@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4030-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 2989 invoked by alias); 31 Jul 2003 21:11:31 -0000
+Return-Path: <cygwin-patches-return-4031-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 25325 invoked by alias); 1 Aug 2003 00:57:07 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,243 +7,150 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 2980 invoked from network); 31 Jul 2003 21:11:30 -0000
-Date: Thu, 31 Jul 2003 21:11:00 -0000
-From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+Received: (qmail 25312 invoked from network); 1 Aug 2003 00:57:06 -0000
+Date: Fri, 01 Aug 2003 00:57:00 -0000
+From: Pavel Tsekov <ptsekov@gmx.net>
 To: cygwin-patches@cygwin.com
-Subject: New Doc section, "Using Cygwin Effectively with Windows"
-Message-ID: <20030731161136.A3446@ns1.iocc.com>
-Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="6c2NcOVqGQ03X4Wi"
-Content-Disposition: inline
-User-Agent: Mutt/1.2.5.1i
-X-SW-Source: 2003-q3/txt/msg00046.txt.bz2
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="========GMXBoundary101171059699425"
+Subject: [PATCH] Add support for ioctl TIOCLINUX, function 6 (get key modifiers) on a TTY
+X-Priority: 3 (Normal)
+X-Authenticated-Sender: #0014308112@gmx.net
+X-Authenticated-IP: [217.110.54.90]
+Message-ID: <10117.1059699425@www61.gmx.net>
+X-Flags: 0001
+X-SW-Source: 2003-q3/txt/msg00047.txt.bz2
 
+This is a MIME encapsulated multipart message -
+please use a MIME-compliant e-mail program to open it.
 
---6c2NcOVqGQ03X4Wi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-length: 279
+Dies ist eine mehrteilige Nachricht im MIME-Format -
+bitte verwenden Sie zum Lesen ein MIME-konformes Mailprogramm.
 
-2003-07-31  Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+--========GMXBoundary101171059699425
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8bit
+Content-length: 1545
 
-        * effectively.sgml: New file, "Using Cygwin Effectively with Windows".
-        * legal.sgml: Update year in copyright notice.
-        * using.sgml: Include "Using Cygwin Effectively with Windows" section.
+Hello,
 
+I'm suggesting the following patch wich allows keyboard modifiers (CTRL,
+SHIFT, ALT) to be retrieved by applications that might need them using an ioctl
+command - MC is one of them. I don't really care if the name used will be
+TIOCLINUX, I am open to suggestions what the proper name might for the ioctl
+control code should be. In fact I have coded an alternative patch that uses
+cygwin_internal () to retrieve the data but I dont feel too comfortable with it
+since it seems too Cygwin specific - in any case I prefer the ioctl way of
+doing things but as I said I have an alternative just in case. The attached
+patch is pretty much non-intrusive, while the one employing cygwin_internal ()
+adds a new member to the tty_min structure thus changing the shared memory
+footprint and I consider it too intrusive.
 
+Please, review and share your thoughts :)
 
---6c2NcOVqGQ03X4Wi
-Content-Type: text/sgml; charset=us-ascii
-Content-Disposition: attachment; filename="effectively.sgml"
-Content-length: 9946
+2003-08-01  Pavel Tsekov  <ptsekov@gmx.net>
 
-<sect1 id="using-effectively">
-<title>Using Cygwin effectively with Windows</title>
+	* fhandler_console.c (fhandler_console::read): Record the state of the
+SHIFT, CTRL and
+	ALT keys at the time of the last keyboard input event.
+	(fhandler_console::ioctl): Handle requests to retrieve the keyboard
+modifiers via the
+	TIOCLINUX command.
+	* fhandler_tty.c (fhandler_tty_slave::read): Ditto.
+	* include/sys/termios.h (TIOCLINUX): New macro definition.
 
-<para>
-Cygwin is not a full operating system, and so must rely on Windows for
-accomplishing some tasks. For example, Cygwin provides a POSIX view
-of the Windows filesystem, but does not provide filesystem drivers of 
-its own. Therefore part of using Cygwin effectively is learning to use
-Windows effectively. 
-Many Windows utilities provide a good way to interact with Cygwin's 
-predominately command-line environment. For example, 
-<command>ipconfig.exe</command> provides information about network 
-configuration, and <command>net.exe</command> views and configures
-network file and printer resources.  Most of these tools
-support the <literal>/?</literal> switch to display usage information. 
-</para>
+-- 
+COMPUTERBILD 15/03: Premium-e-mail-Dienste im Test
+--------------------------------------------------
+1. GMX TopMail - Platz 1 und Testsieger!
+2. GMX ProMail - Platz 2 und Preis-Qualitätssieger!
+3. Arcor - 4. web.de - 5. T-Online - 6. freenet.de - 7. daybyday - 8. e-Post
+--========GMXBoundary101171059699425
+Content-Type: text/plain; name="tioclinux.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="tioclinux.patch"
+Content-length: 4921
 
-<para>
-Unfortunately, no standard set of tools included with all versions of 
-Windows exists.  If you are unfamiliar with the tools available 
-on your system, here is a general guide.  Windows 95, 98, and ME have 
-very limited command-line configuration tools.  Windows NT 4.0 has much 
-better coverage, which Windows 2000 and XP expanded. 
-Microsoft also provides free downloads for Windows NT 4.0 (the Resource Kit 
-Support Tools), Windows 2000 (the Resource Kit Tools), and XP (the 
-Windows Support Tools). Additionally, many independent sites such as 
-<ulink URL="http://download.com.com">download.com</ulink>, 
-<ulink URL="http://simtel.net">simtel.net</ulink>, 
-and <ulink URL="http://sysinternals.com">sysinternals.com</ulink>
-provide command-line utilities.  A few Windows tools, such as 
-<command>find.exe</command> and <command>sort.exe</command>,
-may conflict with the Cygwin versions; make sure that you use the full 
-path (<command>/usr/bin/find</command>) or that your Cygwin 
-<literal>bin</literal> directory comes first in your <EnVar>PATH</EnVar>.
-</para>
+SW5kZXg6IGZoYW5kbGVyX2NvbnNvbGUuY2MKPT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vZmhh
+bmRsZXJfY29uc29sZS5jYyx2CnJldHJpZXZpbmcgcmV2aXNpb24gMS4xMTEK
+ZGlmZiAtdSAtcCAtcjEuMTExIGZoYW5kbGVyX2NvbnNvbGUuY2MKLS0tIGZo
+YW5kbGVyX2NvbnNvbGUuY2MJMTYgSnVuIDIwMDMgMDM6MjQ6MTAgLTAwMDAJ
+MS4xMTEKKysrIGZoYW5kbGVyX2NvbnNvbGUuY2MJMSBBdWcgMjAwMyAwMDoz
+MDo1NCAtMDAwMApAQCAtMjk0LDYgKzI5NCw4IEBAIGZoYW5kbGVyX2NvbnNv
+bGU6OnJlYWQgKHZvaWQgKnB2LCBzaXplX3QKICNkZWZpbmUgdmlydHVhbF9r
+ZXlfY29kZSAoaW5wdXRfcmVjLkV2ZW50LktleUV2ZW50LndWaXJ0dWFsS2V5
+Q29kZSkKICNkZWZpbmUgY29udHJvbF9rZXlfc3RhdGUgKGlucHV0X3JlYy5F
+dmVudC5LZXlFdmVudC5kd0NvbnRyb2xLZXlTdGF0ZSkKIAorCSAgZGV2X3N0
+YXRlLT5uTW9kaWZpZXJzID0gMDsKKwogI2lmZGVmIERFQlVHR0lORwogCSAg
+LyogYWxsb3cgbWFudWFsIHN3aXRjaGluZyB0by9mcm9tIHJhdyBtb2RlIHZp
+YSBjdHJsLWFsdC1zY3JvbGxsb2NrICovCiAJICBpZiAoaW5wdXRfcmVjLkV2
+ZW50LktleUV2ZW50LmJLZXlEb3duICYmCkBAIC0zNDAsMTMgKzM0MiwyNSBA
+QCBmaGFuZGxlcl9jb25zb2xlOjpyZWFkICh2b2lkICpwdiwgc2l6ZV90CiAJ
+CSYmIGlucHV0X3JlYy5FdmVudC5LZXlFdmVudC53VmlydHVhbFNjYW5Db2Rl
+ID09IDB4MzgpKQogCSAgICBjb250aW51ZTsKIAorCSAgaWYgKGNvbnRyb2xf
+a2V5X3N0YXRlICYgU0hJRlRfUFJFU1NFRCkKKwkgICAgZGV2X3N0YXRlLT5u
+TW9kaWZpZXJzIHw9IDE7CisJICBpZiAoY29udHJvbF9rZXlfc3RhdGUgJiBS
+SUdIVF9BTFRfUFJFU1NFRCkKKwkgICAgZGV2X3N0YXRlLT5uTW9kaWZpZXJz
+IHw9IDI7CisJICBpZiAoY29udHJvbF9rZXlfc3RhdGUgJiBDVFJMX1BSRVNT
+RUQpCisJICAgIGRldl9zdGF0ZS0+bk1vZGlmaWVycyB8PSA0OworCSAgaWYg
+KGNvbnRyb2xfa2V5X3N0YXRlICYgTEVGVF9BTFRfUFJFU1NFRCkKKwkgICAg
+ZGV2X3N0YXRlLT5uTW9kaWZpZXJzIHw9IDg7CisKIAkgIGlmICh3Y2ggPT0g
+MCB8fAogCSAgICAgIC8qIGFycm93L2Z1bmN0aW9uIGtleXMgKi8KIAkgICAg
+ICAoaW5wdXRfcmVjLkV2ZW50LktleUV2ZW50LmR3Q29udHJvbEtleVN0YXRl
+ICYgRU5IQU5DRURfS0VZKSkKIAkgICAgewogCSAgICAgIHRvYWRkID0gZ2V0
+X25vbmFzY2lpX2tleSAoaW5wdXRfcmVjLCB0bXApOwogCSAgICAgIGlmICgh
+dG9hZGQpCi0JCWNvbnRpbnVlOworCQl7CisJCSAgZGV2X3N0YXRlLT5uTW9k
+aWZpZXJzID0gMDsKKwkJICBjb250aW51ZTsKKwkJfQogCSAgICAgIG5yZWFk
+ID0gc3RybGVuICh0b2FkZCk7CiAJICAgIH0KIAkgIGVsc2UKQEAgLTM3OSw2
+ICszOTMsNyBAQCBmaGFuZGxlcl9jb25zb2xlOjpyZWFkICh2b2lkICpwdiwg
+c2l6ZV90CiAJCSAgdG1wWzFdID0gY3lnX3RvbG93ZXIgKHRtcFsxXSk7CiAJ
+CSAgdG9hZGQgPSB0bXA7CiAJCSAgbnJlYWQrKzsKKwkJICBkZXZfc3RhdGUt
+Pm5Nb2RpZmllcnMgJj0gfjQ7CiAJCX0KIAkgICAgfQogI3VuZGVmIGljaApA
+QCAtNzE1LDYgKzczMCwxNyBAQCBmaGFuZGxlcl9jb25zb2xlOjppb2N0bCAo
+dW5zaWduZWQgaW50IGNtCiAgICAgICBjYXNlIFRJT0NTV0lOU1o6CiAJKHZv
+aWQpIGJnX2NoZWNrIChTSUdUVE9VKTsKIAlyZXR1cm4gMDsKKyAgICAgIGNh
+c2UgVElPQ0xJTlVYOgorCWlmICgqIChpbnQgKikgYnVmID09IDYpCisJICB7
+CisJICAgICogKGludCAqKSBidWYgPSBkZXZfc3RhdGUtPm5Nb2RpZmllcnM7
+CisJICAgIHJldHVybiAwOworCSAgfQorCWVsc2UKKwkgIHsKKwkgICAgc2V0
+X2Vycm5vIChFSU5WQUwpOworCSAgICByZXR1cm4gLTE7CisJICB9CiAgICAg
+fQogCiAgIHJldHVybiBmaGFuZGxlcl9iYXNlOjppb2N0bCAoY21kLCBidWYp
+OwpJbmRleDogZmhhbmRsZXJfdHR5LmNjCj09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT0KUkNTIGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvY3lnd2luL2ZoYW5k
+bGVyX3R0eS5jYyx2CnJldHJpZXZpbmcgcmV2aXNpb24gMS4xMDEKZGlmZiAt
+dSAtcCAtcjEuMTAxIGZoYW5kbGVyX3R0eS5jYwotLS0gZmhhbmRsZXJfdHR5
+LmNjCTI2IEp1bCAyMDAzIDA0OjUzOjU5IC0wMDAwCTEuMTAxCisrKyBmaGFu
+ZGxlcl90dHkuY2MJMSBBdWcgMjAwMyAwMDozMDo1OCAtMDAwMApAQCAtOTkx
+LDYgKzk5MSw3IEBAIGZoYW5kbGVyX3R0eV9zbGF2ZTo6aW9jdGwgKHVuc2ln
+bmVkIGludCAKICAgICB7CiAgICAgY2FzZSBUSU9DR1dJTlNaOgogICAgIGNh
+c2UgVElPQ1NXSU5TWjoKKyAgICBjYXNlIFRJT0NMSU5VWDoKICAgICAgIGJy
+ZWFrOwogICAgIGNhc2UgRklPTkJJTzoKICAgICAgIHNldF9ub25ibG9ja2lu
+ZyAoKihpbnQgKikgYXJnKTsKQEAgLTEwMzIsNiArMTAzMywyMSBAQCBmaGFu
+ZGxlcl90dHlfc2xhdmU6OmlvY3RsICh1bnNpZ25lZCBpbnQgCiAJICAgIH0K
+IAkgIGlmIChpb2N0bF9kb25lX2V2ZW50KQogCSAgICBXYWl0Rm9yU2luZ2xl
+T2JqZWN0IChpb2N0bF9kb25lX2V2ZW50LCBJTkZJTklURSk7CisJfQorICAg
+ICAgYnJlYWs7CisgICAgY2FzZSBUSU9DTElOVVg6CisgICAgICBpbnQgdmFs
+ID0gKiAodW5zaWduZWQgY2hhciAqKSBhcmc7CisgICAgICBpZiAodmFsID09
+IDYgJiYgaW9jdGxfcmVxdWVzdF9ldmVudCAmJiBpb2N0bF9kb25lX2V2ZW50
+KQorCXsKKwkgIGdldF90dHlwICgpLT5hcmcudmFsdWUgPSB2YWw7IAorCSAg
+U2V0RXZlbnQgKGlvY3RsX3JlcXVlc3RfZXZlbnQpOworCSAgV2FpdEZvclNp
+bmdsZU9iamVjdCAoaW9jdGxfZG9uZV9ldmVudCwgSU5GSU5JVEUpOworCSAg
+KiAodW5zaWduZWQgY2hhciAqKSBhcmcgPSBnZXRfdHR5cCAoKS0+YXJnLnZh
+bHVlICYgMHhGRjsKKwl9CisgICAgICBlbHNlCisJeworCSAgZ2V0X3R0eXAg
+KCktPmlvY3RsX3JldHZhbCA9IC0xOworCSAgc2V0X2Vycm5vIChFSU5WQUwp
+OwogCX0KICAgICAgIGJyZWFrOwogICAgIH0KSW5kZXg6IGluY2x1ZGUvc3lz
+L3Rlcm1pb3MuaAo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBmaWxlOiAv
+Y3ZzL3NyYy9zcmMvd2luc3VwL2N5Z3dpbi9pbmNsdWRlL3N5cy90ZXJtaW9z
+LmgsdgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuNwpkaWZmIC11IC1wIC1yMS43
+IHRlcm1pb3MuaAotLS0gaW5jbHVkZS9zeXMvdGVybWlvcy5oCTEwIEphbiAy
+MDAzIDEyOjMyOjQ5IC0wMDAwCTEuNworKysgaW5jbHVkZS9zeXMvdGVybWlv
+cy5oCTEgQXVnIDIwMDMgMDA6MzE6MDIgLTAwMDAKQEAgLTMzMCw1ICszMzAs
+NiBAQCBzdHJ1Y3Qgd2luc2l6ZQogCiAjZGVmaW5lIFRJT0NHV0lOU1ogKCgn
+VCcgPDwgOCkgfCAxKQogI2RlZmluZSBUSU9DU1dJTlNaICgoJ1QnIDw8IDgp
+IHwgMikKKyNkZWZpbmUgVElPQ0xJTlVYICAoKCdUJyA8PCA4KSB8IDMpCiAK
+ICNlbmRpZgkvKiBfU1lTX1RFUk1JT1NfSCAqLwo=
 
-<sect2> <title>Pathnames</title>
-
-<para>
-Windows programs do not understand POSIX pathnames, so any arguments 
-that reference the filesystem must be in Windows (or DOS) format or 
-translated.  Cygwin provides the <command>cygpath</command> utility for 
-converting between Windows and POSIX paths. A complete description of its 
-options and examples of its usage are in <Xref Linkend="cygpath">, 
-including a shell script for starting Windows Explorer in any directory. 
-The same format works for most Windows programs, for example 
-<screen>
-<literal>notepad.exe "$(cygpath -aw "Desktop/Phone Numbers.txt")"</literal>
-</screen>
-A few programs require a Windows-style, semicolon-delimited path list, 
-which <command>cygpath</command> can translate from a POSIX path with the
-<literal>-p</literal> option. For example, a Java compilation from 
-<command>bash</command> might look like this: 
-<screen>
-<literal>javac -cp "$(cygpath -pw "$CLASSPATH")" hello.java</literal>
-</screen>
-Since using quoting and subshells is somewhat awkward, it is often 
-preferable to use <command>cygpath</command> in shell scripts.
-</para>
-
-</sect2>
-
-<sect2> <title>Console Programs</title>
-<para>
-Another issue is receiving output from or giving input to the console-based 
-Windows programs.  Unfortunately, interacting with Windows console 
-applications is not a simple matter of using a translation utility. Windows 
-console applications and designed to run under <command>command.com</command> 
-or <command>cmd.exe</command>, and some do not deal gracefully with other
-situations.  Cygwin can receive console input only if it
-is also running in a console (DOS box) since Windows does not provide
-any way to attach to the backend of the console device. Another
-traditional Unix input/output method, ptys (pseudo-terminals), are 
-supported by Cygwin but not entirely by Windows.  The basic problem is 
-that a Cygwin pty is a pipe and some Windows applications do not like 
-having their input or output redirected to pipes.  
-</para>
-
-<para>
-To help deal with these issues, Cygwin supports customizable levels of 
-Windows verses Unix compatibility behavior.  To be most compatible with 
-Windows programs, use a DOS prompt, running only the occasional Cygwin 
-command or script. Next would be to run <command>bash</command> with 
-the default DOS box. To make Cygwin more Unix compatible in this case, 
-set <EnVar>CYGWIN=tty</EnVar> (see <Xref Linkend="using-cygwinenv">).
-Alternatively, the optional <command>rxvt</command> package provides 
-a native-Windows version of the popular X11 terminal emulator (it is not 
-necessary to set <EnVar>CYGWIN=tty</EnVar> with <command>rxvt</command>). 
-Using <command>rxvt.exe</command> provides the most Unix-like environment, 
-but expect some compatibility problems with Windows programs.
-</para>
-
-</sect2>
-
-<sect2> <title>Cygwin and Windows Networking</title>
-<para>
-Many popular Cygwin packages, such as <command>ncftp</command>, 
-<command>lynx</command>, and <command>wget</command>, require a 
-network connection.  Since Cygwin relies on Windows for connectivity, 
-if one of these tools is not working as expected you may need to 
-troubleshoot using Windows tools. The first test is to see if you
-can reach the URL's host with <command>ping.exe</command>, one of the 
-few utilities included with every Windows version since Windows 95.
-If you chose to install the inetutils package, you may have both
-Windows and Cygwin versions of utilities such as <command>ftp</command>
-and <command>telnet</command>. If you are having problems using one
-of these programs, see if the alternate one works as expected. 
-</para>
-
-<para>
-There are a variety of other programs available for specific situations.
-If your system does not have an always-on network connection, you 
-may be interested in <command>rasdial.exe</command> (or alternatives for
-Windows 95, 98, and ME) for automating dialup connections.  
-Users who frequently change their network 
-configuration can script these changes with <command>netsh.exe</command> 
-(Windows 2000 and XP). For proxy users, the open source 
-<ulink URL="http://apserver.sourceforge.net">
-NTLM Authorization Proxy Server</ulink> or the no-charge
-<ulink URL="http://www.hummingbird.com/products/nc/socks/index.html">
-Hummingbird SOCKS Proxy</ulink> may allow you to use Cygwin network
-programs in your environment.
-</para>
-
-</sect2>
-
-<sect2><title>The cygutils package</title>
-
-<para>
-The optional cygutils package contains miscellaneous tools that are
-small enough to not require their own package. It is not included in a
-default Cygwin install; select it from the Utils category in 
-<command>setup.exe</command>. Several of the cygutils tools are useful
-for interacting with Windows. 
-</para>
-
-<para>
-One of the hassles of Unix-Windows interoperability is the different line 
-endings on text files.  As mentioned in <Xref Linkend="using-textbinary">, 
-Unix tools such as <command>tr</command> can convert between CRLF and LF 
-endings, but cygutils provides several dedicated programs: 
-<command>conv</command>, <command>d2u</command>, <command>dos2unix</command>, 
-<command>u2d</command>, and <command>unix2dos</command>. Use the
-<literal>--help</literal> switch for usage information. 
-</para>
-
-<sect2><title>Creating shortcuts with cygutils</title>
-<para>
-Another problem area is between Unix-style links, which link one file
-to another, and Microsoft .lnk files, which provide a shortcut to a
-file.  They seem similar at first glance but, in reality, are fairly 
-different.  By default, Cygwin uses a mechanism that creates symbolic
-links that are compatible with standard Microsoft .lnk files. However,
-they do not include much of the information that is available in a 
-standard Microsoft shortcut, such as the working directory, an icon, 
-etc.  The cygutils package includes a <command>mkshortcut</command> 
-utility for creating standard Microsoft .lnk files.
-</para>
-
-<para>
-If Cygwin handled these native shortcuts like any other symlink, 
-you could not archive Microsoft .lnk files into <command>tar</command>
-archives and keep all the information in them.  After unpacking, 
-these shortcuts would have lost all the extra information and would
-be no different than standard Cygwin symlinks. Therefore these two types 
-of links are treated differently.  Unfortunately, this means that the 
-usual Unix way of creating and using symlinks does not work with 
-Windows shortcuts. 
-</para>
-</sect2>
-  
-<sect2><title>Printing with cygutils</title>
-<para>
-There are several options for printing from Cygwin, including the 
-<command>lpr</command> found in cygutils (not to be confused with the 
-native Windows <command>lpr.exe</command>). The easiest way to use cygutils' 
-<command>lpr</command> is to specify a default device name in the 
-<EnVar>PRINTER</EnVar> environment variable.  You may also specify a device 
-on the command line with the <literal>-d</literal> or <literal>-P</literal> 
-options, which will override the environment variable setting. 
-</para>
-
-<para>
-A device name 
-may be a UNC path (<literal>\\server_name\printer_name</literal>), a reserved 
-DOS device name (<literal>prn</literal>, <literal>lpt1</literal>), or a 
-local port name that is mapped to a printer share. Note that forward slashes 
-may be used in a UNC path (<literal>//server_name/printer_name</literal>),
-which is helpful when using <command>lpr</command> from a shell that uses
-the backslash as an escape character. 
-</para>
-
-<para>
-<command>lpr</command> sends raw data to the printer; no formatting is done.
-Many, but not all, printers accept plain text as input. If your printer 
-supports PostScript, packages such as 
-<command>a2ps</command> and <command>enscript</command> can prepare text
-files for printing. The ghostscript package also provides some translation
-from PostScript to various native printer languages. Additionally, a native 
-Windows application for printing PostScript, <command>gsprint</command>, is 
-available from the <ulink URL="http://www.cs.wisc.edu/~ghost/">Ghostscript
-website</ulink>.
-</para>
-
-</sect2>
-
-</sect1>
-
---6c2NcOVqGQ03X4Wi--
+--========GMXBoundary101171059699425--
