@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2536-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 29895 invoked by alias); 28 Jun 2002 19:58:36 -0000
+Return-Path: <cygwin-patches-return-2537-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 22287 invoked by alias); 28 Jun 2002 22:18:06 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,137 +7,71 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 29853 invoked from network); 28 Jun 2002 19:58:34 -0000
-X-Authentication-Warning: maddison.math: dajhorn owned process doing -bs
-Date: Fri, 28 Jun 2002 15:18:00 -0000
-From: Darik Horn <dajhorn@uwaterloo.ca>
-X-X-Sender: dajhorn@maddison.math.uwaterloo.ca
-To: cygwin-patches@cygwin.com
-Subject: sem_getvalue patch revisited
-Message-ID: <Pine.SOL.4.44.0206281540050.25309-200000@maddison.math.uwaterloo.ca>
+Received: (qmail 22273 invoked from network); 28 Jun 2002 22:18:05 -0000
+Message-ID: <008401c21ef1$a6cefd90$1800a8c0@LAPTOP>
+From: "Robert Collins" <robert.collins@syncretize.net>
+To: "Darik Horn" <dajhorn@uwaterloo.ca>,
+	<cygwin-patches@cygwin.com>
+References: <Pine.SOL.4.44.0206281540050.25309-200000@maddison.math.uwaterloo.ca>
+Subject: Re: sem_getvalue patch revisited
+Date: Sat, 29 Jun 2002 00:36:00 -0000
 MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="-559023410-851401618-1025294306=:25309"
-X-SW-Source: 2002-q2/txt/msg00519.txt.bz2
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-MIMEOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-SW-Source: 2002-q2/txt/msg00520.txt.bz2
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
+Actually neither of them are quite right.
 
----559023410-851401618-1025294306=:25309
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-Content-length: 674
+Yours calls __sem_post, which is definately wrong.
+
+Sam Robb's I've properly reviewed now, and it's also not quite there.
+
+The pthread.cc file is nearly a waste of space at the moment. All recent
+patches to it have been converting the call tree from
+
+pthread.cc: foo (thing*
+thread.cc:     __foo (thing*
+thread.cc:        thing->foo
+
+to
+pthread.cc: foo (thing *
+thread.cc:      thing->foo
+
+Sam's approach of reading the value directly is wrong (breaks
+encapsulation), but your double bounce approach is also wasteful. And yes
+there are many examples like that in the threads code, which I inherited and
+have been (slowly) whittling away.
+
+Cheers,
+Rob
+
+----- Original Message -----
+From: "Darik Horn" <dajhorn@uwaterloo.ca>
+To: <cygwin-patches@cygwin.com>
+Sent: Saturday, June 29, 2002 5:58 AM
+Subject: sem_getvalue patch revisited
 
 
-Sam Robb posted a semaphore getvalue patch on June 7th, 2002:
-
-http://cygwin.com/ml/cygwin-patches/2002-q2/msg00339.html
-
-I had been working on the same problem, but I produced a different
-solution.  Please see the attachment, which was written against 1.3.10-1
-but also applies to 1.3.11-3 cleanly.
-
-In particular, Rob's patch returns `(*sem)->currentvalue` directly from
-inside the new __sem_ function, whereas my patch adds a GetValue method to
-the semaphore class.  (I was trying to follow the style of the existing
-Cygwin semaphore.)
-
-I am wondering whether Sam's patch is functionally equivalent to my own,
-and whether one is more or less correct than the other.
-
-[]
-
----559023410-851401618-1025294306=:25309
-Content-Type: TEXT/PLAIN; charset=US-ASCII; name="cygwin-sem_getvalue-dajhorn.patch"
-Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.SOL.4.44.0206281558260.25309@maddison.math.uwaterloo.ca>
-Content-Description: 
-Content-Disposition: attachment; filename="cygwin-sem_getvalue-dajhorn.patch"
-Content-length: 5161
-
-ZGlmZiAtcnVOIC91c3Ivc3JjL2N5Z3dpbi0xLjMuMTAtMS93aW5zdXAvY3ln
-d2luL2N5Z3dpbi5kaW4gY3lnd2luLTEuMy4xMC0xL3dpbnN1cC9jeWd3aW4v
-Y3lnd2luLmRpbg0KLS0tIC91c3Ivc3JjL2N5Z3dpbi0xLjMuMTAtMS93aW5z
-dXAvY3lnd2luL2N5Z3dpbi5kaW4JMjAwMi0wMS0xOSAxMjo0NTo0Ni4wMDAw
-MDAwMDAgLTA1MDANCisrKyBjeWd3aW4tMS4zLjEwLTEvd2luc3VwL2N5Z3dp
-bi9jeWd3aW4uZGluCTIwMDItMDYtMjggMTU6MzA6NDguMDAwMDAwMDAwIC0w
-NDAwDQpAQCAtMTIwNyw2ICsxMjA3LDcgQEANCiBzZW1fd2FpdA0KIHNlbV90
-cnl3YWl0DQogc2VtX3Bvc3QNCitzZW1fZ2V0dmFsdWUNCiBzY2hlZF9nZXRf
-cHJpb3JpdHlfbWF4DQogc2NoZWRfZ2V0X3ByaW9yaXR5X21pbg0KIHNjaGVk
-X2dldHBhcmFtDQpkaWZmIC1ydU4gL3Vzci9zcmMvY3lnd2luLTEuMy4xMC0x
-L3dpbnN1cC9jeWd3aW4vaW5jbHVkZS9zZW1hcGhvcmUuaCBjeWd3aW4tMS4z
-LjEwLTEvd2luc3VwL2N5Z3dpbi9pbmNsdWRlL3NlbWFwaG9yZS5oDQotLS0g
-L3Vzci9zcmMvY3lnd2luLTEuMy4xMC0xL3dpbnN1cC9jeWd3aW4vaW5jbHVk
-ZS9zZW1hcGhvcmUuaAkyMDAxLTAzLTIxIDExOjA2OjIyLjAwMDAwMDAwMCAt
-MDUwMA0KKysrIGN5Z3dpbi0xLjMuMTAtMS93aW5zdXAvY3lnd2luL2luY2x1
-ZGUvc2VtYXBob3JlLmgJMjAwMi0wNi0yOCAxNTozMDo0OC4wMDAwMDAwMDAg
-LTA0MDANCkBAIC0zMyw2ICszMyw3IEBADQogICBpbnQgc2VtX3dhaXQgKHNl
-bV90ICogc2VtKTsNCiAgIGludCBzZW1fdHJ5d2FpdCAoc2VtX3QgKiBzZW0p
-Ow0KICAgaW50IHNlbV9wb3N0IChzZW1fdCAqIHNlbSk7DQorICBpbnQgc2Vt
-X2dldHZhbHVlKHNlbV90ICogc2VtLCBpbnQgKiB2YWx1ZSk7DQogDQogI2lm
-ZGVmIF9fY3BsdXNwbHVzDQogfQ0KZGlmZiAtcnVOIC91c3Ivc3JjL2N5Z3dp
-bi0xLjMuMTAtMS93aW5zdXAvY3lnd2luL3Bvc2l4LnNnbWwgY3lnd2luLTEu
-My4xMC0xL3dpbnN1cC9jeWd3aW4vcG9zaXguc2dtbA0KLS0tIC91c3Ivc3Jj
-L2N5Z3dpbi0xLjMuMTAtMS93aW5zdXAvY3lnd2luL3Bvc2l4LnNnbWwJMjAw
-MS0wOC0yNSAyMTo0MTo1Ny4wMDAwMDAwMDAgLTA0MDANCisrKyBjeWd3aW4t
-MS4zLjEwLTEvd2luc3VwL2N5Z3dpbi9wb3NpeC5zZ21sCTIwMDItMDYtMjgg
-MTU6MzA6NDguMDAwMDAwMDAwIC0wNDAwDQpAQCAtNTIsNyArNTIsNyBAQA0K
-IDwvcGFyYT48L3NlY3QyPg0KIDxzZWN0Mj48dGl0bGU+U3luY2hyb25pemF0
-aW9uIChTZWN0aW9uIDExKSA8L3RpdGxlPjxwYXJhPg0KIA0KLXNlbV9pbml0
-LCBzZW1fZGVzdHJveSwgc2VtX3dhaXQsIHNlbV90cnl3YWl0LCBzZW1fcG9z
-dCwNCitzZW1faW5pdCwgc2VtX2Rlc3Ryb3ksIHNlbV93YWl0LCBzZW1fdHJ5
-d2FpdCwgc2VtX3Bvc3QsIHNlbV9nZXR2YWx1ZQ0KIHB0aHJlYWRfbXV0ZXhf
-aW5pdCwgcHRocmVhZF9tdXRleF9kZXN0cm95LCBwdGhyZWFkX211dGV4X2xv
-Y2ssDQogcHRocmVhZF9tdXRleF90cnlsb2NrLCBwdGhyZWFkX211dGV4X3Vu
-bG9jaw0KIA0KZGlmZiAtcnVOIC91c3Ivc3JjL2N5Z3dpbi0xLjMuMTAtMS93
-aW5zdXAvY3lnd2luL3B0aHJlYWQuY2MgY3lnd2luLTEuMy4xMC0xL3dpbnN1
-cC9jeWd3aW4vcHRocmVhZC5jYw0KLS0tIC91c3Ivc3JjL2N5Z3dpbi0xLjMu
-MTAtMS93aW5zdXAvY3lnd2luL3B0aHJlYWQuY2MJMjAwMS0xMC0wNSAwMTow
-NTowOS4wMDAwMDAwMDAgLTA0MDANCisrKyBjeWd3aW4tMS4zLjEwLTEvd2lu
-c3VwL2N5Z3dpbi9wdGhyZWFkLmNjCTIwMDItMDYtMjggMTU6MzA6NDguMDAw
-MDAwMDAwIC0wNDAwDQpAQCAtNDc2LDQgKzQ3NiwxMCBAQA0KICAgcmV0dXJu
-IF9fc2VtX3Bvc3QgKHNlbSk7DQogfQ0KIA0KK2ludA0KK3NlbV9nZXR2YWx1
-ZSAoc2VtX3QgKiBzZW0sIGludCAqIHZhbHVlKQ0KK3sNCisgIHJldHVybiBf
-X3NlbV9wb3N0IChzZW0pOw0KIH0NCisNCit9IC8qIGV4dGVybiAqLw0KZGlm
-ZiAtcnVOIC91c3Ivc3JjL2N5Z3dpbi0xLjMuMTAtMS93aW5zdXAvY3lnd2lu
-L3RocmVhZC5jYyBjeWd3aW4tMS4zLjEwLTEvd2luc3VwL2N5Z3dpbi90aHJl
-YWQuY2MNCi0tLSAvdXNyL3NyYy9jeWd3aW4tMS4zLjEwLTEvd2luc3VwL2N5
-Z3dpbi90aHJlYWQuY2MJMjAwMi0wMS0wOCAwMDoxNjoyOS4wMDAwMDAwMDAg
-LTA1MDANCisrKyBjeWd3aW4tMS4zLjEwLTEvd2luc3VwL2N5Z3dpbi90aHJl
-YWQuY2MJMjAwMi0wNi0yOCAxNTozMDo0OC4wMDAwMDAwMDAgLTA0MDANCkBA
-IC03OTMsNiArNzkzLDEyIEBADQogfQ0KIA0KIHZvaWQNCitzZW1hcGhvcmU6
-OkdldFZhbHVlIChsb25nICogdmFsdWUpDQorew0KKyAgKnZhbHVlID0gY3Vy
-cmVudHZhbHVlOw0KK30NCisNCit2b2lkDQogc2VtYXBob3JlOjpQb3N0ICgp
-DQogew0KICAgLyogd2UgY2FuJ3QgdXNlIHRoZSBjdXJyZW50dmFsdWUsIGJl
-Y2F1c2UgdGhlIHdhaXQgZnVuY3Rpb25zIGRvbid0IGxldCB1cyBhY2Nlc3Mg
-aXQgKi8NCkBAIC0yMjM4LDQgKzIyNDQsMTQgQEANCiAgIHJldHVybiAwOw0K
-IH0NCiANCitpbnQNCitfX3NlbV9nZXR2YWx1ZSAoc2VtX3QgKnNlbSwgbG9u
-ZyAqdmFsdWUpDQorew0KKyAgaWYgKHZlcmlmeWFibGVfb2JqZWN0X2lzdmFs
-aWQgKHNlbSwgU0VNX01BR0lDKSAhPSBWQUxJRF9PQkpFQ1QpDQorICAgIHJl
-dHVybiBFSU5WQUw7DQorDQorICAoKnNlbSktPkdldFZhbHVlICh2YWx1ZSk7
-DQorICByZXR1cm4gMDsNCit9DQorDQogI2VuZGlmIC8vIE1UX1NBRkUNCmRp
-ZmYgLXJ1TiAvdXNyL3NyYy9jeWd3aW4tMS4zLjEwLTEvd2luc3VwL2N5Z3dp
-bi90aHJlYWQuaCBjeWd3aW4tMS4zLjEwLTEvd2luc3VwL2N5Z3dpbi90aHJl
-YWQuaA0KLS0tIC91c3Ivc3JjL2N5Z3dpbi0xLjMuMTAtMS93aW5zdXAvY3ln
-d2luL3RocmVhZC5oCTIwMDItMDItMTkgMjI6MjU6MDEuMDAwMDAwMDAwIC0w
-NTAwDQorKysgY3lnd2luLTEuMy4xMC0xL3dpbnN1cC9jeWd3aW4vdGhyZWFk
-LmgJMjAwMi0wNi0yOCAxNTozMzo1NC4wMDAwMDAwMDAgLTA0MDANCkBAIC0z
-MzYsNiArMzM2LDcgQEANCiAgIGNsYXNzIHNlbWFwaG9yZSAqIG5leHQ7DQog
-ICBpbnQgc2hhcmVkOw0KICAgbG9uZyBjdXJyZW50dmFsdWU7DQorICB2b2lk
-IEdldFZhbHVlIChsb25nICogdmFsdWUpOw0KICAgdm9pZCBXYWl0ICgpOw0K
-ICAgdm9pZCBQb3N0ICgpOw0KICAgaW50IFRyeVdhaXQgKCk7DQpkaWZmIC1y
-dU4gL3Vzci9zcmMvY3lnd2luLTEuMy4xMC0xL3dpbnN1cC9kb2MvY2FsbHMu
-dGV4aW5mbyBjeWd3aW4tMS4zLjEwLTEvd2luc3VwL2RvYy9jYWxscy50ZXhp
-bmZvDQotLS0gL3Vzci9zcmMvY3lnd2luLTEuMy4xMC0xL3dpbnN1cC9kb2Mv
-Y2FsbHMudGV4aW5mbwkyMDAwLTA3LTIxIDE5OjI4OjIzLjAwMDAwMDAwMCAt
-MDQwMA0KKysrIGN5Z3dpbi0xLjMuMTAtMS93aW5zdXAvZG9jL2NhbGxzLnRl
-eGluZm8JMjAwMi0wNi0yOCAxNTozMDo0OC4wMDAwMDAwMDAgLTA0MDANCkBA
-IC00MjIsNyArNDIyLDcgQEANCiBAaXRlbSBwdGhyZWFkX211dGV4X3VubG9j
-azogUDk2IDExLjMuMy4xDQogQGl0ZW0gc2VtX2Nsb3NlOiBQOTYgMTEuMi40
-LjEgLS0gdW5pbXBsZW1lbnRlZA0KIEBpdGVtIHNlbV9kZXN0cm95OiBQOTYg
-MTEuMi4yLjENCi1AaXRlbSBzZW1fZ2V0dmFsdWU6IFA5NiAxMS4yLjguMSAt
-LSB1bmltcGxlbWVudGVkDQorQGl0ZW0gc2VtX2dldHZhbHVlOiBQOTYgMTEu
-Mi44LjENCiBAaXRlbSBzZW1faW5pdDogUDk2IDExLjIuMS4xDQogQGl0ZW0g
-c2VtX29wZW46IFA5NiAxMS4yLjMuMSAtLSB1bmltcGxlbWVudGVkDQogQGl0
-ZW0gc2VtX3Bvc3Q6IFA5NiAxMS4yLjcuMQ0K
-
----559023410-851401618-1025294306=:25309--
+>
+> Sam Robb posted a semaphore getvalue patch on June 7th, 2002:
+>
+> http://cygwin.com/ml/cygwin-patches/2002-q2/msg00339.html
+>
+> I had been working on the same problem, but I produced a different
+> solution.  Please see the attachment, which was written against 1.3.10-1
+> but also applies to 1.3.11-3 cleanly.
+>
+> In particular, Rob's patch returns `(*sem)->currentvalue` directly from
+> inside the new __sem_ function, whereas my patch adds a GetValue method to
+> the semaphore class.  (I was trying to follow the style of the existing
+> Cygwin semaphore.)
+>
+> I am wondering whether Sam's patch is functionally equivalent to my own,
+> and whether one is more or less correct than the other.
+>
+> []
+>
