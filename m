@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4304-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 20778 invoked by alias); 16 Oct 2003 13:34:09 -0000
+Return-Path: <cygwin-patches-return-4305-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 7139 invoked by alias); 16 Oct 2003 14:08:36 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,32 +7,46 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 20754 invoked from network); 16 Oct 2003 13:34:08 -0000
-Date: Thu, 16 Oct 2003 13:34:00 -0000
+Received: (qmail 7123 invoked from network); 16 Oct 2003 14:08:35 -0000
+Date: Thu, 16 Oct 2003 14:08:00 -0000
 From: Corinna Vinschen <cygwin-patches@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [Patch] *** CreateFileMapping, Win32 error 5.  Terminating.
-Message-ID: <20031016133407.GA25076@cygbert.vinschen.de>
+Subject: Re: [Patch]: Ncurses frame drawing
+Message-ID: <20031016140833.GB25076@cygbert.vinschen.de>
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3.0.5.32.20031015222235.00825920@incoming.verizon.net>
+References: <20031015082724.GJ14344@cygbert.vinschen.de> <3F8D9621.50601@student.tue.nl>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3.0.5.32.20031015222235.00825920@incoming.verizon.net>
+In-Reply-To: <3F8D9621.50601@student.tue.nl>
 User-Agent: Mutt/1.4.1i
-X-SW-Source: 2003-q4/txt/msg00023.txt.bz2
+X-SW-Source: 2003-q4/txt/msg00024.txt.bz2
 
-On Wed, Oct 15, 2003 at 10:22:35PM -0400, Pierre A. Humblet wrote:
-> 2003-10-15  Pierre Humblet  <pierre.humblet@ieee.org>
+On Wed, Oct 15, 2003 at 08:46:57PM +0200, Micha Nelissen wrote:
+> Corinna Vinschen wrote:
+> >Point 2 has some merits.  Are you interested to do that change, Micha?
+> >Of course, con_to_str should become a dev_state member then, too.
 > 
-> 	* syscalls.cc (seteuid32): Always construct a default DACL including
-> 	the new sid, Admins and SYSTEM and copy it to the new thread token.
-> 	* security.cc (create_token): Use a NULL default DACL in NtCreateToken.
+> Ok, attached is a patch with the requested changes.
 
-I assume you have tested it also with an external token, don't you?
-I'm a bit concerned that the code also tries to modify the external
-token.  Is that actually unavoidable?  Isn't the problem just a
-typical problem of a self-created token?
+Thanks!  Applied with a few tweaks to the ChangeLog entry:
+
+>         * fhandler_console.cc (con_to_str, str_to_con): Move functions to
+>         into dev_console class.
+
+Changed to
+
+	* fhandler_console.cc (con_to_str): Move function into dev_console
+	class.
+	(str_to_con): Ditto.
+
+Otherwise, prepend method names with class names:
+
+>         (read): Call con_to_str on dev_state.
+
+	(fhandler_console::read): ...
+
+etc.
 
 Corinna
 
