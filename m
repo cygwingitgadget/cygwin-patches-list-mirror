@@ -1,46 +1,47 @@
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: typo in cygwin/Makefile.in breaks testsuite
-Date: Wed, 22 Nov 2000 08:54:00 -0000
-Message-id: <20001122115343.A7290@redhat.com>
-References: <10530498554.20001122181511@logos-m.ru>
-X-SW-Source: 2000-q4/msg00019.html
+From: Kazuhiro Fujieda <fujieda@jaist.ac.jp>
+To: cygwin-patches@sources.redhat.com
+Subject: Anyone can't read the system cygdrive prefix without the priviledge.
+Date: Fri, 24 Nov 2000 09:07:00 -0000
+Message-id: <s1spujls3hy.fsf@jaist.ac.jp>
+X-SW-Source: 2000-q4/msg00020.html
 
-Sorry.  Applied.
+Anyone can't read the system cygdrive prefix without the
+priviledge of Administrator.
 
-cgf
+ChangeLog:
+Sat Nov 25 01:57:42 2000  Kazuhiro Fujieda  <fujieda@jaist.ac.jp>
 
-On Wed, Nov 22, 2000 at 06:15:11PM +0300, Egor Duda wrote:
->Hi!
->
->Index: winsup/cygwin/Makefile.in
->===================================================================
->RCS file: /cvs/src/src/winsup/cygwin/Makefile.in,v
->retrieving revision 1.43
->diff -c -2 -r1.43 Makefile.in
->*** winsup/cygwin/Makefile.in 2000/11/16 20:32:27     1.43
->--- winsup/cygwin/Makefile.in 2000/11/22 15:09:38
->***************
->*** 186,190 ****
->  new-$(LIB_NAME): $(LIB_NAME)
->        $(DLLTOOL) --as=$(AS) --dllname new-$(DLL_NAME) --def $(DEF_FILE) --output-lib new-templib.a
->!       $(AR) rcv new-temp.a $(LIBCOS)
->        mv new-templib.a new-$(LIB_NAME)
->  
->--- 186,190 ----
->  new-$(LIB_NAME): $(LIB_NAME)
->        $(DLLTOOL) --as=$(AS) --dllname new-$(DLL_NAME) --def $(DEF_FILE) --output-lib new-templib.a
->!       $(AR) rcv new-templib.a $(LIBCOS)
->        mv new-templib.a new-$(LIB_NAME)
->  
->
->2000-11-22  Egor Duda <deo@logos-m.ru>
->
->        * Makefile.in: Fix library name.
->
->Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
->
+	* path.cc (mount_info::read_cygdrive_info_from_registry): Read system 
+	cygdrive prefix with KEY_READ.
+	* path.cc (mount_info::get_cygdrive_info): Ditto.
 
--- 
-cgf@cygnus.com                        Red Hat, Inc.
-http://sources.redhat.com/            http://www.redhat.com/
+Index: path.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/path.cc,v
+retrieving revision 1.83
+diff -u -p -r1.83 path.cc
+--- path.cc	2000/11/17 18:39:47	1.83
++++ path.cc	2000/11/24 16:54:07
+@@ -1517,7 +1517,7 @@ mount_info::read_cygdrive_info_from_regi
+       /* Didn't find the user path prefix so check the system path prefix. */
+ 
+       /* reg_key for system path prefix in HKEY_LOCAL_MACHINE.  */
+-      reg_key r2 (HKEY_LOCAL_MACHINE, KEY_ALL_ACCESS, "SOFTWARE",
++      reg_key r2 (HKEY_LOCAL_MACHINE, KEY_READ, "SOFTWARE",
+ 		 CYGWIN_INFO_CYGNUS_REGISTRY_NAME,
+ 		 CYGWIN_INFO_CYGWIN_REGISTRY_NAME,
+ 		 CYGWIN_INFO_CYGWIN_MOUNT_REGISTRY_NAME,
+@@ -1647,7 +1647,7 @@ mount_info::get_cygdrive_info (char *use
+     }
+ 
+   /* Get the system path prefix from HKEY_LOCAL_MACHINE. */
+-  reg_key r2 (HKEY_LOCAL_MACHINE, KEY_ALL_ACCESS, "SOFTWARE",
++  reg_key r2 (HKEY_LOCAL_MACHINE, KEY_READ, "SOFTWARE",
+ 	      CYGWIN_INFO_CYGNUS_REGISTRY_NAME,
+ 	      CYGWIN_INFO_CYGWIN_REGISTRY_NAME,
+ 	      CYGWIN_INFO_CYGWIN_MOUNT_REGISTRY_NAME,
+
+____
+  | AIST      Kazuhiro Fujieda <fujieda@jaist.ac.jp>
+  | HOKURIKU  School of Information Science
+o_/ 1990      Japan Advanced Institute of Science and Technology
