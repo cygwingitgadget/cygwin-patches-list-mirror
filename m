@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2251-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 27669 invoked by alias); 29 May 2002 02:31:46 -0000
+Return-Path: <cygwin-patches-return-2252-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 14282 invoked by alias); 29 May 2002 03:09:35 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,37 +7,50 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 27631 invoked from network); 29 May 2002 02:31:40 -0000
-Message-ID: <FE045D4D9F7AED4CBFF1B3B813C853376762B3@mail.sandvine.com>
-From: Don Bowman <don@sandvine.com>
-To: "''cygwin-patches@cygwin.com' '" <cygwin-patches@cygwin.com>
-Subject: RE: New stat stuff (was [PATCH] improve performance of stat() ope
-	 rations (e.g. ls -lR )) 
-Date: Tue, 28 May 2002 19:31:00 -0000
-MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="iso-8859-1"
-X-SW-Source: 2002-q2/txt/msg00234.txt.bz2
+Received: (qmail 14266 invoked from network); 29 May 2002 03:09:34 -0000
+Date: Tue, 28 May 2002 20:09:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: New stat stuff (was [PATCH] improve performance of stat() ope rations (e.g. ls -lR ))
+Message-ID: <20020529030925.GA22611@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <FE045D4D9F7AED4CBFF1B3B813C853376762B1@mail.sandvine.com> <20020529022537.GA20997@redhat.com> <20020529022723.GB20997@redhat.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20020529022723.GB20997@redhat.com>
+User-Agent: Mutt/1.3.23.1i
+X-SW-Source: 2002-q2/txt/msg00235.txt.bz2
 
-For interests sake, here are the file operations done with no
-special options (neither environment nor mount) for a ls -l on
-a file:
+On Tue, May 28, 2002 at 10:27:23PM -0400, Christopher Faylor wrote:
+>On Tue, May 28, 2002 at 10:25:37PM -0400, Christopher Faylor wrote:
+>>On Tue, May 28, 2002 at 09:58:52PM -0400, Don Bowman wrote:
+>>>
+>>>So I've performed a mini-benchmark of Chris' changes.
+>>>
+>>>I did a ls -lR >/dev/null of the cygwin source tree on my
+>>>notebook.
+>>>
+>>>Baseline (current setup.exe install): 1m14.9s
+>>>'statquery' patch I sent earlier: 4.081s
+>>>Current CVS tree: 3.718s
+>>>Current CVS tree w/ -E switch to mount: 3.711s
+>>>Current CVS tree w/ -X switch to mount: 3.716s
+>>>
+>>>Not all that scientific, I ran each twice, took the 2nd timing.
+>>>So, looks good, excellent work. I still don't see any 
+>>>difference on the -E or the -X tho'.
+>>
+>>That has got to mean that there's something wrong in the stat
+>>logic.  I didn't do anything to speed up the normal case, AFAIK,
+>>unless you're doing this on a FAT/FAT32 partition.
+>
+>Actually, even in that case, it shouldn't make that big a deal.
 
-IRP_MJ_CREATE	file SUCCESS		Attributes: Any Options: Open 	
-FASTIO_QUERY_BASIC_INFO	file SUCCESS		Attributes: A	
-IRP_MJ_CLEANUP	file SUCCESS		
-IRP_MJ_CLOSE 	file SUCCESS		
-IRP_MJ_CREATE	file SUCCESS		Attributes: RN Options: Open 	
-IRP_MJ_QUERY_VOLUME_INFORMATION	file SUCCESS
-FileFsVolumeInformation	
-IRP_MJ_QUERY_INFORMATION	file BUFFER OVERFLOW	FileAllInformation
-IRP_MJ_CLEANUP	file SUCCESS		
-IRP_MJ_CLOSE 	file SUCCESS		
-IRP_MJ_CREATE	file SUCCESS		Attributes: Any Options: Open 	
-FASTIO_QUERY_BASIC_INFO		file SUCCESS		Attributes: A	
-IRP_MJ_CLEANUP	file SUCCESS		
-IRP_MJ_CLOSE 	file SUCCESS		
-IRP_MJ_CREATE	file SUCCESS		Attributes: Any Options: Open 	
-IRP_MJ_QUERY_SECURITY		file SUCCESS		
-IRP_MJ_CLEANUP	file SUCCESS		
-IRP_MJ_CLOSE 	file SUCCESS		
+Yep.  The stat logic was screwed up.  It was never reading the
+file.
+
+I'm rerunning a snapshot now.
+
+cgf
