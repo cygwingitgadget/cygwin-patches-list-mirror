@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2111-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 20040 invoked by alias); 25 Apr 2002 04:47:01 -0000
+Return-Path: <cygwin-patches-return-2112-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 8019 invoked by alias); 25 Apr 2002 09:33:14 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,330 +7,164 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 20018 invoked from network); 25 Apr 2002 04:46:58 -0000
-Message-Id: <3.0.5.32.20020425003552.00804100@mail.attbi.com>
-X-Sender: phumblet@mail.attbi.com
-Date: Wed, 24 Apr 2002 21:47:00 -0000
-To: Corinna Vinschen <cygwin-patches@cygwin.com>
-From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
-Subject: Re: Workaround patch for MS CLOSE_WAIT bug
-In-Reply-To: <20020415162809.P29277@cygbert.vinschen.de>
-References: <3CBADAE5.92A542FE@ieee.org>
- <3.0.5.32.20020414152944.007ec460@mail.attbi.com>
- <20020415141743.N29277@cygbert.vinschen.de>
- <3CBADAE5.92A542FE@ieee.org>
-Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="=====================_1019723752==_"
-X-SW-Source: 2002-q2/txt/msg00095.txt.bz2
+Received: (qmail 7987 invoked from network); 25 Apr 2002 09:33:08 -0000
+X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
+Date: Thu, 25 Apr 2002 02:33:00 -0000
+From: Thomas Pfaff <tpfaff@gmx.net>
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] added locks in pthread code
+Message-ID: <Pine.WNT.4.44.0204251117110.349-101000@algeria.intern.net>
+X-X-Sender: pfaff@antarctica.intern.net
+MIME-Version: 1.0
+Content-Type: MULTIPART/MIXED; BOUNDARY="956895-17464-1019727179=:349"
+X-SW-Source: 2002-q2/txt/msg00096.txt.bz2
 
---=====================_1019723752==_
-Content-Type: text/plain; charset="us-ascii"
-Content-length: 1267
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
 
-Corinna Vinschen wrote: 
+--956895-17464-1019727179=:349
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-length: 649
 
-> Your patch looks good.  What I didn't quite get is, how the above
-> code now looks like (ideally) when using the new FD_SETCF functionality.
-> Could you write a short example?  If inetd (what about sshd?) could
-> benefit, I'd like to see how to do it.  
+The patch will add locks via mutex around critical code to protect against
+race conditions and fix __pthread_detach to cleanup when thread has
+already terminated. This an incremental update again.
 
-FYI, attached are patches for inetd and sshd. I tested the standalone sshd
-and sshd from inetd on Win98. No CLOSE_WAIT.
-In addition I let the following loop run > 200 times
- i=0; while true; do i=$(($i +1)); ssh the_server echo $i; done
-Without patches it stops after 50 to 83 times and all networking
-on the server returns WSAENOBUFS (as reported by others). 
+Greetings,
+Thomas
 
-Although only a few lines of code need to be changed in the applications,
-it would of course be better if Cygwin itself could take care of the bug
-once and for all, as discussed last week.
-For example, the bug is probably still active (but can be fixed)
-in sshd when using ssh -R xxxxxx
-   
-The patches are not exactly as I had explained. Shutdown() is apparently
-not needed but the socket must (?) be blocking when calling close() for 
-the last time. I threw in linger = off (default behavior) just to be on the 
-safe side. More testing is needed, but it's useless if Cygwin itself gets
-to take care of the issue.
+2002-04-25  Thomas Pfaff  <tpfaff@gmx.net>
 
-Pierre
---=====================_1019723752==_
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment; filename="sshd.c.diff"
-Content-length: 1781
+	* thread.h (pthread::mutex): new member
+	* thread.cc (pthread::pthread): Set mutex to NULL.
+	(pthread::~pthread): Destroy mutex.
+	(pthread::create): Initialize mutex.
+	(thread_init_wrapper): Protect against race.
+	(__pthread_cleanup_push): Ditto.
+	(__pthread_exit): Ditto.
+	(__pthread_join): Ditto
+	(__pthread_detach): Protect against race and cleanup if thread has
+	already terminated.
 
---- sshd.c.in	Sun Apr 21 20:49:32 2002
-+++ sshd.c	Wed Apr 24 22:36:06 2002
-@@ -265,10 +265,14 @@
- {
- 	int save_errno =3D errno;
- 	int status;
-+	pid_t pid;
+--956895-17464-1019727179=:349
+Content-Type: APPLICATION/octet-stream; name="pthread_lock.patch"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.WNT.4.44.0204251132590.349@algeria.intern.net>
+Content-Description: 
+Content-Disposition: attachment; filename="pthread_lock.patch"
+Content-length: 6767
 
--	while (waitpid(-1, &status, WNOHANG) > 0)
--		;
--
-+	while ((pid =3D waitpid(-1, &status, WNOHANG)) > 0) {
-+#ifdef HAVE_CYGWIN
-+	    if (msbug_close(pid, -1))
-+			error("msbug_close %s", strerror(errno));
-+#endif
-+	}
- 	signal(SIGCHLD, main_sigchld_handler);
- 	errno =3D save_errno;
- }
-@@ -888,11 +892,17 @@
- 				verbose("socket: %.100s", strerror(errno));
- 				continue;
- 			}
-+#ifndef HAVE_CYGWIN
- 			if (fcntl(listen_sock, F_SETFL, O_NONBLOCK) < 0) {
- 				error("listen_sock O_NONBLOCK: %s", strerror(errno));
- 				close(listen_sock);
- 				continue;
- 			}
-+#else /* Don't dup listen_sock in forked processes */
-+			if (fcntl(listen_sock, F_SETCF, 0) < 0) {
-+			    error("listen_sock F_SETCF: %s", strerror(errno));
-+			}
-+#endif
- 			/*
- 			 * Set socket options.  We try to make the port
- 			 * reusable and have it close as fast as possible
-@@ -1091,7 +1101,11 @@
- 						 */
- 						startup_pipe =3D startup_p[1];
- 						close_startup_pipes();
-+#ifndef HAVE_CYGWIN
- 						close_listen_socks();
-+#else   /* Not opened in CYGWIN */
-+						num_listen_socks =3D -1;
-+#endif
- 						sock_in =3D newsock;
- 						sock_out =3D newsock;
- 						log_init(__progname, options.log_level, options.log_facility, log_st=
-derr);
-@@ -1117,9 +1131,14 @@
- 				}
+ZGlmZiAtdXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi90aHJlYWQuY2Mgc3Jj
+L3dpbnN1cC9jeWd3aW4vdGhyZWFkLmNjCi0tLSBzcmMub2xkL3dpbnN1cC9j
+eWd3aW4vdGhyZWFkLmNjCVRodSBBcHIgMjUgMTA6MTE6MzAgMjAwMgorKysg
+c3JjL3dpbnN1cC9jeWd3aW4vdGhyZWFkLmNjCVRodSBBcHIgMjUgMTA6NDk6
+MjIgMjAwMgpAQCAtMzQ2LDcgKzM0Niw4IEBAIE1UaW50ZXJmYWNlOjpmaXh1
+cF9hZnRlcl9mb3JrICh2b2lkKQogfQogCiBwdGhyZWFkOjpwdGhyZWFkICgp
+OnZlcmlmeWFibGVfb2JqZWN0IChQVEhSRUFEX01BR0lDKSwgd2luMzJfb2Jq
+X2lkICgwKSwKLSAgICAgICAgICAgICAgICAgICAgY2FuY2Vsc3RhdGUgKDAp
+LCBjYW5jZWx0eXBlICgwKSwgY2xlYW51cF9oYW5kbGVycyhOVUxMKSwgam9p
+bmVyKE5VTEwpCisgICAgICAgICAgICAgICAgICAgIGNhbmNlbHN0YXRlICgw
+KSwgY2FuY2VsdHlwZSAoMCksIG11dGV4KE5VTEwpLAorICAgICAgICAgICAg
+ICAgICAgICBjbGVhbnVwX2hhbmRsZXJzKE5VTEwpLCBqb2luZXIoTlVMTCkK
+IHsKIH0KIApAQCAtMzU0LDYgKzM1NSw3IEBAIHB0aHJlYWQ6On5wdGhyZWFk
+ICgpCiB7CiAgIGlmICh3aW4zMl9vYmpfaWQpCiAgICAgQ2xvc2VIYW5kbGUg
+KHdpbjMyX29ial9pZCk7CisgIF9fcHRocmVhZF9tdXRleF9kZXN0cm95KCZt
+dXRleCk7CiB9CiAKIApAQCAtMzYxLDYgKzM2Myw4IEBAIHZvaWQKIHB0aHJl
+YWQ6OmNyZWF0ZSAodm9pZCAqKCpmdW5jKSAodm9pZCAqKSwgcHRocmVhZF9h
+dHRyICpuZXdhdHRyLAogCQkgdm9pZCAqdGhyZWFkYXJnKQogeworICBpbnQg
+dGVtcGVycjsKKwogICAvKmFscmVhZHkgcnVubmluZyA/ICovCiAgIGlmICh3
+aW4zMl9vYmpfaWQpCiAgICAgcmV0dXJuOwpAQCAtMzc1LDYgKzM3OSwxNCBA
+QCBwdGhyZWFkOjpjcmVhdGUgKHZvaWQgKigqZnVuYykgKHZvaWQgKiksCiAg
+IGZ1bmN0aW9uID0gZnVuYzsKICAgYXJnID0gdGhyZWFkYXJnOwogCisgIGlm
+ICgodGVtcGVyciA9IF9fcHRocmVhZF9tdXRleF9pbml0ICgmbXV0ZXgsIE5V
+TEwpKSkKKyAgICB7CisgICAgICBzeXN0ZW1fcHJpbnRmICgiY291bGRuJ3Qg
+aW5pdCBtdXRleCwgdGhpcyAlcCBlcnJubyAlZCIsIHRoaXMsIHRlbXBlcnIp
+OworICAgICAgLyp3ZSBuZWVkIHRoZSBtdXRleCBmb3IgY29ycmVjdCBiZWhh
+dmlvdXIgKi8KKyAgICAgIG1hZ2ljID0gMDsKKyAgICAgIHJldHVybjsKKyAg
+ICB9CisKICAgd2luMzJfb2JqX2lkID0gOjpDcmVhdGVUaHJlYWQgKCZzZWNf
+bm9uZV9uaWgsIGF0dHIuc3RhY2tzaXplLAogCQkJCShMUFRIUkVBRF9TVEFS
+VF9ST1VUSU5FKSB0aHJlYWRfaW5pdF93cmFwcGVyLAogCQkJCXRoaXMsIENS
+RUFURV9TVVNQRU5ERUQsICZ0aHJlYWRfaWQpOwpAQCAtOTA4LDkgKzkyMCwx
+MSBAQCB0aHJlYWRfaW5pdF93cmFwcGVyICh2b2lkICpfYXJnKQogICAvKnRo
+ZSBPUyBkb2Vzbid0IGNoZWNrIHRoaXMgZm9yIDw9IDY0IFRscyBlbnRyaWVz
+IChwcmUgd2luMmspICovCiAgIFRsc1NldFZhbHVlIChNVF9JTlRFUkZBQ0Ut
+PnRocmVhZF9zZWxmX2R3VGxzSW5kZXgsIHRocmVhZCk7CiAKKyAgX19wdGhy
+ZWFkX211dGV4X2xvY2soJnRocmVhZC0+bXV0ZXgpOwogICAvLyBpZiB0aHJl
+YWQgaXMgZGV0YWNoZWQgZm9yY2UgY2xlYW51cCBvbiBleGl0CiAgIGlmICh0
+aHJlYWQtPmF0dHIuam9pbmFibGUgPT0gUFRIUkVBRF9DUkVBVEVfREVUQUNI
+RUQgJiYgdGhyZWFkLT5qb2luZXIgPT0gTlVMTCkKICAgICB0aHJlYWQtPmpv
+aW5lciA9IF9fcHRocmVhZF9zZWxmKCk7CisgIF9fcHRocmVhZF9tdXRleF91
+bmxvY2soJnRocmVhZC0+bXV0ZXgpOwogCiAjaWZkZWYgX0NZR19USFJFQURf
+RkFJTFNBRkUKICAgaWYgKF9SRUVOVCA9PSBfaW1wdXJlX3B0cikKQEAgLTEy
+MjUsOCArMTIzOSwxMyBAQCBfX3B0aHJlYWRfY2xlYW51cF9wdXNoIChfX3B0
+aHJlYWRfY2xlYW51CiB7CiAgIHB0aHJlYWRfdCB0aHJlYWQgPSBfX3B0aHJl
+YWRfc2VsZiAoKTsKIAorICAvLyBjbGVhbnVwX3B1c2ggaXMgbm90IGFzeW5j
+IGNhbmNlbCBzYWZlCisgIF9fcHRocmVhZF9tdXRleF9sb2NrKCZ0aHJlYWQt
+Pm11dGV4KTsKKwogICBoYW5kbGVyLT5uZXh0ID0gdGhyZWFkLT5jbGVhbnVw
+X2hhbmRsZXJzOwogICB0aHJlYWQtPmNsZWFudXBfaGFuZGxlcnMgPSBoYW5k
+bGVyOworCisgIF9fcHRocmVhZF9tdXRleF91bmxvY2soJnRocmVhZC0+bXV0
+ZXgpOwogfQogCiB2b2lkCkBAIC0xNTM3LDExICsxNTU2LDE1IEBAIF9fcHRo
+cmVhZF9leGl0ICh2b2lkICp2YWx1ZV9wdHIpCiAKICAgTVRfSU5URVJGQUNF
+LT5kZXN0cnVjdG9ycy5JdGVyYXRlTnVsbCAoKTsKIAotICAvLyBjbGVhbnVw
+IGlmIHRocmVhZCBpcyBpbiBkZXRhY2hlZCBzdGF0ZSBhbmQgbm90IGpvaW5l
+ZAorICBfX3B0aHJlYWRfbXV0ZXhfbG9jaygmdGhyZWFkLT5tdXRleCk7CiAg
+IGlmKCBfX3B0aHJlYWRfZXF1YWwoJnRocmVhZC0+am9pbmVyLCAmdGhyZWFk
+ICkgKQorICAgIC8vIGNsZWFudXAgaWYgdGhyZWFkIGlzIGluIGRldGFjaGVk
+IHN0YXRlIGFuZCBub3Qgam9pbmVkCiAgICAgZGVsZXRlIHRocmVhZDsKICAg
+ZWxzZQotICAgIHRocmVhZC0+cmV0dXJuX3B0ciA9IHZhbHVlX3B0cjsKKyAg
+ICB7CisgICAgICBfX3B0aHJlYWRfbXV0ZXhfdW5sb2NrKCZ0aHJlYWQtPm11
+dGV4KTsKKyAgICAgIHRocmVhZC0+cmV0dXJuX3B0ciA9IHZhbHVlX3B0cjsK
+KyAgICB9CiAKICAgaWYgKEludGVybG9ja2VkRGVjcmVtZW50ICgmTVRfSU5U
+RVJGQUNFLT50aHJlYWRjb3VudCkgPT0gMCkKICAgICBleGl0ICgwKTsKQEAg
+LTE1NTgsMjQgKzE1ODEsMjcgQEAgX19wdGhyZWFkX2pvaW4gKHB0aHJlYWRf
+dCAqdGhyZWFkLCB2b2lkIAogICBpZiAodmVyaWZ5YWJsZV9vYmplY3RfaXN2
+YWxpZCAodGhyZWFkLCBQVEhSRUFEX01BR0lDKSAhPSBWQUxJRF9PQkpFQ1Qp
+CiAgICAgcmV0dXJuIEVTUkNIOwogCi0gIGlmICgoKnRocmVhZCktPmF0dHIu
+am9pbmFibGUgPT0gUFRIUkVBRF9DUkVBVEVfREVUQUNIRUQpCisgIGlmKCBf
+X3B0aHJlYWRfZXF1YWwodGhyZWFkLCAmam9pbmVyICkgKQogICAgIHsKICAg
+ICAgIGlmIChyZXR1cm5fdmFsKQogICAgICAgICAqcmV0dXJuX3ZhbCA9IE5V
+TEw7Ci0gICAgICByZXR1cm4gRUlOVkFMOworICAgICAgcmV0dXJuIEVERUFE
+TEs7CiAgICAgfQogCi0gIGVsc2UgaWYoIF9fcHRocmVhZF9lcXVhbCh0aHJl
+YWQsICZqb2luZXIgKSApCisgIF9fcHRocmVhZF9tdXRleF9sb2NrKCYoKnRo
+cmVhZCktPm11dGV4KTsKKyAgaWYgKCgqdGhyZWFkKS0+YXR0ci5qb2luYWJs
+ZSA9PSBQVEhSRUFEX0NSRUFURV9ERVRBQ0hFRCkKICAgICB7CisgICAgICAg
+X19wdGhyZWFkX211dGV4X3VubG9jaygmKCp0aHJlYWQpLT5tdXRleCk7CiAg
+ICAgICBpZiAocmV0dXJuX3ZhbCkKICAgICAgICAgKnJldHVybl92YWwgPSBO
+VUxMOwotICAgICAgcmV0dXJuIEVERUFETEs7CisgICAgICByZXR1cm4gRUlO
+VkFMOwogICAgIH0KIAogICBlbHNlCiAgICAgewogICAgICAgKCp0aHJlYWQp
+LT5qb2luZXIgPSBqb2luZXI7CiAgICAgICAoKnRocmVhZCktPmF0dHIuam9p
+bmFibGUgPSBQVEhSRUFEX0NSRUFURV9ERVRBQ0hFRDsKKyAgICAgICBfX3B0
+aHJlYWRfbXV0ZXhfdW5sb2NrKCYoKnRocmVhZCktPm11dGV4KTsKICAgICAg
+IFdhaXRGb3JTaW5nbGVPYmplY3QgKCgqdGhyZWFkKS0+d2luMzJfb2JqX2lk
+LCBJTkZJTklURSk7CiAgICAgICBpZiAocmV0dXJuX3ZhbCkKICAgICAgICAg
+ICpyZXR1cm5fdmFsID0gKCp0aHJlYWQpLT5yZXR1cm5fcHRyOwpAQCAtMTU5
+NCwxNCArMTYyMCwyMyBAQCBfX3B0aHJlYWRfZGV0YWNoIChwdGhyZWFkX3Qg
+KnRocmVhZCkKICAgaWYgKHZlcmlmeWFibGVfb2JqZWN0X2lzdmFsaWQgKHRo
+cmVhZCwgUFRIUkVBRF9NQUdJQykgIT0gVkFMSURfT0JKRUNUKQogICAgIHJl
+dHVybiBFU1JDSDsKIAorICBfX3B0aHJlYWRfbXV0ZXhfbG9jaygmKCp0aHJl
+YWQpLT5tdXRleCk7CiAgIGlmICgoKnRocmVhZCktPmF0dHIuam9pbmFibGUg
+PT0gUFRIUkVBRF9DUkVBVEVfREVUQUNIRUQpCiAgICAgeworICAgICAgX19w
+dGhyZWFkX211dGV4X3VubG9jaygmKCp0aHJlYWQpLT5tdXRleCk7CiAgICAg
+ICByZXR1cm4gRUlOVkFMOwogICAgIH0KIAotICAvLyBmb3JjZSBjbGVhbnVw
+IG9uIGV4aXQKLSAgKCp0aHJlYWQpLT5qb2luZXIgPSAqdGhyZWFkOwotICAo
+KnRocmVhZCktPmF0dHIuam9pbmFibGUgPSBQVEhSRUFEX0NSRUFURV9ERVRB
+Q0hFRDsKKyAgLy8gY2hlY2sgaWYgdGhyZWFkIGlzIHN0aWxsIGFsaXZlCisg
+IGlmKCBXQUlUX1RJTUVPVVQgPT0gV2FpdEZvclNpbmdsZU9iamVjdCAoKCp0
+aHJlYWQpLT53aW4zMl9vYmpfaWQsIDApICkKKyAgICB7CisgICAgICAoKnRo
+cmVhZCktPmpvaW5lciA9ICp0aHJlYWQ7CisgICAgICAoKnRocmVhZCktPmF0
+dHIuam9pbmFibGUgPSBQVEhSRUFEX0NSRUFURV9ERVRBQ0hFRDsKKyAgICAg
+IF9fcHRocmVhZF9tdXRleF91bmxvY2soJigqdGhyZWFkKS0+bXV0ZXgpOwor
+ICAgIH0KKyAgZWxzZQorICAgIC8vIHRocmVhZCBoYXMgYWxyZWFkeSB0ZXJt
+aW5hdGVkCisgICAgZGVsZXRlICgqdGhyZWFkKTsKIAogICByZXR1cm4gMDsK
+IH0KZGlmZiAtdXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi90aHJlYWQuaCBz
+cmMvd2luc3VwL2N5Z3dpbi90aHJlYWQuaAotLS0gc3JjLm9sZC93aW5zdXAv
+Y3lnd2luL3RocmVhZC5oCVRodSBBcHIgMjUgMTA6MTE6MzAgMjAwMgorKysg
+c3JjL3dpbnN1cC9jeWd3aW4vdGhyZWFkLmgJVGh1IEFwciAyNSAwOToxNTox
+NyAyMDAyCkBAIC0yMzksNiArMjM5LDcgQEAgcHVibGljOgogICB2b2lkICpy
+ZXR1cm5fcHRyOwogICBib29sIHN1c3BlbmRlZDsKICAgaW50IGNhbmNlbHN0
+YXRlLCBjYW5jZWx0eXBlOworICBwdGhyZWFkX211dGV4ICptdXRleDsKICAg
+X19wdGhyZWFkX2NsZWFudXBfaGFuZGxlciAqY2xlYW51cF9oYW5kbGVyczsK
+ICAgcHRocmVhZF90IGpvaW5lcjsKICAgLy8gaW50IGpvaW5hYmxlOwo=
 
- 				arc4random_stir();
--
-+#ifndef HAVE_CYGWIN
- 				/* Close the new socket (the child is now taking care of it). */
- 				close(newsock);
-+#else
-+				if (msbug_close(pid, newsock))
-+				    error("msbug_close %s", strerror(errno));
-+#endif
-+
- 			}
- 			/* child process check (or debug mode) */
- 			if (num_listen_socks < 0)
-@@ -1519,3 +1538,4 @@
- #endif
- 	debug("KEX done");
- }
-+
-
---=====================_1019723752==_
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: attachment; filename="bsd-cygwin_util.h.diff"
-Content-length: 341
-
---- bsd-cygwin_util.h.in	Fri Dec 28 22:08:30 2001
-+++ bsd-cygwin_util.h	Mon Apr 22 18:57:48 2002
-@@ -27,6 +27,7 @@
- int check_nt_auth(int pwd_authenticated, struct passwd *pw);
- int check_ntsec(const char *filename);
- void register_9x_service(void);
-+int msbug_close(pid_t pid, int fd);
- 
- #define open binary_open
- #define pipe binary_pipe
-
---=====================_1019723752==_
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment; filename="bsd-cygwin_util.c.diff"
-Content-length: 2002
-
---- bsd-cygwin_util.c.in	Fri Dec 28 22:08:30 2001
-+++ bsd-cygwin_util.c	Wed Apr 24 23:41:54 2002
-@@ -163,4 +163,63 @@
- 	RegisterServiceProcess(0, 1);
- }
-
-+/* This is a part of a workaround for the following Microsft bug
-+   on Win95/98/Me:
-+   http://support.microsoft.com/default.aspx?scid=3Dkb;en-us;Q198663
-+   http://support.microsoft.com/default.aspx?scid=3Dkb;EN-US;q229658
-+
-+   msbug_close(pid, fd) is normally called twice.
-+   The first time fd is >=3D 0.
-+   On Win95/98/Me it then records the fd as belonging to the pid,
-+   instead of closing it outright, and it sets the
-+   "close on fork" flag to avoid further duplications.
-+   The function is called again with fd < 0 when the pid exits.
-+   It then closes the associated fd.
-+   The two calls can safely be made in different threads.
-+
-+   The function returns the value of the fcntl() or close() call
-+   it makes, if any, else 0.
-+*/
-+#include <fcntl.h>
-+#include <unistd.h>
-+#include "log.h"
-+#define msbug_MAXFD 128 /* Plenty for small systems */
-+int msbug_close(pid_t pid, int fd)
-+{
-+  int i;
-+  static struct {
-+    pid_t pid;
-+      int fd;
-+  } info[msbug_MAXFD] =3D {};
-+
-+  if (GetVersion() < 0x80000000) {
-+    if (fd >=3D 0) return close(fd);
-+    else return 0;
-+  }
-+  if (fd >=3D 0) {
-+    for (i =3D 0; i < msbug_MAXFD; i++){
-+      if (info[i].pid =3D=3D 0) {
-+        info[i].fd =3D fd;
-+        info[i].pid =3D pid; /* Done last */
-+        return fcntl(fd, F_SETCF, 0);
-+      }
-+    }
-+    return close(fd); /* Better now than never */
-+  }
-+  else {
-+    struct linger linger =3D {};
-+    for (i =3D 0; i < msbug_MAXFD; i++){
-+      if (info[i].pid =3D=3D pid) {
-+        fd =3D info[i].fd;
-+        info[i].pid =3D 0; /* Done last */
-+        fcntl(fd, F_SETFL, 0); /* Blocking */
-+        setsockopt(fd, SOL_SOCKET, SO_LINGER,
-+                   &linger, sizeof(linger));
-+        return close(fd);
-+      }
-+    }
-+    error("could not find pid %d", pid);
-+    return 0;
-+  }
-+}
- #endif /* HAVE_CYGWIN */
-
---=====================_1019723752==_
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment; filename="inetd.c.diff"
-Content-length: 2761
-
---- inetd.c.in	Sun Jan  6 04:05:42 2002
-+++ inetd.c	Wed Apr 24 23:49:54 2002
-@@ -590,6 +590,64 @@
-   SetServiceStatus(ssh, &ss);
- }
-
-+/* This is a part of a workaround for the following Microsft bug
-+   on Win95/98/Me:
-+   http://support.microsoft.com/default.aspx?scid=3Dkb;en-us;Q198663
-+   http://support.microsoft.com/default.aspx?scid=3Dkb;EN-US;q229658
-+
-+   msbug_close(pid, fd) is normally called twice.
-+   The first time fd is >=3D 0.
-+   On Win95/98/Me it then records the fd as belonging to the pid,
-+   instead of closing it outright, and it sets the
-+   "close on fork" flag to avoid further duplications.
-+   The function is called again with fd < 0 when the pid exits.
-+   It then closes the associated fd.
-+   The two calls can safely be made in different threads.
-+
-+   The function returns the value of the fcntl() or close() call
-+   it makes, if any, else 0.
-+*/
-+#include <fcntl.h>
-+#include <unistd.h>
-+#define msbug_MAXFD 128 /* Plenty for small systems */
-+static int msbug_close(pid_t pid, int fd)
-+{
-+  int i;
-+  static struct {
-+    pid_t pid;
-+      int fd;
-+  } info[msbug_MAXFD] =3D {};
-+
-+  if (GetVersion() < 0x80000000) {
-+    if (fd >=3D 0) return close(fd);
-+    else return 0;
-+  }
-+  if (fd >=3D 0) {
-+    for (i =3D 0; i < msbug_MAXFD; i++){
-+      if (info[i].pid =3D=3D 0) {
-+        info[i].fd =3D fd;
-+        info[i].pid =3D pid; /* Done last */
-+        return fcntl(fd, F_SETCF, 0);
-+      }
-+    }
-+    return close(fd); /* Better now than never */
-+  }
-+  else {
-+    struct linger linger =3D {};
-+    for (i =3D 0; i < msbug_MAXFD; i++){
-+      if (info[i].pid =3D=3D pid) {
-+        fd =3D info[i].fd;
-+        info[i].pid =3D 0; /* Done last */
-+        fcntl(fd, F_SETFL, 0); /* Blocking */
-+        setsockopt(fd, SOL_SOCKET, SO_LINGER,
-+                   &linger, sizeof(linger));
-+        return close(fd);
-+      }
-+    }
-+    return 0;
-+  }
-+}
-+
- void WINAPI
- service_main(DWORD argc, LPSTR *argv)
- #else
-@@ -920,7 +978,11 @@
- 			    }
- 		    }
- 		    if (!sep->se_wait && sep->se_socktype =3D=3D SOCK_STREAM)
--			    close(ctrl);
-+#ifdef __CYGWIN__
-+		      msbug_close(pid, ctrl);
-+#else
-+		      close(ctrl);
-+#endif
- 		}
- 	}
- }
-@@ -1061,6 +1123,9 @@
- 		if (debug)
- 			fprintf(stderr, "%d reaped, status %#x\n",
- 				pid, status);
-+#ifdef __CYGWIN__
-+		msbug_close(pid, -1);
-+#endif
- 		for (sep =3D servtab; sep; sep =3D sep->se_next)
- 			if (sep->se_wait =3D=3D pid) {
- 				if (status)
-@@ -1256,8 +1321,12 @@
- 		}
- 		return;
- 	}
--	if (sep->se_socktype =3D=3D SOCK_STREAM)
-+	if (sep->se_socktype =3D=3D SOCK_STREAM) {
-+#ifdef __CYGWIN__
-+		if (!sep->se_wait) fcntl(sep->se_fd, F_SETCF, 0);
-+#endif
- 		listen(sep->se_fd, 10);
-+	}
- 	FD_SET(sep->se_fd, &allsock);
- 	nsock++;
- 	if (sep->se_fd > maxsock)
-
---=====================_1019723752==_--
+--956895-17464-1019727179=:349--
