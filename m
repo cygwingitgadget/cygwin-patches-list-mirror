@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5166-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 15747 invoked by alias); 24 Nov 2004 17:50:40 -0000
+Return-Path: <cygwin-patches-return-5167-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 24089 invoked by alias); 24 Nov 2004 18:02:09 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,41 +7,41 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 14911 invoked from network); 24 Nov 2004 17:49:53 -0000
-Received: from unknown (HELO cgf.cx) (66.30.17.189)
-  by sourceware.org with SMTP; 24 Nov 2004 17:49:53 -0000
-Received: by cgf.cx (Postfix, from userid 201)
-	id 751F61B3E5; Wed, 24 Nov 2004 12:50:43 -0500 (EST)
-Date: Wed, 24 Nov 2004 17:50:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
-To: cygwin-apps@cygwin.com, cygwin-patches@cygwin.com
+Received: (qmail 23780 invoked from network); 24 Nov 2004 18:01:51 -0000
+Received: from unknown (HELO omzesmtp01.mci.com) (199.249.17.7)
+  by sourceware.org with SMTP; 24 Nov 2004 18:01:51 -0000
+Received: from pmismtp01.mcilink.com ([166.38.62.36])
+ by firewall.mci.com (Iplanet MTA 5.2)
+ with ESMTP id <0I7P00K67330Z2@firewall.mci.com> for cygwin-patches@cygwin.com;
+ Wed, 24 Nov 2004 17:54:36 +0000 (GMT)
+Received: from pmismtp01.mcilink.com by pmismtp01.mcilink.com
+ (iPlanet Messaging Server 5.2 HotFix 1.14 (built Mar 18 2003))
+ with SMTP id <0I7P00C0132CVB@pmismtp01.mcilink.com> for
+ cygwin-patches@cygwin.com; Wed, 24 Nov 2004 17:54:36 +0000 (GMT)
+Received: from WS117V6220509.mcilink.com ([166.34.132.122])
+ by pmismtp01.mcilink.com
+ (iPlanet Messaging Server 5.2 HotFix 1.14 (built Mar 18 2003))
+ with ESMTP id <0I7P00B7J32WVD@pmismtp01.mcilink.com> for
+ cygwin-patches@cygwin.com; Wed, 24 Nov 2004 17:54:32 +0000 (GMT)
+Date: Wed, 24 Nov 2004 18:02:00 -0000
+From: Mark Paulus <mark.paulus@mci.com>
 Subject: Re: anyone paying attention to bugzilla?
-Message-ID: <20041124175043.GB21649@trixie.casa.cgf.cx>
-Reply-To: cygwin-apps@cygwin.com, cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-apps@cygwin.com, cygwin-patches@cygwin.com
-References: <20041124171922.GA21578@trixie.casa.cgf.cx> <Pine.GSO.4.61.0411241238080.14489@slinky.cs.nyu.edu>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.GSO.4.61.0411241238080.14489@slinky.cs.nyu.edu>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2004-q4/txt/msg00167.txt.bz2
+In-reply-to: <20041124171922.GA21578@trixie.casa.cgf.cx>
+To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Message-id: <0I7P00B7K32WVD@pmismtp01.mcilink.com>
+MIME-version: 1.0
+Content-type: text/plain; charset=iso-8859-1
+Content-transfer-encoding: 7bit
+Priority: Normal
+X-SW-Source: 2004-q4/txt/msg00168.txt.bz2
 
-On Wed, Nov 24, 2004 at 12:41:46PM -0500, Igor Pechtchanski wrote:
->On Wed, 24 Nov 2004, Christopher Faylor wrote:
->
->> Is anyone besides Max paying attention to bugzilla?
->
->Reini and you? ;-)
+Bugzilla?  How do you spell that again?
 
-Yeah, and if Corinna was here, she'd probably be contributing, too.
 
-I'm not exactly contributing.  I just am the default owner of the cygwin
-dll bugs.  Some poor soul has decided that bugzilla is the place to
-submit patches in that category and I haven't seen either of the two
-people who volunteered to police bugzilla setting him straight.
+On Wed, 24 Nov 2004 12:19:22 -0500, Christopher Faylor wrote:
 
-I'll let Brian or Reini decide who wants to be the default owner for
-cygwin DLL bugs and then change the default ownership accordingly.
+>Is anyone besides Max paying attention to bugzilla?
 
-cgf
+>cgf
+
+
