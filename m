@@ -2,14 +2,51 @@ From: "Robert Collins" <robert.collins@itdomain.com.au>
 To: "egor duda" <cygwin-patches@cygwin.com>
 Cc: <cygwin-patches@cygwin.com>
 Subject: Re: src/winsup/cygwin ChangeLog thread.cc thread.h ...
-Date: Thu, 27 Sep 2001 06:03:00 -0000
-Message-id: <004801c14755$01a57f20$01000001@lifelesswks>
+Date: Thu, 27 Sep 2001 07:12:00 -0000
+Message-id: <008301c1475e$afb0c4e0$01000001@lifelesswks>
 References: <20010925114527.23687.qmail@sourceware.cygnus.com> <14472692346.20010927144858@logos-m.ru> <007b01c14743$2a0005b0$01000001@lifelesswks> <12280602580.20010927170049@logos-m.ru>
-X-SW-Source: 2001-q3/msg00210.html
+X-SW-Source: 2001-q3/msg00211.html
+Content-type: multipart/mixed; boundary="----------=_1583532849-65438-108"
 
-I'm just thinking about the best fix - I know what the problem is.
+This is a multi-part message in MIME format...
+
+------------=_1583532849-65438-108
+Content-length: 2106
+
+Ok this is a quick-and-it-couldbe-cleaner patch.
+
+It's interim - this weekend I'll make time to roll the logic throughout
+thread.cc. The patch doesn't introduce any new issues though, and it is
+the correct IMO step to solving the issue(s) I was trying to address
+with my last lets-break-cygwin patch.
+
+I have _no_ idea why it worked at all after I built that .dll :}. The
+fault for those wanting the grisly details was that I changed the
+semantics of verifyableobject_isvalid without updating the tests against
+the return code. Doh.
+
+I'm having some trouble with cvs+ssh with this patch .. though I'm not
+sure why. For a little while I though it might be chris's tuesday
+sleep(1) change, because I was getting strange results from pspec> I'm
+not sure though.
+
+Anyway, I don't have time to complete a binary search now...
+
+What I have established is that the faulty change (other than my
+thread.cc snafu) is sometime between 1am tuesday 25th and now. In other
+words, a dll built from cvs @tuesday 1am, with the most recent thread.cc
+and thread.h and this patch seems to run ok. The cond_wait bug seems
+particularly ticklish however, and that may be the cvs+ssh problem I was
+seeing.
+
+So, you can ignore this blurb :].
+
+I'm not checking this patch in _yet_ as I'm still confirming that
+everything is really ok. I'll have a little time in the office tomorrow
+to follow up, it's bedtime now though.
 
 Rob
+
 ----- Original Message -----
 From: "egor duda" <deo@logos-m.ru>
 To: "Robert Collins" <robert.collins@itdomain.com.au>
@@ -33,116 +70,142 @@ with
 > >> Robert, i have problems with your last patch. at program startup
 > >> read_etc_passwd() is called recursively and second call blocks at
 > >> pthread_mutex_lock()
->
-> RC> Huh, strange. I ran with the .dll for some time with no trouble,
-and am
-> RC> about to switch to it in this environment as well.
->
-> here's the relevant part of backtrace from gdb:
->
-> #2  0x610678e6 in __pthread_mutex_lock (mutex=0x610a44c8)
->     at
-../../../../../../src/sourceware/src/winsup/cygwin/thread.cc:1955
-> #3  0x610407c6 in pthread_mutex_lock (mutex=0x610a44c8)
->     at
-../../../../../../src/sourceware/src/winsup/cygwin/pthread.cc:240
-> #4  0x61035fb1 in read_etc_passwd ()
->     at
-../../../../../../src/sourceware/src/winsup/cygwin/passwd.cc:124
-> #5  0x61036ea2 in internal_getpwent (pos=0)
->     at
-../../../../../../src/sourceware/src/winsup/cygwin/passwd.cc:356
-> #6  0x610460cb in cygsid::get_id (this=0x22c2c0, search_grp=0,
-type=0x0)
->     at
-../../../../../../src/sourceware/src/winsup/cygwin/sec_helper.cc:169
-> #7  0x6104b182 in get_nt_attribute (file=0x614f136c
-"e:\\unix\\etc\\group",
->     attribute=0x22d488, uidret=0x22d48e, gidret=0x22d490)
->     at
-../../../../../../src/sourceware/src/winsup/cygwin/security.h:52
-> #8  0x6104b5e5 in get_file_attribute (use_ntsec=1073741824,
->     file=0x614f136c "e:\\unix\\etc\\group", attribute=0x22d488,
->     uidret=0x22d48e, gidret=0x22d490)
->     at
-../../../../../../src/sourceware/src/winsup/cygwin/security.cc:1219
-> #9  0x61012dca in fhandler_disk_file::fstat (this=0x614f0b3c,
-buf=0x22d480)
->     at
-../../../../../../src/sourceware/src/winsup/cygwin/fhandler.cc:964
-> #10 0x6105df7b in _fstat (fd=4, buf=0x22d480)
->     at
-../../../../../../src/sourceware/src/winsup/cygwin/syscalls.cc:1012
-> #11 0x6108f9e4 in _fstat_r (ptr=0x61098020, fd=4, pstat=0x22d480)
->     at
-../../../../../../../src/sourceware/src/newlib/libc/reent/fstatr.c:62
-> #12 0x6108fa44 in __smakebuf (fp=0xa011aec)
->     at
-../../../../../../../src/sourceware/src/newlib/libc/stdio/makebuf.c:50
-> #13 0x6108d2b3 in __srefill (fp=0xa011aec)
->     at
-../../../../../../../src/sourceware/src/newlib/libc/stdio/refill.c:88
-> #14 0x61081ccb in __srget (fp=0xa011aec)
->     at
-../../../../../../../src/sourceware/src/newlib/libc/stdio/rget.c:37
-> #15 0x61083270 in fgets (buf=0x22d7f0 "$", n=200, fp=0xa011aec)
->     at
-../../../../../../../src/sourceware/src/newlib/libc/../libc/include/stdi
-o.h:290
-> #16 0x61029c49 in read_etc_group ()
->     at ../../../../../../src/sourceware/src/winsup/cygwin/grp.cc:165
-> #17 0x6102a10e in internal_getgrent (pos=0)
->     at ../../../../../../src/sourceware/src/winsup/cygwin/grp.cc:265
-> #18 0x61046153 in cygsid::get_id (this=0x22dd10, search_grp=1,
-type=0x0)
->     at
-../../../../../../src/sourceware/src/winsup/cygwin/sec_helper.cc:187
-> #19 0x6104b1a9 in get_nt_attribute (file=0x614f0af4
-"e:\\unix\\etc\\passwd",
->     attribute=0x22eed8, uidret=0x22eede, gidret=0x22eee0)
->     at
-../../../../../../src/sourceware/src/winsup/cygwin/security.h:53
-> #20 0x6104b5e5 in get_file_attribute (use_ntsec=1073741824,
->     file=0x614f0af4 "e:\\unix\\etc\\passwd", attribute=0x22eed8,
->     uidret=0x22eede, gidret=0x22eee0)
->     at
-../../../../../../src/sourceware/src/winsup/cygwin/security.cc:1219
-> #21 0x61012dca in fhandler_disk_file::fstat (this=0x614f02c4,
-buf=0x22eed0)
->     at ../../../../../../src/sourceware/src/winsup/cygwin/fhandler.cc:
-964
-> #22 0x6105df7b in _fstat (fd=3, buf=0x22eed0)
->     at
-../../../../../../src/sourceware/src/winsup/cygwin/syscalls.cc:1012
-> #23 0x6108f9e4 in _fstat_r (ptr=0x61098020, fd=3, pstat=0x22eed0)
->     at
-../../../../../../../src/sourceware/src/newlib/libc/reent/fstatr.c:62
-> #24 0x6108fa44 in __smakebuf (fp=0xa011a94)
->     at
-../../../../../../../src/sourceware/src/newlib/libc/stdio/makebuf.c:50
-> #25 0x6108d2b3 in __srefill (fp=0xa011a94)
->     at
-../../../../../../../src/sourceware/src/newlib/libc/stdio/refill.c:88
-> #26 0x61081ccb in __srget (fp=0xa011a94)
->     at
-../../../../../../../src/sourceware/src/newlib/libc/stdio/rget.c:37
-> #27 0x61083270 in fgets (buf=0x22f130 "+", n=1024, fp=0xa011a94)
->     at
-../../../../../../../src/sourceware/src/newlib/libc/../libc/include/stdi
-o
-> .h:290
-> #28 0x61036105 in read_etc_passwd ()
->     at
-../../../../../../src/sourceware/src/winsup/cygwin/passwd.cc:150
-> #29 0x61036ea2 in internal_getpwent (pos=0)
->     at
-../../../../../../src/sourceware/src/winsup/cygwin/passwd.cc:356
-> #30 0x6106ab6e in internal_getlogin (user=@0x614f0094)
->     at ../../../../../../src/sourceware/src/winsup/cygwin/uinfo.cc:172
-> #31 0x6106ad76 in uinfo_init ()
->     at ../../../../../../src/sourceware/src/winsup/cygwin/uinfo.cc:222
->
-> Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet
-2:5020/496.19
->
->
+
+
+
+
+------------=_1583532849-65438-108
+Content-Type: text/x-diff; charset=us-ascii; name="fixmutex.patch"
+Content-Disposition: inline; filename="fixmutex.patch"
+Content-Transfer-Encoding: base64
+Content-Length: 7699
+
+SW5kZXg6IHRocmVhZC5jYwo9PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBm
+aWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL2N5Z3dpbi90aHJlYWQuY2Msdgpy
+ZXRyaWV2aW5nIHJldmlzaW9uIDEuNTAKZGlmZiAtdSAtcCAtcjEuNTAgdGhy
+ZWFkLmNjCi0tLSB0aHJlYWQuY2MJMjAwMS8wOS8yNSAxMTo0NToyNQkxLjUw
+CisrKyB0aHJlYWQuY2MJMjAwMS8wOS8yNyAxMzo0Nzo1OApAQCAtNDYyLDcg
+KzQ2Miw3IEBAIHB0aHJlYWRfY29uZDo6QnJvYWRDYXN0ICgpCiAgIGlmIChw
+dGhyZWFkX211dGV4X2xvY2sgKCZjb25kX2FjY2VzcykpCiAgICAgc3lzdGVt
+X3ByaW50ZiAoIkZhaWxlZCB0byBsb2NrIGNvbmRpdGlvbiB2YXJpYWJsZSBh
+Y2Nlc3MgbXV0ZXgsIHRoaXMgJTBwXG4iLCB0aGlzKTsKICAgaW50IGNvdW50
+ID0gd2FpdGluZzsKLSAgaWYgKCF2ZXJpZnlhYmxlX29iamVjdF9pc3ZhbGlk
+ICgmbXV0ZXgsIFBUSFJFQURfTVVURVhfTUFHSUMpKQorICBpZiAodmVyaWZ5
+YWJsZV9vYmplY3RfaXN2YWxpZCAoJm11dGV4LCBQVEhSRUFEX01VVEVYX01B
+R0lDKSAhPSAtMSkKICAgICB7CiAgICAgICBpZiAocHRocmVhZF9tdXRleF91
+bmxvY2sgKCZjb25kX2FjY2VzcykpCiAJc3lzdGVtX3ByaW50ZiAoIkZhaWxl
+ZCB0byB1bmxvY2sgY29uZGl0aW9uIHZhcmlhYmxlIGFjY2VzcyBtdXRleCwg
+dGhpcyAlMHBcbiIsIHRoaXMpOwpAQCAtNDgzLDcgKzQ4Myw3IEBAIHB0aHJl
+YWRfY29uZDo6U2lnbmFsICgpCiB7CiAgIGlmIChwdGhyZWFkX211dGV4X2xv
+Y2sgKCZjb25kX2FjY2VzcykpCiAgICAgc3lzdGVtX3ByaW50ZiAoIkZhaWxl
+ZCB0byBsb2NrIGNvbmRpdGlvbiB2YXJpYWJsZSBhY2Nlc3MgbXV0ZXgsIHRo
+aXMgJTBwXG4iLCB0aGlzKTsKLSAgaWYgKCF2ZXJpZnlhYmxlX29iamVjdF9p
+c3ZhbGlkICgmbXV0ZXgsIFBUSFJFQURfTVVURVhfTUFHSUMpKQorICBpZiAo
+dmVyaWZ5YWJsZV9vYmplY3RfaXN2YWxpZCAoJm11dGV4LCBQVEhSRUFEX01V
+VEVYX01BR0lDKSAhPSAtMSkKICAgICB7CiAgICAgICBpZiAocHRocmVhZF9t
+dXRleF91bmxvY2sgKCZjb25kX2FjY2VzcykpCiAJc3lzdGVtX3ByaW50ZiAo
+IkZhaWxlZCB0byB1bmxvY2sgY29uZGl0aW9uIHZhcmlhYmxlIGFjY2VzcyBt
+dXRleCwgdGhpcyAlMHBcbiIsCkBAIC04MTcsOCArODE3LDEwIEBAIHZlcmlm
+eWFibGVfb2JqZWN0X2lzdmFsaWQgKHZvaWQgY29uc3QgKiAKICAgdmVyaWZ5
+YWJsZV9vYmplY3QgKipvYmplY3QgPSAodmVyaWZ5YWJsZV9vYmplY3QgKiop
+b2JqZWN0cHRyOwogICBpZiAoY2hlY2tfdmFsaWRfcG9pbnRlciAob2JqZWN0
+KSkKICAgICByZXR1cm4gMDsKLSAgaWYgKCEqb2JqZWN0IHx8ICpvYmplY3Qg
+PT0gUFRIUkVBRF9NVVRFWF9JTklUSUFMSVpFUikKKyAgaWYgKCEqb2JqZWN0
+KQogICAgIHJldHVybiAwOworICBpZiAoKm9iamVjdCA9PSBQVEhSRUFEX01V
+VEVYX0lOSVRJQUxJWkVSKQorICAgIHJldHVybiAxOwogICBpZiAoY2hlY2tf
+dmFsaWRfcG9pbnRlciAoKm9iamVjdCkpCiAgICAgcmV0dXJuIDA7CiAgIGlm
+ICgoKm9iamVjdCktPm1hZ2ljICE9IG1hZ2ljKQpAQCAtMTcxMCw3ICsxNzEy
+LDcgQEAgX19wdGhyZWFkX2NvbmRfdGltZWR3YWl0IChwdGhyZWFkX2NvbmRf
+dAogICAgIF9fcHRocmVhZF9tdXRleF9pbml0IChtdXRleCwgTlVMTCk7CiAg
+IHRoZW11dGV4ID0gbXV0ZXg7CiAKLSAgaWYgKCF2ZXJpZnlhYmxlX29iamVj
+dF9pc3ZhbGlkICh0aGVtdXRleCwgUFRIUkVBRF9NVVRFWF9NQUdJQykpCisg
+IGlmICh2ZXJpZnlhYmxlX29iamVjdF9pc3ZhbGlkICh0aGVtdXRleCwgUFRI
+UkVBRF9NVVRFWF9NQUdJQykgIT0gLTEpCiAgICAgcmV0dXJuIEVJTlZBTDsK
+ICAgaWYgKCF2ZXJpZnlhYmxlX29iamVjdF9pc3ZhbGlkIChjb25kLCBQVEhS
+RUFEX0NPTkRfTUFHSUMpKQogICAgIHJldHVybiBFSU5WQUw7CkBAIC0xNzU2
+LDExICsxNzU4LDExIEBAIF9fcHRocmVhZF9jb25kX3dhaXQgKHB0aHJlYWRf
+Y29uZF90ICpjb24KIHsKIC8vIHNlZSBjb25kX3RpbWVkd2FpdCBmb3Igbm90
+ZXMKICAgaW50IHJ2OwotICBwdGhyZWFkX211dGV4X3QgKnRoZW11dGV4ID0g
+bXV0ZXg7CisgIHB0aHJlYWRfbXV0ZXhfdCAqdGhlbXV0ZXg7CiAgIGlmICgq
+bXV0ZXggPT0gUFRIUkVBRF9NVVRFWF9JTklUSUFMSVpFUikKICAgICBfX3B0
+aHJlYWRfbXV0ZXhfaW5pdCAobXV0ZXgsIE5VTEwpOwogICB0aGVtdXRleCA9
+IG11dGV4OwotICBpZiAoIXZlcmlmeWFibGVfb2JqZWN0X2lzdmFsaWQgKHRo
+ZW11dGV4LCBQVEhSRUFEX01VVEVYX01BR0lDKSkKKyAgaWYgKHZlcmlmeWFi
+bGVfb2JqZWN0X2lzdmFsaWQgKHRoZW11dGV4LCBQVEhSRUFEX01VVEVYX01B
+R0lDKSAhPSAtMSkKICAgICByZXR1cm4gRUlOVkFMOwogICBpZiAoIXZlcmlm
+eWFibGVfb2JqZWN0X2lzdmFsaWQgKGNvbmQsIFBUSFJFQURfQ09ORF9NQUdJ
+QykpCiAgICAgcmV0dXJuIEVJTlZBTDsKQEAgLTE5MDcsMTEgKzE5MDksMTEg
+QEAgX19wdGhyZWFkX211dGV4X2luaXQgKHB0aHJlYWRfbXV0ZXhfdCAqbQog
+ICBpZiAoYXR0ciAmJiAhdmVyaWZ5YWJsZV9vYmplY3RfaXN2YWxpZCAoYXR0
+ciwgUFRIUkVBRF9NVVRFWEFUVFJfTUFHSUMpKQogICAgIHJldHVybiBFSU5W
+QUw7CiAKLSAgaWYgKHZlcmlmeWFibGVfb2JqZWN0X2lzdmFsaWQgKG11dGV4
+LCBQVEhSRUFEX01VVEVYX01BR0lDKSkKKyAgaWYgKHZlcmlmeWFibGVfb2Jq
+ZWN0X2lzdmFsaWQgKG11dGV4LCBQVEhSRUFEX01VVEVYX01BR0lDKSA9PSAt
+MSkKICAgICByZXR1cm4gRUJVU1k7CiAKICAgKm11dGV4ID0gbmV3IHB0aHJl
+YWRfbXV0ZXggKGF0dHIgPyAoKmF0dHIpIDogTlVMTCk7Ci0gIGlmICghdmVy
+aWZ5YWJsZV9vYmplY3RfaXN2YWxpZCAobXV0ZXgsIFBUSFJFQURfTVVURVhf
+TUFHSUMpKQorICBpZiAodmVyaWZ5YWJsZV9vYmplY3RfaXN2YWxpZCAobXV0
+ZXgsIFBUSFJFQURfTVVURVhfTUFHSUMpICE9IC0xKQogICAgIHsKICAgICAg
+IGRlbGV0ZSAoKm11dGV4KTsKICAgICAgICptdXRleCA9IE5VTEw7CkBAIC0x
+OTI3LDcgKzE5MjksNyBAQCBfX3B0aHJlYWRfbXV0ZXhfZ2V0cHJpb2NlaWxp
+bmcgKGNvbnN0IHB0CiAgIHB0aHJlYWRfbXV0ZXhfdCAqdGhlbXV0ZXg9KHB0
+aHJlYWRfbXV0ZXhfdCAqKSBtdXRleDsKICAgaWYgKCptdXRleCA9PSBQVEhS
+RUFEX01VVEVYX0lOSVRJQUxJWkVSKQogICAgIF9fcHRocmVhZF9tdXRleF9p
+bml0ICgocHRocmVhZF9tdXRleF90ICopIG11dGV4LCBOVUxMKTsKLSAgaWYg
+KCF2ZXJpZnlhYmxlX29iamVjdF9pc3ZhbGlkICh0aGVtdXRleCwgUFRIUkVB
+RF9NVVRFWF9NQUdJQykpCisgIGlmICh2ZXJpZnlhYmxlX29iamVjdF9pc3Zh
+bGlkICh0aGVtdXRleCwgUFRIUkVBRF9NVVRFWF9NQUdJQykgIT0gLTEpCiAg
+ICAgcmV0dXJuIEVJTlZBTDsKICAgLypXZSBkb24ndCBkZWZpbmUgX1BPU0lY
+X1RIUkVBRF9QUklPX1BST1RFQ1QgYmVjYXVzZSB3ZSBkbyd0IGN1cnJlbnRs
+eSBzdXBwb3J0CiAgICAqbXV0ZXggcHJpb3JpdGllcy4KQEAgLTE5NDQsMTMg
+KzE5NDYsMTkgQEAgaW50CiBfX3B0aHJlYWRfbXV0ZXhfbG9jayAocHRocmVh
+ZF9tdXRleF90ICptdXRleCkKIHsKICAgcHRocmVhZF9tdXRleF90ICp0aGVt
+dXRleCA9IG11dGV4OwotICBpZiAoIXZlcmlmeWFibGVfb2JqZWN0X2lzdmFs
+aWQgKHRoZW11dGV4LCBQVEhSRUFEX01VVEVYX01BR0lDKSkKLSAgICByZXR1
+cm4gRUlOVkFMOwotICBpZiAoKm11dGV4ID09IFBUSFJFQURfTVVURVhfSU5J
+VElBTElaRVIpCisgIHN3aXRjaCAodmVyaWZ5YWJsZV9vYmplY3RfaXN2YWxp
+ZCAodGhlbXV0ZXgsIFBUSFJFQURfTVVURVhfTUFHSUMpKQogICAgIHsKLSAg
+ICAgIGludCBydiA9IF9fcHRocmVhZF9tdXRleF9pbml0IChtdXRleCwgTlVM
+TCk7Ci0gICAgICBpZiAocnYpCi0JcmV0dXJuIHJ2OworICAgIGNhc2UgMDoK
+KyAgICAgIHJldHVybiBFSU5WQUw7CisgICAgICBicmVhazsKKyAgICBjYXNl
+IDE6CisgICAgICBpZiAoKm11dGV4ID09IFBUSFJFQURfTVVURVhfSU5JVElB
+TElaRVIpCisgICAgICAgIHsKKyAgICAgICAgICBpbnQgcnYgPSBfX3B0aHJl
+YWRfbXV0ZXhfaW5pdCAobXV0ZXgsIE5VTEwpOworICAgICAgICAgIGlmIChy
+dikKKwkgICAgcmV0dXJuIHJ2OworICAgICAgICB9CisgICAgICBicmVhazsK
+ICAgICB9CiAgICgqdGhlbXV0ZXgpLT5Mb2NrICgpOwogICByZXR1cm4gMDsK
+QEAgLTE5NjIsNyArMTk3MCw3IEBAIF9fcHRocmVhZF9tdXRleF90cnlsb2Nr
+IChwdGhyZWFkX211dGV4X3QKICAgcHRocmVhZF9tdXRleF90ICp0aGVtdXRl
+eCA9IG11dGV4OwogICBpZiAoKm11dGV4ID09IFBUSFJFQURfTVVURVhfSU5J
+VElBTElaRVIpCiAgICAgX19wdGhyZWFkX211dGV4X2luaXQgKG11dGV4LCBO
+VUxMKTsKLSAgaWYgKCF2ZXJpZnlhYmxlX29iamVjdF9pc3ZhbGlkICh0aGVt
+dXRleCwgUFRIUkVBRF9NVVRFWF9NQUdJQykpCisgIGlmICh2ZXJpZnlhYmxl
+X29iamVjdF9pc3ZhbGlkICh0aGVtdXRleCwgUFRIUkVBRF9NVVRFWF9NQUdJ
+QykgIT0gLTEpCiAgICAgcmV0dXJuIEVJTlZBTDsKICAgaWYgKCgqdGhlbXV0
+ZXgpLT5UcnlMb2NrICgpKQogICAgIHJldHVybiBFQlVTWTsKQEAgLTE5NzQs
+NyArMTk4Miw3IEBAIF9fcHRocmVhZF9tdXRleF91bmxvY2sgKHB0aHJlYWRf
+bXV0ZXhfdCAKIHsKICAgaWYgKCptdXRleCA9PSBQVEhSRUFEX01VVEVYX0lO
+SVRJQUxJWkVSKQogICAgIF9fcHRocmVhZF9tdXRleF9pbml0IChtdXRleCwg
+TlVMTCk7Ci0gIGlmICghdmVyaWZ5YWJsZV9vYmplY3RfaXN2YWxpZCAobXV0
+ZXgsIFBUSFJFQURfTVVURVhfTUFHSUMpKQorICBpZiAodmVyaWZ5YWJsZV9v
+YmplY3RfaXN2YWxpZCAobXV0ZXgsIFBUSFJFQURfTVVURVhfTUFHSUMpICE9
+IC0xKQogICAgIHJldHVybiBFSU5WQUw7CiAgICgqbXV0ZXgpLT5VbkxvY2sg
+KCk7CiAgIHJldHVybiAwOwpAQCAtMTk4NSw3ICsxOTkzLDcgQEAgX19wdGhy
+ZWFkX211dGV4X2Rlc3Ryb3kgKHB0aHJlYWRfbXV0ZXhfdAogewogICBpZiAo
+Y2hlY2tfdmFsaWRfcG9pbnRlciAobXV0ZXgpICYmICgqbXV0ZXggPT0gUFRI
+UkVBRF9NVVRFWF9JTklUSUFMSVpFUikpCiAgICAgcmV0dXJuIDA7Ci0gIGlm
+ICghdmVyaWZ5YWJsZV9vYmplY3RfaXN2YWxpZCAobXV0ZXgsIFBUSFJFQURf
+TVVURVhfTUFHSUMpKQorICBpZiAodmVyaWZ5YWJsZV9vYmplY3RfaXN2YWxp
+ZCAobXV0ZXgsIFBUSFJFQURfTVVURVhfTUFHSUMpICE9IC0xKQogICAgIHJl
+dHVybiBFSU5WQUw7CiAKICAgLypyZWFkaW5nIGEgd29yZCBpcyBhdG9taWMg
+Ki8KQEAgLTIwMDQsNyArMjAxMiw3IEBAIF9fcHRocmVhZF9tdXRleF9zZXRw
+cmlvY2VpbGluZyAocHRocmVhZF8KICAgcHRocmVhZF9tdXRleF90ICp0aGVt
+dXRleCA9IG11dGV4OwogICBpZiAoKm11dGV4ID09IFBUSFJFQURfTVVURVhf
+SU5JVElBTElaRVIpCiAgICAgX19wdGhyZWFkX211dGV4X2luaXQgKG11dGV4
+LCBOVUxMKTsKLSAgaWYgKCF2ZXJpZnlhYmxlX29iamVjdF9pc3ZhbGlkICh0
+aGVtdXRleCwgUFRIUkVBRF9NVVRFWF9NQUdJQykpCisgIGlmICh2ZXJpZnlh
+YmxlX29iamVjdF9pc3ZhbGlkICh0aGVtdXRleCwgUFRIUkVBRF9NVVRFWF9N
+QUdJQykgIT0gLTEpCiAgICAgcmV0dXJuIEVJTlZBTDsKICAgcmV0dXJuIEVO
+T1NZUzsKIH0K
+
+------------=_1583532849-65438-108--
