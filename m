@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4604-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 31887 invoked by alias); 12 Mar 2004 16:40:04 -0000
+Return-Path: <cygwin-patches-return-4605-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 26364 invoked by alias); 12 Mar 2004 23:08:16 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,34 +7,69 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 31877 invoked from network); 12 Mar 2004 16:40:04 -0000
-Date: Fri, 12 Mar 2004 16:40:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
+Received: (qmail 26346 invoked from network); 12 Mar 2004 23:08:15 -0000
+Date: Fri, 12 Mar 2004 23:08:00 -0000
+From: Corinna Vinschen <vinschen@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [Patch] src/winsup/mingw/include/process.h __STRICT_ANSI__
-Message-ID: <20040312164002.GA22086@redhat.com>
+Subject: Re: Patch for /proc/meminfo handler
+Message-ID: <20040312230813.GA29678@cygbert.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <VA.00000f1a.01b89c9b@thesoftwaresource.com>
+References: <A065B7C9B0648F4F8C43388D0D699F8D1DBEEC@ZABRYSVCL21EX01.af.didata.local>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <VA.00000f1a.01b89c9b@thesoftwaresource.com>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2004-q1/txt/msg00094.txt.bz2
+In-Reply-To: <A065B7C9B0648F4F8C43388D0D699F8D1DBEEC@ZABRYSVCL21EX01.af.didata.local>
+User-Agent: Mutt/1.4.2i
+X-SW-Source: 2004-q1/txt/msg00095.txt.bz2
 
-On Thu, Mar 11, 2004 at 07:23:37PM -0500, Brian Keener wrote:
->I notice when trying to compile the #endif got left behind.  Sure you found it by 
->now.
->
->2004-03-11  Brian Keener  <bkeener@thesoftwaresource.com>
->
->        * include/process.h:  Remove the #endif associated with removal of
->        __STRICT_ANSI__ guard from non-ANSI header.
+On Mar 12 15:14, Andrew Klopper wrote:
+> With the Cygwin 1.5.7-1 DLL, 'cat /proc/meminfo' returns an incorrect
+> value for free swap space. This is most noticeable when the free virtual
+> memory is less than the total physical memory, in which case the
+> calculated free swap space is a negative value. This value is then
+> converted to an unsigned int for display purposes, resulting in a very
+> large positive number which is greater than the total amount of swap
+> space.
+> 
+> A patch to correct this problem is attached.
 
-I've taken the libiberty of applying this patch since it is stalling my
-ability to generate a snapshot.
+Well, that doesn't look right after applying your patch:
 
-I hope Danny won't mind.
+  $ cat /proc/meminfo
+	   total:      used:      free:
+  Mem:   536330240  230658048  305672192
+  Swap:  770961408 4245790720  820137984
+  MemTotal:         523760 kB
+  MemFree:          298508 kB
+  [...]
+  SwapTotal:        752892 kB
+  SwapFree:         800916 kB
 
-cgf
+The result using the original version looks much better:
+
+  $ cat /proc/meminfo
+	   total:      used:      free:
+  Mem:   536330240  231788544  304541696
+  Swap:  770961408  182104064  588857344
+  MemTotal:         523760 kB
+  MemFree:          297404 kB
+  [...]
+  SwapTotal:        752892 kB
+  SwapFree:         575056 kB
+
+So, perhaps both are wrong?
+
+Please don't send patches uuencoded or in any other encoded or compressed
+way.  Just add it as plain text, inline or attached.  And all patches
+need a ChangeLog entry.  Have a look onto http://cygwin.com/contrib.html
+which explains it thoroughly.
+
+
+Thanks,
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
