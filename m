@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3241-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 24044 invoked by alias); 29 Nov 2002 12:13:27 -0000
+Return-Path: <cygwin-patches-return-3242-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 31718 invoked by alias); 29 Nov 2002 15:54:09 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,264 +7,219 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 24034 invoked from network); 29 Nov 2002 12:13:25 -0000
-X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
-Date: Fri, 29 Nov 2002 04:13:00 -0000
-From: Thomas Pfaff <tpfaff@gmx.net>
-To: cygwin-patches@cygwin.com
-Subject: [PATCH] pthread_cond_init
-Message-ID: <Pine.WNT.4.44.0211291240310.329-200000@algeria.intern.net>
-X-X-Sender: pfaff@antarctica.intern.net
-MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="1973513-18409-1038571998=:329"
-X-SW-Source: 2002-q4/txt/msg00192.txt.bz2
+Received: (qmail 31613 invoked from network); 29 Nov 2002 15:54:08 -0000
+Message-Id: <3.0.5.32.20021129104925.0084b470@h00207811519c.ne.client2.attbi.com>
+X-Sender: pierre@h00207811519c.ne.client2.attbi.com
+Date: Fri, 29 Nov 2002 07:54:00 -0000
+To: Corinna Vinschen <cygwin-patches@cygwin.com>
+From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
+Subject: Re: Internal get{pw,gr}XX calls
+In-Reply-To: <3.0.5.32.20021129005937.00835100@h00207811519c.ne.client2.
+ attbi.com>
+References: <20021128191909.Y1398@cygbert.vinschen.de>
+ <3.0.5.32.20021126000911.00833190@mail.attbi.com>
+ <3.0.5.32.20021126000911.00833190@mail.attbi.com>
+Mime-Version: 1.0
+Content-Type: multipart/mixed; boundary="=====================_1038602965==_"
+X-SW-Source: 2002-q4/txt/msg00193.txt.bz2
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
+--=====================_1038602965==_
+Content-Type: text/plain; charset="us-ascii"
+Content-length: 981
 
---1973513-18409-1038571998=:329
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-Content-length: 1021
+Hello Corinna,
 
+Don't program when you are tired, my mom used to say.
+This replaces what I sent last night. The discussion
+in the message is still OK.
 
-Rob has added a native mutex around mutex initialization to avoid a
-race. This is required in pthread_cond_init too.
+Pierre
 
-I have moved the nativeMutex class outside of pthread_mutex and added
-similar calls to pthread_cond to avoid that race.
+2002-11-29  Pierre Humblet <pierre.humblet@ieee.org>
 
-Thomas
+	* pwdgrp.h (pwdgrp_check::pwdgrp_state): Replace by 
+	pwdgrp_check::isinitializing ().
+	(pwdgrp_check::isinitializing): Create.
+ 	(pwdgrp_check::operator =): Delete.
+	((pwdgrp_check::set_last_modified): Set state to loaded.
+	* passwd.cc (read_etc_passwd): Replace "passwd_state <= " by 
+	passwd_state::isinitializing (). Remove update of passwd_state.	
+	(internal_getpwuid): Replace "passwd_state <= " by 
+	passwd_state::isinitializing ().
+	(internal_getpwnam): Ditto.
+	(getpwent): Ditto.
+	(getpass): Ditto.
+	* grp.cc (read_etc_group): Replace "group_state <= " by 
+	group_state::isinitializing (). Remove update of group_state.	
+	(internal_getgrgid): Replace "group_state <= " by 
+	group_state::isinitializing ().
+	(getgrent32): Ditto.
+	(internal_getgrent): Ditto.
 
-2002-11-29  Thomas Pfaff  <tpfaff@gmx.net>
+--=====================_1038602965==_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment; filename="pwd2.diff"
+Content-length: 4733
 
-	* pthread.cc (pthread_cond_init): Use new pthread_cond::init.
-	* thread.cc: Some white spaces cleanups.
-	Change __pthread_cond_init to pthread_cond::init throughout.
-	(nativeMutex): Move class methods outside pthread_mutex.
-	(MTinterface::Init): Initialize pthread_cond init lock.
-	(pthread_cond::condInitializationLock): Instantiate.
-	(pthread_cond::initMutex): New Method.
-	(pthread_cond::isGoodInitializerOrBadObject): Ditto.
-	* thread.h: Some white spaces cleanups.
-	(nativeMutex): Move class declaration outside pthread_mutex.
-	(pthread_cond::condInitializationLock): New static member.
-	(pthread_cond::initMutex): New Method.
-	(pthread_cond::isGoodInitializerOrBadObject): Ditto.
-	(__pthread_cond_init): Remove prototype.
+--- pwdgrp.h.new	2002-11-28 23:17:54.000000000 -0500
++++ pwdgrp.h	2002-11-29 10:41:56.000000000 -0500
+@@ -34,25 +34,28 @@ class pwdgrp_check {
 
---1973513-18409-1038571998=:329
-Content-Type: TEXT/plain; name="pthread_cond_init.patch"
-Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.WNT.4.44.0211291313180.329@algeria.intern.net>
-Content-Description: 
-Content-Disposition: attachment; filename="pthread_cond_init.patch"
-Content-length: 12505
+ public:
+   pwdgrp_check () : state (uninitialized) {}
+-  operator pwdgrp_state ()
++  BOOL isinitializing ()
+     {
+-      if (state !=3D uninitialized && file_w32[0] && cygheap->etc_changed =
+())
+-	{
+-	  HANDLE h;
+-	  WIN32_FIND_DATA data;
+-
+-	  if ((h =3D FindFirstFile (file_w32, &data)) !=3D INVALID_HANDLE_VALUE)
++      if (state <=3D initializing)
++	state =3D initializing;
++      else if (cygheap->etc_changed ())
++        {
++	  if (!file_w32[0])
++	    state =3D initializing;
++	  else
+ 	    {
+-	      if (CompareFileTime (&data.ftLastWriteTime, &last_modified) > 0)
+-		state =3D initializing;
+-	      FindClose (h);
++	      HANDLE h;
++	      WIN32_FIND_DATA data;
++
++	      if ((h =3D FindFirstFile (file_w32, &data)) !=3D INVALID_HANDLE_VAL=
+UE)
++	        {
++		  if (CompareFileTime (&data.ftLastWriteTime, &last_modified) > 0)
++		    state =3D initializing;
++		  FindClose (h);
++		}
+ 	    }
+ 	}
+-      return state;
+-    }
+-  void operator =3D (pwdgrp_state nstate)
+-    {
+-      state =3D nstate;
++      return state =3D=3D initializing;
+     }
+   BOOL isuninitialized () const { return state =3D=3D uninitialized; }
+   void set_last_modified (HANDLE fh, const char *name)
+@@ -60,6 +63,7 @@ public:
+       if (!file_w32[0])
+ 	strcpy (file_w32, name);
+       GetFileTime (fh, NULL, NULL, &last_modified);
++      state =3D loaded;
+     }
+ };
 
-ZGlmZiAtdXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi9wdGhyZWFkLmNjIHNy
-Yy93aW5zdXAvY3lnd2luL3B0aHJlYWQuY2MKLS0tIHNyYy5vbGQvd2luc3Vw
-L2N5Z3dpbi9wdGhyZWFkLmNjCTIwMDItMDktMzAgMDQ6MjM6NTIuMDAwMDAw
-MDAwICswMjAwCisrKyBzcmMvd2luc3VwL2N5Z3dpbi9wdGhyZWFkLmNjCTIw
-MDItMTEtMjkgMTA6MDY6MzEuMDAwMDAwMDAwICswMTAwCkBAIC0zNDksNyAr
-MzQ5LDcgQEAgcHRocmVhZF9jb25kX2Rlc3Ryb3kgKHB0aHJlYWRfY29uZF90
-ICogYwogaW50CiBwdGhyZWFkX2NvbmRfaW5pdCAocHRocmVhZF9jb25kX3Qg
-KiBjb25kLCBjb25zdCBwdGhyZWFkX2NvbmRhdHRyX3QgKiBhdHRyKQogewot
-ICByZXR1cm4gX19wdGhyZWFkX2NvbmRfaW5pdCAoY29uZCwgYXR0cik7Cisg
-IHJldHVybiBwdGhyZWFkX2NvbmQ6OmluaXQgKGNvbmQsIGF0dHIpOwogfQog
-CiBpbnQKZGlmZiAtdXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi90aHJlYWQu
-Y2Mgc3JjL3dpbnN1cC9jeWd3aW4vdGhyZWFkLmNjCi0tLSBzcmMub2xkL3dp
-bnN1cC9jeWd3aW4vdGhyZWFkLmNjCTIwMDItMTEtMjcgMTg6MjI6NDUuMDAw
-MDAwMDAwICswMTAwCisrKyBzcmMvd2luc3VwL2N5Z3dpbi90aHJlYWQuY2MJ
-MjAwMi0xMS0yOSAxMDo0MjowNC4wMDAwMDAwMDAgKzAxMDAKQEAgLTcyLDYg
-KzcyLDM3IEBAIF9yZWVudF93aW5zdXAgKCkKICAgcmV0dXJuIF9yLT5fd2lu
-c3VwOwogfQogCitib29sCituYXRpdmVNdXRleDo6aW5pdCAoKQoreworICB0
-aGVIYW5kbGUgPSBDcmVhdGVNdXRleCAoJnNlY19ub25lX25paCwgRkFMU0Us
-IE5VTEwpOworICBpZiAoIXRoZUhhbmRsZSkKKyAgICB7CisgICAgICBkZWJ1
-Z19wcmludGYgKCJDcmVhdGVNdXRleCBmYWlsZWQuICVFIik7CisgICAgICBy
-ZXR1cm4gZmFsc2U7CisgICAgfQorICByZXR1cm4gdHJ1ZTsKK30KKworYm9v
-bAorbmF0aXZlTXV0ZXg6OmxvY2sgKCkKK3sKKyAgRFdPUkQgd2FpdFJlc3Vs
-dCA9IFdhaXRGb3JTaW5nbGVPYmplY3QgKHRoZUhhbmRsZSwgSU5GSU5JVEUp
-OworICBpZiAod2FpdFJlc3VsdCAhPSBXQUlUX09CSkVDVF8wKQorICAgIHsK
-KyAgICAgIHN5c3RlbV9wcmludGYgKCJSZWNlaXZlZCB1bmV4cGVjdGVkIHdh
-aXQgcmVzdWx0ICVkIG9uIGhhbmRsZSAlcCwgJUUiLCB3YWl0UmVzdWx0LCB0
-aGVIYW5kbGUpOworICAgICAgcmV0dXJuIGZhbHNlOworICAgIH0KKyAgcmV0
-dXJuIHRydWU7Cit9CisKK3ZvaWQKK25hdGl2ZU11dGV4Ojp1bmxvY2sgKCkK
-K3sKKyAgaWYgKCFSZWxlYXNlTXV0ZXggKHRoZUhhbmRsZSkpCisgICAgc3lz
-dGVtX3ByaW50ZiAoIlJlY2VpdmVkIGEgdW5leHBlY3RlZCByZXN1bHQgcmVs
-ZWFzaW5nIG11dGV4LiAlRSIpOworfQorCiBpbmxpbmUgTFBDUklUSUNBTF9T
-RUNUSU9OCiBSZXNvdXJjZUxvY2tzOjpMb2NrIChpbnQgX3Jlc2lkKQogewpA
-QCAtMTY4LDYgKzE5OSw3IEBAIE1UaW50ZXJmYWNlOjpJbml0IChpbnQgZm9y
-a2VkKQogICAgIHJlZW50X2tleS5zZXQgKCZyZWVudHMpOwogCiAgIHB0aHJl
-YWRfbXV0ZXg6OmluaXRNdXRleCAoKTsKKyAgcHRocmVhZF9jb25kOjppbml0
-TXV0ZXggKCk7CiB9CiAKIHZvaWQKQEAgLTc0Myw2ICs3NzUsMTkgQEAgcHRo
-cmVhZF9jb25kYXR0cjo6fnB0aHJlYWRfY29uZGF0dHIgKCkKIHsKIH0KIAor
-LyogVGhpcyBpcyB1c2VkIGZvciBjb25kIGNyZWF0aW9uIHByb3RlY3Rpb24g
-d2l0aGluIGEgc2luZ2xlIHByb2Nlc3Mgb25seSAqLworbmF0aXZlTXV0ZXgg
-Tk9fQ09QWSBwdGhyZWFkX2NvbmQ6OmNvbmRJbml0aWFsaXphdGlvbkxvY2s7
-CisKKy8qIFdlIGNhbiBvbmx5IGJlIGNhbGxlZCBvbmNlLgorICAgVE9ETzog
-KG5vIHJ1c2gpIHVzZSBhIG5vbiBjb3BpZWQgbWVtb3J5IHNlY3Rpb24gdG8K
-KyAgIGhvbGQgYW4gaW5pdGlhbGl6YXRpb24gZmxhZy4gICovCit2b2lkCitw
-dGhyZWFkX2NvbmQ6OmluaXRNdXRleCAoKQoreworICBpZiAoIWNvbmRJbml0
-aWFsaXphdGlvbkxvY2suaW5pdCAoKSkKKyAgICBhcGlfZmF0YWwgKCJDb3Vs
-ZCBub3QgY3JlYXRlIHdpbjMyIE11dGV4IGZvciBwdGhyZWFkIGNvbmQgc3Rh
-dGljIGluaXRpYWxpemVyIHN1cHBvcnQuIik7Cit9CisKIHB0aHJlYWRfY29u
-ZDo6cHRocmVhZF9jb25kIChwdGhyZWFkX2NvbmRhdHRyICphdHRyKTp2ZXJp
-ZnlhYmxlX29iamVjdCAoUFRIUkVBRF9DT05EX01BR0lDKQogewogICBpbnQg
-dGVtcGVycjsKQEAgLTEwOTAsMTQgKzExMzUsMTQgQEAgcHRocmVhZF9tdXRl
-eDo6aXNHb29kSW5pdGlhbGl6ZXJPck9iamVjdAogYm9vbAogcHRocmVhZF9t
-dXRleDo6aXNHb29kSW5pdGlhbGl6ZXJPckJhZE9iamVjdCAocHRocmVhZF9t
-dXRleF90IGNvbnN0ICptdXRleCkKIHsKLSAgICB2ZXJpZnlhYmxlX29iamVj
-dF9zdGF0ZSBvYmplY3RTdGF0ZSA9IHZlcmlmeWFibGVfb2JqZWN0X2lzdmFs
-aWQgKG11dGV4LCBQVEhSRUFEX01VVEVYX01BR0lDLCBQVEhSRUFEX01VVEVY
-X0lOSVRJQUxJWkVSKTsKLSAgICBpZiAob2JqZWN0U3RhdGUgPT0gVkFMSURf
-T0JKRUNUKQorICB2ZXJpZnlhYmxlX29iamVjdF9zdGF0ZSBvYmplY3RTdGF0
-ZSA9IHZlcmlmeWFibGVfb2JqZWN0X2lzdmFsaWQgKG11dGV4LCBQVEhSRUFE
-X01VVEVYX01BR0lDLCBQVEhSRUFEX01VVEVYX0lOSVRJQUxJWkVSKTsKKyAg
-aWYgKG9iamVjdFN0YXRlID09IFZBTElEX09CSkVDVCkKIAlyZXR1cm4gZmFs
-c2U7Ci0gICAgcmV0dXJuIHRydWU7CisgIHJldHVybiB0cnVlOwogfQogCiAv
-KiBUaGlzIGlzIHVzZWQgZm9yIG11dGV4IGNyZWF0aW9uIHByb3RlY3Rpb24g
-d2l0aGluIGEgc2luZ2xlIHByb2Nlc3Mgb25seSAqLwotcHRocmVhZF9tdXRl
-eDo6bmF0aXZlTXV0ZXggcHRocmVhZF9tdXRleDo6bXV0ZXhJbml0aWFsaXph
-dGlvbkxvY2sgTk9fQ09QWTsKK25hdGl2ZU11dGV4IE5PX0NPUFkgcHRocmVh
-ZF9tdXRleDo6bXV0ZXhJbml0aWFsaXphdGlvbkxvY2s7CiAKIC8qIFdlIGNh
-biBvbmx5IGJlIGNhbGxlZCBvbmNlLgogICAgVE9ETzogKG5vIHJ1c2gpIHVz
-ZSBhIG5vbiBjb3BpZWQgbWVtb3J5IHNlY3Rpb24gdG8KQEAgLTEyMTMsMzcg
-KzEyNTgsNiBAQCBwdGhyZWFkX211dGV4OjpmaXh1cF9hZnRlcl9mb3JrICgp
-CiB9CiAKIGJvb2wKLXB0aHJlYWRfbXV0ZXg6Om5hdGl2ZU11dGV4Ojppbml0
-ICgpCi17Ci0gIHRoZUhhbmRsZSA9IENyZWF0ZU11dGV4ICgmc2VjX25vbmVf
-bmloLCBGQUxTRSwgTlVMTCk7Ci0gIGlmICghdGhlSGFuZGxlKQotICAgIHsK
-LSAgICAgIGRlYnVnX3ByaW50ZiAoIkNyZWF0ZU11dGV4IGZhaWxlZC4gJUUi
-KTsKLSAgICAgIHJldHVybiBmYWxzZTsKLSAgICB9Ci0gIHJldHVybiB0cnVl
-OwotfQotCi1ib29sCi1wdGhyZWFkX211dGV4OjpuYXRpdmVNdXRleDo6bG9j
-ayAoKQotewotICBEV09SRCB3YWl0UmVzdWx0ID0gV2FpdEZvclNpbmdsZU9i
-amVjdCAodGhlSGFuZGxlLCBJTkZJTklURSk7Ci0gIGlmICh3YWl0UmVzdWx0
-ICE9IFdBSVRfT0JKRUNUXzApCi0gICAgewotICAgICAgc3lzdGVtX3ByaW50
-ZiAoIlJlY2VpdmVkIHVuZXhwZWN0ZWQgd2FpdCByZXN1bHQgJWQgb24gaGFu
-ZGxlICVwLCAlRSIsIHdhaXRSZXN1bHQsIHRoZUhhbmRsZSk7Ci0gICAgICBy
-ZXR1cm4gZmFsc2U7Ci0gICAgfQotICByZXR1cm4gdHJ1ZTsKLX0KLQotdm9p
-ZAotcHRocmVhZF9tdXRleDo6bmF0aXZlTXV0ZXg6OnVubG9jayAoKQotewot
-ICBpZiAoIVJlbGVhc2VNdXRleCAodGhlSGFuZGxlKSkKLSAgICBzeXN0ZW1f
-cHJpbnRmICgiUmVjZWl2ZWQgYSB1bmV4cGVjdGVkIHJlc3VsdCByZWxlYXNp
-bmcgbXV0ZXguICVFIik7Ci19Ci0KLWJvb2wKIHB0aHJlYWRfbXV0ZXhhdHRy
-Ojppc0dvb2RPYmplY3QgKHB0aHJlYWRfbXV0ZXhhdHRyX3QgY29uc3QgKiBh
-dHRyKQogewogICBpZiAodmVyaWZ5YWJsZV9vYmplY3RfaXN2YWxpZCAoYXR0
-ciwgUFRIUkVBRF9NVVRFWEFUVFJfTUFHSUMpICE9IFZBTElEX09CSkVDVCkK
-QEAgLTIwMDEsNDEgKzIwMTUsNTUgQEAgcHRocmVhZF9jb25kOjppc0dvb2RJ
-bml0aWFsaXplck9yT2JqZWN0IAogICByZXR1cm4gdHJ1ZTsKIH0KIAotaW50
-Ci1fX3B0aHJlYWRfY29uZF9kZXN0cm95IChwdGhyZWFkX2NvbmRfdCAqY29u
-ZCkKK2Jvb2wKK3B0aHJlYWRfY29uZDo6aXNHb29kSW5pdGlhbGl6ZXJPckJh
-ZE9iamVjdCAocHRocmVhZF9jb25kX3QgY29uc3QgKmNvbmQpCiB7Ci0gIGlm
-IChwdGhyZWFkX2NvbmQ6OmlzR29vZEluaXRpYWxpemVyIChjb25kKSkKLSAg
-ICByZXR1cm4gMDsKLSAgaWYgKCFwdGhyZWFkX2NvbmQ6OmlzR29vZE9iamVj
-dCAoY29uZCkpCi0gICAgcmV0dXJuIEVJTlZBTDsKLQotICAvKiByZWFkcyBh
-cmUgYXRvbWljICovCi0gIGlmICgoKmNvbmQpLT53YWl0aW5nKQotICAgIHJl
-dHVybiBFQlVTWTsKLQotICBkZWxldGUgKCpjb25kKTsKLSAgKmNvbmQgPSBO
-VUxMOwotCi0gIHJldHVybiAwOworICB2ZXJpZnlhYmxlX29iamVjdF9zdGF0
-ZSBvYmplY3RTdGF0ZSA9IHZlcmlmeWFibGVfb2JqZWN0X2lzdmFsaWQgKGNv
-bmQsIFBUSFJFQURfQ09ORF9NQUdJQywgUFRIUkVBRF9DT05EX0lOSVRJQUxJ
-WkVSKTsKKyAgaWYgKG9iamVjdFN0YXRlID09IFZBTElEX09CSkVDVCkKKwly
-ZXR1cm4gZmFsc2U7CisgIHJldHVybiB0cnVlOwogfQogCiBpbnQKLV9fcHRo
-cmVhZF9jb25kX2luaXQgKHB0aHJlYWRfY29uZF90ICpjb25kLCBjb25zdCBw
-dGhyZWFkX2NvbmRhdHRyX3QgKmF0dHIpCitwdGhyZWFkX2NvbmQ6OmluaXQg
-KHB0aHJlYWRfY29uZF90ICpjb25kLCBjb25zdCBwdGhyZWFkX2NvbmRhdHRy
-X3QgKmF0dHIpCiB7CiAgIGlmIChhdHRyICYmICFwdGhyZWFkX2NvbmRhdHRy
-Ojppc0dvb2RPYmplY3QgKGF0dHIpKQogICAgIHJldHVybiBFSU5WQUw7Cisg
-IGlmICghY29uZEluaXRpYWxpemF0aW9uTG9jay5sb2NrICgpKQorICAgIHJl
-dHVybiBFSU5WQUw7CiAKLSAgaWYgKHB0aHJlYWRfY29uZDo6aXNHb29kT2Jq
-ZWN0IChjb25kKSkKLSAgICByZXR1cm4gRUJVU1k7CisgIGlmICghaXNHb29k
-SW5pdGlhbGl6ZXJPckJhZE9iamVjdCAoY29uZCkpCisgICAgeworICAgICAg
-Y29uZEluaXRpYWxpemF0aW9uTG9jay51bmxvY2sgKCk7CisgICAgICByZXR1
-cm4gRUJVU1k7CisgICAgfQogCiAgICpjb25kID0gbmV3IHB0aHJlYWRfY29u
-ZCAoYXR0ciA/ICgqYXR0cikgOiBOVUxMKTsKLQotICBpZiAoIXB0aHJlYWRf
-Y29uZDo6aXNHb29kT2JqZWN0IChjb25kKSkKKyAgaWYgKCFpc0dvb2RPYmpl
-Y3QgKGNvbmQpKQogICAgIHsKICAgICAgIGRlbGV0ZSAoKmNvbmQpOwogICAg
-ICAgKmNvbmQgPSBOVUxMOworICAgICAgY29uZEluaXRpYWxpemF0aW9uTG9j
-ay51bmxvY2sgKCk7CiAgICAgICByZXR1cm4gRUFHQUlOOwogICAgIH0KKyAg
-Y29uZEluaXRpYWxpemF0aW9uTG9jay51bmxvY2sgKCk7CisgIHJldHVybiAw
-OworfQorCitpbnQKK19fcHRocmVhZF9jb25kX2Rlc3Ryb3kgKHB0aHJlYWRf
-Y29uZF90ICpjb25kKQoreworICBpZiAocHRocmVhZF9jb25kOjppc0dvb2RJ
-bml0aWFsaXplciAoY29uZCkpCisgICAgcmV0dXJuIDA7CisgIGlmICghcHRo
-cmVhZF9jb25kOjppc0dvb2RPYmplY3QgKGNvbmQpKQorICAgIHJldHVybiBF
-SU5WQUw7CisKKyAgLyogcmVhZHMgYXJlIGF0b21pYyAqLworICBpZiAoKCpj
-b25kKS0+d2FpdGluZykKKyAgICByZXR1cm4gRUJVU1k7CisKKyAgZGVsZXRl
-ICgqY29uZCk7CisgICpjb25kID0gTlVMTDsKIAogICByZXR1cm4gMDsKIH0K
-QEAgLTIwNDQsNyArMjA3Miw3IEBAIGludAogX19wdGhyZWFkX2NvbmRfYnJv
-YWRjYXN0IChwdGhyZWFkX2NvbmRfdCAqY29uZCkKIHsKICAgaWYgKHB0aHJl
-YWRfY29uZDo6aXNHb29kSW5pdGlhbGl6ZXIgKGNvbmQpKQotICAgIF9fcHRo
-cmVhZF9jb25kX2luaXQgKGNvbmQsIE5VTEwpOworICAgIHB0aHJlYWRfY29u
-ZDo6aW5pdCAoY29uZCwgTlVMTCk7CiAgIGlmICghcHRocmVhZF9jb25kOjpp
-c0dvb2RPYmplY3QgKGNvbmQpKQogICAgIHJldHVybiBFSU5WQUw7CiAKQEAg
-LTIwNTcsNyArMjA4NSw3IEBAIGludAogX19wdGhyZWFkX2NvbmRfc2lnbmFs
-IChwdGhyZWFkX2NvbmRfdCAqY29uZCkKIHsKICAgaWYgKHB0aHJlYWRfY29u
-ZDo6aXNHb29kSW5pdGlhbGl6ZXIgKGNvbmQpKQotICAgIF9fcHRocmVhZF9j
-b25kX2luaXQgKGNvbmQsIE5VTEwpOworICAgIHB0aHJlYWRfY29uZDo6aW5p
-dCAoY29uZCwgTlVMTCk7CiAgIGlmICghcHRocmVhZF9jb25kOjppc0dvb2RP
-YmplY3QgKGNvbmQpKQogICAgIHJldHVybiBFSU5WQUw7CiAKQEAgLTIwNzgs
-NyArMjEwNiw3IEBAIF9fcHRocmVhZF9jb25kX2Rvd2FpdCAocHRocmVhZF9j
-b25kX3QgKmMKICAgICBwdGhyZWFkX211dGV4Ojppbml0IChtdXRleCwgTlVM
-TCk7CiAgIHRoZW11dGV4ID0gbXV0ZXg7CiAgIGlmIChwdGhyZWFkX2NvbmQ6
-OmlzR29vZEluaXRpYWxpemVyIChjb25kKSkKLSAgICBfX3B0aHJlYWRfY29u
-ZF9pbml0IChjb25kLCBOVUxMKTsKKyAgICBwdGhyZWFkX2NvbmQ6OmluaXQg
-KGNvbmQsIE5VTEwpOwogCiAgIGlmICghcHRocmVhZF9tdXRleDo6aXNHb29k
-T2JqZWN0ICh0aGVtdXRleCkpCiAgICAgcmV0dXJuIEVJTlZBTDsKZGlmZiAt
-dXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi90aHJlYWQuaCBzcmMvd2luc3Vw
-L2N5Z3dpbi90aHJlYWQuaAotLS0gc3JjLm9sZC93aW5zdXAvY3lnd2luL3Ro
-cmVhZC5oCTIwMDItMTEtMjcgMTg6MjI6NDUuMDAwMDAwMDAwICswMTAwCisr
-KyBzcmMvd2luc3VwL2N5Z3dpbi90aHJlYWQuaAkyMDAyLTExLTI5IDEwOjM0
-OjU1LjAwMDAwMDAwMCArMDEwMApAQCAtMTIxLDYgKzEyMSwxNiBAQCB2b2lk
-IEFzc2VydFJlc291cmNlT3duZXIgKGludCwgaW50KTsKICNlbmRpZgogfQog
-CitjbGFzcyBuYXRpdmVNdXRleAoreworcHVibGljOgorICBib29sIGluaXQg
-KCk7CisgIGJvb2wgbG9jayAoKTsKKyAgdm9pZCB1bmxvY2sgKCk7Citwcml2
-YXRlOgorICBIQU5ETEUgdGhlSGFuZGxlOworfTsKKwogY2xhc3MgcGVyX3By
-b2Nlc3M7CiBjbGFzcyBwaW5mbzsKIApAQCAtMjg4LDkgKzI5OCw5IEBAIHB1
-YmxpYzoKIGNsYXNzIHB0aHJlYWRfbXV0ZXg6cHVibGljIHZlcmlmeWFibGVf
-b2JqZWN0CiB7CiBwdWJsaWM6Ci0gIHN0YXRpYyBib29sIGlzR29vZE9iamVj
-dChwdGhyZWFkX211dGV4X3QgY29uc3QgKik7Ci0gIHN0YXRpYyBib29sIGlz
-R29vZEluaXRpYWxpemVyKHB0aHJlYWRfbXV0ZXhfdCBjb25zdCAqKTsKLSAg
-c3RhdGljIGJvb2wgaXNHb29kSW5pdGlhbGl6ZXJPck9iamVjdChwdGhyZWFk
-X211dGV4X3QgY29uc3QgKik7CisgIHN0YXRpYyBib29sIGlzR29vZE9iamVj
-dCAocHRocmVhZF9tdXRleF90IGNvbnN0ICopOworICBzdGF0aWMgYm9vbCBp
-c0dvb2RJbml0aWFsaXplciAocHRocmVhZF9tdXRleF90IGNvbnN0ICopOwor
-ICBzdGF0aWMgYm9vbCBpc0dvb2RJbml0aWFsaXplck9yT2JqZWN0IChwdGhy
-ZWFkX211dGV4X3QgY29uc3QgKik7CiAgIHN0YXRpYyBib29sIGlzR29vZElu
-aXRpYWxpemVyT3JCYWRPYmplY3QgKHB0aHJlYWRfbXV0ZXhfdCBjb25zdCAq
-bXV0ZXgpOwogICBzdGF0aWMgdm9pZCBpbml0TXV0ZXggKCk7CiAgIHN0YXRp
-YyBpbnQgaW5pdCAocHRocmVhZF9tdXRleF90ICosIGNvbnN0IHB0aHJlYWRf
-bXV0ZXhhdHRyX3QgKik7CkBAIC0zMDksMTUgKzMxOSw4IEBAIHB1YmxpYzoK
-ICAgcHRocmVhZF9tdXRleCAocHRocmVhZF9tdXRleGF0dHIgKiA9IE5VTEwp
-OwogICBwdGhyZWFkX211dGV4IChwdGhyZWFkX211dGV4X3QgKiwgcHRocmVh
-ZF9tdXRleGF0dHIgKik7CiAgIH5wdGhyZWFkX211dGV4ICgpOworCiBwcml2
-YXRlOgotICBjbGFzcyBuYXRpdmVNdXRleCB7Ci0gICAgcHVibGljOgotICAg
-ICAgYm9vbCBpbml0KCk7Ci0gICAgICBib29sIGxvY2soKTsKLSAgICAgIHZv
-aWQgdW5sb2NrKCk7Ci0gICAgcHJpdmF0ZToKLSAgICAgIEhBTkRMRSB0aGVI
-YW5kbGU7Ci0gIH07CiAgIHN0YXRpYyBuYXRpdmVNdXRleCBtdXRleEluaXRp
-YWxpemF0aW9uTG9jazsKIH07CiAKQEAgLTQzMiw5ICs0MzUsMTMgQEAgcHVi
-bGljOgogY2xhc3MgcHRocmVhZF9jb25kOnB1YmxpYyB2ZXJpZnlhYmxlX29i
-amVjdAogewogcHVibGljOgotICBzdGF0aWMgYm9vbCBpc0dvb2RPYmplY3Qo
-cHRocmVhZF9jb25kX3QgY29uc3QgKik7Ci0gIHN0YXRpYyBib29sIGlzR29v
-ZEluaXRpYWxpemVyKHB0aHJlYWRfY29uZF90IGNvbnN0ICopOwotICBzdGF0
-aWMgYm9vbCBpc0dvb2RJbml0aWFsaXplck9yT2JqZWN0KHB0aHJlYWRfY29u
-ZF90IGNvbnN0ICopOworICBzdGF0aWMgYm9vbCBpc0dvb2RPYmplY3QgKHB0
-aHJlYWRfY29uZF90IGNvbnN0ICopOworICBzdGF0aWMgYm9vbCBpc0dvb2RJ
-bml0aWFsaXplciAocHRocmVhZF9jb25kX3QgY29uc3QgKik7CisgIHN0YXRp
-YyBib29sIGlzR29vZEluaXRpYWxpemVyT3JPYmplY3QgKHB0aHJlYWRfY29u
-ZF90IGNvbnN0ICopOworICBzdGF0aWMgYm9vbCBpc0dvb2RJbml0aWFsaXpl
-ck9yQmFkT2JqZWN0IChwdGhyZWFkX2NvbmRfdCBjb25zdCAqKTsKKyAgc3Rh
-dGljIHZvaWQgaW5pdE11dGV4ICgpOworICBzdGF0aWMgaW50IGluaXQgKHB0
-aHJlYWRfY29uZF90ICosIGNvbnN0IHB0aHJlYWRfY29uZGF0dHJfdCAqKTsK
-KwogICBpbnQgc2hhcmVkOwogICBMT05HIHdhaXRpbmc7CiAgIExPTkcgRXhp
-dGluZ1dhaXQ7CkBAIC00NTAsNiArNDU3LDkgQEAgcHVibGljOgogCiAgIHB0
-aHJlYWRfY29uZCAocHRocmVhZF9jb25kYXR0ciAqKTsKICAgfnB0aHJlYWRf
-Y29uZCAoKTsKKworcHJpdmF0ZToKKyAgc3RhdGljIG5hdGl2ZU11dGV4IGNv
-bmRJbml0aWFsaXphdGlvbkxvY2s7CiB9OwogCiBjbGFzcyBwdGhyZWFkX29u
-Y2UKQEAgLTU2MCw4ICs1NzAsNiBAQCB2b2lkICpfX3B0aHJlYWRfZ2V0c3Bl
-Y2lmaWMgKHB0aHJlYWRfa2V5CiAKIC8qIFRoZWFkIHN5bmNocm9uaWF0aW9u
-ICovCiBpbnQgX19wdGhyZWFkX2NvbmRfZGVzdHJveSAocHRocmVhZF9jb25k
-X3QgKiBjb25kKTsKLWludCBfX3B0aHJlYWRfY29uZF9pbml0IChwdGhyZWFk
-X2NvbmRfdCAqIGNvbmQsCi0JCQkgY29uc3QgcHRocmVhZF9jb25kYXR0cl90
-ICogYXR0cik7CiBpbnQgX19wdGhyZWFkX2NvbmRfc2lnbmFsIChwdGhyZWFk
-X2NvbmRfdCAqIGNvbmQpOwogaW50IF9fcHRocmVhZF9jb25kX2Jyb2FkY2Fz
-dCAocHRocmVhZF9jb25kX3QgKiBjb25kKTsKIGludCBfX3B0aHJlYWRfY29u
-ZGF0dHJfaW5pdCAocHRocmVhZF9jb25kYXR0cl90ICogY29uZGF0dHIpOwo=
+--- passwd.cc.new	2002-11-28 23:26:28.000000000 -0500
++++ passwd.cc	2002-11-29 10:42:36.000000000 -0500
+@@ -140,7 +140,7 @@ read_etc_passwd ()
+   passwd_lock here (cygwin_finished_initializing);
 
---1973513-18409-1038571998=:329--
+   /* if we got blocked by the mutex, then etc_passwd may have been process=
+ed */
+-  if (passwd_state <=3D initializing)
++  if (passwd_state.isinitializing ())
+     {
+       curr_lines =3D 0;
+       if (pr.open ("/etc/passwd"))
+@@ -153,7 +153,6 @@ read_etc_passwd ()
+ 	  pr.close ();
+ 	  debug_printf ("Read /etc/passwd, %d lines", curr_lines);
+ 	}
+-      passwd_state =3D loaded;
+
+       static char linebuf[1024];
+       char strbuf[128] =3D "";
+@@ -216,7 +215,7 @@ struct passwd *
+ internal_getpwuid (__uid32_t uid, BOOL check)
+ {
+   if (passwd_state.isuninitialized ()
+-      || (check && passwd_state  <=3D initializing))
++      || (check && passwd_state.isinitializing ()))
+     read_etc_passwd ();
+
+   for (int i =3D 0; i < curr_lines; i++)
+@@ -229,7 +228,7 @@ struct passwd *
+ internal_getpwnam (const char *name, BOOL check)
+ {
+   if (passwd_state.isuninitialized ()
+-      || (check && passwd_state  <=3D initializing))
++      || (check && passwd_state.isinitializing ()))
+     read_etc_passwd ();
+
+   for (int i =3D 0; i < curr_lines; i++)
+@@ -351,7 +350,7 @@ getpwnam_r (const char *nam, struct pass
+ extern "C" struct passwd *
+ getpwent (void)
+ {
+-  if (passwd_state  <=3D initializing)
++  if (passwd_state.isinitializing ())
+     read_etc_passwd ();
+
+   if (pw_pos < curr_lines)
+@@ -394,7 +393,7 @@ getpass (const char * prompt)
+ #endif
+   struct termios ti, newti;
+
+-  if (passwd_state  <=3D initializing)
++  if (passwd_state.isinitializing ())
+     read_etc_passwd ();
+
+   cygheap_fdget fhstdin (0);
+--- grp.cc.new	2002-11-28 23:30:04.000000000 -0500
++++ grp.cc	2002-11-29 10:43:12.000000000 -0500
+@@ -135,7 +135,7 @@ read_etc_group ()
+   group_lock here (cygwin_finished_initializing);
+
+   /* if we got blocked by the mutex, then etc_group may have been processe=
+d */
+-  if (group_state <=3D initializing)
++  if (group_state.isinitializing ())
+     {
+       for (int i =3D 0; i < curr_lines; i++)
+ 	if ((group_buf + i)->gr_mem !=3D &null_ptr)
+@@ -152,7 +152,6 @@ read_etc_group ()
+ 	  gr.close ();
+ 	  debug_printf ("Read /etc/group, %d lines", curr_lines);
+ 	}
+-      group_state =3D loaded;
+
+       /* Complete /etc/group in memory if needed */
+       if (!internal_getgrgid (myself->gid))
+@@ -199,7 +198,7 @@ internal_getgrgid (__gid32_t gid, BOOL c
+   struct __group32 * default_grp =3D NULL;
+
+   if (group_state.isuninitialized ()
+-      || (check && group_state  <=3D initializing))
++      || (check && group_state.isinitializing ()))
+     read_etc_group ();
+
+   for (int i =3D 0; i < curr_lines; i++)
+@@ -216,7 +215,7 @@ struct __group32 *
+ internal_getgrnam (const char *name, BOOL check)
+ {
+   if (group_state.isuninitialized ()
+-      || (check && group_state  <=3D initializing))
++      || (check && group_state.isinitializing ()))
+     read_etc_group ();
+
+   for (int i =3D 0; i < curr_lines; i++)
+@@ -281,7 +280,7 @@ endgrent ()
+ extern "C" struct __group32 *
+ getgrent32 ()
+ {
+-  if (group_state  <=3D initializing)
++  if (group_state.isinitializing ())
+     read_etc_group ();
+
+   if (grp_pos < curr_lines)
+
+--=====================_1038602965==_--
