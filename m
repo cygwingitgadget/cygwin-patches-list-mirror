@@ -1,31 +1,26 @@
-From: Corinna Vinschen <vinschen@cygnus.com>
-To: Kazuhiro Fujieda <fujieda@jaist.ac.jp>
+From: Chris Faylor <cgf@cygnus.com>
+To: Egor Duda <deo@logos-m.ru>
 Cc: cygpatch <cygwin-patches@sourceware.cygnus.com>
-Subject: Re: preliminary patch2 for i18n: change the code page to ANSI.
-Date: Tue, 04 Jul 2000 07:27:00 -0000
-Message-id: <3961F45F.D6B06C35@cygnus.com>
-References: <s1saefyooqa.fsf@jaist.ac.jp> <20000703190459.A30846@cygnus.com> <s1s8zviodkm.fsf@jaist.ac.jp> <20000703222950.A5294@cygnus.com> <s1s7lb2oa1d.fsf@jaist.ac.jp> <3961C3A6.A56E102@cygnus.com> <s1s4s66ngar.fsf@jaist.ac.jp>
-X-SW-Source: 2000-q3/msg00008.html
+Subject: Re: error_start patch
+Date: Tue, 04 Jul 2000 12:08:00 -0000
+Message-id: <20000704150841.A2846@cygnus.com>
+References: <2891.000522@logos-m.ru>
+X-SW-Source: 2000-q3/msg00009.html
 
-Kazuhiro Fujieda wrote:
-> 
-> >>> On Tue, 04 Jul 2000 12:59:50 +0200
-> >>> Corinna Vinschen <vinschen@cygnus.com> said:
-> 
-> > Only one thing: Did you notice the use of OemToChar() in
-> > security.cc::read_sd()?
-> > It was necessary to get GetFileSecurity() working with umlauts.
-> >
-> > Shouldn't this be changed then, too?
-> 
-> Yes, it should be changed. I failed to include the change of
-> security.cc in my previous mail. Thank you for your notice.
+On Mon, May 22, 2000 at 09:24:02PM +0400, Egor Duda wrote:
+>Below is a patch to prevent cygwin's JIT debugger (specified via
+>'error_start') from being spawned recursively, in case when debugger
+>throws exception itself.  It also allows to notify the debugee
+>that  we've    done    with   debugging   and  it  can  exit in peace.
+>debugger can post event named
+>
+>"cygwin_error_start_event_<debugee_win32_pid>"
+>
+>instead of
+>
+>(gdb) set keep_looping=0
+>(gdb) c
 
-Thanks for your reply. I will check that in today.
+Applied.  And, only a month or so late. :-)
 
-Corinna
-
--- 
-Corinna Vinschen
-Cygwin Developer
-Cygnus Solutions, a Red Hat company
+cgf
