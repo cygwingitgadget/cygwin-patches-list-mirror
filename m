@@ -1,10 +1,11 @@
-From: "Edward M. Lee" <edward@tailifer.com>
+From: "edward" <tailbert@yahoo.com>
 To: "List, Cygwin Developers" <cygwin-developers@cygwin.com>
 Cc: "List, Cygwin Patches" <cygwin-patches@cygwin.com>
 Subject: Minor winsup/doc/sgml patch.
-Date: Thu, 21 Dec 2000 12:07:00 -0000
-Message-id: <FMEOJCMLNIMPBKAPFPIHCEPICFAA.edward@tailifer.com>
-X-SW-Source: 2000-q4/msg00053.html
+Date: Thu, 21 Dec 2000 12:08:00 -0000
+Message-id: <FMEOJCMLNIMPBKAPFPIHIEPICFAA.tailbert@yahoo.com>
+References: <FMEOJCMLNIMPBKAPFPIHCEPICFAA.edward@tailifer.com>
+X-SW-Source: 2000-q4/msg00054.html
 
 Just some things to make the sgml conformant.
 
