@@ -1,15 +1,108 @@
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-developers@cygwin.com, cygwin-patches@cygwin.com
+From: "Robert Collins" <robert.collins@itdomain.com.au>
+To: <cygwin-developers@cygwin.com>, <cygwin-patches@cygwin.com>
 Subject: Re: hierarchy in setup (category stuff)
-Date: Fri, 29 Jun 2001 19:31:00 -0000
-Message-id: <20010629223227.C11334@redhat.com>
-References: <20010629114004.A6990@redhat.com> <VA.00000842.01fd0b44@thesoftwaresource.com> <20010629172912.A8991@redhat.com> <032001c100fe$d62310c0$806410ac@local> <20010629205735.K9607@redhat.com> <034701c10106$34f6b6e0$806410ac@local> <036501c10108$b55383c0$806410ac@local> <20010629221309.A11334@redhat.com> <038301c1010a$bab7e840$806410ac@local> <039201c1010b$856f0c80$806410ac@local>
-X-SW-Source: 2001-q2/msg00380.html
+Date: Fri, 29 Jun 2001 19:41:00 -0000
+Message-id: <03cb01c1010e$6d809dc0$806410ac@local>
+References: <20010629114004.A6990@redhat.com> <VA.00000842.01fd0b44@thesoftwaresource.com> <20010629172912.A8991@redhat.com> <032001c100fe$d62310c0$806410ac@local> <20010629205735.K9607@redhat.com> <034701c10106$34f6b6e0$806410ac@local> <036501c10108$b55383c0$806410ac@local> <20010629221309.A11334@redhat.com> <038301c1010a$bab7e840$806410ac@local> <039201c1010b$856f0c80$806410ac@local> <20010629223227.C11334@redhat.com>
+X-SW-Source: 2001-q2/msg00381.html
+Content-type: multipart/mixed; boundary="----------=_1583532848-65438-85"
 
-On Sat, Jun 30, 2001 at 12:22:32PM +1000, Robert Collins wrote:
->Applying this should fix my boo boo.
+This is a multi-part message in MIME format...
 
-Sorry, but there is more to my changes than that.  I'm going through now and
-fixing what I can.  I'm also resurrecting Michael's white space changes.
+------------=_1583532848-65438-85
+Content-length: 770
 
-cgf
+----- Original Message -----
+From: "Christopher Faylor" <cgf@redhat.com>
+To: <cygwin-developers@cygwin.com>; <cygwin-patches@cygwin.com>
+Sent: Saturday, June 30, 2001 12:32 PM
+Subject: Re: hierarchy in setup (category stuff)
+
+
+> On Sat, Jun 30, 2001 at 12:22:32PM +1000, Robert Collins wrote:
+> >Applying this should fix my boo boo.
+>
+> Sorry, but there is more to my changes than that.  I'm going through now
+and
+> fixing what I can.  I'm also resurrecting Michael's white space changes.
+>
+> cgf
+
+
+I think this gets them all. I thought I'd not trashed Michael's whate space
+changes - although where code moved between functions, they would have been
+lost regardless.
+
+I'm happy if rolling back is easier for you, but I suspect that its the same
+effort either way.
+
+Rob
+
+------------=_1583532848-65438-85
+Content-Type: text/x-diff; charset=us-ascii; name="oops.patch"
+Content-Disposition: inline; filename="oops.patch"
+Content-Transfer-Encoding: base64
+Content-Length: 3624
+
+SW5kZXg6IGNob29zZS5jYwo9PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBm
+aWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL2NpbnN0YWxsL2Nob29zZS5jYyx2
+CnJldHJpZXZpbmcgcmV2aXNpb24gMi4zNgpkaWZmIC11IC1wIC1yMi4zNiBj
+aG9vc2UuY2MKLS0tIGNob29zZS5jYwkyMDAxLzA2LzMwIDAxOjM3OjU1CTIu
+MzYKKysrIGNob29zZS5jYwkyMDAxLzA2LzMwIDAyOjQwOjExCkBAIC0xMDAs
+OSArMTAwLDExIEBAIGlzaW5zdGFsbGVkIChQYWNrYWdlICpwa2csIGludCB0
+cnVzdCkKIHN0YXRpYyB2b2lkCiBzZXRfYWN0aW9uIChQYWNrYWdlICpwa2cs
+IGJvb2wgcHJlaW5jKQogewotICBwa2ctPnNyY3BpY2tlZCA9IDA7CiAgIGlm
+ICghcGtnLT5hY3Rpb24gfHwgcHJlaW5jKQotICAgICgoaW50KSBwa2ctPmFj
+dGlvbikrKzsKKyAgICB7CisgICAgICAoKGludCkgcGtnLT5hY3Rpb24pKys7
+CisgICAgICBwa2ctPnNyY3BpY2tlZCA9IDA7CisgICAgfQogCiAgIC8qIEV4
+ZXJjaXNlIHRoZSBhY3Rpb24gc3RhdGUgbWFjaGluZS4gKi8KICAgZm9yICg7
+OyAoKGludCkgcGtnLT5hY3Rpb24pKyspCkBAIC0xNDUsMjEgKzE0NywyOCBA
+QCBzZXRfYWN0aW9uIChQYWNrYWdlICpwa2csIGJvb2wgcHJlaW5jKQogICAg
+ICAgY2FzZSBBQ1RJT05fVU5JTlNUQUxMOgogCWlmIChwa2ctPmluc3RhbGxl
+ZCkKIAkgIHJldHVybjsKKwlicmVhazsKICAgICAgIGNhc2UgQUNUSU9OX1JF
+RE86Ci0JaWYgKHBrZy0+aW5zdGFsbGVkKQorCWlmIChwa2ctPmluc3RhbGxl
+ZCAmJiBwa2ctPmluZm9bcGtnLT5pbnN0YWxsZWRfaXhdLmluc3RhbGxfZXhp
+c3RzKQogCSAgewogCSAgICBwa2ctPnRydXN0ID0gcGtnLT5pbnN0YWxsZWRf
+aXg7CiAJICAgIHJldHVybjsKIAkgIH0KKwlicmVhazsKICAgICAgIGNhc2Ug
+QUNUSU9OX1NSQ19PTkxZOgotCWlmIChwa2ctPmluc3RhbGxlZCAmJiBwa2ct
+Pmluc3RhbGxlZC0+c291cmNlX2V4aXN0cykKLQkgIHJldHVybjsKKwlpZiAo
+cGtnLT5pbmZvW3BrZy0+dHJ1c3RdLnNvdXJjZV9leGlzdHMpCisJICB7CisJ
+ICAgIHBrZy0+c3JjcGlja2VkID0gMTsKKwkgICAgcmV0dXJuOworCSAgfQog
+CWJyZWFrOwogICAgICAgY2FzZSBBQ1RJT05fU0FNRV9MQVNUOgogCXBrZy0+
+YWN0aW9uID0gQUNUSU9OX1NLSVA7CiAJLyogRmFsbCB0aHJvdWdoIGludGVu
+dGlvbmFsbHkgKi8KICAgICAgIGNhc2UgQUNUSU9OX1NLSVA6Ci0JcmV0dXJu
+OworICAgICAgICBpZiAoIXBrZy0+aW5zdGFsbGVkIHx8ICFwa2ctPmluZm9b
+cGtnLT5pbnN0YWxsZWRfaXhdLmluc3RhbGxfZXhpc3RzKQorCSAgcmV0dXJu
+OworCWJyZWFrOwogICAgICAgZGVmYXVsdDoKIAlsb2cgKDAsICJzaG91bGQg
+bmV2ZXIgZ2V0IGhlcmUgJWRcbiIsIHBrZy0+YWN0aW9uKTsKICAgICAgIH0K
+QEAgLTE0NjEsMjQgKzE0NzAsMjUgQEAgZG9fY2hvb3NlIChISU5TVEFOQ0Ug
+aCkKIAkJCSAgICAgICA6ICJ1bmtub3duIik7CiAgICAgICBjb25zdCBjaGFy
+ICpleGNsdWRlZCA9IChwa2ctPmV4Y2x1ZGUgPyAieWVzIiA6ICJubyIpOwog
+Ci0gICAgICBsb2cgKExPR19CQUJCTEUsICJbJXNdIGFjdGlvbj0lcyB0cnVz
+dD0lcyBpbnN0YWxsZWQ9JXMgZXhjbHVkZWQ9JXMgc3JjPz0lcyIKKyAgICAg
+IGxvZyAoTE9HX0JBQkJMRSwgCisJICAiWyVzXSBhY3Rpb249JXMgdHJ1c3Q9
+JXMgaW5zdGFsbGVkPSVzIGV4Y2x1ZGVkPSVzIHNyYz89JXMiCiAJICAgImNh
+dGVnb3J5PSVzIiwKIAkgICBwa2ctPm5hbWUsIGFjdGlvbiwgdHJ1c3QsIGlu
+c3RhbGxlZCwKLQkgICBleGNsdWRlZCwgcGtnLT5zcmNwaWNrZWQgPyAieWVz
+IiA6ICJubyIsIHBrZy0+Y2F0ZWdvcnkpOworCSAgIGV4Y2x1ZGVkLCBwa2ct
+PnNyY3BpY2tlZCA/ICJ5ZXMiIDogIm5vIiwgcGtnLT5jYXRlZ29yeS0+bmFt
+ZSk7CiAgICAgICBmb3IgKGludCB0ID0gMTsgdCA8IE5UUlVTVDsgdCsrKQog
+CXsKIAkgIGlmIChwa2ctPmluZm9bdF0uaW5zdGFsbCkKLQkgICAgbG9nIChM
+T0dfQkFCQkxFLCAiICAgICBbJXNdIHZlcj0lc1xyXG4iCi0JCQkgICAgICIg
+ICAgICAgICAgaW5zdD0lcyAlZCBleGlzdHM9JXNcclxuIgotCQkJICAgICAi
+CQlzcmM9JXMgJWQgZXhpc3RzPSVzIiwKKwkgICAgbG9nIChMT0dfQkFCQkxF
+LCAiICAgICBbJXNdIHZlcj0lc1xuIgorCQkJICAgICAiICAgICAgICAgIGlu
+c3Q9JXMgJWQgZXhpc3RzPSVzXG4iCisJCQkgICAgICIgICAgICAgICAgc3Jj
+PSVzICVkIGV4aXN0cz0lcyIsCiAJCSBpbmZvc1t0XSwKIAkJIHBrZy0+aW5m
+b1t0XS52ZXJzaW9uID86ICIobm9uZSkiLAogCQkgcGtnLT5pbmZvW3RdLmlu
+c3RhbGwgPzogIihub25lKSIsCiAJCSBwa2ctPmluZm9bdF0uaW5zdGFsbF9z
+aXplLAotCQkgKHBrZy0+aW5mb1t0XS5pbnN0YWxsX2V4aXN0cykgPyAieWVz
+Ijoibm8iLAorCQkgKHBrZy0+aW5mb1t0XS5pbnN0YWxsX2V4aXN0cykgPyAi
+eWVzIiA6ICJubyIsCiAJCSBwa2ctPmluZm9bdF0uc291cmNlID86ICIobm9u
+ZSkiLAogCQkgcGtnLT5pbmZvW3RdLnNvdXJjZV9zaXplLAotCQkgKHBrZy0+
+aW5mb1t0XS5zb3VyY2VfZXhpc3RzID09IDEpID8gInllcyI6Im5vIik7CisJ
+CSAocGtnLT5pbmZvW3RdLnNvdXJjZV9leGlzdHMpID8gInllcyIgOiAibm8i
+KTsKIAl9CiAgICAgfQogfQo=
+
+------------=_1583532848-65438-85--
