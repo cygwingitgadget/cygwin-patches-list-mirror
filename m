@@ -1,62 +1,131 @@
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
+From: egor duda <deo@logos-m.ru>
+To: Christopher Faylor <cygwin-patches@cygwin.com>
 Subject: Re: yet another "pedantic" patch
-Date: Fri, 14 Sep 2001 13:43:00 -0000
-Message-id: <20010914164404.A17411@redhat.com>
-References: <11495323718.20010913194455@logos-m.ru> <20010913133424.B13789@redhat.com> <150112180767.20010914002552@logos-m.ru> <20010913163632.D15490@redhat.com> <84197556771.20010915000849@logos-m.ru>
-X-SW-Source: 2001-q3/msg00148.html
+Date: Sat, 15 Sep 2001 12:56:00 -0000
+Message-id: <1621743917.20010915235424@logos-m.ru>
+References: <11495323718.20010913194455@logos-m.ru> <20010913133424.B13789@redhat.com> <150112180767.20010914002552@logos-m.ru> <20010913163632.D15490@redhat.com> <84197556771.20010915000849@logos-m.ru> <20010914164404.A17411@redhat.com>
+X-SW-Source: 2001-q3/msg00149.html
+Content-type: multipart/mixed; boundary="----------=_1583532848-65438-101"
 
-On Sat, Sep 15, 2001 at 12:08:49AM +0400, egor duda wrote:
->Hi!
->
->Friday, 14 September, 2001 Christopher Faylor cgf@redhat.com wrote:
->
->>>CF> Can I suggest that you modify the check_null_empty_* to pass
->>>CF> in an errno that should be used in the case of an empty string?
->>>
->>>CF> You are special casing checks to force an EINVAL.
->
->>>neither SUSv2 nor posix draft say what symlink should do if first
->>>argument is empty string. actually, posix say that symlink() shouldn't
->>>care for its validity as filesystem object at all, and this can be
->>>treated as if empty string is allowed as symlink value.
->>>So, should we eliminate (topath[0] == '\0') check altogether?
->>>Of course, after verifying that symlink resolution code won't break on
->>>such symlinks.
->
->CF> Yes.  I guess we should eliminate this then.  It will probably require
->CF> another special case check for symlink.
->
->it looks like current symlink code handles empty string in symlink
->contents without any trouble, but i want to give it a bit more
->testing.
->
->>>CF> Hmm.  I wonder if EINVAL is always appropriate for an empty string.
->>>CF> It could just be wrong in check_null_empty_str.
->
->>>otherwise, i think that allowing the caller to specify desired errno
->>>explicitly in call to check_null_empty_str_errno() is a good thing.
->
->i've removed checks that were forcing EINVAL (leaving those that don't
->relate to check_null_empty_*, however)
->
->it turned out that current check_null_empty_* are ok, and there's no
->actual need to add errno parameters to them. only place were empty
->string in parameter is known to cause error is when it's file or
->directory name. in that case ENOENT is pretty adequate, just as EFAULT
->in case of NULL or invalid pointer.
+This is a multi-part message in MIME format...
 
-It looks ok except for this:
+------------=_1583532848-65438-101
+Content-length: 645
 
-+  if (check_null_empty_str (topath) == EFAULT)
-+    {
-+      set_errno (EFAULT);
-+      goto done;
-+    }
-+  if (check_null_empty_str_errno (frompath))
-+    goto done;
+Hi!
 
-There is no reason for this duplication is there?  Can't this just be
-check_null_empty_str_errno?
+Saturday, 15 September, 2001 Christopher Faylor cgf@redhat.com wrote:
 
-cgf
+CF> It looks ok except for this:
+
+CF> +  if (check_null_empty_str (topath) == EFAULT)
+CF> +    {
+CF> +      set_errno (EFAULT);
+CF> +      goto done;
+CF> +    }
+CF> +  if (check_null_empty_str_errno (frompath))
+CF> +    goto done;
+
+CF> There is no reason for this duplication is there?  Can't this just be
+CF> check_null_empty_str_errno?
+
+ah, right. i was thinking for some reason that check_null_empty_str_errno()
+returns true/false.
+
+Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
+check-args-validity-3.diff
+check-args-validity-3.ChangeLog
+
+
+------------=_1583532848-65438-101
+Content-Type: text/plain; charset=us-ascii;
+ name="check-args-validity-3.ChangeLog"
+Content-Disposition: inline; filename="check-args-validity-3.ChangeLog"
+Content-Transfer-Encoding: base64
+Content-Length: 277
+
+MjAwMS0wOS0xNCAgRWdvciBEdWRhICA8ZGVvQGxvZ29zLW0ucnU+CgoJKiBw
+YXRoLmNjIChzeW1saW5rKTogQ2hlY2sgYXJndW1lbnRzIGZvciB2YWxpZGl0
+eS4KCShnZXRjd2QpOiBEaXR0by4KCSogc3lzY2FsbHMuY2MgKGZ0cnVuY2F0
+ZSk6IERpdHRvLgoJKiB0aW1lcy5jYyAodGltZXMpOiBEaXR0by4KCSogdW5h
+bWUuY2MgKHVuYW1lKTogRGl0dG8uCg==
+
+------------=_1583532848-65438-101
+Content-Type: text/x-diff; charset=us-ascii; name="check-args-validity-3.diff"
+Content-Disposition: inline; filename="check-args-validity-3.diff"
+Content-Transfer-Encoding: base64
+Content-Length: 4275
+
+SW5kZXg6IHBhdGguY2MKPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1MgZmls
+ZTogL2N2cy91YmVyYmF1bS93aW5zdXAvY3lnd2luL3BhdGguY2MsdgpyZXRy
+aWV2aW5nIHJldmlzaW9uIDEuMTYyCmRpZmYgLXUgLXAgLTIgLXIxLjE2MiBw
+YXRoLmNjCi0tLSBwYXRoLmNjCTIwMDEvMDkvMDcgMjE6MzI6MDQJMS4xNjIK
+KysrIHBhdGguY2MJMjAwMS8wOS8xNSAxOTo0MjowMgpAQCAtMjQwMCw0ICsy
+NDAwLDE3IEBAIHN5bWxpbmsgKGNvbnN0IGNoYXIgKnRvcGF0aCwgY29uc3Qg
+Y2hhciAKICAgU0VDVVJJVFlfQVRUUklCVVRFUyBzYSA9IHNlY19ub25lX25p
+aDsKIAorICAvKiBQT1NJWCBzYXlzIHRoYXQgZW1wdHkgJ2Zyb21wYXRoJyBp
+cyBpbnZhbGlkIGlucHV0IHdobGllIGVtcHR5CisgICAgICd0b3BhdGgnIGlz
+IHZhbGlkIC0tIGl0J3Mgc3ltbGluayByZXNvbHZlciBqb2IgdG8gdmVyaWZ5
+IGlmCisgICAgIHN5bWxpbmsgY29udGVudHMgcG9pbnQgdG8gZXhpc3Rpbmcg
+ZmlsZXN5c3RlbSBvYmplY3QgKi8gCisgIGlmIChjaGVja19udWxsX2VtcHR5
+X3N0cl9lcnJubyAodG9wYXRoKSA9PSBFRkFVTFQgfHwKKyAgICAgIGNoZWNr
+X251bGxfZW1wdHlfc3RyX2Vycm5vIChmcm9tcGF0aCkpCisgICAgZ290byBk
+b25lOworCisgIGlmIChzdHJsZW4gKHRvcGF0aCkgPj0gTUFYX1BBVEgpCisg
+ICAgeworICAgICAgc2V0X2Vycm5vIChFTkFNRVRPT0xPTkcpOworICAgICAg
+Z290byBkb25lOworICAgIH0KKwogICB3aW4zMl9wYXRoLmNoZWNrIChmcm9t
+cGF0aCwgUENfU1lNX05PRk9MTE9XKTsKICAgaWYgKGFsbG93X3dpbnN5bWxp
+bmtzICYmICF3aW4zMl9wYXRoLmVycm9yKQpAQCAtMjQxNiwxNSArMjQyOSw0
+IEBAIHN5bWxpbmsgKGNvbnN0IGNoYXIgKnRvcGF0aCwgY29uc3QgY2hhciAK
+ICAgc3lzY2FsbF9wcmludGYgKCJzeW1saW5rICglcywgJXMpIiwgdG9wYXRo
+LCB3aW4zMl9wYXRoLmdldF93aW4zMiAoKSk7CiAKLSAgaWYgKHRvcGF0aFsw
+XSA9PSAwKQotICAgIHsKLSAgICAgIHNldF9lcnJubyAoRUlOVkFMKTsKLSAg
+ICAgIGdvdG8gZG9uZTsKLSAgICB9Ci0gIGlmIChzdHJsZW4gKHRvcGF0aCkg
+Pj0gTUFYX1BBVEgpCi0gICAgewotICAgICAgc2V0X2Vycm5vIChFTkFNRVRP
+T0xPTkcpOwotICAgICAgZ290byBkb25lOwotICAgIH0KLQogICBpZiAod2lu
+MzJfcGF0aC5pc19kZXZpY2UgKCkgfHwKICAgICAgIHdpbjMyX3BhdGguZmls
+ZV9hdHRyaWJ1dGVzICgpICE9IChEV09SRCkgLTEpCkBAIC0yOTg1LDUgKzI5
+ODcsMTAgQEAgY2hhciAqCiBnZXRjd2QgKGNoYXIgKmJ1Ziwgc2l6ZV90IHVs
+ZW4pCiB7Ci0gIHJldHVybiBjeWdoZWFwLT5jd2QuZ2V0IChidWYsIDEsIDEs
+IHVsZW4pOworICBjaGFyKiByZXMgPSBOVUxMOworICBpZiAodWxlbiA9PSAw
+KQorICAgIHNldF9lcnJubyAoRUlOVkFMKTsKKyAgZWxzZSBpZiAoIV9fY2hl
+Y2tfbnVsbF9pbnZhbGlkX3N0cnVjdF9lcnJubyAoYnVmLCB1bGVuKSkKKyAg
+ICByZXMgPSBjeWdoZWFwLT5jd2QuZ2V0IChidWYsIDEsIDEsIHVsZW4pOwor
+ICByZXR1cm4gcmVzOwogfQogCkluZGV4OiBzeXNjYWxscy5jYwo9PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3ViZXJiYXVtL3dpbnN1
+cC9jeWd3aW4vc3lzY2FsbHMuY2MsdgpyZXRyaWV2aW5nIHJldmlzaW9uIDEu
+MTQ0CmRpZmYgLXUgLXAgLTIgLXIxLjE0NCBzeXNjYWxscy5jYwotLS0gc3lz
+Y2FsbHMuY2MJMjAwMS8wOS8xMiAxNzo0NjozNgkxLjE0NAorKysgc3lzY2Fs
+bHMuY2MJMjAwMS8wOS8xNSAxOTo0MjowNApAQCAtMTc2OSw1ICsxNzY5LDkg
+QEAgZnRydW5jYXRlIChpbnQgZmQsIG9mZl90IGxlbmd0aCkKICAgaW50IHJl
+cyA9IC0xOwogCi0gIGlmIChjeWdoZWFwLT5mZHRhYi5ub3Rfb3BlbiAoZmQp
+KQorICBpZiAobGVuZ3RoIDwgMCkKKyAgICB7CisgICAgICBzZXRfZXJybm8g
+KEVJTlZBTCk7CisgICAgfQorICBlbHNlIGlmIChjeWdoZWFwLT5mZHRhYi5u
+b3Rfb3BlbiAoZmQpKQogICAgIHsKICAgICAgIHNldF9lcnJubyAoRUJBREYp
+OwpJbmRleDogdGltZXMuY2MKPT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1Mg
+ZmlsZTogL2N2cy91YmVyYmF1bS93aW5zdXAvY3lnd2luL3RpbWVzLmNjLHYK
+cmV0cmlldmluZyByZXZpc2lvbiAxLjIyCmRpZmYgLXUgLXAgLTIgLXIxLjIy
+IHRpbWVzLmNjCi0tLSB0aW1lcy5jYwkyMDAxLzA5LzEyIDE3OjQ2OjM2CTEu
+MjIKKysrIHRpbWVzLmNjCTIwMDEvMDkvMTUgMTk6NDI6MDQKQEAgLTUzLDQg
+KzUzLDcgQEAgdGltZXMgKHN0cnVjdCB0bXMgKiBidWYpCiAgIEZJTEVUSU1F
+IGNyZWF0aW9uX3RpbWUsIGV4aXRfdGltZSwga2VybmVsX3RpbWUsIHVzZXJf
+dGltZTsKIAorICBpZiAoY2hlY2tfbnVsbF9pbnZhbGlkX3N0cnVjdF9lcnJu
+byAoYnVmKSkKKyAgICByZXR1cm4gKChjbG9ja190KSAtMSk7CisKICAgRFdP
+UkQgdGlja3MgPSBHZXRUaWNrQ291bnQgKCk7CiAgIC8qIFRpY2tzIGlzIGlu
+IG1pbGxpc2Vjb25kcywgY29udmVydCB0byBvdXIgdGlja3MuIFVzZSBsb25n
+IGxvbmcgdG8gcHJldmVudApJbmRleDogdW5hbWUuY2MKPT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PQpSQ1MgZmlsZTogL2N2cy91YmVyYmF1bS93aW5zdXAvY3ln
+d2luL3VuYW1lLmNjLHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjE0CmRpZmYg
+LXUgLXAgLTIgLXIxLjE0IHVuYW1lLmNjCi0tLSB1bmFtZS5jYwkyMDAxLzA5
+LzEyIDE3OjQ2OjM3CTEuMTQKKysrIHVuYW1lLmNjCTIwMDEvMDkvMTUgMTk6
+NDI6MDQKQEAgLTIyLDQgKzIyLDggQEAgdW5hbWUgKHN0cnVjdCB1dHNuYW1l
+ICpuYW1lKQogICBEV09SRCBsZW47CiAgIFNZU1RFTV9JTkZPIHN5c2luZm87
+CisKKyAgaWYgKGNoZWNrX251bGxfaW52YWxpZF9zdHJ1Y3RfZXJybm8gKG5h
+bWUpKQorICAgIHJldHVybiAtMTsKKyAgICAKICAgY2hhciAqc25wID0gc3Ry
+c3RyICAoY3lnd2luX3ZlcnNpb24uZGxsX2J1aWxkX2RhdGUsICJTTlAiKTsK
+IAo=
+
+------------=_1583532848-65438-101--
