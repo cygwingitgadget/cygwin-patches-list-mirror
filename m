@@ -1,20 +1,21 @@
 From: Earnie Boyd <earnie_boyd@yahoo.com>
-To: cygwin-patches@cygwin.com
-Subject: Fix up cinstall to build properly with the new _ANONYMOUS_* defines.
-Date: Wed, 18 Apr 2001 16:44:00 -0000
-Message-id: <3ADE26E0.5A51BAF8@yahoo.com>
-X-SW-Source: 2001-q2/msg00114.html
+To: Cygwin Patches <cygwin-patches@cygwin.com>
+Subject: Re: Fix up cinstall to build properly with the new _ANONYMOUS_* defines.
+Date: Wed, 18 Apr 2001 17:09:00 -0000
+Message-id: <3ADE2CC2.6F05BA2@yahoo.com>
+References: <3ADE26E0.5A51BAF8@yahoo.com>
+X-SW-Source: 2001-q2/msg00115.html
 
  
 2001-04-18  Earnie Boyd  <earnie@users.sourceforge.net>
 
 	* win32.h: Remove the definitions for _UNION_NAME and _STRUCT_NAME.
 	Must now include <windows.h> and not the pieces.
-	* choose.cc: Clean up type mismatch problems.
-	* dialog.h: Ditto.
-	* geturl.cc: Ditto.
-	* install.cc: Ditto.
-	* splash.cc: Ditto.
+	* choose.cc (create_listview): Clean up type mismatch problems.
+	* dialog.h (NEXT(id)): Ditto.
+	* geturl.cc (dialog): Ditto.
+	* install.cc (dialog): Ditto.
+	* splash.cc (load_dialog): Ditto.
 
 Index: choose.cc
 ===================================================================
