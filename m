@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2439-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 29982 invoked by alias); 16 Jun 2002 04:11:11 -0000
+Return-Path: <cygwin-patches-return-2440-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 16287 invoked by alias); 16 Jun 2002 05:14:37 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,217 +7,143 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 29968 invoked from network); 16 Jun 2002 04:11:11 -0000
-Message-Id: <3.0.5.32.20020616000701.007f7df0@mail.attbi.com>
-X-Sender: phumblet@mail.attbi.com
-Date: Sat, 15 Jun 2002 21:11:00 -0000
+Received: (qmail 16270 invoked from network); 16 Jun 2002 05:14:34 -0000
+Date: Sat, 15 Jun 2002 22:14:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
 Subject: Re: Reorganizing internal_getlogin() patch is in
-In-Reply-To: <20020615010217.GA5699@redhat.com>
-References: <20020613052709.GA17779@redhat.com>
- <20020613052709.GA17779@redhat.com>
+Message-ID: <20020616051506.GA6188@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20020613052709.GA17779@redhat.com> <20020613052709.GA17779@redhat.com> <3.0.5.32.20020616000701.007f7df0@mail.attbi.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-X-SW-Source: 2002-q2/txt/msg00422.txt.bz2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3.0.5.32.20020616000701.007f7df0@mail.attbi.com>
+User-Agent: Mutt/1.3.23.1i
+X-SW-Source: 2002-q2/txt/msg00423.txt.bz2
 
-At 09:02 PM 6/14/2002 -0400, Christopher Faylor wrote:
->Pierre's patch + my modifications + Corinna's insights into my blunders
->are now checked in.
+On Sun, Jun 16, 2002 at 12:07:01AM -0400, Pierre A. Humblet wrote:
+>At 09:02 PM 6/14/2002 -0400, Christopher Faylor wrote:
+>>Pierre's patch + my modifications + Corinna's insights into my blunders
+>>are now checked in.
+>
+>Kudos to Chris and Corinna for the elegant way they have reimplemented
+>the Windows environment handling.
+>
+>I noticed several nits:
+>spawn.cc:    line accidentally deleted, diff below.
 
-Kudos to Chris and Corinna for the elegant way they have reimplemented
-the Windows environment handling.
+That's odd.  I thought that the removal of this line was one of the
+goals of your changes.  I guess we should rename this field, as you
+suggested, since it is being used as a flag now.
 
-I noticed several nits:
-spawn.cc:    line accidentally deleted, diff below.
+>environ.cc: (diff below)
+>a) There are cases where a variable that is not present should be added,
+>and cases where an existing variable should be removed.
+>That's because the SYSTEM account is missing variables (different on
+>NT and Win2000 !!), as can be checked by running env from cygrunsrv with
+>the production cygwin1.dll  I made spenv::retrieve return an empty string
+>when a variable should not exist.
 
-environ.cc: (diff below)
-a) There are cases where a variable that is not present should be added,
-and cases where an existing variable should be removed.
-That's because the SYSTEM account is missing variables (different on
-NT and Win2000 !!), as can be checked by running env from cygrunsrv with
-the production cygwin1.dll  I made spenv::retrieve return an empty string
-when a variable should not exist.
-b) Unfortunately, postponing the evaluation of variables cannot be done past 
-CreateProcessAsUser. After that point LookupAccountSid returns 
-incorrect values (this would happen when the child is cygwin but the 
-grandchild isn't).
-However if the child is cygwin, there is no need to include the variables
-in the env (they are stored in "user") so "no_envblock" remains useful. 
-As a side effect, if /usr/bin is mounted cygexec, "env" and "/bin/env" 
-may output a different number of variables. Before this patch they were 
-producing the same number, but some variables had different values...
-c) adding a member "namelen" in spenv (as in win_env) seems to be helpful.
+I am still having a hard time understanding why we have to set these
+variables at all.  My preference would be to wipe them from the
+environment.
 
-There is also a simple possible optimization (not in the patch):
-AFAIK all this stuff is unnecessary in Win95/98/ME
+Do we really think that someone is running a .bat file under ssh or
+something?
 
-I don't understand the logic for SYSTEMDRIVE and SYSTEMROOT. It looks
-like if they are not in the cygwin env then they are looked up in the
-Windows env (this would mean that the program has deleted them (?)).
-However if the program was recognized as a Cygwin program, there won't
-be a Windows environment and they will be lost forever. 
-If these variables are essential in some cases, wouldn't  it be safer 
-to recreate them from GetWindowsDirectory?
+One of the things I liked about my patch was that it could potentially
+speed up process spawning a lot since there is no need to do things like
+query the domain.  I hate the fact that every cygwin program has to pay
+the penalty for the probably unusual occurrence of a program or script
+relying on these environment variables.
 
+>b) Unfortunately, postponing the evaluation of variables cannot be done past 
+>CreateProcessAsUser. After that point LookupAccountSid returns 
+>incorrect values (this would happen when the child is cygwin but the 
+>grandchild isn't).
 
-uinfo.cc:  (no diff yet, can use help)
-a) cygheap_user.pname is set to the Cygwin user name. There should also 
-be an entry for the Windows user name. It should be initialized from the 
-same LookupAccountSid call that returns the domain. I don't provide a patch 
-because I don't see how to do that elegantly... 
-b) NetUserGetInfo() must always be called with the env_logsrv, otherwise
-name aliasing can occur. Don't call if env_logsrv is NULL, which should
-be the case only for SYSTEM.
-c) get_logon_server() will fail for SYSTEM. There should be a test
-"if (strcasematch (Windowname (), "SYSTEM"))" before calling it as it 
-will looked up repeatedly if plogsrv remains NULL.
+Why is this?  How does Windows manage to allow you to login, then?  Is it
+using some kind of undocumented mechanism?
 
-In env_userprofile () I don't understand why the last two conditions
-are useful in:
-  if (strcasematch (name (), "SYSTEM") || !env_domain () || !env_logsrv ())
-The domain should never be NULL, and the logserver only NULL for SYSTEM.
+>However if the child is cygwin, there is no need to include the variables
+>in the env (they are stored in "user") so "no_envblock" remains useful. 
+>As a side effect, if /usr/bin is mounted cygexec, "env" and "/bin/env" 
+>may output a different number of variables.
 
-Also I don't see the need to copy HOMEDRIVE and HOMEPATH to homedrive_env_buf
-and homepath_env_buf when HOME already exists.
+I don't understand what you mean by "env" and "/bin/env".  The type command
+in bash tells me that env == /bin/env.
 
-I'd be happy to eventually provide a diff for uinfo.cc
+>c) adding a member "namelen" in spenv (as in win_env) seems to be helpful.
 
-Pierre
+Possibly, but this is one of those situations where you sully your patch
+by making it do too many things.  It's generally good practice to have
+one idea per patch.
 
-2002-06-12  Pierre Humblet <pierre.humblet@ieee.org>
+>There is also a simple possible optimization (not in the patch):
+>AFAIK all this stuff is unnecessary in Win95/98/ME
+>
+>I don't understand the logic for SYSTEMDRIVE and SYSTEMROOT. It looks
+>like if they are not in the cygwin env then they are looked up in the
+>Windows env (this would mean that the program has deleted them (?)).
 
-	* spawn.cc (spawn_guts): Revert removal of
-	ciresrv.moreinfo->uid = ILLEGAL_UID.
-	* environ.cc (spenv::retrieve): Compute the user variables even if 
-	no_envblock. Return an empty string when values are NULL or if
-	no_envblock. Add namelen member to spenv and avoid strlen ().
-	(build_env): Compare lengths before calling spenv::retrieve.
-	Discard empty strings returned by spenv::retrieve.
+This is nothing new.  This is the code that Egor introduced some time
+ago.  The environment being studied in this code is not necessarily the
+complete user environment.  It can be the environment passed in via
+something like execvpe.
 
+If a user actually goes out of their way to remove these variables from
+their environment then we're just following their wishes.  However,
+Windows unaware programs which think they can just set a minimal number
+of environment variables are unaware of the fact that they need
+SYSTEMROOT and SYSTEMDRIVE.
 
---- spawn.cc.orig       2002-06-15 16:09:34.000000000 -0400
-+++ spawn.cc    2002-06-15 16:12:24.000000000 -0400
-@@ -646,6 +646,7 @@
-       char wstname[1024];
-       char dskname[1024];
- 
-+      ciresrv.moreinfo->uid = ILLEGAL_UID;
-       hwst = GetProcessWindowStation ();
-       SetUserObjectSecurity (hwst, &dsi, get_null_sd ());
-       GetUserObjectInformation (hwst, UOI_NAME, wstname, 1024, &n);
+>uinfo.cc:  (no diff yet, can use help)
+>a) cygheap_user.pname is set to the Cygwin user name. There should also 
+>be an entry for the Windows user name. It should be initialized from the 
+>same LookupAccountSid call that returns the domain. I don't provide a patch 
+>because I don't see how to do that elegantly... 
 
+Is this new?  It sounds like env_name should be returning the Windows name.
+I've done that.
 
---- environ.cc.orig	2002-06-15 16:17:34.000000000 -0400
-+++ environ.cc	2002-06-15 22:31:28.000000000 -0400
-@@ -753,44 +753,41 @@
- struct spenv
- {
-   const char *name;
-+  const int namelen;
-   const char * (cygheap_user::*from_cygheap) ();
-   char *retrieve (bool, const char * const = NULL, int = 0);
- };
- 
- /* Keep this list in upper case and sorted */
-+#define NAMELENGTH(name) #name, sizeof(#name) - 1
- static NO_COPY spenv spenvs[] =
- {
--  {"HOMEPATH=", &cygheap_user::env_homepath},
--  {"HOMEDRIVE=", &cygheap_user::env_homedrive},
--  {"LOGONSERVER=", &cygheap_user::env_logsrv},
--  {"SYSTEMDRIVE=", NULL},
--  {"SYSTEMROOT=", NULL},
--  {"USERDOMAIN=", &cygheap_user::env_domain},
--  {"USERNAME=", &cygheap_user::env_name},
--  {"USERPROFILE=", &cygheap_user::env_userprofile},
-+  {NAMELENGTH(HOMEDRIVE=), &cygheap_user::env_homedrive},
-+  {NAMELENGTH(HOMEPATH=), &cygheap_user::env_homepath},
-+  {NAMELENGTH(LOGONSERVER=), &cygheap_user::env_logsrv},
-+  {NAMELENGTH(SYSTEMDRIVE=), NULL},
-+  {NAMELENGTH(SYSTEMROOT=), NULL},
-+  {NAMELENGTH(USERDOMAIN=), &cygheap_user::env_domain},
-+  {NAMELENGTH(USERNAME=), &cygheap_user::env_name},
-+  {NAMELENGTH(USERPROFILE=), &cygheap_user::env_userprofile},
- };
-+#undef NAMELENGTH
- 
- char *
- spenv::retrieve (bool no_envblock, const char *const envname, int len)
- {
-+  static NO_COPY char empty[] = {0};  
-   if (len && !strncasematch (envname, name, len))
-     return NULL;
-   if (from_cygheap)
-     {
-       const char *p;
--      if (!len)
--	return NULL;			/* No need to force these into the
--					   environment */
--
--      if (no_envblock)
--	return cstrdup1 (envname);	/* Don't really care what it's set to
--					   if we're calling a cygwin program */
- 
-       /* Make a FOO=BAR entry from the value returned by the cygheap_user
--         method. */
--      if (!(p = (cygheap->user.*from_cygheap) ()))
--        return NULL;
--      int namelen = strlen (name);
-+         method. If there is no value or if the value isn't needed,
-+	 return "". */
-+      if (!(p = (cygheap->user.*from_cygheap) ()) || no_envblock)
-+        return empty;
-       char *s = (char *) cmalloc (HEAP_1_STR, namelen + strlen (p) + 1);
-       strcpy (s, name);
-       (void) strcpy (s + namelen, p);
-@@ -804,7 +801,6 @@
-   int vallen = GetEnvironmentVariable (name, dum, 0);
-   if (vallen > 0)
-     {
--      int namelen = strlen (name);
-       char *p = (char *) cmalloc (HEAP_1_STR, namelen + ++vallen);
-       strcpy (p, name);
-       if (GetEnvironmentVariable (name, p + namelen, vallen))
-@@ -845,16 +841,18 @@
-   int tl = 0;
-   /* Iterate over input list, generating a new environment list and
-refreshing
-      "special" entries, if necessary. */
--  for (srcp = envp, dstp = newenv; *srcp; srcp++, dstp++)
-+  for (srcp = envp, dstp = newenv; *srcp; srcp++)
-     {
-       len = strcspn (*srcp, "=") + 1;
- 
-       /* Look for entries that require special attention */
-       for (unsigned i = 0; i < SPENVS_SIZE; i++)
--	if (!saw_spenv[i]
-+	if ( len == spenvs[i].namelen && !saw_spenv[i]
- 	    && (*dstp = spenvs[i].retrieve (no_envblock, *srcp, len)))
- 	  {
- 	    saw_spenv[i] = 1;
-+	    if (**dstp == 0) 
-+	      goto skip; /* Remove from env */
- 	    goto next;
- 	  }
- 
-@@ -863,6 +861,9 @@
-     next:
-       if (!no_envblock)
- 	tl += strlen (*dstp) + 1;
-+      dstp++;
-+    skip:
-+      continue;
-     }
- 
-   /* Fill in any required-but-missing environment variables. */
-@@ -870,7 +871,7 @@
-     if (!saw_spenv[i])
-       {
- 	*dstp = spenvs[i].retrieve (no_envblock);
--	if (*dstp)
-+	if (*dstp && **dstp)
- 	  {
- 	    if (!no_envblock)
- 	      tl += strlen (*dstp) + 1;
+>b) NetUserGetInfo() must always be called with the env_logsrv, otherwise
+>name aliasing can occur. Don't call if env_logsrv is NULL, which should
+>be the case only for SYSTEM.
 
+I seem to recall that Corinna added this code for a reason.
+
+I'm not sure what you mean by name aliasing though.  Do you mean that a
+local name could be refused with a "network name".
+
+>c) get_logon_server() will fail for SYSTEM. There should be a test
+>"if (strcasematch (Windowname (), "SYSTEM"))" before calling it as it 
+>will looked up repeatedly if plogsrv remains NULL.
+
+AFAIK, this code has only seen very minimal change in the last week.
+I'll let Corinna comment on this.  I'll add a guard to env_logsrv, though.
+
+>In env_userprofile () I don't understand why the last two conditions
+>are useful in:
+>  if (strcasematch (name (), "SYSTEM") || !env_domain () || !env_logsrv ())
+>The domain should never be NULL, and the logserver only NULL for SYSTEM.
+
+The domain can be NULL if LookupAccountSid fails.  get_logon_server can
+fail, also.  Certainly it makes sense to fail gracefully, no?
+
+>Also I don't see the need to copy HOMEDRIVE and HOMEPATH to homedrive_env_buf
+>and homepath_env_buf when HOME already exists.
+
+For the same reason as we are meticulously saving all of these other environment
+variables, I guess.  Somebody could use them.
+
+I've installed your spawn.cc patch. I have to think about the rest.
+
+Thanks,
+cgf
+
+>2002-06-12  Pierre Humblet <pierre.humblet@ieee.org>
+>
+>	* spawn.cc (spawn_guts): Revert removal of
+>	ciresrv.moreinfo->uid = ILLEGAL_UID.
