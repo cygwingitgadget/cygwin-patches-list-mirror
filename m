@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2942-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 19867 invoked by alias); 6 Sep 2002 13:31:04 -0000
+Return-Path: <cygwin-patches-return-2943-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 15265 invoked by alias); 6 Sep 2002 15:14:46 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,30 +7,43 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 19840 invoked from network); 6 Sep 2002 13:31:02 -0000
-Message-ID: <3D78ADE3.10807@netscape.net>
-Date: Fri, 06 Sep 2002 06:31:00 -0000
-From: Nicholas Wourms <nwourms@netscape.net>
-User-Agent: Mozilla/5.0 (Windows; U; Win 9x 4.90; en-US; rv:1.0.1) Gecko/20020823 Netscape/7.0
-X-Accept-Language: en-us, en
+Received: (qmail 15251 invoked from network); 6 Sep 2002 15:14:45 -0000
+X-Authentication-Warning: slinky.cs.nyu.edu: pechtcha owned process doing -bs
+Date: Fri, 06 Sep 2002 08:14:00 -0000
+From: Igor Pechtchanski <pechtcha@cs.nyu.edu>
+To: cygwin-patches@cygwin.com, <mingw-users@lists.sourceforge.net>
+Subject: Re: [Mingw-users] Re: WINVER constant value [WAS: GetConsoleWindow]
+In-Reply-To: <3D78A6BD.3BF99DCC@yahoo.com>
+Message-ID: <Pine.GSO.4.44.0209061113340.13825-100000@slinky.cs.nyu.edu>
 MIME-Version: 1.0
-To: cygwin-patches <cygwin-patches@cygwin.com>
-Subject: Patching calls.texinfo
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Transfer-Encoding: 7bit
-X-SW-Source: 2002-q3/txt/msg00390.txt.bz2
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-SW-Source: 2002-q3/txt/msg00391.txt.bz2
 
-Hi,
+On Fri, 6 Sep 2002, Earnie Boyd wrote:
 
-To be quite honest, I'm not familiar with the numbering 
-schema in calls.texinfo for the C standards.  I wanted to 
-submit a patch for isblank(), which falls under the same 
-standard as isalpha() & friends.  Although isblank() and 
-isalpha() are listed in The Open Group Base Specifications 
-Issue 6: IEEE Std 1003.1-2001, I cannot find any reference 
-to the numbering, which is used in that texinfo file, on The 
-Open Groups site.  Can someone give me a hint so that I 
-might submit a proper documentation patch?
+> Earnie Boyd wrote:
+> >
+> > My guess is that there are more GCC experienced people using MinGW for
+> > mingw32-gcc than there are MSVC experienced people using MinGW for any
+> > reason.  A drop in replacement for MSVC, surely isn't the desire.
+> > Wanting to the package to port to all versions of Win32 is the desire.
+>           ^^^^^^ s/to the/a
+> > Using new Win32 API not supported on older versions of the OS isn't the
+> > way to go about doing that.  Runtime surprises, is not the place to
+> > discover that the port doesn't work.
+>                                      ^on prior versions of win32
+> Earnie.
 
-Cheers,
-Nicholas
+I'm not qualified to have an opinion on this, but something here reminds
+me of the old discussion on whether to use numeric co-processor features
+in a compiler vs. emulating floating point in software...
+	Igor
+-- 
+				http://cs.nyu.edu/~pechtcha/
+      |\      _,,,---,,_		pechtcha@cs.nyu.edu
+ZZZzz /,`.-'`'    -.  ;-;;,_		igor@watson.ibm.com
+     |,4-  ) )-,_. ,\ (  `'-'		Igor Pechtchanski
+    '---''(_/--'  `-'\_) fL	a.k.a JaguaR-R-R-r-r-r-.-.-.  Meow!
+
+It took the computational power of three Commodore 64s to fly to the moon.
+It takes a 486 to run Windows 95.  Something is wrong here. -- SC sig file
