@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3062-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 18864 invoked by alias); 18 Oct 2002 08:30:31 -0000
+Return-Path: <cygwin-patches-return-3063-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 8704 invoked by alias); 18 Oct 2002 12:39:23 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,58 +7,55 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 18850 invoked from network); 18 Oct 2002 08:30:30 -0000
-X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
-Date: Fri, 18 Oct 2002 01:30:00 -0000
-From: Thomas Pfaff <tpfaff@gmx.net>
-To: cygwin-patches@cygwin.com
-Subject: [PATCH] verifyable_object_isvalid
-Message-ID: <Pine.WNT.4.44.0210181019190.265-200000@algeria.intern.net>
-X-X-Sender: pfaff@antarctica.intern.net
-MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="671501-19375-1034929821=:265"
-X-SW-Source: 2002-q4/txt/msg00013.txt.bz2
-
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
-
---671501-19375-1034929821=:265
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-Content-length: 239
+Received: (qmail 8695 invoked from network); 18 Oct 2002 12:39:20 -0000
+Subject: Re: [PATCH] verifyable_object_isvalid
+From: Robert Collins <rbcollins@cygwin.com>
+To: Thomas Pfaff <tpfaff@gmx.net>
+Cc: cygwin-patches@cygwin.com
+In-Reply-To: <Pine.WNT.4.44.0210181019190.265-200000@algeria.intern.net>
+References: <Pine.WNT.4.44.0210181019190.265-200000@algeria.intern.net>
+Content-Type: multipart/signed; micalg=pgp-sha1; protocol="application/pgp-signature";
+	boundary="=-+eDmF051A9xo29vx2B2m"
+Date: Fri, 18 Oct 2002 05:39:00 -0000
+Message-Id: <1034944758.24999.1.camel@lifelesswks>
+Mime-Version: 1.0
+X-SW-Source: 2002-q4/txt/msg00014.txt.bz2
 
 
-Rob,
+--=-+eDmF051A9xo29vx2B2m
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+Content-length: 376
 
-the location for the static test is wrong. I have moved it 2 lines down.
+On Fri, 2002-10-18 at 18:30, Thomas Pfaff wrote:
+>=20
+> Rob,
+>=20
+> the location for the static test is wrong. I have moved it 2 lines down.
 
-Thomas
+Ah yes, this reminds me, we've done this 'dance' before. You can crash
+the test if it's not further done :}.
 
-2002-10-18  Thomas Pfaff  <tpfaff@gmx.net>
+I'll check this in tomorrow.
 
-	* thread.cc (verifyable_object_isvalid): Test for a valid object
-	pointer before testing for static ptr.
+Thanks,
+Rob
+--=20
+---
+GPG key available at: http://users.bigpond.net.au/robertc/keys.txt.
+---
 
---671501-19375-1034929821=:265
-Content-Type: TEXT/plain; name="verifyable_object_isvalid.patch"
-Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.WNT.4.44.0210181030210.265@algeria.intern.net>
-Content-Description: 
-Content-Disposition: attachment; filename="verifyable_object_isvalid.patch"
-Content-length: 789
+--=-+eDmF051A9xo29vx2B2m
+Content-Type: application/pgp-signature; name=signature.asc
+Content-Description: This is a digitally signed message part
+Content-length: 189
 
-LS0tIHRocmVhZC5jYy5vcmcJVGh1IE9jdCAxNyAxMDoyODozMiAyMDAyCisr
-KyB0aHJlYWQuY2MJRnJpIE9jdCAxOCAxMDoxNzo1NCAyMDAyCkBAIC0xMzU2
-LDEwICsxMzU2LDEwIEBAIHZlcmlmeWFibGVfb2JqZWN0X3N0YXRlCiB2ZXJp
-ZnlhYmxlX29iamVjdF9pc3ZhbGlkICh2b2lkIGNvbnN0ICogb2JqZWN0cHRy
-LCBsb25nIG1hZ2ljLCB2b2lkICpzdGF0aWNfcHRyKQogewogICB2ZXJpZnlh
-YmxlX29iamVjdCAqKm9iamVjdCA9ICh2ZXJpZnlhYmxlX29iamVjdCAqKilv
-YmplY3RwdHI7Ci0gIGlmIChzdGF0aWNfcHRyICYmICpvYmplY3QgPT0gc3Rh
-dGljX3B0cikKLSAgICByZXR1cm4gVkFMSURfU1RBVElDX09CSkVDVDsKICAg
-aWYgKGNoZWNrX3ZhbGlkX3BvaW50ZXIgKG9iamVjdCkpCiAgICAgcmV0dXJu
-IElOVkFMSURfT0JKRUNUOworICBpZiAoc3RhdGljX3B0ciAmJiAqb2JqZWN0
-ID09IHN0YXRpY19wdHIpCisgICAgcmV0dXJuIFZBTElEX1NUQVRJQ19PQkpF
-Q1Q7CiAgIGlmICghKm9iamVjdCkKICAgICByZXR1cm4gSU5WQUxJRF9PQkpF
-Q1Q7CiAgIGlmIChjaGVja192YWxpZF9wb2ludGVyICgqb2JqZWN0KSkK
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.0.7 (GNU/Linux)
 
---671501-19375-1034929821=:265--
+iD8DBQA9sAD1I5+kQ8LJcoIRAhOiAJ9+ffgF/YKUEF7S4WU9QCY1IlakIgCgqRHR
+AJ1rbKWgH8cbI9gsHNsZerw=
+=+Znh
+-----END PGP SIGNATURE-----
+
+--=-+eDmF051A9xo29vx2B2m--
