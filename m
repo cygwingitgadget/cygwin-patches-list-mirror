@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4281-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 2204 invoked by alias); 1 Oct 2003 11:17:14 -0000
+Return-Path: <cygwin-patches-return-4282-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 19520 invoked by alias); 7 Oct 2003 01:26:39 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,36 +7,42 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 2194 invoked from network); 1 Oct 2003 11:17:14 -0000
-Message-ID: <3F7AB7B6.8040409@etr-usa.com>
-Date: Wed, 01 Oct 2003 11:17:00 -0000
-From: Warren Young <warren@etr-usa.com>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.5) Gecko/20030916
-X-Accept-Language: en-us, en
-MIME-Version: 1.0
-To:  cygwin-patches@cygwin.com
-Subject: Re: New program: cygtweak
-References: <20030927034235.GA18807@redhat.com> <Pine.GSO.4.56.0309271124210.3193@slinky.cs.nyu.edu> <20030930121609.GA2022@cygbert.vinschen.de> <Pine.GSO.4.56.0309301058290.3193@slinky.cs.nyu.edu> <20030930150956.GE20635@redhat.com> <Pine.GSO.4.56.0309301112320.3193@slinky.cs.nyu.edu> <20030930154434.GK20635@redhat.com> <Pine.GSO.4.56.0309301146400.3193@slinky.cs.nyu.edu> <20030930155833.GA29428@redhat.com> <Pine.GSO.4.56.0309301238100.3193@slinky.cs.nyu.edu> <20030930170717.GC29428@redhat.com>
-In-Reply-To: <20030930170717.GC29428@redhat.com>
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Transfer-Encoding: 7bit
-X-SW-Source: 2003-q4/txt/msg00000.txt.bz2
+Received: (qmail 19511 invoked from network); 7 Oct 2003 01:26:38 -0000
+Message-Id: <3.0.5.32.20031006212612.008203b0@incoming.verizon.net>
+X-Sender: vze1u1tg@incoming.verizon.net (Unverified)
+Date: Tue, 07 Oct 2003 01:26:00 -0000
+To: cygwin-patches@cygwin.com
+From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
+Subject: [Patch]: shared.cc debug info.
+Mime-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+X-SW-Source: 2003-q4/txt/msg00001.txt.bz2
 
-Christopher Faylor wrote:
-> 
-> I'm just hoping for someone to come up with a creative name for
-> the car.
+Here is a pretty simple patch..
 
-cygctl?  It isn't particuarly creative, but it's shorter than anything 
-else suggested, and it's a common naming convention for system setting 
-tweakers on Linux:
+BTW, are there more questions about "[Patch]: Fixing the PROCESS_DUP_HANDLE
+security  hole (part 1)." from last week?
 
-$ locate ctl |grep bin
-/usr/bin/esdctl
-/usr/bin/pg_ctl
-/usr/sbin/hotplugctl
-/usr/sbin/usernetctl
-/usr/sbin/userisdnctl
-/usr/sbin/apachectl
-/sbin/sysctl
-/sbin/cardctl
+Pierre
+
+2003-10-06  Pierre Humblet <pierre.humblet@ieee.org>
+
+	* shared.cc (open_shared): Report map name in api_fatal.
+
+
+Index: shared.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/shared.cc,v
+retrieving revision 1.75
+diff -u -p -r1.75 shared.cc
+--- shared.cc   25 Sep 2003 02:29:04 -0000      1.75
++++ shared.cc   7 Oct 2003 01:02:30 -0000
+@@ -99,7 +99,7 @@ open_shared (const char *name, int n, HA
+       if (!shared_h &&
+          !(shared_h = CreateFileMapping (INVALID_HANDLE_VALUE, psa,
+                                          PAGE_READWRITE, 0, size, mapname)))
+-       api_fatal ("CreateFileMapping, %E.  Terminating.");
++       api_fatal ("CreateFileMapping %s, %E.  Terminating.", mapname);
+     }
+ 
+   shared = (shared_info *)
