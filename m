@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3222-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 29992 invoked by alias); 24 Nov 2002 13:55:57 -0000
+Return-Path: <cygwin-patches-return-3223-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 6209 invoked by alias); 24 Nov 2002 14:23:05 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,88 +7,65 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 29983 invoked from network); 24 Nov 2002 13:55:56 -0000
-Subject: Re: [PATCH] Patch for MTinterface
-From: Robert Collins <rbcollins@cygwin.com>
-To: Thomas Pfaff <tpfaff@gmx.net>
-Cc: cygwin-patches@cygwin.com
-In-Reply-To: <Pine.WNT.4.44.0211221554320.379-100000@algeria.intern.net>
-References: <Pine.WNT.4.44.0211221554320.379-100000@algeria.intern.net>
-Content-Type: multipart/signed; micalg=pgp-sha1; protocol="application/pgp-signature";
-	boundary="=-+x3vT69pbiQ+Rpib3Hds"
-Date: Sun, 24 Nov 2002 05:55:00 -0000
-Message-Id: <1038142635.23476.74.camel@lifelesswks>
+Received: (qmail 6199 invoked from network); 24 Nov 2002 14:23:04 -0000
+Message-Id: <3.0.5.32.20021124092120.00829650@mail.attbi.com>
+X-Sender: phumblet@mail.attbi.com
+Date: Sun, 24 Nov 2002 06:23:00 -0000
+To: Corinna Vinschen <cygwin-patches@cygwin.com>
+From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
+Subject: Re: More passwd/group patches
+In-Reply-To: <20021124140414.Z1398@cygbert.vinschen.de>
+References: <3DDE4528.3BDCDCEF@ieee.org>
+ <3DDE3FB9.2AFAA199@ieee.org>
+ <20021122154644.N1398@cygbert.vinschen.de>
+ <3DDE4528.3BDCDCEF@ieee.org>
 Mime-Version: 1.0
-X-SW-Source: 2002-q4/txt/msg00173.txt.bz2
+Content-Type: text/plain; charset="us-ascii"
+X-SW-Source: 2002-q4/txt/msg00174.txt.bz2
 
+At 02:04 PM 11/24/2002 +0100, you wrote:
 
---=-+x3vT69pbiQ+Rpib3Hds
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1215
+Hi Corinna,
 
-On Sat, 2002-11-23 at 01:55, Thomas Pfaff wrote:
->=20
->=20
-> On Tue, 5 Nov 2002, Robert Collins wrote:
->=20
-> > Overall this looks good. What happens to non-cygwinapi created threads
-> > now though? You mention you don't agree with the code, but I can't see
-> > (from a brief look) how you correct it.
-> >
-> > BTW: I'm currently packing to move house, so don't expect much feedback
-> > until late next week, or early the week after :[.
-> >
->=20
-> Ping
+First off I am going to look at the Win98 home directory problem 
+reported on the list, if you have not fixed it already.
 
-Pong. I've added the test cases to the test suite. In future please
-follow the guidelines in testsuite/readme for test behaviour - running
-$ ./testname || echo foo
-should echo foo on failures - and neither of your test cases did that
-initially.
+>Hi Pierre,
+>
+>a few comments:
+>
+>On Fri, Nov 22, 2002 at 09:54:32AM -0500, Pierre A. Humblet wrote:
+>
+>A formatting nit:
 
-Also, the initMainThread behaviour:
-initMainThread (bool dosomething)
-{
-if (!dosomething)
-  return;
-...
+OK, note taken.
+>
+>I don't like the idea that these DENY bits are still set when the acl is
+>returned to the application.  The underlying Solaris acl implementation 
+>doesn't know about these bits.  They should be removed before returning
+>the acl to the application.  Otherwise you're using bits which are not
+>defined in acl.h.
 
-I don't like. I'd rather we not call initMainThread than call it with a
-boolean as above.
+That had crossed my mind. In fact acl.h does not declare any values for
+the a_perm field. Cygwin is simply reproducing the bits in the 
+user, group and other fields. I searched the web and saw that other
+versions of unix did not even agree on the type of the a_perm field (Cygwin
+makes it mode_t) and that the now-defunct standard proposal was silent on the 
+issue. So it seemed to me that all that mattered was consistency with
+the implementation of the routines getfacl, setfacl, etc... 
+I have no problem with masking them off. Defining specific bits in acl.h 
+would be nice in theory, but in absence of a standard perhaps not useful.
+>
+>
+>You're copying the group bits to the mask?  Didn't you suggest to set
+>it to rwx?  I think you're right.  It would be better to move this line
+>to the initialization of the first lacl members and change it to
+>
+Yes, but not knowing the reason for the current behavior I didn't want
+to change it. It doesn't hurt anything.
+>
+>Same here, shouldn't the DEF_CLASS_OBJ entry have rwx, too?
+>
+Same answer!
 
-If dosomething was internal to the pthread class, so that initMainThread
-became:
-initMainThread()
-{
-  if (!dosomething)
-    return;
-...
-
-I'd have no issue.
-
-Anyway, thanks again for excellent work, and the patch has been
-committed.
-
-Rob
-
---=20
----
-GPG key available at: http://users.bigpond.net.au/robertc/keys.txt.
----
-
---=-+x3vT69pbiQ+Rpib3Hds
-Content-Type: application/pgp-signature; name=signature.asc
-Content-Description: This is a digitally signed message part
-Content-length: 189
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.0.7 (GNU/Linux)
-
-iD8DBQA94MypI5+kQ8LJcoIRAtLbAJsEcKMf95pflildCooDPox7SABoDwCdF8gj
-NdJSBsen3+WLT7Hq4EchVUw=
-=mdwp
------END PGP SIGNATURE-----
-
---=-+x3vT69pbiQ+Rpib3Hds--
+Pierre
