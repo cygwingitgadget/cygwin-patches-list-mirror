@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3877-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 16045 invoked by alias); 23 May 2003 22:24:18 -0000
+Return-Path: <cygwin-patches-return-3878-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 6750 invoked by alias); 23 May 2003 22:33:53 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,109 +7,198 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 16007 invoked from network); 23 May 2003 22:24:17 -0000
-Message-ID: <053f01c3216e$947cc570$6400a8c0@FoxtrotTech0001>
-From: "Bill C. Riemers" <cygwin@docbill.net>
-To: <cygwin-patches@cygwin.com>
-Subject: Proposed change for Win9x file permissions...
-Date: Fri, 23 May 2003 22:24:00 -0000
-MIME-Version: 1.0
-Content-Type: multipart/mixed;
-	boundary="----=_NextPart_000_053C_01C3214C.FCA3CC10"
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2800.1165
-X-SW-Source: 2003-q2/txt/msg00104.txt.bz2
+Received: (qmail 6693 invoked from network); 23 May 2003 22:33:52 -0000
+Message-Id: <3.0.5.32.20030523183423.008059c0@mail.attbi.com>
+X-Sender: phumblet@mail.attbi.com (Unverified)
+Date: Fri, 23 May 2003 22:33:00 -0000
+To: cygwin-patches@cygwin.com
+From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
+Subject: df and ls for root directories on Win9X
+Mime-Version: 1.0
+Content-Type: multipart/mixed; boundary="=====================_1053743663==_"
+X-SW-Source: 2003-q2/txt/msg00105.txt.bz2
 
-This is a multi-part message in MIME format.
+--=====================_1053743663==_
+Content-Type: text/plain; charset="us-ascii"
+Content-length: 1337
 
-------=_NextPart_000_053C_01C3214C.FCA3CC10
-Content-Type: text/plain;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: 7bit
-Content-length: 947
+On Win9X, ls reports incorrect date and size (aliasing 
+with those from a file) for Windows filesystem root dirs.  
 
-Actually there are two patches.  The first one is to fhandler_disk_file.cc.
-This changes the fstat()
-function to show Win9x permissions masked by the "umask".  This is the same
-thing early versions of
-the Linux FAT driver did, before "umask" was added as a mount option.
-Obviously that would be the better solution for Cygwin as well.  However, I
-decided try the simpler option of just using the normal umask first.
+~: ls -ld /c /c/MSDOS.SYS 
+drwxr-xr-x   12 pierre   unknown      1660 Jul 18  2001 /c/
+-r--r--r--    1 pierre   unknown      1660 Jul 18  2001 /c/MSDOS.SYS
 
-This allows utilities like sshd to work as expected simply by wrapping them
-in a script like:
+Also UNC pathnames of root directories cannot be stat. 
 
-    #!/bin/bash
-    umask 0077;exec /usr/sbin/sshd "$@"
+~: ls -ld //hpn5170x/c //hpn5170x/c/msdos.sys
+ls: //hpn5170x/c: No such file or directory
+-r--r--r--    1 pierre   unknown      1660 Jul 18  2001 //hpn5170x/c/msdos.sys
 
-Of course there will be unexpected side effects if someone doesn't realize
-that umask is used this way...   But it will probably be less problematic
-than having completely unchangeable permissions
-under Win9x.
+Both problems stem from incorrect use of FindFirstFile
+(FindFirstFile(c:\*) does not return a handle to c:\ )
 
-The second patch corrects an obvious typo in winusers.h that prevents the
-current CVS code from compiling.
+Also df is known to be broken for disks > 2 GB. A patch has been
+submitted long ago, but was never completed:
+<http://cygwin.com/ml/cygwin-patches/2001-q1/msg00183.html>
+I have been in touch with the author, without looking at his patch.
+He told me that he never got someone to sign the release.
+I thus wrote a new patch from scratch.
 
-                                                      Bill
+2003-05-23  Pierre Humblet  <pierre.humblet@ieee.org>
 
-------=_NextPart_000_053C_01C3214C.FCA3CC10
-Content-Type: application/octet-stream;
-	name="cygwin.patch"
+	* autoload.cc (GetDiskFreeSpaceEx): Add.
+	* syscalls.cc (statfs): Call full_path.root_dir() instead of
+	rootdir(full_path). Use GetDiskFreeSpaceEx when available and
+	report space available in addition to free space.
+	* fhandler_disk_file.cc (fhandler_disk_file::fstat_by_name):
+	Do not call FindFirstFile for disk root directories.
+
+--=====================_1053743663==_
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment;
-	filename="cygwin.patch"
-Content-length: 2314
+Content-Disposition: attachment; filename="ls_df.diff"
+Content-length: 4546
 
-? cygwin.patch=0A=
-Index: winsup/cygwin/fhandler_disk_file.cc=0A=
+Index: autoload.cc
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
-RCS file: /cvs/src/src/winsup/cygwin/fhandler_disk_file.cc,v=0A=
-retrieving revision 1.50=0A=
-diff -c -r1.50 fhandler_disk_file.cc=0A=
-*** winsup/cygwin/fhandler_disk_file.cc	11 May 2003 21:52:09 -0000	1.50=0A=
---- winsup/cygwin/fhandler_disk_file.cc	23 May 2003 20:34:10 -0000=0A=
-***************=0A=
-*** 345,350 ****=0A=
---- 345,353 ----=0A=
-=20=20=0A=
-        if (pc->exec_state () =3D=3D is_executable)=0A=
-  	buf->st_mode |=3D STD_XBITS;=0A=
-+=20=0A=
-+       /* This fakes the permissions of all files to match the current uma=
-sk. */=0A=
-+       buf->st_mode &=3D ~(cygheap->umask);=0A=
-      }=0A=
-=20=20=0A=
-    /* The number of links to a directory includes the=0A=
-Index: winsup/w32api/include/winuser.h=0A=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+RCS file: /cvs/src/src/winsup/cygwin/autoload.cc,v
+retrieving revision 1.69
+diff -u -p -r1.69 autoload.cc
+--- autoload.cc	20 Apr 2003 08:56:42 -0000	1.69
++++ autoload.cc	23 May 2003 22:11:09 -0000
+@@ -502,6 +502,7 @@ LoadDLLfuncEx (CreateHardLinkA, 12, kern
+ LoadDLLfuncEx (CreateToolhelp32Snapshot, 8, kernel32, 1)
+ LoadDLLfuncEx2 (GetCompressedFileSizeA, 8, kernel32, 1, 0xffffffff)
+ LoadDLLfuncEx (GetConsoleWindow, 0, kernel32, 1)
++LoadDLLfuncEx (GetDiskFreeSpaceEx, 16, kernel32, 1)
+ LoadDLLfuncEx (GetSystemTimes, 12, kernel32, 1)
+ LoadDLLfuncEx2 (IsDebuggerPresent, 0, kernel32, 1, 1)
+ LoadDLLfunc (IsProcessorFeaturePresent, 4, kernel32);
+Index: syscalls.cc
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
-RCS file: /cvs/src/src/winsup/w32api/include/winuser.h,v=0A=
-retrieving revision 1.36=0A=
-diff -c -r1.36 winuser.h=0A=
-*** winsup/w32api/include/winuser.h	23 May 2003 08:07:05 -0000	1.36=0A=
---- winsup/w32api/include/winuser.h	23 May 2003 20:34:41 -0000=0A=
-***************=0A=
-*** 2960,2966 ****=0A=
-  BOOL WINAPI EnumDisplaySettingsA(LPCSTR,DWORD,PDEVMODEA);=0A=
-  BOOL WINAPI EnumDisplaySettingsW(LPCWSTR,DWORD,PDEVMODEW);=0A=
-  BOOL WINAPI EnumDisplayDevicesA(LPCSTR,DWORD,PDISPLAY_DEVICEA,DWORD);=0A=
-! BOOL WINAPI EnumDisplayDevicesA(LPCWSTR,DWORD,PDISPLAY_DEVICEW,DWORD);=0A=
-  #endif=0A=
-  int WINAPI EnumPropsA(HWND,PROPENUMPROCA);=0A=
-  int WINAPI EnumPropsW(HWND,PROPENUMPROCW);=0A=
---- 2960,2966 ----=0A=
-  BOOL WINAPI EnumDisplaySettingsA(LPCSTR,DWORD,PDEVMODEA);=0A=
-  BOOL WINAPI EnumDisplaySettingsW(LPCWSTR,DWORD,PDEVMODEW);=0A=
-  BOOL WINAPI EnumDisplayDevicesA(LPCSTR,DWORD,PDISPLAY_DEVICEA,DWORD);=0A=
-! BOOL WINAPI EnumDisplayDevicesW(LPCWSTR,DWORD,PDISPLAY_DEVICEW,DWORD);=0A=
-  #endif=0A=
-  int WINAPI EnumPropsA(HWND,PROPENUMPROCA);=0A=
-  int WINAPI EnumPropsW(HWND,PROPENUMPROCW);=0A=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+RCS file: /cvs/src/src/winsup/cygwin/syscalls.cc,v
+retrieving revision 1.269
+diff -u -p -r1.269 syscalls.cc
+--- syscalls.cc	21 May 2003 08:01:57 -0000	1.269
++++ syscalls.cc	23 May 2003 22:11:29 -0000
+@@ -1871,11 +1871,12 @@ statfs (const char *fname, struct statfs
+     }
 
-------=_NextPart_000_053C_01C3214C.FCA3CC10--
+   path_conv full_path (fname, PC_SYM_FOLLOW | PC_FULL);
+-  char *root =3D rootdir (full_path);
++
++  const char *root =3D full_path.root_dir();
 
+   syscall_printf ("statfs %s", root);
+
+-  DWORD spc, bps, freec, totalc;
++  DWORD spc, bps, availc, freec, totalc;
+
+   if (!GetDiskFreeSpace (root, &spc, &bps, &freec, &totalc))
+     {
+@@ -1883,6 +1884,17 @@ statfs (const char *fname, struct statfs
+       return -1;
+     }
+
++  ULARGE_INTEGER availb, freeb, totalb;
++
++  if (GetDiskFreeSpaceEx (root, &availb, &totalb, &freeb))
++    {
++      availc =3D availb.QuadPart / (spc*bps);
++      totalc =3D totalb.QuadPart / (spc*bps);
++      freec =3D freeb.QuadPart / (spc*bps);
++    }
++  else
++    availc =3D freec;
++
+   DWORD vsn, maxlen, flags;
+
+   if (!GetVolumeInformation (root, NULL, 0, &vsn, &maxlen, &flags, NULL, 0=
+))
+@@ -1893,7 +1905,8 @@ statfs (const char *fname, struct statfs
+   sfs->f_type =3D flags;
+   sfs->f_bsize =3D spc*bps;
+   sfs->f_blocks =3D totalc;
+-  sfs->f_bfree =3D sfs->f_bavail =3D freec;
++  sfs->f_bavail =3D availc;
++  sfs->f_bfree =3D freec;
+   sfs->f_files =3D -1;
+   sfs->f_ffree =3D -1;
+   sfs->f_fsid =3D vsn;
+Index: fhandler_disk_file.cc
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+RCS file: /cvs/src/src/winsup/cygwin/fhandler_disk_file.cc,v
+retrieving revision 1.50
+diff -u -p -r1.50 fhandler_disk_file.cc
+--- fhandler_disk_file.cc	11 May 2003 21:52:09 -0000	1.50
++++ fhandler_disk_file.cc	23 May 2003 22:11:42 -0000
+@@ -109,39 +109,26 @@ fhandler_disk_file::fstat_by_name (struc
+       set_errno (ENOENT);
+       res =3D -1;
+     }
++  else if (pc->isdir () && strlen (*pc) <=3D strlen (pc->root_dir ()))
++    {
++      FILETIME ft =3D {};
++      res =3D fstat_helper (buf, pc, ft, ft, ft, 0, 0);
++    }
++  else if ((handle =3D FindFirstFile (*pc, &local)) =3D=3D INVALID_HANDLE_=
+VALUE)
++    {
++      debug_printf ("FindFirstFile failed for '%s', %E", (char *) *pc);
++      __seterrno ();
++      res =3D -1;
++    }
+   else
+     {
+-      char drivebuf[5];
+-      char *name;
+-      if ((*pc)[3] !=3D '\0' || !isalpha ((*pc)[0]) || (*pc)[1] !=3D ':' |=
+| (*pc)[2] !=3D '\\')
+-	name =3D *pc;
+-      else
+-	{
+-	  /* FIXME: Does this work on empty disks? */
+-	  drivebuf[0] =3D (*pc)[0];
+-	  drivebuf[1] =3D (*pc)[1];
+-	  drivebuf[2] =3D (*pc)[2];
+-	  drivebuf[3] =3D '*';
+-	  drivebuf[4] =3D '\0';
+-	  name =3D drivebuf;
+-	}
+-
+-      if ((handle =3D FindFirstFile (name, &local)) =3D=3D INVALID_HANDLE_=
+VALUE)
+-      {
+-	debug_printf ("FindFirstFile failed for '%s', %E", name);
+-	__seterrno ();
+-	res =3D -1;
+-      }
+-    else
+-      {
+-	FindClose (handle);
+-	res =3D fstat_helper (buf, pc,
+-			    local.ftCreationTime,
+-			    local.ftLastAccessTime,
+-			    local.ftLastWriteTime,
+-			    local.nFileSizeHigh,
+-			    local.nFileSizeLow);
+-      }
++      FindClose (handle);
++      res =3D fstat_helper (buf, pc,
++			  local.ftCreationTime,
++			  local.ftLastAccessTime,
++			  local.ftLastWriteTime,
++			  local.nFileSizeHigh,
++			  local.nFileSizeLow);
+     }
+   return res;
+ }
+
+--=====================_1053743663==_--
