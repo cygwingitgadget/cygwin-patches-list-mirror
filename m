@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2449-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 27175 invoked by alias); 17 Jun 2002 12:40:11 -0000
+Return-Path: <cygwin-patches-return-2450-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 18030 invoked by alias); 17 Jun 2002 21:09:37 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,42 +7,55 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 27158 invoked from network); 17 Jun 2002 12:40:09 -0000
-Date: Mon, 17 Jun 2002 05:40:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygpatch <cygwin-patches@cygwin.com>
-Subject: Re: Reorganizing internal_getlogin() patch is in
-Message-ID: <20020617144006.C30892@cygbert.vinschen.de>
-Mail-Followup-To: cygpatch <cygwin-patches@cygwin.com>
-References: <20020613052709.GA17779@redhat.com> <20020613052709.GA17779@redhat.com> <3.0.5.32.20020616000701.007f7df0@mail.attbi.com> <20020616051506.GA6188@redhat.com> <20020617133144.A30892@cygbert.vinschen.de> <3D0DCF70.33E27FB7@certum.pl>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3D0DCF70.33E27FB7@certum.pl>
-User-Agent: Mutt/1.3.22.1i
-X-SW-Source: 2002-q2/txt/msg00432.txt.bz2
+Received: (qmail 17989 invoked from network); 17 Jun 2002 21:09:34 -0000
+Message-ID: <032601c21643$81228be0$6132bc3e@BABEL>
+From: "Conrad Scott" <Conrad.Scott@dsl.pipex.com>
+To: <cygwin-patches@cygwin.com>
+References: <003c01c213f3$2ed077f0$6132bc3e@BABEL> <005801c213f6$ab0e2a30$6132bc3e@BABEL> <20020615010600.GB5699@redhat.com> <005b01c21465$b97a07f0$0100a8c0@advent02>
+Subject: Re: Mount interaction with /dev & /proc entries
+Date: Mon, 17 Jun 2002 14:09:00 -0000
+MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-SW-Source: 2002-q2/txt/msg00433.txt.bz2
 
-On Mon, Jun 17, 2002 at 02:00:48PM +0200, Jacek Trzcinski wrote:
-> Hello Corinna !
-> About one Year ago I created patch to serial device which was serving
-> ioctl function enabling setting RTS and DTR lines and reading CTS and
-> DSR lines. As I remember our last discussion one thing left - copyright
-> assignment. I had agreement of my boss but I was "too lazy" to post it.
-> Other matter is that recently I use Cygwin relatively rarely so I had no
-> motivation to do it.
-> Recently I have got few e-mails fom Cygwin list what is on with the
-> patch. I wonder If You are still interested in the patch . If so I can
+"Chris January" <chris@atomice.net> wrote:
+> Well, when I was writing the /proc stuff, I wrote it on the premise
+there
+> was an imaginary proc filesystem mounted a /proc. This means if you
+chroot,
+> that filesystem won't be mounted at /proc anymore and hence it is
+correct
+> that /proc doesn't work. i.e. the path handling is done with mount
+points in
+> mind.
 
-Sure.
+I'm sympathetic to this approach and I realised it was deliberate -- I
+should have addressed you directly on this: sorry about that, I
+(wrongly) assume that most of the DLL code is the sole interest of the
+good folks at RedHat rather than any of the contributors.
 
-> immediately post copyright assignment. In this case remind me please
-> where can I find correct form sheets for such assignment.
+Anyhow, I was thinking more that while the mount system is as it is
+now (i.e. you've no choice about where the /proc vfs is "mounted"),
+it's either going to remain or disappear when someone's chroot'ed.
+Since then it can be done "right" at the moment, I thought it would be
+better at least to be consistent :-) i.e. make it the same as /dev,
+the only other vfs. But since my patch was broken, it's all a bit
+academic :-(
 
-http://cygwin.com/contrib.html
+> I would argue, as Chris F has suggested above, that this is best
+left for
+> the re-write of the mount stuff.
 
-Corinna
+I'm happily agreeing with both Chris F and yourself that this is best
+left for that re-write, then it can be done "right".
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+Cheers,
+
+// Conrad
+
+
