@@ -1,34 +1,40 @@
-From: "Norman Vine" <nhv@cape.com>
-To: "'Robert Collins'" <robert.collins@itdomain.com.au>, <cygwin@cygwin.com>
-Cc: <cygwin-patches@cygwin.com>
-Subject: RE: hang in pthread_cond_signal
-Date: Fri, 15 Jun 2001 05:07:00 -0000
-Message-id: <00a301c0f591$ad2acbe0$a300a8c0@nhv>
-References: <03cb01c0f529$7b826020$0200a8c0@lifelesswks>
-X-SW-Source: 2001-q2/msg00312.html
+From: "Michael A. Chase" <mchase@ix.netcom.com>
+To: <cygwin-patches@cygwin.com>
+Subject: [PATCH]choose:cc: Incorrect copy in _Info::_Info
+Date: Sat, 16 Jun 2001 11:39:00 -0000
+Message-id: <019401c0f693$60861800$6464648a@ca.boeing.com>
+X-SW-Source: 2001-q2/msg00313.html
 
-Robert Collins writes:
+I'm reading through the sources to setup.exe to get ready to make some
+suggestions.
 
- "Greg Smith" <rys@epaibm.rtpnc.epa.gov> wrote:
->
->
->> I am using the cygwin-src snapshot from June 10.
->>
->> Seems pthread_cond_signal can hang while another thread
->> is waiting on the condition AND a pthread_cond_signal
->> has been previously issued when no one was waiting on the
->> condition.  Below is a testcase that illustrates the
->> problem:
->>
->
->Thanks for the testcase Greg. The attached patch fixes your testcase.
+The part of _Info::_Info in choose.cc that copies the source file name is
+using 'source' where is should be using '_source'.
+--
+Mac :})
+Give a hobbit a fish and he'll eat fish for a day.
+Give a hobbit a ring and he'll eat fish for an age.
 
-With this patch 'some very simple' Python threading tests seem to work.
-But many are still hanging.
+ChangeLog:
 
-Pthreads are still quite foreign to me but hopefully using Greg's test as
-a starting point I can pinpoint the other problem areas now.
+Sat Jun 16 11:33:51  2001  Michael A Chase <mchase@ix.netcom.com>
 
-Thanks
+        * choose.cc (_Info::_Info): Use correct parameter for source file
+name.
 
-Norman Vine
+$ diff -up choose.cc-orig choose.cc
+--- choose.cc-orig   Fri Jun 15 03:48:52 2001
++++ choose.cc Sat Jun 16 10:13:35 2001
+@@ -844,9 +844,9 @@ _Info::_Info (const char *_install, cons
+   install = strdup (_install);
+   version = strdup (_version);
+   install_size = _install_size;
+-  if (source)
++  if (_source)
+     {
+-      source = strdup (source);
++      source = strdup (_source);
+       source_size = _source_size;
+     }
+ }
+
