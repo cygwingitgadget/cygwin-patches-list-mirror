@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3079-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 10932 invoked by alias); 22 Oct 2002 17:35:24 -0000
+Return-Path: <cygwin-patches-return-3080-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 30226 invoked by alias); 22 Oct 2002 18:06:22 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,36 +7,50 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 10922 invoked from network); 22 Oct 2002 17:35:23 -0000
-Message-ID: <3DB58CBD.87B2BDD8@ieee.org>
-Date: Tue, 22 Oct 2002 10:35:00 -0000
-From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
-X-Accept-Language: en,pdf
+Received: (qmail 30204 invoked from network); 22 Oct 2002 18:06:20 -0000
+X-Authentication-Warning: slinky.cs.nyu.edu: pechtcha owned process doing -bs
+Date: Tue, 22 Oct 2002 11:06:00 -0000
+From: Igor Pechtchanski <pechtcha@cs.nyu.edu>
+Reply-To: cygwin-patches@cygwin.com
+To: Steve O <bub@io.com>
+cc: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] fhandler_tty deadlock patch + console
+In-Reply-To: <20021022003249.A32108@eris.io.com>
+Message-ID: <Pine.GSO.4.44.0210221404560.8025-100000@slinky.cs.nyu.edu>
+Importance: Normal
 MIME-Version: 1.0
-To: cygwin-patches@cygwin.com
-Subject: Re: Avoiding /etc/passwd and /etc/group scans
-References: <3DB416E7.99E22851@ieee.org> <20021021162246.GC15828@redhat.com> <20021022162432.GF514@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-SW-Source: 2002-q4/txt/msg00030.txt.bz2
+Content-Type: TEXT/PLAIN; CHARSET=US-ASCII
+Content-ID: <Pine.GSO.4.44.0210221404562.8025@slinky.cs.nyu.edu>
+Content-Disposition: INLINE
+X-SW-Source: 2002-q4/txt/msg00031.txt.bz2
 
-Christopher Faylor wrote:
+On Tue, 22 Oct 2002, Steve O wrote:
+
+> On Mon, Oct 21, 2002 at 12:20:38PM -0400, Christopher Faylor wrote:
+> > Keep resubmitting on large patch until it is accepted.
+> >
+> > My time is limited right now so I may not be able to completely review
+> > this for a couple of weeks.  I'm going to be on a business trip starting
+> > on Wednesday.
+> >
+> > So, I would appreciate it if people would try this out and report their
+> > experiences.
+> >
+> > cgf
 >
-> I've checked this in.  If this solves the majority of the ntsec complaints,
-> I may even send you a medal.
->  
-> If I had any idea that turning on ntsec by default would cause this much
-> pain, I don't think I would have considered it.
+> Here's the original patch plus the recent fix.
+> -steve
+> [snip]
 
-Thanks. By the way the patch can be tested by screwing up the passwd file.
-Delete your sid or (more simply) add a "," at the end. Everything should
-still work as before for you, if your Windows name == Cygwin name, except 
-you will be unable to ssh into the system. 
-You can also delete your passwd entry altogether.
+One more thing I noticed when using this patch is that pasting now seems
+really slow, as if it's sending one character at a time...  Did you turn
+off the buffering somewhere by any chance?
+	Igor
+-- 
+				http://cs.nyu.edu/~pechtcha/
+      |\      _,,,---,,_		pechtcha@cs.nyu.edu
+ZZZzz /,`.-'`'    -.  ;-;;,_		igor@watson.ibm.com
+     |,4-  ) )-,_. ,\ (  `'-'		Igor Pechtchanski
+    '---''(_/--'  `-'\_) fL	a.k.a JaguaR-R-R-r-r-r-.-.-.  Meow!
 
-I keep watching the list and I have identified other solvable 
-issues. I have fixes, but they are more substantial than this patch. 
-I was going to to submit them after Corinna comes back, as they
-overlap the uid == gid patch I had sent just before she left.
-
-Pierre
+"Water molecules expand as they grow warmer" (C) Popular Science, Oct'02, p.51
