@@ -1,26 +1,28 @@
-From: egor duda <deo@logos-m.ru>
-To: Christopher Faylor <cygwin-patches@cygwin.com>
+From: Christopher Faylor <cgf@redhat.com>
+To: cygwin-patches@cygwin.com
 Subject: Re: yet another "pedantic" patch
-Date: Thu, 13 Sep 2001 10:32:00 -0000
-Message-id: <182101754975.20010913213206@logos-m.ru>
-References: <11495323718.20010913194455@logos-m.ru> <20010913132800.A13789@redhat.com>
-X-SW-Source: 2001-q3/msg00142.html
+Date: Thu, 13 Sep 2001 10:34:00 -0000
+Message-id: <20010913133424.B13789@redhat.com>
+References: <11495323718.20010913194455@logos-m.ru>
+X-SW-Source: 2001-q3/msg00143.html
 
-Hi!
+On Thu, Sep 13, 2001 at 07:44:55PM +0400, egor duda wrote:
+>Hi!
+>
+>  I've added input parameter checking to some functions so that new
+>tests in the testsuite will run smoothly.
+>
+>Does anybody know why we link with libstdc++? I've removed it and
+>everything links and runs ok.
 
-Thursday, 13 September, 2001 Christopher Faylor cgf@redhat.com wrote:
+Can I suggest that you modify the check_null_empty_* to pass
+in an errno that should be used in the case of an empty string?
 
-CF> On Thu, Sep 13, 2001 at 07:44:55PM +0400, egor duda wrote:
->>Hi!
->>
->>  I've added input parameter checking to some functions so that new
->>tests in the testsuite will run smoothly.
->>
->>Does anybody know why we link with libstdc++? I've removed it and
->>everything links and runs ok.
+You are special casing checks to force an EINVAL.
 
-CF> In gcc 3+ builtin_new exists in libstdc++.
+Hmm.  I wonder if EINVAL is always appropriate for an empty string.
+It could just be wrong in check_null_empty_str.
 
-ok, point taken. how about the rest?
+Thanks for doing this due diligence.
 
-Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
+cgf
