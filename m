@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2505-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 19328 invoked by alias); 24 Jun 2002 13:22:25 -0000
+Return-Path: <cygwin-patches-return-2506-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 6736 invoked by alias); 24 Jun 2002 13:59:34 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,29 +7,36 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 19275 invoked from network); 24 Jun 2002 13:22:23 -0000
-Date: Mon, 24 Jun 2002 06:59:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
+Received: (qmail 6721 invoked from network); 24 Jun 2002 13:59:34 -0000
+Message-ID: <3D1726E7.4EC19839@ieee.org>
+Date: Mon, 24 Jun 2002 16:49:00 -0000
+From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
+X-Accept-Language: en,pdf
+MIME-Version: 1.0
+To: Corinna Vinschen <cygwin-patches@cygwin.com>
 Subject: Re: Windows username in get_group_sidlist
-Message-ID: <20020624132311.GE19789@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
 References: <3.0.5.32.20020623235117.008008f0@mail.attbi.com> <20020624120506.Z22705@cygbert.vinschen.de> <20020624130226.GA19789@redhat.com> <20020624151450.G22705@cygbert.vinschen.de>
-Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20020624151450.G22705@cygbert.vinschen.de>
-User-Agent: Mutt/1.3.23.1i
-X-SW-Source: 2002-q2/txt/msg00488.txt.bz2
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2002-q2/txt/msg00489.txt.bz2
 
-On Mon, Jun 24, 2002 at 03:14:50PM +0200, Corinna Vinschen wrote:
->On Mon, Jun 24, 2002 at 09:02:26AM -0400, Chris Faylor wrote:
->> patch -l seemed to get most of the way there. 
->
->That's exactly the option I constantly forget.  I even called `man patch'
->and overlooked it.  Sigh.
+Corinna 
 
-What we really need is a "patch --fix-outlook-whitespace-botch".
+Now that get_group_sidlist () knows pw, it would be easy to
+lookup the domain from passwd, instead of using LookupAccountSid.
+This avoids over-the-network lookups for domain users.
 
-cgf
+I would actually read passwd by calling extract_nt_dom_user (),
+modifying it to first read the domain from the passwd file, and 
+if that fails, use LookupAccountSid [currently it tries 
+LookupAccountSid first, getting the sid from passwd]. 
+
+What do you think?
+
+Pierre
+
+Christopher Faylor wrote:
+> What we really need is a "patch --fix-outlook-whitespace-botch".
+
+Actually it was Eudora. Don't know what happened. I may have 
+accidentally inserted a space.
