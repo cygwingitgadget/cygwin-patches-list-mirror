@@ -1,25 +1,18 @@
-From: Egor Duda <deo@logos-m.ru>
-To: cygwin-patches@sourceware.cygnus.com
-Subject: Re: getgroups() SUSv2 compliance
-Date: Wed, 30 Aug 2000 00:11:00 -0000
-Message-id: <80166852691.20000830110923@logos-m.ru>
-References: <200008291900.PAA30759@envy.delorie.com>
-X-SW-Source: 2000-q3/msg00046.html
+From: Chris Faylor <cgf@cygnus.com>
+To: cygpatch <cygwin-patches@sourceware.cygnus.com>
+Subject: Re: link(existing_file_1,existing_file_2) return 0 and actually doing the link
+Date: Wed, 30 Aug 2000 21:07:00 -0000
+Message-id: <20000831000628.D1996@cygnus.com>
+References: <4585031418.20000829122541@logos-m.ru>
+X-SW-Source: 2000-q3/msg00047.html
 
-Hi!
+On Tue, Aug 29, 2000 at 12:25:41PM +0400, Egor Duda wrote:
+>Hi!
+>
+>  link(existing_file_1,existing_file_2)  returns 0 and actually doing the
+>link, but should not.
 
-Tuesday, 29 August, 2000 DJ Delorie dj@delorie.com wrote:
+Couldn't you achieve the same effect here by just testing that the value
+of real_b.get_win32.file_attributes () == (DWORD)-1 ?
 
->>       * grp.cc (getgroups): fail with EINVAL if array is not large
->>       enough to hold all supplementary group IDs.
-
-DD> Applied.  I don't suppose you could add a testcase for that, could
-DD> you?  It would have to fail without your patch, and pass with it, to
-DD> ensure we don't break this in the future.
-
-definitely. actually this one _was_ found as a result of testcase from
-sgi's  testsuite  i've  mentioned yesterday. currently i'm wrapping it
-into dejagnu.
-
-Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
-
+cgf
