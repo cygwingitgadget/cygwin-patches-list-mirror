@@ -1,30 +1,26 @@
 From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: raw-win32-keyboard-mode patch
-Date: Mon, 19 Feb 2001 18:49:00 -0000
-Message-id: <20010219214951.A23483@redhat.com>
-References: <16286062992.20010216183758@logos-m.ru>
-X-SW-Source: 2001-q1/msg00087.html
+Subject: Re: Export rand48 functions.
+Date: Mon, 19 Feb 2001 18:54:00 -0000
+Message-id: <20010219215403.B23483@redhat.com>
+References: <s1slmr8toe2.fsf@jaist.ac.jp>
+X-SW-Source: 2001-q1/msg00088.html
 
-On Fri, Feb 16, 2001 at 06:37:58PM +0300, Egor Duda wrote:
->2001-02-16  Egor Duda  <deo@logos-m.ru>
->  
->        * fhandler_console.cc (use_mouse): Remove. Make mouse handling
->        per-console.
->        * fhandler.h (class fhandler_console): Move use_mouse here.
->        * fhandler.cc (fhandler_console::set_raw_win32_keyboard_mode): New
->        function.
->        * fhandler_console.cc (fhandler_console::fhandler_console): Turn
->        mouse handling and raw-win32 keyboard mode off by default.
->        * fhandler_console.cc (fhandler_console::read): If in raw-win32
->        keyboard mode, encode win32 keyboard events in \033{x;y;z;t;u;wK
->        sequences.
->        * fhandler_console.cc (fhandler_console::char_command): Treat
->        \033[2000h as a command to enable raw-win32 keyboard mode and
->        \033[2000l as a command to disable it.
+On Thu, Feb 15, 2001 at 04:07:49PM +0900, Kazuhiro Fujieda wrote:
+>The following patch enables rand48 functions provided by newlib.
+>I've changed the way of initializing the reentrant structure so
+>other members than _stdin, _stdout and _stderr are initialized
+>to other than zero as well.
+>
+>ChangeLog:
+>2001-02-15  Kazuhiro Fujieda  <fujieda@jaist.ac.jp>
+>
+>	* cygwin.din: Export rand48 functions.
+>	* thread.cc (MTinterface::Init): Remove the initialization of
+>	`reent_data'.
+>	* dcrt0.cc: Add the initalizer to the declaration of `reent_data'.
+>	* include/cygwin/version.h: Bump CYGWIN_VERSION_API_MINOR to 35.
 
-Oops.  Sorry for the delay.
-
-Please check this in.  It looks interesting.
+Applied.  Thanks.
 
 cgf
