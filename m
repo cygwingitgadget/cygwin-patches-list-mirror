@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2842-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 18917 invoked by alias); 16 Aug 2002 21:31:29 -0000
+Return-Path: <cygwin-patches-return-2841-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 18720 invoked by alias); 16 Aug 2002 21:31:24 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,160 +7,75 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 18901 invoked from network); 16 Aug 2002 21:31:27 -0000
+Received: (qmail 18706 invoked from network); 16 Aug 2002 21:31:23 -0000
 Date: Fri, 16 Aug 2002 14:31:00 -0000
 From: Thomas Pfaff <tpfaff@gmx.net>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] pthread_fork Part 1
-Message-ID: <Pine.WNT.4.44.0208162159200.-283127@thomas.kefrig-pfaff.de>
+Subject: [PATCH] pthread_fork Part 2
+Message-ID: <Pine.WNT.4.44.0208162218020.-283127@thomas.kefrig-pfaff.de>
 X-X-Sender: thomas@gw.kefrig-pfaff.de
 MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="2266550-15121-1029529080=:-283127"
+Content-Type: MULTIPART/MIXED; BOUNDARY="3141790-10452-1029529955=:-283127"
 X-AntiVirus: scanned for viruses by NGI Next Generation Internet (http://www.ngi.de/)
-X-SW-Source: 2002-q3/txt/msg00290.txt.bz2
+X-SW-Source: 2002-q3/txt/msg00289.txt.bz2
 
   This message is in MIME format.  The first part should be readable text,
   while the remaining parts are likely unreadable without MIME-aware tools.
   Send mail to mime@docserver.cac.washington.edu for more info.
 
---2266550-15121-1029529080=:-283127
+--3141790-10452-1029529955=:-283127
 Content-Type: TEXT/PLAIN; charset=US-ASCII
-Content-length: 1252
+Content-length: 323
 
 
-Rob suggested to break the pthread_fork patch into smaller chunks. Ths is
-part 1 providing a fork save key value handling.
-The patch will add a linked list of keys to MTinterface and a fork buffer
-in pthread_key where the key values are passed between parent and child.
-
-Thomas
+Some small fixes in the pthread key handling.
 
 2002-08-16  Thomas Pfaff  <tpfaff@gmx.net>
 
-	* fork.cc (fork_child): Remove MTinterface::fixup_after_fork call.
-	It is done in __pthread_atforkchild now.
-	* thread.cc (MTinterface::Init): Initialize keys to NULL.
-	(MTinterface::fixup_before_fork): New method.
-	(MTinterface::fixup_after_fork): Fixup keys after fork.
-	(pthread_key::pthread_key): Insert key in list.
-	(pthread_key::~pthread_key): Remove key from list.
-	(pthread_key::fixup_before_fork): New method. Save key value in
-	fork_buf for child process.
-	(pthread_key::fixup_after_fork): New method. Recreate TLS storage
-	and restore value.
-	(__pthread_atforkprepare): Add MTinterface::fixup_before_fork.
-	(__pthread_atforkchild): Add MTinterface::fixup_after_fork.
-	* thread.h (pthread_key::fork_buf): New member.
-	(pthread_key::next): Ditto.
-	(pthread_key::fixup_before_fork): New method.
-	(pthread_key::fixup_after_fork): Ditto.
-	(MTinterface::keys): New member.
-	(MTinterface::fixup_before_fork): New method.
+	* thread.cc (pthread_key::set): Return EINVAL if index is out of
+	bounds or TlsSetValue failed.
+	(pthread_key::get): Do not clear errno. Preserve Win32 LastError.
+	(__pthread_setspecific): Retuern error from pthread_key::set.
 
 
---2266550-15121-1029529080=:-283127
-Content-Type: TEXT/plain; name="pthread_fork_save_keys.patch"
+
+
+
+--3141790-10452-1029529955=:-283127
+Content-Type: TEXT/plain; name="pthread_keys.patch"
 Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.WNT.4.44.0208162218000.-283127@thomas.kefrig-pfaff.de>
+Content-ID: <Pine.WNT.4.44.0208162232350.-283127@thomas.kefrig-pfaff.de>
 Content-Description: 
-Content-Disposition: attachment; filename="pthread_fork_save_keys.patch"
-Content-length: 5804
+Content-Disposition: attachment; filename="pthread_keys.patch"
+Content-length: 1656
 
-ZGlmZiAtdXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi9mb3JrLmNjIHNyYy93
-aW5zdXAvY3lnd2luL2ZvcmsuY2MKLS0tIHNyYy5vbGQvd2luc3VwL2N5Z3dp
-bi9mb3JrLmNjCVdlZCBKdW4gMTkgMDI6MTc6MDMgMjAwMgorKysgc3JjL3dp
-bnN1cC9jeWd3aW4vZm9yay5jYwlGcmkgQXVnIDE2IDEyOjQzOjU1IDIwMDIK
-QEAgLTMxMSw4ICszMTEsNiBAQCBmb3JrX2NoaWxkIChIQU5ETEUmIGhQYXJl
-bnQsIGRsbCAqJmZpcnN0CiAgICAgaWYgKCgqdCktPmNsZWFyX29uX2Zvcmsg
-KCkpCiAgICAgICAoKnQpLT5zZXQgKCk7CiAKLSAgdXNlcl9kYXRhLT50aHJl
-YWRpbnRlcmZhY2UtPmZpeHVwX2FmdGVyX2ZvcmsgKCk7Ci0KICAgLyogSW5p
-dGlhbGl6ZSBzaWduYWwvcHJvY2VzcyBoYW5kbGluZyAqLwogICBzaWdwcm9j
-X2luaXQgKCk7CiAgIF9fcHRocmVhZF9hdGZvcmtjaGlsZCAoKTsKZGlmZiAt
-dXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi90aHJlYWQuY2Mgc3JjL3dpbnN1
-cC9jeWd3aW4vdGhyZWFkLmNjCi0tLSBzcmMub2xkL3dpbnN1cC9jeWd3aW4v
-dGhyZWFkLmNjCUZyaSBBdWcgMTYgMTE6NDY6MDYgMjAwMgorKysgc3JjL3dp
-bnN1cC9jeWd3aW4vdGhyZWFkLmNjCUZyaSBBdWcgMTYgMTI6NDk6NDIgMjAw
-MgpAQCAtMzAxLDYgKzMwMSw3IEBAIE1UaW50ZXJmYWNlOjpJbml0IChpbnQg
-Zm9ya2VkKQogICBpZiAoZm9ya2VkKQogICAgIHJldHVybjsKIAorICBrZXlz
-ID0gTlVMTDsKICAgbXV0ZXhzID0gTlVMTDsKICAgY29uZHMgID0gTlVMTDsK
-ICAgc2VtYXBob3JlcyA9IE5VTEw7CkBAIC0zMTYsMTAgKzMxNywyOSBAQCBN
-VGludGVyZmFjZTo6SW5pdCAoaW50IGZvcmtlZCkKICNlbmRpZgogfQogCit2
-b2lkCitNVGludGVyZmFjZTo6Zml4dXBfYmVmb3JlX2ZvcmsgKHZvaWQpCit7
-CisgIHB0aHJlYWRfa2V5ICprZXkgPSBrZXlzOworICBkZWJ1Z19wcmludGYg
-KCJrZXlzIGlzICV4IixrZXlzKTsKKyAgd2hpbGUgKGtleSkKKyAgICB7Cisg
-ICAgICBrZXktPmZpeHVwX2JlZm9yZV9mb3JrICgpOworICAgICAga2V5ID0g
-a2V5LT5uZXh0OworICAgIH0KK30KKwogLyogVGhpcyBmdW5jdGlvbiBpcyBj
-YWxsZWQgZnJvbSBhIHNpbmdsZSB0aHJlYWRlZCBwcm9jZXNzICovCiB2b2lk
-CiBNVGludGVyZmFjZTo6Zml4dXBfYWZ0ZXJfZm9yayAodm9pZCkKIHsKKyAg
-cHRocmVhZF9rZXkgKmtleSA9IGtleXM7CisgIGRlYnVnX3ByaW50ZiAoImtl
-eXMgaXMgJXgiLGtleXMpOworICB3aGlsZSAoa2V5KQorICAgIHsKKyAgICAg
-IGtleS0+Zml4dXBfYWZ0ZXJfZm9yayAoKTsKKyAgICAgIGtleSA9IGtleS0+
-bmV4dDsKKyAgICB9CiAgIHB0aHJlYWRfbXV0ZXggKm11dGV4ID0gbXV0ZXhz
-OwogICBkZWJ1Z19wcmludGYgKCJtdXRleHMgaXMgJXgiLG11dGV4cyk7CiAg
-IHdoaWxlIChtdXRleCkKQEAgLTk3NCw2ICs5OTQsOCBAQCBwdGhyZWFkX2tl
-eTo6cHRocmVhZF9rZXkgKHZvaWQgKCpkZXN0cnVjCiAgICAgICBNVF9JTlRF
-UkZBQ0UtPmRlc3RydWN0b3JzLgogCUluc2VydCAobmV3IHB0aHJlYWRfa2V5
-X2Rlc3RydWN0b3IgKGRlc3RydWN0b3IsIHRoaXMpKTsKICAgICB9CisgIC8q
-IHRocmVhZHNhZmUgYWRkaXRpb24gaXMgZWFzeSAqLworICBuZXh0ID0gKHB0
-aHJlYWRfa2V5ICopIEludGVybG9ja2VkRXhjaGFuZ2VQb2ludGVyICgmTVRf
-SU5URVJGQUNFLT5rZXlzLCB0aGlzKTsKIH0KIAogcHRocmVhZF9rZXk6On5w
-dGhyZWFkX2tleSAoKQpAQCAtOTgxLDYgKzEwMDMsMTggQEAgcHRocmVhZF9r
-ZXk6On5wdGhyZWFkX2tleSAoKQogICBpZiAocHRocmVhZF9rZXlfZGVzdHJ1
-Y3RvciAqZGVzdCA9IE1UX0lOVEVSRkFDRS0+ZGVzdHJ1Y3RvcnMuUmVtb3Zl
-ICh0aGlzKSkKICAgICBkZWxldGUgZGVzdDsKICAgVGxzRnJlZSAoZHdUbHNJ
-bmRleCk7CisKKyAgLyogSSdtIG5vdCAxMDAlIHN1cmUgdGhlIG5leHQgYml0
-IGlzIHRocmVhZHNhZmUuIEkgdGhpbmsgaXQgaXMuLi4gKi8KKyAgaWYgKE1U
-X0lOVEVSRkFDRS0+a2V5cyA9PSB0aGlzKQorICAgIEludGVybG9ja2VkRXhj
-aGFuZ2VQb2ludGVyICgmTVRfSU5URVJGQUNFLT5rZXlzLCB0aGlzLT5uZXh0
-KTsKKyAgZWxzZQorICAgIHsKKyAgICAgIHB0aHJlYWRfa2V5ICp0ZW1wa2V5
-ID0gTVRfSU5URVJGQUNFLT5rZXlzOworICAgICAgd2hpbGUgKHRlbXBrZXkt
-Pm5leHQgJiYgdGVtcGtleS0+bmV4dCAhPSB0aGlzKQorICAgICAgICB0ZW1w
-a2V5ID0gdGVtcGtleS0+bmV4dDsKKyAgICAgIC8qIGJ1dCB0aGVyZSBtYXkg
-YmUgYSByYWNlIGJldHdlZW4gdGhlIGxvb3AgYWJvdmUgYW5kIHRoaXMgc3Rh
-dGVtZW50ICovCisgICAgICBJbnRlcmxvY2tlZEV4Y2hhbmdlUG9pbnRlciAo
-JnRlbXBrZXktPm5leHQsIHRoaXMtPm5leHQpOworICAgIH0KIH0KIAogaW50
-CkBAIC05OTgsNiArMTAzMiwyMSBAQCBwdGhyZWFkX2tleTo6Z2V0ICgpCiAg
-IHJldHVybiBUbHNHZXRWYWx1ZSAoZHdUbHNJbmRleCk7CiB9CiAKK3ZvaWQK
-K3B0aHJlYWRfa2V5OjpmaXh1cF9iZWZvcmVfZm9yayAoKQoreworICBmb3Jr
-X2J1ZiA9IGdldCAoKTsKK30KKwordm9pZAorcHRocmVhZF9rZXk6OmZpeHVw
-X2FmdGVyX2ZvcmsgKCkKK3sKKyAgZHdUbHNJbmRleCA9IFRsc0FsbG9jICgp
-OworICBpZiAoZHdUbHNJbmRleCA9PSBUTFNfT1VUX09GX0lOREVYRVMpCisg
-ICAgYXBpX2ZhdGFsICgicHRocmVhZF9rZXk6OmZpeHVwX2FmdGVyX2Zvcmsg
-KCkgZmFpbGVkIHRvIHJlYWxsb2NhdGUgVGxzIHN0b3JhZ2UiKTsKKyAgc2V0
-IChmb3JrX2J1Zik7Cit9CisKIC8qcHNoYXJlZCBtdXRleHM6CiAKICAqIFJF
-TU9WRUQgRlJPTSBDVVJSRU5ULiBUaGVzZSBjYW4gYmUgcmVpbnN0YXRlZCB3
-aXRoIHRoZSBkYWVtb24sIHdoZW4gYWxsIHRoZQpAQCAtMTM4Miw2ICsxNDMx
-LDggQEAgX19wdGhyZWFkX2NhbmNlbCAocHRocmVhZF90IHRocmVhZCkKIHZv
-aWQKIF9fcHRocmVhZF9hdGZvcmtwcmVwYXJlICh2b2lkKQogeworICBNVF9J
-TlRFUkZBQ0UtPmZpeHVwX2JlZm9yZV9mb3JrICgpOworCiAgIGNhbGxiYWNr
-ICpjYiA9IE1UX0lOVEVSRkFDRS0+cHRocmVhZF9wcmVwYXJlOwogICB3aGls
-ZSAoY2IpCiAgICAgewpAQCAtMTQwNCw2ICsxNDU1LDggQEAgX19wdGhyZWFk
-X2F0Zm9ya3BhcmVudCAodm9pZCkKIHZvaWQKIF9fcHRocmVhZF9hdGZvcmtj
-aGlsZCAodm9pZCkKIHsKKyAgTVRfSU5URVJGQUNFLT5maXh1cF9hZnRlcl9m
-b3JrICgpOworCiAgIGNhbGxiYWNrICpjYiA9IE1UX0lOVEVSRkFDRS0+cHRo
-cmVhZF9jaGlsZDsKICAgd2hpbGUgKGNiKQogICAgIHsKZGlmZiAtdXJwIHNy
-Yy5vbGQvd2luc3VwL2N5Z3dpbi90aHJlYWQuaCBzcmMvd2luc3VwL2N5Z3dp
-bi90aHJlYWQuaAotLS0gc3JjLm9sZC93aW5zdXAvY3lnd2luL3RocmVhZC5o
-CUZyaSBBdWcgMTYgMTE6NDY6MDYgMjAwMgorKysgc3JjL3dpbnN1cC9jeWd3
-aW4vdGhyZWFkLmgJRnJpIEF1ZyAxNiAxMjozODoxMSAyMDAyCkBAIC0xNzgs
-OSArMTc4LDE1IEBAIGNsYXNzIHB0aHJlYWRfa2V5OnB1YmxpYyB2ZXJpZnlh
-YmxlX29iamUKIHB1YmxpYzoKIAogICBEV09SRCBkd1Rsc0luZGV4OworICB2
-b2lkICpmb3JrX2J1ZjsKKyAgY2xhc3MgcHRocmVhZF9rZXkgKm5leHQ7CisK
-ICAgaW50IHNldCAoY29uc3Qgdm9pZCAqKTsKICAgdm9pZCAqZ2V0ICgpOwog
-CisgIHZvaWQgZml4dXBfYmVmb3JlX2ZvcmsgKCk7CisgIHZvaWQgZml4dXBf
-YWZ0ZXJfZm9yayAoKTsKKwogICAgIHB0aHJlYWRfa2V5ICh2b2lkICgqKSh2
-b2lkICopKTsKICAgIH5wdGhyZWFkX2tleSAoKTsKIH07CkBAIC0zOTksMTIg
-KzQwNSwxNCBAQCBwdWJsaWM6CiAgIGNhbGxiYWNrICpwdGhyZWFkX2NoaWxk
-OwogICBjYWxsYmFjayAqcHRocmVhZF9wYXJlbnQ7CiAKLSAgLy8gbGlzdCBv
-ZiBtdXRleCdzLiBVU0UgVEhSRUFEU0FGRSBJTlNFUlRTIEFORCBERUxFVEVT
-LgorICAvLyBsaXN0cyBvZiBwdGhyZWFkIG9iamVjdHMuIFVTRSBUSFJFQURT
-QUZFIElOU0VSVFMgQU5EIERFTEVURVMuCisgIGNsYXNzIHB0aHJlYWRfa2V5
-ICAgKiBrZXlzOwogICBjbGFzcyBwdGhyZWFkX211dGV4ICogbXV0ZXhzOwog
-ICBjbGFzcyBwdGhyZWFkX2NvbmQgICogY29uZHM7CiAgIGNsYXNzIHNlbWFw
-aG9yZSAgICAgKiBzZW1hcGhvcmVzOwogCiAgIHZvaWQgSW5pdCAoaW50KTsK
-KyAgdm9pZCBmaXh1cF9iZWZvcmVfZm9yayAodm9pZCk7CiAgIHZvaWQgZml4
-dXBfYWZ0ZXJfZm9yayAodm9pZCk7CiAKICAgTVRpbnRlcmZhY2UgKCk6cmVl
-bnRfaW5kZXggKDApLCBpbmRleGFsbG9jYXRlZCAoMCksIHRocmVhZGNvdW50
-ICgxKQo=
+ZGlmZiAtdXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi90aHJlYWQuY2Mgc3Jj
+L3dpbnN1cC9jeWd3aW4vdGhyZWFkLmNjCi0tLSBzcmMub2xkL3dpbnN1cC9j
+eWd3aW4vdGhyZWFkLmNjCUZyaSBBdWcgMTYgMTI6NTI6MDIgMjAwMgorKysg
+c3JjL3dpbnN1cC9jeWd3aW4vdGhyZWFkLmNjCUZyaSBBdWcgMTYgMTM6MTQ6
+NDkgMjAwMgpAQCAtMTAyMCwxNiArMTAyMCwyNyBAQCBwdGhyZWFkX2tleTo6
+fnB0aHJlYWRfa2V5ICgpCiBpbnQKIHB0aHJlYWRfa2V5OjpzZXQgKGNvbnN0
+IHZvaWQgKnZhbHVlKQogewotICAvKnRoZSBPUyBmdW5jdGlvbiBkb2Vzbid0
+IHBlcmZvcm0gZXJyb3IgY2hlY2tpbmcgKi8KLSAgVGxzU2V0VmFsdWUgKGR3
+VGxzSW5kZXgsICh2b2lkICopIHZhbHVlKTsKKyAgaWYgKGR3VGxzSW5kZXgg
+PT0gVExTX09VVF9PRl9JTkRFWEVTIHx8CisgICAgICAhVGxzU2V0VmFsdWUg
+KGR3VGxzSW5kZXgsICh2b2lkICopIHZhbHVlKSkKKyAgICByZXR1cm4gRUlO
+VkFMOworCiAgIHJldHVybiAwOwogfQogCiB2b2lkICoKIHB0aHJlYWRfa2V5
+OjpnZXQgKCkKIHsKLSAgc2V0X2Vycm5vICgwKTsKLSAgcmV0dXJuIFRsc0dl
+dFZhbHVlIChkd1Rsc0luZGV4KTsKKyAgdm9pZCAqcmVzdWx0OworICBpbnQg
+bGFzdF9lcnJvciA9IEdldExhc3RFcnJvciAoKTsKKworICBpZiAoZHdUbHNJ
+bmRleCA9PSBUTFNfT1VUX09GX0lOREVYRVMpCisgICAgcmVzdWx0ID0gTlVM
+TDsKKyAgZWxzZQorICAgIHJlc3VsdCA9IFRsc0dldFZhbHVlIChkd1Rsc0lu
+ZGV4KTsKKworICBTZXRMYXN0RXJyb3IgKGxhc3RfZXJyb3IpOworCisgIHJl
+dHVybiByZXN1bHQ7CiB9CiAKIHZvaWQKQEAgLTE4ODQsOCArMTg5NSw4IEBA
+IF9fcHRocmVhZF9zZXRzcGVjaWZpYyAocHRocmVhZF9rZXlfdCBrZXkKIHsK
+ICAgaWYgKHZlcmlmeWFibGVfb2JqZWN0X2lzdmFsaWQgKCZrZXksIFBUSFJF
+QURfS0VZX01BR0lDKSAhPSBWQUxJRF9PQkpFQ1QpCiAgICAgcmV0dXJuIEVJ
+TlZBTDsKLSAgKGtleSktPnNldCAodmFsdWUpOwotICByZXR1cm4gMDsKKwor
+ICByZXR1cm4gKGtleSktPnNldCAodmFsdWUpOwogfQogCiB2b2lkICoKQEAg
+LTE4OTUsNyArMTkwNiw2IEBAIF9fcHRocmVhZF9nZXRzcGVjaWZpYyAocHRo
+cmVhZF9rZXlfdCBrZXkKICAgICByZXR1cm4gTlVMTDsKIAogICByZXR1cm4g
+KGtleSktPmdldCAoKTsKLQogfQogCiAvKlRocmVhZCBzeW5jaHJvbmlzYXRp
+b24gKi8K
 
---2266550-15121-1029529080=:-283127--
+--3141790-10452-1029529955=:-283127--
