@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4374-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 25746 invoked by alias); 14 Nov 2003 12:56:41 -0000
+Return-Path: <cygwin-patches-return-4375-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 26223 invoked by alias); 14 Nov 2003 12:58:12 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,45 +7,41 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 25737 invoked from network); 14 Nov 2003 12:56:40 -0000
-Message-ID: <3FB4D118.8030802@cygwin.com>
-Date: Fri, 14 Nov 2003 12:56:00 -0000
-From: Robert Collins <rbcollins@cygwin.com>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.5b) Gecko/20030723 Thunderbird/0.1
-X-Accept-Language: en-us, en
-MIME-Version: 1.0
-To: Max Bowsher <maxb@ukf.net>
-CC:  cygwin-patches@cygwin.com
-Subject: Re: thunk createDirectory and createFile calls
-References: <3FB4A341.5070101@cygwin.com> <20031114101815.GU18706@cygbert.vinschen.de> <3FB4AE07.6010101@cygwin.com> <041701c3aaa4$db725ed0$78d96f83@starfruit> <3FB4C321.6030507@cygwin.com> <04e701c3aaad$b42fee10$78d96f83@starfruit>
-In-Reply-To: <04e701c3aaad$b42fee10$78d96f83@starfruit>
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Transfer-Encoding: 7bit
-X-SW-Source: 2003-q4/txt/msg00093.txt.bz2
+Received: (qmail 26214 invoked from network); 14 Nov 2003 12:58:11 -0000
+Date: Fri, 14 Nov 2003 12:58:00 -0000
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: thunking, the next step
+Message-ID: <20031114125810.GV18706@cygbert.vinschen.de>
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <3FB4C443.2040301@cygwin.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3FB4C443.2040301@cygwin.com>
+User-Agent: Mutt/1.4.1i
+X-SW-Source: 2003-q4/txt/msg00094.txt.bz2
 
-Max Bowsher wrote:
-
-> Robert Collins wrote:
+On Fri, Nov 14, 2003 at 11:02:11PM +1100, Robert Collins wrote:
+> Ok, I've now integrated and generalised Ron's unicode support mini-patch.
 > 
->>Max Bowsher wrote:
->>
->>
->>
->>>Also, I think LPCTSTR should be LPCSTR ? (and also in the CreateFile
->>>case)
->>>
->>
->>Not according to MSDN.
+> So, here tis a version that, well the changelog explains the overview, 
+> and io.h the detail.
 > 
-> 
-> Can you give a link to the bit you are looking at?
-> 
-> http://msdn.microsoft.com/library/default.asp?url=/library/en-us/intl/unicode_9i79.asp
-> seems to support my suggestion.
+> Overhead wise, this is reasonably low:
+> 1 strlen() per IO call minimum.
 
+I'm wondering if we couldn't get rid of that strlen call.  These
+functions already get a Windows path.  This path is constructed by a
+call to path_conv::check().  check() already scans the path so it
+should be simple to add a length field to path_conv, which could
+be used when calling the IOThunkState constructor.
 
-http://msdn.microsoft.com/library/default.asp?url=/library/en-us/fileio/base/createfile.asp
+Right?  Wrong?
 
-Look at the grey box :}.
+Corinna
 
-Rob
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
