@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5347-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 25072 invoked by alias); 10 Feb 2005 14:38:56 -0000
+Return-Path: <cygwin-patches-return-5348-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 26063 invoked by alias); 10 Feb 2005 15:43:34 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,113 +7,89 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 24926 invoked from network); 10 Feb 2005 14:38:37 -0000
-Received: from unknown (HELO pmesmtp04.mci.com) (199.249.20.36)
-  by sourceware.org with SMTP; 10 Feb 2005 14:38:37 -0000
-Received: from pmismtp02.mcilink.com ([166.38.62.37])
- by firewall.mci.com (Iplanet MTA 5.2)
- with ESMTP id <0IBP009EB9XLX1@firewall.mci.com> for cygwin-patches@cygwin.com;
- Thu, 10 Feb 2005 14:36:57 +0000 (GMT)
-Received: from pmismtp02.mcilink.com by pmismtp02.mcilink.com
- (iPlanet Messaging Server 5.2 HotFix 1.14 (built Mar 18 2003))
- with SMTP id <0IBP00M019VLOX@pmismtp02.mcilink.com> for
- cygwin-patches@cygwin.com; Thu, 10 Feb 2005 14:36:57 +0000 (GMT)
-Received: from WS117V6220509.mcilink.com ([166.34.133.100])
- by pmismtp02.mcilink.com
- (iPlanet Messaging Server 5.2 HotFix 1.14 (built Mar 18 2003))
- with ESMTP id <0IBP00MJ89WZDK@pmismtp02.mcilink.com> for
- cygwin-patches@cygwin.com; Thu, 10 Feb 2005 14:36:35 +0000 (GMT)
-Date: Thu, 10 Feb 2005 14:38:00 -0000
-From: Mark Paulus <mark.paulus@mci.com>
+Received: (qmail 25691 invoked from network); 10 Feb 2005 15:43:26 -0000
+Received: from unknown (HELO ciao.gmane.org) (80.91.229.2)
+  by sourceware.org with SMTP; 10 Feb 2005 15:43:26 -0000
+Received: from root by ciao.gmane.org with local (Exim 4.43)
+	id 1CzGQg-0002Uo-Aw
+	for cygwin-patches@cygwin.com; Thu, 10 Feb 2005 16:40:30 +0100
+Received: from eblake.csw.L-3com.com ([128.170.36.44])
+        by main.gmane.org with esmtp (Gmexim 0.1 (Debian))
+        id 1AlnuQ-0007hv-00
+        for <cygwin-patches@cygwin.com>; Thu, 10 Feb 2005 16:40:30 +0100
+Received: from ebb9 by eblake.csw.L-3com.com with local (Gmexim 0.1 (Debian))
+        id 1AlnuQ-0007hv-00
+        for <cygwin-patches@cygwin.com>; Thu, 10 Feb 2005 16:40:30 +0100
+To: cygwin-patches@cygwin.com
+From: Eric Blake <ebb9@byu.net>
 Subject: Re: patch to allow touch to work on HPFS (and others, maybe??)
-In-reply-to: <20050210104551.GX2597@cygbert.vinschen.de>
-To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Message-id: <0IBP00MJ99WZDK@pmismtp02.mcilink.com>
-MIME-version: 1.0
-Content-type: text/plain; charset=iso-8859-1
-Content-transfer-encoding: 7bit
-Priority: Normal
-X-SW-Source: 2005-q1/txt/msg00050.txt.bz2
+Date: Thu, 10 Feb 2005 15:43:00 -0000
+Message-ID: <loom.20050210T160326-68@post.gmane.org>
+References: <20050208091029.GM19096@cygbert.vinschen.de> <0IBM0096T43FSM@pmismtp01.mcilink.com> <20050209085228.GF2597@cygbert.vinschen.de>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Complaints-To: usenet@sea.gmane.org
+X-Gmane-NNTP-Posting-Host: main.gmane.org
+User-Agent: Loom/3.14 (http://gmane.org/)
+X-Loom-IP: 128.170.36.44 (Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0; .NET CLR 1.1.4322))
+X-Gmane-MailScanner: Found to be clean
+X-Gmane-MailScanner: Found to be clean
+X-MailScanner-From: gocp-cygwin-patches@m.gmane.org
+X-MailScanner-To: cygwin-patches@cygwin.com
+X-SW-Source: 2005-q1/txt/msg00051.txt.bz2
 
-That looks like it should do the trick.  I just ran this on a 
-samba mounted FS, and FILE_PERSISTENT_ACLS is 
-true, and it does support the touch using FILE_WRITE_ATTRIBUTES.
-I have asked Andrew DeFaria to compile/run your test program
-on his Clearcase volume, to see if it follows the same trend.
-If it does, then I would say you have found the root cause, and 
-your fix looks like it'll work.
+Corinna Vinschen <vinschen <at> redhat.com> writes:
+> 
+> Hey, why do you give up so quickly?  If it's not the one way, it might
+> be another one.  For us unknowing folks which have no OS/2 box with
+> HPFS to mount, would you mind to run the below application on your NT
+> box and paste the output into the reply?  I'm curious to see the result.
 
-On Thu, 10 Feb 2005 11:45:51 +0100, Corinna Vinschen wrote:
+If it helps, here's my quick results on a ClearCase drive m:, and a Windows 
+view to a Solaris filesystem on drive u: (I think it is using NFS).
 
->On Feb  9 10:27, Mark Paulus wrote:
->> I'm not exactly giving up.  It's just that at this point it looks like
->> the fix will not be trivial, and since my company will not endorse
->> a Waiver, I'm limited in the scope of fixes I can provide.  However,
->> I am more than willing to provide any testing/debugging services
->> that are needed.  The other issue is that this does not seem to be
->> a huge issue, since it hasn't surfaced too much previous to this.
-
->True.  I guess that there are not a lot of people out there using HPFS
->anymore.  But if there's an easy solution, why not include it anyway?
-
->> rootdir: z:\
->> Volume Name        : <>
->> Serial Number      : 2834707476
->> Max Filenamelength : 254
->> Filesystemname     : <??SS>
->> Flags:
->>   FILE_CASE_SENSITIVE_SEARCH  : FALSE
->>   FILE_CASE_PRESERVED_NAMES   : TRUE
->>   FILE_UNICODE_ON_DISK        : FALSE
->>   FILE_PERSISTENT_ACLS        : FALSE
->>   FILE_FILE_COMPRESSION       : FALSE
->>   FILE_VOLUME_QUOTAS          : FALSE
->>   FILE_SUPPORTS_SPARSE_FILES  : FALSE
->>   FILE_SUPPORTS_REPARSE_POINTS: FALSE
->>   FILE_SUPPORTS_REMOTE_STORAGE: FALSE
->>   FILE_VOLUME_IS_COMPRESSED   : FALSE
->>   FILE_SUPPORTS_OBJECT_IDS    : FALSE
->>   FILE_SUPPORTS_ENCRYPTION    : FALSE
->>   FILE_NAMED_STREAMS          : FALSE
->>   FILE_READ_ONLY_VOLUME       : FALSE
-
->The filesystemname is [insert 4-letter word here], really.
-
->However, that let me rethink what I stated yesterday in my reply to
->Yitzchak.  The original patch, which introduced the usage of
->FILE_WRITE_ATTRIBUTES into utimes() made a decision based on the
->operating system.  Without looking into the original code, it was
->roughly like this:
-
->  if (wincap.has_specific_attribs ())
->    attrib = FILE_WRITE_ATTRIBUTES;
->  else
->    attrib = GENERIC_WRITE;
-
->wincap.has_specific_attribs () returned true for NT systems and false
->for 9x systems.  At one point I just removed that stuff since it turned
->out that 9x perfectly understood specific attribs and probably translated
->them into something like GENERIC_WRITE internally.
-
->But, isn't that something which can be easily coupled to the file system?
->It seems that using FILE_WRITE_ATTRIBUTES only makes sense on file systems
->supporting FILE_PERSISTENT_ACLS, regardless which OS is running, isn't it?
->So, what if we just use the has_acls() attribute of path_conv to make the
->decision?
-
->  if (win32.has_acls ())
->    attrib = FILE_WRITE_ATTRIBUTES;
->  else
->    attrib = GENERIC_WRITE;
-
->Thoughts?
-
-
->Corinna
-
->-- 
->Corinna Vinschen                  Please, send mails regarding Cygwin to
->Cygwin Project Co-Leader          mailto:cygwin@cygwin.com
->Red Hat, Inc.
+$ scan m:
+rootdir: m:\
+Volume Name        : <CCase>
+Serial Number      : 36984713
+Max Filenamelength : 255
+Filesystemname     : <MVFS>
+Flags:
+  FILE_CASE_SENSITIVE_SEARCH  : TRUE
+  FILE_CASE_PRESERVED_NAMES   : TRUE
+  FILE_UNICODE_ON_DISK        : FALSE
+  FILE_PERSISTENT_ACLS        : FALSE
+  FILE_FILE_COMPRESSION       : FALSE
+  FILE_VOLUME_QUOTAS          : FALSE
+  FILE_SUPPORTS_SPARSE_FILES  : FALSE
+  FILE_SUPPORTS_REPARSE_POINTS: FALSE
+  FILE_SUPPORTS_REMOTE_STORAGE: FALSE
+  FILE_VOLUME_IS_COMPRESSED   : FALSE
+  FILE_SUPPORTS_OBJECT_IDS    : FALSE
+  FILE_SUPPORTS_ENCRYPTION    : FALSE
+  FILE_NAMED_STREAMS          : FALSE
+  FILE_READ_ONLY_VOLUME       : FALSE
+$ scan u:
+rootdir: u:\
+Volume Name        : <eblake>
+Serial Number      : 316278793
+Max Filenamelength : 255
+Filesystemname     : <NTFS>
+Flags:
+  FILE_CASE_SENSITIVE_SEARCH  : TRUE
+  FILE_CASE_PRESERVED_NAMES   : TRUE
+  FILE_UNICODE_ON_DISK        : FALSE
+  FILE_PERSISTENT_ACLS        : TRUE
+  FILE_FILE_COMPRESSION       : FALSE
+  FILE_VOLUME_QUOTAS          : FALSE
+  FILE_SUPPORTS_SPARSE_FILES  : FALSE
+  FILE_SUPPORTS_REPARSE_POINTS: FALSE
+  FILE_SUPPORTS_REMOTE_STORAGE: FALSE
+  FILE_VOLUME_IS_COMPRESSED   : FALSE
+  FILE_SUPPORTS_OBJECT_IDS    : FALSE
+  FILE_SUPPORTS_ENCRYPTION    : FALSE
+  FILE_NAMED_STREAMS          : FALSE
+  FILE_READ_ONLY_VOLUME       : FALSE
 
 
