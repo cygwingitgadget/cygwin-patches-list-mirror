@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2920-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 25476 invoked by alias); 3 Sep 2002 12:22:26 -0000
+Return-Path: <cygwin-patches-return-2921-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 27036 invoked by alias); 3 Sep 2002 12:28:45 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,40 +7,38 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 25462 invoked from network); 3 Sep 2002 12:22:25 -0000
-Date: Tue, 03 Sep 2002 05:22:00 -0000
+Received: (qmail 27022 invoked from network); 3 Sep 2002 12:28:44 -0000
+Date: Tue, 03 Sep 2002 05:28:00 -0000
 From: Corinna Vinschen <cygwin-patches@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: procps
-Message-ID: <20020903142147.A12899@cygbert.vinschen.de>
+Subject: Re: [PATCH] Added Kazuhiro's new wchar functions to cygwin.din
+Message-ID: <20020903142809.B12899@cygbert.vinschen.de>
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <200209031132.43008.chris@atomice.net>
+References: <20020830142028.F5475@cygbert.vinschen.de> <97179922214.20020830163339@logos-m.ru> <20020830150147.G5475@cygbert.vinschen.de> <110182341242.20020830171358@logos-m.ru> <s1selceuumv.fsf@jaist.ac.jp> <3D720D1F.37080487@yahoo.com> <s1sbs7hvijp.fsf@jaist.ac.jp>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <200209031132.43008.chris@atomice.net>
+In-Reply-To: <s1sbs7hvijp.fsf@jaist.ac.jp>
 User-Agent: Mutt/1.3.22.1i
-X-SW-Source: 2002-q3/txt/msg00368.txt.bz2
+X-SW-Source: 2002-q3/txt/msg00369.txt.bz2
 
-On Tue, Sep 03, 2002 at 11:32:43AM +0100, Christopher January wrote:
-> The flaw is actually in the /proc fhandler. The /proc implementation should be 
-> compatible with the Linux one and hence Linux /proc-based utilities (e.g. 
-> procps). The problem is that procps reports the effective user ID in the user 
-> ID column and the /proc fhandler currently reports the effective user ID as 
-> the user ID of the calling process (this is probably incorrect).
-> The procps utilities have only been modified to compile on Cygwin. They 
-> haven't been changed in any other way. Therefore if they report the wrong 
-> values it is the /proc fhandler that is at fault, not the procps package, 
-> because the /proc fhandler should behave just like the Linux /proc filesystem 
-> that the procps utilities were written for.
-> Hope that makes sense!
+On Mon, Sep 02, 2002 at 12:25:14AM +0900, Kazuhiro Fujieda wrote:
+> >>> On Sun, 01 Sep 2002 08:50:39 -0400
+> >>> Earnie Boyd <earnie_boyd@yahoo.com> said:
+> 
+> > So, instead of Corinna fixing the cygwin.din to/not to export them,
+> > could you submit the patch?
+> 
+> Here it is.
 
-I don't understand that description.  You saw my example.  cygrunsrv
-runs under SYSTEM account, uid 18.  /proc/PID/uid reports 18, so why
-does procps, which should obviously get it's values from the /proc
-interface, doesn't report 18/SYSTEM as uid?
+> 2002-09-02  Kazuhiro Fujieda  <fujieda@jaist.ac.jp>
+> 
+> 	* cygwin.din: Revert exporting new wchar functions.
+> 	* include/cygwin/version.h: Revert bumping API minor number.
 
-Confused,
+Applied with a little tweak in version.h.
+
+Thanks,
 Corinna
 
 -- 
