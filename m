@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1576-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 4594 invoked by alias); 11 Dec 2001 16:17:56 -0000
+Return-Path: <cygwin-patches-return-1577-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 10545 invoked by alias); 11 Dec 2001 20:15:09 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,32 +7,71 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 4564 invoked from network); 11 Dec 2001 16:17:53 -0000
-Date: Fri, 02 Nov 2001 18:47:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-Patches@cygwin.com
-Subject: Re: [Fwd: ghostscript binmode weirdness]
-Message-ID: <20011211161814.GA22821@redhat.com>
+Received: (qmail 10481 invoked from network); 11 Dec 2001 20:15:07 -0000
+Date: Fri, 02 Nov 2001 19:33:00 -0000
+From: "'cgf@redhat.com'" <cygwin-patches@cygwin.com>
+To: Victor Tsou <vtsou@good.com>
+Cc: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Serial code stack corruption
+Message-ID: <20011211201523.GC2260@redhat.com>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-Patches@cygwin.com
-References: <3C15668E.83F92142@research.att.com> <3C15F498.F7E5C88F@yahoo.com> <00db01c1823d$5c74d0e0$0200a8c0@lifelesswks>
+Mail-Followup-To: Victor Tsou <vtsou@good.com>, cygwin-patches@cygwin.com
+References: <E1740305C340D411AC5500B0D020FF7A010656FB@stmail01.good.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <00db01c1823d$5c74d0e0$0200a8c0@lifelesswks>
+In-Reply-To: <E1740305C340D411AC5500B0D020FF7A010656FB@stmail01.good.com>
 User-Agent: Mutt/1.3.23.1i
-X-SW-Source: 2001-q4/txt/msg00108.txt.bz2
+X-SW-Source: 2001-q4/txt/msg00109.txt.bz2
 
-On Tue, Dec 11, 2001 at 11:14:18PM +1100, Robert Collins wrote:
->Hmm, AFAIK cygwin-apps should not recieve patches at all.
+[redirected back to cygwin-patches]
+On Tue, Dec 11, 2001 at 12:04:52PM -0800, Victor Tsou wrote:
+>(Sorry for crummy formatting; I'm coping with the Outlook web
+>interface).
 >
->And w32api and mingw patches have been sent here in the past, which is
->why I suggested this list be cc'd with patches for cygwin apps as well
->as the maintainer.
+>>Do you actually have a test case that illustrates this scenario?
 >
->Chris?? Oh, Chris??
+>Not a simple one, though we have a reproducible process for achieving
+>the crash on multiple machines.  Putting in the patch fixes the crash
+>on all the affected machines.
+>
+>It's a bit tricky to pull off, but I may be able to hack together a
+>test case.  Unfortunately, even then you might not be able to reproduce
+>the results because we've only seen the problem using a custom serial
+>port driver.  Our driver guy was the one who actually identified the
+>problem.
+>
+>>I don't remember any more but I thought that raw_read wasn't supposed
+>>to be exited unless I/O was complete.
+>
+>It probably isn't, but the control paths are so numerous and twisty
+>that it'd be easy to forget to do so as the function is modified over
+>time.
+>
+>>However, I've added an 'ev' field to the fhandler_serial class which
+>>can be used for this.  I think that should eliminate any possibility of
+>>stack corruption.
+>
+>Great, I made that fix initially before deciding on the C++ auto
+>release solution.  That patch fixed the problem on the affected
+>machines.
+>
+>Thanks for taking the fix; we'll be happy not to have to ship out
+>custom DLLs.
 
-Earnie's right.  cygwin-patches is for patches to cygwin, not patches to
-ghostscript.  cygwin-apps seems more appropriate to me.
+I didn't take the fix, actually.  I just implemented the 'ev' solution
+that I mentioned.  A new DLL with this feature is downloadable at the
+snapshots page.
+
+Also, not to sound like a broken record but since you mention the term
+"ship out", I have to point out that if you are providing software to
+people which uses the cygwin DLL you have to also provide source code
+cygwin's licensing terms.
+
+I mention this to everyone who seems to be shipping software which uses
+the DLL.  I'm sure that you're already aware of this and maybe I've even
+already mentioned it to you already, however, you can consider my
+caveats part of the cygwin toll.  If you are adhering to the license
+terms then you can just ignore me.
 
 cgf
