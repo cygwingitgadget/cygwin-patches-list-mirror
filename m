@@ -1,35 +1,115 @@
-From: Earnie Boyd <earnie_boyd@yahoo.com>
+From: egor duda <deo@logos-m.ru>
 To: cygwin-patches@cygwin.com
-Subject: Re: exceptions.cc (call_signal_handler_now)
-Date: Mon, 09 Apr 2001 11:13:00 -0000
-Message-id: <3AD1FBBB.2B6D213C@yahoo.com>
-References: <3ACC7EFA.D650E2D3@yahoo.com> <20010408204539.A23313@redhat.com> <3AD1AB3E.675C33B6@yahoo.com> <20010409121337.B29944@redhat.com>
-X-SW-Source: 2001-q2/msg00022.html
+Subject: generating /etc/passwd and /etc/group for domians with users with cyrillic names
+Date: Mon, 09 Apr 2001 11:42:00 -0000
+Message-id: <130292291322.20010409223921@logos-m.ru>
+X-SW-Source: 2001-q2/msg00023.html
+Content-type: multipart/mixed; boundary="----------=_1583532847-65438-37"
 
-Christopher Faylor wrote:
-> 
-> On Mon, Apr 09, 2001 at 08:29:50AM -0400, Earnie Boyd wrote:
-> >Christopher Faylor wrote:
-> >>
-> >> I think that I came up with a way to avoid "externalizing" this function.
-> >> It's a kludge, but as far as I can tell, it seems to work with both the
-> >> newer (3.1) and older (2.95.3) gcc's.
-> >>
-> >> It's in CVS now.  If this doesn't work for you, I'll break down and
-> >> pollute the global name space.
-> >
-> >It works. :)
-> 
-> Hey, that's good news!  This is truly a horrible kludge but, IMO, it is
-> marginally better than forcing a function to be global.
-> 
+This is a multi-part message in MIME format...
 
-Yea, I didn't want to do that either but it was the only thing I could
-think of.  I'll have to look at your patch for educational purposes. :)
+------------=_1583532847-65438-37
+Content-length: 280
 
-Earnie.
+Hi!
 
-_________________________________________________________
-Do You Yahoo!?
-Get your free @yahoo.com address at http://mail.yahoo.com
+  currently, mkpasswd and mkgroup print garbage if user name or group
+name contains cyrillic symbols. attached patch fixes that.
 
+egor.            mailto:deo@logos-m.ru icq 5165414 fidonet 2:5020/496.19
+mkpasswd-unicode-convertion.diff
+mkpasswd-unicode-convertion.ChangeLog
+
+
+------------=_1583532847-65438-37
+Content-Type: text/plain; charset=us-ascii;
+ name="mkpasswd-unicode-convertion.ChangeLog"
+Content-Disposition: inline; filename="mkpasswd-unicode-convertion.ChangeLog"
+Content-Transfer-Encoding: base64
+Content-Length: 427
+
+MjAwMS0wNC0wOSAgRWdvciBEdWRhICA8ZGVvQGxvZ29zLW0ucnU+CgoJKiBt
+a2dyb3VwLmMgKHVuaTJhbnNpKTogVXNlIG5hdGl2ZSBtZXRob2QgdG8gY29u
+dmVydCBmcm9tIFVuaWNvZGUKCXRvIG11bHRpLWJ5dGUgc3RyaW5ncy4KCSog
+bWtwYXNzd2QuYyAodW5pMmFuc2kpOiBEaXR0by4KCShlbnVtX2xvY2FsX2dy
+b3Vwcyk6IFBhc3MgYnVmZmVyIHNpemUgd2hlbiBjb252ZXJ0aW5nIHN0cmlu
+Zy4KCShlbnVtX2dyb3Vwcyk6IERpdHRvLgoJKiBta3Bhc3N3ZC5jIChlbnVt
+X3VzZXJzKTogRGl0dG8uCgkoZW51bV9sb2NhbF9ncm91cHMpOiBEaXR0by4K
+
+------------=_1583532847-65438-37
+Content-Type: text/x-diff; charset=us-ascii;
+ name="mkpasswd-unicode-convertion.diff"
+Content-Disposition: inline; filename="mkpasswd-unicode-convertion.diff"
+Content-Transfer-Encoding: base64
+Content-Length: 4100
+
+SW5kZXg6IG1rZ3JvdXAuYwo9PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBm
+aWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL3V0aWxzL21rZ3JvdXAuYyx2CnJl
+dHJpZXZpbmcgcmV2aXNpb24gMS40CmRpZmYgLXUgLXAgLTIgLXIxLjQgbWtn
+cm91cC5jCi0tLSBta2dyb3VwLmMJMjAwMC8xMS8wOCAxNTowMDowMgkxLjQK
+KysrIG1rZ3JvdXAuYwkyMDAxLzA0LzA5IDE4OjAxOjAwCkBAIC05Myw5ICs5
+Myw4IEBAIHBzeF9kaXIgKGNoYXIgKmluLCBjaGFyICpvdXQpCiAKIHZvaWQK
+LXVuaTJhbnNpIChMUFdTVFIgd2NzLCBjaGFyICptYnMpCit1bmkyYW5zaSAo
+TFBXU1RSIHdjcywgY2hhciAqbWJzLCBpbnQgc2l6ZSkKIHsKICAgaWYgKHdj
+cykKLSAgICB3Y3N0b21icyAobWJzLCB3Y3MsICh3Y3NsZW4gKHdjcykgKyAx
+KSAqIHNpemVvZiAoV0NIQVIpKTsKLQorICAgIFdpZGVDaGFyVG9NdWx0aUJ5
+dGUgKENQX0FDUCwgMCwgd2NzLCAtMSwgbWJzLCBzaXplLCBOVUxMLCBOVUxM
+KTsKICAgZWxzZQogICAgICptYnMgPSAnXDAnOwpAQCAtMTQyLDUgKzE0MSw1
+IEBAIGVudW1fbG9jYWxfZ3JvdXBzIChpbnQgcHJpbnRfc2lkcykKIAkgIERX
+T1JEIGdpZDsKIAkgIFNJRF9OQU1FX1VTRSBhY2NfdHlwZTsKLQkgIHVuaTJh
+bnNpIChidWZmZXJbaV0ubGdycGkwX25hbWUsIGxvY2FsZ3JvdXBfbmFtZSk7
+CisJICB1bmkyYW5zaSAoYnVmZmVyW2ldLmxncnBpMF9uYW1lLCBsb2NhbGdy
+b3VwX25hbWUsIHNpemVvZiAobG9jYWxncm91cF9uYW1lKSk7CiAKIAkgIGlm
+ICghTG9va3VwQWNjb3VudE5hbWUgKE5VTEwsIGxvY2FsZ3JvdXBfbmFtZSwg
+cHNpZCwKQEAgLTE5OSw1ICsxOTgsNSBAQCBlbnVtX2dyb3VwcyAoTFBXU1RS
+IHNlcnZlcm5hbWUsIGludCBwcmluCiAKICAgaWYgKHNlcnZlcm5hbWUpCi0g
+ICAgdW5pMmFuc2kgKHNlcnZlcm5hbWUsIGFuc2lfc3J2bmFtZSk7CisgICAg
+dW5pMmFuc2kgKHNlcnZlcm5hbWUsIGFuc2lfc3J2bmFtZSwgc2l6ZW9mIChh
+bnNpX3Nydm5hbWUpKTsKIAogICBkbwpAQCAtMjMzLDUgKzIzMiw1IEBAIGVu
+dW1fZ3JvdXBzIChMUFdTVFIgc2VydmVybmFtZSwgaW50IHByaW4KIAogCSAg
+aW50IGdpZCA9IGJ1ZmZlcltpXS5ncnBpMl9ncm91cF9pZDsKLQkgIHVuaTJh
+bnNpIChidWZmZXJbaV0uZ3JwaTJfbmFtZSwgZ3JvdXBuYW1lKTsKKwkgIHVu
+aTJhbnNpIChidWZmZXJbaV0uZ3JwaTJfbmFtZSwgZ3JvdXBuYW1lLCBzaXpl
+b2YgKGdyb3VwbmFtZSkpOwogICAgICAgICAgIGlmIChwcmludF9zaWRzKQog
+ICAgICAgICAgICAgewpJbmRleDogbWtwYXNzd2QuYwo9PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL3V0aWxz
+L21rcGFzc3dkLmMsdgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuNwpkaWZmIC11
+IC1wIC0yIC1yMS43IG1rcGFzc3dkLmMKLS0tIG1rcGFzc3dkLmMJMjAwMC8x
+Mi8wNyAxMDozMTowMQkxLjcKKysrIG1rcGFzc3dkLmMJMjAwMS8wNC8wOSAx
+ODowMTowMApAQCAtOTMsOSArOTMsOCBAQCBwc3hfZGlyIChjaGFyICppbiwg
+Y2hhciAqb3V0KQogCiB2b2lkCi11bmkyYW5zaSAoTFBXU1RSIHdjcywgY2hh
+ciAqbWJzKQordW5pMmFuc2kgKExQV1NUUiB3Y3MsIGNoYXIgKm1icywgaW50
+IHNpemUpCiB7CiAgIGlmICh3Y3MpCi0gICAgd2NzdG9tYnMgKG1icywgd2Nz
+LCAod2NzbGVuICh3Y3MpICsgMSkgKiBzaXplb2YgKFdDSEFSKSk7Ci0KKyAg
+ICBXaWRlQ2hhclRvTXVsdGlCeXRlIChDUF9BQ1AsIDAsIHdjcywgLTEsIG1i
+cywgc2l6ZSwgTlVMTCwgTlVMTCk7CiAgIGVsc2UKICAgICAqbWJzID0gJ1ww
+JzsKQEAgLTExNCw1ICsxMTMsNSBAQCBlbnVtX3VzZXJzIChMUFdTVFIgc2Vy
+dmVybmFtZSwgaW50IHByaW50CiAKICAgaWYgKHNlcnZlcm5hbWUpCi0gICAg
+dW5pMmFuc2kgKHNlcnZlcm5hbWUsIGFuc2lfc3J2bmFtZSk7CisgICAgdW5p
+MmFuc2kgKHNlcnZlcm5hbWUsIGFuc2lfc3J2bmFtZSwgc2l6ZW9mIChhbnNp
+X3Nydm5hbWUpKTsKIAogICBkbwpAQCAtMTUzLDggKzE1Miw4IEBAIGVudW1f
+dXNlcnMgKExQV1NUUiBzZXJ2ZXJuYW1lLCBpbnQgcHJpbnQKIAkgIGludCB1
+aWQgPSBidWZmZXJbaV0udXNyaTNfdXNlcl9pZDsKIAkgIGludCBnaWQgPSBi
+dWZmZXJbaV0udXNyaTNfcHJpbWFyeV9ncm91cF9pZDsKLQkgIHVuaTJhbnNp
+IChidWZmZXJbaV0udXNyaTNfbmFtZSwgdXNlcm5hbWUpOwotCSAgdW5pMmFu
+c2kgKGJ1ZmZlcltpXS51c3JpM19mdWxsX25hbWUsIGZ1bGxuYW1lKTsKKwkg
+IHVuaTJhbnNpIChidWZmZXJbaV0udXNyaTNfbmFtZSwgdXNlcm5hbWUsIHNp
+emVvZiAodXNlcm5hbWUpKTsKKwkgIHVuaTJhbnNpIChidWZmZXJbaV0udXNy
+aTNfZnVsbF9uYW1lLCBmdWxsbmFtZSwgc2l6ZW9mIChmdWxsbmFtZSkpOwog
+CSAgaG9tZWRpcl93MzJbMF0gPSBob21lZGlyX3BzeFswXSA9ICdcMCc7Ci0J
+ICB1bmkyYW5zaSAoYnVmZmVyW2ldLnVzcmkzX2hvbWVfZGlyLCBob21lZGly
+X3czMik7CisJICB1bmkyYW5zaSAoYnVmZmVyW2ldLnVzcmkzX2hvbWVfZGly
+LCBob21lZGlyX3czMiwgc2l6ZW9mIChob21lZGlyX3czMikpOwogCSAgaWYg
+KHByaW50X2N5Z3BhdGgpCiAJICAgIGN5Z3dpbl9jb252X3RvX3Bvc2l4X3Bh
+dGggKGhvbWVkaXJfdzMyLCBob21lZGlyX3BzeCk7CkBAIC0yNjUsNSArMjY0
+LDUgQEAgZW51bV9sb2NhbF9ncm91cHMgKGludCBwcmludF9zaWRzKQogCSAg
+RFdPUkQgZ2lkOwogCSAgU0lEX05BTUVfVVNFIGFjY190eXBlOwotCSAgdW5p
+MmFuc2kgKGJ1ZmZlcltpXS5sZ3JwaTBfbmFtZSwgbG9jYWxncm91cF9uYW1l
+KTsKKwkgIHVuaTJhbnNpIChidWZmZXJbaV0ubGdycGkwX25hbWUsIGxvY2Fs
+Z3JvdXBfbmFtZSwgc2l6ZW9mIChsb2NhbGdyb3VwX25hbWUpKTsKIAogCSAg
+aWYgKCFMb29rdXBBY2NvdW50TmFtZSAoTlVMTCwgbG9jYWxncm91cF9uYW1l
+LCBwc2lkLAo=
+
+------------=_1583532847-65438-37--
