@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4446-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 29781 invoked by alias); 27 Nov 2003 22:55:40 -0000
+Return-Path: <cygwin-patches-return-4447-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 8729 invoked by alias); 28 Nov 2003 13:12:36 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,34 +7,37 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 29761 invoked from network); 27 Nov 2003 22:55:38 -0000
-Date: Thu, 27 Nov 2003 22:55:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
+Received: (qmail 8720 invoked from network); 28 Nov 2003 13:12:35 -0000
+Message-ID: <3FC749BB.4050704@netscape.net>
+Date: Fri, 28 Nov 2003 13:12:00 -0000
+From: Nicholas Wourms <nwourms@netscape.net>
+User-Agent: Mozilla/5.0 (Windows; U; Win 9x 4.90; en-US; rv:1.4) Gecko/20030624 Netscape/7.1 (ax)
+X-Accept-Language: en-us, en
+MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH]:  Add flock syscall emulation
-Message-ID: <20031127225535.GB29208@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <Pine.CYG.4.58.0311271409240.1064139@reddragon.clemson.edu>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.CYG.4.58.0311271409240.1064139@reddragon.clemson.edu>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2003-q4/txt/msg00165.txt.bz2
+References: <Pine.CYG.4.58.0311271409240.1064139@reddragon.clemson.edu> <20031127225535.GB29208@redhat.com>
+In-Reply-To: <20031127225535.GB29208@redhat.com>
+X-Enigmail-Version: 0.76.7.0
+X-Enigmail-Supports: pgp-inline, pgp-mime
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AOL-IP: 130.127.121.187
+X-SW-Source: 2003-q4/txt/msg00166.txt.bz2
 
-On Thu, Nov 27, 2003 at 02:51:10PM -0500, Nicholas Wourms wrote:
->I decided to port this particular version of flock emulation from a
->patch written by a Red Hat employee for use in Red Hat's IMAPd RPM.  I
->tried contacting the individual listed in the spec's ChangeLog, but got
->no response.  IANAL, but since there was no notice of copyright at the
->top of the file and since this code was created for Red Hat by a Red
->Hat employee, I'm assuming that Red Hat owns the rights to this code?
->This is based on the assumption that Red Hat employees sign a similar
->copyright assignment to the one that we do.  If this isn't so, please
->let me know and I'll go back to the drawing board.
+cgf wrote:
+> On Thu, Nov 27, 2003 at 02:51:10PM -0500, Nicholas Wourms wrote:
+> 
+> And, the employee was...?  Your reasoning may be correct but it isn't
+> possible to know for sure without details.
+> 
+Chris,
 
-And, the employee was...?  Your reasoning may be correct but it isn't
-possible to know for sure without details.
+Ooops, sorry about that!  I meant to fill it in after I finished and had 
+a chance to look up his name, but I guess I forgot.  Anyhow, according 
+the the spec's ChangeLog, the author is Nalin Dahyabhai <nalin at rh 
+com>.  This name is also consistant with the RCSId that appears in the 
+header comments of flock.c.
 
-cgf
+Cheers,
+Nicholas
