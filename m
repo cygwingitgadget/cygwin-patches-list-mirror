@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2799-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 20353 invoked by alias); 7 Aug 2002 21:40:20 -0000
+Return-Path: <cygwin-patches-return-2800-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 11462 invoked by alias); 8 Aug 2002 13:39:04 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,40 +7,81 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 20339 invoked from network); 7 Aug 2002 21:40:20 -0000
-Message-ID: <060701c23e5b$5f1d7fb0$6132bc3e@BABEL>
-From: "Conrad Scott" <Conrad.Scott@dsl.pipex.com>
-To: <cygwin-patches@cygwin.com>
-References: <040201c23e37$256b0810$6132bc3e@BABEL> <20020807200131.GA9098@redhat.com> <056501c23e54$031f67c0$6132bc3e@BABEL> <20020807210442.GB10258@redhat.com> <05d101c23e57$b9237220$6132bc3e@BABEL> <20020807212905.GC12225@redhat.com>
-Subject: Re: IsBad*Ptr patch
-Date: Wed, 07 Aug 2002 14:40:00 -0000
+Received: (qmail 11447 invoked from network); 8 Aug 2002 13:39:04 -0000
+Message-ID: <3D527477.6040307@hekimian.com>
+Date: Thu, 08 Aug 2002 06:39:00 -0000
+X-Sybari-Trust: 5465ada6 b923d9bf 4738785c 00000109
+From: Joe Buehler <jbuehler@hekimian.com>
+Reply-To:  joseph.buehler@spirentcom.com
+Organization: Spirent Communications
+User-Agent: Mozilla/5.0 (Windows; U; WinNT4.0; en-US; rv:1.0.0) Gecko/20020530
+X-Accept-Language: en-us, en
 MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="iso-8859-1"
+To:  cygwin-patches@cygwin.com
+Subject: patch for infinite loop in unlink()
+Content-Type: multipart/mixed;
+ boundary="------------010900030505000405090902"
+X-SW-Source: 2002-q3/txt/msg00248.txt.bz2
+
+This is a multi-part message in MIME format.
+--------------010900030505000405090902
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-SW-Source: 2002-q3/txt/msg00247.txt.bz2
+Content-length: 549
 
-"Christopher Faylor" <cgf@redhat.com> wrote:
-> >Perhaps I ought to leave it until tomorrow in that case, to
-give
-> >Corinna a chance to savour the discussion and veto the patch if
-> >necessary.
->
-> Ok.
->
-> At the very least, the removal of const is ok, assuming you can
-> remove that and not affect the Corinna parts.
+Here is a patch for the problem of "rm -fr" getting into an infinite loop
+when it tries to delete a file that is open.
 
-I need to bung it all in together 'cos once the const is removed a
-few functions fail to compile (including a couple in "net.cc"), as
-they check write rather than just read access.  So, I'll pause the
-lot for the moment.
+It is a little incomplete in that it depends on the existence of a directory
+named .cygdel in the root directory of the involved drive, but does not
+attempt to create the directory.  So some solution is needed for that.
+The patch code has no effect if anything fails.
 
-Cheers,
+It has worked for me for some time now, but definitely needs to be
+checked by someone who knows the guts of the code involved.
 
-// Conrad
+Please critique...
 
+Joe Buehler
 
+--------------010900030505000405090902
+Content-Type: text/plain;
+ name="temp.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline;
+ filename="temp.patch"
+Content-length: 1019
+
+Index: src/winsup/cygwin/syscalls.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/syscalls.cc,v
+retrieving revision 1.214
+diff -u -r1.214 syscalls.cc
+--- src/winsup/cygwin/syscalls.cc	2 Jul 2002 03:06:32 -0000	1.214
++++ src/winsup/cygwin/syscalls.cc	8 Aug 2002 13:31:35 -0000
+@@ -142,6 +142,23 @@
+ 	SetFileAttributes (win32_name, (DWORD) win32_name & ~FILE_ATTRIBUTE_READONLY);
+     }
+ 
++  // attempt to rename before deleting
++  char *basename;
++  basename = strrchr(win32_name, '\\');
++  if (basename && *++basename) {
++    const char *rootdir = win32_name.root_dir();
++    if (rootdir) {
++      const char *s = strrchr(rootdir, '\\');
++      if (s && !s[1]) {
++	char newname[MAX_PATH + 12];
++	__small_sprintf(newname, "%s.cygdel\\%s", rootdir, basename);
++	if (MoveFile(win32_name.get_win32(), newname)) {
++	  win32_name.check(newname, PC_SYM_NOFOLLOW | PC_FULL);
++	}
++      }
++    }
++  }
++
+   DWORD lasterr;
+   lasterr = 0;
+   for (int i = 0; i < 2; i++)
+
+--------------010900030505000405090902--
