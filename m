@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2608-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 32039 invoked by alias); 5 Jul 2002 17:08:59 -0000
+Return-Path: <cygwin-patches-return-2609-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 32424 invoked by alias); 5 Jul 2002 17:10:41 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,41 +7,30 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 32023 invoked from network); 5 Jul 2002 17:08:58 -0000
-Date: Fri, 05 Jul 2002 10:08:00 -0000
+Received: (qmail 32404 invoked from network); 5 Jul 2002 17:10:38 -0000
+Date: Fri, 05 Jul 2002 10:10:00 -0000
 From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: printfs in cygserver?
-Message-ID: <20020705170912.GA31040@redhat.com>
+Subject: Re: [PATCH] pthread_key patch
+Message-ID: <20020705171052.GF30783@redhat.com>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20020705030630.GA24255@redhat.com> <008301c22411$7cfc7900$6132bc3e@BABEL>
+References: <Pine.WNT.4.44.0207050848100.224-100000@algeria.intern.net>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <008301c22411$7cfc7900$6132bc3e@BABEL>
+In-Reply-To: <Pine.WNT.4.44.0207050848100.224-100000@algeria.intern.net>
 User-Agent: Mutt/1.3.23.1i
-X-SW-Source: 2002-q3/txt/msg00056.txt.bz2
+X-SW-Source: 2002-q3/txt/msg00057.txt.bz2
 
-On Fri, Jul 05, 2002 at 11:48:24AM +0100, Conrad Scott wrote:
->"Christopher Faylor" <cgf@redhat.com> write:
->> There seems to be a lot of of "printfs" in cygserver code that
->is
->> apparently linked into cygwin.  I specifically noticed it it
->> cygserver_transport_pipes.cc and cygserver_transport_sockets.cc.
->> Is this being corrected?  We don't use raw printf in cygwin
->code.
->
->I've fixed this on the cygwin_daemon branch.  In case it's
->something you'd like fixed immediately, attached is a (slightly
->updated) copy of a patch I previously submitted to Rob that, among
->other things, changes the cygserver code to use the xxx_printf
->calls from "strace.h".  I'd be happy for this to go into HEAD;
->it's not a functionality patch, more of a brisk clean-up and
->rub-down patch :-)
+On Fri, Jul 05, 2002 at 08:50:21AM +0200, Thomas Pfaff wrote:
+>If somebody is interested why if find this patch neccessary with a posix
+>threaded gcc could read
+>http://cygwin.com/ml/cygwin-patches/2002-q2/msg00214.html
 
-You're the maintainer now so the decision of what goes into head
-is pretty much yours.  If you think it should be checked in, go
-for it.
+Can you summarize why you need to explicitly run destructors on process
+detach?  It seems like this should happen automatically anyway.  I assume
+that you're accessing thread-local storage on thread detach, so that's
+why you need to do things then.  Process detach on the other hand...
 
 cgf
