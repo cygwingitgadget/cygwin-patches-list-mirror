@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2127-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 18774 invoked by alias); 30 Apr 2002 14:08:27 -0000
+Return-Path: <cygwin-patches-return-2128-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 7064 invoked by alias); 30 Apr 2002 15:49:06 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,55 +7,70 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 18748 invoked from network); 30 Apr 2002 14:08:23 -0000
-Message-ID: <3CCEA638.E357EFE2@ieee.org>
-Date: Tue, 30 Apr 2002 07:08:00 -0000
-From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
-X-Accept-Language: en,pdf
-MIME-Version: 1.0
-To: Corinna Vinschen <cygwin-patches@cygwin.com>
-Subject: Re: SSH -R problem
-References: <3.0.5.32.20020429205809.007f2920@mail.attbi.com> <3.0.5.32.20020429205809.007f2920@mail.attbi.com> <3.0.5.32.20020430073223.007e3e00@mail.attbi.com> <20020430142039.D1214@cygbert.vinschen.de>
+Received: (qmail 7050 invoked from network); 30 Apr 2002 15:49:05 -0000
+Date: Tue, 30 Apr 2002 08:49:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] dtors run twice on dll detach (update)
+Message-ID: <20020430154905.GA27049@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <F0E13277A26BD311944600500454CCD050807A-101000@antarctica.intern.net>
+Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-SW-Source: 2002-q2/txt/msg00111.txt.bz2
+Content-Disposition: inline
+In-Reply-To: <F0E13277A26BD311944600500454CCD050807A-101000@antarctica.intern.net>
+User-Agent: Mutt/1.3.23.1i
+X-SW-Source: 2002-q2/txt/msg00112.txt.bz2
 
-Corinna Vinschen wrote:
-> 
-> That makes sense... but doesn't that again break something else?
+I finally had some time to review this today and I am still not
+completely convinced that this patch is correct.
 
-What it might break is the case for which linger was added in the first 
-place, i.e. processes terminating and Windows flushing their outgoing 
-packet queue (in the case of slow connections), as opposed to Unix, 
-which maintains the queue for a while after process termination.
+If we just avoid setting up the destructor calls using atexit then the
+destructors will only run once.  So, in the normal case, the destructor
+will run after much cleanup has occurred in the cygwin DLL (specifically
+in the do_exit function).  This means that the destructor may not be
+able to use all of the facilities of cygwin when it is finally executed.
 
-Now I have never observed this myself, and don't have a strong opinion.
-Do we have a reproducible case to understand exactly what's going on?
-I am not convinced by the "user space" argument in
-http://cygwin.com/ml/cygwin/2001-07/msg00855.html
-We know too well that sockets consume system buffers.
+This won't be an issue for the problem below, but I wonder if it is a
+problem for other destructors.  I'm not sure what kind of environment
+a global destructor is guaranteed to have but I suspect that it should
+be a completely normal environment.
 
-At any rate the initial problem occurs only at process termination time.
-The current issue is that we don't want to block processes in the prime of
-their life. 
-So an ideal fix would detect "end of life" situations. Here is a brain 
-storming idea: on a Cygwin close(), do a shutdown(.,2), free the Cygwin
-structure and start a task to do a blocking linger + closesocket() on the
-Windows socket. At process termination, wait until all such tasks are done.
-Exception: in the case of a blocking socket where the application had
-set linger to On, do a Windows closesocket() immediately.
+Anyone know for sure?  Is there an online reference for this kind of thing?
 
-By the way, how does Unix behave when doing a close() on a non blocking
-socket when linger is on? That seems contradictory, linger on is supposed
-to block...
-"SO_LINGER controls the action taken when unsent messages are queued on
-socket and a close(2) is performed.  If the socket promises reliable
-delivery of data and SO_LINGER is set, the system will block the process
-.."
+cgf
 
-Short of something like this we are between a rock and a hard place.
-I would think that applications that go to the trouble of setting the
-socket to non-blocking care more about not blocking than about potentially
-dropping packets at the end of their life.
+On Wed, Apr 17, 2002 at 09:07:32AM +0200, Thomas Pfaff wrote:
+>I am sorry for the previous patch, it was incomplete. This is hopefully a
+>better one:
+>
+>On Tue, 16 Apr 2002, Thomas Pfaff wrote:
+>
+>> I ran into a problem when is was trying to build STLPort-4.5.3 as dll
+>> (if
+>> somebody is interested i can send him my patches). A program build with
+>> this dll crashed in _free_r on termination. After testing a while i
+>> discovered that the dtors were run twice, the first time from
+>> dll_global_dtors, the second time from dll_list::detach which resulted
+>> in
+>> a duplicated free for the same pointer.
+>> Since i can not judge which function is obsolete (i guess
+>> dll_global_dtors
+>> is) i have attached a small patch that will make sure that the dtors run
+>> only once.
+>>
+>> Regards
+>> Thomas
+>>
+>> 2002-04-16  Thomas Pfaff  <tpfaff@gmx.net>
+>>
+>> 	* dll_init.h (per_process::dtors_run): New member.
+>> 	* dll_init.cc (per_module::run_dtors): Run dtors only once.
+>> 	(dll::init): Initialize dtors_run flag.
+>>
+>>
+>>
+>
+>
 
-Pierre
