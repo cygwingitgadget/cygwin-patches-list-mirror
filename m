@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2024-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 28141 invoked by alias); 4 Apr 2002 05:18:12 -0000
+Return-Path: <cygwin-patches-return-2025-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 671 invoked by alias); 4 Apr 2002 05:28:58 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,43 +7,43 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 28127 invoked from network); 4 Apr 2002 05:18:11 -0000
-Message-ID: <20020404051811.20957.qmail@web20002.mail.yahoo.com>
-Date: Wed, 03 Apr 2002 21:18:00 -0000
-From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
-Subject: Re: stackdump.sgml new file
+Received: (qmail 645 invoked from network); 4 Apr 2002 05:28:56 -0000
+Date: Wed, 03 Apr 2002 21:28:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-In-Reply-To: <20020404045149.GA22318@redhat.com>
-MIME-Version: 1.0
+Subject: Re: stackdump.sgml new file
+Message-ID: <20020404052906.GA22575@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20020404045149.GA22318@redhat.com> <20020404051811.20957.qmail@web20002.mail.yahoo.com>
+Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-X-SW-Source: 2002-q2/txt/msg00008.txt.bz2
+Content-Disposition: inline
+In-Reply-To: <20020404051811.20957.qmail@web20002.mail.yahoo.com>
+User-Agent: Mutt/1.3.23.1i
+X-SW-Source: 2002-q2/txt/msg00009.txt.bz2
 
-> 2) The patch is included is an html attachment.
-> 
-> Obviously 1) is a no-op but we really need just a straight patch in
-> regular text.
-> 
-Well, I'm not sure this is what you mean, here is the straight text of the
-file.
-Seems kinda silly for one this short. I put it in stackdump.sgml in
-/src/winsup/cygwin/:
+On Wed, Apr 03, 2002 at 09:18:11PM -0800, Joshua Daniel Franklin wrote:
+>> 2) The patch is included is an html attachment.
+>> 
+>> Obviously 1) is a no-op but we really need just a straight patch in
+>> regular text.
+>> 
+>Well, I'm not sure this is what you mean, here is the straight text of the
+>file.
 
-<sect1 id="func-cygwin-stackdump">
-<title>cygwin_stackdump</title>
+I'm not sure why you're not sure what I meant:
 
-<funcsynopsis>
-<funcdef>extern "C" void
-<function>cygwin_stackdump</function></funcdef>
-<void>
-</funcsynopsis>
+Content-Type: text/html; name="stackdump.sgml-patch"
+Content-Description: stackdump.sgml-patch
+Content-Disposition: inline; filename="stackdump.sgml-patch"
 
-<para> Produce a stackdump from the called location
-</para>
+When I looked at this in my email client, it was pretty much illegible.
+If I look at it in a text editor (now why didn't I think of that
+before?) it looked like a regular patch.
 
-</sect1>
+The way that you were sending patches previously was just fine.  I
+don't know why you changed it.  Or, maybe your email client did it
+for you when it saw the sgml extension.
 
-
-__________________________________________________
-Do You Yahoo!?
-Yahoo! Tax Center - online filing with TurboTax
-http://taxes.yahoo.com/
+cgf
