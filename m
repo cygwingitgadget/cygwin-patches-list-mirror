@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2090-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 7041 invoked by alias); 20 Apr 2002 00:17:37 -0000
+Return-Path: <cygwin-patches-return-2091-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 18000 invoked by alias); 22 Apr 2002 06:33:59 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,47 +7,39 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 6987 invoked from network); 20 Apr 2002 00:17:33 -0000
-content-class: urn:content-classes:message
-Subject: RE: [PATCH] dtors run twice on dll detach (update)
+Received: (qmail 17981 invoked from network); 22 Apr 2002 06:33:58 -0000
+Date: Sun, 21 Apr 2002 23:33:00 -0000
+From: "Gerrit P. Haase" <gp@familiehaase.de>
+Organization: Esse keine toten Tiere
+X-Priority: 3 (Normal)
+Message-ID: <39152833372.20020422083351@familiehaase.de>
+To: "Robert Collins" <robert.collins@itdomain.com.au>
+CC: cygwin-patches@cygwin.com
+Subject: Re: [PATCH]setup.exe mklink2.cc some function arguments need to be pointers
+In-Reply-To: <FC169E059D1A0442A04C40F86D9BA7600C5E74@itdomain003.itdomain.net.au>
+References: <FC169E059D1A0442A04C40F86D9BA7600C5E74@itdomain003.itdomain.net.au>
 MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 19 Apr 2002 17:17:00 -0000
-X-MimeOLE: Produced By Microsoft Exchange V6.0.5762.3
-Message-ID: <FC169E059D1A0442A04C40F86D9BA7600C5E8C@itdomain003.itdomain.net.au>
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-From: "Robert Collins" <robert.collins@itdomain.com.au>
-To: "Robert Collins" <robert.collins@itdomain.com.au>,
-	<cygwin-patches@cygwin.com>
-X-SW-Source: 2002-q2/txt/msg00074.txt.bz2
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2002-q2/txt/msg00075.txt.bz2
+
+Hallo Robert,
+
+>> It looks like you are building in a branch.  The version of
+>> mklink2.cc I have from the main branch is
+
+> No, I've realised that I haven't committed it... I've some smei-invasive
+> changes I've been mulling over in HEAD, and I'd forgotten about that.
+
+> I will commit my patch to HEAD along with a couple of other fixes from
+> setup200202 shortly - hopefully this weekend.
+
+> Until then, simply use the mklink2.cc from the setup200202 branch. 
+
+Is it in now?
+I cannot build because mklink2.cc fails...
 
 
-
-> -----Original Message-----
-> From: Robert Collins=20
-> Sent: Saturday, April 20, 2002 8:05 AM
->
-> Ookay. I don't think that either function is obsolete... and=20
-> neither you nor Corinna had commented.=20=20
-
-I should enlarge on this.
-
-The reason that I don't think that either function is obsolete is as
-follows:
-Once trigger is via atexit - when the program exits. The other is at dll
-detachment.
-
-Now the double-dtor run does not occur under gdb or strace. This
-suggests to me that the dll detachment does not occur in these
-situations (or that atexit does not run).
-
-Also, atexit will call all the dtors before any dll's detach, which
-could be important. So that should stay.
-
-Conversely, dlopened dll's should have their dtors called when they are
-dlclosed, so the dll_detach invocation should stay.
-
-Rob
+Gerrit
+-- 
+=^..^=
