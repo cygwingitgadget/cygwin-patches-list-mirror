@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3534-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 5006 invoked by alias); 6 Feb 2003 19:48:26 -0000
+Return-Path: <cygwin-patches-return-3535-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 5875 invoked by alias); 6 Feb 2003 19:50:00 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,65 +7,55 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 4982 invoked from network); 6 Feb 2003 19:48:26 -0000
-Date: Thu, 06 Feb 2003 19:48:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: [PATCH] w32api [jld@ecoscentric.com: PathRelativePathTo() declarations]
-Message-ID: <20030206194917.GB26036@redhat.com>
-Mail-Followup-To: cygwin-patches@cygwin.com
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.5.1i
-X-SW-Source: 2003-q1/txt/msg00183.txt.bz2
+Received: (qmail 5865 invoked from network); 6 Feb 2003 19:49:59 -0000
+X-Authentication-Warning: slinky.cs.nyu.edu: pechtcha owned process doing -bs
+Date: Thu, 06 Feb 2003 19:50:00 -0000
+From: Igor Pechtchanski <pechtcha@cs.nyu.edu>
+Reply-To: cygwin-patches@cygwin.com
+To: Corinna Vinschen <cygwin-patches@cygwin.com>
+Subject: Re: ntsec odds and ends
+In-Reply-To: <20030206182413.GL5822@cygbert.vinschen.de>
+Message-ID: <Pine.GSO.4.44.0302061445360.24824-100000@slinky.cs.nyu.edu>
+Importance: Normal
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-SW-Source: 2003-q1/txt/msg00184.txt.bz2
 
-Danny,
-I don't know if you read the cygwin mailing list but just in case...
+On Thu, 6 Feb 2003, Corinna Vinschen wrote:
 
-cgf
+> On Thu, Feb 06, 2003 at 01:10:33PM -0500, Igor Pechtchanski wrote:
+> > No problem, I'll rewrite this (after actually looking at the code this
+> > time).  However, at least on my machine, most of the files, especially in
+> > /cygdrive/c, are owned by the Administrators group.  If it's not in
+> > /etc/passwd, most files show up with "????????" for the user, which is not
+> > very informative...
+>
+> Sure but in this case the admins group is treated as a user since it's
+> in the user entry of the file's security descriptor.
 
------ Forwarded message from John Dallaway <jld@ecoscentric.com> -----
+Yes, it is.  What I meant was "files show up in the 'ls -l' listing with
+'????????' in the user field".  Since the Administrators group is not the
+current user, this field won't be set to whatever the default is, will it?
+I'll have to wade through the code, I guess, to fully understand what's
+going on (and probably not even then :-) ).
+	Igor
 
-From: John Dallaway <jld@ecoscentric.com>
-To: cygwin@cygwin.com
-Subject: PathRelativePathTo() declarations
-Date: Tue, 4 Feb 2003 09:32:39 +0000
-Mail-Followup-To: cygwin@cygwin.com
-Organization: eCosCentric Limited
+> I think we never get that right.  The problem is that the ls entries
+> only are 8 chars long, not enough to be really informative.  Whatever
+> you put in there ("unknown", "????????", "mkpasswd", "run mkpa",
+> "dumbass"), you will deterministically get confused users.
+>
+> Which means, I appreciate that you're going to add a few words to the
+> users guide.  It's something we can point people to.
+>
+> Corinna
 
-I have discovered a trivial error in the shlwapi.h Win32 API header
-file. I'm not a Cygwin developer but have appended a patch to the
-installed file.
+-- 
+				http://cs.nyu.edu/~pechtcha/
+      |\      _,,,---,,_		pechtcha@cs.nyu.edu
+ZZZzz /,`.-'`'    -.  ;-;;,_		igor@watson.ibm.com
+     |,4-  ) )-,_. ,\ (  `'-'		Igor Pechtchanski
+    '---''(_/--'  `-'\_) fL	a.k.a JaguaR-R-R-r-r-r-.-.-.  Meow!
 
-John Dallaway
-eCosCentric Limited
-
---cut here--
-
---- shlwapi.h.old       2002-11-25 20:21:02.000000000 +0000
-+++ shlwapi.h   2003-02-03 12:44:08.000000000 +0000
-@@ -262,12 +262,12 @@
- WINSHLWAPI BOOL WINAPI PathMatchSpecW(LPCWSTR,LPCWSTR);
- WINSHLWAPI int WINAPI PathParseIconLocationA(LPSTR);
- WINSHLWAPI int WINAPI PathParseIconLocationW(LPWSTR);
- WINSHLWAPI void WINAPI PathQuoteSpacesA(LPSTR);
- WINSHLWAPI void WINAPI PathQuoteSpacesW(LPWSTR);
--WINSHLWAPI BOOL WINAPI PathRelativePathToA(LPSTR,LPCSTR,DWORD,LPCWSTR,DWORD);
--WINSHLWAPI BOOL WINAPI PathRelativePathToW(LPWSTR,LPCWSTR,DWORD,LPCSTR,DWORD);
-+WINSHLWAPI BOOL WINAPI PathRelativePathToA(LPSTR,LPCSTR,DWORD,LPCSTR,DWORD);
-+WINSHLWAPI BOOL WINAPI PathRelativePathToW(LPWSTR,LPCWSTR,DWORD,LPCWSTR,DWORD);
- WINSHLWAPI void WINAPI PathRemoveArgsA(LPSTR);
- WINSHLWAPI void WINAPI PathRemoveArgsW(LPWSTR);
- WINSHLWAPI LPSTR WINAPI PathRemoveBackslashA(LPSTR);
- WINSHLWAPI LPWSTR WINAPI PathRemoveBackslashW(LPWSTR);
- WINSHLWAPI void WINAPI PathRemoveBlanksA(LPSTR);
-
-
---
-Unsubscribe info:      http://cygwin.com/ml/#unsubscribe-simple
-Bug reporting:         http://cygwin.com/bugs.html
-Documentation:         http://cygwin.com/docs.html
-FAQ:                   http://cygwin.com/faq/
-
------ End forwarded message -----
+Oh, boy, virtual memory! Now I'm gonna make myself a really *big* RAMdisk!
+  -- /usr/games/fortune
