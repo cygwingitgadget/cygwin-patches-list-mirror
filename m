@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4533-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 20356 invoked by alias); 23 Jan 2004 15:22:51 -0000
+Return-Path: <cygwin-patches-return-4534-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 23833 invoked by alias); 23 Jan 2004 16:04:08 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,36 +7,34 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 20347 invoked from network); 23 Jan 2004 15:22:51 -0000
-Date: Fri, 23 Jan 2004 15:22:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
+Received: (qmail 23824 invoked from network); 23 Jan 2004 16:04:07 -0000
+Message-ID: <401145F5.5ECCA8DF@phumblet.no-ip.org>
+Date: Fri, 23 Jan 2004 16:04:00 -0000
+From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
+Reply-To: Pierre.Humblet@ieee.org
+MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
-Subject: Re: Fix write deadlock with streaming serial devices
-Message-ID: <20040123152251.GE10708@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <Pine.GSO.4.58.0401221638310.17483@eos>
-Mime-Version: 1.0
+Subject: Re: [Patch]: secret event
+References: <3.0.5.32.20040122183313.00839860@incoming.verizon.net> <20040123095952.GC12512@cygbert.vinschen.de> <20040123151621.GC10708@redhat.com>
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.GSO.4.58.0401221638310.17483@eos>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2004-q1/txt/msg00023.txt.bz2
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2004-q1/txt/msg00024.txt.bz2
 
-On Thu, Jan 22, 2004 at 05:07:38PM -0600, Brian Ford wrote:
->2004-01-22  Brian Ford  <ford@vss.fsi.com>
->
->	* fhandler_serial.cc (fhandler_serial::raw_write): Prevent a
->	deadlock when the input buffer overflows.
->	(fhandler_serial::raw_read): Correct to print the actual error
->	and only call PurgeComm when necessary.
->
->+          DWORD ev;
->+          if (!ClearCommError (get_handle (), &ev, NULL)) goto err;
->+          if (ev) termios_printf ("error detected %x", ev);
 
-Applied with the above two minor non-GNU formatting problems corrected.
+Christopher Faylor wrote:
+> 
+> 
+> I agree, with one nit.  Was there a reason for getting rid of the handle
+> protection in this patch?  We are apparently stumbling over a problem with
+> handle corruption in the current CVS so removing a chance for protection
+> seems like we're going backwards.
 
-Thanks.
+The previous code was assuming that a handle would never change from
+inheritable to non-inheritable (or conversely) and was protecting it
+accordingly.
+That's not true anymore and I don't know how to protect in that situation.
 
-cgf
+I have seen the DEBUGGING_AND_FDS_PROTECTED stuff, but I am not sure
+if/how it works.
+
+Pierre
