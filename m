@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2489-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 19703 invoked by alias); 22 Jun 2002 15:12:46 -0000
+Return-Path: <cygwin-patches-return-2490-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 13496 invoked by alias); 22 Jun 2002 16:54:05 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,81 +7,276 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 19689 invoked from network); 22 Jun 2002 15:12:46 -0000
-Message-ID: <04a101c219ff$81bedf80$6132bc3e@BABEL>
-From: "Conrad Scott" <Conrad.Scott@dsl.pipex.com>
-To: "Earnie Boyd" <earnie_boyd@yahoo.com>
-Cc: <cygwin-patches@cygwin.com>
-References: <20020622150321.13099.qmail@web20708.mail.yahoo.com>
-Subject: Re: Add FILE_FLAG_FIRST_PIPE_INSTANCE to <w32api/winbase.h>
-Date: Sat, 22 Jun 2002 09:54:00 -0000
+Received: (qmail 13391 invoked from network); 22 Jun 2002 16:54:05 -0000
+Date: Sun, 23 Jun 2002 00:16:00 -0000
+From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+X-X-Sender: joshua@iocc.com
+To: cygwin-patches@cygwin.com
+Subject: Re: YACP
+Message-ID: <Pine.CYG.4.44.0206221151001.1308-200000@iocc.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
-	boundary="----=_NextPart_000_049E_01C21A07.E32F3410"
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-MIMEOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-SW-Source: 2002-q2/txt/msg00472.txt.bz2
+Content-Type: MULTIPART/MIXED; BOUNDARY="-559023410-183831411-1024764758=:1308"
+X-SW-Source: 2002-q2/txt/msg00473.txt.bz2
 
-This is a multi-part message in MIME format.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
 
-------=_NextPart_000_049E_01C21A07.E32F3410
-Content-Type: text/plain;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: 7bit
-Content-length: 191
+---559023410-183831411-1024764758=:1308
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-length: 2009
 
-Earnie,
+> >It would be fine with me to leave the '--type TYPE' syntax as an
+> >alternative to --unix, --windows, --mixed, but having the --type mixed
+> >as the only way to get a forward-slash Windows path seemed counter-
+> >intuitive to me. Also --type dos to me should mean short-name as well.
+> >So should I put together another patch to do this as well?
+>
+> Actually, I think that specifying the output via --type makes things a
+> little more structured.  We can't go back now, though, because users
+> would complain.  It looks like I should have added a '--type unix' if
+> I was going to be consistent, though.
+>
+> I dunno.  I don't feel really strongly about this, though.  If no one
+> agrees then I don't mind changing it.
 
-Thanks for the reply about the WINVER setting. I've attached a new
-version of the patch with a guard of _WIN32_WINNT >= 0x0500, as you
-suggested.
+That does sound like a better idea. This patch is therefore better.
+It fleshes out the --type option so that one can specify: 'dos', 'mixed',
+'unix', or 'windows'. The 'dos' type includes short-name. While I was
+at it, I added a --dos option which is the same as --windows --short-name.
+It's too bad about the feature bloat, but having both should satisfy both
+structure and users.
 
-I hope this is better.
+I feel good about changing the default action to --unix since before
+-u or -w was required in every case, so the only thing it would change
+(to users) is if before they were always typing something like
+'cygpath c:' and getting errors now they will get UNIXy path output.
 
-// Conrad
+I also corrected an apparent bug in the long_options that prevented
+"close", "file" and "type" from working, even though -c, -f, and -t
+did. I'm not intimate with getopt but it looks like the flag part of
+long_options struct should be set to NULL if you're using the optarg.
+
+ChangeLog:
+
+2002-06-22  Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+
+	* cygpath.cc (long_options): Add "dos" and "mixed", correct
+	"close", "file" and "type" to use NULL flag.
+	(usage): Clean up usage output (more), accomodate new options.
+	(main): Add --dos and --mixed options; accomodate all output
+	forms in --type. Make UNIXy output default.
 
 
-------=_NextPart_000_049E_01C21A07.E32F3410
-Content-Type: text/plain;
-	name="ChangeLog.txt"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
-	filename="ChangeLog.txt"
-Content-length: 129
+---559023410-183831411-1024764758=:1308
+Content-Type: TEXT/PLAIN; charset=US-ASCII; name="cygpath.cc-patch"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.CYG.4.44.0206221152380.1308@iocc.com>
+Content-Description: 
+Content-Disposition: attachment; filename="cygpath.cc-patch"
+Content-length: 12298
 
-2002-06-21  Conrad Scott  <conrad.scott@dsl.pipex.com>
+LS0tIGN5Z3BhdGguY2Mtb3JpZwlUaHUgSnVuIDIwIDE3OjI4OjAwIDIwMDIN
+CisrKyBjeWdwYXRoLmNjCVNhdCBKdW4gMjIgMTE6MzU6NTAgMjAwMg0KQEAg
+LTMwLDI4ICszMCwzMCBAQCBzdGF0aWMgaW50IHBhdGhfZmxhZywgdW5peF9m
+bGFnLCB3aW5kb3dzDQogc3RhdGljIGludCBzaG9ydG5hbWVfZmxhZywgbG9u
+Z25hbWVfZmxhZzsNCiBzdGF0aWMgaW50IGlnbm9yZV9mbGFnLCBhbGx1c2Vy
+c19mbGFnLCBvdXRwdXRfZmxhZzsNCiBzdGF0aWMgaW50IG1peGVkX2ZsYWc7
+DQotc3RhdGljIGNvbnN0IGNoYXIgKndpbmRvd3NfZm9ybWF0X2FyZzsNCitz
+dGF0aWMgY29uc3QgY2hhciAqZm9ybWF0X3R5cGVfYXJnOw0KIA0KIHN0YXRp
+YyBzdHJ1Y3Qgb3B0aW9uIGxvbmdfb3B0aW9uc1tdID0gew0KLSAgeyhjaGFy
+ICopICJoZWxwIiwgbm9fYXJndW1lbnQsIE5VTEwsICdoJ30sDQogICB7KGNo
+YXIgKikgImFic29sdXRlIiwgbm9fYXJndW1lbnQsIE5VTEwsICdhJ30sDQor
+ICB7KGNoYXIgKikgImNsb3NlIiwgcmVxdWlyZWRfYXJndW1lbnQsIE5VTEws
+ICdjJ30sDQorICB7KGNoYXIgKikgImRvcyIsIG5vX2FyZ3VtZW50LCBOVUxM
+LCAnZCd9LA0KKyAgeyhjaGFyICopICJmaWxlIiwgcmVxdWlyZWRfYXJndW1l
+bnQsIE5VTEwsICdmJ30sDQorICB7KGNoYXIgKikgImhlbHAiLCBub19hcmd1
+bWVudCwgTlVMTCwgJ2gnfSwNCisgIHsoY2hhciAqKSAiaWdub3JlIiwgbm9f
+YXJndW1lbnQsIE5VTEwsICdpJ30sDQorICB7KGNoYXIgKikgImxvbmctbmFt
+ZSIsIG5vX2FyZ3VtZW50LCBOVUxMLCAnbCd9LA0KKyAgeyhjaGFyICopICJt
+aXhlZCIsIG5vX2FyZ3VtZW50LCBOVUxMLCAnbSd9LA0KICAgeyhjaGFyICop
+ICJvcHRpb24iLCBub19hcmd1bWVudCwgTlVMTCwgJ28nfSwNCiAgIHsoY2hh
+ciAqKSAicGF0aCIsIG5vX2FyZ3VtZW50LCBOVUxMLCAncCd9LA0KLSAgeyhj
+aGFyICopICJjbG9zZSIsIHJlcXVpcmVkX2FyZ3VtZW50LCAoaW50ICopICZj
+bG9zZV9hcmcsICdjJ30sDQorICB7KGNoYXIgKikgInNob3J0LW5hbWUiLCBu
+b19hcmd1bWVudCwgTlVMTCwgJ3MnfSwNCisgIHsoY2hhciAqKSAidHlwZSIs
+IHJlcXVpcmVkX2FyZ3VtZW50LCBOVUxMLCAndCd9LA0KICAgeyhjaGFyICop
+ICJ1bml4Iiwgbm9fYXJndW1lbnQsIE5VTEwsICd1J30sDQotICB7KGNoYXIg
+KikgImZpbGUiLCByZXF1aXJlZF9hcmd1bWVudCwgKGludCAqKSAmZmlsZV9h
+cmcsICdmJ30sDQogICB7KGNoYXIgKikgInZlcnNpb24iLCBub19hcmd1bWVu
+dCwgTlVMTCwgJ3YnfSwNCiAgIHsoY2hhciAqKSAid2luZG93cyIsIG5vX2Fy
+Z3VtZW50LCBOVUxMLCAndyd9LA0KLSAgeyhjaGFyICopICJzaG9ydC1uYW1l
+Iiwgbm9fYXJndW1lbnQsIE5VTEwsICdzJ30sDQotICB7KGNoYXIgKikgImxv
+bmctbmFtZSIsIG5vX2FyZ3VtZW50LCBOVUxMLCAnbCd9LA0KLSAgeyhjaGFy
+ICopICJ3aW5kaXIiLCBub19hcmd1bWVudCwgTlVMTCwgJ1cnfSwNCi0gIHso
+Y2hhciAqKSAic3lzZGlyIiwgbm9fYXJndW1lbnQsIE5VTEwsICdTJ30sDQot
+ICB7KGNoYXIgKikgImlnbm9yZSIsIG5vX2FyZ3VtZW50LCBOVUxMLCAnaSd9
+LA0KICAgeyhjaGFyICopICJhbGx1c2VycyIsIG5vX2FyZ3VtZW50LCBOVUxM
+LCAnQSd9LA0KICAgeyhjaGFyICopICJkZXNrdG9wIiwgbm9fYXJndW1lbnQs
+IE5VTEwsICdEJ30sDQotICB7KGNoYXIgKikgInNtcHJvZ3JhbXMiLCBub19h
+cmd1bWVudCwgTlVMTCwgJ1AnfSwNCi0gIHsoY2hhciAqKSAidHlwZSIsIHJl
+cXVpcmVkX2FyZ3VtZW50LCAoaW50ICopICZ3aW5kb3dzX2Zvcm1hdF9hcmcs
+ICd0J30sDQogICB7KGNoYXIgKikgImhvbWVyb290Iiwgbm9fYXJndW1lbnQs
+IE5VTEwsICdIJ30sDQorICB7KGNoYXIgKikgInNtcHJvZ3JhbXMiLCBub19h
+cmd1bWVudCwgTlVMTCwgJ1AnfSwNCisgIHsoY2hhciAqKSAic3lzZGlyIiwg
+bm9fYXJndW1lbnQsIE5VTEwsICdTJ30sDQorICB7KGNoYXIgKikgIndpbmRp
+ciIsIG5vX2FyZ3VtZW50LCBOVUxMLCAnVyd9LA0KICAgezAsIG5vX2FyZ3Vt
+ZW50LCAwLCAwfQ0KIH07DQogDQpAQCAtNjAsMzMgKzYyLDQxIEBAIHVzYWdl
+IChGSUxFICogc3RyZWFtLCBpbnQgc3RhdHVzKQ0KIHsNCiAgIGlmICghaWdu
+b3JlX2ZsYWcgfHwgIXN0YXR1cykNCiAgICAgZnByaW50ZiAoc3RyZWFtLCAi
+XA0KLVVzYWdlOiAlcyAoLXV8LXd8LXQgVFlQRSkgWy1jIEhBTkRMRV0gWy1m
+IEZJTEVdIFtvcHRpb25zXSBOQU1FXG5cblwNCi0gICAgICAgJXMgWy1BREhQ
+U1ddIFxuXG5cDQotT3V0cHV0IHR5cGUgb3B0aW9ucyAocmVxdWlyZWQpOlxu
+XA0KLSAgLXV8LS11bml4CQlwcmludCBVbml4IGZvcm0gb2YgTkFNRSAoZGVm
+YXVsdClcblwNCi0gIC13fC0td2luZG93cwkJcHJpbnQgV2luZG93cyBmb3Jt
+IG9mIE5BTUUgXG5cblwNCi0gIC10fC0tdHlwZSAgICAgICAgICAgICBwcmlu
+dCBXaW5kb3dzIGZvcm0gb2YgTkFNRSB3aXRoIFRZUEUgb25lIG9mXG5cDQot
+ICAgICBkb3MgICAgICAgICAgICAgICAgZHJpdmUgbGV0dGVyIHdpdGggYmFj
+a3NsYXNoZXMgKEM6XFxXSU5OVClcblwNCi0gICAgIG1peGVkICAgICAgICAg
+ICAgICBkcml2ZSBsZXR0ZXIgd2l0aCByZWd1bGFyIHNsYXNoZXMgKEM6L1dJ
+Tk5UKVxuXA0KK1VzYWdlOiAlcyAoLWR8LW18LXV8LXd8LXQgVFlQRSkgWy1j
+IEhBTkRMRV0gWy1mIEZJTEVdIFtvcHRpb25zXSBOQU1FXG5cDQorICAgICAg
+ICVzIFstQURIUFNXXSBcblwNCitPdXRwdXQgdHlwZSBvcHRpb25zOlxuXA0K
+KyAgLWQsIC0tZG9zCSAgICAgICAgcHJpbnQgRE9TIChzaG9ydCkgZm9ybSBv
+ZiBOQU1FIChDOlxcUFJPR1JBfjFcXClcblwNCisgIC1tLCAtLW1peGVkICAg
+ICAgICAgICBsaWtlIC0td2luZG93cywgYnV0IHdpdGggcmVndWxhciBzbGFz
+aGVzIChDOi9XSU5OVClcblwNCisgIC11LCAtLXVuaXgJICAgICAgICAoZGVm
+YXVsdCkgcHJpbnQgVW5peCBmb3JtIG9mIE5BTUUgKC9jeWdkcml2ZS9jL3dp
+bm50KVxuXA0KKyAgLXcsIC0td2luZG93cyAgICAgICAgIHByaW50IFdpbmRv
+d3MgZm9ybSBvZiBOQU1FIChDOlxcV0lOTlQpXG5cDQorICAtdCwgLS10eXBl
+IFRZUEUgICAgICAgcHJpbnQgVFlQRSBmb3JtOiAnZG9zJywgJ21peGVkJywg
+J3VuaXgnLCBvciAnd2luZG93cydcblwNCiBQYXRoIGNvbnZlcnNpb24gb3B0
+aW9uczpcblwNCi0gIC1hfC0tYWJzb2x1dGUJCW91dHB1dCBhYnNvbHV0ZSBw
+YXRoXG5cDQotICAtY3wtLWNsb3NlIEhBTkRMRSAgICAgY2xvc2UgSEFORExF
+IChmb3IgdXNlIGluIGNhcHR1cmVkIHByb2Nlc3MpXG5cDQotICAtZnwtLWZp
+bGUgRklMRSAgICAgICAgcmVhZCBGSUxFIGZvciBpbnB1dDsgdXNlIC0gdG8g
+cmVhZCBmcm9tIFNURElOXG5cDQotICAtaXwtLWlnbm9yZQkJaWdub3JlIG1p
+c3NpbmcgYXJndW1lbnRcblwNCi0gIC1sfC0tbG9uZy1uYW1lCXByaW50IFdp
+bmRvd3MgbG9uZyBmb3JtIG9mIE5BTUUgKHdpdGggLXcgb25seSlcblwNCi0g
+IC1wfC0tcGF0aAkJTkFNRSBpcyBhIFBBVEggbGlzdCAoaS5lLiwgJy9iaW46
+L3Vzci9iaW4nKVxuXA0KLSAgLXN8LS1zaG9ydC1uYW1lCXByaW50IFdpbmRv
+d3Mgc2hvcnQgZm9ybSBvZiBOQU1FICh3aXRoIC13IG9ubHkpXG5cDQotU3lz
+dGVtIGluZm9ybWF0aW9uIG91dHB1dDpcblwNCi0gIC1BfC0tYWxsdXNlcnMJ
+CXVzZSBgQWxsIFVzZXJzJyBpbnN0ZWFkIG9mIGN1cnJlbnQgdXNlciBmb3Ig
+LUQsIC1QXG5cDQotICAtRHwtLWRlc2t0b3AJCW91dHB1dCBgRGVza3RvcCcg
+ZGlyZWN0b3J5IGFuZCBleGl0XG5cDQotICAtSHwtLWhvbWVyb290CQlvdXRw
+dXQgYFByb2ZpbGVzJyBkaXJlY3RvcnkgKGhvbWUgcm9vdCkgYW5kIGV4aXRc
+blwNCi0gIC1QfC0tc21wcm9ncmFtcwlvdXRwdXQgU3RhcnQgTWVudSBgUHJv
+Z3JhbXMnIGRpcmVjdG9yeSBhbmQgZXhpdFxuXA0KLSAgLVN8LS1zeXNkaXIJ
+CW91dHB1dCBzeXN0ZW0gZGlyZWN0b3J5IGFuZCBleGl0XG5cDQotICAtV3wt
+LXdpbmRpcgkJb3V0cHV0IGBXaW5kb3dzJyBkaXJlY3RvcnkgYW5kIGV4aXRc
+blxuXA0KKyAgLWEsIC0tYWJzb2x1dGUgICAgICAgIG91dHB1dCBhYnNvbHV0
+ZSBwYXRoXG5cDQorICAtbCwgLS1sb25nLW5hbWUJcHJpbnQgV2luZG93cyBs
+b25nIGZvcm0gb2YgTkFNRSAod2l0aCAtdywgLW0gb25seSlcblwNCisgIC1w
+LCAtLXBhdGgJICAgICAgICBOQU1FIGlzIGEgUEFUSCBsaXN0IChpLmUuLCAn
+L2JpbjovdXNyL2JpbicpXG5cDQorICAtcywgLS1zaG9ydC1uYW1lCXByaW50
+IERPUyAoc2hvcnQpIGZvcm0gb2YgTkFNRSAod2l0aCAtdywgLW0gb25seSlc
+blwNCitTeXN0ZW0gaW5mb3JtYXRpb246XG5cDQorICAtQSwgLS1hbGx1c2Vy
+cyAgICAgICAgdXNlIGBBbGwgVXNlcnMnIGluc3RlYWQgb2YgY3VycmVudCB1
+c2VyIGZvciAtRCwgLVBcblwNCisgIC1ELCAtLWRlc2t0b3AJCW91dHB1dCBg
+RGVza3RvcCcgZGlyZWN0b3J5IGFuZCBleGl0XG5cDQorICAtSCwgLS1ob21l
+cm9vdCAgICAgICAgb3V0cHV0IGBQcm9maWxlcycgZGlyZWN0b3J5IChob21l
+IHJvb3QpIGFuZCBleGl0XG5cDQorICAtUCwgLS1zbXByb2dyYW1zCW91dHB1
+dCBTdGFydCBNZW51IGBQcm9ncmFtcycgZGlyZWN0b3J5IGFuZCBleGl0XG5c
+DQorICAtUywgLS1zeXNkaXIJCW91dHB1dCBzeXN0ZW0gZGlyZWN0b3J5IGFu
+ZCBleGl0XG5cDQorICAtVywgLS13aW5kaXIJCW91dHB1dCBgV2luZG93cycg
+ZGlyZWN0b3J5IGFuZCBleGl0XG5cDQorIiwgcHJvZ19uYW1lLCBwcm9nX25h
+bWUpOw0KKyAgaWYgKHN0cmVhbSA9PSBzdGRvdXQpDQorICAgIHsNCisgICAg
+ZnByaW50ZiAoc3RyZWFtLCAiXA0KIE90aGVyIG9wdGlvbnM6XG5cDQotICAt
+aHwtLWhlbHAgICAgICAgICAgICAgb3V0cHV0IHVzYWdlIGluZm9ybWF0aW9u
+IGFuZCBleGl0XG5cDQotICAtdnwtLXZlcnNpb24JCW91dHB1dCB2ZXJzaW9u
+IGluZm9ybWF0aW9uIGFuZCBleGl0XG5cDQotICAiLCBwcm9nX25hbWUsIHBy
+b2dfbmFtZSk7DQorICAtZiwgLS1maWxlIEZJTEUgICAgICAgcmVhZCBGSUxF
+IGZvciBpbnB1dDsgdXNlIC0gdG8gcmVhZCBmcm9tIFNURElOXG5cDQorICAt
+bywgLS1vcHRpb24gICAgICAgICAgcmVhZCBvcHRpb25zIGZyb20gRklMRSBh
+cyB3ZWxsIChmb3IgdXNlIHdpdGggLS1maWxlKVxuXA0KKyAgLWMsIC0tY2xv
+c2UgSEFORExFICAgIGNsb3NlIEhBTkRMRSAoZm9yIHVzZSBpbiBjYXB0dXJl
+ZCBwcm9jZXNzKVxuXA0KKyAgLWksIC0taWdub3JlCQlpZ25vcmUgbWlzc2lu
+ZyBhcmd1bWVudFxuXA0KKyAgLWgsIC0taGVscCAgICAgICAgICAgIG91dHB1
+dCB1c2FnZSBpbmZvcm1hdGlvbiBhbmQgZXhpdFxuXA0KKyAgLXYsIC0tdmVy
+c2lvbgkJb3V0cHV0IHZlcnNpb24gaW5mb3JtYXRpb24gYW5kIGV4aXRcDQor
+Iik7DQorICAgIH0NCisgIGVsc2UNCisgICAgZnByaW50ZihzdHJlYW0sICJU
+cnkgYCVzIC0taGVscCcgZm9yIG1vcmUgaW5mb3JtYXRpb24uIiwgcHJvZ19u
+YW1lKTsNCiAgIGV4aXQgKGlnbm9yZV9mbGFnID8gMCA6IHN0YXR1cyk7DQog
+fQ0KIA0KQEAgLTU0Myw3ICs1NTMsNyBAQCBtYWluIChpbnQgYXJnYywgY2hh
+ciAqKmFyZ3YpDQogICAgIHByb2dfbmFtZSsrOw0KIA0KICAgcGF0aF9mbGFn
+ID0gMDsNCi0gIHVuaXhfZmxhZyA9IDA7DQorICB1bml4X2ZsYWcgPSAxOw0K
+ICAgd2luZG93c19mbGFnID0gMDsNCiAgIHNob3J0bmFtZV9mbGFnID0gMDsN
+CiAgIGxvbmduYW1lX2ZsYWcgPSAwOw0KQEAgLTU1Miw3ICs1NjIsNyBAQCBt
+YWluIChpbnQgYXJnYywgY2hhciAqKmFyZ3YpDQogICBvcHRpb25zX2Zyb21f
+ZmlsZV9mbGFnID0gMDsNCiAgIGFsbHVzZXJzX2ZsYWcgPSAwOw0KICAgb3V0
+cHV0X2ZsYWcgPSAwOw0KLSAgd2hpbGUgKChjID0gZ2V0b3B0X2xvbmcgKGFy
+Z2MsIGFyZ3YsIChjaGFyICopICJoYWM6ZjpvcHNsU3V2d3Q6V2lEUEFIIiwN
+CisgIHdoaWxlICgoYyA9IGdldG9wdF9sb25nIChhcmdjLCBhcmd2LCAoY2hh
+ciAqKSAiYWM6ZGY6aGlsbW9wc3Q6dXZ3QURIUFNXIiwNCiAJCQkgICBsb25n
+X29wdGlvbnMsIChpbnQgKikgTlVMTCkpICE9IEVPRikNCiAgICAgew0KICAg
+ICAgIHN3aXRjaCAoYykNCkBAIC01NjUsNiArNTc1LDE0IEBAIG1haW4gKGlu
+dCBhcmdjLCBjaGFyICoqYXJndikNCiAJICBDbG9zZUhhbmRsZSAoKEhBTkRM
+RSkgc3RydG91bCAob3B0YXJnLCBOVUxMLCAxNikpOw0KIAkgIGJyZWFrOw0K
+IA0KKwljYXNlICdkJzoNCisJICBpZiAod2luZG93c19mbGFnKSANCisJICAg
+IHVzYWdlIChzdGRlcnIsIDEpOw0KKwkgIHVuaXhfZmxhZyA9IDA7DQorCSAg
+d2luZG93c19mbGFnID0gMTsNCisJICBzaG9ydG5hbWVfZmxhZyA9IDE7DQor
+CSAgYnJlYWs7DQorDQogCWNhc2UgJ2YnOg0KIAkgIGZpbGVfYXJnID0gb3B0
+YXJnOw0KIAkgIGJyZWFrOw0KQEAgLTU3OCw0MCArNTk2LDYzIEBAIG1haW4g
+KGludCBhcmdjLCBjaGFyICoqYXJndikNCiAJICBicmVhazsNCiANCiAJY2Fz
+ZSAndSc6DQotCSAgaWYgKHVuaXhfZmxhZyB8fCB3aW5kb3dzX2ZsYWcpDQor
+CSAgaWYgKHdpbmRvd3NfZmxhZyB8fCBtaXhlZF9mbGFnKQ0KIAkgICAgdXNh
+Z2UgKHN0ZGVyciwgMSk7DQogCSAgdW5peF9mbGFnID0gMTsNCiAJICBicmVh
+azsNCiANCiAJY2FzZSAndyc6DQotCSAgaWYgKHVuaXhfZmxhZyB8fCB3aW5k
+b3dzX2ZsYWcpDQorCSAgaWYgKHdpbmRvd3NfZmxhZyB8fCBtaXhlZF9mbGFn
+KQ0KIAkgICAgdXNhZ2UgKHN0ZGVyciwgMSk7DQorCSAgdW5peF9mbGFnID0g
+MDsNCisJICB3aW5kb3dzX2ZsYWcgPSAxOw0KKwkgIGJyZWFrOw0KKw0KKwkg
+Y2FzZSAnbSc6DQorCSAgdW5peF9mbGFnID0gMDsNCiAJICB3aW5kb3dzX2Zs
+YWcgPSAxOw0KKwkgIG1peGVkX2ZsYWcgPSAxOw0KIAkgIGJyZWFrOw0KIA0K
+IAljYXNlICdsJzoNCi0JICBpZiAodW5peF9mbGFnIHx8IHNob3J0bmFtZV9m
+bGFnKQ0KLQkgICAgdXNhZ2UgKHN0ZGVyciwgMSk7DQogCSAgbG9uZ25hbWVf
+ZmxhZyA9IDE7DQogCSAgYnJlYWs7DQogDQogCWNhc2UgJ3MnOg0KLQkgIGlm
+ICh1bml4X2ZsYWcgfHwgbG9uZ25hbWVfZmxhZykNCi0JICAgIHVzYWdlIChz
+dGRlcnIsIDEpOw0KIAkgIHNob3J0bmFtZV9mbGFnID0gMTsNCiAJICBicmVh
+azsNCiANCiAJIGNhc2UgJ3QnOg0KLQkgIGlmICh1bml4X2ZsYWcgfHwgKG9w
+dGFyZyA9PSBOVUxMKSkNCisJICBpZiAob3B0YXJnID09IE5VTEwpDQogCSAg
+ICB1c2FnZSAoc3RkZXJyLCAxKTsNCiANCi0JICB3aW5kb3dzX2ZsYWcgPSAx
+Ow0KLQkgIHdpbmRvd3NfZm9ybWF0X2FyZyA9ICgqb3B0YXJnID09ICc9Jykg
+PyAob3B0YXJnICsgMSkgOiAob3B0YXJnKTsNCi0NCi0JICBpZiAoc3RyY2Fz
+ZWNtcCAod2luZG93c19mb3JtYXRfYXJnLCAibWl4ZWQiKSA9PSAwKQ0KKwkg
+IGZvcm1hdF90eXBlX2FyZyA9ICgqb3B0YXJnID09ICc9JykgPyAob3B0YXJn
+ICsgMSkgOiAob3B0YXJnKTsNCisJICBpZiAoc3RyY2FzZWNtcCAoZm9ybWF0
+X3R5cGVfYXJnLCAiZG9zIikgPT0gMCkNCisgICAgICAgICAgICB7DQorICAg
+ICAgICAgICAgaWYgKHdpbmRvd3NfZmxhZyB8fCBsb25nbmFtZV9mbGFnKQ0K
+KyAgICAgICAgICAgICAgdXNhZ2UgKHN0ZGVyciwgMSk7DQorICAgICAgICAg
+ICAgdW5peF9mbGFnID0gMDsNCisgICAgICAgICAgICB3aW5kb3dzX2ZsYWcg
+PSAxOw0KKyAgICAgICAgICAgIHNob3J0bmFtZV9mbGFnID0gMTsNCisgICAg
+ICAgICAgICB9DQorCSAgZWxzZSBpZiAoc3RyY2FzZWNtcCAoZm9ybWF0X3R5
+cGVfYXJnLCAibWl4ZWQiKSA9PSAwKQ0KKyAgICAgICAgICAgIHsNCisgICAg
+ICAgICAgICB1bml4X2ZsYWcgPSAwOw0KIAkgICAgbWl4ZWRfZmxhZyA9IDE7
+DQotCSAgZWxzZSBpZiAoc3RyY2FzZWNtcCAod2luZG93c19mb3JtYXRfYXJn
+LCAiZG9zIikgPT0gMCkNCi0JICAgIC8qIG5vdGhpbmcgKi87DQorICAgICAg
+ICAgICAgfQ0KKwkgIGVsc2UgaWYgKHN0cmNhc2VjbXAgKGZvcm1hdF90eXBl
+X2FyZywgInVuaXgiKSA9PSAwKQ0KKyAgICAgICAgICAgIHsNCisgICAgICAg
+ICAgICBpZiAod2luZG93c19mbGFnKQ0KKyAgICAgICAgICAgICAgdXNhZ2Ug
+KHN0ZGVyciwgMSk7DQorCSAgICB1bml4X2ZsYWcgPSAxOw0KKyAgICAgICAg
+ICAgIH0NCisJICBlbHNlIGlmIChzdHJjYXNlY21wIChmb3JtYXRfdHlwZV9h
+cmcsICJ3aW5kb3dzIikgPT0gMCkNCisgICAgICAgICAgICB7DQorICAgICAg
+ICAgICAgaWYgKG1peGVkX2ZsYWcpDQorICAgICAgICAgICAgICB1c2FnZSAo
+c3RkZXJyLCAxKTsNCisgICAgICAgICAgICB1bml4X2ZsYWcgPSAwOw0KKyAg
+ICAgICAgICAgIHdpbmRvd3NfZmxhZyA9IDE7DQorICAgICAgICAgICAgfQ0K
+IAkgIGVsc2UNCiAJICAgIHVzYWdlIChzdGRlcnIsIDEpOw0KIAkgIGJyZWFr
+Ow0KQEAgLTY1Miw3ICs2OTMsMTMgQEAgbWFpbiAoaW50IGFyZ2MsIGNoYXIg
+Kiphcmd2KQ0KICAgaWYgKG9wdGlvbnNfZnJvbV9maWxlX2ZsYWcgJiYgIWZp
+bGVfYXJnKQ0KICAgICB1c2FnZSAoc3RkZXJyLCAxKTsNCiANCi0gIGlmICgh
+b3V0cHV0X2ZsYWcgJiYgIXVuaXhfZmxhZyAmJiAhd2luZG93c19mbGFnICYm
+ICFvcHRpb25zX2Zyb21fZmlsZV9mbGFnKQ0KKyAgaWYgKGxvbmduYW1lX2Zs
+YWcgJiYgIXdpbmRvd3NfZmxhZykNCisgICAgdXNhZ2UgKHN0ZGVyciwgMSk7
+DQorDQorICBpZiAoc2hvcnRuYW1lX2ZsYWcgJiYgIXdpbmRvd3NfZmxhZykN
+CisgICAgdXNhZ2UgKHN0ZGVyciwgMSk7DQorDQorICBpZiAoIXVuaXhfZmxh
+ZyAmJiAhd2luZG93c19mbGFnICYmICFtaXhlZF9mbGFnICYmICFvcHRpb25z
+X2Zyb21fZmlsZV9mbGFnKQ0KICAgICB1c2FnZSAoc3RkZXJyLCAxKTsNCiAN
+CiAgIGlmICghZmlsZV9hcmcpDQpAQCAtNzE0LDYgKzc2MSwxMCBAQCBtYWlu
+IChpbnQgYXJnYywgY2hhciAqKmFyZ3YpDQogCQkgICAgc2hvcnRuYW1lX2Zs
+YWcgPSAwOw0KIAkJICAgIGxvbmduYW1lX2ZsYWcgPSAxOw0KIAkJICAgIGJy
+ZWFrOw0KKwkJICBjYXNlICdtJzoNCisJCSAgICB1bml4X2ZsYWcgPSAwOw0K
+KwkJICAgIHdpbmRvd3NfZmxhZyA9IDE7DQorCQkgICAgbWl4ZWRfZmxhZyA9
+IDE7DQogCQkgIGNhc2UgJ3cnOg0KIAkJICAgIHVuaXhfZmxhZyA9IDA7DQog
+CQkgICAgd2luZG93c19mbGFnID0gMTsNCg==
 
-	* include/winbase.h: Add file open flag
-	FILE_FLAG_FIRST_PIPE_INSTANCE.
-
-------=_NextPart_000_049E_01C21A07.E32F3410
-Content-Type: application/octet-stream;
-	name="w32api.patch"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment;
-	filename="w32api.patch"
-Content-length: 838
-
-Index: include/winbase.h=0A=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
-RCS file: /cvs/src/src/winsup/w32api/include/winbase.h,v=0A=
-retrieving revision 1.21=0A=
-diff -u -r1.21 winbase.h=0A=
---- include/winbase.h	19 Jun 2002 01:15:44 -0000	1.21=0A=
-+++ include/winbase.h	22 Jun 2002 15:09:15 -0000=0A=
-@@ -183,6 +183,9 @@=0A=
- #define FILE_FLAG_POSIX_SEMANTICS	16777216=0A=
- #define FILE_FLAG_OPEN_REPARSE_POINT	2097152=0A=
- #define FILE_FLAG_OPEN_NO_RECALL	1048576=0A=
-+#if (_WIN32_WINNT >=3D 0x0500) /* Needs win2k sp2 or XP or later */=0A=
-+#define FILE_FLAG_FIRST_PIPE_INSTANCE	524288=0A=
-+#endif=0A=
- #define CLRDTR 6=0A=
- #define CLRRTS 4=0A=
- #define SETDTR 5=0A=
-
-------=_NextPart_000_049E_01C21A07.E32F3410--
-
+---559023410-183831411-1024764758=:1308--
