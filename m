@@ -1,41 +1,33 @@
-From: Benjamin Riefenstahl <Benjamin.Riefenstahl@epost.de>
+From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: Console codepage
-Date: Sun, 28 Jan 2001 13:26:00 -0000
-Message-id: <m3vgqztllj.fsf@benny-ppc.crocodial.de>
-References: <u7l3fv26h.fsf@mail.epost.de> <20010128154852.A20701@redhat.com>
-X-SW-Source: 2001-q1/msg00040.html
+Date: Sun, 28 Jan 2001 14:21:00 -0000
+Message-id: <20010128172112.A21847@redhat.com>
+References: <u7l3fv26h.fsf@mail.epost.de> <20010128154852.A20701@redhat.com> <m3vgqztllj.fsf@benny-ppc.crocodial.de>
+X-SW-Source: 2001-q1/msg00041.html
 
-Hi Christopher,
+On Sun, Jan 28, 2001 at 10:26:00PM +0100, Benjamin Riefenstahl wrote:
+>Hi Christopher,
+>
+>Christopher Faylor <cgf@redhat.com> writes:
+>> Please look at the "Contributing" link on the Cygwin web page.  I've
+>> gone to some pains to update it lately by showing examples of common
+>> problems with patch submissions.  Unfortunately, there were several
+>> problems with this submission.
+>
+>O.k., I hope this one is better (see below). 
 
-Christopher Faylor <cgf@redhat.com> writes:
-> Please look at the "Contributing" link on the Cygwin web page.  I've
-> gone to some pains to update it lately by showing examples of common
-> problems with patch submissions.  Unfortunately, there were several
-> problems with this submission.
+It is better, but not quite right.  I hate to be picky, but if you look
+at other entries in the Cygwin ChangeLog, you'll see that this
+has some differences.
 
-O.k., I hope this one is better (see below). 
+New functions look like this:
 
-> In the meantime, however, please check out that page.  If you could
-> send an assignment form, too, that would help make sure that the
-> legalities are covered.
+	* foo.c (somefunc): New function.
 
-That will take some time, especially for a disclaimer from my company.
+And, you shouldn't list more than one file or function on a line.
 
-so long, benny
+If the feedback is positive for this patch, I'll make those corrections
+when it is checked in.
 
-
-Changelog entry:
-
-Sun Jan 28 22:05:00 2001  Benjamin Riefenstahl  <Benjamin.Riefenstahl@epost.de>
-
-        * fhandler_console.cc: Add functions cp_convert, con_to_str,
-        str_to_con.
-        * fhandler_console.cc,fhandler.h: Add method
-        fhandler_console::prepare_output.
-        * fhandler_console.cc (fhandler_console::read): Replace
-        OemToCharBuff with con_to_str.
-        * fhandler_console.cc (fhandler_console::write_normal): Replace
-        CharToOemBuff with fhandler_console::prepare_output.
-
-Patch (cvs diff -up):
+cgf
