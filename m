@@ -1,170 +1,55 @@
-From: egor duda <deo@logos-m.ru>
-To: cygwin-patches@cygwin.com
-Subject: Re: fileutils-4.0-3
-Date: Thu, 14 Jun 2001 00:41:00 -0000
-Message-id: <4385449600.20010614114100@logos-m.ru>
-References: <Pine.GSO.4.21.0106122003330.3791-100000@devmail.dev.tivoli.com> <20010613105845.D1144@cygbert.vinschen.de> <12812308989.20010613152159@logos-m.ru> <20010613153123.K1144@cygbert.vinschen.de>
-X-SW-Source: 2001-q2/msg00298.html
-Content-type: multipart/mixed; boundary="----------=_1583532848-65438-71"
+From: "Robert Collins" <robert.collins@itdomain.com.au>
+To: <cygwin-patches@cygwin.com>
+Subject: Re: updated: Categories and basic dependency handling for setup
+Date: Thu, 14 Jun 2001 01:00:00 -0000
+Message-id: <004301c0f4a8$2d6f0ef0$0200a8c0@lifelesswks>
+References: <EA18B9FA0FE4194AA2B4CDB91F73C0EF08F069@itdomain002.itdomain.net.au>
+X-SW-Source: 2001-q2/msg00299.html
 
-This is a multi-part message in MIME format...
+By the way, just to be clear: I'm not going to put a changelog together
+again, until the patch is fully acceptable - and I didn't mean to
+include my temp change to getpkgbyname in the patch (I was tracking a
+bug).
 
-------------=_1583532848-65438-71
-Content-length: 1700
+Rob
 
-Hi!
-
-Wednesday, 13 June, 2001 Corinna Vinschen vinschen@redhat.com wrote:
-
->> Wednesday, 13 June, 2001 Corinna Vinschen cygwin@cygwin.com wrote:
->> 
->> CV> Typically it's the other way around. If a Win32 application opens
->> CV> a file using the `CreateFile' call, it has exclusive access to the
->> CV> file while it's opened. If the application want's to share the
->> CV> file with other apps, it can do that by giving additional flags
->> CV> to `CreateFile' (FILE_SHARE_READ, FILE_SHARE_WRITE). Cygwin's
->> CV> open(2) call uses these flags by default.
->> 
->> well, CreateFile() accepts 0 as second argument, which is what we
->> need-- just query information no matter if anyone opened file in
->> DENYALL mode. i've just tested it on nt4.0 -- it works fine.
->> 
->> the only question is whether we should add new parameter to
->> fhandler::open(), say 'int cygwin_flags', or define new flag in
->> fcntl.h? for me, the first one looks preferable.
-
-CV> Wow. I just read the MSDN entry of CreateFile and I must admit
-CV> that I always slipped over that sentence without reading it.
-CV> It seems obvious now. If that really works (as you state),
-CV> it would be the ultimate solution for `fstat'.
-
-CV> I think you're right using some internal flag. It's not needed
-CV> to create a new fcntl flag.
-
-patch attached. i was a bit confused to discover, however, that
-stat_worker works somehow without it. AFAICS from stat_worker code,
-if it cannot open file, it still tries to get as much information as
-it can, file size and times included. so, du works for me either with
-or without this patch.
-
-Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
-query-open.diff
-query-open.ChangeLog
+----- Original Message -----
+From: "Robert Collins" <robert.collins@itdomain.com.au>
+To: <cygwin-patches@cygwin.com>
+Sent: Thursday, June 14, 2001 3:39 PM
+Subject: RE: updated: Categories and basic dependency handling for setup
 
 
-------------=_1583532848-65438-71
-Content-Type: text/plain; charset=us-ascii; name="query-open.ChangeLog"
-Content-Disposition: inline; filename="query-open.ChangeLog"
-Content-Transfer-Encoding: base64
-Content-Length: 419
 
-MjAwMS0wNi0xNCAgRWdvciBEdWRhICA8ZGVvQGxvZ29zLW0ucnU+CgoJKiBm
-aGFuZGxlci5jYyAoZmhhbmRsZXJfYmFzZTo6b3Blbik6IFNldCB3aW4zMiBh
-Y2Nlc3MgZmxhZ3MKCXRvIDAsIHdoZW4gcmVxdWVzdGVkLgoJKiBmaGFuZGxl
-ci5oOiBOZXcgc3RhdHVzIGZsYWcgRkhfUVVFUllPUEVOLgoJKGZoYW5kbGVy
-OjpnZXRfcXVlcnlfb3Blbik6IE5ldyBmdW5jdGlvbi4KCShmaGFuZGxlcjo6
-c2V0X3F1ZXJ5X29wZW4pOiBEaXR0by4KCSogc3lzY2FsbHMuY2MgKHN0YXRf
-d29ya2VyKTogUmVxdWVzdCBxdWVyeS1vbmx5IG9wZW4gbW9kZS4K
+> -----Original Message-----
+> From: Robert Collins
+>
+>
+> > -----Original Message-----
+> > From: Christopher Faylor [ mailto:cgf@redhat.com ]
+> > Sent: Thursday, June 14, 2001 1:53 PM
+> >
+> >
+> > On Thu, Jun 14, 2001 at 01:23:53PM +1000, Robert Collins wrote:
+> > >Take 5:]
+> >
+> > That installed cleanly modulo the recent commenting changes that
+> > I *just* checked in.
+>
+> Good timing :].
+>
+> > Do you have a marked up setup.ini that you're using?
+>
+> I have a couple of test ones, but not a fully done one. I'll put one
+> together.
+>
 
-------------=_1583532848-65438-71
-Content-Type: text/x-diff; charset=us-ascii; name="query-open.diff"
-Content-Disposition: inline; filename="query-open.diff"
-Content-Transfer-Encoding: base64
-Content-Length: 5726
+I have attach a development "group" package, and a roughly marked up
+setup.ini that demonstrates dependencies (multiple levels thereof) and
+using a signle emtpy package "development" to include all the
+development packages by name.
 
-SW5kZXg6IGZoYW5kbGVyLmNjCj09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KUkNT
-IGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvY3lnd2luL2ZoYW5kbGVyLmNj
-LHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjY0CmRpZmYgLXUgLXAgLTIgLXIx
-LjY0IGZoYW5kbGVyLmNjCi0tLSBmaGFuZGxlci5jYwkyMDAxLzA2LzA1IDA5
-OjIxOjM5CTEuNjQKKysrIGZoYW5kbGVyLmNjCTIwMDEvMDYvMTQgMDc6MDk6
-MDcKQEAgLTMwOSw1ICszMDksOSBAQCBmaGFuZGxlcl9iYXNlOjpvcGVuIChp
-bnQgZmxhZ3MsIG1vZGVfdCBtCiAgICAgfQogCi0gIGlmIChnZXRfZGV2aWNl
-ICgpID09IEZIX1RBUEUpCisgIGlmIChnZXRfcXVlcnlfb3BlbiAoKSkKKyAg
-ICB7CisgICAgICBhY2Nlc3MgPSAwOworICAgIH0KKyAgZWxzZSBpZiAoZ2V0
-X2RldmljZSAoKSA9PSBGSF9UQVBFKQogICAgIHsKICAgICAgIGFjY2VzcyA9
-IEdFTkVSSUNfUkVBRCB8IEdFTkVSSUNfV1JJVEU7CkluZGV4OiBmaGFuZGxl
-ci5oCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT0KUkNTIGZpbGU6IC9jdnMvc3Jj
-L3NyYy93aW5zdXAvY3lnd2luL2ZoYW5kbGVyLmgsdgpyZXRyaWV2aW5nIHJl
-dmlzaW9uIDEuNjIKZGlmZiAtdSAtcCAtMiAtcjEuNjIgZmhhbmRsZXIuaAot
-LS0gZmhhbmRsZXIuaAkyMDAxLzA1LzMxIDA1OjI1OjQ2CTEuNjIKKysrIGZo
-YW5kbGVyLmgJMjAwMS8wNi8xNCAwNzowOTowOApAQCAtNTEsMjggKzUxLDMw
-IEBAIGRldGFpbHMuICovCiBlbnVtCiB7Ci0gIEZIX1JCSU5BUlkgPSAweDAw
-MDAxMDAwLAkvKiBiaW5hcnkgcmVhZCBtb2RlICovCi0gIEZIX1dCSU5BUlkg
-PSAweDAwMDAyMDAwLAkvKiBiaW5hcnkgd3JpdGUgbW9kZSAqLwotICBGSF9D
-TE9FWEVDID0gMHgwMDAwNDAwMCwJLyogY2xvc2Utb24tZXhlYyAqLwotICBG
-SF9SQklOU0VUID0gMHgwMDAwODAwMCwJLyogYmluYXJ5IHJlYWQgbW9kZSBo
-YXMgYmVlbiBleHBsaWNpdGx5IHNldCAqLwotICBGSF9XQklOU0VUID0gMHgw
-MDAxMDAwMCwJLyogYmluYXJ5IHdyaXRlIG1vZGUgaGFzIGJlZW4gZXhwbGlj
-aXRseSBzZXQgKi8KLSAgRkhfQVBQRU5EICA9IDB4MDAwMjAwMDAsCS8qIGFs
-d2F5cyBhcHBlbmQgKi8KLSAgRkhfQVNZTkMgICA9IDB4MDAwNDAwMDAsCS8q
-IGFzeW5jIEkvTyAqLwotICBGSF9IQURFT0YgID0gMHgwMDA4MDAwMCwJLyog
-RU9GIHNlZW4gKi8KKyAgRkhfUkJJTkFSWQk9IDB4MDAwMDEwMDAsCS8qIGJp
-bmFyeSByZWFkIG1vZGUgKi8KKyAgRkhfV0JJTkFSWQk9IDB4MDAwMDIwMDAs
-CS8qIGJpbmFyeSB3cml0ZSBtb2RlICovCisgIEZIX0NMT0VYRUMJPSAweDAw
-MDA0MDAwLAkvKiBjbG9zZS1vbi1leGVjICovCisgIEZIX1JCSU5TRVQJPSAw
-eDAwMDA4MDAwLAkvKiBiaW5hcnkgcmVhZCBtb2RlIGhhcyBiZWVuIGV4cGxp
-Y2l0bHkgc2V0ICovCisgIEZIX1dCSU5TRVQJPSAweDAwMDEwMDAwLAkvKiBi
-aW5hcnkgd3JpdGUgbW9kZSBoYXMgYmVlbiBleHBsaWNpdGx5IHNldCAqLwor
-ICBGSF9BUFBFTkQJPSAweDAwMDIwMDAwLAkvKiBhbHdheXMgYXBwZW5kICov
-CisgIEZIX0FTWU5DCT0gMHgwMDA0MDAwMCwJLyogYXN5bmMgSS9PICovCisg
-IEZIX0hBREVPRgk9IDB4MDAwODAwMDAsCS8qIEVPRiBzZWVuICovCiAKLSAg
-RkhfU1lNTElOSyA9IDB4MDAxMDAwMDAsCS8qIGlzIGEgc3ltbGluayAqLwot
-ICBGSF9FWEVDQUJMID0gMHgwMDIwMDAwMCwJLyogZmlsZSBsb29rZWQgbGlr
-ZSBpdCB3b3VsZCBydW46CisgIEZIX1NZTUxJTksJPSAweDAwMTAwMDAwLAkv
-KiBpcyBhIHN5bWxpbmsgKi8KKyAgRkhfRVhFQ0FCTAk9IDB4MDAyMDAwMDAs
-CS8qIGZpbGUgbG9va2VkIGxpa2UgaXQgd291bGQgcnVuOgogCQkJCSAqIGVu
-ZHMgaW4gLmV4ZSBvciAuYmF0IG9yIGJlZ2lucyB3aXRoICMhICovCi0gIEZI
-X1c5NUxTQlVHPSAweDAwNDAwMDAwLAkvKiBzZXQgd2hlbiBsc2VlayBpcyBj
-YWxsZWQgYXMgYSBmbGFnIHRoYXQKKyAgRkhfVzk1TFNCVUcJPSAweDAwNDAw
-MDAwLAkvKiBzZXQgd2hlbiBsc2VlayBpcyBjYWxsZWQgYXMgYSBmbGFnIHRo
-YXQKIAkJCQkgKiBfd3JpdGUgc2hvdWxkIGNoZWNrIGlmIHdlJ3ZlIG1vdmVk
-IGJleW9uZAogCQkJCSAqIEVPRiwgemVybyBmaWxsaW5nIGlmIHNvLiAqLwot
-ICBGSF9OT0ZSTkFNRT0gMHgwMDgwMDAwMCwJLyogU2V0IGlmIHNob3VsZG4n
-dCBmcmVlIHVuaXhfcGF0aF9uYW1lIGFuZAorICBGSF9OT0ZSTkFNRQk9IDB4
-MDA4MDAwMDAsCS8qIFNldCBpZiBzaG91bGRuJ3QgZnJlZSB1bml4X3BhdGhf
-bmFtZSBhbmQKIAkJCQkgICB3aW5kb3dzX3BhdGhfbmFtZV8gb24gZGVzdHJ1
-Y3Rpb24uICovCi0gIEZIX05PRUlOVFIgPSAweDAxMDAwMDAwLAkvKiBTZXQg
-aWYgSS9PIHNob3VsZCBiZSB1bmludGVycnVwdGlibGUuICovCi0gIEZIX0ZG
-SVhVUCAgPSAweDAyMDAwMDAwLAkvKiBTZXQgaWYgbmVlZCB0byBmaXh1cCBh
-ZnRlciBmb3JrLiAqLwotICBGSF9MT0NBTCAgID0gMHgwNDAwMDAwMCwJLyog
-RmlsZSBpcyB1bml4IGRvbWFpbiBzb2NrZXQgKi8KLSAgRkhfRklGTyAgICA9
-IDB4MDgwMDAwMDAsCS8qIEZpbGUgaXMgRklGTyAqLwotICBGSF9JU1JFTU9U
-RT0gMHgxMDAwMDAwMCwJLyogRmlsZSBpcyBvbiBhIHJlbW90ZSBkcml2ZSAq
-LwotICBGSF9EQ0VYRUMgID0gMHgyMDAwMDAwMCwJLyogRG9uJ3QgY2FyZSBp
-ZiB0aGlzIGlzIGV4ZWN1dGFibGUgKi8KLSAgRkhfSEFTQUNMUyA9IDB4NDAw
-MDAwMDAsCS8qIFRydWUgaWYgZnMgb2YgZmlsZSBoYXMgQUNMUyAqLworICBG
-SF9OT0VJTlRSCT0gMHgwMTAwMDAwMCwJLyogU2V0IGlmIEkvTyBzaG91bGQg
-YmUgdW5pbnRlcnJ1cHRpYmxlLiAqLworICBGSF9GRklYVVAJPSAweDAyMDAw
-MDAwLAkvKiBTZXQgaWYgbmVlZCB0byBmaXh1cCBhZnRlciBmb3JrLiAqLwor
-ICBGSF9MT0NBTAk9IDB4MDQwMDAwMDAsCS8qIEZpbGUgaXMgdW5peCBkb21h
-aW4gc29ja2V0ICovCisgIEZIX0ZJRk8JPSAweDA4MDAwMDAwLAkvKiBGaWxl
-IGlzIEZJRk8gKi8KKyAgRkhfSVNSRU1PVEUJPSAweDEwMDAwMDAwLAkvKiBG
-aWxlIGlzIG9uIGEgcmVtb3RlIGRyaXZlICovCisgIEZIX0RDRVhFQwk9IDB4
-MjAwMDAwMDAsCS8qIERvbid0IGNhcmUgaWYgdGhpcyBpcyBleGVjdXRhYmxl
-ICovCisgIEZIX0hBU0FDTFMJPSAweDQwMDAwMDAwLAkvKiBUcnVlIGlmIGZz
-IG9mIGZpbGUgaGFzIEFDTFMgKi8KKyAgRkhfUVVFUllPUEVOCT0gMHg4MDAw
-MDAwMCwJLyogb3BlbiBmaWxlIHdpdGhvdXQgcmVxdWVzdGluZyBlaXRoZXIg
-cmVhZAorCQkJCSAgIG9yIHdyaXRlIGFjY2VzcyAqLwogCiAgIC8qIERldmlj
-ZSBmbGFncyAqLwpAQCAtMjUyLDQgKzI1NCw3IEBAIHB1YmxpYzoKICAgdm9p
-ZCBzZXRfYXBwZW5kX3AgKGludCB2YWwpIHsgRkhDT05EU0VURiAodmFsLCBB
-UFBFTkQpOyB9CiAgIHZvaWQgc2V0X2FwcGVuZF9wICgpIHsgRkhTRVRGIChB
-UFBFTkQpOyB9CisKKyAgaW50IGdldF9xdWVyeV9vcGVuICgpIHsgcmV0dXJu
-IEZISVNTRVRGIChRVUVSWU9QRU4pOyB9CisgIHZvaWQgc2V0X3F1ZXJ5X29w
-ZW4gKGludCB2YWwpIHsgRkhDT05EU0VURiAodmFsLCBRVUVSWU9QRU4pOyB9
-CiAKICAgaW50IGdldF9yZWFkYWhlYWRfdmFsaWQgKCkgeyByZXR1cm4gcmFp
-eGdldCA8IHJhbGVuOyB9CkluZGV4OiBzeXNjYWxscy5jYwo9PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL2N5
-Z3dpbi9zeXNjYWxscy5jYyx2CnJldHJpZXZpbmcgcmV2aXNpb24gMS4xMjEK
-ZGlmZiAtdSAtcCAtMiAtcjEuMTIxIHN5c2NhbGxzLmNjCi0tLSBzeXNjYWxs
-cy5jYwkyMDAxLzA2LzA5IDIxOjI1OjU1CTEuMTIxCisrKyBzeXNjYWxscy5j
-YwkyMDAxLzA2LzE0IDA3OjA5OjA4CkBAIC0xMDQ5LDQgKzEwNDksNSBAQCBz
-dGF0X3dvcmtlciAoY29uc3QgY2hhciAqY2FsbGVyLCBjb25zdCBjCiAJJiYg
-ZHR5cGUgIT0gRFJJVkVfVU5LTk9XTikpKQogICAgIHsKKyAgICAgIGZoLnNl
-dF9xdWVyeV9vcGVuIChUUlVFKTsKICAgICAgIG9yZXQgPSBmaC5vcGVuIChy
-ZWFsX3BhdGgsIE9fUkRPTkxZIHwgT19CSU5BUlkgfCBPX0RJUk9QRU4gfAog
-CQkJCSAobm9mb2xsb3cgPyBPX05PU1lNTElOSyA6IDApLCAwKTsK
+This patch will also play much nicer from a usability point of view.
 
-------------=_1583532848-65438-71--
+Rob
+
