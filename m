@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2935-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 31327 invoked by alias); 4 Sep 2002 14:07:16 -0000
+Return-Path: <cygwin-patches-return-2936-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 26778 invoked by alias); 4 Sep 2002 15:19:08 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,93 +7,34 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 31313 invoked from network); 4 Sep 2002 14:07:15 -0000
-Date: Wed, 04 Sep 2002 07:07:00 -0000
-From: egor duda <deo@logos-m.ru>
-Reply-To: egor duda <cygwin-patches@cygwin.com>
-Organization: deo
-X-Priority: 3 (Normal)
-Message-ID: <53165040475.20020904180525@logos-m.ru>
+Received: (qmail 26761 invoked from network); 4 Sep 2002 15:19:08 -0000
+Date: Wed, 04 Sep 2002 08:19:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: proposed how-autoload-works.txt
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="----------28841A712262E83"
-X-SW-Source: 2002-q3/txt/msg00383.txt.bz2
-
-------------28841A712262E83
+Subject: Re: proposed how-autoload-works.txt
+Message-ID: <20020904151853.GC1284@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <53165040475.20020904180525@logos-m.ru>
+Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-Content-length: 135
+Content-Disposition: inline
+In-Reply-To: <53165040475.20020904180525@logos-m.ru>
+User-Agent: Mutt/1.3.23.1i
+X-SW-Source: 2002-q3/txt/msg00384.txt.bz2
 
-Hi!
+On Wed, Sep 04, 2002 at 06:05:25PM +0400, egor duda wrote:
+>Spelling, grammar and factual corrections are welcome.
 
-  Spelling, grammar and factual corrections are welcome.
+I checked this in with some corrections.  I checked in your version
+first and my version second if you want to see what I did.
 
-egor.            mailto:deo@logos-m.ru icq 5165414 fidonet 2:5020/496.19
-------------28841A712262E83
-Content-Type: text/plain; name="how-autoload-works.txt"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="how-autoload-works.txt"
-Content-length: 3575
+It was basically just some minor grammar and formatting changes.
 
-Q29weXJpZ2h0IDIwMDIgUmVkIEhhdCBJbmMuLCBFZ29yIER1ZGEKCkhvdyBk
-b2VzIGZ1bmN0aW9uIGF1dG9sb2FkaW5nIHdvcms/CgpDeWd3aW4gaGFzIGFu
-IGFiaWxpdHkgdG8gaGFuZGxlIHdpbjMyIGZ1bmN0aW9ucyB3aGljaCBhcmUg
-cHJlc2VudCBvbiBzb21lIApwbGF0Zm9ybXMgYW5kIG5vdCBwcmVzZW50IG9u
-IG90aGVycyB2aWEgYXV0b2xvYWQgbWVjaGFuaXNtLiBJdCdzIGVzc2VudGlh
-bGx5IGEgCmxhenkgYmluZGluZyBvZiBzeW1ib2xzLiBJdCB3b3JrcyBhcyBm
-b2xsb3dpbmcuIEZvciAoYWxtb3N0KSBldmVyeSBmdW5jdGlvbiAKZnJvbSBP
-UyBBUEkgd2hpY2ggY3lnd2luIHVzZXMsIGEgc3R1YiBpcyBjcmVhdGVkIGlu
-IGZpbGUgYXV0b2xvYWQuY2MuIEVhY2ggCnJlZmVyZW5jZSB0byB0aGUgc3Vj
-aCBmdW5jdGlvbiBmcm9tIHdpbjMyIEFQSSBpbiBjeWd3aW4gZGxsIHNvdXJj
-ZSBjb2RlIGlzIAphY3R1YWxseSBwb2ludGluZyB0byB0aGlzIHN0dWIuCgpX
-aGVuIHRoZSBmdW5jdGlvbiwgc2F5IEdldENvbnNvbGVXaW5kb3coKSwgaXMg
-Y2FsbGVkIGZpcnN0IHRpbWUsIHRoZQpjb250cm9sIGlzIHBhc3NlZCB0byBp
-dHMgc3R1Yi4gU3R1YiB0cmllcyB0byBsb2FkIGFwcHJvcHJpYXRlIHN5c3Rl
-bSBkbGwKdmlhIExvYWRNb2R1bGUoKSBhbmQgZ2V0IGFjdHVhbCBmdW5jdGlv
-biBhZGRyZXNzIHZpYSBHZXRQcm9jQWRkcmVzcygpLgpJZiB0aGlzIG9wZXJh
-dGlvbiBzdWNjZWVkcywgdGhlIHN0dWIgaXMgInBhdGNoZWQiIHRvIHBhc3Mg
-Y29udHJvbCB0byBhY3R1YWwKYWRkcmVzcyBvZiBHZXRDb25zb2xlV2luZG93
-KCkgaW4gYXBwcm9wcmlhdGUgc3lzdGVtIGRsbCwgc28gdGhhdCBuZXh0CnRp
-bWUgd2Ugd29uJ3QgaGF2ZSB0byBsb2FkIGRsbCBhbmQgcGVyZm9ybSBhZGRy
-ZXNzIGxvb2t1cCBpbiBpdCBhZ2Fpbi4KCklmIExvYWRNb2R1bGUoKSBvciBH
-ZXRQcm9jQWRkcmVzcygpIGZhaWwsIChhbmQgb24gbnQ0IHRoZSBsYXR0ZXIg
-aW5kZWVkCmZhaWxzIGJlY2F1c2UgR2V0Q29uc29sZVdpbmRvdygpIGlzIG5v
-dCBhdmFpbGFibGUgaW4ga2VybmVsMzIuZGxsKSwgdGhlbgphcHBsaWNhdGlv
-biwgZGVwZW5kaW5nIG9uIHdoYXQga2luZCBvZiBzdHViIGlzIGNyZWF0ZWQg
-aW4gYXV0b2xvYWQuY2MsIGlzCmVpdGhlcjoKMSkgRXhpdHMgd2l0aCBmYXRh
-bCBlcnJvci4KMikgT3IgcmV0dXJucyBhIHByZWRlZmluZWQgdmFsdWUgaW5k
-aWNhdGluZyBhbiBlcnJvcjsgYW5kIHNldHMgZXJyb3IgY29kZSB0bwoxMjcg
-KEVSUk9SX1BST0NfTk9UX0ZPVU5EKS4KClRoYXQgaXMsIGFsbW9zdCBhbGwg
-dzMyYXBpIGZ1bmN0aW9ucyBhcmUgbGlua2VkIGludG8gY3lnd2luIGRsbApk
-eW5hbWljYWxseSwgYXQgcnVudGltZS4gClRoZSBjb3N0czoKMSkgQSB0aW55
-IG92ZXJoZWFkIGluIGZ1bmN0aW9uIGNhbGwgYXMgZWFjaCBjYWxsIGlzIHBl
-cmZvcm1lZCwgCmluZGlyZWN0bHksIHZpYSBzdHViLgpUaGUgYmVuZWZpdHM6
-CjEpIFNwZWVkdXAgYXQgc3RhcnR1cCB0aW1lLiBBcHBsaWNhdGlvbiBvbmx5
-IGxvYWRzIHRob3NlIGRsbHMgd2hpY2ggYXJlCmFjdHVhbGx5IG5lZWRlZC4g
-Rm9yIGV4YW1wbGUsIGlmIGFwcGxpY2F0aW9uIG5ldmVyIHVzZXMgc29ja2V0
-IGZ1bmN0aW9ucywKd2luc29jayBkbGxzIGFyZSBuZXZlciBsb2FkZWQuCjIp
-IEdyZWF0bHkgc2ltcGxpZnkgd2luY2FwIHN5c3RlbSAtLSB3ZSBkb24ndCBu
-ZWVkIHRvIGhhdmUgYSBzZXBhcmF0ZQpjYXBhYmlsaXR5IGZvciBldmVyeSB3
-aW4zMiBmdW5jdGlvbiB3aGljaCBtYXkgb3IgbWF5IG5vdCBiZSBwcmVzZW50
-IG9uCnBhcnRpY3VsYXIgd2luMzIgcGxhdGZvcm0uCjMpIEFsbG93IHNpbmds
-ZSBjeWd3aW4xLmRsbCBmb3IgYWxsIHdpbjMyIHBsYXRmb3Jtcy4KCklmIHlv
-dSdyZSBjaGFuZ2luZyBpbiBjeWd3aW4xLmRsbCBzb3VyY2UgY29kZSBhbmQg
-aWYgeW91IHVzZSBzb21lIGZ1bmN0aW9uIHRoYXQKd2FzIG5vdCB1c2VkIHRo
-ZXJlIGJlZm9yZSwgeW91IHNob3VsZCBhZGQgYSBzdHViIHNvIGl0IHdpbGwg
-YmUgYXV0b2xvYWRlZC4gVG8gCmRvIHNvLCBhZGQKCkxvYWRETExmdW5jRXgy
-IChmdW5jdGlvbiBuYW1lLCBwYXJhbWV0ZXIgYmxvY2sgbGVuZ3RoLCBkbGwg
-bmFtZSwgCiAgICAgICAgICAgICAgICBub24tZmF0YWxpdHkgZmxhZyAsIHZh
-bHVlIHRvIHJldHVybiBpZiBmdW5jdGlvbiBub3QgYXZhaWxhYmxlKQoKdG8g
-YXV0b2xvYWQuY2MgZmlsZS4KClBhcmFtZXRlciBibG9jayBsZW5ndGggaXMg
-YSBzdW0gb2Ygc2l6ZXMgKGluIGJ5dGVzKSBvZiBwYXJhbWV0ZXJzIHdoaWNo
-IGFyZSAKYmVpbmcgcGFzc2VkIHRvIHRoZSBmdW5jdGlvbi4gSWYgbm9uLWZh
-dGFsaXR5IGZsYWcgaXMgc2V0IHRvIDAsIHRoZW4gZmFpbHVyZSAKdG8gbG9h
-ZCBkbGwgYW5kIGZpbmQgYSBmdW5jdGlvbiB3aWxsIGNhdXNlIGZhdGFsIGVy
-cm9yLiBJZiBub24gZmF0YWxpdHkgZmxhZyAKaXMgc2V0IHRvIDEsIHRoZW4g
-Y2FsbCB0byB0aGUgZnVuY3Rpb24gd2lsbCByZXR1cm4gZGVmYXVsdCB2YWx1
-ZS4KWW91IGNhbiBhbHNvIHVzZSBzaG9ydGVyIHZlcnNpb25zIC0tIExvYWRE
-TExmdW5jRXggYW5kIExvYWRETExmdW5jLCBpZiB0aGUKZGVmYXVsdHMgdGhl
-eSBwcm92aWRlIHN1aXQgeW91ciBuZWVkcy4K
+I did add some words to explain that, after the first load, calls
+to an autoloaded function should be as fast as a normal function
+call.
 
-------------28841A712262E83--
+Thanks very much for providing this info.
+
+cgf
