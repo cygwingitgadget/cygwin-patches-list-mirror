@@ -1,20 +1,46 @@
-From: Robert Collins <robert.collins@itdomain.com.au>
+From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] setup.exe: Stop NetIO_HTTP from treating entire streamas a  header
-Date: Tue, 27 Nov 2001 15:43:00 -0000
-Message-ID: <1006904553.2048.20.camel@lifelesswks>
-References: <3C035977.BF151D0A@syntrex.com> <000601c17772$7c5ecfd0$2101a8c0@d8rc020b> <20011127184223.GA24028@redhat.com> <1006899141.2048.2.camel@lifelesswks> <20011127230925.GA5830@redhat.com>
-X-SW-Source: 2001-q4/msg00262.html
-Message-ID: <20011127154300.fJ07NuCZEJmo_7p-k1pWO1lW4cr5j7xKm7I8URCuUAs@z>
+Subject: Re: [PATCH] setup.exe: Stop NetIO_HTTP from treating entire stream as a  header
+Date: Tue, 27 Nov 2001 15:52:00 -0000
+Message-ID: <20011127235226.GA6537@redhat.com>
+References: <20011127230925.GA5830@redhat.com> <000001c1779c$e1fe2fa0$2101a8c0@NOMAD>
+X-SW-Source: 2001-q4/msg00263.html
+Message-ID: <20011127155200.B3UoATPTKoUxFT6p84zqK1tWdL3SD0IFJLM1uncdPCA@z>
 
-On Wed, 2001-11-28 at 10:09, Christopher Faylor wrote:
-> References?  A simple google search for 'NULL C++ deprecated' didn't
-> unearth this information.
+On Tue, Nov 27, 2001 at 05:40:22PM -0600, Gary R Van Sickle wrote:
+>> On Wed, Nov 28, 2001 at 09:12:20AM +1100, Robert Collins wrote:
+>> >On Wed, 2001-11-28 at 05:42, Christopher Faylor wrote:
+>> Regardless, I strenuously disagree with this.  It certainly is not
+>> deprecated in the Cygwin DLL.
+>
+>I'm with Chris on this one, again from a self-documenting standpoint if
+>nothing else.
 
-Deprecated may have been too strong a word. Anyway, references:
+Yes, that's my primary motivation.  Basically, it was the way I was
+taught and the reasons for doing it that way were drilled into my
+head.
 
-The C++ annotations - http://www.icce.rug.nl/documents/cpp.shtml 
-Specifically...
-http://www.icce.rug.nl/documents/cplusplus/cplusplus02.html#an78
+I used to really object to stuff like this, too:
 
-Rob
+	char *foo;
+	.
+	.
+	.
+	if (!foo)
+	   ...
+
+which is what started this thread.  I used to inform everyone who worked
+for me not to do this.  Then I had to work on Cygwin where this
+construction is rampant.  And, I believe that it is even mentioned in
+the GNU coding standard.
+
+So, my new internal rule is that the above is ok but foo != 0 is
+"wrong".
+
+When I test a character, I use c != '\0' and when I test a floating
+point value, I do f != 0.0.
+
+Btw, is google actually faster if someone else has just done the same
+search?  :-)
+
+cgf
