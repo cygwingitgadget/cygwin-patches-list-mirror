@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3276-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 31059 invoked by alias); 4 Dec 2002 13:40:45 -0000
+Return-Path: <cygwin-patches-return-3277-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 22255 invoked by alias); 4 Dec 2002 14:06:40 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,90 +7,131 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 30711 invoked from network); 4 Dec 2002 13:40:31 -0000
-Message-ID: <3DEE0571.6080703@ece.gatech.edu>
-Date: Wed, 04 Dec 2002 05:40:00 -0000
+Received: (qmail 22234 invoked from network); 4 Dec 2002 14:06:35 -0000
+Message-ID: <3DEE0B91.4070208@ece.gatech.edu>
+Date: Wed, 04 Dec 2002 06:06:00 -0000
 From: Charles Wilson <cwilson@ece.gatech.edu>
 User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.0.1) Gecko/20020823 Netscape/7.0
 X-Accept-Language: en-us, en
 MIME-Version: 1.0
-To: egor duda <cygwin-patches@cygwin.com>
+To:  cygwin-patches@cygwin.com
 Subject: Re: --enable-runtime-pseudo-reloc support in cygwin, take 3.
-References: <3DEB8ABD.80309@ece.gatech.edu> <10868607121.20021203111856@logos-m.ru>
+References: <3DEB8ABD.80309@ece.gatech.edu>
 Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Transfer-Encoding: 7bit
-X-SW-Source: 2002-q4/txt/msg00227.txt.bz2
+X-SW-Source: 2002-q4/txt/msg00228.txt.bz2
 
-egor duda wrote:
-
-> CW> OTOH, if you, Egor Duda, do NOT assign ownership to Red Hat, but instead 
-> CW> release the code as public domain FIRST, then mingw is free to take it.
+> CF> On Mon, Dec 02, 2002 at 01:30:24PM +0300, egor duda wrote:
+>>>2002-12-02  Egor Duda <deo@logos-m.ru>
+>>>
+>>>        * cygwin/lib/pseudo-reloc.c: New file.
+>>>        * cygwin/cygwin.sc: Add symbols to handle runtime pseudo-relocs.
+>>>        * cygwin/lib/_cygwin_crt0_common.cc: Perform pseudo-relocs during
+>>>        initialization of cygwin binary (.exe or .dll).
 > 
-> That's what i was meaning.
+> CF> I'm rapidly approaching the I-don't-care-anymore state for this 
+
+I hope that means "I don't care *either way* whether this goes in or 
+not".  And doesn't mean "this whole idea can go hang for all I care; 
+it's never going in".  :-)
+
+> CF> but I am
+> CF> not clear on why we need to add the changes to cygwin.sc.  This is for people
+> CF> who want to link the cygwin DLL without using the appropriate header files
+> CF> which label things as __declspec(dllexport) or using the appropriate libcygwin.a,
+> CF> right?  Why should that matter?
 > 
-> CW>   Also, Red Hat is free to take it as well -- but they do not have 
-> CW> "ownership" of the code; they simply are using it as they would any 
-> CW> other public domain code.  Which means Red Hat has the right to 
-> CW> re-release it under their proprietary cygwin license and under the GPL.
+> Yes, you're right. This part is not needed. It's probably been left
+> out from the "experimental" phase when i tried different ways to
+> handle pseudo-relocs. Here's the updated one.
 
-And I see that your most recent version was explicitly released into the 
-public domain.  As I understand it, this means that both cygwin and 
-mingw can take it -- and cygwin is even free to modify the code slightly 
-(or not!) and then claim the result as their very very own and stamp it 
-with the "This software is released under the Cygwin license blah blah 
-see section 10 of the GPL blah blah" stuff, if they want.  As I 
-understand it, public domain code is "free" for the stealing.  That's 
-why RMS doesn't like public domain, and why the GPL was invented in the 
-first place.
+I've tested Egor's patch and it seems to work just fine, as demonstrated 
+by the two test cases he posted last week, AND as demonstrated by the 
+test case posted to the binutils list some months ago (it tested 
+pseudo-reloc behavior in the child after a fork).
 
-> CW> But, I am not sure how your (Egor's) pre-existing "assignment form for 
-> CW> continuing contributions" affects this.  Does the assignment kick in 
-> CW> automatically, since this was developed against the cygwin source dist?
-> 
-> Yes, you're right there was such clause in copyright assignment.
-> That means that it's up to Redhat to place this code to public domain.
+I've also tested Egor's runtime reloc support with Ralf's binutils "use 
+the DLL as the import lib" and it ALSO works fine in all three cases.
 
-Nope, on second thought, you as the coder have to explicitly 
-"contribute" the code (in the sense of posting it for inclusion) AND 
-that very same code has to be *accepted* into the cygwin codebase. 
-Let's do a thought experiment:
+I'm going to continue using ld.exe-ralf and 
+cygwin1.dll-egor/libcygwin.a-egor for my day-to-day use, just to see if 
+something wacky crops up...
 
-I'm at home, and I whip up some modifications to cygwin.  I never show 
-them to anybody. I never distribute the binaries or the code.  Does Red 
-Hat own those changes, just because I have one of those letters in a 
-filing cabinet somewhere in North Carolina?  Of course not.
 
-Next, assume I publish those changes on the cygwin mailing list.  cgf 
-says, "Chuck, that's idiotic -- why would anyone every wnat to do 
-something as stupid as your patch?"  and rejects it.  Does Red Hat own 
-the code?  Naturally not.  Am I free to go use that same code in some 
-other (proprietary) project?  Yes -- assuming my "patch" was a new and 
-independent file/function, and not simply an extension of something 
-already in cygwin itself -- e.g. my "patch" was not, in itself, a 
-derivative work.
+Egor listed three ways to implement the runtime pseudo-reloc support. 
+His recent patches used method #1 below.
+---------------------------------------
+ > 1. Implement everything in application (in crt0.o)
 
-Now, if you DO post the code for inclusion AND it is accepted, then 
-things are a little fuzzy -- but I think the public domain'ing finesses 
-the issue.  You release these changes into the public domain -- and just 
-so happen to do that on a cygwin list.  ANYONE is free now to take that 
-code, include it in their proprietary product -- and slap a restrictive 
-proprietary license on it.
+Actually, egor's patch puts the code into the static portion of libcygwin.a.
 
-Including Red Hat.
+ > Benefits: Will work with any version of cygwin1.dll. All problems with
+ > lack of support from runtime are detected during application linking.
 
-So, Red Hat (e.g. cgf) can take the code and stick it in cygwin -- and 
-slap the funny cygwin crossbreed GPL/section 10 license on it.  "This 
-file is part of cygwin" and all that.
+Which means only the application builder needs the fancy runtime code 
+installed on his system (e.g. an up-to-date libcygwin.a).  The 
+application itself will run just fine on a not-so-up-to-date machine 
+(within reason, of course; you probably can't use gold-standard B20.1 
+release...)  Neat.
 
-AND mingw (earnie) is free to take the code and stick it into mingw -- 
-and keep the "public domain" status that your originally gave to the code.
+ > (Possibly) common code with mingw.
+ > Drawbacks: Will require rebuilding application in case we'll want
+ > change something.
 
-No problems.
+This is a danger, if  pseudo-reloc.c  ever changes.
 
-> Anyway, if there's any problems with that, the code can be easily
-> implemented independently. It's not a rocket science, after all.
+---------------------------------------
+ > 2. Implement everything in cygwin1.dll.
 
-Doubt any such problems will arise, since you've explicitly labeled the 
-code as public domain.
+This is right out.  Because:
+
+ > Drawbacks: GUI window popping up when "new" application is loaded with
+ > "old" runtime. Lack of support is detected only at application
+ > startup.
+
+"Entry point not found" -- not very informative for the casual user. 
+Bad bad bad bad.
+
+---------------------------------------
+ > 3. Implement actual relocation in dll, and call it from crt0 via
+ > cygwin_internal(). Check dll api version and print error message if
+ > runtime is too old.
+
+Meh.  Seems like a lot of overhead...
+
+ > Benefits: Easy to change relocation semantics without relinking
+ > application.
+
+Okay, so if pseudo-reloc.c changes, everybody gets the change by virtue 
+of installing a new cygwin1.dll.  But if pseudo-reloc.c changes, doesn't 
+that mean that something in the linker changed?
+
+ > Drawbacks: Lack of support is detected only at application
+ > startup.
+
+But at least we can customize the error message to something more 
+informative than "Entry point not found".
+
+But, both the builder and the user have to have the SAME version of 
+cygwin1.dll, right?  Because I built the program and tested it with 
+pseudo-relocs working THIS way, but the user tries to run the program 
+and pseudo-relocs on her machine work THAT way...  kaboom?
+
+ > Question: How can one distinguish console application from GUI one?
+ > What is the best wording for the error message?
+
+Yes, this scenario requires runtime warnings either console mode -- if 
+we're a console app -- or GUI WinPopups if we're a GUI app.  Not a 
+terrible problem; see the code snippet I posted Monday.  But it "feels" 
+like we'd be piling on more and more *stuff*...incompatibility detection 
+code, console-vs-GUI detection code, notification methods, 
+cygwin_internal() redirection...
+
+#1 is much simpler...and doesn't require *matching* cygwin1.dll's.
+---------------------------------------
+
+On balance, I agree that #1 is the best option.  Unless I run afoul of 
+some unforseen wackiness in the next few days, recommend inclusion as is 
+(in the most recent iteration, e.g. no cygwin.sc changes)
 
 --Chuck
