@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2827-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 13950 invoked by alias); 15 Aug 2002 20:00:34 -0000
+Return-Path: <cygwin-patches-return-2829-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 21160 invoked by alias); 15 Aug 2002 20:25:51 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,280 +7,86 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 13883 invoked from network); 15 Aug 2002 20:00:32 -0000
-Date: Thu, 15 Aug 2002 13:00:00 -0000
-From: Thomas Pfaff <tpfaff@gmx.net>
+Received: (qmail 21140 invoked from network); 15 Aug 2002 20:25:49 -0000
+Date: Thu, 15 Aug 2002 13:25:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] added locks around mutex and cond initialization
-Message-ID: <Pine.WNT.4.44.0208152028390.-376009@thomas.kefrig-pfaff.de>
-X-X-Sender: thomas@gw.kefrig-pfaff.de
-MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="4145170-6876-1029437221=:-376009"
-X-AntiVirus: scanned for viruses by NGI Next Generation Internet (http://www.ngi.de/)
-X-SW-Source: 2002-q3/txt/msg00276.txt.bz2
+Subject: Re: [PATCH] pthread_fork
+Message-ID: <20020815202601.GA21949@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <Pine.WNT.4.44.0208151941420.-376009@thomas.kefrig-pfaff.de>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Pine.WNT.4.44.0208151941420.-376009@thomas.kefrig-pfaff.de>
+User-Agent: Mutt/1.3.23.1i
+X-SW-Source: 2002-q3/txt/msg00277.txt.bz2
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
+On Thu, Aug 15, 2002 at 08:27:38PM +0200, Thomas Pfaff wrote:
+>
+>This patch will fix the pthread key related problems with fork (key value
+>is restored after fork) and some minor fork related fixes.
+>
+>Changelog:
+>
+>2002-08-15  Thomas Pfaff  <tpfaff@gmx.net>
+>
+>	* fork.cc (fork_child): fixup_after_fork call changed.
+>	(fork_parent): Added call to MTinterface->fixup_before_fork to
+>	save TLS values.
 
---4145170-6876-1029437221=:-376009
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-Content-length: 1177
+Sorry, but this is incorrect wording for a ChangeLog.  It should be
+something like:
 
+	* fork.cc (fork_child): Remove extra thread related fork fixup.
+	(fork_parent): Add call to MTinterface->fixup_before_fork to
+	save TLS values.
 
-The actual cond and mutex initialization have a race condition when 2
-threads initializes simultanous a mutex initialized with
-PTHREAD_MUTEX_INITIALIZE or a cond with PTHREAD_COND_INITIALIZER.
+The tense should be "present" as in say "Add" rather than "Added". I can
+see that a few incorrect usages have slipped in but I would appreciate
+it if future submissions adhere to this policy.
 
-I have added critical sections around mutex and cond creation to fix it.
+And, FWIW, I guarantee that I will flame anyone within an inch of their
+lives if they scour old ChangeLog entries trying to find occurrences
+that are counter to this rule.
 
-2002-08-15  Thomas Pfaff  <tpfaff@gmx.net>
+>diff -urp src.old/winsup/cygwin/fork.cc src/winsup/cygwin/fork.cc
+>--- src.old/winsup/cygwin/fork.cc	Wed Aug 14 14:20:24 2002
+>+++ src/winsup/cygwin/fork.cc	Wed Aug  7 17:14:54 2002
+>@@ -652,11 +654,15 @@ fork ()
+>   child_info_fork ch;
+> 
+>   int res = setjmp (ch.jmp);
+>-
+>   if (res)
+>     res = fork_child (grouped.hParent, grouped.first_dll, grouped.load_dlls);
+>   else
+>-    res = fork_parent (grouped.hParent, grouped.first_dll, grouped.load_dlls, esp, ch);
+>+    {
+>+      /* Protect pthread_keys local buf from being overwritten by simultanous forks */
+>+      EnterCriticalSection (&MT_INTERFACE->fork_lock);
+>+      res = fork_parent (grouped.hParent, grouped.first_dll, grouped.load_dlls, esp, ch);
+>+      LeaveCriticalSection (&MT_INTERFACE->fork_lock);
+>+    }
 
-	* thread.cc (MTinterface::Init): Initialize critical sections.
-	(MTinterface::fixup_after_fork): Ditto after fork.
-	(pthread_cond::TimedWait): mutex unlock calls changed.
-	(pthread_mutex::Lock): Return 0 on success.
-	(__pthread_cond_init): Added critical section around cond
-	creation.
-	(__pthread_cond_broadcast): Modified check for initialization.
-	(__pthread_cond_signal): Ditto.
-	(__pthread_cond_dowait); Ditto.
-	(__pthread_mutex_init): Added critical section around mutex
-	creation.
-	(__pthread_mutex_getprioceiling): Modified check for
-	initialization.
-	(__pthread_mutex_lock): Ditto.
-	(__pthread_mutex_trylock): Ditto.
-	(__pthread_mutex_unlock): Ditto.
-	(__pthread_mutex_setprioceiling): Ditto.
-	* thread.h (MUTEX_AUTOINIT_AND_CHECK): New define.
-	(COND_AUTOINIT_AND_CHECK): Ditto.
-	(MTinterface::mutex_lock): New member.
-	(MTinterface::cond_lock): Ditto.
+Please just add additional locks close to the existing malloc lock/unlock.  It doesn't make
+sense for the critical section to be the entire fork_parent function. 
 
---4145170-6876-1029437221=:-376009
-Content-Type: TEXT/plain; name="pthread_locks.patch"
-Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.WNT.4.44.0208152047010.-376009@thomas.kefrig-pfaff.de>
-Content-Description: 
-Content-Disposition: attachment; filename="pthread_locks.patch"
-Content-length: 13120
+>   MALLOC_CHECK;
+>   syscall_printf ("%d = fork()", res);
+>diff -urp src.old/winsup/cygwin/init.cc src/winsup/cygwin/init.cc
+>--- src.old/winsup/cygwin/init.cc	Wed Aug 14 14:20:24 2002
+>+++ src/winsup/cygwin/init.cc	Wed Aug 14 14:23:30 2002
+>@@ -18,6 +18,9 @@ int NO_COPY dynamically_loaded;
+> extern "C" int
+> WINAPI dll_entry (HANDLE h, DWORD reason, void *static_load)
+> {
+>+  if (reason == DLL_THREAD_DETACH || reason == DLL_PROCESS_DETACH)
+>+    MT_INTERFACE->run_key_dtors ();
+>+
 
-ZGlmZiAtdXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi90aHJlYWQuY2Mgc3Jj
-L3dpbnN1cC9jeWd3aW4vdGhyZWFkLmNjCi0tLSBzcmMub2xkL3dpbnN1cC9j
-eWd3aW4vdGhyZWFkLmNjCVdlZCBBdWcgMTQgMTQ6Mjg6NTMgMjAwMgorKysg
-c3JjL3dpbnN1cC9jeWd3aW4vdGhyZWFkLmNjCVdlZCBBdWcgMTQgMTQ6Mjk6
-MzkgMjAwMgpAQCAtMTg2LDYgKzE4Niw4IEBAIE1UaW50ZXJmYWNlOjpJbml0
-IChpbnQgZm9ya2VkKQogICBpZiAoIWZvcmtlZCkKICAgICB7CiAgICAgICBp
-bml0X2NyaXRfc2VjdGlvbiAoJmZvcmtfbG9jayk7CisgICAgICBpbml0X2Ny
-aXRfc2VjdGlvbiAoJm11dGV4X2xvY2spOworICAgICAgaW5pdF9jcml0X3Nl
-Y3Rpb24gKCZjb25kX2xvY2spOwogCiAgICAgICBpbml0X3B0aHJlYWQgKCZt
-YWludGhyZWFkKTsKICAgICAgIC8qc3RvcmUgdGhlIG1haW4gdGhyZWFkJ3Mg
-cmVlbnRzIGFuZCBzZWxmIHBvaW50ZXIgKi8KQEAgLTI3Myw2ICsyNzUsOCBA
-QCBNVGludGVyZmFjZTo6Zml4dXBfYWZ0ZXJfZm9yayAodm9pZCkKICAgICB9
-CiAKICAgaW5pdF9jcml0X3NlY3Rpb24gKCZmb3JrX2xvY2spOworICBpbml0
-X2NyaXRfc2VjdGlvbiAoJm11dGV4X2xvY2spOworICBpbml0X2NyaXRfc2Vj
-dGlvbiAoJmNvbmRfbG9jayk7CiAKICAgcHRocmVhZCAqdGhyZWFkID0gcHRo
-cmVhZDo6c2VsZihmYWxzZSk7CiAgIGlmICghdGhyZWFkKQpAQCAtOTAxLDI3
-ICs5MDUsMTkgQEAgaW50CiBwdGhyZWFkX2NvbmQ6OlRpbWVkV2FpdCAoRFdP
-UkQgZHdNaWxsaXNlY29uZHMpCiB7CiAgIERXT1JEIHJ2OwotICBpZiAoIXdp
-bmNhcC5oYXNfc2lnbmFsX29iamVjdF9hbmRfd2FpdCAoKSkKLSAgICB7Ci0g
-ICAgICAvLyBGSVhNRTogcmFjZSBjb25kaXRpb24gKHBvdGVudGlhbGx5IGRy
-b3AgZXZlbnRzCi0gICAgICAvLyBQb3NzaWJsZSBzb2x1dGlvbiAoc2luZ2xl
-IHByb2Nlc3Mgb25seSkgLSBwbGFjZSB0aGlzIGluIGEgY3JpdGljYWwgc2Vj
-dGlvbi4KLSAgICAgIFJlbGVhc2VNdXRleCAobXV0ZXgtPndpbjMyX29ial9p
-ZCk7Ci0gICAgICBydiA9IFdhaXRGb3JTaW5nbGVPYmplY3QgKHdpbjMyX29i
-al9pZCwgZHdNaWxsaXNlY29uZHMpOwotICAgIH0KLSAgZWxzZQotICAgIHsK
-LSAgICAgIExlYXZlQ3JpdGljYWxTZWN0aW9uICgmbXV0ZXgtPmNyaXRpY2Fs
-c2VjdGlvbik7Ci0gICAgICBydiA9IFdhaXRGb3JTaW5nbGVPYmplY3QgKHdp
-bjMyX29ial9pZCwgZHdNaWxsaXNlY29uZHMpOworCisgIG11dGV4LT5Vbkxv
-Y2sgKCk7CisgIHJ2ID0gV2FpdEZvclNpbmdsZU9iamVjdCAod2luMzJfb2Jq
-X2lkLCBkd01pbGxpc2Vjb25kcyk7CiAjaWYgMAogICAgIC8qIHdlIG5lZWQg
-dG8gdXNlIG5hdGl2ZSB3aW4zMiBtdXRleCdzIGhlcmUsIGJlY2F1c2UgdGhl
-IGN5Z3dpbiBvbmVzIG5vdyB1c2UKICAgICAgKiBjcml0aWNhbCBzZWN0aW9u
-cywgd2hpY2ggYXJlIGZhc3RlciwgYnV0IGludHJvZHVjZSBhIHJhY2UgX2hl
-cmVfLiBVbnRpbCB0aGVuCiAgICAgICogVGhlIE5UIHZhcmlhbnQgb2YgdGhl
-IGNvZGUgaXMgcmVkdW5kYW50LgogICAgICAqLwogCi0gICAgcnYgPSBTaWdu
-YWxPYmplY3RBbmRXYWl0IChtdXRleC0+d2luMzJfb2JqX2lkLCB3aW4zMl9v
-YmpfaWQsIGR3TWlsbGlzZWNvbmRzLAotCQkJIGZhbHNlKTsKKyAgcnYgPSBT
-aWduYWxPYmplY3RBbmRXYWl0IChtdXRleC0+d2luMzJfb2JqX2lkLCB3aW4z
-Ml9vYmpfaWQsIGR3TWlsbGlzZWNvbmRzLAorICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgIGZhbHNlKTsKICNlbmRpZgotICAgIH0KKwogICBzd2l0Y2gg
-KHJ2KQogICAgIHsKICAgICBjYXNlIFdBSVRfRkFJTEVEOgpAQCAtMTEwMyw3
-ICsxMDk5LDggQEAgcHRocmVhZF9tdXRleDo6TG9jayAoKQogICAgICAgcmV0
-dXJuIDA7CiAgICAgfQogICAvKiBGSVhNRTogUmV0dXJuIDAgb24gc3VjY2Vz
-cyAqLwotICByZXR1cm4gV2FpdEZvclNpbmdsZU9iamVjdCAod2luMzJfb2Jq
-X2lkLCBJTkZJTklURSk7CisgIFdhaXRGb3JTaW5nbGVPYmplY3QgKHdpbjMy
-X29ial9pZCwgSU5GSU5JVEUpOworICByZXR1cm4gMDsKIH0KIAogLyogcmV0
-dXJucyBub24temVybyBvbiBmYWlsdXJlICovCkBAIC0xODg5LDMxICsxODg2
-LDQxIEBAIF9fcHRocmVhZF9jb25kX2Rlc3Ryb3kgKHB0aHJlYWRfY29uZF90
-ICoKIGludAogX19wdGhyZWFkX2NvbmRfaW5pdCAocHRocmVhZF9jb25kX3Qg
-KmNvbmQsIGNvbnN0IHB0aHJlYWRfY29uZGF0dHJfdCAqYXR0cikKIHsKKyAg
-aW50IHJlc3VsdCA9IDA7CisKKyAgRW50ZXJDcml0aWNhbFNlY3Rpb24gKCZN
-VF9JTlRFUkZBQ0UtPmNvbmRfbG9jayk7CisKICAgaWYgKGF0dHIgJiYgdmVy
-aWZ5YWJsZV9vYmplY3RfaXN2YWxpZCAoYXR0ciwgUFRIUkVBRF9DT05EQVRU
-Ul9NQUdJQykgIT0gVkFMSURfT0JKRUNUKQotICAgIHJldHVybiBFSU5WQUw7
-CisgICAgeworICAgICAgcmVzdWx0ID0gRUlOVkFMOworICAgICAgZ290byBk
-b25lOworICAgIH0KIAogICBpZiAodmVyaWZ5YWJsZV9vYmplY3RfaXN2YWxp
-ZCAoY29uZCwgUFRIUkVBRF9DT05EX01BR0lDLCBQVEhSRUFEX0NPTkRfSU5J
-VElBTElaRVIpID09IFZBTElEX09CSkVDVCkKLSAgICByZXR1cm4gRUJVU1k7
-CisgICAgeworICAgICAgcmVzdWx0ID0gRUJVU1k7CisgICAgICBnb3RvIGRv
-bmU7CisgICAgfQogCiAgICpjb25kID0gbmV3IHB0aHJlYWRfY29uZCAoYXR0
-ciA/ICgqYXR0cikgOiBOVUxMKTsKLQogICBpZiAodmVyaWZ5YWJsZV9vYmpl
-Y3RfaXN2YWxpZCAoY29uZCwgUFRIUkVBRF9DT05EX01BR0lDKSAhPSBWQUxJ
-RF9PQkpFQ1QpCiAgICAgewogICAgICAgZGVsZXRlICgqY29uZCk7CiAgICAg
-ICAqY29uZCA9IE5VTEw7Ci0gICAgICByZXR1cm4gRUFHQUlOOworICAgICAg
-cmVzdWx0ID0gRUFHQUlOOworICAgICAgZ290byBkb25lOwogICAgIH0KIAot
-ICByZXR1cm4gMDsKKyBkb25lOgorICBMZWF2ZUNyaXRpY2FsU2VjdGlvbiAo
-Jk1UX0lOVEVSRkFDRS0+Y29uZF9sb2NrKTsKKworICByZXR1cm4gcmVzdWx0
-OwogfQogCiBpbnQKIF9fcHRocmVhZF9jb25kX2Jyb2FkY2FzdCAocHRocmVh
-ZF9jb25kX3QgKmNvbmQpCiB7Ci0gIGlmICgqY29uZCA9PSBQVEhSRUFEX0NP
-TkRfSU5JVElBTElaRVIpCi0gICAgX19wdGhyZWFkX2NvbmRfaW5pdCAoY29u
-ZCwgTlVMTCk7Ci0gIGlmICh2ZXJpZnlhYmxlX29iamVjdF9pc3ZhbGlkIChj
-b25kLCBQVEhSRUFEX0NPTkRfTUFHSUMpICE9IFZBTElEX09CSkVDVCkKLSAg
-ICByZXR1cm4gRUlOVkFMOworICBDT05EX0FVVE9JTklUX0FORF9DSEVDSyhj
-b25kKTsKIAogICAoKmNvbmQpLT5Ccm9hZENhc3QgKCk7CiAKQEAgLTE5MjMs
-MTAgKzE5MzAsNyBAQCBfX3B0aHJlYWRfY29uZF9icm9hZGNhc3QgKHB0aHJl
-YWRfY29uZF90CiBpbnQKIF9fcHRocmVhZF9jb25kX3NpZ25hbCAocHRocmVh
-ZF9jb25kX3QgKmNvbmQpCiB7Ci0gIGlmICgqY29uZCA9PSBQVEhSRUFEX0NP
-TkRfSU5JVElBTElaRVIpCi0gICAgX19wdGhyZWFkX2NvbmRfaW5pdCAoY29u
-ZCwgTlVMTCk7Ci0gIGlmICh2ZXJpZnlhYmxlX29iamVjdF9pc3ZhbGlkIChj
-b25kLCBQVEhSRUFEX0NPTkRfTUFHSUMpICE9IFZBTElEX09CSkVDVCkKLSAg
-ICByZXR1cm4gRUlOVkFMOworICBDT05EX0FVVE9JTklUX0FORF9DSEVDSyhj
-b25kKTsKIAogICAoKmNvbmQpLT5TaWduYWwgKCk7CiAKQEAgLTE5NDEsMTYg
-KzE5NDUsMTEgQEAgX19wdGhyZWFkX2NvbmRfZG93YWl0IChwdGhyZWFkX2Nv
-bmRfdCAqYwogLy8gYnJvYWRjYXN0IG9jY3VycyAtICB3ZSBtaXNzIHRoZSBi
-cm9hZGNhc3QuIHRoZSBmdW5jdGlvbnMgYXJlbid0IHNwbGl0IHByb3Blcmx5
-LgogICBpbnQgcnY7CiAgIHB0aHJlYWRfbXV0ZXggKip0aGVtdXRleCA9IE5V
-TEw7Ci0gIGlmICgqbXV0ZXggPT0gUFRIUkVBRF9NVVRFWF9JTklUSUFMSVpF
-UikKLSAgICBfX3B0aHJlYWRfbXV0ZXhfaW5pdCAobXV0ZXgsIE5VTEwpOwot
-ICB0aGVtdXRleCA9IG11dGV4OwotICBpZiAoKmNvbmQgPT0gUFRIUkVBRF9D
-T05EX0lOSVRJQUxJWkVSKQotICAgIF9fcHRocmVhZF9jb25kX2luaXQgKGNv
-bmQsIE5VTEwpOwogCi0gIGlmICh2ZXJpZnlhYmxlX29iamVjdF9pc3ZhbGlk
-ICh0aGVtdXRleCwgUFRIUkVBRF9NVVRFWF9NQUdJQykgIT0gVkFMSURfT0JK
-RUNUKQotICAgIHJldHVybiBFSU5WQUw7Ci0gIGlmICh2ZXJpZnlhYmxlX29i
-amVjdF9pc3ZhbGlkIChjb25kLCBQVEhSRUFEX0NPTkRfTUFHSUMpICE9IFZB
-TElEX09CSkVDVCkKLSAgICByZXR1cm4gRUlOVkFMOworICBNVVRFWF9BVVRP
-SU5JVF9BTkRfQ0hFQ0sobXV0ZXgpOworICBDT05EX0FVVE9JTklUX0FORF9D
-SEVDSyhjb25kKTsKKworICB0aGVtdXRleCA9IG11dGV4OwogCiAgIC8qaWYg
-dGhlIGNvbmQgdmFyaWFibGUgaXMgYmxvY2tlZCwgdGhlbiB0aGUgYWJvdmUg
-dGltZXIgdGVzdCBtYXliZSB3cm9uZy4gKnNocnVnKiovCiAgIGlmIChwdGhy
-ZWFkX211dGV4X2xvY2sgKCYoKmNvbmQpLT5jb25kX2FjY2VzcykpCkBAIC0y
-MTA2LDMyICsyMTA1LDM3IEBAIF9fcHRocmVhZF9lcXVhbCAocHRocmVhZF90
-ICp0MSwgcHRocmVhZF8KIAogLypNdXRleGVzICAqLwogCi0vKkZJWE1FOiB0
-aGVyZSdzIGEgcG90ZW50aWFsIHJhY2Ugd2l0aCBQVEhSRUFEX01VVEVYX0lO
-SVRBTElaRVI6Ci0gKnRoZSBtdXRleCBpcyBub3QgYWN0dWFsbHkgaW5pdGVk
-IHVudGlsIHRoZSBmaXJzdCB1c2UuCi0gKlNvIHR3byB0aHJlYWRzIHRyeWlu
-ZyB0byBsb2NrL3RyeWxvY2sgbWF5IGNvbGxpZGUuCi0gKlNvbHV0aW9uOiB3
-ZSBuZWVkIGEgZ2xvYmFsIG11dGV4IG9uIG11dGV4IGNyZWF0aW9uLCBvciBw
-b3NzaWJseSBzaW1wbHkKLSAqb24gYWxsIGNvbnN0cnVjdG9ycyB0aGF0IGFs
-bG93IElOSVRJQUxJWkVSIG1hY3Jvcy4KLSAqdGhlIGxvY2sgc2hvdWxkIGJl
-IHZlcnkgc21hbGw6IG9ubHkgYXJvdW5kIHRoZSBpbml0IHJvdXRpbmUsIG5v
-dAotICpldmVyeSB0ZXN0LCBvciBhbGwgbXV0ZXggYWNjZXNzIHdpbGwgYmUg
-c3luY2hyb25pc2VkLgotICovCi0KIGludAotX19wdGhyZWFkX211dGV4X2lu
-aXQgKHB0aHJlYWRfbXV0ZXhfdCAqbXV0ZXgsCi0JCSAgICAgIGNvbnN0IHB0
-aHJlYWRfbXV0ZXhhdHRyX3QgKmF0dHIpCitfX3B0aHJlYWRfbXV0ZXhfaW5p
-dCAocHRocmVhZF9tdXRleF90ICptdXRleCwgY29uc3QgcHRocmVhZF9tdXRl
-eGF0dHJfdCAqYXR0cikKIHsKLSAgaWYgKGF0dHIgJiYgdmVyaWZ5YWJsZV9v
-YmplY3RfaXN2YWxpZCAoYXR0ciwgUFRIUkVBRF9NVVRFWEFUVFJfTUFHSUMp
-ICE9IFZBTElEX09CSkVDVCB8fCBjaGVja192YWxpZF9wb2ludGVyIChtdXRl
-eCkpCi0gICAgcmV0dXJuIEVJTlZBTDsKKyAgaW50IHJlc3VsdCA9IDA7CisK
-KyAgRW50ZXJDcml0aWNhbFNlY3Rpb24gKCZNVF9JTlRFUkZBQ0UtPm11dGV4
-X2xvY2spOworCisgIGlmIChhdHRyICYmIHZlcmlmeWFibGVfb2JqZWN0X2lz
-dmFsaWQgKGF0dHIsIFBUSFJFQURfTVVURVhBVFRSX01BR0lDKSAhPSBWQUxJ
-RF9PQkpFQ1QpCisgICAgeworICAgICAgcmVzdWx0ID0gRUlOVkFMOworICAg
-ICAgZ290byBkb25lOworICAgIH0KIAogICBpZiAodmVyaWZ5YWJsZV9vYmpl
-Y3RfaXN2YWxpZCAobXV0ZXgsIFBUSFJFQURfTVVURVhfTUFHSUMsIFBUSFJF
-QURfTVVURVhfSU5JVElBTElaRVIpID09IFZBTElEX09CSkVDVCkKLSAgICBy
-ZXR1cm4gRUJVU1k7CisgICAgeworICAgICAgcmVzdWx0ID0gRUJVU1k7Cisg
-ICAgICBnb3RvIGRvbmU7CisgICAgfQogCiAgICptdXRleCA9IG5ldyBwdGhy
-ZWFkX211dGV4IChhdHRyID8gKCphdHRyKSA6IE5VTEwpOwogICBpZiAodmVy
-aWZ5YWJsZV9vYmplY3RfaXN2YWxpZCAobXV0ZXgsIFBUSFJFQURfTVVURVhf
-TUFHSUMpICE9IFZBTElEX09CSkVDVCkKICAgICB7CiAgICAgICBkZWxldGUg
-KCptdXRleCk7CiAgICAgICAqbXV0ZXggPSBOVUxMOwotICAgICAgcmV0dXJu
-IEVBR0FJTjsKKyAgICAgIHJlc3VsdCA9IEVBR0FJTjsKKyAgICAgIGdvdG8g
-ZG9uZTsKICAgICB9CisKKyBkb25lOgorICBMZWF2ZUNyaXRpY2FsU2VjdGlv
-biAoJk1UX0lOVEVSRkFDRS0+bXV0ZXhfbG9jayk7CisKICAgcmV0dXJuIDA7
-CiB9CiAKQEAgLTIxMzksMTEgKzIxNDMsOSBAQCBpbnQKIF9fcHRocmVhZF9t
-dXRleF9nZXRwcmlvY2VpbGluZyAoY29uc3QgcHRocmVhZF9tdXRleF90ICpt
-dXRleCwKIAkJCQlpbnQgKnByaW9jZWlsaW5nKQogewotICBwdGhyZWFkX211
-dGV4X3QgKnRoZW11dGV4ID0gKHB0aHJlYWRfbXV0ZXhfdCAqKSBtdXRleDsK
-LSAgaWYgKCptdXRleCA9PSBQVEhSRUFEX01VVEVYX0lOSVRJQUxJWkVSKQot
-ICAgIF9fcHRocmVhZF9tdXRleF9pbml0ICgocHRocmVhZF9tdXRleF90ICop
-IG11dGV4LCBOVUxMKTsKLSAgaWYgKHZlcmlmeWFibGVfb2JqZWN0X2lzdmFs
-aWQgKHRoZW11dGV4LCBQVEhSRUFEX01VVEVYX01BR0lDKSAhPSBWQUxJRF9P
-QkpFQ1QpCi0gICAgcmV0dXJuIEVJTlZBTDsKKyAgLy8gU2luY2UgbXV0ZXgg
-cG9pbnRzIHRvIGFuIGNvbnN0IG9iamVjdCwgZG8gbm90IHRyeSB0byBhdXRv
-aW5pdAorICAvL01VVEVYX0FVVE9JTklUX0FORF9DSEVDSyhtdXRleCk7CisK
-ICAgLypXZSBkb24ndCBkZWZpbmUgX1BPU0lYX1RIUkVBRF9QUklPX1BST1RF
-Q1QgYmVjYXVzZSB3ZSBkbyd0IGN1cnJlbnRseSBzdXBwb3J0CiAgICAqbXV0
-ZXggcHJpb3JpdGllcy4KICAgICoKQEAgLTIxNTgsNDkgKzIxNjAsMjUgQEAg
-X19wdGhyZWFkX211dGV4X2dldHByaW9jZWlsaW5nIChjb25zdCBwdAogaW50
-CiBfX3B0aHJlYWRfbXV0ZXhfbG9jayAocHRocmVhZF9tdXRleF90ICptdXRl
-eCkKIHsKLSAgcHRocmVhZF9tdXRleF90ICp0aGVtdXRleCA9IG11dGV4Owot
-ICBzd2l0Y2ggKHZlcmlmeWFibGVfb2JqZWN0X2lzdmFsaWQgKHRoZW11dGV4
-LCBQVEhSRUFEX01VVEVYX01BR0lDLCBQVEhSRUFEX01VVEVYX0lOSVRJQUxJ
-WkVSKSkKLSAgICB7Ci0gICAgY2FzZSBJTlZBTElEX09CSkVDVDoKLSAgICAg
-IHJldHVybiBFSU5WQUw7Ci0gICAgICBicmVhazsKLSAgICBjYXNlIFZBTElE
-X1NUQVRJQ19PQkpFQ1Q6Ci0gICAgICBpZiAoKm11dGV4ID09IFBUSFJFQURf
-TVVURVhfSU5JVElBTElaRVIpCi0JewotCSAgaW50IHJ2ID0gX19wdGhyZWFk
-X211dGV4X2luaXQgKG11dGV4LCBOVUxMKTsKLQkgIGlmIChydikKLQkgICAg
-cmV0dXJuIHJ2OwotCX0KLSAgICAgIGJyZWFrOwotICAgIGNhc2UgVkFMSURf
-T0JKRUNUOgotICAgICAgYnJlYWs7Ci0gICAgfQotICAoKnRoZW11dGV4KS0+
-TG9jayAoKTsKLSAgcmV0dXJuIDA7CisgIE1VVEVYX0FVVE9JTklUX0FORF9D
-SEVDSyhtdXRleCk7CisKKyAgcmV0dXJuICgqbXV0ZXgpLT5Mb2NrICgpOwog
-fQogCiBpbnQKIF9fcHRocmVhZF9tdXRleF90cnlsb2NrIChwdGhyZWFkX211
-dGV4X3QgKm11dGV4KQogewotICBwdGhyZWFkX211dGV4X3QgKnRoZW11dGV4
-ID0gbXV0ZXg7Ci0gIGlmICgqbXV0ZXggPT0gUFRIUkVBRF9NVVRFWF9JTklU
-SUFMSVpFUikKLSAgICBfX3B0aHJlYWRfbXV0ZXhfaW5pdCAobXV0ZXgsIE5V
-TEwpOwotICBpZiAodmVyaWZ5YWJsZV9vYmplY3RfaXN2YWxpZCAodGhlbXV0
-ZXgsIFBUSFJFQURfTVVURVhfTUFHSUMpICE9IFZBTElEX09CSkVDVCkKLSAg
-ICByZXR1cm4gRUlOVkFMOwotICBpZiAoKCp0aGVtdXRleCktPlRyeUxvY2sg
-KCkpCi0gICAgcmV0dXJuIEVCVVNZOwotICByZXR1cm4gMDsKKyAgTVVURVhf
-QVVUT0lOSVRfQU5EX0NIRUNLKG11dGV4KTsKKworICByZXR1cm4gKCptdXRl
-eCktPlRyeUxvY2sgKCk7CiB9CiAKIGludAogX19wdGhyZWFkX211dGV4X3Vu
-bG9jayAocHRocmVhZF9tdXRleF90ICptdXRleCkKIHsKLSAgaWYgKCptdXRl
-eCA9PSBQVEhSRUFEX01VVEVYX0lOSVRJQUxJWkVSKQotICAgIF9fcHRocmVh
-ZF9tdXRleF9pbml0IChtdXRleCwgTlVMTCk7Ci0gIGlmICh2ZXJpZnlhYmxl
-X29iamVjdF9pc3ZhbGlkIChtdXRleCwgUFRIUkVBRF9NVVRFWF9NQUdJQykg
-IT0gVkFMSURfT0JKRUNUKQotICAgIHJldHVybiBFSU5WQUw7Ci0gICgqbXV0
-ZXgpLT5VbkxvY2sgKCk7Ci0gIHJldHVybiAwOworICBNVVRFWF9BVVRPSU5J
-VF9BTkRfQ0hFQ0sobXV0ZXgpOworCisgIHJldHVybiAoKm11dGV4KS0+VW5M
-b2NrICgpOwogfQogCiBpbnQKQEAgLTIyMjQsMTEgKzIyMDIsNyBAQCBpbnQK
-IF9fcHRocmVhZF9tdXRleF9zZXRwcmlvY2VpbGluZyAocHRocmVhZF9tdXRl
-eF90ICptdXRleCwgaW50IHByaW9jZWlsaW5nLAogCQkJCWludCAqb2xkX2Nl
-aWxpbmcpCiB7Ci0gIHB0aHJlYWRfbXV0ZXhfdCAqdGhlbXV0ZXggPSBtdXRl
-eDsKLSAgaWYgKCptdXRleCA9PSBQVEhSRUFEX01VVEVYX0lOSVRJQUxJWkVS
-KQotICAgIF9fcHRocmVhZF9tdXRleF9pbml0IChtdXRleCwgTlVMTCk7Ci0g
-IGlmICh2ZXJpZnlhYmxlX29iamVjdF9pc3ZhbGlkICh0aGVtdXRleCwgUFRI
-UkVBRF9NVVRFWF9NQUdJQykgIT0gVkFMSURfT0JKRUNUKQotICAgIHJldHVy
-biBFSU5WQUw7CisgIE1VVEVYX0FVVE9JTklUX0FORF9DSEVDSyhtdXRleCk7
-CiAgIHJldHVybiBFTk9TWVM7CiB9CiAKZGlmZiAtdXJwIHNyYy5vbGQvd2lu
-c3VwL2N5Z3dpbi90aHJlYWQuaCBzcmMvd2luc3VwL2N5Z3dpbi90aHJlYWQu
-aAotLS0gc3JjLm9sZC93aW5zdXAvY3lnd2luL3RocmVhZC5oCVdlZCBBdWcg
-MTQgMTQ6Mjg6NTMgMjAwMgorKysgc3JjL3dpbnN1cC9jeWd3aW4vdGhyZWFk
-LmgJV2VkIEF1ZyAxNCAxNDoyOTozOSAyMDAyCkBAIC0yMzMsNiArMjMzLDE0
-IEBAIHB1YmxpYzoKICAgfnB0aHJlYWRfbXV0ZXggKCk7CiB9OwogCisjZGVm
-aW5lIE1VVEVYX0FVVE9JTklUX0FORF9DSEVDSyhtdXRleCkgXAorICAgIHsg
-XAorICAgICAgaWYgKCoobXV0ZXgpID09IFBUSFJFQURfTVVURVhfSU5JVElB
-TElaRVIpIFwKKyAgICAgICAgX19wdGhyZWFkX211dGV4X2luaXQgKChtdXRl
-eCksIE5VTEwpO1wKKyAgICAgIGlmICh2ZXJpZnlhYmxlX29iamVjdF9pc3Zh
-bGlkICgobXV0ZXgpLCBQVEhSRUFEX01VVEVYX01BR0lDKSAhPSBWQUxJRF9P
-QkpFQ1QpIFwKKyAgICAgICAgcmV0dXJuIEVJTlZBTDsgXAorICAgIH0KKwog
-Y2xhc3MgcHRocmVhZDpwdWJsaWMgdmVyaWZ5YWJsZV9vYmplY3QKIHsKIHB1
-YmxpYzoKQEAgLTMyNyw2ICszMzUsMTQgQEAgcHVibGljOgogICAgfnB0aHJl
-YWRfY29uZCAoKTsKIH07CiAKKyNkZWZpbmUgQ09ORF9BVVRPSU5JVF9BTkRf
-Q0hFQ0soY29uZCkgXAorICAgIHsgXAorICAgICAgaWYgKCooY29uZCkgPT0g
-UFRIUkVBRF9DT05EX0lOSVRJQUxJWkVSKSBcCisgICAgICAgIF9fcHRocmVh
-ZF9jb25kX2luaXQgKChjb25kKSwgTlVMTCk7XAorICAgICAgaWYgKHZlcmlm
-eWFibGVfb2JqZWN0X2lzdmFsaWQgKChjb25kKSwgUFRIUkVBRF9DT05EX01B
-R0lDKSAhPSBWQUxJRF9PQkpFQ1QpIFwKKyAgICAgICAgcmV0dXJuIEVJTlZB
-TDsgXAorICAgIH0KKwogY2xhc3MgcHRocmVhZF9vbmNlCiB7CiBwdWJsaWM6
-CkBAIC0zODQsNiArNDAwLDggQEAgcHVibGljOgogICBwdGhyZWFkX2tleSB0
-aHJlYWRfc2VsZl9rZXk7CiAKICAgQ1JJVElDQUxfU0VDVElPTiBmb3JrX2xv
-Y2s7CisgIENSSVRJQ0FMX1NFQ1RJT04gbXV0ZXhfbG9jazsKKyAgQ1JJVElD
-QUxfU0VDVElPTiBjb25kX2xvY2s7CiAKICAgdm9pZCBJbml0IChpbnQpOwog
-ICBzdGF0aWMgdm9pZCBpbml0X3B0aHJlYWQgKHB0aHJlYWQgKnRocmVhZCk7
-Cg==
+An if just before a switch that deals with the same variable?  Use the
+switch/case, please.  You can remove the FIXME: block, if that helps.
 
---4145170-6876-1029437221=:-376009--
+cgf
