@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2488-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 17760 invoked by alias); 22 Jun 2002 15:03:26 -0000
+Return-Path: <cygwin-patches-return-2487-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 17758 invoked by alias); 22 Jun 2002 15:03:25 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,9 +7,9 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 17729 invoked from network); 22 Jun 2002 15:03:22 -0000
+Received: (qmail 17728 invoked from network); 22 Jun 2002 15:03:22 -0000
 Message-ID: <20020622150321.13099.qmail@web20708.mail.yahoo.com>
-Date: Sat, 22 Jun 2002 08:03:00 -0000
+Date: Sat, 22 Jun 2002 08:12:00 -0000
 From: Earnie Boyd <earnie_boyd@yahoo.com>
 Subject: Re: Add FILE_FLAG_FIRST_PIPE_INSTANCE to <w32api/winbase.h>
 To: Conrad Scott <Conrad.Scott@dsl.pipex.com>,
@@ -18,7 +18,8 @@ Cc: cygwin-patches@cygwin.com
 In-Reply-To: <00bc01c2197a$2e4edce0$6132bc3e@BABEL>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-X-SW-Source: 2002-q2/txt/msg00470.txt.bz2
+X-SW-Source: 2002-q2/txt/msg00471.txt.bz2
+Message-ID: <20020622081200.nhYvOvTILBFUZ2x9LNeiRvSP9W7sbEcGkpzHT66pM5Q@z>
 
 I would use >= 0x0500
 
