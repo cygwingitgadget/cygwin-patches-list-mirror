@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4352-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 32079 invoked by alias); 10 Nov 2003 15:18:45 -0000
+Return-Path: <cygwin-patches-return-4353-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 3507 invoked by alias); 10 Nov 2003 15:30:19 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,29 +7,26 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 32069 invoked from network); 10 Nov 2003 15:18:44 -0000
-X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
-Message-ID: <3FAFAC3E.1050808@gmx.net>
-Date: Mon, 10 Nov 2003 15:18:00 -0000
-From: Thomas Pfaff <tpfaff@gmx.net>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.5) Gecko/20031013 Thunderbird/0.3
-X-Accept-Language: en-us, en
-MIME-Version: 1.0
+Received: (qmail 3498 invoked from network); 10 Nov 2003 15:30:19 -0000
+Date: Mon, 10 Nov 2003 15:30:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] stdio initialization
+Message-ID: <20031110153018.GA12119@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
 References: <Pine.WNT.4.44.0311101211450.1520-200000@algeria.intern.net> <20031110135740.GA12455@redhat.com> <3FAF9A9A.3070509@gmx.net> <20031110150952.GA10851@redhat.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <20031110150952.GA10851@redhat.com>
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Transfer-Encoding: 7bit
-X-SW-Source: 2003-q4/txt/msg00071.txt.bz2
+User-Agent: Mutt/1.4.1i
+X-SW-Source: 2003-q4/txt/msg00072.txt.bz2
 
-Christopher Faylor wrote:
-> On Mon, Nov 10, 2003 at 03:03:06PM +0100, Thomas Pfaff wrote:
-> 
+On Mon, Nov 10, 2003 at 10:09:52AM -0500, Christopher Faylor wrote:
+>On Mon, Nov 10, 2003 at 03:03:06PM +0100, Thomas Pfaff wrote:
 >>Christopher Faylor wrote:
->>
 >>>On Mon, Nov 10, 2003 at 12:23:35PM +0100, Thomas Pfaff wrote:
->>>
 >>>
 >>>>Attached patch fixes the memory leak reported by Arash Partow by
 >>>>initializing stdio during startup and setting __sdidinit from thread
@@ -48,11 +45,11 @@ Christopher Faylor wrote:
 >>>
 >>
 >>Ouch. I should have stayed in bed today.
-> 
-> But the rest of your patch looks ok, I think, doesn't it?
+>
+>But the rest of your patch looks ok, I think, doesn't it?
 
-After i removed the tomatoes from my eyes and looked again:
-Yes, it does.
-I will commit to CVS in about 4 hours when i am at home.
+Actually, on poking around a little, I wonder if we should be calling
+_reclaim_reent to get back all of the stuff allocated in the REENT
+structure?
 
-Thomas
+cgf
