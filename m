@@ -1,29 +1,39 @@
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: [PATCH] Add MAPISendMail to w32api
-Date: Tue, 22 May 2001 16:04:00 -0000
-Message-id: <20010522190240.A25370@redhat.com>
-X-SW-Source: 2001-q2/msg00261.html
+From: Jacek Trzcinski <jacek@certum.pl>
+To: cygwin-patches@sources.redhat.com
+Subject: Serial programming
+Date: Wed, 23 May 2001 05:48:00 -0000
+Message-id: <3B0BAE8D.EC08D1F8@certum.pl>
+X-SW-Source: 2001-q2/msg00262.html
 
-Tue May 22 18:58:27 2001  Christopher Faylor <cgf@cygnus.com>
+Hi,
+I have created patch to serial device which implements ioctl function
+allowing
+manipulate RTS and DTR line and reading modem lines. I will send it when
+I sign copyright
+assignment form.
+I didn't do two things in my patch about I would like discuss here.
+First remarks I shared
+with Corinna Vinschen and She suggested send e-mail here.
 
-	* lib/mapi32.def: Add MAPISendMail.
-  
-Index: lib/mapi32.def
-===================================================================
-RCS file: /cvs/uberbaum/winsup/w32api/lib/mapi32.def,v
-retrieving revision 1.1.1.1
-diff -p -r1.1.1.1 mapi32.def
-*** mapi32.def	2000/02/17 19:38:32	1.1.1.1
---- mapi32.def	2001/05/22 23:01:21
-*************** MAPIOpenFormMgr
-*** 84,89 ****
---- 84,91 ----
-  MAPIOpenFormMgr@8
-  MAPIOpenLocalFormContainer
-  MAPIOpenLocalFormContainer@4
-+ MAPISendMail
-+ MAPISendMail@20
-  MAPIUninitialize
-  MAPIUninitialize@0
-  MNLS_CompareStringW@24
+1) To read input queue there should be use constant
+FIONREAD (information taken from different sources) but cygwin occupy it
+for
+socket software !(it is macro). Constant TIOCINQ I have taken from linux
+where it is equal FIONREAD(FIONREAD is not occupied in linux like in
+cygwin). As Corinna remarked, this macro
+expands to a constant expression but including asm/socket.h in serial
+programming seems to make not much sense. She suggested (I support her)
+to create asm/ioctls.h file like in Linux.
+
+2) Next matter concerns device name convention. In cygwin one may use
+/dev/com1 or /dev/ttyS1 and so on. (what for is utilizing /dev/comx
+devices I do not
+know - it is not portable to linux).
+I think also that number of devices should start from 0 not from 1 thus
+devices shold be
+numbered /dev/ttyS0, /dev/ttyS1 and so on like in linux because again it
+is not portable.
+Somebody who had access to /dev/ttyS0 in linux will have not in cygwin !
+
+Best regards
+Jacek
