@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2909-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 17311 invoked by alias); 2 Sep 2002 06:10:20 -0000
+Return-Path: <cygwin-patches-return-2910-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 6364 invoked by alias); 2 Sep 2002 10:48:49 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,45 +7,52 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 17295 invoked from network); 2 Sep 2002 06:10:19 -0000
-Date: Sun, 01 Sep 2002 23:10:00 -0000
-From: egor duda <deo@logos-m.ru>
-Reply-To: egor duda <cygwin-patches@cygwin.com>
-Organization: deo
-X-Priority: 3 (Normal)
-Message-ID: <3260121239.20020902100735@logos-m.ru>
-To: Christopher Faylor <cygwin-patches@cygwin.com>
-Subject: Re: [franck.leray@cheops.fr: tcsetattr timeout problem ?]
-In-Reply-To: <20020831033855.GA18122@redhat.com>
-References: <20020830145541.GB1402@redhat.com>
- <136198673817.20020830214611@logos-m.ru> <5199249725.20020830215547@logos-m.ru>
- <147200259187.20020830221236@logos-m.ru> <20020831033855.GA18122@redhat.com>
-MIME-Version: 1.0
+Received: (qmail 6349 invoked from network); 2 Sep 2002 10:48:46 -0000
+Date: Mon, 02 Sep 2002 03:48:00 -0000
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: Readv/writev patch
+Message-ID: <20020902124814.I12899@cygbert.vinschen.de>
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <01aa01c24dda$cc5384b0$6132bc3e@BABEL> <20020828123735.B10870@cygbert.vinschen.de> <03b801c25097$1debc670$6132bc3e@BABEL> <20020831024826.GA17051@redhat.com>
+Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-SW-Source: 2002-q3/txt/msg00357.txt.bz2
+Content-Disposition: inline
+In-Reply-To: <20020831024826.GA17051@redhat.com>
+User-Agent: Mutt/1.3.22.1i
+X-SW-Source: 2002-q3/txt/msg00358.txt.bz2
 
-Hi!
+On Fri, Aug 30, 2002 at 10:48:26PM -0400, Chris Faylor wrote:
+> On Sat, Aug 31, 2002 at 03:35:48AM +0100, Conrad Scott wrote:
+> >"Corinna Vinschen" <cygwin-patches@cygwin.com> wrote:
+> >> Especially I'm reluctant to introduce your changes
+> >> to the sendto and recvfrom implementation since I know there is
+> >> a good reason to use the WinSock1 calls in the non-blocking case
+> >> even though I don't recall why, right now.  Please skip that
+> >> beautyifing patches and just add the readv/writev functionality.
+> >
+> >I went back to the mailing list archives to see if I could dig up the
+> >problem here and it seems that the code to fallback to the winsock1
+> >calls in the non-blocking case was introduced as a result of the
+> >discussion in the thread starting at
+> >http://cygwin.com/ml/cygwin/2001-08/msg00617.html.  Interestingly, the
+> >test program that demonstrated the "problem" was itself bogus.  Like,
+> >you don't set the non-blocking flag w/ the following code:
+> >
+> >  printf("Setting NONBLOCK\n");
+> >  flags = fcntl (sock, F_GETFL, 0);
+> >  flags &= O_NONBLOCK;
+> 
+> OUCH!
 
-Saturday, 31 August, 2002 Christopher Faylor cgf@redhat.com wrote:
+It wasn't quite that but actually the whole thread seem to be based
+on a handful of misinterpretations.
 
-CF> On Fri, Aug 30, 2002 at 10:12:36PM +0400, egor duda wrote:
->>ed> Actually, the patch is wrong :(. I'm looking into it and post a
->>ed> correct one asap.
->>
->>Forgot to include fhandler_tty.cc part.
->>
->>Please check it if possible and feel free to apply it, as i will be
->>away from computer for some time.
+Ok Conrad, send your patch right away.
 
-CF> I took a look at your patch but it didn't seem right to me.
+Corinna
 
-CF> You were asking about circumventing the 'ready_for_read' code and,
-CF> since fhandler_tty_slave::read has the ability to detect a signal,
-CF> removal of fhandler_tty_slave::ready_for_read is the right way to
-CF> go, AFAICT.
-
-Absolutely. Silly me, i haven't noticed a FH_NOEINTR flag, which was
-exactly what was needed. Thanks!
-
-Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
