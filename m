@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2100-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 21661 invoked by alias); 24 Apr 2002 10:53:25 -0000
+Return-Path: <cygwin-patches-return-2101-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 25055 invoked by alias); 24 Apr 2002 15:21:04 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,164 +7,41 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 21643 invoked from network); 24 Apr 2002 10:53:23 -0000
-X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
-Date: Wed, 24 Apr 2002 03:53:00 -0000
-From: Thomas Pfaff <tpfaff@gmx.net>
-To: cygwin-patches@cygwin.com
-Subject: [PATCH] pthread cleanup_push,_pop fixes
-Message-ID: <Pine.WNT.4.44.0204241220040.289-101000@algeria.intern.net>
-X-X-Sender: pfaff@antarctica.intern.net
+Received: (qmail 25041 invoked from network); 24 Apr 2002 15:21:04 -0000
+Message-ID: <3CC6CDFE.9040600@ece.gatech.edu>
+Date: Wed, 24 Apr 2002 08:21:00 -0000
+From: Charles Wilson <cwilson@ece.gatech.edu>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:0.9.4) Gecko/20011019 Netscape6/6.2
+X-Accept-Language: en-us
 MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="6906535-17693-1019645571=:289"
-X-SW-Source: 2002-q2/txt/msg00084.txt.bz2
-
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
-
---6906535-17693-1019645571=:289
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-Content-length: 974
-
-This patch will fix the cleanup_push/pop implementation. It is required
-that the pushed handlers will run when a thread exits or is cancelled, but
-this did not happen.
-This patch is incremental to my previous patches.
-
-Greetings,
-Thomas
-
-2002-04-24  Thomas Pfaff  <tpfaff@gmx.net>
-	* include/pthread.h (__pthread_cleanup_handler): New structure
-	(pthread_cleanup_push): Rewritten.
-	(pthread_cleanup_pop): Ditto.
-	(_pthread_cleanup_push): New prototype
-	(_pthread_cleanup_pop) Ditto.
-	* pthread.cc: (_pthread_cleanup_push) New function.
-	(_pthread_cleanup_pop): Ditto.
-
-	* thread.h (__pthread_cleanup_push): New prototype
-	(__pthread_cleanup_pop): Ditto.
-	(__pthread_cleanup_pop_all): Ditto.
-	(pthread::cleanup_handlers): New member.
-	* thread.cc (__pthread_cleanup_push): New function.
-	(__pthread_cleanup_pop): Ditto.
-	(__pthread_cleanup_pop_all): Ditto.
-	(__pthread_exit): Run cleanup handlers on exit.
-
-	* cygwin.din: Add _pthread_cleanup_push and _pthread_cleanup_pop.
+To: Robert Collins <robert.collins@itdomain.com.au>
+CC: cygwin-patches@cygwin.com
+Subject: Re: Packaging information
+References: <FC169E059D1A0442A04C40F86D9BA7600C5EE0@itdomain003.itdomain.net.au>
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2002-q2/txt/msg00085.txt.bz2
 
 
---6906535-17693-1019645571=:289
-Content-Type: APPLICATION/octet-stream; name="pthread_cleanup.patch"
-Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.WNT.4.44.0204241252510.289@algeria.intern.net>
-Content-Description: 
-Content-Disposition: attachment; filename="pthread_cleanup.patch"
-Content-length: 6202
 
-ZGlmZiAtdXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi9jeWd3aW4uZGluIHNy
-Yy93aW5zdXAvY3lnd2luL2N5Z3dpbi5kaW4KLS0tIHNyYy5vbGQvd2luc3Vw
-L2N5Z3dpbi9jeWd3aW4uZGluCVNhdCBKYW4gMTkgMTg6NDU6NDYgMjAwMgor
-Kysgc3JjL3dpbnN1cC9jeWd3aW4vY3lnd2luLmRpbglUdWUgQXByIDIzIDEx
-OjIwOjUxIDIwMDIKQEAgLTExNTMsNiArMTE1Myw4IEBAIHB0aHJlYWRfYXR0
-cl9zZXRzY2hlZHBvbGljeQogcHRocmVhZF9hdHRyX3NldHNjb3BlCiBwdGhy
-ZWFkX2F0dHJfc2V0c3RhY2tzaXplCiBwdGhyZWFkX2NhbmNlbAorX3B0aHJl
-YWRfY2xlYW51cF9wdXNoCitfcHRocmVhZF9jbGVhbnVwX3BvcAogcHRocmVh
-ZF9jb25kX2Jyb2FkY2FzdAogcHRocmVhZF9jb25kX2Rlc3Ryb3kKIHB0aHJl
-YWRfY29uZF9pbml0CmRpZmYgLXVycCBzcmMub2xkL3dpbnN1cC9jeWd3aW4v
-aW5jbHVkZS9wdGhyZWFkLmggc3JjL3dpbnN1cC9jeWd3aW4vaW5jbHVkZS9w
-dGhyZWFkLmgKLS0tIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi9pbmNsdWRlL3B0
-aHJlYWQuaAlUaHUgTm92IDIyIDAyOjU1OjQxIDIwMDEKKysrIHNyYy93aW5z
-dXAvY3lnd2luL2luY2x1ZGUvcHRocmVhZC5oCVdlZCBBcHIgMjQgMTA6MzI6
-MzcgMjAwMgpAQCAtMTAzLDEwICsxMDMsMjAgQEAgdm9pZCBwdGhyZWFkX2Ns
-ZWFudXBfcHVzaCAodm9pZCAoKnJvdXRpbgogdm9pZCBwdGhyZWFkX2NsZWFu
-dXBfcG9wIChpbnQgZXhlY3V0ZSk7CiAqLwogdHlwZWRlZiB2b2lkICgqX19j
-bGVhbnVwX3JvdXRpbmVfdHlwZSkgKHZvaWQgKik7Cit0eXBlZGVmIHN0cnVj
-dCBfcHRocmVhZF9jbGVhbnVwX2hhbmRsZXIgCit7CisgIF9fY2xlYW51cF9y
-b3V0aW5lX3R5cGUgZnVuY3Rpb247CisgIHZvaWQgKmFyZzsKKyAgc3RydWN0
-IF9wdGhyZWFkX2NsZWFudXBfaGFuZGxlciAqbmV4dDsKK30gX19wdGhyZWFk
-X2NsZWFudXBfaGFuZGxlcjsKIAotI2RlZmluZSBwdGhyZWFkX2NsZWFudXBf
-cHVzaChmbiwgYXJnKSB7IF9fY2xlYW51cF9yb3V0aW5lX3R5cGUgX19jbGVh
-bnVwX3JvdXRpbmU9Zm47IFwKLXZvaWQgKl9fY2xlYW51cF9wYXJhbT1hcmc7
-Ci0jZGVmaW5lIHB0aHJlYWRfY2xlYW51cF9wb3AoZXhlY3V0ZSkgaWYgKGV4
-ZWN1dGUpIF9fY2xlYW51cF9yb3V0aW5lKF9fY2xlYW51cF9wYXJhbSk7IH0K
-K3ZvaWQgX3B0aHJlYWRfY2xlYW51cF9wdXNoIChfX3B0aHJlYWRfY2xlYW51
-cF9oYW5kbGVyICpoYW5kbGVyKTsKK3ZvaWQgX3B0aHJlYWRfY2xlYW51cF9w
-b3AgKGludCBleGVjdXRlKTsKKworI2RlZmluZSBwdGhyZWFkX2NsZWFudXBf
-cHVzaChfZm4sIF9hcmcpIHsgX19wdGhyZWFkX2NsZWFudXBfaGFuZGxlciBf
-X2NsZWFudXBfaGFuZGxlciA9IFwKKyAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgeyBfZm4sIF9hcmcsIE5VTEwgfTsgXAorICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBfcHRocmVh
-ZF9jbGVhbnVwX3B1c2goICZfX2NsZWFudXBfaGFuZGxlciApOworI2RlZmlu
-ZSBwdGhyZWFkX2NsZWFudXBfcG9wKF9leGVjdXRlKSBfcHRocmVhZF9jbGVh
-bnVwX3BvcCggX2V4ZWN1dGUgKTsgfQogCiAvKiBDb25kaXRpb24gdmFyaWFi
-bGVzICovCiBpbnQgcHRocmVhZF9jb25kX2Jyb2FkY2FzdCAocHRocmVhZF9j
-b25kX3QgKik7CmRpZmYgLXVycCBzcmMub2xkL3dpbnN1cC9jeWd3aW4vcHRo
-cmVhZC5jYyBzcmMvd2luc3VwL2N5Z3dpbi9wdGhyZWFkLmNjCi0tLSBzcmMu
-b2xkL3dpbnN1cC9jeWd3aW4vcHRocmVhZC5jYwlGcmkgT2N0ICA1IDA3OjA1
-OjA5IDIwMDEKKysrIHNyYy93aW5zdXAvY3lnd2luL3B0aHJlYWQuY2MJV2Vk
-IEFwciAyNCAxMDozNTozNiAyMDAyCkBAIC00NDUsNiArNDQ1LDE4IEBAIHB0
-aHJlYWRfdGVzdGNhbmNlbCAodm9pZCkKICAgX19wdGhyZWFkX3Rlc3RjYW5j
-ZWwgKCk7CiB9CiAKK3ZvaWQKK19wdGhyZWFkX2NsZWFudXBfcHVzaCAoX19w
-dGhyZWFkX2NsZWFudXBfaGFuZGxlciAqaGFuZGxlcikKK3sKKyAgX19wdGhy
-ZWFkX2NsZWFudXBfcHVzaCAoaGFuZGxlcik7Cit9CisKK3ZvaWQKK19wdGhy
-ZWFkX2NsZWFudXBfcG9wIChpbnQgZXhlY3V0ZSkKK3sKKyAgX19wdGhyZWFk
-X2NsZWFudXBfcG9wIChleGVjdXRlKTsKK30KKwogLyogU2VtYXBob3JlcyAq
-LwogaW50CiBzZW1faW5pdCAoc2VtX3QgKiBzZW0sIGludCBwc2hhcmVkLCB1
-bnNpZ25lZCBpbnQgdmFsdWUpCmRpZmYgLXVycCBzcmMub2xkL3dpbnN1cC9j
-eWd3aW4vdGhyZWFkLmNjIHNyYy93aW5zdXAvY3lnd2luL3RocmVhZC5jYwot
-LS0gc3JjLm9sZC93aW5zdXAvY3lnd2luL3RocmVhZC5jYwlXZWQgQXByIDI0
-IDEwOjI0OjAxIDIwMDIKKysrIHNyYy93aW5zdXAvY3lnd2luL3RocmVhZC5j
-YwlUdWUgQXByIDIzIDE1OjQyOjMyIDIwMDIKQEAgLTM0Niw3ICszNDYsNyBA
-QCBNVGludGVyZmFjZTo6Zml4dXBfYWZ0ZXJfZm9yayAodm9pZCkKIH0KIAog
-cHRocmVhZDo6cHRocmVhZCAoKTp2ZXJpZnlhYmxlX29iamVjdCAoUFRIUkVB
-RF9NQUdJQyksIHdpbjMyX29ial9pZCAoMCksCi0gICAgICAgICAgICAgICAg
-ICAgIGNhbmNlbHN0YXRlICgwKSwgY2FuY2VsdHlwZSAoMCksIGpvaW5lcihO
-VUxMKQorICAgICAgICAgICAgICAgICAgICBjYW5jZWxzdGF0ZSAoMCksIGNh
-bmNlbHR5cGUgKDApLCBjbGVhbnVwX2hhbmRsZXJzKE5VTEwpLCBqb2luZXIo
-TlVMTCkKIHsKIH0KIApAQCAtMTIyMCw2ICsxMjIwLDQyIEBAIF9fcHRocmVh
-ZF90ZXN0Y2FuY2VsICh2b2lkKQogICAgKmRvZXMgc29tZXRoaW5nKi8KIH0K
-IAordm9pZAorX19wdGhyZWFkX2NsZWFudXBfcHVzaCAoX19wdGhyZWFkX2Ns
-ZWFudXBfaGFuZGxlciAqaGFuZGxlcikKK3sKKyAgcHRocmVhZF90IHRocmVh
-ZCA9IF9fcHRocmVhZF9zZWxmICgpOworCisgIGhhbmRsZXItPm5leHQgPSB0
-aHJlYWQtPmNsZWFudXBfaGFuZGxlcnM7CisgIHRocmVhZC0+Y2xlYW51cF9o
-YW5kbGVycyA9IGhhbmRsZXI7Cit9CisKK3ZvaWQKK19fcHRocmVhZF9jbGVh
-bnVwX3BvcCAoaW50IGV4ZWN1dGUpCit7CisgIHB0aHJlYWRfdCB0aHJlYWQg
-PSBfX3B0aHJlYWRfc2VsZiAoKTsKKworICBpZiggdGhyZWFkLT5jbGVhbnVw
-X2hhbmRsZXJzICE9IE5VTEwgKQorICB7CisgICAgIF9fcHRocmVhZF9jbGVh
-bnVwX2hhbmRsZXIgKmhhbmRsZXIgPSB0aHJlYWQtPmNsZWFudXBfaGFuZGxl
-cnM7CisKKyAgICAgaWYgKGV4ZWN1dGUpCisgICAgICAgKCpoYW5kbGVyLT5m
-dW5jdGlvbikgKGhhbmRsZXItPmFyZyk7CisKKyAgICAgdGhyZWFkLT5jbGVh
-bnVwX2hhbmRsZXJzID0gaGFuZGxlci0+bmV4dDsKKyAgfQorfQorCit2b2lk
-CitfX3B0aHJlYWRfY2xlYW51cF9wb3BfYWxsICh2b2lkKQoreworICBwdGhy
-ZWFkX3QgdGhyZWFkID0gX19wdGhyZWFkX3NlbGYgKCk7CisKKyAgd2hpbGUo
-dGhyZWFkLT5jbGVhbnVwX2hhbmRsZXJzICE9IE5VTEwpCisgIHsKKyAgICAg
-X19wdGhyZWFkX2NsZWFudXBfcG9wICgxKTsKKyAgfQorfQorCiAvKgogICpS
-YWNlcyBpbiBwdGhyZWFkX2F0Zm9yazoKICAqV2UgYXJlIHJhY2Ugc2FmZSBp
-biB0aGF0IGFueSBhZGRpdGlvbnMgdG8gdGhlIGxpc3RzIGFyZSBtYWRlIHZp
-YQpAQCAtMTQ5NSw2ICsxNTMxLDkgQEAgdm9pZAogX19wdGhyZWFkX2V4aXQg
-KHZvaWQgKnZhbHVlX3B0cikKIHsKICAgcHRocmVhZF90IHRocmVhZCA9IF9f
-cHRocmVhZF9zZWxmICgpOworCisgIC8vIHJ1biBjbGVhbnVwIGhhbmRsZXJz
-CisgIF9fcHRocmVhZF9jbGVhbnVwX3BvcF9hbGwgKCk7CiAKICAgTVRfSU5U
-RVJGQUNFLT5kZXN0cnVjdG9ycy5JdGVyYXRlTnVsbCAoKTsKIApkaWZmIC11
-cnAgc3JjLm9sZC93aW5zdXAvY3lnd2luL3RocmVhZC5oIHNyYy93aW5zdXAv
-Y3lnd2luL3RocmVhZC5oCi0tLSBzcmMub2xkL3dpbnN1cC9jeWd3aW4vdGhy
-ZWFkLmgJV2VkIEFwciAyNCAxMDoxNDoxNCAyMDAyCisrKyBzcmMvd2luc3Vw
-L2N5Z3dpbi90aHJlYWQuaAlUdWUgQXByIDIzIDE1OjQyOjQ5IDIwMDIKQEAg
-LTIzOSw2ICsyMzksNyBAQCBwdWJsaWM6CiAgIHZvaWQgKnJldHVybl9wdHI7
-CiAgIGJvb2wgc3VzcGVuZGVkOwogICBpbnQgY2FuY2Vsc3RhdGUsIGNhbmNl
-bHR5cGU7CisgIF9fcHRocmVhZF9jbGVhbnVwX2hhbmRsZXIgKmNsZWFudXBf
-aGFuZGxlcnM7CiAgIHB0aHJlYWRfdCBqb2luZXI7CiAgIC8vIGludCBqb2lu
-YWJsZTsKIApAQCAtNTAzLDYgKzUwNCw5IEBAIGludCBfX3B0aHJlYWRfY2Fu
-Y2VsIChwdGhyZWFkX3QgdGhyZWFkKTsKIGludCBfX3B0aHJlYWRfc2V0Y2Fu
-Y2Vsc3RhdGUgKGludCBzdGF0ZSwgaW50ICpvbGRzdGF0ZSk7CiBpbnQgX19w
-dGhyZWFkX3NldGNhbmNlbHR5cGUgKGludCB0eXBlLCBpbnQgKm9sZHR5cGUp
-Owogdm9pZCBfX3B0aHJlYWRfdGVzdGNhbmNlbCAodm9pZCk7Cit2b2lkIF9f
-cHRocmVhZF9jbGVhbnVwX3B1c2ggKF9fcHRocmVhZF9jbGVhbnVwX2hhbmRs
-ZXIgKmhhbmRsZXIpOwordm9pZCBfX3B0aHJlYWRfY2xlYW51cF9wb3AgKGlu
-dCBleGVjdXRlKTsKK3ZvaWQgX19wdGhyZWFkX2NsZWFudXBfcG9wX2FsbCAo
-dm9pZCk7CiAKIAogLyogU2VtYXBob3JlcyAqLwo=
+Robert Collins wrote:
 
---6906535-17693-1019645571=:289--
+
+>>I think generic-* are just as much "documentation" as they are 
+>>"resource"; so  the reader should be able to click on a link(*) 
+>>
+> 
+> Why not link to them via cvsweb?
+
+
+Hey, yeah -- that'll work.  Where should generic-* go -- in one of the 
+existing repositories under cygwin-apps (probably not), or should I 
+create another?  If I should create another, what should it be called? 
+resources?
+
+existing /cvs/cygwin-apps/ modules:
+
+cygrunsrv  cygutils  htdocs  libgetopt++  mknetrel  resedit
+
+
+--Chuck
