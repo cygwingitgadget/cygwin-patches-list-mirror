@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1972-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 1606 invoked by alias); 11 Mar 2002 15:57:27 -0000
+Return-Path: <cygwin-patches-return-1973-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 3498 invoked by alias); 11 Mar 2002 18:04:47 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,43 +7,84 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 1519 invoked from network); 11 Mar 2002 15:57:26 -0000
-Date: Mon, 11 Mar 2002 10:04:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: big kill patch (adds list/help/version)
-Message-ID: <20020311155731.GB16030@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20020311151227.GA15831@redhat.com> <20020311154807.71749.qmail@web20001.mail.yahoo.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20020311154807.71749.qmail@web20001.mail.yahoo.com>
-User-Agent: Mutt/1.3.23.1i
-X-SW-Source: 2002-q1/txt/msg00329.txt.bz2
+Received: (qmail 3468 invoked from network); 11 Mar 2002 18:04:45 -0000
+Message-ID: <006201c1c927$8d05f550$0100a8c0@advent02>
+From: "Chris January" <chris@atomice.net>
+To: <cygwin-patches@cygwin.com>
+Subject: msync patch
+Date: Mon, 11 Mar 2002 10:16:00 -0000
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+	boundary="----=_NextPart_000_005F_01C1C927.8C1AAAF0"
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-SW-Source: 2002-q1/txt/msg00330.txt.bz2
 
-On Mon, Mar 11, 2002 at 07:48:07AM -0800, Joshua Daniel Franklin wrote:
->
->--- Christopher Faylor <cgf@redhat.com> wrote:
->> >> How does the linux kill program handle this?
->> >RedHat's prints a list like
->> > 1) SIGHUP       2) SIGINT       3) SIGQUIT      4) SIGILL
->> > 5) SIGTRAP      6) SIGABRT      7) SIGBUS       8) SIGFPE
->> >...
->> >Looks hard-coded to me, but I didn't look at the sources. I'll hard-code 
->> >the list in the print_list () function.
->> 
->> You're looking at the bash built-in.  /bin/kill just does this:
->> 
->> HUP INT QUIT ILL ABRT FPE KILL SEGV PIPE ALRM TERM USR1 USR2 CHLD CONT
->> STOP TSTP TTIN TTOU TRAP IOT BUS SYS STKFLT URG IO POLL CLD XCPU XFSZ
->> VTALRM PROF PWR WINCH UNUSED
->> 
->Indeed. Now, am I correct in thinking that I cannot look at the util-linux
->sources to see how it works?
+This is a multi-part message in MIME format.
 
-I don't see any reason why not.  Just don't copy code wholesale from the
-sources.  But you knew that...
+------=_NextPart_000_005F_01C1C927.8C1AAAF0
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+Content-length: 489
 
-cgf
+This patch modifies msync in mmap.cc so that you can call msync with an
+address which occurs in the middle of an mmap'ed region. It also fixes the
+bug where the address in the relevant mmap_record would not match the one
+passed to msync if the offset of the mmap'ed region within the file was not
+on a dwAllocationGranularity boundary.
+
+Regards
+Chris
+
+2002-03-11  Christopher January <chris@atomice.net>
+
+ * mmap.cc (msync): Match addresses which are in the middle
+ of an mmap'ed region.
+
+
+------=_NextPart_000_005F_01C1C927.8C1AAAF0
+Content-Type: application/octet-stream;
+	name="mmap.patch"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment;
+	filename="mmap.patch"
+Content-length: 928
+
+Index: mmap.cc=0A=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
+RCS file: /cvs/src/src/winsup/cygwin/mmap.cc,v=0A=
+retrieving revision 1.52=0A=
+diff -u -3 -p -u -p -a -b -B -r1.52 mmap.cc=0A=
+--- mmap.cc	2002/02/25 17:47:47	1.52=0A=
++++ mmap.cc	2002/03/11 17:48:45=0A=
+@@ -664,7 +664,8 @@ msync (caddr_t addr, size_t len, int fla=0A=
+ 	  for (int li =3D 0; li < l->nrecs; ++li)=0A=
+ 	    {=0A=
+ 	      mmap_record *rec =3D l->recs + li;=0A=
+-	      if (rec->get_address () =3D=3D addr)=0A=
++              caddr_t rec_addr =3D rec->get_address ();=0A=
++              if (addr >=3D rec_addr && addr < rec_addr + rec->get_size ()=
+)=0A=
+ 		{=0A=
+ 		  fhandler_base *fh =3D rec->alloc_fh ();=0A=
+ 		  int ret =3D fh->msync (rec->get_handle (), addr, len, flags);=0A=
+
+------=_NextPart_000_005F_01C1C927.8C1AAAF0
+Content-Type: application/octet-stream;
+	name="ChangeLog.mmap"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+	filename="ChangeLog.mmap"
+Content-length: 136
+
+2002-03-11  Christopher January <chris@atomice.net>
+
+	* mmap.cc (msync): Match addresses which are in the middle
+	of an mmap'ed region.
+
+------=_NextPart_000_005F_01C1C927.8C1AAAF0--
