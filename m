@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4632-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 6028 invoked by alias); 26 Mar 2004 21:07:21 -0000
+Return-Path: <cygwin-patches-return-4633-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 32580 invoked by alias); 29 Mar 2004 08:29:04 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,53 +7,58 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 5986 invoked from network); 26 Mar 2004 21:07:18 -0000
-X-Authenticated: #623905
-Message-ID: <40649B80.4090104@gmx.net>
-Date: Fri, 26 Mar 2004 21:07:00 -0000
-From: Thomas Pfaff <tpfaff@gmx.net>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.6b) Gecko/20031205 Thunderbird/0.4
+Received: (qmail 32561 invoked from network); 29 Mar 2004 08:29:00 -0000
+Date: Mon, 29 Mar 2004 08:29:00 -0000
+From: "Thomas Pfaff" <tpfaff@gmx.net>
+To: cygwin-patches@cygwin.com
 MIME-Version: 1.0
-To:  cygwin-patches@cygwin.com
-Subject: Re: [RFA]: Thread safe stdio again
-References: <4054B242.9080606@gmx.net> <20040326065008.GA18127@redhat.com> <20040326200326.GA1864@redhat.com>
-In-Reply-To: <20040326200326.GA1864@redhat.com>
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Transfer-Encoding: 7bit
-X-SW-Source: 2004-q1/txt/msg00122.txt.bz2
+Content-Type: multipart/mixed; boundary="========GMXBoundary189181080548778"
+Subject: [PATCH]: Trivial move in pthread::atforkprepare
+X-Authenticated: #623905
+Message-ID: <18918.1080548778@www17.gmx.net>
+X-Flags: 0001
+X-SW-Source: 2004-q1/txt/msg00123.txt.bz2
 
-Christopher Faylor wrote:
-> On Fri, Mar 26, 2004 at 01:50:08AM -0500, Christopher Faylor wrote:
-> 
->>On Sun, Mar 14, 2004 at 08:28:02PM +0100, Thomas Pfaff wrote:
->>
->>>This time i am using the non portable mutex initializers, therefore
->>>moving __sinit is no longer needed. And i added calls to newlibs
->>>__fp_lock_all and __fp_unlock_all at fork.
->>>
->>>2004-03-14 Thomas Pfaff <tpfaff@gmx.net>
->>>
->>>	* include/cygwin/_types.h: New file.
->>>	* include/sys/lock.h: Ditto.
->>>	* include/sys/stdio.h: Ditto.
->>>	* thread.cc: Include sys/lock.h
->>>	(__cygwin_lock_init): New function.
->>>	(__cygwin_lock_init_recursive): Ditto.
->>>	(__cygwin_lock_fini): Ditto.
->>>	(__cygwin_lock_lock): Ditto.
->>>	(__cygwin_lock_trylock): Ditto.
->>>	(__cygwin_lock_unlock): Ditto.
->>>	(pthread::atforkprepare): Lock file pointer before fork.
->>>	(pthread::atforkparent): Unlock file pointer after fork.
->>>	(pthread::atforkchild): Ditto.
->>
->>This is ok to check in.  If you hurry, it will show up in 1.5.10.
-> 
-> 
-> I've taken the liberty of checking this patch in myself.
-> 
+This is a MIME encapsulated multipart message -
+please use a MIME-compliant e-mail program to open it.
 
-I can't see the new include files in CVS yet.
+Dies ist eine mehrteilige Nachricht im MIME-Format -
+bitte verwenden Sie zum Lesen ein MIME-konformes Mailprogramm.
 
-Greetings,
-Thomas
+--========GMXBoundary189181080548778
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8bit
+Content-length: 511
+
+MT_INTERFACE->fixup_before_fork () should be done as the last step  in
+pthread::atforkprepare.
+
+I am sorrry if the Changelog contains spaces, but i have limited internet
+access at the moment (only Webmail).
+
+2004-03-29  Thomas Pfaff  <tpfaff@gmx.net>
+
+	* thread.cc (pthread::atforkprepare): Call
+	MT_INTERFACE->fixup_before_fork at the end of atforkprepare.
+
+-- 
++++ NEU bei GMX und erstmalig in Deutschland: TÜV-geprüfter Virenschutz +++
+100% Virenerkennung nach Wildlist. Infos: http://www.gmx.net/virenschutz
+--========GMXBoundary189181080548778
+Content-Type: plain/text; name="thread.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="thread.patch"
+Content-length: 606
+
+LS0tIHRocmVhZC5jYy5vcmlnCTIwMDQtMDMtMjkgMDk6MTQ6MTAuNDgxNDM2
+ODAwICswMjAwCisrKyB0aHJlYWQuY2MJMjAwNC0wMy0yOSAwOToxODowMS43
+Njg1NjE2MDAgKzAyMDAKQEAgLTE5NDEsOCArMTk0MSw2IEBAIHB0aHJlYWQ6
+OmNhbmNlbCAocHRocmVhZF90IHRocmVhZCkKIHZvaWQKIHB0aHJlYWQ6OmF0
+Zm9ya3ByZXBhcmUgKHZvaWQpCiB7Ci0gIE1UX0lOVEVSRkFDRS0+Zml4dXBf
+YmVmb3JlX2ZvcmsgKCk7Ci0KICAgY2FsbGJhY2sgKmNiID0gTVRfSU5URVJG
+QUNFLT5wdGhyZWFkX3ByZXBhcmU7CiAgIHdoaWxlIChjYikKICAgICB7CkBA
+IC0xOTUxLDYgKzE5NDksOCBAQCBwdGhyZWFkOjphdGZvcmtwcmVwYXJlICh2
+b2lkKQogICAgIH0KIAogICBfX2ZwX2xvY2tfYWxsICgpOworCisgIE1UX0lO
+VEVSRkFDRS0+Zml4dXBfYmVmb3JlX2ZvcmsgKCk7CiB9CiAKIHZvaWQK
+
+--========GMXBoundary189181080548778--
