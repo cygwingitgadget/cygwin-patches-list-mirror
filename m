@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5309-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 6029 invoked by alias); 20 Jan 2005 20:53:42 -0000
+Return-Path: <cygwin-patches-return-5310-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 14840 invoked by alias); 21 Jan 2005 17:34:56 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,83 +7,72 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 5989 invoked from network); 20 Jan 2005 20:53:38 -0000
-Received: from unknown (HELO exgate.steeleye.com) (209.192.50.48)
-  by sourceware.org with SMTP; 20 Jan 2005 20:53:38 -0000
-Received: from steelpo.steeleye.com ([172.17.4.222]) by exgate.steeleye.com with Microsoft SMTPSVC(5.0.2195.6713);
-	 Thu, 20 Jan 2005 15:53:37 -0500
-Content-class: urn:content-classes:message
-MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-Subject: RE: Control auto-uppercasing of environment variables
-Date: Thu, 20 Jan 2005 20:53:00 -0000
-Message-ID: <76CBF6B36306884D835E33553572BE52059EE0@steelpo>
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-From: "Ernie Coskrey" <Ernie.Coskrey@steeleye.com>
-To: "Cygwin Patches" <cygwin-patches@cygwin.com>
-X-OriginalArrivalTime: 20 Jan 2005 20:53:37.0888 (UTC) FILETIME=[1D569E00:01C4FF32]
-X-SW-Source: 2005-q1/txt/msg00012.txt.bz2
+Received: (qmail 14346 invoked from network); 21 Jan 2005 17:34:28 -0000
+Received: from unknown (HELO cygbert.vinschen.de) (80.132.115.92)
+  by sourceware.org with SMTP; 21 Jan 2005 17:34:28 -0000
+Received: by cygbert.vinschen.de (Postfix, from userid 500)
+	id AAF7C5808F; Fri, 21 Jan 2005 18:34:26 +0100 (CET)
+Date: Fri, 21 Jan 2005 17:34:00 -0000
+From: Corinna Vinschen <vinschen@redhat.com>
+To: Bob Byrnes <byrnes@curl.com>
+Cc: cygwin-patches@cygwin.com
+Subject: [Fwd: RE: ssh problem on Windows XP]
+Message-ID: <20050121173426.GA16347@cygbert.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: Bob Byrnes <byrnes@curl.com>,
+	cygwin-patches@cygwin.com
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.4.2i
+X-SW-Source: 2005-q1/txt/msg00013.txt.bz2
 
+Bob,
+
+----- Forwarded message from "Waiss, Garrett" -----
+> Date: Fri, 21 Jan 2005 06:51:59 -0800
+> From: "Waiss, Garrett" 
+> Subject: RE: ssh problem on Windows XP
+> To: Cygwin List
+> 
+> Good luck. I gave up and "downgraded" to cygwin 1.5.10-3. If you are
+> running any release after that on XP SP2, there is a piping issue that
+> has not been addressed.
+> 
 > -----Original Message-----
-> From: Larry Hall [mailto:no-personal-replies-please-lh@cygwin.com]
-> Sent: Friday, January 14, 2005 11:31 PM
-> To: Ernie Coskrey; cygwin-patches@cygwin.com
-> Subject: RE: Control auto-uppercasing of environment variables
->=20
->=20
-> At 03:28 PM 1/14/2005, you wrote:
-> >Well, I suppose there are some similarities between what the=20
-> uppercase_env and check_case options are used for, but=20
-> check_case is specifically targeted at handling case=20
-> sensitivity with regard to filenames, not environment=20
-> variables.  The subvalues of check_case are specified as=20
-> "levels" (relaxed, adjust, and strict), so I don't think=20
-> there's a clean way to use this unless we completely changed=20
-> the meaning of what check_case is intended to do.
-> >
-> >You'd also have to be able to combine subvalues - for=20
-> example, some users might want strict file checking and no=20
-> environment variable uppercasing, others might want relaxed=20
-> file checking and uppercasing of environment variables.  A=20
-> separate CYGWIN option seems cleaner.
->=20
->=20
-> I agree.=20=20
->=20
-> I only glanced quickly at your patch but the new behavior=20
-> doesn't distinguish
-> between 9x and NT platforms.  As I recall, and I may be=20
-> mistaken, 9x needed
-> the environment upper-cased to work.  Did you try your patch on a 9x=20
-> platform?
->=20
->=20
->=20
-> --
-> Larry Hall                              http://www.rfk.com
-> RFK Partners, Inc.                      (508) 893-9779 - RFK Office
-> 838 Washington Street                   (508) 893-9889 - FAX
-> Holliston, MA 01746=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
-=20=20=20
->=20
+> From: cygwin-owner@cygwin.com [mailto:cygwin-owner@cygwin.com] On Behalf
+> Of Neven Luetic
+> Sent: Friday, January 21, 2005 2:48 AM
+> To: cygwin@cygwin.com
+> Subject: ssh problem on Windows XP
+> 
+> 
+> Hello,
+> 
+> I know, problems have been reported concerning the use of ssh on windows
+> xp ("ssh hangs"). I would just like to confirm, if this is, what I'm
+> dealing with. And perhaps somebody knows some workaround until there is
+> a fix.
+> [etc.]
+----- End forwarded message -----
 
-On a Windows 9X system, environment variables are commonly configured in AU=
-TOEXEC.BAT using the "set" command.  The set command automatically uppercas=
-es the variable name - so adding "set MyValue=3D5" to autoexec.bat will res=
-ult in an environment variable whose name is MYVALUE (as will running the s=
-et command from the CMD prompt).
+is there any chance that we get a fix in the next couple of weeks?
+I'm really annoyed about all these reports of hanging processes over
+ssh due to the pipe changes.  The only application which seems to
+work better to date is apparently the Cygwin version of rsync.
 
-There are two variables - windir and winbootdir - that are lower-case on a =
-Windows 98 system.  Using my patch, I was able to run a shell and see that =
-these variables remain lower-case in the shell environment, and that this d=
-idn't create any problems with any of the Cygwin utilities I tried.  I coul=
-d have written a program that would do a variety of SetEnvironmentVariable(=
-) calls using mixed-case variable names, and then would execute bash, but d=
-idn't go to those lengths.  I don't believe this patch will have any advers=
-e side-effects on a Win9X box.
+If we don't get a patch, I'm inclined to revert the pipe patch before
+we release 1.5.13.  IMHO it's not worth to have one application working
+in favorite of tons of other applications.
 
-Ernie Coskrey
-SteelEye Technology, Inc.
+Btw., didn't you announce more pipe patches yet to come?  Is it possible
+that you already have a patch which will get that working again?  I'm
+still hoping for something more satisfying than reverting...
+
+
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          mailto:cygwin@cygwin.com
+Red Hat, Inc.
