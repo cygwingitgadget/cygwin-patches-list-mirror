@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5355-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 28758 invoked by alias); 17 Feb 2005 09:10:06 -0000
+Return-Path: <cygwin-patches-return-5356-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 10364 invoked by alias); 22 Feb 2005 15:46:03 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,45 +7,50 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 28682 invoked from network); 17 Feb 2005 09:09:56 -0000
-Received: from unknown (HELO cygbert.vinschen.de) (80.132.114.179)
-  by sourceware.org with SMTP; 17 Feb 2005 09:09:56 -0000
+Received: (qmail 10330 invoked from network); 22 Feb 2005 15:45:57 -0000
+Received: from unknown (HELO cygbert.vinschen.de) (80.132.117.153)
+  by sourceware.org with SMTP; 22 Feb 2005 15:45:57 -0000
 Received: by cygbert.vinschen.de (Postfix, from userid 500)
-	id 6691257D77; Thu, 17 Feb 2005 10:09:55 +0100 (CET)
-Date: Thu, 17 Feb 2005 09:10:00 -0000
+	id CAEF357D77; Tue, 22 Feb 2005 16:45:55 +0100 (CET)
+Date: Tue, 22 Feb 2005 15:46:00 -0000
 From: Corinna Vinschen <vinschen@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: patch to allow touch to work on HPFS (and others, maybe??)
-Message-ID: <20050217090955.GB12133@cygbert.vinschen.de>
+Subject: Re: [Fwd: RE: ssh problem on Windows XP]
+Message-ID: <20050222154555.GE18314@cygbert.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20050208091029.GM19096@cygbert.vinschen.de> <0IBM0096T43FSM@pmismtp01.mcilink.com> <20050209085228.GF2597@cygbert.vinschen.de> <loom.20050210T160326-68@post.gmane.org> <20050210155633.GB2597@cygbert.vinschen.de> <loom.20050211T000509-58@post.gmane.org> <20050211142028.GD2597@cygbert.vinschen.de> <loom.20050215T004351-284@post.gmane.org>
+References: <20050121173426.GA16347@cygbert.vinschen.de> <20050122205845.A3967E54A@carnage.curl.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <loom.20050215T004351-284@post.gmane.org>
+In-Reply-To: <20050122205845.A3967E54A@carnage.curl.com>
 User-Agent: Mutt/1.4.2i
-X-SW-Source: 2005-q1/txt/msg00058.txt.bz2
+X-SW-Source: 2005-q1/txt/msg00059.txt.bz2
 
-On Feb 14 23:59, Eric Blake wrote:
-> Corinna Vinschen <vinschen <at> redhat.com> writes:
-> > 
-> > I guess trying my approach isn't the worst one, though.  We should
-> > use that as a start point for further experimenting, IMHO.  I'll check
-> > that in.
-> > 
+On Jan 22 15:58, Bob Byrnes wrote:
+> On Jan 21,  6:34pm, Corinna Vinschen wrote:
+> -- Subject: [Fwd: RE: ssh problem on Windows XP]
+> >
+> > is there any chance that we get a fix in the next couple of weeks?
 > 
-> Checking win32.has_acls() and using GENERIC_WRITE caused a regression in utimes
-> ().  The new upstream automake-1.9.5 tarball contains a read-only file (mode 
-> 0444).  Before the 20050211 snapshot, when utimes() is still using 
-> FILE_WRITE_ATTRIBUTES, tar does just fine at adjusting the timestamp of that 
-> file when unpacking to an NFS-mounted directory.  However, with the current 
-> code, when I tried to unpack, tar is no longer able to touch the timestamps of 
-> the read-only file because GENERIC_WRITE requires write access for at least one 
-> of user, group, and other, even though touching the timestamp does not.
+> I remain absolutely committed to fixing the problems that have been
+> reported, but I can't say that I'll have a fix in that timeframe,
+> because I have some urgent deadlines for other projects.  Maybe
+> early to mid-February?
+> 
+> > If we don't get a patch, I'm inclined to revert the pipe patch before
+> > we release 1.5.13.
+> 
+> Instead of reverting the entire patch, if you want to restore the old
+> behavior (select always returning true for writes on pipes), you could
+> add a small piece of code to "short-circuit" the NtQueryInformationFile
+> logic that I added.
+> [...]
 
-Too bad.  I'll change the code to try FILE_WRITE_ATTRIBUTES first and
-GENERIC_WRITE only if that fails.
+FYI, I've short-circuited the NtQueryInformationFile for now and set
+pipes to always writable.  What convinced me even more that this
+is temorarily the right thing to do is the fact that scp becomes at
+least 3 times faster when short-circuiting NtQueryInformationFile.
 
 
 Corinna
