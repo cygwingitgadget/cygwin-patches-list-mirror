@@ -1,37 +1,31 @@
-From: Chris Faylor <cgf@redhat.com>
+From: "Gerrit P. Haase" <gerrit@familiehaase.de>
 To: cygwin-patches@cygwin.com
-Cc: Dave Sainty <dave@dtsp.co.nz>
-Subject: Re: Patch to make setrlimit() more forgiving
-Date: Fri, 05 Jan 2001 08:27:00 -0000
-Message-id: <20010105112748.I1649@redhat.com>
-References: <20010104214112.A32564@redhat.com> <200101050922.f059MVD30284@mail.redhat.com> <20010105111747.D1649@redhat.com>
-X-SW-Source: 2001-q1/msg00010.html
+Subject: [PATCH] winsup/doc/Makefile.in + winsup/testsuite/Makefile.in
+Date: Fri, 05 Jan 2001 09:16:00 -0000
+Message-id: <3A560EBE.21827.1C8F628@localhost>
+X-SW-Source: 2001-q1/msg00011.html
 
-On Fri, Jan 05, 2001 at 11:17:47AM -0500, Chris Faylor wrote:
->On Fri, Jan 05, 2001 at 10:23:28PM +1300, Dave Sainty wrote:
->>Christopher Faylor writes:
->>
->>> It looks good but I need a ChangeLog.
->>> 
->>> cgf
->>> 
->>> On Fri, Jan 05, 2001 at 03:38:43PM +1300, David Sainty wrote:
->>> >Attached is a simple patch that prevents setrlimit() failing with an error
->>> >when the operation would not have changed anything.  This allows all
->>> >resource types to be set, so long as the setting is identical to the current
->>> >pseudo-settings.
->>
->>Certainly :)  Sorry, I'm sure there was some FAQ I was meant to read
->>before posting patches :)
->>
->>Fri Jan 5 15:38:43 2001  Dave Sainty <david.sainty@dtsp.co.nz>
->>
->>	* resource.cc: Allow all null setrlimit() operations to succeed
->
->And thanks! for the patch.
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-Oops.  Looks like Corinna beat me to this.
+I don't know why it did not work for me correct this time.
 
-I was going to handle this because she is on vacation.  Now there's diligence!
+I changed two Makefile.in -files and winsup compiled o.k.
 
-cgf
+Patch appended.
+
+Please look whether it makes sense to you. (Specially the patch
+for the Makefile.in of winsup/testsuite is only a guess of me).
+
+Gerrit
+
+AnhÃ¤nge:
+  C:\cygwin\src\test\cygpatch0001.diff
+
+-----BEGIN PGP SIGNATURE-----
+Version: PGP 6.5.8 -- QDPGP 2.61c
+
+iQA/AwUBOlXynqMmDzzIydaaEQIB3wCfQgW4H+3tDwLI+l5NihyaLgdz0XYAoO+S
+qXN+h6KO77NSRWZ1eM82Mqnc
+=asxp
+-----END PGP SIGNATURE-----
