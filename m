@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5377-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 20046 invoked by alias); 10 Mar 2005 16:32:11 -0000
+Return-Path: <cygwin-patches-return-5378-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 25923 invoked by alias); 22 Mar 2005 19:01:33 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,38 +7,27 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 19429 invoked from network); 10 Mar 2005 16:32:01 -0000
-Received: from unknown (HELO mail.gmx.net) (213.165.64.20)
-  by sourceware.org with SMTP; 10 Mar 2005 16:32:01 -0000
-Received: (qmail invoked by alias); 10 Mar 2005 16:32:00 -0000
-Received: from unknown (EHLO mordor) (213.91.247.38)
-  by mail.gmx.net (mp015) with SMTP; 10 Mar 2005 17:32:00 +0100
-X-Authenticated: #14308112
-Date: Thu, 10 Mar 2005 16:32:00 -0000
-From: Pavel Tsekov <ptsekov@gmx.net>
-X-X-Sender: ptsekov@mordor
+Received: (qmail 25910 invoked from network); 22 Mar 2005 19:01:30 -0000
+Received: from unknown (HELO cgf.cx) (66.30.17.189)
+  by sourceware.org with SMTP; 22 Mar 2005 19:01:30 -0000
+Received: by cgf.cx (Postfix, from userid 201)
+	id A900413C08D; Tue, 22 Mar 2005 14:01:30 -0500 (EST)
+Date: Tue, 22 Mar 2005 19:01:00 -0000
+From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH]: autoload.cc: Remove unnecessary data entries from
- .dllname_info sections
-In-Reply-To: <20050310144414.GC16211@gully.casa.cgf.cx>
-Message-ID: <Pine.CYG.4.58.0503101828510.1208@mordor>
-References: <Pine.CYG.4.58.0503101212001.1188@mordor> <20050310144414.GC16211@gully.casa.cgf.cx>
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-Y-GMX-Trusted: 0
-X-SW-Source: 2005-q1/txt/msg00080.txt.bz2
+Subject: Re: [Patch]: Timer functions
+Message-ID: <20050322190130.GB25678@trixie.casa.cgf.cx>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <3.0.5.32.20050303234545.00b42bc0@incoming.verizon.net> <3.0.5.32.20050303234545.00b42bc0@incoming.verizon.net> <3.0.5.32.20050306234015.00b5a598@incoming.verizon.net> <003401c52331$a412c3b0$ac05a8c0@wirelessworld.airvananet.com> <20050307162807.GC4591@trixie.casa.cgf.cx> <005b01c52337$f8993210$ac05a8c0@wirelessworld.airvananet.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <005b01c52337$f8993210$ac05a8c0@wirelessworld.airvananet.com>
+User-Agent: Mutt/1.5.6i
+X-SW-Source: 2005-q1/txt/msg00081.txt.bz2
 
+I just wanted to say that I haven't forgotten about this patch and I plan
+on adding it + some modifications soon.
 
-On Thu, 10 Mar 2005, Christopher Faylor wrote:
-
-> Thanks for the patch but I'd prefer keeping the current functionality which
-> makes the use of LoadDllprime optional.
-
-I didn't know better :(
-
-> I've checked in a fix for this so that only one .*_info block is loaded
-> for any given DLL.
-
-Very nice! :)
-
-Thanks!
+cgf
