@@ -1,19 +1,92 @@
-From: Chris Faylor <cgf@cygnus.com>
-To: cygpatch <cygwin-patches@sourceware.cygnus.com>, Mumit Khan <khan@NanoTech.Wisc.EDU>
-Subject: Re: cross compiling patches
-Date: Thu, 30 Mar 2000 17:59:00 -0000
-Message-id: <20000330205925.A30386@cygnus.com>
-References: <200003300046.SAA27482@hp2.xraylith.wisc.edu> <38E30C2A.7B962DE8@vinschen.de> <38E3D5F2.15B2E3A0@vinschen.de> <20000330192529.A29634@cygnus.com>
-X-SW-Source: 2000-q1/msg00027.html
+From: Corinna Vinschen <corinna@vinschen.de>
+To: cygpatch <cygwin-patches@sourceware.cygnus.com>
+Subject: symlink changes
+Date: Fri, 31 Mar 2000 10:49:00 -0000
+Message-id: <38E4F407.3AB20C82@vinschen.de>
+X-SW-Source: 2000-q1/msg00028.html
 
-On Thu, Mar 30, 2000 at 07:25:29PM -0500, Chris Faylor wrote:
->Ok.  I just checked and the top-level Makefile.in in the winsup version
->of CVS is missing some changes that should be in the gcc version.  I'll
->take a look at the difference between the two repositories and submit
->an appropriate patch to Makefile.in.
+Hi Chris,
+Hi all,
 
-I've checked in those changes.  Sorry, Corinna.  You were right.  The only
-way to do this was from the top-level and the sad thing is that I had already
-come to that conclusion and made the appropriate changes elsewhere.
+I have a patch here that solves two different problems with symlinks:
 
-cgf
+- Since the latest big ntsec patch (early this year) the owner/group
+  information wasn't set to the correct values that are given by the
+  settings in /etc/passwd and /etc/group. I have patched this.
+
+- The other problem was that in chown the path was evaluated with
+  SYMLINK_FOLLOW. This isn't the same behaviour as under linux.
+  I have patched it, so that now a chown on a symlink changes
+  user/group of the symlink instead of the linked file, equal to
+  linux. This is done by using SYMLINK_IGNORE as parameter to
+  path_conv.
+
+Do you agree?
+
+Corinna
+Index: ChangeLog
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/ChangeLog,v
+retrieving revision 1.42
+diff -u -p -r1.42 ChangeLog
+--- ChangeLog	2000/03/30 03:51:30	1.42
++++ ChangeLog	2000/03/31 18:37:54
+@@ -1,3 +1,12 @@
++Fry Mar 31 11:18:00 2000  Corinna Vinschen <corinna@vinschen.de>
++
++        * path.cc (symlink): Call `set_file_attribute()' and
++        `SetFileAttributeA()' instead of `chmod()' to set
++        uid/gid correct.
++        * syscall.cc (chown): Get path with SYMLINK_IGNORE to
++        set owner/group of link instead of link target.
++        Eliminate local variable `has_acls'.
++
+ Wed Mar 29 22:49:56 2000  Christopher Faylor <cgf@cygnus.com>
+ 
+ 	* fhandler.h (select_record): Explicitly zero elements of this class.
+Index: path.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/path.cc,v
+retrieving revision 1.5
+diff -u -p -r1.5 path.cc
+--- path.cc	2000/03/28 21:49:16	1.5
++++ path.cc	2000/03/31 18:38:01
+@@ -2048,7 +2048,10 @@ symlink (const char *topath, const char 
+       else
+ 	{
+ 	  CloseHandle (h);
+-	  chmod (frompath, S_IFLNK | S_IRWXU | S_IRWXG | S_IRWXO);
++	  set_file_attribute (win32_path.has_acls (),
++	                      win32_path.get_win32 (),
++                              S_IFLNK | S_IRWXU | S_IRWXG | S_IRWXO);
++          SetFileAttributesA (win32_path.get_win32 (), FILE_ATTRIBUTE_SYSTEM);
+ 	  res = 0;
+ 	}
+     }
+Index: syscalls.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/syscalls.cc,v
+retrieving revision 1.11
+diff -u -p -r1.11 syscalls.cc
+--- syscalls.cc	2000/03/28 21:49:16	1.11
++++ syscalls.cc	2000/03/31 18:38:06
+@@ -656,7 +656,7 @@ chown (const char * name, uid_t uid, gid
+   else
+     {
+       /* we need Win32 path names because of usage of Win32 API functions */
+-      path_conv win32_path (name);
++      path_conv win32_path (name, SYMLINK_IGNORE);
+ 
+       if (win32_path.error)
+ 	{
+@@ -676,9 +676,7 @@ chown (const char * name, uid_t uid, gid
+       DWORD attrib = 0;
+       if (win32_path.file_attributes () & FILE_ATTRIBUTE_DIRECTORY)
+         attrib |= S_IFDIR;
+-      int has_acls;
+-      has_acls = allow_ntsec && win32_path.has_acls ();
+-      res = get_file_attribute (has_acls,
++      res = get_file_attribute (win32_path.has_acls (),
+                                 win32_path.get_win32 (),
+                                 (int *) &attrib);
+       if (!res)
