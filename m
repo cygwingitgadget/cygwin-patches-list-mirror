@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2010-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 10773 invoked by alias); 27 Mar 2002 01:35:17 -0000
+Return-Path: <cygwin-patches-return-2011-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 28461 invoked by alias); 27 Mar 2002 14:03:07 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,42 +7,78 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 10740 invoked from network); 27 Mar 2002 01:35:17 -0000
-Date: Wed, 27 Mar 2002 06:03:00 -0000
-From: Jason Tishler <jason@tishler.net>
-Subject: Re: Defining _POSIX_SEMAPHORES for cygwin
-In-reply-to:
- <FC169E059D1A0442A04C40F86D9BA76008ABBD@itdomain003.itdomain.net.au>
-To: Robert Collins <robert.collins@itdomain.com.au>
-Cc: Cygwin-Patches <cygwin-patches@cygwin.com>
-Mail-followup-to: Robert Collins <robert.collins@itdomain.com.au>,
- Cygwin-Patches <cygwin-patches@cygwin.com>
-Message-id: <20020327014033.GA2088@tishler.net>
-MIME-version: 1.0
-Content-type: text/plain; charset=us-ascii
-Content-transfer-encoding: 7BIT
-Content-disposition: inline
-User-Agent: Mutt/1.3.24i
-References: <FC169E059D1A0442A04C40F86D9BA76008ABBD@itdomain003.itdomain.net.au>
-X-SW-Source: 2002-q1/txt/msg00367.txt.bz2
+Received: (qmail 28378 invoked from network); 27 Mar 2002 14:02:59 -0000
+Message-ID: <3CA1D10E.E672E081@cistron.nl>
+Date: Wed, 27 Mar 2002 06:11:00 -0000
+From: Ton van Overbeek <tvoverbe@cistron.nl>
+X-Accept-Language: en, en-US, en-GB, nl, sv
+MIME-Version: 1.0
+To: cygwin-apps@cygwin.com, cygwin-patches@cygwin.com
+CC: jonas_eriksson@home.se
+Subject: Patch for Setup.exe problem and for mklink2.cc
+Content-Type: multipart/mixed;
+ boundary="------------4E10E38C83FCB4712E588E7C"
+X-SW-Source: 2002-q1/txt/msg00368.txt.bz2
 
-Rob,
+This is a multi-part message in MIME format.
+--------------4E10E38C83FCB4712E588E7C
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Content-length: 835
 
-On Wed, Mar 27, 2002 at 08:23:08AM +1100, Robert Collins wrote:
-> > -----Original Message-----
-> > From: Jason Tishler [mailto:jason@tishler.net] 
-> > Sent: Wednesday, March 27, 2002 3:07 AM
-> 
-> > I have tried the attached patch and threaded Cygwin Python 
-> > builds with semaphore support instead of conditional 
-> > variables.  Is the consensus that this patch should be 
-> > submitted to the newlib list?
-> 
-> Does it pass the test it kept crashing on?
+Found the problem causing the segment violation and probably causing
+Jonas Eriksson's problem. It is a typical case of 'off by 1'.
+In PickView::set_headers the loop filling the window header does one
+iteration too much, resulting in a call to DoInsertItem with a NULL
+string pointer and hence a crash following.
+While debugging this I could not compile the new mklink2.cc ( the
+c++ version of the original mklink2.c). It seems three & (address of operator)
+have disappeared in the transition. Putting them back made the compiler
+happy. Is this OK Robert ?
 
-Yes.  If it didn't, then I wouldn't be pursuing this tack.  BTW,
-with Jerry's Python patch and this one, I have been able to run the
-threaded regression tests for approximately 24 hours without hanging.
-So, I think that this one is finally licked!
+Changelog
+2002-03-27  Ton van Overbeek (tvoverbe@cistron.nl)
+* Pickview.cc (PickView::set_headers) Correct loop count for DoInsertItem.
 
-Jason
+* mklink2.cc (make_link_2) Reinsert three & operators which got lost in the
+  c -> c++ transition.
+
+Patch in attached file.
+
+Ton van Overbeek
+--------------4E10E38C83FCB4712E588E7C
+Content-Type: text/plain; charset=us-ascii;
+ name="patch.txt"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline;
+ filename="patch.txt"
+Content-length: 993
+
+--- mklink2.cc-orig	Wed Mar 27 12:18:34 2002
++++ mklink2.cc	Wed Mar 27 12:41:16 2002
+@@ -20,9 +20,9 @@ make_link_2 (char const *exepath, char c
+   IPersistFile *pf;
+   WCHAR widepath[_MAX_PATH];
+ 
+-  CoCreateInstance (CLSID_ShellLink, NULL,
+-		    CLSCTX_INPROC_SERVER, IID_IShellLink, (LPVOID *) & sl);
+-  sl->lpVtbl->QueryInterface (sl, IID_IPersistFile, (void **) &pf);
++  CoCreateInstance (&CLSID_ShellLink, NULL,
++		    CLSCTX_INPROC_SERVER, &IID_IShellLink, (LPVOID *) & sl);
++  sl->lpVtbl->QueryInterface (sl, &IID_IPersistFile, (void **) &pf);
+ 
+   sl->lpVtbl->SetPath (sl, exepath);
+   sl->lpVtbl->SetArguments (sl, args);
+--- PickView.cc-orig	Wed Mar 27 12:18:26 2002
++++ PickView.cc	Wed Mar 27 12:20:16 2002
+@@ -110,7 +110,7 @@ PickView::set_headers ()
+       SendMessage (listheader, HDM_DELETEITEM, n - 1, 0);
+     }
+   int i;
+-  for (i = 0; i <= last_col; i++)
++  for (i = 0; i < last_col; i++)
+     DoInsertItem (listheader, i, headers[i].width, (char *) headers[i].text);
+ }
+ 
+
+--------------4E10E38C83FCB4712E588E7C--
