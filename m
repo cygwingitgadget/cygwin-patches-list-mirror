@@ -1,28 +1,22 @@
 From: Robert Collins <robert.collins@itdomain.com.au>
-To: egor duda <cygwin-patches@cygwin.com>
-Subject: Re: Egor's daemon
-Date: Wed, 12 Sep 2001 15:29:00 -0000
-Message-id: <1000333801.31770.17.camel@lifelesswks>
-References: <1000295535.30404.67.camel@lifelesswks> <20010912115511.A17668@redhat.com> <1000310370.30375.141.camel@lifelesswks> <20010912121322.A17887@redhat.com> <6611059312.20010912202029@logos-m.ru>
-X-SW-Source: 2001-q3/msg00137.html
+To: Corinna Vinschen <cygwin-patches@cygwin.com>
+Subject: Re: [PATCH]: `wincap' instead of `os_being_run' and `iswinnt'
+Date: Wed, 12 Sep 2001 15:53:00 -0000
+Message-id: <1000335244.31768.39.camel@lifelesswks>
+References: <20010912202058.H1285@cygbert.vinschen.de>
+X-SW-Source: 2001-q3/msg00138.html
 
-On Thu, 2001-09-13 at 02:20, egor duda wrote:
-
-> CF> If it is using non-exported functions from cygwin then we have to design
-> CF> how the two entities communicate with each other.
+On Thu, 2001-09-13 at 04:20, Corinna Vinschen wrote:
+> I have just checked in a huge patch which changes all code which
+> asks for the OS to behave different on different systems.
 > 
-> daemon itself doesn't use non-exported functions. Actually, it doesn't
-> use cygwin1.dll at all -- it should be built with -mno-cygwin
+> The global variables `os_being_run' and `iswinnt' are eliminated.
+> 
+> Instead we have a new global variable called `wincap' which is
+> the only member of class `wincapc'. The definition of that stuff
+> is in the new file wincap.h.
 
-"didn't" :]. I altered it to link to cygwin1.dll for a couple of
-reasons.
-1) Things like syslog are immediately available for us.
-2) We get a little bit of reassurance on the marshalling side that
-things will be built the same.
-3) I wanted to use AF_UNIX sockets as a transport layer, (because with
-SSPI they can do inmpersonation for NT) and duplicating that code from
-cygwin1.dll and attempting to be compatible through any and all changes
-didn't make sense to me. 
+Nice. It's the logical extension of what I'd started with the daemon
+patch for expediency.
 
 Rob
-
