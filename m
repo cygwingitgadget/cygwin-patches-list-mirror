@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2326-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 22802 invoked by alias); 6 Jun 2002 01:06:25 -0000
+Return-Path: <cygwin-patches-return-2327-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 3553 invoked by alias); 6 Jun 2002 01:19:28 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,89 +7,59 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 22788 invoked from network); 6 Jun 2002 01:06:25 -0000
-Message-ID: <01c501c20cf6$987d45b0$6132bc3e@BABEL>
+Received: (qmail 3495 invoked from network); 6 Jun 2002 01:19:27 -0000
+Message-ID: <021101c20cf8$6b033430$6132bc3e@BABEL>
 From: "Conrad Scott" <Conrad.Scott@dsl.pipex.com>
 To: <cygwin-patches@cygwin.com>
-Subject: Make CW_STRACE_TOGGLE toggle
-Date: Wed, 05 Jun 2002 18:06:00 -0000
+References: <00ef01c20cf1$08974c20$6132bc3e@BABEL> <20020606003415.GC15072@redhat.com>
+Subject: Re: Patch for sub-second resolution in stat(2)
+Date: Wed, 05 Jun 2002 18:19:00 -0000
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
-	boundary="----=_NextPart_000_01C2_01C20CFE.FA1D0EB0"
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-SW-Source: 2002-q2/txt/msg00309.txt.bz2
-
-This is a multi-part message in MIME format.
-
-------=_NextPart_000_01C2_01C20CFE.FA1D0EB0
 Content-Type: text/plain;
 	charset="iso-8859-1"
 Content-Transfer-Encoding: 7bit
-Content-length: 864
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-SW-Source: 2002-q2/txt/msg00310.txt.bz2
 
-Another patch but very small.
+"Christopher Faylor" <cgf@redhat.com> wrote:
+> >I'm unclear whether this is the best naming / type scheme but it is one
+> >recognised by both the make and fileutils packages available from the
+> >cygwin setup (i.e. make this patch and re-compile those packages and they
+> > detect the new fields).
+>
+> As long as there's precedent...  Is this how linux does it too?
 
-Currently calls to:
+This does seem to be the way that several vendors do it: it's labelled "the
+usual case" in the make and fileutils configure files (as opposed to Solaris
+2.6 and Unixware 2.1.2) and I found several man pages on the web that
+matched this naming / typing scheme.
 
-    cygwin_internal (CW_STRACE_TOGGLE, pid)
+Strangely, Linux doesn't seem to support sub-second timing (at least, not as
+of 2.5.13, which is all I have to hand right now).
 
-doesn't toggle the stracing of pid but simply turns it on again, i.e. a
-no-op after the first call. This patch makes strace.exe read the current
-value of the strace.active flag and invert it, rather than unilaterally
-setting it.
 
-I've got a small program that makes this call for a given process, so you
-can turn stracing on and off around events of interest etc. I'll send it
-along once I've thought of a good name for it (strtoggle? stroggle?
-stronoff? . . . ) Any suggestions?
+> newlib patches should be sent to the newlib mailing list.
 
-I find this patch useful since (pre-XP) debuggers can't detach from their
-targets. Thus you're stuck with strace.exe once it's attached.
+On its way.
+
+> I see from your next message that you're probably sending a better
+> ChangeLog.  :-)
+
+Well, it's longer :-) and I hope it's better.
+
+
+While I'm writing, just a note that there is a proviso in the second
+(slightly more considered) version of the email about an issue of rounding
+up of the times for FAT that I also missed out from the first.
+
+> I'll let Corinna comment on the patch itself.  It looks good to me, but
+> she's been modifying this code a lot lately so she has a better feel for
+> it.
+
+Thanks Chris.
 
 // Conrad
 
-Changelog message:
-* strace.cc (handle_output_debug_string): Invert the child's strace.active
-flag rather than unilaterally setting it.
-
-
-------=_NextPart_000_01C2_01C20CFE.FA1D0EB0
-Content-Type: application/octet-stream;
-	name="strace.patch"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment;
-	filename="strace.patch"
-Content-length: 1013
-
-Index: strace.cc=0A=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
-RCS file: /cvs/src/src/winsup/utils/strace.cc,v=0A=
-retrieving revision 1.21=0A=
-diff -u -u -r1.21 strace.cc=0A=
---- strace.cc	2 Jun 2002 17:46:38 -0000	1.21=0A=
-+++ strace.cc	6 Jun 2002 00:58:48 -0000=0A=
-@@ -448,7 +448,16 @@=0A=
-=20=0A=
-   if (special =3D=3D _STRACE_INTERFACE_ACTIVATE_ADDR)=0A=
-     {=0A=
--      DWORD new_flag =3D 1;=0A=
-+      DWORD new_flag;=0A=
-+=0A=
-+      if (!ReadProcessMemory (hchild, (LPVOID) n, &new_flag,=0A=
-+			       sizeof (new_flag), &nbytes))=0A=
-+	error (0,=0A=
-+	       "couldn't read strace flag from subprocess, windows error %d",=0A=
-+	       GetLastError ());=0A=
-+=0A=
-+      new_flag =3D !new_flag;=0A=
-+=0A=
-       if (!WriteProcessMemory (hchild, (LPVOID) n, &new_flag,=0A=
- 			       sizeof (new_flag), &nbytes))=0A=
- 	error (0,=0A=
-
-------=_NextPart_000_01C2_01C20CFE.FA1D0EB0--
 
