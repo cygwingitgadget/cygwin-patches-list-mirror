@@ -1,42 +1,63 @@
-From: "Norman Vine" <nhv@cape.com>
-To: "'Jason Tishler'" <Jason.Tishler@dothill.com>, "'Robert Collins'" <robert.collins@itdomain.com.au>
-Cc: "'Greg Smith'" <gsmith@nc.rr.com>, <cygwin-patches@cygwin.com>
-Subject: RE: Deadly embrace between pthread_cond_wait and pthread_cond_signal
-Date: Tue, 26 Jun 2001 07:42:00 -0000
-Message-id: <005001c0fe4c$2e2acb60$a300a8c0@nhv>
-References: <20010626101032.O296@dothill.com>
-X-SW-Source: 2001-q2/msg00339.html
+From: Kazuhiro Fujieda <fujieda@jaist.ac.jp>
+To: cygwin-patches@cygwin.com
+Subject: Make Cygwin damons easier to use on Win9x.
+Date: Tue, 26 Jun 2001 07:44:00 -0000
+Message-id: <s1sithjcndc.fsf@jaist.ac.jp>
+X-SW-Source: 2001-q2/msg00340.html
 
-Jason Tishler writes:
->
->Rob,
->
->On Thu, Jun 21, 2001 at 04:02:46PM -0400, Jason Tishler wrote:
->> Norman,
->> 
->
->Unfortunately I was swayed by Norman's exuberance and responded without
->actually testing myself.  I now see that Python hangs when trying to
->build the standard extension modules during the build (which uses the
->newly built python executable).  I will try to supply useful details as
->soon as I get a chance.
->
->In off-list email with Norman, it was ascertained that he is not using a
->stock Python 2.1 source tree.  Norman, feel free to supply your findings
->-- it may be helpful for Rob to track down some of the remain problems.
+The following patch makes Cygwin daemons more easier to use on Win9x.
+It allows daemons run without their console window and terminate
+silently without annoying us with the "End task" dialog twice.
 
-Hi all
+My patch against syscalls.cc isn't perfect. It doesn't consider the
+case where an application run on the tty mode or re-attach the
+console as its controlling terminal. But it works well practically.
 
-Since my last correspondance with Jason I have tested this with
-the 'stock'  Python-2.1 tarball and all seems to be OK
+2001-06-26  Kazuhiro Fujieda  <fujieda@jaist.ac.jp>
 
-I am experiencing an occasional 'hang' in the make process
-this is on WIn2k sp2 and the 'very latest' Cygwin files.
-Usually a 'ctrl-C' will abort the make and a subsequent make
-will  run to completion.  This make behaviour is not isolated to the
-Python build but I have not been able to find a situation that will
-reliably reproduce it.
+	* syscalls.cc (setsid): Detach process from its console if
+	the current controlling terminal is the console device.
+	* exception.cc (ctrl_c_handler): Send SIGTERM to myself when catch
+	CTRL_LOGOFF_EVENT.
 
-Cheers
+Index: syscalls.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/syscalls.cc,v
+retrieving revision 1.120
+diff -u -p -r1.120 syscalls.cc
+--- syscalls.cc	2001/06/05 10:45:52	1.120
++++ syscalls.cc	2001/06/08 14:57:12
+@@ -214,6 +214,8 @@ setsid (void)
+   /* FIXME: for now */
+   if (myself->pgid != _getpid ())
+     {
++      if (myself->ctty == TTY_CONSOLE)
++	FreeConsole ();
+       myself->ctty = -1;
+       myself->sid = _getpid ();
+       myself->pgid = _getpid ();
 
-Norman
+Index: exceptions.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/exceptions.cc,v
+retrieving revision 1.90
+diff -u -p -r1.90 exceptions.cc
+--- exceptions.cc	2001/06/24 22:26:50	1.90
++++ exceptions.cc	2001/06/26 13:13:57
+@@ -893,7 +893,10 @@ static BOOL WINAPI
+ ctrl_c_handler (DWORD type)
+ {
+   if (type == CTRL_LOGOFF_EVENT)
+-    return TRUE;
++    {
++      sig_send (NULL, SIGTERM);
++      return FALSE;
++    }
+ 
+   if ((type == CTRL_CLOSE_EVENT) || (type == CTRL_SHUTDOWN_EVENT))
+     /* Return FALSE to prevent an "End task" dialog box from appearing
+
+____
+  | AIST      Kazuhiro Fujieda <fujieda@jaist.ac.jp>
+  | HOKURIKU  School of Information Science
+o_/ 1990      Japan Advanced Institute of Science and Technology
