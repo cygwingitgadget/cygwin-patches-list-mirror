@@ -1,19 +1,20 @@
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygwin-patches@cygwin.com
+From: Earnie Boyd <earnie_boyd@yahoo.com>
+To: Robert Collins <robert.collins@itdomain.com.au>
+Cc: cygwin-patches@cygwin.com
 Subject: Re: tzname
-Date: Tue, 27 Mar 2001 05:54:00 -0000
-Message-id: <20010327155402.G16622@cygbert.vinschen.de>
+Date: Tue, 27 Mar 2001 05:58:00 -0000
+Message-id: <3AC09C62.9EF2183B@yahoo.com>
 References: <EA18B9FA0FE4194AA2B4CDB91F73C0EF02E2B2@itdomain002.itdomain.net.au> <3AC09288.13581E12@yahoo.com> <018601c0b6c0$03170430$0200a8c0@lifelesswks>
-X-SW-Source: 2001-q1/msg00251.html
+X-SW-Source: 2001-q1/msg00252.html
 
-On Tue, Mar 27, 2001 at 11:15:35PM +1000, Robert Collins wrote:
+Robert Collins wrote:
+> 
 > ----- Original Message -----
 > From: "Earnie Boyd" <earnie_boyd@yahoo.com>
 > To: "Robert Collins" <robert.collins@itdomain.com.au>
 > Cc: <cygwin-patches@cygwin.com>
 > Sent: Tuesday, March 27, 2001 11:15 PM
 > Subject: Re: tzname
-> 
 > 
 > > Robert Collins wrote:
 > > >
@@ -37,15 +38,16 @@ On Tue, Mar 27, 2001 at 11:15:35PM +1000, Robert Collins wrote:
 > I've found them more accessible :]
 > 
 > Everything I've actually cross checked has matched.
+> 
 
-Hmm, they also define `extern long int timezone' and `extern int daylight'.
+That's good to hear.  I've used the opengroup for reference before and
+glad to know I can count on it.
 
-I would suggest adding these as well and sending your patch to
-mailto:newlib@sources.redhat.com .
+Q: Is _tznames an ANSI spec?  Cygwin supports both ANSI and POSIX.
 
-Corinna
+Earnie.
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+_________________________________________________________
+Do You Yahoo!?
+Get your free @yahoo.com address at http://mail.yahoo.com
+
