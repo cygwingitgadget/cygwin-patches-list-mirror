@@ -1,43 +1,83 @@
-From: "Bradley A. Town" <townba@pobox.com>
-To: <cygwin-patches@cygwin.com>
-Subject: RE: Mouse support
-Date: Sat, 16 Dec 2000 08:10:00 -0000
-Message-id: <OLEFLDABDIPMDEPMLEMMOECMCAAA.townba@pobox.com>
-References: <20001215221335.A13088@redhat.com>
-X-SW-Source: 2000-q4/msg00051.html
+From: Earnie Boyd <earnie_boyd@yahoo.com>
+To: cygwin-patches@cygwin.com
+Subject: cygwin/Makefile.in and cinstall/Makefile.in
+Date: Mon, 18 Dec 2000 12:44:00 -0000
+Message-id: <20001218204418.12970.qmail@web117.yahoomail.com>
+X-SW-Source: 2000-q4/msg00052.html
+Content-type: multipart/mixed; boundary="----------=_1583532846-65437-24"
 
-BTW, for most programs to support using a mouse, the Cygwin user needs to
-add an entry to her termcap file and source terminfo file.
+This is a multi-part message in MIME format...
 
-/etc/termcap: Km=\E[M
-terminfo source: kmous=\E[M (then re-tic)
+------------=_1583532846-65437-24
+Content-length: 325
 
-Brad Town
+Allows the use of -O3 or -finline-functions by disallowing them for
+cygwin/autoload.cc, cygwin/exceptions.cc and cinstall/autoload.c.
+
+Cheers,
+
+__________________________________________________
+Do You Yahoo!?
+Yahoo! Shopping - Thousands of Stores. Millions of Products.
+http://shopping.yahoo.com/
+cygwin.diff
+cinstall.diff
 
 
------Original Message-----
-From: cygwin-patches-owner@sources.redhat.com
-[ mailto:cygwin-patches-owner@sources.redhat.com]On Behalf Of Christopher
-Faylor
-Sent: Friday, December 15, 2000 10:14 PM
-To: 'cygwin-patches@cygwin.com'
-Subject: Re: Mouse support
+------------=_1583532846-65437-24
+Content-Type: text/x-diff; charset=us-ascii; name="cinstall.diff"
+Content-Disposition: inline; filename="cinstall.diff"
+Content-Transfer-Encoding: base64
+Content-Length: 1074
 
+Ck1vbiBEZWMgMTggMTU6MzE6MTYgIDIwMDAgIEVhcm5pZSBCb3lkICA8ZWFy
+bmllX2JveWRAeWFob28uY29tCgoJKiBNYWtlZmlsZS5pbjooYXV0b2xvYWQu
+bykgQWRkIHRhcmdldCB0byBzcGVjaWZ5IC1mbm8taW5saW5lLWZ1bmN0aW9u
+cwoKSW5kZXg6IE1ha2VmaWxlLmluCj09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0K
+UkNTIGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvY2luc3RhbGwvTWFrZWZp
+bGUuaW4sdgpyZXRyaWV2aW5nIHJldmlzaW9uIDIuOQpkaWZmIC11IC0zIC1y
+Mi45IE1ha2VmaWxlLmluCi0tLSBNYWtlZmlsZS5pbgkyMDAwLzEyLzExIDAw
+OjA3OjU2CTIuOQorKysgTWFrZWZpbGUuaW4JMjAwMC8xMi8xOCAyMDozNzo0
+NQpAQCAtMTgxLDYgKzE4MSwxNCBAQAogCUAkKENYWCkgJChNSU5HV19DWFhG
+TEFHUykgLWMgLW8gJEAgJDwKIGVuZGlmCiAKK2F1dG9sb2FkLm86IGF1dG9s
+b2FkLmMKK2lmZGVmIFZFUkJPU0UKKwkkKENDKSAkKE1JTkdXX0NGTEFHUykg
+LWMgLW8gJEAgJDwgLWZuby1pbmxpbmUtZnVuY3Rpb25zCitlbHNlCisJQGVj
+aG8gJChDQykgLWMgJChDRkxBR1MpIC4uLiAkKDxGKSAtZm5vLWlubGluZS1m
+dW5jdGlvbnMKKwlAJChDQykgJChNSU5HV19DRkxBR1MpIC1jIC1vICRAICQ8
+IC1mbm8taW5saW5lLWZ1bmN0aW9ucworZW5kaWYKKwogaW5pcGFyc2UuYyBp
+bmlwYXJzZS5oIDogaW5pcGFyc2UueQogCWJpc29uIC1kIC1vIGluaXBhcnNl
+LmMgJChzcmNkaXIpL2luaXBhcnNlLnkKIAo=
 
-On Fri, Dec 15, 2000 at 11:35:15AM -0500, Town, Brad wrote:
->Yeah, this morning (Friday), CVS choked on my changes, too.  Attached are
->some good patches that do the trick.
+------------=_1583532846-65437-24
+Content-Type: text/x-diff; charset=us-ascii; name="cygwin.diff"
+Content-Disposition: inline; filename="cygwin.diff"
+Content-Transfer-Encoding: base64
+Content-Length: 1428
 
-Patch applied, with a minor change to fhandler_console.cc and some
-reformatting of the ChangeLog.
+Ck1vbiBEZWMgMTggMTU6MzE6MTYgIDIwMDAgIEVhcm5pZSBCb3lkICA8ZWFy
+bmllX2JveWRAeWFob28uY29tCgoJKiBNYWtlZmlsZS5pbjooYXV0b2xvYWQu
+bykgQWRkIHRhcmdldCB0byBzcGVjaWZ5IC1mbm8taW5saW5lLWZ1bmN0aW9u
+cwoJKGV4Y2VwdGlvbnMubykgRGl0dG8uCgpJbmRleDogTWFrZWZpbGUuaW4K
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3Jj
+L3dpbnN1cC9jeWd3aW4vTWFrZWZpbGUuaW4sdgpyZXRyaWV2aW5nIHJldmlz
+aW9uIDEuNDgKZGlmZiAtdSAtMyAtcjEuNDggTWFrZWZpbGUuaW4KLS0tIE1h
+a2VmaWxlLmluCTIwMDAvMTIvMTUgMjI6MjU6NTEJMS40OAorKysgTWFrZWZp
+bGUuaW4JMjAwMC8xMi8xOCAyMDozNzoyMwpAQCAtMTk0LDYgKzE5NCwyMyBA
+QAogCiBkbGxfb2ZpbGVzOiAkKERMTF9PRklMRVMpCiAKK2F1dG9sb2FkLm86
+IGF1dG9sb2FkLmNjCitpZmRlZiBWRVJCT1NFCisJJChDT01QSUxFX0NYWCkg
+LW8gJChARCkvJCgqRikkbyAkPCAtZm5vLWlubGluZS1mdW5jdGlvbnMKK2Vs
+c2UKKwlAZWNobyAkKENYWCkgJGMgJChDWFhGTEFHUykgLi4uICQoKkYpLmNj
+IC1mbm8taW5saW5lLWZ1bmN0aW9ucworCUAkKENPTVBJTEVfQ1hYKSAtbyAk
+KEBEKS8kKCpGKSRvICQ8IC1mbm8taW5saW5lLWZ1bmN0aW9ucworZW5kaWYK
+KworZXhjZXB0aW9ucy5vOiBleGNlcHRpb25zLmNjCitpZmRlZiBWRVJCT1NF
+CisJJChDT01QSUxFX0NYWCkgLW8gJChARCkvJCgqRikkbyAkPCAtZm5vLWlu
+bGluZS1mdW5jdGlvbnMKK2Vsc2UKKwlAZWNobyAkKENYWCkgJGMgJChDWFhG
+TEFHUykgLi4uICQoKkYpLmNjIC1mbm8taW5saW5lLWZ1bmN0aW9ucworCUAk
+KENPTVBJTEVfQ1hYKSAtbyAkKEBEKS8kKCpGKSRvICQ8IC1mbm8taW5saW5l
+LWZ1bmN0aW9ucworZW5kaWYKKworCiAkKExJQkdNT05fQSk6ICQoR01PTl9P
+RklMRVMpICQoR01PTl9TVEFSVCkKIAkkKEFSKSByY3YgJChMSUJHTU9OX0Ep
+ICQoR01PTl9PRklMRVMpCiAK
 
-A ChangeLog entry should list the file name once with just the functions
-listed below it.  The entries should also be present tense as in "Fix
-problem
-with foo" rather than "Fixed problem with foo".
-
-Anyway, thanks for the patch.  I've wanted something like this for a long
-time.
-
-cgf
-
+------------=_1583532846-65437-24--
