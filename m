@@ -1,83 +1,42 @@
-From: Earnie Boyd <earnie_boyd@yahoo.com>
-To: cygwin-patches@cygwin.com
-Subject: cygwin/Makefile.in and cinstall/Makefile.in
-Date: Mon, 18 Dec 2000 12:44:00 -0000
-Message-id: <20001218204418.12970.qmail@web117.yahoomail.com>
-X-SW-Source: 2000-q4/msg00052.html
-Content-type: multipart/mixed; boundary="----------=_1583532846-65437-24"
+From: "Edward M. Lee" <edward@tailifer.com>
+To: "List, Cygwin Developers" <cygwin-developers@cygwin.com>
+Cc: "List, Cygwin Patches" <cygwin-patches@cygwin.com>
+Subject: Minor winsup/doc/sgml patch.
+Date: Thu, 21 Dec 2000 12:07:00 -0000
+Message-id: <FMEOJCMLNIMPBKAPFPIHCEPICFAA.edward@tailifer.com>
+X-SW-Source: 2000-q4/msg00053.html
 
-This is a multi-part message in MIME format...
+Just some things to make the sgml conformant.
 
-------------=_1583532846-65437-24
-Content-length: 325
+ChangeLog:
 
-Allows the use of -O3 or -finline-functions by disallowing them for
-cygwin/autoload.cc, cygwin/exceptions.cc and cinstall/autoload.c.
+Thu Dec 21 15:03:29 2000  Edward M. Lee <tailbert@yahoo.com>
 
-Cheers,
-
-__________________________________________________
-Do You Yahoo!?
-Yahoo! Shopping - Thousands of Stores. Millions of Products.
-http://shopping.yahoo.com/
-cygwin.diff
-cinstall.diff
+	* cygwinenv.sgml: Fix typo in <filename>. Add missing </para>.
 
 
-------------=_1583532846-65437-24
-Content-Type: text/x-diff; charset=us-ascii; name="cinstall.diff"
-Content-Disposition: inline; filename="cinstall.diff"
-Content-Transfer-Encoding: base64
-Content-Length: 1074
+--- doc/cygwinenv.sgml~ Thu Dec 21 15:01:14 2000
++++ doc/cygwinenv.sgml Thu Dec 21 14:52:16 2000
+@@ -1,4 +1,3 @@
+-cvs -d :pserver:anoncvs@anoncvs.cygnus.com:/cvs/src co -p
+src/winsup/doc/cygwinenv.sgml
+ <sect1 id="using-cygwinenv"><title>The <EnVar>CYGWIN</EnVar> environment
+ variable</title>
 
-Ck1vbiBEZWMgMTggMTU6MzE6MTYgIDIwMDAgIEVhcm5pZSBCb3lkICA8ZWFy
-bmllX2JveWRAeWFob28uY29tCgoJKiBNYWtlZmlsZS5pbjooYXV0b2xvYWQu
-bykgQWRkIHRhcmdldCB0byBzcGVjaWZ5IC1mbm8taW5saW5lLWZ1bmN0aW9u
-cwoKSW5kZXg6IE1ha2VmaWxlLmluCj09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0K
-UkNTIGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvY2luc3RhbGwvTWFrZWZp
-bGUuaW4sdgpyZXRyaWV2aW5nIHJldmlzaW9uIDIuOQpkaWZmIC11IC0zIC1y
-Mi45IE1ha2VmaWxlLmluCi0tLSBNYWtlZmlsZS5pbgkyMDAwLzEyLzExIDAw
-OjA3OjU2CTIuOQorKysgTWFrZWZpbGUuaW4JMjAwMC8xMi8xOCAyMDozNzo0
-NQpAQCAtMTgxLDYgKzE4MSwxNCBAQAogCUAkKENYWCkgJChNSU5HV19DWFhG
-TEFHUykgLWMgLW8gJEAgJDwKIGVuZGlmCiAKK2F1dG9sb2FkLm86IGF1dG9s
-b2FkLmMKK2lmZGVmIFZFUkJPU0UKKwkkKENDKSAkKE1JTkdXX0NGTEFHUykg
-LWMgLW8gJEAgJDwgLWZuby1pbmxpbmUtZnVuY3Rpb25zCitlbHNlCisJQGVj
-aG8gJChDQykgLWMgJChDRkxBR1MpIC4uLiAkKDxGKSAtZm5vLWlubGluZS1m
-dW5jdGlvbnMKKwlAJChDQykgJChNSU5HV19DRkxBR1MpIC1jIC1vICRAICQ8
-IC1mbm8taW5saW5lLWZ1bmN0aW9ucworZW5kaWYKKwogaW5pcGFyc2UuYyBp
-bmlwYXJzZS5oIDogaW5pcGFyc2UueQogCWJpc29uIC1kIC1vIGluaXBhcnNl
-LmMgJChzcmNkaXIpL2luaXBhcnNlLnkKIAo=
-
-------------=_1583532846-65437-24
-Content-Type: text/x-diff; charset=us-ascii; name="cygwin.diff"
-Content-Disposition: inline; filename="cygwin.diff"
-Content-Transfer-Encoding: base64
-Content-Length: 1428
-
-Ck1vbiBEZWMgMTggMTU6MzE6MTYgIDIwMDAgIEVhcm5pZSBCb3lkICA8ZWFy
-bmllX2JveWRAeWFob28uY29tCgoJKiBNYWtlZmlsZS5pbjooYXV0b2xvYWQu
-bykgQWRkIHRhcmdldCB0byBzcGVjaWZ5IC1mbm8taW5saW5lLWZ1bmN0aW9u
-cwoJKGV4Y2VwdGlvbnMubykgRGl0dG8uCgpJbmRleDogTWFrZWZpbGUuaW4K
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3Jj
-L3dpbnN1cC9jeWd3aW4vTWFrZWZpbGUuaW4sdgpyZXRyaWV2aW5nIHJldmlz
-aW9uIDEuNDgKZGlmZiAtdSAtMyAtcjEuNDggTWFrZWZpbGUuaW4KLS0tIE1h
-a2VmaWxlLmluCTIwMDAvMTIvMTUgMjI6MjU6NTEJMS40OAorKysgTWFrZWZp
-bGUuaW4JMjAwMC8xMi8xOCAyMDozNzoyMwpAQCAtMTk0LDYgKzE5NCwyMyBA
-QAogCiBkbGxfb2ZpbGVzOiAkKERMTF9PRklMRVMpCiAKK2F1dG9sb2FkLm86
-IGF1dG9sb2FkLmNjCitpZmRlZiBWRVJCT1NFCisJJChDT01QSUxFX0NYWCkg
-LW8gJChARCkvJCgqRikkbyAkPCAtZm5vLWlubGluZS1mdW5jdGlvbnMKK2Vs
-c2UKKwlAZWNobyAkKENYWCkgJGMgJChDWFhGTEFHUykgLi4uICQoKkYpLmNj
-IC1mbm8taW5saW5lLWZ1bmN0aW9ucworCUAkKENPTVBJTEVfQ1hYKSAtbyAk
-KEBEKS8kKCpGKSRvICQ8IC1mbm8taW5saW5lLWZ1bmN0aW9ucworZW5kaWYK
-KworZXhjZXB0aW9ucy5vOiBleGNlcHRpb25zLmNjCitpZmRlZiBWRVJCT1NF
-CisJJChDT01QSUxFX0NYWCkgLW8gJChARCkvJCgqRikkbyAkPCAtZm5vLWlu
-bGluZS1mdW5jdGlvbnMKK2Vsc2UKKwlAZWNobyAkKENYWCkgJGMgJChDWFhG
-TEFHUykgLi4uICQoKkYpLmNjIC1mbm8taW5saW5lLWZ1bmN0aW9ucworCUAk
-KENPTVBJTEVfQ1hYKSAtbyAkKEBEKS8kKCpGKSRvICQ8IC1mbm8taW5saW5l
-LWZ1bmN0aW9ucworZW5kaWYKKworCiAkKExJQkdNT05fQSk6ICQoR01PTl9P
-RklMRVMpICQoR01PTl9TVEFSVCkKIAkkKEFSKSByY3YgJChMSUJHTU9OX0Ep
-ICQoR01PTl9PRklMRVMpCiAK
-
-------------=_1583532846-65437-24--
+@@ -30,10 +29,10 @@
+ settings are re-exported to the environment as $CYGWIN again.</para>
+ </listitem>
+ <listitem>
+-<para><FirstTerm>error_start:filepath</FirstTerm> - if set, runs
+<filename>filepath</filepath>
++<para><FirstTerm>error_start:filepath</FirstTerm> - if set, runs
+<filename>filepath</filename>
+ when cygwin encounters a fatal error.  This is useful for debugging.
+ <filename>filepath</filename> is usually set to the path to the
+<filename>gdb</filename>
+-program.
++program.</para>
+ <para><FirstTerm>(no)glob[:ignorecase]</FirstTerm> - if set, command line
+arguments
+ containing UNIX-style file wildcard characters (brackets, question mark,
+ asterisk, escaped with \) are expanded into lists of files that match
