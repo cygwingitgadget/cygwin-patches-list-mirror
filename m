@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3705-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 30598 invoked by alias); 14 Mar 2003 09:03:48 -0000
+Return-Path: <cygwin-patches-return-3706-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 26290 invoked by alias); 14 Mar 2003 19:46:40 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,48 +7,51 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 30532 invoked from network); 14 Mar 2003 09:03:47 -0000
-Date: Fri, 14 Mar 2003 09:03:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygwin@cygwin.com, "Cygwin-Patches@Cygwin.Com" <cygwin-patches@cygwin.com>
-Subject: Re: Cygwin installation choke
-Message-ID: <20030314090345.GC27047@cygbert.vinschen.de>
-Mail-Followup-To: cygwin@cygwin.com,
-	"Cygwin-Patches@Cygwin.Com" <cygwin-patches@cygwin.com>
-References: <20030313225350.GV27047@cygbert.vinschen.de> <LPEHIHGCJOAIPFLADJAHMEMNDGAA.chris@atomice.net>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <LPEHIHGCJOAIPFLADJAHMEMNDGAA.chris@atomice.net>
-User-Agent: Mutt/1.4i
-X-SW-Source: 2003-q1/txt/msg00354.txt.bz2
+Received: (qmail 26243 invoked from network); 14 Mar 2003 19:46:39 -0000
+To: cygwin-patches@cygwin.com
+Subject: [PATCH]: (newlib) Allow wcschr(x, L'\0')
+MIME-Version: 1.0
+Message-ID: <OF5F37C502.04A60CCA-ON85256CE9.006C05FA-85256CE9.006CA1A3@abinitio.com>
+From: Bob Cassels <bcassels@abinitio.com>
+Date: Fri, 14 Mar 2003 19:46:00 -0000
+Content-Type: multipart/mixed; boundary="=_mixed 006CA19D85256CE9_="
+X-SW-Source: 2003-q1/txt/msg00355.txt.bz2
 
-Chris,
+--=_mixed 006CA19D85256CE9_=
+Content-Type: text/plain; charset="US-ASCII"
+Content-length: 354
 
-On Thu, Mar 13, 2003 at 11:57:43PM -0000, Chris January wrote:
-> Corinna, the cpuid results are still valid if the user doesn't have NT. Only
-> in the worst case scenario (i.e. a user running Windows 95/98 on a 486) will
-> it be necessary to resort to falling back on the registry values alone.
+This simple patch for newlib allows using wcschr to find pointers to null 
+characters, rather than returning NULL.  I hope it's simple enough to not 
+require paperwork.
 
-thanks but your patch isn't valid AFAICS.  Besides the fact that a ChangeLog
-is missing, it expects to find the same registry values as in NT.  But the
-"~Mhz" value isn't available for example, only "VendorIdentifier", "Identifier"
-and a REG_DWORD value called "Update Status".
+2003-03-14  Bob Cassels  <bcassels@abinitio.com>
 
-> -	  if (IsProcessorFeaturePresent (PF_XMMI64_INSTRUCTIONS_AVAILABLE))
-> -	    print (" sse2");
-> +      if (!wincap.is_winnt ())
-             ^^^^^^^^^^^^^^^^^^^
-	     You don't mean this, do you?
+        * libc/string/wcschr.c: (wcschr): Look for character first, then 
+for
+        end of string, so you can do wcschr(x, '\0').
 
-> +        {
-> +	      print ("flags           :");
-> +	      if (IsProcessorFeaturePresent (PF_3DNOW_INSTRUCTIONS_AVAILABLE))
-> +	        print (" 3dnow");
 
-Corinna
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+--=_mixed 006CA19D85256CE9_=
+Content-Type: text/plain; name="wcschr-patch.txt"
+Content-Disposition: attachment; filename="wcschr-patch.txt"
+Content-Transfer-Encoding: base64
+Content-length: 802
+
+SW5kZXg6IGxpYmMvc3RyaW5nL3djc2Noci5jDQo9PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09DQpSQ1MgZmlsZTogL2N2cy9zcmMvc3JjL25ld2xpYi9saWJjL3N0
+cmluZy93Y3NjaHIuYyx2DQpyZXRyaWV2aW5nIHJldmlzaW9uIDEuMg0KZGlm
+ZiAtdSAtcCAtcjEuMiB3Y3NjaHIuYw0KLS0tIGxpYmMvc3RyaW5nL3djc2No
+ci5jCTMgU2VwIDIwMDIgMTk6NTI6MTAgLTAwMDAJMS4yDQorKysgbGliYy9z
+dHJpbmcvd2NzY2hyLmMJMTQgTWFyIDIwMDMgMTk6MzU6MDEgLTAwMDANCkBA
+IC02OSwxNCArNjksMTMgQEAgX0RFRlVOICh3Y3NjaHIsIChzLCBjKSwNCiAg
+IF9DT05TVCB3Y2hhcl90ICpwOw0KIA0KICAgcCA9IHM7DQotICB3aGlsZSAo
+KnApDQorICBkbw0KICAgICB7DQogICAgICAgaWYgKCpwID09IGMpDQogCXsN
+CiAJICAvKiBMSU5URUQgaW50ZXJmYWNlIHNwZWNpZmljYXRpb24gKi8NCiAJ
+ICByZXR1cm4gKHdjaGFyX3QgKikgcDsNCiAJfQ0KLSAgICAgIHArKzsNCi0g
+ICAgfQ0KKyAgICB9IHdoaWxlICgqcCsrKTsNCiAgIHJldHVybiBOVUxMOw0K
+IH0NCg==
+
+--=_mixed 006CA19D85256CE9_=--
