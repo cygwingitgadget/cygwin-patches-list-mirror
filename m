@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1847-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 13968 invoked by alias); 7 Feb 2002 13:56:34 -0000
+Return-Path: <cygwin-patches-return-1848-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 17408 invoked by alias); 7 Feb 2002 13:58:42 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,103 +7,67 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 13929 invoked from network); 7 Feb 2002 13:56:32 -0000
-Date: Thu, 07 Feb 2002 05:58:00 -0000
+Received: (qmail 17307 invoked from network); 7 Feb 2002 13:58:39 -0000
+Date: Thu, 07 Feb 2002 06:04:00 -0000
 From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: Cygwin-Patches <cygwin-patches@sources.redhat.com>
-Subject: Re: connect patch
-Message-ID: <20020207145625.X14241@cygbert.vinschen.de>
-Mail-Followup-To: Corinna Vinschen <cygwin-patches@cygwin.com>,
-	Cygwin-Patches <cygwin-patches@sources.redhat.com>
-References: <20020206180727.GA504@dothill.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: Tokenring support for network interfaces
+Message-ID: <20020207145837.Y14241@cygbert.vinschen.de>
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <Pine.LNX.4.21.0202062016350.1196-300000@lupus.ago.vpn>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20020206180727.GA504@dothill.com>
+In-Reply-To: <Pine.LNX.4.21.0202062016350.1196-300000@lupus.ago.vpn>
 User-Agent: Mutt/1.3.22.1i
-Content-Transfer-Encoding: quoted-printable
-X-MIME-Autoconverted: from 8bit to quoted-printable by cygnus.com id FAA17789
-X-SW-Source: 2002-q1/txt/msg00204.txt.bz2
+X-SW-Source: 2002-q1/txt/msg00205.txt.bz2
 
-On Wed, Feb 06, 2002 at 01:07:28PM -0500, Jason Tishler wrote:
-> The attached patch fixes a SEGV when getsockname () is called.  This
-> problem can be tickled by the PostgreSQL 7.2 version of psql:
->=20
->     http://archives.postgresql.org/pgsql-cygwin/2002-02/msg00012.php
->=20
-> Note that I essentially plagiarized the following commit:
->=20
->     http://cygwin.com/ml/cygwin-cvs/2002-q1/msg00028.html
->=20
-> Was this the right thing to do?
+On Wed, Feb 06, 2002 at 08:18:58PM +0100, Alexander Gottwald wrote:
+> Hi, the patch adds support for enumerating tokenring network interfaces.
 
-The patch isn't correct since it now calls fdsock() twice which allocates
-a new fhandler even if the line before already had created one.
+It does so for systems with IPHelper Lib only, unfortunately.
+Do you also have a way to add it for the rest of the crowd?
 
-Better:
-
-  fhandler_socket* res_fh =3D fdsock (fd, name, soc)->set_addr_family (af);
-  if (af =3D=3D AF_LOCAL)
-    res_fh->set_sun_path (name);
-
-However, I don't understand the need for that patch.  Does postgresql
-call getsockname() before calling bind()? I didn't know that that makes
-sense.  Sure, it shouldn't SEGV but the returned name doesn't make
-sense on non-Cygwin systems either.
-
-A quick test on Linux returns:
-
-[~]$ ./uds /tmp/mysocket
-Before bind(): name =3D =FF=BFM`@=81=83(R`@b, returned len =3D 2
-After bind() : name =3D /tmp/mysocket, returned len =3D 16
-
-So, IMO, the correct way is to clean up cygwin_getsockname()
-so that it always returns "something" instead of SEGVing.
-
-Could you please test the below patch if that works with postgresql?
-
-Thanks,
 Corinna
+> 
+> bye
+>     ago
+> -- 
+>  Alexander.Gottwald@informatik.tu-chemnitz.de 
+>  http://www.gotti.org           ICQ: 126018723
+>  phone: +49 3725 349 80 80	mobile: +49 172 7854017
+>  4. Chemnitzer Linux-Tag http://www.tu-chemnitz.de/linux/tag/lt4
+
+> 2002-02-06  Alexander Gottwald <Alexander.Gottwald@s1999.tuchemnitz.de>
+> 
+>     * net.cc (get_2k_ifconf): Create interface entries for tokenring cards.
+
+> --- net.cc	Wed Feb  6 20:10:34 2002
+> +++ net.cc.new	Wed Feb  6 20:10:22 2002
+> @@ -1652,7 +1652,7 @@ static void
+>  get_2k_ifconf (struct ifconf *ifc, int what)
+>  {
+>    int cnt = 0;
+> -  char eth[2] = "/", ppp[2] = "/", slp[2] = "/", sub[2] = "0";
+> +  char eth[2] = "/", ppp[2] = "/", slp[2] = "/", sub[2] = "0", tok[2] = "/";
+>  
+>    /* Union maps buffer to correct struct */
+>    struct ifreq *ifr = ifc->ifc_req;
+> @@ -1685,6 +1685,11 @@ get_2k_ifconf (struct ifconf *ifc, int w
+>  		  /* Setup the interface name */
+>  		  switch (ift->table[if_cnt].dwType)
+>  		    {
+> +		      case MIB_IF_TYPE_TOKENRING:
+> +			  ++*tok;
+> +			strcpy (ifr->ifr_name, "tok");
+> +			strcat (ifr->ifr_name, tok);
+> +			break;
+>  		      case MIB_IF_TYPE_ETHERNET:
+>  			if (*sub == '0')
+>  			  ++*eth;
 
 
-	* net.cc (cygwin_getsockname): Fix handling of NULL sun_path.
-
-
-Index: net.cc
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-RCS file: /cvs/src/src/winsup/cygwin/net.cc,v
-retrieving revision 1.99
-diff -u -p -r1.99 net.cc
---- net.cc	2002/01/29 13:39:41	1.99
-+++ net.cc	2002/02/07 13:53:11
-@@ -1375,12 +1375,17 @@ cygwin_getsockname (int fd, struct socka
- 	  struct sockaddr_un *sun =3D (struct sockaddr_un *) addr;
- 	  memset (sun, 0, *namelen);
- 	  sun->sun_family =3D AF_LOCAL;
--	  /* According to SUSv2 "If the actual length of the address is greater
--	     than the length of the supplied sockaddr structure, the stored
--	     address will be truncated."  We play it save here so that the
--	     path always has a trailing 0 even if it's truncated. */
--	  strncpy (sun->sun_path, sock->get_sun_path (),
--		   *namelen - sizeof *sun + sizeof sun->sun_path - 1);
-+
-+	  if (!sock->get_sun_path ())
-+	    sun->sun_path[0] =3D '\0';
-+	  else
-+	    /* According to SUSv2 "If the actual length of the address is
-+	       greater than the length of the supplied sockaddr structure, the
-+	       stored address will be truncated."  We play it save here so
-+	       that the path always has a trailing 0 even if it's truncated. */
-+	    strncpy (sun->sun_path, sock->get_sun_path (),
-+		     *namelen - sizeof *sun + sizeof sun->sun_path - 1);
-+
- 	  *namelen =3D sizeof *sun - sizeof sun->sun_path
- 		     + strlen (sun->sun_path) + 1;
- 	  res =3D 0;
-
---=20
+-- 
 Corinna Vinschen                  Please, send mails regarding Cygwin to
 Cygwin Developer                                mailto:cygwin@cygwin.com
 Red Hat, Inc.
