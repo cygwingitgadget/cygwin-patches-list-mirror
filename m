@@ -1,43 +1,32 @@
-From: DJ Delorie <dj@delorie.com>
-To: bkeener@thesoftwaresource.com
-Cc: cygwin-patches@sources.redhat.com
-Subject: Re: [patch] Setup.exe choose.cc selection enhancement based on file existence
-Date: Tue, 06 Feb 2001 20:37:00 -0000
-Message-id: <200102070436.XAA24544@envy.delorie.com>
-References: <VA.0000062f.02ffe21e@thesoftwaresource.com>
-X-SW-Source: 2001-q1/msg00053.html
+From: Egor Duda <deo@logos-m.ru>
+To: Kazuhiro Fujieda <fujieda@jaist.ac.jp>
+Cc: cygwin-patches@cygwin.com
+Subject: Re: Console codepage
+Date: Wed, 07 Feb 2001 07:08:00 -0000
+Message-id: <150109183687.20010207180613@logos-m.ru>
+References: <u7l3fv26h.fsf@mail.epost.de> <20010128154852.A20701@redhat.com> <s1sitmu890d.fsf@jaist.ac.jp>
+X-SW-Source: 2001-q1/msg00054.html
 
-> DJ Delorie wrote:
-> > This is big enough to require legal papers.  Chris, do we have them
-> > from Brian?
-> 
-> Probably not - you only ever asked for a verbal okay from me about my self employment and that no 
-> employer would object.
+Hi!
 
-Oh, right.
+Thursday, 01 February, 2001 Kazuhiro Fujieda fujieda@jaist.ac.jp wrote:
 
-> > 80 colums or so?  Use a helper macro if that makes it more readable.
-> 
-> I will work on it and see about shortening them.  Being that I am a
-> newbie though, and I hate to admit this, but I don't know how to use
-> a helper macro.  And I hate to break this into a bunch of nested
-> ifs.
+>>>> On Sun, 28 Jan 2001 15:48:52 -0500
+>>>> Christopher Faylor <cgf@redhat.com> said:
 
-At least put in a newline here and there ;-)
+>> I can't comment on the validity of the patch itself.  I hope that Egor
+>> or Kazuhiro will do that.
 
-> and if I selected install from local directory then only files which do exist are displayed.
+KF> His patch seems fine to me except for its potential overhead.
+KF> I'm afraid the overhead becomes sensible on cheap Win9x boxes.
+KF> Console APIs are generally slower on 9x than on NT/2000.
+KF> Anyway, I believe his patch is essential for users using 8bit
+KF> characters.
 
-Um, even if they're already installed?
+this  patch  works ok for me, too. i don't think that it will lead  to
+performance  degradation,  though. i believe that console api on 9x is
+slow   not  because  of char<->unicode translation, but because of the
+way WriteFile() API works on consoles.
 
-> > > +     int in_partial_list;/* display this version in partial list */
-> > 
-> > This shouldn't be here; it's private to the chooser.  It
-> > should go in chooser's corresponding struct.
-> 
-> This is new.  It is still in both places - in chooser it pertains to
-> the different versions whereas this one I added pertains to the
-> package as a whole.
+Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
 
-Then you need to change the comment to reflect that.
-
-I'd also recommend using a different name to prevent confusion.
