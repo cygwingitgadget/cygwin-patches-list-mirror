@@ -1,69 +1,55 @@
-From: "Gerrit P. Haase" <gp@familiehaase.de>
-To: cygwin-patches@Cygwin.Com
-Subject: Re: patch for cygpath
-Date: Sun, 12 Aug 2001 01:13:00 -0000
-Message-id: <3B76571D.8114.3051E237@localhost>
-References: <3B7580AD.17089.2D0C3D51@localhost> <20010811214143.E5940@redhat.com>
-X-SW-Source: 2001-q3/msg00077.html
+From: egor duda <deo@logos-m.ru>
+To: cygwin-patches@cygwin.com
+Subject: try to enable appropriate privilege before loading user's hive
+Date: Tue, 14 Aug 2001 01:23:00 -0000
+Message-id: <19956432105.20010814122213@logos-m.ru>
+X-SW-Source: 2001-q3/msg00078.html
+Content-type: multipart/mixed; boundary="----------=_1583532848-65438-93"
 
-Christopher Faylor schrieb am 2001-08-11, 21:41:
+This is a multi-part message in MIME format...
 
->On Sat, Aug 11, 2001 at 06:59:57PM +0200, Gerrit P. Haase wrote:
->>Christopher Faylor schrieb am 2001-08-09, 10:45:
->>
->>>On Thu, Aug 09, 2001 at 01:57:53PM +0200, Gerrit P. Haase wrote:
->>>>BTW, instead of discussing, which lasts some time, it could have been 
->>>>approved and committed in the same time.
->>>
->>>Well, this is a pretty assinine comment.  I'm trying to avoid code bloat.
->>
->>asinine  =  idiotisch; dumm
->>
->>Thank you cgf.
->
->You're perfectly welcome.  If you are going to offer gratuitous
->criticisms you can expect my opinions of your criticisms to be
->forthcoming.
->
->You actually made some good points in your response. They were good enough
->that you didn't need to slam anyone with your asinine observation.
+------------=_1583532848-65438-93
+Content-length: 301
 
-Yes, i'm sorry.
+Hi!
 
->>>I don't like to add "features" to programs if they have no real value
->>>and slow tools down.
->>>
->>>I really don't need to have my procedures criticized.  Thanks.
->>
->>Big Boss, never makes a mistake, no criticism neccesary...
->
->I certainly stated my case too strongly here.  I'm certainly open to
->criticism if I can discern a modicum of conscious thought behind the
->criticism.  Sadly, that was lacking in this case.
->
->Would you rather that I just make unilateral decisions rather than
->discuss things?  My first impulse was to just ignore the patch so
->that would not have been to your advantage.
->
->Or would you prefer that if I see a patch that troubles me in some way,
->I should just check it in automatically?  Maybe that is not a big deal
->since patches are so few and far between and cygwin suffers from a
->surfeit of opinions over deeds.
+  i've noticed that sshd fails to load user's hive even when run from
+LocalSystem account. I wonder if there's somthing wrong in my config
+or we should apply this patch?
 
-AFAIK now the cygpath 'problem' is a 'bug' of windows and in this case 
-you acted completely correct.
-
->Since I had no strong opinion (or actually a slightly negative opinion),
->I asked for votes on whether the patch was worthwhile.  So far the votes
->are 2-1 in favor of the patch.  It looks likely that it will be included.
->
->If it isn't being included fast enough to suit you then...  Gee, I guess
->I just don't care.
-
-O.k.
-
-gph
+egor.            mailto:deo@logos-m.ru icq 5165414 fidonet 2:5020/496.19
+enable-se-restore.diff
+enable-se-restore.ChangeLog
 
 
--- 
-=^..^=
+------------=_1583532848-65438-93
+Content-Type: text/plain; charset=us-ascii; name="enable-se-restore.ChangeLog"
+Content-Disposition: inline; filename="enable-se-restore.ChangeLog"
+Content-Transfer-Encoding: base64
+Content-Length: 183
+
+MjAwMS0wNy0yNyAgRWdvciBEdWRhICA8ZGVvQGxvZ29zLW0ucnU+CgoJKiBz
+cGF3bi5jYyAoc3Bhd25fZ3V0cyk6IEVuYWJsZSBhcHByb3ByaWF0ZSBwcml2
+aWxlZ2UgYmVmb3JlCglsb2FkaW5nIHVzZXIncyByZWdpc3RyeSBoaXZlLgo=
+
+------------=_1583532848-65438-93
+Content-Type: text/x-diff; charset=us-ascii; name="enable-se-restore.diff"
+Content-Disposition: inline; filename="enable-se-restore.diff"
+Content-Transfer-Encoding: base64
+Content-Length: 761
+
+SW5kZXg6IHNwYXduLmNjCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KUkNTIGZp
+bGU6IC9jdnMvdWJlcmJhdW0vd2luc3VwL2N5Z3dpbi9zcGF3bi5jYyx2CnJl
+dHJpZXZpbmcgcmV2aXNpb24gMS44MwpkaWZmIC11IC1wIC0yIC1yMS44MyBz
+cGF3bi5jYwotLS0gc3Bhd24uY2MJMjAwMS8wNy8yNiAxOToyMjoyNAkxLjgz
+CisrKyBzcGF3bi5jYwkyMDAxLzA3LzI3IDEzOjU3OjUxCkBAIC02MzIsNCAr
+NjMyLDExIEBAIHNraXBfYXJnX3BhcnNpbmc6CiAJUmV2ZXJ0VG9TZWxmICgp
+OwogCisgICAgICBzdGF0aWMgQk9PTCBmaXJzdF90aW1lID0gVFJVRTsKKyAg
+ICAgIGlmIChmaXJzdF90aW1lKQorICAgICAgICB7CisgICAgICAgICAgc2V0
+X3Byb2Nlc3NfcHJpdmlsZWdlIChTRV9SRVNUT1JFX05BTUUpOworICAgICAg
+ICAgIGZpcnN0X3RpbWUgPSBGQUxTRTsKKyAgICAgICAgfQorCiAgICAgICAv
+KiBMb2FkIHVzZXJzIHJlZ2lzdHJ5IGhpdmUuICovCiAgICAgICBsb2FkX3Jl
+Z2lzdHJ5X2hpdmUgKHNpZCk7Cg==
+
+------------=_1583532848-65438-93--
