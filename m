@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4369-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 4329 invoked by alias); 14 Nov 2003 10:27:02 -0000
+Return-Path: <cygwin-patches-return-4370-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 30890 invoked by alias); 14 Nov 2003 11:46:07 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,33 +7,40 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 4316 invoked from network); 14 Nov 2003 10:27:00 -0000
-Message-ID: <3FB4AE07.6010101@cygwin.com>
-Date: Fri, 14 Nov 2003 10:27:00 -0000
-From: Robert Collins <rbcollins@cygwin.com>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.5b) Gecko/20030723 Thunderbird/0.1
-X-Accept-Language: en-us, en
-MIME-Version: 1.0
-To: Corinna Vinschen <cygwin-patches@cygwin.com>
+Received: (qmail 30877 invoked from network); 14 Nov 2003 11:46:06 -0000
+Message-ID: <041701c3aaa4$db725ed0$78d96f83@starfruit>
+From: "Max Bowsher" <maxb@ukf.net>
+To: <cygwin-patches@cygwin.com>
+References: <3FB4A341.5070101@cygwin.com> <20031114101815.GU18706@cygbert.vinschen.de> <3FB4AE07.6010101@cygwin.com>
 Subject: Re: thunk createDirectory and createFile calls
-References: <3FB4A341.5070101@cygwin.com> <20031114101815.GU18706@cygbert.vinschen.de>
-In-Reply-To: <20031114101815.GU18706@cygbert.vinschen.de>
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Date: Fri, 14 Nov 2003 11:46:00 -0000
+MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="iso-8859-1"
 Content-Transfer-Encoding: 7bit
-X-SW-Source: 2003-q4/txt/msg00088.txt.bz2
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2800.1165
+X-Cam-ScannerInfo: http://www.cam.ac.uk/cs/email/scanner/
+X-Cam-AntiVirus: No virus found
+X-Cam-SpamDetails: Not scanned
+X-SW-Source: 2003-q4/txt/msg00089.txt.bz2
 
-Corinna Vinschen wrote:
-
-> On Fri, Nov 14, 2003 at 08:41:21PM +1100, Robert Collins wrote:
+Robert Collins wrote:
+> Corinna Vinschen wrote:
 > 
->>inline 
->>BOOL cygwin_create_directory (LPCTSTR filename, LPSECURITY_ATTRIBUTES sec_attr)
->>{
->>  return CreateDirectory(filename, sec_attr);
+>> On Fri, Nov 14, 2003 at 08:41:21PM +1100, Robert Collins wrote:
+>> 
+>>> inline
+>>> BOOL cygwin_create_directory (LPCTSTR filename,
+>>> LPSECURITY_ATTRIBUTES sec_attr) {
+>>>  return CreateDirectory(filename, sec_attr);
+>> 
+>>            ^^^^^^^^^^^^^^^
+>>    CreateDirectoryA?
 > 
->            ^^^^^^^^^^^^^^^
-> 	   CreateDirectoryA?
+> Ah, yeh.
 
-Ah, yeh.
+Also, I think LPCTSTR should be LPCSTR ? (and also in the CreateFile case)
 
-Rob
+Max.
