@@ -1,28 +1,40 @@
-From: Earnie Boyd <earnie_boyd@yahoo.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: patch for cygpath
-Date: Tue, 07 Aug 2001 09:13:00 -0000
-Message-id: <3B702F9E.58523B14@yahoo.com>
-References: <C2D7D58DBFE9D111B0480060086E963504AC5262@mail.gft.de> <20010807115941.F27996@redhat.com>
-X-SW-Source: 2001-q3/msg00068.html
+From: "Schaible, Jorg" <Joerg.Schaible@gft.com>
+To: CP List <Cygwin-Patches@Cygwin.Com>
+Subject: RE: patch for cygpath
+Date: Tue, 07 Aug 2001 09:54:00 -0000
+Message-id: <C2D7D58DBFE9D111B0480060086E963504AC52AD@mail.gft.de>
+X-SW-Source: 2001-q3/msg00069.html
 
-Christopher Faylor wrote:
-> 
-> I don't have much of an opinion on this patch however it seems to
-> needlessly complicate cygpath for minimal gain.
-> 
+>-----Original Message-----
+>From: Earnie Boyd [ mailto:earnie_boyd@yahoo.com ]
+>Sent: Tuesday, August 07, 2001 8:13 PM
+>To: cygwin-patches@Cygwin.Com
+>Subject: Re: patch for cygpath
+>
+>
+>Christopher Faylor wrote:
+>> 
+>> I don't have much of an opinion on this patch however it seems to
+>> needlessly complicate cygpath for minimal gain.
+>> 
+>
+>Ditto.
 
-Ditto.
+Well, it just ensures that the physical name is the delivered one.
 
-> I also don't see why cygpath would need to output the windows version of
-> windows/system.  That sort of bypasses the "cyg" part of things.
-> 
+>
+>> I also don't see why cygpath would need to output the 
+>windows version of
+>> windows/system.  That sort of bypasses the "cyg" part of things.
+>> 
+>
+>Ditto.
 
-Ditto.
+I did it just for a continuous option support. It is handy dealing with
+non-Cygwin apps, e.g. using Cygwin environment developing Java (all those
+CLASSPATH issues).
 
-Earnie.
+But I don't mind, if you won't accept. Was just my point of view.
+:)
 
-_________________________________________________________
-Do You Yahoo!?
-Get your free @yahoo.com address at http://mail.yahoo.com
-
+Jorg
