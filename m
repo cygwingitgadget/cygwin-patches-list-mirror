@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2960-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 16679 invoked by alias); 13 Sep 2002 07:18:59 -0000
+Return-Path: <cygwin-patches-return-2961-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 21880 invoked by alias); 13 Sep 2002 08:42:37 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,44 +7,55 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 16656 invoked from network); 13 Sep 2002 07:18:58 -0000
-Date: Fri, 13 Sep 2002 00:18:00 -0000
-From: Steve O <bub@io.com>
+Received: (qmail 21866 invoked from network); 13 Sep 2002 08:42:35 -0000
+Date: Fri, 13 Sep 2002 01:42:00 -0000
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] tty.cc nonblocking pipe
-Message-ID: <20020913022004.B17744@eris.io.com>
+Subject: Re: initgroups
+Message-ID: <20020913104233.C1574@cygbert.vinschen.de>
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <3D7F4284.46484222@ieee.org> <3.0.5.32.20020910213124.0080e5a0@mail.attbi.com> <20020911123808.Q1574@cygbert.vinschen.de> <3D7F4284.46484222@ieee.org> <3.0.5.32.20020911204241.00810100@mail.attbi.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.2.5.1i
-X-SW-Source: 2002-q3/txt/msg00408.txt.bz2
+In-Reply-To: <3.0.5.32.20020911204241.00810100@mail.attbi.com>
+User-Agent: Mutt/1.3.22.1i
+X-SW-Source: 2002-q3/txt/msg00409.txt.bz2
 
-Hi,
-  I've been tracking down why rxvt hangs when a paste
-is too big, or if you simply cat a file with control
-chars, like rxvt.exe.  What I discovered is that 
-Windows will block writing to an anonymous pipe.  The
-behavior I was seeing was that the child was pretty
-much waiting on writes, which works as long as rxvt
-keeps reading, but if rxvt writes as well (and blocks)
-then deadlock occurs. 
-  So the fix is to make the pipe non-blocking.  In tty.cc
-the to_slave part is set to non-blocking, but the to_master
-isn't.  Odd.  However, setting to_master to non-blocking
-cures the rxvt deadlock.  This fix only works on NT/2K/XP.
-Serious modification would be needed to get 98 to work.
--steve
+On Wed, Sep 11, 2002 at 08:42:41PM -0400, Pierre A. Humblet wrote:
+> At 04:12 PM 9/11/2002 +0200, Corinna Vinschen wrote:
+> >>  why is the largest possible gid value forbidden? 
+> >
+> >It's not forbidden in the first place, it has a special meaning
+> >when used as parameter to chown(), see
+> >http://www.opengroup.org/onlinepubs/007904975/functions/chown.html
+> 
+> OK, thanks Corinna. However we also give it special meaning (noop) 
+> in setegid () (and similarly for uid in seteuid). 
+> http://www.opengroup.org/onlinepubs/007904975/functions/setegid.html
+> gives us no such choice. We can either 1) accept it (if the user has been
+> foolish enough to put it in /etc/group),
+> or 2) return EINVAL if we decide that our implementation does not 
+> support it outright (even if it's in /etc/group).
+> 
+> If we decide on 1) shouldn't we remove calls to {ug}id16to(ug}id32 from
+> passwd.cc, grp.cc and syscalls.cc, EXCEPT in the various cases of chown 
+> (i.e. simply do as getgrgid (), which doesn't call gid16togid32)?
+> Also, we shouldn't rely on ILLEGAL_UID in dcrt0. 
+> If we decide on 2), shouldn't we enforce it everywhere? One possibility is
+> not to read in passwd and group entries with "illegal" {ug}id values.
 
-*** tty-orig.cc Thu Sep 12 23:54:32 2002
---- tty.cc      Thu Sep 12 23:54:08 2002
-***************
-*** 375,380 ****
---- 375,382 ----
-    DWORD pipe_mode = PIPE_NOWAIT;
-    if (!SetNamedPipeHandleState (to_slave, &pipe_mode, NULL, NULL))
-      termios_printf ("can't set to_slave to non-blocking mode");
-+   if (!SetNamedPipeHandleState (to_master, &pipe_mode, NULL, NULL))
-+     termios_printf ("can't set to_master to non-blocking mode");
-    ptym->set_io_handle (from_slave);
-    ptym->set_output_handle (to_slave);
-    return TRUE;
+After looking into this I think 2) is the way to go.  We can't support
+that uid/gid for apparent reasons so we should take the approach to
+invalidate it everywhere, yes.  
+
+However, that would mean that we have to treat both values as
+illegal, ILLEGAL_[UG]ID and ILLEGAL_[UG]ID16.  This looks a little
+bit weird to me...
+
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
