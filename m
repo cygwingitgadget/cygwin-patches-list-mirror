@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1595-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 28593 invoked by alias); 16 Dec 2001 16:26:45 -0000
+Return-Path: <cygwin-patches-return-1596-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 29063 invoked by alias); 16 Dec 2001 16:30:06 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,10 +7,9 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 28579 invoked from network); 16 Dec 2001 16:26:44 -0000
-X-Draft-From: ("nnmh:indoos.cygwin-patches" 24)
-To: "Robert Collins" <robert.collins@itdomain.com.au>
-Cc: <cygwin-patches@cygwin.com>
+Received: (qmail 29045 invoked from network); 16 Dec 2001 16:30:04 -0000
+X-Draft-From: ("nnmh:indoos" 6615)
+To: cygwin-patches@cygwin.com
 Subject: Re: setup.exe remove scripts [Was: Re: experimental texmf packages]
 References: <m3bshtmxhb.fsf@appel.lilypond.org>
 	<878764062.20011128173421@nyckelpiga.de>
@@ -30,46 +29,49 @@ References: <m3bshtmxhb.fsf@appel.lilypond.org>
 	<04db01c18302$e66cae60$0200a8c0@lifelesswks>
 	<m3667ax540.fsf@appel.lilypond.org>
 	<105201c18604$ea001670$0200a8c0@lifelesswks>
+	<3C1CB581.7E2DF6E3@yahoo.com>
 Organization: Jan at Appel
 From: Jan Nieuwenhuizen <janneke@gnu.org>
-Date: Tue, 06 Nov 2001 05:42:00 -0000
-In-Reply-To: <105201c18604$ea001670$0200a8c0@lifelesswks> ("Robert Collins"'s message of "Sun, 16 Dec 2001 18:40:19 +1100")
-Message-ID: <m366779lms.fsf@appel.lilypond.org>
+Date: Tue, 06 Nov 2001 05:54:00 -0000
+In-Reply-To: <3C1CB581.7E2DF6E3@yahoo.com> (Earnie Boyd's message of "Sun, 16 Dec 2001 09:53:53 -0500")
+Message-ID: <m31yhv9lh1.fsf@appel.lilypond.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-X-SW-Source: 2001-q4/txt/msg00127.txt.bz2
+X-SW-Source: 2001-q4/txt/msg00128.txt.bz2
 
-"Robert Collins" <robert.collins@itdomain.com.au> writes:
+Earnie Boyd <earnie_boyd@yahoo.com> writes:
 
-> > Ok.  I like having just a one-line prompt.
+> Robert Collins wrote:
+> > 
+> > Right. Well setup compiled before w32api got broken. I've said it twice
+> > now: revert your w32api (which is what's broken) and setup will build
+> > cleanly.
+> > 
+> > Fixing w32api again is important, and can be address'd in parallel.
+> > Anyone that wants to build setup.exe will have motivation to fix w32api
+> > :].
+> > 
 > 
-> See my other emails. Lets leave this to the side, it's orthogonal to the
-> remove script work you've done.
+> Can you remind me as to what's broke?
 
-Yes, fine.
+From an earlier mail (haven't checked latest cvs):
 
-> Right. Well setup compiled before w32api got broken. I've said it twice
-> now: revert your w32api (which is what's broken) and setup will build
-> cleanly.
 
-Yes, I understand your view/wishes and will comply.  I was just
-explaining why I did this.
+    > The Werror is in by design. If your patch won't build with it, I won't
+    > accept you patch.
 
-> > * install.cc (do_install): Run script initialisation.  Typo fix.
-> 
-> This is still wrong :}.
+    Ah, good.  But it was not for my patch!  The latest cvs setup.exe
+    won't build without it, in my environment.  I get warnings (-> errors)
+    like:
 
-Ok, noted, thanks.
+    /home/fred/usr/src/cygwin/cygwin-1.3.6/usr/src/cygwin/src/winsup/w32api/include/rpcndr.h:252: warning: function declaration isn't a prototype
+    In file included from /home/fred/usr/src/cygwin/cygwin-1.3.6/usr/src/cygwin/src/winsup/w32api/include/ole2.h:5,
+                     from /home/fred/usr/src/cygwin/cygwin-1.3.6/usr/src/cygwin/src/winsup/w32api/include/shlobj.h:8,
+                     from mklink2.c:3:
+    /home/fred/usr/src/cygwin/cygwin-1.3.6/usr/src/cygwin/src/winsup/w32api/include/objbase.h:165: warning: function declaration isn't a prototype
+    /home/fred/usr/src/cygwin/cygwin-1.3.6/usr/src/cygwin/src/winsup/w32api/include/objbase.h:166: warning: function declaration isn't a prototype
+    make: *** [mklink2.o] Error 1
 
-> I'm accepting this patch as is given your disclaimer above so don't
-> worry about another round circuit.
-> 
-> I'll apply it within the next 24 hours.
-
-Thanks, all very well.
-
-Greetings,
-Jan.
 
 -- 
 Jan Nieuwenhuizen <janneke@gnu.org> | GNU LilyPond - The music typesetter
