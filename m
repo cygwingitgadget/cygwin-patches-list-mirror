@@ -1,118 +1,46 @@
-From: Egor Duda <deo@logos-m.ru>
-To: cygpatch <cygwin-patches@sourceware.cygnus.com>
-Subject: Re[2]: error_start patch
-Date: Tue, 23 May 2000 00:12:00 -0000
-Message-id: <2465.000523@logos-m.ru>
-References: <20000522173923.A10365@cygnus.com>
-X-SW-Source: 2000-q2/msg00076.html
+From: DJ Delorie <dj@delorie.com>
+To: Jason.Tishler@dothill.com
+Cc: cygwin-patches@sourceware.cygnus.com
+Subject: Re: [Jason.Tishler@dothill.com: Strange Cygwin 1.1.1 mv Behavior]
+Date: Tue, 23 May 2000 12:23:00 -0000
+Message-id: <200005231923.PAA24195@envy.delorie.com>
+References: <20000523143453.B22579@cygnus.com>
+X-SW-Source: 2000-q2/msg00077.html
 
-Hi!
+> After upgrading from 1.1.0 to 1.1.1, I started to experience problems
+> using relative pathnames with mv when in my home directory:
+> 
+>     $ pwd
+>     /home/jt
+>     $ ls .foo 
+>     .foo
+>     $ mv .foo .foo2 
+>     mv: cannot move `.foo' to `.foo2': No such file or directory
 
-Tuesday, 23 May, 2000 Chris Faylor cgf@cygnus.com wrote:
+Try this, which I'll check in in a moment (i.e. it will be in the next
+snapshot also):
 
-I  don't  remember  for  sure,  but  i  think  it's  to  not mess with
-(statically  or dynamically) allocated buffer of unknown length needed
-for GetEnvironmentVariable(). it's possible to write smth like
+2000-05-23  DJ Delorie  <dj@cygnus.com>
 
-char dummy[1];
-int required_buffer_length = GetEnvironmentVariable("CYGWIN",dummy,0);
-char p[required_buffer_length+1];
-GetEnvironmentVariable("CYGWIN",p,sizeof(p));
-// tweak error_start in p* and set variable
+	* dir.cc (writable_directory): handle root directories
 
-if you think it's better, i'll change my patch.
-
-CF> This is very interesting but I'm wondering why you use GetEnvironmentStrings
-CF> rather than GetEnvironmentVariable below.
-
->>  Below is a patch to prevent cygwin's JIT debugger (specified via
->>'error_start')   from   being   spawned   recursively,  in  case  when
->>debugger throws exception itself. It also allows to notify the debugee
->>that  we've    done    with   debugging   and  it  can  exit in peace.
->>debugger can post event named
->>
->>"cygwin_error_start_event_<debugee_win32_pid>"
->>
->>instead of
->>
->>(gdb) set keep_looping=0
->>(gdb) c
->>
->>----------------------------------------------------------------------------
->>2000-05-22  Egor Duda <deo@logos-m.ru>
->>
->>        * exceptions.cc (try_to_debug): prevent recursive spawning of JIT
->>        debugger.
->>        * exceptions.cc (try_to_debug): treat  special event from debugger
->>        as command to continue.
->>
->>Index: cygwin/exceptions.cc
->>===================================================================
->>RCS file: /home/duda_admin/cvs-mirror/src/winsup/cygwin/exceptions.cc,v
->>retrieving revision 1.17
->>diff -c -2 -r1.17 exceptions.cc
->>*** cygwin/exceptions.cc        2000/05/20 05:52:33     1.17
->>--- cygwin/exceptions.cc        2000/05/22 16:55:40
->>***************
->>*** 301,304 ****
->>--- 301,306 ----
->>  static int NO_COPY keep_looping = 0;
->>  
->>+ #define TIME_TO_WAIT_FOR_DEBUGGER 10000
->>+ 
->>  extern "C" int
->>  try_to_debug ()
->>***************
->>*** 330,333 ****
->>--- 332,350 ----
->>    ReleaseMutex (title_mutex);
->>  
->>+   /* prevent recursive exception handling */
->>+   char* rawenv = GetEnvironmentStrings () ;
->>+   for ( char* p = rawenv; *p != '\0'; p = strchr (p, '\0') + 1 )
->>+     { 
->>+       if (strncmp ( p, "CYGWIN=", sizeof("CYGWIN=") - 1) == 0)
->>+         {
->>+           system_printf ( "%s", p);
->>+           char* q = strstr ( p, "error_start" ) ;
->>+           /* replace 'error_start=...' with '_rror_start=...' */
->>+           if ( q ) *q = '_' ;
->>+           SetEnvironmentVariable ( "CYGWIN", p+sizeof("CYGWIN=") ) ;
->>+           break ;
->>+         }
->>+     }
->>+ 
->>    dbg = CreateProcess (NULL,
->>                       debugger_command,
->>***************
->>*** 349,355 ****
->>    else
->>      {
->>        keep_looping = 1;
->>!       while (keep_looping)
->>!       Sleep (10000);
->>      }
->>  
->>--- 366,385 ----
->>    else
->>      {
->>+       char event_name [ sizeof ( "cygwin_error_start_event" ) + 9 ];
->>+       DWORD win32_pid = GetCurrentProcessId ();
->>+       __small_sprintf ( event_name, "cygwin_error_start_event%x", win32_pid );
->>+       HANDLE sync_with_dbg = CreateEvent ( NULL, TRUE, FALSE, event_name );
->>        keep_looping = 1;
->>!       while (keep_looping) 
->>!         {
->>!           if (sync_with_dbg == NULL)
->>!             Sleep (TIME_TO_WAIT_FOR_DEBUGGER);
->>!           else
->>!             {
->>!               if (WaitForSingleObject (sync_with_dbg,
->>!                                        TIME_TO_WAIT_FOR_DEBUGGER) == WAIT_OBJECT_0)
->>!                 break;
->>!             }
->>!          }
->>      }
-
-Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
-
+Index: dir.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/dir.cc,v
+retrieving revision 1.2
+diff -p -3 -r1.2 dir.cc
+*** dir.cc	2000/05/22 17:15:47	1.2
+--- dir.cc	2000/05/23 19:20:25
+*************** writable_directory (const char *file)
+*** 31,36 ****
+--- 31,40 ----
+    char *slash = strrchr (dir, '\\');
+    if (slash == NULL)
+      usedir = ".";
++   else if (slash == dir)
++     {
++       usedir = "\\";
++     }
+    else
+      {
+        *slash = '\0';
