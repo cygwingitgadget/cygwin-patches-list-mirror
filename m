@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3249-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 13983 invoked by alias); 30 Nov 2002 22:55:00 -0000
+Return-Path: <cygwin-patches-return-3250-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 31161 invoked by alias); 1 Dec 2002 05:06:41 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,179 +7,244 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 13972 invoked from network); 30 Nov 2002 22:54:59 -0000
-Date: Sat, 30 Nov 2002 14:55:00 -0000
-From: Steve O <bub@io.com>
-To: cygwin-patches@cygwin.com
-Subject: [PATCH] line_edit return value
-Message-ID: <20021130170221.A6355@fnord.io.com>
-References: <20021129200410.A20532@eris.io.com> <20021130222603.GB29907@redhat.com>
+Received: (qmail 31152 invoked from network); 1 Dec 2002 05:06:40 -0000
+Message-Id: <3.0.5.32.20021201000321.0082b440@h00207811519c.ne.client2.attbi.com>
+X-Sender: pierre@h00207811519c.ne.client2.attbi.com
+Date: Sat, 30 Nov 2002 21:06:00 -0000
+To: Corinna Vinschen <cygwin-patches@cygwin.com>
+From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
+Subject: Re: Internal get{pw,gr}XX calls
+In-Reply-To: <20021129190611.F1398@cygbert.vinschen.de>
+References: <20021129184501.E1398@cygbert.vinschen.de>
+ <3.0.5.32.20021126000911.00833190@mail.attbi.com>
+ <3.0.5.32.20021126000911.00833190@mail.attbi.com>
+ <3.0.5.32.20021129005937.00835100@h00207811519c.ne.client2.attbi.com>
+ <20021129184501.E1398@cygbert.vinschen.de>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="d6Gm4EdcadzBjdND"
-Content-Disposition: inline
-User-Agent: Mutt/1.2.5.1i
-In-Reply-To: <20021130222603.GB29907@redhat.com>; from cgf@redhat.com on Sat, Nov 30, 2002 at 05:26:03PM -0500
-X-SW-Source: 2002-q4/txt/msg00200.txt.bz2
+Content-Type: multipart/mixed; boundary="=====================_1038737001==_"
+X-SW-Source: 2002-q4/txt/msg00201.txt.bz2
 
+--=====================_1038737001==_
+Content-Type: text/plain; charset="us-ascii"
+Content-length: 1353
 
---d6Gm4EdcadzBjdND
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-length: 1156
+Corinna,
 
-On Sat, Nov 30, 2002 at 05:26:03PM -0500, Christopher Faylor wrote:
-> P.S.  Btw, did you notice that the return value for accept_input
-> is not being used, AFAICT?  I had always wanted to do something
-> with that but it never seemed to be necessary.
+The attached patch includes the changes to grab_int and parse_grp.
+I like your initial idea (a little simplified) better because it 
+leaves uid = -1 as a usable value. That may prove useful one day 
+(I have some ideas). It also makes parse_pwd somewhat simpler.
 
-Yep, about 5 or 6 patches from now, I am thinking of using 
-the return value to signal that accept_input didn't work. 
+strtoul replaces strtol. I have verified that both strtoul("-2",..)
+and strtoul("4294967294",..) return 0xFFFFFFFE.
 
-Here's the next patch.  It shouldn't change the code behavior at all
-but lays some ground work for having line_edit return an error condition.
+I have kept updating the state to loaded in read_etc_{passwd,group}.
 
-Thanks,
--steve
+This patch replaces what I sent on Friday. It is incremental over
+the earlier big patch involving 9 files.
 
-ChangeLog entry
-2002-11-30 Steve Osborn <bub@io.com>
-	* fhandler.h (fhandler_termios::line_edit): Changed return
-	  from an int to an enum to allow the function to return an
-	  error.
-	* fhandler_console.cc (fhandler_console::read): Updated the
-	  line_edit call to use the new enum.
-	* fhandler_termios.cc (fhandler_termios::line_edit): Changed 
-	  return from an int to an enum to allow the function to return an
-          error.  Put put_readahead call before doecho for future patch. 
-	* fhandler_tty.cc (fhandler_pty_master::write): Changed to 
-	  call line_edit one character at a time, and stop if an error
-	  occurs.
+Pierre
 
---d6Gm4EdcadzBjdND
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename="tty_patch.2"
-Content-length: 3580
+2002-11-30  Pierre Humblet <pierre.humblet@ieee.org>
 
-Index: cygwin/fhandler.h
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/fhandler.h,v
-retrieving revision 1.146
-diff -u -p -r1.146 fhandler.h
---- cygwin/fhandler.h	9 Nov 2002 03:17:40 -0000	1.146
-+++ cygwin/fhandler.h	30 Nov 2002 22:32:19 -0000
-@@ -118,6 +118,14 @@ typedef struct __DIR DIR;
- struct dirent;
- struct iovec;
- 
-+enum line_edit_status
-+{
-+  line_edit_signalled = -1,
-+  line_edit_ok = 0,
-+  line_edit_input_done = 1,
-+  line_edit_error = 2
-+};
+	* pwdgrp.h (pwdgrp_check::pwdgrp_state): Replace by 
+	pwdgrp_check::isinitializing ().
+	(pwdgrp_check::isinitializing): Create.
+	* passwd.cc (grab_int): Change type to unsigned, use strtoul and 
+	set the pointer content to 0 if the field is invalid.
+	(parse_pwd): Move validity test after getting pw_gid.
+	(read_etc_passwd): Replace "passwd_state <= " by 
+	passwd_state::isinitializing ().	
+	(internal_getpwuid): Ditto.
+	(internal_getpwnam): Ditto.
+	(getpwent): Ditto.
+	(getpass): Ditto.
+	* grp.cc (parse_grp): Use strtoul for gr_gid and verify the validity.
+	(read_etc_group): Replace "group_state <= " by 
+	group_state::isinitializing (). 
+	(internal_getgrgid): Ditto.
+	(getgrent32): Ditto.
+	(internal_getgrent): Ditto.
+
+--=====================_1038737001==_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment; filename="pwd2.diff"
+Content-length: 5064
+
+--- pwdgrp.h.new	2002-11-28 23:17:54.000000000 -0500
++++ pwdgrp.h	2002-11-30 16:40:34.000000000 -0500
+@@ -34,21 +34,28 @@ class pwdgrp_check {
+
+ public:
+   pwdgrp_check () : state (uninitialized) {}
+-  operator pwdgrp_state ()
++  BOOL isinitializing ()
+     {
+-      if (state !=3D uninitialized && file_w32[0] && cygheap->etc_changed =
+())
+-	{
+-	  HANDLE h;
+-	  WIN32_FIND_DATA data;
+-
+-	  if ((h =3D FindFirstFile (file_w32, &data)) !=3D INVALID_HANDLE_VALUE)
++      if (state <=3D initializing)
++	state =3D initializing;
++      else if (cygheap->etc_changed ())
++        {
++	  if (!file_w32[0])
++	    state =3D initializing;
++	  else
+ 	    {
+-	      if (CompareFileTime (&data.ftLastWriteTime, &last_modified) > 0)
+-		state =3D initializing;
+-	      FindClose (h);
++	      HANDLE h;
++	      WIN32_FIND_DATA data;
 +
- enum bg_check_types
- {
-   bg_error = -1,
-@@ -693,7 +701,7 @@ class fhandler_termios: public fhandler_
-     set_need_fork_fixup ();
-   }
-   HANDLE& get_output_handle () { return output_handle; }
--  int line_edit (const char *rptr, int nread, int always_accept = 0);
-+  line_edit_status line_edit (const char *rptr, int nread, int always_accept = 0);
-   void set_output_handle (HANDLE h) { output_handle = h; }
-   void tcinit (tty_min *this_tc, int force = FALSE);
-   virtual int is_tty () { return 1; }
-Index: cygwin/fhandler_console.cc
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/fhandler_console.cc,v
-retrieving revision 1.96
-diff -u -p -r1.96 fhandler_console.cc
---- cygwin/fhandler_console.cc	15 Nov 2002 04:35:13 -0000	1.96
-+++ cygwin/fhandler_console.cc	30 Nov 2002 22:32:23 -0000
-@@ -457,10 +457,10 @@ fhandler_console::read (void *pv, size_t
- 
-       if (toadd)
- 	{
--	  int res = line_edit (toadd, nread);
--	  if (res < 0)
-+	  line_edit_status res = line_edit (toadd, nread);
-+	  if (res == line_edit_signalled)
- 	    goto sig_exit;
--	  else if (res)
-+	  else if (res == line_edit_input_done)
- 	    break;
++	      if ((h =3D FindFirstFile (file_w32, &data)) !=3D INVALID_HANDLE_VAL=
+UE)
++	        {
++		  if (CompareFileTime (&data.ftLastWriteTime, &last_modified) > 0)
++		    state =3D initializing;
++		  FindClose (h);
++		}
+ 	    }
  	}
- #undef ich
-Index: cygwin/fhandler_termios.cc
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/fhandler_termios.cc,v
-retrieving revision 1.33
-diff -u -p -r1.33 fhandler_termios.cc
---- cygwin/fhandler_termios.cc	23 Sep 2002 00:31:30 -0000	1.33
-+++ cygwin/fhandler_termios.cc	30 Nov 2002 22:32:24 -0000
-@@ -186,9 +186,10 @@ fhandler_termios::echo_erase (int force)
-     doecho ("\b \b", 3);
- }
- 
--int
-+line_edit_status
- fhandler_termios::line_edit (const char *rptr, int nread, int always_accept)
- {
-+  line_edit_status ret = line_edit_ok;
-   char c;
-   int input_done = 0;
-   bool sawsig = FALSE;
-@@ -321,20 +322,23 @@ fhandler_termios::line_edit (const char 
-       if (tc->ti.c_iflag & IUCLC && isupper (c))
- 	c = cyg_tolower (c);
- 
-+      put_readahead (c);
-       if (tc->ti.c_lflag & ECHO)
- 	doecho (&c, 1);
--      put_readahead (c);
+-      return state;
++      return state =3D=3D initializing;
      }
- 
-   if (!iscanon || always_accept)
-     set_input_done (ralen > 0);
- 
-   if (sawsig)
--    input_done = -1;
-+    ret = line_edit_signalled;
-   else if (input_done)
--    (void) accept_input ();
-+    {
-+      ret = line_edit_input_done;
-+      (void) accept_input ();
-+    }
- 
--  return input_done;
-+  return ret;
+   void operator =3D (pwdgrp_state nstate)
+     {
+--- passwd.cc.new	2002-11-28 23:26:28.000000000 -0500
++++ passwd.cc	2002-11-30 23:26:42.000000000 -0500
+@@ -60,16 +60,12 @@ grab_string (char **p)
  }
- 
- void
-Index: cygwin/fhandler_tty.cc
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/fhandler_tty.cc,v
-retrieving revision 1.80
-diff -u -p -r1.80 fhandler_tty.cc
---- cygwin/fhandler_tty.cc	30 Nov 2002 22:23:01 -0000	1.80
-+++ cygwin/fhandler_tty.cc	30 Nov 2002 22:32:26 -0000
-@@ -1077,8 +1077,12 @@ fhandler_pty_master::close ()
- int
- fhandler_pty_master::write (const void *ptr, size_t len)
- {
--  (void) line_edit ((char *) ptr, len);
--  return len;
-+  size_t i;
-+  char *p = (char *) ptr;
-+  for (i=0; i<len; i++)
-+    if (line_edit (p++, 1) == line_edit_error) 
-+      break;
-+  return i;
- }
- 
- int __stdcall
 
---d6Gm4EdcadzBjdND--
+ /* same, for ints */
+-static int
++static unsigned int
+ grab_int (char **p)
+ {
+   char *src =3D *p;
+-  int val =3D strtol (src, NULL, 10);
+-  while (*src && *src !=3D ':')
+-    src++;
+-  if (*src =3D=3D ':')
+-    src++;
+-  *p =3D src;
++  unsigned int val =3D strtoul (src, p, 10);
++  *p =3D (*p =3D=3D src || **p !=3D ':') ? almost_null : *p + 1;
+   return val;
+ }
+
+@@ -82,9 +78,9 @@ parse_pwd (struct passwd &res, char *buf
+   res.pw_name =3D grab_string (&buf);
+   res.pw_passwd =3D grab_string (&buf);
+   res.pw_uid =3D grab_int (&buf);
++  res.pw_gid =3D grab_int (&buf);
+   if (!*buf)
+     return 0;
+-  res.pw_gid =3D grab_int (&buf);
+   res.pw_comment =3D 0;
+   res.pw_gecos =3D grab_string (&buf);
+   res.pw_dir =3D  grab_string (&buf);
+@@ -140,7 +136,7 @@ read_etc_passwd ()
+   passwd_lock here (cygwin_finished_initializing);
+
+   /* if we got blocked by the mutex, then etc_passwd may have been process=
+ed */
+-  if (passwd_state <=3D initializing)
++  if (passwd_state.isinitializing ())
+     {
+       curr_lines =3D 0;
+       if (pr.open ("/etc/passwd"))
+@@ -216,7 +212,7 @@ struct passwd *
+ internal_getpwuid (__uid32_t uid, BOOL check)
+ {
+   if (passwd_state.isuninitialized ()
+-      || (check && passwd_state  <=3D initializing))
++      || (check && passwd_state.isinitializing ()))
+     read_etc_passwd ();
+
+   for (int i =3D 0; i < curr_lines; i++)
+@@ -229,7 +225,7 @@ struct passwd *
+ internal_getpwnam (const char *name, BOOL check)
+ {
+   if (passwd_state.isuninitialized ()
+-      || (check && passwd_state  <=3D initializing))
++      || (check && passwd_state.isinitializing ()))
+     read_etc_passwd ();
+
+   for (int i =3D 0; i < curr_lines; i++)
+@@ -351,7 +347,7 @@ getpwnam_r (const char *nam, struct pass
+ extern "C" struct passwd *
+ getpwent (void)
+ {
+-  if (passwd_state  <=3D initializing)
++  if (passwd_state.isinitializing ())
+     read_etc_passwd ();
+
+   if (pw_pos < curr_lines)
+@@ -394,7 +390,7 @@ getpass (const char * prompt)
+ #endif
+   struct termios ti, newti;
+
+-  if (passwd_state  <=3D initializing)
++  if (passwd_state.isinitializing ())
+     read_etc_passwd ();
+
+   cygheap_fdget fhstdin (0);
+--- grp.cc.new	2002-11-28 23:30:04.000000000 -0500
++++ grp.cc	2002-11-30 16:48:24.000000000 -0500
+@@ -59,9 +59,8 @@ parse_grp (struct __group32 &grp, char *
+   if (dp)
+     {
+       *dp++ =3D '\0';
+-      grp.gr_gid =3D strtol (dp, NULL, 10);
+-      dp =3D strchr (dp, ':');
+-      if (dp)
++      grp.gr_gid =3D strtoul (line =3D dp, &dp, 10);
++      if (dp !=3D line && *dp =3D=3D ':')
+ 	{
+ 	  grp.gr_mem =3D &null_ptr;
+ 	  if (*++dp)
+@@ -135,7 +134,7 @@ read_etc_group ()
+   group_lock here (cygwin_finished_initializing);
+
+   /* if we got blocked by the mutex, then etc_group may have been processe=
+d */
+-  if (group_state <=3D initializing)
++  if (group_state.isinitializing ())
+     {
+       for (int i =3D 0; i < curr_lines; i++)
+ 	if ((group_buf + i)->gr_mem !=3D &null_ptr)
+@@ -199,7 +198,7 @@ internal_getgrgid (__gid32_t gid, BOOL c
+   struct __group32 * default_grp =3D NULL;
+
+   if (group_state.isuninitialized ()
+-      || (check && group_state  <=3D initializing))
++      || (check && group_state.isinitializing ()))
+     read_etc_group ();
+
+   for (int i =3D 0; i < curr_lines; i++)
+@@ -216,7 +215,7 @@ struct __group32 *
+ internal_getgrnam (const char *name, BOOL check)
+ {
+   if (group_state.isuninitialized ()
+-      || (check && group_state  <=3D initializing))
++      || (check && group_state.isinitializing ()))
+     read_etc_group ();
+
+   for (int i =3D 0; i < curr_lines; i++)
+@@ -281,7 +280,7 @@ endgrent ()
+ extern "C" struct __group32 *
+ getgrent32 ()
+ {
+-  if (group_state  <=3D initializing)
++  if (group_state.isinitializing ())
+     read_etc_group ();
+
+   if (grp_pos < curr_lines)
+
+--=====================_1038737001==_--
