@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4863-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 18700 invoked by alias); 18 Jul 2004 16:20:21 -0000
+Return-Path: <cygwin-patches-return-4864-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 26499 invoked by alias); 18 Jul 2004 16:29:33 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,221 +7,75 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 18690 invoked from network); 18 Jul 2004 16:20:19 -0000
-Message-ID: <01C46CF3.DE6329F0.Gerd.Spalink@t-online.de>
-From: Gerd.Spalink@t-online.de (Gerd Spalink)
-Reply-To: "Gerd.Spalink@t-online.de" <Gerd.Spalink@t-online.de>
-To: "'cygwin-patches@cygwin.com'" <cygwin-patches@cygwin.com>
-Subject: Update for the testsuite, devdsp
-Date: Sun, 18 Jul 2004 16:20:00 -0000
-Organization: privat
+Received: (qmail 26481 invoked from network); 18 Jul 2004 16:29:32 -0000
+X-Authentication-Warning: slinky.cs.nyu.edu: pechtcha owned process doing -bs
+Date: Sun, 18 Jul 2004 16:29:00 -0000
+From: Igor Pechtchanski <pechtcha@cs.nyu.edu>
+Reply-To: cygwin-patches@cygwin.com
+To: Gerd Spalink <Gerd.Spalink@t-online.de>
+cc: cygwin-patches@cygwin.com
+Subject: Re: Fix dup for /dev/dsp
+In-Reply-To: <01C46CF2.ACDB11A0.Gerd.Spalink@t-online.de>
+Message-ID: <Pine.GSO.4.58.0407181221420.19508@slinky.cs.nyu.edu>
+References: <01C46CF2.ACDB11A0.Gerd.Spalink@t-online.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-ID: VrxG8uZrQeejyyjuxwltS8XDyAyr54M8mk8zSwxWhAB-QesihozJ62
-X-SW-Source: 2004-q3/txt/msg00015.txt.bz2
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Scanned-By: MIMEDefang 2.39
+X-SW-Source: 2004-q3/txt/msg00016.txt.bz2
 
-The first of the two new tests for dup test use of duped file descriptors,
-after the first has been closed. The second test checks the consistency of
-the audio parameters in duped descriptors.
+On Sun, 18 Jul 2004, Gerd Spalink wrote:
 
-ChangeLog:
+> What I did:
+>
+> The static open_count is no longer needed because now we consistently
+> use the return status from the windows API to decide if we can open or
+> not.  This change is not related to dup.
+>
+> Wave header parsing needed a small fix. It was a +/-1 problem.
+>
+> To fix all cases of dup, a dup_chain is maintained to keep all duped
+> instances consistent. I did not understand how to apply archetypes for
+> this problem, and this solution works (test suite contribution is in
+> separate patch).
+>
+>
+> ChangeLog:
+>
+> 2004-07-18 Gerd Spalink <Gerd.Spalink@t-online.de>
+>
+> 	* fhandler.h (class fhandler_dev_dsp): Remove static open_count,
+> 	add members to keep track of duped instances.
+> 	* fhandler_dsp.cc (fhandler_dev_dsp::Audio_out::parsewav): Compare
+> 	with <= end for the case that only the header is passed to write.
+> 	(fhandler_dev_dsp::open): Remove open_count; instead of query use
+> 	start/stop to get wave device status from win32.
+> 	(fhandler_dev_dsp::fhandler_dev_dsp): Initialize new members
+> 	dup_chain_next and dup_chain_prev.
+> 	(fhandler_dev_dsp::write): Insert call to update_duped.
+> 	(fhandler_dev_dsp::close): Check dup_chain before stop of audio
+> 	device.
+> 	(fhandler_dev_dsp::dup): Create dup_chain linked list. Copy members
+> 	by calling dup_cpy.
+> 	(fhandler_dev_dsp::dup_cpy): New.
+> 	(fhandler_dev_dsp::update_duped): New.
+> 	(fhandler_dev_dsp::ioctl): Replace all inline return statements by
+> 	setting variable rc. At the end, reflect any changes in duped instances
+> 	by calling update_duped ().
 
-2004-07-18 Gerd Spalink <Gerd.Spalink@t-online.de>
+Gerd,
 
-	* devdsp.c (playbacktest): Do not rate successful second open
-	as an error, just log the result.
-	(recordingtest): ditto.
-	(sinegenw): Reduce volume of the beep.
-	(sinegenb): ditto.
-	(dup_test): New.
+I don't have time for an in-depth analysis, but after a quick look-over,
+it looks like you're effectively keeping a reference_count, though as a
+full list of references instead of just a count.  It looks a bit
+heavyweight, but otherwise good, and I can't argue with success.  Just my
+2c.
+	Igor
+-- 
+				http://cs.nyu.edu/~pechtcha/
+      |\      _,,,---,,_		pechtcha@cs.nyu.edu
+ZZZzz /,`.-'`'    -.  ;-;;,_		igor@watson.ibm.com
+     |,4-  ) )-,_. ,\ (  `'-'		Igor Pechtchanski, Ph.D.
+    '---''(_/--'  `-'\_) fL	a.k.a JaguaR-R-R-r-r-r-.-.-.  Meow!
 
-Patch:
-
-Index: devdsp.c
-===================================================================
-RCS file: /cvs/src/src/winsup/testsuite/winsup.api/devdsp.c,v
-retrieving revision 1.3
-diff -p -u -r1.3 devdsp.c
---- devdsp.c	13 Apr 2004 09:40:03 -0000	1.3
-+++ devdsp.c	18 Jul 2004 15:34:32 -0000
-@@ -36,7 +36,7 @@ static const char wavfile_okay[] =
- 
- /* Globals required by libltp */
- const char *TCID = "devdsp";   /* set test case identifier */
--int TST_TOTAL = 35;
-+int TST_TOTAL = 37;
- 
- /* Prototypes */
- void sinegen (void *wave, int rate, int bits, int len, int stride);
-@@ -57,6 +57,7 @@ void abortplaytest (void);
- void playwavtest (void);
- void syncwithchild (pid_t pid, int expected_exit_status);
- void cleanup (void);
-+void dup_test (void);
- 
- static int expect_child_failure = 0;
- 
-@@ -83,6 +84,7 @@ main (int argc, char *argv[])
-   forkrectest ();
-   abortplaytest ();
-   playwavtest ();
-+  dup_test ();
-   tst_exit ();
-   /* NOTREACHED */
-   return 0;
-@@ -150,15 +152,11 @@ playbacktest (void)
- 		strerror (errno));
-     }
-   audio2 = open ("/dev/dsp", O_WRONLY);
-+  tst_resm (TINFO, "Second open /dev/dsp W %s ",
-+	    audio2 >= 0 ? "WORKS" : "DOESN'T WORK");
-   if (audio2 >= 0)
-     {
--      tst_brkm (TFAIL, cleanup,
--		"Second open /dev/dsp W succeeded, but is expected to fail");
--    }
--  if (errno != EBUSY)
--    {
--      tst_brkm (TFAIL, cleanup, "Expected EBUSY here, exit: %s",
--		strerror (errno));
-+      close (audio2);
-     }
-   for (rate = 0; rate < sizeof (rates) / sizeof (int); rate++)
-     for (k = 0; k < sizeof (sblut) / sizeof (struct sb); k++)
-@@ -187,15 +185,11 @@ recordingtest (void)
- 		strerror (errno));
-     }
-   audio2 = open ("/dev/dsp", O_RDONLY);
-+  tst_resm (TINFO, "Second open /dev/dsp R %s",
-+	    audio2 >= 0 ? "WORKS" : "DOESN'T WORK");
-   if (audio2 >= 0)
-     {
--      tst_brkm (TFAIL, cleanup,
--		"Second open /dev/dsp R succeeded, but is expected to fail");
--    }
--  if (errno != EBUSY)
--    {
--      tst_brkm (TFAIL, cleanup, "Expected EBUSY here, exit: %s",
--		strerror (errno));
-+      close (audio2);
-     }
-   for (rate = 0; rate < sizeof (rates) / sizeof (int); rate++)
-     for (k = 0; k < sizeof (sblut) / sizeof (struct sb); k++)
-@@ -582,7 +576,7 @@ sinegenw (int freq, int samprate, short 
-   incr = M_PI * 2.0 * (double) freq / (double) samprate;
-   while (len-- > 0)
-     {
--      *value = (short) floor (0.5 + 32766.5 * sin (phase));
-+      *value = (short) floor (0.5 + 6553 * sin (phase));
-       value += stride;
-       phase += incr;
-     }
-@@ -597,7 +591,7 @@ sinegenb (int freq, int samprate, unsign
-   incr = M_PI * 2.0 * (double) freq / (double) samprate;
-   while (len-- > 0)
-     {
--      *value = (unsigned char) floor (128.5 + 126.5 * sin (phase));
-+      *value = (unsigned char) floor (128.5 + 26 * sin (phase));
-       value += stride;
-       phase += incr;
-     }
-@@ -667,3 +661,98 @@ void
- cleanup (void)
- {
- }
-+
-+void dup_test (void)
-+{
-+  int audio, fd, n;
-+  int bits1, bits2;
-+  int size = sizeof (wavfile_okay);
-+  int header = 44;
-+  const char *okay = wavfile_okay + header;
-+  audio = open ("/dev/dsp", O_WRONLY);
-+  if (audio < 0)
-+    {
-+      tst_brkm (TFAIL, cleanup, "Error open /dev/dsp W: %s",
-+		strerror (errno));
-+    }
-+  /* write header once to set parameters correctly */
-+  n = write (audio, wavfile_okay, header);
-+  if (n != header)
-+    {
-+      tst_brkm (TFAIL, cleanup, "Wrote %d, expected %d; exit", n, header);
-+    }
-+  size = size - header;
-+  /* dup / close */
-+  for (fd = audio+1; fd <= audio+5; fd++)
-+    if (dup2 (fd-1, fd) != -1)
-+      {
-+	if (fd-2 >= audio)
-+	  if (close (fd-2) < 0)
-+	    {
-+	      tst_brkm (TFAIL, cleanup, "Close audio: %s", strerror (errno));
-+	    }
-+	if ((n = write (fd, okay, size)) < 0)
-+	  {
-+	    tst_brkm (TFAIL, cleanup, "write: %s", strerror (errno));
-+	  }
-+	if (n != size)
-+	  {
-+	    tst_brkm (TFAIL, cleanup, "Wrote %d, expected %d; exit", n, size);
-+	  }
-+      }
-+    else
-+      tst_brkm (TFAIL, cleanup, "dup: %s", strerror (errno));
-+
-+  for (fd = audio+4; fd <= audio+5; fd++)
-+    if (close (fd) < 0)
-+      {
-+	tst_brkm (TFAIL, cleanup, "Close audio: %s", strerror (errno));
-+      }
-+  tst_resm (TPASS, "Write to duped fd");
-+
-+  audio = open ("/dev/dsp", O_WRONLY);
-+  if (audio < 0)
-+    {
-+      tst_brkm (TFAIL, cleanup, "Error open /dev/dsp W: %s",
-+		strerror (errno));
-+    }
-+  fd = audio + 1;
-+  if (dup2 (audio, fd) == -1)
-+    {
-+      tst_brkm (TFAIL, cleanup, "dup: %s", strerror (errno));
-+    }
-+  bits1 = AFMT_U8;
-+  if (ioctl (audio, SNDCTL_DSP_SAMPLESIZE, &bits1) < 0)
-+    {
-+      tst_brkm (TFAIL, cleanup, "ioctl: %s", strerror (errno));
-+    }
-+  bits1 = AFMT_S16_LE;
-+  if (ioctl (fd, SNDCTL_DSP_SAMPLESIZE, &bits1) < 0)
-+    {
-+      tst_brkm (TFAIL, cleanup, "ioctl: %s", strerror (errno));
-+    }
-+  bits1 = AFMT_QUERY;
-+  if (ioctl (audio, SNDCTL_DSP_SAMPLESIZE, &bits1) < 0)
-+    {
-+      tst_brkm (TFAIL, cleanup, "ioctl: %s", strerror (errno));
-+    }
-+  bits2 = AFMT_QUERY;
-+  if (ioctl (fd, SNDCTL_DSP_SAMPLESIZE, &bits2) < 0)
-+    {
-+      tst_brkm (TFAIL, cleanup, "ioctl: %s", strerror (errno));
-+    }
-+  if (bits1 != AFMT_S16_LE || bits2 != AFMT_S16_LE)
-+    {
-+      tst_brkm (TFAIL, cleanup, "Inconsistent state of duped fd: %d %d %d",
-+		AFMT_S16_LE,bits1,bits2);
-+    }
-+  if (close (audio) < 0)
-+    {
-+      tst_brkm (TFAIL, cleanup, "Close audio: %s", strerror (errno));
-+    }
-+  if (close (fd) < 0)
-+    {
-+      tst_brkm (TFAIL, cleanup, "Close audio: %s", strerror (errno));
-+    }
-+  tst_resm (TPASS, "Parameter change to duped fd");
-+}
+"I have since come to realize that being between your mentor and his route
+to the bathroom is a major career booster."  -- Patrick Naughton
