@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3902-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 28785 invoked by alias); 26 May 2003 15:38:00 -0000
+Return-Path: <cygwin-patches-return-3903-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 1112 invoked by alias); 26 May 2003 15:54:44 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,66 +7,58 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 26343 invoked from network); 26 May 2003 15:36:40 -0000
-Message-ID: <008f01c3239c$63fc3810$c800a8c0@docbill>
-From: "Bill C Riemers" <cygwin@docbill.net>
-To: "Corinna Vinschen" <cygwin-patches@cygwin.com>
-References: <053f01c3216e$947cc570$6400a8c0@FoxtrotTech0001> <20030524175530.GB5604@redhat.com> <20030524202421.GE19367@cygbert.vinschen.de> <00d501c322f9$ad228e70$6400a8c0@FoxtrotTech0001> <20030526080817.GA5976@cygbert.vinschen.de>
-Subject: Re: Proposed change for Win9x file permissions...
-Date: Mon, 26 May 2003 15:38:00 -0000
-MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2800.1165
-X-SW-Source: 2003-q2/txt/msg00129.txt.bz2
+Received: (qmail 994 invoked from network); 26 May 2003 15:54:43 -0000
+Date: Mon, 26 May 2003 15:54:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: df and ls for root directories on Win9X
+Message-ID: <20030526155440.GA12907@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20030525091901.GA875@cygbert.vinschen.de> <3.0.5.32.20030523183423.008059c0@mail.attbi.com> <20030525091901.GA875@cygbert.vinschen.de> <3.0.5.32.20030525175432.00807100@incoming.verizon.net>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3.0.5.32.20030525175432.00807100@incoming.verizon.net>
+User-Agent: Mutt/1.4.1i
+X-SW-Source: 2003-q2/txt/msg00130.txt.bz2
 
-I'm not saying there won't be problems if someone using this patch does something like:
-    umask 777
+On Sun, May 25, 2003 at 05:54:32PM -0400, Pierre A. Humblet wrote:
+>At 12:48 PM 5/25/2003 -0400, Christopher Faylor wrote:
+>>On Sun, May 25, 2003 at 11:19:01AM +0200, Corinna Vinschen wrote:
+>>>On Fri, May 23, 2003 at 06:34:23PM -0400, Pierre A. Humblet wrote:
+>>>> 2003-05-23  Pierre Humblet  <pierre.humblet@ieee.org>
+>>>> 
+>>>> 	* autoload.cc (GetDiskFreeSpaceEx): Add.
+>>>> 	* syscalls.cc (statfs): Call full_path.root_dir() instead of
+>>>> 	rootdir(full_path). Use GetDiskFreeSpaceEx when available and
+>>>> 	report space available in addition to free space.
+>>>> 	* fhandler_disk_file.cc (fhandler_disk_file::fstat_by_name):
+>>>> 	Do not call FindFirstFile for disk root directories.
+>>>
+>>>Applied.
+>>
+>>Um.  I am still reviewing the fstat_by_name stuff.  I will be making
+>>changes to this.
+>>
+>I hope you find a more elegant way to determine when it's a root directory.
 
-I'm just saying it is a recoverable mistake.  The umask local to the current process at it's children only.  Executables should
-still execute, but scripts probably won't.  However, just changing the umask back to something more reasonable recovers the file
-permissions.  So even the person who edits the change into their .profile or /etc/profile will be able to restore the previous
-value.
+The previous code obviously went out of its way to handle a special
+case.  It was not a "bug" that it filled out an array and changed "c:\"
+to "c:\*".
 
-As I said, a better patch would be to modify the "mount" command to use a "umask" for each mounted file system.  But I wanted to
-keep the change minimal, since I can not really test Win9x systems.
+I'm away from my computer now so I can't easily check to see what you
+did but it looks like you made the root directory always assume today's
+date.
 
-                                                   Bill
+I also had a problem with this:
++  else if (pc->isdir () && strlen (*pc) <= strlen (pc->root_dir ()))
 
------ Original Message ----- 
-From: "Corinna Vinschen" <cygwin-patches@cygwin.com>
-To: <cygwin-patches@cygwin.com>
-Sent: Monday, May 26, 2003 4:08 AM
-Subject: Re: Proposed change for Win9x file permissions...
+Isn't the strlen check just a more expensive and less clear way of doing
+a strcmp?  i.e.,
 
++  else if (pc->isdir () && strcmp (*pc, pc->root_dir () == 0)
 
-> On Sun, May 25, 2003 at 04:10:10PM -0400, Bill C. Riemers wrote:
-> >
-> > > I like the idea as well but wouldn't that eventually cause problems if
-> > > the umask disables the user bits?  I'm a bit concerned about the new
-> > > arriving questions on the cygwin ML due to applications checking these
-> > > bits in combination with clueless users.  It would be better, IMHO, if
-> > > the umask couldn't mask the user bits at all, just the group and other
-> > > bits.
-> >
-> > I seriously doubt it would result in serious problem, since the patch only
-> > changes the file permissions that are visible via a "stat()" command, not
-> > the actual permissions that Windows will use.  Case and point:  /cygdrive/c
-> > shows up with perms 000 under cygwin, but there are not any serious
-> > consequences of that bug, other than user confusion.
->
-> What I mean are applications calling stat and getting permissions back
-> which they don't like.  E.g. a shell which checks the permissions and
-> refuses to run a script because it's not executable.
->
-> Corinna
->
-> -- 
-> Corinna Vinschen                  Please, send mails regarding Cygwin to
-> Cygwin Developer                                mailto:cygwin@cygwin.com
-> Red Hat, Inc.
->
+?
 
+cgf
