@@ -1,34 +1,51 @@
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: memory leak in cygheap -- tester needed
-Date: Sun, 30 Sep 2001 21:13:00 -0000
-Message-id: <20011001001356.A18727@redhat.com>
-References: <15294469449.20010927205156@logos-m.ru> <20010927140039.A32577@redhat.com> <15899509507.20010927221556@logos-m.ru> <20010928014713.G32646@redhat.com> <20010930210446.A4405@redhat.com>
-X-SW-Source: 2001-q3/msg00258.html
+Return-Path: <cygwin-patches-return-1468-listarch-cygwin-patches=sourceware.cygnus.com@sources.redhat.com>
+Received: (qmail 24594 invoked by alias); 11 Nov 2001 22:47:21 -0000
+Mailing-List: contact cygwin-patches-help@sourceware.cygnus.com; run by ezmlm
+Precedence: bulk
+List-Subscribe: <mailto:cygwin-patches-subscribe@sources.redhat.com>
+List-Post: <mailto:cygwin-patches@sources.redhat.com>
+List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
+List-Help: <mailto:cygwin-patches-help@sources.redhat.com>, <http://sources.redhat.com/ml/#faqs>
+Sender: cygwin-patches-owner@sources.redhat.com
+Received: (qmail 24580 invoked from network); 11 Nov 2001 22:47:20 -0000
+Message-ID: <040301c16b03$0d077130$0200a8c0@lifelesswks>
+From: "Robert Collins" <robert.collins@itdomain.com.au>
+To: <bkeener@thesoftwaresource.com>,
+	"cygwin-patches" <cygwin-patches@cygwin.com>
+References: <VA.000009be.0055f8df@thesoftwaresource.com> <02a401c1691d$0b247030$0200a8c0@lifelesswks> <VA.000009c6.0059ec68@thesoftwaresource.com>
+Subject: Re: [Patch] setup.exe - change Prev, Curr, Test Radio Buttons to a Single PushButton
+Date: Mon, 01 Oct 2001 04:36:00 -0000
+MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="Windows-1252"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-OriginalArrivalTime: 11 Nov 2001 22:54:50.0358 (UTC) FILETIME=[DE68F960:01C16B03]
+X-SW-Source: 2001-q4/txt/msg00000.txt.bz2
 
-On Sun, Sep 30, 2001 at 09:04:46PM -0400, Christopher Faylor wrote:
->I just wiped out big chunks of the fhandler code which dealt with the
->names allocation.  It was quite satisfying.
+
+----- Original Message -----
+From: "Brian Keener" <bkeener@thesoftwaresource.com>
 >
->Corinna's idea of calling patch_conv "early" is really proving to
->simplify a lot of things -- most notably stat_worker().
->
->I'm running the test suite now and fixing some last minute glitches but
->I expect to have something to check in tomorrow.
+> The ultimate goal was to have the ability to hit a push button that
+would cycle
+> through "Curr", "Prev", "Test" versions as well as options for
+> "Keep/Skip","Uninstall","Redownload","Reinstall" and "Sources" and
+have it
+> apply to the whole list of packages and not have to do them
+individually.
+> Unfortunately, with all the new changes that occurred in setup with
+the
+> categories and dependencies my understanding of all the trust logic
+took a
+> nosedive and any code I was working on/understood in this area
+crumbled.
 
-I just checked this in.  It passes the test suite.  I can login using
-ssh and telnet.  I can run rxvt.  I'm sure I've missed something,
-though.
+Yeah, the categories and dependencies made big changes to the internal
+logic - as you'd expect. I'm hoping to fiddle this in the near future
+and make it a little easier to hack on.
 
-The one thing that I didn't check was raw device handling.  I could have
-conceivably broken that.
-
-Can anyone test that raw device handling of floppies, tapes, and hard
-disks still works?  Corinna won't be available to test this so I must
-rely on the kindness of you all...
-
-I'd like to verify that the memory leak is gone, too.  It seems to be because
-I saw it when I was copying a large directory recursively but my changes
-eliminated the problem.
-
-cgf
+Rob
