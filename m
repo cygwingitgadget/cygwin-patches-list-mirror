@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3797-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 17560 invoked by alias); 9 Apr 2003 15:11:25 -0000
+Return-Path: <cygwin-patches-return-3798-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 30677 invoked by alias); 9 Apr 2003 15:47:52 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,52 +7,51 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 17548 invoked from network); 9 Apr 2003 15:11:24 -0000
-X-Authentication-Warning: slinky.cs.nyu.edu: pechtcha owned process doing -bs
-Date: Wed, 09 Apr 2003 15:11:00 -0000
-From: Igor Pechtchanski <pechtcha@cs.nyu.edu>
+Received: (qmail 30667 invoked from network); 9 Apr 2003 15:47:51 -0000
+Date: Wed, 09 Apr 2003 15:47:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] enable -finline-functions optimization
+Message-ID: <20030409154807.GD5879@redhat.com>
 Reply-To: cygwin-patches@cygwin.com
-To: Bob Cassels <bcassels@abinitio.com>
-cc: cygwin-patches@cygwin.com
-Subject: Re: PATCH: Better handle accented characters from the console
-In-Reply-To: <OF4A0E537E.6E0F20B0-ON85256D03.004C0999-85256D03.004C2154@abinitio.com>
-Message-ID: <Pine.GSO.4.44.0304091109340.8179-100000@slinky.cs.nyu.edu>
-Importance: Normal
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-SW-Source: 2003-q2/txt/msg00024.txt.bz2
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <Pine.WNT.4.44.0304091020470.272-200000@algeria.intern.net>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Pine.WNT.4.44.0304091020470.272-200000@algeria.intern.net>
+User-Agent: Mutt/1.4.1i
+X-SW-Source: 2003-q2/txt/msg00025.txt.bz2
 
-On Wed, 9 Apr 2003, Bob Cassels wrote:
-
-> cygwin-patches-owner@cygwin.com wrote on 04/08/2003 08:35:34 PM:
+On Wed, Apr 09, 2003 at 11:03:42AM +0200, Thomas Pfaff wrote:
 >
-> > On Tue, Apr 08, 2003 at 05:20:27PM -0400, Christopher Faylor wrote:
+>This patch enables inline optimization for the c++ source files
+>in winsup/cygwin.
 >
-> > Hey, it just occurred to me.  Do you want to take a stab at augmenting
-> > the cygwin documentation for this feature?  I'm not sure where it should
-> > go.  But that's mainly because I haven't actually looked.  :-)
-> >
-> > It just seems that since we now allow people to type this stuff in, it
-> > should be documented somewhere.
+>I tried several attributes for std_dll_init, wsock_init and
+>unused_sig_wrapper without success, the only working solution was to
+>change the functions from static to global to avoid its removal.
 >
-> Sure, I'll take a stab at it.  I'm not sure it'll be much more than a
-> pointer to the Microsoft doc on which numbers get which characters, and a
-> statement that Cygwin supports them, too.
+>And the new_muto in the pwdgrp constructors can not be inlined for more
+>than one instance.
 >
-> I suppose mention of the code page vs. fonts issue should go there, too.
-> Bob
+>To enable -finline-functions optimization run "make CYGINLINE=1".
+>
+>The performance win may vary, at least the rwlock7 test runs about 15%
+>faster.
+>
+>I am running cygwin with this patch about one week now, seems to be
+>stable.
+>
+>2003-04-09  Thomas Pfaff  <tpfaff@gmx.net>
+>
+>	* Makefile.in: Add finline-functions optimization to CXXFLAGS.
+>	* autoload.cc (std_dll_init): Change from static to global.
 
-Bob,
+Sorry but I'm not going to change something that should be a valid static into
+a global just to accommodate the compiler.  There should be compiler attributes
+which allow this to behave normally.
 
-There is also a section in the FAQ, "Why don't international (8-bit)
-characters work?", that might need updating...
-	Igor
--- 
-				http://cs.nyu.edu/~pechtcha/
-      |\      _,,,---,,_		pechtcha@cs.nyu.edu
-ZZZzz /,`.-'`'    -.  ;-;;,_		igor@watson.ibm.com
-     |,4-  ) )-,_. ,\ (  `'-'		Igor Pechtchanski
-    '---''(_/--'  `-'\_) fL	a.k.a JaguaR-R-R-r-r-r-.-.-.  Meow!
+Also, minor point of order:  This a [RFA], not a [PATCH].
 
-Knowledge is an unending adventure at the edge of uncertainty.
-  -- Leto II
+cgf
