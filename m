@@ -1,30 +1,32 @@
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: Cygwin-Patches <cygwin-patches@sources.redhat.com>
-Subject: Re: gethostbyname/gethostbyaddr patch
-Date: Thu, 23 Aug 2001 23:58:00 -0000
-Message-id: <20010824085822.A10526@cygbert.vinschen.de>
-References: <20010823161736.A1556@dothill.com>
-X-SW-Source: 2001-q3/msg00086.html
+From: Christopher Faylor <cgf@redhat.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: rxvt pops up console with 2001-Aug-07 shapshot
+Date: Sat, 25 Aug 2001 10:28:00 -0000
+Message-id: <20010825132846.B21709@redhat.com>
+References: <4268681989.20010822182438@logos-m.ru> <s1sbsl7hp0u.fsf@jaist.ac.jp> <20010823103544.H20320@cygbert.vinschen.de> <s1sheuycxbu.fsf@jaist.ac.jp> <s1sg0aicqdh.fsf@jaist.ac.jp>
+X-SW-Source: 2001-q3/msg00087.html
 
-On Thu, Aug 23, 2001 at 04:17:36PM -0400, Jason Tishler wrote:
-> The following patch:
-> 
->     http://www.cygwin.com/ml/cygwin-cvs/2001-q3/msg00100.html
-> 
-> broke gethostbyname() and gethostbyaddr() when the IP address contains
-> zero components.  For example, my mail server is 24.0.95.227.  When I
-> connect to it with a Cygwin app, the address actually used is 24.0.0.0.
-> 
-> The root cause is that dup_char_list() does not handle embedded null
-> characters.  The attached patch is one way to correct this problem.
-> 
-> Jason
+On Fri, Aug 24, 2001 at 08:23:38AM +0900, Kazuhiro Fujieda wrote:
+>>>> On 24 Aug 2001 05:53:25 +0900
+>>>> Kazuhiro Fujieda <fujieda@jaist.ac.jp> said:
+>
+>> I have another idea:
+>> 
+>> If the process has a pty slave, setsid() shouldn't call
+>> FreeConsole() because it has a chance to execute Windows
+>> application on the pty.
+>> 
+>> I will try it later.
+>
+>I've done.
+>The following patch can solve the problem indicated by the subject.
+>
+>2001-08-24  Kazuhiro Fujieda  <fujieda@jaist.ac.jp>
+>
+>	* syscalls.cc (check_tty_fds): New function. Check whether there
+>	is a fd referring to pty slave.
+>	(setsid): Don't detach console if the process has a pty slave.
 
-Thanks, applied.
+Looks good to me.  I've applied this patch.
 
-Corinna
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+cgf
