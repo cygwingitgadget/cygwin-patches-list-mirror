@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4046-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 4303 invoked by alias); 8 Aug 2003 19:25:34 -0000
+Return-Path: <cygwin-patches-return-4047-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 10677 invoked by alias); 8 Aug 2003 19:31:20 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,75 +7,50 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 4293 invoked from network); 8 Aug 2003 19:25:33 -0000
-From: David Rothenberger <daveroth@acm.org>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="Rdn0uem9Bc"
-Content-Transfer-Encoding: 7bit
-Message-ID: <16179.63786.774532.138718@phish.entomo.com>
-Date: Fri, 08 Aug 2003 19:25:00 -0000
+Received: (qmail 10664 invoked from network); 8 Aug 2003 19:31:20 -0000
+Date: Fri, 08 Aug 2003 19:31:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] pwdgrp::read_group(): Don't call free() twice with the same address
+Subject: Re: [PATCH] stdint.h define of INT32_MIN
+Message-ID: <20030808193118.GA12540@redhat.com>
 Reply-To: cygwin-patches@cygwin.com
-X-SW-Source: 2003-q3/txt/msg00062.txt.bz2
-
-
---Rdn0uem9Bc
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <1231817066743.20030808133751@familiehaase.de>
+Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Description: message body text
-Content-Transfer-Encoding: 7bit
-Content-length: 761
+Content-Disposition: inline
+In-Reply-To: <1231817066743.20030808133751@familiehaase.de>
+User-Agent: Mutt/1.4.1i
+X-SW-Source: 2003-q3/txt/msg00063.txt.bz2
 
-Hi,
+On Fri, Aug 08, 2003 at 01:37:51PM +0200, Gerrit P. Haase wrote:
+>Hallo ,
 
-This patch avoids the heap corruption that was causing the problem
-described in
-<http://www.cygwin.com/ml/cygwin/2003-08/msg00364.html>.
+"Hello"
 
-In pwdgrp::read_group(), there is loop to free allocated gr_mem
-buffers.  That loop checks to see if gr_mem != &null_ptr, but does
-not set gr_mem to &null_ptr after free() is called.  Subsequent
-calls then attempt to free the same address again, corrupting the
-malloc structures.
+>xyz.c:2: warning: this decimal constant is unsigned only in ISO C90
+>
+>Both of the below patches are ok. for me to build perl and also there
+>are no warnings issued, the first is the way it is defined on Linux
+>too, the second seems to be alright according to the SUS specs:
+>
+>$ diff -udp stdint.h~ stdint.h
+>--- stdint.h~   2003-08-08 13:14:19.248036800 +0200
+>+++ stdint.h    2003-08-08 13:14:36.452776000 +0200
+>@@ -70,7 +70,7 @@ typedef unsigned long long uintmax_t;
+> 
+> #define INT8_MIN (-128)
+> #define INT16_MIN (-32768)
+>-#define INT32_MIN (-2147483648)
+>+#define INT32_MIN (-2147483647-1)
+> #define INT64_MIN (-9223372036854775808)
+> 
+> #define INT8_MAX (127)
+>
+># END
 
-The tar test case triggers this behavior if there is no /etc
-directory available, for some reason.
+I've applied the above patch.
 
-Dave
+Thanks.
 
-======================================================================
-ChangeLog:
-2003-08-08  David Rothenberger  <daveroth@acm.org>
-
-	* grp.cc (read_group): Set __group32.gr_mem pointer back to
-	&null_ptr after free() is called.
-
-
---Rdn0uem9Bc
-Content-Type: text/plain
-Content-Disposition: attachment;
-	filename="grp.patch"
-Content-Transfer-Encoding: 7bit
-Content-length: 584
-
-Index: cygwin/grp.cc
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/grp.cc,v
-retrieving revision 1.81
-diff -u -u -p -r1.81 grp.cc
---- cygwin/grp.cc	30 Jun 2003 13:07:36 -0000	1.81
-+++ cygwin/grp.cc	8 Aug 2003 18:29:44 -0000
-@@ -75,7 +75,10 @@ pwdgrp::read_group ()
- {
-   for (int i = 0; i < gr.curr_lines; i++)
-     if ((*group_buf)[i].gr_mem != &null_ptr)
--      free ((*group_buf)[i].gr_mem);
-+      {
-+        free ((*group_buf)[i].gr_mem);
-+        (*group_buf)[i].gr_mem = &null_ptr;
-+      }
- 
-   load ("/etc/group");
- 
-
---Rdn0uem9Bc--
+cgf
