@@ -1,26 +1,33 @@
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@Cygwin.Com
-Subject: Re: _ANONYMOUS_STRUCT (again)
-Date: Mon, 10 Sep 2001 11:34:00 -0000
-Message-id: <20010910143422.B16107@redhat.com>
-References: <20010910044816.4205.qmail@web14509.mail.yahoo.com> <20010910135122.A13759@redhat.com> <20010910135605.A15863@redhat.com> <3B9D03AC.4E648C07@yahoo.com> <20010910143015.A16107@redhat.com>
-X-SW-Source: 2001-q3/msg00118.html
+From: Jason Tishler <jason@tishler.net>
+To: Cygwin-Patches <cygwin-patches@sources.redhat.com>
+Subject: WriteFile() whacks st_atime patch
+Date: Mon, 10 Sep 2001 12:43:00 -0000
+Message-id: <20010910154431.A792@dothill.com>
+X-SW-Source: 2001-q3/msg00119.html
 
-On Mon, Sep 10, 2001 at 02:30:15PM -0400, Christopher Faylor wrote:
->On Mon, Sep 10, 2001 at 02:17:16PM -0400, Earnie Boyd wrote:
->>Christopher Faylor wrote:
->>> >I'm not wild about using something called NONAMELESSUNION to control
->>> >whether a nameless *structure* is defined but I guess it's ok.
->>
->>Never the less, the MSDN will have the control on how this is
->>implemented if it applies in this case.  Or is NONAMELESSUNION something
->>we've made up along the way?
->
->I just checked.
->
->It's a Microsoft invention and the use it the same way, so I guess
-			        they
+Attached is a cleaned up version of the WriteFile() patch that I
+previously posted to cygwin-developers:
 
-(time for a new keyboard...)
+    http://www.cygwin.com/ml/cygwin-developers/2001-09/msg00076.html
 
-cgf
+Note that this version only affects disk files.  Additionally, I verified
+that mutt finds new mail even when not configured with --enable-buffy-size
+(Use file size attribute instead of access time).
+
+I ran some tests to determine the performance impact.  On my machine,
+the GetFileTime()/SetFileTime() pair will add approximately 200 us to
+every write.  I don't know whether or not better Posix conformance is
+worth this performance hit?
+
+Unfortunately, I did not address the race condition between a writer
+and a reader.  If the reader happens to read while the writer is between
+the GetFileTime() and SetFileTime() in fhandler_disk_file::raw_write(),
+then the new functionality will actually whack st_atime!  So, is it
+better to whack st_atime on every write or only on the occasion when
+the above mentioned race condition occurs?
+
+Given the above problems, I have very mixed feelings about this patch.
+Is it worth pursuing or should I dropped it?
+
+Thanks,
+Jason
