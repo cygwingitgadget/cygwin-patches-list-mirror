@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4421-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 511 invoked by alias); 18 Nov 2003 03:42:13 -0000
+Return-Path: <cygwin-patches-return-4422-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 1272 invoked by alias); 18 Nov 2003 15:17:04 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,158 +7,133 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 502 invoked from network); 18 Nov 2003 03:42:12 -0000
-Message-Id: <3.0.5.32.20031117224143.00828850@incoming.verizon.net>
-X-Sender: vze1u1tg@incoming.verizon.net (Unverified)
-Date: Tue, 18 Nov 2003 03:42:00 -0000
-To: David Starks-Browning <david@starks-browning.com>,
- cygwin-patches@cygwin.com
-From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
-Subject: Re: Small patch for the FAQ
-In-Reply-To: <8135-Thu13Nov2003223751+0000-david@starks-browning.com>
-References: <20030829121814.GR614@emcb.co.uk>
- <20030829121814.GR614@emcb.co.uk>
-Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="=====================_1069144903==_"
-X-SW-Source: 2003-q4/txt/msg00140.txt.bz2
+Received: (qmail 1259 invoked from network); 18 Nov 2003 15:17:03 -0000
+Message-ID: <71A0F7B0F1F4F94F85F3D64C4BD0CCFE03C2172D@bmkc1svmail01.am.mfg>
+From: "Parker, Ron" <rdparker@butlermfg.com>
+To: "Parker, Ron" <rdparker@butlermfg.com>, Robert Collins
+	 <rbcollins@cygwin.com>
+Cc: Arch Users <gnu-arch-users@gnu.org>, cygwin-patches@cygwin.com
+Subject: RE: Additional Cygwin long file path patch
+Date: Tue, 18 Nov 2003 15:17:00 -0000
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+	boundary="----_=_NextPart_000_01C3ADE6.C78BFF30"
+X-SW-Source: 2003-q4/txt/msg00141.txt.bz2
 
---=====================_1069144903==_
-Content-Type: text/plain; charset="us-ascii"
-Content-length: 559
+This message is in MIME format. Since your mail reader does not understand
+this format, some or all of this message may not be legible.
 
-At 10:37 PM 11/13/2003 +0000, David Starks-Browning wrote:
->
->It will be *quite* some time before I am able to wade through the
-main
->cygwin list and discover things for the FAQ on my own.  But I
-should
->be able to apply patches on a fairly regular and timely basis,
-at
->least for a while.
->
+------_=_NextPart_000_01C3ADE6.C78BFF30
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-length: 555
 
-Thanks David.
+> From: Parker, Ron [mailto:rdparker@butlermfg.com]
 
-I attach a patch to install.texinfo that covers 
-http://www.cygwin.com/ml/cygwin/2003-03/msg00447.html and
-http://cygwin.com/ml/cygwin-patches/2003-q1/msg00315.html
+> > From: Robert Collins [mailto:rbcollins@cygwin.com]
+> 
+> > 0) Fill out the last couple of thunks. FindFirstFile and 
+> FindNextFile 
+> > need to be always Ansi or always Wide, and if following that 
+> > principle 
+> > there, it probably makes sense to always use one or the other, not 
+> > decide on a per-call basis.
 
-but not (among others)
-http://www.cygwin.com/ml/cygwin/2003-04/msg01416.html
+Oops.  The previous patch was completely bugged.  It was against the wrong
+file version and a build using it showed no problems until I did a
+distclean-configure-make last night.
 
-Pierre
 
---=====================_1069144903==_
-Content-Type: text/plain; charset="iso-8859-1"
+------_=_NextPart_000_01C3ADE6.C78BFF30
+Content-Type: application/octet-stream;
+	name="rbc01-find-first-file.diff"
 Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment; filename="install.texinfo.diff"
-Content-length: 4063
+Content-Disposition: attachment;
+	filename="rbc01-find-first-file.diff"
+Content-length: 2476
 
-Index: install.texinfo
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-RCS file: /cvs/src/src/winsup/doc/install.texinfo,v
-retrieving revision 1.45
-diff -u -p -r1.45 install.texinfo
---- install.texinfo	10 Apr 2003 20:09:35 -0000	1.45
-+++ install.texinfo	18 Nov 2003 03:35:33 -0000
-@@ -40,6 +40,31 @@ from the rest of your Windows system dis
- (In the past, there had been genuine bugs that would cause problems
- for people who installed in C:\, but we believe those are gone now.)
+--- ../../../../cygio.h	2003-11-17 13:51:10.378169600 -0600=0A=
++++ ./cygio.h	2003-11-18 09:12:27.139097600 -0600=0A=
+@@ -1,7 +1,7 @@=0A=
+ /* cygio.h=0A=
+=20=0A=
+    Copyright 2003 Robert Collins  <rbtcollins@hotmail.com>=0A=
+-   Copyright 2003 Ron Parker      <rdparker@butlermfg.com>=0A=
++   Copyright 2003 Ron Parker      <rparker1@kc.rr.com>=0A=
+=20=0A=
+ This file is part of Cygwin.=0A=
+=20=0A=
+@@ -145,7 +145,7 @@=0A=
+       trace_file_wcs(state);=0A=
+       return CreateFileW (state.getWide(), access, share_mode, sec_attr, d=
+isposition,=0A=
+                       flags, template_file);=0A=
+-  };=0A=
++  }=0A=
+ }=0A=
+=20=0A=
+ inline BOOL=0A=
+@@ -160,7 +160,7 @@=0A=
+       return CreateDirectoryA (filename, sec_attr);=0A=
+     case IOThunkState::WIDE:=0A=
+       return CreateDirectoryW (state.getWide(), sec_attr);=0A=
+-  };=0A=
++  }=0A=
+ }=0A=
+=20=0A=
+ inline BOOL=0A=
+@@ -189,7 +189,32 @@=0A=
+ find_first_file (LPCSTR filename, LPWIN32_FIND_DATA data)=0A=
+ {=0A=
+   /* INVALID_HANDLE_VALUE is failure */=0A=
+-  return FindFirstFile (filename, data);=0A=
++  HANDLE handle =3D INVALID_HANDLE_VALUE;=0A=
++  IOThunkState state(filename);=0A=
++  switch (state.condition)=20=0A=
++  {=0A=
++    case IOThunkState::ANSI:=0A=
++      handle =3D FindFirstFileA (filename, data);=0A=
++      break;=0A=
++    case IOThunkState::WIDE:=20=0A=
++      {=0A=
++	WIN32_FIND_DATAW wdata;=0A=
++	trace_file_wcs(state);=0A=
++	handle =3D FindFirstFileW (state.getWide(), &wdata);=0A=
++	if (handle !=3D INVALID_HANDLE_VALUE)=0A=
++	  {=0A=
++	    /* Copy the start of the UNICODE find data into data.  Then convert=
+=0A=
++	     * the UNICODE strings to multibyte strings.=0A=
++	     */=0A=
++	    memcpy (data, &wdata, offsetof (WIN32_FIND_DATA, cFileName));=0A=
++	    sys_wcstombs (data->cFileName, wdata.cFileName,=0A=
++			  sizeof(data->cFileName));=0A=
++	    sys_wcstombs (data->cAlternateFileName, wdata.cAlternateFileName,=0A=
++			  sizeof(data->cAlternateFileName));=0A=
++	  }=0A=
++      }=0A=
++  }=0A=
++  return handle;=0A=
+ }=0A=
+=20=0A=
+=20=0A=
+@@ -212,7 +237,7 @@=0A=
+       return GetFileAttributesA (filename);=0A=
+     case IOThunkState::WIDE:=0A=
+       return GetFileAttributesW (state.getWide());=0A=
+-  };=0A=
++  }=0A=
+ }=0A=
+=20=0A=
+ inline BOOL=0A=
+@@ -227,7 +252,7 @@=0A=
+       return SetFileAttributesA(filename, attr);=0A=
+     case IOThunkState::WIDE:=0A=
+       return SetFileAttributesW(state.getWide(), attr);=0A=
+-  };=0A=
++  }=0A=
+ }=0A=
+=20=0A=
+ inline BOOL=0A=
 
-+@subsection How are file permissions determined
-+
-+The directories and files created by setup inherit the default ACL of their
-+parent directory. Thus in a fresh installation all permissions are initial=
-ly
-+determined by the ACL of the top directory  (e.g. @samp{C:\} for an
-+installation in @samp{C:\cygwin}).
-+
-+After running setup it is a good idea to verify the permissions with the
-+Windows program ``cacls'', which shows the true ACL,
-+or with ``ls -l /bin'', which shows the mapping of the ACL to Posix permis=
-sions.
-+If you are not happy with what you see, set the permissions as you
-+wish by using commands such as:
-+@enumerate
-+@item ``cd /''
-+
-+@item ``chmod -R a+r .''
-+
-+@item ``chmod -R a+x bin usr/sbin usr/local/bin lib/gcc-lib usr/X11R6/bin''
-+@end enumerate
-+You can also change the group and the owner with ``chgrp -R'' and/or ``cho=
-wn -R''.
-+
-+Note that programs executed by services (such as inetd or cron) must be ex=
-ecutable
-+by SYSTEM, which is in the ``Administrators'' and ``Everyone'' groups but =
-not
-+e.g. in ``Users'' nor in ``Authenticated Users''.
-+
- @subsection Can I use Cygwin Setup to update a B18, B19, B20, B20.1 or CD-=
-ROM (1.0) installation of Cygwin?
-
- No, you must start from scratch with the new Cygwin Setup.  The
-@@ -198,14 +223,49 @@ character as a word delimiter.  Under ce
- possible to get around this with various shell quoting mechanisms, but
- you are much better off if you can avoid the problem entirely.
-
--In particular, the environment variables @samp{USER} and @samp{HOME} are
--set for you in /etc/profile.  By default these derive from your Windows
--logon name.  You may edit this file and set them explicitly to something
--without spaces.
--
--(If you use the @samp{login} package or anything else that reads
--/etc/passwd, you may need to make corresponding changes there.  See the
--README file for that package.)
-+On Windows NT/2000/XP you have two choices:
-+@enumerate
-+
-+@item You can rename the user in the Windows User Manager GUI and then
-+run mkpasswd.
-+
-+@item You can simply edit the /etc/passwd file and change the Cygwin user =
-name
-+(first field). It's also a good idea to avoid spaces in the home directory.
-+
-+@end enumerate
-+
-+On Windows 95/98/ME you can create a new user and run mkpasswd,
-+or you can delete the offending entry from /etc/passwd.
-+Cygwin will then use the name in the default entry with uid 500.
-+
-+@subsection My @samp{HOME} environment variable is not what I want.
-+
-+When starting Cygwin from Windows, @samp{HOME} is determined as follows
-+in order of decreasing priority:
-+
-+@enumerate
-+
-+@item @samp{HOME} from the Windows environment, translated to POSIX form.
-+
-+@item The entry in /etc/passwd
-+
-+@item @samp{HOMEDRIVE} and @samp{HOMEPATH} from the Windows environment
-+
-+@item /
-+
-+@end enumerate
-+
-+When using Cygwin from the network (telnet, ssh,...), @samp{HOME} is set
-+from /etc/passwd.
-+
-+If your @samp{HOME} is set to a value such as /cygdrive/c, it is likely
-+that it was set in Windows. Start a DOS Command Window and type
-+"set HOME" to verify if this is the case.
-+
-+Access to shared drives is often restricted when starting from the network,
-+thus Domain users may wish to have a different @samp{HOME} in the
-+Windows environment (on shared drive) than in /etc/passwd (on local drive).
-+Note that ssh only considers /etc/passwd, disregarding @samp{HOME}.
-
- @subsection How do I uninstall individual packages?
-
-
---=====================_1069144903==_--
+------_=_NextPart_000_01C3ADE6.C78BFF30--
