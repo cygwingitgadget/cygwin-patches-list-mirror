@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2612-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 29716 invoked by alias); 7 Jul 2002 14:35:43 -0000
+Return-Path: <cygwin-patches-return-2613-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 26456 invoked by alias); 7 Jul 2002 15:57:28 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,169 +7,263 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 29701 invoked from network); 7 Jul 2002 14:35:38 -0000
-Message-ID: <015501c225c3$d8ddcc20$6132bc3e@BABEL>
-From: "Conrad Scott" <Conrad.Scott@dsl.pipex.com>
-To: <cygwin-patches@cygwin.com>
-Subject: mark_closed messages
-Date: Sun, 07 Jul 2002 07:35:00 -0000
+Received: (qmail 26383 invoked from network); 7 Jul 2002 15:57:25 -0000
+Date: Sun, 07 Jul 2002 08:57:00 -0000
+From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+X-X-Sender: joshua@iocc.com
+To: cygwin-patches@cygwin.com
+Subject: utils.sgml patch for dumper getfacl kill
+Message-ID: <Pine.CYG.4.44.0207071045270.1496-200000@iocc.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
-	boundary="----=_NextPart_000_0152_01C225CC.3A4CC120"
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-SW-Source: 2002-q3/txt/msg00060.txt.bz2
+Content-Type: MULTIPART/MIXED; BOUNDARY="-559023410-1733867187-1026057340=:1496"
+X-SW-Source: 2002-q3/txt/msg00061.txt.bz2
 
-This is a multi-part message in MIME format.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
 
-------=_NextPart_000_0152_01C225CC.3A4CC120
-Content-Type: text/plain;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: 7bit
-Content-length: 1558
+---559023410-1733867187-1026057340=:1496
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-length: 786
 
-As I mentioned before, when using cygserver I've been seeming
-rather too many error messages from "mark_closed" (in debug.cc).
-Altho' triggered by cygserver, the problem turned out to an
-existing problem with the protected handle debugging code, which
-has some but not all the code needed to deal with inherited
-handles.
+Here is a patch for the dumper, getfacal, and kill sections in
+utils.sgml.
 
-I was looking to fix this properly but I've decided, after some
-investigation that taught me lots about how fork() works in
-cygwin, that I've not the time or energy for this right now.
+I'd like to thank Egor for the dumper section since I
+had never used dumper. He saved me quite a bit of time searching the
+mailing lists. (It was recently added to utils.sgml but I moved it
+to be alphabetically in the right place and did a little cleanup.)
 
-AFAICT (and this was all new to me, so I may be utterly adrift
-here), the difficulty is that the child process needs to create
-and protect handles *before* the parent's data space is copied
-down into it.  So, the child would need to keep a temporary list
-of protected handles and merge these into the list it inherited
-from the parent once it had access to it.  Not impossible but not
-my cup of tea today.
+This is the first time getfacl has been included. The information is
+all from getfacl --help output (written by Corinna), except a link to the
+ntsec section. This will also allow me to create a getfacl man page for the
+cygwin-doc package (along with setfacl, after I'm done with patching
+utils.sgml).
 
-The current implementation simply doesn't copy down the protected
-handle list at all (all the data structures are marked NO_COPY).
-Unfortunately there is still code in the fhandler class that tries
-to update inherited handle values with new child handles; see
-fhandler_base::fork_fixup () and setclexec_pid ().  This ended up
-overwriting child handle values with other child handle values.
-Lots of fun on close.  So, I've just #if 0'd setclexec_pid () for
-now.  Volunteers welcome etc.
+I've removed SIGCLD (but not SIGCHLD) and SIGIO from the list of
+signals available to kill since they didn't work by name, and shared
+signal numbers.
 
-I've attached a patch that fixes a couple of other minor issues in
-debug.cc (mostly muto handling) and disables the "setclexec_pid()"
-function.
+---559023410-1733867187-1026057340=:1496
+Content-Type: TEXT/PLAIN; charset=US-ASCII; name="utils.sgml-patch"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.CYG.4.44.0207071055400.1496@iocc.com>
+Content-Description: 
+Content-Disposition: attachment; filename="utils.sgml-patch"
+Content-length: 12973
 
-// Conrad
+LS0tIHV0aWxzLnNnbWwtb3JpZwkyMDAyLTA3LTA3IDA5OjM4OjA0LjAwMDAw
+MDAwMCAtMDUwMA0KKysrIHV0aWxzLnNnbWwJMjAwMi0wNy0wNyAxMDo0Mzo1
+MC4wMDAwMDAwMDAgLTA1MDANCkBAIC0xMjAsOCArMTIwLDkgQEAgaWRlbnRp
+Y2FsIHRvIDxsaXRlcmFsPi13PC9saXRlcmFsPiBhbmQgPA0KIDwvcGFyYT4N
+CiANCiA8cGFyYT5DYXZlYXQ6IFRoZSA8bGl0ZXJhbD4tbDwvbGl0ZXJhbD4g
+b3B0aW9uIGRvZXMgbm90IHdvcmsgaWYgdGhlDQotPGVtPmNoZWNrX2Nhc2U8
+L2VtPiBwYXJhbWV0ZXIgb2YgPGVtPkNZR1dJTjwvZW0+IGlzIHNldCB0byA8
+ZW0+c3RyaWN0PC9lbT4sDQotc2luY2UgQ3lnd2luIGlzIG5vdCBhYmxlIHRv
+IG1hdGNoIGFueSBXaW5kb3dzIHNob3J0IHBhdGggaW4gdGhpcyBtb2RlLg0K
+KzxlbXBoYXNpcz5jaGVja19jYXNlPC9lbXBoYXNpcz4gcGFyYW1ldGVyIG9m
+IDxlbXBoYXNpcz5DWUdXSU48L2VtcGhhc2lzPiANCitpcyBzZXQgdG8gPGVt
+cGhhc2lzPnN0cmljdDwvZW1waGFzaXM+LCBzaW5jZSBDeWd3aW4gaXMgbm90
+IGFibGUgdG8gbWF0Y2ggDQorYW55IFdpbmRvd3Mgc2hvcnQgcGF0aCBpbiB0
+aGlzIG1vZGUuDQogPC9wYXJhPg0KIA0KIDxwYXJhPlRoZSA8bGl0ZXJhbD4t
+cDwvbGl0ZXJhbD4gb3B0aW9uIG1lYW5zIHRoYXQgeW91IHdhbnQgdG8gY29u
+dmVydA0KQEAgLTE2OSwxNiArMTcwLDExMCBAQCBvdGhlciBmb3JtYXRzLg0K
+IA0KIDwvc2VjdDI+DQogDQorPHNlY3QyIGlkPSJkdW1wZXIiPjx0aXRsZT5k
+dW1wZXI8L3RpdGxlPg0KKw0KKzxzY3JlZW4+DQorVXNhZ2U6IGR1bXBlciBb
+T1BUSU9OXSBGSUxFTkFNRSBXSU4zMlBJRA0KK0R1bXAgY29yZSBmcm9tIFdJ
+TjMyUElEIHRvIEZJTEVOQU1FLmNvcmUNCistZCwgLS12ZXJib3NlICBiZSB2
+ZXJib3NlIHdoaWxlIGR1bXBpbmcNCistaCwgLS1oZWxwICAgICBvdXRwdXQg
+aGVscCBpbmZvcm1hdGlvbiBhbmQgZXhpdA0KKy1xLCAtLXF1aWV0ICAgIGJl
+IHF1aWV0IHdoaWxlIGR1bXBpbmcgKGRlZmF1bHQpDQorLXYsIC0tdmVyc2lv
+biAgb3V0cHV0IHZlcnNpb24gaW5mb3JtYXRpb24gYW5kIGV4aXQNCis8L3Nj
+cmVlbj4NCisNCis8cGFyYT5UaGUgPGNvbW1hbmQ+ZHVtcGVyPC9jb21tYW5k
+PiB1dGlsaXR5IGNhbiBiZSB1c2VkIHRvIGNyZWF0ZSBhDQorY29yZSBkdW1w
+IG9mIHJ1bm5pbmcgV2luZG93cyBwcm9jZXNzLiBUaGlzIGNvcmUgZHVtcCBj
+YW4gYmUgbGF0ZXIgbG9hZGVkDQordG8gPGNvbW1hbmQ+Z2RiPC9jb21tYW5k
+PiBhbmQgYW5hbHl6ZWQuIE9uZSBjb21tb24gd2F5IHRvIHVzZSANCis8Y29t
+bWFuZD5kdW1wZXI8L2NvbW1hbmQ+IGlzIHRvIHBsdWcgaXQgaW50byBjeWd3
+aW4ncyBKdXN0LUluLVRpbWUgDQorZGVidWdnaW5nIGZhY2lsaXR5IGJ5IGFk
+ZGluZw0KKw0KKzxzY3JlZW4+DQorZXJyb3Jfc3RhcnQ9eDpccGF0aFx0b1xk
+dW1wZXIuZXhlDQorPC9zY3JlZW4+DQorDQordG8gdGhlIDxlbXBoYXNpcz5D
+WUdXSU48L2VtcGhhc2lzPiBlbnZpcm9ubWVudCB2YXJpYWJsZS4gUGxlYXNl
+IG5vdGUgdGhhdA0KKzxsaXRlcmFsPng6XHBhdGhcdG9cZHVtcGVyLmV4ZTwv
+bGl0ZXJhbD4gaXMgV2luZG93cy1zdHlsZSBhbmQgbm90IGN5Z3dpbg0KK3Bh
+dGguIElmIDxsaXRlcmFsPmVycm9yX3N0YXJ0PC9saXRlcmFsPiBpcyBzZXQg
+dGhpcyB3YXksIHRoZW4gZHVtcGVyIHdpbGwNCitiZSBzdGFydGVkIHdoZW5l
+dmVyIHNvbWUgcHJvZ3JhbSBlbmNvdW50ZXJzIGEgZmF0YWwgZXJyb3IuDQor
+PC9wYXJhPg0KKw0KKzxwYXJhPg0KKzxjb21tYW5kPmR1bXBlcjwvY29tbWFu
+ZD4gY2FuIGJlIGFsc28gYmUgc3RhcnRlZCBmcm9tIHRoZSBjb21tYW5kIGxp
+bmUgdG8gDQorY3JlYXRlIGEgY29yZSBkdW1wIG9mIGFueSBydW5uaW5nIHBy
+b2Nlc3MuIFVuZm9ydHVuYXRlbHksIGJlY2F1c2Ugb2YgYSBXaW5kb3dzIA0K
+K0FQSSBsaW1pdGF0aW9uLCB3aGVuIGEgY29yZSBkdW1wIGlzIGNyZWF0ZWQg
+YW5kIDxjb21tYW5kPmR1bXBlcjwvY29tbWFuZD4gDQorZXhpdHMsIHRoZSB0
+YXJnZXQgcHJvY2VzcyBpcyB0ZXJtaW5hdGVkIHRvby4NCis8L3BhcmE+DQor
+DQorPHBhcmE+DQorVG8gc2F2ZSBzcGFjZSBpbiB0aGUgY29yZSBkdW1wLCA8
+Y29tbWFuZD5kdW1wZXI8L2NvbW1hbmQ+IGRvZXNuJ3Qgd3JpdGUgdGhvc2UN
+Citwb3J0aW9ucyBvZiB0YXJnZXQgcHJvY2VzcycgbWVtb3J5IHNwYWNlIHRo
+YXQgYXJlIGxvYWRlZCBmcm9tIGV4ZWN1dGFibGUgYW5kDQorZGxsIGZpbGVz
+IGFuZCBhcmUgdW5jaGFuZ2VhYmxlLCBzdWNoIGFzIHByb2dyYW0gY29kZSBh
+bmQgZGVidWcgaW5mby4gSW5zdGVhZCwNCis8Y29tbWFuZD5kdW1wZXI8L2Nv
+bW1hbmQ+IHNhdmVzIHBhdGhzIHRvIGZpbGVzIHdoaWNoIGNvbnRhaW4gdGhh
+dCBkYXRhLiBXaGVuIGENCitjb3JlIGR1bXAgaXMgbG9hZGVkIGludG8gZ2Ri
+LCBpdCB1c2VzIHRoZXNlIHBhdGhzIHRvIGxvYWQgYXBwcm9wcmlhdGUgZmls
+ZXMuDQorVGhhdCBtZWFucyB0aGF0IGlmIHlvdSBjcmVhdGUgYSBjb3JlIGR1
+bXAgb24gb25lIG1hY2hpbmUgYW5kIHRyeSB0byBkZWJ1ZyBpdCBvbg0KK2Fu
+b3RoZXIsIHlvdSdsbCBuZWVkIHRvIHBsYWNlIGlkZW50aWNhbCBjb3BpZXMg
+b2YgdGhlIGV4ZWN1dGFibGUgYW5kIGRsbHMgaW4gDQordGhlIHNhbWUgZGly
+ZWN0b3JpZXMgYXMgb24gdGhlIG1hY2hpbmUgd2hlcmUgdGhlIGNvcmUgZHVt
+cCB3YXMgY3JlYXRlZC4NCis8L3BhcmE+DQorDQorPC9zZWN0Mj4NCisNCis8
+c2VjdDIgaWQ9ImdldGZhY2wiPjx0aXRsZT5nZXRmYWNsPC90aXRsZT4NCisN
+Cis8c2NyZWVuPg0KK1VzYWdlOiBnZXRmYWNsIFstYWRuXSBGSUxFIFtGSUxF
+Mi4uLl0NCitEaXNwbGF5IGZpbGUgYW5kIGRpcmVjdG9yeSBhY2Nlc3MgY29u
+dHJvbCBsaXN0cyAoQUNMcykuDQorDQorICAtYSwgLS1hbGwgICAgICBkaXNw
+bGF5IHRoZSBmaWxlbmFtZSwgdGhlIG93bmVyLCB0aGUgZ3JvdXAsIGFuZA0K
+KyAgICAgICAgICAgICAgICAgdGhlIEFDTCBvZiB0aGUgZmlsZQ0KKyAgLWQs
+IC0tZGlyICAgICAgZGlzcGxheSB0aGUgZmlsZW5hbWUsIHRoZSBvd25lciwg
+dGhlIGdyb3VwLCBhbmQNCisgICAgICAgICAgICAgICAgIHRoZSBkZWZhdWx0
+IEFDTCBvZiB0aGUgZGlyZWN0b3J5LCBpZiBpdCBleGlzdHMNCisgIC1oLCAt
+LWhlbHAgICAgIG91dHB1dCB1c2FnZSBpbmZvcm1hdGlvbiBhbmQgZXhpdA0K
+KyAgLW4sIC0tbm9uYW1lICAgZGlzcGxheSB1c2VyIGFuZCBncm91cCBJRHMg
+aW5zdGVhZCBvZiBuYW1lcw0KKyAgLXYsIC0tdmVyc2lvbiAgb3V0cHV0IHZl
+cnNpb24gaW5mb3JtYXRpb24gYW5kIGV4aXQNCisNCitXaGVuIG11bHRpcGxl
+IGZpbGVzIGFyZSBzcGVjaWZpZWQgb24gdGhlIGNvbW1hbmQgbGluZSwgYSBi
+bGFuaw0KK2xpbmUgc2VwYXJhdGVzIHRoZSBBQ0xzIGZvciBlYWNoIGZpbGUu
+DQorPC9zY3JlZW4+DQorDQorPHBhcmE+DQorRm9yIGVhY2ggYXJndW1lbnQg
+dGhhdCBpcyBhIHJlZ3VsYXIgZmlsZSwgc3BlY2lhbCBmaWxlIG9yDQorZGly
+ZWN0b3J5LCA8Y29tbWFuZD5nZXRmYWNsPC9jb21tYW5kPiBkaXNwbGF5cyB0
+aGUgb3duZXIsIHRoZSBncm91cCwgYW5kIHRoZSANCitBQ0wuICBGb3IgZGly
+ZWN0b3JpZXMgPGNvbW1hbmQ+Z2V0ZmFjbDwvY29tbWFuZD4gZGlzcGxheXMg
+YWRkaXRpb25hbGx5IHRoZSANCitkZWZhdWx0IEFDTC4gIFdpdGggbm8gb3B0
+aW9ucyBzcGVjaWZpZWQsIDxjb21tYW5kPmdldGZhY2w8L2NvbW1hbmQ+IGRp
+c3BsYXlzIA0KK3RoZSBmaWxlbmFtZSwgdGhlIG93bmVyLCB0aGUgZ3JvdXAs
+IGFuZCBib3RoIHRoZSBBQ0wgYW5kIHRoZSBkZWZhdWx0IEFDTCwgaWYgDQor
+aXQgZXhpc3RzLiBGb3IgbW9yZSBpbmZvcm1hdGlvbiBvbiBDeWd3aW4gYW5k
+IFdpbmRvd3MgQUNMcywgc2VlDQorc2VlIDxYcmVmIExpbmtlbmQ9Im50c2Vj
+Ij4gaW4gdGhlIEN5Z3dpbiBVc2VyJ3MgR3VpZGUuDQorVGhlIGZvcm1hdCBm
+b3IgQUNMIG91dHB1dCBpcyBhcyBmb2xsb3dzOg0KKzxzY3JlZW4+DQorICAg
+ICAjIGZpbGU6IGZpbGVuYW1lDQorICAgICAjIG93bmVyOiBuYW1lIG9yIHVp
+ZA0KKyAgICAgIyBncm91cDogbmFtZSBvciB1aWQNCisgICAgIHVzZXI6OnBl
+cm0NCisgICAgIHVzZXI6bmFtZSBvciB1aWQ6cGVybQ0KKyAgICAgZ3JvdXA6
+OnBlcm0NCisgICAgIGdyb3VwOm5hbWUgb3IgZ2lkOnBlcm0NCisgICAgIG1h
+c2s6cGVybQ0KKyAgICAgb3RoZXI6cGVybQ0KKyAgICAgZGVmYXVsdDp1c2Vy
+OjpwZXJtDQorICAgICBkZWZhdWx0OnVzZXI6bmFtZSBvciB1aWQ6cGVybQ0K
+KyAgICAgZGVmYXVsdDpncm91cDo6cGVybQ0KKyAgICAgZGVmYXVsdDpncm91
+cDpuYW1lIG9yIGdpZDpwZXJtDQorICAgICBkZWZhdWx0Om1hc2s6cGVybQ0K
+KyAgICAgZGVmYXVsdDpvdGhlcjpwZXJtDQorPC9zY3JlZW4+DQorDQorPC9z
+ZWN0Mj4NCisNCiA8c2VjdDIgaWQ9ImtpbGwiPjx0aXRsZT5raWxsPC90aXRs
+ZT4NCiANCiA8c2NyZWVuPg0KIFVzYWdlOiBraWxsIFstZl0gWy1zaWduYWxd
+IFstcyBzaWduYWxdIHBpZDEgW3BpZDIgLi4uXQ0KLSAgICAgICBraWxsIC1s
+IFtzaWduYWxdDQotIC1mLCAtLWZvcmNlICAgICBmb3JjZSwgdXNpbmcgd2lu
+MzIgaW50ZXJmYWNlIGlmIG5lY2Vzc2FyeQ0KLSAtbCwgLS1saXN0ICAgICAg
+cHJpbnQgYSBsaXN0IG9mIHNpZ25hbCBuYW1lcw0KLSAtcywgLS1zaWduYWwg
+ICAgc2VuZCBzaWduYWwgKHVzZSBraWxsIC0tbGlzdCBmb3IgYSBsaXN0KQ0K
+LSAtaCwgLS1oZWxwICAgICAgb3V0cHV0IHVzYWdlIGluZm9ybWF0aW9uIGFu
+ZCBleGl0DQotIC12LCAtLXZlcnNpb24gICBvdXRwdXQgdmVyc2lvbiBpbmZv
+cm1hdGlvbiBhbmQgZXhpdA0KK2tpbGwgLWwgW3NpZ25hbF0NCistZiwgLS1m
+b3JjZSAgICAgZm9yY2UsIHVzaW5nIHdpbjMyIGludGVyZmFjZSBpZiBuZWNl
+c3NhcnkNCistbCwgLS1saXN0ICAgICAgcHJpbnQgYSBsaXN0IG9mIHNpZ25h
+bCBuYW1lcw0KKy1zLCAtLXNpZ25hbCAgICBzZW5kIHNpZ25hbCAodXNlIGtp
+bGwgLS1saXN0IGZvciBhIGxpc3QpDQorLWgsIC0taGVscCAgICAgIG91dHB1
+dCB1c2FnZSBpbmZvcm1hdGlvbiBhbmQgZXhpdA0KKy12LCAtLXZlcnNpb24g
+ICBvdXRwdXQgdmVyc2lvbiBpbmZvcm1hdGlvbiBhbmQgZXhpdA0KIDwvc2Ny
+ZWVuPg0KIA0KIDxwYXJhPlRoZSA8Y29tbWFuZD5raWxsPC9jb21tYW5kPiBw
+cm9ncmFtIGFsbG93cyB5b3UgdG8gc2VuZCBhcmJpdHJhcnkNCkBAIC0xODgs
+MTcgKzI4MywzMCBAQCBhbHNvIHNlbmQgcHJvZ3JhbS1zcGVjaWZpZWQgc2ln
+bmFscyBzdWNoDQogd2l0aGluIHRoZSBwcm9ncmFtLCBsaWtlIGVuYWJsaW5n
+IGRlYnVnZ2luZyBvciByZS1vcGVuaW5nIGxvZyBmaWxlcy4NCiBFYWNoIHBy
+b2dyYW0gZGVmaW5lcyB0aGUgc2lnbmFscyB0aGV5IHVuZGVyc3RhbmQuPC9w
+YXJhPg0KIA0KLTxwYXJhPk5vdGUgdGhhdCwgdW5sZXNzIHlvdSBzcGVjaWZp
+YyB0aGUgPGxpdGVyYWw+LWY8L2xpdGVyYWw+IG9wdGlvbiwNCi10aGUgInBp
+ZCIgdmFsdWVzIGFyZSB0aGUgQ3lnd2luIHBpZHMsIG5vdCB0aGUgV2luZG93
+cyBwaWRzLiAgVG8gZ2V0IGENCi1saXN0IG9mIHJ1bm5pbmcgcHJvZ3JhbXMg
+YW5kIHRoZWlyIEN5Z3dpbiBwaWRzLCB1c2UgdGhlIEN5Z3dpbg0KKzxwYXJh
+PllvdSBtYXkgbmVlZCB0byBzcGVjaWZ5IHRoZSBmdWxsIHBhdGggdG8gdXNl
+IDxjb21tYW5kPmtpbGw8L2NvbW1hbmQ+IA0KK2Zyb20gd2l0aGluIHNvbWUg
+c2hlbGxzLCBpbmNsdWRpbmcgPGNvbW1hbmQ+YmFzaDwvY29tbWFuZD4sIHRo
+ZSBkZWZhdWx0IEN5Z3dpbg0KK3NoZWxsLiBUaGlzIGlzIGJlY2F1c2UgPGNv
+bW1hbmQ+YmFzaDwvY29tbWFuZD4gZGVmaW5lcyBhIA0KKzxjb21tYW5kPmtp
+bGw8L2NvbW1hbmQ+IGJ1aWx0aW4gZnVuY3Rpb247IHNlZSB0aGUgPGNvbW1h
+bmQ+YmFzaDwvY29tbWFuZD4NCittYW4gcGFnZSB1bmRlciA8ZW1waGFzaXM+
+QlVJTFRJTiBDT01NQU5EUzwvZW1waGFzaXM+IGZvciBtb3JlIGluZm9ybWF0
+aW9uLg0KK1RvIG1ha2Ugc3VyZSB5b3UgYXJlIHVzaW5nIHRoZSBDeWd3aW4g
+dmVyc2lvbiwgdHJ5DQorDQorPHNjcmVlbj4NCiskIC9iaW4va2lsbCAtLXZl
+cnNpb24NCis8L3NjcmVlbj4NCisNCit3aGljaCBzaG91bGQgZ2l2ZSB0aGUg
+Q3lnd2luIDxjb21tYW5kPmtpbGw8L2NvbW1hbmQ+IHZlcnNpb24gbnVtYmVy
+IGFuZA0KK2NvcHlyaWdodCBpbmZvcm1hdGlvbi4NCis8L3BhcmE+DQorDQor
+PHBhcmE+VW5sZXNzIHlvdSBzcGVjaWZpYyB0aGUgPGxpdGVyYWw+LWY8L2xp
+dGVyYWw+IG9wdGlvbiwgdGhlICJwaWQiIHZhbHVlcyANCit1c2VkIGJ5IDxj
+b21tYW5kPmtpbGw8L2NvbW1hbmQ+IGFyZSB0aGUgQ3lnd2luIHBpZHMsIG5v
+dCB0aGUgV2luZG93cyBwaWRzLiAgDQorVG8gZ2V0IGEgbGlzdCBvZiBydW5u
+aW5nIHByb2dyYW1zIGFuZCB0aGVpciBDeWd3aW4gcGlkcywgdXNlIHRoZSBD
+eWd3aW4NCiA8Y29tbWFuZD5wczwvY29tbWFuZD4gcHJvZ3JhbS4gPGNvbW1h
+bmQ+cHMgLVc8L2NvbW1hbmQ+IHdpbGwgZGlzcGxheQ0KIDxlbXBoYXNpcz5h
+bGw8L2VtcGhhc2lzPiB3aW5kb3dzIHBpZHMuPC9wYXJhPg0KIA0KIDxwYXJh
+PlRoZSA8Y29tbWFuZD5raWxsIC1sPC9jb21tYW5kPiBvcHRpb24gcHJpbnRz
+IHRoZSBuYW1lIG9mIHRoZQ0KIGdpdmVuIHNpZ25hbCwgb3IgYSBsaXN0IG9m
+IGFsbCBzaWduYWwgbmFtZXMgaWYgbm8gc2lnbmFsIGlzIGdpdmVuLjwvcGFy
+YT4NCiANCi08cGFyYT48Y29tbWFuZD5raWxsIC1oPC9jb21tYW5kPiBqdXN0
+IGRpc3BsYXlzIHRoZSBraWxsIHVzYWdlIG1lc3NhZ2UuPC9wYXJhPg0KLQ0K
+IDxwYXJhPlRvIHNlbmQgYSBzcGVjaWZpYyBzaWduYWwsIHVzZSB0aGUgPGxp
+dGVyYWw+LXNpZ25OPC9saXRlcmFsPg0KIG9wdGlvbiwgZWl0aGVyIHdpdGgg
+YSBzaWduYWwgbnVtYmVyIG9yIGEgc2lnbmFsIG5hbWUgKG1pbnVzIHRoZSAi
+U0lHIg0KIHBhcnQpLCBsaWtlIHRoZXNlIGV4YW1wbGVzOjwvcGFyYT4NCkBA
+IC0yMzgsMTAgKzM0Niw4IEBAIFNJR1NUT1AgICAgIDE3ICAgIHNlbmRhYmxl
+IHN0b3Agc2lnbmFsIG4NCiBTSUdUU1RQICAgICAxOCAgICBzdG9wIHNpZ25h
+bCBmcm9tIHR0eQ0KIFNJR0NPTlQgICAgIDE5ICAgIGNvbnRpbnVlIGEgc3Rv
+cHBlZCBwcm9jZXNzDQogU0lHQ0hMRCAgICAgMjAgICAgdG8gcGFyZW50IG9u
+IGNoaWxkIHN0b3Agb3IgZXhpdA0KLVNJR0NMRCAgICAgIDIwICAgIFN5c3Rl
+bSBWIG5hbWUgZm9yIFNJR0NITEQNCiBTSUdUVElOICAgICAyMSAgICB0byBy
+ZWFkZXJzIHBncnAgdXBvbiBiYWNrZ3JvdW5kIHR0eSByZWFkDQogU0lHVFRP
+VSAgICAgMjIgICAgbGlrZSBUVElOIGZvciBvdXRwdXQgaWYgKHRwLSZndDt0
+X2xvY2FsJmFtcDtMVE9TVE9QKQ0KLVNJR0lPICAgICAgIDIzICAgIGlucHV0
+L291dHB1dCBwb3NzaWJsZSBzaWduYWwNCiBTSUdQT0xMICAgICAyMyAgICBT
+eXN0ZW0gViBuYW1lIGZvciBTSUdJTw0KIFNJR1hDUFUgICAgIDI0ICAgIGV4
+Y2VlZGVkIENQVSB0aW1lIGxpbWl0DQogU0lHWEZTWiAgICAgMjUgICAgZXhj
+ZWVkZWQgZmlsZSBzaXplIGxpbWl0DQpAQCAtODE1LDUxICs5MjEsNCBAQCBw
+cmludCB0aGUgbWVzc2FnZSBidXQgZG9lcyByZXR1cm4gdGhlIG5vDQogDQog
+PC9zZWN0Mj4NCiANCi08c2VjdDIgaWQ9ImR1bXBlciI+PHRpdGxlPmR1bXBl
+cjwvdGl0bGU+DQotDQotPHNjcmVlbj4NCi1Vc2FnZTogZHVtcGVyIFtPUFRJ
+T05dIEZJTEVOQU1FIFdJTjMyUElEDQotRHVtcCBjb3JlIGZyb20gV0lOMzJQ
+SUQgdG8gRklMRU5BTUUuY29yZQ0KLSAtZCwgLS12ZXJib3NlICBiZSB2ZXJi
+b3NlIHdoaWxlIGR1bXBpbmcNCi0gLWgsIC0taGVscCAgICAgb3V0cHV0IGhl
+bHAgaW5mb3JtYXRpb24gYW5kIGV4aXQNCi0gLXEsIC0tcXVpZXQgICAgYmUg
+cXVpZXQgd2hpbGUgZHVtcGluZyAoZGVmYXVsdCkNCi0gLXYsIC0tdmVyc2lv
+biAgb3V0cHV0IHZlcnNpb24gaW5mb3JtYXRpb24gYW5kIGV4aXQNCi08L3Nj
+cmVlbj4NCi0NCi08cGFyYT5UaGUgPGNvbW1hbmQ+ZHVtcGVyPC9jb21tYW5k
+PiB1dGlsaXR5IGNhbiBiZSB1c2VkIHRvIGNyZWF0ZQ0KLWNvcmUgZHVtcCBv
+ZiBydW5uaW5nIHdpbmRvd3MgcHJvY2Vzcy4gVGhpcyBjb3JlIGR1bXAgY2Fu
+IGJlIGxhdGVyIGxvYWRlZA0KLXRvIGdkYiBhbiBhbmFseXplZC4gT25lIGNv
+bW1vbiB3YXkgdG8gdXNlIDxjb21tYW5kPmR1bXBlcjwvY29tbWFuZD4gaXMg
+dG8NCi1wbHVnIGl0IGludG8gY3lnd2luJ3MgSnVzdC1Jbi1UaW1lIGRlYnVn
+Z2luZyBmYWNpbGl0eSBieSBhZGRpbmcNCi0NCi08c2NyZWVuPg0KLWVycm9y
+X3N0YXJ0PXg6XHBhdGhcdG9cZHVtcGVyLmV4ZQ0KLTwvc2NyZWVuPg0KLQ0K
+LXRvIDxlbT5DWUdXSU48L2VtPiBlbnZpcm9ubWVudCB2YXJpYWJsZS4gUGxl
+YXNlIG5vdGUgdGhhdA0KLTxsaXRlcmFsPng6XHBhdGhcdG9cZHVtcGVyLmV4
+ZTwvbGl0ZXJhbD4gaXMgd2luMzItc3R5bGUgYW5kIG5vdCBjeWd3aW4NCi1w
+YXRoLiBJZiA8bGl0ZXJhbD5lcnJvcl9zdGFydDwvbGl0ZXJhbD4gaXMgc2V0
+IHRoaXMgd2F5LCB0aGVuIGR1bXBlciB3aWxsDQotYmUgc3RhcnRlZCB3aGVu
+ZXZlciBzb21lIHByb2dyYW0gZW5jb3VudGVycyBmYXRhbCBlcnJvci4NCi08
+L3BhcmE+DQotDQotPHBhcmE+DQotPGNvbW1hbmQ+ZHVtcGVyPC9jb21tYW5k
+PiBjYW4gYmUgYWxzbyBiZSBzdGFydGVkIGZyb20gY29tbWFuZCBsaW5lIHRv
+IGNyZWF0ZQ0KLWNvcmUgZHVtcCBvZiBhbnkgcnVubmluZyBwcm9jZXNzLiBV
+bmZvcnR1bmF0ZWx5LCBiZWNhdXNlIG9mIHdpbmRvd3MgQVBJDQotbGltaXRh
+dGlvbiwgd2hlbiBjb3JlIGR1bXAgaXMgY3JlYXRlZCBhbmQgPGNvbW1hbmQ+
+ZHVtcGVyPC9jb21tYW5kPiBleGl0cywNCi10aGUgdGFyZ2V0IHByb2Nlc3Mg
+aXMgdGVybWluYXRlZCB0b28uDQotPC9wYXJhPg0KLQ0KLTxwYXJhPg0KLVRv
+IHNhdmUgdGhlIHNwYWNlIGluIGNvcmUgZHVtcCwgPGNvbW1hbmQ+ZHVtcGVy
+PC9jb21tYW5kPiBkb2Vzbid0IHdyaXRlIHRob3NlDQotcG9ydGlvbnMgb2Yg
+dGFyZ2V0IHByb2Nlc3MnIG1lbW9yeSBzcGFjZSB0aGF0IGFyZSBsb2FkZWQg
+ZnJvbSBleGVjdXRhYmxlIGFuZA0KLWRsbCBmaWxlcyBhbmQgYXJlIHVuY2hh
+bmdlYWJsZSwgc3VjaCBhcyBwcm9ncmFtIGNvZGUgYW5kIGRlYnVnIGluZm8u
+IEluc3RlYWQsDQotPGNvbW1hbmQ+ZHVtcGVyPC9jb21tYW5kPiBzYXZlcyBw
+YXRocyB0byBmaWxlcyB3aGljaCBjb250YWluIHRoYXQgZGF0YS4gV2hlbg0K
+LWNvcmUgZHVtcCBpcyBsb2FkZWQgaW50byBnZGIsIGl0IHVzZXMgdGhlc2Ug
+cGF0aHMgdG8gbG9hZCBhcHByb3ByaWF0ZSBmaWxlcy4NCi1UaGF0IG1lYW5z
+IHRoYXQgaWYgeW91IGNyZWF0ZSBjb3JlIGR1bXAgb24gb25lIG1hY2hpbmUg
+YW5kIHRyeSB0byBkZWJ1ZyBpdCBvbg0KLW90aGVyLCB5b3UnbGwgbmVlZCB0
+byBwbGFjZSBpZGVudGljYWwgY29waWVzIG9mIGV4ZWN1dGFibGUgYW5kIGRs
+bHMgaW4gdGhlIHNhbWUNCi1kaXJlY3RvcmllcyBhcyBvbiBtYWNoaW5lIHdo
+ZXJlIGNvcmUgZHVtcCBoYXMgYmVlbiBjcmVhdGVkLg0KLTwvcGFyYT4NCi0N
+Ci08L3NlY3QyPg0KLQ0KIDwvc2VjdDE+DQotDQo=
 
-
-------=_NextPart_000_0152_01C225CC.3A4CC120
-Content-Type: text/plain;
-	name="ChangeLog.txt"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment;
-	filename="ChangeLog.txt"
-Content-length: 692
-
-2002-07-07  Conrad Scott  <conrad.scott@dsl.pipex.com>
-
-	* debug.cc (class lock_debug): Make a class, rather than a struct.
-	Fix problem where explicit use of the lock_debug::unlock method
-	released the muto twice.
-	(lock_debug::acquired): New field.
-	(lock_debug::lock_debug): Set acquired only if the muto is
-	actually acquired.
-	(lock_debug::unlock): Only release the muto if it is still
-	acquired by this object.
-	(setclexec_pid): Disable until such time as the protected handle
-	list is inherited by child processes.
-	(add_handle): Unlock the lock_debug muto before using
-	system_printf.
-	(mark_closed): Ditto.
-	(debug_fixup_after_fork): Use lock_debug, tho' it's probably
-	unnecessary.
-
-------=_NextPart_000_0152_01C225CC.3A4CC120
-Content-Type: application/octet-stream;
-	name="debug.patch"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment;
-	filename="debug.patch"
-Content-length: 2398
-
-Index: debug.cc=0A=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
-RCS file: /cvs/src/src/winsup/cygwin/debug.cc,v=0A=
-retrieving revision 1.24.2.4=0A=
-diff -u -r1.24.2.4 debug.cc=0A=
---- debug.cc	2 Jul 2002 10:58:17 -0000	1.24.2.4=0A=
-+++ debug.cc	7 Jul 2002 14:17:29 -0000=0A=
-@@ -184,11 +184,15 @@=0A=
-=20=0A=
- static muto NO_COPY *debug_lock =3D NULL;=0A=
-=20=0A=
--struct lock_debug=0A=
-+class lock_debug=0A=
- {=0A=
--  lock_debug () {if (debug_lock) debug_lock->acquire (INFINITE);}=0A=
--  void unlock () {if (debug_lock) debug_lock->release ();}=0A=
-+public:=0A=
-+  lock_debug () : acquired (false)=0A=
-+  {if (debug_lock) acquired =3D debug_lock->acquire (INFINITE);}=0A=
-+  void unlock () {if (acquired) debug_lock->release (); acquired =3D false=
-;}=0A=
-   ~lock_debug () {unlock ();}=0A=
-+private:=0A=
-+  bool acquired;=0A=
- };=0A=
-=20=0A=
- static bool __stdcall mark_closed (const char *, int, HANDLE, const char *=
-, BOOL);=0A=
-@@ -217,12 +221,16 @@=0A=
- void=0A=
- setclexec_pid (HANDLE oh, HANDLE nh, bool setit)=0A=
- {=0A=
-+#if 0=0A=
-+  lock_debug here;=0A=
-   handle_list *hl =3D find_handle (oh);=0A=
-   if (hl)=0A=
-     {=0A=
-+      hl =3D hl->next;=0A=
-       hl->clexec_pid =3D setit ? GetCurrentProcessId () : 0;=0A=
-       hl->h =3D nh;=0A=
-     }=0A=
-+#endif /* 0 */=0A=
- }=0A=
-=20=0A=
- /* Create a new handle record */=0A=
-@@ -257,6 +265,7 @@=0A=
-   if ((hl =3D find_handle (h)))=0A=
-     {=0A=
-       hl =3D hl->next;=0A=
-+      here.unlock ();	// race here=0A=
-       system_printf ("%s:%d - multiple attempts to add handle %s<%p>", fun=
-c,=0A=
- 		     ln, name, h);=0A=
-       system_printf (" previously allocated by %s:%d(%s<%p>)",=0A=
-@@ -296,6 +305,7 @@=0A=
- void=0A=
- debug_fixup_after_fork ()=0A=
- {=0A=
-+  lock_debug here;=0A=
-   handle_list *hl;=0A=
-   for (hl =3D &starth; hl->next !=3D NULL; hl =3D hl->next)=0A=
-     if (hl->next->clexec_pid)=0A=
-@@ -321,6 +331,7 @@=0A=
-   handle_list *hln;=0A=
-   if (hl && (hln =3D hl->next) && strcmp (name, hln->name))=0A=
-     {=0A=
-+      here.unlock ();	// race here=0A=
-       system_printf ("closing protected handle %s:%d(%s<%p>)",=0A=
- 		     hln->func, hln->ln, hln->name, hln->h);=0A=
-       system_printf (" by %s:%d(%s<%p>)", func, ln, name, h);=0A=
-
-------=_NextPart_000_0152_01C225CC.3A4CC120--
-
+---559023410-1733867187-1026057340=:1496--
