@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3366-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 2290 invoked by alias); 10 Jan 2003 08:54:33 -0000
+Return-Path: <cygwin-patches-return-3367-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 18216 invoked by alias); 10 Jan 2003 08:58:31 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,66 +7,67 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 1226 invoked from network); 10 Jan 2003 08:54:28 -0000
+Received: (qmail 18146 invoked from network); 10 Jan 2003 08:58:28 -0000
 X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
-Date: Fri, 10 Jan 2003 08:54:00 -0000
+Date: Fri, 10 Jan 2003 08:58:00 -0000
 From: Thomas Pfaff <tpfaff@gmx.net>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Make sleep and usleep a cancellation point
-Message-ID: <Pine.WNT.4.44.0301100943530.299-200000@algeria.intern.net>
+Subject: [PATCH] make handle_sigsuspend a cancellation point
+Message-ID: <Pine.WNT.4.44.0301100953500.299-200000@algeria.intern.net>
 X-X-Sender: pfaff@antarctica.intern.net
 MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="602334-206-1042188828=:299"
-X-SW-Source: 2003-q1/txt/msg00015.txt.bz2
+Content-Type: MULTIPART/MIXED; BOUNDARY="850713-9445-1042189077=:299"
+X-SW-Source: 2003-q1/txt/msg00016.txt.bz2
 
   This message is in MIME format.  The first part should be readable text,
   while the remaining parts are likely unreadable without MIME-aware tools.
   Send mail to mime@docserver.cac.washington.edu for more info.
 
---602334-206-1042188828=:299
+--850713-9445-1042189077=:299
 Content-Type: TEXT/PLAIN; charset=US-ASCII
-Content-length: 223
+Content-length: 314
 
-This patch will make sleep and usleep a pthread cancellation point.
+This patch will make handle_sigsuspend (used by pause, sigpause
+and sigsuspend) a pthread cancellation point.
+
 
 2003-01-10  Thomas Pfaff  <tpfaff@gmx.net>
 
-	* signal.cc (sleep): Add pthread_testcancel call.
+	* exceptions.cc (handle_sigsuspend): Add pthread_testcancel call.
 	Wait for signal and cancellation event.
-	(usleep): Ditto.
+	* thread.cc: Update list of cancellation points.
 
---602334-206-1042188828=:299
-Content-Type: TEXT/plain; name="sleep-cancel.patch"
+--850713-9445-1042189077=:299
+Content-Type: TEXT/plain; name="handle_sigsuspend-cancel.patch"
 Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.WNT.4.44.0301100953480.299@algeria.intern.net>
+Content-ID: <Pine.WNT.4.44.0301100957570.299@algeria.intern.net>
 Content-Description: 
-Content-Disposition: attachment; filename="sleep-cancel.patch"
-Content-length: 1513
+Content-Disposition: attachment; filename="handle_sigsuspend-cancel.patch"
+Content-length: 1448
 
-ZGlmZiAtdXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi9zaWduYWwuY2Mgc3Jj
-L3dpbnN1cC9jeWd3aW4vc2lnbmFsLmNjCi0tLSBzcmMub2xkL3dpbnN1cC9j
-eWd3aW4vc2lnbmFsLmNjCTIwMDItMTEtMjMgMDQ6MDc6MTAuMDAwMDAwMDAw
-ICswMTAwCisrKyBzcmMvd2luc3VwL2N5Z3dpbi9zaWduYWwuY2MJMjAwMy0w
-MS0wOSAwOTo0MjoyOS4wMDAwMDAwMDAgKzAxMDAKQEAgLTc0LDEyICs3NCwx
-NCBAQCBzbGVlcCAodW5zaWduZWQgaW50IHNlY29uZHMpCiAgIHNpZ2ZyYW1l
-IHRoaXNmcmFtZSAobWFpbnRocmVhZCk7CiAgIERXT1JEIG1zLCBzdGFydF90
-aW1lLCBlbmRfdGltZTsKIAorICBwdGhyZWFkX3Rlc3RjYW5jZWwgKCk7CisK
-ICAgbXMgPSBzZWNvbmRzICogMTAwMDsKICAgc3RhcnRfdGltZSA9IEdldFRp
-Y2tDb3VudCAoKTsKICAgZW5kX3RpbWUgPSBzdGFydF90aW1lICsgKHNlY29u
-ZHMgKiAxMDAwKTsKICAgc3lzY2FsbF9wcmludGYgKCJzbGVlcCAoJWQpIiwg
-c2Vjb25kcyk7CiAKLSAgcmMgPSBXYWl0Rm9yU2luZ2xlT2JqZWN0IChzaWdu
-YWxfYXJyaXZlZCwgbXMpOworICByYyA9IHB0aHJlYWQ6OmNhbmNlbGFibGVf
-d2FpdCAoc2lnbmFsX2Fycml2ZWQsIG1zKTsKICAgRFdPUkQgbm93ID0gR2V0
-VGlja0NvdW50ICgpOwogICBpZiAocmMgPT0gV0FJVF9USU1FT1VUIHx8IG5v
-dyA+PSBlbmRfdGltZSkKICAgICBtcyA9IDA7CkBAIC05Nyw5ICs5OSwxMSBA
-QCBzbGVlcCAodW5zaWduZWQgaW50IHNlY29uZHMpCiBleHRlcm4gIkMiIHVu
-c2lnbmVkIGludAogdXNsZWVwICh1bnNpZ25lZCBpbnQgdXNlY29uZHMpCiB7
-CisgIHB0aHJlYWRfdGVzdGNhbmNlbCAoKTsKKwogICBzaWdfZGlzcGF0Y2hf
-cGVuZGluZyAoMCk7CiAgIHN5c2NhbGxfcHJpbnRmICgidXNsZWVwICglZCki
-LCB1c2Vjb25kcyk7Ci0gIFdhaXRGb3JTaW5nbGVPYmplY3QgKHNpZ25hbF9h
-cnJpdmVkLCAodXNlY29uZHMgKyA1MDApIC8gMTAwMCk7CisgIHB0aHJlYWQ6
-OmNhbmNlbGFibGVfd2FpdCAoc2lnbmFsX2Fycml2ZWQsICh1c2Vjb25kcyAr
-IDUwMCkgLyAxMDAwKTsKICAgc3lzY2FsbF9wcmludGYgKCIwID0gdXNsZWVw
-ICglZCkiLCB1c2Vjb25kcyk7CiAgIHJldHVybiAwOwogfQo=
+ZGlmZiAtdXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi9leGNlcHRpb25zLmNj
+IHNyYy93aW5zdXAvY3lnd2luL2V4Y2VwdGlvbnMuY2MKLS0tIHNyYy5vbGQv
+d2luc3VwL2N5Z3dpbi9leGNlcHRpb25zLmNjCTIwMDItMTItMjUgMjE6MzI6
+MDUuMDAwMDAwMDAwICswMTAwCisrKyBzcmMvd2luc3VwL2N5Z3dpbi9leGNl
+cHRpb25zLmNjCTIwMDMtMDEtMDkgMTA6MTk6MjguMDAwMDAwMDAwICswMTAw
+CkBAIC01NzYsNyArNTc2LDggQEAgaGFuZGxlX3NpZ3N1c3BlbmQgKHNpZ3Nl
+dF90IHRlbXBtYXNrKQogCQkJCS8vICBpbnRlcmVzdGVkIGluIHRocm91Z2gu
+CiAgIHNpZ3Byb2NfcHJpbnRmICgib2xkIG1hc2sgJXgsIG5ldyBtYXNrICV4
+Iiwgb2xkbWFzaywgdGVtcG1hc2spOwogCi0gIFdhaXRGb3JTaW5nbGVPYmpl
+Y3QgKHNpZ25hbF9hcnJpdmVkLCBJTkZJTklURSk7CisgIHB0aHJlYWRfdGVz
+dGNhbmNlbCAoKTsKKyAgcHRocmVhZDo6Y2FuY2VsYWJsZV93YWl0IChzaWdu
+YWxfYXJyaXZlZCwgSU5GSU5JVEUpOwogCiAgIHNldF9zaWdfZXJybm8gKEVJ
+TlRSKTsJLy8gUGVyIFBPU0lYCiAKZGlmZiAtdXJwIHNyYy5vbGQvd2luc3Vw
+L2N5Z3dpbi90aHJlYWQuY2Mgc3JjL3dpbnN1cC9jeWd3aW4vdGhyZWFkLmNj
+Ci0tLSBzcmMub2xkL3dpbnN1cC9jeWd3aW4vdGhyZWFkLmNjCTIwMDMtMDEt
+MDkgMDk6NDI6MjguMDAwMDAwMDAwICswMTAwCisrKyBzcmMvd2luc3VwL2N5
+Z3dpbi90aHJlYWQuY2MJMjAwMy0wMS0xMCAwOTo0MjozNy4wMDAwMDAwMDAg
+KzAxMDAKQEAgLTQ1OCw3ICs0NTgsNyBAQCBtc2dzbmQgKCkKIG1zeW5jICgp
+CiBuYW5vc2xlZXAgKCkKIG9wZW4gKCkKLXBhdXNlICgpCisqcGF1c2UgKCkK
+IHBvbGwgKCkKIHByZWFkICgpCiBwdGhyZWFkX2NvbmRfdGltZWR3YWl0ICgp
+CkBAIC00NzIsOCArNDcyLDggQEAgcmVhZCAoKQogcmVhZHYgKCkKIHNlbGVj
+dCAoKQogKnNlbV93YWl0ICgpCi1zaWdwYXVzZSAoKQotc2lnc3VzcGVuZCAo
+KQorKnNpZ3BhdXNlICgpCisqc2lnc3VzcGVuZCAoKQogc2lndGltZWR3YWl0
+ICgpCiBzaWd3YWl0ICgpCiBzaWd3YWl0aW5mbyAoKQo=
 
---602334-206-1042188828=:299--
+--850713-9445-1042189077=:299--
