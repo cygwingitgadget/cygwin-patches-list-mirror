@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3556-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 4875 invoked by alias); 13 Feb 2003 20:31:15 -0000
+Return-Path: <cygwin-patches-return-3557-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 10676 invoked by alias); 13 Feb 2003 20:35:28 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,38 +7,44 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 4825 invoked from network); 13 Feb 2003 20:31:14 -0000
-Date: Thu, 13 Feb 2003 20:31:00 -0000
+Received: (qmail 10659 invoked from network); 13 Feb 2003 20:35:27 -0000
+Date: Thu, 13 Feb 2003 20:35:00 -0000
 From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: Produce beeps using soundcard
-Message-ID: <20030213203228.GF32279@redhat.com>
+Subject: Re: Create new files as sparse on NT systems. (2nd try)
+Message-ID: <20030213203642.GG32279@redhat.com>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20030213012822.A20310-100000@logout.sh.cvut.cz>
+References: <20030203141333.Y68413-100000@logout.sh.cvut.cz>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20030213012822.A20310-100000@logout.sh.cvut.cz>
+In-Reply-To: <20030203141333.Y68413-100000@logout.sh.cvut.cz>
 User-Agent: Mutt/1.5.1i
-X-SW-Source: 2003-q1/txt/msg00205.txt.bz2
+X-SW-Source: 2003-q1/txt/msg00206.txt.bz2
 
-On Thu, Feb 13, 2003 at 01:34:28AM +0100, Vaclav Haisman wrote:
+On Mon, Feb 03, 2003 at 02:18:03PM +0100, Vaclav Haisman wrote:
 >
->Hi,
->this small patch adds an ability to produce beeps (\a) using soundcard by
->MessageBeep() call. It can be enabled by new CYGWIN option winbeep.
+>This is a little bit improved version of my previous post.
+>By default creation of sparse files is disabled. It can be enabled by CYGWIN
+>option sparse_files.
 >
 >Vaclav Haisman
 >
->2003-02-13  Vaclav Haisman  <V.Haisman@sh.cvut.cz>
->	* environ.cc (windows_beep): New variable declaration.
->	(parse_thing): New CYGWIN option.
->	* fhandler_console.cc (windows_beep): New variable definition.
->	(fhandler_console::write_normal):  Handle the new option.
->	* Makefile.in (DLL_IMPORTS): Add libuser32.a for MessageBeep.
+>
+>2003-02-03  Vaclav Haisman  <V.Haisman@sh.cvut.cz>
+>	* fhandler.h (allow_sparse): Declare new extern variable.
+>	* fhandler.cc (METHOD_BUFFERED): New macro.
+>	(FSCTL_SET_SPARSE): Ditto.
+>	(allow_sparse): Define the new variable.
+>	(fhandler_base::open): Try to set newly created or trucated files
+>	as sparse on NT systems.
+>	* environ.cc (parse_thing): Add new CYGWIN option.
 
-I'm sorry but I really don't want to add too many options to the CYGWIN
-environment variable.  I don't think this really justifies an option.
+This is YA case where I don't think that a CYGWIN environment variable option is
+justified.
+
+UNIX has a method for producing sparse files.  If this is desired functionality,
+Cygwin should mimic that not invent a new way of doing things.
 
 cgf
