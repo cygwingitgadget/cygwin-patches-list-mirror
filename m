@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5365-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 16382 invoked by alias); 4 Mar 2005 05:13:26 -0000
+Return-Path: <cygwin-patches-return-5366-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 14051 invoked by alias); 4 Mar 2005 08:37:00 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,37 +7,38 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 16338 invoked from network); 4 Mar 2005 05:13:22 -0000
-Received: from unknown (HELO cgf.cx) (66.30.17.189)
-  by sourceware.org with SMTP; 4 Mar 2005 05:13:22 -0000
-Received: by cgf.cx (Postfix, from userid 201)
-	id 005741B55F; Fri,  4 Mar 2005 00:13:45 -0500 (EST)
-Date: Fri, 04 Mar 2005 05:13:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
+Received: (qmail 13939 invoked from network); 4 Mar 2005 08:36:53 -0000
+Received: from unknown (HELO cygbert.vinschen.de) (84.148.33.203)
+  by sourceware.org with SMTP; 4 Mar 2005 08:36:53 -0000
+Received: by cygbert.vinschen.de (Postfix, from userid 500)
+	id 8B8D057D6E; Fri,  4 Mar 2005 09:36:51 +0100 (CET)
+Date: Fri, 04 Mar 2005 08:37:00 -0000
+From: Corinna Vinschen <vinschen@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [Patch]: Timer functions
-Message-ID: <20050304051345.GB11743@trixie.casa.cgf.cx>
+Subject: Re: [Patch]: fhandler_socket::ioctl
+Message-ID: <20050304083651.GA18994@cygbert.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3.0.5.32.20050303234545.00b42bc0@incoming.verizon.net>
+References: <3.0.5.32.20050303233658.00b50ad0@incoming.verizon.net>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3.0.5.32.20050303234545.00b42bc0@incoming.verizon.net>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2005-q1/txt/msg00068.txt.bz2
+In-Reply-To: <3.0.5.32.20050303233658.00b50ad0@incoming.verizon.net>
+User-Agent: Mutt/1.4.2i
+X-SW-Source: 2005-q1/txt/msg00069.txt.bz2
 
-On Thu, Mar 03, 2005 at 11:45:45PM -0500, Pierre A. Humblet wrote:
->- the mu_to was not reinitialized on forks (non-inheritable event).
+On Mar  3 23:36, Pierre A. Humblet wrote:
+> 2005-03-04  Pierre Humblet <pierre.humblet@ieee.org>
+> 
+> 	* fhandler_socket.cc (fhandler_socket::ioctl): Only cancel 
+>  	 WSAAsyncSelect when async mode is on.
 
-I just spent at least ten minutes looking for a "mu_to" in cygwin,
-trying to figure out what you were referring to.  I'm not sure why
-you're putting an underscore in the middle there.  Maybe you're thinking
-that the "mu" and "to" have separate meanings but they really don't.
+Applied.
 
-Did you actually see mutos not getting created?  Looking at the code
-now, it seems like there would be a new muto created every time
-there is a new instance of timer_tracker, which was certainly wrong but
-it is different from mutos not being created after a fork.
+Thanks,
+Corinna
 
-cgf
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          mailto:cygwin@cygwin.com
+Red Hat, Inc.
