@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5197-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 29880 invoked by alias); 13 Dec 2004 18:59:05 -0000
+Return-Path: <cygwin-patches-return-5198-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 30191 invoked by alias); 13 Dec 2004 19:34:01 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,16 +7,16 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 29800 invoked from network); 13 Dec 2004 18:59:00 -0000
-Received: from unknown (HELO cgf.cx) (66.30.17.189)
-  by sourceware.org with SMTP; 13 Dec 2004 18:59:00 -0000
-Received: by cgf.cx (Postfix, from userid 201)
-	id D23B71B401; Mon, 13 Dec 2004 13:59:57 -0500 (EST)
-Date: Mon, 13 Dec 2004 18:59:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
+Received: (qmail 30158 invoked from network); 13 Dec 2004 19:33:57 -0000
+Received: from unknown (HELO cygbert.vinschen.de) (80.132.119.182)
+  by sourceware.org with SMTP; 13 Dec 2004 19:33:57 -0000
+Received: by cygbert.vinschen.de (Postfix, from userid 500)
+	id 7078757E53; Mon, 13 Dec 2004 20:36:05 +0100 (CET)
+Date: Mon, 13 Dec 2004 19:34:00 -0000
+From: Corinna Vinschen <vinschen@redhat.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: [Fwd: [que_andrewBOOHyahoo.com: FOLLOWUP: 1.5.12: problems without registry keys]]
-Message-ID: <20041213185957.GD27477@trixie.casa.cgf.cx>
+Message-ID: <20041213193605.GD22056@cygbert.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20041213182127.GB22056@cygbert.vinschen.de> <41BDE01E.3DD3C6CF@phumblet.no-ip.org>
@@ -24,16 +24,22 @@ Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <41BDE01E.3DD3C6CF@phumblet.no-ip.org>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2004-q4/txt/msg00198.txt.bz2
+User-Agent: Mutt/1.4.2i
+X-SW-Source: 2004-q4/txt/msg00199.txt.bz2
 
-On Mon, Dec 13, 2004 at 01:31:58PM -0500, Pierre A. Humblet wrote:
->Corinna Vinschen wrote:
->> Is that ok to apply or is there any good reason not to release the muto
->> when get_drive() has finished?  I can't see any, FWIW.
->
->Oops, please apply ASAP of course.
+On Dec 13 13:31, Pierre A. Humblet wrote:
+> Corinna Vinschen wrote:
+> > Is that ok to apply or is there any good reason not to release the muto
+> > when get_drive() has finished?  I can't see any, FWIW.
+> 
+> Oops, please apply ASAP of course.
 
-Sounds like I should release 1.5.13 soon.
+Ok, done.
 
-cgf
+Thanks,
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          mailto:cygwin@cygwin.com
+Red Hat, Inc.
