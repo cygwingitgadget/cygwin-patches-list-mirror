@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3476-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 8646 invoked by alias); 3 Feb 2003 00:38:24 -0000
+Return-Path: <cygwin-patches-return-3477-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 9221 invoked by alias); 3 Feb 2003 00:41:10 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,129 +7,28 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 8636 invoked from network); 3 Feb 2003 00:38:23 -0000
-Message-ID: <20030203003819.66129.qmail@web20010.mail.yahoo.com>
-Date: Mon, 03 Feb 2003 00:38:00 -0000
-From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
-Subject: doc patch for CYGWIN codepage=, regtool 
-To: cygwin-patches@cygwin.com
+Received: (qmail 9206 invoked from network); 3 Feb 2003 00:41:09 -0000
+X-Authentication-Warning: hp2.xraylith.wisc.edu: khan owned process doing -bs
+Date: Mon, 03 Feb 2003 00:41:00 -0000
+From: Mumit Khan <khan@nanotech.wisc.edu>
+To: <cygwin-patches@cygwin.com>
+cc: Mumit Khan <khan@nanotech.wisc.edu>
+Subject: Re: [patch] Tcl 20030128-3 changes to handle Cygwin pathnames
+In-Reply-To: <3E3DB9D1.8080909@yahoo.com>
+Message-ID: <Pine.HPX.4.33.0302021839450.18077-100000@hp2.xraylith.wisc.edu>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="0-892346162-1044232699=:66115"
-X-SW-Source: 2003-q1/txt/msg00125.txt.bz2
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-SW-Source: 2003-q1/txt/msg00126.txt.bz2
 
---0-892346162-1044232699=:66115
-Content-Type: text/plain; charset=us-ascii
-Content-Id: 
-Content-Disposition: inline
-Content-length: 821
+On Sun, 2 Feb 2003, Earnie Boyd wrote:
 
-I've checked in this documentation patch that fixes a couple of things. 
-There was talk of a codepage:none option, but it's not in cygwin yet
-so I'm ignoring it for now. 
+> If cygwin specific code already exists in the official source then I
+> suggest you submit your patch to the tcl.sf.net project.
 
-I missed the regtool patch that added -K way back in August
+Certainly, but no reason to wait for the next release of Tcl to get this
+code into the Cygwin package. It takes a lot of work to convince the
+maintainers that these Cygwin-specific code is indeed important, so it
+may take a while.
 
-http://sources.redhat.com/ml/cygwin-patches/2002-q3/msg00238.html
+Mumit
 
-but it would be great to get patches for utils.sgml whenever a util
-is patched, or at least a heads-up.
-
-2003-02-02  Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
-
-        * cygwinenv.sgml: Add section for "CYGWIN codepage:[ansi|oem]"
-        * dll.sgml: Add pointer to GCC website for more information
-        * utils.sgml: Update regtool for -K,--key-separator option
-
-__________________________________________________
-Do you Yahoo!?
-Yahoo! Mail Plus - Powerful. Affordable. Sign up now.
-http://mailplus.yahoo.com
---0-892346162-1044232699=:66115
-Content-Type: application/octet-stream; name="tmp.patch"
-Content-Transfer-Encoding: base64
-Content-Description: tmp.patch
-Content-Disposition: attachment; filename="tmp.patch"
-Content-length: 4824
-
-PyB1dGlscy91dGlscy5zZ21sLW9yaWcKSW5kZXg6IGRvYy9jeWd3aW5lbnYu
-c2dtbAo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3Ny
-Yy9zcmMvd2luc3VwL2RvYy9jeWd3aW5lbnYuc2dtbCx2CnJldHJpZXZpbmcg
-cmV2aXNpb24gMS43CmRpZmYgLXUgLXAgLXIxLjcgY3lnd2luZW52LnNnbWwK
-LS0tIGRvYy9jeWd3aW5lbnYuc2dtbAkxOSBEZWMgMjAwMiAwMjoxNDowNiAt
-MDAwMAkxLjcKKysrIGRvYy9jeWd3aW5lbnYuc2dtbAkzIEZlYiAyMDAzIDAw
-OjIzOjQ1IC0wMDAwCkBAIC01MCw2ICs1MCwyMyBAQCBjYXNlIiBlcnJvci48
-L3BhcmE+CiA8L2xpc3RpdGVtPgogPC9pdGVtaXplZGxpc3Q+CiA8L2xpc3Rp
-dGVtPgorCis8bGlzdGl0ZW0+Cis8cGFyYT48Rmlyc3RUZXJtPmNvZGVwYWdl
-OlthbnNpfG9lbV08L0ZpcnN0VGVybT4gLSBXaW5kb3dzIGNvbnNvbGUgCith
-cHBsaWNhdGlvbnMgY2FuIHVzZSBkaWZmZXJlbnQgY2hhcmFjdGVyIHNldHMg
-KGNvZGVwYWdlcykgZm9yIGRyYXdpbmcKK2NoYXJhY3RlcnMuICBUaGUgZmly
-c3Qgc2V0dGluZywgY2FsbGVkICJhbnNpIiwgaXMgdGhlIGRlZmF1bHQuCitU
-aGlzIGNoYXJhY3RlciBzZXQgY29udGFpbnMgdmFyaW91cyBmb3JtcyBvZiBs
-YXRpbiBjaGFyYWN0ZXJzIHVzZWQKK2luIEV1cm9wZWFuIGxhbmd1YWdlcy4g
-IFRoZSBuYW1lIG9yaWdpbmF0ZXMgZnJvbSB0aGUgQU5TSSBMYXRpbjEKKyhJ
-U08gODg1OS0xKSBzdGFuZGFyZCwgdXNlZCBpbiBXaW5kb3dzIDEuMCwgdGhv
-dWdoIHRoZSBjaGFyYWN0ZXIKK3NldHMgaGF2ZSBzaW5jZSBkaXZlcmdlZCBm
-cm9tIGFueSBzdGFuZGFyZC4gIFRoZSBzZWNvbmQgc2V0dGluZworc2VsZWN0
-cyBhbiBvbGRlciwgRE9TLWJhc2VkIGNoYXJhY3RlciBzZXQsIGNvbnRhaW5p
-bmcgdmFyaW91cyBsaW5lCitkcmF3aW5nIGFuZCBzcGVjaWFsIGNoYXJhY3Rl
-cnMuICBJdCBpcyBjYWxsZWQgIm9lbSIgc2luY2UgaXQgd2FzCitvcmlnaW5h
-bGx5IGVuY29kZWQgaW4gdGhlIGZpcm13YXJlIG9mIElCTSBQQ3MgYnkgb3Jp
-Z2luYWwKK2VxdWlwbWVudCBtYW51ZmFjdHVyZXJzIChPRU1zKS4gIElmIHlv
-dSBmaW5kIHRoYXQgc29tZSBjaGFyYWN0ZXJzIAorKGVzcGVjaWFsbHkgbm9u
-LVVTIG9yICdncmFwaGljYWwnIG9uZXMpIGRvIG5vdCBkaXNwbGF5IGNvcnJl
-Y3RseSBpbiAKK0N5Z3dpbiwgeW91IGNhbiB1c2UgdGhpcyBvcHRpb24gdG8g
-c2VsZWN0IGFuIGFwcHJvcHJpYXRlIGNvZGVwYWdlLgorPC9saXN0aXRlbT4K
-KwogPGxpc3RpdGVtPgogPHBhcmE+PEZpcnN0VGVybT4obm8pZW52Y2FjaGU8
-L0ZpcnN0VGVybT4gLSBJZiBzZXQsIGVudmlyb25tZW50IHZhcmlhYmxlCiBj
-b252ZXJzaW9ucyAoYmV0d2VlbiBXaW4zMiBhbmQgUE9TSVgpIGFyZSBjYWNo
-ZWQuICBOb3RlIHRoYXQgdGhpcyBpcyBtYXkKSW5kZXg6IGRvYy9kbGwuc2dt
-bAo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3NyYy9z
-cmMvd2luc3VwL2RvYy9kbGwuc2dtbCx2CnJldHJpZXZpbmcgcmV2aXNpb24g
-MS40CmRpZmYgLXUgLXAgLXIxLjQgZGxsLnNnbWwKLS0tIGRvYy9kbGwuc2dt
-bAkyMyBPY3QgMjAwMiAwMzo1NTozNCAtMDAwMAkxLjQKKysrIGRvYy9kbGwu
-c2dtbAkzIEZlYiAyMDAzIDAwOjIzOjQ1IC0wMDAwCkBAIC0zMiw3ICszMiwx
-MiBAQCBpbmZvcm1hdGlvbiBuZWVkZWQgdG8gdGVsbCB0aGUgT1MgaG93IHlv
-CiAKIDxzZWN0MiBpZD0iZGxsLWJ1aWxkIj48dGl0bGU+QnVpbGRpbmcgRExM
-czwvdGl0bGU+CiAKLTxwYXJhPk9LLCBsZXQncyBnbyB0aHJvdWdoIGEgc2lt
-cGxlIGV4YW1wbGUgb2YgaG93IHRvIGJ1aWxkIGEgZGxsLgorPHBhcmE+VGhp
-cyBwYWdlIGdpdmVzIG9ubHkgYSBmZXcgc2ltcGxlIGV4YW1wbGVzIG9mIGdj
-YydzIERMTC1idWlsZGluZyAKK2NhcGFiaWxpdGllcy4gVG8gYmVnaW4gYW4g
-ZXhwbG9yYXRpb24gb2YgdGhlIG1hbnkgYWRkaXRpb25hbCBvcHRpb25zLAor
-c2VlIHRoZSBnY2MgZG9jdW1lbnRhdGlvbiBhbmQgd2Vic2l0ZSwgY3VycmVu
-dGx5IGF0IAorPHVsaW5rIFVSTD0iaHR0cDovL2djYy5nbnUub3JnLyI+aHR0
-cDovL2djYy5nbnUub3JnLzwvdWxpbms+CisKKzxwYXJhPkxldCdzIGdvIHRo
-cm91Z2ggYSBzaW1wbGUgZXhhbXBsZSBvZiBob3cgdG8gYnVpbGQgYSBkbGwu
-CiBGb3IgdGhpcyBleGFtcGxlLCB3ZSdsbCB1c2UgYSBzaW5nbGUgZmlsZQog
-PGZpbGVuYW1lPm15cHJvZy5jPC9maWxlbmFtZT4gZm9yIHRoZSBwcm9ncmFt
-CiAoPGZpbGVuYW1lPm15cHJvZy5leGU8L2ZpbGVuYW1lPikgYW5kIGEgc2lu
-Z2xlIGZpbGUKSW5kZXg6IHV0aWxzL3V0aWxzLnNnbWwKPT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC91dGls
-cy91dGlscy5zZ21sLHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjM0CmRpZmYg
-LXUgLXAgLXIxLjM0IHV0aWxzLnNnbWwKLS0tIHV0aWxzL3V0aWxzLnNnbWwJ
-MjEgQXVnIDIwMDIgMTU6NDI6MTggLTAwMDAJMS4zNAorKysgdXRpbHMvdXRp
-bHMuc2dtbAkzIEZlYiAyMDAzIDAwOjIzOjQ2IC0wMDAwCkBAIC04NDMsNiAr
-ODQzLDkgQEAgT3B0aW9ucyBmb3IgJ3NldCcgQWN0aW9uOgogIC1tLCAtLW11
-bHRpLXN0cmluZyAgIHNldCB0eXBlIHRvIFJFR19NVUxUSV9TWgogIC1zLCAt
-LXN0cmluZyAgICAgICAgIHNldCB0eXBlIHRvIFJFR19TWgogCitPcHRpb25z
-IGZvciAnc2V0JyBhbmQgJ3Vuc2V0JyBBY3Rpb25zOgorIC1LJmx0O2MmZ3Q7
-LCAtLWtleS1zZXBhcmF0b3JbPV0mbHQ7YyZndDsgIHNldCBrZXkgc2VwYXJh
-dG9yIHRvICZsdDtjJmd0OyBpbnN0ZWFkIG9mICdcJworCiBPdGhlciBPcHRp
-b25zOgogIC1oLCAtLWhlbHAgICAgIG91dHB1dCB1c2FnZSBpbmZvcm1hdGlv
-biBhbmQgZXhpdAogIC1xLCAtLXF1aWV0ICAgIG5vIGVycm9yIG91dHB1dCwg
-anVzdCBub256ZXJvIHJldHVybiBpZiBLRVkvVkFMVUUgbWlzc2luZwpAQCAt
-OTE0LDYgKzkxNywxMiBAQCBudW1iZXIsIGl0J3MgYSBEV09SRC4gIElmIGl0
-IHN0YXJ0cyB3aXRoCiBzdHJpbmcuICBJZiB5b3UgZ2l2ZSBtdWx0aXBsZSB2
-YWx1ZXMsIGl0J3MgYSBtdWx0aS1zdHJpbmcuICBFbHNlLCBpdCdzCiBhIHJl
-Z3VsYXIgc3RyaW5nLgogVGhlIDxsaXRlcmFsPnVuc2V0PC9saXRlcmFsPiBh
-Y3Rpb24gcmVtb3ZlcyBhIHZhbHVlIGZyb20gYSBrZXkuCis8L3BhcmE+CisK
-KzxwYXJhPgorQnkgZGVmYXVsdCwgdGhlIGxhc3QgIlwiIG9yICIvIiBpcyBh
-c3N1bWVkIHRvIGJlIHRoZSBzZXBhcmF0b3IgYmV0d2VlbiB0aGUKK2tleSBh
-bmQgdGhlIHZhbHVlLiAgWW91IGNhbiB1c2UgdGhlIDxsaXRlcmFsPi1LPC9s
-aXRlcmFsPiBvcHRpb24gdG8gcHJvdmlkZSAKK2FuIGFsdGVybmF0ZSBrZXkv
-dmFsdWUgc2VwYXJhdG9yIGNoYXJhY3Rlci4KIDwvcGFyYT4KIAogPC9zZWN0
-Mj4K
-
---0-892346162-1044232699=:66115--
