@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5189-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 28131 invoked by alias); 5 Dec 2004 07:35:36 -0000
+Return-Path: <cygwin-patches-return-5190-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 20154 invoked by alias); 6 Dec 2004 01:45:21 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,35 +7,52 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 27891 invoked from network); 5 Dec 2004 07:35:23 -0000
+Received: (qmail 20076 invoked from network); 6 Dec 2004 01:45:12 -0000
 Received: from unknown (HELO green.qinip.net) (62.100.30.36)
-  by sourceware.org with SMTP; 5 Dec 2004 07:35:23 -0000
-Received: from buzzy-box (hmm-dca-ap02-d11-120.dial.freesurf.nl [195.18.124.120])
+  by sourceware.org with SMTP; 6 Dec 2004 01:45:12 -0000
+Received: from buzzy-box (hmm-dca-ap02-d04-073.dial.freesurf.nl [195.18.77.73])
 	by green.qinip.net (Postfix) with SMTP
-	id 5CCEC42B5; Sun,  5 Dec 2004 08:34:48 +0100 (MET)
-Message-ID: <n2m-g.couh2d.3vsgd8l.1@buzzy-box.bavag>
+	id 7F355445D; Mon,  6 Dec 2004 02:45:10 +0100 (MET)
+Message-ID: <n2m-g.cp0gle.3vsh6i5.1@buzzy-box.bavag>
 From: Bas van Gompel <cygwin-patches.buzz@bavag.tmfweb.nl>
-Subject: Re: [Patch] fhandler.cc: Don't worry about SPC in __small_printf-format
-References: <n2m-g.cou710.3vsjtgl.1@buzzy-box.bavag> <20041205053733.GA21703@trixie.casa.cgf.cx>
+Subject: [Patch] fhandler.cc (pust_readahead): end-condition off.
 Reply-To: cygwin-patches mailing-list <cygwin-patches@cygwin.com>
 Organisation: Ehm...
 User-Agent: slrn/0.9.8.1 (Win32) Hamster/2.0.6.0 Korrnews/4.2
 To: cygwin-patches@cygwin.com
-In-Reply-To: <20041205053733.GA21703@trixie.casa.cgf.cx>
-Date: Sun, 05 Dec 2004 07:35:00 -0000
-X-SW-Source: 2004-q4/txt/msg00190.txt.bz2
+Date: Mon, 06 Dec 2004 01:45:00 -0000
+X-SW-Source: 2004-q4/txt/msg00191.txt.bz2
 
-Op Sun, 5 Dec 2004 00:37:33 -0500 schreef Christopher Faylor
-in <20041205053733.GA21703@trixie.casa.cgf.cx>:
-:  On Sun, Dec 05, 2004 at 05:44:24AM +0100, Bas van Gompel wrote:
-: > 2004-12-05  Bas van Gompel  <cygwin-patch.buzz@bavag.tmfweb.nl>
-: >
-: > 	* fhandler.cc (fhandler_base::read): Remove superfluous check in
-: > 	__small_sprintf format for strace.
-:
-:   Ok.  Please checkin.
+Hi,
 
-Thanks. Done.
+A real bugfix this time.
+
+When fhandler_base::puts_readahead is given a (non -1) len-parameter,
+in the current implementation, not len characters are stowed, but len
+z-strings. This affects at least fhandler_pty_master::accept_input in
+fhandler_tty.cc.
+
+Following (trivial, I'd say) patch ought to fix it.
+
+
+ChangeLog-entry:
+
+2004-12-06 Bas van Gompel  <cygwin-patch@bavag.tmfweb.nl>
+
+	* fhandler.cc (fhandler_base::puts_readahead): Fix end-condition.
+
+
+--- src/winsup/cygwin-mmod/fhandler.cc	5 Dec 2004 07:28:27 -0000	1.209
++++ src/winsup/cygwin-mmod/fhandler.cc	6 Dec 2004 01:14:14 -0000
+@@ -54,7 +54,7 @@ int
+ fhandler_base::puts_readahead (const char *s, size_t len)
+ {
+   int success = 1;
+-  while ((*s || (len != (size_t) -1 && len--))
++  while ((len == (size_t) -1 ? *s : len--)
+ 	 && (success = put_readahead (*s++) > 0))
+     continue;
+   return success;
 
 
 L8r,
