@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1565-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 21310 invoked by alias); 4 Dec 2001 14:23:12 -0000
+Return-Path: <cygwin-patches-return-1566-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 31076 invoked by alias); 7 Dec 2001 21:48:54 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,31 +7,66 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 21295 invoked from network); 4 Dec 2001 14:23:11 -0000
-Date: Fri, 02 Nov 2001 12:29:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygpatch <cygwin-patches@cygwin.com>
-Subject: Re: [PATCH] mkpasswd.c - allows selection of specific user
-Message-ID: <20011204152313.U10634@cygbert.vinschen.de>
-Mail-Followup-To: cygpatch <cygwin-patches@cygwin.com>
-References: <911C684A29ACD311921800508B7293BA037D2828@cnmail>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.2.5i
-In-Reply-To: <911C684A29ACD311921800508B7293BA037D2828@cnmail>; from bradshaw@staff.crosswalk.com on Tue, Dec 04, 2001 at 08:29:45AM -0500
-X-SW-Source: 2001-q4/txt/msg00097.txt.bz2
+Received: (qmail 30850 invoked from network); 7 Dec 2001 21:48:51 -0000
+Message-ID: <096e01c17eac$8230b770$0200a8c0@lifelesswks>
+From: "Robert Collins" <robert.collins@itdomain.com.au>
+To: <cygwin-patches@cygwin.com>
+Subject: W32API: new common control struct from XP
+Date: Fri, 02 Nov 2001 12:56:00 -0000
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+	boundary="----=_NextPart_000_096B_01C17F08.B52EBE90"
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-OriginalArrivalTime: 06 Dec 2001 23:19:50.0156 (UTC) FILETIME=[80AFBCC0:01C17EAC]
+X-SW-Source: 2001-q4/txt/msg00098.txt.bz2
 
-On Tue, Dec 04, 2001 at 08:29:45AM -0500, Mark Bradshaw wrote:
-> I can do that, but it'll probably be a while before I can get back to you on
-> it.  Things are a bit crazy at work.  If that's ok with you guys then I'll
-> do it.
+This is a multi-part message in MIME format.
 
-Sure, no problem.
+------=_NextPart_000_096B_01C17F08.B52EBE90
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+Content-length: 172
 
-Corinna
+Changelog:
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+2001-12-06  Robret Collins  rbtcollins@hotmail.com
+
+    * include/commctrl.h: New typedefs for HDLAYOUT and LPHDLAYOUT based
+on MSDN documentation
+    for XP.
+
+
+------=_NextPart_000_096B_01C17F08.B52EBE90
+Content-Type: application/octet-stream;
+	name="newcommctrl.patch"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment;
+	filename="newcommctrl.patch"
+Content-length: 776
+
+Index: include/commctrl.h=0A=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
+RCS file: /cvs/src/src/winsup/w32api/include/commctrl.h,v=0A=
+retrieving revision 1.8=0A=
+diff -u -p -r1.8 commctrl.h=0A=
+--- commctrl.h	2001/09/19 23:56:12	1.8=0A=
++++ commctrl.h	2001/12/06 23:18:47=0A=
+@@ -1244,6 +1244,10 @@ typedef struct _HD_LAYOUT {=0A=
+ 	RECT *prc;=0A=
+ 	WINDOWPOS *pwpos;=0A=
+ } HD_LAYOUT;=0A=
++typedef struct _HD_LAYOUT_XP {=0A=
++      RECT FAR*      prc;=20=20=0A=
++      WINDOWPOS FAR* pwpos;=20=0A=
++} HDLAYOUT, FAR *LPHDLAYOUT;=20=0A=
+ typedef struct _HD_HITTESTINFO {=0A=
+ 	POINT pt;=0A=
+ 	UINT flags;=0A=
+
+------=_NextPart_000_096B_01C17F08.B52EBE90--
