@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1541-listarch-cygwin-patches=sourceware.cygnus.com@sources.redhat.com>
-Received: (qmail 17156 invoked by alias); 28 Nov 2001 00:32:21 -0000
+Return-Path: <cygwin-patches-return-1542-listarch-cygwin-patches=sourceware.cygnus.com@sources.redhat.com>
+Received: (qmail 17443 invoked by alias); 28 Nov 2001 00:32:52 -0000
 Mailing-List: contact cygwin-patches-help@sourceware.cygnus.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@sources.redhat.com>
@@ -7,40 +7,57 @@ List-Post: <mailto:cygwin-patches@sources.redhat.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@sources.redhat.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@sources.redhat.com
-Received: (qmail 17133 invoked from network); 28 Nov 2001 00:32:19 -0000
-Message-ID: <3C043080.D0E3AD8C@yahoo.com>
-Date: Wed, 24 Oct 2001 16:04:00 -0000
-From: Earnie Boyd <earnie_boyd@yahoo.com>
-Reply-To: CP List <Cygwin-Patches@Cygwin.Com>
-X-Mailer: Mozilla 4.77 [en] (WinNT; U)
-X-Accept-Language: en
-MIME-Version: 1.0
+Received: (qmail 17406 invoked from network); 28 Nov 2001 00:32:49 -0000
+Subject: Re: [PATCH] setup.exe: Stop NetIO_HTTP from treating entire stream
+	as a  header
+From: Robert Collins <robert.collins@itdomain.com.au>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] setup.exe: Stop NetIO_HTTP from treating entire stream as a  
- header
-References: <20011127230925.GA5830@redhat.com> <000001c1779c$e1fe2fa0$2101a8c0@NOMAD> <20011127235226.GA6537@redhat.com> <1006906033.2048.23.camel@lifelesswks> <20011128002122.GA6919@redhat.com>
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <20011128002122.GA6919@redhat.com>
+References: <20011127230925.GA5830@redhat.com>
+	<000001c1779c$e1fe2fa0$2101a8c0@NOMAD> <20011127235226.GA6537@redhat.com>
+	<1006906033.2048.23.camel@lifelesswks>  <20011128002122.GA6919@redhat.com>
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
-X-SW-Source: 2001-q4/txt/msg00073.txt.bz2
+X-Mailer: Evolution/0.99.2 (Preview Release)
+Date: Thu, 25 Oct 2001 04:47:00 -0000
+Message-Id: <1006907495.2048.25.camel@lifelesswks>
+Mime-Version: 1.0
+X-OriginalArrivalTime: 28 Nov 2001 00:32:48.0873 (UTC) FILETIME=[34E32D90:01C177A4]
+X-SW-Source: 2001-q4/txt/msg00074.txt.bz2
 
-Christopher Faylor wrote:
-> 
+On Wed, 2001-11-28 at 11:21, Christopher Faylor wrote:
+> >> So, my new internal rule is that the above is ok but foo != 0 is
+> >> "wrong".
+> >
+> >Why? I parse (foo) and if (foo != 0) are the same IFF foo is a simple
+> >type (which includes pointers to objects). if (foo != NULL) is the same
+> >as these two IFF foo is a pointer to an object. So NULL is a special
+> >case, and thats useful in C, with it's relatively weak type checking.
+> >C++ however has much stronger type checking, so I don't see the value in
+> >a manual extra check like that. 
 > 
 > Why?  For the reasons that both Gary and I mentioned.  It's self
 > documenting?
+
+Granted. I don't really care, I made a single comment and have been
+responding ever since. Forget it. Use whichever syntax you like.
+ 
+> >> When I test a character, I use c != '\0' and when I test a floating
+> >> point value, I do f != 0.0.
+> >
+> >Which is wrong BTW. To test floating point you want (abs (f) > confidence). 
 > 
-> Did you miss the point that I decided on the !foo because I had no
-> choice?
-> 
+> Are you really so desne as to miss my point?  Apparently so.
 
-Once upon a time, not so very long ago, your self documentation added
-precious cycles to the processing.  GCC fortunately is smart enough to
-know how to get this right regardless.  I.E.: It makes no freaking
-difference because the assembler is the same. ;)
+Ha! flamebait.
 
-Earnie.
+What was your point? That in C++ one should write all equality
+comparisons as foo == or foo != zerovaluedvariableofthesametype for
+clarity?
 
-_________________________________________________________
-Do You Yahoo!?
-Get your free @yahoo.com address at http://mail.yahoo.com
+Fine. I don't have a problem with that - although there are corner
+cases.
 
+I _ONLY_ had an issue with NULL vs 0.
+
+Rob
