@@ -1,41 +1,31 @@
 From: egor duda <deo@logos-m.ru>
 To: Christopher Faylor <cygwin-patches@cygwin.com>
-Subject: Re: src/winsup/cygwin ChangeLog thread.cc thread.h ...
-Date: Thu, 27 Sep 2001 11:08:00 -0000
-Message-id: <099067241.20010927220834@logos-m.ru>
-References: <20010925114527.23687.qmail@sourceware.cygnus.com> <14472692346.20010927144858@logos-m.ru> <007b01c14743$2a0005b0$01000001@lifelesswks> <12280602580.20010927170049@logos-m.ru> <008301c1475e$afb0c4e0$01000001@lifelesswks> <20010927140440.B32577@redhat.com>
-X-SW-Source: 2001-q3/msg00217.html
+Subject: Re: memory leak in cygheap
+Date: Thu, 27 Sep 2001 11:17:00 -0000
+Message-id: <15899509507.20010927221556@logos-m.ru>
+References: <15294469449.20010927205156@logos-m.ru> <20010927140039.A32577@redhat.com>
+X-SW-Source: 2001-q3/msg00218.html
 
 Hi!
 
 Thursday, 27 September, 2001 Christopher Faylor cgf@redhat.com wrote:
 
->>I'm having some trouble with cvs+ssh with this patch .. though I'm not
->>sure why. For a little while I though it might be chris's tuesday
->>sleep(1) change, because I was getting strange results from pspec> I'm
->>not sure though.
+>>do we need this "no free names" logic at all? the only suspicious
+>>place is fhandler_disk_file::open () where we were storing pointer to
+>>real_path's win32_path, so if it was changing later we were staying in
+>>sync with those changes. but i can't see why it may change after open
+>>is called, so making duplicate looks safe for me. Comments?
 
-CF> Huh?  What is my "sleep(1)" change?  The only change I made on Tuesday was
-CF> to fhandler_tty_common::ready_for_read.  How would that affect cvs?
+CF> We've recently changed build_fhandler so that it probably isn't necessary
+CF> to use the no_free_names anymore.
 
-it does. i've seen the following at the end of strace (where ssh
-seemed to block in ReadFile() on empty pipe)
+CF> I don't have a lot of time to investigate right now, but it's possible that
+CF> we can now get rid of this entirely.
 
-  517 12076688 [main] ssh 7436 peek_socket: considering handle 0x24
-  242 12076930 [main] ssh 7436 peek_socket: adding read fd_set /dev/tcp, fd 4
-  235 12077165 [main] ssh 7436 peek_socket: adding write fd_set /dev/tcp, fd 4
-  291 12077456 [main] ssh 7436 peek_socket: WINSOCK_SELECT returned 1
-  434 12077890 [main] ssh 7436 set_bits: me 0xA013CC0, testing fd 4 (/dev/tcp)
-  281 12078171 [main] ssh 7436 set_bits: ready 1
-  242 12078413 [main] ssh 7436 peek_pipe: already ready
-  236 12078649 [main] ssh 7436 set_bits: me 0xA013C78, testing fd 0 (/dev/piper)
-  241 12078890 [main] ssh 7436 set_bits: ready 1
-  233 12079123 [main] ssh 7436 select_stuff::poll: returning 2
-  242 12079365 [main] ssh 7436 select_stuff::cleanup: calling cleanup routines
-  248 12079613 [main] ssh 7436 select_stuff::~select_stuff: deleting select records
-  694 12080307 [main] ssh 7436 _read: read (0, 0x24AD7C4, 8192) blocking, sigcatchers 3
-  320 12080627 [main] ssh 7436 peek_pipe: /dev/piper, saw EOF
-  261 12080888 [main] ssh 7436 peek_pipe: saw eof on '/dev/piper'
-  238 12081126 [main] ssh 7436 fhandler_pipe::ready_for_read: returning 1
+CF> So, I think your patch is probably overkill.
+
+? why overkill? i've just moved two identical pieces of code into
+separate routine and removed no_free_names checks. I was thinking it's
+rather "underkill" because no_free_names bit in flags are left intact.
 
 Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
