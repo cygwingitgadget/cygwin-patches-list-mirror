@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1746-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 10080 invoked by alias); 18 Jan 2002 23:26:52 -0000
+Return-Path: <cygwin-patches-return-1747-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 10907 invoked by alias); 18 Jan 2002 23:27:23 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,50 +7,59 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 10064 invoked from network); 18 Jan 2002 23:26:51 -0000
-Date: Fri, 18 Jan 2002 15:26:00 -0000
+Received: (qmail 10848 invoked from network); 18 Jan 2002 23:27:21 -0000
+Date: Fri, 18 Jan 2002 15:27:00 -0000
 From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: Christian LESTRADE <christian.lestrade@free.fr>
+To: Dennis Vshivkov <walrus@amur.ru>
 Cc: cygpatch <cygwin-patches@cygwin.com>
-Subject: Re: Terminal input processing fix
-Message-ID: <20020119002647.N11608@cygbert.vinschen.de>
-Mail-Followup-To: Christian LESTRADE <christian.lestrade@free.fr>,
+Subject: Re: [PATCH] No codepage translation in cygwin console
+Message-ID: <20020119002711.A24934@cygbert.vinschen.de>
+Mail-Followup-To: Dennis Vshivkov <walrus@amur.ru>,
 	cygpatch <cygwin-patches@cygwin.com>
-References: <4.3.2.7.2.20020118224857.00aa3720@mail.oreka.com>
+References: <20020115194622.A3962@amur.ru>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4.3.2.7.2.20020118224857.00aa3720@mail.oreka.com>
+In-Reply-To: <20020115194622.A3962@amur.ru>
 User-Agent: Mutt/1.3.22.1i
-X-SW-Source: 2002-q1/txt/msg00103.txt.bz2
+X-SW-Source: 2002-q1/txt/msg00104.txt.bz2
 
-On Fri, Jan 18, 2002 at 10:59:10PM +0100, Christian LESTRADE wrote:
-> Hello,
+On Tue, Jan 15, 2002 at 07:46:22PM +0300, Dennis Vshivkov wrote:
+>     Hello.
 > 
-> I would like to submit the following bugfix for theses bugs which appear
-> mainly when using rxvt:
+>     There are times when it's very convenient to change Windows console
+> codepage using chcp.com, for example, an interactive ssh session to a host
+> with a different codepage used.  Unfortunately, the current release of cygwin
+> enforces either of the two main codepages, ansi or oem, to be used, mainly
+> because of considerations of their importance for filename and clipboard
+> conversions, etc.  There's a patch attached, it extends functionality of the
+> `codepage' option, set in CYGWIN environment variable, to allow for setting no
+> codepage translation of console input and output.
 > 
-> * Unable to effectively disable c_cc[] input chars processing (like ^C) 
-> using
->   $ stty intr '^-'
->   When I type CTRL-SPACE, I enter a NULL char which is interpreted like ^C
+>     The way the option should look now is
 > 
-> * In raw mode (stty -icanon), the VDISCARD key (^O) should not be 
-> recognized,
->   but should be passed to the application
+>     codepage=ansi|oem[:con-asis]
 > 
-> This fix does not prevent rxvt to hang when typing ^O in cooked mode, but 
-> only
-> in raw mode, instead of always.
+>     If con-asis suboption is specified, console input and output goes
+> unchanged.  Hope this helps someone.
 
-Thanks for that patch.  It looks good, even the ChangeLog.
+Hi,
 
-Unfortunately your patch has a size which already requires us to
-have a signed copyright assignment form from you as described on
-http://cygwin.com/contrib.html. 
+actually your patch seems to be useful when having to switch
+between different codepages.
 
-Please send the signed form by snail mail.  That will take some
-days but it's required.
+But I have two problems with that patch:
+
+- First of all, your patch isn't `trivial' enough so that we
+  can incorporate it without getting a signed copyright assignment
+  form from you as described on http://cygwin.com/contrib.html.
+  Please send us the signed form via snail mail.  As soon as we
+  received it we can use your patch.
+
+- Your ChangeLog entry isn't correctly indented.  And please use
+  your real name, not a pseudonym.
+
+Otherwise I'd be happy to apply your patch to Cygwin.
 
 Thanks,
 Corinna
