@@ -1,21 +1,37 @@
-From: Christopher Faylor <cgf@redhat.com>
+From: Kazuhiro Fujieda <fujieda@jaist.ac.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: mount flag of UNC paths.
-Date: Wed, 09 May 2001 12:06:00 -0000
-Message-id: <20010509150422.B2089@redhat.com>
-References: <s1soft2xty6.fsf@jaist.ac.jp>
-X-SW-Source: 2001-q2/msg00213.html
+Subject: Re: control characters echoed incorrectly.
+Date: Wed, 09 May 2001 13:14:00 -0000
+Message-id: <s1sn18mxotl.fsf@jaist.ac.jp>
+References: <s1spudixvai.fsf@jaist.ac.jp> <20010509145355.A2089@redhat.com>
+X-SW-Source: 2001-q2/msg00214.html
 
-On Thu, May 10, 2001 at 03:23:29AM +0900, Kazuhiro Fujieda wrote:
->I think the mount flag of UNC paths should be picked up from the
->mount table the same as paths including `:' or `\' for consistency.
->The following patch can realize it.
->
->2001-05-10  Kazuhiro Fujieda  <fujieda@jaist.ac.jp>
->
->	* path.cc (mount_info::conv_to_win32_path): Treat UNC paths the same
->	as paths including `:' or `\'.
+>>> On Wed, 9 May 2001 14:53:55 -0400
+>>> Christopher Faylor <cgf@redhat.com> said:
 
-Applied, thanks.
+> I've checked your changes in, with some modification.  I'd appreciate it
+> if you'd double check my modifications to your changes.
 
-cgf
+I'm afraid I can't compile fhandler_termios.cc for lack of
+`interlock.h'.
+
+Index: fhandler_termios.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/fhandler_termios.cc,v
+retrieving revision 1.18
+retrieving revision 1.19
+diff -u -p -r1.18 -r1.19
+--- fhandler_termios.cc	2001/04/28 23:48:28	1.18
++++ fhandler_termios.cc	2001/05/09 18:53:55	1.19
+@@ -17,6 +17,7 @@ details. */
+ #include "cygerrno.h"
+ #include "fhandler.h"
+ #include "sync.h"
++#include "interlock.h"
+ #include "sigproc.h"
+ #include "pinfo.h"
+ #include "tty.h"
+____
+  | AIST      Kazuhiro Fujieda <fujieda@jaist.ac.jp>
+  | HOKURIKU  School of Information Science
+o_/ 1990      Japan Advanced Institute of Science and Technology
