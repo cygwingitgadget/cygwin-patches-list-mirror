@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3761-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 17346 invoked by alias); 27 Mar 2003 12:52:41 -0000
+Return-Path: <cygwin-patches-return-3762-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 30427 invoked by alias); 27 Mar 2003 13:13:07 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,124 +7,32 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 17264 invoked from network); 27 Mar 2003 12:52:40 -0000
-X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
-Date: Thu, 27 Mar 2003 12:52:00 -0000
-From: Thomas Pfaff <tpfaff@gmx.net>
+Received: (qmail 30416 invoked from network); 27 Mar 2003 13:13:04 -0000
+Date: Thu, 27 Mar 2003 13:13:00 -0000
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Change pthread equations
-Message-ID: <Pine.WNT.4.44.0303271347440.479-200000@algeria.intern.net>
-X-X-Sender: pfaff@antarctica.intern.net
-MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="277949-26986-1048769535=:479"
-X-SW-Source: 2003-q1/txt/msg00410.txt.bz2
+Subject: Re: [PATCH] New '--install-type' option for cygcheck?
+Message-ID: <20030327131301.GI23762@cygbert.vinschen.de>
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <006701c2f432$c62a5380$fa6d86d9@ellixia> <008401c2f436$eca2f8b0$fa6d86d9@ellixia> <20030327094634.GE23762@cygbert.vinschen.de> <01c501c2f45e$a93d1150$8f6f883e@pomello>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <01c501c2f45e$a93d1150$8f6f883e@pomello>
+User-Agent: Mutt/1.4i
+X-SW-Source: 2003-q1/txt/msg00411.txt.bz2
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
+On Thu, Mar 27, 2003 at 11:13:12AM -0000, Max Bowsher wrote:
+> Outlook Express doesn't do tabs.
+> 
+> Unfortunately, I've never found another email client that wasn't either ugly
+> or buggy or user-unfriendly.
 
---277949-26986-1048769535=:479
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-Content-length: 105
+mutt?
 
+Corinna
 
-2003-03-27  Thomas Pfaff  <tpfaff@gmx.net>
-
-	* thread.cc: Change 1==foo equations to foo==1 throughout.
-
---277949-26986-1048769535=:479
-Content-Type: TEXT/plain; name="pthread_eqn.patch"
-Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.WNT.4.44.0303271352150.479@algeria.intern.net>
-Content-Description: 
-Content-Disposition: attachment; filename="pthread_eqn.patch"
-Content-length: 5202
-
-ZGlmZiAtdXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi90aHJlYWQuY2Mgc3Jj
-L3dpbnN1cC9jeWd3aW4vdGhyZWFkLmNjCi0tLSBzcmMub2xkL3dpbnN1cC9j
-eWd3aW4vdGhyZWFkLmNjCTIwMDMtMDMtMjcgMTI6NTY6MDMuMDAwMDAwMDAw
-ICswMTAwCisrKyBzcmMvd2luc3VwL2N5Z3dpbi90aHJlYWQuY2MJMjAwMy0w
-My0yNyAxMzowNDozMi4wMDAwMDAwMDAgKzAxMDAKQEAgLTYwNiw3ICs2MDYs
-NyBAQCBwdGhyZWFkOjp0ZXN0Y2FuY2VsICh2b2lkKQogICBpZiAoY2FuY2Vs
-c3RhdGUgPT0gUFRIUkVBRF9DQU5DRUxfRElTQUJMRSkKICAgICByZXR1cm47
-CiAKLSAgaWYgKFdBSVRfT0JKRUNUXzAgPT0gV2FpdEZvclNpbmdsZU9iamVj
-dCAoY2FuY2VsX2V2ZW50LCAwKSkKKyAgaWYgKFdhaXRGb3JTaW5nbGVPYmpl
-Y3QgKGNhbmNlbF9ldmVudCwgMCkgPT0gV0FJVF9PQkpFQ1RfMCkKICAgICBj
-YW5jZWxfc2VsZiAoKTsKIH0KIApAQCAtOTA0LDcgKzkwNCw3IEBAIHB0aHJl
-YWRfY29uZDo6d2FpdCAocHRocmVhZF9tdXRleF90IG11dGUKICAgRFdPUkQg
-cnY7CiAKICAgbXR4X2luLmxvY2sgKCk7Ci0gIGlmICgxID09IEludGVybG9j
-a2VkSW5jcmVtZW50ICgobG9uZyAqKSZ3YWl0aW5nKSkKKyAgaWYgKEludGVy
-bG9ja2VkSW5jcmVtZW50ICgobG9uZyAqKSZ3YWl0aW5nKSA9PSAxKQogICAg
-IG10eF9jb25kID0gbXV0ZXg7CiAgIGVsc2UgaWYgKG10eF9jb25kICE9IG11
-dGV4KQogICAgIHsKQEAgLTkzMSw3ICs5MzEsNyBAQCBwdGhyZWFkX2NvbmQ6
-OndhaXQgKHB0aHJlYWRfbXV0ZXhfdCBtdXRlCiAgICAgICAgKiBvciB0aW1l
-ZCBvdXQuIFRyeSB0byB0YWtlIG9uZS4KICAgICAgICAqIElmIHRoZSB0aHJl
-YWQgZ2V0cyBvbmUgdGhhbiBhIHNpZ25hbHxicm9hZGNhc3QgaXMgaW4gcHJv
-Z3Jlc3MuCiAgICAgICAgKi8gCi0gICAgICBpZiAoV0FJVF9PQkpFQ1RfMCA9
-PSBXYWl0Rm9yU2luZ2xlT2JqZWN0IChzZW1fd2FpdCwgMCkpCisgICAgICBp
-ZiAoV2FpdEZvclNpbmdsZU9iamVjdCAoc2VtX3dhaXQsIDApID09IFdBSVRf
-T0JKRUNUXzApCiAgICAgICAgIC8qCiAgICAgICAgICAqIHRocmVhZCBnb3Qg
-Y2FuY2VsbGVkIG90IHRpbWVkIG91dCB3aGlsZSBhIHNpZ25hbGxpbmcgaXMg
-aW4gcHJvZ3Jlc3MuCiAgICAgICAgICAqIFNldCB3YWl0IHJlc3VsdCBiYWNr
-IHRvIHNpZ25hbGVkCkBAIC05NDEsNyArOTQxLDcgQEAgcHRocmVhZF9jb25k
-Ojp3YWl0IChwdGhyZWFkX211dGV4X3QgbXV0ZQogCiAgIEludGVybG9ja2Vk
-RGVjcmVtZW50ICgobG9uZyAqKSZ3YWl0aW5nKTsKIAotICBpZiAocnYgPT0g
-V0FJVF9PQkpFQ1RfMCAmJiAwID09IC0tcGVuZGluZykKKyAgaWYgKHJ2ID09
-IFdBSVRfT0JKRUNUXzAgJiYgLS1wZW5kaW5nID09IDApCiAgICAgLyoKICAg
-ICAgKiBBbGwgc2lnbmFsZWQgdGhyZWFkcyBhcmUgcmVsZWFzZWQsCiAgICAg
-ICogbmV3IHRocmVhZHMgY2FuIGVudGVyIFdhaXQKQEAgLTE0NTAsNyArMTQ1
-MCw3IEBAIHB0aHJlYWRfbXV0ZXg6OmNhbl9iZV91bmxvY2tlZCAocHRocmVh
-ZF8KICAgLyoKICAgICogQ2hlY2sgaWYgdGhlIG11dGV4IGlzIG93bmVkIGJ5
-IHRoZSBjdXJyZW50IHRocmVhZCBhbmQgY2FuIGJlIHVubG9ja2VkCiAgICAq
-LwotICByZXR1cm4gKHB0aHJlYWRfZXF1YWwgKCgqbXV0ZXgpLT5vd25lciwg
-c2VsZikpICYmIDEgPT0gKCptdXRleCktPnJlY3Vyc2lvbl9jb3VudGVyOwor
-ICByZXR1cm4gKCgqbXV0ZXgpLT5yZWN1cnNpb25fY291bnRlciA9PSAxICYm
-IHB0aHJlYWRfZXF1YWwgKCgqbXV0ZXgpLT5vd25lciwgc2VsZikpOwogfQog
-CiBMaXN0PHB0aHJlYWRfbXV0ZXg+IHB0aHJlYWRfbXV0ZXg6Om11dGV4ZXM7
-CkBAIC0xNTEwLDEyICsxNTEwLDEyIEBAIHB0aHJlYWRfbXV0ZXg6Ol9sb2Nr
-IChwdGhyZWFkX3Qgc2VsZikKIHsKICAgaW50IHJlc3VsdCA9IDA7CiAKLSAg
-aWYgKDEgPT0gSW50ZXJsb2NrZWRJbmNyZW1lbnQgKChsb25nICopJmxvY2tf
-Y291bnRlcikpCisgIGlmIChJbnRlcmxvY2tlZEluY3JlbWVudCAoKGxvbmcg
-KikmbG9ja19jb3VudGVyKSA9PSAxKQogICAgIHNldF9vd25lciAoc2VsZik7
-Ci0gIGVsc2UgaWYgKFBUSFJFQURfTVVURVhfTk9STUFMICE9IHR5cGUgJiYg
-cHRocmVhZF9lcXVhbCAob3duZXIsIHNlbGYpKQorICBlbHNlIGlmICh0eXBl
-ICE9IFBUSFJFQURfTVVURVhfTk9STUFMICYmIHB0aHJlYWRfZXF1YWwgKG93
-bmVyLCBzZWxmKSkKICAgICB7CiAgICAgICBJbnRlcmxvY2tlZERlY3JlbWVu
-dCAoKGxvbmcgKikgJmxvY2tfY291bnRlcik7Ci0gICAgICBpZiAoUFRIUkVB
-RF9NVVRFWF9SRUNVUlNJVkUgPT0gdHlwZSkKKyAgICAgIGlmICh0eXBlID09
-IFBUSFJFQURfTVVURVhfUkVDVVJTSVZFKQogCXJlc3VsdCA9IGxvY2tfcmVj
-dXJzaXZlICgpOwogICAgICAgZWxzZQogCXJlc3VsdCA9IEVERUFETEs7CkBA
-IC0xNTM0LDkgKzE1MzQsOSBAQCBwdGhyZWFkX211dGV4OjpfdHJ5bG9jayAo
-cHRocmVhZF90IHNlbGYpCiB7CiAgIGludCByZXN1bHQgPSAwOwogCi0gIGlm
-ICgwID09IEludGVybG9ja2VkQ29tcGFyZUV4Y2hhbmdlICgobG9uZyAqKSZs
-b2NrX2NvdW50ZXIsIDEsIDAgKSkKKyAgaWYgKEludGVybG9ja2VkQ29tcGFy
-ZUV4Y2hhbmdlICgobG9uZyAqKSZsb2NrX2NvdW50ZXIsIDEsIDAgKSA9PSAw
-KQogICAgIHNldF9vd25lciAoc2VsZik7Ci0gIGVsc2UgaWYgKFBUSFJFQURf
-TVVURVhfUkVDVVJTSVZFID09IHR5cGUgJiYgcHRocmVhZF9lcXVhbCAob3du
-ZXIsIHNlbGYpKQorICBlbHNlIGlmICh0eXBlID09IFBUSFJFQURfTVVURVhf
-UkVDVVJTSVZFICYmIHB0aHJlYWRfZXF1YWwgKG93bmVyLCBzZWxmKSkKICAg
-ICByZXN1bHQgPSBsb2NrX3JlY3Vyc2l2ZSAoKTsKICAgZWxzZQogICAgIHJl
-c3VsdCA9IEVCVVNZOwpAQCAtMTU1MCw3ICsxNTUwLDcgQEAgcHRocmVhZF9t
-dXRleDo6X3VubG9jayAocHRocmVhZF90IHNlbGYpCiAgIGlmICghcHRocmVh
-ZF9lcXVhbCAob3duZXIsIHNlbGYpKQogICAgIHJldHVybiBFUEVSTTsKIAot
-ICBpZiAoMCA9PSAtLXJlY3Vyc2lvbl9jb3VudGVyKQorICBpZiAoLS1yZWN1
-cnNpb25fY291bnRlciA9PSAwKQogICAgIHsKICAgICAgIG93bmVyID0gTlVM
-TDsKICAgICAgIGlmIChJbnRlcmxvY2tlZERlY3JlbWVudCAoKGxvbmcgKikm
-bG9ja19jb3VudGVyKSkKQEAgLTE1ODUsNyArMTU4NSw3IEBAIHB0aHJlYWRf
-bXV0ZXg6Ol9maXh1cF9hZnRlcl9mb3JrICgpCiAgIGlmIChwc2hhcmVkICE9
-IFBUSFJFQURfUFJPQ0VTU19QUklWQVRFKQogICAgIGFwaV9mYXRhbCAoInB0
-aHJlYWRfbXV0ZXg6Ol9maXh1cF9hZnRlcl9mb3JrICgpIGRvZXNuJ3R1bmRl
-cnN0YW5kIFBST0NFU1NfU0hBUkVEIG11dGV4J3MiKTsKIAotICBpZiAoTlVM
-TCA9PSBvd25lcikKKyAgaWYgKG93bmVyID09IE5VTEwpCiAgICAgLyogbXV0
-ZXggaGFzIG5vIG93bmVyLCByZXNldCB0byBpbml0aWFsICovCiAgICAgbG9j
-a19jb3VudGVyID0gMDsKICAgZWxzZSBpZiAobG9ja19jb3VudGVyICE9IDAp
-CkBAIC0yMTk2LDcgKzIxOTYsNyBAQCBwdGhyZWFkOjpkZXRhY2ggKHB0aHJl
-YWRfdCAqdGhyZWFkKQogICAgIH0KIAogICAvLyBjaGVjayBpZiB0aHJlYWQg
-aXMgc3RpbGwgYWxpdmUKLSAgaWYgKFdBSVRfVElNRU9VVCA9PSBXYWl0Rm9y
-U2luZ2xlT2JqZWN0ICgoKnRocmVhZCktPndpbjMyX29ial9pZCwgMCkpCisg
-IGlmIChXYWl0Rm9yU2luZ2xlT2JqZWN0ICgoKnRocmVhZCktPndpbjMyX29i
-al9pZCwgMCkgPT0gV0FJVF9USU1FT1VUKQogICAgIHsKICAgICAgIC8vIGZv
-cmNlIGNsZWFudXAgb24gZXhpdAogICAgICAgKCp0aHJlYWQpLT5qb2luZXIg
-PSAqdGhyZWFkOwo=
-
---277949-26986-1048769535=:479--
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
