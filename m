@@ -1,119 +1,44 @@
 From: "Robert Collins" <robert.collins@itdomain.com.au>
 To: <cygwin-developers@cygwin.com>
 Cc: <cygwin-patches@cygwin.com>
-Subject: muto object.
-Date: Sun, 16 Sep 2001 19:35:00 -0000
-Message-id: <EA18B9FA0FE4194AA2B4CDB91F73C0EF7A2B@itdomain002.itdomain.net.au>
-X-SW-Source: 2001-q3/msg00153.html
-Content-type: multipart/mixed; boundary="----------=_1583532849-65438-103"
+Subject: RE: muto object.
+Date: Sun, 16 Sep 2001 19:37:00 -0000
+Message-id: <EA18B9FA0FE4194AA2B4CDB91F73C0EF08F17C@itdomain002.itdomain.net.au>
+X-SW-Source: 2001-q3/msg00154.html
 
-This is a multi-part message in MIME format...
+I'll try finishing the email this time.
 
-------------=_1583532849-65438-103
-Content-length: 541
+What I meant to say was, if this looks ok, it makes muto's a potential
+replacement for critical sections on 95 for pthreads, which would be
+very good speed wise.
 
-Chris, 
-  This update to muto handles threads exiting spontaneously without
-releasing the muto properly. I think it fixes the FIXME you have in
-::release, but as I can't see how release can check for other thread
-activity, it may not have fixed that.
-
-The logic it uses is:
-if we fail to wait for the event,
-protect ourselves with recover
-check for the thread having died (should be fast - noop basically) and
-if it has aquire the muto anyway.
-
-There was also a typo in the destructor that could be causing memory
-leaks within process.
+Anyway, I'll draw up a change log and the rest if you want this
+included.
 
 Rob
 
-------------=_1583532849-65438-103
-Content-Type: text/x-diff; charset=us-ascii; name="mutoupdate.patch"
-Content-Disposition: inline; filename="mutoupdate.patch"
-Content-Transfer-Encoding: base64
-Content-Length: 4832
-
-SW5kZXg6IHN5bmMuY2MKPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1MgZmls
-ZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vc3luYy5jYyx2CnJldHJp
-ZXZpbmcgcmV2aXNpb24gMS4xOQpkaWZmIC11IC1wIC1yMS4xOSBzeW5jLmNj
-Ci0tLSBzeW5jLmNjCTIwMDEvMDkvMTMgMDE6MDc6MjUJMS4xOQorKysgc3lu
-Yy5jYwkyMDAxLzA5LzE3IDAyOjIxOjU3CkBAIC0yOCw3ICsyOCw3IEBAIG11
-dG8gTk9fQ09QWSBtdXRvX3N0YXJ0OwogI3VuZGVmIFdhaXRGb3JTaW5nbGVP
-YmplY3QKIAogLyogQ29uc3RydWN0b3IgKi8KLW11dG86Om11dG8gKGludCBp
-bmgsIGNvbnN0IGNoYXIgKnMpIDogc3luYyAoMCksIHZpc2l0cygwKSwgd2Fp
-dGVycygtMSksIHRpZCAoMCksIG5leHQgKE5VTEwpCittdXRvOjptdXRvIChp
-bnQgaW5oLCBjb25zdCBjaGFyICpzKSA6IHN5bmMgKDApLCB2aXNpdHMoMCks
-IHdhaXRlcnMoLTEpLCByZWNvdmVyICgwKSwgdGlkICgwKSwgdGhhbmRsZSAo
-TlVMTCksIG5leHQgKE5VTEwpCiB7CiAgIC8qIENyZWF0ZSBldmVudCB3aGlj
-aCBpcyB1c2VkIGluIHRoZSBmYWxsYmFjayBjYXNlIHdoZW4gYmxvY2tpbmcg
-aXMgbmVjZXNzYXJ5ICovCiAgIGlmICghKGJydXRlZm9yY2UgPSBDcmVhdGVF
-dmVudCAoaW5oID8gJnNlY19hbGxfbmloIDogJnNlY19ub25lX25paCwgRkFM
-U0UsIEZBTFNFLCBuYW1lKSkpCkBAIC00Nyw3ICs0Nyw3IEBAIG11dG86On5t
-dXRvICgpCiAgICAgcmVsZWFzZSAoKTsKIAogICBIQU5ETEUgaCA9IGJydXRl
-Zm9yY2U7Ci0gIGggPSBOVUxMOworICBicnV0ZWZvcmNlID0gTlVMTDsKICAg
-LyogSnVzdCBuZWVkIHRvIGNsb3NlIHRoZSBldmVudCBoYW5kbGUgKi8KICAg
-aWYgKGgpCiAgICAgQ2xvc2VIYW5kbGUgKGgpOwpAQCAtNjQsNiArNjQsNyBA
-QCBpbnQKIG11dG86OmFjcXVpcmUgKERXT1JEIG1zKQogewogICBEV09SRCB0
-aGlzX3RpZCA9IEdldEN1cnJlbnRUaHJlYWRJZCAoKTsKKyAgYm9vbCByZWNv
-dmVyZWQgPSBmYWxzZTsKIAogICBpZiAodGlkICE9IHRoaXNfdGlkKQogICAg
-IHsKQEAgLTkwLDYgKzkxLDIwIEBAIG11dG86OmFjcXVpcmUgKERXT1JEIG1z
-KQogCQlnb3RvIGdvdGl0OwogCQlicmVhazsKIAkgICAgICBkZWZhdWx0Ogor
-CQkvKiBUaW1lZCBvdXQuIFRoZSBvdGhlciB0aHJlYWQgY291bGQgaGF2ZSBk
-aWVkIC4uLiAqLworCQkvKiBvbmx5IG9uZSB0aHJlYWQgaXMgYWxsb3dlZCB0
-byAncmVjb3ZlcicgdGhlIG11dG8gKi8KKwkJaWYgKEludGVybG9ja2VkSW5j
-cmVtZW50ICgmcmVjb3ZlcikgPT0gMSkKKwkJICB7CisJCSAgICBEV09SRCBz
-dGF0dXM7CisJCSAgICBHZXRFeGl0Q29kZVRocmVhZCAodGhhbmRsZSwgJnN0
-YXR1cyk7CisJCSAgICBpZiAoc3RhdHVzICE9IFNUSUxMX0FDVElWRSkKKwkJ
-ICAgICAgeworCQkJcmVjb3ZlcmVkID0gdHJ1ZTsKKwkJCXZpc2l0cyA9IDA7
-CisJCSAgICAgICAgZ290byBnb3RpdDsKKwkJICAgICAgfQorCQkgIH0KKwkJ
-SW50ZXJsb2NrZWREZWNyZW1lbnQgKCZyZWNvdmVyKTsKIAkJSW50ZXJsb2Nr
-ZWREZWNyZW1lbnQgKCZ3YWl0ZXJzKTsKIAkJcmV0dXJuIDA7CS8qIGZhaWxl
-ZC4gKi8KIAkgICAgICB9CkBAIC05Nyw3ICsxMTIsMjEgQEAgbXV0bzo6YWNx
-dWlyZSAoRFdPUkQgbXMpCiAgICAgfQogCiBnb3RpdDoKLSAgdGlkID0gdGhp
-c190aWQ7CS8qIHJlZ2lzdGVyIHRoaXMgdGhyZWFkLiAqLworICBpZiAodGlk
-ICE9IHRoaXNfdGlkKQorICAgIHsKKyAgICAgIHRpZCA9IHRoaXNfdGlkOwkv
-KiByZWdpc3RlciB0aGlzIHRocmVhZC4gKi8KKyAgICAgIGlmICh0aGFuZGxl
-KQorCUNsb3NlSGFuZGxlICh0aGFuZGxlKTsKKyAgICAgIER1cGxpY2F0ZUhh
-bmRsZSAoR2V0Q3VycmVudFByb2Nlc3MgKCksCisJCQlHZXRDdXJyZW50VGhy
-ZWFkICgpLAorCQkJR2V0Q3VycmVudFByb2Nlc3MgKCksCisJCQkmdGhhbmRs
-ZSwKKwkJCVRIUkVBRF9RVUVSWV9JTkZPUk1BVElPTiwKKwkJCUZBTFNFLCAw
-KTsKKyAgICAgIGlmIChyZWNvdmVyZWQpCisJSW50ZXJsb2NrZWREZWNyZW1l
-bnQgKCZyZWNvdmVyKTsKKyAgICB9CisKICAgcmV0dXJuICsrdmlzaXRzOwkv
-KiBJbmNyZW1lbnQgdmlzaXQgY291bnQuICovCiB9CiAKQEAgLTExNyw2ICsx
-NDYsMTAgQEAgbXV0bzo6cmVsZWFzZSAoKQogICBpZiAoIS0tdmlzaXRzKQog
-ICAgIHsKICAgICAgIHRpZCA9IDA7CQkvKiBXZSB3ZXJlIHRoZSBsYXN0IHVu
-bG9ja2VyLiAqLworICAgICAgaWYgKHRoYW5kbGUpCisJQ2xvc2VIYW5kbGUg
-KHRoYW5kbGUpOworICAgICAgdGhhbmRsZSA9IE5VTEw7CisgICAgICByZWNv
-dmVyID0gMDsKICAgICAgICh2b2lkKSBJbnRlcmxvY2tlZEV4Y2hhbmdlICgm
-c3luYywgMCk7IC8qIFJlc2V0IHRyaWdnZXIuICovCiAgICAgICAvKiBUaGlz
-IHRocmVhZCBoYWQgaW5jcmVtZW50ZWQgd2FpdGVycyBidXQgaGFkIG5ldmVy
-IGRlY3JlbWVudGVkIGl0LgogCSBEZWNyZW1lbnQgaXQgbm93LiAgSWYgaXQg
-aXMgPj0gMCB0aGVuIHRoZXJlIGFyZSBwb3NzaWJseSBvdGhlcgpAQCAtMTMz
-LDYgKzE2Niw5IEBAIHZvaWQKIG11dG86OnJlc2V0ICgpCiB7CiAgIHZpc2l0
-cyA9IHN5bmMgPSB0aWQgPSAwOworICBpZiAodGhhbmRsZSkKKyAgICBDbG9z
-ZUhhbmRsZSAodGhhbmRsZSk7CisgIHRoYW5kbGUgPSBOVUxMOwogICBJbnRl
-cmxvY2tlZEV4Y2hhbmdlICgmd2FpdGVycywgLTEpOwogICBpZiAoYnJ1dGVm
-b3JjZSkKICAgICB7CkluZGV4OiBzeW5jLmgKPT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vc3lu
-Yy5oLHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjEzCmRpZmYgLXUgLXAgLXIx
-LjEzIHN5bmMuaAotLS0gc3luYy5oCTIwMDEvMDkvMTEgMjA6MDE6MDEJMS4x
-MworKysgc3luYy5oCTIwMDEvMDkvMTcgMDI6MjE6NTcKQEAgLTE3LDggKzE3
-LDEwIEBAIGNsYXNzIG11dG8KICAgTE9ORyBzeW5jOwkvKiBVc2VkIHRvIHNl
-cmlhbGl6ZSBhY2Nlc3MgdG8gdGhpcyBjbGFzcy4gKi8KICAgTE9ORyB2aXNp
-dHM7CS8qIENvdW50IG9mIG51bWJlciBvZiB0aW1lcyBhIHRocmVhZCBoYXMg
-Y2FsbGVkIGFjcXVpcmUuICovCiAgIExPTkcgd2FpdGVyczsJLyogTnVtYmVy
-IG9mIHRocmVhZHMgd2FpdGluZyBmb3IgbG9jay4gKi8KKyAgTE9ORyByZWNv
-dmVyOyAvKiBQcm90ZWN0aW9uIGZvciByZWNvdmVyaW5nIGZyb20gYSBkZWFk
-IHRocmVhZCBzaXR1YXRpb24gKi8KICAgSEFORExFIGJydXRlZm9yY2U7IC8q
-IGV2ZW50IGhhbmRsZSB1c2VkIHRvIGNvbnRyb2wgd2FpdGluZyBmb3IgbG9j
-ay4gKi8KICAgRFdPUkQgdGlkOwkvKiBUaHJlYWQgSWQgb2YgbG9jayBvd25l
-ci4gKi8KKyAgSEFORExFIHRoYW5kbGU7IC8qIHNsaWdodGx5IG1vcmUgZXhw
-ZW5zaXZlIHRoYW4gdGlkLCB1c2VkIHRvIGRldGVjdCB0aHJlYWQgZXhpdHMg
-Ki8KIHB1YmxpYzoKICAgY2xhc3MgbXV0byAqbmV4dDsKICAgY29uc3QgY2hh
-ciAqbmFtZTsK
-
-------------=_1583532849-65438-103--
+> -----Original Message-----
+> From: Robert Collins 
+> Sent: Monday, September 17, 2001 12:23 PM
+> To: cygwin-developers@cygwin.com
+> Cc: cygwin-patches@cygwin.com
+> Subject: muto object.
+> 
+> 
+> Chris, 
+>   This update to muto handles threads exiting spontaneously without
+> releasing the muto properly. I think it fixes the FIXME you have in
+> ::release, but as I can't see how release can check for other thread
+> activity, it may not have fixed that.
+> 
+> The logic it uses is:
+> if we fail to wait for the event,
+> protect ourselves with recover
+> check for the thread having died (should be fast - noop basically) and
+> if it has aquire the muto anyway.
+> 
+> There was also a typo in the destructor that could be causing memory
+> leaks within process.
+> 
+> Rob
+> 
