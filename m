@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1542-listarch-cygwin-patches=sourceware.cygnus.com@sources.redhat.com>
-Received: (qmail 17443 invoked by alias); 28 Nov 2001 00:32:52 -0000
+Return-Path: <cygwin-patches-return-1543-listarch-cygwin-patches=sourceware.cygnus.com@sources.redhat.com>
+Received: (qmail 19215 invoked by alias); 28 Nov 2001 00:35:28 -0000
 Mailing-List: contact cygwin-patches-help@sourceware.cygnus.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@sources.redhat.com>
@@ -7,57 +7,53 @@ List-Post: <mailto:cygwin-patches@sources.redhat.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@sources.redhat.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@sources.redhat.com
-Received: (qmail 17406 invoked from network); 28 Nov 2001 00:32:49 -0000
-Subject: Re: [PATCH] setup.exe: Stop NetIO_HTTP from treating entire stream
-	as a  header
+Received: (qmail 19201 invoked from network); 28 Nov 2001 00:35:28 -0000
+Subject: RE: [PATCH] setup.exe: Stop NetIO_HTTP from treating entire
+	streamas a  header
 From: Robert Collins <robert.collins@itdomain.com.au>
-To: cygwin-patches@cygwin.com
-In-Reply-To: <20011128002122.GA6919@redhat.com>
-References: <20011127230925.GA5830@redhat.com>
-	<000001c1779c$e1fe2fa0$2101a8c0@NOMAD> <20011127235226.GA6537@redhat.com>
-	<1006906033.2048.23.camel@lifelesswks>  <20011128002122.GA6919@redhat.com>
+To: Gary R Van Sickle <tiberius@braemarinc.com>
+Cc: cygwin-patches@cygwin.com
+In-Reply-To: <000101c177a1$e96ed780$2101a8c0@NOMAD>
+References: <000101c177a1$e96ed780$2101a8c0@NOMAD>
 Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 X-Mailer: Evolution/0.99.2 (Preview Release)
-Date: Thu, 25 Oct 2001 04:47:00 -0000
-Message-Id: <1006907495.2048.25.camel@lifelesswks>
+Date: Fri, 26 Oct 2001 01:58:00 -0000
+Message-Id: <1006907654.2048.27.camel@lifelesswks>
 Mime-Version: 1.0
-X-OriginalArrivalTime: 28 Nov 2001 00:32:48.0873 (UTC) FILETIME=[34E32D90:01C177A4]
-X-SW-Source: 2001-q4/txt/msg00074.txt.bz2
+X-OriginalArrivalTime: 28 Nov 2001 00:35:27.0192 (UTC) FILETIME=[9340BD80:01C177A4]
+X-SW-Source: 2001-q4/txt/msg00075.txt.bz2
 
-On Wed, 2001-11-28 at 11:21, Christopher Faylor wrote:
-> >> So, my new internal rule is that the above is ok but foo != 0 is
-> >> "wrong".
+On Wed, 2001-11-28 at 11:16, Gary R Van Sickle wrote:
+> > On Wed, 2001-11-28 at 10:09, Christopher Faylor wrote:
+> > > References?  A simple google search for 'NULL C++ deprecated' didn't
+> > > unearth this information.
 > >
-> >Why? I parse (foo) and if (foo != 0) are the same IFF foo is a simple
-> >type (which includes pointers to objects). if (foo != NULL) is the same
-> >as these two IFF foo is a pointer to an object. So NULL is a special
-> >case, and thats useful in C, with it's relatively weak type checking.
-> >C++ however has much stronger type checking, so I don't see the value in
-> >a manual extra check like that. 
+> > Deprecated may have been too strong a word. Anyway, references:
+> >
+> > The C++ annotations - http://www.icce.rug.nl/documents/cpp.shtml
+> > Specifically...
+> > http://www.icce.rug.nl/documents/cplusplus/cplusplus02.html#an78
 > 
-> Why?  For the reasons that both Gary and I mentioned.  It's self
-> documenting?
+> This must predate the ratification of the standard:
+> 
+> "2.5.3: NULL-pointers vs. 0-pointers
+> [snip]  Indeed, according to the descriptions of the pointer-returning
+> operator new 0 rather than NULL is returned when memory allocation fails."
+> 
+> When new fails, it doesn't return anything, but rather throws an exception
+> now.  (Well, unless you use the (std::nothrow) syntax which I've never seen
+> used and in fact just found out about).  Oops, now it's my turn to document!
+> ;-):  Chuck Allison here: http://www.freshsources.com/newcpp.html
 
-Granted. I don't really care, I made a single comment and have been
-responding ever since. Forget it. Use whichever syntax you like.
+Thank you for the reference. Setup currently builds with exceptions
+disabled, which is a bit of a handicap. I was going to raise this soon
+anyway :}.
  
-> >> When I test a character, I use c != '\0' and when I test a floating
-> >> point value, I do f != 0.0.
-> >
-> >Which is wrong BTW. To test floating point you want (abs (f) > confidence). 
-> 
-> Are you really so desne as to miss my point?  Apparently so.
+> Anywhoo, tell you guys what:  I'll roll all four permutations and whoever
+> checks it in can pick which patch or patches they want ;-).
 
-Ha! flamebait.
-
-What was your point? That in C++ one should write all equality
-comparisons as foo == or foo != zerovaluedvariableofthesametype for
-clarity?
-
-Fine. I don't have a problem with that - although there are corner
-cases.
-
-I _ONLY_ had an issue with NULL vs 0.
+Code comfortable for you. I won't reject patches using NULL, or not
+using ==/!= 0. 
 
 Rob
