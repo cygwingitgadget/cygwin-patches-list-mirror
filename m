@@ -1,25 +1,44 @@
-From: Pavel Tsekov <ptsekov@syntrex.com>
-To: cygwin-patches@cygwin.com
+From: "Robert Collins" <robert.collins@itdomain.com.au>
+To: "Pavel Tsekov" <ptsekov@syntrex.com>, <cygwin-patches@cygwin.com>
 Subject: Re: [PATCH] setup.exe: io_stream-ized SimpleSocket class
-Date: Mon, 26 Nov 2001 04:14:00 -0000
-Message-ID: <3C02323E.ACFEECF0@syntrex.com>
-References: <3BFE8631.AFC9AEF6@syntrex.com> <08ae01c17454$ef204970$0200a8c0@lifelesswks>
-X-SW-Source: 2001-q4/msg00245.html
-Message-ID: <20011126041400.2Hu9eEoCyCL5DDEEcfxp0zqA3cBYazHzy72UxrEHNPo@z>
+Date: Mon, 26 Nov 2001 06:13:00 -0000
+Message-ID: <00eb01c17684$78718230$0200a8c0@lifelesswks>
+References: <3BFE8631.AFC9AEF6@syntrex.com> <08ae01c17454$ef204970$0200a8c0@lifelesswks> <3C02323E.ACFEECF0@syntrex.com>
+X-SW-Source: 2001-q4/msg00246.html
+Message-ID: <20011126061300.RairwymHaLHjOAk5OofABcejhSqU9CVHWE88JsFH1qg@z>
 
-Robert Collins wrote:
-> 
-> 
-> A few points ...
+RFC 2616 and 2617 are the current HTTP specs.
 
-[ snip ]
+However, the format of a URI is defined elsewhere :|. Uhmm, see the
+begining of rfc 2616 for a pointer to the correct URI defining RFC>
 
-> auth may be needed. Also something is needed to pass through a ftp url
-> via http proxy request .. something like
-> http://proxyusername:proxypassword@proxyaddress:port/ftp://ftpuser:ftppa
-> ss@ftpsite.com/bar is a minor variation from the HTTP RFC and should be
-> easily parseable. The http code will need to understand what urls' if
-> can proxy  - as you'd expect :].
+Rob
+===
+----- Original Message -----
+From: "Pavel Tsekov" <ptsekov@syntrex.com>
+To: <cygwin-patches@cygwin.com>
+Sent: Monday, November 26, 2001 11:14 PM
+Subject: Re: [PATCH] setup.exe: io_stream-ized SimpleSocket class
 
-Where do you read this from ? rfc2068 ? Can you point me to the right
-docu.
+
+> Robert Collins wrote:
+> >
+> >
+> > A few points ...
+>
+> [ snip ]
+>
+> > auth may be needed. Also something is needed to pass through a ftp
+url
+> > via http proxy request .. something like
+> >
+http://proxyusername:proxypassword@proxyaddress:port/ftp://ftpuser:ftppa
+> > ss@ftpsite.com/bar is a minor variation from the HTTP RFC and should
+be
+> > easily parseable. The http code will need to understand what urls'
+if
+> > can proxy  - as you'd expect :].
+>
+> Where do you read this from ? rfc2068 ? Can you point me to the right
+> docu.
+>
