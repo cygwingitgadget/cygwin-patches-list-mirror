@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2335-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 4927 invoked by alias); 6 Jun 2002 10:13:23 -0000
+Return-Path: <cygwin-patches-return-2336-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 1413 invoked by alias); 6 Jun 2002 11:18:38 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,94 +7,44 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 4906 invoked from network); 6 Jun 2002 10:13:21 -0000
-Date: Thu, 06 Jun 2002 03:13:00 -0000
-From: egor duda <deo@logos-m.ru>
-Reply-To: egor duda  <cygwin-patches@cygwin.com>
-Organization: deo
-X-Priority: 3 (Normal)
-Message-ID: <13970794877.20020606141146@logos-m.ru>
-To: cygwin-patches@cygwin.com
-Subject: regtool support for remote registry
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="----------103C49C38112E52"
-X-SW-Source: 2002-q2/txt/msg00318.txt.bz2
-
-------------103C49C38112E52
+Received: (qmail 1399 invoked from network); 6 Jun 2002 11:18:36 -0000
+Date: Thu, 06 Jun 2002 04:18:00 -0000
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
+To: cygpatch <cygwin-patches@cygwin.com>
+Subject: Re: Name aliasing in security.cc
+Message-ID: <20020606131834.H30892@cygbert.vinschen.de>
+Mail-Followup-To: cygpatch <cygwin-patches@cygwin.com>
+References: <3.0.5.32.20020603223130.007f6e10@mail.attbi.com> <3.0.5.32.20020530215740.007fc380@mail.attbi.com> <3.0.5.32.20020530215740.007fc380@mail.attbi.com> <3.0.5.32.20020603223130.007f6e10@mail.attbi.com> <3.0.5.32.20020605202359.007fc8a0@mail.attbi.com>
+Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-Content-length: 239
+Content-Disposition: inline
+In-Reply-To: <3.0.5.32.20020605202359.007fc8a0@mail.attbi.com>
+User-Agent: Mutt/1.3.22.1i
+X-SW-Source: 2002-q2/txt/msg00319.txt.bz2
 
-Hi!
+On Wed, Jun 05, 2002 at 08:23:59PM -0400, Pierre A. Humblet wrote:
+> I saw the changes in grp.cc and passwd.cc where you make default
+> entries from the token. That's a good idea, very close to what I had 
+> in mind for the "except" clause" in suggestion c) above.
+> 
+> At any rate this doesn't favor keeping lookup_name() and using it
+> up only in alloc_sd(). So you could still apply my patches, even if
+> you want to move from b) to the direction of c).
 
-  Attached patch allows regtool to access registry on remote hosts,
-e.g.:
+Ok, applied.
 
-regtool get \\bumba\machine\software\microsoft\windows\currentVersion\programFilesDir
+> >However, I think calling lookup_name in internal_getlogin() is 
+> >somewhat useless.
+> I agree. My patches remove it, but replace it with something similar.
+> I will remove it later if you apply them.
+> 
+> By the way, your ChangeLog entry is missing "* passwd.cc " :) :) :) 
 
-egor.            mailto:deo@logos-m.ru icq 5165414 fidonet 2:5020/496.19
-------------103C49C38112E52
-Content-Type: application/octet-stream; name="regtool-remote-registry-support.diff"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="regtool-remote-registry-support.diff"
-Content-length: 2839
+Thanks, I've fixed that.
 
-SW5kZXg6IHV0aWxzL3JlZ3Rvb2wuY2MKPT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PQpSQ1MgZmlsZTogL2N2cy91YmVyYmF1bS93aW5zdXAvdXRpbHMvcmVndG9v
-bC5jYyx2CnJldHJpZXZpbmcgcmV2aXNpb24gMS45CmRpZmYgLXUgLXAgLTIg
-LXIxLjkgcmVndG9vbC5jYwotLS0gdXRpbHMvcmVndG9vbC5jYwkzIEp1biAy
-MDAyIDAyOjU3OjU1IC0wMDAwCTEuOQorKysgdXRpbHMvcmVndG9vbC5jYwk2
-IEp1biAyMDAyIDEwOjA2OjAyIC0wMDAwCkBAIC01MSw0ICs1MSw1IEBAIGlu
-dCBxdWlldCA9IDA7CiBjaGFyICoqYXJndjsKIAorY2hhciAqbWFjaGluZTsK
-IEhLRVkga2V5OwogY2hhciAqdmFsdWU7CkBAIC05Miw4ICs5Myw5IEBAIHVz
-YWdlIChGSUxFICp3aGVyZSA9IHN0ZGVycikKICAgaWYgKHdoZXJlID09IHN0
-ZG91dCkKICAgICBmcHJpbnRmICh3aGVyZSwgIiIKLSAgICAiS0VZIGlzIGlu
-IHRoZSBmb3JtYXQgXFxwcmVmaXhcXEtFWVxcS0VZXFxWQUxVRSwgd2hlcmUg
-cHJlZml4IGlzIGFueSBvZjpcbiIKLSAgICAiICBcXHJvb3QgICAgIEhLQ1Ig
-IEhLRVlfQ0xBU1NFU19ST09UXG4iCi0gICAgIiAgXFxjb25maWcgICBIS0ND
-ICBIS0VZX0NVUlJFTlRfQ09ORklHXG4iCi0gICAgIiAgXFx1c2VyICAgICBI
-S0NVICBIS0VZX0NVUlJFTlRfVVNFUlxuIgorICAgICJLRVkgaXMgaW4gdGhl
-IGZvcm1hdCBbXFxcXGhvc3RdXFxwcmVmaXhcXEtFWVxcS0VZXFxWQUxVRSwg
-d2hlcmUgaG9zdCBpcyBvcHRpb25hbFxuIgorICAgICJyZW1vdGUgaG9zdCBh
-bmQgcHJlZml4IGlzIGFueSBvZjpcbiIKKyAgICAiICBcXHJvb3QgICAgIEhL
-Q1IgIEhLRVlfQ0xBU1NFU19ST09UIChsb2NhbCBvbmx5KVxuIgorICAgICIg
-IFxcY29uZmlnICAgSEtDQyAgSEtFWV9DVVJSRU5UX0NPTkZJRyAobG9jYWwg
-b25seSlcbiIKKyAgICAiICBcXHVzZXIgICAgIEhLQ1UgIEhLRVlfQ1VSUkVO
-VF9VU0VSIChsb2NhbCBvbmx5KVxuIgogICAgICIgIFxcbWFjaGluZSAgSEtM
-TSAgSEtFWV9MT0NBTF9NQUNISU5FXG4iCiAgICAgIiAgXFx1c2VycyAgICBI
-S1UgICBIS0VZX1VTRVJTXG4iCkBAIC0yNTIsMTAgKzI1NCwxNyBAQCB2b2lk
-CiBmaW5kX2tleSAoaW50IGhvd21hbnlwYXJ0cywgUkVHU0FNIGFjY2VzcykK
-IHsKKyAgSEtFWSBiYXNlOworICBpbnQgcnY7CiAgIGNoYXIgKm4gPSBhcmd2
-WzBdLCAqZSwgYzsKICAgaW50IGk7CiAgIGlmICgqbiA9PSAnLycpCiAgICAg
-dHJhbnNsYXRlIChuKTsKLSAgd2hpbGUgKCpuID09ICdcXCcpCisgIGlmIChu
-WzBdID09ICdcXCcgJiYgblsxXSA9PSAnXFwnKQorICAgIHsKKyAgICAgIG1h
-Y2hpbmUgPSBuOyBuICs9IDI7CisgICAgfQorICB3aGlsZSAoKm4gIT0gJ1xc
-JykKICAgICBuKys7CisgICpuKysgPSAwOwogICBmb3IgKGUgPSBuOyAqZSAm
-JiAqZSAhPSAnXFwnOyBlKyspOwogICBjID0gKmU7CkBAIC0yOTMsMTIgKzMw
-MiwyMSBAQCBmaW5kX2tleSAoaW50IGhvd21hbnlwYXJ0cywgUkVHU0FNIGFj
-Y2VzCiAJfQogICAgIH0KKyAgaWYgKG1hY2hpbmUpCisgICAgeworICAgICAg
-cnYgPSBSZWdDb25uZWN0UmVnaXN0cnkgKG1hY2hpbmUsICB3a3ByZWZpeGVz
-W2ldLmtleSwgJmJhc2UpOworICAgICAgaWYgKHJ2ICE9IEVSUk9SX1NVQ0NF
-U1MpCisJRmFpbCAocnYpOworICAgIH0KKyAgZWxzZQorICAgIGJhc2UgPSB3
-a3ByZWZpeGVzW2ldLmtleTsKKwogICBpZiAoblswXSA9PSAwKQorICAgIGtl
-eSA9IGJhc2U7CisgIGVsc2UKICAgICB7Ci0gICAgICBrZXkgPSB3a3ByZWZp
-eGVzW2ldLmtleTsKLSAgICAgIHJldHVybjsKKyAgICAgIHJ2ID0gUmVnT3Bl
-bktleUV4IChiYXNlLCBuLCAwLCBhY2Nlc3MsICZrZXkpOworICAgICAgaWYg
-KHJ2ICE9IEVSUk9SX1NVQ0NFU1MpCisJRmFpbCAocnYpOwogICAgIH0KLSAg
-aW50IHJ2ID0gUmVnT3BlbktleUV4ICh3a3ByZWZpeGVzW2ldLmtleSwgbiwg
-MCwgYWNjZXNzLCAma2V5KTsKLSAgaWYgKHJ2ICE9IEVSUk9SX1NVQ0NFU1Mp
-Ci0gICAgRmFpbCAocnYpOwogICAvL3ByaW50Zigia2V5IGAlcycgdmFsdWUg
-YCVzJ1xuIiwgbiwgdmFsdWUpOwogfQo=
+Corinna
 
-------------103C49C38112E52
-Content-Type: application/octet-stream; name="regtool-remote-registry-support.ChangeLog"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="regtool-remote-registry-support.ChangeLog"
-Content-length: 175
-
-MjAwMi0wNi0wNiAgRWdvciBEdWRhIDxkZW9AbG9nb3MtbS5ydT4KCgkqIHJl
-Z3Rvb2wuY2MgKGZpbmRfa2V5KTogQWRkIHN1cHBvcnQgZm9yIHJlbW90ZSBy
-ZWdpc3RyeSBhY2Nlc3MuCgkodXNhZ2UpOiBEb2N1bWVudCBpdC4K
-
-------------103C49C38112E52--
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
