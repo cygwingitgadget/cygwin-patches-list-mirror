@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2097-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 18857 invoked by alias); 24 Apr 2002 05:55:21 -0000
+Return-Path: <cygwin-patches-return-2098-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 18561 invoked by alias); 24 Apr 2002 06:56:15 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,37 +7,43 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 18835 invoked from network); 24 Apr 2002 05:55:18 -0000
-Message-ID: <3CC64964.1070103@ece.gatech.edu>
-Date: Tue, 23 Apr 2002 22:55:00 -0000
-From: Charles Wilson <cwilson@ece.gatech.edu>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:0.9.4) Gecko/20011019 Netscape6/6.2
-X-Accept-Language: en-us
+Received: (qmail 18547 invoked from network); 24 Apr 2002 06:56:14 -0000
+content-class: urn:content-classes:message
+Subject: RE: Packaging information
 MIME-Version: 1.0
-To: cygwin-patches@cygwin.com
-Subject: Re: Packaging information
-References: <3CC63684.3010207@ece.gatech.edu>
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Transfer-Encoding: 7bit
-X-SW-Source: 2002-q2/txt/msg00081.txt.bz2
-
-> On Wed, Apr 24, 2002 at 12:37:24AM -0400, Charles Wilson wrote:
->>Permission to apply?
-> 
-> AFAIAC, the setup.html is ok but I don't think that the generic-whatever
-> stuff belongs on the web site.  Maybe the ftp directory or the
-> cygwin-apps repository is more appropriate.
-
-
-I think generic-* are just as much "documentation" as they are 
-"resource"; so  the reader should be able to click on a link(*) and 
-peruse them, without having to (a) fire up a different client and 
-"download" them, or (b) fire up cvs and check them out.  That's just 
-needless extra work -- documentation is supposed to make things easier, 
-not more difficult; let's not create artificial barriers.
-
-(*) even if it's 
-"ftp://some-random-mirror/path/cygwin/resources/generic-foo".
+Content-Type: text/plain;
+	charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 23 Apr 2002 23:56:00 -0000
+X-MimeOLE: Produced By Microsoft Exchange V6.0.5762.3
+Message-ID: <FC169E059D1A0442A04C40F86D9BA7600C5EE0@itdomain003.itdomain.net.au>
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+From: "Robert Collins" <robert.collins@itdomain.com.au>
+To: "Charles Wilson" <cwilson@ece.gatech.edu>,
+	<cygwin-patches@cygwin.com>
+X-SW-Source: 2002-q2/txt/msg00082.txt.bz2
 
 
---Chuck
+
+> -----Original Message-----
+> From: Charles Wilson [mailto:cwilson@ece.gatech.edu]=20
+> Sent: Wednesday, April 24, 2002 3:58 PM
+> To: cygwin-patches@cygwin.com
+> Subject: Re: Packaging information
+>=20
+>=20
+> > On Wed, Apr 24, 2002 at 12:37:24AM -0400, Charles Wilson wrote:
+> >>Permission to apply?
+> >=20
+> > AFAIAC, the setup.html is ok but I don't think that the=20
+> > generic-whatever stuff belongs on the web site.  Maybe the ftp=20
+> > directory or the cygwin-apps repository is more appropriate.
+>=20
+>=20
+> I think generic-* are just as much "documentation" as they are=20
+> "resource"; so  the reader should be able to click on a link(*)=20
+
+Why not link to them via cvsweb?
+
+Rob
