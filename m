@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2002-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 5207 invoked by alias); 26 Mar 2002 10:53:36 -0000
+Return-Path: <cygwin-patches-return-2003-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 13844 invoked by alias); 26 Mar 2002 11:10:13 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,94 +7,24 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 5168 invoked from network); 26 Mar 2002 10:53:34 -0000
-Mime-Version: 1.0
-From: <tvoverbe@cistron.nl>
-Date: Tue, 26 Mar 2002 03:10:00 -0000
-To: cygwin-patches@cygwin.com,robert.collins@itdomain.com.au
-Subject: Re: SETUP(PickPackageLine.cc): Patch for 'chopped of characters'
-    problem (RESEND)
-Content-Type: multipart/mixed; boundary="----------=_1017140008-25102-0"
-Message-Id: <E16poa0-0006Wv-00@smtp1.cistron.nl>
-X-SW-Source: 2002-q1/txt/msg00359.txt.bz2
+Received: (qmail 13822 invoked from network); 26 Mar 2002 11:10:11 -0000
+content-class: urn:content-classes:message
+Subject: RE: [PATCH] setup.exe: mkdir.cc. was: setup.exe crash
+MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 26 Mar 2002 03:41:00 -0000
+Message-ID: <FC169E059D1A0442A04C40F86D9BA76008ABAD@itdomain003.itdomain.net.au>
+X-MimeOLE: Produced By Microsoft Exchange V6.0.5762.3
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+From: "Robert Collins" <robert.collins@itdomain.com.au>
+To: "Pavel Tsekov" <cygwin@cygwin.com>,
+	<cygwin-patches@cygwin.com>
+X-SW-Source: 2002-q1/txt/msg00360.txt.bz2
 
-This is a multi-part message in MIME format...
+Pavel,
+	care to supply a changelog? Thanks for tracking this down too.
 
-------------=_1017140008-25102-0
-Content-Type: text/plain
-Content-Disposition: inline
-Content-length: 126
-
-
-> Please put the patch in an attached file, rather than inline.
-> 
-
-As requested, here the patch as an attachment.
-
-Ton
-------------=_1017140008-25102-0
-Content-Type: application/octet-stream; name="pp.dif"
-Content-Disposition: inline; filename="pp.dif"
-Content-Transfer-Encoding: base64
-Content-length: 3530
-
-LS0tIFBpY2tQYWNrYWdlTGluZS5jYy1vcmlnCVdlZCBNYXIgMjAgMDg6MTY6
-MzggMjAwMgorKysgUGlja1BhY2thZ2VMaW5lLmNjCVR1ZSBNYXIgMjYgMTE6
-MDk6MTQgMjAwMgpAQCAtNDMsNyArNDMsOCBAQCB2b2lkCiBQaWNrUGFja2Fn
-ZUxpbmU6OnBhaW50IChIREMgaGRjLCBpbnQgeCwgaW50IHksIGludCByb3cs
-IGludCBzaG93X2NhdCkKIHsKICAgaW50IHIgPSB5ICsgcm93ICogdGhlVmll
-dy5yb3dfaGVpZ2h0OwotICBpbnQgYnkgPSByICsgdGhlVmlldy50bS50bUhl
-aWdodCAtIDExOworICBpbnQgcmIgPSByICsgdGhlVmlldy50bS50bUhlaWdo
-dDsKKyAgaW50IGJ5ID0gcmIgLSAxMTsgLy8gdG9wIG9mIGJveCBpbWFnZXMK
-ICAgaW50IG9sZERDID0gU2F2ZURDIChoZGMpOwogICBpZiAoIW9sZERDKQog
-ICAgIHJldHVybjsKQEAgLTc4LDkgKzc5LDkgQEAgUGlja1BhY2thZ2VMaW5l
-OjpwYWludCAoSERDIGhkYywgaW50IHgsIAogICBpZiAocGtnLmluc3RhbGxl
-ZCkKICAgICB7CiAgICAgICBJbnRlcnNlY3RDbGlwUmVjdCAoaGRjLCB4ICsg
-dGhlVmlldy5oZWFkZXJzW3RoZVZpZXcuY3VycmVudF9jb2xdLngsCi0JCQkg
-YnksCisJCQkgciwKIAkJCSB4ICsgdGhlVmlldy5oZWFkZXJzW3RoZVZpZXcu
-Y3VycmVudF9jb2xdLnggKwotCQkJIHRoZVZpZXcuaGVhZGVyc1t0aGVWaWV3
-LmN1cnJlbnRfY29sXS53aWR0aCwgYnkgKyAxMSk7CisJCQkgdGhlVmlldy5o
-ZWFkZXJzW3RoZVZpZXcuY3VycmVudF9jb2xdLndpZHRoLCByYik7CiAgICAg
-ICBUZXh0T3V0IChoZGMsCiAJICAgICAgIHggKyB0aGVWaWV3LmhlYWRlcnNb
-dGhlVmlldy5jdXJyZW50X2NvbF0ueCArIEhNQVJHSU4gLyAyLCByLAogCSAg
-ICAgICBwa2cuaW5zdGFsbGVkLT5DYW5vbmljYWxfdmVyc2lvbiAoKS5jc3Ry
-X29uZXVzZSgpLApAQCAtOTMsOSArOTQsOSBAQCBQaWNrUGFja2FnZUxpbmU6
-OnBhaW50IChIREMgaGRjLCBpbnQgeCwgCiAKICAgU3RyaW5nIHMgPSBwa2cu
-YWN0aW9uX2NhcHRpb24gKCk7CiAgIEludGVyc2VjdENsaXBSZWN0IChoZGMs
-IHggKyB0aGVWaWV3LmhlYWRlcnNbdGhlVmlldy5uZXdfY29sXS54LAotCQkg
-ICAgIGJ5LAorCQkgICAgIHIsCiAJCSAgICAgeCArIHRoZVZpZXcuaGVhZGVy
-c1t0aGVWaWV3Lm5ld19jb2xdLnggKwotCQkgICAgIHRoZVZpZXcuaGVhZGVy
-c1t0aGVWaWV3Lm5ld19jb2xdLndpZHRoLCBieSArIDExKTsKKwkJICAgICB0
-aGVWaWV3LmhlYWRlcnNbdGhlVmlldy5uZXdfY29sXS53aWR0aCwgcmIpOwog
-ICBUZXh0T3V0IChoZGMsCiAJICAgeCArIHRoZVZpZXcuaGVhZGVyc1t0aGVW
-aWV3Lm5ld19jb2xdLnggKyBITUFSR0lOIC8gMiArCiAJICAgTkVXX0NPTF9T
-SVpFX1NMT1AsIHIsIHMuY3N0cl9vbmV1c2UoKSwgcy5zaXplKCkpOwpAQCAt
-MTM4LDkgKzEzOSw5IEBAIFBpY2tQYWNrYWdlTGluZTo6cGFpbnQgKEhEQyBo
-ZGMsIGludCB4LCAKICAgICAgIGludCBpbmRleCA9IDE7CiAgICAgICBpZiAo
-IXBrZy5DYXRlZ29yaWVzWzFdLT5rZXkubmFtZS5jYXNlY29tcGFyZSggIkFs
-bCIpKQogCWluZGV4ID0gMjsKLSAgICAgIEludGVyc2VjdENsaXBSZWN0ICho
-ZGMsIHggKyB0aGVWaWV3LmhlYWRlcnNbdGhlVmlldy5jYXRfY29sXS54LCBi
-eSwKKyAgICAgIEludGVyc2VjdENsaXBSZWN0IChoZGMsIHggKyB0aGVWaWV3
-LmhlYWRlcnNbdGhlVmlldy5jYXRfY29sXS54LCByLAogCQkJIHggKyB0aGVW
-aWV3LmhlYWRlcnNbdGhlVmlldy5jYXRfY29sXS54ICsKLQkJCSB0aGVWaWV3
-LmhlYWRlcnNbdGhlVmlldy5jYXRfY29sXS54LCBieSArIDExKTsKKwkJCSB0
-aGVWaWV3LmhlYWRlcnNbdGhlVmlldy5jYXRfY29sXS54LCByYik7CiAgICAg
-ICBUZXh0T3V0IChoZGMsIHggKyB0aGVWaWV3LmhlYWRlcnNbdGhlVmlldy5j
-YXRfY29sXS54ICsgSE1BUkdJTiAvIDIsIHIsCiAJICAgICAgIHBrZy5DYXRl
-Z29yaWVzW2luZGV4XS0+a2V5Lm5hbWUuY3N0cl9vbmV1c2UoKSwKIAkgICAg
-ICAgcGtnLkNhdGVnb3JpZXNbaW5kZXhdLT5rZXkubmFtZS5zaXplKCkpOwpA
-QCAtMTUwLDkgKzE1MSw5IEBAIFBpY2tQYWNrYWdlTGluZTo6cGFpbnQgKEhE
-QyBoZGMsIGludCB4LCAKICAgcyA9IHBrZy5uYW1lOwogICBpZiAocGtnLlNE
-ZXNjICgpLnNpemUoKSkKICAgICBzICs9IFN0cmluZygiOiAiKSArIHBrZy5T
-RGVzYyAoKTsKLSAgSW50ZXJzZWN0Q2xpcFJlY3QgKGhkYywgeCArIHRoZVZp
-ZXcuaGVhZGVyc1t0aGVWaWV3LnBrZ19jb2xdLngsIGJ5LAorICBJbnRlcnNl
-Y3RDbGlwUmVjdCAoaGRjLCB4ICsgdGhlVmlldy5oZWFkZXJzW3RoZVZpZXcu
-cGtnX2NvbF0ueCwgciwKIAkJICAgICB4ICsgdGhlVmlldy5oZWFkZXJzW3Ro
-ZVZpZXcucGtnX2NvbF0ueCArCi0JCSAgICAgdGhlVmlldy5oZWFkZXJzW3Ro
-ZVZpZXcucGtnX2NvbF0ud2lkdGgsIGJ5ICsgMTEpOworCQkgICAgIHRoZVZp
-ZXcuaGVhZGVyc1t0aGVWaWV3LnBrZ19jb2xdLndpZHRoLCByYik7CiAgIFRl
-eHRPdXQgKGhkYywgeCArIHRoZVZpZXcuaGVhZGVyc1t0aGVWaWV3LnBrZ19j
-b2xdLnggKyBITUFSR0lOIC8gMiwgciwgcy5jc3RyX29uZXVzZSgpLAogCSAg
-IHMuc2l6ZSgpKTsKICAgRGVsZXRlT2JqZWN0IChvbGRDbGlwKTsK
-
-------------=_1017140008-25102-0--
+Rob
