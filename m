@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5316-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 8969 invoked by alias); 25 Jan 2005 20:59:03 -0000
+Return-Path: <cygwin-patches-return-5317-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 8635 invoked by alias); 25 Jan 2005 21:24:53 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,16 +7,16 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 8939 invoked from network); 25 Jan 2005 20:59:00 -0000
-Received: from unknown (HELO cgf.cx) (66.30.17.189)
-  by sourceware.org with SMTP; 25 Jan 2005 20:59:00 -0000
-Received: by cgf.cx (Postfix, from userid 201)
-	id 0D2601B522; Tue, 25 Jan 2005 15:59:23 -0500 (EST)
-Date: Tue, 25 Jan 2005 20:59:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
+Received: (qmail 8505 invoked from network); 25 Jan 2005 21:24:47 -0000
+Received: from unknown (HELO cygbert.vinschen.de) (80.132.112.219)
+  by sourceware.org with SMTP; 25 Jan 2005 21:24:47 -0000
+Received: by cygbert.vinschen.de (Postfix, from userid 500)
+	id 8D72057D73; Tue, 25 Jan 2005 22:24:45 +0100 (CET)
+Date: Tue, 25 Jan 2005 21:24:00 -0000
+From: Corinna Vinschen <vinschen@redhat.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: [Patch]: setting errno to ENOTDIR rather than ENOENT
-Message-ID: <20050125205922.GA10380@trixie.casa.cgf.cx>
+Message-ID: <20050125212445.GG31117@cygbert.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
 References: <41F6B1F6.5207C318@phumblet.no-ip.org>
@@ -24,28 +24,56 @@ Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <41F6B1F6.5207C318@phumblet.no-ip.org>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2005-q1/txt/msg00019.txt.bz2
+User-Agent: Mutt/1.4.2i
+X-SW-Source: 2005-q1/txt/msg00020.txt.bz2
 
-On Tue, Jan 25, 2005 at 03:54:14PM -0500, Pierre A. Humblet wrote:
->This patch should take care of the error reported by 
->Eric Blake on the list, at least for disk files.
->
->It also removes code under the condition
->(opt & PC_SYM_IGNORE) && pcheck_case == PCHECK_RELAXED
->which is never true, AFAICS.
->
->It also gets rid of an obsolete function.
->
->While testing, the assert (!i); on line 259 of pinfo.cc kicks in.
->That's a feature because when flag & PID_EXECED the code just loops,
->keeping the same h0 and mapname! Am I the only one to see that?
+Well done!  I looked into this a few hours ago and missed how easy a
+solution would be.  *mumbling something about needing glasses*
 
-No.  Corinna is seeing it too.  I have a fix in my sandbox but I've been
-too busy to test it properly before I check it in.
+I guess this is ok to check in after adding some spaces...
 
-Feel free to nuke the digits stuff.  Corinna will have to give her
-blessings to the rest since she's the one who researched this most
-recently.
+On Jan 25 15:54, Pierre A. Humblet wrote:
+> 2005-01-25  Pierre Humblet <pierre.humblet@ieee.org>
+> 
+> 	* path.cc (path_conv::check): Return ENOTDIR rather than ENOENT
+> 	when a component is not a directory. Remove unreachable code.
+> 	(digits): Delete.
+> 
+> Index: path.cc
+> ===================================================================
+> RCS file: /cvs/src/src/winsup/cygwin/path.cc,v
+> retrieving revision 1.338
+> diff -u -p -r1.338 path.cc
+> --- path.cc     18 Jan 2005 13:00:18 -0000      1.338
+> +++ path.cc     25 Jan 2005 20:08:53 -0000
+> @@ -655,12 +655,6 @@ path_conv::check (const char *src, unsig
+>               full_path[3] = '\0';
+>             }
+>  
+> -         if ((opt & PC_SYM_IGNORE) && pcheck_case == PCHECK_RELAXED)
+> -           {
+> -             fileattr = GetFileAttributes (this->path);
+> -             goto out;
+> -           }
+> -
+>           symlen = sym.check (full_path, suff, opt | fs.has_ea ());
+>  
+>           if (sym.minor || sym.major)
+> @@ -680,7 +674,7 @@ path_conv::check (const char *src, unsig
+>               if (pcheck_case == PCHECK_STRICT)
+>                 {
+>                   case_clash = true;
+> -                 error = ENOENT;
+> +                 error = component?ENOTDIR:ENOENT;
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-cgf
+...here.
+
+
+Thanks,
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          mailto:cygwin@cygwin.com
+Red Hat, Inc.
