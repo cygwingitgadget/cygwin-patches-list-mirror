@@ -1,31 +1,57 @@
-From: egor duda <deo@logos-m.ru>
-To: Christopher Faylor <cygwin-patches@cygwin.com>
-Subject: Re: memory leak in cygheap
-Date: Thu, 27 Sep 2001 11:17:00 -0000
-Message-id: <15899509507.20010927221556@logos-m.ru>
-References: <15294469449.20010927205156@logos-m.ru> <20010927140039.A32577@redhat.com>
-X-SW-Source: 2001-q3/msg00218.html
+From: "Robert Collins" <robert.collins@itdomain.com.au>
+To: <cygwin-patches@cygwin.com>
+Subject: Re: src/winsup/cygwin ChangeLog thread.cc thread.h ...
+Date: Thu, 27 Sep 2001 14:39:00 -0000
+Message-id: <015b01c1479d$1d48c370$01000001@lifelesswks>
+References: <20010925114527.23687.qmail@sourceware.cygnus.com> <14472692346.20010927144858@logos-m.ru> <007b01c14743$2a0005b0$01000001@lifelesswks> <12280602580.20010927170049@logos-m.ru> <008301c1475e$afb0c4e0$01000001@lifelesswks> <20010927140440.B32577@redhat.com>
+X-SW-Source: 2001-q3/msg00219.html
 
-Hi!
+----- Original Message -----
+From: "Christopher Faylor" <cgf@redhat.com>
+To: <cygwin-patches@cygwin.com>
+Sent: Friday, September 28, 2001 4:04 AM
+Subject: Re: src/winsup/cygwin ChangeLog thread.cc thread.h ...
 
-Thursday, 27 September, 2001 Christopher Faylor cgf@redhat.com wrote:
 
->>do we need this "no free names" logic at all? the only suspicious
->>place is fhandler_disk_file::open () where we were storing pointer to
->>real_path's win32_path, so if it was changing later we were staying in
->>sync with those changes. but i can't see why it may change after open
->>is called, so making duplicate looks safe for me. Comments?
+> On Fri, Sep 28, 2001 at 12:14:13AM +1000, Robert Collins wrote:
+> >Ok this is a quick-and-it-couldbe-cleaner patch.
+> >
+> >It's interim - this weekend I'll make time to roll the logic
+throughout
+> >thread.cc. The patch doesn't introduce any new issues though, and it
+is
+> >the correct IMO step to solving the issue(s) I was trying to address
+> >with my last lets-break-cygwin patch.
+> >
+> >I have _no_ idea why it worked at all after I built that .dll :}. The
+> >fault for those wanting the grisly details was that I changed the
+> >semantics of verifyableobject_isvalid without updating the tests
+against
+> >the return code. Doh.
+> >
+> >I'm having some trouble with cvs+ssh with this patch .. though I'm
+not
+> >sure why. For a little while I though it might be chris's tuesday
+> >sleep(1) change, because I was getting strange results from pspec>
+I'm
+> >not sure though.
+>
+> Huh?  What is my "sleep(1)" change?  The only change I made on Tuesday
+was
+> to fhandler_tty_common::ready_for_read.  How would that affect cvs?
 
-CF> We've recently changed build_fhandler so that it probably isn't necessary
-CF> to use the no_free_names anymore.
+Uh, looked at when Rob needed sleep(real) :]. Tues may 22nd - waaaaay
+too far back to be of any impact.
 
-CF> I don't have a lot of time to investigate right now, but it's possible that
-CF> we can now get rid of this entirely.
+> I don't know what pspec is either, so I'm lost.
 
-CF> So, I think your patch is probably overkill.
+Sorry, pspec is one of my test suite programs, that is very heavy on
+concurrent sleeps. It seemed to be crashing, but for some reason the
+actual faulty program was pt , and under make check task manager was
+showing the wrong process name - don't ask why!.
 
-? why overkill? i've just moved two identical pieces of code into
-separate routine and removed no_free_names checks. I was thinking it's
-rather "underkill" because no_free_names bit in flags are left intact.
+However something has changed this week to break cvs+ssh for me. I'll
+binary search this today (I'll do a local rollback of the thread code
+and then see where it is without any thread changes).
 
-Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
+Rob
