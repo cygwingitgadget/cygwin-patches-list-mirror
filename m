@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2067-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 21545 invoked by alias); 16 Apr 2002 14:54:48 -0000
+Return-Path: <cygwin-patches-return-2068-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 8530 invoked by alias); 17 Apr 2002 07:08:02 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,51 +7,90 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 21495 invoked from network); 16 Apr 2002 14:54:45 -0000
-Date: Tue, 16 Apr 2002 07:54:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
+Received: (qmail 8481 invoked from network); 17 Apr 2002 07:07:48 -0000
+X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
+Date: Wed, 17 Apr 2002 00:08:00 -0000
+From: Thomas Pfaff <tpfaff@gmx.net>
 To: cygwin-patches@cygwin.com
-Subject: Re: Workaround patch for MS CLOSE_WAIT bug
-Message-ID: <20020416145454.GB32707@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3.0.5.32.20020414152944.007ec460@mail.attbi.com> <20020415141743.N29277@cygbert.vinschen.de> <20020415150129.GA6372@redhat.com> <3CBAF313.1438CF6C@ieee.org> <20020415154209.GG6372@redhat.com> <3CBAFDA5.444F884E@ieee.org> <20020416090632.E6120@cygbert.vinschen.de>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20020416090632.E6120@cygbert.vinschen.de>
-User-Agent: Mutt/1.3.23.1i
-X-SW-Source: 2002-q2/txt/msg00051.txt.bz2
+Subject: [PATCH] dtors run twice on dll detach (update)
+Message-ID: <F0E13277A26BD311944600500454CCD050807A-101000@antarctica.intern.net>
+X-X-Sender: pfaff@antarctica.intern.net
+MIME-Version: 1.0
+Content-Type: MULTIPART/MIXED; BOUNDARY="299144-25001-1019027082=:422"
+Content-ID: <Pine.WNT.4.44.0204170905310.422@algeria.intern.net>
+X-SW-Source: 2002-q2/txt/msg00052.txt.bz2
 
-On Tue, Apr 16, 2002 at 09:06:32AM +0200, Corinna Vinschen wrote:
->On Mon, Apr 15, 2002 at 12:19:49PM -0400, Pierre A. Humblet wrote:
->> Christopher Faylor wrote:
->> 
->> > How can you second that 100% and then talk about how people have to
->> > change ther code to accomodate cygwin?  
->> I second 100% that it's best to find a solution that avoids the MS 
->> bug without requiring any change from Unix.
->> Meanwhile nobody "has to" do anything as a result of including
->> my proposal. 
->> I hope this discussion will generate better approaches.
->
->I think there's only one approach which would allow applications
->to run without special Cygwin patches.  When duplicating a socket,
->Cygwin needs to know the parent-child relationship between the
->sockets.  When closing a socket, the DLL has to check, if there's
->still a child socket left open.  If so, the socket isn't closed
->but moved into a "still-to-close" queue (like the delqueue) until
->all child sockets are closed.  The same for the application itself.
->If exit() has been called, Cygwin has to keep the application in a
->zombie-like state until the child sockets have been closed.
->
->The problem is that this requires a parent-child communication
->which isn't implemented yet.  This would be a job for the Cygwin
->daemon.
->
->Does that invalidate Pierre's approach?  I don't think so.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
 
-I don't see why a daemon is needed.  There is already parent/child
-communication going on without the daemon.
+--299144-25001-1019027082=:422
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-ID: <Pine.WNT.4.44.0204170905311.422@algeria.intern.net>
+Content-length: 940
 
-cgf
+I am sorry for the previous patch, it was incomplete. This is hopefully a
+better one:
+
+On Tue, 16 Apr 2002, Thomas Pfaff wrote:
+
+> I ran into a problem when is was trying to build STLPort-4.5.3 as dll
+> (if
+> somebody is interested i can send him my patches). A program build with
+> this dll crashed in _free_r on termination. After testing a while i
+> discovered that the dtors were run twice, the first time from
+> dll_global_dtors, the second time from dll_list::detach which resulted
+> in
+> a duplicated free for the same pointer.
+> Since i can not judge which function is obsolete (i guess
+> dll_global_dtors
+> is) i have attached a small patch that will make sure that the dtors run
+> only once.
+>
+> Regards
+> Thomas
+>
+> 2002-04-16  Thomas Pfaff  <tpfaff@gmx.net>
+>
+> 	* dll_init.h (per_process::dtors_run): New member.
+> 	* dll_init.cc (per_module::run_dtors): Run dtors only once.
+> 	(dll::init): Initialize dtors_run flag.
+>
+>
+>
+
+
+
+--299144-25001-1019027082=:422
+Content-Type: APPLICATION/OCTET-STREAM; name="run_dtors.patch"
+Content-Transfer-Encoding: BASE64
+Content-ID: Pine.WNT.4.44.0204170904420.422@algeria.intern.net
+Content-Description: 
+Content-Disposition: attachment; filename="run_dtors.patch"
+Content-length: 1387
+
+ZGlmZiAtdXJwIGN5Z3dpbi5vbGQvd2luc3VwL2N5Z3dpbi9kbGxfaW5pdC5j
+YyBjeWd3aW4vd2luc3VwL2N5Z3dpbi9kbGxfaW5pdC5jYwotLS0gY3lnd2lu
+Lm9sZC93aW5zdXAvY3lnd2luL2RsbF9pbml0LmNjCVRodSBOb3YgIDEgMDE6
+MzA6MDMgMjAwMQorKysgY3lnd2luL3dpbnN1cC9jeWd3aW4vZGxsX2luaXQu
+Y2MJV2VkIEFwciAxNyAwODo0NDoyMyAyMDAyCkBAIC01OSw2ICs1OSwxMSBA
+QCB2b2lkCiBwZXJfbW9kdWxlOjpydW5fZHRvcnMgKCkKIHsKICAgdm9pZCAo
+KipwZnVuYykoKSA9IGR0b3JzOworCisgIGlmKCBkdG9yc19ydW4gKQorICAg
+ICByZXR1cm47CisgIGR0b3JzX3J1biA9IHRydWU7CisKICAgZm9yIChpbnQg
+aSA9IDE7IHBmdW5jW2ldOyBpKyspCiAgICAgKHBmdW5jW2ldKSAoKTsKIH0K
+QEAgLTcxLDYgKzc2LDggQEAgZGxsOjppbml0ICgpCiAKICAgLyogV2h5IGRp
+ZG4ndCB3ZSBqdXN0IGltcG9ydCB0aGlzIHZhcmlhYmxlPyAqLwogICAqKHAu
+ZW52cHRyKSA9IF9fY3lnd2luX2Vudmlyb247CisKKyAgcC5kdG9yc19ydW4g
+PSBmYWxzZTsKIAogICAvKiBEb24ndCBydW4gY29uc3RydWN0b3JzIG9yIHRo
+ZSAibWFpbiIgaWYgd2UndmUgZm9ya2VkLiAqLwogICBpZiAoIWluX2Zvcmtl
+ZSkKZGlmZiAtdXJwIGN5Z3dpbi5vbGQvd2luc3VwL2N5Z3dpbi9kbGxfaW5p
+dC5oIGN5Z3dpbi93aW5zdXAvY3lnd2luL2RsbF9pbml0LmgKLS0tIGN5Z3dp
+bi5vbGQvd2luc3VwL2N5Z3dpbi9kbGxfaW5pdC5oCVN1biBOb3YgIDQgMjI6
+Mzk6MzggMjAwMQorKysgY3lnd2luL3dpbnN1cC9jeWd3aW4vZGxsX2luaXQu
+aAlXZWQgQXByIDE3IDA4OjQzOjUzIDIwMDIKQEAgLTEzLDYgKzEzLDcgQEAg
+c3RydWN0IHBlcl9tb2R1bGUKICAgY2hhciAqKiplbnZwdHI7CiAgIHZvaWQg
+KCoqY3RvcnMpKHZvaWQpOwogICB2b2lkICgqKmR0b3JzKSh2b2lkKTsKKyAg
+Ym9vbCBkdG9yc19ydW47CiAgIHZvaWQgKmRhdGFfc3RhcnQ7CiAgIHZvaWQg
+KmRhdGFfZW5kOwogICB2b2lkICpic3Nfc3RhcnQ7Cg==
+
+--299144-25001-1019027082=:422--
