@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2664-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 5949 invoked by alias); 19 Jul 2002 08:04:42 -0000
+Return-Path: <cygwin-patches-return-2665-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 8243 invoked by alias); 19 Jul 2002 08:23:32 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,40 +7,60 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 5932 invoked from network); 19 Jul 2002 08:04:41 -0000
-Message-ID: <3D37C874.1131773@certum.pl>
-Date: Fri, 19 Jul 2002 01:04:00 -0000
-From: Jacek Trzcinski <jacek@certum.pl>
-Reply-To: jacek@certum.pl
-X-Accept-Language: en,pdf
-MIME-Version: 1.0
-To: cygwin-patches@cygwin.com
-Subject: /dev/dsp
+Received: (qmail 8226 invoked from network); 19 Jul 2002 08:23:31 -0000
+Date: Fri, 19 Jul 2002 01:23:00 -0000
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
+To: cygpatch <cygwin-patches@cygwin.com>
+Subject: Re: Corinna or Pierre please comment? [jason@tishler.net: Re: setuid
+Message-ID: <20020719102328.E6932@cygbert.vinschen.de>
+Mail-Followup-To: cygpatch <cygwin-patches@cygwin.com>
+References: <3.0.5.32.20020718211250.0080a5e0@mail.attbi.com>
+Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-SW-Source: 2002-q3/txt/msg00112.txt.bz2
+Content-Disposition: inline
+In-Reply-To: <3.0.5.32.20020718211250.0080a5e0@mail.attbi.com>
+User-Agent: Mutt/1.3.22.1i
+X-SW-Source: 2002-q3/txt/msg00113.txt.bz2
 
-Hi Corinna,
+On Thu, Jul 18, 2002 at 09:12:50PM -0400, Pierre A. Humblet wrote:
+> Corinna,
+> 
+> Here is the patch.
 
-I would like to ask You about /dev/dsp developing. Nicholas Wourms
-asked me few days ago about 
-implementation of reading from /dev/dsp which is currently unsupported.
-Being then not too familiar with this matter I traced current cygwin
-sources (fhandler_dsp.cc) and Windows library possibilities. From
-Windows point of view it is simple to implement reading from audio
-device. Main work is to "convert" it to Cygwin manner. Taking into
-account current solution of /dev/dsp in fhandler_dsp.cc for writing it
-seems to be not very difficult to implement reading. It of course
-requires time for developing so I have questions:
+Thanks but I don't see why you removed the call to get_user_primary_group().
+You now rely fully on /etc/passwd and /etc/group containing the correct
+information.  Before, prgpsid has been set to a value if it was NULL, now
+it's only used for checking.  This would result in
 
-1) Who is really interested - excluding Nicholas :-) - /dev/dsp works in
-read mode. It will prevent any possible future work to be useless.
+  pgrp.PrimaryGroup = NULL;
 
-2) Do You know whether the author of /dev/dsp (Andy Younger) or other
-people work or are going to work to solve the problem. I can not
-guarantee to finish any posiible work from my side 
-in predictable moment in time (a lot of work concerned with my job) so
-if nobody is going to develop /dev/dsp I could step by step do something
-to solve /dev/dsp reading problem.
+in the calling create_token() function.  Which probably results in
+a failing NtCreateToken() function.
 
-Jacek
+
+Another question.  Shouldn't this in create_token
+
+      psa = __sec_user (sa_buf, usersid, TRUE);
+      if (psa->lpSecurityDescriptor &&
+          !SetSecurityDescriptorGroup (
+              (PSECURITY_DESCRIPTOR) psa->lpSecurityDescriptor,
+              special_pgrp ? pgrpsid : well_known_null_sid, FALSE))
+              ^^^^^^^^^^^^
+
+better be change to
+
+      psa = __sec_user (sa_buf, usersid, TRUE);
+      if (psa->lpSecurityDescriptor &&
+          !SetSecurityDescriptorGroup (
+              (PSECURITY_DESCRIPTOR) psa->lpSecurityDescriptor,
+              pgrpsid ? pgrpsid : well_known_null_sid, FALSE))
+              ^^^^^^^
+
+?
+
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
