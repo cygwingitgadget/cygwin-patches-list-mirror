@@ -1,19 +1,23 @@
-From: Christopher Faylor <cgf@redhat.com>
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH]Write Mount Commands - TNG
-Date: Mon, 03 Sep 2001 18:10:00 -0000
-Message-id: <20010903211033.D3824@redhat.com>
-References: <004901c134db$743a6230$200a0a0a@us.oracle.com>
-X-SW-Source: 2001-q3/msg00098.html
+Subject: Re: a bug in restoring the console.
+Date: Tue, 04 Sep 2001 03:46:00 -0000
+Message-id: <20010904124647.F2419@cygbert.vinschen.de>
+References: <s1szo8c6p0y.fsf@jaist.ac.jp>
+X-SW-Source: 2001-q3/msg00099.html
 
-On Mon, Sep 03, 2001 at 05:36:45PM -0700, Michael A. Chase wrote:
->2001-09-03  Michael A Chase <mchase@ix.netcom.com>
->
->    * mount.cc (mount_commands): Don't write /cygdrive/u mount points.
+On Tue, Sep 04, 2001 at 04:41:01AM +0900, Kazuhiro Fujieda wrote:
+> I succeeded to enjoy the feature saving/restoring the console
+> with less and the latest termcap, but found a bug on NT4/Win2k.
+> [...]
 
-Applied.  Thanks.
+Thanks Kazuhiro,
 
-(I can still hear the cygwin mailing list wails though  'Why is everything
-quoooottttteeeeeedddd!!")
+just applied,
 
-cgf
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
