@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5242-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 20153 invoked by alias); 18 Dec 2004 00:35:49 -0000
+Return-Path: <cygwin-patches-return-5243-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 2536 invoked by alias); 18 Dec 2004 14:10:50 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,58 +7,118 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 19299 invoked from network); 18 Dec 2004 00:35:03 -0000
-Received: from unknown (HELO cgf.cx) (66.30.17.189)
-  by sourceware.org with SMTP; 18 Dec 2004 00:35:03 -0000
-Received: by cgf.cx (Postfix, from userid 201)
-	id 572281B401; Fri, 17 Dec 2004 19:36:15 -0500 (EST)
-Date: Sat, 18 Dec 2004 00:35:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: Patch to allow trailing dots on managed mounts
-Message-ID: <20041218003615.GB3068@trixie.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20041216155339.GA16474@cygbert.vinschen.de> <20041216155707.GG23488@trixie.casa.cgf.cx> <20041216160322.GC16474@cygbert.vinschen.de> <3.0.5.32.20041216220441.0082a400@incoming.verizon.net> <20041217032627.GF26712@trixie.casa.cgf.cx> <3.0.5.32.20041216224347.0082d210@incoming.verizon.net> <20041217061741.GG26712@trixie.casa.cgf.cx> <41C31496.4D9140C7@phumblet.no-ip.org> <20041217175649.GA1237@trixie.casa.cgf.cx> <41C36530.89F5A621@phumblet.no-ip.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <41C36530.89F5A621@phumblet.no-ip.org>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2004-q4/txt/msg00243.txt.bz2
+Received: (qmail 2470 invoked from network); 18 Dec 2004 14:10:42 -0000
+Received: from unknown (HELO ptb-relay01.plus.net) (212.159.14.212)
+  by sourceware.org with SMTP; 18 Dec 2004 14:10:42 -0000
+Received: from [81.174.168.250] (helo=avocado)
+	 by ptb-relay01.plus.net with esmtp (Exim) id 1CffI8-000OC4-9d
+	for cygwin-patches@cygwin.com; Sat, 18 Dec 2004 14:10:40 +0000
+From: "Chris January" <chris@atomice.net>
+To: <cygwin-patches@cygwin.com>
+Subject: Add self to /proc (to support procps 3.2.4)
+Date: Sat, 18 Dec 2004 14:10:00 -0000
+Message-ID: <081101c4e50b$5c822310$0207a8c0@avocado>
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+	boundary="----=_NextPart_000_0812_01C4E50B.5C822310"
+X-SW-Source: 2004-q4/txt/msg00244.txt.bz2
 
-On Fri, Dec 17, 2004 at 06:01:04PM -0500, Pierre A. Humblet wrote:
->Christopher Faylor wrote:
->
->> While I detest the trailing dot crap, I don't want cygwin to be inconsistent.
->> I don't want ls /bin./ls.exe to fail but ls /cygdrive/c/bin./ls.exe to work.
->
->Assuming a normal install, the first one is c:\cygwin\bin.\ls.exe,
->which would NOT fail, while the second is c:\bin.\ls.exe, which would
->fail as expected (not due to dots).
+This is a multi-part message in MIME format.
 
-Ok.  Yes.  I had a typo.
+------=_NextPart_000_0812_01C4E50B.5C822310
+Content-Type: text/plain;
+	charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Content-length: 255
 
-If /cygdrive/c/cygwin/bin./ls.exe works, then /bin./ls.exe should also work.
-Or, both should fail.  "consistent"
+2004-12-18  Chris January  <chris@atomice.net>
 
->>I'm not sure that it makes sense for ln -s foo "bar." to actually
->>create a file with a trailing dot on a non-managed mount either.  That
->>seems to expose an implementation detail of the way links are handled
->>and it seems inconsistent to me.
->
->Perhaps, but nobody has complained about it over the years!
+	* fhandler_proc.cc (proc_listing): Add entry for "self".
+	(proc_fhandlers): Add entry for "self".
+	* fhandler_process.cc (fhandler_process::fstate): Handle "self".
+	(fhandler_process::open): Handle "self".
 
-And, until now, no one has complained about the current behavior for
-months!
+------=_NextPart_000_0812_01C4E50B.5C822310
+Content-Type: application/octet-stream;
+	name="proc_self.ChangeLog"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+	filename="proc_self.ChangeLog"
+Content-length: 256
 
->> If we are "fixing" this (I firmly believe that the code in path_conv is never
->> really going to be right) then I don't want to add inconsistencies.
->
->I agree that path_conv is never going to be "right". I would 
->not reduce functionality nor open new holes merely to reduce 
->inconsistencies due to Windows.
+2004-12-18  Chris January  <chris@atomice.net>
 
-And there we disagree.
+	* fhandler_proc.cc (proc_listing): Add entry for "self".
+	(proc_fhandlers): Add entry for "self".
+	* fhandler_process.cc (fhandler_process::fstate): Handle "self".
+	(fhandler_process::open): Handle "self".
 
-cgf
+
+------=_NextPart_000_0812_01C4E50B.5C822310
+Content-Type: application/octet-stream;
+	name="proc_self.patch"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment;
+	filename="proc_self.patch"
+Content-length: 1866
+
+Index: fhandler_proc.cc=0A=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
+RCS file: /cvs/src/src/winsup/cygwin/fhandler_proc.cc,v=0A=
+retrieving revision 1.47=0A=
+diff -u -r1.47 fhandler_proc.cc=0A=
+--- fhandler_proc.cc	12 Sep 2004 03:47:56 -0000	1.47=0A=
++++ fhandler_proc.cc	18 Dec 2004 14:08:25 -0000=0A=
+@@ -54,6 +54,7 @@=0A=
+   "uptime",=0A=
+   "cpuinfo",=0A=
+   "partitions",=0A=
++  "self",=0A=
+   NULL=0A=
+ };=0A=
+=20=0A=
+@@ -73,6 +74,7 @@=0A=
+   FH_PROC,=0A=
+   FH_PROC,=0A=
+   FH_PROC,=0A=
++  FH_PROCESS,=0A=
+ };=0A=
+=20=0A=
+ /* name of the /proc filesystem */=0A=
+Index: fhandler_process.cc=0A=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
+RCS file: /cvs/src/src/winsup/cygwin/fhandler_process.cc,v=0A=
+retrieving revision 1.44=0A=
+diff -u -r1.44 fhandler_process.cc=0A=
+--- fhandler_process.cc	3 Sep 2004 01:53:11 -0000	1.44=0A=
++++ fhandler_process.cc	18 Dec 2004 14:08:26 -0000=0A=
+@@ -107,7 +107,10 @@=0A=
+   int file_type =3D exists ();=0A=
+   (void) fhandler_base::fstat (buf);=0A=
+   path +=3D proc_len + 1;=0A=
+-  pid =3D atoi (path);=0A=
++  if (path_prefix_p ("self", path, 4))=0A=
++    pid =3D getpid ();=0A=
++  else=0A=
++    pid =3D atoi (path);=0A=
+   pinfo p (pid);=0A=
+   if (!p)=0A=
+     {=0A=
+@@ -167,7 +170,10 @@=0A=
+=20=0A=
+   const char *path;=0A=
+   path =3D get_name () + proc_len + 1;=0A=
+-  pid =3D atoi (path);=0A=
++  if (path_prefix_p ("self", path, 4))=0A=
++    pid =3D getpid ();=0A=
++  else=0A=
++    pid =3D atoi (path);=0A=
+   while (*path !=3D 0 && !isdirsep (*path))=0A=
+     path++;=0A=
+=20=0A=
+
+------=_NextPart_000_0812_01C4E50B.5C822310--
