@@ -1,23 +1,77 @@
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: fileutils-4.0-3
-Date: Thu, 14 Jun 2001 10:49:00 -0000
-Message-id: <20010614134928.E16245@redhat.com>
-References: <Pine.GSO.4.21.0106122003330.3791-100000@devmail.dev.tivoli.com> <20010613105845.D1144@cygbert.vinschen.de> <12812308989.20010613152159@logos-m.ru> <20010613153123.K1144@cygbert.vinschen.de> <4385449600.20010614114100@logos-m.ru> <20010614170757.A1144@cygbert.vinschen.de>
-X-SW-Source: 2001-q2/msg00304.html
+From: "Robert Collins" <robert.collins@itdomain.com.au>
+To: "Greg Smith" <rys@epaibm.rtpnc.epa.gov>, <cygwin@cygwin.com>
+Cc: <cygwin-patches@cygwin.com>
+Subject: Re: hang in pthread_cond_signal
+Date: Thu, 14 Jun 2001 16:25:00 -0000
+Message-id: <03cb01c0f529$7b826020$0200a8c0@lifelesswks>
+References: <3B290FE5.22678B61@trex.rtpnc.epa.gov>
+X-SW-Source: 2001-q2/msg00305.html
+Content-type: multipart/mixed; boundary="----------=_1583532848-65438-72"
 
-On Thu, Jun 14, 2001 at 05:07:57PM +0200, Corinna Vinschen wrote:
->On Thu, Jun 14, 2001 at 11:41:00AM +0400, egor duda wrote:
->> patch attached. i was a bit confused to discover, however, that
->> stat_worker works somehow without it. AFAICS from stat_worker code,
->> if it cannot open file, it still tries to get as much information as
->> it can, file size and times included. so, du works for me either with
->> or without this patch.
+This is a multi-part message in MIME format...
+
+------------=_1583532848-65438-72
+Content-length: 734
+
+----- Original Message -----
+From: "Greg Smith" <rys@epaibm.rtpnc.epa.gov>
+To: <cygwin@cygwin.com>
+Sent: Friday, June 15, 2001 5:26 AM
+Subject: hang in pthread_cond_signal
+
+
+> I am using the cygwin-src snapshot from June 10.
 >
->The patch is fine, IMO.
+> Seems pthread_cond_signal can hang while another thread
+> is waiting on the condition AND a pthread_cond_signal
+> has been previously issued when no one was waiting on the
+> condition.  Below is a testcase that illustrates the
+> problem:
+>
+> Thanks,
+>
+> Greg
+>
 
-It looks fine to me, too.  Please check it in.
+Thanks for the testcase Greg. The attached patch fixes your testcase.
 
-I wish I understood why this failed in some situations and not other, though.
+Rob
 
-cgf
+Changelog:
+
+
+Fri June 15 09:25:00  Robert Collins <rbtcollins@hotmail.com>
+
+    * thread.cc (pthread_cond::Signal): Release the condition access
+variable correctly.
+
+
+
+------------=_1583532848-65438-72
+Content-Type: text/x-diff; charset=us-ascii; name="cond_signal_fix.patch"
+Content-Disposition: inline; filename="cond_signal_fix.patch"
+Content-Transfer-Encoding: base64
+Content-Length: 1188
+
+SW5kZXg6IHRocmVhZC5jYwo9PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBm
+aWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL2N5Z3dpbi90aHJlYWQuY2Msdgpy
+ZXRyaWV2aW5nIHJldmlzaW9uIDEuMzMKZGlmZiAtdSAtcCAtcjEuMzMgdGhy
+ZWFkLmNjCi0tLSB0aHJlYWQuY2MJMjAwMS8wNi8wNyAxOTo1NTowNgkxLjMz
+CisrKyB0aHJlYWQuY2MJMjAwMS8wNi8xNCAyMzoyMzo1OQpAQCAtNDQyLDcg
+KzQ0MiwxMiBAQCBwdGhyZWFkX2NvbmQ6OlNpZ25hbCAoKQogICBpZiAocHRo
+cmVhZF9tdXRleF9sb2NrICgmY29uZF9hY2Nlc3MpKQogICAgIHN5c3RlbV9w
+cmludGYgKCJGYWlsZWQgdG8gbG9jayBjb25kaXRpb24gdmFyaWFibGUgYWNj
+ZXNzIG11dGV4LCB0aGlzICUwcFxuIiwgdGhpcyk7CiAgIGlmICghdmVyaWZ5
+YWJsZV9vYmplY3RfaXN2YWxpZCAobXV0ZXgsIFBUSFJFQURfTVVURVhfTUFH
+SUMpKQotICAgIHJldHVybjsKKyAgICB7CisgICAgICBpZiAocHRocmVhZF9t
+dXRleF91bmxvY2sgKCZjb25kX2FjY2VzcykpCisgICAgICAgIHN5c3RlbV9w
+cmludGYgKCJGYWlsZWQgdG8gdW5sb2NrIGNvbmRpdGlvbiB2YXJpYWJsZSBh
+Y2Nlc3MgbXV0ZXgsIHRoaXMgJTBwXG4iLAorICAgICAgICAgICAgICAgICAg
+ICAgICB0aGlzKTsKKyAgICAgIHJldHVybjsKKyAgICB9CiAgIFB1bHNlRXZl
+bnQgKHdpbjMyX29ial9pZCk7CiAgIGlmIChwdGhyZWFkX211dGV4X3VubG9j
+ayAoJmNvbmRfYWNjZXNzKSkKICAgICBzeXN0ZW1fcHJpbnRmICgiRmFpbGVk
+IHRvIHVubG9jayBjb25kaXRpb24gdmFyaWFibGUgYWNjZXNzIG11dGV4LCB0
+aGlzICUwcFxuIiwgdGhpcyk7Cg==
+
+------------=_1583532848-65438-72--
