@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2020-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 20275 invoked by alias); 3 Apr 2002 14:31:45 -0000
+Return-Path: <cygwin-patches-return-2021-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 27258 invoked by alias); 3 Apr 2002 18:12:08 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,51 +7,65 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 20261 invoked from network); 3 Apr 2002 14:31:42 -0000
-Date: Wed, 03 Apr 2002 06:31:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Setup Chooser integration
-Message-ID: <20020403143152.GF4053@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <FC169E059D1A0442A04C40F86D9BA76008AC08@itdomain003.itdomain.net.au> <000c01c1da8b$604fb3f0$2101a8c0@BRAEMARINC.COM>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000c01c1da8b$604fb3f0$2101a8c0@BRAEMARINC.COM>
-User-Agent: Mutt/1.3.23.1i
-X-SW-Source: 2002-q2/txt/msg00004.txt.bz2
+Received: (qmail 27237 invoked from network); 3 Apr 2002 18:12:07 -0000
+Date: Wed, 03 Apr 2002 10:12:00 -0000
+To: cygwin-apps@cygwin.com,
+    cygwin-patches@cygwin.com
+Subject: Re: Patch for Setup.exe problem and for mklink2.cc
+Message-Id: <VA.00000b1a.003b4a45@thesoftwaresource.com>
+From: Brian Keener <bkeener@thesoftwaresource.com>
+Reply-To: bkeener@thesoftwaresource.com
+In-Reply-To: <E16qEjA-0007iC-00@smtp2.cistron.nl>
+References: <E16qEjA-0007iC-00@smtp2.cistron.nl>
+X-SW-Source: 2002-q2/txt/msg00005.txt.bz2
 
-On Tue, Apr 02, 2002 at 03:14:28PM -0600, Gary R Van Sickle wrote:
->> Image: you click on 'install' for 'gcc', and up pops a window 
->> that lists
->> everything that gcc depends on (both requires as we have today, and
->> 'suggested' items that aren't always needed but are useful - ie
->> autoconf), that was not selected before that click. 
->> 
+ wrote:
+> > As for the &'s, I wonder if it's a w32api reference issue? The compiler
+> 
+> > complains if they are present for me.
+> 
+> For me it is the opposite. g++ complains when they are *not*
+> 
+> present.
 >
->I'm drawing a blank at the utility of such a feature, at least in the guise
->of a popup of any kind.  You're saying that as you go through the dozens of
->packages you want and select them, that a box pops up bugging you about the
->dependencies of each selection, which you can't do anything about anyways?
->That sounds like it would be extremely irritating.
+I believe this might be related to the above discussion so I thought I would 
+add this - I updated my cinstall (Setup.exe) node from HEAD in cvs (cvs update 
+-rHEAD) on Monday and now when I try to compile on my Win2000 laptop I get the 
+following error:
 
-Ditto.  I also have to admit that I don't see how this corresponds with any
-complaints or requests that I've seen in the cygwin mailing list.
+make[2]: Entering directory `/usr/develop/obj/i686-pc-cygwin/winsup/cinstall'
+/usr/bin/c++ -L/usr/develop/obj/i686-pc-cygwin/winsup 
+-L/usr/develop/obj/i686-pc-cygwin/winsup/cygwin 
+-L/usr/develop/obj/i686-pc-cygwin/winsup/w32api/lib -isystem 
+/usr/develop/src/winsup/include -isystem /usr/develop/src/winsup/cygwin/include 
+-isystem /usr/develop/src/winsup/w32api/include -isystem 
+/usr/develop/src/newlib/libc/sys/cygwin -isystem 
+/usr/develop/src/newlib/libc/sys/cygwin32 
+-B/usr/develop/obj/i686-pc-cygwin/newlib/ -isystem 
+/usr/develop/obj/i686-pc-cygwin/newlib/targ-include -isystem 
+/usr/develop/src/newlib/libc/include -MMD -g -O2 -mno-cygwin -I. 
+-I/usr/develop/src/winsup/cinstall -I/usr/develop/src/winsup/mingw/include  
+-I/usr/develop/src/winsup/bz2lib -mwindows -c -o mklink2.o 
+/usr/develop/src/winsup/cinstall/mklink2.cc
+/usr/develop/src/winsup/cinstall/mklink2.cc: In function `void 
+make_link_2(const char *, const char *, const char *, const char *)':
+/usr/develop/src/winsup/cinstall/mklink2.cc:24: cannot convert 
+`CLSID_ShellLink' from type `const GUID' to type `const CLSID *'
+/usr/develop/src/winsup/cinstall/mklink2.cc:25: cannot convert 
+`IID_IPersistFile' from type `_GUID' to type `const IID *'
+make[2]: *** [mklink2.o] Error 1
+make[2]: Leaving directory `/usr/develop/obj/i686-pc-cygwin/winsup/cinstall'
+make[1]: *** [cinstall] Error 1
+make[1]: Leaving directory `/usr/develop/obj/i686-pc-cygwin/winsup'
+make: *** [all-target-winsup] Error 2
+~
+$ 
 
->>Likewise, if you click ash off, up pops a window listing everything
->>that depends on ash, with an addiotnal message of "Warning: removing
->>ash will cause these packages to be removed as well.
->>
->
->This does make quite a bit of sense to me.  But wouldn't MessageBox()
->or something akin to it be a better fit to the task?  The only possible
->user input here would be "Yes, remove ash and everything dependent on
->it" and "Cancel", and the only output a list of package names.
+I have tried reinstalling the w32api packages for version 1.1-1, 1.2-1 and 
+1.2-2 as well as other various packages in an attempt to resolve but still get 
+the same error when I compile.  
 
-Actually, I think that automatically removing dependencies is not a good
-idea.  If I select binutils specifically, then select gcc, then uninstall
-gcc, I would probably be annoyed to see binutils disappear.
+I see the patch that Ton van Overbeek and I am about to try that - will this 
+become a standard patch.
 
-cgf
+
