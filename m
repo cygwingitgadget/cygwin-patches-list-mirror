@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3717-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 7129 invoked by alias); 19 Mar 2003 12:36:41 -0000
+Return-Path: <cygwin-patches-return-3718-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 24674 invoked by alias); 19 Mar 2003 13:49:52 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,88 +7,119 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 6951 invoked from network); 19 Mar 2003 12:36:39 -0000
-Subject: Re: [PATCH] reorganize list handling of fixable pthread objects
-From: Robert Collins <rbcollins@cygwin.com>
-To: Thomas Pfaff <tpfaff@gmx.net>
-Cc: cygwin-patches@cygwin.com
-In-Reply-To: <Pine.WNT.4.44.0303191149350.264-100000@algeria.intern.net>
-References: <Pine.WNT.4.44.0303191149350.264-100000@algeria.intern.net>
-Content-Type: multipart/signed; micalg=pgp-sha1; protocol="application/pgp-signature"; boundary="=-R6SQIP2LiXYHjTY0BbGz"
-Organization: 
-Message-Id: <1048077394.5689.159.camel@localhost>
-Mime-Version: 1.0
-Date: Wed, 19 Mar 2003 12:36:00 -0000
-X-SW-Source: 2003-q1/txt/msg00366.txt.bz2
+Received: (qmail 24663 invoked from network); 19 Mar 2003 13:49:52 -0000
+X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
+Date: Wed, 19 Mar 2003 13:49:00 -0000
+From: Thomas Pfaff <tpfaff@gmx.net>
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] Add unsigned long Interlocked functions
+Message-ID: <Pine.WNT.4.44.0303191441120.257-200000@algeria.intern.net>
+X-X-Sender: pfaff@antarctica.intern.net
+MIME-Version: 1.0
+Content-Type: MULTIPART/MIXED; BOUNDARY="160110-8113-1048081419=:257"
+Content-ID: <Pine.WNT.4.44.0303191443550.257@algeria.intern.net>
+X-SW-Source: 2003-q1/txt/msg00367.txt.bz2
+
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
+
+--160110-8113-1048081419=:257
+Content-Type: TEXT/PLAIN; CHARSET=US-ASCII
+Content-ID: <Pine.WNT.4.44.0303191443551.257@algeria.intern.net>
+Content-length: 467
 
 
---=-R6SQIP2LiXYHjTY0BbGz
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1280
+2003-03-19  Thomas Pfaff  <tpfaff@gmx.net>
 
-On Wed, 2003-03-19 at 21:56, Thomas Pfaff wrote:
-> I think that the code could be simplified by making callback a pointer to
-> member function.
->=20
-> void forEach (void (ListNode::*callback) ())
-> {
->   ListNode *aNode =3D head;
->   while (aNode)
->     {
->       (aNode->*callback) ();
->       aNode =3D aNode->next;
->     }
-> }
->=20
-> With this change you do not need a static to member wrapper function like
-> pthread_key::saveAKey.
->=20
-> You could write
->=20
-> void pthread_key::fixup_before_fork()
-> {
->   keys.forEach (&pthread_key::saveKeyToBuffer);
-> }
->=20
-> void pthread_key::fixup_after_fork()
-> {
->   keys.forEach (&pthread_key::recreateKeyFromBuffer);
-> }
->=20
-> void pthread_key::runAllDestructors ()
-> {
->   keys.forEach (&pthread_key::runDestructor);
-> }
->=20
-> instead.
+	* thread.cc (pthread_cond::Wait): Remove typecasts for unsigned
+	long values when calling Interlocked functions. Use new UL functions
+	instead.
+	(pthread_mutex::_Lock): Ditto.
+	(pthread_mutex::_TryLock): Ditto.
+	* winbase.h (InterlockedIncrementUL): New inline function for type
+	safety with unsigned parameters.
+	(InterlockedDecrementUL): Ditto.
+	(InterlockedExchangeUL): Ditto.
+	(InterlockedCompareExchangeUL): Ditto.
 
-For some reason, I forgot that I put in the 'poor mans generic
-programming' initially. It just stood out in the patch.
 
-Using a member pointer like that still requires each function to have
-the same signature. The for_each I sketched below allows arbitrary
-callbacks like using a member function does, but computes them at
-compile time which allows for more efficient binary output.
+--160110-8113-1048081419=:257
+Content-Type: TEXT/PLAIN; NAME="Interlocked.patch"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.WNT.4.44.0303191443390.257@algeria.intern.net>
+Content-Description: 
+Content-Disposition: ATTACHMENT; FILENAME="Interlocked.patch"
+Content-length: 4181
 
-Please apply your patch.
+ZGlmZiAtdXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi90aHJlYWQuY2Mgc3Jj
+L3dpbnN1cC9jeWd3aW4vdGhyZWFkLmNjCi0tLSBzcmMub2xkL3dpbnN1cC9j
+eWd3aW4vdGhyZWFkLmNjCTIwMDMtMDMtMTkgMTQ6MjI6MjQuMDAwMDAwMDAw
+ICswMTAwCisrKyBzcmMvd2luc3VwL2N5Z3dpbi90aHJlYWQuY2MJMjAwMy0w
+My0xOSAxNDoyNzo0NS4wMDAwMDAwMDAgKzAxMDAKQEAgLTkzNCwxMSArOTM0
+LDExIEBAIHB0aHJlYWRfY29uZDo6V2FpdCAocHRocmVhZF9tdXRleF90IG11
+dGUKICAgRFdPUkQgcnY7CiAKICAgbXR4SW4uTG9jayAoKTsKLSAgaWYgKDEg
+PT0gSW50ZXJsb2NrZWRJbmNyZW1lbnQgKChsb25nICopJndhaXRpbmcpKQor
+ICBpZiAoMSA9PSBJbnRlcmxvY2tlZEluY3JlbWVudFVMICgmd2FpdGluZykp
+CiAgICAgbXR4Q29uZCA9IG11dGV4OwogICBlbHNlIGlmIChtdHhDb25kICE9
+IG11dGV4KQogICAgIHsKLSAgICAgIEludGVybG9ja2VkRGVjcmVtZW50ICgo
+bG9uZyAqKSZ3YWl0aW5nKTsKKyAgICAgIEludGVybG9ja2VkRGVjcmVtZW50
+VUwgKCZ3YWl0aW5nKTsKICAgICAgIG10eEluLlVuTG9jayAoKTsKICAgICAg
+IHJldHVybiBFSU5WQUw7CiAgICAgfQpAQCAtOTY5LDcgKzk2OSw3IEBAIHB0
+aHJlYWRfY29uZDo6V2FpdCAocHRocmVhZF9tdXRleF90IG11dGUKICAgICAg
+ICAgcnYgPSBXQUlUX09CSkVDVF8wOwogICAgIH0KIAotICBJbnRlcmxvY2tl
+ZERlY3JlbWVudCAoKGxvbmcgKikmd2FpdGluZyk7CisgIEludGVybG9ja2Vk
+RGVjcmVtZW50VUwgKCZ3YWl0aW5nKTsKIAogICBpZiAocnYgPT0gV0FJVF9P
+QkpFQ1RfMCAmJiAwID09IC0tcGVuZGluZykKICAgICAvKgpAQCAtMTU5Niwx
+MSArMTU5NiwxMSBAQCBwdGhyZWFkX211dGV4OjpfTG9jayAocHRocmVhZF90
+IHNlbGYpCiB7CiAgIGludCByZXN1bHQgPSAwOwogCi0gIGlmICgxID09IElu
+dGVybG9ja2VkSW5jcmVtZW50ICgobG9uZyAqKSZsb2NrX2NvdW50ZXIpKQor
+ICBpZiAoMSA9PSBJbnRlcmxvY2tlZEluY3JlbWVudFVMICgmbG9ja19jb3Vu
+dGVyKSkKICAgICBTZXRPd25lciAoc2VsZik7CiAgIGVsc2UgaWYgKFBUSFJF
+QURfTVVURVhfTk9STUFMICE9IHR5cGUgJiYgcHRocmVhZF9lcXVhbCAob3du
+ZXIsIHNlbGYpKQogICAgIHsKLSAgICAgIEludGVybG9ja2VkRGVjcmVtZW50
+ICgobG9uZyAqKSAmbG9ja19jb3VudGVyKTsKKyAgICAgIEludGVybG9ja2Vk
+RGVjcmVtZW50VUwgKCZsb2NrX2NvdW50ZXIpOwogICAgICAgaWYgKFBUSFJF
+QURfTVVURVhfUkVDVVJTSVZFID09IHR5cGUpCiAJcmVzdWx0ID0gTG9ja1Jl
+Y3Vyc2l2ZSAoKTsKICAgICAgIGVsc2UKQEAgLTE2MjAsNyArMTYyMCw3IEBA
+IHB0aHJlYWRfbXV0ZXg6Ol9UcnlMb2NrIChwdGhyZWFkX3Qgc2VsZikKIHsK
+ICAgaW50IHJlc3VsdCA9IDA7CiAKLSAgaWYgKDAgPT0gSW50ZXJsb2NrZWRD
+b21wYXJlRXhjaGFuZ2UgKChsb25nICopJmxvY2tfY291bnRlciwgMSwgMCAp
+KQorICBpZiAoMCA9PSBJbnRlcmxvY2tlZENvbXBhcmVFeGNoYW5nZVVMICgm
+bG9ja19jb3VudGVyLCAxLCAwICkpCiAgICAgU2V0T3duZXIgKHNlbGYpOwog
+ICBlbHNlIGlmIChQVEhSRUFEX01VVEVYX1JFQ1VSU0lWRSA9PSB0eXBlICYm
+IHB0aHJlYWRfZXF1YWwgKG93bmVyLCBzZWxmKSkKICAgICByZXN1bHQgPSBM
+b2NrUmVjdXJzaXZlICgpOwpAQCAtMTYzOSw3ICsxNjM5LDcgQEAgcHRocmVh
+ZF9tdXRleDo6X1VuTG9jayAocHRocmVhZF90IHNlbGYpCiAgIGlmICgwID09
+IC0tcmVjdXJzaW9uX2NvdW50ZXIpCiAgICAgewogICAgICAgb3duZXIgPSBO
+VUxMOwotICAgICAgaWYgKEludGVybG9ja2VkRGVjcmVtZW50ICgobG9uZyAq
+KSZsb2NrX2NvdW50ZXIpKQorICAgICAgaWYgKEludGVybG9ja2VkRGVjcmVt
+ZW50VUwgKCZsb2NrX2NvdW50ZXIpKQogCS8vIEFub3RoZXIgdGhyZWFkIGlz
+IHdhaXRpbmcKIAk6OlJlbGVhc2VTZW1hcGhvcmUgKHdpbjMyX29ial9pZCwg
+MSwgTlVMTCk7CiAgICAgfQpkaWZmIC11cnAgc3JjLm9sZC93aW5zdXAvY3ln
+d2luL3dpbmJhc2UuaCBzcmMvd2luc3VwL2N5Z3dpbi93aW5iYXNlLmgKLS0t
+IHNyYy5vbGQvd2luc3VwL2N5Z3dpbi93aW5iYXNlLmgJMjAwMy0wMy0xOSAx
+NDoyMzoxNS4wMDAwMDAwMDAgKzAxMDAKKysrIHNyYy93aW5zdXAvY3lnd2lu
+L3dpbmJhc2UuaAkyMDAzLTAzLTE5IDE0OjI1OjIwLjAwMDAwMDAwMCArMDEw
+MApAQCAtNTcsNiArNTcsMzAgQEAgaWxvY2tjbXBleGNoIChsb25nICp0LCBs
+b25nIHYsIGxvbmcgYykKICN1bmRlZiBJbnRlcmxvY2tlZENvbXBhcmVFeGNo
+YW5nZQogI2RlZmluZSBJbnRlcmxvY2tlZENvbXBhcmVFeGNoYW5nZSBpbG9j
+a2NtcGV4Y2gKIAorZXh0ZXJuIF9faW5saW5lX18gdW5zaWduZWQgbG9uZwor
+SW50ZXJsb2NrZWRJbmNyZW1lbnRVTCAodW5zaWduZWQgbG9uZyAqbSkKK3sK
+KyAgcmV0dXJuICh1bnNpZ25lZCBsb25nKSBJbnRlcmxvY2tlZEluY3JlbWVu
+dCAoKGxvbmcqKSBtKTsKK30KKworZXh0ZXJuIF9faW5saW5lX18gdW5zaWdu
+ZWQgbG9uZworSW50ZXJsb2NrZWREZWNyZW1lbnRVTCh1bnNpZ25lZCBsb25n
+ICptKQoreworICByZXR1cm4gKHVuc2lnbmVkIGxvbmcpIEludGVybG9ja2Vk
+RGVjcmVtZW50ICgobG9uZyopIG0pOworfQorCitleHRlcm4gX19pbmxpbmVf
+XyB1bnNpZ25lZCBsb25nCitJbnRlcmxvY2tlZEV4Y2hhbmdlVUwgKHVuc2ln
+bmVkIGxvbmcgKnQsIHVuc2lnbmVkIGxvbmcgdikKK3sKKyAgcmV0dXJuICh1
+bnNpZ25lZCBsb25nKSBJbnRlcmxvY2tlZEV4Y2hhbmdlICgobG9uZyopIHQs
+IChsb25nKSB2KTsKK30KKworZXh0ZXJuIF9faW5saW5lX18gdW5zaWduZWQg
+bG9uZworSW50ZXJsb2NrZWRDb21wYXJlRXhjaGFuZ2VVTCh1bnNpZ25lZCBs
+b25nICp0LCB1bnNpZ25lZCBsb25nIHYsIHVuc2lnbmVkIGxvbmcgYykKK3sK
+KyAgcmV0dXJuICh1bnNpZ25lZCBsb25nKSBJbnRlcmxvY2tlZENvbXBhcmVF
+eGNoYW5nZSAoKGxvbmcqKSB0LCAobG9uZykgdiwgKGxvbmcpIGMpOworfQor
+CiAjaWZuZGVmIEVYUENHZgogI2RlZmluZSBERUNMQVJFX1RMU19TVE9SQUdF
+IGRvIHt9IHdoaWxlICgwKQogI2Vsc2UK
 
-Rob
-
---=20
-GPG key available at: <http://users.bigpond.net.au/robertc/keys.txt>.
-
---=-R6SQIP2LiXYHjTY0BbGz
-Content-Type: application/pgp-signature; name=signature.asc
-Content-Description: This is a digitally signed message part
-Content-length: 189
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.1 (GNU/Linux)
-
-iD8DBQA+eGRSI5+kQ8LJcoIRAkcSAKChO/vjWVsW+V6QllPCG7lq3wCfagCfd/QA
-skHQh0Z8bUd+9lhELZs3Txo=
-=bKZ0
------END PGP SIGNATURE-----
-
---=-R6SQIP2LiXYHjTY0BbGz--
+--160110-8113-1048081419=:257--
