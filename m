@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4342-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 21473 invoked by alias); 6 Nov 2003 15:19:25 -0000
+Return-Path: <cygwin-patches-return-4343-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 27230 invoked by alias); 6 Nov 2003 15:32:43 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,34 +7,33 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 21464 invoked from network); 6 Nov 2003 15:19:25 -0000
-Date: Thu, 06 Nov 2003 15:19:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
+Received: (qmail 27210 invoked from network); 6 Nov 2003 15:32:43 -0000
+Date: Thu, 06 Nov 2003 15:32:00 -0000
+From: Christopher Faylor <cgf-no-personal-replies-please@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [Patch] fhandler_disk_file::opendir memory leak
-Message-ID: <20031106151923.GA15066@redhat.com>
+Subject: Re: [Patch]: Fixing the PROCESS_DUP_HANDLE security hole (part 1).
+Message-ID: <20031106153242.GA14828@redhat.com>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20031106131507.64464.qmail@web13808.mail.yahoo.com> <20031106132923.37170.qmail@web13801.mail.yahoo.com>
+References: <3.0.5.32.20030929215525.0082c4f0@incoming.verizon.net> <3.0.5.32.20031105200201.00828100@incoming.verizon.net>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20031106132923.37170.qmail@web13801.mail.yahoo.com>
+In-Reply-To: <3.0.5.32.20031105200201.00828100@incoming.verizon.net>
 User-Agent: Mutt/1.4.1i
-X-SW-Source: 2003-q4/txt/msg00061.txt.bz2
+X-SW-Source: 2003-q4/txt/msg00062.txt.bz2
 
-On Thu, Nov 06, 2003 at 01:29:23PM +0000, Ian Ray wrote:
->Oops. Typo. Retry.
-
-Thanks for the patch.  I noticed this yesterday when I was hacking on
-this function and I fixed it in a different way after I checked in my
-access_worker change.  I haven't checked it in yet since I can't check
-my changes right now as I'm away from my system.
-
-cgf
-
->2003-11-06  Ian Ray  <ran_iay@yahoo.com>
+On Wed, Nov 05, 2003 at 08:02:01PM -0500, Pierre A. Humblet wrote:
+>Ping? 
 >
->	* fhandler_disk_file.cc (fhandler_disk_file::opendir): Guard against
->	memory leak.
->
+>This has been pending for a while. See also
+><http://cygwin.com/ml/cygwin-patches/2003-q4/msg00003.html>
+
+I haven't forgotten about it.  Unfortunately, in quick scans, the
+implementation gives me heartburn.  That doesn't mean that this isn't
+the correct way to do this, it just means that my initial gut feeling
+is negative.
+
+So, I haven't had much time to give this the attention it deserves and
+either accept it or offer another alternative.  If it was in anything
+other than tty code, it probably wouldn't have languished this long.
