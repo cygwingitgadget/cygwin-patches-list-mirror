@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5299-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 14149 invoked by alias); 1 Jan 2005 20:50:31 -0000
+Return-Path: <cygwin-patches-return-5300-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 5200 invoked by alias); 8 Jan 2005 05:04:52 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,79 +7,100 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 14120 invoked from network); 1 Jan 2005 20:50:24 -0000
-Received: from unknown (HELO cs1.cs.huji.ac.il) (132.65.16.10)
-  by sourceware.org with SMTP; 1 Jan 2005 20:50:24 -0000
-Received: from inferno-01.cs.huji.ac.il ([132.65.32.101])
-	by cs1.cs.huji.ac.il with esmtp
-	id 1CkqCX-0001jD-Jv
-	for cygwin-patches@cygwin.com; Sat, 01 Jan 2005 22:50:17 +0200
-Received: from arielez by inferno-01.cs.huji.ac.il with local (Exim 3.36 #1)
-	id 1CkqCX-00087e-00
-	for cygwin-patches@cygwin.com; Sat, 01 Jan 2005 22:50:17 +0200
-Date: Sat, 01 Jan 2005 20:50:00 -0000
-From: Eizenberg Ariel <arielez@cs.huji.ac.il>
+Received: (qmail 5072 invoked from network); 8 Jan 2005 05:04:45 -0000
+Received: from unknown (HELO phumblet.no-ip.org) (68.163.205.203)
+  by sourceware.org with SMTP; 8 Jan 2005 05:04:45 -0000
+Received: from [192.168.1.156] (helo=hpn5170)
+	by phumblet.no-ip.org with smtp (Exim 4.43)
+	id I9ZFMC-006MVX-1Y
+	for cygwin-patches@cygwin.com; Sat, 08 Jan 2005 00:08:36 -0500
+Message-Id: <3.0.5.32.20050107235918.00827de0@incoming.verizon.net>
+X-Sender: vze1u1tg@incoming.verizon.net (Unverified)
+Date: Sat, 08 Jan 2005 05:04:00 -0000
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Large processes shared.cc fix
-In-Reply-To: <20050101172057.GC10993@trixie.casa.cgf.cx>
-Message-ID: <Pine.LNX.4.56.0501012249570.31170@inferno-01.cs.huji.ac.il>
-References: <Pine.LNX.4.56.0412311549120.20233@inferno-01.cs.huji.ac.il>
- <20041231184121.GB8874@trixie.casa.cgf.cx> <Pine.LNX.4.56.0412312318350.8480@inferno-01.cs.huji.ac.il>
- <20050101172057.GC10993@trixie.casa.cgf.cx>
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-SW-Source: 2005-q1/txt/msg00002.txt.bz2
+From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
+Subject: [Patch]: seteuid
+Mime-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+X-SW-Source: 2005-q1/txt/msg00003.txt.bz2
 
-This fixes the problem!
+Currently the process default dacl is changed in seteuid even
+when seteuid fails. This is a potentially security hole.
+The patch fixes it.
 
-Thanks.
+Also HKCU is not closed anymore, as it is not used by Cygwin.
+It's now up to applications (if any) to close it, and they should
+keep MS KB 199190 in mind.
 
-On Sat, 1 Jan 2005, Christopher Faylor wrote:
+Pierre
 
-|  On Fri, Dec 31, 2004 at 11:28:15PM +0200, Eizenberg Ariel wrote:
-|  >The original code in open_shared() runs as follows:
-|  >Hope this clears it up.
-|
-|  Since the situation which triggers this invalidates the assumption
-|  that the shared memory will be loaded in the same place in cygwin children,
-|  it doesn't seem like there is any reason to use offsets after the failure.
-|
-|  So, something like the below would be less intrusive, I think.
-|
-|  Does this have the desired effect?
-|
-|  cgf
-|
-|  Index: shared.cc
-|  ===================================================================
-|  RCS file: /cvs/src/src/winsup/cygwin/shared.cc,v
-|  retrieving revision 1.84
-|  diff -u -p -r1.84 shared.cc
-|  --- shared.cc	3 Dec 2004 02:00:37 -0000	1.84
-|  +++ shared.cc	1 Jan 2005 17:20:03 -0000
-|  @@ -79,7 +79,7 @@ open_shared (const char *name, int n, HA
-|     void *shared;
-|
-|     void *addr;
-|  -  if (!wincap.needs_memory_protection ())
-|  +  if (!wincap.needs_memory_protection () && offsets[0])
-|       addr = NULL;
-|     else
-|       {
-|  @@ -116,12 +116,13 @@ open_shared (const char *name, int n, HA
-|         if (wincap.is_winnt ())
-|   	system_printf ("relocating shared object %s(%d) from %p to %p on Windows NT", name, n, addr, shared);
-|   #endif
-|  +      offsets[0] = NULL;
-|       }
-|
-|     if (!shared)
-|       api_fatal ("MapViewOfFileEx '%s'(%p), %E.  Terminating.", name, shared_h);
-|
-|  -  if (m == SH_CYGWIN_SHARED && wincap.needs_memory_protection ())
-|  +  if (m == SH_CYGWIN_SHARED && offsets[0] && wincap.needs_memory_protection ())
-|       {
-|         unsigned delta = (char *) shared - offsets[0];
-|         offsets[0] = (char *) shared;
-|
-|
+2005-01-08  Pierre Humblet <pierre.humblet@ieee.org>
+
+	* syscalls.cc (seteuid32): Only change the default dacl when
+	seteuid succeeds. Do not close HKCU.
+
+
+Index: syscalls.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/syscalls.cc,v
+retrieving revision 1.355
+diff -u -p -r1.355 syscalls.cc
+--- syscalls.cc 6 Jan 2005 22:10:08 -0000       1.355
++++ syscalls.cc 8 Jan 2005 00:56:42 -0000
+@@ -2066,7 +2066,7 @@ seteuid32 (__uid32_t uid)
+   if (!wincap.has_security () && pw_new)
+     {
+       load_registry_hive (pw_new->pw_name);
+-    goto success_9x;
++      goto success_9x;
+     }
+   if (!usersid.getfrompw (pw_new))
+     {
+@@ -2103,16 +2103,6 @@ seteuid32 (__uid32_t uid)
+ 
+   debug_printf ("Found token %d", new_token);
+ 
+-  /* Set process def dacl to allow access to impersonated token */
+-  if (sec_acl ((PACL) dacl_buf, true, true, usersid))
+-    {
+-      tdacl.DefaultDacl = (PACL) dacl_buf;
+-      if (!SetTokenInformation (ptok, TokenDefaultDacl,
+-                               &tdacl, sizeof dacl_buf))
+-       debug_printf ("SetTokenInformation"
+-                     "(TokenDefaultDacl), %E");
+-    }
+-
+   /* If no impersonation token is available, try to
+      authenticate using NtCreateToken () or subauthentication. */
+   if (new_token == INVALID_HANDLE_VALUE)
+@@ -2132,6 +2122,16 @@ seteuid32 (__uid32_t uid)
+       cygheap->user.internal_token = new_token;
+     }
+ 
++  /* Set process def dacl to allow access to impersonated token */
++  if (sec_acl ((PACL) dacl_buf, true, true, usersid))
++    {
++      tdacl.DefaultDacl = (PACL) dacl_buf;
++      if (!SetTokenInformation (ptok, TokenDefaultDacl,
++                               &tdacl, sizeof dacl_buf))
++       debug_printf ("SetTokenInformation"
++                     "(TokenDefaultDacl), %E");
++    }
++
+   if (new_token != ptok)
+     {
+       /* Avoid having HKCU use default user */
+@@ -2166,11 +2166,8 @@ success_9x:
+   cygheap->user.set_name (pw_new->pw_name);
+   myself->uid = uid;
+   groups.ischanged = FALSE;
+-  if (!issamesid) /* MS KB 199190 */
+-    {
+-      RegCloseKey (HKEY_CURRENT_USER);
+-      user_shared_initialize (true);
+-    }
++  if (!issamesid)
++    user_shared_initialize (true);
+   return 0;
+ 
+ failed:
