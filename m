@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1777-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 31792 invoked by alias); 25 Jan 2002 00:04:52 -0000
+Return-Path: <cygwin-patches-return-1778-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 10239 invoked by alias); 25 Jan 2002 01:49:10 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,64 +7,51 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 31771 invoked from network); 25 Jan 2002 00:04:50 -0000
-Subject: Re: patch to allow newlib to compile when winsup not present
-From: Robert Collins <robert.collins@itdomain.com.au>
-To: Thomas Fitzsimmons <fitzsim@redhat.com>
-Cc: cgf@redhat.com, newlib@sources.redhat.com, cygwin-patches@cygwin.com
-In-Reply-To: <1011914014.18203.5.camel@lifelesswks>
-References: <1011834535.1278.46.camel@toggle>
-	<02ce01c1a488$156d32b0$0200a8c0@lifelesswks>
-	<1011892037.16026.53.camel@toggle>  <20020124174949.GA3123@redhat.com> 
-	<1011901690.1187.55.camel@toggle>  <1011914014.18203.5.camel@lifelesswks>
-Content-Type: text/plain
+Received: (qmail 10221 invoked from network); 25 Jan 2002 01:49:07 -0000
+Message-ID: <003f01c1a542$742968e0$a100a8c0@mchasecompaq>
+From: "Michael A Chase" <mchase@ix.netcom.com>
+To: <cygwin-patches@cygwin.com>
+Subject: [PATCH]Package extention recognition
+Date: Thu, 24 Jan 2002 17:49:00 -0000
+MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="iso-8859-1"
 Content-Transfer-Encoding: 7bit
-X-Mailer: Evolution/1.0 (Preview Release)
-Date: Thu, 24 Jan 2002 16:04:00 -0000
-Message-Id: <1011917087.18172.9.camel@lifelesswks>
-Mime-Version: 1.0
-X-OriginalArrivalTime: 25 Jan 2002 00:04:48.0861 (UTC) FILETIME=[E77B30D0:01C1A533]
-X-SW-Source: 2002-q1/txt/msg00134.txt.bz2
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-SW-Source: 2002-q1/txt/msg00135.txt.bz2
 
-Further to this,
+I noticed that find_tar_ext() always returns after checking for ".tar.bz2"
+and ".tar.gz" so it never gets to the check for ".tar".  As long as I was
+fixing that, it seemed like a good time to add ".cwp" as an accepted file
+extension.
 
-IMO emulation & platform specific headers should be in the
-winsup dir. libc and libm headers should be in newlib.
+I also updated the code in fromcwd.cc so it can accept any extension found
+by find_tar_ext() if it is ever reactivated.  I think it might be better if
+no msg() call is made if no "-src" file is found and I also think the fall
+back to "-src.tar.bz2" or "-src.tar.gz" could be dispensed with.  I left
+those in for now in case someone really wanted them.
 
-The pthread typedef's are emulation specific, not newlib specific, and I
-strongly oppose them being moved to newlib. The function definitions
-(like pthread_kill) however, are common to any libc, and thus belong in
-newlib (IMO).
+The code compiles successfully into setup.exe 2.184.  I successfully
+downloaded and installed 3 packages with the new setup.exe.
+--
+Mac :})
+** I normally forward private questions to the appropriate mail list. **
+Give a hobbit a fish and he eats fish for a day.
+Give a hobbit a ring and he eats fish for an age.
 
-As for finding a winsup header/local system header, I think that it's
-the users job - if they want to build newlib for cygwin, WITHOUT winsup,
-then they need to add the appropriate -I to the passed CFLAGS line,
-(unless there's a standard location that cross-header are found, like
-/usr/local/i686-pc-cygwin/include/ ?) (I'm not a cross-gcc afficiondo).
+ChangeLog:
 
-Rob
+2002-01-24  Michael A Chase <mchase@ix.netcom.com>
 
+    * filemanip.cc (find_tar_ext): Recognize file extensions .tar and .cwd
+in
+    addition to .tar.gz and .tar.bz2.
+    * fromcwd.cc (do_fromcwd): Try same extension as binary archive for -src
+    archive before falling back to .tar.bz2 or .tar.gz.
+    * install.cc (install_one_source): Add space between words in log()
+call.
 
-On Fri, 2002-01-25 at 10:13, Robert Collins wrote:
-> On Fri, 2002-01-25 at 06:48, Thomas Fitzsimmons wrote:
-> > On Thu, 2002-01-24 at 12:49, Christopher Faylor wrote:
-> 
-> > > What's wrong with saying that you need the winsup directory or a cygwin
-> > > installation to compile the cygwin versions of newlib?
-> > > 
-> > 
-> > That is a possibility, but even in that case, the build shouldn't fail
-> > with an obscure undefined symbol error at compile time.  If we're going
-> > to require either the winsup directory, or a cygwin installation, there
-> > should be checks for these at configuration time. However, usually,
-> > newlib doesn't handle header dependencies in this way.
-> > 
-> > newlib typically includes system-specific headers (like types.h) in the
-> > newlib distribution (like in newlib/libc/sys/cygwin/include).  Is there
-> > any reason why this can't be done for the cygwin target?
-> 
-> Why should a cygwin-specific header be in the _newlib_ distribution? 
-> 
-> Rob
-> 
 
