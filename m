@@ -1,45 +1,34 @@
 From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: memory leak in cygheap
-Date: Sun, 30 Sep 2001 18:04:00 -0000
-Message-id: <20010930210446.A4405@redhat.com>
-References: <15294469449.20010927205156@logos-m.ru> <20010927140039.A32577@redhat.com> <15899509507.20010927221556@logos-m.ru> <20010928014713.G32646@redhat.com>
-X-SW-Source: 2001-q3/msg00257.html
+Subject: Re: memory leak in cygheap -- tester needed
+Date: Sun, 30 Sep 2001 21:13:00 -0000
+Message-id: <20011001001356.A18727@redhat.com>
+References: <15294469449.20010927205156@logos-m.ru> <20010927140039.A32577@redhat.com> <15899509507.20010927221556@logos-m.ru> <20010928014713.G32646@redhat.com> <20010930210446.A4405@redhat.com>
+X-SW-Source: 2001-q3/msg00258.html
 
-On Fri, Sep 28, 2001 at 01:47:13AM -0400, Christopher Faylor wrote:
->On Thu, Sep 27, 2001 at 10:15:56PM +0400, egor duda wrote:
->>Hi!
->>
->>Thursday, 27 September, 2001 Christopher Faylor cgf@redhat.com wrote:
->>
->>>>do we need this "no free names" logic at all? the only suspicious
->>>>place is fhandler_disk_file::open () where we were storing pointer to
->>>>real_path's win32_path, so if it was changing later we were staying in
->>>>sync with those changes. but i can't see why it may change after open
->>>>is called, so making duplicate looks safe for me. Comments?
->>
->>CF> We've recently changed build_fhandler so that it probably isn't necessary
->>CF> to use the no_free_names anymore.
->>
->>CF> I don't have a lot of time to investigate right now, but it's possible that
->>CF> we can now get rid of this entirely.
->>
->>CF> So, I think your patch is probably overkill.
->>
->>? why overkill? i've just moved two identical pieces of code into
->>separate routine and removed no_free_names checks. I was thinking it's
->>rather "underkill" because no_free_names bit in flags are left intact.
+On Sun, Sep 30, 2001 at 09:04:46PM -0400, Christopher Faylor wrote:
+>I just wiped out big chunks of the fhandler code which dealt with the
+>names allocation.  It was quite satisfying.
 >
->I didn't look closely at the patch but I thought that it was possible
->that we don't need to unset it in two places.
+>Corinna's idea of calling patch_conv "early" is really proving to
+>simplify a lot of things -- most notably stat_worker().
+>
+>I'm running the test suite now and fixing some last minute glitches but
+>I expect to have something to check in tomorrow.
 
-I just wiped out big chunks of the fhandler code which dealt with the names
-allocation.  It was quite satisfying.
+I just checked this in.  It passes the test suite.  I can login using
+ssh and telnet.  I can run rxvt.  I'm sure I've missed something,
+though.
 
-Corinna's idea of calling patch_conv "early" is really proving to simplify
-a lot of things -- most notably stat_worker().
+The one thing that I didn't check was raw device handling.  I could have
+conceivably broken that.
 
-I'm running the test suite now and fixing some last minute glitches but I expect
-to have something to check in tomorrow.
+Can anyone test that raw device handling of floppies, tapes, and hard
+disks still works?  Corinna won't be available to test this so I must
+rely on the kindness of you all...
+
+I'd like to verify that the memory leak is gone, too.  It seems to be because
+I saw it when I was copying a large directory recursively but my changes
+eliminated the problem.
 
 cgf
