@@ -1,28 +1,18 @@
-From: Chris Faylor <cgf@cygnus.com>
+From: Corinna Vinschen <vinschen@cygnus.com>
 To: cygwin-patches@sources.redhat.com
-Subject: [PATCH] fix winuser.h typo
-Date: Tue, 08 Aug 2000 07:29:00 -0000
-Message-id: <20000808102824.A20406@cygnus.com>
-X-SW-Source: 2000-q3/msg00037.html
+Subject: [PATCH]: winnt.h, added missing token types and QUOTA_LIMITS
+Date: Fri, 18 Aug 2000 17:25:00 -0000
+Message-id: <399DD3F7.EEB3F1C0@cygnus.com>
+X-SW-Source: 2000-q3/msg00038.html
 
-Tue Aug  8 10:25:14 2000  Christopher Faylor <cgf@cygnus.com>
+As mentioned in the subject, I have added two missing token types
+`TokenRestrictedSids' and `TokenSessionId' to TOKEN_INFORMATION_CLASS
+and I have added the QUOTA_LIMITS, PQUOTA_LIMITS types.
 
-	* include/winuser.h: Correct PCWPSTRUCT typo.
-	(discovered by Axel Riese)
+Corinna
 
-Index: include/winuser.h
-===================================================================
-RCS file: /cvs/src/src/winsup/w32api/include/winuser.h,v
-retrieving revision 1.2
-diff -u -p -r1.2 winuser.h
---- winuser.h	2000/04/25 19:13:51	1.2
-+++ winuser.h	2000/08/08 14:26:39
-@@ -1948,7 +1948,7 @@ typedef struct tagCWPSTRUCT {
- 	WPARAM wParam;
- 	UINT message;
- 	HWND hwnd;
--} CWPSTRUCT,*PWCWPSTRUCT;
-+} CWPSTRUCT,*PCWPSTRUCT;
- typedef struct tagDEBUGHOOKINFO {
- 	DWORD idThread;
- 	DWORD idThreadInstaller;
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                        mailto:cygwin@sources.redhat.com
+Red Hat, Inc.
+mailto:vinschen@cygnus.com
