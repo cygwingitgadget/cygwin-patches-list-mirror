@@ -1,26 +1,18 @@
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: "List, Cygwin Patches" <cygwin-patches@cygwin.com>
-Subject: Re: Minor winsup/doc/sgml patch.
-Date: Fri, 22 Dec 2000 09:03:00 -0000
-Message-id: <00122218034302.00503@cygbert>
-References: <FMEOJCMLNIMPBKAPFPIHEEAACGAA.tailbert@yahoo.com>
-X-SW-Source: 2000-q4/msg00057.html
+From: Christopher Faylor <cgf@redhat.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: cygwin/Makefile.in and cinstall/Makefile.in
+Date: Mon, 25 Dec 2000 19:23:00 -0000
+Message-id: <20001225222322.A7249@redhat.com>
+References: <20001218204418.12970.qmail@web117.yahoomail.com>
+X-SW-Source: 2000-q4/msg00058.html
 
-On Friday 22 December 2000 04:36, edward wrote:
+On Mon, Dec 18, 2000 at 12:44:18PM -0800, Earnie Boyd wrote:
+>Allows the use of -O3 or -finline-functions by disallowing them for
+>cygwin/autoload.cc, cygwin/exceptions.cc and cinstall/autoload.c.
 
-> > How odd. I must have pasted something into the patch file by accident
-> while looking at it. *whoops*.
->
-> Here is a clean patch (tested!) and a sample entry for the change
-> log. The only "real" error is the closing of <filename> with
-> </filepath>
+I've modified exceptions.cc and autoload.h to allow inlining without
+special compile options.
 
-Applied.
+I'll let DJ decide if the cinstall changes are desirable.
 
-Thanks, 
-Corinna
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+cgf
