@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5098-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 18712 invoked by alias); 29 Oct 2004 15:22:27 -0000
+Return-Path: <cygwin-patches-return-5099-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 10753 invoked by alias); 29 Oct 2004 22:02:02 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,121 +7,139 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 18700 invoked from network); 29 Oct 2004 15:22:25 -0000
-Received: from unknown (HELO cgf.cx) (66.30.17.189)
-  by sourceware.org with SMTP; 29 Oct 2004 15:22:25 -0000
-Received: by cgf.cx (Postfix, from userid 201)
-	id 66BD11B3E5; Fri, 29 Oct 2004 11:22:38 -0400 (EDT)
-Date: Fri, 29 Oct 2004 15:22:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
+Received: (qmail 10703 invoked from network); 29 Oct 2004 22:01:54 -0000
+Received: from unknown (HELO apmail1.astralpoint.com) (65.114.186.130)
+  by sourceware.org with SMTP; 29 Oct 2004 22:01:54 -0000
+Received: from [127.0.0.1] (helo=phumblet.no-ip.org)
+	by usched40576.usa1ma.alcatel.com with esmtp (Exim 4.43)
+	id I6D974-0000I3-75
+	for cygwin-patches@cygwin.com; Fri, 29 Oct 2004 18:01:52 -0400
+Message-ID: <4182BDCF.3C04BAF8@phumblet.no-ip.org>
+Date: Fri, 29 Oct 2004 22:02:00 -0000
+From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
+Reply-To: pierre.humblet@ieee.org
+MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
-Subject: Re: [Patch] cygcheck: Don't use keyeprint if GetLastError is irrelevant.
-Message-ID: <20041029152238.GG29869@trixie.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <n2m-g.clsnoj.3vvasbt.1@buzzy-box.bavag>
-Mime-Version: 1.0
+Subject: [Patch] unlink
+Content-Type: multipart/mixed;
+ boundary="------------E11D18727C95EEB25BA318C8"
+X-SW-Source: 2004-q4/txt/msg00100.txt.bz2
+
+This is a multi-part message in MIME format.
+--------------E11D18727C95EEB25BA318C8
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <n2m-g.clsnoj.3vvasbt.1@buzzy-box.bavag>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2004-q4/txt/msg00099.txt.bz2
+Content-Transfer-Encoding: 7bit
+Content-length: 511
 
-On Fri, Oct 29, 2004 at 06:31:11AM +0200, Bas van Gompel wrote:
->Following (trivial, once more, I hope) patch cleans up some of the
->(IMO) inappropriate ``keyeprint'' usage in cygcheck. It (keyeprint)
->should not be used when GetLastError does not apply, I think. Also the
->format ending in ``failed'' can cause strange messages like ``NULL
->pointer for file failed''.
+Here is a patch that should allow unlink() to handle
+nul etc.. on local disks.
 
-If malloc failed, it is not inconceivable that there is a system error.
+It's a cut and paste of Corinna's open on NT and the
+existing CreateFile.
+ 
+It works on normal files. I haven't tested with the
+special names because I forgot how to create them !
+Feedback welcome.
 
-Since the point of keyeprint is to print error messages, reverting to
-using raw puts is a step backwards.  If it is really known that there is
-not a remote possibility that GetLastError will be useful, then an
-option to keyeprint should be added.  I'd rather regularize error output
-throughout cygcheck (which may be a bigger job than your current assignment
-status will allow) than sprinkle fputs's, and fprints's around the code.
+XXXXX This should NOT be applied in 1.5.12 XXXXXX
 
-cgf
+Pierre
 
->While doing this I caught a typo in get_dword.
->
->
->ChangeLog-entry:
->
->2004-10-28  Bas van Gompel  <cygwin-patch.buzz@bavag.tmfweb.nl>
->
->	* cygcheck.cc (add_path): Don't use keyeprint when GetLastError is
->	irrelevant.
->	(find_on_path): Ditto.
->	(rva_to_offset): Ditto.
->	(cygwin_info): Ditto.
->	(get_dword): Fix typo in errormessage.
->
->
->--- src/winsup/utils/cygcheck.cc	27 Oct 2004 01:28:07 -0000	1.58
->+++ src/winsup/utils/cygcheck.cc	29 Oct 2004 03:34:15 -0000
->@@ -122,7 +122,7 @@ add_path (char *s, int maxlen)
->   paths[num_paths] = (char *) malloc (maxlen + 1);
->   if (paths[num_paths] == NULL)
->     {
->-      keyeprint ("add_path: malloc()");
->+      fputs ("cygcheck: add_path: malloc() failed", stderr);
->       return;
->     }
->   memcpy (paths[num_paths], s, maxlen);
->@@ -185,13 +185,14 @@ find_on_path (char *file, char *default_
-> 
->   if (!file)
->     {
->-      keyeprint ("find_on_path: NULL pointer for file");
->+      fputs ("cygcheck: find_on_path: NULL pointer for file", stderr);
->       return 0;
->     }
-> 
->   if (default_extension == NULL)
->     {
->-      keyeprint ("find_on_path: NULL pointer for default_extension");
->+      fputs ("cygcheck: find_on_path: NULL pointer for default_extension",
->+	    stderr);
->       return 0;
->     }
-> 
->@@ -276,7 +277,7 @@ get_dword (HANDLE fh, int offset)
-> 
->   if (SetFilePointer (fh, offset, 0, FILE_BEGIN) == INVALID_SET_FILE_POINTER
->       && GetLastError () != NO_ERROR)
->-    keyeprint ("get_word: SetFilePointer()");
->+    keyeprint ("get_dword: SetFilePointer()");
-> 
->   if (!ReadFile (fh, &rv, 4, (DWORD *) &r, 0))
->     keyeprint ("get_dword: Readfile()");
->@@ -300,7 +301,7 @@ rva_to_offset (int rva, char *sections, 
-> 
->   if (sections == NULL)
->     {
->-      keyeprint ("rva_to_offset: NULL passed for sections");
->+      fputs ("cygcheck: rva_to_offset: NULL passed for sections", stderr);
->       return 0;
->     }
-> 
->@@ -359,7 +360,7 @@ cygwin_info (HANDLE h)
->   buf_start = buf = (char *) calloc (1, size + 1);
->   if (buf == NULL)
->     {
->-      keyeprint ("cygwin_info: malloc()");
->+      fputs ("cygcheck: cygwin_info: calloc() failed", stderr);
->       return;
->     }
-> 
->
->
->L8r,
->
->Buzz.
->-- 
->  ) |  | ---/ ---/  Yes, this | This message consists of true | I do not
->--  |  |   /    /   really is |   and false bits entirely.    | mail for
->  ) |  |  /    /    a 72 by 4 +-------------------------------+ any1 but
->--  \--| /--- /---  .sigfile. |   |perl -pe "s.u(z)\1.as."    | me. 4^re
+2004-10-29  Pierre Humblet <pierre.humblet@ieee.org>
+
+	* syscalls.cc (nt_delete): New function.
+	(unlink): Call nt_delete instead of CreateFile and remove
+	unreachable code.
+--------------E11D18727C95EEB25BA318C8
+Content-Type: text/plain; charset=us-ascii;
+ name="ntdelete.diff"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline;
+ filename="ntdelete.diff"
+Content-length: 2666
+
+Index: syscalls.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/syscalls.cc,v
+retrieving revision 1.349
+diff -u -p -r1.349 syscalls.cc
+--- syscalls.cc	28 Oct 2004 01:46:01 -0000	1.349
++++ syscalls.cc	29 Oct 2004 21:27:04 -0000
+@@ -39,6 +39,8 @@ details. */
+ #include <wininet.h>
+ #include <lmcons.h> /* for UNLEN */
+ #include <rpc.h>
++#include <ntdef.h>
++#include "ntdll.h"
+ 
+ #undef fstat
+ #undef lstat
+@@ -127,6 +129,32 @@ dup2 (int oldfd, int newfd)
+   return cygheap->fdtab.dup2 (oldfd, newfd);
+ }
+ 
++static HANDLE
++nt_delete (path_conv & pc)
++{
++  WCHAR wpath[CYG_MAX_PATH + 10];
++  UNICODE_STRING upath = {0, sizeof (wpath), wpath};
++  pc.get_nt_native_path (upath);
++
++  HANDLE x;
++  OBJECT_ATTRIBUTES attr;
++  IO_STATUS_BLOCK io;
++  NTSTATUS status;
++
++  InitializeObjectAttributes (&attr, &upath, OBJ_CASE_INSENSITIVE | OBJ_INHERIT,
++			      NULL, NULL);
++   
++  status = NtCreateFile (&x, DELETE, &attr, &io, NULL, FILE_ATTRIBUTE_NORMAL, 
++                         FILE_SHARE_READ, FILE_OPEN, FILE_DELETE_ON_CLOSE, NULL, 0);
++  if (!NT_SUCCESS (status))
++    {
++      __seterrno_from_win_error (RtlNtStatusToDosError (status));
++      return INVALID_HANDLE_VALUE;
++    }
++  else
++    return x;
++}
++
+ extern "C" int
+ unlink (const char *ourname)
+ {
+@@ -192,29 +220,17 @@ unlink (const char *ourname)
+      Microsoft KB 837665 describes this problem as a bug in 2K3, but I have
+      reproduced it on shares on Samba 2.2.8, Samba 3.0.2, NT4SP6, XP64SP1 and
+      2K3 and in all cases, DeleteFile works, "delete on close" does not. */
+-  if (!win32_name.isremote () && wincap.has_delete_on_close ())
++  if (!win32_name.isremote () && wincap.is_winnt ())
+     {
+-      HANDLE h;
+-      h = CreateFile (win32_name, 0, FILE_SHARE_READ, &sec_none_nih,
+-		      OPEN_EXISTING, FILE_FLAG_DELETE_ON_CLOSE, 0);
++      HANDLE h = nt_delete (win32_name);
+       if (h != INVALID_HANDLE_VALUE)
+ 	{
+ 	  if (wincap.has_hard_links () && setattrs)
+ 	    (void) SetFileAttributes (win32_name, (DWORD) win32_name);
+ 	  BOOL res = CloseHandle (h);
+ 	  syscall_printf ("%d = CloseHandle (%p)", res, h);
+-	  if (GetFileAttributes (win32_name) == INVALID_FILE_ATTRIBUTES
+-	      || !win32_name.isremote ())
+-	    {
+-	      syscall_printf ("CreateFile (FILE_FLAG_DELETE_ON_CLOSE) succeeded");
+-	      goto ok;
+-	    }
+-	  else
+-	    {
+-	      syscall_printf ("CreateFile (FILE_FLAG_DELETE_ON_CLOSE) failed");
+-	      if (setattrs)
+-		SetFileAttributes (win32_name, (DWORD) win32_name & ~(FILE_ATTRIBUTE_READONLY | FILE_ATTRIBUTE_SYSTEM));
+-	    }
++	  syscall_printf ("nt_delete () succeeded");
++	  goto ok;
+ 	}
+     }
+ 
+
+--------------E11D18727C95EEB25BA318C8--
