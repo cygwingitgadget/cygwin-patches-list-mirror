@@ -1,27 +1,69 @@
-From: Chris Faylor <cgf@cygnus.com>
+From: Corinna Vinschen <vinschen@cygnus.com>
 To: cygpatch <cygwin-patches@sourceware.cygnus.com>
-Subject: Re: [PATCH]: uinfo.cc or "all commands start soooooow slow"
-Date: Wed, 21 Jun 2000 20:38:00 -0000
-Message-id: <20000621233805.C26676@cygnus.com>
-References: <20000622030046.25151.qmail@web124.yahoomail.com>
-X-SW-Source: 2000-q2/msg00111.html
+Subject: Re: [PATCH]: Changes in process startup code
+Date: Sat, 24 Jun 2000 10:45:00 -0000
+Message-id: <3954F3AC.FA935179@cygnus.com>
+References: <394E5E78.FC4D70F@vinschen.de>
+X-SW-Source: 2000-q2/msg00112.html
 
-On Wed, Jun 21, 2000 at 08:00:46PM -0700, Earnie Boyd wrote:
->--- Corinna Vinschen <corinna@vinschen.de> wrote:
->> I have found that on NT/W2K systems that functions are called,
->> regardless of the ntsec setting. My patch fixes that.
->> 
->
->Yep, sure did.  Thanks for the patch.  I've just tested this with my laptop
->unplugged from the domain controller.  Much improved.  Do I hear a cygwin-1.1.3
->in the near future?
+I have just checked in a patch related to that patch:
 
-Corinna has asked me for this too.  Except for this one problem things have been
-so nice and quiet I'm really loath to release it, but I guess it does make
-sense.
+- On fork() and spawn() I have copied pointers(!) to SID's from
+  parent to child process. This is corrected now.
+- Before calling LookupAccountName() I try to get the SID from
+  the access token of the current process. This should work for
+  99.999% of all processes and should therefore speed up process
+  startup with ntsec ON quite more. Nevertheless _if_ that fails,
+  it would try the LookupAccountName, though.
 
-It looks like the version will have to be 1.1.4 since Cygnus has released
-a version 1.1.3 to a customer and I'd rather not cause any confusion like
-this.
+Corinna
 
-cgf
+Corinna Vinschen wrote:
+> 
+> I have just checked in a patch which adds the following
+> features to cygwin when running on NT/W2K:
+> 
+> - User SID is now only retrieved if ntsec is ON.
+> 
+> That should result in a considerable speed up if ntsec is OFF.
+> 
+> - User logon informations are now only retrieved on the
+>   first parent process or if the user context changes
+>   (eg. via sshd, ftpd, login).
+> - First the code tries to get that information from the
+>   localhost and only if that failes, it tries to get them
+>   from the logon server.
+> 
+> Advantage of the above patches should be a considerable
+> speed up with ntsec ON and at least some speed up with
+> ntsec OFF.
+> 
+> - If user context changes, the environment is adjusted.
+>   The following variable are changed according to the new
+>   user:
+> 
+>         HOMEDRIVE
+>         HOMEPATH
+>         LOGONSERVER
+>         USERDOMAIN
+>         USERNAME
+>         USERPROFILE
+> 
+> - If a new process is spawned in a new user context
+>   (CreateProcessAsUser), the dll tries to load the users
+>   registry hive.
+> 
+>   Advantage: Each user has it's own mount points also when
+>   logged on via telnet/ssh etc.
+> 
+>   Disadvantage: Changes made to the users registry hive
+>   in a telnet/ssh session are lost on reboot because there's
+>   currently no code which would be able to save the hive
+>   back again.
+> 
+> COrinna
+
+-- 
+Corinna Vinschen
+Cygwin Developer
+Cygnus Solutions, a Red Hat company
