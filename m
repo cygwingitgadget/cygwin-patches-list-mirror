@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3025-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 27456 invoked by alias); 23 Sep 2002 06:26:06 -0000
+Return-Path: <cygwin-patches-return-3026-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 7078 invoked by alias); 23 Sep 2002 09:29:19 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,46 +7,38 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 27438 invoked from network); 23 Sep 2002 06:26:05 -0000
-X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
-Date: Sun, 22 Sep 2002 23:26:00 -0000
-From: Thomas Pfaff <tpfaff@gmx.net>
-To: Robert Collins <rbcollins@cygwin.com>
-cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] new mutex implementation 2. posting
-In-Reply-To: <1032660183.10933.150.camel@lifelesswks>
-Message-ID: <Pine.WNT.4.44.0209230821020.235-100000@algeria.intern.net>
-X-X-Sender: pfaff@antarctica.intern.net
+Received: (qmail 7064 invoked from network); 23 Sep 2002 09:29:18 -0000
+Message-ID: <009e01c262e4$24de01f0$6132bc3e@BABEL>
+From: "Conrad Scott" <Conrad.Scott@dsl.pipex.com>
+To: <cygwin-patches@cygwin.com>
+References: <00c601c261a5$da1ac200$6132bc3e@BABEL> <20020922004849.GD4163@redhat.com> <00ec01c2626d$e22aac80$6132bc3e@BABEL> <20020922214546.GA20133@redhat.com> <017201c26283$ac658f50$6132bc3e@BABEL> <20020923002626.GB21327@redhat.com>
+Subject: Re: cygwin_daemon merge
+Date: Mon, 23 Sep 2002 02:29:00 -0000
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-SW-Source: 2002-q3/txt/msg00473.txt.bz2
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2800.1106
+X-SW-Source: 2002-q3/txt/msg00474.txt.bz2
 
+"Christopher Faylor" <cgf@redhat.com> wrote:
+Subject: Re: cygwin_daemon merge
 
+> Is there any reason why you can't continue development
+> on the mainline now?
 
-On Sun, 22 Sep 2002, Robert Collins wrote:
+I hadn't considered it before but there doesn't seem any reason why I
+shouldn't.  Thanks for the suggestion: it'll avoid quite a bit of
+messing about for me.
 
-> On Sat, 2002-09-21 at 01:47, Christopher Faylor wrote:
-> > I haven't been following very closely.  Is the reason why we are not using
-> > critical sections that TryEnterCriticalSection isn't available anywhere?
-> > If so, then we can probably fix that with some assembly programming.
->
-> Thats a factor, yes.
->
-> > Critical sections are *so* much faster than mutexes or semaphores that
-> > it makes sense to use them if possible.
-> >
-> > Or, maybe we're talking about something else entirely...
->
-> Well there are two things. Thomas's work gives use recursive and error
-> checking mutexes, which aren't currently supported. He also points out
-> that semaphores leverage critical sections on NT, so should be ~ in
-> speed.
+I assume that the usual conditions apply, i.e. I need clearance for
+changes to non-cygserver files.  BTW I've been treating all the System V
+IPC files (both in the cygserver code and in the DLL) as "cygserver"
+files: I hope that's alright.
 
-The third and most important point is that the current implementation is
-not fork save. After a fork a mutex is recreated and its state is lost.
-POSIX requires that the state is preserved. While this is not important
-for locks that are hold by another thread all locks of the forking thread
-should remain locked. IMHO this can not be done with kernel mutexes nor
-with critical sections.
+Cheers,
 
-Thomas
+// Conrad
+
