@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2238-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 16841 invoked by alias); 28 May 2002 02:18:22 -0000
+Return-Path: <cygwin-patches-return-2239-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 2091 invoked by alias); 28 May 2002 03:08:55 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,58 +7,135 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 16813 invoked from network); 28 May 2002 02:18:21 -0000
-Date: Mon, 27 May 2002 19:18:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
+Received: (qmail 2069 invoked from network); 28 May 2002 03:08:54 -0000
+Date: Mon, 27 May 2002 20:08:00 -0000
+From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+X-X-Sender: joshua@iocc.com
 To: cygwin-patches@cygwin.com
-Cc: cygwin-developers@cygwin.com
-Subject: New stat stuff (was [PATCH] improve performance of stat() operations (e.g. ls -lR ))
-Message-ID: <20020528021816.GA2066@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com,
-	cygwin-developers@cygwin.com
-References: <FE045D4D9F7AED4CBFF1B3B813C85337676295@mail.sandvine.com> <20020527011013.GA15710@redhat.com> <024701c2051d$e13cbdc0$6132bc3e@BABEL> <20020527022339.GA15585@redhat.com> <20020527142437.A26046@cygbert.vinschen.de> <20020527174354.GB21314@redhat.com> <20020527203832.A27852@cygbert.vinschen.de> <20020527184452.GA21106@redhat.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20020527184452.GA21106@redhat.com>
-User-Agent: Mutt/1.3.23.1i
-X-SW-Source: 2002-q2/txt/msg00222.txt.bz2
+Subject: ps help, version patch
+Message-ID: <Pine.CYG.4.44.0205272205260.728-200000@iocc.com>
+MIME-Version: 1.0
+Content-Type: MULTIPART/MIXED; BOUNDARY="-559023410-1724932141-1022555154=:728"
+X-SW-Source: 2002-q2/txt/msg00223.txt.bz2
 
-On Mon, May 27, 2002 at 02:44:52PM -0400, Christopher Faylor wrote:
->On Mon, May 27, 2002 at 08:38:32PM +0200, Corinna Vinschen wrote:
->>On Mon, May 27, 2002 at 01:43:54PM -0400, Chris Faylor wrote:
->>> In the process of researching this, I discovered that NT has a mechanism
->>> for determining a filename from an open handle so I'm trying to work
->>> that into dtable.cc. 
->>
->>Interesting.  Could you provide some link? MSDN or so?
->
->It's in the Native API reference.  NtQueryObject or NtQueryInformationFile.
->I had something working nicely with NtQueryInformationFile but then found out
->that it wasn't actually returning drive info.  So, the common google wisdom
->was that NtQueryObject should be used instead.  I assume that will probably
->return something like \device\whatever\dir\foo, though.
->
->The Windows 9x stuff mentions the use of VXDs although there is a hint that
->maybe that's not necessary.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
 
-I've just checked in a cleanup of fhandler_disk_file::fstat which
-attempts to avoid opening the file, where possible.  Instead, it uses
-the already existing FindFirstFile logic.
+---559023410-1724932141-1022555154=:728
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-length: 343
 
-When it is necessary for the file to be opened, in theory, it attempts
-to do so in query_open mode if it already knows the file's executable
-state.  So, given the original reason for the patch that started this
-thread, the -X and -E options should have a much greater impact on
-performance.
+Here is the --help, --version patch for ps. With, I hope, a proper
+ChangeLog.
 
-I also added an NT-specific routine to determine the file name from it's
-handle.  That means the binmode/textmode mounts should work correctly
-when redirecting files on the console in Windows NT.  My quest to find
-functions for doing this on Windows 9x continues.
+2002-05-13  Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
 
-A snapshot is building now.
+	* ps.cc (prog_name): New global variable.
+	(longopts): Ditto.
+	(opts): Ditto.
+	(usage): New function.
+	(print_version): New function.
+	(main): Accomodate longopts and new --help, --version options.
 
-FYI,
-cgf
+
+---559023410-1724932141-1022555154=:728
+Content-Type: TEXT/PLAIN; charset=US-ASCII; name="ps.cc-patch"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.CYG.4.44.0205272205540.728@iocc.com>
+Content-Description: 
+Content-Disposition: attachment; filename="ps.cc-patch"
+Content-length: 5482
+
+LS0tIHBzLmNjLW9yaWcJTW9uIE1heSAyNyAyMTo1NToxMCAyMDAyDQorKysg
+cHMuY2MJTW9uIE1heSAyNyAyMTo1ODoxNCAyMDAyDQpAQCAtMSw2ICsxLDYg
+QEANCiAvKiBwcy5jYw0KIA0KLSAgIENvcHlyaWdodCAxOTk2LCAxOTk3LCAx
+OTk4LCAxOTk5LCAyMDAwLCAyMDAxIFJlZCBIYXQsIEluYy4NCisgICBDb3B5
+cmlnaHQgMTk5NiwgMTk5NywgMTk5OCwgMTk5OSwgMjAwMCwgMjAwMSwgMjAw
+MiBSZWQgSGF0LCBJbmMuDQogDQogVGhpcyBmaWxlIGlzIHBhcnQgb2YgQ3ln
+d2luLg0KIA0KQEAgLTE5LDYgKzE5LDI1IEBAIGRldGFpbHMuICovDQogI2lu
+Y2x1ZGUgPHRsaGVscDMyLmg+DQogI2luY2x1ZGUgPHBzYXBpLmg+DQogDQor
+c3RhdGljIGNvbnN0IGNoYXIgdmVyc2lvbltdID0gIiRSZXZpc2lvbjogMS4x
+MSAkIjsNCitzdGF0aWMgY2hhciAqcHJvZ19uYW1lOw0KKw0KK3N0YXRpYyBz
+dHJ1Y3Qgb3B0aW9uIGxvbmdvcHRzW10gPQ0KK3sNCisgIHsiYWxsIiwgbm9f
+YXJndW1lbnQsIE5VTEwsICdhJyB9LA0KKyAgeyJldmVyeW9uZSIsIG5vX2Fy
+Z3VtZW50LCBOVUxMLCAnZScgfSwNCisgIHsiZnVsbCIsIG5vX2FyZ3VtZW50
+LCBOVUxMLCAnZicgfSwNCisgIHsiaGVscCIsIG5vX2FyZ3VtZW50LCBOVUxM
+LCAnaCcgfSwNCisgIHsibG9uZyIsIG5vX2FyZ3VtZW50LCBOVUxMLCAnbCcg
+fSwNCisgIHsic3VtbWFyeSIsIG5vX2FyZ3VtZW50LCBOVUxMLCAncycgfSwN
+CisgIHsidXNlciIsIHJlcXVpcmVkX2FyZ3VtZW50LCBOVUxMLCAndSd9LA0K
+KyAgeyJ2ZXJzaW9uIiwgbm9fYXJndW1lbnQsIE5VTEwsICd2J30sDQorICB7
+IndpbmRvd3MiLCBub19hcmd1bWVudCwgTlVMTCwgJ1cnfSwNCisgIHtOVUxM
+LCAwLCBOVUxMLCAwfQ0KK307DQorDQorc3RhdGljIGNoYXIgb3B0c1tdID0g
+ImFlZmhsc3U6dlciOw0KKw0KIHR5cGVkZWYgQk9PTCAoV0lOQVBJICpFTlVN
+UFJPQ0VTU01PRFVMRVMpKA0KICAgSEFORExFIGhQcm9jZXNzLCAgICAgIC8v
+IGhhbmRsZSB0byB0aGUgcHJvY2Vzcw0KICAgSE1PRFVMRSAqIGxwaE1vZHVs
+ZSwgIC8vIGFycmF5IHRvIHJlY2VpdmUgdGhlIG1vZHVsZSBoYW5kbGVzDQpA
+QCAtMTc3LDYgKzE5Niw0NiBAQCB0dHluYW0gKGludCBudHR5KQ0KICAgcmV0
+dXJuIGJ1ZjsNCiB9DQogDQorc3RhdGljIHZvaWQNCit1c2FnZSAoRklMRSAq
+IHN0cmVhbSwgaW50IHN0YXR1cykNCit7DQorICBmcHJpbnRmIChzdHJlYW0s
+ICJcDQorVXNhZ2U6ICVzIFstYWVmbHNdIFstdSBVSURdXG5cDQorIC1hLCAt
+LWFsbCAgICAgICBzaG93IHByb2Nlc3NlcyBvZiBhbGwgdXNlcnNcblwNCisg
+LWUsIC0tZXZlcnlvbmUgIHNob3cgcHJvY2Vzc2VzIG9mIGFsbCB1c2Vyc1xu
+XA0KKyAtZiwgLS1mdWxsICAgICAgc2hvdyBwcm9jZXNzIHVpZHMsIHBwaWRz
+XG5cDQorIC1oLCAtLWhlbHAgICAgICBvdXRwdXQgdXNhZ2UgaW5mb3JtYXRp
+b24gYW5kIGV4aXRcblwNCisgLWwsIC0tbG9uZyAgICAgIHNob3cgcHJvY2Vz
+cyB1aWRzLCBwcGlkcywgcGdpZHMsIHdpbnBpZHNcblwNCisgLXMsIC0tc3Vt
+bWFyeSAgIHNob3cgcHJvY2VzcyBzdW1tYXJ5XG5cDQorIC11LCAtLXVzZXIg
+ICAgICBsaXN0IHByb2Nlc3NlcyBvd25lZCBieSBVSURcblwNCisgLXYsIC0t
+dmVyc2lvbiAgIG91dHB1dCB2ZXJzaW9uIGluZm9ybWF0aW9uIGFuZCBleGl0
+XG5cDQorIC1XLCAtLXdpbmRvd3MgICBzaG93IHdpbmRvd3MgYXMgd2VsbCBh
+cyBjeWd3aW4gcHJvY2Vzc2VzXG5cDQorV2l0aCBvcHRpb25zLCAlcyBvdXRw
+dXRzIHRoZSBsb25nIGZvcm1hdCBieSBkZWZhdWx0XG4iLCBwcm9nX25hbWUs
+IHByb2dfbmFtZSk7DQorICBleGl0IChzdGF0dXMpOw0KK30NCisNCitzdGF0
+aWMgdm9pZA0KK3ByaW50X3ZlcnNpb24gKCkNCit7DQorICBjb25zdCBjaGFy
+ICp2ID0gc3RyY2hyICh2ZXJzaW9uLCAnOicpOw0KKyAgaW50IGxlbjsNCisg
+IGlmICghdikNCisgICAgew0KKyAgICAgIHYgPSAiPyI7DQorICAgICAgbGVu
+ID0gMTsNCisgICAgfQ0KKyAgZWxzZQ0KKyAgICB7DQorICAgICAgdiArPSAy
+Ow0KKyAgICAgIGxlbiA9IHN0cmNociAodiwgJyAnKSAtIHY7DQorICAgIH0N
+CisgIHByaW50ZiAoIlwNCislcyAoY3lnd2luKSAlLipzXG5cDQorUHJvY2Vz
+cyBTdGF0aXN0aWNzXG5cDQorQ29weXJpZ2h0IDE5OTYsIDE5OTcsIDE5OTgs
+IDE5OTksIDIwMDAsIDIwMDEsIDIwMDIgUmVkIEhhdCwgSW5jLlxuXA0KK0Nv
+bXBpbGVkIG9uICVzIiwgcHJvZ19uYW1lLCBsZW4sIHYsIF9fREFURV9fKTsN
+Cit9DQorDQogaW50DQogbWFpbiAoaW50IGFyZ2MsIGNoYXIgKmFyZ3ZbXSkN
+CiB7DQpAQCAtMTk1LDcgKzI1NCwxNSBAQCBtYWluIChpbnQgYXJnYywgY2hh
+ciAqYXJndltdKQ0KICAgdWlkID0gZ2V0dWlkICgpOw0KICAgbGZsYWcgPSAx
+Ow0KIA0KLSAgd2hpbGUgKChjaCA9IGdldG9wdCAoYXJnYywgYXJndiwgImFl
+bGZzdTpXIikpICE9IC0xKQ0KKyAgcHJvZ19uYW1lID0gc3RycmNociAoYXJn
+dlswXSwgJy8nKTsNCisgIGlmIChwcm9nX25hbWUgPT0gTlVMTCkNCisgICAg
+cHJvZ19uYW1lID0gc3RycmNociAoYXJndlswXSwgJ1xcJyk7DQorICBpZiAo
+cHJvZ19uYW1lID09IE5VTEwpDQorICAgIHByb2dfbmFtZSA9IGFyZ3ZbMF07
+DQorICBlbHNlDQorICAgIHByb2dfbmFtZSsrOw0KKw0KKyAgd2hpbGUgKChj
+aCA9IGdldG9wdF9sb25nIChhcmdjLCBhcmd2LCBvcHRzLCBsb25nb3B0cywg
+TlVMTCkpICE9IEVPRikNCiAgICAgc3dpdGNoIChjaCkNCiAgICAgICB7DQog
+ICAgICAgY2FzZSAnYSc6DQpAQCAtMjA1LDYgKzI3Miw4IEBAIG1haW4gKGlu
+dCBhcmdjLCBjaGFyICphcmd2W10pDQogICAgICAgY2FzZSAnZic6DQogICAg
+ICAgICBmZmxhZyA9IDE7DQogICAgICAgICBicmVhazsNCisgICAgICBjYXNl
+ICdoJzoNCisgICAgICAgIHVzYWdlIChzdGRvdXQsIDApOw0KICAgICAgIGNh
+c2UgJ2wnOg0KICAgICAgICAgbGZsYWcgPSAxOw0KICAgICAgICAgYnJlYWs7
+DQpAQCAtMjIxLDI1ICsyOTAsMjIgQEAgbWFpbiAoaW50IGFyZ2MsIGNoYXIg
+KmFyZ3ZbXSkNCiAgICAgICAgICAgICAgIHVpZCA9IHB3LT5wd191aWQ7DQog
+ICAgICAgICAgICAgZWxzZQ0KICAgICAgICAgICAgICAgew0KLSAgICAgICAg
+ICAgICAgICBmcHJpbnRmIChzdGRlcnIsICJ1c2VyICVzIHVua25vd25cbiIs
+IG9wdGFyZyk7DQorICAgICAgICAgICAgICAgIGZwcmludGYgKHN0ZGVyciwg
+IiVzOiB1c2VyICVzIHVua25vd25cbiIsIHByb2dfbmFtZSwgb3B0YXJnKTsN
+CiAgICAgICAgICAgICAgICAgZXhpdCAoMSk7DQogICAgICAgICAgICAgICB9
+DQogICAgICAgICAgIH0NCiAgICAgICAgIGJyZWFrOw0KKyAgICAgIGNhc2Ug
+J3YnOg0KKyAgICAgICAgcHJpbnRfdmVyc2lvbiAoKTsNCisgICAgICAgIGV4
+aXQgKDApOw0KKyAgICAgICAgYnJlYWs7DQogICAgICAgY2FzZSAnVyc6DQog
+CXF1ZXJ5ID0gQ1dfR0VUUElORk9fRlVMTDsNCiAJYWZsYWcgPSAxOw0KIAli
+cmVhazsNCiANCiAgICAgICBkZWZhdWx0Og0KLSAgICAgICAgZnByaW50ZiAo
+c3RkZXJyLCAiVXNhZ2UgJXMgWy1hZWZsXSBbLXUgdWlkXVxuIiwgYXJndlsw
+XSk7DQotICAgICAgICBmcHJpbnRmIChzdGRlcnIsICItZiA9IHNob3cgcHJv
+Y2VzcyB1aWRzLCBwcGlkc1xuIik7DQotICAgICAgICBmcHJpbnRmIChzdGRl
+cnIsICItbCA9IHNob3cgcHJvY2VzcyB1aWRzLCBwcGlkcywgcGdpZHMsIHdp
+bnBpZHNcbiIpOw0KLSAgICAgICAgZnByaW50ZiAoc3RkZXJyLCAiLXUgdWlk
+ID0gbGlzdCBwcm9jZXNzZXMgb3duZWQgYnkgdWlkXG4iKTsNCi0gICAgICAg
+IGZwcmludGYgKHN0ZGVyciwgIi1hLCAtZSA9IHNob3cgcHJvY2Vzc2VzIG9m
+IGFsbCB1c2Vyc1xuIik7DQotCWZwcmludGYgKHN0ZGVyciwgIi1zID0gc2hv
+dyBwcm9jZXNzIHN1bW1hcnlcbiIpOw0KLQlmcHJpbnRmIChzdGRlcnIsICIt
+VyA9IHNob3cgd2luZG93cyBhcyB3ZWxsIGFzIGN5Z3dpbiBwcm9jZXNzZXNc
+biIpOw0KLSAgICAgICAgZXhpdCAoMSk7DQorICAgICAgICB1c2FnZSAoc3Rk
+ZXJyLCAxKTsNCiAgICAgICB9DQogDQogICBpZiAoc2ZsYWcpDQo=
+
+---559023410-1724932141-1022555154=:728--
