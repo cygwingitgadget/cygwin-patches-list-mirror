@@ -1,44 +1,50 @@
-From: Earnie Boyd <earnie_boyd@yahoo.com>
-To: Cygwin Patches <cygwin-patches@cygwin.com>
-Subject: X_OK redefinition protection.
-Date: Thu, 19 Apr 2001 08:02:00 -0000
-Message-id: <3ADEFDEF.626A46EC@yahoo.com>
-X-SW-Source: 2001-q2/msg00122.html
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: /dev/dsp
+Date: Fri, 20 Apr 2001 06:20:00 -0000
+Message-id: <20010420152034.D15499@cygbert.vinschen.de>
+References: <F52bMwDdKiXXc4QzPW800001ffd@hotmail.com>
+X-SW-Source: 2001-q2/msg00123.html
 
-I've also sent the sys-unistd file to newlib.
+On Wed, Apr 18, 2001 at 04:35:55PM -0000, Andy Younger wrote:
+> >
+> >Your patch isn't ok. I can't apply it since it's malformed.
+> >Could you please generate a new patch and send it to the list again?
+> >And please send it only once and not inline _and_ as an attachment.
+> >
+> 
+> Ok. hopefully right this time, fingers crosse.
 
-Earnie.
-2001-04-19  Earnie Boyd  <earnie@users.sourceforge.net>
+Sorry Andy, but it's malformed again. I tried it both, w/ and w/o
+-b option and I have even changed the below mystery to be correctly
+indented but to no avail.
 
-	* include/sys/file.h (X_OK): Remove redefinition warnings when 
-	including both sys/unistd.h and sys/file.h.  Make the definition
-	consistent with sys/unistd.h.
+> --- fhandler_dsp.cc.original	Wed Apr 18 17:25:48 2001
+> +++ fhandler_dsp.cc	Wed Apr 18 15:24:25 2001
+> @@ -28,7 +28,7 @@ static void CALLBACK wave_callback(HWAVE
+> class Audio
+> {
+> public:
 
-Index: file.h
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/include/sys/file.h,v
-retrieving revision 1.3
-diff -u -p -r1.3 file.h
---- file.h	2001/04/18 21:10:15	1.3
-+++ file.h	2001/04/19 14:50:56
-@@ -23,16 +23,16 @@
- #define L_XTND 2
- 
- 
-+#ifndef F_OK
- #define	F_OK		0	/* does file exist */
--#define	_X_OK		1	/* is it executable by caller */
--#if defined (__CYGWIN__) || defined (__INSIDE_CYGWIN__)
--# define X_OK	_X_OK	/* Check for execute permission. */
--#else
-+#define	X_OK		1	/* is it executable by caller */
-+#if defined (__CYGWIN__) && !defined (__INSIDE_CYGWIN__)
- # undef X_OK
- extern const unsigned _cygwin_X_OK;
- # define X_OK	_cygwin_X_OK
- #endif
- #define	W_OK		2	/* is it writable by caller */
- #define	R_OK		4	/* is it readable by caller */
-+#endif /* ndef F_OK */
- 
- #endif
+That's the mystery: The aforementioned three lines are beginning
+in column 0. That's not the output of a `diff -up' since the
+first column inside of a hunk is reserved for the diff-symbols
+(+ and - for unified diffs). Did you rework the patch in a
+editor, perhaps???
+
+Just for your information, I got the following output from
+`patch -p0 -b < <your-patch-file>
+
+patching file fhandler_dsp.cc
+Hunk #2 FAILED at 40.
+Hunk #4 succeeded at 294 with fuzz 1.
+Hunk #5 FAILED at 525.
+Hunk #6 FAILED at 601.
+3 out of 6 hunks FAILED -- saving rejects to file fhandler_dsp.cc.rej
+
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
