@@ -1,43 +1,37 @@
-From: "Dr. Volker Zell" <Dr.Volker.Zell@oracle.com>
+From: Brian Keener <bkeener@thesoftwaresource.com>
 To: cygwin-patches@cygwin.com
-Cc: bleau@igb.umontreal.ca
 Subject: Re: [patch] setup.exe changes for Redownload/Reinstall Current version or Sources only - Part 2
-Date: Tue, 08 May 2001 09:21:00 -0000
-Message-id: <kvitjb3j7r.fsf@vzell.de.oracle.com>
+Date: Tue, 08 May 2001 18:23:00 -0000
+Message-id: <VA.0000075b.00481c6e@thesoftwaresource.com>
 References: <VA.00000757.0015edd1@thesoftwaresource.com> <20010508000842.A3591@redhat.com>
-X-SW-Source: 2001-q2/msg00204.html
+X-SW-Source: 2001-q2/msg00205.html
 
->>>>> "Christopher" == Christopher Faylor <cgf@redhat.com> writes:
+Christopher Faylor wrote:
+> "Sources" option does.  It will install the sources from the
+> requested source, whether it is the internet or the local directory,
+> right?
+>
+Correct.  Or it will download the sources from the Internet if you 
+selected download from Internet.  "Sources only" and "Redo Sources" only 
+applies to the current installed version since it is always on the left 
+side of the selection window.  This is the equivalent of 
+ReDownload/Reinstall for the Binaries package.  They only apply to the 
+current since selecting any of the other version on the right side of the 
+window gives you the option for source. 
+ 
+> directly to (in my case) f:/cygwin/usr/src which made the extraction
+> invisible to me, since /usr/src is mounted elsewhere.
+>
+> I don't know if this is a new problem of if setup.exe has always
+> worked like this, but this is a bug that could theoretically cause
+> us problems.  Anyone want to look at this one?
 
-    Christopher> On Thu, May 03, 2001 at 05:06:38PM -0400, Brian Keener wrote:
-    >> And now here is the actual diff for the change.
+I'm not sure I ever noticed and/or knew where they go when installed.  I 
+vaguely remember a change being discussed not long ago about changing 
+and/or making it operator specified where the source was installed - but 
+I haven't checked the ChangeLog yet.  It will be a few days for me to get 
+a chance to check if anyone else wants a shot.
 
-    Christopher> I've applied this patch.
-
-    Christopher> I like the "Reinstall" option but I am not quite sure what the
-    Christopher> "Sources" option does.  It will install the sources from the
-    Christopher> requested source, whether it is the internet or the local directory,
-    Christopher> right?
-
-    Christopher> One problem that I had is that the installation of the sources
-    Christopher> ignored my mount setting for /usr/src and/or /src.  It extracted
-    Christopher> directly to (in my case) f:/cygwin/usr/src which made the extraction
-    Christopher> invisible to me, since /usr/src is mounted elsewhere.
-
-The same happened to me with the latest opengl-1.1.0-4.tar.gz package.
-Some files were installed directly under in my case D:\usr\lib and D:\usr\bin.
-But my mount table looks like the following so the files were effektively invisible
-to me.
-
-C:\gnu on /gnu type system (binmode)
-D:\bin on /usr/bin type system (binmode)
-D:\lib on /usr/lib type system (binmode)
-C: on /dev/c type system (binmode)
-D: on / type system (binmode)
-b: on /b type system (binmode,noumount)
-e: on /e type system (binmode,noumount)
-f: on /f type system (binmode,noumount)
+bk
 
 
-Ciao
-  Volker
