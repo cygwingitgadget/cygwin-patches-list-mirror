@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2297-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 30700 invoked by alias); 4 Jun 2002 01:22:44 -0000
+Return-Path: <cygwin-patches-return-2298-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 8476 invoked by alias); 4 Jun 2002 01:31:45 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,113 +7,33 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 30626 invoked from network); 4 Jun 2002 01:22:44 -0000
-Date: Mon, 03 Jun 2002 18:22:00 -0000
-From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
-X-X-Sender: joshua@iocc.com
+Received: (qmail 8449 invoked from network); 4 Jun 2002 01:31:42 -0000
+Date: Mon, 03 Jun 2002 18:31:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: umount version patch
-Message-ID: <Pine.CYG.4.44.0206032021080.1096-200000@iocc.com>
-MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="-559023410-1368435840-1023153694=:1096"
-X-SW-Source: 2002-q2/txt/msg00280.txt.bz2
+Subject: Re: umount version patch
+Message-ID: <20020604013148.GE1602@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <Pine.CYG.4.44.0206032021080.1096-200000@iocc.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Pine.CYG.4.44.0206032021080.1096-200000@iocc.com>
+User-Agent: Mutt/1.3.23.1i
+X-SW-Source: 2002-q2/txt/msg00281.txt.bz2
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
+On Mon, Jun 03, 2002 at 08:21:34PM -0500, Joshua Daniel Franklin wrote:
+>2002-06-03  Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+>
+>	* umount.cc (version): New global variable.
+>	(longopts): Accomodate new --version option.
+>	(opts): Ditto.
+>	(usage): Standardize usage output.
+>	(print_version): New function.
+>	(main): Accomodate --help, --version options.
 
----559023410-1368435840-1023153694=:1096
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-Content-length: 343
+Applied.
 
-Here is the help/version patch for umount.
-
-ChangeLog:
-
-2002-06-03  Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
-
-	* umount.cc (version): New global variable.
-	(longopts): Accomodate new --version option.
-	(opts): Ditto.
-	(usage): Standardize usage output.
-	(print_version): New function.
-	(main): Accomodate --help, --version options.
-
-
----559023410-1368435840-1023153694=:1096
-Content-Type: TEXT/PLAIN; charset=US-ASCII; name="umount.cc-patch"
-Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.CYG.4.44.0206032021340.1096@iocc.com>
-Content-Description: 
-Content-Disposition: attachment; filename="umount.cc-patch"
-Content-length: 4079
-
-LS0tIHVtb3VudC5jYy1vcmlnCU1vbiBKdW4gIDMgMjA6MTY6NDkgMjAwMg0K
-KysrIHVtb3VudC5jYwlNb24gSnVuICAzIDIwOjE3OjA5IDIwMDINCkBAIC0x
-LDYgKzEsNiBAQA0KIC8qIHVtb3VudC5jYw0KIA0KLSAgIENvcHlyaWdodCAx
-OTk2LCAxOTk4LCAxOTk5LCAyMDAwLCAyMDAxIFJlZCBIYXQsIEluYy4NCisg
-ICBDb3B5cmlnaHQgMTk5NiwgMTk5OCwgMTk5OSwgMjAwMCwgMjAwMSwgMjAw
-MiBSZWQgSGF0LCBJbmMuDQogDQogVGhpcyBmaWxlIGlzIHBhcnQgb2YgQ3ln
-d2luLg0KIA0KQEAgLTIxLDYgKzIxLDcgQEAgc3RhdGljIHZvaWQgcmVtb3Zl
-X2FsbF91c2VyX21vdW50cyAoKTsNCiBzdGF0aWMgdm9pZCByZW1vdmVfYWxs
-X3N5c3RlbV9tb3VudHMgKCk7DQogc3RhdGljIHZvaWQgcmVtb3ZlX2N5Z2Ry
-aXZlX3ByZWZpeCAoaW50IGZsYWdzKTsNCiANCitzdGF0aWMgY29uc3QgY2hh
-ciB2ZXJzaW9uW10gPSAiJFJldmlzaW9uOiAxLjEwICQiOw0KIHN0YXRpYyBj
-b25zdCBjaGFyICpwcm9nbmFtZTsNCiANCiBzdHJ1Y3Qgb3B0aW9uIGxvbmdv
-cHRzW10gPQ0KQEAgLTMyLDIzICszMywyNyBAQCBzdHJ1Y3Qgb3B0aW9uIGxv
-bmdvcHRzW10gPQ0KICAgeyJyZW1vdmUtdXNlci1tb3VudHMiLCBub19hcmd1
-bWVudCwgTlVMTCwgJ1UnfSwNCiAgIHsic3lzdGVtIiwgbm9fYXJndW1lbnQs
-IE5VTEwsICdzJ30sDQogICB7InVzZXIiLCBub19hcmd1bWVudCwgTlVMTCwg
-J3UnfSwNCisgIHsidmVyc2lvbiIsIG5vX2FyZ3VtZW50LCBOVUxMLCAndid9
-LA0KICAge05VTEwsIDAsIE5VTEwsIDB9DQogfTsNCiANCi1jaGFyIG9wdHNb
-XSA9ICJoQVNVc3VjIjsNCitjaGFyIG9wdHNbXSA9ICJBY2hzU3VVdiI7DQog
-DQogc3RhdGljIHZvaWQNCi11c2FnZSAodm9pZCkNCit1c2FnZSAoRklMRSAq
-d2hlcmUgPSBzdGRlcnIpDQogew0KLSAgZnByaW50ZiAoc3RkZXJyLCAiVXNh
-Z2UgJXMgW09QVElPTl0gWzxwb3NpeHBhdGg+XVxuXA0KKyAgZnByaW50ZiAo
-d2hlcmUsICJcDQorVXNhZ2U6ICVzIFtPUFRJT05dIFs8cG9zaXhwYXRoPl1c
-blwNCiAgIC1BLCAtLXJlbW92ZS1hbGwtbW91bnRzICAgICAgIHJlbW92ZSBh
-bGwgbW91bnRzXG5cDQogICAtYywgLS1yZW1vdmUtY3lnZHJpdmUtcHJlZml4
-ICByZW1vdmUgY3lnZHJpdmUgcHJlZml4XG5cDQorICAtaCwgLS1oZWxwICAg
-ICAgICAgICAgICAgICAgICBvdXRwdXQgdXNhZ2UgaW5mb3JtYXRpb24gYW5k
-IGV4aXRcblwNCiAgIC1zLCAtLXN5c3RlbSAgICAgICAgICAgICAgICAgIHJl
-bW92ZSBzeXN0ZW0gbW91bnQgKGRlZmF1bHQpXG5cDQogICAtUywgLS1yZW1v
-dmUtc3lzdGVtLW1vdW50cyAgICByZW1vdmUgYWxsIHN5c3RlbSBtb3VudHNc
-blwNCiAgIC11LCAtLXVzZXIgICAgICAgICAgICAgICAgICAgIHJlbW92ZSB1
-c2VyIG1vdW50XG5cDQogICAtVSwgLS1yZW1vdmUtdXNlci1tb3VudHMgICAg
-ICByZW1vdmUgYWxsIHVzZXIgbW91bnRzXG5cDQorICAtdiwgLS12ZXJzaW9u
-ICAgICAgICAgICAgICAgICBvdXRwdXQgdmVyc2lvbiBpbmZvcm1hdGlvbiBh
-bmQgZXhpdFxuXA0KICIsIHByb2duYW1lKTsNCi0gIGV4aXQgKDEpOw0KKyAg
-ZXhpdCAod2hlcmUgPT0gc3RkZXJyID8gMSA6IDApOw0KIH0NCiANCiBzdGF0
-aWMgdm9pZA0KQEAgLTU4LDEzICs2MywzNCBAQCBlcnJvciAoY29uc3QgY2hh
-ciAqcGF0aCkNCiAgIGV4aXQgKDEpOw0KIH0NCiANCitzdGF0aWMgdm9pZA0K
-K3ByaW50X3ZlcnNpb24gKCkNCit7DQorICBjb25zdCBjaGFyICp2ID0gc3Ry
-Y2hyICh2ZXJzaW9uLCAnOicpOw0KKyAgaW50IGxlbjsNCisgIGlmICghdikN
-CisgICAgew0KKyAgICAgIHYgPSAiPyI7DQorICAgICAgbGVuID0gMTsNCisg
-ICAgfQ0KKyAgZWxzZQ0KKyAgICB7DQorICAgICAgdiArPSAyOw0KKyAgICAg
-IGxlbiA9IHN0cmNociAodiwgJyAnKSAtIHY7DQorICAgIH0NCisgIHByaW50
-ZiAoIlwNCislcyAoY3lnd2luKSAlLipzXG5cDQorRmlsZXN5c3RlbSBVdGls
-aXR5XG5cDQorQ29weXJpZ2h0IDE5OTYsIDE5OTgsIDE5OTksIDIwMDAsIDIw
-MDEsIDIwMDJcblwNCitDb21waWxlZCBvbiAlcyIsIHByb2duYW1lLCBsZW4s
-IHYsIF9fREFURV9fKTsNCit9DQorDQogaW50DQogbWFpbiAoaW50IGFyZ2Ms
-IGNoYXIgKiphcmd2KQ0KIHsNCiAgIGludCBpOw0KICAgaW50IGZsYWdzID0g
-MDsNCiAgIGludCBkZWZhdWx0X2ZsYWcgPSBNT1VOVF9TWVNURU07DQotICBw
-cm9nbmFtZSA9IGFyZ3ZbMF07DQogICBlbnVtIGRvX3doYXQNCiAgIHsNCiAg
-ICAgbmFkYSwNCkBAIC03NCw2ICsxMDAsMTQgQEAgbWFpbiAoaW50IGFyZ2Ms
-IGNoYXIgKiphcmd2KQ0KICAgICBzYXdfcmVtb3ZlX2FsbF91c2VyX21vdW50
-cw0KICAgfSBkb193aGF0ID0gbmFkYTsNCiANCisgIHByb2duYW1lID0gc3Ry
-cmNociAoYXJndlswXSwgJy8nKTsNCisgIGlmIChwcm9nbmFtZSA9PSBOVUxM
-KQ0KKyAgICBwcm9nbmFtZSA9IHN0cnJjaHIgKGFyZ3ZbMF0sICdcXCcpOw0K
-KyAgaWYgKHByb2duYW1lID09IE5VTEwpDQorICAgIHByb2duYW1lID0gYXJn
-dlswXTsNCisgIGVsc2UNCisgICAgcHJvZ25hbWUrKzsNCisNCiAgIGlmIChh
-cmdjID09IDEpDQogICAgIHVzYWdlICgpOw0KIA0KQEAgLTkwLDYgKzEyNCw4
-IEBAIG1haW4gKGludCBhcmdjLCBjaGFyICoqYXJndikNCiAJICB1c2FnZSAo
-KTsNCiAJZG9fd2hhdCA9IHNhd19yZW1vdmVfY3lnZHJpdmVfcHJlZml4Ow0K
-IAlicmVhazsNCisgICAgICBjYXNlICdoJzoNCisJdXNhZ2UgKHN0ZG91dCk7
-DQogICAgICAgY2FzZSAncyc6DQogCWZsYWdzIHw9IE1PVU5UX1NZU1RFTTsN
-CiAJYnJlYWs7DQpAQCAtMTA3LDYgKzE0Myw5IEBAIG1haW4gKGludCBhcmdj
-LCBjaGFyICoqYXJndikNCiAJICB1c2FnZSAoKTsNCiAJZG9fd2hhdCA9IHNh
-d19yZW1vdmVfYWxsX3VzZXJfbW91bnRzOw0KIAlicmVhazsNCisgICAgICBj
-YXNlICd2JzoNCisJcHJpbnRfdmVyc2lvbiAoKTsNCisJZXhpdCAoMCk7DQog
-ICAgICAgZGVmYXVsdDoNCiAJdXNhZ2UgKCk7DQogICAgICAgfQ0K
-
----559023410-1368435840-1023153694=:1096--
+Thanks.
+cgf
