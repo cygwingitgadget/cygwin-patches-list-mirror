@@ -1,120 +1,34 @@
-From: "Robert Collins" <robert.collins@itdomain.com.au>
-To: <newlib-patches@sources.redhat.com>, <cygwin-patches@cygwin.com>
-Subject: Pthread support in cygwin
-Date: Wed, 11 Apr 2001 17:00:00 -0000
-Message-id: <038901c0c2e3$794e6740$0200a8c0@lifelesswks>
-X-SW-Source: 2001-q2/msg00032.html
-Content-type: multipart/mixed; boundary="----------=_1583532847-65438-39"
+From: Christopher Faylor <cgf@redhat.com>
+To: newlib-patches@sources.redhat.com, cygwin-patches@cygwin.com
+Subject: Re: Pthread support in cygwin
+Date: Wed, 11 Apr 2001 17:06:00 -0000
+Message-id: <20010411200704.A30651@redhat.com>
+References: <038901c0c2e3$794e6740$0200a8c0@lifelesswks>
+X-SW-Source: 2001-q2/msg00033.html
 
-This is a multi-part message in MIME format...
+On Thu, Apr 12, 2001 at 09:59:24AM +1000, Robert Collins wrote:
+>This patch and attached changelog (my mailer stuffs up the formatting)
+>are a resubmission of the previosuly discussed patches for pthreads &
+>cygwin in newlib. I will look into a larger rearrangement as
+>discussed... but that will be much later. I won't shed any tears if the
+>rtems folk get there first :]
+>
+>This patch is self-contained: committing it now should not cause any
+>problems with the existing pthread support in cygwin. (However I haven't
+>tried to mix and match so...)
+>
+>==
+>2001-04-12  Robert Collins <rbtcollins@hotmail.com>
+>
+> * libc/include/sys/features.h: Add appropriate defines for Cygwin
+>pthread support.
+> * libc/include/sys/signal.h: Remove unneeded __CYGWIN__ protection.
+> * libc/include/sys/types.h: Protect __CYGWIN__ from the rtems pthreads
+>types.
+> Include <cygwin/types.h> for the cygwin specific typedefs.
 
-------------=_1583532847-65438-39
-Content-length: 828
+I've committed these since they only affected Cygwin-specific code.
 
-This patch and attached changelog (my mailer stuffs up the formatting)
-are a resubmission of the previosuly discussed patches for pthreads &
-cygwin in newlib. I will look into a larger rearrangement as
-discussed... but that will be much later. I won't shed any tears if the
-rtems folk get there first :]
+Thank you for seeing this through, Robert.
 
-This patch is self-contained: committing it now should not cause any
-problems with the existing pthread support in cygwin. (However I haven't
-tried to mix and match so...)
-
-==
-2001-04-12  Robert Collins <rbtcollins@hotmail.com>
-
- * libc/include/sys/features.h: Add appropriate defines for Cygwin
-pthread support.
- * libc/include/sys/signal.h: Remove unneeded __CYGWIN__ protection.
- * libc/include/sys/types.h: Protect __CYGWIN__ from the rtems pthreads
-types.
- Include <cygwin/types.h> for the cygwin specific typedefs.
-
-
-
-------------=_1583532847-65438-39
-Content-Type: text/plain; charset=us-ascii; name="pthread.ChangeLog"
-Content-Disposition: inline; filename="pthread.ChangeLog"
-Content-Transfer-Encoding: base64
-Content-Length: 468
-
-MjAwMS0wNC0xMiAgUm9iZXJ0IENvbGxpbnMgPHJidGNvbGxpbnNAaG90bWFp
-bC5jb20+CgoJKiBsaWJjL2luY2x1ZGUvc3lzL2ZlYXR1cmVzLmg6IEFkZCBh
-cHByb3ByaWF0ZSBkZWZpbmVzIGZvciBDeWd3aW4gcHRocmVhZCBzdXBwb3J0
-LgoJKiBsaWJjL2luY2x1ZGUvc3lzL3NpZ25hbC5oOiBSZW1vdmUgdW5uZWVk
-ZWQgX19DWUdXSU5fXyBwcm90ZWN0aW9uLgoJKiBsaWJjL2luY2x1ZGUvc3lz
-L3R5cGVzLmg6IFByb3RlY3QgX19DWUdXSU5fXyBmcm9tIHRoZSBydGVtcyBw
-dGhyZWFkcyB0eXBlcy4KCUluY2x1ZGUgPGN5Z3dpbi90eXBlcy5oPiBmb3Ig
-dGhlIGN5Z3dpbiBzcGVjaWZpYyB0eXBlZGVmcy4K
-
-------------=_1583532847-65438-39
-Content-Type: text/x-diff; charset=us-ascii; name="pthread.patch"
-Content-Disposition: inline; filename="pthread.patch"
-Content-Transfer-Encoding: base64
-Content-Length: 3754
-
-PyAucHRocmVhZC5DaGFuZ2VMb2cuc3dwCj8gcHRocmVhZC5DaGFuZ2VMb2cK
-PyBwdGhyZWFkLnBhdGNoCkluZGV4OiBsaWJjL2luY2x1ZGUvc3lzL2ZlYXR1
-cmVzLmgKPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1MgZmlsZTogL2N2cy9z
-cmMvc3JjL25ld2xpYi9saWJjL2luY2x1ZGUvc3lzL2ZlYXR1cmVzLmgsdgpy
-ZXRyaWV2aW5nIHJldmlzaW9uIDEuMgpkaWZmIC11IC1wIC1yMS4yIGZlYXR1
-cmVzLmgKLS0tIGZlYXR1cmVzLmgJMjAwMS8wMS8xMiAwMjo0MTozMwkxLjIK
-KysrIGZlYXR1cmVzLmgJMjAwMS8wNC8xMSAyMzo1MTo0MQpAQCAtODEsNiAr
-ODEsMTEgQEAgZXh0ZXJuICJDIiB7CiAjIGRlZmluZSBfUE9TSVhfSk9CX0NP
-TlRST0wJMQogIyBkZWZpbmUgX1BPU0lYX1NBVkVEX0lEUwkwCiAjIGRlZmlu
-ZSBfUE9TSVhfVkVSU0lPTgkJMTk5MDA5TAorIyBkZWZpbmUgX1BPU0lYX1RI
-UkVBRFMgICAgICAgICAgICAgICAgICAgICAgICAgIDEKKyMgZGVmaW5lIF9Q
-T1NJWF9USFJFQURfUFJPQ0VTU19TSEFSRUQgICAgICAgICAgICAxCisjIGRl
-ZmluZSBfUE9TSVhfVEhSRUFEX1NBRkVfRlVOQ1RJT05TICAgICAgICAgICAg
-MQorIyBkZWZpbmUgX1BPU0lYX1RIUkVBRF9QUklPUklUWV9TQ0hFRFVMSU5H
-ICAgICAgIDEKKyMgZGVmaW5lIF9QT1NJWF9USFJFQURfQVRUUl9TVEFDS1NJ
-WkUgICAgICAgICAgICAxCiAjZW5kaWYKIAogI2lmZGVmIF9fY3BsdXNwbHVz
-CkluZGV4OiBsaWJjL2luY2x1ZGUvc3lzL3NpZ25hbC5oCj09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT0KUkNTIGZpbGU6IC9jdnMvc3JjL3NyYy9uZXdsaWIvbGli
-Yy9pbmNsdWRlL3N5cy9zaWduYWwuaCx2CnJldHJpZXZpbmcgcmV2aXNpb24g
-MS43CmRpZmYgLXUgLXAgLXIxLjcgc2lnbmFsLmgKLS0tIHNpZ25hbC5oCTIw
-MDEvMDIvMTUgMDY6NDI6MzUJMS43CisrKyBzaWduYWwuaAkyMDAxLzA0LzEx
-IDIzOjUyOjAzCkBAIC0xMiw3ICsxMiw3IEBAIGV4dGVybiAiQyIgewogCiAv
-KiAjaWZuZGVmIF9fU1RSSUNUX0FOU0lfXyovCiAKLSNpZiBkZWZpbmVkKF9Q
-T1NJWF9USFJFQURTKSB8fCBkZWZpbmVkKF9fQ1lHV0lOX18pCisjaWYgZGVm
-aW5lZChfUE9TSVhfVEhSRUFEUykKICNpbmNsdWRlIDxzeXMvdHlwZXMuaD4g
-ICAvKiBmb3IgcHRocmVhZCBkYXRhIHR5cGVzICovCiAjZW5kaWYKIApJbmRl
-eDogbGliYy9pbmNsdWRlL3N5cy90eXBlcy5oCj09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT0KUkNTIGZpbGU6IC9jdnMvc3JjL3NyYy9uZXdsaWIvbGliYy9pbmNs
-dWRlL3N5cy90eXBlcy5oLHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjYKZGlm
-ZiAtdSAtcCAtcjEuNiB0eXBlcy5oCi0tLSB0eXBlcy5oCTIwMDEvMDMvMjAg
-MTk6Mjc6NTYJMS42CisrKyB0eXBlcy5oCTIwMDEvMDQvMTEgMjM6NTI6MDQK
-QEAgLTIwNiw3ICsyMDYsNyBAQCB0eXBlZGVmCXN0cnVjdCBfdHlwZXNfZmRf
-c2V0IHsKICAgIGNvbmRpdGlvbiB2YXJpYWJsZXMsIGFuZCBrZXlzLiAgQnV0
-IHNpbmNlIFJURU1TIGlzIGN1cnJlbnRseSB0aGUgb25seQogICAgbmV3bGli
-IHVzZXIgb2YgdGhlc2UsIHRoZSBpZmRlZiBpcyBqdXN0IG9uIFJURU1TLiAq
-LwogCi0jaWYgZGVmaW5lZChfX3J0ZW1zX18pCisjaWYgZGVmaW5lZChfX3J0
-ZW1zX18pIHx8IGRlZmluZWQoX19DWUdXSU5fXykKIAogI2lmbmRlZiBfX2Ns
-b2NraWRfdF9kZWZpbmVkCiB0eXBlZGVmIF9DTE9DS0lEX1RfIGNsb2NraWRf
-dDsKQEAgLTIyMCw4ICsyMjAsMTYgQEAgdHlwZWRlZiBfVElNRVJfVF8gdGlt
-ZXJfdDsKIAogI2luY2x1ZGUgPHN5cy9mZWF0dXJlcy5oPgogCi0jaWYgZGVm
-aW5lZChfUE9TSVhfVEhSRUFEUykKIAorLyogQ3lnd2luIHdpbGwgcHJvYmFi
-bHkgbmV2ZXIgaGF2ZSBmdWxsIHBvc2l4IGNvbXBsaWFuY2UgZHVlIHRvIGxp
-dHRsZSB0aGluZ3MKKyAqIGxpa2UgYW4gaW5hYmlsaXR5IHRvIHNldCB0aGUg
-c3RhY2thZGRyZXNzLiBDeWd3aW4gaXMgYWxzbyB1c2luZyB2b2lkICogIAor
-ICogcG9pbnRlcnMgcmF0aGVyIHRoYW4gc3RydWN0cyB0byBlbnN1cmUgbWF4
-aW11bSBiaW5hcnkgY29tcGF0YWJpbGl0eSB3aXRoCisgKiBwcmV2aW91cyBy
-ZWxlYXNlcy4KKyAqIFRoaXMgbWVhbnMgdGhhdCB3ZSBkb24ndCB1c2UgdGhl
-IHR5cGVzIGRlZmluZWQgaGVyZSwgYnV0IHJhdGhlciBpbgorICogPGN5Z3dp
-bi90eXBlcy5oPgorICovCisjaWYgZGVmaW5lZChfUE9TSVhfVEhSRUFEUykg
-JiYgIShfX0NZR1dJTl9fKQorCiAjaW5jbHVkZSA8c3lzL3NjaGVkLmg+CiAK
-IC8qCkBAIC0zMTMsNyArMzIxLDEwIEBAIHR5cGVkZWYgc3RydWN0IHsKICAg
-aW50ICAgaXNfaW5pdGlhbGl6ZWQ7ICAvKiBpcyB0aGlzIHN0cnVjdHVyZSBp
-bml0aWFsaXplZD8gKi8KICAgaW50ICAgaW5pdF9leGVjdXRlZDsgICAvKiBo
-YXMgdGhlIGluaXRpYWxpemF0aW9uIHJvdXRpbmUgYmVlbiBydW4/ICovCiB9
-IHB0aHJlYWRfb25jZV90OyAgICAgICAvKiBkeW5hbWljIHBhY2thZ2UgaW5p
-dGlhbGl6YXRpb24gKi8KLQorI2Vsc2UKKyNpZiBkZWZpbmVkIChfX0NZR1dJ
-Tl9fKQorI2luY2x1ZGUgPGN5Z3dpbi90eXBlcy5oPgorI2VuZGlmCiAjZW5k
-aWYgLyogZGVmaW5lZChfUE9TSVhfVEhSRUFEUykgKi8KIAogI2VuZGlmICAv
-KiBkZWZpbmVkKF9fcnRlbXNfXykgKi8K
-
-------------=_1583532847-65438-39--
+cgf
