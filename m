@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4758-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 31441 invoked by alias); 14 May 2004 22:50:53 -0000
+Return-Path: <cygwin-patches-return-4759-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 28833 invoked by alias); 15 May 2004 00:33:03 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,141 +7,40 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 31420 invoked from network); 14 May 2004 22:50:51 -0000
-Date: Fri, 14 May 2004 22:50:00 -0000
+Received: (qmail 28824 invoked from network); 15 May 2004 00:33:02 -0000
+Date: Sat, 15 May 2004 00:33:00 -0000
 From: Brian Ford <ford@vss.fsi.com>
 Reply-To: cygwin-patches@cygwin.com
 To: cygwin-patches@cygwin.com
 Subject: Re: [Patch] Fix gethwnd race
-In-Reply-To: <20040514180553.GB10458@coe.bosbc.com>
-Message-ID: <Pine.CYG.4.58.0405141743290.1448@fordpc.vss.fsi.com>
+In-Reply-To: <Pine.CYG.4.58.0405141743290.1448@fordpc.vss.fsi.com>
+Message-ID: <Pine.CYG.4.58.0405141924320.2836@fordpc.vss.fsi.com>
 References: <20040514180553.GB10458@coe.bosbc.com>
+ <Pine.CYG.4.58.0405141743290.1448@fordpc.vss.fsi.com>
 MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="-559023410-958159974-1084575073=:1448"
-X-SW-Source: 2004-q2/txt/msg00110.txt.bz2
-
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
-
----559023410-958159974-1084575073=:1448
 Content-Type: TEXT/PLAIN; charset=US-ASCII
-Content-length: 1048
+X-SW-Source: 2004-q2/txt/msg00111.txt.bz2
 
-On Fri, 14 May 2004, Christopher Faylor wrote:
+Ugh!  Ok, this falls under the "too much list noise" category, so I'll
+just shut up now.
 
-> Well, maybe I didn't do anything, since that is exactly what I did after
-> investigating MSDN.  I thought I remembered that this was the case but
-> I couldn't see anything in MSDN which supported it.  I suppose I should
-> just have trusted Sergey on this one.
->
-> So, nevermind on this wonderful enhancement.
+On Fri, 14 May 2004, Brian Ford wrote:
 
-Just in case it might still be "interesting", here is a revised no muto
-patch with the appropriate fatal error changes.  I think it is pretty
-straight forward.  If you still prefer the muto route, please feel free.
++  HANDLE ws;
++
++  if (InterlockedDecrement (&window_waiters) == 0
++      && (ws = (HANDLE) InterlockedExchange ((long *) &window_started, 0)))
++    CloseHandle (ws);
 
-2004-05-14  Brian Ford  <ford@vss.fsi.com>
+This part now simplifies to just:
 
-	* window.cc (window_started): Make NO_COPY.
-	(Winmain): Make errors api_fatal.
-	(gethwnd): Fix initialization race.
-	(window_init): New function to initialize window_started.
-	* winsup.h (window_init): Prototype it.
-	* dcrt0.cc (dll_crt0_1): Call it.
+if (InterlockedDecrement (&window_waiters) == 0)
+  CloseHandle (window_waiters);
+
+after the fatal error change.
 
 -- 
-Brian Ford
 Senior Realtime Software Engineer
 VITAL - Visual Simulation Systems
 FlightSafety International
 the best safety device in any aircraft is a well-trained pilot...
----559023410-958159974-1084575073=:1448
-Content-Type: TEXT/PLAIN; charset=US-ASCII; name="gethwnd_blocking.patch"
-Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.CYG.4.58.0405141751130.1448@fordpc.vss.fsi.com>
-Content-Description: 
-Content-Disposition: attachment; filename="gethwnd_blocking.patch"
-Content-length: 4799
-
-SW5kZXg6IHdpbmRvdy5jYw0KPT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ0KUkNT
-IGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvY3lnd2luL3dpbmRvdy5jYyx2
-DQpyZXRyaWV2aW5nIHJldmlzaW9uIDEuMzANCmRpZmYgLXUgLXAgLXIxLjMw
-IHdpbmRvdy5jYw0KLS0tIHdpbmRvdy5jYwk5IEZlYiAyMDA0IDA0OjA0OjI0
-IC0wMDAwCTEuMzANCisrKyB3aW5kb3cuY2MJMTQgTWF5IDIwMDQgMjI6MzU6
-MzQgLTAwMDANCkBAIC0xLDQgKzEsNCBAQA0KLS8qIHdpbmRvdy5jYzogaGlk
-ZGVuIHdpbmRvd3MgZm9yIHNpZ25hbHMvaXRpbWVyIHN1cHBvcnQNCisvKiB3
-aW5kb3cuY2M6IGhpZGRlbiB3aW5kb3cgZm9yIGFsYXJtcywgaXRpbWVycywg
-YW5kIHNvY2tldHMuDQogDQogICAgQ29weXJpZ2h0IDE5OTcsIDE5OTgsIDIw
-MDAsIDIwMDEsIDIwMDIsIDIwMDMsIDIwMDQgUmVkIEhhdCwgSW5jLg0KIA0K
-QEAgLTczLDcgKzczLDEzIEBAIFduZFByb2MgKEhXTkQgaHduZCwgVUlOVCB1
-TXNnLCBXUEFSQU0gd1ANCiAgICAgfQ0KIH0NCiANCi1zdGF0aWMgSEFORExF
-IHdpbmRvd19zdGFydGVkOw0KK3N0YXRpYyBOT19DT1BZIEhBTkRMRSB3aW5k
-b3dfc3RhcnRlZDsNCisNCit2b2lkDQord2luZG93X2luaXQgKCkNCit7DQor
-ICAgIHdpbmRvd19zdGFydGVkID0gQ3JlYXRlRXZlbnQgKCZzZWNfbm9uZV9u
-aWgsIFRSVUUsIEZBTFNFLCBOVUxMKTsNCit9DQogDQogc3RhdGljIERXT1JE
-IFdJTkFQSQ0KIFdpbm1haW4gKFZPSUQgKikNCkBAIC05NiwxMCArMTAyLDcg
-QEAgV2lubWFpbiAoVk9JRCAqKQ0KICAgd2MubHBzekNsYXNzTmFtZSA9IGNs
-YXNzbmFtZTsNCiANCiAgIGlmICghUmVnaXN0ZXJDbGFzcyAoJndjKSkNCi0g
-ICAgew0KLSAgICAgIHN5c3RlbV9wcmludGYgKCJDYW5ub3QgcmVnaXN0ZXIg
-d2luZG93IGNsYXNzLCAlRSIpOw0KLSAgICAgIHJldHVybiBGQUxTRTsNCi0g
-ICAgfQ0KKyAgICBhcGlfZmF0YWwgKCJDYW5ub3QgcmVnaXN0ZXIgaGlkZGVu
-IHdpbmRvdyBjbGFzcywgJUUiKTsNCiANCiAgIC8qIENyZWF0ZSBoaWRkZW4g
-d2luZG93LiAqLw0KICAgb3VyaHduZCA9IENyZWF0ZVdpbmRvdyAoY2xhc3Nu
-YW1lLCBjbGFzc25hbWUsIFdTX1BPUFVQLCBDV19VU0VERUZBVUxULA0KQEAg
-LTEwNywxMyArMTEwLDEwIEBAIFdpbm1haW4gKFZPSUQgKikNCiAJCQkgIChI
-V05EKSBOVUxMLCAoSE1FTlUpIE5VTEwsIHVzZXJfZGF0YS0+aG1vZHVsZSwN
-CiAJCQkgIChMUFZPSUQpIE5VTEwpOw0KIA0KLSAgU2V0RXZlbnQgKHdpbmRv
-d19zdGFydGVkKTsNCi0NCiAgIGlmICghb3VyaHduZCkNCi0gICAgew0KLSAg
-ICAgIHN5c3RlbV9wcmludGYgKCJDYW5ub3QgY3JlYXRlIHdpbmRvdyIpOw0K
-LSAgICAgIHJldHVybiBGQUxTRTsNCi0gICAgfQ0KKyAgICBhcGlfZmF0YWwg
-KCJDYW5ub3QgY3JlYXRlIGhpZGRlbiB3aW5kb3csICVFIik7DQorDQorICBT
-ZXRFdmVudCAod2luZG93X3N0YXJ0ZWQpOw0KIA0KICAgLyogU3RhcnQgdGhl
-IG1lc3NhZ2UgbG9vcC4gKi8NCiANCkBAIC0xMjksMTQgKzEyOSwyNiBAQCBn
-ZXRod25kICgpDQogICBpZiAob3VyaHduZCAhPSBOVUxMKQ0KICAgICByZXR1
-cm4gb3VyaHduZDsNCiANCi0gIGN5Z3RocmVhZCAqaDsNCisgIHN0YXRpYyBO
-T19DT1BZIGxvbmcgd2luZG93X3dhaXRlcnM7DQorICBsb25nIHdhaXRlcnMg
-PSBJbnRlcmxvY2tlZEluY3JlbWVudCAoJndpbmRvd193YWl0ZXJzKTsNCisN
-CisgIGlmIChvdXJod25kID09IE5VTEwpDQorICAgIHsNCisgICAgICBpZiAo
-d2FpdGVycyA9PSAxKQ0KKwl7DQorCSAgY3lndGhyZWFkICpoID0gbmV3IGN5
-Z3RocmVhZCAoV2lubWFpbiwgTlVMTCwgIndpbiIpOw0KKwkgIGgtPnphcF9o
-ICgpOw0KKwl9DQorDQorICAgICAgV2FpdEZvclNpbmdsZU9iamVjdCAod2lu
-ZG93X3N0YXJ0ZWQsIElORklOSVRFKTsNCisgICAgfQ0KKw0KKyAgSEFORExF
-IHdzOw0KKw0KKyAgaWYgKEludGVybG9ja2VkRGVjcmVtZW50ICgmd2luZG93
-X3dhaXRlcnMpID09IDANCisgICAgICAmJiAod3MgPSAoSEFORExFKSBJbnRl
-cmxvY2tlZEV4Y2hhbmdlICgobG9uZyAqKSAmd2luZG93X3N0YXJ0ZWQsIDAp
-KSkNCisgICAgQ2xvc2VIYW5kbGUgKHdzKTsNCiANCi0gIHdpbmRvd19zdGFy
-dGVkID0gQ3JlYXRlRXZlbnQgKCZzZWNfbm9uZV9uaWgsIFRSVUUsIEZBTFNF
-LCBOVUxMKTsNCi0gIGggPSBuZXcgY3lndGhyZWFkIChXaW5tYWluLCBOVUxM
-LCAid2luIik7DQotICBoLT5TZXRUaHJlYWRQcmlvcml0eSAoVEhSRUFEX1BS
-SU9SSVRZX0hJR0hFU1QpOw0KLSAgV2FpdEZvclNpbmdsZU9iamVjdCAod2lu
-ZG93X3N0YXJ0ZWQsIElORklOSVRFKTsNCi0gIENsb3NlSGFuZGxlICh3aW5k
-b3dfc3RhcnRlZCk7DQotICBoLT56YXBfaCAoKTsNCiAgIHJldHVybiBvdXJo
-d25kOw0KIH0NCiANCkluZGV4OiB3aW5zdXAuaA0KPT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PQ0KUkNTIGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvY3lnd2lu
-L3dpbnN1cC5oLHYNCnJldHJpZXZpbmcgcmV2aXNpb24gMS4xNDMNCmRpZmYg
-LXUgLXAgLXIxLjE0MyB3aW5zdXAuaA0KLS0tIHdpbnN1cC5oCTMgTWF5IDIw
-MDQgMTE6NTM6MDcgLTAwMDAJMS4xNDMNCisrKyB3aW5zdXAuaAkxNCBNYXkg
-MjAwNCAyMjozNTozNCAtMDAwMA0KQEAgLTIxOCw2ICsyMTgsNyBAQCB2b2lk
-IGV2ZW50c190ZXJtaW5hdGUgKHZvaWQpOw0KIHZvaWQgX19zdGRjYWxsIGNs
-b3NlX2FsbF9maWxlcyAoKTsNCiANCiAvKiBJbnZpc2libGUgd2luZG93IGlu
-aXRpYWxpemF0aW9uL3Rlcm1pbmF0aW9uLiAqLw0KK3ZvaWQgd2luZG93X2lu
-aXQgKHZvaWQpOw0KIEhXTkQgX19zdGRjYWxsIGdldGh3bmQgKHZvaWQpOw0K
-IC8qIENoZWNrIGlmIHJ1bm5pbmcgaW4gYSB2aXNpYmxlIHdpbmRvdyBzdGF0
-aW9uLiAqLw0KIGV4dGVybiBib29sIGhhc192aXNpYmxlX3dpbmRvd19zdGF0
-aW9uICh2b2lkKTsNCkluZGV4OiBkY3J0MC5jYw0KPT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PQ0KUkNTIGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvY3lnd2lu
-L2RjcnQwLmNjLHYNCnJldHJpZXZpbmcgcmV2aXNpb24gMS4yMTgNCmRpZmYg
-LXUgLXAgLXIxLjIxOCBkY3J0MC5jYw0KLS0tIGRjcnQwLmNjCTEyIE1hciAy
-MDA0IDAzOjA5OjI4IC0wMDAwCTEuMjE4DQorKysgZGNydDAuY2MJMTQgTWF5
-IDIwMDQgMjI6MzU6MzQgLTAwMDANCkBAIC03OTksNiArNzk5LDkgQEAgZGxs
-X2NydDBfMSAoY2hhciAqKQ0KICAgLyogQ29ubmVjdCB0byB0dHkuICovDQog
-ICB0dHlfaW5pdCAoKTsNCiANCisgIC8qIEluaXRpYWxpemUgaGlkZGVuIHdp
-bmRvdyBmb3IgaXRpbWVycy9zb2NrZXRzLiAqLw0KKyAgd2luZG93X2luaXQg
-KCk7DQorDQogICBpZiAoIV9fYXJnYykNCiAgICAgew0KICAgICAgIGNoYXIg
-KmxpbmUgPSBHZXRDb21tYW5kTGluZUEgKCk7DQo=
-
----559023410-958159974-1084575073=:1448--
