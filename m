@@ -1,34 +1,35 @@
-From: "Robert Collins" <robert.collins@itdomain.com.au>
-To: <cygwin-patches@cygwin.com>, <cygwin@cygwin.com>
-Subject: Re: Deadly embrace between pthread_cond_wait and pthread_cond_signal
-Date: Wed, 27 Jun 2001 16:00:00 -0000
-Message-id: <037401c0ff5c$ed60ebc0$806410ac@local>
-References: <20010627023524.S19058@redhat.com> <00aa01c0ff1b$44106960$a300a8c0@nhv> <20010627112321.A21615@redhat.com>
-X-SW-Source: 2001-q2/msg00360.html
+From: Christopher Faylor <cgf@redhat.com>
+To: cygwin@cygwin.com, cygwin-patches@cygwin.com
+Subject: Re: pthreads works, sorta - got it
+Date: Wed, 27 Jun 2001 19:20:00 -0000
+Message-id: <20010627222105.A29564@redhat.com>
+References: <EA18B9FA0FE4194AA2B4CDB91F73C0EF08F09E@itdomain002.itdomain.net.au> <20010627012932.I19058@redhat.com> <20010627013502.K19058@redhat.com> <008201c0ff0d$8fe3c2a0$806410ac@local> <009701c0ff0e$4d796400$806410ac@local> <00e501c0ff14$6ad8dd40$806410ac@local>
+X-SW-Source: 2001-q2/msg00361.html
 
------ Original Message -----
-From: "Christopher Faylor" <cgf@redhat.com>
-> >>I bet it would improve even more if we replaced the VirtualQuery
-> >>in path.cc, too.
-> >
-> >With Rob's new patch that does this,
-> >there actually isn't very much difference
-> >
-> >real    7m10.729s
-> >user    2m50.963s
-> >sys     1m11.721s
-> >
-> >Thanks !
+On Thu, Jun 28, 2001 at 12:21:11AM +1000, Robert Collins wrote:
+>Got the bug... attached is a correct patch that doesn't break anything
+>AFAICT.
 >
-> Huh.  I wonder why it makes such a big difference for pthreads.
+>GCC was optimising the variable access when the macro
+>check_null_empty-path_errno was used, and accessing the memory area _before_
+>the readcheck! The overhead of a proper function should be lower than that
+>of VirtualQueryHowever, so I've made it a function. It could have the guts
+>of check_null_empty_path copied into it for speed, but that's optional IMO.
 >
+>Wed Jun 27 23:30:00 2001  Robert Collins <rbtcollins@hotmail.com>
+>
+>	* path.h (check_null_empty_path_errno): Convert to a function
+>	prototype.
+>	* path.cc (check_null_empty_path_errno): New function.
+>	(check_null_empty_path): Change from VirtualQuery to IsBadWritePtr.
+>	* resource.cc (getrlimit): Ditto.
+>	(setrlimit): Ditto.
+>	* thread.cc (check_valid_pointer): Ditto.
 
-Volume of calls :}. openening files doesn't occur quite as often as (say)
-locking a mutex.
+Thanks for the patch.  I took it a step further.  I renamed the _path
+stuff to _str for consistency, and created some
+check_null_invalid_struct* functions.
 
-I'd like to publicly thank Greg Smith for his excellent profiling work in
-identifying the bottleneck here. I know how time consuming that can be :}.
+It has been checked in.
 
-Thanks Greg!
-
-Rob
+cgf
