@@ -1,58 +1,55 @@
 From: egor duda <deo@logos-m.ru>
-To: Christopher Faylor <cygwin-patches@cygwin.com>
-Subject: Re: case-sensitiveness of environment problem
-Date: Wed, 18 Apr 2001 03:00:00 -0000
-Message-id: <146324187977.20010418135812@logos-m.ru>
-References: <27138147024.20010416101728@logos-m.ru> <20010417100306.C31974@redhat.com> <50254646181.20010417183909@logos-m.ru> <20010417122239.A25694@redhat.com> <129262643781.20010417205227@logos-m.ru> <20010417140927.E25644@redhat.com>
-X-SW-Source: 2001-q2/msg00108.html
+To: cygwin-patches@cygwin.com
+Subject: no passwd in /etc/group
+Date: Wed, 18 Apr 2001 07:36:00 -0000
+Message-id: <125340835285.20010418183539@logos-m.ru>
+X-SW-Source: 2001-q2/msg00109.html
+Content-type: multipart/mixed; boundary="----------=_1583532847-65438-46"
+
+This is a multi-part message in MIME format...
+
+------------=_1583532847-65438-46
+Content-length: 229
 
 Hi!
 
-Tuesday, 17 April, 2001 Christopher Faylor cgf@redhat.com wrote:
+  if passwd field in any line of /etc/group is empty, getgroups causes
+SIGSEGV. fix attached.
 
->>CF> I think we can solve this trivially by making getwinenv perform a
->>CF> case-sensitive comparison, though, can't we?  I think it probably should
->>CF> be case-sensitive anyway.
->>
->>probably. but what if someone runs something nasty like this?
->>
->>extern char** environ;
->>
->>char* x[]= { "FOO=bar",
->>             "foo=BAR",
->>             "FOO=very-long-environment-value-used-only-for-testing-purposes",
->>             0 };
->>char* arg[] = { "/bin/env", 0 };
->>
->>int
->>main (int argc, char** argv)
->>{
->>  environ = x;
->>  execvp ( arg[0], arg );
->>}
->>
->>i think external reference is a bad idea anyway.
+egor.            mailto:deo@logos-m.ru icq 5165414 fidonet 2:5020/496.19
+no-grp-passwd-crash.ChangeLog
+no-grp-passwd-crash.diff
 
-CF> I've always thought that if someone plays with environ they get what they pay
-CF> for anyway.
 
-they should get it in their code, not in ours. i can easily imagine a
-program which adds some variable to environment not checking if it's
-already there. And if we only make env cache case-sensitive, we'll
-still have a crash, and a very hard to debug one, as any heap
-corruption problem. and one that is quite hard to reproduce , because
-it depends on global environment which is quite different on different
-machines. 
+------------=_1583532847-65438-46
+Content-Type: text/plain; charset=us-ascii;
+ name="no-grp-passwd-crash.ChangeLog"
+Content-Disposition: inline; filename="no-grp-passwd-crash.ChangeLog"
+Content-Transfer-Encoding: base64
+Content-Length: 163
 
-Also note, that program itself is possibly not using malloc() and
-friends at all, but still crashes in free().
+MjAwMS0wNC0xOCAgRWdvciBEdWRhICA8ZGVvQGxvZ29zLW0ucnU+CgoJKiBn
+cnAuY2MgKGdldGdyb3Vwcyk6IEF2b2lkIGNyYXNoIGlmIHBhc3N3ZCBmaWVs
+ZCBpZiAvZXRjL2dyb3VwIGlzIAoJZW1wdHkuCg==
 
-SUSv2 also says that program can manipulate 'environ' directly, it's
-absolutely legal. it also says that "If more than one string in a
-process' environment has the same the consequences are undefined."
-Crash in cygwin1.dll probably matches "undefined consequences"
-requirement, and formally complies with standard, but it's surely not
-the best way to handle such situation.
+------------=_1583532847-65438-46
+Content-Type: text/x-diff; charset=us-ascii; name="no-grp-passwd-crash.diff"
+Content-Disposition: inline; filename="no-grp-passwd-crash.diff"
+Content-Transfer-Encoding: base64
+Content-Length: 761
 
-Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
+SW5kZXg6IGdycC5jYwo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBmaWxl
+OiAvY3ZzL3NyYy9zcmMvd2luc3VwL2N5Z3dpbi9ncnAuY2MsdgpyZXRyaWV2
+aW5nIHJldmlzaW9uIDEuMTQKZGlmZiAtdSAtcCAtMiAtcjEuMTQgZ3JwLmNj
+Ci0tLSBncnAuY2MJMjAwMS8wNC8xNiAxNDowMjo0MgkxLjE0CisrKyBncnAu
+Y2MJMjAwMS8wNC8xOCAxNDozMDowNwpAQCAtMjYxLDUgKzI2MSw2IEBAIGdl
+dGdyb3VwcyAoaW50IGdpZHNldHNpemUsIGdpZF90ICpncm91cGwKICAgICAg
+ICAgICBmb3IgKGludCBnZyA9IDA7IGdnIDwgY3Vycl9saW5lczsgKytnZykK
+IAkgICAgewotCSAgICAgIGlmICghc3RyY21wIChncm91cF9idWZbZ2ddLmdy
+X3Bhc3N3ZCwgc3NpZCkpCisJICAgICAgaWYgKGdyb3VwX2J1ZltnZ10uZ3Jf
+cGFzc3dkICYmCisgICAgICAgICAgICAgICAgICAhc3RyY21wIChncm91cF9i
+dWZbZ2ddLmdyX3Bhc3N3ZCwgc3NpZCkpCiAJICAgICAgICB7CiAJCSAgaWYg
+KGNudCA8IGdpZHNldHNpemUpCg==
 
+------------=_1583532847-65438-46--
