@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4938-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 23776 invoked by alias); 9 Sep 2004 20:12:01 -0000
+Return-Path: <cygwin-patches-return-4939-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 13959 invoked by alias); 10 Sep 2004 09:00:42 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,45 +7,62 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 23721 invoked from network); 9 Sep 2004 20:11:59 -0000
-Date: Thu, 09 Sep 2004 20:12:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [Patch] implementation of nonblocking writes on pipes
-Message-ID: <20040909201317.GE28438@trixie.casa.cgf.cx>
+Received: (qmail 13196 invoked from network); 10 Sep 2004 09:00:40 -0000
+Date: Fri, 10 Sep 2004 09:00:00 -0000
+From: Corinna Vinschen <vinschen@redhat.com>
+To: Bob Byrnes <byrnes@curl.com>
+Cc: cygwin-patches@cygwin.com
+Subject: [Fwd: 1.5.11-1: sftp performance problem]
+Message-ID: <20040910090123.GV17670@cygbert.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20040909140656.GE27325@trixie.casa.cgf.cx> <20040909181407.ECB49E598@wildcard.curl.com>
+Mail-Followup-To: Bob Byrnes <byrnes@curl.com>,
+	cygwin-patches@cygwin.com
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20040909181407.ECB49E598@wildcard.curl.com>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2004-q3/txt/msg00090.txt.bz2
+User-Agent: Mutt/1.4.2i
+X-SW-Source: 2004-q3/txt/msg00091.txt.bz2
 
-On Thu, Sep 09, 2004 at 02:14:07PM -0400, Bob Byrnes wrote:
->On Sep 9, 10:06am, cgf-no-personal-reply-please@cygwin.com (Christopher Faylor) wrote:
->-- Subject: Re: [Patch] implementation of nonblocking writes on pipes
->>
->> Before we start adding more patches which are based on your previous work,
->> could you reply to some of the problems raised in the cygwin mailing list?
->
->Sure, I'll do that now (I've fallen a few days behind reading that list).
->
->> There was one problem with Windows 95 which Corinna fixed but now there
->> is another problem with using rsync, which I thought was one of the
->> impetuses for your patch.
->>
->-- End of excerpt from Christopher Faylor
->
->The win95 problem was unfortunate ... I don't have a win95 system here
->to test.  I'll look more closely at the patch, but I think it is correct.
->
->The rsync problem (I assume you are talking about "rsync + xp sp2 failing")
->appears to be unrelated to my patch, because I think the failure is reported
->for file desriptors from a socketpair, not a pipe.  I'll try to confirm that.
+Bob,
 
-Ok, thanks.  I didn't look at the error too closely, so you're probably
-corect.
+this problem is easily reproducible with sftp.  It seems to be in some
+way related to your pipe patch.
 
-cgf
+Due to speed considerations, Cygwin's implementation of OpenSSH uses
+pipes for local IPC instead of socketpairs.  I switched back the whole
+OpenSSH suite to use socketpairs and the problem disappears.  Getting
+a 1.4Megs file takes about a minute when using pipes, a split second
+when using socketpairs.  For some reason only receiving files is affected,
+not sending.
+
+Would you mind to have a look into that?  Or is that perhaps a problem
+solved by one of your upcoming patches?
+
+
+TIA,
+Corinna
+
+
+----- Forwarded message from Peter Siebold -----
+> Date: Thu, 9 Sep 2004 13:46:50 -0700
+> From: "Peter Siebold"
+> Subject: 1.5.11-1: sftp performance problem
+> To: Cygwin list
+> 
+> I updated to the newest version of cygwin dll on 9/7/4 and after sftp
+> suffered performance issues when issuing a get on a large file.  File
+> transfers now stall and do not complete.  After downgrading to version
+> of 1.5.10-3 of cygwin sftp then it works fine.
+> 
+> Both configurations used openssh 3.9p1-1
+> 
+> This is the first time reporting a problem, so I hope I didn't miss
+> anything.
+> 
+> -Pete
+----- End forwarded message -----
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          mailto:cygwin@cygwin.com
+Red Hat, Inc.
