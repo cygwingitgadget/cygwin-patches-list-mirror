@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4343-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 27230 invoked by alias); 6 Nov 2003 15:32:43 -0000
+Return-Path: <cygwin-patches-return-4344-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 21623 invoked by alias); 6 Nov 2003 17:01:37 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,33 +7,69 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 27210 invoked from network); 6 Nov 2003 15:32:43 -0000
-Date: Thu, 06 Nov 2003 15:32:00 -0000
-From: Christopher Faylor <cgf-no-personal-replies-please@cygwin.com>
+Received: (qmail 21593 invoked from network); 6 Nov 2003 17:01:35 -0000
+Message-ID: <3FAA7D7F.9080408@fangorn.ca>
+Date: Thu, 06 Nov 2003 17:01:00 -0000
+From: Mark Blackburn <marklist@fangorn.ca>
+User-Agent: Mozilla/5.0 (Windows; U; Win98; en-US; rv:1.5) Gecko/20031013 Thunderbird/0.3
+X-Accept-Language: en-us, en
+MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
-Subject: Re: [Patch]: Fixing the PROCESS_DUP_HANDLE security hole (part 1).
-Message-ID: <20031106153242.GA14828@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3.0.5.32.20030929215525.0082c4f0@incoming.verizon.net> <3.0.5.32.20031105200201.00828100@incoming.verizon.net>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3.0.5.32.20031105200201.00828100@incoming.verizon.net>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2003-q4/txt/msg00062.txt.bz2
+Subject: [PATCH] : make cygpath use multiple filename arguments
+Content-Type: multipart/mixed;
+ boundary="------------080707090402090309010305"
+X-SW-Source: 2003-q4/txt/msg00063.txt.bz2
 
-On Wed, Nov 05, 2003 at 08:02:01PM -0500, Pierre A. Humblet wrote:
->Ping? 
->
->This has been pending for a while. See also
-><http://cygwin.com/ml/cygwin-patches/2003-q4/msg00003.html>
+This is a multi-part message in MIME format.
+--------------080707090402090309010305
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-length: 303
 
-I haven't forgotten about it.  Unfortunately, in quick scans, the
-implementation gives me heartburn.  That doesn't mean that this isn't
-the correct way to do this, it just means that my initial gut feeling
-is negative.
+This patch will allow you to do this.
 
-So, I haven't had much time to give this the attention it deserves and
-either accept it or offer another alternative.  If it was in anything
-other than tty code, it probably wouldn't have languished this long.
+$ ./cygpath.exe -w -a cygpath.cc cygpath.exe
+E:\cygwin\usr\src\cygwin-cvs\src\winsup\utils\cygpath.cc
+E:\cygwin\usr\src\cygwin-cvs\src\winsup\utils\cygpath.exe
+
+I don't know if this is desired behaviour or not. Personally, I would
+find it useful.
+
+Mark Blackburn
+
+
+--------------080707090402090309010305
+Content-Type: text/plain;
+ name="cygpath.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline;
+ filename="cygpath.patch"
+Content-length: 673
+
+Index: src/winsup/utils/cygpath.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/utils/cygpath.cc,v
+retrieving revision 1.31
+diff -u -p -r1.31 cygpath.cc
+--- src/winsup/utils/cygpath.cc	17 Oct 2003 17:20:06 -0000	1.31
++++ src/winsup/utils/cygpath.cc	6 Nov 2003 15:36:05 -0000
+@@ -675,11 +675,13 @@ main (int argc, char **argv)
+       if (output_flag)
+ 	dowin (o);
+ 
+-      if (optind != argc - 1)
++      if (optind > argc - 1)
+ 	usage (stderr, 1);
+ 
+-      filename = argv[optind];
+-      doit (filename);
++      for (int i=optind; argv[i]; i++) {
++	filename = argv[i];
++	doit (filename);
++      }
+     }
+   else
+     {
+
+
+--------------080707090402090309010305--
