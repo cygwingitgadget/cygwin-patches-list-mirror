@@ -1,43 +1,42 @@
 From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygpatch <cygwin-patches@cygwin.com>
-Subject: Re: lseek() fails to seek on /dev/fd0 ('\\.\A:')
-Date: Tue, 27 Feb 2001 03:02:00 -0000
-Message-id: <20010227120159.D27406@cygbert.vinschen.de>
-References: <u67ae79bw6v.fsf@rachel.hq.vtech> <u671ysl8xda.fsf@rachel.hq.vtech> <613331659.20010226160225@logos-m.ru> <3A9A621F.7661F240@yahoo.com> <20010226161735.P27406@cygbert.vinschen.de> <1825816804.20010226221015@logos-m.ru> <20010227004550.X27406@cygbert.vinschen.de> <12658340509.20010227124539@logos-m.ru>
-X-SW-Source: 2001-q1/msg00120.html
+To: cygwin-patches <cygwin-patches@cygwin.com>
+Subject: Re: [patch] setup.exe geturl.cc enhancement for total and diskfull download progress meters
+Date: Tue, 27 Feb 2001 04:28:00 -0000
+Message-id: <20010227132847.H27406@cygbert.vinschen.de>
+References: <VA.00000670.003b71c8@thesoftwaresource.com>
+X-SW-Source: 2001-q1/msg00121.html
 
-On Tue, Feb 27, 2001 at 12:45:39PM +0300, Egor Duda wrote:
-> CV> Did you try that even on raw partitions (\\.\X:)? From the MSDN:
-> 
-> CV> "The IOCTL_DISK_GET_DRIVE_GEOMETRY control code retrieves information
-> CV>  about the physical disk's geometry"
->  
-> CV> so I assume it will only work for raw harddisks (\\.\physicaldriveN).
-> 
-> Yep,    you're    right.    I    can    work    around    this    with
-> IOCTL_DISK_GET_PARTITION_INFO  ioctl,  but here comes the problem with
-> off_t  and  size_t being long int :(  So we won't be able to work with
-> drives  and  partitions  longer  then  2G  (which  are  very  frequent
-> nowadays). Should we return EINVAL in such cases?
+On Tue, Feb 20, 2001 at 10:23:40PM -0500, Brian Keener wrote:
+> 2001-02-20  Brian Keener <bkeener@thesoftwaresource.com>
+>    * download.cc (do_download): New variables total_download_bytes and 
+>    total_download_bytes_sofar added for download progress meter.  Add loop
+>    to accumulate the total bytes to download from the selected packages.
+>    * geturl.cc: Add state.h and diskfull.h to include list.  New variables
+>    gw_iprogress, gw_pprogress, gw_progress_text, gw_pprogress_text, and
+>    gw_iprogress_text added to allow for addition of Total packages download
+>    progress meter and disk full percent progress meter.  Add variables
+>    total_download_bytes and total_download_bytes_sofar for use by progress
+>    meters.
+>    (dialog_proc): New variables gw_iprogress, gw_pprogress, 
+>    gw_progress_text, gw_pprogress_text, and gw_iprogress_text added to 
+>    allow for addition of Total packages download progress meter and disk 
+>    full percent progress meter.  
+>    (init_dialog): Ditto.
+>    (progress): Ditto.
+>    (get_url_to_file): Ditto.
+>    * geturl.h: Add external definition for total_download_bytes and
+>    total_download_bytes_sofar.
+>    * res.rc (): Add two additional progress meters (IDC_DLS_IPROGRESS) 
+>         and (IDC_DLS_PPROGRESS) and three text objects (IDC_DLS_PROGRESS_TEXT)
+>    and (IDC_DLS_IPROGRESS_TEXT, IDC_DLS_PPROGRESS_TEXT) for use in the
+>    download meters.
+>    * resource.h: Add new fields for progress meters and text and update 
+>    _APS_NEXT_CONTROL_VALUE.
+> [...]
 
-I have just checked on Linux kernel 2.2.x. For some reason it returns
-the following on partitions and physical drives:
+Applied.
 
-lseek (fd, 0, SEEK_END) = 0 and the file pointer is set to the
-beginning(!) of the raw device.
-
-lseek (fd, pos != 0, SEEK_END) = -1 (EINVAL)
-
-So if we want to be Linux compatible we could make our life very easy.
-
-Has somebody a 2.4 kernel to test the behaviour there?
-
-> BTW,   does   anybody  have  MO drives around to test this ioctls with
-> partitioned removable media?
-
-I have a ZIP-100 drive which is what you're looking for. I have
-used it for testing the raw stuff earlier.
-
+Thanks,
 Corinna
 
 -- 
