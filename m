@@ -1,33 +1,17 @@
 From: Chris Faylor <cgf@cygnus.com>
 To: cygwin-patches@sourceware.cygnus.com
-Subject: Re: problems related to mount_info.
-Date: Wed, 07 Jun 2000 14:58:00 -0000
-Message-id: <20000607175753.E17648@cygnus.com>
-References: <s1su2f5qmsh.fsf@jaist.ac.jp>
-X-SW-Source: 2000-q2/msg00095.html
+Subject: Re: umount falls into an infinite loop.
+Date: Thu, 08 Jun 2000 19:16:00 -0000
+Message-id: <20000608221629.B18222@cygnus.com>
+References: <s1swvk1r5sr.fsf@jaist.ac.jp> <20000607154918.I16163@cygnus.com> <s1sr9a9qkin.fsf@jaist.ac.jp> <20000607175638.D17648@cygnus.com>
+X-SW-Source: 2000-q2/msg00097.html
 
-This patch looks terrific.  You've made changes that I've been
-contemplating for some time.
+On Wed, Jun 07, 2000 at 05:56:38PM -0400, Chris Faylor wrote:
+>Perfect.  Thank you.  That was service!
+>
+>I'll install this patch once I've finished with the net release.
 
-I'll install it once I've finished with the net release.
+Corinna has installed this patch.
 
-Thanks for all of your hard work.
-
+Thanks,
 cgf
-
-On Thu, Jun 08, 2000 at 05:05:50AM +0900, Kazuhiro Fujieda wrote:
->The methods of the `mount_info' class operates mount entries in
->the registry without regularizing paths. I was amazed by this
->manner as the following.
->
->   $ mount
->   Device              Directory           Type         Flags
->   ...
->   C:\text             /text               user         textmode
->   ...
->   $ umount /text
->   umount: No such file or directory
->
->I failed to notice that I had created the mount entry as the
->following by mistake.
->   $ mount 'C:\text' /text/
