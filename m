@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3272-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 8951 invoked by alias); 4 Dec 2002 09:45:19 -0000
+Return-Path: <cygwin-patches-return-3273-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 14216 invoked by alias); 4 Dec 2002 09:56:17 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,545 +7,322 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 8896 invoked from network); 4 Dec 2002 09:45:10 -0000
-From: "Craig McGeachie" <slapdau@yahoo.com.au>
+Received: (qmail 14207 invoked from network); 4 Dec 2002 09:56:16 -0000
+X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
+Date: Wed, 04 Dec 2002 01:56:00 -0000
+From: Thomas Pfaff <tpfaff@gmx.net>
 To: cygwin-patches@cygwin.com
-Date: Wed, 04 Dec 2002 01:45:00 -0000
+Subject: [PATCH] pthread_mutex patches
+Message-ID: <Pine.WNT.4.44.0212041042090.185-200000@algeria.intern.net>
+X-X-Sender: pfaff@antarctica.intern.net
 MIME-Version: 1.0
-Content-type: Multipart/Mixed; boundary=Message-Boundary-6440
-Subject: Re: PATCH: Implementation of functions in netdb.h
-Message-ID: <3DEE8558.6102.51AEB1@localhost>
-Priority: normal
-In-reply-to: <20021202171548.GA21064@redhat.com>
-References: <3DDA4A99.16846.1EEFD0D0@localhost>
-X-SW-Source: 2002-q4/txt/msg00223.txt.bz2
+Content-Type: MULTIPART/MIXED; BOUNDARY="164646-23431-1038994979=:185"
+Content-ID: <Pine.WNT.4.44.0212041043470.185@algeria.intern.net>
+X-SW-Source: 2002-q4/txt/msg00224.txt.bz2
+
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
+
+--164646-23431-1038994979=:185
+Content-Type: TEXT/PLAIN; CHARSET=US-ASCII
+Content-ID: <Pine.WNT.4.44.0212041043471.185@algeria.intern.net>
+Content-length: 1427
 
 
---Message-Boundary-6440
-Content-type: text/plain; charset=US-ASCII
-Content-transfer-encoding: 7BIT
-Content-description: Mail message body
-Content-length: 1878
+This is my patch from 2002-09-17 ported to the recent cygwin src. (See
+http://cygwin.com/ml/cygwin-patches/2002-q3/msg00436.html).
 
-2002-11-19 Craig McGeachie <slapdau@yahoo.com.au>
- * netdb.cc (open_system_file, get_entire_line, get_alias_list)
- (open_services_file, parse_services_line, free_servent)
- (cygwin_setservent, cygwin_getservent, cygwin_endservent)
- (open_protocol_file, parse_protocol_line, free_protoent)
- (cygwin_setprotoent, cygwin_getprotoent, cygwin_endprotoent):
- New file.
- * Makeile.in (DLL_OFILES): Add reference to the new netdb.cc
- file.
- * cygwin.din : Add new aliased exports for service and
- protocol enumerations in netdb.cc.
+pthread_cond_init patch should be applied first.
 
+2002-12-04  Thomas Pfaff <tpfaff@gmx.net>
 
-On 2 Dec 2002 at 12:15, Christopher Faylor wrote:
-> FYI, we've received your assignment.  Looking forward to a patch
-> against CVS sources. 
-> Btw, the copyright notice should only list the current year, 2002,
-> for any new file. 
+        * include/pthread.h: Add define for errorchecking mutexes.
+        Chang default mutex type.
+        * thread.cc (pthread_cond::TimedWait): Update mutex unlock calls.
+	(pthread_mutex::pthread_mutex): New implement.
+        (pthread_mutex::~pthread_mutex): Ditto.
+        (pthread_mutex::Lock): Ditto.
+        (pthread_mutex::TryLock): Ditto.
+        (pthread_mutex::UnLock): Ditto.
+        (pthread_mutex::Destroy): Implement new method.
+        (pthread_mutex::SetOwner): Ditto.
+	(pthread_mutex::LockRecursive): Ditto.
+        (pthread_mutex::fixup_after_fork): Restore locking state after
+	fork.
+        (__pthread_mutex_destroy): Call pthread_mutex::Destroy to destroy
+        mutex.
+        (__pthread_mutexattr_settype): Allow errorchecking and recursive
+        types.
+        * thread.h (MUTEX_LOCK_COUNTER_INITIAL): New define.
+	(pthread_mutex::criticalsection): Remove.
+        (pthread_mutex::lock_counter): New member.
+        (pthread_mutex::recursion_counter): Ditto.
+        (pthread_mutex::owner): Ditto.
+        (pthread_mutex::type): Ditto.
+        (pthread_mutex::Destroy): New method.
+        (pthread_mutex::SetOwner): Ditto.
+        (pthread_mutex::LockRecursive): Ditto.
 
-Ok.  Here is a patch, diffed against the current CVS sources.  Using 
-cvs diff, I can't get the new file included in the diff file, the way I 
-did last time so I attached it separately.
+--164646-23431-1038994979=:185
+Content-Type: TEXT/PLAIN; NAME="pthread_mutex.patch"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.WNT.4.44.0212041042590.185@algeria.intern.net>
+Content-Description: 
+Content-Disposition: ATTACHMENT; FILENAME="pthread_mutex.patch"
+Content-length: 15324
 
-I changed the comments to be more useful than "cygwin internal" and 
-added some calls to debug_printf, syscall_printf, and paranoid_printf 
-where I thought appropiate.  I'm still not happy about the treatment of 
-returns from malloc and strdup, where the code is simply assuming that 
-valid memory will be returned.  I have at least put the paranoid_printf 
-function calls in, but I want something better.  I thought that 
-set_errno might be the way to go, but I can't see that that this is the 
-right solution.  Should I call set_errno, and return null values?  
-Incidentally I function one function that terminated the running 
-process with an error code if the call to malloc failed.
+ZGlmZiAtdXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi9pbmNsdWRlL3B0aHJl
+YWQuaCBzcmMvd2luc3VwL2N5Z3dpbi9pbmNsdWRlL3B0aHJlYWQuaAotLS0g
+c3JjLm9sZC93aW5zdXAvY3lnd2luL2luY2x1ZGUvcHRocmVhZC5oCTIwMDIt
+MDktMjQgMDU6NTc6NTMuMDAwMDAwMDAwICswMjAwCisrKyBzcmMvd2luc3Vw
+L2N5Z3dpbi9pbmNsdWRlL3B0aHJlYWQuaAkyMDAyLTExLTI5IDEzOjIxOjE1
+LjAwMDAwMDAwMCArMDEwMApAQCAtNTAsMTIgKzUwLDExIEBAIGV4dGVybiAi
+QyIKICNkZWZpbmUgUFRIUkVBRF9DUkVBVEVfSk9JTkFCTEUgMAogI2RlZmlu
+ZSBQVEhSRUFEX0VYUExJQ0lUX1NDSEVEIDEKICNkZWZpbmUgUFRIUkVBRF9J
+TkhFUklUX1NDSEVEIDAKLSNkZWZpbmUgUFRIUkVBRF9NVVRFWF9ERUZBVUxU
+IDAKLSNkZWZpbmUgUFRIUkVBRF9NVVRFWF9FUlJPUkNIRUNLIDEKLSNkZWZp
+bmUgUFRIUkVBRF9NVVRFWF9OT1JNQUwgMgorI2RlZmluZSBQVEhSRUFEX01V
+VEVYX0VSUk9SQ0hFQ0sgMAorI2RlZmluZSBQVEhSRUFEX01VVEVYX1JFQ1VS
+U0lWRSAxCisjZGVmaW5lIFBUSFJFQURfTVVURVhfREVGQVVMVCBQVEhSRUFE
+X01VVEVYX0VSUk9SQ0hFQ0sKIC8qIHRoaXMgc2hvdWxkIGJlIHRvbyBsb3cg
+dG8gZXZlciBiZSBhIHZhbGlkIGFkZHJlc3MgKi8KICNkZWZpbmUgUFRIUkVB
+RF9NVVRFWF9JTklUSUFMSVpFUiAodm9pZCAqKTIwCi0jZGVmaW5lIFBUSFJF
+QURfTVVURVhfUkVDVVJTSVZFIDAKICNkZWZpbmUgUFRIUkVBRF9PTkNFX0lO
+SVQgeyBQVEhSRUFEX01VVEVYX0lOSVRJQUxJWkVSLCAwIH0KICNkZWZpbmUg
+UFRIUkVBRF9QUklPX0lOSEVSSVQKICNkZWZpbmUgUFRIUkVBRF9QUklPX05P
+TkUKZGlmZiAtdXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi90aHJlYWQuY2Mg
+c3JjL3dpbnN1cC9jeWd3aW4vdGhyZWFkLmNjCi0tLSBzcmMub2xkL3dpbnN1
+cC9jeWd3aW4vdGhyZWFkLmNjCTIwMDItMTEtMjkgMTA6NDI6MDQuMDAwMDAw
+MDAwICswMTAwCisrKyBzcmMvd2luc3VwL2N5Z3dpbi90aHJlYWQuY2MJMjAw
+Mi0xMS0yOSAxMzo1NDoyNy4wMDAwMDAwMDAgKzAxMDAKQEAgLTkxMywyNyAr
+OTEzLDIwIEBAIGludAogcHRocmVhZF9jb25kOjpUaW1lZFdhaXQgKERXT1JE
+IGR3TWlsbGlzZWNvbmRzKQogewogICBEV09SRCBydjsKLSAgaWYgKCF3aW5j
+YXAuaGFzX3NpZ25hbF9vYmplY3RfYW5kX3dhaXQgKCkpCi0gICAgewotICAg
+ICAgLy8gRklYTUU6IHJhY2UgY29uZGl0aW9uIChwb3RlbnRpYWxseSBkcm9w
+IGV2ZW50cwotICAgICAgLy8gUG9zc2libGUgc29sdXRpb24gKHNpbmdsZSBw
+cm9jZXNzIG9ubHkpIC0gcGxhY2UgdGhpcyBpbiBhIGNyaXRpY2FsIHNlY3Rp
+b24uCi0gICAgICBSZWxlYXNlTXV0ZXggKG11dGV4LT53aW4zMl9vYmpfaWQp
+OwotICAgICAgcnYgPSBXYWl0Rm9yU2luZ2xlT2JqZWN0ICh3aW4zMl9vYmpf
+aWQsIGR3TWlsbGlzZWNvbmRzKTsKLSAgICB9Ci0gIGVsc2UKLSAgICB7Ci0g
+ICAgICBMZWF2ZUNyaXRpY2FsU2VjdGlvbiAoJm11dGV4LT5jcml0aWNhbHNl
+Y3Rpb24pOwotICAgICAgcnYgPSBXYWl0Rm9yU2luZ2xlT2JqZWN0ICh3aW4z
+Ml9vYmpfaWQsIGR3TWlsbGlzZWNvbmRzKTsKKworICAvLyBGSVhNRTogcmFj
+ZSBjb25kaXRpb24gKHBvdGVudGlhbGx5IGRyb3AgZXZlbnRzCisgIC8vIFBv
+c3NpYmxlIHNvbHV0aW9uIChzaW5nbGUgcHJvY2VzcyBvbmx5KSAtIHBsYWNl
+IHRoaXMgaW4gYSBjcml0aWNhbCBzZWN0aW9uLgorICBtdXRleC0+VW5Mb2Nr
+ICgpOworICBydiA9IFdhaXRGb3JTaW5nbGVPYmplY3QgKHdpbjMyX29ial9p
+ZCwgZHdNaWxsaXNlY29uZHMpOwogI2lmIDAKLSAgICAvKiB3ZSBuZWVkIHRv
+IHVzZSBuYXRpdmUgd2luMzIgbXV0ZXgncyBoZXJlLCBiZWNhdXNlIHRoZSBj
+eWd3aW4gb25lcyBub3cgdXNlCi0gICAgICogY3JpdGljYWwgc2VjdGlvbnMs
+IHdoaWNoIGFyZSBmYXN0ZXIsIGJ1dCBpbnRyb2R1Y2UgYSByYWNlIF9oZXJl
+Xy4gVW50aWwgdGhlbgotICAgICAqIFRoZSBOVCB2YXJpYW50IG9mIHRoZSBj
+b2RlIGlzIHJlZHVuZGFudC4KLSAgICAgKi8KKyAgLyogd2UgbmVlZCB0byB1
+c2UgbmF0aXZlIHdpbjMyIG11dGV4J3MgaGVyZSwgYmVjYXVzZSB0aGUgY3ln
+d2luIG9uZXMgbm93IHVzZQorICAgKiBjcml0aWNhbCBzZWN0aW9ucywgd2hp
+Y2ggYXJlIGZhc3RlciwgYnV0IGludHJvZHVjZSBhIHJhY2UgX2hlcmVfLiBV
+bnRpbCB0aGVuCisgICAqIFRoZSBOVCB2YXJpYW50IG9mIHRoZSBjb2RlIGlz
+IHJlZHVuZGFudC4KKyAgICovCiAKLSAgICBydiA9IFNpZ25hbE9iamVjdEFu
+ZFdhaXQgKG11dGV4LT53aW4zMl9vYmpfaWQsIHdpbjMyX29ial9pZCwgZHdN
+aWxsaXNlY29uZHMsCi0JCQkgZmFsc2UpOworICBydiA9IFNpZ25hbE9iamVj
+dEFuZFdhaXQgKG11dGV4LT53aW4zMl9vYmpfaWQsIHdpbjMyX29ial9pZCwg
+ZHdNaWxsaXNlY29uZHMsCisgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ZmFsc2UpOwogI2VuZGlmCi0gICAgfQogICBzd2l0Y2ggKHJ2KQogICAgIHsK
+ICAgICBjYXNlIFdBSVRfRkFJTEVEOgpAQCAtMTE1NCwzOSArMTE0Nyw0MSBA
+QCBwdGhyZWFkX211dGV4Ojppbml0TXV0ZXggKCkKICAgICBhcGlfZmF0YWwg
+KCJDb3VsZCBub3QgY3JlYXRlIHdpbjMyIE11dGV4IGZvciBwdGhyZWFkIG11
+dGV4IHN0YXRpYyBpbml0aWFsaXplciBzdXBwb3J0LiIpOwogfQogCi1wdGhy
+ZWFkX211dGV4OjpwdGhyZWFkX211dGV4IChwdGhyZWFkX211dGV4YXR0ciAq
+YXR0cik6dmVyaWZ5YWJsZV9vYmplY3QgKFBUSFJFQURfTVVURVhfTUFHSUMp
+CitwdGhyZWFkX211dGV4OjpwdGhyZWFkX211dGV4IChwdGhyZWFkX211dGV4
+YXR0ciAqYXR0cikgOgorICB2ZXJpZnlhYmxlX29iamVjdCAoUFRIUkVBRF9N
+VVRFWF9NQUdJQyksCisgIGxvY2tfY291bnRlciAoTVVURVhfTE9DS19DT1VO
+VEVSX0lOSVRJQUwpLAorICB3aW4zMl9vYmpfaWQgKE5VTEwpLCByZWN1cnNp
+b25fY291bnRlciAoMCksCisgIGNvbmR3YWl0cyAoMCksIG93bmVyIChOVUxM
+KSwgdHlwZSAoUFRIUkVBRF9NVVRFWF9ERUZBVUxUKSwKKyAgcHNoYXJlZChQ
+VEhSRUFEX1BST0NFU1NfUFJJVkFURSkKIHsKLSAgLyogYXR0ciBjaGVja2Vk
+IGluIHRoZSBDIGNhbGwgKi8KLSAgaWYgKGF0dHIgJiYgYXR0ci0+cHNoYXJl
+ZCA9PSBQVEhSRUFEX1BST0NFU1NfU0hBUkVEKQorICB3aW4zMl9vYmpfaWQg
+PSA6OkNyZWF0ZVNlbWFwaG9yZSAoJnNlY19ub25lX25paCwgMCwgTE9OR19N
+QVgsIE5VTEwpOworICBpZiAoIXdpbjMyX29ial9pZCkKICAgICB7Ci0gICAg
+ICAvLyBmYWlsCiAgICAgICBtYWdpYyA9IDA7CiAgICAgICByZXR1cm47CiAg
+ICAgfQotICBpZiAod2luY2FwLmhhc190cnlfZW50ZXJfY3JpdGljYWxfc2Vj
+dGlvbiAoKSkKLSAgICBJbml0aWFsaXplQ3JpdGljYWxTZWN0aW9uICgmY3Jp
+dGljYWxzZWN0aW9uKTsKLSAgZWxzZQorICAvKmF0dHIgY2hlY2tlZCBpbiB0
+aGUgQyBjYWxsICovCisgIGlmIChhdHRyKQogICAgIHsKLSAgICAgIHRoaXMt
+PndpbjMyX29ial9pZCA9IDo6Q3JlYXRlTXV0ZXggKCZzZWNfbm9uZV9uaWgs
+IGZhbHNlLCBOVUxMKTsKLSAgICAgIGlmICghd2luMzJfb2JqX2lkKQotCW1h
+Z2ljID0gMDsKKyAgICAgIGlmIChhdHRyLT5wc2hhcmVkID09IFBUSFJFQURf
+UFJPQ0VTU19TSEFSRUQpCisgICAgICAgIHsKKyAgICAgICAgICAvLyBmYWls
+CisgICAgICAgICAgbWFnaWMgPSAwOworICAgICAgICAgIHJldHVybjsKKyAg
+ICAgICAgfQorICAgICAgCisgICAgICB0eXBlID0gYXR0ci0+bXV0ZXh0eXBl
+OwogICAgIH0KLSAgY29uZHdhaXRzID0gMDsKLSAgcHNoYXJlZCA9IFBUSFJF
+QURfUFJPQ0VTU19QUklWQVRFOworCiAgIC8qIHRocmVhZHNhZmUgYWRkaXRp
+b24gaXMgZWFzeSAqLwogICBuZXh0ID0gKHB0aHJlYWRfbXV0ZXggKikgSW50
+ZXJsb2NrZWRFeGNoYW5nZVBvaW50ZXIgKCZNVF9JTlRFUkZBQ0UtPm11dGV4
+cywgdGhpcyk7CiB9CiAKIHB0aHJlYWRfbXV0ZXg6On5wdGhyZWFkX211dGV4
+ICgpCiB7Ci0gIGlmICh3aW5jYXAuaGFzX3RyeV9lbnRlcl9jcml0aWNhbF9z
+ZWN0aW9uICgpKQotICAgIERlbGV0ZUNyaXRpY2FsU2VjdGlvbiAoJmNyaXRp
+Y2Fsc2VjdGlvbik7Ci0gIGVsc2UKLSAgICB7Ci0gICAgICBpZiAod2luMzJf
+b2JqX2lkKQotCUNsb3NlSGFuZGxlICh3aW4zMl9vYmpfaWQpOwotICAgICAg
+d2luMzJfb2JqX2lkID0gTlVMTDsKLSAgICB9CisgIGlmICh3aW4zMl9vYmpf
+aWQpCisgICAgQ2xvc2VIYW5kbGUgKHdpbjMyX29ial9pZCk7CisKICAgLyog
+SSdtIG5vdCAxMDAlIHN1cmUgdGhlIG5leHQgYml0IGlzIHRocmVhZHNhZmUu
+IEkgdGhpbmsgaXQgaXMuLi4gKi8KICAgaWYgKE1UX0lOVEVSRkFDRS0+bXV0
+ZXhzID09IHRoaXMpCiAgICAgLyogVE9ETzogcHJpbnRmIGFuIGVycm9yIGlm
+IHRoZSByZXR1cm4gdmFsdWUgIT0gdGhpcyAqLwpAQCAtMTE5NSw3ICsxMTkw
+LDcgQEAgcHRocmVhZF9tdXRleDo6fnB0aHJlYWRfbXV0ZXggKCkKICAgICB7
+CiAgICAgICBwdGhyZWFkX211dGV4ICp0ZW1wbXV0ZXggPSBNVF9JTlRFUkZB
+Q0UtPm11dGV4czsKICAgICAgIHdoaWxlICh0ZW1wbXV0ZXgtPm5leHQgJiYg
+dGVtcG11dGV4LT5uZXh0ICE9IHRoaXMpCi0JdGVtcG11dGV4ID0gdGVtcG11
+dGV4LT5uZXh0OworICAgICAgICB0ZW1wbXV0ZXggPSB0ZW1wbXV0ZXgtPm5l
+eHQ7CiAgICAgICAvKiBidXQgdGhlcmUgbWF5IGJlIGEgcmFjZSBiZXR3ZWVu
+IHRoZSBsb29wIGFib3ZlIGFuZCB0aGlzIHN0YXRlbWVudCAqLwogICAgICAg
+LyogVE9ETzogcHJpbnRmIGFuIGVycm9yIGlmIHRoZSByZXR1cm4gdmFsdWUg
+IT0gdGhpcyAqLwogICAgICAgSW50ZXJsb2NrZWRFeGNoYW5nZVBvaW50ZXIg
+KCZ0ZW1wbXV0ZXgtPm5leHQsIHRoaXMtPm5leHQpOwpAQCAtMTIwNSwzMyAr
+MTIwMCw5NiBAQCBwdGhyZWFkX211dGV4Ojp+cHRocmVhZF9tdXRleCAoKQog
+aW50CiBwdGhyZWFkX211dGV4OjpMb2NrICgpCiB7Ci0gIGlmICh3aW5jYXAu
+aGFzX3RyeV9lbnRlcl9jcml0aWNhbF9zZWN0aW9uICgpKQorICBpbnQgcmVz
+dWx0ID0gMDsKKyAgcHRocmVhZF90IHNlbGYgPSBwdGhyZWFkOjpzZWxmICgp
+OworIAorICBpZiAoMCA9PSBJbnRlcmxvY2tlZEluY3JlbWVudCAoJmxvY2tf
+Y291bnRlcikpCisgICAgU2V0T3duZXIgKCk7CisgIGVsc2UgaWYgKF9fcHRo
+cmVhZF9lcXVhbCAoJm93bmVyLCAmc2VsZikpCisgICAgeworICAgICAgSW50
+ZXJsb2NrZWREZWNyZW1lbnQgKCZsb2NrX2NvdW50ZXIpOworICAgICAgaWYg
+KFBUSFJFQURfTVVURVhfUkVDVVJTSVZFID09IHR5cGUpCisgICAgICAgIHJl
+c3VsdCA9IExvY2tSZWN1cnNpdmUgKCk7CisgICAgICBlbHNlCisgICAgICAg
+IHJlc3VsdCA9IEVERUFETEs7CisgICAgfQorICBlbHNlCiAgICAgewotICAg
+ICAgRW50ZXJDcml0aWNhbFNlY3Rpb24gKCZjcml0aWNhbHNlY3Rpb24pOwot
+ICAgICAgcmV0dXJuIDA7CisgICAgICBXYWl0Rm9yU2luZ2xlT2JqZWN0ICh3
+aW4zMl9vYmpfaWQsIElORklOSVRFKTsKKyAgICAgIFNldE93bmVyICgpOwog
+ICAgIH0KLSAgLyogRklYTUU6IFJldHVybiAwIG9uIHN1Y2Nlc3MgKi8KLSAg
+cmV0dXJuIFdhaXRGb3JTaW5nbGVPYmplY3QgKHdpbjMyX29ial9pZCwgSU5G
+SU5JVEUpOworIAorICByZXR1cm4gcmVzdWx0OwogfQogCiAvKiByZXR1cm5z
+IG5vbi16ZXJvIG9uIGZhaWx1cmUgKi8KIGludAogcHRocmVhZF9tdXRleDo6
+VHJ5TG9jayAoKQogewotICBpZiAod2luY2FwLmhhc190cnlfZW50ZXJfY3Jp
+dGljYWxfc2VjdGlvbiAoKSkKLSAgICByZXR1cm4gKCFUcnlFbnRlckNyaXRp
+Y2FsU2VjdGlvbiAoJmNyaXRpY2Fsc2VjdGlvbikpOwotICByZXR1cm4gKFdh
+aXRGb3JTaW5nbGVPYmplY3QgKHdpbjMyX29ial9pZCwgMCkgPT0gV0FJVF9U
+SU1FT1VUKTsKKyAgaW50IHJlc3VsdCA9IDA7CisgIHB0aHJlYWRfdCBzZWxm
+ID0gcHRocmVhZDo6c2VsZiAoKTsKKyAKKyAgaWYgKE1VVEVYX0xPQ0tfQ09V
+TlRFUl9JTklUSUFMID09CisgICAgICBJbnRlcmxvY2tlZENvbXBhcmVFeGNo
+YW5nZSAoJmxvY2tfY291bnRlciwgMCwgTVVURVhfTE9DS19DT1VOVEVSX0lO
+SVRJQUwgKSkKKyAgICBTZXRPd25lciAoKTsKKyAgZWxzZSBpZiAoX19wdGhy
+ZWFkX2VxdWFsICgmb3duZXIsICZzZWxmKSAmJiBQVEhSRUFEX01VVEVYX1JF
+Q1VSU0lWRSA9PSB0eXBlKQorICAgIHJlc3VsdCA9IExvY2tSZWN1cnNpdmUg
+KCk7CisgIGVsc2UKKyAgICByZXN1bHQgPSBFQlVTWTsKKyAKKyAgcmV0dXJu
+IHJlc3VsdDsKIH0KIAogaW50CiBwdGhyZWFkX211dGV4OjpVbkxvY2sgKCkK
+IHsKLSAgaWYgKHdpbmNhcC5oYXNfdHJ5X2VudGVyX2NyaXRpY2FsX3NlY3Rp
+b24gKCkpCisgIHB0aHJlYWRfdCBzZWxmID0gcHRocmVhZDo6c2VsZiAoKTsK
+KyAKKyAgaWYgKCFfX3B0aHJlYWRfZXF1YWwgKCZvd25lciwgJnNlbGYpKQor
+ICAgIHJldHVybiBFUEVSTTsKKyAKKyAgaWYgKDAgPT0gLS1yZWN1cnNpb25f
+Y291bnRlcikKICAgICB7Ci0gICAgICBMZWF2ZUNyaXRpY2FsU2VjdGlvbiAo
+JmNyaXRpY2Fsc2VjdGlvbik7Ci0gICAgICByZXR1cm4gMDsKKyAgICAgIG93
+bmVyID0gTlVMTDsKKyAgICAgIGlmIChNVVRFWF9MT0NLX0NPVU5URVJfSU5J
+VElBTCAhPSBJbnRlcmxvY2tlZERlY3JlbWVudCAoJmxvY2tfY291bnRlcikp
+CisgICAgICAgIC8vIEFub3RoZXIgdGhyZWFkIGlzIHdhaXRpbmcKKyAgICAg
+ICAgOjpSZWxlYXNlU2VtYXBob3JlICh3aW4zMl9vYmpfaWQsIDEsIE5VTEwp
+OwogICAgIH0KLSAgcmV0dXJuICghUmVsZWFzZU11dGV4ICh3aW4zMl9vYmpf
+aWQpKTsKKyAKKyAgcmV0dXJuIDA7Cit9CisKK2ludAorcHRocmVhZF9tdXRl
+eDo6RGVzdHJveSAoKQoreworICBpZiAoY29uZHdhaXRzIHx8IFRyeUxvY2sg
+KCkpCisgICAgLy8gRG8gbm90IGRlc3Ryb3kgYSBjb25kd2FpdGVkIG9yIGxv
+Y2tlZCBtdXRleAorICAgIHJldHVybiBFQlVTWTsKKyAgZWxzZSBpZiAocmVj
+dXJzaW9uX2NvdW50ZXIgIT0gMSkKKyAgICB7CisgICAgICAvLyBEbyBub3Qg
+ZGVzdHJveSBhIHJlY3Vyc2l2ZSBsb2NrZWQgbXV0ZXgKKyAgICAgIC0tcmVj
+dXJzaW9uX2NvdW50ZXI7CisgICAgICByZXR1cm4gRUJVU1k7CisgICAgfQor
+IAorICBkZWxldGUgdGhpczsKKyAgcmV0dXJuIDA7Cit9CisgCit2b2lkCitw
+dGhyZWFkX211dGV4OjpTZXRPd25lciAoKQoreworICByZWN1cnNpb25fY291
+bnRlciA9IDE7CisgIG93bmVyID0gcHRocmVhZDo6c2VsZiAoKTsKK30KKwor
+aW50CitwdGhyZWFkX211dGV4OjpMb2NrUmVjdXJzaXZlICgpCit7CisgIGlm
+IChVSU5UX01BWCA9PSByZWN1cnNpb25fY291bnRlcikKKyAgICByZXR1cm4g
+RUFHQUlOOworICArK3JlY3Vyc2lvbl9jb3VudGVyOworICByZXR1cm4gMDsK
+IH0KIAogdm9pZApAQCAtMTI0MCwxNSArMTI5OCwxOCBAQCBwdGhyZWFkX211
+dGV4OjpmaXh1cF9hZnRlcl9mb3JrICgpCiAgIGRlYnVnX3ByaW50ZiAoIm11
+dGV4ICV4IGluIGZpeHVwX2FmdGVyX2ZvcmsiLCB0aGlzKTsKICAgaWYgKHBz
+aGFyZWQgIT0gUFRIUkVBRF9QUk9DRVNTX1BSSVZBVEUpCiAgICAgYXBpX2Zh
+dGFsICgicHRocmVhZF9tdXRleDo6Zml4dXBfYWZ0ZXJfZm9yayAoKSBkb2Vz
+bid0dW5kZXJzdGFuZCBQUk9DRVNTX1NIQVJFRCBtdXRleCdzIik7Ci0gIC8q
+IEZJWE1FOiBkdXBsaWNhdGUgY29kZSBoZXJlIGFuZCBpbiB0aGUgY29uc3Ry
+dWN0b3IuICovCi0gIGlmICh3aW5jYXAuaGFzX3RyeV9lbnRlcl9jcml0aWNh
+bF9zZWN0aW9uICgpKQotICAgIEluaXRpYWxpemVDcml0aWNhbFNlY3Rpb24g
+KCZjcml0aWNhbHNlY3Rpb24pOwotICBlbHNlCi0gICAgewotICAgICAgd2lu
+MzJfb2JqX2lkID0gOjpDcmVhdGVNdXRleCAoJnNlY19ub25lX25paCwgZmFs
+c2UsIE5VTEwpOwotICAgICAgaWYgKCF3aW4zMl9vYmpfaWQpCi0JYXBpX2Zh
+dGFsICgicHRocmVhZF9tdXRleDo6Zml4dXBfYWZ0ZXJfZm9yayAoKSBmYWls
+ZWQgdG8gY3JlYXRlIG5ldyB3aW4zMiBtdXRleCIpOwotICAgIH0KKworICBp
+ZiAoTlVMTCA9PSBvd25lcikKKyAgICAvKiBtdXRleCBoYXMgbm8gb3duZXIs
+IHJlc2V0IHRvIGluaXRpYWwgKi8KKyAgICBsb2NrX2NvdW50ZXIgPSBNVVRF
+WF9MT0NLX0NPVU5URVJfSU5JVElBTDsKKyAgZWxzZSBpZiAobG9ja19jb3Vu
+dGVyICE9IE1VVEVYX0xPQ0tfQ09VTlRFUl9JTklUSUFMKQorICAgIC8qIEFs
+bCB3YWl0aW5nIHRocmVhZHMgYXJlIGdvbmUgYWZ0ZXIgYSBmb3JrICovCisg
+ICAgbG9ja19jb3VudGVyID0gMDsKKworICB3aW4zMl9vYmpfaWQgPSA6OkNy
+ZWF0ZVNlbWFwaG9yZSAoJnNlY19ub25lX25paCwgMCwgTE9OR19NQVgsIE5V
+TEwpOworICBpZiAoIXdpbjMyX29ial9pZCkKKyAgICBhcGlfZmF0YWwgKCJw
+dGhyZWFkX211dGV4OjpmaXh1cF9hZnRlcl9mb3JrICgpIGZhaWxlZCB0byBy
+ZWNyZWF0ZSB3aW4zMiBzZW1hcGhvcmUgZm9yIG11dGV4Iik7CisKICNpZiBE
+RVRFQ1RfQkFEX0FQUFMKICAgaWYgKGNvbmR3YWl0cykKICAgICBhcGlfZmF0
+YWwgKCJGb3JrZWQgKCkgd2hpbGUgYSBtdXRleCBoYXMgY29uZGl0aW9uIHZh
+cmlhYmxlcyB3YWl0aW5nIG9uIGl0LlxuUmVwb3J0IHRvIGN5Z3dpbkBjeWd3
+aW4uY29tIik7CkBAIC0yMzc3LDE2ICsyNDM4LDE3IEBAIF9fcHRocmVhZF9t
+dXRleF91bmxvY2sgKHB0aHJlYWRfbXV0ZXhfdCAKIGludAogX19wdGhyZWFk
+X211dGV4X2Rlc3Ryb3kgKHB0aHJlYWRfbXV0ZXhfdCAqbXV0ZXgpCiB7Cisg
+IGludCBydjsKKwogICBpZiAocHRocmVhZF9tdXRleDo6aXNHb29kSW5pdGlh
+bGl6ZXIgKG11dGV4KSkKICAgICByZXR1cm4gMDsKICAgaWYgKCFwdGhyZWFk
+X211dGV4Ojppc0dvb2RPYmplY3QgKG11dGV4KSkKICAgICByZXR1cm4gRUlO
+VkFMOwogCi0gIC8qIHJlYWRpbmcgYSB3b3JkIGlzIGF0b21pYyAqLwotICBp
+ZiAoKCptdXRleCktPmNvbmR3YWl0cykKLSAgICByZXR1cm4gRUJVU1k7Cisg
+IHJ2ID0gKCptdXRleCktPkRlc3Ryb3kgKCk7CisgIGlmIChydikKKyAgICBy
+ZXR1cm4gcnY7CiAKLSAgZGVsZXRlICgqbXV0ZXgpOwogICAqbXV0ZXggPSBO
+VUxMOwogICByZXR1cm4gMDsKIH0KQEAgLTI0MjQsMTAgKzI0ODYsNiBAQCBf
+X3B0aHJlYWRfbXV0ZXhhdHRyX2dldHBzaGFyZWQgKGNvbnN0IHB0CiAgIHJl
+dHVybiAwOwogfQogCi0vKiBXaW4zMiBtdXRleCdzIGFyZSBlcXVpdmFsZW50
+IHRvIHBvc2l4IFJFQ1VSU0lWRSBtdXRleHMuCi0gICBXZSBuZWVkIHRvIHB1
+dCBnbHVlIGluIHBsYWNlIHRvIHN1cHBvcnQgb3RoZXIgdHlwZXMgb2YgbXV0
+ZXgncy4gV2UgbWFwCi0gICBQVEhSRUFEX01VVEVYX0RFRkFVTFQgdG8gUFRI
+UkVBRF9NVVRFWF9SRUNVUlNJVkUgYW5kIHJldHVybiBFSU5WQUwgZm9yCi0g
+ICBvdGhlciB0eXBlcy4gICovCiBpbnQKIF9fcHRocmVhZF9tdXRleGF0dHJf
+Z2V0dHlwZSAoY29uc3QgcHRocmVhZF9tdXRleGF0dHJfdCAqYXR0ciwgaW50
+ICp0eXBlKQogewpAQCAtMjQzNywxMCArMjQ5NSw3IEBAIF9fcHRocmVhZF9t
+dXRleGF0dHJfZ2V0dHlwZSAoY29uc3QgcHRocmUKICAgcmV0dXJuIDA7CiB9
+CiAKLS8qIEN1cnJlbnRseSBwdGhyZWFkX211dGV4X2luaXQgaWdub3JlcyB0
+aGUgYXR0ciB2YXJpYWJsZSwgdGhpcyBpcyBiZWNhdXNlCi0gICBub25lIG9m
+IHRoZSB2YXJpYWJsZXMgaGF2ZSBhbnkgaW1wYWN0IG9uIGl0J3MgYmVoYXZp
+b3VyLgotCi0gICBGSVhNRTogd3JpdGUgYW5kIHRlc3QgcHJvY2VzcyBzaGFy
+ZWQgbXV0ZXgncy4gICovCisvKiBGSVhNRTogd3JpdGUgYW5kIHRlc3QgcHJv
+Y2VzcyBzaGFyZWQgbXV0ZXgncy4gICovCiBpbnQKIF9fcHRocmVhZF9tdXRl
+eGF0dHJfaW5pdCAocHRocmVhZF9tdXRleGF0dHJfdCAqYXR0cikKIHsKQEAg
+LTI1MTYsOSArMjU3MSwxNyBAQCBfX3B0aHJlYWRfbXV0ZXhhdHRyX3NldHR5
+cGUgKHB0aHJlYWRfbXV0CiB7CiAgIGlmICghcHRocmVhZF9tdXRleGF0dHI6
+OmlzR29vZE9iamVjdCAoYXR0cikpCiAgICAgcmV0dXJuIEVJTlZBTDsKLSAg
+aWYgKHR5cGUgIT0gUFRIUkVBRF9NVVRFWF9SRUNVUlNJVkUpCi0gICAgcmV0
+dXJuIEVJTlZBTDsKLSAgKCphdHRyKS0+bXV0ZXh0eXBlID0gdHlwZTsKKyAK
+KyAgc3dpdGNoICh0eXBlKQorICAgIHsKKyAgICBjYXNlIFBUSFJFQURfTVVU
+RVhfRVJST1JDSEVDSzoKKyAgICBjYXNlIFBUSFJFQURfTVVURVhfUkVDVVJT
+SVZFOgorICAgICAgKCphdHRyKS0+bXV0ZXh0eXBlID0gdHlwZTsKKyAgICAg
+IGJyZWFrOworICAgIGRlZmF1bHQ6CisgICAgICByZXR1cm4gRUlOVkFMOwor
+ICAgIH0KKwogICByZXR1cm4gMDsKIH0KIApkaWZmIC11cnAgc3JjLm9sZC93
+aW5zdXAvY3lnd2luL3RocmVhZC5oIHNyYy93aW5zdXAvY3lnd2luL3RocmVh
+ZC5oCi0tLSBzcmMub2xkL3dpbnN1cC9jeWd3aW4vdGhyZWFkLmgJMjAwMi0x
+MS0yOSAxMDozNDo1NS4wMDAwMDAwMDAgKzAxMDAKKysrIHNyYy93aW5zdXAv
+Y3lnd2luL3RocmVhZC5oCTIwMDItMTEtMjkgMTM6NDg6MTEuMDAwMDAwMDAw
+ICswMTAwCkBAIC0xNjIsNiArMTYyLDggQEAgcHJpdmF0ZToKICNkZWZpbmUg
+U0VNX01BR0lDIFBUSFJFQURfTUFHSUMrNwogI2RlZmluZSBQVEhSRUFEX09O
+Q0VfTUFHSUMgUFRIUkVBRF9NQUdJQys4OwogCisjZGVmaW5lIE1VVEVYX0xP
+Q0tfQ09VTlRFUl9JTklUSUFMICAgKC0xKQorCiAvKiB2ZXJpZnlhYmxlX29i
+amVjdCBzaG91bGQgbm90IGJlIGRlZmluZWQgaGVyZSAtIGl0J3MgYSBnZW5l
+cmFsIHB1cnBvc2UgY2xhc3MgKi8KIAogY2xhc3MgdmVyaWZ5YWJsZV9vYmpl
+Y3QKQEAgLTMwNSwxNSArMzA3LDIxIEBAIHB1YmxpYzoKICAgc3RhdGljIHZv
+aWQgaW5pdE11dGV4ICgpOwogICBzdGF0aWMgaW50IGluaXQgKHB0aHJlYWRf
+bXV0ZXhfdCAqLCBjb25zdCBwdGhyZWFkX211dGV4YXR0cl90ICopOwogCi0g
+IENSSVRJQ0FMX1NFQ1RJT04gY3JpdGljYWxzZWN0aW9uOworICBMT05HIGxv
+Y2tfY291bnRlcjsKICAgSEFORExFIHdpbjMyX29ial9pZDsKKyAgdW5zaWdu
+ZWQgaW50IHJlY3Vyc2lvbl9jb3VudGVyOwogICBMT05HIGNvbmR3YWl0czsK
+KyAgcHRocmVhZF90IG93bmVyOworICBpbnQgdHlwZTsKICAgaW50IHBzaGFy
+ZWQ7CiAgIGNsYXNzIHB0aHJlYWRfbXV0ZXggKiBuZXh0OwogCiAgIGludCBM
+b2NrICgpOwogICBpbnQgVHJ5TG9jayAoKTsKICAgaW50IFVuTG9jayAoKTsK
+KyAgaW50IERlc3Ryb3kgKCk7CisgIHZvaWQgU2V0T3duZXIgKCk7CisgIGlu
+dCBMb2NrUmVjdXJzaXZlICgpOwogICB2b2lkIGZpeHVwX2FmdGVyX2Zvcmsg
+KCk7CiAKICAgcHRocmVhZF9tdXRleCAocHRocmVhZF9tdXRleGF0dHIgKiA9
+IE5VTEwpOwo=
 
-
-----------------+-------------------------------------------------
-Craig McGeachie | #include <cheesy_tag.h>
-+64(21)037-6917 | while (!inebriated) c2h5oh=(++bottle)->contents;
-----------------+-------------------------------------------------
-
-
-
---Message-Boundary-6440
-Content-type: text/plain; charset=US-ASCII
-Content-transfer-encoding: 7BIT
-Content-description: Text from file 'netdb.diff'
-Content-length: 1536
-
-? winsup/cygwin/netdb.cc
-Index: winsup/cygwin/Makefile.in
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/Makefile.in,v
-retrieving revision 1.108
-diff -u -p -r1.108 Makefile.in
---- winsup/cygwin/Makefile.in	20 Oct 2002 04:15:49 -0000	1.108
-+++ winsup/cygwin/Makefile.in	4 Dec 2002 09:25:45 -0000
-@@ -137,7 +137,7 @@ DLL_OFILES:=assert.o autoload.o cygheap.
- 	fhandler_tty.o fhandler_virtual.o fhandler_windows.o \
- 	fhandler_zero.o fnmatch.o fork.o glob.o grp.o heap.o init.o \
- 	ioctl.o ipc.o localtime.o malloc.o malloc_wrapper.o \
--	miscfuncs.o mmap.o msg.o net.o ntea.o passwd.o path.o pinfo.o \
-+	miscfuncs.o mmap.o msg.o net.o netdb.o ntea.o passwd.o path.o pinfo.o \
- 	pipe.o poll.o pthread.o regcomp.o regerror.o regexec.o \
- 	regfree.o registry.o resource.o scandir.o sched.o sec_acl.o \
- 	sec_helper.o security.o select.o sem.o shared.o shm.o signal.o \
-Index: winsup/cygwin/cygwin.din
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/cygwin.din,v
-retrieving revision 1.70
-diff -u -p -r1.70 cygwin.din
---- winsup/cygwin/cygwin.din	27 Nov 2002 16:11:38 -0000	1.70
-+++ winsup/cygwin/cygwin.din	4 Dec 2002 09:25:51 -0000
-@@ -1308,3 +1308,9 @@ acltotext
- _acltotext = acltotext
- aclfromtext
- _aclfromtext = aclfromtext
-+setprotoent = cygwin_setprotoent
-+setservent = cygwin_setservent
-+getservent = cygwin_getservent
-+getprotoent = cygwin_getprotoent
-+endprotoent = cygwin_endprotoent
-+endservent = cygwin_endservent
-
---Message-Boundary-6440
-Content-type: text/plain; charset=US-ASCII
-Content-transfer-encoding: 7BIT
-Content-description: Text from file 'netdb.cc'
-Content-length: 11384
-
-/* netdb.cc: network database related routines.
-
-   Copyright 2002 Red Hat, Inc.
-
-This file is part of Cygwin.
-
-This software is a copyrighted work licensed under the terms of the
-Cygwin license.  Please consult the file "CYGWIN_LICENSE" for
-details. */
-
-#include "winsup.h"
-#include <windows.h>
-#include <sys/cygwin.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <netdb.h>
-
-/* Locate and open a system network database file.  relative_path
- should be one of the following values:
- "protocol"
- "services"
- "networks"
- "hosts"
-
- This routine will try to locate these files based on system type.
- Currently the only distinction made is between NT and non-NT systems.
-
- It is the callers responsibility to close the file.
-*/
-static FILE *
-open_system_file (const char *relative_path)
-{
-  char win32_name[MAX_PATH];
-  char posix_name[MAX_PATH];
-  if (wincap.is_winnt())
-    {
-      if (! GetSystemDirectory (win32_name, MAX_PATH) ) return NULL;
-      strcat (win32_name, "\\drivers\\etc\\");
-    }
-  else
-    {
-      if (! GetWindowsDirectory (win32_name, MAX_PATH) ) return NULL;
-      strcat (win32_name, "\\");
-    }
-  strcat (win32_name, relative_path);
-  cygwin_conv_to_full_posix_path (win32_name, posix_name);
-  debug_printf("netdb file to open %s", win32_name);
-  FILE *result = fopen (posix_name, "rt");
-  debug_printf("handle to netdb file %p", result);
-  return result;
-}
-
-/* Read an entire line up till the next \n character.  Memory for the
-line is dynamically allocated, and the caller must call free() to
-deallocate it.  When the end of file is reached, NULL is returned.
-*/
-static char *
-get_entire_line (FILE *fd)
-{
-  static const int BUFF_SIZE = 1024;
-  struct line_fragment {
-    char buffer[BUFF_SIZE];
-    line_fragment *next;
-  };
-  line_fragment *fragment_list_head = NULL;
-  line_fragment *fragment = NULL;
-  int fragment_count = 0;
-  char *result;
-  do
-    {
-      line_fragment *new_fragment = (line_fragment *) malloc (sizeof (line_fragment));
-      paranoid_printf("line fragment allocated %p", new_fragment);
-      if (! fragment_list_head) fragment_list_head = new_fragment;
-      if (fragment) fragment->next = new_fragment;
-      fragment = new_fragment;
-      fragment->next = NULL;
-      *fragment->buffer = '\0';
-      result = fgets (fragment->buffer, BUFF_SIZE, fd);
-      ++fragment_count;
-    }
-  while (result && !strchr (fragment->buffer, '\n'));
-  if (*fragment_list_head->buffer != '\0')
-    {
-      char *concatenated_line = (char *) calloc (fragment_count * BUFF_SIZE , sizeof(char));
-      paranoid_printf("concatenated line allocated %p", concatenated_line);
-      *concatenated_line = '\0';
-      fragment = fragment_list_head;
-      while (fragment != NULL)
-        {
-          line_fragment *previous = fragment;
-          strcat(concatenated_line, fragment->buffer);
-          fragment = fragment->next;
-          free(previous);
-        }
-      return concatenated_line;
-    }
-  else
-    {
-      fragment = fragment_list_head;
-      while (fragment != NULL)
-        {
-          line_fragment *previous = fragment;
-          fragment = fragment->next;
-          free(previous);
-        }
-      return NULL;
-    }
-}
-
-/* Characters representing whitespace.  Used by parse_* routines to
-delimit tokens.  */
-static const char *SPACE = " \t\n\r\f";
-
-/* Parse a list aliases from a network database file.  Returns a
-char** structure terminated by a NULL.
-
-N.B. This routine relies on side effects due to the nature of
-strtok().  strtok() initially takes a char * pointing to the start of
-a line, and then NULL to indicate continued processing.  strtok() does
-not provide a mechanism for getting pointer to the unprocessed portion
-of a line.  Alias processing is done part way through a line after
-strtok().  This routine relies on further calls to strtok(), passing
-NULL as the first parameter, returning alias names from the line. */
-static void
-parse_alias_list(char ***aliases)
-{ 
-  struct alias_t {
-    char *alias_name;
-    alias_t *next;
-  };
-  alias_t *alias_list_head = NULL, *alias_list_tail = NULL;
-  char *alias;
-  int alias_count = 0;
-  alias = strtok(NULL, SPACE);
-  while (alias)
-    {
-      ++alias_count;
-      alias_t *new_alias = (alias_t *) malloc (sizeof (alias_t));
-      paranoid_printf("new alias alloc %p", new_alias);
-      if (!alias_list_head) alias_list_head = new_alias;
-      if (alias_list_tail) alias_list_tail->next = new_alias;
-      new_alias->next = NULL;
-      new_alias->alias_name = alias;
-      alias_list_tail = new_alias;
-      alias = strtok(NULL, SPACE);
-    }
-  *aliases = (char**) calloc (alias_count + 1, sizeof(char *));
-  paranoid_printf("aliases alloc %p", *aliases);
-  char **current_entry = *aliases;
-  while (alias_list_head)
-    {
-      alias_t *previous = alias_list_head;
-      *current_entry = strdup (alias_list_head->alias_name);
-      paranoid_printf("*current entry strdup %p", *current_entry);
-      alias_list_head = alias_list_head->next;
-      free (previous);
-      ++current_entry;
-    }
-  *current_entry = NULL;
-}
-
-/* Wrapper for open_system_file(), fixing the constant name
-"services".  Returns the open file. */
-static FILE *
-open_services_file ()
-{
-  return open_system_file ("services");
-}
-
-/* Read the next line from svc_file, and parse it into the structure
-pointed to by sep.  sep can point to stack or static data, but it's
-members will be overwritten with pointers to dynamically allocated
-heap data accommodating parsed data.  It is the responsibility of the
-caller to free up the allocated structures. The function returns true
-to indicate that a line was successfully read and parsed.  False is
-used to indicate that no more lines can be read and parsed.  This
-should also interpreted as end of file. */
-static bool
-parse_services_line (FILE *svc_file, struct servent *sep)
-{
-  char *line;
-  while ((line = get_entire_line (svc_file)))
-    {
-      char *name, *port, *protocol;
-      
-      line[strcspn (line, "#")] = '\0'; // truncate at comment marker.
-      name = strtok(line, SPACE);
-      if (!name)
-        {
-          free(line);
-          continue;
-        }
-      port = strtok(NULL, SPACE);
-      protocol = strchr(port, '/');
-      *protocol++ = '\0';
-      sep->s_name = strdup (name);
-      paranoid_printf("sep->s_name strdup %p", sep->s_name);
-      sep->s_port = atoi (port);
-      sep->s_proto = strdup (protocol);
-      paranoid_printf("sep->s_proto strdup %p", sep->s_proto);
-      /* parse_alias_list relies on side effects.  Read the comments
-         for that function.*/
-      parse_alias_list(& sep->s_aliases);
-      free (line);
-      return true;
-    }
-  return false;
-}
-
-static FILE *svc_file = NULL;
-static long int svc_read_pos = 0;
-static struct servent current_servent;
-
-/* Steps through a struct servent, and frees all of the internal
-structures.*/
-static void
-free_servent (struct servent *sep)
-{
-  free (sep->s_name);
-  free (sep->s_proto);
-  char ** current = sep->s_aliases;
-  while (current && *current)
-    {
-      free (*current);
-      ++current;
-    }
-  free (sep->s_aliases);
-  sep->s_name = NULL;
-  sep->s_port = 0;
-  sep->s_proto = NULL;
-  sep->s_aliases = NULL;
-}
-
-extern "C" void
-cygwin_setservent (int stay_open)
-{
-  if (svc_file)
-    {
-      fclose (svc_file);
-    }
-  if (stay_open)
-    {
-      svc_file = open_services_file ();
-    }
-  free_servent (&current_servent);
-  svc_read_pos = 0;
-  syscall_printf ("setservent (%d)", stay_open);
-}
-
-extern "C" struct servent *
-cygwin_getservent (void)
-{
-  FILE *fd;
-  if (svc_file)
-    {
-      fd = svc_file;
-    }
-  else
-    {
-      fd = open_services_file ();
-      if (!fd)
-        {
-          syscall_printf ("%p = getservent()", NULL);
-          return NULL;
-        }
-      fseek (fd, svc_read_pos, SEEK_SET);
-    }
-  free_servent (&current_servent);
-  bool found = parse_services_line (fd, &current_servent);
-  if (!svc_file)
-    {
-      svc_read_pos = ftell(fd);
-      fclose(fd);
-    }
-  struct servent *result;
-  if (found)
-    {
-      result = &current_servent;
-    }
-  else
-    {
-      result = NULL;
-    }
-  syscall_printf ("%p = getservent()", result);
-  return result;
-}
-
-extern "C" void
-cygwin_endservent (void)
-{
-  if (svc_file)
-    {
-      fclose (svc_file);
-      svc_file = NULL;
-    }
-  free_servent (&current_servent);
-  svc_read_pos = 0;
-  syscall_printf ("endservent ()");
-}
-
-static FILE *
-open_protocol_file ()
-{
-  return open_system_file ("protocol");
-}
-
-/* Read the next line from proto_file, and parse it into the structure
-pointed to by pep.  pep can point to stack or static data, but it's
-members will be overwritten with pointers to dynamically allocated
-heap data accommodating parsed data.  It is the responsibility of the
-caller to free up the allocated structures. The function returns true
-to indicate that a line was successfully read and parsed.  False is
-used to indicate that no more lines can be read and parsed.  This
-should also interpreted as end of file. */
-static bool
-parse_protocol_line (FILE *proto_file, struct protoent *pep)
-{
-  char *line;
-  while ((line = get_entire_line (proto_file)))
-    {
-      char *name, *protocol;
-      
-      line[strcspn (line, "#")] = '\0'; // truncate at comment marker.
-      name = strtok(line, SPACE);
-      if (!name)
-        {
-          free(line);
-          continue;
-        }
-      protocol = strtok(NULL, SPACE);
-      pep->p_name = strdup (name);
-      paranoid_printf("pep->p_name strdup %p", pep->p_name);
-      pep->p_proto = atoi (protocol);
-      /* parse_alias_list relies on side effects.  Read the comments
-         for that function.*/
-      parse_alias_list(& pep->p_aliases);
-      free (line);
-      return true;
-    }
-  return false;
-}
-
-static FILE *proto_file = NULL;
-static long int proto_read_pos = 0;
-static struct protoent current_protoent;
-
-/* Steps through a struct protoent, and frees all the internal
-structures.  */
-static void
-free_protoent (struct protoent *pep)
-{
-  free (pep->p_name);
-  char ** current = pep->p_aliases;
-  while (current && *current)
-    {
-      free (*current);
-      ++current;
-    }
-  free (pep->p_aliases);
-  pep->p_name = NULL;
-  pep->p_proto = 0;
-  pep->p_aliases = NULL;
-}
-
-extern "C" void
-cygwin_setprotoent (int stay_open)
-{
-  if (proto_file)
-    {
-      fclose (proto_file);
-    }
-  if (stay_open)
-    {
-      proto_file = open_protocol_file ();
-    }
-  free_protoent (&current_protoent);
-  proto_read_pos = 0;
-  syscall_printf ("setprotoent (%d)", stay_open);
-}
-
-extern "C" struct protoent *
-cygwin_getprotoent (void)
-{
-  FILE *fd;
-  if (proto_file)
-    {
-      fd = proto_file;
-    }
-  else
-    {
-      fd = open_protocol_file ();
-      if (!fd)
-        {
-          syscall_printf ("%p = getprotoent()", NULL);
-          return NULL;
-        }
-      fseek (fd, proto_read_pos, SEEK_SET);
-    }
-  free_protoent (&current_protoent);
-  bool found = parse_protocol_line (fd, &current_protoent);
-  if (!proto_file)
-    {
-      proto_read_pos = ftell(fd);
-      fclose(fd);
-    }
-  struct protoent *result;
-  if (found)
-    {
-      result =  &current_protoent;
-    }
-  else
-    {
-      result =  NULL;
-    }
-  syscall_printf ("%p = getprotoent()", result);
-  return result;
-}
-
-extern "C" void
-cygwin_endprotoent (void)
-{
-  if (proto_file)
-    {
-      fclose (proto_file);
-      proto_file = NULL;
-    }
-  free_protoent (&current_protoent);
-  proto_read_pos = 0;
-  syscall_printf ("endprotoent ()");
-}
-
---Message-Boundary-6440--
+--164646-23431-1038994979=:185--
