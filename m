@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5041-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 4654 invoked by alias); 10 Oct 2004 06:36:39 -0000
+Return-Path: <cygwin-patches-return-5042-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 4901 invoked by alias); 10 Oct 2004 06:36:43 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,47 +7,50 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 4642 invoked from network); 10 Oct 2004 06:36:38 -0000
-Message-ID: <n2m-g.ckajsj.3vv9689.1@buzzy-box.bavag>
+Received: (qmail 4890 invoked from network); 10 Oct 2004 06:36:42 -0000
+Message-ID: <n2m-g.ckaqe1.3vva6e9.1@buzzy-box.bavag>
 From: Bas van Gompel <cygwin-patches.buzz@bavag.tmfweb.nl>
-Subject: [Patch] cygcheck (add_path): A little memory-leak.
+Subject: Re: [Patch] cygcheck: warn about empty path-components
+References: <Pine.CYG.4.58.0410050902580.5620@fordpc.vss.fsi.com> <20041005143458.GB13719@trixie.casa.cgf.cx> <20041005144649.GB30752@cygbert.vinschen.de> <n2m-g.ck0h06.3vvequf.1@buzzy-box.bavag> <20041006145805.GB29289@trixie.casa.cgf.cx> <n2m-g.ck2ctr.3vshr73.1@buzzy-box.bavag> <20041007021558.GL2722@trixie.casa.cgf.cx> <n2m-g.ck4jdl.3vsg21n.1@buzzy-box.bavag> <20041008001755.GK17593@trixie.casa.cgf.cx> <n2m-g.ck9k3i.3vvefmv.1@buzzy-box.bavag> <20041009231813.GD11984@trixie.casa.cgf.cx>
+In-Reply-To: <20041009231813.GD11984@trixie.casa.cgf.cx>
 Reply-To: cygwin-patches mailing-list <cygwin-patches@cygwin.com>
 Organisation: Ehm...
 To: cygwin-patches@cygwin.com
 Date: Sun, 10 Oct 2004 06:36:00 -0000
-X-SW-Source: 2004-q4/txt/msg00042.txt.bz2
+X-SW-Source: 2004-q4/txt/msg00043.txt.bz2
 
-In cygcheck.cc, in function add_path, if paths[num_paths] was already
-in the list, the mallocced memory was not released. The trivial (IMO)
-patch follows...
+Op Sat, 9 Oct 2004 19:18:13 -0400 schreef Christopher Faylor
+in <20041009231813.GD11984@trixie.casa.cgf.cx>:
+:  On Sun, Oct 10, 2004 at 12:41:20AM +0200, Bas van Gompel wrote:
 
+[licensing/CA]
 
-ChangeLog-entry:
+I'll be staying with the trivial patches until further notice...
 
-2004-10-10  Bas van Gompel  <cygwin-patch.buzz@bavag.tmfweb.nl>
-	* cygcheck.cc (add_path): Don't leak memory when path is already in
-	``paths''.
+Are CA-issues also on-topic for the licensing-ml?
 
+: > (Would not corrections be misplaced in cygcheck?
+: > Is ensuring correct permissions not something better handled in setup?)
+:
+:   It should probably done in both places.  It's easy enough to screw up
+:  permissions after setup.exe has been run and it seems like it is hard
+:  for setup to set permissions correctly since it is not a cygwin program.
 
---- src/winsup/utils/cygcheck.cc	9 Oct 2004 23:19:38 -0000	1.47
-+++ src/winsup/utils/cygcheck.cc	10 Oct 2004 03:27:22 -0000
-@@ -130,7 +130,10 @@ add_path (char *s, int maxlen)
-     *--e = 0;
-   for (int i = 1; i < num_paths; i++)
-     if (strcasecmp (paths[num_paths], paths[i]) == 0)
--      return;
-+      {
-+	free (paths[num_paths]);
-+	return;
-+      }
-   num_paths++;
- }
- 
+So cygcheck will have the same problem...
+
+How about doing it from a (postinstall-)script?
+
+[ChangeLog-entry]
+
+:  Checked in.  Thanks for the patch and special thanks for keeping the
+:  dialog going about your patch.  Your persistence is appreciated.
+
+Thank /you/. I was afraid you'd think I was a PITA!
 
 
 L8r,
 
-Buzz.
+Buzz. :-)
 -- 
   ) |  | ---/ ---/  Yes, this | This message consists of true | I do not
 --  |  |   /    /   really is |   and false bits entirely.    | mail for
