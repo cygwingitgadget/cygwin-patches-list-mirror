@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4602-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 1916 invoked by alias); 12 Mar 2004 03:12:56 -0000
+Return-Path: <cygwin-patches-return-4603-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 25644 invoked by alias); 12 Mar 2004 13:56:59 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,63 +7,58 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 1907 invoked from network); 12 Mar 2004 03:12:55 -0000
-Message-Id: <3.0.5.32.20040311221130.007f5770@incoming.verizon.net>
-X-Sender: vze1u1tg@incoming.verizon.net (Unverified)
-Date: Fri, 12 Mar 2004 03:12:00 -0000
-To: cygwin-patches@cygwin.com
-From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
-Subject: Re: [Patch] Signal mask handling
-In-Reply-To: <20040312023709.GA7161@redhat.com>
-References: <3.0.5.32.20040311210405.007f81e0@incoming.verizon.net>
- <3.0.5.32.20040311193641.007f29f0@incoming.verizon.net>
- <3.0.5.32.20040310232619.007fac50@incoming.verizon.net>
- <3.0.5.32.20040310232619.007fac50@incoming.verizon.net>
- <3.0.5.32.20040311193641.007f29f0@incoming.verizon.net>
- <3.0.5.32.20040311210405.007f81e0@incoming.verizon.net>
-Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-X-SW-Source: 2004-q1/txt/msg00092.txt.bz2
+Received: (qmail 25634 invoked from network); 12 Mar 2004 13:56:58 -0000
+content-class: urn:content-classes:message
+Subject: Patch for /proc/meminfo handler
+Date: Fri, 12 Mar 2004 13:56:00 -0000
+Message-ID: <A065B7C9B0648F4F8C43388D0D699F8D1DBEEC@ZABRYSVCL21EX01.af.didata.local>
+X-MS-Has-Attach: yes
+X-MS-TNEF-Correlator: 
+From: "Andrew Klopper" <andrew.klopper@is.co.za>
+To: <cygwin-patches@cygwin.com>
+X-OriginalArrivalTime: 12 Mar 2004 13:14:10.0963 (UTC) FILETIME=[E8762E30:01C40833]
+X-SW-Source: 2004-q1/txt/msg00093.txt.bz2
 
-At 09:37 PM 3/11/2004 -0500, you wrote:
->On Thu, Mar 11, 2004 at 09:04:05PM -0500, Pierre A. Humblet wrote:
+With the Cygwin 1.5.7-1 DLL, 'cat /proc/meminfo' returns an incorrect
+value for free swap space. This is most noticeable when the free virtual
+memory is less than the total physical memory, in which case the
+calculated free swap space is a negative value. This value is then
+converted to an unsigned int for display purposes, resulting in a very
+large positive number which is greater than the total amount of swap
+space.
 
->>>>BTW I noticed that Posix and Cygwin diverge on sigpause.
->>>>
->>>>Posix:
->>>>int sigpause(int sig);
->>>>The sigpause() function removes sig from the calling process' signal
->>>>mask and suspends the calling process until a signal is received.  The
->>>>sigpause() function restores the process' signal mask to its original
->>>>state before returning.
->>>>
->>>>Cygwin
->>>>sigpause (int signal_mask)
->>>>{
->>>>  return handle_sigsuspend ((sigset_t) signal_mask);
->>>>}
->>>
->>>Sorry, but I don't see any divergence.  A reading of the above might
->>>seem to indicate that sigpause should return on the receipt of any
->>>signal but I notice that on linux (and one other UNIX that I tested this
->>>on) sigpause only returns on the receipt of a signal that has a handler
->>>associated with it.  This makes sigpause equivalent to sigsuspend,
->>>AFAICT.
->>
->>What I find strange is that usually sig is an integer (1-32), not a mask.
->>Compare the two following lines are from the same Posix page
->>void (*sigset(int sig, void (*disp)(int)))(int);   <= clearly an integer
->>int sigpause(int sig);  <= a mask???
->
->It's a mask, yes.  I guess the only difference is that sigset_t is an
->unsigned long on cygwin rather than an int.
+A patch to correct this problem is attached.
 
-After some googling, it looks like BSD and System V differ
-http://world.std.com/~jimf/papers/signals/signals.html
-"Note that sigpause() conflicts with the BSD function of the same name"
+Regards
+Andrew
+ <<fhandler_proc.cc.diff>> 
+-- 
+Andrew Klopper                    andrew.klopper@za.didata.com
+Dimension Data PLC                Tel: +27-11-575-1424
+Johannesburg, South Africa        Fax: +27-11-576-1424
 
-Posix knows the difference between an "int" and a "sigset_t". For some
-reason it's not following BSD.
-I point to this as a curiosity, I don't care about the outcome.
 
-Pierre
+
+
+
+
+This email and all contents are subject to the following disclaimer:
+
+"http://www.didata.com/disclaimer.asp"
+
+begin 666 fhandler_proc.cc.diff
+M+2TM(&9H86YD;&5R7W!R;V,N8V,N;W)I9PDR,# S+3$Q+3(V(# T.C$U.C W
+M+C P,3 P,# P," K,#(P, T**RLK(&9H86YD;&5R7W!R;V,N8V,),C P-"TP
+M,RTQ,2 Q-3HT,CHR,2XW,S$V,S@Q,# @*S R,# -"D! ("TS.3$L-R K,SDQ
+M+#<@0$ -"B @(&UE;5]T;W1A;" ](&UE;6]R>5]S=&%T=7,N9'=4;W1A;%!H
+M>7,[#0H@("!M96U?9G)E92 ](&UE;6]R>5]S=&%T=7,N9'=!=F%I;%!H>7,[
+M#0H@("!S=V%P7W1O=&%L(#T@;65M;W)Y7W-T871U<RYD=U1O=&%L4&%G949I
+M;&4@+2!M96U?=&]T86P[#0HM("!S=V%P7V9R964@/2!M96UO<GE?<W1A='5S
+M+F1W079A:6Q086=E1FEL92 M(&UE;5]T;W1A;#L-"BL@('-W87!?9G)E92 ]
+M(&UE;6]R>5]S=&%T=7,N9'=!=F%I;%!A9V5&:6QE("T@;65M7V9R964[#0H@
+M("!R971U<FX@7U]S;6%L;%]S<')I;G1F("AD97-T8G5F+" B(" @(" @(" @
+M=&]T86PZ(" @(" @=7-E9#H@(" @("!F<F5E.EQN(@T*( D)"0D@(" B365M
+M.B @)3$P;'4@)3$P;'4@)3$P;'5<;B(-"B )"0D)(" @(E-W87 Z("4Q,&QU
+1("4Q,&QU("4Q,&QU7&XB#0H`
+`
+end
