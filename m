@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3020-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 20989 invoked by alias); 22 Sep 2002 03:21:47 -0000
+Return-Path: <cygwin-patches-return-3021-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 4590 invoked by alias); 22 Sep 2002 19:22:49 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,66 +7,34 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 20941 invoked from network); 22 Sep 2002 03:21:47 -0000
-Message-Id: <3.0.5.32.20020921231219.00833600@h00207811519c.ne.client2.attbi.com>
-X-Sender: pierre@h00207811519c.ne.client2.attbi.com
-Date: Sat, 21 Sep 2002 20:21:00 -0000
-To: cygwin-patches@cygwin.com
-From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
-Subject: Re: Cleaning up for NULL handles
-In-Reply-To: <20020922015828.GA6730@redhat.com>
-References: <3.0.5.32.20020920192828.0080c640@mail.attbi.com>
- <3.0.5.32.20020920192828.0080c640@mail.attbi.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-X-SW-Source: 2002-q3/txt/msg00468.txt.bz2
+Received: (qmail 4576 invoked from network); 22 Sep 2002 19:22:49 -0000
+Message-ID: <00ec01c2626d$e22aac80$6132bc3e@BABEL>
+From: "Conrad Scott" <Conrad.Scott@dsl.pipex.com>
+To: <cygwin-patches@cygwin.com>
+References: <00c601c261a5$da1ac200$6132bc3e@BABEL> <20020922004849.GD4163@redhat.com>
+Subject: Re: cygwin_daemon merge
+Date: Sun, 22 Sep 2002 12:22:00 -0000
+MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2800.1106
+X-SW-Source: 2002-q3/txt/msg00469.txt.bz2
 
-At 09:58 PM 9/21/2002 -0400, Christopher Faylor wrote:
->So, although the fact that CreateFile will return INVALID_HANDLE_VALUE
->on error is documented, I think we can safely assume that CreateFile
->will never return a NULL handle either.
+"Christopher Faylor" <cgf@redhat.com> wrote:
+> On Sat, Sep 21, 2002 at 08:34:06PM +0100, Conrad Scott wrote:
+> >The attached patch is the (small) subset of the cygwin_daemon merge
+that
+> >I need clearance on.
+>
+> Looks ok.  Go ahead and check it in.
 
-Fair enough. I would still recommend to apply the patch because it 
-guarantees that invalid io_handles have the same value (0 or -1, depending
-on handlers) in a parent and a dup'ed child, avoiding a source of bugs.
-It doesn't add any new lines, only deleting two useless ones.
+Thanks: it's in now.  Sorry for the mangled Makefile formatting: I'd
+forgotten I'd done that.
 
-The matter of locks with negative lengths was left unresolved, around
-line 475 in fhandler_disk_file.cc
-According to
+Cheers,
 
-http://www.opengroup.org/onlinepubs/007908799/xsh/fcntl.html
+// Conrad
 
-"If l_len is positive, the area affected starts at l_start and ends at 
-l_start + l_len-1. If l_len is negative, the area affected starts at 
-l_start + l_len and ends at l_start-1. Locks may start and extend beyond 
-the current end of a file, but must not be negative relative to the 
-beginning of the file. A lock will be set to extend to the largest 
-possible value of the file offset for that file by setting l_len to 0."
-
-So there should be a += in the third line below.
-  if (fl->l_len < 0)
-    {
-      win32_start -= fl->l_len;
-      win32_len = -fl->l_len;
-    } 
-In addition the sentence about not being negative relative to the beginning
-of a file implies (please verify this) that the condition win32_start < 0
-below should always result in EINVAL. There is no need to subtract the negative
-of a negative number to try to fix things up :)
-  if (win32_start < 0)
-    {
-      /* watch the signs! */
-      win32_len -= -win32_start;
-      if (win32_len <= 0)
-	{
-	  /* Failure ! */
-	  set_errno (EINVAL);
-	  return -1;
-	}
-      win32_start = 0;
-    }
-If you agree I will send a patch. You may also decide that it's faster 
-overall for you to edit the file directly.
-
-Pierre
