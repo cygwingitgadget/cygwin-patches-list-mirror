@@ -1,145 +1,120 @@
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygpatch <cygwin-patches@cygwin.com>
-Subject: [PATCH]: Check modification time on /etc/passwd and /etc/group
-Date: Tue, 31 Jul 2001 11:38:00 -0000
-Message-id: <20010731203820.U490@cygbert.vinschen.de>
-X-SW-Source: 2001-q3/msg00041.html
+From: egor duda <deo@logos-m.ru>
+To: cygwin-patches@cygwin.com
+Subject: close-on-exec handles are left open by exec parent
+Date: Thu, 02 Aug 2001 07:40:00 -0000
+Message-id: <71194343130.20010802183838@logos-m.ru>
+X-SW-Source: 2001-q3/msg00042.html
+Content-type: multipart/mixed; boundary="----------=_1583532848-65438-91"
 
-Hi,
+This is a multi-part message in MIME format...
 
-the following is a PRELIMINARY patch which I created while waiting
-for a loooong build. It checks the modification time on /etc/passwd
-and /etc/group to reread them if neccessary.
+------------=_1583532848-65438-91
+Content-length: 441
 
-It's preliminary since it completely ignores thread issues.
+Hi!
 
-Could somebody have a look what is needed to make it thread safe?
+  here's the proposed patch. it also contains a fix FreeConsole ()
+related bug -- when cygwin application frees its console,
+"process_input" thread may be still running. When console is closed,
+WaitForMultipleObjects () with console handle returns WAIT_FAILED, so
+"process_input" thread starts cycling and eating CPU.
 
-Thanks in advance,
-Corinna
+egor.            mailto:deo@logos-m.ru icq 5165414 fidonet 2:5020/496.19
+close-on-exec.diff
+close-on-exec.ChangeLog
 
-ChangeLog:
-==========
 
-	* grp.cc (class grp_check): New class. Make `group_state'
-	a member of class grp_check.
-	(read_etc_group): Set `curr_lines' explicitely to 0.
-	* passwd.cc (class pwd_check): New class Make `passwd_state'
-	a member of class pwd_check.
-	(read_etc_passwd): Set `curr_lines' explicitely to 0.
+------------=_1583532848-65438-91
+Content-Type: text/plain; charset=us-ascii; name="close-on-exec.ChangeLog"
+Content-Disposition: inline; filename="close-on-exec.ChangeLog"
+Content-Transfer-Encoding: base64
+Content-Length: 501
 
-Index: grp.cc
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/grp.cc,v
-retrieving revision 1.26
-diff -u -p -r1.26 grp.cc
---- grp.cc	2001/07/26 19:22:24	1.26
-+++ grp.cc	2001/07/31 18:00:27
-@@ -17,6 +17,7 @@ details. */
- #include <stdio.h>
- #include <stdlib.h>
- #include <errno.h>
-+#include <sys/stat.h>
- #include "sync.h"
- #include "sigproc.h"
- #include "pinfo.h"
-@@ -51,7 +52,30 @@ enum grp_state {
-   emulated,
-   loaded
- };
--static grp_state group_state = uninitialized;
-+class grp_check {
-+  grp_state state;
-+  time_t    last_modified;
-+
-+public:
-+  grp_check () : state (uninitialized), last_modified (0L) {}
-+  operator grp_state ()
-+    {
-+      struct stat st;
-+
-+      if (!stat ("/etc/group", &st) && st.st_mtime > last_modified)
-+	{
-+	  state = uninitialized;
-+	  last_modified = st.st_mtime;
-+	}
-+      return state;
-+    }
-+  void operator = (grp_state nstate)
-+    {
-+      state = nstate;
-+    }
-+};
-+
-+static grp_check group_state;
- 
- static int
- parse_grp (struct group &grp, const char *line)
-@@ -153,6 +177,7 @@ read_etc_group ()
-   if (group_state != initializing)
-     {
-       group_state = initializing;
-+      curr_lines = 0;
- 
-       FILE *f = fopen (etc_group, "rt");
- 
-Index: passwd.cc
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/passwd.cc,v
-retrieving revision 1.27
-diff -u -p -r1.27 passwd.cc
---- passwd.cc	2001/07/26 19:22:24	1.27
-+++ passwd.cc	2001/07/31 18:00:27
-@@ -13,6 +13,7 @@ details. */
- #include <pwd.h>
- #include <stdio.h>
- #include <errno.h>
-+#include <sys/stat.h>
- #include "cygerrno.h"
- #include "security.h"
- #include "fhandler.h"
-@@ -40,7 +41,31 @@ enum pwd_state {
-   emulated,
-   loaded
- };
--static pwd_state passwd_state = uninitialized;
-+class pwd_check {
-+  pwd_state state;
-+  time_t    last_modified;
-+
-+public:
-+  pwd_check () : state (uninitialized), last_modified (0L) {}
-+  operator pwd_state ()
-+    {
-+      struct stat st;
-+
-+      if (!stat ("/etc/passwd", &st) && st.st_mtime > last_modified)
-+	{
-+	  state = uninitialized;
-+	  last_modified = st.st_mtime;
-+	}
-+      return state;
-+    }
-+  void operator = (pwd_state nstate)
-+    {
-+      state = nstate;
-+    }
-+};
-+
-+static pwd_check passwd_state;
-+
- 
- /* Position in the passwd cache */
- #ifdef _MT_SAFE
-@@ -140,6 +165,7 @@ read_etc_passwd ()
-     if (passwd_state != initializing)
-       {
- 	passwd_state = initializing;
-+	curr_lines = 0;
- 
- 	FILE *f = fopen ("/etc/passwd", "rt");
- 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+MjAwMS0wOC0wMiAgRWdvciBEdWRhICA8ZGVvQGxvZ29zLW0ucnU+CgoJKiBz
+cGF3bi5jYyAoc3Bhd25fZ3V0cyk6IEluIGV4ZWMgcGFyZW50LCB3YWl0IGZv
+ciBjaGlsZCB0byBwZXJmb20KCWFsbCBoYW5kbGUgZml4dXBzLCBhbmQgdGhl
+biBjbG9zZSBhbGwgZmlsZXMuCgkqIGR0YWJsZS5jYyAoZHRhYmxlOjpmaXh1
+cF9hZnRlcl9leGVjKTogU2lnbmFsIHBhcmVudCB0aGF0IGZpeHVwCglpcyBj
+b21wbGV0ZS4KCSogZHRhYmxlLmg6IERlZmluZSAiZml4dXAgY29tcGxldGUi
+IGV2ZW50IG5hbWUuCgkqIGZoYW5kbGVyX3R0eS5jYyAocHJvY2Vzc19pbnB1
+dCk6IFN0b3AgcHJvY2Vzc2luZyB3aGVuIG1hc3RlcgoJcmV0dXJucyByZWFk
+IGVycm9yLgo=
+
+------------=_1583532848-65438-91
+Content-Type: text/x-diff; charset=us-ascii; name="close-on-exec.diff"
+Content-Disposition: inline; filename="close-on-exec.diff"
+Content-Transfer-Encoding: base64
+Content-Length: 4258
+
+SW5kZXg6IGR0YWJsZS5jYwo9PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBm
+aWxlOiAvY3ZzL3ViZXJiYXVtL3dpbnN1cC9jeWd3aW4vZHRhYmxlLmNjLHYK
+cmV0cmlldmluZyByZXZpc2lvbiAxLjQzCmRpZmYgLXUgLXAgLTIgLXIxLjQz
+IGR0YWJsZS5jYwotLS0gZHRhYmxlLmNjCTIwMDEvMDcvMjYgMTk6MjI6MjMJ
+MS40MworKysgZHRhYmxlLmNjCTIwMDEvMDgvMDIgMDY6Mzg6MzgKQEAgLTUw
+Nyw0ICs1MDcsNiBAQCBkdGFibGU6OmZpeHVwX2FmdGVyX2V4ZWMgKEhBTkRM
+RSBwYXJlbnQpCiAgIGZpcnN0X2ZkX2Zvcl9vcGVuID0gMDsKICAgZmhhbmRs
+ZXJfYmFzZSAqZmg7CisgIGNoYXIgZmRzX2ZpeHVwX2V2ZW50X25hbWUgW01B
+WF9QQVRIXTsKKyAgSEFORExFIGZkc19maXh1cF9ldmVudCA9IE5VTEw7CiAg
+IGZvciAoc2l6ZV90IGkgPSAwOyBpIDwgc2l6ZTsgaSsrKQogICAgIGlmICgo
+ZmggPSBmZHNbaV0pICE9IE5VTEwpCkBAIC01MjIsNCArNTI0LDE0IEBAIGR0
+YWJsZTo6Zml4dXBfYWZ0ZXJfZXhlYyAoSEFORExFIHBhcmVudCkKIAkgIH0K
+ICAgICAgIH0KKyAgX19zbWFsbF9zcHJpbnRmIChmZHNfZml4dXBfZXZlbnRf
+bmFtZSwgRkRTX0ZJWFVQX0VWRU5UX05BTUUsIEdldEN1cnJlbnRQcm9jZXNz
+SWQgKCkpOworICBmZHNfZml4dXBfZXZlbnQgPSBPcGVuRXZlbnQgKEVWRU5U
+X01PRElGWV9TVEFURSwgRkFMU0UsIGZkc19maXh1cF9ldmVudF9uYW1lKTsK
+KyAgaWYgKGZkc19maXh1cF9ldmVudCkKKyAgICB7CisgICAgICBTZXRFdmVu
+dCAoZmRzX2ZpeHVwX2V2ZW50KTsKKyAgICAgIGRlYnVnX3ByaW50ZiAoImZk
+c19maXh1cCBzaWduYWxsZWQiKTsKKyAgICAgIENsb3NlSGFuZGxlIChmZHNf
+Zml4dXBfZXZlbnQpOworICAgIH0KKyAgZWxzZQorICAgIGRlYnVnX3ByaW50
+ZiAoImNhbm5vdCBvcGVuIGZkc19maXh1cCBldmVudCwgJUUiKTsKIH0KIApJ
+bmRleDogZHRhYmxlLmgKPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1MgZmls
+ZTogL2N2cy91YmVyYmF1bS93aW5zdXAvY3lnd2luL2R0YWJsZS5oLHYKcmV0
+cmlldmluZyByZXZpc2lvbiAxLjEwCmRpZmYgLXUgLXAgLTIgLXIxLjEwIGR0
+YWJsZS5oCi0tLSBkdGFibGUuaAkyMDAxLzA3LzI2IDAwOjEwOjUyCTEuMTAK
+KysrIGR0YWJsZS5oCTIwMDEvMDgvMDIgMDY6Mzg6MzgKQEAgLTExLDQgKzEx
+LDUgQEAgZGV0YWlscy4gKi8KIC8qIEluaXRpYWwgYW5kIGluY3JlbWVudCB2
+YWx1ZXMgZm9yIGN5Z3dpbidzIGZkIHRhYmxlICovCiAjZGVmaW5lIE5PRklM
+RV9JTkNSICAgIDMyCisjZGVmaW5lIEZEU19GSVhVUF9FVkVOVF9OQU1FCSJj
+eWd3aW4uZmRzX2ZpeHVwLiVsZCIKIAogI2luY2x1ZGUgInRocmVhZC5oIgpJ
+bmRleDogZmhhbmRsZXJfdHR5LmNjCj09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0K
+UkNTIGZpbGU6IC9jdnMvdWJlcmJhdW0vd2luc3VwL2N5Z3dpbi9maGFuZGxl
+cl90dHkuY2MsdgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuNDEKZGlmZiAtdSAt
+cCAtMiAtcjEuNDEgZmhhbmRsZXJfdHR5LmNjCi0tLSBmaGFuZGxlcl90dHku
+Y2MJMjAwMS8wNy8yNiAxOToyMjoyNAkxLjQxCisrKyBmaGFuZGxlcl90dHku
+Y2MJMjAwMS8wOC8wMiAwNjozODo0MwpAQCAtMjIwLDYgKzIyMCw5IEBAIHBy
+b2Nlc3NfaW5wdXQgKHZvaWQgKikKICAgICAgIGludCBucmF3ID0gdHR5X21h
+c3Rlci0+Y29uc29sZS0+cmVhZCAoKHZvaWQgKikgcmF3YnVmLAogCQkJCSAg
+ICAgIChzaXplX3QpIElOUF9CVUZGRVJfU0laRSk7CisgICAgICBpZiAobnJh
+dyA8IDApIAorICAgICAgICBicmVhazsKICAgICAgICh2b2lkKSB0dHlfbWFz
+dGVyLT5saW5lX2VkaXQgKHJhd2J1ZiwgbnJhdyk7CiAgICAgfQorICByZXR1
+cm4gMDsKIH0KIApJbmRleDogc3Bhd24uY2MKPT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PQpSQ1MgZmlsZTogL2N2cy91YmVyYmF1bS93aW5zdXAvY3lnd2luL3Nw
+YXduLmNjLHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjgzCmRpZmYgLXUgLXAg
+LTIgLXIxLjgzIHNwYXduLmNjCi0tLSBzcGF3bi5jYwkyMDAxLzA3LzI2IDE5
+OjIyOjI0CTEuODMKKysrIHNwYXduLmNjCTIwMDEvMDgvMDIgMDY6Mzg6NDQK
+QEAgLTU3Miw0ICs1NzIsOCBAQCBza2lwX2FyZ19wYXJzaW5nOgogICAgIGZs
+YWdzIHw9IENSRUFURV9TVVNQRU5ERUQ7CiAKKyAgY2hhciBmZHNfZml4dXBf
+ZXZlbnRfbmFtZSBbTUFYX1BBVEhdOworICBIQU5ETEUgZmRzX2ZpeHVwX2V2
+ZW50ID0gTlVMTDsKKyAgX19zbWFsbF9zcHJpbnRmIChmZHNfZml4dXBfZXZl
+bnRfbmFtZSwgRkRTX0ZJWFVQX0VWRU5UX05BTUUsIHBpLmR3UHJvY2Vzc0lk
+KTsKKyAgZmRzX2ZpeHVwX2V2ZW50ID0gQ3JlYXRlRXZlbnQgKCZzZWNfYWxs
+X25paCwgRkFMU0UsIEZBTFNFLCBmZHNfZml4dXBfZXZlbnRfbmFtZSk7CiAK
+ICAgLyogQnVpbGQgd2luZG93cyBzdHlsZSBlbnZpcm9ubWVudCBsaXN0ICov
+CkBAIC03NTQsNiArNzU4LDYgQEAgc2tpcF9hcmdfcGFyc2luZzoKICAgaWYg
+KG1vZGUgPT0gX1BfT1ZFUkxBWSkKICAgICB7Ci0gICAgICBpbnQgbndhaXQg
+PSAzOwotICAgICAgSEFORExFIHdhaXRidWZbM10gPSB7cGkuaFByb2Nlc3Ms
+IHNpZ25hbF9hcnJpdmVkLCBzcHJ9OworICAgICAgaW50IG53YWl0ID0gNDsK
+KyAgICAgIEhBTkRMRSB3YWl0YnVmWzRdID0ge3BpLmhQcm9jZXNzLCBzaWdu
+YWxfYXJyaXZlZCwgc3ByLCBmZHNfZml4dXBfZXZlbnR9OwogICAgICAgZm9y
+IChpbnQgaSA9IDA7IGkgPCAxMDA7IGkrKykKIAl7CkBAIC03ODIsNCArNzg2
+LDcgQEAgc2tpcF9hcmdfcGFyc2luZzoKIAkJfQogCSAgICAgIGJyZWFrOwor
+CSAgICBjYXNlIFdBSVRfT0JKRUNUXzAgKyAzOgorCSAgICAgIGNsb3NlX2Fs
+bF9maWxlcyAoKTsKKwkgICAgICBjb250aW51ZTsKIAkgICAgY2FzZSBXQUlU
+X0ZBSUxFRDoKIAkgICAgICBzeXN0ZW1fcHJpbnRmICgid2FpdCBmYWlsZWQ6
+IG53YWl0ICVkLCBwaWQgJWQsIHdpbnBpZCAlZCwgJUUiLAo=
+
+------------=_1583532848-65438-91--
