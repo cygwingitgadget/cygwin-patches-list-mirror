@@ -1,22 +1,19 @@
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: \033[xx;yy;zzm patch
-Date: Wed, 14 Feb 2001 14:00:00 -0000
-Message-id: <20010214170018.A19427@redhat.com>
-References: <1772701184.20010215002717@logos-m.ru>
-X-SW-Source: 2001-q1/msg00073.html
+From: Chrisiasci@aol.com
+To: <cygwin-patches@cygwin.com>
+Subject: Re: 1.1.8: access violation in dlopen
+Date: Wed, 14 Feb 2001 15:21:00 -0000
+Message-id: <da.259b715.27bc6cc9@aol.com>
+X-SW-Source: 2001-q1/msg00074.html
 
-On Thu, Feb 15, 2001 at 12:27:17AM +0300, Egor Duda wrote:
->Hi!
->
->2001-02-14  Egor Duda  <deo@logos-m.ru>
-> 
->	* fhandler_console.cc (fhandler_console::char_command): Ignore unknown
->	rendition codes in \033[xx;yym control sequences
+Sorry,
 
-Applied.
+I thought I already attached it, but my b... mail did not agree...
 
-Actually, I should have just asked you to apply this yourself.  You have checkin
-rights, right?
+Christophe
 
-cgf
+here it is :
+
+Wed Feb 14 14:54:40 2001 Christophe Iasci <chrisiasci@aol.com>
+
+    * dlfcn.cc (dlopen): Do not call LoadLibrary with a NULL pointer, when the library is not found
+
