@@ -1,67 +1,32 @@
-From: "Neil Erskine" <neil.erskine@jjmackay.ca>
-To: "Corinna Vinschen" <cygwin-patches@cygwin.com>
-Subject: RE: unlink() patch (was Cygwin CVS breaks PostgreSQL drop table)
-Date: Wed, 18 Jul 2001 05:08:00 -0000
-Message-id: <CAEIIBEHOJELFDAHENHIOEDOCGAA.neil.erskine@jjmackay.ca>
+From: Jason Tishler <Jason.Tishler@dothill.com>
+To: Corinna Vinschen <cygwin-patches@cygwin.com>
+Subject: Re: unlink() patch (was Cygwin CVS breaks PostgreSQL drop table)
+Date: Wed, 18 Jul 2001 05:19:00 -0000
+Message-id: <20010718081915.A431@dothill.com>
 References: <20010718130154.E730@cygbert.vinschen.de>
-X-SW-Source: 2001-q3/msg00014.html
+X-SW-Source: 2001-q3/msg00015.html
 
-It wouldn't bother me, and might it easier to allow the code work on Novell
-without interfering with unusual Windows behaviour.
+Corrina,
 
------Original Message-----
-From: cygwin-patches-owner@sources.redhat.com
-[ mailto:cygwin-patches-owner@sources.redhat.com]On Behalf Of Corinna
-Vinschen
-Sent: July 18, 2001 08:02
-To: Cygwin-Patches
-Subject: Re: unlink() patch (was Cygwin CVS breaks PostgreSQL drop
-table)
+On Wed, Jul 18, 2001 at 01:01:54PM +0200, Corinna Vinschen wrote:
+> IMO, that's rather late in the function to handle a nonexistant file.
+> I checked in a different solution which handles it more at the 
+> beginning of _unlink().
 
+Agreed.  I almost submitted a patch that dealt with this issue upfront
+too, but the 1.122 version also handled this issue late and the 1.123
+version seemed to have a yank and put error so I opted for the minimal
+perturbation approach.
 
-On Tue, Jul 17, 2001 at 10:10:42PM -0400, Jason Tishler wrote:
-> Cygwin no longer correctly handles the case when the file passed to
-> unlink() does not exist -- unlink() incorrectly returns 0.
-> [...]
-> Index: syscalls.cc
-> ===================================================================
-> RCS file: /cvs/src/src/winsup/cygwin/syscalls.cc,v
-> retrieving revision 1.128
-> diff -u -p -r1.128 syscalls.cc
-> --- syscalls.cc	2001/07/14 00:09:33	1.128
-> +++ syscalls.cc	2001/07/18 01:54:21
-> @@ -155,7 +155,7 @@ _unlink (const char *ourname)
->    if (h == INVALID_HANDLE_VALUE)
->      {
->        if (GetLastError () == ERROR_FILE_NOT_FOUND)
-> -	goto ok;
-> +	goto err;
->      }
->    else
->      {
+> Thanks for tracking it down, though.
 
-IMO, that's rather late in the function to handle a nonexistant file.
-I checked in a different solution which handles it more at the
-beginning of _unlink(). Thanks for tracking it down, though.
+You're welcome -- thanks for checking in a better fix.
 
-BTW, I have a naive question related to unlink. I had just another
-look into SUSv2 and to my surprise it defines the following error
-code:
+Jason
 
-[EBUSY]    The file named by the path argument cannot be unlinked
-           because it is being used by the system or another process
-	   and the implementation considers this an error.
-
-which basically means, if we try to unlink a file and that fails,
-we wouldn't have to force it by ugly tricks (delqueue) but just
-return EBUSY and Cygwin would still be SUSv2 compliant.
-
-All: Would that be ok to change or would you like to keep the current
-     behaviour?
-
-Corinna
-
---
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+-- 
+Jason Tishler
+Director, Software Engineering       Phone: 732.264.8770 x235
+Dot Hill Systems Corp.               Fax:   732.264.8798
+82 Bethany Road, Suite 7             Email: Jason.Tishler@dothill.com
+Hazlet, NJ 07730 USA                 WWW:   http://www.dothill.com
