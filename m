@@ -1,150 +1,84 @@
-From: egor duda <deo@logos-m.ru>
-To: cygwin-patches@cygwin.com
+From: "Robert Collins" <robert.collins@itdomain.com.au>
+To: "egor duda" <cygwin-patches@cygwin.com>
+Subject: Re: PTHREAD_COND_INITIALIZER
+Date: Mon, 24 Sep 2001 15:01:00 -0000
+Message-id: <0f4701c14544$8d21cda0$0200a8c0@lifelesswks>
+References: <19733505618.20010924193924@logos-m.ru>
+X-SW-Source: 2001-q3/msg00191.html
+
+Hi Egor,
+Thanks for that.
+
+It's not quite right yet though....
+In pthread.h,
+* PTHREAD_COND_INITIALIZER must be a never valid address, that is
+unlikely to occur randomly - 0 won't work. (See
+PTHREAD_MUTEX_INITIALIZER).
+* I'm still not sure of the appropriateness of the clean_up routine
+typedef change, it should go in as a separate patch regardless.
+
+In thread.cc, you have introduced many deference potential invalid
+memory issues.
+
+No dereferencing of * parameters should occur until a
+verifyable_object_isvalid () call is made on them. As you can see that
+function checks for address space allocation and for the INITIALIZER
+macro's, and for the correct contect according to a magic cookie.
+
+ie this is bad:
++ if (*cond != PTHREAD_COND_INITIALIZER &&
++ verifyable_object_isvalid (*cond, PTHREAD_COND_MAGIC))
+return EBUSY;
+
+whereas adding PTHREAD_COND_INITIALIZER to verifyable_object_isvalid
+won't introduce this issue.
+
+pthread_cond_construct is a (to me) unneeded function, thats what the
+object constructor is for. Finally reusing the verifyyobject call will
+result in less os overhead (in calls to IsBadWritePtr).
+
+Can I suggest you look at the implementation of
+PTHREAD_MUTEX_INITIALIZER, PTHREAD_COND_INITIALIZER should be nearly
+identical.
+(ie the new code in each function is only two lines:
+
+int
+__pthread_mutex_lock (pthread_mutex_t *mutex)
+{
+  if (!verifyable_object_isvalid (*themutex, PTHREAD_MUTEX_MAGIC))
+    return EINVAL;
+== new code ==
+  if (*mutex == PTHREAD_MUTEX_INITIALIZER)
+    __pthread_mutex_init (mutex, NULL);
+== /new code ==
+  (*themutex)->Lock ();
+  return 0;
+}
+
+And finally, can you create a simple (able to be included in my GPL'd
+pthread test suite) testcase to test the COND_INITIALIZER? If you have
+the time to create boundary tests as well, that's even better, but a
+core test is needed IMO. I'll run the whole suite for regression
+checking (unless you want to :} ).
+
+Rob
+
+----- Original Message -----
+From: "egor duda" <deo@logos-m.ru>
+To: <cygwin-patches@cygwin.com>
+Sent: Tuesday, September 25, 2001 1:39 AM
 Subject: PTHREAD_COND_INITIALIZER
-Date: Mon, 24 Sep 2001 08:41:00 -0000
-Message-id: <19733505618.20010924193924@logos-m.ru>
-X-SW-Source: 2001-q3/msg00190.html
-Content-type: multipart/mixed; boundary="----------=_1583532849-65438-106"
-
-This is a multi-part message in MIME format...
-
-------------=_1583532849-65438-106
-Content-length: 372
-
-Hi!
-
-  attached is a patch which adds support for PTHREAD_COND_INITIALIZER.
-please don't be fooled by
-
--__pthread_cond_destroy (pthread_cond_t *cond)
-+__pthread_cond_construct (pthread_cond_t *cond)
-
-lines, it's 'diff', not me :)
-
-egor.            mailto:deo@logos-m.ru icq 5165414 fidonet 2:5020/496.19
-pthreads_cond_initializer.diff
-pthreads_cond_initializer.ChangeLog
 
 
-------------=_1583532849-65438-106
-Content-Type: text/plain; charset=us-ascii;
- name="pthreads_cond_initializer.ChangeLog"
-Content-Disposition: inline; filename="pthreads_cond_initializer.ChangeLog"
-Content-Transfer-Encoding: base64
-Content-Length: 732
-
-MjAwMS0wOS0yNCAgRWdvciBEdWRhICA8ZGVvQGxvZ29zLW0ucnU+CgoJKiBp
-bmNsdWRlL3B0aHJlYWQuaDogRGVmaW5lIFBUSFJFQURfQ09ORF9JTklUSUFM
-SVpFUi4KCShfX2NsZWFudXBfcm91dGluZV90eXBlKTogRml4IHR5cG8uCgkq
-IHRocmVhZC5jYyAoX19wdGhyZWFkX2NvbmRfY29uc3RydWN0KTogTmV3IGZ1
-bmN0aW9uLiBWZXJpZnkKCWNvbmRpdGlvbiB2YXJpYWJsZSwgYW5kIGluaXRp
-YWxpemUgaXQgaWYgbmVlZGVkLgoJKF9fcHRocmVhZF9jb25kX2Rlc3Ryb3kp
-OiBBY2NvbW9kYXRlIGl0LgoJKF9fcHRocmVhZF9jb25kX2Jyb2FkY2FzdCk6
-IERpdHRvLgoJKF9fcHRocmVhZF9jb25kX3NpZ25hbCk6IERpdHRvLgoJKF9f
-cHRocmVhZF9jb25kX3RpbWVkd2FpdCk6IERpdHRvLgoJKF9fcHRocmVhZF9j
-b25kX3dhaXQpOiBEaXR0by4KCShfX3B0aHJlYWRfY29uZF9pbml0KTogSGFu
-ZGxlIFBUSFJFQURfQ09ORF9JTklUSUFMSVpFUiBhcmd1bWVudC4KCSogd2lu
-c3VwLmggKGNoZWNrX251bGxfaW52YWxpZF9zdHJ1Y3QpOiBGaXggdHlwby4K
-
-------------=_1583532849-65438-106
-Content-Type: text/x-diff; charset=us-ascii;
- name="pthreads_cond_initializer.diff"
-Content-Disposition: inline; filename="pthreads_cond_initializer.diff"
-Content-Transfer-Encoding: base64
-Content-Length: 5649
-
-SW5kZXg6IGN5Z3dpbi90aHJlYWQuY2MKPT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PQpSQ1MgZmlsZTogL2N2cy91YmVyYmF1bS93aW5zdXAvY3lnd2luL3RocmVh
-ZC5jYyx2CnJldHJpZXZpbmcgcmV2aXNpb24gMS40OQpkaWZmIC11IC1wIC0y
-IC1yMS40OSB0aHJlYWQuY2MKLS0tIHRocmVhZC5jYwkyMDAxLzA5LzEyIDE3
-OjQ2OjM2CTEuNDkKKysrIHRocmVhZC5jYwkyMDAxLzA5LzI0IDE1OjI2OjA4
-CkBAIC0xNjM2LDkgKzE2MzYsMjkgQEAgX19wdGhyZWFkX2dldHNwZWNpZmlj
-IChwdGhyZWFkX2tleV90IGtleQogCiBpbnQKLV9fcHRocmVhZF9jb25kX2Rl
-c3Ryb3kgKHB0aHJlYWRfY29uZF90ICpjb25kKQorX19wdGhyZWFkX2NvbmRf
-Y29uc3RydWN0IChwdGhyZWFkX2NvbmRfdCAqY29uZCkKIHsKKyAgaW50IHJl
-cyA9IGNoZWNrX251bGxfaW52YWxpZF9zdHJ1Y3QgKGNvbmQpOworICBpZiAo
-cmVzKQorICAgIHJldHVybiByZXM7CisKKyAgaWYgKCpjb25kID09IFBUSFJF
-QURfQ09ORF9JTklUSUFMSVpFUikKKyAgICB7CisgICAgICBpZiAoKHJlcyA9
-IF9fcHRocmVhZF9jb25kX2luaXQgKGNvbmQsIE5VTEwpKSAhPSAwKQorCXJl
-dHVybiByZXM7CisgICAgfQorCiAgIGlmICghdmVyaWZ5YWJsZV9vYmplY3Rf
-aXN2YWxpZCAoKmNvbmQsIFBUSFJFQURfQ09ORF9NQUdJQykpCiAgICAgcmV0
-dXJuIEVJTlZBTDsKIAorICByZXR1cm4gMDsKK30KKworaW50CitfX3B0aHJl
-YWRfY29uZF9kZXN0cm95IChwdGhyZWFkX2NvbmRfdCAqY29uZCkKK3sKKyAg
-aW50IGVyciA9IF9fcHRocmVhZF9jb25kX2NvbnN0cnVjdCAoY29uZCk7Cisg
-IGlmIChlcnIpCisgICAgcmV0dXJuIGVycjsKKwogICAvKnJlYWRzIGFyZSBh
-dG9taWMgKi8KICAgaWYgKCgqY29uZCktPndhaXRpbmcpCkBAIC0xNjU3LDUg
-KzE2NzcsNiBAQCBfX3B0aHJlYWRfY29uZF9pbml0IChwdGhyZWFkX2NvbmRf
-dCAqY29uCiAgICAgcmV0dXJuIEVJTlZBTDsKIAotICBpZiAodmVyaWZ5YWJs
-ZV9vYmplY3RfaXN2YWxpZCAoKmNvbmQsIFBUSFJFQURfQ09ORF9NQUdJQykp
-CisgIGlmICgqY29uZCAhPSBQVEhSRUFEX0NPTkRfSU5JVElBTElaRVIgJiYK
-KyAgICAgIHZlcmlmeWFibGVfb2JqZWN0X2lzdmFsaWQgKCpjb25kLCBQVEhS
-RUFEX0NPTkRfTUFHSUMpKQogICAgIHJldHVybiBFQlVTWTsKIApAQCAtMTY3
-NSw2ICsxNjk2LDcgQEAgaW50CiBfX3B0aHJlYWRfY29uZF9icm9hZGNhc3Qg
-KHB0aHJlYWRfY29uZF90ICpjb25kKQogewotICBpZiAoIXZlcmlmeWFibGVf
-b2JqZWN0X2lzdmFsaWQgKCpjb25kLCBQVEhSRUFEX0NPTkRfTUFHSUMpKQot
-ICAgIHJldHVybiBFSU5WQUw7CisgIGludCBlcnIgPSBfX3B0aHJlYWRfY29u
-ZF9jb25zdHJ1Y3QgKGNvbmQpOworICBpZiAoZXJyKQorICAgIHJldHVybiBl
-cnI7CiAKICAgKCpjb25kKS0+QnJvYWRDYXN0ICgpOwpAQCAtMTY4Niw2ICsx
-NzA4LDcgQEAgaW50CiBfX3B0aHJlYWRfY29uZF9zaWduYWwgKHB0aHJlYWRf
-Y29uZF90ICpjb25kKQogewotICBpZiAoIXZlcmlmeWFibGVfb2JqZWN0X2lz
-dmFsaWQgKCpjb25kLCBQVEhSRUFEX0NPTkRfTUFHSUMpKQotICAgIHJldHVy
-biBFSU5WQUw7CisgIGludCBlcnIgPSBfX3B0aHJlYWRfY29uZF9jb25zdHJ1
-Y3QgKGNvbmQpOworICBpZiAoZXJyKQorICAgIHJldHVybiBlcnI7CiAKICAg
-KCpjb25kKS0+U2lnbmFsICgpOwpAQCAtMTcwOSw3ICsxNzMyLDggQEAgX19w
-dGhyZWFkX2NvbmRfdGltZWR3YWl0IChwdGhyZWFkX2NvbmRfdAogCiAgIGlm
-ICghdmVyaWZ5YWJsZV9vYmplY3RfaXN2YWxpZCAoKnRoZW11dGV4LCBQVEhS
-RUFEX01VVEVYX01BR0lDKSkKLSAgICByZXR1cm4gRUlOVkFMOwotICBpZiAo
-IXZlcmlmeWFibGVfb2JqZWN0X2lzdmFsaWQgKCpjb25kLCBQVEhSRUFEX0NP
-TkRfTUFHSUMpKQogICAgIHJldHVybiBFSU5WQUw7CisgIGludCBlcnIgPSBf
-X3B0aHJlYWRfY29uZF9jb25zdHJ1Y3QgKGNvbmQpOworICBpZiAoZXJyKQor
-ICAgIHJldHVybiBlcnI7CiAgIHN0cnVjdCB0aW1lYiBjdXJyU3lzVGltZTsK
-ICAgbG9uZyB3YWl0bGVuZ3RoOwpAQCAtMTc1OSw3ICsxNzgzLDggQEAgX19w
-dGhyZWFkX2NvbmRfd2FpdCAocHRocmVhZF9jb25kX3QgKmNvbgogICB0aGVt
-dXRleCA9IG11dGV4OwogICBpZiAoIXZlcmlmeWFibGVfb2JqZWN0X2lzdmFs
-aWQgKCp0aGVtdXRleCwgUFRIUkVBRF9NVVRFWF9NQUdJQykpCi0gICAgcmV0
-dXJuIEVJTlZBTDsKLSAgaWYgKCF2ZXJpZnlhYmxlX29iamVjdF9pc3ZhbGlk
-ICgqY29uZCwgUFRIUkVBRF9DT05EX01BR0lDKSkKICAgICByZXR1cm4gRUlO
-VkFMOworICBpbnQgZXJyID0gX19wdGhyZWFkX2NvbmRfY29uc3RydWN0IChj
-b25kKTsKKyAgaWYgKGVycikKKyAgICByZXR1cm4gZXJyOwogCiAgIGlmIChw
-dGhyZWFkX211dGV4X2xvY2sgKCYoKmNvbmQpLT5jb25kX2FjY2VzcykpCklu
-ZGV4OiBjeWd3aW4vd2luc3VwLmgKPT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpS
-Q1MgZmlsZTogL2N2cy91YmVyYmF1bS93aW5zdXAvY3lnd2luL3dpbnN1cC5o
-LHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjY5CmRpZmYgLXUgLXAgLTIgLXIx
-LjY5IHdpbnN1cC5oCi0tLSB3aW5zdXAuaAkyMDAxLzA5LzEyIDE3OjQ2OjM3
-CTEuNjkKKysrIHdpbnN1cC5oCTIwMDEvMDkvMjQgMTU6MjY6MDgKQEAgLTE5
-NSw1ICsxOTUsNSBAQCBpbnQgX19zdGRjYWxsIF9fY2hlY2tfbnVsbF9pbnZh
-bGlkX3N0cnVjCiAKICNkZWZpbmUgY2hlY2tfbnVsbF9pbnZhbGlkX3N0cnVj
-dChzKSBcCi0gIF9fY2hlY2tfbnVsbF9pbnZhbGlkICgocyksIHNpemVvZiAo
-KihzKSkpCisgIF9fY2hlY2tfbnVsbF9pbnZhbGlkX3N0cnVjdCAoKHMpLCBz
-aXplb2YgKCoocykpKQogI2RlZmluZSBjaGVja19udWxsX2ludmFsaWRfc3Ry
-dWN0X2Vycm5vKHMpIFwKICAgX19jaGVja19udWxsX2ludmFsaWRfc3RydWN0
-X2Vycm5vICgocyksIHNpemVvZiAoKihzKSkpCkluZGV4OiBjeWd3aW4vaW5j
-bHVkZS9wdGhyZWFkLmgKPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1MgZmls
-ZTogL2N2cy91YmVyYmF1bS93aW5zdXAvY3lnd2luL2luY2x1ZGUvcHRocmVh
-ZC5oLHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjcKZGlmZiAtdSAtcCAtMiAt
-cjEuNyBwdGhyZWFkLmgKLS0tIHB0aHJlYWQuaAkyMDAxLzA1LzA5IDE0OjQ1
-OjQ3CTEuNworKysgcHRocmVhZC5oCTIwMDEvMDkvMjQgMTU6MjY6MDgKQEAg
-LTI5LDUgKzI5LDUgQEAgZXh0ZXJuICJDIgogLyogRklYTUU6IHRoaXMgc2hv
-dWxkIGFsbG9jYXRlIGEgbmV3IGNvbmQgdmFyaWFibGUsIGFuZCByZXR1cm4g
-dGhlIHZhbHVlICB0aGF0CiAgd291bGQgbm9ybWFsbHkgYmUgd3JpdHRlbiB0
-byB0aGUgcGFzc2VkIHBhcmFtZXRlciBvZiBwdGhyZWFkX2NvbmRfaW5pdChs
-dmFsdWUsIE5VTEwpOyAqLwotLyogI2RlZmluZSBQVEhSRUFEX0NPTkRfSU5J
-VElBTElaRVIgMCAqLworI2RlZmluZSBQVEhSRUFEX0NPTkRfSU5JVElBTEla
-RVIgMAogCiAjZGVmaW5lIFBUSFJFQURfREVTVFJVQ1RPUl9JVEVSQVRJT05T
-IDEKQEAgLTQ0LDUgKzQ0LDUgQEAgZXh0ZXJuICJDIgogI2RlZmluZSBQVEhS
-RUFEX0NBTkNFTF9ESVNBQkxFIDEKICNkZWZpbmUgUFRIUkVBRF9DQU5DRUxF
-RAotI2RlZmluZSBQVEhSRUFEX0NPTkRfSU5JVElBTElaRVIKKy8vICNkZWZp
-bmUgUFRIUkVBRF9DT05EX0lOSVRJQUxJWkVSIAogI2RlZmluZSBQVEhSRUFE
-X0NSRUFURV9ERVRBQ0hFRCAxCiAvKiB0aGUgZGVmYXVsdCA6IGpvaW5hYmxl
-ICovCkBAIC0xMDIsNSArMTAyLDUgQEAgdm9pZCBwdGhyZWFkX2NsZWFudXBf
-cHVzaCAodm9pZCAoKnJvdXRpbgogdm9pZCBwdGhyZWFkX2NsZWFudXBfcG9w
-IChpbnQgZXhlY3V0ZSk7CiAqLwotdHlwZWRlZiB2b2lkIF9fY2xlYW51cF9y
-b3V0aW5lX3R5cGUgKHZvaWQgKik7Cit0eXBlZGVmIHZvaWQgKCpfX2NsZWFu
-dXBfcm91dGluZV90eXBlKSAodm9pZCAqKTsKIAogI2RlZmluZSBwdGhyZWFk
-X2NsZWFudXBfcHVzaChmbiwgYXJnKSB7IF9fY2xlYW51cF9yb3V0aW5lX3R5
-cGUgX19jbGVhbnVwX3JvdXRpbmU9Zm47IFwK
-
-------------=_1583532849-65438-106--
+> Hi!
+>
+>   attached is a patch which adds support for PTHREAD_COND_INITIALIZER.
+> please don't be fooled by
+>
+> -__pthread_cond_destroy (pthread_cond_t *cond)
+> +__pthread_cond_construct (pthread_cond_t *cond)
+>
+> lines, it's 'diff', not me :)
+>
+> egor.            mailto:deo@logos-m.ru icq 5165414 fidonet
+2:5020/496.19
