@@ -1,44 +1,117 @@
-From: "Robert Collins" <robert.collins@itdomain.com.au>
-To: "Corinna Vinschen" <cygwin-patches@cygwin.com>
-Subject: Re: win95 and pshared mutex support for pthreads
-Date: Wed, 25 Apr 2001 02:47:00 -0000
-Message-id: <04da01c0cd6c$cf39af00$0200a8c0@lifelesswks>
-References: <00d001c0c8bc$d9f12400$0200a8c0@lifelesswks> <20010424232202.A23753@cygbert.vinschen.de> <01b001c0cd0b$cf997950$0200a8c0@lifelesswks> <20010425102017.I23753@cygbert.vinschen.de> <047d01c0cd65$18c8aed0$0200a8c0@lifelesswks> <20010425112012.K23753@cygbert.vinschen.de>
-X-SW-Source: 2001-q2/msg00155.html
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
+To: cygpatch <cygwin-patches@cygwin.com>
+Subject: [PATCH]: Extend ntsec behaviour
+Date: Wed, 25 Apr 2001 03:20:00 -0000
+Message-id: <20010425122030.L23753@cygbert.vinschen.de>
+X-SW-Source: 2001-q2/msg00156.html
 
------ Original Message -----
-From: "Corinna Vinschen" <cygwin-patches@cygwin.com>
-To: "cygpatch" <cygwin-patches@cygwin.com>
-Sent: Wednesday, April 25, 2001 7:20 PM
-Subject: Re: win95 and pshared mutex support for pthreads
+Hi,
 
+I have just checked in a rather big change to Cygwin (for 1.3.2) which
+basically adds the following to Cygwin:
 
-> On Wed, Apr 25, 2001 at 06:51:17PM +1000, Robert Collins wrote:
-> > From: "Corinna Vinschen" <cygwin-patches@cygwin.com>
-> > > No reason to apologize. I apologize. I was too harsh since I was
-> > > working on my new ntsec related code and suddenly found an error
-> > > in my own code which could have been handled by some _r function.
-> > > When I saw that getpwxxx_r couldn't work I overacted somewhat.
-> > >
-> > > Corinna
-> > >
-> >
-> > Thanks. I hadn't noticed any harshness - just directness. Mind you
-I'm
-> > pretty thick skinned after the last decade :]
->
-> I should have that thick skin as well but I'm still not able
-> to not interpret directness as harshness sometimes. English
-> speaking/writing is somewhat more direct than German. I had
-> some collisions with Chris for that reason back in 1998. He
-> never wanted to be harsh but I didn't get that. Dependent of
-> my mood I'm sometimes still annoyed by this directness so I
-> feel the need to apologize when I was, uhm, direct, you know?
->
-> Corinna
->
+- A new class `cygsid'. It's used at places where otherwise a PSIDs and
+  a char buffer is needed.
 
-:]. Thank you. I appreciated the apology - and wanted to let you know I
-had not been offended.
+- Two new functions `internal_getpwent()' and `internal_getgrent(index)'
+  to walk through the passwd and group lists inside of Cygwin. Up to now
+  the ntsec related code used getpwent and getgrent which can break
+  applications (*gulp*). I have found that error this morning and I'm
+  already busy with hitting myself with a stick...
+  Anyway, if somebody needs to walk through the passwd and group lists
+  inside of Cygwin please use only these two new functions from now on.
 
-Rob
+- The three functions which are in front when the user context should
+  change (setegid, seteuid) or when a Cygwin process has been started
+  from a non Cygwin process (internal_getlogin) try to manipulate the
+  process token resp. the impersonation token so that the following
+  is done if ntsec is ON and if not an error occurs:
+
+  - internal_getlogin: The processes token owner is set to the same value
+    as the token user and if the process is started from a non Cygwin
+    process the token primary group is set to the group which is given as
+    primary group in /etc/passwd.
+
+  - setegid: The processes token primary group is set to the group given
+    as parameter.
+
+  - seteuid: The impersonation token owner is set to the same value as
+    the token user and the token primary group is set to the group
+    currently set to the processes primary group.
+
+  The reasoning behind these changes is the style in which NT sets the
+  process token by default. Example for a user which is member of the
+  administrators group and which logged in via sshd running as service
+  on a workstation which is not in a domain:
+
+  Process token:
+
+    User:
+    	S-1-5-21-1644491937-764733703-1343024091-1001  <- Yep, that's me
+
+    Owner:
+    	S-1-5-32-544   <- Hmm, owner is administrators group
+
+    Primary Group:
+    	S-1-5-21-1644491937-764733703-1343024091-513  <- "None"
+
+    Suplementary Groups:
+	S-1-5-21-1644491937-764733703-1343024091-513
+	S-1-1-0
+	S-1-5-32-544
+	S-1-5-32-545
+	S-1-5-5-0-170088991
+	S-1-2-0
+	S-1-5-6
+	S-1-5-11
+
+  The result of this token is that eg. files are owned by the admins
+  group and the group is None.
+
+  I don't want this. I want the files owned by me and the primary group
+  set to admins. Non-admin users don't have the owner!=user problem
+  but the primary group in the process token is always set to "None"
+  regardless of the settings in the user manager. Primary group management
+  is unfortunately only supported by NT domains.
+
+  But we can do this by ourselves. So my change results in the following
+  process token, assuming that I have set the admins group as my primary
+  group in /etc/passwd:
+
+    User:
+    	S-1-5-21-1644491937-764733703-1343024091-1001  <- Yep, that's me
+
+    Owner:
+    	S-1-5-21-1644491937-764733703-1343024091-1001  <- :-)
+
+    Primary Group:
+    	S-1-5-32-544 :-)
+
+    Suplementary Groups:
+	S-1-5-21-1644491937-764733703-1343024091-513
+	S-1-1-0
+	S-1-5-32-544
+	S-1-5-32-545
+	S-1-5-5-0-170088991
+	S-1-2-0
+	S-1-5-6
+	S-1-5-11
+
+  As an interesting extension, I can set my primary group now to
+  each group which is in the tokens supplementary group list in
+  the running process by calling `setegid'.
+
+Since I'm in the process to restructure the whole setuid/setgid
+mechanism with an extension to allow changing user context without
+passwords, that code is subject to further changes but it already
+shows where the train goes.
+
+Bug reports, bug fixes and criticism is welcome. Hmm, the last one
+isn't really welcome but probably needed.
+
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
