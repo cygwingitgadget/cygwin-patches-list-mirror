@@ -1,26 +1,29 @@
-From: "Robert Collins" <robert.collins@itdomain.com.au>
-To: <bkeener@thesoftwaresource.com>, <cygwin-patches@cygwin.com>
-Subject: RE: [patch] change to choose.cc in setup.exe for Redownload/Sources crashes
-Date: Thu, 17 May 2001 21:40:00 -0000
-Message-id: <EA18B9FA0FE4194AA2B4CDB91F73C0EF08EFDA@itdomain002.itdomain.net.au>
-X-SW-Source: 2001-q2/msg00260.html
+From: Christopher Faylor <cgf@redhat.com>
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] Add MAPISendMail to w32api
+Date: Tue, 22 May 2001 16:04:00 -0000
+Message-id: <20010522190240.A25370@redhat.com>
+X-SW-Source: 2001-q2/msg00261.html
 
-> -----Original Message-----
-> From: Brian Keener [ mailto:bkeener@thesoftwaresource.com ]
-> Sent: Friday, May 18, 2001 2:14 PM
-> To: cygwin-patches@cygwin.com
-> Subject: Re: [patch] change to choose.cc in setup.exe for
-> Redownload/Sources crashes
-> 
-> 
-> Christopher Faylor wrote:
-> > I hate to say this, but after all of the discussion about indenting,
-> > the indentation below is obviously wrong.
-> 
-> Buggers, after all that - bitten by the old cut and paste 
-> into the email 
-> editor, and I worked so hard to get it right in vi.
+Tue May 22 18:58:27 2001  Christopher Faylor <cgf@cygnus.com>
 
-I use cat foo > /dev/clipboard. Then the email gets the right characters
-:]
- 
+	* lib/mapi32.def: Add MAPISendMail.
+  
+Index: lib/mapi32.def
+===================================================================
+RCS file: /cvs/uberbaum/winsup/w32api/lib/mapi32.def,v
+retrieving revision 1.1.1.1
+diff -p -r1.1.1.1 mapi32.def
+*** mapi32.def	2000/02/17 19:38:32	1.1.1.1
+--- mapi32.def	2001/05/22 23:01:21
+*************** MAPIOpenFormMgr
+*** 84,89 ****
+--- 84,91 ----
+  MAPIOpenFormMgr@8
+  MAPIOpenLocalFormContainer
+  MAPIOpenLocalFormContainer@4
++ MAPISendMail
++ MAPISendMail@20
+  MAPIUninitialize
+  MAPIUninitialize@0
+  MNLS_CompareStringW@24
