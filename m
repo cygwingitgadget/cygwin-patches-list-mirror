@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2327-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 3553 invoked by alias); 6 Jun 2002 01:19:28 -0000
+Return-Path: <cygwin-patches-return-2328-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 30090 invoked by alias); 6 Jun 2002 01:34:09 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,59 +7,44 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 3495 invoked from network); 6 Jun 2002 01:19:27 -0000
-Message-ID: <021101c20cf8$6b033430$6132bc3e@BABEL>
-From: "Conrad Scott" <Conrad.Scott@dsl.pipex.com>
-To: <cygwin-patches@cygwin.com>
-References: <00ef01c20cf1$08974c20$6132bc3e@BABEL> <20020606003415.GC15072@redhat.com>
-Subject: Re: Patch for sub-second resolution in stat(2)
-Date: Wed, 05 Jun 2002 18:19:00 -0000
-MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-SW-Source: 2002-q2/txt/msg00310.txt.bz2
+Received: (qmail 29998 invoked from network); 6 Jun 2002 01:34:09 -0000
+Date: Wed, 05 Jun 2002 18:34:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: Make CW_STRACE_TOGGLE toggle
+Message-ID: <20020606013422.GA851@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <01c501c20cf6$987d45b0$6132bc3e@BABEL>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <01c501c20cf6$987d45b0$6132bc3e@BABEL>
+User-Agent: Mutt/1.3.23.1i
+X-SW-Source: 2002-q2/txt/msg00311.txt.bz2
 
-"Christopher Faylor" <cgf@redhat.com> wrote:
-> >I'm unclear whether this is the best naming / type scheme but it is one
-> >recognised by both the make and fileutils packages available from the
-> >cygwin setup (i.e. make this patch and re-compile those packages and they
-> > detect the new fields).
+On Thu, Jun 06, 2002 at 02:07:57AM +0100, Conrad Scott wrote:
+>Another patch but very small.
 >
-> As long as there's precedent...  Is this how linux does it too?
+>Currently calls to:
+>
+>    cygwin_internal (CW_STRACE_TOGGLE, pid)
+>
+>doesn't toggle the stracing of pid but simply turns it on again, i.e. a
+>no-op after the first call.
 
-This does seem to be the way that several vendors do it: it's labelled "the
-usual case" in the make and fileutils configure files (as opposed to Solaris
-2.6 and Unixware 2.1.2) and I found several man pages on the web that
-matched this naming / typing scheme.
+Did you look at strace::hello?  This is supposed to toggle but, since
+the "inited" field in the strace class is never set, it never toggles.
 
-Strangely, Linux doesn't seem to support sub-second timing (at least, not as
-of 2.5.13, which is all I have to hand right now).
+>I've got a small program that makes this call for a given process, so you
+>can turn stracing on and off around events of interest etc. I'll send it
+>along once I've thought of a good name for it (strtoggle? stroggle?
+>stronoff? . . . ) Any suggestions?
 
+I don't understand what this program does.  Are you saying that you run this
+other program while stracing a running program?
 
-> newlib patches should be sent to the newlib mailing list.
+I've never had a real use for this myself, but it sounds like this is an
+strace option, not another program.
 
-On its way.
-
-> I see from your next message that you're probably sending a better
-> ChangeLog.  :-)
-
-Well, it's longer :-) and I hope it's better.
-
-
-While I'm writing, just a note that there is a proviso in the second
-(slightly more considered) version of the email about an issue of rounding
-up of the times for FAT that I also missed out from the first.
-
-> I'll let Corinna comment on the patch itself.  It looks good to me, but
-> she's been modifying this code a lot lately so she has a better feel for
-> it.
-
-Thanks Chris.
-
-// Conrad
-
-
+cgf
