@@ -1,13 +1,36 @@
-From: DJ Delorie <dj@delorie.com>
-To: mchase@ix.netcom.com
-Cc: cygwin-patches@cygwin.com
-Subject: Re: [patch] setup.exe changes for Redownload/Reinstall Current version or Sources only - Part 2
-Date: Thu, 10 May 2001 10:05:00 -0000
-Message-id: <200105101705.NAA22677@envy.delorie.com>
-References: <EA18B9FA0FE4194AA2B4CDB91F73C0EF08EFA8@itdomain002.itdomain.net.au> <20010510005533.A12859@redhat.com> <000701c0d972$7889a680$9332273f@ca.boeing.com>
-X-SW-Source: 2001-q2/msg00230.html
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: storing symlink in extended attribute (on ntfs)
+Date: Thu, 10 May 2001 14:23:00 -0000
+Message-id: <20010510232258.H5386@cygbert.vinschen.de>
+References: <1791875116.20010510172000@logos-m.ru> <12912395994.20010510201521@logos-m.ru>
+X-SW-Source: 2001-q2/msg00231.html
 
-> Unless setup.exe is (re)building the mount table, I'd prefer to see
-> setup.exe honor the Cygwin mount points.
+On Thu, May 10, 2001 at 08:15:21PM +0400, egor duda wrote:
+> ed>   i've modified cygwin slightly to store symlink value in shortcut's
+> ed> extended attribute, and to try to get it from there. my (rough)
+> ed> benchmarking shows 30%-50% speedup in symlink resolution code.
+> 
+> here's ready-to-go patch.
+> 2001-05-10  Egor Duda  <deo@logos-m.ru>
+> 
+>         * path.cc (symlink): If symlink is created on NTFS, store its
+>         value in EA.
 
-Me too, but *someone* has to write the code to do so.  Will you?
+Did you check that with a Samba drive as well? Samba drives
+return NTFS as file system name in a call to GetVolumeInformation,
+too. AFAICS, additionally a check if the flag FILE_NAMED_STREAMS
+is returned would be good. Samba returns FALSE here. I'm not sure
+if that would have real advantages. It would avoid a useless
+write when creating a symlink on Samba...
+
+Except for the above knit, I like the idea. It combines the
+advantages of shortcuts with a faster read mechanism on NTFS.
+I think it's worth a try.
+
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
