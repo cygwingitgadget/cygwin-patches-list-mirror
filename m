@@ -1,18 +1,33 @@
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: cygwin/Makefile.in and cinstall/Makefile.in
-Date: Mon, 25 Dec 2000 19:23:00 -0000
-Message-id: <20001225222322.A7249@redhat.com>
-References: <20001218204418.12970.qmail@web117.yahoomail.com>
-X-SW-Source: 2000-q4/msg00058.html
+From: Matt <matt@use.net>
+To: cygwin-patches@sources.redhat.com
+Subject: cinstall patches
+Date: Tue, 26 Dec 2000 03:59:00 -0000
+Message-id: <Pine.NEB.4.10.10012260335470.16114-400000@cesium.clock.org>
+X-SW-Source: 2000-q4/msg00059.html
 
-On Mon, Dec 18, 2000 at 12:44:18PM -0800, Earnie Boyd wrote:
->Allows the use of -O3 or -finline-functions by disallowing them for
->cygwin/autoload.cc, cygwin/exceptions.cc and cinstall/autoload.c.
+The default selection is to Install from Internet with a Direct
+Connection. Now, most users will just press enter to get through the
+entire install. Yay! :)
 
-I've modified exceptions.cc and autoload.h to allow inlining without
-special compile options.
+When using Direct Connection, setup.exe leaks socket handles for each file
+it gets (can be verified with HandleEx from sysinternals.com). I'll try
+and track this down tomorrow if I get a chance.
 
-I'll let DJ decide if the cinstall changes are desirable.
 
-cgf
+Tue Dec 26 03:46:00 2000  Matt Hargett <matt@use.net>
+
+	* winsup/cinstall/res.rc: Added accelerators and improved focus
+	order. Removed WS_DISABLED from "OK" buttons to accomodate
+	default focus changes in net.cc and source.cc.
+
+	* winsup/cinstall/net.cc (dialog_proc): If no radio button
+	is selected, a default is selected.
+
+	* winsup/cinstall/source.cc (dialog_proc): Ditto.
+
+	(check_if_enable_next): Removed. No longer needed since
+	a radio button will always be selected.
+
+	(load_dialog): Removed call to check_if_enable_next.
+
+	(dialog_cmd): Ditto. Also added default to switch.
