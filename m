@@ -1,15 +1,16 @@
 From: Chris Faylor <cgf@cygnus.com>
 To: cygwin-patches@sourceware.cygnus.com
-Subject: Re: umount falls into an infinite loop.
+Subject: Re: problems related to mount_info.
 Date: Thu, 08 Jun 2000 19:16:00 -0000
-Message-id: <20000608221629.B18222@cygnus.com>
-References: <s1swvk1r5sr.fsf@jaist.ac.jp> <20000607154918.I16163@cygnus.com> <s1sr9a9qkin.fsf@jaist.ac.jp> <20000607175638.D17648@cygnus.com>
-X-SW-Source: 2000-q2/msg00097.html
+Message-id: <20000608221619.A18222@cygnus.com>
+References: <s1su2f5qmsh.fsf@jaist.ac.jp> <20000607175753.E17648@cygnus.com>
+X-SW-Source: 2000-q2/msg00096.html
 
-On Wed, Jun 07, 2000 at 05:56:38PM -0400, Chris Faylor wrote:
->Perfect.  Thank you.  That was service!
+On Wed, Jun 07, 2000 at 05:57:53PM -0400, Chris Faylor wrote:
+>This patch looks terrific.  You've made changes that I've been
+>contemplating for some time.
 >
->I'll install this patch once I've finished with the net release.
+>I'll install it once I've finished with the net release.
 
 Corinna has installed this patch.
 
