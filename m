@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3834-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 6175 invoked by alias); 28 Apr 2003 20:10:49 -0000
+Return-Path: <cygwin-patches-return-3835-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 6841 invoked by alias); 29 Apr 2003 18:19:15 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,31 +7,47 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 6166 invoked from network); 28 Apr 2003 20:10:49 -0000
-Date: Mon, 28 Apr 2003 20:10:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: profil fixes
-Message-ID: <20030428201135.GA4325@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <Pine.GSO.4.44.0304281456300.18331-200000@eos>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.GSO.4.44.0304281456300.18331-200000@eos>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2003-q2/txt/msg00061.txt.bz2
+Received: (qmail 6825 invoked from network); 29 Apr 2003 18:19:14 -0000
+From: "Chris January" <chris@atomice.net>
+To: "Cygwin-Patches@Cygwin.Com" <cygwin-patches@cygwin.com>
+Subject: RE: hostid patch
+Date: Tue, 29 Apr 2003 18:19:00 -0000
+Message-ID: <LPEHIHGCJOAIPFLADJAHMEIFDJAA.chris@atomice.net>
+MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3 (Normal)
+X-MSMail-Priority: Normal
+X-Mimeole: Produced By Microsoft MimeOLE V6.00.2800.1165
+Importance: Normal
+In-Reply-To: <LPEHIHGCJOAIPFLADJAHMEPHDIAA.chris@atomice.net>
+X-SW-Source: 2003-q2/txt/msg00062.txt.bz2
 
-On Mon, Apr 28, 2003 at 03:07:45PM -0500, Brian Ford wrote:
->2003-04-28  Brian Ford  <ford@vss.fsi.com>
->
->        * profil.h (PROFADDR): Prevent overflow when text segments
->	are larger than 256k.
->	* profil.c (profthr_func): Raise thread priority for more accurate
->	sampling.
+> > On Tue, Apr 15, 2003 at 08:55:08PM +0100, Chris January wrote:
+> > >*Not* tested on anything other than Windows XP.
+> > >
+> > >Adds gethostid function to Cygwin. Three patches: one for 
+> Cygwin, one for
+> > >newlib and one for w32api.
+> > >If I've done anything wrong let me know and I'll try to fix it.
+> >
+> > I tried this on Windows XP and, when run repeatedly, I get two
+> > different numbers:
+> >
+> > m:\test>gethostid
+> > 0xf9926a74
+> >
+> > m:\test>gethostid
+> > 0xdfd35415
+> >
+> > The highly sophisticated program that I'm using is below.
+> >
+> > I take it this doesn't happen to you, Chris?
+> Can you send me two strace outputs with different results please?
+> There are debug_printf's all the way through the hostid function 
+> that output
+> the result at each stage and these can be used to identify which value is
+> changing between calls.
 
-Applied.
-
-Thanks,
-cgf
+ping...
