@@ -1,40 +1,42 @@
-From: "Robert Collins" <robert.collins@itdomain.com.au>
-To: <cygwin-patches@cygwin.com>
-Subject: [W32API] att getrandomrgn
-Date: Thu, 20 Dec 2001 22:55:00 -0000
-Message-ID: <055701c189ec$558d8630$0200a8c0@lifelesswks>
-X-SW-Source: 2001-q4/msg00347.html
-Message-ID: <20011220225500._TKzFfxuSIJH5bdcaBDwr75R4JJhoemLENcfi2Kg0ug@z>
+From: Danny Smith <danny_r_smith_2001@yahoo.co.nz>
+To: cygwin-patches <cygwin-patches@cygwin.com>, rbcollins@cygwin.com
+Subject: Re: src/winsup/w32api ChangeLog include/wingdi.h
+Date: Fri, 21 Dec 2001 00:00:00 -0000
+Message-ID: <20011221080001.90765.qmail@web14506.mail.yahoo.com>
+References: <20011221065358.25757.qmail@sources.redhat.com>
+X-SW-Source: 2001-q4/msg00348.html
+Message-ID: <20011221000000.EsD1iW_HZWO7lJFbPrDfZb42cf38ytEGQ9wPbZvZQzU@z>
 
-I've checked this in. It's needed for setup.exe compilation.
+ --- rbcollins@cygwin.com wrote: > CVSROOT:	/cvs/src
+> Module name:	src
+> Changes by:	rbcollins@sources.redhat.com	2001-12-20 22:53:57
+> 
+> Modified files:
+> 	winsup/w32api  : ChangeLog 
+> 	winsup/w32api/include: wingdi.h 
+> 
+> Log message:
+> 	2001-12-21  Robert Collins  <rbtcollins@hotmail.com>
+> 	
+> 	* include/wingdi.h: Add GetRandomRgn and SYSRGN.
+> 
+Robert. I know your intentions were good, but please there is no need to
+submit to the patch tracker page at mingw SourceForge site as well. That is
+for submission of new patches needing review.  Unless you make clear that
+you have comitted this patch to winsup CVS, it may lead to someone else
+(like myself) checking in your patch to the SourceForge CVS (perhaps
+modified) leading to conflicts at merging.
 
-Rob
+Also, in future, keeping to the general layout of existing w32api headers
+(defines, then typedefs, then prototypes) would be good.  This makes it
+easier to protect typedefs and prototypes against RC_INVOKED, while leaving
+the constants visible to windres.
 
-2001-12-21  Robert Collins  <rbtcollins@hotmail.com>
+Thanks
 
-        * include/wingdi.h: Add GetRandomRgn and SYSRGN.
+Danny
 
-Index: include/wingdi.h
-===================================================================
-RCS file: /cvs/src/src/winsup/w32api/include/wingdi.h,v
-retrieving revision 1.7
-diff -u -p -r1.7 wingdi.h
---- wingdi.h    2001/08/29 13:45:46     1.7
-+++ wingdi.h    2001/12/21 06:52:36
-@@ -2009,6 +2009,8 @@ typedef struct _RGNDATA {
-        RGNDATAHEADER rdh;
-        char Buffer[1];
- } RGNDATA,*LPRGNDATA;
-+/* for GetRandomRgn */
-+#define SYSRGN  4
- typedef struct tagGCP_RESULTSA {
-        DWORD lStructSize;
-        LPSTR lpOutString;
-@@ -2539,6 +2541,7 @@ COLORREF WINAPI GetPixel(HDC,int,int);
- int WINAPI GetPixelFormat(HDC);
- int WINAPI GetPolyFillMode(HDC);
- BOOL WINAPI GetRasterizerCaps(LPRASTERIZER_STATUS,UINT);
-+int WINAPI GetRandomRgn (HDC,HRGN,INT);
- DWORD WINAPI GetRegionData(HRGN,DWORD,LPRGNDATA);
- int WINAPI GetRgnBox(HRGN,LPRECT);
- int WINAPI GetROP2(HDC);
+
+
+http://greetings.yahoo.com.au - Yahoo! Greetings
+- Send your festive greetings online!
