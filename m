@@ -1,51 +1,36 @@
-From: Egor Duda <deo@logos-m.ru>
-To: Christopher Faylor <cygwin-patches@cygwin.com>
-Subject: Re: tty-slave read() patch
-Date: Wed, 28 Feb 2001 12:54:00 -0000
-Message-id: <192120339128.20010228235310@logos-m.ru>
-References: <115104181535.20010228192351@logos-m.ru> <20010228140956.L2327@redhat.com>
-X-SW-Source: 2001-q1/msg00133.html
+From: Jon Ericson <Jonathan.L.Ericson@jpl.nasa.gov>
+To: <cygwin-patches@cygwin.com>
+Cc: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
+Subject: ispell package
+Date: Wed, 28 Feb 2001 13:13:00 -0000
+Message-id: <86ofvmjyvz.fsf@jon_ericson.jpl.nasa.gov>
+X-SW-Source: 2001-q1/msg00134.html
 
-Hi!
+Inspired by the recent call for contributors
+( http://sources.redhat.com/ml/cygwin/2001-02/msg01512.html ), I
+contacted Pierre A. Humblet, who maintains a Cygwin binary of ispell:
+ftp://ftp.franken.de/pub/win32/develop/gnuwin32/cygwin/porters/Humblet_Pierre_A
 
-Wednesday, 28 February, 2001 Christopher Faylor cgf@redhat.com wrote:
+He kindly gave me the go-ahead to contribute an "official" ispell
+package, but expressed the following:
 
->>  i've  changed  the  way  fhandler_tty_slave::read  communicates with
->>master.   it  addresses  a  couple  of  problems.  currently,  when in
->>non-canonical  mode  and  vmin=1,  read() never reads more then 1 byte
->>from  the  pipe,   even   if  more  input  is available. the result is
->>following:  when user  presses  F1 key in ssh window, this keypress is
->>actually  sent  to server  not  in  one  packet but in 4. This is very
->>noticeable on slow links. it also eliminates pipe polling.
+> The things that have kept me back from offering it are: 
+> a) the Franken site is already well known and the ispell site points
+>   to it, so users should have no problem finding it.
+> b) Cygnus does not have a good mechanism to specify optional
+>   packages and I already feel burdened having to upload
+>   optional packages I could do without (turning them off
+>   each time I upload is a pain). Thus I don't want
+>   to impose ispell on others.
+> c) What dictionaries to include ? (with impact on b))
 
-CF> Can you go into more detail on how you accomplished this? It looks
-CF> like you have used a mutex for communicating between the processes. 
+Given that Cygwin is fairly English-centric at the moment, I plan on
+packaging only the American and British dictionaries.  I wonder what
+will happen when someone offers a German or Spanish or ... package?
 
-tty  master  communicates with slaves by setting input_available_event
-whenever it puts new input in pipe from master to slave. mutex is used
-to serialize access to the pipe,  so  that  several  slaves  won't  do
-PeekNamedPipe()  and  ReadFile()  simultaneously,  and  so that master
-won't     set   input_available_event  again  before  waked slave read
-info from pipe.
+In the meantime, I am starting on the instructions for building a
+cygwin package
+( http://cygwin.com/ml/cygwin-apps/2000-11/msg00055.html ).  Is the /usr
+versus /usr/local a hard and fast rule?
 
-CF>    Won't  this  cause  problems when communicating with non-cygwin
-CF> applications?
-
-as far as i can understand from source, if slave have pipe's handle to
-get  input  from  master, it can assume that master is cygwin process.
-that  means  that  opening input_mutex from slave's side is safe, this
-mutex  (end  event) should already exist. if cygwin master opens  pipe
-and  communicate   though  it  with  non-cygwin  child, it will freely
-acquire and release input mutex, since noone else hold it.
-
-the  only  possible  problem is that master can have two children, one
-cygwin  and  one non-cygwin, and they both are trying to read. in this
-case  it's  possible that cygwin child will see input_available_event,
-but  won't  see  any  data in pipe, since non-cygwin child had already
-eaten it. but i think it was the same in old code, too.
-
-i've  tested  it  in  either  tty  or  notty  mode and with non-cygwin
-programs in local console and via ssh.
-
-Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
-
+Jon
