@@ -1,15 +1,180 @@
-From: DJ Delorie <dj@delorie.com>
+From: egor duda <deo@logos-m.ru>
 To: cygwin-patches@cygwin.com
-Subject: Re: [patch] setup.exe changes for Redownload/Reinstall Current version or Sources only - Part 2
-Date: Thu, 10 May 2001 07:53:00 -0000
-Message-id: <200105101453.KAA21606@envy.delorie.com>
-References: <EA18B9FA0FE4194AA2B4CDB91F73C0EF08EFA8@itdomain002.itdomain.net.au> <20010510005533.A12859@redhat.com>
-X-SW-Source: 2001-q2/msg00227.html
+Subject: Re: storing symlink in extended attribute (on ntfs)
+Date: Thu, 10 May 2001 09:16:00 -0000
+Message-id: <12912395994.20010510201521@logos-m.ru>
+References: <1791875116.20010510172000@logos-m.ru>
+X-SW-Source: 2001-q2/msg00228.html
+Content-type: multipart/mixed; boundary="----------=_1583532847-65438-60"
 
-> >IIRC setup used to do that.  Then there was a heated discussion on
-> >cygwin(-users) and Dj altered setup to preserve existing mount points.
-> 
-> Yes, I thought I remembered this, too.
+This is a multi-part message in MIME format...
 
-The discussion was about whether existing mount points should be
-preserved or not.  Setup has *never* honored them.
+------------=_1583532847-65438-60
+Content-length: 1195
+
+Hi!
+
+Thursday, 10 May, 2001 egor duda deo@logos-m.ru wrote:
+
+ed>   i've modified cygwin slightly to store symlink value in shortcut's
+ed> extended attribute, and to try to get it from there. my (rough)
+ed> benchmarking shows 30%-50% speedup in symlink resolution code.
+
+[...]
+
+ed> the patch is only proof-of-concept. of course, if will be cleaned up
+ed> (work only on ntfs, better error checking, etc.) if we decide we need
+ed> such functionality in cygwin. 
+
+here's ready-to-go patch.
+2001-05-10  Egor Duda  <deo@logos-m.ru>
+
+        * security.h (NTWriteEA): Change prototype.
+        * ntea.cc (NTReadEA): Don't check for global ntea setting, now
+        it's caller responsibility.
+        (NTWriteEA): Ditto.
+        * path.cc (symlink): If symlink is created on NTFS, store its
+        value in EA.
+        (symlink_info::check): Get symlink value from EA.
+        * path.h: Define SYMLINK_EA_NAME
+        * security.cc (get_file_attribute): Read attribute from EA only 
+        if 'ntea' is enabled.
+        (set_file_attribute): Ditto.
+
+Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
+symlink-in-ea-2.diff
+symlink-in-ea-2.ChangeLog
+force-systemroot-2.ChangeLog
+
+
+------------=_1583532847-65438-60
+Content-Type: text/plain; charset=us-ascii;
+ name="force-systemroot-2.ChangeLog"
+Content-Disposition: inline; filename="force-systemroot-2.ChangeLog"
+Content-Transfer-Encoding: base64
+Content-Length: 228
+
+MjAwMS0wNS0xMCAgRWdvciBEdWRhICA8ZGVvQGxvZ29zLW0ucnU+CgoJKiBl
+bnZpcm9uLmNjIChhcHBlbmRfdG9fd2luZW52KTogTmV3IGZ1bmN0aW9uLgoJ
+KHdpbmVudik6IEFsd2F5cyBhZGQgU1lTVEVNRFJJVkUgYW5kIFNZU1lFTVJP
+T1QgdG8gd2luMzItc3R5bGUKCWVudmlyb25tZW50Lgo=
+
+------------=_1583532847-65438-60
+Content-Type: text/plain; charset=us-ascii; name="symlink-in-ea-2.ChangeLog"
+Content-Disposition: inline; filename="symlink-in-ea-2.ChangeLog"
+Content-Transfer-Encoding: base64
+Content-Length: 655
+
+MjAwMS0wNS0xMCAgRWdvciBEdWRhICA8ZGVvQGxvZ29zLW0ucnU+CgoJKiBz
+ZWN1cml0eS5oIChOVFdyaXRlRUEpOiBDaGFuZ2UgcHJvdG90eXBlLgoJKiBu
+dGVhLmNjIChOVFJlYWRFQSk6IERvbid0IGNoZWNrIGZvciBnbG9iYWwgbnRl
+YSBzZXR0aW5nLCBub3cKCWl0J3MgY2FsbGVyIHJlc3BvbnNpYmlsaXR5LgoJ
+KE5UV3JpdGVFQSk6IERpdHRvLgoJKiBwYXRoLmNjIChzeW1saW5rKTogSWYg
+c3ltbGluayBpcyBjcmVhdGVkIG9uIE5URlMsIHN0b3JlIGl0cwoJdmFsdWUg
+aW4gRUEuCgkoc3ltbGlua19pbmZvOjpjaGVjayk6IEdldCBzeW1saW5rIHZh
+bHVlIGZyb20gRUEuCgkqIHBhdGguaDogRGVmaW5lIFNZTUxJTktfRUFfTkFN
+RQoJKiBzZWN1cml0eS5jYyAoZ2V0X2ZpbGVfYXR0cmlidXRlKTogUmVhZCBh
+dHRyaWJ1dGUgZnJvbSBFQSBvbmx5IAoJaWYgJ250ZWEnIGlzIGVuYWJsZWQu
+Cgkoc2V0X2ZpbGVfYXR0cmlidXRlKTogRGl0dG8uCg==
+
+------------=_1583532847-65438-60
+Content-Type: text/x-diff; charset=us-ascii; name="symlink-in-ea-2.diff"
+Content-Disposition: inline; filename="symlink-in-ea-2.diff"
+Content-Transfer-Encoding: base64
+Content-Length: 5629
+
+SW5kZXg6IG50ZWEuY2MKPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1MgZmls
+ZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vbnRlYS5jYyx2CnJldHJp
+ZXZpbmcgcmV2aXNpb24gMS4zCmRpZmYgLXUgLXAgLTIgLXIxLjMgbnRlYS5j
+YwotLS0gbnRlYS5jYwkyMDAwLzA5LzA4IDAyOjU2OjU0CTEuMworKysgbnRl
+YS5jYwkyMDAxLzA1LzEwIDE1OjI5OjE5CkBAIC04Niw4ICs4Niw0IEBAIGlu
+dCBfX3N0ZGNhbGwKIE5UUmVhZEVBIChjb25zdCBjaGFyICpmaWxlLCBjb25z
+dCBjaGFyICphdHRybmFtZSwgY2hhciAqYXR0cmJ1ZiwgaW50IGxlbikKIHsK
+LSAgICAvKiByZXR1cm4gaW1tZWRpYXRlbHkgaWYgTlRFQSB1c2FnZSBpcyB0
+dXJuZWQgb2ZmICovCi0gICAgaWYgKCEgYWxsb3dfbnRlYSkKLSAgICAgIHJl
+dHVybiBGQUxTRTsKLQogICAgIEhBTkRMRSBoRmlsZVNvdXJjZTsKICAgICBp
+bnQgZWFmb3VuZCA9IDA7CkBAIC0yNTUsMTAgKzI1MSw2IEBAIE5UUmVhZEVB
+UmF3IChIQU5ETEUgaEZpbGVTb3VyY2UsIGludCAqbGUKIAogQk9PTCBfX3N0
+ZGNhbGwKLU5UV3JpdGVFQSAoY29uc3QgY2hhciAqZmlsZSwgY29uc3QgY2hh
+ciAqYXR0cm5hbWUsIGNoYXIgKmJ1ZiwgaW50IGxlbikKK05UV3JpdGVFQSAo
+Y29uc3QgY2hhciAqZmlsZSwgY29uc3QgY2hhciAqYXR0cm5hbWUsIGNvbnN0
+IGNoYXIgKmJ1ZiwgaW50IGxlbikKIHsKLSAgLyogcmV0dXJuIGltbWVkaWF0
+ZWx5IGlmIE5URUEgdXNhZ2UgaXMgdHVybmVkIG9mZiAqLwotICBpZiAoISBh
+bGxvd19udGVhKQotICAgIHJldHVybiBUUlVFOwotCiAgIEhBTkRMRSBoRmls
+ZVNvdXJjZTsKICAgV0lOMzJfU1RSRUFNX0lEIFN0cmVhbUlkOwpJbmRleDog
+cGF0aC5jYwo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3Zz
+L3NyYy9zcmMvd2luc3VwL2N5Z3dpbi9wYXRoLmNjLHYKcmV0cmlldmluZyBy
+ZXZpc2lvbiAxLjEzNwpkaWZmIC11IC1wIC0yIC1yMS4xMzcgcGF0aC5jYwot
+LS0gcGF0aC5jYwkyMDAxLzA1LzA5IDE4OjU5OjEwCTEuMTM3CisrKyBwYXRo
+LmNjCTIwMDEvMDUvMTAgMTU6Mjk6MjAKQEAgLTI0MjEsNCArMjQyMSwyNCBA
+QCBzeW1saW5rIChjb25zdCBjaGFyICp0b3BhdGgsIGNvbnN0IGNoYXIgCiAJ
+CSAgICAmJiBXcml0ZUZpbGUgKGgsIHczMnRvcGF0aCwgd2luX2xlbiwgJndy
+aXR0ZW4sIE5VTEwpCiAJCSAgICAmJiB3cml0dGVuID09IHdpbl9sZW47CisJ
+ICBjaGFyIHJvb3QgW01BWF9QQVRIXTsKKwkgIGNoYXIgZnNuYW1lIFtNQVhf
+UEFUSF07CisJICBEV09SRCBmc2ZsYWdzOworCSAgc3RyY3B5IChyb290LCB3
+aW4zMl9wYXRoKTsKKwkgIGlmIChyb290ZGlyIChyb290KSB8fAorCSAgICAg
+IEdldEN1cnJlbnREaXJlY3RvcnkgKHNpemVvZiAocm9vdCksIHJvb3QpICYm
+IHJvb3RkaXIgKHJvb3QpKQorCSAgICB7CisJICAgICAgaWYgKCFHZXRWb2x1
+bWVJbmZvcm1hdGlvbiAocm9vdCwKKwkJCQkJIE5VTEwsIDAsCisJCQkJCSBO
+VUxMLCBOVUxMLAorCQkJCQkgJmZzZmxhZ3MsCisJCQkJCSBmc25hbWUsIHNp
+emVvZiAoZnNuYW1lKSkpCisJCWRlYnVnX3ByaW50ZiAoImVycm9yIGdldHRp
+bmcgZnMgdHlwZSBmb3IgJXM6ICVFIiwgcm9vdCk7IAorCSAgICAgIGVsc2Ug
+aWYgKHN0cm5jYXNlbWF0Y2ggKGZzbmFtZSwgIk5URlMiLCA0KSkKKwkJewor
+CQkgIGlmICghTlRXcml0ZUVBKHdpbjMyX3BhdGgsIFNZTUxJTktfRUFfTkFN
+RSwKKwkJCQkgdG9wYXRoLCBzdHJsZW4gKHRvcGF0aCkgKyAxKSkKKwkJICAg
+IGRlYnVnX3ByaW50ZiAoImVycm9yIHdyaXRpbmcgRUEiKTsKKwkJfQorCSAg
+ICB9CiAJfQogICAgICAgZWxzZQpAQCAtMjcwMyw0ICsyNzIzLDEyIEBAIHN5
+bWxpbmtfaW5mbzo6Y2hlY2sgKGNoYXIgKnBhdGgsIGNvbnN0IHMKICAgICAg
+IGlmICghc3ltX2NoZWNrKQogCWdvdG8gZmlsZV9ub3Rfc3ltbGluazsKKwor
+ICAgICAgaWYgKHN5bV9jaGVjayA+IDAgJiYKKyAgICAgICAgICAocmVzID0g
+TlRSZWFkRUEgKHN1ZmZpeC5wYXRoLCBTWU1MSU5LX0VBX05BTUUsIGNvbnRl
+bnRzLCBzaXplb2YgKGNvbnRlbnRzKSkgLSAxKSA+IDApCisJeworCSAgcGZs
+YWdzID0gUEFUSF9TWU1MSU5LOworCSAgZGVidWdfcHJpbnRmICgiZ290IHN5
+bWxpbmsgZnJvbSBlYTogJXMiLCBjb250ZW50cyk7CisJICBnb3RvIG91dDsK
+Kwl9CiAKICAgICAgIC8qIE9wZW4gdGhlIGZpbGUuICAqLwpJbmRleDogcGF0
+aC5oCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT0KUkNTIGZpbGU6IC9jdnMvc3Jj
+L3NyYy93aW5zdXAvY3lnd2luL3BhdGguaCx2CnJldHJpZXZpbmcgcmV2aXNp
+b24gMS4yNgpkaWZmIC11IC1wIC0yIC1yMS4yNiBwYXRoLmgKLS0tIHBhdGgu
+aAkyMDAxLzA0LzE3IDIzOjEyOjExCTEuMjYKKysrIHBhdGguaAkyMDAxLzA1
+LzEwIDE1OjI5OjIwCkBAIC0xMjksNCArMTI5LDYgQEAgY2xhc3MgcGF0aF9j
+b252CiAjZGVmaW5lIFNZTUxJTktfQ09PS0lFICIhPHN5bWxpbms+IgogCisj
+ZGVmaW5lIFNZTUxJTktfRUFfTkFNRSAiLkNZR1NZTUxJTksiCisKIC8qIFNv
+Y2tldCBtYXJrZXIgKi8KICNkZWZpbmUgU09DS0VUX0NPT0tJRSAgIiE8c29j
+a2V0ID4iCkluZGV4OiBzZWN1cml0eS5jYwo9PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09ClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL2N5Z3dpbi9zZWN1
+cml0eS5jYyx2CnJldHJpZXZpbmcgcmV2aXNpb24gMS40NgpkaWZmIC11IC1w
+IC0yIC1yMS40NiBzZWN1cml0eS5jYwotLS0gc2VjdXJpdHkuY2MJMjAwMS8w
+NC8zMCAyMToxOTo0MgkxLjQ2CisrKyBzZWN1cml0eS5jYwkyMDAxLzA1LzEw
+IDE1OjI5OjIwCkBAIC01NDUsNSArNTQ1LDggQEAgZ2V0X2ZpbGVfYXR0cmli
+dXRlIChpbnQgdXNlX250c2VjLCBjb25zdAogICAgIHJldHVybiAwOwogCi0g
+IHJlcyA9IE5UUmVhZEVBIChmaWxlLCAiLlVOSVhBVFRSIiwgKGNoYXIgKikg
+YXR0cmlidXRlLCBzaXplb2YgKCphdHRyaWJ1dGUpKTsKKyAgaWYgKGFsbG93
+X250ZWEpCisgICAgcmVzID0gTlRSZWFkRUEgKGZpbGUsICIuVU5JWEFUVFIi
+LCAoY2hhciAqKSBhdHRyaWJ1dGUsIHNpemVvZiAoKmF0dHJpYnV0ZSkpOwor
+ICBlbHNlCisgICAgcmVzID0gMDsKIAogICAvKiBzeW1saW5rcyBhcmUgZXZl
+cnl0aGluZyBmb3IgZXZlcnlvbmUhKi8KQEAgLTg2OSw1ICs4NzIsNSBAQCBz
+ZXRfZmlsZV9hdHRyaWJ1dGUgKGludCB1c2VfbnRzZWMsIGNvbnN0CiAgICAg
+YXR0cmlidXRlIHw9IFNfSVJXWFUgfCBTX0lSV1hHIHwgU19JUldYTzsKIAot
+ICBpZiAoIXVzZV9udHNlYyB8fCAhYWxsb3dfbnRzZWMpCisgIGlmIChhbGxv
+d19udGVhICYmICghdXNlX250c2VjIHx8ICFhbGxvd19udHNlYykpCiAgICAg
+ewogICAgICAgaWYgKCFOVFdyaXRlRUEgKGZpbGUsICIuVU5JWEFUVFIiLApJ
+bmRleDogc2VjdXJpdHkuaAo9PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBm
+aWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL2N5Z3dpbi9zZWN1cml0eS5oLHYK
+cmV0cmlldmluZyByZXZpc2lvbiAxLjcKZGlmZiAtdSAtcCAtMiAtcjEuNyBz
+ZWN1cml0eS5oCi0tLSBzZWN1cml0eS5oCTIwMDEvMDQvMzAgMjE6MTk6NDIJ
+MS43CisrKyBzZWN1cml0eS5oCTIwMDEvMDUvMTAgMTU6Mjk6MjAKQEAgLTEw
+MywzICsxMDMsMyBAQCBleHRlcm4gU0VDVVJJVFlfQVRUUklCVVRFUyAqX19z
+dGRjYWxsIHNlCiAKIGludCBfX3N0ZGNhbGwgTlRSZWFkRUEgKGNvbnN0IGNo
+YXIgKmZpbGUsIGNvbnN0IGNoYXIgKmF0dHJuYW1lLCBjaGFyICpidWYsIGlu
+dCBsZW4pOwotQk9PTCBfX3N0ZGNhbGwgTlRXcml0ZUVBIChjb25zdCBjaGFy
+ICpmaWxlLCBjb25zdCBjaGFyICphdHRybmFtZSwgY2hhciAqYnVmLCBpbnQg
+bGVuKTsKK0JPT0wgX19zdGRjYWxsIE5UV3JpdGVFQSAoY29uc3QgY2hhciAq
+ZmlsZSwgY29uc3QgY2hhciAqYXR0cm5hbWUsIGNvbnN0IGNoYXIgKmJ1Ziwg
+aW50IGxlbik7Cg==
+
+------------=_1583532847-65438-60--
