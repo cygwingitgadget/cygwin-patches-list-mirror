@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2478-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 18355 invoked by alias); 21 Jun 2002 02:47:34 -0000
+Return-Path: <cygwin-patches-return-2479-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 25114 invoked by alias); 21 Jun 2002 04:12:14 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,47 +7,80 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 18299 invoked from network); 21 Jun 2002 02:47:26 -0000
-Date: Thu, 20 Jun 2002 19:47:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
+Received: (qmail 25050 invoked from network); 21 Jun 2002 04:12:12 -0000
+Message-Id: <3.0.5.32.20020621000918.007f9dc0@mail.attbi.com>
+X-Sender: phumblet@mail.attbi.com
+Date: Thu, 20 Jun 2002 21:12:00 -0000
 To: cygwin-patches@cygwin.com
-Subject: Re: YACP
-Message-ID: <20020621024807.GA16786@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20020621003543.GG7913@redhat.com> <20020621005707.27244.qmail@web20004.mail.yahoo.com>
+From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
+Subject: uinfo.cc & environ.cc
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20020621005707.27244.qmail@web20004.mail.yahoo.com>
-User-Agent: Mutt/1.3.23.1i
-X-SW-Source: 2002-q2/txt/msg00461.txt.bz2
+Content-Type: text/plain; charset="us-ascii"
+X-SW-Source: 2002-q2/txt/msg00462.txt.bz2
 
-On Thu, Jun 20, 2002 at 05:57:07PM -0700, Joshua Daniel Franklin wrote:
->So is the UNC type coming back at some point? 
+Chris,
 
-No.  I meant the alternate way of specifying a file in Windows:
+just a few nits.
 
-"\\?\C:\myworld\private"
+Pierre
 
-http://msdn.microsoft.com/library/default.asp?url=/library/en-us/fileio/storage_7mn9.asp
+2002-06-20  Pierre Humblet <pierre.humblet@ieee.org>
 
->It would be fine with me to leave the '--type TYPE' syntax as an 
->alternative to --unix, --windows, --mixed, but having the --type mixed
->as the only way to get a forward-slash Windows path seemed counter-
->intuitive to me. Also --type dos to me should mean short-name as well.
->So should I put together another patch to do this as well?
+	* uinfo.cc (cygheap_user::ontherange): Use env_name for NetUserGetInfo.
+	(cygheap_user::env_logsrv): Verify env_domain is valid.
+	* environ.cc: Include child_info.h and keep spenvs[] sorted.
+	(environ_init): Check child_proc_info instead of myself->ppid_handle.
 
-Actually, I think that specifying the output via --type makes things a
-little more structured.  We can't go back now, though, because users
-would complain.  It looks like I should have added a '--type unix' if
-I was going to be consistent, though.
+--- uinfo.cc.orig       2002-06-20 21:29:52.000000000 -0400
++++ uinfo.cc    2002-06-20 23:58:52.000000000 -0400
+@@ -251,7 +251,7 @@
+              WCHAR wlogsrv[INTERNET_MAX_HOST_NAME_LENGTH + 3];
+              sys_mbstowcs (wlogsrv, env_logsrv (),
+                            sizeof (wlogsrv) / sizeof(*wlogsrv));
+-             sys_mbstowcs (wuser, name (), sizeof (wuser) / sizeof (*wuser));
++             sys_mbstowcs (wuser, env_name (), sizeof (wuser) / sizeof
+(*wuser));
+              if (!(ret = NetUserGetInfo (wlogsrv, wuser, 3,(LPBYTE *)&ui)))
+                {
+                  char *p;
+@@ -304,7 +304,7 @@
+   if (plogsrv)
+     return plogsrv;
+ 
+-  if (strcasematch (env_name (), "SYSTEM"))
++  if (!env_domain () || strcasematch (env_name (), "SYSTEM"))
+     return NULL;
+ 
+   char logsrv[INTERNET_MAX_HOST_NAME_LENGTH + 3];
 
-I dunno.  I don't feel really strongly about this, though.  If no one
-agrees then I don't mind changing it.
 
->And BTW, is the UNIXy default OK?
+--- environ.cc.orig     2002-06-20 21:37:52.000000000 -0400
++++ environ.cc  2002-06-20 23:11:00.000000000 -0400
+@@ -25,6 +25,7 @@
+ #include "cygheap.h"
+ #include "registry.h"
+ #include "environ.h"
++#include "child_info.h"
+ 
+ extern BOOL allow_daemon;
+ extern BOOL allow_glob;
+@@ -712,7 +713,7 @@
+       char *eq;
+       if ((eq = strchr (newp, '=')) == NULL)
+        eq = strchr (newp, '\0');
+-      if (!myself->ppid_handle)
++      if (!child_proc_info)
+        ucenv (newp, eq);
+       if (*newp == 'T' && strncmp (newp, "TERM=", 5) == 0)
+        sawTERM = 1;
+@@ -765,8 +766,8 @@
+ /* Keep this list in upper case and sorted */
+ static NO_COPY spenv spenvs[] =
+ {
+-  {NL ("HOMEPATH="), &cygheap_user::env_homepath},
+   {NL ("HOMEDRIVE="), &cygheap_user::env_homedrive},
++  {NL ("HOMEPATH="), &cygheap_user::env_homepath},
+   {NL ("LOGONSERVER="), &cygheap_user::env_logsrv},
+   {NL ("SYSTEMDRIVE="), NULL},
+   {NL ("SYSTEMROOT="), NULL},
 
-IMO, yes.  I'd like more opinions, though.
-
-cgf
