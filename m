@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3137-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 29454 invoked by alias); 7 Nov 2002 03:08:48 -0000
+Return-Path: <cygwin-patches-return-3138-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 9109 invoked by alias); 7 Nov 2002 09:12:21 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,26 +7,28 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 29436 invoked from network); 7 Nov 2002 03:08:48 -0000
-Date: Wed, 06 Nov 2002 19:08:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: utmp database manipulations patch
-Message-ID: <20021107031049.GA31332@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <00ba01c285e4$620b2350$0201a8c0@sos> <20021107022144.GB6144@redhat.com> <00c501c28606$05629df0$0201a8c0@sos> <00ca01c28608$beb21f40$0201a8c0@sos>
+Received: (qmail 9091 invoked from network); 7 Nov 2002 09:12:19 -0000
+Date: Thu, 07 Nov 2002 01:12:00 -0000
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
+To: Cygwin-Patches <cygwin-patches@cygwin.com>
+Subject: Re: export fseeko() and ftello() patch
+Message-ID: <20021107101213.I2180@cygbert.vinschen.de>
+Mail-Followup-To: Cygwin-Patches <cygwin-patches@cygwin.com>
+References: <20021107040756.GB3920@redhat.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <00ca01c28608$beb21f40$0201a8c0@sos>
-User-Agent: Mutt/1.5.1i
-X-SW-Source: 2002-q4/txt/msg00088.txt.bz2
+In-Reply-To: <20021107040756.GB3920@redhat.com>
+User-Agent: Mutt/1.3.22.1i
+X-SW-Source: 2002-q4/txt/msg00089.txt.bz2
 
-On Wed, Nov 06, 2002 at 09:52:41PM -0500, Sergey Okhapkin wrote:
->Looks like it's better to define UT_IDLEN as 4 to be compatible with linux
->and solaris...
+> The attached patch exports newlib's fseeko() and ftello().  Besides
 
-You can't do that easily, it would break binary compatibility.
+Applied, thanks. 
 
-cgf
+Note, though, that this isn't the ultimate solution.  In the long run we
+must write our own entry points for 32 bit as well as 64 bit off_t.  The
+problem is that newlib is still not changed to support both off_t types
+on the FILE-I/O function level.  Sigh.
+
+Corinna
