@@ -1,46 +1,25 @@
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: Avoid checking a magic number of a directory.
-Date: Mon, 02 Apr 2001 07:35:00 -0000
-Message-id: <20010402163532.K956@cygbert.vinschen.de>
-References: <s1sk853h7fy.fsf@jaist.ac.jp>
-X-SW-Source: 2001-q2/msg00002.html
+From: Jason Tishler <Jason.Tishler@dothill.com>
+To: Cygwin-Patches <cygwin-patches@sources.redhat.com>
+Subject: getsockopt() SO_ERROR optval mapping
+Date: Mon, 02 Apr 2001 12:08:00 -0000
+Message-id: <20010402150827.G798@dothill.com>
+X-SW-Source: 2001-q2/msg00003.html
 
-On Mon, Apr 02, 2001 at 08:22:57PM +0900, Kazuhiro Fujieda wrote:
-> The following patch can speed up stat() a bit.
-> 
-> ChangeLog:
-> 2001-04-02  Kazuhiro Fujieda  <fujieda@jaist.ac.jp>
-> 
-> 	* fhandler.cc (fhandler_disk_file::open): Avoid checking a magic
-> 	number of a directory.
-> 
-> Index: fhandler.cc
-> ===================================================================
-> RCS file: /cvs/src/src/winsup/cygwin/fhandler.cc,v
-> retrieving revision 1.55
-> diff -u -p -r1.55 fhandler.cc
-> --- fhandler.cc	2001/03/13 13:07:15	1.55
-> +++ fhandler.cc	2001/04/02 10:05:19
-> @@ -1262,6 +1262,7 @@ fhandler_disk_file::open (path_conv& rea
->    extern BOOL allow_ntea;
->  
->    if (real_path.isdisk ()
-> +      && !(real_path.file_attributes () & FILE_ATTRIBUTE_DIRECTORY)
->        && (real_path.exec_state () == dont_know_if_executable)
->        && !allow_ntea && (!allow_ntsec || !real_path.has_acls ()))
->      {
-> 
-> ____
->   | AIST      Kazuhiro Fujieda <fujieda@jaist.ac.jp>
->   | HOKURIKU  School of Information Science
-> o_/ 1990      Japan Advanced Institute of Science and Technology
+This patch maps getsockopt() SO_ERROR optval's from their Winsock versions to
+their corresponding errno versions.  This prevents strerror(optval) from
+generating cryptic messages like:
 
-Thanks, applied,
+    error 10061
 
-Corinna
+instead of:
+
+    Connection refused
+
+Jason
 
 -- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+Jason Tishler
+Director, Software Engineering       Phone: +1 (732) 264-8770 x235
+Dot Hill Systems Corp.               Fax:   +1 (732) 264-8798
+82 Bethany Road, Suite 7             Email: Jason.Tishler@dothill.com
+Hazlet, NJ 07730 USA                 WWW:   http://www.dothill.com
