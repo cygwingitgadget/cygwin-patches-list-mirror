@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4101-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 21878 invoked by alias); 17 Aug 2003 17:18:38 -0000
+Return-Path: <cygwin-patches-return-4102-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 23728 invoked by alias); 17 Aug 2003 17:26:28 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,43 +7,28 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 21869 invoked from network); 17 Aug 2003 17:18:37 -0000
-Date: Sun, 17 Aug 2003 17:18:00 -0000
+Received: (qmail 23718 invoked from network); 17 Aug 2003 17:26:28 -0000
+Date: Sun, 17 Aug 2003 17:26:00 -0000
 From: Corinna Vinschen <cygwin-patches@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: Questions and a RFC [was Re: Assignment from Nicholas Wourms arrived]
-Message-ID: <20030817171835.GK3101@cygbert.vinschen.de>
+Subject: Re: [PATCH] Package content search and listing functionality for cygcheck
+Message-ID: <20030817172626.GL3101@cygbert.vinschen.de>
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20030812191411.GH17051@cygbert.vinschen.de> <3F39704F.6030001@netscape.net> <20030813113509.GA24855@cygbert.vinschen.de> <3F3A5CE4.10004@netscape.net> <20030813170416.GG3101@cygbert.vinschen.de> <20030817164304.GB9059@redhat.com>
+References: <16189.45520.758000.679252@gargle.gargle.HOWL> <Pine.GSO.4.44.0308160842240.15497-100000@slinky.cs.nyu.edu> <16190.27360.563000.784032@gargle.gargle.HOWL>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20030817164304.GB9059@redhat.com>
+In-Reply-To: <16190.27360.563000.784032@gargle.gargle.HOWL>
 User-Agent: Mutt/1.4.1i
-X-SW-Source: 2003-q3/txt/msg00117.txt.bz2
+X-SW-Source: 2003-q3/txt/msg00118.txt.bz2
 
-On Sun, Aug 17, 2003 at 12:43:04PM -0400, Christopher Faylor wrote:
-> On Wed, Aug 13, 2003 at 07:04:16PM +0200, Corinna Vinschen wrote:
-> >>For future contributions, what is the official policy on doing it now?
-> >
-> >Basically don't add an underscore alias.  Create an underscore alias if
-> >the function is used by newlib.  Or, create an underscore alias if it's
-> >e.g.  available in Linux or BSD, which might happen (mempcpy comes to
-> >mind).
-> 
-> I don't think this is right.  The underscore aliases were put there,
-> IIRC, in a misplaced desire to emulate MSFT's version of such things as
-> _open, _close, etc.  There is no reason to add underscores to any new
-> functions.  The use of functions with leading underscores should be
-> considred deprecated.
+On Sat, Aug 16, 2003 at 10:33:20AM -0700, David Rothenberger wrote:
+> 	* dump_setup.cc (check_package_files): Strip leading / and ./ from
+> 	package file names.
 
-That's what I was trying to explain.  It's just that sometimes there are
-functions additionally defined with leading underscores even under Linux,
-see mempcpy() and __mempcpy() and that's the only situation, IMHO, in
-which both would be ok for Cygwin as well.  It was a bumpy example,
-probably.
+Applied.
 
-
+Thanks,
 Corinna
 
 -- 
