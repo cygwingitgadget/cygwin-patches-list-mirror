@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4515-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 331 invoked by alias); 12 Jan 2004 10:24:14 -0000
+Return-Path: <cygwin-patches-return-4516-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 10417 invoked by alias); 16 Jan 2004 00:48:33 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,150 +7,27 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 320 invoked from network); 12 Jan 2004 10:24:12 -0000
-X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
-Date: Mon, 12 Jan 2004 10:24:00 -0000
-From: Thomas Pfaff <tpfaff@gmx.net>
-To: cygwin-patches@cygwin.com
-Subject: [PATCH]: Thread safe stdio
-Message-ID: <Pine.WNT.4.44.0401121110300.1304-200000@algeria.intern.net>
-X-X-Sender: pfaff@antarctica.intern.net
+Received: (qmail 10401 invoked from network); 16 Jan 2004 00:48:32 -0000
+Message-ID: <4007349B.3050009@att.net>
+Date: Fri, 16 Jan 2004 00:48:00 -0000
+From: David Fritz <zeroxdf@att.net>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.6b) Gecko/20031205 Thunderbird/0.4
 MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="1736112-8253-1073903029=:1304"
-X-SW-Source: 2004-q1/txt/msg00005.txt.bz2
+To:  cygwin-patches@cygwin.com
+Subject: Re: enable argument permutation by default for getopt_long() and
+ not getopt() [PATCH] (was Re: getopt() musings)
+References: <3FDDA282.3000600@att.net>
+In-Reply-To: <3FDDA282.3000600@att.net>
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2004-q1/txt/msg00006.txt.bz2
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
+It's been a month and so far there have been no replies. On the chance
+that it was overlooked, I offer this humble...
 
---1736112-8253-1073903029=:1304
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-Content-length: 760
+PING!
 
-This patch adds support for thread safe stdio.
+Any feedback would be appreciated.
 
-It will add 3 new header files three which supersedes newlib ones.
-
-One of these (_types.h) is just a copy of newlibs _types.h with a
-modified _lock_t. It is not strictly necessary since sizeof(int)
-== sizeof(void*).
-
-This patch makes only sense when my patch for newlib will be accepted.
-
-Regards,
-
-Thomas
-
-2004-01-12  Thomas Pfaff  <tpfaff@gmx.net>
-
-	* include/sys/_types.h: New file.
-	* include/sys/lock.h: Ditto.
-	* include/sys/stdio.h: Ditto.
-	* thread.cc: Include sys/lock.h
-	(__cygwin_lock_init_recursive): New function.
-	(__cygwin_lock_fini_recursive): Ditto.
-	(__cygwin_lock_lock_recursive): Ditto.
-	(__cygwin_lock_unlock_recursive): Ditto.
-	(__cygwin_flockfile): Ditto.
-	(__cygwin_funlockfile): Ditto.
-
---1736112-8253-1073903029=:1304
-Content-Type: TEXT/plain; name="cygwin.patch"
-Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.WNT.4.44.0401121123490.1304@algeria.intern.net>
-Content-Description: 
-Content-Disposition: attachment; filename="cygwin.patch"
-Content-length: 5482
-
-ZGlmZiAtdXJwTiBjeWd3aW4ub3JnL2luY2x1ZGUvc3lzL190eXBlcy5oIGN5
-Z3dpbi9pbmNsdWRlL3N5cy9fdHlwZXMuaAotLS0gY3lnd2luLm9yZy9pbmNs
-dWRlL3N5cy9fdHlwZXMuaAkxOTcwLTAxLTAxIDAxOjAwOjAwLjAwMDAwMDAw
-MCArMDEwMAorKysgY3lnd2luL2luY2x1ZGUvc3lzL190eXBlcy5oCTIwMDQt
-MDEtMTIgMDg6MDI6MDEuNzc1MDQxNjAwICswMTAwCkBAIC0wLDAgKzEsMzcg
-QEAKKy8qIEFOU0kgQyBuYW1lc3BhY2UgY2xlYW4gdXRpbGl0eSB0eXBlZGVm
-cyAqLworCisvKiBUaGlzIGZpbGUgZGVmaW5lcyB2YXJpb3VzIHR5cGVkZWZz
-IG5lZWRlZCBieSB0aGUgc3lzdGVtIGNhbGxzIHRoYXQgc3VwcG9ydAorICAg
-dGhlIEMgbGlicmFyeS4gIEJhc2ljYWxseSwgdGhleSdyZSBqdXN0IHRoZSBQ
-T1NJWCB2ZXJzaW9ucyB3aXRoIGFuICdfJworICAgcHJlcGVuZGVkLiAgVGhp
-cyBmaWxlIGxpdmVzIGluIHRoZSBgc3lzJyBkaXJlY3Rvcnkgc28gdGFyZ2V0
-cyBjYW4gcHJvdmlkZQorICAgdGhlaXIgb3duIGlmIGRlc2lyZWQgKG9yIHRo
-ZXkgY2FuIHB1dCB0YXJnZXQgZGVwZW5kYW50IGNvbmRpdGlvbmFscyBoZXJl
-KS4KKyovCisKKyNpZm5kZWYJX1NZU19fVFlQRVNfSAorI2RlZmluZSBfU1lT
-X19UWVBFU19ICisKK3R5cGVkZWYgbG9uZyBfb2ZmX3Q7CitfX2V4dGVuc2lv
-bl9fIHR5cGVkZWYgbG9uZyBsb25nIF9vZmY2NF90OworCisjaWYgZGVmaW5l
-ZChfX0lOVF9NQVhfXykgJiYgX19JTlRfTUFYX18gPT0gMjE0NzQ4MzY0Nwor
-dHlwZWRlZiBpbnQgX3NzaXplX3Q7CisjZWxzZQordHlwZWRlZiBsb25nIF9z
-c2l6ZV90OworI2VuZGlmCisKKyNkZWZpbmUgX19uZWVkX3dpbnRfdAorI2lu
-Y2x1ZGUgPHN0ZGRlZi5oPgorCisvKiBDb252ZXJzaW9uIHN0YXRlIGluZm9y
-bWF0aW9uLiAgKi8KK3R5cGVkZWYgc3RydWN0Cit7CisgIGludCBfX2NvdW50
-OworICB1bmlvbgorICB7CisgICAgd2ludF90IF9fd2NoOworICAgIHVuc2ln
-bmVkIGNoYXIgX193Y2hiWzRdOworICB9IF9fdmFsdWU7CQkvKiBWYWx1ZSBz
-byBmYXIuICAqLworfSBfbWJzdGF0ZV90OworCit0eXBlZGVmIHZvaWQgKl9m
-bG9ja190OworCisjZW5kaWYJLyogX1NZU19fVFlQRVNfSCAqLwpkaWZmIC11
-cnBOIGN5Z3dpbi5vcmcvaW5jbHVkZS9zeXMvbG9jay5oIGN5Z3dpbi9pbmNs
-dWRlL3N5cy9sb2NrLmgKLS0tIGN5Z3dpbi5vcmcvaW5jbHVkZS9zeXMvbG9j
-ay5oCTE5NzAtMDEtMDEgMDE6MDA6MDAuMDAwMDAwMDAwICswMTAwCisrKyBj
-eWd3aW4vaW5jbHVkZS9zeXMvbG9jay5oCTIwMDQtMDEtMTIgMDg6MTE6NTAu
-MDUwOTQwODAwICswMTAwCkBAIC0wLDAgKzEsMjEgQEAKKy8qIHN5cy9sb2Nr
-LmgKKworICAgQ29weXJpZ2h0IDIwMDQgUmVkIEhhdCwgSW5jLgorCitUaGlz
-IGZpbGUgaXMgcGFydCBvZiBDeWd3aW4uCisKK1RoaXMgc29mdHdhcmUgaXMg
-YSBjb3B5cmlnaHRlZCB3b3JrIGxpY2Vuc2VkIHVuZGVyIHRoZSB0ZXJtcyBv
-ZiB0aGUKK0N5Z3dpbiBsaWNlbnNlLiAgUGxlYXNlIGNvbnN1bHQgdGhlIGZp
-bGUgIkNZR1dJTl9MSUNFTlNFIiBmb3IKK2RldGFpbHMuICovCisKKyNpZm5k
-ZWYgX1NZU19MT0NLX0hfCisjZGVmaW5lIF9TWVNfTE9DS19IXworCit0eXBl
-ZGVmIHZvaWQgKl9MT0NLX1JFQ1VSU0lWRV9UOworCisjZGVmaW5lIF9fbG9j
-a19pbml0X3JlY3Vyc2l2ZShfX2xvY2spIF9fY3lnd2luX2xvY2tfaW5pdF9y
-ZWN1cnNpdmUoJl9fbG9jaykKKyNkZWZpbmUgX19sb2NrX2FjcXVpcmVfcmVj
-dXJzaXZlKF9fbG9jaykgX19jeWd3aW5fbG9ja19sb2NrX3JlY3Vyc2l2ZSgm
-X19sb2NrKQorI2RlZmluZSBfX2xvY2tfcmVsZWFzZV9yZWN1cnNpdmUoX19s
-b2NrKSBfX2N5Z3dpbl9sb2NrX3VubG9ja19yZWN1cnNpdmUoJl9fbG9jaykK
-KyNkZWZpbmUgX19sb2NrX2Nsb3NlX3JlY3Vyc2l2ZShfX2xvY2spIF9fY3ln
-d2luX2xvY2tfZmluaV9yZWN1cnNpdmUoJl9fbG9jaykKKworI2VuZGlmCmRp
-ZmYgLXVycE4gY3lnd2luLm9yZy9pbmNsdWRlL3N5cy9zdGRpby5oIGN5Z3dp
-bi9pbmNsdWRlL3N5cy9zdGRpby5oCi0tLSBjeWd3aW4ub3JnL2luY2x1ZGUv
-c3lzL3N0ZGlvLmgJMTk3MC0wMS0wMSAwMTowMDowMC4wMDAwMDAwMDAgKzAx
-MDAKKysrIGN5Z3dpbi9pbmNsdWRlL3N5cy9zdGRpby5oCTIwMDQtMDEtMDkg
-MTU6MzQ6MTYuMjQ1Nzg1NjAwICswMTAwCkBAIC0wLDAgKzEsMjMgQEAKKy8q
-IHN5cy9zdGRpby5oCisKKyAgIENvcHlyaWdodCAyMDA0IFJlZCBIYXQsIElu
-Yy4KKworVGhpcyBmaWxlIGlzIHBhcnQgb2YgQ3lnd2luLgorCitUaGlzIHNv
-ZnR3YXJlIGlzIGEgY29weXJpZ2h0ZWQgd29yayBsaWNlbnNlZCB1bmRlciB0
-aGUgdGVybXMgb2YgdGhlCitDeWd3aW4gbGljZW5zZS4gIFBsZWFzZSBjb25z
-dWx0IHRoZSBmaWxlICJDWUdXSU5fTElDRU5TRSIgZm9yCitkZXRhaWxzLiAq
-LworCisjaWZuZGVmIF9TWVNfU1RESU9fSF8KKyNkZWZpbmUgX1NZU19TVERJ
-T19IXworCisjaWYgIWRlZmluZWQoX19TSU5HTEVfVEhSRUFEX18pCisjICBp
-ZiAhZGVmaW5lZChfZmxvY2tmaWxlKQorIyAgICBkZWZpbmUgX2Zsb2NrZmls
-ZShmcCkgX19jeWd3aW5fZmxvY2tmaWxlKGZwKQorIyAgZW5kaWYKKyMgIGlm
-ICFkZWZpbmVkKF9mdW5sb2NrZmlsZSkKKyMgICAgZGVmaW5lIF9mdW5sb2Nr
-ZmlsZShmcCkgX19jeWd3aW5fZnVubG9ja2ZpbGUoZnApCisjICBlbmRpZgor
-I2VuZGlmCisgCisjZW5kaWYKZGlmZiAtdXJwTiBjeWd3aW4ub3JnL3RocmVh
-ZC5jYyBjeWd3aW4vdGhyZWFkLmNjCi0tLSBjeWd3aW4ub3JnL3RocmVhZC5j
-YwkyMDAzLTEyLTIzIDE3OjI3OjUzLjAwMDAwMDAwMCArMDEwMAorKysgY3ln
-d2luL3RocmVhZC5jYwkyMDA0LTAxLTEyIDEwOjM4OjAzLjUwMTg3MzYwMCAr
-MDEwMApAQCAtNDQsNiArNDQsNyBAQCBkZXRhaWxzLiAqLwogI2luY2x1ZGUg
-PHN5cy90aW1lYi5oPgogI2luY2x1ZGUgPGV4Y2VwdGlvbnMuaD4KICNpbmNs
-dWRlIDxzeXMvZmNudGwuaD4KKyNpbmNsdWRlIDxzeXMvbG9jay5oPgogCiBl
-eHRlcm4gaW50IHRocmVhZHNhZmU7CiAKQEAgLTU0LDYgKzU1LDQzIEBAIF9f
-Z2V0cmVlbnQgKCkKICAgcmV0dXJuICZfbXlfdGxzLmxvY2FsX2NsaWI7CiB9
-CiAKK2V4dGVybiAiQyIgdm9pZAorX19jeWd3aW5fbG9ja19pbml0X3JlY3Vy
-c2l2ZSAoX0xPQ0tfUkVDVVJTSVZFX1QgKmxvY2spCit7CisgIGlmICghcHRo
-cmVhZF9tdXRleF9pbml0ICgocHRocmVhZF9tdXRleF90KikgbG9jaywgTlVM
-TCkpCisgICAgKCoocHRocmVhZF9tdXRleF90Kilsb2NrKS0+dHlwZSA9IFBU
-SFJFQURfTVVURVhfUkVDVVJTSVZFOworfQorCitleHRlcm4gIkMiIHZvaWQK
-K19fY3lnd2luX2xvY2tfZmluaV9yZWN1cnNpdmUgKF9MT0NLX1JFQ1VSU0lW
-RV9UICpsb2NrKQoreworICBwdGhyZWFkX211dGV4X2Rlc3Ryb3kgKChwdGhy
-ZWFkX211dGV4X3QqKSBsb2NrKTsKK30KKworZXh0ZXJuICJDIiB2b2lkCitf
-X2N5Z3dpbl9sb2NrX2xvY2tfcmVjdXJzaXZlIChfTE9DS19SRUNVUlNJVkVf
-VCAqbG9jaykKK3sKKyAgcHRocmVhZF9tdXRleF9sb2NrICgocHRocmVhZF9t
-dXRleF90KikgbG9jayk7Cit9CisKK2V4dGVybiAiQyIgdm9pZAorX19jeWd3
-aW5fbG9ja191bmxvY2tfcmVjdXJzaXZlIChfTE9DS19SRUNVUlNJVkVfVCAq
-bG9jaykKK3sKKyAgcHRocmVhZF9tdXRleF91bmxvY2sgKChwdGhyZWFkX211
-dGV4X3QqKSBsb2NrKTsKK30KKyAKK2V4dGVybiAiQyIgdm9pZAorX19jeWd3
-aW5fZmxvY2tmaWxlIChGSUxFICpzdHJlYW0pCit7CisgIF9fY3lnd2luX2xv
-Y2tfbG9ja19yZWN1cnNpdmUgKChfTE9DS19SRUNVUlNJVkVfVCAqKSZzdHJl
-YW0tPl9sb2NrKTsKK30KKyAKK2V4dGVybiAiQyIgdm9pZAorX19jeWd3aW5f
-ZnVubG9ja2ZpbGUgKEZJTEUgKnN0cmVhbSkKK3sKKyAgX19jeWd3aW5fbG9j
-a191bmxvY2tfcmVjdXJzaXZlICgoX0xPQ0tfUkVDVVJTSVZFX1QgKikmc3Ry
-ZWFtLT5fbG9jayk7Cit9CisgCiBpbmxpbmUgTFBDUklUSUNBTF9TRUNUSU9O
-CiBSZXNvdXJjZUxvY2tzOjpMb2NrIChpbnQgX3Jlc2lkKQogewo=
-
---1736112-8253-1073903029=:1304--
+Cheers,
+David Fritz
