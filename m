@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1544-listarch-cygwin-patches=sourceware.cygnus.com@sources.redhat.com>
-Received: (qmail 32479 invoked by alias); 28 Nov 2001 00:54:18 -0000
+Return-Path: <cygwin-patches-return-1545-listarch-cygwin-patches=sourceware.cygnus.com@sources.redhat.com>
+Received: (qmail 16013 invoked by alias); 28 Nov 2001 01:19:01 -0000
 Mailing-List: contact cygwin-patches-help@sourceware.cygnus.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@sources.redhat.com>
@@ -7,35 +7,45 @@ List-Post: <mailto:cygwin-patches@sources.redhat.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@sources.redhat.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@sources.redhat.com
-Received: (qmail 32465 invoked from network); 28 Nov 2001 00:54:17 -0000
-Date: Fri, 26 Oct 2001 07:50:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] setup.exe: Stop NetIO_HTTP from treating entire stream as a  header
-Message-ID: <20011128005414.GA7118@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20011127230925.GA5830@redhat.com> <000001c1779c$e1fe2fa0$2101a8c0@NOMAD> <20011127235226.GA6537@redhat.com> <1006906033.2048.23.camel@lifelesswks> <20011128002122.GA6919@redhat.com> <1006907495.2048.25.camel@lifelesswks>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1006907495.2048.25.camel@lifelesswks>
-User-Agent: Mutt/1.3.23.1i
-X-SW-Source: 2001-q4/txt/msg00076.txt.bz2
+Received: (qmail 15994 invoked from network); 28 Nov 2001 01:19:00 -0000
+Reply-To: <nhv@cape.com>
+From: "Norman Vine" <nhv@cape.com>
+To: <cygwin-patches@cygwin.com>
+Subject: RE: [PATCH] setup.exe: Stop NetIO_HTTP from treating entire stream as a  header
+Date: Fri, 26 Oct 2001 07:57:00 -0000
+Message-ID: <004801c177ab$13c9f4c0$a300a8c0@nhv>
+MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3 (Normal)
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook 8.5, Build 4.71.2232.26
+In-Reply-To: <20011127235426.GB6537@redhat.com>
+X-MimeOLE: Produced By Microsoft MimeOLE V5.50.4522.1200
+Importance: Normal
+X-SW-Source: 2001-q4/txt/msg00077.txt.bz2
 
-On Wed, Nov 28, 2001 at 11:31:35AM +1100, Robert Collins wrote:
->What was your point? That in C++ one should write all equality
->comparisons as foo == or foo != zerovaluedvariableofthesametype for
->clarity?
+Christopher Faylor writes:
+>
+>On Wed, Nov 28, 2001 at 10:42:33AM +1100, Robert Collins wrote:
+>>On Wed, 2001-11-28 at 10:09, Christopher Faylor wrote:
+>>> References?  A simple google search for 'NULL C++ deprecated' didn't
+>>> unearth this information.
+>>
+>>Deprecated may have been too strong a word. Anyway, references:
+>>
+>>The C++ annotations - http://www.icce.rug.nl/documents/cpp.shtml 
+>>Specifically...
+>>http://www.icce.rug.nl/documents/cplusplus/cplusplus02.html#an78
+>
+>Thanks for the URL.  This looks like something to bookmark.
+>
 
-My point was that is the way I do it.  I obviously do it that way
-because I think it is the best way to do things.
+FWIW
+I believe that Standard C requires NULL to be defined in <stddef.h>
+http://www.ccs.ucsd.edu/c/stddef.html/#NULL
 
-Although I disagree with using 0 when testing a pointer, I wouldn't
-venture to dictate this style in setup.exe.
+Cheers
 
-And, as always, I'm sorry that I ventured into a discussion about
-coding style.  I'll try not to let that happen again, unless it
-is to point out a clear violation of GNU coding standards.
-
-cgf
+Norman
