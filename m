@@ -1,95 +1,268 @@
 From: "Robert Collins" <robert.collins@itdomain.com.au>
 To: <cygwin-patches@cygwin.com>
-Cc: <newlib@sources.redhat.com>
-Subject: Re: cygwin/newlib types patchs
-Date: Wed, 21 Mar 2001 14:42:00 -0000
-Message-id: <029301c0b258$06fb42d0$0200a8c0@lifelesswks>
-References: <008101c0b1e6$d2b92f80$0200a8c0@lifelesswks> <20010321090559.F3149@redhat.com> <20010321091547.I3149@redhat.com> <000b01c0b24c$43e45530$0200a8c0@lifelesswks> <20010321170610.C9775@redhat.com> <026301c0b255$8982d130$0200a8c0@lifelesswks> <20010321173020.F9775@redhat.com>
-X-SW-Source: 2001-q1/msg00232.html
+Subject: /dev/clipboard update
+Date: Thu, 22 Mar 2001 02:58:00 -0000
+Message-id: <002c01c0b2be$dbdbcf40$0200a8c0@lifelesswks>
+X-SW-Source: 2001-q1/msg00233.html
+Content-type: multipart/mixed; boundary="----------=_1583532846-65438-30"
 
-Hi,
-    Chris Faylor has asked to bring a discussion we've been having
-cygwin-developers to the newlib list. The topic it pthread type
-definitions && pthread defines.
+This is a multi-part message in MIME format...
 
-I've include a couple of extracts below, but the short summary and
-history is
-I'm attempting to extend the current cygwin pthreads support, going from
-specifications at www.opengroup.org. As part of that work I wanted to
-move the cygwin pthread*_t type definitions to sys/types.h which the
-standard says is appropriate.
+------------=_1583532846-65438-30
+Content-length: 998
 
-When I did that I noticed that
-a) (minor) newlib has pthread DEFINES in sys/types - the specs I'm
-reading suggest they should be in pthreads.h and
-b) (major) new has typedef'd the pthread*_t types as structs, not
-pointers. IMO having theortically opaque types defined as structs is
-dangerous - both because you cannot extend the capabilities in the
-future without breaking the ABI and because it encourages userland
-programs to alter the contents directly rather than via the API.
+here's a patch for /dev/clipboard that
+* allows sequential reads (the existing code only allowed a single
+read() ).
+* allows writes (sequential only.. I haven't thought thru the logic for
+the boundary cases of random writes).
+* allows binary data (ie it's 8 bit clean). A text version is exported
+for windows, to the first \0.
 
-It should be safe from an ABI point of view to convert from structs to
-void* pointers, as long as dependent system libraries are able to use a
-different typedef at compile time (in cygwin I have a #ifndef
-__INSIDE_CYGWIN__ \ userland types \#else \system types\#endif). However
-if any user programs have 'peeked' inside the structures, they will need
-to be rebuilt when their system library gets updated..
+sample use:
+administrator@LIFELESSWKS /usr/src/src/winsup/cygwin
+$ cp ~/fport.exe  /dev/clipboard
+
+administrator@LIFELESSWKS /usr/src/src/winsup/cygwin
+$ cp /dev/clipboard ./t.t
+
+administrator@LIFELESSWKS /usr/src/src/winsup/cygwin
+$ diff t.t ~/fport.exe
 
 
-Rob
+(Use the attached changelog Chris - it has the tabs intact).
+Thursday Mar 22 2001  Robert Collins <rbtcollins@hotmail.com>
+
+ * fhandler.h: Extend fhandler_dev_clipboard to support writing.
+ * fhandler_clipboard.cc: (fhandler_dev_clipboard) Support sequential
+reads and
+   sequential writes. Support for binary data via a native clipboard
+format.
+ * Makefile.in: Link against user32 for the clipboard functions.
 
 
-On Thu, Mar 22, 2001 at 08:16:57AM +1100, Robert Collins wrote:
->Well we can't turn on _POSIX_THREADS. And I don't think we should...
->a) I've read enough of the spec now to say fairly confidently that
->cygwin will not be conformant for a very long time. (Setting the stack
->address, setting a guard buffer for the stack...). So turning on
->_POSIX_THREADS will be misleading. Autoconf feature tests find all the
->functions quite well.
->b) the newlib _POSIX_THREADS types are broken IMO. They are reasonable
->structures and so forth but for userland includes they should be opaque
->to the user, and not a struct but rather a struct pointer to allow
->behind the scenes changes without breaking the ABI. (better yet, a void
->* for real opaqueness).
->c) the newlib includes have things in weird places- the pthreads
->#defines should be in pthreads.h not sys/types.
 
-Ok.  I didn't know this.  I wonder how much should be handled by fixing
-newlib, though?  If there are changes that make things more conformant
-then they should go in newlib.  I am sure that the newlib maintainers
-would like to fix things if they're out of whack.
+------------=_1583532846-65438-30
+Content-Type: text/plain; charset=us-ascii; name="clipboard.changelog"
+Content-Disposition: inline; filename="clipboard.changelog"
+Content-Transfer-Encoding: base64
+Content-Length: 476
 
-cgf
+VGh1cnNkYXkgTWFyIDIyIDIwMDEgIFJvYmVydCBDb2xsaW5zIDxyYnRjb2xs
+aW5zQGhvdG1haWwuY29tPgoKCSogZmhhbmRsZXIuaDogRXh0ZW5kIGZoYW5k
+bGVyX2Rldl9jbGlwYm9hcmQgdG8gc3VwcG9ydCB3cml0aW5nLgoJKiBmaGFu
+ZGxlcl9jbGlwYm9hcmQuY2M6IChmaGFuZGxlcl9kZXZfY2xpcGJvYXJkKSBT
+dXBwb3J0IHNlcXVlbnRpYWwgcmVhZHMgYW5kCgkgIHNlcXVlbnRpYWwgd3Jp
+dGVzLiBTdXBwb3J0IGZvciBiaW5hcnkgZGF0YSB2aWEgYSBuYXRpdmUgY2xp
+cGJvYXJkIGZvcm1hdC4KCSogTWFrZWZpbGUuaW46IExpbmsgYWdhaW5zdCB1
+c2VyMzIgZm9yIHRoZSBjbGlwYm9hcmQgZnVuY3Rpb25zLgoK
 
------ Original Message -----
-From: "Christopher Faylor" <cgf@redhat.com>
-To: <cygwin-patches@cygwin.com>
-Sent: Thursday, March 22, 2001 9:30 AM
-Subject: Re: cygwin/newlib types patchs
+------------=_1583532846-65438-30
+Content-Type: text/x-diff; charset=us-ascii; name="clipboard.patch"
+Content-Disposition: inline; filename="clipboard.patch"
+Content-Transfer-Encoding: base64
+Content-Length: 12213
 
+SW5kZXg6IE1ha2VmaWxlLmluCj09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KUkNT
+IGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvY3lnd2luL01ha2VmaWxlLmlu
+LHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjUyCmRpZmYgLXUgLXAgLXIxLjUy
+IE1ha2VmaWxlLmluCi0tLSBNYWtlZmlsZS5pbgkyMDAxLzAzLzIxIDAyOjE3
+OjU3CTEuNTIKKysrIE1ha2VmaWxlLmluCTIwMDEvMDMvMjIgMTA6NDQ6MTEK
+QEAgLTExMSw3ICsxMTEsNyBAQCBFWFRSQV9ETExfT0ZJTEVTOj0ke2FkZHN1
+ZmZpeCAubywke2Jhc2VuCiAKIEVYVFJBX09GSUxFUz0kKGJ1cGRpcjEpL2xp
+YmliZXJ0eS9yYW5kb20ubyAkKGJ1cGRpcjEpL2xpYmliZXJ0eS9zdHJzaWdu
+YWwubwogCi1ETExfSU1QT1JUUzo9JCh3MzJhcGlfbGliKS9saWJrZXJuZWwz
+Mi5hCitETExfSU1QT1JUUzo9JCh3MzJhcGlfbGliKS9saWJrZXJuZWwzMi5h
+ICQodzMyYXBpX2xpYikvbGlidXNlcjMyLmEKIAogRExMX09GSUxFUzo9YXNz
+ZXJ0Lm8gYXV0b2xvYWQubyBjeWdoZWFwLm8gZGNydDAubyBkZWJ1Zy5vIGRl
+bHF1ZXVlLm8gZGlyLm8gXAogCWRsZmNuLm8gXApJbmRleDogZmhhbmRsZXIu
+aAo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3NyYy9z
+cmMvd2luc3VwL2N5Z3dpbi9maGFuZGxlci5oLHYKcmV0cmlldmluZyByZXZp
+c2lvbiAxLjQ5CmRpZmYgLXUgLXAgLXIxLjQ5IGZoYW5kbGVyLmgKLS0tIGZo
+YW5kbGVyLmgJMjAwMS8wMy8xOCAxODowNTowMQkxLjQ5CisrKyBmaGFuZGxl
+ci5oCTIwMDEvMDMvMjIgMTA6NDQ6MTYKQEAgLTg5NSw3ICs4OTUsMTUgQEAg
+cHVibGljOgogICBvZmZfdCBsc2VlayAob2ZmX3Qgb2Zmc2V0LCBpbnQgd2hl
+bmNlKTsKICAgaW50IGNsb3NlICh2b2lkKTsKIAorICBpbnQgZHVwIChmaGFu
+ZGxlcl9iYXNlICpjaGlsZCk7CisKICAgdm9pZCBkdW1wICgpOworCitwcml2
+YXRlOgorICBvZmZfdCBwb3M7CisgIHZvaWQgKm1lbWJ1ZmZlcjsKKyAgc2l6
+ZV90IG1zaXplOworICBCT09MIGVvZjsKIH07CiAKIGNsYXNzIGZoYW5kbGVy
+X3dpbmRvd3M6IHB1YmxpYyBmaGFuZGxlcl9iYXNlCkluZGV4OiBmaGFuZGxl
+cl9jbGlwYm9hcmQuY2MKPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1MgZmls
+ZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXJfY2xpcGJv
+YXJkLmNjLHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjMKZGlmZiAtdSAtcCAt
+cjEuMyBmaGFuZGxlcl9jbGlwYm9hcmQuY2MKLS0tIGZoYW5kbGVyX2NsaXBi
+b2FyZC5jYwkyMDAwLzEyLzEwIDAwOjQ1OjExCTEuMworKysgZmhhbmRsZXJf
+Y2xpcGJvYXJkLmNjCTIwMDEvMDMvMjIgMTA6NDQ6MTYKQEAgLTEyLDYyICsx
+MiwyMzUgQEAgZGV0YWlscy4gKi8KIAogI2luY2x1ZGUgIndpbnN1cC5oIgog
+I2luY2x1ZGUgPHN0ZGlvLmg+CisjaW5jbHVkZSA8c3RkbGliLmg+CiAjaW5j
+bHVkZSA8ZXJybm8uaD4KKyNpbmNsdWRlIDx1bmlzdGQuaD4KICNpbmNsdWRl
+ICJjeWdlcnJuby5oIgogI2luY2x1ZGUgImZoYW5kbGVyLmgiCiAjaW5jbHVk
+ZSA8d2luZG93cy5oPgogI2luY2x1ZGUgPHdpbmdkaS5oPgogI2luY2x1ZGUg
+PHdpbnVzZXIuaD4KIAotc3RhdGljIEJPT0wgY2xpcGJvYXJkX2VvZjsgLy8g
+Tk9UIFRIUkVBRC1TQUZFCisvKgorICogUm9iZXJ0IENvbGxpbnM6CisgKiBG
+SVhNRTogc2hvdWxkIHdlIHVzZSBHZXRDbGlwYm9hcmRTZXF1ZW5jZU51bWJl
+ciB0byB0ZWxsIGlmIHRoZSBjbGlwYm9hcmQgaGFzCisgKiBjaGFuZ2VkPyBI
+b3cgZG9lcyAvZGV2L2NsaXBib2FyZCBvcGVyYXRlIHVuZGVyIChzYXkpIGxp
+bnV4PworICovCiAKLWZoYW5kbGVyX2Rldl9jbGlwYm9hcmQ6OmZoYW5kbGVy
+X2Rldl9jbGlwYm9hcmQgKGNvbnN0IGNoYXIgKm5hbWUpCi0gIDogZmhhbmRs
+ZXJfYmFzZSAoRkhfQ0xJUEJPQVJELCBuYW1lKQorc3RhdGljIGNvbnN0IGNo
+YXIgKkNZR1dJTl9OQVRJVkUgPSAiQ1lHV0lOX05BVElWRV9DTElQQk9BUkQi
+OworLyogdGhpcyBpcyBNVCBzYWZlIGJlY2F1c2Ugd2luZG93cyBmb3JtYXQg
+aWQncyBhcmUgYXRvbWljICovCitzdGF0aWMgVUlOVCBjeWduYXRpdmVmb3Jt
+YXQgPSAwOworCitmaGFuZGxlcl9kZXZfY2xpcGJvYXJkOjpmaGFuZGxlcl9k
+ZXZfY2xpcGJvYXJkIChjb25zdCBjaGFyICpuYW1lKToKK2ZoYW5kbGVyX2Jh
+c2UgKEZIX0NMSVBCT0FSRCwgbmFtZSkKIHsKICAgc2V0X2NiIChzaXplb2Yg
+KnRoaXMpOwotICBjbGlwYm9hcmRfZW9mID0gZmFsc2U7CisgIGVvZiA9IHRy
+dWU7CisgIHBvcyA9IDA7CisgIG1lbWJ1ZmZlciA9IE5VTEw7CisgIG1zaXpl
+ID0gMDsKKyAgLyogRklYTUU6IGNoZWNrIGZvciBlcnJvcnMgYW5kIGxvb3Ag
+dW50aWwgd2UgY2FuIG9wZW4gdGhlIGNsaXBib2FyZCAqLworICBPcGVuQ2xp
+cGJvYXJkIChOVUxMKTsKKyAgY3lnbmF0aXZlZm9ybWF0ID0gUmVnaXN0ZXJD
+bGlwYm9hcmRGb3JtYXQgKENZR1dJTl9OQVRJVkUpOworICBDbG9zZUNsaXBi
+b2FyZCAoKTsKIH0KIAorLyoKKyAqIFNwZWNpYWwgY2xpcGJvYXJkIGR1cCB0
+byBkdXBsaWNhdGUgaW5wdXQgYW5kIG91dHB1dAorICogaGFuZGxlcy4KKyAq
+LworCiBpbnQKK2ZoYW5kbGVyX2Rldl9jbGlwYm9hcmQ6OmR1cCAoZmhhbmRs
+ZXJfYmFzZSAqIGNoaWxkKQoreworICBmaGFuZGxlcl9kZXZfY2xpcGJvYXJk
+ICpmaGMgPSAoZmhhbmRsZXJfZGV2X2NsaXBib2FyZCAqKSBjaGlsZDsKKwor
+ICBpZiAoIWZoYy0+b3BlbiAoZ2V0X25hbWUgKCksIGdldF9mbGFncyAoKSwg
+MCkpCisgICAgc3lzdGVtX3ByaW50ZiAoImVycm9yIG9wZW5pbmcgY2xpcGJv
+YXJkLCAlRSIpOworCisgIGZoYy0+bWVtYnVmZmVyID0gbWVtYnVmZmVyOwor
+ICBmaGMtPnBvcyA9IHBvczsKKyAgZmhjLT5tc2l6ZSA9IG1zaXplOworCisg
+IHJldHVybiAwOworfQorCitpbnQKIGZoYW5kbGVyX2Rldl9jbGlwYm9hcmQ6
+Om9wZW4gKGNvbnN0IGNoYXIgKiwgaW50IGZsYWdzLCBtb2RlX3QpCiB7CiAg
+IHNldF9mbGFncyAoZmxhZ3MpOwotICBjbGlwYm9hcmRfZW9mID0gZmFsc2U7
+CisgIGVvZiA9IGZhbHNlOworICBwb3MgPSAwOworICBpZiAobWVtYnVmZmVy
+KQorICAgIGZyZWUgKG1lbWJ1ZmZlcik7CisgIG1lbWJ1ZmZlciA9IE5VTEw7
+CisgIGlmICghY3lnbmF0aXZlZm9ybWF0KQorICAgIGN5Z25hdGl2ZWZvcm1h
+dCA9IFJlZ2lzdGVyQ2xpcGJvYXJkRm9ybWF0IChDWUdXSU5fTkFUSVZFKTsK
+ICAgcmV0dXJuIDE7CiB9CiAKK2ludAorU2V0Q2xpcGJvYXJkIChjb25zdCB2
+b2lkICpidWYsIHNpemVfdCBsZW4pCit7CisgIEhHTE9CQUwgaG1lbTsKKyAg
+dW5zaWduZWQgY2hhciAqY2xpcGJ1ZjsKKyAgLyogTmF0aXZlIENZR1dJTiBm
+b3JtYXQgKi8KKyAgT3BlbkNsaXBib2FyZCAoMCk7CisgIGhtZW0gPSBHbG9i
+YWxBbGxvYyAoR01FTV9NT1ZFQUJMRSwgbGVuICsgc2l6ZW9mIChzaXplX3Qp
+KTsKKyAgaWYgKCFobWVtKQorICAgIHsKKyAgICAgIHN5c3RlbV9wcmludGYg
+KCJDb3VsZG4ndCBhbGxvY2F0ZSBnbG9iYWwgYnVmZmVyIGZvciB3cml0ZVxu
+Iik7CisgICAgICByZXR1cm4gLTE7CisgICAgfQorICBjbGlwYnVmID0gKHVu
+c2lnbmVkIGNoYXIgKikgR2xvYmFsTG9jayAoaG1lbSk7CisgIG1lbWNweSAo
+Y2xpcGJ1ZiArIHNpemVvZiAoc2l6ZV90KSwgYnVmLCBsZW4pOworICAqKHNp
+emVfdCAqKSAoY2xpcGJ1ZikgPSBsZW47CisgIEdsb2JhbFVubG9jayAoaG1l
+bSk7CisgIEVtcHR5Q2xpcGJvYXJkICgpOworICBpZiAoIWN5Z25hdGl2ZWZv
+cm1hdCkKKyAgICBjeWduYXRpdmVmb3JtYXQgPSBSZWdpc3RlckNsaXBib2Fy
+ZEZvcm1hdCAoQ1lHV0lOX05BVElWRSk7CisgIGlmICghU2V0Q2xpcGJvYXJk
+RGF0YSAoY3lnbmF0aXZlZm9ybWF0LCBobWVtKSkKKyAgICB7CisgICAgICBz
+eXN0ZW1fcHJpbnRmCisJKCJDb3VsZG4ndCB3cml0ZSBuYXRpdmUgZm9ybWF0
+IHRvIHRoZSBjbGlwYm9hcmQgJTA0eCAleFxuIiwKKwkgY3lnbmF0aXZlZm9y
+bWF0LCBobWVtKTsKKy8qIEZJWE1FOiByZXR1cm4gYW4gYXBwcmlhdGUgZXJy
+b3IgY29kZSAmfCBzZXRfZXJybm8oKTsgKi8KKyAgICAgIHJldHVybiAtMTsK
+KyAgICB9CisgIENsb3NlQ2xpcGJvYXJkICgpOworICBpZiAoR2xvYmFsRnJl
+ZSAoaG1lbSkpCisgICAgeworICAgICAgc3lzdGVtX3ByaW50ZgorCSgiQ291
+bGRuJ3QgZnJlZSBnbG9iYWwgYnVmZmVyIGFmdGVyIHdyaXRlIHRvIHRoZSBj
+bGlwYm9hcmRcbiIpOworLyogRklYTUU6IHJldHVybiBhbiBhcHByaWF0ZSBl
+cnJvciBjb2RlICZ8IHNldF9lcnJubygpOyAqLworICAgICAgcmV0dXJuIDA7
+CisgICAgfQorCisgIC8qIENGX1RFWFQvQ0ZfT0VNVEVYVCBmb3IgY29weWlu
+ZyB0byB3b3JkcGFkIGFuZCB0aGUgbGlrZSAqLworCisgIE9wZW5DbGlwYm9h
+cmQgKDApOworICBobWVtID0gR2xvYmFsQWxsb2MgKEdNRU1fTU9WRUFCTEUs
+IGxlbiArIDIpOworICBpZiAoIWhtZW0pCisgICAgeworICAgICAgc3lzdGVt
+X3ByaW50ZiAoIkNvdWxkbid0IGFsbG9jYXRlIGdsb2JhbCBidWZmZXIgZm9y
+IHdyaXRlXG4iKTsKKyAgICAgIHJldHVybiAtMTsKKyAgICB9CisgIGNsaXBi
+dWYgPSAodW5zaWduZWQgY2hhciAqKSBHbG9iYWxMb2NrIChobWVtKTsKKyAg
+bWVtY3B5IChjbGlwYnVmLCBidWYsIGxlbik7CisgICooY2xpcGJ1ZiArIGxl
+bikgPSAnXDAnOworICAqKGNsaXBidWYgKyBsZW4gKyAxKSA9ICdcMCc7Cisg
+IEdsb2JhbFVubG9jayAoaG1lbSk7CisgIGlmICghU2V0Q2xpcGJvYXJkRGF0
+YQorICAgICAgKChjdXJyZW50X2NvZGVwYWdlID09IGFuc2lfY3AgPyBDRl9U
+RVhUIDogQ0ZfT0VNVEVYVCksIGhtZW0pKQorICAgIHsKKyAgICAgIHN5c3Rl
+bV9wcmludGYgKCJDb3VsZG4ndCB3cml0ZSB0byB0aGUgY2xpcGJvYXJkXG4i
+KTsKKy8qIEZJWE1FOiByZXR1cm4gYW4gYXBwcmlhdGUgZXJyb3IgY29kZSAm
+fCBzZXRfZXJybm8oKTsgKi8KKyAgICAgIHJldHVybiAtMTsKKyAgICB9Cisg
+IENsb3NlQ2xpcGJvYXJkICgpOworICBpZiAoR2xvYmFsRnJlZSAoaG1lbSkp
+CisgICAgeworICAgICAgc3lzdGVtX3ByaW50ZgorCSgiQ291bGRuJ3QgZnJl
+ZSBnbG9iYWwgYnVmZmVyIGFmdGVyIHdyaXRlIHRvIHRoZSBjbGlwYm9hcmRc
+biIpOworLyogRklYTUU6IHJldHVybiBhbiBhcHByaWF0ZSBlcnJvciBjb2Rl
+ICZ8IHNldF9lcnJubygpOyAqLworICAgIH0KKyAgcmV0dXJuIDA7Cit9CisK
+Ky8qIEZJWE1FOiBhcmJpdHJhcnkgc2Vla2luZyBpcyBub3QgaGFuZGxlZCAq
+LwogaW50Ci1maGFuZGxlcl9kZXZfY2xpcGJvYXJkOjp3cml0ZSAoY29uc3Qg
+dm9pZCAqLCBzaXplX3QgbGVuKQorZmhhbmRsZXJfZGV2X2NsaXBib2FyZDo6
+d3JpdGUgKGNvbnN0IHZvaWQgKmJ1Ziwgc2l6ZV90IGxlbikKIHsKLSAgcmV0
+dXJuIGxlbjsKKyAgaWYgKCFlb2YpCisgICAgeworICAgICAgLyogd3JpdGUg
+dG8gb3VyIG1lbWJ1ZmZlciAqLworICAgICAgc2l6ZV90IGN1cnNpemUgPSBt
+c2l6ZTsKKyAgICAgIHZvaWQgKnRlbXBidWZmZXIgPSByZWFsbG9jIChtZW1i
+dWZmZXIsIGN1cnNpemUgKyBsZW4pOworICAgICAgaWYgKCF0ZW1wYnVmZmVy
+KQorCXsKKwkgIHN5c3RlbV9wcmludGYgKCJDb3VsZG4ndCByZWFsbG9jKCkg
+Y2xpcGJvYXJkIGJ1ZmZlciBmb3Igd3JpdGVcbiIpOworCSAgcmV0dXJuIC0x
+OworCX0KKyAgICAgIG1lbWJ1ZmZlciA9IHRlbXBidWZmZXI7CisgICAgICBt
+c2l6ZSA9IGN1cnNpemUgKyBsZW47CisgICAgICBtZW1jcHkgKCh1bnNpZ25l
+ZCBjaGFyICopIG1lbWJ1ZmZlciArIGN1cnNpemUsIGJ1ZiwgbGVuKTsKKwor
+ICAgICAgLyogbm93IHBhc3MgdG8gd2luZG93cyAqLworICAgICAgaWYgKFNl
+dENsaXBib2FyZCAobWVtYnVmZmVyLCBtc2l6ZSkpCisJeworCSAgLyogRklY
+TUU6IG1lbWJ1ZmZlciBpcyBub3cgb3V0IG9mIHN5bmMgd2l0aCBwb3MsIGJ1
+dCBtc2l6ZSBpcyB1c2VkIGFib3ZlICovCisJICBzZXRfZXJybm8gKEVOT1NQ
+Qyk7CisJICByZXR1cm4gLTE7CisJfQorCisgICAgICBwb3MgPSBtc2l6ZTsK
+KworICAgICAgc2V0X2Vycm5vICgwKTsKKyAgICAgIGVvZiA9IGZhbHNlOwor
+ICAgICAgcmV0dXJuIGxlbjsKKyAgICB9CisgIGVsc2UKKyAgICB7CisgICAg
+ICAvKiBGSVhNRTogcmV0dXJuIDAgYnl0ZXMgd3JpdHRlbiwgZmlsZSBub3Qg
+b3BlbiAqLworICAgICAgcmV0dXJuIDA7CisgICAgfQogfQogCiBpbnQKIGZo
+YW5kbGVyX2Rldl9jbGlwYm9hcmQ6OnJlYWQgKHZvaWQgKnB0ciwgc2l6ZV90
+IGxlbikKIHsKICAgSEdMT0JBTCBoZ2xiOwotICBMUFNUUiBscHN0cjsKLSAg
+aW50IHJldDsKLQotICBpZiAoIWNsaXBib2FyZF9lb2YpCisgIHNpemVfdCBy
+ZXQ7CisgIFVJTlQgZm9ybWF0bGlzdFsyXTsKKyAgVUlOVCBmb3JtYXQ7Cisg
+IGlmICghZW9mKQogICAgIHsKLSAgICAgIE9wZW5DbGlwYm9hcmQoMCk7Ci0g
+ICAgICBoZ2xiID0gR2V0Q2xpcGJvYXJkRGF0YSgoY3VycmVudF9jb2RlcGFn
+ZT09YW5zaV9jcCA/IENGX1RFWFQgOiBDRl9PRU1URVhUKSk7Ci0gICAgICBs
+cHN0ciA9IChMUFNUUikgR2xvYmFsTG9jayhoZ2xiKTsKLSAgICAgIGlmIChs
+ZW4gPCBzaXplb2YgKGxwc3RyKSkKLSAgICAgICAgewotICAgICAgICAgIHNl
+dF9lcnJubyAoRUlOVkFMKTsKLSAgICAgICAgICBHbG9iYWxVbmxvY2sgKGhn
+bGIpOwotICAgICAgICAgIENsb3NlQ2xpcGJvYXJkICgpOwotICAgICAgICAg
+IHJldHVybiAtMTsKLSAgICAgICAgfQotCi0gICAgICByZXQgPSBzbnByaW50
+ZigoY2hhciAqKSBwdHIsIGxlbiwgIiVzIiwgbHBzdHIpOwotICAgICAgR2xv
+YmFsVW5sb2NrKGhnbGIpOwotICAgICAgQ2xvc2VDbGlwYm9hcmQoKTsKLSAg
+ICAgIHNldF9lcnJubyAoMCk7Ci0gICAgICBjbGlwYm9hcmRfZW9mID0gdHJ1
+ZTsKLSAgICAgIHJldHVybiByZXQ7CisgICAgICBmb3JtYXRsaXN0WzBdID0g
+Y3lnbmF0aXZlZm9ybWF0OworICAgICAgZm9ybWF0bGlzdFsxXSA9IGN1cnJl
+bnRfY29kZXBhZ2UgPT0gYW5zaV9jcCA/IENGX1RFWFQgOiBDRl9PRU1URVhU
+OworICAgICAgT3BlbkNsaXBib2FyZCAoMCk7CisgICAgICBpZiAoKGZvcm1h
+dCA9IEdldFByaW9yaXR5Q2xpcGJvYXJkRm9ybWF0IChmb3JtYXRsaXN0LCAy
+KSkgPiAwKQorCXsKKwkgIGhnbGIgPSBHZXRDbGlwYm9hcmREYXRhIChmb3Jt
+YXQpOworCSAgaWYgKGZvcm1hdCA9PSBjeWduYXRpdmVmb3JtYXQpCisJICAg
+IHsKKwkgICAgICB1bnNpZ25lZCBjaGFyICpidWYgPSAodW5zaWduZWQgY2hh
+ciAqKSBHbG9iYWxMb2NrIChoZ2xiKTsKKwkgICAgICBzaXplX3QgYnVmbGVu
+ID0gKCooc2l6ZV90ICopIGJ1Zik7CisJICAgICAgcmV0ID0gKChsZW4gPiAo
+YnVmbGVuIC0gcG9zKSkgPyAoYnVmbGVuIC0gcG9zKSA6IGxlbik7CisJICAg
+ICAgbWVtY3B5IChwdHIsIGJ1ZiArIHNpemVvZiAoc2l6ZV90KSsgcG9zICwg
+cmV0KTsKKwkgICAgICBwb3MgKz0gcmV0OworCSAgICAgIGlmIChwb3MgKyBs
+ZW4gLSByZXQgPj0gYnVmbGVuKQorCQllb2YgPSB0cnVlOworCSAgICAgIEds
+b2JhbFVubG9jayAoaGdsYik7CisJICAgIH0KKwkgIGVsc2UKKwkgICAgewor
+CSAgICAgIExQU1RSIGxwc3RyOworCSAgICAgIGxwc3RyID0gKExQU1RSKSBH
+bG9iYWxMb2NrIChoZ2xiKTsKKworCSAgICAgIHJldCA9CisJCSgobGVuID4g
+KHN0cmxlbiAobHBzdHIpIC0gcG9zKSkgPyAoc3RybGVuIChscHN0cikgLSBw
+b3MpIDoKKwkJIGxlbik7CisKKwkgICAgICBtZW1jcHkgKHB0ciwgbHBzdHIg
+KyBwb3MsIHJldCk7CisJICAgICAgLy9yZXQgPSBzbnByaW50ZigoY2hhciAq
+KSBwdHIsIGxlbiwgIiVzIiwgbHBzdHIpOy8vK3Bvcyk7CisJICAgICAgcG9z
+ICs9IHJldDsKKwkgICAgICBpZiAocG9zICsgbGVuIC0gcmV0ID49IHN0cmxl
+biAobHBzdHIpKQorCQllb2YgPSB0cnVlOworCSAgICAgIEdsb2JhbFVubG9j
+ayAoaGdsYik7CisJICAgIH0KKwkgIENsb3NlQ2xpcGJvYXJkICgpOworCSAg
+c2V0X2Vycm5vICgwKTsKKwkgIHJldHVybiByZXQ7CisJfQorICAgICAgZWxz
+ZQorCXsKKwkgIENsb3NlQ2xpcGJvYXJkICgpOworI2lmIDAKKwkgIHN5c3Rl
+bV9wcmludGYgKCJhIG5vbi1hY2NlcHRlZCBmb3JtYXQhICVkXG4iLCBmb3Jt
+YXQpOworI2VuZGlmCisJICBzZXRfZXJybm8gKDApOworCSAgcmV0dXJuIDA7
+CisJfQogICAgIH0KICAgZWxzZQogICAgIHsKQEAgLTc4LDE4ICsyNTEsMzEg
+QEAgZmhhbmRsZXJfZGV2X2NsaXBib2FyZDo6cmVhZCAodm9pZCAqcHRyLAog
+b2ZmX3QKIGZoYW5kbGVyX2Rldl9jbGlwYm9hcmQ6OmxzZWVrIChvZmZfdCBv
+ZmZzZXQsIGludCB3aGVuY2UpCiB7CisgIC8qIE9uIHJlYWRzIHdlIGNoZWNr
+IHRoaXMgYXQgcmVhZCB0aW1lLCBub3Qgc2VlayB0aW1lLgorICAgKiBPbiB3
+cml0ZXMgd2UgdXNlIHRoaXMgdG8gZGVjaWRlIGhvdyB0byB3cml0ZSAtIGVt
+cHR5IGFuZCB3cml0ZSwgb3Igb3BlbiwgY29weSwgZW1wdHkKKyAgICogYW5k
+IHdyaXRlCisgICAqLworICBwb3MgPSBvZmZzZXQ7CisgIC8qIHRyZWF0IHNl
+ZWsgbGlrZSByZXdpbmQgKi8KKyAgaWYgKG1lbWJ1ZmZlcikKKyAgICBmcmVl
+IChtZW1idWZmZXIpOworICBtc2l6ZSA9IDA7CiAgIHJldHVybiAwOwogfQog
+CiBpbnQKIGZoYW5kbGVyX2Rldl9jbGlwYm9hcmQ6OmNsb3NlICh2b2lkKQog
+ewotICBjbGlwYm9hcmRfZW9mID0gZmFsc2U7CisgIGVvZiA9IHRydWU7Cisg
+IHBvcyA9IDA7CisgIGlmIChtZW1idWZmZXIpCisgICAgZnJlZSAobWVtYnVm
+ZmVyKTsKKyAgbXNpemUgPSAwOwogICByZXR1cm4gMDsKIH0KIAogdm9pZAog
+ZmhhbmRsZXJfZGV2X2NsaXBib2FyZDo6ZHVtcCAoKQogewotICBwYXJhbm9p
+ZF9wcmludGYoImhlcmUsIGZoYW5kbGVyX2Rldl9jbGlwYm9hcmQiKTsKKyAg
+cGFyYW5vaWRfcHJpbnRmICgiaGVyZSwgZmhhbmRsZXJfZGV2X2NsaXBib2Fy
+ZCIpOwogfQo=
 
-> On Thu, Mar 22, 2001 at 09:23:19AM +1100, Robert Collins wrote:
-> >On the technical side the newlib maintainers are facing the same
-problem
-> >I did with pthreads (Changing at this date may break ABI and or
-existing
-> >#if code. Secondly they may have users who have used the fact that
-the
-> >userland includes allowed access to the internal elements of the *_t
-> >types. (Which is a bad thing). I understand newlib exists because
-> >proprietary software can be linked to it when it's sold under the
-second
-> >licence... so the maintainers may well have contractual issues crop
-up
-> >if they start fixing these things up.
->
-> I think that all of the pthreads stuff was added by external
-contributors,
-> actually.
->
-> Would you mind raising this issue on the newlib mailing list?  If no
-one
-> seems interested then we'll pursue a cygwin-only solution.
->
-> cgf
->
+------------=_1583532846-65438-30--
