@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5040-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 18799 invoked by alias); 9 Oct 2004 23:20:13 -0000
+Return-Path: <cygwin-patches-return-5041-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 4654 invoked by alias); 10 Oct 2004 06:36:39 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,33 +7,49 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 18789 invoked from network); 9 Oct 2004 23:20:13 -0000
-Date: Sat, 09 Oct 2004 23:20:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
+Received: (qmail 4642 invoked from network); 10 Oct 2004 06:36:38 -0000
+Message-ID: <n2m-g.ckajsj.3vv9689.1@buzzy-box.bavag>
+From: Bas van Gompel <cygwin-patches.buzz@bavag.tmfweb.nl>
+Subject: [Patch] cygcheck (add_path): A little memory-leak.
+Reply-To: cygwin-patches mailing-list <cygwin-patches@cygwin.com>
+Organisation: Ehm...
 To: cygwin-patches@cygwin.com
-Subject: Re: [Patch] cygcheck: warn about trailing (back)slash on mount entries
-Message-ID: <20041009232027.GE11984@trixie.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <n2m-g.ck100t.3vvcra7.1@buzzy-box.bavag>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <n2m-g.ck100t.3vvcra7.1@buzzy-box.bavag>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2004-q4/txt/msg00041.txt.bz2
+Date: Sun, 10 Oct 2004 06:36:00 -0000
+X-SW-Source: 2004-q4/txt/msg00042.txt.bz2
 
-On Wed, Oct 06, 2004 at 03:12:45PM +0200, Bas van Gompel wrote:
->ChangeLog-entry:
->
->2004-10-06  Bas van Gompel  <cygwin-patch.buzz@bavag.tmfweb.nl>
->
->	* cygcheck.cc (dump_sysinfo): Warn about trailing (back)slash on mount
->	entries.
+In cygcheck.cc, in function add_path, if paths[num_paths] was already
+in the list, the mallocced memory was not released. The trivial (IMO)
+patch follows...
 
-Rather than continue the debate about whether and how paths should
-be checked, I've checked in this patch.
 
-Thanks.
+ChangeLog-entry:
 
-cgf
+2004-10-10  Bas van Gompel  <cygwin-patch.buzz@bavag.tmfweb.nl>
+	* cygcheck.cc (add_path): Don't leak memory when path is already in
+	``paths''.
+
+
+--- src/winsup/utils/cygcheck.cc	9 Oct 2004 23:19:38 -0000	1.47
++++ src/winsup/utils/cygcheck.cc	10 Oct 2004 03:27:22 -0000
+@@ -130,7 +130,10 @@ add_path (char *s, int maxlen)
+     *--e = 0;
+   for (int i = 1; i < num_paths; i++)
+     if (strcasecmp (paths[num_paths], paths[i]) == 0)
+-      return;
++      {
++	free (paths[num_paths]);
++	return;
++      }
+   num_paths++;
+ }
+ 
+
+
+L8r,
+
+Buzz.
+-- 
+  ) |  | ---/ ---/  Yes, this | This message consists of true | I do not
+--  |  |   /    /   really is |   and false bits entirely.    | mail for
+  ) |  |  /    /    a 72 by 4 +-------------------------------+ any1 but
+--  \--| /--- /---  .sigfile. |   |perl -pe "s.u(z)\1.as."    | me. 4^re
