@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2153-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 7324 invoked by alias); 4 May 2002 18:27:57 -0000
+Return-Path: <cygwin-patches-return-2154-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 25469 invoked by alias); 4 May 2002 19:48:19 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,29 +7,31 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 7298 invoked from network); 4 May 2002 18:27:55 -0000
-Date: Sat, 04 May 2002 11:27:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: Bug in ln / cygwin1.dll
-Message-ID: <20020504182803.GA29885@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <011901c1f2fb$1fbf5330$0100a8c0@advent02> <20020504042742.GI32261@redhat.com> <00c801c1f36d$73d55470$0100a8c0@advent02> <20020504153612.GC29229@redhat.com> <016001c1f383$90e0c700$0100a8c0@advent02>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <016001c1f383$90e0c700$0100a8c0@advent02>
-User-Agent: Mutt/1.3.23.1i
-X-SW-Source: 2002-q2/txt/msg00137.txt.bz2
+Received: (qmail 25454 invoked from network); 4 May 2002 19:48:18 -0000
+From: "Norbert Schulze" <Norbert.Schulze@web.de>
+To: <cygwin-patches@cygwin.com>
+Subject: Re: automatic TZ in non-english windows
+Date: Sat, 04 May 2002 12:48:00 -0000
+Message-ID: <000101c1f3a4$b25a8f30$010115ac@NEXUS>
+MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3 (Normal)
+X-MSMail-Priority: Normal
+Importance: Normal
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-SW-Source: 2002-q2/txt/msg00138.txt.bz2
 
-On Sat, May 04, 2002 at 04:51:33PM +0100, Chris January wrote:
->> >This patch fixes the problem.
->>
->> Why?
->In the destructor, the code checks if normalized_path is non-NULL before
->callin cfree on it.
+> ChangeLog:
+> 
+> 2002-04-28  Norbert Schulze  <norbert.schulze@web.de>
+> 
+>         * localtime.cc (tzsetwall): use wildabbr if generated 
+>         timezone name length < 3
 
-Thanks for the explanation.  Committed.
+After nearly one week of no response, what must I do that
+my patch gets finally committed?
 
-cgf
+Regards
+   Norbert 
