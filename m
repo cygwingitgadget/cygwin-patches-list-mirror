@@ -1,29 +1,24 @@
-From: "Gary R. Van Sickle" <g.r.vansickle@worldnet.att.net>
-To: <cygwin-patches@sourceware.cygnus.com>
-Subject: RE: [PATCH] Update 3 - Setup.exe property sheet patch
-Date: Sun, 23 Dec 2001 13:41:00 -0000
-Message-ID: <NCBBIHCHBLCMLBLOBONKAEBDCIAA.g.r.vansickle@worldnet.att.net>
-References: <024a01c18bab$4ead8e30$0200a8c0@lifelesswks>
-X-SW-Source: 2001-q4/msg00352.html
-Message-ID: <20011223134100.WR8vjEJNraSqq65ZyzmIauTDJHusdOvFnQsko5kTBpo@z>
+From: Jonathan Kamens <jik@curl.com>
+To: cygwin-patches@cygwin.com
+Subject: A few fixes to winsup/utils/cygpath.cc
+Date: Wed, 26 Dec 2001 05:03:00 -0000
+Message-ID: <20011226130350.7718.qmail@lizard.curl.com>
+X-SW-Source: 2001-q4/msg00353.html
+Message-ID: <20011226050300.-Foj-ErFi3dPAYRisWGwti1vKJJE5p-zE2SbkIO88SE@z>
 
-> ===
-> ----- Original Message -----
-> From: "Gary R. Van Sickle" <g.r.vansickle@worldnet.att.net>
->
->
-> > - indented per indent's GNU formatting abilities (FYI: the new indent
-> 2.2.7
-> > looks like it can handle C++ pretty well).
->
-> Committed. Thanks again.
->
-> BTW: what indent options did you use?
+I sent this patch in last night, but I don't think it made it to the
+list because I wasn't subscribed properly (at least, it's not in the
+archive yet, and I assume it would have shown up by now), so here it
+is again.
 
-None, just the GNU formatting it defaults to.  But again, this is 2.2.*7*, not
-the 2.2.6 that's currently in Cygwin - it builds OOB and seems to have come a
-*very* long way, at least since I tried it last a version or two ago.
+The patch below fixes the following three problems in
+winsup/utils/cygpath.cc:
 
---
-Gary R. Van Sickle
-Brewer.  Patriot.
+1) Calculate prog_name correctly -- skip over the final slash or
+   backslash.
+2) Print a useful error message and exit with non-zero status if the
+   user tries to convert an empty path.
+3) Detect if a path conversion function returns -1 (indicating
+   failure) and print an error message if so.
+
+jik
