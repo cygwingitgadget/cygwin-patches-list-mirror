@@ -1,43 +1,23 @@
-From: "Robert Collins" <robert.collins@itdomain.com.au>
-To: <cygwin-patches@cygwin.com>
-Subject: Re: win95 and pshared mutex support for pthreads
-Date: Sat, 21 Apr 2001 16:42:00 -0000
-Message-id: <008301c0cabc$ce3dc170$0200a8c0@lifelesswks>
-References: <00d001c0c8bc$d9f12400$0200a8c0@lifelesswks> <20010419080934.C19483@redhat.com> <015401c0c8ca$380e8ac0$0200a8c0@lifelesswks> <00ed01c0ca6e$ff599c50$0200a8c0@lifelesswks> <20010421131139.A25636@redhat.com>
-X-SW-Source: 2001-q2/msg00136.html
+From: Glen Coakley <gcoakley@mqsoftware.com>
+To: "'cygwin-patches@cygwin.com'" <cygwin-patches@cygwin.com>
+Subject: FW: Bash Prompt Here?
+Date: Mon, 23 Apr 2001 13:44:00 -0000
+Message-id: <E1B42CFD544FD31193EE0000E87C5CE799B51E@mailserver2.mqsoftware.com>
+X-SW-Source: 2001-q2/msg00137.html
 
------ Original Message -----
-From: "Christopher Faylor" <cgf@redhat.com>
-To: <cygwin-patches@cygwin.com>
-Sent: Sunday, April 22, 2001 3:11 AM
-Subject: Re: win95 and pshared mutex support for pthreads
+I have updated my version of this to incorporate Ross Smith's .inf idea,
+thus allowing it to be used on Windows <whatever>. There is also an install
+script that will locate your cygwin root directory. It does not run bash
+twice like Ross' solution but it does require changes to our .bashrc but it
+wraps them in an 'if cygwin' check so that they will only be invoked if you
+are running under cygwin. (I share my .bashrc with my Unix box.) The changes
+are also designed to insulate you from cygwin upgrades by not modifying any
+of the distributed files nor making any assumptions about them except for
+the existence of certain tools (regtool, cygpath, cut, cat, grep, sed and,
+of course bash).
 
+http://www.users.qwest.net/~weissj/BashPromptHere.tar.gz
 
-> On Sun, Apr 22, 2001 at 12:26:02AM +1000, Robert Collins wrote:
-> >committed (with passwd.cc not password.cc :] )
->
-> Unfortunately, it looks like there are problems with your checkin:
->
-> i686-pc-cygwin-g++ -c -g -O2 -MD -fbuiltin ... thread.cc
-> /cygnus/src/uberbaum/winsup/cygwin/thread.cc: In member function `void
->    MTinterface::Init(int)':
-> /cygnus/src/uberbaum/winsup/cygwin/thread.cc:301: `shm_head'
-undeclared (first
->    use this function)
-> /cygnus/src/uberbaum/winsup/cygwin/thread.cc:301: (Each undeclared
-identifier
->    is reported only once for each function it appears in.)
-> make: *** [thread.o] Error 1
-> make: *** Waiting for unfinished jobs....
-> make: ***
-[/cygnus/build/win32/i686-pc-cygwin/winsup/cygwin/new-cygwin1.dll] Error
-2
->
-> cgf
->
-
-Just answering for the archives. This slipped me by. It's part of a
-in-cygwin shmg implementation, put it's not cross process persistent at
-this point in time (unless process A exits after process B attaches).
-
-Rob
+________________________________
+Glen Coakley, Sr. Software Engineer
+MQSoftware Inc., (763) 543-4845
