@@ -1,27 +1,22 @@
-From: DJ Delorie <dj@delorie.com>
-To: matt@use.net
+From: Matt <matt@use.net>
+To: DJ Delorie <dj@delorie.com>
 Cc: cygwin-patches@sources.redhat.com
 Subject: Re: cinstall patches
-Date: Tue, 26 Dec 2000 14:51:00 -0000
-Message-id: <200012262250.RAA24592@envy.delorie.com>
-References: <Pine.NEB.4.10.10012260335470.16114-400000@cesium.clock.org>
-X-SW-Source: 2000-q4/msg00060.html
+Date: Tue, 26 Dec 2000 15:06:00 -0000
+Message-id: <Pine.NEB.4.10.10012261500350.16114-100000@cesium.clock.org>
+References: <200012262250.RAA24592@envy.delorie.com>
+X-SW-Source: 2000-q4/msg00061.html
 
-No default for these options can be determined in advance.  That's why
-I didn't default them to anything.  The user *must* pick one.
+On Tue, 26 Dec 2000, DJ Delorie wrote:
 
-> 	* winsup/cinstall/res.rc: Added accelerators and improved focus
-> 	order. Removed WS_DISABLED from "OK" buttons to accomodate
-> 	default focus changes in net.cc and source.cc.
-> 
-> 	* winsup/cinstall/net.cc (dialog_proc): If no radio button
-> 	is selected, a default is selected.
-> 
-> 	* winsup/cinstall/source.cc (dialog_proc): Ditto.
-> 
-> 	(check_if_enable_next): Removed. No longer needed since
-> 	a radio button will always be selected.
-> 
-> 	(load_dialog): Removed call to check_if_enable_next.
-> 
-> 	(dialog_cmd): Ditto. Also added default to switch.
+> No default for these options can be determined in advance.  That's why
+> I didn't default them to anything.  The user *must* pick one.
+
+In order for focus to be able to reach the group of radio buttons, one
+must be selected. I chose what I thought would be the most commonly used
+selections, and the most compatible across all the platforms.
+
+The worst case scenario is that now the user will change the from
+the default selection, which is on par with being forced to select in the
+first place. The difference being now they'll be able to change the
+selection with the keyboard via the accelerators, or changing focus.
