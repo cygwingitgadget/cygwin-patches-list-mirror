@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4963-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 24421 invoked by alias); 14 Sep 2004 09:09:45 -0000
+Return-Path: <cygwin-patches-return-4964-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 542 invoked by alias); 15 Sep 2004 02:31:35 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,85 +7,61 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 24407 invoked from network); 14 Sep 2004 09:09:43 -0000
-Date: Tue, 14 Sep 2004 09:09:00 -0000
-From: Corinna Vinschen <vinschen@redhat.com>
+Received: (qmail 529 invoked from network); 15 Sep 2004 02:31:34 -0000
+Message-ID: <n2m-g.ci8g43.3vvdv5l.1@buzzy-box.bavag>
+From: Bas van Gompel <cygwin-patches.buzz@bavag.tmfweb.nl>
+Subject: [Patch] getfacl -n layout not upto spec.
+Reply-To: cygwin-patches mailing-list <cygwin-patches@cygwin.com>
+Organisation: Ehm...
 To: cygwin-patches@cygwin.com
-Subject: Re: [Fwd: 1.5.11-1: sftp performance problem]
-Message-ID: <20040914091029.GC3757@cygbert.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20040912144258.GB11786@cygbert.vinschen.de> <20040913180937.400E2E538@carnage.curl.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20040913180937.400E2E538@carnage.curl.com>
-User-Agent: Mutt/1.4.2i
-X-SW-Source: 2004-q3/txt/msg00115.txt.bz2
+Date: Wed, 15 Sep 2004 02:31:00 -0000
+X-SW-Source: 2004-q3/txt/msg00116.txt.bz2
 
-On Sep 13 14:09, Bob Byrnes wrote:
-> On Sep 12,  4:42pm, Corinna Vinschen wrote:
-> -- Subject: Re: [Fwd: 1.5.11-1: sftp performance problem]
-> This all works most of the time.  But it interacts badly with the
-> POSIX atomic write requirements related to PIPE_BUF.  In particular,
-> select should say that a pipe is not writable when there is < PIPE_BUF
-> space available (and our implementation does this).
+Hi,
 
-I reread the description of CreateNamedPipe in MSDN and now I'm wondering
-if exactly that, trying to mimic POSIX atomic writes, is the culprit of
-the problem.  MSDN states:
+I noticed, getfacl -n ... returns badly formatted
+output like:
 
-  "Whenever a pipe write operation occurs, the system first tries to charge
-   the memory against the pipe write quota. If the remaining pipe write
-   quota is enough to fulfill the request, the write operation completes
-   immediately. If the remaining pipe write quota is too small to fulfill
-   the request, the system will try to expand the buffers to accommodate
-   the data using nonpaged pool reserved for the process. The write operation
-   will block until the data is read from the pipe so that the additional
-   buffer quota can be released. Therefore, if your specified buffer size
-   is too small, the system will grow the buffer as needed, but the downside
-   is that the operation will block."
+...
+group:544
+rwx
+..
 
-I'm not sure if my interpretation is correct, but I'd guess that the OS
-would also try to force a flush, as soon as the write buffer had to be
-expanded beyond the write quota.  Our implementation of select *prevents*
-the write buffer to be expanded...  Do you understand what I mean?
+instead of:
 
-> > |                                         I guess this means that local
-> > | pipes always do buffering as described in the previous paragraph, and
-> > | this can't be disabled using FILE_FLAG_WRITE_THROUGH.
-> > 
-> > Did you try that?
-> 
-> I haven't yet, but I will.  Disabling buffering would fix the problem.
+...
+group:544:rwx
+...
 
-Just another random idea.  What if the pipe isn't called \\.\xxx but
-instead \\${hostname}\xxx ?  Perhaps (but not likely) the pipe is then
-treated as remote.
+This (trivial, I think) patch fixes that.
 
-> Or if we could somehow control the buffering parameters (the high-water
-
-Hmm, there's just this DefaultTimeout value which seems to be somewhat
-unrelated.
-
-> mark or the timer), that would also probably be sufficient.  In particular,
-> setting the high-water mark to reserve PIPE_BUF bytes would be perfect.
-
-The problem is that the buffer sizes given to CreateNamedPipe are just
-*advisory* to the system.
-
-> > Dunno if that's a *better* idea, but would it be reasonable to try changing
-> > pipes to use overlapped I/O?
-> 
-> Maybe, but that seems complicated.  I'm hoping for something simpler.
-
-Well, it's not *that* complicated.  But when reading MSDN, I'm entertaining
-some doubt that it would really help for pipes.
+--- src/winsup/utils/getfacl.c	11 Sep 2003 07:55:51 -0000	1.11
++++ src/winsup/utils/getfacl.c	14 Sep 2004 21:21:45 -0000
+@@ -229,7 +229,7 @@ main (int argc, char **argv)
+ 	      break;
+ 	    case USER:
+ 	      if (nopt)
+-		printf ("user:%lu\n", (unsigned long)acls[i].a_id);
++		printf ("user:%lu:", (unsigned long)acls[i].a_id);
+ 	      else
+ 		printf ("user:%s:", username (acls[i].a_id));
+ 	      break;
+@@ -238,7 +238,7 @@ main (int argc, char **argv)
+ 	      break;
+ 	    case GROUP:
+ 	      if (nopt)
+-		printf ("group:%lu\n", (unsigned long)acls[i].a_id);
++		printf ("group:%lu:", (unsigned long)acls[i].a_id);
+ 	      else
+ 		printf ("group:%s:", groupname (acls[i].a_id));
+ 	      break;
 
 
-Corinna
+L8r,
 
+Buzz.
 -- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          mailto:cygwin@cygwin.com
-Red Hat, Inc.
+  ) |  | ---/ ---/  Yes, this | This message consists of true | I do not
+--  |  |   /    /   really is |   and false bits entirely.    | mail for
+  ) |  |  /    /    a 72 by 4 +-------------------------------+ any1 but
+--  \--| /--- /---  .sigfile. |   |perl -pe "s.u(z)\1.as."    | me. 4^re
