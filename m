@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2938-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 11405 invoked by alias); 6 Sep 2002 04:23:48 -0000
+Return-Path: <cygwin-patches-return-2939-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 11757 invoked by alias); 6 Sep 2002 04:25:34 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,70 +7,62 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 11390 invoked from network); 6 Sep 2002 04:23:47 -0000
-Date: Thu, 05 Sep 2002 21:23:00 -0000
+Received: (qmail 11743 invoked from network); 6 Sep 2002 04:25:34 -0000
+Date: Thu, 05 Sep 2002 21:25:00 -0000
 From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: [cgf@redhat.com: Re: [Mingw-users] Re: WINVER constant value [WAS: GetConsoleWindow]]
-Message-ID: <20020906042335.GA28278@redhat.com>
-Mail-Followup-To: cygwin-patches@cygwin.com
+To: MinGW-users@lists.sourceforge.net
+Cc: cygwin-patches@cygwin.com
+Subject: Re: [Mingw-users] Re: WINVER constant value [WAS: GetConsoleWindow]
+Message-ID: <20020906042522.GD27778@redhat.com>
+Reply-To: MinGW-users@lists.sourceforge.net,
+	cygwin-patches@cygwin.com
+Mail-Followup-To: MinGW-users@lists.sourceforge.net,
+	cygwin-patches@cygwin.com
+References: <NCBBIHCHBLCMLBLOBONKEEMFDEAA.g.r.vansickle@worldnet.att.net> <3D780D71.F3F87271@yahoo.com> <7khzvl5r.fsf@wanadoo.es>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <7khzvl5r.fsf@wanadoo.es>
 User-Agent: Mutt/1.4i
-X-SW-Source: 2002-q3/txt/msg00386.txt.bz2
+X-SW-Source: 2002-q3/txt/msg00387.txt.bz2
 
------ Forwarded message from Christopher Faylor <cgf@redhat.com> -----
+On Fri, Sep 06, 2002 at 05:42:24AM +0200, Oscar Fuentes wrote:
+>But I think MinGW must not be a drop-in replacement for MSVC.
 
-From: Christopher Faylor <cgf@redhat.com>
-To: "Andrew 'Static' Stadt" <acstadt@sympatico.ca>
-Cc: Mingw-users <mingw-users@lists.sourceforge.net>
-Subject: Re: [Mingw-users] Re: WINVER constant value [WAS: GetConsoleWindow]
-Date: Fri, 6 Sep 2002 00:09:34 -0400
-In-Reply-To: <EMEJLKIHGFHGPDDBKMEGAEIMCAAA.acstadt@sympatico.ca>
+We aren't talking about just MinGW, though.  Several projects use these
+header files.
 
-On Thu, Sep 05, 2002 at 10:46:25PM -0400, Andrew 'Static' Stadt wrote:
->I'll admit that the first time I attempted to use a newer api call, the
->error threw me for a little bit of a loop, but all I had to do was read the
->appropriate header file, and the added the appropriate define in my
->makefile. ( a side note here to note my own glaring stupidity at the time: I
->was attempting to use an api call which didn't exist on the target platform,
->but my client had also given my some misleading specs, so I'm not entirely
->to blame).
+I'd be interested in hearing your rationale for not making MinGW a
+drop-in replacement for MSVC, though.  It seems like there are frequent
+discussions about how to arrange things in the header files so that
+they closely mimic the layout used by MSVC.  I'm sure I can easily
+find examples of this in the email archives.
+
+(maybe that's a discussion just for the mingw mailing list)
+
+Obviously gcc itself is not a complete drop-in replacement for msvc
+but we really don't have much control over that.
+
+It seems inconsistent to be lax in this instance.
+
+>If you think it should be, the logic way is to mimic MSVC on every
+>possible detail.
 >
->Do I wish it had been documented somewhere?  A knee-jerk response says yes,
->but in retrospect, how many people actually read all of the documentation
->supplied with all of their software/tools/etc.
+>The argument about "Why can't MinGW find X API function" is not
+>valid. Everyone who programs on Win32 *must* know that different
+>Windows versions have different APIs, so if someone can't figure out
+>the existence of WINVER, you are doing him a favor by forcing him to
+>learn about it.
 
-However, if there was someplace to point people who stumble across this then
-at least we wouldn't have to be reexplaining the issue.
+I've used the "for their own good" line of reasoning myself many times
+in the cygwin project but I think I have, more often than not,
+eventually reverted to fixing things so that they cause the minimal
+amount of end-user confusion.
 
->In this particular case, I don't believe that having someone actually
->look in the header file to see what's going on would be such a
->hardship.  Admittedly, I wouldn't mind a little table somewhere which
->lists the 'common name' (e.g.  w2k), with its appropriate WINVER
->value...  but then again, its something I should probably add to my own
->reference notes vs.  spending so much time on msdn.
->
->So, my $0.02 is that I like it the way it is.
-
-So what would the downside be to you if the WINVER was set to the highest
-legal value?  You'd still know enough to look in the header file if
-something was amiss.  And, people who were used to MSVC would still
-have the environment they were used to.
+I think the bottom line is not that we should teach people for their own
+good as much as not violate the principle of least surprise.  I honestly
+don't know what would be the least surprising in this case, but I
+suspect that most people would probably be less surprised by the MSVC
+behavior.
 
 cgf
-
-
--------------------------------------------------------
-This sf.net email is sponsored by: OSDN - Tired of that same old
-cell phone?  Get a new here for FREE!
-https://www.inphonic.com/r.asp?r=sourceforge1&refcode1=vs3390
-_______________________________________________
-MinGW-users mailing list
-MinGW-users@lists.sourceforge.net
-
-You may change your MinGW Account Options or unsubscribe at:
-https://lists.sourceforge.net/lists/listinfo/mingw-users
-
------ End forwarded message -----
