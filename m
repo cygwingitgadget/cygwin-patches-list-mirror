@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2271-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 9850 invoked by alias); 30 May 2002 11:03:09 -0000
+Return-Path: <cygwin-patches-return-2272-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 4441 invoked by alias); 30 May 2002 11:41:47 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,54 +7,44 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 9795 invoked from network); 30 May 2002 11:03:06 -0000
-From: "Robert Collins" <robert.collins@itdomain.com.au>
-To: "'Corinna Vinschen'" <cygwin-patches@cygwin.com>
-Subject: RE: Cleanup of ntdll.h
-Date: Thu, 30 May 2002 04:03:00 -0000
-Message-ID: <00ef01c207c9$93cc35d0$0200a8c0@lifelesswks>
-MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3 (Normal)
-X-MSMail-Priority: Normal
-Importance: Normal
-In-Reply-To: <20020530102327.Z30892@cygbert.vinschen.de>
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-OriginalArrivalTime: 30 May 2002 11:03:03.0690 (UTC) FILETIME=[91DE96A0:01C207C9]
-X-SW-Source: 2002-q2/txt/msg00254.txt.bz2
+Received: (qmail 4409 invoked from network); 30 May 2002 11:41:43 -0000
+Date: Thu, 30 May 2002 04:41:00 -0000
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
+To: cygpatch <cygwin-patches@cygwin.com>
+Subject: Re: Cleanup of ntdll.h
+Message-ID: <20020530134141.E30892@cygbert.vinschen.de>
+Mail-Followup-To: cygpatch <cygwin-patches@cygwin.com>
+References: <20020530102327.Z30892@cygbert.vinschen.de> <00ef01c207c9$93cc35d0$0200a8c0@lifelesswks>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00ef01c207c9$93cc35d0$0200a8c0@lifelesswks>
+User-Agent: Mutt/1.3.22.1i
+X-SW-Source: 2002-q2/txt/msg00255.txt.bz2
 
+On Thu, May 30, 2002 at 09:03:06PM +1000, Robert Collins wrote:
+> It was my understandinf that the NtXXX calls cannot be used from user
+> mode. 
 
+That's a misunderstanding.  They are intentionally identical in user mode.
 
-> -----Original Message-----
-> From: cygwin-patches-owner@cygwin.com 
-> [mailto:cygwin-patches-owner@cygwin.com] On Behalf Of Corinna Vinschen
-> Sent: Thursday, 30 May 2002 6:23 PM
-> To: cygpatch
-> Subject: Re: Cleanup of ntdll.h
-> 
-> 
-> On Thu, May 30, 2002 at 06:04:19PM +1000, Robert Collins wrote:
-> > > [mailto:cygwin-patches-owner@cygwin.com] On Behalf Of 
-> Corinna Vinschen
-> > > I changed that now so that all functions are called with 
-> Nt prefix.
-> > 
-> > This is incorrect. BOTH definitions should exist. NtXXX are 
-> kernel mode
-> > calls, ZwXXX are user mode calls that gate through to 
-> kernel mode calls
-> > via int 2eh.
-> 
-> Nope.  From user mode both call types are identical.  There's no need
-> to use both forms in Cygwin and since the header is only used inside
-> of Cygwin there's also no need to define both variations.  
-> One is enough.
-> It's all one to me if it's the Zw or Nt version but we should at least
-> use always the same.
+> We should be using the Zw calls.
 
-It was my understandinf that the NtXXX calls cannot be used from user
-mode. We should be using the Zw calls.
+...because...???
 
-Rob
+Anyway, they *are* identical from the Cygwin DLL point of view.  The
+calls are the same.  They don't point to different entry points in user
+mode.  So it's just a point of taste how to call these functions.
+
+The following is my taste:
+
+IMHO, we should use the Nt calls.  When I first introduced usage of
+native NT calls I called them NtXXX since that the name of the function
+is sort of self explaining.  IMHO.
+
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
