@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2979-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 21827 invoked by alias); 16 Sep 2002 11:46:12 -0000
+Return-Path: <cygwin-patches-return-2980-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 8815 invoked by alias); 16 Sep 2002 16:43:05 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,58 +7,39 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 21808 invoked from network); 16 Sep 2002 11:46:10 -0000
-Subject: Re: [PATCH] check for valid pthread_self pointer
-From: Robert Collins <rbcollins@cygwin.com>
-To: Jason Tishler <jason@tishler.net>
-Cc: cygwin-patches@cygwin.com
-In-Reply-To: <20020816112218.GA892@tishler.net>
-References: <Pine.WNT.4.44.0208071245020.353-200000@algeria.intern.net> 
-	<20020816112218.GA892@tishler.net>
-Content-Type: multipart/signed; micalg=pgp-sha1; protocol="application/pgp-signature";
-	boundary="=-wdWqR2UvjHkOT9b/Du6I"
-Date: Mon, 16 Sep 2002 04:46:00 -0000
-Message-Id: <1032176803.17676.135.camel@lifelesswks>
-Mime-Version: 1.0
-X-SW-Source: 2002-q3/txt/msg00427.txt.bz2
+Received: (qmail 8783 invoked from network); 16 Sep 2002 16:43:04 -0000
+Date: Mon, 16 Sep 2002 09:43:00 -0000
+From: Jason Tishler <jason@tishler.net>
+Subject: Re: pthread_testcancel() causes SEGV
+In-reply-to: <1031671312.22457.19.camel@lifelesswks>
+To: Robert Collins <rbcollins@cygwin.com>
+Cc: Thomas Pfaff <tpfaff@gmx.net>, cygwin-developers@cygwin.com,
+ cygwin-patches@cygwin.com
+Mail-followup-to: Robert Collins <rbcollins@cygwin.com>,
+ Thomas Pfaff <tpfaff@gmx.net>, cygwin-developers@cygwin.com,
+ cygwin-patches@cygwin.com
+Message-id: <20020916164642.GH424@tishler.net>
+MIME-version: 1.0
+Content-type: text/plain; charset=us-ascii
+Content-transfer-encoding: 7BIT
+Content-disposition: inline
+User-Agent: Mutt/1.4i
+References: <20020806183632.GA1892@tishler.net>
+ <Pine.WNT.4.44.0208070927490.268-100000@algeria.intern.net>
+ <20020807185435.GA2228@tishler.net> <1031671312.22457.19.camel@lifelesswks>
+X-SW-Source: 2002-q3/txt/msg00428.txt.bz2
 
+Rob,
 
---=-wdWqR2UvjHkOT9b/Du6I
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-Content-length: 627
+On Wed, Sep 11, 2002 at 01:21:50AM +1000, Robert Collins wrote:
+> sorry for the *cough* long delay. 
 
-On Fri, 2002-08-16 at 21:22, Jason Tishler wrote:
-> Rob,
->=20
-> On Wed, Aug 07, 2002 at 05:19:10PM +0200, Thomas Pfaff wrote:
-> > This patch should fix the problem with the ipc-daemon started as
-> > service and threads that are not created by pthread_create.
->=20
-> Please evaluate and commit if OK -- the PostgreSQL folks could really
-> use this.
+No problem -- I guess that I won't have to cough when we discuss setup
+rebase delays... :,)
 
-BTW: they really should use pthread_create if they want to use threaded
-code with cygwin. But you knew that right?
+> Generally speaking, when you find yourself writing the same bit of code
+> twice, the design is wrong. Anyway, enough said:
 
-There is *no* guarantee that any pthread operations called from a non
-cygwin created thread will operate correctly. We'll try... but there is
-no guarantee.
+I saw "yank and puts" too, but decided to leave judgment up to you.
 
-Rob
-
-
---=-wdWqR2UvjHkOT9b/Du6I
-Content-Type: application/pgp-signature; name=signature.asc
-Content-Description: This is a digitally signed message part
-Content-length: 189
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.0.7 (GNU/Linux)
-
-iD8DBQA9hcSeI5+kQ8LJcoIRAhoQAJ9y/6bW3OZW9kaytqiz0LwVX6ygDQCfe+CI
-DirHb45CK8/rLZGWqAr2tGE=
-=aBk4
------END PGP SIGNATURE-----
-
---=-wdWqR2UvjHkOT9b/Du6I--
+Jason
