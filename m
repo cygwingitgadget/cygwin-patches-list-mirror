@@ -1,25 +1,43 @@
-From: Mumit Khan <khan@NanoTech.Wisc.EDU>
-To: Chris Faylor <cgf@cygnus.com>
-Cc: cygwin-patches@sourceware.cygnus.com
-Subject: Re: [PATCH] fix duplicate typedefs in winnt.h
-Date: Sun, 26 Mar 2000 11:19:00 -0000
-Message-id: <Pine.HPP.3.96.1000326131859.9368I-100000@hp2.xraylith.wisc.edu>
-References: <20000326134520.A16419@cygnus.com>
-X-SW-Source: 2000-q1/msg00015.html
+From: Chris Faylor <cgf@cygnus.com>
+To: cygwin-patches@sourceware.cygnus.com
+Subject: [PATCH] Throttle fork_copy on Windows 9x
+Date: Sun, 26 Mar 2000 14:55:00 -0000
+Message-id: <20000326175458.A1082@cygnus.com>
+X-SW-Source: 2000-q1/msg00016.html
 
-On Sun, 26 Mar 2000, Chris Faylor wrote:
+I've appended the following patch after a net user indicated that it solved
+a problem where fork_copy was taking an inordinately long time on Windows 98.
 
-> I just noticed that I was getting warnings when compiling Windows CE
-> executables, so I made the following changes.
-> 
-> Mumit, how do you want to handle this kind of change?  Do you want
-> people just go ahead and check things in if they are relatively simple
-> and "make sense" or do you want to approve every patch?
+I can't say that I understand it but I'm not surprised the Windows 9x doesn't
+like copying large amounts of memory between processes.
 
-Please feel free to check in the obvious changes/fixes; I can always
-extract the patches, but a copy to the patches list is good for
-reference.
+cgf
 
-Regards,
-Mumit
+Sun Mar 26 17:52:09 2000  Christopher Faylor <cgf@cygnus.com>
 
+        * dcrt0.cc (host_dependent_constants::init): Limit non-NT platforms to
+        32K chunks when copying regions during a fork.
+
+Index: dcrt0.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/dcrt0.cc,v
+retrieving revision 1.6
+diff -u -p -r1.6 dcrt0.cc
+--- dcrt0.cc	2000/03/25 05:25:27	1.6
++++ dcrt0.cc	2000/03/26 22:54:37
+@@ -151,6 +151,7 @@ host_dependent_constants NO_COPY host_de
+ void
+ host_dependent_constants::init ()
+ {
++  extern DWORD chunksize;
+   /* fhandler_disk_file::lock needs a platform specific upper word
+      value for locking entire files.
+ 
+@@ -169,6 +170,7 @@ host_dependent_constants::init ()
+     case win32s:
+       win32_upper = 0x00000000;
+       shared = FILE_SHARE_READ | FILE_SHARE_WRITE;
++      chunksize = 32 * 1024 * 1024;
+       break;
+ 
+     default:
