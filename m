@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2116-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 11011 invoked by alias); 26 Apr 2002 09:08:24 -0000
+Return-Path: <cygwin-patches-return-2117-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 21814 invoked by alias); 26 Apr 2002 09:43:55 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,112 +7,45 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 10978 invoked from network); 26 Apr 2002 09:08:21 -0000
-X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
-Date: Fri, 26 Apr 2002 02:08:00 -0000
-From: Thomas Pfaff <tpfaff@gmx.net>
-To: cygwin-patches@cygwin.com
-Subject: [PATCH] Fixed race in __pthread_mutex_init
-Message-ID: <Pine.WNT.4.44.0204261057490.243-101000@algeria.intern.net>
-X-X-Sender: pfaff@antarctica.intern.net
+Received: (qmail 21767 invoked from network); 26 Apr 2002 09:43:48 -0000
+content-class: urn:content-classes:message
 MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="1620310-18288-1019812093=:243"
-X-SW-Source: 2002-q2/txt/msg00100.txt.bz2
-
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
-
---1620310-18288-1019812093=:243
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-Content-length: 636
-
-__pthead_mutex_init had a race condition if the mutex is initialized with
-PTHREAD_MUTEX_INITIALIZER (the mutex could be initialized by two threads
-simultanously).
-The patch wraps a mutex around mutex creation.
-
-This is will be the last patch for a while. The feedback for the previous
-ones was a little low, i do not know if no one (except Rob) is interested
-in pthreads for cygwin or my patches are not welcome. I will wait for
-comments now.
-
-Regards,
-
-Thomas
-
-2002-04-26  Thomas Pfaff  <tpfaff@gmx.net>
-
-	* thread.cc (__pthread_mutex_init): Wrappped a mutex around mutex
-	creation to protect against PTHREAD_MUTEX_INITIALIZER race.
+Subject: RE: [PATCH] Fixed race in __pthread_mutex_init
+Content-Type: text/plain;
+	charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 26 Apr 2002 02:43:00 -0000
+X-MimeOLE: Produced By Microsoft Exchange V6.0.5762.3
+Message-ID: <FC169E059D1A0442A04C40F86D9BA7600C5F11@itdomain003.itdomain.net.au>
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+From: "Robert Collins" <robert.collins@itdomain.com.au>
+To: "Thomas Pfaff" <tpfaff@gmx.net>,
+	<cygwin-patches@cygwin.com>
+X-SW-Source: 2002-q2/txt/msg00101.txt.bz2
 
 
 
---1620310-18288-1019812093=:243
-Content-Type: APPLICATION/octet-stream; name="pthread_mutex_init.patch"
-Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.WNT.4.44.0204261108130.243@algeria.intern.net>
-Content-Description: 
-Content-Disposition: attachment; filename="pthread_mutex_init.patch"
-Content-length: 3494
+> -----Original Message-----
+> From: Thomas Pfaff [mailto:tpfaff@gmx.net]=20
+> Sent: Friday, April 26, 2002 7:08 PM
+> To: cygwin-patches@cygwin.com
+> Subject: [PATCH] Fixed race in __pthread_mutex_init
+>=20
+>=20
+> __pthead_mutex_init had a race condition if the mutex is=20
+> initialized with PTHREAD_MUTEX_INITIALIZER (the mutex could=20
+> be initialized by two threads simultanously). The patch wraps=20
+> a mutex around mutex creation.
+>=20
+> This is will be the last patch for a while. The feedback for=20
+> the previous ones was a little low, i do not know if no one=20
+> (except Rob) is interested in pthreads for cygwin or my=20
+> patches are not welcome. I will wait for comments now.
 
-ZGlmZiAtdXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi90aHJlYWQuY2Mgc3Jj
-L3dpbnN1cC9jeWd3aW4vdGhyZWFkLmNjCi0tLSBzcmMub2xkL3dpbnN1cC9j
-eWd3aW4vdGhyZWFkLmNjCUZyaSBBcHIgMjYgMTA6MjM6MjYgMjAwMgorKysg
-c3JjL3dpbnN1cC9jeWd3aW4vdGhyZWFkLmNjCUZyaSBBcHIgMjYgMTA6MDg6
-MzYgMjAwMgpAQCAtMjEwMSwzMyArMjEwMSw2MyBAQCBfX3B0aHJlYWRfZXF1
-YWwgKHB0aHJlYWRfdCAqdDEsIHB0aHJlYWRfCiAKIC8qTXV0ZXhlcyAgKi8K
-IAotLypGSVhNRTogdGhlcmUncyBhIHBvdGVudGlhbCByYWNlIHdpdGggUFRI
-UkVBRF9NVVRFWF9JTklUQUxJWkVSOgotICp0aGUgbXV0ZXggaXMgbm90IGFj
-dHVhbGx5IGluaXRlZCB1bnRpbCB0aGUgZmlyc3QgdXNlLgotICpTbyB0d28g
-dGhyZWFkcyB0cnlpbmcgdG8gbG9jay90cnlsb2NrIG1heSBjb2xsaWRlLgot
-ICpTb2x1dGlvbjogd2UgbmVlZCBhIGdsb2JhbCBtdXRleCBvbiBtdXRleCBj
-cmVhdGlvbiwgb3IgcG9zc2libHkgc2ltcGx5Ci0gKm9uIGFsbCBjb25zdHJ1
-Y3RvcnMgdGhhdCBhbGxvdyBJTklUSUFMSVpFUiBtYWNyb3MuCi0gKnRoZSBs
-b2NrIHNob3VsZCBiZSB2ZXJ5IHNtYWxsOiBvbmx5IGFyb3VuZCB0aGUgaW5p
-dCByb3V0aW5lLCBub3QKLSAqZXZlcnkgdGVzdCwgb3IgYWxsIG11dGV4IGFj
-Y2VzcyB3aWxsIGJlIHN5bmNocm9uaXNlZC4KLSAqLwotCiBpbnQKIF9fcHRo
-cmVhZF9tdXRleF9pbml0IChwdGhyZWFkX211dGV4X3QgKm11dGV4LAogCQkg
-ICAgICBjb25zdCBwdGhyZWFkX211dGV4YXR0cl90ICphdHRyKQogeworICBz
-dGF0aWMgcHRocmVhZF9tdXRleF90IGluaXRfbXV0ZXg7CisgIGludCByZXN1
-bHQgPSAwOworCisgIHsKKyAgICAvLyBJbml0aWFsaXplIGluaXRfbXV0ZXgg
-Zm9yIHRoZSBQVEhSRUFEX01VVEVYX0lOSVRJQUxJWkVSIHJhY2UKKyAgICAv
-LyBUbyB3b3JrIGFyb3VuZCBhIGNoaWNrZW4vZWdnIHByb2JsZW0gKHB0aHJl
-YWRfb25jZSByZXF1aXJlcyBtdXRleF9pbml0KQorICAgIC8vIHRoaXMgaXMg
-ZG9uZSB3aXRoIGFuIEludGVybG9ja2VkSW5jcmVtZW50ZWQgY291bnRlcgor
-ICAgIHN0YXRpYyBzdHJ1Y3QKKyAgICAgIHsKKyAgICAgICAgYm9vbCBkb25l
-OworICAgICAgICBMT05HIGNvdW50ZXI7CisgICAgICB9IGludGVybG9ja2Vk
-X29uY2UgPSB7IGZhbHNlLCAtMSB9OworCisgICAgaWYoICFpbnRlcmxvY2tl
-ZF9vbmNlLmRvbmUgKQorICAgICAgeworICAgICAgICAgaWYoIDAgPT0gSW50
-ZXJsb2NrZWRJbmNyZW1lbnQgKCZpbnRlcmxvY2tlZF9vbmNlLmNvdW50ZXIp
-ICkKKyAgICAgICAgICAgeworICAgICAgICAgICAgIGluaXRfbXV0ZXggPSBu
-ZXcgcHRocmVhZF9tdXRleCAoKHB0aHJlYWRfbXV0ZXhhdHRyICopTlVMTCk7
-CisgICAgICAgICAgICAgaW50ZXJsb2NrZWRfb25jZS5kb25lID0gdHJ1ZTsK
-KyAgICAgICAgICAgfQorICAgICAgICAgZWxzZQorICAgICAgICAgICB7Cisg
-ICAgICAgICAgICAgSW50ZXJsb2NrZWREZWNyZW1lbnQgKCZpbnRlcmxvY2tl
-ZF9vbmNlLmNvdW50ZXIpOworICAgICAgICAgICAgIHdoaWxlKCFpbnRlcmxv
-Y2tlZF9vbmNlLmRvbmUpCisgICAgICAgICAgICAgICB7CisgICAgICAgICAg
-ICAgICAgIFNsZWVwKDApOworICAgICAgICAgICAgICAgfQorICAgICAgICAg
-ICB9CisgICAgICB9CisgIH0KKwogICBpZiAoYXR0ciAmJiB2ZXJpZnlhYmxl
-X29iamVjdF9pc3ZhbGlkIChhdHRyLCBQVEhSRUFEX01VVEVYQVRUUl9NQUdJ
-QykgIT0gVkFMSURfT0JKRUNUIHx8IGNoZWNrX3ZhbGlkX3BvaW50ZXIgKG11
-dGV4KSkKICAgICByZXR1cm4gRUlOVkFMOwogCisgIF9fcHRocmVhZF9tdXRl
-eF9sb2NrICgmaW5pdF9tdXRleCk7CisKICAgaWYgKHZlcmlmeWFibGVfb2Jq
-ZWN0X2lzdmFsaWQgKG11dGV4LCBQVEhSRUFEX01VVEVYX01BR0lDLCBQVEhS
-RUFEX01VVEVYX0lOSVRJQUxJWkVSKSA9PSBWQUxJRF9PQkpFQ1QpCi0gICAg
-cmV0dXJuIEVCVVNZOworICAgIHJlc3VsdCA9IEVCVVNZOwogCi0gICptdXRl
-eCA9IG5ldyBwdGhyZWFkX211dGV4IChhdHRyID8gKCphdHRyKSA6IE5VTEwp
-OwotICBpZiAodmVyaWZ5YWJsZV9vYmplY3RfaXN2YWxpZCAobXV0ZXgsIFBU
-SFJFQURfTVVURVhfTUFHSUMpICE9IFZBTElEX09CSkVDVCkKKyAgZWxzZQog
-ICAgIHsKLSAgICAgIGRlbGV0ZSAoKm11dGV4KTsKLSAgICAgICptdXRleCA9
-IE5VTEw7Ci0gICAgICByZXR1cm4gRUFHQUlOOworICAgICAgKm11dGV4ID0g
-bmV3IHB0aHJlYWRfbXV0ZXggKGF0dHIgPyAoKmF0dHIpIDogTlVMTCk7Cisg
-ICAgICBpZiAodmVyaWZ5YWJsZV9vYmplY3RfaXN2YWxpZCAobXV0ZXgsIFBU
-SFJFQURfTVVURVhfTUFHSUMpICE9IFZBTElEX09CSkVDVCkKKyAgICAgICAg
-eworICAgICAgICAgIGRlbGV0ZSAoKm11dGV4KTsKKyAgICAgICAgICAqbXV0
-ZXggPSBOVUxMOworICAgICAgICAgIHJlc3VsdCA9IEVBR0FJTjsKKyAgICAg
-ICAgfQogICAgIH0KLSAgcmV0dXJuIDA7CisKKyAgX19wdGhyZWFkX211dGV4
-X3VubG9jayAoJmluaXRfbXV0ZXgpOworICAKKyAgcmV0dXJuIHJlc3VsdDsK
-IH0KIAogaW50Cg==
+I'm the pthread maintainer, so you only need my interest :}.
 
---1620310-18288-1019812093=:243--
+I'm reviewing your other patches at the moment.. I'll have some feedback
+for you before too much longer.
+
+Rob
