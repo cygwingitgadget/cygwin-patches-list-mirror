@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3220-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 11255 invoked by alias); 22 Nov 2002 20:46:40 -0000
+Return-Path: <cygwin-patches-return-3221-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 4609 invoked by alias); 24 Nov 2002 13:04:17 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,84 +7,77 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 11233 invoked from network); 22 Nov 2002 20:46:38 -0000
-Date: Fri, 22 Nov 2002 12:46:00 -0000
-From: Jason Tishler <jason@tishler.net>
-Subject: export nl_langinfo() patch
-To: Cygwin-Patches <cygwin-patches@cygwin.com>
-Mail-followup-to: Cygwin-Patches <cygwin-patches@cygwin.com>
-Message-id: <20021122204912.GA2236@tishler.net>
-MIME-version: 1.0
-Content-type: multipart/mixed; boundary="Boundary_(ID_YlHkQ9+qw9zcF09PIJMjQA)"
-User-Agent: Mutt/1.4i
-X-SW-Source: 2002-q4/txt/msg00171.txt.bz2
+Received: (qmail 4594 invoked from network); 24 Nov 2002 13:04:16 -0000
+Date: Sun, 24 Nov 2002 05:04:00 -0000
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: More passwd/group patches
+Message-ID: <20021124140414.Z1398@cygbert.vinschen.de>
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <3DDE3FB9.2AFAA199@ieee.org> <20021122154644.N1398@cygbert.vinschen.de> <3DDE4528.3BDCDCEF@ieee.org>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3DDE4528.3BDCDCEF@ieee.org>
+User-Agent: Mutt/1.3.22.1i
+X-SW-Source: 2002-q4/txt/msg00172.txt.bz2
 
+Hi Pierre,
 
---Boundary_(ID_YlHkQ9+qw9zcF09PIJMjQA)
-Content-type: text/plain; charset=us-ascii
-Content-transfer-encoding: 7BIT
-Content-disposition: inline
-Content-length: 66
+a few comments:
 
-The attached patch exports newlib's nl_langinfo().
+On Fri, Nov 22, 2002 at 09:54:32AM -0500, Pierre A. Humblet wrote:
+>  static void
+>  getace (__aclent16_t &acl, int type, int id, DWORD win_ace_mask, DWORD win_ace_type)
+>  {
+>    acl.a_type = type;
+>    acl.a_id = id;
+>  
+> -  if (win_ace_mask & FILE_READ_DATA)
+> +  if ((win_ace_mask & FILE_READ_DATA) &&
+> +      !(acl.a_perm & (ALLOW_R | DENY_R)))
 
-Thanks,
-Jason
+A formatting nit:
+As long as these conditionals are not longer than a line, it would be nice
+to keep them on one line.  *If* you split the logical expression, please put
+the && or || in front of the next line, not at the end of the previous one.
 
---Boundary_(ID_YlHkQ9+qw9zcF09PIJMjQA)
-Content-type: text/plain; charset=us-ascii; NAME=nl_langinfo.patch
-Content-transfer-encoding: 7BIT
-Content-disposition: attachment; filename=nl_langinfo.patch
-Content-length: 1272
+>      if (win_ace_type == ACCESS_ALLOWED_ACE_TYPE)
+> -      acl.a_perm |= (acl.a_perm & S_IRGRP) ? 0 : S_IRUSR;
+> +      acl.a_perm |= ALLOW_R;
+>      else if (win_ace_type == ACCESS_DENIED_ACE_TYPE)
+> -      acl.a_perm &= ~S_IRGRP;
+> +      acl.a_perm |= DENY_R;
 
-Index: cygwin.din
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/cygwin.din,v
-retrieving revision 1.68
-diff -u -p -r1.68 cygwin.din
---- cygwin.din	15 Nov 2002 19:04:36 -0000	1.68
-+++ cygwin.din	22 Nov 2002 20:35:24 -0000
-@@ -597,6 +597,8 @@ nextafter
- _nextafter = nextafter
- nextafterf
- _nextafterf = nextafterf
-+nl_langinfo
-+_nl_langinfo = nl_langinfo
- open
- _open = open
- opendir
-Index: include/cygwin/version.h
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/include/cygwin/version.h,v
-retrieving revision 1.86
-diff -u -p -r1.86 version.h
---- include/cygwin/version.h	22 Nov 2002 16:27:32 -0000	1.86
-+++ include/cygwin/version.h	22 Nov 2002 20:35:24 -0000
-@@ -163,12 +163,13 @@ details. */
-        63: Export pututline
-        64: Export fseeko, ftello
-        65: Export siginterrupt
-+       66: Export nl_langinfo
-      */
- 
-      /* Note that we forgot to bump the api for ualarm, strtoll, strtoull */
- 
- #define CYGWIN_VERSION_API_MAJOR 0
--#define CYGWIN_VERSION_API_MINOR 65
-+#define CYGWIN_VERSION_API_MINOR 66
- 
-      /* There is also a compatibity version number associated with the
- 	shared memory regions.  It is incremented when incompatible
+I don't like the idea that these DENY bits are still set when the acl is
+returned to the application.  The underlying Solaris acl implementation 
+doesn't know about these bits.  They should be removed before returning
+the acl to the application.  Otherwise you're using bits which are not
+defined in acl.h.
 
---Boundary_(ID_YlHkQ9+qw9zcF09PIJMjQA)
-Content-type: text/plain; charset=us-ascii; NAME=nl_langinfo.ChangeLog
-Content-transfer-encoding: 7BIT
-Content-disposition: attachment; filename=nl_langinfo.ChangeLog
-Content-length: 137
+> +      /* Include CLASS_OBJ to insure count > 4 (MIN_ACL_ENTRIES)
+> +	 if any default ace exists */
+> +      lacl[3].a_perm = lacl[1].a_perm;
 
-Fri Nov 22 15:43:13 2002  <jason@tishler.net>
+You're copying the group bits to the mask?  Didn't you suggest to set
+it to rwx?  I think you're right.  It would be better to move this line
+to the initialization of the first lacl members and change it to
 
-	* cygwin.din: Export nl_langinfo().
-	* include/cygwin/version.h: Bump API minor version.
+  lacl[3].a_perm = ALLOW_R | ALLOW_W | ALLOW_X;
 
---Boundary_(ID_YlHkQ9+qw9zcF09PIJMjQA)--
+> +      int dgpos;
+> +      if ((types_def & (USER|GROUP)) 
+> +	  && ((dgpos = searchace (lacl, MAX_ACL_ENTRIES, DEF_GROUP_OBJ)),
+> +	      (pos = searchace (lacl, MAX_ACL_ENTRIES, DEF_CLASS_OBJ)) >= 0))
+> +	{
+> +	  lacl[pos].a_type = DEF_CLASS_OBJ;
+> +	  lacl[pos].a_perm = lacl[dgpos].a_perm;
+
+Same here, shouldn't the DEF_CLASS_OBJ entry have rwx, too?
+
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
