@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4492-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 13090 invoked by alias); 9 Dec 2003 05:08:35 -0000
+Return-Path: <cygwin-patches-return-4493-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 403 invoked by alias); 9 Dec 2003 23:54:13 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,31 +7,65 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 13075 invoked from network); 9 Dec 2003 05:08:34 -0000
-Date: Tue, 09 Dec 2003 05:08:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [Patch]: Fixing the PROCESS_DUP_HANDLE security hole (part 1).
-Message-ID: <20031209050834.GA15178@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3.0.5.32.20031208221010.0082f7b0@incoming.verizon.net> <3.0.5.32.20030929215525.0082c4f0@incoming.verizon.net> <3.0.5.32.20030929215525.0082c4f0@incoming.verizon.net> <3.0.5.32.20031208221010.0082f7b0@incoming.verizon.net> <3.0.5.32.20031208224603.0082cc00@incoming.verizon.net> <20031209043601.GA14369@redhat.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20031209043601.GA14369@redhat.com>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2003-q4/txt/msg00211.txt.bz2
+Received: (qmail 32646 invoked from network); 9 Dec 2003 23:54:12 -0000
+Message-ID: <3FD6609A.2090303@netscape.net>
+Date: Tue, 09 Dec 2003 23:54:00 -0000
+From: Nicholas Wourms <nwourms@netscape.net>
+User-Agent: Mozilla/5.0 (Windows; U; Win 9x 4.90; en-US; rv:1.4) Gecko/20030624 Netscape/7.1 (ax)
+X-Accept-Language: en-us, en
+MIME-Version: 1.0
+To: "Gerd.Spalink@t-online.de" <Gerd.Spalink@t-online.de>
+CC: cygwin-patches@cygwin.com
+Subject: Re: patch for audio recording with /dev/dsp
+References: <01C3BD3C.95EC61D0.Gerd.Spalink@t-online.de>
+In-Reply-To: <01C3BD3C.95EC61D0.Gerd.Spalink@t-online.de>
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AOL-IP: 130.127.121.187
+X-SW-Source: 2003-q4/txt/msg00212.txt.bz2
 
-On Mon, Dec 08, 2003 at 11:36:01PM -0500, Christopher Faylor wrote:
->I would have but the information that the fhandler contains the
->controlling tty is lost by the time dup is called.  Hmm.  I guess I
->could just check the io_handle.  I'll do that.
+Gerd Spalink wrote:
 
-I did this but, in testing, found that there are still other problems
-with setsid assuming that it can close the cygheap ctty when there may
-still be open fds which wouldn't like that to happen.
+> Hi,
+> 
+> This patch changes the device /dev/dsp so that audio recording works.
+> I have tested it with
+> cp /dev/dsp test.wav         (stop by hitting ctrl-C)
+> and subsequent playback with
+> cp test.wav /dev/dsp
+> 
+> I also tested successfully with bplay of the gramofile package
+> (with some hangups that I link to the terminal handling of this software).
 
-I'll work on that tomorrow.
+Awesome, thanks for doing this!  I hope it won't be too much trouble for 
+you to fill out that small assignment form mentioned in the other reply. 
+  Otherwise, we'll not be able to use this :-(.
 
-cgf
+> I am now considering implementing /dev/mixer ...
+
+Awhile back, a guy devised a drop-in replacement for /dev/mixer for when 
+you compile the ESounD daemon on Cygwin.  I don't know if it is of any 
+use, but I found it interesting:
+
+http://www.kiss.taihaku.sendai.jp/~fuji/product/esd.patch
+
+If you feel the libmm api isn't robust enough, you might consider using 
+the DirectSound API, since it should provide the advanced features 
+necessary to support a rich mixer without being dependent on one sound 
+card or another.  Depending on how current and/or complete the 
+DirectSound support is in the w32api libraries, you may have to do some 
+  work on them first.
+
+Something else that would be nice to have would be very basic midi 
+support, which you might consider doing if you're going to do mixer.
+
+One final thought, one thing which would compliment the addition of 
+/dev/mixer would be the port of either the alsa or oss library to 
+Cygwin.  Even just providing a set of wrapper functions around the 
+w32api would nice.  I know we currently have the header for oss, but 
+some apps require the supplementary functions found in the library 
+itself.  And now, more and more, applications are moving towards using 
+alsa as the default.  Anyhow, that's something to consider if you care to.
+
+Cheers,
+Nicholas
