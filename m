@@ -1,151 +1,29 @@
-From: Egor Duda <deo@logos-m.ru>
+From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: raw-win32-keyboard-mode patch
-Date: Fri, 16 Feb 2001 07:38:00 -0000
-Message-id: <16286062992.20010216183758@logos-m.ru>
-X-SW-Source: 2001-q1/msg00079.html
-Content-type: multipart/mixed; boundary="----------=_1583532846-65438-7"
+Subject: Re: \033[xx;yy;zzm patch
+Date: Fri, 16 Feb 2001 09:03:00 -0000
+Message-id: <20010216120402.A19422@redhat.com>
+References: <1772701184.20010215002717@logos-m.ru> <20010214170018.A19427@redhat.com> <13286032277.20010216183727@logos-m.ru>
+X-SW-Source: 2001-q1/msg00080.html
 
-This is a multi-part message in MIME format...
+On Fri, Feb 16, 2001 at 06:37:27PM +0300, Egor Duda wrote:
+>Hi!
+>
+>Thursday, 15 February, 2001 Christopher Faylor cgf@redhat.com wrote:
+>
+>>>2001-02-14  Egor Duda  <deo@logos-m.ru>
+>>> 
+>>>       * fhandler_console.cc (fhandler_console::char_command): Ignore unknown
+>>>       rendition codes in \033[xx;yym control sequences
+>
+>CF> Applied.
+>
+>CF> Actually, I should have just asked you to apply this yourself.  You have checkin
+>CF> rights, right?
+>
+>right. perhaps, next time you can send "approval" message, similar to
+>those i've seen in binutils list, and i'd check the patch in?
 
-------------=_1583532846-65438-7
-Content-length: 1014
+Yep.  Will do.
 
-Hi!
-
-  i   wrote   a   program   called "ttyfier" which allows starting any
-win32  console    application   (or attaching to the existing one) and
- work   with  it  via  cygwin's  tty  interface. basically, this means
-that you can start any console    application  (including dos programs
-in ntvdm)  on   remote machine  via Corinna's port of openssh and work
-with  it  interactively (a-la pcAnywhere).
-
-i'll  announce it shortly in cygwin list and post it on my home page.
-
-this   program   requires,  however,  a  small  support  feature  from
-cygwin1.dll,  which  is  implemented in this patch. Sending \033[2000h
-sequence  to cygwin console makes it switch to "raw-win32" mode, where
-every win32 keyboard event is translated to \033{x;y;z;t;u;vK sequence
-where   in  x, y, z, t, u and v  the  fields  of  KEY_EVENT_RECORD are
-encoded. \033[2000l turns raw-win32 mode off.
-
-Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
-raw-win32-keyboard-mode.diff
-raw-win32-keyboard-mode.ChangeLog
-
-
-------------=_1583532846-65438-7
-Content-Type: text/plain; charset=us-ascii;
- name="raw-win32-keyboard-mode.ChangeLog"
-Content-Disposition: inline; filename="raw-win32-keyboard-mode.ChangeLog"
-Content-Transfer-Encoding: base64
-Content-Length: 944
-
-MjAwMS0wMi0xNiAgRWdvciBEdWRhICA8ZGVvQGxvZ29zLW0ucnU+CgoJKiBm
-aGFuZGxlcl9jb25zb2xlLmNjICh1c2VfbW91c2UpOiBSZW1vdmUuIE1ha2Ug
-bW91c2UgaGFuZGxpbmcKCXBlci1jb25zb2xlLgoJKiBmaGFuZGxlci5oIChj
-bGFzcyBmaGFuZGxlcl9jb25zb2xlKTogTW92ZSB1c2VfbW91c2UgaGVyZS4K
-CSogZmhhbmRsZXIuY2MgKGZoYW5kbGVyX2NvbnNvbGU6OnNldF9yYXdfd2lu
-MzJfa2V5Ym9hcmRfbW9kZSk6IE5ldwoJZnVuY3Rpb24uCgkqIGZoYW5kbGVy
-X2NvbnNvbGUuY2MgKGZoYW5kbGVyX2NvbnNvbGU6OmZoYW5kbGVyX2NvbnNv
-bGUpOiBUdXJuCgltb3VzZSBoYW5kbGluZyBhbmQgcmF3LXdpbjMyIGtleWJv
-YXJkIG1vZGUgb2ZmIGJ5IGRlZmF1bHQuCgkqIGZoYW5kbGVyX2NvbnNvbGUu
-Y2MgKGZoYW5kbGVyX2NvbnNvbGU6OnJlYWQpOiBJZiBpbiByYXctd2luMzIK
-CWtleWJvYXJkIG1vZGUsIGVuY29kZSB3aW4zMiBrZXlib2FyZCBldmVudHMg
-aW4gXDAzM3t4O3k7ejt0O3U7d0sKCXNlcXVlbmNlcy4KCSogZmhhbmRsZXJf
-Y29uc29sZS5jYyAoZmhhbmRsZXJfY29uc29sZTo6Y2hhcl9jb21tYW5kKTog
-VHJlYXQKCVwwMzNbMjAwMGggYXMgYSBjb21tYW5kIHRvIGVuYWJsZSByYXct
-d2luMzIga2V5Ym9hcmQgbW9kZSBhbmQKCVwwMzNbMjAwMGwgYXMgYSBjb21t
-YW5kIHRvIGRpc2FibGUgaXQuCg==
-
-------------=_1583532846-65438-7
-Content-Type: text/x-diff; charset=us-ascii;
- name="raw-win32-keyboard-mode.diff"
-Content-Disposition: inline; filename="raw-win32-keyboard-mode.diff"
-Content-Transfer-Encoding: base64
-Content-Length: 4958
-
-SW5kZXg6IGZoYW5kbGVyLmgKPT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1Mg
-ZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXIuaCx2
-CnJldHJpZXZpbmcgcmV2aXNpb24gMS40MApkaWZmIC11IC1yMS40MCBmaGFu
-ZGxlci5oCi0tLSBmaGFuZGxlci5oCTIwMDEvMDEvMTcgMTQ6NTc6MDkJMS40
-MAorKysgZmhhbmRsZXIuaAkyMDAxLzAyLzE2IDE0OjE2OjAyCkBAIC01OTcs
-NiArNTk3LDggQEAKICAgaW50IG5hcmdzXzsKIAogICBEV09SRCBkZWZhdWx0
-X2NvbG9yOworICBCT09MIHVzZV9tb3VzZTsKKyAgQk9PTCByYXdfd2luMzJf
-a2V5Ym9hcmRfbW9kZV9wOwogCiAvKiBPdXRwdXQgY2FsbHMgKi8KIApAQCAt
-NjA4LDYgKzYxMCw3IEBACiAgIHZvaWQgY3Vyc29yX3JlbCAoaW50LCBpbnQp
-OwogICBjb25zdCB1bnNpZ25lZCBjaGFyICogd3JpdGVfbm9ybWFsICh1bnNp
-Z25lZCBjb25zdCBjaGFyKiwgdW5zaWduZWQgY29uc3QgY2hhciAqKTsKICAg
-dm9pZCBjaGFyX2NvbW1hbmQgKGNoYXIsIGJvb2wpOworICBCT09MIHNldF9y
-YXdfd2luMzJfa2V5Ym9hcmRfbW9kZSAoQk9PTCk7CiAgIGludCBvdXRwdXRf
-dGNzZXRhdHRyIChpbnQgYSwgY29uc3Qgc3RydWN0IHRlcm1pb3MgKnQpOwog
-CiAvKiBJbnB1dCBjYWxscyAqLwpJbmRleDogZmhhbmRsZXJfY29uc29sZS5j
-Ywo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3NyYy9z
-cmMvd2luc3VwL2N5Z3dpbi9maGFuZGxlcl9jb25zb2xlLmNjLHYKcmV0cmll
-dmluZyByZXZpc2lvbiAxLjM3CmRpZmYgLXUgLXIxLjM3IGZoYW5kbGVyX2Nv
-bnNvbGUuY2MKLS0tIGZoYW5kbGVyX2NvbnNvbGUuY2MJMjAwMS8wMi8xNCAy
-MjowMDowOQkxLjM3CisrKyBmaGFuZGxlcl9jb25zb2xlLmNjCTIwMDEvMDIv
-MTYgMTQ6MTY6MDQKQEAgLTQ4LDggKzQ4LDYgQEAKIAogY29uc3QgY2hhciAq
-IGdldF9ub25hc2NpaV9rZXkgKElOUFVUX1JFQ09SRCYsIGNoYXIgKik7CiAK
-LXN0YXRpYyBCT09MIHVzZV9tb3VzZSA9IEZBTFNFOwotCiBzdGF0aWMgdHR5
-X21pbiBOT19DT1BZICpzaGFyZWRfY29uc29sZV9pbmZvID0gTlVMTDsKIAog
-LyogQWxsb2NhdGUgYW5kIGluaXRpYWxpemUgdGhlIHNoYXJlZCByZWNvcmQg
-Zm9yIHRoZSBjdXJyZW50IGNvbnNvbGUuCkBAIC0xMTYsNiArMTE0LDE1IEBA
-CiAgIHJldHVybiAxOwogfQogCitCT09MCitmaGFuZGxlcl9jb25zb2xlOjpz
-ZXRfcmF3X3dpbjMyX2tleWJvYXJkX21vZGUgKEJPT0wgbmV3X21vZGUpCit7
-CisgIEJPT0wgb2xkX21vZGUgPSByYXdfd2luMzJfa2V5Ym9hcmRfbW9kZV9w
-OworICByYXdfd2luMzJfa2V5Ym9hcmRfbW9kZV9wID0gbmV3X21vZGU7Cisg
-IHN5c2NhbGxfcHJpbnRmICgicmF3IGtleWJvYXJkIG1vZGUgJXNhYmxlZCIs
-IHJhd193aW4zMl9rZXlib2FyZF9tb2RlX3AgPyAiZW4iIDogImRpcyIpOwor
-ICByZXR1cm4gb2xkX21vZGU7Cit9OworCiB2b2lkCiBmaGFuZGxlcl9jb25z
-b2xlOjpzZXRfY3Vyc29yX21heWJlICgpCiB7CkBAIC0xNTMsNyArMTYwLDcg
-QEAKIAogICBIQU5ETEUgdzRbMl07CiAgIERXT1JEIG53YWl0OwotICBjaGFy
-IHRtcFsxN107CisgIGNoYXIgdG1wWzYwXTsKIAogICB3NFswXSA9IGg7CiAg
-IGlmIChpc2N5Z3RocmVhZCAoKSkKQEAgLTE5OCw2ICsyMDUsMzUgQEAKICAg
-ICAgIHN3aXRjaCAoaW5wdXRfcmVjLkV2ZW50VHlwZSkKIAl7CiAJY2FzZSBL
-RVlfRVZFTlQ6CisjZGVmaW5lIHZpcnR1YWxfa2V5X2NvZGUgKGlucHV0X3Jl
-Yy5FdmVudC5LZXlFdmVudC53VmlydHVhbEtleUNvZGUpCisjZGVmaW5lIGNv
-bnRyb2xfa2V5X3N0YXRlIChpbnB1dF9yZWMuRXZlbnQuS2V5RXZlbnQuZHdD
-b250cm9sS2V5U3RhdGUpCisKKyNpZmRlZiBERUJVR0dJTkcKKyAgICAgICAg
-ICAvKiBhbGxvdyBtYW51YWwgc3dpdGNoaW5nIHRvL2Zyb20gcmF3IG1vZGUg
-dmlhIGN0cmwtYWx0LXNjcm9sbGxvY2sgKi8KKyAgICAgICAgICBpZiAoaW5w
-dXRfcmVjLkV2ZW50LktleUV2ZW50LmJLZXlEb3duICYmCisgICAgICAgICAg
-ICAgIHZpcnR1YWxfa2V5X2NvZGUgPT0gVktfU0NST0xMICYmCisgICAgICAg
-ICAgICAgIGNvbnRyb2xfa2V5X3N0YXRlICYgKExFRlRfQUxUX1BSRVNTRUQg
-fCBMRUZUX0NUUkxfUFJFU1NFRCkgPT0gTEVGVF9BTFRfUFJFU1NFRCB8IExF
-RlRfQ1RSTF9QUkVTU0VECisgICAgICAgICAgICAgKQorICAgICAgICAgICAg
-eyAgIAorICAgICAgICAgICAgICBzZXRfcmF3X3dpbjMyX2tleWJvYXJkX21v
-ZGUgKCAhcmF3X3dpbjMyX2tleWJvYXJkX21vZGVfcCApOworICAgICAgICAg
-ICAgICBjb250aW51ZTsKKyAgICAgICAgICAgIH0KKyNlbmRpZgorCisgICAg
-ICAgICAgaWYgKHJhd193aW4zMl9rZXlib2FyZF9tb2RlX3ApCisgICAgICAg
-ICAgICB7CisgICAgICAgICAgICAgIF9fc21hbGxfc3ByaW50Zih0bXAsICJc
-MDMzeyV1OyV1OyV1OyV1OyV1OyVsdUsiLAorICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICBpbnB1dF9yZWMuRXZlbnQuS2V5RXZlbnQuYktl
-eURvd24sCisgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGlu
-cHV0X3JlYy5FdmVudC5LZXlFdmVudC53UmVwZWF0Q291bnQsCisgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgIGlucHV0X3JlYy5FdmVudC5L
-ZXlFdmVudC53VmlydHVhbEtleUNvZGUsCisgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgIGlucHV0X3JlYy5FdmVudC5LZXlFdmVudC53Vmly
-dHVhbFNjYW5Db2RlLAorICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICBpbnB1dF9yZWMuRXZlbnQuS2V5RXZlbnQudUNoYXIuVW5pY29kZUNo
-YXIsCisgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGlucHV0
-X3JlYy5FdmVudC5LZXlFdmVudC5kd0NvbnRyb2xLZXlTdGF0ZSApOworICAg
-ICAgICAgICAgICB0b2FkZCA9IHRtcDsKKyAgICAgICAgICAgICAgbnJlYWQg
-PSBzdHJsZW4gKHRvYWRkKTsKKyAgICAgICAgICAgICAgYnJlYWs7CisgICAg
-ICAgICAgICB9CisKIAkgIGlmICghaW5wdXRfcmVjLkV2ZW50LktleUV2ZW50
-LmJLZXlEb3duKQogCSAgICBjb250aW51ZTsKIApAQCAtNzIwLDYgKzc1Niw4
-IEBACiB7CiAgIHNldF9jYiAoc2l6ZW9mICp0aGlzKTsKICAgc3RhdGVfID0g
-bm9ybWFsOworICB1c2VfbW91c2UgPSBGQUxTRTsKKyAgcmF3X3dpbjMyX2tl
-eWJvYXJkX21vZGVfcCA9IEZBTFNFOwogICBzZXRfbmVlZF9mb3JrX2ZpeHVw
-ICgpOwogfQogCkBAIC0xMDAwLDYgKzEwMzgsOSBAQAogCSAgc3lzY2FsbF9w
-cmludGYoIm1vdXNlIHN1cHBvcnQgJXNhYmxlZCIsIHVzZV9tb3VzZSA/ICJl
-biIgOiAiZGlzIik7CiAJICBicmVhazsKIAorICAgICAgICBjYXNlIDIwMDA6
-IC8qIFJhdyBrZXlib2FyZCBtb2RlICovCisJICBzZXRfcmF3X3dpbjMyX2tl
-eWJvYXJkX21vZGUgKCAoYyA9PSAnaCcpID8gVFJVRSA6IEZBTFNFICk7Cisg
-ICAgICAgICAgCiAJZGVmYXVsdDogLyogSWdub3JlICovCiAJICBzeXNjYWxs
-X3ByaW50ZigidW5rbm93biBoL2wgY29tbWFuZDogJWQiLCBhcmdzX1swXSk7
-CiAJICBicmVhazsK
-
-------------=_1583532846-65438-7--
+cgf
