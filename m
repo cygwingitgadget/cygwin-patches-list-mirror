@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4425-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 9793 invoked by alias); 19 Nov 2003 11:24:18 -0000
+Return-Path: <cygwin-patches-return-4426-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 29732 invoked by alias); 20 Nov 2003 20:43:14 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,55 +7,50 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 9784 invoked from network); 19 Nov 2003 11:24:17 -0000
-Date: Wed, 19 Nov 2003 11:24:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
+Received: (qmail 29723 invoked from network); 20 Nov 2003 20:43:13 -0000
+Subject: Re: For masochists: the leap o faith
+From: Robert Collins <rbcollins@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: dtable.cc (build_fh_pc): serial port handling
-Message-ID: <20031119112416.GA32288@cygbert.vinschen.de>
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <Pine.GSO.4.56.0311111612280.9584@eos> <Pine.GSO.4.56.0311111819230.9584@eos> <20031112092733.GB7542@cygbert.vinschen.de> <Pine.GSO.4.56.0311121307230.9584@eos> <20031114013739.GC2631@redhat.com>
+In-Reply-To: <20031114220708.GA26100@redhat.com>
+References: <3FB4D81C.6010808@cygwin.com> <3FB53BAE.3000803@cygwin.com>
+	 <20031114220708.GA26100@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha1; protocol="application/pgp-signature"; boundary="=-vnW/K86/DIeZx0Css4A7"
+Message-Id: <1069360989.1117.33.camel@localhost>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20031114013739.GC2631@redhat.com>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2003-q4/txt/msg00144.txt.bz2
+Date: Thu, 20 Nov 2003 20:43:00 -0000
+X-SW-Source: 2003-q4/txt/msg00145.txt.bz2
 
-On Thu, Nov 13, 2003 at 08:37:39PM -0500, Christopher Faylor wrote:
-> On Wed, Nov 12, 2003 at 01:24:21PM -0600, Brian Ford wrote:
-> >2003-11-12  Brian Ford  <ford@vss.fsi.com>
-> >
-> >	* dtable.cc (build_fh_pc): Use DEV_SERIAL_MAJOR to catch all
-> >	serial ports.  Remove redundant FH_CYGDRIVE case since it is
-> >	handled by DEV_CYGDRIVE_MAJOR.
-> >
-> >FYI, this is the reason I am here:
-> >
-> >http://www.cygwin.com/ml/cygwin/2003-10/msg01750.html
-> >
-> >He offered to test my tcflush patch, but reported being unable to
-> >open /dev/ttyS0 with the cvs compiled Cygwin.
-> 
-> Reporting that this solved an actual bug would have been useful
-> information in the patch.  I was holding off approving this until
-> I had a chance to investigate and I'm extremely busy with real
-> work this week.
-> 
-> So, approved and applied.
 
-Today I found out that you accidentally removed both cases, the
-DEV_CYGDRIVE_MAJOR and the FH_CYGDRIVE case.  The effect is, that
-/cygdrive is not recognized as directory anymore and `ls -l /mnt'
-prints something like
+--=-vnW/K86/DIeZx0Css4A7
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+Content-length: 304
 
-  crw-rw-rw-    1 corinna  root      98,   0 Nov 19 12:23 /mnt
+On Sat, 2003-11-15 at 09:07, Christopher Faylor wrote:
 
-I checked in a patch which resurrects the DEV_CYGDRIVE_MAJOR case. 
+>=20
+> This problem is fixed in the gcc cvs trunk.  I've asked Danny and Gerrit
+> about backporting the fix to 3.3.2.  It should be trivial to do so.
 
-Corinna
+Any word on this?=20
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+Rob
+
+
+--=20
+GPG key available at: <http://www.robertcollins.net/keys.txt>.
+
+--=-vnW/K86/DIeZx0Css4A7
+Content-Type: application/pgp-signature; name=signature.asc
+Content-Description: This is a digitally signed message part
+Content-length: 189
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.3 (GNU/Linux)
+
+iD8DBQA/vSddI5+kQ8LJcoIRArznAJ9Pe9++Shpq1qvXeAXLS7rvfRMY6wCbBs1C
+MGZVFosHJeAFmBetyl6Psho=
+=Zv1U
+-----END PGP SIGNATURE-----
+
+--=-vnW/K86/DIeZx0Css4A7--
