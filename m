@@ -2,10 +2,10 @@ From: "Robert Collins" <robert.collins@itdomain.com.au>
 To: "Jason Tishler" <jason@tishler.net>
 Cc: <cygwin-patches@cygwin.com>
 Subject: Re: fix cond_race... was RE: src/winsup/cygwin ChangeLog thread.cc thread.h ...
-Date: Fri, 28 Sep 2001 11:20:00 -0000
-Message-id: <003a01c1484a$68e7b540$01000001@lifelesswks>
+Date: Sat, 29 Sep 2001 02:44:00 -0000
+Message-id: <038301c148cb$7cf7a550$01000001@lifelesswks>
 References: <20010928123825.V1356@dothill.com>
-X-SW-Source: 2001-q3/msg00232.html
+X-SW-Source: 2001-q3/msg00233.html
 
 ----- Original Message -----
 From: "Jason Tishler" <jason@tishler.net>
@@ -26,10 +26,12 @@ thread.cc thread.h ...
 hang
 > trigger by Python's test_threadedtempfile regression test?
 
-Well, if the problem with the test_threadedtempfile is what I thought it
-was, yes.
+I've checked in my completed code. I -cannot- tickle this bug via my
+test suite at all now. (I found that one of my test scripts was slightly
+buggy in that it made an incorrect assumption - it was passing when this
+bug was tickled - correcting that let me hit this bug nearly every time
+:]).
 
-The patch does need to be combined with the other fixup patch to have
-any effect though :].
+So please, give it a go and see how it fares.
 
 Rob
