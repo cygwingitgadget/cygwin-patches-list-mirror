@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3961-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 7248 invoked by alias); 13 Jun 2003 14:17:01 -0000
+Return-Path: <cygwin-patches-return-3962-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 1654 invoked by alias); 14 Jun 2003 12:32:35 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,43 +7,40 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 7238 invoked from network); 13 Jun 2003 14:17:01 -0000
-Date: Fri, 13 Jun 2003 14:17:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: Ping:  [PATCH] One liner to allow i786 (aka pentium4) in cygwin
-Message-ID: <20030613141700.GD22654@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3EDCCE5F.70509@ford.com> <3EE9BF64.2060204@ford.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3EE9BF64.2060204@ford.com>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2003-q2/txt/msg00188.txt.bz2
+Received: (qmail 1634 invoked from network); 14 Jun 2003 12:32:35 -0000
+X-Originating-IP: [62.21.237.84]
+X-Originating-Email: [mdvpost@hotmail.com]
+From: "Micha Nelissen" <mdvpost@hotmail.com>
+To: <cygwin-patches@cygwin.com>
+References: <BAY1-DAV408dRYtEcNi00028051@hotmail.com> <20030524180106.GC5604@redhat.com>
+Subject: Re: End of buffer suppress scroll
+Date: Sat, 14 Jun 2003 12:32:00 -0000
+MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2800.1165
+Message-ID: <BAY1-DAV42n8eeGbdBm0001926c@hotmail.com>
+X-OriginalArrivalTime: 14 Jun 2003 12:32:34.0312 (UTC) FILETIME=[07FB7880:01C33271]
+X-SW-Source: 2003-q2/txt/msg00189.txt.bz2
 
-On Fri, Jun 13, 2003 at 08:11:16AM -0400, Kelley Cook wrote:
->A ping of this simple patch from ten days ago.  In the meantime, the 
->sources.redhat.com
->toplevel config.sub has pulled in the code to bless the 
->pentium4-pc-cygwin target triple
->as an alias for i786-pc-cygwin.
+Hi,
 
-I made an equivalent patch a few days ago.  Sorry for not mentioning it
-here.
+>> This scroll is not with scrollbar, but when adding a line. When a
+>> character is written in right bottom cell, all of buffer is
+>> scrolled. With this patch, the cursor can be 'out of range' while
+...
+>
+> You explained this but I still think there is an escape sequence
+> which controls what happens when a character shows up in the lower
+> right corner.  I thought there was a termcap/terminfo setting for
+> this, too.
 
->Note that as mentioned below either {mingw,w32api}/config.{guess,sub} 
->should also
->be updated to match the toplevel, or I have a really simple autoconf 
->patch that will let you
->delete those bogus copies and properly use the toplevel versions.
+There indeed is a termcap entry. But it has no effect in screen. This is the
+same as the termcap entry on EOL wrap, you can disable that too in termcap,
+but almost no program works anymore then. It's just 'the default' I think to
+have EOL wrap, and no wrap at last character of buffer.
 
-We don't control the mingw directory.  Try sending email to
-
-mingw-dvlpr SPLAT lists BOP sourceforge BOP net .
-
-(with SPLAT and BOP replaced by their obvious characters).
-
-Thanks,
-cgf
+Micha.
