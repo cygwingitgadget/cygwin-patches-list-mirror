@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5158-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 25372 invoked by alias); 22 Nov 2004 16:01:16 -0000
+Return-Path: <cygwin-patches-return-5159-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 20810 invoked by alias); 22 Nov 2004 17:47:13 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,61 +7,71 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 25274 invoked from network); 22 Nov 2004 16:00:59 -0000
-Received: from unknown (HELO cgf.cx) (66.30.17.189)
-  by sourceware.org with SMTP; 22 Nov 2004 16:00:59 -0000
-Received: by cgf.cx (Postfix, from userid 201)
-	id C91AA1B3E5; Mon, 22 Nov 2004 11:01:42 -0500 (EST)
-Date: Mon, 22 Nov 2004 16:01:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
-To: cygwin-patches@cygwin.com, pierre.humblet@ieee.org
-Subject: Re: [Patch] Loading the registry hive on Win9x (part 2)
-Message-ID: <20041122160142.GB31237@trixie.casa.cgf.cx>
+Received: (qmail 20204 invoked from network); 22 Nov 2004 17:46:48 -0000
+Received: from unknown (HELO slinky.cs.nyu.edu) (128.122.20.14)
+  by sourceware.org with SMTP; 22 Nov 2004 17:46:48 -0000
+Received: from localhost (localhost [127.0.0.1])
+	by slinky.cs.nyu.edu (8.12.10+Sun/8.12.10) with ESMTP id iAMHkkrc009198
+	for <cygwin-patches@cygwin.com>; Mon, 22 Nov 2004 12:46:46 -0500 (EST)
+Date: Mon, 22 Nov 2004 17:47:00 -0000
+From: Igor Pechtchanski <pechtcha@cs.nyu.edu>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com, pierre.humblet@ieee.org
-References: <3.0.5.32.20041121215538.008217f0@incoming.verizon.net> <20041122152518.GD25781@trixie.casa.cgf.cx> <41A20A4E.C4A20EC6@phumblet.no-ip.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <41A20A4E.C4A20EC6@phumblet.no-ip.org>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2004-q4/txt/msg00159.txt.bz2
+To: cygwin-patches@cygwin.com
+Subject: Re: [Patch] Fixing the PROCESS_DUP_HANDLE security hole.
+In-Reply-To: <20041120062339.GA31757@trixie.casa.cgf.cx>
+Message-ID: <Pine.GSO.4.61.0411221240590.20353@slinky.cs.nyu.edu>
+References: <3.0.5.32.20041111224857.00819b20@incoming.verizon.net>
+ <3.0.5.32.20041111224857.00819b20@incoming.verizon.net>
+ <3.0.5.32.20041111235225.00818340@incoming.verizon.net>
+ <20041114051158.GG7554@trixie.casa.cgf.cx> <20041116054156.GA17214@trixie.casa.cgf.cx>
+ <419A1F7B.8D59A9C9@phumblet.no-ip.org> <20041116155640.GA22397@trixie.casa.cgf.cx>
+ <20041120062339.GA31757@trixie.casa.cgf.cx>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Scanned-By: MIMEDefang 2.39
+X-SW-Source: 2004-q4/txt/msg00160.txt.bz2
 
-On Mon, Nov 22, 2004 at 10:48:30AM -0500, Pierre A. Humblet wrote:
->Christopher Faylor wrote:
->> 
->> On Sun, Nov 21, 2004 at 09:55:38PM -0500, Pierre A. Humblet wrote:
->> >-  got_something_from_registry = regopt ("default");
->> >   if (myself->progname[0])
->> >-    got_something_from_registry = regopt (myself->progname) || got_something_from_registry;
->> >+    got_something_from_registry = regopt (myself->progname);
->> >+  got_something_from_registry =  got_something_from_registry || regopt ("default");
->> 
->> Doesn't this change the sense of the "default" key so that it will never
->> get used if a key exists for myself->progname rather than always get
->> used, regardless?  Maybe I'm the only person in the world who relies on
->> that behavior, but I do rely on it.
+On Sat, 20 Nov 2004, Christopher Faylor wrote:
+
+> Here's the good news/bad news.
 >
->Hmm, I thought that what went on before was that the "default"
->key was always read, but that it was overwritten if the other key
->existed. Is it the case that there is no complete overwriting,
->it's the union that counts? If so, I will put it back that way.
+> On Tue, Nov 16, 2004 at 10:56:40AM -0500, Christopher Faylor wrote:
+> >The simplification of the code from removing all of the reparenting
+> >considerations is not something that I'm going to give up on easily.
+>
+> Well, the code seems to be slightly faster now than the old method,
+> so that's something.  I think it's also a lot simpler.
+>
+> There are some ancillary benefits of this new approach.  I've fixed the
+> old problem where if you run a process from a windows command prompt and
+> that process execs another process and it execs another process, each
+> process will wait around into the final process in the chain dies.
+>
+> I've also added an 'exitcode' field to _pinfo so that a Cygwin process
+> will set the error code in a UNIX fashion based on whether it is exiting
+> due to a signal or with a normal exit().  Unfortunately, this means that
+> I don't know quite what to do with exit codes from Windows processes.
+> This is the last remaining problem before I check things in.  This
+> problem just occurred to me as I was typing in the ChangeLog and it may
+> be the one reason why you actually need to do the reparenting tango.
 
-AFAICT, regopt calls parse_options which parses the options immediately.
-So, the first call to "default" sets the CYGWIN environment variable
-options from the registry immediately.
+Can the code simply propagate the actual exit code into the exitcode field
+(since Windows programs don't know about signals)?  Besides, I recall that
+there could be a problem if the Windows program had a negative exit code,
+since it treads upon special bit flags.  Can we just mask the higher bits
+of the signal?  If that means that -2 becomes 126 -- so be it.
 
->I didn't know that every program was trying to read 4 items in the
->registry. Wouldn't it make sense to keep inheritable keys to the Cygwin
->registry branches on the cygheap, instead of walking down the hierarchy
->four times?
+> What do you want to bet that someone is relying on exit codes from a
+> non-cygwin java program?  Blech.
 
-What kind of speed improvement would we see from this?  AFAIK, windows
-programs read the registry all of the time.
+Oh, bet on it.  Ant relies on exactly that.  Blech, indeed.
+	Igor
+-- 
+				http://cs.nyu.edu/~pechtcha/
+      |\      _,,,---,,_		pechtcha@cs.nyu.edu
+ZZZzz /,`.-'`'    -.  ;-;;,_		igor@watson.ibm.com
+     |,4-  ) )-,_. ,\ (  `'-'		Igor Pechtchanski, Ph.D.
+    '---''(_/--'  `-'\_) fL	a.k.a JaguaR-R-R-r-r-r-.-.-.  Meow!
 
->By the way, perhaps others in the world would also find that feature
->useful, but AFAIK it's a well kept secret. FAQ or users' guide alert?
-
-It's user's guide fodder.
-
-cgf
+"The Sun will pass between the Earth and the Moon tonight for a total
+Lunar eclipse..." -- WCBS Radio Newsbrief, Oct 27 2004, 12:01 pm EDT
