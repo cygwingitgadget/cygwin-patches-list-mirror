@@ -1,25 +1,24 @@
-From: Christopher Faylor <cgf@redhat.com>
+From: Earnie Boyd <earnie_boyd@yahoo.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: config/i386/cygwin.h Use msvcrt for -mno-cygwin
-Date: Wed, 10 Jan 2001 13:29:00 -0000
-Message-id: <20010110162922.A4790@redhat.com>
-References: <3A5CCC11.9CF6AC25@yahoo.com> <200101102103.QAA26304@envy.delorie.com> <3A5CCFFC.D20B5B56@yahoo.com>
-X-SW-Source: 2001-q1/msg00028.html
+Date: Wed, 10 Jan 2001 17:02:00 -0000
+Message-id: <3A5CBFB3.89B6C0E6@yahoo.com>
+References: <3A5CCC11.9CF6AC25@yahoo.com> <200101102103.QAA26304@envy.delorie.com> <3A5CCFFC.D20B5B56@yahoo.com> <20010110162922.A4790@redhat.com>
+X-SW-Source: 2001-q1/msg00029.html
 
-On Wed, Jan 10, 2001 at 04:11:24PM -0500, Earnie Boyd wrote:
->DJ Delorie wrote:
->> 
->> gcc patches need to be sent to gcc-patches@gcc.gnu.org if you want
->> them applied to the master sources.
+Christopher Faylor wrote:
+
 >
->This was mostly for Chris.  He's working on some other changes and I
->promised him this.
+> What does everyone think about making -mno-win32 the default?
+>
 
-I've got them, thanks.
+Go for it, you won't regret it.
 
-My sources had drifted a little but there was nothing major.  I'll make
-a test release tonight.
+Cheers,
+Earnie.
 
-What does everyone think about making -mno-win32 the default?
 
-cgf
+
+_________________________________________________________
+Do You Yahoo!?
+Get your free @yahoo.com address at http://mail.yahoo.com
