@@ -1,17 +1,19 @@
-From: Benjamin Riefenstahl <Benjamin.Riefenstahl@epost.de>
+From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: Console codepage
-Date: Sun, 15 Apr 2001 07:38:00 -0000
-Message-id: <m3puee8bz2.fsf@benny-ppc.crocodial.de>
-References: <u7l3fv26h.fsf@mail.epost.de> <20010128154852.A20701@redhat.com> <m3hezz8o0c.fsf@benny-ppc.crocodial.de> <20010408144157.A30790@redhat.com> <20010408204737.B23313@redhat.com>
-X-SW-Source: 2001-q2/msg00067.html
+Subject: Re: [PATCH]Add help option to mount and umount
+Date: Sun, 15 Apr 2001 19:51:00 -0000
+Message-id: <20010415225137.A10773@redhat.com>
+References: <000c01c0c1da$475de120$6d31273f@ca.boeing.com>
+X-SW-Source: 2001-q2/msg00068.html
 
-Hi,
+On Tue, Apr 10, 2001 at 09:20:58AM -0700, Michael A. Chase wrote:
+>It's going to take a while to figure out who at Oracle should sign the
+>disclaimer for me, so here's the help option part of the previous patch.
+>
+>You can discard the ChangeLog if you like, this really just completes the
+>changes made on 2 April.
 
-Christopher Faylor <cgf@redhat.com> writes:
-> I made enough changes that this needs to be retested.
+I've committed this change.
 
-Looks o.k. here with interactive tests covering the combinations of
-chcp 850 vs 1252 and CYGWIN=codepage:ansi vs oem.
-
-so long, benny
+Thanks.
+cgf
