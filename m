@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4339-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 25095 invoked by alias); 6 Nov 2003 01:31:49 -0000
+Return-Path: <cygwin-patches-return-4340-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 2780 invoked by alias); 6 Nov 2003 13:15:10 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,52 +7,115 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 25085 invoked from network); 6 Nov 2003 01:31:48 -0000
-Message-Id: <3.0.5.32.20031105200201.00828100@incoming.verizon.net>
-X-Sender: vze1u1tg@incoming.verizon.net (Unverified)
-Date: Thu, 06 Nov 2003 01:31:00 -0000
+Received: (qmail 2771 invoked from network); 6 Nov 2003 13:15:09 -0000
+Message-ID: <20031106131507.64464.qmail@web13808.mail.yahoo.com>
+Date: Thu, 06 Nov 2003 13:15:00 -0000
+From: =?iso-8859-1?q?Ian=20Ray?= <ran_iay@yahoo.com>
+Subject: [Patch] fhandler_disk_file::opendir memory leak
 To: cygwin-patches@cygwin.com
-From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
-Subject: Re: [Patch]: Fixing the PROCESS_DUP_HANDLE security hole (part
-  1).
-In-Reply-To: <3.0.5.32.20030929215525.0082c4f0@incoming.verizon.net>
-Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-X-SW-Source: 2003-q4/txt/msg00058.txt.bz2
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="0-777658689-1068124507=:64083"
+Content-Transfer-Encoding: 8bit
+X-SW-Source: 2003-q4/txt/msg00059.txt.bz2
 
-Ping? 
+--0-777658689-1068124507=:64083
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8bit
+Content-Id: 
+Content-Disposition: inline
+Content-length: 283
 
-This has been pending for a while. See also
-<http://cygwin.com/ml/cygwin-patches/2003-q4/msg00003.html>
+The attached patch fixes possible memory leak in
+fhandler_disk_file::opendir.
 
-Pierre
+Blue skies,
+Ian
 
-At 09:55 PM 9/29/2003 -0400, Pierre A. Humblet wrote:
->Here is a patch that allows to open master ttys without giving
->full access to the process, at least for access to the ctty. 
->
->It works by snooping the ctty pipe handles and duplicating them
->on the cygheap, for use by future opens in descendant processes.
->
->It passes all the tests I tried, but considering my lack of knowledge
->about ttys, everything is possible.
->
->Pierre
->
->
->2003-09-29  Pierre Humblet <pierre.humblet@ieee.org>
->
->	* cygheap.h (class cygheap_ctty): Create.
->	(struct init_cygheap): Add inherited_ctty member.
->	* cygheap.cc: Include pinfo.h.
->	(cygheap_ctty::acquire): Create.
->	(cygheap_ctty::pass): Ditto.
->	(cygheap_ctty::close): Ditto.
->	* fhandler_tty.cc (fhandler_tty_slave::open): Call
->	cygheap->inherited_ctty.pass and cygheap->inherited_ctty.acquire.
->	* tty.cc (tty::common_init): Remove call to SetKernelObjectSecurity
->	and edit some comments.
->	* syscalls.cc (setsid): Call cygheap->inherited_ctty.close.
->
->Attachment Converted: "c:\Home\Pierre\Mail\attach\tty1.dif"
->
+
+________________________________________________________________________
+Want to chat instantly with your online friends?  Get the FREE Yahoo!
+Messenger http://mail.messenger.yahoo.co.uk
+--0-777658689-1068124507=:64083
+Content-Type: text/plain; name="fhandler_disk_file.changelog"
+Content-Description: fhandler_disk_file.changelog
+Content-Disposition: inline; filename="fhandler_disk_file.changelog"
+Content-length: 127
+
+2003-11-06  Ian Ray  <ran_iay@yahoo.com>
+
+	* fhandler_disk_file.cc (fhandler_disk_file::opendir): Guard against
+	memory leak.
+
+
+--0-777658689-1068124507=:64083
+Content-Type: text/plain; name="fhandler_disk_file.patch"
+Content-Description: fhandler_disk_file.patch
+Content-Disposition: inline; filename="fhandler_disk_file.patch"
+Content-length: 1703
+
+--- fhandler_disk_file.1.67	2003-11-06 14:48:48.959065000 +0200
++++ fhandler_disk_file.cc	2003-11-06 14:48:18.543510000 +0200
+@@ -605,7 +605,7 @@ fhandler_disk_file::lock (int cmd, struc
+ DIR *
+ fhandler_disk_file::opendir ()
+ {
+-  DIR *dir;
++  DIR *dir = NULL;
+   DIR *res = NULL;
+   size_t len;
+ 
+@@ -613,26 +613,14 @@ fhandler_disk_file::opendir ()
+     set_errno (ENOTDIR);
+   else if ((len = strlen (pc))> MAX_PATH - 3)
+     set_errno (ENAMETOOLONG);
+-  else if ((dir = (DIR *) malloc (sizeof (DIR))) == NULL)
++  else if ((dir = (DIR *) calloc (sizeof (DIR))) == NULL)
+     set_errno (ENOMEM);
+   else if ((dir->__d_dirname = (char *) malloc (len + 3)) == NULL)
+-    {
+-      set_errno (ENOMEM);
+-      free (dir);
+-    }
++    set_errno (ENOMEM);
+   else if ((dir->__d_dirent =
+ 	    (struct dirent *) malloc (sizeof (struct dirent))) == NULL)
+-    {
+-      set_errno (ENOMEM);
+-      free (dir);
+-      free (dir->__d_dirname);
+-    }
+-  else if (access_worker (pc, R_OK) != 0)
+-    {
+-      free (dir);
+-      free (dir->__d_dirname);
+-    }
+-  else
++    set_errno (ENOMEM);
++  else if (access_worker (pc, R_OK) == 0)
+     {
+       strcpy (dir->__d_dirname, get_win32_name ());
+       dir->__d_dirent->d_version = __DIRENT_VERSION;
+@@ -655,11 +643,21 @@ fhandler_disk_file::opendir ()
+ 	  dir->__d_dirhash = get_namehash ();
+ 
+ 	  res = dir;
++          dir = NULL;
+ 	}
+       if (pc.isencoded ())
+ 	set_encoded ();
+     }
+ 
++  if (dir != NULL)
++    {
++      if (dir->__d_dirname != NULL)
++        free (dir->__d_dirname);
++      if (dir->__d_dirent != NULL)
++        free (dir->__d_dirent);
++      free (dir);
++    }
++
+   syscall_printf ("%p = opendir (%s)", res, get_name ());
+   return res;
+ }
+
+--0-777658689-1068124507=:64083--
