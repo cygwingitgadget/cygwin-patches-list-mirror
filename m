@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3929-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 30359 invoked by alias); 9 Jun 2003 13:30:24 -0000
+Return-Path: <cygwin-patches-return-3930-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 4766 invoked by alias); 9 Jun 2003 13:33:16 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,40 +7,61 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 30254 invoked from network); 9 Jun 2003 13:30:21 -0000
-Date: Mon, 09 Jun 2003 13:30:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygwin-patches@cygwin.com
+Received: (qmail 4755 invoked from network); 9 Jun 2003 13:33:15 -0000
+Message-ID: <3EE48CF9.536E06B5@ieee.org>
+Date: Mon, 09 Jun 2003 13:33:00 -0000
+From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
+X-Accept-Language: en,pdf
+MIME-Version: 1.0
+To: Corinna Vinschen <cygwin-patches@cygwin.com>
 Subject: Re: exec after seteuid
-Message-ID: <20030609133019.GK18350@cygbert.vinschen.de>
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3.0.5.32.20030607153456.008051b0@incoming.verizon.net> <3.0.5.32.20030607094044.00805970@mail.attbi.com> <3.0.5.32.20030607094044.00805970@mail.attbi.com> <3.0.5.32.20030607153456.008051b0@incoming.verizon.net> <3.0.5.32.20030608173256.007c6d00@incoming.verizon.net>
-Mime-Version: 1.0
+References: <3.0.5.32.20030607153456.008051b0@incoming.verizon.net> <3.0.5.32.20030607094044.00805970@mail.attbi.com> <3.0.5.32.20030607094044.00805970@mail.attbi.com> <3.0.5.32.20030607153456.008051b0@incoming.verizon.net> <3.0.5.32.20030608173256.007c6d00@incoming.verizon.net> <20030609121132.GJ18350@cygbert.vinschen.de>
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3.0.5.32.20030608173256.007c6d00@incoming.verizon.net>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2003-q2/txt/msg00156.txt.bz2
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2003-q2/txt/msg00157.txt.bz2
 
-On Sun, Jun 08, 2003 at 05:32:56PM -0400, Pierre A. Humblet wrote:
-> 2003-06-09  Pierre Humblet  <pierre.humblet@ieee.org>
+Corinna Vinschen wrote:
 > 
-> 	* spawn.cc (spawn_guts): Call CreateProcess while impersonated, 
-> 	when the real {u,g}ids and the groups are original.
-> 	Move RevertToSelf and ImpersonateLoggedOnUser to the main line.
-> 	* uinfo.cc (uinfo_init): Reorganize. If CreateProcess was called 
-> 	while impersonated, preserve the uids and gids and call
->  	ImpersonateLoggedOnUser. Preserve the uids and gids on Win9X.
+> > It seems to work fine but it requires login.exe changes. It's
+> > not just a question of security. ash does not setuid, while bash
+> > setuid(getuid()), i.e. just the opposite of what we need.
 > 
-> 	* exceptions.cc (error_start_init): Quote the pgm in the command.
+> I'm wondering why a shell should use setuid at all.  It's not the
+> task of the shell to do this, it's supposed under the environment
+> it gets.  So this is entirely the task of the processes which
+> eventually start a shell (login, rshd, sshd, etc.)
 
-Applied with some minor changes, mainly a bit more comment and a slight
-simplification of uinfo_init().
+I agree 100%. If you look in bash code there is some explanation,
+involving a "privileged mode" (undocumented?). I don't recall the 
+details.
 
-Thanks,
-Corinna
+> > While I was looking at the most recent login.c I saw that you have
+> > added a seteuid (priv_uid). Ideally, shouldn't it still be effective
+> > while calling dolastlog()? It's weird that the Berkeley code didn't do
+> 
+> I've uploaded a new login which does that.
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+OK, will try later.
+ 
+> > that. There is also the issue raised by Takashi Yano on the list.
+> 
+> Which is not related to using the wrong token.  I've written something
+> on the cygwin ML.
+
+Are you running with gid 544 by any chance?
+What I saw in login.exe while stracing my patch was
+setegid(513)
+seteuid(new user) <= uses token from login with password
+seteuid(18)       <= creates a new token, discards token from login
+seteuid(new user) <= creates new token.
+If the first setegid was a 544, the seteuid(18) would reuse the process
+token and the final seteuid() would use the token from the login with 
+passwd.
+
+Something else:
+Around 4:00 GMT there were exim related messages about setuid not working.
+It was on a Windows 2003 Enterprise. Is that the same as a Windows Server
+2003? We have had reports of problems with that one.
+Please have a look, for the moment I can't spend any time on these matters.
+
+Pierre
