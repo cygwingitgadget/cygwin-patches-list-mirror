@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3491-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 10870 invoked by alias); 4 Feb 2003 17:53:40 -0000
+Return-Path: <cygwin-patches-return-3492-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 11983 invoked by alias); 4 Feb 2003 22:54:14 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,33 +7,38 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 10851 invoked from network); 4 Feb 2003 17:53:39 -0000
-Date: Tue, 04 Feb 2003 17:53:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: handle leak in internal_getgroups
-Message-ID: <20030204175337.GJ5822@cygbert.vinschen.de>
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3.0.5.32.20030204113915.007f5b20@mail.attbi.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3.0.5.32.20030204113915.007f5b20@mail.attbi.com>
-User-Agent: Mutt/1.4i
-X-SW-Source: 2003-q1/txt/msg00140.txt.bz2
+Received: (qmail 11914 invoked from network); 4 Feb 2003 22:54:13 -0000
+X-Authentication-Warning: hp2.xraylith.wisc.edu: khan owned process doing -bs
+Date: Tue, 04 Feb 2003 22:54:00 -0000
+From: Mumit Khan <khan@nanotech.wisc.edu>
+To: <cygwin-patches@cygwin.com>
+Subject: Re: [patch] Tcl 20030128-3 changes to handle cygwin pathnames
+In-Reply-To: <20030203011505.GA14800@redhat.com>
+Message-ID: <Pine.HPX.4.33.0302041645530.27424-100000@hp2.xraylith.wisc.edu>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-SW-Source: 2003-q1/txt/msg00141.txt.bz2
 
-On Tue, Feb 04, 2003 at 11:39:15AM -0500, Pierre A. Humblet wrote:
-> 2003/02/04  Pierre Humblet  <pierre.humblet@ieee.org>
->  
-> 	* grp.cc (internal_getgroups): Do not return without closing
-> 	the process handle.
+On Sun, 2 Feb 2003, Christopher Faylor wrote:
 
-Applied.
+> Wow.  Do i have to suffer with this tcl crap in YA cygwin mailing list?
+>
+> If you want to submit patches for tcl/tk, use the insight mailing list.
+>
+> This would not be the correct place for this patch even if there wasn't
+> a more appropriate place that I have mentioned 127 times already.
 
-Thanks,
-Corinna
+I apologize for sending the patch to the wrong list. I do hope the end
+result will be that it will indeed cut down on all the tcl crap in cygwin
+lists.
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+> Mumit, you were once a valued contributor to the project but that doesn't
+> give you a grandfather clause for sending off-topic posts to cygwin-patches.
+
+I deserve the rebuke for sending an off topic patch, but I'm dismayed at
+the ad hominem attack. Rest assured that I will not make this mistake
+again.
+
+Mumit
+
+
