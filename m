@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2963-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 6918 invoked by alias); 13 Sep 2002 17:09:06 -0000
+Return-Path: <cygwin-patches-return-2964-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 14739 invoked by alias); 14 Sep 2002 18:43:23 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,55 +7,44 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 6871 invoked from network); 13 Sep 2002 17:09:04 -0000
-Date: Fri, 13 Sep 2002 10:09:00 -0000
-From: Steve O <bub@io.com>
+Received: (qmail 14725 invoked from network); 14 Sep 2002 18:43:22 -0000
+Date: Sat, 14 Sep 2002 11:43:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] tty.cc nonblocking pipe
-Message-ID: <20020913120752.A29249@fnord.io.com>
-References: <20020913022004.B17744@eris.io.com>
+Subject: Re: cygwin part of pseudo-relocs patch
+Message-ID: <20020914184315.GA19372@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <17051818150.20020903103820@logos-m.ru>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.2.5.1i
-In-Reply-To: <20020913022004.B17744@eris.io.com>; from bub@io.com on Fri, Sep 13, 2002 at 02:20:04AM -0500
-X-SW-Source: 2002-q3/txt/msg00411.txt.bz2
+In-Reply-To: <17051818150.20020903103820@logos-m.ru>
+User-Agent: Mutt/1.4i
+X-SW-Source: 2002-q3/txt/msg00412.txt.bz2
 
-Testing this patch a little more, I've found that WriteFile
-may fail in fhandler_tty.cc line ~643.  Failure causes the
-process to exit, which is not appropriate.  I'll look at this 
-some more over the weekend, but for now, I'd say hold off
-on applying this patch. 
-Thanks,
--steve
+On Tue, Sep 03, 2002 at 10:38:20AM +0400, egor duda wrote:
+>This is an updated cygwin part of pseudo-relocs patch.  Relocations are
+>performed inside of cygwin1.dll, as Chris suggested, and it seems to
+>work ok in case of one dll referencing another one.  After new binutils
+>package is released, it can go into cygwin release.
 
-On Fri, Sep 13, 2002 at 02:20:04AM -0500, Steve O wrote:
-> Hi,
->   I've been tracking down why rxvt hangs when a paste
-> is too big, or if you simply cat a file with control
-> chars, like rxvt.exe.  What I discovered is that 
-> Windows will block writing to an anonymous pipe.  The
-> behavior I was seeing was that the child was pretty
-> much waiting on writes, which works as long as rxvt
-> keeps reading, but if rxvt writes as well (and blocks)
-> then deadlock occurs. 
->   So the fix is to make the pipe non-blocking.  In tty.cc
-> the to_slave part is set to non-blocking, but the to_master
-> isn't.  Odd.  However, setting to_master to non-blocking
-> cures the rxvt deadlock.  This fix only works on NT/2K/XP.
-> Serious modification would be needed to get 98 to work.
-> -steve
-> 
-> *** tty-orig.cc Thu Sep 12 23:54:32 2002
-> --- tty.cc      Thu Sep 12 23:54:08 2002
-> ***************
-> *** 375,380 ****
-> --- 375,382 ----
->     DWORD pipe_mode = PIPE_NOWAIT;
->     if (!SetNamedPipeHandleState (to_slave, &pipe_mode, NULL, NULL))
->       termios_printf ("can't set to_slave to non-blocking mode");
-> +   if (!SetNamedPipeHandleState (to_master, &pipe_mode, NULL, NULL))
-> +     termios_printf ("can't set to_master to non-blocking mode");
->     ptym->set_io_handle (from_slave);
->     ptym->set_output_handle (to_slave);
->     return TRUE;
+Sorry for the long delay in reviewing this.  As the mantra goes "I've
+been incredibly busy".  I could tell you just how busy I am but I don't
+have time right now.  Anyway, I thought that this patch would take some
+time to review so I've been avoiding it.
+
+As it turns out, it took very little time at all.
+
+It seems to be ok, as far as I can tell, but I would prefer it if you
+would use the cygwin_internal interface for adding new cygwin-specific
+functionality.  That can allow a program to gracefully degrade when
+a feature is not available rather than popping up an "entry point not
+found" dialog.
+
+Assuming that you agree to this change, feel free to check in a version
+based on this concept.
+
+Thanks and apologies again for the delay in reviewing this patch.
+
+cgf
