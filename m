@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4356-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 894 invoked by alias); 11 Nov 2003 15:48:09 -0000
+Return-Path: <cygwin-patches-return-4357-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 17006 invoked by alias); 12 Nov 2003 00:08:10 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,51 +7,61 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 868 invoked from network); 11 Nov 2003 15:48:08 -0000
-Date: Tue, 11 Nov 2003 15:48:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
+Received: (qmail 16997 invoked from network); 12 Nov 2003 00:08:09 -0000
+X-Authentication-Warning: eos.vss.fsi.com: ford owned process doing -bs
+Date: Wed, 12 Nov 2003 00:08:00 -0000
+From: Brian Ford <ford@vss.fsi.com>
+X-X-Sender: ford@eos
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] stdio initialization
-Message-ID: <20031111154807.GB25083@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <Pine.WNT.4.44.0311101211450.1520-200000@algeria.intern.net> <20031110135740.GA12455@redhat.com> <3FAF9A9A.3070509@gmx.net> <20031110150952.GA10851@redhat.com> <20031110153018.GA12119@redhat.com> <3FB0F5A6.1050207@gmx.net>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3FB0F5A6.1050207@gmx.net>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2003-q4/txt/msg00075.txt.bz2
+Subject: dtable.cc typo
+Message-ID: <Pine.GSO.4.56.0311111612280.9584@eos>
+MIME-Version: 1.0
+Content-Type: MULTIPART/MIXED; BOUNDARY="-559023410-675537891-1068594348=:9584"
+Content-ID: <Pine.GSO.4.56.0311111806450.9584@eos>
+X-SW-Source: 2003-q4/txt/msg00076.txt.bz2
 
-On Tue, Nov 11, 2003 at 03:43:50PM +0100, Thomas Pfaff wrote:
->Christopher Faylor wrote:
->>Actually, on poking around a little, I wonder if we should be calling
->>_reclaim_reent to get back all of the stuff allocated in the REENT
->>structure?
->
->I think you are right.  Here is my patch to thread.cc that i will apply
->if there are no objections.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
 
-Looks ok to me.
+---559023410-675537891-1068594348=:9584
+Content-Type: TEXT/PLAIN; CHARSET=US-ASCII
+Content-ID: <Pine.GSO.4.56.0311111806451.9584@eos>
+Content-length: 444
 
-cgf
+I don't know c++ much/at all, but this looks wrong to me.  I don't
+understand how it even compiled before?  Feel free to slap me in the face
+because you can switch on a struct in c++? :)
 
->diff -urp src.org/thread.cc src/thread.cc
->--- src.org/thread.cc	2003-11-11 09:16:39.775574400 +0100
->+++ src/thread.cc	2003-11-11 09:21:24.304707200 +0100
->@@ -377,6 +377,8 @@ pthread::exit (void *value_ptr)
->       mutex.unlock ();
->     }
->
->+  (_reclaim_reent) (_REENT);
->+
->   if (InterlockedDecrement (&MT_INTERFACE->threadcount) == 0)
->     ::exit (0);
->   else
->@@ -1879,6 +1881,7 @@ __reent_t::init_clib (struct _reent& var
->   var._stdout = _GLOBAL_REENT->_stdout;
->   var._stderr = _GLOBAL_REENT->_stderr;
->   var.__sdidinit = _GLOBAL_REENT->__sdidinit;
->+  var.__cleanup = _GLOBAL_REENT->__cleanup;
->   _clib = &var;
-> };
+2003-11-11  Brian Ford  <ford@vss.fsi.com>
+
+	* dtable.cc (build_fh_pc): Fix typo in device number switch.
+
+-- 
+Brian Ford
+Senior Realtime Software Engineer
+VITAL - Visual Simulation Systems
+FlightSafety International
+Phone: 314-551-8460
+Fax:   314-551-8444
+---559023410-675537891-1068594348=:9584
+Content-Type: TEXT/PLAIN; CHARSET=US-ASCII; NAME="dtable.cc.patch"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.GSO.4.56.0311111745480.9584@eos>
+Content-Description: 
+Content-Disposition: ATTACHMENT; FILENAME="dtable.cc.patch"
+Content-length: 663
+
+SW5kZXg6IGR0YWJsZS5jYw0KPT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ0KUkNT
+IGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvY3lnd2luL2R0YWJsZS5jYyx2
+DQpyZXRyaWV2aW5nIHJldmlzaW9uIDEuMTE5DQpkaWZmIC11IC1wIC1yMS4x
+MTkgZHRhYmxlLmNjDQotLS0gZHRhYmxlLmNjCTEgT2N0IDIwMDMgMTI6MzY6
+MzkgLTAwMDAJMS4xMTkNCisrKyBkdGFibGUuY2MJMTEgTm92IDIwMDMgMjI6
+MDg6NTkgLTAwMDANCkBAIC0zNDAsNyArMzQwLDcgQEAgYnVpbGRfZmhfcGMg
+KHBhdGhfY29udiYgcGMpDQogCWZoID0gY25ldyAoZmhhbmRsZXJfZGV2X3Rh
+cGUpICgpOw0KIAlicmVhazsNCiAgICAgICBkZWZhdWx0Og0KLQlzd2l0Y2gg
+KHBjLmRldikNCisJc3dpdGNoIChwYy5kZXYuZGV2bikNCiAJICB7DQogCSAg
+Y2FzZSBGSF9DT05TT0xFOg0KIAkgIGNhc2UgRkhfQ09OSU46DQo=
+
+---559023410-675537891-1068594348=:9584--
