@@ -1,28 +1,39 @@
 From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: fileutils-4.0-3
-Date: Sun, 17 Jun 2001 07:43:00 -0000
-Message-id: <20010617104337.B3159@redhat.com>
-References: <Pine.GSO.4.21.0106122003330.3791-100000@devmail.dev.tivoli.com> <20010613105845.D1144@cygbert.vinschen.de> <12812308989.20010613152159@logos-m.ru> <20010613153123.K1144@cygbert.vinschen.de> <4385449600.20010614114100@logos-m.ru> <20010614170757.A1144@cygbert.vinschen.de> <20258602010.20010617153433@logos-m.ru>
-X-SW-Source: 2001-q2/msg00316.html
+Subject: Comments on Robert's category feature
+Date: Sun, 17 Jun 2001 18:09:00 -0000
+Message-id: <20010617211004.A530@redhat.com>
+References: <EA18B9FA0FE4194AA2B4CDB91F73C0EF08F069@itdomain002.itdomain.net.au> <004301c0f4a8$2d6f0ef0$0200a8c0@lifelesswks> <20010614203149.A14254@redhat.com> <20010614225309.A16513@redhat.com>
+X-SW-Source: 2001-q2/msg00317.html
 
-On Sun, Jun 17, 2001 at 03:34:33PM +0400, egor duda wrote:
->CV> The patch is fine, IMO.
+On Thu, Jun 14, 2001 at 10:53:09PM -0400, Christopher Faylor wrote:
+>On Thu, Jun 14, 2001 at 08:31:49PM -0400, Christopher Faylor wrote:
+>>I'm testing the other stuff in the meantime.
 >
->unfortunately, when file resides on a remote share,
->CreateFile (fname,0,...,OPEN_EXISTING,...) returns valid handle even
->if file doesn't exist! i've seen this on nt4, share is nt4 too. just
->try to 'touch //server/share/non-exiting-file' -- it prints "file
->doesn't exist" instead of creating it.
->
->this patch is supposed to work around it. Can anybody test it in
->w9x/w2k/samba environments?
+>I'm still checking but I also checked in the parsing parts of your patch
+>since I think that they are definitely the way to go.
 
-It actually worked fine with Samba before, at least in my setup.
+Ok, I've played with Robert's changes and I don't think that they go far
+enough.  Has anyone else looked at them?
 
-It still works fine after this patch and the behavior that you mention
-above is rectified when accessing shares between two Windows systems.
+I think we still need to change the chooser dialog so that it can
+create different views.  The default view should just display categories.
+Maybe categories should have those nifty chooser things so that you can
+deselect the whole thing, use test versions for the category, download
+sources for the category, skip the category, etc.
 
-Ok to check in?
+Clicking on the category name should expand it (maybe we need an icon next
+to the category name to make this clear).  Underneath the category name
+would be the list of everything in the category, in the standard format.
+
+If we were ambitious, we could also have a button at the top which switched
+everything to the "old view" where all packages were displayed.
+
+I don't think that these changes are too huge.  Robert has already laid
+the infrastructure for doing this.
+
+Does this make any sense?  Comments?
+
+Thanks to Robert for getting the ball rolling with this.
 
 cgf
