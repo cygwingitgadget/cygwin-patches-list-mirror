@@ -1,17 +1,15 @@
-From: "Mark Paulus" <commpg@yahoo.com>
-To: "Cygwin Patches" <cygwin-patches@sources.redhat.com>
-Subject: Who's watching cygwin-info@redhat.com??
-Date: Thu, 12 Apr 2001 07:39:00 -0000
-Message-id: <c395da4ebc17726411ffb22a0180a7c5@NO-ID-FOUND.mhonarc.org>
-X-SW-Source: 2001-q2/msg00038.html
+From: Christopher Faylor <cgf@redhat.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: Cygwin half of pthread update
+Date: Thu, 12 Apr 2001 08:35:00 -0000
+Message-id: <20010412113539.A5879@redhat.com>
+References: <03f001c0c2ed$3b89acd0$0200a8c0@lifelesswks> <20010411232520.C32524@redhat.com> <05df01c0c305$d4bef0f0$0200a8c0@lifelesswks>
+X-SW-Source: 2001-q2/msg00039.html
 
-Hi,
+On Thu, Apr 12, 2001 at 02:05:30PM +1000, Robert Collins wrote:
+>Committed.
 
-I have sent in a couple of notes to cygwin-info@redhat.com about
-an intellectual rights exception, and i have heard nothing back.  Is
-anyone monitoring that email address, and if so, can I get a status?
-(I've got this patch in limbo, and want to know whether to just drop
-it, or wait a little longer)
+What happened to the ChangeLog?  You shouldn't check in stuff without
+a ChangeLog entry.
 
-Thanks.
-
+cgf
