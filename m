@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2293-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 26200 invoked by alias); 3 Jun 2002 14:27:57 -0000
+Return-Path: <cygwin-patches-return-2294-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 19102 invoked by alias); 3 Jun 2002 17:07:32 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,55 +7,57 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 26184 invoked from network); 3 Jun 2002 14:27:56 -0000
-Message-ID: <20020603142753.6790.qmail@web20005.mail.yahoo.com>
-Date: Mon, 03 Jun 2002 07:27:00 -0000
-From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
-Subject: Re: regtool help/version patch
+Received: (qmail 18590 invoked from network); 3 Jun 2002 17:07:00 -0000
+Date: Mon, 03 Jun 2002 10:07:00 -0000
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
 To: cygwin-patches@cygwin.com
-In-Reply-To: <20020603032114.GA8750@redhat.com>
-MIME-Version: 1.0
+Subject: Re: Name aliasing in security.cc
+Message-ID: <20020603190657.B22554@cygbert.vinschen.de>
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <3.0.5.32.20020530215740.007fc380@mail.attbi.com>
+Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-X-SW-Source: 2002-q2/txt/msg00276.txt.bz2
+Content-Disposition: inline
+In-Reply-To: <3.0.5.32.20020530215740.007fc380@mail.attbi.com>
+User-Agent: Mutt/1.3.22.1i
+X-SW-Source: 2002-q2/txt/msg00277.txt.bz2
 
+On Thu, May 30, 2002 at 09:57:40PM -0400, Pierre A. Humblet wrote:
+> a) keep lookup_name() as it is?
+> b) remove it entirely?
+> c) call it whenever a SID is missing from a passwd/group entry, using
+> user independent search rules (except if a user looks up itself)? 
 
---- Christopher Faylor <cgf@redhat.com> wrote:
-> On Sun, Jun 02, 2002 at 10:58:33PM -0400, Christopher Faylor wrote:
-> >On Sun, Jun 02, 2002 at 09:45:30PM -0500, Joshua Daniel Franklin wrote:
-> >>2002-06-02  Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
-> >>
-> >>	* regtool.cc (prog_name): New global variable.
-> >>	(longopts): Ditto.
-> >>	(opts): Ditto.
-> >>	(usage): Standardize usage output. Rearrange/add descriptions.
-> >>	(print_version): New function.
-> >>	(main): Accomodate longopts and new --help, --version options.
-> >>	Add check for (_argv[optind+1] == NULL).
-> >
-> >Applied.
-> >
-> >Thanks, as always.
+I think b) is the way to go.  IMHO we should deprecate using ntsec
+w/o SID in the passwd/group files.
+
+> 2002-05-30  Pierre Humblet <pierre.humblet@ieee.org>
 > 
-> Joshua, it just occurred to me that you don't seem to be patching the
-> .sgml documentation when you make a change to a utility.
-> 
-> Do you think you could take a run over the utils.sgml file and see
-> if there are missing options that could be added?  Also, if you're
-> adding examples to the output then utils.sgml would be a good place
-> for that, too.
-> 
-> cgf
+> 	* security.cc (lsa2wchar): Suppressed.
+> 	(get_lsa_srv_inf): Suppressed.
+> 	(get_logon_server_and_user_domain): Suppressed.
+> 	(get_logon_server): Essentially new.
+> 	(get_user_groups): Add "domain" argument. Only lookup the
+> 	designated server and use "domain" in LookupAccountName.
+> 	(is_group_member): Simplify the arguments.
+> 	(get_user_local_groups): Simplify the arguments. Do only a
+> 	local lookup. Use "BUILTIN" and local domain in LookupAccountName.
+> 	(get_user_primary_group). Only lookup the designated server.
+> 	(get_group_sidlist): Remove logonserver argument. Do not lookup
+> 	any server for the SYSTEM account.
+> 	(create_token): Delete logonserver and call to get_logon_server.
+> 	Adjust arguments of get_group_sidlist, see above.
+> 	* security.h: Delete declaration of get_logon_server_and_user_domain
+> 	and add declaration of get_logon_server.
+> 	* uinfo.cc (internal_get_login): Call get_logon_server instead of
+> 	get_logon_server_and_user_domain.
 
-I was going to try to get all the --help/--version patches in for the
-next release, then patch utils.sgml at leisure. My logic is that the
-binaries are hard to change, but the using-utils.html page and the
-cygwin-doc package (which I have full control over) are easy. Also I
-may have a lot of questions on certain explanations in utils.sgml
-(about, for example, setfacl or strace) that really are not related to
-the patches but could slow down the patching if I were working on it at 
-the same time.
+Applied.
 
-__________________________________________________
-Do You Yahoo!?
-Yahoo! - Official partner of 2002 FIFA World Cup
-http://fifaworldcup.yahoo.com
+Thanks,
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
