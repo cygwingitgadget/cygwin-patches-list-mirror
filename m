@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3560-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 4287 invoked by alias); 13 Feb 2003 21:22:52 -0000
+Return-Path: <cygwin-patches-return-3561-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 22653 invoked by alias); 13 Feb 2003 22:04:57 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,13 +7,13 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 4253 invoked from network); 13 Feb 2003 21:22:51 -0000
-Date: Thu, 13 Feb 2003 21:22:00 -0000
+Received: (qmail 22643 invoked from network); 13 Feb 2003 22:04:56 -0000
+Date: Thu, 13 Feb 2003 22:04:00 -0000
 From: Vaclav Haisman <V.Haisman@sh.cvut.cz>
 To: cygwin-patches@cygwin.com
-Subject: Re: Create new files as sparse on NT systems. (2nd try)
-In-Reply-To: <20030213203642.GG32279@redhat.com>
-Message-ID: <20030213220730.Y52833-100000@logout.sh.cvut.cz>
+Subject: Re: Produce beeps using soundcard
+In-Reply-To: <20030213204600.GH32279@redhat.com>
+Message-ID: <20030213225108.H52833-100000@logout.sh.cvut.cz>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 X-Scanned-By: AMaViS at Silicon Hill
@@ -22,22 +22,22 @@ X-Spam-Status: No, hits=-0.5 required=5.0
 	      SPAM_PHRASE_00_01
 	version=2.43
 X-Spam-Level: 
-X-SW-Source: 2003-q1/txt/msg00209.txt.bz2
+X-SW-Source: 2003-q1/txt/msg00210.txt.bz2
 
-On Thu, 13 Feb 2003, Christopher Faylor wrote:
-
-> This is YA case where I don't think that a CYGWIN environment variable option is
-> justified.
+> I don't like to introduce lots of unnecessary decision points into a
+> product.  It increases support and it increases code complexity.
+This patch is literally few lines long. I doubt it adds much complexity.
 >
-> UNIX has a method for producing sparse files.  If this is desired functionality,
-> Cygwin should mimic that not invent a new way of doing things.
+> Once again, how does linux handle this scenario?  You don't do a
+> "export LINUX=linbeep" to get linux to use the soundcard.
 >
 > cgf
 >
-
-I am not that much knowledgeable in matters of UNIX standars. What
-libary/system call is it? My justificaion of this patch is that with this
-option enable it mimics what this FreeBSD 4.7 box does. I don't need any other
-syscall than open() and ftruncate() to create 100GB empty sparse file.
+I know only about one way how to do this in GNU/Linux. It is this
+ftp://www.ibiblio.org/pub/Linux/kernel/patches/misc/modreq_beep.tgz kernel
+module and user space daemon that gets notified whenever there is a beep
+pending. IMHO this is much more complex than my patch. If you don't like using
+new CYGWIN option I can make it registry value but I think that that is still
+more complex than this patch.
 
 Vaclav Haisman
