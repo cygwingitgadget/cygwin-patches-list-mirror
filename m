@@ -1,46 +1,67 @@
-From: "J. Johnston" <jjohnstn@cygnus.com>
-To: Robert Collins <robert.collins@itdomain.com.au>
-Cc: Joel Sherrill <joel.sherrill@OARcorp.com>, cygwin-patches@cygwin.com, newlib@sources.redhat.com
-Subject: Re: cygwin/newlib types patchs
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: /dev/dsp
 Date: Thu, 29 Mar 2001 11:48:00 -0000
-Message-id: <3AC37051.7807901A@cygnus.com>
-References: <008101c0b1e6$d2b92f80$0200a8c0@lifelesswks> <20010321090559.F3149@redhat.com> <20010321091547.I3149@redhat.com> <000b01c0b24c$43e45530$0200a8c0@lifelesswks> <20010321170610.C9775@redhat.com> <026301c0b255$8982d130$0200a8c0@lifelesswks> <20010321173020.F9775@redhat.com> <029301c0b258$06fb42d0$0200a8c0@lifelesswks> <3ABBA589.74CED71C@cygnus.com> <3AC21396.979DB2C7@OARcorp.com> <3AC21E12.17F10166@OARcorp.com> <3AC227E5.5A31051C@OARcorp.com> <3AC249A8.1ADD0384@cygnus.com> <018a01c0b7d0$f4957510$0200a8c0@lifelesswks>
-X-SW-Source: 2001-q1/msg00267.html
+Message-id: <20010329134518.E16622@cygbert.vinschen.de>
+References: <F28ukp53NVBRIoni4u60000de19@hotmail.com>
+X-SW-Source: 2001-q1/msg00268.html
 
-Robert Collins wrote:
+On Wed, Mar 28, 2001 at 11:07:42PM -0000, Andy Younger wrote:
+> Hi,
 > 
-> ----- Original Message -----
-> From: "J. Johnston" <jjohnstn@cygnus.com>
-> To: "Joel Sherrill" <joel.sherrill@OARcorp.com>
-> Cc: "Robert Collins" <robert.collins@itdomain.com.au>;
-> <cygwin-patches@cygwin.com>; <newlib@sources.redhat.com>
-> Sent: Thursday, March 29, 2001 6:29 AM
-> Subject: Re: cygwin/newlib types patchs
-> 
-> 
-> >
-> > After thinking a little further on this, IMO it is best to separate
-> out the pthread types from
-> > sys/types.h since they are extremely system-specific.  This is how
-> glibc handles it.  So, we have a
-> > separate header: sys/pthreadtypes.h which contains the pthread types.
-> A default header file will
-> > exist in the libc/include/sys directory, however, each system that
-> supports pthreads will have its
-> > own version of sys/pthreadtypes.h in their sys directory which will
-> override the default.
-> 
-> Uhmm yes :] I've actually put the cygwin ones in cygwin/types.h, but as
-> long as it's system specific it doesn't really matter.
-> 
+> Here is my first revision of the /dev/dsp device for cygwin.
 
-So, what are you proposing?  I still contend that removing all the system pthread
-types into the sys directories is the clean way to implement this and the best
-long term solution for adding other system pthread implementations in the future.  
-I don't think overriding the entire types header is warranted.
+Cool! 
 
-Unless you have a better proposal, I am going to do this so it would save me the work 
-if as part of your change you simply split the pthread types into sys/pthreadtypes.h and 
-put the RTEMS stuff in the RTEMS directory and the Cygwin stuff in the Cygwin directory.
+> I am not overly familiar with Changelog formats, diff files etc, 
+> so any pointers would be well appreciated.
 
--- Jeff J.
+Ok, here we go... your ChangeLog looks good. Just some minor nits:
+
+> CHANGELOG:
+> ----------
+> Wed Mar 28 2001 Andy Younger <andylyounger@hotmail.com>
+> 
+> 	* fhandler_dsp.cc: new file. Implements OSS like /dev/dsp
+								 ^
+								Missing the
+								full stop.
+
+> 	* include/sys/soundcard.h: new file. User land includes for OSS /dev/dsp
+				   ^
+				   Always begin upper case.
+
+> 	* fhandler.h: add new class fhandler_dev_dsp and a FH_OSS_DSP definition
+> 	* makefile.in: add fhandler_dsp.o
+> 	* dtable.cc (dtable::build_fhandler): allow creation of the /dev/dsp
+> 	  device.
+	  ^^^^^^^
+	  All lines should have the same indentation:
+
+ 	* dtable.cc (dtable::build_fhandler): allow creation of the /dev/dsp
+ 	device.
+
+> 	* path.cc (windows_device_names): add /dev/dsp into list of device
+> 	  names
+> 
+> DIFF:
+> -----
+> 
+> The diff was created by,
+> 
+> 	diff -up src.original/winsup/cygwin/ src/winsup/cygwin/  >dsp.diff
+> 
+> is this ok, or do I need to do something different?
+
+diff -up is fine. We are using the same format. But I (and Chris as well)
+would appreciate to get it included into the mail text itself (assuming
+your mail client handles indentation and line breaks reasonable) or
+at least as attachment without compression, just the diff.
+
+Thanks for your efforts!
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
