@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2386-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 9095 invoked by alias); 11 Jun 2002 00:18:09 -0000
+Return-Path: <cygwin-patches-return-2387-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 13296 invoked by alias); 11 Jun 2002 00:29:36 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,27 +7,31 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 9080 invoked from network); 11 Jun 2002 00:18:08 -0000
-Message-ID: <021201c210dd$af3db970$6132bc3e@BABEL>
+Received: (qmail 13281 invoked from network); 11 Jun 2002 00:29:34 -0000
+Message-ID: <023701c210df$49350c80$6132bc3e@BABEL>
 From: "Conrad Scott" <Conrad.Scott@dsl.pipex.com>
 To: <cygwin-patches@cygwin.com>
-Subject: shmctl(2) patch
-Date: Mon, 10 Jun 2002 17:18:00 -0000
+References: <021201c210dd$af3db970$6132bc3e@BABEL>
+Subject: Re: shmctl(2) patch
+Date: Mon, 10 Jun 2002 17:29:00 -0000
 MIME-Version: 1.0
 Content-Type: multipart/mixed;
-	boundary="----=_NextPart_000_020F_01C210E6.10A97A20"
+	boundary="----=_NextPart_000_0234_01C210E7.AAAEAFE0"
 X-Priority: 3
 X-MSMail-Priority: Normal
 X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-SW-Source: 2002-q2/txt/msg00369.txt.bz2
+X-SW-Source: 2002-q2/txt/msg00370.txt.bz2
 
 This is a multi-part message in MIME format.
 
-------=_NextPart_000_020F_01C210E6.10A97A20
+------=_NextPart_000_0234_01C210E7.AAAEAFE0
 Content-Type: text/plain;
 	charset="iso-8859-1"
 Content-Transfer-Encoding: 7bit
-Content-length: 1518
+Content-length: 1600
+
+[Please ignore the patch attached to the previous email: I got it wrong.
+Again.]
 
 Attached is a patch to add the shmctl(2) interfaces required by ipcs(8)
 (following Linux's example tho' not their exact implementation or code).
@@ -68,7 +72,7 @@ Cheers.
  * shm.cc: Ditto.
 
 
-------=_NextPart_000_020F_01C210E6.10A97A20
+------=_NextPart_000_0234_01C210E7.AAAEAFE0
 Content-Type: text/plain;
 	name="ChangeLog.txt"
 Content-Transfer-Encoding: 7bit
@@ -86,19 +90,19 @@ Content-length: 382
 	* cygserver_shm.cc: Update for new cygshmid_ds class.
 	* shm.cc: Ditto.
 
-------=_NextPart_000_020F_01C210E6.10A97A20
+------=_NextPart_000_0234_01C210E7.AAAEAFE0
 Content-Type: application/octet-stream;
 	name="shmctl.patch"
 Content-Transfer-Encoding: quoted-printable
 Content-Disposition: attachment;
 	filename="shmctl.patch"
-Content-length: 11717
+Content-length: 11978
 
 diff -u -r -x CVS /pack/src/cygwin/HEAD.src/winsup/cygwin/cygserver_shm.cc =
 ./cygserver_shm.cc=0A=
 --- /pack/src/cygwin/HEAD.src/winsup/cygwin/cygserver_shm.cc	2002-06-11 00:=
 30:53.000000000 +0100=0A=
-+++ ./cygserver_shm.cc	2002-06-11 01:09:31.000000000 +0100=0A=
++++ ./cygserver_shm.cc	2002-06-11 01:24:18.000000000 +0100=0A=
 @@ -106,7 +106,7 @@=0A=
   * attach count and attachees list=0A=
   */=0A=
@@ -126,6 +130,15 @@ diff -u -r -x CVS /pack/src/cygwin/HEAD.src/winsup/cygwin/cygserver_shm.cc =
  	      header.error_code =3D 0;=0A=
  	      CloseHandle (token_handle);=0A=
  	      return;=0A=
+@@ -345,7 +345,7 @@=0A=
+ 		deleted_head =3D temp2;=0A=
+=20=0A=
+ 		// FIXME: when/where do we delete the handles?=0A=
+-		if (temp2->shmds->shm_nattch)=0A=
++		if (temp2->shmds->ds.shm_nattch)=0A=
+ 		  {=0A=
+ 		    // FIXME: add to a pending queue?=0A=
+ 		  }=0A=
 @@ -417,7 +417,7 @@=0A=
  	    {=0A=
  	      // FIXME: free the mutex=0A=
@@ -470,5 +483,5 @@ diff -u -r -x CVS /pack/src/cygwin/HEAD.src/winsup/cygwin/shm.cc ./shm.cc=
    shmtemp->attachmap =3D attachmap;=0A=
    shmtemp->mapptr =3D mapptr;=0A=
 
-------=_NextPart_000_020F_01C210E6.10A97A20--
+------=_NextPart_000_0234_01C210E7.AAAEAFE0--
 
