@@ -1,57 +1,32 @@
-From: David Sainty <David.Sainty@optimation.co.nz>
-To: "'Jason Gouger'" <cygwin@jason-gouger.com>
-Cc: cygwin-patches@cygwin.com
-Subject: RE: PATCH: getcwd() pathstyle
-Date: Thu, 11 Jan 2001 19:06:00 -0000
-Message-id: <30E7BC40E838D211B3DB00104B09EFB7795411@delorean.optimation.co.nz>
-X-SW-Source: 2001-q1/msg00033.html
+From: "Dr. Volker Zell" <Dr.Volker.Zell@oracle.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: config/i386/cygwin.h Use msvcrt for -mno-cygwin
+Date: Sat, 13 Jan 2001 01:38:00 -0000
+Message-id: <kv4rz36b7r.fsf@vzell.de.oracle.com>
+References: <3A5CCC11.9CF6AC25@yahoo.com> <200101102103.QAA26304@envy.delorie.com> <3A5CCFFC.D20B5B56@yahoo.com> <20010110162922.A4790@redhat.com>
+X-SW-Source: 2001-q1/msg00034.html
 
-> Unfortunately the "problem" would be across many scripts 
-> (sh/perl/make).
-> The scripts are all part of a common development environment 
-> which is used
-> on both UNIX and NT.  Under UNIX the scripts build options for gcc and
-> compile the application.  Under NT the same is true, except 
-> for the fact
-> that the scripts drive MSDev compilers which require native 
-> win32 paths...
+>>>>> "Christopher" == Christopher Faylor <cgf@redhat.com> writes:
 
-I can see the incentive, but I don't think it is the responsibility of
-Cygwin to resolve this if it risks breaking the Unix-style interface that
-Cygwin is attempting to provide.
+    Christopher> On Wed, Jan 10, 2001 at 04:11:24PM -0500, Earnie Boyd wrote:
+    >> DJ Delorie wrote:
+    >>> 
+    >>> gcc patches need to be sent to gcc-patches@gcc.gnu.org if you want
+    >>> them applied to the master sources.
+    >> 
+    >> This was mostly for Chris.  He's working on some other changes and I
+    >> promised him this.
 
-The problem you are trying to solve is not (directly) "OS" related, but is
-really related to the command you are using.  The MS compilers require
-filenames in a certain format, the Cygwin and Unix compilers require them in
-a different format (although it just so happens that the Cygwin utilities
-have a compatibility mode too).
+    Christopher> I've got them, thanks.
 
-You must agree that changing the output of getcwd() is not a general
-solution.  If you are calling programs from Cygwin that require non-Cygwin
-pathnames, you will also potentially need to know the native DOS directory
-delimiter to work with some utilities.
+    Christopher> My sources had drifted a little but there was nothing major.  I'll make
+    Christopher> a test release tonight.
 
-> Some examples assuming pathstyle=win32
-> 
-> 1. User cd's to 'C:/cygwin' getcwd will return 'C:/cygwin'
-> 2. User cd's to '/usr/local' getcwd will return '/usr/local'
-> 3. User cd's to '//C/cygwin' getcwd will return '//C/cygwin'
-> 4. User cd's to '/cygdrive/c/cygwin' getcwd will return
-'/cygdrive/c/cygwin'
+    Christopher> What does everyone think about making -mno-win32 the default?
 
-If this is the case, then your build scripts must still rely on you making
-the "right" style of chdir() in order for it to work.  That is fairly
-fragile...
+Yes, please
 
-The general solution (although not convenient) is to use 'cygpath.exe'
-within your scripts, or wrap the non-Cygwin utilities in scripts that
-provide the appropriate abstraction layer.
-The latter is probably the cleanest, and will always work correctly.  ...and
-is also the most work :)
+    Christopher> cgf
 
-But it has never been easy getting the same scripts to work under Windows
-and Unix, it only seems that way if you have Cygwin :)
-
-Cheers,
-
-Dave
+Ciao
+  Volker
