@@ -1,10 +1,23 @@
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: Cygwin-Patches <cygwin-patches@sources.redhat.com>
-Subject: Re: unlink() patch (was Cygwin CVS breaks PostgreSQL drop table)
-Date: Wed, 18 Jul 2001 04:02:00 -0000
-Message-id: <20010718130154.E730@cygbert.vinschen.de>
-References: <20010717221042.A426@dothill.com>
-X-SW-Source: 2001-q3/msg00013.html
+From: "Neil Erskine" <neil.erskine@jjmackay.ca>
+To: "Corinna Vinschen" <cygwin-patches@cygwin.com>
+Subject: RE: unlink() patch (was Cygwin CVS breaks PostgreSQL drop table)
+Date: Wed, 18 Jul 2001 05:08:00 -0000
+Message-id: <CAEIIBEHOJELFDAHENHIOEDOCGAA.neil.erskine@jjmackay.ca>
+References: <20010718130154.E730@cygbert.vinschen.de>
+X-SW-Source: 2001-q3/msg00014.html
+
+It wouldn't bother me, and might it easier to allow the code work on Novell
+without interfering with unusual Windows behaviour.
+
+-----Original Message-----
+From: cygwin-patches-owner@sources.redhat.com
+[ mailto:cygwin-patches-owner@sources.redhat.com]On Behalf Of Corinna
+Vinschen
+Sent: July 18, 2001 08:02
+To: Cygwin-Patches
+Subject: Re: unlink() patch (was Cygwin CVS breaks PostgreSQL drop
+table)
+
 
 On Tue, Jul 17, 2001 at 10:10:42PM -0400, Jason Tishler wrote:
 > Cygwin no longer correctly handles the case when the file passed to
@@ -28,7 +41,7 @@ On Tue, Jul 17, 2001 at 10:10:42PM -0400, Jason Tishler wrote:
 >      {
 
 IMO, that's rather late in the function to handle a nonexistant file.
-I checked in a different solution which handles it more at the 
+I checked in a different solution which handles it more at the
 beginning of _unlink(). Thanks for tracking it down, though.
 
 BTW, I have a naive question related to unlink. I had just another
@@ -45,10 +58,10 @@ return EBUSY and Cygwin would still be SUSv2 compliant.
 
 All: Would that be ok to change or would you like to keep the current
      behaviour?
-     
+
 Corinna
 
--- 
+--
 Corinna Vinschen                  Please, send mails regarding Cygwin to
 Cygwin Developer                                mailto:cygwin@cygwin.com
 Red Hat, Inc.
