@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1998-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 22428 invoked by alias); 26 Mar 2002 10:14:13 -0000
+Return-Path: <cygwin-patches-return-1999-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 26856 invoked by alias); 26 Mar 2002 10:30:21 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,87 +7,113 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 22414 invoked from network); 26 Mar 2002 10:14:12 -0000
-Date: Tue, 26 Mar 2002 02:30:00 -0000
-From: Pavel Tsekov <ptsekov@syntrex.com>
-Reply-To: Pavel Tsekov <cygwin@cygwin.com>
-Organization: Syntrex, Inc.
-X-Priority: 3 (Normal)
-Message-ID: <747589232.20020326111351@syntrex.com>
-To: cygwin-patches@cygwin.com
-Subject: [PATCH] setup.exe: mkdir.cc. was: setup.exe crash
+Received: (qmail 26838 invoked from network); 26 Mar 2002 10:30:17 -0000
+Message-ID: <3CA04DB7.4B1CFDD5@cistron.nl>
+Date: Tue, 26 Mar 2002 02:36:00 -0000
+From: Ton van Overbeek <tvoverbe@cistron.nl>
+X-Accept-Language: en, en-US, en-GB, nl, sv
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="----------297E96210C50F0"
-X-SW-Source: 2002-q1/txt/msg00355.txt.bz2
-
-------------297E96210C50F0
+To: cygwin-patches@cygwin.com
+Subject: SETUP(PickPackageLine.cc): Patch for 'chopped of characters' problem
 Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-Content-length: 1353
+X-SW-Source: 2002-q1/txt/msg00356.txt.bz2
 
-Here is a solution for this problem. Please, review.
+Here is a patch for the 'chopped off characters in the chooser' problem
+when
+using Large Fonts. I mentioned this problem in my message
+http://cygwin.com/ml/cygwin/2002-03/msg01200.html and also saw it
+appearing
+on cygwin-apps yesterday (with a picture illustrating the problem under
+windows XP) in http://cygwin.com/ml/cygwin-apps/2002-03/msg00247.html.
 
-To reproduce the crash write manually a path with non-existent drive
-in the local package directory edit control.
+The original code uses a fixed clip rectangle height of 11, which is the
+height of the used bitmaps for the boxes in the line. This is OK when
+using
+small fonts, but when using large fonts textheight is larger than 11,
+hence
+the chopping off at the top.
 
-The reason for this crash is that mkdir_p tries to create the path
-recursevly and does not care if its actually a path component or a
-drive spec.
+Here is a changelogentry and the patch:
 
-I've tried a setup.exe with this patch applied and with very long path
-and it works just fine.
+Changelog-entry
 
-This is a forwarded message
-From: Colman Curtin <colman.curtin@trintech.com>
-To: cygwin@cygwin.com
-Date: Monday, March 25, 2002, 11:46:56 PM
-Subject: setup.exe crash
+2002-03-26 Ton van Overbeek (tvoverbe@cistron.nl)
 
-===8<==============Original message text===============
-Hi
-I have setup.exe point to a local network mapping for its local Package
-directory.
-I noticed when I rebooted, not having the mapping set up to reconnect, that
-setup.exe crashed when it tried to move on from that screen with the
-following error;
-"The exception unknown software exception (0xc00000fd) occurred in the
-application at location 0x77f7f12a.
-That was the only trouble its given me.
+* PickPackageLine.cc (PickPackageline::paint) Adjust clipping rectangle
+  to textheight, so large fonts work.
 
-setup.exe version 2.194.2.15
-Wint4 sp6a
+and here is the diff:
+------------------------------------------------------------------------
+--- PickPackageLine.cc-orig     Wed Mar 20 08:16:38 2002
++++ PickPackageLine.cc  Tue Mar 26 11:09:14 2002
+@@ -43,7 +43,8 @@ void
+ PickPackageLine::paint (HDC hdc, int x, int y, int row, int show_cat)
+ {
+   int r = y + row * theView.row_height;
+-  int by = r + theView.tm.tmHeight - 11;
++  int rb = r + theView.tm.tmHeight;
++  int by = rb - 11; // top of box images
+   int oldDC = SaveDC (hdc);
+   if (!oldDC)
+     return;
+@@ -78,9 +79,9 @@ PickPackageLine::paint (HDC hdc, int x, 
+   if (pkg.installed)
+     {
+       IntersectClipRect (hdc, x +
+theView.headers[theView.current_col].x,
+-                        by,
++                        r,
+                         x + theView.headers[theView.current_col].x +
+-                        theView.headers[theView.current_col].width, by
++ 11);
++                        theView.headers[theView.current_col].width,
+rb);
+       TextOut (hdc,
+               x + theView.headers[theView.current_col].x + HMARGIN / 2,
+r,
+               pkg.installed->Canonical_version ().cstr_oneuse(),
+@@ -93,9 +94,9 @@ PickPackageLine::paint (HDC hdc, int x, 
+ 
+   String s = pkg.action_caption ();
+   IntersectClipRect (hdc, x + theView.headers[theView.new_col].x,
+-                    by,
++                    r,
+                     x + theView.headers[theView.new_col].x +
+-                    theView.headers[theView.new_col].width, by + 11);
++                    theView.headers[theView.new_col].width, rb);
+   TextOut (hdc,
+           x + theView.headers[theView.new_col].x + HMARGIN / 2 +
+           NEW_COL_SIZE_SLOP, r, s.cstr_oneuse(), s.size());
+@@ -138,9 +139,9 @@ PickPackageLine::paint (HDC hdc, int x, 
+       int index = 1;
+       if (!pkg.Categories[1]->key.name.casecompare( "All"))
+        index = 2;
+-      IntersectClipRect (hdc, x + theView.headers[theView.cat_col].x,
+by,
++      IntersectClipRect (hdc, x + theView.headers[theView.cat_col].x,
+r,
+                         x + theView.headers[theView.cat_col].x +
+-                        theView.headers[theView.cat_col].x, by + 11);
++                        theView.headers[theView.cat_col].x, rb);
+       TextOut (hdc, x + theView.headers[theView.cat_col].x + HMARGIN /
+2, r,
+               pkg.Categories[index]->key.name.cstr_oneuse(),
+               pkg.Categories[index]->key.name.size());
+@@ -150,9 +151,9 @@ PickPackageLine::paint (HDC hdc, int x, 
+   s = pkg.name;
+   if (pkg.SDesc ().size())
+     s += String(": ") + pkg.SDesc ();
+-  IntersectClipRect (hdc, x + theView.headers[theView.pkg_col].x, by,
++  IntersectClipRect (hdc, x + theView.headers[theView.pkg_col].x, r,
+                     x + theView.headers[theView.pkg_col].x +
+-                    theView.headers[theView.pkg_col].width, by + 11);
++                    theView.headers[theView.pkg_col].width, rb);
+   TextOut (hdc, x + theView.headers[theView.pkg_col].x + HMARGIN / 2,
+r, s.cstr_oneuse(),
+           s.size());
+   DeleteObject (oldClip);
+------------------------------------------------------------------------
 
--Coley.
 
---
-Unsubscribe info:      http://cygwin.com/ml/#unsubscribe-simple
-Bug reporting:         http://cygwin.com/bugs.html
-Documentation:         http://cygwin.com/docs.html
-FAQ:                   http://cygwin.com/faq/
-
-
-===8<===========End of original message text===========
-------------297E96210C50F0
-Content-Type: application/octet-stream; name="mkdir.cc.patch"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="mkdir.cc.patch"
-Content-length: 972
-
-LS0tIC4uLy4uLy4uLy4uL3NyYy93aW5zdXAvY2luc3RhbGwvbWtkaXIuY2MJ
-VHVlIE5vdiAxMyAwMTo0OTozMiAyMDAxCisrKyAuLi8uLi8uLi8uLi9jeWd3
-aW4tc25hcHNob3Qvd2luc3VwL2NpbnN0YWxsL21rZGlyLmNjCVR1ZSBNYXIg
-MjYgMTA6MDQ6MDggMjAwMgpAQCAtNjksMTMgKzY5LDIyIEBAIG1rZGlyX3Ag
-KGludCBpc2FkaXIsIGNvbnN0IGNoYXIgKmluX3BhdGgKICAgaWYgKCFzbGFz
-aCkKICAgICByZXR1cm4gMDsKIAorICAvLyBUcnlpbmcgdG8gY3JlYXRlIGEg
-ZHJpdmUuLi4gSXQncyB0aW1lIHRvIGdpdmUgdXAuCisgIGlmICgoKHNsYXNo
-IC0gcGF0aCkgPT0gMikgJiYgKHBhdGhbMV0gPT0gJzonKSkKKyAgICByZXR1
-cm4gLTE7CisKICAgc2F2ZWRfY2hhciA9ICpzbGFzaDsKICAgKnNsYXNoID0g
-MDsKLSAgaWYgKG1rZGlyX3AgKDEsIHBhdGgpKQorICBzd2l0Y2ggKG1rZGly
-X3AgKDEsIHBhdGgpKQogICAgIHsKLSAgICAgICpzbGFzaCA9IHNhdmVkX2No
-YXI7Ci0gICAgICByZXR1cm4gMTsKKyAgICAgIGNhc2UgMToKKyAgICAgICAg
-KnNsYXNoID0gc2F2ZWRfY2hhcjsKKyAgICAgICAgcmV0dXJuIDE7CisgICAg
-ICBjYXNlIC0xOgorICAgICAgICAvLyBCb3VuY2UgdGhlIGVycm9yIHVwIHRv
-IHRoZSBjaGFpbi4uLgorICAgICAgICByZXR1cm4gLTE7CiAgICAgfQorICAK
-ICAgKnNsYXNoID0gc2F2ZWRfY2hhcjsKIAogICBpZiAoIWlzYWRpcikK
-
-------------297E96210C50F0--
+Ton van Overbeek
