@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3115-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 9990 invoked by alias); 5 Nov 2002 00:20:04 -0000
+Return-Path: <cygwin-patches-return-3116-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 7086 invoked by alias); 5 Nov 2002 09:38:47 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,43 +7,75 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 9981 invoked from network); 5 Nov 2002 00:20:02 -0000
-Message-ID: <001c01c28460$ca1e5eb0$0201a8c0@sos>
-From: "Sergey Okhapkin" <sos@prospect.com.ru>
-To: "Cygwin-Patches" <cygwin-patches@cygwin.com>
-Subject: ioctl.cc fix
-Date: Mon, 04 Nov 2002 16:20:00 -0000
+Received: (qmail 7037 invoked from network); 5 Nov 2002 09:38:45 -0000
+Message-ID: <001501c284af$07928020$b2eae18f@luigi>
+From: "Luigi Piegari" <gigi-x@piegari.net>
+To: <cygwin-patches@cygwin.com>
+Subject: Fw: ipv6 patch problem
+Date: Tue, 05 Nov 2002 01:38:00 -0000
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+	boundary="----=_NextPart_000_0012_01C284B7.66471010"
 X-Priority: 3
 X-MSMail-Priority: Normal
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-Virus-Scanned: by amavisd-milter (http://amavis.org/)
-X-SW-Source: 2002-q4/txt/msg00066.txt.bz2
+X-MimeOLE: Produced By Microsoft MimeOLE V5.50.4920.2300
+X-SW-Source: 2002-q4/txt/msg00067.txt.bz2
 
-I see no output from "debug_printf ("returning %d", res);" in trace file
-without this fix... gcc bug?
+This is a multi-part message in MIME format.
 
-2002-11-04  Sergey Okhapkin  <sos@prospect.com.ru>
+------=_NextPart_000_0012_01C284B7.66471010
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-length: 451
 
-        * ioctl.cc (ioctl): Add default case.
+Hi,
 
+I installed the ipv6 patch found on win6.jp/Cygwin but i got some problems =
+that could depend on my little practice with cygwin (I'm a newbie).
 
-Index: ioctl.cc
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/ioctl.cc,v
-retrieving revision 1.18
-diff -u -p -r1.18 ioctl.cc
---- ioctl.cc    4 Nov 2002 04:09:14 -0000       1.18
-+++ ioctl.cc    5 Nov 2002 00:14:48 -0000
-@@ -50,6 +50,8 @@ ioctl (int fd, int cmd, ...)
-          return tcsetattr (fd, TCSADRAIN, (struct termios *) argp);
-        case TCSETAF:
-          return tcsetattr (fd, TCSAFLUSH, (struct termios *) argp);
-+       default:
-+         break;
-       }
+During making operation I can compile programs, but at the linking procedur=
+e i got errors like
 
-   int res = cfd->ioctl (cmd, argp);
+ undefined reference to `gethostbyname2'
 
-Sergey Okhapkin
-Somerset, NJ
+to all new functions of the patch. Have I to link some library at the start=
+ of cygwin? Have I to set some shared libraries?
 
+Thank you for your help.
+
+gigi-x
+
+------=_NextPart_000_0012_01C284B7.66471010
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-length: 951
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML><HEAD>
+<META content=3D"text/html; charset=3Diso-8859-1" http-equiv=3DContent-Type>
+<META content=3D"MSHTML 5.00.3504.2500" name=3DGENERATOR>
+<STYLE></STYLE>
+</HEAD>
+<BODY bgColor=3D#ffffff>
+<DIV><FONT face=3DArial size=3D2>Hi,</FONT></DIV>
+<DIV>&nbsp;</DIV>
+<DIV>I installed the ipv6 patch found on win6.jp/Cygwin but i got some prob=
+lems=20
+that could depend on my little practice with cygwin (I'm a newbie).</DIV>
+<DIV>&nbsp;</DIV>
+<DIV>During making operation I can compile programs, but at the linking=20
+procedure i got errors like</DIV>
+<DIV>&nbsp;</DIV>
+<DIV>&nbsp;undefined reference to `gethostbyname2'</DIV>
+<DIV>&nbsp;</DIV>
+<DIV>to all new functions of the patch. Have I to link some library at the =
+start=20
+of cygwin? Have I to set some shared libraries?</DIV>
+<DIV>&nbsp;</DIV>
+<DIV>Thank you for your help.</DIV>
+<DIV>&nbsp;</DIV>
+<DIV>gigi-x</DIV></BODY></HTML>
+
+------=_NextPart_000_0012_01C284B7.66471010--
