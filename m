@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2781-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 2513 invoked by alias); 7 Aug 2002 07:54:14 -0000
+Return-Path: <cygwin-patches-return-2782-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 29607 invoked by alias); 7 Aug 2002 09:51:27 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,34 +7,42 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 2447 invoked from network); 7 Aug 2002 07:54:13 -0000
-X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
-Date: Wed, 07 Aug 2002 00:54:00 -0000
-From: Thomas Pfaff <tpfaff@gmx.net>
-To: cygwin-patches@cygwin.com
-Subject: Re: fhandler_socket::accept() and FIONBIO
-In-Reply-To: <01de01c23da2$f1ead310$6132bc3e@BABEL>
-Message-ID: <Pine.WNT.4.44.0208070945370.276-100000@algeria.intern.net>
-X-X-Sender: pfaff@antarctica.intern.net
+Received: (qmail 29593 invoked from network); 7 Aug 2002 09:51:27 -0000
+Message-ID: <006401c23df8$0f932340$6132bc3e@BABEL>
+From: "Conrad Scott" <Conrad.Scott@dsl.pipex.com>
+To: <cygwin-patches@cygwin.com>
+References: <01e501c23d74$400b2c90$6132bc3e@BABEL> <20020806220731.GG1386@redhat.com> <013b01c23d99$a180f930$6132bc3e@BABEL> <20020807012331.GJ1386@redhat.com>
+Subject: Re: init_cheap and _csbrk
+Date: Wed, 07 Aug 2002 02:51:00 -0000
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-SW-Source: 2002-q3/txt/msg00229.txt.bz2
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-SW-Source: 2002-q3/txt/msg00230.txt.bz2
+
+"Christopher Faylor" <cgf@redhat.com> wrote:
+> And even if I got the slop working there would still
+> be a call to VirtualAlloc.  It shouldn't matter since it will
+just
+> be allocating allocated memory but that means it probably isn't
+> really worth it anyway.  So, I've reorganized things one more
+time.
+> And, no more slop.
+
+Good point: I hadn't quite got as far as thinking too clearly
+about what was being optimised.  I bet a call to VirtualAlloc to
+commit an already committed page is cheap and so some optimization
+might be possible, but without instrumenting a few test programs
+who knows what difference it would make.
+
+> In the reorganization our aesthetic sense merged so I moved the
+> cygheap_max setting back into init_cheap.
+
+Beauty will out :-)
+
+// Conrad
 
 
-
-On Wed, 7 Aug 2002, Conrad Scott wrote:
-
-> I've attached a tiny patch to fix the win98 / WSAENOBUFS problem
-> reported in
-> http://cygwin.com/ml/cygwin-developers/2002-07/msg00167.html
-> (amongst other places).
->
-> It turns out to be a minor ding in setting the socket back to
-> non-blocking in the (blocking) accept call.  Quite why this has
-> the effect it does on win98, I'll leave to the morning.  This
-> patch fixes the problem and is obviously the right thing to do:
-> the details I'm happy to leave 'til later.
-
-Unfortunately it has worked on NT. Don't know why.
-
-Thomas
