@@ -1,36 +1,34 @@
-From: Chris Faylor <cgf@cygnus.com>
+From: Mumit Khan <khan@NanoTech.Wisc.EDU>
 To: cygwin-patches@sourceware.cygnus.com
-Subject: Re: winsup/cygwin/Makefile.in tweak to install profiling code
-Date: Thu, 04 May 2000 14:51:00 -0000
-Message-id: <20000504175117.A21647@cygnus.com>
-References: <200005041829.NAA09844@pluto.xraylith.wisc.edu>
-X-SW-Source: 2000-q2/msg00037.html
+Subject: wchar prototype tweaks
+Date: Sat, 06 May 2000 08:40:00 -0000
+Message-id: <200005061540.KAA06446@pluto.xraylith.wisc.edu>
+X-SW-Source: 2000-q2/msg00038.html
 
-Looks good.  Go ahead and check this in.
-cgf
+Trivial prototype fixes. Wish I had the time to rig up a more complete
+wchar implementation, sigh.
 
-On Thu, May 04, 2000 at 01:29:15PM -0500, Mumit Khan wrote:
->The profile startup/library were not being installed since the reorg.
->
->2000-05-04  Mumit Khan  <khan@xraylith.wisc.edu>
->
->	* Makefile.in (install): Install profile startup and library.
->
->Index: Makefile.in
->===================================================================
->RCS file: /cvs/src/src/winsup/cygwin/Makefile.in,v
->retrieving revision 1.6
->diff -u -3 -p -r1.6 Makefile.in
->--- Makefile.in	2000/04/26 18:19:22	1.6
->+++ Makefile.in	2000/05/04 18:27:03
->@@ -143,7 +143,9 @@ force:
-> 
-> install: all
-> 	$(INSTALL_DATA) new-$(DLL_NAME) $(bindir)/$(DLL_NAME) ; \
->-	$(INSTALL_DATA) $(LIB_NAME) $(tooldir)/lib/$(LIB_NAME); \
->+	for i in $(LIB_NAME) $(GMON_START) $(LIBGMON_A) ; do \
->+	    $(INSTALL_DATA) $$i $(tooldir)/lib/$$i ; \
->+	done ; \
-> 	cd $(srcdir); \
-> 	for sub in `find include -name '[a-z]*' -type d -print | sort`; do \
-> 	    for i in $$sub/*.h ; do \
+2000-05-06  Mumit Khan  <khan@xraylith.wisc.edu>
+
+	* include/wchar.h (wcscmp, wcslen): Fix prototypes.
+
+Index: include/wchar.h
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/include/wchar.h,v
+retrieving revision 1.1.1.1
+diff -u -3 -p -r1.1.1.1 wchar.h
+--- wchar.h	2000/02/17 19:38:31	1.1.1.1
++++ wchar.h	2000/05/06 15:36:54
+@@ -19,8 +19,8 @@ details. */
+ 
+ __BEGIN_DECLS
+ 
+-int wcscmp (wchar_t *__s1, wchar_t *__s2);
+-int wcslen (wchar_t *__s1);
++int wcscmp (const wchar_t *__s1, const wchar_t *__s2);
++size_t wcslen (const wchar_t *__s1);
+ 
+ __END_DECLS
+ 
+Regards,
+Mumit
