@@ -1,15 +1,12 @@
 From: DJ Delorie <dj@delorie.com>
-To: matt@use.net
-Cc: cygwin-patches@sources.redhat.com
-Subject: Re: cinstall patches
-Date: Tue, 26 Dec 2000 15:16:00 -0000
-Message-id: <200012262315.SAA24977@envy.delorie.com>
-References: <Pine.NEB.4.10.10012260335470.16114-400000@cesium.clock.org>
-X-SW-Source: 2000-q4/msg00063.html
+To: cygwin-patches@cygwin.com
+Subject: Re: cygwin/Makefile.in and cinstall/Makefile.in
+Date: Tue, 26 Dec 2000 15:21:00 -0000
+Message-id: <200012262321.SAA25080@envy.delorie.com>
+References: <20001218204418.12970.qmail@web117.yahoomail.com> <20001225222322.A7249@redhat.com>
+X-SW-Source: 2000-q4/msg00064.html
 
-> Tue Dec 26 03:46:00 2000  Matt Hargett <matt@use.net>
-> 
-> 	* winsup/cinstall/res.rc: Added accelerators and improved focus
-> 	order.
+> I'll let DJ decide if the cinstall changes are desirable.
 
-I checked this part in, though.  Thanks!
+I added his patch as-is.  There's nothing in cinstall/autoload.c that
+would benefit from inlining anyway.
