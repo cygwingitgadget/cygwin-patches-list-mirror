@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2971-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 5887 invoked by alias); 16 Sep 2002 03:29:18 -0000
+Return-Path: <cygwin-patches-return-2972-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 21546 invoked by alias); 16 Sep 2002 08:30:18 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,47 +7,42 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 5871 invoked from network); 16 Sep 2002 03:29:17 -0000
-Message-Id: <3.0.5.32.20020915232518.00816590@mail.attbi.com>
-X-Sender: phumblet@mail.attbi.com
-Date: Sun, 15 Sep 2002 20:29:00 -0000
-To: Corinna Vinschen <cygwin-patches@cygwin.com>
-From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
+Received: (qmail 21532 invoked from network); 16 Sep 2002 08:30:16 -0000
+Date: Mon, 16 Sep 2002 01:30:00 -0000
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
+To: cygwin-patches@cygwin.com
 Subject: Re: initgroups
-In-Reply-To: <3D81F339.6766E6CD@ieee.org>
-References: <3D7F4284.46484222@ieee.org>
- <3.0.5.32.20020910213124.0080e5a0@mail.attbi.com>
- <20020911123808.Q1574@cygbert.vinschen.de>
- <3D7F4284.46484222@ieee.org>
- <3.0.5.32.20020911204241.00810100@mail.attbi.com>
- <20020913104233.C1574@cygbert.vinschen.de>
+Message-ID: <20020916103014.A6942@cygbert.vinschen.de>
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <3D7F4284.46484222@ieee.org> <3.0.5.32.20020910213124.0080e5a0@mail.attbi.com> <20020911123808.Q1574@cygbert.vinschen.de> <3D7F4284.46484222@ieee.org> <3.0.5.32.20020911204241.00810100@mail.attbi.com> <20020913104233.C1574@cygbert.vinschen.de> <3D81F339.6766E6CD@ieee.org>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-X-SW-Source: 2002-q3/txt/msg00419.txt.bz2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3D81F339.6766E6CD@ieee.org>
+User-Agent: Mutt/1.3.22.1i
+X-SW-Source: 2002-q3/txt/msg00420.txt.bz2
 
+On Fri, Sep 13, 2002 at 10:16:25AM -0400, Pierre A. Humblet wrote:
+> Good point. But that's due to the transition from 16 to 32 bits (when do
+> you plan to complete it?) and it depends on the user's perspective.
 
-Corinna Vinschen wrote:
-> > If we decide on 1) shouldn't we remove calls to {ug}id16to(ug}id32 from
-> > passwd.cc, grp.cc and syscalls.cc, EXCEPT in the various cases of chown
-> > (i.e. simply do as getgrgid (), which doesn't call gid16togid32)?
-> > Also, we shouldn't rely on ILLEGAL_UID in dcrt0.
-> > If we decide on 2), shouldn't we enforce it everywhere? One possibility is
-> > not to read in passwd and group entries with "illegal" {ug}id values.
-> 
-> After looking into this I think 2) is the way to go.  We can't support
-> that uid/gid for apparent reasons so we should take the approach to
-> invalidate it everywhere, yes.
-> 
-> However, that would mean that we have to treat both values as
-> illegal, ILLEGAL_[UG]ID and ILLEGAL_[UG]ID16.  This looks a little
-> bit weird to me...
->
-Corinna, after sleeping over it I now think that the interaction between 16
-and 32 bit ids you point out makes solution 2 (as described in my previous e-mail)
-counterproductive, potentially generating more confusion. Posix doesn't make -1
-an illegal {UG}ID. If a user decides to create {ug}id to FFFF or FFFFFFFF (or has
-such a RID that we get in emulated passwd/group files), we can handle them as best
-we can, supporting them for everything except possibly chown. 
-Thus I am now leaning to a solution 1...
+The transition to 32 bit uids/gids is functional complete AFAICS.
+Originally I planned to switch over to 32 bit uids/gids together with
+64 bit off_t/fpos_t in one go but for the latter step I'd need to
+change newlib.  I simply have not enough time and can't be bothered
+to change this.
 
-Pierre 
+So, if we want 32 bit uids/gids ASAP, we either have to use other
+define in the header files (__CYGWIN_USE_32_BIT_IDS__ and
+__CYGWIN_USE_64_BIT_OFFS__ instead of the one __CYGWIN_USE_BIG_TYPES__)
+and then we'd need to change the Cygwin Makefile to use the 32 bit
+funcs and define __CYGWIN_USE_32_BIT_IDS__.
+Or somebody else cares for getting newlib into 64 bit off_t/fpos_t
+shape.
+
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
