@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4014-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 24807 invoked by alias); 15 Jul 2003 16:12:21 -0000
+Return-Path: <cygwin-patches-return-4015-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 15455 invoked by alias); 17 Jul 2003 04:07:36 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,40 +7,45 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 24779 invoked from network); 15 Jul 2003 16:12:20 -0000
-Date: Tue, 15 Jul 2003 16:12:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
+Received: (qmail 15445 invoked from network); 17 Jul 2003 04:07:35 -0000
+Message-Id: <3.0.5.32.20030717000711.008162b0@mail.attbi.com>
+X-Sender: phumblet@mail.attbi.com (Unverified)
+Date: Thu, 17 Jul 2003 04:07:00 -0000
 To: cygwin-patches@cygwin.com
-Subject: Re: Problems on accessing Windows network resources
-Message-ID: <20030715161218.GM12368@cygbert.vinschen.de>
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3.0.5.32.20030712093737.00812900@incoming.verizon.net> <3.0.5.32.20030711200253.00807190@mail.attbi.com> <3.0.5.32.20030711200253.00807190@mail.attbi.com> <3.0.5.32.20030712093737.00812900@incoming.verizon.net> <3.0.5.32.20030714232518.00808560@incoming.verizon.net>
+From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
+Subject: mmsystem.h patch
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3.0.5.32.20030714232518.00808560@incoming.verizon.net>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2003-q3/txt/msg00030.txt.bz2
+Content-Type: text/plain; charset="us-ascii"
+X-SW-Source: 2003-q3/txt/msg00031.txt.bz2
 
-On Mon, Jul 14, 2003 at 11:25:18PM -0400, Pierre A. Humblet wrote:
-> Corinna,
-> 
-> As announced, this patch is only about style conformance and 
-> efficiency. You have already applied the bug fix part.
-> 
-> Pierre
-> 
-> 2003-07-15  Pierre Humblet  <pierre.humblet@ieee.org>
-> 
-> 	* security.cc (verify_token): Fix white space and style.
-> 	Use type bool instead of BOOL and char. Use alloca
-> 	instead of malloc and free for my_grps. 
+As per
 
-Please apply.
+<http://www.winehq.com/hypermail/wine-patches/2003/01/0033.html>
+and (slight difference)
+<http://csislabs.palomar.edu/Student/dx81/DXSDK/samples/Multimedia/DirectSho
+w/BaseClasses/readme.txt>
+and thread
+<http://www.aewnet.com/newsgroups/rnews.asp?newsid=105001&group=9>
 
-Corinna
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+2003-07-17  Pierre Humblet  <pierre.humblet@ieee.org>
+
+	* include/mmsystem.h: Add TIME_KILL_SYNCHRONOUS.
+
+ 
+
+Index: mmsystem.h
+===================================================================
+RCS file: /cvs/src/src/winsup/w32api/include/mmsystem.h,v
+retrieving revision 1.4
+diff -u -p -r1.4 mmsystem.h
+--- mmsystem.h  27 Jan 2003 23:11:13 -0000      1.4
++++ mmsystem.h  17 Jul 2003 03:51:51 -0000
+@@ -382,6 +382,7 @@ extern "C" {
+ #define TIME_CALLBACK_FUNCTION 0
+ #define TIME_CALLBACK_EVENT_SET 16
+ #define TIME_CALLBACK_EVENT_PULSE 32
++#define TIME_KILL_SYNCHRONOUS 0x0100
+ #define JOYERR_NOERROR (0)
+ #define JOYERR_PARMS (JOYERR_BASE+5)
+ #define JOYERR_NOCANDO (JOYERR_BASE+6)
