@@ -1,29 +1,24 @@
 From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: \033[xx;yy;zzm patch
-Date: Fri, 16 Feb 2001 09:03:00 -0000
-Message-id: <20010216120402.A19422@redhat.com>
-References: <1772701184.20010215002717@logos-m.ru> <20010214170018.A19427@redhat.com> <13286032277.20010216183727@logos-m.ru>
-X-SW-Source: 2001-q1/msg00080.html
+Subject: Re: einval-on-wrong-args patch
+Date: Fri, 16 Feb 2001 09:07:00 -0000
+Message-id: <20010216120709.B19422@redhat.com>
+References: <12986060127.20010216183755@logos-m.ru>
+X-SW-Source: 2001-q1/msg00081.html
 
-On Fri, Feb 16, 2001 at 06:37:27PM +0300, Egor Duda wrote:
+On Fri, Feb 16, 2001 at 06:37:55PM +0300, Egor Duda wrote:
 >Hi!
 >
->Thursday, 15 February, 2001 Christopher Faylor cgf@redhat.com wrote:
+>[pedantic mode on]
 >
->>>2001-02-14  Egor Duda  <deo@logos-m.ru>
->>> 
->>>       * fhandler_console.cc (fhandler_console::char_command): Ignore unknown
->>>       rendition codes in \033[xx;yym control sequences
+>  return  EINVAL  if  signal()  or  lseek()  are  called  with illegal
+>arguments.
 >
->CF> Applied.
->
->CF> Actually, I should have just asked you to apply this yourself.  You have checkin
->CF> rights, right?
->
->right. perhaps, next time you can send "approval" message, similar to
->those i've seen in binutils list, and i'd check the patch in?
+>[pedantic mode off :)]
 
-Yep.  Will do.
+Either your signal() change is not quite right, or sigaction() is wrong.
+sigaction() allows setting the handler for SIGKILL to SIG_DFL.  Is
+that incorrect?  If not, then please modify your change (and check it in).
+If it is the incorrect behavior, could you fix sigaction, too?
 
 cgf
