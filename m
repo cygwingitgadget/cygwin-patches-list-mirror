@@ -1,26 +1,34 @@
-From: Chris Faylor <cgf@cygnus.com>
+From: Mumit Khan <khan@NanoTech.Wisc.EDU>
 To: cygwin-patches@sourceware.cygnus.com
-Subject: Added another INTERNET_OPTION
-Date: Wed, 26 Apr 2000 08:06:00 -0000
-Message-id: <20000426110550.A24633@cygnus.com>
-X-SW-Source: 2000-q2/msg00035.html
+Subject: winsup/cygwin/Makefile.in tweak to install profiling code
+Date: Thu, 04 May 2000 11:29:00 -0000
+Message-id: <200005041829.NAA09844@pluto.xraylith.wisc.edu>
+X-SW-Source: 2000-q2/msg00036.html
 
-I've made the following change to w32api/include/wininet.h.
+The profile startup/library were not being installed since the reorg.
 
-cgf
+2000-05-04  Mumit Khan  <khan@xraylith.wisc.edu>
 
-Wed Apr 26 11:04:18 2000  Christopher Faylor <cgf@cygnus.com>
+	* Makefile.in (install): Install profile startup and library.
 
-	* include/wininet.h: Add another "INTERNET_OPTIONS".
+Index: Makefile.in
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/Makefile.in,v
+retrieving revision 1.6
+diff -u -3 -p -r1.6 Makefile.in
+--- Makefile.in	2000/04/26 18:19:22	1.6
++++ Makefile.in	2000/05/04 18:27:03
+@@ -143,7 +143,9 @@ force:
+ 
+ install: all
+ 	$(INSTALL_DATA) new-$(DLL_NAME) $(bindir)/$(DLL_NAME) ; \
+-	$(INSTALL_DATA) $(LIB_NAME) $(tooldir)/lib/$(LIB_NAME); \
++	for i in $(LIB_NAME) $(GMON_START) $(LIBGMON_A) ; do \
++	    $(INSTALL_DATA) $$i $(tooldir)/lib/$$i ; \
++	done ; \
+ 	cd $(srcdir); \
+ 	for sub in `find include -name '[a-z]*' -type d -print | sort`; do \
+ 	    for i in $$sub/*.h ; do \
 
-
---- wininet.h.orig	Sat Apr  1 00:59:31 2000
-+++ wininet.h	Tue Apr 25 16:45:14 2000
-@@ -47,6 +47,7 @@ extern "C" {
- #define INTERNET_FLAG_RESYNCHRONIZE 0x800
- #define INTERNET_FLAG_HYPERLINK 0x400
- #define INTERNET_FLAG_NO_UI 0x200
-+#define INTERNET_FLAG_PRAGMA_NOCACHE 0x100
- #define INTERNET_FLAG_TRANSFER_ASCII FTP_TRANSFER_TYPE_ASCII
- #define INTERNET_FLAG_TRANSFER_BINARY FTP_TRANSFER_TYPE_BINARY
- #define SECURITY_INTERNET_MASK (INTERNET_FLAG_IGNORE_CERT_CN_INVALID|INTERNET_FLAG_IGNORE_CERT_DATE_INVALID|INTERNET_FLAG_IGNORE_REDIRECT_TO_HTTPS|INTERNET_FLAG_IGNORE_REDIRECT_TO_HTTP)
+Regards,
+Mumit
