@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3472-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 21075 invoked by alias); 1 Feb 2003 04:56:48 -0000
+Return-Path: <cygwin-patches-return-3473-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 2188 invoked by alias); 1 Feb 2003 21:06:35 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,38 +7,83 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 21066 invoked from network); 1 Feb 2003 04:56:47 -0000
-Date: Sat, 01 Feb 2003 04:56:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
+Received: (qmail 2179 invoked from network); 1 Feb 2003 21:06:35 -0000
+Date: Sat, 01 Feb 2003 21:06:00 -0000
+From: Vaclav Haisman <V.Haisman@sh.cvut.cz>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] system-cancel part2
-Message-ID: <20030201045720.GA21649@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <Pine.WNT.4.44.0301151113240.93-300000@algeria.intern.net> <20030115163540.GF15975@redhat.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20030115163540.GF15975@redhat.com>
-User-Agent: Mutt/1.5.1i
-X-SW-Source: 2003-q1/txt/msg00121.txt.bz2
+Subject: Create new files as sparse on NT. (fwd)
+Message-ID: <20030201220607.M9442-100000@logout.sh.cvut.cz>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Scanned-By: AMaViS at Silicon Hill
+X-Spam-Status: No, hits=-1.3 required=5.0
+	tests=CARRIAGE_RETURNS,PATCH_CONTEXT_DIFF,SPAM_PHRASE_00_01
+	version=2.43
+X-Spam-Level: 
+X-SW-Source: 2003-q1/txt/msg00122.txt.bz2
 
-On Wed, Jan 15, 2003 at 11:35:40AM -0500, Christopher Faylor wrote:
->>2003-01-15  Thomas Paff  <tpfaff@gmx.net>
->>
->>	* syscalls.cc (struct system_cleanup_args): New struct.
->>	(system_cleanup): New function.
->>	(system): Use pthread_cleanup_push and _pop to save and restore
->>	signal handlers and sigprocmask.
->
->Please do not check this in.  You are changing other parts of the code than the
->pthreads code and I want to study what you've done before you are approved to
->check this in.
->
->In other words, Robert's "as long as you have a test case" only applies to
->trivial changes or changes to pthread.cc, thread.cc, or thread.h.
 
-Sorry for the long delay.  This patch looks ok to me.  Please feel free
-to check it in along with your additional test cases.
+Hi,
+this little patch makes Cygwin create new files as sparse on NT systems.
+There is no error checking for DeviceIoCotrol() result because there should be
+no harm if it should fail only that the file will not be sparse.
 
-cgf
+This patch has only been tested on my WinXP box by running P2P sharing
+program BitTorrent.
+
+Vaclav Haisman
+
+
+2003-02-01  Vaclav Haisman  <V.Haisman@sh.cvut.cz>
+        * fhandler.cc (fhandler_base::open): Try to create new files as
+        sparse on NT systems.
+
+Index: cygwin/fhandler.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/fhandler.cc,v
+retrieving revision 1.143
+diff -c -r1.143 fhandler.cc
+*** cygwin/fhandler.cc	20 Dec 2002 01:48:22 -0000	1.143
+--- cygwin/fhandler.cc	1 Feb 2003 20:30:09 -0000
+***************
+*** 27,32 ****
+--- 27,37 ----
+  #include "pinfo.h"
+  #include <assert.h>
+  #include <limits.h>
++ #include <winioctl.h>
++
++ #define METHOD_BUFFERED 0
++ #define FSCTL_SET_SPARSE CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 49, \
++   METHOD_BUFFERED, FILE_SPECIAL_ACCESS)
+
+  static NO_COPY const int CHUNK_SIZE = 1024; /* Used for crlf conversions */
+
+***************
+*** 371,376 ****
+--- 376,383 ----
+    int shared;
+    int creation_distribution;
+    SECURITY_ATTRIBUTES sa = sec_none;
++   DWORD dw;
++   BOOL r;
+
+    syscall_printf ("(%s, %p) query_open %d", get_win32_name (), flags, get_query_open ());
+
+***************
+*** 486,491 ****
+--- 493,507 ----
+        && !allow_ntsec && allow_ntea)
+      set_file_attribute (has_acls (), get_win32_name (), mode);
+
++   /* Try to set newly created files as sparse on NT system. */
++   if (wincap.is_winnt () && (access & GENERIC_WRITE) == GENERIC_WRITE
++       && (flags & (O_CREAT | O_TRUNC)) && get_device () == FH_DISK)
++     {
++       r = DeviceIoControl(x, FSCTL_SET_SPARSE, NULL, 0, NULL, 0, &dw, NULL);
++       syscall_printf ("%d = DeviceIoControl(0x%x, FSCTL_SET_SPARSE, NULL, 0, "
++ 		      "NULL, 0, &dw, NULL)", r, x);
++     }
++
+    set_io_handle (x);
+    set_flags (flags, pc ? pc->binmode () : 0);
