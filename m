@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2014-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 25450 invoked by alias); 29 Mar 2002 05:05:15 -0000
+Return-Path: <cygwin-patches-return-2016-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 17563 invoked by alias); 2 Apr 2002 02:28:04 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,71 +7,72 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 25436 invoked from network); 29 Mar 2002 05:05:15 -0000
-Message-ID: <20020329050515.58965.qmail@web10106.mail.yahoo.com>
-Date: Fri, 29 Mar 2002 01:25:00 -0000
-From: David Robinow <drobinow@yahoo.com>
-Subject: Patch to w32api/include/wingdi.h  (SetPixelFormat)
+Received: (qmail 17547 invoked from network); 2 Apr 2002 02:28:04 -0000
+Message-ID: <20020402022804.15975.qmail@web14503.mail.yahoo.com>
+Date: Mon, 01 Apr 2002 18:28:00 -0000
+From: =?iso-8859-1?q?Danny=20Smith?= <danny_r_smith_2001@yahoo.co.nz>
+Subject: FWD: mingw-runtime: problem with -mno-cygwin and profiling (libgmon.a) 
 To: cygwin-patches@cygwin.com
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="0-1108667238-1017378315=:58594"
-X-SW-Source: 2002-q1/txt/msg00371.txt.bz2
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8bit
+X-SW-Source: 2002-q2/txt/msg00000.txt.bz2
 
---0-1108667238-1017378315=:58594
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-length: 879
-
-In http://cygwin.com/ml/cygwin/2002-03/msg01545.html
-I said,
-
-... I was not able to get fltk-1.0.11 to compile by change HAVE_GL to
-1, either.
-I have no reason to think any of these problems have anything to do
-with cygwin. ...
-
-It turns out I was wrong wrt cygwin.  fltk-1.0.11 compiles properly
-with the following patch.
-
-2002-03-29  David Robinow <drobinow@yahoo.com>
-	
-	* include/wingdi.h (SetPixelFormat): Make 3rd parameter const.
+From: "Henrik Stokseth" <hstokset at tiscali dot no> 
 
 
-This patch was previously suggested by
-  http://sources.redhat.com/ml/cygwin/2001-05/msg01129.html
-The MSDN reference quoted in that mail does not appear to be valid any
-more.
-This one works
-http://msdn.microsoft.com/library/default.asp?url=/library/en-us/opengl/ntopnglr_3q5w.asp
+> as a quick solution i have copied the file libgmon.a from the lib/ 
+directory
+> in the official mingw32 distribution and pasted it into /lib/mingw/ in my
+> cygwin installation and it seemed to work. i'm not sure if the problem is
+> the /lib/libgmon.a is dependant on parts of the cygwin runtime, but if
+> that's the case whoever is the maintainer (christopher faylor i guess?)
+of
+> the mingw-runtime package should include the mingw gmon library here.
+
+
+This patch should fix.  Can anyone see any problems with this?  
+It also puts gcrt1.o and gcrt2.o in the mingw/lib. With current cygwin
+specs, they are not used.  
+
+(gcrt1.o and gcrt2.o are actually identical, and probably also
+interchangeable with cygwins gcrt0.o) 
+
+winsup/mingw/ChangeLog
+
+2002-04-02  Danny Smith  <dannysmith@users.sourceforge.net>
+
+	* profile/makefile.in (install): Install to inst_libdir and
+	inst_includedir, not tooldir.
+
+
+--- mingw/profile/makefile.in.ori	Tue Jun 12 06:57:39 2001
++++ mingw/profile/makefile.in	Tue Apr  2 13:35:52 2002
+@@ -95,17 +95,17 @@ info-html:
+ install-info: info
+ 
+ install: all
+-	$(mkinstalldirs) $(tooldir)/lib 
++	$(mkinstalldirs) $(inst_libdir)
+ 	for i in $(LIBS); do \
+-		$(INSTALL_DATA) $$i $(tooldir)/lib/$$i ; \
++		$(INSTALL_DATA) $$i $(inst_libdir)/$$i ; \
+ 	done
+ 	for i in $(CRT0S); do \
+-		$(INSTALL_DATA) $$i $(tooldir)/lib/$$i ; \
++		$(INSTALL_DATA) $$i $(inst_libdir)/$$i ; \
+ 	done
+ 	for sub in . ; do \
+-	$(mkinstalldirs) $(tooldir)/include/$$sub ; \
++	$(mkinstalldirs) $(inst_includedir)/$$sub ; \
+ 		for i in $(srcdir)/$$sub/*.h ; do \
+-		  $(INSTALL_DATA) $$i $(tooldir)/include/$$sub/`basename $$i` ; \
++		  $(INSTALL_DATA) $$i $(inst_includedir)/$$sub/`basename $$i` ; \
+ 		done ; \
+ 	done
+  
 
 
 
-__________________________________________________
-Do You Yahoo!?
-Yahoo! Greetings - send holiday greetings for Easter, Passover
-http://greetings.yahoo.com/
---0-1108667238-1017378315=:58594
-Content-Type: text/plain; name="wingdi.h-patch"
-Content-Description: wingdi.h-patch
-Content-Disposition: inline; filename="wingdi.h-patch"
-Content-length: 761
-
-Index: winsup/w32api/include/wingdi.h
-===================================================================
-RCS file: /cvs/src/src/winsup/w32api/include/wingdi.h,v
-retrieving revision 1.10
-diff -u -p -r1.10 wingdi.h
---- wingdi.h	2002/03/09 09:04:10	1.10
-+++ wingdi.h	2002/03/29 04:44:48
-@@ -2659,7 +2659,7 @@ int WINAPI SetMetaRgn(HDC);
- BOOL WINAPI SetMiterLimit(HDC,FLOAT,PFLOAT);
- UINT WINAPI SetPaletteEntries(HPALETTE,UINT,UINT,const PALETTEENTRY*);
- COLORREF WINAPI SetPixel(HDC,int,int,COLORREF);
--BOOL WINAPI SetPixelFormat(HDC,int,PIXELFORMATDESCRIPTOR*);
-+BOOL WINAPI SetPixelFormat(HDC,int,const PIXELFORMATDESCRIPTOR*);
- BOOL WINAPI SetPixelV(HDC,int,int,COLORREF);
- int WINAPI SetPolyFillMode(HDC,int);
- BOOL WINAPI SetRectRgn(HRGN,int,int,int,int);
-
---0-1108667238-1017378315=:58594--
+http://www.sold.com.au - SOLD.com.au Auctions
+- 1,000s of Bargains!
