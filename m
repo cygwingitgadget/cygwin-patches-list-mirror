@@ -1,29 +1,31 @@
-From: Chris Faylor <cgf@cygnus.com>
-To: cygwin-patches@sourceware.cygnus.com
-Subject: [PATCH] Add three new INTERNET_* options for setup.exe
-Date: Sat, 01 Apr 2000 17:53:00 -0000
-Message-id: <20000401205342.A19737@cygnus.com>
-X-SW-Source: 2000-q2/msg00001.html
+From: Corinna Vinschen <corinna@vinschen.de>
+To: cygpatch <cygwin-patches@sourceware.cygnus.com>
+Subject: Re: symlink changes
+Date: Sun, 02 Apr 2000 01:18:00 -0000
+Message-id: <38E71042.A4DE611C@vinschen.de>
+References: <38E4F407.3AB20C82@vinschen.de> <20000331150508.F1576@cygnus.com> <38E50B89.829ABC4B@vinschen.de> <38E5F4AA.C5C4A31B@vinschen.de>
+X-SW-Source: 2000-q2/msg00002.html
 
-Ron Parker's setup program needed a couple of new INTERNET_OPTION* defines.
-I've added them to w32api/include/wininet.h.
+Corinna Vinschen wrote:
+> [...]
+> While testing it (this change implies reconfiguring and new compiling
+> of fileutils) I found a surprising error in chown.c and chgrp.c:
+> 
+> While differentiating between changing a link or the referenced file,
+> both tools call `lstat' for getting owner/group information. This
+> gives wrong results, because both tools check out if at least the
+> owner or the group changes. If you then try to change the owner of
+> the file to the same owner as of the link, lstat returns the owner
+> of the link so that it doesn't call chown(2). Nothing is changed
+> and chown/chgrp are sure to have done the right thing. Moreover
+> chgrp has no option `--dereference' while the global variable
+> `change_symlinks' is set to 1 by default!
+> 
+> You will find the error in linux, too, because it's really an
+> error in the GNU fileutils sources.
 
-cgf
+I have sent the patch additionally to fileutils-bugs@gnu.ai.mit.edu.
+As I have seen, there's no patch to fileutils since 1998. I hope
+there's still somebody who feels responsible.
 
-Index: include/wininet.h
-===================================================================
-RCS file: /cvs/src/src/winsup/w32api/include/wininet.h,v
-retrieving revision 1.1.1.1
-diff -u -p -r1.1.1.1 wininet.h
---- wininet.h	2000/02/17 19:38:32	1.1.1.1
-+++ wininet.h	2000/04/02 01:51:41
-@@ -114,6 +114,9 @@ INTERNET_FLAG_NO_COOKIES|INTERNET_FLAG_N
- #define INTERNET_OPTION_SETTINGS_CHANGED 39
- #define INTERNET_OPTION_VERSION 40
- #define INTERNET_OPTION_USER_AGENT 41
-+#define INTERNET_OPTION_END_BROWSER_SESSION 42
-+#define INTERNET_OPTION_PROXY_USERNAME 43
-+#define INTERNET_OPTION_PROXY_PASSWORD 44
- #define INTERNET_FIRST_OPTION INTERNET_OPTION_CALLBACK
- #define INTERNET_LAST_OPTION INTERNET_OPTION_USER_AGENT
- #define INTERNET_PRIORITY_FOREGROUND 1000
+Corinna
