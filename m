@@ -1,32 +1,33 @@
-From: "Sergey Okhapkin" <sos@prospect.com.ru>
-To: "Corinna Vinschen" <cygwin-patches@cygwin.com>
-Cc: <cygwin-patches@sourceware.cygnus.com>
-Subject: Re: shutdown sockets on exit patch
-Date: Tue, 27 Nov 2001 10:49:00 -0000
-Message-ID: <002601c17773$53f23090$02af6080@cc.telcordia.com>
-References: <001b01c1776b$0ad3c020$02af6080@cc.telcordia.com> <20011127193031.Q14975@cygbert.vinschen.de>
-X-SW-Source: 2001-q4/msg00257.html
-Message-ID: <20011127104900.VsUJBlIwNm73IFOla24-DWx9CSSlsOS91RkcVB5bk1s@z>
+From: "Gary R Van Sickle" <tiberius@braemarinc.com>
+To: <cygwin-patches@cygwin.com>
+Subject: RE: [PATCH] setup.exe: Stop NetIO_HTTP from treating entire stream as a  header
+Date: Tue, 27 Nov 2001 10:58:00 -0000
+Message-ID: <000701c17775$6a1fea40$2101a8c0@d8rc020b>
+References: <20011127184223.GA24028@redhat.com>
+X-SW-Source: 2001-q4/msg00258.html
+Message-ID: <20011127105800.yHp-mwmSD2v9dATos2HyAxFjIhwQ-emkXuwf-GVDxC8@z>
 
-> I tried it.  Rexecd, rshd, sshd (and scp) seem to work fine but the
-> following new errors occur now:
+> >Ah, better yet.  Jeez you guys are clever ;-).  But how
+> about we make it:
+> >
+> >	while (((l = s->gets ()) != 0) && (*l != '\0'))
+> >
+> >in the interest of making it a bit more self-documenting?
 >
-> - Calling `dir' in an ftp connection to the Windows box works but
->   after finishing the connection is closed and the message
->   "421 Service not available, remote server has closed connection."
->   is printed.
->
-> - Connecting from the Windows box to a host using ssh with X11
->   forwarding activated fails with error
->   "Write failed: errno ESHUTDOWN triggered"
->
-> This is probably due to the child processes calling shutdown on the
-> socket on exit.
+> Actually, how about not using != 0.  Use NULL in this context.
 >
 
-You're right, child process shuts down parent's socket... I'll try to find
-some other solution.
+Also better yet.
 
-Sergey Okhapkin
-Piscataway, NJ
+> I don't think that *l is hard to understand, fwiw.
+>
 
+Right, it isn't.  I did need to do a double-take though at this ungodly hour
+of the afternoon, whereas the '\0' would have reduced that to a single-take
+;-).
+
+--
+Gary R. Van Sickle
+Braemar Inc.
+11481 Rupp Dr.
+Burnsville, MN 55337
