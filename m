@@ -1,497 +1,269 @@
 From: Brian Keener <bkeener@thesoftwaresource.com>
-To: Cygwin Patches <cygwin-patches@sources.redhat.com>
-Subject: [patch] Setup.exe choose.cc selection enhancement based on file existence
+To: cygwin-patches <cygwin-patches@cygwin.com>
+Subject: [patch] setup.exe geturl.cc enhancement for total and diskfull download progress meters
 Date: Tue, 20 Feb 2001 19:23:00 -0000
-Message-id: <VA.0000066f.003b71be@thesoftwaresource.com>
-References: <VA.0000062c.02a8582a@thesoftwaresource.com>
-X-SW-Source: 2001-q1/msg00094.html
-Content-type: multipart/mixed; boundary="----------=_1583532846-65438-10"
+Message-id: <VA.00000670.003b71c8@thesoftwaresource.com>
+X-SW-Source: 2001-q1/msg00096.html
 
-This is a multi-part message in MIME format...
+2001-02-20  Brian Keener <bkeener@thesoftwaresource.com>
+   * download.cc (do_download): New variables total_download_bytes and 
+   total_download_bytes_sofar added for download progress meter.  Add loop
+   to accumulate the total bytes to download from the selected packages.
+   * geturl.cc: Add state.h and diskfull.h to include list.  New variables
+   gw_iprogress, gw_pprogress, gw_progress_text, gw_pprogress_text, and
+   gw_iprogress_text added to allow for addition of Total packages download
+   progress meter and disk full percent progress meter.  Add variables
+   total_download_bytes and total_download_bytes_sofar for use by progress
+   meters.
+   (dialog_proc): New variables gw_iprogress, gw_pprogress, 
+   gw_progress_text, gw_pprogress_text, and gw_iprogress_text added to 
+   allow for addition of Total packages download progress meter and disk 
+   full percent progress meter.  
+   (init_dialog): Ditto.
+   (progress): Ditto.
+   (get_url_to_file): Ditto.
+   * geturl.h: Add external definition for total_download_bytes and
+   total_download_bytes_sofar.
+   * res.rc (): Add two additional progress meters (IDC_DLS_IPROGRESS) 
+        and (IDC_DLS_PPROGRESS) and three text objects (IDC_DLS_PROGRESS_TEXT)
+   and (IDC_DLS_IPROGRESS_TEXT, IDC_DLS_PPROGRESS_TEXT) for use in the
+   download meters.
+   * resource.h: Add new fields for progress meters and text and update 
+   _APS_NEXT_CONTROL_VALUE.
 
-------------=_1583532846-65438-10
-Content-length: 2827
+Index: winsup/cinstall/download.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cinstall/download.cc,v
+retrieving revision 2.4
+diff -p -2 -r2.4 download.cc
+*** download.cc    2000/10/23 19:46:01 2.4
+--- download.cc    2001/02/20 04:40:18
+*************** do_download (HINSTANCE h)
+*** 82,85 ****
+--- 82,93 ----
+    int i;
+    int errors = 0;
++   total_download_bytes = 0;
++   total_download_bytes_sofar = 0;
++ 
++   for (i=0; i<npackages; i++)
++     if (package[i].action == ACTION_NEW || package[i].action == ACTION_UPGRADE)
++       {
++         total_download_bytes += pi.install_size;
++       }
+  
+    for (i=0; i<npackages; i++)
+Index: winsup/cinstall/geturl.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cinstall/geturl.cc,v
+retrieving revision 2.2
+diff -p -2 -r2.2 geturl.cc
+*** geturl.cc  2000/08/30 01:05:42 2.2
+--- geturl.cc  2001/02/20 04:40:22
+*************** static char *cvsid = "\n%%% $Id: geturl.
+*** 33,36 ****
+--- 33,38 ----
+  #include "msg.h"
+  #include "log.h"
++ #include "state.h"
++ #include "diskfull.h"
+  
+  static int is_showing = 0;
+*************** static HWND gw_url = 0;
+*** 39,45 ****
+--- 41,55 ----
+  static HWND gw_rate = 0;
+  static HWND gw_progress = 0;
++ static HWND gw_pprogress = 0;
++ static HWND gw_iprogress = 0;
++ static HWND gw_progress_text = 0;
++ static HWND gw_pprogress_text = 0;
++ static HWND gw_iprogress_text = 0;
+  static HANDLE init_event;
+  static int max_bytes = 0;
+  
++ int total_download_bytes = 0;
++ int total_download_bytes_sofar = 0;
++ 
+  static BOOL
+  dialog_cmd (HWND h, int id, HWND hwndctl, UINT code)
+*************** dialog_proc (HWND h, UINT message, WPARA
+*** 64,67 ****
+--- 74,82 ----
+        gw_rate = GetDlgItem (h, IDC_DLS_RATE);
+        gw_progress = GetDlgItem (h, IDC_DLS_PROGRESS);
++       gw_pprogress = GetDlgItem (h, IDC_DLS_PPROGRESS);
++       gw_iprogress = GetDlgItem (h, IDC_DLS_IPROGRESS);
++       gw_progress_text = GetDlgItem (h, IDC_DLS_PROGRESS_TEXT);
++       gw_pprogress_text = GetDlgItem (h, IDC_DLS_PPROGRESS_TEXT);
++       gw_iprogress_text = GetDlgItem (h, IDC_DLS_IPROGRESS_TEXT);
+        SetEvent (init_event);
+        return FALSE;
+*************** init_dialog (char *url, int length)
+*** 101,104 ****
+--- 116,121 ----
+        CloseHandle (init_event);
+        SendMessage (gw_progress, PBM_SETRANGE, 0, MAKELPARAM (0, 100));
++       SendMessage (gw_pprogress, PBM_SETRANGE, 0, MAKELPARAM (0, 100));
++       SendMessage (gw_iprogress, PBM_SETRANGE, 0, MAKELPARAM (0, 100));
+        is_showing = 0;
+      }
+*************** init_dialog (char *url, int length)
+*** 112,115 ****
+--- 129,148 ----
+    SendMessage (gw_progress, PBM_SETPOS, (WPARAM) 0, 0);
+    ShowWindow (gw_progress, (length > 0) ? SW_SHOW : SW_HIDE);
++   if (length > 0 )
++     SetWindowText (gw_progress_text, "Package");
++   else
++     SetWindowText (gw_progress_text, "       ");
++   ShowWindow (gw_pprogress, (total_download_bytes > 0) ? SW_SHOW : SW_HIDE);
++   if (total_download_bytes > 0)
++     {
++       SetWindowText (gw_pprogress_text, "Total");
++       SetWindowText (gw_iprogress_text, "Disk");
++     }
++   else 
++     {
++       SetWindowText (gw_pprogress_text, "     ");
++       SetWindowText (gw_iprogress_text, "    ");
++     }
++   ShowWindow (gw_iprogress, (total_download_bytes > 0) ? SW_SHOW : SW_HIDE);
+    ShowWindow (gw_dialog, SW_SHOWNORMAL);
+    if (!is_showing)
+*************** progress (int bytes)
+*** 137,140 ****
+--- 170,175 ----
+    kbps = bytes / (tics - start_tics);
+    ShowWindow (gw_progress, (max_bytes > 0) ? SW_SHOW : SW_HIDE);
++   ShowWindow (gw_pprogress, (total_download_bytes > 0) ? SW_SHOW : SW_HIDE);
++   ShowWindow (gw_iprogress, (total_download_bytes > 0) ? SW_SHOW : SW_HIDE);
+    if (max_bytes > 100)
+      {
+*************** progress (int bytes)
+*** 143,146 ****
+--- 178,187 ----
+        sprintf (buf, "%3d %%  (%dk/%dk)  %d kb/s\n",
+          perc, bytes/1000, max_bytes/1000, kbps);
++       if (total_download_bytes > 0)
++         {
++           int totalperc = (total_download_bytes_sofar + bytes) / (
++                     total_download_bytes / 100);
++           SendMessage (gw_pprogress, PBM_SETPOS, (WPARAM) totalperc, 0);
++         }
+      }
+    else
+*************** get_url_to_file (char *_url, char *_file
+*** 208,211 ****
+--- 249,257 ----
+  {
+    log (LOG_BABBLE, "get_url_to_file %s %s", _url, _filename);
++   if (total_download_bytes > 0)
++     {
++       int df = diskfull (root_dir);
++       SendMessage (gw_iprogress, PBM_SETPOS, (WPARAM) df, 0);
++     }
+    init_dialog (_url, expected_length);
+  
+*************** get_url_to_file (char *_url, char *_file
+*** 246,250 ****
+--- 292,304 ----
+      }
+  
++   total_download_bytes_sofar += total_bytes;
++ 
+    fclose (f);
++ 
++   if (total_download_bytes > 0)
++     {
++       int df = diskfull (root_dir);
++       SendMessage (gw_iprogress, PBM_SETPOS, (WPARAM) df, 0);
++     }
+  
+    return 0;
+Index: winsup/cinstall/geturl.h
+===================================================================
+RCS file: /cvs/src/src/winsup/cinstall/geturl.h,v
+retrieving revision 2.0
+diff -p -2 -r2.0 geturl.h
+*** geturl.h   2000/08/08 00:27:54 2.0
+--- geturl.h   2001/02/20 04:40:22
+***************
+*** 17,20 ****
+--- 17,23 ----
+     don't forget to dismiss it when you're done downloading for a while */
+  
++ extern int total_download_bytes;
++ extern int total_download_bytes_sofar;
++ 
+  char  *get_url_to_string (char *_url);
+  int    get_url_to_file (char *_url, char *_filename, int expected_size);
+Index: winsup/cinstall/res.rc
+===================================================================
+RCS file: /cvs/src/src/winsup/cinstall/res.rc,v
+retrieving revision 2.11
+diff -p -2 -r2.11 res.rc
+*** res.rc 2000/12/26 23:15:56 2.11
+--- res.rc 2001/02/20 04:40:29
+*************** BEGIN
+*** 141,149 ****
+      ICON            IDI_CYGWIN,IDC_STATIC,5,5,20,20
+      PUSHBUTTON      "Cancel",IDCANCEL,165,75,45,15
+!     LTEXT           "Downloading...",IDC_STATIC,55,15,135,8
+!     LTEXT           "(URL)",IDC_DLS_URL,55,30,150,8
+!     LTEXT           "(RATE)",IDC_DLS_RATE,55,45,155,8
+      CONTROL         "Progress1",IDC_DLS_PROGRESS,"msctls_progress32",
+                      PBS_SMOOTH | WS_BORDER,55,60,155,10
+  END
+  
+--- 141,156 ----
+      ICON            IDI_CYGWIN,IDC_STATIC,5,5,20,20
+      PUSHBUTTON      "Cancel",IDCANCEL,165,75,45,15
+!     LTEXT           "Downloading...",IDC_STATIC,55,5,135,8
+!     LTEXT           "(URL)",IDC_DLS_URL,55,15,150,8
+!     LTEXT           "(RATE)",IDC_DLS_RATE,55,25,155,8
+      CONTROL         "Progress1",IDC_DLS_PROGRESS,"msctls_progress32",
++                     PBS_SMOOTH | WS_BORDER,55,40,155,10
++     CONTROL         "Progress1",IDC_DLS_PPROGRESS,"msctls_progress32",
++                     PBS_SMOOTH | WS_BORDER,55,50,155,10
++     CONTROL         "Progress1",IDC_DLS_IPROGRESS,"msctls_progress32",
+                      PBS_SMOOTH | WS_BORDER,55,60,155,10
++     RTEXT           "Package",IDC_DLS_PROGRESS_TEXT,5,40,45,8
++     RTEXT           "Total",IDC_DLS_PPROGRESS_TEXT,10,50,40,8
++     RTEXT           "Disk",IDC_DLS_IPROGRESS_TEXT,5,60,45,8
+  END
+  
+Index: winsup/cinstall/resource.h
+===================================================================
+RCS file: /cvs/src/src/winsup/cinstall/resource.h,v
+retrieving revision 2.8
+diff -p -2 -r2.8 resource.h
+*** resource.h 2000/10/23 19:46:01 2.8
+--- resource.h 2001/02/20 04:40:30
+***************
+*** 94,97 ****
+--- 94,102 ----
+  #define IDC_LOCAL_DIR_BROWSE            1043
+  #define IDC_LOCAL_DIR                   1044
++ #define IDC_DLS_PPROGRESS               1045
++ #define IDC_DLS_IPROGRESS               1046
++ #define IDC_DLS_PROGRESS_TEXT           1047
++ #define IDC_DLS_PPROGRESS_TEXT          1048
++ #define IDC_DLS_IPROGRESS_TEXT          1049
+  #define IDC_STATIC                      -1
+  
+***************
+*** 104,108 ****
+  #define _APS_NEXT_RESOURCE_VALUE        126
+  #define _APS_NEXT_COMMAND_VALUE         40003
+! #define _APS_NEXT_CONTROL_VALUE         1045
+  #define _APS_NEXT_SYMED_VALUE           101
+  #endif
+--- 109,113 ----
+  #define _APS_NEXT_RESOURCE_VALUE        126
+  #define _APS_NEXT_COMMAND_VALUE         40003
+! #define _APS_NEXT_CONTROL_VALUE         1050
+  #define _APS_NEXT_SYMED_VALUE           101
+  #endif
 
-Okay,  trying this one more time - can't say I haven't tried.  Hope this one measures up. Again 
-sorry about sending the code as an attachment.
 
-2001-02-05  Brian Keener <bkeener@thesoftwaresource.com>
-   * choose.cc (paint): Modify message for nothing to download vs 
-   nothing to install/update based on installation method.
-   (list_click): Modify to skip versions in selection process if
-   installing from local directory and installation file does not exist.  
-   Also leaves Source Action set to N/A if the source file does not exist 
-   and installing from local directory.
-   (check_existence): New method to check current existence of installation
-   files based on selected installation method.
-   (set_existence): New method to set the current existence of installation
-   files based on selected installation method.
-   (best_trust): Modify decision process for best trust to base decision on
-   current trust selected (IE: Prev, Curr, or Test), existence of file and
-   installation method selected.
-   (default_trust): Add logic to capture the current trust level and the 
-   trust selected for the given package.
-   (set_full_list): Expand decision criteria for displaying a package in 
-   the selection list to include file existence/non-existence and selected
-   installation method.
-   (build_labels): Modify criteria for label addition to include
-   installation method and file existence/non-existence.
-   (create_listview): Modify to establish package trust level for each 
-   package before setting up the display list.  Also modification to set 
-   current trust button as the default.
-   (dialog_cmd): Set response for Prev, Curr, Test button push to perform
-   a reset of the selection list in addition to setting the default trust.
-   (get_package_version): New method to provide reusable code for
-   determining the package version from the file name for a specified
-   trust.
-   (scan2): Modify to use new method get_package_version and
-   also enhance handling of the build for the structures package and 
-   extra.
-   (read_installed_db): Modify to use the new method 
-   get_package_version and also enhance handling of the build for the 
-   structures package and extra.
-   (do_choose): Add additional initialization of package and extra 
-   structures.  Modify to use read_installed_db all the time despite 
-   install method.  Modify output to setup.log.full log file to increase 
-   readability by adding additional spacing, expanded code and available 
-   versions.        
-   * ini.h: Add new fields install_exists, source_exists and 
-   partial_list_display to the structure definition for package.
-   * res.rc (IDD_CHOOSE): Modify choose dialog Prev, Curr, and Test 
-   pushbuttons by replacing with Radio Buttons thus allowing the 
-   operator to better determine which is selected.
-
-
-
-------------=_1583532846-65438-10
-Content-Type: text/x-diff; charset=us-ascii; name="foo1"
-Content-Disposition: inline; filename="foo1"
-Content-Transfer-Encoding: base64
-Content-Length: 25864
-
-SW5kZXg6IGNob29zZS5jYw0KPT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ0KUkNT
-IGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvY2luc3RhbGwvY2hvb3NlLmNj
-LHYNCnJldHJpZXZpbmcgcmV2aXNpb24gMi4xMQ0KZGlmZiAtcCAtMiAtcjIu
-MTEgY2hvb3NlLmNjDQoqKiogY2hvb3NlLmNjCTIwMDAvMTIvMTEgMDA6MDc6
-NTYJMi4xMQ0KLS0tIGNob29zZS5jYwkyMDAxLzAyLzA4IDAzOjExOjQ5DQoq
-KioqKioqKioqKioqKiogc3RhdGljIGNoYXIgKmN2c2lkID0gIlxuJSUlICRJ
-ZDogY2hvb3NlLg0KKioqIDMxLDM0ICoqKioNCi0tLSAzMSwzNSAtLS0tDQog
-ICNpbmNsdWRlIDxzdGRpby5oPg0KICAjaW5jbHVkZSA8c3RkbGliLmg+DQor
-ICNpbmNsdWRlIDxpby5oPg0KICAjaW5jbHVkZSA8Y3R5cGUuaD4NCiAgDQoq
-KioqKioqKioqKioqKiogc3RhdGljIGNoYXIgKmN2c2lkID0gIlxuJSUlICRJ
-ZDogY2hvb3NlLg0KKioqIDQyLDQ2ICoqKioNCiAgI2luY2x1ZGUgImZpbmQu
-aCINCiAgDQohICNkZWZpbmUgSE1BUkdJTgkJMTANCiAgI2RlZmluZSBST1df
-TUFSR0lOCTUNCiAgI2RlZmluZSBJQ09OX01BUkdJTgk0DQotLS0gNDMsNDkg
-LS0tLQ0KICAjaW5jbHVkZSAiZmluZC5oIg0KICANCiEgI2luY2x1ZGUgInBv
-cnQuaCINCiEgDQohICNkZWZpbmUgSE1BUkdJTgkxMA0KICAjZGVmaW5lIFJP
-V19NQVJHSU4JNQ0KICAjZGVmaW5lIElDT05fTUFSR0lOCTQNCioqKioqKioq
-KioqKioqKiBzdGF0aWMgaW50IGluaXRpYWxpemVkID0gMDsNCioqKiA1NSw1
-OCAqKioqDQotLS0gNTgsNjIgLS0tLQ0KICANCiAgc3RhdGljIGludCBmdWxs
-X2xpc3QgPSAwOw0KKyBzdGF0aWMgaW50IHdoaWNoX3RydXN0ID0gVFJVU1Rf
-Q1VSUjsNCiAgDQogIHN0YXRpYyBpbnQgc2Nyb2xsX3VsY194LCBzY3JvbGxf
-dWxjX3k7DQoqKioqKioqKioqKioqKiogcGFpbnQgKEhXTkQgaHduZCkNCioq
-KiAxODEsMTg0ICoqKioNCi0tLSAxODUsMTkwIC0tLS0NCiAgICAgIHsNCiAg
-ICAgICAgc3RhdGljIGNoYXIgKm1zZyA9ICJOb3RoaW5nIHRvIEluc3RhbGwv
-VXBkYXRlIjsNCisgICAgICAgaWYgKHNvdXJjZSA9PSBJRENfU09VUkNFX0RP
-V05MT0FEKQ0KKyAgICAgICAgICBtc2cgPSAiTm90aGluZyB0byBEb3dubG9h
-ZCI7DQogICAgICAgIFRleHRPdXQgKGhkYywgSE1BUkdJTiwgaGVhZGVyX2hl
-aWdodCwgbXNnLCBzdHJsZW4gKG1zZykpOw0KICAgICAgfQ0KKioqKioqKioq
-KioqKioqIGxpc3RfY2xpY2sgKEhXTkQgaHduZCwgQk9PTCBkYmxjbGssIGlu
-dCANCioqKiAyODEsMjg0ICoqKioNCi0tLSAyODcsMjk1IC0tLS0NCiAgICAg
-IHsNCiAgICAgICAgZXh0cmFbcF0ucGljayArKzsNCisgICAgICAgd2hpbGUg
-KChwYWNrYWdlW3BdLmluZm9bZXh0cmFbcF0uY2hvb3NlcltleHRyYVtwXS5w
-aWNrXS50cnVzdF0uaW5zdGFsbF9leGlzdHM9PTAgJiYgDQorICAgICAgICAg
-ICAgICAgc291cmNlID09IElEQ19TT1VSQ0VfQ1dEKSAmJiANCisgICAgICAg
-ICAgICAgICBwYWNrYWdlW3BdLmluZm9bZXh0cmFbcF0uY2hvb3NlcltleHRy
-YVtwXS5waWNrXS50cnVzdF0uaW5zdGFsbCAmJg0KKyAgICAgICAgICAgICAg
-IGV4dHJhW3BdLmNob29zZXJbZXh0cmFbcF0ucGlja10uY2FwdGlvbiAhPSAw
-KQ0KKyAgICAgICAgIGV4dHJhW3BdLnBpY2sgKys7DQogICAgICAgIGlmIChl
-eHRyYVtwXS5jaG9vc2VyW2V4dHJhW3BdLnBpY2tdLmNhcHRpb24gPT0gMCkN
-CiAgCWV4dHJhW3BdLnBpY2sgPSAwOw0KKioqKioqKioqKioqKioqIGxpc3Rf
-Y2xpY2sgKEhXTkQgaHduZCwgQk9PTCBkYmxjbGssIGludCANCioqKiAyODcs
-MjkxICoqKioNCiAgICBpZiAoeCA+PSBoZWFkZXJzW1NSQ19DT0xdLnggLSBI
-TUFSR0lOLzIgJiYgeCA8PSBoZWFkZXJzW1NSQ19DT0wrMV0ueCAtIEhNQVJH
-SU4vMikNCiAgICAgIHsNCiEgICAgICAgaWYgKGV4dHJhW3BdLmNob29zZXJb
-ZXh0cmFbcF0ucGlja10uc3JjX2F2YWlsKQ0KICAJcGFja2FnZVtwXS5zcmNh
-Y3Rpb24gXj0gKFNSQ0FDVElPTl9OT15TUkNBQ1RJT05fWUVTKTsNCiAgICAg
-IH0NCi0tLSAyOTgsMzAzIC0tLS0NCiAgICBpZiAoeCA+PSBoZWFkZXJzW1NS
-Q19DT0xdLnggLSBITUFSR0lOLzIgJiYgeCA8PSBoZWFkZXJzW1NSQ19DT0wr
-MV0ueCAtIEhNQVJHSU4vMikNCiAgICAgIHsNCiEgICAgICAgaWYgKGV4dHJh
-W3BdLmNob29zZXJbZXh0cmFbcF0ucGlja10uc3JjX2F2YWlsICYmIA0KISAg
-ICAgICAgICAgcGFja2FnZVtwXS5pbmZvW2V4dHJhW3BdLmNob29zZXJbZXh0
-cmFbcF0ucGlja10udHJ1c3RdLnNvdXJjZV9leGlzdHMpDQogIAlwYWNrYWdl
-W3BdLnNyY2FjdGlvbiBePSAoU1JDQUNUSU9OX05PXlNSQ0FDVElPTl9ZRVMp
-Ow0KICAgICAgfQ0KKioqKioqKioqKioqKioqIG5vdGVfd2lkdGggKEhEQyBk
-YywgY2hhciAqc3RyaW5nLCBpbnQgYWQNCioqKiAzNTEsMzY1ICoqKioNCiAg
-fQ0KICANCiAgc3RhdGljIGludA0KICBiZXN0X3RydXN0IChpbnQgcCwgaW50
-IHRydXN0KQ0KICB7DQogICAgaW50IHQ7DQohICAgZm9yICh0PXRydXN0OyB0
-Pj0wOyB0LS0pDQohICAgICBpZiAocGFja2FnZVtwXS5pbmZvW3RdLmluc3Rh
-bGwpDQogICAgICAgIHJldHVybiB0Ow0KISAgIGZvciAodD10cnVzdCsxOyB0
-PD1OVFJVU1Q7IHQrKykNCiEgICAgIGlmIChwYWNrYWdlW3BdLmluZm9bdF0u
-aW5zdGFsbCkNCiEgICAgICAgcmV0dXJuIHQ7DQohICAgaWYgKGV4dHJhW3Bd
-Lmluc3RhbGxlZF9maWxlKQ0KICAgICAgcmV0dXJuIFRSVVNUX0tFRVA7DQog
-ICAgcmV0dXJuIFRSVVNUX05PTkU7DQotLS0gMzYzLDQzNyAtLS0tDQogIH0N
-CiAgDQorIHN0YXRpYyBpbnQgDQorIGNoZWNrX2V4aXN0ZW5jZSAoaW50IHAs
-IGludCB0cnVzdCwgaW50IGNoZWNrX3NyYykNCisgew0KKyAgIGlmIChzb3Vy
-Y2UgPT0gSURDX1NPVVJDRV9ORVRJTlNUKQ0KKyAgICAgICAgIHJldHVybiAx
-Ow0KKyAgIGlmIChzb3VyY2UgPT0gSURDX1NPVVJDRV9ET1dOTE9BRCkNCisg
-ICAgICB7DQorICAgICAgaWYgKCBjaGVja19zcmMgPT0gMCAmJiBfYWNjZXNz
-KHBhY2thZ2VbcF0uaW5mb1t0cnVzdF0uaW5zdGFsbCwwKSA9PSAwKQ0KKyAg
-ICAgICAgIHJldHVybiAxOw0KKyAgICAgIGVsc2UgaWYgKCBjaGVja19zcmMg
-PT0gMSAmJiBfYWNjZXNzKHBhY2thZ2VbcF0uaW5mb1t0cnVzdF0uc291cmNl
-LDApID09IDAgKQ0KKyAgICAgICAgIHJldHVybiAxOw0KKyAgICAgIGVsc2UN
-CisgICAgICAgICByZXR1cm4gMDsNCisgICAgICB9DQorICAgaWYgKHNvdXJj
-ZSA9PSBJRENfU09VUkNFX0NXRCkNCisgICAgICB7DQorICAgICAgaWYgKCBj
-aGVja19zcmMgPT0gMCAgJiYgcGFja2FnZVtwXS5pbmZvW3RydXN0XS5pbnN0
-YWxsICYmDQorICAgICAgICAgICAgX2FjY2VzcyhwYWNrYWdlW3BdLmluZm9b
-dHJ1c3RdLmluc3RhbGwsMCkgPT0gMCApDQorICAgICAgICAgIHJldHVybiAx
-Ow0KKyAgICAgIGVsc2UgaWYgKCBjaGVja19zcmMgPT0gMSAmJiBwYWNrYWdl
-W3BdLmluZm9bdHJ1c3RdLnNvdXJjZSAmJiANCisgICAgICAgICAgICAgICAg
-X2FjY2VzcyhwYWNrYWdlW3BdLmluZm9bdHJ1c3RdLnNvdXJjZSwwKSA9PSAw
-ICkNCisgICAgICAgICAgcmV0dXJuIDE7DQorICAgICAgfQ0KKyAgIHJldHVy
-biAwOw0KKyB9DQorIA0KKyBzdGF0aWMgdm9pZA0KKyBzZXRfZXhpc3RlbmNl
-ICgpDQorIHsNCisgICBmb3IgKGludCBpPTA7IGk8bnBhY2thZ2VzOyBpKysp
-DQorICAgICB7DQorICAgICAgIGZvciAoaW50IHQ9MDsgdDxOVFJVU1Q7IHQr
-KykNCisgICAgICAgICB7DQorICAgICAgICAgICAvKiAwID0gY2hlY2sgaW5z
-dGFsbCBmaWxlICovDQorICAgICAgICAgICBwYWNrYWdlW2ldLmluZm9bdF0u
-aW5zdGFsbF9leGlzdHMgPSBjaGVja19leGlzdGVuY2UoaSx0LDApOyANCisg
-ICAgICAgICAgIC8qIDEgPSBjaGVjayBzb3VyY2UgZmlsZSAqLw0KKyAgICAg
-ICAgICAgcGFja2FnZVtpXS5pbmZvW3RdLnNvdXJjZV9leGlzdHMgPSBjaGVj
-a19leGlzdGVuY2UoaSx0LDEpOyANCisgICAgICAgICB9DQorICAgICAgIGZv
-ciAoaW50IHQ9MDsgdDxOVFJVU1Q7IHQrKykNCisgICAgICAgICB7DQorICAg
-ICAgICAgICBpZiAocGFja2FnZVtpXS5pbmZvW3RdLmluc3RhbGwgJiYgDQor
-ICAgICAgICAgICAgICAgZXh0cmFbaV0uaW5zdGFsbGVkX3ZlciAhPSBwYWNr
-YWdlW2ldLmluZm9bdF0udmVyc2lvbiApDQorICAgICAgICAgICAgIHsNCisg
-ICAgICAgICAgICAgaWYgKHNvdXJjZSA9PSBJRENfU09VUkNFX05FVElOU1Qg
-KQ0KKyAgICAgICAgICAgICAgICBwYWNrYWdlW2ldLmluZm9bdF0ucGFydGlh
-bF9saXN0X2Rpc3BsYXk9MTsNCisgICAgICAgICAgICAgZWxzZSBpZiAoc291
-cmNlID09IElEQ19TT1VSQ0VfRE9XTkxPQUQgKQ0KKyAgICAgICAgICAgICAg
-ICBwYWNrYWdlW2ldLmluZm9bdF0ucGFydGlhbF9saXN0X2Rpc3BsYXkgPSAx
-LXBhY2thZ2VbaV0uaW5mb1t0XS5pbnN0YWxsX2V4aXN0czsNCisgICAgICAg
-ICAgICAgZWxzZSBpZiAoc291cmNlID09IElEQ19TT1VSQ0VfQ1dEICkNCisg
-CSAgICAgICBpZiAocGFja2FnZVtpXS5pbmZvW3RdLmluc3RhbGxfZXhpc3Rz
-KQ0KKyAgICAgICAgICAgICAgICAgICBwYWNrYWdlW2ldLmluZm9bdF0ucGFy
-dGlhbF9saXN0X2Rpc3BsYXkgPSAxOw0KKyAgICAgICAgICAgICAgICBlbHNl
-IA0KKyAJCSAgcGFja2FnZVtpXS5pbmZvW3RdLnBhcnRpYWxfbGlzdF9kaXNw
-bGF5ID0gMDsNCisgICAgICAgICAgICAgfQ0KKyAgICAgICAgICAgaWYgKHBh
-Y2thZ2VbaV0uaW5mb1t0XS5wYXJ0aWFsX2xpc3RfZGlzcGxheSApDQorICAg
-ICAgICAgICAgIGV4dHJhW2ldLmluX3BhcnRpYWxfbGlzdCA9IDE7DQorIAkg
-ICAgDQorICAgICAgICAgfQ0KKyAgICAgfQ0KKyB9DQorIA0KICBzdGF0aWMg
-aW50DQogIGJlc3RfdHJ1c3QgKGludCBwLCBpbnQgdHJ1c3QpDQogIHsNCiAg
-ICBpbnQgdDsNCiEgICB0PXRydXN0OyANCiEgICAgIGlmIChwYWNrYWdlW3Bd
-LmluZm9bdF0uaW5zdGFsbCAmJg0KISAgICAgICAgICgocGFja2FnZVtwXS5p
-bmZvW3RdLmluc3RhbGxfZXhpc3RzICYmIHNvdXJjZSA9PSBJRENfU09VUkNF
-X0NXRCkgfHwNCiEgICAgICAgICAocGFja2FnZVtwXS5pbmZvW3RdLmluc3Rh
-bGxfZXhpc3RzID09IDAgJiYgDQohICAgICAgICAgc291cmNlID09IElEQ19T
-T1VSQ0VfRE9XTkxPQUQpIHx8IHNvdXJjZSA9PSBJRENfU09VUkNFX05FVElO
-U1QpKQ0KICAgICAgICByZXR1cm4gdDsNCiEgICBpZiAoZXh0cmFbcF0uaW5z
-dGFsbGVkX2ZpbGUgJiYgZXh0cmFbcF0uaW5zdGFsbGVkX3ZlciA9PSBwYWNr
-YWdlW3BdLmluZm9bdF0udmVyc2lvbikNCiAgICAgIHJldHVybiBUUlVTVF9L
-RUVQOw0KICAgIHJldHVybiBUUlVTVF9OT05FOw0KKioqKioqKioqKioqKioq
-IGRlZmF1bHRfdHJ1c3QgKEhXTkQgaCwgaW50IHRydXN0KQ0KKioqIDM3MSwz
-NzggKioqKg0KLS0tIDQ0Myw0NTMgLS0tLQ0KICAgIGludCBpLCB0LCBjOw0K
-ICANCisgICB3aGljaF90cnVzdD10cnVzdDsNCisgDQogICAgZm9yIChpPTA7
-IGk8bnBhY2thZ2VzOyBpKyspDQogICAgICB7DQogICAgICAgIHQgPSBiZXN0
-X3RydXN0IChpLCB0cnVzdCk7DQogICAgICAgIGV4dHJhW2ldLnBpY2sgPSAx
-Ow0KKyAgICAgICBwYWNrYWdlW2ldLnRydXN0ID0gdDsNCiAgICAgICAgZm9y
-IChjPTA7IGM8ZXh0cmFbaV0ubnBpY2s7IGMrKykNCiAgCWlmICh0ID09IGV4
-dHJhW2ldLmNob29zZXJbY10udHJ1c3QpDQoqKioqKioqKioqKioqKiogc2V0
-X2Z1bGxfbGlzdCAoSFdORCBoLCBpbnQgaXNmdWxsKQ0KKioqIDM5NSwzOTkg
-KioqKg0KICAgIGZvciAoaT1qPTA7IGk8bnBhY2thZ2VzOyBpKyspDQogICAg
-ICB7DQohICAgICAgIGlmIChpc2Z1bGwgfHwgZXh0cmFbaV0uaW5fcGFydGlh
-bF9saXN0KQ0KICAJcGFja2FnZV9pbmRleGVzW2orK10gPSBpOw0KICAgICAg
-fQ0KLS0tIDQ3MCw0ODAgLS0tLQ0KICAgIGZvciAoaT1qPTA7IGk8bnBhY2th
-Z2VzOyBpKyspDQogICAgICB7DQohICAgICAgIGlmICgoaXNmdWxsIHx8IChl
-eHRyYVtpXS5pbl9wYXJ0aWFsX2xpc3QgJiYgDQohICAgICAgICAgIGV4dHJh
-W2ldLmNob29zZXJbZXh0cmFbaV0ucGlja10udHJ1c3QgIT0gVFJVU1RfS0VF
-UCAmJg0KISAgICAgICAgICBleHRyYVtpXS5jaG9vc2VyW2V4dHJhW2ldLnBp
-Y2tdLnRydXN0ICE9IFRSVVNUX05PTkUpKSAmJiANCiEgICAgICAgICAgKHNv
-dXJjZSA9PSBJRENfU09VUkNFX0RPV05MT0FEIHx8IHNvdXJjZSA9PSBJRENf
-U09VUkNFX05FVElOU1QgfHwgDQohICAgICAgICAgIHBhY2thZ2VbaV0uaW5m
-b1tUUlVTVF9QUkVWXS5pbnN0YWxsX2V4aXN0cyB8fCANCiEgICAgICAgICAg
-cGFja2FnZVtpXS5pbmZvW1RSVVNUX0NVUlJdLmluc3RhbGxfZXhpc3RzIHx8
-IA0KISAgICAgICAgICBwYWNrYWdlW2ldLmluZm9bVFJVU1RfVEVTVF0uaW5z
-dGFsbF9leGlzdHMpICkNCiAgCXBhY2thZ2VfaW5kZXhlc1tqKytdID0gaTsN
-CiAgICAgIH0NCioqKioqKioqKioqKioqKiBidWlsZF9sYWJlbHMgKCkNCioq
-KiA0NTAsNDYwICoqKioNCiAgCQlDLmNhcHRpb24gPSAiMC4wIjsNCiAgCSAg
-ICAgIEMudHJ1c3QgPSB0Ow0KISAJICAgICAgaWYgKHBhY2thZ2VbaV0uaW5m
-b1t0XS5zb3VyY2UpDQogIAkJQy5zcmNfYXZhaWwgPSAxOw0KICAJICAgICAg
-YysrOw0KLSAJICAgICAgLyogd2UgaW50ZW50aW9uYWxseSBza2lwIFRSVVNU
-X1BSRVYgKi8NCi0gCSAgICAgIGlmICh0ICE9IFRSVVNUX1BSRVYgfHwgIWV4
-dHJhW2ldLmluc3RhbGxlZF92ZXIpDQotIAkJZXh0cmFbaV0uaW5fcGFydGlh
-bF9saXN0ID0gMTsNCi0gDQogIAkgICAgfQ0KICANCi0tLSA1MzEsNTQxIC0t
-LS0NCiAgCQlDLmNhcHRpb24gPSAiMC4wIjsNCiAgCSAgICAgIEMudHJ1c3Qg
-PSB0Ow0KISAJICAgICAgaWYgKHBhY2thZ2VbaV0uaW5mb1t0XS5zb3VyY2Ug
-JiYgDQohICAgICAgICAgICAgICAgICAgICgocGFja2FnZVtpXS5pbmZvW3Rd
-LnNvdXJjZV9leGlzdHMgJiYgDQohICAgICAgICAgICAgICAgICAgIHNvdXJj
-ZT09SURDX1NPVVJDRV9DV0QpIHx8IA0KISAgICAgICAgICAgICAgICAgICAo
-cGFja2FnZVtpXS5pbmZvW3RdLnNvdXJjZV9leGlzdHM9PTAgJiYgDQohICAg
-ICAgICAgICAgICAgICAgIHNvdXJjZT09SURDX1NPVVJDRV9ET1dOTE9BRCkg
-fHwgc291cmNlPT1JRENfU09VUkNFX05FVElOU1QpKQ0KICAJCUMuc3JjX2F2
-YWlsID0gMTsNCiAgCSAgICAgIGMrKzsNCiAgCSAgICB9DQogIA0KKioqKioq
-KioqKioqKioqIGNyZWF0ZV9saXN0dmlldyAoSFdORCBkbGcsIFJFQ1QgKnIp
-DQoqKiogNTMxLDUzNiAqKioqDQogICAgaGVhZGVyc1tQQUNLQUdFX0NPTF0u
-eCA9IGhlYWRlcnNbU1JDX0NPTF0ueCArIGhlYWRlcnNbU1JDX0NPTF0ud2lk
-dGggKyBITUFSR0lOOw0KICANCi0gICBzZXRfZnVsbF9saXN0IChsdiwgZnVs
-bF9saXN0KTsNCiAgICBkZWZhdWx0X3RydXN0IChsdiwgVFJVU1RfQ1VSUik7
-DQogIA0KICAgIFJlbGVhc2VEQyAobHYsIGRjKTsNCi0tLSA2MTIsNjE5IC0t
-LS0NCiAgICBoZWFkZXJzW1BBQ0tBR0VfQ09MXS54ID0gaGVhZGVyc1tTUkNf
-Q09MXS54ICsgaGVhZGVyc1tTUkNfQ09MXS53aWR0aCArIEhNQVJHSU47DQog
-IA0KICAgIGRlZmF1bHRfdHJ1c3QgKGx2LCBUUlVTVF9DVVJSKTsNCisgICBz
-ZXRfZnVsbF9saXN0IChsdiwgZnVsbF9saXN0KTsNCisgICBzdGF0aWMgaW50
-IHRhW10gPSB7IElEQ19DSE9PU0VfQ1VSUiwgMCB9Ow0KKyAgIHJic2V0IChk
-bGcsIHRhLCBJRENfQ0hPT1NFX0NVUlIpOw0KICANCiAgICBSZWxlYXNlREMg
-KGx2LCBkYyk7DQoqKioqKioqKioqKioqKiogZGlhbG9nX2NtZCAoSFdORCBo
-LCBpbnQgaWQsIEhXTkQgaHduZGN0bA0KKioqIDU0NSw1NTQgKioqKg0KLS0t
-IDYyOCw2NDAgLS0tLQ0KICAgICAgY2FzZSBJRENfQ0hPT1NFX1BSRVY6DQog
-ICAgICAgIGRlZmF1bHRfdHJ1c3QgKGx2LCBUUlVTVF9QUkVWKTsNCisgICAg
-ICAgc2V0X2Z1bGxfbGlzdCAobHYsIGZ1bGxfbGlzdCk7DQogICAgICAgIGJy
-ZWFrOw0KICAgICAgY2FzZSBJRENfQ0hPT1NFX0NVUlI6DQogICAgICAgIGRl
-ZmF1bHRfdHJ1c3QgKGx2LCBUUlVTVF9DVVJSKTsNCisgICAgICAgc2V0X2Z1
-bGxfbGlzdCAobHYsIGZ1bGxfbGlzdCk7DQogICAgICAgIGJyZWFrOw0KICAg
-ICAgY2FzZSBJRENfQ0hPT1NFX0VYUDoNCiAgICAgICAgZGVmYXVsdF90cnVz
-dCAobHYsIFRSVVNUX1RFU1QpOw0KKyAgICAgICBzZXRfZnVsbF9saXN0IChs
-diwgZnVsbF9saXN0KTsNCiAgICAgICAgYnJlYWs7DQogICAgICBjYXNlIElE
-Q19DSE9PU0VfRlVMTFBBUlQ6DQoqKioqKioqKioqKioqKiogYmFzZSAoY2hh
-ciAqcykNCioqKiA2MzMsNjM2ICoqKioNCi0tLSA3MTksNzYwIC0tLS0NCiAg
-ICByZXR1cm4gcnY7DQogIH0NCisgCSAgICAgIA0KKyBzdGF0aWMgdm9pZA0K
-KyBnZXRfcGFja2FnZV92ZXJzaW9uKGludCBwICwgaW50IHRydXN0KQ0KKyB7
-DQorICAgY2hhciAqdiwgKmQ7DQorICAgY2hhciBpbnN0cGtnW19NQVhfUEFU
-SF07DQorICAgaW5zdHBrZ1swXT0wOyAgLyogbWFrZSBzdXJlIGVtcHR5IHRv
-IHN0YXJ0IHdpdGggKi8NCisgICBpZiAodHJ1c3Q9PS0xKQ0KKyAgICAgc3Ry
-Y3B5IChpbnN0cGtnLGV4dHJhW3BdLmluc3RhbGxlZF9maWxlKTsNCisgICBl
-bHNlDQorICAgICBzdHJjcHkgKGluc3Rwa2cscGFja2FnZVtwXS5pbmZvW3Ry
-dXN0XS5pbnN0YWxsKTsNCisgICBmb3IgKHY9YmFzZSAoaW5zdHBrZyk7ICp2
-OyB2KyspDQorICAgICBpZiAoKnYgPT0gJy0nICYmIGlzZGlnaXQodlsxXSkp
-DQorICAgICB7DQorICAgICAgIHYrKzsNCisgICAgICAgYnJlYWs7DQorICAg
-ICB9DQorICAgaWYgKCF2KQ0KKyAgICAgdiA9IGluc3Rwa2c7DQorICAgZm9y
-IChkPXY7ICpkOyBkKyspDQorICAgICBpZiAoc3RybmNtcCAoZCwgIi50YXIi
-LCA0KSA9PSAwKQ0KKyAgICAgICB7DQorICAgICAgICAgKmQgPSAwOw0KKyAg
-ICAgICAgIGJyZWFrOw0KKyAgICAgICB9DQorICAgaWYgKHZbMF0pDQorICAg
-ICB7DQorICAgICBpZiAodHJ1c3QgIT0gLTEpDQorICAgICAgIHBhY2thZ2Vb
-cF0uaW5mb1t0cnVzdF0udmVyc2lvbj1zdHJkdXAodik7DQorICAgICBleHRy
-YVtwXS5pbnN0YWxsZWRfdmVyID0gc3RyZHVwICh2KTsNCisgICAgIH0NCisg
-ICBlbHNlDQorICAgICB7DQorICAgICBpZiAodHJ1c3QgIT0gLTEpDQorICAg
-ICAgIHBhY2thZ2VbcF0uaW5mb1t0cnVzdF0udmVyc2lvbj0iMCI7DQorICAg
-ICBleHRyYVtwXS5pbnN0YWxsZWRfdmVyID0gIjAiOw0KKyAgICAgfQ0KKyB9
-DQogIA0KICBzdGF0aWMgdm9pZA0KKioqKioqKioqKioqKioqIHNjYW4yIChj
-aGFyICpwYXRoLCB1bnNpZ25lZCBpbnQgc2l6ZSkNCioqKiA2MzgsNjU0ICoq
-KioNCiAgew0KICAgIGludCBpLCB0Ow0KISAgIGZvciAoaT0wOyBpPG5wYWNr
-YWdlczsgaSsrKQ0KISAgICAgZm9yICh0PTA7IHQ8TlRSVVNUOyB0KyspDQoh
-ICAgICAgIGlmIChwYWNrYWdlW2ldLmluZm9bdF0uaW5zdGFsbA0KISAJICAm
-JiBzdHJjbXAgKGJhc2UgKHBhY2thZ2VbaV0uaW5mb1t0XS5pbnN0YWxsKSwg
-YmFzZSAocGF0aCkpID09IDANCiEgCSAgJiYgcGFja2FnZVtpXS5pbmZvW3Rd
-Lmluc3RhbGxfc2l6ZSA9PSBzaXplKQ0KISAJew0KISAJICBleHRyYVtpXS5p
-bnN0YWxsZWRfZmlsZSA9IHBhY2thZ2VbaV0uaW5mb1t0XS5pbnN0YWxsOw0K
-ISAJICBleHRyYVtpXS5pbnN0YWxsZWRfc2l6ZSA9IHNpemU7DQohIAkgIGV4
-dHJhW2ldLndoaWNoX2lzX2luc3RhbGxlZCA9IHQ7DQohIAkgIGV4dHJhW2ld
-Lmluc3RhbGxlZF92ZXIgPSBwYWNrYWdlW2ldLmluZm9bdF0udmVyc2lvbjsN
-CiEgCSAgaWYgKCFleHRyYVtpXS5pbnN0YWxsZWRfdmVyKQ0KISAJICAgIGV4
-dHJhW2ldLmluc3RhbGxlZF92ZXIgPSAiMCI7DQogIAl9DQogIH0NCiAgDQot
-LS0gNzYyLDgzMCAtLS0tDQogIHsNCiAgICBpbnQgaSwgdDsNCiEgICBpZiAo
-c3RyY21wKHBhdGgrc3RybGVuKHBhdGgpLTcsIi50YXIuZ3oiKSA9PSAwKQ0K
-ISAgICAgew0KISAgICAgY2hhciBtYWlucGtnW19NQVhfUEFUSF0scGtnaW5m
-b1tfTUFYX1BBVEhdLCAqdmVyLCAqdmVyaW5mbzsNCiEgICAgIHN0cmNweSAo
-bWFpbnBrZyxwYXRoKTsNCiEgICAgIG1haW5wa2dbc3RybGVuKG1haW5wa2cp
-LTddID0gMDsgLyogc3RyaXAgb2ZmIHRoZSB0YXIuZ3ogKi8NCiEgICAgIGZv
-ciAodmVyPW1haW5wa2c7ICp2ZXI7IHZlcisrKQ0KISAgICAgICBpZiAoKCp2
-ZXIgPT0gJy0nIHx8ICp2ZXIgPT0gJ18nKSAmJiBpc2RpZ2l0KHZlclsxXSkp
-DQohICAgICAgICAgew0KISAgICAgICAgICAgKnZlcisrID0gMDsNCiEgICAg
-ICAgICAgIGJyZWFrOw0KICAJfQ0KKyAgICAgZm9yIChpPTA7IGk8bnBhY2th
-Z2VzOyBpKyspDQorICAgICAgIHsNCisgICAgICAgICBwa2dpbmZvWzBdID0g
-MDsNCisgICAgICAgICBmb3IgKHQ9MDsgdDxOVFJVU1Q7IHQrKykNCisgICAg
-ICAgICAgIHsNCisgICAgICAgICAgIGlmIChwYWNrYWdlW2ldLmluZm9bdF0u
-aW5zdGFsbCkNCisgICAgICAgICAgICAgew0KKyAgICAgICAgICAgICAgIHN0
-cmNweSAocGtnaW5mbyxwYWNrYWdlW2ldLmluZm9bdF0uaW5zdGFsbCk7DQor
-ICAgICAgICAgICAgICAgcGtnaW5mb1tzdHJsZW4ocGtnaW5mbyktN10gPSAw
-OyAvKiBzdHJpcCBvZmYgdGhlIHRhci5neiAqLw0KKyAgICAgICAgICAgICAg
-IGZvciAodmVyaW5mbz1wa2dpbmZvOyAqdmVyaW5mbzsgdmVyaW5mbysrKQ0K
-KyAgICAgICAgICAgICAgICAgeyANCisgICAgICAgICAgICAgICAgICAgaWYg
-KCgqdmVyaW5mbyA9PSAnLScgfHwgKnZlcmluZm8gPT0gJ18nKSAmJiBpc2Rp
-Z2l0KHZlcmluZm9bMV0pKQ0KKyAgICAgICAgICAgICAgICAgICAgIHsNCisg
-ICAgICAgICAgICAgICAgICAgICAgICp2ZXJpbmZvKysgPSAwOw0KKyAgICAg
-ICAgICAgICAgICAgICAgICAgYnJlYWs7DQorIAkgICAgICAgICAgICB9DQor
-ICAgICAgICAgICAgICAgICB9DQorICAgICAgICAgICAgIGJyZWFrOw0KKyAg
-ICAgICAgICAgICB9DQorICAgICAgICAgICB9ICANCisgICAgICAgaWYgKHN0
-cmNtcChwa2dpbmZvLG1haW5wa2cpID09IDAgKQ0KKyAgICAgICAgIHsNCisg
-ICAgICAgICBmb3IgKHQ9MDsgdDxOVFJVU1Q7IHQrKykgDQorICAgICAgICAg
-ICBpZiAocGFja2FnZVtpXS5pbmZvW3RdLmluc3RhbGwgJiYgDQorICAgICAg
-ICAgICAgICAgc3RyY21wIChiYXNlIChwYWNrYWdlW2ldLmluZm9bdF0uaW5z
-dGFsbCksIGJhc2UgKHBhdGgpKSA9PSAwKQ0KKyAJICAgIHsNCisgICAgICAg
-ICAgICAgICBwYWNrYWdlW2ldLmluZm9bdF0uaW5zdGFsbF9leGlzdHM9MTsN
-CisgICAgICAgICAgICAgICBicmVhazsNCisgCSAgICB9DQorICAgICAgICAg
-ICBlbHNlIGlmICh0Pj1OVFJVU1QtMSkNCisgICAgICAgICAgICAgaWYgKCFw
-YWNrYWdlW2ldLmluZm9bVFJVU1RfQ1VSUl0uaW5zdGFsbCkNCisgICAgICAg
-ICAgICAgICB7DQorICAgICAgICAgICAgICAgICBwYWNrYWdlW2ldLmluZm9b
-VFJVU1RfQ1VSUl0udmVyc2lvbiA9IDA7DQorICAgICAgICAgICAgICAgICBw
-YWNrYWdlW2ldLmluZm9bVFJVU1RfQ1VSUl0uaW5zdGFsbCA9IHN0cmR1cChw
-YXRoKTsNCisgICAgICAgICAgICAgICAgIHBhY2thZ2VbaV0uaW5mb1tUUlVT
-VF9DVVJSXS5pbnN0YWxsX3NpemUgPSBzaXplOw0KKyAgICAgICAgICAgICAg
-ICAgcGFja2FnZVtpXS5pbmZvW1RSVVNUX0NVUlJdLmluc3RhbGxfZXhpc3Rz
-PTE7DQorICAgICAgICAgICAgICAgICBpZiAocGFja2FnZVtpXS5pbmZvW1RS
-VVNUX0NVUlJdLnZlcnNpb24gPT0gMCkgDQorIAkgICAgICAgICAgZ2V0X3Bh
-Y2thZ2VfdmVyc2lvbihpLFRSVVNUX0NVUlIpOw0KKyAgICAgICAgICAgICAg
-ICAgYnJlYWs7DQorICAgICAgICAgICAgICAgfQ0KKyAgICAgICAgICAgICBl
-bHNlIGlmICghcGFja2FnZVtpXS5pbmZvW1RSVVNUX1BSRVZdLmluc3RhbGwg
-KQ0KKyAgICAgICAgICAgICAgIHsNCisgICAgICAgICAgICAgICAgIHBhY2th
-Z2VbaV0uaW5mb1tUUlVTVF9QUkVWXS52ZXJzaW9uID0gMDsNCisgICAgICAg
-ICAgICAgICAgIHBhY2thZ2VbaV0uaW5mb1tUUlVTVF9QUkVWXS5pbnN0YWxs
-ID0gc3RyZHVwKHBhdGgpOw0KKyAgICAgICAgICAgICAgICAgcGFja2FnZVtp
-XS5pbmZvW1RSVVNUX1BSRVZdLmluc3RhbGxfc2l6ZSA9IHNpemU7DQorICAg
-ICAgICAgICAgICAgICBwYWNrYWdlW2ldLmluZm9bVFJVU1RfUFJFVl0uaW5z
-dGFsbF9leGlzdHM9MTsNCisgICAgICAgICAgICAgICAgIGlmIChwYWNrYWdl
-W2ldLmluZm9bVFJVU1RfUFJFVl0udmVyc2lvbiA9PSAwKSANCisgCSAgICAg
-ICAgICBnZXRfcGFja2FnZV92ZXJzaW9uKGksVFJVU1RfUFJFVik7DQorICAg
-ICAgICAgICAgICAgICBicmVhazsNCisgICAgICAgICAgICAgICB9DQorICAg
-ICAgICAgYnJlYWs7DQorICAgICAgICAgfQ0KKyAgICAgICB9IA0KKyAgICAg
-fQ0KICB9DQogIA0KKioqKioqKioqKioqKioqIHJlYWRfaW5zdGFsbGVkX2Ri
-ICgpDQoqKiogNjg1LDY4OCAqKioqDQotLS0gODYxLDg2NSAtLS0tDQogIAkg
-ICAgZXh0cmFbaV0uaW5zdGFsbGVkX2ZpbGUgPSBpbnN0Ow0KICAJICAgIGV4
-dHJhW2ldLmluc3RhbGxlZF9zaXplID0gaW5zdHN6Ow0KKyAJICAgIGdldF9w
-YWNrYWdlX3ZlcnNpb24oaSwgLTEpOw0KICANCiAgCSAgICBmb3IgKHQ9MDsg
-dDxOVFJVU1Q7IHQrKykNCioqKioqKioqKioqKioqKiByZWFkX2luc3RhbGxl
-ZF9kYiAoKQ0KKioqIDY5Miw3MjEgKioqKg0KICAJCSAgZXh0cmFbaV0ud2hp
-Y2hfaXNfaW5zdGFsbGVkID0gdDsNCiAgCQkgIGV4dHJhW2ldLmluc3RhbGxl
-ZF92ZXIgPSBwYWNrYWdlW2ldLmluZm9bdF0udmVyc2lvbjsNCiAgCQkgIGJy
-ZWFrOw0KICAJCX0NCiAgDQogIAkgICAgaWYgKGV4dHJhW2ldLmluc3RhbGxl
-ZF92ZXIgPT0gMCkgLyogc3RpbGwgKi8NCiEgCSAgICAgIHsNCiEgCQljaGFy
-ICp2LCAqZDsNCiEgCQlmb3IgKHY9YmFzZSAoaW5zdCk7ICp2OyB2KyspDQoh
-IAkJICBpZiAoKnYgPT0gJy0nICYmIGlzZGlnaXQodlsxXSkpDQohIAkJICAg
-IHsNCiEgCQkgICAgICB2Kys7DQohIAkJICAgICAgYnJlYWs7DQohIAkJICAg
-IH0NCiEgCQlpZiAoIXYpDQohIAkJICB2ID0gaW5zdDsNCiEgCQlmb3IgKGQ9
-djsgKmQ7IGQrKykNCiEgCQkgIGlmIChzdHJuY21wIChkLCAiLnRhciIsIDQp
-ID09IDApDQohIAkJICAgIHsNCiEgCQkgICAgICAqZCA9IDA7DQohIAkJICAg
-ICAgYnJlYWs7DQohIAkJICAgIH0NCiEgCQlpZiAodlswXSkNCiEgCQkgIGV4
-dHJhW2ldLmluc3RhbGxlZF92ZXIgPSBzdHJkdXAgKHYpOw0KISAJCWVsc2UN
-CiEgCQkgIGV4dHJhW2ldLmluc3RhbGxlZF92ZXIgPSAiMCI7DQohIAkgICAg
-ICB9DQohIAkgICAgYnJlYWs7DQogIAkgIH0NCiAgICAgIH0NCi0tLSA4Njks
-ODgwIC0tLS0NCiAgCQkgIGV4dHJhW2ldLndoaWNoX2lzX2luc3RhbGxlZCA9
-IHQ7DQogIAkJICBleHRyYVtpXS5pbnN0YWxsZWRfdmVyID0gcGFja2FnZVtp
-XS5pbmZvW3RdLnZlcnNpb247DQorIAkgICAgICAgICAgaWYgKGV4dHJhW2ld
-Lmluc3RhbGxlZF92ZXIgPT0gMCkgLyogc3RpbGwgKi8NCisgCQkgICAgZ2V0
-X3BhY2thZ2VfdmVyc2lvbihpLHQpOw0KICAJCSAgYnJlYWs7DQogIAkJfQ0K
-ICANCiAgCSAgICBpZiAoZXh0cmFbaV0uaW5zdGFsbGVkX3ZlciA9PSAwKSAv
-KiBzdGlsbCAqLw0KISAJICAgICAgZ2V0X3BhY2thZ2VfdmVyc2lvbihpLCAt
-MSk7DQohICAgICAgICAgICAgIGJyZWFrOw0KICAJICB9DQogICAgICB9DQoq
-KioqKioqKioqKioqKiogZG9fY2hvb3NlIChISU5TVEFOQ0UgaCkNCioqKiA3
-NDksNzYwICoqKioNCiAgICBtZW1zZXQgKGV4dHJhLCAwLCBucGFja2FnZXMg
-KiBzaXplb2YgKEV4dHJhUGFja2FnZUluZm8pKTsNCiAgICBmb3IgKGk9MDsg
-aTxucGFja2FnZXM7IGkrKykNCiEgICAgIGV4dHJhW2ldLndoaWNoX2lzX2lu
-c3RhbGxlZCA9IC0xOw0KICANCiAgICByZWdpc3Rlcl93aW5kb3dzIChoKTsN
-CiAgDQohICAgaWYgKHNvdXJjZSA9PSBJRENfU09VUkNFX0RPV05MT0FEKQ0K
-ICAgICAgc2Nhbl9kb3dubG9hZGVkX2ZpbGVzICgpOw0KISAgIGVsc2UNCiEg
-ICAgIHJlYWRfaW5zdGFsbGVkX2RiICgpOw0KICAgIGJ1aWxkX2xhYmVscyAo
-KTsNCiAgDQotLS0gOTA4LDkzMSAtLS0tDQogICAgbWVtc2V0IChleHRyYSwg
-MCwgbnBhY2thZ2VzICogc2l6ZW9mIChFeHRyYVBhY2thZ2VJbmZvKSk7DQog
-ICAgZm9yIChpPTA7IGk8bnBhY2thZ2VzOyBpKyspDQohICAgICB7DQohICAg
-ICAgIGV4dHJhW2ldLndoaWNoX2lzX2luc3RhbGxlZCA9IC0xOw0KISAgICAg
-ICBleHRyYVtpXS5pbl9wYXJ0aWFsX2xpc3QgPSAwOw0KISAgICAgICBleHRy
-YVtpXS5waWNrID0gMTsNCiEgICAgICAgZXh0cmFbaV0uY2hvb3NlcltleHRy
-YVtpXS5waWNrXS50cnVzdCA9IFRSVVNUX05PTkU7DQohIAlmb3IgKGludCB0
-PTA7IHQ8TlRSVVNUOyB0KyspDQohICAgICAgICAgICB7DQohICAgICAgICAg
-ICBwYWNrYWdlW2ldLmluZm9bdF0ucGFydGlhbF9saXN0X2Rpc3BsYXk9MDsN
-CiEgICAgICAgICAgIHBhY2thZ2VbaV0uaW5mb1t0XS5pbnN0YWxsX2V4aXN0
-cz0wOw0KISAgICAgICAgICAgcGFja2FnZVtpXS5pbmZvW3RdLnNvdXJjZV9l
-eGlzdHM9MDsNCiEgICAgICAgICAgIH0NCiEgICAgIH0NCiAgDQogICAgcmVn
-aXN0ZXJfd2luZG93cyAoaCk7DQogIA0KISAgIGlmIChzb3VyY2UgPT0gSURD
-X1NPVVJDRV9ET1dOTE9BRCB8fCBzb3VyY2UgPT0gSURDX1NPVVJDRV9DV0Qp
-DQogICAgICBzY2FuX2Rvd25sb2FkZWRfZmlsZXMgKCk7DQohICAgICANCiEg
-ICByZWFkX2luc3RhbGxlZF9kYiAoKTsNCiEgICBzZXRfZXhpc3RlbmNlICgp
-Ow0KICAgIGJ1aWxkX2xhYmVscyAoKTsNCiAgDQoqKioqKioqKioqKioqKiog
-ZG9fY2hvb3NlIChISU5TVEFOQ0UgaCkNCioqKiA3ODQsNzg4ICoqKioNCiAg
-CWNhc2UgVFJVU1RfTk9ORToNCiAgCWRlZmF1bHQ6DQohIAkgIHBhY2thZ2Vb
-aV0uYWN0aW9uID0gQUNUSU9OX1NBTUU7DQogIAkgIGJyZWFrOw0KICAJfQ0K
-LS0tIDk1NSw5NTkgLS0tLQ0KICAJY2FzZSBUUlVTVF9OT05FOg0KICAJZGVm
-YXVsdDoNCiEgICAgICAgICAgIHBhY2thZ2VbaV0uYWN0aW9uID0gQUNUSU9O
-X1NBTUU7DQogIAkgIGJyZWFrOw0KICAJfQ0KKioqKioqKioqKioqKioqIGRv
-X2Nob29zZSAoSElOU1RBTkNFIGgpDQoqKiogODA0LDgyMCAqKioqDQogIAkJ
-CSAgICA6IChwYWNrYWdlW2ldLmFjdGlvbiA9PSBBQ1RJT05fRVJST1IpID8g
-ImVycm9yIg0KICAJCQkgICAgOiAidW5rbm93biIpOw0KICANCiEgICAgICAg
-bG9nIChMT0dfQkFCQkxFLCAiWyVzXSBhY3Rpb249JXMgdHJ1c3Q9JXMgc3Jj
-PyAlcyIsIHBhY2thZ2VbaV0ubmFtZSwgYWN0aW9uLCB0cnVzdCwNCiEgCSAg
-IHBhY2thZ2VbaV0uc3JjYWN0aW9uID09IFNSQ0FDVElPTl9OTyA/ICJubyIg
-OiAieWVzIik7DQogICAgICAgIGZvciAoaW50IHQ9MDsgdDxOVFJVU1Q7IHQr
-KykNCiAgCXsNCiAgCSAgaWYgKHBhY2thZ2VbaV0uaW5mb1t0XS5pbnN0YWxs
-KQ0KISAJICAgIGxvZyAoTE9HX0JBQkJMRSwgIlslc10gdmVyICVzIGluc3Qg
-JXMgJWQgc3JjICVzICVkIiwNCiAgCQkgaW5mb3NbdF0sDQogIAkJIHBhY2th
-Z2VbaV0uaW5mb1t0XS52ZXJzaW9uID86ICIobm9uZSkiLA0KICAJCSBwYWNr
-YWdlW2ldLmluZm9bdF0uaW5zdGFsbCA/OiAiKG5vbmUpIiwNCiAgCQkgcGFj
-a2FnZVtpXS5pbmZvW3RdLmluc3RhbGxfc2l6ZSwNCiAgCQkgcGFja2FnZVtp
-XS5pbmZvW3RdLnNvdXJjZSA/OiAiKG5vbmUpIiwNCiEgCQkgcGFja2FnZVtp
-XS5pbmZvW3RdLnNvdXJjZV9zaXplKTsNCiAgCX0NCiAgICAgIH0NCi0tLSA5
-NzUsOTk5IC0tLS0NCiAgCQkJICAgIDogKHBhY2thZ2VbaV0uYWN0aW9uID09
-IEFDVElPTl9FUlJPUikgPyAiZXJyb3IiDQogIAkJCSAgICA6ICJ1bmtub3du
-Iik7DQorICAgICAgIGNvbnN0IGNoYXIgKmluc3RhbGxlZCA9ICgoZXh0cmFb
-aV0ud2hpY2hfaXNfaW5zdGFsbGVkID09IC0xKSA/ICJub25lIg0KKyAJCQkg
-ICA6IChleHRyYVtpXS53aGljaF9pc19pbnN0YWxsZWQgPT0gVFJVU1RfUFJF
-VikgPyAicHJldiINCisgCQkJICAgOiAoZXh0cmFbaV0ud2hpY2hfaXNfaW5z
-dGFsbGVkID09IFRSVVNUX0NVUlIpID8gImN1cnIiDQorIAkJCSAgIDogKGV4
-dHJhW2ldLndoaWNoX2lzX2luc3RhbGxlZCA9PSBUUlVTVF9URVNUKSA/ICJ0
-ZXN0Ig0KKyAJCQkgICA6ICJ1bmtub3duIik7DQorICAgICAgIGNvbnN0IGNo
-YXIgKnBhcnRpYWxfbGlzdCA9ICgoZXh0cmFbaV0uaW5fcGFydGlhbF9saXN0
-ID09IDEpID8gInllcyIgOiAibm8iKTsNCiAgDQohICAgICAgIGxvZyAoTE9H
-X0JBQkJMRSwgIlslc10gYWN0aW9uPSVzIHRydXN0PSVzIGluc3RhbGxlZD0l
-cyBwYXJ0aWFsX2xpc3Q9JXMgc3JjPz0lcyIsIHBhY2thZ2VbaV0ubmFtZSwg
-YWN0aW9uLCB0cnVzdCxpbnN0YWxsZWQscGFydGlhbF9saXN0LHBhY2thZ2Vb
-aV0uc3JjYWN0aW9uID09IFNSQ0FDVElPTl9OTyA/ICJubyIgOiAieWVzIik7
-DQogICAgICAgIGZvciAoaW50IHQ9MDsgdDxOVFJVU1Q7IHQrKykNCiAgCXsN
-CiAgCSAgaWYgKHBhY2thZ2VbaV0uaW5mb1t0XS5pbnN0YWxsKQ0KISAJICAg
-IGxvZyAoTE9HX0JBQkJMRSwgIiAgICAgWyVzXSB2ZXI9JXMgcGFydGlhbF9s
-aXN0PSVzIFxyXG4gICAgICAgICAgICBpbnN0PSVzICVkIGV4aXN0cz0lcyBc
-clxuICAgICAgICAgICAgc3JjPSVzICVkIGV4aXN0cz0lcyIsDQogIAkJIGlu
-Zm9zW3RdLA0KICAJCSBwYWNrYWdlW2ldLmluZm9bdF0udmVyc2lvbiA/OiAi
-KG5vbmUpIiwNCisgCQkgKHBhY2thZ2VbaV0uaW5mb1t0XS5wYXJ0aWFsX2xp
-c3RfZGlzcGxheSA9PSAxICkgPyAieWVzIjoibm8iLA0KICAJCSBwYWNrYWdl
-W2ldLmluZm9bdF0uaW5zdGFsbCA/OiAiKG5vbmUpIiwNCiAgCQkgcGFja2Fn
-ZVtpXS5pbmZvW3RdLmluc3RhbGxfc2l6ZSwNCisgCQkgKHBhY2thZ2VbaV0u
-aW5mb1t0XS5pbnN0YWxsX2V4aXN0cyA9PSAxKSA/ICJ5ZXMiOiJubyIsDQog
-IAkJIHBhY2thZ2VbaV0uaW5mb1t0XS5zb3VyY2UgPzogIihub25lKSIsDQoh
-IAkJIHBhY2thZ2VbaV0uaW5mb1t0XS5zb3VyY2Vfc2l6ZSwNCiEgCQkgKHBh
-Y2thZ2VbaV0uaW5mb1t0XS5zb3VyY2VfZXhpc3RzID09IDEpID8gInllcyI6
-Im5vIik7DQogIAl9DQogICAgICB9DQpJbmRleDogaW5pLmgNCj09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT0NClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2luc3Vw
-L2NpbnN0YWxsL2luaS5oLHYNCnJldHJpZXZpbmcgcmV2aXNpb24gMi40DQpk
-aWZmIC1wIC0yIC1yMi40IGluaS5oDQoqKiogaW5pLmgJMjAwMC8xMS8wOSAw
-MTo0MDoxNQkyLjQNCi0tLSBpbmkuaAkyMDAxLzAyLzA4IDAzOjExOjQ5DQoq
-KioqKioqKioqKioqKiogdHlwZWRlZiBzdHJ1Y3Qgew0KKioqIDUyLDU3ICoq
-KioNCi0tLSA1Miw2MCAtLS0tDQogICAgICBjaGFyICppbnN0YWxsOwkvKiBm
-aWxlIG5hbWUgdG8gaW5zdGFsbCAqLw0KICAgICAgaW50IGluc3RhbGxfc2l6
-ZTsJLyogaW4gYnl0ZXMgKi8NCisgICAgIGludCBpbnN0YWxsX2V4aXN0czsg
-LyogaW5zdGFsbCBmaWxlIGV4aXN0cyBvbiBkaXNrICovDQogICAgICBjaGFy
-ICpzb3VyY2U7CS8qIHNvdXJjZXMgZm9yIGluc3RhbGxlZCBiaW5hcmllcyAq
-Lw0KICAgICAgaW50IHNvdXJjZV9zaXplOwkvKiBpbiBieXRlcyAqLw0KKyAg
-ICAgaW50IHNvdXJjZV9leGlzdHM7ICAvKiBzb3VyY2UgZmlsZSBleGlzdHMg
-b24gZGlzayAqLw0KKyAgICAgaW50IHBhcnRpYWxfbGlzdF9kaXNwbGF5Oy8q
-IGRpc3BsYXkgdGhpcyB2ZXJzaW9uIGluIHBhcnRpYWwgbGlzdCAqLw0KICAg
-IH0gaW5mb1tOVFJVU1QrMV07CS8qICsxIGZvciBUUlVTVF9VTktOT1dOICov
-DQogIH0gUGFja2FnZTsNCkluZGV4OiByZXMucmMNCj09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT0NClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL2NpbnN0
-YWxsL3Jlcy5yYyx2DQpyZXRyaWV2aW5nIHJldmlzaW9uIDIuMTENCmRpZmYg
-LXAgLTIgLXIyLjExIHJlcy5yYw0KKioqIHJlcy5yYwkyMDAwLzEyLzI2IDIz
-OjE1OjU2CTIuMTENCi0tLSByZXMucmMJMjAwMS8wMi8wOCAwMzoxMTo1Mw0K
-KioqKioqKioqKioqKioqIEJFR0lODQoqKiogMjMzLDIzOSAqKioqDQogICAg
-ICAgICAgICAgICAgICAgICAgSURDX1NUQVRJQyw2NSwxNzAsMjIwLDgNCiAg
-ICAgIFBVU0hCVVRUT04gICAgICAiRnVsbC9QYXJ0IixJRENfQ0hPT1NFX0ZV
-TExQQVJULDI1MCw1LDM1LDEwDQohICAgICBQVVNIQlVUVE9OICAgICAgIkV4
-cCIsSURDX0NIT09TRV9FWFAsMjE1LDUsMjUsMTANCiEgICAgIFBVU0hCVVRU
-T04gICAgICAiQ3VyciIsSURDX0NIT09TRV9DVVJSLDE5MCw1LDI1LDEwDQoh
-ICAgICBQVVNIQlVUVE9OICAgICAgIlByZXYiLElEQ19DSE9PU0VfUFJFViwx
-NjUsNSwyNSwxMA0KICAgICAgREVGUFVTSEJVVFRPTiAgICImTmV4dCAtLT4i
-LElET0ssMTc1LDE4NSw0NSwxNQ0KICAgICAgUFVTSEJVVFRPTiAgICAgICJD
-YW5jZWwiLElEQ0FOQ0VMLDI0MCwxODUsNDUsMTUNCi0tLSAyMzMsMjM5IC0t
-LS0NCiAgICAgICAgICAgICAgICAgICAgICBJRENfU1RBVElDLDY1LDE3MCwy
-MjAsOA0KICAgICAgUFVTSEJVVFRPTiAgICAgICJGdWxsL1BhcnQiLElEQ19D
-SE9PU0VfRlVMTFBBUlQsMjUwLDUsMzUsMTANCiEgICAgIENPTlRST0wgICAg
-ICAgICAiRXhwIixJRENfQ0hPT1NFX0VYUCwiQnV0dG9uIixCU19BVVRPUkFE
-SU9CVVRUT04gfCBXU19HUk9VUCwyMTUsNSwyNSwxMA0KISAgICAgQ09OVFJP
-TCAgICAgICAgICJDdXJyIixJRENfQ0hPT1NFX0NVUlIsIkJ1dHRvbiIsQlNf
-QVVUT1JBRElPQlVUVE9OLDE4OSw1LDI1LDEwDQohICAgICBDT05UUk9MICAg
-ICAgICAgIlByZXYiLElEQ19DSE9PU0VfUFJFViwiQnV0dG9uIixCU19BVVRP
-UkFESU9CVVRUT04sMTYxLDUsMjcsMTANCiAgICAgIERFRlBVU0hCVVRUT04g
-ICAiJk5leHQgLS0+IixJRE9LLDE3NSwxODUsNDUsMTUNCiAgICAgIFBVU0hC
-VVRUT04gICAgICAiQ2FuY2VsIixJRENBTkNFTCwyNDAsMTg1LDQ1LDE1DQo=
-
-------------=_1583532846-65438-10--
