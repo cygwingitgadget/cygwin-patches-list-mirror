@@ -1,16 +1,60 @@
-From: Benjamin Riefenstahl <Benjamin.Riefenstahl@epost.de>
-To: cygwin-patches@cygwin.com
-Subject: Re: Console codepage
-Date: Sun, 28 Jan 2001 14:26:00 -0000
-Message-id: <m3r91ntit5.fsf@benny-ppc.crocodial.de>
-References: <u7l3fv26h.fsf@mail.epost.de> <20010128154852.A20701@redhat.com> <m3vgqztllj.fsf@benny-ppc.crocodial.de> <20010128172112.A21847@redhat.com>
-X-SW-Source: 2001-q1/msg00042.html
+From: Bill Hegardt <bill@troyxcd.com>
+To: cygwin-patches@sources.redhat.com
+Subject: multi-threaded serial I/O patch
+Date: Mon, 29 Jan 2001 17:23:00 -0000
+Message-id: <3A7618B4.ED2741F5@troyxcd.com>
+X-SW-Source: 2001-q1/msg00043.html
 
-Christopher Faylor <cgf@redhat.com> writes:
-> If the feedback is positive for this patch, I'll make those corrections
-> when it is checked in.
+Attached is a patch and ChangeLog entry for the multi-threaded serial
+I/O problem I fixed.
 
-Thanks, I'll keep your comments in mind for the next time. 
+Mon Jan 29 17:15:22 2001  Bill Hegardt <bill@troyxcd.com>
 
-so long, benny
-
+        * fhandler_serial.cc (raw_write): Use local copy of OVERLAPPED
+structure instead of io_status which was shared
+		with the raw_read routine resulting in a race condition.
+--- fhandler_serial.original	Fri Jan 19 16:22:00 2001
++++ fhandler_serial.cc	Mon Jan 29 16:47:32 2001
+@@ -161,15 +161,19 @@ int
+ fhandler_serial::raw_write (const void *ptr, size_t len)
+ {
+   DWORD bytes_written;
++  OVERLAPPED osWrite;
++
++  memset (&osWrite, 0, sizeof (osWrite));
++  osWrite.hEvent = CreateEvent (&sec_none_nih, TRUE, FALSE, NULL);
++  ProtectHandle (osWrite.hEvent);
+ 
+   if (overlapped_armed)
+     PurgeComm (get_handle (), PURGE_TXABORT | PURGE_RXABORT);
+-  ResetEvent (io_status.hEvent);
+ 
+   for (;;)
+     {
+       overlapped_armed = TRUE;
+-      if (WriteFile (get_handle(), ptr, len, &bytes_written, &io_status))
++      if (WriteFile (get_handle(), ptr, len, &bytes_written, &osWrite))
+ 	break;
+ 
+       switch (GetLastError ())
+@@ -182,16 +186,19 @@ fhandler_serial::raw_write (const void *
+ 	    goto err;
+ 	}
+ 
+-      if (!GetOverlappedResult (get_handle (), &io_status, &bytes_written, TRUE))
++      if (!GetOverlappedResult (get_handle (), &osWrite, &bytes_written, TRUE))
+ 	goto err;
+ 
+       break;
+     }
+ 
++  CloseHandle(osWrite.hEvent);
++ 
+   overlapped_armed = FALSE;
+   return bytes_written;
+ 
+ err:
++  CloseHandle(osWrite.hEvent);
+   __seterrno ();
+   return -1;
+ }
