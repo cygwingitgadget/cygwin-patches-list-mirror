@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3755-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 1294 invoked by alias); 27 Mar 2003 09:30:41 -0000
+Return-Path: <cygwin-patches-return-3756-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 7549 invoked by alias); 27 Mar 2003 09:40:53 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,52 +7,45 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 1229 invoked from network); 27 Mar 2003 09:30:39 -0000
-Subject: Re: [ford@vss.fsi.com: [PATCH] Trivial pthread testsuite fixes]
-From: Robert Collins <rbcollins@cygwin.com>
-To: Thomas Pfaff <tpfaff@gmx.net>
-Cc: cygwin-patches@cygwin.com
-In-Reply-To: <3E82ABFF.2060701@gmx.net>
-References: <20030326225727.GC12110@redhat.com>  <3E82ABFF.2060701@gmx.net>
-Content-Type: multipart/signed; micalg=pgp-sha1; protocol="application/pgp-signature"; boundary="=-hDrJmb1kH2+JYGVLEgdG"
-Organization: 
-Message-Id: <1048757430.4371.6.camel@localhost>
+Received: (qmail 7540 invoked from network); 27 Mar 2003 09:40:52 -0000
+Date: Thu, 27 Mar 2003 09:40:00 -0000
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] performance patch for /proc/registry -- version 2
+Message-ID: <20030327094049.GD23762@cygbert.vinschen.de>
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <LPEHIHGCJOAIPFLADJAHAEHODHAA.chris@atomice.net> <3E820411.1020100@hekimian.com> <20030326202213.GZ23762@cygbert.vinschen.de> <3E821FEE.2000408@hekimian.com>
 Mime-Version: 1.0
-Date: Thu, 27 Mar 2003 09:30:00 -0000
-X-SW-Source: 2003-q1/txt/msg00404.txt.bz2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3E821FEE.2000408@hekimian.com>
+User-Agent: Mutt/1.4i
+X-SW-Source: 2003-q1/txt/msg00405.txt.bz2
 
+On Wed, Mar 26, 2003 at 04:47:26PM -0500, Joe Buehler wrote:
+> Corinna Vinschen wrote:
+> 
+> >However... am I doing something wrong?  I'm trying to find out what the
+> >performance improvement is on my XP box and both versions of the DLL
+> >(w/ and w/o your patch) are running 7.5 minutes for 
+> >
+> >  ls -lR /proc/registry > /dev/null
+> >
+> >Or is that only a problem on older systems?  You're running NT4SP5, right?
+> >
+> >Other than that your patch looks fine.
+> 
+> It may be that XP has the WIN32 API fixed.  The different is drastic
+> on my NT4 SP5 box.  You can see the difference just by doing
+> ls -l /proc/registry/HKEY_LOCAL_MACHINE.  With patch comes back instantly,
+> without you have to sit and wait.
 
---=-hDrJmb1kH2+JYGVLEgdG
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-Content-length: 352
+Applied.
 
-On Thu, 2003-03-27 at 18:45, Thomas Pfaff wrote:
-> Christopher Faylor wrote:
-> > I assume that these patches are to clean up some warnings.  Do they
-> > make sense?
-> >=20
->=20
-> Yes.
-> I have recognized these warnings yesterday too and will apply the patch.
+Thanks,
+Corinna
 
-Thank you.
-
-Rob
---=20
-GPG key available at: <http://users.bigpond.net.au/robertc/keys.txt>.
-
---=-hDrJmb1kH2+JYGVLEgdG
-Content-Type: application/pgp-signature; name=signature.asc
-Content-Description: This is a digitally signed message part
-Content-length: 189
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.1 (GNU/Linux)
-
-iD8DBQA+gsS2I5+kQ8LJcoIRAgbzAJ47al5EaoJykF5XyDSs9ldr+ClHqwCbBysz
-9bTvfLPAArHMOgyUpaSnJQU=
-=4PlU
------END PGP SIGNATURE-----
-
---=-hDrJmb1kH2+JYGVLEgdG--
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
