@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4736-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 30787 invoked by alias); 9 May 2004 14:37:18 -0000
+Return-Path: <cygwin-patches-return-4737-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 31274 invoked by alias); 9 May 2004 15:11:52 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,46 +7,30 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 30777 invoked from network); 9 May 2004 14:37:17 -0000
-Date: Sun, 09 May 2004 14:37:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
+Received: (qmail 31228 invoked from network); 9 May 2004 15:11:51 -0000
+Message-Id: <3.0.5.32.20040509110852.0080d100@incoming.verizon.net>
+X-Sender: vze1u1tg@incoming.verizon.net (Unverified)
+Date: Sun, 09 May 2004 15:11:00 -0000
 To: cygwin-patches@cygwin.com
+From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
 Subject: Re: [Patch]: env -i
-Message-ID: <20040509003858.GA30449@coe.bosbc.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
+In-Reply-To: <20040509003858.GA30449@coe.bosbc.com>
 References: <3.0.5.32.20040508144526.0080bdb0@incoming.verizon.net>
+ <3.0.5.32.20040508144526.0080bdb0@incoming.verizon.net>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3.0.5.32.20040508144526.0080bdb0@incoming.verizon.net>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2004-q2/txt/msg00088.txt.bz2
+Content-Type: text/plain; charset="us-ascii"
+X-SW-Source: 2004-q2/txt/msg00089.txt.bz2
 
-On Sat, May 08, 2004 at 02:45:26PM -0400, Pierre A. Humblet wrote:
->Before:
->~: env -i /bin/env
->HOMEDRIVE=C:
->HOMEPATH=\Documents and Settings\Owner
->LOGONSERVER=\\COMPAQ
->SYSTEMDRIVE=C:
->SYSTEMROOT=C:\WINDOWS
->USERDOMAIN=COMPAQ
->USERNAME=Owner
->USERPROFILE=C:\Documents and Settings\Owner
+At 08:38 PM 5/8/2004 -0400, Christopher Faylor wrote:
+>On Sat, May 08, 2004 at 02:45:26PM -0400, Pierre A. Humblet wrote:
+>>2004-05-08  Pierre Humblet <pierre.humblet@ieee.org>
+>>
+>>	* environ.cc (build_env): Only try to construct required-but-missing
+>>	variables while issetuid.
 >
->After:
->~: env -i /bin/env
->~: 
->(but the variables are present with telnet, ssh, etc..)
->
->Pierre
->
->2004-05-08  Pierre Humblet <pierre.humblet@ieee.org>
->
->	* environ.cc (build_env): Only try to construct required-but-missing
->	variables while issetuid.
+>Ok with me.  Wasn't this your addition to begin with?
 
-Ok with me.  Wasn't this your addition to begin with?
+OK, I will apply it. "to begin with", yes, but you wrote what's there
+now.
 
-cgf
+Pierre
