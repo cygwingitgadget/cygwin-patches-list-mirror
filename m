@@ -1,29 +1,49 @@
-From: Kazuhiro Fujieda <fujieda@jaist.ac.jp>
-To: cygwin-patches@cygwin.com
-Subject: Re: NT Shutdown Handling Patch
-Date: Wed, 18 Jul 2001 15:03:00 -0000
-Message-id: <s1sy9pl3nei.fsf@jaist.ac.jp>
-References: <20010718165558.G608@dothill.com>
-X-SW-Source: 2001-q3/msg00025.html
+From: Mark Bradshaw <bradshaw@staff.crosswalk.com>
+To: "'cygwin-patches@cygwin.com'" <cygwin-patches@cygwin.com>
+Subject: patch to dir.cc
+Date: Thu, 19 Jul 2001 14:27:00 -0000
+Message-id: <911C684A29ACD311921800508B7293BA010A8A57@cnmail>
+X-SW-Source: 2001-q3/msg00026.html
 
->>> On Wed, 18 Jul 2001 16:55:58 -0400
->>> Jason Tishler <jason@tishler.net> said:
+I've track down a problem with the sftp server hanging under Windows NT (not
+Windows 2000) to the readdir function in dir.cc.  The sftp server called
+readdir with a directory handle repeatedly to get all the directory entries.
+When the directory has been fully read it calls readdir one more time with a
+(now) invalid handle.  This causes FindNextFileA to never return.  I've add
+a small bit of code to check for the invalid handle before called
+FindNextFileA, and that seems to have corrected the problem.  The latest cvs
+version of dir.cc didn't show any changes to readdir, so I assume this
+hasn't been patched yet.
 
-> The attached patch changes ctrl_c_handler() to send SIGTERM (instead
-> of SIGHUP) when NT shuts down (or a close event is received).  See the
-> following for the motivation:
-> 
->     http://www.cygwin.com/ml/cygwin/2001-07/msg00827.html
->     http://www.cygwin.com/ml/cygwin/2001-07/msg01060.html
+There is code that checks for an invalid handle, but it also checks whether
+it's the first time readdir has been called.  This doesn't match the error
+condition occurring with the sftp server.  I added a quick check after that
+that simply returns res as NULL.  There may be additional things that you
+want to add in.
 
-My daemon patch includes the change against ctrl_c_handler
-similar to yours. In my patch, the ctrl_c_handler send SIGTERM
-in response to CTRL_SHUTDOWN_EVENT, while send SIGHUP to
-terminate shells in response to CTRL_CLOSE_EVENT.
+As I noted above, this error only occurs with Windows NT, not 2000, but the
+changed code still appears to function normally under Windows 2000.
 
-Please see
-http://cygwin.com/ml/cygwin-patches/2001-q3/msg00010.html
-____
-  | AIST      Kazuhiro Fujieda <fujieda@jaist.ac.jp>
-  | HOKURIKU  Center for Information Science
-o_/ 1990      Japan Advanced Institute of Science and Technology
+BTW, any idea when the next version of the cygwin dll will be released?
+
+Mark
+
+
+----------------------------------------------------------------------------
+----
+
+--- /usr/src/cygwin-1.3.2-1/winsup/cygwin/dir.cc        Sat May 12 18:32:40
+2001
++++ /tmp/dir.cc Thu Jul 19 14:46:13 2001
+@@ -160,6 +160,10 @@ readdir (DIR * dir)
+          return res;
+        }
+     }
++  else if (dir->__d_u.__d_data.__handle == INVALID_HANDLE_VALUE)
++    {
++      return res;
++    }
+   else if (!FindNextFileA (dir->__d_u.__d_data.__handle, &buf))
+     {
+       DWORD lasterr = GetLastError ();
+
