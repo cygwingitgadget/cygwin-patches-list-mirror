@@ -1,56 +1,22 @@
-From: "Gareth Pearce" <tilps@hotmail.com>
-To: cygwin-patches@cygwin.com
+From: "Robert Collins" <robert.collins@itdomain.com.au>
+To: "Corinna Vinschen" <cygwin-patches@cygwin.com>
 Subject: Re: w32api compiler warning fix.
-Date: Fri, 09 Nov 2001 14:00:00 -0000
-Message-id: <F89lepVsBmpJgjPoK3i000229a6@hotmail.com>
-X-SW-Source: 2001-q4/msg00176.html
+Date: Fri, 09 Nov 2001 14:09:00 -0000
+Message-id: <00aa01c1696b$737b4480$0200a8c0@lifelesswks>
+References: <EA18B9FA0FE4194AA2B4CDB91F73C0EF163A90@itdomain002.itdomain.net.au> <20011108182912.D5685@redhat.com> <025a01c1691a$9568e3f0$0200a8c0@lifelesswks> <20011109150528.D1099@cygbert.vinschen.de> <03f601c16928$e0ebc280$0200a8c0@lifelesswks> <20011109165938.E1099@cygbert.vinschen.de>
+X-SW-Source: 2001-q4/msg00177.html
 
->On Fri, Nov 09, 2001 at 11:32:22PM +1100, Robert Collins wrote:
-> > ----- Original Message -----
-> > From: "Christopher Faylor" <cgf@redhat.com>
-> >
-> >
-> > > On Fri, Nov 09, 2001 at 10:32:34AM +1100, Robert Collins wrote:
-> > > >Nope, it's called....
-> > > >
-> > > >I've invested in a dual katmai 550 to be able to push the pthreads
-> > tests
-> > > >a bit more realistically.
-> > > >
-> > > >HAL.DLL, ACPI and motherboard changes. How not to do it(tm).
-> > > >
-> > > >It's at times like this that I _love_ linux.
-> > >
-> > > I hate to say this but it is my Athlon 1.2G motherboard that is giving
-> > > me fits.  It has been nothing but trouble since I bought it and it is
-> > > running...  Linux.  It's less than a year old.
-> >
-> > Lol. Well, I wasn't claiming I've never had hardware grief from linux ;}
-> > jsut that Linux is _much_ happier about having the motherboard changed
-> > out from under it. Win2k just gave up in a heap :[. I've finally
-> > recovered the installed system (whew).
+----- Original Message -----
+From: "Corinna Vinschen" <cygwin-patches@cygwin.com>
+> > I'll bet you large sums of money that either both motherboards are
+ACPI
+> > recognised by W2K, or neither are.
 >
->Which is sorta strange.  I had a W2K installed on a P3 machine
->and assembled the full installed harddisk into an Athlon machine.
->W2K recognized all installed components and asked for rebooting
->twice.  Then it was done and the Athlon systems is still running
->fine (uptime > 2 months now).
+> Both are ACPI.  Does that matter?
 
-At risk of pushing this OT on too far...
-I transfered W2K from P3 to athalon as well ... and I think it would have 
-been fine, except my new hard drive controller was too different from my old 
-one (had raid support and nifty stuff), and W2K refused to boot in the first 
-place (unable to access boot device message - which is odd since it was 
-halfway through the boot process :P)
+Not until you try and put the hard disks into a non ACPI motherboard -
+which is what I did (all unknowning).
 
->
->Corinna
->
->--
->Corinna Vinschen                  Please, send mails regarding Cygwin to
->Cygwin Developer                                mailto:cygwin@cygwin.com
->Red Hat, Inc.
+:}.
 
-
-_________________________________________________________________
-Get your FREE download of MSN Explorer at http://explorer.msn.com/intl.asp
+Rob
