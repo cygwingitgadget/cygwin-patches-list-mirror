@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3072-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 20485 invoked by alias); 21 Oct 2002 16:18:57 -0000
+Return-Path: <cygwin-patches-return-3073-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 20972 invoked by alias); 21 Oct 2002 16:21:04 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,45 +7,35 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 20469 invoked from network); 21 Oct 2002 16:18:56 -0000
-Date: Mon, 21 Oct 2002 09:18:00 -0000
+Received: (qmail 20963 invoked from network); 21 Oct 2002 16:21:04 -0000
+Date: Mon, 21 Oct 2002 09:21:00 -0000
 From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] fhandler_tty deadlock patch
-Message-ID: <20021021162038.GB15828@redhat.com>
+Subject: Re: Avoiding /etc/passwd and /etc/group scans
+Message-ID: <20021021162246.GC15828@redhat.com>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20021018011921.A20255@hagbard.io.com> <Pine.GSO.4.44.0210202249210.18735-101000@slinky.cs.nyu.edu> <20021021010303.A2647@eris.io.com>
+References: <3DB416E7.99E22851@ieee.org>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20021021010303.A2647@eris.io.com>
+In-Reply-To: <3DB416E7.99E22851@ieee.org>
 User-Agent: Mutt/1.5.1i
-X-SW-Source: 2002-q4/txt/msg00023.txt.bz2
+X-SW-Source: 2002-q4/txt/msg00024.txt.bz2
 
-On Mon, Oct 21, 2002 at 01:03:03AM -0500, Steve O wrote:
->On Sun, Oct 20, 2002 at 11:15:47PM -0400, Igor Pechtchanski wrote:
->> However, there are a couple of problems with this patch.  For example,
->> this makes bash run from a command prompt (or a shortcut) treat every
->> character as a ^D.
->
->So every character closes bash?  I'm not able to reproduce this on
->WinXP, have an strace?
->
->> /bin/sh ignores Enter (or ^J, or ^M).  
->
->Good find.  I've attached a diff that should fix this.  Unsure
->how to proceed since the original patch hasn't been applied.
->Do I resubmit the original patch or treat this one as it's own
->thing?
+On Mon, Oct 21, 2002 at 11:01:59AM -0400, Pierre A. Humblet wrote:
+>Cygwin scans the passwd and group files to map sids
+>to/from uid & gid. It does so even for the current user,
+>although the relevant mappings are stored internally.
+>This is inefficient and causes problems (e.g. gcc produces
+>non executable files) as soon as /etc/passwd is incomplete.
 
-Keep resubmitting on large patch until it is accepted.
+It's only supposed to be doing this for the first cygwin process that
+start up on a given console.  Is that, again, no longer the case?  It
+seems like we keep drifting here.  We shouldn't be incurring the
+/etc/group and /etc/passwd startup costs even when ntsec isn't
+available.
 
-My time is limited right now so I may not be able to completely review
-this for a couple of weeks.  I'm going to be on a business trip starting
-on Wednesday.
-
-So, I would appreciate it if people would try this out and report their
-experiences.
+Anyway, I'll take a look at your patch later today, Pierre.
 
 cgf
