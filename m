@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2260-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 24916 invoked by alias); 30 May 2002 00:15:25 -0000
+Return-Path: <cygwin-patches-return-2261-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 29688 invoked by alias); 30 May 2002 00:26:31 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,36 +7,48 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 24900 invoked from network); 30 May 2002 00:15:22 -0000
-Date: Wed, 29 May 2002 17:15:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: New stat stuff (was [PATCH] improve performance of stat() operations (e.g. ls -lR ))
-Message-ID: <20020530001516.GB3497@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1022521439.8403.ezmlm@cygwin.com> <3CF54D4D.2000509@ece.gatech.edu>
-Mime-Version: 1.0
+Received: (qmail 29667 invoked from network); 30 May 2002 00:26:31 -0000
+Message-ID: <20020530002630.44094.qmail@web20003.mail.yahoo.com>
+Date: Wed, 29 May 2002 17:26:00 -0000
+From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+Subject: Re: passwd help/version patch
+To: Corinna Vinschen <cygwin-patches@cygwin.com>
+In-Reply-To: <20020529091720.G30892@cygbert.vinschen.de>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3CF54D4D.2000509@ece.gatech.edu>
-User-Agent: Mutt/1.3.23.1i
-X-SW-Source: 2002-q2/txt/msg00243.txt.bz2
+X-SW-Source: 2002-q2/txt/msg00244.txt.bz2
 
-On Wed, May 29, 2002 at 05:51:09PM -0400, Charles Wilson wrote:
->>"Christopher Faylor" <cgf@redhat.com> wrote:
->>>I think you're running run.exe from Chuck Wilson's site.
->>
->>Umm . . . (quick check). No: it's the copy from the current version of
->>XFree-startup-scripts (4.2.0-2). I was using it in this case without an X
->>server running (it's always happily worked either way, with or without).
->
->Harold included a copy of my run.exe in one of his recent startup script 
->bundles -- it helps with Xwin.exe on Win9x, AFAIRC.  [I have no problem 
->with his inclusion of it there]
+--- Corinna Vinschen <cygwin-patches@cygwin.com> wrote:
+> On Tue, May 28, 2002 at 10:56:21PM -0500, Joshua Daniel Franklin wrote:
+> > Here is the --help, --version patch for passwd.
+> > I used the idea from a recent cygpath patch to separate usage output into
+> > sections, though I feel I've improved on it a bit. :)
+> > Corinna, you might want to take a look at these longopt names I chose to
+> > make sure they're OK:
+> 
+> Cool.  Applied.
+> 
+> While playing with it, I'd suddenly missed a short text in the usage,
+> that the username has to be the windows username, not the Cygwin
+> username.  Passwd has been written before all that ntsec stuff AFAIR,
+> so it has no idea that the user "Administrator" might be renamed
+> to "root" in /etc/passwd.  Do you think you could add something
+> appropriate?  Or perhaps change passwd to take the Cygwin name and
+> convert it to the windows name???
+> 
+> Corinna
 
-Right.  For some reason the package listing for this package was blank
-so when I went to http://cygwin.com/packages to look for it, it wasn't
-found.
+Maybe I'm missing something, but there doesn't seem to be any Win32 
+function to get a username from a uid other than NetUserEnum, but 
+I really don't think people running 'passwd bob' are wanting to enum
+all users. The code to do it wouldn't be that hard, but it wouldn't
+work for those people with domains (unless they specify a domain like
+for mkpasswd).
 
-cgf
+Maybe mkpasswd should cache the info somewhere other than just /etc/passwd 
+for this purpose? Or use the GECOS field?
+
+__________________________________________________
+Do You Yahoo!?
+Yahoo! - Official partner of 2002 FIFA World Cup
+http://fifaworldcup.yahoo.com
