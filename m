@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4700-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 15741 invoked by alias); 29 Apr 2004 23:30:08 -0000
+Return-Path: <cygwin-patches-return-4701-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 13989 invoked by alias); 4 May 2004 15:15:07 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,35 +7,35 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 15732 invoked from network); 29 Apr 2004 23:30:07 -0000
-Date: Thu, 29 Apr 2004 23:30:00 -0000
+Received: (qmail 13979 invoked from network); 4 May 2004 15:15:06 -0000
+Date: Tue, 04 May 2004 15:15:00 -0000
 From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: Copyright assignment received for Chris Faylor
-Message-ID: <20040429233006.GA5953@coe.bosbc.com>
+Subject: Re: [Patch]: Last path.cc
+Message-ID: <20040504151506.GA5531@coe.bosbc.com>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20040429224614.GA23205@cygbert.vinschen.de> <409187F9.2090105@sokhapkin.dyndns.org>
+References: <3.0.5.32.20040410233707.00846910@incoming.verizon.net>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <409187F9.2090105@sokhapkin.dyndns.org>
+In-Reply-To: <3.0.5.32.20040410233707.00846910@incoming.verizon.net>
 User-Agent: Mutt/1.4.1i
-X-SW-Source: 2004-q2/txt/msg00052.txt.bz2
+X-SW-Source: 2004-q2/txt/msg00053.txt.bz2
 
-On Thu, Apr 29, 2004 at 06:55:53PM -0400, Sergey Okhapkin wrote:
->Corinna Vinschen wrote:
->>Red Hat received the copyright assignment for Chris Faylor and the yay of
->>his new employer.  So patch right away, Chris!
+On Sat, Apr 10, 2004 at 11:37:07PM -0400, Pierre A. Humblet wrote:
+>2004-04-11  Pierre Humblet <pierre.humblet@ieee.org>
 >
->Hmm... I remember the day when I got similar message from Geof Noer... 
->Welcome to cygwin community, Chris:-)
+>	* path.cc (normalize_win32_path): Detect components with only dots.
+>	Remove a final . if it follows '\\'.
+>	(slash_unc_prefix_p): Remove redundant tests.
+>	(mount_info::conv_to_win32_path): Only backslashify the path
+>	when no mount is found.
+>	(chdir): Do not look for components with only dots.
 
-Thanks.  I remember when some guy suggested that I should do the same
-thing many years ago.
+Corinna indicated to me in private email that she had no problems with the
+removal of her code in chdir, so I have checked in the below patch with
+minor modifications to is_unc_share.
 
-I think that assignment is still on file.
-
-Hey, I get a nice gift from Red Hat, too.  Wheee!!
-
+Thanks,
 cgf
