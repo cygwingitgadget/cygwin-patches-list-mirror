@@ -1,37 +1,53 @@
-From: Chris Faylor <cgf@cygnus.com>
+From: Egor Duda <deo@logos-m.ru>
 To: cygwin-patches@sources.redhat.com
-Cc: cygwin-developers@sources.redhat.com
-Subject: tty handling patches
-Date: Thu, 07 Sep 2000 09:27:00 -0000
-Message-id: <20000907122643.A22869@cygnus.com>
-X-SW-Source: 2000-q3/msg00076.html
+Subject: Re: winsup.h shrunk, shared.h deleted, many new include files
+Date: Fri, 08 Sep 2000 02:37:00 -0000
+Message-id: <102247059923.20000908133636@logos-m.ru>
+References: <20000907230039.A32628@cygnus.com>
+X-SW-Source: 2000-q3/msg00077.html
+Content-type: multipart/mixed; boundary="----------=_1583532846-65437-10"
 
-I've just made some changes to the way Cygwin handles CYGWIN=tty.  They
-speed output up ENORMOUSLY but I may have introduced synchronization
-issues between the tty child and the tty master.  This also affects ptys.
+This is a multi-part message in MIME format...
 
-These changes will obviously be in the next snapshot but I would appreciate
-it if anyone who has the time could build this and check it out.  I'll probably
-announce this on the cygwin mailing list but I'd like to have a slightly more
-limited audience try it out first.
+------------=_1583532846-65437-10
+Content-length: 169
 
-cgf
+Hi!
 
-Thu Sep  7 12:14:43 2000  Christopher Faylor <cgf@cygnus.com>
+  patch to fix the build in cygwin/lib/
 
-	Split out tty and shared_info stuff into their own headers and use
-	throughout.  Include sys/termios.h for files which need it.
-	* tty.h: New file.
-	* shared_info.h: New file.
-	* fhandler.h: Move inline methods that rely on tty stuff to
-	fhandler_console.cc.
-	* fhandler_tty.cc (fhandler_pty_master::process_slave_output): Set
-	output_done_event immediately after reading data to speed up tty output
-	processing.
-	(process_output): Set write_error to errno or zero.
-	(fhandler_tty_slave::write): Check previous write error prior to
-	writing to slave end of pipe.  This allows tty output to be slightly
-	less synchronous.
-	* fhandler_console.cc (fhandler_console::tcsetpgrp): Moved here from
-	fhandler.h.
-	(fhandler_console::set_input_state): Ditto.
+Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
+required-headers.diff
+required-headers.ChangeLog
+
+
+------------=_1583532846-65437-10
+Content-Type: text/plain; charset=us-ascii; name="required-headers.ChangeLog"
+Content-Disposition: inline; filename="required-headers.ChangeLog"
+Content-Transfer-Encoding: base64
+Content-Length: 135
+
+MjAwMC0wOS0wOCAgRWdvciBEdWRhICA8ZGVvQGxvZ29zLW0ucnU+CgoJKiBs
+aWIvX2N5Z3dpbl9jcnQwX2NvbW1vbi5jYzogSW5jbHVkZSByZXF1aXJlZCBo
+ZWFkZXJzLgo=
+
+------------=_1583532846-65437-10
+Content-Type: text/x-diff; charset=us-ascii; name="required-headers.diff"
+Content-Disposition: inline; filename="required-headers.diff"
+Content-Transfer-Encoding: base64
+Content-Length: 692
+
+SW5kZXg6IHdpbnN1cC9jeWd3aW4vbGliL19jeWd3aW5fY3J0MF9jb21tb24u
+Y2MKPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1MgZmlsZTogL2N2cy9zcmMv
+c3JjL3dpbnN1cC9jeWd3aW4vbGliL19jeWd3aW5fY3J0MF9jb21tb24uY2Ms
+dgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuNgpkaWZmIC11IC1wIC1yMS42IF9j
+eWd3aW5fY3J0MF9jb21tb24uY2MKLS0tIF9jeWd3aW5fY3J0MF9jb21tb24u
+Y2MJMjAwMC8wNy8xNyAwMDoyNDo1NgkxLjYKKysrIF9jeWd3aW5fY3J0MF9j
+b21tb24uY2MJMjAwMC8wOS8wOCAwOToyNjo1MApAQCAtMTIsNiArMTIsOCBA
+QCBkZXRhaWxzLiAqLwogI2luY2x1ZGUgImNydDAuaCIKICNpbmNsdWRlIDxy
+ZWVudC5oPgogI2luY2x1ZGUgPHN0ZGxpYi5oPgorI2luY2x1ZGUgPHN5cy9j
+eWd3aW4uaD4KKyNpbmNsdWRlIDxjeWd3aW4vdmVyc2lvbi5oPgogCiAjdW5k
+ZWYgZW52aXJvbgogCg==
+
+------------=_1583532846-65437-10--
