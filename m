@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5048-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 30399 invoked by alias); 12 Oct 2004 22:11:20 -0000
+Return-Path: <cygwin-patches-return-5049-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 30933 invoked by alias); 12 Oct 2004 22:12:14 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,62 +7,65 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 30390 invoked from network); 12 Oct 2004 22:11:18 -0000
-Message-ID: <n2m-g.ckhq8e.3vvvbef.1@buzzy-box.bavag>
+Received: (qmail 30924 invoked from network); 12 Oct 2004 22:12:13 -0000
+Message-ID: <n2m-g.ckhrjl.3vvankf.1@buzzy-box.bavag>
 From: Bas van Gompel <cygwin-patches.buzz@bavag.tmfweb.nl>
-Subject: Re: [Patch] cygcheck: warn about empty path-components
-References: <20041005144649.GB30752@cygbert.vinschen.de> <n2m-g.ck0h06.3vvequf.1@buzzy-box.bavag> <20041006145805.GB29289@trixie.casa.cgf.cx> <n2m-g.ck2ctr.3vshr73.1@buzzy-box.bavag> <20041007021558.GL2722@trixie.casa.cgf.cx> <n2m-g.ck4jdl.3vsg21n.1@buzzy-box.bavag> <20041008001755.GK17593@trixie.casa.cgf.cx> <n2m-g.ck9k3i.3vvefmv.1@buzzy-box.bavag> <20041009231813.GD11984@trixie.casa.cgf.cx> <n2m-g.ckaqe1.3vva6e9.1@buzzy-box.bavag> <20041010171323.GD14377@trixie.casa.cgf.cx>
-In-Reply-To: <20041010171323.GD14377@trixie.casa.cgf.cx>
+Subject: [Patch] cygheap.cc: Allow _crealloc to shrink memory-block.
 Reply-To: cygwin-patches mailing-list <cygwin-patches@cygwin.com>
 Organisation: Ehm...
 To: cygwin-patches@cygwin.com
-Date: Tue, 12 Oct 2004 22:11:00 -0000
-X-SW-Source: 2004-q4/txt/msg00049.txt.bz2
+Date: Tue, 12 Oct 2004 22:12:00 -0000
+X-SW-Source: 2004-q4/txt/msg00050.txt.bz2
 
-Op Sun, 10 Oct 2004 13:13:23 -0400 schreef Christopher Faylor
-in <20041010171323.GD14377@trixie.casa.cgf.cx>:
-:  On Sun, Oct 10, 2004 at 08:36:38AM +0200, Bas van Gompel wrote:
-: > Op Sat, 9 Oct 2004 19:18:13 -0400 schreef Christopher Faylor
-: > So cygcheck will have the same problem...
-:
-:   Right, but cygcheck can rely on the fact that cygwin1.dll is around, at
-:  least, if necessary.
+Hi,
 
-The dll is/should be around after setup ran (in install-mode), as well.
+Following (trivial IMO) patch, allows memory blocks on the cygheap to
+be shrunk.
 
-:  I guess a goal could be to come up with a generic
-:  library which did sanity checking and corrections on cygwin permissions.
+There are some issues with this:
+- The code is slightly slower.
+- This change is in a block of code marked ``copyright D. J. Delorie''.
+- I'm not sure _crealloc is ever called with a smaller size. (If it
+  isn't, this patch is useless.)
 
-Which would than have to be linked statically, or suffer from it's
-own permission-problems...
-
-: > How about doing it from a (postinstall-)script?
-:
-:   A post-install script doesn't help if someone copied all of their stuff
-:  to a CD-ROM and then to a new system.
-
-I didn't think that was a supported procedure. (IOW: YOWTWYWT)
-A post-install script does have the advantage of being run from within
-cygwin.
-
-:  We really should improve setup, too, but I still think we need this in
-:  two places.
-
-Probably. It could also be done from _cygwin_dll_entry, or some such.
-
-:  Maybe we could get by with just having a sanity shell script that could
-:  be run but it still seems like it should be tied into cygcheck somehow.
-:
-:  Or, maybe we need a "cygfix"...
-
-Or more options to cygcheck:
-
--F: try to fix. (implies -s)
--p: print commands to execute to try to fix. (implies -qs)
--q: suppress normal output.
+(I did test this, and it WJFFM.)
 
 
-L8r,
+ChangeLog-entry:
+
+20040-10-13  Bas van Gompel  <cygwin-patch.buzz@bavag.tmfweb.nl>
+
+	* cygheap.cc (_crealloc): Allow memory-block to shrink.
+
+
+--- src/winsup/cygwin/cygheap.cc	2 Jun 2004 21:20:53 -0000	1.103
++++ src/winsup/cygwin/cygheap.cc	12 Oct 2004 02:43:30 -0000
+@@ -324,16 +324,22 @@ _cfree (void *ptr)
+ static void *__stdcall
+ _crealloc (void *ptr, unsigned size)
+ {
++  unsigned sz;
+   void *newptr;
+   if (ptr == NULL)
+     newptr = _cmalloc (size);
+   else
+     {
+       unsigned oldsize = 1 << to_cmalloc (ptr)->b;
+-      if (size <= oldsize)
++
++     /* Calculate size as a power of two. */
++      for (sz = 8; sz && sz < size; sz <<= 1)
++	continue;
++
++      if (sz == oldsize)
+ 	return ptr;
+       newptr = _cmalloc (size);
+-      memcpy (newptr, ptr, oldsize);
++      memcpy (newptr, ptr, min(sz, oldsize));
+       _cfree (ptr);
+     }
+   return newptr;
+
 
 Buzz.
 -- 
