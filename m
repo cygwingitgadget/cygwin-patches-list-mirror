@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2046-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 20343 invoked by alias); 10 Apr 2002 06:08:11 -0000
+Return-Path: <cygwin-patches-return-2047-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 29548 invoked by alias); 10 Apr 2002 10:06:53 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,110 +7,74 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 20289 invoked from network); 10 Apr 2002 06:08:05 -0000
-To: cygwin-patches@cygwin.com
-Bcc: 
-Subject: Re: ChangeLog indentation
-Message-ID: <OFDB072838.5E1DA315-ON48256B97.001EBE6C@netstd.com>
-From: adah@netstd.com
-Date: Tue, 09 Apr 2002 23:08:00 -0000
+Received: (qmail 29499 invoked from network); 10 Apr 2002 10:06:46 -0000
+Date: Wed, 10 Apr 2002 03:06:00 -0000
+From: Pavel Tsekov <ptsekov@syntrex.com>
+Reply-To: Pavel Tsekov <cygwin@cygwin.com>
+Organization: Syntrex, Inc.
+X-Priority: 3 (Normal)
+Message-ID: <08165371.20020410120613@syntrex.com>
+To: cygwin@cygwin.com
+CC: rjlpub@kc.rr.com, cygwin-patches@cygwin.com
+Subject: Re[2]: Cygwin 1.3.10 Setup.exe 2.194.2.22 Install Problems With MSVCRT.DLL and source code on Win98
+In-Reply-To: <1921297856.20020410101146@syntrex.com>
+References: <000401c1e033$e5bce3c0$0301a8c0@kc.rr.com>
+ <1921297856.20020410101146@syntrex.com>
 MIME-Version: 1.0
-Content-Type: multipart/alternative; boundary="=_alternative 0021A49A48256B97_="
-X-SW-Source: 2002-q2/txt/msg00030.txt.bz2
+Content-Type: multipart/mixed; boundary="----------321D8C7338E6328"
+X-SW-Source: 2002-q2/txt/msg00031.txt.bz2
 
-This is a multipart message in MIME format.
---=_alternative 0021A49A48256B97_=
-Content-Type: text/plain; charset="us-ascii"
-Content-length: 1699
+------------321D8C7338E6328
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Content-length: 974
 
-I am absolutely certain about the correctness of the facts you mentioned. 
-You are the authority here. However:
+Hello, there! :)
 
-- Telling people to model is not enough. You yourself predicted my 
-failure. Why not a better document? -- Of course, my statement is invalid 
-if only one newbie (I) made mistakes. I don't suppose so.
+Wednesday, April 10, 2002, 10:11:46 AM, you wrote:
 
-- The point is not about correctness. People are human instead of 
-machines. People are easy to be misled if not already knowing the correct 
-thing to do. For you it must be simple and straightforward, but not for 
-everybody who wants to contribute. -- To say the details, I thought I need 
-to "model" the content but not the format; the concept of CVS ChangeLog 
-interferes; the guidelines talk of bracketing function names but nothing 
-about structs....
+Ok, found it - its canonicalize_version() in version.cc. There is
+a pointer 'v' which is modified and then delete[]'d.
 
-Somebody else mentioned TABs. I thought he is right, but I am not sure 
-when reading your reply. I do not have to use a tab before the asterisk in 
-the ChangeLog?
+A trivial patch is attached :)
 
-Best regards,
+2002-04-10  Pavel Tsekov  <ptsekov@gmx.net>
 
-Wu Yongwei
+            * version.cc (canonicalize_version): Fix a call delete[]
+            to delete.
 
 
+PT> Wednesday, April 10, 2002, 4:03:24 AM, you wrote:
 
-I just deleted a long reply to this message.
+rkrc>> Two major problems (summary):
 
-I realized that I'd just be repeating myself.
+rkrc>> 1. Setup.exe (2.194.2.22) ends with a invalid page fault against MSVCRT.DLL
+rkrc>> (details below) on my Windows 98 machine, before complely fininshing the
+rkrc>> install.
 
-However, I'll try to briefly make a couple of points:
+PT> I have not investigated this yet - but from what I see the crash is
+PT> similiar to one reported earlier to the ml. The address at which the
+PT> crash occurs is inside the code of a helper function for
+PT> free() and realloc().
 
-- The contrib web page says to model your entry on winsup/ChangeLog.
+PT> I'll look into this maybe this night.
 
-- If you can download files via the web, you can download a ChangeLog
-  file.
+PT> P.S. Thanks for the very good description of your problem :)
+------------321D8C7338E6328
+Content-Type: application/octet-stream; name="version.cc.diff"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="version.cc.diff"
+Content-length: 578
 
-- AFAICT, I never mentioned anything about tabs.  I only said that
-  Ralf Habacker got the indentation wrong.  You should go back and
-  actually look at the changes that I made.  It wasn't the lack of
-  a tab that I was referring to.  It was the "hanging indent" style.
-  I actually made a couple of other changes there too.  All of the
-  changes were for problems listed under "Improper ChangeLog
-  formatting".
+LS0tIHZlcnNpb24uY2MJTW9uIEZlYiAxOCAyMzoxNTowMiAyMDAyCisrKyB2
+ZXJzaW9uLmNjLmZpeGVkCVdlZCBBcHIgMTAgMTA6MDA6MjMgMjAwMgpAQCAt
+MzIsNiArMzIsNyBAQCBTdHJpbmcgCiBjYW5vbmljYWxpemVfdmVyc2lvbiAo
+U3RyaW5nIGNvbnN0ICZhU3RyaW5nKQogewogICBjaGFyICp2ID1hU3RyaW5n
+LmNzdHIoKTsKKyAgY2hhciAqdnNhdmUgPSB2OwogICBzdGF0aWMgY2hhciBu
+dlszXVsxMDBdOwogICBzdGF0aWMgaW50IGlkeCA9IDA7CiAgIGNoYXIgKm5w
+OwpAQCAtNTUsNiArNTYsNiBAQCBjYW5vbmljYWxpemVfdmVyc2lvbiAoU3Ry
+aW5nIGNvbnN0ICZhU3RyCiAJKm5wKysgPSAqdisrOwogICAgIH0KICAgKm5w
+KysgPSAwOwotICBkZWxldGVbXSB2OworICBkZWxldGVbXSB2c2F2ZTsKICAg
+cmV0dXJuIG52W2lkeF07CiB9Cg==
 
-That's it for me.
-
-cgf
-
---=_alternative 0021A49A48256B97_=
-Content-Type: text/html; charset="us-ascii"
-Content-length: 2184
-
-
-<br><font size=2 face="sans-serif">I am absolutely certain about the correctness of the facts you mentioned. You are the authority here. However:</font>
-<br>
-<br><font size=2 face="sans-serif">- Telling people to model is not enough. You yourself predicted my failure. Why not a better document? -- Of course, my statement is invalid if only one newbie (I) made mistakes. I don't suppose so.</font>
-<br>
-<br><font size=2 face="sans-serif">- The point is not about correctness. People are human instead of machines. People are easy to be misled if not already knowing the correct thing to do. For you it must be simple and straightforward, but not for everybody who wants to contribute. -- To say the details, I thought I need to &quot;model&quot; the content but not the format; the concept of CVS ChangeLog interferes; the guidelines talk of bracketing function names but nothing about structs....</font>
-<br>
-<br><font size=2 face="sans-serif">Somebody else mentioned TABs. I thought he is right, but I am not sure when reading your reply. I do not have to use a tab before the asterisk in the ChangeLog?</font>
-<br>
-<br><font size=2 face="sans-serif">Best regards,</font>
-<br>
-<br><font size=2 face="sans-serif">Wu Yongwei</font>
-<br>
-<br>
-<br>
-<br><font size=2><tt>I just deleted a long reply to this message.<br>
-<br>
-I realized that I'd just be repeating myself.<br>
-<br>
-However, I'll try to briefly make a couple of points:<br>
-<br>
-- The contrib web page says to model your entry on winsup/ChangeLog.<br>
-<br>
-- If you can download files via the web, you can download a ChangeLog<br>
- &nbsp;file.<br>
-<br>
-- AFAICT, I never mentioned anything about tabs. &nbsp;I only said that<br>
- &nbsp;Ralf Habacker got the indentation wrong. &nbsp;You should go back and<br>
- &nbsp;actually look at the changes that I made. &nbsp;It wasn't the lack of<br>
- &nbsp;a tab that I was referring to. &nbsp;It was the &quot;hanging indent&quot; style.<br>
- &nbsp;I actually made a couple of other changes there too. &nbsp;All of the<br>
- &nbsp;changes were for problems listed under &quot;Improper ChangeLog<br>
- &nbsp;formatting&quot;.<br>
-<br>
-That's it for me.<br>
-<br>
-cgf</tt></font>
-<br>
---=_alternative 0021A49A48256B97_=--
+------------321D8C7338E6328--
