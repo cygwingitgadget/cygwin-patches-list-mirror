@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2533-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 7333 invoked by alias); 28 Jun 2002 09:51:21 -0000
+Return-Path: <cygwin-patches-return-2534-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 7606 invoked by alias); 28 Jun 2002 10:57:46 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,84 +7,59 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 7319 invoked from network); 28 Jun 2002 09:51:20 -0000
-Date: Fri, 28 Jun 2002 03:57:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygwin-patches@cygwin.com
+Received: (qmail 7544 invoked from network); 28 Jun 2002 10:57:43 -0000
+Message-ID: <06a901c21e92$e3d4ae60$6132bc3e@BABEL>
+From: "Conrad Scott" <Conrad.Scott@dsl.pipex.com>
+To: <cygwin-patches@cygwin.com>
+References: <Pine.GSO.4.30L.0206261539550.20345-600000@biohazard-cafe.mit.edu> <20020628115118.Z1188@cygbert.vinschen.de>
 Subject: Re: Patch to pass file descriptors
-Message-ID: <20020628115118.Z1188@cygbert.vinschen.de>
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <Pine.GSO.4.30L.0206261539550.20345-600000@biohazard-cafe.mit.edu>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.GSO.4.30L.0206261539550.20345-600000@biohazard-cafe.mit.edu>
-User-Agent: Mutt/1.3.22.1i
-X-SW-Source: 2002-q2/txt/msg00516.txt.bz2
+Date: Fri, 28 Jun 2002 04:07:00 -0000
+MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-SW-Source: 2002-q2/txt/msg00517.txt.bz2
 
-On Wed, Jun 26, 2002 at 03:45:07PM -0400, David E Euresti wrote:
-> Hello,
-> 	I finally am able to send in the patch to pass file descriptors.
-> There's still some work to be done like adding security and such, but
-> otherwise it works.
-> There are two new files cygserver_handle.cc and cygserver_handle.h  these
-> go into src/winsup/cygwin
+"Corinna Vinschen" <cygwin-patches@cygwin.com> wrote:
+> More problematic is the approach to use cygserver for this.  I've
+talked
+> to Chris about passing descriptors and we agree in that we want to
+try
+> under all circumstances to find a solution which doesn't need
+cygserver.
 
-I have a problem with this patch.  First of all, it doesn't fit well
-into current CVS since I've moved most of the socket I/O implementation
-into fhandler_socket.cc a few days ago.
+Corinna,
 
-More problematic is the approach to use cygserver for this.  I've talked
-to Chris about passing descriptors and we agree in that we want to try
-under all circumstances to find a solution which doesn't need cygserver.
-A stand-alone cygwin1.dll should allow that.  Since descriptor passing
-only works on AF_UNIX sockets anyway and these are encapsulated inside
-of Cygwin, we don't have to care for any backward compatibility.
+I thought that the main reason to use cygserver for this is for
+security reasons. Your final paragraph mentions this issue but it's
+not clear whether it's a complete solution (and I'm not fully up to
+speed on the NT security model, so I've no idea). One issue tho' is
+that you'll have to create the shared memory segment with global read
+(and write) permissions since you've no idea of the security level of
+the receiving process. If the sender then puts its process handle,
+with the PROCESS_DUP_HANDLE privilege, into that shared memory, any
+process on the system can read the shared memory and now has access to
+*all* of the sender's handles (i.e., just run through all the small
+integers running DuplicateHandle on them). You could put some
+obfuscation into the system by generating random names for the shared
+memory segment but that's still not ideal.
 
-So we discussed an approach which basically acts like this:
+It's also not clear to me how secure cygwin is intended to be: I
+assume it should be no less secure than the underlying NT system, but
+perhaps I've the wrong end of the stick here. But if such security is
+the aim, it can't be achieved through this approach (AFAICS etc.).
 
-We could actually use a piece of shared mem, this is created by the
-sending process and filled with it's own pid, the handles and possible
-extra information (The stuff which you've packed into that structure,
-binmode/textmode etc.).  Then it sends a datablock on the socket, giving
-additionally the "name" of the shared memory.  Now it blocks, waiting
-for some sort of "signal" given by the receiving process.  Signalling
-could be accomplished using a named event object using the same name
-as the shared mem object.
+In general, I thought that cygserver was intended for all such
+inter-process communication to get around just these sort of problems.
+(Not that I can see how to get file descriptor passing to work
+properly via cygserver either, but I've not thought too much about it
+yet.)
 
-The receiving process extracts the name info, opens the shared mem
-and reads the info.  Now it tries to duplicate the handles which
-may or may not work.  If it works, it signals the originator that
-everything's perfectly fine.
+I'd be interested to see a good solution to this sort of problem.
 
-If it doesn't work, it fills it's own winpid into the shared mem
-and signals "Hey, I'm lost here!".  Now it waits for a signal of
-the sender process.  The sender gets the pid and tries by itself
-to duplicate the handles.  If that works, it fills the handles into
-the shared memory or it gives up.  Either way, it signals the result
-to the receiver.  The receiver evaluates the signal, either creating
-matching fhandlers or returning fd=-1 and signals the sender that
-it's done.  Then it closes the shared mem.
-
-The sender knows that we're done, closes the shared mem and returns.
-
-The above approach depends on the PROCESS_DUP_HANDLE rights of the
-involved processes unfortunately.  So, a slighty different way is,
-the receiving process could duplicate it's own process handle for
-the sender, giving the PROCESS_DUP_HANDLE permission, and return this
-handle to the sender.  Then the sender always (mostly?) has the 
-permission to create the handles for the receiver.
-
-What do you think?
-
-I'm actually very interested in getting that working so I'd appreciate
-if we could work together on this.
+// Conrad
 
 
-Thanks in advance,
-Corinna
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
