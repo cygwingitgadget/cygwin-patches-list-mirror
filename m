@@ -1,33 +1,22 @@
-From: Corinna Vinschen <corinna@vinschen.de>
-To: Chris Faylor <cgf@cygnus.com>
-Cc: cygpatch <cygwin-patches@sourceware.cygnus.com>, Mumit Khan <khan@NanoTech.Wisc.EDU>
-Subject: Re: cross compiling patches
-Date: Fri, 31 Mar 2000 10:58:00 -0000
-Message-id: <38E4F650.7AE6F8EE@vinschen.de>
-References: <200003300046.SAA27482@hp2.xraylith.wisc.edu> <38E30C2A.7B962DE8@vinschen.de> <38E3D5F2.15B2E3A0@vinschen.de> <20000330192529.A29634@cygnus.com>
-X-SW-Source: 2000-q1/msg00029.html
+From: Chris Faylor <cgf@cygnus.com>
+To: Corinna Vinschen <corinna@vinschen.de>
+Cc: cygpatch <cygwin-patches@sourceware.cygnus.com>
+Subject: Re: symlink changes
+Date: Fri, 31 Mar 2000 12:05:00 -0000
+Message-id: <20000331150508.F1576@cygnus.com>
+References: <38E4F407.3AB20C82@vinschen.de>
+X-SW-Source: 2000-q1/msg00030.html
 
-Chris Faylor wrote:
-> >- In winsup/cygwin/Makefile.in `cygrun.exe' has to be compiled with
-> >  $(COMPILE_CC) because the linker stage results in the error
-> >  `-lcygwin not found.'
-> 
-> Are you saying that the change I made to winsup/cygwin/Makefile.in
-> doesn't solve this?  cygrun.o *is* being compiled via COMPILE_CC.
+On Fri, Mar 31, 2000 at 08:52:55PM +0200, Corinna Vinschen wrote:
+>- The other problem was that in chown the path was evaluated with
+>  SYMLINK_FOLLOW. This isn't the same behaviour as under linux.
+>  I have patched it, so that now a chown on a symlink changes
+>  user/group of the symlink instead of the linked file, equal to
+>  linux. This is done by using SYMLINK_IGNORE as parameter to
+>  path_conv.
 
-I see. It's a bit complicated: My patch was a mess but a change is
-needed, actually. The missing part is the link path for the cygwin
-directory itself. xgcc is grumbling
+I believe that linux has an "lchown" call as well as a "chown" call.
+I'd prefer to implement lchown and leave chown alone.  It would also
+be nice to implement fchown (and fchmod?) while we're at it.
 
-	`-lcygwin' not found.
-
-cygrun.exe : cygrun.o $(DLL_IMPORTS) $(w32api_lib)/libuser32.a \
-             $(w32api_lib)/libshell32.a
-        $(CC) -o $@ -L$(w32api_lib) -L$(objdir) ${word 1,$^}
-                                    ^^^^^^^^^^^
-                                    THAT is the missing part.
-
-I don't insist to make the patch _this_ way but the path is needed,
-though.
-
-Corinna
+cgf
