@@ -1,45 +1,34 @@
 From: Christopher Faylor <cgf@redhat.com>
-To: Christopher Faylor <cygwin-patches@cygwin.com>
-Subject: Re: case-sensitiveness of environment problem
-Date: Tue, 17 Apr 2001 09:22:00 -0000
-Message-id: <20010417122239.A25694@redhat.com>
-References: <27138147024.20010416101728@logos-m.ru> <20010417100306.C31974@redhat.com> <50254646181.20010417183909@logos-m.ru>
-X-SW-Source: 2001-q2/msg00103.html
+To: cygwin-patches@cygwin.com
+Subject: Re: /dev/dsp
+Date: Tue, 17 Apr 2001 09:24:00 -0000
+Message-id: <20010417122430.B25694@redhat.com>
+References: <F23AZndKaQf0Stamg6d00000c37@hotmail.com>
+X-SW-Source: 2001-q2/msg00104.html
 
-On Tue, Apr 17, 2001 at 06:39:09PM +0400, egor duda wrote:
->Hi!
+On Tue, Apr 17, 2001 at 03:36:17PM -0000, Andy Younger wrote:
+>I have just been looking through the applied patch after failing to get the 
+>CVS version of /dev/dsp working on my "at work" machine.
 >
->Tuesday, 17 April, 2001 Christopher Faylor cgf@redhat.com wrote:
+>It seems to be to do with the FH_OSS_DSP enumeration in fhandler.h, this has 
+>been set up as a fast device, where as in the original patch, it was a slow 
+>one. What exactly is the difference between slow & fast devices. Should it 
+>not be a slow device being that calls to write() can block for a good 
+>fraction of a second (depending on the size & number of fragments).
 >
->>>  if cygwin environment contains both 'Path' and 'PATH', creating
->>>windows environment from it causes crash due to reallocating memory
->>>object which is externally referenced. this patch fixes that.
->>>
->>>i feel that we need a bit more tweaking with environment to deal with
->>>it case-insensitiveness under win32.
+>Making it a slow device enables it to work. Is this maybe just exposing a 
+>problem somewhere else? I don't have time to look at this right now, maybe 
+>later on, any hints welcomed.
 >
->CF> I don't think that this is due to case insensitivity as much as someone
->CF> supplying a non-malloced PATH string.
->
->it is. suppose we have cygwin environment containing
->
->Path=/bin
->PATH=/bin:/usr/bin:/usr/local/bin:/home/user/bla/bla/bla
+>As to how I got it too work last night, I'm not sure - maybe it was just 
+>tiredness.. Bahhh..
 
-You're right.  I really should have looked at the code more closely.
+This doesn't qualify as a slow device unless it can be interrupted.
+That means that you have to provide the appropriate framework for doing
+so in select.cc like you see with other slow devices.  If/when you do
+that we can make it slow again.
 
-I think we can solve this trivially by making getwinenv perform a
-case-sensitive comparison, though, can't we?  I think it probably should
-be case-sensitive anyway.
-
->CF> Your patch doesn't look right, since it is storing the environ string in
->CF> an alloca'ed buffer.  Since alloca is stack based, won't the buffer be
->CF> overwritten once the function returns?
->
->this buffer is temporary and used internally in winenv. all data is
->copied to 'envblock' later.
-
-Sigh.  You're right again.  I use alloca a few lines below this.  Sorry
-for the noise.
+The problem that you're seeing is due to the fact that I forgot to move
+the \dev\dsp string in path.cc.  I have rectified this.
 
 cgf
