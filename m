@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3198-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 2083 invoked by alias); 16 Nov 2002 13:01:46 -0000
+Return-Path: <cygwin-patches-return-3199-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 32082 invoked by alias); 16 Nov 2002 16:22:48 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,42 +7,32 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 2069 invoked from network); 16 Nov 2002 13:01:42 -0000
-From: "Ronald Landheer-Cieslak" <info@rlsystems.net>
-To: "Cygwin-Patches" <cygwin-patches@cygwin.com>
-Subject: FW: path to /etc/profile.default
-Date: Sat, 16 Nov 2002 05:01:00 -0000
-Message-ID: <NFBBLOMHALONCDMPGBLFKEONECAA.info@rlsystems.net>
-MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-X-Priority: 3 (Normal)
-X-MSMail-Priority: Normal
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Importance: Normal
-X-SW-Source: 2002-q4/txt/msg00149.txt.bz2
+Received: (qmail 32063 invoked from network); 16 Nov 2002 16:22:47 -0000
+Date: Sat, 16 Nov 2002 08:22:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: FW: path to /etc/profile.default
+Message-ID: <20021116162311.GA6496@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <NFBBLOMHALONCDMPGBLFKEONECAA.info@rlsystems.net>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <NFBBLOMHALONCDMPGBLFKEONECAA.info@rlsystems.net>
+User-Agent: Mutt/1.5.1i
+X-SW-Source: 2002-q4/txt/msg00150.txt.bz2
 
-Hi y'all,
+On Sat, Nov 16, 2002 at 01:58:54PM +0100, Ronald Landheer-Cieslak wrote:
+>After brushing up on my C++, getting married, etc. etc. I decided to 
+>check out the source of cygwin to see if there's anything I can do on 
+>the work I kinda promised a while ago. Had to apply a little "patch" to 
+>the CVSROOT though, so to help you incite others to help you, here's the 
+>"patch"
 
-After brushing up on my C++, getting married, etc. etc. I decided to=20
-check out the source of cygwin to see if there's anything I can do on=20
-the work I kinda promised a while ago. Had to apply a little "patch" to=20
-the CVSROOT though, so to help you incite others to help you, here's the=20
-"patch"
+Sorry, but this is the wrong mailing list.  This isn't a cygwin patch
+it's a patch to a cygwin package.  So, please use the cygwin mailing list
+for this.
 
-Bye,
-
-Ronald
-
---- profile.default~    2002-07-30 16:20:08.000000000 +0200
-+++ profile.default     2002-11-16 13:38:38.000000000 +0100
-@@ -40,7 +40,7 @@
- export CVS_RSH=3D/bin/ssh
-
- # Patches to Cygwin always appreciated ;)
--#export CVSROOT=3D:pserver:anoncvs@anoncvs.cygnus.com:/cvs/src
-+#export CVSROOT=3D:pserver:anoncvs@sources.redhat.com:/cvs/src
-
- # Set a HOSTNAME variable to the host name in lower case letters
- export HOSTNAME=3D`hostname | tr '[A-Z]' '[a-z]'`
+Thanks,
+cgf
