@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3562-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 5408 invoked by alias); 13 Feb 2003 22:32:51 -0000
+Return-Path: <cygwin-patches-return-3563-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 5288 invoked by alias); 13 Feb 2003 23:22:21 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,55 +7,46 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 5399 invoked from network); 13 Feb 2003 22:32:50 -0000
-Message-ID: <028d01c2d3af$d592f230$78d96f83@pomello>
-From: "Max Bowsher" <maxb@ukf.net>
-To: <cygwin-patches@cygwin.com>
-References: <20030213012822.A20310-100000@logout.sh.cvut.cz> <20030213203228.GF32279@redhat.com> <021f01c2d39f$fcd78a00$78d96f83@pomello> <20030213204600.GH32279@redhat.com>
+Received: (qmail 5279 invoked from network); 13 Feb 2003 23:22:20 -0000
+Date: Thu, 13 Feb 2003 23:22:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
+To: cygwin-patches@cygwin.com
 Subject: Re: Produce beeps using soundcard
-Date: Thu, 13 Feb 2003 22:32:00 -0000
-MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2800.1106
-X-SW-Source: 2003-q1/txt/msg00211.txt.bz2
+Message-ID: <20030213232335.GB31877@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20030213012822.A20310-100000@logout.sh.cvut.cz> <20030213203228.GF32279@redhat.com> <021f01c2d39f$fcd78a00$78d96f83@pomello> <20030213204600.GH32279@redhat.com> <028d01c2d3af$d592f230$78d96f83@pomello>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <028d01c2d3af$d592f230$78d96f83@pomello>
+User-Agent: Mutt/1.5.1i
+X-SW-Source: 2003-q1/txt/msg00212.txt.bz2
 
-Christopher Faylor wrote:
-> On Thu, Feb 13, 2003 at 08:39:21PM -0000, Max Bowsher wrote:
->> Christopher Faylor wrote:
->>> On Thu, Feb 13, 2003 at 01:34:28AM +0100, Vaclav Haisman wrote:
->>>>
->>>> Hi,
->>>> this small patch adds an ability to produce beeps (\a) using
->>>> soundcard by MessageBeep() call. It can be enabled by new CYGWIN
->>>> option winbeep.
->>>
->>> I'm sorry but I really don't want to add too many options to the
->>> CYGWIN environment variable.  I don't think this really justifies an
->>> option.
->>
->> Does that mean it will replace the current beep, or is it a
->> rejection of the patch? I would really like this - Beep() can be
->> quite painful if you're wearing headphones!. MessageBeep would be
->> controllable via the volume settings, but Beep is just a maximum
->> volume blast!
->>
->> Does it really *matter* for there to be lots of options in CYGWIN? I
->> can't see any disadvantage at all.
+On Thu, Feb 13, 2003 at 10:32:47PM -0000, Max Bowsher wrote:
+>> I don't like to introduce lots of unnecessary decision points into a
+>> product.  It increases support and it increases code complexity.
 >
-> I don't like to introduce lots of unnecessary decision points into a
-> product.  It increases support and it increases code complexity.
+>Complexity? Slightly, but only at CYGWIN-parsing time, and Beeping time.
+>That's not that much, surely?
 
-Complexity? Slightly, but only at CYGWIN-parsing time, and Beeping time.
-That's not that much, surely?
+This is a cumulative thing.  Every "it's only a couple of lines" adds
+up.  It's a couple lines of code, a couple of extra lines in
+documentation, a couple of extra email messages with people struggling
+to use it.
 
-> Once again, how does linux handle this scenario?  You don't do a
-> "export LINUX=linbeep" to get linux to use the soundcard.
+I don't mind adding the lines when we are moving closer to UNIX
+compatibility but I will always push back on adding arbitrary options to
+the CYGWIN environment variable.  I'm in good company.  My predecessor
+did the same thing.
 
-If Vaclav is correct - that it required a kernel module - I think this
-question is answered.
+>>Once again, how does linux handle this scenario?  You don't do a
+>>"export LINUX=linbeep" to get linux to use the soundcard.
+>
+>If Vaclav is correct - that it required a kernel module - I think this
+>question is answered.
 
-Max.
+Ok.  How about if I say "I don't think it requires a kernel module".
+Does that put things back on course?
+
+cgf
