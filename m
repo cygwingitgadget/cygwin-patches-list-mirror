@@ -1,19 +1,23 @@
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: Bugfix for pthread_cond_init
-Date: Fri, 16 Mar 2001 20:50:00 -0000
-Message-id: <20010316235021.B4725@redhat.com>
-References: <02b401c0ae9c$d58d43b0$0200a8c0@lifelesswks>
-X-SW-Source: 2001-q1/msg00193.html
+From: Egor Duda <deo@logos-m.ru>
+To: Christopher Faylor <cgf@redhat.com>
+Cc: cygwin-patches@cygwin.com
+Subject: Re: pthread_cond*
+Date: Sat, 17 Mar 2001 04:53:00 -0000
+Message-id: <8888709136.20010317155009@logos-m.ru>
+References: <05e401c0ae24$e8194600$0200a8c0@lifelesswks> <20010316102348.D11518@redhat.com> <007701c0ae6c$f174ab70$0200a8c0@lifelesswks> <20010316202404.A2512@redhat.com>
+X-SW-Source: 2001-q1/msg00194.html
 
-On Sat, Mar 17, 2001 at 03:43:36PM +1100, Robert Collins wrote:
+Hi!
 
->Saturday Mar 17 3:45 2001 Robert Collins <rbtcollins@hotmail.com>
->
->	* thread.cc (MTinterface::CreateCond): Check for null attr pointer.
+Saturday, 17 March, 2001 Christopher Faylor cgf@redhat.com wrote:
 
-Applied, modulo some ChangeLog surgery.
+CF> On Sat, Mar 17, 2001 at 10:00:47AM +1100, Robert Collins wrote:
+>>Take two - return value for TimedWait function.
 
-Thanks.
+CF> I've checked this in.
 
-cgf
+hmm. does anybody tested this patch under  w9x?  msdn  states  that
+SignalObjectAndWait() API requires NT 4.0 or later.
+
+Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
+
