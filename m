@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1920-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 30466 invoked by alias); 27 Feb 2002 18:07:53 -0000
+Return-Path: <cygwin-patches-return-1921-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 31133 invoked by alias); 27 Feb 2002 18:09:36 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,23 +7,20 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 30439 invoked from network); 27 Feb 2002 18:07:50 -0000
-Message-ID: <20020227180739.75868.qmail@web20005.mail.yahoo.com>
-Date: Wed, 27 Feb 2002 10:09:00 -0000
+Received: (qmail 31104 invoked from network); 27 Feb 2002 18:09:32 -0000
+Message-ID: <20020227180923.76253.qmail@web20005.mail.yahoo.com>
+Date: Wed, 27 Feb 2002 10:22:00 -0000
 From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
-Subject: Re: version information for cygcheck
-To: Warren Young <warren@etr-usa.com>
-Cc: cygwin-patches@cygwin.com
-In-Reply-To: <3C7D0F96.48B764E8@etr-usa.com>
+Subject: Re: version information for cygcheck 
+To: cygwin-patches@cygwin.com
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="0-1182565908-1014833259=:74209"
-X-SW-Source: 2002-q1/txt/msg00277.txt.bz2
+Content-Type: multipart/mixed; boundary="0-2096267733-1014833363=:74226"
+X-SW-Source: 2002-q1/txt/msg00278.txt.bz2
 
---0-1182565908-1014833259=:74209
+--0-2096267733-1014833363=:74226
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-length: 798
-
+Content-length: 795
 
 --- Warren Young <warren@etr-usa.com> wrote:
 > Joshua Daniel Franklin wrote:
@@ -49,13 +46,11 @@ I think this one's going to work, so here's a changelog:
 * cygcheck.cc: added -V --version option, corrected -h to output to stdout
 
 
-
-
 __________________________________________________
 Do You Yahoo!?
 Yahoo! Greetings - Send FREE e-cards for every occasion!
 http://greetings.yahoo.com
---0-1182565908-1014833259=:74209
+--0-2096267733-1014833363=:74226
 Content-Type: text/plain; name="cygcheck.cc-patch"
 Content-Description: cygcheck.cc-patch
 Content-Disposition: inline; filename="cygcheck.cc-patch"
@@ -177,4 +172,4 @@ Content-length: 3544
    if (keycheck)
      return check_keys ();
 
---0-1182565908-1014833259=:74209--
+--0-2096267733-1014833363=:74226--
