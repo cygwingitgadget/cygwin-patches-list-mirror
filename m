@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4216-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 8931 invoked by alias); 15 Sep 2003 08:03:24 -0000
+Return-Path: <cygwin-patches-return-4217-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 16593 invoked by alias); 15 Sep 2003 11:19:00 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,44 +7,38 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 8920 invoked from network); 15 Sep 2003 08:03:23 -0000
-Date: Mon, 15 Sep 2003 08:03:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
+Received: (qmail 16576 invoked from network); 15 Sep 2003 11:18:58 -0000
+X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
+Message-ID: <3F65A007.80406@gmx.net>
+Date: Mon, 15 Sep 2003 11:19:00 -0000
+From: Thomas Pfaff <tpfaff@gmx.net>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.5b) Gecko/20030901 Thunderbird/0.2
+X-Accept-Language: en-us, en
+MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
-Subject: Re: Part 2 of Fixing a security hole in pinfo.
-Message-ID: <20030915080322.GV9981@cygbert.vinschen.de>
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3.0.5.32.20030913220742.0082d260@incoming.verizon.net> <20030914023055.GA10962@redhat.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20030914023055.GA10962@redhat.com>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2003-q3/txt/msg00232.txt.bz2
+Subject: Re: [PATCH] pthread patch - Thomas Pfaff, please note
+References: <20030913012508.GA2870@redhat.com>
+In-Reply-To: <20030913012508.GA2870@redhat.com>
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2003-q3/txt/msg00233.txt.bz2
 
-On Sat, Sep 13, 2003 at 10:30:55PM -0400, Christopher Faylor wrote:
-> On Sat, Sep 13, 2003 at 10:07:42PM -0400, Pierre A. Humblet wrote:
-> >This is the second and final part of the pinfo security patch. 
+Christopher Faylor wrote:
+> Thomas, I made the change below to stop a SEGV on thread exit as evinced
+> by the threadidafterfork test in the testsuite.
 > 
-> Looks like a Corinna yea or nay on this one.
+> The problem is that this code overwrites impure_ptr with the contents of
+> the thread which called fork, which is not the correct thing to do since
+> _impure_ptr contains global information not present in the calling threads
+> reent structure.
+> 
+> I hope it makes sense.  If there is some better way to do this, please
+> feel free to check it in.  This looked right to me, though.
 
-The changes look good.  Please apply, Pierre.
+It is ok for me.
 
-FYI:
+I was not sure whether the thread local reent contains something 
+important that should be restored after a fork, but with the 
+_GLOBAL_REENT patches to newlib it is better to keep _impure_ptr unchanged.
 
-What bugged me when reading the patch was my decision at one point to
-use the phrase "orig_sid".  The "orig_sid" is basically what is called
-a "saved id" in POSIX systems and I think it would help reading the
-code if we also rename orig_sid/orig_uid/orig_gid to saved_sid/saved_uid/
-saved_gid and using the phrase "saved" instead of "orig" or "original"
-throughout.
-
-So, after you have applied the patch, I'll do all the renaming within
-this week.
-
-Corinna
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+Thomas
