@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5288-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 17118 invoked by alias); 24 Dec 2004 09:26:58 -0000
+Return-Path: <cygwin-patches-return-5289-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 23961 invoked by alias); 24 Dec 2004 13:45:49 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,130 +7,101 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 16913 invoked from network); 24 Dec 2004 09:26:39 -0000
-Received: from unknown (HELO dessent.net) (66.17.244.20)
-  by sourceware.org with SMTP; 24 Dec 2004 09:26:39 -0000
-Received: from localhost ([127.0.0.1] helo=dessent.net)
-	by dessent.net with esmtp (Exim 4.34)
-	id 1ChlkT-0002e1-IH; Fri, 24 Dec 2004 09:28:37 +0000
-Message-ID: <41CBE1E1.51CB9AE6@dessent.net>
-Date: Fri, 24 Dec 2004 09:26:00 -0000
-From: Brian Dessent <brian@dessent.net>
-Organization: My own little world...
-MIME-Version: 1.0
+Received: (qmail 23930 invoked from network); 24 Dec 2004 13:45:43 -0000
+Received: from unknown (HELO phumblet.no-ip.org) (68.163.186.67)
+  by sourceware.org with SMTP; 24 Dec 2004 13:45:43 -0000
+Received: from [192.168.1.156] (helo=hpn5170)
+	by phumblet.no-ip.org with smtp (Exim 4.43)
+	id I98BPL-00HEDH-PK
+	for cygwin-patches@cygwin.com; Fri, 24 Dec 2004 08:48:57 -0500
+Message-Id: <3.0.5.32.20041224084029.00825100@incoming.verizon.net>
+X-Sender: vze1u1tg@incoming.verizon.net (Unverified)
+Date: Fri, 24 Dec 2004 13:45:00 -0000
 To: cygwin-patches@cygwin.com
-CC: ptsekov@gmx.net
-Subject: stopping floppy seeks (Was: available for test: findutils-20041219-1)
-References: <20041219203809.GA32005@trixie.casa.cgf.cx> <41CB9C86.DF363492@dessent.net> <20041224043943.GB22309@trixie.casa.cgf.cx> <41CBA34D.13D639A5@dessent.net> <20041224050451.GA22543@trixie.casa.cgf.cx> <41CBACDA.59ABD12C@dessent.net>
-Content-Type: multipart/mixed;
- boundary="------------DF72E8FB2BDC27CEF1026522"
-X-SW-Source: 2004-q4/txt/msg00289.txt.bz2
+From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
+Subject: Re: [Patch] Fixing the PROCESS_DUP_HANDLE security hole.
+In-Reply-To: <3.0.5.32.20041224005402.007c88f0@incoming.verizon.net>
+References: <20041224052526.GB22543@trixie.casa.cgf.cx>
+ <3.0.5.32.20041223235959.0081ba80@incoming.verizon.net>
+ <20041205010020.GA20101@trixie.casa.cgf.cx>
+ <20041213202505.GB27768@trixie.casa.cgf.cx>
+ <41BEFBA5.97CA687B@phumblet.no-ip.org>
+ <20041214154214.GE498@trixie.casa.cgf.cx>
+ <41C99D2A.B5C4C418@phumblet.no-ip.org>
+ <41C9C088.9E9B16E3@phumblet.no-ip.org>
+ <3.0.5.32.20041223182306.00824b60@incoming.verizon.net>
+ <3.0.5.32.20041223215420.0082b790@incoming.verizon.net>
+ <3.0.5.32.20041223230550.0081e100@incoming.verizon.net>
+ <3.0.5.32.20041223235959.0081ba80@incoming.verizon.net>
+Mime-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+X-SW-Source: 2004-q4/txt/msg00290.txt.bz2
 
-This is a multi-part message in MIME format.
---------------DF72E8FB2BDC27CEF1026522
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-Content-length: 1912
+At 12:54 AM 12/24/2004 -0500, Pierre A. Humblet wrote:
+>At 12:25 AM 12/24/2004 -0500, Christopher Faylor wrote:
+>>On Thu, Dec 23, 2004 at 11:59:59PM -0500, Pierre A. Humblet wrote:
+>>>At 11:35 PM 12/23/2004 -0500, Christopher Faylor wrote:
+>>>>I don't think you need it.  You just need to tell a process which is
+>>>>about to exec after having been execed to make sure that its
+>>>>wr_proc_pipe is valid.
+>>>
+>>>Yes, that's the key. So the question is only about method. Either the
+parent
+>>>guarantees that the child has a valid handle, or the child must check
+>>>that it already has a valid handle or wait until it does. 
+>>
+>>I have just implemented code which causes an execed child to wait for the
+>>parent to fill in its wr_proc_pipe if it is going to exec again.  It uses
+>>a busy loop but I think it's unlikely that the loop will be exercised too
+>>often.
+>
+>It's late, but I am trying to go through all permutations.
+>Here is a strange one. 
+>Cygwin process A started from Windows execs a Windows process B.
+>We are in the case where A
+>      if (!myself->wr_proc_pipe)
+>       {
+>         myself.remember (true);
+>         wait_for_myself = true;
+>
+>The problem is that later there is
+>if (wait_for_myself)
+>  waitpid (myself->pid, &res, 0);
+>else
+>  ciresrv.sync (myself, INFINITE);
+>
+>Process A takes the first branch (waitpid), although it's the
+>second branch that will call GetExitCodeProcess.
+>So A will see its logical self terminate, but it won't get the
+>exit status of B. 
+>Right? Going to sleep on this.
 
-Brian Dessent wrote:
+I think the way out is as follows:
+Toward the end of spawn_guts:
 
-> > Let me say it again.  This is not new behavior:
-> >
-> > 2003-08-05  Pavel Tsekov  <ptsekov AT gmx.net>
-> >
-> >         * path.cc (cygdrive_getmntent): Do not skip over drives of type
-> >         DRIVE_REMOVABLE.
-> >
-> > Perhaps you should be discussing this with Pavel.
-> 
-> Okay, I misunderstood.  I thought that you were saying someone had
-> posted a patch that would prevent checking floppy drives in that section
-> of the code.  I now see that it used to be the case that this was done,
-> and the above patch removed that functionality.
-> 
-> I have no idea what Pavel's intentions were with his change.  I can only
-> guess it was to support /cygdrive use with some form of removable media,
-> perhaps floppy, perhaps otherwise.  However at the time it was
-> committed, there was no mount checking code in find, and so there were
-> no spurious floppy seeks for opening a login shell and many other
-> activities.  I will CC him on this email to see if he wants to clarify.
-> It seems to me that making this behavior settable through a CYGWIN env
-> option would satisy everyone, but I'm also quite sure that no patch I
-> submit to implement this would be accepted, mainly due to not having a
-> copyright assignment on file.
+ciresrv.sync (myself, INFINITE);   [always]
 
-Here is a patch.  If $CYGWIN does not contain "removable" (or contains
-"noremovable") then /cygdrive's where GetDriveType() returns
-DRIVE_REMOVABLE are skipped, avoiding the annoying floppy seeks. 
-CYGWIN=removable works the same as current code.
+if (wait_for_myself)
+   waitpid (myself->pid, &dummy, 0);
+ [For clarity, these two lines should be brought down
+  inside the case _P_OVERLAY: ]
 
-Note: I don't know if this would be considered trivial or not.  Nor do I
-know if it satisfies Pavel's needs.  Just thought I'd post it anyway.
+and in pinfo::exit, change ExitProcess (n) to
+ExitProcess (exitcode)
 
-2004-12-24  Brian Dessent  <brian@dessent.net>
+There is NO NEED for a Cygwin process started from Windows to
+start a new exec'ed process in suspended state.
 
-	* environ.cc: Add extern decl for `cygdrive_removable'.
-	(struct parse_thing): Add entry for `[no]removable'. 
-	* path.cc (cygdrive_getmntent): Ignore drive letters of 
-	removable drives, unless `cygdrive_removable' set.
---------------DF72E8FB2BDC27CEF1026522
-Content-Type: text/plain; charset=us-ascii;
- name="removable.diff"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline;
- filename="removable.diff"
-Content-length: 2100
+The ciressrv.sync will collect the exit status of any Windows
+process.
+The purpose of the waitpid is to wait for the process chain to be
+finished. But waitpid will fail if the child had terminated before
+the pipe could be duplicated. That't why waitpid uses "dummy".
+At any rate the final return value of the chain is safely set in
+the exitstatus.
 
-Index: src/winsup/cygwin/environ.cc
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/environ.cc,v
-retrieving revision 1.105
-diff -u -p -r1.105 environ.cc
---- src/winsup/cygwin/environ.cc	3 Dec 2004 23:49:06 -0000	1.105
-+++ src/winsup/cygwin/environ.cc	24 Dec 2004 09:12:45 -0000
-@@ -31,6 +31,7 @@ extern bool ignore_case_with_glob;
- extern bool allow_ntea;
- extern bool allow_smbntsec;
- extern bool allow_winsymlinks;
-+extern bool cygdrive_removable;
- extern bool strip_title_path;
- extern int pcheck_case;
- extern int subauth_id;
-@@ -537,6 +538,7 @@ static struct parse_thing
-   {"ntea", {func: set_ntea}, isfunc, NULL, {{0}, {s: "yes"}}},
-   {"ntsec", {func: set_ntsec}, isfunc, NULL, {{0}, {s: "yes"}}},
-   {"smbntsec", {func: set_smbntsec}, isfunc, NULL, {{0}, {s: "yes"}}},
-+  {"removable", {&cygdrive_removable}, justset, NULL, {{false}, {true}}},
-   {"reset_com", {&reset_com}, justset, NULL, {{false}, {true}}},
-   {"strip_title", {&strip_title_path}, justset, NULL, {{false}, {true}}},
-   {"subauth_id", {func: &subauth_id_init}, isfunc, NULL, {{0}, {0}}},
-Index: src/winsup/cygwin/path.cc
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/path.cc,v
-retrieving revision 1.335
-diff -u -p -r1.335 path.cc
---- src/winsup/cygwin/path.cc	23 Dec 2004 21:37:43 -0000	1.335
-+++ src/winsup/cygwin/path.cc	24 Dec 2004 09:12:57 -0000
-@@ -2301,6 +2301,9 @@ mount_item::getmntent ()
-   return fillout_mntent (native_path, posix_path, flags);
- }
- 
-+/* If true, removable /cygdrive's should be returned by getmntent() */
-+bool cygdrive_removable;
-+
- static struct mntent *
- cygdrive_getmntent ()
- {
-@@ -2316,7 +2319,8 @@ cygdrive_getmntent ()
- 	  break;
- 
-       __small_sprintf (native_path, "%c:\\", drive);
--      if (GetFileAttributes (native_path) == INVALID_FILE_ATTRIBUTES)
-+      if ((!cygdrive_removable && GetDriveType (native_path) == DRIVE_REMOVABLE) ||
-+	  GetFileAttributes (native_path) == INVALID_FILE_ATTRIBUTES)
- 	{
- 	  _my_tls.locals.available_drives &= ~mask;
- 	  continue;
+The change in pinfo::exit is to handle the "norecord" case. In that
+case the value of n is meaningless, the correct exit code is already
+set in exitcode.
 
-
---------------DF72E8FB2BDC27CEF1026522--
+Pierre
