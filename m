@@ -1,205 +1,43 @@
-From: "Tony Sideris" <tonys1110@home.com>
-To: <cygwin-patches@cygwin.com>
-Subject: Patch: More options for regtool
-Date: Tue, 09 Jan 2001 22:25:00 -0000
-Message-id: <000601c07ae7$404bd700$0200a8c0@fred>
-X-SW-Source: 2001-q1/msg00020.html
-Content-type: multipart/mixed; boundary="----------=_1583532845-65438-2"
+From: Christopher Faylor <cgf@redhat.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: Patch: More options for regtool
+Date: Wed, 10 Jan 2001 05:29:00 -0000
+Message-id: <20010110082944.A25695@redhat.com>
+References: <000601c07ae7$404bd700$0200a8c0@fred>
+X-SW-Source: 2001-q1/msg00021.html
 
-This is a multi-part message in MIME format...
+On Wed, Jan 10, 2001 at 01:25:19AM -0800, Tony Sideris wrote:
+>PS: I apoligize if i missed something. I read the FAQs on contributing, hope
+>i got it all...
 
-------------=_1583532845-65438-2
-Content-length: 1209
+Actually, please go back and read the Contributing web page again.  The
+entry below is not correct.  If you could tell me where I got things
+wrong, I'll try to clarify the information on the contrib.html web page.
 
-Attached is a simple patch that adds three new options to the regtool
-utility (specifically the 'list' subcommand). This adds -p which is like
-'ls -p', a \ is appended to KEY names, -k which lists ONLY keys, and -l
-which lists only values. This helps the utility and any scripts that may use
-it easily seperate keys from values.
-I also added a call to LocalFree in the Fail function to free the memory
-allocated by FormatMessage, and i updated the utils.sgml file (i presume
-documentation is generated from this?).
+Specifically, there should not be multiple lines for "global", the file
+should only be listed once, and the entries should begin with a tab.
 
--Tony
+Thanks for your submission, though.  We'll evaluate the patch itself soon.
 
-PS: I apoligize if i missed something. I read the FAQs on contributing, hope
-i got it all...
+cgf
 
-Tue Jan 09 10:26:23 2001  Tony Sideris  <tonys1110@home.com>
-
- * regtool.cc (global): Add LIST_KEYS, LIST_VALS, and LIST_ALL
- constants.
- * regtool.cc (global): Add int listwhat, and int postfix.
- * regtool.cc (global): Modify usage_msg to document -p, -k, and -l.
- * regtool.cc (Fail): Add call to LocalFree to free memory
- allocated by FormatMessage (unrelated to new options).
- * regtool.cc (cmd_list): Add code to implement -p, -k, and -l
- options, this involved checking 'listwhat' and 'postfix' and
- acting accordingly.
- * utils.sgml: Updated usage message to reflect the new options.
+>Tue Jan 09 10:26:23 2001  Tony Sideris  <tonys1110@home.com>
+>
+> * regtool.cc (global): Add LIST_KEYS, LIST_VALS, and LIST_ALL
+> constants.
+> * regtool.cc (global): Add int listwhat, and int postfix.
+> * regtool.cc (global): Modify usage_msg to document -p, -k, and -l.
+> * regtool.cc (Fail): Add call to LocalFree to free memory
+> allocated by FormatMessage (unrelated to new options).
+> * regtool.cc (cmd_list): Add code to implement -p, -k, and -l
+> options, this involved checking 'listwhat' and 'postfix' and
+> acting accordingly.
+> * utils.sgml: Updated usage message to reflect the new options.
+>
 
 
-------------=_1583532845-65438-2
-Content-Type: text/x-diff; charset=us-ascii; name="regtool.cc-patch"
-Content-Disposition: inline; filename="regtool.cc-patch"
-Content-Transfer-Encoding: base64
-Content-Length: 6466
 
-LS0tIC4uLy4uLy4uLy4uL3NyYy93aW5zdXAvdXRpbHMvcmVndG9vbC5jYwlU
-dWUgSmFuICA5IDEwOjIxOjA0IDIwMDEKKysrIC4uLy4uLy4uLy4uL3NyYy93
-aW5zdXAvdXRpbHMvcmVndG9vbC5jYy1vcmlnCVR1ZSBKYW4gIDkgMDk6NDA6
-MDggMjAwMQpAQCAtMTgsMTIgKzE4LDYgQEAgZW51bSB7CiAgIEtUX0FVVE8s
-IEtUX0lOVCwgS1RfU1RSSU5HLCBLVF9FWFBBTkQsIEtUX01VTFRJCiB9IGtl
-eV90eXBlID0gS1RfQVVUTzsKIAotI2RlZmluZSBMSVNUX0tFWVMJMHgwMQot
-I2RlZmluZSBMSVNUX1ZBTFMJMHgwMgotI2RlZmluZSBMSVNUX0FMTAkoTElT
-VF9LRVlTIHwgTElTVF9WQUxTKQotCi1pbnQgbGlzdHdoYXQgPSAwOwotaW50
-IHBvc3RmaXggPSAwOwogaW50IHZlcmJvc2UgPSAwOwogaW50IHF1aWV0ID0g
-MDsKIGNoYXIgKiphcmd2OwpAQCAtMzUsMTAgKzI5LDcgQEAgY29uc3QgY2hh
-ciAqdXNhZ2VfbXNnW10gPQogewogICAiUmVndG9vbCBDb3B5cmlnaHQgKGMp
-IDIwMDAgUmVkIEhhdCBJbmMiLAogICAiIHJlZ3Rvb2wgLWggIC0gcHJpbnQg
-dGhpcyBtZXNzYWdlIiwKLSAgIiByZWd0b29sIFstdnwtcHwta3wtbF0gbGlz
-dCBba2V5XSAgLSBsaXN0IHN1YmtleXMgYW5kIHZhbHVlcyIsCi0gICIgICAg
-IC1wPXBvc3RmaXgsIGxpa2UgbHMgLXAsIGFwcGVuZHMgLyBwb3N0Zml4IHRv
-IGtleSBuYW1lcyIsCi0gICIgICAgIC1rPWtleXMsIGxpc3RzIG9ubHkga2V5
-cyIsCi0gICIgICAgIC1sPXZhbHVlcywgbGlzdHMgb25seSB2YWx1ZXMiLAor
-ICAiIHJlZ3Rvb2wgWy12XSBsaXN0IFtrZXldICAtIGxpc3Qgc3Via2V5cyBh
-bmQgdmFsdWVzIiwKICAgIiByZWd0b29sIFstdl0gYWRkIFtrZXlcXHN1Ymtl
-eV0gIC0gYWRkIG5ldyBzdWJrZXkiLAogICAiIHJlZ3Rvb2wgWy12XSByZW1v
-dmUgW2tleV0gIC0gcmVtb3ZlIGtleSIsCiAgICIgcmVndG9vbCBbLXZ8LXFd
-IGNoZWNrIFtrZXldICAtIGV4aXQgMCBpZiBrZXkgZXhpc3RzLCAxIGlmIG5v
-dCIsCkBAIC03Niw3ICs2Nyw2IEBAIEZhaWwoRFdPUkQgcnYpCiAJCSAgICB8
-IEZPUk1BVF9NRVNTQUdFX0ZST01fU1lTVEVNLAogCQkgICAgMCwgcnYsIDAs
-IChDSEFSICopJmJ1ZiwgMCwgMCk7CiAgICAgICBmcHJpbnRmKHN0ZGVyciwg
-IkVycm9yOiAlc1xuIiwgYnVmKTsKLSAgICAgIExvY2FsRnJlZShidWYpOwog
-ICAgIH0KICAgZXhpdCgxKTsKIH0KQEAgLTI0Nyw3MiArMjM3LDY1IEBAIGNt
-ZF9saXN0KCkKICAgdmFsdWVfbmFtZSA9IChjaGFyICopbWFsbG9jKG1heHZh
-bG5hbWVsZW4rMSk7CiAgIHZhbHVlX2RhdGEgPSAodW5zaWduZWQgY2hhciAq
-KW1hbGxvYyhtYXh2YWx1ZWxlbisxKTsKIAotICBpZiAoIWxpc3R3aGF0KQot
-ICAgIGxpc3R3aGF0ID0gTElTVF9BTEw7Ci0KLSAgaWYgKGxpc3R3aGF0ICYg
-TElTVF9LRVlTKQotICAgIGZvciAoaT0wOyBpPG51bV9zdWJrZXlzOyBpKysp
-Ci0gICAgICB7Ci0JbSA9IG1heHN1YmtleWxlbisxOwotCW4gPSBtYXhjbGFz
-c2xlbisxOwotCVJlZ0VudW1LZXlFeChrZXksIGksIHN1YmtleV9uYW1lLCAm
-bSwgMCwgY2xhc3NfbmFtZSwgJm4sIDApOwotCXByaW50ZigiJXMlcyIsIHN1
-YmtleV9uYW1lLCAocG9zdGZpeCB8fCB2ZXJib3NlKSA/ICJcXCIgOiAiIik7
-Ci0KLQlpZiAodmVyYm9zZSkKLQkgIHByaW50ZigiICglcykiLCBjbGFzc19u
-YW1lKTsKLQotCXB1dHMoIiIpOwotICAgICAgfQorICBmb3IgKGk9MDsgaTxu
-dW1fc3Via2V5czsgaSsrKQorICAgIHsKKyAgICAgIG0gPSBtYXhzdWJrZXls
-ZW4rMTsKKyAgICAgIG4gPSBtYXhjbGFzc2xlbisxOworICAgICAgUmVnRW51
-bUtleUV4KGtleSwgaSwgc3Via2V5X25hbWUsICZtLCAwLCBjbGFzc19uYW1l
-LCAmbiwgMCk7CisgICAgICBpZiAodmVyYm9zZSkKKwlwcmludGYoIiVzXFwg
-KCVzKVxuIiwgc3Via2V5X25hbWUsIGNsYXNzX25hbWUpOworICAgICAgZWxz
-ZQorCXByaW50ZigiJXNcbiIsIHN1YmtleV9uYW1lKTsKKyAgICB9CiAKLSAg
-aWYgKGxpc3R3aGF0ICYgTElTVF9WQUxTKQotICAgIGZvciAoaT0wOyBpPG51
-bV92YWx1ZXM7IGkrKykKLSAgICAgIHsKLQltID0gbWF4dmFsbmFtZWxlbisx
-OwotCW4gPSBtYXh2YWx1ZWxlbisxOwotCVJlZ0VudW1WYWx1ZShrZXksIGks
-IHZhbHVlX25hbWUsICZtLCAwLCAmdCwgKEJZVEUgKil2YWx1ZV9kYXRhLCAm
-bik7Ci0JaWYgKCF2ZXJib3NlKQotCSAgcHJpbnRmKCIlc1xuIiwgdmFsdWVf
-bmFtZSk7Ci0JZWxzZQotCSAgewotCSAgICBwcmludGYoIiVzID0gIiwgdmFs
-dWVfbmFtZSk7Ci0JICAgIHN3aXRjaCAodCkKLQkgICAgICB7Ci0JICAgICAg
-Y2FzZSBSRUdfQklOQVJZOgotCQlmb3IgKGo9MDsgajw4ICYmIGo8bjsgaisr
-KQotCQkgIHByaW50ZigiJTAyeCAiLCB2YWx1ZV9kYXRhW2pdKTsKLQkJcHJp
-bnRmKCJcbiIpOwotCQlicmVhazsKLQkgICAgICBjYXNlIFJFR19EV09SRDoK
-LQkJcHJpbnRmKCIweCUwOGx4ICglbHUpXG4iLCAqKERXT1JEICopdmFsdWVf
-ZGF0YSwKLQkJICAgICAgICooRFdPUkQgKil2YWx1ZV9kYXRhKTsKLQkJYnJl
-YWs7Ci0JICAgICAgY2FzZSBSRUdfRFdPUkRfQklHX0VORElBTjoKLQkJdiA9
-ICgodmFsdWVfZGF0YVswXSA8PCAyNCkKLQkJICAgICB8ICh2YWx1ZV9kYXRh
-WzFdIDw8IDE2KQotCQkgICAgIHwgKHZhbHVlX2RhdGFbMl0gPDwgOCkKLQkJ
-ICAgICB8ICh2YWx1ZV9kYXRhWzNdKSk7Ci0JCXByaW50ZigiMHglMDh4ICgl
-ZClcbiIsIHYsIHYpOwotCQlicmVhazsKLQkgICAgICBjYXNlIFJFR19FWFBB
-TkRfU1o6Ci0JICAgICAgY2FzZSBSRUdfU1o6Ci0JCXByaW50ZigiXCIlc1wi
-XG4iLCB2YWx1ZV9kYXRhKTsKLQkJYnJlYWs7Ci0JICAgICAgY2FzZSBSRUdf
-TVVMVElfU1o6Ci0JCXZkID0gdmFsdWVfZGF0YTsKLQkJd2hpbGUgKHZkICYm
-ICp2ZCkKLQkJICB7Ci0JCSAgICBwcmludGYoIlwiJXNcIiIsIHZkKTsKLQkJ
-ICAgIHZkID0gdmQrc3RybGVuKChjb25zdCBjaGFyICopdmQpICsgMTsKLQkJ
-ICAgIGlmICgqdmQpCi0JCSAgICAgIHByaW50ZigiLCAiKTsKLQkJICB9Ci0J
-CXByaW50ZigiXG4iKTsKLQkJYnJlYWs7Ci0JICAgICAgZGVmYXVsdDoKLQkJ
-cHJpbnRmKCI/ICh0eXBlICVkKVxuIiwgKGludCl0KTsKLQkgICAgICB9Ci0J
-ICB9Ci0gICAgICB9CisgIGZvciAoaT0wOyBpPG51bV92YWx1ZXM7IGkrKykK
-KyAgICB7CisgICAgICBtID0gbWF4dmFsbmFtZWxlbisxOworICAgICAgbiA9
-IG1heHZhbHVlbGVuKzE7CisgICAgICBSZWdFbnVtVmFsdWUoa2V5LCBpLCB2
-YWx1ZV9uYW1lLCAmbSwgMCwgJnQsIChCWVRFICopdmFsdWVfZGF0YSwgJm4p
-OworICAgICAgaWYgKCF2ZXJib3NlKQorCXByaW50ZigiJXNcbiIsIHZhbHVl
-X25hbWUpOworICAgICAgZWxzZQorCXsKKwkgIHByaW50ZigiJXMgPSAiLCB2
-YWx1ZV9uYW1lKTsKKwkgIHN3aXRjaCAodCkKKwkgICAgeworCSAgICBjYXNl
-IFJFR19CSU5BUlk6CisJICAgICAgZm9yIChqPTA7IGo8OCAmJiBqPG47IGor
-KykKKwkJcHJpbnRmKCIlMDJ4ICIsIHZhbHVlX2RhdGFbal0pOworCSAgICAg
-IHByaW50ZigiXG4iKTsKKwkgICAgICBicmVhazsKKwkgICAgY2FzZSBSRUdf
-RFdPUkQ6CisJICAgICAgcHJpbnRmKCIweCUwOGx4ICglbHUpXG4iLCAqKERX
-T1JEICopdmFsdWVfZGF0YSwKKwkJICAgICAqKERXT1JEICopdmFsdWVfZGF0
-YSk7CisJICAgICAgYnJlYWs7CisJICAgIGNhc2UgUkVHX0RXT1JEX0JJR19F
-TkRJQU46CisJICAgICAgdiA9ICgodmFsdWVfZGF0YVswXSA8PCAyNCkKKwkJ
-ICAgfCAodmFsdWVfZGF0YVsxXSA8PCAxNikKKwkJICAgfCAodmFsdWVfZGF0
-YVsyXSA8PCA4KQorCQkgICB8ICh2YWx1ZV9kYXRhWzNdKSk7CisJICAgICAg
-cHJpbnRmKCIweCUwOHggKCVkKVxuIiwgdiwgdik7CisJICAgICAgYnJlYWs7
-CisJICAgIGNhc2UgUkVHX0VYUEFORF9TWjoKKwkgICAgY2FzZSBSRUdfU1o6
-CisJICAgICAgcHJpbnRmKCJcIiVzXCJcbiIsIHZhbHVlX2RhdGEpOworCSAg
-ICAgIGJyZWFrOworCSAgICBjYXNlIFJFR19NVUxUSV9TWjoKKwkgICAgICB2
-ZCA9IHZhbHVlX2RhdGE7CisJICAgICAgd2hpbGUgKHZkICYmICp2ZCkKKwkJ
-eworCQkgIHByaW50ZigiXCIlc1wiIiwgdmQpOworCQkgIHZkID0gdmQrc3Ry
-bGVuKChjb25zdCBjaGFyICopdmQpICsgMTsKKwkJICBpZiAoKnZkKQorCQkg
-ICAgcHJpbnRmKCIsICIpOworCQl9CisJICAgICAgcHJpbnRmKCJcbiIpOwor
-CSAgICAgIGJyZWFrOworCSAgICBkZWZhdWx0OgorCSAgICAgIHByaW50Zigi
-PyAodHlwZSAlZClcbiIsIChpbnQpdCk7CisJICAgIH0KKwl9CisgICAgfQog
-ICByZXR1cm4gMDsKIH0KIApAQCAtNDk0LDcgKzQ3Nyw3IEBAIG1haW4oaW50
-IGFyZ2MsIGNoYXIgKipfYXJndikKIHsKICAgd2hpbGUgKDEpCiAgICAgewot
-ICAgICAgaW50IGcgPSBnZXRvcHQgKGFyZ2MsIF9hcmd2LCAiaHZxaXNlbXBr
-bCIpOworICAgICAgaW50IGcgPSBnZXRvcHQgKGFyZ2MsIF9hcmd2LCAiaHZx
-aXNlbSIpOwogICAgICAgaWYgKGcgPT0gLTEpCiAJYnJlYWs7CiAgICAgICBz
-d2l0Y2ggKGcpCkBAIC01MDQsMTUgKzQ4Nyw2IEBAIG1haW4oaW50IGFyZ2Ms
-IGNoYXIgKipfYXJndikKIAlicmVhazsKICAgICAgIGNhc2UgJ3EnOgogCXF1
-aWV0ICsrOwotCWJyZWFrOwotICAgICAgY2FzZSAncCc6Ci0JcG9zdGZpeCAr
-KzsKLQlicmVhazsKLSAgICAgIGNhc2UgJ2snOgotCWxpc3R3aGF0IHw9IExJ
-U1RfS0VZUzsKLQlicmVhazsKLSAgICAgIGNhc2UgJ2wnOgotCWxpc3R3aGF0
-IHw9IExJU1RfVkFMUzsKIAlicmVhazsKIAogICAgICAgY2FzZSAnaSc6Cg==
 
-------------=_1583532845-65438-2
-Content-Type: text/x-diff; charset=us-ascii; name="utils.sgml-patch"
-Content-Disposition: inline; filename="utils.sgml-patch"
-Content-Transfer-Encoding: base64
-Content-Length: 2587
-
-LS0tIC4uLy4uLy4uLy4uL3NyYy93aW5zdXAvdXRpbHMvdXRpbHMuc2dtbAlU
-dWUgSmFuICA5IDEwOjI0OjQ5IDIwMDEKKysrIC4uLy4uLy4uLy4uL3NyYy93
-aW5zdXAvdXRpbHMvdXRpbHMuc2dtbC1vbGQJVHVlIEphbiAgOSAxMDoyMzo1
-MyAyMDAxCkBAIC02MTMsMjcgKzYxMywyMyBAQCByZXBvcnRlZC4gIFRoZSB2
-YWxpZCBiaXRzIHRvIHNldCBhcmUgYXMgCiA8c2VjdDIgaWQ9InJlZ3Rvb2wi
-Pjx0aXRsZT5yZWd0b29sPC90aXRsZT4KIAogPHNjcmVlbj4KLVJlZ3Rvb2wg
-Q29weXJpZ2h0IChjKSAyMDAwIFJlZCBIYXQgSW5jCi0gcmVndG9vbCAtaCAg
-LSBwcmludCB0aGlzIG1lc3NhZ2UKLSByZWd0b29sIFstdnwtcHwta3wtbF0g
-bGlzdCBba2V5XSAgLSBsaXN0IHN1YmtleXMgYW5kIHZhbHVlcwotICAgICAt
-cD1wb3N0Zml4LCBsaWtlIGxzIC1wLCBhcHBlbmRzIC8gcG9zdGZpeCB0byBr
-ZXkgbmFtZXMKLSAgICAgLWs9a2V5cywgbGlzdHMgb25seSBrZXlzCi0gICAg
-IC1sPXZhbHVlcywgbGlzdHMgb25seSB2YWx1ZXMKLSByZWd0b29sIFstdl0g
-YWRkIFtrZXlcc3Via2V5XSAgLSBhZGQgbmV3IHN1YmtleQotIHJlZ3Rvb2wg
-Wy12XSByZW1vdmUgW2tleV0gIC0gcmVtb3ZlIGtleQotIHJlZ3Rvb2wgWy12
-fC1xXSBjaGVjayBba2V5XSAgLSBleGl0IDAgaWYga2V5IGV4aXN0cywgMSBp
-ZiBub3QKLSByZWd0b29sIFstaXwtc3wtZXwtbV0gc2V0IFtrZXlcdmFsdWVd
-IFtkYXRhIC4uLl0gIC0gc2V0IHZhbHVlCityZWd0b29sIC1oICAtIHByaW50
-IHRoaXMgbWVzc2FnZQorcmVndG9vbCBbLXZdIGxpc3QgW2tleV0gIC0gbGlz
-dCBzdWJrZXlzIGFuZCB2YWx1ZXMKK3JlZ3Rvb2wgWy12XSBhZGQgW2tleVxz
-dWJrZXldICAtIGFkZCBuZXcgc3Via2V5CityZWd0b29sIFstdl0gcmVtb3Zl
-IFtrZXldICAtIHJlbW92ZSBrZXkKK3JlZ3Rvb2wgWy12fC1xXSBjaGVjayBb
-a2V5XSAgLSBleGl0IDAgaWYga2V5IGV4aXN0cywgMSBpZiBub3QKK3JlZ3Rv
-b2wgWy1pfC1zfC1lfC1tXSBzZXQgW2tleVx2YWx1ZV0gW2RhdGEgLi4uXSAg
-LSBzZXQgdmFsdWUKICAgICAgLWk9aW50ZWdlciAtcz1zdHJpbmcgLWU9ZXhw
-YW5kLXN0cmluZyAtbT1tdWx0aS1zdHJpbmcKLSByZWd0b29sIFstdl0gdW5z
-ZXQgW2tleVx2YWx1ZV0gIC0gcmVtb3ZlcyB2YWx1ZSBmcm9tIGtleQotIHJl
-Z3Rvb2wgWy1xXSBnZXQgW2tleVx2YWx1ZV0gIC0gcHJpbnRzIHZhbHVlIHRv
-IHN0ZG91dAorcmVndG9vbCBbLXZdIHVuc2V0IFtrZXlcdmFsdWVdICAtIHJl
-bW92ZXMgdmFsdWUgZnJvbSBrZXkKK3JlZ3Rvb2wgWy1xXSBnZXQgW2tleVx2
-YWx1ZV0gIC0gcHJpbnRzIHZhbHVlIHRvIHN0ZG91dAogICAgICAtcT1xdWll
-dCwgbm8gZXJyb3IgbXNnLCBqdXN0IHJldHVybiBub256ZXJvIGV4aXQgaWYg
-a2V5L3ZhbHVlIG1pc3NpbmcKLSBrZXlzIGFyZSBsaWtlIFxwcmVmaXhca2V5
-XGtleVxrZXlcdmFsdWUsIHdoZXJlIHByZWZpeCBpcyBhbnkgb2Y6CitrZXlz
-IGFyZSBsaWtlIFxwcmVmaXhca2V5XGtleVxrZXlcdmFsdWUsIHdoZXJlIHBy
-ZWZpeCBpcyBhbnkgb2Y6CiAgICByb290ICAgICBIS0NSICBIS0VZX0NMQVNT
-RVNfUk9PVAogICAgY29uZmlnICAgSEtDQyAgSEtFWV9DVVJSRU5UX0NPTkZJ
-RwogICAgdXNlciAgICAgSEtDVSAgSEtFWV9DVVJSRU5UX1VTRVIKICAgIG1h
-Y2hpbmUgIEhLTE0gIEhLRVlfTE9DQUxfTUFDSElORQogICAgdXNlcnMgICAg
-SEtVICAgSEtFWV9VU0VSUwotIGV4YW1wbGU6IFx1c2VyXHNvZnR3YXJlXE1p
-Y3Jvc29mdFxDbG9ja1xpRm9ybWF0CitleGFtcGxlOiBcdXNlclxzb2Z0d2Fy
-ZVxNaWNyb3NvZnRcQ2xvY2tcaUZvcm1hdAogPC9zY3JlZW4+CiAKIDxwYXJh
-PlRoZSA8Y29tbWFuZD5yZWd0b29sPC9jb21tYW5kPiBwcm9ncmFtIGFsbG93
-cyBzaGVsbCBzY3JpcHRzCg==
-
-------------=_1583532845-65438-2--
+-- 
+cgf@cygnus.com                        Red Hat, Inc.
+http://sources.redhat.com/            http://www.redhat.com/
