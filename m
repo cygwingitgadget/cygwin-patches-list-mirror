@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1528-listarch-cygwin-patches=sourceware.cygnus.com@sources.redhat.com>
-Received: (qmail 1292 invoked by alias); 27 Nov 2001 18:42:28 -0000
+Return-Path: <cygwin-patches-return-1529-listarch-cygwin-patches=sourceware.cygnus.com@sources.redhat.com>
+Received: (qmail 8664 invoked by alias); 27 Nov 2001 18:49:49 -0000
 Mailing-List: contact cygwin-patches-help@sourceware.cygnus.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@sources.redhat.com>
@@ -7,52 +7,39 @@ List-Post: <mailto:cygwin-patches@sources.redhat.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@sources.redhat.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@sources.redhat.com
-Received: (qmail 1278 invoked from network); 27 Nov 2001 18:42:28 -0000
-Date: Thu, 18 Oct 2001 08:16:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] setup.exe: Stop NetIO_HTTP from treating entire stream as a  header
-Message-ID: <20011127184223.GA24028@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3C035977.BF151D0A@syntrex.com> <000601c17772$7c5ecfd0$2101a8c0@d8rc020b>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000601c17772$7c5ecfd0$2101a8c0@d8rc020b>
-User-Agent: Mutt/1.3.23.1i
-X-SW-Source: 2001-q4/txt/msg00060.txt.bz2
+Received: (qmail 8636 invoked from network); 27 Nov 2001 18:49:49 -0000
+Message-ID: <002601c17773$53f23090$02af6080@cc.telcordia.com>
+From: "Sergey Okhapkin" <sos@prospect.com.ru>
+To: "Corinna Vinschen" <cygwin-patches@cygwin.com>
+Cc: <cygwin-patches@sourceware.cygnus.com>
+References: <001b01c1776b$0ad3c020$02af6080@cc.telcordia.com> <20011127193031.Q14975@cygbert.vinschen.de>
+Subject: Re: shutdown sockets on exit patch
+Date: Thu, 18 Oct 2001 16:07:00 -0000
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 5.00.2919.6600
+X-MimeOLE: Produced By Microsoft MimeOLE V5.00.2919.6600
+X-SW-Source: 2001-q4/txt/msg00061.txt.bz2
 
-On Tue, Nov 27, 2001 at 12:36:52PM -0600, Gary R Van Sickle wrote:
->> "Gary R. Van Sickle" wrote:
->> >
->> > Ok, setup.exe seems to work much better with this patch
->> applied (also attached):
->>
->> Yep, I'm the one that screwed this up. Here is how it was before
->> my patch was applied.
->>
->>   do {
->>     l = s->gets ();
->>     if (_strnicmp (l, "Content-Length:", 15) == 0)
->>       sscanf (l, "%*s %d", &file_size);
->>   } while (*l);
->>
->>
->> What about replacing this in your patch:
->> > +  while (((l = s->gets ()) != 0) && (strlen(l) != 0))
->> with
->>   +  while (((l = s->gets ()) != 0) && *l)
->>
+> I tried it.  Rexecd, rshd, sshd (and scp) seem to work fine but the
+> following new errors occur now:
 >
->Ah, better yet.  Jeez you guys are clever ;-).  But how about we make it:
+> - Calling `dir' in an ftp connection to the Windows box works but
+>   after finishing the connection is closed and the message
+>   "421 Service not available, remote server has closed connection."
+>   is printed.
 >
->	while (((l = s->gets ()) != 0) && (*l != '\0'))
+> - Connecting from the Windows box to a host using ssh with X11
+>   forwarding activated fails with error
+>   "Write failed: errno ESHUTDOWN triggered"
 >
->in the interest of making it a bit more self-documenting?
+> This is probably due to the child processes calling shutdown on the
+> socket on exit.
+>
 
-Actually, how about not using != 0.  Use NULL in this context.
+You're right, child process shuts down parent's socket... I'll try to find
+some other solution.
 
-I don't think that *l is hard to understand, fwiw.
+Sergey Okhapkin
+Piscataway, NJ
 
-cgf
