@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2743-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 22739 invoked by alias); 29 Jul 2002 12:55:06 -0000
+Return-Path: <cygwin-patches-return-2744-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 31676 invoked by alias); 29 Jul 2002 13:07:20 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,59 +7,38 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 22725 invoked from network); 29 Jul 2002 12:55:06 -0000
-Date: Mon, 29 Jul 2002 05:55:00 -0000
+Received: (qmail 31638 invoked from network); 29 Jul 2002 13:07:19 -0000
+Date: Mon, 29 Jul 2002 06:07:00 -0000
 From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygpatch <cygwin-patches@cygwin.com>
-Subject: Re: setgroups
-Message-ID: <20020729145504.A18176@cygbert.vinschen.de>
-Mail-Followup-To: cygpatch <cygwin-patches@cygwin.com>
-References: <3.0.5.32.20020726000410.00813de0@mail.attbi.com> <3.0.5.32.20020726000410.00813de0@mail.attbi.com> <3.0.5.32.20020728211223.00819100@mail.attbi.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: UNIX domain socket patch
+Message-ID: <20020729150716.X3921@cygbert.vinschen.de>
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <03f001c23504$5be06890$6132bc3e@BABEL> <025701c235a1$058cb730$6132bc3e@BABEL>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3.0.5.32.20020728211223.00819100@mail.attbi.com>
+In-Reply-To: <025701c235a1$058cb730$6132bc3e@BABEL>
 User-Agent: Mutt/1.3.22.1i
-X-SW-Source: 2002-q3/txt/msg00191.txt.bz2
+X-SW-Source: 2002-q3/txt/msg00192.txt.bz2
 
-On Sun, Jul 28, 2002 at 09:12:23PM -0400, Pierre A. Humblet wrote:
-> 2002-07-28 Pierre Humblet <Pierre.Humblet@ieee.org>
+On Sat, Jul 27, 2002 at 08:08:40PM +0100, Conrad Scott wrote:
+> I've just found a typo in the previous version of the patch I
+> sent, so I've attached a new one.  All that's involved is
+> suppressing (or not) a compiler warning (I obviously wasn't
+> watching the compiles too carefully at the end there).
 > 
-> 	* cygheap.h (class cygheap_user): Add member groups.
-> 	* security.h (class cygsidlist): Add members type and maxcount, 
-> 	methods position, addfromgr, alloc_sids and free_sids and
-> 	operator+= (const PSID psid). Modify contains () to call 
-> 	position () and optimize add () to use maxcount.
-> 	(class user_groups): Create.
-> 	Update declarations of verify_token and create_token.
-> 	* security.cc (cygsidlist::alloc_sids): New.
-> 	(cygsidlist::free_sids): New. 
-> 	(get_token_group_sidlist): Create from get_group_sidlist.
-> 	(get_initgroups_sidlist): Create from get_group_sidlist.
-> 	(get_group_sidlist): Suppress.
-> 	(get_setgroups_sidlist): Create.
-> 	(verify_token): Modify arguments. Add setgroups case.
-> 	(create_token): Modify arguments. Call get_initgroups_sidlist and
-> 	get_setgroups_sidlist as needed. Set SE_GROUP_LOGON_ID from auth_pos
-> 	outside of the loop. Rename the various group sid lists consistently.
-> 	* syscalls.cc (seteuid32): Modify to use cygheap->user.groups.
-> 	(setegid32): Call cygheap->user.groups.update_pgrp.
-> 	* grp.cc (setgroups): Create.
-> 	(setgroups32): Create.
-> 	* uinfo.cc (internal_getlogin): Initialize and update user.groups.pgsid.
-> 	* cygwin.din: Add setgroups and setgroups32.
+> // Conrad
 
-Thanks a lot.  I've applied it with some formatting changes.  Please,
-don't do this
+Conrad,
 
-	if (expr) statement;
+even if it's a pretty big patch, could you please attach it in
+clear text rather than using some sort of compressing on it?
 
-I found some of them in security.cc.  I took the chance to do some more
-formatting changes in security.cc. 
+The reason is, it's not as easy to discuss parts of the code
+if it's not possible to quote code from the original mail.
 
-This time I even remembered to bump the API minor version in
-include/cygwin/version.h :-)
-
+Thanks,
 Corinna
 
 -- 
