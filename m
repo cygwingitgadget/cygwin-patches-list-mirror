@@ -1,35 +1,22 @@
-From: Christopher Faylor <cgf@redhat.com>
+From: Kazuhiro Fujieda <fujieda@jaist.ac.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: Deadly embrace between pthread_cond_wait and pthread_cond_signal
-Date: Tue, 26 Jun 2001 23:34:00 -0000
-Message-id: <20010627023524.S19058@redhat.com>
-References: <006a01c0fe7b$7f0d8980$a300a8c0@nhv> <008e01c0fed1$371ad820$a300a8c0@nhv>
-X-SW-Source: 2001-q2/msg00347.html
+Subject: Re: Make Cygwin damons easier to use on Win9x.
+Date: Wed, 27 Jun 2001 04:17:00 -0000
+Message-id: <s1su212yxwm.fsf@jaist.ac.jp>
+References: <s1sithjcndc.fsf@jaist.ac.jp> <20010626104909.B6427@redhat.com> <s1sr8w64yoq.fsf@jaist.ac.jp> <20010627012107.H19058@redhat.com>
+X-SW-Source: 2001-q2/msg00348.html
 
-On Wed, Jun 27, 2001 at 02:20:08AM -0400, Norman Vine wrote:
->Norman Vine  wrote:
->>
->>Jason Tishler writes:
->>
->>>How long does it take to run the regression tests (sans test_poll)?
->>
->>A long time :-( < several hours >
->>the re, sre and various unicode tests seem to take forever
->>I will add a timer to the python regression test to time each
->>module tested and post the results.
->
->I tried Rob's proposed  IsBadWritePtr(...) patch 
->< see cygwin list [RE:] pthreads works ,sorta  thread >
->
->And running the Python regression suite is an 
->ORDER of MAGNITUDE FASTER
->with this patch applied :-))
->
->real    7m5.712s
->user    2m50.883s
->sys     1m15.236s
+>>> On Wed, 27 Jun 2001 01:21:07 -0400
+>>> Christopher Faylor <cgf@redhat.com> said:
 
-I bet it would improve even more if we replaced the VirtualQuery
-in path.cc, too.
+> I don't think that there is any simple heuristic for doing this but
+> I suppose that if you walk the fd table and find no open console handles
+> that it would be safe to detach the console after a setsid().
 
-cgf
+I tried writing such code, but it made sshd unable to detach the
+console. Sshd call setsid() before closing the tty. I will try
+to find out another way, sigh...
+____
+  | AIST      Kazuhiro Fujieda <fujieda@jaist.ac.jp>
+  | HOKURIKU  School of Information Science
+o_/ 1990      Japan Advanced Institute of Science and Technology
