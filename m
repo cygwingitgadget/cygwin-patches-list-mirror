@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3341-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 19090 invoked by alias); 17 Dec 2002 07:29:57 -0000
+Return-Path: <cygwin-patches-return-3342-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 13557 invoked by alias); 17 Dec 2002 15:24:39 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,126 +7,120 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 19081 invoked from network); 17 Dec 2002 07:29:56 -0000
-Date: Mon, 16 Dec 2002 23:29:00 -0000
-From: Steve O <bub@io.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] to_slave pipe is full fix
-Message-ID: <20021217013105.A22529@hagbard.io.com>
-References: <20021215144314.A28430@eris.io.com> <20021216170122.G19104@cygbert.vinschen.de> <20021216131554.D30600@hagbard.io.com> <20021216193629.GB19567@redhat.com> <20021216164704.A13198@fnord.io.com> <20021217035114.GA12993@redhat.com>
-Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="J2SCkAp4GZ/dPZZf"
-Content-Disposition: inline
-User-Agent: Mutt/1.2.5.1i
-In-Reply-To: <20021217035114.GA12993@redhat.com>; from cgf@redhat.com on Mon, Dec 16, 2002 at 10:51:14PM -0500
-X-SW-Source: 2002-q4/txt/msg00292.txt.bz2
-
-
---J2SCkAp4GZ/dPZZf
+Received: (qmail 13546 invoked from network); 17 Dec 2002 15:24:35 -0000
+Message-ID: <3DFF41DC.BB578807@ieee.org>
+Date: Tue, 17 Dec 2002 07:24:00 -0000
+From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
+X-Accept-Language: en,pdf
+MIME-Version: 1.0
+To: Corinna Vinschen <cygwin-patches@cygwin.com>
+Subject: Re: security.cc and sec_acl.cc (ntsec, inheritance and sec_acl)
+References: <3.0.5.32.20021205222631.007d3920@mail.attbi.com> <20021210112403.B7796@cygbert.vinschen.de> <3DFDF1C4.575D6360@ieee.org> <20021216184320.H19104@cygbert.vinschen.de> <3DFE151D.B657F3EF@ieee.org> <3DFE1867.1242AEFC@ieee.org> <3DFE1AD7.76CA224D@ieee.org> <20021216193940.I19104@cygbert.vinschen.de>
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-length: 925
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2002-q4/txt/msg00293.txt.bz2
 
-On Mon, Dec 16, 2002 at 10:51:14PM -0500, Christopher Faylor wrote:
-> One more question, though.  In accept_input, shouldn't ret be set to
-> something besides 1 when there is an "error writing to pipe"?
+Corinna,
 
-True.  I hadn't been considering the error case. 
-I've attached a patch for this.  It's not terribly pretty. 
+After thinking more about it, I am afraid there is a basic
+problem with how merging is done in setacl. Consider the 
+following double matching case, where entry 1 matches 4 and 
+entry 3 matches 5. 
 
-> I wonder if there is some other way to do this other than pulling
-> everything out of the read ahead buffer and then putting it back on
-> failure.  I guess it doesn't matter since this is an edge condition.
+0 user::rwx
+1 user:testuser:r--
+2 group::r-x
+3 other:rw-
+4 default:user:testuser:r--
+5 default:other:rw-
 
-There's some things that could be done such as moving the get_readahead
-later, but I agree, no point in adding complexity for this case. 
+After 1 is matched with 4, the type of 4 is reset to 0, to
+"eliminate the corresponding default entry".
+When searchace () is then called for 3, the search will stop
+on 4, and not reach 5, because type == 0 is a wildcard.
+This has been verified, see below.
 
-> Hmm.  I wonder if the WaitForSingleObject (input_mutex,...) is enough to
-> make this code thread safe. 
+A solution is to invalidate the type of entry 4 after matching, 
+instead of resetting it to 0.
+The patch below is incremental to what I sent last night.
 
-I think so, but it may be more protection than you need.  OTOH, the
-readahead buffer could probably use some more protection on the filling
-side.
+Pierre
 
--steve
+2002/12/17  Pierre Humblet  <pierre.humblet@ieee.org>
 
---J2SCkAp4GZ/dPZZf
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename="tty5.patch"
-Content-length: 2258
+	* sec_acl.cc (setacl): Invalidate the a_type of matching
+	default entries, instead of clearing it. 
 
-Index: cygwin/fhandler.h
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/fhandler.h,v
-retrieving revision 1.149
-diff -u -p -r1.149 fhandler.h
---- cygwin/fhandler.h	14 Dec 2002 04:01:32 -0000	1.149
-+++ cygwin/fhandler.h	17 Dec 2002 06:28:09 -0000
-@@ -123,7 +123,8 @@ enum line_edit_status
-   line_edit_signalled = -1,
-   line_edit_ok = 0,
-   line_edit_input_done = 1,
--  line_edit_error = 2
-+  line_edit_error = 2,
-+  line_edit_pipe_full = 3
- };
+--- sec_acl.cc.orig     2002-12-17 09:52:19.000000000 -0500
++++ sec_acl.cc  2002-12-17 09:52:29.000000000 -0500
+@@ -145,8 +145,8 @@ setacl (const char *file, int nentries, 
+          && aclbufp[i].a_perm == aclbufp[pos].a_perm)
+        {
+          inheritance = SUB_CONTAINERS_AND_OBJECTS_INHERIT;
+-         /* This eliminates the corresponding default entry. */
+-         aclbufp[pos].a_type = 0;
++         /* This invalidates the corresponding default entry. */
++         aclbufp[pos].a_type = USER|GROUP;
+        }
+       switch (aclbufp[i].a_type)
+        {
+
+
+
+***********************************************88
+/> uname -a
+CYGWIN_NT-4.0 PHumblet 1.3.17(0.67/3/2) 2002-11-27 18:54 i686 unknown
+/> setfacl -s u::rwx,u:testuser:r--,g::r--,o:rw-,d:u:testuser:r--,d:o:rw- abcd
+/> cacls abcd
+e:\abcd DOMAIN\PHumblet:F 
+        PHumblet\testuser:(OI)(CI)(special access:)
+                                  READ_CONTROL
+                                  SYNCHRONIZE
+                                  FILE_GENERIC_READ
+                                  FILE_READ_DATA
+                                  FILE_READ_EA
+                                  FILE_READ_ATTRIBUTES
  
- enum bg_check_types
-Index: cygwin/fhandler_termios.cc
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/fhandler_termios.cc,v
-retrieving revision 1.36
-diff -u -p -r1.36 fhandler_termios.cc
---- cygwin/fhandler_termios.cc	17 Dec 2002 03:49:34 -0000	1.36
-+++ cygwin/fhandler_termios.cc	17 Dec 2002 06:28:10 -0000
-@@ -326,9 +326,10 @@ fhandler_termios::line_edit (const char 
-       put_readahead (c);
-       if (!iscanon || always_accept || input_done)
- 	{
--	  if (!accept_input ()) 
-+	  int status = accept_input ();
-+	  if (status != 1) 
- 	    {
--	      ret = line_edit_error;
-+	      ret = status ? line_edit_error : line_edit_pipe_full;
- 	      eat_readahead (1);
- 	      break;
- 	    }
-Index: cygwin/fhandler_tty.cc
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/fhandler_tty.cc,v
-retrieving revision 1.83
-diff -u -p -r1.83 fhandler_tty.cc
---- cygwin/fhandler_tty.cc	17 Dec 2002 03:49:34 -0000	1.83
-+++ cygwin/fhandler_tty.cc	17 Dec 2002 06:28:12 -0000
-@@ -169,6 +169,7 @@ fhandler_pty_master::accept_input ()
- 	{
- 	  debug_printf ("error writing to pipe %E");
- 	  get_ttyp ()->read_retval = -1;
-+	  ret = -1;
- 	}
-       else
- 	{
-@@ -1077,11 +1078,17 @@ fhandler_pty_master::close ()
- int
- fhandler_pty_master::write (const void *ptr, size_t len)
- {
--  size_t i;
-+  int i;
-   char *p = (char *) ptr;
--  for (i=0; i<len; i++)
--    if (line_edit (p++, 1) == line_edit_error)
-+  for (i=0; i < (int) len; i++)
-+    {
-+      line_edit_status status = line_edit (p++, 1);
-+      if (status == line_edit_ok || status == line_edit_input_done)
-+	continue;
-+      if (status != line_edit_pipe_full)
-+	i = -1;
-       break;
-+    }
-   return i;
- }
+        DOMAIN\Clearusers:(special access:)
+                               READ_CONTROL
+                               SYNCHRONIZE
+                               FILE_GENERIC_READ
+                               FILE_READ_DATA
+                               FILE_READ_EA
+                               FILE_READ_ATTRIBUTES
  
-
---J2SCkAp4GZ/dPZZf--
+        Everyone:(special access:)
+                 STANDARD_RIGHTS_ALL
+                 DELETE
+                 READ_CONTROL
+                 WRITE_DAC
+                 WRITE_OWNER
+                 SYNCHRONIZE
+                 STANDARD_RIGHTS_REQUIRED
+                 FILE_GENERIC_READ
+                 FILE_GENERIC_WRITE
+                 FILE_READ_DATA
+                 FILE_WRITE_DATA
+                 FILE_APPEND_DATA
+                 FILE_READ_EA
+                 FILE_WRITE_EA
+                 FILE_READ_ATTRIBUTES
+                 FILE_WRITE_ATTRIBUTES
+ 
+        Everyone:(OI)(CI)(IO)(special access:)
+                             STANDARD_RIGHTS_ALL
+                             DELETE
+                             READ_CONTROL
+                             WRITE_DAC
+                             WRITE_OWNER
+                             SYNCHRONIZE
+                             STANDARD_RIGHTS_REQUIRED
+                             FILE_GENERIC_READ
+                             FILE_GENERIC_WRITE
+                             FILE_READ_DATA
+                             FILE_WRITE_DATA
+                             FILE_APPEND_DATA
+                             FILE_READ_EA
+                             FILE_WRITE_EA
+                             FILE_READ_ATTRIBUTES
+                             FILE_WRITE_ATTRIBUTES
