@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1955-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 17673 invoked by alias); 7 Mar 2002 01:40:55 -0000
+Return-Path: <cygwin-patches-return-1956-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 11207 invoked by alias); 7 Mar 2002 03:04:05 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,31 +7,33 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 17637 invoked from network); 7 Mar 2002 01:40:53 -0000
-Date: Wed, 06 Mar 2002 19:04:00 -0000
+Received: (qmail 11169 invoked from network); 7 Mar 2002 03:04:03 -0000
+Date: Thu, 07 Mar 2002 06:36:00 -0000
 From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: Patch for cd .../. bug
-Message-ID: <20020307014051.GA25480@redhat.com>
+Subject: Re: cygpath copyright/version patch
+Message-ID: <20020307030403.GA13107@redhat.com>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <012301c1c570$8af537e0$0100a8c0@advent02> <20020307004423.GA24387@redhat.com> <02df01c1c576$4a534af0$0200a8c0@lifelesswks>
+References: <20020227162528.GA2205@redhat.com> <20020227205634.45738.qmail@web20003.mail.yahoo.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <02df01c1c576$4a534af0$0200a8c0@lifelesswks>
+In-Reply-To: <20020227205634.45738.qmail@web20003.mail.yahoo.com>
 User-Agent: Mutt/1.3.23.1i
-X-SW-Source: 2002-q1/txt/msg00312.txt.bz2
+X-SW-Source: 2002-q1/txt/msg00313.txt.bz2
 
-On Thu, Mar 07, 2002 at 12:20:36PM +1100, Robert Collins wrote:
->Anyway, it seems reasonable to me to use unix behaviour for cygwin with
->this.
+On Wed, Feb 27, 2002 at 12:56:34PM -0800, Joshua Daniel Franklin wrote:
+>Changelog:
+>
+>2002-02-27 Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+>
+>* cygpath.cc (print_version): New function.
+>(main): Accommodate new version function. Initialize 'o' to prevent warning.
 
-Ok.  I guess you're right.  This is the same thing as disallowing the
-windows idiocy of foo/. succeeding when foo is a file.
+Applied with some minor tweaks.
 
-I just added a small patch to cause the return of ENOENT on a run of
-dots.  AFAICT, Windows doesn't allow you to create such a file or
-directory.
+I also ran indent over the file.  It had accumulated a strange mishmash of
+GNU and non-GNU formatting.
 
 cgf
