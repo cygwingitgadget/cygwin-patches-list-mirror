@@ -1,18 +1,17 @@
-From: Corinna Vinschen <vinschen@cygnus.com>
-To: cygwin-patches@sources.redhat.com
-Subject: [PATCH]: winnt.h, added missing token types and QUOTA_LIMITS
-Date: Fri, 18 Aug 2000 17:25:00 -0000
-Message-id: <399DD3F7.EEB3F1C0@cygnus.com>
-X-SW-Source: 2000-q3/msg00038.html
+From: Chris Faylor <cgf@cygnus.com>
+To: cygpatch <cygwin-patches@sourceware.cygnus.com>
+Subject: Re: error_start patch
+Date: Tue, 22 Aug 2000 10:25:00 -0000
+Message-id: <20000822132442.A29134@cygnus.com>
+References: <2891.000522@logos-m.ru>
+X-SW-Source: 2000-q3/msg00039.html
 
-As mentioned in the subject, I have added two missing token types
-`TokenRestrictedSids' and `TokenSessionId' to TOKEN_INFORMATION_CLASS
-and I have added the QUOTA_LIMITS, PQUOTA_LIMITS types.
+Hi,
+I keep meaning to ask you if you would mind resubmitting your cygwin
+core file patch to gdb-patches?
 
-Corinna
+I promise that I'll install it this time.
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                        mailto:cygwin@sources.redhat.com
-Red Hat, Inc.
-mailto:vinschen@cygnus.com
+You did get your cygwin core file changes into binutils, right?
+
+cgf
