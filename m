@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3854-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 27262 invoked by alias); 16 May 2003 07:54:13 -0000
+Return-Path: <cygwin-patches-return-3855-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 5655 invoked by alias); 16 May 2003 07:59:01 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,236 +7,42 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 26574 invoked from network); 16 May 2003 07:54:10 -0000
+Received: (qmail 5544 invoked from network); 16 May 2003 07:59:00 -0000
 X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
-Date: Fri, 16 May 2003 07:54:00 -0000
+Message-ID: <3EC49A2E.3040008@gmx.net>
+Date: Fri, 16 May 2003 07:59:00 -0000
 From: Thomas Pfaff <tpfaff@gmx.net>
-To: cygwin-patches@cygwin.com
-Subject: [RFA] enable dynamic (thread safe) reents
-Message-ID: <Pine.WNT.4.44.0305160915170.1356-200000@algeria.intern.net>
-X-X-Sender: pfaff@antarctica.intern.net
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.4b) Gecko/20030507
+X-Accept-Language: en-us, en
 MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="2322701-18326-1053071624=:1356"
-X-SW-Source: 2003-q2/txt/msg00081.txt.bz2
+To: cygpatches <cygwin-patches@cygwin.com>
+Subject: Re: [RFA] enable dynamic (thread safe) reents
+References: <Pine.WNT.4.44.0305160915170.1356-200000@algeria.intern.net>
+In-Reply-To: <Pine.WNT.4.44.0305160915170.1356-200000@algeria.intern.net>
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2003-q2/txt/msg00082.txt.bz2
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
+Thomas Pfaff wrote:
+> 2003-05-16  Thomas Pfaff  <tpfaff@gmx.net>
+> 
+> 	* include/cygwin/config.h (__DYNAMIC_REENT__): Define.
+> 	* include/cygwin/version.h: Bump API minor version.
+> 	* cygwin.din: Export __getreent
+> 	* cygerrno.h: Include errno.h.
+> 	Fix places where _impure_ptr is used directly to store the errno
+> 	value.
 
---2322701-18326-1053071624=:1356
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-Content-length: 1972
+	* debug.cc (__set_errno): Ditto.
 
-
-This patch will define __DYNAMIC_REENT__ for newlib, adds a __getreent
-function and eliminates the use of _impure_ptr directly.
-There is still one location in cygserver.cc where _impure_ptr is used
-directly. And it is still used in exceptions.cc as long as signals are not
-multithread safe.
-
-While single threaded apps should keep run without problems (_impure_ptr
-is still used for the mainthread) multithreaded apps should be recompiled
-to get the full power of the thread safe reents. This is due the
-fact that _RRENT is used in some newlib headers directly. Unfortunately
-this affects also static libs, therefore this is will be a longer
-transition.
-
-While the primary goal was to get thread safe errnos, this will also fix
-strange stdio outputs from multithreaded apps. I had these when i run
-apps which made printfs from different threads simultanous in a Win32
-console window, they did not happen in rxvt. Fortunately the errno
-handling will be fixed anyway.
-
-I consider that the patch is stable, it has passed the testsuite and i
-didn't have any problems yet.
-
-One more note: Apps compiled with this change will not run on older cygwin
-releases.
-
-Thomas
-
-2003-05-16  Thomas Pfaff  <tpfaff@gmx.net>
-
-	* include/cygwin/config.h (__DYNAMIC_REENT__): Define.
-	* include/cygwin/version.h: Bump API minor version.
-	* cygwin.din: Export __getreent
-	* cygerrno.h: Include errno.h.
-	Fix places where _impure_ptr is used directly to store the errno
-	value.
-	* errno.cc: Remove _RRENT_ONLY define to get errno.cc compiled.
-	* signal.cc: Rename _reent_clib to _REENT throughout.
-	* thread.h (reent_clib): Remove prototype.
-	* thread.cc (reent_clib): Rename reent_clib to __getreent.
-	Return _impure_ptr until MTinterface is initialized.
-	(reent_winsup): Fix a possible SEGV when _r == NULL.
-	Return NULL instead.
-	* MTinterface::fixup_after_fork: Switch reent back to _impure_ptr
-	to keep signal handling running when fork is called from a thread
-	other than the mainthread.
-
---2322701-18326-1053071624=:1356
-Content-Type: TEXT/plain; name="reent.patch"
-Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.WNT.4.44.0305160953440.1356@algeria.intern.net>
-Content-Description: 
-Content-Disposition: attachment; filename="reent.patch"
-Content-length: 9492
-
-SW5kZXg6IGN5Z2Vycm5vLmgKPT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1Mg
-ZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vY3lnZXJybm8uaCx2
-CnJldHJpZXZpbmcgcmV2aXNpb24gMS43CmRpZmYgLXUgLXIxLjcgY3lnZXJy
-bm8uaAotLS0gY3lnZXJybm8uaAkyMiBPY3QgMjAwMSAyMTowOTo0MSAtMDAw
-MAkxLjcKKysrIGN5Z2Vycm5vLmgJMTUgTWF5IDIwMDMgMTk6NDY6MjMgLTAw
-MDAKQEAgLTgsNiArOCw4IEBACiBDeWd3aW4gbGljZW5zZS4gIFBsZWFzZSBj
-b25zdWx0IHRoZSBmaWxlICJDWUdXSU5fTElDRU5TRSIgZm9yCiBkZXRhaWxz
-LiAqLwogCisjaW5jbHVkZSA8ZXJybm8uaD4KKwogdm9pZCBfX3N0ZGNhbGwg
-c2V0ZXJybm9fZnJvbV93aW5fZXJyb3IgKGNvbnN0IGNoYXIgKmZpbGUsIGlu
-dCBsaW5lLCBEV09SRCBjb2RlKSBfX2F0dHJpYnV0ZV9fICgocmVncGFybSgz
-KSkpOwogdm9pZCBfX3N0ZGNhbGwgc2V0ZXJybm8gKGNvbnN0IGNoYXIgKiwg
-aW50IGxpbmUpIF9fYXR0cmlidXRlX18gKChyZWdwYXJtKDIpKSk7CiBpbnQg
-X19zdGRjYWxsIGdldGVycm5vX2Zyb21fd2luX2Vycm9yIChEV09SRCBjb2Rl
-LCBpbnQgZGVmZXJybm8pIF9fYXR0cmlidXRlX18gKChyZWdwYXJtKDIpKSk7
-CkBAIC0xNiwxMiArMTgsMTIgQEAKICNkZWZpbmUgX19zZXRlcnJub19mcm9t
-X3dpbl9lcnJvcih2YWwpIHNldGVycm5vX2Zyb21fd2luX2Vycm9yIChfX0ZJ
-TEVfXywgX19MSU5FX18sIHZhbCkKIAogI2lmbmRlZiBERUJVR0dJTkcKLSNk
-ZWZpbmUgc2V0X2Vycm5vKHZhbCkgKF9pbXB1cmVfcHRyLT5fZXJybm8gPSAo
-dmFsKSkKKyNkZWZpbmUgc2V0X2Vycm5vKHZhbCkgKGVycm5vID0gKHZhbCkp
-CiAjZWxzZQogaW50IF9fc3RkY2FsbCBfX3NldF9lcnJubyAoY29uc3QgY2hh
-ciAqbG4sIGludCBsbiwgaW50IHZhbCkgX19hdHRyaWJ1dGUgKChyZWdwYXJt
-KDMpKSk7CiAjZGVmaW5lIHNldF9lcnJubyh2YWwpIF9fc2V0X2Vycm5vIChf
-X1BSRVRUWV9GVU5DVElPTl9fLCBfX0xJTkVfXywgKHZhbCkpCiAjZW5kaWYK
-LSNkZWZpbmUgZ2V0X2Vycm5vKCkgIChfaW1wdXJlX3B0ci0+X2Vycm5vKQor
-I2RlZmluZSBnZXRfZXJybm8oKSAgKGVycm5vKQogZXh0ZXJuICJDIiB2b2lk
-IF9fc3RkY2FsbCBzZXRfc2lnX2Vycm5vIChpbnQgZSk7CiAKIGNsYXNzIHNh
-dmVfZXJybm8KSW5kZXg6IGN5Z3dpbi5kaW4KPT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vY3ln
-d2luLmRpbix2CnJldHJpZXZpbmcgcmV2aXNpb24gMS44NwpkaWZmIC11IC1y
-MS44NyBjeWd3aW4uZGluCi0tLSBjeWd3aW4uZGluCTkgTWF5IDIwMDMgMjI6
-MTE6MjUgLTAwMDAJMS44NworKysgY3lnd2luLmRpbgkxNSBNYXkgMjAwMyAx
-OTo0NjoyNSAtMDAwMApAQCAtMjYsNiArMjYsNyBAQAogX19lcnJubwogX19m
-cGNsYXNzaWZ5ZAogX19mcGNsYXNzaWZ5ZgorX19nZXRyZWVudAogX19pbmZp
-bml0eQogX19tYWluCiBfX3NpZ25iaXRkCkluZGV4OiBkZWJ1Zy5jYwo9PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2lu
-c3VwL2N5Z3dpbi9kZWJ1Zy5jYyx2CnJldHJpZXZpbmcgcmV2aXNpb24gMS40
-MApkaWZmIC11IC1yMS40MCBkZWJ1Zy5jYwotLS0gZGVidWcuY2MJMjEgT2N0
-IDIwMDIgMDE6MDA6NTYgLTAwMDAJMS40MAorKysgZGVidWcuY2MJMTUgTWF5
-IDIwMDMgMTk6NDY6MjYgLTAwMDAKQEAgLTIyMiw2ICsyMjIsNiBAQAogX19z
-ZXRfZXJybm8gKGNvbnN0IGNoYXIgKmZ1bmMsIGludCBsbiwgaW50IHZhbCkK
-IHsKICAgZGVidWdfcHJpbnRmICgiJXM6JWQgdmFsICVkIiwgZnVuYywgbG4s
-IHZhbCk7Ci0gIHJldHVybiBfaW1wdXJlX3B0ci0+X2Vycm5vID0gdmFsOwor
-ICByZXR1cm4gZXJybm8gPSB2YWw7CiB9CiAjZW5kaWYgLypERUJVR0dJTkcq
-LwpJbmRleDogZXJybm8uY2MKPT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1Mg
-ZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vZXJybm8uY2Msdgpy
-ZXRyaWV2aW5nIHJldmlzaW9uIDEuMzYKZGlmZiAtdSAtcjEuMzYgZXJybm8u
-Y2MKLS0tIGVycm5vLmNjCTExIE1heSAyMDAzIDAwOjEwOjEwIC0wMDAwCTEu
-MzYKKysrIGVycm5vLmNjCTE1IE1heSAyMDAzIDE5OjQ2OjMwIC0wMDAwCkBA
-IC0xMiw3ICsxMiw2IEBACiAjZGVmaW5lIHN5c19uZXJyIEZPT3N5c19uZXJy
-CiAjZGVmaW5lIF9zeXNfZXJybGlzdCBGT09fc3lzX2Vycmxpc3QKICNpbmNs
-dWRlICJ3aW5zdXAuaCIKLSNkZWZpbmUgX1JFRU5UX09OTFkKICNpbmNsdWRl
-IDxzdGRpby5oPgogI2luY2x1ZGUgPGVycm5vLmg+CiAjaW5jbHVkZSAiY3ln
-ZXJybm8uaCIKSW5kZXg6IHNpZ25hbC5jYwo9PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09ClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL2N5Z3dpbi9zaWdu
-YWwuY2MsdgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuNDMKZGlmZiAtdSAtcjEu
-NDMgc2lnbmFsLmNjCi0tLSBzaWduYWwuY2MJNiBNYXkgMjAwMyAxOTozOTox
-MCAtMDAwMAkxLjQzCisrKyBzaWduYWwuY2MJMTUgTWF5IDIwMDMgMTk6NDY6
-MzEgLTAwMDAKQEAgLTI5Nyw4ICsyOTcsOCBAQAogICAgICBiZSBmbHVzaGVk
-LgogICAgICBIb3dldmVyIHRoaXMgaXMgdGhlIHdheSBGcmVlQlNEIGRvZXMg
-aXQsIGFuZCBpdCBpcyBtdWNoIGVhc2llciB0bwogICAgICBkbyB0aGluZ3Mg
-dGhpcyB3YXksIHNvLi4uICovCi0gIGlmIChfcmVlbnRfY2xpYiAoKS0+X19j
-bGVhbnVwKQotICAgIF9yZWVudF9jbGliICgpLT5fX2NsZWFudXAgKF9yZWVu
-dF9jbGliICgpKTsKKyAgaWYgKF9SRUVOVC0+X19jbGVhbnVwKQorICAgIF9S
-RUVOVC0+X19jbGVhbnVwIChfUkVFTlQpOwogCiAgIC8qIEVuc3VyZSB0aGF0
-IFNJR0FCUlQgY2FuIGJlIGNhdWdodCByZWdhcmRsZXNzIG9mIGJsb2NrYWdl
-LiAqLwogICBzaWdzZXRfdCBzaWdfbWFzazsKSW5kZXg6IHRocmVhZC5jYwo9
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMv
-d2luc3VwL2N5Z3dpbi90aHJlYWQuY2MsdgpyZXRyaWV2aW5nIHJldmlzaW9u
-IDEuMTI1CmRpZmYgLXUgLXIxLjEyNSB0aHJlYWQuY2MKLS0tIHRocmVhZC5j
-YwkxNSBNYXkgMjAwMyAxOTo0Mjo1MSAtMDAwMAkxLjEyNQorKysgdGhyZWFk
-LmNjCTE1IE1heSAyMDAzIDE5OjQ2OjM5IC0wMDAwCkBAIC00NSwxNiArNDUs
-MjEgQEAKIAogZXh0ZXJuIGludCB0aHJlYWRzYWZlOwogCi1zdHJ1Y3QgX3Jl
-ZW50ICoKLV9yZWVudF9jbGliICgpCitleHRlcm4gIkMiIHN0cnVjdCBfcmVl
-bnQgKgorX19nZXRyZWVudCAoKQogewogICBzdHJ1Y3QgX19yZWVudF90ICpf
-ciA9CiAgICAgKHN0cnVjdCBfX3JlZW50X3QgKikgTVRfSU5URVJGQUNFLT5y
-ZWVudF9rZXkuZ2V0ICgpOwogCi0jaWZkZWYgX0NZR19USFJFQURfRkFJTFNB
-RkUKICAgaWYgKF9yID09IDApCi0gICAgc3lzdGVtX3ByaW50ZiAoImxvY2Fs
-IHRocmVhZCBzdG9yYWdlIG5vdCBpbml0ZWQiKTsKKyAgICB7CisjaWZkZWYg
-X0NZR19USFJFQURfRkFJTFNBRkUKKyAgICAgIHN5c3RlbV9wcmludGYgKCJs
-b2NhbCB0aHJlYWQgc3RvcmFnZSBub3QgaW5pdGVkIik7CiAjZW5kaWYKKyAg
-ICAgIC8qIFJldHVybiBfaW1wdXJlX3B0ciBhcyBsb25nIGFzIE1UaW50ZXJm
-YWNlIGlzIG5vdCBpbml0aWFsaXplZCAqLworICAgICAgcmV0dXJuIF9pbXB1
-cmVfcHRyOworICAgIH0KKwogICByZXR1cm4gX3ItPl9jbGliOwogfQogCkBA
-IC02NCwxMCArNjksMTQgQEAKICAgc3RydWN0IF9fcmVlbnRfdCAqX3IgPQog
-ICAgIChzdHJ1Y3QgX19yZWVudF90ICopIE1UX0lOVEVSRkFDRS0+cmVlbnRf
-a2V5LmdldCAoKTsKIAotI2lmZGVmIF9DWUdfVEhSRUFEX0ZBSUxTQUZFCiAg
-IGlmIChfciA9PSAwKQotICAgIHN5c3RlbV9wcmludGYgKCJsb2NhbCB0aHJl
-YWQgc3RvcmFnZSBub3QgaW5pdGVkIik7CisgICAgeworI2lmZGVmIF9DWUdf
-VEhSRUFEX0ZBSUxTQUZFCisgICAgICBzeXN0ZW1fcHJpbnRmICgibG9jYWwg
-dGhyZWFkIHN0b3JhZ2Ugbm90IGluaXRlZCIpOwogI2VuZGlmCisgICAgICBy
-ZXR1cm4gTlVMTDsKKyAgICB9CisKICAgcmV0dXJuIF9yLT5fd2luc3VwOwog
-fQogCkBAIC0yMTEsNiArMjIwLDIwIEBACiBNVGludGVyZmFjZTo6Zml4dXBf
-YWZ0ZXJfZm9yayAodm9pZCkKIHsKICAgcHRocmVhZF9rZXk6OmZpeHVwX2Fm
-dGVyX2ZvcmsgKCk7CisKKyNpZm5kZWYgX19TSUdOQUxTX0FSRV9NVUxUSVRI
-UkVBREVEX18KKyAgLyogQXMgbG9uZyBhcyB0aGUgc2lnbmFsIGhhbmRsaW5n
-IG5vdCBtdWx0aXRocmVhZGVkCisgICAgIHN3aXRjaCByZWVudHMgc3RvcmFn
-ZSBiYWNrIHRvIF9pbXB1cmVfcHRyIGZvciB0aGUgbWFpbnRocmVhZAorICAg
-ICB0byBzdXBwb3J0IGZvcmsgZnJvbSB0aHJlYWRzIG90aGVyIHRoYW4gdGhl
-IG1haW50aHJlYWQgKi8KKyAgc3RydWN0IF9yZWVudCAqcmVlbnRfb2xkID0g
-X19nZXRyZWVudCAoKTsKKworICBpZiAocmVlbnRfb2xkICYmIF9pbXB1cmVf
-cHRyICE9IHJlZW50X29sZCkKKyAgICAqX2ltcHVyZV9wdHIgPSAqcmVlbnRf
-b2xkOworICByZWVudHMuX2NsaWIgPSBfaW1wdXJlX3B0cjsKKyAgcmVlbnRz
-Ll93aW5zdXAgPSAmd2luc3VwX3JlZW50OworICB3aW5zdXBfcmVlbnQuX3By
-b2Nlc3NfbG9nbWFzayA9IExPR19VUFRPIChMT0dfREVCVUcpOworICByZWVu
-dF9rZXkuc2V0ICgmcmVlbnRzKTsKKyNlbmRpZgogCiAgIHRocmVhZGNvdW50
-ID0gMTsKICAgcHRocmVhZDo6aW5pdF9tYWludGhyZWFkICgpOwpJbmRleDog
-dGhyZWFkLmgKPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1MgZmlsZTogL2N2
-cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vdGhyZWFkLmgsdgpyZXRyaWV2aW5n
-IHJldmlzaW9uIDEuNjkKZGlmZiAtdSAtcjEuNjkgdGhyZWFkLmgKLS0tIHRo
-cmVhZC5oCTE1IE1heSAyMDAzIDE5OjQyOjUxIC0wMDAwCTEuNjkKKysrIHRo
-cmVhZC5oCTE1IE1heSAyMDAzIDE5OjQ2OjQwIC0wMDAwCkBAIC0xMTAsNyAr
-MTEwLDYgQEAKICAgc3RydWN0IF93aW5zdXBfdCAqX3dpbnN1cDsKIH07CiAK
-LV9yZWVudCAqX3JlZW50X2NsaWIgKCk7CiBfd2luc3VwX3QgKl9yZWVudF93
-aW5zdXAgKCk7CiB2b2lkIFNldFJlc291cmNlTG9jayAoaW50LCBpbnQsIGNv
-bnN0IGNoYXIgKikgX19hdHRyaWJ1dGVfXyAoKHJlZ3Bhcm0gKDMpKSk7CiB2
-b2lkIFJlbGVhc2VSZXNvdXJjZUxvY2sgKGludCwgaW50LCBjb25zdCBjaGFy
-ICopCkluZGV4OiBpbmNsdWRlL2N5Z3dpbi9jb25maWcuaAo9PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL2N5
-Z3dpbi9pbmNsdWRlL2N5Z3dpbi9jb25maWcuaCx2CnJldHJpZXZpbmcgcmV2
-aXNpb24gMS4yCmRpZmYgLXUgLXIxLjIgY29uZmlnLmgKLS0tIGluY2x1ZGUv
-Y3lnd2luL2NvbmZpZy5oCTEzIE1heSAyMDAzIDA5OjI2OjE3IC0wMDAwCTEu
-MgorKysgaW5jbHVkZS9jeWd3aW4vY29uZmlnLmgJMTUgTWF5IDIwMDMgMTk6
-NDY6NDAgLTAwMDAKQEAgLTE5LDYgKzE5LDcgQEAKICNlbmRpZgogI2RlZmlu
-ZSBfQ1lHV0lOX0NPTkZJR19ICiAKKyNkZWZpbmUgX19EWU5BTUlDX1JFRU5U
-X18KICNkZWZpbmUgX19GSUxFTkFNRV9NQVhfXyAoMjYwIC0gMSAvKiBOVUwg
-Ki8pCiAjZGVmaW5lIF9SRUFEX1dSSVRFX1JFVFVSTl9UWVBFIF9zc2l6ZV90
-CiAjZGVmaW5lIF9fTEFSR0U2NF9GSUxFUyAxCkluZGV4OiBpbmNsdWRlL2N5
-Z3dpbi92ZXJzaW9uLmgKPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1MgZmls
-ZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vaW5jbHVkZS9jeWd3aW4v
-dmVyc2lvbi5oLHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjExNwpkaWZmIC11
-IC1yMS4xMTcgdmVyc2lvbi5oCi0tLSBpbmNsdWRlL2N5Z3dpbi92ZXJzaW9u
-LmgJOSBNYXkgMjAwMyAyMjoxMToyNSAtMDAwMAkxLjExNworKysgaW5jbHVk
-ZS9jeWd3aW4vdmVyc2lvbi5oCTE1IE1heSAyMDAzIDE5OjQ2OjQxIC0wMDAw
-CkBAIC0yMDUsMTIgKzIwNSwxMyBAQAogICAgICAgICAgICB1bmRlcnNjb3Jl
-LiAgTm8gcHJvYmxlbXMgd2l0aCBiYWNrd2FyZCBjb21wYXRpYmlsaXR5IHNp
-bmNlIG5vCiAgICAgICAgICAgIG9mZmljaWFsIHJlbGVhc2UgaGFzIGJlZW4g
-bWFkZSBzbyBmYXIuICBUaGlzIGNoYW5nZSByZW1vdmVzCiAgICAgICAgICAg
-IGV4cG9ydGVkIHN5bWJvbHMgbGlrZSBmb3BlbjY0LCB3aGljaCBtaWdodCBj
-b25mdXNlIGNvbmZpZ3VyZS4KKyAgICAgICA4NjogRXhwb3J0IF9fZ2V0cmVl
-bnQKICAgICAgKi8KIAogICAgICAvKiBOb3RlIHRoYXQgd2UgZm9yZ290IHRv
-IGJ1bXAgdGhlIGFwaSBmb3IgdWFsYXJtLCBzdHJ0b2xsLCBzdHJ0b3VsbCAq
-LwogCiAjZGVmaW5lIENZR1dJTl9WRVJTSU9OX0FQSV9NQUpPUiAwCi0jZGVm
-aW5lIENZR1dJTl9WRVJTSU9OX0FQSV9NSU5PUiA4NQorI2RlZmluZSBDWUdX
-SU5fVkVSU0lPTl9BUElfTUlOT1IgODYKIAogICAgICAvKiBUaGVyZSBpcyBh
-bHNvIGEgY29tcGF0aWJpdHkgdmVyc2lvbiBudW1iZXIgYXNzb2NpYXRlZCB3
-aXRoIHRoZQogCXNoYXJlZCBtZW1vcnkgcmVnaW9ucy4gIEl0IGlzIGluY3Jl
-bWVudGVkIHdoZW4gaW5jb21wYXRpYmxlCg==
-
---2322701-18326-1053071624=:1356--
+> 	* errno.cc: Remove _RRENT_ONLY define to get errno.cc compiled.
+> 	* signal.cc: Rename _reent_clib to _REENT throughout.
+> 	* thread.h (reent_clib): Remove prototype.
+> 	* thread.cc (reent_clib): Rename reent_clib to __getreent.
+> 	Return _impure_ptr until MTinterface is initialized.
+> 	(reent_winsup): Fix a possible SEGV when _r == NULL.
+> 	Return NULL instead.
+> 	* MTinterface::fixup_after_fork: Switch reent back to
+>       _impure_ptr
+> 	to keep signal handling running when fork is called from a
+>       thread other than the mainthread.
