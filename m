@@ -1,83 +1,61 @@
 From: Egor Duda <deo@logos-m.ru>
-To: Chris Faylor <cygwin-patches@sources.redhat.com>
-Subject: Re: Just checked in a major change to cygwin
-Date: Mon, 04 Sep 2000 00:51:00 -0000
-Message-id: <128221669273.20000904115006@logos-m.ru>
-References: <20000903003055.A14834@cygnus.com>
-X-SW-Source: 2000-q3/msg00053.html
-Content-type: multipart/mixed; boundary="----------=_1583532846-65437-6"
+To: cygwin-patches@sourceware.cygnus.com
+Subject: testsuite signal handling patch
+Date: Mon, 04 Sep 2000 02:11:00 -0000
+Message-id: <51226485839.20000904131022@logos-m.ru>
+X-SW-Source: 2000-q3/msg00054.html
+Content-type: multipart/mixed; boundary="----------=_1583532846-65437-7"
 
 This is a multi-part message in MIME format...
 
-------------=_1583532846-65437-6
-Content-length: 757
+------------=_1583532846-65437-7
+Content-length: 296
 
 Hi!
 
-Sunday, 03 September, 2000 Chris Faylor cgf@cygnus.com wrote:
-
-CF> For the last several weeks, I've been working on giving cygwin it's own
-CF> "heap".  I use this heap to allocate memory that should be common to a
-CF> process's children.  This was one of the things that I desperately wanted
-CF> copy-on-write for but I ended up implementing my own crude version instead.
-
-stat("f:\\tmp\\bla-bla",...)   causes   exception   with  your  latest
-changes.
-
-in this line (path.cc:1025)
-
-rc = normalize_win32_path (cwd_win32 (TMPCWD), src_path, dst);
-
-alloca()  is  called  after  src_path  and dst are put on stack. patch
-attached.
+  currently,  tests  from  winsup.api/ltp/  can  possibly  catch fatal
+signals such as SIGSEGV recursively. attached patch fixes this.
 
 Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
-win32-path-crash.ChangeLog
-win32-path-crash.diff
+testsuite-fatal-signals-handling.ChangeLog
+testsuite-fatal-signals-handling.diff
 
 
-------------=_1583532846-65437-6
-Content-Type: text/plain; charset=us-ascii; name="win32-path-crash.ChangeLog"
-Content-Disposition: inline; filename="win32-path-crash.ChangeLog"
+------------=_1583532846-65437-7
+Content-Type: text/plain; charset=us-ascii;
+ name="testsuite-fatal-signals-handling.ChangeLog"
+Content-Disposition: inline;
+ filename="testsuite-fatal-signals-handling.ChangeLog"
 Content-Transfer-Encoding: base64
-Content-Length: 188
+Content-Length: 163
 
-MjAwMC0wOS0wNCAgRWdvciBEdWRhICA8ZGVvQGxvZ29zLW0ucnU+CgoJKiBw
-YXRoLmNjIChtb3VudF9pbmZvOjpjb252X3RvX3dpbjMyX3BhdGgpOiBGaXgg
-Y3Jhc2ggd2hlbgoJZ2l2ZW4gcGF0aCBpcyBhbHJlYWR5IGluIHdpbjMyIG9u
-ZS4K
+MjAwMC0wOS0wNCAgRWdvciBEdWRhICA8ZGVvQGxvZ29zLW0ucnU+CgoJKiBs
+aWJsdHAvbGliL3RzdF9zaWcuYyAodHN0X3NpZyk6IERvbid0IGF0dGVtcHQg
+dG8gY2xlYW51cCBvbgoJZmF0YWwgZXJyb3JzCg==
 
-------------=_1583532846-65437-6
-Content-Type: text/x-diff; charset=us-ascii; name="win32-path-crash.diff"
-Content-Disposition: inline; filename="win32-path-crash.diff"
+------------=_1583532846-65437-7
+Content-Type: text/x-diff; charset=us-ascii;
+ name="testsuite-fatal-signals-handling.diff"
+Content-Disposition: inline; filename="testsuite-fatal-signals-handling.diff"
 Content-Transfer-Encoding: base64
-Content-Length: 1578
+Content-Length: 1029
 
-SW5kZXg6IHdpbnN1cC9jeWd3aW4vcGF0aC5jYwo9PT09PT09PT09PT09PT09
+SW5kZXg6IHdpbnN1cC90ZXN0c3VpdGUvbGlibHRwL2xpYi90c3Rfc2lnLmMK
 PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09ClJDUyBmaWxlOiAvaG9tZS9kdWRhX2FkbWluL2N2cy1taXJyb3Iv
-c3JjL3dpbnN1cC9jeWd3aW4vcGF0aC5jYyx2CnJldHJpZXZpbmcgcmV2aXNp
-b24gMS40NgpkaWZmIC1jIC0yIC1yMS40NiBwYXRoLmNjCioqKiB3aW5zdXAv
-Y3lnd2luL3BhdGguY2MJMjAwMC8wOS8wMyAwNDoxNjozNQkxLjQ2Ci0tLSB3
-aW5zdXAvY3lnd2luL3BhdGguY2MJMjAwMC8wOS8wNCAwNjo0Mjo1MQoqKioq
-KioqKioqKioqKioKKioqIDEwMDUsMTAwOCAqKioqCi0tLSAxMDA1LDEwMDkg
-LS0tLQogICAgbW91bnRfaXRlbSAqbWkgPSBOVUxMOwkvKiBpbml0aWFsaXpl
-ZCB0byBhdm9pZCBjb21waWxlciB3YXJuaW5nICovCiAgICBjaGFyIHBhdGhi
-dWZbTUFYX1BBVEhdOworICAgY2hhciogY3dkX3dpbjMyX25vdyA9IE5VTEw7
-CiAgCiAgICBjaGFyIGN3ZFtNQVhfUEFUSF07CioqKioqKioqKioqKioqKgoq
-KiogMTAyMywxMDI3ICoqKioKICAgICAgewogICAgICAgIGRlYnVnX3ByaW50
-ZiAoIiVzIGFscmVhZHkgd2luMzIiLCBzcmNfcGF0aCk7CiEgICAgICAgcmMg
-PSBub3JtYWxpemVfd2luMzJfcGF0aCAoY3dkX3dpbjMyIChUTVBDV0QpLCBz
-cmNfcGF0aCwgZHN0KTsKICAgICAgICBpZiAocmMpCiAgCXsKLS0tIDEwMjQs
-MTAzMCAtLS0tCiAgICAgIHsKICAgICAgICBkZWJ1Z19wcmludGYgKCIlcyBh
-bHJlYWR5IHdpbjMyIiwgc3JjX3BhdGgpOwohICAgICAgIAohICAgICAgIGN3
-ZF93aW4zMl9ub3cgPSBjd2Rfd2luMzIgKFRNUENXRCk7CiEgICAgICAgcmMg
-PSBub3JtYWxpemVfd2luMzJfcGF0aCAoY3dkX3dpbjMyX25vdywgc3JjX3Bh
-dGgsIGRzdCk7CiAgICAgICAgaWYgKHJjKQogIAl7CioqKioqKioqKioqKioq
-KgoqKiogMTE0MCwxMTQ0ICoqKioKICAgIHVuc2lnbmVkIGN3ZGxlbjsKICAg
-IGN3ZGxlbiA9IDA7CS8qIGF2b2lkIGEgKGhvcGVmdWxseSkgYm9ndXMgY29t
-cGlsZXIgd2FybmluZyAqLwotICAgY2hhciAqY3dkX3dpbjMyX25vdzsKICAg
-IGN3ZF93aW4zMl9ub3cgPSBjd2Rfd2luMzIgKFRNUENXRCk7CiAgICBpZiAo
-d2luMzJfcGF0aCA9PSBOVUxMKQotLS0gMTE0MywxMTQ2IC0tLS0K
+PT09PT09PT09PT09PT09PT09PT09PQpSQ1MgZmlsZTogL2hvbWUvZHVkYV9h
+ZG1pbi9jdnMtbWlycm9yL3NyYy93aW5zdXAvdGVzdHN1aXRlL2xpYmx0cC9s
+aWIvdHN0X3NpZy5jLHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjEKZGlmZiAt
+YyAtMiAtcjEuMSB0c3Rfc2lnLmMKKioqIHdpbnN1cC90ZXN0c3VpdGUvbGli
+bHRwL2xpYi90c3Rfc2lnLmMJMjAwMC8wOS8wMyAwMzo1MjozMAkxLjEKLS0t
+IHdpbnN1cC90ZXN0c3VpdGUvbGlibHRwL2xpYi90c3Rfc2lnLmMJMjAwMC8w
+OS8wNCAwODowNTozOAoqKioqKioqKioqKioqKioKKioqIDE1MSwxNTUgKioq
+KgogICAgICAgICAgICAgICAgICBjYXNlIFNJR1BUUkVTQ0hFRDoKICAjZW5k
+aWYgLyogU0lHUFRSRVNDSEVEICovCiEgCiAgCSAgICAgICAgICAgIGJyZWFr
+OwogIAotLS0gMTUxLDE2MyAtLS0tCiAgICAgICAgICAgICAgICAgIGNhc2Ug
+U0lHUFRSRVNDSEVEOgogICNlbmRpZiAvKiBTSUdQVFJFU0NIRUQgKi8KISAj
+aWZkZWYgX19DWUdXSU5fXwohIAkJY2FzZSBTSUdTRUdWOgohIAkJY2FzZSBT
+SUdJTEw6CiEgCQljYXNlIFNJR1RSQVA6CiEgCQljYXNlIFNJR0FCUlQ6CiEg
+CQljYXNlIFNJR0VNVDoKISAJCWNhc2UgU0lHRlBFOgohIAkJY2FzZSBTSUdC
+VVM6CiEgI2VuZGlmCiAgCSAgICAgICAgICAgIGJyZWFrOwogIAo=
 
-------------=_1583532846-65437-6--
+------------=_1583532846-65437-7--
