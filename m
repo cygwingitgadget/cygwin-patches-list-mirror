@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1992-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 7409 invoked by alias); 19 Mar 2002 03:41:57 -0000
+Return-Path: <cygwin-patches-return-1993-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 28978 invoked by alias); 19 Mar 2002 15:28:36 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,27 +7,30 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 7366 invoked from network); 19 Mar 2002 03:41:55 -0000
-Date: Tue, 19 Mar 2002 07:28:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
+Received: (qmail 28808 invoked from network); 19 Mar 2002 15:28:31 -0000
+Date: Tue, 19 Mar 2002 07:48:00 -0000
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: Console lseek fix
-Message-ID: <20020319034147.GB30772@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
+Subject: Re: new mkgroup patch
+Message-ID: <20020319162828.X29574@cygbert.vinschen.de>
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <FC169E059D1A0442A04C40F86D9BA760014C45@itdomain003.itdomain.net.au>
+References: <20020317054400.4671.qmail@web20008.mail.yahoo.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <FC169E059D1A0442A04C40F86D9BA760014C45@itdomain003.itdomain.net.au>
-User-Agent: Mutt/1.3.23.1i
-X-SW-Source: 2002-q1/txt/msg00349.txt.bz2
+In-Reply-To: <20020317054400.4671.qmail@web20008.mail.yahoo.com>
+User-Agent: Mutt/1.3.22.1i
+X-SW-Source: 2002-q1/txt/msg00350.txt.bz2
 
-On Tue, Mar 19, 2002 at 02:15:07PM +1100, Robert Collins wrote:
->The following patch allows arch's with-ftp command to run under cygwin.
->
->Chris, any objections?
+On Sat, Mar 16, 2002 at 09:44:00PM -0800, Joshua Daniel Franklin wrote:
+> Here is a new patch that retains the multiple fprintf's instead of 
+> using a multiline one in the usage function. Also adds version option, etc.:
 
-Nope.  Please check it in.
+Thanks for the patch.  Applied.
 
-cgf
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
