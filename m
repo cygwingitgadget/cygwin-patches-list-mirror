@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4672-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 8742 invoked by alias); 12 Apr 2004 23:09:47 -0000
+Return-Path: <cygwin-patches-return-4673-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 18614 invoked by alias); 12 Apr 2004 23:32:47 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,97 +7,48 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 8580 invoked from network); 12 Apr 2004 23:09:36 -0000
-Message-Id: <3.0.5.32.20040412190645.00809e10@incoming.verizon.net>
+Received: (qmail 18601 invoked from network); 12 Apr 2004 23:32:46 -0000
+Message-Id: <3.0.5.32.20040412192958.0080cab0@incoming.verizon.net>
 X-Sender: vze1u1tg@incoming.verizon.net (Unverified)
-Date: Mon, 12 Apr 2004 23:09:00 -0000
+Date: Mon, 12 Apr 2004 23:32:00 -0000
 To: cygwin-patches@cygwin.com
 From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
-Subject: Re: [Patch]: path.cc
-In-Reply-To: <20040410134918.GO26558@cygbert.vinschen.de>
-References: <20040410110343.GM26558@cygbert.vinschen.de>
- <3.0.5.32.20040404234622.00800100@incoming.verizon.net>
- <3.0.5.32.20040404095756.00804cc0@incoming.verizon.net>
- <3.0.5.32.20040403214940.007f2650@incoming.verizon.net>
- <3.0.5.32.20040403214940.007f2650@incoming.verizon.net>
- <3.0.5.32.20040404095756.00804cc0@incoming.verizon.net>
- <3.0.5.32.20040404234622.00800100@incoming.verizon.net>
- <3.0.5.32.20040409231957.00857bb0@incoming.verizon.net>
- <20040410110343.GM26558@cygbert.vinschen.de>
+Subject: Re: [Patch]: Last path.cc
+In-Reply-To: <20040411034553.GA6129@coe.bosbc.com>
+References: <3.0.5.32.20040410233707.00846910@incoming.verizon.net>
+ <3.0.5.32.20040410233707.00846910@incoming.verizon.net>
 Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
-X-SW-Source: 2004-q2/txt/msg00024.txt.bz2
+X-SW-Source: 2004-q2/txt/msg00025.txt.bz2
 
-This fixes the /proc bug reported on the list.
+At 11:45 PM 4/10/2004 -0400, Christopher Faylor wrote:
+>On Sat, Apr 10, 2004 at 11:37:07PM -0400, Pierre A. Humblet wrote:
+>>This should take care of the issues I listed yesterday evening.
+>>
+>>I simply don't understand the logic in normalize_win32_path
+>>well enough to touch it intelligently. 
+>>So I removed the final . in the dumbest way possible
+>
+>Why do we have to remove the final dot?
+>
+>How does that jive with the goal of munging windows paths as little
+>as possible.
 
-I have also observed abnormal behavior on NT4.0
-1) ls uses ntsec even on remote drives without smbntsec
+Windows paths go through the symlink evaluation and path existence
+loops as all others. Keeping the final /. causes abnormal behavior
+with some symlinks (Cygwin looks for /..lnk).
+Also the non-uniform normalization complicates other routines. For
+example hash_path_name() contains special code to detect and remove
+the final /. 
 
-/> echo $CYGWIN
-bash: CYGWIN: unbound variable
-~> uname -a
-CYGWIN_NT-4.0 myhost 1.5.9(0.112/4/2) 2004-03-18 23:05 i686 unknown unknown
-Cygwin
-~> ls -ld ~
-drwxr-xr-x    1 PHumblet Clearuse        0 Apr 12 10:16 /h/
+About the "normalized_path", I would still recommend replacing
+get_name() by get_win32_name() in fchown32, fchmod, fstat64, facl32
+and perhaps fhandler_disk_file::mmap. Otherwise making changes to the
+mounts can cause calls on opened files to fail. It's also faster.
 
+Once that is done, get_name() only remains useful in printf statements.
+Its use in the virtual handlers and two other odd places can easily
+be replaced by get_win32_name() (!!) too.
 
-~> uname -a
-CYGWIN_NT-4.0 myhost 1.5.10(0.113/4/2) 2004-04-12 00:16 i686 unknown
-unknown Cygwin
-~> ls -ld ~
-d---------+  22 Administ Domain A        0 Apr 12 10:16 /h/
-
-
-2) The system has become unbearably slow.
- 
- 2771   45904 [main] ls 410 get_file_attribute: file: h:\Job
-1091290 1137194 [main] ls 410 cygpsid::debug_print: get_sids_info: owner
-SID = S-1-5-32-544
-
-I think it's related to
-http://www.cygwin.com/ml/cygwin/2003-03/msg01760.html
- 
-
-2004-04-12  Pierre Humblet <pierre.humblet@ieee.org>
-
-	* path.cc (path_conv::check): Fix "tail filling" logic.
-
-
-
-Index: path.cc
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/path.cc,v
-retrieving revision 1.297
-diff -u -p -r1.297 path.cc
---- path.cc     10 Apr 2004 19:24:55 -0000      1.297
-+++ path.cc     12 Apr 2004 23:04:32 -0000
-@@ -499,7 +499,7 @@ path_conv::check (const char *src, unsig
-   bool need_directory = 0;
-   bool saw_symlinks = 0;
-   int is_relpath;
--  char *tail;
-+  char *tail, *path_end;
- 
- #if 0
-   static path_conv last_path_conv;
-@@ -544,7 +544,7 @@ path_conv::check (const char *src, unsig
-          need_directory = 1;
-          *--tail = '\0';
-        }
--      char *path_end = tail;
-+      path_end = tail;
- 
-       /* Scan path_copy from right to left looking either for a symlink
-         or an actual existing file.  If an existing file is found, just
-@@ -872,7 +872,7 @@ out:
-     normalized_path_size = 0;
-   else
-     {
--      if (tail[1] != '\0')
-+      if (tail < path_end && tail > path_copy + 1)
-        *tail = '/';
-       set_normalized_path (path_copy);
-     }
-
+Pierre
 
