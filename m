@@ -1,97 +1,77 @@
-From: Kazuhiro Fujieda <fujieda@jaist.ac.jp>
+From: egor duda <deo@logos-m.ru>
 To: cygwin-patches@cygwin.com
-Subject: Solve a problem triggered by duplicate names in /etc/passwd.
-Date: Wed, 25 Apr 2001 05:41:00 -0000
-Message-id: <s1ssnixnodp.fsf@jaist.ac.jp>
-X-SW-Source: 2001-q2/msg00158.html
+Subject: Export asctime_r, ctime_r, gmtime_r, localtime_r
+Date: Wed, 25 Apr 2001 05:53:00 -0000
+Message-id: <138104313044.20010425165309@logos-m.ru>
+X-SW-Source: 2001-q2/msg00159.html
+Content-type: multipart/mixed; boundary="----------=_1583532847-65438-51"
 
-The last patch of mine against `mkpasswd' can't solve another problem
-triggered by the duplicate entries of Administrator in /etc/passwd.
-The uid of processes executed by the local Administrator always
-becomes the uid of the domain Administrator (10500).
+This is a multi-part message in MIME format...
 
-The following patch can solve this problem.
+------------=_1583532847-65438-51
+Content-length: 311
 
-2001-04-25  Kazuhiro Fujieda  <fujieda@jaist.ac.jp>
+Hi!
 
-	* uinfo.cc (internal_getlogin): Return pointer to struct passwd.
-	(uinfo_init): Accommodate the above change.
-	* syscalls.cc (seteuid): Ditto.
+2001-04-25  Egor Duda  <deo@logos-m.ru>
 
-Index: uinfo.cc
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/uinfo.cc,v
-retrieving revision 1.34
-diff -u -p -r1.34 uinfo.cc
---- uinfo.cc	2001/04/25 09:43:25	1.34
-+++ uinfo.cc	2001/04/25 12:25:30
-@@ -26,11 +26,12 @@ details. */
- #include "registry.h"
- #include "security.h"
- 
--const char *
-+struct passwd *
- internal_getlogin (cygheap_user &user)
- {
-   char username[MAX_USER_NAME];
-   DWORD username_len = MAX_USER_NAME;
-+  struct passwd *pw = NULL;
- 
-   if (!user.name ())
-     if (!GetUserName (username, &username_len))
-@@ -153,7 +154,6 @@ internal_getlogin (cygheap_user &user)
- 	  cygsid gsid (NULL);
- 	  if (ret)
- 	    {
--	      struct passwd *pw;
- 	      cygsid psid;
- 
- 	      if (!strcasematch (user.name (), "SYSTEM")
-@@ -194,7 +194,7 @@ internal_getlogin (cygheap_user &user)
- 	}
-     }
-   debug_printf ("Cygwins Username: %s", user.name ());
--  return user.name ();
-+  return pw ?: getpwnam(user.name ());
- }
- 
- void
-@@ -212,7 +212,7 @@ uinfo_init ()
-   /* If uid is USHRT_MAX, the process is started from a non cygwin
-      process or the user context was changed in spawn.cc */
-   if (myself->uid == USHRT_MAX)
--    if ((p = getpwnam (internal_getlogin (cygheap->user))) != NULL)
-+    if ((p = internal_getlogin (cygheap->user)) != NULL)
-       {
- 	myself->uid = p->pw_uid;
- 	/* Set primary group only if ntsec is off or the process has been
-Index: syscalls.cc
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/syscalls.cc,v
-retrieving revision 1.109
-diff -u -p -r1.109 syscalls.cc
---- syscalls.cc	2001/04/25 09:43:25	1.109
-+++ syscalls.cc	2001/04/25 12:25:30
-@@ -1945,7 +1945,7 @@ setuid (uid_t uid)
-   return ret;
- }
- 
--extern const char *internal_getlogin (cygheap_user &user);
-+extern struct passwd *internal_getlogin (cygheap_user &user);
- 
- /* seteuid: standards? */
- extern "C" int
-@@ -2015,7 +2015,7 @@ seteuid (uid_t uid)
- 	     retrieving user's SID. */
- 	  user.token = cygheap->user.impersonated ? cygheap->user.token
- 						  : INVALID_HANDLE_VALUE;
--	  struct passwd *pw_cur = getpwnam (internal_getlogin (user));
-+	  struct passwd *pw_cur = internal_getlogin (user);
- 	  if (pw_cur != pw_new)
- 	    {
- 	      debug_printf ("Diffs!!! token: %d, cur: %d, new: %d, orig: %d",
+        * cygwin.din: Export asctime_r, ctime_r, gmtime_r, localtime_r
+        * include/cygwin/version.h: Bump CYGWIN_VERSION_API_MINOR to 39  
 
-____
-  | AIST      Kazuhiro Fujieda <fujieda@jaist.ac.jp>
-  | HOKURIKU  School of Information Science
-o_/ 1990      Japan Advanced Institute of Science and Technology
+egor.            mailto:deo@logos-m.ru icq 5165414 fidonet 2:5020/496.19
+time_r-exports.diff
+time_r-exports.ChangeLog
+
+
+------------=_1583532847-65438-51
+Content-Type: text/plain; charset=us-ascii; name="time_r-exports.ChangeLog"
+Content-Disposition: inline; filename="time_r-exports.ChangeLog"
+Content-Transfer-Encoding: base64
+Content-Length: 232
+
+MjAwMS0wNC0yNSAgRWdvciBEdWRhICA8ZGVvQGxvZ29zLW0ucnU+CgoJKiBj
+eWd3aW4uZGluOiBFeHBvcnQgYXNjdGltZV9yLCBjdGltZV9yLCBnbXRpbWVf
+ciwgbG9jYWx0aW1lX3IKCSogaW5jbHVkZS9jeWd3aW4vdmVyc2lvbi5oOiBC
+dW1wIENZR1dJTl9WRVJTSU9OX0FQSV9NSU5PUiB0byAzOQo=
+
+------------=_1583532847-65438-51
+Content-Type: text/x-diff; charset=us-ascii; name="time_r-exports.diff"
+Content-Disposition: inline; filename="time_r-exports.diff"
+Content-Transfer-Encoding: base64
+Content-Length: 1997
+
+SW5kZXg6IGN5Z3dpbi5kaW4KPT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1Mg
+ZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vY3lnd2luLmRpbix2
+CnJldHJpZXZpbmcgcmV2aXNpb24gMS4yOApkaWZmIC11IC1wIC0yIC1yMS4y
+OCBjeWd3aW4uZGluCi0tLSBjeWd3aW4uZGluCTIwMDEvMDQvMjAgMjM6Mzg6
+NDMJMS4yOAorKysgY3lnd2luLmRpbgkyMDAxLzA0LzI1IDEyOjQ4OjU3CkBA
+IC0zMyw0ICszMyw2IEBAIF9hbHBoYXNvcnQgPSBhbHBoYXNvcnQKIGFzY3Rp
+bWUKIF9hc2N0aW1lID0gYXNjdGltZQorYXNjdGltZV9yCitfYXNjdGltZV9y
+ID0gYXNjdGltZV9yCiBhc2luCiBfYXNpbiA9IGFzaW4KQEAgLTEyMCw0ICsx
+MjIsNiBAQCBfY3JlYXQgPSBjcmVhdAogY3RpbWUKIF9jdGltZSA9IGN0aW1l
+CitjdGltZV9yCitfY3RpbWVfciA9IGN0aW1lX3IKIGN3YWl0CiBfY3dhaXQg
+PSBjd2FpdApAQCAtMzY3LDQgKzM3MSw2IEBAIF9nbG9iZnJlZSA9IGdsb2Jm
+cmVlCiBnbXRpbWUKIF9nbXRpbWUgPSBnbXRpbWUKK2dtdGltZV9yCitfZ210
+aW1lX3IgPSBnbXRpbWVfcgogaF9lcnJubyBEQVRBCiBoeXBvdApAQCAtNDU1
+LDQgKzQ2MSw2IEBAIF9sb2NhbGVjb252ID0gbG9jYWxlY29udgogbG9jYWx0
+aW1lCiBfbG9jYWx0aW1lID0gbG9jYWx0aW1lCitsb2NhbHRpbWVfcgorX2xv
+Y2FsdGltZV9yID0gbG9jYWx0aW1lX3IKIGxvZwogX2xvZyA9IGxvZwpJbmRl
+eDogaW5jbHVkZS9jeWd3aW4vdmVyc2lvbi5oCj09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT0KUkNTIGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvY3lnd2luL2lu
+Y2x1ZGUvY3lnd2luL3ZlcnNpb24uaCx2CnJldHJpZXZpbmcgcmV2aXNpb24g
+MS4zNApkaWZmIC11IC1wIC0yIC1yMS4zNCB2ZXJzaW9uLmgKLS0tIHZlcnNp
+b24uaAkyMDAxLzA0LzIzIDAwOjQ4OjIzCTEuMzQKKysrIHZlcnNpb24uaAky
+MDAxLzA0LzI1IDEyOjQ4OjU4CkBAIC0xMzMsOCArMTMzLDkgQEAgZGV0YWls
+cy4gKi8KICAgICAgICAzNzogW2ZdcGF0aGNvbnYgc3VwcG9ydCBfUENfUE9T
+SVhfUEVSTUlTU0lPTlMgYW5kIF9QQ19QT1NJWF9TRUNVUklUWQogICAgICAg
+IDM4OiB2c2NhbmYsIHZzY2FuZl9yLCBhbmQgcmFuZG9tIHB0aHJlYWQgZnVu
+Y3Rpb25zCisgICAgICAgMzk6IGFzY3RpbWVfciwgY3RpbWVfciwgZ210aW1l
+X3IsIGxvY2FsdGltZV9yCiAgICAgICovCiAKICNkZWZpbmUgQ1lHV0lOX1ZF
+UlNJT05fQVBJX01BSk9SIDAKLSNkZWZpbmUgQ1lHV0lOX1ZFUlNJT05fQVBJ
+X01JTk9SIDM4CisjZGVmaW5lIENZR1dJTl9WRVJTSU9OX0FQSV9NSU5PUiAz
+OQogCiAgICAgIC8qIFRoZXJlIGlzIGFsc28gYSBjb21wYXRpYml0eSB2ZXJz
+aW9uIG51bWJlciBhc3NvY2lhdGVkIHdpdGggdGhlCg==
+
+------------=_1583532847-65438-51--
