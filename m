@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2364-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 30837 invoked by alias); 7 Jun 2002 18:42:35 -0000
+Return-Path: <cygwin-patches-return-2365-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 20359 invoked by alias); 7 Jun 2002 19:29:07 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,56 +7,215 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 30823 invoked from network); 7 Jun 2002 18:42:35 -0000
-X-MimeOLE: Produced By Microsoft Exchange V6.0.5762.3
-content-class: urn:content-classes:message
-MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-Subject: RE: sem_getvalue patch
-Date: Fri, 07 Jun 2002 11:42:00 -0000
-Message-ID: <3D848382FB72E249812901444C6BDB1D0AA17D@exchange.timesys.com>
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-From: "Robb, Sam" <sam.robb@timesys.com>
-To: <cygwin-patches@cygwin.com>
-X-SW-Source: 2002-q2/txt/msg00347.txt.bz2
+Received: (qmail 20332 invoked from network); 7 Jun 2002 19:29:06 -0000
+Date: Fri, 07 Jun 2002 12:29:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
+To: David Peterson <David.Peterson@mail.idrive.com>
+Cc: cygwin-patches@cygwin.com
+Subject: Re: new option for cygpath.exe
+Message-ID: <20020607192622.GA23552@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: David Peterson <David.Peterson@mail.idrive.com>,
+	cygwin-patches@cygwin.com
+References: <B1F282D5B226D411B8B900E08110486F0451AC@sweetness.idrive.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <B1F282D5B226D411B8B900E08110486F0451AC@sweetness.idrive.com>
+User-Agent: Mutt/1.3.23.1i
+X-SW-Source: 2002-q2/txt/msg00348.txt.bz2
 
-Thanks all for the advice... I just got out of a meeting where
-I requested a disclaimer for Cygwin contributions, figuring
-that in this case, it was better to ask permission than to beg
-forgiveness. It may take a while, though.
+[extremely delayed response]
+On Thu, Feb 01, 2001 at 09:22:12AM -0800, David Peterson wrote:
+>Thu Feb 01 09:00:00 2001  David Peterson <chief@mail.idrive.com>
+>
+>	* cygpath.cc: add option to output windows paths in
+>	different formats including UNC, DOS, and "mixed".
+>	(main): process options
+>	(doit): check new options flags
 
--Samrobb
+Thanks to the recent email here, I just realized that you'd sent in an
+assignment some time ago but I never put the assignment together with
+this patch.
 
-> -----Original Message-----
-> From: Christopher Faylor [mailto:cgf@redhat.com]
-> Sent: Friday, June 07, 2002 1:40 PM
-> To: cygwin-patches@cygwin.com
-> Subject: Re: sem_getvalue patch
->=20
->=20
-> On Fri, Jun 07, 2002 at 01:22:17PM -0400, Robb, Sam wrote:
-> >> Btw, if you don't already have a form on file, we'll need an=20
-> >> assignment form for this patch.  See=20
-> http://cygwin.com/contrib.html .
-> >
-> >No, I don't have one on file... I'll see about getting one to
-> >you soon.
-> >
-> >On a related note: under what circumstances does RedHat generally
-> >want/need an employer disclaimer for Cygwin contributions?
->=20
-> If you are employed as a programmer, most companies have you sign some
-> kind of form saying that your work belongs to them.  If the form can,
-> in any way, be construed as covering cygwin patches then your employer
-> needs to be involved.
->=20
-> Or, to put it another way, if you sign a form, indicating that you own
-> the rights to your changes, and your employer disagrees and=20
-> comes after
-> Red Hat for the changes, guess who's going to be in hot water?
->=20
-> cgf
->=20
+cygpath has changed a lot in the interim but I adapted this patch to the
+current sources and checked it in.  I dropped the 'unc' part, however,
+since it doesn't make sense with recent versions of cygwin.
+
+Thanks for the patch and many apologies for the lag in applying it.
+
+cgf
+
+
+>Index: cygpath.cc
+>===================================================================
+>RCS file: /cvs/src/src/winsup/utils/cygpath.cc,v
+>retrieving revision 1.7
+>diff -u -p -r1.7 cygpath.cc
+>--- cygpath.cc	2000/10/28 05:00:00	1.7
+>+++ cygpath.cc	2001/02/01 17:12:07
+>@@ -23,7 +23,8 @@ static char *prog_name;
+> static char *file_arg;
+> static char *close_arg;
+> static int path_flag, unix_flag, windows_flag, absolute_flag;
+>-static int shortname_flag, ignore_flag;
+>+static int shortname_flag, ignore_flag, unc_flag, mixed_flag;
+>+static char *windows_format_arg;
+> 
+> static struct option long_options[] =
+> {
+>@@ -37,6 +38,7 @@ static struct option long_options[] =
+>   { (char *) "version", no_argument, NULL, 'v' },
+>   { (char *) "windows", no_argument, NULL, 'w' },
+>   { (char *) "short-name", no_argument, NULL, 's' },
+>+  { (char *) "type", required_argument, (int *) &windows_format_arg, 't' },
+>   { (char *) "windir", no_argument, NULL, 'W' },
+>   { (char *) "sysdir", no_argument, NULL, 'S' },
+>   { (char *) "ignore", no_argument, NULL, 'i' },
+>@@ -48,13 +50,18 @@ usage (FILE *stream, int status)
+> {
+>   if (!ignore_flag || !status)
+>     fprintf (stream, "\
+>-Usage: %s [-p|--path] (-u|--unix)|(-w|--windows [-s|--short-name])
+>filename\n\
+>+Usage: %s [-p|--path] (-u|--unix)|(-w|--windows [-s|--short-name]
+>[-t|--type type]) filename\n\
+>   -a|--absolute		output absolute path\n\
+>   -c|--close handle	close handle (for use in captured process)\n\
+>   -f|--file file	read file for path information\n\
+>   -u|--unix		print Unix form of filename\n\
+>   -w|--windows		print Windows form of filename\n\
+>   -s|--short-name	print Windows short form of filename\n\
+>+  -t|--type		print Windows form of filename with specified
+>type\n\
+>+                        requires -a or --absolute, type is one of the
+>following:\n\
+>+      dos 		    drive letter with back-slashes (C:\\WINNT)\n\
+>+      unc		    UNC style (//C/WINNT)\n\
+>+      mixed		    drive letter with forward-slashes (C:/WINNT)\n\
+>   -W|--windir		print `Windows' directory\n\
+>   -S|--sysdir		print `system' directory\n\
+>   -p|--path		filename argument is a path\n\
+>@@ -128,7 +135,7 @@ get_short_name (const char *filename)
+>   {
+>     fprintf (stderr, "%s: out of memory\n", prog_name);
+>     exit (1);
+>-  }
+>+  } 
+>   if (GetShortPathName (filename, sbuf, len) == ERROR_INVALID_PARAMETER)
+>   {
+>     fprintf (stderr, "%s: cannot create short name of %s\n", prog_name,
+>filename);
+>@@ -138,6 +145,55 @@ get_short_name (const char *filename)
+> }
+> 
+> static void
+>+convert_slashes (char* name)
+>+{
+>+	while (*name != '\0')
+>+	{
+>+		if (*name == '\\')
+>+			*name = '/';
+>+		name++;
+>+	}
+>+}
+>+
+>+static char*
+>+get_unc_name (const char *filename)
+>+{
+>+	int len = strlen(filename);
+>+	char* unc_buf = (char *) calloc(len + 2, 1);
+>+
+>+	if (unc_buf == NULL)
+>+	{
+>+      fprintf (stderr, "%s: out of memory\n", prog_name);
+>+      exit (1);
+>+	}
+>+
+>+	memcpy(unc_buf + 3, filename + 2, len - 2);
+>+	convert_slashes(unc_buf + 3);
+>+
+>+	unc_buf[0] = '/';
+>+	unc_buf[1] = '/';
+>+	unc_buf[2] = filename[0];
+>+
+>+	return unc_buf;
+>+}
+>+
+>+static char*
+>+get_mixed_name (const char* filename)
+>+{
+>+	char* mixed_buf = strdup(filename);
+>+	
+>+	if (mixed_buf == NULL)
+>+	{
+>+      fprintf (stderr, "%s: out of memory\n", prog_name);
+>+      exit (1);
+>+	}
+>+
+>+	convert_slashes(mixed_buf);
+>+
+>+	return mixed_buf;
+>+}
+>+
+>+static void
+> doit (char *filename)
+> {
+>   char *buf;
+>@@ -193,8 +249,14 @@ doit (char *filename)
+>       else
+> 	{
+> 	  (absolute_flag ? cygwin_conv_to_full_win32_path :
+>cygwin_conv_to_win32_path) (filename, buf);
+>+
+> 	  if (shortname_flag)
+> 	    buf = get_short_name (buf);
+>+
+>+	  if (unc_flag)
+>+		  buf = get_unc_name (buf);
+>+	  else if (mixed_flag)
+>+		  buf = get_mixed_name (buf);
+> 	}
+>     }
+> 
+>@@ -219,9 +281,11 @@ main (int argc, char **argv)
+>   unix_flag = 0;
+>   windows_flag = 0;
+>   shortname_flag = 0;
+>+  unc_flag = 0;
+>+  mixed_flag = 0;
+>   ignore_flag = 0;
+>   options_from_file_flag = 0;
+>-  while ((c = getopt_long (argc, argv, (char *) "hac:f:opsSuvwWi",
+>long_options, (int *) NULL))
+>+  while ((c = getopt_long (argc, argv, (char *) "hac:f:opsSuvwt:Wi",
+>long_options, (int *) NULL))
+> 	 != EOF)
+>     {
+>       switch (c)
+>@@ -263,6 +327,23 @@ main (int argc, char **argv)
+> 	    usage (stderr, 1);
+> 	  shortname_flag = 1;
+> 	  break;
+>+
+>+	case 't':
+>+		if (unix_flag || !windows_flag || !absolute_flag || (optarg
+>== NULL))
+>+			usage (stderr, 1);
+>+
+>+		windows_format_arg = ((*optarg == '=') ? (optarg + 1) :
+>(optarg));
+>+
+>+		if (0 == strcmp(windows_format_arg, "unc"))
+>+			unc_flag = 1;
+>+		else if (0 == strcmp(windows_format_arg, "mixed"))
+>+			mixed_flag = 1;
+>+		else if (0 == strcmp(windows_format_arg, "dos"))
+>+			;
+>+		else
+>+			usage (stderr, 1);
+>+
+>+		break;
+> 
+> 	case 'W':
+> 	  GetWindowsDirectory(buf, MAX_PATH);
