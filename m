@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2054-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 9099 invoked by alias); 12 Apr 2002 10:53:03 -0000
+Return-Path: <cygwin-patches-return-2055-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 27128 invoked by alias); 14 Apr 2002 19:43:21 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,103 +7,245 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 9060 invoked from network); 12 Apr 2002 10:52:58 -0000
-Date: Fri, 12 Apr 2002 03:53:00 -0000
-From: egor duda <deo@logos-m.ru>
-Reply-To: egor duda <cygwin-patches@cygwin.com>
-Organization: deo
-X-Priority: 3 (Normal)
-Message-ID: <532464283.20020412145055@logos-m.ru>
+Received: (qmail 27111 invoked from network); 14 Apr 2002 19:43:17 -0000
+Message-Id: <3.0.5.32.20020414152944.007ec460@mail.attbi.com>
+X-Sender: phumblet@mail.attbi.com
+Date: Sun, 14 Apr 2002 12:43:00 -0000
 To: cygwin-patches@cygwin.com
-Subject: Disable security checks for connectionless sockets.
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="----------5D822A21FE2A23"
-X-SW-Source: 2002-q2/txt/msg00038.txt.bz2
+From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
+Subject: Workaround patch for MS CLOSE_WAIT bug
+Mime-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+X-SW-Source: 2002-q2/txt/msg00039.txt.bz2
 
-------------5D822A21FE2A23
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-Content-length: 412
+The problem 
+***********
+What I want to fix is this
+> netstat -an
+  TCP    65.96.132.163:22       65.114.186.130:4762    CLOSE_WAIT
+  TCP    65.96.132.163:22       65.114.186.130:1777    CLOSE_WAIT
+  TCP    65.96.132.163:22       193.55.113.140:35861   CLOSE_WAIT
+  TCP    65.96.132.163:25       204.127.198.37:40365   CLOSE_WAIT
+  TCP    65.96.132.163:25       216.148.227.85:41320   CLOSE_WAIT
+  TCP    65.96.132.163:110      65.114.186.130:4874    CLOSE_WAIT
+<snip, it goes on>
 
-Hi!
+Sockets stay in CLOSE_WAIT forever on Win 95/98/Me due to the bug
+http://support.microsoft.com/default.aspx?scid=kb;EN-US;q229658
+Please read that page to understand what follows.
 
-  Attached is the patch to address the issue reported in
-http://sources.redhat.com/ml/cygwin/2002-04/msg00076.html
+Typical server application code looks like this:
 
-I haven't found any way to fix it except disabling security checks for
-connectionless sockets.
+sock = socket()
+bind(sock)
+listen(sock)
+while (1) {
+ select()
+ newsock = accept(sock)
+ pid = fork()
+ if (pid == 0) { 
+   close(sock)
+   child works 
+ }
+ if (pid > 0) close(newsock)
+}
 
-I'm going to vacation now, so could somebody commit it after reviewing
-(of course if there're no problems with the patch)
+Because newsock is closed in the parent before
+being closed in the child, it stays in CLOSE_WAIT
+until the parent exits. Not good in server applications.
 
-egor.            mailto:deo@logos-m.ru icq 5165414 fidonet 2:5020/496.19
-------------5D822A21FE2A23
-Content-Type: application/octet-stream; name="af-unix-dgram-socket-secret-cookie-disable.diff"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="af-unix-dgram-socket-secret-cookie-disable.diff"
-Content-length: 2831
+Fixing the application
+**********************
+To keep sock open in the parent, the ported application 
+structure can be changed to:
 
-SW5kZXg6IGZoYW5kbGVyLmgKPT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1Mg
-ZmlsZTogL2N2cy91YmVyYmF1bS93aW5zdXAvY3lnd2luL2ZoYW5kbGVyLmgs
-dgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuMTExCmRpZmYgLXUgLXAgLTIgLXIx
-LjExMSBmaGFuZGxlci5oCi0tLSBmaGFuZGxlci5oCTE5IE1hciAyMDAyIDA0
-OjM5OjAxIC0wMDAwCTEuMTExCisrKyBmaGFuZGxlci5oCTEwIEFwciAyMDAy
-IDE1OjE2OjE2IC0wMDAwCkBAIC0zNTgsNCArMzU4LDUgQEAgY2xhc3MgZmhh
-bmRsZXJfc29ja2V0OiBwdWJsaWMgZmhhbmRsZXJfYgogIHByaXZhdGU6CiAg
-IGludCBhZGRyX2ZhbWlseTsKKyAgaW50IHR5cGU7CiAgIGludCBjb25uZWN0
-X3NlY3JldCBbNF07CiAgIEhBTkRMRSBzZWNyZXRfZXZlbnQ7CkBAIC0zOTgs
-NCArMzk5LDYgQEAgY2xhc3MgZmhhbmRsZXJfc29ja2V0OiBwdWJsaWMgZmhh
-bmRsZXJfYgogICB2b2lkIHNldF9hZGRyX2ZhbWlseSAoaW50IGFmKSB7YWRk
-cl9mYW1pbHkgPSBhZjt9CiAgIGludCBnZXRfYWRkcl9mYW1pbHkgKCkge3Jl
-dHVybiBhZGRyX2ZhbWlseTt9CisgIHZvaWQgc2V0X3NvY2tldF90eXBlIChp
-bnQgc3QpIHsgdHlwZSA9IHN0O30KKyAgaW50IGdldF9zb2NrZXRfdHlwZSAo
-KSB7cmV0dXJuIHR5cGU7fQogICB2b2lkIHNldF9zdW5fcGF0aCAoY29uc3Qg
-Y2hhciAqcGF0aCk7CiAgIGNoYXIgKmdldF9zdW5fcGF0aCAoKSB7cmV0dXJu
-IHN1bl9wYXRoO30KSW5kZXg6IG5ldC5jYwo9PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09ClJDUyBmaWxlOiAvY3ZzL3ViZXJiYXVtL3dpbnN1cC9jeWd3aW4vbmV0
-LmNjLHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjEwNQpkaWZmIC11IC1wIC0y
-IC1yMS4xMDUgbmV0LmNjCi0tLSBuZXQuY2MJMTUgTWFyIDIwMDIgMjE6NDk6
-MTAgLTAwMDAJMS4xMDUKKysrIG5ldC5jYwkxMCBBcHIgMjAwMiAxNToxNjox
-NiAtMDAwMApAQCAtNTE5LDQgKzUxOSw1IEBAIGN5Z3dpbl9zb2NrZXQgKGlu
-dCBhZiwgaW50IHR5cGUsIGludCBwcm8KICAgaW50IHJlcyA9IC0xOwogICBT
-T0NLRVQgc29jID0gMDsKKyAgZmhhbmRsZXJfc29ja2V0KiBmaCA9IE5VTEw7
-CiAKICAgY3lnaGVhcF9mZG5ldyBmZDsKQEAgLTU0MCw1ICs1NDEsMTAgQEAg
-Y3lnd2luX3NvY2tldCAoaW50IGFmLCBpbnQgdHlwZSwgaW50IHBybwogCW5h
-bWUgPSAodHlwZSA9PSBTT0NLX1NUUkVBTSA/ICIvZGV2L3N0cmVhbXNvY2tl
-dCIgOiAiL2Rldi9kZ3NvY2tldCIpOwogCi0gICAgICBmZHNvY2sgKGZkLCBu
-YW1lLCBzb2MpLT5zZXRfYWRkcl9mYW1pbHkgKGFmKTsKKyAgICAgIGZoID0g
-ZmRzb2NrIChmZCwgbmFtZSwgc29jKTsKKyAgICAgIGlmIChmaCkKKwl7CisJ
-ICBmaC0+c2V0X2FkZHJfZmFtaWx5IChhZik7CisgICAgICAgICAgZmgtPnNl
-dF9zb2NrZXRfdHlwZSAodHlwZSk7CisJfQogICAgICAgcmVzID0gZmQ7CiAg
-ICAgfQpAQCAtODgyLDUgKzg4OCw2IEBAIGN5Z3dpbl9jb25uZWN0IChpbnQg
-ZmQsCiAJICBzZXRfd2luc29ja19lcnJubyAoKTsKIAl9Ci0gICAgICBpZiAo
-c29jay0+Z2V0X2FkZHJfZmFtaWx5ICgpID09IEFGX0xPQ0FMKQorICAgICAg
-aWYgKHNvY2stPmdldF9hZGRyX2ZhbWlseSAoKSA9PSBBRl9MT0NBTCAmJgor
-CSAgc29jay0+Z2V0X3NvY2tldF90eXBlICgpID09IFNPQ0tfU1RSRUFNKQog
-CXsKIAkgIGlmICghcmVzIHx8IGluX3Byb2dyZXNzKQpAQCAtMTIwMCw1ICsx
-MjA3LDYgQEAgY3lnd2luX2FjY2VwdCAoaW50IGZkLCBzdHJ1Y3Qgc29ja2Fk
-ZHIgKgogCWluX3Byb2dyZXNzID0gVFJVRTsKIAotICAgICAgaWYgKHNvY2st
-PmdldF9hZGRyX2ZhbWlseSAoKSA9PSBBRl9MT0NBTCkKKyAgICAgIGlmIChz
-b2NrLT5nZXRfYWRkcl9mYW1pbHkgKCkgPT0gQUZfTE9DQUwgJiYKKwkgIHNv
-Y2stPmdldF9zb2NrZXRfdHlwZSAoKSA9PSBTT0NLX1NUUkVBTSkKIAl7CiAJ
-ICBpZiAoKFNPQ0tFVCkgcmVzICE9IChTT0NLRVQpIElOVkFMSURfU09DS0VU
-IHx8IGluX3Byb2dyZXNzKQo=
+int oldsocks[2^32];  /* I'll be smarter */
+sock = socket()     (1)
+bind(sock)
+listen(sock)
+while (1) {
+ select()
+ newsock = accept(sock)
+ pid = fork()
+ if (pid == 0) { 
+    close(sock)     (2)
+    child works 
+ }
+ if (pid > 0) {
+    oldsocks[pid] = newsock
+                 <= (3)
+ }
+}
+sigchild_handler()
+{ 
+  pid = waitpid()
+  close(oldsocks[pid]) (4)
+}
 
-------------5D822A21FE2A23
-Content-Type: application/octet-stream; name="af-unix-dgram-socket-secret-cookie-disable.ChangeLog"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="af-unix-dgram-socket-secret-cookie-disable.ChangeLog"
-Content-length: 472
+The itch is that oldsocks[pidA] remains open in the parent,
+thus cygwin will duplicate it in a child pidB when there
+is another accept() and fork(). 
+The socket of pidA will then remain in CLOSE_WAIT if pidA 
+terminates before pidB... Experience shows that CLOSE_WAIT can
+occur even if pidB closes its copy (but does not terminate)
+before pidA terminates.
 
-MjAwMi0wNC0xMiAgRWdvciBEdWRhICA8ZGVvQGxvZ29zLW0ucnU+CgoJKiBm
-aGFuZGxlci5oIChjbGFzcyBmaGFuZGxlcl9zb2NrZXQpOiBOZXcgbWVtYmVy
-IHRvIHN0b3JlIHNvY2tldCB0eXBlLgoJKGZoYW5kbGVyX3NvY2tldDo6Z2V0
-X3NvY2tldF90eXBlKTogQWNjZXNzIGl0LgoJKGZoYW5kbGVyX3NvY2tldDo6
-c2V0X3NvY2tldF90eXBlKTogRGl0dG8uCgkqIG5ldC5jYyAoY3lnd2luX3Nv
-Y2tldCk6IFN0b3JlIHNvY2tldCB0eXBlLgoJKGN5Z3dpbl9jb25uZWN0KTog
-RGlzYWJsZSBzZWN1cml0eSBjaGVja3MgZm9yIGNvbm5lY3Rpb25sZXNzIHNv
-Y2tldHMuCgkoY3lnd2luX2FjY2VwdCk6IERpdHRvLgo=
+Help from cygwin
+****************
+The itch can be cured by adding to cygwin a 
+"close_on_fork" call and using it on line (3) above.
+This "close_on_fork" applies only to sockets and simply
+sets a flag. When the flag is set the socket is not 
+duplicated in the parent and it is closed in the child 
+(during fixups).
 
-------------5D822A21FE2A23--
+The easiest way to implement this is with fcntl(fd,F_SETCF,flag)
+where "F_SETCF" is a newly defined command and "flag" is unused.
+Calling it with non-socket fd's returns an error.
+
+See Changelog and diffs below.
+
+Related items
+*************
+Adding shutdown() before line (4) has also proved necessary
+in some cases. Not sure why.
+Weird behavior (details on request) can also be avoided by
+"closing on fork" the main sock after line (1) and deleting
+line (2).
+In this situation the "linger on close" hack is unnecessary
+and potentially harmful. 
+I added a test in fhandler_socket::close().
+ 
+I have ported two servers, exim (an MTA)and qpopper. 
+With those fixes they seem to run fine on all Windows 
+platforms I have tried (98, Me, NT).
+inetd could be similarly patched (IMHO) but I don't 
+find the Cygwin sources.
+
+Similar CLOSE_WAIT issues have been reported with Apache
+on Win2000.
+http://sources.redhat.com/ml/cygwin/2001-10/msg01171.html
+I have no idea if this patch can help there.
+
+Problems with duplicate LISTEN have also been reported
+by me and others
+http://sources.redhat.com/ml/cygwin/2002-01/msg01579.html
+http://sources.redhat.com/ml/cygwin/2002-04/msg00515.html
+No progress there, it's mind boggling. My problem occurs 
+only when the server re-execs itself while a child is 
+running. "close on fork" doesn't seem to help.
+
+Pierre
+
+*************************************************************************
+*************************************************************************
+Changelog
+
+2002-04-14  Pierre Humblet  <Pierre.Humblet@ieee.org>
+
+	* fhandler.h: define FH_CLOFORK, set_close_on_fork_flag()
+	and get_close_on_fork().
+	* fhandler_socket.cc: (fhandler_socket::fcntl): Add FD_SETCF case.
+	(fhandler_socket::close): test with get_close_on_fork().
+	* dtable.cc: (dtable::fixup_before_fork) Handle close on fork.
+	(dtable::fixup_after_fork) Ditto.
+
+diff -ut ./dtable.cc ../dtable.cc
+--- ./dtable.cc	Thu Apr 11 18:38:28 2002
++++ ../dtable.cc	Wed Apr 10 00:10:42 2002
+@@ -534,7 +534,7 @@
+   SetResourceLock (LOCK_FD_LIST, WRITE_LOCK | READ_LOCK, "fixup_before_fork");
+   fhandler_base *fh;
+   for (size_t i = 0; i < size; i++)
+-    if ((fh = fds[i]) != NULL)
++    if ((fh = fds[i]) != NULL && !fh->get_close_on_fork ())
+       {
+         debug_printf ("fd %d (%s)", i, fh->get_name ());
+         fh->fixup_before_fork_exec (target_proc_id);
+@@ -585,15 +585,20 @@
+   for (size_t i = 0; i < size; i++)
+     if ((fh = fds[i]) != NULL)
+       {
+-        if (fh->get_close_on_exec () || fh->get_need_fork_fixup ())
+-          {
+-            debug_printf ("fd %d (%s)", i, fh->get_name ());
+-            fh->fixup_after_fork (parent);
++        if (fh->get_close_on_fork())
++          release (i);
++        else
++          {
++            if (fh->get_close_on_exec () || fh->get_need_fork_fixup ())
++              {
++                debug_printf ("fd %d (%s)", i, fh->get_name ());
++                fh->fixup_after_fork (parent);
++              }
++            if (i == 0)
++              SetStdHandle (std_consts[i], fh->get_io_handle ());
++            else if (i <= 2)
++              SetStdHandle (std_consts[i], fh->get_output_handle ());
+           }
+-        if (i == 0)
+-          SetStdHandle (std_consts[i], fh->get_io_handle ());
+-        else if (i <= 2)
+-          SetStdHandle (std_consts[i], fh->get_output_handle ());
+       }
+ }
+ 
+diff -ut ./fhandler.h ../fhandler.h
+--- ./fhandler.h	Sun Apr 14 14:19:00 2002
++++ ../fhandler.h	Sun Apr 14 14:21:22 2002
+@@ -207,6 +207,10 @@
+   bool get_close_on_exec () { return FHISSETF (CLOEXEC); }
+   int set_close_on_exec_flag (int b) { return FHCONDSETF (b, CLOEXEC); }
+ 
++#define FH_CLOFORK (FH_FFIXUP|FH_W95LSBUG)
++  bool get_close_on_fork () { return FHISSETF (CLOFORK) == FH_CLOFORK; }
++  int set_close_on_fork_flag () { return FHSETF (CLOFORK); }
++
+   LPSECURITY_ATTRIBUTES get_inheritance (bool all = 0)
+   {
+     if (all)
+diff -ut ./fhandler_socket.cc ../fhandler_socket.cc
+--- ./fhandler_socket.cc	Tue Apr  9 22:19:46 2002
++++ ../fhandler_socket.cc	Sun Apr 14 11:00:36 2002
+@@ -349,7 +349,7 @@
+   struct linger linger;
+   linger.l_onoff = 1;
+   linger.l_linger = 240; /* seconds. default 2MSL value according to MSDN. */
+-  setsockopt (get_socket (), SOL_SOCKET, SO_LINGER,
++  if (!get_close_on_fork()) setsockopt (get_socket (), SOL_SOCKET, SO_LINGER,
+               (const char *)&linger, sizeof linger);
+ 
+   while ((res = closesocket (get_socket ())) != 0)
+@@ -534,6 +534,9 @@
+         set_flags ((get_flags () & ~O_NONBLOCK_MASK) | new_flags);
+         break;
+       }
++    case F_SETCF:
++      set_close_on_fork_flag ();
++      break;
+     default:
+       res = fhandler_base::fcntl (cmd, arg);
+       break;
+
+
+*************************************************************************
+*************************************************************************
+Changelog
+2002-04-14  Pierre Humblet  <Pierre.Humblet@ieee.org>
+
+	* libc/include/sys/fcntl.h: Define FD_SETCF flag.
+
+--- ./fcntl.h.in  Mon Feb 25 10:16:32 2002
++++ ./fcntl.h     Sat Apr  6 06:56:42 2002
+@@ -124,6 +124,9 @@
+ #define        F_CNVT          12      /* Convert a fhandle to an open fd */
+ #define        F_RSETLKW       13      /* Set or Clear remote record-lock(Blocking) */
+ #endif /* !_POSIX_SOURCE */
++#ifdef __CYGWIN__
++#define        F_SETCF         14      /* Set close on fork, only for sockets */
++#endif
+ 
+ /* fcntl(2) flags (l_type field of flock structure) */
+ #define        F_RDLCK         1       /* read lock */
+
