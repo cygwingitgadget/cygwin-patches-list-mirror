@@ -1,24 +1,117 @@
-From: DJ Delorie <dj@delorie.com>
-To: mark.paulus@wcom.com
-Cc: cygwin-patches@cygwin.com
-Subject: Re: Patch to syscalls.cc for statfs/df problem
-Date: Mon, 12 Mar 2001 10:25:00 -0000
-Message-id: <200103121825.NAA25184@envy.delorie.com>
-References: <0GA300HNZGMA0G@pmismtp01.wcomnet.com>
-X-SW-Source: 2001-q1/msg00174.html
+From: Mark Paulus <mark.paulus@wcom.com>
+To: "cygwin-patches@sources.redhat.com" <cygwin-patches@sources.redhat.com>
+Subject: [PATCH] syscalls.cc for statfs/df under Win9x problem
+Date: Tue, 13 Mar 2001 06:16:00 -0000
+Message-id: <0GA500EHC3LE2O@pmismtp04.wcomnet.com>
+X-SW-Source: 2001-q1/msg00175.html
+Content-type: multipart/mixed; boundary="----------=_1583532846-65438-19"
 
-> One other small issue.  I apparently can't do a 
-> cvs diff -up -r1.88 /tmp/syscalls.cc.  I get the following
-> error:
-> 
-> cvs diff:  cannot open CVS/Entries for reading: No such file or directory
-> cvs [diff aborted]:  no repository
+This is a multi-part message in MIME format...
 
-The first thing you need to do if you're using cvs is check out the
-cvs version of the sources.  This creates a "working directory" that
-includes information that cvs uses to keep track of what your changes
-are.
+------------=_1583532846-65438-19
+Content-length: 345
 
-If you want to compare a non-cvs source tree with cvs, you'll have to
-check out a cvs tree elsewhere on your local drive and do a local
-diff.
+Enclosed is a patch to fix the 2GB limit problem under Win9x
+exhibited by df.  The only problem I can see is a failure with
+repeated calls to a SMB share under WinME.  The first call to 
+statfs() gets good values, but the 2nd call returns some bogus 
+values.  I do not have access to a SMB share under Win2K 
+to see if it fails there also.  
+
+
+
+
+------------=_1583532846-65438-19
+Content-Type: text/plain; charset=us-ascii; name="ChangeLog"
+Content-Disposition: inline; filename="ChangeLog"
+Content-Transfer-Encoding: base64
+Content-Length: 220
+
+RnJpIE1hciAwOSAxMzozNjowMCAyMDAxICBNYXJrIFBhdWx1cyA8bWFyay5w
+YXVsdXNAd2NvbS5jb20+CgoJKiBzeXNjYWxscy5jYyAoc3RhdGZzKTogYWRk
+ZWQgY2FsbCB0byBHZXREaXNrRnJlZVNwYWNlRXgoKS4KCgkqIHN5c2NhbGxz
+LmNjIDogYWRkZWQgQ1ZTIEtleXdvcmRzLgoK
+
+------------=_1583532846-65438-19
+Content-Type: text/x-diff; charset=us-ascii; name="syscalls.cc.patch"
+Content-Disposition: inline; filename="syscalls.cc.patch"
+Content-Transfer-Encoding: base64
+Content-Length: 4527
+
+SW5kZXg6IHN5c2NhbGxzLmNjCj09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KUkNT
+IGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvY3lnd2luL3N5c2NhbGxzLmNj
+LHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjkwCmRpZmYgLXUgLXAgLXIxLjkw
+IHN5c2NhbGxzLmNjCi0tLSBzeXNjYWxscy5jYwkyMDAxLzAzLzEyIDE0OjQ5
+OjI5CTEuOTAKKysrIHN5c2NhbGxzLmNjCTIwMDEvMDMvMTIgMjE6MzY6MzEK
+QEAgLTgsNiArOCw4IEBAIFRoaXMgc29mdHdhcmUgaXMgYSBjb3B5cmlnaHRl
+ZCB3b3JrIGxpY2UKIEN5Z3dpbiBsaWNlbnNlLiAgUGxlYXNlIGNvbnN1bHQg
+dGhlIGZpbGUgIkNZR1dJTl9MSUNFTlNFIiBmb3IKIGRldGFpbHMuICovCiAK
+K3N0YXRpYyBjb25zdCBjaGFyICpjdnNJZCA9ICIkSWQkICREYXRlJCAkUmV2
+aXNpb24kIjsKKwogI2luY2x1ZGUgIndpbnN1cC5oIgogI2luY2x1ZGUgPHN5
+cy9zdGF0Lmg+CiAjaW5jbHVkZSA8c3lzL3Zmcy5oPiAvKiBuZWVkZWQgZm9y
+IHN0YXRmcyAqLwpAQCAtMTczNCwxOSArMTczNiw3MiBAQCBzdGF0ZnMgKGNv
+bnN0IGNoYXIgKmZuYW1lLCBzdHJ1Y3Qgc3RhdGZzCiAgICAgICByZXR1cm4g
+LTE7CiAgICAgfQogCi0gIHBhdGhfY29udiBmdWxsX3BhdGggKGZuYW1lLCBQ
+Q19TWU1fRk9MTE9XIHwgUENfRlVMTCk7CisgIHBhdGhfY29udiBmdWxsX3Bh
+dGgoZm5hbWUsIFBDX1NZTV9GT0xMT1cgfCBQQ19GVUxMKTsKICAgY2hhciAq
+cm9vdCA9IHJvb3RkaXIgKGZ1bGxfcGF0aCk7CiAKICAgc3lzY2FsbF9wcmlu
+dGYgKCJzdGF0ZnMgJXMiLCByb290KTsKLQotICBEV09SRCBzcGMsIGJwcywg
+ZnJlZWMsIHRvdGFsYzsKIAotICBpZiAoIUdldERpc2tGcmVlU3BhY2UgKHJv
+b3QsICZzcGMsICZicHMsICZmcmVlYywgJnRvdGFsYykpCisgIC8vICBDaGVj
+ayB0byBzZWUgaWYgdGhlIEdldERpc2tGcmVlU3BhY2VFeCBtZXRob2QgaXMg
+YXZhaWxhYmxlIHRvIHVzCisgIEZBUlBST0MgcEdldERpc2tGcmVlU3BhY2VF
+eDsKKyAgcEdldERpc2tGcmVlU3BhY2VFeCA9IEdldFByb2NBZGRyZXNzKCBH
+ZXRNb2R1bGVIYW5kbGUoImtlcm5lbDMyLmRsbCIpLAorCSAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIkdldERpc2tGcmVlU3BhY2VFeEEiKTsK
+KworICBpZiAocEdldERpc2tGcmVlU3BhY2VFeCkKKyAgeworICAgIExBUkdF
+X0lOVEVHRVIgZnJlZVNpemUsIHRvdERpc2ssIHRvdEZyZWU7CisKKyAgICBp
+ZiAoIXBHZXREaXNrRnJlZVNwYWNlRXggKHJvb3QsCisgICAgICAgICAgICAg
+ICAgICAgICAJICAgICAgKFBMQVJHRV9JTlRFR0VSKSZmcmVlU2l6ZSwKKwkJ
+CSAgICAgIChQTEFSR0VfSU5URUdFUikmdG90RGlzaywKKwkJCSAgICAgIChQ
+TEFSR0VfSU5URUdFUikmdG90RnJlZSkpCiAgICAgewogICAgICAgX19zZXRl
+cnJubyAoKTsKICAgICAgIHJldHVybiAtMTsKICAgICB9CiAKKyAgICBEV09S
+RCBzbWFsbFRvdEJsb2NrczsKKyAgICB1bnNpZ25lZCBfX2ludDY0IGxhcmdl
+VG90QmxvY2tzOworICAgIERXT1JEIGJsa1NpemUgPSAyMDQ4OyAgLy8gQXJi
+aXJ0cmFyaWx5IHN0YXJ0IHcvIDRLIGJsb2NrcyAoZmF0MzIpCisgICAgRFdP
+UkQgcHJldkJsa1NpemUgPSAyMDQ4OyAgLy8gQXJiaXJ0cmFyaWx5IHN0YXJ0
+IHcvIDRLIGJsb2NrcyAoZmF0MzIpCisgIAorICAgIC8vICBDaGVjayB0aGUg
+YmxvY2sgc2l6ZS4gIElmIGl0IGlzbid0IGJpZyBlbm91Z2gsIHRoZW4gaXQg
+c2VlbXMgbGlrZSB3ZQorICAgIC8vICB3aWxsIGdldCBzb21lIG92ZXJmbG93
+IGZvciB2ZXJ5IGxhcmdlIGRpc2tzLiAgU28sIHRyeSB0byBpbmNyZWFzZQor
+ICAgIC8vICBpdCB1bnRpbCB3ZSBkb24ndCBnZXQgYW4gb3ZlcmZsb3cuICBU
+aGlzIHdpbGwgZmFpbCBzb21ld2hlcmUgYXJvdW5kCisgICAgLy8gIDQgYmls
+bGlvbiBHQiAoMHg3RkZGRkZGRkZGRkZGRkZGKSAoSSBoYXZlIG5vIGlkZWEg
+aG93IGJpZyB0aGF0IGlzLCAKKyAgICAvLyAgb3Igd2hlbiB3ZSdsbCByZWFj
+aCBpdCkKKyAgICBkbworICAgIHsKKyAgICAgIGJsa1NpemUgKj0gMjsKKyAg
+ICAgIGlmICAoYmxrU2l6ZSA8IHByZXZCbGtTaXplKSAvLyBvdmVyZmxvdy93
+cmFwCisJICByZXR1cm4gLTE7CisgICAgICBwcmV2QmxrU2l6ZSA9IGJsa1Np
+emU7CisgICAgICBzbWFsbFRvdEJsb2NrcyA9IHRvdERpc2suUXVhZFBhcnQg
+LyBibGtTaXplOworICAgICAgbGFyZ2VUb3RCbG9ja3MgPSAodW5zaWduZWQg
+X19pbnQ2NCl0b3REaXNrLlF1YWRQYXJ0IC8gYmxrU2l6ZTsKKyAgICB9IHdo
+aWxlICgodW5zaWduZWQgX19pbnQ2NCkgc21hbGxUb3RCbG9ja3MgIT0gbGFy
+Z2VUb3RCbG9ja3MpOworICAgCisgICAgc2ZzLT5mX2JzaXplID0gYmxrU2l6
+ZTsKKyAgICBzZnMtPmZfYmxvY2tzID0gKGxvbmcpICh0b3REaXNrLlF1YWRQ
+YXJ0IC8gc2ZzLT5mX2JzaXplKTsKKyAgICBzZnMtPmZfYmF2YWlsID0gKGxv
+bmcpIChmcmVlU2l6ZS5RdWFkUGFydCAvIHNmcy0+Zl9ic2l6ZSk7CisgICAg
+c2ZzLT5mX2JmcmVlID0gKGxvbmcpICh0b3RGcmVlLlF1YWRQYXJ0IC8gc2Zz
+LT5mX2JzaXplKTsKKyAgfSAvLyBQcm9jZXNzIEdldERpc2tGcmVlU3BhY2VF
+eCByZXN1bHRzLgorICBlbHNlIAorICB7CisgICAgRFdPUkQgc3BjLCBicHMs
+IGZyZWVjLCB0b3RhbGM7CisKKyAgICBpZiAoIUdldERpc2tGcmVlU3BhY2Ug
+KHJvb3QsICZzcGMsICZicHMsICZmcmVlYywgJnRvdGFsYykpCisgICAgICB7
+CisJRFdPUkQgcmMgPSBHZXRMYXN0RXJyb3IoKTsKKyAgICAgIGlmICAoNTAg
+IT0gcmMpCisJeworCSAgX19zZXRlcnJubyAoKTsKKwkgIHJldHVybiAtMTsK
+Kwl9CisgICAgICB9CisgICAgc2ZzLT5mX2JzaXplID0gc3BjKmJwczsKKyAg
+ICBzZnMtPmZfYmxvY2tzID0gdG90YWxjOworICAgIHNmcy0+Zl9iZnJlZSA9
+IHNmcy0+Zl9iYXZhaWwgPSBmcmVlYzsKKyAgfQorCiAgIERXT1JEIHZzbiwg
+bWF4bGVuLCBmbGFnczsKIAogICBpZiAoIUdldFZvbHVtZUluZm9ybWF0aW9u
+IChyb290LCBOVUxMLCAwLCAmdnNuLCAmbWF4bGVuLCAmZmxhZ3MsIE5VTEws
+IDApKQpAQCAtMTc1NSw5ICsxODEwLDYgQEAgc3RhdGZzIChjb25zdCBjaGFy
+ICpmbmFtZSwgc3RydWN0IHN0YXRmcwogICAgICAgcmV0dXJuIC0xOwogICAg
+IH0KICAgc2ZzLT5mX3R5cGUgPSBmbGFnczsKLSAgc2ZzLT5mX2JzaXplID0g
+c3BjKmJwczsKLSAgc2ZzLT5mX2Jsb2NrcyA9IHRvdGFsYzsKLSAgc2ZzLT5m
+X2JmcmVlID0gc2ZzLT5mX2JhdmFpbCA9IGZyZWVjOwogICBzZnMtPmZfZmls
+ZXMgPSAtMTsKICAgc2ZzLT5mX2ZmcmVlID0gLTE7CiAgIHNmcy0+Zl9mc2lk
+ID0gdnNuOwo=
+
+------------=_1583532846-65438-19--
