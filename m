@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2656-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 18694 invoked by alias); 16 Jul 2002 02:42:31 -0000
+Return-Path: <cygwin-patches-return-2657-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 4302 invoked by alias); 16 Jul 2002 03:13:08 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,90 +7,29 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 18679 invoked from network); 16 Jul 2002 02:42:31 -0000
-Date: Mon, 15 Jul 2002 19:42:00 -0000
-From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
-X-X-Sender: joshua@iocc.com
+Received: (qmail 4287 invoked from network); 16 Jul 2002 03:13:08 -0000
+Date: Mon, 15 Jul 2002 20:13:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: utils.sgml patch fixit
-Message-ID: <Pine.CYG.4.44.0207152137250.1620-200000@iocc.com>
-MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="-559023410-481980039-1026787221=:1620"
-X-SW-Source: 2002-q3/txt/msg00104.txt.bz2
+Subject: Re: utils.sgml patch fixit
+Message-ID: <20020716031321.GA31892@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <Pine.CYG.4.44.0207152137250.1620-200000@iocc.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Pine.CYG.4.44.0207152137250.1620-200000@iocc.com>
+User-Agent: Mutt/1.3.23.1i
+X-SW-Source: 2002-q3/txt/msg00105.txt.bz2
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
+On Mon, Jul 15, 2002 at 09:40:21PM -0500, Joshua Daniel Franklin wrote:
+>Here is a patch for utils.sgml that fixes a problem with the
+>jade thinking <posixpath> &c. are tags. My fault.
+>
+>BTW, after fixing my build problems I can now build the User's
+>Guide HTML again.
 
----559023410-481980039-1026787221=:1620
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-Content-length: 194
+Fixed.  Thanks.
 
-Here is a patch for utils.sgml that fixes a problem with the
-jade thinking <posixpath> &c. are tags. My fault.
-
-BTW, after fixing my build problems I can now build the User's
-Guide HTML again.
-
-
----559023410-481980039-1026787221=:1620
-Content-Type: TEXT/PLAIN; charset=US-ASCII; name="utils.sgml-patch"
-Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.CYG.4.44.0207152140210.1620@iocc.com>
-Content-Description: 
-Content-Disposition: attachment; filename="utils.sgml-patch"
-Content-length: 3091
-
-LS0tIHV0aWxzLnNnbWwtb3JpZwkyMDAyLTA3LTE1IDIxOjI2OjI1LjAwMDAw
-MDAwMCAtMDUwMA0KKysrIHV0aWxzLnNnbWwJMjAwMi0wNy0xNSAyMTozNjox
-NC4wMDAwMDAwMDAgLTA1MDANCkBAIC00OTgsMTAgKzQ5OCwxMCBAQCB0YWtl
-cyBpbiBhIGxhcmdlIGRvbWFpbi4gDQogPHNlY3QyIGlkPSJtb3VudCI+PHRp
-dGxlPm1vdW50PC90aXRsZT4NCiANCiA8c2NyZWVuPg0KLVVzYWdlOiBtb3Vu
-dCBbT1BUSU9OXSBbPHdpbjMycGF0aD4gPHBvc2l4cGF0aD5dDQorVXNhZ2U6
-IG1vdW50IFtPUFRJT05dIFsmbHQ7d2luMzJwYXRoJmd0OyAmbHQ7cG9zaXhw
-YXRoJmd0O10NCiAgIC1iLCAtLWJpbmFyeSAgICAgICAgICAgICAgICAgIHRl
-eHQgZmlsZXMgYXJlIGVxdWl2YWxlbnQgdG8gYmluYXJ5IGZpbGVzDQogICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAobmV3bGluZSA9IFxuKQ0K
-LSAgLWMsIC0tY2hhbmdlLWN5Z2RyaXZlLXByZWZpeCAgY2hhbmdlIHRoZSBj
-eWdkcml2ZSBwYXRoIHByZWZpeCB0byA8cG9zaXhwYXRoPg0KKyAgLWMsIC0t
-Y2hhbmdlLWN5Z2RyaXZlLXByZWZpeCAgY2hhbmdlIHRoZSBjeWdkcml2ZSBw
-YXRoIHByZWZpeCB0byAmbHQ7cG9zaXhwYXRoJmd0Ow0KICAgLWYsIC0tZm9y
-Y2UgICAgICAgICAgICAgICAgICAgZm9yY2UgbW91bnQsIGRvbid0IHdhcm4g
-YWJvdXQgbWlzc2luZyBtb3VudA0KICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgcG9pbnQgZGlyZWN0b3JpZXMNCiAgIC1oLCAtLWhlbHAgICAg
-ICAgICAgICAgICAgICAgIG91dHB1dCB1c2FnZSBpbmZvcm1hdGlvbiBhbmQg
-ZXhpdA0KQEAgLTEyNjYsOCArMTI2Niw4IEBAICQgc3NwIDxsaXRlcmFsPi12
-PC9saXRlcmFsPiA8bGl0ZXJhbD4tczwNCiA8c2VjdDIgaWQ9InN0cmFjZSI+
-PHRpdGxlPnN0cmFjZTwvdGl0bGU+DQogDQogPHNjcmVlbj4NCi1Vc2FnZTog
-c3RyYWNlLmV4ZSBbT1BUSU9OU10gPGNvbW1hbmQtbGluZT4NCi1Vc2FnZTog
-c3RyYWNlLmV4ZSBbT1BUSU9OU10gLXAgPHBpZD4NCitVc2FnZTogc3RyYWNl
-LmV4ZSBbT1BUSU9OU10gJmx0O2NvbW1hbmQtbGluZSZndDsNCitVc2FnZTog
-c3RyYWNlLmV4ZSBbT1BUSU9OU10gLXAgJmx0O3BpZCZndDsNCiAgIC1iLCAt
-LWJ1ZmZlci1zaXplPVNJWkUgICAgICAgc2V0IHNpemUgb2Ygb3V0cHV0IGZp
-bGUgYnVmZmVyDQogICAtZCwgLS1uby1kZWx0YSAgICAgICAgICAgICAgIGRv
-bid0IGRpc3BsYXkgdGhlIGRlbHRhLXQgbWljcm9zZWNvbmQgdGltZXN0YW1w
-DQogICAtZiwgLS10cmFjZS1jaGlsZHJlbiAgICAgICAgIHRyYWNlIGNoaWxk
-IHByb2Nlc3NlcyAodG9nZ2xlIC0gZGVmYXVsdCB0cnVlKQ0KQEAgLTEyODEs
-NyArMTI4MSw3IEBAIFVzYWdlOiBzdHJhY2UuZXhlIFtPUFRJT05TXSAtcCA8
-cGlkPg0KICAgLXQsIC0tdGltZXN0YW1wICAgICAgICAgICAgICB1c2UgYW4g
-YWJzb2x1dGUgaGg6bW06c3MgdGltZXN0YW1wIGluc3RlZCBvZiANCiAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgdGhlIGRlZmF1bHQgbWljcm9z
-ZWNvbmQgdGltZXN0YW1wLiAgSW1wbGllcyAtZA0KICAgLVQsIC0tdG9nZ2xl
-ICAgICAgICAgICAgICAgICB0b2dnbGUgdHJhY2luZyBpbiBhIHByb2Nlc3Mg
-YWxyZWFkeSBiZWluZw0KLSAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICB0cmFjZWQuIFJlcXVpcmVzIC1wIDxwaWQ+DQorICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgIHRyYWNlZC4gUmVxdWlyZXMgLXAgJmx0O3BpZCZn
-dDsNCiAgIC12LCAtLXZlcnNpb24gICAgICAgICAgICAgICAgb3V0cHV0IHZl
-cnNpb24gaW5mb3JtYXRpb24gYW5kIGV4aXQNCiAgIC13LCAtLW5ldy13aW5k
-b3cgICAgICAgICAgICAgc3Bhd24gcHJvZ3JhbSB1bmRlciB0ZXN0IGluIGEg
-bmV3IHdpbmRvdw0KIA0KQEAgLTEzMzcsNyArMTMzNyw3IEBAIEN5Z3dpbiBE
-TEwgaXRzZWxmLjwvcGFyYT4NCiA8c2VjdDIgaWQ9InVtb3VudCI+PHRpdGxl
-PnVtb3VudDwvdGl0bGU+DQogDQogPHNjcmVlbj4NCi1Vc2FnZTogdW1vdW50
-LmV4ZSBbT1BUSU9OXSBbPHBvc2l4cGF0aD5dDQorVXNhZ2U6IHVtb3VudC5l
-eGUgW09QVElPTl0gWyZsdDtwb3NpeHBhdGgmZ3Q7XQ0KICAgLUEsIC0tcmVt
-b3ZlLWFsbC1tb3VudHMgICAgICAgcmVtb3ZlIGFsbCBtb3VudHMNCiAgIC1j
-LCAtLXJlbW92ZS1jeWdkcml2ZS1wcmVmaXggIHJlbW92ZSBjeWdkcml2ZSBw
-cmVmaXgNCiAgIC1oLCAtLWhlbHAgICAgICAgICAgICAgICAgICAgIG91dHB1
-dCB1c2FnZSBpbmZvcm1hdGlvbiBhbmQgZXhpdA0K
-
----559023410-481980039-1026787221=:1620--
+cgf
