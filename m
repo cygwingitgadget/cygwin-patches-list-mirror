@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5052-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 10073 invoked by alias); 12 Oct 2004 22:31:07 -0000
+Return-Path: <cygwin-patches-return-5053-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 10987 invoked by alias); 12 Oct 2004 22:32:04 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,38 +7,41 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 10055 invoked from network); 12 Oct 2004 22:31:06 -0000
-Date: Tue, 12 Oct 2004 22:31:00 -0000
+Received: (qmail 10977 invoked from network); 12 Oct 2004 22:32:03 -0000
+Date: Tue, 12 Oct 2004 22:32:00 -0000
 From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [Patch] cygheap.cc: Allow _crealloc to shrink memory-block.
-Message-ID: <20041012223130.GC847@trixie.casa.cgf.cx>
+Subject: Re: [Patch] cygcheck: warn about empty path-components
+Message-ID: <20041012223227.GD847@trixie.casa.cgf.cx>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <n2m-g.ckhrjl.3vvankf.1@buzzy-box.bavag>
+References: <20041007021558.GL2722@trixie.casa.cgf.cx> <n2m-g.ck4jdl.3vsg21n.1@buzzy-box.bavag> <20041008001755.GK17593@trixie.casa.cgf.cx> <n2m-g.ck9k3i.3vvefmv.1@buzzy-box.bavag> <20041009231813.GD11984@trixie.casa.cgf.cx> <n2m-g.ckaqe1.3vva6e9.1@buzzy-box.bavag> <20041010171323.GD14377@trixie.casa.cgf.cx> <n2m-g.ckhq8e.3vvvbef.1@buzzy-box.bavag> <20041012222032.GB847@trixie.casa.cgf.cx> <Pine.GSO.4.61.0410121825550.27836@slinky.cs.nyu.edu>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <n2m-g.ckhrjl.3vvankf.1@buzzy-box.bavag>
+In-Reply-To: <Pine.GSO.4.61.0410121825550.27836@slinky.cs.nyu.edu>
 User-Agent: Mutt/1.4.1i
-X-SW-Source: 2004-q4/txt/msg00053.txt.bz2
+X-SW-Source: 2004-q4/txt/msg00054.txt.bz2
 
-On Wed, Oct 13, 2004 at 12:11:24AM +0200, Bas van Gompel wrote:
->Following (trivial IMO) patch, allows memory blocks on the cygheap to
->be shrunk.
+On Tue, Oct 12, 2004 at 06:26:36PM -0400, Igor Pechtchanski wrote:
+>On Tue, 12 Oct 2004, Christopher Faylor wrote:
 >
->There are some issues with this:
->- The code is slightly slower.
->- This change is in a block of code marked ``copyright D. J. Delorie''.
->- I'm not sure _crealloc is ever called with a smaller size. (If it
->  isn't, this patch is useless.)
+>> On Wed, Oct 13, 2004 at 12:11:05AM +0200, Bas van Gompel wrote:
+>> >Op Sun, 10 Oct 2004 13:13:23 -0400 schreef Christopher Faylor:
+>> >:  On Sun, Oct 10, 2004 at 08:36:38AM +0200, Bas van Gompel wrote:
+>> >: > Op Sat, 9 Oct 2004 19:18:13 -0400 schreef Christopher Faylor
+>> >: > So cygcheck will have the same problem...
+>> >:
+>> >:   Right, but cygcheck can rely on the fact that cygwin1.dll is around, at
+>> >:  least, if necessary.
+>> >
+>> >The dll is/should be around after setup ran (in install-mode), as well.
+>>
+>> Right.  But it may not be loadable.  I don't know if you can still use
+>> LoadLibrary on dlls which lack the correct permissions or not.
 >
->(I did test this, and it WJFFM.)
+>FYI: you can't.  Just tested on WinXP Pro.  HTH,
 
-Thanks, but I don't see any reason to go to the effort of allocating a
-new block of memory in order to get a smaller block of memory.  The
-overhead of allocating memory, which could actually cause a call to the
-OS, shouldn't be worth it unless you're suffering from severe memory
-constraints.  I don't believe that is normally the case for cygheap.
+Wow, that was fast.  Thanks for the feedback.
 
 cgf
