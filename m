@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2943-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 15265 invoked by alias); 6 Sep 2002 15:14:46 -0000
+Return-Path: <cygwin-patches-return-2944-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 20264 invoked by alias); 6 Sep 2002 15:24:31 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,43 +7,29 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 15251 invoked from network); 6 Sep 2002 15:14:45 -0000
-X-Authentication-Warning: slinky.cs.nyu.edu: pechtcha owned process doing -bs
-Date: Fri, 06 Sep 2002 08:14:00 -0000
-From: Igor Pechtchanski <pechtcha@cs.nyu.edu>
-To: cygwin-patches@cygwin.com, <mingw-users@lists.sourceforge.net>
+Received: (qmail 20250 invoked from network); 6 Sep 2002 15:24:31 -0000
+Date: Fri, 06 Sep 2002 08:24:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
+To: MinGW-users@lists.sourceforge.net
+Cc: cygwin-patches@cygwin.com
 Subject: Re: [Mingw-users] Re: WINVER constant value [WAS: GetConsoleWindow]
-In-Reply-To: <3D78A6BD.3BF99DCC@yahoo.com>
-Message-ID: <Pine.GSO.4.44.0209061113340.13825-100000@slinky.cs.nyu.edu>
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-SW-Source: 2002-q3/txt/msg00391.txt.bz2
+Message-ID: <20020906152420.GE21699@redhat.com>
+Reply-To: mingw-users@lists.sourceforge.net,
+	cygwin-patches@cygwin.com
+Mail-Followup-To: MinGW-users@lists.sourceforge.net,
+	cygwin-patches@cygwin.com
+References: <NCBBIHCHBLCMLBLOBONKEEMFDEAA.g.r.vansickle@worldnet.att.net> <3D780D71.F3F87271@yahoo.com> <7khzvl5r.fsf@wanadoo.es> <20020906042522.GD27778@redhat.com> <3csnvfry.fsf@wanadoo.es> <3D7894BF.F12F3E0A@yahoo.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3D7894BF.F12F3E0A@yahoo.com>
+User-Agent: Mutt/1.4i
+X-SW-Source: 2002-q3/txt/msg00392.txt.bz2
 
-On Fri, 6 Sep 2002, Earnie Boyd wrote:
+FWIW, I'm bowing out of this discussion.  I don't care enough to argue.
 
-> Earnie Boyd wrote:
-> >
-> > My guess is that there are more GCC experienced people using MinGW for
-> > mingw32-gcc than there are MSVC experienced people using MinGW for any
-> > reason.  A drop in replacement for MSVC, surely isn't the desire.
-> > Wanting to the package to port to all versions of Win32 is the desire.
->           ^^^^^^ s/to the/a
-> > Using new Win32 API not supported on older versions of the OS isn't the
-> > way to go about doing that.  Runtime surprises, is not the place to
-> > discover that the port doesn't work.
->                                      ^on prior versions of win32
-> Earnie.
+Since I seem to be the only one waving the banner here, I assume that
+means that things will remain as they are.  I've patched cygwin
+accordingly.
 
-I'm not qualified to have an opinion on this, but something here reminds
-me of the old discussion on whether to use numeric co-processor features
-in a compiler vs. emulating floating point in software...
-	Igor
--- 
-				http://cs.nyu.edu/~pechtcha/
-      |\      _,,,---,,_		pechtcha@cs.nyu.edu
-ZZZzz /,`.-'`'    -.  ;-;;,_		igor@watson.ibm.com
-     |,4-  ) )-,_. ,\ (  `'-'		Igor Pechtchanski
-    '---''(_/--'  `-'\_) fL	a.k.a JaguaR-R-R-r-r-r-.-.-.  Meow!
-
-It took the computational power of three Commodore 64s to fly to the moon.
-It takes a 486 to run Windows 95.  Something is wrong here. -- SC sig file
+cgf
