@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3349-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 2120 invoked by alias); 20 Dec 2002 09:58:07 -0000
+Return-Path: <cygwin-patches-return-3350-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 4599 invoked by alias); 22 Dec 2002 03:06:28 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,139 +7,171 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 2110 invoked from network); 20 Dec 2002 09:58:05 -0000
-X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
-Date: Fri, 20 Dec 2002 01:58:00 -0000
-From: Thomas Pfaff <tpfaff@gmx.net>
+Received: (qmail 4585 invoked from network); 22 Dec 2002 03:06:27 -0000
+Date: Sat, 21 Dec 2002 19:06:00 -0000
+From: Steve O <bub@io.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] cancellation revised
-Message-ID: <Pine.WNT.4.44.0212201033400.273-200000@algeria.intern.net>
-X-X-Sender: pfaff@antarctica.intern.net
-MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="1447645-1651-1040378257=:273"
-X-SW-Source: 2002-q4/txt/msg00300.txt.bz2
-
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
-
---1447645-1651-1040378257=:273
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-Content-length: 627
+Subject: [PATCH] pty_master echobuf
+Message-ID: <20021221210844.A27687@hagbard.io.com>
+Mime-Version: 1.0
+Content-Type: multipart/mixed; boundary="ikeVEW9yuYc//A+q"
+Content-Disposition: inline
+User-Agent: Mutt/1.2.5.1i
+X-SW-Source: 2002-q4/txt/msg00301.txt.bz2
 
 
-While Chris is waiting on Rob (or vice versa) i got a new pthread related
-patch which will make pthread_join and sem_wait real cancellation points.
+--ikeVEW9yuYc//A+q
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-length: 1058
 
-TODO: Add testcancel to other cancelation points.
+Hi,
+Thank you Christopher for reviewing all these tty patches.
+Here's the next one.  It introduces an echo buffer that doecho
+will eventually use.  As nothing yet puts characters into the
+echo buffer, this patch should not have any noticeable effect. 
 
-Thomas
+Thanks,
+-steve
 
-2002-12-20  Thomas Pfaff  <tpfaff@gmx.net>
+ChangeLog
+2002-12-21  Steve Osborn  <bub@io.com>
 
-	* thread.h (WAIT_CANCELED): New define.
-	(pthread::cancelable_wait): New static method.
-	* thread.cc (pthread::cancelable_wait): Implement.
-	(semaphore::Wait): Wait on semaphore and thread cancellation.
-	(pthread::join): Wait on joined thread and thread cancellation.
-	(semaphore::wait): Add testcancel to check for thread cancellation
-	even if the semaphore is available.
+	* fhandler.h (fhandler_pty_master::get_echobuf_valid): New.
+	(fhandler_pty_master::ebbuf): New buffer.
+	(fhandler_pty_master::ebixget): New buffer get index.
+	(fhandler_pty_master::ebixput): New buffer put index.
+	(fhandler_pty_master::ebixlen): New buffer length.
+	(fhandler_pty_master::get_echobuf_into_buffer): New.
+	(fhandler_pty_master::clear_echobuf): New.
+	* fhandler_tty.cc (fhandler_pty_master::get_echobuf_into_buffer): New.
+	(fhandler_pty_master::process_slave_output) Read from echobuf 
+	initially.
+	(fhandler_pty_master::fhandler_pty_master): Initialize new variables.
+	(fhandler_pty_master::clear_echobuf): New.
+	(fhandler_pty_master::close): Clear echobuf on close.
+	* select.cc (peek_pipe): Check for input from echobuf.
 
---1447645-1651-1040378257=:273
-Content-Type: TEXT/plain; name="cancel.patch"
-Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.WNT.4.44.0212201057370.273@algeria.intern.net>
-Content-Description: 
-Content-Disposition: attachment; filename="cancel.patch"
-Content-length: 5352
 
-ZGlmZiAtdXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi90aHJlYWQuY2Mgc3Jj
-L3dpbnN1cC9jeWd3aW4vdGhyZWFkLmNjCi0tLSBzcmMub2xkL3dpbnN1cC9j
-eWd3aW4vdGhyZWFkLmNjCTIwMDItMTItMTEgMTE6MTA6MjguMDAwMDAwMDAw
-ICswMTAwCisrKyBzcmMvd2luc3VwL2N5Z3dpbi90aHJlYWQuY2MJMjAwMi0x
-Mi0yMCAwOTozNzoxMS4wMDAwMDAwMDAgKzAxMDAKQEAgLTQ3MSw3ICs0NzEs
-NyBAQCBwd3JpdGUgKCkKIHJlYWQgKCkKIHJlYWR2ICgpCiBzZWxlY3QgKCkK
-LXNlbV93YWl0ICgpCisqc2VtX3dhaXQgKCkKIHNpZ3BhdXNlICgpCiBzaWdz
-dXNwZW5kICgpCiBzaWd0aW1lZHdhaXQgKCkKQEAgLTYzMiw2ICs2MzIsMjcg
-QEAgcHRocmVhZDo6c3RhdGljX2NhbmNlbF9zZWxmICh2b2lkKQogfQogCiAK
-K0RXT1JEIHB0aHJlYWQ6OmNhbmNlbGFibGVfd2FpdCAoSEFORExFIG9iamVj
-dCwgRFdPUkQgdGltZW91dCwgY29uc3QgYm9vbCBkb19jYW5jZWwpCit7Cisg
-IERXT1JEIHJlczsKKyAgSEFORExFIHdhaXRfb2JqZWN0c1syXTsKKyAgcHRo
-cmVhZF90IHRocmVhZCA9IHNlbGYgKCk7CisKKyAgaWYgKCFpc0dvb2RPYmpl
-Y3QgKCZ0aHJlYWQpIHx8IHRocmVhZC0+Y2FuY2Vsc3RhdGUgPT0gUFRIUkVB
-RF9DQU5DRUxfRElTQUJMRSkKKyAgICByZXR1cm4gV2FpdEZvclNpbmdsZU9i
-amVjdCAob2JqZWN0LCB0aW1lb3V0KTsKKworICAvLyBEbyBub3QgY2hhbmdl
-IHRoZSB3YWl0IG9yZGVyCisgIC8vIFRoZSBvYmplY3QgbXVzdCBoYXZlIGhp
-Z2hlciBwcmlvcml0eSB0aGFuIHRoZSBjYW5jZWwgZXZlbnQsCisgIC8vIHRo
-YXQgbWVhbnMgV2FpdEZvck11bHRpcGxlT2JqZWN0cyBzaWduYWxlcyB0aGUg
-c21hbGxlc3QgaW5kZXgKKyAgd2FpdF9vYmplY3RzWzBdID0gb2JqZWN0Owor
-ICB3YWl0X29iamVjdHNbMV0gPSB0aHJlYWQtPmNhbmNlbF9ldmVudDsKKwor
-ICByZXMgPSBXYWl0Rm9yTXVsdGlwbGVPYmplY3RzICgyLCB3YWl0X29iamVj
-dHMsIEZBTFNFLCB0aW1lb3V0KTsKKyAgaWYgKGRvX2NhbmNlbCAmJiByZXMg
-PT0gV0FJVF9DQU5DRUxFRCkKKyAgICBwdGhyZWFkOjpzdGF0aWNfY2FuY2Vs
-X3NlbGYgKCk7CisgIHJldHVybiByZXM7Cit9CisKIGludAogcHRocmVhZDo6
-c2V0Y2FuY2Vsc3RhdGUgKGludCBzdGF0ZSwgaW50ICpvbGRzdGF0ZSkKIHsK
-QEAgLTEzOTAsOCArMTQxMSwxNSBAQCBzZW1hcGhvcmU6OlRyeVdhaXQgKCkK
-IHZvaWQKIHNlbWFwaG9yZTo6V2FpdCAoKQogewotICBXYWl0Rm9yU2luZ2xl
-T2JqZWN0ICh3aW4zMl9vYmpfaWQsIElORklOSVRFKTsKLSAgY3VycmVudHZh
-bHVlLS07CisgIHN3aXRjaCAocHRocmVhZDo6Y2FuY2VsYWJsZV93YWl0ICh3
-aW4zMl9vYmpfaWQsIElORklOSVRFKSkKKyAgICB7CisgICAgY2FzZSBXQUlU
-X09CSkVDVF8wOgorICAgICAgY3VycmVudHZhbHVlLS07CisgICAgICBicmVh
-azsKKyAgICBkZWZhdWx0OgorICAgICAgZGVidWdfcHJpbnRmICgiY2FuY2Vs
-YWJsZV93YWl0IGZhaWxlZC4gJUUiKTsKKyAgICAgIHJldHVybjsKKyAgICB9
-CiB9CiAKIHZvaWQKQEAgLTE4NTAsMTQgKzE4NzgsMTUgQEAgcHRocmVhZDo6
-am9pbiAocHRocmVhZF90ICp0aHJlYWQsIHZvaWQgKgogewogICAgcHRocmVh
-ZF90IGpvaW5lciA9IHNlbGYgKCk7CiAKLSAgIGlmICghaXNHb29kT2JqZWN0
-ICgmam9pbmVyKSkKLSAgICAgcmV0dXJuIEVJTlZBTDsKKyAgIGpvaW5lci0+
-dGVzdGNhbmNlbCAoKTsKIAogICAgLy8gSW5pdGlhbGl6ZSByZXR1cm4gdmFs
-IHdpdGggTlVMTAogICAgaWYgKHJldHVybl92YWwpCiAgICAgICpyZXR1cm5f
-dmFsID0gTlVMTDsKIAotICAvKiBGSVhNRTogd2FpdCBvbiB0aGUgdGhyZWFk
-IGNhbmNlbGxhdGlvbiBldmVudCBhcyB3ZWxsIC0gd2UgYXJlIGEgY2FuY2Vs
-bGF0aW9uIHBvaW50Ki8KKyAgIGlmICghaXNHb29kT2JqZWN0ICgmam9pbmVy
-KSkKKyAgICAgcmV0dXJuIEVJTlZBTDsKKwogICBpZiAoIWlzR29vZE9iamVj
-dCAodGhyZWFkKSkKICAgICByZXR1cm4gRVNSQ0g7CiAKQEAgLTE4NzYsMTQg
-KzE5MDUsMjYgQEAgcHRocmVhZDo6am9pbiAocHRocmVhZF90ICp0aHJlYWQs
-IHZvaWQgKgogICAgICAgKCp0aHJlYWQpLT5qb2luZXIgPSBqb2luZXI7CiAg
-ICAgICAoKnRocmVhZCktPmF0dHIuam9pbmFibGUgPSBQVEhSRUFEX0NSRUFU
-RV9ERVRBQ0hFRDsKICAgICAgICgqdGhyZWFkKS0+bXV0ZXguVW5Mb2NrICgp
-OwotICAgICAgV2FpdEZvclNpbmdsZU9iamVjdCAoKCp0aHJlYWQpLT53aW4z
-Ml9vYmpfaWQsIElORklOSVRFKTsKLSAgICAgIGlmIChyZXR1cm5fdmFsKQot
-CSAqcmV0dXJuX3ZhbCA9ICgqdGhyZWFkKS0+cmV0dXJuX3B0cjsKLSAgICAg
-IC8vIGNsZWFudXAKLSAgICAgIGRlbGV0ZSAoKnRocmVhZCk7Ci0gICAgfQkv
-KiBFbmQgaWYgKi8KIAotICBwdGhyZWFkX3Rlc3RjYW5jZWwgKCk7CisgICAg
-ICBzd2l0Y2ggKGNhbmNlbGFibGVfd2FpdCAoKCp0aHJlYWQpLT53aW4zMl9v
-YmpfaWQsIElORklOSVRFLCBmYWxzZSkpCisgICAgICAgIHsKKyAgICAgICAg
-Y2FzZSBXQUlUX09CSkVDVF8wOgorICAgICAgICAgIGlmIChyZXR1cm5fdmFs
-KQorICAgICAgICAgICAgKnJldHVybl92YWwgPSAoKnRocmVhZCktPnJldHVy
-bl9wdHI7CisgICAgICAgICAgZGVsZXRlICgqdGhyZWFkKTsKKyAgICAgICAg
-ICBicmVhazsKKyAgICAgICAgY2FzZSBXQUlUX0NBTkNFTEVEOgorICAgICAg
-ICAgIC8vIHNldCBqb2luZWQgdGhyZWFkIGJhY2sgdG8gam9pbmFibGUgc2lu
-Y2Ugd2UgZ290IGNhbmNlbGVkCisgICAgICAgICAgKCp0aHJlYWQpLT5qb2lu
-ZXIgPSBOVUxMOworICAgICAgICAgICgqdGhyZWFkKS0+YXR0ci5qb2luYWJs
-ZSA9IFBUSFJFQURfQ1JFQVRFX0pPSU5BQkxFOworICAgICAgICAgIGpvaW5l
-ci0+Y2FuY2VsX3NlbGYgKCk7CisgICAgICAgICAgLy8gbmV2ZXIgcmVhY2hl
-ZAorICAgICAgICAgIGJyZWFrOworICAgICAgICBkZWZhdWx0OgorICAgICAg
-ICAgIC8vIHNob3VsZCBuZXZlciBoYXBwZW4KKyAgICAgICAgICByZXR1cm4g
-RUlOVkFMOworICAgICAgICB9CisgICAgfQogCiAgIHJldHVybiAwOwogfQpA
-QCAtMjYyOSw2ICsyNjcwLDggQEAgc2VtYXBob3JlOjpkZXN0cm95IChzZW1f
-dCAqc2VtKQogaW50CiBzZW1hcGhvcmU6OndhaXQgKHNlbV90ICpzZW0pCiB7
-CisgIHB0aHJlYWQ6OnNlbGYgKCktPnRlc3RjYW5jZWwgKCk7CisKICAgaWYg
-KCFpc0dvb2RPYmplY3QgKHNlbSkpCiAgICAgewogICAgICAgc2V0X2Vycm5v
-IChFSU5WQUwpOwpkaWZmIC11cnAgc3JjLm9sZC93aW5zdXAvY3lnd2luL3Ro
-cmVhZC5oIHNyYy93aW5zdXAvY3lnd2luL3RocmVhZC5oCi0tLSBzcmMub2xk
-L3dpbnN1cC9jeWd3aW4vdGhyZWFkLmgJMjAwMi0xMi0xMCAxNDozODoyMy4w
-MDAwMDAwMDAgKzAxMDAKKysrIHNyYy93aW5zdXAvY3lnd2luL3RocmVhZC5o
-CTIwMDItMTItMjAgMDk6Mzc6MTMuMDAwMDAwMDAwICswMTAwCkBAIC0zMzIs
-NiArMzMyLDggQEAgcHJpdmF0ZToKICAgc3RhdGljIG5hdGl2ZU11dGV4IG11
-dGV4SW5pdGlhbGl6YXRpb25Mb2NrOwogfTsKIAorI2RlZmluZSBXQUlUX0NB
-TkNFTEVEICAgKFdBSVRfT0JKRUNUXzAgKyAxKQorCiBjbGFzcyBwdGhyZWFk
-OnB1YmxpYyB2ZXJpZnlhYmxlX29iamVjdAogewogcHVibGljOgpAQCAtMzc5
-LDYgKzM4MSw4IEBAIHB1YmxpYzoKICAgdmlydHVhbCB2b2lkIHRlc3RjYW5j
-ZWwgKCk7CiAgIHN0YXRpYyB2b2lkIHN0YXRpY19jYW5jZWxfc2VsZiAoKTsK
-IAorICBzdGF0aWMgRFdPUkQgY2FuY2VsYWJsZV93YWl0IChIQU5ETEUgb2Jq
-ZWN0LCBEV09SRCB0aW1lb3V0LCBjb25zdCBib29sIGRvX2NhbmNlbCA9IHRy
-dWUpOworCiAgIHZpcnR1YWwgaW50IHNldGNhbmNlbHN0YXRlIChpbnQgc3Rh
-dGUsIGludCAqb2xkc3RhdGUpOwogICB2aXJ0dWFsIGludCBzZXRjYW5jZWx0
-eXBlIChpbnQgdHlwZSwgaW50ICpvbGR0eXBlKTsKIAo=
+--ikeVEW9yuYc//A+q
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment; filename="tty6.patch"
+Content-length: 3202
 
---1447645-1651-1040378257=:273--
+Index: cygwin/fhandler.h
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/fhandler.h,v
+retrieving revision 1.151
+diff -u -p -r1.151 fhandler.h
+--- cygwin/fhandler.h	21 Dec 2002 04:38:12 -0000	1.151
++++ cygwin/fhandler.h	22 Dec 2002 02:40:27 -0000
+@@ -937,6 +937,16 @@ class fhandler_pty_master: public fhandl
+ 
+   void set_close_on_exec (int val);
+   bool hit_eof ();
++
++  bool get_echobuf_valid () { return ebixget < ebixput; }
++
++ protected:
++  char *ebbuf;		/* used for buffering echo chars */
++  size_t ebixget;
++  size_t ebixput;
++  size_t ebbuflen;
++  int get_echobuf_into_buffer (char *buf, size_t buflen);
++  void clear_echobuf ();
+ };
+ 
+ class fhandler_tty_master: public fhandler_pty_master
+Index: cygwin/fhandler_tty.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/fhandler_tty.cc,v
+retrieving revision 1.85
+diff -u -p -r1.85 fhandler_tty.cc
+--- cygwin/fhandler_tty.cc	21 Dec 2002 04:38:12 -0000	1.85
++++ cygwin/fhandler_tty.cc	22 Dec 2002 02:40:30 -0000
+@@ -220,6 +220,19 @@ fhandler_pty_master::hit_eof ()
+ /* Process tty output requests */
+ 
+ int
++fhandler_pty_master::get_echobuf_into_buffer (char *buf, size_t buflen)
++{
++  size_t copied_chars = 0;
++  while (copied_chars < buflen && ebixget < ebixput)
++      buf[copied_chars++] = ebbuf[ebixget++];
++
++  if (ebixget >= ebixput)
++    ebixget = ebixput = 0;
++
++  return (int)copied_chars;
++}
++
++int
+ fhandler_pty_master::process_slave_output (char *buf, size_t len, int pktmode_on)
+ {
+   size_t rlen;
+@@ -261,7 +274,7 @@ fhandler_pty_master::process_slave_outpu
+ 
+       HANDLE handle = get_io_handle ();
+ 
+-      n = 0; // get_readahead_into_buffer (outbuf, len);
++      n = get_echobuf_into_buffer (outbuf, rlen);
+       if (!n)
+ 	{
+ 	  /* Doing a busy wait like this is quite inefficient, but nothing
+@@ -992,7 +1005,11 @@ out:
+  fhandler_pty_master
+ */
+ fhandler_pty_master::fhandler_pty_master (DWORD devtype, int unit)
+-  : fhandler_tty_common (devtype, unit)
++  : fhandler_tty_common (devtype, unit),
++    ebbuf (NULL),
++    ebixget (0),
++    ebixput (0),
++    ebbuflen (0)
+ {
+ }
+ 
+@@ -1047,6 +1064,15 @@ fhandler_tty_common::close ()
+   return 0;
+ }
+ 
++void 
++fhandler_pty_master::clear_echobuf ()
++{
++  ebixput = ebixget = ebbuflen = 0;
++  if (ebbuf) 
++    free(ebbuf);
++  ebbuf = NULL;
++}
++
+ int
+ fhandler_pty_master::close ()
+ {
+@@ -1071,7 +1097,7 @@ fhandler_pty_master::close ()
+ 	CloseHandle (get_ttyp ()->to_master);
+       get_ttyp ()->init ();
+     }
+-
++  clear_echobuf ();
+   return 0;
+ }
+ 
+Index: cygwin/select.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/select.cc,v
+retrieving revision 1.83
+diff -u -p -r1.83 select.cc
+--- cygwin/select.cc	11 Dec 2002 04:00:04 -0000	1.83
++++ cygwin/select.cc	22 Dec 2002 02:40:33 -0000
+@@ -431,7 +431,8 @@ peek_pipe (select_record *s, bool from_s
+ 	{
+ 	case FH_PTYM:
+ 	case FH_TTYM:
+-	  if (((fhandler_pty_master *) fh)->need_nl)
++	  if (((fhandler_pty_master *) fh)->need_nl
++	      || ((fhandler_pty_master *)fh)->get_echobuf_valid ())
+ 	    {
+ 	      gotone = s->read_ready = true;
+ 	      goto out;
+
+--ikeVEW9yuYc//A+q--
