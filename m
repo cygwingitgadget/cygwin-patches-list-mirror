@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2927-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 9795 invoked by alias); 3 Sep 2002 15:36:00 -0000
+Return-Path: <cygwin-patches-return-2928-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 12882 invoked by alias); 4 Sep 2002 02:41:20 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,44 +7,68 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 9781 invoked from network); 3 Sep 2002 15:36:00 -0000
-Message-ID: <3D74D6D0.7080007@netscape.net>
-Date: Tue, 03 Sep 2002 08:36:00 -0000
-From: Nicholas Wourms <nwourms@netscape.net>
-User-Agent: Mozilla/5.0 (Windows; U; Win 9x 4.90; en-US; rv:1.0.1) Gecko/20020823 Netscape/7.0
-X-Accept-Language: en-us, en
-MIME-Version: 1.0
-To: Corinna Vinschen <cygwin-patches@cygwin.com>
-Subject: Re: [PATCH] Added Kazuhiro's new wchar functions to cygwin.din
-References: <20020830142028.F5475@cygbert.vinschen.de> <97179922214.20020830163339@logos-m.ru> <20020830150147.G5475@cygbert.vinschen.de> <110182341242.20020830171358@logos-m.ru> <s1selceuumv.fsf@jaist.ac.jp> <3D720D1F.37080487@yahoo.com> <s1sbs7hvijp.fsf@jaist.ac.jp> <20020903142809.B12899@cygbert.vinschen.de> <3D74BD4A.80403@netscape.net> <20020903171937.F12899@cygbert.vinschen.de>
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Transfer-Encoding: 7bit
-X-SW-Source: 2002-q3/txt/msg00375.txt.bz2
+Received: (qmail 12868 invoked from network); 4 Sep 2002 02:41:19 -0000
+Subject: mingw - free_osfhnd
+From: Robert Collins <rbcollins@cygwin.com>
+To: cygwin-patches@cygwin.com
+Content-Type: multipart/signed; micalg=pgp-sha1; protocol="application/pgp-signature";
+	boundary="=-DmC/nJlGPZ57p5pGhTWE"
+Date: Tue, 03 Sep 2002 19:41:00 -0000
+Message-Id: <1031107292.31077.680.camel@lifelesswks>
+Mime-Version: 1.0
+X-SW-Source: 2002-q3/txt/msg00376.txt.bz2
 
-Corinna Vinschen wrote:
 
->On Tue, Sep 03, 2002 at 09:46:50AM -0400, Nicholas Wourms wrote:
->
->>I'd like to voice a small objection to this practice of adding and then 
->>removing symbols, especially given the quantity in this case and the 
->>period of time which lapsed inbetween.  I don't think this practice 
->>should be encouraged at all because it can be quite a PITA if you have 
->>apps which were compiled when the symbols were exported.  I think this 
->>goes double for "cosmetic" issues which are going to be fixed anyhow in 
->>the near future.  I'm trying to help Conrad test the cygserver, so I 
->>have many apps I'm using for testing purposes.  I am now going to have 
->>to recompile the ones I just compiled the other day due to this change. 
->>
->
->That's the reason I copy only the new built DLL to my "Cygwin test and
->native build system", and *not* the libcygwin.a.  This way, I link always
->against the symbols available in the latest stable release and not
->against symbols only available in the developers snapshot (except I
->really, really want it).
->
-I guess in retrospect I should have taken this approach.  The only 
-reason I hadn't in the past is because I thought Chuck's statements 
-represented the "party-line" of this project.  Oh well, live and learn.
+--=-DmC/nJlGPZ57p5pGhTWE
+Content-Type: multipart/mixed; boundary="=-tfJI9B7q4Ue8IE8ymXok"
 
-Cheers,
-Nicholas
+
+--=-tfJI9B7q4Ue8IE8ymXok
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+Content-length: 129
+
+Changelog:
+
+2002-09-04  Robert Collins  <robertc@cygwin.com>
+
+	* msvcrt.def: Export _free_osfhnd.
+
+Is this ok Earnie/Danny?
+
+Rob
+
+--=-tfJI9B7q4Ue8IE8ymXok
+Content-Disposition: attachment; filename=mingwfreeosf.patch
+Content-Type: text/x-patch; name=mingwfreeosf.patch; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+Content-length: 336
+
+diff -rup mingw-runtime-2.1-1.orig/msvcrt.def mingw-runtime-2.1-1/msvcrt.def
+--- mingw-runtime-2.1-1.orig/msvcrt.def	2002-06-15 01:00:39.000000000 +1000
++++ mingw-runtime-2.1-1/msvcrt.def	2002-09-04 12:33:31.000000000 +1000
+@@ -213,6 +213,7 @@ _fpieee_flt
+ _fpreset DATA
+ _fputchar
+ _fputwchar
++_free_osfhnd
+ _fsopen
+ _fstat
+ _fstati64
+
+--=-tfJI9B7q4Ue8IE8ymXok--
+
+--=-DmC/nJlGPZ57p5pGhTWE
+Content-Type: application/pgp-signature; name=signature.asc
+Content-Description: This is a digitally signed message part
+Content-length: 189
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.0.7 (GNU/Linux)
+
+iD8DBQA9dXLbI5+kQ8LJcoIRAiGQAJ9BjfMfw2PyEOR8wlxiRBn+JRwHYQCfV0/5
+WgSsaqho4x2330/9Eo3TUpU=
+=NhS7
+-----END PGP SIGNATURE-----
+
+--=-DmC/nJlGPZ57p5pGhTWE--
