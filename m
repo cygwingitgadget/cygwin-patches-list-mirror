@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3868-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 26567 invoked by alias); 21 May 2003 16:22:46 -0000
+Return-Path: <cygwin-patches-return-3869-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 555 invoked by alias); 21 May 2003 16:24:52 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,101 +7,73 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 26520 invoked from network); 21 May 2003 16:22:45 -0000
-Date: Wed, 21 May 2003 16:22:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
+Received: (qmail 514 invoked from network); 21 May 2003 16:24:51 -0000
+Date: Wed, 21 May 2003 16:24:00 -0000
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
+To: Micha Nelissen <mdvpost@hotmail.com>
+Cc: cygwin-patches@cygwin.com
 Subject: Re: Patch for line draw characters problem & screen scrolling
-Message-ID: <20030521162232.GC3096@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <BAY1-DAV24HHGNZ4mF100020af2@hotmail.com>
+Message-ID: <20030521162449.GA18620@cygbert.vinschen.de>
+Mail-Followup-To: Micha Nelissen <mdvpost@hotmail.com>,
+	cygwin-patches@cygwin.com
+References: <BAY1-DAV24HHGNZ4mF100020af2@hotmail.com> <20030521154842.GA1865@cygbert.vinschen.de> <BAY1-DAV29JOMyQlmLF00020bf3@hotmail.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <BAY1-DAV24HHGNZ4mF100020af2@hotmail.com>
+In-Reply-To: <BAY1-DAV29JOMyQlmLF00020bf3@hotmail.com>
 User-Agent: Mutt/1.4.1i
-X-SW-Source: 2003-q2/txt/msg00095.txt.bz2
+X-SW-Source: 2003-q2/txt/msg00096.txt.bz2
 
-On Wed, May 21, 2003 at 05:32:33PM +0200, Micha Nelissen wrote:
->Hi,
->
->Several problems encountered and tried to fix:
->
->1) line draw characters not showing up in combination Command Prompt with
->bash.
->2) screen scrolling fixed for termcap entry 'cs' -> screen split is very
->fast and cool.
->3) end-of-buffer cursor out of range; see changelog for more details.
->
->This is my first patch, so please don't flame ;). I am open to suggestions.
->
->Regards,
+On Wed, May 21, 2003 at 06:00:05PM +0200, Micha Nelissen wrote:
+> Hi,
+> 
+> > First of all, this is a big patch which requires an assignment
+> > which copies over the copyright ownership to RedHat.
+> 
+> Ok, but where to send this assignment form?
 
->2003-05-21  Micha Nelissen  <mdvpost@hotmail.com>
->
->* fhandler.h (dev_console): add title state variables.
->* fhandler_console.cc (get_tty_stuff): save old console title.
+The address is given on the form (just click the appropriate link):
 
-Why?  This wasn't mentioned in your description of the patch.
+  Rose Naftaly
+  Red Hat, Inc.
+  444 Castro Street
+  Suite 1200
+  Mountain View, California 94041 USA
 
->* fhandler_console.cc (macro: srTop, srBottom; char_command): scroll_region is
->not relative to window top.
+This will take some time but it's required, sorry.
 
-I'm not 100% sure what you're saying here, but if you set a scroll
-region and then send a "goto line 1" escape sequence, I believe that, by
-default, you go to actual line one on the screen, not the first line of
-the scroll region.  This behavior is controlled by some escape sequence.
-rustle, rustle.  <ESC>[?6h and <ESC>[?6l
+> > Second, the ChangeLog doesn't adhere to the ChangeLog standards.
+> 
+> I have taken a look at http://www.gnu.org/prep/standards_42.html. On what
+> ground(s) does it not comply?
 
->* fhandler_console.cc (scroll_screen): renamed variables sr1, sr2 to srScroll,
->srClip respectively which is clearer.
+Well, it should adhere to the other ChangeLog entries in the same file
+at least :-)  Just looking into the existing ChangeLog file should give a
+clue.  It consists of a specifc set of tabs, colons and other characters
+at the right spot.  Just an examples:
 
-That's a gratuitous change, the bane of patch receivers everywhere.
+Not
 
->* fhandler_console.cc (scroll_screen, char_command, write_normal): more debug
->info.
+* foo.c (bar): blah blah
+* foo.c (baz): more blah
+* foobar.c (fooy): even more blah
 
-Your debug output is in a different format than the rest of the debug
-output in that file.  Granted, this is flexible, but your patch seems to
-be extremely wordy.
+but
 
->* fhandler_console.cc (write_normal): end of buffer check enables cursor to be
->out of range; it better emulates *nix terminal behaviour; ie. it is now
->possible to write a single character at right bottom of console buffer without
->the console scrolling the buffer.
+	* foo.c (bar): Blah blah.
+	(baz): More blah.
+	* foobar.c (fooy): Even more blah.
 
-How is this similar to UNIX?  If I do a:
+And there's e.g. no need to rationalize the patch in the ChangeLog.
+Just write *what* you did, not *why* you did it.  If it's not clear
+from the code, add comments there.
 
-sleep 5; echo hello
+It's actually not really hard, just a process to get used to it.
+No worries.
 
-and then scroll my xterm up, xterm scrolls down when hello is printed.  It
-sounds like your patch would not cause this to happen.
+Corinna
 
->* fhandler_console.cc (write_normal): cancelled premature optimization, do
->always use scroll_screen instead of '\n' sometimes
-
-No.  This section of code has been hacked back and forth for years.  This
-one is not going to happen.
-
->* fhandler_write.cc (write): if `user' clears title, then don't add `|'
-
-I must be missing something.  Why is "|" being added to the title at all?
-
-General comments about the rest of the patch:
-
-1) Please break it up into smaller sets for approval.  Large patches like
-this which attempt multiple things are difficult to review.
-
-2) There is occasional deviation from GNU coding standards in your patch.
-Specifically, there are missing spaces after commas and coercions.
-
-3) You comment out some code rather than deleting it outright.  There's
-no reason to leave old code around.
-
-4) As Corinna mentioned, you need to send in an assignment.  The contributing
-page has details.
-
-Thanks for all of your hard work on this patch.
-
-cgf
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
