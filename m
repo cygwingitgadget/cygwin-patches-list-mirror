@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4340-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 2780 invoked by alias); 6 Nov 2003 13:15:10 -0000
+Return-Path: <cygwin-patches-return-4341-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 6929 invoked by alias); 6 Nov 2003 13:29:26 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,35 +7,33 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 2771 invoked from network); 6 Nov 2003 13:15:09 -0000
-Message-ID: <20031106131507.64464.qmail@web13808.mail.yahoo.com>
-Date: Thu, 06 Nov 2003 13:15:00 -0000
+Received: (qmail 6919 invoked from network); 6 Nov 2003 13:29:25 -0000
+Message-ID: <20031106132923.37170.qmail@web13801.mail.yahoo.com>
+Date: Thu, 06 Nov 2003 13:29:00 -0000
 From: =?iso-8859-1?q?Ian=20Ray?= <ran_iay@yahoo.com>
-Subject: [Patch] fhandler_disk_file::opendir memory leak
+Subject: Re: [Patch] fhandler_disk_file::opendir memory leak
 To: cygwin-patches@cygwin.com
+In-Reply-To: <20031106131507.64464.qmail@web13808.mail.yahoo.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="0-777658689-1068124507=:64083"
+Content-Type: multipart/mixed; boundary="0-842784298-1068125363=:36655"
 Content-Transfer-Encoding: 8bit
-X-SW-Source: 2003-q4/txt/msg00059.txt.bz2
+X-SW-Source: 2003-q4/txt/msg00060.txt.bz2
 
---0-777658689-1068124507=:64083
+--0-842784298-1068125363=:36655
 Content-Type: text/plain; charset=iso-8859-1
 Content-Transfer-Encoding: 8bit
 Content-Id: 
 Content-Disposition: inline
-Content-length: 283
+Content-length: 208
 
-The attached patch fixes possible memory leak in
-fhandler_disk_file::opendir.
+Oops. Typo. Retry.
 
-Blue skies,
-Ian
 
 
 ________________________________________________________________________
 Want to chat instantly with your online friends?  Get the FREE Yahoo!
 Messenger http://mail.messenger.yahoo.co.uk
---0-777658689-1068124507=:64083
+--0-842784298-1068125363=:36655
 Content-Type: text/plain; name="fhandler_disk_file.changelog"
 Content-Description: fhandler_disk_file.changelog
 Content-Disposition: inline; filename="fhandler_disk_file.changelog"
@@ -47,14 +45,14 @@ Content-length: 127
 	memory leak.
 
 
---0-777658689-1068124507=:64083
+--0-842784298-1068125363=:36655
 Content-Type: text/plain; name="fhandler_disk_file.patch"
 Content-Description: fhandler_disk_file.patch
 Content-Disposition: inline; filename="fhandler_disk_file.patch"
-Content-length: 1703
+Content-length: 1706
 
 --- fhandler_disk_file.1.67	2003-11-06 14:48:48.959065000 +0200
-+++ fhandler_disk_file.cc	2003-11-06 14:48:18.543510000 +0200
++++ fhandler_disk_file.cc	2003-11-06 15:28:21.081920000 +0200
 @@ -605,7 +605,7 @@ fhandler_disk_file::lock (int cmd, struc
  DIR *
  fhandler_disk_file::opendir ()
@@ -69,7 +67,7 @@ Content-length: 1703
    else if ((len = strlen (pc))> MAX_PATH - 3)
      set_errno (ENAMETOOLONG);
 -  else if ((dir = (DIR *) malloc (sizeof (DIR))) == NULL)
-+  else if ((dir = (DIR *) calloc (sizeof (DIR))) == NULL)
++  else if ((dir = (DIR *) calloc (1, sizeof (DIR))) == NULL)
      set_errno (ENOMEM);
    else if ((dir->__d_dirname = (char *) malloc (len + 3)) == NULL)
 -    {
@@ -118,4 +116,4 @@ Content-length: 1703
    return res;
  }
 
---0-777658689-1068124507=:64083--
+--0-842784298-1068125363=:36655--
