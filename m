@@ -1,19 +1,15 @@
 From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: mkdir ((char*) -1, 0777) returns ECASECLASH
-Date: Fri, 20 Apr 2001 09:40:00 -0000
-Message-id: <20010420124121.B24555@redhat.com>
-References: <122419105832.20010419162011@logos-m.ru>
-X-SW-Source: 2001-q2/msg00130.html
+To: Cygwin Patches <cygwin-patches@cygwin.com>
+Subject: Re: X_OK redefinition protection.
+Date: Fri, 20 Apr 2001 09:46:00 -0000
+Message-id: <20010420124649.B24665@redhat.com>
+References: <3ADEFDEF.626A46EC@yahoo.com> <3AE06643.F33E065B@yahoo.com>
+X-SW-Source: 2001-q2/msg00131.html
 
-On Thu, Apr 19, 2001 at 04:20:11PM +0400, egor duda wrote:
->Hi!
->
->  instead of EFAULT. Fix attached.
+On Fri, Apr 20, 2001 at 12:39:31PM -0400, Earnie Boyd wrote:
+>What's the status of this patch?
 
-I've checked in a minor variation of this patch.  I just preserved
-the same initialization order as was previously used.
-
-Thanks.
+I don't see any reason to add protection to these files.  They have been
+like this for a long time.  Is this a long-standing problem?
 
 cgf
