@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5403-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 29462 invoked by alias); 31 Mar 2005 01:21:44 -0000
+Return-Path: <cygwin-patches-return-5404-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 23568 invoked by alias); 6 Apr 2005 05:37:25 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,37 +7,114 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 29320 invoked from network); 31 Mar 2005 01:21:40 -0000
-Received: from unknown (HELO cgf.cx) (66.30.17.189)
-  by sourceware.org with SMTP; 31 Mar 2005 01:21:40 -0000
-Received: by cgf.cx (Postfix, from userid 201)
-	id 4094213C84F; Wed, 30 Mar 2005 20:21:40 -0500 (EST)
-Date: Thu, 31 Mar 2005 01:21:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
+Received: (qmail 23542 invoked from network); 6 Apr 2005 05:37:18 -0000
+Received: from unknown (HELO dessent.net) (66.17.244.20)
+  by sourceware.org with SMTP; 6 Apr 2005 05:37:18 -0000
+Received: from localhost ([127.0.0.1] helo=dessent.net)
+	by dessent.net with esmtp (Exim 4.44)
+	id 1DJ3AG-0007qo-VP
+	for cygwin-patches@cygwin.com; Wed, 06 Apr 2005 05:33:21 +0000
+Message-ID: <4253768A.8711D94@dessent.net>
+Date: Wed, 06 Apr 2005 05:37:00 -0000
+From: Brian Dessent <brian@dessent.net>
+Organization: My own little world...
+MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH]: "decorate" gcc extensions with __extension__
-Message-ID: <20050331012140.GA19459@trixie.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20050327065657.21624.qmail@gawab.com> <20050329104322.GB28534@cygbert.vinschen.de> <4249A3F0.6020007@gawab.com> <20050329203032.GB32369@trixie.casa.cgf.cx> <4249E5D0.1000201@gawab.com> <20050330054609.GD2969@trixie.casa.cgf.cx> <424B31F2.4010508@gawab.com>
-Mime-Version: 1.0
+Subject: [patch] dup_ent does not set dst when src is NULL
+Content-Type: multipart/mixed;
+ boundary="------------107F8164F734E1B6409DCB71"
+X-SW-Source: 2005-q2/txt/msg00000.txt.bz2
+
+This is a multi-part message in MIME format.
+--------------107F8164F734E1B6409DCB71
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <424B31F2.4010508@gawab.com>
-User-Agent: Mutt/1.5.8i
-X-SW-Source: 2005-q1/txt/msg00106.txt.bz2
+Content-Transfer-Encoding: 7bit
+Content-length: 1880
 
-On Wed, Mar 30, 2005 at 06:10:42PM -0500, Nicholas Wourms wrote:
->As I noted previously, I thought it could be a source of confusion
->since this behaviour is not documented and is not widely know.
 
-?: *is* a documented gcc extension.
+In net.cc, there are several cases where dup_ent() is used as follows:
 
->I, myself, had to rummage through the GCC source code to be absolutely
->certain what the implict behavior was.
+dup_ent (servent_buf, getservbyname (name, proto), t_servent);
+syscall_printf ("%p = getservbyname (%s, %s)",
+    _my_tls.locals.servent_buf, name, proto);
+return _my_tls.locals.servent_buf;
 
-Wow.  Rummaging through the source.  Incredible.
+This presents a problem if getservbyname() returns NULL, because
+dup_ent just returns NULL, it does not modify 'dst'.  This results in
+the function returning the previous successful value if the
+get_foo_by_bar() function returned NULL.  This seems to be applicable to
+getservbyname(), getservbyport(), gethostbyaddr(), and gethostbyname().  
 
-"info gcc" is your friend.
+In the case of gethostbyname() there's also another bug in that there
+will be a spurious debug_printf() about dup_ent failing if the address
+simply didn't resolve.  That should probably be fixed too but I wanted
+to be sure the patch stayed "trivial".
 
-No.  We're not going to change the use of ?:.
+A simple testcase that demonstrates the problem:
+
+#include <stdio.h>
+#include <string.h>
+#include <netdb.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+
+void mygetservbyname(char *serv, char *proto)
+{
+  struct servent *p;
+
+  if((p = getservbyname(serv, proto)))
+    printf("getservbyname(\"%s\", \"%s\") success, port = %u\n", 
+       serv, proto, (unsigned int)ntohs (p->s_port));
+  else
+    printf("getservbyname(\"%s\", \"%s\") returns NULL\n", serv, proto);
+}  
+
+int main(int argc, char **argv)
+{
+  mygetservbyname("25", "tcp");
+  mygetservbyname("auth", "tcp");
+  mygetservbyname("25", "tcp");
+  return 0;
+}
+
+$ ./getservbyname 
+getservbyname("25", "tcp") returns NULL
+getservbyname("auth", "tcp") success, port = 113
+getservbyname("25", "tcp") success, port = 113
+
+
+Brian
+
+===================================================================
+2005-04-05  Brian Dessent  <brian@dessent.net>
+
+	* net.cc (__dup_ent): Make dst point to NULL if src is NULL.
+	Free dst if it was previously allocated to not leak memory.
+--------------107F8164F734E1B6409DCB71
+Content-Type: text/plain; charset=us-ascii;
+ name="dup_ent_null_check.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline;
+ filename="dup_ent_null_check.patch"
+Content-length: 455
+
+Index: net.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/net.cc,v
+retrieving revision 1.186
+diff -u -p -r1.186 net.cc
+--- net.cc	24 Mar 2005 14:04:06 -0000	1.186
++++ net.cc	6 Apr 2005 05:17:50 -0000
+@@ -387,6 +387,9 @@ __dup_ent (unionent *&dst, unionent *src
+   if (!src)
+     {
+       set_winsock_errno ();
++      if(dst)
++        free(dst);
++      dst = NULL;
+       return NULL;
+     }
+ 
+
+
+--------------107F8164F734E1B6409DCB71--
