@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2955-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 3494 invoked by alias); 11 Sep 2002 21:55:38 -0000
+Return-Path: <cygwin-patches-return-2956-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 7962 invoked by alias); 12 Sep 2002 00:46:45 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,23 +7,42 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 3479 invoked from network); 11 Sep 2002 21:55:38 -0000
-Message-ID: <3D7FBBD5.7050103@etr-usa.com>
-Date: Wed, 11 Sep 2002 14:55:00 -0000
-From: Warren Young <warren@etr-usa.com>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.1) Gecko/20020826
-X-Accept-Language: en-us, en
-MIME-Version: 1.0
-To: Cygwin Patches <cygwin-patches@sourceware.cygnus.com>
-Subject: Re: /etc/hosts symlink
-References: <3D7FADF3.5010805@etr-usa.com>
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Transfer-Encoding: 7bit
-X-SW-Source: 2002-q3/txt/msg00403.txt.bz2
+Received: (qmail 7947 invoked from network); 12 Sep 2002 00:46:45 -0000
+Message-Id: <3.0.5.32.20020911204241.00810100@mail.attbi.com>
+X-Sender: phumblet@mail.attbi.com
+Date: Wed, 11 Sep 2002 17:46:00 -0000
+To: Corinna Vinschen <cygwin-patches@cygwin.com>
+From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
+Subject: Re: initgroups
+In-Reply-To: <20020911161252.V1574@cygbert.vinschen.de>
+References: <3D7F4284.46484222@ieee.org>
+ <3.0.5.32.20020910213124.0080e5a0@mail.attbi.com>
+ <20020911123808.Q1574@cygbert.vinschen.de>
+ <3D7F4284.46484222@ieee.org>
+Mime-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+X-SW-Source: 2002-q3/txt/msg00404.txt.bz2
 
-Nevermind on this patch.  I hadn't seen the "beginnings of a patch" 
-thread on the main Cygwin list yet when I wrote and posted this.
+At 04:12 PM 9/11/2002 +0200, Corinna Vinschen wrote:
+>>  why is the largest possible gid value forbidden? 
+>
+>It's not forbidden in the first place, it has a special meaning
+>when used as parameter to chown(), see
+>http://www.opengroup.org/onlinepubs/007904975/functions/chown.html
 
-Perhaps some ideas from this script can be salvaged; I'd rather merge 
-any such ideas into that script than make my script feature-competitive 
-with the other one.
+OK, thanks Corinna. However we also give it special meaning (noop) 
+in setegid () (and similarly for uid in seteuid). 
+http://www.opengroup.org/onlinepubs/007904975/functions/setegid.html
+gives us no such choice. We can either 1) accept it (if the user has been
+foolish enough to put it in /etc/group),
+or 2) return EINVAL if we decide that our implementation does not 
+support it outright (even if it's in /etc/group).
+
+If we decide on 1) shouldn't we remove calls to {ug}id16to(ug}id32 from
+passwd.cc, grp.cc and syscalls.cc, EXCEPT in the various cases of chown 
+(i.e. simply do as getgrgid (), which doesn't call gid16togid32)?
+Also, we shouldn't rely on ILLEGAL_UID in dcrt0. 
+If we decide on 2), shouldn't we enforce it everywhere? One possibility is
+not to read in passwd and group entries with "illegal" {ug}id values.
+
+Pierre
