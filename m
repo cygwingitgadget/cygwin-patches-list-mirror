@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1503-listarch-cygwin-patches=sourceware.cygnus.com@sources.redhat.com>
-Received: (qmail 21806 invoked by alias); 17 Nov 2001 09:48:37 -0000
+Return-Path: <cygwin-patches-return-1504-listarch-cygwin-patches=sourceware.cygnus.com@sources.redhat.com>
+Received: (qmail 19833 invoked by alias); 17 Nov 2001 19:59:30 -0000
 Mailing-List: contact cygwin-patches-help@sourceware.cygnus.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@sources.redhat.com>
@@ -7,49 +7,72 @@ List-Post: <mailto:cygwin-patches@sources.redhat.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@sources.redhat.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@sources.redhat.com
-Received: (qmail 21592 invoked from network); 17 Nov 2001 09:48:34 -0000
-Date: Sun, 14 Oct 2001 06:30:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygwin-patches@sourceware.cygnus.com
-Subject: Re: [PATCH] Mask mnemonics and expressions, help, version, getopts_long() for strace
-Message-ID: <20011117104821.A25284@cygbert.vinschen.de>
-Mail-Followup-To: Corinna Vinschen <cygwin-patches@cygwin.com>,
-	cygwin-patches@sourceware.cygnus.com
-References: <NCBBIHCHBLCMLBLOBONKMEFPCHAA.g.r.vansickle@worldnet.att.net>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.2.5i
-In-Reply-To: <NCBBIHCHBLCMLBLOBONKMEFPCHAA.g.r.vansickle@worldnet.att.net>; from g.r.vansickle@worldnet.att.net on Thu, Nov 15, 2001 at 07:24:12AM -0600
-X-SW-Source: 2001-q4/txt/msg00035.txt.bz2
+Received: (qmail 19812 invoked from network); 17 Nov 2001 19:59:30 -0000
+To: cygwin-patches@sources.redhat.com
+From: Nick Duffek <nick@duffek.com>
+Subject: [PATCH] Don't modify const string in conv_path_list()
+Message-Id: <20011117195929.7886D1BF249@duffek.com>
+Date: Sun, 14 Oct 2001 06:38:00 -0000
+X-SW-Source: 2001-q4/txt/msg00036.txt.bz2
 
-On Thu, Nov 15, 2001 at 07:24:12AM -0600, Gary R. Van Sickle wrote:
-> 12th time's the charm;-)!:
-> 
-> 2001-11-15  Gary R. Van Sickle  <g.r.vansickle@worldnet.att.net>
-> 
-> 	* strace.cc (main): Change getopt() to getopt_long().
-> 	Add support for help and version info.
-> 	Use new parse_mask() function for -m/--mask option.
-> 	(longopts): Add long options structure.
-> 	(opts): Move options string from getopts call to static var.
-> 	(usage): Print usage information.
-> 	(SCCSid): Version info.
-> 	(version): New function for displaying version info.
-> 	(parse_mask): New function supporting parsing of mnemonics,
-> 	hex, and basic expressions in masks.
-> 	(mnemonic2ul): New mnemonic parsing function.
-> 	(tag_mask_mnemonic): New type.
-> 	(mnemonic_table): New table of mnemonics for mnemonic2ul() to
-> 	search through.
+Hi,
 
+On 15-Oct-2001, Robert Bogomip <bob.bogo@milohedge.com> wrote:
 
-Applied.
+>  bash-2.05$ (exec -c sh -c 'export PATH; ls')
+>        0 [main] sh 8724 open_stackdumpfile: Dumping stack trace to sh.exe.stackdump
 
-Thanks,
-Corinna
+Here's a patch to fix that.
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+Starting ash as above causes PATH to be a read-only compile-time string.
+When forking a subprocess, that string:
+  1. gets passed to execve() as part of the environment;
+  2. subsequently gets passed as a const char * parameter to
+     conv_path_list() in winsup/cygwin/path.cc;
+  3. becomes the target of an assignment in conv_path_list(), resulting in
+     the segmentation violation.
+
+The appended patch fixes the bug by copying PATH components instead of
+modifying PATH itself.
+
+winsup/cygwin/ChangeLog:
+
+	* path.cc (conv_path_list): Copy source paths before modifying
+	them.
+
+Nick Duffek
+<nick@duffek.com>
+
+[patch follows]
+
+Index: winsup/cygwin/path.cc
+===================================================================
+diff -up winsup/cygwin/path.cc winsup/cygwin/path.cc
+--- winsup/cygwin/path.cc	Fri Nov 16 22:57:52 2001
++++ winsup/cygwin/path.cc	Fri Nov 16 22:57:32 2001
+@@ -1234,17 +1234,22 @@ conv_path_list (const char *src, char *d
+   int (*conv_fn) (const char *, char *) = (to_posix_p
+ 					   ? cygwin_conv_to_posix_path
+ 					   : cygwin_conv_to_win32_path);
++  char srcbuf[MAX_PATH];
++  int len;
+ 
+   do
+     {
+       s = strchr (src, src_delim);
+       if (s)
+ 	{
+-	  *s = 0;
+-	  (*conv_fn) (src[0] != 0 ? src : ".", d);
++	  len = s - src;
++	  if (len >= MAX_PATH)
++	    len = MAX_PATH - 1;
++	  memcpy (srcbuf, src, len);
++	  srcbuf[len] = 0;
++	  (*conv_fn) (len ? srcbuf : ".", d);
+ 	  d += strlen (d);
+ 	  *d++ = dst_delim;
+-	  *s = src_delim;
+ 	  src = s + 1;
+ 	}
+       else
