@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1793-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 8563 invoked by alias); 25 Jan 2002 22:34:10 -0000
+Return-Path: <cygwin-patches-return-1794-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 21812 invoked by alias); 25 Jan 2002 22:53:41 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,13 +7,17 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 8549 invoked from network); 25 Jan 2002 22:34:09 -0000
-Message-ID: <008b01c1a5f0$65c9e9b0$0200a8c0@lifelesswks>
+Received: (qmail 21683 invoked from network); 25 Jan 2002 22:53:38 -0000
+Message-ID: <014f01c1a5f3$1eb048f0$0200a8c0@lifelesswks>
 From: "Robert Collins" <robert.collins@itdomain.com.au>
-To: <cygwin-patches@cygwin.com>
-References: <02b901c1a58d$11e86820$a100a8c0@mchasecompaq> <1011955697.18203.27.camel@lifelesswks> <000901c1a58f$58a46640$a100a8c0@mchasecompaq> <20020125172432.GD27965@redhat.com>
-Subject: Re: [PATCH]Package extention recognition (revision 2)
-Date: Fri, 25 Jan 2002 14:34:00 -0000
+To: "J. Johnston" <jjohnstn@redhat.com>
+Cc: "Thomas Fitzsimmons" <fitzsim@redhat.com>,
+	<cgf@redhat.com>,
+	<newlib@sources.redhat.com>,
+	<cygwin-patches@cygwin.com>
+References: <1011834535.1278.46.camel@toggle>	<02ce01c1a488$156d32b0$0200a8c0@lifelesswks>	<1011892037.16026.53.camel@toggle>  <20020124174949.GA3123@redhat.com> 	<1011901690.1187.55.camel@toggle> <1011914014.18203.5.camel@lifelesswks> <3C50A86B.93F06373@redhat.com>
+Subject: Re: patch to allow newlib to compile when winsup not present
+Date: Fri, 25 Jan 2002 14:53:00 -0000
 MIME-Version: 1.0
 Content-Type: text/plain;
 	charset="iso-8859-1"
@@ -22,44 +26,63 @@ X-Priority: 3
 X-MSMail-Priority: Normal
 X-Mailer: Microsoft Outlook Express 6.00.2600.0000
 X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-OriginalArrivalTime: 25 Jan 2002 22:34:08.0573 (UTC) FILETIME=[673ADED0:01C1A5F0]
-X-SW-Source: 2002-q1/txt/msg00150.txt.bz2
+X-OriginalArrivalTime: 25 Jan 2002 22:53:37.0733 (UTC) FILETIME=[201A8750:01C1A5F3]
+X-SW-Source: 2002-q1/txt/msg00151.txt.bz2
 
-My fault, we discussed this on cygwin-apps when you where adding package
-support to cygcheck.
 
-I was looking for a clear and easy to read solution ;}. I don't think
-that supporting foo.tar.bz2.tar.bz2 needs to be an objective though :}.
-
-Rob
 ===
 ----- Original Message -----
-From: "Christopher Faylor" <cgf@redhat.com>
-To: <cygwin-patches@cygwin.com>
-Sent: Saturday, January 26, 2002 4:24 AM
-Subject: Re: [PATCH]Package extention recognition (revision 2)
+From: "J. Johnston" <jjohnstn@redhat.com>
 
+> No overwhelming reason, however, historically there are already
+precedences for
+> this.  Newlib already contains system-specific and machine-specific
+header
+> files and a system for overriding the common ones.  It supposed to be
+the
+> C library.  It is not supposed to be 1/nth of a C library.  Look at
+glibc if
+> you want an example.  It has multiple directories for system-dependent
+code.
+> It is a very reasonable design.
 
-> On Fri, Jan 25, 2002 at 02:59:17AM -0800, Michael A Chase wrote:
-> >And that test is still there, I moved it into the if () so something
-like
-> >".tar.bz2" wouldn't trigger the return .... : 0;  If all the ifs
-fail,
-> >return 0; still occurs.
->
-> Hmm.  Seems like someone has "improved" this code from when I wrote
-it.
->
-> My version checked for a trailing component.  If it existed, it
-returned
-> the index into the string.
->
-> This version sort of does the same thing but if there is a .tar.bz2
-> anywhere in the string prior to trailing component, it will fail
-> regardless of whether the filename ends with .tar .tar.gz or .tar.bz2.
->
-> Perhaps that is an acceptable risk but it puzzles me why anyone would
-> move from an algorithm that was foolproof to one that wasn't.
->
-> cgf
->
+I'll accept that you may have system-dependent code that is part of the
+C library. If you are implementing user-land threads for instance, then
+that is quite clearly a C library, probably system dependent set of
+code. However, in this instance, we are implementing 'kernel' threads,
+and the typedef will change as that implementation changes, without any
+other changes being needed (or appropriate) in newlib.
+
+I'm not suggesting that newlib be a 1/nth C library, just like I presume
+you aren't suggesting it become a kernel :}.
+
+> That said, the line between newlib and winsup has not been drawn
+particularly
+> well.
+
+I agree. I recently suggested that winsup have it's binary reorganised
+to have more a more explict C library, math libray, and porting layer
+approach, which (if accepted :}) will likely help draw the line.
+Ideally, the two are orthogonal to each other. But realiy is often more
+messy than that.
+
+> A simple solution is to have the header file in question for newlib
+(possibly
+> some
+> additional ones) have a #error message if Cygwin is being compiled and
+the
+> header file
+> has not been overridden properly because winsup headers have not been
+brought
+> in.
+
+Hmm, I wonder if
+#ifndef pthread_t
+#error pthread_t hasn't be specified for this platform, do you have the
+kernel includes available?
+#endif
+
+will catch a missing typedef correctly? Assuming it won't, the correct
+define to check for in this case is _CYGWIN_TYPES_H.
+
+Rob
