@@ -1,52 +1,29 @@
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
+From: Egor Duda <deo@logos-m.ru>
 To: cygwin-patches@cygwin.com
-Subject: Re: src/winsup Makefile.common ChangeLog
-Date: Thu, 22 Feb 2001 05:02:00 -0000
-Message-id: <20010222140020.J908@cygbert.vinschen.de>
-References: <20010221200320.B7330@redhat.com> <Pine.HPP.3.96.1010221210751.20219D-100000@hp2.xraylith.wisc.edu>
-X-SW-Source: 2001-q1/msg00107.html
+Subject: Re: race in tty handling code
+Date: Thu, 22 Feb 2001 07:56:00 -0000
+Message-id: <1989782887.20010222185416@logos-m.ru>
+References: <2170208116.20010222140316@logos-m.ru>
+X-SW-Source: 2001-q1/msg00108.html
 
-On Wed, Feb 21, 2001 at 09:14:51PM -0600, Mumit Khan wrote:
-> On Wed, 21 Feb 2001, Christopher Faylor wrote:
-> 
-> > On Wed, Feb 21, 2001 at 07:01:11PM -0500, Earnie Boyd wrote:
-> > >
-> > >Are you positive about this patch?  I thought that problems existed
-> > >unless all libraries were compiled -fvtable-thunks.
-> > 
-> > Huh.  I just asked Corinna to discuss this here to see if anyone had
-> > any idea if this would cause problems.  It sounds like it might be
-> > a potential speedup for cygwin, though?
-> 
-> Thunks allow *some* optimization, and makes the vtable layout compatible
-> with MS COM objects, so it's a big plus. It's the default for Linux.
-> However, there are a two primary considerations, and these are primarily
-> why I resisted making it the default when it was discussed the last time
-> (I believe just before gcc-2.95 was first released for Cygwin/Mingw):
-> 
-> 1 Binary incompatibility: *everything* must be build accordingly. 
-> 2 There are bugs in vtable thunks implementation that causes trouble with
->   certain types of multiple inheritance. I had to redesign some of our 
->   code so that it would work under Linux. It's supposedly fixed for 
->   gcc-2.95.3 (backported from the mainline). Fortunately, most user 
->   codes don't make extensive use of multiple inheritance, and it hasn't 
->   been that big of an issue.
-> 
-> If you mix and match code compiled with -fvtable-thunks, it'll fail
-> mysteriously, and a debugger won't help you there either. However, I
-> don't know if building Cygwin with it will impact user code (it really
-> shouldn't, but that's not based on hard evidence).
-> 
-> I have not observed appreciable speedup with -fvtable-thunks except for
-> some specific cases.
+Hi!
 
-To short-circute any problems which could be related to using
-`-fvtable-thunks' I have changed the new symlink code to use
-the C interface to COM instead of the C++ interface.
+Thursday, 22 February, 2001 Egor Duda deo@logos-m.ru wrote:
 
-Corinna
+ED>   if  application performs write to tty with ONLCR flag turned off and
+ED>   then    immediately    calls    tcsetattr    to    turn    it    on,
+ED> fhandler_pty_master::process_slave_output     gets    confused.   it
+ED> calculates rlen according to old tty settings and signals output_done
+ED> event.  then  it process the buffer according to new tty settings, and
+ED> stumbles  over  internal  error  message. Patch attached  (well,  this
+ED> time  i  triple-checked  that  it does contain changelog entry :)
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+the  patch  is  wrong, however :( it seems that pty_master cannot tell
+when   it   got   all  data  from  slave's  write()  and  can  signal
+output_done_event.     How    about    sending
+'<data_length (1 byte)><data_block (up to 255 bytes)>'
+through  pipe  between  slave  and  master?  this  would  also  solve
+PeekNamedPipe  polling  problem.
+
+Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
+
