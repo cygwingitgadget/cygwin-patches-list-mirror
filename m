@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1898-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 27667 invoked by alias); 25 Feb 2002 18:15:22 -0000
+Return-Path: <cygwin-patches-return-1897-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 27657 invoked by alias); 25 Feb 2002 18:15:20 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,15 +7,15 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 27586 invoked from network); 25 Feb 2002 18:15:18 -0000
-Message-ID: <20020225181509.5534.qmail@web20006.mail.yahoo.com>
-Date: Mon, 25 Feb 2002 10:15:00 -0000
+Received: (qmail 27592 invoked from network); 25 Feb 2002 18:15:18 -0000
+Message-ID: <20020225181508.5528.qmail@web20006.mail.yahoo.com>
+Date: Mon, 25 Feb 2002 10:23:00 -0000
 From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
 Subject: Re: help/version patches 
 To: cygwin-patches@cygwin.com
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-X-SW-Source: 2002-q1/txt/msg00253.txt.bz2
+X-SW-Source: 2002-q1/txt/msg00255.txt.bz2
 
 > Adding version numbers is not a bad idea (although, I can't honestly
 > think of a time when it would have helped to have this information).
