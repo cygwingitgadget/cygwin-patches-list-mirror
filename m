@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4955-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 21653 invoked by alias); 12 Sep 2004 03:50:09 -0000
+Return-Path: <cygwin-patches-return-4956-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 16237 invoked by alias); 12 Sep 2004 14:08:06 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,36 +7,63 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 21642 invoked from network); 12 Sep 2004 03:50:08 -0000
-Date: Sun, 12 Sep 2004 03:50:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
+Received: (qmail 16162 invoked from network); 12 Sep 2004 14:08:02 -0000
+Date: Sun, 12 Sep 2004 14:08:00 -0000
+From: Corinna Vinschen <vinschen@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [Patch]: Setting the winpid in pinfo
-Message-ID: <20040912035134.GF18421@trixie.casa.cgf.cx>
+Subject: Re: [Fwd: 1.5.11-1: sftp performance problem]
+Message-ID: <20040912140847.GA11786@cygbert.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3.0.5.32.20040907212602.0085d7f0@incoming.verizon.net> <3.0.5.32.20040907212602.0085d7f0@incoming.verizon.net> <3.0.5.32.20040910212935.007e4310@incoming.verizon.net>
+References: <20040911130247.GB17670@cygbert.vinschen.de> <20040911172454.6F9DEE538@carnage.curl.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3.0.5.32.20040910212935.007e4310@incoming.verizon.net>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2004-q3/txt/msg00107.txt.bz2
+In-Reply-To: <20040911172454.6F9DEE538@carnage.curl.com>
+User-Agent: Mutt/1.4.2i
+X-SW-Source: 2004-q3/txt/msg00108.txt.bz2
 
-On Fri, Sep 10, 2004 at 09:29:35PM -0400, Pierre A. Humblet wrote:
->	* exceptions.cc: Add header files.
->	(ctrl_c_handler): Do nothing while a Cygwin subprocess is
->	starting.
+On Sep 11 13:24, Bob Byrnes wrote:
+> On Sep 11,  3:02pm, Corinna Vinschen wrote:
+> -- Subject: Re: [Fwd: 1.5.11-1: sftp performance problem]
+> >
+> > http://cygwin.com/acronyms/#PCYMTNQREAIYR
+> 
+> Sorry ... done.
+> 
+> > | One really annoying consequence of socketpairs for sshd is that
+> > | Windows-native (i.e. non-Cygwin) programs don't know how to write
+> > | directly to sockets on stdout (or stderr), so if you try to use
+> > | them via ssh, their output silently disappears.
+> > 
+> > Oh lord!  I tried it with `net', `ping' and `nslookup', which are roughly
+> > the only Windows applications I use on the command line, and all three
+> > have no problems.  I'm wondering how the above can happen since the
+> > interactive application side is running in a PTY (which *is* a pipe),
+> > not on socketpairs.
+> 
+> Try it without a pty:
+> 
+>     ssh cygwin-system-with-sshd-using-sockpairs "win32-native-command"
+> 
+> vs.
+> 
+>     ssh cygwin-system-with-sshd-using-sockpairs "win32-native-command | cat"
 
-I checked in a variation of this patch which used myself->ppid_handle
-as a method for finding if the process was started by a cygwin process.
-This means that a program which execs itself two or more times from
-the command prompt will not trigger this behavior but I'm not 100%
-sure that that isn't the correct behavior.
+Yeah, sure.  But native apps are not our first concern and the above can
+also easily be done with
 
-I also checked in the other two changes which I've mentioned in this
-thread.
+  ssh -t cygwin-system-with-sshd-using-sockpairs "win32-native-command"
 
-Thanks, as always, for your patch.
+> And we'd still have the problem with win32-native apps, which I think
+> is a show-stopper for socketpairs.
 
-cgf
+I'm actually in doubt that this should be a showstopper.
+
+
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          mailto:cygwin@cygwin.com
+Red Hat, Inc.
