@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3875-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 10656 invoked by alias); 22 May 2003 19:07:34 -0000
+Return-Path: <cygwin-patches-return-3876-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 31236 invoked by alias); 23 May 2003 04:00:09 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,37 +7,53 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 10647 invoked from network); 22 May 2003 19:07:34 -0000
-Date: Thu, 22 May 2003 19:07:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: Patch for line draw characters problem & screen scrolling
-Message-ID: <20030522190722.GB4621@redhat.com>
+Received: (qmail 27497 invoked from network); 23 May 2003 03:58:29 -0000
+X-Authentication-Warning: slinky.cs.nyu.edu: pechtcha owned process doing -bs
+Date: Fri, 23 May 2003 04:00:00 -0000
+From: Igor Pechtchanski <pechtcha@cs.nyu.edu>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <BAY1-DAV24HHGNZ4mF100020af2@hotmail.com> <20030521162232.GC3096@redhat.com> <s1sof1vzgj1.fsf@jaist.ac.jp>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <s1sof1vzgj1.fsf@jaist.ac.jp>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2003-q2/txt/msg00102.txt.bz2
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] cygcheck parsing of id output
+In-Reply-To: <Pine.GSO.4.44.0305011823430.25128-200000@slinky.cs.nyu.edu>
+Message-ID: <Pine.GSO.4.44.0305222357490.26092-100000@slinky.cs.nyu.edu>
+Importance: Normal
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; CHARSET=US-ASCII
+Content-ID: <Pine.GSO.4.44.0305222357492.26092@slinky.cs.nyu.edu>
+X-SW-Source: 2003-q2/txt/msg00103.txt.bz2
 
-On Thu, May 22, 2003 at 02:39:30PM +0900, Kazuhiro Fujieda wrote:
->>>> On Wed, 21 May 2003 12:22:32 -0400
->>>> Christopher Faylor <cgf@redhat.com> said:
+Ping.
+	Igor
+
+On Thu, 1 May 2003, Igor Pechtchanski wrote:
+
+> Hi,
 >
->> >* fhandler_console.cc (write_normal): cancelled premature optimization, do
->> >always use scroll_screen instead of '\n' sometimes
->> 
->> No.  This section of code has been hacked back and forth for years.  This
->> one is not going to happen.
+> The attached patch allows cygcheck to handle spaces, commas, and
+> *matching* parentheses in user and group names in the "id" output.
+> There's some code sharing in parsing the user and group names, but that
+> could be refactored in a later cleanup.
 >
->As an additional explanation, this optimization makes the
->scrolling down accelerate considerably (2-3 times faster)
->on Win9x/Me.
+> One issue that also came up is the old "run a cygwin program from a
+> non-cygwin program from an xterm" issue -- when running cygcheck from an
+> xterm, id pops up a separate window and cygcheck gets no output from id...
+> I'm not sure how to fix this.  One thing that comes to mind is making
+> cygcheck aware of Cygwin ptys, but I don't know how hard that would be...
+> 	Igor
+> ==============================================================================
+> ChangeLog:
+> 2003-05-01  Igor Pechtchanski  <pechtcha@cs.nyu.edu>
+>
+> 	* cygcheck.cc (pretty_id): Parse id output without
+> 	using strtok.
+> 	(match_paren): New static function.
 
-Thanks.  I knew we had a good reason for this but I forgot what
-it was.
+-- 
+				http://cs.nyu.edu/~pechtcha/
+      |\      _,,,---,,_		pechtcha@cs.nyu.edu
+ZZZzz /,`.-'`'    -.  ;-;;,_		igor@watson.ibm.com
+     |,4-  ) )-,_. ,\ (  `'-'		Igor Pechtchanski
+    '---''(_/--'  `-'\_) fL	a.k.a JaguaR-R-R-r-r-r-.-.-.  Meow!
 
-cgf
+"I have since come to realize that being between your mentor and his route
+to the bathroom is a major career booster."  -- Patrick Naughton
