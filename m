@@ -1,43 +1,63 @@
-From: DJ Delorie <dj@delorie.com>
-To: juliano@cs.unc.edu
-Cc: cygwin-patches@sources.redhat.com
-Subject: Re: cinstall contribution
-Date: Fri, 14 Jul 2000 15:22:00 -0000
-Message-id: <200007142222.SAA16834@envy.delorie.com>
-References: <Pine.SGI.4.10.10007111450500.361924-100000@cystine.cs.unc.edu> <396B7FC4.188536DC@delorie.com> <200007112129.RAA03821@envy.delorie.com> <396F377E.F3ADDEF6@cs.unc.edu> <200007141712.NAA14485@envy.delorie.com> <396F9057.83997899@cs.unc.edu>
-X-SW-Source: 2000-q3/msg00015.html
+From: Chris Faylor <cgf@cygnus.com>
+To: Robert Collins <robert.collins@itdomain.com.au>
+Cc: cygwin-patches@sourceware.cygnus.com
+Subject: Re: stackdump revisited - line number achieved!
+Date: Fri, 14 Jul 2000 16:25:00 -0000
+Message-id: <20000714192440.A16900@cygnus.com>
+References: <8600BF007197944F8DD3906E40CB42808F83@itdomain001.itdomain.net.au> <20000709205322.A8625@cygnus.com> <011501bfede5$c8a7b130$f7c723cb@lifelesswks>
+X-SW-Source: 2000-q3/msg00016.html
 
-> Did that, but I additionally patched concat to prevent a crash when
-> root_mount remained unset.
+On Sat, Jul 15, 2000 at 08:49:30AM +1000, Robert Collins wrote:
+>Chris,
+>
+>Here's a patch that fixed my problems. with stack dumping daemons. Your
+>suggestions did help me, although (as I mentioned ) I still can't get gdb to
+>attach properly.. ah well another day another problem.
+>
+>Notes on the diff's:
+>Path.cc - get device name has an unchecked parameter, and would never return
+>FH_BAD.
+>The hinfo.cc - delinearize fd loop shouldn't iterate at all failed when
+>max_used_fd is -1. I'm still getting my programming shoes back on, so the if
+>check is _not_ portable. (How _do_ you check for a overflow issues on
+>size_t - which is theoretically unsigned??)
 
-Others have suggested that, but in all the cases where that patch
-would help, what you *really* need is a test for root_dir==NULL
-elsewhere to change the logic so that concat isn't calles.  Otherwise,
-you end up passing an null pointer as a filename, which is a bad idea.
+In this case it can be changed by making max_unused_fd into an int, which I've
+done.
 
-> Changed it.  I was trying to emulate your conventions elsewhere in that
-> file.
+Thanks for tracking this down.
 
-Yeah, well, different code needs different style.  My preference is to
-design my functions so that I can abort them (by returning) when
-errors are encountered, but there are times when I'm just trying
-something to see if it works and, if so, doing a little extra
-processing.  That's when you see the reverse test.
+There should be no need to protect the device name against NULL since it
+is not ever supposed to get a NULL.
 
-> "line" is for catching the case where the URL in the file is longer than
-> 1000 characters.  Something that's automatically handled by:
-> 
-> How else do you do that in C?
+The attached patch should hopefully fix this problem.  I'll check it in soon.
 
-With fgets.  One of the parameters is the size of the buffer.  If the
-url exceeds 1000 characters, it just gets truncated.  Otherwise, you
-could stat() the file and allocate a buffer.
+cgf
 
-> But, I exposed a function in site.cc to other.cc, through a new file
-> site.h.  It's kind of ugly, but I didn't know where else to put it. 
-
-site.h is correct.  I prefer that each "foo.cc" has a "foo.h" that
-describes the interface to that file.  Obvious exception: dialog.h
-prototypes all the dialog entries, because using a macro to do that
-makes it easier to maintain, and it also removes the need for a lot of
-trivial *.h files.
+Index: hinfo.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/hinfo.cc,v
+retrieving revision 1.8
+diff -u -p -r1.8 hinfo.cc
+--- hinfo.cc	2000/07/01 17:30:35	1.8
++++ hinfo.cc	2000/07/14 22:57:59
+@@ -497,8 +497,8 @@ hinfo::linearize_fd_array (unsigned char
+ LPBYTE
+ hinfo::de_linearize_fd_array (LPBYTE buf)
+ {
+-  int len;
+-  size_t max_used_fd, inc_size;
++  int len, max_used_fd;
++  size_t inc_size;
+ 
+   debug_printf ("buf %x", buf);
+ 
+@@ -518,7 +518,7 @@ hinfo::de_linearize_fd_array (LPBYTE buf
+       return NULL;
+     }
+ 
+-  for (size_t i = 0; i <= max_used_fd; i++)
++  for (int i = 0; i <= max_used_fd; i++)
+     {
+       /* 0xFF means closed */
+       if (*buf == 0xff)
