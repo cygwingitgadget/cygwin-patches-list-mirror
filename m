@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2861-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 6241 invoked by alias); 25 Aug 2002 22:02:53 -0000
+Return-Path: <cygwin-patches-return-2862-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 13003 invoked by alias); 25 Aug 2002 22:45:36 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,363 +7,303 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 6226 invoked from network); 25 Aug 2002 22:02:51 -0000
-Message-Id: <3.0.5.32.20020825175114.0080a290@h00207811519c.ne.client2.attbi.com>
-X-Sender: pierre@h00207811519c.ne.client2.attbi.com
-Date: Sun, 25 Aug 2002 15:02:00 -0000
-To: "Chris January" <chris@atomice.net>
-From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
-Subject: RE: More more Everyone
-Cc: cygwin-patches@cygwin.com
-In-Reply-To: <LPEHIHGCJOAIPFLADJAHGEIMCKAA.chris@atomice.net>
-References: <3.0.5.32.20020824171457.00811b80@mail.attbi.com>
-Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="=====================_1030326674==_"
-X-SW-Source: 2002-q3/txt/msg00309.txt.bz2
+Received: (qmail 12989 invoked from network); 25 Aug 2002 22:45:35 -0000
+Message-ID: <010a01c24c89$82b70c20$6132bc3e@BABEL>
+From: "Conrad Scott" <Conrad.Scott@dsl.pipex.com>
+To: <cygwin-patches@cygwin.com>
+Subject: SUSv3 compliant prototypes for socket calls
+Date: Sun, 25 Aug 2002 15:45:00 -0000
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+	boundary="----=_NextPart_000_0107_01C24C91.E4214630"
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-SW-Source: 2002-q3/txt/msg00310.txt.bz2
 
---=====================_1030326674==_
-Content-Type: text/plain; charset="us-ascii"
-Content-length: 789
+This is a multi-part message in MIME format.
 
-At 11:04 AM 8/25/2002 +0100, Chris January wrote:
->Can you please make sure these changes are also reflected in
->get_nt_object_attribute?
+------=_NextPart_000_0107_01C24C91.E4214630
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+Content-length: 243
 
-Good point. Thanks. 
-I took this opportunity to collect a chunk of common code in a new function.
-This patch supersedes those I sent yesterday.
+I'm trying to unwind some of the changes that have built up in my
+sandbox: here's a patch to fix the prototypes for recv/recvfrom
+and send/sendto to match SUSv3; and some minor changes to strace
+output too while I'm at it.
 
-Pierre
+Enjoy,
 
-2002-08-25 Pierre Humblet <Pierre.Humblet@ieee.org>
-	
-	* sec_acl.cc (getacl): Check ace_sid == well_known_world_sid
-	before owner_sid and group_sid so that well_known_world_sid 
-	means "other" even when owner_sid and/or group_sid are Everyone. 
-	* security.cc (get_attribute_from_acl): Created from code common
-	to get_nt_attribute() and get_nt_object_attribute(), with same 
-	reordering as in getacl() above.
-	(get_nt_attribute): Call get_attribute_from_acl().
-	(get_nt_object_attribute): Ditto.
+// Conrad
 
---=====================_1030326674==_
-Content-Type: text/plain; charset="iso-8859-1"
+
+------=_NextPart_000_0107_01C24C91.E4214630
+Content-Type: text/plain;
+	name="ChangeLog.txt"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+	filename="ChangeLog.txt"
+Content-length: 768
+
+2002-08-25  Conrad Scott  <conrad.scott@dsl.pipex.com>
+
+	* fhandler.h (fhandler_socket::recvfrom): Fix prototype.
+	(fhandler_socket::sendto): Ditto.
+	* fhandler_socket.cc (fhandler_socket::recvfrom): Ditto.
+	(fhandler_socket::sendto): Ditto.
+	* include/sys/socket.h (recv): Fix prototype.
+	(recvfrom): Ditto.
+	(send): Ditto.
+	(sendto): Ditto.
+	* net.cc (cygwin_sendto): Ditto. Improve strace message
+	(cygwin_recvfrom): Ditto.  Ditto.
+	(cygwin_setsockopt): Improve strace message.
+	(cygwin_getsockopt): Ditto.
+	(cygwin_connect): Ditto.
+	(cygwin_accept): Ditto.
+	(cygwin_bind): Ditto.
+	(cygwin_getsockname): Ditto.
+	(cygwin_getpeername): Ditto.
+	(cygwin_recv): Fix prototype.
+	(cygwin_send): Ditto.
+	(cygwin_recvmsg): Improve strace message.
+	(cygwin_sendmsg): Ditto.
+
+
+------=_NextPart_000_0107_01C24C91.E4214630
+Content-Type: text/plain;
+	name="flags.patch.txt"
 Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment; filename="Everyone.diff"
-Content-length: 8649
+Content-Disposition: attachment;
+	filename="flags.patch.txt"
+Content-length: 8307
 
---- sec_acl.cc.orig	2002-07-02 20:29:16.000000000 -0400
-+++ sec_acl.cc	2002-08-24 17:01:02.000000000 -0400
-@@ -314,7 +314,12 @@
-       int id;
-       int type =3D 0;
-
--      if (ace_sid =3D=3D owner_sid)
-+      if (ace_sid =3D=3D well_known_world_sid)
-+	{
-+	  type =3D OTHER_OBJ;
-+	  id =3D 0;
-+	}
-+      else if (ace_sid =3D=3D owner_sid)
- 	{
- 	  type =3D USER_OBJ;
- 	  id =3D uid;
-@@ -324,11 +329,6 @@
- 	  type =3D GROUP_OBJ;
- 	  id =3D gid;
- 	}
--      else if (ace_sid =3D=3D well_known_world_sid)
--	{
--	  type =3D OTHER_OBJ;
--	  id =3D 0;
--	}
-       else
- 	{
- 	  id =3D ace_sid.get_id (FALSE, &type);
---- security.cc.orig	2002-08-23 18:37:10.000000000 -0400
-+++ security.cc	2002-08-25 10:51:48.000000000 -0400
-@@ -1202,6 +1202,95 @@
-   return 0;
+Index: fhandler.h
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+RCS file: /cvs/src/src/winsup/cygwin/fhandler.h,v
+retrieving revision 1.135
+diff -u -p -r1.135 fhandler.h
+--- fhandler.h	19 Aug 2002 04:43:58 -0000	1.135
++++ fhandler.h	25 Aug 2002 22:33:58 -0000
+@@ -398,12 +398,12 @@ class fhandler_socket: public fhandler_b
+   int getpeername (struct sockaddr *name, int *namelen);
+=20
+   int __stdcall read (void *ptr, size_t len) __attribute__ ((regparm (3)));
+-  int recvfrom (void *ptr, size_t len, unsigned int flags,
++  int recvfrom (void *ptr, size_t len, int flags,
+ 		struct sockaddr *from, int *fromlen);
+   int recvmsg (struct msghdr *msg, int flags);
+=20
+   int write (const void *ptr, size_t len);
+-  int sendto (const void *ptr, size_t len, unsigned int flags,
++  int sendto (const void *ptr, size_t len, int flags,
+ 	      const struct sockaddr *to, int tolen);
+   int sendmsg (const struct msghdr *msg, int flags);
+=20
+Index: fhandler_socket.cc
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+RCS file: /cvs/src/src/winsup/cygwin/fhandler_socket.cc,v
+retrieving revision 1.58
+diff -u -p -r1.58 fhandler_socket.cc
+--- fhandler_socket.cc	12 Aug 2002 13:54:12 -0000	1.58
++++ fhandler_socket.cc	25 Aug 2002 22:33:58 -0000
+@@ -675,7 +675,7 @@ fhandler_socket::read (void *ptr, size_t
  }
-
-+static void
-+get_attribute_from_acl(int * attribute, PACL acl, PSID owner_sid,
-+		       PSID group_sid, BOOL grp_member)
-+{
-+  ACCESS_ALLOWED_ACE *ace;
-+  int allow =3D 0;
-+  int deny =3D 0;
-+  int *flags, *anti;
-+
-+  for (DWORD i =3D 0; i < acl->AceCount; ++i)
-+    {
-+      if (!GetAce (acl, i, (PVOID *) &ace))
-+	continue;
-+      if (ace->Header.AceFlags & INHERIT_ONLY)
-+	continue;
-+      switch (ace->Header.AceType)
-+	{
-+	case ACCESS_ALLOWED_ACE_TYPE:
-+	  flags =3D &allow;
-+	  anti =3D &deny;
-+	  break;
-+	case ACCESS_DENIED_ACE_TYPE:
-+	  flags =3D &deny;
-+	  anti =3D &allow;
-+	  break;
-+	default:
-+	  continue;
-+	}
-+
-+      cygsid ace_sid ((PSID) &ace->SidStart);
-+      if (ace_sid =3D=3D well_known_world_sid)
-+	{
-+	  if (ace->Mask & FILE_READ_DATA)
-+	    *flags |=3D S_IROTH
-+		      | ((!(*anti & S_IRGRP)) ? S_IRGRP : 0)
-+		      | ((!(*anti & S_IRUSR)) ? S_IRUSR : 0);
-+	  if (ace->Mask & FILE_WRITE_DATA)
-+	    *flags |=3D S_IWOTH
-+		      | ((!(*anti & S_IWGRP)) ? S_IWGRP : 0)
-+		      | ((!(*anti & S_IWUSR)) ? S_IWUSR : 0);
-+	  if (ace->Mask & FILE_EXECUTE)
-+	    {
-+	      *flags |=3D S_IXOTH
-+			| ((!(*anti & S_IXGRP)) ? S_IXGRP : 0)
-+			| ((!(*anti & S_IXUSR)) ? S_IXUSR : 0);
-+	    }
-+	  if ((*attribute & S_IFDIR) &&
-+	      (ace->Mask & (FILE_WRITE_DATA | FILE_EXECUTE | FILE_DELETE_CHILD))
-+	      =3D=3D (FILE_WRITE_DATA | FILE_EXECUTE))
-+	    *flags |=3D S_ISVTX;
-+	}
-+      else if (ace_sid =3D=3D well_known_null_sid)
-+	{
-+	  /* Read SUID, SGID and VTX bits from NULL ACE. */
-+	  if (ace->Mask & FILE_READ_DATA)
-+	    *flags |=3D S_ISVTX;
-+	  if (ace->Mask & FILE_WRITE_DATA)
-+	    *flags |=3D S_ISGID;
-+	  if (ace->Mask & FILE_APPEND_DATA)
-+	    *flags |=3D S_ISUID;
-+	}
-+      else if (owner_sid && ace_sid =3D=3D owner_sid)
-+	{
-+	  if (ace->Mask & FILE_READ_DATA)
-+	    *flags |=3D S_IRUSR;
-+	  if (ace->Mask & FILE_WRITE_DATA)
-+	    *flags |=3D S_IWUSR;
-+	  if (ace->Mask & FILE_EXECUTE)
-+	    *flags |=3D S_IXUSR;
-+	}
-+      else if (group_sid && ace_sid =3D=3D group_sid)
-+	{
-+	  if (ace->Mask & FILE_READ_DATA)
-+	    *flags |=3D S_IRGRP
-+		      | ((grp_member && !(*anti & S_IRUSR)) ? S_IRUSR : 0);
-+	  if (ace->Mask & FILE_WRITE_DATA)
-+	    *flags |=3D S_IWGRP
-+		      | ((grp_member && !(*anti & S_IWUSR)) ? S_IWUSR : 0);
-+	  if (ace->Mask & FILE_EXECUTE)
-+	    *flags |=3D S_IXGRP
-+		      | ((grp_member && !(*anti & S_IXUSR)) ? S_IXUSR : 0);
-+	}
-+    }
-+  *attribute &=3D ~(S_IRWXU | S_IRWXG | S_IRWXO | S_ISVTX | S_ISGID | S_IS=
-UID);
-+  *attribute |=3D allow;
-+  *attribute &=3D ~deny;
-+  return;
-+}
-+
- static int
- get_nt_attribute (const char *file, int *attribute,
- 		  __uid32_t *uidret, __gid32_t *gidret)
-@@ -1264,89 +1353,8 @@
- 		      file, *attribute, uid, gid);
-       return 0;
-     }
-+  get_attribute_from_acl (attribute, acl, owner_sid, group_sid, grp_member=
-);
-
--  ACCESS_ALLOWED_ACE *ace;
--  int allow =3D 0;
--  int deny =3D 0;
--  int *flags, *anti;
--
--  for (DWORD i =3D 0; i < acl->AceCount; ++i)
--    {
--      if (!GetAce (acl, i, (PVOID *) &ace))
--	continue;
--      if (ace->Header.AceFlags & INHERIT_ONLY)
--	continue;
--      switch (ace->Header.AceType)
--	{
--	case ACCESS_ALLOWED_ACE_TYPE:
--	  flags =3D &allow;
--	  anti =3D &deny;
--	  break;
--	case ACCESS_DENIED_ACE_TYPE:
--	  flags =3D &deny;
--	  anti =3D &allow;
--	  break;
--	default:
--	  continue;
--	}
--
--      cygsid ace_sid ((PSID) &ace->SidStart);
--      if (owner_sid && ace_sid =3D=3D owner_sid)
--	{
--	  if (ace->Mask & FILE_READ_DATA)
--	    *flags |=3D S_IRUSR;
--	  if (ace->Mask & FILE_WRITE_DATA)
--	    *flags |=3D S_IWUSR;
--	  if (ace->Mask & FILE_EXECUTE)
--	    *flags |=3D S_IXUSR;
--	}
--      else if (group_sid && ace_sid =3D=3D group_sid)
--	{
--	  if (ace->Mask & FILE_READ_DATA)
--	    *flags |=3D S_IRGRP
--		      | ((grp_member && !(*anti & S_IRUSR)) ? S_IRUSR : 0);
--	  if (ace->Mask & FILE_WRITE_DATA)
--	    *flags |=3D S_IWGRP
--		      | ((grp_member && !(*anti & S_IWUSR)) ? S_IWUSR : 0);
--	  if (ace->Mask & FILE_EXECUTE)
--	    *flags |=3D S_IXGRP
--		      | ((grp_member && !(*anti & S_IXUSR)) ? S_IXUSR : 0);
--	}
--      else if (ace_sid =3D=3D well_known_world_sid)
--	{
--	  if (ace->Mask & FILE_READ_DATA)
--	    *flags |=3D S_IROTH
--		      | ((!(*anti & S_IRGRP)) ? S_IRGRP : 0)
--		      | ((!(*anti & S_IRUSR)) ? S_IRUSR : 0);
--	  if (ace->Mask & FILE_WRITE_DATA)
--	    *flags |=3D S_IWOTH
--		      | ((!(*anti & S_IWGRP)) ? S_IWGRP : 0)
--		      | ((!(*anti & S_IWUSR)) ? S_IWUSR : 0);
--	  if (ace->Mask & FILE_EXECUTE)
--	    {
--	      *flags |=3D S_IXOTH
--			| ((!(*anti & S_IXGRP)) ? S_IXGRP : 0)
--			| ((!(*anti & S_IXUSR)) ? S_IXUSR : 0);
--	    }
--	  if ((*attribute & S_IFDIR) &&
--	      (ace->Mask & (FILE_WRITE_DATA | FILE_EXECUTE | FILE_DELETE_CHILD))
--	      =3D=3D (FILE_WRITE_DATA | FILE_EXECUTE))
--	    *flags |=3D S_ISVTX;
--	}
--      else if (ace_sid =3D=3D well_known_null_sid)
--	{
--	  /* Read SUID, SGID and VTX bits from NULL ACE. */
--	  if (ace->Mask & FILE_READ_DATA)
--	    *flags |=3D S_ISVTX;
--	  if (ace->Mask & FILE_WRITE_DATA)
--	    *flags |=3D S_ISGID;
--	  if (ace->Mask & FILE_APPEND_DATA)
--	    *flags |=3D S_ISUID;
--	}
--    }
--  *attribute &=3D ~(S_IRWXU | S_IRWXG | S_IRWXO | S_ISVTX | S_ISGID | S_IS=
-UID);
--  *attribute |=3D allow;
--  *attribute &=3D ~deny;
-   syscall_printf ("file: %s %x, uid %d, gid %d", file, *attribute, uid, gi=
-d);
-   return 0;
+=20
+ int
+-fhandler_socket::recvfrom (void *ptr, size_t len, unsigned int flags,
++fhandler_socket::recvfrom (void *ptr, size_t len, int flags,
+ 			   struct sockaddr *from, int *fromlen)
+ {
+   int res =3D -1;
+@@ -763,7 +763,7 @@ fhandler_socket::write (const void *ptr,
  }
-@@ -1437,88 +1445,7 @@
-       return 0;
+=20
+ int
+-fhandler_socket::sendto (const void *ptr, size_t len, unsigned int flags,
++fhandler_socket::sendto (const void *ptr, size_t len, int flags,
+ 			 const struct sockaddr *to, int tolen)
+ {
+   int res =3D -1;
+Index: net.cc
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+RCS file: /cvs/src/src/winsup/cygwin/net.cc,v
+retrieving revision 1.121
+diff -u -p -r1.121 net.cc
+--- net.cc	12 Aug 2002 13:54:12 -0000	1.121
++++ net.cc	25 Aug 2002 22:33:59 -0000
+@@ -564,7 +564,7 @@ done:
+=20
+ /* exported as sendto: standards? */
+ extern "C" int
+-cygwin_sendto (int fd, const void *buf, int len, unsigned int flags,
++cygwin_sendto (int fd, const void *buf, int len, int flags,
+ 	       const struct sockaddr *to, int tolen)
+ {
+   int res;
+@@ -577,15 +577,16 @@ cygwin_sendto (int fd, const void *buf,=20
+   else if ((res =3D len) !=3D 0)
+     res =3D fh->sendto (buf, len, flags, to, tolen);
+=20
+-  syscall_printf ("%d =3D sendto (%d, %x, %x, %x)", res, fd, buf, len, fla=
+gs);
++  syscall_printf ("%d =3D sendto (%d, %p, %d, %x, %p, %d)",
++		  res, fd, buf, len, flags, to, tolen);
+=20
+   return res;
+ }
+=20
+ /* exported as recvfrom: standards? */
+ extern "C" int
+-cygwin_recvfrom (int fd, void *buf, int len, int flags, struct sockaddr *f=
+rom,
+-		 int *fromlen)
++cygwin_recvfrom (int fd, void *buf, int len, int flags,
++		 struct sockaddr *from, int *fromlen)
+ {
+   int res;
+   fhandler_socket *fh =3D get (fd);
+@@ -599,7 +600,8 @@ cygwin_recvfrom (int fd, void *buf, int=20
+   else if ((res =3D len) !=3D 0)
+     res =3D fh->recvfrom (buf, len, flags, from, fromlen);
+=20
+-  syscall_printf ("%d =3D recvfrom (%d, %x, %x, %x)", res, fd, buf, len, f=
+lags);
++  syscall_printf ("%d =3D recvfrom (%d, %p, %d, %x, %p, %p)",
++		  res, fd, buf, len, flags, from, fromlen);
+=20
+   return res;
+ }
+@@ -662,7 +664,7 @@ cygwin_setsockopt (int fd, int level, in
+ 	set_winsock_errno ();
      }
+=20
+-  syscall_printf ("%d =3D setsockopt (%d, %d, %x (%s), %x, %d)",
++  syscall_printf ("%d =3D setsockopt (%d, %d, %x (%s), %p, %d)",
+ 		  res, fd, level, optname, name, optval, optlen);
+   return res;
+ }
+@@ -730,7 +732,7 @@ cygwin_getsockopt (int fd, int level, in
+ 	set_winsock_errno ();
+     }
+=20
+-  syscall_printf ("%d =3D getsockopt (%d, %d, %x (%s), %x, %d)",
++  syscall_printf ("%d =3D getsockopt (%d, %d, %x (%s), %p, %p)",
+ 		  res, fd, level, optname, name, optval, optlen);
+   return res;
+ }
+@@ -747,7 +749,7 @@ cygwin_connect (int fd, const struct soc
+   else
+     res =3D fh->connect (name, namelen);
+=20
+-  syscall_printf ("%d =3D connect (%d, %x, %x)", res, fd, name, namelen);
++  syscall_printf ("%d =3D connect (%d, %p, %d)", res, fd, name, namelen);
+=20
+   return res;
+ }
+@@ -1009,7 +1011,7 @@ cygwin_accept (int fd, struct sockaddr *
+   else
+     res =3D fh->accept (peer, len);
+=20
+-  syscall_printf ("%d =3D accept (%d, %x, %x)", res, fd, peer, len);
++  syscall_printf ("%d =3D accept (%d, %p, %d)", res, fd, peer, len);
+   return res;
+ }
+=20
+@@ -1025,7 +1027,7 @@ cygwin_bind (int fd, const struct sockad
+   else
+     res =3D fh->bind (my_addr, addrlen);
+=20
+-  syscall_printf ("%d =3D bind (%d, %x, %d)", res, fd, my_addr, addrlen);
++  syscall_printf ("%d =3D bind (%d, %p, %d)", res, fd, my_addr, addrlen);
+   return res;
+ }
+=20
+@@ -1043,7 +1045,7 @@ cygwin_getsockname (int fd, struct socka
+   else
+     res =3D fh->getsockname (addr, namelen);
+=20
+-  syscall_printf ("%d =3D getsockname (%d, %x, %d)", res, fd, addr, namele=
+n);
++  syscall_printf ("%d =3D getsockname (%d, %p, %d)", res, fd, addr, namele=
+n);
+   return res;
+ }
+=20
+@@ -1146,14 +1148,14 @@ cygwin_getpeername (int fd, struct socka
+=20
+ /* exported as recv: standards? */
+ extern "C" int
+-cygwin_recv (int fd, void *buf, int len, unsigned int flags)
++cygwin_recv (int fd, void *buf, int len, int flags)
+ {
+   return cygwin_recvfrom (fd, buf, len, flags, NULL, NULL);
+ }
+=20
+ /* exported as send: standards? */
+ extern "C" int
+-cygwin_send (int fd, const void *buf, int len, unsigned int flags)
++cygwin_send (int fd, const void *buf, int len, int flags)
+ {
+   return cygwin_sendto (fd, buf, len, flags, NULL, 0);
+ }
+@@ -2096,7 +2098,7 @@ cygwin_recvmsg (int fd, struct msghdr *m
+   else
+     res =3D fh->recvmsg (msg, flags);
+=20
+-  syscall_printf ("%d =3D recvmsg (%d, %x, %x)", res, fd, msg, flags);
++  syscall_printf ("%d =3D recvmsg (%d, %p, %d)", res, fd, msg, flags);
+   return res;
+ }
+=20
+@@ -2116,6 +2118,6 @@ cygwin_sendmsg (int fd, const struct msg
+   else
+     res =3D fh->sendmsg (msg, flags);
+=20
+-  syscall_printf ("%d =3D recvmsg (%d, %x, %x)", res, fd, msg, flags);
++  syscall_printf ("%d =3D recvmsg (%d, %p, %d)", res, fd, msg, flags);
+   return res;
+ }
+Index: include/sys/socket.h
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+RCS file: /cvs/src/src/winsup/cygwin/include/sys/socket.h,v
+retrieving revision 1.6
+diff -u -p -r1.6 socket.h
+--- include/sys/socket.h	19 Jan 2002 16:11:00 -0000	1.6
++++ include/sys/socket.h	25 Aug 2002 22:33:59 -0000
+@@ -32,13 +32,14 @@ extern "C"
+   int getpeername (int, struct sockaddr *__peer, int *);
+   int getsockname (int, struct sockaddr *__addr, int *);
+   int listen (int, int __n);
+-  int recv (int, void *__buff, int __len, unsigned int __flags);
+-  int recvfrom (int, char *__buff, int __len, int __flags,
+-			 struct sockaddr *__from, int *__fromlen);
++  int recv (int, void *__buff, int __len, int __flags);
++  int recvfrom (int, void *__buff, int __len, int __flags,
++		struct sockaddr *__from, int *__fromlen);
+   int recvmsg(int s, struct msghdr *msg, int flags);
+-  int send (int, const void *__buff, int __len, unsigned int __flags);
++  int send (int, const void *__buff, int __len, int __flags);
+   int sendmsg(int s, const struct msghdr *msg, int flags);
+-  int sendto (int, const void *, int, unsigned int, const struct sockaddr =
+*, int);
++  int sendto (int, const void *, int __len, int __flags,
++	      const struct sockaddr *__to, int __tolen);
+   int setsockopt (int __s, int __level, int __optname, const void *optval,=
+ int __optlen);
+   int getsockopt (int __s, int __level, int __optname, void *__optval, int=
+ *__optlen);
+   int shutdown (int, int);
 
--  ACCESS_ALLOWED_ACE *ace;
--  int allow =3D 0;
--  int deny =3D 0;
--  int *flags, *anti;
--
--  for (DWORD i =3D 0; i < acl->AceCount; ++i)
--    {
--      if (!GetAce (acl, i, (PVOID *) & ace))
--	continue;
--      if (ace->Header.AceFlags & INHERIT_ONLY)
--	continue;
--      switch (ace->Header.AceType)
--	{
--	case ACCESS_ALLOWED_ACE_TYPE:
--	  flags =3D &allow;
--	  anti =3D &deny;
--	  break;
--	case ACCESS_DENIED_ACE_TYPE:
--	  flags =3D &deny;
--	  anti =3D &allow;
--	  break;
--	default:
--	  continue;
--	}
--
--      cygsid ace_sid ((PSID) & ace->SidStart);
--      if (owner_sid && ace_sid =3D=3D owner_sid)
--	{
--	  if (ace->Mask & FILE_READ_DATA)
--	    *flags |=3D S_IRUSR;
--	  if (ace->Mask & FILE_WRITE_DATA)
--	    *flags |=3D S_IWUSR;
--	  if (ace->Mask & FILE_EXECUTE)
--	    *flags |=3D S_IXUSR;
--	}
--      else if (group_sid && ace_sid =3D=3D group_sid)
--	{
--	  if (ace->Mask & FILE_READ_DATA)
--	    *flags |=3D S_IRGRP
--		      | ((grp_member && !(*anti & S_IRUSR)) ? S_IRUSR : 0);
--	  if (ace->Mask & FILE_WRITE_DATA)
--	    *flags |=3D S_IWGRP
--		      | ((grp_member && !(*anti & S_IWUSR)) ? S_IWUSR : 0);
--	  if (ace->Mask & FILE_EXECUTE)
--	    *flags |=3D S_IXGRP
--		      | ((grp_member && !(*anti & S_IXUSR)) ? S_IXUSR : 0);
--	}
--      else if (ace_sid =3D=3D well_known_world_sid)
--	{
--	  if (ace->Mask & FILE_READ_DATA)
--	    *flags |=3D S_IROTH
--		      | ((!(*anti & S_IRGRP)) ? S_IRGRP : 0)
--		      | ((!(*anti & S_IRUSR)) ? S_IRUSR : 0);
--	  if (ace->Mask & FILE_WRITE_DATA)
--	    *flags |=3D S_IWOTH
--		      | ((!(*anti & S_IWGRP)) ? S_IWGRP : 0)
--		      | ((!(*anti & S_IWUSR)) ? S_IWUSR : 0);
--	  if (ace->Mask & FILE_EXECUTE)
--	    {
--	      *flags |=3D S_IXOTH
--			| ((!(*anti & S_IXGRP)) ? S_IXGRP : 0)
--			| ((!(*anti & S_IXUSR)) ? S_IXUSR : 0);
--	    }
--	  if ((*attribute & S_IFDIR) &&
--	      (ace->Mask & (FILE_WRITE_DATA | FILE_EXECUTE | FILE_DELETE_CHILD))
--	      =3D=3D (FILE_WRITE_DATA | FILE_EXECUTE))
--	    *flags |=3D S_ISVTX;
--	}
--      else if (ace_sid =3D=3D well_known_null_sid)
--	{
--	  /* Read SUID, SGID and VTX bits from NULL ACE. */
--	  if (ace->Mask & FILE_READ_DATA)
--	    *flags |=3D S_ISVTX;
--	  if (ace->Mask & FILE_WRITE_DATA)
--	    *flags |=3D S_ISGID;
--	  if (ace->Mask & FILE_APPEND_DATA)
--	    *flags |=3D S_ISUID;
--	}
--    }
--  *attribute &=3D ~(S_IRWXU | S_IRWXG | S_IRWXO | S_ISVTX | S_ISGID | S_IS=
-UID);
--  *attribute |=3D allow;
--  *attribute &=3D ~deny;
-+  get_attribute_from_acl (attribute, acl, owner_sid, group_sid, grp_member=
-);
+------=_NextPart_000_0107_01C24C91.E4214630--
 
-   LocalFree (psd);
-
-
---=====================_1030326674==_--
