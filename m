@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1492-listarch-cygwin-patches=sourceware.cygnus.com@sources.redhat.com>
-Received: (qmail 21014 invoked by alias); 14 Nov 2001 11:45:31 -0000
+Return-Path: <cygwin-patches-return-1493-listarch-cygwin-patches=sourceware.cygnus.com@sources.redhat.com>
+Received: (qmail 16976 invoked by alias); 14 Nov 2001 14:59:21 -0000
 Mailing-List: contact cygwin-patches-help@sourceware.cygnus.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@sources.redhat.com>
@@ -7,113 +7,120 @@ List-Post: <mailto:cygwin-patches@sources.redhat.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@sources.redhat.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@sources.redhat.com
-Received: (qmail 20977 invoked from network); 14 Nov 2001 11:45:27 -0000
-Date: Wed, 10 Oct 2001 19:18:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygwin-patches@sourceware.cygnus.com
-Subject: Re: [PATCH] Mask mnemonics and expressions, help, getopts_long() for strace - current diff
-Message-ID: <20011114124520.A27350@cygbert.vinschen.de>
-Mail-Followup-To: Corinna Vinschen <cygwin-patches@cygwin.com>,
-	cygwin-patches@sourceware.cygnus.com
-References: <NCBBIHCHBLCMLBLOBONKIEFCCHAA.g.r.vansickle@worldnet.att.net>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.2.5i
-In-Reply-To: <NCBBIHCHBLCMLBLOBONKIEFCCHAA.g.r.vansickle@worldnet.att.net>; from g.r.vansickle@worldnet.att.net on Wed, Nov 14, 2001 at 03:59:13AM -0600
-X-SW-Source: 2001-q4/txt/msg00024.txt.bz2
+Received: (qmail 16959 invoked from network); 14 Nov 2001 14:59:20 -0000
+From: "Gary R. Van Sickle" <g.r.vansickle@worldnet.att.net>
+To: <cygwin-patches@sourceware.cygnus.com>
+Subject: RE: [PATCH] Mask mnemonics and expressions, help, getopts_long() for strace - current diff
+Date: Wed, 10 Oct 2001 19:20:00 -0000
+Message-ID: <NCBBIHCHBLCMLBLOBONKOEFDCHAA.g.r.vansickle@worldnet.att.net>
+MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3 (Normal)
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook IMO, Build 9.0.2416 (9.0.2911.0)
+Importance: Normal
+In-Reply-To: <20011114124520.A27350@cygbert.vinschen.de>
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-SW-Source: 2001-q4/txt/msg00025.txt.bz2
 
-On Wed, Nov 14, 2001 at 03:59:13AM -0600, Gary R. Van Sickle wrote:
-> Patch of 11-4 diffed against current CVS.
+> On Wed, Nov 14, 2001 at 03:59:13AM -0600, Gary R. Van Sickle wrote:
+> > Patch of 11-4 diffed against current CVS.
+>
+> Thanks, Gary.
+>
+> I applied the patch locally but I'm somewhat reluctant to apply it
+> to the repository.  I found some flaws:
+>
+> The indenting isn't according to the GNU rules:
+>
 
-Thanks, Gary.
+[snip]
 
-I applied the patch locally but I'm somewhat reluctant to apply it
-to the repository.  I found some flaws:
+Ok, fixed with a little help from indent.  Sorry about that.
 
-The indenting isn't according to the GNU rules:
+>
+> > +  -f, --fork-debug              ???\n\
+>
+> The usage information for -f is missing.  -f means, trace not only
+> the application on the command line but also child apps forked by
+> the originally traced app.
+>
 
-Each block is indented by 2 more spaces, that's not given in version()
-and mnemonic2ul().  Each parenthesis gets a leading space, even
-function paren's.  Except it's leaded by another paren.
+Ok, thanks, yeah, I forgot to ask what that did.  In light of that, perhaps the
+long option would be better if it was something like "--trace-children" or
+"--trace-forked-children"?
 
-Your mnemonic2ul():
+> > +  -n, --error-number            Also output associated Windows
+> error number.\n\
+>
+> Giving the -n option doesn't show the error number but removes it in
+> favor of the error text.  That should be the other way around.  Is it
+> intended that the error text completely removes the output of the
+> error number?  The help text is talking about `also output ...'.
+>
 
-  while(mnp->text != NULL)
-  {
-        if(strcmp(mnp->text, nptr) == 0)
-        {
-          // Found a match.
-          if(endptr != NULL)
-          {
-            *endptr = ((char*)nptr) + strlen(mnp->text);
-          }
-          return mnp->val;
-    }
-    mnp++;
-  }
-  [...] 
+Your right, I got this exactly backwards.  I'll clear that up.
 
-Correctly indented and correctly usage of spaces:
+> > +  -d, --delta                   Add a delta-t timestamp to each
+> output line.\n\
+>
+> Giving the -d option doesn't show the delta but removes it from the output.
+> That should be the other way around.
+>
 
-  while (mnp->text != NULL)
-    {
-      if (strcmp (mnp->text, nptr) == 0)
-        {
-          // Found a match.
-          if (endptr != NULL)
-            {
-              *endptr = ((char*)nptr) + strlen(mnp->text);
-            }
-          return mnp->val;
-        }
-      mnp++;
-    }
-  [...]
+So it does (well, more precisely it appears to switch from delta to absolute).
+I thought sure I checked that.  I'll change the longopt to "--absolute" and
+update the usage text.  Is "-d" too entrenched at this point to change it to
+"-a" at the same time and make things a little more consistent?
 
-> +  -f, --fork-debug              ???\n\
- 
-The usage information for -f is missing.  -f means, trace not only
-the application on the command line but also child apps forked by
-the originally traced app.
- 
-> +  -n, --error-number            Also output associated Windows error number.\n\
+> > +  -u, --usecs                   Add a microsecond-resolution
+> timestamp to each
+> > +                                output line.\n\
+>
+> -u seem to have no effect on the output.
+>
 
-Giving the -n option doesn't show the error number but removes it in
-favor of the error text.  That should be the other way around.  Is it
-intended that the error text completely removes the output of the
-error number?  The help text is talking about `also output ...'.
+It appears that this option is either being ignored by the rest of the code or
+isn't implemented properly, I can't tell which.  The 'usecs' global switch
+variable is used only in syst(), and even there apparently not as a switch.
+Then in handle_output_debug_string() there's a local of the same name declared.
 
-> +  -d, --delta                   Add a delta-t timestamp to each output line.\n\
+I think what I'll do is just remove this from the usage text until I can figure
+this out and/or somebody can explain it to me.  Maybe this option should just be
+removed completely.
 
-Giving the -d option doesn't show the delta but removes it from the output.
-That should be the other way around.
+> > +  -t, --timestamp               Add an hhmmss timestamp to each
+> output line.\n\
+>
+> -t shows the hhmmss timestamp but also removes both, delta and usecs output.
+> Is that intended?
 
-> +  -u, --usecs                   Add a microsecond-resolution timestamp to each
-> +                                output line.\n\
+From what I can tell, yes.  I didn't change any of the option semantics or
+output logic.
 
--u seem to have no effect on the output.
+>  The help text suggests that it's just added.
+>
 
-> +  -t, --timestamp               Add an hhmmss timestamp to each output line.\n\
+Ok, I'll clarify that.
 
--t shows the hhmmss timestamp but also removes both, delta and usecs output.
-Is that intended?  The help text suggests that it's just added.
+> About the version information... What about adding an SCCSid to the
+> source which then is used by the version output?  We could begin
+> with version 1.0:
+>
+>   static char *SCCSid = "@(#)strace V1.0, Copyright (C) 2001 Red Hat
+> Inc., " __DATE__ "\n";
+>
+>   static void version ()
+>   {
+>     printf ("%s", SCCSid + 4);
+>   }
+>
 
-About the version information... What about adding an SCCSid to the
-source which then is used by the version output?  We could begin
-with version 1.0:
+Done and done.  I'll generate a new diff tonight.  Sorry about the problems,
+thanks for catching them.
 
-  static char *SCCSid = "@(#)strace V1.0, Copyright (C) 2001 Red Hat Inc., " __DATE__ "\n";
-
-  static void version ()
-  {
-    printf ("%s", SCCSid + 4);
-  }
-
-
-Corinna
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+--
+Gary R. Van Sickle
+Brewer.  Patriot.
