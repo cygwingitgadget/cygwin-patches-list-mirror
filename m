@@ -1,32 +1,36 @@
-From: Jason Tishler <Jason.Tishler@dothill.com>
+From: Earnie Boyd <earnie_boyd@yahoo.com>
 To: Corinna Vinschen <cygwin-patches@cygwin.com>
+Cc: Cygwin-Patches <cygwin-patches@sources.redhat.com>
 Subject: Re: unlink() patch (was Cygwin CVS breaks PostgreSQL drop table)
-Date: Wed, 18 Jul 2001 05:19:00 -0000
-Message-id: <20010718081915.A431@dothill.com>
-References: <20010718130154.E730@cygbert.vinschen.de>
-X-SW-Source: 2001-q3/msg00015.html
+Date: Wed, 18 Jul 2001 05:20:00 -0000
+Message-id: <3B559AB3.B93C5DA5@yahoo.com>
+References: <20010717221042.A426@dothill.com> <20010718130154.E730@cygbert.vinschen.de>
+X-SW-Source: 2001-q3/msg00016.html
 
-Corrina,
+Corinna Vinschen wrote:
+> 
+> BTW, I have a naive question related to unlink. I had just another
+> look into SUSv2 and to my surprise it defines the following error
+> code:
+> 
+> [EBUSY]    The file named by the path argument cannot be unlinked
+>            because it is being used by the system or another process
+>            and the implementation considers this an error.
+> 
+> which basically means, if we try to unlink a file and that fails,
+> we wouldn't have to force it by ugly tricks (delqueue) but just
+> return EBUSY and Cygwin would still be SUSv2 compliant.
+> 
+> All: Would that be ok to change or would you like to keep the current
+>      behaviour?
+> 
 
-On Wed, Jul 18, 2001 at 01:01:54PM +0200, Corinna Vinschen wrote:
-> IMO, that's rather late in the function to handle a nonexistant file.
-> I checked in a different solution which handles it more at the 
-> beginning of _unlink().
+I vote for EBUSY.  The delqueue has the potential to be more harmful
+than good.
 
-Agreed.  I almost submitted a patch that dealt with this issue upfront
-too, but the 1.122 version also handled this issue late and the 1.123
-version seemed to have a yank and put error so I opted for the minimal
-perturbation approach.
+Earnie.
 
-> Thanks for tracking it down, though.
+_________________________________________________________
+Do You Yahoo!?
+Get your free @yahoo.com address at http://mail.yahoo.com
 
-You're welcome -- thanks for checking in a better fix.
-
-Jason
-
--- 
-Jason Tishler
-Director, Software Engineering       Phone: 732.264.8770 x235
-Dot Hill Systems Corp.               Fax:   732.264.8798
-82 Bethany Road, Suite 7             Email: Jason.Tishler@dothill.com
-Hazlet, NJ 07730 USA                 WWW:   http://www.dothill.com
