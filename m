@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1555-listarch-cygwin-patches=sourceware.cygnus.com@sources.redhat.com>
-Received: (qmail 3822 invoked by alias); 28 Nov 2001 23:18:07 -0000
+Return-Path: <cygwin-patches-return-1556-listarch-cygwin-patches=sourceware.cygnus.com@sources.redhat.com>
+Received: (qmail 8515 invoked by alias); 28 Nov 2001 23:31:44 -0000
 Mailing-List: contact cygwin-patches-help@sourceware.cygnus.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@sources.redhat.com>
@@ -7,37 +7,54 @@ List-Post: <mailto:cygwin-patches@sources.redhat.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@sources.redhat.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@sources.redhat.com
-Received: (qmail 3803 invoked from network); 28 Nov 2001 23:18:06 -0000
-Message-ID: <038f01c17862$b64afb60$0200a8c0@lifelesswks>
-From: "Robert Collins" <robert.collins@itdomain.com.au>
-To: "Alexander Gottwald" <Alexander.Gottwald@informatik.tu-chemnitz.de>
-Cc: <cygwin-patches@cygwin.com>
-References: <Pine.LNX.4.21.0111282007530.1783-100000@lupus.ago.vpn>
-Subject: Re: [PATCH] setup.exe: Stop NetIO_HTTP from treating entire stream as a  header
-Date: Thu, 01 Nov 2001 02:41:00 -0000
+Received: (qmail 8497 invoked from network); 28 Nov 2001 23:31:43 -0000
+Message-ID: <3C0573DE.349B65DA@etr-usa.com>
+Date: Thu, 01 Nov 2001 05:32:00 -0000
+From: Warren Young <warren@etr-usa.com>
+Organization: -ENOENT
+X-Mailer: Mozilla 4.77 [en] (Windows NT 5.0; U)
+X-Accept-Language: en
 MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="iso-8859-1"
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] setup.exe: Stop NetIO_HTTP from treating entire stream as a  
+ header
+References: <3C035977.BF151D0A@syntrex.com> <000601c17772$7c5ecfd0$2101a8c0@d8rc020b> <20011127184223.GA24028@redhat.com> <1006899141.2048.2.camel@lifelesswks> <20011127230925.GA5830@redhat.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-OriginalArrivalTime: 28 Nov 2001 23:17:54.0225 (UTC) FILETIME=[E8481210:01C17862]
-X-SW-Source: 2001-q4/txt/msg00087.txt.bz2
+X-SW-Source: 2001-q4/txt/msg00088.txt.bz2
 
------ Original Message -----
-From: "Alexander Gottwald"
-<Alexander.Gottwald@informatik.tu-chemnitz.de>
-> I was once told that NULL might not be equal to 0 on all platforms. So
-...
-> This is - afair - defined for C.
+Christopher Faylor wrote:
+> 
+> References?  A simple google search for 'NULL C++ deprecated' didn't
+> unearth this information.
 
-Thus my comment re: NULL usage on C. I'm religious there - I always use
-NULL.
+This controversy officially started with the ARM, IIRC.  In it, I recall
+that the authors made some comments saying that NULL should die.  I
+don't keep the ARM here at work any more, though, so I have no reference
+to back that recollection up.
 
-> For C++ I have no clues.
+In section 5.1.1 of the more current Stroustrup 3/e he says, "Because of
+C++'s tighter type checking, the use of plain 0, rather than any
+suggested NULL macro, leads to fewer problems."
 
-Nuff said :]. Seriously though for C++ NULL == '0'.
+I don't know what problems Stroustrup is referring to.  In section 18.1
+of the current C++ Standard, footnote 180 says: "Possible definitions
+[of NULL] include 0 and 0L, but not (void*)0."  This implies that NULL
+is most likely to expand to a literal 0, and not the distasteful casted
+pointer you see in C compilers' standard libraries.  Of course there are
+old systems with NULL still defined to (void*)0, but Cygwin's g++/newlib
+system isn't one of these.
 
-Rob
+Okay, "NULL" is fine to use, then.  As for "0", the C++ standard
+guarantees that if you use 0 in a pointer context, it will be converted
+to whatever that platform uses for the "null pointer", even if it
+happens not to have a bit pattern of all zeroes.  (Section 4.10) 
+Therefore, it's safe to use 0 to mean "the null pointer".
+
+Personally, I prefer 0 to NULL, though I leaned the other way before C++
+evolved to where it is today, since the C standard did not guarantee
+that 0 would convert to the null pointer.  In practice, with a
+conforming C++ implementation, it probably doesn't matter either way --
+it's now just a style issue.
+-- 
+= ICBM Address: 36.8274040 N, 108.0204086 W, alt. 1714m
