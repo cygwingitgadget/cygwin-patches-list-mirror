@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3039-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 19095 invoked by alias); 24 Sep 2002 10:45:26 -0000
+Return-Path: <cygwin-patches-return-3040-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 504 invoked by alias); 24 Sep 2002 13:17:19 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,112 +7,164 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 19080 invoked from network); 24 Sep 2002 10:45:25 -0000
-X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
-Date: Tue, 24 Sep 2002 03:45:00 -0000
-From: Thomas Pfaff <tpfaff@gmx.net>
-To: cygwin-patches@cygwin.com
-Subject: [PATCH] MTinterface patch part 3
-Message-ID: <Pine.WNT.4.44.0209241235020.327-200000@algeria.intern.net>
-X-X-Sender: pfaff@antarctica.intern.net
+Received: (qmail 488 invoked from network); 24 Sep 2002 13:17:18 -0000
+X-WM-Posted-At: avacado.atomice.net; Tue, 24 Sep 02 14:17:15 +0100
+From: "Chris January" <chris@atomice.net>
+To: "Cygwin-Patches@Cygwin.Com" <cygwin-patches@cygwin.com>
+Subject: changes to /proc ctty and uid/gid handling
+Date: Tue, 24 Sep 2002 06:17:00 -0000
+Message-ID: <LPEHIHGCJOAIPFLADJAHOEIFCNAA.chris@atomice.net>
 MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="4227302-3028-1032864113=:327"
-Content-ID: <Pine.WNT.4.44.0209241244460.327@algeria.intern.net>
-X-SW-Source: 2002-q3/txt/msg00487.txt.bz2
+Content-Type: multipart/mixed;
+	boundary="----=_NextPart_000_000B_01C263D5.15207DF0"
+X-Priority: 3 (Normal)
+X-MSMail-Priority: Normal
+Importance: Normal
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2800.1106
+X-SW-Source: 2002-q3/txt/msg00488.txt.bz2
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
+This is a multi-part message in MIME format.
 
---4227302-3028-1032864113=:327
-Content-Type: TEXT/PLAIN; CHARSET=US-ASCII
-Content-ID: <Pine.WNT.4.44.0209241244461.327@algeria.intern.net>
-Content-length: 436
+------=_NextPart_000_000B_01C263D5.15207DF0
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+Content-length: 2203
 
+I hope this isn't too late for 1.3.13.
 
-This is patch 3 of 3.
+This fixes the bug where processes showed up as the wrong user in procps.
+Also, procps should now report the correct tty a proces is running on.
 
-It will change thread cleanup to use a destructor function.
+Chris
 
-2002-09-24  Thomas Pfaff  <tpfaff@gmx.net>
+---
 
-	* init.cc (dll_entry): Run pthread key destructors on thread
-	detach.
-	* thread.cc (pthread::destructor): Implement.
-	(pthread::exit): Remove runAllDestructors. Remove thread cleanup.
-	* thread.h (pthread::destructor); New static member.
-	(MTinterface::MTinterface): Set pthread self destructor function.
+2002-09-24  Christopher January <chris@atomice.net>
 
+	* fhandler_proc.cc (format_process_stat): make ctty a real device number.
+	(format_process_status): use effective uid/gid as real and saved uid/gid.
 
---4227302-3028-1032864113=:327
-Content-Type: TEXT/PLAIN; NAME="mtinterface3.patch"
-Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.WNT.4.44.0209241241530.327@algeria.intern.net>
-Content-Description: 
-Content-Disposition: ATTACHMENT; FILENAME="mtinterface3.patch"
-Content-length: 3762
+---
 
-ZGlmZiAtdXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi9pbml0LmNjIHNyYy93
-aW5zdXAvY3lnd2luL2luaXQuY2MKLS0tIHNyYy5vbGQvd2luc3VwL2N5Z3dp
-bi9pbml0LmNjCVR1ZSBTZXAgMjQgMTE6MjU6MTUgMjAwMgorKysgc3JjL3dp
-bnN1cC9jeWd3aW4vaW5pdC5jYwlUdWUgU2VwIDI0IDExOjE5OjMzIDIwMDIK
-QEAgLTI5LDE3ICsyOSw4IEBAIFdJTkFQSSBkbGxfZW50cnkgKEhBTkRMRSBo
-LCBEV09SRCByZWFzb24KICAgICAgICAgYXBpX2ZhdGFsKCJTaWcgcHJvYyBN
-VCBpbml0IGZhaWxlZFxuIik7CiAgICAgICBicmVhazsKICAgICBjYXNlIERM
-TF9QUk9DRVNTX0RFVEFDSDoKLSAgICAgIGJyZWFrOwogICAgIGNhc2UgRExM
-X1RIUkVBRF9ERVRBQ0g6Ci0jaWYgMAotICAgICAgcHRocmVhZCAqdGhpc3Ro
-cmVhZCA9IChwdGhyZWFkICopCi0JVGxzR2V0VmFsdWUgKHVzZXJfZGF0YS0+
-dGhyZWFkaW50ZXJmYWNlLT50aHJlYWRfc2VsZl9kd1Rsc0luZGV4KTsKLSAg
-ICAgIGlmICh0aGlzdGhyZWFkKSB7Ci0JICAvKiBTb21lIG5vbi1wdGhyZWFk
-IGNhbGwgY3JlYXRlZCB0aGlzIHRocmVhZCwKLQkgICAqIGJ1dCB3ZSBuZWVk
-IHRvIGNsZWFuIGl0IHVwICovCi0JICB0aGlzdGhyZWFkLT5leGl0ICgwKTsK
-LSAgICAgIH0KLSNlbmRpZgorICAgICAgcHRocmVhZF9rZXk6OnJ1bkFsbERl
-c3RydWN0b3JzICgpOwogICAgICAgYnJlYWs7CiAgICAgfQogICByZXR1cm4g
-MTsKZGlmZiAtdXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi90aHJlYWQuY2Mg
-c3JjL3dpbnN1cC9jeWd3aW4vdGhyZWFkLmNjCi0tLSBzcmMub2xkL3dpbnN1
-cC9jeWd3aW4vdGhyZWFkLmNjCVR1ZSBTZXAgMjQgMTE6MjU6MTUgMjAwMgor
-Kysgc3JjL3dpbnN1cC9jeWd3aW4vdGhyZWFkLmNjCVR1ZSBTZXAgMjQgMTE6
-MjQ6NDUgMjAwMgpAQCAtMjQ0LDYgKzI0NCwxNSBAQCBwdGhyZWFkOjpzZWxm
-IChjb25zdCBib29sIGF1dG9faW5pdCkKIH0KIAogdm9pZAorcHRocmVhZDo6
-ZGVzdHJ1Y3RvciAodm9pZCAqdmFsdWUpCit7CisgIHB0aHJlYWQgKnRocmVh
-ZCA9IChwdGhyZWFkICopIHZhbHVlOworICAvKiBjbGVhbnVwIHRocmVhZCBp
-ZiB0aHJlYWQgaXMgZGV0YWNoZWQgYW5kIG5vdCBqb2luZWQgKi8KKyAgaWYg
-KHRocmVhZCAmJiBfX3B0aHJlYWRfZXF1YWwoJnRocmVhZC0+am9pbmVyLCAm
-dGhyZWFkKSkKKyAgICBkZWxldGUgdGhyZWFkOworfQorCit2b2lkCiBwdGhy
-ZWFkOjpzZXRUbHNTZWxmUG9pbnRlciAocHRocmVhZCAqdGhpc1RocmVhZCkK
-IHsKICAgTVRfSU5URVJGQUNFLT50aHJlYWRfc2VsZl9rZXkuc2V0ICh0aGlz
-VGhyZWFkKTsKQEAgLTM1MiwyMCArMzYxLDEzIEBAIHB0aHJlYWQ6OmV4aXQg
-KHZvaWQgKnZhbHVlX3B0cikKICAgLy8gcnVuIGNsZWFudXAgaGFuZGxlcnMK
-ICAgcG9wX2FsbF9jbGVhbnVwX2hhbmRsZXJzICgpOwogCi0gIHB0aHJlYWRf
-a2V5OjpydW5BbGxEZXN0cnVjdG9ycyAoKTsKLQogICBtdXRleC5Mb2NrICgp
-OwotICAvLyBjbGVhbnVwIGlmIHRocmVhZCBpcyBpbiBkZXRhY2hlZCBzdGF0
-ZSBhbmQgbm90IGpvaW5lZAotICBpZiAoX19wdGhyZWFkX2VxdWFsICgmam9p
-bmVyLCAmdGhyZWFkICkgKQotICAgIGRlbGV0ZSB0aGlzOwotICBlbHNlCisg
-IGlmICghX19wdGhyZWFkX2VxdWFsKCZqb2luZXIsICZ0aHJlYWQpKQogICAg
-IHsKICAgICAgIHJldHVybl9wdHIgPSB2YWx1ZV9wdHI7CiAgICAgICBtdXRl
-eC5VbkxvY2sgKCk7CiAgICAgfQotCi0gIC8qIFByZXZlbnQgRExMX1RIUkVB
-RF9ERVRBQ0ggQXR0ZW1wdGluZyB0byBjbGVhbiB1cyB1cCAqLwotICBzZXRU
-bHNTZWxmUG9pbnRlciAoMCk7CisgIC8vIGVsc2U6IGNsZWFudXAgaXMgbm93
-IGRvbmUgaW4ga2V5IGRlc3RydWN0b3IgZnVuY3Rpb24KIAogICBpZiAoSW50
-ZXJsb2NrZWREZWNyZW1lbnQgKCZNVF9JTlRFUkZBQ0UtPnRocmVhZGNvdW50
-KSA9PSAwKQogICAgIDo6ZXhpdCAoMCk7CmRpZmYgLXVycCBzcmMub2xkL3dp
-bnN1cC9jeWd3aW4vdGhyZWFkLmggc3JjL3dpbnN1cC9jeWd3aW4vdGhyZWFk
-LmgKLS0tIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi90aHJlYWQuaAlUdWUgU2Vw
-IDI0IDExOjI1OjE1IDIwMDIKKysrIHNyYy93aW5zdXAvY3lnd2luL3RocmVh
-ZC5oCVR1ZSBTZXAgMjQgMTE6MjQ6NDkgMjAwMgpAQCAtMzY4LDYgKzM2OCw4
-IEBAIHB1YmxpYzoKICAgIHZpcnR1YWwgdm9pZCBwb3BfY2xlYW51cF9oYW5k
-bGVyIChpbnQgY29uc3QgZXhlY3V0ZSk7CiAKICAgIHN0YXRpYyBwdGhyZWFk
-KiBzZWxmIChjb25zdCBib29sIGF1dG9faW5pdCA9IHRydWUpOworICAgc3Rh
-dGljIHZvaWQgZGVzdHJ1Y3RvciAodm9pZCAqdmFsdWUpOworCiAgICBzdGF0
-aWMgdm9pZCAqdGhyZWFkX2luaXRfd3JhcHBlciAodm9pZCAqKTsKIAogICAg
-dmlydHVhbCB1bnNpZ25lZCBsb25nIGdldHNlcXVlbmNlX25wKCk7CkBAIC01
-MTksNyArNTIxLDcgQEAgcHVibGljOgogICAgIGNvbmN1cnJlbmN5ICgwKSwg
-dGhyZWFkY291bnQgKDEpLAogICAgIHB0aHJlYWRfcHJlcGFyZSAoTlVMTCks
-IHB0aHJlYWRfY2hpbGQgKE5VTEwpLCBwdGhyZWFkX3BhcmVudCAoTlVMTCks
-CiAgICAgbXV0ZXhzIChOVUxMKSwgY29uZHMgKE5VTEwpLCBzZW1hcGhvcmVz
-IChOVUxMKSwKLSAgICBtYWludGhyZWFkICgpLCByZWVudF9rZXkgKE5VTEwp
-LCB0aHJlYWRfc2VsZl9rZXkgKE5VTEwpCisgICAgbWFpbnRocmVhZCAoKSwg
-cmVlbnRfa2V5IChOVUxMKSwgdGhyZWFkX3NlbGZfa2V5IChwdGhyZWFkOjpk
-ZXN0cnVjdG9yKQogICAgIHsKICAgICB9CiB9Owo=
+Index: fhandler_process.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/fhandler_process.cc,v
+retrieving revision 1.19
+diff -u -3 -p -u -p -r1.19 fhandler_process.cc
+--- fhandler_process.cc	31 Aug 2002 16:37:51 -0000	1.19
++++ fhandler_process.cc	24 Sep 2002 13:13:30 -0000
+@@ -25,6 +25,7 @@ details. */
+ #include "ntdll.h"
+ #include <sys/param.h>
+ #include <assert.h>
++#include <sys/sysmacros.h>
 
---4227302-3028-1032864113=:327--
+ #define _COMPILING_NEWLIB
+ #include <dirent.h>
+@@ -486,7 +487,7 @@ format_process_stat (_pinfo *p, char *de
+ 				   "%lu",
+ 			  p->pid, cmd,
+ 			  state,
+-			  p->ppid, p->pgid, p->sid, p->ctty, -1,
++              p->ppid, p->pgid, p->sid, makedev (FH_TTYS, p->ctty), -1,
+ 			  0, fault_count, fault_count, 0, 0, utime, stime,
+ 			  utime, stime, priority, 0, 0, 0,
+ 			  start_time, vmsize,
+@@ -556,6 +557,9 @@ format_process_status (_pinfo *p, char *
+       vmsize *= page_size; vmrss *= page_size; vmdata *= page_size;
+       vmtext *= page_size; vmlib *= page_size;
+     }
++  // The real uid value for *this* process is stored at
+cygheap->user.real_uid
++  // but we can't get at the real uid value for any other process, so
++  // just fake it as p->uid. Similar for p->gid.
+   return __small_sprintf (destbuf, "Name:   %s\n"
+ 				   "State:  %c (%s)\n"
+ 				   "Tgid:   %d\n"
+@@ -578,8 +582,8 @@ format_process_status (_pinfo *p, char *
+ 			  p->pgid,
+ 			  p->pid,
+ 			  p->ppid,
+-			  p->uid, cygheap->user.real_uid, cygheap->user.real_uid, p->uid,
+-			  p->gid, cygheap->user.real_gid, cygheap->user.real_gid, p->gid,
++              p->uid, p->uid, p->uid, p->uid,
++              p->gid, p->gid, p->gid, p->gid,
+ 			  vmsize >> 10, 0, vmrss >> 10, vmdata >> 10, 0, vmtext >> 10, vmlib >>
+10,
+ 			  0, 0, p->getsigmask ()
+ 			  );
+
+------=_NextPart_000_000B_01C263D5.15207DF0
+Content-Type: application/octet-stream;
+	name="ChangeLog"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+	filename="ChangeLog"
+Content-length: 203
+
+2002-09-24  Christopher January <chris@atomice.net>
+
+	* fhandler_proc.cc (format_process_stat): make ctty a real device number.
+	(format_process_status): use effective uid/gid as real and saved uid/gid.
+
+------=_NextPart_000_000B_01C263D5.15207DF0
+Content-Type: application/octet-stream;
+	name="proc.patch"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment;
+	filename="proc.patch"
+Content-length: 2133
+
+Index: fhandler_process.cc=0A=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
+RCS file: /cvs/src/src/winsup/cygwin/fhandler_process.cc,v=0A=
+retrieving revision 1.19=0A=
+diff -u -3 -p -u -p -r1.19 fhandler_process.cc=0A=
+--- fhandler_process.cc	31 Aug 2002 16:37:51 -0000	1.19=0A=
++++ fhandler_process.cc	24 Sep 2002 13:13:30 -0000=0A=
+@@ -25,6 +25,7 @@ details. */=0A=
+ #include "ntdll.h"=0A=
+ #include <sys/param.h>=0A=
+ #include <assert.h>=0A=
++#include <sys/sysmacros.h>=0A=
+=20=0A=
+ #define _COMPILING_NEWLIB=0A=
+ #include <dirent.h>=0A=
+@@ -486,7 +487,7 @@ format_process_stat (_pinfo *p, char *de=0A=
+ 				   "%lu",=0A=
+ 			  p->pid, cmd,=0A=
+ 			  state,=0A=
+-			  p->ppid, p->pgid, p->sid, p->ctty, -1,=0A=
++              p->ppid, p->pgid, p->sid, makedev (FH_TTYS, p->ctty), -1,=0A=
+ 			  0, fault_count, fault_count, 0, 0, utime, stime,=0A=
+ 			  utime, stime, priority, 0, 0, 0,=0A=
+ 			  start_time, vmsize,=0A=
+@@ -556,6 +557,9 @@ format_process_status (_pinfo *p, char *=0A=
+       vmsize *=3D page_size; vmrss *=3D page_size; vmdata *=3D page_size;=
+=0A=
+       vmtext *=3D page_size; vmlib *=3D page_size;=0A=
+     }=0A=
++  // The real uid value for *this* process is stored at cygheap->user.real=
+_uid=0A=
++  // but we can't get at the real uid value for any other process, so=0A=
++  // just fake it as p->uid. Similar for p->gid.=0A=
+   return __small_sprintf (destbuf, "Name:   %s\n"=0A=
+ 				   "State:  %c (%s)\n"=0A=
+ 				   "Tgid:   %d\n"=0A=
+@@ -578,8 +582,8 @@ format_process_status (_pinfo *p, char *=0A=
+ 			  p->pgid,=0A=
+ 			  p->pid,=0A=
+ 			  p->ppid,=0A=
+-			  p->uid, cygheap->user.real_uid, cygheap->user.real_uid, p->uid,=0A=
+-			  p->gid, cygheap->user.real_gid, cygheap->user.real_gid, p->gid,=0A=
++              p->uid, p->uid, p->uid, p->uid,=0A=
++              p->gid, p->gid, p->gid, p->gid,=0A=
+ 			  vmsize >> 10, 0, vmrss >> 10, vmdata >> 10, 0, vmtext >> 10, vmlib >>=
+ 10,=0A=
+ 			  0, 0, p->getsigmask ()=0A=
+ 			  );=0A=
+
+------=_NextPart_000_000B_01C263D5.15207DF0--
