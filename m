@@ -1,14 +1,17 @@
-From: Corinna Vinschen <corinna@vinschen.de>
-To: cygpatch <cygwin-patches@sourceware.cygnus.com>
-Subject: Change to fhandler_random.cc/wincrypt.h
-Date: Sat, 27 May 2000 07:04:00 -0000
-Message-id: <392FD5FB.EF3B0494@vinschen.de>
-X-SW-Source: 2000-q2/msg00088.html
+From: Chris Faylor <cgf@cygnus.com>
+To: cygwin-patches@sourceware.cygnus.com
+Subject: Just checked in two patches
+Date: Mon, 29 May 2000 17:51:00 -0000
+Message-id: <20000529205142.A7669@cygnus.com>
+X-SW-Source: 2000-q2/msg00089.html
 
-I have patched fhandler_random.cc to be able to deal with
-user accounts which have not loaded their user registry hive.
+I just checked in some patches to augment Cygwin's handling of autoloading
+DLLs.  This will enable us to, relatively easily, start using functions that
+are only implemented in newer versions of libraries like those found in W2K.
 
-The patch has required to add the missing CRYPT_MACHINE_KEYSET
-define to wincrypt.h
+I was going to hold off on doing this, but I had to make some changes to the
+low level path handling code to fix the problem reported by David Bolen in
+the cygwin mailing list and I didn't feel like trying to weed out the autoload
+changes from the path handling changes.
 
-Corinna
+cgf
