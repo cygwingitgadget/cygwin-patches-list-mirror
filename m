@@ -1,24 +1,55 @@
-From: Earnie Boyd <earnie_boyd@yahoo.com>
+From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: config/i386/cygwin.h Use msvcrt for -mno-cygwin
-Date: Wed, 10 Jan 2001 17:02:00 -0000
-Message-id: <3A5CBFB3.89B6C0E6@yahoo.com>
-References: <3A5CCC11.9CF6AC25@yahoo.com> <200101102103.QAA26304@envy.delorie.com> <3A5CCFFC.D20B5B56@yahoo.com> <20010110162922.A4790@redhat.com>
-X-SW-Source: 2001-q1/msg00029.html
+Subject: Re: Patch: More options for regtool
+Date: Wed, 10 Jan 2001 17:07:00 -0000
+Message-id: <20010110200742.A6944@redhat.com>
+References: <000601c07ae7$404bd700$0200a8c0@fred> <20010110082944.A25695@redhat.com>
+X-SW-Source: 2001-q1/msg00030.html
 
-Christopher Faylor wrote:
+I asked DJ to review this patch and he says that it looks good.  so,
+I've applied it along with a modified ChangeLog.
 
+Thanks.
+
+cgf
+
+On Wed, Jan 10, 2001 at 08:29:44AM -0500, Christopher Faylor wrote:
+>On Wed, Jan 10, 2001 at 01:25:19AM -0800, Tony Sideris wrote:
+>>PS: I apoligize if i missed something. I read the FAQs on contributing, hope
+>>i got it all...
 >
-> What does everyone think about making -mno-win32 the default?
+>Actually, please go back and read the Contributing web page again.  The
+>entry below is not correct.  If you could tell me where I got things
+>wrong, I'll try to clarify the information on the contrib.html web page.
 >
+>Specifically, there should not be multiple lines for "global", the file
+>should only be listed once, and the entries should begin with a tab.
+>
+>Thanks for your submission, though.  We'll evaluate the patch itself soon.
+>
+>cgf
+>
+>>Tue Jan 09 10:26:23 2001  Tony Sideris  <tonys1110@home.com>
+>>
+>> * regtool.cc (global): Add LIST_KEYS, LIST_VALS, and LIST_ALL
+>> constants.
+>> * regtool.cc (global): Add int listwhat, and int postfix.
+>> * regtool.cc (global): Modify usage_msg to document -p, -k, and -l.
+>> * regtool.cc (Fail): Add call to LocalFree to free memory
+>> allocated by FormatMessage (unrelated to new options).
+>> * regtool.cc (cmd_list): Add code to implement -p, -k, and -l
+>> options, this involved checking 'listwhat' and 'postfix' and
+>> acting accordingly.
+>> * utils.sgml: Updated usage message to reflect the new options.
+>>
+>
+>
+>
+>
+>-- 
+>cgf@cygnus.com                        Red Hat, Inc.
+> http://sources.redhat.com/            http://www.redhat.com/
 
-Go for it, you won't regret it.
-
-Cheers,
-Earnie.
-
-
-
-_________________________________________________________
-Do You Yahoo!?
-Get your free @yahoo.com address at http://mail.yahoo.com
+-- 
+cgf@cygnus.com                        Red Hat, Inc.
+http://sources.redhat.com/            http://www.redhat.com/
