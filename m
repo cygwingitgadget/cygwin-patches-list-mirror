@@ -1,75 +1,30 @@
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygwin-patches@sourceware.cygnus.com
-Subject: Re: [PATCH] Mask mnemonics and expressions, help, getopts_long() for strace - current diff
-Date: Wed, 14 Nov 2001 07:09:00 -0000
-Message-ID: <20011114160931.B27452@cygbert.vinschen.de>
-References: <20011114124520.A27350@cygbert.vinschen.de> <NCBBIHCHBLCMLBLOBONKOEFDCHAA.g.r.vansickle@worldnet.att.net>
-X-SW-Source: 2001-q4/msg00222.html
-Message-ID: <20011114070900.AANc7QHXcDdHG35itT7TtijSRrS640NkLoQO8-XtwiY@z>
+From: Brian Keener <bkeener@thesoftwaresource.com>
+To: cygwin-patches <cygwin-patches@cygwin.com>
+Subject: Re: [Patch] setup.exe - change to not ask root on download only.
+Date: Wed, 14 Nov 2001 11:41:00 -0000
+Message-ID: <VA.000009dc.00a69973@thesoftwaresource.com>
+References: <VA.000009d7.011e66c9@thesoftwaresource.com> <01ee01c16c9e$0350bce0$0200a8c0@lifelesswks>
+X-SW-Source: 2001-q4/msg00223.html
+Message-ID: <20011114114100.1tobFd25sj2X-cZqgsn__jmnExkkjw4nfAvtr5_ZLVI@z>
 
-On Wed, Nov 14, 2001 at 08:59:18AM -0600, Gary R. Van Sickle wrote:
-> > > +  -f, --fork-debug              ???\n\
-> >
-> > The usage information for -f is missing.  -f means, trace not only
-> > the application on the command line but also child apps forked by
-> > the originally traced app.
-> >
-> 
-> Ok, thanks, yeah, I forgot to ask what that did.  In light of that, perhaps the
-> long option would be better if it was something like "--trace-children" or
-> "--trace-forked-children"?
+Robert Collins wrote:
+> can you generate patches with "-up" ? (See the cygwin contributors
+> page).
+> It makes it a lot easier to visually grok a patch.
 
-Hmm,  --trace-forkee?  --trace-over-fork?  I'm not sure either.
+I can do that.  Actually I knew I had done it two ways in the past and couldn't 
+remember the other.  Nor was I sure which was the preferred - now I know.
 
-Would be better if english would be my first language, I guess.
+> I'll update this for you to the io_streams code for HEAD committing.
 
-> > > +  -d, --delta                   Add a delta-t timestamp to each
-> > output line.\n\
-> >
-> > Giving the -d option doesn't show the delta but removes it from the output.
-> > That should be the other way around.
-> >
-> 
-> So it does (well, more precisely it appears to switch from delta to absolute).
-> I thought sure I checked that.  I'll change the longopt to "--absolute" and
-> update the usage text.  Is "-d" too entrenched at this point to change it to
-> "-a" at the same time and make things a little more consistent?
+Did it make it in the version you just rolled to the web page.
 
-Uhm, from what I could see it actually just removes the delta from
-the output.  Since there is already an absolute stamp,  I don't
-think changing the option to -a,--absolute makes sense.  Just
-use -d,--no-delta and stuck with the current behaviour.
+> Lastly, you were missing a call to get_root_dir_now which resulted in
+> /etc/setup/last-cache never getting read.
 
-> > > +  -u, --usecs                   Add a microsecond-resolution
-> > timestamp to each
-> > > +                                output line.\n\
-> >
-> > -u seem to have no effect on the output.
-> >
-> 
-> It appears that this option is either being ignored by the rest of the code or
-> isn't implemented properly, I can't tell which.  The 'usecs' global switch
-> variable is used only in syst(), and even there apparently not as a switch.
-> Then in handle_output_debug_string() there's a local of the same name declared.
-> 
-> I think what I'll do is just remove this from the usage text until I can figure
-> this out and/or somebody can explain it to me.  Maybe this option should just be
-> removed completely.
+Hum,  I'll have to look at the change you made - I thought mine was reading 
+either file depending on where it found it. Ah well.  Thanks for correcting it 
+anyways.
 
-Yeah, from that point of view...  FWIW, it could make sense to remove
-the output... Hmm, dunno. 
 
-Any other opinion on that?
 
-> Done and done.  I'll generate a new diff tonight.  Sorry about the problems,
-> thanks for catching them.
-
-Sure.  You're welcome.  I recall that my first patches back in 1998
-weren't clean either :-)
-
-Corinna
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
