@@ -1,49 +1,52 @@
-From: Egor Duda <deo@logos-m.ru>
-To: cygpatch <cygwin-patches@sourceware.cygnus.com>
-Subject: Re: st_blocks incorrect for files larger than 2Gbytes
-Date: Thu, 27 Jul 2000 07:16:00 -0000
-Message-id: <2760.000727@logos-m.ru>
-References: <20000726135017.G7599@cygnus.com>
-X-SW-Source: 2000-q3/msg00034.html
+From: "Norman Vine" <nhv@cape.com>
+To: <cygwin-patches@sources.redhat.com>
+Cc: "'DJ Delorie'" <dj@delorie.com>
+Subject: RE: Installation problems
+Date: Wed, 02 Aug 2000 09:26:00 -0000
+Message-id: <000001bffc9e$73977000$2037ba8c@nhv>
+References: <200008021500.LAA05521@envy.delorie.com>
+X-SW-Source: 2000-q3/msg00035.html
 
-Hi!
+DJ Delorie writes:
+>
+>I don't suppose you could post that, as a diff, with a ChangeLog, to
+>cygwin-patches@sources.redhat.com?  Cc me as well.
+>
+>Yes, I know it's trivial, but if you do it that way I can just apply
+>it as-is.
 
->>Wed Jul 26 14:32:38 2000 Egor Duda <deo@logos-m.ru>
->>
->>        * syscalls.cc: Make stat return correct st_blocks for files
->>          with size bigger than 2Gb and less than 4Gb
-
-oops.  i  should  grep carefully next time. seems that i've overlooked
-st_blocks assignment in fhandler_disk_file::fstat()
-
-Thu Jul 27 13:03:57 2000   Egor Duda <deo@logos-m.ru>
-
-        *  fhandler.cc:  (fhandler_disk_file::fstat)  Make stat return
-        correct st_blocks for files with size bigger than 2Gb and less
-        than 4Gb
+Sure
 
 
-Index: winsup/cygwin/fhandler.cc
+========== CUT HERE ==========
+Index: ChangeLog
 ===================================================================
-RCS file: /home/duda_admin/cvs-mirror/src/winsup/cygwin/fhandler.cc,v
-retrieving revision 1.24
-diff -c -2 -r1.24 fhandler.cc
-*** winsup/cygwin/fhandler.cc   2000/07/17 19:18:21     1.24
---- winsup/cygwin/fhandler.cc   2000/07/27 13:03:57
-***************
-*** 947,951 ****
-  
-    buf->st_blksize = S_BLKSIZE;
-!   buf->st_blocks  = (buf->st_size + S_BLKSIZE-1) / S_BLKSIZE;
-  
-    /* Using a side effect: get_file_attibutes checks for
---- 947,951 ----
-  
-    buf->st_blksize = S_BLKSIZE;
-!   buf->st_blocks  = ((unsigned long) buf->st_size + S_BLKSIZE-1) / S_BLKSIZE;
-  
-    /* Using a side effect: get_file_attibutes checks for
-
-
-Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
-
+RCS file: /cvs/src/src/winsup/cinstall/ChangeLog,v
+retrieving revision 1.67
+diff -d -w -u -r1.67 ChangeLog
+--- ChangeLog	2000/08/02 01:45:50	1.67
++++ ChangeLog	2000/08/02 16:23:06
+@@ -1,3 +1,7 @@
++2000-08-02  Norman Vine <nhv@yahoo,com>
++
++	* msg.cc (mbox): added MB_TOPMOST to MessageBox type flags
++
+ 2000-08-01  DJ Delorie  <dj@redhat.com>
+ 
+ 	* postinstall.cc (each): don't rename files we ignore
+Index: msg.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cinstall/msg.cc,v
+retrieving revision 1.2
+diff -d -w -u -r1.2 msg.cc
+--- msg.cc	2000/07/17 20:48:00	1.2
++++ msg.cc	2000/08/02 16:23:07
+@@ -40,7 +40,7 @@
+     ExitProcess (0);
+ 
+   vsprintf (buf, fmt, args);
+-  return MessageBox (0, buf, "Cygwin Setup", type);
++  return MessageBox (0, buf, "Cygwin Setup", type | MB_TOPMOST);
+ }
+ 
+ void
