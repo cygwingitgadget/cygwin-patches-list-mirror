@@ -1,32 +1,18 @@
-From: "Norman Vine" <nhv@cape.com>
-To: <cygwin-patches@cygwin.com>
-Subject: RE: [PATCH] setup.exe: Stop NetIO_HTTP from treating entire stream as a  header
-Date: Tue, 27 Nov 2001 17:19:00 -0000
-Message-ID: <004801c177ab$13c9f4c0$a300a8c0@nhv>
-References: <20011127235426.GB6537@redhat.com>
-X-SW-Source: 2001-q4/msg00272.html
-Message-ID: <20011127171900.IzmtZfQrx3Bbfa0ye9ehYt6-iLU7_iByW43aWQfvn-M@z>
+From: Robert Collins <robert.collins@itdomain.com.au>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] setup.exe: Stop NetIO_HTTP from treating entire streamas a  header
+Date: Tue, 27 Nov 2001 17:26:00 -0000
+Message-ID: <1006910727.637.0.camel@lifelesswks>
+References: <20011127230925.GA5830@redhat.com> <000001c1779c$e1fe2fa0$2101a8c0@NOMAD> <20011127235226.GA6537@redhat.com> <1006906033.2048.23.camel@lifelesswks> <20011128002122.GA6919@redhat.com> <1006907495.2048.25.camel@lifelesswks> <20011128005414.GA7118@redhat.com>
+X-SW-Source: 2001-q4/msg00273.html
+Message-ID: <20011127172600.PfrKGFNuQ5TN_XZ7X6VuZ3NsiqBTHl2AuYwmrBwy1IE@z>
 
-Christopher Faylor writes:
->
->On Wed, Nov 28, 2001 at 10:42:33AM +1100, Robert Collins wrote:
->>On Wed, 2001-11-28 at 10:09, Christopher Faylor wrote:
->>> References?  A simple google search for 'NULL C++ deprecated' didn't
->>> unearth this information.
->>
->>Deprecated may have been too strong a word. Anyway, references:
->>
->>The C++ annotations - http://www.icce.rug.nl/documents/cpp.shtml 
->>Specifically...
->> http://www.icce.rug.nl/documents/cplusplus/cplusplus02.html#an78
->
->Thanks for the URL.  This looks like something to bookmark.
->
+On Wed, 2001-11-28 at 11:54, Christopher Faylor wrote:
+> On Wed, Nov 28, 2001 at 11:31:35AM +1100, Robert Collins wrote:
+> And, as always, I'm sorry that I ventured into a discussion about
+> coding style.  I'll try not to let that happen again, unless it
+> is to point out a clear violation of GNU coding standards.
 
-FWIW
-I believe that Standard C requires NULL to be defined in <stddef.h>
-http://www.ccs.ucsd.edu/c/stddef.html/#NULL
+I'm equally guilty here, don't worry about it. 
 
-Cheers
-
-Norman
+Rob
