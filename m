@@ -1,67 +1,26 @@
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
+From: "Robert Collins" <robert.collins@itdomain.com.au>
+To: <cygwin-patches@cygwin.com>
 Subject: Re: how-fhandlers-work draft
-Date: Sun, 30 Sep 2001 17:48:00 -0000
-Message-id: <20010930204859.D3722@redhat.com>
-References: <010b01c14a10$9e9ee470$01000001@lifelesswks>
-X-SW-Source: 2001-q3/msg00254.html
+Date: Sun, 30 Sep 2001 17:51:00 -0000
+Message-id: <013901c14a13$4ff33ee0$01000001@lifelesswks>
+References: <010b01c14a10$9e9ee470$01000001@lifelesswks> <20010930204859.D3722@redhat.com>
+X-SW-Source: 2001-q3/msg00255.html
 
-On Mon, Oct 01, 2001 at 10:32:57AM +1000, Robert Collins wrote:
->Chris, Corinna, anything in here that is wrong or missing? I'm happy to
->keep reading
+----- Original Message -----
+From: "Christopher Faylor" <cgf@redhat.com>
+To: <cygwin-patches@cygwin.com>
+Sent: Monday, October 01, 2001 10:48 AM
+Subject: Re: how-fhandlers-work draft
 
-Feel free to check this in.
 
-Could you wrap the lines to 80 columns, though?
+> On Mon, Oct 01, 2001 at 10:32:57AM +1000, Robert Collins wrote:
+> >Chris, Corinna, anything in here that is wrong or missing? I'm happy
+to
+> >keep reading
+>
+> Feel free to check this in.
 
-Also, DJ wrote a tutorial for adding a file handler a while ago.  Does
-this incorporate that information?
+Will do once I incorporate Dj's tutorial - any pointers to that (I'm
+about to search the archives) & linewrap it.
 
-cgf
-
->Copyright 2001 Red Hat Inc., Robert Collins
->
->fhandlers are the core mechanism by which cygwin provides a file descripter (fd) interface to things such as a random number generated, winsock sockets, raw disk devices, the clipboard, the console and so on. Under unix access to all such devices is via a combination of IOCTL's and open/close/read/write calls. Some special functions do exist - such as bind () and listen () for sockets, but these consistently operate on fd's. Under Win32 there are disparate interfaces that have little in common with each other. See for example Direct Sound and the Clipboard.
->
->
->The fhandler class provides all open,read,write,close, ioctl and fork()/exec() functionality for the fd interface. The base class operates on win32 backed files. The various derived classes utilise win32 primitives to provide their specific functionality.
->
->When a file is opened - not necesarily via open() a fd is assigned to it. The fd includes a pointer to the actual fhandler that operates this specific file. All file-oriented system calls then operate off this basic structure.
->
->For example, lets example lseek ().
->
->extern "C" off_t
->_lseek (int fd, off_t pos, int dir)
->{
->  off_t res;
->  sigframe thisframe (mainthread);
->
->  if (dir != SEEK_SET && dir != SEEK_CUR && dir != SEEK_END)
->    {
->      set_errno (EINVAL);
->      res = -1;
->    }
->  else if (cygheap->fdtab.not_open (fd))
->    {
->      set_errno (EBADF);
->      res = -1;
->    }
->  else
->    {
->      res = cygheap->fdtab[fd]->lseek (pos, dir);
->    }
->  syscall_printf ("%d = lseek (%d, %d, %d)", res, fd, pos, dir);
->
->  return res;
->}
->
->The sigframe thisframe (mainthread); is signal related - see "how_signals_work.txt".
->
->The if, else if, else tests (in order)
->* the validity of the dir parameter,
->* is the fd being passed actually open? (cannot seek on a closed fd)
->* call the lseek virtual function in the associated fhandler. 
->
->So as you can see, there is no code that attempts to understand the nature of the fhandler.
->
->fhandlers that make cross-function-call use of win32 objects that are not inheritable cross-process need to implement fixup-after-fork and recreate those objects. HANDLES can be inherited, but memory mapped regions (for example) cannot.
+Rob
