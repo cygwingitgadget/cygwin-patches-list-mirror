@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2193-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 14996 invoked by alias); 17 May 2002 09:32:58 -0000
+Return-Path: <cygwin-patches-return-2194-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 9535 invoked by alias); 18 May 2002 14:33:03 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,38 +7,38 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 14944 invoked from network); 17 May 2002 09:32:52 -0000
-Date: Fri, 17 May 2002 02:32:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygpatch <cygwin-patches@cygwin.com>
-Subject: Re: set_errno() fixes
-Message-ID: <20020517113250.H7555@cygbert.vinschen.de>
-Mail-Followup-To: cygpatch <cygwin-patches@cygwin.com>
-References: <3.0.5.32.20020516205822.007f7b20@mail.attbi.com>
-Mime-Version: 1.0
+Received: (qmail 9510 invoked from network); 18 May 2002 14:33:03 -0000
+Message-ID: <15590.26146.494851.534995@bea.com>
+Date: Sat, 18 May 2002 07:33:00 -0000
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3.0.5.32.20020516205822.007f7b20@mail.attbi.com>
-User-Agent: Mutt/1.3.22.1i
-X-SW-Source: 2002-q2/txt/msg00177.txt.bz2
+Content-Transfer-Encoding: 7bit
+From: "Philip Aston" <paston@bea.com>
+To: cygwin-patches@cygwin.com
+Subject: Correction to w32api/include/pbt.h
+X-SW-Source: 2002-q2/txt/msg00178.txt.bz2
 
-On Thu, May 16, 2002 at 08:58:22PM -0400, Pierre A. Humblet wrote:
-> 2002-05-16  Pierre Humblet <pierre.humblet@ieee.org>
-> 
-> 	* fhandler_raw.cc (fhandler_dev_raw::open): Replace set_errno()
-> 	by __seterrno_from_win_error(). 
-> 	* security.cc (open_local_policy): Ditto. (get_lsa_srv_inf): Ditto.
-> 	(get_user_groups): Ditto. (get_user_primary_group): Ditto.
-> 	(create_token): Ditto. (subauth): Ditto.
-> 
-> I have also removed some debug_printf() when the printf()'s from
-> __seterrno_from_win_error() are unambiguous.
 
-Thanks, applied.  I've just fixed the above ChangeLog entry.
+2002-05-15  Philip Aston  <phlipa@mail.com>
 
-Corinna
+	* include/pbt.h (PBT_APMRESUMESUSPEND): Correct value is 7.
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+
+Index: w32api/include/pbt.h
+===================================================================
+RCS file: /cvs/src/src/winsup/w32api/include/pbt.h,v
+retrieving revision 1.2
+diff -u -p -u -r1.2 pbt.h
+--- w32api/include/pbt.h	9 Mar 2002 09:04:09 -0000	1.2
++++ w32api/include/pbt.h	15 May 2002 20:18:47 -0000
+@@ -11,7 +11,7 @@
+ #define PBT_APMSUSPEND 4
+ #define PBT_APMSTANDBY 5
+ #define PBT_APMRESUMECRITICAL 6
+-#define PBT_APMRESUMESUSPEND 8
++#define PBT_APMRESUMESUSPEND 7
+ #define PBT_APMRESUMESTANDBY 8
+ #define PBTF_APMRESUMEFROMFAILURE 1
+ #define PBT_APMBATTERYLOW 9
+
+
