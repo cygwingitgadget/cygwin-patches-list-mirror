@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3442-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 22049 invoked by alias); 21 Jan 2003 17:57:34 -0000
+Return-Path: <cygwin-patches-return-3443-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 31959 invoked by alias); 21 Jan 2003 18:01:29 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,55 +7,54 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 22040 invoked from network); 21 Jan 2003 17:57:33 -0000
-Date: Tue, 21 Jan 2003 17:57:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
+Received: (qmail 31936 invoked from network); 21 Jan 2003 18:01:29 -0000
+Date: Tue, 21 Jan 2003 18:01:00 -0000
+From: Jason Tishler <jason@tishler.net>
+Subject: Re: nanosleep() patch
+In-reply-to: <20030121161706.GU29236@cygbert.vinschen.de>
 To: cygwin-patches@cygwin.com
-Subject: Re: Races in group/passwd code (was Re: etc_changed, passwd & group)
-Message-ID: <20030121175854.GA15711@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3.0.5.32.20030117233612.007ed390@mail.attbi.com> <3.0.5.32.20030120215131.007f9740@h00207811519c.ne.client2.attbi.com> <20030121051325.GA4667@redhat.com> <20030121153538.GA24356@redhat.com> <3E2D6CF9.FF47B7F4@ieee.org> <20030121161115.GA13536@redhat.com> <3E2D79A7.DCC9AF74@ieee.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3E2D79A7.DCC9AF74@ieee.org>
-User-Agent: Mutt/1.5.1i
-X-SW-Source: 2003-q1/txt/msg00091.txt.bz2
+Mail-followup-to: cygwin-patches@cygwin.com
+Message-id: <20030121180536.GC628@tishler.net>
+MIME-version: 1.0
+Content-type: text/plain; charset=us-ascii
+Content-transfer-encoding: 7BIT
+Content-disposition: inline
+User-Agent: Mutt/1.4i
+References: <20030117192853.GA1164@tishler.net>
+ <20030121155842.GS29236@cygbert.vinschen.de>
+ <20030121160201.GA13579@redhat.com>
+ <20030121161706.GU29236@cygbert.vinschen.de>
+X-SW-Source: 2003-q1/txt/msg00092.txt.bz2
 
-On Tue, Jan 21, 2003 at 11:47:35AM -0500, Pierre A. Humblet wrote:
->Christopher Faylor wrote:
->
->> You'd need a per-thread buffer to accomplish that.  I assume that
->> is what you had in mind.
->
->If you look at them, most internal_get{pw,gr} calls from outside
->of passwd.cc and grp.cc only want the {u,g}id, the sid or the name,
->but never the other fields. 
+Corinna,
+Chris,
 
-getpwuid_r32
+Thanks for your feedback.
 
->I wanted to avoid copying the entire line, at least in the first
->two cases.
+On Tue, Jan 21, 2003 at 05:17:06PM +0100, Corinna Vinschen wrote:
+> On Tue, Jan 21, 2003 at 11:02:01AM -0500, Christopher Faylor wrote:
+> > On Tue, Jan 21, 2003 at 04:58:42PM +0100, Corinna Vinschen wrote:
+> > >I'm wondering if we could do without an extra function
+> > >sleep_worker() and let nanosleep() be the basic implementation.  So
+> > >sleep() as well as usleep() could call nanosleep().  Isn't that
+> > >done that way in the Linux kernel, too?
+> > 
+> > In that case, nanosleep needs to be rewritten to deal with the same
+> > issues as sleep().
+> 
+> Sure.  nanosleep would be sleep_worker with timespec arguments.
 
-Not copying is a good goal.  I guess there is no reason why the lock
-couldn't be exported to everyone.
+OK, I will rework the patch as specified above.
 
-Except for the problem with locks and signals, this isn't a big issue,
-as you know.  However, since I was in the process of cleaning some of
-this up, I thought I'd try to at least close the window a little.
+Regarding usleep(), I was afraid to change it to use nanosleep() (aka
+sleep_worker()) because its implementation was different than sleep().
+Additionally, its current behavior does not seem to agree with what is
+documented in "man 3 usleep" under Red Hat Linux 8.0.  Should I include
+a reworked usleep() in the next version of this patch?
 
->> I wonder how many inexplicable "cygwin hangs" issues this is
->> responsible for.
->
->Problems only happen when updating passwd/group while a program
->is running. At least in case of the recent BSOD, users were
->very good correlating the two events.
+Thanks,
+Jason
 
-There is a potential for essentially causing a deadlock due to
-the fact that pthread locks are not recognized by the signal code.
-If a signal handler is called in the middle of a passwd or group
-read, then there is a potential for a hang.  It's easy enough to
-fix by using mutos and I will do that in the next couple of days.
-
-cgf
+-- 
+PGP/GPG Key: http://www.tishler.net/jason/pubkey.asc or key servers
+Fingerprint: 7A73 1405 7F2B E669 C19D  8784 1AFD E4CC ECF4 8EF6
