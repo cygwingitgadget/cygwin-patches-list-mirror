@@ -1,58 +1,26 @@
 From: Corinna Vinschen <cygwin-patches@cygwin.com>
 To: cygpatch <cygwin-patches@cygwin.com>
 Subject: Re: win95 and pshared mutex support for pthreads
-Date: Wed, 25 Apr 2001 01:15:00 -0000
-Message-id: <20010425101554.H23753@cygbert.vinschen.de>
-References: <00d001c0c8bc$d9f12400$0200a8c0@lifelesswks> <20010424232202.A23753@cygbert.vinschen.de> <20010424233314.B23753@cygbert.vinschen.de> <01ba01c0cd0c$26b7b850$0200a8c0@lifelesswks>
-X-SW-Source: 2001-q2/msg00150.html
+Date: Wed, 25 Apr 2001 01:20:00 -0000
+Message-id: <20010425102017.I23753@cygbert.vinschen.de>
+References: <00d001c0c8bc$d9f12400$0200a8c0@lifelesswks> <20010424232202.A23753@cygbert.vinschen.de> <01b001c0cd0b$cf997950$0200a8c0@lifelesswks>
+X-SW-Source: 2001-q2/msg00151.html
 
-On Wed, Apr 25, 2001 at 08:16:02AM +1000, Robert Collins wrote:
-> ----- Original Message -----
-> I wasn't sure so I _tested_ the output. And no overruns occured.
+On Wed, Apr 25, 2001 at 08:13:36AM +1000, Robert Collins wrote:
+> From: "Corinna Vinschen" <cygwin-patches@cygwin.com>
+> > Robert,
+> >
+> > may I ask why your new reentrant functions ignore the pw_gecos
+> > field? You know that it's very important when using ntsec?
+> 
+> I didn't realise that I ignored anything. If I missed copying a field
+> across it will be because I wrote from a spec and their struct
+> definition, not the cygwin internals. - Sorry.
 
-It's not an overrun problem in first place.
-
-> Have you tested this Corinna?
-
-I have. My testcode:
-
-===============================================
-#include <unistd.h>
-#include <stdio.h>
-#include <pwd.h>
-
-int
-main(int argc, char **argv)
-{
-  struct passwd pw, *ret;
-  char buffer[256];
-
-  if (getpwuid_r (100, &pw, buffer, 256, &ret))
-    perror ("getpwuid_r");
-  else
-    {
-      printf ("pw_name: <%s>\n", pw.pw_name);
-      printf ("pw_dir: <%s>\n", pw.pw_dir);
-      printf ("pw_shell: <%s>\n", pw.pw_shell);
-    }
-  return 0;
-}
-===============================================
-
-Uid 100 is my own entry in /etc/passwd.
-
-With my changes, the output is:
-
-    pw_name: <corinna>
-    pw_dir: </home/corinna>
-    pw_shell: </bin/tcsh>
-
-
-Your version prints:
-
-    pw_name: <corinna/home/corinna/bin/tcsh>
-    pw_dir: </home/corinna/bin/tcsh>
-    pw_shell: </bin/tcsh>
+No reason to apologize. I apologize. I was too harsh since I was
+working on my new ntsec related code and suddenly found an error
+in my own code which could have been handled by some _r function.
+When I saw that getpwxxx_r couldn't work I overacted somewhat.
 
 Corinna
 
