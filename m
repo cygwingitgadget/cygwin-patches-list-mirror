@@ -1,26 +1,25 @@
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: "Dejavou@inwind.it" <Dejavou@inwind.it>
-Cc: cygwin-patches@cygwin.com
-Subject: Re: Export Library from CygWinPerl to ActivePerl...
-Date: Wed, 25 Jul 2001 02:54:00 -0000
-Message-id: <20010725115419.G490@cygbert.vinschen.de>
-References: <GH0TLE$IftNbRbwWTvoHR2Kfxke9KOKS5YI_pjYyvGt7y7Ieb@inwind.it>
-X-SW-Source: 2001-q3/msg00032.html
+From: Robert Collins <robert.collins@itdomain.com.au>
+To: Trevor Forbes <trevorforbes@ozemail.com.au>
+Cc: Cygwin-patches <cygwin-patches@sources.redhat.com>
+Subject: Re: Exception using GDB
+Date: Wed, 25 Jul 2001 14:27:00 -0000
+Message-id: <996096632.17154.7.camel@lifelesswks>
+References: <047f01c114ee$38e66600$0300a8c0@ufo>
+X-SW-Source: 2001-q3/msg00033.html
 
-On Wed, Jul 25, 2001 at 10:44:02AM +0200, Dejavou@inwind.it wrote:
-> Hi Guys
->    i've compiled a module for multicasting under cygwin perl.I've got the file .a .o .def .dll .bs.
-> Is there a way to work with this module under active perl?
-> Tnxs Francesco
+On 25 Jul 2001 19:12:05 +0930, Trevor Forbes wrote:
+> A fix for the bad pointer exception when a debugger is attached. 
+> 
+>  * thread.cc (verifyable_object_isvalid): Don't validate
+> PTHREAD_MUTEX_INITIALIZER pointer as it will cause an exception in
+> IsBadWritePtr() when running GDB.
+> 
+> Note, Insight has a bug and it will not work without this patch.... 
+> 
+> Trevor
+> 
+Thanks Trevor, that looks good.
 
-Would you mind to ask your question on cygwin@cygwin.com?
-cygwin-patches is reserved for development of the Cygwin DLL
-itself.
+Chris - can you do the honours, or would you like me to?
 
-Thanks,
-Corinna
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+Rob
