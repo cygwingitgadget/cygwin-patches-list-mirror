@@ -1,28 +1,78 @@
-From: Christopher Faylor <cgf@redhat.com>
+From: "Gareth Pearce" <tilps@hotmail.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: patch to mkpasswd.c - allows selection of specific user
-Date: Fri, 09 Nov 2001 17:40:00 -0000
-Message-id: <20011109204014.A13761@redhat.com>
-References: <911C684A29ACD311921800508B7293BA010A8FF1@cnmail>
-X-SW-Source: 2001-q4/msg00186.html
+Subject: Re: [Patch] setup.exe - no skip/keep option buggyness
+Date: Fri, 09 Nov 2001 19:14:00 -0000
+Message-id: <F174dfEtGrpUN7cLjHZ00022a02@hotmail.com>
+X-SW-Source: 2001-q4/msg00187.html
 
-On Fri, Nov 09, 2001 at 08:23:01PM -0500, Mark Bradshaw wrote:
->Ah.  I'm a dummy.  I'm looking at the wrong thing.  How about this:
 >
->Fri 9 Nov 2001 18:15:00  Mark Bradshaw <bradshaw@staff.crosswalk.com>
->	* mkpasswd.c (main): New -u option to allow specifying a 
->	specific user.  If specified groups aren't displayed.
->	(enum_users): If specific user is specified, via -u option, 
->	display only that user's record.
+>----- Original Message -----
+>From: "Gareth Pearce" <tilps@hotmail.com>
+>To: <robert.collins@itdomain.com.au>; <cygwin-patches@cygwin.com>
+>
+>
+>...
+> > Would have submited another go ... but what you have done looks great
+>(A
+> > more significant change then I would have submited, but then I am in
+>newbie
+> > cautious mode), and I am in the middle of a 336meg download of debian
+>
+>I've put your patch into the categories branch, and into HEAD.
 
-Looks ok.  The date is a little off.  It should either be:
+hmm I hope you tested my patch, because although I tested it with no 
+problems, if your original patch didnt work - I wouldnt be supprised that 
+mine fails for the same reasons... this was what I meant about not knowing 
+why it worked... I also thought being set to unknown should break my code 
+... but only realised that after having tested it and having had it work jut 
+fine...
 
-2001-11-09 or Fri  9 Nov 18:15:00 2001
+if you want it to say keep instead of skip ... under the way my patch 
+works...
 
-but that's obviously no big deal.
+in choose_caption
+I think
+    case ACTION_SKIP:
+      if (!pkg->installed)
+        return "Skip";
+      else
+        return "Keep";
 
-I really do need an assignment for something of this length.  Especially
-if it adds new functionality.  Sorry.  I hate the fact that I have to
-ask for this.
+should do it... since theres no actual difference between the actions 
+internally,
+ofcourse your fix that you had before is much cleaner ... and I really 
+thought it would have worked if mine did ... prehaps a simple logic tweak 
+would fix it... ie for instance would that loop ever set the value to 
+ACTION_SAME ? ... I am thinking that it wouldnt... but I dont have your code 
+right in front of me ...
 
-cgf
+
+fixing it if unkown doesnt work should be as simple as if 
+(!pkg->installed_ix ||pkg->install_ix==unkownConstantThingie) isntead of 
+just installed_ix check...
+
+would submit a patch, but NTFS on win2k being read only mounted is stuffing 
+me arround... and I couldnt test it here in debian anyway...
+
+>
+>As for being cautious .... I'll accept any patch, big or small, that
+>a) is inline with the setup.exe goals. If in doubt the issue can be
+>discussed to it's death on cyg-apps.
+>b) is coded well. return values checked, snprintf instead of sprintf
+>etc.
+>c) is designed well (IOW doesn't make the internal maintenance harder).
+>
+>I understand not wanting to spend a lot of time on a big patch, just to
+>get the patch rejected, so discussing the concept first on cyg-apps is
+>usually a good idea for non-obvious or structural work.
+
+cyg-apps for setup/winsup directory stuff? hmmm thought I read somewhere 
+that was not right... anyway ... I can do that :P
+and cautious is a not wanting to tred on toes just yet :P I am sure that 
+will change after patch 3 or 4 ... :P
+
+Gareth
+
+
+_________________________________________________________________
+Get your FREE download of MSN Explorer at http://explorer.msn.com/intl.asp
