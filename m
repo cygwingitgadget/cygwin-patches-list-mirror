@@ -1,24 +1,31 @@
-From: Jason Tishler <Jason.Tishler@dothill.com>
+From: Benjamin Riefenstahl <Benjamin.Riefenstahl@epost.de>
 To: Cygwin-Patches <cygwin-patches@cygwin.com>
-Subject: Re: setlogmask() patch
-Date: Thu, 25 Jan 2001 19:50:00 -0000
-Message-id: <20010125225359.A1184@dothill.com>
-References: <20010121225155.A1272@dothill.com> <20010122103427.A30981@redhat.com>
-X-SW-Source: 2001-q1/msg00037.html
+Subject: Console codepage
+Date: Sun, 28 Jan 2001 12:43:00 -0000
+Message-id: <u7l3fv26h.fsf@mail.epost.de>
+X-SW-Source: 2001-q1/msg00038.html
 
-Chris,
+Hi everybody,
 
-On Mon, Jan 22, 2001 at 10:34:27AM -0500, Christopher Faylor wrote:
-> Applied. Thanks.
 
-Thanks for adding the include/cygwin/version.h part -- I just realized
-that I forgot it.
+The code to support I/O to the console (fhandler_console.cc) currently
+assumes that the console uses the default OEM codepage.  The user can
+change that with CHCP.COM though, and I for one do that routinely.  It
+is amoung other things a very usefull to do when running a shell in
+NTEmacs.  Because of this customization, 8-bit character console I/O
+in Cygwin has for some time been broken for me.
 
-Jason
+I corrected this in fhandler_console.cc by replacing functions
+OemToChar() and CharToOem() with a combo of MultiByteToWideChar() and
+WideCharToMultiByte().
 
--- 
-Jason Tishler
-Director, Software Engineering       Phone: +1 (732) 264-8770 x235
-Dot Hill Systems Corp.               Fax:   +1 (732) 264-8798
-82 Bethany Road, Suite 7             Email: Jason.Tishler@dothill.com
-Hazlet, NJ 07730 USA                 WWW:   http://www.dothill.com
+I tested console output on Win2000 with "time od test.data" and it
+doesn't look like there is a noticeable difference in efficiency.
+
+I include the result of a "cvs diff" below. 
+
+This is my first submission for Cygwin so if there is anything I can
+do to make this easier to process, just tell me. 
+
+
+so long, benny
