@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4524-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 12403 invoked by alias); 22 Jan 2004 23:07:41 -0000
+Return-Path: <cygwin-patches-return-4525-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 20573 invoked by alias); 22 Jan 2004 23:34:13 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,99 +7,123 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 12387 invoked from network); 22 Jan 2004 23:07:39 -0000
-X-Authentication-Warning: eos.vss.fsi.com: ford owned process doing -bs
-Date: Thu, 22 Jan 2004 23:07:00 -0000
-From: Brian Ford <ford@vss.fsi.com>
-X-X-Sender: ford@eos
+Received: (qmail 20551 invoked from network); 22 Jan 2004 23:34:05 -0000
+Message-Id: <3.0.5.32.20040122183313.00839860@incoming.verizon.net>
+X-Sender: vze1u1tg@incoming.verizon.net (Unverified)
+Date: Thu, 22 Jan 2004 23:34:00 -0000
 To: cygwin-patches@cygwin.com
-Subject: Fix write deadlock with streaming serial devices
-Message-ID: <Pine.GSO.4.58.0401221638310.17483@eos>
-MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="-559023410-675537891-1074811835=:17483"
-Content-ID: <Pine.GSO.4.58.0401221651270.17483@eos>
-X-SW-Source: 2004-q1/txt/msg00014.txt.bz2
+From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
+Subject: [Patch]: secret event
+Mime-Version: 1.0
+Content-Type: multipart/mixed; boundary="=====================_1074832393==_"
+X-SW-Source: 2004-q1/txt/msg00015.txt.bz2
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
+--=====================_1074832393==_
+Content-Type: text/plain; charset="us-ascii"
+Content-length: 939
 
----559023410-675537891-1074811835=:17483
-Content-Type: TEXT/PLAIN; CHARSET=US-ASCII
-Content-ID: <Pine.GSO.4.58.0401221651271.17483@eos>
-Content-length: 1293
+fhandler_socket.cc has a handle leak: when several accept()'s are 
+made on an AF_LOCAL parent socket, it accumulates secret_event handles.
 
-This trivial patch fixes the problem reported here:
+Also close on exec does not work properly on the secret_event when 
+the call occurs after the event creation.
 
-http://www.cygwin.com/ml/cygwin/2004-01/msg00664.html
+The patch fixes both issues. For the close on exec, the event is
+always created with inheritance allowed, but the handle inheritance
+is set appropriately.
+I had to drop the ProtectHandle because of the changing inheritance.
 
-Tested and confirmed by the reporter here:
+Pierre
 
-http://www.cygwin.com/ml/cygwin/2004-01/msg00716.html
+2004-01-22  Pierre Humblet <pierre.humblet@ieee.org>
 
-and by Martin Farnik in a previous private email discussion.
+	* fhandler_socket.cc (fhandler_socket::create_secret_event): Avoid
+	creating multiple handles. Always allow event inheritance but set the
+	handle inheritance appropriately. Improve error handling.
+	(fhandler_socket::check_peer_secret_event): Improve error handling.
+	(fhandler_socket::close_secret_event): Simply call CloseHandle.
+	(fhandler_socket::set_close_on_exec): Set secret event inheritance.
 
-If the input buffer overflows because a device is streaming faster than
-the application is reading, all serial communications cease and calls
-return ERROR_OPERATION_ABORTED.  In order to restart communication,
-ClearCommError must be called.  Without this patch, a deadlock inside
-fhandler_serial::raw_write could occur.
+--=====================_1074832393==_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment; filename="fhandler_socket.diff"
+Content-length: 2687
 
-Martin has supplied me with an strace log of another hang, but I have yet
-to fully understand it.  A patch for it is hopefully forth comming.
+Index: fhandler_socket.cc
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+RCS file: /cvs/src/src/winsup/cygwin/fhandler_socket.cc,v
+retrieving revision 1.115
+diff -u -p -r1.115 fhandler_socket.cc
+--- fhandler_socket.cc	7 Dec 2003 22:37:11 -0000	1.115
++++ fhandler_socket.cc	22 Jan 2004 23:27:49 -0000
+@@ -183,6 +183,9 @@ fhandler_socket::create_secret_event (in
+   struct sockaddr_in sin;
+   int sin_len =3D sizeof (sin);
 
-The fhandler_serial::raw_read patch is merely a suggestion to correct a
-possible thinko.  Feel free to ignore it, or correct my limited analysis.
++  if (secret_event)
++    return secret_event;
++
+   if (::getsockname (get_socket (), (struct sockaddr*) &sin, &sin_len))
+     {
+       debug_printf ("error getting local socket name (%d)", WSAGetLastErro=
+r ());
+@@ -191,17 +194,13 @@ fhandler_socket::create_secret_event (in
 
-Thanks.
+   char event_name[CYG_MAX_PATH];
+   secret_event_name (event_name, sin.sin_port, secret ?: connect_secret);
+-  LPSECURITY_ATTRIBUTES sec =3D get_inheritance (true);
+-  secret_event =3D CreateEvent (sec, FALSE, FALSE, event_name);
+-  if (!secret_event && GetLastError () =3D=3D ERROR_ALREADY_EXISTS)
+-    secret_event =3D OpenEvent (EVENT_ALL_ACCESS, FALSE, event_name);
++  secret_event =3D CreateEvent (&sec_all, FALSE, FALSE, event_name);
 
-2004-01-22  Brian Ford  <ford@vss.fsi.com>
+   if (!secret_event)
+-    /* nothing to do */;
+-  else if (sec =3D=3D &sec_all_nih || sec =3D=3D &sec_none_nih)
+-    ProtectHandle (secret_event);
+-  else
+-    ProtectHandleINH (secret_event);
++    debug_printf("create event %E");
++  else if (get_close_on_exec ())
++    /* Event allows inheritance, but handle will not be inherited */
++    set_inheritance (secret_event, 1);
 
-	* fhandler_serial.cc (fhandler_serial::raw_write): Prevent a
-	deadlock when the input buffer overflows.
-	(fhandler_serial::raw_read): Correct to print the actual error
-	and only call PurgeComm when necessary.
+   return secret_event;
+ }
+@@ -222,7 +221,7 @@ void
+ fhandler_socket::close_secret_event ()
+ {
+   if (secret_event)
+-    ForceCloseHandle (secret_event);
++    CloseHandle (secret_event);
+   secret_event =3D NULL;
+ }
 
--- 
-Brian Ford
-Senior Realtime Software Engineer
-VITAL - Visual Simulation Systems
-FlightSafety International
-Phone: 314-551-8460
-Fax:   314-551-8444
----559023410-675537891-1074811835=:17483
-Content-Type: TEXT/PLAIN; CHARSET=US-ASCII; NAME="fhandler_serial.cc.patch"
-Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.GSO.4.58.0401221650350.17483@eos>
-Content-Description: 
-Content-Disposition: ATTACHMENT; FILENAME="fhandler_serial.cc.patch"
-Content-length: 1530
+@@ -234,11 +233,8 @@ fhandler_socket::check_peer_secret_event
 
-SW5kZXg6IGZoYW5kbGVyX3NlcmlhbC5jYw0KPT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PQ0KUkNTIGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvY3lnd2luL2Zo
-YW5kbGVyX3NlcmlhbC5jYyx2DQpyZXRyaWV2aW5nIHJldmlzaW9uIDEuNDcN
-CmRpZmYgLXUgLXAgLXIxLjQ3IGZoYW5kbGVyX3NlcmlhbC5jYw0KLS0tIGZo
-YW5kbGVyX3NlcmlhbC5jYwkxMSBEZWMgMjAwMyAxODowNzo0MiAtMDAwMAkx
-LjQ3DQorKysgZmhhbmRsZXJfc2VyaWFsLmNjCTIyIEphbiAyMDA0IDIyOjM4
-OjA0IC0wMDAwDQpAQCAtMTMzLDE2ICsxMzMsMTYgQEAgZmhhbmRsZXJfc2Vy
-aWFsOjpyYXdfcmVhZCAodm9pZCAqcHRyLCBzaQ0KICAgICAgIGNvbnRpbnVl
-Ow0KIA0KICAgICBlcnI6DQotICAgICAgUHVyZ2VDb21tIChnZXRfaGFuZGxl
-ICgpLCBQVVJHRV9SWEFCT1JUKTsNCiAgICAgICBkZWJ1Z19wcmludGYgKCJl
-cnIgJUUiKTsNCi0gICAgICBpZiAoR2V0TGFzdEVycm9yICgpID09IEVSUk9S
-X09QRVJBVElPTl9BQk9SVEVEKQ0KLQluID0gMDsNCi0gICAgICBlbHNlDQor
-ICAgICAgaWYgKEdldExhc3RFcnJvciAoKSAhPSBFUlJPUl9PUEVSQVRJT05f
-QUJPUlRFRCkNCiAJew0KKyAgICAgICAgICBQdXJnZUNvbW0gKGdldF9oYW5k
-bGUgKCksIFBVUkdFX1JYQUJPUlQpOw0KIAkgIHRvdCA9IC0xOw0KIAkgIF9f
-c2V0ZXJybm8gKCk7DQogCSAgYnJlYWs7DQogCX0NCisNCisgICAgICBuID0g
-MDsNCiAgICAgfQ0KIA0KIG91dDoNCkBAIC0xNjksNiArMTY5LDkgQEAgZmhh
-bmRsZXJfc2VyaWFsOjpyYXdfd3JpdGUgKGNvbnN0IHZvaWQgKg0KICAgICAg
-IHN3aXRjaCAoR2V0TGFzdEVycm9yICgpKQ0KIAl7DQogCWNhc2UgRVJST1Jf
-T1BFUkFUSU9OX0FCT1JURUQ6DQorICAgICAgICAgIERXT1JEIGV2Ow0KKyAg
-ICAgICAgICBpZiAoIUNsZWFyQ29tbUVycm9yIChnZXRfaGFuZGxlICgpLCAm
-ZXYsIE5VTEwpKSBnb3RvIGVycjsNCisgICAgICAgICAgaWYgKGV2KSB0ZXJt
-aW9zX3ByaW50ZiAoImVycm9yIGRldGVjdGVkICV4IiwgZXYpOw0KIAkgIGNv
-bnRpbnVlOw0KIAljYXNlIEVSUk9SX0lPX1BFTkRJTkc6DQogCSAgYnJlYWs7
-DQo=
+   secret_event_name (event_name, peer->sin_port, secret ?: connect_secret);
+   HANDLE ev =3D CreateEvent (&sec_all_nih, FALSE, FALSE, event_name);
+-  if (!ev && GetLastError () =3D=3D ERROR_ALREADY_EXISTS)
+-    {
+-      debug_printf ("event \"%s\" already exists", event_name);
+-      ev =3D OpenEvent (EVENT_ALL_ACCESS, FALSE, event_name);
+-    }
++  if (!ev)
++    debug_printf("create event %E");
 
----559023410-675537891-1074811835=:17483--
+   signal_secret_event ();
+
+@@ -1302,6 +1298,8 @@ fhandler_socket::fcntl (int cmd, void *a
+ void
+ fhandler_socket::set_close_on_exec (int val)
+ {
++  if (secret_event)
++    set_inheritance (secret_event, val);
+   if (!winsock2_active) /* < Winsock 2.0 */
+     set_inheritance (get_handle (), val);
+   set_close_on_exec_flag (val);
+
+--=====================_1074832393==_--
