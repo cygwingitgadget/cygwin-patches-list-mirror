@@ -1,10 +1,10 @@
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
+From: David Sainty <David.Sainty@optimation.co.nz>
+To: "'cygwin@jason-gouger.com'" <cygwin@jason-gouger.com>
+Cc: "'cygwin-patches@cygwin.com'" <cygwin-patches@cygwin.com>
 Subject: Re: PATCH: getcwd() pathstyle
-Date: Sun, 07 Jan 2001 20:11:00 -0000
-Message-id: <20010107231202.A24911@redhat.com>
-References: <GIEAKOJACGCDOHKHFLIHIEIDCAAA.cygwin@jason-gouger.com>
-X-SW-Source: 2001-q1/msg00013.html
+Date: Sun, 07 Jan 2001 21:52:00 -0000
+Message-id: <30E7BC40E838D211B3DB00104B09EFB77953EF@delorean.optimation.co.nz>
+X-SW-Source: 2001-q1/msg00014.html
 
 On Sun, Jan 07, 2001 at 07:38:16PM -0800, Jason Gouger wrote:
 >Below is a small patch which adds a "pathstyle" to the CYGWIN options. This
@@ -18,31 +18,42 @@ On Sun, Jan 07, 2001 at 07:38:16PM -0800, Jason Gouger wrote:
 >The 'pathstyle=win32' option allows cygwin programs to more easily interact
 >with win32 types of programs when the cygwin program builds
 >arguments/envvars based off of the cwd.
->
->Sun Jan 7 18:45:22 2001  Jason Gouger <cygwin@jason-gouger.com>
->
->	* environ.cc: Added new configuration entry (pathstyle) to
->	              'struct parse_thing .. known[]'
->	* winsup.h: Added header definition for new function
->	            pathstyle_start_init
->	* path.cc: New function to initialize pathstyle configuration
->	           named pathstyle_start_init
->	           Modified 'getcwd' to return different pathstyles
->	           + pathstyle=posix (default), getcwd returns
->	               the traditional path, i.e. /usr/local/bin
->	           + pathstyle=win32, getcwd returns a win32
->	               type of path, i.e. C:/cygwin/usr/local/bin
->	           + pathstyle=dos, getcwd returns a dos
->	               type of path, i.e. C:\cygwin\usr\local\bin
 
-This looks interesting but I'd like you to do two things:
+This has (I think) some undesirable side-effects.  In particular, it risks
+breaking the principle of least surprise.  For example, my many varied shell
+scripts may throw up their hands in horror if they don't receive a cwd in
+the normal format.  Does this now mean I need to modify all my scripts to
+parse CYGWIN and determine the selected format?  It does if I want them to
+work in all situations.  But that isn't enough by itself, because I don't
+know if the environment variable my shell sees is actually in the processes
+environment, so really I'm just screwed :)
 
-1) Check out this link for the correct formatting of ChangeLog entries:
-http://www.gnu.org/prep/standards_39.html
+It seems like this change also has little chance of helping.  Either a
+program is win32 aware, or it isn't, and if it isn't then it will make
+assumptions like '^/' = root and '/' = directory separator.
 
-2) Fill out the assignment form so that we can incorporate your change
-   into cygwin.  I don't think you've done this yet, have you?
+It would be much safer to do a little porting exercise on the program in
+question, and for that reason there is probably a very good argument for
+including all of:
 
-    http://cygwin.com/assign.txt
+- getcwd()
+- getcwd_win32()
+- getcwd_dos()
 
-cgf
+... in the Cygwin API, to make porting trivial.  After all, most programs
+probably wouldn't have more than one call to getcwd(), and if the program
+really needs one of the non-standard formats then it would be better to fix
+it right at the source of the problem, not rely on the environment being set
+correctly before it is run.
+
+For the benefit of shell scripts, adding options to '/bin/pwd' would be a
+simpler solution.
+
+Maybe I'm just missing the case where this change has an essential benefit?
+
+I'm not trying to say the patch is bad, I just think it'd be bad if it was
+merged into the release code.
+
+Cheers,
+
+Dave
