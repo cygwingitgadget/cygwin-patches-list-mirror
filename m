@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1853-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 27023 invoked by alias); 7 Feb 2002 15:05:49 -0000
+Return-Path: <cygwin-patches-return-1854-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 16491 invoked by alias); 9 Feb 2002 08:35:45 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,34 +7,34 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 26908 invoked from network); 7 Feb 2002 15:05:44 -0000
-Date: Sat, 09 Feb 2002 00:35:00 -0000
-From: Alexander Gottwald <alexander.gottwald@informatik.tu-chemnitz.de>
-To: Corinna Vinschen <cygwin-patches@cygwin.com>
-Subject: Re: Tokenring support for network interfaces
-In-Reply-To: <20020207151153.Z14241@cygbert.vinschen.de>
-Message-ID: <Pine.LNX.4.21.0202071532110.9517-100000@rotuma.informatik.tu-chemnitz.de>
+Received: (qmail 16446 invoked from network); 9 Feb 2002 08:35:45 -0000
+Message-ID: <002a01c1b144$c002b560$7c00a8c0@mchasecompaq>
+From: "Michael A Chase" <mchase@ix.netcom.com>
+To: "Jason Tishler" <jason@tishler.net>,
+	"Cygwin-Patches" <cygwin-patches@sources.redhat.com>
+References: <20020205193627.GA816@dothill.com>
+Subject: Rebase Patch Review
+Date: Sat, 09 Feb 2002 01:01:00 -0000
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-SW-Source: 2002-q1/txt/msg00210.txt.bz2
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-SW-Source: 2002-q1/txt/msg00211.txt.bz2
 
-On Thu, 7 Feb 2002, Corinna Vinschen wrote:
+I've looked the patch over and don't see any obvious problems.  My technical
+knowledge of C++ has some severe limits though.
 
-> Me neither.  Perhaps it's ok to implement it just based on the
-> description (if any and if it's at all possible)?!?
+It might be better to have rebase in some of the names; rebase_config
+instead of config_file for example.
+--
+Mac :})
+** I normally forward private questions to the appropriate mail list. **
+Ask Smarter: http://www.tuxedo.org/~esr/faqs/smart-questions.htm
+Give a hobbit a fish and he eats fish for a day.
+Give a hobbit a ring and he eats fish for an age.
 
-For NT and 95: every interface which is not ppp is considered as eth type. 
-This is not correct, but at least they're listed. I've searched the msdn
-but found no information where and how it is coded that an network inter-
-face is tokenring or ethernet or something else.
 
-The Problem with the 2k implementation was that the tokenring adapters
-were left out and xfree could not find the correct interface for the local 
-ip-address.
-
-bye
-	ago
--- 
- Alexander.Gottwald@informatik.tu-chemnitz.de 
- http://www.gotti.org           ICQ: 126018723
- phone: +49 3725 349 80 80	mobile: +49 172 7854017
