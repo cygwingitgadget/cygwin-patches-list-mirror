@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3048-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 20510 invoked by alias); 28 Sep 2002 16:18:06 -0000
+Return-Path: <cygwin-patches-return-3049-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 9963 invoked by alias); 7 Oct 2002 10:35:09 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,39 +7,38 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 20488 invoked from network); 28 Sep 2002 16:18:05 -0000
-Date: Sat, 28 Sep 2002 09:18:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: Modes of files with uid = gid
-Message-ID: <20020928181802.A1519@cygbert.vinschen.de>
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3D9470B5.87AAB099@ieee.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3D9470B5.87AAB099@ieee.org>
-User-Agent: Mutt/1.3.22.1i
-X-SW-Source: 2002-q3/txt/msg00496.txt.bz2
+Received: (qmail 9948 invoked from network); 7 Oct 2002 10:35:08 -0000
+From: "Ralf Habacker" <Ralf.Habacker@freenet.de>
+To: "Cygwin-Patches" <cygwin-patches@cygwin.com>
+Subject: [patch] postgresql 'rc' like start script 
+Date: Mon, 07 Oct 2002 03:35:00 -0000
+Message-ID: <006901c26ded$319f37b0$686607d5@BRAMSCHE>
+MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3 (Normal)
+X-MSMail-Priority: Normal
+X-MimeOLE: Produced By Microsoft MimeOLE V5.50.4133.2400
+Importance: Normal
+X-SW-Source: 2002-q4/txt/msg00000.txt.bz2
 
-On Fri, Sep 27, 2002 at 10:52:37AM -0400, Pierre A. Humblet wrote:
-> Corinna,
-> 
-> Motivated by a Cygwin list e-mail on this subject last weekend I have
-> improved the handling of the modes of files with uid = gid.
-> The patch below does that, as well as some other things I did not
-> expect when I started. It also raises some questions and makes
-> this e-mail rather long :(
-> [...]
+Hi all, 
 
-Hi Pierre,
+this patch add a unix like 'rc'-start script for the postgresql server. 
 
-I'm sorry but I'm now on vacation until early November.  I'm definitely
-offline all the time so this has to wait until then.
 
-Corinna
+Regards
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+Ralf 
+
+
+2002-10-17 Ralf Habacker <ralf.habacker@freenet.de>
+
+	rcpostgresql: new file 
+
+
+--- /dev/null   2002-10-07 12:30:54.000000000 +0200
++++ /usr/sbin/rcpostgresql      2002-10-07 12:30:41.000000000 +0200
+@@ -0,0 +1,2 @@
++/usr/bin/pg_ctl -D /usr/share/postgresql/data -l /var/log/pgsql.log $1
