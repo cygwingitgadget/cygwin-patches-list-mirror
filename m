@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3965-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 20978 invoked by alias); 16 Jun 2003 06:37:36 -0000
+Return-Path: <cygwin-patches-return-3966-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 26671 invoked by alias); 16 Jun 2003 11:32:16 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,51 +7,61 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 20945 invoked from network); 16 Jun 2003 06:37:35 -0000
-X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
-Message-ID: <3EED65A4.7010703@gmx.net>
-Date: Mon, 16 Jun 2003 06:37:00 -0000
-From: Thomas Pfaff <tpfaff@gmx.net>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.4) Gecko/20030529
+Received: (qmail 25744 invoked from network); 16 Jun 2003 11:31:53 -0000
+Message-ID: <3EEDAAAC.3090401@yahoo.com>
+Date: Mon, 16 Jun 2003 11:32:00 -0000
+From: Earnie Boyd <earnie_boyd@yahoo.com>
+Reply-To:  cygwin-patches@cygwin.com
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.2.1) Gecko/20021130
 X-Accept-Language: en-us, en
 MIME-Version: 1.0
-To: cygwin-patches@cygwin.com
-Subject: Re: [RFA] enable dynamic (thread safe) reents
-References: <Pine.WNT.4.44.0305160915170.1356-200000@algeria.intern.net> <3EC4D5A0.7020005@gmx.net> <20030613031603.GA12302@redhat.com> <3EE96D3F.5010303@gmx.net> <20030616032457.GA10910@redhat.com>
-In-Reply-To: <20030616032457.GA10910@redhat.com>
+To:  cygwin-patches@cygwin.com
+Subject: Re: exceptions.cc - stackdump file - patch to identify version and
+ build date
+References: <3EE9BA02.7080502@yahoo.com>
+In-Reply-To: <3EE9BA02.7080502@yahoo.com>
 Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Transfer-Encoding: 7bit
-X-SW-Source: 2003-q2/txt/msg00192.txt.bz2
+X-SW-Source: 2003-q2/txt/msg00193.txt.bz2
 
-Christopher Faylor wrote:
-> On Fri, Jun 13, 2003 at 08:20:47AM +0200, Thomas Pfaff wrote:
+What's up?  It seems to me that I'm being ignored.  I would have thought 
+a little discussion or CVS update would have ensued.
+
+Earnie.
+
+Earnie Boyd wrote:
 > 
->>Unfortunately stdin, stdout and stderr were defined with _REENT 
->>directly. Sigh.
+> ------------------------------------------------------------------------
 > 
+> 2003-06-13  Earnie Boyd  <earnie@users.sf.net>
 > 
-> I've checked in this patch.  I'll ask again if it makes sense
-> to fix this problem in newlib.  Does it?
+> 	* exceptions.cc (exception): Output version and build date information
+> 	to the stackdump.
 > 
-
-It is a little late for cygwin, but i would suggest to change stdin, out 
-and err to
-
-#define stdin (*__stdin())
-extern  __FILE **__stdin _PARAMS ((void));
-
-and implement as
-
-__FILE **
-__stdin ()
-{
-   return &_REENT->_stdin;
-}
-
-Same for stdout and err. This would allow to define and undefine 
-__DYNAMIC_REENT__ without recompiling all user apps. And _getreent must 
-not be exported.
-I think that this is cleaner.
-
-Thomas
-
+> Index: exceptions.cc
+> ===================================================================
+> RCS file: /cvs/src/src/winsup/cygwin/exceptions.cc,v
+> retrieving revision 1.149
+> diff -u -3 -p -r1.149 exceptions.cc
+> --- exceptions.cc	12 Jun 2003 12:36:07 -0000	1.149
+> +++ exceptions.cc	13 Jun 2003 11:43:05 -0000
+> @@ -22,6 +22,7 @@ details. */
+>  #include "shared_info.h"
+>  #include "perprocess.h"
+>  #include "security.h"
+> +#include "cygwin_version.h"
+>  
+>  #define CALL_HANDLER_RETRY 20
+>  
+> @@ -206,6 +207,11 @@ exception (EXCEPTION_RECORD *e,  CONTEXT
+>  
+>  #ifdef __i386__
+>  #define HAVE_STATUS
+> +  small_printf ("CYGWIN-%d.%d.%d Build:%s\r\n",
+> +      cygwin_version.dll_major / 1000,
+> +      cygwin_version.dll_major % 1000,
+> +      cygwin_version.dll_minor,
+> +      cygwin_version.dll_build_date);
+>    if (exception_name)
+>      small_printf ("Exception: %s at eip=%08x\r\n", exception_name, in->Eip);
+>    else
