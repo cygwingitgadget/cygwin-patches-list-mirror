@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2344-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 26919 invoked by alias); 6 Jun 2002 14:03:32 -0000
+Return-Path: <cygwin-patches-return-2345-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 812 invoked by alias); 6 Jun 2002 14:12:01 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,34 +7,32 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 26880 invoked from network); 6 Jun 2002 14:03:29 -0000
-Message-ID: <3CFF6CB2.66B80261@ieee.org>
-Date: Thu, 06 Jun 2002 07:03:00 -0000
-From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
-X-Accept-Language: en,pdf
+Received: (qmail 786 invoked from network); 6 Jun 2002 14:11:59 -0000
+Message-ID: <001f01c20d64$5417c5d0$6132bc3e@BABEL>
+From: "Conrad Scott" <Conrad.Scott@dsl.pipex.com>
+To: "Earnie Boyd" <Cygwin-Patches@Cygwin.Com>
+References: <01ae01c20cf5$551007f0$6132bc3e@BABEL> <20020606013947.GB851@redhat.com> <025101c20cfd$930b0f70$6132bc3e@BABEL> <032201c20d55$73b57bd0$6132bc3e@BABEL> <20020606150911.A22789@cygbert.vinschen.de> <042c01c20d5d$a339f7c0$6132bc3e@BABEL> <3CFF659C.6DBD3D2B@yahoo.com>
+Subject: Re: Patch for sub-second resolution in stat(2)
+Date: Thu, 06 Jun 2002 07:12:00 -0000
 MIME-Version: 1.0
-To: Corinna Vinschen <cygwin-patches@cygwin.com>
-Subject: Re: Name aliasing in security.cc
-References: <3.0.5.32.20020603223130.007f6e10@mail.attbi.com> <3.0.5.32.20020530215740.007fc380@mail.attbi.com> <3.0.5.32.20020530215740.007fc380@mail.attbi.com> <3.0.5.32.20020603223130.007f6e10@mail.attbi.com> <3.0.5.32.20020605202359.007fc8a0@mail.attbi.com> <20020606131834.H30892@cygbert.vinschen.de>
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain;
+	charset="iso-8859-1"
 Content-Transfer-Encoding: 7bit
-X-SW-Source: 2002-q2/txt/msg00327.txt.bz2
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-SW-Source: 2002-q2/txt/msg00328.txt.bz2
 
-Corinna Vinschen wrote:
-> 
-> On Wed, Jun 05, 2002 at 08:23:59PM -0400, Pierre A. Humblet wrote:
-> > I saw the changes in grp.cc and passwd.cc where you make default
-> > entries from the token. That's a good idea, very close to what I had
-> > in mind for the "except" clause" in suggestion c) above.
+"Earnie Boyd" <earnie_boyd@yahoo.com> wrote:
+> Attach the ChangeLog entry to the mail, make sure the mime for the
+> attachment is text or make sure the file has a .txt suffix.  Most mail
+> clients will then display the attachment within the body of the mail.
 
-Corinna,
+Thanks for the hint: I've just had a look and yes, OE was attaching the
+changelog file as 'application/octet-stream' (i.e. binary). I'll try saving
+the file as 'changelog.txt' and attaching that next time.
 
-Something came to my mind last night: the sid that your new code in
-passwd.cc gets from the token should already be in user.sid (and 
-user.orig_sid). Why not get it from there instead?
+Thanks.
 
-I also have a question: why does internal Cygwin code use 
-strcasematch() instead of !strcasecmp()? I (ignorantly) used
-strcasecmp() recently, it seems to work.
+// Conrad
 
-Pierre
