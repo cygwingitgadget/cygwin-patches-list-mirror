@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2393-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 8622 invoked by alias); 12 Jun 2002 05:32:17 -0000
+Return-Path: <cygwin-patches-return-2394-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 24039 invoked by alias); 12 Jun 2002 11:03:58 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,68 +7,106 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 8574 invoked from network); 12 Jun 2002 05:32:14 -0000
-Date: Tue, 11 Jun 2002 22:32:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
+Received: (qmail 23656 invoked from network); 12 Jun 2002 11:03:56 -0000
+Date: Wed, 12 Jun 2002 04:03:00 -0000
+From: egor duda <deo@logos-m.ru>
+Reply-To: egor duda <cygwin-patches@cygwin.com>
+Organization: deo
+X-Priority: 3 (Normal)
+Message-ID: <63184716087.20020612150326@logos-m.ru>
 To: cygwin-patches@cygwin.com
-Subject: Re: Reorganizing internal_getlogin()
-Message-ID: <20020612053233.GA21398@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3.0.5.32.20020609231253.008044d0@mail.attbi.com> <20020610035228.GC6201@redhat.com> <20020610111359.R30892@cygbert.vinschen.de> <20020610151016.GG6201@redhat.com> <3D04C62B.E7804DC0@ieee.org> <20020611022812.GA30113@redhat.com>
-Mime-Version: 1.0
+Subject: Re: Need documentation for dumper.exe
+In-Reply-To: <28181617301.20020612141147@logos-m.ru>
+References: <20020611145443.GA352@redhat.com>
+ <28181617301.20020612141147@logos-m.ru>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="----------251831DB2D349EB0"
+X-SW-Source: 2002-q2/txt/msg00377.txt.bz2
+
+------------251831DB2D349EB0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20020611022812.GA30113@redhat.com>
-User-Agent: Mutt/1.3.23.1i
-X-SW-Source: 2002-q2/txt/msg00376.txt.bz2
+Content-Transfer-Encoding: 7bit
+Content-length: 421
 
-On Mon, Jun 10, 2002 at 10:28:12PM -0400, Christopher Faylor wrote:
->On Mon, Jun 10, 2002 at 11:30:51AM -0400, Pierre A. Humblet wrote:
->>Christopher Faylor wrote:
->>> 
->>> 
->>> Ok.  I'm in favor of getting rid of sexec in 1.3.11, then.
->>> 
->>> I'll do that sometime today.
->>> 
->>Then you can also junk the first argument (token) in _spawnve()
->>and spawn_guts() (FYI).
->
->Yes, this was one of the things that I've wanted to do for a while.
+Hi!
 
-After a chat with Corinna, I have taken a stab at cleaning up some
-of the environment manipulation in internal_getlogin.  I've done this
-without bothering spawn_guts too much.
+ed> Tuesday, 11 June, 2002 Christopher Faylor cgf@redhat.com wrote:
 
-I tried to keep most of the logic the same but a couple of things
-bothered me in internal_getlogin.  They were probably there for a
-good reason, but I changed them anyway.
+CF>> I just noticed that dumper.exe is not documented in utils.sgml.
 
-One thing that I changed was to not query for a user name if you've
-already gotten the user name from GetUserName.  I also changed the HOME
-and HOMEPATH manipulation slightly.  If there were reasons for the way
-things were, then please revert my changes and check in a comment
-explaining why you have to call GetUserName and then overwrite what it
-has discovered a few lines later.
+CF>> Is anyone interested in taking a stab at it?  There should be lots of
+CF>> info in the mailing list archives.
 
-I probably introduced other gratuitous formatting changes as I careened
-around uinfo.cc, too.  Hopefully Corinna will tell me if I did anything
-wrong.
+Patch attached. Can anybody with sgml tools installed please check if
+formatting is ok?
 
-The bottom line is that all (most?) user-related environment variables
-are only set when they need to be set and are not calculated or set at
-all when a known cygwin process is about to be run.  UNIX doesn't know
-about HOMEPATH or HOMEDRIVE so there is no reason to assume that a
-"native" cygwin process needs this updated info, either.
+Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
+------------251831DB2D349EB0
+Content-Type: application/octet-stream; name="dumper-docs.diff"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="dumper-docs.diff"
+Content-length: 3116
 
-There's probably more cleanup that can be done.  If so, let's discuss
-them.
+SW5kZXg6IHdpbnN1cC91dGlscy91dGlscy5zZ21sCj09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT0KUkNTIGZpbGU6IC9jdnMvdWJlcmJhdW0vd2luc3VwL3V0aWxz
+L3V0aWxzLnNnbWwsdgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuMjUKZGlmZiAt
+dSAtcCAtMiAtcjEuMjUgdXRpbHMuc2dtbAotLS0gd2luc3VwL3V0aWxzL3V0
+aWxzLnNnbWwJNyBKdW4gMjAwMiAxOToyNToyNiAtMDAwMAkxLjI1CisrKyB3
+aW5zdXAvdXRpbHMvdXRpbHMuc2dtbAkxMiBKdW4gMjAwMiAxMDo1ODo1MCAt
+MDAwMApAQCAtNzY2LDQgKzc2Niw1MCBAQCBwcmludCB0aGUgbWVzc2FnZSBi
+dXQgZG9lcyByZXR1cm4gdGhlIG5vCiA8L3NlY3QyPgogCis8c2VjdDIgaWQ9
+ImR1bXBlciI+PHRpdGxlPmR1bXBlcjwvdGl0bGU+CisKKzxzY3JlZW4+CitV
+c2FnZTogZHVtcGVyIFtPUFRJT05dIEZJTEVOQU1FIFdJTjMyUElECitEdW1w
+IGNvcmUgZnJvbSBXSU4zMlBJRCB0byBGSUxFTkFNRS5jb3JlCisgLWQsIC0t
+dmVyYm9zZSAgYmUgdmVyYm9zZSB3aGlsZSBkdW1waW5nCisgLWgsIC0taGVs
+cCAgICAgb3V0cHV0IGhlbHAgaW5mb3JtYXRpb24gYW5kIGV4aXQKKyAtcSwg
+LS1xdWlldCAgICBiZSBxdWlldCB3aGlsZSBkdW1waW5nIChkZWZhdWx0KQor
+IC12LCAtLXZlcnNpb24gIG91dHB1dCB2ZXJzaW9uIGluZm9ybWF0aW9uIGFu
+ZCBleGl0Cis8L3NjcmVlbj4KKworPHBhcmE+VGhlIDxjb21tYW5kPmR1bXBl
+cjwvY29tbWFuZD4gdXRpbGl0eSBjYW4gYmUgdXNlZCB0byBjcmVhdGUKK2Nv
+cmUgZHVtcCBvZiBydW5uaW5nIHdpbmRvd3MgcHJvY2Vzcy4gVGhpcyBjb3Jl
+IGR1bXAgY2FuIGJlIGxhdGVyIGxvYWRlZAordG8gZ2RiIGFuIGFuYWx5emVk
+LiBPbmUgY29tbW9uIHdheSB0byB1c2UgPGNvbW1hbmQ+ZHVtcGVyPC9jb21t
+YW5kPiBpcyB0bworcGx1ZyBpdCBpbnRvIGN5Z3dpbidzIEp1c3QtSW4tVGlt
+ZSBkZWJ1Z2dpbmcgZmFjaWxpdHkgYnkgYWRkaW5nCisKKzxzY3JlZW4+Citl
+cnJvcl9zdGFydD14OlxwYXRoXHRvXGR1bXBlci5leGUKKzwvc2NyZWVuPgor
+Cit0byA8ZW0+Q1lHV0lOPC9lbT4gZW52aXJvbm1lbnQgdmFyaWFibGUuIFBs
+ZWFzZSBub3RlIHRoYXQKKzxsaXRlcmFsPng6XHBhdGhcdG9cZHVtcGVyLmV4
+ZTwvbGl0ZXJhbD4gaXMgd2luMzItc3R5bGUgYW5kIG5vdCBjeWd3aW4KK3Bh
+dGguIElmIDxsaXRlcmFsPmVycm9yX3N0YXJ0PC9saXRlcmFsPiBpcyBzZXQg
+dGhpcyB3YXksIHRoZW4gZHVtcGVyIHdpbGwKK2JlIHN0YXJ0ZWQgd2hlbmV2
+ZXIgc29tZSBwcm9ncmFtIGVuY291bnRlcnMgZmF0YWwgZXJyb3IuCis8L3Bh
+cmE+CisKKzxwYXJhPgorPGNvbW1hbmQ+ZHVtcGVyPC9jb21tYW5kPiBjYW4g
+YmUgYWxzbyBiZSBzdGFydGVkIGZyb20gY29tbWFuZCBsaW5lIHRvIGNyZWF0
+ZQorY29yZSBkdW1wIG9mIGFueSBydW5uaW5nIHByb2Nlc3MuIFVuZm9ydHVu
+YXRlbHksIGJlY2F1c2Ugb2Ygd2luZG93cyBBUEkKK2xpbWl0YXRpb24sIHdo
+ZW4gY29yZSBkdW1wIGlzIGNyZWF0ZWQgYW5kIDxjb21tYW5kPmR1bXBlcjwv
+Y29tbWFuZD4gZXhpdHMsCit0aGUgdGFyZ2V0IHByb2Nlc3MgaXMgdGVybWlu
+YXRlZCB0b28uCis8L3BhcmE+CisKKzxwYXJhPgorVG8gc2F2ZSB0aGUgc3Bh
+Y2UgaW4gY29yZSBkdW1wLCA8Y29tbWFuZD5kdW1wZXI8L2NvbW1hbmQ+IGRv
+ZXNuJ3Qgd3JpdGUgdGhvc2UKK3BvcnRpb25zIG9mIHRhcmdldCBwcm9jZXNz
+JyBtZW1vcnkgc3BhY2UgdGhhdCBhcmUgbG9hZGVkIGZyb20gZXhlY3V0YWJs
+ZSBhbmQKK2RsbCBmaWxlcyBhbmQgYXJlIHVuY2hhbmdlYWJsZSwgc3VjaCBh
+cyBwcm9ncmFtIGNvZGUgYW5kIGRlYnVnIGluZm8uIEluc3RlYWQsCis8Y29t
+bWFuZD5kdW1wZXI8L2NvbW1hbmQ+IHNhdmVzIHBhdGhzIHRvIGZpbGVzIHdo
+aWNoIGNvbnRhaW4gdGhhdCBkYXRhLiBXaGVuCitjb3JlIGR1bXAgaXMgbG9h
+ZGVkIGludG8gZ2RiLCBpdCB1c2VzIHRoZXNlIHBhdGhzIHRvIGxvYWQgYXBw
+cm9wcmlhdGUgZmlsZXMuCitUaGF0IG1lYW5zIHRoYXQgaWYgeW91IGNyZWF0
+ZSBjb3JlIGR1bXAgb24gb25lIG1hY2hpbmUgYW5kIHRyeSB0byBkZWJ1ZyBp
+dCBvbgorb3RoZXIsIHlvdSdsbCBuZWVkIHRvIHBsYWNlIGlkZW50aWNhbCBj
+b3BpZXMgb2YgZXhlY3V0YWJsZSBhbmQgZGxscyBpbiB0aGUgc2FtZQorZGly
+ZWN0b3JpZXMgYXMgb24gbWFjaGluZSB3aGVyZSBjb3JlIGR1bXAgaGFzIGJl
+ZW4gY3JlYXRlZC4KKzwvcGFyYT4KKworPC9zZWN0Mj4KKwogPC9zZWN0MT4K
+IAo=
 
-<time passes>
+------------251831DB2D349EB0
+Content-Type: application/octet-stream; name="dumper-docs.ChangeLog"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="dumper-docs.ChangeLog"
+Content-length: 110
 
-Oops!  I just realized that I screwed up posix conversion in the new
-code.  Oh well.  That something to fix tomorrow.  Until then CVS is
-officially broken.
+MjAwMi0wNi0xMiAgRWdvciBEdWRhICA8ZGVvQGxvZ29zLW0ucnU+CgoJKiB1
+dGlscy5zZ21sOiBBZGQgc2VjdGlvbiBmb3IgZHVtcGVyLgo=
 
-cgf
+------------251831DB2D349EB0--
