@@ -1,93 +1,276 @@
-From: "Gerrit P. Haase" <freeweb@nyckelpiga.de>
+From: Pavel Tsekov <ptsekov@syntrex.com>
 To: cygwin-patches@cygwin.com
-Cc: cygwin@cygwin.com
-Subject: Re: need help to build xerces
-Date: Fri, 23 Nov 2001 04:40:00 -0000
-Message-ID: <1195690372.20011123133335@nyckelpiga.de>
-References: <93127483090.20011113225111@familiehaase.de>
-X-SW-Source: 2001-q4/msg00242.html
-Content-type: multipart/mixed; boundary="----------=_1583532850-65438-118"
-Message-ID: <20011123044000.XlUaToB5mKzo1N_vkKeHXVdRH1CFjTXZheIccl5gCqc@z>
+Subject: [PATCH] setup.exe: io_stream-ized SimpleSocket class
+Date: Fri, 23 Nov 2001 09:24:00 -0000
+Message-ID: <3BFE8631.AFC9AEF6@syntrex.com>
+X-SW-Source: 2001-q4/msg00243.html
+Message-ID: <20011123092400._UQDVK6g7EKDvqSnEcVs2n3fwfrCEsJNjCL7mt7aMxQ@z>
 
-This is a multi-part message in MIME format...
+Hello, there!
 
-------------=_1583532850-65438-118
-Content-length: 1455
+This is a simple patch which is a step towards
+merging the NetIO hierarchy with the new 
+io_stream hierarchy. The supplied patch implemnts
+all the abstract methods of io_stream except
+tell() and seek(), and also implements its own
+gets() method.
 
-Hallo Gerrit,
+There is no Changelog since I post this patch
+for comments/critics/flames/etc. I just want to
+know if this change is needed and if this is the
+right way to do it.
 
-2001-11-13 23:08:54, du schriebst:
+The next step I'll take if this is approved is to
+inherit SimpleSocket in both NetIO_FTP and NetIO_HTTP
+and include the " http://" ; and " ftp://" ; urls in
+the list of known urls of io_stream::open(). 
 
-> Hallo Cygwinners,
-
-> I get every sourcefile compiled but one.
-> The compiler (g++) doesn't want to build it because of this error:
-
-> In file included from IconvTransService.cpp:68:
-> /usr/include/wchar.h:24: syntax error before `('
-> make[2]: *** [IconvTransService.o] Error 1
-
-Ahh, I found it, patch is attached.
-
-> The file looks like this:
-
-> /* wchar.h
-
->    Copyright 1998, 1999, 2000, 2001 Red Hat, Inc.
-
-> This file is part of Cygwin.
-
-> This software is a copyrighted work licensed under the terms of the
-> Cygwin license.  Please consult the file "CYGWIN_LICENSE" for
-> details. */
-
-> #ifndef _WCHAR_H
-> #define _WCHAR_H
-
-> #include <sys/cdefs.h>
-
-> /* Get wchar_t and wint_t from <stddef.h>.  */
-> #define __need_wchar_t
-> #define __need_wint_t
-> #include <stddef.h>
-
-> __BEGIN_DECLS
-
-> int wcscmp (const wchar_t *__s1, const wchar_t *__s2);
-> size_t wcslen (const wchar_t *__s1);                    <--------- line 24 is here
-
-> __END_DECLS
-
-> #endif /* _WCHAR_H */
-
-
-> So what goes wrong here? I don't know.
-> Thanks in advance for a hint,
-
-> Gerrit
-
-
--- 
-convey Information Systems GmbH                   http://www.convey.de/
-                                                  VitalisstraÃe 326-328
-Gerrit P. Haase                                   D-50933 KÃ¶ln
-gerrit.haase@convey.de                            Fon: ++49 221 6903922
-Attachment:
-wchar.h.patch
-Description: Binary data
-
-
-------------=_1583532850-65438-118
-Content-Type: text/x-diff; charset=us-ascii; name="wchar.h.patch"
-Content-Disposition: inline; filename="wchar.h.patch"
-Content-Transfer-Encoding: base64
-Content-Length: 346
-
-LS0tIHdjaGFyLmgub3JpZwlUdWUgTm92IDEzIDIyOjQwOjQzIDIwMDEKKysr
-IHdjaGFyLmgJVHVlIE5vdiAxMyAyMzowNTo1NSAyMDAxCkBAIC0xNiw2ICsx
-Niw3IEBACiAvKiBHZXQgd2NoYXJfdCBhbmQgd2ludF90IGZyb20gPHN0ZGRl
-Zi5oPi4gICovCiAjZGVmaW5lIF9fbmVlZF93Y2hhcl90CiAjZGVmaW5lIF9f
-bmVlZF93aW50X3QKKyNkZWZpbmUgX19uZWVkX3NpemVfdAogI2luY2x1ZGUg
-PHN0ZGRlZi5oPgogCiBfX0JFR0lOX0RFQ0xTCg==
-
-------------=_1583532850-65438-118--
+Thanks.
+diff -up ../cinstall/simpsock.cc ../cinstall_devel/simpsock.cc
+--- ../cinstall/simpsock.cc	Wed Nov 21 12:15:12 2001
++++ ../cinstall_devel/simpsock.cc	Fri Nov 23 18:02:01 2001
+@@ -25,7 +25,9 @@ static const char *cvsid =
+ #include <stdio.h>
+ #include <stdarg.h>
+ #include <stdlib.h>
++#include <errno.h>
+ 
++#include "io_stream.h"
+ #include "simpsock.h"
+ #include "msg.h"
+ 
+@@ -44,6 +46,7 @@ SimpleSocket::SimpleSocket (const char *
+   s = INVALID_SOCKET;
+   buf = 0;
+   putp = getp = 0;
++  lasterr = NO_ERROR;
+ 
+   int i1, i2, i3, i4;
+   unsigned char ip[4];
+@@ -61,6 +64,7 @@ SimpleSocket::SimpleSocket (const char *
+       he = gethostbyname (hostname);
+       if (!he)
+ 	{
++          lasterr = WSAGetLastError ();
+ 	  msg ("Can't resolve `%s'\n", hostname);
+ 	  return;
+ 	}
+@@ -70,7 +74,8 @@ SimpleSocket::SimpleSocket (const char *
+   s = socket (AF_INET, SOCK_STREAM, 0);
+   if (s == INVALID_SOCKET)
+     {
+-      msg ("Can't create socket, %d", WSAGetLastError ());
++      lasterr = WSAGetLastError ();
++      msg ("Can't create socket, %d", lasterr);
+       return;
+     }
+ 
+@@ -83,6 +88,7 @@ SimpleSocket::SimpleSocket (const char *
+ 
+   if (connect (s, (sockaddr *) & name, sizeof (name)))
+     {
++      lasterr = WSAGetLastError ();
+       msg ("Can't connect to %s:%d", hostname, port);
+       closesocket (s);
+       s = INVALID_SOCKET;
+@@ -115,14 +121,20 @@ SimpleSocket::printf (const char *fmt, .
+   return write (buf, strlen (buf));
+ }
+ 
+-int
+-SimpleSocket::write (const char *buf, int len)
++ssize_t
++SimpleSocket::write (const void *buffer, size_t len)
+ {
+-  int rv;
++  ssize_t rv;
+   if (!ok ())
+-    return -1;
++    {
++      lasterr = EBADF;
++      return -1;
++    }
+   if ((rv = send (s, buf, len, 0)) == -1)
+-    invalidate ();
++    {
++      lasterr = WSAGetLastError ();
++      invalidate ();
++    }
+   return rv;
+ }
+ 
+@@ -130,7 +142,10 @@ int
+ SimpleSocket::fill ()
+ {
+   if (!ok ())
+-    return -1;
++    {
++      lasterr = EBADF;
++      return -1;
++    }
+ 
+   if (buf == 0)
+     buf = (char *) malloc (SSBUFSZ + 3);
+@@ -147,14 +162,23 @@ SimpleSocket::fill ()
+     }
+   else if (r < 0 && putp == getp)
+     {
++      lasterr = WSAGetLastError ();
+       invalidate ();
+     }
+   return r;
+ }
+ 
++#define MIN(a,b) ((a) < (b) ? (a) : (b))
++
+ char *
+-SimpleSocket::gets ()
++SimpleSocket::gets (char *buffer, size_t len)
+ {
++  if (len < 2 || !buffer)
++    {
++      lasterr = EINVAL;
++      return 0;
++    }
++  // FIXME: This block seems to be no longer needed
+   if (getp > 0 && putp > getp)
+     {
+       memmove (buf, buf + getp, putp - getp);
+@@ -166,52 +190,66 @@ SimpleSocket::gets ()
+       return 0;
+ 
+   // getp is zero, always, here, and putp is the count
+-  char *nl;
+-  while ((nl = (char *) memchr (buf, '\n', putp)) == NULL && putp < SSBUFSZ)
+-    if (fill () <= 0)
+-      break;
+-
+-  if (nl)
+-    {
+-      getp = nl - buf + 1;
+-      while ((*nl == '\n' || *nl == '\r') && nl >= buf)
+-	*nl-- = 0;
+-    }
+-  else if (putp > getp)
+-    {
+-      getp = putp;
+-      nl = buf + putp;
+-      nl[1] = 0;
++  char *nl = NULL;
++  size_t minlen = MIN (len - 1, putp);
++  while (len > 1 && nl == NULL)
++    {
++      if ((nl = (char *) memchr (buf + getp, '\n', minlen)) != NULL)
++        minlen = (nl - buf) - getp;
++
++      read ((void *) buffer, minlen);
++      buffer += minlen;
++      len -= minlen;
++      
++      if (len > 1 && nl == NULL)
++        {
++          if (fill () <= 0)
++            break;
++          minlen = MIN (len - 1, putp - getp);
++        }
+     }
+-  else
++
++  if (error())
+     return 0;
+ 
+-  return buf;
+-}
++  *buffer = '\0';
+ 
+-#define MIN(a,b) ((a) < (b) ? (a) : (b))
++  return buffer;
++}
+ 
+-int
+-SimpleSocket::read (char *ubuf, int ulen)
++ssize_t
++SimpleSocket::read(char *ubuf, size_t ulen, int peek)
+ {
+   if (!ok ())
+-    return -1;
++    {
++      lasterr = EBADF;
++      return -1;
++    }
++
++  int n, recvflags = 0;
++  ssize_t rv = 0;
++
++  if (peek)
++    recvflags |= MSG_PEEK;
+ 
+-  int n, rv = 0;
+   if (putp > getp)
+     {
+       n = MIN (ulen, putp - getp);
+       memmove (ubuf, buf + getp, n);
+-      getp += n;
+       ubuf += n;
+       ulen -= n;
+       rv += n;
++      if (!peek)
++        getp += n;
+     }
+   while (ulen > 0)
+     {
+-      n = recv (s, ubuf, ulen, 0);
++      n = recv (s, ubuf, ulen, recvflags);
+       if (n < 0)
+-	invalidate ();
++        {
++          lasterr = WSAGetLastError ();
++	  invalidate ();
++        }
+       if (n <= 0)
+ 	return rv > 0 ? rv : n;
+       ubuf += n;
+diff -up ../cinstall/simpsock.h ../cinstall_devel/simpsock.h
+--- ../cinstall/simpsock.h	Wed Nov 21 12:15:12 2001
++++ ../cinstall_devel/simpsock.h	Fri Nov 23 18:07:24 2001
+@@ -21,8 +21,10 @@ class SimpleSocket
+   SOCKET s;
+   char *buf;
+   int putp, getp;
++  int lasterr;
+   int fill ();
+   void invalidate (void);
++  ssize_t read(char *buffer, size_t len, int peek);
+ 
+ public:
+     SimpleSocket (const char *hostname, int port);
+@@ -31,8 +33,24 @@ public:
+   int ok ();
+ 
+   int printf (const char *fmt, ...);
+-  int write (const char *buf, int len);
+ 
+-  char *gets ();
+-  int read (char *buf, int len);
++  virtual ssize_t read (void *buffer, size_t len)
++  {
++    return read((char *) buffer, len, 0);
++  }
++
++  virtual ssize_t write (const void *buffer, size_t len);
++
++  virtual ssize_t peek (void *buffer, size_t len)
++  {
++    return read((char *) buffer, len, 1);
++  }
++
++  virtual long tell () { lasterr = ENOSYS; return -1; }
++
++  virtual int seek (long, io_stream_seek_t) { lasterr = ENOSYS; return -1; }
++
++  virtual int error () { return lasterr; }
++
++  virtual char *gets (char *, size_t len);
+ };
+Common subdirectories: ../cinstall/temp and ../cinstall_devel/temp
+Common subdirectories: ../cinstall/zlib and ../cinstall_devel/zlib
