@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1469-listarch-cygwin-patches=sourceware.cygnus.com@sources.redhat.com>
-Received: (qmail 3849 invoked by alias); 11 Nov 2001 23:30:32 -0000
+Return-Path: <cygwin-patches-return-1470-listarch-cygwin-patches=sourceware.cygnus.com@sources.redhat.com>
+Received: (qmail 9785 invoked by alias); 11 Nov 2001 23:51:46 -0000
 Mailing-List: contact cygwin-patches-help@sourceware.cygnus.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@sources.redhat.com>
@@ -7,40 +7,32 @@ List-Post: <mailto:cygwin-patches@sources.redhat.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@sources.redhat.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@sources.redhat.com
-Received: (qmail 3819 invoked from network); 11 Nov 2001 23:30:31 -0000
-Date: Mon, 01 Oct 2001 15:42:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com, cygwin-apps@cygwin.com
-Subject: Re: setup streams work..
-Message-ID: <20011111233034.GA24210@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com, cygwin-apps@cygwin.com
-References: <019d01c16a7f$ab3ee060$0200a8c0@lifelesswks>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <019d01c16a7f$ab3ee060$0200a8c0@lifelesswks>
-User-Agent: Mutt/1.3.23.1i
-X-SW-Source: 2001-q4/txt/msg00001.txt.bz2
+Received: (qmail 9755 invoked from network); 11 Nov 2001 23:51:45 -0000
+content-class: urn:content-classes:message
+MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Subject: RE: setup streams work..
+X-MimeOLE: Produced By Microsoft Exchange V6.0.4417.0
+Date: Tue, 02 Oct 2001 20:46:00 -0000
+Message-ID: <EA18B9FA0FE4194AA2B4CDB91F73C0EF163A92@itdomain002.itdomain.net.au>
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+Thread-Topic: setup streams work..
+Thread-Index: AcFrCer48XqyKe5cRP6yUxRzTEgHxgAAsxpg
+From: "Robert Collins" <robert.collins@itdomain.com.au>
+To: <cygwin-patches@cygwin.com>,
+	<cygwin-apps@cygwin.com>
+X-SW-Source: 2001-q4/txt/msg00002.txt.bz2
 
-On Sun, Nov 11, 2001 at 06:08:29PM +1100, Robert Collins wrote:
->So given that the class layout works, and somethings are already
->becoming easier to do, I plan to commit this to HEAD.
->
->Any objections?
+> -----Original Message-----
+> From: Christopher Faylor [mailto:cgf@redhat.com]
+>=20
+> I actually think that indent is doing the wrong thing for c++ in some
+> cases.
 
-It looks fine to me.
-
-It was a little hard to tell what was changing given that you seem
-to have run the sources through indent and there was some whitespace
-changes.
-
-I actually think that indent is doing the wrong thing for c++ in some
-cases.
-
-I like the idea of the io_stream a lot.  I also like the "cygfile:"
-"URL".
-
-I say go for it.
-
-cgf
+I agree. I figure it's easier to live with the occasional wrongness,
+than not indent. At the least it should be consistently wrong.
+=20
+Rob
