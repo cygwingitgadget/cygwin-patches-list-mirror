@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2537-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 22287 invoked by alias); 28 Jun 2002 22:18:06 -0000
+Return-Path: <cygwin-patches-return-2538-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 11526 invoked by alias); 29 Jun 2002 07:36:21 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,71 +7,33 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 22273 invoked from network); 28 Jun 2002 22:18:05 -0000
-Message-ID: <008401c21ef1$a6cefd90$1800a8c0@LAPTOP>
-From: "Robert Collins" <robert.collins@syncretize.net>
-To: "Darik Horn" <dajhorn@uwaterloo.ca>,
-	<cygwin-patches@cygwin.com>
-References: <Pine.SOL.4.44.0206281540050.25309-200000@maddison.math.uwaterloo.ca>
-Subject: Re: sem_getvalue patch revisited
-Date: Sat, 29 Jun 2002 00:36:00 -0000
-MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-MIMEOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-SW-Source: 2002-q2/txt/msg00520.txt.bz2
+Received: (qmail 11508 invoked from network); 29 Jun 2002 07:36:19 -0000
+Date: Sat, 29 Jun 2002 01:44:00 -0000
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: Patch to pass file descriptors
+Message-ID: <20020629093616.C1247@cygbert.vinschen.de>
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <06a901c21e92$e3d4ae60$6132bc3e@BABEL> <003601c21e94$064fc780$0200a8c0@lifelesswks>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <003601c21e94$064fc780$0200a8c0@lifelesswks>
+User-Agent: Mutt/1.3.22.1i
+X-SW-Source: 2002-q2/txt/msg00521.txt.bz2
 
-Actually neither of them are quite right.
+On Fri, Jun 28, 2002 at 09:07:42PM +1000, Robert Collins wrote:
+> Chris/Corinna, why do you want to avoid *new* functionality (especially
+> with security complications) using the cygserver?
 
-Yours calls __sem_post, which is definately wrong.
+Basically, I don't like that sshd might depend on a running cygserver.
+If the implementation only works with a server process as for SysV shared
+memory, that's ok.  But if it's possible to get that working w/o the
+cygserver, I'd prefer that.
 
-Sam Robb's I've properly reviewed now, and it's also not quite there.
+Corinna
 
-The pthread.cc file is nearly a waste of space at the moment. All recent
-patches to it have been converting the call tree from
-
-pthread.cc: foo (thing*
-thread.cc:     __foo (thing*
-thread.cc:        thing->foo
-
-to
-pthread.cc: foo (thing *
-thread.cc:      thing->foo
-
-Sam's approach of reading the value directly is wrong (breaks
-encapsulation), but your double bounce approach is also wasteful. And yes
-there are many examples like that in the threads code, which I inherited and
-have been (slowly) whittling away.
-
-Cheers,
-Rob
-
------ Original Message -----
-From: "Darik Horn" <dajhorn@uwaterloo.ca>
-To: <cygwin-patches@cygwin.com>
-Sent: Saturday, June 29, 2002 5:58 AM
-Subject: sem_getvalue patch revisited
-
-
->
-> Sam Robb posted a semaphore getvalue patch on June 7th, 2002:
->
-> http://cygwin.com/ml/cygwin-patches/2002-q2/msg00339.html
->
-> I had been working on the same problem, but I produced a different
-> solution.  Please see the attachment, which was written against 1.3.10-1
-> but also applies to 1.3.11-3 cleanly.
->
-> In particular, Rob's patch returns `(*sem)->currentvalue` directly from
-> inside the new __sem_ function, whereas my patch adds a GetValue method to
-> the semaphore class.  (I was trying to follow the style of the existing
-> Cygwin semaphore.)
->
-> I am wondering whether Sam's patch is functionally equivalent to my own,
-> and whether one is more or less correct than the other.
->
-> []
->
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
