@@ -1,35 +1,59 @@
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin@cygwin.com, cygwin-patches@cygwin.com
-Subject: Re: pthreads works, sorta - got it
-Date: Wed, 27 Jun 2001 19:20:00 -0000
-Message-id: <20010627222105.A29564@redhat.com>
-References: <EA18B9FA0FE4194AA2B4CDB91F73C0EF08F09E@itdomain002.itdomain.net.au> <20010627012932.I19058@redhat.com> <20010627013502.K19058@redhat.com> <008201c0ff0d$8fe3c2a0$806410ac@local> <009701c0ff0e$4d796400$806410ac@local> <00e501c0ff14$6ad8dd40$806410ac@local>
-X-SW-Source: 2001-q2/msg00361.html
+From: "Michael A. Chase" <mchase@ix.netcom.com>
+To: <cygwin-patches@cygwin.com>
+Cc: <keith_starsmeare@yahoo.co.uk>
+Subject: [UNPATCH]Slashes in regtool.exe
+Date: Wed, 27 Jun 2001 19:41:00 -0000
+Message-id: <003201c0ff7b$929432a0$6464648a@ca.boeing.com>
+X-SW-Source: 2001-q2/msg00362.html
 
-On Thu, Jun 28, 2001 at 12:21:11AM +1000, Robert Collins wrote:
->Got the bug... attached is a correct patch that doesn't break anything
->AFAICT.
->
->GCC was optimising the variable access when the macro
->check_null_empty-path_errno was used, and accessing the memory area _before_
->the readcheck! The overhead of a proper function should be lower than that
->of VirtualQueryHowever, so I've made it a function. It could have the guts
->of check_null_empty_path copied into it for speed, but that's optional IMO.
->
->Wed Jun 27 23:30:00 2001  Robert Collins <rbtcollins@hotmail.com>
->
->	* path.h (check_null_empty_path_errno): Convert to a function
->	prototype.
->	* path.cc (check_null_empty_path_errno): New function.
->	(check_null_empty_path): Change from VirtualQuery to IsBadWritePtr.
->	* resource.cc (getrlimit): Ditto.
->	(setrlimit): Ditto.
->	* thread.cc (check_valid_pointer): Ditto.
+The change is unnecessary.  Corrina added the capability in January 2000.  I
+have confirmed this behavior with the version of regtool.exe that is part of
+1.3.2.  Part of the confusion may be because the leading '\\' is not
+required if '\\' separators are being used; it probably ought to be.
+Perhaps the examples in usage_msg[] could show both types of separators.
 
-Thanks for the patch.  I took it a step further.  I renamed the _path
-stuff to _str for consistency, and created some
-check_null_invalid_struct* functions.
+If the first character of the key is '/' (see two lines before patch),
+translate() is called to convert '/'s to '\\'s so the user doesn't have to
+dirty his hands with '\\'  _unless_ she wants to use a key part that
+contains '/'.  If any part of the key contains '/', you don't want
+translate() to get its mitts on the string so the first character may not be
+'/'.
 
-It has been checked in.
+Other note:
 
-cgf
+The help screen says "-p" causes '/' to be appended to key names, but it
+actually appends '\\'.  I still can't send patches since my assignment isn't
+done yet, but you might want to fix this when you reverse the patch.
+
+--
+Mac :})
+** I normally forward private questions to the appropriate mail list. **
+Give a hobbit a fish and he eats fish for a day.
+Give a hobbit a ring and he eats fish for an age.
+
+===================================================================
+RCS file: /cvs/uberbaum/winsup/utils/regtool.cc,v
+retrieving revision 1.5
+retrieving revision 1.6
+diff -u -r1.5 -r1.6
+--- winsup/utils/regtool.cc 2001/01/10 22:34:02 1.5
++++ winsup/utils/regtool.cc 2001/06/27 17:38:40 1.6
+@@ -194,10 +194,13 @@
+   int i;
+   if (*n == '/')
+     translate (n);
+-  while (*n == '\\')
++  while ((*n == '\\') || (*n == '/'))
+     n++;
+-  for (e = n; *e && *e != '\\'; e++);
+-  c = *e;
++  for (e = n; *e && *e != '\\' && *e != '/'; e++);
++  if (*e == '/')
++    c = '\\';
++  else
++    c = *e;
+   *e = 0;
+   for (i = 0; wkprefixes[i].string; i++)
+     if (strcmp (wkprefixes[i].string, n) == 0)
+
+
