@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4444-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 24251 invoked by alias); 26 Nov 2003 15:48:24 -0000
+Return-Path: <cygwin-patches-return-4445-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 12283 invoked by alias); 27 Nov 2003 19:51:13 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,72 +7,231 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 24224 invoked from network); 26 Nov 2003 15:48:23 -0000
-Message-Id: <3.0.5.32.20031126104557.00838210@incoming.verizon.net>
-X-Sender: vze1u1tg@incoming.verizon.net (Unverified)
-Date: Wed, 26 Nov 2003 15:48:00 -0000
-To: Corinna Vinschen <cygwin-patches@cygwin.com>
-From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
-Subject: Re: [Patch]: Create Global Privilege
-In-Reply-To: <20031126143204.GN21540@cygbert.vinschen.de>
-References: <3.0.5.32.20031125205533.0082b2a0@incoming.verizon.net>
- <3.0.5.32.20031125205533.0082b2a0@incoming.verizon.net>
-Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-X-SW-Source: 2003-q4/txt/msg00163.txt.bz2
+Received: (qmail 12260 invoked from network); 27 Nov 2003 19:51:12 -0000
+Date: Thu, 27 Nov 2003 19:51:00 -0000
+From: Nicholas Wourms <nwourms@netscape.net>
+X-X-Sender: nwourms@reddragon.clemson.edu
+Reply-To: Nicholas Wourms <nwourms@netscape.net>
+To: cygwin-patches@sources.redhat.com
+Subject: [PATCH]:  Add flock syscall emulation
+Message-ID: <Pine.CYG.4.58.0311271409240.1064139@reddragon.clemson.edu>
+MIME-Version: 1.0
+Content-Type: MULTIPART/MIXED; BOUNDARY="-559023410-825986032-1069962670=:1064139"
+X-SW-Source: 2003-q4/txt/msg00164.txt.bz2
 
-At 03:32 PM 11/26/2003 +0100, Corinna Vinschen wrote:
->On Tue, Nov 25, 2003 at 08:55:33PM -0500, Pierre A. Humblet wrote:
->
->I have a problem with this patch.
->
->While the SE_CREATE_GLOBAL_NAME privilege is needed in a terminal session
->to create a global object, it's not needed to *access* a global object,
->right?  Wouldn't it be better, if the functions would try to access the
->global object first, and only if that fails, try to create the object
->according to its privilege?
->
->Imagine a sshd service is running on the system.  This service has the
->SE_CREATE_GLOBAL_NAME privilege and would create the global object on
->system startup (given the service is in automatic mode).  Other processes
->would then be able to access the global object, regardless if running in
->a terminal session or not.  This would keep the process list together,
->for instance.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
 
-This has crossed my mind (my first attempt was doing it) but requires more
-careful design and the ability to test, which I don't have.
-As it is, the patch makes Cygwin functional for non-privileged users
-on Terminal Services and doesn't change anything for privileged users. 
-Some sysadmins are unwilling (for very good reasons) to give the privilege
-to their users, so having a snapshot is useful. It's far from solving
-all the issues (which are real, but nobody has complained yet).
+---559023410-825986032-1069962670=:1064139
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-length: 2384
 
-The problem with the track you start on is that one can end up with a
-split system, e.g. the cygwin share in global space and a tty in local
-space, invisible to the rest of the system. I am unsure of what can
-happen then. Also the user share could be either global or local, depending
-if a user (or a seteuid process) is already running at the console/service
-at the moment a session starts under Terminal Services. 
-That leads to indeterminate behavior.
+Hi All,
 
-The current design results in completely isolated cygwin islands for
-non-privileged users, which is exactly what a sysadmin requested and
-which is safe. One could argue that systems that want to promote user
-interactions and run the cygwin server should give the privilege to the 
-users (I am not a sysadmin, I don't use Terminal Services, and I don't 
-have strong views either way).
- 
->Also, shouldn't the prefix variable have a NO_COPY attribute?  If the
->process setuids and forks, the new process might have different privileges
->which might or might not result in the need to use a different object
->name space.
+Here is a patch to add the flock() syscall to Cygwin.  I've noticed that some
+of our mailer apps are using this syscall and have encountered a number of
+other apps which do as well.  In most cases, they will provide an emulation of
+flock using fcntl() in the case that  flock() is absent from the system's libc.
+I've also noticed that some Linux distributions, Red Hat in particular, do not
+trust the Linux kernel's implementation of flock and thus prefer to emulate it
+in a similar manner.
 
-I think it's OK. forks don't call CreateProcessAsUser and memory_init happens
-early. However I am not 100% sure of what might happen following a seteuid
-(but it won't be worse than before the patch).
+Rather then duplicate the numerous varieties of emulated flock out there, I
+decided to port this particular version of flock emulation from a patch
+written by a Red Hat employee for use in Red Hat's IMAPd RPM.  I tried
+contacting the individual listed in the spec's ChangeLog, but got no response.
+IANAL, but since there was no notice of copyright at the top of the file and
+since this code was created for Red Hat by a Red Hat employee, I'm assuming
+that Red Hat owns the rights to this code?  This is based on the assumption
+that Red Hat employees sign a similar copyright assignment to the one that we
+do.  If this isn't so, please let me know and I'll go back to the drawing board.
 
+So, I tweaked the code and formatting for use by Cygwin and have updated the
+sys/file.h header to support the operations provided by this syscall.  I based
+that off of the header from FreeBSD, which also resulted in the other changes.
+IMHO, I found that the comments and the way in which the alternative whence
+values were defined in the BSD header seemed to add more clarity.  So if there
+are no objections, I thought I'd add those changes as well.
 
-Now I am really off for a while :)
+Also, I added an underscore symbol in the case that some program was looking
+for the BSD syscall.  It was mostly done as an after-thought, so feel free to
+dump that if you are inclined to do so.
 
-Pierre
+Lastly, for testing purposes, you can build the flock source as an executable.
+This is just a very small test to prove basic flock() functionality.  I've
+tested successfully using some of the tests in the LTP.  Also, I've been
+running programs using this implementation for months now, with no adverse
+side-effects.
 
+As a side note, I noticed that sys/file.h was from DJGPP.  Will DJ allow us to
+use code from DJGPP in Newlib/Cygwin?  If so, I noticed some code in the DJGPP
+libc which I could port and use in future contributions.
+
+Cheers,
+Nicholas
+---559023410-825986032-1069962670=:1064139
+Content-Type: TEXT/plain; charset=US-ASCII; name="ChangeLog.txt"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.CYG.4.58.0311271451100.1064139@reddragon.clemson.edu>
+Content-Description: 
+Content-Disposition: attachment; filename="ChangeLog.txt"
+Content-length: 724
+
+MjAwMy0xMS0yNyAgTmljaG9sYXMgV291cm1zICA8bndvdXJtc0BuZXRzY2Fw
+ZS5uZXQ+DQoNCgkqIE1ha2VmaWxlLmluOiAoRExMX09GSUxFUyk6IEFkZCBm
+bG9jay5vLg0KCSogY3lnd2luLmRpbjogRXhwb3J0IGZsb2NrICYgX2Zsb2Nr
+Lg0KCSogZmxvY2suYzogTmV3IGZpbGUuDQoJKiBpbmNsdWRlL3N5cy9maWxl
+Lmg6IEluY2x1ZGUgc3lzL2NkZWZzLmguDQoJQWRkIGZ1bmN0aW9uIHByb3Rv
+dHlwZSBmb3IgZmxvY2soKS4NCglBZGQgc29tZSBjb21tZW50cyBmcm9tIEJT
+RCdzIGhlYWRlciBmb3IgZnVydGhlciBjbGFyaXR5Lg0KCShMX1NFVCwgTF9D
+VVJSLCBMX0lOQ1IsIExfWFRORCk6IFJlZGVmaW5lIGFzIHRoZSBtYWNyb3MN
+CglTRUVLX1NFVCwgU0VFS19DVVIsIFNFRUtfQ1VSLCAmIFNFRUtfRU5EIHJl
+c3BlY3RpdmVseS4NCgkoTE9DS19TSCxMT0NLX0VYLExPQ0tfTkIsTE9DS19V
+Tik6IE5ldyBtYWNyb3MgZm9yIGZsb2NrKCkuDQoJKiBpbmNsdWRlL2N5Z3dp
+bi92ZXJzaW9uLmg6IEJ1bXAgQVBJIG1pbm9yIG51bWJlci4NCg==
+
+---559023410-825986032-1069962670=:1064139
+Content-Type: TEXT/PLAIN; charset=US-ASCII; name="cygwin-flock-emu.patch"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.CYG.4.58.0311271451101.1064139@reddragon.clemson.edu>
+Content-Description: 
+Content-Disposition: attachment; filename="cygwin-flock-emu.patch"
+Content-length: 8130
+
+SW5kZXg6IE1ha2VmaWxlLmluDQo9PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQpS
+Q1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vTWFrZWZpbGUu
+aW4sdg0KcmV0cmlldmluZyByZXZpc2lvbiAxLjE0Mw0KZGlmZiAtdSAtMyAt
+cCAtcjEuMTQzIE1ha2VmaWxlLmluDQotLS0gTWFrZWZpbGUuaW4JMjcgT2N0
+IDIwMDMgMTM6MDY6NTYgLTAwMDAJMS4xNDMNCisrKyBNYWtlZmlsZS5pbgky
+NyBOb3YgMjAwMyAxODo0Mjo0NCAtMDAwMA0KQEAgLTEyNiw4ICsxMjYsOCBA
+QCBETExfT0ZJTEVTOj1hc3NlcnQubyBhdXRvbG9hZC5vIGJzZGxpYi5vDQog
+CWZoYW5kbGVyX3JhbmRvbS5vIGZoYW5kbGVyX3Jhdy5vIGZoYW5kbGVyX3Jl
+Z2lzdHJ5Lm8gZmhhbmRsZXJfc2VyaWFsLm8gXA0KIAlmaGFuZGxlcl9zb2Nr
+ZXQubyBmaGFuZGxlcl90YXBlLm8gZmhhbmRsZXJfdGVybWlvcy5vIFwNCiAJ
+ZmhhbmRsZXJfdHR5Lm8gZmhhbmRsZXJfdmlydHVhbC5vIGZoYW5kbGVyX3dp
+bmRvd3MubyBcDQotCWZoYW5kbGVyX3plcm8ubyBmbm1hdGNoLm8gZm9yay5v
+IGdldG9wdC5vIGdsb2IubyBncnAubyBoZWFwLm8gaW5pdC5vIFwNCi0JaW9j
+dGwubyBpcGMubyBpcnVzZXJvay5vIGxvY2FsdGltZS5vIG1hbGxvY193cmFw
+cGVyLm8gbWlzY2Z1bmNzLm8gXA0KKwlmaGFuZGxlcl96ZXJvLm8gZmxvY2su
+byBmbm1hdGNoLm8gZm9yay5vIGdldG9wdC5vIGdsb2IubyBncnAubyBoZWFw
+Lm8gXA0KKwlpbml0Lm8gaW9jdGwubyBpcGMubyBpcnVzZXJvay5vIGxvY2Fs
+dGltZS5vIG1hbGxvY193cmFwcGVyLm8gbWlzY2Z1bmNzLm8gXA0KIAltbWFw
+Lm8gbXNnLm8gbmV0Lm8gbmV0ZGIubyBudGVhLm8gcGFzc3dkLm8gcGF0aC5v
+IHBpbmZvLm8gcGlwZS5vIFwNCiAJcG9sbC5vIHB0aHJlYWQubyByZWdjb21w
+Lm8gcmVnZXJyb3IubyByZWdleGVjLm8gcmVnZnJlZS5vIHJlZ2lzdHJ5Lm8g
+XA0KIAlyZXNvdXJjZS5vIHNjYW5kaXIubyBzY2hlZC5vIHNlY19hY2wubyBz
+ZWNfaGVscGVyLm8gc2VjdXJpdHkubyBcDQpJbmRleDogY3lnd2luLmRpbg0K
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PQ0KUkNTIGZpbGU6IC9jdnMvc3JjL3Ny
+Yy93aW5zdXAvY3lnd2luL2N5Z3dpbi5kaW4sdg0KcmV0cmlldmluZyByZXZp
+c2lvbiAxLjEwNA0KZGlmZiAtdSAtMyAtcCAtcjEuMTA0IGN5Z3dpbi5kaW4N
+Ci0tLSBjeWd3aW4uZGluCTE5IE5vdiAyMDAzIDE4OjUwOjIwIC0wMDAwCTEu
+MTA0DQorKysgY3lnd2luLmRpbgkyNyBOb3YgMjAwMyAxODozMjoxOSAtMDAw
+MA0KQEAgLTUwNCw2ICs1MTcsOCBAQCBmaW5pdGVmDQogX2Zpbml0ZWYgPSBm
+aW5pdGVmDQogZmlwcmludGYNCiBfZmlwcmludGYgPSBmaXByaW50Zg0KK2Zs
+b2NrDQorX2Zsb2NrID0gZmxvY2sNCiBmbG9vcg0KIF9mbG9vciA9IGZsb29y
+DQogZmxvb3JmDQpJbmRleDogZmxvY2suYw0KPT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PQ0KUkNTIGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvY3lnd2luL2Zs
+b2NrLmMsdg0KcmV0cmlldmluZyByZXZpc2lvbiAxLjANCmRpZmYgLXUgLTMg
+LXAgLXIxLjAgZmxvY2suYw0KLS0tIGZsb2NrLmMJMTk3MC0wMS0wMSAwMTow
+MDowMC4wMDAwMDAwMDAgKzAxMDANCisrKyBmbG9jay5jCTIwMDMtMTEtMjcg
+MTM6MjI6NDguMDAwMDAwMDAwIC0wNTAwDQpAQCAtMCwwICsxLDgwIEBADQor
+LyogT25lIG9mIG1hbnkgd2F5cyB0byBlbXVsYXRlIGZsb2NrKCkgb24gdG9w
+IG9mIHJlYWwgKGdvb2QpIFBPU0lYIGxvY2tzLg0KKyAqDQorICogVGhpcyBm
+bG9jaygpIGVtdWxhdGlvbiBpcyBiYXNlZCB1cG9uIHNvdXJjZSB0YWtlbiBm
+cm9tIHRoZSBSZWQgSGF0DQorICogaW1wbGltZW50YXRpb24gdXNlZCBpbiB0
+aGVpciBpbWFwLTIwMDJkIFNSUE0uDQorICoNCisgKiAkUkg6IGZsb2NrLmMs
+diAxLjIgMjAwMC8wOC8yMyAxNzowNzowMCBuYWxpbiBFeHAgJA0KKyAqLw0K
+Ky8qIGZsb2NrLmMNCisNCisgICBDb3B5cmlnaHQgMjAwMyBSZWQgSGF0LCBJ
+bmMuDQorDQorICAgVGhpcyBmaWxlIGlzIHBhcnQgb2YgQ3lnd2luLg0KKw0K
+KyAgIFRoaXMgc29mdHdhcmUgaXMgYSBjb3B5cmlnaHRlZCB3b3JrIGxpY2Vu
+c2VkIHVuZGVyIHRoZSB0ZXJtcyBvZiB0aGUNCisgICBDeWd3aW4gbGljZW5z
+ZS4gIFBsZWFzZSBjb25zdWx0IHRoZSBmaWxlICJDWUdXSU5fTElDRU5TRSIg
+Zm9yDQorICAgZGV0YWlscy4gKi8NCisNCisjaW5jbHVkZSA8c3lzL2ZpbGUu
+aD4NCisjaW5jbHVkZSA8c3lzL3R5cGVzLmg+DQorI2luY2x1ZGUgPGVycm5v
+Lmg+DQorI2luY2x1ZGUgPGZjbnRsLmg+DQorI2luY2x1ZGUgPHVuaXN0ZC5o
+Pg0KKw0KK2ludA0KK19ERUZVTiAoZmxvY2ssIChmZCwgb3BlcmF0aW9uKSwN
+CisJaW50IGZkIF9BTkQNCisJaW50IG9wZXJhdGlvbikNCit7DQorCWludCBp
+LCBjbWQ7DQorCXN0cnVjdCBmbG9jayBsID0gezAsIDAsIDAsIDAsIDB9Ow0K
+KwlpZihvcGVyYXRpb24gJiBMT0NLX05CKSB7DQorCQljbWQgPSBGX1NFVExL
+Ow0KKwl9IGVsc2Ugew0KKwkJY21kID0gRl9TRVRMS1c7DQorCX0NCisJbC5s
+X3doZW5jZSA9IFNFRUtfU0VUOw0KKwlzd2l0Y2gob3BlcmF0aW9uICYgKH5M
+T0NLX05CKSkgew0KKwkJY2FzZSBMT0NLX0VYOg0KKwkJCWwubF90eXBlID0g
+Rl9XUkxDSzsNCisJCQlpID0gZmNudGwoZmQsIGNtZCwgJmwpOw0KKwkJCWlm
+KGkgPT0gLTEpIHsNCisJCQkJaWYoKGVycm5vID09IEVBR0FJTikgfHwgKGVy
+cm5vID09IEVBQ0NFUykpIHsNCisJCQkJCWVycm5vID0gRVdPVUxEQkxPQ0s7
+DQorCQkJCX0NCisJCQl9DQorCQkJYnJlYWs7DQorCQljYXNlIExPQ0tfU0g6
+DQorCQkJbC5sX3R5cGUgPSBGX1JETENLOw0KKwkJCWkgPSBmY250bChmZCwg
+Y21kLCAmbCk7DQorCQkJaWYoaSA9PSAtMSkgew0KKwkJCQlpZigoZXJybm8g
+PT0gRUFHQUlOKSB8fCAoZXJybm8gPT0gRUFDQ0VTKSkgew0KKwkJCQkJZXJy
+bm8gPSBFV09VTERCTE9DSzsNCisJCQkJfQ0KKwkJCX0NCisJCQlicmVhazsN
+CisJCWNhc2UgTE9DS19VTjoNCisJCQlsLmxfdHlwZSA9IEZfVU5MQ0s7DQor
+CQkJaSA9IGZjbnRsKGZkLCBjbWQsICZsKTsNCisJCQlpZihpID09IC0xKSB7
+DQorCQkJCWlmKChlcnJubyA9PSBFQUdBSU4pIHx8IChlcnJubyA9PSBFQUND
+RVMpKSB7DQorCQkJCQllcnJubyA9IEVXT1VMREJMT0NLOw0KKwkJCQl9DQor
+CQkJfQ0KKwkJCWJyZWFrOw0KKwkJZGVmYXVsdDoNCisJCQlpID0gLTE7DQor
+CQkJZXJybm8gPSBFSU5WQUw7DQorCQkJYnJlYWs7DQorCX0NCisJcmV0dXJu
+IGk7IA0KK30NCisNCisjaWZkZWYgRkxPQ0tfRU1VTEFURV9JU19NQUlODQor
+aW50IG1haW4oaW50IGFyZ2MsIGNoYXIgKiphcmd2KQ0KK3sNCisJaW50IGZk
+ID0gb3Blbihhcmd2WzFdLCBPX1dST05MWSk7DQorCWZsb2NrKGZkLCBMT0NL
+X0VYKTsNCisJcmV0dXJuIDA7DQorfQ0KKyNlbmRpZg0KSW5kZXg6IGluY2x1
+ZGUvc3lzL2ZpbGUuaA0KPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ0KUkNTIGZp
+bGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvY3lnd2luL2luY2x1ZGUvc3lzL2Zp
+bGUuaCx2DQpyZXRyaWV2aW5nIHJldmlzaW9uIDEuNg0KZGlmZiAtdSAtMyAt
+cCAtcjEuNiBmaWxlLmgNCi0tLSBpbmNsdWRlL3N5cy9maWxlLmgJOCBNYXkg
+MjAwMSAwMTozNjo1MCAtMDAwMAkxLjYNCisrKyBpbmNsdWRlL3N5cy9maWxl
+LmgJMjcgTm92IDIwMDMgMTg6Mjg6MTAgLTAwMDANCkBAIC0xMSwyMCArMTEs
+MzUgQEANCiAqKiBUaGlzIGZpbGUgaXMgZGlzdHJpYnV0ZWQgV0lUSE9VVCBB
+TlkgV0FSUkFOVFk7IHdpdGhvdXQgZXZlbiB0aGUgaW1wbGllZA0KICoqIHdh
+cnJhbnR5IG9mIE1FUkNIQU5UQUJJTElUWSBvciBGSVRORVNTIEZPUiBBIFBB
+UlRJQ1VMQVIgUFVSUE9TRS4NCiAqLw0KLQ0KICNpZm5kZWYgX0ZJTEVfSF8N
+CiAjZGVmaW5lIF9GSUxFX0hfDQogDQorI2luY2x1ZGUgPHN5cy9jZGVmcy5o
+Pg0KICNpbmNsdWRlIDxmY250bC5oPg0KIA0KLSNkZWZpbmUgTF9TRVQgIDAN
+Ci0jZGVmaW5lIExfQ1VSUiAxDQotI2RlZmluZSBMX0lOQ1IgMQ0KLSNkZWZp
+bmUgTF9YVE5EIDINCisvKiBXaGVuY2UgdmFsdWVzIGZvciBsc2VlaygpOyBy
+ZW5hbWVkIGJ5IFBPU0lYIDEwMDMuMSAqLw0KKyNkZWZpbmUgTF9TRVQJCVNF
+RUtfU0VUDQorI2RlZmluZSBMX0NVUlIJCVNFRUtfQ1VSDQorI2RlZmluZSBM
+X0lOQ1IJCVNFRUtfQ1VSDQorI2RlZmluZSBMX1hUTkQJCVNFRUtfRU5EDQor
+DQorLyogT3BlcmF0aW9ucyBmb3IgZmxvY2soKSBmdW5jdGlvbiAqLw0KKyNk
+ZWZpbmUJTE9DS19TSAkJMQkvKiBTaGFyZWQgbG9jay4gKi8NCisjZGVmaW5l
+CUxPQ0tfRVgJCTIJLyogRXhjbHVzaXZlIGxvY2suICovDQorI2RlZmluZQlM
+T0NLX05CCQk0CS8qIERvbid0IGJsb2NrIHdoZW4gbG9ja2luZy4gKi8NCisj
+ZGVmaW5lCUxPQ0tfVU4JCTgJLyogVW5sb2NrLiAqLw0KIA0KKy8qIE9wZXJh
+dGlvbnMgZm9yIGFjY2VzcyBmdW5jdGlvbiAqLw0KICNkZWZpbmUJRl9PSwkJ
+MAkvKiBkb2VzIGZpbGUgZXhpc3QgKi8NCi0jZGVmaW5lIFhfT0sJCTEJLyog
+aXMgaXQgZXhlY3V0YWJsZSBieSBjYWxsZXIgKi8NCisjZGVmaW5lIFhfT0sJ
+CTEJLyogaXMgaXQgZXhlY3V0YWJsZSBvciBzZWFyY2hhYmxlIGJ5IGNhbGxl
+ciAqLw0KICNkZWZpbmUJV19PSwkJMgkvKiBpcyBpdCB3cml0YWJsZSBieSBj
+YWxsZXIgKi8NCiAjZGVmaW5lCVJfT0sJCTQJLyogaXMgaXQgcmVhZGFibGUg
+YnkgY2FsbGVyICovDQorDQorLyogQXBwbHkgb3IgcmVtb3ZlIGFuIGFkdmlz
+b3J5IGxvY2sgb24gdGhlIGZpbGUgZmQgcmVmZXJzIHRvLiAqLw0KK19fQkVH
+SU5fREVDTFMNCisNCitpbnQJX0VYRlVOKGZsb2NrLCAoaW50LCBpbnQpKTsN
+CisNCitfX0VORF9ERUNMUw0KIA0KICNlbmRpZg0KSW5kZXg6IGluY2x1ZGUv
+Y3lnd2luL3ZlcnNpb24uaA0KPT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ0KUkNT
+IGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvY3lnd2luL2luY2x1ZGUvY3ln
+d2luL3ZlcnNpb24uaCx2DQpyZXRyaWV2aW5nIHJldmlzaW9uIDEuMTQ2DQpk
+aWZmIC11IC0zIC1wIC1yMS4xNDYgdmVyc2lvbi5oDQotLS0gaW5jbHVkZS9j
+eWd3aW4vdmVyc2lvbi5oCTE5IE5vdiAyMDAzIDE4OjUwOjIyIC0wMDAwCTEu
+MTQ2DQorKysgaW5jbHVkZS9jeWd3aW4vdmVyc2lvbi5oCTI3IE5vdiAyMDAz
+IDE4OjM2OjUzIC0wMDAwDQpAQCAtMjI5LDEzICsyMjksMTQgQEAgZGV0YWls
+cy4gKi8NCiAgICAgICAxMDI6IENXX0dFVF9VSURfRlJPTV9TSUQgYW5kIENX
+X0dFVF9HSURfRlJPTV9TSUQgYWRkaXRpb24gdG8gZXh0ZXJuYWwuY2MuDQog
+ICAgICAgMTAzOiBFeHBvcnQgZ2V0cHJvZ25hbWUsIHNldHByb2duYW1lLg0K
+ICAgICAgIDEwNDogRXhwb3J0IG1zZ2N0bCwgbXNnZ2V0LCBtc2dyY3YsIG1z
+Z3NuZCwgc2VtY3RsLCBzZW1nZXQsIHNlbW9wLg0KKyAgICAgIDEwNTogRXhw
+b3J0IGZsb2NrLCBfZmxvY2suDQogDQogICAgICAqLw0KIA0KICAgICAgLyog
+Tm90ZSB0aGF0IHdlIGZvcmdvdCB0byBidW1wIHRoZSBhcGkgZm9yIHVhbGFy
+bSwgc3RydG9sbCwgc3RydG91bGwgKi8NCiANCiAjZGVmaW5lIENZR1dJTl9W
+RVJTSU9OX0FQSV9NQUpPUiAwDQotI2RlZmluZSBDWUdXSU5fVkVSU0lPTl9B
+UElfTUlOT1IgMTA0DQorI2RlZmluZSBDWUdXSU5fVkVSU0lPTl9BUElfTUlO
+T1IgMTA1DQogDQogICAgICAvKiBUaGVyZSBpcyBhbHNvIGEgY29tcGF0aWJp
+dHkgdmVyc2lvbiBudW1iZXIgYXNzb2NpYXRlZCB3aXRoIHRoZQ0KIAlzaGFy
+ZWQgbWVtb3J5IHJlZ2lvbnMuICBJdCBpcyBpbmNyZW1lbnRlZCB3aGVuIGlu
+Y29tcGF0aWJsZQ0K
+
+---559023410-825986032-1069962670=:1064139--
