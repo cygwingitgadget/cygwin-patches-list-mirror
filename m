@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4087-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 3436 invoked by alias); 15 Aug 2003 19:38:32 -0000
+Return-Path: <cygwin-patches-return-4088-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 2219 invoked by alias); 15 Aug 2003 20:26:23 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,363 +7,98 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 3427 invoked from network); 15 Aug 2003 19:38:30 -0000
-X-Authentication-Warning: slinky.cs.nyu.edu: pechtcha owned process doing -bs
-Date: Fri, 15 Aug 2003 19:38:00 -0000
-From: Igor Pechtchanski <pechtcha@cs.nyu.edu>
-Reply-To: cygwin-patches@cygwin.com
-To: Corinna Vinschen <cygwin-patches@cygwin.com>
-Subject: Re: [PATCH] Package content search and listing functionality for 
- cygcheck
-In-Reply-To: <20030815091732.GA3101@cygbert.vinschen.de>
-Message-ID: <Pine.GSO.4.44.0308151532550.1848-200000@slinky.cs.nyu.edu>
-Importance: Normal
-MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="-559023410-1804928587-1060976310=:1848"
-X-SW-Source: 2003-q3/txt/msg00103.txt.bz2
+Received: (qmail 2188 invoked from network); 15 Aug 2003 20:26:22 -0000
+Date: Fri, 15 Aug 2003 20:26:00 -0000
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Package content search and listing functionality for cygcheck
+Message-ID: <20030815202621.GG3101@cygbert.vinschen.de>
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20030815091732.GA3101@cygbert.vinschen.de> <Pine.GSO.4.44.0308151532550.1848-200000@slinky.cs.nyu.edu>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Pine.GSO.4.44.0308151532550.1848-200000@slinky.cs.nyu.edu>
+User-Agent: Mutt/1.4.1i
+X-SW-Source: 2003-q3/txt/msg00104.txt.bz2
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
+On Fri, Aug 15, 2003 at 03:38:30PM -0400, Igor Pechtchanski wrote:
+> > On Cygwin:
+> >
+> >   $ cygcheck -f /usr/bin/tcsh.exe
+> >   /usr/bin/tcsh.exe: found in package tcsh-6.12.00-6
+> >
+> > On Linux:
+> >
+> >   $ rpm -qf /usr/bin/tcsh
+> >   tcsh-6.12.00-134
+> >
+> > Shouldn't we also just print the package name?  It doesn't really matter,
+> > just a question...
+> 
+> Fixed.
 
----559023410-1804928587-1060976310=:1848
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-Content-length: 3299
+I'm happy!  Another difference to Linux is when using -l.  rpm -ql doesn't
+prepend the package version to each file list, it just prints a list of
+files of all packages on the command line:
 
-Corinna,
+  $ rpm -ql bash tcsh
+  /bin/bash
+  [more bash files]
+  /usr/bin/tcsh
+  [more tcsh files]
+  $
 
-Thanks for the feedback.  Replies inline below.
+On Cygwin:
 
-On Fri, 15 Aug 2003, Corinna Vinschen wrote:
+  $ cygcheck -l bash tcsh
+  Package: bash-2.05b-12
+      /usr/bin/bash.exe
+      [more bash files]
+  Package: tcsh-6.12.00-7
+      /usr/bin/tcsh.exe
+      [more tcsh files]
+  $
 
-> On Thu, Aug 14, 2003 at 03:30:44PM -0400, Igor Pechtchanski wrote:
-> > This patch adds the functionality to cygcheck to list (using the "-l" or
-> > "--list-package" flag) the contents of and search (using the "-f" or
-> > "--find-package" flag and passing the absolute paths to the files) for
-> > files in the *installed* packages.  Please test this and feel free to give
-> > feedback.  I've done some refactoring of the code in dump_setup.cc as
->
-> Cool, especially the -f which allows the same as `rpm -qf'.  However,
-> you asked for feedback... (I dropped the "Use -h to see..." from below
-> examples, we should get rid of it anyway)
->
-> On Cygwin:
->
->   $ cygcheck -f /usr/bin/tcsh.exe
->   /usr/bin/tcsh.exe: found in package tcsh-6.12.00-6
->
-> On Linux:
->
->   $ rpm -qf /usr/bin/tcsh
->   tcsh-6.12.00-134
->
-> Shouldn't we also just print the package name?  It doesn't really matter,
-> just a question...
+Should we do it also like rpm or do you like it better as it is?
 
-Fixed.
+> Well, I agree with all the above points, so here's another iteration.
+> Same ChangeLog (except for the date -- reposting just in case).
+> 	Igor
+> ==============================================================================
+> ChangeLog:
+> 2003-08-15  Igor Pechtchanski  <pechtcha@cs.nyu.edu>
+> 
+> 	* cygcheck.cc (find_package,list_package): New global
+> 	variables.
+> 	(usage): Add "--find-package" and "--list-package" options,
+> 	reformat output.
+> 	(longopts, opts): Add "--find-package" and "--list-package"
+> 	options.
+> 	(main): Process the "--find-package" and "--list-package"
+> 	flags.  Add new semantic checks.  Add calls to find_package()
+> 	and list_package().
+> 	* dump_setup.cc: Fix header comment.
+> 	(match_argv): Change return type to int to distinguish
+> 	between real matches and default ones.
+> 	(open_package_list): New static function.
+> 	(check_package_files): Factor out opening the package list
+> 	file into open_package_list().
+> 	(get_packages): New static function.
+> 	(dump_setup): Factor out getting a list of packages into
+> 	get_packages().
+> 	(package_list, package_find): New global functions.
 
-> But we have two problems which are no problems in Linux and it would be
-> nice(TM) to have a neat solution for them.  Example:
->
-> $ cygcheck -f /usr/bin/tcsh
-> $
->
-> Huh?  No .exe, no package :-(
->
-> $ cygcheck -f /bin/tcsh
-> $
+I've checked it in and added some formatting changes.  I removed most
+of the `puts("");' lines and the "Use -h to see..." is now only printed
+where it belongs to, to the end of a sysinfo dump.  Oh, and the other
+helptext ("Here is where the OS will...") would have been printed also
+on -f -h or -l -h, I've fixed the if clause appropriately.
 
-Fixed.  One thing left to do is to verify that /usr/bin is indeed an alias
-for /bin (and /usr/lib an alias for /lib) -- although I think plenty of
-other things will break if this is not the case.
-
-> Do you see what I mean?  Since /bin and /usr/bin (same for /lib) are
-> the same directory, one could ask for the same file in /bin and would
-> not get the package reply.  Bummer.  I don't see that as a big problem
-> for files in /lib but I guess you should expect that a good bunch of
-> people don't get the idea to ask for the same file in /usr/bin again.
->
-> Corinna
-
-Well, I agree with all the above points, so here's another iteration.
-Same ChangeLog (except for the date -- reposting just in case).
-	Igor
-==============================================================================
-ChangeLog:
-2003-08-15  Igor Pechtchanski  <pechtcha@cs.nyu.edu>
-
-	* cygcheck.cc (find_package,list_package): New global
-	variables.
-	(usage): Add "--find-package" and "--list-package" options,
-	reformat output.
-	(longopts, opts): Add "--find-package" and "--list-package"
-	options.
-	(main): Process the "--find-package" and "--list-package"
-	flags.  Add new semantic checks.  Add calls to find_package()
-	and list_package().
-	* dump_setup.cc: Fix header comment.
-	(match_argv): Change return type to int to distinguish
-	between real matches and default ones.
-	(open_package_list): New static function.
-	(check_package_files): Factor out opening the package list
-	file into open_package_list().
-	(get_packages): New static function.
-	(dump_setup): Factor out getting a list of packages into
-	get_packages().
-	(package_list, package_find): New global functions.
+Thanks for the patch, it's really cool,
+Corinna
 
 -- 
-				http://cs.nyu.edu/~pechtcha/
-      |\      _,,,---,,_		pechtcha@cs.nyu.edu
-ZZZzz /,`.-'`'    -.  ;-;;,_		igor@watson.ibm.com
-     |,4-  ) )-,_. ,\ (  `'-'		Igor Pechtchanski, Ph.D.
-    '---''(_/--'  `-'\_) fL	a.k.a JaguaR-R-R-r-r-r-.-.-.  Meow!
-
-"I have since come to realize that being between your mentor and his route
-to the bathroom is a major career booster."  -- Patrick Naughton
-
----559023410-1804928587-1060976310=:1848
-Content-Type: TEXT/PLAIN; charset=US-ASCII; name="cygcheck-list-packages.patch"
-Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.GSO.4.44.0308151538300.1848@slinky.cs.nyu.edu>
-Content-Description: 
-Content-Disposition: attachment; filename="cygcheck-list-packages.patch"
-Content-length: 14299
-
-SW5kZXg6IGN5Z2NoZWNrLmNjDQo9PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQpS
-Q1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC91dGlscy9jeWdjaGVjay5j
-Yyx2DQpyZXRyaWV2aW5nIHJldmlzaW9uIDEuMzUNCmRpZmYgLXUgLXAgLXIx
-LjM1IGN5Z2NoZWNrLmNjDQotLS0gY3lnY2hlY2suY2MJMTMgSnVuIDIwMDMg
-MDI6MzY6MTIgLTAwMDAJMS4zNQ0KKysrIGN5Z2NoZWNrLmNjCTE1IEF1ZyAy
-MDAzIDE2OjIzOjE0IC0wMDAwDQpAQCAtMjYsNiArMjYsOCBAQCBpbnQgc3lz
-aW5mbyA9IDA7DQogaW50IGdpdmVoZWxwID0gMDsNCiBpbnQga2V5Y2hlY2sg
-PSAwOw0KIGludCBjaGVja19zZXR1cCA9IDA7DQoraW50IGZpbmRfcGFja2Fn
-ZSA9IDA7DQoraW50IGxpc3RfcGFja2FnZSA9IDA7DQogDQogI2lmZGVmIF9f
-R05VQ19fDQogdHlwZWRlZiBsb25nIGxvbmcgbG9uZ2xvbmc7DQpAQCAtMzQs
-NiArMzYsOCBAQCB0eXBlZGVmIF9faW50NjQgbG9uZ2xvbmc7DQogI2VuZGlm
-DQogDQogdm9pZCBkdW1wX3NldHVwIChpbnQsIGNoYXIgKiosIGJvb2wpOw0K
-K3ZvaWQgcGFja2FnZV9maW5kIChpbnQsIGNoYXIgKiopOw0KK3ZvaWQgcGFj
-a2FnZV9saXN0IChpbnQsIGNoYXIgKiopOw0KIA0KIHN0YXRpYyBjb25zdCBj
-aGFyIHZlcnNpb25bXSA9ICIkUmV2aXNpb246IDEuMzUgJCI7DQogDQpAQCAt
-MTMxNywxMyArMTMyMSwxNSBAQCB1c2FnZSAoRklMRSAqIHN0cmVhbSwgaW50
-IHN0YXR1cykNCiBVc2FnZTogY3lnY2hlY2sgW09QVElPTlNdIFtQUk9HUkFN
-Li4uXVxuXA0KIENoZWNrIHN5c3RlbSBpbmZvcm1hdGlvbiBvciBQUk9HUkFN
-IGxpYnJhcnkgZGVwZW5kZW5jaWVzXG5cDQogXG5cDQotIC1jLCAtLWNoZWNr
-LXNldHVwICBjaGVjayBwYWNrYWdlcyBpbnN0YWxsZWQgdmlhIHNldHVwLmV4
-ZVxuXA0KLSAtcywgLS1zeXNpbmZvICAgICAgc3lzdGVtIGluZm9ybWF0aW9u
-IChub3Qgd2l0aCAtaylcblwNCi0gLXYsIC0tdmVyYm9zZSAgICAgIHZlcmJv
-c2Ugb3V0cHV0IChpbmRlbnRlZCkgKGZvciAtcyBvciBwcm9ncmFtcylcblwN
-Ci0gLXIsIC0tcmVnaXN0cnkgICAgIHJlZ2lzdHJ5IHNlYXJjaCAocmVxdWly
-ZXMgLXMpXG5cDQotIC1rLCAtLWtleWNoZWNrICAgICBwZXJmb3JtIGEga2V5
-Ym9hcmQgY2hlY2sgc2Vzc2lvbiAobm90IHdpdGggLXMpXG5cDQotIC1oLCAt
-LWhlbHAgICAgICAgICBnaXZlIGhlbHAgYWJvdXQgdGhlIGluZm8gKG5vdCB3
-aXRoIC1jKVxuXA0KLSAtViwgLS12ZXJzaW9uICAgICAgb3V0cHV0IHZlcnNp
-b24gaW5mb3JtYXRpb24gYW5kIGV4aXRcblwNCisgLWMsIC0tY2hlY2stc2V0
-dXAgICBjaGVjayBwYWNrYWdlcyBpbnN0YWxsZWQgdmlhIHNldHVwLmV4ZVxu
-XA0KKyAtcywgLS1zeXNpbmZvICAgICAgIHN5c3RlbSBpbmZvcm1hdGlvbiAo
-bm90IHdpdGggLWspXG5cDQorIC12LCAtLXZlcmJvc2UgICAgICAgdmVyYm9z
-ZSBvdXRwdXQgKGluZGVudGVkKSAoZm9yIC1zIG9yIHByb2dyYW1zKVxuXA0K
-KyAtciwgLS1yZWdpc3RyeSAgICAgIHJlZ2lzdHJ5IHNlYXJjaCAocmVxdWly
-ZXMgLXMpXG5cDQorIC1rLCAtLWtleWNoZWNrICAgICAgcGVyZm9ybSBhIGtl
-eWJvYXJkIGNoZWNrIHNlc3Npb24gKG5vdCB3aXRoIC1bc2NmbF0pXG5cDQor
-IC1mLCAtLWZpbmQtcGFja2FnZSAgZmluZCBpbnN0YWxsZWQgcGFja2FnZXMg
-Y29udGFpbmluZyBmaWxlcyAobm90IHdpdGggLVtjbF0pXG5cDQorIC1sLCAt
-LWxpc3QtcGFja2FnZSAgbGlzdCB0aGUgY29udGVudHMgb2YgaW5zdGFsbGVk
-IHBhY2thZ2VzIChub3Qgd2l0aCAtW2NmXSlcblwNCisgLWgsIC0taGVscCAg
-ICAgICAgICBnaXZlIGhlbHAgYWJvdXQgdGhlIGluZm8gKG5vdCB3aXRoIC1b
-Y2ZsXSlcblwNCisgLVYsIC0tdmVyc2lvbiAgICAgICBvdXRwdXQgdmVyc2lv
-biBpbmZvcm1hdGlvbiBhbmQgZXhpdFxuXA0KIFlvdSBtdXN0IGF0IGxlYXN0
-IGdpdmUgZWl0aGVyIC1zIG9yIC1rIG9yIGEgcHJvZ3JhbSBuYW1lXG4iKTsN
-CiAgIGV4aXQgKHN0YXR1cyk7DQogfQ0KQEAgLTEzMzQsMTIgKzEzNDAsMTQg
-QEAgc3RydWN0IG9wdGlvbiBsb25nb3B0c1tdID0gew0KICAgeyJyZWdpc3Ry
-eSIsIG5vX2FyZ3VtZW50LCBOVUxMLCAncid9LA0KICAgeyJ2ZXJib3NlIiwg
-bm9fYXJndW1lbnQsIE5VTEwsICd2J30sDQogICB7ImtleWNoZWNrIiwgbm9f
-YXJndW1lbnQsIE5VTEwsICdrJ30sDQorICB7ImZpbmQtcGFja2FnZSIsIG5v
-X2FyZ3VtZW50LCBOVUxMLCAnZid9LA0KKyAgeyJsaXN0LXBhY2thZ2UiLCBu
-b19hcmd1bWVudCwgTlVMTCwgJ2wnfSwNCiAgIHsiaGVscCIsIG5vX2FyZ3Vt
-ZW50LCBOVUxMLCAnaCd9LA0KICAgeyJ2ZXJzaW9uIiwgbm9fYXJndW1lbnQs
-IDAsICdWJ30sDQogICB7MCwgbm9fYXJndW1lbnQsIE5VTEwsIDB9DQogfTsN
-CiANCi1zdGF0aWMgY2hhciBvcHRzW10gPSAiY2hrcnN2ViI7DQorc3RhdGlj
-IGNoYXIgb3B0c1tdID0gImNmaGtscnN2ViI7DQogDQogc3RhdGljIHZvaWQN
-CiBwcmludF92ZXJzaW9uICgpDQpAQCAtMTM4Nyw2ICsxMzk1LDEyIEBAIG1h
-aW4gKGludCBhcmdjLCBjaGFyICoqYXJndikNCiAgICAgICBjYXNlICdrJzoN
-CiAJa2V5Y2hlY2sgPSAxOw0KIAlicmVhazsNCisgICAgICBjYXNlICdmJzoN
-CisJZmluZF9wYWNrYWdlID0gMTsNCisJYnJlYWs7DQorICAgICAgY2FzZSAn
-bCc6DQorCWxpc3RfcGFja2FnZSA9IDE7DQorCWJyZWFrOw0KICAgICAgIGNh
-c2UgJ2gnOg0KIAlnaXZlaGVscCA9IDE7DQogCWJyZWFrOw0KQEAgLTE0MDUs
-NyArMTQxOSwxMyBAQCBtYWluIChpbnQgYXJnYywgY2hhciAqKmFyZ3YpDQog
-ICAgIGVsc2UNCiAgICAgICB1c2FnZSAoc3RkZXJyLCAxKTsNCiANCi0gIGlm
-ICgoY2hlY2tfc2V0dXAgfHwgc3lzaW5mbykgJiYga2V5Y2hlY2spDQorICBp
-ZiAoKGNoZWNrX3NldHVwIHx8IHN5c2luZm8gfHwgZmluZF9wYWNrYWdlIHx8
-IGxpc3RfcGFja2FnZSkgJiYga2V5Y2hlY2spDQorICAgIHVzYWdlIChzdGRl
-cnIsIDEpOw0KKw0KKyAgaWYgKChmaW5kX3BhY2thZ2UgfHwgbGlzdF9wYWNr
-YWdlKSAmJiBjaGVja19zZXR1cCkNCisgICAgdXNhZ2UgKHN0ZGVyciwgMSk7
-DQorDQorICBpZiAoZmluZF9wYWNrYWdlICYmIGxpc3RfcGFja2FnZSkNCiAg
-ICAgdXNhZ2UgKHN0ZGVyciwgMSk7DQogDQogICBpZiAoa2V5Y2hlY2spDQpA
-QCAtMTQxMyw3ICsxNDMzLDcgQEAgbWFpbiAoaW50IGFyZ2MsIGNoYXIgKiph
-cmd2KQ0KIA0KICAgaW5pdF9wYXRocyAoKTsNCiANCi0gIC8qIEZJWE1FOiBB
-ZGQgaGVscCBmb3IgY2hlY2tfc2V0dXAgKi8NCisgIC8qIEZJWE1FOiBBZGQg
-aGVscCBmb3IgY2hlY2tfc2V0dXAgYW5kIHtsaXN0LGZpbmR9X3BhY2thZ2Ug
-Ki8NCiAgIGlmIChhcmdjID49IDEgJiYgZ2l2ZWhlbHAgJiYgIWNoZWNrX3Nl
-dHVwKQ0KICAgICB7DQogICAgICAgaWYgKGFyZ2MgPT0gMSkNCkBAIC0xNDM2
-LDYgKzE0NTYsMTYgQEAgbWFpbiAoaW50IGFyZ2MsIGNoYXIgKiphcmd2KQ0K
-ICAgaWYgKGNoZWNrX3NldHVwKQ0KICAgICB7DQogICAgICAgZHVtcF9zZXR1
-cCAodmVyYm9zZSwgYXJndiwgdHJ1ZSk7DQorICAgICAgcHV0cyAoIiIpOw0K
-KyAgICB9DQorICBlbHNlIGlmIChmaW5kX3BhY2thZ2UpDQorICAgIHsNCisg
-ICAgICBwYWNrYWdlX2ZpbmQgKHZlcmJvc2UsIGFyZ3YpOw0KKyAgICAgIHB1
-dHMgKCIiKTsNCisgICAgfQ0KKyAgZWxzZSBpZiAobGlzdF9wYWNrYWdlKQ0K
-KyAgICB7DQorICAgICAgcGFja2FnZV9saXN0ICh2ZXJib3NlLCBhcmd2KTsN
-CiAgICAgICBwdXRzICgiIik7DQogICAgIH0NCiAgIGVsc2UNCkluZGV4OiBk
-dW1wX3NldHVwLmNjDQo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQpSQ1MgZmls
-ZTogL2N2cy9zcmMvc3JjL3dpbnN1cC91dGlscy9kdW1wX3NldHVwLmNjLHYN
-CnJldHJpZXZpbmcgcmV2aXNpb24gMS45DQpkaWZmIC11IC1wIC1yMS45IGR1
-bXBfc2V0dXAuY2MNCi0tLSBkdW1wX3NldHVwLmNjCTEzIEF1ZyAyMDAzIDE5
-OjM3OjQwIC0wMDAwCTEuOQ0KKysrIGR1bXBfc2V0dXAuY2MJMTUgQXVnIDIw
-MDMgMTY6MjM6MTQgLTAwMDANCkBAIC0xLDQgKzEsNCBAQA0KLS8qIHBhdGgu
-Y2MNCisvKiBkdW1wX3NldHVwLmNjDQogDQogICAgQ29weXJpZ2h0IDIwMDEg
-UmVkIEhhdCwgSW5jLg0KIA0KQEAgLTE2NSwxNSArMTY1LDE1IEBAIGNvbXBh
-ciAoY29uc3Qgdm9pZCAqYSwgY29uc3Qgdm9pZCAqYikNCiB9DQogfQ0KIA0K
-LWJvb2wNCitpbnQNCiBtYXRjaF9hcmd2IChjaGFyICoqYXJndiwgY29uc3Qg
-Y2hhciAqbmFtZSkNCiB7DQogICBpZiAoIWFyZ3YgfHwgISphcmd2KQ0KLSAg
-ICByZXR1cm4gdHJ1ZTsNCisgICAgcmV0dXJuIC0xOw0KICAgZm9yIChjaGFy
-ICoqYSA9IGFyZ3Y7ICphOyBhKyspDQogICAgIGlmIChzdHJjYXNlY21wICgq
-YSwgbmFtZSkgPT0gMCkNCi0gICAgICByZXR1cm4gdHJ1ZTsNCi0gIHJldHVy
-biBmYWxzZTsNCisgICAgICByZXR1cm4gYSAtIGFyZ3YgKyAxOw0KKyAgcmV0
-dXJuIDA7DQogfQ0KIA0KIHN0YXRpYyBib29sDQpAQCAtMjM0LDE3ICsyMzQs
-MTMgQEAgZmlsZV9leGlzdHMgKGludCB2ZXJib3NlLCBjaGFyICpmaWxlbmFt
-ZQ0KICAgcmV0dXJuIHRydWU7DQogfQ0KIA0KLXN0YXRpYyBib29sDQotY2hl
-Y2tfcGFja2FnZV9maWxlcyAoaW50IHZlcmJvc2UsIGNoYXIgKnBhY2thZ2Up
-DQorc3RhdGljIEZJTEUgKg0KK29wZW5fcGFja2FnZV9saXN0IChjaGFyICpw
-YWNrYWdlKQ0KIHsNCiAgIGNoYXIgZmlsZWxpc3RbTUFYX1BBVEggKyAxXSA9
-ICJldGMvc2V0dXAvIjsNCiAgIHN0cmNhdCAoc3RyY2F0IChmaWxlbGlzdCwg
-cGFja2FnZSksICIubHN0Lmd6Iik7DQogICBpZiAoIWZpbGVfZXhpc3RzIChm
-YWxzZSwgZmlsZWxpc3QsIE5VTEwsIE5VTEwpKQ0KLSAgICB7DQotICAgICAg
-aWYgKHZlcmJvc2UpDQotCXByaW50ZiAoIk1pc3NpbmcgZmlsZSBsaXN0IC8l
-cyBmb3IgcGFja2FnZSAlc1xuIiwgZmlsZWxpc3QsIHBhY2thZ2UpOw0KLSAg
-ICAgIHJldHVybiBmYWxzZTsNCi0gICAgfQ0KKyAgICByZXR1cm4gTlVMTDsN
-CiANCiAgIHN0YXRpYyBjaGFyICp6Y2F0Ow0KICAgc3RhdGljIGNoYXIgKnpj
-YXRfZW5kOw0KQEAgLTI2MCw2ICsyNTYsMjEgQEAgY2hlY2tfcGFja2FnZV9m
-aWxlcyAoaW50IHZlcmJvc2UsIGNoYXIgKg0KICAgc3RyY3B5ICh6Y2F0X2Vu
-ZCwgZmlsZWxpc3QpOw0KICAgRklMRSAqZnAgPSBwb3BlbiAoemNhdCwgInJ0
-Iik7DQogDQorICByZXR1cm4gZnA7DQorfQ0KKw0KK3N0YXRpYyBib29sDQor
-Y2hlY2tfcGFja2FnZV9maWxlcyAoaW50IHZlcmJvc2UsIGNoYXIgKnBhY2th
-Z2UpDQorew0KKyAgRklMRSAqZnAgPSBvcGVuX3BhY2thZ2VfbGlzdCAocGFj
-a2FnZSk7DQorICBpZiAoIWZwKQ0KKyAgICB7DQorICAgICAgaWYgKHZlcmJv
-c2UpDQorCXByaW50ZiAoIkNhbid0IG9wZW4gZmlsZSBsaXN0IC9ldGMvc2V0
-dXAvJXMubHN0Lmd6IGZvciBwYWNrYWdlICVzXG4iLA0KKyAgICAgICAgICAg
-ICAgICBwYWNrYWdlLCBwYWNrYWdlKTsNCisgICAgICByZXR1cm4gZmFsc2U7
-DQorICAgIH0NCisNCiAgIGJvb2wgcmVzdWx0ID0gdHJ1ZTsNCiAgIGNoYXIg
-YnVmW01BWF9QQVRIICsgMV07DQogICB3aGlsZSAoZmdldHMgKGJ1ZiwgTUFY
-X1BBVEgsIGZwKSkNCkBAIC0yODYsMjUgKzI5NywxNyBAQCBjaGVja19wYWNr
-YWdlX2ZpbGVzIChpbnQgdmVyYm9zZSwgY2hhciAqDQogICByZXR1cm4gcmVz
-dWx0Ow0KIH0NCiANCi12b2lkDQotZHVtcF9zZXR1cCAoaW50IHZlcmJvc2Us
-IGNoYXIgKiphcmd2LCBib29sIGNoZWNrX2ZpbGVzKQ0KLXsNCisvKioNCisg
-KiBSZXR1cm5zIGEgY2FsbG9jJ2Qgc29ydGVkIGxpc3Qgb2YgcGFja2FnZXMg
-b3IgTlVMTCBpZiBubyBpbmZvLg0KKyAqIFRoZSBsYXN0IGVudHJ5IGluIHRo
-ZSBsaXN0IGlzIHtOVUxMLE5VTEx9Lg0KKyAqLw0KK3N0YXRpYyBwa2d2ZXIg
-Kg0KK2dldF9wYWNrYWdlcyAoY2hhciAqKmFyZ3YpIHsNCiAgIGNoYXIgKnNl
-dHVwID0gY3lncGF0aCAoIi9ldGMvc2V0dXAvaW5zdGFsbGVkLmRiIiwgTlVM
-TCk7DQogICBGSUxFICpmcCA9IGZvcGVuIChzZXR1cCwgInJ0Iik7DQogDQot
-ICBwdXRzICgiQ3lnd2luIFBhY2thZ2UgSW5mb3JtYXRpb24iKTsNCiAgIGlm
-IChmcCA9PSBOVUxMKQ0KLSAgICB7DQotICAgICAgcHV0cyAoIk5vIHBhY2th
-Z2UgaW5mb3JtYXRpb24gZm91bmQiKTsNCi0gICAgICBnb3RvIGVycjsNCi0g
-ICAgfQ0KLQ0KLSAgaWYgKHZlcmJvc2UpDQotICAgIHsNCi0gICAgICBib29s
-IG5lZWRfbmwgPSBkdW1wX2ZpbGUgKCJMYXN0IGRvd25sb2FkZWQgZmlsZXMg
-dG86ICIsICJsYXN0LWNhY2hlIik7DQotICAgICAgaWYgKGR1bXBfZmlsZSAo
-Ikxhc3QgZG93bmxvYWRlZCBmaWxlcyBmcm9tOiAiLCAibGFzdC1taXJyb3Ii
-KSB8fCBuZWVkX25sKQ0KLQlwdXRzICgiIik7DQotICAgIH0NCisgICAgcmV0
-dXJuIE5VTEw7DQogDQogICBpbnQgbmxpbmVzOw0KICAgbmxpbmVzID0gMDsN
-CkBAIC0zMTIsMTIgKzMxNSwxNSBAQCBkdW1wX3NldHVwIChpbnQgdmVyYm9z
-ZSwgY2hhciAqKmFyZ3YsIGJvDQogICB3aGlsZSAoZmdldHMgKGJ1ZiwgNDA5
-NiwgZnApKQ0KICAgICBubGluZXMgKz0gMjsJLyogcG90ZW50aWFsbHkgYmlu
-YXJ5ICsgc291cmNlICovDQogICBpZiAoIW5saW5lcykNCi0gICAgZ290byBl
-cnI7DQorICAgIHsNCisgICAgICBmY2xvc2UgKGZwKTsNCisgICAgICByZXR1
-cm4gTlVMTDsNCisgICAgfQ0KICAgcmV3aW5kIChmcCk7DQogDQogICBwa2d2
-ZXIgKnBhY2thZ2VzOw0KIA0KLSAgcGFja2FnZXMgPSAocGtndmVyICopIGNh
-bGxvYyAobmxpbmVzLCBzaXplb2YocGFja2FnZXNbMF0pKTsNCisgIHBhY2th
-Z2VzID0gKHBrZ3ZlciAqKSBjYWxsb2MgKG5saW5lcyArIDEsIHNpemVvZihw
-YWNrYWdlc1swXSkpOw0KICAgaW50IG47DQogICBmb3IgKG4gPSAwOyBmZ2V0
-cyAoYnVmLCA0MDk2LCBmcCkgJiYgbiA8IG5saW5lczspDQogICAgIHsNCkBA
-IC0zNDksMjMgKzM1NSwxMzkgQEAgZHVtcF9zZXR1cCAoaW50IHZlcmJvc2Us
-IGNoYXIgKiphcmd2LCBibw0KIAl9DQogICAgIH0NCiANCisgIHBhY2thZ2Vz
-W25dLm5hbWUgPSBwYWNrYWdlc1tuXS52ZXIgPSBOVUxMOw0KKw0KICAgcXNv
-cnQgKHBhY2thZ2VzLCBuLCBzaXplb2YgKHBhY2thZ2VzWzBdKSwgY29tcGFy
-KTsNCiANCisgIGZjbG9zZSAoZnApOw0KKw0KKyAgcmV0dXJuIHBhY2thZ2Vz
-Ow0KK30NCisNCit2b2lkDQorZHVtcF9zZXR1cCAoaW50IHZlcmJvc2UsIGNo
-YXIgKiphcmd2LCBib29sIGNoZWNrX2ZpbGVzKQ0KK3sNCisgIHBrZ3ZlciAq
-cGFja2FnZXMgPSBnZXRfcGFja2FnZXMoYXJndik7DQorDQorICBwdXRzICgi
-Q3lnd2luIFBhY2thZ2UgSW5mb3JtYXRpb24iKTsNCisgIGlmIChwYWNrYWdl
-cyA9PSBOVUxMKQ0KKyAgICB7DQorICAgICAgcHV0cyAoIk5vIHNldHVwIGlu
-Zm9ybWF0aW9uIGZvdW5kIik7DQorICAgICAgcmV0dXJuOw0KKyAgICB9DQor
-DQorICBpZiAodmVyYm9zZSkNCisgICAgew0KKyAgICAgIGJvb2wgbmVlZF9u
-bCA9IGR1bXBfZmlsZSAoIkxhc3QgZG93bmxvYWRlZCBmaWxlcyB0bzogIiwg
-Imxhc3QtY2FjaGUiKTsNCisgICAgICBpZiAoZHVtcF9maWxlICgiTGFzdCBk
-b3dubG9hZGVkIGZpbGVzIGZyb206ICIsICJsYXN0LW1pcnJvciIpIHx8IG5l
-ZWRfbmwpDQorCXB1dHMgKCIiKTsNCisgICAgfQ0KKw0KICAgcHJpbnRmICgi
-JS0qcyAlLSpzICAgICAlc1xuIiwgcGFja2FnZV9sZW4sICJQYWNrYWdlIiwg
-dmVyc2lvbl9sZW4sICJWZXJzaW9uIiwgY2hlY2tfZmlsZXM/IlN0YXR1cyI6
-IiIpOw0KLSAgZm9yIChpbnQgaSA9IDA7IGkgPCBuOyBpKyspDQorICBmb3Ig
-KGludCBpID0gMDsgcGFja2FnZXNbaV0ubmFtZTsgaSsrKQ0KICAgICB7DQog
-ICAgICAgcHJpbnRmICgiJS0qcyAlLSpzICAgICAlc1xuIiwgcGFja2FnZV9s
-ZW4sIHBhY2thZ2VzW2ldLm5hbWUsIHZlcnNpb25fbGVuLA0KIAkgICAgICBw
-YWNrYWdlc1tpXS52ZXIsIGNoZWNrX2ZpbGVzID8NCiAJICAgICAgKGNoZWNr
-X3BhY2thZ2VfZmlsZXMgKHZlcmJvc2UsIHBhY2thZ2VzW2ldLm5hbWUpID8g
-Ik9LIiA6ICJJbmNvbXBsZXRlIikgOiAiIik7DQogICAgICAgZmZsdXNoKHN0
-ZG91dCk7DQogICAgIH0NCi0gIGZjbG9zZSAoZnApOw0KKw0KKyAgZnJlZSAo
-cGFja2FnZXMpOw0KIA0KICAgcmV0dXJuOw0KK30NCisNCit2b2lkDQorcGFj
-a2FnZV9saXN0IChpbnQgdmVyYm9zZSwgY2hhciAqKmFyZ3YpDQorew0KKyAg
-cGtndmVyICpwYWNrYWdlcyA9IGdldF9wYWNrYWdlcyhhcmd2KTsNCisgIGlm
-IChwYWNrYWdlcyA9PSBOVUxMKQ0KKyAgICB7DQorICAgICAgcHV0cyAoIk5v
-IHNldHVwIGluZm9ybWF0aW9uIGZvdW5kIik7DQorICAgICAgcmV0dXJuOw0K
-KyAgICB9DQorDQorICBmb3IgKGludCBpID0gMDsgcGFja2FnZXNbaV0ubmFt
-ZTsgaSsrKQ0KKyAgICB7DQorICAgICAgRklMRSAqZnAgPSBvcGVuX3BhY2th
-Z2VfbGlzdCAocGFja2FnZXNbaV0ubmFtZSk7DQorICAgICAgaWYgKCFmcCkN
-CisgICAgICB7DQorCWlmICh2ZXJib3NlKQ0KKwkgIHByaW50ZiAoIkNhbid0
-IG9wZW4gZmlsZSBsaXN0IC9ldGMvc2V0dXAvJXMubHN0Lmd6IGZvciBwYWNr
-YWdlICVzXG4iLA0KKwkgICAgICBwYWNrYWdlc1tpXS5uYW1lLCBwYWNrYWdl
-c1tpXS5uYW1lKTsNCisJcmV0dXJuOw0KKyAgICAgIH0NCisNCisgICAgICBw
-cmludGYgKCJQYWNrYWdlOiAlcy0lc1xuIiwgcGFja2FnZXNbaV0ubmFtZSwg
-cGFja2FnZXNbaV0udmVyKTsNCisNCisgICAgICBjaGFyIGJ1ZltNQVhfUEFU
-SCArIDFdOw0KKyAgICAgIHdoaWxlIChmZ2V0cyAoYnVmLCBNQVhfUEFUSCwg
-ZnApKQ0KKwl7DQorCSAgY2hhciAqbGFzdGNoYXIgPSBzdHJjaHIoYnVmLCAn
-XG4nKTsNCisJICBpZiAobGFzdGNoYXJbLTFdICE9ICcvJykNCisJICAgIHBy
-aW50ZiAoIiAgICAvJXMiLCBidWYpOw0KKwl9DQorDQorICAgICAgZmNsb3Nl
-IChmcCk7DQorICAgIH0NCisNCisgIGZyZWUgKHBhY2thZ2VzKTsNCisNCisg
-IHJldHVybjsNCit9DQorDQordm9pZA0KK3BhY2thZ2VfZmluZCAoaW50IHZl
-cmJvc2UsIGNoYXIgKiphcmd2KQ0KK3sNCisgIHBrZ3ZlciAqcGFja2FnZXMg
-PSBnZXRfcGFja2FnZXMoTlVMTCk7DQorICBpZiAocGFja2FnZXMgPT0gTlVM
-TCkNCisgICAgew0KKyAgICAgIHB1dHMgKCJObyBzZXR1cCBpbmZvcm1hdGlv
-biBmb3VuZCIpOw0KKyAgICAgIHJldHVybjsNCisgICAgfQ0KKw0KKyAgZm9y
-IChpbnQgaSA9IDA7IHBhY2thZ2VzW2ldLm5hbWU7IGkrKykNCisgICAgew0K
-KyAgICAgIEZJTEUgKmZwID0gb3Blbl9wYWNrYWdlX2xpc3QgKHBhY2thZ2Vz
-W2ldLm5hbWUpOw0KKyAgICAgIGlmICghZnApDQorICAgICAgew0KKwlpZiAo
-dmVyYm9zZSkNCisJICBwcmludGYgKCJDYW4ndCBvcGVuIGZpbGUgbGlzdCAv
-ZXRjL3NldHVwLyVzLmxzdC5neiBmb3IgcGFja2FnZSAlc1xuIiwNCisJICAg
-ICAgcGFja2FnZXNbaV0ubmFtZSwgcGFja2FnZXNbaV0ubmFtZSk7DQorCXJl
-dHVybjsNCisgICAgICB9DQorDQorICAgICAgY2hhciBidWZbTUFYX1BBVEgg
-KyAyXTsNCisgICAgICBidWZbMF0gPSAnLyc7DQorICAgICAgd2hpbGUgKGZn
-ZXRzIChidWYgKyAxLCBNQVhfUEFUSCwgZnApKQ0KKwl7DQorCSAgY2hhciAq
-ZmlsZW5hbWUgPSBzdHJ0b2soYnVmLCAiXG4iKTsNCisJICBpbnQgZmxlbiA9
-IHN0cmxlbiAoZmlsZW5hbWUpOw0KKwkgIGlmIChmaWxlbmFtZVtmbGVuIC0g
-MV0gIT0gJy8nKQ0KKwkgICAgew0KKwkgICAgICAvLyBGSVhNRTogdmVyaWZ5
-IHRoYXQgL2JpbiBpcyBtb3VudGVkIG9uIC91c3IvYmluOyBkaXR0byBmb3Ig
-L2xpYg0KKwkgICAgICBib29sIGlzX2FsaWFzID0gIXN0cm5jbXAoZmlsZW5h
-bWUsICIvdXNyL2Jpbi8iLCA5KSB8fA0KKwkJCSAgICAgICFzdHJuY21wKGZp
-bGVuYW1lLCAiL3Vzci9saWIiLCA5KTsNCisJICAgICAgaW50IGEgPSBtYXRj
-aF9hcmd2IChhcmd2LCBmaWxlbmFtZSk7DQorCSAgICAgIGlmICghYSAmJiBp
-c19hbGlhcykNCisJCWEgPSBtYXRjaF9hcmd2IChhcmd2LCBmaWxlbmFtZSAr
-IDQpOw0KKwkgICAgICBpZiAoIWEgJiYgIXN0cmNtcChmaWxlbmFtZSArIGZs
-ZW4gLSA0LCAiLmV4ZSIpKQ0KKwkJew0KKwkJICBmaWxlbmFtZVtmbGVuIC0g
-NF0gPSAnXDAnOw0KKwkJICBhID0gbWF0Y2hfYXJndiAoYXJndiwgZmlsZW5h
-bWUpOw0KKwkJfQ0KKwkgICAgICBpZiAoIWEgJiYgaXNfYWxpYXMpDQorCQlh
-ID0gbWF0Y2hfYXJndiAoYXJndiwgZmlsZW5hbWUgKyA0KTsNCisJICAgICAg
-aWYgKGEgPiAwKQ0KKwkJcHJpbnRmICgiJXMtJXNcbiIsIHBhY2thZ2VzW2ld
-Lm5hbWUsIHBhY2thZ2VzW2ldLnZlcik7DQorCSAgICB9DQorCX0NCisNCisg
-ICAgICBmY2xvc2UgKGZwKTsNCisgICAgfQ0KKw0KKyAgZnJlZSAocGFja2Fn
-ZXMpOw0KIA0KLWVycjoNCi0gIHB1dHMgKCJObyBzZXR1cCBpbmZvcm1hdGlv
-biBmb3VuZCIpOw0KLSAgaWYgKGZwKQ0KLSAgICBmY2xvc2UgKGZwKTsNCiAg
-IHJldHVybjsNCiB9DQorDQo=
-
----559023410-1804928587-1060976310=:1848--
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
