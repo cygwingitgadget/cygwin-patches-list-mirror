@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2496-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 3876 invoked by alias); 23 Jun 2002 14:01:06 -0000
+Return-Path: <cygwin-patches-return-2497-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 11609 invoked by alias); 23 Jun 2002 17:40:28 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,76 +7,77 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 3837 invoked from network); 23 Jun 2002 14:00:57 -0000
-Message-ID: <06b601c21abe$9e7d10a0$6132bc3e@BABEL>
+Received: (qmail 11570 invoked from network); 23 Jun 2002 17:40:21 -0000
+Message-ID: <07c601c21add$428ebae0$6132bc3e@BABEL>
 From: "Conrad Scott" <Conrad.Scott@dsl.pipex.com>
-To: "Robert Collins" <robert.collins@syncretize.net>
-Cc: <cygwin-patches@cygwin.com>
-References: <000601c21a8b$bd8324e0$0200a8c0@lifelesswks> <062501c21a99$47da4300$6132bc3e@BABEL> <002901c21aa7$eb2ab360$1800a8c0@LAPTOP>
-Subject: Re: Resubmission of cygwin_daemon patch.
-Date: Sun, 23 Jun 2002 10:40:00 -0000
+To: <cygwin-patches@cygwin.com>
+Subject: lib/_cygwin_S_IEXEC.cc and extern "C" scope
+Date: Sun, 23 Jun 2002 19:09:00 -0000
 MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed;
+	boundary="----=_NextPart_000_07C3_01C21AE5.A3CF9B00"
 X-Priority: 3
 X-MSMail-Priority: Normal
 X-MIMEOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-SW-Source: 2002-q2/txt/msg00479.txt.bz2
+X-SW-Source: 2002-q2/txt/msg00480.txt.bz2
 
-"Robert Collins" <robert.collins@syncretize.net> wrote:
-> From: "Conrad Scott" <Conrad.Scott@dsl.pipex.com>
-> > About instance detection: you're right that something better could
-be
-> > done here. What I've ended up with is really a security patch:
-it's
-> > possible for another process to create an instance of a named
-pipe,
-> > wait for clients to connect and then impersonate them.
->
-> It will always be possible to do that. Anyone can build the
-cygserver and
-> insert hostile code into their build. Code interception is a
-standard
-> technique for reverse engineering, runtime patching and the like.
+This is a multi-part message in MIME format.
 
-No: the problem is that someone without privileges on a machine could
-create a server that listens on that named pipe and then wait for
-other (more privileged) clients to connect to their "server", so that
-they could impersonate them and then do what they want with the
-privileges. There's code lying around on the internet to do exactly
-this: it creates an instance of a named pipe and listens for
-connections, then impersonates the client and launches a shell or
-whatever else you want. If the cygserver itself were to connect to
-such a fake server it would be giving it a chance to impersonate a
-privileged process. Unclever. The usual case is if the attacker can
-race the server to create the first pipe instance: since cygserver
-will start as a system process of some kind, it ought to be up and
-running before anything has a chance to run, so that's less likely as
-an attack.
+------=_NextPart_000_07C3_01C21AE5.A3CF9B00
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+Content-length: 156
 
-> In terms of preventing someone hostilely opening the same
-socket/pipe, I'd
-> have thought windows prevented multiple listening pipes with the
-same
-> name.
-
-The idea is that multiple listening pipes *are* created, usually by
-multiple threads in the same process (tho' this isn't quite what
-cygserver does). You've got to control the rights on the pipe to avoid
-other people also creating instances of the same pipe (as I understand
-it: I've read the references but I've not tried it). Actually, since
-cygserver will run as a privileged process, unprivileged processes may
-not have enough privilege to create such duplicates anyhow, but there
-is a particular privilege that cygserver ought to exclude on creating
-the named pipe to deny other processes also creating pipe instances.
-Again, there are exploits on the web for this. And a whole sequence of
-MS security patches for, e.g., telnet, where they got it wrong. This
-is why the new file flag got added, as before that it was impossible
-for a server to protect itself against some of these attacks.
-
-Cheers for the moment,
+Another nit: "lib/_cygwin_S_IEXEC.cc" #include's "winsup.h" et al
+inside an extern "C" declaration. Presumably it would be better done
+outside.
 
 // Conrad
 
+
+------=_NextPart_000_07C3_01C21AE5.A3CF9B00
+Content-Type: text/plain;
+	name="ChangeLog.txt"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+	filename="ChangeLog.txt"
+Content-length: 119
+
+2002-06-23  Conrad Scott  <conrad.scott@dsl.pipex.com>
+
+	* lib/_cygwin_S_IEXEC.cc: Move #include's outside extern "C".
+
+------=_NextPart_000_07C3_01C21AE5.A3CF9B00
+Content-Type: application/octet-stream;
+	name="extern-c.patch"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment;
+	filename="extern-c.patch"
+Content-length: 862
+
+Index: lib/_cygwin_S_IEXEC.cc=0A=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
+RCS file: /cvs/src/src/winsup/cygwin/lib/_cygwin_S_IEXEC.cc,v=0A=
+retrieving revision 1.3=0A=
+diff -u -r1.3 _cygwin_S_IEXEC.cc=0A=
+--- lib/_cygwin_S_IEXEC.cc	8 May 2001 15:16:49 -0000	1.3=0A=
++++ lib/_cygwin_S_IEXEC.cc	23 Jun 2002 17:38:05 -0000=0A=
+@@ -8,11 +8,11 @@=0A=
+ Cygwin license.  Please consult the file "CYGWIN_LICENSE" for=0A=
+ details. */=0A=
+=20=0A=
+-extern "C" {=0A=
+ #include "winsup.h"=0A=
+ #include <sys/stat.h>=0A=
+ #include <sys/unistd.h>=0A=
+=20=0A=
++extern "C" {=0A=
+ unsigned _cygwin_S_IEXEC =3D S_IEXEC;=0A=
+ unsigned _cygwin_S_IXUSR =3D S_IXUSR;=0A=
+ unsigned _cygwin_S_IXGRP =3D S_IXGRP;=0A=
+
+------=_NextPart_000_07C3_01C21AE5.A3CF9B00--
 
