@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4166-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 8971 invoked by alias); 5 Sep 2003 01:42:56 -0000
+Return-Path: <cygwin-patches-return-4167-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 15287 invoked by alias); 6 Sep 2003 00:44:14 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,92 +7,69 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 8955 invoked from network); 5 Sep 2003 01:42:55 -0000
-Message-Id: <3.0.5.32.20030904214114.00814b30@incoming.verizon.net>
-X-Sender: vze1u1tg@incoming.verizon.net (Unverified)
-Date: Fri, 05 Sep 2003 01:42:00 -0000
+Received: (qmail 15274 invoked from network); 6 Sep 2003 00:44:13 -0000
+X-Authentication-Warning: slinky.cs.nyu.edu: pechtcha owned process doing -bs
+Date: Sat, 06 Sep 2003 00:44:00 -0000
+From: Igor Pechtchanski <pechtcha@cs.nyu.edu>
+Reply-To: cygwin-patches@cygwin.com
 To: cygwin-patches@cygwin.com
-From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
-Subject: nanosleep patch 2
-Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="=====================_1062740474==_"
-X-SW-Source: 2003-q3/txt/msg00182.txt.bz2
+Subject: [PATCH] cygcheck: don't fail integrity check on empty package
+Message-ID: <Pine.GSO.4.56.0309052041170.7348@slinky.cs.nyu.edu>
+Importance: Normal
+MIME-Version: 1.0
+Content-Type: MULTIPART/MIXED; BOUNDARY="-559023410-824023566-1062809053=:7348"
+X-SW-Source: 2003-q3/txt/msg00183.txt.bz2
 
---=====================_1062740474==_
-Content-Type: text/plain; charset="us-ascii"
-Content-length: 292
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
 
-And here is part 2, ChangeLog is self explanatory.
+---559023410-824023566-1062809053=:7348
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-length: 756
 
-2003-09-04  Pierre Humblet <pierre.humblet@ieee.org>
+Hi,
 
-	* signal.cc (nanosleep): Improve test for valid values.
-	Round delay up to resolution. Fix test for negative remainder. 
-	Use timeGetTime through gtod.
-	(sleep): Round up return value.
+This patch fixes the erroneous failure of "cygcheck -c" when the package
+is empty (and thus the file list for it is missing), e.g., XFree86-base.
+	Igor
+==============================================================================
+ChangeLog:
+2003-09-05  Igor Pechtchanski  <pechtcha@cs.nyu.edu>
 
---=====================_1062740474==_
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment; filename="sleep2.diff"
-Content-length: 1980
+	* dump_setup.cc (dump_setup): Don't fail on empty packages.
 
-Index: signal.cc
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-RCS file: /cvs/src/src/winsup/cygwin/signal.cc,v
-retrieving revision 1.47
-diff -u -p -r1.47 signal.cc
---- signal.cc	1 Sep 2003 02:05:32 -0000	1.47
-+++ signal.cc	5 Sep 2003 01:15:46 -0000
-@@ -17,6 +17,7 @@ details. */
- #include <sys/cygwin.h>
- #include "sigproc.h"
- #include "pinfo.h"
-+#include "hires.h"
+-- 
+				http://cs.nyu.edu/~pechtcha/
+      |\      _,,,---,,_		pechtcha@cs.nyu.edu
+ZZZzz /,`.-'`'    -.  ;-;;,_		igor@watson.ibm.com
+     |,4-  ) )-,_. ,\ (  `'-'		Igor Pechtchanski, Ph.D.
+    '---''(_/--'  `-'\_) fL	a.k.a JaguaR-R-R-r-r-r-.-.-.  Meow!
 
- int sigcatchers;	/* FIXME: Not thread safe. */
+"I have since come to realize that being between your mentor and his route
+to the bathroom is a major career booster."  -- Patrick Naughton
+---559023410-824023566-1062809053=:7348
+Content-Type: TEXT/PLAIN; charset=US-ASCII; name="cygcheck-verify-packages-empty.patch"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.GSO.4.56.0309052044130.7348@slinky.cs.nyu.edu>
+Content-Description: 
+Content-Disposition: attachment; filename="cygcheck-verify-packages-empty.patch"
+Content-length: 915
 
-@@ -73,20 +74,22 @@ nanosleep (const struct timespec *rqtp,
-   sigframe thisframe (mainthread);
-   pthread_testcancel ();
+SW5kZXg6IHdpbnN1cC91dGlscy9kdW1wX3NldHVwLmNjDQo9PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09DQpSQ1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC91
+dGlscy9kdW1wX3NldHVwLmNjLHYNCnJldHJpZXZpbmcgcmV2aXNpb24gMS4x
+Mg0KZGlmZiAtdSAtcCAtcjEuMTIgZHVtcF9zZXR1cC5jYw0KLS0tIHdpbnN1
+cC91dGlscy9kdW1wX3NldHVwLmNjCTE3IEF1ZyAyMDAzIDE3OjI2OjA4IC0w
+MDAwCTEuMTINCisrKyB3aW5zdXAvdXRpbHMvZHVtcF9zZXR1cC5jYwk2IFNl
+cCAyMDAzIDAwOjM5OjQwIC0wMDAwDQpAQCAtMjY2LDkgKzI2Niw4IEBAIGNo
+ZWNrX3BhY2thZ2VfZmlsZXMgKGludCB2ZXJib3NlLCBjaGFyICoNCiAgIGlm
+ICghZnApDQogICAgIHsNCiAgICAgICBpZiAodmVyYm9zZSkNCi0JcHJpbnRm
+ICgiQ2FuJ3Qgb3BlbiBmaWxlIGxpc3QgL2V0Yy9zZXR1cC8lcy5sc3QuZ3og
+Zm9yIHBhY2thZ2UgJXNcbiIsDQotICAgICAgICAgICAgICAgIHBhY2thZ2Us
+IHBhY2thZ2UpOw0KLSAgICAgIHJldHVybiBmYWxzZTsNCisJcHJpbnRmICgi
+RW1wdHkgcGFja2FnZSAlc1xuIiwgcGFja2FnZSk7DQorICAgICAgcmV0dXJu
+IHRydWU7DQogICAgIH0NCiANCiAgIGJvb2wgcmVzdWx0ID0gdHJ1ZTsNCg==
 
--  if (rqtp->tv_sec < 0 || rqtp->tv_nsec < 0 || rqtp->tv_nsec > 999999999)
-+  if ((unsigned int) rqtp->tv_sec > (_DELAY_MAX / 1000 - 1)
-+      || (unsigned int) rqtp->tv_nsec > 999999999)
-     {
-       set_errno (EINVAL);
-       return -1;
-     }
--
--  DWORD req =3D rqtp->tv_sec * 1000 + (rqtp->tv_nsec + 500000) / 1000000;
--  DWORD start_time =3D GetTickCount ();
--  DWORD end_time =3D start_time + req;
-+  DWORD resolution =3D gtod.resolution ();
-+  DWORD req =3D ((rqtp->tv_sec * 1000 + (rqtp->tv_nsec + 999999) / 1000000
-+		+ resolution - 1) / resolution ) * resolution;
-+  DWORD end_time =3D gtod.dmsecs () + req;
-   syscall_printf ("nanosleep (%ld)", req);
-
-   int rc =3D pthread::cancelable_wait (signal_arrived, req);
--  DWORD now =3D GetTickCount ();
--  DWORD rem =3D (rc =3D=3D WAIT_TIMEOUT || now >=3D end_time) ? 0 : end_ti=
-me - now;
-+  DWORD rem;
-+  if ((rem =3D end_time - gtod.dmsecs ()) > _DELAY_MAX)
-+    rem =3D 0;
-   if (rc =3D=3D WAIT_OBJECT_0)
-     {
-       (void) thisframe.call_signal_handler ();
-@@ -111,7 +114,7 @@ sleep (unsigned int seconds)
-   req.tv_sec =3D seconds;
-   req.tv_nsec =3D 0;
-   nanosleep (&req, &rem);
--  return rem.tv_sec + (rem.tv_nsec + 500000000) / 1000000000;
-+  return rem.tv_sec + (rem.tv_nsec > 0);
- }
-
- extern "C" unsigned int
-
---=====================_1062740474==_--
+---559023410-824023566-1062809053=:7348--
