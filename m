@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4034-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 5560 invoked by alias); 2 Aug 2003 16:11:19 -0000
+Return-Path: <cygwin-patches-return-4035-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 12970 invoked by alias); 3 Aug 2003 22:19:31 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,39 +7,55 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 5549 invoked from network); 2 Aug 2003 16:11:18 -0000
-Date: Sat, 02 Aug 2003 16:11:00 -0000
-From: Pavel Tsekov <ptsekov@gmx.net>
-To: cygwin-patches@cygwin.com
+Received: (qmail 12961 invoked from network); 3 Aug 2003 22:19:30 -0000
+Resent-Date: Sun,  3 Aug 2003 23:19:27 +0100
+Resent-Message-Id: <3291-Sun03Aug2003231927+0100-david@starks-browning.com>
+X-Resent-Mailer: emacs 21.2.1 (via feedmail 8 I)
+Resent-From: David Starks-Browning <david@starks-browning.com>
+Resent-To: cygwin-patches@cygwin.com
+Message-Id: <5835-Sun03Aug2003230604+0100-david@starks-browning.com>
 MIME-Version: 1.0
-References: <20030802141248.GB16831@redhat.com>
-Subject: Re: [PATCH] patch.cc: cygdrive_getmntent () - Unify behaviour with fhandler_cygdrive
-X-Priority: 3 (Normal)
-X-Authenticated-Sender: #0014308112@gmx.net
-X-Authenticated-IP: [195.27.52.137]
-Message-ID: <13970.1059840677@www56.gmx.net>
-X-Flags: 0001
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8bit
-X-SW-Source: 2003-q3/txt/msg00050.txt.bz2
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+In-Reply-To: <20030213024144.1284.qmail@sources.redhat.com>
+References: <20030213024144.1284.qmail@sources.redhat.com>
+From: David Starks-Browning <david@starks-browning.com>
+To: cygwin-patches@cygwin.com
+Subject: winsup MAINTAINERS
+Date: Sun, 03 Aug 2003 22:19:00 -0000
+X-SW-Source: 2003-q3/txt/msg00051.txt.bz2
 
-> On Sat, Aug 02, 2003 at 01:53:21PM +0200, Pavel Tsekov wrote:
-> >Here is a simple patch which makes the behaviour of getmntent ()
-> >consistent with the one of fhandler_cygdrive.
+Sorry for this blast from the past:
+
+On  13 Feb 03, cgf@.... writes:
+> CVSROOT:	/cvs/uberbaum
+> Module name:	winsup
+> Changes by:	cgf@....	2003-02-13 02:41:44
 > 
-> The reason this is there is to avoid long delays in mount table
-> listings.
+> Modified files:
+> 	.              : ChangeLog 
+> Removed files:
+> 	.              : MAINTAINERS 
+> 
+> Log message:
+> 	* MAINTAINERS: Remove out-of-date file.
 
-Well, I guessed so, but it would be more convinient and consistent if
-calling getmntent() could
-retrieve all the accesible (mounted) drives. Anyway, I guess i'll be using
-readdir () :)
+In that case you might wish to apply this patch to /src/MAINTAINERS,
+or instruct me to do it.
 
-Pavel
+Regards,
+David
 
--- 
-COMPUTERBILD 15/03: Premium-e-mail-Dienste im Test
---------------------------------------------------
-1. GMX TopMail - Platz 1 und Testsieger!
-2. GMX ProMail - Platz 2 und Preis-Qualitätssieger!
-3. Arcor - 4. web.de - 5. T-Online - 6. freenet.de - 7. daybyday - 8. e-Post
+diff -u -r1.19 MAINTAINERS
+--- MAINTAINERS 3 May 2003 00:44:23 -0000       1.19
++++ MAINTAINERS 3 Aug 2003 22:02:12 -0000
+@@ -98,7 +98,6 @@
+        cygwin: http://sources.redhat.com/cygwin
+        Patches to cygwin-patches@sources.redhat.com.
+        General discussion cygwin@sources.redhat.com.
+-       See also winsup/MAINTAINERS.
+ 
+ expect/; config-ml.in; mpw-README; mpw-build.in; mpw-config.in;
+ mpw-configure; mpw-install; setup.com; missing; makefile.vms; utils/;
+
+
