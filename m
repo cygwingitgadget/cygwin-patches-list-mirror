@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4258-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 3994 invoked by alias); 27 Sep 2003 03:03:13 -0000
+Return-Path: <cygwin-patches-return-4259-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 4638 invoked by alias); 27 Sep 2003 03:07:39 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,33 +7,60 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 3985 invoked from network); 27 Sep 2003 03:03:13 -0000
-Date: Sat, 27 Sep 2003 03:03:00 -0000
+Received: (qmail 4628 invoked from network); 27 Sep 2003 03:07:39 -0000
+Date: Sat, 27 Sep 2003 03:07:00 -0000
 From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: Turning pinfo security on
-Message-ID: <20030927030308.GA17960@redhat.com>
+Subject: Re: setmetamode
+Message-ID: <20030927030734.GA18280@redhat.com>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3.0.5.32.20030926221700.008209b0@incoming.verizon.net> <3.0.5.32.20030926221700.008209b0@incoming.verizon.net> <3.0.5.32.20030926223605.00822510@incoming.verizon.net>
+References: <s1sznjdk5sg.fsf@jaist.ac.jp> <20030718171054.GC1621@cygbert.vinschen.de> <s1sk7a3jxgm.fsf@jaist.ac.jp> <20030812144731.GB3101@cygbert.vinschen.de>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3.0.5.32.20030926223605.00822510@incoming.verizon.net>
+In-Reply-To: <20030812144731.GB3101@cygbert.vinschen.de>
 User-Agent: Mutt/1.4.1i
-X-SW-Source: 2003-q3/txt/msg00274.txt.bz2
+X-SW-Source: 2003-q3/txt/msg00275.txt.bz2
 
-On Fri, Sep 26, 2003 at 10:36:05PM -0400, Pierre A. Humblet wrote:
->BTW, now that your sigpacket includes the sending pid, the commune stuff
->could be simplified and avoid calling winpids. It knows whom to talk
->to (but it must still double check for security).
+On Tue, Aug 12, 2003 at 04:47:31PM +0200, Corinna Vinschen wrote:
+>On Mon, Jul 28, 2003 at 09:39:53AM +0900, Kazuhiro Fujieda wrote:
+>> >>> On Fri, 18 Jul 2003 19:10:54 +0200
+>> >>> Corinna Vinschen <cygwin-patches@cygwin.com> said:
+>> Umm. I can't find any reason why it doesn't work.
+>> I'd like to confirm whether setmetamode can show and change the
+>> meta mode in your environment.
+>> 
+>> Could you show me the output of the following instructions:
+>> $ setmetamode
+>> <output>
+>> $ setmetamode meta
+>> $ setmetamode
+>> <output>
+>
+>    $ setmetamode
+>    escprefix
+>    [~]$ cat | od -t x1
+>
+>    0000000 1b 78 1b 78 1b 78 0d 0a
+>    0000010
+>    $ setmetamode meta
+>    $ setmetamode
+>    metabit
+>    $ cat | od -t x1
+>
+>    0000000 1b 78 1b 78 1b 78 0d 0a
+>    0000010
+>
+>> > Another question: Shouldn't this also add a sys/kd.h file which just
+>> > includes <cygwin/kd.h>?
+>> 
+>> Probably yes. I'm not, however, sure why it is necessary.
+>> To stick to the way of Linux?
+>
+>Yes.
 
-Yeah.  That's one of the reasons I added it.
-
->Another benefit of your method!
-
-It makes me wonder why I waited three or four years to do it this way.
-I guess, with my infallible intuition, I always thought it would slow
-things down.
+Whatever happened to this patch?  Did we figure out why it didn't work
+for Corinna?
 
 cgf
