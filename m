@@ -1,36 +1,64 @@
-From: Earnie Boyd <earnie_boyd@yahoo.com>
-To: cygwin-patches@sources.redhat.com
-Subject: Re: src/winsup/cinstall ChangeLog desktop.cc
-Date: Wed, 08 Nov 2000 11:14:00 -0000
-Message-id: <20001108191409.10579.qmail@web112.yahoomail.com>
-X-SW-Source: 2000-q4/msg00015.html
+From: "Town, Brad" <btown@ceddec.com>
+To: "'cygwin-patches@sources.redhat.com'" <cygwin-patches@sources.redhat.com>
+Subject: RE: 'clear' does not clear entire screen (affects vim also)
+Date: Thu, 16 Nov 2000 13:06:00 -0000
+Message-id: <F10D23B02E54D011A0AB0020AF9CEFE988FA0F@lynx.ceddec.com>
+X-SW-Source: 2000-q4/msg00016.html
+Content-type: multipart/mixed; boundary="----------=_1583532846-65437-16"
 
-Shouldn't this patch wait until the changes for mkpasswd and mkgroup have made
-distribution?
+This is a multi-part message in MIME format...
 
-Cheers,
-Earnie
---- corinna@sourceware.cygnus.com wrote:
-> CVSROOT:	/cvs/src
-> Module name:	src
-> Changes by:	corinna@sources.redhat.com	2000-11-08 08:24:39
-> 
-> Modified files:
-> 	winsup/cinstall: ChangeLog desktop.cc 
-> 
-> Log message:
-> 	* desktop.cc (make_passwd_group): Don't exit when started
-> 	on 9x/ME since mkpasswd/mkgroup are usable on 9x/ME now.
-> 
-> Patches:
->
-http://sources.redhat.com/cgi-bin/cvsweb.cgi/src/winsup/cinstall/ChangeLog.diff?cvsroot=src&r1=2.25&r2=2.26
->
-http://sources.redhat.com/cgi-bin/cvsweb.cgi/src/winsup/cinstall/desktop.cc.diff?cvsroot=src&r1=2.4&r2=2.5
-> 
+------------=_1583532846-65437-16
+Content-length: 1108
+
+(This was sent to the cygwin-patches list rather than the cygwin list.)
+
+The ChangeLog entry is attached.  Is there a better way to do this sort of
+thing?  For example, should I send a ChangeLog entry along with proposed
+patches?  Should I send proposed patches to cygwin-patches instead?
+
+BTW, the copyright assignment form is almost ready -- I'm waiting to get the
+employer part back.  Perhaps I'll send the first two parts now and the third
+part when I get it.
+
+Brad Town
 
 
-__________________________________________________
-Do You Yahoo!?
-Thousands of Stores.  Millions of Products.  All in one Place.
-http://shopping.yahoo.com/
+> -----Original Message-----
+> From: Chris Faylor [ mailto:cgf@redhat.com ]
+> Sent: Thursday, November 16, 2000 3:51 PM
+> To: 'cygwin@cygwin.com'
+> Subject: Re: 'clear' does not clear entire screen (affects vim also)
+> 
+> 
+> On Tue, Nov 14, 2000 at 09:52:09AM -0500, Town, Brad wrote:
+> >Attached is a minor patch that uses the screen buffer width 
+> rather than the
+> >window width to calculate the number of spaces to clear.
+> 
+> The patch looks reasonable.  Could I have a ChangeLog entry 
+> for it, please?
+> 
+> cgf
+> 
+> --
+> Want to unsubscribe from this list?
+> Send a message to cygwin-unsubscribe@sourceware.cygnus.com
+> 
+
+
+------------=_1583532846-65437-16
+Content-Type: text/plain; charset=us-ascii; name="ChangeLog.mine"
+Content-Disposition: inline; filename="ChangeLog.mine"
+Content-Transfer-Encoding: base64
+Content-Length: 391
+
+VGh1IE5vdiAxNiAxNTo1OTo1OCAyMDAwIEJyYWRsZXkgQS4gVG93biA8dG93
+bmJhQHBvYm94LmNvbT4KCgkqIGZoYW5kbGVyX2NvbnNvbGUuY2M6IE5ldyBt
+ZW1iZXIgdmFyaWFibGUgYGR3QnVmZmVyU2l6ZScgZm9yIGBpbmZvJy4KCShm
+aWxsaW5faW5mbyk6IFNldCBgZHdCdWZmZXJTaXplJyB0byB0aGUgc2l6ZSBv
+ZiB0aGUgY29uc29sZSBidWZmZXIuCgkoY2xlYXJfc2NyZWVuKTogVXNlIHdp
+ZHRoIG9mIGNvbnNvbGUgYnVmZmVyIHRvIGNhbGN1bGF0ZSBob3cgbWFueQoJ
+c3BhY2VzIHRvIGNsZWFyLgo=
+
+------------=_1583532846-65437-16--
