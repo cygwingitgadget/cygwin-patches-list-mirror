@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2569-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 31394 invoked by alias); 1 Jul 2002 14:52:00 -0000
+Return-Path: <cygwin-patches-return-2570-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 23503 invoked by alias); 1 Jul 2002 21:42:26 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,40 +7,44 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 31360 invoked from network); 1 Jul 2002 14:51:59 -0000
-Date: Mon, 01 Jul 2002 07:52:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygpatch <cygwin-patches@cygwin.com>
-Subject: Re: Serial patch programming
-Message-ID: <20020701165154.A23555@cygbert.vinschen.de>
-Mail-Followup-To: cygpatch <cygwin-patches@cygwin.com>
-References: <3D2069F6.618737F5@certum.pl>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3D2069F6.618737F5@certum.pl>
-User-Agent: Mutt/1.3.22.1i
-X-SW-Source: 2002-q3/txt/msg00017.txt.bz2
+Received: (qmail 23489 invoked from network); 1 Jul 2002 21:42:25 -0000
+Date: Mon, 01 Jul 2002 14:42:00 -0000
+From: David Euresti <davie@MIT.EDU>
+X-X-Sender:  <davie@this>
+To: <cygwin-patches@cygwin.com>
+Subject: Re: Patch to pass file descriptors
+Message-ID: <Pine.LNX.4.33.0207011735010.2716-100000@this>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-SW-Source: 2002-q3/txt/msg00018.txt.bz2
 
-On Mon, Jul 01, 2002 at 04:40:54PM +0200, Jacek Trzcinski wrote:
-> I guess I should wait for acknowledge from You or Chris ?
+Oops. I posted this to the wrong list.  Here it is in context.
 
-Chris sends a mail to this list as soon as the assignment gets to him.
+So,
+        There's the option of keeping full BSD semantics if the cygserver
+is running.  I like that.  I can require users to run the cygserver.  I
+don't mind.
+        Unfortunately the whole net.cc has been refactored so I'll have to
+regenerate my patch.
+        The question is, can you incorporate my code and then you guys
+deal with the case when the cygserver isn't running?  I don't really have
+a use for a non cygserver solution because my program depends on full BSD
+semantics.  Such as closing the handle after sending it, or exiting the
+process after sending it.  I don't see how to solve this second problem
+without the cygserver.
+        I'm sure other people will want full BSD semantics also so why not
+allow them to have it if the cygserver is running.
 
-> My question concers any additional work concerned with the patch. As I
-> remember version I sent last year was not good from the formal point of
-> view( sources were not conforming to GNU coding.). I fixed it then and
-> the corrected patch laid on my hard disk until now. During last year
-> there were created other new versions of cygwin.dll(unfortunately, I did
-> not trace it) so I guess my patch is not suitable and I should check any
-> latest version of cygwin sources and create new patch? If so, what
-> version of Cygwin sources should I take into account.
+By the way, I thought about how to solve the problem of the program
+closing the handle after sending it.  Assuming that you'll spawn a thread
+with your shared memory stuff.  You can dup the handle in that thread.
+Then the sender can do whatever it wants with it's copy (Close it), and
+when the receiver has it, it can tell the sender to release it.
+Unfortunately this won't help the situation where the sender process
+exits before the receiver receives.
 
-Always latest from CVS as Earnie already posted.
+        Also should this discussion be moved to cygwin-developers?
 
-Corinna
+David
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+
