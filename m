@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5356-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 10364 invoked by alias); 22 Feb 2005 15:46:03 -0000
+Return-Path: <cygwin-patches-return-5357-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 19013 invoked by alias); 23 Feb 2005 17:07:37 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,55 +7,57 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 10330 invoked from network); 22 Feb 2005 15:45:57 -0000
-Received: from unknown (HELO cygbert.vinschen.de) (80.132.117.153)
-  by sourceware.org with SMTP; 22 Feb 2005 15:45:57 -0000
-Received: by cygbert.vinschen.de (Postfix, from userid 500)
-	id CAEF357D77; Tue, 22 Feb 2005 16:45:55 +0100 (CET)
-Date: Tue, 22 Feb 2005 15:46:00 -0000
-From: Corinna Vinschen <vinschen@redhat.com>
+Received: (qmail 18240 invoked from network); 23 Feb 2005 17:07:33 -0000
+Received: from unknown (HELO ciao.gmane.org) (80.91.229.2)
+  by sourceware.org with SMTP; 23 Feb 2005 17:07:33 -0000
+Received: from list by ciao.gmane.org with local (Exim 4.43)
+	id 1D3zuz-0008Qy-7C
+	for cygwin-patches@cygwin.com; Wed, 23 Feb 2005 18:03:26 +0100
+Received: from eblake.csw.L-3com.com ([128.170.36.44])
+        by main.gmane.org with esmtp (Gmexim 0.1 (Debian))
+        id 1AlnuQ-0007hv-00
+        for <cygwin-patches@cygwin.com>; Wed, 23 Feb 2005 18:03:21 +0100
+Received: from ebb9 by eblake.csw.L-3com.com with local (Gmexim 0.1 (Debian))
+        id 1AlnuQ-0007hv-00
+        for <cygwin-patches@cygwin.com>; Wed, 23 Feb 2005 18:03:21 +0100
 To: cygwin-patches@cygwin.com
-Subject: Re: [Fwd: RE: ssh problem on Windows XP]
-Message-ID: <20050222154555.GE18314@cygbert.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20050121173426.GA16347@cygbert.vinschen.de> <20050122205845.A3967E54A@carnage.curl.com>
+From: Eric Blake <ebb9@byu.net>
+Subject: patch for devices.in
+Date: Wed, 23 Feb 2005 17:07:00 -0000
+Message-ID: <loom.20050223T175658-904@post.gmane.org>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20050122205845.A3967E54A@carnage.curl.com>
-User-Agent: Mutt/1.4.2i
-X-SW-Source: 2005-q1/txt/msg00059.txt.bz2
+Content-Transfer-Encoding: 7bit
+X-Complaints-To: usenet@sea.gmane.org
+X-Gmane-NNTP-Posting-Host: main.gmane.org
+User-Agent: Loom/3.14 (http://gmane.org/)
+X-Loom-IP: 128.170.36.44 (Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0; .NET CLR 1.1.4322))
+X-Gmane-MailScanner: Found to be clean
+X-Gmane-MailScanner: Found to be clean
+X-MailScanner-From: gocp-cygwin-patches@m.gmane.org
+X-MailScanner-To: cygwin-patches@cygwin.com
+X-SW-Source: 2005-q1/txt/msg00060.txt.bz2
 
-On Jan 22 15:58, Bob Byrnes wrote:
-> On Jan 21,  6:34pm, Corinna Vinschen wrote:
-> -- Subject: [Fwd: RE: ssh problem on Windows XP]
-> >
-> > is there any chance that we get a fix in the next couple of weeks?
-> 
-> I remain absolutely committed to fixing the problems that have been
-> reported, but I can't say that I'll have a fix in that timeframe,
-> because I have some urgent deadlines for other projects.  Maybe
-> early to mid-February?
-> 
-> > If we don't get a patch, I'm inclined to revert the pipe patch before
-> > we release 1.5.13.
-> 
-> Instead of reverting the entire patch, if you want to restore the old
-> behavior (select always returning true for writes on pipes), you could
-> add a small piece of code to "short-circuit" the NtQueryInformationFile
-> logic that I added.
-> [...]
+Found this when reviewing the change to add /dev/full
 
-FYI, I've short-circuited the NtQueryInformationFile for now and set
-pipes to always writable.  What convinced me even more that this
-is temorarily the right thing to do is the fact that scp becomes at
-least 3 times faster when short-circuiting NtQueryInformationFile.
+2005-02-23  Eric Blake  <ebb9@byu.net>  (tiny change)
 
+	* devices.in (parsedisk): Fix typo.
 
-Corinna
+Index: cygwin/devices.in
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/devices.in,v
+retrieving revision 1.7
+diff -u -r1.7 devices.in
+--- cygwin/devices.in   23 Feb 2005 12:30:31 -0000      1.7
++++ cygwin/devices.in   23 Feb 2005 17:02:44 -0000
+@@ -140,7 +140,7 @@
+   else
+     {
+       base = DEV_SD1_MAJOR;
+-      drive -= 'q' - 'q';
++      drive -= 'q' - 'a';
+     }
+   parse (base, part + (drive * 16));
+ }
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          mailto:cygwin@cygwin.com
-Red Hat, Inc.
