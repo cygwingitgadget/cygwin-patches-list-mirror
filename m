@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1942-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 27163 invoked by alias); 4 Mar 2002 16:48:51 -0000
+Return-Path: <cygwin-patches-return-1943-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 16483 invoked by alias); 4 Mar 2002 18:15:38 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,33 +7,112 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 27111 invoked from network); 4 Mar 2002 16:48:48 -0000
-Date: Mon, 04 Mar 2002 10:15:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Use ftruncate64 directly to not lose upper 32 bits
-Message-ID: <20020304174846.A17581@cygbert.vinschen.de>
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <007401c1c33c$3bc49e80$cf823bd5@dmitry>
+Received: (qmail 16398 invoked from network); 4 Mar 2002 18:15:33 -0000
+Message-Id: <4.3.2.7.2.20020304190639.00a9a180@mail.oreka.com>
+X-Sender: christian.lestrade@pop.free.fr
+X-Mailer: QUALCOMM Windows Eudora Version 4.3.2
+Date: Mon, 04 Mar 2002 14:44:00 -0000
+To: cygpatch <cygwin-patches@cygwin.com>
+From: Christian LESTRADE <christian.lestrade@free.fr>
+Subject: Terminal input processing fix (update)
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <007401c1c33c$3bc49e80$cf823bd5@dmitry>
-User-Agent: Mutt/1.3.22.1i
-X-SW-Source: 2002-q1/txt/msg00299.txt.bz2
+Content-Type: multipart/mixed;
+	boundary="=====================_28599285==_"
+X-SW-Source: 2002-q1/txt/msg00300.txt.bz2
 
-On Mon, Mar 04, 2002 at 01:10:29PM +0800, Dmitry Timoshkov wrote:
-> Hello.
-> 
-> 2002-03-04  Dmitry Timoshkov  <dmitry@baikal.ru>
-> 
-> * syscalls.cc (truncate64): Use ftruncate64 directly to not lose upper 32 bits.
+--=====================_28599285==_
+Content-Type: text/plain; charset="us-ascii"; format=flowed
+Content-length: 363
 
-Thanks, applied.
+Here a new version of my input processing patch.
 
-Corinna
+---------- winsup/cygwin/ChangeLog ----------
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+2002-03-04  Christian Lestrade  <christian.lestrade@free.fr>
+
+	* include/sys/termios.h: define _POSIX_VDISABLE
+	define CCEQ macro
+
+	* fhandler_termios.cc: include <sys/termios.h>
+	(line_edit): Recognize disabled c_cc[] chars
+	Ignore VDISCARD when not in ICANON mode
+
+--=====================_28599285==_
+Content-Type: application/octet-stream; name="termios.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="termios.patch"
+Content-length: 4299
+
+LS0tIHdpbnN1cC9jeWd3aW4vaW5jbHVkZS9zeXMvdGVybWlvcy5oLm9yaWcJ
+U3VuIE1hciAyNSAyMjowOTo1MiAyMDAxCisrKyB3aW5zdXAvY3lnd2luL2lu
+Y2x1ZGUvc3lzL3Rlcm1pb3MuaAlNb24gTWFyICA0IDE2OjQ1OjM4IDIwMDIK
+QEAgLTE5NSw2ICsxOTUsMTQgQEAKIAogI2RlZmluZSBOQ0NTCQkxOAogCisv
+KiBgY19jYycgbWVtYmVyIG9mICdzdHJ1Y3QgdGVybWlvcycgc3RydWN0dXJl
+IGNhbiBiZSBkaXNhYmxlZCBieQorICAgdXNpbmcgdGhlIHZhbHVlIF9QT1NJ
+WF9WRElTQUJMRS4gICovCisjZGVmaW5lCV9QT1NJWF9WRElTQUJMRQknXDAn
+CisKKy8qIENvbXBhcmUgYSBjaGFyYWN0ZXIgQyB0byBhIHZhbHVlIFZBTCBm
+cm9tIHRoZSBgY19jYycgYXJyYXkgaW4gYQorICAgYHN0cnVjdCB0ZXJtaW9z
+Jy4gIElmIFZBTCBpcyBfUE9TSVhfVkRJU0FCTEUsIG5vIGNoYXJhY3RlciBj
+YW4gbWF0Y2ggaXQuICAqLworI2RlZmluZSBDQ0VRKHZhbCwgYykJKChjKSA9
+PSAodmFsKSAmJiAodmFsKSAhPSBfUE9TSVhfVkRJU0FCTEUpCisKIHR5cGVk
+ZWYgdW5zaWduZWQgY2hhciBjY190OwogdHlwZWRlZiB1bnNpZ25lZCBpbnQg
+IHRjZmxhZ190OwogdHlwZWRlZiB1bnNpZ25lZCBpbnQgIHNwZWVkX3Q7Ci0t
+LSB3aW5zdXAvY3lnd2luL2ZoYW5kbGVyX3Rlcm1pb3MuY2Mub3JpZwlTdW4g
+QXVnIDI2IDAzOjQxOjU4IDIwMDEKKysrIHdpbnN1cC9jeWd3aW4vZmhhbmRs
+ZXJfdGVybWlvcy5jYwlNb24gTWFyICA0IDE2OjUxOjE2IDIwMDIKQEAgLTks
+NiArOSw3IEBACiBkZXRhaWxzLiAqLwogCiAjaW5jbHVkZSAid2luc3VwLmgi
+CisjaW5jbHVkZSA8c3lzL3Rlcm1pb3MuaD4KICNpbmNsdWRlIDxzdGRsaWIu
+aD4KICNpbmNsdWRlIDxmY250bC5oPgogI2luY2x1ZGUgPHVuaXN0ZC5oPgpA
+QCAtMjA3LDExICsyMDgsMTEgQEAKICAgICAgIGlmICh0Yy0+dGkuY19sZmxh
+ZyAmIElTSUcpCiAJewogCSAgaW50IHNpZzsKLQkgIGlmIChjID09ICB0Yy0+
+dGkuY19jY1tWSU5UUl0pCisJICBpZiAoQ0NFUSh0Yy0+dGkuY19jY1tWSU5U
+Ul0sIGMpKQogCSAgICBzaWcgPSBTSUdJTlQ7Ci0JICBlbHNlIGlmIChjID09
+IHRjLT50aS5jX2NjW1ZRVUlUXSkKKwkgIGVsc2UgaWYgKENDRVEodGMtPnRp
+LmNfY2NbVlFVSVRdLCBjKSkKIAkgICAgc2lnID0gU0lHUVVJVDsKLQkgIGVs
+c2UgaWYgKGMgPT0gdGMtPnRpLmNfY2NbVlNVU1BdKQorCSAgZWxzZSBpZiAo
+Q0NFUSh0Yy0+dGkuY19jY1tWU1VTUF0sIGMpKQogCSAgICBzaWcgPSBTSUdU
+U1RQOwogCSAgZWxzZQogCSAgICBnb3RvIG5vdF9hX3NpZzsKQEAgLTIyNiw3
+ICsyMjcsNyBAQAogICAgIG5vdF9hX3NpZzoKICAgICAgIGlmICh0Yy0+dGku
+Y19pZmxhZyAmIElYT04pCiAJewotCSAgaWYgKGMgPT0gdGMtPnRpLmNfY2Nb
+VlNUT1BdKQorCSAgaWYgKENDRVEodGMtPnRpLmNfY2NbVlNUT1BdLCBjKSkK
+IAkgICAgewogCSAgICAgIGlmICghdGMtPm91dHB1dF9zdG9wcGVkKQogCQl7
+CkBAIC0yMzUsNyArMjM2LDcgQEAKIAkJfQogCSAgICAgIGNvbnRpbnVlOwog
+CSAgICB9Ci0JICBlbHNlIGlmIChjID09IHRjLT50aS5jX2NjW1ZTVEFSVF0p
+CisJICBlbHNlIGlmIChDQ0VRKHRjLT50aS5jX2NjW1ZTVEFSVF0sIGMpKQog
+CSAgICB7CiAgICAgcmVzdGFydF9vdXRwdXQ6CiAJICAgICAgdGMtPm91dHB1
+dF9zdG9wcGVkID0gMDsKQEAgLTI0NSwyMCArMjQ2LDIwIEBACiAJICBlbHNl
+IGlmICgodGMtPnRpLmNfaWZsYWcgJiBJWEFOWSkgJiYgdGMtPm91dHB1dF9z
+dG9wcGVkKQogCSAgICBnb3RvIHJlc3RhcnRfb3V0cHV0OwogCX0KLSAgICAg
+IGlmICh0Yy0+dGkuY19sZmxhZyAmIElFWFRFTiAmJiBjID09IHRjLT50aS5j
+X2NjW1ZESVNDQVJEXSkKKyAgICAgIGlmIChpc2Nhbm9uICYmIHRjLT50aS5j
+X2xmbGFnICYgSUVYVEVOICYmIENDRVEodGMtPnRpLmNfY2NbVkRJU0NBUkRd
+LCBjKSkKIAl7CiAJICB0Yy0+dGkuY19sZmxhZyBePSBGTFVTSE87CiAJICBj
+b250aW51ZTsKIAl9CiAgICAgICBpZiAoIWlzY2Fub24pCiAJLyogbm90aGlu
+ZyAqLzsKLSAgICAgIGVsc2UgaWYgKGMgPT0gdGMtPnRpLmNfY2NbVkVSQVNF
+XSkKKyAgICAgIGVsc2UgaWYgKENDRVEodGMtPnRpLmNfY2NbVkVSQVNFXSwg
+YykpCiAJewogCSAgaWYgKGVhdF9yZWFkYWhlYWQgKDEpKQogCSAgICBlY2hv
+X2VyYXNlICgpOwogCSAgY29udGludWU7CiAJfQotICAgICAgZWxzZSBpZiAo
+YyA9PSB0Yy0+dGkuY19jY1tWV0VSQVNFXSkKKyAgICAgIGVsc2UgaWYgKEND
+RVEodGMtPnRpLmNfY2NbVldFUkFTRV0sIGMpKQogCXsKIAkgIGludCBjaDsK
+IAkgIGRvCkBAIC0yNjksNyArMjcwLDcgQEAKIAkgIHdoaWxlICgoY2ggPSBw
+ZWVrX3JlYWRhaGVhZCAoMSkpID49IDAgJiYgIWlzc3BhY2UgKGNoKSk7CiAJ
+ICBjb250aW51ZTsKIAl9Ci0gICAgICBlbHNlIGlmIChjID09IHRjLT50aS5j
+X2NjW1ZLSUxMXSkKKyAgICAgIGVsc2UgaWYgKENDRVEodGMtPnRpLmNfY2Nb
+VktJTExdLCBjKSkKIAl7CiAJICBpbnQgbmNoYXJzID0gZWF0X3JlYWRhaGVh
+ZCAoLTEpOwogCSAgaWYgKHRjLT50aS5jX2xmbGFnICYgRUNITykKQEAgLTI3
+Nyw3ICsyNzgsNyBAQAogCSAgICAgIGVjaG9fZXJhc2UgKDEpOwogCSAgY29u
+dGludWU7CiAJfQotICAgICAgZWxzZSBpZiAoYyA9PSB0Yy0+dGkuY19jY1tW
+UkVQUklOVF0pCisgICAgICBlbHNlIGlmIChDQ0VRKHRjLT50aS5jX2NjW1ZS
+RVBSSU5UXSwgYykpCiAJewogCSAgaWYgKHRjLT50aS5jX2xmbGFnICYgRUNI
+TykKIAkgICAgewpAQCAtMjg2LDE0ICsyODcsMTQgQEAKIAkgICAgfQogCSAg
+Y29udGludWU7CiAJfQotICAgICAgZWxzZSBpZiAoYyA9PSB0Yy0+dGkuY19j
+Y1tWRU9GXSkKKyAgICAgIGVsc2UgaWYgKENDRVEodGMtPnRpLmNfY2NbVkVP
+Rl0sIGMpKQogCXsKIAkgIHRlcm1pb3NfcHJpbnRmICgiRU9GIik7CiAJICBp
+bnB1dF9kb25lID0gMTsKIAkgIGNvbnRpbnVlOwogCX0KLSAgICAgIGVsc2Ug
+aWYgKGMgPT0gdGMtPnRpLmNfY2NbVkVPTF0gfHwKLQkgICAgICAgYyA9PSB0
+Yy0+dGkuY19jY1tWRU9MMl0gfHwKKyAgICAgIGVsc2UgaWYgKENDRVEodGMt
+PnRpLmNfY2NbVkVPTF0sIGMpIHx8CisJICAgICAgIENDRVEodGMtPnRpLmNf
+Y2NbVkVPTDJdLCBjKSB8fAogCSAgICAgICBjID09ICdcbicpCiAJewogCSAg
+c2V0X2lucHV0X2RvbmUgKDEpOwo=
+
+--=====================_28599285==_--
