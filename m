@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5076-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 5835 invoked by alias); 23 Oct 2004 20:17:08 -0000
+Return-Path: <cygwin-patches-return-5077-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 21898 invoked by alias); 24 Oct 2004 01:15:48 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,57 +7,65 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 5805 invoked from network); 23 Oct 2004 20:17:06 -0000
-Message-ID: <n2m-g.clektf.3vvfh6r.1@buzzy-box.bavag>
-From: Bas van Gompel <cygwin-patches.buzz@bavag.tmfweb.nl>
-Subject: Re: [Patch] cygcheck: More complete helptext on drive-list.
-References: <n2m-g.cl9oca.3vve76d.1@buzzy-box.bavag> <20041022000805.GF28112@trixie.casa.cgf.cx> <n2m-g.cl9v8k.3vv94fl.1@buzzy-box.bavag> <n2m-g.cla2a1.3vvcfu5.1@buzzy-box.bavag>
-Reply-To: cygwin-patches mailing-list <cygwin-patches@cygwin.com>
-Organisation: Ehm...
-User-Agent: slrn/0.9.8.1 (Win32) Hamster/2.0.6.0
+Received: (qmail 21889 invoked from network); 24 Oct 2004 01:15:47 -0000
+Message-Id: <3.0.5.32.20041023211115.0082d3f0@incoming.verizon.net>
+X-Sender: vze1u1tg@incoming.verizon.net (Unverified)
+Date: Sun, 24 Oct 2004 01:15:00 -0000
 To: cygwin-patches@cygwin.com
-In-Reply-To: <n2m-g.cla2a1.3vvcfu5.1@buzzy-box.bavag>
-Date: Sat, 23 Oct 2004 20:17:00 -0000
-X-SW-Source: 2004-q4/txt/msg00077.txt.bz2
+From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
+Subject: [Patch] registry issues
+Mime-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+X-SW-Source: 2004-q4/txt/msg00078.txt.bz2
 
-Op Fri, 22 Oct 2004 04:34:05 +0200 (MET DST) schreef Bas van Gompel
-in <n2m-g.cla2a1.3vvcfu5.1@buzzy-box.bavag>:
-[...]
+This should fix the first two issues in the recent mail
+to cygwin-developers.
+It's currently untested (need an NT machine).
 
-:  D**n, the leading newline was lost...
+Pierre
 
-...and I checked in CRLF's in the Changelog...
+2004-10-24  Pierre Humblet <pierre.humblet@ieee.org>
 
-...Ain't I doing great. :(
-
-
-ChangeLog-entry:
-
-2004-10-23  Bas van Gompel  <cygwin-patch.buzz@bavag.tmfweb.nl>
-
-	* ChangeLog: Fix line-endings on previous entry.
-	* cygcheck.cc (dump_sysinfo): Add leading newline before legend for
-	drive-list.
+	* registry.cc (get_registry_hive_path): Simplify and add a
+	debug_printf in case of failure.
+	(load_registry_hive): Revert 2004-04-19 change.	
 
 
---- cygcheck.cc	22 Oct 2004 01:29:10 -0000	1.55
-+++ cygcheck.cc	23 Oct 2004 18:01:20 -0000
-@@ -1160,7 +1160,7 @@ dump_sysinfo ()
-   SetErrorMode (prev_mode);
-   if (givehelp)
+Index: registry.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/registry.cc,v
+retrieving revision 1.19
+diff -u -p -r1.19 registry.cc
+--- registry.cc 19 Apr 2004 19:29:10 -0000      1.19
++++ registry.cc 24 Oct 2004 01:01:31 -0000
+@@ -211,14 +211,15 @@ get_registry_hive_path (const PSID psid,
+       char buf[256];
+       DWORD type, siz;
+ 
+-      key[0] = '\0';
++      path[0] = '\0';
+       if (!RegQueryValueExA (hkey, "ProfileImagePath", 0, &type,
+-                            (BYTE *)buf, (siz = 256, &siz)))
+-       ExpandEnvironmentStringsA (buf, key, 256);
++                            (BYTE *)buf, (siz = sizeof (buf), &siz)))
++       ExpandEnvironmentStringsA (buf, path, CYG_MAX_PATH + 1);
+       RegCloseKey (hkey);
+-      if (key[0])
+-       return strcpy (path, key);
++      if (path[0])
++       return path;
+     }
++  debug_printf ("HKLM\\%s not found", key);
+   return NULL;
+ }
+ 
+@@ -241,7 +242,8 @@ load_registry_hive (PSID psid)
+       RegCloseKey (hkey);
+       return;
+     }
+-  enable_restore_privilege ();
++  /* This is only called while deimpersonated */
++  set_process_privilege (SE_RESTORE_NAME);
+   if (get_registry_hive_path (psid, path))
      {
--      puts (
-+      puts ("\n"
- 	  "fd = floppy,          hd = hard drive,       cd = CD-ROM\n"
- 	  "net= Network Share,   ram= RAM drive,        unk= Unknown\n"
- 	  "CP = Case Preserving, CS = Case Sensitive,   UN = Unicode\n"
-
-
-L8r,
-
-Buzz. (Can I check this in? I'll try not to let it happen again.)
--- 
-  ) |  | ---/ ---/  Yes, this | This message consists of true | I do not
---  |  |   /    /   really is |   and false bits entirely.    | mail for
-  ) |  |  /    /    a 72 by 4 +-------------------------------+ any1 but
---  \--| /--- /---  .sigfile. |   |perl -pe "s.u(z)\1.as."    | me. 4^re
+       strcat (path, "\\NTUSER.DAT");
