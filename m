@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3398-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 1406 invoked by alias); 15 Jan 2003 18:03:34 -0000
+Return-Path: <cygwin-patches-return-3399-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 8950 invoked by alias); 15 Jan 2003 18:27:51 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,67 +7,68 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 1224 invoked from network); 15 Jan 2003 18:03:32 -0000
-Message-ID: <009201c2bcc0$82411040$305886d9@webdev>
-From: "Elfyn McBratney" <elfyn-cygwin@exposure.org.uk>
-To: <cygwin-patches@cygwin.com>
-References: <59A835EDCDDBEB46BC75402F4604D5528F75D6@elmer>
-Subject: Re: Where to put my basename() and dirname() implementation...
-Date: Wed, 15 Jan 2003 18:03:00 -0000
-MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2800.1106
-X-SW-Source: 2003-q1/txt/msg00047.txt.bz2
+Received: (qmail 8940 invoked from network); 15 Jan 2003 18:27:51 -0000
+Date: Wed, 15 Jan 2003 18:27:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: setuid on Win95 and etc_changed, passwd & group.
+Message-ID: <20030115182850.GG15975@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <3.0.5.32.20030115001238.00806440@mail.attbi.com> <20030115060939.GB15975@redhat.com> <3E2570BD.2582F293@ieee.org>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3E2570BD.2582F293@ieee.org>
+User-Agent: Mutt/1.5.1i
+X-SW-Source: 2003-q1/txt/msg00048.txt.bz2
 
-Doooh! Thanks for the heads up Sergey. It kinda seems pointless just adding
-a dirname() function but what the hell... Any inkling where i should put
-this lone sub?
-
-Elfyn
-elfyn@exposure.org.uk
-
------ Original Message -----
-From: "Sergey Okhapkin" <sos@sokhapkin.dyndns.org>
-To: "'Elfyn McBratney'" <elfyn-cygwin@exposure.org.uk>;
-<cygwin-patches@cygwin.com>
-Sent: Wednesday, January 15, 2003 5:56 PM
-Subject: RE: Where to put my basename() and dirname() implementation...
-
-
-> Basename() is implemented in libiberty already, just modify cygwin.din
-> :-)
+On Wed, Jan 15, 2003 at 09:31:25AM -0500, Pierre A. Humblet wrote:
+>Christopher Faylor wrote:
+>> I'm not sure what you're saying.  Are you saying it's inefficient
+>> because it is duplicated?  I don't see anything wrong with the code.
 >
-> > -----Original Message-----
-> > From: cygwin-patches-owner@cygwin.com
-> > [mailto:cygwin-patches-owner@cygwin.com] On Behalf Of Elfyn McBratney
-> > Sent: Wednesday, January 15, 2003 12:37 PM
-> > To: cygwin-patches@cygwin.com
-> > Subject: Where to put my basename() and dirname() implementation...
-> >
-> >
-> > I have finished my basename() and dirname() (so long for
-> > something so simple
-> > ;-) implementation and I have two questions:
-> >
-> > 1) Where would be the best place to put these functions? I
-> > was thinking dir.cc or path.cc?
-> > 2) What header file (winsup/cygwin/include) should I put the
-> > prototypes into? On my sun and redhat box they're in libgen.h
-> > so should I follow this convention?
-> >
-> > Once I have these answered I will submit the patch here.
-> >
-> > Elfyn
-> > elfyn@exposure.org.uk
-> >
-> >
-> >
-> >
->
->
+>I believe there are 8 unused bytes in every block.
+>On line 221 sz is what's asked + 8.  On line 234 size is sz + 8, or
+>what's asked + 16.  The header has size 8, the last 8 bytes will never
+>be filled.
 
+Ok.  Got it.  I checked in a patch.
 
+>> In a similar vein,
+>> 
+>> BOOL isuninitialized () const
+>>   {
+>>     if (state == uninitialized)
+>>       (void) cygheap->etc_changed (me);
+>>     return (state == uninitialized);
+>>   }
+>> 
+>> Are both tests for uninitialized necessary?  If not shouldn't it be
+>> something like:
+>> 
+>> BOOL isuninitialized () const
+>>   {
+>>     if (state != uninitialized)
+>>       return false;
+>>     (void) cygheap->etc_changed (me);
+>>     return true;
+>>   }
+>
+>I like functions with a single return, within reason.
+>I thought the compiler would be smart enough not to
+>test twice.
+
+Not if there was a etc_changed function call in the middle.
+
+>> Also, could you explain what this 'me' stuff is wrt etc_changed?
+>
+>That's to go around the problem outlined in the e-mail. Objects
+>accessing etc_changed (for now passwd and group) have an ID (me). 
+>When an object discovers that etc has changed, it sets a flag for 
+>all *other* objects, telling them that etc has already changed
+>(see new code in cygheap.cc).
+
+Ok, thanks.
+
+cgf
