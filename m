@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2308-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 10379 invoked by alias); 5 Jun 2002 12:09:55 -0000
+Return-Path: <cygwin-patches-return-2309-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 20935 invoked by alias); 5 Jun 2002 12:35:11 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,33 +7,35 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 10363 invoked from network); 5 Jun 2002 12:09:54 -0000
-Date: Wed, 05 Jun 2002 05:09:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygpatch <cygwin-patches@cygwin.com>
-Subject: Re: Name aliasing in security.cc
-Message-ID: <20020605140952.W30892@cygbert.vinschen.de>
-Mail-Followup-To: cygpatch <cygwin-patches@cygwin.com>
-References: <3.0.5.32.20020530215740.007fc380@mail.attbi.com> <3.0.5.32.20020530215740.007fc380@mail.attbi.com> <3.0.5.32.20020603223130.007f6e10@mail.attbi.com> <20020605140251.V30892@cygbert.vinschen.de>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20020605140251.V30892@cygbert.vinschen.de>
-User-Agent: Mutt/1.3.22.1i
-X-SW-Source: 2002-q2/txt/msg00291.txt.bz2
+Received: (qmail 20835 invoked from network); 5 Jun 2002 12:35:09 -0000
+From: "Robert Collins" <robert.collins@itdomain.com.au>
+To: "'Thomas Pfaff'" <tpfaff@gmx.net>,
+	<cygwin-patches@cygwin.com>
+Subject: RE: [PATCH] minor pthread fixes
+Date: Wed, 05 Jun 2002 05:35:00 -0000
+Message-ID: <015e01c20c8d$7369a2a0$0200a8c0@lifelesswks>
+MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3 (Normal)
+X-MSMail-Priority: Normal
+Importance: Normal
+X-MIMEOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+In-Reply-To: <F0E13277A26BD311944600500454CCD050ACA9-101000@antarctica.intern.net>
+X-OriginalArrivalTime: 05 Jun 2002 12:35:07.0783 (UTC) FILETIME=[6CF6C970:01C20C8D]
+X-SW-Source: 2002-q2/txt/msg00292.txt.bz2
 
-On Wed, Jun 05, 2002 at 02:02:51PM +0200, cygpatch wrote:
-> However, I think calling lookup_name is somewhat useless.  If a process
-                                     ^^^
-                            from internal_getlogin()
+Thanks, applied.
 
-> can't read it's own token, something's really broken (and this is
-> in retrospect the reason you investigated in changing the security
-> stuff).
+> -----Original Message-----
+> From: Thomas Pfaff [mailto:tpfaff@gmx.net] 
+> Sent: Thursday, 18 April 2002 8:11 PM
+> To: cygwin-patches@cygwin.com
+> Subject: [PATCH] minor pthread fixes
+> 
+> 
+> 
+> This patch contains some small pthread fixes:
 
-Corinna
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+Rob
