@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4375-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 26223 invoked by alias); 14 Nov 2003 12:58:12 -0000
+Return-Path: <cygwin-patches-return-4376-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 28235 invoked by alias); 14 Nov 2003 13:04:52 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,41 +7,59 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 26214 invoked from network); 14 Nov 2003 12:58:11 -0000
-Date: Fri, 14 Nov 2003 12:58:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: thunking, the next step
-Message-ID: <20031114125810.GV18706@cygbert.vinschen.de>
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3FB4C443.2040301@cygwin.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3FB4C443.2040301@cygwin.com>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2003-q4/txt/msg00094.txt.bz2
+Received: (qmail 28221 invoked from network); 14 Nov 2003 13:04:51 -0000
+Message-ID: <050601c3aaaf$cbe72df0$78d96f83@starfruit>
+From: "Max Bowsher" <maxb@ukf.net>
+To: "Robert Collins" <rbcollins@cygwin.com>
+Cc: <cygwin-patches@cygwin.com>
+References: <3FB4A341.5070101@cygwin.com> <20031114101815.GU18706@cygbert.vinschen.de> <3FB4AE07.6010101@cygwin.com> <041701c3aaa4$db725ed0$78d96f83@starfruit> <3FB4C321.6030507@cygwin.com> <04e701c3aaad$b42fee10$78d96f83@starfruit> <3FB4D118.8030802@cygwin.com>
+Subject: Re: thunk createDirectory and createFile calls
+Date: Fri, 14 Nov 2003 13:04:00 -0000
+MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2800.1165
+X-Cam-ScannerInfo: http://www.cam.ac.uk/cs/email/scanner/
+X-Cam-AntiVirus: No virus found
+X-Cam-SpamDetails: Not scanned
+X-SW-Source: 2003-q4/txt/msg00095.txt.bz2
 
-On Fri, Nov 14, 2003 at 11:02:11PM +1100, Robert Collins wrote:
-> Ok, I've now integrated and generalised Ron's unicode support mini-patch.
-> 
-> So, here tis a version that, well the changelog explains the overview, 
-> and io.h the detail.
-> 
-> Overhead wise, this is reasonably low:
-> 1 strlen() per IO call minimum.
+Robert Collins wrote:
+> Max Bowsher wrote:
+>
+>> Robert Collins wrote:
+>>
+>>> Max Bowsher wrote:
+>>>
+>>>
+>>>
+>>>> Also, I think LPCTSTR should be LPCSTR ? (and also in the
+>>>> CreateFile case)
+>>>>
+>>>
+>>> Not according to MSDN.
+>>
+>>
+>> Can you give a link to the bit you are looking at?
+>>
+>>
+http://msdn.microsoft.com/library/default.asp?url=/library/en-us/intl/unicode_9i79.asp
+>> seems to support my suggestion.
+>
+>
+>
+http://msdn.microsoft.com/library/default.asp?url=/library/en-us/fileio/base/createfile.asp
+>
+> Look at the grey box :}.
 
-I'm wondering if we couldn't get rid of that strlen call.  These
-functions already get a Windows path.  This path is constructed by a
-call to path_conv::check().  check() already scans the path so it
-should be simple to add a length field to path_conv, which could
-be used when calling the IOThunkState constructor.
+Exactly. CreateFile takes LPCTSTR - but you are calling CreateFileA, which
+takes LPCSTR.
 
-Right?  Wrong?
+Granted, LPCTSTR == LPCSTR when UNICODE is not defined - but if you are
+relying on that, you don't need to bother with the "A" suffix on the
+function, either.
 
-Corinna
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+Max.
