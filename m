@@ -1,18 +1,26 @@
-From: DJ Delorie <dj@delorie.com>
-To: fujieda@jaist.ac.jp
-Cc: cygwin-patches@sourceware.cygnus.com
+From: Chris Faylor <cgf@cygnus.com>
+To: cygwin-patches@sourceware.cygnus.com
 Subject: Re: Add some defines in winnt.h.
-Date: Tue, 13 Jun 2000 19:30:00 -0000
-Message-id: <200006140230.WAA29671@envy.delorie.com>
+Date: Wed, 14 Jun 2000 13:36:00 -0000
+Message-id: <20000614163549.A8265@cygnus.com>
 References: <s1saegpq9xb.fsf@jaist.ac.jp>
-X-SW-Source: 2000-q2/msg00099.html
+X-SW-Source: 2000-q2/msg00100.html
 
-(1) That's not the proper format for a ChangeLog entry.  Please see
-the existing ChangeLog entries for examples.  Your submission should
-include the line with the date, your name, and email too.
+Since Mumit isn't around, I've taken the liberty of approving this patch.
+It looks fine to me.
 
-(2) the w32api directory is imported from MinGW.  Any patches should
-be sent there first, accepted, and *then* applied to cygwin.  Patches
-made only to Cygwin will be lost when the next MinGW merge happens.
+This is conditional on Mumit's approval when he returns, of course.
 
-If these *are* updates from MinGW, please state so.
+cgf
+
+On Wed, Jun 14, 2000 at 11:21:52AM +0900, Kazuhiro Fujieda wrote:
+>ChangeLog:
+>	winnt.h: Add some missing defines related to locale identifiers.
+>	Translate values of LANG_* and SUBLANG_* into hexadecimal codes
+>	so that I can easily check these values with my eyes.
+>
+>Index: winnt.h
+>===================================================================
+>RCS file: /cvs/src/src/winsup/w32api/include/winnt.h,v
+>retrieving revision 1.6
+>diff -u -p -r1.6 winnt.h
