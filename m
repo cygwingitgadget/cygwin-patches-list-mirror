@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4463-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 17505 invoked by alias); 1 Dec 2003 16:50:41 -0000
+Return-Path: <cygwin-patches-return-4464-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 25234 invoked by alias); 1 Dec 2003 18:22:38 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,74 +7,58 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 17476 invoked from network); 1 Dec 2003 16:50:40 -0000
-X-Authentication-Warning: slinky.cs.nyu.edu: pechtcha owned process doing -bs
-Date: Mon, 01 Dec 2003 16:50:00 -0000
-From: Igor Pechtchanski <pechtcha@cs.nyu.edu>
-Reply-To: cygwin-patches@cygwin.com
-To: Corinna Vinschen <cygwin-patches@cygwin.com>
-Subject: Re: [PATCH] localtime.cc: Point TZDIR to the /usr/share/zoneinfo
-In-Reply-To: <20031201102807.GB27760@cygbert.vinschen.de>
-Message-ID: <Pine.GSO.4.56.0312010820520.26435@slinky.cs.nyu.edu>
-References: <87ad6cgb3m.fsf@vzell-de.de.oracle.com> <20031201102807.GB27760@cygbert.vinschen.de>
-Importance: Normal
+Received: (qmail 25223 invoked from network); 1 Dec 2003 18:22:37 -0000
+Message-ID: <3FCB86E6.8090604@netscape.net>
+Date: Mon, 01 Dec 2003 18:22:00 -0000
+From: Nicholas Wourms <nwourms@netscape.net>
+User-Agent: Mozilla/5.0 (Windows; U; Win 9x 4.90; en-US; rv:1.4) Gecko/20030624 Netscape/7.1 (ax)
+X-Accept-Language: en-us, en
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-SW-Source: 2003-q4/txt/msg00182.txt.bz2
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH]:  Add flock syscall emulation
+References: <Pine.CYG.4.58.0311271409240.1064139@reddragon.clemson.edu> <20031129230104.GA6964@cygbert.vinschen.de> <3FCA2F9C.4070207@netscape.net> <20031201102334.GA27760@cygbert.vinschen.de>
+In-Reply-To: <20031201102334.GA27760@cygbert.vinschen.de>
+X-Enigmail-Version: 0.76.7.0
+X-Enigmail-Supports: pgp-inline, pgp-mime
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AOL-IP: 130.127.121.187
+X-SW-Source: 2003-q4/txt/msg00183.txt.bz2
 
-On Mon, 1 Dec 2003, Corinna Vinschen wrote:
+Corinna wrote:
+> On Sun, Nov 30, 2003 at 12:57:48PM -0500, Nicholas Wourms wrote:
+> 
+>>Corinna wrote:
+>>
+>>>I've run indent on flock.c since its formatting was non-GNU.
+>>
+>>I can understand why you did it in this case (the tabs were out of 
+>>control), but can we make an exception for bsd/isc-derived code?  I 
+>>think that enforcing this rule strictly on written-from-scratch source 
+>>is ok, but doing it on derived source reduces the overall transparency 
+>>of changes against the upstream version.
+> 
+> 
+> I see.  Is that necessary for flock?  It's not BSD derived and will
+> not likely need another external update.
 
-> On Mon, Dec 01, 2003 at 10:07:25AM +0100, Dr. Volker Zell wrote:
-> > Hi
-> >
-> > As discussed in cygwin-apps here's a small patch to point cygwin to an existing
-> > time zone datasbase when the tzcode/data package is installed.
->
-> Should we do some extra stuff to maintain backward compatibility with
-> the old /usr/local/etc path?  I don't think so but...
->
-> Corinna
+Oh, I think I was unclear.  I was trying to say is that I agree with 
+your formatting changes to the flock code.  I just wanted to see if I 
+could have an exception from this policy in certain cases where the 
+source was derived.
 
-That's pretty much what I suggested in
-<http://cygwin.com/ml/cygwin-apps/2003-11/msg00443.html>.  Right now, the
-code is not $TZDIR-aware, AFAICS.  IMO, having it first check the TZDIR
-environment variable, and if that's not set, default to the #defined value
-of TZDIR would be the right solution.  Something like (very raw)
+> However, we have a problem here, which I just saw when looking into
+> the flock code another time.  The newlib defintion of `struct flock'
+> isn't 64 bit aware and it doesn't adhere to the SUSv3 definition.  :-(
+> It uses 'long' as datatypes for l_start and l_len but these should
+> be off_t.
 
-Index: localtime.cc
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/localtime.cc,v
-retrieving revision 1.8
-diff -u -p -r1.8 localtime.cc
---- localtime.cc        20 Dec 2002 03:40:00 -0000      1.8
-+++ localtime.cc        1 Dec 2003 16:44:49 -0000
-@@ -717,7 +717,8 @@ tzload(const char *name, struct state *s
- 	register int		fid;
- 	save_errno		save;
+> So we need to define flock32 and flock64 structs and change the fcntl
+> interface to accept both.  Sic.
 
--	if (name == NULL && (name = TZDEFAULT) == NULL)
-+	if (name == NULL && (name = getenv("TZDEFAULT")) == NULL
-+			 && (name = TZDEFAULT) == NULL)
- 		return -1;
- 	{
- 		register int	doaccess;
-@@ -734,7 +735,7 @@ tzload(const char *name, struct state *s
- 			++name;
- 		doaccess = name[0] == '/';
- 		if (!doaccess) {
--			if ((p = TZDIR) == NULL)
-+			if ((p = getenv("TZDIR") == NULL && (p = TZDIR) == NULL)
- 				return -1;
- 			if ((strlen(p) + strlen(name) + 1) >= sizeof fullname)
- 				return -1;
-------------------------------------------------------------------------------
-	Igor
--- 
-				http://cs.nyu.edu/~pechtcha/
-      |\      _,,,---,,_		pechtcha@cs.nyu.edu
-ZZZzz /,`.-'`'    -.  ;-;;,_		igor@watson.ibm.com
-     |,4-  ) )-,_. ,\ (  `'-'		Igor Pechtchanski, Ph.D.
-    '---''(_/--'  `-'\_) fL	a.k.a JaguaR-R-R-r-r-r-.-.-.  Meow!
+Hmm, I see what you mean.  While I've been mulling over the problem, it 
+seems you've already solved it.  Thanks for catching that oversight on 
+my part.
 
-"I have since come to realize that being between your mentor and his route
-to the bathroom is a major career booster."  -- Patrick Naughton
+Cheers,
+Nicholas
