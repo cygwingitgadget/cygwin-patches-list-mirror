@@ -1,68 +1,32 @@
 From: Kazuhiro Fujieda <fujieda@jaist.ac.jp>
 To: cygwin-patches@cygwin.com
-Subject: control characters echoed incorrectly.
-Date: Wed, 09 May 2001 10:54:00 -0000
-Message-id: <s1spudixvai.fsf@jaist.ac.jp>
-X-SW-Source: 2001-q2/msg00209.html
+Subject: mount flag of UNC paths.
+Date: Wed, 09 May 2001 11:23:00 -0000
+Message-id: <s1soft2xty6.fsf@jaist.ac.jp>
+X-SW-Source: 2001-q2/msg00210.html
 
-The terminal device echoes control characters even when the echo 
-flag is off.
+I think the mount flag of UNC paths should be picked up from the
+mount table the same as paths including `:' or `\' for consistency.
+The following patch can realize it.
 
 2001-05-10  Kazuhiro Fujieda  <fujieda@jaist.ac.jp>
 
-	* fhandler_termios.cc (fhandler_termios::line_edit): Check the echo
-	flag before echoing control characters.
+	* path.cc (mount_info::conv_to_win32_path): Treat UNC paths the same
+	as paths including `:' or `\'.
 
-Index: fhandler_termios.cc
+Index: path.cc
 ===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/fhandler_termios.cc,v
-retrieving revision 1.18
-diff -u -p -r1.18 fhandler_termios.cc
---- fhandler_termios.cc	2001/04/28 23:48:28	1.18
-+++ fhandler_termios.cc	2001/05/09 17:39:30
-@@ -246,7 +246,7 @@ fhandler_termios::line_edit (const char 
- 	/* nothing */;
-       else if (c == tc->ti.c_cc[VERASE])
- 	{
--	  if (eat_readahead (1))
-+	  if (eat_readahead (1) && (tc->ti.c_lflag & ECHO))
- 	    doecho ("\b \b", 3);
- 	  continue;
- 	}
-@@ -256,7 +256,7 @@ fhandler_termios::line_edit (const char 
- 	  do
- 	    if (!eat_readahead (1))
- 	      break;
--	    else
-+	    else if (tc->ti.c_lflag & ECHO)
- 	      doecho ("\b \b", 3);
- 	  while ((ch = peek_readahead (1)) >= 0 && !isspace (ch));
- 	  continue;
-@@ -264,14 +264,18 @@ fhandler_termios::line_edit (const char 
-       else if (c == tc->ti.c_cc[VKILL])
- 	{
- 	  int nchars = eat_readahead (-1);
--	  while (nchars--)
--	    doecho ("\b \b", 3);
-+	  if (tc->ti.c_lflag & ECHO)
-+	    while (nchars--)
-+	      doecho ("\b \b", 3);
- 	  continue;
- 	}
-       else if (c == tc->ti.c_cc[VREPRINT])
- 	{
--	  doecho ("\n\r", 2);
--	  doecho (rabuf, ralen);
-+	  if (tc->ti.c_lflag & ECHO)
-+	    {
-+	      doecho ("\n\r", 2);
-+	      doecho (rabuf, ralen);
-+	    }
- 	  continue;
- 	}
-       else if (c == tc->ti.c_cc[VEOF])
-
-____
-  | AIST      Kazuhiro Fujieda <fujieda@jaist.ac.jp>
-  | HOKURIKU  School of Information Science
-o_/ 1990      Japan Advanced Institute of Science and Technology
+RCS file: /cvs/src/src/winsup/cygwin/path.cc,v
+retrieving revision 1.136
+diff -u -p -r1.136 path.cc
+--- path.cc	2001/05/08 15:16:49	1.136
++++ path.cc	2001/05/09 17:56:49
+@@ -1171,7 +1171,7 @@ mount_info::conv_to_win32_path (const ch
+ 
+   /* An MS-DOS spec has either a : or a \.  If this is found, short
+      circuit most of the rest of this function. */
+-  if (strpbrk (src_path, ":\\") != NULL)
++  if (strpbrk (src_path, ":\\") != NULL || slash_unc_prefix_p (src_path))
+     {
+       debug_printf ("%s already win32", src_path);
+       rc = normalize_win32_path (src_path, dst);
