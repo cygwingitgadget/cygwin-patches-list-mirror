@@ -1,60 +1,81 @@
-Return-Path: <cygwin-patches-return-1556-listarch-cygwin-patches=sourceware.cygnus.com@sources.redhat.com>
-Received: (qmail 8515 invoked by alias); 28 Nov 2001 23:31:44 -0000
-Mailing-List: contact cygwin-patches-help@sourceware.cygnus.com; run by ezmlm
+Return-Path: <cygwin-patches-return-1557-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 24924 invoked by alias); 4 Dec 2001 02:25:02 -0000
+Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
-List-Subscribe: <mailto:cygwin-patches-subscribe@sources.redhat.com>
-List-Post: <mailto:cygwin-patches@sources.redhat.com>
+List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
+List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
-List-Help: <mailto:cygwin-patches-help@sources.redhat.com>, <http://sources.redhat.com/ml/#faqs>
-Sender: cygwin-patches-owner@sources.redhat.com
-Received: (qmail 8497 invoked from network); 28 Nov 2001 23:31:43 -0000
-Message-ID: <3C0573DE.349B65DA@etr-usa.com>
-Date: Thu, 01 Nov 2001 05:32:00 -0000
-From: Warren Young <warren@etr-usa.com>
-Organization: -ENOENT
-X-Mailer: Mozilla 4.77 [en] (Windows NT 5.0; U)
-X-Accept-Language: en
+List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
+Sender: cygwin-patches-owner@cygwin.com
+Received: (qmail 24741 invoked from network); 4 Dec 2001 02:24:58 -0000
+Message-ID: <911C684A29ACD311921800508B7293BA037D2827@cnmail>
+From: Mark Bradshaw <bradshaw@staff.crosswalk.com>
+To: 'Corinna Vinschen' <cygwin-patches@cygwin.com>
+Subject: RE: [PATCH] mkpasswd.c - allows selection of specific user
+Date: Thu, 01 Nov 2001 05:36:00 -0000
 MIME-Version: 1.0
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] setup.exe: Stop NetIO_HTTP from treating entire stream as a  
- header
-References: <3C035977.BF151D0A@syntrex.com> <000601c17772$7c5ecfd0$2101a8c0@d8rc020b> <20011127184223.GA24028@redhat.com> <1006899141.2048.2.camel@lifelesswks> <20011127230925.GA5830@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-SW-Source: 2001-q4/txt/msg00088.txt.bz2
+X-Mailer: Internet Mail Service (5.5.2653.19)
+Content-Type: multipart/mixed;
+	boundary="----_=_NextPart_000_01C17C6A.D804B7D0"
+X-SW-Source: 2001-q4/txt/msg00089.txt.bz2
 
-Christopher Faylor wrote:
-> 
-> References?  A simple google search for 'NULL C++ deprecated' didn't
-> unearth this information.
+This message is in MIME format. Since your mail reader does not understand
+this format, some or all of this message may not be legible.
 
-This controversy officially started with the ARM, IIRC.  In it, I recall
-that the authors made some comments saying that NULL should die.  I
-don't keep the ARM here at work any more, though, so I have no reference
-to back that recollection up.
+------_=_NextPart_000_01C17C6A.D804B7D0
+Content-Type: text/plain
+Content-length: 1124
 
-In section 5.1.1 of the more current Stroustrup 3/e he says, "Because of
-C++'s tighter type checking, the use of plain 0, rather than any
-suggested NULL macro, leads to fewer problems."
+It just occurred to me that the patch I submitted for mkpasswd.c causes one
+of its error messages to be a bit misleading.  If you ask mkpasswd for a
+user that doesn't exist it will say:
+"NetUserEnum() failed with error 2221.
+That user doesn't exist."
 
-I don't know what problems Stroustrup is referring to.  In section 18.1
-of the current C++ Standard, footnote 180 says: "Possible definitions
-[of NULL] include 0 and 0L, but not (void*)0."  This implies that NULL
-is most likely to expand to a literal 0, and not the distasteful casted
-pointer you see in C compilers' standard libraries.  Of course there are
-old systems with NULL still defined to (void*)0, but Cygwin's g++/newlib
-system isn't one of these.
+While the error number is correct, and the explanation on the second line is
+right, it's not actually NetUserEnum that's been called to determine that.
+I don't know if you care about this, but maybe the following patch could be
+thrown in to make that error a bit more generic (and correct).
 
-Okay, "NULL" is fine to use, then.  As for "0", the C++ standard
-guarantees that if you use 0 in a pointer context, it will be converted
-to whatever that platform uses for the "null pointer", even if it
-happens not to have a bit pattern of all zeroes.  (Section 4.10) 
-Therefore, it's safe to use 0 to mean "the null pointer".
+===============================
 
-Personally, I prefer 0 to NULL, though I leaned the other way before C++
-evolved to where it is today, since the C standard did not guarantee
-that 0 would convert to the null pointer.  In practice, with a
-conforming C++ implementation, it probably doesn't matter either way --
-it's now just a style issue.
--- 
-= ICBM Address: 36.8274040 N, 108.0204086 W, alt. 1714m
+2001-12-03  Mark Bradshaw  <bradshaw@staff.crosswalk.com>
+
+	* mkpasswd.c: (enum_users): Fix an error message.
+
+===============================
+
+--- mkpasswd.c	Wed Nov 21 20:55:41 2001
++++ mkpasswd.c.new	Mon Dec  3 21:17:14 2001
+@@ -147,7 +147,7 @@ enum_users (LPWSTR servername, int print
+ 	  break;
+ 
+ 	default:
+-	  fprintf (stderr, "NetUserEnum() failed with error %ld.\n", rc);
++	  fprintf (stderr, "Mkpasswd failed with error %ld.\n", rc);
+ 	  if (rc == NERR_UserNotFound) 
+ 	    fprintf (stderr, "That user doesn't exist.\n");
+ 	  exit (1);
+
+
+------_=_NextPart_000_01C17C6A.D804B7D0
+Content-Type: application/octet-stream;
+	name="mkpasswd.c.diff"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment;
+	filename="mkpasswd.c.diff"
+Content-length: 454
+
+--- mkpasswd.c	Wed Nov 21 20:55:41 2001=0A=
++++ mkpasswd.c.new	Mon Dec  3 21:17:14 2001=0A=
+@@ -147,7 +147,7 @@ enum_users (LPWSTR servername, int print=0A=
+ 	  break;=0A=
+=20=0A=
+ 	default:=0A=
+-	  fprintf (stderr, "NetUserEnum() failed with error %ld.\n", rc);=0A=
++	  fprintf (stderr, "Mkpasswd failed with error %ld.\n", rc);=0A=
+ 	  if (rc =3D=3D NERR_UserNotFound)=20=0A=
+ 	    fprintf (stderr, "That user doesn't exist.\n");=0A=
+ 	  exit (1);=0A=
+
+------_=_NextPart_000_01C17C6A.D804B7D0--
