@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2550-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 9424 invoked by alias); 30 Jun 2002 22:14:03 -0000
+Return-Path: <cygwin-patches-return-2552-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 12424 invoked by alias); 1 Jul 2002 08:04:19 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,48 +7,41 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 9409 invoked from network); 30 Jun 2002 22:14:02 -0000
-X-WM-Posted-At: avacado.atomice.net; Sun, 30 Jun 02 23:17:33 +0100
-Message-ID: <01a801c22083$ee74c5b0$0100a8c0@advent02>
-From: "Chris January" <chris@atomice.net>
-To: <cygwin-patches@cygwin.com>
-References: <00c501c22036$2cfd0f20$0100a8c0@advent02> <20020630171319.GC32201@redhat.com>
-Subject: Re: Fw: dup tty error.
-Date: Sun, 30 Jun 2002 15:21:00 -0000
-MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-SW-Source: 2002-q2/txt/msg00533.txt.bz2
+Received: (qmail 12292 invoked from network); 1 Jul 2002 08:04:17 -0000
+Date: Mon, 01 Jul 2002 01:04:00 -0000
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: Patch to pass file descriptors
+Message-ID: <20020701100414.B17641@cygbert.vinschen.de>
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <Pine.LNX.4.33.0206291214370.4768-100000@this>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Pine.LNX.4.33.0206291214370.4768-100000@this>
+User-Agent: Mutt/1.3.22.1i
+X-SW-Source: 2002-q3/txt/msg00000.txt.bz2
 
-> >2002-06-30  Christopher January <chris@atomice.net>
-> >
-> > * tty.cc (tty_list::allocate_tty): retry FindWindow if it fails.
->
->        __small_sprintf (buf, "cygwin.find.console.%d", myself->pid);
->        SetConsoleTitle (buf);
-> -      Sleep (40);
-> -      console = FindWindow (NULL, buf);
-> +      for (int times = 0; times < 25 && console == NULL; times++)
-> +           {
-> +                 Sleep (40);
-> +          console = FindWindow (NULL, buf);
-> +           }
->        SetConsoleTitle (oldtitle);
->        Sleep (40);
->        ReleaseMutex (title_mutex);
->
-> Is the SetConsoleTitle really succeeding when the window doesn't exist
-> yet?  That seems really broken to me but I guess that not too surprising.
->
-> I'm just wondering if we should be looping on the SetConsoleTitle rather
-> than the FindWindow.
-I did some testing and it seemed like looping on SetConsoleTitle was
-unnecessary. I believe the window is open at this point, but the title is
-set asynchronously, hence the loop to wait for the title to change.
+On Sat, Jun 29, 2002 at 12:22:04PM -0400, David Euresti wrote:
+> So here are three reasons to use the cygserver to pass file descriptors.
+> 
+> #1 Security - as has been mentioned.  Althought currently the patch has no 
+> security it can easily be added.
+> 
+> #2 My application is not allowed to block on anything.  I 
+> can't send a file descriptor and then block this changes the whole 
+> semantics of sendmsg.  I call select and it tells me I can write but then 
+> my call to sendmsg blocks?  That is really bad.  
 
-Chris
+A change in the concept would eliminate that.  The sender process
+could start a thread and duplicate all file handlers/HANDLEs.  So
+the main thread in the sender isn't blocked.  The receiver is blocked
+anyway since it has to wait until all file handle information has
+been correctly transmitted/regenerated.
 
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
