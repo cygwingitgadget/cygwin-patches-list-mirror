@@ -1,28 +1,37 @@
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: uid and gid for domain accounts.
-Date: Thu, 12 Apr 2001 15:00:00 -0000
-Message-id: <20010413000049.J20490@cygbert.vinschen.de>
-References: <s1sofu2oyxc.fsf@jaist.ac.jp> <3AD5E2A6.A0B35CD1@yahoo.com> <s1slmp5q390.fsf@jaist.ac.jp>
-X-SW-Source: 2001-q2/msg00044.html
+From: "Robert Collins" <robert.collins@itdomain.com.au>
+To: <cygwin-patches@cygwin.com>
+Subject: Re: Cygwin half of pthread update
+Date: Thu, 12 Apr 2001 15:46:00 -0000
+Message-id: <00d201c0c3a2$5fcc0ba0$0200a8c0@lifelesswks>
+References: <03f001c0c2ed$3b89acd0$0200a8c0@lifelesswks> <20010411232520.C32524@redhat.com> <05df01c0c305$d4bef0f0$0200a8c0@lifelesswks> <20010412113539.A5879@redhat.com>
+X-SW-Source: 2001-q2/msg00045.html
 
-On Fri, Apr 13, 2001 at 05:20:27AM +0900, Kazuhiro Fujieda wrote:
-> >>> On Thu, 12 Apr 2001 13:15:18 -0400
-> >>> Earnie Boyd <earnie_boyd@yahoo.com> said:
-> 
-> > Sounds great, when can we expect the patches?
-> 
-> Just now.
+I checked it in as
+cvs -z9 ci -F pthread.ChangeLog configure.in cygwin.din pthread.cc
+sched.cc thread.cc thread.h include/pthread.h include/sched.h
+include/cygwin/types.h
 
-Thanks for the patch. I'm too tired for today but I will look
-into it this weekend.
+where pthread.ChangeLog was the updated version of the changelog entry I
+had emailed out to the patches list.
 
-Corinna
+The -F should have inserted the ChangeLog entry as the commit message.
 
-> 2001-04-13  Kazuhiro Fujieda  <fujieda@jaist.ac.jp>
-> [...]
+Or do you manually update the ChangeLog file?
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+Rob
+
+----- Original Message -----
+From: "Christopher Faylor" <cgf@redhat.com>
+To: <cygwin-patches@cygwin.com>
+Sent: Friday, April 13, 2001 1:35 AM
+Subject: Re: Cygwin half of pthread update
+
+
+> On Thu, Apr 12, 2001 at 02:05:30PM +1000, Robert Collins wrote:
+> >Committed.
+>
+> What happened to the ChangeLog?  You shouldn't check in stuff without
+> a ChangeLog entry.
+>
+> cgf
+>
