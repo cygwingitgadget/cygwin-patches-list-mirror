@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2652-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 25788 invoked by alias); 15 Jul 2002 06:04:03 -0000
+Return-Path: <cygwin-patches-return-2653-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 1736 invoked by alias); 15 Jul 2002 07:57:08 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,33 +7,31 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 25772 invoked from network); 15 Jul 2002 06:04:02 -0000
-Message-ID: <3D2EE6B2.8B9AFE7D@certum.pl>
-Date: Sun, 14 Jul 2002 23:04:00 -0000
+Received: (qmail 1590 invoked from network); 15 Jul 2002 07:57:07 -0000
+Message-ID: <3D327F4D.C8E80EB8@certum.pl>
+Date: Mon, 15 Jul 2002 00:57:00 -0000
 From: Jacek Trzcinski <jacek@certum.pl>
 Reply-To: jacek@certum.pl
 X-Accept-Language: en,pdf
 MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
-Subject: Serial patch - second attempt
+Subject: serial patch - second attempt
 Content-Type: multipart/mixed;
- boundary="------------050B889197A68679690CAE68"
-X-SW-Source: 2002-q3/txt/msg00100.txt.bz2
+ boundary="------------4904060DF08D2E2CADEE1085"
+X-SW-Source: 2002-q3/txt/msg00101.txt.bz2
 
 This is a multi-part message in MIME format.
---------------050B889197A68679690CAE68
+--------------4904060DF08D2E2CADEE1085
 Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-Content-length: 197
+Content-length: 86
 
 Hi,
-I spent a little time in weekend to fix my patch. Now it should be in
-accordance with cvs sources ( I rebuilt cygwin from latest cvs sources
-and tested how my patch worked).
+Something wrong was with my computer today morning so I send my patch
+again
 
-Best regards
 Jacek
---------------050B889197A68679690CAE68
+--------------4904060DF08D2E2CADEE1085
 Content-Type: text/plain; charset=us-ascii;
  name="serial_patch"
 Content-Transfer-Encoding: 7bit
@@ -283,7 +281,7 @@ Content-length: 6444
  #define TCOON		1
  #define TCIOFF		2
 
---------------050B889197A68679690CAE68
+--------------4904060DF08D2E2CADEE1085
 Content-Type: text/plain; charset=us-ascii;
  name="serial.patch.ChangeLog"
 Content-Transfer-Encoding: 7bit
@@ -306,4 +304,4 @@ Content-length: 663
     * termios.h: Add new defines as a support for ioctl() function
     on serial device.
     
---------------050B889197A68679690CAE68--
+--------------4904060DF08D2E2CADEE1085--
