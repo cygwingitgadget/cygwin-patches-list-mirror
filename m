@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1995-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 31675 invoked by alias); 19 Mar 2002 17:13:06 -0000
+Return-Path: <cygwin-patches-return-1996-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 28768 invoked by alias); 20 Mar 2002 01:33:29 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,145 +7,174 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 31578 invoked from network); 19 Mar 2002 17:13:00 -0000
-Date: Tue, 19 Mar 2002 17:33:00 -0000
-From: Dennis Vshivkov <walrus@amur.ru>
-To: Corinna Vinschen <cygwin-patches@cygwin.com>
-Subject: Re: [PATCH] No codepage translation in cygwin console
-Message-ID: <20020319201257.A21208@amur.ru>
-References: <20020115194622.A3962@amur.ru> <20020119002711.A24934@cygbert.vinschen.de> <20020121174058.B31464@amur.ru> <20020121192855.O11608@cygbert.vinschen.de>
-Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="VbJkn9YxBvnuCH5J"
-Content-Disposition: inline
-User-Agent: Mutt/1.2.5.1i
-In-Reply-To: <20020121192855.O11608@cygbert.vinschen.de>; from cygwin-patches@cygwin.com on Mon, Jan 21, 2002 at 07:28:55PM +0100
-X-SW-Source: 2002-q1/txt/msg00352.txt.bz2
+Received: (qmail 28730 invoked from network); 20 Mar 2002 01:33:28 -0000
+Message-ID: <20020320013328.44270.qmail@web20002.mail.yahoo.com>
+Date: Fri, 22 Mar 2002 22:52:00 -0000
+From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+Subject: mkpasswd patch
+To: cygwin-patches@cygwin.com
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="0-350142815-1016588008=:44233"
+X-SW-Source: 2002-q1/txt/msg00353.txt.bz2
 
-
---VbJkn9YxBvnuCH5J
+--0-350142815-1016588008=:44233
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-length: 1382
+Content-length: 885
 
-On Mon, Jan 21, 2002 at 07:28:55PM +0100, Corinna Vinschen wrote:
+Here is a patch for mkpasswd that is very similar to the one for 
+mkgroup just checked in. It uses string concatenation similar to the current
+CVS of mkgroup, maintaining spacing. 
 
-> On Mon, Jan 21, 2002 at 05:40:58PM +0300, Dennis Vshivkov wrote:
-> > > >     If con-asis suboption is specified, console input and output goes
-> > > > unchanged.  Hope this helps someone.
-> > > 
-> > > actually your patch seems to be useful when having to switch
-> > > between different codepages.
-> > > 
-> > > But I have two problems with that patch:
-> > > 
-> > > - First of all, your patch isn't `trivial' enough so that we
-> > >   can incorporate it without getting a signed copyright assignment
-> > >   form from you as described on http://cygwin.com/contrib.html.
-> > >   Please send us the signed form via snail mail.  As soon as we
-> > >   received it we can use your patch.
-> > 
-> >     Ok, I've printed the assignment and will send it ASAP.
-> > 
-> > > - Your ChangeLog entry isn't correctly indented.  And please use
-> > >   your real name, not a pseudonym.
-> > 
-> >     Ok.  Do I have to correct and resend it right away or it's better to wait
-> > until the assignment is received?
-> 
-> Just send it again when you like.  However, snail mail to US is somewhat,
-> say, weird.  It could take two or three weeks.
+Also, do I need to resubmit the kill.cc long-options patch from:
 
-    Having received the signed assignment back from Red Hat, I'm resending the
-patch (updated to match 1.3.10-1) along with the corrected ChangeLog entry.
+http://cygwin.com/ml/cygwin-patches/2002-q1/msg00339.html
 
--- 
-/Awesome Walrus <walrus@amur.ru>
+I forgot the attachment the first time and never heard anything more...
+Thanks.
 
---VbJkn9YxBvnuCH5J
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename="Cygwin console as-is codepage passing.ChangeLog"
-Content-length: 527
+Changelog:
 
-2002-03-19  Dennis Vshivkov  <walrus@amur.ru>
+2001-03-19  Joshua Daniel Franklin  <joshuadfranklin@yahoo.com>
+	* mkpasswd.c (usage): Simplify usage output.  Generalize to allow use
+	for help. Correct '?' typo to 'h'.
+	(longopts): Add version option.
+	(opts): Add 'v' version option.
+	(print_version): New function.
+	(main): Accommodate new version option.  Accommodate usage parameter
+	changes. 
 
-	* winsup/cygwin/dcrt0.cc:
-	  New BOOL console_asis, indicating passing console output as it is.
-	* winsup/cygwin/environ.cc (codepage_init) <con-asis>:
-	  Processing :con-asis suboption, setting BOOL console_asis to TRUE
-	  if it's present in codepage= option of CYGWIN environment variable.
-	* winsup/cygwin/fhandler_console.cc (cp_convert):
-	  No codepage conversion if console_asis is TRUE.
-	* winsup/cygwin/winsup.h:
-	  External declaration of newly added BOOL console_asis.
+__________________________________________________
+Do You Yahoo!?
+Yahoo! Sports - live college hoops coverage
+http://sports.yahoo.com/
+--0-350142815-1016588008=:44233
+Content-Type: text/plain; name="mkpasswd.c-patch"
+Content-Description: mkpasswd.c-patch
+Content-Disposition: inline; filename="mkpasswd.c-patch"
+Content-length: 4825
 
---VbJkn9YxBvnuCH5J
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename="Cygwin console as-is codepage passing.patch"
-Content-length: 2263
-
-diff -ur cygwin-1.3.10-1.orig/winsup/cygwin/dcrt0.cc cygwin-1.3.10-1/winsup/cygwin/dcrt0.cc
---- cygwin-1.3.10-1.orig/winsup/cygwin/dcrt0.cc	Tue Mar 19 16:56:15 2002
-+++ cygwin-1.3.10-1/winsup/cygwin/dcrt0.cc	Tue Mar 19 10:34:53 2002
-@@ -58,6 +58,7 @@
- BOOL strip_title_path;
- BOOL allow_glob = TRUE;
- codepage_type current_codepage = ansi_cp;
-+BOOL console_asis = FALSE;
+--- mkpasswd.c-orig	Sun Feb 24 13:28:27 2002
++++ mkpasswd.c	Tue Mar 19 19:21:32 2002
+@@ -1,6 +1,6 @@
+ /* mkpasswd.c:
  
- int cygwin_finished_initializing;
+-   Copyright 1997, 1998, 1999, 2000, 2001 Red Hat, Inc.
++   Copyright 1997, 1998, 1999, 2000, 2001, 2002 Red Hat, Inc.
  
-diff -ur cygwin-1.3.10-1.orig/winsup/cygwin/environ.cc cygwin-1.3.10-1/winsup/cygwin/environ.cc
---- cygwin-1.3.10-1.orig/winsup/cygwin/environ.cc	Tue Mar 19 16:56:15 2002
-+++ cygwin-1.3.10-1/winsup/cygwin/environ.cc	Tue Mar 19 10:34:53 2002
-@@ -449,12 +449,24 @@
-   if (!buf || !*buf)
-     return;
+    This file is part of Cygwin.
  
--  if (strcmp (buf, "oem")== 0)
-+  const char *colon = strchr(buf, ':');
-+  if (colon)
-+    {
-+      if (strcmp(colon + 1, "con-asis") != 0)
-+	{
-+	  debug_printf ("Wrong codepage suboption: %s", colon + 1);
-+	  return;
-+	}
+@@ -21,6 +21,8 @@
+ #include <sys/fcntl.h>
+ #include <lmerr.h>
+ 
++static const char version[] = "$Revision: 1.20 $";
 +
-+      console_asis = TRUE;
-+    }
-+
-+  if (strncmp(buf, "oem", colon ? colon - buf : sizeof("oem") - 1) == 0)
-     {
-       current_codepage = oem_cp;
-       set_file_api_mode (current_codepage);
-     }
--  else if (strcmp (buf, "ansi")== 0)
-+  else if (strncmp(buf, "ansi", colon ? colon - buf : sizeof("ansi") - 1) == 0)
-     {
-       current_codepage = ansi_cp;
-       set_file_api_mode (current_codepage);
-diff -ur cygwin-1.3.10-1.orig/winsup/cygwin/fhandler_console.cc cygwin-1.3.10-1/winsup/cygwin/fhandler_console.cc
---- cygwin-1.3.10-1.orig/winsup/cygwin/fhandler_console.cc	Tue Mar 19 16:56:15 2002
-+++ cygwin-1.3.10-1/winsup/cygwin/fhandler_console.cc	Tue Mar 19 10:34:53 2002
-@@ -47,7 +47,7 @@
+ SID_IDENTIFIER_AUTHORITY sid_world_auth = {SECURITY_WORLD_SID_AUTHORITY};
+ SID_IDENTIFIER_AUTHORITY sid_nt_auth = {SECURITY_NT_AUTHORITY};
+ 
+@@ -393,26 +395,27 @@ print_special (int print_sids,
+ }
+ 
+ int
+-usage ()
++usage (FILE * stream, int status)
  {
-   if (!size)
-     /* no action */;
--  else if (destcp == srccp)
-+  else if (console_asis || destcp == srccp)
+-  fprintf (stderr, "Usage: mkpasswd [OPTION]... [domain]\n\n");
+-  fprintf (stderr, "This program prints a /etc/passwd file to stdout\n\n");
+-  fprintf (stderr, "Options:\n");
+-  fprintf (stderr, "   -l,--local              print local user accounts\n");
+-  fprintf (stderr, "   -d,--domain             print domain accounts (from current domain\n");
+-  fprintf (stderr, "                           if no domain specified)\n");
+-  fprintf (stderr, "   -o,--id-offset offset   change the default offset (10000) added to uids\n");
+-  fprintf (stderr, "                           in domain accounts.\n");
+-  fprintf (stderr, "   -g,--local-groups       print local group information too\n");
+-  fprintf (stderr, "                           if no domain specified\n");
+-  fprintf (stderr, "   -m,--no-mount           don't use mount points for home dir\n");
+-  fprintf (stderr, "   -s,--no-sids            don't print SIDs in GCOS field\n");
+-  fprintf (stderr, "                           (this affects ntsec)\n");
+-  fprintf (stderr, "   -p,--path-to-home path  use specified path instead of user account home dir\n");
+-  fprintf (stderr, "   -u,--username username  only return information for the specified user\n");
+-  fprintf (stderr, "   -?,--help               displays this message\n\n");
+-  fprintf (stderr, "One of `-l', `-d' or `-g' must be given on NT/W2K.\n");
+-  return 1;
++  fprintf (stream, "Usage: mkpasswd [OPTION]... [domain]\n\n"
++                   "This program prints a /etc/passwd file to stdout\n\n"
++                   "Options:\n"
++                   "   -l,--local              print local user accounts\n"
++                   "   -d,--domain             print domain accounts (from current domain\n"
++                   "                           if no domain specified)\n"
++                   "   -o,--id-offset offset   change the default offset (10000) added to uids\n"
++                   "                           in domain accounts.\n"
++                   "   -g,--local-groups       print local group information too\n"
++                   "                           if no domain specified\n"
++                   "   -m,--no-mount           don't use mount points for home dir\n"
++                   "   -s,--no-sids            don't print SIDs in GCOS field\n"
++                   "                           (this affects ntsec)\n"
++                   "   -p,--path-to-home path  use specified path instead of user account home dir\n"
++                   "   -u,--username username  only return information for the specified user\n"
++                   "   -h,--help               displays this message\n"
++                   "   -v,--version            version information and exit\n\n"
++                   "One of `-l', `-d' or `-g' must be given on NT/W2K.\n");
++  return status;
+ }
+ 
+ struct option longopts[] = {
+@@ -425,10 +428,33 @@ struct option longopts[] = {
+   {"path-to-home", required_argument, NULL, 'p'},
+   {"username", required_argument, NULL, 'u'},
+   {"help", no_argument, NULL, 'h'},
++  {"version", no_argument, NULL, 'v'},
+   {0, no_argument, NULL, 0}
+ };
+ 
+-char opts[] = "ldo:gsmhp:u:";
++char opts[] = "ldo:gsmhp:u:v";
++
++static void
++print_version ()
++{
++  const char *v = strchr (version, ':');
++  int len;
++  if (!v)
++    {
++      v = "?";
++      len = 1;
++    }
++  else
++    {
++      v += 2;
++      len = strchr (v, ' ') - v;
++    }
++  printf ("\
++mkpasswd (cygwin) %.*s\n\
++passwd File Generator\n\
++Copyright 1997, 1998, 1999, 2000, 2001, 2002 Red Hat, Inc.\n\
++Compiled on %s", len, v, __DATE__);
++}
+ 
+ int
+ main (int argc, char **argv)
+@@ -455,7 +481,7 @@ main (int argc, char **argv)
+   if (GetVersion () < 0x80000000)
      {
-       if (dest != src)
- 	memcpy (dest, src, size);
-diff -ur cygwin-1.3.10-1.orig/winsup/cygwin/winsup.h cygwin-1.3.10-1/winsup/cygwin/winsup.h
---- cygwin-1.3.10-1.orig/winsup/cygwin/winsup.h	Tue Mar 19 16:56:15 2002
-+++ cygwin-1.3.10-1/winsup/cygwin/winsup.h	Tue Mar 19 15:36:01 2002
-@@ -76,6 +76,7 @@
- 
- enum codepage_type {ansi_cp, oem_cp};
- extern codepage_type current_codepage;
-+extern BOOL console_asis;
- 
- /* Used to check if Cygwin DLL is dynamically loaded. */
- extern int dynamically_loaded;
+       if (argc == 1)
+-	return usage ();
++	return usage (stderr, 1);
+       else
+ 	{
+ 	  while ((i = getopt_long (argc, argv, opts, longopts, NULL)) != EOF)
+@@ -494,7 +520,10 @@ main (int argc, char **argv)
+ 		disp_username = optarg;
+ 		break;
+ 	      case 'h':
+-		return usage ();
++		return usage (stdout, 0);
++	      case 'v':
++                print_version ();
++		exit (0);
+ 	      default:
+ 		fprintf (stderr, "Try `%s --help' for more information.\n", argv[0]);
+ 		return 1;
 
---VbJkn9YxBvnuCH5J--
+--0-350142815-1016588008=:44233--
