@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5230-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 25217 invoked by alias); 17 Dec 2004 03:26:16 -0000
+Return-Path: <cygwin-patches-return-5231-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 29424 invoked by alias); 17 Dec 2004 03:33:19 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,30 +7,110 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 25128 invoked from network); 17 Dec 2004 03:26:12 -0000
-Received: from unknown (HELO cgf.cx) (66.30.17.189)
-  by sourceware.org with SMTP; 17 Dec 2004 03:26:12 -0000
-Received: by cgf.cx (Postfix, from userid 201)
-	id 6AE701B401; Thu, 16 Dec 2004 22:27:21 -0500 (EST)
-Date: Fri, 17 Dec 2004 03:26:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
+Received: (qmail 29399 invoked from network); 17 Dec 2004 03:33:12 -0000
+Received: from unknown (HELO green.qinip.net) (62.100.30.36)
+  by sourceware.org with SMTP; 17 Dec 2004 03:33:12 -0000
+Received: from buzzy-box (hmm-dca-ap02-d01-103.dial.freesurf.nl [195.18.74.103])
+	by green.qinip.net (Postfix) with SMTP
+	id 438584477; Fri, 17 Dec 2004 04:33:10 +0100 (MET)
+Message-ID: <n2m-g.cptncf.3vv6gv7.1@buzzy-box.bavag>
+From: Bas van Gompel <cygwin-patches.buzz@bavag.tmfweb.nl>
+Subject: Re: [Patch] cygcheck: eprintf + display_error: Do /something/.
+References: <n2m-g.cpt7kf.3vvb68n.1@buzzy-box.bavag> <20041217020205.GA26712@trixie.casa.cgf.cx> <n2m-g.cptl2c.3vvd6ov.1@buzzy-box.bavag> <20041217025607.GE26712@trixie.casa.cgf.cx>
+Reply-To: cygwin-patches mailing-list <cygwin-patches@cygwin.com>
+Organisation: Ehm...
+User-Agent: slrn/0.9.8.1 (Win32) Hamster/2.0.6.0 Korrnews/4.2
 To: cygwin-patches@cygwin.com
-Subject: Re: Patch to allow trailing dots on managed mounts
-Message-ID: <20041217032721.GA28985@trixie.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20041216160322.GC16474@cygbert.vinschen.de> <41C1A1F4.CD3CC833@phumblet.no-ip.org> <20041216150040.GA23488@trixie.casa.cgf.cx> <20041216155339.GA16474@cygbert.vinschen.de> <20041216155707.GG23488@trixie.casa.cgf.cx> <20041216160322.GC16474@cygbert.vinschen.de> <3.0.5.32.20041216220441.0082a400@incoming.verizon.net> <20041217032627.GF26712@trixie.casa.cgf.cx>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20041217032627.GF26712@trixie.casa.cgf.cx>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2004-q4/txt/msg00231.txt.bz2
+In-Reply-To: <20041217025607.GE26712@trixie.casa.cgf.cx>
+Date: Fri, 17 Dec 2004 03:33:00 -0000
+X-SW-Source: 2004-q4/txt/msg00232.txt.bz2
 
-On Thu, Dec 16, 2004 at 10:26:27PM -0500, Christopher Faylor wrote:
->I don't see how it could be correct for the slash checking code not to
->be "in the loop".  Won't this cause a problem if you've done
+Op Thu, 16 Dec 2004 21:56:07 -0500 schreef Christopher Faylor
+in <20041217025607.GE26712@trixie.casa.cgf.cx>:
+:  On Fri, Dec 17, 2004 at 03:51:47AM +0100, Bas van Gompel wrote:
 
-Ah, nevermind.  I see that your patch handles that.
+[...]
 
-cgf
+: > I seem to be making a mess here... The point is to have the error-messages
+: > appear at about the appropriate point in the output, not bunched together
+: > near the beginning or end. Here is another attempt. This time, do the
+: > flushing when both are ttys or neither are.
+:
+:   I still don't see the point.  There is no need to do explicit flushes if
+:  both stdout and stderr are ttys.  In the case of stdout the flush should
+:  occur every time there's a newline.  In the case of stderr, the flush
+:  should happen after every write.
+
+So, the test can exclude the case where both are ttys. (Did I say I was
+making a mess?) Here is a sample of ``cygcheck -s -v -r >cygcheck.out
+2>&1'', when some (network) drives can not be read:
+
+
+...
+zip                     2.3-6
+zlib                    1.2.2-1
+zsh                     4.2.0-2
+Use -h to see help about each section
+cygcheck: dump_sysinfo: GetVolumeInformation() failed: 5
+cygcheck: dump_sysinfo: GetVolumeInformation() failed: 5
+
+
+Another version of the ChangeLog-entry/patch:
+
+2004-12-17  Bas van Gompel  <cygwin-patch.buzz@bavag.tmfweb.nl>
+
+	* cygcheck.cc (eprintf): Flush stdout before, and stderr after output,
+	when stdout and stderr both don't refer to ttys.
+	(display_error): Use eprintf.
+
+
+--- src/winsup/utils/cygcheck.cc	18 Nov 2004 05:20:23 -0000	1.64
++++ src/winsup/utils/cygcheck.cc	17 Dec 2004 02:45:43 -0000
+@@ -9,6 +9,7 @@
+    details. */
+ 
+ #include <stdio.h>
++#include <unistd.h>
+ #include <stdlib.h>
+ #include <string.h>
+ #include <sys/time.h>
+@@ -102,9 +103,16 @@ void
+ eprintf (const char *format, ...)
+ {
+   va_list ap;
++
++  if (!isatty (fileno (stdout)) && !isatty (fileno (stderr)))
++    fflush (stdout);
++
+   va_start (ap, format);
+   vfprintf (stderr, format, ap);
+   va_end (ap);
++
++  if (!isatty (fileno (stdout)) && !isatty (fileno (stderr)))
++    fflush (stderr);
+ }
+ 
+ /*
+@@ -114,10 +122,10 @@ static int
+ display_error (const char *name, bool show_error = true, bool print_failed = true)
+ {
+   if (show_error)
+-    fprintf (stderr, "cygcheck: %s%s: %lu\n", name,
++    eprintf ("cygcheck: %s%s: %lu\n", name,
+ 	print_failed ? " failed" : "", GetLastError ());
+   else
+-    fprintf (stderr, "cygcheck: %s%s\n", name,
++    eprintf ("cygcheck: %s%s\n", name,
+ 	print_failed ? " failed" : "");
+   return 1;
+ }
+
+
+L8r,
+
+Buzz.
+-- 
+  ) |  | ---/ ---/  Yes, this | This message consists of true | I do not
+--  |  |   /    /   really is |   and false bits entirely.    | mail for
+  ) |  |  /    /    a 72 by 4 +-------------------------------+ any1 but
+--  \--| /--- /---  .sigfile. |   |perl -pe "s.u(z)\1.as."    | me. 4^re
