@@ -1,31 +1,30 @@
-From: "Robert Collins" <robert.collins@itdomain.com.au>
-To: <bkeener@thesoftwaresource.com>, "cygwin-patches" <cygwin-patches@cygwin.com>
-Subject: Re: [Patch] setup.exe - change Prev, Curr, Test Radio Buttons to a Single PushButton
-Date: Sun, 11 Nov 2001 14:47:00 -0000
-Message-ID: <040301c16b03$0d077130$0200a8c0@lifelesswks>
-References: <VA.000009be.0055f8df@thesoftwaresource.com> <02a401c1691d$0b247030$0200a8c0@lifelesswks> <VA.000009c6.0059ec68@thesoftwaresource.com>
-X-SW-Source: 2001-q4/msg00196.html
-Message-ID: <20011111144700.JTWbu0bGWbqmX7eMQGgcALJQGbNnAiZCFtSFmGhIkXg@z>
+From: Christopher Faylor <cgf@redhat.com>
+To: cygwin-patches@cygwin.com, cygwin-apps@cygwin.com
+Subject: Re: setup streams work..
+Date: Sun, 11 Nov 2001 15:30:00 -0000
+Message-ID: <20011111233034.GA24210@redhat.com>
+References: <019d01c16a7f$ab3ee060$0200a8c0@lifelesswks>
+X-SW-Source: 2001-q4/msg00197.html
+Message-ID: <20011111153000.1cnAosEWgzXiiNvaKYywwsuz3iIioYev_zPYdBYbT3M@z>
 
------ Original Message -----
-From: "Brian Keener" <bkeener@thesoftwaresource.com>
+On Sun, Nov 11, 2001 at 06:08:29PM +1100, Robert Collins wrote:
+>So given that the class layout works, and somethings are already
+>becoming easier to do, I plan to commit this to HEAD.
 >
-> The ultimate goal was to have the ability to hit a push button that
-would cycle
-> through "Curr", "Prev", "Test" versions as well as options for
-> "Keep/Skip","Uninstall","Redownload","Reinstall" and "Sources" and
-have it
-> apply to the whole list of packages and not have to do them
-individually.
-> Unfortunately, with all the new changes that occurred in setup with
-the
-> categories and dependencies my understanding of all the trust logic
-took a
-> nosedive and any code I was working on/understood in this area
-crumbled.
+>Any objections?
 
-Yeah, the categories and dependencies made big changes to the internal
-logic - as you'd expect. I'm hoping to fiddle this in the near future
-and make it a little easier to hack on.
+It looks fine to me.
 
-Rob
+It was a little hard to tell what was changing given that you seem
+to have run the sources through indent and there was some whitespace
+changes.
+
+I actually think that indent is doing the wrong thing for c++ in some
+cases.
+
+I like the idea of the io_stream a lot.  I also like the "cygfile:"
+"URL".
+
+I say go for it.
+
+cgf
