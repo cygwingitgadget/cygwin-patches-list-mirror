@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2340-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 30497 invoked by alias); 6 Jun 2002 13:24:06 -0000
+Return-Path: <cygwin-patches-return-2341-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 4463 invoked by alias); 6 Jun 2002 13:29:05 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,37 +7,45 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 30477 invoked from network); 6 Jun 2002 13:24:05 -0000
-Message-ID: <042c01c20d5d$a339f7c0$6132bc3e@BABEL>
-From: "Conrad Scott" <Conrad.Scott@dsl.pipex.com>
-To: <cygwin-patches@cygwin.com>
-References: <01ae01c20cf5$551007f0$6132bc3e@BABEL> <20020606013947.GB851@redhat.com> <025101c20cfd$930b0f70$6132bc3e@BABEL> <032201c20d55$73b57bd0$6132bc3e@BABEL> <20020606150911.A22789@cygbert.vinschen.de>
-Subject: Re: Patch for sub-second resolution in stat(2)
-Date: Thu, 06 Jun 2002 06:24:00 -0000
-MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-SW-Source: 2002-q2/txt/msg00323.txt.bz2
+Received: (qmail 4441 invoked from network); 6 Jun 2002 13:29:01 -0000
+Date: Thu, 06 Jun 2002 06:29:00 -0000
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
+To: egor duda <cygwin-patches@cygwin.com>
+Subject: Re: regtool support for remote registry
+Message-ID: <20020606152859.B22789@cygbert.vinschen.de>
+Mail-Followup-To: egor duda <cygwin-patches@cygwin.com>
+References: <13970794877.20020606141146@logos-m.ru>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <13970794877.20020606141146@logos-m.ru>
+User-Agent: Mutt/1.3.22.1i
+X-SW-Source: 2002-q2/txt/msg00324.txt.bz2
 
-"Corinna Vinschen" <cygwin-patches@cygwin.com> wrote:
->  If you now substitute the leading space by a leading TAB, the
->  ChangeLog entry would be correct.
->
-> ;-)
-> Corinna
+On Thu, Jun 06, 2002 at 02:11:46PM +0400, Egor Duda wrote:
+> Hi!
+> 
+>   Attached patch allows regtool to access registry on remote hosts,
+> e.g.:
+> 
+> regtool get \\bumba\machine\software\microsoft\windows\currentVersion\programFilesDir
 
-But I can't convince Outlook Express to insert tab characters into a
-message! (breaks down sobbing with the utter futility of using M$ products).
+Just a question:  Wouldn't it make sense to use a syntax as rcp/scp:
 
-So, time to start using some other email agent. I hope everyone is waiting
-with baited breath to see what I get wrong then :-)
+  regtool get bumba:\machine\software\microsoft\...
 
-Cheers,
+This together with the capability to use forward slashes looks
+more unixy:
 
-// Conrad
+  regtool get bumba:/machine/software/microsoft/...
 
+In this context I see for the first time, that the usage doesn't
+say anything about using forward slashes.   Shouldn't we add a word
+that this is possible, too?
 
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
