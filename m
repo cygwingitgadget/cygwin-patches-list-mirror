@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3664-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 11836 invoked by alias); 2 Mar 2003 14:10:35 -0000
+Return-Path: <cygwin-patches-return-3665-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 30168 invoked by alias); 2 Mar 2003 15:40:16 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,27 +7,22 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 11827 invoked from network); 2 Mar 2003 14:10:34 -0000
-Message-ID: <3E6210D6.4000802@yahoo.com>
-Date: Sun, 02 Mar 2003 14:10:00 -0000
-From: Earnie Boyd <earnie_boyd@yahoo.com>
-Reply-To:  cygwin-patches@cygwin.com
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.1) Gecko/20020826
-X-Accept-Language: en-us, en
-MIME-Version: 1.0
-To: Chris January <chris@atomice.net>
-CC: "Cygwin-Patches@Cygwin.Com" <cygwin-patches@cygwin.com>
+Received: (qmail 30158 invoked from network); 2 Mar 2003 15:40:14 -0000
+Date: Sun, 02 Mar 2003 15:40:00 -0000
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
+To: "Cygwin-Patches@Cygwin.Com" <cygwin-patches@cygwin.com>
 Subject: Re: PATCH: Implements /proc/cpuinfo and /proc/partitions
+Message-ID: <20030302154006.GH1193@cygbert.vinschen.de>
+Mail-Followup-To: "Cygwin-Patches@Cygwin.Com" <cygwin-patches@cygwin.com>
 References: <LPEHIHGCJOAIPFLADJAHAEADDGAA.chris@atomice.net>
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Transfer-Encoding: 7bit
-X-SW-Source: 2003-q1/txt/msg00313.txt.bz2
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <LPEHIHGCJOAIPFLADJAHAEADDGAA.chris@atomice.net>
+User-Agent: Mutt/1.4i
+X-SW-Source: 2003-q1/txt/msg00314.txt.bz2
 
-Please separate the w32api patches into a different patch set.
-
-Thanks.
-
-Chris January wrote:
+On Sun, Mar 02, 2003 at 12:50:51PM -0000, Chris January wrote:
 > 2003-03-01  Christopher January  <chris@atomice.net>
 > 
 > 	* autoload.cc (GetSystemTimes): Define new autoload function. 
@@ -45,6 +40,28 @@ Chris January wrote:
 > 	(FindVolumeClose): Add declaration.
 > 	(GetSystemTimes): Add declaration.
 > 	* w32api/include/winnt.h: Add define for PF_XMMI64_INSTRUCTIONS_AVAILABLE.
-> 
-> ---
-> Christopher January www.atomice.com
+
+I tried this patch and it works nicely but the patch creates a couple of
+warnings at compile time:
+
+fhandler_proc.cc: In function `off_t format_proc_cpuinfo(char*, unsigned int)':
+fhandler_proc.cc:683: warning: unused variable `unsigned int extended_family'
+fhandler_proc.cc:684: warning: unused variable `unsigned int extended_model'
+fhandler_proc.cc:672: warning: unused variable `unsigned int cpuid_sig'
+fhandler_proc.cc:672: warning: unused variable `unsigned int extra_info'
+fhandler_proc.cc:672: warning: unused variable `unsigned int features'
+fhandler_proc.cc:625: warning: unused variable `int cpu'
+fhandler_proc.cc:625: warning: unused variable `int r1'
+fhandler_proc.cc:625: warning: unused variable `int r2'
+fhandler_proc.cc: In function `off_t format_proc_partitions(char*, unsigned int)':
+fhandler_proc.cc:906: warning: comparison between signed and unsigned integer expressions
+
+Would you mind to send a new patch w/o these warnings?
+
+
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
