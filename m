@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2662-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 5008 invoked by alias); 17 Jul 2002 17:53:13 -0000
+Return-Path: <cygwin-patches-return-2663-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 14672 invoked by alias); 19 Jul 2002 01:16:20 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,236 +7,205 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 4994 invoked from network); 17 Jul 2002 17:53:11 -0000
-Date: Wed, 17 Jul 2002 10:53:00 -0000
-To: cygwin-patches <cygwin-patches@cygwin.com>
-Subject: Re: [Setup] [Patch] New Views for Skipped Packages and Installed Packages (keeps)
-Message-Id: <VA.00000bfb.0117359f@thesoftwaresource.com>
+Received: (qmail 14633 invoked from network); 19 Jul 2002 01:16:18 -0000
+Message-Id: <3.0.5.32.20020718211250.0080a5e0@mail.attbi.com>
+X-Sender: phumblet@mail.attbi.com
+Date: Thu, 18 Jul 2002 18:16:00 -0000
+To: cygwin-patches@cygwin.com
+From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
+Subject: Re: Corinna or Pierre please comment? [jason@tishler.net: Re:
+  setuid
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="Next part of message (VA.00000bfb.0117359f:thesoftwaresource.com)"
-From: Brian Keener <bkeener@thesoftwaresource.com>
-Reply-To: bkeener@thesoftwaresource.com
-In-Reply-To: <01dd01c22bf4$43b1de20$1800a8c0@LAPTOP>
-References: <000501c22951$a948b740$0200a8c0@lifelesswks> <VA.00000bf1.00258f45@thesoftwaresource.com> <01dd01c22bf4$43b1de20$1800a8c0@LAPTOP>
-X-SW-Source: 2002-q3/txt/msg00110.txt.bz2
+Content-Type: multipart/mixed; boundary="=====================_1027055570==_"
+X-SW-Source: 2002-q3/txt/msg00111.txt.bz2
 
-This is a Mime message, which your current mail reader
-may not understand. Parts of the message will appear as
-text. To process the rest, use a Mime compatible reader
-or Base64 conversion utility.
+--=====================_1027055570==_
+Content-Type: text/plain; charset="us-ascii"
+Content-length: 621
 
---Next part of message (VA.00000bfb.0117359f:thesoftwaresource.com)
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8bit
-Content-length: 199
+Corinna,
 
-Robert Collins wrote:
-> Could you please update the patch to be against HEAD, and check it - then
-> I'll happily commit it.
->
-Done.  I sent it as an attachment again as you requested last time.
+Here is the patch.
 
-bk
+Pierre
 
 
---Next part of message (VA.00000bfb.0117359f:thesoftwaresource.com)
-Content-Type: application/octet-stream; name="ViewChng"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="ViewChng"
-Content-length: 11700
+2002-07-18  Pierre Humblet <pierre.humblet@ieee.org>
 
-MjAwMi0wNy0xNyAgQnJpYW4gS2VlbmVyICA8YmtlZW5lckB0aGVzb2Z0d2Fy
-ZXNvdXJjZS5jb20+CgogICAgICAgICogUGlja1ZpZXcuY2MgKFBpY2tWaWV3
-Ojp2aWV3cyk6IEFkZCB0d28gbmV3IHZpZXdzIGZvciBTa2lwcGVkCglwYWNr
-YWdlcyBhbmQgSW5zdGFsbGVkIFBhY2thZ2VzIG5vdCByZXF1aXJpbmcgdXBk
-YXRlLgoJKFBpY2tWaWV3OjpzZXRfaGVhZGVycyAoKSApOiBEaXR0by4KCShQ
-aWNrVmlldzo6Y2xlYXJfdmlldyAodm9pZCkgKTogRGl0dG8uCgkoUGlja1Zp
-ZXc6OnZpZXdzOjpjYXB0aW9uICgpICk6IEFkZCB0d28gbmV3IGNhcHRpb25z
-IGZvciB0aGUgbmV3Cgl2aWV3cyBhZGRlZCBmb3IgU2tpcHBlZCBhbmQgSW5z
-dGFsbGVkIFBhY2thZ2VzLgoJKFBpY2tWaWV3OjpzY3JvbGwgKCkgKTogTW9k
-aWZ5IFNjcm9sbCBCYXIgcHJvcGVydHkgdG8gRGlzYWJsZQogICAgICAgCWlu
-c3RlYWQgb2YgZGlzYXBwZWFyaW5nIHdoZW4gdGhlcmUgaXMgbm90aGluZyB0
-byBTY3JvbGwuCgkqIFBpY2tWaWV3Lmg6IEFkZCB0d28gbmV3IHZpZXdzIGZv
-ciBTa2lwcGVkIHBhY2thZ2VzIGFuZCBJbnN0YWxsZWQKCXBhY2thZ2VzIHRv
-IHB1YmxpYyBjbGFzcyB2aWV3LgoJKiBjaG9vc2UuY2MgKGxpc3RfY2xpY2sg
-KCkgKTogTW9kaWZ5IFNjcm9sbCBCYXIgcHJvcGVydHkgdG8gRGlzYWJsZQog
-ICAgICAgCWluc3RlYWQgb2YgZGlzYXBwZWFyaW5nIHdoZW4gdGhlcmUgaXMg
-bm90aGluZyB0byBTY3JvbGwuCgkobGlzdHZpZXdfcHJvYyAoKSApOiBEaXR0
-by4KCShzZXRfdmlld19tb2RlKTogQWRkIHR3byBuZXcgdmlld3MgZm9yIFNr
-aXBwZWQgUGFja2FnZXMgYW5kIEluc3RhbGxlZAoJUGFja2FnZXMgbm90IHJl
-cXVpcmluZyB1cGRhdGUuICBNb2RpZnkgU2Nyb2xsIEJhciBwcm9wZXJ0eSB0
-byBEaXNhYmxlCglpbnN0ZWFkIG9mIGRpc2FwcGVhcmluZyB3aGVuIHRoZXJl
-IGlzIG5vdGhpbmcgdG8gc2Nyb2xsLgoJKiByZXMucmMgKElERF9DSE9PU0Up
-OiBSZXBvc2l0aW9uIFJhZGlvIEJ1dHRvbnMsIFZpZXcgU2VsZWN0aW9uCglC
-dXR0b24gYW5kIFZpZXcgQnV0dG9uIENhcHRpb24gdG8gbWFrZSByb29tIGZv
-ciBsb25nZXIgY2FwdGlvbnMuCgoJCgkJCQkJCQkJCQk/IGF1dG9tNHRlLmNh
-Y2hlCj8gYnoybGliL2F1dG9tNHRlLmNhY2hlCj8gbGliZ2V0b3B0KysvY2Zn
-YXV4Cj8gbGliZ2V0b3B0KysvYWNsb2NhbC5tNAo/IGxpYmdldG9wdCsrL2F1
-dG9tNHRlLmNhY2hlCj8gbGliZ2V0b3B0KysvY29uZmlndXJlCj8gbGliZ2V0
-b3B0KysvTWFrZWZpbGUuaW4KPyBsaWJnZXRvcHQrKy9pbmNsdWRlL2F1dG9j
-b25mLmguaW4KPyB6bGliL2F1dG9tNHRlLmNhY2hlCkluZGV4OiBNYWtlZmls
-ZS5pbgo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL2N5
-Z3dpbi1hcHBzL3NldHVwL01ha2VmaWxlLmluLHYKcmV0cmlldmluZyByZXZp
-c2lvbiAyLjgzCmRpZmYgLXUgLXAgLXIyLjgzIE1ha2VmaWxlLmluCi0tLSBN
-YWtlZmlsZS5pbgk5IEp1bCAyMDAyIDA2OjU3OjQwIC0wMDAwCTIuODMKKysr
-IE1ha2VmaWxlLmluCTE3IEp1bCAyMDAyIDE2OjMzOjIyIC0wMDAwCkBAIC0x
-NSw3ICsxNSw3IEBACiBAU0VUX01BS0VACiAKICMKLSMgJElkOiBNYWtlZmls
-ZS5pbix2IDIuODMgMjAwMi8wNy8wOSAwNjo1Nzo0MCByYmNvbGxpbnMgRXhw
-ICQKKyMgJElkOiBNYWtlZmlsZS5hbSx2IDIuMjIgMjAwMi8wNy8wOSAwNjo1
-Nzo0MCByYmNvbGxpbnMgRXhwICQKICMKICMgQ29weXJpZ2h0IChjKSAyMDAw
-LCBSZWQgSGF0LCBJbmMuCiAjIENvcHlyaWdodCAoYykgMjAwMiwgUm9iZXJ0
-IENvbGxpbnMKSW5kZXg6IFBpY2tWaWV3LmNjCj09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT0KUkNTIGZpbGU6IC9jdnMvY3lnd2luLWFwcHMvc2V0dXAvUGlja1Zp
-ZXcuY2MsdgpyZXRyaWV2aW5nIHJldmlzaW9uIDIuMTAKZGlmZiAtdSAtcCAt
-cjIuMTAgUGlja1ZpZXcuY2MKLS0tIFBpY2tWaWV3LmNjCTkgSnVsIDIwMDIg
-MDY6NTc6NDAgLTAwMDAJMi4xMAorKysgUGlja1ZpZXcuY2MJMTcgSnVsIDIw
-MDIgMTY6MzM6MjMgLTAwMDAKQEAgLTQ3LDggKzQ3LDEwIEBAIHN0YXRpYyBQ
-aWNrVmlldzo6SGVhZGVyIGNhdF9oZWFkZXJzW10gPSAKIC8vIFBpY2tWaWV3
-Ojogdmlld3MKIGNvbnN0IFBpY2tWaWV3Ojp2aWV3cyBQaWNrVmlldzo6dmll
-d3M6OlVua25vd24gKDApOwogY29uc3QgUGlja1ZpZXc6OnZpZXdzIFBpY2tW
-aWV3Ojp2aWV3czo6UGFja2FnZUZ1bGwgKDEpOwotY29uc3QgUGlja1ZpZXc6
-OnZpZXdzIFBpY2tWaWV3Ojp2aWV3czo6UGFja2FnZSA9IFBpY2tWaWV3Ojp2
-aWV3cyAoMik7Ci1jb25zdCBQaWNrVmlldzo6dmlld3MgUGlja1ZpZXc6OnZp
-ZXdzOjpDYXRlZ29yeSAoMyk7Citjb25zdCBQaWNrVmlldzo6dmlld3MgUGlj
-a1ZpZXc6OnZpZXdzOjpQYWNrYWdlICgyKTsKK2NvbnN0IFBpY2tWaWV3Ojp2
-aWV3cyBQaWNrVmlldzo6dmlld3M6OlBhY2thZ2VLZWVwcyAoMyk7Citjb25z
-dCBQaWNrVmlldzo6dmlld3MgUGlja1ZpZXc6OnZpZXdzOjpQYWNrYWdlU2tp
-cHMgPSBQaWNrVmlldzo6dmlld3MgKDQpOworY29uc3QgUGlja1ZpZXc6OnZp
-ZXdzIFBpY2tWaWV3Ojp2aWV3czo6Q2F0ZWdvcnkgKDUpOwogCiAvLyBEb0lu
-c2VydEl0ZW0gLSBpbnNlcnRzIGFuIGl0ZW0gaW50byBhIGhlYWRlciBjb250
-cm9sLgogLy8gUmV0dXJucyB0aGUgaW5kZXggb2YgdGhlIG5ldyBpdGVtLgpA
-QCAtODIsNyArODQsOSBAQCBQaWNrVmlldzo6c2V0X2hlYWRlcnMgKCkKICAg
-aWYgKHZpZXdfbW9kZSA9PSB2aWV3czo6VW5rbm93bikKICAgICByZXR1cm47
-CiAgIGlmICh2aWV3X21vZGUgPT0gdmlld3M6OlBhY2thZ2VGdWxsIHx8Ci0g
-ICAgICB2aWV3X21vZGUgPT0gdmlld3M6OlBhY2thZ2UpCisgICAgICB2aWV3
-X21vZGUgPT0gdmlld3M6OlBhY2thZ2UgfHwKKyAgICAgIHZpZXdfbW9kZSA9
-PSB2aWV3czo6UGFja2FnZUtlZXBzIHx8CisgICAgICB2aWV3X21vZGUgPT0g
-dmlld3M6OlBhY2thZ2VTa2lwcykKICAgICB7CiAgICAgICBoZWFkZXJzID0g
-cGtnX2hlYWRlcnM7CiAgICAgICBjdXJyZW50X2NvbCA9IDA7CkBAIC0xNTQs
-NiArMTU4LDEwIEBAIFBpY2tWaWV3Ojp2aWV3czo6Y2FwdGlvbiAoKQogICAg
-IGNhc2UgMjoKICAgICAgIHJldHVybiAiUGFydGlhbCI7CiAgICAgY2FzZSAz
-OgorICAgICAgcmV0dXJuICJVcCBUbyBEYXRlIjsKKyAgICBjYXNlIDQ6Cisg
-ICAgICByZXR1cm4gIk5vdCBJbnN0YWxsZWQiOworICAgIGNhc2UgNToKICAg
-ICAgIHJldHVybiAiQ2F0ZWdvcnkiOwogICAgIGRlZmF1bHQ6CiAgICAgICBy
-ZXR1cm4gIiI7CkBAIC0yMTAsNyArMjE4LDkgQEAgUGlja1ZpZXc6OmNsZWFy
-X3ZpZXcgKHZvaWQpCiAgIGlmICh2aWV3X21vZGUgPT0gdmlld3M6OlVua25v
-d24pCiAgICAgcmV0dXJuOwogICBpZiAodmlld19tb2RlID09IHZpZXdzOjpQ
-YWNrYWdlRnVsbCB8fAotICAgICAgdmlld19tb2RlID09IHZpZXdzOjpQYWNr
-YWdlKQorICAgICAgdmlld19tb2RlID09IHZpZXdzOjpQYWNrYWdlIHx8Cisg
-ICAgICB2aWV3X21vZGUgPT0gdmlld3M6OlBhY2thZ2VLZWVwcyB8fAorICAg
-ICAgdmlld19tb2RlID09IHZpZXdzOjpQYWNrYWdlU2tpcHMpCiAgICAgY29u
-dGVudHMuU2hvd0xhYmVsIChmYWxzZSk7CiAgIGVsc2UgaWYgKHZpZXdfbW9k
-ZSA9PSB2aWV3czo6Q2F0ZWdvcnkpCiAgICAgY29udGVudHMuU2hvd0xhYmVs
-ICgpOwpAQCAtMjM3LDcgKzI0Nyw3IEBAIFBpY2tWaWV3OjpzY3JvbGwgKEhX
-TkQgaHduZCwgaW50IHdoaWNoLCAKIHsKICAgU0NST0xMSU5GTyBzaTsKICAg
-c2kuY2JTaXplID0gc2l6ZW9mIChzaSk7Ci0gIHNpLmZNYXNrID0gU0lGX0FM
-TDsKKyAgc2kuZk1hc2sgPSBTSUZfQUxMIHwgU0lGX0RJU0FCTEVOT1NDUk9M
-TDsKICAgR2V0U2Nyb2xsSW5mbyAoaHduZCwgd2hpY2gsICZzaSk7CiAKICAg
-c3dpdGNoIChjb2RlKQpJbmRleDogUGlja1ZpZXcuaAo9PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL2N5Z3dpbi1hcHBzL3NldHVwL1Bp
-Y2tWaWV3LmgsdgpyZXRyaWV2aW5nIHJldmlzaW9uIDIuNApkaWZmIC11IC1w
-IC1yMi40IFBpY2tWaWV3LmgKLS0tIFBpY2tWaWV3LmgJMjcgTWFyIDIwMDIg
-MTI6MjE6MTkgLTAwMDAJMi40CisrKyBQaWNrVmlldy5oCTE3IEp1bCAyMDAy
-IDE2OjMzOjIzIC0wMDAwCkBAIC03OSw2ICs3OSw4IEBAIHB1YmxpYzoKICAg
-ICBzdGF0aWMgY29uc3Qgdmlld3MgVW5rbm93bjsKICAgICBzdGF0aWMgY29u
-c3Qgdmlld3MgUGFja2FnZUZ1bGw7CiAgICAgc3RhdGljIGNvbnN0IHZpZXdz
-IFBhY2thZ2U7CisgICAgc3RhdGljIGNvbnN0IHZpZXdzIFBhY2thZ2VLZWVw
-czsKKyAgICBzdGF0aWMgY29uc3Qgdmlld3MgUGFja2FnZVNraXBzOwogICAg
-IHN0YXRpYyBjb25zdCB2aWV3cyBDYXRlZ29yeTsKICAgICBzdGF0aWMgY29u
-c3Qgdmlld3MgTlZpZXc7CiAgICAgICB2aWV3cyAoKTpfdmFsdWUgKDApCkBA
-IC04Nyw3ICs4OSw3IEBAIHB1YmxpYzoKICAgICB2aWV3cyAoaW50IGFJbnQp
-CiAgICAgewogICAgICAgX3ZhbHVlID0gYUludDsKLSAgICAgIGlmIChfdmFs
-dWUgPCAwIHx8IF92YWx1ZSA+IDMpCisgICAgICBpZiAoX3ZhbHVlIDwgMCB8
-fCBfdmFsdWUgPiA1KQogCV92YWx1ZSA9IDA7CiAgICAgfQogICAgIHZpZXdz
-ICYgb3BlcmF0b3IrKyAoKTsKSW5kZXg6IGNob29zZS5jYwo9PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL2N5Z3dpbi1hcHBzL3NldHVw
-L2Nob29zZS5jYyx2CnJldHJpZXZpbmcgcmV2aXNpb24gMi4xMDYKZGlmZiAt
-dSAtcCAtcjIuMTA2IGNob29zZS5jYwotLS0gY2hvb3NlLmNjCTkgSnVsIDIw
-MDIgMDY6NTc6NDAgLTAwMDAJMi4xMDYKKysrIGNob29zZS5jYwkxNyBKdWwg
-MjAwMiAxNjozMzo0MiAtMDAwMApAQCAtMTQ5LDcgKzE0OSw3IEBAIGxpc3Rf
-Y2xpY2sgKEhXTkQgaHduZCwgQk9PTCBkYmxjbGssIGludCAKICAgICAgIFND
-Uk9MTElORk8gc2k7CiAgICAgICBtZW1zZXQgKCZzaSwgMCwgc2l6ZW9mIChz
-aSkpOwogICAgICAgc2kuY2JTaXplID0gc2l6ZW9mIChzaSk7Ci0gICAgICBz
-aS5mTWFzayA9IFNJRl9BTEw7CS8qIFNJRl9SQU5HRSB3YXMgZ2l2aW5nIHN0
-cmFuZ2UgYmVoYXZpb3VyICovCisgICAgICBzaS5mTWFzayA9IFNJRl9BTEwg
-fCBTSUZfRElTQUJMRU5PU0NST0xMOwkvKiBTSUZfUkFOR0Ugd2FzIGdpdmlu
-ZyBzdHJhbmdlIGJlaGF2aW91ciAqLwogICAgICAgc2kubk1pbiA9IDA7CiAK
-ICAgICAgIHNpLm5NYXggPSBjaG9vc2VyLT5jb250ZW50cy5pdGVtY291bnQg
-KCkgKiBjaG9vc2VyLT5yb3dfaGVpZ2h0OwpAQCAtMjE2LDcgKzIxNiw3IEBA
-IGxpc3R2aWV3X3Byb2MgKEhXTkQgaHduZCwgVUlOVCBtZXNzYWdlLCAKIAkJ
-R2V0Q2xpZW50UmVjdCAoaHduZCwgJnIpOwogCQlTQ1JPTExJTkZPIHNpOwog
-CQlzaS5jYlNpemUgPSBzaXplb2YgKHNpKTsKLQkJc2kuZk1hc2sgPSBTSUZf
-QUxMOworCQlzaS5mTWFzayA9IFNJRl9BTEwgfCBTSUZfRElTQUJMRU5PU0NS
-T0xMOwogCQlHZXRTY3JvbGxJbmZvIChod25kLCBTQl9IT1JaLCAmc2kpOwog
-CQlpbnQgb2xkTWF4ID0gc2kubk1heDsKIAkJc2kubk1heCA9CkBAIC0zNjYs
-NyArMzY2LDI4IEBAIHNldF92aWV3X21vZGUgKEhXTkQgaCwgUGlja1ZpZXc6
-OnZpZXdzIG0KIAkgIHBhY2thZ2VtZXRhICYgcGtnID0gKippOwogCSAgaWYg
-KCghcGtnLmRlc2lyZWQgJiYgcGtnLmluc3RhbGxlZCkKIAkgICAgICB8fCAo
-cGtnLmRlc2lyZWQgJiYgKHBrZy5kZXNpcmVkLnBpY2tlZCAoKSAKLQkJCQkg
-IHx8IHBrZy5kZXNpcmVkLnNvdXJjZVBhY2thZ2UoKS5waWNrZWQoKSkpKQor
-CQkgIHx8IHBrZy5kZXNpcmVkLnNvdXJjZVBhY2thZ2UoKS5waWNrZWQoKSkp
-KQorCSAgICBjaG9vc2VyLT5pbnNlcnRfcGtnIChwa2cpOworCX0KKyAgICB9
-CisgIGVsc2UgaWYgKGNob29zZXItPmdldF92aWV3X21vZGUgKCkgPT0gUGlj
-a1ZpZXc6OnZpZXdzOjpQYWNrYWdlS2VlcHMpCisgICAgeworICAgICAgZm9y
-ICh2ZWN0b3IgPHBhY2thZ2VtZXRhICo+OjppdGVyYXRvciBpID0gZGIucGFj
-a2FnZXMuYmVnaW4gKCk7CisJICAgaSAhPSBkYi5wYWNrYWdlcy5lbmQgKCk7
-ICsraSkKKwl7CisJICBwYWNrYWdlbWV0YSAmIHBrZyA9ICoqaTsKKwkgIGlm
-IChwa2cuaW5zdGFsbGVkICYmIHBrZy5kZXNpcmVkICYmICFwa2cuZGVzaXJl
-ZC5waWNrZWQoKSAKKwkgICAgICAmJiAhcGtnLmRlc2lyZWQuc291cmNlUGFj
-a2FnZSgpLnBpY2tlZCgpKQorCSAgICBjaG9vc2VyLT5pbnNlcnRfcGtnIChw
-a2cpOworCX0KKyAgICB9CisgIGVsc2UgaWYgKGNob29zZXItPmdldF92aWV3
-X21vZGUgKCkgPT0gUGlja1ZpZXc6OnZpZXdzOjpQYWNrYWdlU2tpcHMpCisg
-ICAgeworICAgICAgZm9yICh2ZWN0b3IgPHBhY2thZ2VtZXRhICo+OjppdGVy
-YXRvciBpID0gZGIucGFja2FnZXMuYmVnaW4gKCk7CisJICAgaSAhPSBkYi5w
-YWNrYWdlcy5lbmQgKCk7ICsraSkKKwl7CisJICBwYWNrYWdlbWV0YSAmIHBr
-ZyA9ICoqaTsKKwkgIGlmICghcGtnLmRlc2lyZWQgJiYgIXBrZy5pbnN0YWxs
-ZWQpCiAJICAgIGNob29zZXItPmluc2VydF9wa2cgKHBrZyk7CiAJfQogICAg
-IH0KQEAgLTM5MCw3ICs0MTEsNyBAQCBzZXRfdmlld19tb2RlIChIV05EIGgs
-IFBpY2tWaWV3Ojp2aWV3cyBtCiAgIFNDUk9MTElORk8gc2k7CiAgIG1lbXNl
-dCAoJnNpLCAwLCBzaXplb2YgKHNpKSk7CiAgIHNpLmNiU2l6ZSA9IHNpemVv
-ZiAoc2kpOwotICBzaS5mTWFzayA9IFNJRl9BTEw7CisgIHNpLmZNYXNrID0g
-U0lGX0FMTCB8IFNJRl9ESVNBQkxFTk9TQ1JPTEw7CiAgIHNpLm5NaW4gPSAw
-OwogICBzaS5uTWF4ID0gY2hvb3Nlci0+aGVhZGVyc1tjaG9vc2VyLT5sYXN0
-X2NvbF0ueCArIGNob29zZXItPmhlYWRlcnNbY2hvb3Nlci0+bGFzdF9jb2xd
-LndpZHRoOwkvLyArIEhNQVJHSU47CiAgIHNpLm5QYWdlID0gci5yaWdodDsK
-SW5kZXg6IHJlcy5yYwo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBmaWxl
-OiAvY3ZzL2N5Z3dpbi1hcHBzL3NldHVwL3Jlcy5yYyx2CnJldHJpZXZpbmcg
-cmV2aXNpb24gMi40MQpkaWZmIC11IC1wIC1yMi40MSByZXMucmMKLS0tIHJl
-cy5yYwkyNiBKdW4gMjAwMiAyMTozNToxNiAtMDAwMAkyLjQxCisrKyByZXMu
-cmMJMTcgSnVsIDIwMDIgMTY6MzQ6MjQgLTAwMDAKQEAgLTI2OSwxMiArMjY5
-LDEyIEBAIENBUFRJT04gIkN5Z3dpbiBTZXR1cCIKIEZPTlQgOCwgIk1TIFNh
-bnMgU2VyaWYiCiBCRUdJTgogICAgIENPTlRST0wgICAgICAgICAiJlByZXYi
-LElEQ19DSE9PU0VfUFJFViwiQnV0dG9uIixCU19BVVRPUkFESU9CVVRUT04g
-fCAKLSAgICAgICAgICAgICAgICAgICAgV1NfR1JPVVAgfCBXU19UQUJTVE9Q
-LDE1MCwzMCwyNywxMAotICAgIENPTlRST0wgICAgICAgICAiJkN1cnIiLElE
-Q19DSE9PU0VfQ1VSUiwiQnV0dG9uIixCU19BVVRPUkFESU9CVVRUT04sMTg1
-LAorICAgICAgICAgICAgICAgICAgICBXU19HUk9VUCB8IFdTX1RBQlNUT1As
-MTQwLDMwLDI3LDEwCisgICAgQ09OVFJPTCAgICAgICAgICImQ3VyciIsSURD
-X0NIT09TRV9DVVJSLCJCdXR0b24iLEJTX0FVVE9SQURJT0JVVFRPTiwxNzUs
-CiAgICAgICAgICAgICAgICAgICAgIDMwLDI1LDEwCi0gICAgQ09OVFJPTCAg
-ICAgICAgICJFJnhwIixJRENfQ0hPT1NFX0VYUCwiQnV0dG9uIixCU19BVVRP
-UkFESU9CVVRUT04sMjIwLDMwLAorICAgIENPTlRST0wgICAgICAgICAiRSZ4
-cCIsSURDX0NIT09TRV9FWFAsIkJ1dHRvbiIsQlNfQVVUT1JBRElPQlVUVE9O
-LDIxMCwzMCwKICAgICAgICAgICAgICAgICAgICAgMjUsMTAKLSAgICBQVVNI
-QlVUVE9OICAgICAgIiZWaWV3IixJRENfQ0hPT1NFX1ZJRVcsMjU1LDMwLDIw
-LDEwLFdTX0dST1VQCisgICAgUFVTSEJVVFRPTiAgICAgICImVmlldyIsSURD
-X0NIT09TRV9WSUVXLDI0NSwzMCwyMCwxMCxXU19HUk9VUAogICAgIENPTlRS
-T0wgICAgICAgICAiIixJRENfU1RBVElDLCJTdGF0aWMiLFNTX0JMQUNLRlJB
-TUUgfCBTU19TVU5LRU4sMCwyOCwKICAgICAgICAgICAgICAgICAgICAgMzE3
-LDEKICAgICBDT05UUk9MICAgICAgICAgIiIsSURDX0xJU1RWSUVXX1BPUywi
-U3RhdGljIixTU19CTEFDS0ZSQU1FIHwgTk9UIApAQCAtMjg0LDcgKzI4NCw3
-IEBAIEJFR0lOCiAgICAgICAgICAgICAgICAgICAgIElEQ19TVEFUSUMsMjEs
-OSwyMzksMTYsTk9UIFdTX0dST1VQCiAgICAgTFRFWFQgICAgICAgICAgICJT
-ZWxlY3QgUGFja2FnZXMiLElEQ19TVEFUSUNfSEVBREVSX1RJVExFLDcsMCwy
-NTgsOCxOT1QgCiAgICAgICAgICAgICAgICAgICAgIFdTX0dST1VQCi0gICAg
-TFRFWFQgICAgICAgICAgICIiLElEQ19DSE9PU0VfVklFV0NBUFRJT04sMjgw
-LDMwLDMwLDEwCisgICAgTFRFWFQgICAgICAgICAgICIiLElEQ19DSE9PU0Vf
-VklFV0NBUFRJT04sMjcwLDMwLDQwLDEwCiBFTkQKIAogCg==
+	* security.cc (get_unix_group_sidlist): Create.
+	(get_supplementary_group_sidlist): Evolve into get_unix_group_sidlist.
+	(get_user_local_groups): Add check for duplicates.
+	(get_user_primary_group): Suppress.
+	(get_group_sidlist): Silently ignore PDC unavailability. 
+	Call get_unix_group_sidlist() before get_user_local_groups().
+	Remove call to get_supplementary_group_sidlist(). Never call 
+	get_user_primary_group() as the passwd group is always included.
+ 	Add well_known_authenticated_users_sid in only one statement.
+	
+	
+--=====================_1027055570==_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment; filename="security.cc.diff"
+Content-length: 4692
 
---Next part of message (VA.00000bfb.0117359f:thesoftwaresource.com)--
-This is the end of the Mime message.
+--- security.cc.orig	2002-07-16 21:45:52.000000000 -0400
++++ security.cc	2002-07-18 20:27:58.000000000 -0400
+@@ -389,17 +389,17 @@
+ 	if (!LookupAccountName (NULL, bgroup, gsid, &glen, domain, &dlen, &use))
+ 	  {
+ 	     if (GetLastError () !=3D ERROR_NONE_MAPPED)
+-		 debug_printf ("LookupAccountName(%s): %E", bgroup);
++               debug_printf ("LookupAccountName(%s): %E", bgroup);
+ 	     strcpy (lgroup + llen, bgroup + blen);
+ 	     if (!LookupAccountName (NULL, lgroup, gsid, &glen,
+ 				     domain, &dlen, &use))
+-		 debug_printf ("LookupAccountName(%s): %E", lgroup);
++               debug_printf ("LookupAccountName(%s): %E", lgroup);
+ 	  }
+-	if (legal_sid_type (use))
++	if (!legal_sid_type (use))
++	  debug_printf ("Rejecting local %s. use: %d", bgroup + blen, use);
++	else if (!grp_list.contains (gsid))
+ 	  grp_list +=3D gsid;
+-	else debug_printf ("Rejecting local %s. use: %d", bgroup + blen, use);
+       }
+-
+   NetApiBufferFree (buf);
+   return TRUE;
+ }
+@@ -415,6 +415,7 @@
+   return FALSE;
+ }
+
++#if 0 /* Unused */
+ static BOOL
+ get_user_primary_group (WCHAR *wlogonserver, const char *user,
+ 			PSID pusersid, cygsid &pgrpsid)
+@@ -448,34 +449,33 @@
+   NetApiBufferFree (buf);
+   return retval;
+ }
++#endif
+
+-static int
+-get_supplementary_group_sidlist (const char *username, cygsidlist &grp_lis=
+t)
++static void
++get_unix_group_sidlist (struct passwd * pw, cygsidlist &grp_list)
+ {
+   struct __group32 *gr;
+-  int cnt =3D 0;
++  cygsid gsid;
+
+   for (int gidx =3D 0; (gr =3D internal_getgrent (gidx)); ++gidx)
+     {
+-      if (gr->gr_mem)
++      if (gr->gr_gid =3D=3D (__gid32_t) pw->pw_gid)
++	goto found;
++      else if (gr->gr_mem)
+ 	for (int gi =3D 0; gr->gr_mem[gi]; ++gi)
+-	  if (strcasematch (username, gr->gr_mem[gi]))
+-	    {
+-	      if (gr->gr_passwd && *gr->gr_passwd)
+-		{
+-		  cygsid sid (gr->gr_passwd);
+-		  if ((PSID)sid && grp_list.add (sid))
+-		    ++cnt;
+-		}
+-	      break;
+-	    }
++	  if (strcasematch (pw->pw_name, gr->gr_mem[gi]))
++	    goto found;
++      continue;
++    found:
++      if (gsid.getfromgr (gr) && !grp_list.contains (gsid))
++	grp_list +=3D gsid;
++
+     }
+-  return cnt;
+ }
+
+ static BOOL
+ get_group_sidlist (cygsidlist &grp_list,
+-		  cygsid &usersid, cygsid &pgrpsid, struct passwd * pw,
++		   cygsid &usersid, cygsid &pgrpsid, struct passwd * pw,
+ 		   PTOKEN_GROUPS my_grps, LUID auth_luid, int &auth_pos,
+ 		   BOOL * special_pgrp)
+ {
+@@ -488,16 +488,14 @@
+   auth_pos =3D -1;
+
+   grp_list +=3D well_known_world_sid;
++  grp_list +=3D well_known_authenticated_users_sid;
+   if (usersid =3D=3D well_known_system_sid)
+     {
+-      grp_list +=3D well_known_authenticated_users_sid;
+       grp_list +=3D well_known_admins_sid;
++      get_unix_group_sidlist (pw, grp_list);
+     }
+   else
+     {
+-      extract_nt_dom_user (pw, domain, user);
+-      if (!get_logon_server (domain, server, wserver))
+-	return FALSE;
+       if (my_grps)
+ 	{
+ 	  if (sid_in_token_groups (my_grps, well_known_local_sid))
+@@ -512,13 +510,11 @@
+ 	    grp_list +=3D well_known_interactive_sid;
+ 	  if (sid_in_token_groups (my_grps, well_known_service_sid))
+ 	    grp_list +=3D well_known_service_sid;
+-	  grp_list +=3D well_known_authenticated_users_sid;
+ 	}
+       else
+ 	{
+ 	  grp_list +=3D well_known_local_sid;
+ 	  grp_list +=3D well_known_interactive_sid;
+-	  grp_list +=3D well_known_authenticated_users_sid;
+ 	}
+       if (auth_luid.QuadPart !=3D 999) /* !=3D SYSTEM_LUID */
+ 	{
+@@ -528,28 +524,22 @@
+ 	  grp_list +=3D buf;
+ 	  auth_pos =3D grp_list.count - 1;
+ 	}
+-      if (!get_user_groups (wserver, grp_list, user, domain) ||
+-	  !get_user_local_groups (grp_list, usersid))
++      extract_nt_dom_user (pw, domain, user);
++      /* Fail silently if DC is not reachable */
++      if (get_logon_server (domain, server, wserver) &&
++	  !get_user_groups (wserver, grp_list, user, domain))
++	return FALSE;
++      get_unix_group_sidlist (pw, grp_list);
++      if (!get_user_local_groups (grp_list, usersid))
+ 	return FALSE;
+     }
+   /* special_pgrp true if pgrpsid is not null and not in normal groups */
+-  if (!pgrpsid)
+-    {
+-      *special_pgrp =3D FALSE;
+-      get_user_primary_group (wserver, user, usersid, pgrpsid);
+-    }
+-  else
+-    *special_pgrp =3D TRUE;
+-  if (pw->pw_name && get_supplementary_group_sidlist (pw->pw_name, sup_lis=
+t))
++  *special_pgrp =3D FALSE;
++  if (pgrpsid && !grp_list.contains (pgrpsid))
+     {
+-      for (int i =3D 0; i < sup_list.count; ++i)
+-	if (!grp_list.contains (sup_list.sids[i]))
+-	  grp_list +=3D sup_list.sids[i];
++       *special_pgrp =3D TRUE;
++       grp_list +=3D pgrpsid;
+     }
+-  if (!grp_list.contains (pgrpsid))
+-    grp_list +=3D pgrpsid;
+-  else
+-    *special_pgrp =3D FALSE;
+   return TRUE;
+ }
+
+
+--=====================_1027055570==_--
