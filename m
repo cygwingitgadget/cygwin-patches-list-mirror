@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2395-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 872 invoked by alias); 12 Jun 2002 11:17:13 -0000
+Return-Path: <cygwin-patches-return-2396-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 2709 invoked by alias); 12 Jun 2002 11:20:57 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,180 +7,45 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 845 invoked from network); 12 Jun 2002 11:17:10 -0000
-X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
-Date: Wed, 12 Jun 2002 04:17:00 -0000
-From: Thomas Pfaff <tpfaff@gmx.net>
-To: cygwin-patches@cygwin.com
-Subject: Re: Pthreads patches
-Message-ID: <F0E13277A26BD311944600500454CCD056364A-101000@antarctica.intern.net>
-X-X-Sender: pfaff@antarctica.intern.net
+Received: (qmail 2687 invoked from network); 12 Jun 2002 11:20:56 -0000
+From: "Robert Collins" <robert.collins@syncretize.net>
+To: "'Thomas Pfaff'" <tpfaff@gmx.net>,
+	<cygwin-patches@cygwin.com>
+Subject: RE: Pthreads patches
+Date: Wed, 12 Jun 2002 04:20:00 -0000
+Message-ID: <009201c21203$3e564c00$0200a8c0@lifelesswks>
 MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; boundary="----_=_NextPart_000_01C211F5.FAA0E020"
-Content-ID: <Pine.WNT.4.44.0206121314440.264@algeria.intern.net>
-X-SW-Source: 2002-q2/txt/msg00378.txt.bz2
-
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
-
-------_=_NextPart_000_01C211F5.FAA0E020
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-Content-ID: Pine.WNT.4.44.0206121145441.242@algeria.intern.net
-Content-length: 1492
-
-
-Hi Rob,
-
-i had a minor problem with your latest code:
-You decided to change the mutex pointer into an object. This will break
-the verifyable_object_isvalid call in pthread::create.
-
-I have attached a small patch, a cancellation patch will follow.
-
-Thomas
-
-2002-06-12  Thomas Pfaff  <tpfaff@gmx.net>
-
-	* thread.h (pthread::cleanup_stack): Renamed cleanup_handlers to
-	cleanup_stack.
-	* thread.cc (pthread::pthread): Ditto.
-	(pthread::create): Fixed mutex verification.
-	(pthread::push_cleanup_handler): Renamed cleanup_handlers to
-	cleanup_stack.
-	Mutex calls removed, used InterlockedExchangePointer instead.
-	(pthread::pop_cleanup_handler): Renamed cleanup_handlers to
-	cleanup_stack.
-	(pthread::pop_all_cleanup_handlers): Ditto.
-	(__pthread_once): Check state first and return if already done.
-	(__pthread_join): DEADLOCK test reverted to __pthread_equal call.
-	(__pthread_detach): Unlock mutex before deletion.
-
-
-On Mon, 10 Jun 2002, Robert Collins wrote:
-
-> I've still got 4 pthread patches from Thomas to review, but I've got
-to
-> go out for a while.
->
-> **WARNING** I have code reviewed, but not regression tested these
-> changes. Thomas, could you merge your current sandbox with the latest
-> changes and ensure I haven't broken any of your patches ? Also, I've
-> probably caused the remaining patches to apply badly - if you have the
-> time, it would help me if you could regenerate the patches against
-CVS.
->
-> I should get the remaining code reviewed today sometime.
->
-> Rob
->
+Content-Type: text/plain;
+	charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3 (Normal)
+X-MSMail-Priority: Normal
+Importance: Normal
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+In-Reply-To: <F0E13277A26BD311944600500454CCD056364A-101000@antarctica.intern.net>
+X-SW-Source: 2002-q2/txt/msg00379.txt.bz2
 
 
 
+> -----Original Message-----
+> From: cygwin-patches-owner@cygwin.com 
+> [mailto:cygwin-patches-owner@cygwin.com] On Behalf Of Thomas Pfaff
+> Sent: Wednesday, 12 June 2002 9:17 PM
+> To: cygwin-patches@cygwin.com
+> Subject: Re: Pthreads patches
+> 
+> 
+> 
+> Hi Rob,
+> 
+> i had a minor problem with your latest code:
+> You decided to change the mutex pointer into an object. This 
+> will break
+> the verifyable_object_isvalid call in pthread::create.
 
+Why? I adjusted that as well I thought. Certainly the built dll seemed
+fine to me. Or did I manage to naff it up?
 
-------_=_NextPart_000_01C211F5.FAA0E020
-Content-Type: APPLICATION/OCTET-STREAM; name="pthread_fix.patch"
-Content-Transfer-Encoding: BASE64
-Content-ID: Pine.WNT.4.44.0206121314160.264@algeria.intern.net
-Content-Description: 
-Content-Disposition: attachment; filename="pthread_fix.patch"
-Content-length: 5779
+Anyway, your patch seems absent w/o leave :}.
 
-ZGlmZiAtdXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi90aHJlYWQuY2Mgc3Jj
-L3dpbnN1cC9jeWd3aW4vdGhyZWFkLmNjCi0tLSBzcmMub2xkL3dpbnN1cC9j
-eWd3aW4vdGhyZWFkLmNjCU1vbiBKdW4gMTAgMjE6MjQ6MjggMjAwMgorKysg
-c3JjL3dpbnN1cC9jeWd3aW4vdGhyZWFkLmNjCVdlZCBKdW4gMTIgMTI6NDc6
-MjIgMjAwMgpAQCAtMzU1LDcgKzM1NSw3IEBAIHB0aHJlYWQ6OnNlbGYgKCkK
-IAogLyogbWVtYmVyIG1ldGhvZHMgKi8KIHB0aHJlYWQ6OnB0aHJlYWQgKCk6
-dmVyaWZ5YWJsZV9vYmplY3QgKFBUSFJFQURfTUFHSUMpLCB3aW4zMl9vYmpf
-aWQgKDApLAotY2FuY2Vsc3RhdGUgKDApLCBjYW5jZWx0eXBlICgwKSwgam9p
-bmVyIChOVUxMKSwgY2xlYW51cF9oYW5kbGVycyhOVUxMKSAKKyAgICAgICAg
-ICAgICAgICAgICAgY2FuY2Vsc3RhdGUgKDApLCBjYW5jZWx0eXBlICgwKSwg
-am9pbmVyIChOVUxMKSwgY2xlYW51cF9zdGFjayhOVUxMKSAKIHsKIH0KIApA
-QCAtMzcwLDYgKzM3MCw4IEBAIHZvaWQKIHB0aHJlYWQ6OmNyZWF0ZSAodm9p
-ZCAqKCpmdW5jKSAodm9pZCAqKSwgcHRocmVhZF9hdHRyICpuZXdhdHRyLAog
-CQkgdm9pZCAqdGhyZWFkYXJnKQogeworICBwdGhyZWFkX211dGV4ICp2ZXJp
-ZnlhYmxlX211dGV4X29iaiA9ICZtdXRleDsKKwogICAvKmFscmVhZHkgcnVu
-bmluZyA/ICovCiAgIGlmICh3aW4zMl9vYmpfaWQpCiAgICAgcmV0dXJuOwpA
-QCAtMzg0LDcgKzM4Niw3IEBAIHB0aHJlYWQ6OmNyZWF0ZSAodm9pZCAqKCpm
-dW5jKSAodm9pZCAqKSwKICAgZnVuY3Rpb24gPSBmdW5jOwogICBhcmcgPSB0
-aHJlYWRhcmc7CiAKLSAgaWYgKHZlcmlmeWFibGVfb2JqZWN0X2lzdmFsaWQg
-KCZtdXRleCwgUFRIUkVBRF9NVVRFWF9NQUdJQykgIT0gVkFMSURfT0JKRUNU
-KQorICBpZiAodmVyaWZ5YWJsZV9vYmplY3RfaXN2YWxpZCAoJnZlcmlmeWFi
-bGVfbXV0ZXhfb2JqLCBQVEhSRUFEX01VVEVYX01BR0lDKSAhPSBWQUxJRF9P
-QkpFQ1QpCiAgICAgewogICAgICAgdGhyZWFkX3ByaW50ZiAoIk5ldyB0aHJl
-YWQgb2JqZWN0IGFjY2VzcyBtdXRleCBpcyBub3QgdmFsaWQuIHRoaXMgJXAi
-LAogCQkgICAgIHRoaXMpOwpAQCAtNDE3LDEwICs0MTksOCBAQCBwdGhyZWFk
-OjpwdXNoX2NsZWFudXBfaGFuZGxlciAoX19wdGhyZWFkCiAgIGlmICh0aGlz
-ICE9IHNlbGYgKCkpCiAgICAgLy8gVE9ETzogZG8gaXQ/CiAgICAgYXBpX2Zh
-dGFsICgiQXR0ZW1wdCB0byBwdXNoIGEgY2xlYW51cCBoYW5kbGVyIGFjcm9z
-cyB0aHJlYWRzIik7IAotICBtdXRleC5Mb2NrKCk7Ci0gIGhhbmRsZXItPm5l
-eHQgPSBjbGVhbnVwX2hhbmRsZXJzOwotICBjbGVhbnVwX2hhbmRsZXJzID0g
-aGFuZGxlcjsKLSAgbXV0ZXguVW5Mb2NrKCk7CisgIGhhbmRsZXItPm5leHQg
-PSBjbGVhbnVwX3N0YWNrOworICBJbnRlcmxvY2tlZEV4Y2hhbmdlUG9pbnRl
-ciggJmNsZWFudXBfc3RhY2ssIGhhbmRsZXIgKTsKIH0KIAogdm9pZApAQCAt
-NDMwLDIxICs0MzAsMjAgQEAgcHRocmVhZDo6cG9wX2NsZWFudXBfaGFuZGxl
-ciAoaW50IGNvbnN0IAogICAgIC8vIFRPRE86IHNlbmQgYSBzaWduYWwgb3Ig
-c29tZXRoaW5nIHRvIHRoZSB0aHJlYWQgPwogICAgIGFwaV9mYXRhbCAoIkF0
-dGVtcHQgdG8gZXhlY3V0ZSBhIGNsZWFudXAgaGFuZGxlciBhY3Jvc3MgdGhy
-ZWFkcyIpOwogICAKLSAgaWYgKGNsZWFudXBfaGFuZGxlcnMgIT0gTlVMTCAp
-CisgIGlmIChjbGVhbnVwX3N0YWNrICE9IE5VTEwpCiAgICAgewotICAgICAg
-X19wdGhyZWFkX2NsZWFudXBfaGFuZGxlciAqaGFuZGxlciA9IGNsZWFudXBf
-aGFuZGxlcnM7CisgICAgICBfX3B0aHJlYWRfY2xlYW51cF9oYW5kbGVyICpo
-YW5kbGVyID0gY2xlYW51cF9zdGFjazsKIAogICAgICAgaWYgKGV4ZWN1dGUp
-Ci0JICgqaGFuZGxlci0+ZnVuY3Rpb24pIChoYW5kbGVyLT5hcmcpOwotCi0g
-ICAgICBjbGVhbnVwX2hhbmRsZXJzID0gaGFuZGxlci0+bmV4dDsKKyAgICAg
-ICAgKCpoYW5kbGVyLT5mdW5jdGlvbikgKGhhbmRsZXItPmFyZyk7CisgICAg
-ICBjbGVhbnVwX3N0YWNrID0gaGFuZGxlci0+bmV4dDsKICAgICB9CiB9CiAK
-IHZvaWQKIHB0aHJlYWQ6OnBvcF9hbGxfY2xlYW51cF9oYW5kbGVycyAoKQog
-ewotICB3aGlsZSAoY2xlYW51cF9oYW5kbGVycyAhPSBOVUxMKQorICB3aGls
-ZSAoY2xlYW51cF9zdGFjayAhPSBOVUxMKQogICAgIHBvcF9jbGVhbnVwX2hh
-bmRsZXIgKDEpOwogfQogCkBAIC0xMDE1LDYgKzEwMTQsMTAgQEAgX19wdGhy
-ZWFkX2NyZWF0ZSAocHRocmVhZF90ICp0aHJlYWQsIGNvbgogaW50CiBfX3B0
-aHJlYWRfb25jZSAocHRocmVhZF9vbmNlX3QgKm9uY2VfY29udHJvbCwgdm9p
-ZCAoKmluaXRfcm91dGluZSkgKHZvaWQpKQogeworICAvLyBhbHJlYWR5IGRv
-bmUgPworICBpZiAob25jZV9jb250cm9sLT5zdGF0ZSkKKyAgICByZXR1cm4g
-MDsKKwogICBwdGhyZWFkX211dGV4X2xvY2sgKCZvbmNlX2NvbnRyb2wtPm11
-dGV4KTsKICAgLypIZXJlIHdlIG11c3Qgc2V0IGEgY2FuY2VsbGF0aW9uIGhh
-bmRsZXIgdG8gdW5sb2NrIHRoZSBtdXRleCBpZiBuZWVkZWQgKi8KICAgLypi
-dXQgYSBjYW5jZWxsYXRpb24gaGFuZGxlciBpcyBub3QgdGhlIHJpZ2h0IHRo
-aW5nLiBXZSBuZWVkIHRoaXMgaW4gdGhlIHRocmVhZApAQCAtMTAyMiw3ICsx
-MDI1LDcgQEAgX19wdGhyZWFkX29uY2UgKHB0aHJlYWRfb25jZV90ICpvbmNl
-X2NvbgogICAgKmF0IGEgdGltZS4gU3RvdGUgYSBtdXRleF90ICppbiB0aGUg
-cHRocmVhZF9zdHJ1Y3R1cmUuIGlmIHRoYXQncyBub24gbnVsbCB1bmxvY2sK
-ICAgICpvbiBwdGhyZWFkX2V4aXQgKCk7CiAgICAqLwotICBpZiAob25jZV9j
-b250cm9sLT5zdGF0ZSA9PSAwKQorICBpZiAoIW9uY2VfY29udHJvbC0+c3Rh
-dGUpCiAgICAgewogICAgICAgaW5pdF9yb3V0aW5lICgpOwogICAgICAgb25j
-ZV9jb250cm9sLT5zdGF0ZSA9IDE7CkBAIC0xNTU2LDcgKzE1NTksNyBAQCBf
-X3B0aHJlYWRfZXhpdCAodm9pZCAqdmFsdWVfcHRyKQogICBwdGhyZWFkICog
-dGhyZWFkID0gcHRocmVhZDo6c2VsZiAoKTsKIAogICAvLyBydW4gY2xlYW51
-cCBoYW5kbGVycwotICB0aHJlYWQtPnBvcF9hbGxfY2xlYW51cF9oYW5kbGVy
-cygpOworICB0aHJlYWQtPnBvcF9hbGxfY2xlYW51cF9oYW5kbGVycyAoKTsK
-IAogICBNVF9JTlRFUkZBQ0UtPmRlc3RydWN0b3JzLkl0ZXJhdGVOdWxsICgp
-OwogICAKQEAgLTE1ODEsMjMgKzE1ODQsMjEgQEAgX19wdGhyZWFkX2pvaW4g
-KHB0aHJlYWRfdCAqdGhyZWFkLCB2b2lkIAogewogICAgcHRocmVhZF90IGpv
-aW5lciA9IHB0aHJlYWQ6OnNlbGYgKCk7CiAKKyAgIC8vIEluaXRpYWxpemUg
-cmV0dXJuIHZhbCB3aXRoIE5VTEwKKyAgIGlmIChyZXR1cm5fdmFsKQorICAg
-ICAqcmV0dXJuX3ZhbCA9IE5VTEw7CisKICAgLypGSVhNRTogd2FpdCBvbiB0
-aGUgdGhyZWFkIGNhbmNlbGxhdGlvbiBldmVudCBhcyB3ZWxsIC0gd2UgYXJl
-IGEgY2FuY2VsbGF0aW9uIHBvaW50Ki8KICAgaWYgKHZlcmlmeWFibGVfb2Jq
-ZWN0X2lzdmFsaWQgKHRocmVhZCwgUFRIUkVBRF9NQUdJQykgIT0gVkFMSURf
-T0JKRUNUKQogICAgIHJldHVybiBFU1JDSDsKIAotICBpZiAoIGpvaW5lciA9
-PSAqdGhyZWFkKSAgICAKLSAgICB7Ci0gICAgICBpZiAocmV0dXJuX3ZhbCkK
-LSAgICAgICAgKnJldHVybl92YWwgPSBOVUxMOwotICAgICAgcmV0dXJuIEVE
-RUFETEs7Ci0gICAgfQorICBpZiAoX19wdGhyZWFkX2VxdWFsKHRocmVhZCwm
-am9pbmVyKSkKKyAgICByZXR1cm4gRURFQURMSzsKIAogICAoKnRocmVhZCkt
-Pm11dGV4LkxvY2sgKCk7CiAKICAgaWYoKCp0aHJlYWQpLT5hdHRyLmpvaW5h
-YmxlID09IFBUSFJFQURfQ1JFQVRFX0RFVEFDSEVEKQogICAgIHsKLSAgICAg
-IGlmIChyZXR1cm5fdmFsKQotICAgICAgICAqcmV0dXJuX3ZhbCA9IE5VTEw7
-CiAgICAgICAoKnRocmVhZCktPm11dGV4LlVuTG9jayAoKTsKICAgICAgIHJl
-dHVybiBFSU5WQUw7CiAgICAgfQpAQCAtMTY0MCw4ICsxNjQxLDExIEBAIF9f
-cHRocmVhZF9kZXRhY2ggKHB0aHJlYWRfdCAqdGhyZWFkKQogICAgICAgKCp0
-aHJlYWQpLT5tdXRleC5VbkxvY2sgKCk7CiAgICAgfQogICBlbHNlCi0gICAg
-Ly8gdGhyZWFkIGhhcyBhbHJlYWR5IHRlcm1pbmF0ZWQuCisgICAgeworICAg
-ICAgLy8gdGhyZWFkIGhhcyBhbHJlYWR5IHRlcm1pbmF0ZWQuCisgICAgICAo
-KnRocmVhZCktPm11dGV4LlVuTG9jayAoKTsKICAgICAgIGRlbGV0ZSAoKnRo
-cmVhZCk7CisgICAgfQogCiAgIHJldHVybiAwOwogfQo=
-
-------_=_NextPart_000_01C211F5.FAA0E020--
+Rob
