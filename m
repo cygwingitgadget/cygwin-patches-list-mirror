@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2347-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 15544 invoked by alias); 6 Jun 2002 14:34:16 -0000
+Return-Path: <cygwin-patches-return-2348-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 20221 invoked by alias); 6 Jun 2002 14:43:35 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,39 +7,29 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 15502 invoked from network); 6 Jun 2002 14:34:14 -0000
-Message-ID: <20020606143410.65277.qmail@web20007.mail.yahoo.com>
-Date: Thu, 06 Jun 2002 07:34:00 -0000
-From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
-Subject: Re: Patch for sub-second resolution in stat(2)
-To: cygwin-patches@cygwin.com
-In-Reply-To: <001f01c20d64$5417c5d0$6132bc3e@BABEL>
+Received: (qmail 20196 invoked from network); 6 Jun 2002 14:43:34 -0000
+Message-ID: <3CFF761E.720EC8C6@ieee.org>
+Date: Thu, 06 Jun 2002 07:43:00 -0000
+From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
+X-Accept-Language: en,pdf
 MIME-Version: 1.0
+To: Corinna Vinschen <cygwin-patches@cygwin.com>
+Subject: Re: Name aliasing in security.cc
+References: <3.0.5.32.20020603223130.007f6e10@mail.attbi.com> <3.0.5.32.20020530215740.007fc380@mail.attbi.com> <3.0.5.32.20020530215740.007fc380@mail.attbi.com> <3.0.5.32.20020603223130.007f6e10@mail.attbi.com> <3.0.5.32.20020605202359.007fc8a0@mail.attbi.com> <20020606131834.H30892@cygbert.vinschen.de> <3CFF6CB2.66B80261@ieee.org> <20020606162548.E22789@cygbert.vinschen.de>
 Content-Type: text/plain; charset=us-ascii
-X-SW-Source: 2002-q2/txt/msg00330.txt.bz2
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2002-q2/txt/msg00331.txt.bz2
 
-You know, I had some trouble with this, too. 
-Maybe it would be worth adding to contrib.html that attaching 
-a "ChangeLog.txt" file works well to preserve formatting?
+Corinna Vinschen wrote:
 
---- Conrad Scott <Conrad.Scott@dsl.pipex.com> wrote:
-> "Earnie Boyd" <earnie_boyd@yahoo.com> wrote:
-> > Attach the ChangeLog entry to the mail, make sure the mime for the
-> > attachment is text or make sure the file has a .txt suffix.  Most mail
-> > clients will then display the attachment within the body of the mail.
-> 
-> Thanks for the hint: I've just had a look and yes, OE was attaching the
-> changelog file as 'application/octet-stream' (i.e. binary). I'll try saving
-> the file as 'changelog.txt' and attaching that next time.
-> 
-> Thanks.
-> 
-> // Conrad
-> 
-> 
+> You're right but it doesn't matter since I have to open the token
+> anyway since I need the primary group which isn't available at that
+> point.
 
+Yes, but you open, read and close it and passwd.cc, and then open, read
+and close it in grp.cc. 
 
-__________________________________________________
-Do You Yahoo!?
-Yahoo! - Official partner of 2002 FIFA World Cup
-http://fifaworldcup.yahoo.com
+> It's faster than strcasecmp.
+Thanks, I will use it instead.
+
+Pierre
