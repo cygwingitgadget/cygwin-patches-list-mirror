@@ -1,42 +1,26 @@
-From: Christopher Faylor <cgf@redhat.com>
+From: egor duda <deo@logos-m.ru>
 To: cygwin-patches@cygwin.com
-Subject: Re: "correct" stack trace in gdb
-Date: Sun, 29 Apr 2001 20:10:00 -0000
-Message-id: <20010429231106.A26455@redhat.com>
-References: <189167092696.20010426101930@logos-m.ru>
-X-SW-Source: 2001-q2/msg00175.html
+Subject: Re: src/winsup/cygwin ChangeLog autoload.cc autolo ...
+Date: Thu, 03 May 2001 03:03:00 -0000
+Message-id: <132246850181.20010503140017@logos-m.ru>
+References: <20010503093508.13491.qmail@sourceware.cygnus.com>
+X-SW-Source: 2001-q2/msg00176.html
 
-On Thu, Apr 26, 2001 at 10:19:30AM +0400, egor duda wrote:
->several people complained in mailing list recently that when they're
->"error_start"ing gdb or dumper to analyze crashes, they see "incorrect"
->stack traces -- without the frame of function which had actually
->crashed.  this patch is supposed to fix this problem, but it has a
->drawback of stripping handle_exception() and try_to_debug() frames from
->stack trace.
+Hi!
 
-I just checked in a relatively simple patch which I think accomplishes
-everything in cygwin.  It keeps looping in the exception handler until
-gdb starts up.  This is a little unfriendly to the system but it seems
-to work ok.
+Thursday, 03 May, 2001 corinna@sourceware.cygnus.com wrote:
 
-I even tried it on Windows 95.
+cscc>         * net.cc (wsock_init): Add guard variable handling. Take care
+cscc>         to call WSAStartup only once. Load WSAStartup without using
+cscc>         autoload wrapper to eliminate recursion.  Eliminate FIONBIO
+cscc>         and srandom stuff.
 
-The benefit of this is that if you do a "thread 1" gdb will be stopped
-on the specific instruction that caused the problem.  Or, if it isn't
-a "continue" will get you there.
+actually, srandom stuff was calles purposively in wsock_init. it's
+supposed to make secret cookies for AF_UNIX sockets random. i know
+that calling srandom() isn't the best way to assure this, but it's
+better than nothing. I'll probably replace newlib's random to calls to
+windows crypto-api, but until then, i think, srandom should be called
+during init.
 
-In the process of doing this, I removed all of the attempts at
-synchronization except the "keep_looping" busy loop.  The busy loop is
-only used when Cygwin wants to call the debugger for its own purposes,
-not when there is an exception.
+Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
 
-I also changed the stack dump logic a little so that the stack dump
-should be a little more accurate now.
-
-Ironically, all of this was prompted by problems with my recent path
-scanning logic.  I got a SIGSEGV while testing a configure script and,
-as usual, I couldn't figure out exactly where the problem occurred
-thanks to the usual problem of missing frame pointers in Windows
-functions.
-
-cgf
