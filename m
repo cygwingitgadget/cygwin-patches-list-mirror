@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2355-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 4068 invoked by alias); 7 Jun 2002 11:12:47 -0000
+Return-Path: <cygwin-patches-return-2356-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 32135 invoked by alias); 7 Jun 2002 16:37:10 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,38 +7,174 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 4051 invoked from network); 7 Jun 2002 11:12:44 -0000
-Date: Fri, 07 Jun 2002 04:12:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygpatch <cygwin-patches@cygwin.com>
-Subject: Re: regtool support for remote registry
-Message-ID: <20020607131242.C23093@cygbert.vinschen.de>
-Mail-Followup-To: cygpatch <cygwin-patches@cygwin.com>
-References: <13970794877.20020606141146@logos-m.ru> <20020606152859.B22789@cygbert.vinschen.de> <47151556727.20020607123750@logos-m.ru>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <47151556727.20020607123750@logos-m.ru>
-User-Agent: Mutt/1.3.22.1i
-X-SW-Source: 2002-q2/txt/msg00338.txt.bz2
+Received: (qmail 32121 invoked from network); 7 Jun 2002 16:37:09 -0000
+X-MimeOLE: Produced By Microsoft Exchange V6.0.5762.3
+content-class: urn:content-classes:message
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+	boundary="----_=_NextPart_001_01C20E41.4A43A82A"
+Subject: RE: sem_getvalue patch
+Date: Fri, 07 Jun 2002 09:37:00 -0000
+Message-ID: <3D848382FB72E249812901444C6BDB1D0AA179@exchange.timesys.com>
+X-MS-Has-Attach: yes
+X-MS-TNEF-Correlator: 
+From: "Robb, Sam" <sam.robb@timesys.com>
+To: <cygwin-patches@cygwin.com>
+X-SW-Source: 2002-q2/txt/msg00339.txt.bz2
 
-On Fri, Jun 07, 2002 at 12:37:50PM +0400, Egor Duda wrote:
-> CV> Just a question:  Wouldn't it make sense to use a syntax as rcp/scp:
-> CV>   regtool get bumba:\machine\software\microsoft\...
-> CV> This together with the capability to use forward slashes looks
-> CV> more unixy:
-> CV>   regtool get bumba:/machine/software/microsoft/...
-> CV> In this context I see for the first time, that the usage doesn't
-> CV> say anything about using forward slashes.   Shouldn't we add a word
-> CV> that this is possible, too?
-> 
-> No probs. This should support both formats.
+This is a multi-part message in MIME format.
 
-Thanks!  Applied.
+------_=_NextPart_001_01C20E41.4A43A82A
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: base64
+Content-length: 1826
 
-Corinna
+W29yaWdpbmFsIG1lc3NhZ2Ugd2FzIHRvIGN5Z3dpbkBjeWd3aW4uY29tXQ0K
+DQo+IFdpdGggYSBsaXR0bGUgZWZmb3J0LCBJJ3ZlIG1hbmFnZWQgdG8gYnVp
+bGQgYSBjeWd3aW4xLmRsbCB0aGF0IGV4cG9ydHMNCj4gc2VtX2dldHZhbHVl
+KCkuICBUaGUgdmVyc2lvbiBvZiBjeWd3aW4xLmRsbCB0aGF0IEkgYnVpbHQg
+c2VlbXMgc3VidGx5DQo+IGhvc2VkLCB0aG91Z2ggLSB3aGlsZSBJIGNhbiBj
+b21waWxlIGFuZCBydW4gbXkgdGVzdCBwcm9ncmFtIGZyb20NCj4gd2l0aGlu
+IGEgV2luZG93cyBjbWQuZXhlIHNoZWxsLCB0cnlpbmcgdG8gcnVuIGJhc2gg
+b3IgbHMgKGFuZCBwcm9iYWJseQ0KPiBhIGdyZWF0IG1hbnkgb3RoZXIgdGhp
+bmdzKSBoYW5ncy4NCg0KSGVyZSdzIHRoZSBwYXRjaC4uLiBmYWlybHkgc3Ry
+YWlnaHRmb3J3YXJkLCBpZiBJJ3ZlIHVuZGVyc3Rvb2QgdGhlIFNVUw0Kc3Bl
+YyBmb3IgdGhlIGZ1bmN0aW9uIGNvcnJlY3RseSA6LS8NCg0KQXMgZm9yIHRo
+ZSBhcHBhcmVudCBoYW5ncyBpbiBiYXNoL2xzL2V0Yy4gLSB3ZWxsLCBwZXJo
+YXBzIGl0IHdhcyBteQ0KcGF0Y2gsIHBlcmhhcHMgbm90LCBhcyBJIHdhcyBi
+dWlsZGluZyBmcm9tIGxhdGVzdCBjdnMgc291cmNlLiAgU2luY2UNCkkgY2Fu
+J3QgZmluZCBhbnkgZG9jdW1lbnRhdGlvbiB0aGF0IGluZGljYXRlcyBpZiBh
+IHBhcnRpY3VsYXIgbWV0aG9kDQpmb3IgYWRkaW5nIGFuIGV4cG9ydCB0byBj
+eWdpd24uZGluIG5lZWRzIHRvIGJlIGZvbGxvd2VkLCB0aGlzIHBhdGNoDQpz
+aW1wbHkgdGFja3Mgc2VtX2dldHZhbHVlIHRvIHRoZSBlbmQgb2YgdGhlIGxp
+c3QuDQoNClRoYW5rcywNCg0KLVNhbXJvYmINCg0Kd2luc3VwL2N5Z3dpbi9D
+aGFuZ2VMb2cgZW50cnk6DQoNCjIwMDItMDYtMDYgIFNhbSBSb2JiIDxzYW0u
+cm9iYkB0aW1lc3lzLmNvbT4NCg0KCSogcHRocmVhZC5jYyAoc2VtX2dldHZh
+bHVlKTogTmV3IGZ1bmN0aW9uLg0KCSogdGhyZWFkLmNjIChfX3NlbV9nZXR2
+YWx1ZSk6IERpaXRvLg0KCSogdGhyZWFkLmggKF9fc2VtX2dldHZhbHVlKTog
+RGl0dG8uDQoJKiBpbmNsdWRlL3NlbWFwaG9yZS5oIChzZW1fZ2V0dmFsdWUp
+OiBEaXR0by4NCgkqIHBvc2l4LnNnbWw6IEFkZCBzZW1fZ2V0dmFsdWUgdG8g
+IlN5bmNocm9uaXphdGlvbiIgc2VjdGlvbi4NCgkqIGN5Z3dpbi5kaW46IEFk
+ZCBzeW1ib2wgZm9yIHNlbV9nZXR2YWx1ZSgpLg0KDQp3aW5zdXAvZG9jL0No
+YW5nZUxvZyBlbnRyeToNCg0KMjAwMi0wNi0wNiAgU2FtIFJvYmIgPHNhbS5y
+b2JiQHRpbWVzeXMuY29tPg0KDQoJKiBjYWxscy50ZXhpbmZvOiBSZW1vdmUg
+J3VuaW1wbGVtZW50ZWQnIHRhZyBmcm9tIHNlbV9nZXR2YWx1ZS4NCg==
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+------_=_NextPart_001_01C20E41.4A43A82A
+Content-Type: application/octet-stream;
+	name="sem_getvalue.changelog"
+Content-Transfer-Encoding: base64
+Content-Description: sem_getvalue.changelog
+Content-Disposition: attachment;
+	filename="sem_getvalue.changelog"
+Content-length: 663
+
+d2luc3VwL2N5Z3dpbi9DaGFuZ2VMb2cgZW50cnk6CgoyMDAyLTA2LTA2ICBT
+YW0gUm9iYiA8c2FtLnJvYmJAdGltZXN5cy5jb20+CgoJKiBwdGhyZWFkLmNj
+IChzZW1fZ2V0dmFsdWUpOiBOZXcgZnVuY3Rpb24uCgkqIHRocmVhZC5jYyAo
+X19zZW1fZ2V0dmFsdWUpOiBEaWl0by4KCSogdGhyZWFkLmggKF9fc2VtX2dl
+dHZhbHVlKTogRGl0dG8uCgkqIGluY2x1ZGUvc2VtYXBob3JlLmggKHNlbV9n
+ZXR2YWx1ZSk6IERpdHRvLgoJKiBwb3NpeC5zZ21sOiBBZGQgc2VtX2dldHZh
+bHVlIHRvICJTeW5jaHJvbml6YXRpb24iIHNlY3Rpb24uCgkqIGN5Z3dpbi5k
+aW46IEFkZCBzeW1ib2wgZm9yIHNlbV9nZXR2YWx1ZSgpLgoKd2luc3VwL2Rv
+Yy9DaGFuZ2VMb2cgZW50cnk6CgoyMDAyLTA2LTA2ICBTYW0gUm9iYiA8c2Ft
+LnJvYmJAdGltZXN5cy5jb20+CgoJKiBjYWxscy50ZXhpbmZvOiBSZW1vdmUg
+J3VuaW1wbGVtZW50ZWQnIHRhZyBmcm9tIHNlbV9nZXR2YWx1ZS4K
+
+------_=_NextPart_001_01C20E41.4A43A82A
+Content-Type: application/octet-stream;
+	name="sem_getvalue.diff"
+Content-Transfer-Encoding: base64
+Content-Description: sem_getvalue.diff
+Content-Disposition: attachment;
+	filename="sem_getvalue.diff"
+Content-length: 5153
+
+SW5kZXg6IGN5Z3dpbi9jeWd3aW4uZGluCj09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT0KUkNTIGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvY3lnd2luL2N5Z3dp
+bi5kaW4sdgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuNTAKZGlmZiAtdSAtcCAt
+cjEuNTAgY3lnd2luLmRpbgotLS0gY3lnd2luL2N5Z3dpbi5kaW4JNiBKdW4g
+MjAwMiAwMDowOTo1NSAtMDAwMAkxLjUwCisrKyBjeWd3aW4vY3lnd2luLmRp
+bgk3IEp1biAyMDAyIDAzOjQ2OjQ3IC0wMDAwCkBAIC0xMjcwLDMgKzEyNzAs
+NCBAQCBhY2x0b3RleHQKIF9hY2x0b3RleHQgPSBhY2x0b3RleHQKIGFjbGZy
+b210ZXh0CiBfYWNsZnJvbXRleHQgPSBhY2xmcm9tdGV4dAorc2VtX2dldHZh
+bHVlCkluZGV4OiBjeWd3aW4vcG9zaXguc2dtbAo9PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09ClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL2N5Z3dpbi9w
+b3NpeC5zZ21sLHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjMKZGlmZiAtdSAt
+cCAtcjEuMyBwb3NpeC5zZ21sCi0tLSBjeWd3aW4vcG9zaXguc2dtbAkyNCBK
+dW4gMjAwMSAyMjoyNjo1MiAtMDAwMAkxLjMKKysrIGN5Z3dpbi9wb3NpeC5z
+Z21sCTcgSnVuIDIwMDIgMDM6NDY6NDcgLTAwMDAKQEAgLTUyLDcgKzUyLDcg
+QEAgZ2V0Z3JnaWQsIGdldGdybmFtLCBnZXRwd25hbSwgZ2V0cHd1aWQKIDwv
+cGFyYT48L3NlY3QyPgogPHNlY3QyPjx0aXRsZT5TeW5jaHJvbml6YXRpb24g
+KFNlY3Rpb24gMTEpIDwvdGl0bGU+PHBhcmE+CiAKLXNlbV9pbml0LCBzZW1f
+ZGVzdHJveSwgc2VtX3dhaXQsIHNlbV90cnl3YWl0LCBzZW1fcG9zdCwKK3Nl
+bV9pbml0LCBzZW1fZGVzdHJveSwgc2VtX3dhaXQsIHNlbV90cnl3YWl0LCBz
+ZW1fcG9zdCwgc2VtX2dldHZhbHVlLAogcHRocmVhZF9tdXRleF9pbml0LCBw
+dGhyZWFkX211dGV4X2Rlc3Ryb3ksIHB0aHJlYWRfbXV0ZXhfbG9jaywKIHB0
+aHJlYWRfbXV0ZXhfdHJ5bG9jaywgcHRocmVhZF9tdXRleF91bmxvY2sKIApJ
+bmRleDogY3lnd2luL3B0aHJlYWQuY2MKPT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vcHRocmVh
+ZC5jYyx2CnJldHJpZXZpbmcgcmV2aXNpb24gMS4xMQpkaWZmIC11IC1wIC1y
+MS4xMSBwdGhyZWFkLmNjCi0tLSBjeWd3aW4vcHRocmVhZC5jYwkyOSBTZXAg
+MjAwMSAwOTowMTowMSAtMDAwMAkxLjExCisrKyBjeWd3aW4vcHRocmVhZC5j
+Ywk3IEp1biAyMDAyIDAzOjQ2OjQ4IC0wMDAwCkBAIC00NzYsNCArNDc2LDEw
+IEBAIHNlbV9wb3N0IChzZW1fdCAqIHNlbSkKICAgcmV0dXJuIF9fc2VtX3Bv
+c3QgKHNlbSk7CiB9CiAKK2ludAorc2VtX2dldHZhbHVlIChzZW1fdCAqIHNl
+bSwgaW50ICogc3ZhbCkKK3sKKyAgcmV0dXJuIF9fc2VtX2dldHZhbHVlIChz
+ZW0sIHN2YWwpOworfQorCiB9CkluZGV4OiBjeWd3aW4vdGhyZWFkLmNjCj09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT0KUkNTIGZpbGU6IC9jdnMvc3JjL3NyYy93
+aW5zdXAvY3lnd2luL3RocmVhZC5jYyx2CnJldHJpZXZpbmcgcmV2aXNpb24g
+MS43MApkaWZmIC11IC1wIC1yMS43MCB0aHJlYWQuY2MKLS0tIGN5Z3dpbi90
+aHJlYWQuY2MJNSBKdW4gMjAwMiAxMjozOTo1NCAtMDAwMAkxLjcwCisrKyBj
+eWd3aW4vdGhyZWFkLmNjCTcgSnVuIDIwMDIgMDM6NDY6NTEgLTAwMDAKQEAg
+LTIyNzEsNCArMjI3MSwxMyBAQCBfX3NlbV9wb3N0IChzZW1fdCAqc2VtKQog
+ICByZXR1cm4gMDsKIH0KIAoraW50CitfX3NlbV9nZXR2YWx1ZSAoc2VtX3Qg
+KnNlbSwgaW50ICpzdmFsKQoreworICBpZiAodmVyaWZ5YWJsZV9vYmplY3Rf
+aXN2YWxpZCAoc2VtLCBTRU1fTUFHSUMpICE9IFZBTElEX09CSkVDVCkKKyAg
+ICByZXR1cm4gRUlOVkFMOworICAqc3ZhbCA9ICgqc2VtKS0+Y3VycmVudHZh
+bHVlOworICByZXR1cm4gMDsKK30KKwogI2VuZGlmIC8vIE1UX1NBRkUKSW5k
+ZXg6IGN5Z3dpbi90aHJlYWQuaAo9PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09ClJD
+UyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL2N5Z3dpbi90aHJlYWQuaCx2
+CnJldHJpZXZpbmcgcmV2aXNpb24gMS4zNApkaWZmIC11IC1wIC1yMS4zNCB0
+aHJlYWQuaAotLS0gY3lnd2luL3RocmVhZC5oCTUgSnVuIDIwMDIgMTI6Mzk6
+NTUgLTAwMDAJMS4zNAorKysgY3lnd2luL3RocmVhZC5oCTcgSnVuIDIwMDIg
+MDM6NDY6NTIgLTAwMDAKQEAgLTUxMSw2ICs1MTEsNyBAQCBpbnQgX19zZW1f
+ZGVzdHJveSAoc2VtX3QgKiBzZW0pOwogaW50IF9fc2VtX3dhaXQgKHNlbV90
+ICogc2VtKTsKIGludCBfX3NlbV90cnl3YWl0IChzZW1fdCAqIHNlbSk7CiBp
+bnQgX19zZW1fcG9zdCAoc2VtX3QgKiBzZW0pOworaW50IF9fc2VtX2dldHZh
+bHVlIChzZW1fdCAqIHNlbSwgaW50ICogc3ZhbCk7CiB9OwogCiAjZW5kaWYg
+Ly8gTVRfU0FGRQpJbmRleDogY3lnd2luL2luY2x1ZGUvc2VtYXBob3JlLmgK
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3Jj
+L3dpbnN1cC9jeWd3aW4vaW5jbHVkZS9zZW1hcGhvcmUuaCx2CnJldHJpZXZp
+bmcgcmV2aXNpb24gMS4xCmRpZmYgLXUgLXAgLXIxLjEgc2VtYXBob3JlLmgK
+LS0tIGN5Z3dpbi9pbmNsdWRlL3NlbWFwaG9yZS5oCTIxIE1hciAyMDAxIDE2
+OjA2OjIyIC0wMDAwCTEuMQorKysgY3lnd2luL2luY2x1ZGUvc2VtYXBob3Jl
+LmgJNyBKdW4gMjAwMiAwMzo0Njo1MiAtMDAwMApAQCAtMzMsNiArMzMsNyBA
+QCBleHRlcm4gIkMiCiAgIGludCBzZW1fd2FpdCAoc2VtX3QgKiBzZW0pOwog
+ICBpbnQgc2VtX3RyeXdhaXQgKHNlbV90ICogc2VtKTsKICAgaW50IHNlbV9w
+b3N0IChzZW1fdCAqIHNlbSk7CisgIGludCBzZW1fZ2V0dmFsdWUgKHNlbV90
+ICogc2VtLCBpbnQgKiBzdmFsKTsKIAogI2lmZGVmIF9fY3BsdXNwbHVzCiB9
+CkluZGV4OiBkb2MvY2FsbHMudGV4aW5mbwo9PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09ClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL2RvYy9jYWxscy50
+ZXhpbmZvLHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjMKZGlmZiAtdSAtcCAt
+cjEuMyBjYWxscy50ZXhpbmZvCi0tLSBkb2MvY2FsbHMudGV4aW5mbwkyMCBK
+dWwgMjAwMCAxMTowNDozMyAtMDAwMAkxLjMKKysrIGRvYy9jYWxscy50ZXhp
+bmZvCTcgSnVuIDIwMDIgMDM6NDY6NTMgLTAwMDAKQEAgLTQyMiw3ICs0MjIs
+NyBAQCBuZXQgcmVsZWFzZS4pfQogQGl0ZW0gcHRocmVhZF9tdXRleF91bmxv
+Y2s6IFA5NiAxMS4zLjMuMQogQGl0ZW0gc2VtX2Nsb3NlOiBQOTYgMTEuMi40
+LjEgLS0gdW5pbXBsZW1lbnRlZAogQGl0ZW0gc2VtX2Rlc3Ryb3k6IFA5NiAx
+MS4yLjIuMQotQGl0ZW0gc2VtX2dldHZhbHVlOiBQOTYgMTEuMi44LjEgLS0g
+dW5pbXBsZW1lbnRlZAorQGl0ZW0gc2VtX2dldHZhbHVlOiBQOTYgMTEuMi44
+LjEKIEBpdGVtIHNlbV9pbml0OiBQOTYgMTEuMi4xLjEKIEBpdGVtIHNlbV9v
+cGVuOiBQOTYgMTEuMi4zLjEgLS0gdW5pbXBsZW1lbnRlZAogQGl0ZW0gc2Vt
+X3Bvc3Q6IFA5NiAxMS4yLjcuMQo=
+
+------_=_NextPart_001_01C20E41.4A43A82A--
