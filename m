@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5308-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 17142 invoked by alias); 16 Jan 2005 17:15:25 -0000
+Return-Path: <cygwin-patches-return-5309-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 6029 invoked by alias); 20 Jan 2005 20:53:42 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,31 +7,25 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 17107 invoked from network); 16 Jan 2005 17:15:21 -0000
+Received: (qmail 5989 invoked from network); 20 Jan 2005 20:53:38 -0000
 Received: from unknown (HELO exgate.steeleye.com) (209.192.50.48)
-  by sourceware.org with SMTP; 16 Jan 2005 17:15:21 -0000
+  by sourceware.org with SMTP; 20 Jan 2005 20:53:38 -0000
 Received: from steelpo.steeleye.com ([172.17.4.222]) by exgate.steeleye.com with Microsoft SMTPSVC(5.0.2195.6713);
-	 Sun, 16 Jan 2005 12:15:20 -0500
+	 Thu, 20 Jan 2005 15:53:37 -0500
 Content-class: urn:content-classes:message
 MIME-Version: 1.0
 Content-Type: text/plain;
 	charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 Subject: RE: Control auto-uppercasing of environment variables
-Date: Sun, 16 Jan 2005 17:15:00 -0000
-Message-ID: <76CBF6B36306884D835E33553572BE52059ED0@steelpo>
+Date: Thu, 20 Jan 2005 20:53:00 -0000
+Message-ID: <76CBF6B36306884D835E33553572BE52059EE0@steelpo>
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 From: "Ernie Coskrey" <Ernie.Coskrey@steeleye.com>
 To: "Cygwin Patches" <cygwin-patches@cygwin.com>
-X-OriginalArrivalTime: 16 Jan 2005 17:15:20.0690 (UTC) FILETIME=[F525CD20:01C4FBEE]
-X-SW-Source: 2005-q1/txt/msg00011.txt.bz2
-
-No, I haven't done that.  If anybody knows of any specific tests that I nee=
-d to try on a Win9X box, I'll do that.  Otherwise I'll just check general s=
-hell (bash) and some utility functionality.
-
-Ernie Coskrey
+X-OriginalArrivalTime: 20 Jan 2005 20:53:37.0888 (UTC) FILETIME=[1D569E00:01C4FF32]
+X-SW-Source: 2005-q1/txt/msg00012.txt.bz2
 
 > -----Original Message-----
 > From: Larry Hall [mailto:no-personal-replies-please-lh@cygwin.com]
@@ -75,4 +69,21 @@ Ernie Coskrey
 > Holliston, MA 01746=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
 =20=20=20
 >=20
->=20
+
+On a Windows 9X system, environment variables are commonly configured in AU=
+TOEXEC.BAT using the "set" command.  The set command automatically uppercas=
+es the variable name - so adding "set MyValue=3D5" to autoexec.bat will res=
+ult in an environment variable whose name is MYVALUE (as will running the s=
+et command from the CMD prompt).
+
+There are two variables - windir and winbootdir - that are lower-case on a =
+Windows 98 system.  Using my patch, I was able to run a shell and see that =
+these variables remain lower-case in the shell environment, and that this d=
+idn't create any problems with any of the Cygwin utilities I tried.  I coul=
+d have written a program that would do a variety of SetEnvironmentVariable(=
+) calls using mixed-case variable names, and then would execute bash, but d=
+idn't go to those lengths.  I don't believe this patch will have any advers=
+e side-effects on a Win9X box.
+
+Ernie Coskrey
+SteelEye Technology, Inc.
