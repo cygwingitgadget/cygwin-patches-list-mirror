@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4989-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 30749 invoked by alias); 23 Sep 2004 16:24:46 -0000
+Return-Path: <cygwin-patches-return-4990-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 4646 invoked by alias); 23 Sep 2004 16:28:30 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,94 +7,61 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 30648 invoked from network); 23 Sep 2004 16:24:42 -0000
-Date: Thu, 23 Sep 2004 16:24:00 -0000
-From: Corinna Vinschen <vinschen@redhat.com>
+Received: (qmail 4613 invoked from network); 23 Sep 2004 16:28:29 -0000
+From: "Bob Byrnes" <byrnes@curl.com>
+Date: Thu, 23 Sep 2004 16:28:00 -0000
+In-Reply-To: <20040923123136.GG12802@cygbert.vinschen.de>
+       from Corinna Vinschen (Sep 23,  2:31pm)
+Organization: Curl Corporation
+X-Address: 1 Cambridge Center, 10th Floor, Cambridge, MA 02142-1612
+X-Phone: 617-761-1238
+X-Fax: 617-761-1201
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Fake POSIX behaviour in seteuid/setegid
-Message-ID: <20040923162537.GA944@cygbert.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.4.2i
-X-SW-Source: 2004-q3/txt/msg00141.txt.bz2
+Subject: Re: More pipe problems (was Re: [Fwd: 1.5.11-1: sftp performance problem])
+Message-Id: <20040923162828.CA385E4F9@wildcard.curl.com>
+X-SW-Source: 2004-q3/txt/msg00142.txt.bz2
 
-Hi folks,
-especially Pierre,
+On Sep 23,  2:31pm, Corinna Vinschen wrote:
+-- Subject: Re: More pipe problems (was Re: [Fwd: 1.5.11-1: sftp performance 
+>
+> It seems that NtQueryInformationFile doesn't return useful values
+> anymore under XP SP2.  I'm not quite sure though since it's the first
+> time I'm looking into this issue.
+> ...
+> [select_pipe] ssh 756 peek_pipe: WriteQuotaAvailable = 1024
+> [select_pipe] ssh 756 peek_pipe: OutboundQuota = 16117632
+> ...
+> Since WriteQuotaAvailable is < PIPE_BUF and OutboundQuota is ... way
+> too big, gotone resp. s->write_ready never gets set.
+> 
+-- End of excerpt from Corinna Vinschen
 
-I'm thinking of applying the below patch.  The idea is that an application
-which has changed real as well as effective id to values different from
-the saved (==original) id has no way to restore its old identity.
+I just tried some of my NtQueryInformationFile test programs on an
+XP SP2 system, and they all seem to work correctly.
 
-That's obviously not correct from a Windows NT point of view, but this
-is a start to mimic the expected behaviour under POSIX.  For example
-OpenSSH's sshd calls seteuid/setuid to change to an unprivileged user
-and then it calls seteuid and setuid again, to test if it's possible
-to revert the identity to root.  If so, it exists with error.  Same for
-the gid.  The Cygwin version of OpenSSH currently disables these tests,
-but it might be a good idea to fake POSIXy behaviour from a portability
-point of view.
+OutboundQuota is just the size of the pipe.  How do we know that the
+cygwin ssh didn't really inherit a huge pipe from the win32-native
+unison?
 
-Any thoughts appreciated.  I'd be interested if there's some serious
-reason not to do this at all, or if there's a better way to do this.
-One caveat of my patch is that changing from one privileged account to
-another privileged account disables changing uids, even though the
-second account would also have this right.  Perhaps the tests should
-be coupled with a check, whether the current effective uid has the
-appropriate permissions or not.  I'm also suspecting that the gid
-test is not far away from a total error in reasoning...
+Also, OutboundQuota is only used in the cygwin select code to detect
+and deal with tiny pipes ...
 
+          /* If we somehow inherit a tiny pipe (size < PIPE_BUF), then consider
+             the pipe writable only if it is completely empty, to minimize the
+             probability that a subsequent write will block.  */
+          else if (fpli.OutboundQuota < PIPE_BUF &&
+                   fpli.WriteQuotaAvailable == fpli.OutboundQuota)
 
-Corinna
+... so even if OutboundQuota were wrong, I don't see how a huge value
+would cause incorrect behavior.
 
+The real trouble here seems to be that WriteQuotaAvailable is so low,
+which (if that is to be believed) indicates the pipe has almost filled.
+This seems similar to the sftp problem, which I am still investigating;
+I haven't made much progress during the past week because I've been
+busy with other things at work, but I have learned a few new things
+and I'll try to send another report as soon as I can construct a
+coherent explanation.
 
-	* syscalls.cc (seteuid32): Mimic POSIX behaviour.  After giving up
-	real and effective uid, don't allow to change uids again.
-	(setegid32): Ditto for gids.
-
-Index: syscalls.cc
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/syscalls.cc,v
-retrieving revision 1.348
-diff -p -u -r1.348 syscalls.cc
---- syscalls.cc	17 Sep 2004 09:10:53 -0000	1.348
-+++ syscalls.cc	23 Sep 2004 16:16:56 -0000
-@@ -2004,6 +2004,15 @@ seteuid32 (__uid32_t uid)
-       return 0;
-     }
- 
-+  /* Mimic POSIX behaviour.  After giving up the real uid, don't allow
-+     to change uids again. */
-+  if (cygheap->user.real_uid != cygheap->user.saved_uid
-+      && myself->uid != cygheap->user.saved_uid)
-+    {
-+      set_errno (EPERM);
-+      return -1;
-+    }
-+
-   cygsid usersid;
-   user_groups &groups = cygheap->user.groups;
-   HANDLE ptok, new_token = INVALID_HANDLE_VALUE;
-@@ -2184,6 +2193,15 @@ setegid32 (__gid32_t gid)
-       return 0;
-     }
- 
-+  /* Mimic POSIX behaviour.  After giving up the real gid, don't allow
-+     to change gids again. */
-+  if (cygheap->user.real_gid != cygheap->user.saved_gid
-+      && myself->gid != cygheap->user.saved_gid)
-+    {
-+      set_errno (EPERM);
-+      return -1;
-+    }
-+
-   user_groups * groups = &cygheap->user.groups;
-   cygsid gsid;
-   HANDLE ptok;
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          mailto:cygwin@cygwin.com
-Red Hat, Inc.
+--
+Bob
