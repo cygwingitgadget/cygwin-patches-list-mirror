@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3283-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 24892 invoked by alias); 6 Dec 2002 23:41:56 -0000
+Return-Path: <cygwin-patches-return-3284-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 668 invoked by alias); 8 Dec 2002 00:39:57 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,80 +7,60 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 24846 invoked from network); 6 Dec 2002 23:41:53 -0000
-Message-ID: <3DF13580.5060403@earthlink.net>
-Date: Fri, 06 Dec 2002 15:41:00 -0000
-From: Christophe Galerne <christophegalerne@earthlink.net>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.2.1) Gecko/20021130
-X-Accept-Language: en-us, en, fr-fr, fr
+Received: (qmail 653 invoked from network); 8 Dec 2002 00:39:56 -0000
+Message-ID: <3DF2947F.8010308@ece.gatech.edu>
+Date: Sat, 07 Dec 2002 16:39:00 -0000
+From: Charles Wilson <cwilson@ece.gatech.edu>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.0.1) Gecko/20020823 Netscape/7.0
+X-Accept-Language: en-us, en
 MIME-Version: 1.0
-To: cygwin <cygwin@cygwin.com>,  cygwin-patches@cygwin.com
-Subject: [patch] Symbolic value for PTHREAD_MUTEX_DEFAULT 
-Content-Type: multipart/mixed;
- boundary="------------020708060309050108090106"
-X-SW-Source: 2002-q4/txt/msg00234.txt.bz2
-
-This is a multi-part message in MIME format.
---------------020708060309050108090106
+To:  cygwin-patches@cygwin.com
+Subject: Re: --enable-runtime-pseudo-reloc support in cygwin, take 3.
+References: <3DEB8ABD.80309@ece.gatech.edu> <3DEE0B91.4070208@ece.gatech.edu>
 Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Transfer-Encoding: 7bit
-Content-length: 411
+X-SW-Source: 2002-q4/txt/msg00235.txt.bz2
 
-Hi,
+Charles Wilson wrote:
 
-As discussed with Robert Collins, I propose this patch to make
-the 'default' mutex type more explicit.
+> I've tested Egor's patch and it seems to work just fine, as demonstrated 
+> by the two test cases he posted last week, AND as demonstrated by the 
+> test case posted to the binutils list some months ago (it tested 
+> pseudo-reloc behavior in the child after a fork).
+> 
+> I've also tested Egor's runtime reloc support with Ralf's binutils "use 
+> the DLL as the import lib" and it ALSO works fine in all three cases.
+> 
+> I'm going to continue using ld.exe-ralf and 
+> cygwin1.dll-egor/libcygwin.a-egor for my day-to-day use, just to see if 
+> something wacky crops up...
+[snip]
+> On balance, I agree that #1 is the best option.  Unless I run afoul of 
+> some unforseen wackiness in the next few days, recommend inclusion as is 
+> (in the most recent iteration, e.g. no cygwin.sc changes)
 
-2002-12-05 Christophe Galerne <christophegalerne@earthlink.net>
+So far, no problems.  I'm gonna go on record in favor of this patch, in 
+its 4th incarnation 
+(http://cygwin.com/ml/cygwin-patches/2002-q4/msg00222.html).
 
-	* pthread.h (PTHREAD_MUTEX_DEFAULT):
-	reorder PTHREAD_MUTEX_DEFAULT and PTHREAD_MUTEX_RECURSIVE so that
-	PTHREAD_MUTEX_DEFAULT can be defined as PTHREAD_MUTEX_RECURSIVE.
-	add a comment that PTHREAD_MUTEX_NORMAL is not yet implemented.
+given that winsup/cygwin/lib/getopt.c(*) still retains its BSD licensing 
+and comments, there's no reason to change the (non-)license/public 
+domain attribution in egor's pseudo-relocs.c file.  Egor's patch #4 
+should be able to be committed as-is.
 
+--Chuck
 
---------------020708060309050108090106
-Content-Type: text/plain;
- name="pthread_constant.patch"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline;
- filename="pthread_constant.patch"
-Content-length: 1207
+(*) winsup/cygwin/lib/getopt.c still retains the original 
+BSD-with-advert license which is explicitly incompatible with the GPL. 
+And since it is the NetBSD variant, it doesn't fall under the 
+"rescinded" announcement made by the Berkeley folks:
 
-? pthread_constant.patch
-Index: pthread.h
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/include/pthread.h,v
-retrieving revision 1.12
-diff -u -p -r1.12 pthread.h
---- pthread.h	4 Jul 2002 14:17:30 -0000	1.12
-+++ pthread.h	6 Dec 2002 22:55:18 -0000
-@@ -50,12 +50,15 @@ extern "C"
- #define PTHREAD_CREATE_JOINABLE 0
- #define PTHREAD_EXPLICIT_SCHED 1
- #define PTHREAD_INHERIT_SCHED 0
--#define PTHREAD_MUTEX_DEFAULT 0
-+
-+#define PTHREAD_MUTEX_RECURSIVE 0
- #define PTHREAD_MUTEX_ERRORCHECK 1
-+/* not implemented yet */
- #define PTHREAD_MUTEX_NORMAL 2
-+#define PTHREAD_MUTEX_DEFAULT PTHREAD_MUTEX_RECURSIVE
-+
- /* this should be too low to ever be a valid address */
- #define PTHREAD_MUTEX_INITIALIZER (void *)20
--#define PTHREAD_MUTEX_RECURSIVE 0
- #define PTHREAD_ONCE_INIT { PTHREAD_MUTEX_INITIALIZER, 0 }
- #define PTHREAD_PRIO_INHERIT
- #define PTHREAD_PRIO_NONE
-@@ -103,7 +106,7 @@ void pthread_cleanup_push (void (*routin
- void pthread_cleanup_pop (int execute);
- */
- typedef void (*__cleanup_routine_type) (void *);
--typedef struct _pthread_cleanup_handler 
-+typedef struct _pthread_cleanup_handler
- {
-   __cleanup_routine_type function;
-   void *arg;
+ftp://ftp.cs.berkeley.edu/pub/4bsd/README.Impt.License.Change
 
---------------020708060309050108090106--
+(the NetBSD folks are quite clear that they LIKE the advertisement 
+clause in their license)
+
+However, the FreeBSD folks DO abide by the "rescind clause 3" decision; 
+perhaps we should replace our (modified) getopt.c with a similarly 
+modified one from FreeBSD?
+
