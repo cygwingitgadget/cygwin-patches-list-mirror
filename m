@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4061-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 5925 invoked by alias); 10 Aug 2003 00:04:52 -0000
+Return-Path: <cygwin-patches-return-4062-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 6486 invoked by alias); 10 Aug 2003 00:07:34 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,60 +7,58 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 5916 invoked from network); 10 Aug 2003 00:04:51 -0000
-Date: Sun, 10 Aug 2003 00:04:00 -0000
+Received: (qmail 6476 invoked from network); 10 Aug 2003 00:07:34 -0000
+Date: Sun, 10 Aug 2003 00:07:00 -0000
 From: Christopher Faylor <cgf@redhat.com>
-To: Charles Wilson <cygwin@cwilson.fastmail.fm>
-Cc: cygwin-patches@cygwin.com
+To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] Checking integrity of installed packages in cygcheck
-Message-ID: <20030810000451.GA13252@redhat.com>
+Message-ID: <20030810000733.GA13380@redhat.com>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: Charles Wilson <cygwin@cwilson.fastmail.fm>,
-	cygwin-patches@cygwin.com
-References: <Pine.GSO.4.44.0308071843550.5132-200000@slinky.cs.nyu.edu> <20030809161211.GB9514@redhat.com> <20030809162939.GA9863@redhat.com> <3F3548E8.1040605@cwilson.fastmail.fm>
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20030809161211.GB9514@redhat.com> <Pine.GSO.4.44.0308091553280.7386-100000@slinky.cs.nyu.edu>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3F3548E8.1040605@cwilson.fastmail.fm>
+In-Reply-To: <Pine.GSO.4.44.0308091553280.7386-100000@slinky.cs.nyu.edu>
 User-Agent: Mutt/1.4.1i
-X-SW-Source: 2003-q3/txt/msg00077.txt.bz2
+X-SW-Source: 2003-q3/txt/msg00078.txt.bz2
 
-On Sat, Aug 09, 2003 at 03:18:00PM -0400, Charles Wilson wrote:
->Christopher Faylor wrote:
->>I'll check this in but it would be nice if (WBNI) this used a mingw gzip
->>library rather than calling gzip directly.  That's a fair amount of
->>work but I could resurrect the zlib library in winsup if necessary.
->>
->>I wonder why setup is using gzip rather than bzip2 for the package files...
+On Sat, Aug 09, 2003 at 03:59:00PM -0400, Igor Pechtchanski wrote:
+>On Sat, 9 Aug 2003, Christopher Faylor wrote:
 >
->the setup tree contains its own copies of the zlib and bzlib trees; 
->thue, they are compiled under the same runtime that setup is.  If setup 
->is a 'mingw' app, then so are the internal, statically linked libz and 
->bz2lib.
+>> [snip]
+>> Btw, have you considered some kind of rpm -f functionality?  That would
+>> allow a user to do a:
+>>
+>> cygcheck -f /usr/bin/ls.exe
+>> fileutils-4.1-2
+>>
+>> Also some kind of functionality which would allow cygcheck to query
+>> the same files as the web search would be really cool.  Something like
+>> a:
+>>
+>> cygcheck --whatprovides /usr/bin/ls.exe
+>>
+>> would be really useful.
+>
+>I'm not sure I see the difference between the two cases above.
 
-Yes, of course, I know about setup's zlib and bz2lib (having imported
-both of them <or maybe DJ imported zlib.  Don't remember exactly.>).  I
-kept the bz2lib around in winsup after moving setup out of winsup for
-its eventual use by files in utils.  As I mentioned, I would be willing
-to resurrect zlib also.
+-f checks the installed database in /etc/setup/package.lst.gz (similar
+to rpm -f), --whatprovides checks the "database" on sources.redhat.com
+(similar to Red Hat's up2date?).  That's what I meant by "the same files
+as the web search".
 
-This doesn't explain why setup is using gzip over bzip2 since both are
-available and bzip2 generally (but not always) provides superior
-compression.
+I don't see why -f wouldn't be relatively trivial to do since we know
+have code in cygcheck which uncompresses and opens each of the package
+files.  --whatprovides would require a net query, of course.  That would
+be more complicated.
 
-(I see that Robert indicates that this is historical but I thought that
-the compression of the package files in /etc/setup postdates the
-availability of bz2 compression in setup.  Guess I was wrong.)
+>> Another interesting thing would be to do some ntsec/mkpasswd/mkgroup
+>> type sanity checks or even to fix up common ntsec problems.
+>
+>Yeah.  At least have it check for the group name of "mkpasswd" or
+>"mkgroup"...  That, however, would require a separate flag, IMO.
 
->I imagine that the reason Igor used popen and zcat is simply that it was 
->easier than directly interfacing to the library.  Perhaps that issue 
->could be addressed in a later patch (along the lines of the compress_gz 
->class, which also provides uncompression capabilities?)
-
-Yes.  It would have to be a later patch since the current implementation
-is already checked in.
-
-As I said, "That's a fair amount of work but I could resurrect the zlib
-library in winsup if necessary."
+Why a separate flag?  Why not always do it with a cygcheck -s?
 
 cgf
