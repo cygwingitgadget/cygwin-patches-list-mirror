@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4507-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 3842 invoked by alias); 16 Dec 2003 01:14:10 -0000
+Return-Path: <cygwin-patches-return-4508-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 4021 invoked by alias); 16 Dec 2003 01:14:14 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -8,18 +8,16 @@ List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Received: (qmail 2729 invoked from network); 16 Dec 2003 01:08:37 -0000
-Received: from unknown (HELO phumblet.no-ip.org) (68.163.146.15) by sources.redhat.com with SMTP; 16 Dec 2003 01:08:37 -0000
-Received: from [192.168.1.156] (helo=hpn5170x) by phumblet.no-ip.org with smtp (Exim 4.24) id HPYRUY-001SON-QZ for cygwin-patches@cygwin.com; Mon, 15 Dec 2003 20:21:46 -0500
-Message-Id: <3.0.5.32.20031215200813.00826100@incoming.verizon.net>
+Message-ID: <3.0.5.32.20031215200813.00826100@incoming.verizon.net>
 X-Sender: vze1u1tg@incoming.verizon.net (Unverified)
-Date: Tue, 16 Dec 2003 01:14:00 -0000
+Date: Thu, 18 Dec 2003 10:00:00 -0000
 To: cygwin-patches@cygwin.com
 From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
 Subject: [Patch]: Improving tty_list security (part 1).
 Mime-Version: 1.0
 Content-Type: multipart/mixed; boundary="=====================_1071554893==_"
-X-IsSubscribed: yes
-X-SW-Source: 2003-q4/txt/msg00226.txt.bz2
+X-SW-Source: 2003-q4/txt/msg00227.txt.bz2
+Message-ID: <20031218100000.DOWWhWnLaZNQrJAb13rxlQ28jBvzdoN3AH6bwGBcJn8@z>
 
 --=====================_1071554893==_
 Content-Type: text/plain; charset="us-ascii"
