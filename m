@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2802-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 17782 invoked by alias); 8 Aug 2002 13:53:44 -0000
+Return-Path: <cygwin-patches-return-2803-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 26596 invoked by alias); 8 Aug 2002 14:12:10 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,50 +7,48 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 17768 invoked from network); 8 Aug 2002 13:53:42 -0000
-Date: Thu, 08 Aug 2002 06:53:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygwin-patches <cygwin-patches@cygwin.com>
+Received: (qmail 26579 invoked from network); 8 Aug 2002 14:12:09 -0000
+Message-ID: <3D527C38.1050707@hekimian.com>
+Date: Thu, 08 Aug 2002 07:12:00 -0000
+X-Sybari-Trust: cdeff78e b923d9bf 4738785c 00000109
+From: Joe Buehler <jbuehler@hekimian.com>
+Reply-To:  joseph.buehler@spirentcom.com
+Organization: Spirent Communications
+User-Agent: Mozilla/5.0 (Windows; U; WinNT4.0; en-US; rv:1.0.0) Gecko/20020530
+X-Accept-Language: en-us, en
+MIME-Version: 1.0
+To: Corinna Vinschen <cygwin-patches@cygwin.com>
 Subject: Re: minor patch to printf
-Message-ID: <20020808155339.G4229@cygbert.vinschen.de>
-Mail-Followup-To: cygwin-patches <cygwin-patches@cygwin.com>
-References: <3D52765A.5000507@hekimian.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3D52765A.5000507@hekimian.com>
-User-Agent: Mutt/1.3.22.1i
-X-SW-Source: 2002-q3/txt/msg00250.txt.bz2
+References: <3D52765A.5000507@hekimian.com> <20020808155339.G4229@cygbert.vinschen.de>
+Content-Type: multipart/mixed;
+ boundary="------------010000090706000806030805"
+X-SW-Source: 2002-q3/txt/msg00251.txt.bz2
 
-On Thu, Aug 08, 2002 at 09:47:06AM -0400, Joe Buehler wrote:
-> A minor patch for a printf format problem is attached.
+This is a multi-part message in MIME format.
+--------------010000090706000806030805
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-length: 121
 
-Thanks.  And the ChangeLog is where...?
+Corinna Vinschen wrote:
 
-Corinna
+> Thanks.  And the ChangeLog is where...?
 
-> 
-> Joe Buehler
+Oops -- learning curve.  It's attached.
 
-> Index: src/winsup/cygwin/sec_helper.cc
-> ===================================================================
-> RCS file: /cvs/src/src/winsup/cygwin/sec_helper.cc,v
-> retrieving revision 1.23
-> diff -u -r1.23 sec_helper.cc
-> --- src/winsup/cygwin/sec_helper.cc	3 Jul 2002 03:20:50 -0000	1.23
-> +++ src/winsup/cygwin/sec_helper.cc	8 Aug 2002 13:41:27 -0000
-> @@ -432,8 +442,8 @@
->    if (sid1)
->      if (!AddAccessAllowedAce (acl, ACL_REVISION,
->  			      GENERIC_ALL, sid1))
-> -      debug_printf ("AddAccessAllowedAce(sid1) %E", sid1);
-> +      debug_printf ("AddAccessAllowedAce(sid1) %E");
->    if (admins)
->      if (!AddAccessAllowedAce (acl, ACL_REVISION,
->  			      GENERIC_ALL, well_known_admins_sid))
+Joe Buehler
+
+--------------010000090706000806030805
+Content-Type: text/plain;
+ name="ChangeLog.txt"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline;
+ filename="ChangeLog.txt"
+Content-length: 122
+
+2002-08-08  Joe Buehler  <jbuehler@hekimian.com>
+
+	    * sec_helper.cc (sec_acl): remove extraneous arg to debug_printf.
 
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+--------------010000090706000806030805--
