@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1598-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 11782 invoked by alias); 16 Dec 2001 17:26:05 -0000
+Return-Path: <cygwin-patches-return-1599-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 27075 invoked by alias); 16 Dec 2001 23:42:22 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,41 +7,34 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 11766 invoked from network); 16 Dec 2001 17:26:05 -0000
-Date: Tue, 06 Nov 2001 08:56:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: RFP : shell defaults
-Message-ID: <20011216172634.GF28210@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <104801c18603$c811fb10$0200a8c0@lifelesswks> <Pine.LNX.4.21.0112161721240.2658-100000@lupus.ago.vpn>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.LNX.4.21.0112161721240.2658-100000@lupus.ago.vpn>
-User-Agent: Mutt/1.3.23.1i
-X-SW-Source: 2001-q4/txt/msg00130.txt.bz2
+Received: (qmail 27061 invoked from network); 16 Dec 2001 23:42:21 -0000
+Message-ID: <15c601c1868b$543c7930$0200a8c0@lifelesswks>
+From: "Robert Collins" <robert.collins@itdomain.com.au>
+To: <cygwin-patches@cygwin.com>,
+	"Jan Nieuwenhuizen" <janneke@gnu.org>
+References: <m3bshtmxhb.fsf@appel.lilypond.org><878764062.20011128173421@nyckelpiga.de><m37ks9lgxi.fsf@appel.lilypond.org><4434079433.20011129221637@familiehaase.de><m3oflgy98n.fsf@appel.lilypond.org><9517228633.20011203135833@familiehaase.de><m3lmgkwgeu.fsf@appel.lilypond.org> <3C0D8535.D67735D1@ece.gatech.edu><m33d2pam3l.fsf@appel.lilypond.org><00d501c17d93$1936c990$0200a8c0@lifelesswks><m3zo4x7obb.fsf@appel.lilypond.org><m38zcdssxd.fsf@appel.lilypond.org><01a801c18036$3d447350$0200a8c0@lifelesswks><m3itbhqowz.fsf@appel.lilypond.org><027001c18040$c91651f0$0200a8c0@lifelesswks><m3wuzth3l1.fsf@appel.lilypond.org><04db01c18302$e66cae60$0200a8c0@lifelesswks><m3667ax540.fsf@appel.lilypond.org><105201c18604$ea001670$0200a8c0@lifelesswks><3C1CB581.7E2DF6E3@yahoo.com> <m31yhv9lh1.fsf@appel.lilypond.org>
+Subject: Re: setup.exe remove scripts [Was: Re: experimental texmf packages]
+Date: Wed, 07 Nov 2001 01:42:00 -0000
+MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-OriginalArrivalTime: 16 Dec 2001 23:42:20.0770 (UTC) FILETIME=[4DD89420:01C1868B]
+X-SW-Source: 2001-q4/txt/msg00131.txt.bz2
 
-On Sun, Dec 16, 2001 at 05:25:11PM +0100, Alexander Gottwald wrote:
->On Sun, 16 Dec 2001, Robert Collins wrote:
->> If someone wants to follow my notes in reply to Corinna and create a
->> shell defaults package, that would be great. AFAIK all distro's generate
->> a very simply prompt for you, and then leave it up to you.
+Strangely enough, building from CVS works fine for me - w32api seems
+fine.
+
+----- Original Message -----
+From: "Jan Nieuwenhuizen" <janneke@gnu.org>
+...
+> > Can you remind me as to what's broke?
 >
->One thing that might be useful: 
->
->SuSE Linux sets PROFILEREAD=yes as first thing in /etc/profile and
->all $HOME/.profile depend on this and read /etc/profile if this is
->not set. 
->
->Running cygwin and accessing homes on a SuSE box will fall into an 
->never ending loop.
+> From an earlier mail (haven't checked latest cvs):
 
-And, it sounds like (possibly) running Mandrake linux and accessing home
-on a SuSE box will fall into an infinite loop, and (definitely) running
-Red Hat will do so.
 
-This sounds like a dubious feature to me.
-
-cgf
+Rob
