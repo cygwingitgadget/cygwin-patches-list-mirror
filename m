@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4540-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 21836 invoked by alias); 29 Jan 2004 13:07:52 -0000
+Return-Path: <cygwin-patches-return-4541-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 8318 invoked by alias); 30 Jan 2004 11:06:04 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,27 +7,37 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 21787 invoked from network); 29 Jan 2004 13:07:51 -0000
-Date: Thu, 29 Jan 2004 13:07:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: patch for audio recording with /dev/dsp
-Message-ID: <20040129130751.GA10773@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <01C3E65A.A966FD50.Gerd.Spalink@t-online.de> <20040129110726.GP1572@cygbert.vinschen.de>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20040129110726.GP1572@cygbert.vinschen.de>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2004-q1/txt/msg00030.txt.bz2
+Received: (qmail 8245 invoked from network); 30 Jan 2004 11:06:02 -0000
+Message-ID: <CB2B5D9D2710D611A79100025558212EF23A75@geacprg.cz.geac.com>
+From: Jiri Malak <Jiri.Malak@geac.cz>
+To: "'cygwin-patches@cygwin.com'" <cygwin-patches@cygwin.com>
+Subject: Patch winuser.h in w32api
+Date: Fri, 30 Jan 2004 11:06:00 -0000
+MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="iso-8859-2"
+X-SW-Source: 2004-q1/txt/msg00031.txt.bz2
 
-On Thu, Jan 29, 2004 at 12:07:26PM +0100, Corinna Vinschen wrote:
->We just have no feedback from the person who's collecting the papers so far.
->For that reason we have to wait, yet.
+I am working on Open Watcom open source project which use w32api.
+I need correct winuser.h header file in w32api.
 
-Actually, I believe we do have the individual form.  I had asked for the
-employer's signature also since we don't have a special German form
-which can be signed and notarized to indicate that someone is working
-on cygwin only in their spare time.
+Original line
+
+#define RT_MANIFEST MAKEINTRESOURCE(24)
+
+to 
+
+#ifndef RC_INVOKED
+#define RT_MANIFEST MAKEINTRESOURCE(24)
+#else
+#define RT_MANIFEST 24
+#define CREATEPROCESS_MANIFEST_RESOURCE_ID 1
+#define ISOLATIONAWARE_MANIFEST_RESOURCE_ID 2
+#define ISOLATIONAWARE_NOSTATICIMPORT_MANIFEST_RESOURCE_ID 3
+#endif
+
+Please, could you change it if it is possible.
+
+Thanks
+
+Jiri
