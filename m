@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2392-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 27604 invoked by alias); 12 Jun 2002 01:19:37 -0000
+Return-Path: <cygwin-patches-return-2393-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 8622 invoked by alias); 12 Jun 2002 05:32:17 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,69 +7,68 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 27554 invoked from network); 12 Jun 2002 01:19:34 -0000
-Date: Tue, 11 Jun 2002 18:19:00 -0000
-From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
-X-X-Sender: joshua@iocc.com
+Received: (qmail 8574 invoked from network); 12 Jun 2002 05:32:14 -0000
+Date: Tue, 11 Jun 2002 22:32:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: passwd edited /etc/passwd patch
-Message-ID: <Pine.CYG.4.44.0206112017330.772-200000@iocc.com>
-MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="-559023410-726625162-1023844695=:772"
-X-SW-Source: 2002-q2/txt/msg00375.txt.bz2
+Subject: Re: Reorganizing internal_getlogin()
+Message-ID: <20020612053233.GA21398@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <3.0.5.32.20020609231253.008044d0@mail.attbi.com> <20020610035228.GC6201@redhat.com> <20020610111359.R30892@cygbert.vinschen.de> <20020610151016.GG6201@redhat.com> <3D04C62B.E7804DC0@ieee.org> <20020611022812.GA30113@redhat.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20020611022812.GA30113@redhat.com>
+User-Agent: Mutt/1.3.23.1i
+X-SW-Source: 2002-q2/txt/msg00376.txt.bz2
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
+On Mon, Jun 10, 2002 at 10:28:12PM -0400, Christopher Faylor wrote:
+>On Mon, Jun 10, 2002 at 11:30:51AM -0400, Pierre A. Humblet wrote:
+>>Christopher Faylor wrote:
+>>> 
+>>> 
+>>> Ok.  I'm in favor of getting rid of sexec in 1.3.11, then.
+>>> 
+>>> I'll do that sometime today.
+>>> 
+>>Then you can also junk the first argument (token) in _spawnve()
+>>and spawn_guts() (FYI).
+>
+>Yes, this was one of the things that I've wanted to do for a while.
 
----559023410-726625162-1023844695=:772
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-Content-length: 472
+After a chat with Corinna, I have taken a stab at cleaning up some
+of the environment manipulation in internal_getlogin.  I've done this
+without bothering spawn_guts too much.
 
-Here is that patch for passwd.c to deal with user-edited /etc/passwd
-files. I poked around about adding the CW_EXTRACT_DOMAIN_AND_USER
-then did a CVS update and Corinna already had done it. Sorry for the
-delay, I apparently haven't been paying attention for more than a week...
+I tried to keep most of the logic the same but a couple of things
+bothered me in internal_getlogin.  They were probably there for a
+good reason, but I changed them anyway.
 
-ChangeLog:
+One thing that I changed was to not query for a user name if you've
+already gotten the user name from GetUserName.  I also changed the HOME
+and HOMEPATH manipulation slightly.  If there were reasons for the way
+things were, then please revert my changes and check in a comment
+explaining why you have to call GetUserName and then overwrite what it
+has discovered a few lines later.
 
-2002-06-11  Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+I probably introduced other gratuitous formatting changes as I careened
+around uinfo.cc, too.  Hopefully Corinna will tell me if I did anything
+wrong.
 
-	* passwd.c (GetPW): Handle case of user-edited /etc/passwd
-	with cygwin_internal (CW_EXTRACT_DOMAIN_AND_USER, ...)
+The bottom line is that all (most?) user-related environment variables
+are only set when they need to be set and are not calculated or set at
+all when a known cygwin process is about to be run.  UNIX doesn't know
+about HOMEPATH or HOMEDRIVE so there is no reason to assume that a
+"native" cygwin process needs this updated info, either.
 
+There's probably more cleanup that can be done.  If so, let's discuss
+them.
 
----559023410-726625162-1023844695=:772
-Content-Type: TEXT/PLAIN; charset=US-ASCII; name="passwd.c-patch"
-Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.CYG.4.44.0206112018150.772@iocc.com>
-Content-Description: 
-Content-Disposition: attachment; filename="passwd.c-patch"
-Content-length: 1416
+<time passes>
 
-LS0tIHBhc3N3ZC5jLW9yaWcJVHVlIEp1biAxMSAyMDoxMzo1MSAyMDAyDQor
-KysgcGFzc3dkLmMJVHVlIEp1biAxMSAxOTo1OToxNyAyMDAyDQpAQCAtMTYs
-NiArMTYsNyBAQCBkZXRhaWxzLiAqLw0KICNpbmNsdWRlIDx1bmlzdGQuaD4N
-CiAjaW5jbHVkZSA8Z2V0b3B0Lmg+DQogI2luY2x1ZGUgPHB3ZC5oPg0KKyNp
-bmNsdWRlIDxzeXMvY3lnd2luLmg+DQogI2luY2x1ZGUgPHN5cy90eXBlcy5o
-Pg0KICNpbmNsdWRlIDx0aW1lLmg+DQogDQpAQCAtMTA3LDkgKzEwOCwyMSBA
-QCBHZXRQVyAoY29uc3QgY2hhciAqdXNlcikNCiAgIFdDSEFSIG5hbWVbNTEy
-XTsNCiAgIERXT1JEIHJldDsNCiAgIFBVU0VSX0lORk9fMyB1aTsNCi0NCisg
-IHN0cnVjdCBwYXNzd2QgKnB3Ow0KKyAgY2hhciAqZG9tYWluID0gKGNoYXIg
-KikgbWFsbG9jIChNQVhfUEFUSCArIDEpOw0KKyAgICAgDQogICBNdWx0aUJ5
-dGVUb1dpZGVDaGFyIChDUF9BQ1AsIDAsIHVzZXIsIC0xLCBuYW1lLCA1MTIp
-Ow0KICAgcmV0ID0gTmV0VXNlckdldEluZm8gKE5VTEwsIG5hbWUsIDMsIChM
-UEJZVEUgKikgJnVpKTsNCisgIC8qIFRyeSBnZXR0aW5nIGEgV2luMzIgdXNl
-cm5hbWUgaW4gY2FzZSB0aGUgdXNlciBlZGl0ZWQgL2V0Yy9wYXNzd2QgKi8N
-CisgIGlmIChyZXQgPT0gTkVSUl9Vc2VyTm90Rm91bmQpDQorICB7DQorICAg
-IGlmICgocHcgPSBnZXRwd25hbSAodXNlcikpKQ0KKyAgICAgIGN5Z3dpbl9p
-bnRlcm5hbCAoQ1dfRVhUUkFDVF9ET01BSU5fQU5EX1VTRVIsIHB3LCBkb21h
-aW4sIChjaGFyICopIHVzZXIpOw0KKyAgICBNdWx0aUJ5dGVUb1dpZGVDaGFy
-IChDUF9BQ1AsIDAsIHVzZXIsIC0xLCBuYW1lLCA1MTIpOw0KKyAgICByZXQg
-PSBOZXRVc2VyR2V0SW5mbyAoTlVMTCwgbmFtZSwgMywgKExQQllURSAqKSAm
-dWkpOw0KKyAgICBpZiAocmV0ID09IChpbnQpIE5VTEwpDQorICAgICAgcHJp
-bnRmICgiV2luZG93cyB1c2VybmFtZSA6ICVzXG4iLCB1c2VyKTsNCisgIH0N
-CiAgIHJldHVybiBFdmFsUmV0IChyZXQsIHVzZXIpID8gTlVMTCA6IHVpOw0K
-IH0NCiANCg==
+Oops!  I just realized that I screwed up posix conversion in the new
+code.  Oh well.  That something to fix tomorrow.  Until then CVS is
+officially broken.
 
----559023410-726625162-1023844695=:772--
+cgf
