@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4763-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 11376 invoked by alias); 15 May 2004 16:12:00 -0000
+Return-Path: <cygwin-patches-return-4764-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 17406 invoked by alias); 16 May 2004 02:38:48 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,51 +7,91 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 11360 invoked from network); 15 May 2004 16:11:59 -0000
-Date: Sat, 15 May 2004 16:12:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
+Received: (qmail 17395 invoked from network); 16 May 2004 02:38:47 -0000
+Message-Id: <3.0.5.32.20040515223540.00810100@incoming.verizon.net>
+X-Sender: vze1u1tg@incoming.verizon.net (Unverified)
+Date: Sun, 16 May 2004 02:38:00 -0000
 To: cygwin-patches@cygwin.com
-Subject: Re: [Patch]: ./.. changed during execution of find
-Message-ID: <20040515161158.GA21098@coe.bosbc.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <40A4CB07.93BF544@ieee.org> <3.0.5.32.20040514223818.007fdc80@incoming.verizon.net> <20040515155608.GA25768@coe.bosbc.com>
+From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
+Subject: [Patch]: c:.
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20040515155608.GA25768@coe.bosbc.com>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2004-q2/txt/msg00115.txt.bz2
+Content-Type: multipart/mixed; boundary="=====================_1084689340==_"
+X-SW-Source: 2004-q2/txt/msg00116.txt.bz2
 
-On Sat, May 15, 2004 at 11:56:08AM -0400, Christopher Faylor wrote:
->On Fri, May 14, 2004 at 10:38:18PM -0400, Pierre A. Humblet wrote:
->>I have been rereading the chdir thread to see how things 
->>went wrong. The problem with find is due to the following change
->><http://cygwin.com/ml/cygwin-patches/2004-q2/msg00063.html>
->>
->>> That means that cwd.set always attempts to build the
->>> Posix wd through the mount table.
->>> Up to now that was only the case when a symlink was
->>> involved in the translation, or there was a ":" or a "\" 
->>> in the directory name, or check_case was not relaxed.
->>
->>It follows that "find /" has always been broken when 
->>check_case != "relax". 
->>
->>Please review carefully! In addition to fixing the find bug the
->>patch fixes the handling of paths such as c:xxx and it calls
->>SetCurrentDirectory inside the muto region.
->
->I don't think that would be a problem.  It makes sense to do that
->in fact.
->
->(famous last words)
->
->I've checked this in and am generating a snapshot now.
+--=====================_1084689340==_
+Content-Type: text/plain; charset="us-ascii"
+Content-length: 796
 
-...which died immediately.  I think you forgot a corresponding cygheap.h
-change.  I've checked in the required stuff.
+I have run more tests and noticed that c:. and c:..
+are now interpreted as c:/
+That's because of the new code that strips trailing dots
+and spaces. 
 
-Thanks for fixing this problem.
+A patch is attached. It works fine on WinME (ls, cd, etc...)
+but I am wondering how NtCreateFile reacts to that syntax
+as well as to c:xxxx 
+Depending on the answer we may have to treat these forms in
+a new way (perhaps just forbid them).
 
-cgf
+If we do not use the patch, then chdir must be tuned to
+handle these paths appropriately (they are not recognized by
+isabspath, although they are absolute).
+
+Paths such as c:../.. are not handled properly, but that's
+not a regression.
+
+Windows never stops amazing me!
+
+Pierre
+
+2004-05-16  Pierre Humblet <pierre.humblet@ieee.org>
+
+	* path.c {path_conv::check): Do not strip trailing dots in
+	c:. and c:..
+
+
+--=====================_1084689340==_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment; filename="dot.diff"
+Content-length: 1257
+
+Index: path.cc
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+RCS file: /cvs/src/src/winsup/cygwin/path.cc,v
+retrieving revision 1.312
+diff -u -p -r1.312 path.cc
+--- path.cc	15 May 2004 15:55:43 -0000	1.312
++++ path.cc	16 May 2004 00:40:18 -0000
+@@ -556,13 +556,18 @@ path_conv::check (const char *src, unsig
+ 	       tail--;
+ 	    }
+           /* Remove trailing dots and spaces which are ignored by Win32 fu=
+nctions but
+-	     not by native NT functions. */
+-          while (tail[-1] =3D=3D '.' || tail[-1] =3D=3D ' ')
+-	    tail--;
+-          if (tail > path_copy + 1 && isslash (tail[-1]))
+-            {
+-	      error =3D ENOENT;
+-              return;
++	     not by native NT functions, except c:. and c:.. */
++	  if (tail - path_copy > 4
++	      || !isdrive (path_copy)
++	      || !(path_copy[2] =3D=3D '.' && (!path_copy[3] || path_copy[3] =3D=
+=3D '.')))
++	    {
++	      while (tail[-1] =3D=3D '.' || tail[-1] =3D=3D ' ')
++		tail--;
++	      if (tail > path_copy + 1 && isslash (tail[-1]))
++	        {
++		  error =3D ENOENT;
++		  return;
++		}
+ 	    }
+         }
+       path_end =3D tail;
+
+--=====================_1084689340==_--
