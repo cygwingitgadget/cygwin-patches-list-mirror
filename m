@@ -1,36 +1,78 @@
-From: egor duda <deo@logos-m.ru>
-To: Robert Collins <robert.collins@itdomain.com.au>
+From: "Gerrit P. Haase" <gp@familiehaase.de>
+To: cygwin-apps@cygwin.com
 Cc: cygwin-patches@cygwin.com
-Subject: Re: PTHREAD_COND_INITIALIZER
-Date: Tue, 25 Sep 2001 04:56:00 -0000
-Message-id: <6214257951.20010925155455@logos-m.ru>
-References: <EA18B9FA0FE4194AA2B4CDB91F73C0EF08F1C6@itdomain002.itdomain.net.au> <342526142.20010925114613@logos-m.ru> <1001414378.1761.45.camel@lifelesswks> <11811589024.20010925151026@logos-m.ru> <1001418247.1825.69.camel@lifelesswks>
-X-SW-Source: 2001-q3/msg00199.html
+Subject: setup.exe crashs / setup.ini patch for perl
+Date: Wed, 26 Sep 2001 01:00:00 -0000
+Message-id: <3BB1A27D.4773.50774CA1@localhost>
+X-SW-Source: 2001-q3/msg00200.html
 
-Hi!
+Hi,
 
-Tuesday, 25 September, 2001 Robert Collins robert.collins@itdomain.com.au wrote:
+I will be OOO (out of office:) the next week, unfortunately I will not
+be able to do more debugging on setup.exe <-> choose.cc, it just starts
+making fun:)
 
->> RC> I really don't see any benefit from using NULL in this instance, and I
->> RC> do see benefits from not using NULL.
->> 
->> the benefit from using NULL is portability. I understand that cygwin
->> is not supposed to that portable as, say, Apache, but nevertheless.
- 
-RC> Ok, I'll accept that. So we use void *(-2), void * (-3) and so on -
-RC> address's so high up they can never be valid for pthread objects because
-RC> pthread objects are larger than the remaining address space.
+But some hints:
+===============
+The original (CVS) setup.exe crashes only if you have some packages with
+dependencies NOT installed.
 
-ok, you're probably right. i'll change my patch and resubmit it.
+Another (the same?) problem causes that not all categories gets into the 
+list.  I never saw entries for 'Doc' or 'Mail' up to now.
+The package 'newlib-man' never shows up (also not in 'full' list mode), 
+I think there is the 'setup.hint' file in latest/cygwin is wrong.
 
-[...]
+The setup choose dialog pops up with some categories in and some packages
+in this categories, with the tree expanded.  After collapsing Shells or
+Interpreters (both entries), it was not able to open this part again, 
+just like there were no packages in this category.
+See attached .jpeg for details.
 
->> I'll check this stuff into cygwin testsuite tonight. it
->> needs just minor cleanup currently.
+It crashes not if I remove one line, but then there are not all packages
+categories listed.  I removed line 814:
+	  if (n == nlines)
+	    {
+	      /* the category wasn't visible - insert at the end */
+	      insert_category (cat, CATEGORY_COLLAPSED);
+	      insert_pkg (pkg);
+	    }
+So it looks like:
+	  if (n == nlines)
+	    {
+	      /* the category wasn't visible - insert at the end */
+	      insert_category (cat, CATEGORY_COLLAPSED);
+	    }
+But that is no solution, was only a help for me to see what is happening
+inside the program if it doesn't crash.
 
-RC> You might want to check with cgf first about copyright issues? I don't
-RC> know - is the testsuite GPL compatible.
+With the last change from Robert Collins, there are no more crashes:-)
+but still the same other problems:-(
 
-it's LGPLed.
+New problem: there are some category duplicates.
 
-Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
+So I think, there is a problem in the logic somewhere I did not found yet.
+
+Rob Collins wrote:
+>> 		  {
+>       insert_under (n, line);
+>strange. ok, well how about this then...
+>
+>- 	        n++;
+>+		n = nlines;
+>
+>        }
+>> 	      n++;
+
+That is a step forward now. It seems to work better. No more crashes.
+
+The 'no crash'-patch for this is also attached.
+
+I'm no C++ programmer, so I hope this helps someone who is a better coder.
+
+The patch for the perl entry is attached.
+
+Gerrit
+
+
+-- 
+=^..^=
