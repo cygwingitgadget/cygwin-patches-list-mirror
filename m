@@ -1,38 +1,77 @@
 From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH]Write Mount Commands
-Date: Mon, 03 Sep 2001 15:03:00 -0000
-Message-id: <20010903180302.A3225@redhat.com>
-References: <000c01c134af$0f165ed0$200a0a0a@us.oracle.com>
-X-SW-Source: 2001-q3/msg00093.html
+Subject: Re: a bug in restoring the console.
+Date: Mon, 03 Sep 2001 15:06:00 -0000
+Message-id: <20010903180605.B3225@redhat.com>
+References: <s1szo8c6p0y.fsf@jaist.ac.jp>
+X-SW-Source: 2001-q3/msg00094.html
 
-On Mon, Sep 03, 2001 at 12:31:25PM -0700, Michael A. Chase wrote:
->Here's the patch to mount to tell it to write the commands needed to
->re-create the current mount table.
->
->Users of Win9x might be confused if they create the commands from a bash
->prompt and then try to run the resulting file from command.com.  In my
->system (which has binary mount points),
->   mount -m > file
->produced a file with NL line endings which command.com chokes on.  Running
->the same command from the MSDOS prompt produced a file with CRLF line
->endings.
-
-That's what I would expect.
-
-I've checked this in.  It looks very nice, with one exception.
-
-I don't think you should be displaying mount commands for the default drive
-stuff, i.e. mount -f -u -t "u:" "/cygdrive/u"
-
-Also, I wonder if it would be nicer only to quote the path specs which contain
-spaces?
-
-Thanks for doing this.  I've wanted something like this for a long time.
-
-There are obviously ways to write a script to do what you've done here and
-maybe that would be better unix philosophy but I still think making this
-a mount option will be easier to explain to people who are interested in
-this option.
+Corinna, it sounds like this should go in 1.3.3.  What do you think?
 
 cgf
+
+On Tue, Sep 04, 2001 at 04:41:01AM +0900, Kazuhiro Fujieda wrote:
+>I succeeded to enjoy the feature saving/restoring the console
+>with less and the latest termcap, but found a bug on NT4/Win2k.
+>
+>Less can't restore the previous screen properly when it starts
+>on the down-scrollable console window. It can scroll the console
+>buffer. When it terminates, the sequence restoring the cursor
+>included in `te' scrolls back and breaks the restored screen.
+>
+>It is triggered by the wrong implementation of the feature
+>saving/restoring the cursor position. It shouldn't save the
+>position of the console buffer, but the cursor position.
+>
+>The following patch corrects the implementation and can solve my 
+>problem.
+>
+>2001-09-04  Kazuhiro Fujieda  <fujieda@jaist.ac.jp>
+>
+>	* fhandler_console.cc (fhandler_console::char_command): Save the cursor
+>	position relative to the top of the window.
+>	* fhandler_cc (fhandler_console::write): Ditto.
+>
+>Index: fhandler_console.cc
+>===================================================================
+>RCS file: /cvs/src/src/winsup/cygwin/fhandler_console.cc,v
+>retrieving revision 1.57
+>diff -u -p -r1.57 fhandler_console.cc
+>--- fhandler_console.cc	2001/08/07 05:15:59	1.57
+>+++ fhandler_console.cc	2001/09/03 19:38:00
+>@@ -1306,9 +1306,10 @@ fhandler_console::char_command (char c)
+>       break;
+>     case 's':   /* Save cursor position */
+>       cursor_get (&savex, &savey);
+>+      savey -= info.winTop;
+>       break;
+>     case 'u':   /* Restore cursor position */
+>-      cursor_set (FALSE, savex, savey);
+>+      cursor_set (TRUE, savex, savey);
+>       break;
+>     case 'I':	/* TAB */
+>       cursor_get (&x, &y);
+>@@ -1543,12 +1544,13 @@ fhandler_console::write (const void *vsr
+> 	    }
+> 	  else if (*src == '8')		/* Restore cursor position */
+> 	    {
+>-	      cursor_set (FALSE, savex, savey);
+>+	      cursor_set (TRUE, savex, savey);
+> 	      state_ = normal;
+> 	    }
+> 	  else if (*src == '7')		/* Save cursor position */
+> 	    {
+> 	      cursor_get (&savex, &savey);
+>+	      savey -= info.winTop;
+> 	      state_ = normal;
+> 	    }
+> 	  else if (*src == 'R')
+>
+>____
+>  | AIST      Kazuhiro Fujieda <fujieda@jaist.ac.jp>
+>  | HOKURIKU  Center for Information Science
+>o_/ 1990      Japan Advanced Institute of Science and Technology
+
+-- 
+cgf@cygnus.com                        Red Hat, Inc.
+http://sources.redhat.com/            http://www.redhat.com/
