@@ -1,27 +1,49 @@
-From: Chris Faylor <cgf@cygnus.com>
+From: Egor Duda <deo@logos-m.ru>
 To: cygpatch <cygwin-patches@sourceware.cygnus.com>
 Subject: Re: st_blocks incorrect for files larger than 2Gbytes
-Date: Wed, 26 Jul 2000 10:58:00 -0000
-Message-id: <20000726135822.J7599@cygnus.com>
-References: <200007261344.JAA17559@envy.delorie.com> <14788.000726@logos-m.ru> <20000726135017.G7599@cygnus.com>
-X-SW-Source: 2000-q3/msg00033.html
+Date: Thu, 27 Jul 2000 07:16:00 -0000
+Message-id: <2760.000727@logos-m.ru>
+References: <20000726135017.G7599@cygnus.com>
+X-SW-Source: 2000-q3/msg00034.html
 
-On Wed, Jul 26, 2000 at 01:50:17PM -0400, Chris Faylor wrote:
->On Wed, Jul 26, 2000 at 06:56:07PM +0400, Egor Duda wrote:
->>Wednesday, 26 July, 2000 DJ Delorie dj@delorie.com wrote:
->>
->>>>   buf->st_blocks = (buf->st_size + S_BLKSIZE-1) / S_BLKSIZE;
->>>>
->>>> which way is preferable?
->>
->>DD>Casting  buf->st_size  to (unsigned long) before doing the math is.
->>DD>off_t is signed, but negative sizes are meaningless.
->>
->>Wed Jul 26 14:32:38 2000  Egor Duda <deo@logos-m.ru>
+Hi!
+
+>>Wed Jul 26 14:32:38 2000 Egor Duda <deo@logos-m.ru>
 >>
 >>        * syscalls.cc: Make stat return correct st_blocks for files
 >>          with size bigger than 2Gb and less than 4Gb
 
-Btw, I applied this patch.
+oops.  i  should  grep carefully next time. seems that i've overlooked
+st_blocks assignment in fhandler_disk_file::fstat()
 
-cgf
+Thu Jul 27 13:03:57 2000   Egor Duda <deo@logos-m.ru>
+
+        *  fhandler.cc:  (fhandler_disk_file::fstat)  Make stat return
+        correct st_blocks for files with size bigger than 2Gb and less
+        than 4Gb
+
+
+Index: winsup/cygwin/fhandler.cc
+===================================================================
+RCS file: /home/duda_admin/cvs-mirror/src/winsup/cygwin/fhandler.cc,v
+retrieving revision 1.24
+diff -c -2 -r1.24 fhandler.cc
+*** winsup/cygwin/fhandler.cc   2000/07/17 19:18:21     1.24
+--- winsup/cygwin/fhandler.cc   2000/07/27 13:03:57
+***************
+*** 947,951 ****
+  
+    buf->st_blksize = S_BLKSIZE;
+!   buf->st_blocks  = (buf->st_size + S_BLKSIZE-1) / S_BLKSIZE;
+  
+    /* Using a side effect: get_file_attibutes checks for
+--- 947,951 ----
+  
+    buf->st_blksize = S_BLKSIZE;
+!   buf->st_blocks  = ((unsigned long) buf->st_size + S_BLKSIZE-1) / S_BLKSIZE;
+  
+    /* Using a side effect: get_file_attibutes checks for
+
+
+Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
+
