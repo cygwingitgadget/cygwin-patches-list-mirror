@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3013-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 23222 invoked by alias); 20 Sep 2002 15:47:19 -0000
+Return-Path: <cygwin-patches-return-3014-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 21952 invoked by alias); 20 Sep 2002 23:32:24 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,50 +7,83 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 23208 invoked from network); 20 Sep 2002 15:47:19 -0000
-Date: Fri, 20 Sep 2002 08:47:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
+Received: (qmail 21938 invoked from network); 20 Sep 2002 23:32:23 -0000
+Message-Id: <3.0.5.32.20020920192828.0080c640@mail.attbi.com>
+X-Sender: phumblet@mail.attbi.com
+Date: Fri, 20 Sep 2002 16:32:00 -0000
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] new mutex implementation 2. posting
-Message-ID: <20020920154735.GF24740@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <Pine.WNT.4.44.0209201428100.279-100000@algeria.intern.net> <1032525980.9116.55.camel@lifelesswks>
+From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
+Subject: Cleaning up for NULL handles
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1032525980.9116.55.camel@lifelesswks>
-User-Agent: Mutt/1.4i
-X-SW-Source: 2002-q3/txt/msg00461.txt.bz2
+Content-Type: text/plain; charset="us-ascii"
+X-SW-Source: 2002-q3/txt/msg00462.txt.bz2
 
-On Fri, Sep 20, 2002 at 10:46:15PM +1000, Robert Collins wrote:
->On Fri, 2002-09-20 at 22:43, Thomas Pfaff wrote:
->> 
->> 
->> On Fri, 20 Sep 2002, Robert Collins wrote:
->> 
->> > On Tue, 2002-09-17 at 19:34, Thomas Pfaff wrote:
->> >
->> > Thomas, the patch is incomplete.
->> >
->> > pthread_cond::TimedWait needs updating as well...
->> 
->> Yup, but it seems that this was broken on NT before i made my changes,
->> because it was never updated to use Critical Sections when they are
->> available.
-> 
->Uhmm, it was working for me :}. anyway, if you can make that consistent,
->I will apply the semaphore based mutex code. I'm not 100% behind it, I
->think we need to benchmark it, but lacking the facilities, I'm going to
->accept it and tune later.
 
-I haven't been following very closely.  Is the reason why we are not using
-critical sections that TryEnterCriticalSection isn't available anywhere?
-If so, then we can probably fix that with some assembly programming.
+The patch below takes care of the possibility that CreateFile
+might return a 0 handle, in the area that I touched recently.
 
-Critical sections are *so* much faster than mutexes or semaphores that
-it makes sense to use them if possible.
+2002-09-20  Pierre Humblet <pierre.humblet@ieee.org>
 
-Or, maybe we're talking about something else entirely...
+	* dtable.cc (dtable::dup_worker): Do not NULL the io_handle
+	of the child. It is copied from the parent.
+	* fhandler.cc (fhandler_base::dup): If the io_handle is invalid,
+	keep the value set in the parent.
+	* fhandler_disk_file.cc (fhandler_disk_file::fstat): Use 
+	get_open_status () instead of get_io_handle () to test if the 
+	file is open.
 
-cgf
+--- dtable.cc.orig      2002-09-19 21:50:56.000000000 -0400
++++ dtable.cc   2002-09-19 21:51:28.000000000 -0400
+@@ -409,7 +409,6 @@ dtable::dup_worker (fhandler_base *oldfh
+ {
+   fhandler_base *newfh = build_fhandler (-1, oldfh->get_device ());
+   *newfh = *oldfh;
+-  newfh->set_io_handle (NULL);
+   if (oldfh->dup (newfh))
+     {
+       cfree (newfh);
+--- fhandler.cc.orig    2002-09-19 22:39:34.000000000 -0400
++++ fhandler.cc 2002-09-19 22:39:50.000000000 -0400
+@@ -1005,19 +1005,19 @@ fhandler_base::dup (fhandler_base *child
+ {
+   debug_printf ("in fhandler_base dup");
+ 
+-  HANDLE nh;
+-  if (get_nohandle ())
+-    nh = INVALID_HANDLE_VALUE;
+-  else if (!DuplicateHandle (hMainProc, get_handle(), hMainProc, &nh, 0,
+TRUE,
+-                       DUPLICATE_SAME_ACCESS))
++  if (!get_nohandle ())
+     {
+-      system_printf ("dup(%s) failed, handle %x, %E",
+-                    get_name (), get_handle());
+-      __seterrno ();
+-      return -1;
++      HANDLE nh;
++      if (!DuplicateHandle (hMainProc, get_handle(), hMainProc, &nh, 0, TRUE,
++                           DUPLICATE_SAME_ACCESS))
++        {
++         system_printf ("dup(%s) failed, handle %x, %E",
++                        get_name (), get_handle());
++         __seterrno ();
++         return -1;
++       }
++      child->set_io_handle (nh);
+     }
+-
+-  child->set_io_handle (nh);
+   return 0;
+ }
+ 
+--- fhandler_disk_file.cc.orig  2002-09-19 21:49:18.000000000 -0400
++++ fhandler_disk_file.cc       2002-09-19 21:57:30.000000000 -0400
+@@ -155,7 +155,7 @@ fhandler_disk_file::fstat (struct __stat
+   int open_flags = O_RDONLY | O_BINARY | O_DIROPEN;
+   bool query_open_already;
+ 
+-  if (get_io_handle ())
++  if (get_open_status ())
+     {
+       if (get_nohandle ())
+        return fstat_by_name (buf, pc);
