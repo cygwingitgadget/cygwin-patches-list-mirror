@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4023-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 16220 invoked by alias); 21 Jul 2003 13:07:19 -0000
+Return-Path: <cygwin-patches-return-4024-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 31240 invoked by alias); 23 Jul 2003 17:01:17 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,38 +7,88 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 16192 invoked from network); 21 Jul 2003 13:07:18 -0000
-Date: Mon, 21 Jul 2003 13:07:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
+Received: (qmail 31213 invoked from network); 23 Jul 2003 17:01:16 -0000
+X-Authentication-Warning: localhost.localdomain: ronald set sender to blytkerchan@users.sourceforge.net using -f
+Date: Wed, 23 Jul 2003 17:01:00 -0000
+From: Ronald Landheer-Cieslak <blytkerchan@users.sourceforge.net>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Fix format strings for *_printf in mmap.c
-Message-ID: <20030721130717.GL1621@cygbert.vinschen.de>
+Subject: patch for winsup/cygwin/Makefile.in
+Message-ID: <20030723171718.GA2875@linux_rln.harvest>
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <14130.1058788870@www45.gmx.net>
 Mime-Version: 1.0
+Content-Type: multipart/mixed; boundary="ew6BAiZeqk4r7MaW"
+Content-Disposition: inline
+User-Agent: Mutt/1.4i
+X-Disclaimer: I had nothing to do with it - I swear!
+X-loop: linux_rln.harvest
+X-SW-Source: 2003-q3/txt/msg00040.txt.bz2
+
+
+--ew6BAiZeqk4r7MaW
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <14130.1058788870@www45.gmx.net>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2003-q3/txt/msg00039.txt.bz2
+Content-length: 685
 
-On Mon, Jul 21, 2003 at 02:01:10PM +0200, Pavel Tsekov wrote:
-> Hello, 
-> 
-> Does the following patch make any sense ?
-> 
-> * 2003-07-21  Pavel Tsekov  <ptsekov@gmx.net>
-> 
-> 	* mmap.cc: Use proper format specifiers for _off64_t and size_t in
-> 	format strings passed to syscall_printf () and debug_printf ()
-> 	throughout.
+The attached patch fixes a (micro) problem that has been bugging me for a while
+now: the various header files could not be installed with a `make install` 
+without creating the proper directories first.
 
-Definitely.  Applied.
+patch is against current CVS
 
-Thanks for the patch,
-Corinna
+HTH
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+rlc
+
+NB: I've re-sent this because I don't think it arrived: I just switched to 
+    mutt as a MUA (from Pine) and I didn't quite get the .muttrc file right
+    the first time - sorry if you're getting this twice
+
+Changelog is:
+2003-07-23	Ronald Landheer-Cieslak <blytkerchan@users.sourceforge.net>
+	* winsup/cygwin/Makefile.in <install-headers>: run mkinstalldirs before install for each directory
+	<install-man>: ditto for each manpage dir
+--
+
+
+--ew6BAiZeqk4r7MaW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment; filename="Makefile.in.diff"
+Content-length: 1428
+
+2003-07-23	Ronald Landheer-Cieslak <blytkerchan@users.sourceforge.net>
+	* winsup/cygwin/Makefile.in <install-headers>: run mkinstalldirs before install for each directory
+	<install-man>: ditto for each manpage dir
+
+diff -u -r1.127 Makefile.in
+--- winsup/cygwin/Makefile.in	7 Jul 2003 05:30:33 -0000	1.127
++++ winsup/cygwin/Makefile.in	23 Jul 2003 13:54:52 -0000
+@@ -269,6 +269,7 @@
+ 	cd $(srcdir); \
+ 	for sub in `find include -name '[a-z]*' -type d -print | sort`; do \
+ 	    for i in $$sub/*.h ; do \
++	      $(SHELL) $(srcdir)/mkinstalldirs $(tooldir)/$$sub ; \
+ 	      $(INSTALL_DATA) $$i $(tooldir)/$$sub/`basename $$i` ; \
+ 	    done ; \
+ 	done ; \
+@@ -277,15 +278,19 @@
+ install-man:
+ 	cd $(srcdir); \
++	$(SHELL) $(srcdir)/mkinstalldirs $(tooldir)/man/man2 ; \
+ 	for i in `find . -type f -name '*.2'`; do \
+ 	    $(INSTALL_DATA) $$i $(tooldir)/man/man2/`basename $$i` ; \
+ 	done; \
++	$(SHELL) $(srcdir)/mkinstalldirs $(tooldir)/man/man3 ; \
+ 	for i in `find . -type f -name '*.3'`; do \
+ 	    $(INSTALL_DATA) $$i $(tooldir)/man/man3/`basename $$i` ; \
+ 	done; \
++	$(SHELL) $(srcdir)/mkinstalldirs $(tooldir)/man/man5 ; \
+ 	for i in `find . -type f -name '*.5'`; do \
+ 	    $(INSTALL_DATA) $$i $(tooldir)/man/man5/`basename $$i` ; \
+ 	done; \
++	$(SHELL) $(srcdir)/mkinstalldirs $(tooldir)/man/man7 ; \
+ 	for i in `find . -type f -name '*.7'`; do \
+ 	    $(INSTALL_DATA) $$i $(tooldir)/man/man7/`basename $$i` ; \
+ 	done
+ 
+
+--ew6BAiZeqk4r7MaW--
