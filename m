@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4710-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 23352 invoked by alias); 5 May 2004 19:48:39 -0000
+Return-Path: <cygwin-patches-return-4711-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 15351 invoked by alias); 6 May 2004 04:01:56 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,79 +7,230 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 23332 invoked from network); 5 May 2004 19:48:38 -0000
-Date: Wed, 05 May 2004 19:48:00 -0000
-From: Brian Ford <ford@vss.fsi.com>
-Reply-To: cygwin@cygwin.com
-To: Reza <rezmang@yahoo.com>
-cc: cygwin-patches@cygwin.com, cygwin@cygwin.com
-Subject: Re: cygwin1.dll 1.5.9-1 and pthread_exit: UNSTABLE
-In-Reply-To: <20040505181724.87981.qmail@web50610.mail.yahoo.com>
-Message-ID: <Pine.CYG.4.58.0405051420480.3220@fordpc.vss.fsi.com>
-References: <20040505181724.87981.qmail@web50610.mail.yahoo.com>
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-SW-Source: 2004-q2/txt/msg00062.txt.bz2
+Received: (qmail 15342 invoked from network); 6 May 2004 04:01:55 -0000
+Message-Id: <3.0.5.32.20040505235853.00806100@incoming.verizon.net>
+X-Sender: vze1u1tg@incoming.verizon.net (Unverified)
+Date: Thu, 06 May 2004 04:01:00 -0000
+To: cygwin-patches@cygwin.com
+From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
+Subject: Re: [Patch]: chdir
+In-Reply-To: <4098F250.29E4291@phumblet.no-ip.org>
+References: <20040505002003.GA8846@coe.bosbc.com>
+ <3.0.5.32.20040504200359.007fcec0@incoming.verizon.net>
+ <20040505002003.GA8846@coe.bosbc.com>
+ <3.0.5.32.20040505004236.007ff280@incoming.verizon.net>
+ <20040505095134.GA6206@cygbert.vinschen.de>
+Mime-Version: 1.0
+Content-Type: multipart/mixed; boundary="=====================_1083830333==_"
+X-SW-Source: 2004-q2/txt/msg00063.txt.bz2
 
-Although you may have thought this message was on topic for this
-list, since it is neither a patch submission, nor a direct reply to or
-discussion of one, it is not on topic.  Please read:
+--=====================_1083830333==_
+Content-Type: text/plain; charset="us-ascii"
+Content-length: 678
 
-http://cygwin.com/lists.html
+After mulling over it, I simplified chdir even more
+in the interest of uniformity (it matters for unc paths).
+Now cwd.set is always called with only the native_dir.
 
-before posting again.  Redirecting...
+That means that cwd.set always attempts to build the
+Posix wd through the mount table.
+Up to now that was only the case when a symlink was
+involved in the translation, or there was a ":" or a "\" 
+in the directory name, or check_case was not relaxed.
 
-On Wed, 5 May 2004, Reza wrote:
+Pierre
 
-> http://www.mail-archive.com/cygwin@cygwin.com/msg38397.html
->
-> Why hasnt this issue been fixed yet?
+2004-05-06  Pierre Humblet <pierre.humblet@ieee.org>
 
-THAT issue has been fixed.  I presume, by the following:
+	* path.cc (chdir): Do not check for trailing spaces.
+	Do not set native_dir to c:\ for virtual devices.
+	Pass only native_dir to cwd.set.
+	(cwdstuff::set): Assume posix_cwd is already normalized.
 
-2004-04-12  Christopher Faylor  <cgf@alum.bu.edu>
 
-        * thread.cc (pthread::create): Use thread mutex to control
-        synchronization rather than creating a suspended thread.  Wait for
-        "cancellation event" to indicate that started thread has been properly
-        initialized.
-        (pthread::thread_init_wrapper): Use set_tls_self_pointer() to set tid
-        and cygtls.  Signal with cancel_event when done.
+--=====================_1083830333==_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment; filename="path.diff"
+Content-length: 5653
 
-Although, that issue talks about pthread_kill, not pthread_exit, so I fail
-to see how they are directly related.
+Index: path.cc
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+RCS file: /cvs/src/src/winsup/cygwin/path.cc,v
+retrieving revision 1.308
+diff -u -p -r1.308 path.cc
+--- path.cc	4 May 2004 15:14:48 -0000	1.308
++++ path.cc	5 May 2004 23:36:33 -0000
+@@ -286,10 +286,6 @@ normalize_posix_path (const char *src, c
+     }
 
-> I cant find the fix/patch that is mentioned in the link.
+ done:
+-  /* Remove trailing dots and spaces which are ignored by Win32 functions =
+but
+-     not by native NT functions. */
+-  while (dst[-1] =3D=3D '.' || dst[-1] =3D=3D ' ')
+-    --dst;
+   *dst =3D '\0';
+   *tail =3D dst;
 
-Look harder please.
+@@ -555,9 +551,19 @@ path_conv::check (const char *src, unsig
+       if (tail > path_copy + 1 && isslash (*(tail - 1)))
+ 	{
+ 	  need_directory =3D 1;
+-	  *--tail =3D '\0';
++	  tail--;
++	}
++      /* Remove trailing dots and spaces which are ignored by Win32 functi=
+ons but
++	 not by native NT functions. */
++      while (tail[-1] =3D=3D '.' || tail[-1] =3D=3D ' ')
++	tail--;
++      if (tail[-1] =3D=3D '/')
++        {
++	  error =3D ENOENT;
++          return;
+ 	}
+       path_end =3D tail;
++      *tail =3D '\0';
 
-> I just downloaded and installed cygwin yesterday and ran into this
-> problem.
+       /* Scan path_copy from right to left looking either for a symlink
+ 	 or an actual existing file.  If an existing file is found, just
+@@ -3285,80 +3291,44 @@ chdir (const char *in_dir)
 
-Ok, use a snapshot then (http://cygwin.com/snapshots).
+   syscall_printf ("dir '%s'", in_dir);
 
-> Releasing an unstable version of cygwin for this long isn't a
-> good idea (unless these are just isolated cases).
+-  char *s;
+-  char dir[strlen (in_dir) + 1];
+-  strcpy (dir, in_dir);
+-  /* Incredibly. Windows allows you to specify a path with trailing
+-     whitespace to SetCurrentDirectory.  This doesn't work too well
+-     with other parts of the API, though, apparently.  So nuke trailing
+-     white space. */
+-  for (s =3D strchr (dir, '\0'); --s >=3D dir && isspace ((unsigned int) (=
+*s & 0xff)); )
+-    *s =3D '\0';
+-
+-  if (!*s)
+-    {
+-      set_errno (ENOENT);
+-      return -1;
+-    }
+-
+   /* Convert path.  First argument ensures that we don't check for NULL/em=
+pty/invalid
+      again. */
+-  path_conv path (PC_NONULLEMPTY, dir, PC_FULL | PC_SYM_FOLLOW);
++  path_conv path (PC_NONULLEMPTY, in_dir, PC_FULL | PC_SYM_FOLLOW);
+   if (path.error)
+     {
+       set_errno (path.error);
+-      syscall_printf ("-1 =3D chdir (%s)", dir);
++      syscall_printf ("-1 =3D chdir (%s)", in_dir);
+       return -1;
+     }
 
-I strongly suggest you read:
++  int res =3D -1;
+   const char *native_dir =3D path;
+-
+-  /* Check to see if path translates to something like C:.
+-     If it does, append a \ to the native directory specification to
+-     defeat the Windows 95 (i.e. MS-DOS) tendency of returning to
+-     the last directory visited on the given drive. */
+-  if (isdrive (native_dir) && !native_dir[2])
+-    {
+-      path.get_win32 ()[2] =3D '\\';
+-      path.get_win32 ()[3] =3D '\0';
+-    }
+-  int res;
+   int devn =3D path.get_devn ();
+   if (!isvirtual_dev (devn))
+-    res =3D SetCurrentDirectory (native_dir) ? 0 : -1;
+-  else if (!path.exists ())
+     {
+-      set_errno (ENOENT);
+-      return -1;
++      /* Check to see if path translates to something like C:.
++	 If it does, append a \ to the native directory specification to
++	 defeat the Windows 95 (i.e. MS-DOS) tendency of returning to
++	 the last directory visited on the given drive. */
++      if (isdrive (native_dir) && !native_dir[2])
++        {
++	  path.get_win32 ()[2] =3D '\\';
++	  path.get_win32 ()[3] =3D '\0';
++	}
++      if (SetCurrentDirectory (native_dir))
++        res =3D 0;
++      else
++        __seterrno ();
+     }
++  else if (!path.exists ())
++    set_errno (ENOENT);
+   else if (!path.isdir ())
+-    {
+-      set_errno (ENOTDIR);
+-      return -1;
+-    }
++    set_errno (ENOTDIR);
+   else
+-    {
+-      native_dir =3D "c:\\";
+-      res =3D 0;
+-    }
++    res =3D 0;
 
-http://cygwin.com/problems.html
+-  /* If res !=3D 0, we didn't change to a new directory.
+-     Otherwise, set the current windows and posix directory cache from inp=
+ut.
+-     If the specified directory is a MS-DOS style directory or if the dire=
+ctory
+-     was symlinked, convert the MS-DOS path back to posix style.  Otherwis=
+e just
+-     store the given directory.  This allows things like "find", which tra=
+verse
+-     directory trees, to work correctly with Cygwin mounted directories.
+-     FIXME: Is just storing the posixized windows directory the correct th=
+ing to
+-     do when we detect a symlink?  Should we instead rebuild the posix pat=
+h from
+-     the input by traversing links?  This would be an expensive operation =
+but
+-     we'll see if Cygwin mailing list users whine about the current behavi=
+or. */
+-  if (res)
+-    __seterrno ();
+-  else if ((!path.has_symlinks () && strpbrk (dir, ":\\") =3D=3D NULL
+-	    && pcheck_case =3D=3D PCHECK_RELAXED) || isvirtual_dev (devn))
+-    cygheap->cwd.set (native_dir, dir);
+-  else
+-    cygheap->cwd.set (native_dir, NULL);
++  if (res =3D=3D 0)
++    cygheap->cwd.set (native_dir);
 
-as you did not describe your particular pthread_exit problem at all.
-Also, this part might be especially informative:
+   /* Note that we're accessing cwd.posix without a lock here.  I didn't th=
+ink
+      it was worth locking just for strace. */
+@@ -3711,16 +3681,12 @@ cwdstuff::set (const char *win32_cwd, co
+     }
 
-* Avoid expressions of incredulity "I can't believe that this is so
-broken!" or other editorializing. This should go without saying, really,
-but, sadly, many people can't stop themselves from expressing their
-outrage.
+   if (!posix_cwd)
+-    mount_table->conv_to_posix_path (win32, pathbuf, 0);
+-  else
+     {
+-      char * tail;
+-      (void) normalize_posix_path (posix_cwd, pathbuf, &tail);
+-      if (tail > pathbuf + 1 && *(--tail) =3D=3D '/')
+-	*tail =3D 0;
++      mount_table->conv_to_posix_path (win32, pathbuf, 0);
++      posix_cwd =3D pathbuf;
+     }
+-  posix =3D (char *) crealloc (posix, strlen (pathbuf) + 1);
+-  strcpy (posix, pathbuf);
++  posix =3D (char *) crealloc (posix, strlen (posix_cwd) + 1);
++  strcpy (posix, posix_cwd);
 
-We would prefer that you didn't tell us what "a good idea" is.
+   hash =3D hash_path_name (0, win32);
 
-Thanks.
 
--- 
-Brian Ford
-Senior Realtime Software Engineer
-VITAL - Visual Simulation Systems
-FlightSafety International
-the best safety device in any aircraft is a well-trained pilot...
+--=====================_1083830333==_--
