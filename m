@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2602-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 15622 invoked by alias); 5 Jul 2002 07:12:24 -0000
+Return-Path: <cygwin-patches-return-2603-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 21605 invoked by alias); 5 Jul 2002 07:39:06 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,141 +7,79 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 15607 invoked from network); 5 Jul 2002 07:12:22 -0000
-X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
-Date: Fri, 05 Jul 2002 00:12:00 -0000
-From: Thomas Pfaff <tpfaff@gmx.net>
-To: Robert Collins <robert.collins@syncretize.net>
-cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] pthread_key patch
-In-Reply-To: <011b01c223f2$d31d3640$2300a8c0@LAPTOP>
-Message-ID: <Pine.WNT.4.44.0207050910250.276-200000@algeria.intern.net>
-X-X-Sender: pfaff@antarctica.intern.net
+Received: (qmail 21591 invoked from network); 5 Jul 2002 07:39:04 -0000
+Date: Fri, 05 Jul 2002 00:39:00 -0000
+From: egor duda <deo@logos-m.ru>
+Reply-To: egor duda <cygwin-patches@cygwin.com>
+Organization: deo
+X-Priority: 3 (Normal)
+Message-ID: <15690890433.20020705113658@logos-m.ru>
+To: Christopher Faylor <cygwin-patches@cygwin.com>
+Subject: Re: --enable-auto-import extension
+In-Reply-To: <20020704163021.GA27886@redhat.com>
+References: <1212929671.20020628141818@logos-m.ru>
+ <3D1D08A1.9070505@ece.gatech.edu> <180259441557.20020701104656@logos-m.ru>
+ <3D20C981.8020407@ece.gatech.edu> <903891375.20020702193614@logos-m.ru>
+ <14464996970.20020703123443@logos-m.ru> <20020704163021.GA27886@redhat.com>
 MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="178266-30183-1025853124=:276"
-X-SW-Source: 2002-q3/txt/msg00050.txt.bz2
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2002-q3/txt/msg00051.txt.bz2
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
+Hi!
 
---178266-30183-1025853124=:276
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-Content-length: 1558
+Thursday, 04 July, 2002 Christopher Faylor cgf@redhat.com wrote:
 
+CF> On Wed, Jul 03, 2002 at 12:34:43PM +0400, egor duda wrote:
+>>Attached is a patch to add support runtime pseudo-relocations in
+>>cygwin once/if binutils with support for them are released.
 
-This time it was my fault.
-Sorry.
+CF> Is there some reason why this has to be linked into the application and
+CF> is not run from the DLL?  It looks like you'd need to get the
+CF> _image_base__ variable into the DLL somehow but we should be able to do
+CF> that in _cygwin_crt0_common if there is no other way to get this.
 
-Thomas
+We have to make sure that we get application's, not cygwin1.dll's
+_image_base__, __RUNTIME_PSEUDO_RELOC_LIST__, and
+__RUNTIME_PSEUDO_RELOC_LIST_END__. Actually, part that is linked into
+application is doing just this -- gets application's _image_base__,
+RPRL and RPRLE and pass them to dll.
 
-On Fri, 5 Jul 2002, Robert Collins wrote:
+Actually, dll's client may be another dll. I haven't tested it yet.
+Doess _image_base__ for, say, cygintl.dll get updated when/if cygintl.dll
+is rebased at load time?
 
-> Thomas, I can't see the patch again :[.
->
-> Rob
->
-> ----- Original Message -----
-> From: "Thomas Pfaff" <tpfaff@gmx.net>
-> To: <cygwin-patches@cygwin.com>
-> Sent: Friday, July 05, 2002 4:50 PM
-> Subject: [PATCH] pthread_key patch
->
->
-> >
-> >
-> > If somebody is interested why if find this patch neccessary with a posix
-> > threaded gcc could read
-> > http://cygwin.com/ml/cygwin-patches/2002-q2/msg00214.html
-> >
-> > At least the changes in pthread_key::get should be applied, peoble would
-> > be very surprised if the value of errno or Win32LastError will be set to 0
-> > behind her back.
-> >
-> > Thomas
-> >
-> > Changelog:
-> >
-> > 2002-07-05  Thomas Pfaff  <tpfaff@gmx.net>
-> >
-> > * init.cc (dll_entry): Run the pthread_key destructors on thread
-> > and process detach. This will make sure that regardless a thread
-> > is created with pthread_create or CreateThread its eh context
-> > will be freed.
-> > * thread.cc: Moved #define MT_INTERFACE from thread.cc to
-> > thread.h.
-> > (pthread_key_destructor_list::IterateNull): Run
-> > destructor only if value is not NULL.
-> > (pthread_key::get): Save and restore WIN32 LastError to avoid
-> > that Lasterror is cleared in the exception handling code.
-> > set_errno (0) removed.
-> > (__pthread_exit): Removed IterateNull call. This will be done
-> > during thread detach.
-> > * thread.h (pthread::cleanup_stack): Moved #define MT_INTERFACE
-> > user_data->threadinterface from thread.cc to this location.
-> >
-> >
-> >
-> >
->
+CF> I think it makes sense to do as little as possible in the library stub
+CF> code and as much as possible in the DLL so moving the call to
+CF> _pei386_runtime_relocator seems like a good thing.
 
---178266-30183-1025853124=:276
-Content-Type: TEXT/plain; name="pthread_key.patch"
-Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.WNT.4.44.0207050912040.276@algeria.intern.net>
-Content-Description: 
-Content-Disposition: attachment; filename="pthread_key.patch"
-Content-length: 3026
+CF> Btw, could you give a paragraph summary of what this code does?  I
+CF> haven't been following the binutils discussion that closely.  Sounds
+CF> very interesting though...
 
-ZGlmZiAtdXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi9pbml0LmNjIHNyYy93
-aW5zdXAvY3lnd2luL2luaXQuY2MKLS0tIHNyYy5vbGQvd2luc3VwL2N5Z3dp
-bi9pbml0LmNjCU1vbiBKdW4gMjQgMTA6NTE6NDMgMjAwMgorKysgc3JjL3dp
-bnN1cC9jeWd3aW4vaW5pdC5jYwlNb24gSnVuIDI0IDExOjA4OjQ5IDIwMDIK
-QEAgLTMzLDYgKzMzLDcgQEAgV0lOQVBJIGRsbF9lbnRyeSAoSEFORExFIGgs
-IERXT1JEIHJlYXNvbgogCX0KICAgICAgIGJyZWFrOwogICAgIGNhc2UgRExM
-X1BST0NFU1NfREVUQUNIOgorICAgICAgTVRfSU5URVJGQUNFLT5kZXN0cnVj
-dG9ycy5JdGVyYXRlTnVsbCAoKTsKICAgICAgIGJyZWFrOwogICAgIGNhc2Ug
-RExMX1RIUkVBRF9ERVRBQ0g6CiAjaWYgMCAvLyBGSVhNRTogUkVJTlNUQVRF
-IFNPT04KQEAgLTQ4LDYgKzQ5LDcgQEAgV0lOQVBJIGRsbF9lbnRyeSAoSEFO
-RExFIGgsIERXT1JEIHJlYXNvbgogCX0KIAkvLyBGSVhNRTogTmVlZCB0byBh
-ZGQgb3RoZXIgcGVyX3RocmVhZCBzdHVmZiBoZXJlCiAjZW5kaWYKKyAgICAg
-IE1UX0lOVEVSRkFDRS0+ZGVzdHJ1Y3RvcnMuSXRlcmF0ZU51bGwgKCk7CiAg
-ICAgICBicmVhazsKICAgICB9CiAgIHJldHVybiAxOwpkaWZmIC11cnAgc3Jj
-Lm9sZC93aW5zdXAvY3lnd2luL3RocmVhZC5jYyBzcmMvd2luc3VwL2N5Z3dp
-bi90aHJlYWQuY2MKLS0tIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi90aHJlYWQu
-Y2MJTW9uIEp1biAyNCAxMTowODoyMSAyMDAyCisrKyBzcmMvd2luc3VwL2N5
-Z3dpbi90aHJlYWQuY2MJTW9uIEp1biAyNCAxMTowODo0OSAyMDAyCkBAIC0x
-MjYsMTQgKzEyNiwxNyBAQCBwdGhyZWFkX2tleV9kZXN0cnVjdG9yX2xpc3Q6
-Okl0ZXJhdGVOdWxsCiAgIHB0aHJlYWRfa2V5X2Rlc3RydWN0b3IgKnRlbXAg
-PSBoZWFkOwogICB3aGlsZSAodGVtcCkKICAgICB7Ci0gICAgICB0ZW1wLT5k
-ZXN0cnVjdG9yICgodGVtcC0+a2V5KS0+Z2V0ICgpKTsKKyAgICAgIHZvaWQg
-KnZhbHVlID0gKHRlbXAtPmtleSktPmdldCAoKTsKKyAgICAgIGlmICh2YWx1
-ZSkKKyAgICAgICAgeworICAgICAgICAgIHRlbXAtPmRlc3RydWN0b3IgKHZh
-bHVlKTsKKyAgICAgICAgICAodGVtcC0+a2V5KS0+c2V0IChOVUxMKTsKKyAg
-ICAgICAgfQogICAgICAgdGVtcCA9IHRlbXAtPk5leHQgKCk7CiAgICAgfQog
-fQogCiAKLSNkZWZpbmUgTVRfSU5URVJGQUNFIHVzZXJfZGF0YS0+dGhyZWFk
-aW50ZXJmYWNlCi0KIHN0cnVjdCBfcmVlbnQgKgogX3JlZW50X2NsaWIgKCkK
-IHsKQEAgLTQzMyw4ICs0MzYsNiBAQCBwdGhyZWFkOjpleGl0ICh2b2lkICp2
-YWx1ZV9wdHIpCiAgIC8vIHJ1biBjbGVhbnVwIGhhbmRsZXJzCiAgIHBvcF9h
-bGxfY2xlYW51cF9oYW5kbGVycyAoKTsKIAotICBNVF9JTlRFUkZBQ0UtPmRl
-c3RydWN0b3JzLkl0ZXJhdGVOdWxsICgpOwotCiAgIG11dGV4LkxvY2sgKCk7
-CiAgIC8vIGNsZWFudXAgaWYgdGhyZWFkIGlzIGluIGRldGFjaGVkIHN0YXRl
-IGFuZCBub3Qgam9pbmVkCiAgIGlmKCBfX3B0aHJlYWRfZXF1YWwoJmpvaW5l
-ciwgJnRocmVhZCApICkKQEAgLTk5MSw4ICs5OTIsMTMgQEAgcHRocmVhZF9r
-ZXk6OnNldCAoY29uc3Qgdm9pZCAqdmFsdWUpCiB2b2lkICoKIHB0aHJlYWRf
-a2V5OjpnZXQgKCkKIHsKLSAgc2V0X2Vycm5vICgwKTsKLSAgcmV0dXJuIFRs
-c0dldFZhbHVlIChkd1Rsc0luZGV4KTsKKyAgdm9pZCAqcmVzdWx0OworICBp
-bnQgbGFzdF9lcnJvciA9IEdldExhc3RFcnJvciAoKTsKKworICByZXN1bHQg
-PSBUbHNHZXRWYWx1ZSAoZHdUbHNJbmRleCk7CisgIFNldExhc3RFcnJvciAo
-bGFzdF9lcnJvcik7CisKKyAgcmV0dXJuIHJlc3VsdDsKIH0KIAogLypwc2hh
-cmVkIG11dGV4czoKZGlmZiAtdXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi90
-aHJlYWQuaCBzcmMvd2luc3VwL2N5Z3dpbi90aHJlYWQuaAotLS0gc3JjLm9s
-ZC93aW5zdXAvY3lnd2luL3RocmVhZC5oCU1vbiBKdW4gMjQgMTE6MDg6MjEg
-MjAwMgorKysgc3JjL3dpbnN1cC9jeWd3aW4vdGhyZWFkLmgJTW9uIEp1biAy
-NCAxMTowODo0OSAyMDAyCkBAIC01MjksNiArNTI5LDggQEAgaW50IF9fc2Vt
-X3RyeXdhaXQgKHNlbV90ICogc2VtKTsKIGludCBfX3NlbV9wb3N0IChzZW1f
-dCAqIHNlbSk7CiB9OwogCisjZGVmaW5lIE1UX0lOVEVSRkFDRSB1c2VyX2Rh
-dGEtPnRocmVhZGludGVyZmFjZQorCiAjZW5kaWYgLy8gTVRfU0FGRQogCiAj
-ZW5kaWYgLy8gX0NZR05VU19USFJFQURTXwo=
+There is a problem with auto-import when client has a reference to data
+object in dll with some offset. For instance, dll exports _foo_struct
+and client code contains 'x = _foo_struct.bar'. In this case compiler
+generates a relocation with base symbol _foo_struct and addend equal
+to offset of field "bar" in the structure. ld (when doing static
+linking) and, say, linux ld.so, can handle such relocations, while
+Microsoft's loader can't. So, the only option so far was to change
+application code to get rid of relocations with non-zero addends. But
+this is not always possible -- such relocations may be generated
+implicitly. For instance, c++ exception handling emits a record which
+contains a pointer to "type info". Pointer to type info is 'vtable +
+8'. If vtable is imported from dll, we can't 'auto-import' this data
+reference in client code.
 
---178266-30183-1025853124=:276--
+So, to work around this limitation of Microsoft's loader we can add
+some runtime support for relocations with non-zero addends. ld
+generates a vector of "pseudo-relocations" for each such reference in
+client code, and then runtime environment perform necessary fixups at
+program startup. Additionally, to make sure that runtime environment
+supports such "pseudo-relocations" at link-time, iff at least one such
+relocation is generated, it also creates reference to symbol
+_pei386_runtime_relocator. In case of linking new dll client with old
+runtime we'll get error at link-time -- not some strange effects of
+some references in client code are missing needed addends.
+
+Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
