@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5346-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 21360 invoked by alias); 10 Feb 2005 14:34:34 -0000
+Return-Path: <cygwin-patches-return-5347-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 25072 invoked by alias); 10 Feb 2005 14:38:56 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,184 +7,109 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 21235 invoked from network); 10 Feb 2005 14:34:27 -0000
-Received: from unknown (HELO omzesmtp04.mci.com) (199.249.17.14)
-  by sourceware.org with SMTP; 10 Feb 2005 14:34:27 -0000
+Received: (qmail 24926 invoked from network); 10 Feb 2005 14:38:37 -0000
+Received: from unknown (HELO pmesmtp04.mci.com) (199.249.20.36)
+  by sourceware.org with SMTP; 10 Feb 2005 14:38:37 -0000
 Received: from pmismtp02.mcilink.com ([166.38.62.37])
  by firewall.mci.com (Iplanet MTA 5.2)
- with ESMTP id <0IBP00HMJ9TE0W@firewall.mci.com> for cygwin-patches@cygwin.com;
- Thu, 10 Feb 2005 14:34:27 +0000 (GMT)
+ with ESMTP id <0IBP009EB9XLX1@firewall.mci.com> for cygwin-patches@cygwin.com;
+ Thu, 10 Feb 2005 14:36:57 +0000 (GMT)
 Received: from pmismtp02.mcilink.com by pmismtp02.mcilink.com
  (iPlanet Messaging Server 5.2 HotFix 1.14 (built Mar 18 2003))
- with SMTP id <0IBP00M019SYLI@pmismtp02.mcilink.com>; Thu,
- 10 Feb 2005 14:34:26 +0000 (GMT)
+ with SMTP id <0IBP00M019VLOX@pmismtp02.mcilink.com> for
+ cygwin-patches@cygwin.com; Thu, 10 Feb 2005 14:36:57 +0000 (GMT)
 Received: from WS117V6220509.mcilink.com ([166.34.133.100])
  by pmismtp02.mcilink.com
  (iPlanet Messaging Server 5.2 HotFix 1.14 (built Mar 18 2003))
- with ESMTP id <0IBP00MBU9T7DK@pmismtp02.mcilink.com>; Thu,
- 10 Feb 2005 14:34:19 +0000 (GMT)
-Date: Thu, 10 Feb 2005 14:34:00 -0000
+ with ESMTP id <0IBP00MJ89WZDK@pmismtp02.mcilink.com> for
+ cygwin-patches@cygwin.com; Thu, 10 Feb 2005 14:36:35 +0000 (GMT)
+Date: Thu, 10 Feb 2005 14:38:00 -0000
 From: Mark Paulus <mark.paulus@mci.com>
 Subject: Re: patch to allow touch to work on HPFS (and others, maybe??)
-In-reply-to: <20050209085228.GF2597@cygbert.vinschen.de>
-To: "Andrew@DeFaria.com" <Andrew@DeFaria.com>,
- "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Message-id: <0IBP00MBW9T7DK@pmismtp02.mcilink.com>
+In-reply-to: <20050210104551.GX2597@cygbert.vinschen.de>
+To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Message-id: <0IBP00MJ99WZDK@pmismtp02.mcilink.com>
 MIME-version: 1.0
 Content-type: text/plain; charset=iso-8859-1
 Content-transfer-encoding: 7bit
 Priority: Normal
-X-SW-Source: 2005-q1/txt/msg00049.txt.bz2
+X-SW-Source: 2005-q1/txt/msg00050.txt.bz2
 
-I would also like to send this to Andrew DeFaria, since he
-seems to have access to a ClearCase volume he was having
-problems with.  
+That looks like it should do the trick.  I just ran this on a 
+samba mounted FS, and FILE_PERSISTENT_ACLS is 
+true, and it does support the touch using FILE_WRITE_ATTRIBUTES.
+I have asked Andrew DeFaria to compile/run your test program
+on his Clearcase volume, to see if it follows the same trend.
+If it does, then I would say you have found the root cause, and 
+your fix looks like it'll work.
 
-Andrew, could you compile and run the program below against
-your Clearcase volume, and either return the results to 
-cygwin-patches@cygwin.com, or to me, and I'll post them?
+On Thu, 10 Feb 2005 11:45:51 +0100, Corinna Vinschen wrote:
 
-Thanks.
+>On Feb  9 10:27, Mark Paulus wrote:
+>> I'm not exactly giving up.  It's just that at this point it looks like
+>> the fix will not be trivial, and since my company will not endorse
+>> a Waiver, I'm limited in the scope of fixes I can provide.  However,
+>> I am more than willing to provide any testing/debugging services
+>> that are needed.  The other issue is that this does not seem to be
+>> a huge issue, since it hasn't surfaced too much previous to this.
 
+>True.  I guess that there are not a lot of people out there using HPFS
+>anymore.  But if there's an easy solution, why not include it anyway?
 
-On Wed, 09 Feb 2005 09:52:28 +0100, Corinna Vinschen wrote:
+>> rootdir: z:\
+>> Volume Name        : <>
+>> Serial Number      : 2834707476
+>> Max Filenamelength : 254
+>> Filesystemname     : <??SS>
+>> Flags:
+>>   FILE_CASE_SENSITIVE_SEARCH  : FALSE
+>>   FILE_CASE_PRESERVED_NAMES   : TRUE
+>>   FILE_UNICODE_ON_DISK        : FALSE
+>>   FILE_PERSISTENT_ACLS        : FALSE
+>>   FILE_FILE_COMPRESSION       : FALSE
+>>   FILE_VOLUME_QUOTAS          : FALSE
+>>   FILE_SUPPORTS_SPARSE_FILES  : FALSE
+>>   FILE_SUPPORTS_REPARSE_POINTS: FALSE
+>>   FILE_SUPPORTS_REMOTE_STORAGE: FALSE
+>>   FILE_VOLUME_IS_COMPRESSED   : FALSE
+>>   FILE_SUPPORTS_OBJECT_IDS    : FALSE
+>>   FILE_SUPPORTS_ENCRYPTION    : FALSE
+>>   FILE_NAMED_STREAMS          : FALSE
+>>   FILE_READ_ONLY_VOLUME       : FALSE
 
->On Feb  8 14:38, Mark Paulus wrote:
->> Well, all I can say, is "That's Uuuugggllleeeyyyyy".....
->> 
->> When I print fsname on the HPFS mounted volume, 
->> I get back '??SS'.  What the heck is that???  Somehow,
->> I'm guessing that's not something I want to be doing a 
->> string comparison on, for any kind of stability purpose.
->> 
->> Guess I'll live with not being able to 'touch' on mounted
->> HPFS volumes, and not do builds on that remote volume.
->> 
->> Sheesh, what a pain.  Thanks for the pointers, tho.
+>The filesystemname is [insert 4-letter word here], really.
 
->Hey, why do you give up so quickly?  If it's not the one way, it might
->be another one.  For us unknowing folks which have no OS/2 box with
->HPFS to mount, would you mind to run the below application on your NT
->box and paste the output into the reply?  I'm curious to see the result.
->On NTFS, it looks like this:
+>However, that let me rethink what I stated yesterday in my reply to
+>Yitzchak.  The original patch, which introduced the usage of
+>FILE_WRITE_ATTRIBUTES into utimes() made a decision based on the
+>operating system.  Without looking into the original code, it was
+>roughly like this:
 
->$ ./getvolinfo `pwd`
->rootdir: C:\
->Volume Name        : <>
->Serial Number      : 813830114
->Max Filenamelength : 255
->Filesystemname     : <NTFS>
->Flags:
->  FILE_CASE_SENSITIVE_SEARCH  : TRUE
->  FILE_CASE_PRESERVED_NAMES   : TRUE
->  FILE_UNICODE_ON_DISK        : TRUE
->  FILE_PERSISTENT_ACLS        : TRUE
->  FILE_FILE_COMPRESSION       : TRUE
->  FILE_VOLUME_QUOTAS          : TRUE
->  FILE_SUPPORTS_SPARSE_FILES  : TRUE
->  FILE_SUPPORTS_REPARSE_POINTS: TRUE
->  FILE_SUPPORTS_REMOTE_STORAGE: FALSE
->  FILE_VOLUME_IS_COMPRESSED   : FALSE
->  FILE_SUPPORTS_OBJECT_IDS    : TRUE
->  FILE_SUPPORTS_ENCRYPTION    : TRUE
->  FILE_NAMED_STREAMS          : TRUE
->  FILE_READ_ONLY_VOLUME       : FALSE
+>  if (wincap.has_specific_attribs ())
+>    attrib = FILE_WRITE_ATTRIBUTES;
+>  else
+>    attrib = GENERIC_WRITE;
+
+>wincap.has_specific_attribs () returned true for NT systems and false
+>for 9x systems.  At one point I just removed that stuff since it turned
+>out that 9x perfectly understood specific attribs and probably translated
+>them into something like GENERIC_WRITE internally.
+
+>But, isn't that something which can be easily coupled to the file system?
+>It seems that using FILE_WRITE_ATTRIBUTES only makes sense on file systems
+>supporting FILE_PERSISTENT_ACLS, regardless which OS is running, isn't it?
+>So, what if we just use the has_acls() attribute of path_conv to make the
+>decision?
+
+>  if (win32.has_acls ())
+>    attrib = FILE_WRITE_ATTRIBUTES;
+>  else
+>    attrib = GENERIC_WRITE;
+
+>Thoughts?
 
 
 >Corinna
-
-=================== SNIP =================== 
-#include <stdio.h>
-#include <string.h>
-#define _WIN32_WINNT 0x0500
-#include <windows.h>
-
-#ifndef FILE_NAMED_STREAMS
-#define FILE_NAMED_STREAMS 0x40000
-#endif
-#ifndef FILE_READ_ONLY_VOLUME
-#define FILE_READ_ONLY_VOLUME 0x80000
-#endif
-
-int
-main (int argc, char **argv)
-
-  char winpath[256];
-  char rootdir[256];
-  char volname[256];
-  char fsname[256];
-  DWORD sernum = 0;
-  DWORD maxlen = 0;
-  DWORD flags = 0;
-
-  if (argc < 2)
-    {
-      fprintf (stderr, "Doofi!\n");
-      return 1;
-    }
-  cygwin_conv_to_full_win32_path (argv[1], winpath);
-  if (!GetVolumePathName(winpath, rootdir, 256))
-    {
-      fprintf (stderr, "GetVolumePathName: %d\n", GetLastError ());
-      return 1;
-    }
-  printf ("rootdir: %s\n", rootdir);
-  if (!GetVolumeInformation (rootdir, volname, 256, &sernum,
-  			     &maxlen, &flags, fsname, 256))
-    {
-      fprintf (stderr, "GetVolumeInformation: %d\n", GetLastError ());
-      return 1;
-    }
-  printf ("Volume Name        : <%s>\n", volname);
-  printf ("Serial Number      : %lu\n", sernum);
-  printf ("Max Filenamelength : %lu\n", maxlen);
-  printf ("Filesystemname     : <%s>\n", fsname);
-  printf ("Flags:\n");
-
-  printf ("  FILE_CASE_SENSITIVE_SEARCH  : %s\n",
-  	  (flags & FILE_CASE_SENSITIVE_SEARCH) ? "TRUE" : "FALSE");
-
-  printf ("  FILE_CASE_PRESERVED_NAMES   : %s\n",
-  	  (flags & FILE_CASE_PRESERVED_NAMES) ? "TRUE" : "FALSE");
-
-  printf ("  FILE_UNICODE_ON_DISK        : %s\n",
-  	  (flags & FILE_UNICODE_ON_DISK) ? "TRUE" : "FALSE");
-
-  printf ("  FILE_PERSISTENT_ACLS        : %s\n",
-  	  (flags & FILE_PERSISTENT_ACLS) ? "TRUE" : "FALSE");
-
-  printf ("  FILE_FILE_COMPRESSION       : %s\n",
-  	  (flags & FILE_FILE_COMPRESSION) ? "TRUE" : "FALSE");
-
-  printf ("  FILE_VOLUME_QUOTAS          : %s\n",
-  	  (flags & FILE_VOLUME_QUOTAS) ? "TRUE" : "FALSE");
-
-  printf ("  FILE_SUPPORTS_SPARSE_FILES  : %s\n",
-  	  (flags & FILE_SUPPORTS_SPARSE_FILES) ? "TRUE" : "FALSE");
-
-  printf ("  FILE_SUPPORTS_REPARSE_POINTS: %s\n",
-  	  (flags & FILE_SUPPORTS_REPARSE_POINTS) ? "TRUE" : "FALSE");
-
-  printf ("  FILE_SUPPORTS_REMOTE_STORAGE: %s\n",
-  	  (flags & FILE_SUPPORTS_REMOTE_STORAGE) ? "TRUE" : "FALSE");
-
-  printf ("  FILE_VOLUME_IS_COMPRESSED   : %s\n",
-  	  (flags & FILE_VOLUME_IS_COMPRESSED) ? "TRUE" : "FALSE");
-
-  printf ("  FILE_SUPPORTS_OBJECT_IDS    : %s\n",
-  	  (flags & FILE_SUPPORTS_OBJECT_IDS) ? "TRUE" : "FALSE");
-
-  printf ("  FILE_SUPPORTS_ENCRYPTION    : %s\n",
-  	  (flags & FILE_SUPPORTS_ENCRYPTION) ? "TRUE" : "FALSE");
-
-  printf ("  FILE_NAMED_STREAMS          : %s\n",
-  	  (flags & FILE_NAMED_STREAMS) ? "TRUE" : "FALSE");
-
-  printf ("  FILE_READ_ONLY_VOLUME       : %s\n",
-  	  (flags & FILE_READ_ONLY_VOLUME) ? "TRUE" : "FALSE");
-  return 0;
-
-=================== SNAP =================== 
 
 >-- 
 >Corinna Vinschen                  Please, send mails regarding Cygwin to
