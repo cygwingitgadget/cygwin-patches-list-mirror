@@ -1,21 +1,17 @@
 From: Mark Bradshaw <bradshaw@staff.crosswalk.com>
 To: "'cygwin-patches@cygwin.com'" <cygwin-patches@cygwin.com>
 Subject: RE: patch to mkpasswd.c - allows selection of specific user
-Date: Fri, 09 Nov 2001 17:18:00 -0000
-Message-id: <911C684A29ACD311921800508B7293BA010A8FF0@cnmail>
-X-SW-Source: 2001-q4/msg00184.html
+Date: Fri, 09 Nov 2001 17:23:00 -0000
+Message-id: <911C684A29ACD311921800508B7293BA010A8FF1@cnmail>
+X-SW-Source: 2001-q4/msg00185.html
 
-I haven't done an assignment.  I figured this was a trivial change.  If you
-want one I'll go ahead and send one in.
+Ah.  I'm a dummy.  I'm looking at the wrong thing.  How about this:
 
-Here's a new Changelog....
-
-2001-11-09  Mark Bradshaw  <bradshaw@staff.crosswalk.com>
-
-	* mkpasswd.c: Add an option (-u) to only display a selected user.
-
-Better?  I looked in the Changelog and modeled the new one after the few on
-top, but I saw lots down below that used the same formatting I did.  
+Fri 9 Nov 2001 18:15:00  Mark Bradshaw <bradshaw@staff.crosswalk.com>
+	* mkpasswd.c (main): New -u option to allow specifying a 
+	specific user.  If specified groups aren't displayed.
+	(enum_users): If specific user is specified, via -u option, 
+	display only that user's record.
 
 Mark
 
