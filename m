@@ -1,44 +1,75 @@
 From: "Robert Collins" <robert.collins@itdomain.com.au>
-To: <cygwin-patches@cygwin.com>
-Subject: W32API: new common control struct from XP
-Date: Fri, 07 Dec 2001 13:48:00 -0000
-Message-ID: <096e01c17eac$8230b770$0200a8c0@lifelesswks>
-X-SW-Source: 2001-q4/msg00293.html
-Content-type: multipart/mixed; boundary="----------=_1583532850-65438-122"
-Message-ID: <20011207134800.b5Zk9wz5SSoR4Bf3U2AhffqjXa0OmNjBWCC_NYlsN2o@z>
+To: "Jan Nieuwenhuizen" <janneke@gnu.org>
+Cc: <cygwin-apps@cygwin.com>, <cygwin-patches@cygwin.com>
+Subject: Re: experimental texmf packages
+Date: Sat, 08 Dec 2001 14:18:00 -0000
+Message-ID: <01a801c18036$3d447350$0200a8c0@lifelesswks>
+References: <m3bshtmxhb.fsf@appel.lilypond.org> <878764062.20011128173421@nyckelpiga.de> <m37ks9lgxi.fsf@appel.lilypond.org> <4434079433.20011129221637@familiehaase.de> <m3oflgy98n.fsf@appel.lilypond.org> <9517228633.20011203135833@familiehaase.de> <m3lmgkwgeu.fsf@appel.lilypond.org> <3C0D8535.D67735D1@ece.gatech.edu> <m33d2pam3l.fsf@appel.lilypond.org> <00d501c17d93$1936c990$0200a8c0@lifelesswks> <m3zo4x7obb.fsf@appel.lilypond.org> <m38zcdssxd.fsf@appel.lilypond.org>
+X-SW-Source: 2001-q4/msg00295.html
+Message-ID: <20011208141800.mdvsPO6IW8T7DQjtiunpnKlic8cH0rFnv4MuoTgLuZw@z>
 
-This is a multi-part message in MIME format...
+Follow to cygwin-patches please.
 
-------------=_1583532850-65438-122
-Content-length: 172
+Thanks for freshening this up. There's still a little more to do, but it
+looks good nonetheless.
 
-Changelog:
+Rob
 
-2001-12-06  Robret Collins  rbtcollins@hotmail.com
+----- Original Message -----
+From: "Jan Nieuwenhuizen" <janneke@gnu.org>
+> Jan Nieuwenhuizen <janneke@gnu.org> writes:
+>
+> > > BTW: can you freshed up your postremove patch? I'd like that to be
+> > > included in setup.
+> >
+> > Yes, will do.
 
-    * include/commctrl.h: New typedefs for HDLAYOUT and LPHDLAYOUT based
-on MSDN documentation
-    for XP.
+Thank you. A few nits:
+
+> cygwin-installer-20011208.ChangeLog
+> 2001-12-08  Jan Nieuwenhuizen  <janneke@gnu.org>
+>
+> * Makefile.in (CFLAGS): Remove -Werror to allow build.
+
+The Werror is in by design. If your patch won't build with it, I won't
+accept you patch.
+
+> (realclean): more clean.
+>
+> * configure.in (LIB_AC_PROG_CXX): Bugfix for CXXFLAGS override.
+
+What's wrong with the current method?
+
+> * desktop.cc (etc_profile): Remove line breaks and spaces from PS1.
+
+The line is now > 80 chars, and indent will break it up again. Is there
+some reason for this change?
+
+> * Forward port cygwin-20010707.jcn3.patch.
+>
+> * postinstall.cc (do_postinstall): Split off:
+> (init_run_script): New function.
+> (run_script_in_etc_postinstall): New function.
+>
+> * package_meta.cc (try_run_script): New function.
+
+This doesn't belong here. It's nothing to do with the package, but with
+interfacing with the shell/scripts. Also (this one is minor/optional),
+cygpath and _access are deprecated - foo = io_stream::open (concat
+("cygfile://", dir, fname, 0), "rb") followed by run_script (foo) would
+be the more OO approach here.
+
+In the future I think we'll want a script or shell class to encapsulate
+all of this.
+
+> (uninstall): Run pre- and postremove scripts.
 
 
-------------=_1583532850-65438-122
-Content-Type: text/x-diff; charset=us-ascii; name="newcommctrl.patch"
-Content-Disposition: inline; filename="newcommctrl.patch"
-Content-Transfer-Encoding: base64
-Content-Length: 757
+> * install.cc (do_install): Run script initialisation.
 
-SW5kZXg6IGluY2x1ZGUvY29tbWN0cmwuaAo9PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09ClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL3czMmFwaS9pbmNs
-dWRlL2NvbW1jdHJsLmgsdgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuOApkaWZm
-IC11IC1wIC1yMS44IGNvbW1jdHJsLmgKLS0tIGNvbW1jdHJsLmgJMjAwMS8w
-OS8xOSAyMzo1NjoxMgkxLjgKKysrIGNvbW1jdHJsLmgJMjAwMS8xMi8wNiAy
-MzoxODo0NwpAQCAtMTI0NCw2ICsxMjQ0LDEwIEBAIHR5cGVkZWYgc3RydWN0
-IF9IRF9MQVlPVVQgewogCVJFQ1QgKnByYzsKIAlXSU5ET1dQT1MgKnB3cG9z
-OwogfSBIRF9MQVlPVVQ7Cit0eXBlZGVmIHN0cnVjdCBfSERfTEFZT1VUX1hQ
-IHsKKyAgICAgIFJFQ1QgRkFSKiAgICAgIHByYzsgIAorICAgICAgV0lORE9X
-UE9TIEZBUiogcHdwb3M7IAorfSBIRExBWU9VVCwgRkFSICpMUEhETEFZT1VU
-OyAKIHR5cGVkZWYgc3RydWN0IF9IRF9ISVRURVNUSU5GTyB7CiAJUE9JTlQg
-cHQ7CiAJVUlOVCBmbGFnczsK
+You're missing postinstall.h in your changelog.
+Also postinstall.h won't compile if it's the only include used in a
+translation unit. (ie include the _absolutely_ required headers to parse
+postinstall.h
 
-------------=_1583532850-65438-122--
+Thanks
