@@ -1,80 +1,57 @@
-From: Chris Faylor <cgf@cygnus.com>
+From: Corinna Vinschen <corinna@vinschen.de>
 To: cygpatch <cygwin-patches@sourceware.cygnus.com>
-Subject: Re: [RFA]: patch to rmdir
-Date: Sun, 21 May 2000 15:41:00 -0000
-Message-id: <20000521184132.E1386@cygnus.com>
-References: <3927E038.FF38FB02@vinschen.de>
-X-SW-Source: 2000-q2/msg00068.html
+Subject: [RFA]: patch to 'rename', was Re: Wierd patch problem + simple fix
+Date: Mon, 22 May 2000 02:50:00 -0000
+Message-id: <3928FF7A.B4402B9C@vinschen.de>
+References: <392633C8.4B20FBE5@ece.gatech.edu> <20000520215546.E2054@cygnus.com> <39277F56.43288E5E@ece.gatech.edu> <3927DD35.C31AC4AA@vinschen.de> <20000521183456.B1386@cygnus.com>
+X-SW-Source: 2000-q2/msg00069.html
 
-Does this fix the erroneous error when you do a:
-
-rmdir somefilethatisnotadirectory
-
-too?
-
-cgf
-
-On Sun, May 21, 2000 at 03:10:16PM +0200, Corinna Vinschen wrote:
->Hi all,
->
->the following patch solves a problem with samba drives.
->If you try to rmdir a non empty directory on a samba
->drive, the windows function RemoveDirectory() returns
->NO_ERROR. The directory isn't removed, of course. The
->problem is solved by calling 'GetFileAttributes' after
->RemoveDirectory() returns NO_ERROR. If the function
->returns -1, the directory is been removed. Otherwise
->a set_errno(ENOEMPTY) is raised.
->
->Additionally I removed a superfluous `else if (error == ...)'
->because that case is already handled by __seterrno().
->
->Have a nice Sunday,
->Corinna
->
->ChangeLog:
->
->	* dir.cc (rmdir): Check existance of directory
->	after successfully called RemoveDirectoryA() to
->	deal correclty with samba drives.
->	Remove superfluous else branch.
->
->Index: dir.cc
->===================================================================
->RCS file: /cvs/src/src/winsup/cygwin/dir.cc,v
->retrieving revision 1.1.1.1
->diff -u -p -r1.1.1.1 dir.cc
->--- dir.cc      2000/02/17 19:38:31     1.1.1.1
->+++ dir.cc      2000/05/21 12:58:21
->@@ -319,7 +319,15 @@ rmdir (const char *dir)
->     }
+Chris Faylor wrote:
 > 
->   if (RemoveDirectoryA (real_dir.get_win32 ()))
->-    res = 0;
->+    {
->+      /* RemoveDirectory on a samba drive doesn't return an error if
->the
->+         directory can't be removed because it's not empty. Checking
->for
->+         existence afterwards keeps us informed about success. */
->+      if (GetFileAttributesA (real_dir.get_win32 ()) != -1)
->+        set_errno (ENOTEMPTY);
->+      else
->+        res = 0;
->+    }
->   else if (os_being_run != winNT && GetLastError() ==
->ERROR_ACCESS_DENIED)
->     {
->       /* Under Windows 95 & 98, ERROR_ACCESS_DENIED is returned
->@@ -329,8 +337,6 @@ rmdir (const char *dir)
->      else
->        set_errno (ENOTEMPTY);
->     }
->-  else if (GetLastError () == ERROR_DIRECTORY)
->-    set_errno (ENOTDIR);
->   else
->     __seterrno ();
+> On Sun, May 21, 2000 at 02:57:25PM +0200, Corinna Vinschen wrote:
+> >I'm completely unable to reproduce that problem...
+> >
+> >...as far as the $TMP directory is on the same drive
+> >   as the patched file!
+> >[...]
+> But I really can't believe that this is a generic patch bug.
+> /tmp is often located on a different partition than a 'src'
+> directory and it is hard to believe that this could be broken
+> in patch.
+> 
+> Is it possible that some stat (st_dev maybe?) field has changed
+> recently?
 
--- 
-cgf@cygnus.com                        Cygnus Solutions, a Red Hat company
-http://sourceware.cygnus.com/         http://www.redhat.com/
+I have investigated that phenomenon and I found that
+`MoveFile' returns ERROR_FILE_EXISTS while our `rename'
+code checks only for ERROR_ALREADY_EXISTS. Perhaps the return
+code is OS dependent? I'm testing mainly on W2K.
+
+I have attached a patch for _rename so that it checks for
+both return codes. If there are no objections, I will
+commit it today.
+
+Corinna
+
+ChangeLog:
+==========
+
+	* syscalls.cc (_rename): Additionally check for ERROR_FILE_EXISTS
+	if MoveFile fails.
+Index: syscalls.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/syscalls.cc,v
+retrieving revision 1.25
+diff -u -p -r1.25 syscalls.cc
+--- syscalls.cc	2000/05/19 17:15:02	1.25
++++ syscalls.cc	2000/05/22 09:35:29
+@@ -1231,7 +1231,8 @@ _rename (const char *oldpath, const char
+   if (!MoveFile (real_old.get_win32 (), real_new.get_win32 ()))
+     res = -1;
+ 
+-  if (res == 0 || GetLastError () != ERROR_ALREADY_EXISTS)
++  if (res == 0 || (GetLastError () != ERROR_ALREADY_EXISTS
++                   && GetLastError () != ERROR_FILE_EXISTS))
+     goto done;
+ 
+   if (os_being_run == winNT)
