@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4099-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 3930 invoked by alias); 17 Aug 2003 16:43:05 -0000
+Return-Path: <cygwin-patches-return-4100-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 4490 invoked by alias); 17 Aug 2003 16:44:14 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,34 +7,32 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 3917 invoked from network); 17 Aug 2003 16:43:04 -0000
-Date: Sun, 17 Aug 2003 16:43:00 -0000
+Received: (qmail 4468 invoked from network); 17 Aug 2003 16:44:13 -0000
+Date: Sun, 17 Aug 2003 16:44:00 -0000
 From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: Questions and a RFC [was Re: Assignment from Nicholas Wourms arrived]
-Message-ID: <20030817164304.GB9059@redhat.com>
+Subject: Re: [PATCH] Consider extensions for special names in managed mode
+Message-ID: <20030817164413.GC9059@redhat.com>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20030812191411.GH17051@cygbert.vinschen.de> <3F39704F.6030001@netscape.net> <20030813113509.GA24855@cygbert.vinschen.de> <3F3A5CE4.10004@netscape.net> <20030813170416.GG3101@cygbert.vinschen.de>
+References: <20030813083512.GG13155@linux_rln.harvest> <Pine.GSO.4.44.0308131014360.8046-200000@slinky.cs.nyu.edu> <20030813172801.GH3101@cygbert.vinschen.de>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20030813170416.GG3101@cygbert.vinschen.de>
+In-Reply-To: <20030813172801.GH3101@cygbert.vinschen.de>
 User-Agent: Mutt/1.4.1i
-X-SW-Source: 2003-q3/txt/msg00115.txt.bz2
+X-SW-Source: 2003-q3/txt/msg00116.txt.bz2
 
-On Wed, Aug 13, 2003 at 07:04:16PM +0200, Corinna Vinschen wrote:
->>For future contributions, what is the official policy on doing it now?
+On Wed, Aug 13, 2003 at 07:28:01PM +0200, Corinna Vinschen wrote:
+>On Wed, Aug 13, 2003 at 10:19:08AM -0400, Igor Pechtchanski wrote:
+>> 2003-08-13  Igor Pechtchanski  <pechtcha@cs.nyu.edu>
+>> 
+>> 	* path.cc (special_name): Add checks for some specials
+>> 	followed by a "." and a FIXME comment.
 >
->Basically don't add an underscore alias.  Create an underscore alias if
->the function is used by newlib.  Or, create an underscore alias if it's
->e.g.  available in Linux or BSD, which might happen (mempcpy comes to
->mind).
+>Ok, I've applied it.  I guess Chris can work from that, too.
 
-I don't think this is right.  The underscore aliases were put there,
-IIRC, in a misplaced desire to emulate MSFT's version of such things as
-_open, _close, etc.  There is no reason to add underscores to any new
-functions.  The use of functions with leading underscores should be
-considred deprecated.
+I saw the comment on the cygwin mailing list and had already written
+a patch that also works with things like com1.sh.  It's checked in.
 
 cgf
