@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4722-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 308 invoked by alias); 6 May 2004 23:08:32 -0000
+Return-Path: <cygwin-patches-return-4723-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 19871 invoked by alias); 6 May 2004 23:54:09 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,97 +7,37 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 32766 invoked from network); 6 May 2004 23:08:31 -0000
-Message-ID: <01C433CF.C9723B10.Gerd.Spalink@t-online.de>
-From: Gerd.Spalink@t-online.de (Gerd Spalink)
-Reply-To: "Gerd.Spalink@t-online.de" <Gerd.Spalink@t-online.de>
-To: "'cygwin-patches@cygwin.com'" <cygwin-patches@cygwin.com>
-Subject: Patch for /dev/dsp to make audio play interruptible by Ctrl-C
-Date: Thu, 06 May 2004 23:08:00 -0000
-Organization: privat
-MIME-Version: 1.0
+Received: (qmail 19505 invoked from network); 6 May 2004 23:54:07 -0000
+Message-Id: <3.0.5.32.20040506195101.008064e0@incoming.verizon.net>
+X-Sender: vze1u1tg@incoming.verizon.net (Unverified)
+Date: Thu, 06 May 2004 23:54:00 -0000
+To: cygwin-patches@cygwin.com
+From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
+Subject: [Patch]: mount_info::conv_to_posix_path
+Mime-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Seen: false
-X-ID: E4xP8qZJQeIwk6qoDXI0m6UoVo7jZa-t2r53ZT6nBftltPicOlEVQI
-X-SW-Source: 2004-q2/txt/msg00074.txt.bz2
+X-SW-Source: 2004-q2/txt/msg00075.txt.bz2
 
-Hello,
+A missing return causes trouble when chroot is in effect.
 
-This patch makes /dev/dsp respond to exceptions without delay,
-even if audio has been buffered and is currently playing.
+Pierre 
 
-Thank you, cgf, for the hint to use exit_state.
+2004-05-07  Pierre Humblet <pierre.humblet@ieee.org>
 
-Can you make it go into the upcoming release 1.5.10?
+	* path.cc (mount_info::conv_to_posix_path): Add return.
 
-Gerd
-
-
-ChangeLog:
-
-2004-05-07  Gerd Spalink  <Gerd.Spalink@t-online.de>
-	* fhandler_dsp.cc (fhandler_dev_dsp::Audio_out::stop):
-	Move delete of bigwavebuffer_ so that it is always cleaned,
-	also in child processes.
-	(fhandler_dev_dsp::Audio_in::stop): ditto
-	(fhandler_dev_dsp::close): Stop audio play immediately
-	in case of abnormal exit.
-
-
-
-Index: fhandler_dsp.cc
+Index: path.cc
 ===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/fhandler_dsp.cc,v
-retrieving revision 1.35
-diff -u -p -r1.35 fhandler_dsp.cc
---- fhandler_dsp.cc     13 Apr 2004 09:38:32 -0000      1.35
-+++ fhandler_dsp.cc     6 May 2004 22:55:34 -0000
-@@ -457,12 +457,12 @@ fhandler_dev_dsp::Audio_out::stop (bool
-       debug_printf ("waveOutClose rc=%d", rc);
-
-       clearOwner ();
-+    }
-
--      if (bigwavebuffer_)
--       {
--         delete[] bigwavebuffer_;
--         bigwavebuffer_ = NULL;
--       }
-+  if (bigwavebuffer_)
-+    {
-+      delete[] bigwavebuffer_;
-+      bigwavebuffer_ = NULL;
+RCS file: /cvs/src/src/winsup/cygwin/path.cc,v
+retrieving revision 1.309
+diff -u -p -r1.309 path.cc
+--- path.cc     6 May 2004 16:26:10 -0000       1.309
++++ path.cc     6 May 2004 23:27:31 -0000
+@@ -1703,6 +1703,7 @@ mount_info::conv_to_posix_path (const ch
+          posix_path[0] = '/';
+          posix_path[1] = '\0';
+        }
++      return 0;
      }
- }
-
-@@ -859,12 +859,12 @@ fhandler_dev_dsp::Audio_in::stop ()
-       debug_printf ("waveInClose rc=%d", rc);
-
-       clearOwner ();
-+    }
-
--      if (bigwavebuffer_)
--       {
--         delete[] bigwavebuffer_;
--         bigwavebuffer_ = NULL;
--       }
-+  if (bigwavebuffer_)
-+    {
-+      delete[] bigwavebuffer_;
-+      bigwavebuffer_ = NULL;
-     }
- }
-
-@@ -1207,6 +1207,11 @@ fhandler_dev_dsp::close (void)
-     }
-   if (audio_out_)
-     {
-+      if (exit_state != ES_NOT_EXITING)
-+       { // emergency close due to call to exit() or Ctrl-C:
-+         // do not wait for all pending audio to be played
-+         audio_out_->stop (true);
-+       }
-       delete audio_out_;
-       audio_out_ = NULL;
-     }
+   else
+     return ENOENT;
