@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2079-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 5535 invoked by alias); 18 Apr 2002 22:45:45 -0000
+Return-Path: <cygwin-patches-return-2080-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 6079 invoked by alias); 19 Apr 2002 00:20:11 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,58 +7,86 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 5506 invoked from network); 18 Apr 2002 22:45:43 -0000
-content-class: urn:content-classes:message
-Subject: RE: [PATCH]setup.exe mklink2.cc some function arguments need to be pointers
+Received: (qmail 6038 invoked from network); 19 Apr 2002 00:20:06 -0000
+Message-ID: <013401c1e737$e9d78e00$2000a8c0@mchasecompaq>
+From: "Michael A Chase" <mchase@ix.netcom.com>
+To: "Robert Collins" <robert.collins@itdomain.com.au>,
+	<cygwin-patches@cygwin.com>
+References: <FC169E059D1A0442A04C40F86D9BA7600C5E68@itdomain003.itdomain.net.au>
+Subject: Re: [PATCH]setup.exe mklink2.cc some function arguments need to be pointers
+Date: Thu, 18 Apr 2002 17:20:00 -0000
 MIME-Version: 1.0
 Content-Type: text/plain;
-	charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 18 Apr 2002 15:45:00 -0000
-X-MimeOLE: Produced By Microsoft Exchange V6.0.5762.3
-Message-ID: <FC169E059D1A0442A04C40F86D9BA7600C5E6D@itdomain003.itdomain.net.au>
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
+	charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-SW-Source: 2002-q2/txt/msg00064.txt.bz2
+
 From: "Robert Collins" <robert.collins@itdomain.com.au>
-To: <bkeener@thesoftwaresource.com>,
-	<cygwin-patches@cygwin.com>
-X-SW-Source: 2002-q2/txt/msg00063.txt.bz2
+To: "Michael A Chase" <mchase@ix.netcom.com>; <cygwin-patches@cygwin.com>
+Sent: Thursday, April 18, 2002 14:59
+Subject: RE: [PATCH]setup.exe mklink2.cc some function arguments need to be
+pointers
 
-Well if you recall I had the opposite code in place (as far as I can
-tell without an actual patch), and that didn't compile for a different
-set of users. I completely rebuild my OS the other day, and after that
-I've needed the patch. That seemed a strong indication that the w32api
-was the culprit..
 
-Rob
+> Update your win32api - And it should not need the patch,
 
-> -----Original Message-----
-> From: Brian Keener [mailto:bkeener@thesoftwaresource.com]=20
-> Sent: Friday, April 19, 2002 8:46 AM
-> To: cygwin-patches@cygwin.com
-> Subject: Re: [PATCH]setup.exe mklink2.cc some function=20
-> arguments need to be pointers
->=20
->=20
-> Not to be a pain about this - but this have been reported=20
-> several times in the=20
-> past and I am running Win2000 and have the W32api-1.3-2=20
-> installed.  I haven't=20
-> seen any other w32api come down the pike so that appears to=20
-> be the most recent.=20
-> I have the patch - just took it out and no compile - put it=20
-> back and it does=20
-> compile.
->=20
-> Not sure what Mike's OS or yours Robert or if it even makes a=20
-> difference but I=20
-> thought I would point out mine is Win2k.  I also have my just=20
-> updated my CVS=20
-> for cinstall so it is current.
->=20
-> I know this is a me2 but I thought I would add what I could.
->=20
-> Bk
->=20
->=20
->=20
+I ran a complete CVS update for the Cygwin source, deleted all .o, .a, and
+.d files in the obj/ tree, and ran configure for the entire tree just before
+I attempted to make everything including setup.exe.  The only compile that
+fails is mklink2.cc.
+
+Both functions in mklink2.cc are extern "C" so the automatic referencing
+done by C++ to function call parameters doesn't occur.
+
+# first make attempt:
+c++ -L/cygwin-build/obj/i686-pc-cygwin/winsup -L/cygwin-build/obj/i686-pc-cy
+gwin/winsup/cygwin -L/cygwin-build/obj/i686-pc-cygwin/winsup/w32api/lib -isy
+stem /cygwin-build/src/winsup/include -isystem
+/cygwin-build/src/winsup/cygwin/include -isystem
+/cygwin-build/src/winsup/w32api/include -isystem
+/cygwin-build/src/newlib/libc/sys/cygwin -isystem
+/cygwin-build/src/newlib/libc/sys/cygwin32 -B/cygwin-build/obj/i686-pc-cygwi
+n/newlib/ -isystem
+/cygwin-build/obj/i686-pc-cygwin/newlib/targ-include -isystem
+/cygwin-build/src/newlib/libc/include -MMD -g -O2 -mno-cygwin -I. -I/cygwin-
+build/src/winsup/cinstall -I/cygwin-build/src/winsup/mingw/include  -I/cygwi
+n-build/src/winsup/bz2lib -mwindows -c -o mklink2.o
+/cygwin-build/src/winsup/cinstall/mklink2.cc
+
+/cygwin-build/src/winsup/cinstall/mklink2.cc: In function `void
+make_link_2(const char *, const char *, const char *, const char *)':
+/cygwin-build/src/winsup/cinstall/mklink2.cc:24: cannot convert
+`CLSID_ShellLink' from type `const GUID' to type `const CLSID *'
+/cygwin-build/src/winsup/cinstall/mklink2.cc:25: cannot convert
+`IID_IPersistFile' from type `_GUID' to type `const IID *'
+
+# second make attempt after first two arguments &ed
+c++ -L/cygwin-build/obj/i686-pc-cygwin/winsup -L/cygwin-build/obj/i686-pc-cy
+gwin/winsup/cygwin -L/cygwin-build/obj/i686-pc-cygwin/winsup/w32api/lib -isy
+stem /cygwin-build/src/winsup/include -isystem
+/cygwin-build/src/winsup/cygwin/include -isystem
+/cygwin-build/src/winsup/w32api/include -isystem
+/cygwin-build/src/newlib/libc/sys/cygwin -isystem
+/cygwin-build/src/newlib/libc/sys/cygwin32 -B/cygwin-build/obj/i686-pc-cygwi
+n/newlib/ -isystem
+/cygwin-build/obj/i686-pc-cygwin/newlib/targ-include -isystem
+/cygwin-build/src/newlib/libc/include -MMD -g -O2 -mno-cygwin -I. -I/cygwin-
+build/src/winsup/cinstall -I/cygwin-build/src/winsup/mingw/include  -I/cygwi
+n-build/src/winsup/bz2lib -mwindows -c -o mklink2.o
+/cygwin-build/src/winsup/cinstall/mklink2.cc
+
+/cygwin-build/src/winsup/cinstall/mklink2.cc: In function `void
+make_link_2(const char *, const char *, const char *, const char *)':
+/cygwin-build/src/winsup/cinstall/mklink2.cc:24: cannot convert
+`IID_IShellLinkA' from type `const GUID' to type `const IID *'
+
+--
+Mac :})
+** I normally forward private questions to the appropriate mail list. **
+Ask Smarter: http://www.tuxedo.org/~esr/faqs/smart-questions.html
+Give a hobbit a fish and he eats fish for a day.
+Give a hobbit a ring and he eats fish for an age.
+
