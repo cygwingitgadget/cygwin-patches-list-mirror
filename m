@@ -1,35 +1,22 @@
 From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: race in tty handling code
-Date: Mon, 26 Feb 2001 16:12:00 -0000
-Message-id: <20010226191134.D6209@redhat.com>
-References: <2170208116.20010222140316@logos-m.ru> <1989782887.20010222185416@logos-m.ru>
-X-SW-Source: 2001-q1/msg00117.html
+Subject: Re: fhandler_console
+Date: Mon, 26 Feb 2001 16:15:00 -0000
+Message-id: <20010226191432.E6209@redhat.com>
+References: <16286062992.20010216183758@logos-m.ru> <20010219214951.A23483@redhat.com> <7888578378.20010220130012@logos-m.ru> <17613156858.20010223151715@logos-m.ru>
+X-SW-Source: 2001-q1/msg00118.html
 
-On Thu, Feb 22, 2001 at 06:54:16PM +0300, Egor Duda wrote:
->Hi!
->
->Thursday, 22 February, 2001 Egor Duda deo@logos-m.ru wrote:
->
->ED>   if  application performs write to tty with ONLCR flag turned off and
->ED>   then    immediately    calls    tcsetattr    to    turn    it    on,
->ED> fhandler_pty_master::process_slave_output     gets    confused.   it
->ED> calculates rlen according to old tty settings and signals output_done
->ED> event.  then  it process the buffer according to new tty settings, and
->ED> stumbles  over  internal  error  message. Patch attached  (well,  this
->ED> time  i  triple-checked  that  it does contain changelog entry :)
->
->the  patch  is  wrong, however :( it seems that pty_master cannot tell
->when   it   got   all  data  from  slave's  write()  and  can  signal
->output_done_event.     How    about    sending
->'<data_length (1 byte)><data_block (up to 255 bytes)>'
->through  pipe  between  slave  and  master?  this  would  also  solve
->PeekNamedPipe  polling  problem.
+On Fri, Feb 23, 2001 at 03:17:15PM +0300, Egor Duda wrote:
+>i've   moved   console  state variables inside fhandler_console class.
+>this is a combined patch (with raw keyboard mode patch i sent sometime
+>ago). it adds 4 new rendition commands (\033[24;27;39;49m), compatible
+>with  linux console and already described in Chuck's terminfo file for
+>cygwin, and emulate "blink" attribute with bright background.
 
-I've thought about doing this but it would break using cygwin ptys with non-cygwin
-apps.
+Wow, you've done a lot of work here.  It all looks fine.  Please check it
+in.
 
-I guess you could open up another channel with this info but that channel would
-get filled up in the same scenario.
+Thanks for your incredible effort.  It is much appreciated.  IMO, it makes
+things much more structured in the console code.
 
 cgf
