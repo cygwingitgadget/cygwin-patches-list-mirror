@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2785-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 7337 invoked by alias); 7 Aug 2002 10:10:16 -0000
+Return-Path: <cygwin-patches-return-2786-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 29648 invoked by alias); 7 Aug 2002 13:57:22 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,58 +7,43 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 7321 invoked from network); 7 Aug 2002 10:10:15 -0000
-X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
-Date: Wed, 07 Aug 2002 03:10:00 -0000
-From: Thomas Pfaff <tpfaff@gmx.net>
+Received: (qmail 29626 invoked from network); 7 Aug 2002 13:57:21 -0000
+Date: Wed, 07 Aug 2002 06:57:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: fhandler_socket::accept() and FIONBIO
-In-Reply-To: <006801c23df9$3d047ad0$6132bc3e@BABEL>
-Message-ID: <Pine.WNT.4.44.0208071159530.299-100000@algeria.intern.net>
-X-X-Sender: pfaff@antarctica.intern.net
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-SW-Source: 2002-q3/txt/msg00233.txt.bz2
+Subject: Re: init_cheap and _csbrk
+Message-ID: <20020807135719.GB2326@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <01e501c23d74$400b2c90$6132bc3e@BABEL> <20020806220731.GG1386@redhat.com> <013b01c23d99$a180f930$6132bc3e@BABEL> <20020807012331.GJ1386@redhat.com> <006401c23df8$0f932340$6132bc3e@BABEL>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <006401c23df8$0f932340$6132bc3e@BABEL>
+User-Agent: Mutt/1.3.23.1i
+X-SW-Source: 2002-q3/txt/msg00234.txt.bz2
 
-
-
-On Wed, 7 Aug 2002, Conrad Scott wrote:
-
-> "Thomas Pfaff" <tpfaff@gmx.net> wrote:
-> >
-> > On Wed, 7 Aug 2002, Conrad Scott wrote:
-> >
-> > > I've attached a tiny patch to fix the win98 / WSAENOBUFS
-> problem
-> > > reported in
-> > > http://cygwin.com/ml/cygwin-developers/2002-07/msg00167.html
-> > > (amongst other places).
-> > >
-> > > It turns out to be a minor ding in setting the socket back to
-> > > non-blocking in the (blocking) accept call.  Quite why this
-> has
-> > > the effect it does on win98, I'll leave to the morning.  This
-> > > patch fixes the problem and is obviously the right thing to
-> do:
-> > > the details I'm happy to leave 'til later.
-> >
-> > Unfortunately it has worked on NT. Don't know why.
+On Wed, Aug 07, 2002 at 10:51:53AM +0100, Conrad Scott wrote:
+>"Christopher Faylor" <cgf@redhat.com> wrote:
+>> And even if I got the slop working there would still
+>> be a call to VirtualAlloc.  It shouldn't matter since it will
+>just
+>> be allocating allocated memory but that means it probably isn't
+>> really worth it anyway.  So, I've reorganized things one more
+>time.
+>> And, no more slop.
 >
-> Yes, and if I've got the energy today, I might try and understand
-> what was going wrong on win98.  AFAICT the socket was being left
-> non-blocking but since the fhandler thought it was blocking, this
-> wasn't generally visible.  Perhaps *0 on NT systems is != 0 but on
-> 9x systems it's == 0.
->
-> London's promised rain every day until the end of the weekend at
-> the earliest so I might yet have the opportunity to look more at
-> this :-(
+>Good point: I hadn't quite got as far as thinking too clearly
+>about what was being optimised.  I bet a call to VirtualAlloc to
+>commit an already committed page is cheap and so some optimization
+>might be possible, but without instrumenting a few test programs
+>who knows what difference it would make.
 
-Do not waste your time. You did the right thing and i was wrong.
-According to
-http://msdn.microsoft.com/library/default.asp?url=/library/en-us/winsock/ovrspi3_6whe.asp
-you must pass an unsigned long pointer to ioctlsocket for the FIONBIO
-opcode.
+I was toying with doing something like:
 
-Thomas
+_cfree (cmalloc (HEAP_STR, 2 * page_size))
 
+which would have the effect that I was looking for but decided that
+there was no clear win in doing that.
+
+cgf
