@@ -1,38 +1,20 @@
-From: "Robert Collins" <robert.collins@itdomain.com.au>
-To: <nhv@cape.com>, "'Jason Tishler'" <jason@tishler.net>
-Cc: <cygwin-patches@cygwin.com>
+From: Jason Tishler <jason@tishler.net>
+To: Robert Collins <robert.collins@itdomain.com.au>
+Cc: cygwin-patches@cygwin.com, Norman Vine <nhv@cape.com>
 Subject: Re: fix cond_race... was RE: src/winsup/cygwin ChangeLog thread.cc thread.h ...
-Date: Sun, 30 Sep 2001 07:40:00 -0000
-Message-id: <006701c149be$0676afe0$01000001@lifelesswks>
-References: <003201c149ab$0e16e020$a300a8c0@nhv>
-X-SW-Source: 2001-q3/msg00243.html
+Date: Sun, 30 Sep 2001 07:58:00 -0000
+Message-id: <20010930110031.C1356@dothill.com>
+References: <038301c148cb$7cf7a550$01000001@lifelesswks>
+X-SW-Source: 2001-q3/msg00244.html
 
------ Original Message -----
-From: "Norman Vine" <nhv@cape.com>
-To: "'Robert Collins'" <robert.collins@itdomain.com.au>; "'Jason
-Tishler'" <jason@tishler.net>
-Cc: <cygwin-patches@cygwin.com>
-Sent: Sunday, September 30, 2001 10:25 PM
-Subject: RE: fix cond_race... was RE: src/winsup/cygwin ChangeLog
-thread.cc thread.h ...
+Rob,
 
+On Sat, Sep 29, 2001 at 07:45:34PM +1000, Robert Collins wrote:
+> So please, give it a go and see how it fares.
 
+I see that Norman is already on this one.  Since I will be off-net
+starting tomorrow for 5 days, I will let Norman work this one.  Hopefully,
+it will be resolved by the time I'm back.  If not, I will join in then.
 
-> See attached
-
-Inline is cool too :}.
-
-please try an updated dll, I've checked in a potential fix now. If that
-doesn't fix it, then..
-
-in frame 3 (pthread_cond_wait.
-can you do
-print *(pthread_cond_t *) 0xa05e6fc (the value of the first parameter).
-
-in frame 2,
-print *cond
-, or if cond doesn't look sensible,
-print **pthread_cond_t *) <value of first parameter>
-
-
-Rob
+Thanks,
+Jason
