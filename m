@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4622-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 562 invoked by alias); 23 Mar 2004 01:18:53 -0000
+Return-Path: <cygwin-patches-return-4623-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 27352 invoked by alias); 23 Mar 2004 11:09:35 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,41 +7,67 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 552 invoked from network); 23 Mar 2004 01:18:53 -0000
-Message-ID: <011e01c41074$cb556ac0$e22b1145@esp>
-From: "Matt Hargett" <matt@use.net>
-To: "Nicholas Wourms" <nwourms@netscape.net>
-Cc: <Pierre.Humblet@ieee.org>,
-	<cygwin-patches@cygwin.com>
-References: <405EF9F4.A97FF863@phumblet.no-ip.org> <20040322185405.GA3266@redhat.com> <405F4530.F3188C94@phumblet.no-ip.org> <024901c4104b$d266a370$640aa8c0@esp> <405F8F15.40409@netscape.net>
-Subject: Re: [Patch]: Win95
-Date: Tue, 23 Mar 2004 01:18:00 -0000
-MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: 7bit
-X-SW-Source: 2004-q1/txt/msg00112.txt.bz2
+Received: (qmail 27333 invoked from network); 23 Mar 2004 11:09:34 -0000
+Date: Tue, 23 Mar 2004 11:09:00 -0000
+From: Corinna Vinschen <vinschen@redhat.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: Patch 20040321 for audio recording with /dev/dsp (indented), test issues
+Message-ID: <20040323110933.GM17229@cygbert.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <01C41057.52EAB850.Gerd.Spalink@t-online.de>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <01C41057.52EAB850.Gerd.Spalink@t-online.de>
+User-Agent: Mutt/1.4.2i
+X-SW-Source: 2004-q1/txt/msg00113.txt.bz2
 
-> >>Can you believe that the address appears 5 times on the stack on Win95,
-> >>twice on ME, once on NT4.0?
-> >>
-> >>Now that the method is stable (after 1.5.10 is released), couldn't we
-> > store
-> >
-> >>the offsets in wincap, keeping the adaptive method as a backup in the
-> >>unknown case? Or are there many variations?
-> >
-> > I can tell you from the perspective of writing shellcode and rootkits on
-> > windows that assuming offsets will be the same is not a good idea if you
-are
-> > going for something that is to be widely deployed. Not only can they
-vary
-> > between service packs/patches, but also between language editions of the
-OS.
-> >
->
-> What would you suggest doing instead?
+On Mar 22 21:47, Gerd Spalink wrote:
+> >   [From now on, the tests make *no* sound]
+> > 
+> This is correct, since the following are the tests for audio
+> recording. They record whatever is at your currently
+> selected analog audio source (could be MIC, LINE, CD),
+> and silently ignore the recorded sound data.
 
-Um, I would stick to the adaptive method that is currently being used. Maybe
-the adaptive method could be sped up a bit, though? I'll see if I spot
-anything obvious in the code tomorrow.
+Uh, ok, that makes sense.
+
+> > I'm not quite sure about putting the testcase into the testsuite.
+> > It's a good idea in general, but, well, I'm wondering if you'd
+> > like to use the libltp framework for the testresults, perhaps?
+> >
+> I agree. The printed results will be unambiguous, so no more
+> wondering about correctness or not.
+
+Cool.
+
+> Actually, I tried "indent" as distributed with cygwin, and it apparently
+> did strange things to the C++ code, e.g. "delete[] foo;" became "delete[]foo;"
+> I found also that the code in the class declarations looked worse than before.
+> Do you have a special set of options that work better than the default for C++?
+
+No, I don't.  I had a bit weird results, too, so I just tweaked some
+lines by hand.  Chris, do you have a personally approved set of indent
+options which give a useful result, perhaps?
+
+> > Since that code makes you to the one and only audio code maintainer
+> > for Cygwin, I'm wondering if you're also interested in maintaining
+> > some audio application which makes use of this new Cygwin code,
+> > as part of the Cygwin net distribution...
+> >
+> As far as my limited spare time allows...
+> Which applications were you thinking of?
+
+I have no idea!  I thought you would know one, given that you cared for
+the dsp code in Cygwin.
+
+I've applied your patch.  It will go into 1.5.10 already.
+
+Thanks,
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
