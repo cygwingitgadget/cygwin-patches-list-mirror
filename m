@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3506-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 27553 invoked by alias); 5 Feb 2003 17:13:20 -0000
+Return-Path: <cygwin-patches-return-3507-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 5944 invoked by alias); 5 Feb 2003 17:22:13 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,38 +7,54 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 27525 invoked from network); 5 Feb 2003 17:13:19 -0000
-Date: Wed, 05 Feb 2003 17:13:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
+Received: (qmail 5934 invoked from network); 5 Feb 2003 17:22:12 -0000
+Message-Id: <3.0.5.32.20030205122144.007edd30@h00207811519c.ne.client2.attbi.com>
+X-Sender: pierre@h00207811519c.ne.client2.attbi.com
+Date: Wed, 05 Feb 2003 17:22:00 -0000
 To: cygwin-patches@cygwin.com
-Subject: Re: sec_acl.cc
-Message-ID: <20030205171317.GZ5822@cygbert.vinschen.de>
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20030205163738.GW5822@cygbert.vinschen.de> <3.0.5.32.20030205102239.00805100@h00207811519c.ne.client2.attbi.com> <3.0.5.32.20030205091505.007fc270@mail.attbi.com> <3.0.5.32.20030205091505.007fc270@mail.attbi.com> <3.0.5.32.20030205102239.00805100@h00207811519c.ne.client2.attbi.com> <3.0.5.32.20030205112940.00804ab0@h00207811519c.ne.client2.attbi.com> <20030205163738.GW5822@cygbert.vinschen.de> <3.0.5.32.20030205120201.007ef6c0@h00207811519c.ne.client2.attbi.com>
+From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
+Subject: Re: ntsec odds and ends (cygcheck augmentation?)
+In-Reply-To: <20030205164834.GE15400@redhat.com>
+References: <3.0.5.32.20030205114159.00800620@mail.attbi.com>
+ <3.0.5.32.20030205114159.00800620@mail.attbi.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3.0.5.32.20030205120201.007ef6c0@h00207811519c.ne.client2.attbi.com>
-User-Agent: Mutt/1.4i
-X-SW-Source: 2003-q1/txt/msg00155.txt.bz2
+Content-Type: text/plain; charset="us-ascii"
+X-SW-Source: 2003-q1/txt/msg00156.txt.bz2
 
-On Wed, Feb 05, 2003 at 12:02:01PM -0500, Pierre A. Humblet wrote:
-> At 05:45 PM 2/5/2003 +0100, Corinna Vinschen wrote:
-> >But still, it's more correct, isn't it.
-> That's opinion, not fact! It's also relatively convoluted code that does
-> little, or perhaps even nothing! 
+At 11:48 AM 2/5/2003 -0500, Christopher Faylor wrote:
+>Pierre or Corinna,
+>Have either of you considered adding code to cygcheck to check for more
+>common ntsec "problems"?  At the very least, something along the lines
+>of "your username isn't in /etc/passwd" seems like it would be
+>worthwhile.
 
-No problem, then it's my opinion that it's more correct.
+Chris,
 
-> How was the DELETE_FILE (or whatever the name) permission on the directory?
-> I tried here and got an error message.
+I have though about that and actually have such a program. However it's
+a Cygwin program. The idea being that it should reproduce *exactly* the
+starting sequence of Cygwin, which has varied over the years. Keeping
+cygcheck up to date might be a pain
 
-When DELETE_CHILD is off on the parent dir, a file with DELETE can be
-removed, a file w/o DELETE can't.
+In the patch I have just sent, the group name is set to "run mkpasswd"
+if the username is not in passwd, and it is "run mkgroup" if the user name
+is present but not his group.
+So that should be clearly visible in "id", and visible but truncated in
+"ls -l".
+  
+I have also changed the default uid and gid to 400/401 when the names are
+missing, to make detection easy. It can then easily be done e.g. in 
+/etc/profile or in sshd-user-config.
 
-Corinna
+The question of "Why is my HOME C:\ " could also be handled in /etc/profile.
+I was thinking of putting something like this in it:
+echo "Hello this is /etc/profile"
+echo "You are a new user and I will verify your configuration".
+echo "Delete these lines once everything is well".
+if [ $uid -eq 400 ]; then etc...
+echo "Your HOME is set to $HOME, the rules are 1).. 2).. 3).. 4).. "
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+What do you think?
+
+Pierre
+  
+
