@@ -1,9 +1,21 @@
+From: Earnie Boyd <earnie_boyd@yahoo.com>
+To: Earnie Boyd <mingw-dvlpr@lists.sourceforge.net>
+Cc: cygwin-patches@cygwin.com
+Subject: [Fwd: mingw/include/stddef.h]
+Date: Fri, 23 Feb 2001 07:07:00 -0000
+Message-id: <3A967CBA.6ABF8725@yahoo.com>
+X-SW-Source: 2001-q1/msg00111.html
+
+Danny,
+
+Can you answer Corinna's question?
+
+Earnie.
+
+-------- Original Message --------
 From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygpatch <cygwin-patches@cygwin.com>
 Subject: mingw/include/stddef.h
-Date: Fri, 23 Feb 2001 06:59:00 -0000
-Message-id: <20010223154619.P908@cygbert.vinschen.de>
-X-SW-Source: 2001-q1/msg00110.html
+To: cygpatch <cygwin-patches@cygwin.com>
 
 Hi,
 
@@ -30,3 +42,8 @@ Corinna
 Corinna Vinschen                  Please, send mails regarding Cygwin to
 Cygwin Developer                                mailto:cygwin@cygwin.com
 Red Hat, Inc.
+
+_________________________________________________________
+Do You Yahoo!?
+Get your free @yahoo.com address at http://mail.yahoo.com
+
