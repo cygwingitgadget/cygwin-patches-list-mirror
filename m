@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4175-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 24070 invoked by alias); 7 Sep 2003 05:19:07 -0000
+Return-Path: <cygwin-patches-return-4176-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 23734 invoked by alias); 8 Sep 2003 08:53:29 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,31 +7,36 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 24061 invoked from network); 7 Sep 2003 05:19:07 -0000
-Date: Sun, 07 Sep 2003 05:19:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
+Received: (qmail 23711 invoked from network); 8 Sep 2003 08:53:28 -0000
+Date: Mon, 08 Sep 2003 08:53:00 -0000
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: nanosleep patch 2
-Message-ID: <20030907051907.GB23916@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH]: Export argz/envz functions
+Message-ID: <20030908085327.GC1859@cygbert.vinschen.de>
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3.0.5.32.20030904214114.00814b30@incoming.verizon.net>
+References: <3F246153.3020504@netscape.net>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3.0.5.32.20030904214114.00814b30@incoming.verizon.net>
+In-Reply-To: <3F246153.3020504@netscape.net>
 User-Agent: Mutt/1.4.1i
-X-SW-Source: 2003-q3/txt/msg00191.txt.bz2
+X-SW-Source: 2003-q3/txt/msg00192.txt.bz2
 
-On Thu, Sep 04, 2003 at 09:41:14PM -0400, Pierre A. Humblet wrote:
->2003-09-04  Pierre Humblet <pierre.humblet@ieee.org>
->
->	* signal.cc (nanosleep): Improve test for valid values.
->	Round delay up to resolution. Fix test for negative remainder. 
->	Use timeGetTime through gtod.
->	(sleep): Round up return value.
+On Sun, Jul 27, 2003 at 07:33:39PM -0400, Nicholas Wourms wrote:
+> 2003-07-27  Nicholas Wourms  <nwourms@netscape.net>
+> 
+>     * cygwin.din: Export argz_add argz_add_sep argz_append argz_count
+>     argz_create argz_create_sep argz_delete argz_extract argz_insert
+>     argz_next argz_replace argz_stringify envz_add envz_entry envz_get 
+>     envz_merge envz_remove envz_strip
+>     * include/cygwin/version.h: Bump api minor number.
 
-Applied, with accommodations from previous patch.
+Applied (finally ;-)).
 
-Thanks.
-cgf
+Thanks,
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
