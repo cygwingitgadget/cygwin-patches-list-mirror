@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2855-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 26314 invoked by alias); 22 Aug 2002 11:54:59 -0000
+Return-Path: <cygwin-patches-return-2856-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 343 invoked by alias); 24 Aug 2002 21:06:13 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,44 +7,99 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 26298 invoked from network); 22 Aug 2002 11:54:57 -0000
-Date: Thu, 22 Aug 2002 04:54:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: Wu Yongwei <adah@netstd.com>
-Cc: cygwin-patches@cygwin.com
-Subject: Re: timezonevar in time.h
-Message-ID: <20020822135440.D26346@cygbert.vinschen.de>
-Mail-Followup-To: Wu Yongwei <adah@netstd.com>, cygwin-patches@cygwin.com
-References: <3D645438.D18ECE5@netstd.com>
+Received: (qmail 329 invoked from network); 24 Aug 2002 21:06:13 -0000
+Message-Id: <3.0.5.32.20020824170233.007ef430@mail.attbi.com>
+X-Sender: phumblet@mail.attbi.com
+Date: Sat, 24 Aug 2002 14:06:00 -0000
+To: cygwin-patches@cygwin.com
+From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
+Subject: More Everyone
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3D645438.D18ECE5@netstd.com>
-User-Agent: Mutt/1.3.22.1i
-X-SW-Source: 2002-q3/txt/msg00303.txt.bz2
+Content-Type: text/plain; charset="us-ascii"
+X-SW-Source: 2002-q3/txt/msg00304.txt.bz2
 
-On Thu, Aug 22, 2002 at 11:02:16AM +0800, Wu Yongwei wrote:
-> The current /usr/include/time.h requires people to use
-> "#define timezonevar 1" instead of just "#define timezonevar" before
-> including <time.h>:
-> [...]
+Corinna,
 
-Hi,
+The changes below, which have no effects in sane cases, will
+- greatly reduce the likelihood of denying access
+- have "ls -l" reflect the actual situation.
+Things can still be strange when group==Everyone, e.g. 
+- chmod 707 will both deny and allow access to Everyone, with
+  the net outcome being denied (as shown by ls -l)
+- ls -l and getfacl report different settings for group
 
-time.h is in newlib, exactly newlib/libc/include/time.h.  Please send
-the patch to the newlib mailing list newlib@sources.redhat.com.
+Pierre
 
-> Maybe I still have something wrong here, say, not diffing from the CVS
-> version (but I really did not find it). I am already struggling to do things
-> right. :-)
+2002-08-24 Pierre Humblet <Pierre.Humblet@ieee.org>
+	
+	* sec_acl.cc (getacl): Check ace_sid == well_known_world_sid
+	before group_sid so that well_known_world_sid means "other"
+	even when group_sid is Everyone. 
+	* security.cc (get_nt_attribute): Ditto.
 
-http://cygwin.com/cvs.html
+--- sec_acl.cc.orig     2002-07-02 20:29:16.000000000 -0400
++++ sec_acl.cc  2002-08-23 18:39:32.000000000 -0400
+@@ -319,16 +319,16 @@
+          type = USER_OBJ;
+          id = uid;
+        }
+-      else if (ace_sid == group_sid)
+-       {
+-         type = GROUP_OBJ;
+-         id = gid;
+-       }
+       else if (ace_sid == well_known_world_sid)
+        {
+          type = OTHER_OBJ;
+          id = 0;
+        }
++      else if (ace_sid == group_sid)
++       {
++         type = GROUP_OBJ;
++         id = gid;
++       }
+       else
+        {
+          id = ace_sid.get_id (FALSE, &type);
 
-newlib is part of the cvs tree.
+--- security.cc.orig    2002-08-23 18:37:10.000000000 -0400
++++ security.cc 2002-08-24 15:01:04.000000000 -0400
+@@ -1300,18 +1300,6 @@
+          if (ace->Mask & FILE_EXECUTE)
+            *flags |= S_IXUSR;
+        }
+-      else if (group_sid && ace_sid == group_sid)
+-       {
+-         if (ace->Mask & FILE_READ_DATA)
+-           *flags |= S_IRGRP
+-                     | ((grp_member && !(*anti & S_IRUSR)) ? S_IRUSR : 0);
+-         if (ace->Mask & FILE_WRITE_DATA)
+-           *flags |= S_IWGRP
+-                     | ((grp_member && !(*anti & S_IWUSR)) ? S_IWUSR : 0);
+-         if (ace->Mask & FILE_EXECUTE)
+-           *flags |= S_IXGRP
+-                     | ((grp_member && !(*anti & S_IXUSR)) ? S_IXUSR : 0);
+-       }
+       else if (ace_sid == well_known_world_sid)
+        {
+          if (ace->Mask & FILE_READ_DATA)
+@@ -1343,6 +1331,18 @@
+          if (ace->Mask & FILE_APPEND_DATA)
+            *flags |= S_ISUID;
+        }
++      else if (group_sid && ace_sid == group_sid)
++       {
++         if (ace->Mask & FILE_READ_DATA)
++           *flags |= S_IRGRP
++                     | ((grp_member && !(*anti & S_IRUSR)) ? S_IRUSR : 0);
++         if (ace->Mask & FILE_WRITE_DATA)
++           *flags |= S_IWGRP
++                     | ((grp_member && !(*anti & S_IWUSR)) ? S_IWUSR : 0);
++         if (ace->Mask & FILE_EXECUTE)
++           *flags |= S_IXGRP
++                     | ((grp_member && !(*anti & S_IXUSR)) ? S_IXUSR : 0);
++       }
+     }
+   *attribute &= ~(S_IRWXU | S_IRWXG | S_IRWXO | S_ISVTX | S_ISGID | S_ISUID);
+   *attribute |= allow;
 
-Corinna
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
