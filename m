@@ -1,19 +1,129 @@
-From: Christopher Faylor <cgf@redhat.com>
+From: Egor Duda <deo@logos-m.ru>
 To: cygwin-patches@cygwin.com
-Subject: Re: sched_* functions
-Date: Sun, 18 Mar 2001 15:27:00 -0000
-Message-id: <20010318182814.D15804@redhat.com>
-References: <018c01c0af5c$fe559ed0$0200a8c0@lifelesswks> <20010317230848.B6751@redhat.com> <3AB52CA7.5358C560@yahoo.com>
-X-SW-Source: 2001-q1/msg00210.html
+Subject: Re: Outstanding issues with current DLL?
+Date: Mon, 19 Mar 2001 10:00:00 -0000
+Message-id: <16776811979.20010319205814@logos-m.ru>
+References: <20010308125701.A4371@redhat.com> <3AA7CCBA.E84FD16E@yahoo.com> <20010308133552.A878@redhat.com> <3AA7E05A.BF9F2535@yahoo.com> <20010310184508.A16745@redhat.com> <3AAFF6E9.DFBF2C8@yahoo.com> <20010317180414.A22971@redhat.com> <115297467.20010318180906@logos-m.ru> <20010318121519.F12880@redhat.com> <437795639.20010318203634@logos-m.ru> <20010318124713.L12880@redhat.com> <639192998.20010318205951@logos-m.ru>
+X-SW-Source: 2001-q1/msg00211.html
+Content-type: multipart/mixed; boundary="----------=_1583532846-65438-24"
 
-On Sun, Mar 18, 2001 at 04:46:15PM -0500, Earnie Boyd wrote:
->Christopher Faylor wrote:
->> - Earnie, if you're reading this, please note the w32api change.  It adds the
->>   w2k/winme OpenThread() function to winbase.h
->
->Yea, I noticed.  I'll have to look at this later in the week or you can
->check it in when you do the others.
+This is a multi-part message in MIME format...
 
-Ok.  No problem.  I'll check it in when the rest of the stuff is approved.
+------------=_1583532846-65438-24
+Content-length: 801
 
-cgf
+Hi!
+
+Sunday, 18 March, 2001 Egor Duda deo@logos-m.ru wrote:
+
+ED> Sunday, 18 March, 2001 Christopher Faylor cgf@redhat.com wrote:
+CF>> So, rxvt tries to exit but hangs waiting for bash to go away -- which
+CF>> it never does?  I would have thought that the closing of the parent
+CF>> pty would cause bash to disappear.
+
+ED> ah,  i  see  now.  this  indeed looks like a bug in my code. before my
+ED> patches,  process  which  reads from slave tty polled the pipe, so, it
+ED> saw  when  pipe  from master to slave is abandoned, and send SIGHUP to
+ED> itself. now it's not the case. i think i know how to fix it.
+
+Here's the patch. I think it solves rxvt-close-with-X-button problem.
+
+Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
+tty-slave-read3.ChangeLog
+tty-slave-read3.diff
+
+
+------------=_1583532846-65438-24
+Content-Type: text/plain; charset=us-ascii; name="tty-slave-read3.ChangeLog"
+Content-Disposition: inline; filename="tty-slave-read3.ChangeLog"
+Content-Transfer-Encoding: base64
+Content-Length: 728
+
+MjAwMS0wMy0xOSAgRWdvciBEdWRhICA8ZGVvQGxvZ29zLW0ucnU+DQoNCgkq
+IHR0eS5oICh0dHk6OmNyZWF0ZV9pbnVzZSk6IEFkZCBuZXcgcGFyYW1ldGVy
+IHRvIGFsbG93IG5vbi0NCglpbmhlcml0YWJsZSAnaW51c2UnIGV2ZW50cy4N
+CgkqIHR0eS5jYyAodHR5OjpjcmVhdGVfaW51c2UpOiBVc2UgbmV3IHBhcmFt
+ZXRlci4NCgkqIGZoYW5kbGVyX3R0eS5jYyAoZmhhbmRsZXJfdHR5X21hc3Rl
+cjo6aW5pdCk6IERpdHRvLg0KCSogZmhhbmRsZXJfdHR5LmNjIChmaGFuZGxl
+cl9wdHlfbWFzdGVyOjpvcGVuKTogRGl0dG8uDQoJKiBmaGFuZGxlcl90dHku
+Y2MgKGZoYW5kbGVyX3R0eV9tYXN0ZXI6OmluaXQpOiBDcmVhdGUgbWFzdGVy
+X2FsaXZlDQoJZXZlbnQuDQoJKiB0dHkuY2MgKHR0eV9saXN0Ojp0ZXJtaW5h
+dGUpOiBDbG9zZSBtYXN0ZXJfYWxpdmUgZXZlbnQuDQoJKiBmaGFuZGxlcl90
+dHkuY2MgKGZoYW5kbGVyX3R0eV9jb21tb246OmNsb3NlKTogU2VuZCBFT0Yg
+dG8gc2xhdmVzDQoJd2hlbiBtYXN0ZXIgc2lkZSBpcyBjbG9zZWQuDQo=
+
+------------=_1583532846-65438-24
+Content-Type: text/x-diff; charset=us-ascii; name="tty-slave-read3.diff"
+Content-Disposition: inline; filename="tty-slave-read3.diff"
+Content-Transfer-Encoding: base64
+Content-Length: 4067
+
+SW5kZXg6IGZoYW5kbGVyX3R0eS5jYwo9PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+ClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL2N5Z3dpbi9maGFuZGxl
+cl90dHkuY2MsdgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuMjkKZGlmZiAtdSAt
+cCAtMiAtcjEuMjkgZmhhbmRsZXJfdHR5LmNjCi0tLSBmaGFuZGxlcl90dHku
+Y2MJMjAwMS8wMy8xOCAxODowNTowMQkxLjI5CisrKyBmaGFuZGxlcl90dHku
+Y2MJMjAwMS8wMy8xOSAxNzozMjo0MwpAQCAtNjIsNCArNjIsNiBAQCBmaGFu
+ZGxlcl90dHlfbWFzdGVyOjppbml0IChpbnQgbnR0eSkKICAgY3lnd2luX3No
+YXJlZC0+dHR5W3R0eW51bV0tPmNvbW1vbl9pbml0ICh0aGlzKTsKIAorICBp
+bnVzZSA9IGdldF90dHlwICgpLT5jcmVhdGVfaW51c2UgKFRUWV9NQVNURVJf
+QUxJVkUsIEZBTFNFKTsKKwogICBoID0gbWFrZXRocmVhZCAocHJvY2Vzc19p
+bnB1dCwgTlVMTCwgMCwgInR0eWluIik7CiAgIGlmIChoID09IE5VTEwpCkBA
+IC00ODMsNSArNDg1LDUgQEAgZmhhbmRsZXJfdHR5X3NsYXZlOjpvcGVuIChj
+b25zdCBjaGFyICosIAogICB7CiAgICAgYWNxdWlyZV9vdXRwdXRfbXV0ZXgg
+KDUwMCk7Ci0gICAgaW51c2UgPSBnZXRfdHR5cCAoKS0+Y3JlYXRlX2ludXNl
+IChUVFlfU0xBVkVfQUxJVkUpOworICAgIGludXNlID0gZ2V0X3R0eXAgKCkt
+PmNyZWF0ZV9pbnVzZSAoVFRZX1NMQVZFX0FMSVZFLCBUUlVFKTsKICAgICBn
+ZXRfdHR5cCAoKS0+d2FzX29wZW5lZCA9IFRSVUU7CiAgICAgcmVsZWFzZV9v
+dXRwdXRfbXV0ZXggKCk7CkBAIC05NDgsNSArOTUwLDUgQEAgZmhhbmRsZXJf
+cHR5X21hc3Rlcjo6b3BlbiAoY29uc3QgY2hhciAqLAogCiAgIGN5Z3dpbl9z
+aGFyZWQtPnR0eVt0dHludW1dLT5jb21tb25faW5pdCAodGhpcyk7Ci0gIGlu
+dXNlID0gZ2V0X3R0eXAgKCktPmNyZWF0ZV9pbnVzZSAoVFRZX01BU1RFUl9B
+TElWRSk7CisgIGludXNlID0gZ2V0X3R0eXAgKCktPmNyZWF0ZV9pbnVzZSAo
+VFRZX01BU1RFUl9BTElWRSwgRkFMU0UpOwogICBzZXRfZmxhZ3MgKGZsYWdz
+KTsKIApAQCAtOTcwLDQgKzk3MiwxMiBAQCBmaGFuZGxlcl90dHlfY29tbW9u
+OjpjbG9zZSAoKQogICBpZiAoIUZvcmNlQ2xvc2VIYW5kbGUgKGlucHV0X211
+dGV4KSkKICAgICB0ZXJtaW9zX3ByaW50ZiAoIkNsb3NlSGFuZGxlIChpbnB1
+dF9tdXRleDwlcD4pLCAlRSIsIGlucHV0X211dGV4KTsKKworICAvKiBTZW5k
+IEVPRiB0byBzbGF2ZXMgaWYgbWFzdGVyIHNpZGUgaXMgY2xvc2VkICovCisg
+IGlmICghZ2V0X3R0eXAgKCktPm1hc3Rlcl9hbGl2ZSAoKSkKKyAgICB7Cisg
+ICAgICB0ZXJtaW9zX3ByaW50ZiAoIm5vIG1vcmUgbWFzdGVycyBsZWZ0LiBz
+ZW5kaW5nIEVPRiIgKTsKKyAgICAgIFNldEV2ZW50IChpbnB1dF9hdmFpbGFi
+bGVfZXZlbnQpOworICAgIH0KKwogICBpZiAoIUZvcmNlQ2xvc2VIYW5kbGUg
+KGlucHV0X2F2YWlsYWJsZV9ldmVudCkpCiAgICAgdGVybWlvc19wcmludGYg
+KCJDbG9zZUhhbmRsZSAoaW5wdXRfYXZhaWxhYmxlX2V2ZW50PCVwPiksICVF
+IiwgaW5wdXRfYXZhaWxhYmxlX2V2ZW50KTsKSW5kZXg6IHR0eS5jYwo9PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2lu
+c3VwL2N5Z3dpbi90dHkuY2MsdgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuMTcK
+ZGlmZiAtdSAtcCAtMiAtcjEuMTcgdHR5LmNjCi0tLSB0dHkuY2MJMjAwMS8w
+My8xOCAyMToxMToyNQkxLjE3CisrKyB0dHkuY2MJMjAwMS8wMy8xOSAxNzoz
+Mjo0MwpAQCAtMTM5LDQgKzEzOSw1IEBAIHR0eV9saXN0Ojp0ZXJtaW5hdGUg
+KHZvaWQpCiAgICAgICBGb3JjZUNsb3NlSGFuZGxlMSAodC0+dG9fc2xhdmUs
+IHRvX3B0eSk7CiAgICAgICBGb3JjZUNsb3NlSGFuZGxlMSAodC0+ZnJvbV9z
+bGF2ZSwgZnJvbV9wdHkpOworICAgICAgQ2xvc2VIYW5kbGUgKHR0eV9tYXN0
+ZXItPmludXNlKTsKICAgICAgIFdhaXRGb3JTaW5nbGVPYmplY3QgKHR0eV9t
+YXN0ZXItPmhUaHJlYWQsIElORklOSVRFKTsKICAgICAgIHQtPmluaXQgKCk7
+CkBAIC0zMDAsNSArMzAxLDUgQEAgdHR5OjphbGl2ZSAoY29uc3QgY2hhciAq
+Zm10KQogCiBIQU5ETEUKLXR0eTo6Y3JlYXRlX2ludXNlIChjb25zdCBjaGFy
+ICpmbXQpCit0dHk6OmNyZWF0ZV9pbnVzZSAoY29uc3QgY2hhciAqZm10LCBC
+T09MIGluaGVyaXQpCiB7CiAgIEhBTkRMRSBoOwpAQCAtMzA2LDUgKzMwNyw1
+IEBAIHR0eTo6Y3JlYXRlX2ludXNlIChjb25zdCBjaGFyICpmbXQpCiAKICAg
+X19zbWFsbF9zcHJpbnRmIChidWYsIGZtdCwgbnR0eSk7Ci0gIGggPSBDcmVh
+dGVFdmVudCAoJnNlY19hbGwsIFRSVUUsIEZBTFNFLCBidWYpOworICBoID0g
+Q3JlYXRlRXZlbnQgKChpbmhlcml0ID8gJnNlY19hbGwgOiAmc2VjX2FsbF9u
+aWgpLCBUUlVFLCBGQUxTRSwgYnVmKTsKICAgdGVybWlvc19wcmludGYgKCIl
+cyA9ICVwIiwgYnVmLCBoKTsKICAgaWYgKCFoKQpJbmRleDogdHR5LmgKPT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3JjL3dp
+bnN1cC9jeWd3aW4vdHR5LmgsdgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuNApk
+aWZmIC11IC1wIC0yIC1yMS40IHR0eS5oCi0tLSB0dHkuaAkyMDAxLzAzLzE4
+IDE4OjA1OjAxCTEuNAorKysgdHR5LmgJMjAwMS8wMy8xOSAxNzozMjo0MwpA
+QCAtMTAwLDUgKzEwMCw1IEBAIHB1YmxpYzoKIAogICB2b2lkIGluaXQgKCk7
+Ci0gIEhBTkRMRSBjcmVhdGVfaW51c2UgKGNvbnN0IGNoYXIgKik7CisgIEhB
+TkRMRSBjcmVhdGVfaW51c2UgKGNvbnN0IGNoYXIgKiwgQk9PTCk7CiAgIEJP
+T0wgY29tbW9uX2luaXQgKGZoYW5kbGVyX3B0eV9tYXN0ZXIgKik7CiAgIEJP
+T0wgYWxpdmUgKGNvbnN0IGNoYXIgKmZtdCk7Cg==
+
+------------=_1583532846-65438-24--
