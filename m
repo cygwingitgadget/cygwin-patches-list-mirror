@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3221-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 4609 invoked by alias); 24 Nov 2002 13:04:17 -0000
+Return-Path: <cygwin-patches-return-3222-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 29992 invoked by alias); 24 Nov 2002 13:55:57 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,77 +7,88 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 4594 invoked from network); 24 Nov 2002 13:04:16 -0000
-Date: Sun, 24 Nov 2002 05:04:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: More passwd/group patches
-Message-ID: <20021124140414.Z1398@cygbert.vinschen.de>
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3DDE3FB9.2AFAA199@ieee.org> <20021122154644.N1398@cygbert.vinschen.de> <3DDE4528.3BDCDCEF@ieee.org>
+Received: (qmail 29983 invoked from network); 24 Nov 2002 13:55:56 -0000
+Subject: Re: [PATCH] Patch for MTinterface
+From: Robert Collins <rbcollins@cygwin.com>
+To: Thomas Pfaff <tpfaff@gmx.net>
+Cc: cygwin-patches@cygwin.com
+In-Reply-To: <Pine.WNT.4.44.0211221554320.379-100000@algeria.intern.net>
+References: <Pine.WNT.4.44.0211221554320.379-100000@algeria.intern.net>
+Content-Type: multipart/signed; micalg=pgp-sha1; protocol="application/pgp-signature";
+	boundary="=-+x3vT69pbiQ+Rpib3Hds"
+Date: Sun, 24 Nov 2002 05:55:00 -0000
+Message-Id: <1038142635.23476.74.camel@lifelesswks>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3DDE4528.3BDCDCEF@ieee.org>
-User-Agent: Mutt/1.3.22.1i
-X-SW-Source: 2002-q4/txt/msg00172.txt.bz2
+X-SW-Source: 2002-q4/txt/msg00173.txt.bz2
 
-Hi Pierre,
 
-a few comments:
+--=-+x3vT69pbiQ+Rpib3Hds
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+Content-length: 1215
 
-On Fri, Nov 22, 2002 at 09:54:32AM -0500, Pierre A. Humblet wrote:
->  static void
->  getace (__aclent16_t &acl, int type, int id, DWORD win_ace_mask, DWORD win_ace_type)
->  {
->    acl.a_type = type;
->    acl.a_id = id;
->  
-> -  if (win_ace_mask & FILE_READ_DATA)
-> +  if ((win_ace_mask & FILE_READ_DATA) &&
-> +      !(acl.a_perm & (ALLOW_R | DENY_R)))
+On Sat, 2002-11-23 at 01:55, Thomas Pfaff wrote:
+>=20
+>=20
+> On Tue, 5 Nov 2002, Robert Collins wrote:
+>=20
+> > Overall this looks good. What happens to non-cygwinapi created threads
+> > now though? You mention you don't agree with the code, but I can't see
+> > (from a brief look) how you correct it.
+> >
+> > BTW: I'm currently packing to move house, so don't expect much feedback
+> > until late next week, or early the week after :[.
+> >
+>=20
+> Ping
 
-A formatting nit:
-As long as these conditionals are not longer than a line, it would be nice
-to keep them on one line.  *If* you split the logical expression, please put
-the && or || in front of the next line, not at the end of the previous one.
+Pong. I've added the test cases to the test suite. In future please
+follow the guidelines in testsuite/readme for test behaviour - running
+$ ./testname || echo foo
+should echo foo on failures - and neither of your test cases did that
+initially.
 
->      if (win_ace_type == ACCESS_ALLOWED_ACE_TYPE)
-> -      acl.a_perm |= (acl.a_perm & S_IRGRP) ? 0 : S_IRUSR;
-> +      acl.a_perm |= ALLOW_R;
->      else if (win_ace_type == ACCESS_DENIED_ACE_TYPE)
-> -      acl.a_perm &= ~S_IRGRP;
-> +      acl.a_perm |= DENY_R;
+Also, the initMainThread behaviour:
+initMainThread (bool dosomething)
+{
+if (!dosomething)
+  return;
+...
 
-I don't like the idea that these DENY bits are still set when the acl is
-returned to the application.  The underlying Solaris acl implementation 
-doesn't know about these bits.  They should be removed before returning
-the acl to the application.  Otherwise you're using bits which are not
-defined in acl.h.
+I don't like. I'd rather we not call initMainThread than call it with a
+boolean as above.
 
-> +      /* Include CLASS_OBJ to insure count > 4 (MIN_ACL_ENTRIES)
-> +	 if any default ace exists */
-> +      lacl[3].a_perm = lacl[1].a_perm;
+If dosomething was internal to the pthread class, so that initMainThread
+became:
+initMainThread()
+{
+  if (!dosomething)
+    return;
+...
 
-You're copying the group bits to the mask?  Didn't you suggest to set
-it to rwx?  I think you're right.  It would be better to move this line
-to the initialization of the first lacl members and change it to
+I'd have no issue.
 
-  lacl[3].a_perm = ALLOW_R | ALLOW_W | ALLOW_X;
+Anyway, thanks again for excellent work, and the patch has been
+committed.
 
-> +      int dgpos;
-> +      if ((types_def & (USER|GROUP)) 
-> +	  && ((dgpos = searchace (lacl, MAX_ACL_ENTRIES, DEF_GROUP_OBJ)),
-> +	      (pos = searchace (lacl, MAX_ACL_ENTRIES, DEF_CLASS_OBJ)) >= 0))
-> +	{
-> +	  lacl[pos].a_type = DEF_CLASS_OBJ;
-> +	  lacl[pos].a_perm = lacl[dgpos].a_perm;
+Rob
 
-Same here, shouldn't the DEF_CLASS_OBJ entry have rwx, too?
+--=20
+---
+GPG key available at: http://users.bigpond.net.au/robertc/keys.txt.
+---
 
-Corinna
+--=-+x3vT69pbiQ+Rpib3Hds
+Content-Type: application/pgp-signature; name=signature.asc
+Content-Description: This is a digitally signed message part
+Content-length: 189
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.0.7 (GNU/Linux)
+
+iD8DBQA94MypI5+kQ8LJcoIRAtLbAJsEcKMf95pflildCooDPox7SABoDwCdF8gj
+NdJSBsen3+WLT7Hq4EchVUw=
+=mdwp
+-----END PGP SIGNATURE-----
+
+--=-+x3vT69pbiQ+Rpib3Hds--
