@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2870-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 22816 invoked by alias); 26 Aug 2002 20:51:59 -0000
+Return-Path: <cygwin-patches-return-2871-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 7993 invoked by alias); 27 Aug 2002 09:25:03 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,70 +7,53 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 22802 invoked from network); 26 Aug 2002 20:51:59 -0000
-Message-ID: <20020826205122.89598.qmail@web14507.mail.yahoo.com>
-Date: Mon, 26 Aug 2002 13:51:00 -0000
-From: =?iso-8859-1?q?Danny=20Smith?= <danny_r_smith_2001@yahoo.co.nz>
-Subject: Re: [PATCH] winsock related changes for w32api
-To: Bart Oldeman <bart.oldeman@btinternet.com>
-Cc: cygwin-patches@cygwin.com
-In-Reply-To: <Pine.LNX.4.33.0208261813120.17877-100000@enm-bo-lt.enm.bris.ac.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8bit
-X-SW-Source: 2002-q3/txt/msg00318.txt.bz2
+Received: (qmail 7798 invoked from network); 27 Aug 2002 09:24:59 -0000
+Date: Tue, 27 Aug 2002 02:25:00 -0000
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: fhandler_socket & sigframe patch
+Message-ID: <20020827112453.A1352@cygbert.vinschen.de>
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <015b01c24d09$50499840$6132bc3e@BABEL>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <015b01c24d09$50499840$6132bc3e@BABEL>
+User-Agent: Mutt/1.3.22.1i
+X-SW-Source: 2002-q3/txt/msg00319.txt.bz2
 
- --- Bart Oldeman <bart.oldeman@btinternet.com> wrote: > On Mon, 26 Aug 2002,
-Danny Smith wrote:
+On Mon, Aug 26, 2002 at 03:03:10PM +0100, Conrad Scott wrote:
+> 2002-08-26  Conrad Scott  <conrad.scott@dsl.pipex.com>
 > 
-> > No it is not fine. We need explict A and W SERVICE_INFO structure
-> definitions.
-> 
-> OK - I see what you mean and corrected that now.
-> 
-> > This is not fine either. Did you read the FIXME in winsock2.h next to
-> include
-> > #<nspapi.h.>  My reading of the Windows Sockest 2.2 spec is that is not
-> meant
-> > to depend on other api's.
-> >
-> > The FIXME refers to getting rid of dependence of winsock on service
-> provider
-> > api, not reinforcing that dependence
-> 
-> I tried addressing what the FIXME said, by defining a __CSADDR_T_DEFINED
-> guard.
-> 
-> third try...
-> 
-> Bart
-> 
-> 2002-08-26  Bart Oldeman  <bart.oldeman@btinternet.com>
-> 
->         * include/winsock2.h (SOCKET_ADDRESS): define if
-> 	__CSADDR_T_DEFINED is not defined (copied from nspapi.h). Removed
-> 	FIXME comment.
->         (CSADDR_INFO): Ditto.
->         * include/nspapi.h (SOCKET_ADDRESS) Only define if
-> 	__CSADDR_T_DEFINED is not defined.
-> 	(CSADDR_INFO): Ditto.
->         (BLOB): Added structure and typedef if not already defined.
->         (NS_*): Add defines.
->         (SERVICE_*): Ditto.
->         (SERVICE_ADDRESS): Add structure and typedefs.
->         (SERVICE_ADDRESSES): Ditto.
->         (SERVICE_INFO[AW]): Ditto, and add UNICODE mappings.
->         (LPSERVICE_ASYNC_INFO): Add typedef.
->         (SetService[AW], GetAddressByName[AW]): Add prototypes and UNICODE
-> 	mappings.
->         * include/wsipx.h: New file.
->         * include/svcguid.h: New file.
-> 
+> 	* fhandler_socket.cc (fhandler_socket::check_peer_secret_event):
+> 	Fix strace message.
+> 	(fhandler_socket::connect): Remove sigframe.
+> 	(fhandler_socket::accept): Ditto.
+> 	(fhandler_socket::getsockname): Ditto.
+> 	(fhandler_socket::getpeername): Ditto.
+> 	(fhandler_socket::recvfrom): Ditto.
+> 	(fhandler_socket::recvmsg): Ditto.
+> 	(fhandler_socket::sendto): Ditto.
+> 	(fhandler_socket::sendmsg): Ditto.
+> 	(fhandler_socket::close): Ditto.
+> 	(fhandler_socket::ioctl): Ditto.
+> 	* ioctl.cc (ioctl): Add sigframe.
+> 	*net.cc (cygwin_sendto): Ditto.
+> 	(cygwin_recvfrom): Ditto.
+> 	(cygwin_recvfrom): Ditto.
+> 	(cygwin_connect): Ditto.
+> 	(cygwin_shutdown): Ditto.
+> 	(cygwin_getpeername): Ditto.
+> 	(cygwin_accept): Ditto.  Improve strace message.
+> 	(cygwin_getsockname): Ditto.  Ditto.
+> 	(cygwin_recvmsg): Ditto.  Ditto.
+> 	(cygwin_sendmsg): Fix strace message.
 
+Thanks!  Applied.
 
-This is fine :). Thanks for persevering.
+Corinna
 
-Danny
-
-http://digital.yahoo.com.au - Yahoo! Digital How To
-- Get the best out of your PC!
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
