@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3316-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 8008 invoked by alias); 14 Dec 2002 16:57:41 -0000
+Return-Path: <cygwin-patches-return-3317-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 8820 invoked by alias); 14 Dec 2002 17:00:20 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,27 +7,32 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 7998 invoked from network); 14 Dec 2002 16:57:40 -0000
-Date: Sat, 14 Dec 2002 08:57:00 -0000
+Received: (qmail 8806 invoked from network); 14 Dec 2002 17:00:19 -0000
+Date: Sat, 14 Dec 2002 09:00:00 -0000
 From: Corinna Vinschen <cygwin-patches@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: Small security patches
-Message-ID: <20021214175737.O19104@cygbert.vinschen.de>
+Subject: Re: [patch] netdb.cc to use strtok_r
+Message-ID: <20021214180016.P19104@cygbert.vinschen.de>
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3DF76981.86674258@ieee.org> <20021211192211.GD29798@redhat.com> <3DF7A670.E7BA1862@ieee.org> <20021211210349.GB31049@redhat.com> <3DF8BA7A.37C82FE5@ieee.org> <20021213133801.A17831@cygbert.vinschen.de> <3DF9F616.F1511B8D@ieee.org>
+References: <3DF62D35.8020.1099672B@localhost> <20021210143002.E7796@cygbert.vinschen.de>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3DF9F616.F1511B8D@ieee.org>
+In-Reply-To: <20021210143002.E7796@cygbert.vinschen.de>
 User-Agent: Mutt/1.3.22.1i
-X-SW-Source: 2002-q4/txt/msg00267.txt.bz2
+X-SW-Source: 2002-q4/txt/msg00268.txt.bz2
 
-On Fri, Dec 13, 2002 at 10:00:38AM -0500, Pierre A. Humblet wrote:
-> 2002/12/13  Pierre Humblet  <pierre.humblet@ieee.org>
+On Tue, Dec 10, 2002 at 02:30:02PM +0100, Corinna Vinschen wrote:
+>   So I think we should drop the 'N.B.' comment
+> now entirely.
 > 
->         * security.cc (get_user_local_groups): Use LookupAccountSid to find the
->         local equivalent of BUILTIN.
+> Comment?
 
-Thanks, applied.
+No comment, so I removed the comment.
 
 Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
