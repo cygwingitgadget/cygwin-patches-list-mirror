@@ -1,45 +1,54 @@
-From: Jason Tishler <Jason.Tishler@dothill.com>
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
 To: Cygwin-Patches <cygwin-patches@sources.redhat.com>
-Subject: unlink() patch (was Cygwin CVS breaks PostgreSQL drop table)
-Date: Tue, 17 Jul 2001 19:12:00 -0000
-Message-id: <20010717221042.A426@dothill.com>
-X-SW-Source: 2001-q3/msg00012.html
+Subject: Re: unlink() patch (was Cygwin CVS breaks PostgreSQL drop table)
+Date: Wed, 18 Jul 2001 04:02:00 -0000
+Message-id: <20010718130154.E730@cygbert.vinschen.de>
+References: <20010717221042.A426@dothill.com>
+X-SW-Source: 2001-q3/msg00013.html
 
-On Fri, Jul 13, 2001 at 12:12:29PM -0400, Jason Tishler wrote:
-> I will try to dig some more and devise a patch (if I can), but I wanted
-> to at least give a heads up in the meantime.
+On Tue, Jul 17, 2001 at 10:10:42PM -0400, Jason Tishler wrote:
+> Cygwin no longer correctly handles the case when the file passed to
+> unlink() does not exist -- unlink() incorrectly returns 0.
+> [...]
+> Index: syscalls.cc
+> ===================================================================
+> RCS file: /cvs/src/src/winsup/cygwin/syscalls.cc,v
+> retrieving revision 1.128
+> diff -u -p -r1.128 syscalls.cc
+> --- syscalls.cc	2001/07/14 00:09:33	1.128
+> +++ syscalls.cc	2001/07/18 01:54:21
+> @@ -155,7 +155,7 @@ _unlink (const char *ourname)
+>    if (h == INVALID_HANDLE_VALUE)
+>      {
+>        if (GetLastError () == ERROR_FILE_NOT_FOUND)
+> -	goto ok;
+> +	goto err;
+>      }
+>    else
+>      {
 
-The first attachment, utest.c, demonstrates the root cause of the problem:
+IMO, that's rather late in the function to handle a nonexistant file.
+I checked in a different solution which handles it more at the 
+beginning of _unlink(). Thanks for tracking it down, though.
 
-    $ date > duda
-    $ utest duda
-    s = 0, errno = 0
-    $ ls -l duda
-    ls: duda: No such file or directory
-    $ utest duda
-    s = 0, errno = 0
+BTW, I have a naive question related to unlink. I had just another
+look into SUSv2 and to my surprise it defines the following error
+code:
 
-After the following commit:
+[EBUSY]    The file named by the path argument cannot be unlinked
+           because it is being used by the system or another process
+	   and the implementation considers this an error.
 
-    http://www.cygwin.com/ml/cygwin-cvs/2001-q2/msg00276.html
+which basically means, if we try to unlink a file and that fails,
+we wouldn't have to force it by ugly tricks (delqueue) but just
+return EBUSY and Cygwin would still be SUSv2 compliant.
 
-Cygwin no longer correctly handles the case when the file passed to
-unlink() does not exist -- unlink() incorrectly returns 0.
-
-The second and third attachments are a patch and the corresponding
-ChangeLog entry that fix this problem.
-
-BTW, this bug caused PostgreSQL to spin while dropping tables because
-as part of its clean up algorithm (which I do not fully grok), it would
-continue to delete files foo, foo.1, foo.2, ... until unlink() returned
-with an error.
-
-Thanks,
-Jason
+All: Would that be ok to change or would you like to keep the current
+     behaviour?
+     
+Corinna
 
 -- 
-Jason Tishler
-Director, Software Engineering       Phone: 732.264.8770 x235
-Dot Hill Systems Corp.               Fax:   732.264.8798
-82 Bethany Road, Suite 7             Email: Jason.Tishler@dothill.com
-Hazlet, NJ 07730 USA                 WWW:   http://www.dothill.com
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
