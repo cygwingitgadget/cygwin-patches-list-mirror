@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1769-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 19491 invoked by alias); 23 Jan 2002 21:56:11 -0000
+Return-Path: <cygwin-patches-return-1770-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 2538 invoked by alias); 24 Jan 2002 01:08:59 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,33 +7,51 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 19477 invoked from network); 23 Jan 2002 21:56:11 -0000
-Message-ID: <021401c1a458$c4dc1700$0200a8c0@lifelesswks>
-From: "Robert Collins" <robert.collins@itdomain.com.au>
-To: "Earnie Boyd" <Cygwin-Patches@Cygwin.Com>
-References: <3C4E0C9F.1BEECC02@yahoo.com> <3C4EC73A.B63A8371@yahoo.com>
-Subject: Re: include/sys/strace.h
-Date: Wed, 23 Jan 2002 13:56:00 -0000
-MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="iso-8859-1"
+Received: (qmail 2503 invoked from network); 24 Jan 2002 01:08:57 -0000
+Subject: patch to allow newlib to compile when winsup not present
+From: Thomas Fitzsimmons <fitzsim@redhat.com>
+To: cygwin-patches@cygwin.com
+Cc: newlib@sources.redhat.com
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-OriginalArrivalTime: 23 Jan 2002 21:56:10.0133 (UTC) FILETIME=[C4590450:01C1A458]
-X-SW-Source: 2002-q1/txt/msg00126.txt.bz2
+X-Mailer: Evolution/1.0 (Preview Release)
+Date: Wed, 23 Jan 2002 17:08:00 -0000
+Message-Id: <1011834535.1278.46.camel@toggle>
+Mime-Version: 1.0
+X-SW-Source: 2002-q1/txt/msg00127.txt.bz2
 
------ Original Message ----- 
-From: "Earnie Boyd" <earnie_boyd@yahoo.com>
-To: "Earnie Boyd" <Cygwin-Patches@Cygwin.Com>
-Sent: Thursday, January 24, 2002 1:22 AM
-Subject: Re: include/sys/strace.h
+I've applied this patch to newlib, so that it will compile for the
+i686-pc-cygwin target, when winsup is not in the source tree.
+Previously, the newlib build failed because pthread_t was undefined.
 
+Index: libc/include/sys/signal.h
+===================================================================
+RCS file: /cvs/src/src/newlib/libc/include/sys/signal.h,v
+retrieving revision 1.9
+retrieving revision 1.10
+diff -c -r1.9 -r1.10
+*** signal.h	2001/10/22 16:40:26	1.9
+--- signal.h	2002/01/24 00:52:27	1.10
+***************
+*** 158,164 ****
+  int _EXFUN(sigsuspend, (const sigset_t *));
+  int _EXFUN(sigpause, (int));
+  
+! #if defined(_POSIX_THREADS)
+  int _EXFUN(pthread_kill, (pthread_t thread, int sig));
+  #endif
+  
+--- 158,164 ----
+  int _EXFUN(sigsuspend, (const sigset_t *));
+  int _EXFUN(sigpause, (int));
+  
+! #if defined(_POSIX_THREADS) && !defined(__CYGWIN__)
+  int _EXFUN(pthread_kill, (pthread_t thread, int sig));
+  #endif
+  
 
-> Any objection to this patch?  Can I apply it?
-
-I've no objection, it could be useful in corner cases.
-
-Rob
+-- 
+Thomas Fitzsimmons
+Red Hat Canada Limited        e-mail: fitzsim@redhat.com
+2323 Yonge Street, Suite 300
+Toronto, ON M4P2C9
