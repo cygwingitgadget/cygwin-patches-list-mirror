@@ -1,32 +1,49 @@
 From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: src/winsup/cygwin ChangeLog thread.cc thread.h ...
-Date: Thu, 27 Sep 2001 11:03:00 -0000
-Message-id: <20010927140440.B32577@redhat.com>
-References: <20010925114527.23687.qmail@sourceware.cygnus.com> <14472692346.20010927144858@logos-m.ru> <007b01c14743$2a0005b0$01000001@lifelesswks> <12280602580.20010927170049@logos-m.ru> <008301c1475e$afb0c4e0$01000001@lifelesswks>
-X-SW-Source: 2001-q3/msg00215.html
+Subject: Re: stamp winver_stamp only on success
+Date: Thu, 27 Sep 2001 11:04:00 -0000
+Message-id: <20010927140505.C32577@redhat.com>
+References: <00c001c1474c$ce1e1890$01000001@lifelesswks>
+X-SW-Source: 2001-q3/msg00216.html
 
-On Fri, Sep 28, 2001 at 12:14:13AM +1000, Robert Collins wrote:
->Ok this is a quick-and-it-couldbe-cleaner patch.
->
->It's interim - this weekend I'll make time to roll the logic throughout
->thread.cc. The patch doesn't introduce any new issues though, and it is
->the correct IMO step to solving the issue(s) I was trying to address
->with my last lets-break-cygwin patch.
->
->I have _no_ idea why it worked at all after I built that .dll :}. The
->fault for those wanting the grisly details was that I changed the
->semantics of verifyableobject_isvalid without updating the tests against
->the return code. Doh.
->
->I'm having some trouble with cvs+ssh with this patch .. though I'm not
->sure why. For a little while I though it might be chris's tuesday
->sleep(1) change, because I was getting strange results from pspec> I'm
->not sure though.
+On Thu, Sep 27, 2001 at 10:06:13PM +1000, Robert Collins wrote:
+>I've had some trouble with recent version changes, with cygwin_version.h
+>not being found - which is how I noticed this...
 
-Huh?  What is my "sleep(1)" change?  The only change I made on Tuesday was
-to fhandler_tty_common::ready_for_read.  How would that affect cvs?
+Please check this in.
 
-I don't know what pspec is either, so I'm lost.
+Thanks.
 
 cgf
+
+>Thu Sep 27 22:00:00 2001 Robert Collins rbtcollins@itdomain.com.au
+>
+>    * Makefile.in: Only stamp winver_stamp on success.
+>
+>====
+>Index: Makefile.in
+>===================================================================
+>RCS file: /cvs/src/src/winsup/cygwin/Makefile.in,v
+>retrieving revision 1.63
+>diff -u -p -r1.63 Makefile.in
+>--- Makefile.in 2001/09/24 22:49:12     1.63
+>+++ Makefile.in 2001/09/27 12:03:42
+>@@ -210,8 +210,8 @@ version.cc winver.o: winver_stamp
+> winver_stamp: mkvers.sh include/cygwin/version.h winver.rc
+>$(DLL_OFILES)
+>        @echo "Making version.o and winver.o";\
+>        $(SHELL) ${word 1,$^} ${word 2,$^} ${word 3,$^} $(WINDRES) && \
+>-       touch $@ && \
+>-       $(COMPILE_CXX) -o version.o version.cc
+>+       $(COMPILE_CXX) -o version.o version.cc && \
+>+       touch $@
+>
+> cygrun.exe : cygrun.o $(LIB_NAME) $(w32api_lib)/libuser32.a \
+>             $(w32api_lib)/libshell32.a $(w32api_lib)/libkernel32.a
+>
+>
+>
+
+-- 
+cgf@cygnus.com                        Red Hat, Inc.
+http://sources.redhat.com/            http://www.redhat.com/
