@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3998-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 25954 invoked by alias); 9 Jul 2003 10:07:37 -0000
+Return-Path: <cygwin-patches-return-3999-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 26671 invoked by alias); 9 Jul 2003 10:10:00 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,12 +7,12 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 25945 invoked from network); 9 Jul 2003 10:07:35 -0000
+Received: (qmail 26651 invoked from network); 9 Jul 2003 10:09:59 -0000
 From: "Chris January" <chris@atomice.net>
 To: <cygwin-patches@cygwin.com>
 Subject: RE: start_time patch for fhandler_process.cc
-Date: Wed, 09 Jul 2003 10:07:00 -0000
-Message-ID: <ICEBIHGCEJIPLNMBNCMKKEIKCIAA.chris@atomice.net>
+Date: Wed, 09 Jul 2003 10:10:00 -0000
+Message-ID: <ICEBIHGCEJIPLNMBNCMKOEIKCIAA.chris@atomice.net>
 MIME-Version: 1.0
 Content-Type: text/plain;
 	charset="us-ascii"
@@ -22,7 +22,8 @@ X-MSMail-Priority: Normal
 In-Reply-To: <20030709005048.GA18400@redhat.com>
 Importance: Normal
 X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2800.1165
-X-SW-Source: 2003-q3/txt/msg00014.txt.bz2
+X-SW-Source: 2003-q3/txt/msg00015.txt.bz2
+
 
 > On Tue, Jul 08, 2003 at 07:09:12PM +0100, Chris January wrote:
 > >Try this Chris and see if it solves the start time problem.
@@ -44,13 +45,7 @@ X-SW-Source: 2003-q3/txt/msg00014.txt.bz2
 > Now that I've read the description of what the field is supposed to
 > contain, I'm wondering if the culprit is the "Unknown HZ value! (250)
 > Assume 100."
->
-> Could that be it?
-Almost certainly. That would give you dates 250/100 = 2.5 times into the
-future I should think.
-Could the problem be you have an SMP machine? procps calibrates HZ using
-uptime and total cpu jiffies. The /proc implementation asks NT how many
-ticks it spent in kernel, user mode, etc. However maybe NT counts ticks more
-than once if you have more than one processor?
+Maybe sysconf (_SC_NPROCESSORS_CONF) is reporting the wrong amount if the
+problem is indeed you are running on an SMP machine.
 
 Chris
