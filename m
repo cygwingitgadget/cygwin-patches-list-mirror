@@ -1,67 +1,37 @@
-From: emotion168@ms67.url.com.tw
-To: "cygwin-patches@cygwin.com"
-Subject: To  cygwin-patches   about  e-promotion
-Date: Sun, 15 Apr 2001 06:53:00 -0000
-Message-id: <6c66add480aaf068eba0247f77322339@NO-ID-FOUND.mhonarc.org>
-X-SW-Source: 2001-q2/msg00065.html
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: uid and gid for domain accounts.
+Date: Sun, 15 Apr 2001 07:12:00 -0000
+Message-id: <20010415161230.T20490@cygbert.vinschen.de>
+References: <s1sofu2oyxc.fsf@jaist.ac.jp> <3AD5E2A6.A0B35CD1@yahoo.com> <s1slmp5q390.fsf@jaist.ac.jp>
+X-SW-Source: 2001-q2/msg00066.html
 
-Title: china-art (from cloudeight's Horizon Collection release date April 10, 1999)
-
-
-
-Â 
-
-
-
-Â¦pÂ¦Ã³Â¥Â¿Â½TÂªÂºÂ¥HE-MailÂ¶}ÂµoÂ«HÂ¨ÃÂ³ÃÂ³yÂ°ÃÂ¾Ã·. 
-
-Dear cygwin-patches,Â  
-
-Â 
-
-Â¤jÂ®aÂ³Â£Â´Â¿Â·QÂ¹LÂ§QÂ¥ÃÂºÃ´Â¸Ã´ÂªÂºÂ«KÂ±Â¶Â»PÂµLÂ»Â·Â¥Â±Â¬ÃÂªÂºÂ¯SÂ©ÃÂ¨ÃÂ¶}ÂµoÂ°ÃÂ¾Ã·, 
-Â©ÃÂ»PÂ²{Â¦Â³Â«ÃÂ¤Ã¡Â¥[Â±jÂ³sÃÂ´Â»PÂªAÂ°Ã. Â¦Ã½Â©ÃÂ³\Â«oÂ¦Â³Â¤UÂ¦CÂ§xÃZÂ¦ÃÂµLÂªkÂ°ÂµÂ¦nÂ¦Â¹Â¤uÂ§@: 
-Â 
-
-1. Â¤Â£ÂªÂ¾Â­nÂ¦pÂ¦Ã³ÂµÃÂ¤Ã¢Â°_, Â¥Â«Â­Â±Â¤WÂ§Ã¤Â¤Â£Â¨Ã¬Â¬ÃÃÃ¶Â®ÃÃyÂ©ÃÂ°ÃÂ¦ÃÂ¸ÃªÂ®Ã. Â¶RÂ¤FÂ¬ÃÃÃ¶Â³nÃÃ©Â»Pe-mailÂ¦WÂ³Ã¦Â¸ÃªÂ®Ã, Â«oÂ¤Â£ÂªÂ¾Â¾Ã£Â¦XÂ¿ÃÂ·|Â³eÂ³q,Â¥uÂ¯Ã Â·nÃYÂ¿Â³Â¹Ã, 
-Â¦bÂ¤Â£Ã_ÂªÂºÂ¿Ã¹Â»~Â¤Â¤ÂºNÂ¯ÃÂ¦ÃÂ§iÂ©Ã±Â±Ã³. 
-Â 
-
-2. Â©eÂ°UÂ¥LÂ¤HÂ¥NÂµo, Â©ÃÂ¤Â£ÂªÂ¾Â¦pÂ¦Ã³ÃÃªÂ©wÂ«ÃÂ¤Ã¡Â¸s, 
-Â·jÂ¶Â°Â¦Â³Â¼Ã§Â¤OÂªÂºe-mail, Â®Ã¶Â¶OÂºÃ«Â¤OÂ»PÂªÃ·Â¿ÃºÂ«oÂ±oÂ¤Â£Â¨Ã¬Â¹wÂ´ÃÂ®ÃÂªG. 
-Â 
-
-3. Â¦]Â¨SÂ¸gÃÃ§Â©ÃÂ¦]Â¤jÂ¶qÃÃÂµo, Â³yÂ¦Â¨Â¦Â¬Â«HÂ¤HÂ¤ÃÂ·PÂ¬ÃÂ¦ÃÂ©Ã³Â¹Ã¯Â§Ã, 
-Â³QISPÃÂµÂ§iÂ¬ÃÂ¦ÃÂ°Â±Ãv... 
-Â 
-
-4. Â¯ÃÂ¥FÂ¥Â¿Â½TÃ[Â©Ã, Â¤Â£ÂªÂ¾Â¦pÂ¦Ã³ÂºÃ»Ã@ÂºÃÂ²z, 
-ÂµLÂªkÂ°ÂµÂ¦nÂµoÂ«HÂ«eÂ·ÃÂ³ÃÂ¤uÂ§@, ÂµoÂ«HÂªÂºÃÂ§Â¸`Â»PÂ¤Ã¨Âªk, ÂµoÂ«HÂ«Ã¡ÂªÂºÂ«Ã¡ÃÃ²Â³BÂ²z. Â³yÂ¦Â¨Â¨ÃÂ­Â¿Â¥\Â¥b, Â¬ÃÂ¦ÃÂ¤ÃÂ®ÃÂªGÂ¡D 
-Â 
-
-Â¦pÂªGÂ§AÂ¦Â³Â¤WÂ­zÂ·PÃÂ², Â¦ÃÂ¥BÂ¡G
-1. Â  Â¹Ã¯PCÂ¨ÃÂ¥ÃÂ¦Â³Â°Ã²Â¥Â»Â¯Ã Â¤O, 
-Â¨ÃÂ¥ÃÂ­^Â¤Ã¥Â³nÃÃ©Â¨SÂ§xÃZ. 
-Â 
-2. Â¦Â³Â¤ÃÂ·QÂ¾ÃÂ¦ne-mailÂ¶}Âµo. 
+On Fri, Apr 13, 2001 at 05:20:27AM +0900, Kazuhiro Fujieda wrote:
+> >>> On Thu, 12 Apr 2001 13:15:18 -0400
+> >>> Earnie Boyd <earnie_boyd@yahoo.com> said:
+> 
+> > Sounds great, when can we expect the patches?
+> 
+> Just now.
+> 
+> 2001-04-13  Kazuhiro Fujieda  <fujieda@jaist.ac.jp>
+> 
+> 	* mkgroup.c (enum_groups): Use RID + offset specified an additional
+> 	argument as ID.
+> 	(usage): Add description of -o option.
+> 	(longopts, opts): Add specifications of -o/--id-offset option.
+> 	(main): Add -o option. Invoke enum_groups with specified offset.
+> 	* mkpasswd.c (enum_users): Just like mkgroup.c.
+> 	(usage, longopts, opts): Ditto.
+> 	(main): Add -o option. Invoke enum_users with specified offset
+> 	only against domain accounts.
 
 
-Â±qÂ¤FÂ¸ÃÂ¥Â¿Â½TÂªÂºe-mailÂ¶}ÂµoÃ[Â©ÃÂ»PÂ¤Ã¨ÂªkÂ¡@>> 
-Â¿Ã¯Â¾ÃÂ¦XÂ¾AÂªÂºÂ¤uÂ¨Ã£Â¡@>> Â¥ÃÂ¼ÃÂ¸se-mailÂ·jÂ¶Â°Â¡@>> ÂµoÂ«HÂ¤uÂ§@Â§Â¹Â¦Â¨Â¡@>> Â«Ã¡ÃÃ²ÂºÃ»Ã@ÂºÃÂ²z 
-ÂµÂ¥Â¤@Â³sÂ¦ÃªÂ¾Ã£Â¦XÂ¡DÂ¤Â£Â¥ÃÂ¦bÂ¿Ã¹Â»~Â¤Â¤ÂºNÂ¯Ã,Â¹wÂ´ÃÂ¥ÃÂªÂºÂ¨SÂ¹FÂ¨Ã¬Â¥Ã½Â¤ÃÂ¤ÃµÂ¤WÂ¨Â­Â¡DÂ¡@Â¡@ Â°OÂ±oÂ¡Ie-mailÂ¶}ÂµoÂ¤Ã±Â¦LÂ¨ÃªÂµÂ¥Â´CÃÃ©Â¼sÂ§iÂ¤Ã¨Â¦Â¡Â§Ã³ÃÃ´Â«OÂ»PÂ²MÂ¼Ã¤, Â¦Ã½Â¦]Â»ÃÂ¹BÂ¥ÃÂ¨Ã¬ÂºÃ´Â¸Ã´Â¸ÃªÂ·Â½Â©ÃÂ¥HÂ¨ÃÂ¤Â£Â¨Ã¼Â¨Ã¬ÃwÂªÃ¯, 
-Â¥iÂ¬OÂ§OÂ§ÃÂ¤FÂ¤]Â¦Â³Â§Ã³Â¦hÂ¤HÂ®Ã¶Â¶OÂºÃ´Â¸Ã´Â§Ã³Â¤jÃWÂ¼eÂ°ÂµÂ§Ã³ÂµLÂ·NÂ¸qÂ¤Â§Â¨ÃÂ¡DÂ¦]Â¦Â¹Â¦pÂ¦Ã³Â°ÂµÂ¦n,Â¦Â³Â¿Ã Â¥Â¿Â½TÃ[Â©ÃÂ¤ÃÂ¤Ã¨ÂªkÂ¤~Â¯Ã Â¹FÂ¨Ã¬Â¥ÃÂªÂºÂ»PÂ¸ÃªÂ·Â½Â¹BÂ¥ÃÂ¨ÃºÂ±oÂ¥Â­Â¿ÃÂ¡D 
-Â 
+Thanks Kazuhiro, I have just checked it in.
 
-Â»PÂ§ÃÂ³sÂµÂ¸, 
-Â¥iÂ¨Ã¬Â¶QÂ¤Â½Â¥qÂ±ÃÂ¾ÃÂ¡DÂ¡@Â¡]Â§ÃÂ¤Â£Â¬OÂ½Ã¦Â¥ÃºÂºÃÂ©Ãe-mailÂ¦WÂ³Ã¦Â¡^ 
-Â¡@ abc
-Â¡@ 
-Â¡@
-Â¡@
-Â¡@
-Â¡@
-Â¡@
-Â¡@
-Â¡@
-Â¡@
-Â¡@
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
