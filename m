@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1691-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 23196 invoked by alias); 14 Jan 2002 07:19:57 -0000
+Return-Path: <cygwin-patches-return-1692-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 24233 invoked by alias); 14 Jan 2002 08:30:30 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,107 +7,101 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 23181 invoked from network); 14 Jan 2002 07:19:56 -0000
-From: "Ralf Habacker" <Ralf.Habacker@freenet.de>
-To: <cygwin-patches@cygwin.com>
-Subject: RE: Problem with winsup/cinstall compilation
-Date: Sun, 13 Jan 2002 23:19:00 -0000
-Message-ID: <000d01c19ccb$83a8daa0$fe6207d5@BRAMSCHE>
+Received: (qmail 24219 invoked from network); 14 Jan 2002 08:30:30 -0000
+Message-ID: <C2D7D58DBFE9D111B0480060086E96350689B752@mail_server.gft.com>
+From: "Schaible, Jorg" <Joerg.Schaible@gft.com>
+To: cygwin-patches@cygwin.com
+Subject: RE: A few fixes to winsup/utils/cygpath.cc
+Date: Mon, 14 Jan 2002 00:30:00 -0000
 MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3 (Normal)
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook 8.5, Build 4.71.2173.0
-In-Reply-To: <20020112203006.GG21924@redhat.com>
-X-MimeOLE: Produced By Microsoft MimeOLE V5.50.4133.2400
-Importance: Normal
-X-SW-Source: 2002-q1/txt/msg00048.txt.bz2
+X-Mailer: Internet Mail Service (5.5.2653.19)
+Content-Type: multipart/mixed;
+	boundary="----_=_NextPart_000_01C19CD5.B8474490"
+X-SW-Source: 2002-q1/txt/msg00049.txt.bz2
 
-> On Sat, Jan 12, 2002 at 07:36:00PM +0100, Corinna Vinschen wrote:
-> >On Sat, Jan 12, 2002 at 07:14:25PM +0100, Ralf Habacker wrote:
-> >> EMail: Ralf.Habacker@saght.tessag.com
-> >>>>I have looked in the cygwin ChangeLog for making a proper ChangeLog,
-> >>>>but don't recognized this details.  Sorry
-> >>>
-> >>>http://cygwin.com/contrib.html
-> >>>
-> >>I have read this and I see many "what not to do statements" relating
-> >>changelog.  I think it would be easier and faster to read if some true
-> >>examples are included at this page.  :-)
-> >
-> >Isn't the ChangeLog file itself *the* example?
+This message is in MIME format. Since your mail reader does not understand
+this format, some or all of this message may not be legible.
+
+------_=_NextPart_000_01C19CD5.B8474490
+Content-Type: text/plain
+Content-length: 1364
+
+Hi Chris,
+
+just an additional minor patch for Jonathtan's change in cygpath.cc, that
+keeps some consistency for -i option:
+
+/src/winsup/utils> cygpath -w > /dev/null 2>&1; echo $?
+1
+/src/winsup/utils> cygpath -wi > /dev/null 2>&1; echo $?
+0
+/src/winsup/utils> cygpath -w "" > /dev/null 2>&1; echo $?
+1
+/src/winsup/utils> cygpath -wi "" > /dev/null 2>&1; echo $?
+1    <========== should be 0, too.
+/src/winsup/utils> cygpath -wp > /dev/null 2>&1; echo $?
+1
+/src/winsup/utils> cygpath -wpi > /dev/null 2>&1; echo $?
+0
+/src/winsup/utils> cygpath -wp "" > /dev/null 2>&1; echo $?
+0
+/src/winsup/utils> cygpath -wpi "" > /dev/null 2>&1; echo $?
+0
+
+
+========
+
+2002-01-14  Joerg Schaible <joerg.schaible@gmx.de>
+
+	* cygpath.cc (doit): Empty file ignored using option -i
+
+========
+
+Regards,
+Jorg
+
+>-----Original Message-----
+>From: Christopher Faylor [mailto:cgf@redhat.com]
+>Sent: Wednesday, December 26, 2001 6:46 PM
+>To: cygwin-patches@cygwin.com
+>Subject: Re: A few fixes to winsup/utils/cygpath.cc
 >
-Yet, see above. But than it should be consequently used in the ChangeLogs.
-
-from www.cygwin.com/contrib.html I found the following statement for example
-
-Improper ChangeLog formatting:
-	Multiple functions or filenames on a ChangeLog line (e.g., "* foo.cc, bar.cc: Add argument
-to baf call.")
-
-I have found about 400 several changelog entrys lines in the whole cygwin src tree (including
-winsup) with this error.
-Relating to the total number of entries (1146) this means that over 30% of all changelog
-entries are not conform with the style guide you've told about.
-
-You can reproduce this benchmark with the following lines:
-
-finding all violations:
-
- find src -name 'ChangeLog' -exec grep ",.*:" {} \; | grep -v "[()]" | wc -l
-     401
-
-number of changelog entries:
-
- find src -name 'ChangeLog' -exec egrep "^[0-9]+-[0-9]+-" {} \;  | wc -l
-    1146
-
-In the winsup tree itself there are about 4 % of all entry only with this violation.
-
-> Yes.  That and the *link to the GNU ChangeLog Standards*.
 >
-Yes, but the above result seems to me that more people as I have problems to know the correct
-standard.
+>On Wed, Dec 26, 2001 at 12:40:12PM -0500, Jonathan Kamens wrote:
+>>2001-12-26  Jonathan Kamens  <jik@curl.com>
+>>
+>>	* cygpath.cc (doit): Detect and warn about an empty 
+>path.  Detect
+>>	and warn about errors converting a path.
+>>	(main): Set prog_name correctly -- don't leave an extra slash or
+>>	backslash at the beginning of it.
+>
+>Applied.  Thanks.
+>
+>cgf
+>
 
-> And, regardless, I believe that Ralf's ChangeLog didn't even adhere to
-> even the "what not to do statements".
 
-Yes I've done a mistakes in spelling ("ditto.") and building full sentense "missing dot", but
-I'm onot the only one.
+------_=_NextPart_000_01C19CD5.B8474490
+Content-Type: application/octet-stream;
+	name="cygpath.cc-patch"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment;
+	filename="cygpath.cc-patch"
+Content-length: 363
 
-"... full sentence" - examples missing dot at the end
+164,170c164,165=0A=
+<           if (!ignore_flag)=0A=
+<           {=0A=
+<             fprintf(stderr, "%s: can't convert empty path\n", prog_name);=
+=0A=
+<             exit (1);=0A=
+<           }=0A=
+<           else=0A=
+<             exit (0);=0A=
+---=0A=
+>           fprintf(stderr, "%s: can't convert empty path\n", prog_name);=
+=0A=
+>           exit (1);=0A=
 
-2001-12-14  Christopher Faylor  <cgf@redhat.com>
-        * configure: Regenerate
-
-2001-11-03  Christopher Faylor  <cgf@redhat.com>
-	* configure: Regenerate.
-
-2000-09-02  Egor Duda  <deo@logos-m.ru>
-
-	* Makefile.in: Add new goal "check"
-
-Thu May 25 18:39:24 2000  Christopher Faylor <cgf@cygnus.com>
-
-	* configure: Regenerate
-
-2000-04-17  DJ Delorie  <dj@cygnus.com>
-
-	* Makefile.common (srcdir): remove dependence on where pwd is
-
-2000-01-26  DJ Delorie  <dj@cygnus.com>
-
-	* doc/Makefile.in: fix doctool -d options
-
-So I don't want to accuse someone, but my objectives are to make it easier specific for new
-contributors to follow this rules and again putting some examples direct on this contribution
-page I think would shorten the learning curve.
-
-After Robert Collins has wrote me, that there was something wrong with this ChangeLog, I have
-looked more deeply what he is meaning and now I'm ready for this task.  (I hope I remember
-all very detailed issues, when I add a patch in an half year)
-
-Regards
-Ralf
+------_=_NextPart_000_01C19CD5.B8474490--
