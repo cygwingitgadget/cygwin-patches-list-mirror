@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2512-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 14669 invoked by alias); 25 Jun 2002 09:25:59 -0000
+Return-Path: <cygwin-patches-return-2513-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 899 invoked by alias); 25 Jun 2002 11:52:57 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,40 +7,45 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 14638 invoked from network); 25 Jun 2002 09:25:56 -0000
-Date: Tue, 25 Jun 2002 04:52:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygpatch <cygwin-patches@cygwin.com>
-Subject: Re: Windows username in get_group_sidlist
-Message-ID: <20020625112554.V22705@cygbert.vinschen.de>
-Mail-Followup-To: cygpatch <cygwin-patches@cygwin.com>
-References: <3.0.5.32.20020623235117.008008f0@mail.attbi.com> <20020624120506.Z22705@cygbert.vinschen.de> <20020624130226.GA19789@redhat.com> <20020624151450.G22705@cygbert.vinschen.de> <3D1726E7.4EC19839@ieee.org>
-Mime-Version: 1.0
+Received: (qmail 858 invoked from network); 25 Jun 2002 11:52:55 -0000
+Message-ID: <3D185911.CB269110@yahoo.com>
+Date: Tue, 25 Jun 2002 05:46:00 -0000
+From: Earnie Boyd <earnie_boyd@yahoo.com>
+Reply-To: Earnie Boyd <Cygwin-Patches@Cygwin.Com>
+X-Accept-Language: en
+MIME-Version: 1.0
+To: Conrad Scott <Conrad.Scott@dsl.pipex.com>
+CC: cygwin-patches@cygwin.com
+Subject: Re: Add FILE_FLAG_FIRST_PIPE_INSTANCE to <w32api/winbase.h>
+References: <20020622150321.13099.qmail@web20708.mail.yahoo.com> <04a101c219ff$81bedf80$6132bc3e@BABEL>
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3D1726E7.4EC19839@ieee.org>
-User-Agent: Mutt/1.3.22.1i
-X-SW-Source: 2002-q2/txt/msg00495.txt.bz2
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2002-q2/txt/msg00496.txt.bz2
 
-On Mon, Jun 24, 2002 at 10:04:23AM -0400, Pierre A. Humblet wrote:
-> Corinna 
+Yes, you may commit the change except make the ChangeLog entry
+
+        * include/winbase.h (FILE_FLAG_FIRST_PIPE_INSTANCE): Add
+constant.
+
+Earnie.
+
+Conrad Scott wrote:
 > 
-> Now that get_group_sidlist () knows pw, it would be easy to
-> lookup the domain from passwd, instead of using LookupAccountSid.
-> This avoids over-the-network lookups for domain users.
+> Earnie,
 > 
-> I would actually read passwd by calling extract_nt_dom_user (),
-> modifying it to first read the domain from the passwd file, and 
-> if that fails, use LookupAccountSid [currently it tries 
-> LookupAccountSid first, getting the sid from passwd]. 
+> Thanks for the reply about the WINVER setting. I've attached a new
+> version of the patch with a guard of _WIN32_WINNT >= 0x0500, as you
+> suggested.
 > 
-> What do you think?
-
-Actually it sounds good.  Do you have a patch?
-
-Corinna
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+> I hope this is better.
+> 
+> // Conrad
+> 
+>   ------------------------------------------------------------------------
+>                     Name: ChangeLog.txt
+>    ChangeLog.txt    Type: Plain Text (text/plain)
+>                 Encoding: 7bit
+> 
+>                    Name: w32api.patch
+>    w32api.patch    Type: unspecified type (application/octet-stream)
+>                Encoding: quoted-printable
