@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2655-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 24334 invoked by alias); 15 Jul 2002 11:39:32 -0000
+Return-Path: <cygwin-patches-return-2656-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 18694 invoked by alias); 16 Jul 2002 02:42:31 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,64 +7,90 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 24320 invoked from network); 15 Jul 2002 11:39:31 -0000
-Message-ID: <01dd01c22bf4$43b1de20$1800a8c0@LAPTOP>
-From: "Robert Collins" <robert.collins@syncretize.net>
-To: <bkeener@thesoftwaresource.com>,
-	"cygwin-patches" <cygwin-patches@cygwin.com>
-References: <000501c22951$a948b740$0200a8c0@lifelesswks> <VA.00000bf1.00258f45@thesoftwaresource.com>
-Subject: Re: [Setup] [Patch] New Views for Skipped Packages and Installed Packages (keeps)
-Date: Mon, 15 Jul 2002 04:39:00 -0000
+Received: (qmail 18679 invoked from network); 16 Jul 2002 02:42:31 -0000
+Date: Mon, 15 Jul 2002 19:42:00 -0000
+From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+X-X-Sender: joshua@iocc.com
+To: cygwin-patches@cygwin.com
+Subject: utils.sgml patch fixit
+Message-ID: <Pine.CYG.4.44.0207152137250.1620-200000@iocc.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-SW-Source: 2002-q3/txt/msg00103.txt.bz2
+Content-Type: MULTIPART/MIXED; BOUNDARY="-559023410-481980039-1026787221=:1620"
+X-SW-Source: 2002-q3/txt/msg00104.txt.bz2
 
-It can't be against head, as you are using db.packages.number() which
-doesn't exist since I got rid of the custom container code...
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
 
-if you look in CVS/Entries, the last field is the tag.
-HEAD:
-/choose.cc/2.106/Mon Jul 15 11:33:48 2002//
+---559023410-481980039-1026787221=:1620
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-length: 194
 
-setup-200207:
-/choose.cc/2.101.2.1/Fri Jul  5 02:01:10 2002//Tsetup-200207
+Here is a patch for utils.sgml that fixes a problem with the
+jade thinking <posixpath> &c. are tags. My fault.
 
-To get a list of the available tags, you can look in val-tags in CVSROOT.
-(You may need to check CVSROOT out first). Or you can go to the cvsweb site
-referenced from http://sources.redhat.com/cygwin-apps/setup.html and click
-on the dropdown list of tags.
-
-Could you please update the patch to be against HEAD, and check it - then
-I'll happily commit it.
-
-Rob
------ Original Message -----
-From: "Brian Keener" <bkeener@thesoftwaresource.com>
-To: "cygwin-patches" <cygwin-patches@cygwin.com>
-Sent: Saturday, July 13, 2002 1:20 AM
-Subject: Re: [Setup] [Patch] New Views for Skipped Packages and Installed
-Packages (keeps)
+BTW, after fixing my build problems I can now build the User's
+Guide HTML again.
 
 
-> Robert Collins wrote:
-> > Sure. It doesn't apply for me - what branch is it against? If it's
-> > against HEAD, can you please post it as an attachment?
->
-> I thought these changes were listed in the README under wishlist, but at
-any
-> rate it is against HEAD (I thought).  I'll show my stupidity once again
-since I
-> don't guess I realized we currently had other branches working.
->
-> Where would I go via the Web to check active branches or better yet can I
-get
-> CVS to tell me?
->
-> Bk
->
->
+---559023410-481980039-1026787221=:1620
+Content-Type: TEXT/PLAIN; charset=US-ASCII; name="utils.sgml-patch"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.CYG.4.44.0207152140210.1620@iocc.com>
+Content-Description: 
+Content-Disposition: attachment; filename="utils.sgml-patch"
+Content-length: 3091
+
+LS0tIHV0aWxzLnNnbWwtb3JpZwkyMDAyLTA3LTE1IDIxOjI2OjI1LjAwMDAw
+MDAwMCAtMDUwMA0KKysrIHV0aWxzLnNnbWwJMjAwMi0wNy0xNSAyMTozNjox
+NC4wMDAwMDAwMDAgLTA1MDANCkBAIC00OTgsMTAgKzQ5OCwxMCBAQCB0YWtl
+cyBpbiBhIGxhcmdlIGRvbWFpbi4gDQogPHNlY3QyIGlkPSJtb3VudCI+PHRp
+dGxlPm1vdW50PC90aXRsZT4NCiANCiA8c2NyZWVuPg0KLVVzYWdlOiBtb3Vu
+dCBbT1BUSU9OXSBbPHdpbjMycGF0aD4gPHBvc2l4cGF0aD5dDQorVXNhZ2U6
+IG1vdW50IFtPUFRJT05dIFsmbHQ7d2luMzJwYXRoJmd0OyAmbHQ7cG9zaXhw
+YXRoJmd0O10NCiAgIC1iLCAtLWJpbmFyeSAgICAgICAgICAgICAgICAgIHRl
+eHQgZmlsZXMgYXJlIGVxdWl2YWxlbnQgdG8gYmluYXJ5IGZpbGVzDQogICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAobmV3bGluZSA9IFxuKQ0K
+LSAgLWMsIC0tY2hhbmdlLWN5Z2RyaXZlLXByZWZpeCAgY2hhbmdlIHRoZSBj
+eWdkcml2ZSBwYXRoIHByZWZpeCB0byA8cG9zaXhwYXRoPg0KKyAgLWMsIC0t
+Y2hhbmdlLWN5Z2RyaXZlLXByZWZpeCAgY2hhbmdlIHRoZSBjeWdkcml2ZSBw
+YXRoIHByZWZpeCB0byAmbHQ7cG9zaXhwYXRoJmd0Ow0KICAgLWYsIC0tZm9y
+Y2UgICAgICAgICAgICAgICAgICAgZm9yY2UgbW91bnQsIGRvbid0IHdhcm4g
+YWJvdXQgbWlzc2luZyBtb3VudA0KICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgcG9pbnQgZGlyZWN0b3JpZXMNCiAgIC1oLCAtLWhlbHAgICAg
+ICAgICAgICAgICAgICAgIG91dHB1dCB1c2FnZSBpbmZvcm1hdGlvbiBhbmQg
+ZXhpdA0KQEAgLTEyNjYsOCArMTI2Niw4IEBAICQgc3NwIDxsaXRlcmFsPi12
+PC9saXRlcmFsPiA8bGl0ZXJhbD4tczwNCiA8c2VjdDIgaWQ9InN0cmFjZSI+
+PHRpdGxlPnN0cmFjZTwvdGl0bGU+DQogDQogPHNjcmVlbj4NCi1Vc2FnZTog
+c3RyYWNlLmV4ZSBbT1BUSU9OU10gPGNvbW1hbmQtbGluZT4NCi1Vc2FnZTog
+c3RyYWNlLmV4ZSBbT1BUSU9OU10gLXAgPHBpZD4NCitVc2FnZTogc3RyYWNl
+LmV4ZSBbT1BUSU9OU10gJmx0O2NvbW1hbmQtbGluZSZndDsNCitVc2FnZTog
+c3RyYWNlLmV4ZSBbT1BUSU9OU10gLXAgJmx0O3BpZCZndDsNCiAgIC1iLCAt
+LWJ1ZmZlci1zaXplPVNJWkUgICAgICAgc2V0IHNpemUgb2Ygb3V0cHV0IGZp
+bGUgYnVmZmVyDQogICAtZCwgLS1uby1kZWx0YSAgICAgICAgICAgICAgIGRv
+bid0IGRpc3BsYXkgdGhlIGRlbHRhLXQgbWljcm9zZWNvbmQgdGltZXN0YW1w
+DQogICAtZiwgLS10cmFjZS1jaGlsZHJlbiAgICAgICAgIHRyYWNlIGNoaWxk
+IHByb2Nlc3NlcyAodG9nZ2xlIC0gZGVmYXVsdCB0cnVlKQ0KQEAgLTEyODEs
+NyArMTI4MSw3IEBAIFVzYWdlOiBzdHJhY2UuZXhlIFtPUFRJT05TXSAtcCA8
+cGlkPg0KICAgLXQsIC0tdGltZXN0YW1wICAgICAgICAgICAgICB1c2UgYW4g
+YWJzb2x1dGUgaGg6bW06c3MgdGltZXN0YW1wIGluc3RlZCBvZiANCiAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgdGhlIGRlZmF1bHQgbWljcm9z
+ZWNvbmQgdGltZXN0YW1wLiAgSW1wbGllcyAtZA0KICAgLVQsIC0tdG9nZ2xl
+ICAgICAgICAgICAgICAgICB0b2dnbGUgdHJhY2luZyBpbiBhIHByb2Nlc3Mg
+YWxyZWFkeSBiZWluZw0KLSAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICB0cmFjZWQuIFJlcXVpcmVzIC1wIDxwaWQ+DQorICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIHRyYWNlZC4gUmVxdWlyZXMgLXAgJmx0O3BpZCZn
+dDsNCiAgIC12LCAtLXZlcnNpb24gICAgICAgICAgICAgICAgb3V0cHV0IHZl
+cnNpb24gaW5mb3JtYXRpb24gYW5kIGV4aXQNCiAgIC13LCAtLW5ldy13aW5k
+b3cgICAgICAgICAgICAgc3Bhd24gcHJvZ3JhbSB1bmRlciB0ZXN0IGluIGEg
+bmV3IHdpbmRvdw0KIA0KQEAgLTEzMzcsNyArMTMzNyw3IEBAIEN5Z3dpbiBE
+TEwgaXRzZWxmLjwvcGFyYT4NCiA8c2VjdDIgaWQ9InVtb3VudCI+PHRpdGxl
+PnVtb3VudDwvdGl0bGU+DQogDQogPHNjcmVlbj4NCi1Vc2FnZTogdW1vdW50
+LmV4ZSBbT1BUSU9OXSBbPHBvc2l4cGF0aD5dDQorVXNhZ2U6IHVtb3VudC5l
+eGUgW09QVElPTl0gWyZsdDtwb3NpeHBhdGgmZ3Q7XQ0KICAgLUEsIC0tcmVt
+b3ZlLWFsbC1tb3VudHMgICAgICAgcmVtb3ZlIGFsbCBtb3VudHMNCiAgIC1j
+LCAtLXJlbW92ZS1jeWdkcml2ZS1wcmVmaXggIHJlbW92ZSBjeWdkcml2ZSBw
+cmVmaXgNCiAgIC1oLCAtLWhlbHAgICAgICAgICAgICAgICAgICAgIG91dHB1
+dCB1c2FnZSBpbmZvcm1hdGlvbiBhbmQgZXhpdA0K
+
+---559023410-481980039-1026787221=:1620--
