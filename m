@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3588-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 20648 invoked by alias); 18 Feb 2003 22:27:57 -0000
+Return-Path: <cygwin-patches-return-3589-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 15906 invoked by alias); 18 Feb 2003 22:59:24 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,47 +7,52 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 20639 invoked from network); 18 Feb 2003 22:27:57 -0000
-Date: Tue, 18 Feb 2003 22:27:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: Create new files as sparse on NT systems. (2nd try)
-Message-ID: <20030218222803.GA2679@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20030218221239.U46120-100000@logout.sh.cvut.cz> <009c01c2d79a$552579d0$78d96f83@pomello> <20030218221257.GA2458@redhat.com> <000701c2d79c$140f9230$78d96f83@pomello>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000701c2d79c$140f9230$78d96f83@pomello>
-User-Agent: Mutt/1.5.1i
-X-SW-Source: 2003-q1/txt/msg00237.txt.bz2
+Received: (qmail 15896 invoked from network); 18 Feb 2003 22:59:23 -0000
+From: "Gary R Van Sickle" <tiberius@braemarinc.com>
+To: <cygwin-patches@cygwin.com>
+Subject: RE: Create new files as sparse on NT systems. (2nd try)
+Date: Tue, 18 Feb 2003 22:59:00 -0000
+Message-ID: <001701c2d7a1$a101a020$2101a8c0@BRAEMARINC.COM>
+MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3 (Normal)
+X-MSMail-Priority: Normal
+Importance: Normal
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2800.1106
+In-Reply-To: <20030218222803.GA2679@redhat.com>
+X-SW-Source: 2003-q1/txt/msg00238.txt.bz2
 
-On Tue, Feb 18, 2003 at 10:21:26PM -0000, Max Bowsher wrote:
->Christopher Faylor wrote:
->> On Tue, Feb 18, 2003 at 10:08:56PM -0000, Max Bowsher wrote:
->>> Two things - First:
->>>
->>> Please, please don't make this the default! Once a file is
->>> sparsified, it cannot be unsparsified except by copying the contents
->>> to a new file! This seems like an optimization for a corner case is
->>> trying to cause a global change.
->>
->> Why is it a big deal if a file is sparse?  I don't get it.  In 99% of
->> the cases this won't be a big deal.  In the cases where it is a big
->> deal, cygwin will be operating more like UNIX.
+[snip]
+
+> >What kind of program would actually benefit from sparse
+> files? And shouldn't
+> >it be the responsibility of that program to request them?
 >
->Mainly, it feels aesthetically horrible to me.
+> IIRC, linux creates sparse files automatically when you do an lseek to
+> a position beyond EOF.  I believe that Windows is similar.
 >
->And, we don't have any benchmarks for the common case, yet.
->
->What kind of program would actually benefit from sparse files? And shouldn't
->it be the responsibility of that program to request them?
 
-IIRC, linux creates sparse files automatically when you do an lseek to
-a position beyond EOF.  I believe that Windows is similar.
+No, Windows does nothing like that.  On Windows, sparse files are completely
+non-automatic:
 
-I would like to see a benchmark but I doubt there will be any noticeable
-difference.
+"Note: It is up to the application to maintain sparseness by writing zeros
+with FSCTL_SET_ZERO_DATA", sez the Platform docs.
 
-cgf
+Even if you do WriteFile()s with all zeros on a sparse file, you are
+actually hitting the disk.
+
+> I would like to see a benchmark but I doubt there will be any
+> noticeable
+> difference.
+
+The only thing this patch will do AFAICS is set a bit somewhere in the guts
+of NTFS that will be pretty much ignored.  I'm with Max, I don't see the
+benefit and can only imagine the consequences.
+
+--
+Gary R. Van Sickle
+Braemar Inc.
+11481 Rupp Dr.
+Burnsville, MN 55337
