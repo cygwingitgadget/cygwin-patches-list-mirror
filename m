@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3636-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 4021 invoked by alias); 27 Feb 2003 15:22:04 -0000
+Return-Path: <cygwin-patches-return-3637-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 31878 invoked by alias); 27 Feb 2003 16:45:24 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,110 +7,132 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 4011 invoked from network); 27 Feb 2003 15:22:03 -0000
-X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
-Date: Thu, 27 Feb 2003 15:22:00 -0000
-From: Thomas Pfaff <tpfaff@gmx.net>
+Received: (qmail 31851 invoked from network); 27 Feb 2003 16:45:23 -0000
+Date: Thu, 27 Feb 2003 16:45:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH]: interruptable connect
-Message-ID: <Pine.WNT.4.44.0302271616590.314-200000@algeria.intern.net>
-X-X-Sender: pfaff@antarctica.intern.net
-MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="2789423-20251-1046359226=:314"
-Content-ID: <Pine.WNT.4.44.0302271621170.314@algeria.intern.net>
-X-SW-Source: 2003-q1/txt/msg00285.txt.bz2
+Subject: Re: [PATCH]: interruptable connect
+Message-ID: <20030227164537.GB10601@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <Pine.WNT.4.44.0302271616590.314-200000@algeria.intern.net>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Pine.WNT.4.44.0302271616590.314-200000@algeria.intern.net>
+User-Agent: Mutt/1.5.1i
+X-SW-Source: 2003-q1/txt/msg00286.txt.bz2
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
+On Thu, Feb 27, 2003 at 04:21:33PM +0100, Thomas Pfaff wrote:
+>
+>Hi Corinna,
+>
+>this is a slightly modified version of my proposed solution from
+>yesterday. Not tested exhaustiv but seems to work pretty well.
 
---2789423-20251-1046359226=:314
-Content-Type: TEXT/PLAIN; CHARSET=US-ASCII
-Content-ID: <Pine.WNT.4.44.0302271621171.314@algeria.intern.net>
-Content-length: 288
+I appreciate the effort that you and Corinna have put into this
+very much.
 
+Out of curiousity, is there any way to generalize the (I think) common
+code that is now in fhandler_socket::accept and fhandler_socket::connect
+into one common function?
 
-Hi Corinna,
+cgf
 
-this is a slightly modified version of my proposed solution from
-yesterday. Not tested exhaustiv but seems to work pretty well.
+>Thomas
+>
+>2003-03-27  Thomas Pfaff  <tpfaff@gmx.net>
+>
+>	* fhandler_socket.cc (fhandler_socket::connect): Add support for
+>	an interruptable connect.
 
-Thomas
-
-2003-03-27  Thomas Pfaff  <tpfaff@gmx.net>
-
-	* fhandler_socket.cc (fhandler_socket::connect): Add support for
-	an interruptable connect.
-
---2789423-20251-1046359226=:314
-Content-Type: TEXT/PLAIN; NAME="intr_connect.patch"
-Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.WNT.4.44.0302271620260.314@algeria.intern.net>
-Content-Description: 
-Content-Disposition: ATTACHMENT; FILENAME="intr_connect.patch"
-Content-length: 3782
-
-LS0tIGZoYW5kbGVyX3NvY2tldC5jYy5vcmcJMjAwMy0wMi0yNyAxNjoxNDo0
-OS4wMDAwMDAwMDAgKzAxMDAKKysrIGZoYW5kbGVyX3NvY2tldC5jYwkyMDAz
-LTAyLTI3IDE2OjE1OjU5LjAwMDAwMDAwMCArMDEwMApAQCAtNDMxLDYgKzQz
-MSw4IEBAIG91dDoKIGludAogZmhhbmRsZXJfc29ja2V0Ojpjb25uZWN0IChj
-b25zdCBzdHJ1Y3Qgc29ja2FkZHIgKm5hbWUsIGludCBuYW1lbGVuKQogewor
-ICBXU0FFVkVOVCBldlsyXSA9IHsgV1NBX0lOVkFMSURfRVZFTlQsIHNpZ25h
-bF9hcnJpdmVkIH07CisgIEJPT0wgaW50ZXJydXB0ZWQgPSBGQUxTRTsKICAg
-aW50IHJlcyA9IC0xOwogICBCT09MIHNlY3JldF9jaGVja19mYWlsZWQgPSBG
-QUxTRTsKICAgQk9PTCBpbl9wcm9ncmVzcyA9IEZBTFNFOwpAQCAtNDQwLDEy
-ICs0NDIsNjMgQEAgZmhhbmRsZXJfc29ja2V0Ojpjb25uZWN0IChjb25zdCBz
-dHJ1Y3QgcwogICBpZiAoIWdldF9pbmV0X2FkZHIgKG5hbWUsIG5hbWVsZW4s
-ICZzaW4sICZuYW1lbGVuLCBzZWNyZXQpKQogICAgIHJldHVybiAtMTsKIAor
-ICBpZiAoIWlzX25vbmJsb2NraW5nICgpICYmICFpc19jb25uZWN0X3BlbmRp
-bmcgKCkpCisgICAgeworICAgICAgZXZbMF0gPSBXU0FDcmVhdGVFdmVudCAo
-KTsKKyAgICAgIFdTQUV2ZW50U2VsZWN0IChnZXRfc29ja2V0ICgpLCBldlsw
-XSwgRkRfQ09OTkVDVCk7CisgICAgfQorCiAgIHJlcyA9IDo6Y29ubmVjdCAo
-Z2V0X3NvY2tldCAoKSwgKHNvY2thZGRyICopICZzaW4sIG5hbWVsZW4pOwor
-ICBpZiAocmVzICYmICFpc19ub25ibG9ja2luZyAoKSAmJiAhaXNfY29ubmVj
-dF9wZW5kaW5nICgpICYmCisgICAgICBXU0FHZXRMYXN0RXJyb3IgKCkgPT0g
-V1NBRVdPVUxEQkxPQ0spCisgICAgeworCisgICAgICBXU0FORVRXT1JLRVZF
-TlRTIHNvY2tfZXZlbnQ7CisgICAgICBpbnQgd2FpdF9yZXN1bHQ7CisKKyAg
-ICAgIHdhaXRfcmVzdWx0ID0gV1NBV2FpdEZvck11bHRpcGxlRXZlbnRzICgy
-LCBldiwgRkFMU0UsIFdTQV9JTkZJTklURSwgRkFMU0UpOworCisgICAgICBp
-ZiAod2FpdF9yZXN1bHQgPT0gV1NBX1dBSVRfRVZFTlRfMCkKKyAgICAgICAg
-V1NBRW51bU5ldHdvcmtFdmVudHMgKGdldF9zb2NrZXQgKCksIGV2WzBdLCAm
-c29ja19ldmVudCk7CisKKyAgICAgIC8qIFVuc2V0IGV2ZW50cyBmb3IgY29u
-bmVjdGluZyBzb2NrZXQgYW5kCisgICAgICAgICBzd2l0Y2ggYmFjayB0byBi
-bG9ja2luZyBtb2RlICovCisgICAgICBXU0FFdmVudFNlbGVjdCAoZ2V0X3Nv
-Y2tldCAoKSwgZXZbMF0sIDApOworICAgICAgdW5zaWduZWQgbG9uZyBub25i
-bG9ja2luZyA9IDA7CisgICAgICBpb2N0bHNvY2tldCAoZ2V0X3NvY2tldCAo
-KSwgRklPTkJJTywgJm5vbmJsb2NraW5nKTsKKworICAgICAgc3dpdGNoICh3
-YWl0X3Jlc3VsdCkKKyAgICAgICAgeworICAgICAgICBjYXNlIFdTQV9XQUlU
-X0VWRU5UXzA6CisgICAgICAgICAgaWYgKHNvY2tfZXZlbnQubE5ldHdvcmtF
-dmVudHMgJiBGRF9DT05ORUNUKQorICAgICAgICAgICAgeworICAgICAgICAg
-ICAgICBpZiAoc29ja19ldmVudC5pRXJyb3JDb2RlW0ZEX0NPTk5FQ1RfQklU
-XSkKKyAgICAgICAgICAgICAgICBXU0FTZXRMYXN0RXJyb3IgKHNvY2tfZXZl
-bnQuaUVycm9yQ29kZVtGRF9DT05ORUNUX0JJVF0pOworICAgICAgICAgICAg
-ICBlbHNlCisgICAgICAgICAgICAgICAgcmVzID0gMDsKKyAgICAgICAgICAg
-IH0KKyAgICAgICAgICAvKiBlbHNlOyA6IFNob3VsZCBuZXZlciBoYXBwZW4g
-c2luY2UgRkRfQ09OTkVDVCBpcyB0aGUgb25seQorICAgICAgICAgICAgIGV2
-ZW50IHRoYXQgaGFzIGJlZW4gc2VsZWN0ZWQgKi8KKyAgICAgICAgICBicmVh
-azsKKworICAgICAgICBjYXNlIFdTQV9XQUlUX0VWRU5UXzAgKyAxOgorICAg
-ICAgICAgIGRlYnVnX3ByaW50ZiAoInNpZ25hbCByZWNlaXZlZCBkdXJpbmcg
-Y29ubmVjdCIpOworICAgICAgICAgIFdTQVNldExhc3RFcnJvciAoV1NBRUlO
-UFJPR1JFU1MpOworICAgICAgICAgIGludGVycnVwdGVkID0gVFJVRTsKKyAg
-ICAgICAgICBicmVhazsKKworICAgICAgICBjYXNlIFdTQV9XQUlUX0ZBSUxF
-RDoKKyAgICAgICAgZGVmYXVsdDogLyogU2hvdWxkIG5ldmVyIGhhcHBlbiAq
-LworICAgICAgICAgIFdTQVNldExhc3RFcnJvciAoV1NBRUZBVUxUKTsKKyAg
-ICAgICAgICBicmVhazsKKyAgICAgICAgfQorICAgIH0KKwogICBpZiAocmVz
-KQogICAgIHsKICAgICAgIC8qIFNwZWNpYWwgaGFuZGxpbmcgZm9yIGNvbm5l
-Y3QgdG8gcmV0dXJuIHRoZSBjb3JyZWN0IGVycm9yIGNvZGUKIAkgd2hlbiBj
-YWxsZWQgb24gYSBub24tYmxvY2tpbmcgc29ja2V0LiAqLwotICAgICAgaWYg
-KGlzX25vbmJsb2NraW5nICgpKQorICAgICAgaWYgKGlzX25vbmJsb2NraW5n
-ICgpIHx8IGlzX2Nvbm5lY3RfcGVuZGluZyAoKSkKIAl7CiAJICBEV09SRCBl
-cnIgPSBXU0FHZXRMYXN0RXJyb3IgKCk7CiAJICBpZiAoZXJyID09IFdTQUVX
-T1VMREJMT0NLIHx8IGVyciA9PSBXU0FFQUxSRUFEWSkKQEAgLTQ5Myw2ICs1
-NDYsMTMgQEAgZmhhbmRsZXJfc29ja2V0Ojpjb25uZWN0IChjb25zdCBzdHJ1
-Y3QgcwogICAgIHNldF9jb25uZWN0X3N0YXRlIChDT05ORUNUX1BFTkRJTkcp
-OwogICBlbHNlCiAgICAgc2V0X2Nvbm5lY3Rfc3RhdGUgKENPTk5FQ1RFRCk7
-CisKKyAgaWYgKGV2WzBdICE9IFdTQV9JTlZBTElEX0VWRU5UKQorICAgIFdT
-QUNsb3NlRXZlbnQgKGV2WzBdKTsKKworICBpZiAoaW50ZXJydXB0ZWQpCisg
-ICAgc2V0X2Vycm5vIChFSU5UUik7CisKICAgcmV0dXJuIHJlczsKIH0KIAo=
-
---2789423-20251-1046359226=:314--
+>--- fhandler_socket.cc.org	2003-02-27 16:14:49.000000000 +0100
+>+++ fhandler_socket.cc	2003-02-27 16:15:59.000000000 +0100
+>@@ -431,6 +431,8 @@ out:
+> int
+> fhandler_socket::connect (const struct sockaddr *name, int namelen)
+> {
+>+  WSAEVENT ev[2] = { WSA_INVALID_EVENT, signal_arrived };
+>+  BOOL interrupted = FALSE;
+>   int res = -1;
+>   BOOL secret_check_failed = FALSE;
+>   BOOL in_progress = FALSE;
+>@@ -440,12 +442,63 @@ fhandler_socket::connect (const struct s
+>   if (!get_inet_addr (name, namelen, &sin, &namelen, secret))
+>     return -1;
+> 
+>+  if (!is_nonblocking () && !is_connect_pending ())
+>+    {
+>+      ev[0] = WSACreateEvent ();
+>+      WSAEventSelect (get_socket (), ev[0], FD_CONNECT);
+>+    }
+>+
+>   res = ::connect (get_socket (), (sockaddr *) &sin, namelen);
+>+  if (res && !is_nonblocking () && !is_connect_pending () &&
+>+      WSAGetLastError () == WSAEWOULDBLOCK)
+>+    {
+>+
+>+      WSANETWORKEVENTS sock_event;
+>+      int wait_result;
+>+
+>+      wait_result = WSAWaitForMultipleEvents (2, ev, FALSE, WSA_INFINITE, FALSE);
+>+
+>+      if (wait_result == WSA_WAIT_EVENT_0)
+>+        WSAEnumNetworkEvents (get_socket (), ev[0], &sock_event);
+>+
+>+      /* Unset events for connecting socket and
+>+         switch back to blocking mode */
+>+      WSAEventSelect (get_socket (), ev[0], 0);
+>+      unsigned long nonblocking = 0;
+>+      ioctlsocket (get_socket (), FIONBIO, &nonblocking);
+>+
+>+      switch (wait_result)
+>+        {
+>+        case WSA_WAIT_EVENT_0:
+>+          if (sock_event.lNetworkEvents & FD_CONNECT)
+>+            {
+>+              if (sock_event.iErrorCode[FD_CONNECT_BIT])
+>+                WSASetLastError (sock_event.iErrorCode[FD_CONNECT_BIT]);
+>+              else
+>+                res = 0;
+>+            }
+>+          /* else; : Should never happen since FD_CONNECT is the only
+>+             event that has been selected */
+>+          break;
+>+
+>+        case WSA_WAIT_EVENT_0 + 1:
+>+          debug_printf ("signal received during connect");
+>+          WSASetLastError (WSAEINPROGRESS);
+>+          interrupted = TRUE;
+>+          break;
+>+
+>+        case WSA_WAIT_FAILED:
+>+        default: /* Should never happen */
+>+          WSASetLastError (WSAEFAULT);
+>+          break;
+>+        }
+>+    }
+>+
+>   if (res)
+>     {
+>       /* Special handling for connect to return the correct error code
+> 	 when called on a non-blocking socket. */
+>-      if (is_nonblocking ())
+>+      if (is_nonblocking () || is_connect_pending ())
+> 	{
+> 	  DWORD err = WSAGetLastError ();
+> 	  if (err == WSAEWOULDBLOCK || err == WSAEALREADY)
+>@@ -493,6 +546,13 @@ fhandler_socket::connect (const struct s
+>     set_connect_state (CONNECT_PENDING);
+>   else
+>     set_connect_state (CONNECTED);
+>+
+>+  if (ev[0] != WSA_INVALID_EVENT)
+>+    WSACloseEvent (ev[0]);
+>+
+>+  if (interrupted)
+>+    set_errno (EINTR);
+>+
+>   return res;
+> }
+> 
