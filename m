@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3395-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 25751 invoked by alias); 15 Jan 2003 14:30:19 -0000
+Return-Path: <cygwin-patches-return-3396-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 15275 invoked by alias); 15 Jan 2003 16:34:54 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,94 +7,176 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 25742 invoked from network); 15 Jan 2003 14:30:17 -0000
-Message-ID: <3E2570BD.2582F293@ieee.org>
-Date: Wed, 15 Jan 2003 14:30:00 -0000
-From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
-X-Accept-Language: en,pdf
-MIME-Version: 1.0
+Received: (qmail 15264 invoked from network); 15 Jan 2003 16:34:52 -0000
+Date: Wed, 15 Jan 2003 16:34:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: setuid on Win95 and etc_changed, passwd & group.
-References: <3.0.5.32.20030115001238.00806440@mail.attbi.com> <20030115060939.GB15975@redhat.com>
+Subject: Re: [PATCH] system-cancel part2
+Message-ID: <20030115163540.GF15975@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <Pine.WNT.4.44.0301151113240.93-300000@algeria.intern.net>
+Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-SW-Source: 2003-q1/txt/msg00044.txt.bz2
+Content-Disposition: inline
+In-Reply-To: <Pine.WNT.4.44.0301151113240.93-300000@algeria.intern.net>
+User-Agent: Mutt/1.5.1i
+X-SW-Source: 2003-q1/txt/msg00045.txt.bz2
 
-Christopher Faylor wrote:
+On Wed, Jan 15, 2003 at 12:23:14PM +0100, Thomas Pfaff wrote:
+>
+>This patch will make sure that the signal handlers that are saved in the
+>system call are restored even if the thread got cancelled. Since
+>spawn_guts uses waitpid when mode is _P_WAIT spawn_guts is a cancellation
+>point.
+>
+>Attached is the patch and a new test case.
+>
+>2003-01-15  Thomas Paff  <tpfaff@gmx.net>
+>
+>	* syscalls.cc (struct system_cleanup_args): New struct.
+>	(system_cleanup): New function.
+>	(system): Use pthread_cleanup_push and _pop to save and restore
+>	signal handlers and sigprocmask.
 
-> >During testing I noticed another issue. If etc_changed is initialized
-> >in a parent and /etc/passwd is changed between the moments where a
-> >child is forked and where etc_changed is first called in the child,
-> >etc_changed unexpectedly returns false in the child (WinME).
-> >Not sure how to fix that, short of always rereading the files in
-> >the child (when/if actually accessed).  That would be an OK solution if
-> >we hadn't just copied the data from the parent.  Would it be possible
-> >to store passwd and group in some other heap (from Windows?) that
-> >doesn't get copied?  If that was done, then the etc_changed handle
-> >could be opened as needed instead of being inherited.
+Please do not check this in.  You are changing other parts of the code than the
+pthreads code and I want to study what you've done before you are approved to
+check this in.
+
+In other words, Robert's "as long as you have a test case" only applies to
+trivial changes or changes to pthread.cc, thread.cc, or thread.h.
+
+cgf
+
+>diff -urp src.old/winsup/cygwin/syscalls.cc src/winsup/cygwin/syscalls.cc
+>--- src.old/winsup/cygwin/syscalls.cc	2003-01-14 11:35:51.000000000 +0100
+>+++ src/winsup/cygwin/syscalls.cc	2003-01-15 09:42:04.000000000 +0100
+>@@ -1371,6 +1371,21 @@ done:
+>   return res;
+> }
 > 
-> It may be worse than what you say.  It's possible that there is a huge
-> race here where the parent and child compete for the privilege of each
-> being able to figure out when /etc changed.  I think that if the
-> parent figures out that etc changed, the child will not notice and
-> vice versa.  This is regardless of whether the process is in the
-> middle of forking or not.
+>+struct system_cleanup_args
+>+{
+>+  _sig_func_ptr oldint, oldquit;
+>+  sigset_t old_mask;
+>+};
+>+
+>+static void system_cleanup (void *args)
+>+{
+>+  struct system_cleanup_args *cleanup_args = (struct system_cleanup_args *) args;
+>+
+>+  signal (SIGINT, cleanup_args->oldint);
+>+  signal (SIGQUIT, cleanup_args->oldquit);
+>+  (void) sigprocmask (SIG_SETMASK, &cleanup_args->old_mask, 0);
+>+}  
+>+
+> extern "C" int
+> system (const char *cmdstring)
+> {
+>@@ -1382,23 +1397,25 @@ system (const char *cmdstring)
+>   sigframe thisframe (mainthread);
+>   int res;
+>   const char* command[4];
+>-  _sig_func_ptr oldint, oldquit;
+>-  sigset_t child_block, old_mask;
+>+  struct system_cleanup_args cleanup_args;
+>+  sigset_t child_block;
 > 
-> So, yes, you can easily put this in some other structure.  Just
-> move it out of cygheap entirely and use a global variable that
-> is marked NO_COPY.  Don't do the DuplicateHandle step to mark the
-> file as inheritable.  Then parent and child should both be able
-> to figure out when etc changes.
-
-Yes, this is what I will do.
-The passwd state and the non-inheritable etc_handle will be NO_COPY.
-The handle will be created as needed on first access in a process. 
-In addition forked processes, which may already have a malloced copy
-of passwd, will do a date comparison on first access.
- 
-> >Incidentally while looking at cygheap.cc I noticed that the
-> >+ sizeof (_cmalloc_entry) on line 221 duplicates the one on line
-> >234. I didn't change it in this patch as it is not related to the rest,
-> >but I have run with an abbreviated line 221 for a day.
+>   if (cmdstring == (const char *) NULL)
+> 	return 1;
 > 
-> I'm not sure what you're saying.  Are you saying it's inefficient
-> because it is duplicated?  I don't see anything wrong with the code.
-
-I believe there are 8 unused bytes in every block.
-On line 221 sz is what's asked + 8.
-On line 234 size is sz + 8, or what's asked + 16.
-The header has size 8, the last 8 bytes will never be filled.
-
-> In a similar vein,
+>-  oldint = signal (SIGINT, SIG_IGN);
+>-  oldquit = signal (SIGQUIT, SIG_IGN);
+>+  cleanup_args.oldint = signal (SIGINT, SIG_IGN);
+>+  cleanup_args.oldquit = signal (SIGQUIT, SIG_IGN);
+>   sigemptyset (&child_block);
+>   sigaddset (&child_block, SIGCHLD);
+>-  (void) sigprocmask (SIG_BLOCK, &child_block, &old_mask);
+>+  (void) sigprocmask (SIG_BLOCK, &child_block, &cleanup_args.old_mask);
 > 
-> BOOL isuninitialized () const
->   {
->     if (state == uninitialized)
->       (void) cygheap->etc_changed (me);
->     return (state == uninitialized);
->   }
+>   command[0] = "sh";
+>   command[1] = "-c";
+>   command[2] = cmdstring;
+>   command[3] = (const char *) NULL;
 > 
-> Are both tests for uninitialized necessary?  If not shouldn't it be
-> something like:
+>+  pthread_cleanup_push (system_cleanup, (void *) &cleanup_args);
+>+
+>   if ((res = spawnvp (_P_WAIT, "sh", command)) == -1)
+>     {
+>       // when exec fails, return value should be as if shell
+>@@ -1406,9 +1423,8 @@ system (const char *cmdstring)
+>       res = 127;
+>     }
 > 
-> BOOL isuninitialized () const
->   {
->     if (state != uninitialized)
->       return false;
->     (void) cygheap->etc_changed (me);
->     return true;
->   }
+>-  signal (SIGINT, oldint);
+>-  signal (SIGQUIT, oldquit);
+>-  (void) sigprocmask (SIG_SETMASK, &old_mask, 0);
+>+  pthread_cleanup_pop (1);
+>+
+>   return res;
+> }
+> 
 
-I like functions with a single return, within reason.
-I thought the compiler would be smart enough not to
-test twice.
- 
-> Also, could you explain what this 'me' stuff is wrt etc_changed?
-
-That's to go around the problem outlined in the e-mail. Objects
-accessing etc_changed (for now passwd and group) have an ID (me). 
-When an object discovers that etc has changed, it sets a flag for 
-all *other* objects, telling them that etc has already changed
-(see new code in cygheap.cc).
-
-Pierre
+>/*
+> * File: cancel11.c
+> *
+> * Test Synopsis: Test if system is a cancellation point.
+> *
+> * Test Method (Validation or Falsification):
+> * - 
+> *
+> * Requirements Tested:
+> * -
+> *
+> * Features Tested:
+> * - 
+> *
+> * Cases Tested:
+> * - 
+> *
+> * Description:
+> * - 
+> *
+> * Environment:
+> * - 
+> *
+> * Input:
+> * - None.
+> *
+> * Output:
+> * - File name, Line number, and failed expression on failure.
+> * - No output on success.
+> *
+> * Assumptions:
+> * - have working pthread_create, pthread_cancel, pthread_setcancelstate
+> *   pthread_join
+> *
+> * Pass Criteria:
+> * - Process returns zero exit status.
+> *
+> * Fail Criteria:
+> * - Process returns non-zero exit status.
+> */
+>
+>#include "test.h"
+>
+>static void *Thread(void *punused)
+>{
+>  system ("sleep 10");
+>
+>  return NULL;
+>}
+>
+>int main (void)
+>{
+>  void * result;
+>  pthread_t t;
+>
+>  assert (pthread_create (&t, NULL, Thread, NULL) == 0);
+>  sleep (5);
+>  assert (pthread_cancel (t) == 0);
+>  assert (pthread_join (t, &result) == 0);
+>  assert (result == PTHREAD_CANCELED);
+>
+>  return 0;
+>}
