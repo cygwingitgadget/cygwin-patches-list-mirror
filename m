@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3391-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 29697 invoked by alias); 15 Jan 2003 06:08:56 -0000
+Return-Path: <cygwin-patches-return-3392-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 5283 invoked by alias); 15 Jan 2003 11:23:53 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,93 +7,124 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 29687 invoked from network); 15 Jan 2003 06:08:52 -0000
-Date: Wed, 15 Jan 2003 06:08:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
+Received: (qmail 5271 invoked from network); 15 Jan 2003 11:23:51 -0000
+X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
+Date: Wed, 15 Jan 2003 11:23:00 -0000
+From: Thomas Pfaff <tpfaff@gmx.net>
 To: cygwin-patches@cygwin.com
-Subject: Re: setuid on Win95 and etc_changed, passwd & group.
-Message-ID: <20030115060939.GB15975@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3.0.5.32.20030115001238.00806440@mail.attbi.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3.0.5.32.20030115001238.00806440@mail.attbi.com>
-User-Agent: Mutt/1.5.1i
-X-SW-Source: 2003-q1/txt/msg00040.txt.bz2
+Subject: [PATCH] system-cancel part2
+Message-ID: <Pine.WNT.4.44.0301151113240.93-300000@algeria.intern.net>
+X-X-Sender: pfaff@antarctica.intern.net
+MIME-Version: 1.0
+Content-Type: MULTIPART/MIXED; BOUNDARY="13481890-4402-1042629794=:93"
+X-SW-Source: 2003-q1/txt/msg00041.txt.bz2
 
-On Wed, Jan 15, 2003 at 12:12:38AM -0500, Pierre A. Humblet wrote:
->Hello Corinna,
->
->The following patches affect many files but they are simple.
->They can wait for 1.3.20.
->
->1) On Win95/98/ME, seteuid and setegid now change the uid/gid.
->   Related to that are simplifications in spawn.cc and dcrt0.cc 
->   and plugging a handle leak in uinfo.cc (5 first files).
->2) passwd and group: various cleanup, plus fixing the following
->   scenario that came to light while investigating etc_changed
->   (but it doesn't cause any BSOD):
->   t0: process starts, reads passwd and group
->   t1: user updates /etc/group
->   t2: program calls getpwuid. etc_changed returns TRUE. Timestamp
->       of passwd file is old, no update. OK.
->   t3: program calls getgrgid. etc_changed returns FALSE. 
->       /etc/group is not updated. Bug.
->
->During testing I noticed another issue. If etc_changed is initialized
->in a parent and /etc/passwd is changed between the moments where a 
->child is forked and where etc_changed is first called in the child, 
->etc_changed unexpectedly returns false in the child (WinME).
->Not sure how to fix that, short of always rereading the files in 
->the child (when/if actually accessed).  That would be an OK solution if
->we hadn't just copied the data from the parent.  Would it be possible
->to store passwd and group in some other heap (from Windows?) that
->doesn't get copied?  If that was done, then the etc_changed handle
->could be opened as needed instead of being inherited.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
 
-It may be worse than what you say.  It's possible that there is a huge
-race here where the parent and child compete for the privilege of each
-being able to figure out when /etc changed.  I think that if the
-parent figures out that etc changed, the child will not notice and
-vice versa.  This is regardless of whether the process is in the
-middle of forking or not.
+--13481890-4402-1042629794=:93
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-length: 497
 
-So, yes, you can easily put this in some other structure.  Just
-move it out of cygheap entirely and use a global variable that
-is marked NO_COPY.  Don't do the DuplicateHandle step to mark the
-file as inheritable.  Then parent and child should both be able
-to figure out when etc changes.
 
->Incidentally while looking at cygheap.cc I noticed that the 
->+ sizeof (_cmalloc_entry) on line 221 duplicates the one on line
->234. I didn't change it in this patch as it is not related to the rest, 
->but I have run with an abbreviated line 221 for a day.
+This patch will make sure that the signal handlers that are saved in the
+system call are restored even if the thread got cancelled. Since
+spawn_guts uses waitpid when mode is _P_WAIT spawn_guts is a cancellation
+point.
 
-I'm not sure what you're saying.  Are you saying it's inefficient
-because it is duplicated?  I don't see anything wrong with the code.
+Attached is the patch and a new test case.
 
-In a similar vein, 
+2003-01-15  Thomas Paff  <tpfaff@gmx.net>
 
-BOOL isuninitialized () const
-  {
-    if (state == uninitialized)
-      (void) cygheap->etc_changed (me);
-    return (state == uninitialized);
-  }
+	* syscalls.cc (struct system_cleanup_args): New struct.
+	(system_cleanup): New function.
+	(system): Use pthread_cleanup_push and _pop to save and restore
+	signal handlers and sigprocmask.
 
-Are both tests for uninitialized necessary?  If not shouldn't it be
-something like:
+--13481890-4402-1042629794=:93
+Content-Type: TEXT/plain; name="system-cancel2.patch"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.WNT.4.44.0301151223140.93@algeria.intern.net>
+Content-Description: 
+Content-Disposition: attachment; filename="system-cancel2.patch"
+Content-length: 2644
 
-BOOL isuninitialized () const
-  {
-    if (state != uninitialized)
-      return false;
-    (void) cygheap->etc_changed (me);
-    return true;
-  }
+ZGlmZiAtdXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi9zeXNjYWxscy5jYyBz
+cmMvd2luc3VwL2N5Z3dpbi9zeXNjYWxscy5jYwotLS0gc3JjLm9sZC93aW5z
+dXAvY3lnd2luL3N5c2NhbGxzLmNjCTIwMDMtMDEtMTQgMTE6MzU6NTEuMDAw
+MDAwMDAwICswMTAwCisrKyBzcmMvd2luc3VwL2N5Z3dpbi9zeXNjYWxscy5j
+YwkyMDAzLTAxLTE1IDA5OjQyOjA0LjAwMDAwMDAwMCArMDEwMApAQCAtMTM3
+MSw2ICsxMzcxLDIxIEBAIGRvbmU6CiAgIHJldHVybiByZXM7CiB9CiAKK3N0
+cnVjdCBzeXN0ZW1fY2xlYW51cF9hcmdzCit7CisgIF9zaWdfZnVuY19wdHIg
+b2xkaW50LCBvbGRxdWl0OworICBzaWdzZXRfdCBvbGRfbWFzazsKK307CisK
+K3N0YXRpYyB2b2lkIHN5c3RlbV9jbGVhbnVwICh2b2lkICphcmdzKQorewor
+ICBzdHJ1Y3Qgc3lzdGVtX2NsZWFudXBfYXJncyAqY2xlYW51cF9hcmdzID0g
+KHN0cnVjdCBzeXN0ZW1fY2xlYW51cF9hcmdzICopIGFyZ3M7CisKKyAgc2ln
+bmFsIChTSUdJTlQsIGNsZWFudXBfYXJncy0+b2xkaW50KTsKKyAgc2lnbmFs
+IChTSUdRVUlULCBjbGVhbnVwX2FyZ3MtPm9sZHF1aXQpOworICAodm9pZCkg
+c2lncHJvY21hc2sgKFNJR19TRVRNQVNLLCAmY2xlYW51cF9hcmdzLT5vbGRf
+bWFzaywgMCk7Cit9ICAKKwogZXh0ZXJuICJDIiBpbnQKIHN5c3RlbSAoY29u
+c3QgY2hhciAqY21kc3RyaW5nKQogewpAQCAtMTM4MiwyMyArMTM5NywyNSBA
+QCBzeXN0ZW0gKGNvbnN0IGNoYXIgKmNtZHN0cmluZykKICAgc2lnZnJhbWUg
+dGhpc2ZyYW1lIChtYWludGhyZWFkKTsKICAgaW50IHJlczsKICAgY29uc3Qg
+Y2hhciogY29tbWFuZFs0XTsKLSAgX3NpZ19mdW5jX3B0ciBvbGRpbnQsIG9s
+ZHF1aXQ7Ci0gIHNpZ3NldF90IGNoaWxkX2Jsb2NrLCBvbGRfbWFzazsKKyAg
+c3RydWN0IHN5c3RlbV9jbGVhbnVwX2FyZ3MgY2xlYW51cF9hcmdzOworICBz
+aWdzZXRfdCBjaGlsZF9ibG9jazsKIAogICBpZiAoY21kc3RyaW5nID09IChj
+b25zdCBjaGFyICopIE5VTEwpCiAJcmV0dXJuIDE7CiAKLSAgb2xkaW50ID0g
+c2lnbmFsIChTSUdJTlQsIFNJR19JR04pOwotICBvbGRxdWl0ID0gc2lnbmFs
+IChTSUdRVUlULCBTSUdfSUdOKTsKKyAgY2xlYW51cF9hcmdzLm9sZGludCA9
+IHNpZ25hbCAoU0lHSU5ULCBTSUdfSUdOKTsKKyAgY2xlYW51cF9hcmdzLm9s
+ZHF1aXQgPSBzaWduYWwgKFNJR1FVSVQsIFNJR19JR04pOwogICBzaWdlbXB0
+eXNldCAoJmNoaWxkX2Jsb2NrKTsKICAgc2lnYWRkc2V0ICgmY2hpbGRfYmxv
+Y2ssIFNJR0NITEQpOwotICAodm9pZCkgc2lncHJvY21hc2sgKFNJR19CTE9D
+SywgJmNoaWxkX2Jsb2NrLCAmb2xkX21hc2spOworICAodm9pZCkgc2lncHJv
+Y21hc2sgKFNJR19CTE9DSywgJmNoaWxkX2Jsb2NrLCAmY2xlYW51cF9hcmdz
+Lm9sZF9tYXNrKTsKIAogICBjb21tYW5kWzBdID0gInNoIjsKICAgY29tbWFu
+ZFsxXSA9ICItYyI7CiAgIGNvbW1hbmRbMl0gPSBjbWRzdHJpbmc7CiAgIGNv
+bW1hbmRbM10gPSAoY29uc3QgY2hhciAqKSBOVUxMOwogCisgIHB0aHJlYWRf
+Y2xlYW51cF9wdXNoIChzeXN0ZW1fY2xlYW51cCwgKHZvaWQgKikgJmNsZWFu
+dXBfYXJncyk7CisKICAgaWYgKChyZXMgPSBzcGF3bnZwIChfUF9XQUlULCAi
+c2giLCBjb21tYW5kKSkgPT0gLTEpCiAgICAgewogICAgICAgLy8gd2hlbiBl
+eGVjIGZhaWxzLCByZXR1cm4gdmFsdWUgc2hvdWxkIGJlIGFzIGlmIHNoZWxs
+CkBAIC0xNDA2LDkgKzE0MjMsOCBAQCBzeXN0ZW0gKGNvbnN0IGNoYXIgKmNt
+ZHN0cmluZykKICAgICAgIHJlcyA9IDEyNzsKICAgICB9CiAKLSAgc2lnbmFs
+IChTSUdJTlQsIG9sZGludCk7Ci0gIHNpZ25hbCAoU0lHUVVJVCwgb2xkcXVp
+dCk7Ci0gICh2b2lkKSBzaWdwcm9jbWFzayAoU0lHX1NFVE1BU0ssICZvbGRf
+bWFzaywgMCk7CisgIHB0aHJlYWRfY2xlYW51cF9wb3AgKDEpOworCiAgIHJl
+dHVybiByZXM7CiB9CiAK
 
-Also, could you explain what this 'me' stuff is wrt etc_changed?
+--13481890-4402-1042629794=:93
+Content-Type: TEXT/plain; name="cancel11.c"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.WNT.4.44.0301151223141.93@algeria.intern.net>
+Content-Description: 
+Content-Disposition: attachment; filename="cancel11.c"
+Content-length: 1351
 
-cgf
+LyoKICogRmlsZTogY2FuY2VsMTEuYwogKgogKiBUZXN0IFN5bm9wc2lzOiBU
+ZXN0IGlmIHN5c3RlbSBpcyBhIGNhbmNlbGxhdGlvbiBwb2ludC4KICoKICog
+VGVzdCBNZXRob2QgKFZhbGlkYXRpb24gb3IgRmFsc2lmaWNhdGlvbik6CiAq
+IC0gCiAqCiAqIFJlcXVpcmVtZW50cyBUZXN0ZWQ6CiAqIC0KICoKICogRmVh
+dHVyZXMgVGVzdGVkOgogKiAtIAogKgogKiBDYXNlcyBUZXN0ZWQ6CiAqIC0g
+CiAqCiAqIERlc2NyaXB0aW9uOgogKiAtIAogKgogKiBFbnZpcm9ubWVudDoK
+ICogLSAKICoKICogSW5wdXQ6CiAqIC0gTm9uZS4KICoKICogT3V0cHV0Ogog
+KiAtIEZpbGUgbmFtZSwgTGluZSBudW1iZXIsIGFuZCBmYWlsZWQgZXhwcmVz
+c2lvbiBvbiBmYWlsdXJlLgogKiAtIE5vIG91dHB1dCBvbiBzdWNjZXNzLgog
+KgogKiBBc3N1bXB0aW9uczoKICogLSBoYXZlIHdvcmtpbmcgcHRocmVhZF9j
+cmVhdGUsIHB0aHJlYWRfY2FuY2VsLCBwdGhyZWFkX3NldGNhbmNlbHN0YXRl
+CiAqICAgcHRocmVhZF9qb2luCiAqCiAqIFBhc3MgQ3JpdGVyaWE6CiAqIC0g
+UHJvY2VzcyByZXR1cm5zIHplcm8gZXhpdCBzdGF0dXMuCiAqCiAqIEZhaWwg
+Q3JpdGVyaWE6CiAqIC0gUHJvY2VzcyByZXR1cm5zIG5vbi16ZXJvIGV4aXQg
+c3RhdHVzLgogKi8KCiNpbmNsdWRlICJ0ZXN0LmgiCgpzdGF0aWMgdm9pZCAq
+VGhyZWFkKHZvaWQgKnB1bnVzZWQpCnsKICBzeXN0ZW0gKCJzbGVlcCAxMCIp
+OwoKICByZXR1cm4gTlVMTDsKfQoKaW50IG1haW4gKHZvaWQpCnsKICB2b2lk
+ICogcmVzdWx0OwogIHB0aHJlYWRfdCB0OwoKICBhc3NlcnQgKHB0aHJlYWRf
+Y3JlYXRlICgmdCwgTlVMTCwgVGhyZWFkLCBOVUxMKSA9PSAwKTsKICBzbGVl
+cCAoNSk7CiAgYXNzZXJ0IChwdGhyZWFkX2NhbmNlbCAodCkgPT0gMCk7CiAg
+YXNzZXJ0IChwdGhyZWFkX2pvaW4gKHQsICZyZXN1bHQpID09IDApOwogIGFz
+c2VydCAocmVzdWx0ID09IFBUSFJFQURfQ0FOQ0VMRUQpOwoKICByZXR1cm4g
+MDsKfQo=
+
+--13481890-4402-1042629794=:93--
