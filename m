@@ -1,60 +1,153 @@
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: [PATCH] Make fiber functions "external __inline"
-Date: Sun, 08 Apr 2001 17:52:00 -0000
-Message-id: <20010408205211.A23411@redhat.com>
-X-SW-Source: 2001-q2/msg00017.html
+From: "Michael A. Chase" <mchase@ix.netcom.com>
+To: <cygwin-patches@cygwin.com>
+Subject: [PATCH]Change mount utility to write commands (TODO 20000704.101353)
+Date: Sun, 08 Apr 2001 20:26:00 -0000
+Message-id: <002201c0c0a4$b16771d0$f930273f@ca.boeing.com>
+X-SW-Source: 2001-q2/msg00018.html
+Content-type: multipart/mixed; boundary="----------=_1583532847-65438-36"
 
-The recent changes to the fiber functions in winnt.h cause inclusion of
-the inline assembler code in any file which includes winnt.h.  The patch
-below fixes this.
+This is a multi-part message in MIME format...
 
-I also changed the multi-line string to include a \n\ at the end of
-every line since newer gcc's complain about multi-line strings otherwise
-(sic).
+------------=_1583532847-65438-36
+Content-length: 408
 
-cgf
+The patch to winsup/utils/mount.cc adds function mount_commands().  The
+resulting output works with the new mount and the one in the current binary
+distribution both as a shell script and as a batch file.
 
-Sun Apr  8 20:48:01 2001  Christopher Faylor <cgf@cygnus.com>
+I noticed that mount and umount don't include the help option, so I added it
+to both.
+--
+Mac :})
+Give a hobbit a fish and he'll eat fish for a day.
+Give a hobbit a ring and he'll eat fish for an age.
 
-	* include/winnt.h (GetCurrentFiber): Make "external __inline" or asm
-	code will be included in every module which includes this header.
-	(GetFiberData): Ditto.
 
-Index: include/winnt.h
-===================================================================
-RCS file: /cvs/uberbaum/winsup/w32api/include/winnt.h,v
-retrieving revision 1.18
-diff -u -p -r1.18 winnt.h
---- winnt.h     2001/04/08 17:00:27     1.18
-+++ winnt.h     2001/04/09 00:47:51
-@@ -2499,22 +2499,22 @@ typedef struct _REPARSE_POINT_INFORMATIO
-	WORD   ReparseDataLength;
-	WORD   UnparsedNameLength;
- } REPARSE_POINT_INFORMATION, *PREPARSE_POINT_INFORMATION;
--__inline PVOID GetCurrentFiber(void)
-+extern __inline PVOID GetCurrentFiber(void)
- {
-     void* ret;
--    __asm__ volatile ("
--             movl      %%fs:0x10,%0
--             movl      (%0),%0
-+    __asm__ volatile ("\n\
-+             movl      %%fs:0x10,%0\n\
-+             movl      (%0),%0\n\
-	      " : "=r" (ret) /* allow use of reg eax, ebx, ecx, edx, esi, edi */
-		:
-	      );
-     return ret;
- }
--__inline PVOID GetFiberData(void)
-+extern __inline PVOID GetFiberData(void)
- {
-     void* ret;
--    __asm__ volatile ("
--             movl      %%fs:0x10,%0
-+    __asm__ volatile ("\n\
-+             movl      %%fs:0x10,%0\n\
-	      " : "=r" (ret) /* allow use of reg eax,ebx,ecx,edx,esi,edi */
-		:
-		);
+
+------------=_1583532847-65438-36
+Content-Type: text/plain; charset=us-ascii;
+ name="ChangeLog-winsup-utils-mac-1"
+Content-Disposition: inline; filename="ChangeLog-winsup-utils-mac-1"
+Content-Transfer-Encoding: base64
+Content-Length: 379
+
+MjAwMS0wNC0wOCAgTWljaGFlbCBBIENoYXNlIDxtY2hhc2VAaXgubmV0Y29t
+LmNvbT4KCiAgICAqIHVtb3VudC5jYyAobG9uZ29wdHMpOiBBZGQgaGVscCB0
+byBvcHRpb25zIGxpc3QuCiAgICAqIG1vdW50LmNjIChsb25nb3B0cyk6IEFk
+ZCBoZWxwIGFuZCBtb3VudC1jb21tYW5kcyB0byBvcHRpb25zIGxpc3QuCiAg
+ICAgICAgICAgICAgICh1c2FnZSk6IEFkZCBvcHRpb24gbW91bnQtY29tbWFu
+ZHMuCiAgICAgICAgICAgICAgIChtb3VudF9jb21tYW5kcyk6IEFkZCBmdW5j
+dGlvbi4KCg==
+
+------------=_1583532847-65438-36
+Content-Type: text/x-diff; charset=us-ascii; name="mount.cc-patch"
+Content-Disposition: inline; filename="mount.cc-patch"
+Content-Transfer-Encoding: base64
+Content-Length: 5173
+
+LS0tIG1vdW50LmNjLTAJVGh1IEFwciAgNSAwOTo0MDo1MyAyMDAxCisrKyBt
+b3VudC5jYwlTdW4gQXByICA4IDE2OjM2OjU0IDIwMDEKQEAgLTIyLDYgKzIy
+LDcgQEAgZGV0YWlscy4gKi8KICNlbmRpZgogI2luY2x1ZGUgPGVycm5vLmg+
+CiAKK3N0YXRpYyB2b2lkIG1vdW50X2NvbW1hbmRzICh2b2lkKTsKIHN0YXRp
+YyB2b2lkIHNob3dfbW91bnRzICh2b2lkKTsKIHN0YXRpYyB2b2lkIHNob3df
+Y3lnZHJpdmVfaW5mbyAodm9pZCk7CiBzdGF0aWMgdm9pZCBjaGFuZ2VfY3ln
+ZHJpdmVfcHJlZml4IChjb25zdCBjaGFyICpuZXdfcHJlZml4LCBpbnQgZmxh
+Z3MpOwpAQCAtODcsNiArODgsNyBAQCBkb19tb3VudCAoY29uc3QgY2hhciAq
+ZGV2LCBjb25zdCBjaGFyICp3CiAKIHN0cnVjdCBvcHRpb24gbG9uZ29wdHNb
+XSA9CiB7CisgIHsiaGVscCIsIG5vX2FyZ3VtZW50LCBOVUxMLCAnaCcgfSwK
+ICAgeyJiaW5hcnkiLCBub19hcmd1bWVudCwgTlVMTCwgJ2InfSwKICAgeyJm
+b3JjZSIsIG5vX2FyZ3VtZW50LCBOVUxMLCAnZid9LAogICB7InN5c3RlbSIs
+IG5vX2FyZ3VtZW50LCBOVUxMLCAncyd9LApAQCAtOTcsMTAgKzk5LDExIEBA
+IHN0cnVjdCBvcHRpb24gbG9uZ29wdHNbXSA9CiAgIHsiY3lnd2luLWV4ZWN1
+dGFibGUiLCBub19hcmd1bWVudCwgTlVMTCwgJ1gnfSwKICAgeyJzaG93LWN5
+Z2RyaXZlLXByZWZpeCIsIG5vX2FyZ3VtZW50LCBOVUxMLCAncCd9LAogICB7
+ImltcG9ydC1vbGQtbW91bnRzIiwgbm9fYXJndW1lbnQsIE5VTEwsICdpJ30s
+CisgIHsibW91bnQtY29tbWFuZHMiLCBub19hcmd1bWVudCwgTlVMTCwgJ20n
+fSwKICAge05VTEwsIDAsIE5VTEwsIDB9CiB9OwogCi1jaGFyIG9wdHNbXSA9
+ICJiZnN0dXhYcGljIjsKK2NoYXIgb3B0c1tdID0gImhiZnN0dXhYcGljbSI7
+CiAKIHN0YXRpYyB2b2lkCiB1c2FnZSAodm9pZCkKQEAgLTEyMCw2ICsxMjMs
+OCBAQCB1c2FnZSAodm9pZCkKICAgLXgsIC0tZXhlY3V0YWJsZSAgICAgICAg
+ICAgICAgdHJlYXQgYWxsIGZpbGVzIHVuZGVyIG1vdW50IHBvaW50IGFzIGV4
+ZWN1dGFibGVzXG5cCiAgIC1YLCAtLWN5Z3dpbi1leGVjdXRhYmxlICAgICAg
+IHRyZWF0IGFsbCBmaWxlcyB1bmRlciBtb3VudCBwb2ludCBhcyBjeWd3aW5c
+blwKIAkJCQlleGVjdXRhYmxlc1xuXAorICAtbSwgLS1tb3VudC1jb21tYW5k
+cyAgICAgICAgICB3cml0ZSBtb3VudCBjb21tYW5kcyB0byByZXBsYWNlIHVz
+ZXIgYW5kXG5cCisgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN5
+c3RlbSBtb3VudCBwb2ludHMgYW5kIGN5Z2RyaXZlIHByZWZpeGVzXG5cCiAi
+LCBwcm9nbmFtZSk7CiAgIGV4aXQgKDEpOwogfQpAQCAtMTM0LDcgKzEzOSw4
+IEBAIG1haW4gKGludCBhcmdjLCBjaGFyICoqYXJndikKICAgICBuYWRhLAog
+ICAgIHNhd19jaGFuZ2VfY3lnZHJpdmVfcHJlZml4LAogICAgIHNhd19pbXBv
+cnRfb2xkX21vdW50cywKLSAgICBzYXdfc2hvd19jeWdkcml2ZV9wcmVmaXgK
+KyAgICBzYXdfc2hvd19jeWdkcml2ZV9wcmVmaXgsCisgICAgc2F3X21vdW50
+X2NvbW1hbmRzCiAgIH0gZG9fd2hhdCA9IG5hZGE7CiAKICAgcHJvZ25hbWUg
+PSBhcmd2WzBdOwpAQCAtMTg3LDYgKzE5MywxMiBAQCBtYWluIChpbnQgYXJn
+YywgY2hhciAqKmFyZ3YpCiAgICAgICBjYXNlICd4JzoKIAlmbGFncyB8PSBN
+T1VOVF9FWEVDOwogCWJyZWFrOworICAgICAgY2FzZSAnbSc6CisJaWYgKGRv
+X3doYXQgPT0gbmFkYSkKKwkgIGRvX3doYXQgPSBzYXdfbW91bnRfY29tbWFu
+ZHM7CisJZWxzZQorCSAgdXNhZ2UgKCk7CisJYnJlYWs7CiAgICAgICBkZWZh
+dWx0OgogCXVzYWdlICgpOwogICAgICAgfQpAQCAtMjEwLDYgKzIyMiwxMSBA
+QCBtYWluIChpbnQgYXJnYywgY2hhciAqKmFyZ3YpCiAJdXNhZ2UgKCk7CiAg
+ICAgICBzaG93X2N5Z2RyaXZlX2luZm8gKCk7CiAgICAgICBicmVhazsKKyAg
+ICBjYXNlIHNhd19tb3VudF9jb21tYW5kczoKKyAgICAgIGlmIChvcHRpbmQg
+PD0gYXJnYykKKwl1c2FnZSAoKTsKKyAgICAgIG1vdW50X2NvbW1hbmRzICgp
+OworICAgICAgYnJlYWs7CiAgICAgZGVmYXVsdDoKICAgICAgIGlmIChvcHRp
+bmQgIT0gKGFyZ2MgLSAxKSkKIAl7CkBAIC0yMjcsNiArMjQ0LDYyIEBAIG1h
+aW4gKGludCBhcmdjLCBjaGFyICoqYXJndikKIAogICAvKiBOT1RSRUFDSEVE
+ICovCiAgIHJldHVybiAwOworfQorCitzdGF0aWMgdm9pZAorbW91bnRfY29t
+bWFuZHMgKHZvaWQpCit7CisgIEZJTEUgKm0gPSBzZXRtbnRlbnQgKCIvLW5v
+dC11c2VkLSIsICJyIik7CisgIHN0cnVjdCBtbnRlbnQgKnA7CisgIGNoYXIg
+KmM7CisgIGNvbnN0IGNoYXIgKmZvcm1hdF9tbnQgPSAibW91bnQlcyBcIiVz
+XCIgXCIlc1wiXG4iOworICBjb25zdCBjaGFyICpmb3JtYXRfY3lnID0gIm1v
+dW50JXMgLS1jaGFuZ2UtY3lnZHJpdmUtcHJlZml4IFwiJXNcIlxuIjsKKyAg
+Y2hhciBvcHRzW01BWF9QQVRIXTsKKyAgY2hhciB1c2VyW01BWF9QQVRIXTsK
+KyAgY2hhciBzeXN0ZW1bTUFYX1BBVEhdOworICBjaGFyIHVzZXJfZmxhZ3Nb
+TUFYX1BBVEhdOworICBjaGFyIHN5c3RlbV9mbGFnc1tNQVhfUEFUSF07CisK
+KyAgLy8gd3JpdGUgbW91bnQgY29tbWFuZHMgZm9yIHVzZXIgYW5kIHN5c3Rl
+bSBtb3VudCBwb2ludHMKKyAgd2hpbGUgKChwID0gZ2V0bW50ZW50IChtKSkg
+IT0gTlVMTCkgeworICAgIHN0cmNweShvcHRzLCAiIC1mIik7CisgICAgaWYg
+ICAgICAocC0+bW50X3R5cGVbMF0gPT0gJ3UnKQorICAgICAgc3RyY2F0IChv
+cHRzLCAiIC11Iik7CisgICAgZWxzZSBpZiAocC0+bW50X3R5cGVbMF0gPT0g
+J3MnKQorICAgICAgc3RyY2F0IChvcHRzLCAiIC1zIik7CisgICAgaWYgICAg
+ICAocC0+bW50X29wdHNbMF0gPT0gJ2InKQorICAgICAgc3RyY2F0IChvcHRz
+LCAiIC1iIik7CisgICAgZWxzZSBpZiAocC0+bW50X29wdHNbMF0gPT0gJ3Qn
+KQorICAgICAgc3RyY2F0IChvcHRzLCAiIC10Iik7CisgICAgaWYgKHN0cnN0
+ciAocC0+bW50X29wdHMsICIsZXhlYyIpKQorICAgICAgc3RyY2F0IChvcHRz
+LCAiIC14Iik7CisgICAgd2hpbGUgKChjID0gc3RyY2hyIChwLT5tbnRfZnNu
+YW1lLCAnXFwnKSkgIT0gTlVMTCkKKyAgICAgICpjID0gJy8nOworICAgIHBy
+aW50ZiAoZm9ybWF0X21udCwgb3B0cywgcC0+bW50X2ZzbmFtZSwgcC0+bW50
+X2Rpcik7CisgIH0KKyAgZW5kbW50ZW50IChtKTsKKworICAvLyB3cml0ZSBt
+b3VudCBjb21tYW5kcyBmb3IgY3lnZHJpdmUgcHJlZml4ZXMKKyAgY3lnd2lu
+X2ludGVybmFsIChDV19HRVRfQ1lHRFJJVkVfSU5GTywgdXNlciwgc3lzdGVt
+LCB1c2VyX2ZsYWdzLAorCQkgICBzeXN0ZW1fZmxhZ3MpOworICBpZiAoc3Ry
+bGVuICh1c2VyKSA+IDApIHsKKyAgICBzdHJjcHkgKG9wdHMsICIgICAiKTsK
+KyAgICBpZiAgICAgICh1c2VyX2ZsYWdzWzBdID09ICdiJykKKyAgICAgIHN0
+cmNhdCAob3B0cywgIiAtYiIpOworICAgIGVsc2UgaWYgKHVzZXJfZmxhZ3Nb
+MF0gPT0gJ3QnKQorICAgICAgc3RyY2F0IChvcHRzLCAiIC10Iik7CisgICAg
+cHJpbnRmIChmb3JtYXRfY3lnLCBvcHRzLCB1c2VyKTsKKyAgfQorICBpZiAo
+c3RybGVuIChzeXN0ZW0pID4gMCkgeworICAgIHN0cmNweSAob3B0cywgIiAt
+cyIpOworICAgIGlmICAgICAgKHN5c3RlbV9mbGFnc1swXSA9PSAnYicpCisg
+ICAgICBzdHJjYXQgKG9wdHMsICIgLWIiKTsKKyAgICBlbHNlIGlmIChzeXN0
+ZW1fZmxhZ3NbMF0gPT0gJ3QnKQorICAgICAgc3RyY2F0IChvcHRzLCAiIC10
+Iik7CisgICAgcHJpbnRmIChmb3JtYXRfY3lnLCBvcHRzLCBzeXN0ZW0pOwor
+ICB9CisKKyAgZXhpdCgwKTsKIH0KIAogc3RhdGljIHZvaWQK
+
+------------=_1583532847-65438-36
+Content-Type: text/x-diff; charset=us-ascii; name="umount.cc-patch"
+Content-Disposition: inline; filename="umount.cc-patch"
+Content-Transfer-Encoding: base64
+Content-Length: 692
+
+LS0tIHVtb3VudC5jYy0wCVN1biBBcHIgIDggMTY6NDE6MDcgMjAwMQorKysg
+dW1vdW50LmNjCVN1biBBcHIgIDggMTY6Mzk6NDggMjAwMQpAQCAtMjUsNiAr
+MjUsNyBAQCBzdGF0aWMgY29uc3QgY2hhciAqcHJvZ25hbWU7CiAKIHN0cnVj
+dCBvcHRpb24gbG9uZ29wdHNbXSA9CiB7CisgIHsiaGVscCIsIG5vX2FyZ3Vt
+ZW50LCBOVUxMLCAnaCcgfSwKICAgeyJyZW1vdmUtYWxsLW1vdW50cyIsIG5v
+X2FyZ3VtZW50LCBOVUxMLCAnQSd9LAogICB7InJlbW92ZS1jeWdkcml2ZS1w
+cmVmaXgiLCBub19hcmd1bWVudCwgTlVMTCwgJ2MnfSwKICAgeyJyZW1vdmUt
+c3lzdGVtLW1vdW50cyIsIG5vX2FyZ3VtZW50LCBOVUxMLCAnUyd9LApAQCAt
+MzQsNyArMzUsNyBAQCBzdHJ1Y3Qgb3B0aW9uIGxvbmdvcHRzW10gPQogICB7
+TlVMTCwgMCwgTlVMTCwgMH0KIH07CiAKLWNoYXIgb3B0c1tdID0gIlJTVXN1
+YyI7CitjaGFyIG9wdHNbXSA9ICJoUlNVc3VjIjsKIAogc3RhdGljIHZvaWQK
+IHVzYWdlICh2b2lkKQo=
+
+------------=_1583532847-65438-36--
