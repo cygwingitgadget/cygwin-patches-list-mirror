@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5336-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 26355 invoked by alias); 7 Feb 2005 21:37:38 -0000
+Return-Path: <cygwin-patches-return-5337-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 25602 invoked by alias); 8 Feb 2005 06:32:05 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,71 +7,32 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 26331 invoked from network); 7 Feb 2005 21:37:34 -0000
-Received: from unknown (HELO pmesmtp02.mci.com) (199.249.20.2)
-  by sourceware.org with SMTP; 7 Feb 2005 21:37:34 -0000
-Received: from pmismtp02.mcilink.com ([166.38.62.37])
- by firewall.wcom.com (Iplanet MTA 5.2)
- with ESMTP id <0IBK008589EM7H@firewall.wcom.com> for
- cygwin-patches@cygwin.com; Mon, 07 Feb 2005 21:37:34 +0000 (GMT)
-Received: from pmismtp02.mcilink.com by pmismtp02.mcilink.com
- (iPlanet Messaging Server 5.2 HotFix 1.14 (built Mar 18 2003))
- with SMTP id <0IBK009019993U@pmismtp02.mcilink.com> for
- cygwin-patches@cygwin.com; Mon, 07 Feb 2005 21:37:34 +0000 (GMT)
-Received: from WS117V6220509.mcilink.com ([166.34.133.100])
- by pmismtp02.mcilink.com
- (iPlanet Messaging Server 5.2 HotFix 1.14 (built Mar 18 2003))
- with ESMTP id <0IBK008D09EKWQ@pmismtp02.mcilink.com> for
- cygwin-patches@cygwin.com; Mon, 07 Feb 2005 21:37:32 +0000 (GMT)
-Date: Mon, 07 Feb 2005 21:37:00 -0000
-From: Mark Paulus <mark.paulus@mci.com>
-Subject: Re: patch to allow touch to work on HPFS (and others, maybe??)
-In-reply-to: <20050207171925.GG19096@cygbert.vinschen.de>
-To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Message-id: <0IBK008D19EKWQ@pmismtp02.mcilink.com>
-MIME-version: 1.0
-Content-type: text/plain; charset=iso-8859-1
-Content-transfer-encoding: 7bit
-Priority: Normal
-X-SW-Source: 2005-q1/txt/msg00039.txt.bz2
+Received: (qmail 24811 invoked from network); 8 Feb 2005 06:31:52 -0000
+Received: from unknown (HELO pop-a065d19.pas.sa.earthlink.net) (207.217.121.253)
+  by sourceware.org with SMTP; 8 Feb 2005 06:31:52 -0000
+Received: from user-2inieig.dialup.mindspring.com ([165.121.58.80] helo=efn.org)
+	by pop-a065d19.pas.sa.earthlink.net with smtp (Exim 3.33 #1)
+	id 1CyOud-0001MC-00
+	for cygwin-patches@cygwin.com; Mon, 07 Feb 2005 22:31:51 -0800
+Received: by efn.org (sSMTP sendmail emulation); Mon, 7 Feb 2005 22:31:57 -0800
+Date: Tue, 08 Feb 2005 06:32:00 -0000
+From: Yitzchak Scott-Thoennes <sthoenna@efn.org>
+To: cygwin-patches@cygwin.com
+Subject: Re: gethostbyname() problem?
+Message-ID: <20050208063157.GC3096@efn.org>
+References: <200502051240.j15CevQ32345@webmail.web-mania.com> <4205D6D1.70D38D40@dessent.net> <20050206110530.GR19096@cygbert.vinschen.de> <20050206230129.GA3512@efn.org> <20050206234458.GA2425@trixie.casa.cgf.cx> <20050207055347.GA2248@efn.org> <20050207061313.GA7852@trixie.casa.cgf.cx> <20050207093823.GV19096@cygbert.vinschen.de>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20050207093823.GV19096@cygbert.vinschen.de>
+User-Agent: Mutt/1.4.1i
+Organization: bs"d
+X-SW-Source: 2005-q1/txt/msg00040.txt.bz2
 
-So, what it really seems to boil down to is 
-for those filesystems that support doing timestamp 
-updating via FILE_WRITE_ATTRIBUTES (NTFS systems)
-we should use FILE_WRITE_ATTRIBUTES, and for those that
-don't (HPFS, etc), they should use GENERIC_WRITE?
+On Mon, Feb 07, 2005 at 10:38:23AM +0100, Corinna Vinschen wrote:
+> I like it, but it's a bit over the border for a trivial patch.  I'd be
+> willing to let slip this through, though.  Yitzchak, any plans to send
+> a copyright assignment form to Red Hat?  That would be nice and would
+> keep me from further ticking off. ;-)
 
-Unfortunately, during my brief perusal of MSDN, I didn't see
-an easy way to determine the file system type.  
-
-I also see from the message you quoted that ntsec comes 
-into play, but I think it still goes back to the filesystem, since
-I have ntsec set, and the touch works on my box (using NTFS,
-on our PDS shares (also running NTFS, I assume), but not
-on my OS2/HPFS box.
-
-On Mon, 07 Feb 2005 18:19:25 +0100, Corinna Vinschen wrote:
-
->On Feb  7 09:34, Mark Paulus wrote:
->> Attached is a patch that works to allow me to do a 
->> touch on my mounted HPFS filesystem.  I'm not sure
->> about clearcase, or others, but it works on HPFS and
->> NTFS. 
->> 
->> 	* times.cc: Use GENERIC_WRITE instead of FILE_WRITE_ATTRIBUTES.
-
->That's reverting a more than three years old patch.  Please read
->http://cygwin.com/ml/cygwin/2001-08/msg00666.html which explains why
->opening with GENERIC_WRITE is not generally a good idea.  If you want
->to get it working for HPFS or whatever, use the FS flags present in
->the local path_conv variable called win32 to conditionalize the call.
-
-
->Corinna
-
->-- 
->Corinna Vinschen                  Please, send mails regarding Cygwin to
->Cygwin Project Co-Leader          mailto:cygwin@cygwin.com
->Red Hat, Inc.
-
-
+Will do.
