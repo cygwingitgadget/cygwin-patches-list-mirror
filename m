@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1484-listarch-cygwin-patches=sourceware.cygnus.com@sources.redhat.com>
-Received: (qmail 28104 invoked by alias); 13 Nov 2001 05:22:22 -0000
+Return-Path: <cygwin-patches-return-1485-listarch-cygwin-patches=sourceware.cygnus.com@sources.redhat.com>
+Received: (qmail 28704 invoked by alias); 13 Nov 2001 10:44:20 -0000
 Mailing-List: contact cygwin-patches-help@sourceware.cygnus.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@sources.redhat.com>
@@ -7,46 +7,54 @@ List-Post: <mailto:cygwin-patches@sources.redhat.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@sources.redhat.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@sources.redhat.com
-Received: (qmail 28043 invoked from network); 13 Nov 2001 05:22:12 -0000
-Date: Mon, 08 Oct 2001 16:30:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: patch to mkpasswd.c - allows selection of specific user
-Message-ID: <20011113052214.GA27481@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <FB7B5F146C8CD5118E0D00306E005CDA02EA5F@AP-CAN-MAIL01>
+Received: (qmail 28641 invoked from network); 13 Nov 2001 10:44:17 -0000
+Date: Mon, 08 Oct 2001 18:59:00 -0000
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
+To: "'cygwin-patches@cygwin.com'" <cygwin-patches@cygwin.com>
+Subject: Re: mkpasswd support for current user option (-c)
+Message-ID: <20011113114407.A19495@cygbert.vinschen.de>
+Mail-Followup-To: "'cygwin-patches@cygwin.com'" <cygwin-patches@cygwin.com>
+References: <FB7B5F146C8CD5118E0D00306E005CDA02EA5D@AP-CAN-MAIL01>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <FB7B5F146C8CD5118E0D00306E005CDA02EA5F@AP-CAN-MAIL01>
-User-Agent: Mutt/1.3.23.1i
-X-SW-Source: 2001-q4/txt/msg00016.txt.bz2
+User-Agent: Mutt/1.2.5i
+In-Reply-To: <FB7B5F146C8CD5118E0D00306E005CDA02EA5D@AP-CAN-MAIL01>; from mathew.boorman@au.cmg.com on Tue, Nov 13, 2001 at 02:05:52PM +1100
+X-SW-Source: 2001-q4/txt/msg00017.txt.bz2
 
-On Tue, Nov 13, 2001 at 04:02:32PM +1100, Mathew Boorman wrote:
->Darn, now I'm told about Marks patch!
->Anyway, onward...
->
->Mark Bradshaw:
->
->>@@ -135,6 +145,7 @@ enum_users (LPWSTR servername, int print
->> 	default:
->> 	  fprintf (stderr, "NetUserEnum() failed with %ld\n", rc);
->>+	  if ( rc == 2221 ) printf("That user doesn't appear to exist.\n");
->
->The appropriate error codes are in <lmerr.h> around, I noted some were
->slightly different in name though.
->I believe this message should go to stderr anyway, otherwise you would end
->up with a polluted /etc/passwd file.
+Sorry, but your patch is not against the latest version of mkpasswd.cc
+in the CVS repository.  The headline of your patch contains a 
+`cygwin-1.3.3-2' directory... mkpasswd.cc has been changed a lot since
+then.
 
-Oops.  This points out a couple of problems that I didn't notice before.
+Btw., you shouldn't cut-n-paste a diff into your mail client but
+instead either add it as an attachment or e.g in vim use `:r filename'.
+The below patch is broken (tabs/line breaks).
 
-1) Never use a raw number like the above, as Mathew has said.
+Corinna
 
-2) This is not the correct format for an if statement.  You aren't adhering
-   to the GNU formatting conventions.  Please use the formatting of the
-   code that you are patching.  This is good advice for whatever project
-   you are on.
+On Tue, Nov 13, 2001 at 02:05:52PM +1100, Mathew Boorman wrote:
+> 2001-11-13  Mathew Boorman  <mathew.boorman@au.cmg.com>
+> 
+> 	* mkpasswd.c (load_netapi) Add dll entry points to determine current
+> user.
+> 	Used explicit cast to avoid warnings.
+> 	(psx_dir) Fixed const-ness of parameter.
+> 	(uni2ansi) dito.
+> 	(ansi2uni) New function.
+>       (print_user_info) New function refactored from enum_users.
+>       (enum_users) Use new function print_user_info.
+> 	(print_current_user_info) New function.
+> 	(usage) Add current user option.
+> 	(main) Add suport for current user option.
+> 
+> 
+> 
+> --- /usr/src/cygwin-1.3.3-2/winsup/utils/mkpasswd.c	Thu Sep  6 12:38:49
+> 2001
+> [...]
 
-Thanks,
-cgf
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
