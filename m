@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2159-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 3037 invoked by alias); 7 May 2002 13:20:39 -0000
+Return-Path: <cygwin-patches-return-2160-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 6793 invoked by alias); 8 May 2002 01:45:45 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,57 +7,110 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 3002 invoked from network); 7 May 2002 13:20:35 -0000
-Date: Tue, 07 May 2002 06:20:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygpatch <cygwin-patches@cygwin.com>
-Subject: Re: automatic TZ in non-english windows
-Message-ID: <20020507152034.A26255@cygbert.vinschen.de>
-Mail-Followup-To: cygpatch <cygwin-patches@cygwin.com>
-References: <20020506120908.I9238@cygbert.vinschen.de> <000201c1f52f$18bb9860$010115ac@NEXUS>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000201c1f52f$18bb9860$010115ac@NEXUS>
-User-Agent: Mutt/1.3.22.1i
-X-SW-Source: 2002-q2/txt/msg00143.txt.bz2
+Received: (qmail 6772 invoked from network); 8 May 2002 01:45:43 -0000
+Date: Tue, 07 May 2002 18:45:00 -0000
+From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+X-X-Sender: joshua@iocc.com
+To: cygwin-patches@cygwin.com
+Subject: dumper.exe help/version patch
+Message-ID: <Pine.CYG.4.44.0205072043540.1100-200000@iocc.com>
+MIME-Version: 1.0
+Content-Type: MULTIPART/MIXED; BOUNDARY="-559023410-8644534-1020822343=:1100"
+X-SW-Source: 2002-q2/txt/msg00144.txt.bz2
 
-On Mon, May 06, 2002 at 02:51:55PM -0400, Norbert Schulze wrote:
-> > What I'd like to see is just a bit more of an
-> > explanation why the patch is needed.  Especially two points,
-> > where in the common standards did you find that a timezone
-> > string must be three chars to be valid and could you give
-> > an example what else is stored at that point in non-english
-> > OSes?
-> 
-> excerpt from http://www.opengroup.org/onlinepubs/007908799/xbd/envvar.html
-> [...]
-> In a non-english windows these members may have values like: (e.g. german)
-> 
-> Eastern Normalzeit
-> Eastern Sommerzeit
-> Pazifik Normalzeit
-> Pazifik Sommerzeit
-> Westeuropaische Normalzeit
-> Westeuropaische Sommerzeit
-> 
-> and the computed values are:
-> 
-> EN
-> ES
-> PN
-> PS
-> WN
-> WS
-> 
-> As you can see all values are invalid and incorrect timezone names.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
 
-Thanks for the description.  I've commited your patch.
+---559023410-8644534-1020822343=:1100
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-length: 687
 
-Thanks,
-Corinna
+Can someone apply this patch? There were no objections to it but it seems
+to have been left sitting around. Egor approved it here:
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+http://cygwin.com/ml/cygwin-patches/2002-q1/msg00323.html
+
+The 'exit (status);' calls can be changed to 'return status;' if desired,
+but this is the exact patch Egor has looked at. I only changed the date
+on the ChangeLog entry.
+
+ChangeLog:
+
+2002-05-07  Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+	* dumper.cc (usage) Standardize usage output. Generalize to allow use
+	for help.
+	(longopts) New struct. Added longopts for all options.
+	(print_version) New function.
+	(main) Change getopt to getopt_long. Accommodate new help and version
+	options.
+
+---559023410-8644534-1020822343=:1100
+Content-Type: TEXT/PLAIN; charset=US-ASCII; name="dumper.cc-patch"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.CYG.4.44.0205072045430.1100@iocc.com>
+Content-Description: 
+Content-Disposition: attachment; filename="dumper.cc-patch"
+Content-length: 3547
+
+LS0tIGR1bXBlci5jYy1vcmlnCVN1biBGZWIgMjQgMTk6MzM6MDYgMjAwMg0K
+KysrIGR1bXBlci5jYwlTYXQgTWFyICA5IDAwOjM0OjAyIDIwMDINCkBAIC0x
+LDYgKzEsNiBAQA0KIC8qIGR1bXBlci5jYw0KIA0KLSAgIENvcHlyaWdodCAx
+OTk5LDIwMDEgUmVkIEhhdCBJbmMuDQorICAgQ29weXJpZ2h0IDE5OTksIDIw
+MDEsIDIwMDIgUmVkIEhhdCBJbmMuDQogDQogICAgV3JpdHRlbiBieSBFZ29y
+IER1ZGEgPGRlb0Bsb2dvcy1tLnJ1Pg0KIA0KQEAgLTM2LDYgKzM2LDggQEAg
+X19hdHRyaWJ1dGVfXyAoKHBhY2tlZCkpDQogI2VuZGlmDQogICBub3RlX2hl
+YWRlcjsNCiANCitzdGF0aWMgY29uc3QgY2hhciB2ZXJzaW9uW10gPSAiJFJl
+dmlzaW9uOiAxLjggJCI7DQorDQogQk9PTCB2ZXJib3NlID0gRkFMU0U7DQog
+DQogaW50IGRlYl9wcmludGYgKGNvbnN0IGNoYXIgKmZvcm1hdCwuLi4pDQpA
+QCAtNzcwLDE0ICs3NzIsNDYgQEAgZHVtcGVyOjp3cml0ZV9jb3JlX2R1bXAg
+KCkNCiB9DQogDQogc3RhdGljIHZvaWQNCi11c2FnZSAoKQ0KK3VzYWdlIChG
+SUxFICpzdHJlYW0sIGludCBzdGF0dXMpDQogew0KLSAgZnByaW50ZiAoc3Rk
+ZXJyLCAiVXNhZ2U6IGR1bXBlciBbb3B0aW9uc10gZmlsZW5hbWUgcGlkXG4i
+KTsNCi0gIGZwcmludGYgKHN0ZGVyciwgImZpbGVuYW1lIC0tIGR1bXAgY29y
+ZSB0byBmaWxlbmFtZS5jb3JlXG4iKTsNCi0gIGZwcmludGYgKHN0ZGVyciwg
+InBpZCAgICAgIC0tIHdpbjMyLXBpZCBvZiBwcm9jZXNzIHRvIGR1bXBcblxu
+Iik7DQotICBmcHJpbnRmIChzdGRlcnIsICJQb3NzaWJsZSBvcHRpb25zIGFy
+ZTpcbiIpOw0KLSAgZnByaW50ZiAoc3RkZXJyLCAiLWQgICAgICAgLS0gYmUg
+dmVyYm9zZSB3aGlsZSBkdW1waW5nXG4iKTsNCi0gIGZwcmludGYgKHN0ZGVy
+ciwgIi1xICAgICAgIC0tIGJlIHF1aXRlIHdoaWxlIGR1bXBpbmcgKGRlZmF1
+bHQpXG4iKTsNCisgIGZwcmludGYgKHN0cmVhbSwgIlwNCitVc2FnZTogZHVt
+cGVyIFtPUFRJT05dIEZJTEVOQU1FIFdJTjMyUElEXG5cDQorRHVtcCBjb3Jl
+IGZyb20gV0lOMzJQSUQgdG8gRklMRU5BTUUuY29yZVxuXA0KKyAtZCwgLS12
+ZXJib3NlICBiZSB2ZXJib3NlIHdoaWxlIGR1bXBpbmdcblwNCisgLWgsIC0t
+aGVscCAgICAgb3V0cHV0IGhlbHAgaW5mb3JtYXRpb24gYW5kIGV4aXRcblwN
+CisgLXEsIC0tcXVpZXQgICAgYmUgcXVpZXQgd2hpbGUgZHVtcGluZyAoZGVm
+YXVsdClcblwNCisgLXYsIC0tdmVyc2lvbiAgb3V0cHV0IHZlcnNpb24gaW5m
+b3JtYXRpb24gYW5kIGV4aXRcblwNCisiKTsNCisgIGV4aXQgKHN0YXR1cyk7
+DQorfQ0KKw0KK3N0cnVjdCBvcHRpb24gbG9uZ29wdHNbXSA9IHsNCisgIHsi
+dmVyYm9zZSIsIG5vX2FyZ3VtZW50LCBOVUxMLCAnZCd9LA0KKyAgeyJoZWxw
+Iiwgbm9fYXJndW1lbnQsIE5VTEwsICdoJ30sDQorICB7InF1aWV0Iiwgbm9f
+YXJndW1lbnQsIE5VTEwsICdxJ30sDQorICB7InZlcnNpb24iLCBub19hcmd1
+bWVudCwgMCwgJ3YnfSwNCisgIHswLCBub19hcmd1bWVudCwgTlVMTCwgMH0N
+Cit9Ow0KKw0KK3N0YXRpYyB2b2lkIA0KK3ByaW50X3ZlcnNpb24gKCkNCit7
+DQorICBjb25zdCBjaGFyICp2ID0gc3RyY2hyICh2ZXJzaW9uLCAnOicpOw0K
+KyAgaW50IGxlbjsNCisgIGlmICghdikNCisgICAgew0KKyAgICAgIHYgPSAi
+PyI7DQorICAgICAgbGVuID0gMTsNCisgICAgfQ0KKyAgZWxzZQ0KKyAgICB7
+DQorICAgICAgdiArPSAyOw0KKyAgICAgIGxlbiA9IHN0cmNociAodiwgJyAn
+KSAtIHY7DQorICAgIH0NCisgIHByaW50ZiAoIlwNCitkdW1wZXIgKGN5Z3dp
+bikgJS4qc1xuXA0KK0NvcmUgRHVtcGVyIGZvciBDeWd3aW5cblwNCitDb3B5
+cmlnaHQgMTk5OSwgMjAwMSwgMjAwMiBSZWQgSGF0LCBJbmMuXG4iLCBsZW4s
+IHYpOw0KIH0NCiANCiBpbnQNCkBAIC03ODgsNyArODIyLDcgQEAgbWFpbiAo
+aW50IGFyZ2MsIGNoYXIgKiphcmd2KQ0KICAgRFdPUkQgcGlkOw0KICAgY2hh
+ciB3aW4zMl9uYW1lIFtNQVhfUEFUSF07DQogDQotICB3aGlsZSAoKG9wdCA9
+IGdldG9wdCAoYXJnYywgYXJndiwgImRxIikpICE9IEVPRikNCisgIHdoaWxl
+ICgob3B0ID0gZ2V0b3B0X2xvbmcgKGFyZ2MsIGFyZ3YsICJkcWh2IiwgbG9u
+Z29wdHMsIE5VTEwpICkgIT0gRU9GKQ0KICAgICBzd2l0Y2ggKG9wdCkNCiAg
+ICAgICB7DQogICAgICAgY2FzZSAnZCc6DQpAQCAtNzk3LDggKzgzMSwxMyBA
+QCBtYWluIChpbnQgYXJnYywgY2hhciAqKmFyZ3YpDQogICAgICAgY2FzZSAn
+cSc6DQogCXZlcmJvc2UgPSBGQUxTRTsNCiAJYnJlYWs7DQorICAgICAgY2Fz
+ZSAnaCc6DQorCXVzYWdlIChzdGRvdXQsIDApOw0KKyAgICAgIGNhc2UgJ3Yn
+Og0KKyAgICAgICBwcmludF92ZXJzaW9uICgpOw0KKyAgICAgICBleGl0ICgw
+KTsNCiAgICAgICBkZWZhdWx0Og0KLQl1c2FnZSAoKTsNCisJdXNhZ2UgKHN0
+ZGVyciwgMSk7DQogCWJyZWFrOw0KICAgICAgIH0NCiANCkBAIC04MTQsNyAr
+ODUzLDcgQEAgbWFpbiAoaW50IGFyZ2MsIGNoYXIgKiphcmd2KQ0KICAgICB9
+DQogICBlbHNlDQogICAgIHsNCi0gICAgICB1c2FnZSAoKTsNCisgICAgICB1
+c2FnZSAoc3RkZXJyLCAxKTsNCiAgICAgICByZXR1cm4gLTE7DQogICAgIH0N
+CiANCg==
+
+---559023410-8644534-1020822343=:1100--
