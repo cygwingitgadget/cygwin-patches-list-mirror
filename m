@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2995-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 3086 invoked by alias); 18 Sep 2002 01:18:03 -0000
+Return-Path: <cygwin-patches-return-2996-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 24261 invoked by alias); 18 Sep 2002 01:41:02 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,176 +7,121 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 3061 invoked from network); 18 Sep 2002 01:18:02 -0000
-From: "Gary R. Van Sickle" <g.r.vansickle@worldnet.att.net>
-To: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>,
-	<cygwin-patches@cygwin.com>
+Received: (qmail 24247 invoked from network); 18 Sep 2002 01:41:01 -0000
+Message-Id: <3.0.5.32.20020917213708.00810580@h00207811519c.ne.client2.attbi.com>
+X-Sender: pierre@h00207811519c.ne.client2.attbi.com
+Date: Tue, 17 Sep 2002 18:41:00 -0000
+To: "Gary R. Van Sickle" <g.r.vansickle@worldnet.att.net>,
+ <cygwin-patches@cygwin.com>
+From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
 Subject: RE: open () on Win95 directories
-Date: Tue, 17 Sep 2002 18:18:00 -0000
-Message-ID: <NCBBIHCHBLCMLBLOBONKOEEMDFAA.g.r.vansickle@worldnet.att.net>
-MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3 (Normal)
-X-MSMail-Priority: Normal
-In-Reply-To: <3.0.5.32.20020917205836.0080c100@mail.attbi.com>
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2800.1106
-Importance: Normal
-X-SW-Source: 2002-q3/txt/msg00443.txt.bz2
+In-Reply-To: <NCBBIHCHBLCMLBLOBONKOEEMDFAA.g.r.vansickle@worldnet.att.ne
+ t>
+References: <3.0.5.32.20020917205836.0080c100@mail.attbi.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+X-SW-Source: 2002-q3/txt/msg00444.txt.bz2
 
-Hehehehe, I was just about to hit send on a reply to your original email on this
-Pierre!  It wasn't going to have a nice patch attached though.  Thanks for
-tracking this down and fixing it.
+At 08:18 PM 9/17/2002 -0500, Gary R. Van Sickle wrote:
+>Hehehehe, I was just about to hit send on a reply to your original email
+on this
+>Pierre!  It wasn't going to have a nice patch attached though.  Thanks for
+>tracking this down and fixing it.
 
---
-Gary R. Van Sickle
-Brewer.  Patriot.
+This problem is fixed, but there is another one! Solving the other one
+would best
+be done with the help of the mutt developer and integrated in the main release
+(same for the fopen( ,"b"), by the way, he shouldn't object).
 
-> -----Original Message-----
-> From: cygwin-patches-owner@cygwin.com
-> [mailto:cygwin-patches-owner@cygwin.com]On Behalf Of Pierre A. Humblet
-> Sent: Tuesday, September 17, 2002 7:59 PM
-> To: cygwin-patches@cygwin.com
-> Subject: open () on Win95 directories
->
->
-> As reported on Sunday in the Cygwin list, applications such as
-> mutt 1.4 do not work on Win95/98/ME because there Cygwin does
-> not implement open() on directories, as CreateFile () does
-> not work on directories either. However often open () is used on
-> directories with fchdir () or fstat (), which do not rely
-> on CreateFile. So it would still be useful to have open.
->
-> The patch below does just that. Essentially on Windows 95 directories
-> are opened without a valid handle (set_nohandle). Then it's just a
-> matter of calling get_nohandle () in a couple of places to make
-> everything work.
->
-> The fhandler_zero.cc stuff is an unrelated fix for dup(/dev/zero).
->
-> On line 173 of fhandler_disk_file.cc [strpbrk (get_win32_name (), "?*|<>|")]
-> is there a need for the two '|'? Was something else meant?
->
-> Pierre
->
-> 2002-09-17  Pierre Humblet <pierre.humblet@ieee.org>
->
-> 	* fhandler.cc (fhandler_base::raw_read): Add case for
-> 	ERROR_INVALID_HANDLE due to Win95 directories.
-> 	(fhandler_base::open): Handle errors due to Win95 directories.
-> 	(fhandler_base::close): Add get_nohandle () test.
-> 	* fhandler_disk_file.cc (fhandler_disk_file::fstat): Call
->  	fstat_by_name () if get_nohandle ().
-> 	(fhandler_disk_file::open): Remove test for Win95 directory.
-> 	(fhandler_disk_file::lock): Add get_nohandle () test.
-> 	* fhandler_zero.cc (fhandler_dev_zero::open): Add
-> 	get_nohandle () test.
->
-> --- fhandler.cc.orig    2002-09-16 22:23:44.000000000 -0400
-> +++ fhandler.cc 2002-09-17 19:31:22.000000000 -0400
-> @@ -275,6 +275,7 @@ fhandler_base::raw_read (void *ptr, size
->             return 0;
->         case ERROR_INVALID_FUNCTION:
->         case ERROR_INVALID_PARAMETER:
-> +       case ERROR_INVALID_HANDLE:
->           if (openflags & O_DIROPEN)
->             {
->               set_errno (EISDIR);
-> @@ -441,11 +442,20 @@ fhandler_base::open (path_conv *pc, int
->
->    if (x == INVALID_HANDLE_VALUE)
->      {
-> -      if (GetLastError () == ERROR_INVALID_HANDLE)
-> -       set_errno (ENOENT);
-> +      if (pc->isdir () && !wincap.can_open_directories ())
-> +        {
-> +          if (mode & (O_WRONLY | O_RDWR))
-> +            set_errno (EISDIR);
-> +          else if (mode & (O_CREAT | O_EXCL) == (O_CREAT | O_EXCL))
-> +            set_errno (EEXIST);
-> +          else
-> +            set_nohandle (true);
-> +        }
-> +      else if (GetLastError () == ERROR_INVALID_HANDLE)
-> +        set_errno (ENOENT);
->        else
-> -       __seterrno ();
-> -      goto done;
-> +        __seterrno ();
-> +      if (!get_nohandle ()) goto done;
->      }
->
->    /* Attributes may be set only if a file is _really_ created.
-> @@ -871,7 +881,7 @@ fhandler_base::close ()
->    int res = -1;
->
->    syscall_printf ("closing '%s' handle %p", get_name (), get_handle());
-> -  if (CloseHandle (get_handle()))
-> +  if (get_nohandle () || CloseHandle (get_handle()))
->      res = 0;
->    else
->      {
-> --- fhandler_disk_file.cc.orig  2002-09-16 21:10:42.000000000 -0400
-> +++ fhandler_disk_file.cc       2002-09-17 18:35:28.000000000 -0400
-> @@ -156,8 +156,12 @@ fhandler_disk_file::fstat (struct __stat
->    bool query_open_already;
->
->    if (get_io_handle ())
-> -    return fstat_by_handle (buf, pc);
-> -
-> +    {
-> +      if (get_nohandle ())
-> +       return fstat_by_name (buf, pc);
-> +      else
-> +       return fstat_by_handle (buf, pc);
-> +    }
->    /* If we don't care if the file is executable or we already know if it is,
->       then just do a "query open" as it is apparently much faster. */
->    if (pc->exec_state () != dont_know_if_executable)
-> @@ -191,7 +195,7 @@ fhandler_disk_file::fstat (struct __stat
->         }
->      }
->
-> -  if (!oret)
-> +  if (!oret || get_nohandle ())
->      res = fstat_by_name (buf, pc);
->    else
->      {
-> @@ -364,15 +368,7 @@ fhandler_disk_file::open (path_conv *rea
->    set_isremote (real_path->isremote ());
->
->    int res;
-> -  if (!real_path->isdir () || wincap.can_open_directories ())
-> -    res = this->fhandler_base::open (real_path, flags | O_DIROPEN, mode);
-> -  else
-> -    {
-> -      set_errno (EISDIR);
-> -      res = 0;
-> -    }
-> -
-> -  if (!res)
-> +  if (!(res = this->fhandler_base::open (real_path, flags | O_DIROPEN,
-> mode)))
->      goto out;
->
->    /* This is for file systems known for having a buggy CreateFile call
-> @@ -434,7 +430,7 @@ fhandler_disk_file::lock (int cmd, struc
->     * We don't do getlck calls yet.
->     */
->
-> -  if (cmd == F_GETLK)
-> +  if (cmd == F_GETLK || get_nohandle ())
->      {
->        set_errno (ENOSYS);
-> --- fhandler_zero.cc.orig       2002-09-16 18:18:08.000000000 -0400
-> +++ fhandler_zero.cc    2002-09-16 18:25:58.000000000 -0400
-> @@ -24,6 +24,7 @@ int
->  fhandler_dev_zero::open (path_conv *, int flags, mode_t)
->  {
->    set_flags ((flags & ~O_TEXT) | O_BINARY);
-> +  set_nohandle (true);
->    set_open_status ();
->    return 1;
->  }
->
+The problem is that hard links are not implemented on FAT, and dotlock.c
+relies
+on the hardlink count. You will see that it will timeout.
+However there is NO NEED to look at the hardlink count when the link succeeds
+(only when it fails, which can happen because of NFS problems even though the
+actual link succeeded on the remote machine), because when it succeeds the
+count 
+MUST be 2.
+This is how exim does it, not because of Win95 but for efficiency sake. 
+Below I cut and pasted a relevant part of appendfile.c that explains the
+logic.
+
+By the way, exim uses both fcntl and dotlock by default (can be changed from
+exim.conf), so mutt could interoperate with exim with fcntl only.
+
+Pierre
+  
+
+****************************************************************************
+*****
+  if (ob->use_lockfile)
+    {
+    lockname = string_sprintf("%s.lock", filename);
+    hitchname = string_sprintf( "%s.%s.%08x.%08x", lockname, primary_hostname,
+      (unsigned int)(time(NULL)), (unsigned int)getpid());
+
+    DEBUG(D_transport) debug_printf("lock name: %s\nhitch name: %s\n",
+lockname,
+      hitchname);
+
+    /* Lock file creation retry loop */
+
+    for (i = 0; i < ob->lock_retries; sleep(ob->lock_interval), i++)
+      {
+      int rc;
+      hd = Uopen(hitchname, O_WRONLY | O_CREAT | O_EXCL, ob->lockfile_mode);
+
+      if (hd < 0)
+        {
+        addr->basic_errno = errno;
+        addr->message =
+          string_sprintf("creating lock file hitching post %s "
+            "(euid=%ld egid=%ld)", hitchname, (long int)geteuid(),
+            (long int)getegid());
+        return FALSE;
+        }
+
+      /* Attempt to hitch the hitching post to the lock file. If link()
+      succeeds (the common case, we hope) all is well. Otherwise, fstat the
+      file, and get rid of the hitching post. If the number of links was 2,
+      the link was created, despite the failure of link(). If the hitch was
+      not successful, try again, having unlinked the lock file if it is too
+      old.
+
+      There's a version of Linux (2.0.27) which doesn't update its local cache
+      of the inode after link() by default - which many think is a bug - but
+      if the link succeeds, this code will be OK. It just won't work in the
+      case when link() fails after having actually created the link. The Linux
+      NFS person is fixing this; a temporary patch is available if anyone is
+      sufficiently worried. */
+
+      if ((rc = Ulink(hitchname, lockname)) != 0) fstat(hd, &statbuf);
+      close(hd);
+      Uunlink(hitchname);
+      if (rc != 0 && statbuf.st_nlink != 2)
+        {
+        if (ob->lockfile_timeout > 0 && Ustat(lockname, &statbuf) == 0 &&
+            time(NULL) - statbuf.st_ctime > ob->lockfile_timeout)
+          {
+          DEBUG(D_transport) debug_printf("unlinking timed-out lock file\n");
+          Uunlink(lockname);
+          }
+        DEBUG(D_transport) debug_printf("link of hitching post failed -
+retrying\n");
+        continue;
+        }
+
+      DEBUG(D_transport) debug_printf("lock file created\n");
+      break;
+      }
+
+    /* Check for too many tries at creating the lock file */
+
+    if (i >= ob->lock_retries)
+      {
+      addr->basic_errno = ERRNO_LOCKFAILED;
+      addr->message = string_sprintf("failed to lock mailbox %s (lock file)",
+        filename);
+      return FALSE;
+      }
+    }
+
