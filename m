@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3608-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 19005 invoked by alias); 20 Feb 2003 22:29:50 -0000
+Return-Path: <cygwin-patches-return-3609-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 26611 invoked by alias); 21 Feb 2003 01:16:59 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,302 +7,340 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 18996 invoked from network); 20 Feb 2003 22:29:49 -0000
-Date: Thu, 20 Feb 2003 22:29:00 -0000
-From: Vaclav Haisman <V.Haisman@sh.cvut.cz>
+Received: (qmail 26602 invoked from network); 21 Feb 2003 01:16:59 -0000
+Message-Id: <3.0.5.32.20030220201534.007fb310@mail.attbi.com>
+X-Sender: phumblet@mail.attbi.com (Unverified)
+Date: Fri, 21 Feb 2003 01:16:00 -0000
 To: cygwin-patches@cygwin.com
-Subject: Silent some more warnings.
-Message-ID: <20030220230012.I26596-100000@logout.sh.cvut.cz>
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-Scanned-By: AMaViS at Silicon Hill
-X-Spam-Status: No, hits=1.1 required=6.0
-	tests=CARRIAGE_RETURNS,SPAM_PHRASE_00_01
-	version=2.44
-X-Spam-Level: *
-X-SW-Source: 2003-q1/txt/msg00257.txt.bz2
+From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
+Subject: access()
+Mime-Version: 1.0
+Content-Type: multipart/mixed; boundary="=====================_1045808134==_"
+X-SW-Source: 2003-q1/txt/msg00258.txt.bz2
+
+--=====================_1045808134==_
+Content-Type: text/plain; charset="us-ascii"
+Content-length: 2818
+
+Corinna,
+
+Here is a patch with a new implementation of access() using AccessCheck.
+Compared to the old version, the readonly attribute and the deny ace's
+are taken into account, and the function does not rely on /etc/passwd
+nor on /etc/group. It also seems to be somewhat faster.
+
+I was wondering if it would declare that all directories are x, because
+of the Bypass Traverse (a.k.a. Change Notify) privilege, but it doesn't.
+Except for that it reflects the Windows permissions perfectly.
+
+Note that the builtin "test" in ash uses access(), but /bin/test and 
+bash don't.
+/> ls -l test
+--wx-wx---+   1 PHumblet Users       43310 Oct 24 15:13 test*
+/> sh -c 'if [ -r test ]; then echo yes; else echo no; fi'
+yes                                                          <== CORRECT!
+/> bash -c 'if [ -r test ]; then echo yes; else echo no; fi'
+no                                                           <== WRONG
+/> getfacl test
+# file: test
+# owner: PHumblet
+# group: Users
+user::--x
+group::-wx
+group:Administrators:r-x                    <== NOT CONSIDERED BY bash
+mask:rwx
+other:---
+
+The reason that bash and /bin/test do not use access() is that
+according to POSIX (but not to Cygwin), access() reflects the 
+permissions for the real (and not effective) {u,g}ids.
+Thus these two programs define an eaccess() function based on stat().
+It doesn't work properly on Cygwin, as shown above.
+
+However bash already uses access() when AFS is defined. Thus it
+would be a 1/2 line patch in bash (test.c and findcmd.c) to also
+use access() for Cygwin. 
+- #if defined (AFS)
++ #if defined (AFS) || defined (__CYGWIN__)
+That would be a significant improvement, IMO. What do you think?
+
+Going off-topic, there is a strange feature in findcmd.c (file_status). 
+If we are the owner of a file but do not have x permission, 
+and the gid is one of our groups and has x permission, 
+or others have x permission, then bash considers that the file is 
+executable, although it isn't for us.
+  /* If `others' have execute permission to the file, then so do we,
+     since we are also `others'. */
+Fortunately this interpretation is not present in the eaccess function.
+
+Finally I have two questions:
+1) Is (!real_path.exists ()) a reliable indicator of file non-existence?
+   If so, shouldn't stat take advantage of that, for disk files?
+   Stat currently tries twice to open non-existent files. 
+2) I am not sure when to use LoadDLLfuncEx vs. LoadDLLfunc.
+
+Pierre
+
+2003-02-21  Pierre Humblet  <pierre.humblet@ieee.org>
+
+	* autoload.cc (AccessCheck): Add.
+	(DuplicateToken): Add.
+	* security.h (check_file_access): Declare.
+	* syscalls.cc (access): Convert path to Windows, check existence
+	and readonly attribute. Call check_file_access instead of acl_access.
+	* security.cc (check_file_access): Create.
+	* sec_acl (acl_access): Delete.
 
 
-Hi,
-this patch silents warnings about strict-aliasing rules breach.
-There are also two hunks that remove obviously always true assert().
+--=====================_1045808134==_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment; filename="access.diff"
+Content-length: 7562
 
-Vaclav Haisman
+Index: autoload.cc
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+RCS file: /cvs/src/src/winsup/cygwin/autoload.cc,v
+retrieving revision 1.62
+diff -u -p -r1.62 autoload.cc
+--- autoload.cc	20 Feb 2003 11:12:44 -0000	1.62
++++ autoload.cc	21 Feb 2003 00:14:23 -0000
+@@ -307,6 +307,7 @@ wsock_init ()
+ LoadDLLprime (wsock32, wsock_init)
+ LoadDLLprime (ws2_32, wsock_init)
 
++LoadDLLfunc (AccessCheck, 32, advapi32)
+ LoadDLLfunc (AddAccessAllowedAce, 16, advapi32)
+ LoadDLLfunc (AddAccessDeniedAce, 16, advapi32)
+ LoadDLLfunc (AddAce, 20, advapi32)
+@@ -318,6 +319,7 @@ LoadDLLfuncEx (CryptAcquireContextA, 20,
+ LoadDLLfuncEx (CryptGenRandom, 12, advapi32, 1)
+ LoadDLLfuncEx (CryptReleaseContext, 8, advapi32, 1)
+ LoadDLLfunc (DeregisterEventSource, 4, advapi32)
++LoadDLLfunc (DuplicateToken, 12, advapi32)
+ LoadDLLfuncEx (DuplicateTokenEx, 24, advapi32, 1)
+ LoadDLLfunc (EqualSid, 8, advapi32)
+ LoadDLLfunc (GetAce, 12, advapi32)
+Index: security.h
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+RCS file: /cvs/src/src/winsup/cygwin/security.h,v
+retrieving revision 1.40
+diff -u -p -r1.40 security.h
+--- security.h	10 Feb 2003 22:43:29 -0000	1.40
++++ security.h	21 Feb 2003 00:14:29 -0000
+@@ -225,6 +225,7 @@ LONG __stdcall read_sd(const char *file,
+ LONG __stdcall write_sd(const char *file, PSECURITY_DESCRIPTOR sd_buf, DWO=
+RD sd_size);
+ BOOL __stdcall add_access_allowed_ace (PACL acl, int offset, DWORD attribu=
+tes, PSID sid, size_t &len_add, DWORD inherit);
+ BOOL __stdcall add_access_denied_ace (PACL acl, int offset, DWORD attribut=
+es, PSID sid, size_t &len_add, DWORD inherit);
++int __stdcall check_file_access (const char *, int);
 
-2003-02-20  Vaclav Haisman  <V.Haisman@sh.cvut.cz>
-
-	* libc/stdio/vfprintf.c (cvt): Fix strict-aliasing rules
-	breach warning.
-	* libc/stdlib/ldtoa.c (_ldtoa_r): Ditto.
-	(_strtold): Ditto.
-
-2003-02-20  Vaclav Haisman  <V.Haisman@sh.cvut.cz>
-
-	* cygserver_transport_sockets.cc (transport_layer_sockets::read):
-	Remove obvously always true assert.
-	(transport_layer_sockets::write): Ditto
-
-2003-02-20  Vaclav Haisman  <V.Haisman@sh.cvut.cz>
-
-	* mingwex/math/powl.c (LOG2EA): Fix strict-aliasing rules breach
-	warning.
-
-2003-02-20  Vaclav Haisman  <V.Haisman@sh.cvut.cz>
-
-	* mkgroup.c (enum_local_users): Silent strict-aliasing rules breach
-	warning.
-	(enum_local_groups): Ditto.
-	(enum_users): Ditto.
-	(enum_groups): Ditto.
-	(main): Ditto.
-	* mkpasswd.c (enum_users): Ditto.
-	(enum_local_groups): Ditto.
-	(main): Ditto.
-	* passwd.c (GetPW): Ditto.
-	(PrintPW): Ditto.
-	(SetModals): Ditto.
-
-Index: newlib/libc/stdio/vfprintf.c
-===================================================================
-RCS file: /cvs/src/src/newlib/libc/stdio/vfprintf.c,v
-retrieving revision 1.18
-diff -u -p -r1.18 vfprintf.c
---- newlib/libc/stdio/vfprintf.c	7 Jan 2003 20:02:33 -0000	1.18
-+++ newlib/libc/stdio/vfprintf.c	20 Feb 2003 21:54:44 -0000
-@@ -1158,7 +1158,7 @@ cvt(data, value, ndigits, flags, sign, d
-
- 	digits = _dtoa_r(data, value, mode, ndigits, decpt, &dsgn, &rve);
- #else /* !_NO_LONGDBL */
--	ldptr = (struct ldieee *)&value;
-+	ldptr = (struct ldieee *)(void *)&value;
- 	if (ldptr->sign) { /* this will check for < 0 and -0.0 */
- 		value = -value;
- 		*sign = '-';
-Index: newlib/libc/stdlib/ldtoa.c
-===================================================================
-RCS file: /cvs/src/src/newlib/libc/stdlib/ldtoa.c,v
-retrieving revision 1.8
-diff -u -p -r1.8 ldtoa.c
---- newlib/libc/stdlib/ldtoa.c	3 Feb 2003 21:29:45 -0000	1.8
-+++ newlib/libc/stdlib/ldtoa.c	20 Feb 2003 21:54:47 -0000
-@@ -2729,13 +2729,13 @@ if (_REENT_MP_RESULT(ptr))
-   }
-
- #if LDBL_MANT_DIG == 24
--e24toe( (unsigned short *)&d, e, ldp );
-+e24toe( (unsigned short *)(void *)&d, e, ldp );
- #elif LDBL_MANT_DIG == 53
--e53toe( (unsigned short *)&d, e, ldp );
-+e53toe( (unsigned short *)(void *)&d, e, ldp );
- #elif LDBL_MANT_DIG == 64
--e64toe( (unsigned short *)&d, e, ldp );
-+e64toe( (unsigned short *)(void *)&d, e, ldp );
- #else
--e113toe( (unsigned short *)&d, e, ldp );
-+e113toe( (unsigned short *)(void *)&d, e, ldp );
- #endif
-
- if( eisneg(e) )
-@@ -3228,7 +3228,7 @@ long double _strtold (char *s, char **se
-   rnd.rlast = -1;
-   rnd.rndprc = NBITS;
-
--  lenldstr = asctoeg( s, (unsigned short *)&x, LDBL_MANT_DIG, ldp );
-+  lenldstr = asctoeg( s, (unsigned short *)(void *)&x, LDBL_MANT_DIG, ldp );
-   if (se)
-     *se = s + lenldstr;
-   return x;
-Index: winsup/cygwin/cygserver_transport_sockets.cc
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/cygserver_transport_sockets.cc,v
-retrieving revision 1.4
-diff -u -p -r1.4 cygserver_transport_sockets.cc
---- winsup/cygwin/cygserver_transport_sockets.cc	22 Sep 2002 12:04:15 -0000	1.4
-+++ winsup/cygwin/cygserver_transport_sockets.cc	20 Feb 2003 21:55:04 -0000
-@@ -269,8 +269,6 @@ transport_layer_sockets::read (void *con
-     {
-       read_buf += res;
-       read_buf_len -= res;
--
--      assert (read_buf_len >= 0);
-     }
-
-   if (res != -1)
-@@ -315,8 +313,6 @@ transport_layer_sockets::write (void *co
-     {
-       write_buf += res;
-       write_buf_len -= res;
--
--      assert (write_buf_len >= 0);
-     }
-
-   if (res != -1)
-Index: winsup/mingw/mingwex/math/powl.c
-===================================================================
-RCS file: /cvs/src/src/winsup/mingw/mingwex/math/powl.c,v
-retrieving revision 1.2
-diff -u -p -r1.2 powl.c
---- winsup/mingw/mingwex/math/powl.c	6 Oct 2002 23:26:43 -0000	1.2
-+++ winsup/mingw/mingwex/math/powl.c	20 Feb 2003 21:55:12 -0000
-@@ -270,7 +270,7 @@ static const unsigned short R[] = {
- #define MNEXP (-NXT*16384.0L)
- #endif
- static const unsigned short L[] = {0xc2ef,0x705f,0xeca5,0xe2a8,0x3ffd, XPD};
--#define LOG2EA (*(long double *)(&L[0]))
-+#define LOG2EA (*(long double *)(void *)(&L[0]))
- #endif
-
- #ifdef MIEEE
-@@ -359,7 +359,7 @@ static long R[] = {
- #define MNEXP (-NXT*16382.0L)
- #endif
- static long L[3] = {0x3ffd0000,0xe2a8eca5,0x705fc2ef};
--#define LOG2EA (*(long double *)(&L[0]))
-+#define LOG2EA (*(long double *)(void *)(&L[0]))
- #endif
-
-
-Index: winsup/utils/mkgroup.c
-===================================================================
-RCS file: /cvs/src/src/winsup/utils/mkgroup.c,v
-retrieving revision 1.19
-diff -u -p -r1.19 mkgroup.c
---- winsup/utils/mkgroup.c	15 Jan 2003 10:08:37 -0000	1.19
-+++ winsup/utils/mkgroup.c	20 Feb 2003 21:55:17 -0000
-@@ -136,7 +136,7 @@ enum_local_users (LPWSTR groupname)
-   DWORD reshdl = 0;
-
-   if (!netlocalgroupgetmembers (NULL, groupname,
--				1, (LPBYTE *) &buf1,
-+				1, (LPBYTE *)(void *) &buf1,
- 				MAX_PREFERRED_LENGTH,
- 				&entries, &total, &reshdl))
-     {
-@@ -170,7 +170,7 @@ enum_local_groups (int print_sids, int p
-     {
-       DWORD i;
-
--      rc = netlocalgroupenum (NULL, 0, (LPBYTE *) &buffer, 1024,
-+      rc = netlocalgroupenum (NULL, 0, (LPBYTE *)(void *) &buffer, 1024,
- 			      &entriesread, &totalentries, &resume_handle);
-       switch (rc)
- 	{
-@@ -255,7 +255,7 @@ enum_users (LPWSTR servername, LPWSTR gr
-   DWORD reshdl = 0;
-
-   if (!netgroupgetusers (servername, groupname,
--			 0, (LPBYTE *) &buf1,
-+			 0, (LPBYTE *)(void *) &buf1,
- 			 MAX_PREFERRED_LENGTH,
- 			 &entries, &total, &reshdl))
-     {
-@@ -292,7 +292,7 @@ enum_groups (LPWSTR servername, int prin
-     {
-       DWORD i;
-
--      rc = netgroupenum (servername, 2, (LPBYTE *) & buffer, 1024,
-+      rc = netgroupenum (servername, 2, (LPBYTE *)(void *) &buffer, 1024,
- 		         &entriesread, &totalentries, &resume_handle);
-       switch (rc)
- 	{
-@@ -670,7 +670,7 @@ main (int argc, char **argv)
- 	    {
- 	      ret = lsaqueryinformationpolicy (lsa,
- 					       PolicyPrimaryDomainInformation,
--					       (PVOID *) &pdi);
-+					       (void *) &pdi);
- 	      if (ret == STATUS_SUCCESS)
- 	        {
- 		  if (pdi->Sid)
-@@ -701,10 +701,10 @@ main (int argc, char **argv)
-   if (print_domain)
-     {
-       if (domain_specified)
--	rc = netgetdcname (NULL, domain_name, (LPBYTE *) & servername);
-+	rc = netgetdcname (NULL, domain_name, (LPBYTE *)(void *) &servername);
-
-       else
--	rc = netgetdcname (NULL, NULL, (LPBYTE *) & servername);
-+	rc = netgetdcname (NULL, NULL, (LPBYTE *)(void *) &servername);
-
-       if (rc != ERROR_SUCCESS)
- 	{
-Index: winsup/utils/mkpasswd.c
-===================================================================
-RCS file: /cvs/src/src/winsup/utils/mkpasswd.c,v
-retrieving revision 1.28
-diff -u -p -r1.28 mkpasswd.c
---- winsup/utils/mkpasswd.c	15 Jan 2003 10:08:37 -0000	1.28
-+++ winsup/utils/mkpasswd.c	20 Feb 2003 21:55:17 -0000
-@@ -237,12 +237,12 @@ enum_users (LPWSTR servername, int print
-       {
- 	MultiByteToWideChar (CP_ACP, 0, disp_username, -1, uni_name, 512 );
- 	rc = netusergetinfo(servername, (LPWSTR) & uni_name, 3,
--			    (LPBYTE *) &buffer );
-+			    (LPBYTE *)(void *) &buffer );
- 	entriesread=1;
-       }
-     else
-       rc = netuserenum (servername, 3, FILTER_NORMAL_ACCOUNT,
--			(LPBYTE *) & buffer, 1024,
-+			(LPBYTE *)(void *) &buffer, 1024,
- 			&entriesread, &totalentries, &resume_handle);
-       switch (rc)
- 	{
-@@ -370,7 +370,7 @@ enum_local_groups (int print_sids)
-     {
-       DWORD i;
-
--      rc = netlocalgroupenum (NULL, 0, (LPBYTE *) & buffer, 1024,
-+      rc = netlocalgroupenum (NULL, 0, (LPBYTE *)(void *) &buffer, 1024,
- 			      &entriesread, &totalentries, &resume_handle);
-       switch (rc)
- 	{
-@@ -702,10 +702,10 @@ main (int argc, char **argv)
-   if (print_domain)
-     {
-       if (domain_name_specified)
--	rc = netgetdcname (NULL, domain_name, (LPBYTE *) & servername);
-+	rc = netgetdcname (NULL, domain_name, (LPBYTE *)(void *) &servername);
-
-       else
--	rc = netgetdcname (NULL, NULL, (LPBYTE *) & servername);
-+	rc = netgetdcname (NULL, NULL, (LPBYTE *)(void *) &servername);
-
-       if (rc != ERROR_SUCCESS)
- 	{
-Index: winsup/utils/passwd.c
-===================================================================
-RCS file: /cvs/src/src/winsup/utils/passwd.c,v
-retrieving revision 1.7
-diff -u -p -r1.7 passwd.c
---- winsup/utils/passwd.c	15 Sep 2002 19:24:36 -0000	1.7
-+++ winsup/utils/passwd.c	20 Feb 2003 21:55:20 -0000
-@@ -129,7 +129,7 @@ GetPW (char *user, int print_win_name)
- 	}
-     }
-   MultiByteToWideChar (CP_ACP, 0, user, -1, name, 2 * (UNLEN + 1));
--  ret = NetUserGetInfo (NULL, name, 3, (LPBYTE *) &ui);
-+  ret = NetUserGetInfo (NULL, name, 3, (LPBYTE *)(void *) &ui);
-   return EvalRet (ret, user) ? NULL : ui;
+ void set_security_attribute (int attribute, PSECURITY_ATTRIBUTES psa,
+ 			     void *sd_buf, DWORD sd_buf_size);
+Index: syscalls.cc
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+RCS file: /cvs/src/src/winsup/cygwin/syscalls.cc,v
+retrieving revision 1.245
+diff -u -p -r1.245 syscalls.cc
+--- syscalls.cc	10 Feb 2003 22:43:29 -0000	1.245
++++ syscalls.cc	21 Feb 2003 00:14:35 -0000
+@@ -1163,8 +1163,6 @@ cygwin_lstat (const char *name, struct _
+   return ret;
  }
 
-@@ -176,7 +176,7 @@ PrintPW (PUSER_INFO_3 ui)
-   printf ("Password expired : %s", (ui->usri3_password_expired)
-                                 ? "yes\n" : "no\n");
-   printf ("Password changed : %s", ctime(&t));
--  ret = NetUserModalsGet (NULL, 0, (LPBYTE *) &mi);
-+  ret = NetUserModalsGet (NULL, 0, (LPBYTE *)(void *) &mi);
-   if (! ret)
-     {
-       if (mi->usrmod0_max_passwd_age == TIMEQ_FOREVER
-@@ -207,7 +207,7 @@ SetModals (int xarg, int narg, int iarg,
-   int ret;
-   PUSER_MODALS_INFO_0 mi;
+-extern int acl_access (const char *, int);
+-
+ extern "C" int
+ access (const char *fn, int flags)
+ {
+@@ -1176,11 +1174,33 @@ access (const char *fn, int flags)
+       return -1;
+     }
 
--  ret = NetUserModalsGet (NULL, 0, (LPBYTE *) &mi);
-+  ret = NetUserModalsGet (NULL, 0, (LPBYTE *)(void *) &mi);
-   if (! ret)
-     {
-       if (xarg == 0)
+-  if (allow_ntsec)
+-    return acl_access (fn, flags);
++  path_conv real_path (fn, PC_SYM_FOLLOW | PC_FULL, stat_suffixes);
++  if (real_path.error)
++    {
++      set_errno (real_path.error);
++      return -1;
++    }
++
++  if (!real_path.exists ())
++    {
++      set_errno (ENOENT);
++      return -1;
++    }
++
++  if (!(flags & (R_OK | W_OK | X_OK)))
++    return 0;
++
++  if (real_path.has_attribute (FILE_ATTRIBUTE_READONLY) && (flags & W_OK))
++    {
++      set_errno (EACCES);
++      return -1;
++    }
++
++  if (real_path.has_acls () && allow_ntsec)
++    return check_file_access (real_path, flags);
+
+   struct __stat64 st;
+-  int r =3D stat_worker (fn, &st, 0);
++  int r =3D stat_worker (real_path, &st, 0);
+   if (r)
+     return -1;
+   r =3D -1;
+Index: security.cc
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+RCS file: /cvs/src/src/winsup/cygwin/security.cc,v
+retrieving revision 1.137
+diff -u -p -r1.137 security.cc
+--- security.cc	10 Feb 2003 22:43:29 -0000	1.137
++++ security.cc	21 Feb 2003 00:14:41 -0000
+@@ -1918,3 +1918,54 @@ set_file_attribute (int use_ntsec, const
+   return set_file_attribute (use_ntsec, file,
+ 			     myself->uid, myself->gid, attribute);
+ }
++
++int
++check_file_access (const char *fn, int flags)
++{
++  int ret =3D -1;
++  char sd_buf[4096];
++  DWORD sd_size =3D sizeof sd_buf;
++  PSECURITY_DESCRIPTOR psd =3D (PSECURITY_DESCRIPTOR) sd_buf;
++  HANDLE hToken, hIToken;
++  BOOL status;
++  char pbuf[sizeof (PRIVILEGE_SET) + 3 * sizeof (LUID_AND_ATTRIBUTES)];
++  DWORD desired =3D 0, granted, plength =3D sizeof pbuf;
++  static GENERIC_MAPPING NO_COPY mapping =3D { FILE_GENERIC_READ,
++					     FILE_GENERIC_WRITE,
++					     FILE_GENERIC_EXECUTE,
++					     FILE_ALL_ACCESS };
++  if (read_sd (fn, psd, &sd_size) <=3D 0)
++    goto done;
++
++  if (cygheap->user.issetuid ())
++    hToken =3D cygheap->user.token;
++  else if (!OpenProcessToken (hMainProc, TOKEN_DUPLICATE, &hToken))
++    {
++      __seterrno ();
++      goto done;
++    }
++  if (!(status =3D DuplicateToken (hToken, SecurityIdentification, &hIToke=
+n)))
++    __seterrno ();
++  if (hToken !=3D cygheap->user.token)
++    CloseHandle (hToken);
++  if (!status)
++    goto done;
++
++  if (flags & R_OK)
++    desired |=3D FILE_READ_DATA;
++  if (flags & W_OK)
++    desired |=3D FILE_WRITE_DATA;
++  if (flags & X_OK)
++    desired |=3D FILE_EXECUTE;
++  if (!AccessCheck (psd, hIToken, desired, &mapping,
++		    (PPRIVILEGE_SET) pbuf, &plength, &granted, &status))
++    __seterrno ();
++  else if (!status)
++    set_errno (EACCES);
++  else
++    ret =3D 0;
++  CloseHandle (hIToken);
++ done:
++  debug_printf ("flags %x, ret %d", flags, ret);
++  return ret;
++}
+Index: sec_acl.cc
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+RCS file: /cvs/src/src/winsup/cygwin/sec_acl.cc,v
+retrieving revision 1.26
+diff -u -p -r1.26 sec_acl.cc
+--- sec_acl.cc	5 Feb 2003 16:15:22 -0000	1.26
++++ sec_acl.cc	21 Feb 2003 00:14:45 -0000
+@@ -413,69 +413,6 @@ getacl (const char *file, DWORD attr, in
+   return pos;
+ }
+
+-int
+-acl_access (const char *path, int flags)
+-{
+-  __aclent32_t acls[MAX_ACL_ENTRIES];
+-  int cnt;
+-
+-  if ((cnt =3D acl32 (path, GETACL, MAX_ACL_ENTRIES, acls)) < 1)
+-    return -1;
+-
+-  /* Only check existence. */
+-  if (!(flags & (R_OK | W_OK | X_OK)))
+-    return 0;
+-
+-  for (int i =3D 0; i < cnt; ++i)
+-    {
+-      switch (acls[i].a_type)
+-	{
+-	case USER_OBJ:
+-	case USER:
+-	  if (acls[i].a_id !=3D myself->uid)
+-	    {
+-	      /*
+-	       * Check if user is a NT group:
+-	       * Take SID from passwd, search SID in token groups
+-	       */
+-	      cygsid owner;
+-	      struct passwd *pw;
+-
+-	      if ((pw =3D internal_getpwuid (acls[i].a_id)) !=3D NULL
+-		  && owner.getfrompw (pw)
+-		  && internal_getgroups (0, NULL, &owner) > 0)
+-		break;
+-	      continue;
+-	    }
+-	  break;
+-	case GROUP_OBJ:
+-	case GROUP:
+-	  if (acls[i].a_id !=3D myself->gid)
+-            {
+-	      cygsid group;
+-	      struct __group32 *gr =3D NULL;
+-
+-	      if ((gr =3D internal_getgrgid (acls[i].a_id)) !=3D NULL
+-		  && group.getfromgr (gr)
+-		  && internal_getgroups (0, NULL, &group) > 0)
+-		break;
+-	      continue;
+-	    }
+-	  break;
+-	case OTHER_OBJ:
+-	  break;
+-	default:
+-	  continue;
+-	}
+-      if ((!(flags & R_OK) || (acls[i].a_perm & S_IROTH))
+-	  && (!(flags & W_OK) || (acls[i].a_perm & S_IWOTH))
+-	  && (!(flags & X_OK) || (acls[i].a_perm & S_IXOTH)))
+-	return 0;
+-    }
+-  set_errno (EACCES);
+-  return -1;
+-}
+-
+ static
+ int
+ acl_worker (const char *path, int cmd, int nentries, __aclent32_t *aclbufp,
+
+--=====================_1045808134==_--
