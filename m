@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1765-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 32509 invoked by alias); 23 Jan 2002 17:21:47 -0000
+Return-Path: <cygwin-patches-return-1766-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 818 invoked by alias); 23 Jan 2002 17:23:10 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,63 +7,129 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 32495 invoked from network); 23 Jan 2002 17:21:46 -0000
-Date: Wed, 23 Jan 2002 09:21:00 -0000
+Received: (qmail 771 invoked from network); 23 Jan 2002 17:23:06 -0000
+Date: Wed, 23 Jan 2002 09:23:00 -0000
 From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-Patches@cygwin.com
-Subject: Re: include/sys/strace.h
-Message-ID: <20020123172219.GC6765@redhat.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: Fwd: [MinGW-patches] Patch for GPROF runtime on Win32
+Message-ID: <20020123172312.GD6765@redhat.com>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-Patches@cygwin.com
-References: <3C4E0C9F.1BEECC02@yahoo.com> <3C4EC73A.B63A8371@yahoo.com>
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20020123082238.41330.qmail@web14506.mail.yahoo.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3C4EC73A.B63A8371@yahoo.com>
+In-Reply-To: <20020123082238.41330.qmail@web14506.mail.yahoo.com>
 User-Agent: Mutt/1.3.23.1i
-X-SW-Source: 2002-q1/txt/msg00122.txt.bz2
+X-SW-Source: 2002-q1/txt/msg00123.txt.bz2
 
-On Wed, Jan 23, 2002 at 09:22:50AM -0500, Earnie Boyd wrote:
->Any objection to this patch?  Can I apply it?
+On Wed, Jan 23, 2002 at 07:22:38PM +1100, Danny Smith wrote:
+>This patch was submitted for mingw runtime. It may also be applicable to
+>cygwin. Any comments (apart from formatting)?
+>
+>Here is the Changelog entry:
+>
+>2002-01-22  Pascal Obry  <obry@gnat.com>
+>
+>	* profile/profil.h (PROFADDR): Cast idx to unsigned long long to
+>	avoid overflow.
+>	* profile/gmon.c: Define bzero as memset if mingw32.
+>	(monstartup): Use it.
+>
 
-I'm sorry Earnie.  I really don't see any reason for it and can't imagine
-that it would be very useful to me.
+Is this part of the sources in winsup?
 
 cgf
 
->Earnie Boyd wrote:
+> --- Pascal Obry <obry@gnat.com> wrote: > To:
+>mingw-patches@lists.sourceforge.net
+>> From: obry@gnat.com (Pascal Obry)
+>> Subject: [MinGW-patches] Patch for GPROF runtime on Win32
+>> Date: Mon, 21 Jan 2002 09:52:52 -0500 (EST)
 >> 
->> I've created simple macros to set strace.active ON or OFF when
->> --enable-debugging is enabled.
 >> 
->> Comments?
+>> The GPROF runtime support is broken in 2 places on
+>> Win32. We have add a report about GPROF not working
+>> on an Ada program. This is in fact not a GNU/Ada
+>> issue. We have been able to reproduce the problem and
+>> we propose the following fix (see attachement). 
+>> With this fix in the program run fine and provides 
+>> good output.
 >> 
->> Earnie.
+>> <<
+>> *** d:/home/obry/cvs/mingw/runtime/profile/profil.h Tue Jun  5 01:26:04
+>> 2001
+>> --- ./profil.h Sun Jan 20 10:32:46 2002
+>> ***************
+>> *** 29,35 ****
+>>   
+>>   /* convert an index into an address */
+>>   #define PROFADDR(idx, base, scale)	\
+>> ! 	((base) + ((((idx) << 16) / (scale)) << 1))
+>>   
+>>   /* convert a bin size into a scale */
+>>   #define PROFSCALE(range, bins)		(((bins) << 16) / ((range) >> 1))
+>> --- 29,36 ----
+>>   
+>>   /* convert an index into an address */
+>>   #define PROFADDR(idx, base, scale)	\
+>> !  ((base) + \
+>> !      ((((unsigned long long)(idx) << 16) / (unsigned long long)(scale))
+>> << 1))
+>>   
+>>   /* convert a bin size into a scale */
+>>   #define PROFSCALE(range, bins)		(((bins) << 16) / ((range) >> 1))
+>> *** d:/home/obry/cvs/mingw/runtime/profile/gmon.c Sat Jan 19 21:00:56
+>> 2002
+>> --- ./gmon.c Sun Jan 20 10:09:22 2002
+>> ***************
+>> *** 55,60 ****
+>> --- 55,64 ----
+>>   /* XXX needed? */
+>>   //extern char *minbrk __asm ("minbrk");
+>>   
+>> + #ifdef __MINGW32__
+>> + #define bzero(ptr,size) memset (ptr, 0, size);
+>> + #endif
+>> + 
+>>   struct gmonparam _gmonparam = { GMON_PROF_OFF };
+>>   
+>>   static int	s_scale;
+>> ***************
+>> *** 102,110 ****
+>>   		ERR("monstartup: out of memory\n");
+>>   		return;
+>>   	}
+>> ! #ifdef notdef
+>>   	bzero(cp, p->kcountsize + p->fromssize + p->tossize);
+>> ! #endif
+>>   	p->tos = (struct tostruct *)cp;
+>>   	cp += p->tossize;
+>>   	p->kcount = (u_short *)cp;
+>> --- 106,115 ----
+>>   		ERR("monstartup: out of memory\n");
+>>   		return;
+>>   	}
+>> ! 
+>> ! 	/* zero out the cp structure as value will be added there */
+>>   	bzero(cp, p->kcountsize + p->fromssize + p->tossize);
+>> ! 
+>>   	p->tos = (struct tostruct *)cp;
+>>   	cp += p->tossize;
+>>   	p->kcount = (u_short *)cp;
+>> >>
 >> 
->>   ------------------------------------------------------------------------
->> 2002.01.22  Earnie Boyd  <earnie@users.sf.net>
+>> Pascal Obry.
 >> 
->>         * include/sys/strace.h (_STRACE_ON): Define.
->>         (_STRACE_OFF): Ditto.
->> 
->> Index: strace.h
->> ===================================================================
->> RCS file: /cvs/src/src/winsup/cygwin/include/sys/strace.h,v
->> retrieving revision 1.12
->> diff -u -3 -p -r1.12 strace.h
->> --- strace.h    2001/04/03 02:53:25     1.12
->> +++ strace.h    2002/01/23 01:00:40
->> @@ -77,6 +77,13 @@ extern strace strace;
->>  #define _STRACE_MALLOC  0x20000 // trace malloc calls
->>  #define _STRACE_THREAD  0x40000 // thread-locking calls
->>  #define _STRACE_NOTALL  0x80000 // don't include if _STRACE_ALL
->> +#if defined (DEBUGGING)
->> +# define _STRACE_ON strace.active = 1;
->> +# define _STRACE_OFF strace.active = 0;
->> +#else
->> +# define _STRACE_ON
->> +# define _STRACE_OFF
->> +#endif
->> 
->>  #ifdef __cplusplus
->>  extern "C" {
+>> _______________________________________________
+>> MinGW-patches mailing list
+>> MinGW-patches@lists.sourceforge.net
+>> https://lists.sourceforge.net/lists/listinfo/mingw-patches 
+>
+>
+>http://my.yahoo.com.au - My Yahoo!
+>- It's My Yahoo! Get your own!
+
+-- 
+Please do not send me personal email with cygwin questions.
+Use the resources at http://cygwin.com/ .
