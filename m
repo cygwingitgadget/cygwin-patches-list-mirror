@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2639-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 28697 invoked by alias); 12 Jul 2002 15:20:30 -0000
+Return-Path: <cygwin-patches-return-2640-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 1048 invoked by alias); 12 Jul 2002 21:13:22 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,160 +7,101 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 28682 invoked from network); 12 Jul 2002 15:20:29 -0000
-Date: Fri, 12 Jul 2002 08:20:00 -0000
-To: cygwin-patches <cygwin-patches@cygwin.com>
-Subject: Re: [Setup] [Patch] New Views for Skipped Packages and Installed Packages (keeps)
-Message-Id: <VA.00000bf1.00258f45@thesoftwaresource.com>
-Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="Next part of message (VA.00000bf1.00258f45:thesoftwaresource.com)"
-From: Brian Keener <bkeener@thesoftwaresource.com>
-Reply-To: bkeener@thesoftwaresource.com
-In-Reply-To: <000501c22951$a948b740$0200a8c0@lifelesswks>
-References: <000501c22951$a948b740$0200a8c0@lifelesswks>
-X-SW-Source: 2002-q3/txt/msg00087.txt.bz2
+Received: (qmail 1019 invoked from network); 12 Jul 2002 21:13:21 -0000
+Message-ID: <002901c229e9$3ec34aa0$6132bc3e@BABEL>
+From: "Conrad Scott" <Conrad.Scott@dsl.pipex.com>
+To: <cygwin-patches@cygwin.com>
+Subject: cygwin.din
+Date: Fri, 12 Jul 2002 14:13:00 -0000
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+	boundary="----=_NextPart_000_0026_01C229F1.A016A150"
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-SW-Source: 2002-q3/txt/msg00088.txt.bz2
 
-This is a Mime message, which your current mail reader
-may not understand. Parts of the message will appear as
-text. To process the rest, use a Mime compatible reader
-or Base64 conversion utility.
+This is a multi-part message in MIME format.
 
---Next part of message (VA.00000bf1.00258f45:thesoftwaresource.com)
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8bit
-Content-length: 473
+------=_NextPart_000_0026_01C229F1.A016A150
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+Content-length: 887
 
-Robert Collins wrote:
-> Sure. It doesn't apply for me - what branch is it against? If it's
-> against HEAD, can you please post it as an attachment?
+I've been looking at cygwin.din (again) for a couple of reasons.
+While I was there I noticed a couple of issues and I've attached a
+patch for one (obvious?) typo.
 
-I thought these changes were listed in the README under wishlist, but at any 
-rate it is against HEAD (I thought).  I'll show my stupidity once again since I 
-don't guess I realized we currently had other branches working.
+i) The entries for read(2) are:
 
-Where would I go via the Web to check active branches or better yet can I get 
-CVS to tell me?
+    _read
+    read = read
 
-Bk
+  I've included a patch to make this:
+
+    _read
+    read = _read
+
+  (this crept in at 1.49, June this year, by the looks of it).
+
+ii) There's a rather suspicious entry in this file:
+
+    barfly = write
+
+  Uh? or am I missing a joke here?
+
+iii) How should I go about adding the new SysV IPC entry points?
+Rob added some as `shmat' etc. (i.e. just one entry, no
+underscore) but should these instead follow the `read' pattern
+above (i.e. as two entries, one with a leading underscore)?
+
+iv) More generally, why are there these two symbols (with and
+without the leading underscore) anyhow?  Any pointers for some
+information on this gratefully received.
+
+// Conrad
 
 
---Next part of message (VA.00000bf1.00258f45:thesoftwaresource.com)
-Content-Type: application/octet-stream; name="viewchng"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="viewchng"
-Content-length: 6763
+------=_NextPart_000_0026_01C229F1.A016A150
+Content-Type: text/plain;
+	name="ChangeLog.txt"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+	filename="ChangeLog.txt"
+Content-length: 89
 
-MjAwMi0wNy0xMSAgQnJpYW4gS2VlbmVyICA8YmtlZW5lckB0aGVzb2Z0d2Fy
-ZXNvdXJjZS5jb20+DQoNCiAgICAgICAgKiBQaWNrVmlldy5jYyAoUGlja1Zp
-ZXc6OnZpZXdzKTogVHdvIG5ldyB2aWV3cyBhZGRlZCBmb3IgU2tpcHBlZA0K
-ICAgICAgICBwYWNrYWdlcyBhbmQgSW5zdGFsbGVkIFBhY2thZ2VzIG5vdCBy
-ZXF1aXJpbmcgdXBkYXRlLg0KICAgICAgICAoUGlja1ZpZXc6OnNldF9oZWFk
-ZXJzICgpICk6IERpdHRvLg0KICAgICAgICAoUGlja1ZpZXc6OmNsZWFyX3Zp
-ZXcgKHZvaWQpICk6IERpdHRvLg0KICAgICAgICAoUGlja1ZpZXc6OnZpZXdz
-OjpjYXB0aW9uICgpICk6IFR3byBuZXcgY2FwdGlvbiBhZGRlZCBmb3IgdGhl
-IG5ldw0KICAgICAgICB2aWV3cyBhZGRlZCBmb3IgU2tpcHBlZCBhbmQgSW5z
-dGFsbGVkIFBhY2thZ2VzLg0KICAgICAgICAqIFBpY2tWaWV3Lmg6IFR3byBu
-ZXcgdmlld3MgZm9yIFNraXBwZWQgcGFja2FnZXMgYW5kIEluc3RhbGxlZA0K
-ICAgICAgICBwYWNrYWdlcyBhZGRlZCB0byBwdWJsaWMgY2xhc3Mgdmlldy4N
-CiAgICAgICAgKiBjaG9vc2UuY2MgKHNldF92aWV3X21vZGUpOiBUd28gbmV3
-IHZpZXdzIGFkZGVkIGZvciBTa2lwcGVkDQogICAgICAgIHBhY2thZ2VzIGFu
-ZCBJbnN0YWxsZWQgUGFja2FnZXMgbm90IHJlcXVpcmluZyB1cGRhdGUuDQoN
-Cg0KPyBhdXRvbTR0ZS5jYWNoZQ0KPyBiejJsaWIvYXV0b200dGUuY2FjaGUN
-Cj8gbGliZ2V0b3B0KysvY2ZnYXV4DQo/IGxpYmdldG9wdCsrL2FjbG9jYWwu
-bTQNCj8gbGliZ2V0b3B0KysvYXV0b200dGUuY2FjaGUNCj8gbGliZ2V0b3B0
-KysvY29uZmlndXJlDQo/IGxpYmdldG9wdCsrL01ha2VmaWxlLmluDQo/IGxp
-YmdldG9wdCsrL2luY2x1ZGUvYXV0b2NvbmYuaC5pbg0KPyB6bGliL2F1dG9t
-NHRlLmNhY2hlDQpJbmRleDogUGlja1ZpZXcuY2MNCj09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT0NClJDUyBmaWxlOiAvY3ZzL2N5Z3dpbi1hcHBzL3NldHVwL1Bp
-Y2tWaWV3LmNjLHYNCnJldHJpZXZpbmcgcmV2aXNpb24gMi45DQpkaWZmIC11
-IC1wIC1yMi45IFBpY2tWaWV3LmNjDQotLS0gUGlja1ZpZXcuY2MJOCBKdWwg
-MjAwMiAxMjo1MjowOCAtMDAwMAkyLjkNCisrKyBQaWNrVmlldy5jYwkxMSBK
-dWwgMjAwMiAxNDoyMzozOCAtMDAwMA0KQEAgLTQ3LDggKzQ3LDEwIEBAIHN0
-YXRpYyBQaWNrVmlldzo6SGVhZGVyIGNhdF9oZWFkZXJzW10gPSANCiAvLyBQ
-aWNrVmlldzo6IHZpZXdzDQogY29uc3QgUGlja1ZpZXc6OnZpZXdzIFBpY2tW
-aWV3Ojp2aWV3czo6VW5rbm93biAoMCk7DQogY29uc3QgUGlja1ZpZXc6OnZp
-ZXdzIFBpY2tWaWV3Ojp2aWV3czo6UGFja2FnZUZ1bGwgKDEpOw0KLWNvbnN0
-IFBpY2tWaWV3Ojp2aWV3cyBQaWNrVmlldzo6dmlld3M6OlBhY2thZ2UgPSBQ
-aWNrVmlldzo6dmlld3MgKDIpOw0KLWNvbnN0IFBpY2tWaWV3Ojp2aWV3cyBQ
-aWNrVmlldzo6dmlld3M6OkNhdGVnb3J5ICgzKTsNCitjb25zdCBQaWNrVmll
-dzo6dmlld3MgUGlja1ZpZXc6OnZpZXdzOjpQYWNrYWdlICgyKTsNCitjb25z
-dCBQaWNrVmlldzo6dmlld3MgUGlja1ZpZXc6OnZpZXdzOjpQYWNrYWdlS2Vl
-cHMgKDMpOw0KK2NvbnN0IFBpY2tWaWV3Ojp2aWV3cyBQaWNrVmlldzo6dmll
-d3M6OlBhY2thZ2VTa2lwcyA9IFBpY2tWaWV3Ojp2aWV3cyAoNCk7DQorY29u
-c3QgUGlja1ZpZXc6OnZpZXdzIFBpY2tWaWV3Ojp2aWV3czo6Q2F0ZWdvcnkg
-KDUpOw0KIA0KIC8vIERvSW5zZXJ0SXRlbSAtIGluc2VydHMgYW4gaXRlbSBp
-bnRvIGEgaGVhZGVyIGNvbnRyb2wuDQogLy8gUmV0dXJucyB0aGUgaW5kZXgg
-b2YgdGhlIG5ldyBpdGVtLg0KQEAgLTgyLDcgKzg0LDkgQEAgUGlja1ZpZXc6
-OnNldF9oZWFkZXJzICgpDQogICBpZiAodmlld19tb2RlID09IHZpZXdzOjpV
-bmtub3duKQ0KICAgICByZXR1cm47DQogICBpZiAodmlld19tb2RlID09IHZp
-ZXdzOjpQYWNrYWdlRnVsbCB8fA0KLSAgICAgIHZpZXdfbW9kZSA9PSB2aWV3
-czo6UGFja2FnZSkNCisgICAgICB2aWV3X21vZGUgPT0gdmlld3M6OlBhY2th
-Z2UgfHwNCisgICAgICB2aWV3X21vZGUgPT0gdmlld3M6OlBhY2thZ2VLZWVw
-cyB8fA0KKyAgICAgIHZpZXdfbW9kZSA9PSB2aWV3czo6UGFja2FnZVNraXBz
-KQ0KICAgICB7DQogICAgICAgaGVhZGVycyA9IHBrZ19oZWFkZXJzOw0KICAg
-ICAgIGN1cnJlbnRfY29sID0gMDsNCkBAIC0xNTQsNiArMTU4LDEwIEBAIFBp
-Y2tWaWV3Ojp2aWV3czo6Y2FwdGlvbiAoKQ0KICAgICBjYXNlIDI6DQogICAg
-ICAgcmV0dXJuICJQYXJ0aWFsIjsNCiAgICAgY2FzZSAzOg0KKyAgICAgIHJl
-dHVybiAiSW5zdGFsbGVkIjsNCisgICAgY2FzZSA0Og0KKyAgICAgIHJldHVy
-biAiU2tpcHBlZCI7DQorICAgIGNhc2UgNToNCiAgICAgICByZXR1cm4gIkNh
-dGVnb3J5IjsNCiAgICAgZGVmYXVsdDoNCiAgICAgICByZXR1cm4gIiI7DQpA
-QCAtMjEwLDcgKzIxOCw5IEBAIFBpY2tWaWV3OjpjbGVhcl92aWV3ICh2b2lk
-KQ0KICAgaWYgKHZpZXdfbW9kZSA9PSB2aWV3czo6VW5rbm93bikNCiAgICAg
-cmV0dXJuOw0KICAgaWYgKHZpZXdfbW9kZSA9PSB2aWV3czo6UGFja2FnZUZ1
-bGwgfHwNCi0gICAgICB2aWV3X21vZGUgPT0gdmlld3M6OlBhY2thZ2UpDQor
-ICAgICAgdmlld19tb2RlID09IHZpZXdzOjpQYWNrYWdlIHx8DQorICAgICAg
-dmlld19tb2RlID09IHZpZXdzOjpQYWNrYWdlS2VlcHMgfHwNCisgICAgICB2
-aWV3X21vZGUgPT0gdmlld3M6OlBhY2thZ2VTa2lwcykNCiAgICAgY29udGVu
-dHMuU2hvd0xhYmVsIChmYWxzZSk7DQogICBlbHNlIGlmICh2aWV3X21vZGUg
-PT0gdmlld3M6OkNhdGVnb3J5KQ0KICAgICBjb250ZW50cy5TaG93TGFiZWwg
-KCk7DQpJbmRleDogUGlja1ZpZXcuaA0KPT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PQ0KUkNTIGZpbGU6IC9jdnMvY3lnd2luLWFwcHMvc2V0dXAvUGlja1ZpZXcu
-aCx2DQpyZXRyaWV2aW5nIHJldmlzaW9uIDIuNA0KZGlmZiAtdSAtcCAtcjIu
-NCBQaWNrVmlldy5oDQotLS0gUGlja1ZpZXcuaAkyNyBNYXIgMjAwMiAxMjoy
-MToxOSAtMDAwMAkyLjQNCisrKyBQaWNrVmlldy5oCTExIEp1bCAyMDAyIDE0
-OjIzOjM5IC0wMDAwDQpAQCAtNzksNiArNzksOCBAQCBwdWJsaWM6DQogICAg
-IHN0YXRpYyBjb25zdCB2aWV3cyBVbmtub3duOw0KICAgICBzdGF0aWMgY29u
-c3Qgdmlld3MgUGFja2FnZUZ1bGw7DQogICAgIHN0YXRpYyBjb25zdCB2aWV3
-cyBQYWNrYWdlOw0KKyAgICBzdGF0aWMgY29uc3Qgdmlld3MgUGFja2FnZUtl
-ZXBzOw0KKyAgICBzdGF0aWMgY29uc3Qgdmlld3MgUGFja2FnZVNraXBzOw0K
-ICAgICBzdGF0aWMgY29uc3Qgdmlld3MgQ2F0ZWdvcnk7DQogICAgIHN0YXRp
-YyBjb25zdCB2aWV3cyBOVmlldzsNCiAgICAgICB2aWV3cyAoKTpfdmFsdWUg
-KDApDQpAQCAtODcsNyArODksNyBAQCBwdWJsaWM6DQogICAgIHZpZXdzIChp
-bnQgYUludCkNCiAgICAgew0KICAgICAgIF92YWx1ZSA9IGFJbnQ7DQotICAg
-ICAgaWYgKF92YWx1ZSA8IDAgfHwgX3ZhbHVlID4gMykNCisgICAgICBpZiAo
-X3ZhbHVlIDwgMCB8fCBfdmFsdWUgPiA1KQ0KIAlfdmFsdWUgPSAwOw0KICAg
-ICB9DQogICAgIHZpZXdzICYgb3BlcmF0b3IrKyAoKTsNCkluZGV4OiBjaG9v
-c2UuY2MNCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NClJDUyBmaWxlOiAvY3Zz
-L2N5Z3dpbi1hcHBzL3NldHVwL2Nob29zZS5jYyx2DQpyZXRyaWV2aW5nIHJl
-dmlzaW9uIDIuMTA1DQpkaWZmIC11IC1wIC1yMi4xMDUgY2hvb3NlLmNjDQot
-LS0gY2hvb3NlLmNjCTcgSnVsIDIwMDIgMTU6MTQ6NDkgLTAwMDAJMi4xMDUN
-CisrKyBjaG9vc2UuY2MJMTEgSnVsIDIwMDIgMTQ6MjM6NDMgLTAwMDANCkBA
-IC0zNjAsOSArMzYwLDI4IEBAIHNldF92aWV3X21vZGUgKEhXTkQgaCwgUGlj
-a1ZpZXc6OnZpZXdzIG0NCiAgICAgICBmb3IgKHNpemVfdCBuID0gMTsgbiA8
-PSBkYi5wYWNrYWdlcy5udW1iZXIgKCk7IG4rKykNCiAJew0KIAkgIHBhY2th
-Z2VtZXRhICYgcGtnID0gKmRiLnBhY2thZ2VzW25dOw0KLQkgIGlmICgoIXBr
-Zy5kZXNpcmVkICYmIHBrZy5pbnN0YWxsZWQpDQorCSAgaWYgKCghcGtnLmRl
-c2lyZWQgJiYgcGtnLmluc3RhbGxlZCkgDQogCSAgICAgIHx8IChwa2cuZGVz
-aXJlZCAmJiAocGtnLmRlc2lyZWQucGlja2VkICgpIA0KIAkJCQkgIHx8IHBr
-Zy5kZXNpcmVkLnNvdXJjZVBhY2thZ2UoKS5waWNrZWQoKSkpKQ0KKwkgICAg
-Y2hvb3Nlci0+aW5zZXJ0X3BrZyAocGtnKTsNCisJfQ0KKyAgICB9DQorICBl
-bHNlIGlmIChjaG9vc2VyLT5nZXRfdmlld19tb2RlICgpID09IFBpY2tWaWV3
-Ojp2aWV3czo6UGFja2FnZUtlZXBzKQ0KKyAgICB7DQorICAgICAgZm9yIChz
-aXplX3QgbiA9IDE7IG4gPD0gZGIucGFja2FnZXMubnVtYmVyICgpOyBuKysp
-DQorCXsNCisJICBwYWNrYWdlbWV0YSAmIHBrZyA9ICpkYi5wYWNrYWdlc1tu
-XTsNCisJICBpZiAocGtnLmluc3RhbGxlZCAmJiBwa2cuZGVzaXJlZCAmJiAh
-cGtnLmRlc2lyZWQucGlja2VkKCkgDQorCSAgICAgICYmICFwa2cuZGVzaXJl
-ZC5zb3VyY2VQYWNrYWdlKCkucGlja2VkKCkpDQorCSAgICBjaG9vc2VyLT5p
-bnNlcnRfcGtnIChwa2cpOw0KKwl9DQorICAgIH0NCisgIGVsc2UgaWYgKGNo
-b29zZXItPmdldF92aWV3X21vZGUgKCkgPT0gUGlja1ZpZXc6OnZpZXdzOjpQ
-YWNrYWdlU2tpcHMpDQorICAgIHsNCisgICAgICBmb3IgKHNpemVfdCBuID0g
-MTsgbiA8PSBkYi5wYWNrYWdlcy5udW1iZXIgKCk7IG4rKykNCisJew0KKwkg
-IHBhY2thZ2VtZXRhICYgcGtnID0gKmRiLnBhY2thZ2VzW25dOw0KKwkgIGlm
-ICghcGtnLmRlc2lyZWQgJiYgIXBrZy5pbnN0YWxsZWQpDQogCSAgICBjaG9v
-c2VyLT5pbnNlcnRfcGtnIChwa2cpOw0KIAl9DQogICAgIH0NCg==
+2002-07-12  Conrad Scott  <conrad.scott@dsl.pipex.com>
 
---Next part of message (VA.00000bf1.00258f45:thesoftwaresource.com)--
-This is the end of the Mime message.
+	* cygwin.din (read): Fix typo.
+
+
+------=_NextPart_000_0026_01C229F1.A016A150
+Content-Type: application/octet-stream;
+	name="din.patch"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment;
+	filename="din.patch"
+Content-length: 597
+
+Index: cygwin.din=0A=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
+RCS file: /cvs/src/src/winsup/cygwin/cygwin.din,v=0A=
+retrieving revision 1.53=0A=
+diff -u -r1.53 cygwin.din=0A=
+--- cygwin.din	2 Jul 2002 08:44:54 -0000	1.53=0A=
++++ cygwin.din	12 Jul 2002 18:52:39 -0000=0A=
+@@ -615,7 +615,7 @@=0A=
+ initstate=0A=
+ setstate=0A=
+ _read=0A=
+-read =3D read=0A=
++read =3D _read=0A=
+ readdir=0A=
+ _readdir =3D readdir=0A=
+ readlink=0A=
+
+------=_NextPart_000_0026_01C229F1.A016A150--
+
