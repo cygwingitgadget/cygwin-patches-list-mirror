@@ -1,34 +1,28 @@
-From: Kazuhiro Fujieda <fujieda@jaist.ac.jp>
+From: Chris Faylor <cgf@cygnus.com>
 To: cygwin-patches@sourceware.cygnus.com
 Subject: Re: preliminary patch2 for i18n: change the code page to ANSI.
-Date: Mon, 03 Jul 2000 19:05:00 -0000
-Message-id: <s1s8zviodkm.fsf@jaist.ac.jp>
-References: <s1saefyooqa.fsf@jaist.ac.jp> <20000703190459.A30846@cygnus.com>
-X-SW-Source: 2000-q3/msg00003.html
+Date: Mon, 03 Jul 2000 19:30:00 -0000
+Message-id: <20000703222950.A5294@cygnus.com>
+References: <s1saefyooqa.fsf@jaist.ac.jp> <20000703190459.A30846@cygnus.com> <s1s8zviodkm.fsf@jaist.ac.jp>
+X-SW-Source: 2000-q3/msg00004.html
 
->>> On Mon, 3 Jul 2000 19:04:59 -0400
->>> Chris Faylor <cgf@cygnus.com> said:
+On Tue, Jul 04, 2000 at 11:04:57AM +0900, Kazuhiro Fujieda wrote:
+>> This test against 0xe0 was a recent addition from someone who
+>> claimed that it made things work better under 95 or 98, I
+>> believe.
+>
+>You are right. Before you added the test against 0xe0, this test
+>was done only against 0. It couldn't distinguish extended keys
+>under Win9x.
 
-> >-      if (ich == 0 || (ich & 0xff) == 0xe0)  /* arrow/function keys */
-> >+      if (ich == 0 ||
-> >+	  /* arrow/function keys */
-> >+	  (input_rec.Event.KeyEvent.dwControlKeyState & ENHANCED_KEY))
-> > 	{
-> > 	  toadd = get_nonascii_key (input_rec);
-> > 	  if (!toadd)
-> 
-> Have you tested this change under Windows 95/98?
+Ok.  I've applied this patch.  Thanks.
 
-Yes, I tested it under Windows 98 and found it to work fine.
+I do wonder if the elimination of the SetFileApisToOEM/CharToOem will
+cause other problems since I've tried to eliminate those in the past
+but have gotten complaints.
 
-> This test against 0xe0 was a recent addition from someone who
-> claimed that it made things work better under 95 or 98, I
-> believe.
+Maybe your changes to fhandler_console are all that is required but I
+would appreciate it if you would remain vigilant for complaints on the
+cygwin mailing list once this new version is released.
 
-You are right. Before you added the test against 0xe0, this test
-was done only against 0. It couldn't distinguish extended keys
-under Win9x.
-____
-  | AIST      Kazuhiro Fujieda <fujieda@jaist.ac.jp>
-  | HOKURIKU  School of Information Science
-o_/ 1990      Japan Advanced Institute of Science and Technology
+cgf
