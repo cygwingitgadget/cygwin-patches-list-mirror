@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4114-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 25174 invoked by alias); 19 Aug 2003 04:13:09 -0000
+Return-Path: <cygwin-patches-return-4115-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 29187 invoked by alias); 19 Aug 2003 04:22:24 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,63 +7,46 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 25164 invoked from network); 19 Aug 2003 04:13:07 -0000
-Date: Tue, 19 Aug 2003 04:13:00 -0000
+Received: (qmail 29171 invoked from network); 19 Aug 2003 04:22:21 -0000
+Date: Tue, 19 Aug 2003 04:22:00 -0000
 From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: Signal handling tune up.
-Message-ID: <20030819041307.GA9022@redhat.com>
+Message-ID: <20030819042216.GB9022@redhat.com>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3.0.5.32.20030818201736.0080e4e0@mail.attbi.com> <3.0.5.32.20030818201736.0080e4e0@mail.attbi.com> <3.0.5.32.20030818222927.008114e0@incoming.verizon.net> <20030819024617.GA6581@redhat.com>
+References: <20030819005832.GB4303@redhat.com> <3.0.5.32.20030818201736.0080e4e0@mail.attbi.com> <20030819005832.GB4303@redhat.com> <3.0.5.32.20030818225010.0080e4c0@incoming.verizon.net>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20030819024617.GA6581@redhat.com>
+In-Reply-To: <3.0.5.32.20030818225010.0080e4c0@incoming.verizon.net>
 User-Agent: Mutt/1.4.1i
-X-SW-Source: 2003-q3/txt/msg00130.txt.bz2
+X-SW-Source: 2003-q3/txt/msg00131.txt.bz2
 
-On Mon, Aug 18, 2003 at 10:46:17PM -0400, Christopher Faylor wrote:
->On Mon, Aug 18, 2003 at 10:29:27PM -0400, Pierre A. Humblet wrote:
->>>However, this does demonstrate a flaw in wait_sig.  It exhausts the sigtodo
->>>array based on he last received type of signal.  So, if process a sends ctrl-c
->>>to itself and "at the same time" process b sends ctrl-c to process a,
->>>then the signal will be randomly processed as coming from either process a
->>>process b.  If the signal is handled as coming from process b, process a
->>>will never get the notification it needs.
+On Mon, Aug 18, 2003 at 10:50:10PM -0400, Pierre A. Humblet wrote:
+>At 09:05 PM 8/18/2003 -0400, Christopher Faylor wrote:
+>>Nevermind.  It doesn't work the way I remembered.  The while loop which
+>>decrements sigtodo only executes once when it encounters a normal UNIX
+>>signal (it probably should just be recoded as an if).  So, this should
+>>be a non-issue.  In fact, I don't see how multiple signals coming in at
+>>the same time would have the effect you mentioned either.
 >>
->>Yes, that's what I had in mind. There are also the sig_dispatch_pending (0)
->>in net.cc (and other places) that generate events with rc == 2 even though 
->>they are local.
->
->Hmm.  Now that I look at this more, I think maybe this should be a
->'rc == 1' rather than a 'rc != 2'.
->
->>I don't understand their role.
->
->All of the calls in net.cc are sig_dispatch_pending (0).
->
->It's supposed to synchronously flush all pending signals.  Only calling
->sig_dispatch_pending (1) should call the nonsync semaphore.  This
->justwake semaphore is problematic as it is used in exceptions.cc,
->though.  It will confuse wait_sig when signals are stacked up.  That may
->explain the occasional signal hang reports.
+>I don't understand. The sigtodo of a signal is decremented once
+>but the code immediately continues in the for loop for the next signal.
+>Two signals can be processed during a cycle of the outside for (;;) and
+>they will have the same rc.
 
-Nope.  I was wrong again.  I don't believe that this should cause a
-hang.  Understanding the signal code is nothing like riding a bicycle.
+Oh, right.  I was remembering a time when the inner while used to
+exhaust the InterlockedDecrement.  It doesn't do that anymore but that
+hardly matters because, as you say, it is possible to the current code
+to be confused by "simultaneous" signals coming from the outside and
+from the current process.
 
-Anyway, in an attempt to simplify this somewhat, I've moved stuff out
-of setup_handler and back into wait_sig (for at least the second time)
-as your patch did.  I've also changed the inner while in wait_sig to an
-if (for at least the second time).  This will move things around so your
-patch probably no longer cleanly applies but I'll deal with that in the
-next few days as I dissect more of it.
+The only way I can think of around that is to add another an internal
+sigtodo array to every process just for signals sent to myself and scan
+that and the sigtodo process table.  I guess I'll implement that in the
+next couple of days.
 
-I may not be able to get to your patch soon since I have actual
-honest-to-gosh Red Hat Cygwin duties to attend to for the first time
-in quite some time.  I volunteered to help out on a cygwin project even
-though I've moved from the group that is responsible for cygwin.  I
-neglected those duties tonight, in fact, thanks to the excitement of
-someone actually submitting substantial signal handling patches.  :-)
+So, yes, this could be responsible for some strange signal hangs.
 
 cgf
