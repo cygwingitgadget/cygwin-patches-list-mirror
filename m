@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4627-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 12163 invoked by alias); 23 Mar 2004 22:28:45 -0000
+Return-Path: <cygwin-patches-return-4628-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 12742 invoked by alias); 24 Mar 2004 10:20:51 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,73 +7,35 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 12132 invoked from network); 23 Mar 2004 22:28:44 -0000
-Message-ID: <01C4112E.907FD100.Gerd.Spalink@t-online.de>
-From: Gerd.Spalink@t-online.de (Gerd Spalink)
-Reply-To: "Gerd.Spalink@t-online.de" <Gerd.Spalink@t-online.de>
-To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: Fix to discard wave header properly
-Date: Tue, 23 Mar 2004 22:28:00 -0000
-Organization: privat
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Seen: false
-X-ID: TF2MHeZa8evKxWKRDJfK7rNMMWlrOEP0Wckf+ge52mqoX87vk1Je0L
-X-SW-Source: 2004-q1/txt/msg00117.txt.bz2
+Received: (qmail 12732 invoked from network); 24 Mar 2004 10:20:50 -0000
+Date: Wed, 24 Mar 2004 10:20:00 -0000
+From: Corinna Vinschen <vinschen@redhat.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: /dev/dsp test to go into the winsup testsuite, now using libltp
+Message-ID: <20040324102049.GB17229@cygbert.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <01C4112C.8CF3FD10.Gerd.Spalink@t-online.de>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <01C4112C.8CF3FD10.Gerd.Spalink@t-online.de>
+User-Agent: Mutt/1.4.2i
+X-SW-Source: 2004-q1/txt/msg00118.txt.bz2
 
-This patch fixes the following problem: If .wav files are copied
-to /dev/dsp, the wave header is played as PCM audio.
-After the patch, discarding the wave header works properly.
-I also got rid of one type cast. The cast in the call to
-parsewav prevented the call by reference to work properly.
+On Mar 23 23:14, Gerd Spalink wrote:
+> Hello,
+> 
+> This is the modified test for the /dev/dsp device.
 
-Gerd
+Cool, especially the final okay ;-)
 
-ChangeLog
+I've applied it.
 
-2004-03-23  Gerd Spalink  <Gerd.Spalink@t-online.de>
+Thanks,
+Corinna
 
-	* fhandler_dsp.cc (fhandler_dev_dsp::write): Remove type
-	cast from argument to audio_out_->parsewav() to make reference
-	work properly. Now .wav file headers are properly discarded.
-
-
-Index: fhandler_dsp.cc
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/fhandler_dsp.cc,v
-retrieving revision 1.31
-diff -p -u -r1.31 fhandler_dsp.cc
---- fhandler_dsp.cc     23 Mar 2004 11:05:56 -0000      1.31
-+++ fhandler_dsp.cc     23 Mar 2004 22:15:10 -0000
-@@ -1098,7 +1098,9 @@ fhandler_dev_dsp::open (int flags, mode_
- int
- fhandler_dev_dsp::write (const void *ptr, size_t len)
- {
--  int len_s = len;
-+  int len_s = len;
-+  const char *ptr_s = static_cast <const char *> (ptr);
-+
-   debug_printf ("ptr=%08x len=%d", ptr, len);
-   if (!audio_out_)
-     {
-@@ -1109,9 +1111,10 @@ fhandler_dev_dsp::write (const void *ptr
-   if (audio_out_->getOwner () == 0L)
-     { // No owner yet, lets do it
-       // check for wave file & get parameters & skip header if possible.
--      if (audio_out_->parsewav ((const char *) ptr, len_s,
-+      if (audio_out_->parsewav (ptr_s, len_s,
-                                audiofreq_, audiobits_, audiochannels_))
-        { // update our format conversion
-+         debug_printf ("=> ptr_s=%08x len_s=%d", ptr_s, len_s);
-          audioformat_ = ((audiobits_ == 8) ? AFMT_U8 : AFMT_S16_LE);
-          audio_out_->setformat (audioformat_);
-        }
-@@ -1123,7 +1126,7 @@ fhandler_dev_dsp::write (const void *ptr
-        }
-     }
-
--  audio_out_->write ((char *)ptr, len_s);
-+  audio_out_->write (ptr_s, len_s);
-   return len;
- }
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
