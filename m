@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3350-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 4599 invoked by alias); 22 Dec 2002 03:06:28 -0000
+Return-Path: <cygwin-patches-return-3351-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 8171 invoked by alias); 2 Jan 2003 04:56:27 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,171 +7,74 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 4585 invoked from network); 22 Dec 2002 03:06:27 -0000
-Date: Sat, 21 Dec 2002 19:06:00 -0000
-From: Steve O <bub@io.com>
-To: cygwin-patches@cygwin.com
-Subject: [PATCH] pty_master echobuf
-Message-ID: <20021221210844.A27687@hagbard.io.com>
-Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="ikeVEW9yuYc//A+q"
-Content-Disposition: inline
-User-Agent: Mutt/1.2.5.1i
-X-SW-Source: 2002-q4/txt/msg00301.txt.bz2
+Received: (qmail 8161 invoked from network); 2 Jan 2003 04:56:26 -0000
+Message-ID: <3E13C60B.4000904@ece.gatech.edu>
+Date: Thu, 02 Jan 2003 04:56:00 -0000
+From: Charles Wilson <cwilson@ece.gatech.edu>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.0.1) Gecko/20020823 Netscape/7.0
+X-Accept-Language: en-us, en
+MIME-Version: 1.0
+To:  cygwin-patches@cygwin.com
+Subject: [PATCH] export asprintf and friends
+Content-Type: multipart/mixed;
+ boundary="------------020703000100030002070302"
+X-SW-Source: 2003-q1/txt/msg00000.txt.bz2
 
+This is a multi-part message in MIME format.
+--------------020703000100030002070302
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-length: 429
 
---ikeVEW9yuYc//A+q
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-length: 1058
+This patch assumes that the asprintf.c change I submitted to newlib is 
+also applied.  (And no, it doesn't fix the problem I was having with 
+glib and the printf functions, but I noticed this oversight -- and the 
+newlib typo -- while doing that investigation)
 
-Hi,
-Thank you Christopher for reviewing all these tty patches.
-Here's the next one.  It introduces an echo buffer that doecho
-will eventually use.  As nothing yet puts characters into the
-echo buffer, this patch should not have any noticeable effect. 
+2003-01-01  Charles Wilson  <cwilson@ece.gatech.edu>
 
-Thanks,
--steve
+	* cygwin.din: add asprintf and vasprintf, as
+	well as the reentrant versions and underscore
+	variants.
 
-ChangeLog
-2002-12-21  Steve Osborn  <bub@io.com>
+--Chuck
 
-	* fhandler.h (fhandler_pty_master::get_echobuf_valid): New.
-	(fhandler_pty_master::ebbuf): New buffer.
-	(fhandler_pty_master::ebixget): New buffer get index.
-	(fhandler_pty_master::ebixput): New buffer put index.
-	(fhandler_pty_master::ebixlen): New buffer length.
-	(fhandler_pty_master::get_echobuf_into_buffer): New.
-	(fhandler_pty_master::clear_echobuf): New.
-	* fhandler_tty.cc (fhandler_pty_master::get_echobuf_into_buffer): New.
-	(fhandler_pty_master::process_slave_output) Read from echobuf 
-	initially.
-	(fhandler_pty_master::fhandler_pty_master): Initialize new variables.
-	(fhandler_pty_master::clear_echobuf): New.
-	(fhandler_pty_master::close): Clear echobuf on close.
-	* select.cc (peek_pipe): Check for input from echobuf.
+--------------020703000100030002070302
+Content-Type: text/plain;
+ name="asprintf.cygwin"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline;
+ filename="asprintf.cygwin"
+Content-length: 613
 
-
---ikeVEW9yuYc//A+q
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename="tty6.patch"
-Content-length: 3202
-
-Index: cygwin/fhandler.h
+Index: cygwin.din
 ===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/fhandler.h,v
-retrieving revision 1.151
-diff -u -p -r1.151 fhandler.h
---- cygwin/fhandler.h	21 Dec 2002 04:38:12 -0000	1.151
-+++ cygwin/fhandler.h	22 Dec 2002 02:40:27 -0000
-@@ -937,6 +937,16 @@ class fhandler_pty_master: public fhandl
- 
-   void set_close_on_exec (int val);
-   bool hit_eof ();
-+
-+  bool get_echobuf_valid () { return ebixget < ebixput; }
-+
-+ protected:
-+  char *ebbuf;		/* used for buffering echo chars */
-+  size_t ebixget;
-+  size_t ebixput;
-+  size_t ebbuflen;
-+  int get_echobuf_into_buffer (char *buf, size_t buflen);
-+  void clear_echobuf ();
- };
- 
- class fhandler_tty_master: public fhandler_pty_master
-Index: cygwin/fhandler_tty.cc
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/fhandler_tty.cc,v
-retrieving revision 1.85
-diff -u -p -r1.85 fhandler_tty.cc
---- cygwin/fhandler_tty.cc	21 Dec 2002 04:38:12 -0000	1.85
-+++ cygwin/fhandler_tty.cc	22 Dec 2002 02:40:30 -0000
-@@ -220,6 +220,19 @@ fhandler_pty_master::hit_eof ()
- /* Process tty output requests */
- 
- int
-+fhandler_pty_master::get_echobuf_into_buffer (char *buf, size_t buflen)
-+{
-+  size_t copied_chars = 0;
-+  while (copied_chars < buflen && ebixget < ebixput)
-+      buf[copied_chars++] = ebbuf[ebixget++];
-+
-+  if (ebixget >= ebixput)
-+    ebixget = ebixput = 0;
-+
-+  return (int)copied_chars;
-+}
-+
-+int
- fhandler_pty_master::process_slave_output (char *buf, size_t len, int pktmode_on)
- {
-   size_t rlen;
-@@ -261,7 +274,7 @@ fhandler_pty_master::process_slave_outpu
- 
-       HANDLE handle = get_io_handle ();
- 
--      n = 0; // get_readahead_into_buffer (outbuf, len);
-+      n = get_echobuf_into_buffer (outbuf, rlen);
-       if (!n)
- 	{
- 	  /* Doing a busy wait like this is quite inefficient, but nothing
-@@ -992,7 +1005,11 @@ out:
-  fhandler_pty_master
- */
- fhandler_pty_master::fhandler_pty_master (DWORD devtype, int unit)
--  : fhandler_tty_common (devtype, unit)
-+  : fhandler_tty_common (devtype, unit),
-+    ebbuf (NULL),
-+    ebixget (0),
-+    ebixput (0),
-+    ebbuflen (0)
- {
- }
- 
-@@ -1047,6 +1064,15 @@ fhandler_tty_common::close ()
-   return 0;
- }
- 
-+void 
-+fhandler_pty_master::clear_echobuf ()
-+{
-+  ebixput = ebixget = ebbuflen = 0;
-+  if (ebbuf) 
-+    free(ebbuf);
-+  ebbuf = NULL;
-+}
-+
- int
- fhandler_pty_master::close ()
- {
-@@ -1071,7 +1097,7 @@ fhandler_pty_master::close ()
- 	CloseHandle (get_ttyp ()->to_master);
-       get_ttyp ()->init ();
-     }
--
-+  clear_echobuf ();
-   return 0;
- }
- 
-Index: cygwin/select.cc
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/select.cc,v
-retrieving revision 1.83
-diff -u -p -r1.83 select.cc
---- cygwin/select.cc	11 Dec 2002 04:00:04 -0000	1.83
-+++ cygwin/select.cc	22 Dec 2002 02:40:33 -0000
-@@ -431,7 +431,8 @@ peek_pipe (select_record *s, bool from_s
- 	{
- 	case FH_PTYM:
- 	case FH_TTYM:
--	  if (((fhandler_pty_master *) fh)->need_nl)
-+	  if (((fhandler_pty_master *) fh)->need_nl
-+	      || ((fhandler_pty_master *)fh)->get_echobuf_valid ())
- 	    {
- 	      gotone = s->read_ready = true;
- 	      goto out;
+RCS file: /cvs/src/src/winsup/cygwin/cygwin.din,v
+retrieving revision 1.72
+diff -u -r1.72 cygwin.din
+--- cygwin.din	6 Dec 2002 19:48:03 -0000	1.72
++++ cygwin.din	2 Jan 2003 02:40:17 -0000
+@@ -50,6 +50,10 @@
+ _asinh = asinh
+ asinhf
+ _asinhf = asinhf
++asprintf
++_asprintf = asprintf
++_asprintf_r
++asprintf_r = _asprintf_r
+ atan
+ _atan = atan
+ atan2
+@@ -943,6 +947,10 @@
+ utmpname
+ _utmpname = utmpname
+ valloc
++vasprintf
++_vasprintf = vasprintf
++_vasprintf_r
++vasprintf_r = _vasprintf_r
+ vfiprintf
+ _vfiprintf = vfiprintf
+ vfork
 
---ikeVEW9yuYc//A+q--
+--------------020703000100030002070302--
