@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3292-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 8476 invoked by alias); 9 Dec 2002 22:49:45 -0000
+Return-Path: <cygwin-patches-return-3293-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 4568 invoked by alias); 10 Dec 2002 05:07:10 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,45 +7,142 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 8462 invoked from network); 9 Dec 2002 22:49:44 -0000
-Date: Mon, 09 Dec 2002 14:49:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
+Received: (qmail 4557 invoked from network); 10 Dec 2002 05:07:08 -0000
+From: "Craig McGeachie" <slapdau@yahoo.com.au>
 To: cygwin-patches@cygwin.com
-Subject: Re: --enable-runtime-pseudo-reloc support in cygwin, take 3.
-Message-ID: <20021209225053.GA6419@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20021119072016.23A231BF36@redhat.com> <3577371564.20021119120659@logos-m.ru> <1451205547776.20021202133024@logos-m.ru> <20021202175006.GC21442@redhat.com> <19973816953.20021203124546@logos-m.ru>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <19973816953.20021203124546@logos-m.ru>
-User-Agent: Mutt/1.5.1i
-X-SW-Source: 2002-q4/txt/msg00243.txt.bz2
+Date: Mon, 09 Dec 2002 21:07:00 -0000
+MIME-Version: 1.0
+Content-type: Multipart/Mixed; boundary=Message-Boundary-12046
+Subject: [patch] netdb.cc to use strtok_r
+Reply-to: cygwin-patches@cygwin.com
+Message-ID: <3DF62D35.8020.1099672B@localhost>
+Priority: normal
+X-SW-Source: 2002-q4/txt/msg00244.txt.bz2
 
-On Tue, Dec 03, 2002 at 12:45:46PM +0300, egor duda wrote:
->Monday, 02 December, 2002 Christopher Faylor cgf@redhat.com wrote:
->CF> On Mon, Dec 02, 2002 at 01:30:24PM +0300, egor duda wrote:
->>>2002-12-02  Egor Duda <deo@logos-m.ru>
->>>
->>>        * cygwin/lib/pseudo-reloc.c: New file.
->>>        * cygwin/cygwin.sc: Add symbols to handle runtime pseudo-relocs.
->>>        * cygwin/lib/_cygwin_crt0_common.cc: Perform pseudo-relocs during
->>>        initialization of cygwin binary (.exe or .dll).
->
->CF> I'm rapidly approaching the I-don't-care-anymore state for this but I am
->CF> not clear on why we need to add the changes to cygwin.sc.  This is for people
->CF> who want to link the cygwin DLL without using the appropriate header files
->CF> which label things as __declspec(dllexport) or using the appropriate libcygwin.a,
->CF> right?  Why should that matter?
->
->Yes, you're right. This part is not needed. It's probably been left
->out from the "experimental" phase when i tried different ways to
->handle pseudo-relocs. Here's the updated one.
 
-Our lawyer has informed me that PD is ok on a limited basis, so I've checked
-this in, at long last.
+--Message-Boundary-12046
+Content-type: text/plain; charset=US-ASCII
+Content-transfer-encoding: 7BIT
+Content-description: Mail message body
+Content-length: 404
 
-Thanks everyone for your patience as we hashed this out.
+2002-12-10 Craig McGeachie <slapdau@yahoo.com.au>
 
-cgf
+* netdb.cc (parse_alias_list, parse_services_line)
+(parse_protocol_line): Change strtok calls to strtok_r.
+
+----------------+-------------------------------------------------
+Craig McGeachie | #include <cheesy_tag.h>
++64(21)037-6917 | while (!inebriated) c2h5oh=(++bottle)->contents;
+----------------+-------------------------------------------------
+
+
+
+--Message-Boundary-12046
+Content-type: text/plain; charset=US-ASCII
+Content-transfer-encoding: 7BIT
+Content-description: Text from file 'netdb.diff'
+Content-length: 3653
+
+Index: cygwin/netdb.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/netdb.cc,v
+retrieving revision 1.1
+diff -u -p -r1.1 netdb.cc
+--- cygwin/netdb.cc	4 Dec 2002 20:44:17 -0000	1.1
++++ cygwin/netdb.cc	10 Dec 2002 04:57:25 -0000
+@@ -136,14 +136,14 @@ static const NO_COPY char *SPACE = " \t\
+ char** structure terminated by a NULL.
+ 
+ N.B. This routine relies on side effects due to the nature of
+-strtok().  strtok() initially takes a char * pointing to the start of
+-a line, and then NULL to indicate continued processing.  strtok() does
++strtok_r().  strtok_r() initially takes a char * pointing to the start of
++a line, and then NULL to indicate continued processing.  strtok_r() does
+ not provide a mechanism for getting pointer to the unprocessed portion
+ of a line.  Alias processing is done part way through a line after
+-strtok().  This routine relies on further calls to strtok(), passing
++strtok_r().  This routine relies on further calls to strtok_r(), passing
+ NULL as the first parameter, returning alias names from the line. */
+ static void
+-parse_alias_list (char ***aliases)
++parse_alias_list (char ***aliases, char **lasts)
+ {
+   struct alias_t
+   {
+@@ -153,7 +153,7 @@ parse_alias_list (char ***aliases)
+   alias_t *alias_list_head = NULL, *alias_list_tail = NULL;
+   char *alias;
+   int alias_count = 0;
+-  alias = strtok (NULL, SPACE);
++  alias = strtok_r (NULL, SPACE, lasts);
+ 
+   while (alias)
+     {
+@@ -167,7 +167,7 @@ parse_alias_list (char ***aliases)
+       new_alias->next = NULL;
+       new_alias->alias_name = alias;
+       alias_list_tail = new_alias;
+-      alias = strtok (NULL, SPACE);
++      alias = strtok_r (NULL, SPACE, lasts);
+     }
+ 
+   *aliases = (char**) calloc (alias_count + 1, sizeof (char *));
+@@ -201,16 +201,16 @@ parse_services_line (FILE *svc_file, str
+   char *line;
+   while ((line = get_entire_line (svc_file)))
+     {
+-      char *name, *port, *protocol;
++      char *name, *port, *protocol, *lasts;
+ 
+       line[strcspn (line, "#")] = '\0'; // truncate at comment marker.
+-      name = strtok (line, SPACE);
++      name = strtok_r (line, SPACE, &lasts);
+       if (!name)
+ 	{
+ 	  free (line);
+ 	  continue;
+ 	}
+-      port = strtok (NULL, SPACE);
++      port = strtok_r (NULL, SPACE, &lasts);
+       protocol = strchr (port, '/');
+       *protocol++ = '\0';
+       sep->s_name = strdup (name);
+@@ -220,7 +220,7 @@ parse_services_line (FILE *svc_file, str
+       paranoid_printf ("sep->s_proto strdup %p", sep->s_proto);
+       /* parse_alias_list relies on side effects.  Read the comments
+ 	 for that function.*/
+-      parse_alias_list (& sep->s_aliases);
++      parse_alias_list (& sep->s_aliases, &lasts);
+       free (line);
+       return true;
+     }
+@@ -322,22 +322,22 @@ parse_protocol_line (FILE *proto_file, s
+   char *line;
+   while ((line = get_entire_line (proto_file)))
+     {
+-      char *name, *protocol;
++      char *name, *protocol, *lasts;
+ 
+       line[strcspn (line, "#")] = '\0'; // truncate at comment marker.
+-      name = strtok (line, SPACE);
++      name = strtok_r (line, SPACE, &lasts);
+       if (!name)
+ 	{
+ 	  free (line);
+ 	  continue;
+ 	}
+-      protocol = strtok (NULL, SPACE);
++      protocol = strtok_r (NULL, SPACE, &lasts);
+       pep->p_name = strdup (name);
+       paranoid_printf ("pep->p_name strdup %p", pep->p_name);
+       pep->p_proto = atoi (protocol);
+       /* parse_alias_list relies on side effects.  Read the comments
+ 	 for that function.*/
+-      parse_alias_list (& pep->p_aliases);
++      parse_alias_list (& pep->p_aliases, &lasts);
+       free (line);
+       return true;
+     }
+
+--Message-Boundary-12046--
