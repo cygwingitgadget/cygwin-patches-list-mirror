@@ -1,40 +1,29 @@
-From: Christopher Faylor <cgf@redhat.com>
-To: Christopher Faylor <cygwin-patches@cygwin.com>
-Subject: Re: improving security of AF_UNIX sockets
-Date: Fri, 06 Apr 2001 17:01:00 -0000
-Message-id: <20010406200121.A24663@redhat.com>
-References: <198204047314.20010404220250@logos-m.ru> <20010406141743.A23496@redhat.com> <6836779856.20010406234047@logos-m.ru>
-X-SW-Source: 2001-q2/msg00012.html
+From: Benjamin Riefenstahl <Benjamin.Riefenstahl@epost.de>
+To: cygwin-patches@cygwin.com
+Subject: Re: Console codepage
+Date: Sun, 08 Apr 2001 07:28:00 -0000
+Message-id: <m3hezz8o0c.fsf@benny-ppc.crocodial.de>
+References: <u7l3fv26h.fsf@mail.epost.de> <20010128154852.A20701@redhat.com>
+X-SW-Source: 2001-q2/msg00013.html
 
-On Fri, Apr 06, 2001 at 11:40:47PM +0400, egor duda wrote:
->Hi!
->
->Friday, 06 April, 2001 Christopher Faylor cgf@redhat.com wrote:
->
->CF> On Wed, Apr 04, 2001 at 10:02:50PM +0400, egor duda wrote:
->>>This patch prevents local users from connecting to cygwin-emulated
->>>AF_UNIX socket if this user have no read rights on socket's file.  it's
->>>done by adding 128-bit random secret cookie to !<socket>port string in
->>>file.  later, each processes which is negotiating connection via
->>>connect() or accept() must signal its peer that it knows this secret
->>>cookie.
->
->CF> This looks good.  It seems like this would not be backwards compatible
->CF> though, right?
->
->CF> I don't know if this is an issue or not.
->
->it won't be an issue because contents of AF_UNIX sockets are not
->"persistent", they are being created anew on every bind(). in
->this sense they're unlike symlinks -- we don't care about what was
->written to the socket file before.
->
->the only possible incompatibility can appear if some application is
->reading an interpreting socket file contents directly, bypassing
->normal cygwin mechanism. i've never heard of such applications, and
->even if they exist, they're certainly fundamentally wrong.
+Hi Christopher and all,
 
-That's what I thought.  Go ahead and check this in.  I appreciate your
-thinking about this.
 
-cgf
+Christopher Faylor <cgf@redhat.com> writes:
+> [...] If you could send an assignment form, too, that would help
+> make sure that the legalities are covered.
+
+I got the reply to the assignment form last week.  Thanks for the
+T-shirt, I didn't expect that ;-)
+
+
+I checked the CVS source and noticed that my patch did not get applied
+yet.  Did it just fall between the cracks or are there still problems
+with it?
+
+I could update the patch to account for the changes that have occurred
+in the CVS source in the meantime.  It would take some days though
+until I have the spare time.
+
+
+so long, benny
