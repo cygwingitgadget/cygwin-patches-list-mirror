@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2368-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 30596 invoked by alias); 8 Jun 2002 13:56:59 -0000
+Return-Path: <cygwin-patches-return-2369-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 23227 invoked by alias); 10 Jun 2002 01:03:27 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,90 +7,57 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 30582 invoked from network); 8 Jun 2002 13:56:58 -0000
+Received: (qmail 23213 invoked from network); 10 Jun 2002 01:03:25 -0000
 From: "Robert Collins" <robert.collins@syncretize.net>
-To: "'Robert Collins'" <robert.collins@syncretize.net>,
-	"'Robb, Sam'" <sam.robb@timesys.com>,
+To: "'Thomas Pfaff'" <tpfaff@gmx.net>,
 	<cygwin-patches@cygwin.com>
-Subject: RE: sem_getvalue patch
-Date: Sat, 08 Jun 2002 06:56:00 -0000
-Message-ID: <007301c20ef4$5b659bf0$0200a8c0@lifelesswks>
+Subject: RE: [PATCH] pthread_join fix
+Date: Sun, 09 Jun 2002 18:03:00 -0000
+Message-ID: <003e01c2101a$a2a37290$0200a8c0@lifelesswks>
 MIME-Version: 1.0
 Content-Type: text/plain;
 	charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 X-Priority: 3 (Normal)
 X-MSMail-Priority: Normal
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+In-reply-to: <F0E13277A26BD311944600500454CCD0513601-101000@antarctica.intern.net>
 Importance: Normal
-In-Reply-To: <000801c20e42$8461fd80$0200a8c0@lifelesswks>
-X-SW-Source: 2002-q2/txt/msg00351.txt.bz2
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-SW-Source: 2002-q2/txt/msg00352.txt.bz2
 
-Ok, well I'll hold off for the assignment.
+Applied.
 
+Thanks,
 Rob
 
 > -----Original Message-----
-> From: cygwin-patches-owner@cygwin.com 
-> [mailto:cygwin-patches-owner@cygwin.com] On Behalf Of Robert Collins
-> Sent: Saturday, 8 June 2002 2:44 AM
-> To: 'Robb, Sam'; cygwin-patches@cygwin.com
-> Subject: RE: sem_getvalue patch
+> From: Thomas Pfaff [mailto:tpfaff@gmx.net] 
+> Sent: Wednesday, 24 April 2002 8:18 PM
+> To: cygwin-patches@cygwin.com
+> Subject: [PATCH] pthread_join fix
 > 
 > 
-> Thanks, this looks good, I'll do a closer review in the weekend.
+> Rob,
 > 
-> Rob
+> this is an incremental update to my pthread patches. It will 
+> fix a problem
+> when a thread is joined before the creation completed.
 > 
-> > -----Original Message-----
-> > From: cygwin-patches-owner@cygwin.com 
-> > [mailto:cygwin-patches-owner@cygwin.com] On Behalf Of Robb, Sam
-> > Sent: Saturday, 8 June 2002 2:35 AM
-> > To: cygwin-patches@cygwin.com
-> > Subject: RE: sem_getvalue patch
-> > 
-> > 
-> > [original message was to cygwin@cygwin.com]
-> > 
-> > > With a little effort, I've managed to build a cygwin1.dll 
-> > that exports
-> > > sem_getvalue().  The version of cygwin1.dll that I built 
-> > seems subtly
-> > > hosed, though - while I can compile and run my test program from
-> > > within a Windows cmd.exe shell, trying to run bash or ls 
-> > (and probably
-> > > a great many other things) hangs.
-> > 
-> > Here's the patch... fairly straightforward, if I've 
-> understood the SUS
-> > spec for the function correctly :-/
-> > 
-> > As for the apparent hangs in bash/ls/etc. - well, perhaps it was my
-> > patch, perhaps not, as I was building from latest cvs source.  Since
-> > I can't find any documentation that indicates if a particular method
-> > for adding an export to cygiwn.din needs to be followed, this patch
-> > simply tacks sem_getvalue to the end of the list.
-> > 
-> > Thanks,
-> > 
-> > -Samrobb
-> > 
-> > winsup/cygwin/ChangeLog entry:
-> > 
-> > 2002-06-06  Sam Robb <sam.robb@timesys.com>
-> > 
-> > 	* pthread.cc (sem_getvalue): New function.
-> > 	* thread.cc (__sem_getvalue): Diito.
-> > 	* thread.h (__sem_getvalue): Ditto.
-> > 	* include/semaphore.h (sem_getvalue): Ditto.
-> > 	* posix.sgml: Add sem_getvalue to "Synchronization" section.
-> > 	* cygwin.din: Add symbol for sem_getvalue().
-> > 
-> > winsup/doc/ChangeLog entry:
-> > 
-> > 2002-06-06  Sam Robb <sam.robb@timesys.com>
-> > 
-> > 	* calls.texinfo: Remove 'unimplemented' tag from sem_getvalue.
-> > 
+> BTW, i have not added any locks yet (the actual 
+> implementation had no),
+> but IMHO they are required in the exit,join,cancel code. I 
+> will add locks
+> if you agree.
+> 
+> Greetings,
+> Thomas
+> 
+> 2002-04-24  Thomas Pfaff  <tpfaff@gmx.net>
+> 
+> 	* thread.cc (thread_init_wrapper): Check if thread is alreay
+> 	joined
+> 	(__pthread_join): Set joiner first.
+> 	(__pthread_detach): Ditto.
+> 
 > 
 > 
