@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2966-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 13630 invoked by alias); 15 Sep 2002 15:27:37 -0000
+Return-Path: <cygwin-patches-return-2967-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 26557 invoked by alias); 15 Sep 2002 19:05:36 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,44 +7,53 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 13616 invoked from network); 15 Sep 2002 15:27:37 -0000
-Message-ID: <20020915152737.22331.qmail@web20002.mail.yahoo.com>
-Date: Sun, 15 Sep 2002 08:27:00 -0000
-From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
-Subject: Re: `cygpath --version` missing a newline
+Received: (qmail 26543 invoked from network); 15 Sep 2002 19:05:36 -0000
+Date: Sun, 15 Sep 2002 12:05:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-MIME-Version: 1.0
+Subject: Re: cygwin part of pseudo-relocs patch
+Message-ID: <20020915190545.GC32609@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <17051818150.20020903103820@logos-m.ru> <20020914184315.GA19372@redhat.com> <101436798232.20020915155139@logos-m.ru>
+Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-X-SW-Source: 2002-q3/txt/msg00414.txt.bz2
+Content-Disposition: inline
+In-Reply-To: <101436798232.20020915155139@logos-m.ru>
+User-Agent: Mutt/1.4i
+X-SW-Source: 2002-q3/txt/msg00415.txt.bz2
 
-I've checked this in. I'll add the newlines to the other utils soon. 
+On Sun, Sep 15, 2002 at 03:51:39PM +0400, egor duda wrote:
+>Hi!
+>
+>Saturday, 14 September, 2002 Christopher Faylor cgf@redhat.com wrote:
+>
+>CF> On Tue, Sep 03, 2002 at 10:38:20AM +0400, egor duda wrote:
+>>>This is an updated cygwin part of pseudo-relocs patch.  Relocations are
+>>>performed inside of cygwin1.dll, as Chris suggested, and it seems to
+>>>work ok in case of one dll referencing another one.  After new binutils
+>>>package is released, it can go into cygwin release.
+>
+>CF> Sorry for the long delay in reviewing this.  As the mantra goes "I've
+>CF> been incredibly busy".  I could tell you just how busy I am but I don't
+>CF> have time right now.  Anyway, I thought that this patch would take some
+>CF> time to review so I've been avoiding it.
+>
+>CF> As it turns out, it took very little time at all.
+>
+>CF> It seems to be ok, as far as I can tell, but I would prefer it if you
+>CF> would use the cygwin_internal interface for adding new cygwin-specific
+>CF> functionality.  That can allow a program to gracefully degrade when
+>CF> a feature is not available rather than popping up an "entry point not
+>CF> found" dialog.
+>
+>This entry point was added intentionally, to diagnose the case
+>when application, linked using --enable-pseudo-relocs, is linked
+>(statically or dynamically) with a runtime which doesn't support such
+>relocations. Actually, i don't see the way for application to handle
+>such situation in other way than simply exiting with some kind of
+>"fatal error" message.
 
-I updated the ChangeLog and also used the ChangeLog as the CVS log... 
-is that right? Or should there be no CVS log entries? (The sources.redhat.com 
-guide just says to use "cvs commit".) Hmm, now that I look at what I did
-with cvsweb it looks like they're sometimes descriptive ("import
-winsup-2000-02-17 snapshot") and sometimes just one of the ChangeLog lines
-("* cygcheck.cc: Reformat."). I'll try to do the same.
+Which is much more graceful than displaying a dialog box.
 
-> From: Igor Pechtchanski <pechtcha@cs.nyu.edu>
-> To: cygwin-patches@cygwin.com
-> Subject: `cygpath --version` missing a newline
-> Date: Thu, 12 Sep 2002 23:39:05 -0400 (EDT)
-> 
-> Hi,
-> `cygpath --version` is missing a trailing newline.  I'm attaching a patch.
-> This probably doesn't merit a ChangeLog entry, but I'm providing one
-> anyway, feel free to disregard it.  I also took the opportunity to factor
-> out the short options array into a global variable.  I can split this into
-> two separate patches, if necessary.
-> 	Igor
-> 
-> 2002-09-12  Igor Pechtchanski <pechtcha@cs.nyu.edu>
-> 	* cygpath.cc (options) New global variable.
-> 	(main) Make short options global for easier change.
-> 	(print_version) Add a missing newline.
-
-__________________________________________________
-Do you Yahoo!?
-Yahoo! News - Today's headlines
-http://news.yahoo.com
+cgf
