@@ -1,45 +1,185 @@
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygwin-patches <cygwin-patches@cygwin.com>
-Subject: Re: [patch] setup.exe geturl.cc enhancement for total and diskfull download progress meters
-Date: Tue, 27 Feb 2001 04:28:00 -0000
-Message-id: <20010227132847.H27406@cygbert.vinschen.de>
-References: <VA.00000670.003b71c8@thesoftwaresource.com>
-X-SW-Source: 2001-q1/msg00121.html
+From: Egor Duda <deo@logos-m.ru>
+To: Corinna Vinschen <cygwin-patches@cygwin.com>
+Subject: Re: lseek() fails to seek on /dev/fd0 ('\\.\A:')
+Date: Tue, 27 Feb 2001 05:05:00 -0000
+Message-id: <475821030.20010227160430@logos-m.ru>
+References: <u67ae79bw6v.fsf@rachel.hq.vtech> <u671ysl8xda.fsf@rachel.hq.vtech> <613331659.20010226160225@logos-m.ru> <3A9A621F.7661F240@yahoo.com> <20010226161735.P27406@cygbert.vinschen.de> <1825816804.20010226221015@logos-m.ru> <20010227004550.X27406@cygbert.vinschen.de> <12658340509.20010227124539@logos-m.ru> <20010227120159.D27406@cygbert.vinschen.de>
+X-SW-Source: 2001-q1/msg00122.html
+Content-type: multipart/mixed; boundary="----------=_1583532846-65438-14"
 
-On Tue, Feb 20, 2001 at 10:23:40PM -0500, Brian Keener wrote:
-> 2001-02-20  Brian Keener <bkeener@thesoftwaresource.com>
->    * download.cc (do_download): New variables total_download_bytes and 
->    total_download_bytes_sofar added for download progress meter.  Add loop
->    to accumulate the total bytes to download from the selected packages.
->    * geturl.cc: Add state.h and diskfull.h to include list.  New variables
->    gw_iprogress, gw_pprogress, gw_progress_text, gw_pprogress_text, and
->    gw_iprogress_text added to allow for addition of Total packages download
->    progress meter and disk full percent progress meter.  Add variables
->    total_download_bytes and total_download_bytes_sofar for use by progress
->    meters.
->    (dialog_proc): New variables gw_iprogress, gw_pprogress, 
->    gw_progress_text, gw_pprogress_text, and gw_iprogress_text added to 
->    allow for addition of Total packages download progress meter and disk 
->    full percent progress meter.  
->    (init_dialog): Ditto.
->    (progress): Ditto.
->    (get_url_to_file): Ditto.
->    * geturl.h: Add external definition for total_download_bytes and
->    total_download_bytes_sofar.
->    * res.rc (): Add two additional progress meters (IDC_DLS_IPROGRESS) 
->         and (IDC_DLS_PPROGRESS) and three text objects (IDC_DLS_PROGRESS_TEXT)
->    and (IDC_DLS_IPROGRESS_TEXT, IDC_DLS_PPROGRESS_TEXT) for use in the
->    download meters.
->    * resource.h: Add new fields for progress meters and text and update 
->    _APS_NEXT_CONTROL_VALUE.
-> [...]
+This is a multi-part message in MIME format...
 
-Applied.
+------------=_1583532846-65438-14
+Content-length: 1536
 
-Thanks,
-Corinna
+Hi!
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+Tuesday, 27 February, 2001 Corinna Vinschen cygwin-patches@cygwin.com wrote:
+
+CV> On Tue, Feb 27, 2001 at 12:45:39PM +0300, Egor Duda wrote:
+>> CV> Did you try that even on raw partitions (\\.\X:)? From the MSDN:
+>> 
+>> CV> "The IOCTL_DISK_GET_DRIVE_GEOMETRY control code retrieves information
+>> CV>  about the physical disk's geometry"
+>>  
+>> CV> so I assume it will only work for raw harddisks (\\.\physicaldriveN).
+>> 
+>> Yep,    you're    right.    I    can    work    around    this    with
+>> IOCTL_DISK_GET_PARTITION_INFO  ioctl,  but here comes the problem with
+>> off_t  and  size_t being long int :(  So we won't be able to work with
+>> drives  and  partitions  longer  then  2G  (which  are  very  frequent
+>> nowadays). Should we return EINVAL in such cases?
+
+CV> I have just checked on Linux kernel 2.2.x. For some reason it returns
+CV> the following on partitions and physical drives:
+
+CV> lseek (fd, 0, SEEK_END) = 0 and the file pointer is set to the
+CV> beginning(!) of the raw device.
+
+CV> lseek (fd, pos != 0, SEEK_END) = -1 (EINVAL)
+
+CV> So if we want to be Linux compatible we could make our life very easy.
+
+CV> Has somebody a 2.4 kernel to test the behaviour there?
+
+i've just tested it under 2.4.0. it seeks correctly from the end of device
+and returns device_size + offset.
+
+ if  return  value > 2G, it returns -1 with EOVERFLOW. I feel EFBIG is
+more appropriate here, but it's arguable.
+
+Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
+floppy-lseek.diff
+floppy-lseek.ChangeLog
+
+
+------------=_1583532846-65438-14
+Content-Type: text/plain; charset=us-ascii; name="floppy-lseek.ChangeLog"
+Content-Disposition: inline; filename="floppy-lseek.ChangeLog"
+Content-Transfer-Encoding: base64
+Content-Length: 350
+
+MjAwMS0wMi0yNiAgRWdvciBEdWRhICA8ZGVvQGxvZ29zLW0ucnU+CgoJKiBm
+aGFuZGxlcl9mbG9wcHkuY2MgKGZoYW5kbGVyX2Rldl9mbG9wcHk6OmxzZWVr
+KTogRGV0ZXJtaW5lCglkcml2ZSBnZW9tZXRyeSB0byBhbGxvdyBzZWVraW5n
+IGZyb20gdGhlIGVuZCBvZiByYXcgZmxvcHB5CglkZXZpY2UuIERvbid0IGFs
+bG93IHJlYWRpbmcgcGFzdCB0aGUgZW5kIG9mIG1lZGlhLiBBbHdheXMgcmV0
+dXJuCgluZXcgZmlsZSBwb2ludGVyIHBvc2l0aW9uLgo=
+
+------------=_1583532846-65438-14
+Content-Type: text/x-diff; charset=us-ascii; name="floppy-lseek.diff"
+Content-Disposition: inline; filename="floppy-lseek.diff"
+Content-Transfer-Encoding: base64
+Content-Length: 6617
+
+SW5kZXg6IGZoYW5kbGVyX2Zsb3BweS5jYwo9PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09ClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL2N5Z3dpbi9maGFu
+ZGxlcl9mbG9wcHkuY2MsdgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuNgpkaWZm
+IC11IC1wIC0yIC1yMS42IGZoYW5kbGVyX2Zsb3BweS5jYwotLS0gZmhhbmRs
+ZXJfZmxvcHB5LmNjCTIwMDEvMDIvMDUgMTY6MTA6MDYJMS42CisrKyBmaGFu
+ZGxlcl9mbG9wcHkuY2MJMjAwMS8wMi8yNyAxMjo1MTozMQpAQCAtMTcsNCAr
+MTcsNSBAQCBkZXRhaWxzLiAqLwogI2luY2x1ZGUgImZoYW5kbGVyLmgiCiAj
+aW5jbHVkZSAiY3lnZXJybm8uaCIKKyNpbmNsdWRlIDx3aW5pb2N0bC5oPgog
+CiAvKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioq
+KioqKioqKioqKioqKioqKioqKioqKioqKioqKi8KQEAgLTgxLDM2ICs4Miw2
+MCBAQCBmaGFuZGxlcl9kZXZfZmxvcHB5Ojpsc2VlayAob2ZmX3Qgb2Zmc2V0
+CiB7CiAgIGludCByZXQ7Ci0gIERXT1JEIG9mZjsKICAgY2hhciBidWZbNTEy
+XTsKKyAgbG9uZyBsb25nIGRyaXZlX3NpemUgPSAwOworICBsb25nIGxvbmcg
+bGxvZmZzZXQgPSBvZmZzZXQ7CisgIGxvbmcgbG9uZyBjdXJyZW50X3Bvc2l0
+aW9uOworICBvZmZfdCBzZWN0b3JfYWxpZ25lZF9vZmZzZXQ7CisgIG9mZl90
+IGJ5dGVzX2xlZnQ7CisgIERXT1JEIGxvdzsKKyAgTE9ORyBoaWdoID0gMDsK
+IAotICBpZiAod2hlbmNlID09IFNFRUtfU0VUKQorICBpZiAob3NfYmVpbmdf
+cnVuID09IHdpbk5UKQogICAgIHsKLSAgICAgIGlmIChvZmZzZXQgPCAwKQor
+ICAgICAgRElTS19HRU9NRVRSWSBkaTsKKyAgICAgIFBBUlRJVElPTl9JTkZP
+Uk1BVElPTiBwaTsKKyAgICAgIERXT1JEIGJ5dGVzX3JlYWQ7CisKKyAgICAg
+IGlmICggIURldmljZUlvQ29udHJvbCAoIGdldF9oYW5kbGUoKSwKKyAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIElPQ1RMX0RJU0tfR0VUX0RSSVZF
+X0dFT01FVFJZLAorICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgTlVM
+TCwgMCwKKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICZkaSwgc2l6
+ZW9mIChkaSksCisgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAmYnl0
+ZXNfcmVhZCwgTlVMTCkgKQogICAgICAgICB7Ci0JICBzZXRfZXJybm8gKEVJ
+TlZBTCk7Ci0JICByZXR1cm4gLTE7Ci0JfQotCi0gICAgICAvKiBJbnZhbGlk
+YXRlIGJ1ZmZlci4gKi8KLSAgICAgIHJldCA9IHdyaXRlYnVmICgpOwotICAg
+ICAgaWYgKHJldCkKLQlyZXR1cm4gcmV0OwotICAgICAgZGV2YnVmc3RhcnQg
+PSBkZXZidWZlbmQgPSAwOwotCi0gICAgICBvZmYgPSAob2Zmc2V0IC8gNTEy
+KSAqIDUxMjsKLQotICAgICAgaWYgKFNldEZpbGVQb2ludGVyIChnZXRfaGFu
+ZGxlICgpLCBvZmYsIE5VTEwsIEZJTEVfQkVHSU4pCi0gICAgICAgICAgPT0g
+SU5WQUxJRF9TRVRfRklMRV9QT0lOVEVSKQorICAgICAgICAgIF9fc2V0ZXJy
+bm8gKCk7CisgICAgICAgICAgcmV0dXJuIC0xOworICAgICAgICB9CisgICAg
+ICBkZWJ1Z19wcmludGYgKCAiZGlzayBnZW9tZXRyeTogKCVsZCBjeWwpKigl
+bGQgdHJrKSooJWxkIHNlYykqKCVsZCBicHMpIiwKKyAgICAgICAgICAgICAg
+ICAgICAgIGRpLkN5bGluZGVycy5Mb3dQYXJ0LAorICAgICAgICAgICAgICAg
+ICAgICAgZGkuVHJhY2tzUGVyQ3lsaW5kZXIsCisgICAgICAgICAgICAgICAg
+ICAgICBkaS5TZWN0b3JzUGVyVHJhY2ssCisgICAgICAgICAgICAgICAgICAg
+ICBkaS5CeXRlc1BlclNlY3RvciApOworICAgICAgaWYgKCBEZXZpY2VJb0Nv
+bnRyb2wgKCBnZXRfaGFuZGxlICgpLAorICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICBJT0NUTF9ESVNLX0dFVF9QQVJUSVRJT05fSU5GTywKKyAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgTlVMTCwgMCwKKyAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgJnBpLCBzaXplb2YgKHBpKSwKKyAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgJmJ5dGVzX3JlYWQsIE5VTEwgKSkKICAg
+ICAgICAgewotCSAgX19zZXRlcnJubyAoKTsKLQkgIHJldHVybiAtMTsKLQl9
+Ci0gICAgICByZXR1cm4gcmF3X3JlYWQgKGJ1Ziwgb2Zmc2V0IC0gb2ZmKTsK
+KyAgICAgICAgICBkZWJ1Z19wcmludGYgKCAicGFydGl0aW9uIGluZm86ICVs
+ZCAoJWxkKSIsCisgICAgICAgICAgICAgICAgICAgICAgICAgIHBpLlN0YXJ0
+aW5nT2Zmc2V0Lkxvd1BhcnQsCisgICAgICAgICAgICAgICAgICAgICAgICAg
+IHBpLlBhcnRpdGlvbkxlbmd0aC5Mb3dQYXJ0KTsKKyAgICAgICAgICBkcml2
+ZV9zaXplID0gKGxvbmcgbG9uZykgcGkuUGFydGl0aW9uTGVuZ3RoLlF1YWRQ
+YXJ0OworICAgICAgICB9CisgICAgICBlbHNlCisgICAgICAgIHsKKyAgICAg
+ICAgICBkcml2ZV9zaXplID0gKGxvbmcgbG9uZylkaS5DeWxpbmRlcnMuUXVh
+ZFBhcnQgKiBkaS5UcmFja3NQZXJDeWxpbmRlciAqCisgICAgICAgICAgICAg
+ICAgICAgICAgIGRpLlNlY3RvcnNQZXJUcmFjayAqIGRpLkJ5dGVzUGVyU2Vj
+dG9yOworICAgICAgICB9CisgICAgICBkZWJ1Z19wcmludGYgKCAiZHJpdmUg
+c2l6ZTogJWxkIiwgZHJpdmVfc2l6ZSApOwogICAgIH0KLSAgZWxzZSBpZiAo
+d2hlbmNlID09IFNFRUtfQ1VSKQorCisgIGlmICh3aGVuY2UgPT0gU0VFS19F
+TkQgJiYgZHJpdmVfc2l6ZSA+IDApCiAgICAgewotICAgICAgRFdPUkQgbG93
+OwotICAgICAgTE9ORyBoaWdoID0gMDsKKyAgICAgIGxsb2Zmc2V0ID0gb2Zm
+c2V0ICsgZHJpdmVfc2l6ZTsKKyAgICAgIHdoZW5jZSA9IFNFRUtfU0VUOyAK
+KyAgICB9CiAKKyAgaWYgKHdoZW5jZSA9PSBTRUVLX0NVUikKKyAgICB7CiAg
+ICAgICBsb3cgPSBTZXRGaWxlUG9pbnRlciAoZ2V0X2hhbmRsZSAoKSwgMCwg
+JmhpZ2gsIEZJTEVfQ1VSUkVOVCk7CiAgICAgICBpZiAobG93ID09IElOVkFM
+SURfU0VUX0ZJTEVfUE9JTlRFUiAmJiBHZXRMYXN0RXJyb3IgKCkpCkBAIC0x
+MTksMTAgKzE0NCwzNSBAQCBmaGFuZGxlcl9kZXZfZmxvcHB5Ojpsc2VlayAo
+b2ZmX3Qgb2Zmc2V0CiAJICByZXR1cm4gLTE7CiAJfQotICAgICAgbG9uZyBs
+b25nIGN1ciA9IChsb25nIGxvbmcpIGhpZ2ggPDwgMzIgKyBsb3c7CisgICAg
+ICBjdXJyZW50X3Bvc2l0aW9uID0gKGxvbmcgbG9uZykgbG93ICsgKChsb25n
+IGxvbmcpIGhpZ2ggPDwgMzIpOwogICAgICAgaWYgKGlzX3dyaXRpbmcpCi0J
+Y3VyICs9IGRldmJ1ZmVuZCAtIGRldmJ1ZnN0YXJ0OworCWN1cnJlbnRfcG9z
+aXRpb24gKz0gZGV2YnVmZW5kIC0gZGV2YnVmc3RhcnQ7CiAgICAgICBlbHNl
+Ci0JY3VyIC09IGRldmJ1ZmVuZCAtIGRldmJ1ZnN0YXJ0OwotICAgICAgCisJ
+Y3VycmVudF9wb3NpdGlvbiAtPSBkZXZidWZlbmQgLSBkZXZidWZzdGFydDsK
+KworICAgICAgbGxvZmZzZXQgKz0gY3VycmVudF9wb3NpdGlvbjsKKyAgICAg
+IHdoZW5jZSA9IFNFRUtfU0VUOworICAgIH0KKworICBpZiAobGxvZmZzZXQg
+PCAwIHx8CisgICAgICBkcml2ZV9zaXplID4gMCAmJiBsbG9mZnNldCA+IGRy
+aXZlX3NpemUpCisgICAgeworICAgICAgc2V0X2Vycm5vIChFSU5WQUwpOwor
+ICAgICAgcmV0dXJuIC0xOworICAgIH0KKyAgaGlnaCA9IGxsb2Zmc2V0ID4+
+IDMyOworICBsb3cgPSBsbG9mZnNldCAmIDB4ZmZmZmZmZmY7CisgIGlmICgg
+aGlnaCB8fCAob2ZmX3QpIGxvdyA8IDAgKQorICAgIHsKKyAgICAgIHNldF9l
+cnJubyAoIEVGQklHICk7CisgICAgICByZXR1cm4gLTE7CisgICAgfQorICBv
+ZmZzZXQgPSAob2ZmX3QpIGxvdzsKKworICAvKiBGSVhNRTogc2VjdG9yIGNh
+biBwb3NzaWJseSBiZSBub3QgNTEyIGJ5dGVzIGxvbmcgKi8KKyAgc2VjdG9y
+X2FsaWduZWRfb2Zmc2V0ID0gKG9mZnNldCAvIDUxMikgKiA1MTI7CisgIGJ5
+dGVzX2xlZnQgPSBvZmZzZXQgLSBzZWN0b3JfYWxpZ25lZF9vZmZzZXQ7CisK
+KyAgaWYgKHdoZW5jZSA9PSBTRUVLX1NFVCkKKyAgICB7CiAgICAgICAvKiBJ
+bnZhbGlkYXRlIGJ1ZmZlci4gKi8KICAgICAgIHJldCA9IHdyaXRlYnVmICgp
+OwpAQCAtMTMxLDI2ICsxODEsMTMgQEAgZmhhbmRsZXJfZGV2X2Zsb3BweTo6
+bHNlZWsgKG9mZl90IG9mZnNldAogICAgICAgZGV2YnVmc3RhcnQgPSBkZXZi
+dWZlbmQgPSAwOwogCi0gICAgICBjdXIgKz0gb2Zmc2V0OwotICAgICAgaWYg
+KGN1ciA8IDApCi0JewotCSAgc2V0X2Vycm5vIChFSU5WQUwpOwotCSAgcmV0
+dXJuIC0xOwotCX0KLQotICAgICAgbG9uZyBsb25nIHNldCA9IChjdXIgLyA1
+MTIpICogNTEyOwotICAgICAgaGlnaCA9IHNldCA+PiAzMjsKLSAgICAgIGxv
+dyA9IHNldCAmIDB4ZmZmZmZmZmY7Ci0KLSAgICAgIG9mZiA9IGN1ciAtIHNl
+dDsKLQotICAgICAgbG93ID0gU2V0RmlsZVBvaW50ZXIgKGdldF9oYW5kbGUg
+KCksIGxvdywgJmhpZ2gsIEZJTEVfQkVHSU4pOwotICAgICAgaWYgKGxvdyA9
+PSBJTlZBTElEX1NFVF9GSUxFX1BPSU5URVIgJiYgR2V0TGFzdEVycm9yICgp
+KQotCXsKKyAgICAgIGlmIChTZXRGaWxlUG9pbnRlciAoZ2V0X2hhbmRsZSAo
+KSwgc2VjdG9yX2FsaWduZWRfb2Zmc2V0LCBOVUxMLCBGSUxFX0JFR0lOKQor
+ICAgICAgICAgID09IElOVkFMSURfU0VUX0ZJTEVfUE9JTlRFUikKKyAgICAg
+ICAgewogCSAgX19zZXRlcnJubyAoKTsKIAkgIHJldHVybiAtMTsKIAl9Ci0g
+ICAgICByZXR1cm4gcmF3X3JlYWQgKGJ1Ziwgb2ZmKTsKKyAgICAgIHJldHVy
+biBzZWN0b3JfYWxpZ25lZF9vZmZzZXQgKyByYXdfcmVhZCAoYnVmLCBieXRl
+c19sZWZ0KTsKICAgICB9Ci0gIC8qIFNFRUtfRU5EIGlzIG5vdCBzdXBwb3J0
+ZWQgb24gcmF3IGRpc2sgZGV2aWNlcy4gKi8KKwogICBzZXRfZXJybm8gKEVJ
+TlZBTCk7CiAgIHJldHVybiAtMTsK
+
+------------=_1583532846-65438-14--
