@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5362-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 26671 invoked by alias); 2 Mar 2005 15:57:01 -0000
+Return-Path: <cygwin-patches-return-5363-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 16463 invoked by alias); 4 Mar 2005 04:38:30 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,38 +7,48 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 26258 invoked from network); 2 Mar 2005 15:56:30 -0000
-Received: from unknown (HELO cgf.cx) (66.30.17.189)
-  by sourceware.org with SMTP; 2 Mar 2005 15:56:30 -0000
-Received: by cgf.cx (Postfix, from userid 201)
-	id 7ADCB1B55F; Wed,  2 Mar 2005 10:56:48 -0500 (EST)
-Date: Wed, 02 Mar 2005 15:57:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
+Received: (qmail 15967 invoked from network); 4 Mar 2005 04:38:22 -0000
+Received: from unknown (HELO phumblet.no-ip.org) (68.163.154.17)
+  by sourceware.org with SMTP; 4 Mar 2005 04:38:22 -0000
+Received: from [192.168.1.10] (helo=Compaq)
+	by phumblet.no-ip.org with smtp (Exim 4.50)
+	id ICT8RF-0002HG-63
+	for cygwin-patches@cygwin.com; Thu, 03 Mar 2005 23:36:59 -0500
+Message-Id: <3.0.5.32.20050303233658.00b50ad0@incoming.verizon.net>
+X-Sender: vze1u1tg@incoming.verizon.net (Unverified)
+Date: Fri, 04 Mar 2005 04:38:00 -0000
 To: cygwin-patches@cygwin.com
-Subject: Re: cygstart patch
-Message-ID: <20050302155648.GB15633@trixie.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <49D88D820A7BC0479A7B0932D4219EFE1A4BC7@NAEAPAXREX04VA.nadsusea.nads.navy.mil>
+From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
+Subject: [Patch]: fhandler_socket::ioctl
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <49D88D820A7BC0479A7B0932D4219EFE1A4BC7@NAEAPAXREX04VA.nadsusea.nads.navy.mil>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2005-q1/txt/msg00065.txt.bz2
+Content-Type: text/plain; charset="us-ascii"
+X-SW-Source: 2005-q1/txt/msg00066.txt.bz2
 
-On Wed, Mar 02, 2005 at 10:47:40AM -0500, Derosa, Anthony  CIV NAVAIR 2035, 2, 205/214 wrote:
->I found a small bug and added a feature to the cygstart utility, which
->is part of the cygutils package.  The feature that I added removes the
->limit on the length of the command line arguments passed to the target
->application, which was previously limited to MAX_PATH.  The bug I fixed
->was in regard to freeing the variable "args" instead of tyring to free
->"workDir" twice.  A patch and change log follow below.  As this is my
->first contribution, please correct me if I did something incorrectly.
+This patch avoids the unnecessary creation of the win thread in window.cc
+It fails to create the invisible window (error 5) when running exim
+as a service under a privileged non SYSTEM account (XP home, SP 2).
 
-AFAICT, the patch looks fine but this mailing list is for patches to the
-cygwin DLL.
+Pierre
 
-Please send your patch to the cygwin mailing list.
+2005-03-04  Pierre Humblet <pierre.humblet@ieee.org>
 
-cgf
+	* fhandler_socket.cc (fhandler_socket::ioctl): Only cancel 
+ 	 WSAAsyncSelect when async mode is on.
+
+
+Index: fhandler_socket.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/fhandler_socket.cc,v
+retrieving revision 1.150
+diff -u -p -r1.150 fhandler_socket.cc
+--- fhandler_socket.cc  28 Feb 2005 13:11:49 -0000      1.150
++++ fhandler_socket.cc  4 Mar 2005 00:32:57 -0000
+@@ -1594,7 +1594,7 @@ fhandler_socket::ioctl (unsigned int cmd
+       /* We must cancel WSAAsyncSelect (if any) before setting socket to
+        * blocking mode
+        */
+-      if (cmd == FIONBIO && *(int *) p == 0)
++      if (cmd == FIONBIO && async_io () && *(int *) p == 0)
+        WSAAsyncSelect (get_socket (), winmsg, 0, 0);
+       res = ioctlsocket (get_socket (), cmd, (unsigned long *) p);
+       if (res == SOCKET_ERROR)
