@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2253-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 31708 invoked by alias); 29 May 2002 03:57:41 -0000
+Return-Path: <cygwin-patches-return-2254-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 18844 invoked by alias); 29 May 2002 05:19:40 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,199 +7,44 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 31694 invoked from network); 29 May 2002 03:57:40 -0000
-Date: Tue, 28 May 2002 20:57:00 -0000
-From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
-X-X-Sender: joshua@iocc.com
+Received: (qmail 18828 invoked from network); 29 May 2002 05:19:39 -0000
+Date: Tue, 28 May 2002 22:19:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: passwd help/version patch
-Message-ID: <Pine.CYG.4.44.0205282255460.1556-200000@iocc.com>
-MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="-559023410-509326004-1022644581=:1556"
-X-SW-Source: 2002-q2/txt/msg00236.txt.bz2
+Subject: Re: New stat stuff (was [PATCH] improve performance of stat() operations (e.g. ls -lR ))
+Message-ID: <20020529051934.GA10833@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <024701c2051d$e13cbdc0$6132bc3e@BABEL> <20020527022339.GA15585@redhat.com> <20020527142437.A26046@cygbert.vinschen.de> <20020527174354.GB21314@redhat.com> <20020527203832.A27852@cygbert.vinschen.de> <20020527184452.GA21106@redhat.com> <20020528021816.GA2066@redhat.com> <003f01c20693$14cbb990$6132bc3e@BABEL> <20020528224031.GA17266@redhat.com> <00bb01c20699$af643c60$6132bc3e@BABEL>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00bb01c20699$af643c60$6132bc3e@BABEL>
+User-Agent: Mutt/1.3.23.1i
+X-SW-Source: 2002-q2/txt/msg00237.txt.bz2
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
+On Tue, May 28, 2002 at 11:47:45PM +0100, Conrad Scott wrote:
+>"Christopher Faylor" <cgf@redhat.com> wrote:
+>> On Tue, May 28, 2002 at 11:00:28PM +0100, Conrad Scott wrote:
+>> >I've just picked up the latest changes from CVS and I'm having a problem
+>> >with run.exe from a .BAT file (i.e., from my current cygwin.bat
+>mechanism).
+>>
+>> What's run.exe?
+>>
+>> cgf
+>
+>Sorry: it's /usr/X11R6/bin/run.exe, which was recommended by some as the
+>best way to launch rxvt from the cygwin.bat file. AFAIK it's meant to avoid
+>having the (irritating) command window pop-up before the rxvt window
+>appears. However, it fails to achieve that and I'd never (until just now)
+>taken it out of my cygwin.bat file.
 
----559023410-509326004-1022644581=:1556
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-Content-length: 1169
+I think you're running run.exe from Chuck Wilson's site.  I managed to
+duplicate this behavior.  Apparently it happens because valid looking handles
+exist for stdin/stdout/stderr even when a program is linked with -mwindows.
+My new code attempted to do something with the handles and NT did something
+nonsensical.  I've worked around the behavior.  It's checked in and in the
+next snapshot.
 
-Here is the --help, --version patch for passwd.
-I used the idea from a recent cygpath patch to separate usage output into
-sections, though I feel I've improved on it a bit. :)
-Corinna, you might want to take a look at these longopt names I chose to
-make sure they're OK:
-
-Usage: passwd (-l|-u|-S) [USER]
-       passwd [-i NUM] [-n MINDAYS] [-x MAXDAYS] [-L LEN]
-
-User operations:
- -l, --lock      lock USER's account
- -u, --unlock    unlock USER's account
- -S, --status    display password status for USER (locked, expired, etc.)
-
-System operations:
- -i, --inactive  set NUM of days before inactive accounts are disabled
-                 (inactive accounts are those with expired passwords)
- -n, --minage    set system minimum password age to MINDAYS
- -x, --maxage    set system maximum password age to MAXDAYS
- -L, --length    set system minimum password length to LEN
-
-
-2002-05-28  Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
-
-	* passwd.c (prog_name): New global variable.
-	(longopts): Ditto.
-	(opts): Ditto.
-	(usage): Standardize output. Accomodate new options.
-	(print_version): New function.
-	(main): Accomodate longopts and new --help, --version options.
-
-
----559023410-509326004-1022644581=:1556
-Content-Type: TEXT/PLAIN; charset=US-ASCII; name="passwd.c-patch"
-Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.CYG.4.44.0205282256210.1556@iocc.com>
-Content-Description: 
-Content-Disposition: attachment; filename="passwd.c-patch"
-Content-length: 8227
-
-LS0tIHBhc3N3ZC5jLW9yaWcJVHVlIE1heSAyOCAyMDoyOToxOSAyMDAyDQor
-KysgcGFzc3dkLmMJVHVlIE1heSAyOCAyMTo1NjoxMyAyMDAyDQpAQCAtMjks
-NyArMjksMjQgQEAgZGV0YWlscy4gKi8NCiANCiAjZGVmaW5lIFVGX0xPQ0tP
-VVQgICAgICAgICAgICAweDAwMDEwDQogDQotY2hhciAqbXluYW1lOw0KK3N0
-YXRpYyBjb25zdCBjaGFyIHZlcnNpb25bXSA9ICIkUmV2aXNpb246IDEuNCAk
-IjsNCitzdGF0aWMgY2hhciAqcHJvZ19uYW1lOw0KKw0KK3N0YXRpYyBzdHJ1
-Y3Qgb3B0aW9uIGxvbmdvcHRzW10gPQ0KK3sNCisgIHsiaGVscCIsIG5vX2Fy
-Z3VtZW50LCBOVUxMLCAnaCcgfSwNCisgIHsiaW5hY3RpdmUiLCByZXF1aXJl
-ZF9hcmd1bWVudCwgTlVMTCwgJ2knfSwNCisgIHsibG9jayIsIG5vX2FyZ3Vt
-ZW50LCBOVUxMLCAnbCd9LA0KKyAgeyJtaW5hZ2UiLCByZXF1aXJlZF9hcmd1
-bWVudCwgTlVMTCwgJ24nfSwNCisgIHsidW5sb2NrIiwgbm9fYXJndW1lbnQs
-IE5VTEwsICd1J30sDQorICB7InZlcnNpb24iLCBub19hcmd1bWVudCwgTlVM
-TCwgJ3YnfSwNCisgIHsibWF4YWdlIiwgcmVxdWlyZWRfYXJndW1lbnQsIE5V
-TEwsICd4J30sDQorICB7Imxlbmd0aCIsIHJlcXVpcmVkX2FyZ3VtZW50LCBO
-VUxMLCAnTCd9LA0KKyAgeyJzdGF0dXMiLCBub19hcmd1bWVudCwgTlVMTCwg
-J1MnfSwNCisgIHtOVUxMLCAwLCBOVUxMLCAwfQ0KK307DQorDQorc3RhdGlj
-IGNoYXIgb3B0c1tdID0gIkw6eDpuOmk6bHVTaHYiOw0KIA0KIGludA0KIGVw
-cmludCAoaW50IHdpdGhfbmFtZSwgY29uc3QgY2hhciAqZm10LCAuLi4pDQpA
-QCAtMzcsNyArNTQsNyBAQCBlcHJpbnQgKGludCB3aXRoX25hbWUsIGNvbnN0
-IGNoYXIgKmZtdCwgDQogICB2YV9saXN0IGFwOw0KIA0KICAgaWYgKHdpdGhf
-bmFtZSkNCi0gICAgZnByaW50ZihzdGRlcnIsICIlczogIiwgbXluYW1lKTsN
-CisgICAgZnByaW50ZihzdGRlcnIsICIlczogIiwgcHJvZ19uYW1lKTsNCiAg
-IHZhX3N0YXJ0IChhcCwgZm10KTsNCiAgIHZmcHJpbnRmIChzdGRlcnIsIGZt
-dCwgYXApOw0KICAgdmFfZW5kIChhcCk7DQpAQCAtMjAwLDE0ICsyMTcsNTIg
-QEAgU2V0TW9kYWxzIChpbnQgeGFyZywgaW50IG5hcmcsIGludCBpYXJnLA0K
-ICAgcmV0dXJuIEV2YWxSZXQgKHJldCwgTlVMTCk7DQogfQ0KIA0KLWludA0K
-LXVzYWdlICgpDQorc3RhdGljIHZvaWQNCit1c2FnZSAoRklMRSAqIHN0cmVh
-bSwgaW50IHN0YXR1cykNCit7DQorICBmcHJpbnRmIChzdHJlYW0sICIiDQor
-ICAiVXNhZ2U6ICVzICgtbHwtdXwtUykgW1VTRVJdXG4iDQorICAiICAgICAg
-ICVzIFstaSBOVU1dIFstbiBNSU5EQVlTXSBbLXggTUFYREFZU10gWy1MIExF
-Tl1cbiINCisgICJcbiINCisgICJVc2VyIG9wZXJhdGlvbnM6XG4iDQorICAi
-IC1sLCAtLWxvY2sgICAgICBsb2NrIFVTRVIncyBhY2NvdW50XG4iDQorICAi
-IC11LCAtLXVubG9jayAgICB1bmxvY2sgVVNFUidzIGFjY291bnRcbiINCisg
-ICIgLVMsIC0tc3RhdHVzICAgIGRpc3BsYXkgcGFzc3dvcmQgc3RhdHVzIGZv
-ciBVU0VSIChsb2NrZWQsIGV4cGlyZWQsIGV0Yy4pXG4iDQorICAiXG4iDQor
-ICAiU3lzdGVtIG9wZXJhdGlvbnM6XG4iDQorICAiIC1pLCAtLWluYWN0aXZl
-ICBzZXQgTlVNIG9mIGRheXMgYmVmb3JlIGluYWN0aXZlIGFjY291bnRzIGFy
-ZSBkaXNhYmxlZFxuIg0KKyAgIiAgICAgICAgICAgICAgICAgKGluYWN0aXZl
-IGFjY291bnRzIGFyZSB0aG9zZSB3aXRoIGV4cGlyZWQgcGFzc3dvcmRzKVxu
-Ig0KKyAgIiAtbiwgLS1taW5hZ2UgICAgc2V0IHN5c3RlbSBtaW5pbXVtIHBh
-c3N3b3JkIGFnZSB0byBNSU5EQVlTXG4iDQorICAiIC14LCAtLW1heGFnZSAg
-ICBzZXQgc3lzdGVtIG1heGltdW0gcGFzc3dvcmQgYWdlIHRvIE1BWERBWVNc
-biINCisgICIgLUwsIC0tbGVuZ3RoICAgIHNldCBzeXN0ZW0gbWluaW11bSBw
-YXNzd29yZCBsZW5ndGggdG8gTEVOXG4iDQorICAiXG4iDQorICAiT3RoZXIg
-b3B0aW9uczpcbiINCisgICIgLWgsIC0taGVscCAgICAgIG91dHB1dCB1c2Fn
-ZSBpbmZvcm1hdGlvbiBhbmQgZXhpdFxuIg0KKyAgIiAtdiwgLS12ZXJzaW9u
-ICAgb3V0cHV0IHZlcnNpb24gaW5mb3JtYXRpb24gYW5kIGV4aXRcbiINCisg
-ICIiLCBwcm9nX25hbWUsIHByb2dfbmFtZSk7DQorICBleGl0IChzdGF0dXMp
-Ow0KK30NCisNCitzdGF0aWMgdm9pZA0KK3ByaW50X3ZlcnNpb24gKCkNCiB7
-DQotICBmcHJpbnRmIChzdGRlcnIsICJ1c2FnZTogJXMgW25hbWVdXG4iLCBt
-eW5hbWUpOw0KLSAgZnByaW50ZiAoc3RkZXJyLCAiICAgICAgICVzIFstTCBt
-YXhsZW5dIFsteCBtYXhdIFstbiBtaW5dIFstaSBpbmFjdF1cbiIsDQotICAg
-ICAgICAgICBteW5hbWUpOw0KLSAgZnByaW50ZiAoc3RkZXJyLCAiICAgICAg
-ICVzIHstbHwtdXwtU30gbmFtZVxuIiwgbXluYW1lKTsNCi0gIHJldHVybiAy
-Ow0KKyAgY29uc3QgY2hhciAqdiA9IHN0cmNociAodmVyc2lvbiwgJzonKTsN
-CisgIGludCBsZW47DQorICBpZiAoIXYpDQorICAgIHsNCisgICAgICB2ID0g
-Ij8iOw0KKyAgICAgIGxlbiA9IDE7DQorICAgIH0NCisgIGVsc2UNCisgICAg
-ew0KKyAgICAgIHYgKz0gMjsNCisgICAgICBsZW4gPSBzdHJjaHIgKHYsICcg
-JykgLSB2Ow0KKyAgICB9DQorICBwcmludGYgKCJcDQorJXMgKGN5Z3dpbikg
-JS4qc1xuXA0KK1Bhc3N3b3JkIFV0aWxpdHlcblwNCitDb3B5cmlnaHQgMTk5
-OSwgMjAwMCwgMjAwMSwgMjAwMiBSZWQgSGF0LCBJbmMuXG5cDQorQ29tcGls
-ZWQgb24gJXMiLCBwcm9nX25hbWUsIGxlbiwgdiwgX19EQVRFX18pOw0KIH0N
-CiANCiBpbnQNCkBAIC0yMjcsMjQgKzI4MiwzMyBAQCBtYWluIChpbnQgYXJn
-YywgY2hhciAqKmFyZ3YpDQogICBpbnQgU29wdCA9IDA7DQogICBQVVNFUl9J
-TkZPXzMgdWksIGxpOw0KIA0KLSBpZiAoKG15bmFtZSA9IHN0cnJjaHIgKGFy
-Z3ZbMF0sICcvJykpDQotICAgICAgfHwgKG15bmFtZSA9IHN0cnJjaHIgKGFy
-Z3ZbMF0sICdcXCcpKSkNCi0gICAgKytteW5hbWU7DQorICBwcm9nX25hbWUg
-PSBzdHJyY2hyIChhcmd2WzBdLCAnLycpOw0KKyAgaWYgKHByb2dfbmFtZSA9
-PSBOVUxMKQ0KKyAgICBwcm9nX25hbWUgPSBzdHJyY2hyIChhcmd2WzBdLCAn
-XFwnKTsNCisgIGlmIChwcm9nX25hbWUgPT0gTlVMTCkNCisgICAgcHJvZ19u
-YW1lID0gYXJndlswXTsNCiAgIGVsc2UNCi0gICAgbXluYW1lID0gYXJndlsw
-XTsNCi0gIGMgPSBzdHJyY2hyIChteW5hbWUsICcuJyk7DQorICAgIHByb2df
-bmFtZSsrOw0KKyAgYyA9IHN0cnJjaHIgKHByb2dfbmFtZSwgJy4nKTsNCiAg
-IGlmIChjKQ0KICAgICAqYyA9ICdcMCc7DQogDQotICB3aGlsZSAoKG9wdCA9
-IGdldG9wdCAoYXJnYywgYXJndiwgIkw6eDpuOmk6bHVTIikpICE9IEVPRikN
-CisgIHdoaWxlICgob3B0ID0gZ2V0b3B0X2xvbmcgKGFyZ2MsIGFyZ3YsIG9w
-dHMsIGxvbmdvcHRzLCBOVUxMKSkgIT0gRU9GKQ0KICAgICBzd2l0Y2ggKG9w
-dCkNCiAgICAgICB7DQotICAgICAgY2FzZSAneCc6DQotCWlmICgoeGFyZyA9
-IGF0b2kgKG9wdGFyZykpIDwgMCB8fCB4YXJnID4gOTk5KQ0KLQkgIHJldHVy
-biBlcHJpbnQgKDEsICJNYXhpbXVtIHBhc3N3b3JkIGFnZSBtdXN0IGJlIGJl
-dHdlZW4gMCBhbmQgOTk5LiIpOw0KLQlpZiAobmFyZyA+PSAwICYmIHhhcmcg
-PCBuYXJnKQ0KLQkgIHJldHVybiBlcHJpbnQgKDEsICJNYXhpbXVtIHBhc3N3
-b3JkIGFnZSBtdXN0IGJlIGdyZWF0ZXIgdGhhbiAiDQotCSAgICAgICAgICAg
-ICAgICAgICAgIm1pbmltdW0gcGFzc3dvcmQgYWdlLiIpOw0KKyAgICAgIGNh
-c2UgJ2gnOg0KKwl1c2FnZSAoc3Rkb3V0LCAwKTsNCisgICAgICAgIGJyZWFr
-Ow0KKw0KKyAgICAgIGNhc2UgJ2knOg0KKwlpZiAoKGlhcmcgPSBhdG9pIChv
-cHRhcmcpKSA8IDAgfHwgaWFyZyA+IDk5OSkNCisJICByZXR1cm4gZXByaW50
-ICgxLCAiRm9yY2UgbG9nb3V0IHRpbWUgbXVzdCBiZSBiZXR3ZWVuIDAgYW5k
-IDk5OS4iKTsNCisgICAgICAgIGJyZWFrOw0KKw0KKyAgICAgIGNhc2UgJ2wn
-Og0KKwlpZiAoeGFyZyA+PSAwIHx8IG5hcmcgPj0gMCB8fCBpYXJnID49IDAg
-fHwgTGFyZyA+PSAwIHx8IHVvcHQgfHwgU29wdCkNCisJICB1c2FnZSAoc3Rk
-ZXJyLCAxKTsNCisJbG9wdCA9IDE7DQogICAgICAgICBicmVhazsNCiANCiAg
-ICAgICBjYXNlICduJzoNCkBAIC0yNTUsNDIgKzMxOSw0NCBAQCBtYWluIChp
-bnQgYXJnYywgY2hhciAqKmFyZ3YpDQogCSAgICAgICAgICAgICAgICAgICAg
-Im1heGltdW0gcGFzc3dvcmQgYWdlLiIpOw0KICAgICAgICAgYnJlYWs7DQog
-DQotICAgICAgY2FzZSAnaSc6DQotCWlmICgoaWFyZyA9IGF0b2kgKG9wdGFy
-ZykpIDwgMCB8fCBpYXJnID4gOTk5KQ0KLQkgIHJldHVybiBlcHJpbnQgKDEs
-ICJGb3JjZSBsb2dvdXQgdGltZSBtdXN0IGJlIGJldHdlZW4gMCBhbmQgOTk5
-LiIpOw0KKyAgICAgIGNhc2UgJ3UnOg0KKwlpZiAoeGFyZyA+PSAwIHx8IG5h
-cmcgPj0gMCB8fCBpYXJnID49IDAgfHwgTGFyZyA+PSAwIHx8IGxvcHQgfHwg
-U29wdCkNCisJICB1c2FnZSAoc3RkZXJyLCAxKTsNCisJdW9wdCA9IDE7DQog
-ICAgICAgICBicmVhazsNCiANCi0gICAgICBjYXNlICdMJzoNCi0JaWYgKChM
-YXJnID0gYXRvaSAob3B0YXJnKSkgPCAwIHx8IExhcmcgPiBMTTIwX1BXTEVO
-KQ0KLQkgIHJldHVybiBlcHJpbnQgKDEsICJNaW5pbXVtIHBhc3N3b3JkIGxl
-bmd0aCBtdXN0IGJlIGJldHdlZW4gIg0KLQkgICAgICAgICAgICAgICAgICAg
-ICIwIGFuZCAlZC4iLCBMTTIwX1BXTEVOKTsNCisgICAgICBjYXNlICd2JzoN
-CisJcHJpbnRfdmVyc2lvbiAoKTsNCisgICAgICAgIGV4aXQgKDApOw0KICAg
-ICAgICAgYnJlYWs7DQogDQotICAgICAgY2FzZSAnbCc6DQotCWlmICh4YXJn
-ID49IDAgfHwgbmFyZyA+PSAwIHx8IGlhcmcgPj0gMCB8fCBMYXJnID49IDAg
-fHwgdW9wdCB8fCBTb3B0KQ0KLQkgIHJldHVybiB1c2FnZSAoKTsNCi0JbG9w
-dCA9IDE7DQorICAgICAgY2FzZSAneCc6DQorCWlmICgoeGFyZyA9IGF0b2kg
-KG9wdGFyZykpIDwgMCB8fCB4YXJnID4gOTk5KQ0KKwkgIHJldHVybiBlcHJp
-bnQgKDEsICJNYXhpbXVtIHBhc3N3b3JkIGFnZSBtdXN0IGJlIGJldHdlZW4g
-MCBhbmQgOTk5LiIpOw0KKwlpZiAobmFyZyA+PSAwICYmIHhhcmcgPCBuYXJn
-KQ0KKwkgIHJldHVybiBlcHJpbnQgKDEsICJNYXhpbXVtIHBhc3N3b3JkIGFn
-ZSBtdXN0IGJlIGdyZWF0ZXIgdGhhbiAiDQorCSAgICAgICAgICAgICAgICAg
-ICAgIm1pbmltdW0gcGFzc3dvcmQgYWdlLiIpOw0KICAgICAgICAgYnJlYWs7
-DQogDQotICAgICAgY2FzZSAndSc6DQotCWlmICh4YXJnID49IDAgfHwgbmFy
-ZyA+PSAwIHx8IGlhcmcgPj0gMCB8fCBMYXJnID49IDAgfHwgbG9wdCB8fCBT
-b3B0KQ0KLQkgIHJldHVybiB1c2FnZSAoKTsNCi0JdW9wdCA9IDE7DQorICAg
-ICAgY2FzZSAnTCc6DQorCWlmICgoTGFyZyA9IGF0b2kgKG9wdGFyZykpIDwg
-MCB8fCBMYXJnID4gTE0yMF9QV0xFTikNCisJICByZXR1cm4gZXByaW50ICgx
-LCAiTWluaW11bSBwYXNzd29yZCBsZW5ndGggbXVzdCBiZSBiZXR3ZWVuICIN
-CisJICAgICAgICAgICAgICAgICAgICAiMCBhbmQgJWQuIiwgTE0yMF9QV0xF
-Tik7DQogICAgICAgICBicmVhazsNCiANCiAgICAgICBjYXNlICdTJzoNCiAJ
-aWYgKHhhcmcgPj0gMCB8fCBuYXJnID49IDAgfHwgaWFyZyA+PSAwIHx8IExh
-cmcgPj0gMCB8fCBsb3B0IHx8IHVvcHQpDQotCSAgcmV0dXJuIHVzYWdlICgp
-Ow0KKwkgIHVzYWdlIChzdGRlcnIsIDEpOw0KIAlTb3B0ID0gMTsNCiAgICAg
-ICAgIGJyZWFrOw0KIA0KICAgICAgIGRlZmF1bHQ6DQotICAgICAgICByZXR1
-cm4gdXNhZ2UgKCk7DQorICAgICAgICB1c2FnZSAoc3RkZXJyLCAxKTsNCiAg
-ICAgICB9DQogICBpZiAoTGFyZyA+PSAwIHx8IHhhcmcgPj0gMCB8fCBuYXJn
-ID49IDAgfHwgaWFyZyA+PSAwKQ0KICAgICB7DQogICAgICAgaWYgKG9wdGlu
-ZCA8IGFyZ2MpDQotICAgICAgICByZXR1cm4gdXNhZ2UgKCk7DQorICAgICAg
-ICB1c2FnZSAoc3RkZXJyLCAxKTsNCiAgICAgICByZXR1cm4gU2V0TW9kYWxz
-ICh4YXJnLCBuYXJnLCBpYXJnLCBMYXJnKTsNCiAgICAgfQ0KIA0K
-
----559023410-509326004-1022644581=:1556--
+cgf
