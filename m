@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2059-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 7778 invoked by alias); 15 Apr 2002 15:01:24 -0000
+Return-Path: <cygwin-patches-return-2060-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 11998 invoked by alias); 15 Apr 2002 15:09:36 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,33 +7,43 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 7739 invoked from network); 15 Apr 2002 15:01:22 -0000
-Date: Mon, 15 Apr 2002 08:01:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
+Received: (qmail 11965 invoked from network); 15 Apr 2002 15:09:34 -0000
+Message-ID: <3CBAEDF1.647F5DC6@ieee.org>
+Date: Mon, 15 Apr 2002 08:09:00 -0000
+From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
+X-Accept-Language: en,pdf
+MIME-Version: 1.0
+To: Corinna Vinschen <cygwin-patches@cygwin.com>
 Subject: Re: Workaround patch for MS CLOSE_WAIT bug
-Message-ID: <20020415150129.GA6372@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3.0.5.32.20020414152944.007ec460@mail.attbi.com> <20020415141743.N29277@cygbert.vinschen.de>
-Mime-Version: 1.0
+References: <3.0.5.32.20020414152944.007ec460@mail.attbi.com> <20020415141743.N29277@cygbert.vinschen.de> <3CBADAE5.92A542FE@ieee.org> <20020415162809.P29277@cygbert.vinschen.de>
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20020415141743.N29277@cygbert.vinschen.de>
-User-Agent: Mutt/1.3.23.1i
-X-SW-Source: 2002-q2/txt/msg00043.txt.bz2
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2002-q2/txt/msg00044.txt.bz2
 
-On Mon, Apr 15, 2002 at 02:17:43PM +0200, Corinna Vinschen wrote:
->Your patch looks good.  What I didn't quite get is, how the above
->code now looks like (ideally) when using the new FD_SETCF functionality.
->Could you write a short example?  If inetd (what about sshd?) could
->benefit, I'd like to see how to do it.  Btw., the sources are in the
->inetutils-1.3.2-17-src.tar.bz2 file, obviously, which you can get
->by using setup.exe.
+Corinna Vinschen wrote:
 
-It looks like the patch will do the job but I would like to be convinced
-that there is no other way around this problem.  If I'm reading this
-correctly, this change requires modifying any code which uses cygwin.
-That's something we should try to avoid at all costs.
+> Sorry if I'm dense but... shouldn't the new FD_SETCF functionality
+> allow to do the "right thing" without adding the oldsocks variable
+> at all?!?  You wrote about the disadvantage that the child inherits
+> that array...
 
-cgf
+The oldsocks array is needed in the parent because the MS bug
+precisely requires the last close() on a socket to be done by 
+the parent, after all other processes referencing the socket 
+are gone (*). 
+
+It's true that the oldsocks array is not needed in the child.
+Is there a way  to declare a variable "NO_COPY" in an application?
+However the oldsocks array is just a an array of integers. The child
+can't (and won't try anyway) make use of them because the underlying 
+handles have not been duplicated. 
+
+(*) My example code assumes that the child has not created detached 
+processes that keep accessing the socket after the child has
+exited (but exec() chains are OK). 
+Is that the case for applications created by inetd & sshd? 
+If this assumption is not true, then shutdown() can't be called 
+in the parent and CLOSE_WAIT may still occur, albeit at a reduced 
+frequency [probably]. 
+ 
+Pierre
