@@ -1,94 +1,216 @@
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin patches <cygwin-patches@cygwin.com>
-Subject: Re: [patch] Setup.exe choose.cc selection enhancement based on file existence
-Date: Wed, 07 Feb 2001 19:42:00 -0000
-Message-id: <20010207224256.A22298@redhat.com>
-References: <200102070226.VAA23607@envy.delorie.com> <VA.00000633.00299ba0@thesoftwaresource.com>
-X-SW-Source: 2001-q1/msg00066.html
+From: David Peterson <David.Peterson@mail.idrive.com>
+To: "'cygwin-patches@cygwin.com'" <cygwin-patches@cygwin.com>
+Subject: RE: new option for cygpath.exe
+Date: Tue, 13 Feb 2001 08:58:00 -0000
+Message-id: <B1F282D5B226D411B8B900E08110486F01E856BF@sweetness.idrive.com>
+X-SW-Source: 2001-q1/msg00067.html
 
-Deja vu.
+Sorry for the delay on this.
 
-"This looks good but, please check out the Contributing section of the
-web page.  It contains a link and some hints on ChangeLog formatting.
-This one is a little 'off', unfortunately."
+The assignment should be in the mail today.
+
+-dave.
+
+
+-----Original Message-----
+From: Christopher Faylor [ mailto:cgf@redhat.com ]
+Sent: Friday, February 02, 2001 8:43 PM
+To: 'cygwin-patches@cygwin.com'
+Cc: David.Peterson@mail.idrive.com
+Subject: Re: new option for cygpath.exe
+
+
+Unfortunately, this patch is large enough to require an assignment
+form.  Please check out the Contributing link on cygwin.com for
+info on what you need.
+
+I apologize for requiring these legalities.
 
 cgf
 
-On Wed, Feb 07, 2001 at 10:35:27PM -0500, Brian Keener wrote:
->Okay I will try this again.  The following change enhances the Setup.exe 
->selection criteria for which files to show in the partial/full lists so 
->that the selection criteria now include the installation method selected 
->and the existence/non-existence of the installation file for each package 
->as well as slightly different logic on Prev, Curr, and Test.  No,  the 
->basic scheme still works they way it did.  The difference is what is 
->displayed and whether they are shown as needing updating or if they 
->default to skip or keep.  If I am in partial list then it comes up by 
->default with current selected like it did and if I selected an install 
->method of Netinstall then all packages with a current that is not 
->currently installed would be displayed.  On the other hand if I selected 
->download then only packages with a current version that is not 
->installed and does not already exist on my local drive would be displayed 
->for selection and if I selected install from local directory then only 
->those whose current install file existed on disk and where the 
->current version is not installed would be displayed.  This same logic 
->follows if I then selected Prev or Test the selection list changes 
->accordingly.
+On Thu, Feb 01, 2001 at 09:22:12AM -0800, David Peterson wrote:
 >
->Sorry about the fact that I use and attachment but the code diff was 
->bigger than my email would allow me to send  but here is the Changelog 
->entry
+>Thu Feb 01 09:00:00 2001  David Peterson <chief@mail.idrive.com>
 >
->2001-02-05  Brian Keener   <bkeener@thesoftwaresource.com>
->        *  choose.cc (paint) : modified message for nothing to download  
->        vs nothing to install/update.
->        (list_click) : modified to skip versions in selection process if 
->        installing from local directory and installation file does not   
->        exist.  Also leaves Source Action set to N/A if the source file  
->        does not exist and installing from local directory.
->        (check_existence) : new method to check current existence of
->        installation files based on selected installation method.
->        (set_existence) : new method to set the current existence of 
->        installation files based on selected installation method.
->        (best_trust) : decision process modified for best trust to base 
->        decision on current trust selected (IE: prev, curr, or test) and
->        existence of file and installation method selected.
->        (default_trust) : added logic to capture the current trust level 
->        and the trust selected for the given package.
->        (set_full_list) : expanded the decision criteria for displaying a 
->        package in the selection list to include existence/non-existence 
->        of the file and the selected installation method.
->        (build_labels) : modified criteria for label addition to include
->        installation method and file existence/non-existence.
->        (create_listview) : modification to establish the trust on       
->        packages before setting up the display list.  Also modification  
->        to set Current trust button as the default.
->        (dialog_cmd) : set response for Prev, Curr, Test button push to  
->        perform a reset of the selection list as well as setting the     
->        default trust.
->        (scan2) : modification to use the new method get_package_version 
->        and also enhanced handling of the build for the structures       
->        package and extra.
->        (get_package_version) : new method to provide for reusable code  
->        for determining the package version from the file name for a     
->        specified trust.
->        (read_installed_db) : modification to use the new method 
->        get_package_version and also enhanced handling of the build for  
->        the structures package and extra.
->        (do_choose) : modification for additional initialization of      
->        package and extra structures.  Uses read_installed_db all the    
->        time despite install method.  Enhancement and changes to output  
->        display for expanded code meanings and clarified output for      
->        packages and available versions in the setup.log.full log file.
->        *  ini.h :  added install_exists and source_exists and 
->        partial_list_display to the structure definition for package.
->        *  res.rc (IDD_CHOOSE) : Modify to choose dialog such that Prev, 
->        Curr, and Test pushbuttons become Radio Buttons instead thus     
->        allowing the operator to better determine which is selected.
+>	* cygpath.cc: add option to output windows paths in
+>	different formats including UNC, DOS, and "mixed".
+>	(main): process options
+>	(doit): check new options flags
 >
 >
->
-
-
+>Index: cygpath.cc
+>===================================================================
+>RCS file: /cvs/src/src/winsup/utils/cygpath.cc,v
+>retrieving revision 1.7
+>diff -u -p -r1.7 cygpath.cc
+>--- cygpath.cc	2000/10/28 05:00:00	1.7
+>+++ cygpath.cc	2001/02/01 17:12:07
+>@@ -23,7 +23,8 @@ static char *prog_name;
+> static char *file_arg;
+> static char *close_arg;
+> static int path_flag, unix_flag, windows_flag, absolute_flag;
+>-static int shortname_flag, ignore_flag;
+>+static int shortname_flag, ignore_flag, unc_flag, mixed_flag;
+>+static char *windows_format_arg;
+> 
+> static struct option long_options[] =
+> {
+>@@ -37,6 +38,7 @@ static struct option long_options[] =
+>   { (char *) "version", no_argument, NULL, 'v' },
+>   { (char *) "windows", no_argument, NULL, 'w' },
+>   { (char *) "short-name", no_argument, NULL, 's' },
+>+  { (char *) "type", required_argument, (int *) &windows_format_arg, 't'
+},
+>   { (char *) "windir", no_argument, NULL, 'W' },
+>   { (char *) "sysdir", no_argument, NULL, 'S' },
+>   { (char *) "ignore", no_argument, NULL, 'i' },
+>@@ -48,13 +50,18 @@ usage (FILE *stream, int status)
+> {
+>   if (!ignore_flag || !status)
+>     fprintf (stream, "\
+>-Usage: %s [-p|--path] (-u|--unix)|(-w|--windows [-s|--short-name])
+>filename\n\
+>+Usage: %s [-p|--path] (-u|--unix)|(-w|--windows [-s|--short-name]
+>[-t|--type type]) filename\n\
+>   -a|--absolute		output absolute path\n\
+>   -c|--close handle	close handle (for use in captured process)\n\
+>   -f|--file file	read file for path information\n\
+>   -u|--unix		print Unix form of filename\n\
+>   -w|--windows		print Windows form of filename\n\
+>   -s|--short-name	print Windows short form of filename\n\
+>+  -t|--type		print Windows form of filename with specified
+>type\n\
+>+                        requires -a or --absolute, type is one of the
+>following:\n\
+>+      dos 		    drive letter with back-slashes (C:\\WINNT)\n\
+>+      unc		    UNC style (//C/WINNT)\n\
+>+      mixed		    drive letter with forward-slashes (C:/WINNT)\n\
+>   -W|--windir		print `Windows' directory\n\
+>   -S|--sysdir		print `system' directory\n\
+>   -p|--path		filename argument is a path\n\
+>@@ -128,7 +135,7 @@ get_short_name (const char *filename)
+>   {
+>     fprintf (stderr, "%s: out of memory\n", prog_name);
+>     exit (1);
+>-  }
+>+  } 
+>   if (GetShortPathName (filename, sbuf, len) == ERROR_INVALID_PARAMETER)
+>   {
+>     fprintf (stderr, "%s: cannot create short name of %s\n", prog_name,
+>filename);
+>@@ -138,6 +145,55 @@ get_short_name (const char *filename)
+> }
+> 
+> static void
+>+convert_slashes (char* name)
+>+{
+>+	while (*name != '\0')
+>+	{
+>+		if (*name == '\\')
+>+			*name = '/';
+>+		name++;
+>+	}
+>+}
+>+
+>+static char*
+>+get_unc_name (const char *filename)
+>+{
+>+	int len = strlen(filename);
+>+	char* unc_buf = (char *) calloc(len + 2, 1);
+>+
+>+	if (unc_buf == NULL)
+>+	{
+>+      fprintf (stderr, "%s: out of memory\n", prog_name);
+>+      exit (1);
+>+	}
+>+
+>+	memcpy(unc_buf + 3, filename + 2, len - 2);
+>+	convert_slashes(unc_buf + 3);
+>+
+>+	unc_buf[0] = '/';
+>+	unc_buf[1] = '/';
+>+	unc_buf[2] = filename[0];
+>+
+>+	return unc_buf;
+>+}
+>+
+>+static char*
+>+get_mixed_name (const char* filename)
+>+{
+>+	char* mixed_buf = strdup(filename);
+>+	
+>+	if (mixed_buf == NULL)
+>+	{
+>+      fprintf (stderr, "%s: out of memory\n", prog_name);
+>+      exit (1);
+>+	}
+>+
+>+	convert_slashes(mixed_buf);
+>+
+>+	return mixed_buf;
+>+}
+>+
+>+static void
+> doit (char *filename)
+> {
+>   char *buf;
+>@@ -193,8 +249,14 @@ doit (char *filename)
+>       else
+> 	{
+> 	  (absolute_flag ? cygwin_conv_to_full_win32_path :
+>cygwin_conv_to_win32_path) (filename, buf);
+>+
+> 	  if (shortname_flag)
+> 	    buf = get_short_name (buf);
+>+
+>+	  if (unc_flag)
+>+		  buf = get_unc_name (buf);
+>+	  else if (mixed_flag)
+>+		  buf = get_mixed_name (buf);
+> 	}
+>     }
+> 
+>@@ -219,9 +281,11 @@ main (int argc, char **argv)
+>   unix_flag = 0;
+>   windows_flag = 0;
+>   shortname_flag = 0;
+>+  unc_flag = 0;
+>+  mixed_flag = 0;
+>   ignore_flag = 0;
+>   options_from_file_flag = 0;
+>-  while ((c = getopt_long (argc, argv, (char *) "hac:f:opsSuvwWi",
+>long_options, (int *) NULL))
+>+  while ((c = getopt_long (argc, argv, (char *) "hac:f:opsSuvwt:Wi",
+>long_options, (int *) NULL))
+> 	 != EOF)
+>     {
+>       switch (c)
+>@@ -263,6 +327,23 @@ main (int argc, char **argv)
+> 	    usage (stderr, 1);
+> 	  shortname_flag = 1;
+> 	  break;
+>+
+>+	case 't':
+>+		if (unix_flag || !windows_flag || !absolute_flag || (optarg
+>== NULL))
+>+			usage (stderr, 1);
+>+
+>+		windows_format_arg = ((*optarg == '=') ? (optarg + 1) :
+>(optarg));
+>+
+>+		if (0 == strcmp(windows_format_arg, "unc"))
+>+			unc_flag = 1;
+>+		else if (0 == strcmp(windows_format_arg, "mixed"))
+>+			mixed_flag = 1;
+>+		else if (0 == strcmp(windows_format_arg, "dos"))
+>+			;
+>+		else
+>+			usage (stderr, 1);
+>+
+>+		break;
+> 
+> 	case 'W':
+> 	  GetWindowsDirectory(buf, MAX_PATH);
 
 -- 
 cgf@cygnus.com                        Red Hat, Inc.
