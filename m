@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5168-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 30966 invoked by alias); 26 Nov 2004 04:33:21 -0000
+Return-Path: <cygwin-patches-return-5169-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 24544 invoked by alias); 26 Nov 2004 20:25:23 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,50 +7,115 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 30853 invoked from network); 26 Nov 2004 04:33:15 -0000
-Received: from unknown (HELO cgf.cx) (66.30.17.189)
-  by sourceware.org with SMTP; 26 Nov 2004 04:33:15 -0000
-Received: by cgf.cx (Postfix, from userid 201)
-	id DC6151B3E5; Thu, 25 Nov 2004 23:29:08 -0500 (EST)
-Date: Fri, 26 Nov 2004 04:33:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
+Received: (qmail 24509 invoked from network); 26 Nov 2004 20:25:19 -0000
+Received: from unknown (HELO moutng.kundenserver.de) (212.227.126.171)
+  by sourceware.org with SMTP; 26 Nov 2004 20:25:19 -0000
+Received: from [212.227.126.179] (helo=mrelayng.kundenserver.de)
+	by moutng.kundenserver.de with esmtp (Exim 3.35 #1)
+	id 1CXmec-0000oI-00
+	for cygwin-patches@cygwin.com; Fri, 26 Nov 2004 21:25:18 +0100
+Received: from [217.245.1.179] (helo=towo.net)
+	by mrelayng.kundenserver.de with asmtp (Exim 3.35 #1)
+	id 1CXmec-00015U-00
+	for cygwin-patches@cygwin.com; Fri, 26 Nov 2004 21:25:18 +0100
+Received: by towo.net (sSMTP sendmail emulation); Fri, 26 Nov 2004 05:04:01 +0100
+Date: Fri, 26 Nov 2004 20:25:00 -0000
 To: cygwin-patches@cygwin.com
-Subject: Re: [Patch] Fixing the PROCESS_DUP_HANDLE security hole.
-Message-ID: <20041126042908.GA12730@trixie.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3.0.5.32.20041111224857.00819b20@incoming.verizon.net> <3.0.5.32.20041111224857.00819b20@incoming.verizon.net> <3.0.5.32.20041111235225.00818340@incoming.verizon.net> <20041114051158.GG7554@trixie.casa.cgf.cx> <20041116054156.GA17214@trixie.casa.cgf.cx> <419A1F7B.8D59A9C9@phumblet.no-ip.org> <20041116155640.GA22397@trixie.casa.cgf.cx> <20041120062339.GA31757@trixie.casa.cgf.cx>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20041120062339.GA31757@trixie.casa.cgf.cx>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2004-q4/txt/msg00169.txt.bz2
+From: Thomas Wolff <towo@computer.org>
+Subject: [Patch] bugs # 512 and 514 / cygwin console handling
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary=%%message-boundary%%
+Message-Id: <E1CXmec-00015U-00@mrelayng.kundenserver.de>
+X-Provags-ID: kundenserver.de abuse@kundenserver.de auth:1bd85ed25de6039e01e18a198cf341a2
+X-SW-Source: 2004-q4/txt/msg00170.txt.bz2
 
-On Sat, Nov 20, 2004 at 01:23:39AM -0500, Christopher Faylor wrote:
->On Tue, Nov 16, 2004 at 10:56:40AM -0500, Christopher Faylor wrote:
->>The simplification of the code from removing all of the reparenting
->>considerations is not something that I'm going to give up on easily.
->
->Well, the code seems to be slightly faster now than the old method, so
->that's something.  I think it's also a lot simpler.
 
-I've checked in my revamp of the exec/wait code.  There are still some
-other ways to do what I did and maybe I'll experiment with using
-multiple threads running WaitForMultipleObjects, but, for now, cygwin is
-using the one thread per process technique.
+--%%message-boundary%%
+Content-Type: text/plain
+Content-length: 538
 
-AFAIK, the only problem with the current code is if a parent process
-forks a process, calls setuid, and execs a non-cygwin process it is
-possible that the parent process won't be able to retrieve the exit
-value of the non-cygwin process.
+Hello,
+attached is a patch to fhandler_console.cc that fixes two bugs:
+512 wrong mouse click position reports in cygwin terminal
+514 cygwin terminal: wrong color handling in reverse display mode
 
-Right now, my reaction to this crucial shortcoming is "oh well" but
-if it actually proves to be a problem, I know how to deal with it.
+After some initial problems :( I have been able to verify that 
+this patch works. For # 514, there are actually two useful 
+alternatives which I documented in the code and I included an #ifdef 
+for them.
 
-This was a major change but, if wc and ls are to believed, the net
-result is a reduction in size of the dll.  I don't detect any change in
-behavior as far as timings are concerned but I still need to check
-things on a single processor CPU.
+I'd appreciate if this patch is integrated into cygwin to 
+accomodate interactive programs on the cygwin console.
 
-cgf
+Kind regards,
+Thomas
+
+
+--%%message-boundary%%
+Content-Type: application/octet-stream; name="fhandler_console.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="fhandler_console.patch"
+Content-length: 3624
+
+LS0tIGN5Z3dpbi0xLjUuMTItMS93aW5zdXAvY3lnd2luL2ZoYW5kbGVyX2Nv
+bnNvbGUuY2Mub2xkCTIwMDQtMTAtMjggMTc6MzM6MDQuMDAwMDAwMDAwICsw
+MjAwCisrKyBjeWd3aW4tMS41LjEyLTEvd2luc3VwL2N5Z3dpbi9maGFuZGxl
+cl9jb25zb2xlLmNjCTIwMDQtMTEtMjYgMTY6MjQ6NTEuMDAwMDAwMDAwICsw
+MTAwCkBAIC00MjIsMTAgKzQyMiwyNSBAQAogCSAgICAgIGlmIChtb3VzZV9l
+dmVudC5kd0V2ZW50RmxhZ3MpCiAJCWNvbnRpbnVlOwogCi0JICAgICAgLyog
+SWYgdGhlIG1vdXNlIGV2ZW50IG9jY3VycmVkIG91dCBvZiB0aGUgYXJlYSB3
+ZSBjYW4gaGFuZGxlLAotCQkgaWdub3JlIGl0LiAqLworCSAgICAgIC8qIFJl
+dHJpZXZlIHJlcG9ydGVkIG1vdXNlIHBvc2l0aW9uICovCiAJICAgICAgaW50
+IHggPSBtb3VzZV9ldmVudC5kd01vdXNlUG9zaXRpb24uWDsKIAkgICAgICBp
+bnQgeSA9IG1vdXNlX2V2ZW50LmR3TW91c2VQb3NpdGlvbi5ZOworCisJICAg
+ICAgLyogQWRqdXN0IG1vdXNlIHBvc2l0aW9uIGJ5IHNjcm9sbCBidWZmZXIg
+b2Zmc2V0ICovCisJICAgICAgQ09OU09MRV9TQ1JFRU5fQlVGRkVSX0lORk8g
+bm93OworCSAgICAgIGlmIChHZXRDb25zb2xlU2NyZWVuQnVmZmVySW5mbyAo
+Z2V0X291dHB1dF9oYW5kbGUgKCksICZub3cpKQorCQl7CisJCSAgeSAtPSBu
+b3cuc3JXaW5kb3cuVG9wOworCQkgIHggLT0gbm93LnNyV2luZG93LkxlZnQ7
+CisJCX0KKwkgICAgICBlbHNlCisJCXsKKwkJICBzeXNjYWxsX3ByaW50ZiAo
+Im1vdXNlOiBjYW5ub3QgYWRqdXN0IHBvc2l0aW9uIGJ5IHNjcm9sbCBidWZm
+ZXIgb2Zmc2V0Iik7CisJCSAgY29udGludWU7CisJCX0KKworCSAgICAgIC8q
+IElmIHRoZSBtb3VzZSBldmVudCBvY2N1cnJlZCBvdXQgb2YgdGhlIGFyZWEg
+d2UgY2FuIGhhbmRsZSwKKwkJIGlnbm9yZSBpdC4gKi8KIAkgICAgICBpZiAo
+KHggKyAnICcgKyAxID4gMHhGRikgfHwgKHkgKyAnICcgKyAxID4gMHhGRikp
+CiAJCXsKIAkJICBzeXNjYWxsX3ByaW50ZiAoIm1vdXNlOiBwb3NpdGlvbiBv
+dXQgb2YgcmFuZ2UiKTsKQEAgLTkyMSwxNCArOTM2LDMyIEBACiAgIGlmIChk
+ZXZfc3RhdGUtPnJldmVyc2UpCiAgICAgewogICAgICAgV09SRCBzYXZlX2Zn
+ID0gd2luX2ZnOworI2RlZmluZSByZXZlcnNlX2JyaWdodAorI2lmZGVmIHJl
+dmVyc2VfYnJpZ2h0CisgICAgICAvKiBUaGlzIHdheSwgYSBicmlnaHQgZm9y
+ZWdyb3VuZCB3aWxsIHJldmVyc2UgdG8gYSBicmlnaHQgYmFja2dyb3VuZC4K
+KyAgICAgICAqLworICAgICAgd2luX2ZnID0gKHdpbl9iZyAmIEJBQ0tHUk9V
+TkRfUkVEICAgPyBGT1JFR1JPVU5EX1JFRCAgIDogMCkgfAorCSAgICAgICAo
+d2luX2JnICYgQkFDS0dST1VORF9HUkVFTiA/IEZPUkVHUk9VTkRfR1JFRU4g
+OiAwKSB8CisJICAgICAgICh3aW5fYmcgJiBCQUNLR1JPVU5EX0JMVUUgID8g
+Rk9SRUdST1VORF9CTFVFICA6IDApIHwKKwkgICAgICAgKHdpbl9iZyAmIEJB
+Q0tHUk9VTkRfSU5URU5TSVRZID8gRk9SRUdST1VORF9JTlRFTlNJVFkgOiAw
+KTsKKyAgICAgIHdpbl9iZyA9IChzYXZlX2ZnICYgRk9SRUdST1VORF9SRUQg
+ICA/IEJBQ0tHUk9VTkRfUkVEICAgOiAwKSB8CisJICAgICAgIChzYXZlX2Zn
+ICYgRk9SRUdST1VORF9HUkVFTiA/IEJBQ0tHUk9VTkRfR1JFRU4gOiAwKSB8
+CisJICAgICAgIChzYXZlX2ZnICYgRk9SRUdST1VORF9CTFVFICA/IEJBQ0tH
+Uk9VTkRfQkxVRSAgOiAwKSB8CisJICAgICAgIChzYXZlX2ZnICYgRk9SRUdS
+T1VORF9JTlRFTlNJVFkgPyBCQUNLR1JPVU5EX0lOVEVOU0lUWSA6IDApOwor
+I2Vsc2UKKyAgICAgIC8qIFRoaXMgd2F5LCBhIGJyaWdodCBmb3JlZ3JvdW5k
+IHdpbGwgcmV2ZXJzZSB0byBhIGRpbSBiYWNrZ3JvdW5kLgorICAgICAgICAg
+QnV0IHRoZSBiYWNrZ3JvdW5kIHdpbGwgbm8gbG9uZ2VyIHJldmVyc2UgdG8g
+YSBicmlnaHQgZm9yZWdyb3VuZCAKKyAgICAgICAgICh3aGljaCB1c2VkIHRv
+IHJlbmRlciByZXZlcnNlIG91dHB1dCB1bnJlYWRhYmxlKS4KKyAgICAgICAq
+LwogICAgICAgd2luX2ZnID0gKHdpbl9iZyAmIEJBQ0tHUk9VTkRfUkVEICAg
+PyBGT1JFR1JPVU5EX1JFRCAgIDogMCkgfAogCSAgICAgICAod2luX2JnICYg
+QkFDS0dST1VORF9HUkVFTiA/IEZPUkVHUk9VTkRfR1JFRU4gOiAwKSB8CiAJ
+ICAgICAgICh3aW5fYmcgJiBCQUNLR1JPVU5EX0JMVUUgID8gRk9SRUdST1VO
+RF9CTFVFICA6IDApIHwKLQkgICAgICAgKHdpbl9mZyAmIEZPUkVHUk9VTkRf
+SU5URU5TSVRZKTsKKwkgICAgICAgKHdpbl9iZyAmIEZPUkVHUk9VTkRfSU5U
+RU5TSVRZKTsKICAgICAgIHdpbl9iZyA9IChzYXZlX2ZnICYgRk9SRUdST1VO
+RF9SRUQgICA/IEJBQ0tHUk9VTkRfUkVEICAgOiAwKSB8CiAJICAgICAgIChz
+YXZlX2ZnICYgRk9SRUdST1VORF9HUkVFTiA/IEJBQ0tHUk9VTkRfR1JFRU4g
+OiAwKSB8CiAJICAgICAgIChzYXZlX2ZnICYgRk9SRUdST1VORF9CTFVFICA/
+IEJBQ0tHUk9VTkRfQkxVRSAgOiAwKSB8Ci0JICAgICAgICh3aW5fYmcgJiBC
+QUNLR1JPVU5EX0lOVEVOU0lUWSk7CisJICAgICAgIChzYXZlX2ZnICYgQkFD
+S0dST1VORF9JTlRFTlNJVFkpOworI2VuZGlmCiAgICAgfQogICBpZiAoZGV2
+X3N0YXRlLT51bmRlcmxpbmUpCiAgICAgd2luX2ZnID0gZGV2X3N0YXRlLT51
+bmRlcmxpbmVfY29sb3I7Cg==
+
+--%%message-boundary%%--
