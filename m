@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3921-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 1039 invoked by alias); 3 Jun 2003 16:40:28 -0000
+Return-Path: <cygwin-patches-return-3922-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 9499 invoked by alias); 4 Jun 2003 01:21:53 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,74 +7,118 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 995 invoked from network); 3 Jun 2003 16:40:27 -0000
-Message-ID: <3EDCCE5F.70509@ford.com>
-Date: Tue, 03 Jun 2003 16:40:00 -0000
-From: Kelley Cook <kcook34@ford.com>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.4b) Gecko/20030507
-X-Accept-Language: en-us, en
-MIME-Version: 1.0
+Received: (qmail 9464 invoked from network); 4 Jun 2003 01:21:52 -0000
+Message-Id: <3.0.5.32.20030603212215.007fe100@mail.attbi.com>
+X-Sender: phumblet@mail.attbi.com (Unverified)
+Date: Wed, 04 Jun 2003 01:21:00 -0000
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] One liner to allow i786 in cygwin
-Content-Type: multipart/mixed;
- boundary="------------050000090503010700010904"
-X-MW-BTID: 090125000020031546002000000
-X-MW-CTIME: 1054658420
-HOP-COUNT: 1
-X-MAILWATCH-INSTANCEID: 0102001e09f5e24f-5e46-418b-a42b-aa8cd07f1467
-X-OriginalArrivalTime: 03 Jun 2003 16:40:20.0615 (UTC) FILETIME=[D2720970:01C329EE]
-X-SW-Source: 2003-q2/txt/msg00148.txt.bz2
+From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
+Subject: stat weird feature
+Mime-Version: 1.0
+Content-Type: multipart/mixed; boundary="=====================_1054704135==_"
+X-SW-Source: 2003-q2/txt/msg00149.txt.bz2
 
-This is a multi-part message in MIME format.
---------------050000090503010700010904
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-length: 811
+--=====================_1054704135==_
+Content-Type: text/plain; charset="us-ascii"
+Content-length: 431
 
-This patch allows the Cygwin DLL to be configured and compiled for
---{host,build,target}=i786-pc-cygwin.
+Here is the patch discussed today on the developers' list.
+I have also moved a comment that had drifted out of its 
+natural spot.
 
-After applying a pending patch to the toplevel config.sub as well as the
-hand changing the questionable old copies of config.sub that need to be
-in the mingw and w32api directories,  I have configured, compiled and
-installed the DLL for --{host,build,target}=pentium4-pc-cygwin.  A make
-check showed zero unexpected failures and one unexpected pass:
-ltp/gethostid01.c.
+Pierre
 
-Similar patches have already been installed for the toplevel, binutils,
-libiberty, and newlib.
+2003-06-04  Pierre Humblet  <pierre.humblet@ieee.org>
 
-I also have a simple autoconf/automake patch pending which corrects the
-need for the (IMO bogus) mingw/w32api config.{sub,guess}.  Should I also
-post that patch here for inclusion in the Cygwin versions of
-autoconf/automake.
+	* fhandler_disk_file.cc (fhandler_disk_file::fstat): Mark the pc
+	as non-executable if the file cannot be opened for read. Retry query 
+	open only if errno is EACCES. Never change the mode, even if it is 000 
+	when query open() fails. 
 
-Kelley Cook
+--=====================_1054704135==_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment; filename="fhandler_disk_file.diff"
+Content-length: 3397
 
+Index: fhandler_disk_file.cc
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+RCS file: /cvs/src/src/winsup/cygwin/fhandler_disk_file.cc,v
+retrieving revision 1.54
+diff -u -p -r1.54 fhandler_disk_file.cc
+--- fhandler_disk_file.cc	1 Jun 2003 19:37:13 -0000	1.54
++++ fhandler_disk_file.cc	4 Jun 2003 00:54:25 -0000
+@@ -137,8 +137,6 @@ fhandler_disk_file::fstat (struct __stat
+ {
+   int res =3D -1;
+   int oret;
+-  __uid32_t uid;
+-  __gid32_t gid;
+   int open_flags =3D O_RDONLY | O_BINARY | O_DIROPEN;
+   bool query_open_already;
 
---------------050000090503010700010904
-Content-Type: text/plain;
- name="cygwini786.diff"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline;
- filename="cygwini786.diff"
-Content-length: 468
+@@ -159,27 +157,15 @@ fhandler_disk_file::fstat (struct __stat
+   if (query_open_already && strncasematch (pc->volname (), "FAT", 3)
+       && !strpbrk (get_win32_name (), "?*|<>"))
+     oret =3D 0;
+-  else if (!(oret =3D open (pc, open_flags, 0)))
++  else if (!(oret =3D open (pc, open_flags, 0))
++	   && !query_open_already
++	   && get_errno () =3D=3D EACCES)
+     {
+-      mode_t ntsec_atts =3D 0;
+       /* If we couldn't open the file, try a "query open" with no permissi=
+ons.
+ 	 This will allow us to determine *some* things about the file, at least. =
+*/
++      pc->set_exec (0);
+       set_query_open (true);
+-      if (!query_open_already && (oret =3D open (pc, open_flags, 0)))
+-	/* ok */;
+-      else if (allow_ntsec && pc->has_acls () && get_errno () =3D=3D EACCES
+-		&& !get_file_attribute (TRUE, get_win32_name (), &ntsec_atts, &uid, &gid)
+-		&& !ntsec_atts && uid =3D=3D myself->uid && gid =3D=3D myself->gid)
+-	{
+-	  /* Check a special case here. If ntsec is ON it happens
+-	     that a process creates a file using mode 000 to disallow
+-	     other processes access. In contrast to UNIX, this results
+-	     in a failing open call in the same process. Check that
+-	     case. */
+-	  set_file_attribute (TRUE, get_win32_name (), 0400);
+-	  oret =3D open (pc, open_flags, 0);
+-	  set_file_attribute (TRUE, get_win32_name (), ntsec_atts);
+-	}
++      oret =3D open (pc, open_flags, 0);
+     }
 
-2003-06-03  Kelley Cook  <kelleycook@wideopenwest.com>
+   if (!oret || get_nohandle ())
+@@ -217,7 +203,11 @@ fhandler_disk_file::fstat_helper (struct
+   to_timestruc_t (&ftCreationTime, &buf->st_ctim);
+   buf->st_dev =3D pc->volser ();
+   buf->st_size =3D ((_off64_t)nFileSizeHigh << 32) + nFileSizeLow;
+-  /* Unfortunately the count of 2 confuses `find (1)' command. So
++  /* The number of links to a directory includes the
++     number of subdirectories in the directory, since all
++     those subdirectories point to it.
++     This is too slow on remote drives, so we do without it.
++     Setting the count to 2 confuses `find (1)' command. So
+      let's try it with `1' as link count. */
+   if (pc->isdir () && !pc->isremote () && nNumberOfLinks =3D=3D 1)
+     buf->st_nlink =3D num_entries (pc->get_win32 ());
+@@ -336,11 +326,6 @@ fhandler_disk_file::fstat_helper (struct
+       buf->st_mode &=3D ~(cygheap->umask);
+     }
 
-	* configure.in: Allow i786 variant.
-	* configure: Regenerate.
+-  /* The number of links to a directory includes the
+-     number of subdirectories in the directory, since all
+-     those subdirectories point to it.
+-     This is too slow on remote drives, so we do without it and
+-     set the number of links to 2. */
+  done:
+   syscall_printf ("0 =3D fstat (, %p) st_atime=3D%x st_size=3D%D, st_mode=
+=3D%p, st_ino=3D%d, sizeof=3D%d",
+ 		  buf, buf->st_atime, buf->st_size, buf->st_mode,
 
---- cygwin/configure.in.orig	2003-06-03 10:43:30.000000000 -0400
-+++ cygwin/configure.in	2003-06-03 10:27:26.000000000 -0400
-@@ -205,7 +205,7 @@
- dnl fi
- 
- case "$target_cpu" in
--   i386|i486|i586|i686) DLL_ENTRY="_dll_entry@12"
-+   i[[3-7]]86)	DLL_ENTRY="_dll_entry@12"
- 		DEF_DLL_ENTRY="dll_entry@12"
- 		ALLOCA="_alloca"
- 		CONFIG_DIR="i386"  ;;
-
---------------050000090503010700010904--
+--=====================_1054704135==_--
