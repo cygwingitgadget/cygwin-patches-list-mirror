@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2779-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 18547 invoked by alias); 6 Aug 2002 23:40:07 -0000
+Return-Path: <cygwin-patches-return-2780-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 31085 invoked by alias); 7 Aug 2002 01:23:36 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,84 +7,38 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 18533 invoked from network); 6 Aug 2002 23:40:06 -0000
-Message-ID: <01de01c23da2$f1ead310$6132bc3e@BABEL>
-From: "Conrad Scott" <Conrad.Scott@dsl.pipex.com>
-To: <cygwin-patches@cygwin.com>
-Subject: fhandler_socket::accept() and FIONBIO
-Date: Tue, 06 Aug 2002 16:40:00 -0000
-MIME-Version: 1.0
-Content-Type: multipart/mixed;
-	boundary="----=_NextPart_000_01DB_01C23DAB.53723210"
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-SW-Source: 2002-q3/txt/msg00227.txt.bz2
+Received: (qmail 31056 invoked from network); 7 Aug 2002 01:23:35 -0000
+Date: Tue, 06 Aug 2002 18:23:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: init_cheap and _csbrk
+Message-ID: <20020807012331.GJ1386@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <01e501c23d74$400b2c90$6132bc3e@BABEL> <20020806220731.GG1386@redhat.com> <013b01c23d99$a180f930$6132bc3e@BABEL>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <013b01c23d99$a180f930$6132bc3e@BABEL>
+User-Agent: Mutt/1.3.23.1i
+X-SW-Source: 2002-q3/txt/msg00228.txt.bz2
 
-This is a multi-part message in MIME format.
+On Tue, Aug 06, 2002 at 11:35:56PM +0100, Conrad Scott wrote:
+>I wasn't thinking of efficiency while I was looking at this.  I
+>was actually trying to understand an apparent memory leak on fork.
+>(I found that BTW: it's the "well-known" one in the per_thread
+>mechanism.  So I've stopped worrying about it.)
+>
+>But: the slop will never get used AFAICT (so it's not really
+>slop).
 
-------=_NextPart_000_01DB_01C23DAB.53723210
-Content-Type: text/plain;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: 7bit
-Content-length: 478
+You're right.  And even if I got the slop working there would still
+be a call to VirtualAlloc.  It shouldn't matter since it will just
+be allocating allocated memory but that means it probably isn't
+really worth it anyway.  So, I've reorganized things one more time.
+And, no more slop.
 
-I've attached a tiny patch to fix the win98 / WSAENOBUFS problem
-reported in
-http://cygwin.com/ml/cygwin-developers/2002-07/msg00167.html
-(amongst other places).
+In the reorganization our aesthetic sense merged so I moved the
+cygheap_max setting back into init_cheap.
 
-It turns out to be a minor ding in setting the socket back to
-non-blocking in the (blocking) accept call.  Quite why this has
-the effect it does on win98, I'll leave to the morning.  This
-patch fixes the problem and is obviously the right thing to do:
-the details I'm happy to leave 'til later.
-
-Enjoy!
-
-// Conrad
-
-
-------=_NextPart_000_01DB_01C23DAB.53723210
-Content-Type: text/plain;
-	name="ChangeLog.txt"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment;
-	filename="ChangeLog.txt"
-Content-length: 124
-
-2002-08-07  Conrad Scott  <conrad.scott@dsl.pipex.com>
-
-	* fhandler_socket.cc (fhandler_socket::accept): Fix FIONBIO call.
-
-
-------=_NextPart_000_01DB_01C23DAB.53723210
-Content-Type: text/plain;
-	name="FIONBIO.patch.txt"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment;
-	filename="FIONBIO.patch.txt"
-Content-length: 828
-
-Index: fhandler_socket.cc
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-RCS file: /cvs/src/src/winsup/cygwin/fhandler_socket.cc,v
-retrieving revision 1.55
-diff -u -r1.55 fhandler_socket.cc
---- fhandler_socket.cc	13 Jul 2002 20:00:25 -0000	1.55
-+++ fhandler_socket.cc	6 Aug 2002 23:33:08 -0000
-@@ -524,7 +524,8 @@
-           /* Unset events for listening socket and
-              switch back to blocking mode */
-           WSAEventSelect (get_socket (), ev[0], 0 );
--          ioctlsocket (get_socket (), FIONBIO, 0);
-+	  unsigned long nonblocking =3D 0;
-+          ioctlsocket (get_socket (), FIONBIO, &nonblocking);
-=20
-           switch (wait_result)
-             {
-
-------=_NextPart_000_01DB_01C23DAB.53723210--
-
+cgf
