@@ -1,31 +1,25 @@
-From: Benjamin Riefenstahl <Benjamin.Riefenstahl@epost.de>
+From: Christopher Faylor <cgf@redhat.com>
 To: Cygwin-Patches <cygwin-patches@cygwin.com>
-Subject: Console codepage
-Date: Sun, 28 Jan 2001 12:43:00 -0000
-Message-id: <u7l3fv26h.fsf@mail.epost.de>
-X-SW-Source: 2001-q1/msg00038.html
+Subject: Re: Console codepage
+Date: Sun, 28 Jan 2001 12:49:00 -0000
+Message-id: <20010128154852.A20701@redhat.com>
+References: <u7l3fv26h.fsf@mail.epost.de>
+X-SW-Source: 2001-q1/msg00039.html
 
-Hi everybody,
+On Sun, Jan 28, 2001 at 09:42:30PM +0100, Benjamin Riefenstahl wrote:
+>This is my first submission for Cygwin so if there is anything I can
+>do to make this easier to process, just tell me. 
 
+Please look at the "Contributing" link on the Cygwin web page.  I've gone
+to some pains to update it lately by showing examples of common problems
+with patch submissions.  Unfortunately, there were several problems with
+this submission.
 
-The code to support I/O to the console (fhandler_console.cc) currently
-assumes that the console uses the default OEM codepage.  The user can
-change that with CHCP.COM though, and I for one do that routinely.  It
-is amoung other things a very usefull to do when running a shell in
-NTEmacs.  Because of this customization, 8-bit character console I/O
-in Cygwin has for some time been broken for me.
+I can't comment on the validity of the patch itself.  I hope that Egor
+or Kazuhiro will do that.
 
-I corrected this in fhandler_console.cc by replacing functions
-OemToChar() and CharToOem() with a combo of MultiByteToWideChar() and
-WideCharToMultiByte().
+In the meantime, however, please check out that page.  If you could send
+an assignment form, too, that would help make sure that the legalities are
+covered.
 
-I tested console output on Win2000 with "time od test.data" and it
-doesn't look like there is a noticeable difference in efficiency.
-
-I include the result of a "cvs diff" below. 
-
-This is my first submission for Cygwin so if there is anything I can
-do to make this easier to process, just tell me. 
-
-
-so long, benny
+cgf
