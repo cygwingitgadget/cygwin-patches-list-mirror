@@ -1,22 +1,15 @@
-From: Chris Faylor <cgf@cygnus.com>
+From: Kazuhiro Fujieda <fujieda@jaist.ac.jp>
 To: cygwin-patches@sources.redhat.com
-Subject: Re: memory leaks in cygheap
-Date: Wed, 13 Sep 2000 12:59:00 -0000
-Message-id: <20000913155809.A26505@cygnus.com>
-References: <19119861671.20000913214625@logos-m.ru>
-X-SW-Source: 2000-q3/msg00087.html
+Subject: Re: a weird behavior on a command prompt.
+Date: Wed, 13 Sep 2000 13:35:00 -0000
+Message-id: <s1szolchw0p.fsf@jaist.ac.jp>
+References: <s1s66o0jnd3.fsf@jaist.ac.jp> <20000913142841.C17331@cygnus.com> <s1s3dj4je7c.fsf@jaist.ac.jp> <20000913155221.A26441@cygnus.com>
+X-SW-Source: 2000-q3/msg00088.html
 
-On Wed, Sep 13, 2000 at 09:46:25PM +0400, Egor Duda wrote:
->  running  "gcc -c *.c" in dir with lots of *.c files causes
->api_fatal ("couldn't commit memory for cygwin heap")
->
->looks  like  not  all  memory allocated on cygheap got freed. attached
->patch fixes this.
-
-Thanks.  I've checked in your changes.
-
-I've also made some modifications to the 'av' class since I didn't like
-the fact that calloced needed to be manipulated by people using the
-method.
-
-cgf
+I'm sorry. I completely misunderstood your mail.
+But I have to point out that the result of strcpy between
+overlapped regions is unpredictable according to the standard.
+____
+  | AIST      Kazuhiro Fujieda <fujieda@jaist.ac.jp>
+  | HOKURIKU  School of Information Science
+o_/ 1990      Japan Advanced Institute of Science and Technology
