@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3069-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 790 invoked by alias); 21 Oct 2002 05:59:54 -0000
+Return-Path: <cygwin-patches-return-3070-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 9999 invoked by alias); 21 Oct 2002 15:00:25 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,98 +7,132 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 781 invoked from network); 21 Oct 2002 05:59:54 -0000
-Date: Sun, 20 Oct 2002 22:59:00 -0000
-From: Steve O <bub@io.com>
+Received: (qmail 9990 invoked from network); 21 Oct 2002 15:00:24 -0000
+Message-ID: <3DB416E7.99E22851@ieee.org>
+Date: Mon, 21 Oct 2002 08:00:00 -0000
+From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
+X-Accept-Language: en,pdf
+MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] fhandler_tty deadlock patch
-Message-ID: <20021021010303.A2647@eris.io.com>
-References: <20021018011921.A20255@hagbard.io.com> <Pine.GSO.4.44.0210202249210.18735-101000@slinky.cs.nyu.edu>
-Mime-Version: 1.0
+Subject: Avoiding /etc/passwd and /etc/group scans 
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.2.5.1i
-In-Reply-To: <Pine.GSO.4.44.0210202249210.18735-101000@slinky.cs.nyu.edu>; from pechtcha@cs.nyu.edu on Sun, Oct 20, 2002 at 11:15:47PM -0400
-X-SW-Source: 2002-q4/txt/msg00020.txt.bz2
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2002-q4/txt/msg00021.txt.bz2
 
-On Sun, Oct 20, 2002 at 11:15:47PM -0400, Igor Pechtchanski wrote:
-> However, there are a couple of problems with this patch.  For example,
-> this makes bash run from a command prompt (or a shortcut) treat every
-> character as a ^D.
+Chris,
 
-So every character closes bash?  I'm not able to reproduce this on
-WinXP, have an strace?
+Cygwin scans the passwd and group files to map sids
+to/from uid & gid. It does so even for the current user,
+although the relevant mappings are stored internally.
+This is inefficient and causes problems (e.g. gcc produces
+non executable files) as soon as /etc/passwd is incomplete.
 
-> /bin/sh ignores Enter (or ^J, or ^M).  
+security.cc:alloc_sd already uses internal structures to map
+uid to sid. This small patch proceeds similarly to map gid
+to sid and to map sid to uid/gid, thus improving both the 
+efficiency and robustness of Cygwin. 
 
-Good find.  I've attached a diff that should fix this.  Unsure
-how to proceed since the original patch hasn't been applied.
-Do I resubmit the original patch or treat this one as it's own
-thing?
+The patch is very simple, most changed lines only differ in
+blank spaces.
 
-> Running 'bash -c "echo BLAH && exit"' from
-> a command prompt works, however, running "bash -c 'echo BLAH && exit'
-...
+Pierre
 
-Curious behavior, but not related to the tty patch.  Happens
-with previous cygwin dll's and in rxvt -e cmd.
+2002-10-21  Pierre Humblet <pierre.humblet@ieee.org>
 
-Thanks,
--steve
+	* sec_helper.cc (cygsid::get_id): If the sid matches a sid
+	stored in cygheap->user, return the uid or gid from myself.
+	* security.cc (alloc_sd): If gid == myself->gid, return the
+	group sid from cygheap->user. Remove the test for uid ==
+	original_uid, which is counter-productive.
 
-
-2002-10-20  Steve Osborn  <bub@io.com>
-
-	* fhandler_termios.cc (fhandler_termios::line_edit_cnt) Return
-        1 if last character processed results in input_done.
-
---- fhandler_termios_orig.cc	2002-10-20 22:43:40.000000000 -0700
-+++ fhandler_termios.cc	2002-10-20 22:00:44.000000000 -0700
-@@ -206,6 +206,7 @@ fhandler_termios::line_edit_cnt (const c
- 
-   for (nprocessed = 0; nprocessed < *nread; nprocessed++)
+--- sec_helper.cc.orig  2002-10-19 12:57:48.000000000 -0400
++++ sec_helper.cc       2002-10-21 10:25:50.000000000 -0400
+@@ -162,14 +162,17 @@ cygsid::get_id (BOOL search_grp, int *ty
+       if (!search_grp)
+        {
+          struct passwd *pw;
+-         for (int pidx = 0; (pw = internal_getpwent (pidx)); ++pidx)
+-           {
+-             if (sid.getfrompw (pw) && sid == psid)
+-               {
+-                 id = pw->pw_uid;
+-                 break;
+-               }
+-           }
++         if (EqualSid(psid, cygheap->user.sid ()))
++           id = myself->uid;
++         else
++           for (int pidx = 0; (pw = internal_getpwent (pidx)); ++pidx)
++             {
++               if (sid.getfrompw (pw) && sid == psid)
++                 {
++                   id = pw->pw_uid;
++                   break;
++                 }
++             }
+          if (id >= 0)
+            {
+              if (type)
+@@ -180,14 +183,17 @@ cygsid::get_id (BOOL search_grp, int *ty
+       if (search_grp || type)
+        {
+          struct __group32 *gr;
+-         for (int gidx = 0; (gr = internal_getgrent (gidx)); ++gidx)
+-           {
+-             if (sid.getfromgr (gr) && sid == psid)
+-               {
+-                 id = gr->gr_gid;
+-                 break;
+-               }
+-           }
++         if (cygheap->user.groups.pgsid == psid)
++           id = myself->gid;
++         else
++           for (int gidx = 0; (gr = internal_getgrent (gidx)); ++gidx)
++             {
++               if (sid.getfromgr (gr) && sid == psid)
++                 {
++                   id = gr->gr_gid;
++                   break;
++                 }
++             }
+          if (id >= 0)
+            {
+              if (type)
+--- security.cc.orig    2002-09-30 20:24:00.000000000 -0400
++++ security.cc 2002-10-21 09:31:53.000000000 -0400
+@@ -1536,9 +1536,7 @@ alloc_sd (__uid32_t uid, __gid32_t gid, 
+   /* Check for current user first */
+   if (uid == myself->uid)
+     owner_sid = cygheap->user.sid ();
+-  else if (uid == cygheap->user.orig_uid)
+-    owner_sid = cygheap->user.orig_sid ();
+-  if (!owner_sid)
++  else
      {
-+      input_done=0;
-       c = *rptr++;
-       eat_on_failure = FALSE;
+       /* Otherwise retrieve user data from /etc/passwd */
+       struct passwd *pw = getpwuid32 (uid);
+@@ -1559,12 +1557,17 @@ alloc_sd (__uid32_t uid, __gid32_t gid, 
  
-@@ -342,7 +343,6 @@ fhandler_termios::line_edit_cnt (const c
- 
-       if (input_done) 
- 	{
--	  input_done=0;
- 	  if (accept_input ()) 
- 	    {
- 	      termios_printf ("accept_input full, undoing last char");
-@@ -364,20 +364,19 @@ fhandler_termios::line_edit_cnt (const c
- 	}
-     }
- 
--  if (!iscanon || always_accept)
--    set_input_done (ralen > 0);
+   /* Get SID of new group. */
+   cygsid group_sid (NO_SID);
+-  struct __group32 *grp = getgrgid32 (gid);
+-  if (!grp)
+-    debug_printf ("no /etc/group entry for %d", gid);
+-  else if (!group_sid.getfromgr (grp))
+-    debug_printf ("no SID for group %d", gid);
 -
-   if (sawsig)
-     input_done = -1;
--  else if (input_done)
--    if (accept_input () && nprocessed == *nread) 
--      {
--	termios_printf ("accept_input full");
--	if (eat_on_failure)
--	  eat_readahead (1);
--	nprocessed--;
--      }
--
-+  else if (!input_done && ralen > 0 && (!iscanon || always_accept))
-+    {
-+      set_input_done (1);
-+      if (accept_input () && nprocessed == *nread)
-+	{
-+	  termios_printf ("accept_input full");
-+	  if (eat_on_failure)
-+	    eat_readahead (1);
-+	  nprocessed--;
-+	}
-+    }
-   *nread = nprocessed;
-   return input_done;
- }
++  /* Check for current user first */
++  if (gid == myself->gid)
++    group_sid = cygheap->user.groups.pgsid;
++  else
++   {
++      struct __group32 *grp = getgrgid32 (gid);
++      if (!grp)
++        debug_printf ("no /etc/group entry for %d", gid);
++      else if (!group_sid.getfromgr (grp))
++        debug_printf ("no SID for group %d", gid);
++   }
+   /* Initialize local security descriptor. */
+   SECURITY_DESCRIPTOR sd;
+   PSECURITY_DESCRIPTOR psd = NULL;
