@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4390-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 11313 invoked by alias); 14 Nov 2003 22:18:01 -0000
+Return-Path: <cygwin-patches-return-4391-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 29462 invoked by alias); 14 Nov 2003 22:48:29 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,9 +7,9 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 11262 invoked from network); 14 Nov 2003 22:17:59 -0000
-Message-ID: <3FB554AD.2090309@cygwin.com>
-Date: Fri, 14 Nov 2003 22:18:00 -0000
+Received: (qmail 29233 invoked from network); 14 Nov 2003 22:48:27 -0000
+Message-ID: <3FB55BCE.8030304@cygwin.com>
+Date: Fri, 14 Nov 2003 22:48:00 -0000
 From: Robert Collins <rbcollins@cygwin.com>
 User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.5b) Gecko/20030723 Thunderbird/0.1
 X-Accept-Language: en-us, en
@@ -20,35 +20,17 @@ References: <3FB4D81C.6010808@cygwin.com> <3FB53BAE.3000803@cygwin.com> <2003111
 In-Reply-To: <20031114220708.GA26100@redhat.com>
 Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Transfer-Encoding: 7bit
-X-SW-Source: 2003-q4/txt/msg00109.txt.bz2
+X-SW-Source: 2003-q4/txt/msg00110.txt.bz2
 
 Christopher Faylor wrote:
 
 > On Sat, Nov 15, 2003 at 07:31:42AM +1100, Robert Collins wrote:
 > 
->>I posted a test case to the developers list when we where working on -O3 
->>support ?two? years back - it looks like the same issue.
-> 
-> 
-> This problem is fixed in the gcc cvs trunk.  I've asked Danny and Gerrit
-> about backporting the fix to 3.3.2.  It should be trivial to do so.
-
-In fact, the test case I created "back then" passes now. It may be a 
-variant on a theme though.
-
-> 
->>So, Chris, are there any parts you've seen so far, that you've be happy 
->>to ok (i.e. the MAX_PATH->CYG_MAX_PATH rename), or the global search and 
->>replaces to the thunk functions?
-> 
-> 
-> I haven't looked at anything in great detail.  This is not the best
-> possible time for me to be reviewing massive changes to cygwin,
-> unfortunately.
-
-Ah. Well while there are a lot of textual changes, there are only a few 
-logical changes. I'm happy to throw this into a branch and let you 
-ponder - but I only have a few hours to actually work on it.
+>>Robert Collins wrote:
+>>
+>>
+>>>Ok, so this it for tonight, my bed is calling me.
+>>>
 
 >>As far as applications maing assumptions, unix file systems don't 
 >>guarantee PATH_MAX: thats an upper limit of the OS, applications are 
@@ -58,26 +40,44 @@ ponder - but I only have a few hours to actually work on it.
 > 
 > It is fairly unusual for PATH_MAX to be many times greater than what
 > is support by pathconf.
-> 
-> 
->>Now, for global use of an A or W function, Chris' utf patch which I just 
->>ran into digging into a INVALID_NAME error, also chose at runtime. I can 
->>easily alter IOThunkState to always use W if available, and then check a 
->>cached flag from then on in. I really think that the current overhead 
->>will be low enough to be a non-issue though.
-> 
-> 
-> Sorry but you've lost me.  I don't know what my utf patch is.
 
-Chris January :}.
 
-> For the record, I don't have any problems with changing PATH_MAX to
-> CYG_PATH_MAX as a first step for this change.  Small steps are, as
-> always, appreciated.
+And yet: http://www.opengroup.org/onlinepubs/007908799/xsh/fpathconf.html
 
-Alrighty, will commit that in a minute.
+the notes allude to the issue: unless you call [f]pathconf with a path 
+for details on, some implementations won't supply valid information.
+
+You're right though, that we need to update [f]pathconf as part of this.
+
+"
+If the implementation needs to use path to determine the value of name 
+and the implementation does not support the association of name with the 
+file specified by path, or if the process did not have appropriate 
+privileges to query the file specified by path, or path does not exist, 
+pathconf() returns -1 and errno is set to indicate the error.
+"
+
+and in http://www.opengroup.org/onlinepubs/007908799/xsh/limits.h.html
+we have " Pathname Variable Values
+
+The values in the following list may be constants within an 
+implementation or may vary from one pathname to another. For example, 
+file systems or directories may have different characteristics.
+
+A definition of one of the values will be omitted from the <limits.h> 
+header on specific implementations where the corresponding value is 
+equal to or greater than the stated minimum, but where the value can 
+vary depending on the file to which it is applied. The actual value 
+supported for a specific pathname will be provided by the pathconf() 
+function. "
+
+I think we need to remove the PATH_MAX constant as per their comment, as 
+we will now offer runtime differences:
+win9X
+NT FAT
+NT NTFS.
+
+NAME_MAX will still be constant, (although I haven't reviewed msdn on 
+that yet).
 
 Rob
-
-
-
