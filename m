@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4420-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 23208 invoked by alias); 18 Nov 2003 00:34:06 -0000
+Return-Path: <cygwin-patches-return-4421-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 511 invoked by alias); 18 Nov 2003 03:42:13 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,88 +7,158 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 23192 invoked from network); 18 Nov 2003 00:34:05 -0000
-X-Authentication-Warning: eos.vss.fsi.com: ford owned process doing -bs
-Date: Tue, 18 Nov 2003 00:34:00 -0000
-From: Brian Ford <ford@vss.fsi.com>
-X-X-Sender: ford@eos
-To: Corinna Vinschen <cygwin-patches@cygwin.com>
-cc: newlib@sources.redhat.com
-Subject: Re: (fhandler_base::lseek): Include high order bits in return.
-In-Reply-To: <Pine.GSO.4.56.0311171628330.922@eos>
-Message-ID: <Pine.GSO.4.56.0311171831520.922@eos>
-References: <Pine.GSO.4.56.0311171454590.922@eos> <Pine.GSO.4.56.0311171538130.922@eos>
- <20031117221509.GP18706@cygbert.vinschen.de> <Pine.GSO.4.56.0311171628330.922@eos>
-MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="-559023410-456208845-1069115644=:922"
-X-SW-Source: 2003-q4/txt/msg00139.txt.bz2
+Received: (qmail 502 invoked from network); 18 Nov 2003 03:42:12 -0000
+Message-Id: <3.0.5.32.20031117224143.00828850@incoming.verizon.net>
+X-Sender: vze1u1tg@incoming.verizon.net (Unverified)
+Date: Tue, 18 Nov 2003 03:42:00 -0000
+To: David Starks-Browning <david@starks-browning.com>,
+ cygwin-patches@cygwin.com
+From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
+Subject: Re: Small patch for the FAQ
+In-Reply-To: <8135-Thu13Nov2003223751+0000-david@starks-browning.com>
+References: <20030829121814.GR614@emcb.co.uk>
+ <20030829121814.GR614@emcb.co.uk>
+Mime-Version: 1.0
+Content-Type: multipart/mixed; boundary="=====================_1069144903==_"
+X-SW-Source: 2003-q4/txt/msg00140.txt.bz2
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
+--=====================_1069144903==_
+Content-Type: text/plain; charset="us-ascii"
+Content-length: 559
 
----559023410-456208845-1069115644=:922
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-Content-length: 1389
-
-On Mon, 17 Nov 2003, Brian Ford wrote:
-
-> On Mon, 17 Nov 2003, Corinna Vinschen wrote:
+At 10:37 PM 11/13/2003 +0000, David Starks-Browning wrote:
 >
-> > On Mon, Nov 17, 2003 at 03:40:46PM -0600, Brian Ford wrote:
-> > > On Mon, 17 Nov 2003, Brian Ford wrote:
-> > >
-> > > > This bug fix got our app past its first problem with > 2 Gig files, but
-> > > > then it tripped over ftello.  I'm still trying to figure that one out.
-> > > >
-> > > > It looks like it got a 32 bit sign extended value somewhere.  Any help would
-> > > > be appreciated.  Thanks.
-> > > >
-> > > Well, that somewhere is ftello64.c line 111.  fp->_offset has a 32 bit
-> > > sign extended value.  Anybody know how it got there?
-> >
-> > That can't be it.  fp is of type FILE which is actually mapped to
-> > __sFILE64 in 64 bit case.  See newlib/libc/include/sys/reent.h.
-> > _offset is of type _off64_t there.
-> >
-> I think you misunderstood.  fp->_offset is a 64 bit type, but at the
-> ftello call in question, it contains a value that must have come from a 32
-> bit sign extension.  That's why I asked for help, because I have to figure
-> out what/who put it there.
+>It will be *quite* some time before I am able to wade through the
+main
+>cygwin list and discover things for the FAQ on my own.  But I
+should
+>be able to apply patches on a fairly regular and timely basis,
+at
+>least for a while.
 >
-I have attached a test case that shows the problem.  It is on line 58 of
-lseekr.c.
 
-I can't seem to find the actual problem tonight and I'm tired so I'm going
-home.
+Thanks David.
 
--- 
-Brian Ford
-Senior Realtime Software Engineer
-VITAL - Visual Simulation Systems
-FlightSafety International
-Phone: 314-551-8460
-Fax:   314-551-8444
----559023410-456208845-1069115644=:922
-Content-Type: TEXT/PLAIN; charset=US-ASCII; name="x.c"
-Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.GSO.4.56.0311171834040.922@eos>
-Content-Description: 
-Content-Disposition: attachment; filename="x.c"
-Content-length: 757
+I attach a patch to install.texinfo that covers 
+http://www.cygwin.com/ml/cygwin/2003-03/msg00447.html and
+http://cygwin.com/ml/cygwin-patches/2003-q1/msg00315.html
 
-I2luY2x1ZGUgPHN5cy90eXBlcy5oPg0KI2luY2x1ZGUgPHN5cy9zdGF0Lmg+
-DQojaW5jbHVkZSA8ZmNudGwuaD4NCiNpbmNsdWRlIDxzdGRsaWIuaD4NCiNp
-bmNsdWRlIDxzdGRpby5oPg0KI2luY2x1ZGUgPHVuaXN0ZC5oPg0KDQppbnQN
-Cm1haW4odm9pZCkNCnsNCiAgICBGSUxFICpmcDsNCiAgICBvZmZfdCBwLCBx
-Ow0KICAgIGNoYXIgYzsNCg0KICAgIGxvbmcgbG9uZyBzaXplID0gNTAwMDAw
-MDAwMExMOw0KICAgIGludCBmZCA9IG9wZW4oImp1bmsiLCBPX1JEV1J8T19D
-UkVBVCwgU19JUkVBRHxTX0lXUklURSk7DQogICAgbHNlZWsoZmQsIHNpemUs
-IFNFRUtfU0VUKTsNCiAgICB3cml0ZShmZCwgIngiLCAxKTsNCiAgICBjbG9z
-ZShmZCk7DQoNCiAgICBmcCA9IGZvcGVuKCJqdW5rIiwgInIiKTsNCg0KICAg
-IHAgPSBmc2Vla28oZnAsIHNpemUsIFNFRUtfU0VUKTsNCiAgICBmcHJpbnRm
-KHN0ZGVyciwgIiVjICIsIGZnZXRjKGZwKSk7DQogICAgcSA9IGZ0ZWxsbyhm
-cCk7DQoNCiAgICBmcHJpbnRmKHN0ZGVyciwiJWxseCAlbGx4ICVsbHhcbiIs
-c2l6ZSxwLCBxKTsNCn0NCg==
+but not (among others)
+http://www.cygwin.com/ml/cygwin/2003-04/msg01416.html
 
----559023410-456208845-1069115644=:922--
+Pierre
+
+--=====================_1069144903==_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment; filename="install.texinfo.diff"
+Content-length: 4063
+
+Index: install.texinfo
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+RCS file: /cvs/src/src/winsup/doc/install.texinfo,v
+retrieving revision 1.45
+diff -u -p -r1.45 install.texinfo
+--- install.texinfo	10 Apr 2003 20:09:35 -0000	1.45
++++ install.texinfo	18 Nov 2003 03:35:33 -0000
+@@ -40,6 +40,31 @@ from the rest of your Windows system dis
+ (In the past, there had been genuine bugs that would cause problems
+ for people who installed in C:\, but we believe those are gone now.)
+
++@subsection How are file permissions determined
++
++The directories and files created by setup inherit the default ACL of their
++parent directory. Thus in a fresh installation all permissions are initial=
+ly
++determined by the ACL of the top directory  (e.g. @samp{C:\} for an
++installation in @samp{C:\cygwin}).
++
++After running setup it is a good idea to verify the permissions with the
++Windows program ``cacls'', which shows the true ACL,
++or with ``ls -l /bin'', which shows the mapping of the ACL to Posix permis=
+sions.
++If you are not happy with what you see, set the permissions as you
++wish by using commands such as:
++@enumerate
++@item ``cd /''
++
++@item ``chmod -R a+r .''
++
++@item ``chmod -R a+x bin usr/sbin usr/local/bin lib/gcc-lib usr/X11R6/bin''
++@end enumerate
++You can also change the group and the owner with ``chgrp -R'' and/or ``cho=
+wn -R''.
++
++Note that programs executed by services (such as inetd or cron) must be ex=
+ecutable
++by SYSTEM, which is in the ``Administrators'' and ``Everyone'' groups but =
+not
++e.g. in ``Users'' nor in ``Authenticated Users''.
++
+ @subsection Can I use Cygwin Setup to update a B18, B19, B20, B20.1 or CD-=
+ROM (1.0) installation of Cygwin?
+
+ No, you must start from scratch with the new Cygwin Setup.  The
+@@ -198,14 +223,49 @@ character as a word delimiter.  Under ce
+ possible to get around this with various shell quoting mechanisms, but
+ you are much better off if you can avoid the problem entirely.
+
+-In particular, the environment variables @samp{USER} and @samp{HOME} are
+-set for you in /etc/profile.  By default these derive from your Windows
+-logon name.  You may edit this file and set them explicitly to something
+-without spaces.
+-
+-(If you use the @samp{login} package or anything else that reads
+-/etc/passwd, you may need to make corresponding changes there.  See the
+-README file for that package.)
++On Windows NT/2000/XP you have two choices:
++@enumerate
++
++@item You can rename the user in the Windows User Manager GUI and then
++run mkpasswd.
++
++@item You can simply edit the /etc/passwd file and change the Cygwin user =
+name
++(first field). It's also a good idea to avoid spaces in the home directory.
++
++@end enumerate
++
++On Windows 95/98/ME you can create a new user and run mkpasswd,
++or you can delete the offending entry from /etc/passwd.
++Cygwin will then use the name in the default entry with uid 500.
++
++@subsection My @samp{HOME} environment variable is not what I want.
++
++When starting Cygwin from Windows, @samp{HOME} is determined as follows
++in order of decreasing priority:
++
++@enumerate
++
++@item @samp{HOME} from the Windows environment, translated to POSIX form.
++
++@item The entry in /etc/passwd
++
++@item @samp{HOMEDRIVE} and @samp{HOMEPATH} from the Windows environment
++
++@item /
++
++@end enumerate
++
++When using Cygwin from the network (telnet, ssh,...), @samp{HOME} is set
++from /etc/passwd.
++
++If your @samp{HOME} is set to a value such as /cygdrive/c, it is likely
++that it was set in Windows. Start a DOS Command Window and type
++"set HOME" to verify if this is the case.
++
++Access to shared drives is often restricted when starting from the network,
++thus Domain users may wish to have a different @samp{HOME} in the
++Windows environment (on shared drive) than in /etc/passwd (on local drive).
++Note that ssh only considers /etc/passwd, disregarding @samp{HOME}.
+
+ @subsection How do I uninstall individual packages?
+
+
+--=====================_1069144903==_--
