@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1498-listarch-cygwin-patches=sourceware.cygnus.com@sources.redhat.com>
-Received: (qmail 10953 invoked by alias); 15 Nov 2001 12:01:33 -0000
+Return-Path: <cygwin-patches-return-1499-listarch-cygwin-patches=sourceware.cygnus.com@sources.redhat.com>
+Received: (qmail 24370 invoked by alias); 15 Nov 2001 12:20:02 -0000
 Mailing-List: contact cygwin-patches-help@sourceware.cygnus.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@sources.redhat.com>
@@ -7,27 +7,37 @@ List-Post: <mailto:cygwin-patches@sources.redhat.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@sources.redhat.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@sources.redhat.com
-Received: (qmail 10858 invoked from network); 15 Nov 2001 12:01:25 -0000
-Message-ID: <3BF3AE8E.A35D3E13@syntrex.com>
-Date: Thu, 11 Oct 2001 12:34:00 -0000
-From: Pavel Tsekov <ptsekov@syntrex.com>
-X-Mailer: Mozilla 4.76 [en] (X11; U; Linux 2.4.2-2 i686)
-X-Accept-Language: en
+Received: (qmail 24329 invoked from network); 15 Nov 2001 12:20:01 -0000
+Message-ID: <030601c16dd0$1a48ac40$0200a8c0@lifelesswks>
+From: "Robert Collins" <robert.collins@itdomain.com.au>
+To: "egor duda" <cygwin-patches@cygwin.com>
+Cc: <cygwin-patches@cygwin.com>
+References:  <EA18B9FA0FE4194AA2B4CDB91F73C0EF08F28E@itdomain002.itdomain.net.au> <92602986318.20011109105819@logos-m.ru> <17285934467.20011115142602@logos-m.ru>
+Subject: Re: PTHREAD_COND_INITIALIZER support
+Date: Thu, 11 Oct 2001 13:56:00 -0000
 MIME-Version: 1.0
-To: Corinna Vinschen <cygwin@cygwin.com>
-CC: cygwin-patches@cygwin.com
-Subject: Re: [PATHC] Re: 1.3.5: write(2) system call fails with 0 length
-References: <5.1.0.14.2.20011113215143.03327810@pop.mssinternet.com> <20011114.135353.111406103.gotoh@taiyo.co.jp> <3BF24170.71D1CADF@syntrex.com> <3BF3ACC6.C994956A@syntrex.com> <20011115125837.V27452@cygbert.vinschen.de>
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain;
+	charset="iso-8859-1"
 Content-Transfer-Encoding: 7bit
-X-SW-Source: 2001-q4/txt/msg00030.txt.bz2
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-OriginalArrivalTime: 15 Nov 2001 12:19:59.0877 (UTC) FILETIME=[D85DD350:01C16DCF]
+X-SW-Source: 2001-q4/txt/msg00031.txt.bz2
 
-Corinna Vinschen wrote:
-> 
-> On Thu, Nov 15, 2001 at 12:53:42PM +0100, Pavel Tsekov wrote:
-> > There was no feedback on this so I post again :) Is this
-> > cygwin behaviour the expected behaviour ?
-> 
-> Should be fixed in the developers sources.
+----- Original Message -----
+From: "egor duda" <deo@logos-m.ru>
+..
+> ed> yes. i'm going to add a bunch of pthread tests after this checkin.
+>
+> done too.
+>
+> Robert, can you please take a look at winsup.api/pthread/condvar3_1.c
+> test? it looks like when condition variable is signalled, two threads
+> wake on it instead of one. it's quite stable effect, so i don't think
+> we have a race here.
 
-Doh - I haven't checked the CVS yet :) Ok, sorry :)
+Ok, it's probably the wakeup code. Do you have a sinlge or dual machine?
+
+Rob
