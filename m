@@ -1,55 +1,115 @@
-From: Brian Keener <bkeener@thesoftwaresource.com>
-To: Trevor Forbes <cygwin-patches@cygwin.com>
-Subject: Re: [patch] Setup.exe choose.cc selection enhancement based on file existence
-Date: Thu, 08 Mar 2001 13:54:00 -0000
-Message-id: <VA.0000069b.012559b5@thesoftwaresource.com>
-References: <004f01c0a80f$88e94a60$0200a8c0@voyager>
-X-SW-Source: 2001-q1/msg00159.html
+From: "Jason Gouger" <cygwin@jason-gouger.com>
+To: <cygwin-patches@cygwin.com>
+Subject: [PATCH] fixes incorrect exit status to windows process
+Date: Thu, 08 Mar 2001 22:49:00 -0000
+Message-id: <001101c0a865$ce21f8b0$250ddb18@fision>
+References: <001101c0a52c$6f506e20$250ddb18@fision> <20010304235848.D8103@redhat.com>
+X-SW-Source: 2001-q1/msg00160.html
 
-Trevor Forbes wrote:
-> ----- Original Message ----- 
-> From: "Corinna Vinschen" <cygwin-patches@cygwin.com>
-> > 
-> > I would like to see the ability of setup to download all sources,
-> > even the packages which don't need updating. I can't see a reason
-> > that I'm unable to download the sources 10 minutes after installing
-> > only because I forgot to click on the src? button in that moment.
-> > 
-> > Corinna
-> 
-> Ditto
-> 
-> Trevor
+Here's another patch which fixes the problem in spawn_guts...
+
+----- Original Message -----
+From: "Christopher Faylor" <cgf@redhat.com>
+To: <cygwin-patches@cygwin.com>
+Sent: Sunday, March 04, 2001 8:58 PM
+Subject: Re: [PATCH] fixes incorrect exit status to windows process
+
+
+> It looks like you're on the right track, but I think it would
+> make sense to put this in spawn_guts somewhere where EXIT_REPARENTING
+> is being set.  Possibly you can avoid setting the EXIT_REPARENTING
+> bit entirely when !myself->ppid_handle (this is the best way to
+> find out if a cygwin application has been invoked from a non-cygwin
+> application).
 >
-This is exactly what I was about to ask you.  If you are doing the 
-download from internet and then the install from local directory then you 
-are doing it exactly as I normally do.  Are you saying that when you 
-select download from internet and first see the choose screen and the 
-packages needing updating (which defaulted to current) are displayed that 
-there is no option to check the box for downloading the source.  This 
-works for me as does the install from local directory.  
-
-Again bear in mind if you have not downloaded the source at download time 
-then you will not see the option to install the sources when you install 
-from local directory.  On the same note if you download the binary and 
-install the binary then you will not see the package under partial but 
-you will under full -- but you will not be presented with the option to 
-redownload or reinstall the installed package and because the package is 
-installed you will not be given the option to download the source which 
-is what Corinna's message pertains to and I must admit I agree with and 
-contemplated doing before and may now for sure.
-
-I am seeking clarification as to where your setup diverts from this 
-expected operation.
-
-I know I *sound* *like* I am defending my changes and stating I couldn't 
-have made a mistake, but that is really not the case.  My C++ programming 
-abilities are extremely thin and this is really a learning tool for me so 
-I really do want to know if there is a problem and get it fixed or roll 
-back the changes - whatever is required.  I would prefer to solve since I 
-felt the changes I made were an enhancement but this is a group project 
-so if I goofed it up from what everyone would prefer it was still a good 
-learn for me.
-
-Bk
-
+> Thanks for tracking down what is going on.
+>
+> cgf
+>
+> On Sun, Mar 04, 2001 at 08:26:22PM -0800, Jason Gouger wrote:
+> >Patch to fix the problem described below...
+> >
+> >-----Original Message-----
+> >From: Jason Gouger [ mailto:cygwin@jason-gouger.com ]
+> >Sent: Tuesday, February 27, 2001 11:18 PM
+> >To: cygwin-developers@cygwin.com
+> >Subject: incorrect exit status from cygwin exec to windows process
+> >
+> >There appears to be some error when a cygwin process exec's another
+cygwin
+> >process, and returns the exit status to a windows process. The windows
+> >process receives a return code of '131072'.
+> >
+> >To reproduce the error, try the following:
+> >1. Compile the "x.c" program below with a windows compiler, e.g. MSVC or
+> >similar.
+> >cl x.c
+> >#include <stdio.h>
+> >#include <process.h>
+> >int main(int argc, char **argv) {
+> >   const char *cmdline = argv[1];
+> >   int ret_code;
+> >   printf("COMMAND LINE: (%s)\n", cmdline);
+> >   fflush(stdout); fflush(stderr);
+> >   ret_code = system(cmdline);
+> >   fflush(stdout); fflush(stderr);
+> >   printf("RETURN CODE: %d\n", ret_code);
+> >   fflush(stdout); fflush(stderr);
+> >   exit(ret_code);
+> >}
+> >
+> >2. From a cygwin shell (bash), type the following command:
+> >   ./x.exe 'C:\cygwin\bin\bash -c /bin/date'
+> >   Results:
+> >      COMMAND LINE: (C:\cygwin\bin\bash.exe -c /bin/date)
+> >      Tue Feb 27 22:55:39 2001
+> >      RETURN CODE: 131072
+> >
+> >3. Create a script, e.g.
+> >   echo /bin/date > x.sh
+> >   Run the command:
+> >      ./x.exe 'C:\cygwin\bin\bash x.sh'
+> >   Results:
+> >      COMMAND LINE: (C:\cygwin\bin\bash.exe x.sh)
+> >      Tue Feb 27 22:58:34 2001
+> >      RETURN CODE: 0
+> >4. Change the script to have an exec, e.g.
+> >   echo exec /bin/date > x.sh
+> >   Run the command:
+> >      ./x.exe 'C:\cygwin\bin\bash x.sh'
+> >   Results:
+> >      COMMAND LINE: (C:\cygwin\bin\bash.exe x.sh)
+> >      Tue Feb 27 22:59:47 2001
+> >      RETURN CODE: 131072
+> >
+>
+> >2001-03-04  Jason Gouger  <cygwin@jason-gouger.com>
+> > * pinfo.cc (_pinfo::exit): Clear EXIT_REPARENTING if there is no parent
+process.
+>
+> >Index: pinfo.cc
+> >===================================================================
+> >RCS file: /cvs/src/src/winsup/cygwin/pinfo.cc,v
+> >retrieving revision 1.41
+> >diff -u -r1.41 pinfo.cc
+> >--- pinfo.cc 2001/01/30 08:10:04 1.41
+> >+++ pinfo.cc 2001/03/05 04:10:16
+> >@@ -126,6 +126,12 @@
+> >   fill_rusage (&r, hMainProc);
+> >   add_rusage (&rusage_self, &r);
+> >
+> >+  if (ppid == 1 && n & EXIT_REPARENTING)
+> >+    {
+> >+      sigproc_printf ("Clearing EXIT_REPARENTING on res, ppid == 1\n");
+> >+      n &= ~EXIT_REPARENTING;
+> >+    }
+> >+
+> >   sigproc_printf ("Calling ExitProcess %d", n);
+> >   ExitProcess (n);
+> > }
+>
+>
+> --
+> cgf@cygnus.com                        Red Hat, Inc.
+> http://sources.redhat.com/            http://www.redhat.com/
+>
