@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5182-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 27063 invoked by alias); 4 Dec 2004 18:06:17 -0000
+Return-Path: <cygwin-patches-return-5183-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 15336 invoked by alias); 4 Dec 2004 23:01:16 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,113 +7,57 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 26814 invoked from network); 4 Dec 2004 18:06:13 -0000
-Received: from unknown (HELO phumblet.no-ip.org) (68.163.190.188)
-  by sourceware.org with SMTP; 4 Dec 2004 18:06:13 -0000
-Received: from [192.168.1.156] (helo=hpn5170)
-	by phumblet.no-ip.org with smtp (Exim 4.43)
-	id I87MG4-000ATF-8X
-	for cygwin-patches@cygwin.com; Sat, 04 Dec 2004 13:09:40 -0500
-Message-Id: <3.0.5.32.20041204130111.0081fd50@incoming.verizon.net>
-X-Sender: vze1u1tg@incoming.verizon.net (Unverified)
-Date: Sat, 04 Dec 2004 18:06:00 -0000
+Received: (qmail 15179 invoked from network); 4 Dec 2004 23:01:05 -0000
+Received: from unknown (HELO green.qinip.net) (62.100.30.36)
+  by sourceware.org with SMTP; 4 Dec 2004 23:01:05 -0000
+Received: from buzzy-box (hmm-dca-ap02-d12-009.dial.freesurf.nl [195.18.125.9])
+	by green.qinip.net (Postfix) with SMTP
+	id 403B14298; Sun,  5 Dec 2004 00:01:02 +0100 (MET)
+Message-ID: <n2m-g.cotj39.3vvb3sh.1@buzzy-box.bavag>
+From: Bas van Gompel <cygwin-patches.buzz@bavag.tmfweb.nl>
+Subject: [Patch] fhandler.cc: debug_printf when copied_chars is zero.
+Reply-To: cygwin-patches mailing-list <cygwin-patches@cygwin.com>
+Organisation: Ehm...
+User-Agent: slrn/0.9.8.1 (Win32) Hamster/2.0.6.0 Korrnews/4.2
 To: cygwin-patches@cygwin.com
-From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
-Subject: Re: [Patch] Fixing the PROCESS_DUP_HANDLE security hole.
-In-Reply-To: <20041204173333.GE15990@trixie.casa.cgf.cx>
-References: <3.0.5.32.20041204114528.0081fc00@incoming.verizon.net>
- <3.0.5.32.20041111224857.00819b20@incoming.verizon.net>
- <3.0.5.32.20041111224857.00819b20@incoming.verizon.net>
- <3.0.5.32.20041111235225.00818340@incoming.verizon.net>
- <20041114051158.GG7554@trixie.casa.cgf.cx>
- <20041116054156.GA17214@trixie.casa.cgf.cx>
- <419A1F7B.8D59A9C9@phumblet.no-ip.org>
- <20041116155640.GA22397@trixie.casa.cgf.cx>
- <20041120062339.GA31757@trixie.casa.cgf.cx>
- <3.0.5.32.20041202211311.00820770@incoming.verizon.net>
- <3.0.5.32.20041204114528.0081fc00@incoming.verizon.net>
-Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="=====================_1102201271==_"
-X-SW-Source: 2004-q4/txt/msg00183.txt.bz2
+Date: Sat, 04 Dec 2004 23:01:00 -0000
+X-SW-Source: 2004-q4/txt/msg00184.txt.bz2
 
---=====================_1102201271==_
-Content-Type: text/plain; charset="us-ascii"
-Content-length: 1364
+Hi,
 
-At 12:33 PM 12/4/2004 -0500, Christopher Faylor wrote:
->On Sat, Dec 04, 2004 at 11:45:28AM -0500, Pierre A. Humblet wrote:
->>At 12:43 AM 12/4/2004 -0500, Christopher Faylor wrote:
->>>I wrote a simple test case to check this and I don't see it -- on XP.  I
->>>can't easily run Me anymore.  Does the attached program demonstrate this
->>>behavior when you run it?  It should re-exec itself every time you hit
->>>CTRL-C.
->>
->>That test case has no problem, but the attached one does. 
->>Use kill -30 pid
->
->Sigh.  Works fine on XP, AFAICT.
+While going over a strace I noticed some garbage in the (debug) output
+when fhandler_base::read had read zero bytes. Following (trivial)
+patch fixes that.
 
-More details
-CYGWIN_ME-4.90 hpn5170 1.5.13s(0.116/4/2) 20041125 23:34:52 i686 unknown
-unknown Cygwin
 
-I added a printf at the top, showing the current pid and ppid
-(attached)
+ChangeLog-entry:
 
-~: ./a
-pid 556021 ppid 890585
-~: ps | fgrep /A
-  36793321       1  556021 4258173975    0  740 12:47:22 /c/HOME/PIERRE/A
-~: kill -30 36793321
-got signal 30
-execing myself
-~: pid 36793321 ppid 36793321
-~: ps | fgrep /A
-  36765717       1  556021 4258201579    0  740 12:47:44 /c/HOME/PIERRE/A
+2004-12-05  Bas van Gompel  <cygwin-patch.buzz@bavag.tmfweb.nl>
 
-The problem is that the execed process has itself as ppid.
-So it forks again.
+	* fhandler.cc (fhandler_base::read): Don't debug_printf garbage when
+	copied_chars is zero.
 
-That must be history by now, but I think it's coming from
- if (!myself->wr_proc_pipe)
- 	         {
- 	           myself.hProcess = pi.hProcess;
- 	           myself.remember ();
- 	           wait_for_myself = true;
- 	         }
-with wr_proc_pipe having been reset to NULL.
 
-Pierre
+--- src/winsup/cygwin/fhandler.cc	20 Nov 2004 23:42:36 -0000	1.207
++++ src/winsup/cygwin/fhandler.cc	4 Dec 2004 22:04:38 -0000
+@@ -758,6 +758,7 @@ fhandler_base::read (void *in_ptr, size_
+ 	  __small_sprintf (p, c >= 33 && c <= 127 ? " %c" : " %p", c);
+ 	  p += strlen (p);
+ 	}
++      *p = '\0';
+       debug_printf ("read %d bytes (%s%s)", copied_chars, buf,
+ 		    copied_chars > 16 ? " ..." : "");
+     }
 
---=====================_1102201271==_
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: attachment; filename="execit4.c"
-Content-length: 416
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/signal.h>
+L8r,
 
-void ouch (int sig)
-{
-  printf ("got signal %d\n", sig);
-  return;
-}
+Buzz.
 
-int
-main (int argc, char **argv)
-{
-  printf("pid %d ppid %d\n", getpid(), getppid());
-  if (getppid() != 1 && fork())
-    exit(0);
-  signal (SIGUSR1, ouch);
-  while (pause ())
-    {
-      puts ("execing myself");
-      execv (argv[0], argv);
-    }
-  exit (0);
-}
-
---=====================_1102201271==_--
+BTW: In how-vfork-works.txt, lines 31 and 32 end in CRLF.
+BTW2: ansi.sgml has no linefeed at the end of the file.
+-- 
+  ) |  | ---/ ---/  Yes, this | This message consists of true | I do not
+--  |  |   /    /   really is |   and false bits entirely.    | mail for
+  ) |  |  /    /    a 72 by 4 +-------------------------------+ any1 but
+--  \--| /--- /---  .sigfile. |   |perl -pe "s.u(z)\1.as."    | me. 4^re
