@@ -1,39 +1,39 @@
 From: Chris Faylor <cgf@cygnus.com>
-To: Corinna Vinschen <corinna@vinschen.de>
-Cc: cygpatch <cygwin-patches@sourceware.cygnus.com>
-Subject: Re: grp.cc
-Date: Mon, 03 Apr 2000 10:10:00 -0000
-Message-id: <20000403131035.C1543@cygnus.com>
-References: <38E8CEF0.2BE9EA4F@vinschen.de>
-X-SW-Source: 2000-q2/msg00006.html
+To: cygwin-patches@sourceware.cygnus.com
+Cc: Mumit Khan <khan@xraylith.wisc.EDU>
+Subject: YA w32api change
+Date: Mon, 10 Apr 2000 20:00:00 -0000
+Message-id: <20000410230023.A13748@cygnus.com>
+X-SW-Source: 2000-q2/msg00007.html
 
-Sure.  Go ahead.
+I found these while working with Ron's installer.
+
+Ok to check in?
 
 cgf
 
-On Mon, Apr 03, 2000 at 07:03:44PM +0200, Corinna Vinschen wrote:
->We already talked about that:
->
->        * grp.cc (parse_grp): Save empty array instead of
->        NULL in gr_mem if no supplementary group is given.
->
->I would like to commit this patch:
->
->Index: grp.cc
->===================================================================
->RCS file: /cvs/src/src/winsup/cygwin/grp.cc,v
->retrieving revision 1.2
->diff -u -p -r1.2 grp.cc
->--- grp.cc      2000/02/21 05:20:37     1.2
->+++ grp.cc      2000/04/03 16:55:30
->@@ -92,7 +92,7 @@ parse_grp (struct group &grp, const char
->              grp.gr_mem = namearray;
->             }
->           else
->-            grp.gr_mem = NULL;
->+            grp.gr_mem = (char **) calloc (1, sizeof (char *));
->           return 1;
->         }
->     }
->
->Corinna
+Mon Apr 10 22:58:25 2000  Christopher Faylor <cgf@cygnus.com>
+
+        * include/winbase.h: Change first argument of ENUMRES* types to 
+        coincide with Microsoft usage.
+
+Index: include/winbase.h
+===================================================================
+RCS file: /cvs/src/src/winsup/w32api/include/winbase.h,v
+retrieving revision 1.3
+diff -u -p -r1.3 winbase.h
+--- winbase.h	2000/03/30 06:10:11	1.3
++++ winbase.h	2000/04/11 02:58:30
+@@ -921,9 +921,9 @@ typedef struct _WIN_CERTIFICATE {
+ 
+ typedef DWORD(WINAPI *LPPROGRESS_ROUTINE)(LARGE_INTEGER,LARGE_INTEGER,LARGE_INTEGER,LARGE_INTEGER,DWORD,DWORD,HANDLE,HANDLE,LPVOID);
+ typedef void(WINAPI *LPFIBER_START_ROUTINE)(PVOID);
+-typedef BOOL(CALLBACK *ENUMRESLANGPROC)(HANDLE,LPCTSTR,LPCTSTR,WORD,LONG);
+-typedef BOOL(CALLBACK *ENUMRESNAMEPROC)(HANDLE,LPCTSTR,LPTSTR,LONG);
+-typedef BOOL(CALLBACK *ENUMRESTYPEPROC)(HANDLE,LPTSTR,LONG);
++typedef BOOL(CALLBACK *ENUMRESLANGPROC)(HMODULE,LPCTSTR,LPCTSTR,WORD,LONG);
++typedef BOOL(CALLBACK *ENUMRESNAMEPROC)(HMODULE,LPCTSTR,LPTSTR,LONG);
++typedef BOOL(CALLBACK *ENUMRESTYPEPROC)(HMODULE,LPTSTR,LONG);
+ typedef void(CALLBACK *LPOVERLAPPED_COMPLETION_ROUTINE)(DWORD,DWORD,LPOVERLAPPED);
+ typedef LONG(CALLBACK *PTOP_LEVEL_EXCEPTION_FILTER)(LPEXCEPTION_POINTERS);
+ typedef PTOP_LEVEL_EXCEPTION_FILTER LPTOP_LEVEL_EXCEPTION_FILTER;
