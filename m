@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1658-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 8559 invoked by alias); 7 Jan 2002 14:03:47 -0000
+Return-Path: <cygwin-patches-return-1659-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 17978 invoked by alias); 7 Jan 2002 15:49:12 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,114 +7,123 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 8544 invoked from network); 7 Jan 2002 14:03:47 -0000
-Message-ID: <013601c19784$1f95c1f0$0200a8c0@lifelesswks>
-From: "Robert Collins" <robert.collins@itdomain.com.au>
-To: <cygwin-patches@cygwin.com>
-Subject: getsem cleanup
-Date: Mon, 07 Jan 2002 06:03:00 -0000
+Received: (qmail 17964 invoked from network); 7 Jan 2002 15:49:11 -0000
+Message-ID: <C2D7D58DBFE9D111B0480060086E96350689B61C@mail_server.gft.com>
+From: =?iso-8859-1?Q?=22Schaible=2C_J=F6rg=22?= <Joerg.Schaible@gft.com>
+To: cygwin-patches@sourceware.cygnus.com
+Subject: FW: [PATCH] Update 2 - Setup.exe property sheet patch
+Date: Mon, 07 Jan 2002 07:49:00 -0000
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
-	boundary="----=_NextPart_000_0133_01C197E0.52917F20"
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MIMEOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-OriginalArrivalTime: 07 Jan 2002 14:03:46.0202 (UTC) FILETIME=[1F705FA0:01C19784]
-X-SW-Source: 2002-q1/txt/msg00015.txt.bz2
-
-This is a multi-part message in MIME format.
-
-------=_NextPart_000_0133_01C197E0.52917F20
+X-Mailer: Internet Mail Service (5.5.2653.19)
 Content-Type: text/plain;
 	charset="iso-8859-1"
-Content-Transfer-Encoding: 7bit
-Content-length: 241
-
-My first foray into signals...
-
-ChangeLog:
-
-2002-01-08  Robert Collins  rbtcollins@hotmail.com
-
-    * sigproc.cc (getsem): Rearrange code to be more readable, and to
-    always output an error if accessing or creating the semaphore fails.
-
-
-
-------=_NextPart_000_0133_01C197E0.52917F20
-Content-Type: application/octet-stream;
-	name="getsem.patch"
 Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment;
-	filename="getsem.patch"
-Content-length: 2106
+X-SW-Source: 2002-q1/txt/msg00016.txt.bz2
 
-Index: sigproc.cc=0A=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
-RCS file: /cvs/src/src/winsup/cygwin/sigproc.cc,v=0A=
-retrieving revision 1.95.2.2=0A=
-diff -u -p -r1.95.2.2 sigproc.cc=0A=
---- sigproc.cc	2002/01/04 03:56:10	1.95.2.2=0A=
-+++ sigproc.cc	2002/01/07 14:03:20=0A=
-@@ -930,38 +930,33 @@ getsem (_pinfo *p, const char *str, int=20=0A=
- 		  ISSTATE (p, PID_INITIALIZING));=0A=
-       for (int i =3D 0; ISSTATE (p, PID_INITIALIZING) && i < wait; i++)=0A=
- 	Sleep (1);=0A=
--    }=0A=
--=0A=
--  SetLastError (0);=0A=
--  if (p =3D=3D NULL)=0A=
--    {=0A=
--      char sa_buf[1024];=0A=
--=0A=
--      DWORD winpid =3D GetCurrentProcessId ();=0A=
--      h =3D CreateSemaphore (allow_ntsec ? sec_user_nih (sa_buf) : &sec_no=
-ne_nih,=0A=
--			   init, max, str =3D shared_name (str, winpid));=0A=
--      p =3D myself;=0A=
--    }=0A=
--  else=0A=
--    {=0A=
-+      SetLastError (0);=0A=
-       h =3D OpenSemaphore (SEMAPHORE_ALL_ACCESS, FALSE,=0A=
--			 str =3D shared_name (str, p->dwProcessId));=0A=
-+	  		 str =3D shared_name (str, p->dwProcessId));=0A=
-=20=0A=
-       if (h =3D=3D NULL)=0A=
--	{=0A=
-+        {=0A=
- 	  if (GetLastError () =3D=3D ERROR_FILE_NOT_FOUND && !proc_exists (p))=0A=
- 	    set_errno (ESRCH);=0A=
- 	  else=0A=
- 	    set_errno (EPERM);=0A=
--	  return NULL;=0A=
- 	}=0A=
-     }=0A=
--=0A=
--  if (!h)=0A=
-+  else=0A=
-     {=0A=
--      system_printf ("can't %s %s, %E", p ? "open" : "create", str);=0A=
--      set_errno (ESRCH);=0A=
-+      SetLastError (0);=0A=
-+      char sa_buf[1024];=0A=
-+=0A=
-+      DWORD winpid =3D GetCurrentProcessId ();=0A=
-+      h =3D CreateSemaphore (allow_ntsec ? sec_user_nih (sa_buf) : &sec_no=
-ne_nih,=0A=
-+			   init, max, str =3D shared_name (str, winpid));=0A=
-+      p =3D myself;=0A=
-+      if (h =3D=3D NULL)=0A=
-+	set_errno (ESRCH);=0A=
-     }=0A=
-+=0A=
-+  if (h =3D=3D NULL)=0A=
-+    system_printf ("can't %s %s, %E", p ? "open" : "create", str);=0A=
-   return h;=0A=
- }=0A=
-=20=0A=
+did not recognize, that Robert mailed twice - one private, one to the list
 
-------=_NextPart_000_0133_01C197E0.52917F20--
+-----Original Message-----
+From: Schaible, J=F6rg=20
+Sent: Monday, January 07, 2002 3:24 PM
+To: 'Robert Collins'
+Subject: RE: [PATCH] Update 2 - Setup.exe property sheet patch
+
+
+Hi Robert,
+
+unfortunately is this document not freely available and have to be purchased
+from the ISO commitee, but I can cite here:
+
+------------------- 10.3.2 ---------------
+If a virtual member function "vf" is declared in a class "Base" and in a
+derived class "Derived", derived directly or indirectly from "Base", a
+member function "vf" with the same name and same parameter list as
+"Base::vf" is declared, then "Dervived::vf" is also virtual (wether or not
+so declared) and it overrides(97) "Base::vf". For conveniance we say that
+any virtual function overrides itself. Then in any well-formed class, for
+each virtual function declared in that class or any of its direct or
+indirect base classes there is a unique "final overrider" that overrides
+that function and every other overrider of that function. The rules for
+member lookup (10.2) are used to determin the final overrider for a virtual
+function in the scope of a derived class but ignoring names introduced by
+"using-declaration"s. [Example:
+
+struct A {
+	virtual void f();
+};
+struct B : virtual A {
+	virtual void f();
+};
+
+struct C : B , virtual A {
+	using A::f;
+}
+void foo() {
+	C c;
+	c.f();	// calls "B::f", the final overrider
+	c.C::f();	// calls "A::f" because of the using-declaration
+-- end example]
+
+97) A function with the same name but a different parameter list (clause 13)
+as a virtual function is not necessarily virtual and does not override. The
+use of the "virtual" specifier in the declaration of an overriding function
+is legal but redundant (has empty semantics). Access control (clause 11) is
+not considered in determining overriding.
+------------------------------------
+
+Regards,
+J=F6rg
+
+BTW: The address book entries are managed in a company wide Exchange server,
+so no modification possible. It seems that you've setup your mail client to
+accept "," as separator, while normally only ";" is accepted.
+
+
+
+>-----Original Message-----
+>From: Robert Collins [mailto:robert.collins@itdomain.com.au]
+>Sent: Monday, January 07, 2002 2:47 PM
+>To: Schaible, J=F6rg
+>Subject: Fw: [PATCH] Update 2 - Setup.exe property sheet patch
+>
+>
+>
+>=3D=3D=3D
+>----- Original Message -----
+>From: "Robert Collins" <robert.collins@itdomain.com.au>
+>To: <Schaible>; "J=F6rg" <Joerg.Schaible@gft.com>;
+><cygwin-patches@sourceware.cygnus.com>
+>Sent: Tuesday, January 08, 2002 12:46 AM
+>Subject: Re: [PATCH] Update 2 - Setup.exe property sheet patch
+>
+>
+>> I'm sorry Jorg, but I don't have the standard to reference. Do you
+>know
+>> of an on-line copy? (Googling for "c++ standard 10.3.2" gave me lots
+>of
+>> useless hits :})
+>>
+>> I got my info from the C++ FAQS second edition (Cline Lomow & Girou),
+>> FAQ 33.09.
+>>
+>> Rob
+>> =3D=3D=3D
+>> ----- Original Message -----
+>> From: "Schaible, J=F6rg" <Joerg.Schaible@gft.com>
+>> >My understanding is that this is not 100% the case. Or more
+>> >pedantically - in a class derived from a a class with virtual
+>> >functions,
+>> >those virtual functions wil get overriden, but if not declared
+>virtual
+>> >themselves, any further derivations will not. I believe that the
+>> >technique of doing this to allow inlining of code calling references
+>to
+>> >an object is called 'final classes'.
+>>
+>> Sorry, Gary is right. See 10.3.2 of the standard.
+>>
+>> Regards,
+>> J=F6rg
+>>
+>>
+>
