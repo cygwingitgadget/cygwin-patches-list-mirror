@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3612-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 22330 invoked by alias); 21 Feb 2003 15:32:22 -0000
+Return-Path: <cygwin-patches-return-3613-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 3185 invoked by alias); 21 Feb 2003 16:11:10 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,47 +7,70 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 22303 invoked from network); 21 Feb 2003 15:32:21 -0000
-Date: Fri, 21 Feb 2003 15:32:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
+Received: (qmail 3171 invoked from network); 21 Feb 2003 16:11:09 -0000
+Message-ID: <3E565022.4E01CCCA@ieee.org>
+Date: Fri, 21 Feb 2003 16:11:00 -0000
+From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
+X-Accept-Language: en,pdf
+MIME-Version: 1.0
+To: Corinna Vinschen <cygwin-patches@cygwin.com>
 Subject: Re: access()
-Message-ID: <20030221153236.GD26242@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
 References: <3.0.5.32.20030220201534.007fb310@mail.attbi.com> <20030221143127.GL1403@cygbert.vinschen.de>
-Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20030221143127.GL1403@cygbert.vinschen.de>
-User-Agent: Mutt/1.5.1i
-X-SW-Source: 2003-q1/txt/msg00261.txt.bz2
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2003-q1/txt/msg00262.txt.bz2
 
-On Fri, Feb 21, 2003 at 03:31:27PM +0100, Corinna Vinschen wrote:
->On Thu, Feb 20, 2003 at 08:15:34PM -0500, Pierre A. Humblet wrote:
->> However bash already uses access() when AFS is defined. Thus it
->> would be a 1/2 line patch in bash (test.c and findcmd.c) to also
->> use access() for Cygwin. 
->> - #if defined (AFS)
->> + #if defined (AFS) || defined (__CYGWIN__)
->> That would be a significant improvement, IMO. What do you think?
->
->Yes, I'll change that.  Thanks for the hint.
->
->> 2003-02-21  Pierre Humblet  <pierre.humblet@ieee.org>
->> 
->> 	* autoload.cc (AccessCheck): Add.
->> 	(DuplicateToken): Add.
->> 	* security.h (check_file_access): Declare.
->> 	* syscalls.cc (access): Convert path to Windows, check existence
->> 	and readonly attribute. Call check_file_access instead of acl_access.
->> 	* security.cc (check_file_access): Create.
->> 	* sec_acl (acl_access): Delete.
->
->I'm impressed.  Works nice with no more handcrafted messing around
->with ACLs.
+Corinna Vinschen wrote:
 
-If I read Pierre's previous message correctly, it sounds like /bin/test
-is now broken.  Was someone going to fix that?
+> Applied.
 
-cgf
+Corinna,
+
+I am still worried about using !real_path.exists() to determine
+non existence, as done in several places in Cygwin. 
+That function checks if the file attributes are FFFFFFFF
+
+After some experiments I found out that GetFileAttributes returns
+FFFFFFF on an existing file if
+a) the file ACL does not allow the caller to read the attributes
+and
+b) the directory is unreadable.
+Do you agree or is it more complicated?
+
+In principle this does not prevent the caller from reading the
+security descriptor.
+
+To return more accurate information, symlink_info::check could call
+GetLastError. If it == 5, the file exists but there is an access problem. 
+What to do then is TBD.
+
+If we take for granted that (with the existing code) the situation is
+hopeless when the file attributes are FFFFFFFFF then the test 
+  if (!pc->exists ())
+    {
+      debug_printf ("already determined that pc does not exist");
+could be moved from fhandler_disk_file::fstat_by_name
+to fhandler_disk_file::fstat (after the get_io_handle test).
+
+While we are at it, set_query_open (query_open_already = true);
+could also be called when a file has acls and ntsec is true.
+
+On the other hand, if we keep the fstat code as it is, then for consistency
+the following code in access
+  if (!real_path.exists ())
+    {
+      set_errno (ENOENT);
+      return -1;
+    }
+
+  if (!(flags & (R_OK | W_OK | X_OK)))
+    return 0;
+
+should be weakened to
+  if (real_path.exists () && !(flags & (R_OK | W_OK | X_OK)))
+    return 0
+so that we go ahead and try to read the sd even with !real_path.exists()
+
+What you you think?
+
+Pierre
