@@ -1,49 +1,68 @@
 From: Corinna Vinschen <cygwin-patches@cygwin.com>
 To: cygpatch <cygwin-patches@cygwin.com>
-Subject: Re: lseek() fails to seek on /dev/fd0 ('\\.\A:')
-Date: Tue, 27 Feb 2001 07:52:00 -0000
-Message-id: <20010227165149.A4647@cygbert.vinschen.de>
-References: <613331659.20010226160225@logos-m.ru> <3A9A621F.7661F240@yahoo.com> <20010226161735.P27406@cygbert.vinschen.de> <1825816804.20010226221015@logos-m.ru> <20010227004550.X27406@cygbert.vinschen.de> <12658340509.20010227124539@logos-m.ru> <20010227120159.D27406@cygbert.vinschen.de> <475821030.20010227160430@logos-m.ru> <20010227151541.B4275@cygbert.vinschen.de> <14713826972.20010227181756@logos-m.ru>
-X-SW-Source: 2001-q1/msg00125.html
+Subject: Re: [patch] Setup.exe choose.cc selection enhancement based on file existence
+Date: Tue, 27 Feb 2001 09:22:00 -0000
+Message-id: <20010227182216.S4275@cygbert.vinschen.de>
+References: <VA.0000062c.02a8582a@thesoftwaresource.com> <VA.0000066f.003b71be@thesoftwaresource.com>
+X-SW-Source: 2001-q1/msg00126.html
 
-On Tue, Feb 27, 2001 at 06:17:56PM +0300, Egor Duda wrote:
-> Hi!
-> 
-> Tuesday, 27 February, 2001 Corinna Vinschen cygwin-patches@cygwin.com wrote:
-> 
-> CV> On Tue, Feb 27, 2001 at 04:04:30PM +0300, Egor Duda wrote:
-> >> CV> Has somebody a 2.4 kernel to test the behaviour there?
-> >> 
-> >> i've just tested it under 2.4.0. it seeks correctly from the end of device
-> >> and returns device_size + offset.
-> >> 
-> >>  if  return  value > 2G, it returns -1 with EOVERFLOW. I feel EFBIG is
-> >> more appropriate here, but it's arguable.
-> 
-> CV> Ok, that sounds more reasonable than the 2.2 behaviour. Would you
-> CV> mind to change your current patch to work on physical drives
-> CV> using IOCTL_DISK_GET_DRIVE_GEOMETRY and on partitions using the
-> CV> IOCTL_DISK_GET_PARTITION_INFO call and, hmm, I think you're right,
-> CV> to return EFBIG in the above case? That would be nice. I would
-> CV> like to see the patch first but I'm pretty sure I will approve it.
-> 
-> i've  already  modified  it,  the  diff  in my previous message is the
-> modified  one.  It  determines drive geometry, and fails if it cannot,
+Brian,
 
-Ooops, sorry I missed that there was an attachment to your mail.
-The patch looks good. Please check it in. Just one minor nit:
+I have some difficulties to apply your patch cleanly. Would you please
+send it again as diff -up relative to the current version from CVS?
 
-Please change
-
-	set_errno ( EFBIG );
-
-to
-
-	set_errno (EFBIG);
-
-Thanks for that patch, I will check it with my ZIP drive this week.
-
+Thanks,
 Corinna
+
+On Tue, Feb 20, 2001 at 10:23:30PM -0500, Brian Keener wrote:
+> Okay,  trying this one more time - can't say I haven't tried.  Hope this one measures up. Again 
+> sorry about sending the code as an attachment.
+> 
+> 2001-02-05  Brian Keener <bkeener@thesoftwaresource.com>
+>    * choose.cc (paint): Modify message for nothing to download vs 
+>    nothing to install/update based on installation method.
+>    (list_click): Modify to skip versions in selection process if
+>    installing from local directory and installation file does not exist.  
+>    Also leaves Source Action set to N/A if the source file does not exist 
+>    and installing from local directory.
+>    (check_existence): New method to check current existence of installation
+>    files based on selected installation method.
+>    (set_existence): New method to set the current existence of installation
+>    files based on selected installation method.
+>    (best_trust): Modify decision process for best trust to base decision on
+>    current trust selected (IE: Prev, Curr, or Test), existence of file and
+>    installation method selected.
+>    (default_trust): Add logic to capture the current trust level and the 
+>    trust selected for the given package.
+>    (set_full_list): Expand decision criteria for displaying a package in 
+>    the selection list to include file existence/non-existence and selected
+>    installation method.
+>    (build_labels): Modify criteria for label addition to include
+>    installation method and file existence/non-existence.
+>    (create_listview): Modify to establish package trust level for each 
+>    package before setting up the display list.  Also modification to set 
+>    current trust button as the default.
+>    (dialog_cmd): Set response for Prev, Curr, Test button push to perform
+>    a reset of the selection list in addition to setting the default trust.
+>    (get_package_version): New method to provide reusable code for
+>    determining the package version from the file name for a specified
+>    trust.
+>    (scan2): Modify to use new method get_package_version and
+>    also enhance handling of the build for the structures package and 
+>    extra.
+>    (read_installed_db): Modify to use the new method 
+>    get_package_version and also enhance handling of the build for the 
+>    structures package and extra.
+>    (do_choose): Add additional initialization of package and extra 
+>    structures.  Modify to use read_installed_db all the time despite 
+>    install method.  Modify output to setup.log.full log file to increase 
+>    readability by adding additional spacing, expanded code and available 
+>    versions.        
+>    * ini.h: Add new fields install_exists, source_exists and 
+>    partial_list_display to the structure definition for package.
+>    * res.rc (IDD_CHOOSE): Modify choose dialog Prev, Curr, and Test 
+>    pushbuttons by replacing with Radio Buttons thus allowing the 
+>    operator to better determine which is selected.
 
 -- 
 Corinna Vinschen                  Please, send mails regarding Cygwin to
