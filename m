@@ -1,23 +1,37 @@
 From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: exceptions.cc (call_signal_handler_now)
-Date: Sun, 08 Apr 2001 17:45:00 -0000
-Message-id: <20010408204539.A23313@redhat.com>
-References: <3ACC7EFA.D650E2D3@yahoo.com>
-X-SW-Source: 2001-q2/msg00015.html
+Subject: Re: Console codepage
+Date: Sun, 08 Apr 2001 17:47:00 -0000
+Message-id: <20010408204737.B23313@redhat.com>
+References: <u7l3fv26h.fsf@mail.epost.de> <20010128154852.A20701@redhat.com> <m3hezz8o0c.fsf@benny-ppc.crocodial.de> <20010408144157.A30790@redhat.com>
+X-SW-Source: 2001-q2/msg00016.html
 
-I think that I came up with a way to avoid "externalizing" this function.
-It's a kludge, but as far as I can tell, it seems to work with both the
-newer (3.1) and older (2.95.3) gcc's.
-
-It's in CVS now.  If this doesn't work for you, I'll break down and
-pollute the global name space.
-
-cgf
-
-On Thu, Apr 05, 2001 at 09:19:38AM -0500, Earnie Boyd wrote:
-> 
->2001-04-05  Earnie Boyd  <earnie_boyd@yahoo.com
+On Sun, Apr 08, 2001 at 02:41:58PM -0400, Christopher Faylor wrote:
+>On Sun, Apr 08, 2001 at 04:28:03PM +0200, Benjamin Riefenstahl wrote:
+>>Christopher Faylor <cgf@redhat.com> writes:
+>>> [...] If you could send an assignment form, too, that would help
+>>> make sure that the legalities are covered.
+>>
+>>I got the reply to the assignment form last week.  Thanks for the
+>>T-shirt, I didn't expect that ;-)
+>>
+>>
+>>I checked the CVS source and noticed that my patch did not get applied
+>>yet.  Did it just fall between the cracks or are there still problems
+>>with it?
 >
->	* exceptions.cc (call_signal_handler_now): Remove the static declaration
->	to allow -finline-functions option to work.
+>The patch doesn't get installed until I hear that the assignment has
+>gone through.  I'll look at this now.
+
+I've installed a variation of this patch.  I eliminated the method
+call in favor of just directly using str_to_con.
+
+I also did a fair amount of coding style cleanup on this and reformatted
+the ChangeLog, as previously indicated.
+
+I made enough changes that this needs to be retested.  I'd appreciated
+it if everyone who gave this thumbs up before (Kazuhiro and Egor?) would
+test this again.
+
+Thanks,
+cgf
