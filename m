@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3118-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 31914 invoked by alias); 5 Nov 2002 13:14:51 -0000
+Return-Path: <cygwin-patches-return-3119-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 1998 invoked by alias); 5 Nov 2002 13:29:12 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,373 +7,85 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 31903 invoked from network); 5 Nov 2002 13:14:50 -0000
-X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
-Date: Tue, 05 Nov 2002 05:14:00 -0000
-From: Thomas Pfaff <tpfaff@gmx.net>
-To: cygwin-patches@cygwin.com
-Subject: [PATCH] Patch for MTinterface
-Message-ID: <Pine.WNT.4.44.0211051319080.289-200000@algeria.intern.net>
-X-X-Sender: pfaff@antarctica.intern.net
-MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="3325248-9093-1036502067=:289"
-X-SW-Source: 2002-q4/txt/msg00069.txt.bz2
-
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
-
---3325248-9093-1036502067=:289
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-Content-length: 3939
+Received: (qmail 1988 invoked from network); 5 Nov 2002 13:29:11 -0000
+Subject: Re: [PATCH] Patch for MTinterface
+From: Robert Collins <rbcollins@cygwin.com>
+To: Thomas Pfaff <tpfaff@gmx.net>
+Cc: cygwin-patches@cygwin.com
+In-Reply-To: <Pine.WNT.4.44.0211051319080.289-200000@algeria.intern.net>
+References: <Pine.WNT.4.44.0211051319080.289-200000@algeria.intern.net>
+Content-Type: multipart/signed; micalg=pgp-sha1; protocol="application/pgp-signature";
+	boundary="=-VGMOjaNW2hFkWYVOFPBH"
+Date: Tue, 05 Nov 2002 05:29:00 -0000
+Message-Id: <1036502950.17049.51.camel@lifelesswks>
+Mime-Version: 1.0
+X-SW-Source: 2002-q4/txt/msg00070.txt.bz2
 
 
-I have discovered some problems with the current MTinterface
-implementation. Here are 2 test cases:
+--=-VGMOjaNW2hFkWYVOFPBH
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+Content-length: 1775
 
-1: mainthread related
+On Wed, 2002-11-06 at 00:14, Thomas Pfaff wrote:
+>=20
+> I have discovered some problems with the current MTinterface
+> implementation. Here are 2 test cases:
 
-#include <stdio.h>
-#include <unistd.h>
-#include <pthread.h>
+> Even if the handles would be valid the pthread_join call would try to
+> delete a thread object that is created static which would result in a
+> corrupted heap.
 
-static void * Thread (void *);
+Ouch. Good catch.
 
-static pthread_t main_thread;
+> 2: fork related
 
-int main(void)
-{
-  pthread_t t;
+> The forked child will not get the same thread handle as its parent, it
+> will get the thread handle from the main thread instead. The child will
+> not terminate because the threadcount is still 2 after the fork (it is
+> set to 1 in MTinterface::Init and then set back to 2 after the childs
+> memory gets overwritten by the parent).
 
-  main_thread = pthread_self ();
+For memory that should not be copied, mark it with NO_COPY in the
+declaration. MTinterface is set thusly IIRC.
 
-  pthread_create (&t, NULL, Thread, NULL);
-  sleep (5);
-  pthread_exit (t);
+> And i do not agree with the the current pthread_self code where the
+> threadcount is incremented if a new thread handle has been created but
+> never gets decremented (i do not expect that threads that are not created
+> by pthread_created will terminate via pthread_exit). And the newly created
+> object never gets freed.
 
-  return 0;
-}
+The dllinit routine will take care of this when we get that implemented
+again. I don't=20
 
-static void * Thread (void *not_used)
-{
-  pthread_join (main_thread, NULL);
+> To avoid these errors i have made changes that will create the mainthread
+> object dynamic and store the reents and thread self pointer via fork safe
+> keys.
 
-  return NULL;
-}
+Overall this looks good. What happens to non-cygwinapi created threads
+now though? You mention you don't agree with the code, but I can't see
+(from a brief look) how you correct it.
 
-This valid code doesn't work at all. The mainthread object in MTinterface
-is not properly initialized, the cancel_event is NULL and the win32_obj_id
-is NULL because myself->hProcess is NULL when MTinterface is initialized
-(and i don't think that a process handle can be used as thread handle).
-Even if the handles would be valid the pthread_join call would try to
-delete a thread object that is created static which would result in a
-corrupted heap.
+BTW: I'm currently packing to move house, so don't expect much feedback
+until late next week, or early the week after :[.
 
+Rob
+--=20
+---
+GPG key available at: http://users.bigpond.net.au/robertc/keys.txt.
+---
 
-2: fork related
+--=-VGMOjaNW2hFkWYVOFPBH
+Content-Type: application/pgp-signature; name=signature.asc
+Content-Description: This is a digitally signed message part
+Content-length: 189
 
-#include <stdio.h>
-#include <unistd.h>
-#include <sys/wait.h>
-#include <pthread.h>
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.0.7 (GNU/Linux)
 
-static void * TestThread ( void * );
+iD8DBQA9x8eiI5+kQ8LJcoIRAjZUAKCyN1GjLFjZ9YrY1ZfZqNpAsEDBtgCfaouC
+w/mK4AQMzQ8AQDWCBk+u+Z8=
+=ZND9
+-----END PGP SIGNATURE-----
 
-int main (void)
-{
-  pthread_t t;
-
-  printf ("main: %p\n", pthread_self ());
-
-  pthread_create (&t, NULL, TestThread, NULL);
-  pthread_join (t, NULL);
-
-  return 0;
-}
-
-static void * TestThread ( void *not_used )
-{
-  switch (fork ())
-    {
-    case -1:
-      return NULL;
-    case 0:
-      printf ("child:  %p\n", pthread_self());
-      break;
-    default:
-      printf ("parent: %p\n", pthread_self());
-      wait (NULL);
-    }
-
-  return NULL;
-}
-
-The forked child will not get the same thread handle as its parent, it
-will get the thread handle from the main thread instead. The child will
-not terminate because the threadcount is still 2 after the fork (it is
-set to 1 in MTinterface::Init and then set back to 2 after the childs
-memory gets overwritten by the parent).
-
-
-
-And i do not agree with the the current pthread_self code where the
-threadcount is incremented if a new thread handle has been created but
-never gets decremented (i do not expect that threads that are not created
-by pthread_created will terminate via pthread_exit). And the newly created
-object never gets freed.
-
-
-To avoid these errors i have made changes that will create the mainthread
-object dynamic and store the reents and thread self pointer via fork safe
-keys.
-
-Thomas
-
-2002-11-05  Thomas Pfaff  <tpfaff@gmx.net>
-
-	* dcrt0.cc (dll_crt0_1): Add call to pthread::initMainThread to
-	initialize mainthread when it is safe to call new.
-	* init.cc (dll_entry): Change call to store reents in tls key.
-	* thread.cc (_reent_clib) : Change call to get reents from tls
-	key.
-	(_reent_winsup): Ditto.
-	(MTinterface::Init): Key handling changed. Remove initialization
-	of member variables.
-	(MTinterface::fixup_after_fork): Reinitialize mainthread object
-	after fork. Reset threadount to 1.
-	(pthread::initMainThread): Create mainthread object dynamically.
-	and initialize with valid handles.
-	(pthread::self): Remove calls to create thread objects.
-	(pthread::setTlsSelfPointer): Change call to store thread self
-	handle in tls key.
-	(pthread::getTlsSelfPointer): New static method.
-	(pthread::exit): Remove setTlsSelfPointer call.
-	(pthread::initCurrentThread): New method.
-	(pthread::thread_init_wrapper): Change call to store thread self
-	handle in tls key.
-	(pthread::join): Check for a valid joiner.
-	(pthreadNull::pthreadNull): Mark Null object as detached.
-	(pthreadNull::exit): Terminate thread via ExitThread.
-	* thread.h (pthread::initMainThread): Change parameter in function
-	call.
-	(pthread::getTlsSelfPointer): New static method.
-	(pthread::initCurrentThread): New method.
-	(MTinterface::reent_key): Remove.
-	(MTinterface::thread_self_dwTlsIndex): Ditto..
-	(MTinterface::indexallocated): Ditto.
-	(MTinterface::mainthread): Ditto.
-	(MTinterface::reent_key): New member.
-	(MTinterface::thread_self_key): Ditto.
-	(MTinterface::MTinterface): Initialize all members.
-
-
---3325248-9093-1036502067=:289
-Content-Type: TEXT/plain; name="mtinterface.patch"
-Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.WNT.4.44.0211051414270.289@algeria.intern.net>
-Content-Description: 
-Content-Disposition: attachment; filename="mtinterface.patch"
-Content-length: 12180
-
-ZGlmZiAtdXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi9kY3J0MC5jYyBzcmMv
-d2luc3VwL2N5Z3dpbi9kY3J0MC5jYwotLS0gc3JjLm9sZC93aW5zdXAvY3ln
-d2luL2RjcnQwLmNjCTIwMDItMTAtMjMgMjA6NDI6NTEuMDAwMDAwMDAwICsw
-MjAwCisrKyBzcmMvd2luc3VwL2N5Z3dpbi9kY3J0MC5jYwkyMDAyLTEwLTMx
-IDEwOjIyOjE3LjAwMDAwMDAwMCArMDEwMApAQCAtNjI4LDYgKzYyOCw4IEBA
-IGRsbF9jcnQwXzEgKCkKICAgUHJvdGVjdEhhbmRsZSAoaE1haW5UaHJlYWQp
-OwogICBjeWd0aHJlYWQ6OmluaXQgKCk7CiAKKyAgcHRocmVhZDo6aW5pdE1h
-aW5UaHJlYWQgKCF1c2VyX2RhdGEtPmZvcmtlZSk7CisKICAgLyogSW5pdGlh
-bGl6ZSBkZWJ1ZyBtdXRvLCBpZiBETEwgaXMgYnVpbHQgd2l0aCAtLWVuYWJs
-ZS1kZWJ1Z2dpbmcuCiAgICAgIE5lZWQgdG8gZG8gdGhpcyBiZWZvcmUgYW55
-IGhlbHBlciB0aHJlYWRzIHN0YXJ0LiAqLwogICBkZWJ1Z19pbml0ICgpOwpk
-aWZmIC11cnAgc3JjLm9sZC93aW5zdXAvY3lnd2luL2luaXQuY2Mgc3JjL3dp
-bnN1cC9jeWd3aW4vaW5pdC5jYwotLS0gc3JjLm9sZC93aW5zdXAvY3lnd2lu
-L2luaXQuY2MJMjAwMi0xMC0xMyAyMDozMToxOC4wMDAwMDAwMDAgKzAyMDAK
-KysrIHNyYy93aW5zdXAvY3lnd2luL2luaXQuY2MJMjAwMi0xMC0yOCAxNjoy
-ODo1OC4wMDAwMDAwMDAgKzAxMDAKQEAgLTI3LDEyICsyNyw4IEBAIFdJTkFQ
-SSBkbGxfZW50cnkgKEhBTkRMRSBoLCBEV09SRCByZWFzb24KICAgICBjYXNl
-IERMTF9QUk9DRVNTX0RFVEFDSDoKICAgICAgIGJyZWFrOwogICAgIGNhc2Ug
-RExMX1RIUkVBRF9BVFRBQ0g6Ci0gICAgICBpZiAodXNlcl9kYXRhLT50aHJl
-YWRpbnRlcmZhY2UpCi0JewotCSAgaWYgKCFUbHNTZXRWYWx1ZSAodXNlcl9k
-YXRhLT50aHJlYWRpbnRlcmZhY2UtPnJlZW50X2luZGV4LAotCQkJICAgICZ1
-c2VyX2RhdGEtPnRocmVhZGludGVyZmFjZS0+cmVlbnRzKSkKKyAgICAgIGlm
-IChNVF9JTlRFUkZBQ0UtPnJlZW50X2tleS5zZXQgKCZNVF9JTlRFUkZBQ0Ut
-PnJlZW50cykpCiAJICAgIGFwaV9mYXRhbCAoInRocmVhZCBpbml0aWFsaXph
-dGlvbiBmYWlsZWQiKTsKLQl9CiAgICAgICBicmVhazsKICAgICBjYXNlIERM
-TF9USFJFQURfREVUQUNIOgogICAgICAgLyogbm90IGludm9rZWQgKi87CmRp
-ZmYgLXVycCBzcmMub2xkL3dpbnN1cC9jeWd3aW4vdGhyZWFkLmNjIHNyYy93
-aW5zdXAvY3lnd2luL3RocmVhZC5jYwotLS0gc3JjLm9sZC93aW5zdXAvY3ln
-d2luL3RocmVhZC5jYwkyMDAyLTEwLTIxIDAzOjAzOjMyLjAwMDAwMDAwMCAr
-MDIwMAorKysgc3JjL3dpbnN1cC9jeWd3aW4vdGhyZWFkLmNjCTIwMDItMTEt
-MDUgMTM6MTY6MTguMDAwMDAwMDAwICswMTAwCkBAIC00NiwzNSArNDYsMjkg
-QEAgZGV0YWlscy4gKi8KIAogZXh0ZXJuIGludCB0aHJlYWRzYWZlOwogCi0j
-ZGVmaW5lIE1UX0lOVEVSRkFDRSB1c2VyX2RhdGEtPnRocmVhZGludGVyZmFj
-ZQotCiBzdHJ1Y3QgX3JlZW50ICoKIF9yZWVudF9jbGliICgpCiB7Ci0gIGlu
-dCB0bXAgPSBHZXRMYXN0RXJyb3IgKCk7CiAgIHN0cnVjdCBfX3JlZW50X3Qg
-Kl9yID0KLSAgICAoc3RydWN0IF9fcmVlbnRfdCAqKSBUbHNHZXRWYWx1ZSAo
-TVRfSU5URVJGQUNFLT5yZWVudF9pbmRleCk7CisgICAgKHN0cnVjdCBfX3Jl
-ZW50X3QgKikgTVRfSU5URVJGQUNFLT5yZWVudF9rZXkuZ2V0ICgpOwogCiAj
-aWZkZWYgX0NZR19USFJFQURfRkFJTFNBRkUKICAgaWYgKF9yID09IDApCiAg
-ICAgc3lzdGVtX3ByaW50ZiAoImxvY2FsIHRocmVhZCBzdG9yYWdlIG5vdCBp
-bml0ZWQiKTsKICNlbmRpZgotCi0gIFNldExhc3RFcnJvciAodG1wKTsKICAg
-cmV0dXJuIF9yLT5fY2xpYjsKIH0KIAogc3RydWN0IF93aW5zdXBfdCAqCiBf
-cmVlbnRfd2luc3VwICgpCiB7Ci0gIGludCB0bXAgPSBHZXRMYXN0RXJyb3Ig
-KCk7Ci0gIHN0cnVjdCBfX3JlZW50X3QgKl9yOwotICBfciA9IChzdHJ1Y3Qg
-X19yZWVudF90ICopIFRsc0dldFZhbHVlIChNVF9JTlRFUkZBQ0UtPnJlZW50
-X2luZGV4KTsKKyAgc3RydWN0IF9fcmVlbnRfdCAqX3IgPQorICAgIChzdHJ1
-Y3QgX19yZWVudF90ICopIE1UX0lOVEVSRkFDRS0+cmVlbnRfa2V5LmdldCAo
-KTsKKwogI2lmZGVmIF9DWUdfVEhSRUFEX0ZBSUxTQUZFCiAgIGlmIChfciA9
-PSAwKQogICAgIHN5c3RlbV9wcmludGYgKCJsb2NhbCB0aHJlYWQgc3RvcmFn
-ZSBub3QgaW5pdGVkIik7CiAjZW5kaWYKLSAgU2V0TGFzdEVycm9yICh0bXAp
-OwogICByZXR1cm4gX3ItPl93aW5zdXA7CiB9CiAKQEAgLTE2NiwzOSArMTYw
-LDE0IEBAIFJlc291cmNlTG9ja3M6OkRlbGV0ZSAoKQogdm9pZAogTVRpbnRl
-cmZhY2U6OkluaXQgKGludCBmb3JrZWQpCiB7Ci0KLSAgcmVlbnRfaW5kZXgg
-PSBUbHNBbGxvYyAoKTsKICAgcmVlbnRzLl9jbGliID0gX2ltcHVyZV9wdHI7
-CiAgIHJlZW50cy5fd2luc3VwID0gJndpbnN1cF9yZWVudDsKLQogICB3aW5z
-dXBfcmVlbnQuX3Byb2Nlc3NfbG9nbWFzayA9IExPR19VUFRPIChMT0dfREVC
-VUcpOwogCi0gIFRsc1NldFZhbHVlIChyZWVudF9pbmRleCwgJnJlZW50cyk7
-Ci0gIC8vIHRoZSBzdGF0aWMgcmVlbnRfZGF0YSB3aWxsIGJlIHVzZWQgaW4g
-dGhlIG1haW4gdGhyZWFkCi0KLSAgaWYgKCFpbmRleGFsbG9jYXRlZCkKLSAg
-ICB7Ci0gICAgICB0aHJlYWRfc2VsZl9kd1Rsc0luZGV4ID0gVGxzQWxsb2Mg
-KCk7Ci0gICAgICBpZiAodGhyZWFkX3NlbGZfZHdUbHNJbmRleCA9PSBUTFNf
-T1VUX09GX0lOREVYRVMpCi0Jc3lzdGVtX3ByaW50ZgotCSAgKCJsb2NhbCBz
-dG9yYWdlIGZvciB0aHJlYWQgY291bGRuJ3QgYmUgc2V0XG5UaGlzIG1lYW5z
-IHRoYXQgd2UgYXJlIG5vdCB0aHJlYWQgc2FmZSEiKTsKLSAgICAgIGVsc2UK
-LQlpbmRleGFsbG9jYXRlZCA9ICgtMSk7Ci0gICAgfQorICBpZiAoIWZvcmtl
-ZCkKKyAgICByZWVudF9rZXkuc2V0ICgmcmVlbnRzKTsKIAotICBjb25jdXJy
-ZW5jeSA9IDA7Ci0gIHRocmVhZGNvdW50ID0gMTsgLyogMSBjdXJyZW50IHRo
-cmVhZCB3aGVuIEluaXQgb2NjdXJzLiovCi0KLSAgcHRocmVhZDo6aW5pdE1h
-aW5UaHJlYWQgKCZtYWludGhyZWFkLCBteXNlbGYtPmhQcm9jZXNzKTsKICAg
-cHRocmVhZF9tdXRleDo6aW5pdE11dGV4ICgpOwotCi0gIGlmIChmb3JrZWQp
-Ci0gICAgcmV0dXJuOwotCi0gIG11dGV4cyA9IE5VTEw7Ci0gIGNvbmRzICA9
-IE5VTEw7Ci0gIHNlbWFwaG9yZXMgPSBOVUxMOwotCiB9CiAKIHZvaWQKQEAg
-LTIzMyw0MCArMjAyLDUxIEBAIE1UaW50ZXJmYWNlOjpmaXh1cF9hZnRlcl9m
-b3JrICh2b2lkKQogICAgICAgc2VtLT5maXh1cF9hZnRlcl9mb3JrICgpOwog
-ICAgICAgc2VtID0gc2VtLT5uZXh0OwogICAgIH0KKworICBwdGhyZWFkOjpp
-bml0TWFpblRocmVhZCAodHJ1ZSk7CisKKyAgdGhyZWFkY291bnQgPSAxOwog
-fQogCiAvKiBwdGhyZWFkIGNhbGxzICovCiAKIC8qIHN0YXRpYyBtZXRob2Rz
-ICovCiB2b2lkCi1wdGhyZWFkOjppbml0TWFpblRocmVhZCAocHRocmVhZCAq
-bWFpblRocmVhZCwgSEFORExFIHdpbjMyX29ial9pZCkKK3B0aHJlYWQ6Omlu
-aXRNYWluVGhyZWFkIChib29sIGRvX2luaXQpCiB7Ci0gIG1haW5UaHJlYWQt
-PndpbjMyX29ial9pZCA9IHdpbjMyX29ial9pZDsKLSAgbWFpblRocmVhZC0+
-c2V0VGhyZWFkSWR0b0N1cnJlbnQgKCk7Ci0gIHNldFRsc1NlbGZQb2ludGVy
-IChtYWluVGhyZWFkKTsKKyAgaWYgKCFkb19pbml0KQorICAgIHJldHVybjsK
-KworICBwdGhyZWFkICp0aHJlYWQgPSBnZXRUbHNTZWxmUG9pbnRlciAoKTsK
-KyAgaWYgKCF0aHJlYWQpCisgICAgeworICAgICAgdGhyZWFkID0gbmV3IHB0
-aHJlYWQgKCk7CisgICAgICBpZiAoIXRocmVhZCkKKyAgICAgICAgYXBpX2Zh
-dGFsICgiZmFpbGVkIHRvIGNyZWF0ZSBtYWludGhyZWFkIG9iamVjdCIpOwor
-ICAgIH0KKworICB0aHJlYWQtPmluaXRDdXJyZW50VGhyZWFkICgpOwogfQog
-CiBwdGhyZWFkICoKIHB0aHJlYWQ6OnNlbGYgKCkKIHsKLSAgcHRocmVhZCAq
-dGVtcCA9IChwdGhyZWFkICopIFRsc0dldFZhbHVlIChNVF9JTlRFUkZBQ0Ut
-PnRocmVhZF9zZWxmX2R3VGxzSW5kZXgpOwotICBpZiAodGVtcCkKLSAgICAg
-IHJldHVybiB0ZW1wOwotICB0ZW1wID0gbmV3IHB0aHJlYWQgKCk7Ci0gIHRl
-bXAtPnByZWNyZWF0ZSAoTlVMTCk7Ci0gIGlmICghdGVtcC0+bWFnaWMpIHsK
-LSAgICAgIGRlbGV0ZSB0ZW1wOwotICAgICAgcmV0dXJuIHB0aHJlYWROdWxs
-OjpnZXROdWxscHRocmVhZCAoKTsKLSAgfQotICB0ZW1wLT5wb3N0Y3JlYXRl
-ICgpOwotICByZXR1cm4gdGVtcDsKKyAgcHRocmVhZCAqdGhyZWFkID0gZ2V0
-VGxzU2VsZlBvaW50ZXIgKCk7CisgIGlmICh0aHJlYWQpCisgICAgcmV0dXJu
-IHRocmVhZDsKKyAgcmV0dXJuIHB0aHJlYWROdWxsOjpnZXROdWxscHRocmVh
-ZCAoKTsKIH0KIAogdm9pZAogcHRocmVhZDo6c2V0VGxzU2VsZlBvaW50ZXIg
-KHB0aHJlYWQgKnRoaXNUaHJlYWQpCiB7Ci0gIC8qIHRoZSBPUyBkb2Vzbid0
-IGNoZWNrIHRoaXMgZm9yIDw9IDY0IFRscyBlbnRyaWVzIChwcmUgd2luMmsp
-ICovCi0gIFRsc1NldFZhbHVlIChNVF9JTlRFUkZBQ0UtPnRocmVhZF9zZWxm
-X2R3VGxzSW5kZXgsIHRoaXNUaHJlYWQpOworICBNVF9JTlRFUkZBQ0UtPnRo
-cmVhZF9zZWxmX2tleS5zZXQgKHRoaXNUaHJlYWQpOworfQorCitwdGhyZWFk
-ICoKK3B0aHJlYWQ6OmdldFRsc1NlbGZQb2ludGVyICgpCit7CisgIHJldHVy
-biAocHRocmVhZCAqKSBNVF9JTlRFUkZBQ0UtPnRocmVhZF9zZWxmX2tleS5n
-ZXQgKCk7CiB9CiAKIApAQCAtMzg0LDkgKzM2NCw2IEBAIHB0aHJlYWQ6OmV4
-aXQgKHZvaWQgKnZhbHVlX3B0cikKICAgICAgIG11dGV4LlVuTG9jayAoKTsK
-ICAgICB9CiAKLSAgLyogUHJldmVudCBETExfVEhSRUFEX0RFVEFDSCBBdHRl
-bXB0aW5nIHRvIGNsZWFuIHVzIHVwICovCi0gIHNldFRsc1NlbGZQb2ludGVy
-ICgwKTsKLQogICBpZiAoSW50ZXJsb2NrZWREZWNyZW1lbnQgKCZNVF9JTlRF
-UkZBQ0UtPnRocmVhZGNvdW50KSA9PSAwKQogICAgIDo6ZXhpdCAoMCk7CiAg
-IGVsc2UKQEAgLTcxNSw2ICs2OTIsMTggQEAgcHRocmVhZDo6Z2V0VGhyZWFk
-SWQgKCkKICAgcmV0dXJuIHRocmVhZF9pZDsKIH0KIAordm9pZAorcHRocmVh
-ZDo6aW5pdEN1cnJlbnRUaHJlYWQgKCkKK3sKKyAgY2FuY2VsX2V2ZW50ID0g
-OjpDcmVhdGVFdmVudCAoJnNlY19ub25lX25paCwgVFJVRSwgRkFMU0UsIE5V
-TEwpOworICBpZiAoIUR1cGxpY2F0ZUhhbmRsZSAoR2V0Q3VycmVudFByb2Nl
-c3MgKCksIEdldEN1cnJlbnRUaHJlYWQgKCksCisgICAgICAgICAgICAgICAg
-ICAgICAgICBHZXRDdXJyZW50UHJvY2VzcyAoKSwgJndpbjMyX29ial9pZCwK
-KyAgICAgICAgICAgICAgICAgICAgICAgIDAsIEZBTFNFLCBEVVBMSUNBVEVf
-U0FNRV9BQ0NFU1MpKQorICAgIHdpbjMyX29ial9pZCA9IE5VTEw7CisgIHNl
-dFRocmVhZElkdG9DdXJyZW50ICgpOworICBzZXRUbHNTZWxmUG9pbnRlciAo
-dGhpcyk7Cit9CisKIC8qIHN0YXRpYyBtZW1iZXJzICovCiBib29sCiBwdGhy
-ZWFkX2F0dHI6OmlzR29vZE9iamVjdCAocHRocmVhZF9hdHRyX3QgY29uc3Qg
-KmF0dHIpCkBAIC0xNDExLDE2ICsxNDAwLDE1IEBAIHB0aHJlYWQ6OnRocmVh
-ZF9pbml0X3dyYXBwZXIgKHZvaWQgKl9hcmcKIAogICBsb2NhbF93aW5zdXAu
-X3Byb2Nlc3NfbG9nbWFzayA9IExPR19VUFRPIChMT0dfREVCVUcpOwogCi0g
-IC8qIFRoaXMgaXMgbm90IGNoZWNrZWQgYnkgdGhlIE9TICEhICovCi0gIGlm
-ICghVGxzU2V0VmFsdWUgKE1UX0lOVEVSRkFDRS0+cmVlbnRfaW5kZXgsICZs
-b2NhbF9yZWVudCkpCi0gICAgc3lzdGVtX3ByaW50ZiAoImxvY2FsIHN0b3Jh
-Z2UgZm9yIHRocmVhZCBjb3VsZG4ndCBiZSBzZXQiKTsKKyAgTVRfSU5URVJG
-QUNFLT5yZWVudF9rZXkuc2V0ICgmbG9jYWxfcmVlbnQpOwogCisgIHRocmVh
-ZC0+c2V0VGhyZWFkSWR0b0N1cnJlbnQgKCk7CiAgIHNldFRsc1NlbGZQb2lu
-dGVyICh0aHJlYWQpOwogCiAgIHRocmVhZC0+bXV0ZXguTG9jayAoKTsKICAg
-Ly8gaWYgdGhyZWFkIGlzIGRldGFjaGVkIGZvcmNlIGNsZWFudXAgb24gZXhp
-dAogICBpZiAodGhyZWFkLT5hdHRyLmpvaW5hYmxlID09IFBUSFJFQURfQ1JF
-QVRFX0RFVEFDSEVEICYmIHRocmVhZC0+am9pbmVyID09IE5VTEwpCi0gICAg
-dGhyZWFkLT5qb2luZXIgPSBwdGhyZWFkOjpzZWxmICgpOworICAgIHRocmVh
-ZC0+am9pbmVyID0gdGhyZWFkOwogICB0aHJlYWQtPm11dGV4LlVuTG9jayAo
-KTsKIAogI2lmZGVmIF9DWUdfVEhSRUFEX0ZBSUxTQUZFCkBAIC0xNzg3LDYg
-KzE3NzUsOSBAQCBwdGhyZWFkOjpqb2luIChwdGhyZWFkX3QgKnRocmVhZCwg
-dm9pZCAqCiB7CiAgICBwdGhyZWFkX3Qgam9pbmVyID0gc2VsZiAoKTsKIAor
-ICAgaWYgKCFpc0dvb2RPYmplY3QgKCZqb2luZXIpKQorICAgICByZXR1cm4g
-RUlOVkFMOworCiAgICAvLyBJbml0aWFsaXplIHJldHVybiB2YWwgd2l0aCBO
-VUxMCiAgICBpZiAocmV0dXJuX3ZhbCkKICAgICAgKnJldHVybl92YWwgPSBO
-VUxMOwpAQCAtMjU5NCw2ICsyNTg1LDcgQEAgcHRocmVhZE51bGw6OmdldE51
-bGxwdGhyZWFkICgpCiAKIHB0aHJlYWROdWxsOjpwdGhyZWFkTnVsbCAoKQog
-eworICBhdHRyLmpvaW5hYmxlID0gUFRIUkVBRF9DUkVBVEVfREVUQUNIRUQ7
-CiAgIC8qIE1hcmsgb3Vyc2VsdmVzIGFzIGludmFsaWQgKi8KICAgbWFnaWMg
-PSAwOwogfQpAQCAtMjYxMCw2ICsyNjAyLDcgQEAgcHRocmVhZE51bGw6OmNy
-ZWF0ZSAodm9pZCAqKCopKHZvaWQgKiksIAogdm9pZAogcHRocmVhZE51bGw6
-OmV4aXQgKHZvaWQgKnZhbHVlX3B0cikKIHsKKyAgRXhpdFRocmVhZCAoMCk7
-CiB9CiAKIGludApkaWZmIC11cnAgc3JjLm9sZC93aW5zdXAvY3lnd2luL3Ro
-cmVhZC5oIHNyYy93aW5zdXAvY3lnd2luL3RocmVhZC5oCi0tLSBzcmMub2xk
-L3dpbnN1cC9jeWd3aW4vdGhyZWFkLmgJMjAwMi0xMC0xNyAyMzozODowNi4w
-MDAwMDAwMDAgKzAyMDAKKysrIHNyYy93aW5zdXAvY3lnd2luL3RocmVhZC5o
-CTIwMDItMTEtMDQgMTA6MDg6MDcuMDAwMDAwMDAwICswMTAwCkBAIC0zNDQs
-NyArMzQ0LDcgQEAgcHVibGljOgogICBwdGhyZWFkICgpOwogICB2aXJ0dWFs
-IH5wdGhyZWFkICgpOwogCi0gIHN0YXRpYyB2b2lkIGluaXRNYWluVGhyZWFk
-KHB0aHJlYWQgKiwgSEFORExFKTsKKyAgc3RhdGljIHZvaWQgaW5pdE1haW5U
-aHJlYWQgKGJvb2wpOwogICBzdGF0aWMgYm9vbCBpc0dvb2RPYmplY3QocHRo
-cmVhZF90IGNvbnN0ICopOwogICBzdGF0aWMgdm9pZCBhdGZvcmtwcmVwYXJl
-KCk7CiAgIHN0YXRpYyB2b2lkIGF0Zm9ya3BhcmVudCgpOwpAQCAtMzg3LDEw
-ICszODcsMTIgQEAgcHJpdmF0ZToKICAgdm9pZCBwb3BfYWxsX2NsZWFudXBf
-aGFuZGxlcnMgKHZvaWQpOwogICB2b2lkIHByZWNyZWF0ZSAocHRocmVhZF9h
-dHRyICopOwogICB2b2lkIHBvc3RjcmVhdGUgKCk7Ci0gIHZvaWQgc2V0VGhy
-ZWFkSWR0b0N1cnJlbnQoKTsKLSAgc3RhdGljIHZvaWQgc2V0VGxzU2VsZlBv
-aW50ZXIocHRocmVhZCAqKTsKKyAgdm9pZCBzZXRUaHJlYWRJZHRvQ3VycmVu
-dCAoKTsKKyAgc3RhdGljIHZvaWQgc2V0VGxzU2VsZlBvaW50ZXIgKHB0aHJl
-YWQgKik7CisgIHN0YXRpYyBwdGhyZWFkICpnZXRUbHNTZWxmUG9pbnRlciAo
-KTsKICAgdm9pZCBjYW5jZWxfc2VsZiAoKTsKICAgRFdPUkQgZ2V0VGhyZWFk
-SWQgKCk7CisgIHZvaWQgaW5pdEN1cnJlbnRUaHJlYWQgKCk7CiB9OwogCiBj
-bGFzcyBwdGhyZWFkTnVsbCA6IHB1YmxpYyBwdGhyZWFkCkBAIC00OTMsMTcg
-KzQ5NSwxMiBAQCBjbGFzcyBNVGludGVyZmFjZQogewogcHVibGljOgogICAv
-LyBHZW5lcmFsCi0gIERXT1JEIHJlZW50X2luZGV4OwotICBEV09SRCB0aHJl
-YWRfc2VsZl9kd1Rsc0luZGV4OwotICAvKiB3ZSBtYXkgZ2V0IDAgZm9yIHRo
-ZSBUbHMgaW5kZXguLiBncnJyICovCi0gIGludCBpbmRleGFsbG9jYXRlZDsK
-ICAgaW50IGNvbmN1cnJlbmN5OwogICBsb25nIGludCB0aHJlYWRjb3VudDsK
-IAogICAvLyBVc2VkIGZvciBtYWluIHRocmVhZCBkYXRhLCBhbmQgc2lncHJv
-YyB0aHJlYWQKICAgc3RydWN0IF9fcmVlbnRfdCByZWVudHM7CiAgIHN0cnVj
-dCBfd2luc3VwX3Qgd2luc3VwX3JlZW50OwotICBwdGhyZWFkIG1haW50aHJl
-YWQ7CiAKICAgY2FsbGJhY2sgKnB0aHJlYWRfcHJlcGFyZTsKICAgY2FsbGJh
-Y2sgKnB0aHJlYWRfY2hpbGQ7CkBAIC01MTQsMTggKzUxMSwyNSBAQCBwdWJs
-aWM6CiAgIGNsYXNzIHB0aHJlYWRfY29uZCAgKiBjb25kczsKICAgY2xhc3Mg
-c2VtYXBob3JlICAgICAqIHNlbWFwaG9yZXM7CiAKKyAgcHRocmVhZF9rZXkg
-cmVlbnRfa2V5OworICBwdGhyZWFkX2tleSB0aHJlYWRfc2VsZl9rZXk7CisK
-ICAgdm9pZCBJbml0IChpbnQpOwogICB2b2lkIGZpeHVwX2JlZm9yZV9mb3Jr
-ICh2b2lkKTsKICAgdm9pZCBmaXh1cF9hZnRlcl9mb3JrICh2b2lkKTsKIAot
-ICBNVGludGVyZmFjZSAoKTpyZWVudF9pbmRleCAoMCksIGluZGV4YWxsb2Nh
-dGVkICgwKSwgdGhyZWFkY291bnQgKDEpCisgIE1UaW50ZXJmYWNlICgpIDoK
-KyAgICBjb25jdXJyZW5jeSAoMCksIHRocmVhZGNvdW50ICgxKSwKKyAgICBw
-dGhyZWFkX3ByZXBhcmUgKE5VTEwpLCBwdGhyZWFkX2NoaWxkIChOVUxMKSwg
-cHRocmVhZF9wYXJlbnQgKE5VTEwpLAorICAgIG11dGV4cyAoTlVMTCksIGNv
-bmRzIChOVUxMKSwgc2VtYXBob3JlcyAoTlVMTCksCisgICAgcmVlbnRfa2V5
-IChOVUxMKSwgdGhyZWFkX3NlbGZfa2V5IChOVUxMKQogICB7Ci0gICAgcHRo
-cmVhZF9wcmVwYXJlID0gTlVMTDsKLSAgICBwdGhyZWFkX2NoaWxkICAgPSBO
-VUxMOwotICAgIHB0aHJlYWRfcGFyZW50ICA9IE5VTEw7CiAgIH0KIH07CiAK
-KyAKKyNkZWZpbmUgTVRfSU5URVJGQUNFIHVzZXJfZGF0YS0+dGhyZWFkaW50
-ZXJmYWNlCisKIGV4dGVybiAiQyIKIHsKIGludCBfX3B0aHJlYWRfYXR0cl9p
-bml0IChwdGhyZWFkX2F0dHJfdCAqIGF0dHIpOwo=
-
---3325248-9093-1036502067=:289--
+--=-VGMOjaNW2hFkWYVOFPBH--
