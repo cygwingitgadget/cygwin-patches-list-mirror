@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2456-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 1994 invoked by alias); 18 Jun 2002 11:39:38 -0000
+Return-Path: <cygwin-patches-return-2457-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 2403 invoked by alias); 18 Jun 2002 11:41:09 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,41 +7,48 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 1980 invoked from network); 18 Jun 2002 11:39:37 -0000
-Message-ID: <3D0F1B8A.DE385130@yahoo.com>
-Date: Tue, 18 Jun 2002 04:39:00 -0000
-From: Earnie Boyd <earnie_boyd@yahoo.com>
-Reply-To: Earnie Boyd <Cygwin-Patches@Cygwin.Com>
-X-Accept-Language: en
-MIME-Version: 1.0
-To: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
-CC: cygwin-patches@cygwin.com
+Received: (qmail 2388 invoked from network); 18 Jun 2002 11:41:07 -0000
+Date: Tue, 18 Jun 2002 04:41:00 -0000
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
+To: cygpatch <cygwin-patches@cygwin.com>
 Subject: Re: Reorganizing internal_getlogin() patch is in
-References: <3.0.5.32.20020617213433.007fcca0@mail.attbi.com>
-	 <3.0.5.32.20020616000701.007f7df0@mail.attbi.com>
-	 <20020613052709.GA17779@redhat.com>
-	 <20020613052709.GA17779@redhat.com>
-	 <3.0.5.32.20020616000701.007f7df0@mail.attbi.com>
-	 <3.0.5.32.20020617213433.007fcca0@mail.attbi.com> <3.0.5.32.20020617223823.00808640@mail.attbi.com>
+Message-ID: <20020618134102.A23980@cygbert.vinschen.de>
+Mail-Followup-To: cygpatch <cygwin-patches@cygwin.com>
+References: <20020616051506.GA6188@redhat.com> <20020613052709.GA17779@redhat.com> <20020613052709.GA17779@redhat.com> <3.0.5.32.20020616000701.007f7df0@mail.attbi.com> <20020616051506.GA6188@redhat.com> <3.0.5.32.20020617224247.007faad0@mail.attbi.com>
+Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-SW-Source: 2002-q2/txt/msg00439.txt.bz2
+Content-Disposition: inline
+In-Reply-To: <3.0.5.32.20020617224247.007faad0@mail.attbi.com>
+User-Agent: Mutt/1.3.22.1i
+X-SW-Source: 2002-q2/txt/msg00440.txt.bz2
 
-"Pierre A. Humblet" wrote:
+On Mon, Jun 17, 2002 at 10:42:47PM -0400, Pierre A. Humblet wrote:
+> At 01:31 PM 6/17/2002 +0200, Corinna Vinschen wrote:
+> >The original reason was to speed up things in domain environments.
+> >The local machine has buffered the user information so it's called
+> >first.  Only if that fails we fallback to calling the logon server
+> >(a PDC probably).  This should avoid unnecessary net access.
+> >
+> >I'm curious, too, what you mean by "name aliasing".  Are you talking
+> >about having a local and a domain user of the same name?
 > 
-> At 10:00 PM 6/17/2002 -0400, Christopher Faylor wrote:
-> >>>I don't understand what you mean by "env" and "/bin/env".  The type command
-> >>>in bash tells me that env == /bin/env.
-> >I'm sorry but I'm still not getting it.  "type bin" returns "command not
-> >found" on my system.  AFAIK, I only have one "env" command and it is
-> >"/usr/bin/env".
+> Yes, precisely.
 > 
-> Dyslexia, I meant "type env" returns /usr/bin/env, which is on a cygexec
-> drive. So your optimization kicks in when I type "env".
-> /bin/env invokes exactly the same program, but somehow it's not recognized
-> as being on a cygexec drive and your optimization does not kick in.
-> 
+> About caching, I did some experiments on NT.
+> The SID doesn't seem to be cached, in the sense that calling 
+> LookupAccountSid() twice in a row, with the Ethernet unplugged the 
+> second time, returns a failure after a very long delay.
 
-You must mount the /bin as a cygexec mount point for that to work.
+What exactly did you try?  My intention was to eliminate a 
+network access in case Cygwin is started on the Windows
+desktop.  No setuid() is involved.  So the user information
+is the one of the currently locally logged in user.  This
+information should be available on the local machine even
+in case of domain accounts.
 
-Earnie.
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
