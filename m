@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2615-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 21528 invoked by alias); 7 Jul 2002 19:01:25 -0000
+Return-Path: <cygwin-patches-return-2616-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 28871 invoked by alias); 8 Jul 2002 07:38:39 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,49 +7,45 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 21506 invoked from network); 7 Jul 2002 19:01:23 -0000
-Message-ID: <007801c225e8$f94d0550$6132bc3e@BABEL>
-From: "Conrad Scott" <Conrad.Scott@dsl.pipex.com>
-To: <cygwin-patches@cygwin.com>
-References: <015501c225c3$d8ddcc20$6132bc3e@BABEL> <20020707180435.GA1213@redhat.com>
-Subject: Re: mark_closed messages
-Date: Sun, 07 Jul 2002 12:01:00 -0000
+Received: (qmail 28855 invoked from network); 8 Jul 2002 07:38:38 -0000
+X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
+Date: Mon, 08 Jul 2002 00:38:00 -0000
+From: Thomas Pfaff <tpfaff@gmx.net>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] pthread_key patch
+In-Reply-To: <20020705171052.GF30783@redhat.com>
+Message-ID: <Pine.WNT.4.44.0207080926450.118-100000@algeria.intern.net>
+X-X-Sender: pfaff@antarctica.intern.net
 MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-SW-Source: 2002-q3/txt/msg00063.txt.bz2
-
-"Christopher Faylor" <cgf@redhat.com> wrote:
-> Of course, maybe we should just nuke the whole concept, too.
-> I think the vast majority of "problems" that the
-> ProtectHandle stuff has unearthed have been "false
-> positives", lately.
-
-Thanks for the response, Chris.  It was a slew of false positives
-that set me off looking at this, thinking that something was wrong
-with the cygserver client code.  Of course, I didn't know they
-were false when I started :-)
-
-FWIW, all the problems I saw came from calls to setclexec_pid
-after a fork, and I couldn't see any easy way to fix that code.  I
-tried removing NO_COPY from the relevant data structures but then,
-as I mentioned, you have to handle calls to ProtectHandle before
-the parent's data is copied down (and there are quite a few such
-calls).  I didn't consider using the cygheap mechanism, for no
-other reason than I haven't looked at that bit yet.  Anyhow, you
-understand the issues better than me.
-
-Right now, I'm happy to know that it's nothing to do with the
-cygserver code, which is what I was worried about.  And I'm glad
-my fiddling around was of some use.  I'll get back to the
-cygserver code now.
-
-Cheers,
-
-// Conrad
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-SW-Source: 2002-q3/txt/msg00064.txt.bz2
 
 
+
+On Fri, 5 Jul 2002, Christopher Faylor wrote:
+
+> On Fri, Jul 05, 2002 at 08:50:21AM +0200, Thomas Pfaff wrote:
+> >If somebody is interested why if find this patch neccessary with a posix
+> >threaded gcc could read
+> >http://cygwin.com/ml/cygwin-patches/2002-q2/msg00214.html
+>
+> Can you summarize why you need to explicitly run destructors on process
+> detach?  It seems like this should happen automatically anyway.  I assume
+> that you're accessing thread-local storage on thread detach, so that's
+> why you need to do things then.  Process detach on the other hand...
+>
+
+This is pthread feature, i am not calling any of my own destructors.
+
+Pthread keys can have an additional destructor function that is called
+when the thread is terminated. The 2.95.3 gcc use this feature to free the
+thread specific exception context.
+In the actual pthread code these destructor functions are called in
+pthread_exit, but this works only for threads that have been created
+pthread_create, but not with CreateThread. IMHO cygwin should support both
+ways.
+
+The reason why i have added it to PROCESS_DETACH too is that the last
+terminating thread is detached in PROCESS_DETACH, not in THREAD_DETACH.
+
+Thomas
