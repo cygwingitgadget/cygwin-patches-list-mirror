@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2339-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 22241 invoked by alias); 6 Jun 2002 13:15:16 -0000
+Return-Path: <cygwin-patches-return-2340-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 30497 invoked by alias); 6 Jun 2002 13:24:06 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,36 +7,37 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 22176 invoked from network); 6 Jun 2002 13:15:12 -0000
-Message-ID: <3CFF5FF3.224BCB13@yahoo.com>
-Date: Thu, 06 Jun 2002 06:15:00 -0000
-From: Earnie Boyd <earnie_boyd@yahoo.com>
-Reply-To: Earnie Boyd <Cygwin-Patches@Cygwin.Com>
-X-Accept-Language: en
-MIME-Version: 1.0
-To: Corinna Vinschen <cygwin-patches@cygwin.com>
-Subject: Re: Patch for sub-second resolution in stat(2)
+Received: (qmail 30477 invoked from network); 6 Jun 2002 13:24:05 -0000
+Message-ID: <042c01c20d5d$a339f7c0$6132bc3e@BABEL>
+From: "Conrad Scott" <Conrad.Scott@dsl.pipex.com>
+To: <cygwin-patches@cygwin.com>
 References: <01ae01c20cf5$551007f0$6132bc3e@BABEL> <20020606013947.GB851@redhat.com> <025101c20cfd$930b0f70$6132bc3e@BABEL> <032201c20d55$73b57bd0$6132bc3e@BABEL> <20020606150911.A22789@cygbert.vinschen.de>
-Content-Type: text/plain; charset=us-ascii
+Subject: Re: Patch for sub-second resolution in stat(2)
+Date: Thu, 06 Jun 2002 06:24:00 -0000
+MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="iso-8859-1"
 Content-Transfer-Encoding: 7bit
-X-SW-Source: 2002-q2/txt/msg00322.txt.bz2
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-SW-Source: 2002-q2/txt/msg00323.txt.bz2
 
-The leading tab is in the attached file.  His mail client converted it
-to a leading space.
-
-Earnie.
-
-Corinna Vinschen wrote:
-> 
-> 
->  ^^
+"Corinna Vinschen" <cygwin-patches@cygwin.com> wrote:
 >  If you now substitute the leading space by a leading TAB, the
 >  ChangeLog entry would be correct.
-> 
+>
 > ;-)
 > Corinna
-> 
-> --
-> Corinna Vinschen                  Please, send mails regarding Cygwin to
-> Cygwin Developer                                mailto:cygwin@cygwin.com
-> Red Hat, Inc.
+
+But I can't convince Outlook Express to insert tab characters into a
+message! (breaks down sobbing with the utter futility of using M$ products).
+
+So, time to start using some other email agent. I hope everyone is waiting
+with baited breath to see what I get wrong then :-)
+
+Cheers,
+
+// Conrad
+
+
