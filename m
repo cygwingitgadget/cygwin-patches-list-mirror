@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1529-listarch-cygwin-patches=sourceware.cygnus.com@sources.redhat.com>
-Received: (qmail 8664 invoked by alias); 27 Nov 2001 18:49:49 -0000
+Return-Path: <cygwin-patches-return-1530-listarch-cygwin-patches=sourceware.cygnus.com@sources.redhat.com>
+Received: (qmail 8687 invoked by alias); 27 Nov 2001 18:49:52 -0000
 Mailing-List: contact cygwin-patches-help@sourceware.cygnus.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@sources.redhat.com>
@@ -14,12 +14,13 @@ To: "Corinna Vinschen" <cygwin-patches@cygwin.com>
 Cc: <cygwin-patches@sourceware.cygnus.com>
 References: <001b01c1776b$0ad3c020$02af6080@cc.telcordia.com> <20011127193031.Q14975@cygbert.vinschen.de>
 Subject: Re: shutdown sockets on exit patch
-Date: Thu, 18 Oct 2001 16:07:00 -0000
+Date: Thu, 18 Oct 2001 18:43:00 -0000
 X-Priority: 3
 X-MSMail-Priority: Normal
 X-Mailer: Microsoft Outlook Express 5.00.2919.6600
 X-MimeOLE: Produced By Microsoft MimeOLE V5.00.2919.6600
-X-SW-Source: 2001-q4/txt/msg00061.txt.bz2
+X-SW-Source: 2001-q4/txt/msg00062.txt.bz2
+Message-ID: <20011018184300.LEx6ixoIrnQwQf8E4H2iqg3OTKwZmzF6x2RcwhPasCo@z>
 
 > I tried it.  Rexecd, rshd, sshd (and scp) seem to work fine but the
 > following new errors occur now:
