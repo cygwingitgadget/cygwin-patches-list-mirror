@@ -1,29 +1,20 @@
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygpatch <cygwin-patches@cygwin.com>
-Subject: [PATCH]: winnt.h
-Date: Wed, 16 May 2001 09:26:00 -0000
-Message-id: <20010516182545.F31266@cygbert.vinschen.de>
-X-SW-Source: 2001-q2/msg00251.html
+From: "Michael A. Chase" <mchase@ix.netcom.com>
+To: <cygwin-patches@cygwin.com>
+Subject: setup.exe 2.53 fails when fetching source
+Date: Wed, 16 May 2001 13:37:00 -0000
+Message-id: <000801c0de47$c8dfd350$e333273f@ca.boeing.com>
+X-SW-Source: 2001-q2/msg00252.html
 
-Hi,
+When I try to fetch the latest bash source using the setup.exe I just built
+from the CVS tree, it aborts with a Dr Watson dump.  I haven't seen this
+happen downloading binary packages.
 
-I have just applied the following patch to winnt.h:
+Is it happening to anyone else?
 
-- Add defines for group attributes SE_GROUP_xxx which are used
-  in TOKEN_GROUPS as groups attributes in the LUID_AND_ATTRIBUTES
-  structure.
-
-- Add define for SYSTEM_LUID which is a predefined logon session
-  used in some authentication related calls.
-
-- Add missing types PTOKEN_DEFAULT_DACL, PTOKEN_OWNER and
-  PTOKEN_PRIMARY_GROUP as corresponding pointer types to the
-  TOKEN_DEFAULT_DACL, TOKEN_OWNER and TOKEN_PRIMARY_GROUP
-  base types.
-
-Corinna
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+I'm running under WinNT 4.0 SP4 and built the setup.exe from a CVS update I
+just completed a few minutes ago.  I have downloaded and installed all
+Cygwin packages except Postgresql using setup.exe.
+--
+Mac :})
+Give a hobbit a fish and he'll eat fish for a day.
+Give a hobbit a ring and he'll eat fish for an age.
