@@ -1,23 +1,23 @@
+From: "Robert Collins" <robert.collins@itdomain.com.au>
+To: "Gary R. Van Sickle" <g.r.vansickle@worldnet.att.net>, <cygwin-patches@sourceware.cygnus.com>
+Subject: Re: [PATCH] Setup.exe "other URL" functionality
+Date: Fri, 28 Dec 2001 03:25:00 -0000
+Message-ID: <06d901c18f92$6209ef60$0200a8c0@lifelesswks>
+References: <NCBBIHCHBLCMLBLOBONKIEBJCIAA.g.r.vansickle@worldnet.att.net>
+X-SW-Source: 2001-q4/msg00360.html
+Message-ID: <20011228032500.VDXth2yPC7AFWqWoQiRvfhO3_Z3diw7vYuLQ0qZ83XE@z>
+
+===
+----- Original Message -----
 From: "Gary R. Van Sickle" <g.r.vansickle@worldnet.att.net>
-To: <cygwin-patches@sourceware.cygnus.com>
-Subject: RE: [PATCH] Setup.exe "other URL" functionality
-Date: Fri, 28 Dec 2001 03:21:00 -0000
-Message-ID: <NCBBIHCHBLCMLBLOBONKIEBJCIAA.g.r.vansickle@worldnet.att.net>
-References: <069b01c18f90$0a195720$0200a8c0@lifelesswks>
-X-SW-Source: 2001-q4/msg00359.html
-Message-ID: <20011228032100.2sUQRy88MUXjbl5rupOx7UV202A5cLgGeHglnPQJB3g@z>
 
-> Gary, can I ask that you do not bz2 your diffs, unless there is real
-> need for it?
->
-> It makes having a quick look at them much harder...
->
-> Rob
+> NP.  Some of us still enduring the 56K modem scourge probably get
+overly
+.
 
-NP.  Some of us still enduring the 56K modem scourge probably get overly
-cautious when attachments sent to the world (well, the world of list subscribers
-anyway) start to get to a few tens of KB ;-).
+Thanks. BTW: If you can identify what made that huge patch (my money is
+on indent 2.2.7 inserting ^M's)'s that would be handy.
 
---
-Gary R. Van Sickle
-Brewer.  Patriot.
+Rob
+
+
