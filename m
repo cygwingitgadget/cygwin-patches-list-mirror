@@ -1,25 +1,23 @@
-From: Earnie Boyd <earnie_boyd@yahoo.com>
-To: cygwin-patches@cygwin.com
+From: Christopher Faylor <cgf@redhat.com>
+To: cygwin-patches@Cygwin.Com
 Subject: Re: _ANONYMOUS_STRUCT (again)
-Date: Mon, 10 Sep 2001 11:17:00 -0000
-Message-id: <3B9D03AC.4E648C07@yahoo.com>
-References: <20010910044816.4205.qmail@web14509.mail.yahoo.com> <20010910135122.A13759@redhat.com> <20010910135605.A15863@redhat.com>
-X-SW-Source: 2001-q3/msg00116.html
+Date: Mon, 10 Sep 2001 11:30:00 -0000
+Message-id: <20010910143015.A16107@redhat.com>
+References: <20010910044816.4205.qmail@web14509.mail.yahoo.com> <20010910135122.A13759@redhat.com> <20010910135605.A15863@redhat.com> <3B9D03AC.4E648C07@yahoo.com>
+X-SW-Source: 2001-q3/msg00117.html
 
-Christopher Faylor wrote:
-> 
-> >
-> >I'm not wild about using something called NONAMELESSUNION to control
-> >whether a nameless *structure* is defined but I guess it's ok.
-> >
+On Mon, Sep 10, 2001 at 02:17:16PM -0400, Earnie Boyd wrote:
+>Christopher Faylor wrote:
+>> >I'm not wild about using something called NONAMELESSUNION to control
+>> >whether a nameless *structure* is defined but I guess it's ok.
+>
+>Never the less, the MSDN will have the control on how this is
+>implemented if it applies in this case.  Or is NONAMELESSUNION something
+>we've made up along the way?
 
-Never the less, the MSDN will have the control on how this is
-implemented if it applies in this case.  Or is NONAMELESSUNION something
-we've made up along the way?
+I just checked.
 
-Earnie.
+It's a Microsoft invention and the use it the same way, so I guess
+we're "good company".
 
-_________________________________________________________
-Do You Yahoo!?
-Get your free @yahoo.com address at http://mail.yahoo.com
-
+cgf
