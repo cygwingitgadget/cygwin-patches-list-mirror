@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2204-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 26924 invoked by alias); 22 May 2002 10:05:51 -0000
+Return-Path: <cygwin-patches-return-2205-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 2145 invoked by alias); 22 May 2002 10:26:13 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,43 +7,45 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 26873 invoked from network); 22 May 2002 10:05:48 -0000
-Date: Wed, 22 May 2002 03:05:00 -0000
+Received: (qmail 2110 invoked from network); 22 May 2002 10:26:11 -0000
+Date: Wed, 22 May 2002 03:26:00 -0000
 From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] cygpath.cc
-Message-ID: <20020522120546.B10218@cygbert.vinschen.de>
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1264BCF4F426D611B0B00050DA782A50014C22D4@mail.gft.com>
+To: cygpatch <cygwin-patches@cygwin.com>
+Subject: Re: getfacl help/version patch
+Message-ID: <20020522122609.D10218@cygbert.vinschen.de>
+Mail-Followup-To: cygpatch <cygwin-patches@cygwin.com>
+References: <Pine.CYG.4.44.0205211721230.416-200000@iocc.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1264BCF4F426D611B0B00050DA782A50014C22D4@mail.gft.com>
+In-Reply-To: <Pine.CYG.4.44.0205211721230.416-200000@iocc.com>
 User-Agent: Mutt/1.3.22.1i
-X-SW-Source: 2002-q2/txt/msg00188.txt.bz2
+X-SW-Source: 2002-q2/txt/msg00189.txt.bz2
 
-On Wed, May 22, 2002 at 09:29:32AM +0200, "Schaible, Jörg" wrote:
-> Hi Corinna,
-> 
-> >AFAICS, the patch is ok.
-> 
-> Fine.
-> 
-> >Just two question:
+On Tue, May 21, 2002 at 05:23:22PM -0500, Joshua Daniel Franklin wrote:
+> > On Mon, May 20, 2002 at 05:33:01PM -0500, Joshua Daniel Franklin wrote:
+> > > Here is a patch to getfacl that adds longopts for all options,
+> > > standardizes the usage output, and adds the GNU standard --version option.
 > >
-> >- The -s and -l options are only valid with the -w option.  Shouldn't
-> >  either the usage reflect that or the -s and -l options imply -w
-> >  automatically?  It's not *that* obvious for the user that s/he
-> >  has to use `cygpath -w -l ...'.
-> 
-> I always had in mind that it would be great to implement the options once
-> for -u, too.
+> > I'm all for it but the patch doesn't apply cleanly against current CVS.
+> > Could you please send another diff?
+> >
+> > Corinna
+> >
+> Yes. Here it is.
 
-I see and that's a good idea, IMHO.  However, for now I have
-applied your patch and just tweaked the usage output slightly.
+Hi Joshua,
 
-Thanks,
+this patch applies cleanly but I have a problem.  What I don't get is
+the reasoning for introducing the --examples option.  From my point
+of view that output should still be a part of --help.  Probably the
+short form w/o that stuff in case of a getfacl w/o args or with
+wrong args and the long form incuding the examples when -h/--help
+is given on the command line.  The --examples is somewhat unnatural
+IMHO.  Would you mind to change that?
+
+I'm sorry that this comes so late, I haven't seen that yesterday.
+
 Corinna
 
 -- 
