@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2531-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 19553 invoked by alias); 27 Jun 2002 16:58:02 -0000
+Return-Path: <cygwin-patches-return-2532-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 666 invoked by alias); 27 Jun 2002 17:18:56 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,42 +7,40 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 19505 invoked from network); 27 Jun 2002 16:58:00 -0000
-Date: Thu, 27 Jun 2002 10:18:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
+Received: (qmail 645 invoked from network); 27 Jun 2002 17:18:54 -0000
+Message-ID: <3D1B48A9.60909@netscape.net>
+Date: Fri, 28 Jun 2002 02:51:00 -0000
+From: Nicholas Wourms <nwourms@netscape.net>
+User-Agent: Mozilla/5.0 (Windows; U; Win 9x 4.90; en-US; rv:1.0rc2) Gecko/20020512 Netscape/7.0b1
+X-Accept-Language: en-us, en
+MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
 Subject: Re: A minor patch to Makefile.in
-Message-ID: <20020627165803.GC28018@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3D19F55E.3070800@netscape.net> <3D19F812.70509@netscape.net> <20020627152129.GA6961@redhat.com> <3D1B3783.7030201@netscape.net> <20020627160909.GE7598@redhat.com> <3D1B4293.30707@netscape.net>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3D1B4293.30707@netscape.net>
-User-Agent: Mutt/1.3.23.1i
-X-SW-Source: 2002-q2/txt/msg00514.txt.bz2
+References: <3D19F55E.3070800@netscape.net> <3D19F812.70509@netscape.net> <20020627152129.GA6961@redhat.com> <3D1B3783.7030201@netscape.net> <20020627160909.GE7598@redhat.com> <3D1B4293.30707@netscape.net> <20020627165803.GC28018@redhat.com>
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2002-q2/txt/msg00515.txt.bz2
 
-On Thu, Jun 27, 2002 at 12:51:31PM -0400, Nicholas Wourms wrote:
->I stand corrected... As it turns out, my theory doesn't work anyway. 
->So, I will have configure check for the existance of gettext > 10.40 
->and any dependancies on libiconv.  I will work up a patch but I need to 
->know if this will require a copyright assignment, as undoubtly it will 
->entail more then 10 lines of configure script changes.  So if this is 
->the way you want to go, then let me know and I'll do so.
+Christopher Faylor wrote:
 
-You're right.  You'll need a copyright assignment.
+>You're right.  You'll need a copyright assignment.
+>
+Ok, well I'll work on getting that situated.
 
->On another note, I really think having seperate configure files for 
->every directory is a tad bit redundant.  Are there any plans to migrate 
->to Automake templates and/or a single configure script for the winsup tree?
+>Nope.  As someone who really detests automake, you can probably guess
+>why that would be so.
+>
+>And, since every directory underneath winsup has different configuration
+>requirements, it really doesn't make much sense to merge them.  I really
+>don't see a big deal here.  There's nothing broken that requires fixing
+>as far as I can tell.
+>
+I see, well I suppose that is one way to look at it.  Anyhow, are the 
+gettext m4 macros (part of the gettext package) installed on 
+sources.redhat.com?  The reason being that there is no point in 
+reinventing the wheel when a perfectly good set of macros are already 
+defined.  I ask only because I assume you will regenerate configure and 
+aclocal.m4 from my changes to configure.in.
 
-Nope.  As someone who really detests automake, you can probably guess
-why that would be so.
-
-And, since every directory underneath winsup has different configuration
-requirements, it really doesn't make much sense to merge them.  I really
-don't see a big deal here.  There's nothing broken that requires fixing
-as far as I can tell.
-
-cgf
+Cheers,
+Nicholas
