@@ -1,48 +1,37 @@
 From: "Robert Collins" <robert.collins@itdomain.com.au>
-To: "egor duda" <cygwin-patches@cygwin.com>
-Subject: Re: src/winsup/cygwin ChangeLog thread.cc thread.h ...
-Date: Thu, 27 Sep 2001 03:55:00 -0000
-Message-id: <007b01c14743$2a0005b0$01000001@lifelesswks>
-References: <20010925114527.23687.qmail@sourceware.cygnus.com> <14472692346.20010927144858@logos-m.ru>
-X-SW-Source: 2001-q3/msg00207.html
-
------ Original Message -----
-From: "egor duda" <deo@logos-m.ru>
 To: <cygwin-patches@cygwin.com>
-Cc: "Robert Collins" <robert.collins@itdomain.com.au>
-Sent: Thursday, September 27, 2001 8:48 PM
-Subject: Re: src/winsup/cygwin ChangeLog thread.cc thread.h ...
+Subject: stamp winver_stamp only on success
+Date: Thu, 27 Sep 2001 05:04:00 -0000
+Message-id: <00c001c1474c$ce1e1890$01000001@lifelesswks>
+X-SW-Source: 2001-q3/msg00208.html
+
+I've had some trouble with recent version changes, with cygwin_version.h
+not being found - which is how I noticed this...
+
+Thu Sep 27 22:00:00 2001 Robert Collins rbtcollins@itdomain.com.au
+
+    * Makefile.in: Only stamp winver_stamp on success.
+
+====
+Index: Makefile.in
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/Makefile.in,v
+retrieving revision 1.63
+diff -u -p -r1.63 Makefile.in
+--- Makefile.in 2001/09/24 22:49:12     1.63
++++ Makefile.in 2001/09/27 12:03:42
+@@ -210,8 +210,8 @@ version.cc winver.o: winver_stamp
+ winver_stamp: mkvers.sh include/cygwin/version.h winver.rc
+$(DLL_OFILES)
+        @echo "Making version.o and winver.o";\
+        $(SHELL) ${word 1,$^} ${word 2,$^} ${word 3,$^} $(WINDRES) && \
+-       touch $@ && \
+-       $(COMPILE_CXX) -o version.o version.cc
++       $(COMPILE_CXX) -o version.o version.cc && \
++       touch $@
+
+ cygrun.exe : cygrun.o $(LIB_NAME) $(w32api_lib)/libuser32.a \
+             $(w32api_lib)/libshell32.a $(w32api_lib)/libkernel32.a
 
 
-> Hi!
->
-> Tuesday, 25 September, 2001 rbcollins@sourceware.cygnus.com
-rbcollins@sourceware.cygnus.com wrote:
->
-> rscc> Modified files:
-> rscc>         winsup/cygwin  : ChangeLog thread.cc thread.h
-> rscc>         winsup/cygwin/include: pthread.h
->
-> rscc> Log message:
-> rscc>         Tue Sep 25 21:25:00 2001  Robert Collins
-<rbtcollins@hotmail.com>
->
-> rscc>         * thread.cc (pthread_cond::BroadCast): Use address with
-verifyable_object_isvalid().
-> rscc>         (pthread_cond::Signal): Ditto.
->
-> [...]
->
-> Robert, i have problems with your last patch. at program startup
-> read_etc_passwd() is called recursively and second call blocks at
-> pthread_mutex_lock()
 
-Huh, strange. I ran with the .dll for some time with no trouble, and am
-about to switch to it in this environment as well.
-
-> did you run 'make check' with it?
-
-I don't have a dejagnu environment. I did run make check with my
-pthreads code.
-
-Rob
