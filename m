@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3475-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 8349 invoked by alias); 3 Feb 2003 00:37:58 -0000
+Return-Path: <cygwin-patches-return-3476-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 8646 invoked by alias); 3 Feb 2003 00:38:24 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,228 +7,129 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 8339 invoked from network); 3 Feb 2003 00:37:57 -0000
-Message-ID: <3E3DB9D1.8080909@yahoo.com>
-Date: Mon, 03 Feb 2003 00:37:00 -0000
-From: Earnie Boyd <earnie_boyd@yahoo.com>
-Reply-To:  cygwin-patches@cygwin.com
-User-Agent: Mozilla/5.0 (Windows; U; WinNT4.0; en-US; rv:1.1) Gecko/20020826
-X-Accept-Language: en-us, en
+Received: (qmail 8636 invoked from network); 3 Feb 2003 00:38:23 -0000
+Message-ID: <20030203003819.66129.qmail@web20010.mail.yahoo.com>
+Date: Mon, 03 Feb 2003 00:38:00 -0000
+From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+Subject: doc patch for CYGWIN codepage=, regtool 
+To: cygwin-patches@cygwin.com
 MIME-Version: 1.0
-To: Mumit Khan <khan@nanotech.wisc.edu>
-CC:  cygwin-patches@cygwin.com
-Subject: Re: [patch] Tcl 20030128-3 changes to handle Cygwin pathnames
-References: <Pine.HPX.4.33.0302021802560.18077-100000@hp2.xraylith.wisc.edu>
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Transfer-Encoding: 7bit
-X-SW-Source: 2003-q1/txt/msg00124.txt.bz2
+Content-Type: multipart/mixed; boundary="0-892346162-1044232699=:66115"
+X-SW-Source: 2003-q1/txt/msg00125.txt.bz2
 
-Hi Mumit,
+--0-892346162-1044232699=:66115
+Content-Type: text/plain; charset=us-ascii
+Content-Id: 
+Content-Disposition: inline
+Content-length: 821
 
-If cygwin specific code already exists in the official source then I 
-suggest you submit your patch to the tcl.sf.net project.
+I've checked in this documentation patch that fixes a couple of things. 
+There was talk of a codepage:none option, but it's not in cygwin yet
+so I'm ignoring it for now. 
 
-Earnie.
+I missed the regtool patch that added -K way back in August
 
-Mumit Khan wrote:
-> Jeff Hobbs had put in some of my changes that allows Cygwin pathnames
-> into Tcl 8.3.5, but it doesn't work with the new filesystem code in Tcl
-> 8.4. The new filesystem code does make it a bit easier to support such
-> "non-native" filenames. Hopefully these will go into Tcl core at some
-> point.
-> 
-> The 3 cases that the appended patch fixes:
-> 
-> 1. Translate Cygwin POSIX path correctly into native form.
-> 
->    $ /usr/local/tcl8.4.1-redhat/bin/tclsh84 /tmp/foo.tcl
-> 
->    will do the right thing.
-> 
->    $ /usr/local/tcl8.4.1-redhat/bin/tclsh84
->    % file native /
->    C:\cygwin
->    %
-> 
-> 2. Support globbing with Cygwin POSIX pathnames.
-> 
->    $ /usr/local/tcl8.4.1-redhat/bin/tclsh84
->    % glob /
->    C:/cygwin
->    % glob /home
->    C:/cygwin/home
->    % glob "/home/Mumit Khan/.bash*"
->    {C:/cygwin/home/Mumit Khan/.bash_profile}
-> 
-> 3. Chdir. Use Cygwin's chdir to keep the internal state consistent.
-> 
-> 2003-02-02  Mumit Khan  <khan@nanotech.wisc.edu>
-> 
-> 	* generic/tclIOUtil.c (SetFsPathFromAny): Add Cygwin specific
-> 	code to convert POSIX filename to native format.
-> 	* generic/tclFileName.c (Tcl_TranslateFileName): And remove
-> 	from here.
-> 	(TclDoGlob): Adjust.
-> 	* win/tclWinFile.c (TclpObjChdir): Use chdir on Cygwin.
-> 
-> Index: generic/tclFileName.c
-> ===================================================================
-> RCS file: /home/khan/src/tcltk/CVSROOT/tcltk8.4.1/tcl/generic/tclFileName.c,v
-> retrieving revision 1.1.1.1
-> diff -u -3 -p -r1.1.1.1 tclFileName.c
-> --- generic/tclFileName.c	2003/01/31 22:26:16	1.1.1.1
-> +++ generic/tclFileName.c	2003/02/02 04:37:23
-> @@ -1356,31 +1356,12 @@ Tcl_TranslateFileName(interp, name, buff
->       */
-> 
->      if (tclPlatform == TCL_PLATFORM_WINDOWS) {
-> -#if defined(__CYGWIN__) && defined(__WIN32__)
-> -
-> -	extern int cygwin_conv_to_win32_path
-> -	    _ANSI_ARGS_((CONST char *, char *));
-> -	char winbuf[MAX_PATH];
-> -
-> -	/*
-> -	 * In the Cygwin world, call conv_to_win32_path in order to use the
-> -	 * mount table to translate the file name into something Windows will
-> -	 * understand.  Take care when converting empty strings!
-> -	 */
-> -	if (Tcl_DStringLength(bufferPtr)) {
-> -	    cygwin_conv_to_win32_path(Tcl_DStringValue(bufferPtr), winbuf);
-> -	    Tcl_DStringFree(bufferPtr);
-> -	    Tcl_DStringAppend(bufferPtr, winbuf, -1);
-> -	}
-> -#else /* __CYGWIN__ && __WIN32__ */
-> -
->  	register char *p;
->  	for (p = Tcl_DStringValue(bufferPtr); *p != '\0'; p++) {
->  	    if (*p == '/') {
->  		*p = '\\';
->  	    }
->  	}
-> -#endif /* __CYGWIN__ && __WIN32__ */
->      }
->      return Tcl_DStringValue(bufferPtr);
->  }
-> @@ -2336,25 +2317,6 @@ TclDoGlob(interp, separators, headPtr, t
->  	     * element.  Add an extra slash if this is a UNC path.
->  	     */
-> 
-> -#if defined(__CYGWIN__) && defined(__WIN32__)
-> -	    {
-> -
-> -	    extern int cygwin_conv_to_win32_path
-> -	    	_ANSI_ARGS_((CONST char *, char *));
-> -	    char winbuf[MAX_PATH];
-> -
-> -	    /*
-> -	     * In the Cygwin world, call conv_to_win32_path in order to use
-> -	     * the mount table to translate the file name into something
-> -	     * Windows will understand.
-> -	     */
-> -	    cygwin_conv_to_win32_path(Tcl_DStringValue(headPtr), winbuf);
-> -	    Tcl_DStringFree(headPtr);
-> -	    Tcl_DStringAppend(headPtr, winbuf, -1);
-> -
-> -	    }
-> -#endif /* __CYGWIN__ && __WIN32__ */
-> -
->  	    if (*name == ':') {
->  		Tcl_DStringAppend(headPtr, ":", 1);
->  		if (count > 1) {
-> @@ -2570,11 +2532,24 @@ TclDoGlob(interp, separators, headPtr, t
->  		if (Tcl_DStringLength(headPtr) == 0) {
->  		    if (((*name == '\\') && (name[1] == '/' || name[1] == '\\'))
->  			    || (*name == '/')) {
-> -			Tcl_DStringAppend(headPtr, "\\", 1);
-> +			Tcl_DStringAppend(headPtr, "/", 1);
->  		    } else {
->  			Tcl_DStringAppend(headPtr, ".", 1);
->  		    }
->  		}
-> +#if defined(__CYGWIN__) && defined(__WIN32__)
-> +		{
-> +
-> +		extern int cygwin_conv_to_win32_path
-> +		    _ANSI_ARGS_((CONST char *, char *));
-> +		char winbuf[MAX_PATH+1];
-> +
-> +		cygwin_conv_to_win32_path(Tcl_DStringValue(headPtr), winbuf);
-> +		Tcl_DStringFree(headPtr);
-> +		Tcl_DStringAppend(headPtr, winbuf, -1);
-> +
-> +		}
-> +#endif /* __CYGWIN__ && __WIN32__ */
->  		/*
->  		 * Convert to forward slashes.  This is required to pass
->  		 * some Tcl tests.  We should probably remove the conversions
-> Index: generic/tclIOUtil.c
-> ===================================================================
-> RCS file: /home/khan/src/tcltk/CVSROOT/tcltk8.4.1/tcl/generic/tclIOUtil.c,v
-> retrieving revision 1.1.1.1
-> diff -u -3 -p -r1.1.1.1 tclIOUtil.c
-> --- generic/tclIOUtil.c	2003/01/31 22:26:18	1.1.1.1
-> +++ generic/tclIOUtil.c	2003/02/03 00:16:51
-> @@ -3947,6 +3947,28 @@ SetFsPathFromAny(interp, objPtr)
->  	transPtr = Tcl_FSJoinToPath(objPtr,0,NULL);
->      }
-> 
-> +#if defined(__CYGWIN__) && defined(__WIN32__)
-> +    {
-> +
-> +    extern int cygwin_conv_to_win32_path
-> +	_ANSI_ARGS_((CONST char *, char *));
-> +    char winbuf[MAX_PATH+1];
-> +
-> +    /*
-> +     * In the Cygwin world, call conv_to_win32_path in order to use the
-> +     * mount table to translate the file name into something Windows will
-> +     * understand.  Take care when converting empty strings!
-> +     */
-> +    name = Tcl_GetStringFromObj(transPtr, &len);
-> +    if (len > 0) {
-> +	cygwin_conv_to_win32_path(name, winbuf);
-> +	TclWinNoBackslash(winbuf);
-> +	Tcl_SetStringObj(transPtr, winbuf, -1);
-> +    }
-> +
-> +    }
-> +#endif /* __CYGWIN__ && __WIN32__ */
-> +
->      /*
->       * Now we have a translated filename in 'transPtr'.  This will have
->       * forward slashes on Windows, and will not contain any ~user
-> Index: win/tclWinFile.c
-> ===================================================================
-> RCS file: /home/khan/src/tcltk/CVSROOT/tcltk8.4.1/tcl/win/tclWinFile.c,v
-> retrieving revision 1.1.1.1
-> diff -u -3 -p -r1.1.1.1 tclWinFile.c
-> --- win/tclWinFile.c	2003/01/31 22:27:10	1.1.1.1
-> +++ win/tclWinFile.c	2003/02/01 01:01:15
-> @@ -1330,9 +1330,25 @@ TclpObjChdir(pathPtr)
->  {
->      int result;
->      CONST TCHAR *nativePath;
-> +#ifdef __CYGWIN__
-> +    extern int cygwin_conv_to_posix_path
-> +	_ANSI_ARGS_((CONST char *, char *));
-> +    char posixPath[MAX_PATH+1];
-> +    CONST char *path;
-> +    Tcl_DString ds;
-> +#endif /* __CYGWIN__ */
-> 
-> +
->      nativePath = (CONST TCHAR *) Tcl_FSGetNativePath(pathPtr);
-> +#ifdef __CYGWIN__
-> +    /* Cygwin chdir only groks POSIX path. */
-> +    path = Tcl_WinTCharToUtf(nativePath, -1, &ds);
-> +    cygwin_conv_to_posix_path(path, posixPath);
-> +    result = (chdir(posixPath) == 0 ? 1 : 0);
-> +    Tcl_DStringFree(&ds);
-> +#else /* __CYGWIN__ */
->      result = (*tclWinProcs->setCurrentDirectoryProc)(nativePath);
-> +#endif /* __CYGWIN__ */
-> 
->      if (result == 0) {
->  	TclWinConvertError(GetLastError());
-> 
+http://sources.redhat.com/ml/cygwin-patches/2002-q3/msg00238.html
+
+but it would be great to get patches for utils.sgml whenever a util
+is patched, or at least a heads-up.
+
+2003-02-02  Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+
+        * cygwinenv.sgml: Add section for "CYGWIN codepage:[ansi|oem]"
+        * dll.sgml: Add pointer to GCC website for more information
+        * utils.sgml: Update regtool for -K,--key-separator option
+
+__________________________________________________
+Do you Yahoo!?
+Yahoo! Mail Plus - Powerful. Affordable. Sign up now.
+http://mailplus.yahoo.com
+--0-892346162-1044232699=:66115
+Content-Type: application/octet-stream; name="tmp.patch"
+Content-Transfer-Encoding: base64
+Content-Description: tmp.patch
+Content-Disposition: attachment; filename="tmp.patch"
+Content-length: 4824
+
+PyB1dGlscy91dGlscy5zZ21sLW9yaWcKSW5kZXg6IGRvYy9jeWd3aW5lbnYu
+c2dtbAo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3Ny
+Yy9zcmMvd2luc3VwL2RvYy9jeWd3aW5lbnYuc2dtbCx2CnJldHJpZXZpbmcg
+cmV2aXNpb24gMS43CmRpZmYgLXUgLXAgLXIxLjcgY3lnd2luZW52LnNnbWwK
+LS0tIGRvYy9jeWd3aW5lbnYuc2dtbAkxOSBEZWMgMjAwMiAwMjoxNDowNiAt
+MDAwMAkxLjcKKysrIGRvYy9jeWd3aW5lbnYuc2dtbAkzIEZlYiAyMDAzIDAw
+OjIzOjQ1IC0wMDAwCkBAIC01MCw2ICs1MCwyMyBAQCBjYXNlIiBlcnJvci48
+L3BhcmE+CiA8L2xpc3RpdGVtPgogPC9pdGVtaXplZGxpc3Q+CiA8L2xpc3Rp
+dGVtPgorCis8bGlzdGl0ZW0+Cis8cGFyYT48Rmlyc3RUZXJtPmNvZGVwYWdl
+OlthbnNpfG9lbV08L0ZpcnN0VGVybT4gLSBXaW5kb3dzIGNvbnNvbGUgCith
+cHBsaWNhdGlvbnMgY2FuIHVzZSBkaWZmZXJlbnQgY2hhcmFjdGVyIHNldHMg
+KGNvZGVwYWdlcykgZm9yIGRyYXdpbmcKK2NoYXJhY3RlcnMuICBUaGUgZmly
+c3Qgc2V0dGluZywgY2FsbGVkICJhbnNpIiwgaXMgdGhlIGRlZmF1bHQuCitU
+aGlzIGNoYXJhY3RlciBzZXQgY29udGFpbnMgdmFyaW91cyBmb3JtcyBvZiBs
+YXRpbiBjaGFyYWN0ZXJzIHVzZWQKK2luIEV1cm9wZWFuIGxhbmd1YWdlcy4g
+IFRoZSBuYW1lIG9yaWdpbmF0ZXMgZnJvbSB0aGUgQU5TSSBMYXRpbjEKKyhJ
+U08gODg1OS0xKSBzdGFuZGFyZCwgdXNlZCBpbiBXaW5kb3dzIDEuMCwgdGhv
+dWdoIHRoZSBjaGFyYWN0ZXIKK3NldHMgaGF2ZSBzaW5jZSBkaXZlcmdlZCBm
+cm9tIGFueSBzdGFuZGFyZC4gIFRoZSBzZWNvbmQgc2V0dGluZworc2VsZWN0
+cyBhbiBvbGRlciwgRE9TLWJhc2VkIGNoYXJhY3RlciBzZXQsIGNvbnRhaW5p
+bmcgdmFyaW91cyBsaW5lCitkcmF3aW5nIGFuZCBzcGVjaWFsIGNoYXJhY3Rl
+cnMuICBJdCBpcyBjYWxsZWQgIm9lbSIgc2luY2UgaXQgd2FzCitvcmlnaW5h
+bGx5IGVuY29kZWQgaW4gdGhlIGZpcm13YXJlIG9mIElCTSBQQ3MgYnkgb3Jp
+Z2luYWwKK2VxdWlwbWVudCBtYW51ZmFjdHVyZXJzIChPRU1zKS4gIElmIHlv
+dSBmaW5kIHRoYXQgc29tZSBjaGFyYWN0ZXJzIAorKGVzcGVjaWFsbHkgbm9u
+LVVTIG9yICdncmFwaGljYWwnIG9uZXMpIGRvIG5vdCBkaXNwbGF5IGNvcnJl
+Y3RseSBpbiAKK0N5Z3dpbiwgeW91IGNhbiB1c2UgdGhpcyBvcHRpb24gdG8g
+c2VsZWN0IGFuIGFwcHJvcHJpYXRlIGNvZGVwYWdlLgorPC9saXN0aXRlbT4K
+KwogPGxpc3RpdGVtPgogPHBhcmE+PEZpcnN0VGVybT4obm8pZW52Y2FjaGU8
+L0ZpcnN0VGVybT4gLSBJZiBzZXQsIGVudmlyb25tZW50IHZhcmlhYmxlCiBj
+b252ZXJzaW9ucyAoYmV0d2VlbiBXaW4zMiBhbmQgUE9TSVgpIGFyZSBjYWNo
+ZWQuICBOb3RlIHRoYXQgdGhpcyBpcyBtYXkKSW5kZXg6IGRvYy9kbGwuc2dt
+bAo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3NyYy9z
+cmMvd2luc3VwL2RvYy9kbGwuc2dtbCx2CnJldHJpZXZpbmcgcmV2aXNpb24g
+MS40CmRpZmYgLXUgLXAgLXIxLjQgZGxsLnNnbWwKLS0tIGRvYy9kbGwuc2dt
+bAkyMyBPY3QgMjAwMiAwMzo1NTozNCAtMDAwMAkxLjQKKysrIGRvYy9kbGwu
+c2dtbAkzIEZlYiAyMDAzIDAwOjIzOjQ1IC0wMDAwCkBAIC0zMiw3ICszMiwx
+MiBAQCBpbmZvcm1hdGlvbiBuZWVkZWQgdG8gdGVsbCB0aGUgT1MgaG93IHlv
+CiAKIDxzZWN0MiBpZD0iZGxsLWJ1aWxkIj48dGl0bGU+QnVpbGRpbmcgRExM
+czwvdGl0bGU+CiAKLTxwYXJhPk9LLCBsZXQncyBnbyB0aHJvdWdoIGEgc2lt
+cGxlIGV4YW1wbGUgb2YgaG93IHRvIGJ1aWxkIGEgZGxsLgorPHBhcmE+VGhp
+cyBwYWdlIGdpdmVzIG9ubHkgYSBmZXcgc2ltcGxlIGV4YW1wbGVzIG9mIGdj
+YydzIERMTC1idWlsZGluZyAKK2NhcGFiaWxpdGllcy4gVG8gYmVnaW4gYW4g
+ZXhwbG9yYXRpb24gb2YgdGhlIG1hbnkgYWRkaXRpb25hbCBvcHRpb25zLAor
+c2VlIHRoZSBnY2MgZG9jdW1lbnRhdGlvbiBhbmQgd2Vic2l0ZSwgY3VycmVu
+dGx5IGF0IAorPHVsaW5rIFVSTD0iaHR0cDovL2djYy5nbnUub3JnLyI+aHR0
+cDovL2djYy5nbnUub3JnLzwvdWxpbms+CisKKzxwYXJhPkxldCdzIGdvIHRo
+cm91Z2ggYSBzaW1wbGUgZXhhbXBsZSBvZiBob3cgdG8gYnVpbGQgYSBkbGwu
+CiBGb3IgdGhpcyBleGFtcGxlLCB3ZSdsbCB1c2UgYSBzaW5nbGUgZmlsZQog
+PGZpbGVuYW1lPm15cHJvZy5jPC9maWxlbmFtZT4gZm9yIHRoZSBwcm9ncmFt
+CiAoPGZpbGVuYW1lPm15cHJvZy5leGU8L2ZpbGVuYW1lPikgYW5kIGEgc2lu
+Z2xlIGZpbGUKSW5kZXg6IHV0aWxzL3V0aWxzLnNnbWwKPT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC91dGls
+cy91dGlscy5zZ21sLHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjM0CmRpZmYg
+LXUgLXAgLXIxLjM0IHV0aWxzLnNnbWwKLS0tIHV0aWxzL3V0aWxzLnNnbWwJ
+MjEgQXVnIDIwMDIgMTU6NDI6MTggLTAwMDAJMS4zNAorKysgdXRpbHMvdXRp
+bHMuc2dtbAkzIEZlYiAyMDAzIDAwOjIzOjQ2IC0wMDAwCkBAIC04NDMsNiAr
+ODQzLDkgQEAgT3B0aW9ucyBmb3IgJ3NldCcgQWN0aW9uOgogIC1tLCAtLW11
+bHRpLXN0cmluZyAgIHNldCB0eXBlIHRvIFJFR19NVUxUSV9TWgogIC1zLCAt
+LXN0cmluZyAgICAgICAgIHNldCB0eXBlIHRvIFJFR19TWgogCitPcHRpb25z
+IGZvciAnc2V0JyBhbmQgJ3Vuc2V0JyBBY3Rpb25zOgorIC1LJmx0O2MmZ3Q7
+LCAtLWtleS1zZXBhcmF0b3JbPV0mbHQ7YyZndDsgIHNldCBrZXkgc2VwYXJh
+dG9yIHRvICZsdDtjJmd0OyBpbnN0ZWFkIG9mICdcJworCiBPdGhlciBPcHRp
+b25zOgogIC1oLCAtLWhlbHAgICAgIG91dHB1dCB1c2FnZSBpbmZvcm1hdGlv
+biBhbmQgZXhpdAogIC1xLCAtLXF1aWV0ICAgIG5vIGVycm9yIG91dHB1dCwg
+anVzdCBub256ZXJvIHJldHVybiBpZiBLRVkvVkFMVUUgbWlzc2luZwpAQCAt
+OTE0LDYgKzkxNywxMiBAQCBudW1iZXIsIGl0J3MgYSBEV09SRC4gIElmIGl0
+IHN0YXJ0cyB3aXRoCiBzdHJpbmcuICBJZiB5b3UgZ2l2ZSBtdWx0aXBsZSB2
+YWx1ZXMsIGl0J3MgYSBtdWx0aS1zdHJpbmcuICBFbHNlLCBpdCdzCiBhIHJl
+Z3VsYXIgc3RyaW5nLgogVGhlIDxsaXRlcmFsPnVuc2V0PC9saXRlcmFsPiBh
+Y3Rpb24gcmVtb3ZlcyBhIHZhbHVlIGZyb20gYSBrZXkuCis8L3BhcmE+CisK
+KzxwYXJhPgorQnkgZGVmYXVsdCwgdGhlIGxhc3QgIlwiIG9yICIvIiBpcyBh
+c3N1bWVkIHRvIGJlIHRoZSBzZXBhcmF0b3IgYmV0d2VlbiB0aGUKK2tleSBh
+bmQgdGhlIHZhbHVlLiAgWW91IGNhbiB1c2UgdGhlIDxsaXRlcmFsPi1LPC9s
+aXRlcmFsPiBvcHRpb24gdG8gcHJvdmlkZSAKK2FuIGFsdGVybmF0ZSBrZXkv
+dmFsdWUgc2VwYXJhdG9yIGNoYXJhY3Rlci4KIDwvcGFyYT4KIAogPC9zZWN0
+Mj4K
+
+--0-892346162-1044232699=:66115--
