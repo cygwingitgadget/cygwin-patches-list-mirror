@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4517-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 10338 invoked by alias); 16 Jan 2004 06:38:41 -0000
+Return-Path: <cygwin-patches-return-4518-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 28598 invoked by alias); 16 Jan 2004 13:57:55 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,29 +7,33 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 10326 invoked from network); 16 Jan 2004 06:38:40 -0000
-Message-ID: <20040116063840.71982.qmail@web61102.mail.yahoo.com>
-Date: Fri, 16 Jan 2004 06:38:00 -0000
-From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
-Subject: Added Quick Start to Users' Guide
-To: cygwin-patches@cygwin.com
+Received: (qmail 28587 invoked from network); 16 Jan 2004 13:57:53 -0000
+X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
+Message-ID: <4007EDC8.5020003@gmx.net>
+Date: Fri, 16 Jan 2004 13:57:00 -0000
+From: Thomas Pfaff <tpfaff@gmx.net>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.6b) Gecko/20031205 Thunderbird/0.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-X-SW-Source: 2004-q1/txt/msg00007.txt.bz2
+To: cygpatches <cygwin-patches@cygwin.com>
+Subject: Re: [PATCH]: Thread safe stdio
+References: <Pine.WNT.4.44.0401121110300.1304-200000@algeria.intern.net>
+In-Reply-To: <Pine.WNT.4.44.0401121110300.1304-200000@algeria.intern.net>
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2004-q1/txt/msg00008.txt.bz2
 
-I just checked in a couple patches to the Users' Guide. The big news
-is two short "Quick Start" sections focused on those with
-Windows or Unix experience. 
+Please ignore this patch, i will generate a new one soon.
 
-2004-01-15  Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+Thomas
 
-        * setup-net.sgml: Add "internet-setup" id anchor.
-        * overview.sgml: Update "What is it?" section. Add links to
-        "Is it free software?" section. Update "Brief History" section.
-        * overview2.sgml: Rewrite "Expectations for {Windows,Unix}"
-        as "Quick Start for those more experienced with {Windows,Unix}".
-
-__________________________________
-Do you Yahoo!?
-Yahoo! Hotjobs: Enter the "Signing Bonus" Sweepstakes
-http://hotjobs.sweepstakes.yahoo.com/signingbonus
+Thomas Pfaff wrote:
+> This patch adds support for thread safe stdio.
+> 
+> It will add 3 new header files three which supersedes newlib ones.
+> 
+> One of these (_types.h) is just a copy of newlibs _types.h with a
+> modified _lock_t. It is not strictly necessary since sizeof(int)
+> == sizeof(void*).
+> 
+> This patch makes only sense when my patch for newlib will be accepted.
+> 
