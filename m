@@ -1,33 +1,34 @@
 From: egor duda <deo@logos-m.ru>
-To: Christopher Faylor <cygwin-patches@cygwin.com>
+To: Corinna Vinschen <cygwin-patches@cygwin.com>
 Subject: Re: storing symlink in extended attribute (on ntfs)
-Date: Sat, 12 May 2001 04:43:00 -0000
-Message-id: <64168820861.20010512154228@logos-m.ru>
-References: <1791875116.20010510172000@logos-m.ru> <12912395994.20010510201521@logos-m.ru> <20010511142639.A26920@redhat.com>
-X-SW-Source: 2001-q2/msg00248.html
+Date: Mon, 14 May 2001 02:40:00 -0000
+Message-id: <38334234654.20010514133925@logos-m.ru>
+References: <1791875116.20010510172000@logos-m.ru> <12912395994.20010510201521@logos-m.ru> <20010510232258.H5386@cygbert.vinschen.de>
+X-SW-Source: 2001-q2/msg00249.html
 
 Hi!
 
-Friday, 11 May, 2001 Christopher Faylor cgf@redhat.com wrote:
+Friday, 11 May, 2001 Corinna Vinschen cygwin-patches@cygwin.com wrote:
 
-CF> This looks ok.  I'm a little concerned about adding YA way to set symlinks,
-CF> though.
+CV> Did you check that with a Samba drive as well? Samba drives
+CV> return NTFS as file system name in a call to GetVolumeInformation,
+CV> too. AFAICS, additionally a check if the flag FILE_NAMED_STREAMS
+CV> is returned would be good. Samba returns FALSE here.
 
-well, i really hope this change is both backward and forward
-compatible. i.e. old dll should work seamlessly  with "new" symlinks,
-and new dll -- with the old ones. the only problem is with moving and
-copying cygwin symlinks with native tools -- it's still here, as it
-was before. 
+unfortunately, NT 4.0 returns FALSE too. on my ntfs partitions
+fsflags == 0x1f. can you check what samba returns in fsflags?
 
-CF> As a specific comment, I wonder if it would just make sense to store volume
-CF> information in the path_conv class to avoid going through the duplicate efforts
-CF> in symlink.
+additionally, there's 'fstype' option in smb.conf, which allows setting
+reported file system type to any string, say, "Samba". I'm not sure if
+such change won't break some native applications.
 
-i guess so. currently, GetVolumeInformation is called only when
-symlink is created, not resolved, but this will slow things down on
-file systems other than NTFS. to remove this penalty,
-GetVolumeInformation() should be called in symlink resolution code to, 
-and that's where volume information caching can save some cycles.
+CV> I'm not sure if that would have real advantages. It would avoid a
+CV> useless write when creating a symlink on Samba...
+
+there will be. i think that checking fs for "fast ea" support is
+desirable on symlink reads too, to avoid unnecessary ea reading
+efforts. so, i believe, we'll reduce symlink resolution time if we'll
+be able to say by volume information, whether it supports EA's or not.
 
 Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
 
