@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5104-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 32708 invoked by alias); 31 Oct 2004 03:36:50 -0000
+Return-Path: <cygwin-patches-return-5105-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 24039 invoked by alias); 31 Oct 2004 11:31:46 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,84 +7,158 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 32687 invoked from network); 31 Oct 2004 03:36:49 -0000
-Received: from unknown (HELO cgf.cx) (66.30.17.189)
-  by sourceware.org with SMTP; 31 Oct 2004 03:36:49 -0000
-Received: by cgf.cx (Postfix, from userid 201)
-	id E4A151B3F8; Sat, 30 Oct 2004 23:36:51 -0400 (EDT)
-Date: Sun, 31 Oct 2004 03:36:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
-To: cygwin-patches@cygwin.com
+Received: (qmail 24029 invoked from network); 31 Oct 2004 11:31:45 -0000
+Received: from unknown (HELO smartmx-07.inode.at) (213.229.60.39)
+  by sourceware.org with SMTP; 31 Oct 2004 11:31:45 -0000
+Received: from [62.99.252.218] (port=62751 helo=[192.168.0.2])
+	by smartmx-07.inode.at with esmtp (Exim 4.30)
+	id 1CODvx-0007lR-VO
+	for cygwin-patches@cygwin.com; Sun, 31 Oct 2004 12:31:42 +0100
+Message-ID: <4184CD1A.8070403@x-ray.at>
+Date: Sun, 31 Oct 2004 11:31:00 -0000
+From: Reini Urban <rurban@x-ray.at>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.0; de-AT; rv:1.8a3) Gecko/20040817
+MIME-Version: 1.0
+To:  cygwin-patches@cygwin.com
 Subject: Re: [Patch] unlink
-Message-ID: <20041031033651.GA12853@trixie.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
 References: <4182BDCF.3C04BAF8@phumblet.no-ip.org> <4182BDCF.3C04BAF8@phumblet.no-ip.org> <3.0.5.32.20041030223054.008277e0@incoming.verizon.net>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 In-Reply-To: <3.0.5.32.20041030223054.008277e0@incoming.verizon.net>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2004-q4/txt/msg00105.txt.bz2
+Content-Type: multipart/mixed;
+ boundary="------------000800090200040201070605"
+X-SW-Source: 2004-q4/txt/msg00106.txt.bz2
 
-On Sat, Oct 30, 2004 at 10:30:54PM -0400, Pierre A. Humblet wrote:
->At 01:39 PM 10/30/2004 -0400, you wrote:
->>On Fri, Oct 29, 2004 at 06:01:51PM -0400, Pierre A. Humblet wrote:
->>>Here is a patch that should allow unlink() to handle
->>>nul etc.. on local disks.
->>>
->>>It's a cut and paste of Corinna's open on NT and the
->>>existing CreateFile.
->>> 
+This is a multi-part message in MIME format.
+--------------000800090200040201070605
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-length: 697
+
+Pierre A. Humblet schrieb:
 >>>It works on normal files. I haven't tested with the
 >>>special names because I forgot how to create them !
 >>>Feedback welcome.
->>>
->>>XXXXX This should NOT be applied in 1.5.12 XXXXXX
->>>
->>>Pierre
->>>
->>>2004-10-29  Pierre Humblet <pierre.humblet@ieee.org>
->>>
->>>	* syscalls.cc (nt_delete): New function.
->>>	(unlink): Call nt_delete instead of CreateFile and remove
->>>	unreachable code.
->>
->>Corinna suggested something similar to me a couple of months ago but I
->>wanted to wait for things to settle down somewhat after the original
->>use of NtCreateFile.
->>
+
+works fine on w2k.
+attached is a test to create such files.
+unlink works fine on these.
+
+didn't test with wchar and unicode files yet, just char.
+but coreutils/findutils don't work with unicode files anyway.
+(just testing findutils-4.1.20)
+
 >>On reflection, however, wouldn't it be a little easier just to prepend
 >>the path being deleted with a: \\.\ so that "rm nul" would eventually
 >>translate to DeleteFile("\\.\c:\foo\null") (I'm not using true C
 >>backslash quoting here)?  I don't know if that would work on Windows 9x,
 >>though.
->
->That would work on NT, but then one would need to check if the input
->path didn't already have the form //./xx, worry about exceeding max 
->pathlength, etc...
 
-Other than being able to delete special filenames is there any other
-benefit to using NtCreateFile to delete files?
+--------------000800090200040201070605
+Content-Type: text/plain;
+ name="testcreate.cc"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline;
+ filename="testcreate.cc"
+Content-length: 2562
 
-If path length was an issue we could use '//?/' instead since the length
-restriction is a lot larger there.  So, it would be something like:
+// c++ -I../src/winsup/cygwin -o testcreate testcreate.cc -lntdll 
+#include "winsup.h"
+#include <stdio.h>
+#include <ntdef.h>
+#include "ntdll.h"
 
-  char *path;
-  char newpath[strlen (win32_name) + 4] = "\\\\?\";
-  if  (win32_name[0] != '\\')
-      path = strcat (newpath, win32_name);
-  else
-      path = win32_name;
+//#define NTCREATE
+#undef NTCREATE
 
-and then you'd use path throughout from then on.
+NTSTATUS 
+  NtCreateDirectoryObject(
+    OUT PHANDLE  DirectoryHandle,
+    IN ACCESS_MASK  DesiredAccess,
+    IN POBJECT_ATTRIBUTES  ObjectAttributes
+    );
 
-We could use a technique like this for other things, like rename, to enable
-it to manipulate accidentally-created special files.
+#ifndef NTCREATE
+static HANDLE
+create (char *path)
+{
+  HANDLE hFile; 
+  char pwd[CYG_MAX_PATH], dev[CYG_MAX_PATH];
+  int len;
 
-OTOH, I just had an idea about how to use //?/ on NT so that we could
-have longer path names.  I have to mull it over a little to see if it
-would work or not, though.  I have an airplane trip tomorrow that would
-be perfect for this kind of mulling.
+  //create ("\\\\.\\c:\\con");
+  if (len = GetCurrentDirectoryA (CYG_MAX_PATH, pwd)) {
+    strcpy(dev, "\\\\.\\");
+    strcat(dev, pwd);
+    strcat(dev, "\\");
+    strcat(dev, path);
+  }
+  hFile = CreateFile(dev,     // file to create
+		     GENERIC_WRITE,          // open for writing
+		     0,                      // do not share
+		     NULL,                   // default security
+		     CREATE_ALWAYS,          // overwrite existing
+		     FILE_ATTRIBUTE_NORMAL | // normal file
+		     FILE_FLAG_OVERLAPPED,   // asynchronous I/O
+		     NULL);                  // no attr. template
+  if (hFile == INVALID_HANDLE_VALUE) return 0;
+  printf("%s created\n", path);
+  CloseHandle(hFile);
+  return hFile;
+}
 
-cgf
+#else
+static HANDLE
+nt_create (WCHAR *wpath)
+{
+  WCHAR pwd[2*CYG_MAX_PATH];
+  UNICODE_STRING upath = {0, sizeof (wpath), wpath};
+  //UNICODE_STRING cpath = {0, 2, L"."};
+
+  int len;
+  HANDLE x, root = NULL;
+  OBJECT_ATTRIBUTES attr;
+  IO_STATUS_BLOCK io;
+  NTSTATUS status;
+  
+  if (len = GetCurrentDirectoryW (2*CYG_MAX_PATH, pwd)) {
+    UNICODE_STRING upwd = {0, sizeof (pwd), pwd};
+    InitializeObjectAttributes (&attr, &upwd, OBJ_CASE_INSENSITIVE, NULL, NULL);
+    NtOpenFile(&root, STANDARD_RIGHTS_ALL, &attr, &io, 0, 0);
+  }
+  InitializeObjectAttributes (&attr, &upath, OBJ_CASE_INSENSITIVE, root, NULL);
+  // http://msdn.microsoft.com/library/default.asp?url=/library/en-us/devnotes/winprog/ntcreatefile.asp
+  status = NtCreateFile (&x, STANDARD_RIGHTS_ALL, &attr, &io, NULL, FILE_ATTRIBUTE_NORMAL, 
+                         FILE_SHARE_READ, FILE_OPEN, FILE_DELETE_ON_CLOSE, NULL, 0);
+  if (!NT_SUCCESS (status))
+    {
+      printf("error creating %ls\n", wpath);
+      return 0;
+    }
+  else {
+    CloseHandle(x);
+    return x;
+  }
+}
+#endif
+
+int main(int argc, char** argv)
+{
+#ifndef NTCREATE
+  create ("con");
+  create ("com");
+  create ("nul");
+  create ("aux");
+  create ("prn");
+  create ("lpt1");
+  create ("...");
+#else
+  nt_create (L"con");
+  nt_create (L"nul");
+  nt_create (L"aux");
+  nt_create (L"prn");
+  nt_create (L"lpt1");
+  nt_create (L"...");
+#endif
+  return(0);
+}
+
+--------------000800090200040201070605--
