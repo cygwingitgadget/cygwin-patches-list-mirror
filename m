@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2917-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 3118 invoked by alias); 2 Sep 2002 16:33:52 -0000
+Return-Path: <cygwin-patches-return-2918-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 26051 invoked by alias); 3 Sep 2002 06:39:51 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,38 +7,135 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 3100 invoked from network); 2 Sep 2002 16:33:51 -0000
-Date: Mon, 02 Sep 2002 09:33:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
+Received: (qmail 26036 invoked from network); 3 Sep 2002 06:39:50 -0000
+Date: Mon, 02 Sep 2002 23:39:00 -0000
+From: egor duda <deo@logos-m.ru>
+Reply-To: egor duda <cygwin-patches@cygwin.com>
+Organization: deo
+X-Priority: 3 (Normal)
+Message-ID: <17051818150.20020903103820@logos-m.ru>
 To: cygwin-patches@cygwin.com
-Subject: Re: very small passwd patch
-Message-ID: <20020902163355.GD16203@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <Pine.CYG.4.44.0209021109360.1260-100000@joshua.iocc.com>
-Mime-Version: 1.0
+Subject: cygwin part of pseudo-relocs patch
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="----------903BED2A48E83E"
+X-SW-Source: 2002-q3/txt/msg00366.txt.bz2
+
+------------903BED2A48E83E
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.CYG.4.44.0209021109360.1260-100000@joshua.iocc.com>
-User-Agent: Mutt/1.3.23.1i
-X-SW-Source: 2002-q3/txt/msg00365.txt.bz2
+Content-Transfer-Encoding: 7bit
+Content-length: 343
 
-On Mon, Sep 02, 2002 at 11:09:54AM -0500, Joshua Daniel Franklin wrote:
->--- Corinna Vinschen <cygwin-patches@cygwin.com> wrote:
->> On Mon, Sep 02, 2002 at 08:28:07AM -0500, Joshua Daniel Franklin wrote:
->> > I thought there was some mention of this already, but I guess
->> > not. This adds a note about passwd not working with Win9x/ME.
->>
->> Good idea but it doesn't help.  Since passwd is linked statically
->> against a symbol only available in NT, a 9x/Me user will never see
->> this help.  The system dialog will always win the race.
->>
->
->True, but it would at least help with people who use NT on another machine
->diagnose the problem. Right now it's completely hidden.
->Also the --help notes are eventually folded into the User's Guide.
+Hi!
 
-How about a patch to dynamically load the specific function so that the
-error message will work correctly?
+  This is an updated cygwin part of pseudo-relocs patch. Relocations
+are performed inside of cygwin1.dll, as Chris suggested, and it seems
+to work ok in case of one dll referencing another one. After new
+binutils package is released, it can go into cygwin release.
 
-cgf
+egor.            mailto:deo@logos-m.ru icq 5165414 fidonet 2:5020/496.19
+------------903BED2A48E83E
+Content-Type: application/octet-stream; name="cygwin-runtime-pseudo-reloc-support.2.ChangeLog"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="cygwin-runtime-pseudo-reloc-support.2.ChangeLog"
+Content-length: 509
+
+MjAwMi0wOS0wMyAgRWdvciBEdWRhICA8ZGVvQGxvZ29zLW0ucnU+CgoJKiBs
+aWIvY3J0MC5oOiBEZWNsYXJlIF9wZWkzODZfcnVudGltZV9yZWxvY2F0b3Iu
+CgkqIGN5Z3dpbi5kaW46IEV4cG9ydCBfcGVpMzg2X3J1bnRpbWVfcmVsb2Nh
+dG9yLgoJKiBkY3J0MC5jIChfcGVpMzg2X3J1bnRpbWVfcmVsb2NhdG9yKTog
+UGVyZm9ybSBwc2V1ZG8gcmVsb2NzLgoJKGRsbF9jcnQwXzEpOiBQZXJmb3Jt
+IHBzZXVkbyByZWxvY3MgYXQgc3RhcnR1cC4KCSogY3lnd2luLnNjOiBEZWZp
+bmUgc3ltYm9scyBuZWVkZWQgZm9yIHJ1bnRpbWUgcHNldWRvLXJlbG9jYXRp
+b25zLgoJKiBpbmNsdWRlL2N5Z3dpbi92ZXJzaW9uLmg6IEJ1bXAgQVBJIG1p
+bm9yIHZlcnNpb24uCg==
+
+------------903BED2A48E83E
+Content-Type: application/octet-stream; name="cygwin-runtime-pseudo-reloc-support.2.diff"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="cygwin-runtime-pseudo-reloc-support.2.diff"
+Content-length: 4990
+
+SW5kZXg6IGN5Z3dpbi5kaW4KPT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1Mg
+ZmlsZTogL2N2cy91YmVyYmF1bS93aW5zdXAvY3lnd2luL2N5Z3dpbi5kaW4s
+dgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuNjIKZGlmZiAtdSAtcCAtMiAtcjEu
+NjIgY3lnd2luLmRpbgotLS0gY3lnd2luLmRpbgkzMCBBdWcgMjAwMiAxMzoz
+MDoyNiAtMDAwMAkxLjYyCisrKyBjeWd3aW4uZGluCTMgU2VwIDIwMDIgMDY6
+MjU6NTEgLTAwMDAKQEAgLTE0OCw0ICsxNDgsNSBAQCBkbGxfbm9uY3lnd2lu
+X2RsbGNydDAKIGN5Z3dpbl9kZXRhY2hfZGxsCiBjeWd3aW4zMl9kZXRhY2hf
+ZGxsID0gY3lnd2luX2RldGFjaF9kbGwKK19wZWkzODZfcnVudGltZV9yZWxv
+Y2F0b3IKIEBERUZfRExMX0VOVFJZQAogZHJlbQpJbmRleDogY3lnd2luLnNj
+Cj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT0KUkNTIGZpbGU6IC9jdnMvdWJlcmJh
+dW0vd2luc3VwL2N5Z3dpbi9jeWd3aW4uc2MsdgpyZXRyaWV2aW5nIHJldmlz
+aW9uIDEuNwpkaWZmIC11IC1wIC0yIC1yMS43IGN5Z3dpbi5zYwotLS0gY3ln
+d2luLnNjCTIzIEp1biAyMDAyIDE4OjU1OjIzIC0wMDAwCTEuNworKysgY3ln
+d2luLnNjCTMgU2VwIDIwMDIgMDY6MjU6NTEgLTAwMDAKQEAgLTQwLDQgKzQw
+LDcgQEAgU0VDVElPTlMKICAgICAqKFNPUlQoLnJkYXRhJCopKQogICAgICoo
+LmVoX2ZyYW1lKQorICAgIF9fX1JVTlRJTUVfUFNFVURPX1JFTE9DX0xJU1Rf
+XyA9IC47IF9fUlVOVElNRV9QU0VVRE9fUkVMT0NfTElTVF9fID0gLiA7Cisg
+ICAgKigucmRhdGFfcnVudGltZV9wc2V1ZG9fcmVsb2MpCisgICAgX19fUlVO
+VElNRV9QU0VVRE9fUkVMT0NfTElTVF9FTkRfXyA9IC47IF9fUlVOVElNRV9Q
+U0VVRE9fUkVMT0NfTElTVF9FTkRfXyA9IC4gOwogICB9CiAgIC5wZGF0YSBC
+TE9DSyhfX3NlY3Rpb25fYWxpZ25tZW50X18pIDoKSW5kZXg6IGRjcnQwLmNj
+Cj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT0KUkNTIGZpbGU6IC9jdnMvdWJlcmJh
+dW0vd2luc3VwL2N5Z3dpbi9kY3J0MC5jYyx2CnJldHJpZXZpbmcgcmV2aXNp
+b24gMS4xNDcKZGlmZiAtdSAtcCAtMiAtcjEuMTQ3IGRjcnQwLmNjCi0tLSBk
+Y3J0MC5jYwkyNyBBdWcgMjAwMiAwNDoxMDo1NCAtMDAwMAkxLjE0NworKysg
+ZGNydDAuY2MJMyBTZXAgMjAwMiAwNjoyNTo1MSAtMDAwMApAQCAtMTIwLDQg
+KzEyMCwyNSBAQCBjaGFyICpvbGRfdGl0bGU7CiBjaGFyIHRpdGxlX2J1ZltU
+SVRMRVNJWkUgKyAxXTsKIAordHlwZWRlZiBzdHJ1Y3QKKyAgeworICAgIERX
+T1JEIGFkZGVuZDsKKyAgICBEV09SRCB0YXJnZXQ7CisgIH0KK3J1bnRpbWVf
+cHNldWRvX3JlbG9jOworCitleHRlcm4gIkMiIHZvaWQgX3BlaTM4Nl9ydW50
+aW1lX3JlbG9jYXRvciAodm9pZCosIHZvaWQqLCB2b2lkKik7CisKK3ZvaWQK
+K19wZWkzODZfcnVudGltZV9yZWxvY2F0b3IgKHZvaWQqIHN0YXJ0LCB2b2lk
+KiBlbmQsIHZvaWQqIGJhc2UpCit7CisgIERXT1JEIHJlbG9jX3RhcmdldDsK
+KyAgcnVudGltZV9wc2V1ZG9fcmVsb2MqIHI7CisgIGZvciAociA9IChydW50
+aW1lX3BzZXVkb19yZWxvYyopIHN0YXJ0OyByIDwgKHJ1bnRpbWVfcHNldWRv
+X3JlbG9jKikgZW5kOyByKyspCisgICAgeworICAgICAgcmVsb2NfdGFyZ2V0
+ID0gKERXT1JEKSBiYXNlICsgci0+dGFyZ2V0OworICAgICAgKigoRFdPUkQq
+KSByZWxvY190YXJnZXQpICs9IHItPmFkZGVuZDsKKyAgICB9Cit9CisKIHN0
+YXRpYyB2b2lkCiBkb19nbG9iYWxfZHRvcnMgKHZvaWQpCkBAIC01MzcsNCAr
+NTU4LDggQEAgc2lndGhyZWFkOjppbml0IChjb25zdCBjaGFyICpzKQogfQog
+CitleHRlcm4gY2hhciBfX1JVTlRJTUVfUFNFVURPX1JFTE9DX0xJU1RfXzsK
+K2V4dGVybiBjaGFyIF9fUlVOVElNRV9QU0VVRE9fUkVMT0NfTElTVF9FTkRf
+XzsKK2V4dGVybiBjaGFyIF9pbWFnZV9iYXNlX187CisKIC8qIFRha2Ugb3Zl
+ciBmcm9tIGxpYmMncyBjcnQwLm8gYW5kIHN0YXJ0IHRoZSBhcHBsaWNhdGlv
+bi4gTm90ZSB0aGUKICAgIHZhcmlvdXMgc3BlY2lhbCBjYXNlcyB3aGVuIEN5
+Z3dpbiBETEwgaXMgYmVpbmcgcnVudGltZSBsb2FkZWQgKGFzCkBAIC01NTUs
+NCArNTgwLDggQEAgZGxsX2NydDBfMSAoKQogICB3aW5jYXAuaW5pdCAoKTsK
+ICAgY2hlY2tfc2FuaXR5X2FuZF9zeW5jICh1c2VyX2RhdGEpOworCisgIF9w
+ZWkzODZfcnVudGltZV9yZWxvY2F0b3IgKCZfX1JVTlRJTUVfUFNFVURPX1JF
+TE9DX0xJU1RfXywKKwkJCSAgICAgJl9fUlVOVElNRV9QU0VVRE9fUkVMT0Nf
+TElTVF9FTkRfXywKKwkJCSAgICAgJl9pbWFnZV9iYXNlX18pOwogCiAgIGRv
+X2dsb2JhbF9jdG9ycyAoJl9fQ1RPUl9MSVNUX18sIDEpOwpJbmRleDogaW5j
+bHVkZS9jeWd3aW4vdmVyc2lvbi5oCj09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0K
+UkNTIGZpbGU6IC9jdnMvdWJlcmJhdW0vd2luc3VwL2N5Z3dpbi9pbmNsdWRl
+L2N5Z3dpbi92ZXJzaW9uLmgsdgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuNzUK
+ZGlmZiAtdSAtcCAtMiAtcjEuNzUgdmVyc2lvbi5oCi0tLSBpbmNsdWRlL2N5
+Z3dpbi92ZXJzaW9uLmgJMzAgQXVnIDIwMDIgMTI6MTg6NTYgLTAwMDAJMS43
+NQorKysgaW5jbHVkZS9jeWd3aW4vdmVyc2lvbi5oCTMgU2VwIDIwMDIgMDY6
+MjU6NTIgLTAwMDAKQEAgLTE2NSw0ICsxNjUsNSBAQCBkZXRhaWxzLiAqLwog
+ICAgICAgICAgICB3Y3NuY21wLCB3Y3NuY3B5LCB3Y3NwYnJrLCB3Y3NyY2hy
+LCB3Y3NzcG4sIHdjc3N0ciwgd21lbWNociwKIAkgICB3bWVtY21wLCB3bWVt
+Y3B5LCB3bWVtbW92ZSwgd21lbXNldAorICAgICAgIDYzOiBFeHBvcnQgX3Bl
+aTM4Nl9ydW50aW1lX3JlbG9jYXRvci4KICAgICAgKi8KIApAQCAtMTcwLDUg
+KzE3MSw1IEBAIGRldGFpbHMuICovCiAKICNkZWZpbmUgQ1lHV0lOX1ZFUlNJ
+T05fQVBJX01BSk9SIDAKLSNkZWZpbmUgQ1lHV0lOX1ZFUlNJT05fQVBJX01J
+Tk9SIDYyCisjZGVmaW5lIENZR1dJTl9WRVJTSU9OX0FQSV9NSU5PUiA2Mwog
+CiAgICAgIC8qIFRoZXJlIGlzIGFsc28gYSBjb21wYXRpYml0eSB2ZXJzaW9u
+IG51bWJlciBhc3NvY2lhdGVkIHdpdGggdGhlCkluZGV4OiBsaWIvY3J0MC5o
+Cj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT0KUkNTIGZpbGU6IC9jdnMvdWJlcmJh
+dW0vd2luc3VwL2N5Z3dpbi9saWIvY3J0MC5oLHYKcmV0cmlldmluZyByZXZp
+c2lvbiAxLjMKZGlmZiAtdSAtcCAtMiAtcjEuMyBjcnQwLmgKLS0tIGxpYi9j
+cnQwLmgJMTEgU2VwIDIwMDEgMjA6MDE6MDIgLTAwMDAJMS4zCisrKyBsaWIv
+Y3J0MC5oCTMgU2VwIDIwMDIgMDY6MjU6NTIgLTAwMDAKQEAgLTEzLDQgKzEz
+LDYgQEAgZXh0ZXJuICJDIiB7CiAjZW5kaWYKIAordm9pZCBfcGVpMzg2X3J1
+bnRpbWVfcmVsb2NhdG9yICh2b2lkKiwgdm9pZCosIHZvaWQgKik7CisKIHN0
+cnVjdCBwZXJfcHJvY2VzczsKIHR5cGVkZWYgaW50ICgqTWFpbkZ1bmMpIChp
+bnQgYXJnYywgY2hhciAqYXJndltdLCBjaGFyICoqZW52KTsK
+
+------------903BED2A48E83E--
