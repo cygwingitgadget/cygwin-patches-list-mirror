@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5023-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 6616 invoked by alias); 6 Oct 2004 13:12:53 -0000
+Return-Path: <cygwin-patches-return-5024-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 26718 invoked by alias); 6 Oct 2004 14:58:11 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,61 +7,41 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 6434 invoked from network); 6 Oct 2004 13:12:49 -0000
-Message-ID: <n2m-g.ck100t.3vvcra7.1@buzzy-box.bavag>
-From: Bas van Gompel <cygwin-patches.buzz@bavag.tmfweb.nl>
-Subject: [Patch] cygcheck: warn about trailing (back)slash on mount entries
-Reply-To: cygwin-patches mailing-list <cygwin-patches@cygwin.com>
-Organisation: Ehm...
+Received: (qmail 26590 invoked from network); 6 Oct 2004 14:58:04 -0000
+Date: Wed, 06 Oct 2004 14:58:00 -0000
+From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
 To: cygwin-patches@cygwin.com
-Date: Wed, 06 Oct 2004 13:12:00 -0000
-X-SW-Source: 2004-q4/txt/msg00024.txt.bz2
+Subject: Re: [Patch] cygcheck: warn about empty path-components
+Message-ID: <20041006145805.GB29289@trixie.casa.cgf.cx>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <n2m-g.cjth8v.3vsj9uv.1@buzzy-box.bavag> <20041005081629.GI6702@cygbert.vinschen.de> <Pine.CYG.4.58.0410050902580.5620@fordpc.vss.fsi.com> <20041005143458.GB13719@trixie.casa.cgf.cx> <20041005144649.GB30752@cygbert.vinschen.de> <n2m-g.ck0h06.3vvequf.1@buzzy-box.bavag>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <n2m-g.ck0h06.3vvequf.1@buzzy-box.bavag>
+User-Agent: Mutt/1.4.1i
+X-SW-Source: 2004-q4/txt/msg00025.txt.bz2
 
-Another (hopefully trivial) patch, to help in trouble-shooting.
+On Wed, Oct 06, 2004 at 10:49:09AM +0200, Bas van Gompel wrote:
+>Op Tue, 5 Oct 2004 16:46:49 +0200 schreef Corinna Vinschen
+>in <20041005144649.GB30752@cygbert.vinschen.de>:
+>
+>[Empty path-components resolving to current dir.]
+>
+>:  Oh, interesting.  I never even thought about using an empty path.
+>
+>Nor I. Thw described behaviour makes the warning even more useful (when
+>cygcheck is run from a command/cmd prompt).
+>
+>Are you applying the patch?
+>
+>(Maybe the message could get a ``-v'' addition like: ``This will
+>resolve to the current directory when in cygwin''.)
 
+I see that Corinna has checked this in but I really don't see the need
+for a warning for a perfectly acceptable use of an empty PATH component.
 
-ChangeLog-entry:
+Why are we bothering with this?
 
-2004-10-06  Bas van Gompel  <cygwin-patch.buzz@bavag.tmfweb.nl>
-
-	* cygcheck.cc (dump_sysinfo): Warn about trailing (back)slash on mount
-	entries.
-
-
---- src/winsup/utils/cygcheck.cc	6 Oct 2004 09:46:40 -0000	1.45
-+++ src/winsup/utils/cygcheck.cc	6 Oct 2004 11:59:58 -0000
-@@ -1165,19 +1165,25 @@ dump_sysinfo ()
-   printf ("\n");
- 
-   unsigned ml_fsname = 4, ml_dir = 7, ml_type = 6;
-+  bool ml_trailing = false;
- 
-   struct mntent *mnt;
-   setmntent (0, 0);
-   while ((mnt = getmntent (0)))
-     {
-       unsigned n = (int) strlen (mnt->mnt_fsname);
-+      ml_trailing |= (n > 1 && strchr ("\\/", mnt->mnt_fsname[n - 1]));
-       if (ml_fsname < n)
- 	ml_fsname = n;
-       n = (int) strlen (mnt->mnt_dir);
-+      ml_trailing |= (n > 1 && strchr ("\\/", mnt->mnt_dir[n - 1]));
-       if (ml_dir < n)
- 	ml_dir = n;
-     }
- 
-+  if (ml_trailing)
-+    puts ("Warning: Mount entries should not have a trailing (back)slash\n");
-+
-   if (givehelp)
-     {
-       printf
-
-L8r,
-
-Buzz (by special request).
--- 
-  ) |  | ---/ ---/  Yes, this | This message consists of true | I do not
---  |  |   /    /   really is |   and false bits entirely.    | mail for
-  ) |  |  /    /    a 72 by 4 +-------------------------------+ any1 but
---  \--| /--- /---  .sigfile. |   |perl -pe "s.u(z)\1.as."    | me. 4^re
+cgf
