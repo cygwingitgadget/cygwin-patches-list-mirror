@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4136-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 27124 invoked by alias); 29 Aug 2003 01:19:27 -0000
+Return-Path: <cygwin-patches-return-4137-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 22362 invoked by alias); 29 Aug 2003 03:12:57 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,88 +7,71 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 27115 invoked from network); 29 Aug 2003 01:19:26 -0000
-Date: Fri, 29 Aug 2003 01:19:00 -0000
+Received: (qmail 22351 invoked from network); 29 Aug 2003 03:12:57 -0000
+Date: Fri, 29 Aug 2003 03:12:00 -0000
 From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: Signal handling tune up.
-Message-ID: <20030829011926.GA16898@redhat.com>
+Message-ID: <20030829031256.GA18890@redhat.com>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3F43B482.AC7F68F4@phumblet.no-ip.org> <20030819024617.GA6581@redhat.com> <3.0.5.32.20030818201736.0080e4e0@mail.attbi.com> <3.0.5.32.20030818201736.0080e4e0@mail.attbi.com> <3.0.5.32.20030818222927.008114e0@incoming.verizon.net> <20030819024617.GA6581@redhat.com> <3.0.5.32.20030819084636.0081c730@incoming.verizon.net> <20030819143305.GA17431@redhat.com> <3F43B482.AC7F68F4@phumblet.no-ip.org> <3.0.5.32.20030828205339.0081f920@incoming.verizon.net>
+References: <20030819024617.GA6581@redhat.com> <3.0.5.32.20030818201736.0080e4e0@mail.attbi.com> <3.0.5.32.20030818201736.0080e4e0@mail.attbi.com> <3.0.5.32.20030818222927.008114e0@incoming.verizon.net> <20030819024617.GA6581@redhat.com> <3.0.5.32.20030819084636.0081c730@incoming.verizon.net> <20030819143305.GA17431@redhat.com> <3F43B482.AC7F68F4@phumblet.no-ip.org> <3.0.5.32.20030828205339.0081f920@incoming.verizon.net> <20030829011926.GA16898@redhat.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3.0.5.32.20030828205339.0081f920@incoming.verizon.net>
+In-Reply-To: <20030829011926.GA16898@redhat.com>
 User-Agent: Mutt/1.4.1i
-X-SW-Source: 2003-q3/txt/msg00152.txt.bz2
+X-SW-Source: 2003-q3/txt/msg00153.txt.bz2
 
-On Thu, Aug 28, 2003 at 08:53:39PM -0400, Pierre A. Humblet wrote:
->At 02:09 PM 8/20/2003 -0400, you wrote:
->>On Wed, Aug 20, 2003 at 01:48:50PM -0400, Pierre A. Humblet wrote:
->>>Christopher Faylor wrote:
->>>>>If you do something like:
->>>>>
->>>>>foo()
->>>>>{
->>>>>   sigframe thisframe;
->>>>>   sig_dispatch_pending ();
->>>>>}
->>>>>
->>>>>then the signal dispatch will happen when foo returns, not when
->>>>>sig_dispatch_pending returns.  The goal is that, in most cases, the
->>>>>function closest to the user should be the one that gets "interrupted".
->>>>
->>>>Well, that is what I thought the goal was, but looking at the sigframe
->>>>code again it doesn't work that way.  If it did work that way then the
->>>>current call to call_signal_handler_now in sigreturn wouldn't be
->>>>necessary, although the stack pressue would be even greater.
->>>>
->>>>So, I don't know why I put that explicit call in that function.  It's
->>>>probably superfluous, as you suspect.
->>>
->>>After sleeping over this I have a new hypothesis, kind of just the
->>>opposite of what we were thinking above.
->>>
->>>interrupt_on_return will walk the stack and find an "interruptible"
->>>address in the user code (outside of cygwin).  The handler starts when
->>>returning from that frame (closest to the user).
->>>
->>>sigframe::call_signal_handler () undoes that and forces an immediate
->>>run of the handler.  So it makes sense to use it in
->>>sig_dispatch_pending ().
->>
->>Except that since sig_dispatch_pending may not be the "owner" of the
->>frame info, it will not call anything in some (most) cases.  I saw this
->>in a debugging session last night.
+On Thu, Aug 28, 2003 at 09:19:26PM -0400, Christopher Faylor wrote:
+>On Thu, Aug 28, 2003 at 08:53:39PM -0400, Pierre A. Humblet wrote:
+>>I was planning to also eventually propose patches for the  following,
+>>but it's more efficient to tell Chris while he is working on the code
+>>and before I forget:
+>>1) sigcatch_nosync could be an event instead of a semaphore. This 
+>>   doesn't affect the logic and will cut down useless loops, mainly
+>>   at high load with pending_signals set.
 >
->For the benefit of future maintainers I went back to this and figured
->it out. sigframe::call_signal_handler () will do its job iff there is
->no earlier sigframe (thus not from set_process_mask). That's why in 
->e.g. syscalls.cc and net.cc the following order is always respected:
->  1) sig_dispatch_pending ();
->  2) sigframe thisframe;
->
->I was planning to also eventually propose patches for the  following,
->but it's more efficient to tell Chris while he is working on the code
->and before I forget:
->1) sigcatch_nosync could be an event instead of a semaphore. This 
->   doesn't affect the logic and will cut down useless loops, mainly
->   at high load with pending_signals set.
+>Are you seeing a lot of loops through the signal handler due to
+>semaphores being > 1?
 
-Are you seeing a lot of loops through the signal handler due to
-semaphores being > 1?
+As coincidence would have it, I was trying to investigate Corinna's
+problem without much success.  She reported that resizing an xterm
+that was logged into a cygwin ssh session would cause the session
+to terminate.
 
->2) When a signal is pending but blocked, pending_signals is set and
->   sig_dispatch_pending() signals the sigthread. It would be more 
->   efficient to have a pending_signal_mask and to do mask comparison
->   in sig_dispatch_pending(). It's just a courtesy call, no interlock
->   is necessary.
+I couldn't duplicate that, even on my slower machine at work.  So,
+I thought I'd write a program which sent 100,000 SIGWINCH's to a zsh
+process to see what would happen.
 
-There are all sorts of optimizations like this which could be done.  Do
-you think that an occasional loop through the signal handler is slowing
-things down that much?  Do you think that sig_dispatch_pending gets
-called a lot with all pending signals blocked?  Are you convinced that
-you can set a mask in a non-raceable way?
+I was heartened to see that zsh did not crash when I sicc'ed this
+program on it -- until I tried to type something at the zsh prompt and
+saw that it was hung.  The reason was that the recursive signal call
+stuff was still not right.  We were restoring the return address
+incorrectly.  AFAICT, we really do have to use the stored
+retaddr_on_stack to rectify setup_handler's inappropriate "fixup" of the
+return address.  Restoring it to 36(%%esp) wasn't right.
+
+Ok.  Problem solved.  So I run the program again.  Then I type 'ls' in
+zsh.  Hmm.  No response.  So, I look at the stack trace of the "hung"
+zsh in gdb and it looks very reasonable.  I exit gdb and go look at the
+code.  When I return to my PC, zsh has executed the ls and it is
+responding to input normally.
+
+Conclusion: cygwin can't handle 100,000 signals very quickly (which we
+knew).
+
+So, since you (Pierre) just raised this issue, I decided to change the
+nosync handler to an event to see if that made any difference.  I didn't
+run a scientific study but I would have to say that it didn't.  Of
+course, in retrospect, it shouldn't have anyway, since the delay in
+processing must be due to repeated signal handler calls.  The excess
+nosync loop would have only introduced a processor load but input should
+have still been functional since the signal handler calls were probably
+handled by the inner loop in wait_sig.
+
+So, I ended up checking in the change to use events and am building
+a snapshot now.  With luck, I've solved Corinna's problems and maybe
+I can even release 1.5.3 this weekend.
 
 cgf
