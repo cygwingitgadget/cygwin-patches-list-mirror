@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1754-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 17793 invoked by alias); 19 Jan 2002 20:39:53 -0000
+Return-Path: <cygwin-patches-return-1755-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 24462 invoked by alias); 21 Jan 2002 14:41:05 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,43 +7,47 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 17779 invoked from network); 19 Jan 2002 20:39:53 -0000
-Message-ID: <911C684A29ACD311921800508B7293BA037D2A89@cnmail>
-From: Mark Bradshaw <bradshaw@staff.crosswalk.com>
-To: 'Corinna Vinschen' <cygwin-patches@cygwin.com>
-Subject: RE: New addition to cygwin: recvmsg and sendmsg
-Date: Sat, 19 Jan 2002 12:39:00 -0000
-MIME-Version: 1.0
-X-Mailer: Internet Mail Service (5.5.2653.19)
-Content-Type: text/plain
-X-SW-Source: 2002-q1/txt/msg00111.txt.bz2
+Received: (qmail 24417 invoked from network); 21 Jan 2002 14:41:03 -0000
+Date: Mon, 21 Jan 2002 06:41:00 -0000
+From: Dennis Vshivkov <walrus@amur.ru>
+To: Corinna Vinschen <cygwin-patches@cygwin.com>
+Subject: Re: [PATCH] No codepage translation in cygwin console
+Message-ID: <20020121174058.B31464@amur.ru>
+References: <20020115194622.A3962@amur.ru> <20020119002711.A24934@cygbert.vinschen.de>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.2.5.1i
+In-Reply-To: <20020119002711.A24934@cygbert.vinschen.de>; from cygwin-patches@cygwin.com on Sat, Jan 19, 2002 at 12:27:11AM +0100
+X-SW-Source: 2002-q1/txt/msg00112.txt.bz2
 
-> -----Original Message-----
-> From: Corinna Vinschen [mailto:cygwin-patches@cygwin.com] 
-> Sent: Saturday, January 19, 2002 11:19 AM
-> To: cygpatch
-> Subject: Re: New addition to cygwin: recvmsg and sendmsg
+On Sat, Jan 19, 2002 at 12:27:11AM +0100, Corinna Vinschen wrote:
+
+> >     If con-asis suboption is specified, console input and output goes
+> > unchanged.  Hope this helps someone.
 > 
-> Thanks, Mark!  I applied it with *just* a few changes to the
-> ChangeLog:
+> actually your patch seems to be useful when having to switch
+> between different codepages.
 > 
->         * cygwin.din: Add recvmsg and sendmsg.
-> 	* net.cc: Add cygwin_recvmsg and cygwin_sendmsg.
-> 	* /usr/include/sys/socket.h: Add recvmsg and sendmsg.
+> But I have two problems with that patch:
 > 
-> Do you see the differences? Present tense, upper case after 
-> the colon, full stop at the end of a sentence.
+> - First of all, your patch isn't `trivial' enough so that we
+>   can incorporate it without getting a signed copyright assignment
+>   form from you as described on http://cygwin.com/contrib.html.
+>   Please send us the signed form via snail mail.  As soon as we
+>   received it we can use your patch.
 
-Got it.  One more thing to add to my growing list of Changelog do's and
-don't's.  I swear, the day I submit a perfect changelog the world will come
-to an end.  Or hell will freeze over.  Or AOL will buy Redhat.
+    Ok, I've printed the assignment and will send it ASAP.
 
-> And there's something else important.  Adding new functions
-> to the API requires us to bump CYGWIN_VERSION_API_MINOR in 
-> include/cygwin/version.h.  I did that now but it would be
-> nice(tm) if you could do that by yourself when you add a
-> new function to the API next time (e.g strptime :-)).
+> - Your ChangeLog entry isn't correctly indented.  And please use
+>   your real name, not a pseudonym.
 
-Ok.  I'll remember that for next time.
+    Ok.  Do I have to correct and resend it right away or it's better to wait
+until the assignment is received?
 
-Mark
+> Otherwise I'd be happy to apply your patch to Cygwin.
+
+    Thanks.
+
+-- 
+/Awesome Walrus <walrus@amur.ru>
