@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3348-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 31358 invoked by alias); 20 Dec 2002 02:11:28 -0000
+Return-Path: <cygwin-patches-return-3349-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 2120 invoked by alias); 20 Dec 2002 09:58:07 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,54 +7,139 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 31231 invoked from network); 20 Dec 2002 02:11:26 -0000
-Date: Thu, 19 Dec 2002 18:11:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
+Received: (qmail 2110 invoked from network); 20 Dec 2002 09:58:05 -0000
+X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
+Date: Fri, 20 Dec 2002 01:58:00 -0000
+From: Thomas Pfaff <tpfaff@gmx.net>
 To: cygwin-patches@cygwin.com
-Subject: Re: localtime.cc
-Message-ID: <20021220021125.GB7359@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3.0.5.32.20021219210102.0080d840@mail.attbi.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3.0.5.32.20021219210102.0080d840@mail.attbi.com>
-User-Agent: Mutt/1.5.1i
-X-SW-Source: 2002-q4/txt/msg00299.txt.bz2
+Subject: [PATCH] cancellation revised
+Message-ID: <Pine.WNT.4.44.0212201033400.273-200000@algeria.intern.net>
+X-X-Sender: pfaff@antarctica.intern.net
+MIME-Version: 1.0
+Content-Type: MULTIPART/MIXED; BOUNDARY="1447645-1651-1040378257=:273"
+X-SW-Source: 2002-q4/txt/msg00300.txt.bz2
 
-Go ahead and check this in.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
 
-Thanks.
+--1447645-1651-1040378257=:273
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-length: 627
 
-cgf
 
-On Thu, Dec 19, 2002 at 09:01:02PM -0500, Pierre A. Humblet wrote:
->While I am at it, there is also this one. It's an improvement, not
->a bug fix, cutting down on tzset trashing around as visible in strace.
->
->Pierre
->
->2002-12-19  Pierre Humblet <pierre.humblet@ieee.org>
->
->	* localtime.cc (tzsetwall): Set lcl_is_set and lcl_TZname
->	in the Cygwin specific part of the routine.
->
->Index: localtime.cc
->===================================================================
->RCS file: /cvs/src/src/winsup/cygwin/localtime.cc,v
->retrieving revision 1.7
->diff -u -p -r1.7 localtime.cc
->--- localtime.cc        23 Sep 2002 00:31:30 -0000      1.7
->+++ localtime.cc        20 Dec 2002 01:53:34 -0000
->@@ -1451,7 +1451,9 @@ tzsetwall P((void))
->            /* printf("TZ deduced as `%s'\n", buf); */
->            if (tzparse(buf, lclptr, FALSE) == 0) {
->                settzname();
->-               setenv("TZ", buf, 1);
->+               lcl_is_set = 1;
->+               strlcpy(lcl_TZname, buf, sizeof (lcl_TZname));
->+               setenv("TZ", lcl_TZname, 1);
->                return;
->            }
->        }
+While Chris is waiting on Rob (or vice versa) i got a new pthread related
+patch which will make pthread_join and sem_wait real cancellation points.
+
+TODO: Add testcancel to other cancelation points.
+
+Thomas
+
+2002-12-20  Thomas Pfaff  <tpfaff@gmx.net>
+
+	* thread.h (WAIT_CANCELED): New define.
+	(pthread::cancelable_wait): New static method.
+	* thread.cc (pthread::cancelable_wait): Implement.
+	(semaphore::Wait): Wait on semaphore and thread cancellation.
+	(pthread::join): Wait on joined thread and thread cancellation.
+	(semaphore::wait): Add testcancel to check for thread cancellation
+	even if the semaphore is available.
+
+--1447645-1651-1040378257=:273
+Content-Type: TEXT/plain; name="cancel.patch"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.WNT.4.44.0212201057370.273@algeria.intern.net>
+Content-Description: 
+Content-Disposition: attachment; filename="cancel.patch"
+Content-length: 5352
+
+ZGlmZiAtdXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi90aHJlYWQuY2Mgc3Jj
+L3dpbnN1cC9jeWd3aW4vdGhyZWFkLmNjCi0tLSBzcmMub2xkL3dpbnN1cC9j
+eWd3aW4vdGhyZWFkLmNjCTIwMDItMTItMTEgMTE6MTA6MjguMDAwMDAwMDAw
+ICswMTAwCisrKyBzcmMvd2luc3VwL2N5Z3dpbi90aHJlYWQuY2MJMjAwMi0x
+Mi0yMCAwOTozNzoxMS4wMDAwMDAwMDAgKzAxMDAKQEAgLTQ3MSw3ICs0NzEs
+NyBAQCBwd3JpdGUgKCkKIHJlYWQgKCkKIHJlYWR2ICgpCiBzZWxlY3QgKCkK
+LXNlbV93YWl0ICgpCisqc2VtX3dhaXQgKCkKIHNpZ3BhdXNlICgpCiBzaWdz
+dXNwZW5kICgpCiBzaWd0aW1lZHdhaXQgKCkKQEAgLTYzMiw2ICs2MzIsMjcg
+QEAgcHRocmVhZDo6c3RhdGljX2NhbmNlbF9zZWxmICh2b2lkKQogfQogCiAK
+K0RXT1JEIHB0aHJlYWQ6OmNhbmNlbGFibGVfd2FpdCAoSEFORExFIG9iamVj
+dCwgRFdPUkQgdGltZW91dCwgY29uc3QgYm9vbCBkb19jYW5jZWwpCit7Cisg
+IERXT1JEIHJlczsKKyAgSEFORExFIHdhaXRfb2JqZWN0c1syXTsKKyAgcHRo
+cmVhZF90IHRocmVhZCA9IHNlbGYgKCk7CisKKyAgaWYgKCFpc0dvb2RPYmpl
+Y3QgKCZ0aHJlYWQpIHx8IHRocmVhZC0+Y2FuY2Vsc3RhdGUgPT0gUFRIUkVB
+RF9DQU5DRUxfRElTQUJMRSkKKyAgICByZXR1cm4gV2FpdEZvclNpbmdsZU9i
+amVjdCAob2JqZWN0LCB0aW1lb3V0KTsKKworICAvLyBEbyBub3QgY2hhbmdl
+IHRoZSB3YWl0IG9yZGVyCisgIC8vIFRoZSBvYmplY3QgbXVzdCBoYXZlIGhp
+Z2hlciBwcmlvcml0eSB0aGFuIHRoZSBjYW5jZWwgZXZlbnQsCisgIC8vIHRo
+YXQgbWVhbnMgV2FpdEZvck11bHRpcGxlT2JqZWN0cyBzaWduYWxlcyB0aGUg
+c21hbGxlc3QgaW5kZXgKKyAgd2FpdF9vYmplY3RzWzBdID0gb2JqZWN0Owor
+ICB3YWl0X29iamVjdHNbMV0gPSB0aHJlYWQtPmNhbmNlbF9ldmVudDsKKwor
+ICByZXMgPSBXYWl0Rm9yTXVsdGlwbGVPYmplY3RzICgyLCB3YWl0X29iamVj
+dHMsIEZBTFNFLCB0aW1lb3V0KTsKKyAgaWYgKGRvX2NhbmNlbCAmJiByZXMg
+PT0gV0FJVF9DQU5DRUxFRCkKKyAgICBwdGhyZWFkOjpzdGF0aWNfY2FuY2Vs
+X3NlbGYgKCk7CisgIHJldHVybiByZXM7Cit9CisKIGludAogcHRocmVhZDo6
+c2V0Y2FuY2Vsc3RhdGUgKGludCBzdGF0ZSwgaW50ICpvbGRzdGF0ZSkKIHsK
+QEAgLTEzOTAsOCArMTQxMSwxNSBAQCBzZW1hcGhvcmU6OlRyeVdhaXQgKCkK
+IHZvaWQKIHNlbWFwaG9yZTo6V2FpdCAoKQogewotICBXYWl0Rm9yU2luZ2xl
+T2JqZWN0ICh3aW4zMl9vYmpfaWQsIElORklOSVRFKTsKLSAgY3VycmVudHZh
+bHVlLS07CisgIHN3aXRjaCAocHRocmVhZDo6Y2FuY2VsYWJsZV93YWl0ICh3
+aW4zMl9vYmpfaWQsIElORklOSVRFKSkKKyAgICB7CisgICAgY2FzZSBXQUlU
+X09CSkVDVF8wOgorICAgICAgY3VycmVudHZhbHVlLS07CisgICAgICBicmVh
+azsKKyAgICBkZWZhdWx0OgorICAgICAgZGVidWdfcHJpbnRmICgiY2FuY2Vs
+YWJsZV93YWl0IGZhaWxlZC4gJUUiKTsKKyAgICAgIHJldHVybjsKKyAgICB9
+CiB9CiAKIHZvaWQKQEAgLTE4NTAsMTQgKzE4NzgsMTUgQEAgcHRocmVhZDo6
+am9pbiAocHRocmVhZF90ICp0aHJlYWQsIHZvaWQgKgogewogICAgcHRocmVh
+ZF90IGpvaW5lciA9IHNlbGYgKCk7CiAKLSAgIGlmICghaXNHb29kT2JqZWN0
+ICgmam9pbmVyKSkKLSAgICAgcmV0dXJuIEVJTlZBTDsKKyAgIGpvaW5lci0+
+dGVzdGNhbmNlbCAoKTsKIAogICAgLy8gSW5pdGlhbGl6ZSByZXR1cm4gdmFs
+IHdpdGggTlVMTAogICAgaWYgKHJldHVybl92YWwpCiAgICAgICpyZXR1cm5f
+dmFsID0gTlVMTDsKIAotICAvKiBGSVhNRTogd2FpdCBvbiB0aGUgdGhyZWFk
+IGNhbmNlbGxhdGlvbiBldmVudCBhcyB3ZWxsIC0gd2UgYXJlIGEgY2FuY2Vs
+bGF0aW9uIHBvaW50Ki8KKyAgIGlmICghaXNHb29kT2JqZWN0ICgmam9pbmVy
+KSkKKyAgICAgcmV0dXJuIEVJTlZBTDsKKwogICBpZiAoIWlzR29vZE9iamVj
+dCAodGhyZWFkKSkKICAgICByZXR1cm4gRVNSQ0g7CiAKQEAgLTE4NzYsMTQg
+KzE5MDUsMjYgQEAgcHRocmVhZDo6am9pbiAocHRocmVhZF90ICp0aHJlYWQs
+IHZvaWQgKgogICAgICAgKCp0aHJlYWQpLT5qb2luZXIgPSBqb2luZXI7CiAg
+ICAgICAoKnRocmVhZCktPmF0dHIuam9pbmFibGUgPSBQVEhSRUFEX0NSRUFU
+RV9ERVRBQ0hFRDsKICAgICAgICgqdGhyZWFkKS0+bXV0ZXguVW5Mb2NrICgp
+OwotICAgICAgV2FpdEZvclNpbmdsZU9iamVjdCAoKCp0aHJlYWQpLT53aW4z
+Ml9vYmpfaWQsIElORklOSVRFKTsKLSAgICAgIGlmIChyZXR1cm5fdmFsKQot
+CSAqcmV0dXJuX3ZhbCA9ICgqdGhyZWFkKS0+cmV0dXJuX3B0cjsKLSAgICAg
+IC8vIGNsZWFudXAKLSAgICAgIGRlbGV0ZSAoKnRocmVhZCk7Ci0gICAgfQkv
+KiBFbmQgaWYgKi8KIAotICBwdGhyZWFkX3Rlc3RjYW5jZWwgKCk7CisgICAg
+ICBzd2l0Y2ggKGNhbmNlbGFibGVfd2FpdCAoKCp0aHJlYWQpLT53aW4zMl9v
+YmpfaWQsIElORklOSVRFLCBmYWxzZSkpCisgICAgICAgIHsKKyAgICAgICAg
+Y2FzZSBXQUlUX09CSkVDVF8wOgorICAgICAgICAgIGlmIChyZXR1cm5fdmFs
+KQorICAgICAgICAgICAgKnJldHVybl92YWwgPSAoKnRocmVhZCktPnJldHVy
+bl9wdHI7CisgICAgICAgICAgZGVsZXRlICgqdGhyZWFkKTsKKyAgICAgICAg
+ICBicmVhazsKKyAgICAgICAgY2FzZSBXQUlUX0NBTkNFTEVEOgorICAgICAg
+ICAgIC8vIHNldCBqb2luZWQgdGhyZWFkIGJhY2sgdG8gam9pbmFibGUgc2lu
+Y2Ugd2UgZ290IGNhbmNlbGVkCisgICAgICAgICAgKCp0aHJlYWQpLT5qb2lu
+ZXIgPSBOVUxMOworICAgICAgICAgICgqdGhyZWFkKS0+YXR0ci5qb2luYWJs
+ZSA9IFBUSFJFQURfQ1JFQVRFX0pPSU5BQkxFOworICAgICAgICAgIGpvaW5l
+ci0+Y2FuY2VsX3NlbGYgKCk7CisgICAgICAgICAgLy8gbmV2ZXIgcmVhY2hl
+ZAorICAgICAgICAgIGJyZWFrOworICAgICAgICBkZWZhdWx0OgorICAgICAg
+ICAgIC8vIHNob3VsZCBuZXZlciBoYXBwZW4KKyAgICAgICAgICByZXR1cm4g
+RUlOVkFMOworICAgICAgICB9CisgICAgfQogCiAgIHJldHVybiAwOwogfQpA
+QCAtMjYyOSw2ICsyNjcwLDggQEAgc2VtYXBob3JlOjpkZXN0cm95IChzZW1f
+dCAqc2VtKQogaW50CiBzZW1hcGhvcmU6OndhaXQgKHNlbV90ICpzZW0pCiB7
+CisgIHB0aHJlYWQ6OnNlbGYgKCktPnRlc3RjYW5jZWwgKCk7CisKICAgaWYg
+KCFpc0dvb2RPYmplY3QgKHNlbSkpCiAgICAgewogICAgICAgc2V0X2Vycm5v
+IChFSU5WQUwpOwpkaWZmIC11cnAgc3JjLm9sZC93aW5zdXAvY3lnd2luL3Ro
+cmVhZC5oIHNyYy93aW5zdXAvY3lnd2luL3RocmVhZC5oCi0tLSBzcmMub2xk
+L3dpbnN1cC9jeWd3aW4vdGhyZWFkLmgJMjAwMi0xMi0xMCAxNDozODoyMy4w
+MDAwMDAwMDAgKzAxMDAKKysrIHNyYy93aW5zdXAvY3lnd2luL3RocmVhZC5o
+CTIwMDItMTItMjAgMDk6Mzc6MTMuMDAwMDAwMDAwICswMTAwCkBAIC0zMzIs
+NiArMzMyLDggQEAgcHJpdmF0ZToKICAgc3RhdGljIG5hdGl2ZU11dGV4IG11
+dGV4SW5pdGlhbGl6YXRpb25Mb2NrOwogfTsKIAorI2RlZmluZSBXQUlUX0NB
+TkNFTEVEICAgKFdBSVRfT0JKRUNUXzAgKyAxKQorCiBjbGFzcyBwdGhyZWFk
+OnB1YmxpYyB2ZXJpZnlhYmxlX29iamVjdAogewogcHVibGljOgpAQCAtMzc5
+LDYgKzM4MSw4IEBAIHB1YmxpYzoKICAgdmlydHVhbCB2b2lkIHRlc3RjYW5j
+ZWwgKCk7CiAgIHN0YXRpYyB2b2lkIHN0YXRpY19jYW5jZWxfc2VsZiAoKTsK
+IAorICBzdGF0aWMgRFdPUkQgY2FuY2VsYWJsZV93YWl0IChIQU5ETEUgb2Jq
+ZWN0LCBEV09SRCB0aW1lb3V0LCBjb25zdCBib29sIGRvX2NhbmNlbCA9IHRy
+dWUpOworCiAgIHZpcnR1YWwgaW50IHNldGNhbmNlbHN0YXRlIChpbnQgc3Rh
+dGUsIGludCAqb2xkc3RhdGUpOwogICB2aXJ0dWFsIGludCBzZXRjYW5jZWx0
+eXBlIChpbnQgdHlwZSwgaW50ICpvbGR0eXBlKTsKIAo=
+
+--1447645-1651-1040378257=:273--
