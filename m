@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3011-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 9164 invoked by alias); 20 Sep 2002 13:14:41 -0000
+Return-Path: <cygwin-patches-return-3012-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 21170 invoked by alias); 20 Sep 2002 15:45:02 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,66 +7,39 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 9150 invoked from network); 20 Sep 2002 13:14:39 -0000
+Received: (qmail 21133 invoked from network); 20 Sep 2002 15:45:01 -0000
+Date: Fri, 20 Sep 2002 08:45:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
+To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] pthread_fork Part 3
-From: Robert Collins <rbcollins@cygwin.com>
-To: Thomas Pfaff <tpfaff@gmx.net>
-Cc: cygwin-patches@cygwin.com
-In-Reply-To: <Pine.WNT.4.44.0209201453550.344-100000@algeria.intern.net>
-References: <Pine.WNT.4.44.0209201453550.344-100000@algeria.intern.net>
-Content-Type: multipart/signed; micalg=pgp-sha1; protocol="application/pgp-signature";
-	boundary="=-pSxLuKa46CRGWsU5P4NM"
-Date: Fri, 20 Sep 2002 06:14:00 -0000
-Message-Id: <1032527712.9116.75.camel@lifelesswks>
+Message-ID: <20020920154517.GE24740@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <Pine.WNT.4.44.0208162232370.-283127@thomas.kefrig-pfaff.de> <1032526255.9135.61.camel@lifelesswks>
 Mime-Version: 1.0
-X-SW-Source: 2002-q3/txt/msg00459.txt.bz2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1032526255.9135.61.camel@lifelesswks>
+User-Agent: Mutt/1.4i
+X-SW-Source: 2002-q3/txt/msg00460.txt.bz2
 
+On Fri, Sep 20, 2002 at 10:50:55PM +1000, Robert Collins wrote:
+>On Sat, 2002-08-17 at 06:55, Thomas Pfaff wrote:
+>> 
+>> Pthread key destructor handling revised. IMHO it does not make sense to
+>> handle two lists with keys, one with all keys, one with its destructors.
+>> The destructors are now part of the key class.
+>
+>I agree with the duplication of code. This is one area I'd really really
+>really like to use templates. 
+>
+>Chris, Corinna, if we ever get the chance to use templates please tell
+>me so! It makes code clarity and size so much better.
 
---=-pSxLuKa46CRGWsU5P4NM
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-Content-length: 651
+I actually used to use templates in environ.cc.  I think DJ yanked them
+out because some version of g++ couldn't handle them.
 
-On Fri, 2002-09-20 at 23:06, Thomas Pfaff wrote:
+AFAIK, use of templates won't cause any code bloat so I don't see any
+reason to avoid them.
 
-> If you want to work around this you must use a mutex to protect the entire
-> list.
-
-Or: don't delete foo; the keys, instead foo->deleteme();
-
-pthread_key::pthread_key(){
-  inuse_count =3D 1;
-}
-
-pthread_key::deleteme() {
-  interlockedincrement(inuse_count)
-  if interlockeddecrement (inuse_count) =3D=3D 0
-    delete this;
-}
-
-
-pthread_key::rundestructor() {
-if (interlockeddecrement(inuse_count) =3D=3D 0)
-  delete this
-}
-
-This prevents the race you describe with no locks.
-
-Still, this race is actually one ieee says we don't care about IIRC,
-it's up to the user to synchronise calls like this.
-Rob
-
---=-pSxLuKa46CRGWsU5P4NM
-Content-Type: application/pgp-signature; name=signature.asc
-Content-Description: This is a digitally signed message part
-Content-length: 189
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.0.7 (GNU/Linux)
-
-iD8DBQA9ix9fI5+kQ8LJcoIRAofZAJ9s99JyNc+RI4qPV9T8aCT0nCzGzQCgtilr
-MGAjk1/ORVGxnFLYgyIA5NY=
-=HCMk
------END PGP SIGNATURE-----
-
---=-pSxLuKa46CRGWsU5P4NM--
+cgf
