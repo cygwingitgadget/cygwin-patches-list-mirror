@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4059-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 21498 invoked by alias); 9 Aug 2003 21:50:34 -0000
+Return-Path: <cygwin-patches-return-4060-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 27872 invoked by alias); 9 Aug 2003 21:55:32 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,54 +7,43 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 21451 invoked from network); 9 Aug 2003 21:50:33 -0000
+Received: (qmail 27863 invoked from network); 9 Aug 2003 21:55:31 -0000
 Subject: Re: [PATCH] Checking integrity of installed packages in cygcheck
 From: Robert Collins <rbcollins@cygwin.com>
 To: cygwin-patches@cygwin.com
-In-Reply-To: <20030809161211.GB9514@redhat.com>
+In-Reply-To: <20030809162939.GA9863@redhat.com>
 References: <Pine.GSO.4.44.0308071843550.5132-200000@slinky.cs.nyu.edu>
-	 <20030809161211.GB9514@redhat.com>
-Content-Type: multipart/signed; micalg=pgp-sha1; protocol="application/pgp-signature"; boundary="=-r0CDEEdBNNvLzEN8YBcn"
-Message-Id: <1060465841.1475.34.camel@localhost>
+	 <20030809161211.GB9514@redhat.com>  <20030809162939.GA9863@redhat.com>
+Content-Type: multipart/signed; micalg=pgp-sha1; protocol="application/pgp-signature"; boundary="=-pQ8bQJI6c+qoZSicOnTu"
+Message-Id: <1060466141.10220.39.camel@localhost>
 Mime-Version: 1.0
-Date: Sat, 09 Aug 2003 21:50:00 -0000
-X-SW-Source: 2003-q3/txt/msg00075.txt.bz2
+Date: Sat, 09 Aug 2003 21:55:00 -0000
+X-SW-Source: 2003-q3/txt/msg00076.txt.bz2
 
 
---=-r0CDEEdBNNvLzEN8YBcn
+--=-pQ8bQJI6c+qoZSicOnTu
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
-Content-length: 734
+Content-length: 527
 
-On Sun, 2003-08-10 at 02:12, Christopher Faylor wrote:
-> On Thu, Aug 07, 2003 at 06:50:10PM -0400, Igor Pechtchanski wrote:
-> >Hi,
-> >
+On Sun, 2003-08-10 at 02:29, Christopher Faylor wrote:
 
-> Also some kind of functionality which would allow cygcheck to query
-> the same files as the web search would be really cool.  Something like
-> a:
->=20
-> cygcheck --whatprovides /usr/bin/ls.exe
->=20
-> would be really useful.
+> I wonder why setup is using gzip rather than bzip2 for the package files.=
+..
 
+It's historical. I'm not *planning* on altering that before the
+hypothetical dpkg/rpm backend integration.
 
-Hmm, I think we're getting into stuff that setup should do itself. We
--do- have command line functionality...
-
-
-> Another interesting thing would be to do some ntsec/mkpasswd/mkgroup
-> type sanity checks or even to fix up common ntsec problems.
-
-That sounds good for cygcheck.
+I'd suggest though, that further cygcheck setup smarts should come by
+librarising setup's code, rather than reproducing it - the setup dir
+format is likely to change if we find we need to.
 
 Cheers,
 Rob
 --=20
 GPG key available at: <http://members.aardvark.net.au/lifeless/keys.txt>.
 
---=-r0CDEEdBNNvLzEN8YBcn
+--=-pQ8bQJI6c+qoZSicOnTu
 Content-Type: application/pgp-signature; name=signature.asc
 Content-Description: This is a digitally signed message part
 Content-length: 189
@@ -62,9 +51,9 @@ Content-length: 189
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.2.2 (GNU/Linux)
 
-iD8DBQA/NWyxI5+kQ8LJcoIRAlpUAJ99IG0En4VlXMGd2Ogz8XTSqmuamACgrP+U
-cG5T4Mz8dZ46bq+eyVmEKig=
-=UqSv
+iD8DBQA/NW3dI5+kQ8LJcoIRAnQMAKCn3gLLCiIbXWKpXMSP92yF6aV64QCfe2gK
+36/UxoOME8E587htIq8utzA=
+=qfSY
 -----END PGP SIGNATURE-----
 
---=-r0CDEEdBNNvLzEN8YBcn--
+--=-pQ8bQJI6c+qoZSicOnTu--
