@@ -1,19 +1,25 @@
-From: Pavel Tsekov <ptsekov@syntrex.com>
-To: Corinna Vinschen <cygwin@cygwin.com>
-Cc: cygwin-patches@cygwin.com
-Subject: Re: [PATHC] Re: 1.3.5: write(2) system call fails with 0 length
-Date: Thu, 15 Nov 2001 04:01:00 -0000
-Message-ID: <3BF3AE8E.A35D3E13@syntrex.com>
-References: <5.1.0.14.2.20011113215143.03327810@pop.mssinternet.com> <20011114.135353.111406103.gotoh@taiyo.co.jp> <3BF24170.71D1CADF@syntrex.com> <3BF3ACC6.C994956A@syntrex.com> <20011115125837.V27452@cygbert.vinschen.de>
-X-SW-Source: 2001-q4/msg00226.html
-Message-ID: <20011115040100.fRmS5Uq7CALAUEkhgGym9Q4fjpv5lKmHKoL3rMaizSM@z>
+From: "Robert Collins" <robert.collins@itdomain.com.au>
+To: "egor duda" <cygwin-patches@cygwin.com>
+Cc: <cygwin-patches@cygwin.com>
+Subject: Re: PTHREAD_COND_INITIALIZER support
+Date: Thu, 15 Nov 2001 04:20:00 -0000
+Message-ID: <030601c16dd0$1a48ac40$0200a8c0@lifelesswks>
+References: <EA18B9FA0FE4194AA2B4CDB91F73C0EF08F28E@itdomain002.itdomain.net.au> <92602986318.20011109105819@logos-m.ru> <17285934467.20011115142602@logos-m.ru>
+X-SW-Source: 2001-q4/msg00227.html
+Message-ID: <20011115042000.v6lS1Rn2XEM12CYAIc3-qPBvX7iZEX9Xi1AMSnMPp4o@z>
 
-Corinna Vinschen wrote:
-> 
-> On Thu, Nov 15, 2001 at 12:53:42PM +0100, Pavel Tsekov wrote:
-> > There was no feedback on this so I post again :) Is this
-> > cygwin behaviour the expected behaviour ?
-> 
-> Should be fixed in the developers sources.
+----- Original Message -----
+From: "egor duda" <deo@logos-m.ru>
+..
+> ed> yes. i'm going to add a bunch of pthread tests after this checkin.
+>
+> done too.
+>
+> Robert, can you please take a look at winsup.api/pthread/condvar3_1.c
+> test? it looks like when condition variable is signalled, two threads
+> wake on it instead of one. it's quite stable effect, so i don't think
+> we have a race here.
 
-Doh - I haven't checked the CVS yet :) Ok, sorry :)
+Ok, it's probably the wakeup code. Do you have a sinlge or dual machine?
+
+Rob
