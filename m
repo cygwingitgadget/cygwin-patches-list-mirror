@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2288-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 27387 invoked by alias); 2 Jun 2002 17:48:53 -0000
+Return-Path: <cygwin-patches-return-2289-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 10875 invoked by alias); 2 Jun 2002 23:46:12 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,42 +7,48 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 27373 invoked from network); 2 Jun 2002 17:48:52 -0000
-Date: Sun, 02 Jun 2002 10:48:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
+Received: (qmail 10859 invoked from network); 2 Jun 2002 23:46:12 -0000
+Message-Id: <3.0.5.32.20020602194017.007e5ca0@mail.attbi.com>
+X-Sender: phumblet@mail.attbi.com
+Date: Sun, 02 Jun 2002 16:46:00 -0000
 To: cygwin-patches@cygwin.com
-Subject: Re: strace -f fix
-Message-ID: <20020602174851.GA16779@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <06eb01c209b9$11c491d0$6132bc3e@BABEL> <20020601223846.GB8326@redhat.com> <07ee01c209be$f395c430$6132bc3e@BABEL> <20020601225943.GA2561@redhat.com> <07f601c209c3$4b212010$6132bc3e@BABEL> <20020602020326.GA7937@redhat.com>
+From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
+Subject: getgrgid() and setegid()
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20020602020326.GA7937@redhat.com>
-User-Agent: Mutt/1.3.23.1i
-X-SW-Source: 2002-q2/txt/msg00271.txt.bz2
+Content-Type: text/plain; charset="us-ascii"
+X-SW-Source: 2002-q2/txt/msg00272.txt.bz2
 
-On Sat, Jun 01, 2002 at 10:03:26PM -0400, Christopher Faylor wrote:
->On Sun, Jun 02, 2002 at 12:23:09AM +0100, Conrad Scott wrote:
->>I'm well confused and it's obviously more complex than I realised.
->>Maybe we'll be lucky and there'll be one set of flags that does work on
->>all platforms?
->>
->>Fingers crossed.
->
->Well, we don't have to worry about CE.  That's not an issue.
->
->I did reboot in W2K and noticed the behavior that you reported.  I
->suppose this means that gdb isn't going to work right on some platform.
->I'll try making your change to strace and trying it on the platforms
->that are available to me.  If I do enough rebooting, that's basically
->every platform that cygwin is supposed to be report, give or take some
->service packs.
+Corinna.
 
-I checked in a similar fix but I didn't check this everywhere.  Perhaps
-other people might want to do that.
+This is not related to your group 32 changes, they are fine.
 
-I did make '-f' the default.  I normally want to see everything.
+getgrgid32 (gid) returns the default grp if the gid does not
+exist and allow_ntsec is FALSE. As a result, calling setegid()
+with a non-existent gid can put a user in the admins group
+when allow_ntsec is FALSE.
 
-cgf
+If you think it's undesirable, apply the following patch.
+
+Pierre
+
+P.S.: There was an earlier patch on 2002-01-21 to take care of the 
+same problem when ntsec is on. With the recent changes, it also 
+occurs when ntsec is off...
+
+2002-05-30  Pierre Humblet <pierre.humblet@ieee.org>
+
+	syscalls.cc (setegid32): Verify the correctness of the gid 
+	of the group returned by getgrgid32.
+
+--- syscalls.cc.orig    2002-05-30 18:15:24.000000000 -0400
++++ syscalls.cc 2002-05-30 18:50:32.000000000 -0400
+@@ -2169,7 +2169,8 @@
+   cygsid gsid;
+   HANDLE ptok;
+ 
+-  if (!(gsid.getfromgr (getgrgid32 (gid))))
++  struct __group32 * gr = getgrgid32 (gid);
++  if (!gr || gr->gr_gid != gid || !gsid.getfromgr (gr))
+     {
+       set_errno (EINVAL);
+       return -1;
