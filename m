@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2185-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 2504 invoked by alias); 13 May 2002 20:56:12 -0000
+Return-Path: <cygwin-patches-return-2186-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 5592 invoked by alias); 13 May 2002 23:34:13 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,29 +7,119 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 2398 invoked from network); 13 May 2002 20:56:09 -0000
-Date: Mon, 13 May 2002 13:56:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
+Received: (qmail 5540 invoked from network); 13 May 2002 23:34:10 -0000
+Date: Mon, 13 May 2002 16:34:00 -0000
+From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+X-X-Sender: joshua@iocc.com
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] strlcat & strlcpy
-Message-ID: <20020513205601.GA12577@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <911C684A29ACD311921800508B7293BA037D2FC6@cnmail>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <911C684A29ACD311921800508B7293BA037D2FC6@cnmail>
-User-Agent: Mutt/1.3.23.1i
-X-SW-Source: 2002-q2/txt/msg00169.txt.bz2
+Subject: kill.cc version patch
+Message-ID: <Pine.CYG.4.44.0205131832330.224-200000@iocc.com>
+MIME-Version: 1.0
+Content-Type: MULTIPART/MIXED; BOUNDARY="-559023410-1352313049-1021332798=:224"
+X-SW-Source: 2002-q2/txt/msg00170.txt.bz2
 
-On Fri, May 10, 2002 at 06:28:58PM -0400, Mark Bradshaw wrote:
->For cygwin:
->2002-05-10  Mark Bradshaw  <bradshaw@staff.crosswalk.com>
->
->	  * cygwin.din: Add strlcat and strlcpy.
->	  * include/cygwin/version.h: Increment API minor version number.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
 
-Applied.  Thanks.
+---559023410-1352313049-1021332798=:224
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-length: 460
 
-cgf
+Here is a version option patch against Chris' new kill.cc with
+signal listing. It also adds a prog_name variable as a small way
+of helping prevent /bin/kill vs bash's kill confusion.
+
+ChangeLog:
+
+2002-05-13  Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+	* kill.cc (prog_name) New global variable.
+	(usage) Standardize usage output. Add descriptions.
+	(print_version) New function.
+	(longopts) Accomodate new version option.
+	(opts) Ditto.
+	(main) Ditto.
+
+---559023410-1352313049-1021332798=:224
+Content-Type: TEXT/PLAIN; charset=US-ASCII; name="kill.cc-patch"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.CYG.4.44.0205131833180.224@iocc.com>
+Content-Description: 
+Content-Disposition: attachment; filename="kill.cc-patch"
+Content-length: 4445
+
+LS0tIGtpbGwuY2Mtb3JpZwlNb24gTWF5IDEzIDE3OjQ3OjE3IDIwMDINCisr
+KyBraWxsLmNjCU1vbiBNYXkgMTMgMTg6MjM6MDMgMjAwMg0KQEAgLTEsNiAr
+MSw2IEBADQogLyoga2lsbC5jYw0KIA0KLSAgIENvcHlyaWdodCAxOTk2LCAx
+OTk3LCAxOTk4LCAxOTk5LCAyMDAwLCAyMDAxIFJlZCBIYXQsIEluYy4NCisg
+ICBDb3B5cmlnaHQgMTk5NiwgMTk5NywgMTk5OCwgMTk5OSwgMjAwMCwgMjAw
+MSwgMjAwMiBSZWQgSGF0LCBJbmMuDQogDQogVGhpcyBmaWxlIGlzIHBhcnQg
+b2YgQ3lnd2luLg0KIA0KQEAgLTE4LDI3ICsxOCw2MCBAQCBkZXRhaWxzLiAq
+Lw0KICNpbmNsdWRlIDxzeXMvY3lnd2luLmg+DQogI2luY2x1ZGUgPGdldG9w
+dC5oPg0KIA0KK3N0YXRpYyBjb25zdCBjaGFyIHZlcnNpb25bXSA9ICIkUmV2
+aXNpb246IDEuMTQgJCI7DQorc3RhdGljIGNoYXIgKnByb2dfbmFtZTsNCisN
+CiBzdGF0aWMgc3RydWN0IG9wdGlvbiBsb25nb3B0c1tdID0NCiB7DQogICB7
+ImhlbHAiLCBub19hcmd1bWVudCwgTlVMTCwgJ2gnIH0sDQogICB7Imxpc3Qi
+LCBvcHRpb25hbF9hcmd1bWVudCwgTlVMTCwgJ2wnfSwNCiAgIHsiZm9yY2Ui
+LCBub19hcmd1bWVudCwgTlVMTCwgJ2YnfSwNCiAgIHsic2lnbmFsIiwgcmVx
+dWlyZWRfYXJndW1lbnQsIE5VTEwsICdzJ30sDQorICB7InZlcnNpb24iLCBu
+b19hcmd1bWVudCwgTlVMTCwgJ3YnfSwNCiAgIHtOVUxMLCAwLCBOVUxMLCAw
+fQ0KIH07DQogDQotc3RhdGljIGNoYXIgb3B0c1tdID0gImhsOjpmczoiOw0K
+K3N0YXRpYyBjaGFyIG9wdHNbXSA9ICJobDo6ZnM6diI7DQogDQogZXh0ZXJu
+ICJDIiBjb25zdCBjaGFyICpzdHJzaWdubyAoaW50KTsNCiANCiBzdGF0aWMg
+dm9pZA0KIHVzYWdlIChGSUxFICp3aGVyZSA9IHN0ZGVycikNCiB7DQotICBm
+cHV0cyAoInVzYWdlOiBraWxsIFstc2lnbmFsXSBbLXMgc2lnbmFsXSBwaWQx
+IFtwaWQyIC4uLl1cbiINCi0JICIgICAgICAga2lsbCAtbCBbc2lnbmFsXVxu
+Iiwgd2hlcmUpOw0KKyAgZnByaW50ZiAod2hlcmUgLCAiIg0KKwkiVXNhZ2U6
+ICVzIFstZl0gWy1zaWduYWxdIFstcyBzaWduYWxdIHBpZDEgW3BpZDIgLi4u
+XVxuIg0KKwkiICAgICAgICVzIC1sIFtzaWduYWxdXG4iDQorCSIgLWYsIC0t
+Zm9yY2UgICAgIGZvcmNlLCB1c2luZyB3aW4zMiBpbnRlcmZhY2UgaWYgbmVj
+ZXNzYXJ5XG4iDQorCSIgLWwsIC0tbGlzdCAgICAgIHByaW50IGEgbGlzdCBv
+ZiBzaWduYWwgbmFtZXNcbiINCisJIiAtcywgLS1zaWduYWwgICAgc2VuZCBz
+aWduYWwgKHVzZSAlcyAtLWxpc3QgZm9yIGEgbGlzdClcbiINCisJIiAtaCwg
+LS1oZWxwICAgICAgb3V0cHV0IHVzYWdlIGluZm9ybWF0aW9uIGFuZCBleGl0
+XG4iDQorCSIgLXYsIC0tdmVyc2lvbiAgIG91dHB1dCB2ZXJzaW9uIGluZm9y
+bWF0aW9uIGFuZCBleGl0XG4iDQorCSIiLCBwcm9nX25hbWUsIHByb2dfbmFt
+ZSwgcHJvZ19uYW1lKTsNCiAgIGV4aXQgKHdoZXJlID09IHN0ZGVyciA/IDEg
+OiAwKTsNCiB9DQogDQorc3RhdGljIHZvaWQNCitwcmludF92ZXJzaW9uICgp
+DQorew0KKyAgY29uc3QgY2hhciAqdiA9IHN0cmNociAodmVyc2lvbiwgJzon
+KTsNCisgIGludCBsZW47DQorICBpZiAoIXYpDQorICAgIHsNCisgICAgICB2
+ID0gIj8iOw0KKyAgICAgIGxlbiA9IDE7DQorICAgIH0NCisgIGVsc2UNCisg
+ICAgew0KKyAgICAgIHYgKz0gMjsNCisgICAgICBsZW4gPSBzdHJjaHIgKHYs
+ICcgJykgLSB2Ow0KKyAgICB9DQorICBwcmludGYgKCJcDQorJXMgKGN5Z3dp
+bikgJS4qc1xuXA0KK1Byb2Nlc3MgU2lnbmFsbGVyXG5cDQorQ29weXJpZ2h0
+IDE5OTYsIDE5OTcsIDE5OTgsIDE5OTksIDIwMDAsIDIwMDEsIDIwMDIgUmVk
+IEhhdCwgSW5jLlxuXA0KK0NvbXBpbGVkIG9uICVzIiwgcHJvZ19uYW1lLCBs
+ZW4sIHYsIF9fREFURV9fKTsNCit9DQorDQogc3RhdGljIGludA0KIGdldHNp
+ZyAoY29uc3QgY2hhciAqaW5fc2lnKQ0KIHsNCkBAIC02NSw3ICs5OCw3IEBA
+IHRlc3RfZm9yX3Vua25vd25fc2lnIChpbnQgc2lnLCBjb25zdCBjaGENCiB7
+DQogICBpZiAoc2lnIDwgMCB8fCBzaWcgPiBOU0lHKQ0KICAgICB7DQotICAg
+ICAgZnByaW50ZiAoc3RkZXJyLCAia2lsbDogdW5rbm93biBzaWduYWw6ICVz
+XG4iLCBzaWdzdHIpOw0KKyAgICAgIGZwcmludGYgKHN0ZGVyciwgIiVzOiB1
+bmtub3duIHNpZ25hbDogJXNcbiIsIHByb2dfbmFtZSwgc2lnc3RyKTsNCiAg
+ICAgICB1c2FnZSAoKTsNCiAgICAgICBleGl0ICgxKTsNCiAgICAgfQ0KQEAg
+LTExMSw2ICsxNDQsMTQgQEAgbWFpbiAoaW50IGFyZ2MsIGNoYXIgKiphcmd2
+KQ0KICAgY2hhciAqZ290c2lnID0gTlVMTDsNCiAgIGludCByZXQgPSAwOw0K
+IA0KKyAgcHJvZ19uYW1lID0gc3RycmNociAoYXJndlswXSwgJy8nKTsNCisg
+IGlmIChwcm9nX25hbWUgPT0gTlVMTCkNCisgICAgcHJvZ19uYW1lID0gc3Ry
+cmNociAoYXJndlswXSwgJ1xcJyk7DQorICBpZiAocHJvZ19uYW1lID09IE5V
+TEwpDQorICAgIHByb2dfbmFtZSA9IGFyZ3ZbMF07DQorICBlbHNlDQorICAg
+IHByb2dfbmFtZSsrOw0KKw0KICAgaWYgKGFyZ2MgPT0gMSkNCiAgICAgdXNh
+Z2UgKCk7DQogDQpAQCAtMTQ3LDYgKzE4OCw5IEBAIG1haW4gKGludCBhcmdj
+LCBjaGFyICoqYXJndikNCiAJY2FzZSAnaCc6DQogCSAgdXNhZ2UgKHN0ZG91
+dCk7DQogCSAgYnJlYWs7DQorCWNhc2UgJ3YnOg0KKwkgIHByaW50X3ZlcnNp
+b24gKCk7DQorCSAgYnJlYWs7DQogCWNhc2UgJz8nOg0KIAkgIGlmIChnb3Rz
+aWcpDQogCSAgICB1c2FnZSAoKTsNCkBAIC0xNzAsNyArMjE0LDcgQEAgbWFp
+biAoaW50IGFyZ2MsIGNoYXIgKiphcmd2KQ0KICAgICAgIGludCBwaWQgPSBz
+dHJ0b2wgKCphcmd2LCAmcCwgMTApOw0KICAgICAgIGlmICgqcCAhPSAnXDAn
+KQ0KIAl7DQotCSAgZnByaW50ZiAoc3RkZXJyLCAia2lsbDogaWxsZWdhbCBw
+aWQ6ICVzXG4iLCAqYXJndik7DQorCSAgZnByaW50ZiAoc3RkZXJyLCAiJXM6
+IGlsbGVnYWwgcGlkOiAlc1xuIiwgcHJvZ19uYW1lLCAqYXJndik7DQogCSAg
+cmV0ID0gMTsNCiAJfQ0KICAgICAgIGVsc2UgaWYgKGtpbGwgKHBpZCwgc2ln
+KSA9PSAwKQ0KQEAgLTE4Myw3ICsyMjcsNyBAQCBtYWluIChpbnQgYXJnYywg
+Y2hhciAqKmFyZ3YpDQogICAgICAgZWxzZQ0KIAl7DQogCSAgY2hhciBidWZb
+MTAwMF07DQotCSAgc3ByaW50ZiAoYnVmLCAia2lsbCAlZCIsIHBpZCk7DQor
+CSAgc3ByaW50ZiAoYnVmLCAiJXMgJWQiLCBwcm9nX25hbWUsIHBpZCk7DQog
+CSAgcGVycm9yIChidWYpOw0KIAkgIHJldCA9IDE7DQogCX0NCg==
+
+---559023410-1352313049-1021332798=:224--
