@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2839-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 6247 invoked by alias); 16 Aug 2002 19:33:17 -0000
+Return-Path: <cygwin-patches-return-2840-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 10946 invoked by alias); 16 Aug 2002 19:42:22 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,32 +7,33 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 6230 invoked from network); 16 Aug 2002 19:33:16 -0000
-Message-ID: <3D5D537A.6060002@hekimian.com>
-Date: Fri, 16 Aug 2002 12:33:00 -0000
-X-Sybari-Trust: 7da5c1c6 b923d9bf 4738785c 00000109
-From: Joe Buehler <jbuehler@hekimian.com>
-User-Agent: Mozilla/5.0 (Windows; U; WinNT4.0; en-US; rv:1.0.0) Gecko/20020530
-X-Accept-Language: en-us, en
+Received: (qmail 10932 invoked from network); 16 Aug 2002 19:42:21 -0000
+X-Authentication-Warning: slinky.cs.nyu.edu: pechtcha owned process doing -bs
+Date: Fri, 16 Aug 2002 12:42:00 -0000
+From: Igor Pechtchanski <pechtcha@cs.nyu.edu>
+Reply-To: cygwin-patches@cygwin.com
+To: cygwin-patches@cygwin.com
+Subject: New program: cygtweak
+Message-ID: <Pine.GSO.4.44.0208161539040.21909-100000@slinky.cs.nyu.edu>
 MIME-Version: 1.0
-Newsgroups: gmane.os.cygwin
-To: Pavel Tsekov <ptsekov@gmx.net>
-CC:  mc-devel@gnome.org,  cygwin-patches@cygwin.com
-Subject: Re: [PATCH suggestion] exceptions.cc, interrupt_setup ()
-References: <119122398409.20020816203409@gmx.net>
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Transfer-Encoding: 7bit
-X-SW-Source: 2002-q3/txt/msg00287.txt.bz2
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-SW-Source: 2002-q3/txt/msg00288.txt.bz2
 
-Pavel Tsekov wrote:
+I've tried submitting this twice before, and had gotten no reaction.  I'm
+trying to find out what the proper procedure is and which list should this
+be sent to.  I'd also like to discuss the appropriate name for this little
+app, as well as get your comments on its usefulness.  To avoid retyping
+and clogging up the list, I'm providing a link to the latest submission
+below.
 
-> I suggest the following very simple patch. Since I may have not
-> understand all the specifics of the signal handling mechanism I offer
-> it for discussion. Just for the record - this patch solves that
-> outstanding problem with MC.
+http://www.cygwin.com/ml/cygwin-patches/2002-q3/msg00261.html
+	Igor
+-- 
+				http://cs.nyu.edu/~pechtcha/
+      |\      _,,,---,,_		pechtcha@cs.nyu.edu
+ZZZzz /,`.-'`'    -.  ;-;;,_		igor@watson.ibm.com
+     |,4-  ) )-,_. ,\ (  `'-'		Igor Pechtchanski
+    '---''(_/--'  `-'\_) fL	a.k.a JaguaR-R-R-r-r-r-.-.-.  Meow!
 
-Good work!  I applied this, and initial testing indicates that this may
-have cured the emacs subprocess problems also.
-
-Joe Buehler
-
+It took the computational power of three Commodore 64s to fly to the moon.
+It takes a 486 to run Windows 95.  Something is wrong here. -- SC sig file
