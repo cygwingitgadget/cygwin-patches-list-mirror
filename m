@@ -1,30 +1,32 @@
-From: Brian Keener <bkeener@thesoftwaresource.com>
-To: cygwin-patches <cygwin-patches@cygwin.com>
-Subject: Re: [Patch] setup.exe - change to not ask root on download only.
-Date: Wed, 14 Nov 2001 11:41:00 -0000
-Message-ID: <VA.000009dc.00a69973@thesoftwaresource.com>
-References: <VA.000009d7.011e66c9@thesoftwaresource.com> <01ee01c16c9e$0350bce0$0200a8c0@lifelesswks>
-X-SW-Source: 2001-q4/msg00223.html
-Message-ID: <20011114114100.1tobFd25sj2X-cZqgsn__jmnExkkjw4nfAvtr5_ZLVI@z>
+From: egor duda <deo@logos-m.ru>
+To: "Robert Collins" <robert.collins@itdomain.com.au>
+Cc: cygwin-patches@cygwin.com
+Subject: Re: PTHREAD_COND_INITIALIZER support
+Date: Thu, 15 Nov 2001 03:26:00 -0000
+Message-ID: <17285934467.20011115142602@logos-m.ru>
+References: <EA18B9FA0FE4194AA2B4CDB91F73C0EF08F28E@itdomain002.itdomain.net.au> <92602986318.20011109105819@logos-m.ru>
+X-SW-Source: 2001-q4/msg00224.html
+Message-ID: <20011115032600.r5RGrxkKNmkQ-INdCr6TrrJNsPMayxt_33ccBlmelZo@z>
 
-Robert Collins wrote:
-> can you generate patches with "-up" ? (See the cygwin contributors
-> page).
-> It makes it a lot easier to visually grok a patch.
+Hi!
 
-I can do that.  Actually I knew I had done it two ways in the past and couldn't 
-remember the other.  Nor was I sure which was the preferred - now I know.
+Friday, 09 November, 2001 egor duda deo@logos-m.ru wrote:
 
-> I'll update this for you to the io_streams code for HEAD committing.
+ed> well, since it's "feature added" rather than "bug fixed" kind of patch
+ed> i think it should wait after 1.3.5 release.
 
-Did it make it in the version you just rolled to the web page.
+done.
 
-> Lastly, you were missing a call to get_root_dir_now which resulted in
-> /etc/setup/last-cache never getting read.
+RC>> Have you got a test case for pthread_cond_initializer support
+RC>> currently?
 
-Hum,  I'll have to look at the change you made - I thought mine was reading 
-either file depending on where it found it. Ah well.  Thanks for correcting it 
-anyways.
+ed> yes. i'm going to add a bunch of pthread tests after this checkin.
 
+done too.
 
+Robert, can you please take a look at winsup.api/pthread/condvar3_1.c
+test? it looks like when condition variable is signalled, two threads
+wake on it instead of one. it's quite stable effect, so i don't think
+we have a race here.
 
+Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
