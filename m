@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1701-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 26188 invoked by alias); 14 Jan 2002 23:43:58 -0000
+Return-Path: <cygwin-patches-return-1702-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 28310 invoked by alias); 15 Jan 2002 12:59:07 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,37 +7,57 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 26172 invoked from network); 14 Jan 2002 23:43:57 -0000
-Date: Mon, 14 Jan 2002 15:43:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygpatch <cygwin-patches@cygwin.com>
-Subject: Re: src/winsup/w32api ChangeLog include/winnt.h
-Message-ID: <20020115004355.M2015@cygbert.vinschen.de>
-Mail-Followup-To: cygpatch <cygwin-patches@cygwin.com>
-References: <20020115001207.K2015@cygbert.vinschen.de> <20020114233300.88722.qmail@web14502.mail.yahoo.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20020114233300.88722.qmail@web14502.mail.yahoo.com>
-User-Agent: Mutt/1.3.22.1i
-X-SW-Source: 2002-q1/txt/msg00058.txt.bz2
+Received: (qmail 28293 invoked from network); 15 Jan 2002 12:59:06 -0000
+Message-ID: <C2D7D58DBFE9D111B0480060086E96350689B7D0@mail_server.gft.com>
+From: "Schaible, Jorg" <Joerg.Schaible@gft.com>
+To: Corinna Vinschen <cygwin-patches@cygwin.com>
+Subject: RE: A few fixes to winsup/utils/cygpath.cc
+Date: Tue, 15 Jan 2002 04:59:00 -0000
+MIME-Version: 1.0
+X-Mailer: Internet Mail Service (5.5.2653.19)
+Content-Type: text/plain
+X-SW-Source: 2002-q1/txt/msg00059.txt.bz2
 
-On Tue, Jan 15, 2002 at 10:33:00AM +1100, Danny Smith wrote:
->  --- Corinna Vinschen <cygwin-patches@cygwin.com> wrote: > On Tue, Jan 15,
-> > Oh, btw., I put it into winnt.h since all FILE_ATTRIBUTE_* defines
-> > are in winnt.h.  MSDN requires INVALID_FILE_ATTRIBUTES to be in
-> > winbase.h.  Do you think I should move it?
-> 
-> No, the doc cited above says that the function GetFileAttributes is in
-> winbase.h.  It doesn't say where the defines are. I think they should be
-> kept together. If you move INVALID, then should also move the valid ones as
-> well. Hmm,I wonder why they didn't call it FILE_ATTRIBUTE_INVALID ?
+Hi Corinna (possibly I should not perosnalize this mail, since it will be
+sent to the list again),
 
-Too logical?  Too easy?
+>> Hi Chris,
+>
+>Sorry but you're sending that stuff to cygwin-patches,
+>not to a single person.  Please don't personalize your patches.
 
-Corinna
+I thought, it is normal within a thread. I anwered to a posting of Chris.
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+>It could happen that nobody takes a look.
+
+Therefore I sent the last message to cygwin-apps as I recognized, that
+another change for cygpath is in the pipeline.
+
+>Your attached patch look like a reverse patch.  And it's using
+>the wrong format.  Please send patches using diff -u format.
+
+Uuups. Right. Sorry. Here it comes again.
+
+============================
+--- cygpath.cc  Mon Jan 14 08:28:04 2002
++++ cygpath.cc-orig     Mon Jan 14 08:16:22 2002
+@@ -161,13 +161,8 @@
+       len = strlen (filename) + 100;
+       if (len == 100)
+         {
+-          if (!ignore_flag)
+-          {
+-            fprintf(stderr, "%s: can't convert empty path\n", prog_name);
+-            exit (1);
+-          }
+-          else
+-            exit (0);
++          fprintf(stderr, "%s: can't convert empty path\n", prog_name);
++          exit (1);
+         }
+     }
+   else
+============================
+
+Regards,
+Jorg
