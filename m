@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5207-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 22579 invoked by alias); 16 Dec 2004 02:31:49 -0000
+Return-Path: <cygwin-patches-return-5208-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 12248 invoked by alias); 16 Dec 2004 13:21:01 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,42 +7,49 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 22533 invoked from network); 16 Dec 2004 02:31:41 -0000
-Received: from unknown (HELO cgf.cx) (66.30.17.189)
-  by sourceware.org with SMTP; 16 Dec 2004 02:31:41 -0000
-Received: by cgf.cx (Postfix, from userid 201)
-	id 8C0D51B401; Wed, 15 Dec 2004 21:32:47 -0500 (EST)
-Date: Thu, 16 Dec 2004 02:31:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
-To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: Re: Patch to allow trailing dots on managed mounts
-Message-ID: <20041216023247.GA17763@trixie.casa.cgf.cx>
+Received: (qmail 12179 invoked from network); 16 Dec 2004 13:20:54 -0000
+Received: from unknown (HELO cygbert.vinschen.de) (80.132.119.93)
+  by sourceware.org with SMTP; 16 Dec 2004 13:20:54 -0000
+Received: by cygbert.vinschen.de (Postfix, from userid 500)
+	id 64E5E5808D; Thu, 16 Dec 2004 14:23:02 +0100 (CET)
+Date: Thu, 16 Dec 2004 13:21:00 -0000
+From: Corinna Vinschen <vinschen@redhat.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: [Patch] bug # 514 (cygwin console handling) - update
+Message-ID: <20041216132302.GA13898@cygbert.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-References: <0I8S00MOZDF18J@pmismtp01.mcilink.com>
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <E1CeJAV-0007GT-00@mrelayng.kundenserver.de>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0I8S00MOZDF18J@pmismtp01.mcilink.com>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2004-q4/txt/msg00208.txt.bz2
+In-Reply-To: <E1CeJAV-0007GT-00@mrelayng.kundenserver.de>
+User-Agent: Mutt/1.4.2i
+X-SW-Source: 2004-q4/txt/msg00209.txt.bz2
 
-On Wed, Dec 15, 2004 at 04:04:13PM -0700, Mark Paulus wrote:
->This patch is as trivial as I could get to allow trailing
->dots to be used on a managed file system.
->
->Unfortunately, my company will not sign the waiver,
->so I cannot sign up for any significant changes to
->the cygwin sources.  So, hopefully, this patch is
->small enough to squeek under the limit, or it can be a
->starting point for discussions on how to fix the original
->problem.
->
->    * path.cc (path_conv::check):  retain trailing dots and 
->      spaces for managed mounts.
+On Dec 14 06:02, Thomas Wolff wrote:
+> This is an update of my "trivial patch" that fixes
+>  http://sourceware.org/bugzilla/show_bug.cgi?id=514
+> 
+> > I guess the patch is pretty much ok and I'm inclined to let it pass
+> > under the trivial patch rule... iff you change it so that the #ifdef
+> > goes away.  Which alternative seems more appropriate resp. which one
+> > results in the more readable output?  It's the one we should choose
+> > (since any choice will result in complains anyway).
+> OK, I kept the alternative that was selected by #ifdef before. 
+> It's the more consistent one anyway.
+> 
+> > And please shorten the ChangeLog entry to about one sentence.
+> OK.
 
-Er, this patch apparently just leaves the trailing dots in the
-"converted" path, bypassing the loop which attempts to remove them.
-That's not the way to do this.  Sorry.
+Well done, just the layout of the ChangeLog needed some reworking
+(the whole entry should be tabbified).
 
-cgf
+
+Thanks for the patch,
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          mailto:cygwin@cygwin.com
+Red Hat, Inc.
