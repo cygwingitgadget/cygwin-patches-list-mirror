@@ -1,26 +1,29 @@
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygpatch <cygwin-patches@cygwin.com>
+From: Brian Keener <bkeener@thesoftwaresource.com>
+To: Corinna Vinschen <cygwin-patches@cygwin.com>
 Subject: Re: [patch] Setup.exe choose.cc selection enhancement based on file existence
-Date: Tue, 06 Mar 2001 08:10:00 -0000
-Message-id: <20010306171013.I7734@cygbert.vinschen.de>
-References: <VA.0000066f.003b71be@thesoftwaresource.com> <VA.00000689.004d571c@thesoftwaresource.com>
-X-SW-Source: 2001-q1/msg00149.html
+Date: Tue, 06 Mar 2001 11:33:00 -0000
+Message-id: <VA.0000068c.00d1000e@thesoftwaresource.com>
+References: <20010306171013.I7734@cygbert.vinschen.de>
+X-SW-Source: 2001-q1/msg00150.html
 
-On Tue, Mar 06, 2001 at 12:34:52AM -0500, Brian Keener wrote:
-> Trying again - still have the file as an attachment but this time using diff -up
-> 
-> 2001-02-05  Brian Keener <bkeener@thesoftwaresource.com>
-> [...]
->    Also leaves Source Action set to N/A if the source file does not exist 
->    and installing from local directory.
+Corinna Vinschen wrote:
+> Even if I install from internet, when
+> choosing the "Full" view, I'm getting "n/a" for every  package
+> which doesn't need update.
+>
+I think the key word there is for every package that *doesn't* need 
+update.  Since the package itself does not need updating then I think I 
+have by default (and it's probably not selectable) the source download 
+set to N/A - this also appear to be the way the current version 
+downloadable from the web works as well.  
 
-This doesn't work AFAICS. Even if I install from internet, when
-choosing the "Full" view, I'm getting "n/a" for every  package
-which doesn't need update.
+What does it do if the package does need updating? - I think it gives you 
+the Source download option then.  I think the overriding factor here - 
+even on the current version from the web is whether the packaged binaries 
+need updating and my thought process was that if you were getting the 
+source you would probably do it at download/install time and not after 
+the package was already updated - might be a bad conclusion.  We might 
+want to revisit this - what do you and others think?
 
-Corinna
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+
