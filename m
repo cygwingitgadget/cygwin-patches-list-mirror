@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1552-listarch-cygwin-patches=sourceware.cygnus.com@sources.redhat.com>
-Received: (qmail 32155 invoked by alias); 28 Nov 2001 17:07:46 -0000
+Return-Path: <cygwin-patches-return-1553-listarch-cygwin-patches=sourceware.cygnus.com@sources.redhat.com>
+Received: (qmail 21995 invoked by alias); 28 Nov 2001 19:27:37 -0000
 Mailing-List: contact cygwin-patches-help@sourceware.cygnus.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@sources.redhat.com>
@@ -7,27 +7,43 @@ List-Post: <mailto:cygwin-patches@sources.redhat.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@sources.redhat.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@sources.redhat.com
-Received: (qmail 32134 invoked from network); 28 Nov 2001 17:07:44 -0000
-Date: Mon, 29 Oct 2001 12:32:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] (Updated) setup.exe: Stop NetIO_HTTP from treating entire stream as a header
-Message-ID: <20011128170742.GD2287@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <NCBBIHCHBLCMLBLOBONKOEJNCHAA.g.r.vansickle@worldnet.att.net> <00c001c17804$e7c479e0$0200a8c0@lifelesswks>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00c001c17804$e7c479e0$0200a8c0@lifelesswks>
-User-Agent: Mutt/1.3.23.1i
-X-SW-Source: 2001-q4/txt/msg00084.txt.bz2
+Received: (qmail 21975 invoked from network); 28 Nov 2001 19:27:36 -0000
+Date: Mon, 29 Oct 2001 13:10:00 -0000
+From: Alexander Gottwald <Alexander.Gottwald@informatik.tu-chemnitz.de>
+Cc: cygwin-patches@cygwin.com
+Subject: RE: [PATCH] setup.exe: Stop NetIO_HTTP from treating entire stream
+ as a  header
+In-Reply-To: <1006914349.637.4.camel@lifelesswks>
+Message-ID: <Pine.LNX.4.21.0111282007530.1783-100000@lupus.ago.vpn>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-SW-Source: 2001-q4/txt/msg00085.txt.bz2
 
-On Wed, Nov 28, 2001 at 11:04:56PM +1100, Robert Collins wrote:
->GULP. I just checked in my entire sandbox by mistake. HEAD is now broken
->until I fix that up. ugh.
+On 28 Nov 2001, Robert Collins wrote:
 
-I know how you feel.  I've been doing that a lot lately.  For me, that's
-a sign of multi-tasking breakdown...
+> ===
+> NULL
+> 
+> #define NULL <either 0, 0L, or (void *)0> [0 in C++]
+> 
+> The macro yields a null pointer constant that is usable as an address
+> constant expression.
+> ===
 
-cgf
+I was once told that NULL might not be equal to 0 on all platforms. So 
+there may be a platform where NULL equals to - let say -1 -. Any test
+(!pointer) is on this platform pure nonsense. (pointer != NULL) would 
+be correct. And so am I coding. I don't wan't to see my code crash 
+just because of the assumption that the pointer to core[0] is not valid.
+
+This is - afair - defined for C. For C++ I have no clues. But in my 
+opinion it would be much better to test explicitly for an invalid pointer 
+than implicitly. (pointer != NULL) than (pointer != 0)
+
+bye
+    ago
+-- 
+ Alexander.Gottwald@informatik.tu-chemnitz.de 
+ http://www.gotti.org           ICQ: 126018723
+ phone: +49 3725 349 80 80	mobile: +49 172 7854017
+ 4. Chemnitzer Linux-Tag http://www.tu-chemnitz.de/linux/tag/lt4
