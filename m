@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2357-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 2755 invoked by alias); 7 Jun 2002 16:44:01 -0000
+Return-Path: <cygwin-patches-return-2358-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 24173 invoked by alias); 7 Jun 2002 17:13:31 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,74 +7,41 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 2738 invoked from network); 7 Jun 2002 16:43:59 -0000
-From: "Robert Collins" <robert.collins@syncretize.net>
-To: "'Robb, Sam'" <sam.robb@timesys.com>,
-	<cygwin-patches@cygwin.com>
-Subject: RE: sem_getvalue patch
-Date: Fri, 07 Jun 2002 09:44:00 -0000
-Message-ID: <000801c20e42$8461fd80$0200a8c0@lifelesswks>
-MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3 (Normal)
-X-MSMail-Priority: Normal
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Importance: Normal
+Received: (qmail 24158 invoked from network); 7 Jun 2002 17:13:30 -0000
+Date: Fri, 07 Jun 2002 10:13:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: sem_getvalue patch
+Message-ID: <20020607171347.GC18090@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <3D848382FB72E249812901444C6BDB1D0AA179@exchange.timesys.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <3D848382FB72E249812901444C6BDB1D0AA179@exchange.timesys.com>
-X-SW-Source: 2002-q2/txt/msg00340.txt.bz2
+User-Agent: Mutt/1.3.23.1i
+X-SW-Source: 2002-q2/txt/msg00341.txt.bz2
 
-Thanks, this looks good, I'll do a closer review in the weekend.
+On Fri, Jun 07, 2002 at 12:35:10PM -0400, Robb, Sam wrote:
+>[original message was to cygwin@cygwin.com]
+>
+>> With a little effort, I've managed to build a cygwin1.dll that exports
+>> sem_getvalue().  The version of cygwin1.dll that I built seems subtly
+>> hosed, though - while I can compile and run my test program from
+>> within a Windows cmd.exe shell, trying to run bash or ls (and probably
+>> a great many other things) hangs.
+>
+>Here's the patch... fairly straightforward, if I've understood the SUS
+>spec for the function correctly :-/
+>
+>As for the apparent hangs in bash/ls/etc. - well, perhaps it was my
+>patch, perhaps not, as I was building from latest cvs source.  Since
+>I can't find any documentation that indicates if a particular method
+>for adding an export to cygiwn.din needs to be followed, this patch
+>simply tacks sem_getvalue to the end of the list.
 
-Rob
+Btw, if you don't already have a form on file, we'll need an assignment
+form for this patch.  See http://cygwin.com/contrib.html .
 
-> -----Original Message-----
-> From: cygwin-patches-owner@cygwin.com 
-> [mailto:cygwin-patches-owner@cygwin.com] On Behalf Of Robb, Sam
-> Sent: Saturday, 8 June 2002 2:35 AM
-> To: cygwin-patches@cygwin.com
-> Subject: RE: sem_getvalue patch
-> 
-> 
-> [original message was to cygwin@cygwin.com]
-> 
-> > With a little effort, I've managed to build a cygwin1.dll 
-> that exports
-> > sem_getvalue().  The version of cygwin1.dll that I built 
-> seems subtly
-> > hosed, though - while I can compile and run my test program from
-> > within a Windows cmd.exe shell, trying to run bash or ls 
-> (and probably
-> > a great many other things) hangs.
-> 
-> Here's the patch... fairly straightforward, if I've understood the SUS
-> spec for the function correctly :-/
-> 
-> As for the apparent hangs in bash/ls/etc. - well, perhaps it was my
-> patch, perhaps not, as I was building from latest cvs source.  Since
-> I can't find any documentation that indicates if a particular method
-> for adding an export to cygiwn.din needs to be followed, this patch
-> simply tacks sem_getvalue to the end of the list.
-> 
-> Thanks,
-> 
-> -Samrobb
-> 
-> winsup/cygwin/ChangeLog entry:
-> 
-> 2002-06-06  Sam Robb <sam.robb@timesys.com>
-> 
-> 	* pthread.cc (sem_getvalue): New function.
-> 	* thread.cc (__sem_getvalue): Diito.
-> 	* thread.h (__sem_getvalue): Ditto.
-> 	* include/semaphore.h (sem_getvalue): Ditto.
-> 	* posix.sgml: Add sem_getvalue to "Synchronization" section.
-> 	* cygwin.din: Add symbol for sem_getvalue().
-> 
-> winsup/doc/ChangeLog entry:
-> 
-> 2002-06-06  Sam Robb <sam.robb@timesys.com>
-> 
-> 	* calls.texinfo: Remove 'unimplemented' tag from sem_getvalue.
-> 
+cgf
