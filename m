@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2992-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 29708 invoked by alias); 17 Sep 2002 10:52:21 -0000
+Return-Path: <cygwin-patches-return-2993-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 3207 invoked by alias); 17 Sep 2002 10:59:20 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,82 +7,43 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 29681 invoked from network); 17 Sep 2002 10:52:20 -0000
-X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
-Date: Tue, 17 Sep 2002 03:52:00 -0000
-From: Thomas Pfaff <tpfaff@gmx.net>
-To: Robert Collins <rbcollins@cygwin.com>
-cc: cygwin-patches@cygwin.com
+Received: (qmail 3193 invoked from network); 17 Sep 2002 10:59:20 -0000
 Subject: Re: [PATCH] new mutex implementation 2. posting
-In-Reply-To: <1032257204.17674.192.camel@lifelesswks>
-Message-ID: <Pine.WNT.4.44.0209171229540.279-100000@algeria.intern.net>
-X-X-Sender: pfaff@antarctica.intern.net
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-SW-Source: 2002-q3/txt/msg00440.txt.bz2
+From: Robert Collins <rbcollins@cygwin.com>
+To: Thomas Pfaff <tpfaff@gmx.net>
+Cc: cygwin-patches@cygwin.com
+In-Reply-To: <Pine.WNT.4.44.0209171229540.279-100000@algeria.intern.net>
+References: <Pine.WNT.4.44.0209171229540.279-100000@algeria.intern.net>
+Content-Type: multipart/signed; micalg=pgp-sha1; protocol="application/pgp-signature";
+	boundary="=-WqJ9blCof0H3cj154Kz0"
+Date: Tue, 17 Sep 2002 03:59:00 -0000
+Message-Id: <1032260391.17676.194.camel@lifelesswks>
+Mime-Version: 1.0
+X-SW-Source: 2002-q3/txt/msg00441.txt.bz2
 
 
+--=-WqJ9blCof0H3cj154Kz0
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+Content-length: 86
 
-On Tue, 17 Sep 2002, Robert Collins wrote:
+Cool. I'll look into this in more depth tomorrow.
 
-> On Tue, 2002-09-17 at 19:34, Thomas Pfaff wrote:
-> >
-> > This patch contains a new mutex implementation.
-> >
-> > The advantages are:
-> >
-> > - Same code on Win9x and NT. Actual are critical sections used on NT and
-> >   kernel mutexes on 9x.
->
-> Are you saying it uses critical sections on NT? (i.e. is that MS's
-> uinderlying implementation for semaphores?)
+Thanks for the updated patch!
 
-I am saying that the current implementatione differ between NT and 9x.
-NT uses critical section (for performance reasons i guess), 9x kernel
-mutexes because of the lacking TryEnterCriticalSection.
+Rob
 
->
-> > - Posix compliant error codes.
->
-> I thought we where before. Can you be more specific?
+--=-WqJ9blCof0H3cj154Kz0
+Content-Type: application/pgp-signature; name=signature.asc
+Content-Description: This is a digitally signed message part
+Content-length: 189
 
-I can not see error codes like EPERM, EAGAIN or EDEADLK at positions where
-they should be returned.
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.0.7 (GNU/Linux)
 
->
-> > - State is preserved after fork as it should.
->
-> Likewise, I know this has already been implemented. What was not
-> preserved previously?
->
+iD8DBQA9hwsmI5+kQ8LJcoIRAoz1AJsHu7nE+2pYTpKopUb+Tmj8lcmmxACgkaY4
+2AHZlJhWt+qU7RFUWIQCmGg=
+=ypLV
+-----END PGP SIGNATURE-----
 
-Instead of preservering the state a mutex is recreated after a fork and
-the locking state is lost. IMHO a fork save mutex can not be done with
-kernel mutexes nor with critical sections.
-
-> > - Supports both errorchecking and recursive mutexes.
->
-> This is nice. It shouldn't need a new implementation though. What I mean
-> is: lets understand the ramifications first.
-
-IMHO it is impossible on 9x to support errorchecking mutexes with kernel
-objects and on NT with critical sections unless you willing to use the
-undocumented parts of the CRITICAL_SECTION structure.
-
-And: the actual default mutex type is recursive which is incompatible to
-any other pthread implementation that i know.
-
->
-> > - Should be at least as fast as critical sections.
->
-> I don't understand how it can be, if semaphores are based on critical
-> sections, it can't be faster. Or am I wearing my dumb hat today?
->
-
-One of my goals was to be as fast as a critical section even on 9x.
-Instead of a kernel transition in each mutex call it is only needed when
-another thread is waiting. Critical sections are about 10 times faster
-than kernel mutexes if they are not locked simultanously be 2 or more
-threads and they work mostly the same way than my implementation.
-
-Thomas
+--=-WqJ9blCof0H3cj154Kz0--
