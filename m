@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3811-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 16286 invoked by alias); 14 Apr 2003 18:04:19 -0000
+Return-Path: <cygwin-patches-return-3812-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 21253 invoked by alias); 15 Apr 2003 08:59:39 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,46 +7,144 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 16277 invoked from network); 14 Apr 2003 18:04:19 -0000
-Date: Mon, 14 Apr 2003 18:04:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
+Received: (qmail 21232 invoked from network); 15 Apr 2003 08:59:38 -0000
+X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
+Date: Tue, 15 Apr 2003 08:59:00 -0000
+From: Thomas Pfaff <tpfaff@gmx.net>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] enable -finline-functions optimization
-Message-ID: <20030414180421.GB31904@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <Pine.WNT.4.44.0304091020470.272-200000@algeria.intern.net> <20030409154807.GD5879@redhat.com> <3E9A6F15.6060506@gmx.net> <20030414140539.GA28133@redhat.com> <3E9AC616.8040905@gmx.net>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3E9AC616.8040905@gmx.net>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2003-q2/txt/msg00038.txt.bz2
+Subject: [RFA] enable finline-functions optimization
+Message-ID: <Pine.WNT.4.44.0304151046400.259-200000@algeria.intern.net>
+X-X-Sender: pfaff@antarctica.intern.net
+MIME-Version: 1.0
+Content-Type: MULTIPART/MIXED; BOUNDARY="759923-918-1050397153=:259"
+X-SW-Source: 2003-q2/txt/msg00039.txt.bz2
 
-On Mon, Apr 14, 2003 at 04:30:46PM +0200, Thomas Pfaff wrote:
->Christopher Faylor wrote:
->>On Mon, Apr 14, 2003 at 10:19:33AM +0200, Thomas Pfaff wrote:
->>
->>>According to
->>>http://gcc.gnu.org/onlinedocs/gcc-3.2.1/gcc/Function-Attributes.html
->>>__attribute__((used)) should do the trick, but it doesn't seem to work.
->>
->>Look at exceptions.cc: unused_sig_wrapper.
->
->Look at my patch: unused_sig_wrapper is removed when the code is 
->compiled with -finline-functions.
->
->I tried
->static void unused_sig_wrapper () __attribute__((const, used, noinline));
->
->and __attribute__((used)) should prevent the removal, but it didn't.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
 
-Ok.  In that case the final answer is that I'm not going to sacrifice
-correct code to gcc bugs.  The attribute stuff used to be sufficient to
-cause the functions to be kept.  At one point, aliasing the function
-also kept the function around, if you want to try that.  I don't mind
-hiding stuff in a macro.  I just don't want to have to comment every
-should-be-static function in cygwin with a "I know it looks like it
-should be static but it can't be really."
+--759923-918-1050397153=:259
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-length: 825
 
-cgf
+
+It seems that  __attribute__(used) does not work in conjunction with
+__asm__ ("function name without _"). If i remove the  __asm__ stuff it
+works as expected.
+This patch will keep the functions static.
+
+2003-04-15  Thomas Pfaff  <tpfaff@gmx.net>
+
+	* Makefile.in: Add finline-functions optimization to CXXFLAGS.
+	* autoload.cc (LoadDLLprime): Rename std_dll_init to
+	_std_dll_init.
+	(std_dll_init): Remove name mangling prototype. Add attributes
+	used and noinline.
+	(wsock_init): Ditto.
+	Change wsock_init to _wsock_init in wsock32 and ws2_32
+	LoadDLLprime.
+	* exceptions.cc (unused_sig_wrapper): Remove prototype. Add
+	attributes used and noinline.
+	* pwdgrp.h ((pwdgrp (passwd *&)): Remove inline code.
+	(pwdgrp (__group32 *&)): Ditto.
+	* grp.cc (pwdgrp (passwd *&)): Outline constructor.
+	(pwdgrp (__group32 *&)): Ditto.
+
+--759923-918-1050397153=:259
+Content-Type: TEXT/plain; name="finline-functions.patch"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.WNT.4.44.0304151059130.259@algeria.intern.net>
+Content-Description: 
+Content-Disposition: attachment; filename="finline-functions.patch"
+Content-length: 5348
+
+ZGlmZiAtdXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi9NYWtlZmlsZS5pbiBz
+cmMvd2luc3VwL2N5Z3dpbi9NYWtlZmlsZS5pbgotLS0gc3JjLm9sZC93aW5z
+dXAvY3lnd2luL01ha2VmaWxlLmluCTIwMDMtMDQtMDkgMTA6MTM6NTYuMDAw
+MDAwMDAwICswMjAwCisrKyBzcmMvd2luc3VwL2N5Z3dpbi9NYWtlZmlsZS5p
+bgkyMDAzLTA0LTA5IDEwOjE3OjM5LjAwMDAwMDAwMCArMDIwMApAQCAtODAs
+NiArODAsOSBAQCBDRkxBR1M9QENGTEFHU0AKIG92ZXJyaWRlIENGTEFHUys9
+LU1NRCAkeyQoKkYpX0NGTEFHU30KIENYWD1AQ1hYQAogQ1hYRkxBR1M9QENY
+WEZMQUdTQAoraWZlcSAoJChDWUdJTkxJTkUpLDEpCitvdmVycmlkZSBDWFhG
+TEFHUys9LWZpbmxpbmUtZnVuY3Rpb25zCitlbmRpZgogCiBBUjo9QEFSQAog
+QVJfRkxBR1M6PXF2CmRpZmYgLXVycCBzcmMub2xkL3dpbnN1cC9jeWd3aW4v
+YXV0b2xvYWQuY2Mgc3JjL3dpbnN1cC9jeWd3aW4vYXV0b2xvYWQuY2MKLS0t
+IHNyYy5vbGQvd2luc3VwL2N5Z3dpbi9hdXRvbG9hZC5jYwkyMDAzLTA0LTA5
+IDEwOjEyOjU4LjAwMDAwMDAwMCArMDIwMAorKysgc3JjL3dpbnN1cC9jeWd3
+aW4vYXV0b2xvYWQuY2MJMjAwMy0wNC0xNSAxMDo0MzoyNy4wMDAwMDAwMDAg
+KzAyMDAKQEAgLTU4LDcgKzU4LDcgQEAgZGV0YWlscy4gKi8KICNkZWZpbmUg
+TG9hZERMTHByaW1lKGRsbG5hbWUsIGluaXRfYWxzbykgX19hc21fXyAoIglc
+blwKICAgLnNlY3Rpb24JLiIgI2RsbG5hbWUgIl9pbmZvLFwid1wiCQlcblwK
+ICAgLmxpbmtvbmNlCQkJCQkJXG5cCi0gIC5sb25nCQlzdGRfZGxsX2luaXQJ
+CQkJXG5cCisgIC5sb25nCQlfc3RkX2RsbF9pbml0CQkJCVxuXAogICAubG9u
+ZwkJMAkJCQkJXG5cCiAgIC5sb25nCQktMQkJCQkJXG5cCiAgIC5sb25nCQki
+ICNpbml0X2Fsc28gIgkJCQlcblwKQEAgLTIwMSw4ICsyMDEsNyBAQCB1bmlv
+biByZXRjaGFpbgogfTsKIAogLyogVGhlIHN0YW5kYXJkIERMTCBpbml0aWFs
+aXphdGlvbiByb3V0aW5lLiAqLwotc3RhdGljIGxvbmcgbG9uZyBzdGRfZGxs
+X2luaXQgKCkgX19hc21fXyAoInN0ZF9kbGxfaW5pdCIpIF9fYXR0cmlidXRl
+X18gKCh1bnVzZWQpKTsKLXN0YXRpYyBsb25nIGxvbmcKK19fYXR0cmlidXRl
+X18gKCh1c2VkLCBub2lubGluZSkpIHN0YXRpYyBsb25nIGxvbmcKIHN0ZF9k
+bGxfaW5pdCAoKQogewogICBIQU5ETEUgaDsKQEAgLTI0MSw5ICsyNDAsOCBA
+QCBzdGRfZGxsX2luaXQgKCkKIH0KIAogLyogSW5pdGlhbGl6YXRpb24gZnVu
+Y3Rpb24gZm9yIHdpbnNvY2sgc3R1ZmYuICovCi1zdGF0aWMgbG9uZyBsb25n
+IHdzb2NrX2luaXQgKCkgX19hc21fXyAoIndzb2NrX2luaXQiKSBfX2F0dHJp
+YnV0ZV9fICgodW51c2VkLCByZWdwYXJtKDEpKSk7CiBib29sIE5PX0NPUFkg
+d3NvY2tfc3RhcnRlZCA9IDA7Ci1zdGF0aWMgbG9uZyBsb25nCitfX2F0dHJp
+YnV0ZV9fICgodXNlZCwgbm9pbmxpbmUsIHJlZ3Bhcm0oMSkpKSBzdGF0aWMg
+bG9uZyBsb25nCiB3c29ja19pbml0ICgpCiB7CiAgIHN0YXRpYyBMT05HIE5P
+X0NPUFkgaGVyZSA9IC0xTDsKQEAgLTMwNCw4ICszMDIsOCBAQCB3c29ja19p
+bml0ICgpCiAgIHJldHVybiByZXQubGw7CiB9CiAKLUxvYWRETExwcmltZSAo
+d3NvY2szMiwgd3NvY2tfaW5pdCkKLUxvYWRETExwcmltZSAod3MyXzMyLCB3
+c29ja19pbml0KQorTG9hZERMTHByaW1lICh3c29jazMyLCBfd3NvY2tfaW5p
+dCkKK0xvYWRETExwcmltZSAod3MyXzMyLCBfd3NvY2tfaW5pdCkKIAogTG9h
+ZERMTGZ1bmMgKEFjY2Vzc0NoZWNrLCAzMiwgYWR2YXBpMzIpCiBMb2FkRExM
+ZnVuYyAoQWRkQWNjZXNzQWxsb3dlZEFjZSwgMTYsIGFkdmFwaTMyKQpkaWZm
+IC11cnAgc3JjLm9sZC93aW5zdXAvY3lnd2luL2V4Y2VwdGlvbnMuY2Mgc3Jj
+L3dpbnN1cC9jeWd3aW4vZXhjZXB0aW9ucy5jYwotLS0gc3JjLm9sZC93aW5z
+dXAvY3lnd2luL2V4Y2VwdGlvbnMuY2MJMjAwMy0wNC0wOSAxMDoxMzoyMS4w
+MDAwMDAwMDAgKzAyMDAKKysrIHNyYy93aW5zdXAvY3lnd2luL2V4Y2VwdGlv
+bnMuY2MJMjAwMy0wNC0xNSAxMDo0MjoyMy4wMDAwMDAwMDAgKzAyMDAKQEAg
+LTEyMDMsMTIgKzEyMDMsMTAgQEAgcmVzZXRfc2lnbmFsX2Fycml2ZWQgKCkK
+ICAgc2lncHJvY19wcmludGYgKCJyZXNldCBzaWduYWxfYXJyaXZlZCIpOwog
+fQogCi1zdGF0aWMgdm9pZCB1bnVzZWRfc2lnX3dyYXBwZXIgKCkgX19hdHRy
+aWJ1dGVfXygoY29uc3QsIHVudXNlZCkpOwotCiAjdW5kZWYgZXJybm8KICNk
+ZWZpbmUgZXJybm8gKChEV09SRCB2b2xhdGlsZSkgX2ltcHVyZV9wdHIpICsg
+KCgoY2hhciAqKSAmX2ltcHVyZV9wdHItPl9lcnJubykgLSAoKGNoYXIgKikg
+X2ltcHVyZV9wdHIpKQogCi1zdGF0aWMgdm9pZAorX19hdHRyaWJ1dGVfXygo
+Y29uc3QsIHVzZWQsIG5vaW5saW5lKSkgc3RhdGljIHZvaWQKIHVudXNlZF9z
+aWdfd3JhcHBlciAoKQogewogLyogU2lnbmFsIGNsZWFudXAgc3R1ZmYuICBD
+bGVhbnMgdXAgc3RhY2sgKHRvbyBiYWQgdGhhdCB3ZSBkaWRuJ3QKZGlmZiAt
+dXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi9ncnAuY2Mgc3JjL3dpbnN1cC9j
+eWd3aW4vZ3JwLmNjCi0tLSBzcmMub2xkL3dpbnN1cC9jeWd3aW4vZ3JwLmNj
+CTIwMDMtMDQtMDkgMTA6MTM6MzUuMDAwMDAwMDAwICswMjAwCisrKyBzcmMv
+d2luc3VwL2N5Z3dpbi9ncnAuY2MJMjAwMy0wNC0wOSAxMDoxNTo0MS4wMDAw
+MDAwMDAgKzAyMDAKQEAgLTEwOCw2ICsxMDgsMjEgQEAgcHdkZ3JwOjpyZWFk
+X2dyb3VwICgpCiAgIHJldHVybjsKIH0KIAorcHdkZ3JwOjpwd2RncnAgKHBh
+c3N3ZCAqJnBidWYpIDoKKyAgcHdkZ3JwX2J1Zl9lbGVtX3NpemUgKHNpemVv
+ZiAoKnBidWYpKSwgcGFzc3dkX2J1ZiAoJnBidWYpCit7CisgIHJlYWQgPSAm
+cHdkZ3JwOjpyZWFkX3Bhc3N3ZDsKKyAgcGFyc2UgPSAmcHdkZ3JwOjpwYXJz
+ZV9wYXNzd2Q7CisgIG5ld19tdXRvIChwZ2xvY2spOworfQorcHdkZ3JwOjpw
+d2RncnAgKF9fZ3JvdXAzMiAqJmdidWYpIDoKKyAgcHdkZ3JwX2J1Zl9lbGVt
+X3NpemUgKHNpemVvZiAoKmdidWYpKSwgZ3JvdXBfYnVmICgmZ2J1ZikKK3sK
+KyAgcmVhZCA9ICZwd2RncnA6OnJlYWRfZ3JvdXA7CisgIHBhcnNlID0gJnB3
+ZGdycDo6cGFyc2VfZ3JvdXA7CisgIG5ld19tdXRvIChwZ2xvY2spOworfQor
+CiBzdHJ1Y3QgX19ncm91cDMyICoKIGludGVybmFsX2dldGdyc2lkIChjeWdw
+c2lkICZzaWQpCiB7CmRpZmYgLXVycCBzcmMub2xkL3dpbnN1cC9jeWd3aW4v
+cHdkZ3JwLmggc3JjL3dpbnN1cC9jeWd3aW4vcHdkZ3JwLmgKLS0tIHNyYy5v
+bGQvd2luc3VwL2N5Z3dpbi9wd2RncnAuaAkyMDAzLTA0LTA5IDEwOjEzOjQy
+LjAwMDAwMDAwMCArMDIwMAorKysgc3JjL3dpbnN1cC9jeWd3aW4vcHdkZ3Jw
+LmgJMjAwMy0wNC0wOSAxMDoxNTo0MS4wMDAwMDAwMDAgKzAyMDAKQEAgLTc3
+LDE4ICs3Nyw2IEBAIHB1YmxpYzoKICAgICBwZ2xvY2stPnJlbGVhc2UgKCk7
+CiAgIH0KIAotICBwd2RncnAgKHBhc3N3ZCAqJnBidWYpIDoKLSAgICBwd2Rn
+cnBfYnVmX2VsZW1fc2l6ZSAoc2l6ZW9mICgqcGJ1ZikpLCBwYXNzd2RfYnVm
+ICgmcGJ1ZikKLSAgICB7Ci0gICAgICByZWFkID0gJnB3ZGdycDo6cmVhZF9w
+YXNzd2Q7Ci0gICAgICBwYXJzZSA9ICZwd2RncnA6OnBhcnNlX3Bhc3N3ZDsK
+LSAgICAgIG5ld19tdXRvIChwZ2xvY2spOwotICAgIH0KLSAgcHdkZ3JwIChf
+X2dyb3VwMzIgKiZnYnVmKSA6Ci0gICAgcHdkZ3JwX2J1Zl9lbGVtX3NpemUg
+KHNpemVvZiAoKmdidWYpKSwgZ3JvdXBfYnVmICgmZ2J1ZikKLSAgICB7Ci0g
+ICAgICByZWFkID0gJnB3ZGdycDo6cmVhZF9ncm91cDsKLSAgICAgIHBhcnNl
+ID0gJnB3ZGdycDo6cGFyc2VfZ3JvdXA7Ci0gICAgICBuZXdfbXV0byAocGds
+b2NrKTsKLSAgICB9CisgIHB3ZGdycCAocGFzc3dkIComcGJ1Zik7CisgIHB3
+ZGdycCAoX19ncm91cDMyIComZ2J1Zik7CiB9Owo=
+
+--759923-918-1050397153=:259--
