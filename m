@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4888-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 32186 invoked by alias); 4 Aug 2004 02:20:06 -0000
+Return-Path: <cygwin-patches-return-4889-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 30534 invoked by alias); 10 Aug 2004 10:36:44 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,35 +7,45 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 32176 invoked from network); 4 Aug 2004 02:20:05 -0000
-Date: Wed, 04 Aug 2004 02:20:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
+Received: (qmail 30518 invoked from network); 10 Aug 2004 10:36:42 -0000
+X-Originating-IP: 141.228.156.225
+From: Charles Reindorf <charles@reindorf.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [Patch] mapping root directory to SystemDrive / CurrentDrive
-Message-ID: <20040804022029.GA13189@trixie.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <200408021452.34000.gernot.hillier@siemens.com> <3.0.5.32.20040803202352.0080e320@incoming.verizon.net>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3.0.5.32.20040803202352.0080e320@incoming.verizon.net>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2004-q3/txt/msg00040.txt.bz2
+Date: Tue, 10 Aug 2004 10:36:00 -0000
+Subject: array size problem in select.cc
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+X-Qmail-Scanner-Message-ID: <109213420166130361@lon3.mailcustodian.co.uk>
+X-SW-Source: 2004-q3/txt/msg00041.txt.bz2
+Message-ID: <20040810103600.UcV2Eun7D4mHAdBTrt-WoJorre3boPoG6EBXQDxMMNE@z>
 
-On Tue, Aug 03, 2004 at 08:23:52PM -0400, Pierre A. Humblet wrote:
->Here is a patch.
 
-Thanks much but unless you are really really sure that this patch will
-introduce no regressions, I'd like to hold off applying this patch until
-after 1.5.11.
+Cygwin developers,
 
-cgf
+I was browsing in "winsup/cygwin/select.cc" from snapshot 20040808-1 and I
+think I see an array size problem there, resutling in possible core dumps when
+selecting about 63 file descriptors. I wonder if the following patch is
+applicable?
 
->2004-08-04  Pierre Humblet <pierre.humblet@ieee.org>
->
->	* cygheap.h (cwdstuff::drive_length): New member.
->	(cwdstuff::get_drive): New method.
->	* path.cc (normalize_win32_path): Simplify by using cwdstuff::get_drive.
->	(mount_info::conv_to_win32_path): Use cwdstuff::get_drive as default for /.
->	(cwdstuff::set): Initialize drive_length.
+-- Charles Reindorf.
+
+*** ../cygwin.bak/select.cc	Tue Aug 10 11:27:26 2004
+--- select.cc	Tue Aug 10 11:27:38 2004
+***************
+*** 223,229 ****
+  		    DWORD ms)
+  {
+    int wait_ret;
+!   HANDLE w4[MAXIMUM_WAIT_OBJECTS];
+    select_record *s = &start;
+    int m = 0;
+    int res = 0;
+--- 223,229 ----
+  		    DWORD ms)
+  {
+    int wait_ret;
+!   HANDLE w4[MAXIMUM_WAIT_OBJECTS+1];
+    select_record *s = &start;
+    int m = 0;
+    int res = 0;
+
