@@ -1,67 +1,57 @@
-From: "Robert Collins" <robert.collins@itdomain.com.au>
-To: <cygwin-patches@cygwin.com>
-Subject: Re: win95 and pshared mutex support for pthreads
-Date: Thu, 19 Apr 2001 05:14:00 -0000
-Message-id: <015401c0c8ca$380e8ac0$0200a8c0@lifelesswks>
-References: <00d001c0c8bc$d9f12400$0200a8c0@lifelesswks> <20010419080934.C19483@redhat.com>
-X-SW-Source: 2001-q2/msg00120.html
+From: egor duda <deo@logos-m.ru>
+To: cygwin-patches@cygwin.com
+Subject: mkdir ((char*) -1, 0777) returns ECASECLASH
+Date: Thu, 19 Apr 2001 05:22:00 -0000
+Message-id: <122419105832.20010419162011@logos-m.ru>
+X-SW-Source: 2001-q2/msg00121.html
+Content-type: multipart/mixed; boundary="----------=_1583532847-65438-49"
 
-I don't suppose you could from the patch? My working directory is _much
-much_ worse than the code I got into that patch.
+This is a multi-part message in MIME format...
 
-Rob
+------------=_1583532847-65438-49
+Content-length: 160
 
------ Original Message -----
-From: "Christopher Faylor" <cgf@redhat.com>
-To: <cygwin-patches@cygwin.com>
-Sent: Thursday, April 19, 2001 10:09 PM
-Subject: Re: win95 and pshared mutex support for pthreads
+Hi!
+
+  instead of EFAULT. Fix attached.
+
+egor.            mailto:deo@logos-m.ru icq 5165414 fidonet 2:5020/496.19
+path-conv-init.diff
+path-conv-init.ChangeLog
 
 
-> On Thu, Apr 19, 2001 at 08:38:18PM +1000, Robert Collins wrote:
-> >The code is a little ugly, but it still passes all my testcases.
-> >
-> >The ABI HAS NOT CHANGED. It may have to support pshared condition
-> >variables properly, but I wanted to get the win95 support submitted.
-> >
-> >Rob
-> >
-> >Thu Apr 19 20:22:00 2001  Robert Collins <rbtcollins@hotmail.com>
-> >
-> > * password.cc (getpwuid): Check for thread cancellation.
-> > (getpwuid_r): Ditto.
-> > (getpwname): Ditto.
-> > (getpwnam_r): Ditto.
-> > * thread.h (pthread_mutex): New constructors for pshared operation.
-> > (MTinterface): Associative array for pshared mutex's.
-> > * thread.cc (MTinterface::Init): Initailize pshared mutex array.
-> > (pthread_cond::BroadCast): Implementation notes.
-> > (pthread_cond::TimedWait): Remove use of SignalObjectAndWait on
-non-NT
-> >systems.
-> > (pthread_mutex::pthread_mutex(unsigned short)): New function.
-> > (pthread_mutex::pthread_mutex (pthread_mutex_t *, pthread_mutexattr
-> >*)):New function.
-> > (pthread_mutex::pthread_mutex(pthread_mutexattr *)): Fail on pshared
-> >mutex's.
-> > (__pthread_mutex_getpshared): New function.
-> > (__pthread_join): Check for thread cancellation.
-> > (__pthread_cond_timedwait): Support pshared mutex's.
-> > (__pthread_cond_wait): Ditto.
-> > (__pthread_condattr_setpshared): Error on PROCESS_SHARED requests.
-> > (__pthread_mutex_init): Support pshared mutex's.
-> > (__pthread_mutex_getprioceiling): Ditto.
-> > (__pthread_mutex_lock): Ditto.
-> > (__pthread_mutex_trylock): Ditto.
-> > (__pthread_mutex_unlock): Ditto.
-> > (__pthread_mutex_destroy): Ditto.
-> > (__pthread_mutex_setprioceiling): Ditto.
-> > (__pthread_mutexattr_setpshared): Support PTHREAD_PROCESS_PSHARED
-> >requests.
->
-> Please check this in.
->
-> Thanks,
->
-> cgf
->
+------------=_1583532847-65438-49
+Content-Type: text/plain; charset=us-ascii; name="path-conv-init.ChangeLog"
+Content-Disposition: inline; filename="path-conv-init.ChangeLog"
+Content-Transfer-Encoding: base64
+Content-Length: 147
+
+MjAwMS0wNC0xOSAgRWdvciBEdWRhICA8ZGVvQGxvZ29zLW0ucnU+CgoJKiBw
+YXRoLmNjIChwYXRoX2NvbnY6OmNoZWNrKTogQWx3YXlzIGluaXRpYWxpemUg
+bWVtYmVyIHZhcmlhYmxlcy4K
+
+------------=_1583532847-65438-49
+Content-Type: text/x-diff; charset=us-ascii; name="path-conv-init.diff"
+Content-Disposition: inline; filename="path-conv-init.diff"
+Content-Transfer-Encoding: base64
+Content-Length: 1013
+
+SW5kZXg6IHBhdGguY2MKPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1MgZmls
+ZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vcGF0aC5jYyx2CnJldHJp
+ZXZpbmcgcmV2aXNpb24gMS4xMjYKZGlmZiAtdSAtcCAtMiAtcjEuMTI2IHBh
+dGguY2MKLS0tIHBhdGguY2MJMjAwMS8wNC8xOCAyMToxMDoxMgkxLjEyNgor
+KysgcGF0aC5jYwkyMDAxLzA0LzE5IDEyOjE2OjI2CkBAIC0yMzAsNCArMjMw
+LDEwIEBAIHBhdGhfY29udjo6Y2hlY2sgKGNvbnN0IGNoYXIgKnNyYywgdW5z
+aWcKICAgY2hhciAqcmVsX3BhdGgsICpmdWxsX3BhdGg7CiAKKyAgY2FzZV9j
+bGFzaCA9IEZBTFNFOworICBwYXRoX2ZsYWdzID0gMDsKKyAga25vd25fc3Vm
+Zml4ID0gTlVMTDsKKyAgZGV2biA9IHVuaXQgPSAwOworICBmaWxlYXR0ciA9
+IChEV09SRCkgLTE7CisKICAgaWYgKCEob3B0ICYgUENfTlVMTEVNUFRZKSkK
+ICAgICBlcnJvciA9IDA7CkBAIC0yNDIsOCArMjQ4LDQgQEAgcGF0aF9jb252
+OjpjaGVjayAoY29uc3QgY2hhciAqc3JjLCB1bnNpZwogICAvKiBUaGlzIGxv
+b3AgaGFuZGxlcyBzeW1saW5rIGV4cGFuc2lvbi4gICovCiAgIGludCBsb29w
+ID0gMDsKLSAgcGF0aF9mbGFncyA9IDA7Ci0gIGtub3duX3N1ZmZpeCA9IE5V
+TEw7Ci0gIGZpbGVhdHRyID0gKERXT1JEKSAtMTsKLSAgY2FzZV9jbGFzaCA9
+IEZBTFNFOwogICBmb3IgKDs7KQogICAgIHsK
+
+------------=_1583532847-65438-49--
