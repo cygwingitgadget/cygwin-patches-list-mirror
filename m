@@ -1,32 +1,35 @@
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygwin-patches@cygwin.com
+From: egor duda <deo@logos-m.ru>
+To: Christopher Faylor <cygwin-patches@cygwin.com>
 Subject: Re: generating /etc/passwd and /etc/group for domians with users with cyrillic names
-Date: Wed, 11 Apr 2001 01:35:00 -0000
-Message-id: <20010411103530.H956@cygbert.vinschen.de>
-References: <130292291322.20010409223921@logos-m.ru> <20010410184619.Y956@cygbert.vinschen.de> <s1s66gcqmks.fsf@jaist.ac.jp> <20010410223404.A24731@redhat.com> <s1s1yr0q6vv.fsf@jaist.ac.jp>
-X-SW-Source: 2001-q2/msg00030.html
+Date: Wed, 11 Apr 2001 02:40:00 -0000
+Message-id: <86432671428.20010411133903@logos-m.ru>
+References: <130292291322.20010409223921@logos-m.ru> <20010410184619.Y956@cygbert.vinschen.de> <s1s66gcqmks.fsf@jaist.ac.jp> <20010410223404.A24731@redhat.com>
+X-SW-Source: 2001-q2/msg00031.html
 
-On Wed, Apr 11, 2001 at 03:37:24PM +0900, Kazuhiro Fujieda wrote:
-> >>> On Tue, 10 Apr 2001 22:34:04 -0400
-> >>> Christopher Faylor <cgf@redhat.com> said:
-> 
-> > Would it make sense to augment newlib to do the right thing, then?
-> 
-> No, I'm afraid it wouldn't.
-> 
-> `wcstombs' must be sensitive to a locale selected by an
-> application according to the ISO C standard.
-> In this case, however, it must be sensitive to the system
-> default locale of Windows.
-> 
-> I believe we should use WideCharToMultiByte for i18n of such
-> Windows specific tools.
+Hi!
 
-Thanks for the explanation. As I wrote, I was just curious.
+Wednesday, 11 April, 2001 Christopher Faylor cgf@redhat.com wrote:
 
-Corinna
+CF> On Wed, Apr 11, 2001 at 09:58:27AM +0900, Kazuhiro Fujieda wrote:
+>> Corinna Vinschen <cygwin-patches@cygwin.com> said:
+>>> Why is that needed? What is the problem with the original functions?
+>>
+>>The `wcstombs' included in newlib simply strips the higher byte
+>>of Unicode. It can't translate Cyrillic, Greek, Turkish, and so on
+>>from Unicode to their ANSI codepages. WideCharToMultiByte can do
+>>these translations well.
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+CF> Would it make sense to augment newlib to do the right thing, then?
+
+it's possible, but, as Kazuhiro's already said, such translation
+should depend of current locale, so we can't use native functions --
+they're using current win32 codepage which can be unrelated to unix
+locale. so, i suppose, newlib will need to use some translation table
+from /usr/share/locale/*  Alas, i don't feel i'm good enough in
+unix-style i18n to volunteer for the job.
+
+Using native i18n methods is a bit kludgy, but i think it's ok for
+windows-specific utility. i've checked the patch in.
+
+Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
+
