@@ -1,50 +1,41 @@
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: [RFA] lib/Makefile.in patch
-Date: Tue, 18 Sep 2001 09:42:00 -0000
-Message-id: <20010918124312.B18932@redhat.com>
-X-SW-Source: 2001-q3/msg00165.html
+From: "Ralf Habacker" <Ralf.Habacker@freenet.de>
+To: "egor duda" <cygwin-patches@cygwin.com>
+Cc: "Cygwin-Patches" <cygwin-patches@sourceware.cygnus.com>
+Subject: RE: Patch for ssp on win2k
+Date: Wed, 19 Sep 2001 07:03:00 -0000
+Message-id: <000101c14114$6d028e80$651c440a@BRAMSCHE>
+References: <561543329.20010918162950@logos-m.ru>
+X-SW-Source: 2001-q3/msg00166.html
 
-[reposted to appropriate mailing list]
-Now that Earnie has reverted the change which added /usr to inst_*
-variables, I'd like to revert Makefile.in to its previous "one level of
-ifneq" state.  This will make it easier for anyone who is interested in
-understanding what is going on in the future.
+> -----UrsprÃ¼ngliche Nachricht-----
+> Von: egor duda [ mailto:deo@logos-m.ru ]
+> Gesendet am: Dienstag, 18. September 2001 14:30
+> An: Ralf Habacker
+> Cc: cygwin-patches@cygwin.com
+> Betreff: Re: Patch for ssp on win2k
+>
+> Hi!
+>
+> Tuesday, 18 September, 2001 Ralf Habacker Ralf.Habacker@freenet.de wrote:
+>
+> RH> I don't know if this a condition indicate a failure. rc contains
+> an adress which
+> RH> direct into the ntdll.dll.
+> RH> Perhaps it means something other as used currently, but examinig
+> the content
+> RH> under that adress produces no additional infos for me.
+>
+> you can take a look at gdb or dumper sources. they contain functions
+> that try to obtain dll name using "official" means (psapi.dll) on NT.
+>
+That's great. Do you know, where I can find a documentation for this api ?
 
-The patch below just removes what appear to be unnecessary if tests.
-The end result is that inst_includedir and inst_libdir should still be
-set appropriately but the code in Makefile.in is simpler and more
-understandable.
+I ask because currently kde2 needs huge memory (about 200MB: the win2k task
+manager say this) and I like to look in which dlls all the memory is gone ?
+Or does anyone know about an already available tool for this ?
 
-cgf
+Ralf
 
-Index: Makefile.in
-===================================================================
-RCS file: /cvs/uberbaum/winsup/w32api/lib/Makefile.in,v
-retrieving revision 1.16
-diff -p -4 -r1.16 Makefile.in
-*** Makefile.in	2001/09/17 16:15:54	1.16
---- Makefile.in	2001/09/18 16:22:28
-*************** infodir = @infodir@
-*** 40,59 ****
-  #FIXME.  The inst_includedir and inst_libdir need to be modified to use
-  #$(tooldir)/usr/include/w32api and $(tooldir)/usr/lib/w32api for the dist 
-  #targets.
-  ifneq (,$(findstring cygwin,$(target_alias)))
-- ifeq ($(build_alias),$(host_alias))
-- ifeq ($(prefix),$(config_prefix))
-  inst_includedir:=$(tooldir)/include/w32api
-  inst_libdir:=$(tooldir)/lib/w32api
-- else
-- inst_includedir:=$(tooldir)/include/w32api
-- inst_libdir:=$(tooldir)/lib/w32api
-- endif
-- else
-- inst_includedir:=$(includedir)
-- inst_libdir:=$(libdir)
-- endif
-  else
-  inst_includedir:=$(includedir)
-  inst_libdir:=$(libdir)
-  endif
---- 40,49 ----
+> Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
+>
+>
