@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2984-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 16081 invoked by alias); 17 Sep 2002 03:11:00 -0000
+Return-Path: <cygwin-patches-return-2985-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 22016 invoked by alias); 17 Sep 2002 08:48:49 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,26 +7,77 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 16067 invoked from network); 17 Sep 2002 03:10:59 -0000
-Date: Mon, 16 Sep 2002 20:11:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
+Received: (qmail 21994 invoked from network); 17 Sep 2002 08:48:48 -0000
+X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
+Date: Tue, 17 Sep 2002 01:48:00 -0000
+From: Thomas Pfaff <tpfaff@gmx.net>
+To: Robert Collins <rbcollins@cygwin.com>
+cc: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] pthread_fork Part 1
-Message-ID: <20020917031056.GA14335@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <Pine.WNT.4.44.0208162159200.-283127@thomas.kefrig-pfaff.de> <1032176687.17674.131.camel@lifelesswks>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 In-Reply-To: <1032176687.17674.131.camel@lifelesswks>
-User-Agent: Mutt/1.4i
-X-SW-Source: 2002-q3/txt/msg00432.txt.bz2
+Message-ID: <Pine.WNT.4.44.0209161541580.90-200000@algeria.intern.net>
+X-X-Sender: pfaff@antarctica.intern.net
+MIME-Version: 1.0
+Content-Type: MULTIPART/MIXED; BOUNDARY="268295-25500-1032252522=:277"
+X-SW-Source: 2002-q3/txt/msg00433.txt.bz2
 
-On Mon, Sep 16, 2002 at 09:44:46PM +1000, Robert Collins wrote:
->In general, I liked this patch.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
 
-Robert, are all of Thomas's patches now in cygwin or are you
-still reviewing parts 2 - 4?
+--268295-25500-1032252522=:277
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-length: 1066
 
-cgf
+
+
+On Mon, 16 Sep 2002, Robert Collins wrote:
+
+> On Sat, 2002-08-17 at 06:18, Thomas Pfaff wrote:
+> >
+> > Rob suggested to break the pthread_fork patch into smaller chunks. Ths is
+> > part 1 providing a fork save key value handling.
+> > The patch will add a linked list of keys to< MTinterface and a fork buffer
+> > in pthread_key where the key values are passed between parent and child.
+>
+> In general, I liked this patch.
+> I've made some essentially stylistic alterations, to make the resulting
+> code a little easier to read. I realise you followed my lead on some of
+> the layout - I need to fix up my existing code too :].
+>
+> Here's a snapshot of HEAD with your patch after my changes.
+>
+> I'd love it if you sent me the source for the test case you used when
+> developing this.
+>
+
+I have attached a small source file for testing.
+
+My main goal was to get a working threaded perl, so this was the reference
+source for the final testing. With all patches applied (and the changed
+mutex implementation) i was able to build and run it without problems.
+
+Thomas
+
+
+--268295-25500-1032252522=:277
+Content-Type: TEXT/plain; name="fork.c"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.WNT.4.44.0209171048420.277@algeria.intern.net>
+Content-Description: 
+Content-Disposition: attachment; filename="fork.c"
+Content-length: 647
+
+I2luY2x1ZGUgPHN0ZGlvLmg+CiNpbmNsdWRlIDx1bmlzdGQuaD4KI2luY2x1
+ZGUgPHN5cy93YWl0Lmg+CiNpbmNsdWRlIDxwdGhyZWFkLmg+CgppbnQgbWFp
+bih2b2lkKQp7CiAgcHRocmVhZF9rZXlfdCBwX2tleTsKCiAgcHRocmVhZF9r
+ZXlfY3JlYXRlICgmcF9rZXksTlVMTCk7CiAgcHRocmVhZF9zZXRzcGVjaWZp
+YyAocF9rZXksICh2b2lkKikgMHgxMCk7CgogIHN3aXRjaCAoZm9yaygpKQog
+ICAgewogICAgY2FzZSAtMToKICAgICAgcmV0dXJuIDA7CiAgICBjYXNlIDA6
+CiAgICAgIHByaW50ZiAoImNoaWxkOiAgJXAgJXBcbiIsIHB0aHJlYWRfc2Vs
+ZigpLCBwdGhyZWFkX2dldHNwZWNpZmljIChwX2tleSkpOwogICAgICBicmVh
+azsKICAgIGRlZmF1bHQ6CiAgICAgIHByaW50ZiAoInBhcmVudDogJXAgJXBc
+biIsIHB0aHJlYWRfc2VsZigpLCBwdGhyZWFkX2dldHNwZWNpZmljIChwX2tl
+eSkpOwogICAgfQoKICByZXR1cm4gMDsKfQo=
+
+--268295-25500-1032252522=:277--
