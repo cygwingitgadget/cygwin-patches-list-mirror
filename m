@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2937-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 5382 invoked by alias); 5 Sep 2002 07:45:59 -0000
+Return-Path: <cygwin-patches-return-2938-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 11405 invoked by alias); 6 Sep 2002 04:23:48 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,43 +7,70 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 5346 invoked from network); 5 Sep 2002 07:45:57 -0000
-Date: Thu, 05 Sep 2002 00:45:00 -0000
-From: egor duda <deo@logos-m.ru>
-Reply-To: egor duda <cygwin-patches@cygwin.com>
-Organization: deo
-X-Priority: 3 (Normal)
-Message-ID: <155228642049.20020905114529@logos-m.ru>
-To: Christopher Faylor <cygwin-patches@cygwin.com>
-Subject: Re: proposed how-autoload-works.txt
-In-Reply-To: <20020904151853.GC1284@redhat.com>
-References: <53165040475.20020904180525@logos-m.ru>
- <20020904151853.GC1284@redhat.com>
-MIME-Version: 1.0
+Received: (qmail 11390 invoked from network); 6 Sep 2002 04:23:47 -0000
+Date: Thu, 05 Sep 2002 21:23:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
+To: cygwin-patches@cygwin.com
+Subject: [cgf@redhat.com: Re: [Mingw-users] Re: WINVER constant value [WAS: GetConsoleWindow]]
+Message-ID: <20020906042335.GA28278@redhat.com>
+Mail-Followup-To: cygwin-patches@cygwin.com
+Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-SW-Source: 2002-q3/txt/msg00385.txt.bz2
+Content-Disposition: inline
+User-Agent: Mutt/1.4i
+X-SW-Source: 2002-q3/txt/msg00386.txt.bz2
 
-Hi!
+----- Forwarded message from Christopher Faylor <cgf@redhat.com> -----
 
-Wednesday, 04 September, 2002 Christopher Faylor cgf@redhat.com wrote:
+From: Christopher Faylor <cgf@redhat.com>
+To: "Andrew 'Static' Stadt" <acstadt@sympatico.ca>
+Cc: Mingw-users <mingw-users@lists.sourceforge.net>
+Subject: Re: [Mingw-users] Re: WINVER constant value [WAS: GetConsoleWindow]
+Date: Fri, 6 Sep 2002 00:09:34 -0400
+In-Reply-To: <EMEJLKIHGFHGPDDBKMEGAEIMCAAA.acstadt@sympatico.ca>
 
-CF> On Wed, Sep 04, 2002 at 06:05:25PM +0400, egor duda wrote:
->>Spelling, grammar and factual corrections are welcome.
+On Thu, Sep 05, 2002 at 10:46:25PM -0400, Andrew 'Static' Stadt wrote:
+>I'll admit that the first time I attempted to use a newer api call, the
+>error threw me for a little bit of a loop, but all I had to do was read the
+>appropriate header file, and the added the appropriate define in my
+>makefile. ( a side note here to note my own glaring stupidity at the time: I
+>was attempting to use an api call which didn't exist on the target platform,
+>but my client had also given my some misleading specs, so I'm not entirely
+>to blame).
+>
+>Do I wish it had been documented somewhere?  A knee-jerk response says yes,
+>but in retrospect, how many people actually read all of the documentation
+>supplied with all of their software/tools/etc.
 
-CF> I checked this in with some corrections.  I checked in your version
-CF> first and my version second if you want to see what I did.
+However, if there was someplace to point people who stumble across this then
+at least we wouldn't have to be reexplaining the issue.
 
-CF> It was basically just some minor grammar and formatting changes.
+>In this particular case, I don't believe that having someone actually
+>look in the header file to see what's going on would be such a
+>hardship.  Admittedly, I wouldn't mind a little table somewhere which
+>lists the 'common name' (e.g.  w2k), with its appropriate WINVER
+>value...  but then again, its something I should probably add to my own
+>reference notes vs.  spending so much time on msdn.
+>
+>So, my $0.02 is that I like it the way it is.
 
-CF> I did add some words to explain that, after the first load, calls
-CF> to an autoloaded function should be as fast as a normal function
-CF> call.
+So what would the downside be to you if the WINVER was set to the highest
+legal value?  You'd still know enough to look in the header file if
+something was amiss.  And, people who were used to MSVC would still
+have the environment they were used to.
 
-Thanks!
+cgf
 
-Actually, i was meaning an extra jmp when talking about overhead, but
-now i realize that an extra jmp is performed in normal dll+implib
-setup too. 
 
-Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
+-------------------------------------------------------
+This sf.net email is sponsored by: OSDN - Tired of that same old
+cell phone?  Get a new here for FREE!
+https://www.inphonic.com/r.asp?r=sourceforge1&refcode1=vs3390
+_______________________________________________
+MinGW-users mailing list
+MinGW-users@lists.sourceforge.net
+
+You may change your MinGW Account Options or unsubscribe at:
+https://lists.sourceforge.net/lists/listinfo/mingw-users
+
+----- End forwarded message -----
