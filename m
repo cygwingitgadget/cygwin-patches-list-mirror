@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2099-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 13187 invoked by alias); 24 Apr 2002 10:18:52 -0000
+Return-Path: <cygwin-patches-return-2100-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 21661 invoked by alias); 24 Apr 2002 10:53:25 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,83 +7,164 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 13166 invoked from network); 24 Apr 2002 10:18:49 -0000
+Received: (qmail 21643 invoked from network); 24 Apr 2002 10:53:23 -0000
 X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
-Date: Wed, 24 Apr 2002 03:18:00 -0000
+Date: Wed, 24 Apr 2002 03:53:00 -0000
 From: Thomas Pfaff <tpfaff@gmx.net>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] pthread_join fix
-Message-ID: <F0E13277A26BD311944600500454CCD0513601-101000@antarctica.intern.net>
+Subject: [PATCH] pthread cleanup_push,_pop fixes
+Message-ID: <Pine.WNT.4.44.0204241220040.289-101000@algeria.intern.net>
 X-X-Sender: pfaff@antarctica.intern.net
 MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="4617279-5635-1019643282=:289"
-Content-ID: <Pine.WNT.4.44.0204241214460.289@algeria.intern.net>
-X-SW-Source: 2002-q2/txt/msg00083.txt.bz2
+Content-Type: MULTIPART/MIXED; BOUNDARY="6906535-17693-1019645571=:289"
+X-SW-Source: 2002-q2/txt/msg00084.txt.bz2
 
   This message is in MIME format.  The first part should be readable text,
   while the remaining parts are likely unreadable without MIME-aware tools.
   Send mail to mime@docserver.cac.washington.edu for more info.
 
---4617279-5635-1019643282=:289
+--6906535-17693-1019645571=:289
 Content-Type: TEXT/PLAIN; charset=US-ASCII
-Content-ID: <Pine.WNT.4.44.0204241214461.289@algeria.intern.net>
-Content-length: 498
+Content-length: 974
 
-Rob,
-
-this is an incremental update to my pthread patches. It will fix a problem
-when a thread is joined before the creation completed.
-
-BTW, i have not added any locks yet (the actual implementation had no),
-but IMHO they are required in the exit,join,cancel code. I will add locks
-if you agree.
+This patch will fix the cleanup_push/pop implementation. It is required
+that the pushed handlers will run when a thread exits or is cancelled, but
+this did not happen.
+This patch is incremental to my previous patches.
 
 Greetings,
 Thomas
 
 2002-04-24  Thomas Pfaff  <tpfaff@gmx.net>
+	* include/pthread.h (__pthread_cleanup_handler): New structure
+	(pthread_cleanup_push): Rewritten.
+	(pthread_cleanup_pop): Ditto.
+	(_pthread_cleanup_push): New prototype
+	(_pthread_cleanup_pop) Ditto.
+	* pthread.cc: (_pthread_cleanup_push) New function.
+	(_pthread_cleanup_pop): Ditto.
 
-	* thread.cc (thread_init_wrapper): Check if thread is alreay
-	joined
-	(__pthread_join): Set joiner first.
-	(__pthread_detach): Ditto.
+	* thread.h (__pthread_cleanup_push): New prototype
+	(__pthread_cleanup_pop): Ditto.
+	(__pthread_cleanup_pop_all): Ditto.
+	(pthread::cleanup_handlers): New member.
+	* thread.cc (__pthread_cleanup_push): New function.
+	(__pthread_cleanup_pop): Ditto.
+	(__pthread_cleanup_pop_all): Ditto.
+	(__pthread_exit): Run cleanup handlers on exit.
+
+	* cygwin.din: Add _pthread_cleanup_push and _pthread_cleanup_pop.
 
 
-
---4617279-5635-1019643282=:289
-Content-Type: APPLICATION/OCTET-STREAM; name="pthread_join.patch"
+--6906535-17693-1019645571=:289
+Content-Type: APPLICATION/octet-stream; name="pthread_cleanup.patch"
 Content-Transfer-Encoding: BASE64
-Content-ID: Pine.WNT.4.44.0204241214420.289@algeria.intern.net
+Content-ID: <Pine.WNT.4.44.0204241252510.289@algeria.intern.net>
 Content-Description: 
-Content-Disposition: attachment; filename="pthread_join.patch"
-Content-length: 1643
+Content-Disposition: attachment; filename="pthread_cleanup.patch"
+Content-length: 6202
 
-ZGlmZiAtdXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi90aHJlYWQuY2Mgc3Jj
-L3dpbnN1cC9jeWd3aW4vdGhyZWFkLmNjCi0tLSBzcmMub2xkL3dpbnN1cC9j
-eWd3aW4vdGhyZWFkLmNjCVdlZCBBcHIgMjQgMTA6MTQ6MTQgMjAwMgorKysg
-c3JjL3dpbnN1cC9jeWd3aW4vdGhyZWFkLmNjCVdlZCBBcHIgMjQgMTA6MjQ6
-MDEgMjAwMgpAQCAtOTA5LDcgKzkwOSw3IEBAIHRocmVhZF9pbml0X3dyYXBw
-ZXIgKHZvaWQgKl9hcmcpCiAgIFRsc1NldFZhbHVlIChNVF9JTlRFUkZBQ0Ut
-PnRocmVhZF9zZWxmX2R3VGxzSW5kZXgsIHRocmVhZCk7CiAKICAgLy8gaWYg
-dGhyZWFkIGlzIGRldGFjaGVkIGZvcmNlIGNsZWFudXAgb24gZXhpdAotICBp
-ZiAodGhyZWFkLT5hdHRyLmpvaW5hYmxlID09IFBUSFJFQURfQ1JFQVRFX0RF
-VEFDSEVEKQorICBpZiAodGhyZWFkLT5hdHRyLmpvaW5hYmxlID09IFBUSFJF
-QURfQ1JFQVRFX0RFVEFDSEVEICYmIHRocmVhZC0+am9pbmVyID09IE5VTEwp
-CiAgICAgdGhyZWFkLT5qb2luZXIgPSBfX3B0aHJlYWRfc2VsZigpOwogCiAj
-aWZkZWYgX0NZR19USFJFQURfRkFJTFNBRkUKQEAgLTE1MzUsOCArMTUzNSw4
-IEBAIF9fcHRocmVhZF9qb2luIChwdGhyZWFkX3QgKnRocmVhZCwgdm9pZCAK
-IAogICBlbHNlCiAgICAgewotICAgICAgKCp0aHJlYWQpLT5hdHRyLmpvaW5h
-YmxlID0gUFRIUkVBRF9DUkVBVEVfREVUQUNIRUQ7CiAgICAgICAoKnRocmVh
-ZCktPmpvaW5lciA9IGpvaW5lcjsKKyAgICAgICgqdGhyZWFkKS0+YXR0ci5q
-b2luYWJsZSA9IFBUSFJFQURfQ1JFQVRFX0RFVEFDSEVEOwogICAgICAgV2Fp
-dEZvclNpbmdsZU9iamVjdCAoKCp0aHJlYWQpLT53aW4zMl9vYmpfaWQsIElO
-RklOSVRFKTsKICAgICAgIGlmIChyZXR1cm5fdmFsKQogICAgICAgICAgKnJl
-dHVybl92YWwgPSAoKnRocmVhZCktPnJldHVybl9wdHI7CkBAIC0xNTYwLDkg
-KzE1NjAsOSBAQCBfX3B0aHJlYWRfZGV0YWNoIChwdGhyZWFkX3QgKnRocmVh
-ZCkKICAgICAgIHJldHVybiBFSU5WQUw7CiAgICAgfQogCi0gICgqdGhyZWFk
-KS0+YXR0ci5qb2luYWJsZSA9IFBUSFJFQURfQ1JFQVRFX0RFVEFDSEVEOwog
-ICAvLyBmb3JjZSBjbGVhbnVwIG9uIGV4aXQKICAgKCp0aHJlYWQpLT5qb2lu
-ZXIgPSAqdGhyZWFkOworICAoKnRocmVhZCktPmF0dHIuam9pbmFibGUgPSBQ
-VEhSRUFEX0NSRUFURV9ERVRBQ0hFRDsKIAogICByZXR1cm4gMDsKIH0K
+ZGlmZiAtdXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi9jeWd3aW4uZGluIHNy
+Yy93aW5zdXAvY3lnd2luL2N5Z3dpbi5kaW4KLS0tIHNyYy5vbGQvd2luc3Vw
+L2N5Z3dpbi9jeWd3aW4uZGluCVNhdCBKYW4gMTkgMTg6NDU6NDYgMjAwMgor
+Kysgc3JjL3dpbnN1cC9jeWd3aW4vY3lnd2luLmRpbglUdWUgQXByIDIzIDEx
+OjIwOjUxIDIwMDIKQEAgLTExNTMsNiArMTE1Myw4IEBAIHB0aHJlYWRfYXR0
+cl9zZXRzY2hlZHBvbGljeQogcHRocmVhZF9hdHRyX3NldHNjb3BlCiBwdGhy
+ZWFkX2F0dHJfc2V0c3RhY2tzaXplCiBwdGhyZWFkX2NhbmNlbAorX3B0aHJl
+YWRfY2xlYW51cF9wdXNoCitfcHRocmVhZF9jbGVhbnVwX3BvcAogcHRocmVh
+ZF9jb25kX2Jyb2FkY2FzdAogcHRocmVhZF9jb25kX2Rlc3Ryb3kKIHB0aHJl
+YWRfY29uZF9pbml0CmRpZmYgLXVycCBzcmMub2xkL3dpbnN1cC9jeWd3aW4v
+aW5jbHVkZS9wdGhyZWFkLmggc3JjL3dpbnN1cC9jeWd3aW4vaW5jbHVkZS9w
+dGhyZWFkLmgKLS0tIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi9pbmNsdWRlL3B0
+aHJlYWQuaAlUaHUgTm92IDIyIDAyOjU1OjQxIDIwMDEKKysrIHNyYy93aW5z
+dXAvY3lnd2luL2luY2x1ZGUvcHRocmVhZC5oCVdlZCBBcHIgMjQgMTA6MzI6
+MzcgMjAwMgpAQCAtMTAzLDEwICsxMDMsMjAgQEAgdm9pZCBwdGhyZWFkX2Ns
+ZWFudXBfcHVzaCAodm9pZCAoKnJvdXRpbgogdm9pZCBwdGhyZWFkX2NsZWFu
+dXBfcG9wIChpbnQgZXhlY3V0ZSk7CiAqLwogdHlwZWRlZiB2b2lkICgqX19j
+bGVhbnVwX3JvdXRpbmVfdHlwZSkgKHZvaWQgKik7Cit0eXBlZGVmIHN0cnVj
+dCBfcHRocmVhZF9jbGVhbnVwX2hhbmRsZXIgCit7CisgIF9fY2xlYW51cF9y
+b3V0aW5lX3R5cGUgZnVuY3Rpb247CisgIHZvaWQgKmFyZzsKKyAgc3RydWN0
+IF9wdGhyZWFkX2NsZWFudXBfaGFuZGxlciAqbmV4dDsKK30gX19wdGhyZWFk
+X2NsZWFudXBfaGFuZGxlcjsKIAotI2RlZmluZSBwdGhyZWFkX2NsZWFudXBf
+cHVzaChmbiwgYXJnKSB7IF9fY2xlYW51cF9yb3V0aW5lX3R5cGUgX19jbGVh
+bnVwX3JvdXRpbmU9Zm47IFwKLXZvaWQgKl9fY2xlYW51cF9wYXJhbT1hcmc7
+Ci0jZGVmaW5lIHB0aHJlYWRfY2xlYW51cF9wb3AoZXhlY3V0ZSkgaWYgKGV4
+ZWN1dGUpIF9fY2xlYW51cF9yb3V0aW5lKF9fY2xlYW51cF9wYXJhbSk7IH0K
+K3ZvaWQgX3B0aHJlYWRfY2xlYW51cF9wdXNoIChfX3B0aHJlYWRfY2xlYW51
+cF9oYW5kbGVyICpoYW5kbGVyKTsKK3ZvaWQgX3B0aHJlYWRfY2xlYW51cF9w
+b3AgKGludCBleGVjdXRlKTsKKworI2RlZmluZSBwdGhyZWFkX2NsZWFudXBf
+cHVzaChfZm4sIF9hcmcpIHsgX19wdGhyZWFkX2NsZWFudXBfaGFuZGxlciBf
+X2NsZWFudXBfaGFuZGxlciA9IFwKKyAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgeyBfZm4sIF9hcmcsIE5VTEwgfTsgXAorICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBfcHRocmVh
+ZF9jbGVhbnVwX3B1c2goICZfX2NsZWFudXBfaGFuZGxlciApOworI2RlZmlu
+ZSBwdGhyZWFkX2NsZWFudXBfcG9wKF9leGVjdXRlKSBfcHRocmVhZF9jbGVh
+bnVwX3BvcCggX2V4ZWN1dGUgKTsgfQogCiAvKiBDb25kaXRpb24gdmFyaWFi
+bGVzICovCiBpbnQgcHRocmVhZF9jb25kX2Jyb2FkY2FzdCAocHRocmVhZF9j
+b25kX3QgKik7CmRpZmYgLXVycCBzcmMub2xkL3dpbnN1cC9jeWd3aW4vcHRo
+cmVhZC5jYyBzcmMvd2luc3VwL2N5Z3dpbi9wdGhyZWFkLmNjCi0tLSBzcmMu
+b2xkL3dpbnN1cC9jeWd3aW4vcHRocmVhZC5jYwlGcmkgT2N0ICA1IDA3OjA1
+OjA5IDIwMDEKKysrIHNyYy93aW5zdXAvY3lnd2luL3B0aHJlYWQuY2MJV2Vk
+IEFwciAyNCAxMDozNTozNiAyMDAyCkBAIC00NDUsNiArNDQ1LDE4IEBAIHB0
+aHJlYWRfdGVzdGNhbmNlbCAodm9pZCkKICAgX19wdGhyZWFkX3Rlc3RjYW5j
+ZWwgKCk7CiB9CiAKK3ZvaWQKK19wdGhyZWFkX2NsZWFudXBfcHVzaCAoX19w
+dGhyZWFkX2NsZWFudXBfaGFuZGxlciAqaGFuZGxlcikKK3sKKyAgX19wdGhy
+ZWFkX2NsZWFudXBfcHVzaCAoaGFuZGxlcik7Cit9CisKK3ZvaWQKK19wdGhy
+ZWFkX2NsZWFudXBfcG9wIChpbnQgZXhlY3V0ZSkKK3sKKyAgX19wdGhyZWFk
+X2NsZWFudXBfcG9wIChleGVjdXRlKTsKK30KKwogLyogU2VtYXBob3JlcyAq
+LwogaW50CiBzZW1faW5pdCAoc2VtX3QgKiBzZW0sIGludCBwc2hhcmVkLCB1
+bnNpZ25lZCBpbnQgdmFsdWUpCmRpZmYgLXVycCBzcmMub2xkL3dpbnN1cC9j
+eWd3aW4vdGhyZWFkLmNjIHNyYy93aW5zdXAvY3lnd2luL3RocmVhZC5jYwot
+LS0gc3JjLm9sZC93aW5zdXAvY3lnd2luL3RocmVhZC5jYwlXZWQgQXByIDI0
+IDEwOjI0OjAxIDIwMDIKKysrIHNyYy93aW5zdXAvY3lnd2luL3RocmVhZC5j
+YwlUdWUgQXByIDIzIDE1OjQyOjMyIDIwMDIKQEAgLTM0Niw3ICszNDYsNyBA
+QCBNVGludGVyZmFjZTo6Zml4dXBfYWZ0ZXJfZm9yayAodm9pZCkKIH0KIAog
+cHRocmVhZDo6cHRocmVhZCAoKTp2ZXJpZnlhYmxlX29iamVjdCAoUFRIUkVB
+RF9NQUdJQyksIHdpbjMyX29ial9pZCAoMCksCi0gICAgICAgICAgICAgICAg
+ICAgIGNhbmNlbHN0YXRlICgwKSwgY2FuY2VsdHlwZSAoMCksIGpvaW5lcihO
+VUxMKQorICAgICAgICAgICAgICAgICAgICBjYW5jZWxzdGF0ZSAoMCksIGNh
+bmNlbHR5cGUgKDApLCBjbGVhbnVwX2hhbmRsZXJzKE5VTEwpLCBqb2luZXIo
+TlVMTCkKIHsKIH0KIApAQCAtMTIyMCw2ICsxMjIwLDQyIEBAIF9fcHRocmVh
+ZF90ZXN0Y2FuY2VsICh2b2lkKQogICAgKmRvZXMgc29tZXRoaW5nKi8KIH0K
+IAordm9pZAorX19wdGhyZWFkX2NsZWFudXBfcHVzaCAoX19wdGhyZWFkX2Ns
+ZWFudXBfaGFuZGxlciAqaGFuZGxlcikKK3sKKyAgcHRocmVhZF90IHRocmVh
+ZCA9IF9fcHRocmVhZF9zZWxmICgpOworCisgIGhhbmRsZXItPm5leHQgPSB0
+aHJlYWQtPmNsZWFudXBfaGFuZGxlcnM7CisgIHRocmVhZC0+Y2xlYW51cF9o
+YW5kbGVycyA9IGhhbmRsZXI7Cit9CisKK3ZvaWQKK19fcHRocmVhZF9jbGVh
+bnVwX3BvcCAoaW50IGV4ZWN1dGUpCit7CisgIHB0aHJlYWRfdCB0aHJlYWQg
+PSBfX3B0aHJlYWRfc2VsZiAoKTsKKworICBpZiggdGhyZWFkLT5jbGVhbnVw
+X2hhbmRsZXJzICE9IE5VTEwgKQorICB7CisgICAgIF9fcHRocmVhZF9jbGVh
+bnVwX2hhbmRsZXIgKmhhbmRsZXIgPSB0aHJlYWQtPmNsZWFudXBfaGFuZGxl
+cnM7CisKKyAgICAgaWYgKGV4ZWN1dGUpCisgICAgICAgKCpoYW5kbGVyLT5m
+dW5jdGlvbikgKGhhbmRsZXItPmFyZyk7CisKKyAgICAgdGhyZWFkLT5jbGVh
+bnVwX2hhbmRsZXJzID0gaGFuZGxlci0+bmV4dDsKKyAgfQorfQorCit2b2lk
+CitfX3B0aHJlYWRfY2xlYW51cF9wb3BfYWxsICh2b2lkKQoreworICBwdGhy
+ZWFkX3QgdGhyZWFkID0gX19wdGhyZWFkX3NlbGYgKCk7CisKKyAgd2hpbGUo
+dGhyZWFkLT5jbGVhbnVwX2hhbmRsZXJzICE9IE5VTEwpCisgIHsKKyAgICAg
+X19wdGhyZWFkX2NsZWFudXBfcG9wICgxKTsKKyAgfQorfQorCiAvKgogICpS
+YWNlcyBpbiBwdGhyZWFkX2F0Zm9yazoKICAqV2UgYXJlIHJhY2Ugc2FmZSBp
+biB0aGF0IGFueSBhZGRpdGlvbnMgdG8gdGhlIGxpc3RzIGFyZSBtYWRlIHZp
+YQpAQCAtMTQ5NSw2ICsxNTMxLDkgQEAgdm9pZAogX19wdGhyZWFkX2V4aXQg
+KHZvaWQgKnZhbHVlX3B0cikKIHsKICAgcHRocmVhZF90IHRocmVhZCA9IF9f
+cHRocmVhZF9zZWxmICgpOworCisgIC8vIHJ1biBjbGVhbnVwIGhhbmRsZXJz
+CisgIF9fcHRocmVhZF9jbGVhbnVwX3BvcF9hbGwgKCk7CiAKICAgTVRfSU5U
+RVJGQUNFLT5kZXN0cnVjdG9ycy5JdGVyYXRlTnVsbCAoKTsKIApkaWZmIC11
+cnAgc3JjLm9sZC93aW5zdXAvY3lnd2luL3RocmVhZC5oIHNyYy93aW5zdXAv
+Y3lnd2luL3RocmVhZC5oCi0tLSBzcmMub2xkL3dpbnN1cC9jeWd3aW4vdGhy
+ZWFkLmgJV2VkIEFwciAyNCAxMDoxNDoxNCAyMDAyCisrKyBzcmMvd2luc3Vw
+L2N5Z3dpbi90aHJlYWQuaAlUdWUgQXByIDIzIDE1OjQyOjQ5IDIwMDIKQEAg
+LTIzOSw2ICsyMzksNyBAQCBwdWJsaWM6CiAgIHZvaWQgKnJldHVybl9wdHI7
+CiAgIGJvb2wgc3VzcGVuZGVkOwogICBpbnQgY2FuY2Vsc3RhdGUsIGNhbmNl
+bHR5cGU7CisgIF9fcHRocmVhZF9jbGVhbnVwX2hhbmRsZXIgKmNsZWFudXBf
+aGFuZGxlcnM7CiAgIHB0aHJlYWRfdCBqb2luZXI7CiAgIC8vIGludCBqb2lu
+YWJsZTsKIApAQCAtNTAzLDYgKzUwNCw5IEBAIGludCBfX3B0aHJlYWRfY2Fu
+Y2VsIChwdGhyZWFkX3QgdGhyZWFkKTsKIGludCBfX3B0aHJlYWRfc2V0Y2Fu
+Y2Vsc3RhdGUgKGludCBzdGF0ZSwgaW50ICpvbGRzdGF0ZSk7CiBpbnQgX19w
+dGhyZWFkX3NldGNhbmNlbHR5cGUgKGludCB0eXBlLCBpbnQgKm9sZHR5cGUp
+Owogdm9pZCBfX3B0aHJlYWRfdGVzdGNhbmNlbCAodm9pZCk7Cit2b2lkIF9f
+cHRocmVhZF9jbGVhbnVwX3B1c2ggKF9fcHRocmVhZF9jbGVhbnVwX2hhbmRs
+ZXIgKmhhbmRsZXIpOwordm9pZCBfX3B0aHJlYWRfY2xlYW51cF9wb3AgKGlu
+dCBleGVjdXRlKTsKK3ZvaWQgX19wdGhyZWFkX2NsZWFudXBfcG9wX2FsbCAo
+dm9pZCk7CiAKIAogLyogU2VtYXBob3JlcyAqLwo=
 
---4617279-5635-1019643282=:289--
+--6906535-17693-1019645571=:289--
