@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5081-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 30565 invoked by alias); 26 Oct 2004 19:52:52 -0000
+Return-Path: <cygwin-patches-return-5082-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 17262 invoked by alias); 26 Oct 2004 21:34:20 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,50 +7,67 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 30545 invoked from network); 26 Oct 2004 19:52:49 -0000
-Message-ID: <n2m-g.cllkm1.3vvccd5.1@buzzy-box.bavag>
+Received: (qmail 16335 invoked from network); 26 Oct 2004 21:34:15 -0000
+Message-ID: <n2m-g.clmmgp.3vvbk61.1@buzzy-box.bavag>
 From: Bas van Gompel <cygwin-patches.buzz@bavag.tmfweb.nl>
-Subject: Re: [Patch] cygcheck: More complete helptext on drive-list.
-References: <n2m-g.cl9oca.3vve76d.1@buzzy-box.bavag> <20041022000805.GF28112@trixie.casa.cgf.cx> <n2m-g.cl9v8k.3vv94fl.1@buzzy-box.bavag> <n2m-g.cla2a1.3vvcfu5.1@buzzy-box.bavag> <n2m-g.clektf.3vvfh6r.1@buzzy-box.bavag> <20041025155132.GA8428@coe.bosbc.com> <n2m-g.cljgae.3vvfvq3.1@buzzy-box.bavag> <20041025212807.GS27118@trixie.casa.cgf.cx>
+Subject: [Patch] cygcheck: Warn about multiple or missing cygwin1.dlls.
 Reply-To: cygwin-patches mailing-list <cygwin-patches@cygwin.com>
 Organisation: Ehm...
-User-Agent: slrn/0.9.8.1 (Win32) Hamster/2.0.6.0
+User-Agent: slrn/0.9.8.1 (Win32) Hamster/2.0.6.0 Korrnews/4.2
 To: cygwin-patches@cygwin.com
-In-Reply-To: <20041025212807.GS27118@trixie.casa.cgf.cx>
-Date: Tue, 26 Oct 2004 19:52:00 -0000
-X-SW-Source: 2004-q4/txt/msg00082.txt.bz2
+Date: Tue, 26 Oct 2004 21:34:00 -0000
+X-SW-Source: 2004-q4/txt/msg00083.txt.bz2
 
-Op Mon, 25 Oct 2004 17:28:07 -0400 schreef Christopher Faylor
-in <20041025212807.GS27118@trixie.casa.cgf.cx>:
-:  On Mon, Oct 25, 2004 at 06:25:16PM +0200, Bas van Gompel wrote:
-: > Op Mon, 25 Oct 2004 11:51:32 -0400 schreef Christopher Faylor
+Hi,
 
-[Messed up ChangeLog-entry]
+Another (trivial, I think) patch, this time to warn about one of the
+more common pitfalls: multiple or missing cygwin1.dlls.
 
-: > :   I fixed this and checked it in.  In general, you don't add ChangeLog entries
-: > :  about the ChangeLog.
-: >
-: > Ok. (There are other instances...)
-:
-:   With the exception of the famous "subauth", the word "ChangeLog" does not show
-:  up in any cygwin-specific ChangeLog that I can see.
+2004-10-26  Bas van Gompel  <cygwin-patch.buzz@bavag.tmfweb.nl>
 
-You are of course correct.
-The instances which fooled me into adding it are in w32api and cygwin-apps:
+	* cygcheck.cc (dump_sysinfo): Warn about missing or multiple cygwin1
+	dlls.
 
-| w32api/ChangeLog:4225: * ChangeLog: Fix omission of name in recent entries.
-| w32api/ChangeLog:4250: * ChangeLog: Fix typo in last entry.
-| w32api/ChangeLog:4442: * ChangeLog: correct date in last entry.
-| w32api/ChangeLog:4731: * ChangeLog: Fix typo in last entry.
-| w32api/ChangeLog:8072: * ChangeLog started
-| cygwin-apps/cygutils/ChangeLog:865:       * ChangeLog: fix tabs
-| cygwin-apps/cygutils/ChangeLog:1682:      * ChangeLog: fix tabs
-| cygwin-apps/setup/ChangeLog:258:  * ChangeLog: Fix broken line-wrapping throughout. Clarify that
+
+--- src/winsup/utils-3/cygcheck.cc	25 Oct 2004 16:11:41 -0000	1.57
++++ src/winsup/utils-3/cygcheck.cc	26 Oct 2004 20:50:24 -0000
+@@ -1222,6 +1222,7 @@ dump_sysinfo ()
+ 
+   if (givehelp)
+     printf ("Looking for various Cygnus DLLs...  (-v gives version info)\n");
++  int cygwin_dll_count = 0;
+   for (i = 0; i < num_paths; i++)
+     {
+       WIN32_FIND_DATA ffinfo;
+@@ -1238,7 +1239,10 @@ dump_sysinfo ()
+ 		{
+ 		  sprintf (tmp, "%s\\%s", paths[i], f);
+ 		  if (strcasecmp (f, "cygwin1.dll") == 0)
+-		    found_cygwin_dll = strdup (tmp);
++		    {
++		      cygwin_dll_count++;
++		      found_cygwin_dll = strdup (tmp);
++		    }
+ 		  else
+ 		    ls (tmp);
+ 		}
+@@ -1253,6 +1257,10 @@ dump_sysinfo ()
+ 
+       FindClose (ff);
+     }
++  if (cygwin_dll_count > 1)
++    puts ("Warning: There are multiple cygwin1.dlls on your path");
++  if (!cygwin_dll_count)
++    puts ("Warning: cygwin1.dll not found on your path");
+ }
+ 
+ static int
+
 
 
 L8r,
 
-Buzz. (EOT|TITTTL?)
+Buzz.
 -- 
   ) |  | ---/ ---/  Yes, this | This message consists of true | I do not
 --  |  |   /    /   really is |   and false bits entirely.    | mail for
