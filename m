@@ -1,41 +1,30 @@
-From: Corinna Vinschen <corinna@vinschen.de>
+From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: src/winsup/cinstall ChangeLog download.cc
-Date: Mon, 19 Feb 2001 10:56:00 -0000
-Message-id: <20010219195553.G908@cygbert.vinschen.de>
-References: <20010219180219.3323.qmail@sourceware.cygnus.com> <3A916118.A043FFBD@yahoo.com>
-X-SW-Source: 2001-q1/msg00086.html
+Subject: Re: raw-win32-keyboard-mode patch
+Date: Mon, 19 Feb 2001 18:49:00 -0000
+Message-id: <20010219214951.A23483@redhat.com>
+References: <16286062992.20010216183758@logos-m.ru>
+X-SW-Source: 2001-q1/msg00087.html
 
-On Mon, Feb 19, 2001 at 01:08:24PM -0500, Earnie Boyd wrote:
-> corinna@sourceware.cygnus.com wrote:
-> > 
-> > CVSROOT:        /cvs/src
-> > Module name:    src
-> > Changes by:     corinna@sources.redhat.com      2001-02-19 10:02:19
-> > 
-> > Modified files:
-> >         winsup/cinstall: ChangeLog download.cc
-> > 
-> > Log message:
-> >         * download.cc (get_file_size): New function. Eliminates the need
-> >         to call `stat'.
-> >         (download_one): Call `get_file_size' instead of `stat'. This
-> >         workarounds a problem with mingw's `stat' call.
-> > 
-> 
-> Corinna,
-> 
-> Can you please elaborate on the problem with MinGW's `stat' call?
+On Fri, Feb 16, 2001 at 06:37:58PM +0300, Egor Duda wrote:
+>2001-02-16  Egor Duda  <deo@logos-m.ru>
+>  
+>        * fhandler_console.cc (use_mouse): Remove. Make mouse handling
+>        per-console.
+>        * fhandler.h (class fhandler_console): Move use_mouse here.
+>        * fhandler.cc (fhandler_console::set_raw_win32_keyboard_mode): New
+>        function.
+>        * fhandler_console.cc (fhandler_console::fhandler_console): Turn
+>        mouse handling and raw-win32 keyboard mode off by default.
+>        * fhandler_console.cc (fhandler_console::read): If in raw-win32
+>        keyboard mode, encode win32 keyboard events in \033{x;y;z;t;u;wK
+>        sequences.
+>        * fhandler_console.cc (fhandler_console::char_command): Treat
+>        \033[2000h as a command to enable raw-win32 keyboard mode and
+>        \033[2000l as a command to disable it.
 
-I haven't investigated the problem in mingw. I only saw that
-mingw's stat returns the wrong size in st_size. I needed a quick
-solution so I decided to create a solution without using stat
-instead of debugging.
+Oops.  Sorry for the delay.
 
-Corinna
+Please check this in.  It looks interesting.
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
-mailto:vinschen@redhat.com
+cgf
