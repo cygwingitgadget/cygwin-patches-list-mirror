@@ -1,110 +1,26 @@
-From: egor duda <deo@logos-m.ru>
+From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: SYSTEMROOT, SYSTEMDRIVE
-Date: Wed, 09 May 2001 11:40:00 -0000
-Message-id: <12720489682.20010509223903@logos-m.ru>
-References: <20010508001319.A16059@redhat.com> <8111460809.20010508190550@logos-m.ru>
-X-SW-Source: 2001-q2/msg00211.html
-Content-type: multipart/mixed; boundary="----------=_1583532847-65438-58"
+Subject: Re: control characters echoed incorrectly.
+Date: Wed, 09 May 2001 11:55:00 -0000
+Message-id: <20010509145355.A2089@redhat.com>
+References: <s1spudixvai.fsf@jaist.ac.jp>
+X-SW-Source: 2001-q2/msg00212.html
 
-This is a multi-part message in MIME format...
+On Thu, May 10, 2001 at 02:54:29AM +0900, Kazuhiro Fujieda wrote:
+>The terminal device echoes control characters even when the echo 
+>flag is off.
+>
+>2001-05-10  Kazuhiro Fujieda  <fujieda@jaist.ac.jp>
+>
+>	* fhandler_termios.cc (fhandler_termios::line_edit): Check the echo
+>	flag before echoing control characters.
 
-------------=_1583532847-65438-58
-Content-length: 317
+Good catch.  I made a modification to your patch.  I put the echoing of
+the erase characters into an "echo_erase" method.
 
-Hi!
+I've checked your changes in, with some modification.  I'd appreciate it
+if you'd double check my modifications to your changes.
 
-2001-05-09  Egor Duda  <deo@logos-m.ru>
+Thanks.
 
-        * environ.cc (append_to_winenv): New function.
-        (winenv): Always add SYSTEMDRIVE and SYSYEMROOT to win32-style
-        environment.
-
-Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
-force-systemroot.diff
-force-systemroot.ChangeLog
-
-
-------------=_1583532847-65438-58
-Content-Type: text/plain; charset=us-ascii; name="force-systemroot.ChangeLog"
-Content-Disposition: inline; filename="force-systemroot.ChangeLog"
-Content-Transfer-Encoding: base64
-Content-Length: 228
-
-MjAwMS0wNS0wOSAgRWdvciBEdWRhICA8ZGVvQGxvZ29zLW0ucnU+CgoJKiBl
-bnZpcm9uLmNjIChhcHBlbmRfdG9fd2luZW52KTogTmV3IGZ1bmN0aW9uLgoJ
-KHdpbmVudik6IEFsd2F5cyBhZGQgU1lTVEVNRFJJVkUgYW5kIFNZU1lFTVJP
-T1QgdG8gd2luMzItc3R5bGUKCWVudmlyb25tZW50Lgo=
-
-------------=_1583532847-65438-58
-Content-Type: text/x-diff; charset=us-ascii; name="force-systemroot.diff"
-Content-Disposition: inline; filename="force-systemroot.diff"
-Content-Transfer-Encoding: base64
-Content-Length: 3852
-
-SW5kZXg6IGVudmlyb24uY2MKPT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1Mg
-ZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vZW52aXJvbi5jYyx2
-CnJldHJpZXZpbmcgcmV2aXNpb24gMS40OQpkaWZmIC11IC1wIC0yIC1yMS40
-OSBlbnZpcm9uLmNjCi0tLSBlbnZpcm9uLmNjCTIwMDEvMDUvMDQgMjA6Mzk6
-MzgJMS40OQorKysgZW52aXJvbi5jYwkyMDAxLzA1LzA5IDE4OjI5OjM4CkBA
-IC03MjksNCArNzI5LDIyIEBAIGVudl9zb3J0IChjb25zdCB2b2lkICphLCBj
-b25zdCB2b2lkICpiKQogfQogCitzdGF0aWMgY2hhcioKK2FwcGVuZF90b193
-aW5lbnYgKGNoYXIqIHdpbmVudnAsIGNvbnN0IGNoYXIqIHN0cikKK3sKKyAg
-aW50IGxlbiA9IHN0cmxlbiAoc3RyKTsKKyAgbWVtY3B5ICh3aW5lbnZwLCBz
-dHIsIGxlbiArIDEpOworICByZXR1cm4gKHdpbmVudnAgKyBsZW4gKyAxKTsK
-K30KKworLyogS2VlcCB0aGlzIGxpc3QgaW4gdXBwZXIgY2FzZSBhbmQgc29y
-dGVkICovCitjb25zdCBjaGFyKiBmb3JjZWRfd2luZW52X3ZhcnMgW10gPQor
-ICB7CisgICAgIlNZU1RFTURSSVZFIiwKKyAgICAiU1lTVEVNUk9PVCIsCisg
-ICAgTlVMTAorICB9OworCisjZGVmaW5lIEZPUkNFRF9XSU5FTlZfU0laRSAo
-c2l6ZW9mIChmb3JjZWRfd2luZW52X3ZhcnMpIC8gc2l6ZW9mIChmb3JjZWRf
-d2luZW52X3ZhcnNbMF0pKSAKKwogLyogQ3JlYXRlIGEgV2luZG93cy1zdHls
-ZSBlbnZpcm9ubWVudCBibG9jaywgaS5lLiBhIHR5cGljYWwgY2hhcmFjdGVy
-IGJ1ZmZlcgogICAgZmlsbGVkIHdpdGggbnVsbCB0ZXJtaW5hdGVkIHN0cmlu
-Z3MsIHRlcm1pbmF0ZWQgYnkgZG91YmxlIG51bGwgY2hhcmFjdGVycy4KQEAg
-LTczOCw1ICs3NTYsMjkgQEAgd2luZW52IChjb25zdCBjaGFyICogY29uc3Qg
-KmVudnAsIGludCBrZQogICBpbnQgbGVuLCBuLCB0bDsKICAgY29uc3QgY2hh
-ciAqIGNvbnN0ICpzcmNwOworICBjb25zdCBjaGFyICogY29uc3QgKmZvcmNl
-ZF9zcmNwOwogICBjb25zdCBjaGFyICogKmRzdHA7CisgIGNvbnN0IGNoYXIq
-IGZvcmNlZF9lbnZwIFtGT1JDRURfV0lORU5WX1NJWkVdOworICBjaGFyKiBw
-OworCisgIGRlYnVnX3ByaW50ZiAoImVudnAgJXAsIGtlZXBfcG9zaXggJWQi
-LCBlbnZwLCBrZWVwX3Bvc2l4KTsKKworICB0bCA9IDA7CisKKyAgZm9yIChz
-cmNwID0gZm9yY2VkX3dpbmVudl92YXJzLCBkc3RwID0gZm9yY2VkX2VudnA7
-ICpzcmNwOyBzcmNwKyspCisgICAgeworICAgICAgbGVuID0gc3RybGVuICgq
-c3JjcCk7CisgICAgICBwID0gKGNoYXIqKSBhbGxvY2EgKGxlbiArIE1BWF9Q
-QVRIKTsKKyAgICAgIHN0cmNweSAocCwgKnNyY3ApOworICAgICAgc3RyY2F0
-IChwLCAiPSIpOworICAgICAgaWYgKCFHZXRFbnZpcm9ubWVudFZhcmlhYmxl
-ICgqc3JjcCwgcCArIGxlbiArIDEsIE1BWF9QQVRIKSkKKyAgICAgICAgZGVi
-dWdfcHJpbnRmICgid2FybmluZzogJXMgbm90IHByZXNlbnQgaW4gZW52aXJv
-bm1lbnQiLCAqc3JjcCk7CisgICAgICBlbHNlICAKKyAgICAgICAgeworICAg
-ICAgICAgIHRsICs9IHN0cmxlbiAocCkgKyAxOworICAgICAgICAgICpkc3Rw
-ID0gcDsKKyAgICAgICAgICBkc3RwKys7CisgICAgICAgIH0KKyAgICB9Cisg
-ICpkc3RwID0gMDsKIAogICBmb3IgKG4gPSAwOyBlbnZwW25dOyBuKyspCkBA
-IC03NDUsNyArNzg3LDUgQEAgd2luZW52IChjb25zdCBjaGFyICogY29uc3Qg
-KmVudnAsIGludCBrZQogICBjb25zdCBjaGFyICpuZXdlbnZwW24gKyAxXTsK
-IAotICBkZWJ1Z19wcmludGYgKCJlbnZwICVwLCBrZWVwX3Bvc2l4ICVkIiwg
-ZW52cCwga2VlcF9wb3NpeCk7Ci0KLSAgZm9yICh0bCA9IDAsIHNyY3AgPSBl
-bnZwLCBkc3RwID0gbmV3ZW52cDsgKnNyY3A7IHNyY3ArKywgZHN0cCsrKQor
-ICBmb3IgKHNyY3AgPSBlbnZwLCBkc3RwID0gbmV3ZW52cDsgKnNyY3A7IHNy
-Y3ArKywgZHN0cCsrKQogICAgIHsKICAgICAgIGxlbiA9IHN0cmNzcG4gKCpz
-cmNwLCAiPSIpICsgMTsKQEAgLTc4MSwxMCArODIxLDE5IEBAIHdpbmVudiAo
-Y29uc3QgY2hhciAqIGNvbnN0ICplbnZwLCBpbnQga2UKICAgY2hhciAqcHRy
-LCAqZW52YmxvY2s7CiAgIGVudmJsb2NrID0gKGNoYXIgKikgbWFsbG9jICh0
-bCArIDIpOwotICBmb3IgKHNyY3AgPSBuZXdlbnZwLCBwdHIgPSBlbnZibG9j
-azsgKnNyY3A7IHNyY3ArKykKKyAgZm9yIChzcmNwID0gbmV3ZW52cCwgcHRy
-ID0gZW52YmxvY2ssIGZvcmNlZF9zcmNwID0gZm9yY2VkX2VudnA7ICpzcmNw
-OyBzcmNwKyspCiAgICAgewotICAgICAgbGVuID0gc3RybGVuICgqc3JjcCk7
-Ci0gICAgICBtZW1jcHkgKHB0ciwgKnNyY3AsIGxlbiArIDEpOwotICAgICAg
-cHRyICs9IGxlbiArIDE7CisgICAgICBmb3IgKDsgKmZvcmNlZF9zcmNwOyBm
-b3JjZWRfc3JjcCsrKQorICAgICAgICB7CisgICAgICAgICAgaW50IGNtcCA9
-IHN0cmNtcCAoKmZvcmNlZF9zcmNwLCAqc3JjcCk7CisgICAgICAgICAgaWYg
-KGNtcCA8IDApCisgICAgICAgICAgICBwdHIgPSBhcHBlbmRfdG9fd2luZW52
-IChwdHIsICpmb3JjZWRfc3JjcCk7CisgICAgICAgICAgZWxzZSBpZiAoY21w
-ID4gMCkKKyAgICAgICAgICAgIGJyZWFrOworICAgICAgICB9CisgICAgICBw
-dHIgPSBhcHBlbmRfdG9fd2luZW52IChwdHIsICpzcmNwKTsKICAgICB9Cisg
-IGZvciAoOyAqZm9yY2VkX3NyY3A7IGZvcmNlZF9zcmNwKyspCisgICAgcHRy
-ID0gYXBwZW5kX3RvX3dpbmVudiAocHRyLCAqZm9yY2VkX3NyY3ApOworCiAg
-ICpwdHIgPSAnXDAnOwkJLyogVHdvIG51bGwgYnl0ZXMgYXQgdGhlIGVuZCAq
-LwogCg==
-
-------------=_1583532847-65438-58--
+cgf
