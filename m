@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2333-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 17083 invoked by alias); 6 Jun 2002 02:53:36 -0000
+Return-Path: <cygwin-patches-return-2334-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 20721 invoked by alias); 6 Jun 2002 02:55:27 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,140 +7,31 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 17062 invoked from network); 6 Jun 2002 02:53:35 -0000
-Date: Wed, 05 Jun 2002 19:53:00 -0000
-From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
-X-X-Sender: joshua@iocc.com
+Received: (qmail 20693 invoked from network); 6 Jun 2002 02:55:26 -0000
+Date: Wed, 05 Jun 2002 19:55:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: strace patch
-Message-ID: <Pine.CYG.4.44.0206052152001.1500-200000@iocc.com>
-MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="-559023410-617291440-1023331942=:1500"
-X-SW-Source: 2002-q2/txt/msg00316.txt.bz2
+Subject: Re: strace patch
+Message-ID: <20020606025540.GA16989@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <Pine.CYG.4.44.0206052152001.1500-200000@iocc.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Pine.CYG.4.44.0206052152001.1500-200000@iocc.com>
+User-Agent: Mutt/1.3.23.1i
+X-SW-Source: 2002-q2/txt/msg00317.txt.bz2
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
+On Wed, Jun 05, 2002 at 09:52:22PM -0500, Joshua Daniel Franklin wrote:
+>2002-06-05  Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+>
+>	* strace.cc (version): New global variable.
+>	(usage): Accomodate stdout output.
+>	(print_version): New function.
+>
 
----559023410-617291440-1023331942=:1500
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-Content-length: 440
+Applied.
 
-Here is a patch for strace that changes the method of version output
-to be consistent with the other utils. CVS should now automatically
-update version information. I also changed usage () so that the MASK
-information will only display with --help.
-
-ChangeLog:
-
-2002-06-05  Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
-
-	* strace.cc (version): New global variable.
-	(usage): Accomodate stdout output.
-	(print_version): New function.
-
-
----559023410-617291440-1023331942=:1500
-Content-Type: TEXT/PLAIN; charset=US-ASCII; name="strace.cc-patch"
-Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.CYG.4.44.0206052152220.1500@iocc.com>
-Content-Description: 
-Content-Disposition: attachment; filename="strace.cc-patch"
-Content-length: 5706
-
-LS0tIHN0cmFjZS5jYy1vcmlnCVdlZCBKdW4gIDUgMjE6NDQ6MjEgMjAwMg0K
-KysrIHN0cmFjZS5jYwlXZWQgSnVuICA1IDIxOjQzOjU0IDIwMDINCkBAIC0z
-NSw3ICszNSw3IEBAIGludCBfaW1wdXJlX3B0cjsNCiAjZGVmaW5lIGFsbG9j
-YSBfX2J1aWx0aW5fYWxsb2NhDQogDQogLy8gVmVyc2lvbiBzdHJpbmcuDQot
-c3RhdGljIGNvbnN0IGNoYXIgKnZlcnNpb25fc3RyaW5nID0gIkAoIylzdHJh
-Y2UgVjEuMCwgQ29weXJpZ2h0IChDKSAyMDAxLCAyMDAyIFJlZCBIYXQgSW5j
-LiwgIiBfX0RBVEVfXyAiXG4iOw0KK3N0YXRpYyBjb25zdCBjaGFyIHZlcnNp
-b25bXSA9ICIkUmV2aXNpb246IDEuMjEgJCI7DQogDQogc3RhdGljIGNvbnN0
-IGNoYXIgKnBnbTsNCiBzdGF0aWMgaW50IGZvcmtkZWJ1ZyA9IDE7DQpAQCAt
-NzgyLDI1ICs3ODIsMjcgQEAgcGFyc2VfbWFzayAoY29uc3QgY2hhciAqbXMs
-IGNoYXIgKiplbmRwdA0KIH0NCiANCiBzdGF0aWMgdm9pZA0KLXVzYWdlICgp
-DQordXNhZ2UgKEZJTEUgKndoZXJlID0gc3RkZXJyKQ0KIHsNCi0gIGZwcmlu
-dGYgKHN0ZGVyciwgIlwNCi1Vc2FnZTogc3RyYWNlIFtPUFRJT05TXSA8Y29t
-bWFuZC1saW5lPlxuXA0KKyAgZnByaW50ZiAod2hlcmUsICJcDQorVXNhZ2U6
-ICVzIFtPUFRJT05TXSA8Y29tbWFuZC1saW5lPlxuXA0KICAgLWIsIC0tYnVm
-ZmVyLXNpemU9U0laRSAgICAgICBzZXQgc2l6ZSBvZiBvdXRwdXQgZmlsZSBi
-dWZmZXJcblwNCiAgIC1kLCAtLW5vLWRlbHRhICAgICAgICAgICAgICAgZG9u
-J3QgZGlzcGxheSB0aGUgZGVsdGEtdCBtaWNyb3NlY29uZCB0aW1lc3RhbXBc
-blwNCiAgIC1mLCAtLXRyYWNlLWNoaWxkcmVuICAgICAgICAgdHJhY2UgY2hp
-bGQgcHJvY2Vzc2VzICh0b2dnbGUgLSBkZWZhdWx0IHRydWUpXG5cDQotICAt
-aCwgLS1oZWxwICAgICAgICAgICAgICAgICAgIGRpc3BsYXkgdGhpcyBoZWxw
-IGluZm9cblwNCisgIC1oLCAtLWhlbHAgICAgICAgICAgICAgICAgICAgb3V0
-cHV0IHVzYWdlIGluZm9ybWF0aW9uIGFuZCBleGl0XG5cDQogICAtbSwgLS1t
-YXNrPU1BU0sgICAgICAgICAgICAgIHNldCBtZXNzYWdlIGZpbHRlciBtYXNr
-XG5cDQogICAtbywgLS1vdXRwdXQ9RklMRU5BTUUgICAgICAgIHNldCBvdXRw
-dXQgZmlsZSB0byBGSUxFTkFNRVxuXA0KICAgLXAsIC0tcGlkPW4gICAgICAg
-ICAgICAgICAgICBhdHRhY2ggdG8gZXhlY3V0aW5nIHByb2dyYW0gd2l0aCBj
-eWd3aW4gcGlkIG5cblwNCiAgIC1uLCAtLWNyYWNrLWVycm9yLW51bWJlcnMg
-ICAgb3V0cHV0IGRlc2NyaXB0aXZlIHRleHQgaW5zdGVhZCBvZiBlcnJvclxu
-XA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBudW1iZXJzIGZv
-ciBXaW5kb3dzIGVycm9yc1xuXA0KICAgLVMsIC0tZmx1c2gtcGVyaW9kPVBF
-UklPRCAgICBmbHVzaCBidWZmZXJlZCBzdHJhY2Ugb3V0cHV0IGV2ZXJ5IFBF
-UklPRCBzZWNzXG5cDQotICAtdCwgLS10aW1lc3RhbXAgICAgICAgICAgICAg
-IHVzZSBhbiBhYnNvbHV0ZSBoaDptbTpzcyB0aW1lc3RhbXAgaW5zdGVkIG9m
-IHRoZVxuXA0KLSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBkZWZh
-dWx0IG1pY3Jvc2Vjb25kIHRpbWVzdGFtcC4gIEltcGxpZXMgLWRcblwNCi0g
-IC12LCAtLXZlcnNpb24gICAgICAgICAgICAgICAgZGlzcGxheSB2ZXJzaW9u
-IGluZm9cblwNCisgIC10LCAtLXRpbWVzdGFtcCAgICAgICAgICAgICAgdXNl
-IGFuIGFic29sdXRlIGhoOm1tOnNzIHRpbWVzdGFtcCBpbnN0ZWQgb2YgXG5c
-DQorICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHRoZSBkZWZhdWx0
-IG1pY3Jvc2Vjb25kIHRpbWVzdGFtcC4gIEltcGxpZXMgLWRcblwNCisgIC12
-LCAtLXZlcnNpb24gICAgICAgICAgICAgICAgb3V0cHV0IHZlcnNpb24gaW5m
-b3JtYXRpb24gYW5kIGV4aXRcblwNCiAgIC13LCAtLW5ldy13aW5kb3cgICAg
-ICAgICAgICAgc3Bhd24gcHJvZ3JhbSB1bmRlciB0ZXN0IGluIGEgbmV3IHdp
-bmRvd1xuXA0KLVxuXA0KK1xuIiwgcGdtKTsNCisgIGlmICggd2hlcmUgPT0g
-c3Rkb3V0KQ0KKyAgICBmcHJpbnRmIChzdGRvdXQsICJcDQogICAgIE1BU0sg
-Y2FuIGJlIGFueSBjb21iaW5hdGlvbiBvZiB0aGUgZm9sbG93aW5nIG1uZW1v
-bmljcyBhbmQvb3IgaGV4IHZhbHVlc1xuXA0KICAgICAoMHggaXMgb3B0aW9u
-YWwpLiAgQ29tYmluZSBtYXNrcyB3aXRoICcrJyBvciAnLCcgbGlrZSBzbzpc
-blwNCiBcblwNCkBAIC04MjIsMTcgKzgyNCwxNCBAQCBVc2FnZTogc3RyYWNl
-IFtPUFRJT05TXSA8Y29tbWFuZC1saW5lPlxuDQogICAgIHNpZ3AgICAgIDB4
-MDA4MDAgKF9TVFJBQ0VfU0lHUCkgICAgIFRyYWNlIHNpZ25hbCBhbmQgcHJv
-Y2VzcyBoYW5kbGluZy5cblwNCiAgICAgbWluaW1hbCAgMHgwMTAwMCAoX1NU
-UkFDRV9NSU5JTUFMKSAgVmVyeSBtaW5pbWFsIHN0cmFjZSBvdXRwdXQuXG5c
-DQogICAgIGV4aXRkdW1wIDB4MDQwMDAgKF9TVFJBQ0VfRVhJVERVTVApIER1
-bXAgc3RyYWNlIGNhY2hlIG9uIGV4aXQuXG5cDQotICAgIHN5c3RlbSAgIDB4
-MDgwMDAgKF9TVFJBQ0VfU1lTVEVNKSAgIFNlcmlvdXMgZXJyb3Igd2hpY2gg
-Z29lcyB0byBjb25zb2xlIGFuZCBsb2cuXG5cDQorICAgIHN5c3RlbSAgIDB4
-MDgwMDAgKF9TVFJBQ0VfU1lTVEVNKSAgIFNlcmlvdXMgZXJyb3I7IGdvZXMg
-dG8gY29uc29sZSBhbmQgbG9nLlxuXA0KICAgICBub211dGV4ICAweDEwMDAw
-IChfU1RSQUNFX05PTVVURVgpICBEb24ndCB1c2UgbXV0ZXggZm9yIHN5bmNo
-cm9uaXphdGlvbi5cblwNCiAgICAgbWFsbG9jICAgMHgyMDAwMCAoX1NUUkFD
-RV9NQUxMT0MpICAgVHJhY2UgbWFsbG9jIGNhbGxzLlxuXA0KICAgICB0aHJl
-YWQgICAweDQwMDAwIChfU1RSQUNFX1RIUkVBRCkgICBUaHJlYWQtbG9ja2lu
-ZyBjYWxscy5cblwNCiAiKTsNCi19DQotDQotc3RhdGljIHZvaWQNCi12ZXJz
-aW9uICgpDQotew0KLSAgZnB1dHMgKHZlcnNpb25fc3RyaW5nICsgNCwgc3Rk
-ZXJyKTsNCisgIGlmICh3aGVyZSA9PSBzdGRlcnIpDQorICAgIGZwcmludGYg
-KHN0ZGVyciwgIlRyeSAnJXMgLS1oZWxwJyBmb3IgbW9yZSBpbmZvcm1hdGlv
-bi5cbiIsIHBnbSk7DQorICBleGl0ICh3aGVyZSA9PSBzdGRlcnIgPyAxIDog
-MCApOw0KIH0NCiANCiBzdHJ1Y3Qgb3B0aW9uIGxvbmdvcHRzW10gPSB7DQpA
-QCAtODU0LDYgKzg1MywyOCBAQCBzdHJ1Y3Qgb3B0aW9uIGxvbmdvcHRzW10g
-PSB7DQogDQogc3RhdGljIGNvbnN0IGNoYXIgKmNvbnN0IG9wdHMgPSAiYjpk
-aGZtOm5vOnA6Uzp0dXZ3IjsNCiANCitzdGF0aWMgdm9pZA0KK3ByaW50X3Zl
-cnNpb24gKCkNCit7DQorICBjb25zdCBjaGFyICp2ID0gc3RyY2hyICh2ZXJz
-aW9uLCAnOicpOw0KKyAgaW50IGxlbjsNCisgIGlmICghdikNCisgICAgew0K
-KyAgICAgIHYgPSAiPyI7DQorICAgICAgbGVuID0gMTsNCisgICAgfQ0KKyAg
-ZWxzZQ0KKyAgICB7DQorICAgICAgdiArPSAyOw0KKyAgICAgIGxlbiA9IHN0
-cmNociAodiwgJyAnKSAtIHY7DQorICAgIH0NCisgIHByaW50ZiAoIlwNCisl
-cyAoY3lnd2luKSAlLipzXG5cDQorU3lzdGVtIFRyYWNlXG5cDQorQ29weXJp
-Z2h0IDIwMDAsIDIwMDEsIDIwMDIgUmVkIEhhdCwgSW5jLlxuXA0KK0NvbXBp
-bGVkIG9uICVzIiwgcGdtLCBsZW4sIHYsIF9fREFURV9fKTsNCit9DQorDQog
-aW50DQogbWFpbiAoaW50IGFyZ2MsIGNoYXIgKiphcmd2KQ0KIHsNCkBAIC04
-ODEsOCArOTAyLDcgQEAgbWFpbiAoaW50IGFyZ2MsIGNoYXIgKiphcmd2KQ0K
-IAlicmVhazsNCiAgICAgICBjYXNlICdoJzoNCiAJLy8gUHJpbnQgaGVscCBh
-bmQgZXhpdA0KLQl1c2FnZSAoKTsNCi0JcmV0dXJuIDE7DQorCXVzYWdlIChz
-dGRvdXQpOw0KIAlicmVhazsNCiAgICAgICBjYXNlICdtJzoNCiAJew0KQEAg
-LTkyMSwxMyArOTQxLDE2IEBAIGNoYXJhY3RlciAjJWQuXG4iLCBvcHRhcmcs
-IChpbnQpIChlbmRwdHINCiAJYnJlYWs7DQogICAgICAgY2FzZSAndic6DQog
-CS8vIFByaW50IHZlcnNpb24gaW5mbyBhbmQgZXhpdA0KLQl2ZXJzaW9uICgp
-Ow0KLQlyZXR1cm4gMTsNCisJcHJpbnRfdmVyc2lvbiAoKTsNCisJcmV0dXJu
-IDA7DQogCWJyZWFrOw0KICAgICAgIGNhc2UgJ3cnOg0KIAluZXdfd2luZG93
-IF49IDE7DQogCWJyZWFrOw0KICAgICAgIH0NCisNCisgIGlmICggYXJndltv
-cHRpbmRdID09IE5VTEwpDQorICAgIHVzYWdlICgpOw0KIA0KICAgaWYgKCFt
-YXNrKQ0KICAgICBtYXNrID0gMTsNCg==
-
----559023410-617291440-1023331942=:1500--
+Thanks,
+cgf
