@@ -1,40 +1,20 @@
-From: "Gary R Van Sickle" <tiberius@braemarinc.com>
-To: <cygwin-patches@cygwin.com>
-Subject: RE: [PATCH] setup.exe: Stop NetIO_HTTP from treating entire stream as a  header
-Date: Tue, 27 Nov 2001 15:41:00 -0000
-Message-ID: <000001c1779c$e1fe2fa0$2101a8c0@NOMAD>
-References: <20011127230925.GA5830@redhat.com>
-X-SW-Source: 2001-q4/msg00261.html
-Message-ID: <20011127154100.BAFFEZVbhjKS1SeSa1Rh0Ve0lwZsP4wJRDQtUM0pIYI@z>
+From: Robert Collins <robert.collins@itdomain.com.au>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] setup.exe: Stop NetIO_HTTP from treating entire streamas a  header
+Date: Tue, 27 Nov 2001 15:43:00 -0000
+Message-ID: <1006904553.2048.20.camel@lifelesswks>
+References: <3C035977.BF151D0A@syntrex.com> <000601c17772$7c5ecfd0$2101a8c0@d8rc020b> <20011127184223.GA24028@redhat.com> <1006899141.2048.2.camel@lifelesswks> <20011127230925.GA5830@redhat.com>
+X-SW-Source: 2001-q4/msg00262.html
+Message-ID: <20011127154300.fJ07NuCZEJmo_7p-k1pWO1lW4cr5j7xKm7I8URCuUAs@z>
 
-> On Wed, Nov 28, 2001 at 09:12:20AM +1100, Robert Collins wrote:
-> >On Wed, 2001-11-28 at 05:42, Christopher Faylor wrote:
-
-[snip]
-
-> >I think *l is ok. As for 0 vs NULL, in C++ NULL is
-> deprecated, 0 is the
-> >correct test for an invalid pointer.
->
+On Wed, 2001-11-28 at 10:09, Christopher Faylor wrote:
 > References?  A simple google search for 'NULL C++ deprecated' didn't
 > unearth this information.
->
 
-I thought I was getting those Google responses a little faster than usual
-;-).  All I could find was a statement by Mr. Stroustrup (sp) indicating
-that it was a 'tradition' he liked and wanted to promulgate, nothing
-whatsoever about it being deprecated.  (If anyone's wondering, "<ptr> != 0"
-is a completely valid and portable construct syntactically).
+Deprecated may have been too strong a word. Anyway, references:
 
-> Regardless, I strenuously disagree with this.  It certainly is not
-> deprecated in the Cygwin DLL.
->
+The C++ annotations - http://www.icce.rug.nl/documents/cpp.shtml 
+Specifically...
+http://www.icce.rug.nl/documents/cplusplus/cplusplus02.html#an78
 
-I'm with Chris on this one, again from a self-documenting standpoint if
-nothing else.
-
---
-Gary R. Van Sickle
-Braemar Inc.
-11481 Rupp Dr.
-Burnsville, MN 55337
+Rob
