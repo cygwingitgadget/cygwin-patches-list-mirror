@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2197-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 12880 invoked by alias); 20 May 2002 22:34:06 -0000
+Return-Path: <cygwin-patches-return-2198-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 28570 invoked by alias); 21 May 2002 07:03:17 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,197 +7,614 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 12855 invoked from network); 20 May 2002 22:34:01 -0000
-Date: Mon, 20 May 2002 15:34:00 -0000
-From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
-X-X-Sender: joshua@iocc.com
+Received: (qmail 28514 invoked from network); 21 May 2002 07:03:13 -0000
+Message-ID: <1264BCF4F426D611B0B00050DA782A50014C228E@mail.gft.com>
+From: =?iso-8859-1?Q?=22Schaible=2C_J=F6rg=22?= <Joerg.Schaible@gft.com>
 To: cygwin-patches@cygwin.com
-Subject: getfacl help/version patch
-Message-ID: <Pine.CYG.4.44.0205201732160.664-200000@iocc.com>
+Subject: [PATCH] cygpath.cc
+Date: Tue, 21 May 2002 00:03:00 -0000
 MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="-559023410-339825506-1021933981=:664"
-X-SW-Source: 2002-q2/txt/msg00181.txt.bz2
+Content-Type: multipart/mixed;
+	boundary="----_=_NextPart_000_01C20095.67758F80"
+X-SW-Source: 2002-q2/txt/msg00182.txt.bz2
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
+This message is in MIME format. Since your mail reader does not understand
+this format, some or all of this message may not be legible.
 
----559023410-339825506-1021933981=:664
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-Content-length: 469
+------_=_NextPart_000_01C20095.67758F80
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-length: 993
 
-Here is a patch to getfacl that adds longopts for all options,
-standardizes the usage output, and adds the GNU standard --version option.
+Hi,
 
-2002-05-07  Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
-	* getfacl.c (usage) Standardize usage output. Change return type to
-	static void. Remove examples of output.
-	(print_examples) New function.
-	(print_version) New function.
-	(longopts) Added longopts for all options.
-	(main) Accommodate new help and version options.
+as already announced here is the next patch for cygpath.cc supporting -l
+option to convert file names to Windows long format. Unfortunately this
+works not for strict mode, since functions cygwin_conv_to_win32_path and
+cygwin_conv_to_full_win32_path will return an error for a Windows short
+path/name.
 
----559023410-339825506-1021933981=:664
-Content-Type: TEXT/PLAIN; charset=US-ASCII; name="getfacl.c-patch"
-Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.CYG.4.44.0205201733010.664@iocc.com>
-Content-Description: 
-Content-Disposition: attachment; filename="getfacl.c-patch"
-Content-length: 9378
+2002-05-20  Joerg Schaible <joerg.schaible@gmx.de>
 
-LS0tIGdldGZhY2wuYy1vcmlnCVN1biBGZWIgMjQgMTM6Mjg6MjcgMjAwMg0K
-KysrIGdldGZhY2wuYwlNb24gTWF5IDIwIDE3OjI0OjQ4IDIwMDINCkBAIC0x
-LDYgKzEsNiBAQA0KIC8qIGdldGZhY2wuYw0KIA0KLSAgIENvcHlyaWdodCAy
-MDAwLCAyMDAxIFJlZCBIYXQgSW5jLg0KKyAgIENvcHlyaWdodCAyMDAwLCAy
-MDAxLCAyMDAyIFJlZCBIYXQgSW5jLg0KIA0KICAgIFdyaXR0ZW4gYnkgQ29y
-aW5uYSBWaW5zY2hlbiA8dmluc2NoZW5AcmVkaGF0LmNvbT4NCiANCkBAIC0y
-MCw2ICsyMCw5IEBAIGRldGFpbHMuICovDQogI2luY2x1ZGUgPHN5cy9zdGF0
-Lmg+DQogI2luY2x1ZGUgPHN0cmluZy5oPg0KIA0KK3N0YXRpYyBjb25zdCBj
-aGFyIHZlcnNpb25bXSA9ICIkUmV2aXNpb246IDEuMTMgJCI7DQorc3RhdGlj
-IGNoYXIgKnByb2dfbmFtZTsNCisNCiBjaGFyICoNCiBwZXJtc3RyIChtb2Rl
-X3QgcGVybSkNCiB7DQpAQCAtNTgsNjggKzYxLDkwIEBAIGdyb3VwbmFtZSAo
-Z2lkX3QgZ2lkKQ0KICAgcmV0dXJuIGdidWY7DQogfQ0KIA0KLSNkZWZpbmUg
-cG4odHh0KQlmcHJpbnRmIChmcCwgdHh0ICJcbiIsIG5hbWUpDQotI2RlZmlu
-ZSBwKHR4dCkJZnByaW50ZiAoZnAsIHR4dCAiXG4iKQ0KLQ0KLWludA0KLXVz
-YWdlIChjb25zdCBjaGFyICpuYW1lLCBpbnQgaGVscCkNCitzdGF0aWMgdm9p
-ZA0KK3VzYWdlIChGSUxFICogc3RyZWFtKQ0KIHsNCi0gIEZJTEUgKmZwID0g
-aGVscCA/IHN0ZG91dCA6IHN0ZGVycjsNCisgIGZwcmludGYgKHN0cmVhbSwg
-IlVzYWdlOiAlcyBbLWFkbl0gRklMRSBbRklMRTIuLi5dXG4iDQorICAgICAg
-ICAgICAgIkRpc3BsYXkgZmlsZSBhbmQgZGlyZWN0b3J5IGFjY2VzcyBjb250
-cm9sIGxpc3RzIChBQ0xzKS5cbiINCisgICAgICAgICAgICAiXG4iDQorICAg
-ICAgICAgICAgIiAgLWEsIC0tYWxsICAgICAgZGlzcGxheSB0aGUgZmlsZW5h
-bWUsIHRoZSBvd25lciwgdGhlIGdyb3VwLCBhbmRcbiINCisgICAgICAgICAg
-ICAiICAgICAgICAgICAgICAgICB0aGUgQUNMIG9mIHRoZSBmaWxlXG4iDQor
-ICAgICAgICAgICAgIiAgLWQsIC0tZGlyICAgICAgZGlzcGxheSB0aGUgZmls
-ZW5hbWUsIHRoZSBvd25lciwgdGhlIGdyb3VwLCBhbmRcbiINCisgICAgICAg
-ICAgICAiICAgICAgICAgICAgICAgICB0aGUgZGVmYXVsdCBBQ0wgb2YgdGhl
-IGRpcmVjdG9yeSwgaWYgaXQgZXhpc3RzXG4iDQorICAgICAgICAgICAgIiAg
-LWUsIC0tZXhhbXBsZXMgb3V0cHV0IGV4YW1wbGVzIGFuZCBleHBsYW5hdGlv
-biBvZiBvdXRwdXQgYW5kIGV4aXRcbiINCisgICAgICAgICAgICAiICAtaCwg
-LS1oZWxwICAgICBvdXRwdXQgdXNhZ2UgaW5mb3JtYXRpb24gYW5kIGV4aXRc
-biINCisgICAgICAgICAgICAiICAtbiwgLS1ub25hbWUgICBkaXNwbGF5IHVz
-ZXIgYW5kIGdyb3VwIElEcyBpbnN0ZWFkIG9mIG5hbWVzXG4iDQorICAgICAg
-ICAgICAgIiAgLXYsIC0tdmVyc2lvbiAgb3V0cHV0IHZlcnNpb24gaW5mb3Jt
-YXRpb24gYW5kIGV4aXRcblxuIg0KKyAgICAgICAgICAgICJBQ0wgb3V0cHV0
-IGZvciBtdWx0aXBsZSBmaWxlcyBpcyBzZXBhcmF0ZWQgYnkgYSBibGFuayBs
-aW5lXG5cbiINCisgICAgICAgICAgICAiUmVwb3J0IGJ1Z3MgdG8gPGN5Z3dp
-bkBjeWd3aW4uY29tPi5cbiINCisgICAgICAgICAgICAiIiwgcHJvZ19uYW1l
-KTsNCit9DQogDQotICBwbiAoInVzYWdlOiAlcyBbLWFkbl0gZmlsZS4uLiIp
-Ow0KLSAgaWYgKCFoZWxwKQ0KLSAgICBwbiAoIlRyeSBgJXMgLS1oZWxwJyBm
-b3IgbW9yZSBpbmZvcm1hdGlvbi4iKTsNCi0gIGVsc2UNCi0gICAgew0KLSAg
-ICAgIHAgKCIiKTsNCi0gICAgICBwICgiRGlzcGxheSBmaWxlIGFuZCBkaXJl
-Y3RvcnkgYWNjZXNzIGNvbnRyb2wgbGlzdHMgKEFDTHMpLiIpOw0KLSAgICAg
-IHAgKCIiKTsNCi0gICAgICBwICgiRm9yIGVhY2ggYXJndW1lbnQgdGhhdCBp
-cyBhIHJlZ3VsYXIgZmlsZSwgc3BlY2lhbCBmaWxlIG9yIik7DQotICAgICAg
-cCAoImRpcmVjdG9yeSwgZ2V0ZmFjbCBkaXNwbGF5cyB0aGUgb3duZXIsIHRo
-ZSBncm91cCwgYW5kIHRoZSBBQ0wuIik7DQotICAgICAgcCAoIkZvciBkaXJl
-Y3RvcmllcyBnZXRmYWNsIGRpc3BsYXlzIGFkZGl0aW9uYWxseSB0aGUgZGVm
-YXVsdCBBQ0wuIik7DQotICAgICAgcCAoIiIpOw0KLSAgICAgIHAgKCJXaXRo
-IG5vIG9wdGlvbnMgc3BlY2lmaWVkLCBnZXRmYWNsIGRpc3BsYXlzIHRoZSBm
-aWxlbmFtZSwgdGhlIik7DQotICAgICAgcCAoIm93bmVyLCB0aGUgZ3JvdXAs
-IGFuZCBib3RoIHRoZSBBQ0wgYW5kIHRoZSBkZWZhdWx0IEFDTCwgaWYgaXQi
-KTsNCi0gICAgICBwICgiZXhpc3RzLiIpOw0KLSAgICAgIHAgKCIiKTsNCi0g
-ICAgICBwICgiVGhlIGZvbGxvd2luZyBvcHRpb25zIGFyZSBzdXBwb3J0ZWQ6
-Iik7DQotICAgICAgcCAoIiIpOw0KLSAgICAgIHAgKCItYSAgIERpc3BsYXkg
-dGhlIGZpbGVuYW1lLCB0aGUgb3duZXIsIHRoZSBncm91cCwgYW5kIHRoZSBB
-Q0wiKTsNCi0gICAgICBwICgiICAgICBvZiB0aGUgZmlsZS4iKTsNCi0gICAg
-ICBwICgiIik7DQotICAgICAgcCAoIi1kICAgRGlzcGxheSB0aGUgZmlsZW5h
-bWUsIHRoZSBvd25lciwgdGhlIGdyb3VwLCBhbmQgdGhlIGRlZmF1bHQiKTsN
-Ci0gICAgICBwICgiICAgICBBQ0wgb2YgdGhlIGRpcmVjdG9yeSwgaWYgaXQg
-ZXhpc3RzLiIpOw0KLSAgICAgIHAgKCIiKTsNCi0gICAgICBwICgiLW4gICBE
-aXNwbGF5IHVzZXIgYW5kIGdyb3VwIElEcyBpbnN0ZWFkIG9mIG5hbWVzLiIp
-Ow0KLSAgICAgIHAgKCIiKTsNCi0gICAgICBwICgiVGhlIGZvcm1hdCBmb3Ig
-QUNMIG91dHB1dCBpcyBhcyBmb2xsb3dzOiIpOw0KLSAgICAgIHAgKCIgICAg
-ICMgZmlsZTogZmlsZW5hbWUiKTsNCi0gICAgICBwICgiICAgICAjIG93bmVy
-OiBuYW1lIG9yIHVpZCIpOw0KLSAgICAgIHAgKCIgICAgICMgZ3JvdXA6IG5h
-bWUgb3IgdWlkIik7DQotICAgICAgcCAoIiAgICAgdXNlcjo6cGVybSIpOw0K
-LSAgICAgIHAgKCIgICAgIHVzZXI6bmFtZSBvciB1aWQ6cGVybSIpOw0KLSAg
-ICAgIHAgKCIgICAgIGdyb3VwOjpwZXJtIik7DQotICAgICAgcCAoIiAgICAg
-Z3JvdXA6bmFtZSBvciBnaWQ6cGVybSIpOw0KLSAgICAgIHAgKCIgICAgIG1h
-c2s6cGVybSIpOw0KLSAgICAgIHAgKCIgICAgIG90aGVyOnBlcm0iKTsNCi0g
-ICAgICBwICgiICAgICBkZWZhdWx0OnVzZXI6OnBlcm0iKTsNCi0gICAgICBw
-ICgiICAgICBkZWZhdWx0OnVzZXI6bmFtZSBvciB1aWQ6cGVybSIpOw0KLSAg
-ICAgIHAgKCIgICAgIGRlZmF1bHQ6Z3JvdXA6OnBlcm0iKTsNCi0gICAgICBw
-ICgiICAgICBkZWZhdWx0Omdyb3VwOm5hbWUgb3IgZ2lkOnBlcm0iKTsNCi0g
-ICAgICBwICgiICAgICBkZWZhdWx0Om1hc2s6cGVybSIpOw0KLSAgICAgIHAg
-KCIgICAgIGRlZmF1bHQ6b3RoZXI6cGVybSIpOw0KLSAgICAgIHAgKCIiKTsN
-Ci0gICAgICBwICgiV2hlbiBtdWx0aXBsZSBmaWxlcyBhcmUgc3BlY2lmaWVk
-IG9uIHRoZSBjb21tYW5kIGxpbmUsIGEgYmxhbmsiKTsNCi0gICAgICBwICgi
-bGluZSBzZXBhcmF0ZXMgdGhlIEFDTHMgZm9yIGVhY2ggZmlsZS4iKTsNCi0g
-ICAgfQ0KLSAgcmV0dXJuIDE7DQorc3RhdGljIHZvaWQNCitwcmludF9leGFt
-cGxlcyAoKQ0KK3sNCisgIHByaW50ZiAoIlxuIg0KKyAgICAgICAgICAgICAg
-IkZvciBlYWNoIGFyZ3VtZW50IHRoYXQgaXMgYSByZWd1bGFyIGZpbGUsIHNw
-ZWNpYWwgZmlsZSBvclxuIg0KKyAgICAgICAgICAgICAgImRpcmVjdG9yeSwg
-Z2V0ZmFjbCBkaXNwbGF5cyB0aGUgb3duZXIsIHRoZSBncm91cCwgYW5kIHRo
-ZSBBQ0wuXG4iDQorICAgICAgICAgICAgICAiRm9yIGRpcmVjdG9yaWVzIGdl
-dGZhY2wgZGlzcGxheXMgYWRkaXRpb25hbGx5IHRoZSBkZWZhdWx0IEFDTC5c
-biINCisgICAgICAgICAgICAgICJcbiINCisgICAgICAgICAgICAgICJXaXRo
-IG5vIG9wdGlvbnMgc3BlY2lmaWVkLCBnZXRmYWNsIGRpc3BsYXlzIHRoZSBm
-aWxlbmFtZSwgdGhlXG4iDQorICAgICAgICAgICAgICAib3duZXIsIHRoZSBn
-cm91cCwgYW5kIGJvdGggdGhlIEFDTCBhbmQgdGhlIGRlZmF1bHQgQUNMLCBp
-ZiBpdFxuIg0KKyAgICAgICAgICAgICAgImV4aXN0cy5cbiINCisgICAgICAg
-ICAgICAgICJcbiINCisgICAgICAgICAgICAgICJUaGUgZm9ybWF0IGZvciBB
-Q0wgb3V0cHV0IGlzIGFzIGZvbGxvd3M6XG4iDQorICAgICAgICAgICAgICAi
-ICAgICAjIGZpbGU6IGZpbGVuYW1lXG4iDQorICAgICAgICAgICAgICAiICAg
-ICAjIG93bmVyOiBuYW1lIG9yIHVpZFxuIg0KKyAgICAgICAgICAgICAgIiAg
-ICAgIyBncm91cDogbmFtZSBvciB1aWRcbiINCisgICAgICAgICAgICAgICIg
-ICAgIHVzZXI6OnBlcm1cbiINCisgICAgICAgICAgICAgICIgICAgIHVzZXI6
-bmFtZSBvciB1aWQ6cGVybVxuIg0KKyAgICAgICAgICAgICAgIiAgICAgZ3Jv
-dXA6OnBlcm1cbiINCisgICAgICAgICAgICAgICIgICAgIGdyb3VwOm5hbWUg
-b3IgZ2lkOnBlcm1cbiINCisgICAgICAgICAgICAgICIgICAgIG1hc2s6cGVy
-bVxuIg0KKyAgICAgICAgICAgICAgIiAgICAgb3RoZXI6cGVybVxuIg0KKyAg
-ICAgICAgICAgICAgIiAgICAgZGVmYXVsdDp1c2VyOjpwZXJtXG4iDQorICAg
-ICAgICAgICAgICAiICAgICBkZWZhdWx0OnVzZXI6bmFtZSBvciB1aWQ6cGVy
-bVxuIg0KKyAgICAgICAgICAgICAgIiAgICAgZGVmYXVsdDpncm91cDo6cGVy
-bVxuIg0KKyAgICAgICAgICAgICAgIiAgICAgZGVmYXVsdDpncm91cDpuYW1l
-IG9yIGdpZDpwZXJtXG4iDQorICAgICAgICAgICAgICAiICAgICBkZWZhdWx0
-Om1hc2s6cGVybVxuIg0KKyAgICAgICAgICAgICAgIiAgICAgZGVmYXVsdDpv
-dGhlcjpwZXJtXG4iDQorICAgICAgICAgICAgICAiXG4iDQorICAgICAgICAg
-ICAgICAiV2hlbiBtdWx0aXBsZSBmaWxlcyBhcmUgc3BlY2lmaWVkIG9uIHRo
-ZSBjb21tYW5kIGxpbmUsIGEgYmxhbmtcbiINCisgICAgICAgICAgICAgICJs
-aW5lIHNlcGFyYXRlcyB0aGUgQUNMcyBmb3IgZWFjaCBmaWxlLlxuIik7DQog
-fQ0KIA0KIHN0cnVjdCBvcHRpb24gbG9uZ29wdHNbXSA9IHsNCisgIHsiYWxs
-Iiwgbm9fYXJndW1lbnQsIE5VTEwsICdhJ30sDQorICB7ImRpciIsIG5vX2Fy
-Z3VtZW50LCBOVUxMLCAnZCd9LA0KKyAgeyJleGFtcGxlcyIsIG5vX2FyZ3Vt
-ZW50LCBOVUxMLCAnZSd9LA0KICAgeyJoZWxwIiwgbm9fYXJndW1lbnQsIE5V
-TEwsICdoJ30sDQorICB7Im5vbmFtZSIsIG5vX2FyZ3VtZW50LCBOVUxMLCAn
-bid9LA0KKyAgeyJ2ZXJzaW9uIiwgbm9fYXJndW1lbnQsIE5VTEwsICd2J30s
-DQogICB7MCwgbm9fYXJndW1lbnQsIE5VTEwsIDB9DQogfTsNCiANCitzdGF0
-aWMgdm9pZA0KK3ByaW50X3ZlcnNpb24gKCkNCit7DQorICBjb25zdCBjaGFy
-ICp2ID0gc3RyY2hyICh2ZXJzaW9uLCAnOicpOw0KKyAgaW50IGxlbjsNCisg
-IGlmICghdikNCisgICAgew0KKyAgICAgIHYgPSAiPyI7DQorICAgICAgbGVu
-ID0gMTsNCisgICAgfQ0KKyAgZWxzZQ0KKyAgICB7DQorICAgICAgdiArPSAy
-Ow0KKyAgICAgIGxlbiA9IHN0cmNociAodiwgJyAnKSAtIHY7DQorICAgIH0N
-CisgIHByaW50ZiAoIlwNCitnZXRmYWNsIChjeWd3aW4pICUuKnNcblwNCitB
-Q0wgVXRpbGl0eVxuXA0KK0NvcHlyaWdodCAoYykgMjAwMCwgMjAwMSwgMjAw
-MiBSZWQgSGF0LCBJbmMuXG5cDQorQ29tcGlsZWQgb24gJXMiLCBsZW4sIHYs
-IF9fREFURV9fKTsNCit9DQorDQogaW50DQogbWFpbiAoaW50IGFyZ2MsIGNo
-YXIgKiphcmd2KQ0KIHsNCkBAIC0xMzIsNyArMTU3LDE1IEBAIG1haW4gKGlu
-dCBhcmdjLCBjaGFyICoqYXJndikNCiAgIHN0cnVjdCBzdGF0IHN0Ow0KICAg
-YWNsZW50X3QgYWNsc1tNQVhfQUNMX0VOVFJJRVNdOw0KIA0KLSAgd2hpbGUg
-KChjID0gZ2V0b3B0X2xvbmcgKGFyZ2MsIGFyZ3YsICJhZG4iLCBsb25nb3B0
-cywgTlVMTCkpICE9IEVPRikNCisgIHByb2dfbmFtZSA9IHN0cnJjaHIgKGFy
-Z3ZbMF0sICcvJyk7DQorICBpZiAocHJvZ19uYW1lID09IE5VTEwpDQorICAg
-IHByb2dfbmFtZSA9IHN0cnJjaHIgKGFyZ3ZbMF0sICdcXCcpOw0KKyAgaWYg
-KHByb2dfbmFtZSA9PSBOVUxMKQ0KKyAgICBwcm9nX25hbWUgPSBhcmd2WzBd
-Ow0KKyAgZWxzZQ0KKyAgICBwcm9nX25hbWUrKzsNCisNCisgIHdoaWxlICgo
-YyA9IGdldG9wdF9sb25nIChhcmdjLCBhcmd2LCAiYWRlaG52IiwgbG9uZ29w
-dHMsIE5VTEwpKSAhPSBFT0YpDQogICAgIHN3aXRjaCAoYykNCiAgICAgICB7
-DQogICAgICAgY2FzZSAnYSc6DQpAQCAtMTQxLDE2ICsxNzQsMjggQEAgbWFp
-biAoaW50IGFyZ2MsIGNoYXIgKiphcmd2KQ0KICAgICAgIGNhc2UgJ2QnOg0K
-IAlkb3B0ID0gMTsNCiAJYnJlYWs7DQorICAgICAgY2FzZSAnZSc6DQorICAg
-ICAgIHVzYWdlIChzdGRvdXQpOw0KKyAgICAgICBwcmludF9leGFtcGxlcyAo
-KTsNCisgICAgICAgcmV0dXJuIDA7DQorICAgICAgY2FzZSAnaCc6DQorICAg
-ICAgIHVzYWdlIChzdGRvdXQpOw0KKyAgICAgICByZXR1cm4gMDsNCiAgICAg
-ICBjYXNlICduJzoNCiAJbm9wdCA9IDE7DQogCWJyZWFrOw0KLSAgICAgIGNh
-c2UgJ2gnOg0KLSAgICAgICByZXR1cm4gdXNhZ2UgKGFyZ3ZbMF0sIDEpOw0K
-KyAgICAgIGNhc2UgJ3YnOg0KKyAgICAgICBwcmludF92ZXJzaW9uICgpOw0K
-KyAgICAgICByZXR1cm4gMDsNCiAgICAgICBkZWZhdWx0Og0KLQlyZXR1cm4g
-dXNhZ2UgKGFyZ3ZbMF0sIDApOw0KKwl1c2FnZSAoc3RkZXJyKTsNCisJcmV0
-dXJuIDE7DQogICAgICAgfQ0KICAgaWYgKG9wdGluZCA+IGFyZ2MgLSAxKQ0K
-LSAgICByZXR1cm4gdXNhZ2UgKGFyZ3ZbMF0sIDApOw0KKyAgICB7DQorICAg
-ICAgdXNhZ2UgKHN0ZGVycik7DQorICAgICAgcmV0dXJuIDE7DQorICAgIH0N
-CiAgIHdoaWxlICgoYyA9IG9wdGluZCsrKSA8IGFyZ2MpDQogICAgIHsNCiAg
-ICAgICBpZiAoc3RhdCAoYXJndltjXSwgJnN0KSkNCg==
+	* cygpath.cc (main): Add option l to support conversion to
+	Windows long file names.  Refactured code for capital options.
+	Support of options from file for capital options.
+	(dowin): New function.  Refactured from main.
+	(doit): Call long path conversion.
+	(get_long_name): New function.
+	(get_long_paths): New function.
+	(get_long_path_name_w32impl): New function.  Reimplementation
+	of Windows API function GetLongPathName (only 98/Me/2000/XP or=20
+	higher).
+	(get_short_name): Call GetShortPathName only once.
+	(get_short_paths): Fix calculating buffer size.
+	* utils.sgml: Update cygpath section for l option.
 
----559023410-339825506-1021933981=:664--
+Regards,
+J=F6rg
+
+
+------_=_NextPart_000_01C20095.67758F80
+Content-Type: application/octet-stream;
+	name="cygpath.diff"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment;
+	filename="cygpath.diff"
+Content-length: 14627
+
+Index: cygpath.cc=0A=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
+RCS file: /cvs/src/src/winsup/utils/cygpath.cc,v=0A=
+retrieving revision 1.17=0A=
+diff -u -p -r1.17 cygpath.cc=0A=
+--- cygpath.cc	15 May 2002 11:36:00 -0000	1.17=0A=
++++ cygpath.cc	20 May 2002 19:25:05 -0000=0A=
+@@ -27,7 +27,8 @@ static char *prog_name;=0A=
+ static char *file_arg;=0A=
+ static char *close_arg;=0A=
+ static int path_flag, unix_flag, windows_flag, absolute_flag;=0A=
+-static int shortname_flag, ignore_flag, allusers_flag, output_flag;=0A=
++static int shortname_flag, longname_flag;=0A=
++static int ignore_flag, allusers_flag, output_flag;=0A=
+=20=0A=
+ static struct option long_options[] =3D {=0A=
+   {(char *) "help", no_argument, NULL, 'h'},=0A=
+@@ -40,6 +41,7 @@ static struct option long_options[] =3D {=0A=
+   {(char *) "version", no_argument, NULL, 'v'},=0A=
+   {(char *) "windows", no_argument, NULL, 'w'},=0A=
+   {(char *) "short-name", no_argument, NULL, 's'},=0A=
++  {(char *) "long-name", no_argument, NULL, 'l'},=0A=
+   {(char *) "windir", no_argument, NULL, 'W'},=0A=
+   {(char *) "sysdir", no_argument, NULL, 'S'},=0A=
+   {(char *) "ignore", no_argument, NULL, 'i'},=0A=
+@@ -60,6 +62,7 @@ Usage: %s [-p|--path] (-u|--unix)|(-w|--=0A=
+   -c|--close handle	close handle (for use in captured process)\n\=0A=
+   -f|--file file	read file for input path information\n\=0A=
+   -i|--ignore		ignore missing argument\n\=0A=
++  -l|--long-name	print Windows long form of filename\n\=0A=
+   -p|--path		filename argument is a path\n\=0A=
+   -s|--short-name	print Windows short form of filename\n\=0A=
+   -u|--unix		print Unix form of filename\n\=0A=
+@@ -123,6 +126,7 @@ get_short_paths (char *path)=0A=
+ 	break;=0A=
+       *sptr =3D ';';=0A=
+       ++ptr, ++sptr;=0A=
++      acc -=3D len + 1;=0A=
+     }=0A=
+   return sbuf;=0A=
+ }=0A=
+@@ -130,8 +134,8 @@ get_short_paths (char *path)=0A=
+ static char *=0A=
+ get_short_name (const char *filename)=0A=
+ {=0A=
+-  char *sbuf;=0A=
+-  DWORD len =3D GetShortPathName (filename, NULL, 0);=0A=
++  char *sbuf, buf[MAX_PATH];=0A=
++  DWORD len =3D GetShortPathName (filename, buf, MAX_PATH);=0A=
+   if (len =3D=3D 0 && GetLastError () =3D=3D ERROR_INVALID_PARAMETER)=0A=
+     {=0A=
+       fprintf (stderr, "%s: cannot create short name of %s\n", prog_name,=
+=0A=
+@@ -144,14 +148,225 @@ get_short_name (const char *filename)=0A=
+       fprintf (stderr, "%s: out of memory\n", prog_name);=0A=
+       exit (1);=0A=
+     }=0A=
+-  len =3D GetShortPathName (filename, sbuf, len);=0A=
++  return strcpy (sbuf, buf);=0A=
++}=0A=
++=0A=
++static DWORD=0A=
++get_long_path_name_w32impl (LPCSTR src, LPSTR sbuf, DWORD)=0A=
++{=0A=
++  char buf1[MAX_PATH], buf2[MAX_PATH], *ptr;=0A=
++  const char *pelem, *next;=0A=
++  WIN32_FIND_DATA w32_fd;=0A=
++  int len;=0A=
++=20=20=0A=
++  strcpy (buf1, src);=0A=
++  *buf2 =3D 0;=0A=
++  pelem =3D src;=0A=
++  ptr =3D buf2;=0A=
++  while (pelem)=0A=
++    {=0A=
++      next =3D pelem;=0A=
++      if (*next =3D=3D '\\')=0A=
++	{=0A=
++	  strcat (ptr++, "\\");=0A=
++	  pelem++;=0A=
++	  if (!*pelem)=0A=
++	    break;=0A=
++	  continue;=0A=
++	}=0A=
++      pelem =3D strchr (next, '\\');=0A=
++      len =3D pelem ? (pelem++ - next) : strlen (next);=0A=
++      strncpy (ptr, next, len);=0A=
++      ptr[len] =3D 0;=0A=
++      if (next[1] !=3D ':' && strcmp(next, ".") && strcmp(next, ".."))=0A=
++	{=0A=
++	  if (FindFirstFile (buf2, &w32_fd) !=3D INVALID_HANDLE_VALUE)=0A=
++	    strcpy (ptr, w32_fd.cFileName);=0A=
++	}=0A=
++      ptr +=3D strlen (ptr);=0A=
++      if (pelem)=0A=
++	{=0A=
++	  *ptr++ =3D '\\';=0A=
++	  *ptr =3D 0;=0A=
++	}=0A=
++    }=0A=
++  if (sbuf)=0A=
++    strcpy (sbuf, buf2);=0A=
++  SetLastError (0);=0A=
++  return strlen (buf2) + (sbuf ? 0 : 1);=0A=
++}=0A=
++=0A=
++static char *=0A=
++get_long_paths (char *path)=0A=
++{=0A=
++  char *sbuf;=0A=
++  char *sptr;=0A=
++  char *next;=0A=
++  char *ptr =3D path;=0A=
++  char *end =3D strrchr (path, 0);=0A=
++  DWORD acc =3D 0;=0A=
++  DWORD len;=0A=
++=0A=
++  HINSTANCE hinst;=0A=
++  DWORD (*GetLongPathNameAPtr) (LPCSTR, LPSTR, DWORD) =3D 0;=0A=
++  hinst =3D LoadLibrary ("kernel32");=0A=
++  if (hinst)=0A=
++    GetLongPathNameAPtr =3D (DWORD (*) (LPCSTR, LPSTR, DWORD))=0A=
++      GetProcAddress (hinst, "GetLongPathNameA");=0A=
++  /* subsequent calls of kernel function with NULL cause SegFault in W2K!!=
+ */=0A=
++  if (1 || !GetLongPathNameAPtr)=0A=
++    GetLongPathNameAPtr =3D get_long_path_name_w32impl;=0A=
++=0A=
++  while (ptr !=3D NULL)=0A=
++    {=0A=
++      next =3D ptr;=0A=
++      ptr =3D strchr (ptr, ';');=0A=
++      if (ptr)=0A=
++	*ptr++ =3D 0;=0A=
++      len =3D (*GetLongPathNameAPtr) (next, NULL, 0);=0A=
++      if (len =3D=3D 0 && GetLastError () =3D=3D ERROR_INVALID_PARAMETER)=
+=0A=
++	{=0A=
++	  fprintf (stderr, "%s: cannot create long name of %s\n", prog_name,=0A=
++		   next);=0A=
++	  exit (2);=0A=
++	}=0A=
++      acc +=3D len + 1;=0A=
++    }=0A=
++  sptr =3D sbuf =3D (char *) malloc (acc + 1);=0A=
++  if (sbuf =3D=3D NULL)=0A=
++    {=0A=
++      fprintf (stderr, "%s: out of memory\n", prog_name);=0A=
++      exit (1);=0A=
++    }=0A=
++  ptr =3D path;=0A=
++  for (;;)=0A=
++    {=0A=
++      len =3D (*GetLongPathNameAPtr) (ptr, sptr, acc);=0A=
++      if (len =3D=3D 0 && GetLastError () =3D=3D ERROR_INVALID_PARAMETER)=
+=0A=
++	{=0A=
++	  fprintf (stderr, "%s: cannot create long name of %s\n", prog_name,=0A=
++		   ptr);=0A=
++	  exit (2);=0A=
++	}=0A=
++=0A=
++      ptr =3D strrchr (ptr, 0);=0A=
++      sptr =3D strrchr (sptr, 0);=0A=
++      if (ptr =3D=3D end)=0A=
++	break;=0A=
++      *ptr =3D *sptr =3D ';';=0A=
++      ++ptr, ++sptr;=0A=
++      acc -=3D len + 1;=0A=
++    }=0A=
++  return sbuf;=0A=
++}=0A=
++=0A=
++static char *=0A=
++get_long_name (const char *filename)=0A=
++{=0A=
++  char *sbuf, buf[MAX_PATH];=0A=
++  DWORD len;=0A=
++  HINSTANCE hinst;=0A=
++  DWORD (*GetLongPathNameAPtr) (LPCSTR, LPSTR, DWORD) =3D 0;=0A=
++  hinst =3D LoadLibrary ("kernel32");=0A=
++  if (hinst)=0A=
++    GetLongPathNameAPtr =3D (DWORD (*) (LPCSTR, LPSTR, DWORD))=0A=
++      GetProcAddress (hinst, "GetLongPathNameA");=0A=
++  if (!GetLongPathNameAPtr)=0A=
++    GetLongPathNameAPtr =3D get_long_path_name_w32impl;=0A=
++=20=20=0A=
++  len =3D (*GetLongPathNameAPtr) (filename, buf, MAX_PATH);=0A=
+   if (len =3D=3D 0 && GetLastError () =3D=3D ERROR_INVALID_PARAMETER)=0A=
+     {=0A=
+-      fprintf (stderr, "%s: cannot create short name of %s\n", prog_name,=
+=0A=
++      fprintf (stderr, "%s: cannot create long name of %s\n", prog_name,=
+=0A=
+ 	       filename);=0A=
+       exit (2);=0A=
+     }=0A=
+-  return sbuf;=0A=
++  sbuf =3D (char *) malloc (++len);=0A=
++  if (sbuf =3D=3D NULL)=0A=
++    {=0A=
++      fprintf (stderr, "%s: out of memory\n", prog_name);=0A=
++      exit (1);=0A=
++    }=0A=
++  return strcpy (sbuf, buf);=0A=
++}=0A=
++=0A=
++static void=0A=
++dowin (char option)=0A=
++{=0A=
++  char *buf, buf1[MAX_PATH], buf2[MAX_PATH];=0A=
++  DWORD len =3D MAX_PATH;=0A=
++  WIN32_FIND_DATA w32_fd;=0A=
++  LPITEMIDLIST id;=0A=
++  HINSTANCE hinst;=0A=
++  BOOL (*GetProfilesDirectoryAPtr) (LPSTR, LPDWORD) =3D 0;=0A=
++=20=20=20=20=20=20=0A=
++  buf =3D buf1;=0A=
++  switch (option)=0A=
++    {=0A=
++    case 'D':=0A=
++      SHGetSpecialFolderLocation (NULL, allusers_flag ?=20=0A=
++	CSIDL_COMMON_DESKTOPDIRECTORY : CSIDL_DESKTOPDIRECTORY, &id);=0A=
++      SHGetPathFromIDList (id, buf);=0A=
++      /* This if clause is a Fix for Win95 without any "All Users" */=0A=
++      if (strlen (buf) =3D=3D 0)=0A=
++	{=0A=
++	  SHGetSpecialFolderLocation (NULL, CSIDL_DESKTOPDIRECTORY, &id);=0A=
++	  SHGetPathFromIDList (id, buf);=0A=
++	}=0A=
++      break;=0A=
++=0A=
++    case 'P':=0A=
++      SHGetSpecialFolderLocation (NULL, allusers_flag ?=20=0A=
++	CSIDL_COMMON_PROGRAMS : CSIDL_PROGRAMS, &id);=0A=
++      SHGetPathFromIDList (id, buf);=0A=
++      /* This if clause is a Fix for Win95 without any "All Users" */=0A=
++      if (strlen (buf) =3D=3D 0)=0A=
++	{=0A=
++	  SHGetSpecialFolderLocation (NULL, CSIDL_PROGRAMS, &id);=0A=
++	  SHGetPathFromIDList (id, buf);=0A=
++	}=0A=
++      break;=0A=
++=0A=
++    case 'H':=0A=
++      hinst =3D LoadLibrary ("userenv");=0A=
++      if (hinst)=0A=
++	GetProfilesDirectoryAPtr =3D (BOOL (*) (LPSTR, LPDWORD))=0A=
++	  GetProcAddress (hinst, "GetProfilesDirectoryA");=0A=
++      if (GetProfilesDirectoryAPtr)=0A=
++        (*GetProfilesDirectoryAPtr) (buf, &len);=0A=
++      else=0A=
++	{=0A=
++	  GetWindowsDirectory (buf, MAX_PATH);=0A=
++	  strcat (buf, "\\Profiles");=0A=
++	}=0A=
++      break;=0A=
++=0A=
++    case 'S':=0A=
++      GetSystemDirectory (buf, MAX_PATH);=0A=
++      FindFirstFile (buf, &w32_fd);=0A=
++      strcpy (strrchr (buf, '\\') + 1, w32_fd.cFileName);=0A=
++      break;=0A=
++=0A=
++    case 'W':=0A=
++      GetWindowsDirectory (buf, MAX_PATH);=0A=
++      break;=0A=
++=0A=
++    default:=0A=
++      usage (stderr, 1);=0A=
++    }=0A=
++=0A=
++  if (!windows_flag)=0A=
++    {=0A=
++      cygwin_conv_to_posix_path (buf, buf2);=0A=
++      buf =3D buf2;=0A=
++    }=0A=
++  else=0A=
++    {=0A=
++      if (shortname_flag)=0A=
++        buf =3D get_short_name (buf);=0A=
++    }=0A=
++  printf ("%s\n", buf);=0A=
++  exit (0);=0A=
+ }=0A=
+=20=0A=
+ static void=0A=
+@@ -213,6 +428,8 @@ doit (char *filename)=0A=
+ 	  cygwin_posix_to_win32_path_list (filename, buf);=0A=
+ 	  if (shortname_flag)=0A=
+ 	    buf =3D get_short_paths (buf);=0A=
++	  if (longname_flag)=0A=
++	    buf =3D get_long_paths (buf);=0A=
+ 	}=0A=
+     }=0A=
+   else=0A=
+@@ -230,8 +447,13 @@ doit (char *filename)=0A=
+ 		   prog_name, filename);=0A=
+ 	  exit (1);=0A=
+ 	}=0A=
+-      if (!unix_flag && shortname_flag)=0A=
+-	buf =3D get_short_name (buf);=0A=
++      if (!unix_flag)=0A=
++	{=0A=
++	if (shortname_flag)=0A=
++	  buf =3D get_short_name (buf);=0A=
++	if (longname_flag)=0A=
++	  buf =3D get_long_name (buf);=0A=
++	}=0A=
+     }=0A=
+=20=0A=
+   puts (buf);=0A=
+@@ -278,12 +500,13 @@ main (int argc, char **argv)=0A=
+   unix_flag =3D 0;=0A=
+   windows_flag =3D 0;=0A=
+   shortname_flag =3D 0;=0A=
++  longname_flag =3D 0;=0A=
+   ignore_flag =3D 0;=0A=
+   options_from_file_flag =3D 0;=0A=
+   allusers_flag =3D 0;=0A=
+   output_flag =3D 0;=0A=
+   while ((c =3D=0A=
+-	  getopt_long (argc, argv, (char *) "hac:f:opsSuvwWiDPAH",=0A=
++	  getopt_long (argc, argv, (char *) "hac:f:opslSuvwWiDPAH",=0A=
+ 		       long_options, (int *) NULL)) !=3D EOF)=0A=
+     {=0A=
+       switch (c)=0A=
+@@ -320,8 +543,14 @@ main (int argc, char **argv)=0A=
+ 	  windows_flag =3D 1;=0A=
+ 	  break;=0A=
+=20=0A=
++	case 'l':=0A=
++	  if (unix_flag || shortname_flag)=0A=
++	    usage (stderr, 1);=0A=
++	  longname_flag =3D 1;=0A=
++	  break;=0A=
++=0A=
+ 	case 's':=0A=
+-	  if (unix_flag)=0A=
++	  if (unix_flag || longname_flag)=0A=
+ 	    usage (stderr, 1);=0A=
+ 	  shortname_flag =3D 1;=0A=
+ 	  break;=0A=
+@@ -360,97 +589,17 @@ main (int argc, char **argv)=0A=
+=20=0A=
+     }=0A=
+=20=0A=
+-  if (output_flag)=0A=
+-    {=0A=
+-      char *buf, buf1[MAX_PATH], buf2[MAX_PATH];=0A=
+-      DWORD len =3D MAX_PATH;=0A=
+-      WIN32_FIND_DATA w32_fd;=0A=
+-      LPITEMIDLIST id;=0A=
+-      HINSTANCE hinst;=0A=
+-      BOOL (*GetProfilesDirectoryAPtr) (LPSTR, LPDWORD) =3D 0;=0A=
+-=20=20=20=20=20=20=0A=
+-      buf =3D buf1;=0A=
+-      switch (o)=0A=
+-	{=0A=
+-	case 'D':=0A=
+-	  if (!allusers_flag)=0A=
+-	    SHGetSpecialFolderLocation (NULL, CSIDL_DESKTOPDIRECTORY, &id);=0A=
+-	  else=0A=
+-	    SHGetSpecialFolderLocation (NULL, CSIDL_COMMON_DESKTOPDIRECTORY,=0A=
+-					&id);=0A=
+-	  SHGetPathFromIDList (id, buf);=0A=
+-	  /* This if clause is a Fix for Win95 without any "All Users" */=0A=
+-	  if (strlen (buf) =3D=3D 0)=0A=
+-	    {=0A=
+-	      SHGetSpecialFolderLocation (NULL, CSIDL_DESKTOPDIRECTORY, &id);=0A=
+-	      SHGetPathFromIDList (id, buf);=0A=
+-	    }=0A=
+-	  break;=0A=
+-=0A=
+-	case 'P':=0A=
+-	  if (!allusers_flag)=0A=
+-	    SHGetSpecialFolderLocation (NULL, CSIDL_PROGRAMS, &id);=0A=
+-	  else=0A=
+-	    SHGetSpecialFolderLocation (NULL, CSIDL_COMMON_PROGRAMS, &id);=0A=
+-	  SHGetPathFromIDList (id, buf);=0A=
+-	  /* This if clause is a Fix for Win95 without any "All Users" */=0A=
+-	  if (strlen (buf) =3D=3D 0)=0A=
+-	    {=0A=
+-	      SHGetSpecialFolderLocation (NULL, CSIDL_PROGRAMS, &id);=0A=
+-	      SHGetPathFromIDList (id, buf);=0A=
+-	    }=0A=
+-	  break;=0A=
+-=0A=
+-	case 'H':=0A=
+-	  hinst =3D LoadLibrary ("userenv");=0A=
+-	  if (hinst)=0A=
+-	    GetProfilesDirectoryAPtr =3D (BOOL (*) (LPSTR, LPDWORD))=0A=
+-	      GetProcAddress (hinst, "GetProfilesDirectoryA");=0A=
+-	  if (GetProfilesDirectoryAPtr)=0A=
+-	    (*GetProfilesDirectoryAPtr) (buf, &len);=0A=
+-	  else=0A=
+-	    {=0A=
+-	      GetWindowsDirectory (buf, MAX_PATH);=0A=
+-	      strcat (buf, "\\Profiles");=0A=
+-	    }=0A=
+-	  break;=0A=
+-=0A=
+-	case 'S':=0A=
+-	  GetSystemDirectory (buf, MAX_PATH);=0A=
+-	  FindFirstFile (buf, &w32_fd);=0A=
+-	  strcpy (strrchr (buf, '\\') + 1, w32_fd.cFileName);=0A=
+-	  break;=0A=
+-=0A=
+-	case 'W':=0A=
+-	  GetWindowsDirectory (buf, MAX_PATH);=0A=
+-	  break;=0A=
+-=0A=
+-	default:=0A=
+-    	  usage (stderr, 1);=0A=
+-	}=0A=
+-=0A=
+-	if (!windows_flag)=0A=
+-	  {=0A=
+-	    cygwin_conv_to_posix_path (buf, buf2);=0A=
+-	    buf =3D buf2;=0A=
+-	  }=0A=
+-	else=0A=
+-	  {=0A=
+-	    if (shortname_flag)=0A=
+-	      buf =3D get_short_name (buf);=0A=
+-	  }=0A=
+-	printf ("%s\n", buf);=0A=
+-	exit (0);=0A=
+-    }=0A=
+-=0A=
+   if (options_from_file_flag && !file_arg)=0A=
+     usage (stderr, 1);=0A=
+=20=0A=
+-  if (!unix_flag && !windows_flag && !options_from_file_flag)=0A=
++  if (!output_flag && !unix_flag && !windows_flag && !options_from_file_fl=
+ag)=0A=
+     usage (stderr, 1);=0A=
+=20=0A=
+   if (!file_arg)=0A=
+     {=0A=
++      if (output_flag)=0A=
++	dowin (o);=0A=
++=0A=
+       if (optind !=3D argc - 1)=0A=
+ 	usage (stderr, 1);=0A=
+=20=0A=
+@@ -499,6 +648,11 @@ main (int argc, char **argv)=0A=
+ 		    break;=0A=
+ 		  case 's':=0A=
+ 		    shortname_flag =3D 1;=0A=
++		    longname_flag =3D 0;=0A=
++		    break;=0A=
++		  case 'l':=0A=
++		    shortname_flag =3D 0;=0A=
++		    longname_flag =3D 1;=0A=
+ 		    break;=0A=
+ 		  case 'w':=0A=
+ 		    unix_flag =3D 0;=0A=
+@@ -510,14 +664,25 @@ main (int argc, char **argv)=0A=
+ 		    break;=0A=
+ 		  case 'p':=0A=
+ 		    path_flag =3D 1;=0A=
++		    break;=0A=
++		  case 'D':=0A=
++		  case 'H':=0A=
++		  case 'P':=0A=
++		  case 'S':=0A=
++		  case 'W':=0A=
++	  	    output_flag =3D 1;=0A=
++		    o =3D c;=0A=
++	  	    break;=0A=
+ 		  }=0A=
+ 	      if (*s)=0A=
+ 		do=0A=
+ 		  s++;=0A=
+ 		while (*s && isspace (*s));=0A=
+ 	    }=0A=
+-	  if (*s)=0A=
++	  if (*s && !output_flag)=0A=
+ 	    doit (s);=0A=
++	  if (!*s && output_flag)=0A=
++	    dowin (o);=0A=
+ 	}=0A=
+     }=0A=
+=20=0A=
+
+------_=_NextPart_000_01C20095.67758F80
+Content-Type: application/octet-stream;
+	name="utils.diff"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment;
+	filename="utils.diff"
+Content-length: 3028
+
+Index: utils.sgml=0A=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
+RCS file: /cvs/src/src/winsup/utils/utils.sgml,v=0A=
+retrieving revision 1.20=0A=
+diff -u -p -r1.20 utils.sgml=0A=
+--- utils.sgml	15 May 2002 11:36:00 -0000	1.20=0A=
++++ utils.sgml	20 May 2002 19:32:07 -0000=0A=
+@@ -71,18 +71,22 @@ or if you know what everything is alread=0A=
+ <sect2 id=3D"cygpath"><title>cygpath</title>=0A=
+=20=0A=
+ <screen>=0A=
+-Usage: cygpath.exe [-p|--path] (-u|--unix)|(-w|--windows [-s|--short-name]=
+) filename=0A=
++Usage: cygpath [-p|--path] (-w|--windows) ([-s|--short-name]|[-l|--long-na=
+me]) filename=0A=
++Usage: cygpath [-p|--path] (-u|--unix) filename=0A=
++Usage: cygpath (-H|--homeroot)|(-S|--sysdir)|(-W|--windir) [-s|--short-nam=
+e]=0A=
++Usage: cygpath [-A|--allusers] (-D|--desktop)|(-P|--smprograms) [-s|--shor=
+t-name]=0A=
+   -a|--absolute         output absolute path=0A=
+   -c|--close handle     close handle (for use in captured process)=0A=
+   -f|--file file        read file for input path information=0A=
+   -i|--ignore           ignore missing argument=0A=
++  -l|--long-name        print Windows long form of filename=0A=
+   -p|--path             filename argument is a path=0A=
+   -s|--short-name       print Windows short form of filename=0A=
+   -u|--unix             print Unix form of filename=0A=
+   -v|--version          output version information and exit=0A=
+   -w|--windows          print Windows form of filename=0A=
+   -A|--allusers         use `All Users' instead of current user for -D, -P=
+=0A=
+-  -H|--homeroot		output `Profiles' directory (home root) and exit\n\=0A=
++  -H|--homeroot		output `Profiles' directory (home root) and exit=0A=
+   -D|--desktop          output `Desktop' directory and exit=0A=
+   -P|--smprograms       output Start Menu `Programs' directory and exit=0A=
+   -S|--sysdir           output system directory and exit=0A=
+@@ -102,8 +106,14 @@ indicate whether you want a conversion f=0A=
+ format (<literal>-u</literal>) or a conversion from UNIX (POSIX) to=0A=
+ Windows format (<literal>-w</literal>).  You must give exactly=0A=
+ one of these.  To give neither or both is an error.  Use the=0A=
+-<literal>-s</literal> option in combination with the <literal>-w=0A=
+-</literal> option to convert to Windows short form.</para>=0A=
++<literal>-l</literal> or <literal>-s</literal> option in combination=20=0A=
++with the <literal>-w</literal> option to convert to Windows long or=20=0A=
++short form.</para>=0A=
++=0A=
++<para>Caveat: The <literal>-l</literal> option does not work if the=0A=
++<em>check_case</em> parameter of <em>CYGWIN</em> is set to <em>strict</em>=
+,=0A=
++since Cygwin is not able to match any Windows short path in this mode.=0A=
++</para>=0A=
+=20=0A=
+ <para>The <literal>-p</literal> option means that you want to convert=0A=
+ a path-style string rather than a single filename.  For example, the=0A=
+
+------_=_NextPart_000_01C20095.67758F80--
