@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2967-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 26557 invoked by alias); 15 Sep 2002 19:05:36 -0000
+Return-Path: <cygwin-patches-return-2968-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 6730 invoked by alias); 15 Sep 2002 19:27:57 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,53 +7,159 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 26543 invoked from network); 15 Sep 2002 19:05:36 -0000
-Date: Sun, 15 Sep 2002 12:05:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
+Received: (qmail 6716 invoked from network); 15 Sep 2002 19:27:57 -0000
+Message-ID: <20020915192756.93971.qmail@web20007.mail.yahoo.com>
+Date: Sun, 15 Sep 2002 12:27:00 -0000
+From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+Subject: Re: print_version missing newlines (for Joshua?)
 To: cygwin-patches@cygwin.com
-Subject: Re: cygwin part of pseudo-relocs patch
-Message-ID: <20020915190545.GC32609@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <17051818150.20020903103820@logos-m.ru> <20020914184315.GA19372@redhat.com> <101436798232.20020915155139@logos-m.ru>
-Mime-Version: 1.0
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="0-6309314-1032118076=:93969"
+X-SW-Source: 2002-q3/txt/msg00416.txt.bz2
+
+--0-6309314-1032118076=:93969
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <101436798232.20020915155139@logos-m.ru>
-User-Agent: Mutt/1.4i
-X-SW-Source: 2002-q3/txt/msg00415.txt.bz2
+Content-length: 1046
 
-On Sun, Sep 15, 2002 at 03:51:39PM +0400, egor duda wrote:
->Hi!
->
->Saturday, 14 September, 2002 Christopher Faylor cgf@redhat.com wrote:
->
->CF> On Tue, Sep 03, 2002 at 10:38:20AM +0400, egor duda wrote:
->>>This is an updated cygwin part of pseudo-relocs patch.  Relocations are
->>>performed inside of cygwin1.dll, as Chris suggested, and it seems to
->>>work ok in case of one dll referencing another one.  After new binutils
->>>package is released, it can go into cygwin release.
->
->CF> Sorry for the long delay in reviewing this.  As the mantra goes "I've
->CF> been incredibly busy".  I could tell you just how busy I am but I don't
->CF> have time right now.  Anyway, I thought that this patch would take some
->CF> time to review so I've been avoiding it.
->
->CF> As it turns out, it took very little time at all.
->
->CF> It seems to be ok, as far as I can tell, but I would prefer it if you
->CF> would use the cygwin_internal interface for adding new cygwin-specific
->CF> functionality.  That can allow a program to gracefully degrade when
->CF> a feature is not available rather than popping up an "entry point not
->CF> found" dialog.
->
->This entry point was added intentionally, to diagnose the case
->when application, linked using --enable-pseudo-relocs, is linked
->(statically or dynamically) with a runtime which doesn't support such
->relocations. Actually, i don't see the way for application to handle
->such situation in other way than simply exiting with some kind of
->"fatal error" message.
+I've applied this to fix the lack of final newlines in
+the --version option to all the utils (other than cygpath, which
+Igor's patch fixed this morning).
 
-Which is much more graceful than displaying a dialog box.
+2002-09-15  Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+        * cygcheck.cc (print_version) Add final newline.
+        * getfacl.c (print_version) Add final newline.
+        * kill.cc (print_version) Add final newline.
+        * mkgroup.c (print_version) Add final newline.
+        * mkpasswd.c (print_version) Add final newline.
+        * mount.cc (print_version) Add final newline.
+        * passwd.c (print_version) Add final newline.
+        * ps.cc (print_version) Add final newline.
+        * regtool.cc (print_version) Add final newline.
+        * setfacl.c (print_version) Add final newline.
+        * ssp.c (print_version) Add final newline.
+        * strace.cc (print_version) Add final newline.
+        * umount.cc (print_version) Add final newline.
 
-cgf
+
+__________________________________________________
+Do you Yahoo!?
+Yahoo! News - Today's headlines
+http://news.yahoo.com
+--0-6309314-1032118076=:93969
+Content-Type: application/octet-stream; name=ChangeLog
+Content-Transfer-Encoding: base64
+Content-Description: ChangeLog
+Content-Disposition: attachment; filename=ChangeLog
+Content-length: 924
+
+MjAwMi0wOS0xNSAgSm9zaHVhIERhbmllbCBGcmFua2xpbiA8am9zaHVhZGZy
+YW5rbGluQHlhaG9vLmNvbT4KCSogY3lnY2hlY2suY2MgKHByaW50X3ZlcnNp
+b24pIEFkZCBmaW5hbCBuZXdsaW5lLgoJKiBnZXRmYWNsLmMgKHByaW50X3Zl
+cnNpb24pIEFkZCBmaW5hbCBuZXdsaW5lLgoJKiBraWxsLmNjIChwcmludF92
+ZXJzaW9uKSBBZGQgZmluYWwgbmV3bGluZS4KCSogbWtncm91cC5jIChwcmlu
+dF92ZXJzaW9uKSBBZGQgZmluYWwgbmV3bGluZS4KCSogbWtwYXNzd2QuYyAo
+cHJpbnRfdmVyc2lvbikgQWRkIGZpbmFsIG5ld2xpbmUuCgkqIG1vdW50LmNj
+IChwcmludF92ZXJzaW9uKSBBZGQgZmluYWwgbmV3bGluZS4KCSogcGFzc3dk
+LmMgKHByaW50X3ZlcnNpb24pIEFkZCBmaW5hbCBuZXdsaW5lLgoJKiBwcy5j
+YyAocHJpbnRfdmVyc2lvbikgQWRkIGZpbmFsIG5ld2xpbmUuCgkqIHJlZ3Rv
+b2wuY2MgKHByaW50X3ZlcnNpb24pIEFkZCBmaW5hbCBuZXdsaW5lLgoJKiBz
+ZXRmYWNsLmMgKHByaW50X3ZlcnNpb24pIEFkZCBmaW5hbCBuZXdsaW5lLgoJ
+KiBzc3AuYyAocHJpbnRfdmVyc2lvbikgQWRkIGZpbmFsIG5ld2xpbmUuCgkq
+IHN0cmFjZS5jYyAocHJpbnRfdmVyc2lvbikgQWRkIGZpbmFsIG5ld2xpbmUu
+CgkqIHVtb3VudC5jYyAocHJpbnRfdmVyc2lvbikgQWRkIGZpbmFsIG5ld2xp
+bmUuCg==
+
+--0-6309314-1032118076=:93969
+Content-Type: application/octet-stream; name="v.patch"
+Content-Transfer-Encoding: base64
+Content-Description: v.patch
+Content-Disposition: attachment; filename="v.patch"
+Content-length: 5072
+
+SW5kZXg6IGN5Z2NoZWNrLmNjCj09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KUkNT
+IGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvdXRpbHMvY3lnY2hlY2suY2Ms
+dgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuMjYKZGlmZiAtcjEuMjYgY3lnY2hl
+Y2suY2MKMTI3MGMxMjcwLDEyNzEKPCBDb21waWxlZCBvbiAlcyIsIGxlbiwg
+diwgX19EQVRFX18pOwotLS0KPiBDb21waWxlZCBvbiAlc1xuXAo+ICIsIGxl
+biwgdiwgX19EQVRFX18pOwpJbmRleDogZ2V0ZmFjbC5jCj09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT0KUkNTIGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvdXRp
+bHMvZ2V0ZmFjbC5jLHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjYKZGlmZiAt
+cjEuNiBnZXRmYWNsLmMKMTM5YzEzOSwxNDAKPCBDb21waWxlZCBvbiAlcyIs
+IGxlbiwgdiwgX19EQVRFX18pOwotLS0KPiBDb21waWxlZCBvbiAlc1xuXAo+
+ICIsIGxlbiwgdiwgX19EQVRFX18pOwpJbmRleDoga2lsbC5jYwo9PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2luc3Vw
+L3V0aWxzL2tpbGwuY2MsdgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuMTUKZGlm
+ZiAtcjEuMTUga2lsbC5jYwo3MmM3Miw3Mwo8IENvbXBpbGVkIG9uICVzIiwg
+cHJvZ19uYW1lLCBsZW4sIHYsIF9fREFURV9fKTsKLS0tCj4gQ29tcGlsZWQg
+b24gJXNcblwKPiAiLCBwcm9nX25hbWUsIGxlbiwgdiwgX19EQVRFX18pOwpJ
+bmRleDogbWtncm91cC5jCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KUkNTIGZp
+bGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvdXRpbHMvbWtncm91cC5jLHYKcmV0
+cmlldmluZyByZXZpc2lvbiAxLjE1CmRpZmYgLXIxLjE1IG1rZ3JvdXAuYwo0
+NzZjNDc2LDQ3Nwo8IENvbXBpbGVkIG9uICVzIiwgbGVuLCB2LCBfX0RBVEVf
+Xyk7Ci0tLQo+IENvbXBpbGVkIG9uICVzXG5cCj4gIiwgbGVuLCB2LCBfX0RB
+VEVfXyk7CkluZGV4OiBta3Bhc3N3ZC5jCj09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT0KUkNTIGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvdXRpbHMvbWtwYXNz
+d2QuYyx2CnJldHJpZXZpbmcgcmV2aXNpb24gMS4yMwpkaWZmIC1yMS4yMyBt
+a3Bhc3N3ZC5jCjQ1NmM0NTYsNDU3CjwgQ29tcGlsZWQgb24gJXMiLCBsZW4s
+IHYsIF9fREFURV9fKTsKLS0tCj4gQ29tcGlsZWQgb24gJXNcblwKPiAiLCBs
+ZW4sIHYsIF9fREFURV9fKTsKSW5kZXg6IG1vdW50LmNjCj09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT0KUkNTIGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvdXRp
+bHMvbW91bnQuY2MsdgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuMjYKZGlmZiAt
+cjEuMjYgbW91bnQuY2MKMTc4YzE3OCwxNzkKPCBDb21waWxlZCBvbiAlcyIs
+IHByb2duYW1lLCBsZW4sIHYsIF9fREFURV9fKTsKLS0tCj4gQ29tcGlsZWQg
+b24gJXNcblwKPiAiLCBwcm9nbmFtZSwgbGVuLCB2LCBfX0RBVEVfXyk7Cklu
+ZGV4OiBwYXNzd2QuYwo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBmaWxl
+OiAvY3ZzL3NyYy9zcmMvd2luc3VwL3V0aWxzL3Bhc3N3ZC5jLHYKcmV0cmll
+dmluZyByZXZpc2lvbiAxLjYKZGlmZiAtcjEuNiBwYXNzd2QuYwoyODVjMjg1
+LDI4Ngo8IENvbXBpbGVkIG9uICVzIiwgcHJvZ19uYW1lLCBsZW4sIHYsIF9f
+REFURV9fKTsKLS0tCj4gQ29tcGlsZWQgb24gJXNcblwKPiAiLCBwcm9nX25h
+bWUsIGxlbiwgdiwgX19EQVRFX18pOwpJbmRleDogcHMuY2MKPT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC91
+dGlscy9wcy5jYyx2CnJldHJpZXZpbmcgcmV2aXNpb24gMS4xNQpkaWZmIC1y
+MS4xNSBwcy5jYwoyMzdjMjM3LDIzOAo8IENvbXBpbGVkIG9uICVzIiwgcHJv
+Z19uYW1lLCBsZW4sIHYsIF9fREFURV9fKTsKLS0tCj4gQ29tcGlsZWQgb24g
+JXNcblwKPiAiLCBwcm9nX25hbWUsIGxlbiwgdiwgX19EQVRFX18pOwpJbmRl
+eDogcmVndG9vbC5jYwo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBmaWxl
+OiAvY3ZzL3NyYy9zcmMvd2luc3VwL3V0aWxzL3JlZ3Rvb2wuY2MsdgpyZXRy
+aWV2aW5nIHJldmlzaW9uIDEuMTEKZGlmZiAtcjEuMTEgcmVndG9vbC5jYwox
+MzljMTM5LDE0MAo8IENvbXBpbGVkIG9uICVzIiwgcHJvZ19uYW1lLCBsZW4s
+IHYsIF9fREFURV9fKTsKLS0tCj4gQ29tcGlsZWQgb24gJXNcblwKPiAiLCBw
+cm9nX25hbWUsIGxlbiwgdiwgX19EQVRFX18pOwpJbmRleDogc2V0ZmFjbC5j
+Cj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT0KUkNTIGZpbGU6IC9jdnMvc3JjL3Ny
+Yy93aW5zdXAvdXRpbHMvc2V0ZmFjbC5jLHYKcmV0cmlldmluZyByZXZpc2lv
+biAxLjUKZGlmZiAtcjEuNSBzZXRmYWNsLmMKNDE5YzQxOSw0MjAKPCBDb21w
+aWxlZCBvbiAlcyIsIGxlbiwgdiwgX19EQVRFX18pOwotLS0KPiBDb21waWxl
+ZCBvbiAlc1xuXAo+ICIsIGxlbiwgdiwgX19EQVRFX18pOwpJbmRleDogc3Nw
+LmMKPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1MgZmlsZTogL2N2cy9zcmMv
+c3JjL3dpbnN1cC91dGlscy9zc3AuYyx2CnJldHJpZXZpbmcgcmV2aXNpb24g
+MS40CmRpZmYgLXIxLjQgc3NwLmMKODI1YzgyNSw4MjYKPCBDb21waWxlZCBv
+biAlcyIsIHByb2dfbmFtZSwgbGVuLCB2LCBfX0RBVEVfXyk7Ci0tLQo+IENv
+bXBpbGVkIG9uICVzXG5cCj4gIiwgcHJvZ19uYW1lLCBsZW4sIHYsIF9fREFU
+RV9fKTsKSW5kZXg6IHN0cmFjZS5jYwo9PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+ClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL3V0aWxzL3N0cmFjZS5j
+Yyx2CnJldHJpZXZpbmcgcmV2aXNpb24gMS4yNApkaWZmIC1yMS4yNCBzdHJh
+Y2UuY2MKODkwYzg5MCw4OTEKPCBDb21waWxlZCBvbiAlcyIsIHBnbSwgbGVu
+LCB2LCBfX0RBVEVfXyk7Ci0tLQo+IENvbXBpbGVkIG9uICVzXG5cCj4gIiwg
+cGdtLCBsZW4sIHYsIF9fREFURV9fKTsKSW5kZXg6IHVtb3VudC5jYwo9PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2lu
+c3VwL3V0aWxzL3Vtb3VudC5jYyx2CnJldHJpZXZpbmcgcmV2aXNpb24gMS4x
+MgpkaWZmIC1yMS4xMiB1bW91bnQuY2MKODVjODUsODYKPCBDb21waWxlZCBv
+biAlcyIsIHByb2duYW1lLCBsZW4sIHYsIF9fREFURV9fKTsKLS0tCj4gQ29t
+cGlsZWQgb24gJXNcblwKPiAiLCBwcm9nbmFtZSwgbGVuLCB2LCBfX0RBVEVf
+Xyk7Cg==
+
+--0-6309314-1032118076=:93969--
