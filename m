@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4022-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 25057 invoked by alias); 21 Jul 2003 12:01:12 -0000
+Return-Path: <cygwin-patches-return-4023-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 16220 invoked by alias); 21 Jul 2003 13:07:19 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,129 +7,38 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 25048 invoked from network); 21 Jul 2003 12:01:11 -0000
-Date: Mon, 21 Jul 2003 12:01:00 -0000
-From: Pavel Tsekov <ptsekov@gmx.net>
+Received: (qmail 16192 invoked from network); 21 Jul 2003 13:07:18 -0000
+Date: Mon, 21 Jul 2003 13:07:00 -0000
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
 To: cygwin-patches@cygwin.com
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="========GMXBoundary141301058788870"
-Subject: [PATCH] Fix format strings for *_printf in mmap.c
-X-Priority: 3 (Normal)
-X-Authenticated-Sender: #0014308112@gmx.net
-X-Authenticated-IP: [217.110.55.35]
-Message-ID: <14130.1058788870@www45.gmx.net>
-X-Flags: 0001
-X-SW-Source: 2003-q3/txt/msg00038.txt.bz2
+Subject: Re: [PATCH] Fix format strings for *_printf in mmap.c
+Message-ID: <20030721130717.GL1621@cygbert.vinschen.de>
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <14130.1058788870@www45.gmx.net>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <14130.1058788870@www45.gmx.net>
+User-Agent: Mutt/1.4.1i
+X-SW-Source: 2003-q3/txt/msg00039.txt.bz2
 
-This is a MIME encapsulated multipart message -
-please use a MIME-compliant e-mail program to open it.
+On Mon, Jul 21, 2003 at 02:01:10PM +0200, Pavel Tsekov wrote:
+> Hello, 
+> 
+> Does the following patch make any sense ?
+> 
+> * 2003-07-21  Pavel Tsekov  <ptsekov@gmx.net>
+> 
+> 	* mmap.cc: Use proper format specifiers for _off64_t and size_t in
+> 	format strings passed to syscall_printf () and debug_printf ()
+> 	throughout.
 
-Dies ist eine mehrteilige Nachricht im MIME-Format -
-bitte verwenden Sie zum Lesen ein MIME-konformes Mailprogramm.
+Definitely.  Applied.
 
---========GMXBoundary141301058788870
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8bit
-Content-length: 372
-
-Hello, 
-
-Does the following patch make any sense ?
-
-* 2003-07-21  Pavel Tsekov  <ptsekov@gmx.net>
-
-	* mmap.cc: Use proper format specifiers for _off64_t and size_t in
-	format strings passed to syscall_printf () and debug_printf ()
-	throughout.
+Thanks for the patch,
+Corinna
 
 -- 
-+++ GMX - Mail, Messaging & more  http://www.gmx.net +++
-
-Jetzt ein- oder umsteigen und USB-Speicheruhr als Prämie sichern!
---========GMXBoundary141301058788870
-Content-Type: text/plain; name="mmap.cc.diff"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="mmap.cc.diff"
-Content-length: 4763
-
-SW5kZXg6IG1tYXAuY2MKPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1MgZmls
-ZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vbW1hcC5jYyx2CnJldHJp
-ZXZpbmcgcmV2aXNpb24gMS43OQpkaWZmIC11IC1wIC1yMS43OSBtbWFwLmNj
-Ci0tLSBtbWFwLmNjCTUgSnVsIDIwMDMgMTg6NTk6MzUgLTAwMDAJMS43OQor
-KysgbW1hcC5jYwkyMSBKdWwgMjAwMyAxMTo0NToyOCAtMDAwMApAQCAtMTIz
-LDEyICsxMjMsMTIgQEAgbW1hcF9yZWNvcmQ6OmFsbG9jX21hcCAoX29mZjY0
-X3Qgb2ZmLCBEVwogICAgICAgbGVuID0gUEFHRV9DTlQgKGxlbikgKiBnZXRw
-YWdlc2l6ZSAoKTsKICAgICAgIGlmIChvZmYgPiAwICYmCiAJICAhVmlydHVh
-bFByb3RlY3QgKGJhc2VfYWRkcmVzc18sIG9mZiwgUEFHRV9OT0FDQ0VTUywg
-Jm9sZF9wcm90KSkKLQlzeXNjYWxsX3ByaW50ZiAoIlZpcnR1YWxQcm90ZWN0
-KCV4LCVkKSBmYWlsZWQ6ICVFIiwgYmFzZV9hZGRyZXNzXywgb2ZmKTsKKwlz
-eXNjYWxsX3ByaW50ZiAoIlZpcnR1YWxQcm90ZWN0KCV4LCVEKSBmYWlsZWQ6
-ICVFIiwgYmFzZV9hZGRyZXNzXywgb2ZmKTsKICAgICAgIGlmIChvZmYgKyBs
-ZW4gPCBzaXplX3RvX21hcF8KIAkgICYmICFWaXJ0dWFsUHJvdGVjdCAoYmFz
-ZV9hZGRyZXNzXyArIG9mZiArIGxlbiwKIAkJCSAgICAgIHNpemVfdG9fbWFw
-XyAtIGxlbiAtIG9mZiwKIAkJCSAgICAgIFBBR0VfTk9BQ0NFU1MsICZvbGRf
-cHJvdCkpCi0Jc3lzY2FsbF9wcmludGYgKCJWaXJ0dWFsUHJvdGVjdCgleCwl
-ZCkgZmFpbGVkOiAlRSIsCisJc3lzY2FsbF9wcmludGYgKCJWaXJ0dWFsUHJv
-dGVjdCgleCwlRCkgZmFpbGVkOiAlRSIsCiAJCQliYXNlX2FkZHJlc3NfICsg
-b2ZmICsgbGVuLCBzaXplX3RvX21hcF8gLSBsZW4gLSBvZmYpOwogICAgICAg
-b2ZmIC89IGdldHBhZ2VzaXplICgpOwogICAgICAgbGVuIC89IGdldHBhZ2Vz
-aXplICgpOwpAQCAtMTU4LDcgKzE1OCw3IEBAIG1tYXBfcmVjb3JkOjptYXBf
-bWFwIChfb2ZmNjRfdCBvZmYsIERXT1IKICAgICAgIGJyZWFrOwogICAgIH0K
-IAotICBkZWJ1Z19wcmludGYgKCJtYXBfbWFwIChmZD0lZCwgb2ZmPSVELCBs
-ZW49JWQpIiwgZmRlc2NfLCBvZmYsIGxlbik7CisgIGRlYnVnX3ByaW50ZiAo
-Im1hcF9tYXAgKGZkPSVkLCBvZmY9JUQsIGxlbj0ldSkiLCBmZGVzY18sIG9m
-ZiwgbGVuKTsKICAgbGVuID0gUEFHRV9DTlQgKGxlbik7CiAKICAgaWYgKChv
-ZmYgPSBmaW5kX2VtcHR5IChsZW4pKSA9PSAoRFdPUkQpLTEpCkBAIC00MzUs
-NyArNDM1LDcgQEAgc3RhdGljIG1hcCAqbW1hcHBlZF9hcmVhczsKIGV4dGVy
-biAiQyIgY2FkZHJfdAogbW1hcDY0IChjYWRkcl90IGFkZHIsIHNpemVfdCBs
-ZW4sIGludCBwcm90LCBpbnQgZmxhZ3MsIGludCBmZCwgX29mZjY0X3Qgb2Zm
-KQogewotICBzeXNjYWxsX3ByaW50ZiAoImFkZHIgJXgsIGxlbiAlZCwgcHJv
-dCAleCwgZmxhZ3MgJXgsIGZkICVkLCBvZmYgJUQiLAorICBzeXNjYWxsX3By
-aW50ZiAoImFkZHIgJXgsIGxlbiAldSwgcHJvdCAleCwgZmxhZ3MgJXgsIGZk
-ICVkLCBvZmYgJUQiLAogCQkgIGFkZHIsIGxlbiwgcHJvdCwgZmxhZ3MsIGZk
-LCBvZmYpOwogCiAgIHN0YXRpYyBEV09SRCBncmFudWxhcml0eTsKQEAgLTYx
-OCw3ICs2MTgsNyBAQCBtbWFwIChjYWRkcl90IGFkZHIsIHNpemVfdCBsZW4s
-IGludCBwcm90CiBleHRlcm4gIkMiIGludAogbXVubWFwIChjYWRkcl90IGFk
-ZHIsIHNpemVfdCBsZW4pCiB7Ci0gIHN5c2NhbGxfcHJpbnRmICgibXVubWFw
-IChhZGRyICV4LCBsZW4gJWQpIiwgYWRkciwgbGVuKTsKKyAgc3lzY2FsbF9w
-cmludGYgKCJtdW5tYXAgKGFkZHIgJXgsIGxlbiAldSkiLCBhZGRyLCBsZW4p
-OwogCiAgIC8qIEVycm9yIGNvbmRpdGlvbnMgYWNjb3JkaW5nIHRvIFNVU3Yz
-ICovCiAgIGlmICghYWRkciB8fCAoKERXT1JEKWFkZHIgJSBnZXRwYWdlc2l6
-ZSAoKSkgfHwgIWxlbgpAQCAtNjc1LDcgKzY3NSw3IEBAIG11bm1hcCAoY2Fk
-ZHJfdCBhZGRyLCBzaXplX3QgbGVuKQogZXh0ZXJuICJDIiBpbnQKIG1zeW5j
-IChjYWRkcl90IGFkZHIsIHNpemVfdCBsZW4sIGludCBmbGFncykKIHsKLSAg
-c3lzY2FsbF9wcmludGYgKCJhZGRyID0gJXgsIGxlbiA9ICVkLCBmbGFncyA9
-ICV4IiwKKyAgc3lzY2FsbF9wcmludGYgKCJhZGRyID0gJXgsIGxlbiA9ICV1
-LCBmbGFncyA9ICV4IiwKIAkJICBhZGRyLCBsZW4sIGZsYWdzKTsKIAogICAv
-KiBIb3dldmVyLCBjaGVjayBmbGFncyBmb3IgdmFsaWRpdHkuICovCkBAIC04
-NDMsNyArODQzLDcgQEAgZmhhbmRsZXJfZGlza19maWxlOjptbWFwIChjYWRk
-cl90ICphZGRyLAogICBpZiAoIWJhc2UgJiYgIShmbGFncyAmIE1BUF9GSVhF
-RCkpCiAgICAgYmFzZSA9IE1hcFZpZXdPZkZpbGVFeCAoaCwgYWNjZXNzLCBo
-aWdoLCBsb3csIGxlbiwgTlVMTCk7CiAgIGRlYnVnX3ByaW50ZiAoIiV4ID0g
-TWFwVmlld09mRmlsZUV4IChoOiV4LCBhY2Nlc3M6JXgsIDAsIG9mZjolRCwg
-IgotICAJCSJsZW46JWQsIGFkZHI6JXgpIiwgYmFzZSwgaCwgYWNjZXNzLCBv
-ZmYsIGxlbiwgKmFkZHIpOworICAJCSJsZW46JXUsIGFkZHI6JXgpIiwgYmFz
-ZSwgaCwgYWNjZXNzLCBvZmYsIGxlbiwgKmFkZHIpOwogICBpZiAoIWJhc2Ug
-fHwgKChmbGFncyAmIE1BUF9GSVhFRCkgJiYgYmFzZSAhPSAqYWRkcikpCiAg
-ICAgewogICAgICAgaWYgKCFiYXNlKQpAQCAtOTA3LDcgKzkwNyw3IEBAIG1w
-cm90ZWN0IChjYWRkcl90IGFkZHIsIHNpemVfdCBsZW4sIGludCAKICAgRFdP
-UkQgb2xkX3Byb3Q7CiAgIERXT1JEIG5ld19wcm90ID0gMDsKIAotICBzeXNj
-YWxsX3ByaW50ZiAoIm1wcm90ZWN0IChhZGRyICV4LCBsZW4gJWQsIHByb3Qg
-JXgpIiwgYWRkciwgbGVuLCBwcm90KTsKKyAgc3lzY2FsbF9wcmludGYgKCJt
-cHJvdGVjdCAoYWRkciAleCwgbGVuICV1LCBwcm90ICV4KSIsIGFkZHIsIGxl
-biwgcHJvdCk7CiAKICAgaWYgKCF3aW5jYXAudmlydHVhbF9wcm90ZWN0X3dv
-cmtzX29uX3NoYXJlZF9wYWdlcyAoKQogICAgICAgJiYgYWRkciA+PSAoY2Fk
-ZHJfdCkweDgwMDAwMDAwICYmIGFkZHIgPD0gKGNhZGRyX3QpMHhCRkZGRkZG
-RikKQEAgLTk4NSw3ICs5ODUsNyBAQCBmaXh1cF9tbWFwc19hZnRlcl9mb3Jr
-IChIQU5ETEUgcGFyZW50KQogCSAgICB7CiAJICAgICAgbW1hcF9yZWNvcmQg
-KnJlYyA9IG1hcF9saXN0LT5yZWNzICsgbGk7CiAKLQkgICAgICBkZWJ1Z19w
-cmludGYgKCJmZCAlZCwgaCAleCwgYWNjZXNzICV4LCBvZmZzZXQgJWQsIHNp
-emUgJWQsIGFkZHJlc3MgJXAiLAorCSAgICAgIGRlYnVnX3ByaW50ZiAoImZk
-ICVkLCBoICV4LCBhY2Nlc3MgJXgsIG9mZnNldCAlRCwgc2l6ZSAldSwgYWRk
-cmVzcyAlcCIsCiAJCSAgcmVjLT5nZXRfZmQgKCksIHJlYy0+Z2V0X2hhbmRs
-ZSAoKSwgcmVjLT5nZXRfYWNjZXNzICgpLAogCQkgIHJlYy0+Z2V0X29mZnNl
-dCAoKSwgcmVjLT5nZXRfc2l6ZSAoKSwgcmVjLT5nZXRfYWRkcmVzcyAoKSk7
-CiAK
-
---========GMXBoundary141301058788870--
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
