@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1495-listarch-cygwin-patches=sourceware.cygnus.com@sources.redhat.com>
-Received: (qmail 23027 invoked by alias); 14 Nov 2001 19:41:32 -0000
+Return-Path: <cygwin-patches-return-1496-listarch-cygwin-patches=sourceware.cygnus.com@sources.redhat.com>
+Received: (qmail 27891 invoked by alias); 15 Nov 2001 11:26:27 -0000
 Mailing-List: contact cygwin-patches-help@sourceware.cygnus.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@sources.redhat.com>
@@ -7,36 +7,45 @@ List-Post: <mailto:cygwin-patches@sources.redhat.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@sources.redhat.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@sources.redhat.com
-Received: (qmail 23012 invoked from network); 14 Nov 2001 19:41:31 -0000
-Date: Thu, 11 Oct 2001 10:28:00 -0000
-To: cygwin-patches <cygwin-patches@cygwin.com>
-Subject: Re: [Patch] setup.exe - change to not ask root on download only.
-X-Mailer: Virtual Access by Atlantic Coast PLC, http://www.atlantic-coast.com/va
-Message-Id: <VA.000009dc.00a69973@thesoftwaresource.com>
-From: Brian Keener <bkeener@thesoftwaresource.com>
-Reply-To: bkeener@thesoftwaresource.com
-In-Reply-To: <01ee01c16c9e$0350bce0$0200a8c0@lifelesswks>
-References: <VA.000009d7.011e66c9@thesoftwaresource.com> <01ee01c16c9e$0350bce0$0200a8c0@lifelesswks>
-X-SW-Source: 2001-q4/txt/msg00027.txt.bz2
+Received: (qmail 27875 invoked from network); 15 Nov 2001 11:26:22 -0000
+Date: Thu, 11 Oct 2001 11:46:00 -0000
+From: egor duda <deo@logos-m.ru>
+X-Mailer: The Bat! (v1.53 RC/4)
+Reply-To: egor duda <cygwin-patches@cygwin.com>
+Organization: deo
+X-Priority: 3 (Normal)
+Message-ID: <17285934467.20011115142602@logos-m.ru>
+To: "Robert Collins" <robert.collins@itdomain.com.au>
+CC: cygwin-patches@cygwin.com
+Subject: Re: PTHREAD_COND_INITIALIZER support
+In-Reply-To: <92602986318.20011109105819@logos-m.ru>
+References: 
+ <EA18B9FA0FE4194AA2B4CDB91F73C0EF08F28E@itdomain002.itdomain.net.au>
+ <92602986318.20011109105819@logos-m.ru>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2001-q4/txt/msg00028.txt.bz2
 
-Robert Collins wrote:
-> can you generate patches with "-up" ? (See the cygwin contributors
-> page).
-> It makes it a lot easier to visually grok a patch.
+Hi!
 
-I can do that.  Actually I knew I had done it two ways in the past and couldn't 
-remember the other.  Nor was I sure which was the preferred - now I know.
+Friday, 09 November, 2001 egor duda deo@logos-m.ru wrote:
 
-> I'll update this for you to the io_streams code for HEAD committing.
+ed> well, since it's "feature added" rather than "bug fixed" kind of patch
+ed> i think it should wait after 1.3.5 release.
 
-Did it make it in the version you just rolled to the web page.
+done.
 
-> Lastly, you were missing a call to get_root_dir_now which resulted in
-> /etc/setup/last-cache never getting read.
+RC>> Have you got a test case for pthread_cond_initializer support
+RC>> currently?
 
-Hum,  I'll have to look at the change you made - I thought mine was reading 
-either file depending on where it found it. Ah well.  Thanks for correcting it 
-anyways.
+ed> yes. i'm going to add a bunch of pthread tests after this checkin.
 
+done too.
 
+Robert, can you please take a look at winsup.api/pthread/condvar3_1.c
+test? it looks like when condition variable is signalled, two threads
+wake on it instead of one. it's quite stable effect, so i don't think
+we have a race here.
 
+Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
