@@ -1,18 +1,27 @@
 From: Robert Collins <robert.collins@itdomain.com.au>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] setup.exe: Stop NetIO_HTTP from treating entire streamas a  header
-Date: Tue, 27 Nov 2001 17:26:00 -0000
-Message-ID: <1006910727.637.0.camel@lifelesswks>
-References: <20011127230925.GA5830@redhat.com> <000001c1779c$e1fe2fa0$2101a8c0@NOMAD> <20011127235226.GA6537@redhat.com> <1006906033.2048.23.camel@lifelesswks> <20011128002122.GA6919@redhat.com> <1006907495.2048.25.camel@lifelesswks> <20011128005414.GA7118@redhat.com>
-X-SW-Source: 2001-q4/msg00273.html
-Message-ID: <20011127172600.PfrKGFNuQ5TN_XZ7X6VuZ3NsiqBTHl2AuYwmrBwy1IE@z>
+To: nhv@cape.com
+Cc: cygwin-patches@cygwin.com
+Subject: RE: [PATCH] setup.exe: Stop NetIO_HTTP from treating entire streamas a  header
+Date: Tue, 27 Nov 2001 18:27:00 -0000
+Message-ID: <1006914349.637.4.camel@lifelesswks>
+References: <004801c177ab$13c9f4c0$a300a8c0@nhv>
+X-SW-Source: 2001-q4/msg00274.html
+Message-ID: <20011127182700.2vBJm4QArqDC6efEdmDdw5kI1qKu__tk4cgYqtW0TAs@z>
 
-On Wed, 2001-11-28 at 11:54, Christopher Faylor wrote:
-> On Wed, Nov 28, 2001 at 11:31:35AM +1100, Robert Collins wrote:
-> And, as always, I'm sorry that I ventured into a discussion about
-> coding style.  I'll try not to let that happen again, unless it
-> is to point out a clear violation of GNU coding standards.
+On Wed, 2001-11-28 at 12:21, Norman Vine wrote:
+> FWIW
+> I believe that Standard C requires NULL to be defined in <stddef.h>
+> http://www.ccs.ucsd.edu/c/stddef.html/#NULL
 
-I'm equally guilty here, don't worry about it. 
+Thanks Norman..
+
+===
+NULL
+
+#define NULL <either 0, 0L, or (void *)0> [0 in C++]
+
+The macro yields a null pointer constant that is usable as an address
+constant expression.
+===
 
 Rob
