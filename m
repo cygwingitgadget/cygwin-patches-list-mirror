@@ -1,30 +1,23 @@
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
+From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: Solve a problem triggered by duplicate names in /etc/passwd.
-Date: Wed, 25 Apr 2001 05:54:00 -0000
-Message-id: <20010425145439.T23753@cygbert.vinschen.de>
-References: <s1ssnixnodp.fsf@jaist.ac.jp>
-X-SW-Source: 2001-q2/msg00160.html
+Subject: Re: Export asctime_r, ctime_r, gmtime_r, localtime_r
+Date: Wed, 25 Apr 2001 08:00:00 -0000
+Message-id: <20010425110052.E5956@redhat.com>
+References: <138104313044.20010425165309@logos-m.ru>
+X-SW-Source: 2001-q2/msg00161.html
 
-On Wed, Apr 25, 2001 at 09:40:50PM +0900, Kazuhiro Fujieda wrote:
-> The last patch of mine against `mkpasswd' can't solve another problem
-> triggered by the duplicate entries of Administrator in /etc/passwd.
-> The uid of processes executed by the local Administrator always
-> becomes the uid of the domain Administrator (10500).
-> 
-> The following patch can solve this problem.
-> 
-> 2001-04-25  Kazuhiro Fujieda  <fujieda@jaist.ac.jp>
-> 
-> 	* uinfo.cc (internal_getlogin): Return pointer to struct passwd.
-> 	(uinfo_init): Accommodate the above change.
-> 	* syscalls.cc (seteuid): Ditto.
+On Wed, Apr 25, 2001 at 04:53:09PM +0400, egor duda wrote:
+>Hi!
+>
+>2001-04-25  Egor Duda  <deo@logos-m.ru>
+>
+>        * cygwin.din: Export asctime_r, ctime_r, gmtime_r, localtime_r
+>        * include/cygwin/version.h: Bump CYGWIN_VERSION_API_MINOR to 39  
+>
+>egor.            mailto:deo@logos-m.ru icq 5165414 fidonet 2:5020/496.19
 
-Thanks, applied.
+Please check this in, Egor.
 
-Corinna
+Thanks.
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+cgf
