@@ -1,38 +1,29 @@
 From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: cygwin/newlib types patchs
-Date: Wed, 21 Mar 2001 14:01:00 -0000
-Message-id: <20010321170214.B9775@redhat.com>
-References: <008101c0b1e6$d2b92f80$0200a8c0@lifelesswks> <20010321090936.G3149@redhat.com> <001501c0b24c$90458e30$0200a8c0@lifelesswks>
-X-SW-Source: 2001-q1/msg00227.html
+Date: Wed, 21 Mar 2001 14:05:00 -0000
+Message-id: <20010321170610.C9775@redhat.com>
+References: <008101c0b1e6$d2b92f80$0200a8c0@lifelesswks> <20010321090559.F3149@redhat.com> <20010321091547.I3149@redhat.com> <000b01c0b24c$43e45530$0200a8c0@lifelesswks>
+X-SW-Source: 2001-q1/msg00228.html
 
-On Thu, Mar 22, 2001 at 08:19:05AM +1100, Robert Collins wrote:
->
->----- Original Message -----
->From: "Christopher Faylor" <cgf@redhat.com>
->To: <cygwin-patches@cygwin.com>
->Sent: Thursday, March 22, 2001 1:09 AM
->Subject: Re: cygwin/newlib types patchs
->
->
->> On Wed, Mar 21, 2001 at 08:10:00PM +1100, Robert Collins wrote:
->> >    * include/cygwin/types.h: Add pthread_*_t typedefs for user code
->and
->> >for building cygwin.
->>
->> I'm not comfortable with adding a new file with such a generic name
->here.
->> Shouldn't this just be cygwin/pthread.h, or something?
->
->You're not adding. It was already there, just absolutely bare bones.
->Corinna suggested that we include a cygwin/file for types that are
->included into user apps via sys/types.h, but specific to newlib - that
->file seemed most appropriate to me.
+On Thu, Mar 22, 2001 at 08:16:57AM +1100, Robert Collins wrote:
+>Well we can't turn on _POSIX_THREADS. And I don't think we should...
+>a) I've read enough of the spec now to say fairly confidently that
+>cygwin will not be conformant for a very long time. (Setting the stack
+>address, setting a guard buffer for the stack...). So turning on
+>_POSIX_THREADS will be misleading. Autoconf feature tests find all the
+>functions quite well.
+>b) the newlib _POSIX_THREADS types are broken IMO. They are reasonable
+>structures and so forth but for userland includes they should be opaque
+>to the user, and not a struct but rather a struct pointer to allow
+>behind the scenes changes without breaking the ABI. (better yet, a void
+>* for real opaqueness).
+>c) the newlib includes have things in weird places- the pthreads
+>#defines should be in pthreads.h not sys/types.
 
-Actually, checking the history, it looks like I added this but it was
-a mistake.  I probably did a massive 'cvs add' and ended up adding this.
-I probably thought I needed it at some point and then changed my mind.
-
-However, I guess it makes sense to have something like this.
+Ok.  I didn't know this.  I wonder how much should be handled by fixing
+newlib, though?  If there are changes that make things more conformant
+then they should go in newlib.  I am sure that the newlib maintainers
+would like to fix things if they're out of whack.
 
 cgf
