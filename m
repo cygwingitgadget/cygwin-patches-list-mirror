@@ -1,105 +1,59 @@
-From: "J. Johnston" <jjohnstn@cygnus.com>
-To: Robert Collins <robert.collins@itdomain.com.au>
-Cc: cygwin-patches@cygwin.com, newlib@sources.redhat.com, Joel Sherrill <joel.sherrill@OARcorp.com>
-Subject: Re: cygwin/newlib types patchs
-Date: Fri, 23 Mar 2001 11:35:00 -0000
-Message-id: <3ABBA589.74CED71C@cygnus.com>
-References: <008101c0b1e6$d2b92f80$0200a8c0@lifelesswks> <20010321090559.F3149@redhat.com> <20010321091547.I3149@redhat.com> <000b01c0b24c$43e45530$0200a8c0@lifelesswks> <20010321170610.C9775@redhat.com> <026301c0b255$8982d130$0200a8c0@lifelesswks> <20010321173020.F9775@redhat.com> <029301c0b258$06fb42d0$0200a8c0@lifelesswks>
-X-SW-Source: 2001-q1/msg00247.html
+From: "Robert Collins" <robert.collins@itdomain.com.au>
+To: <cygwin-patches@cygwin.com>
+Subject: tzname
+Date: Mon, 26 Mar 2001 22:13:00 -0000
+Message-id: <EA18B9FA0FE4194AA2B4CDB91F73C0EF02E2B2@itdomain002.itdomain.net.au>
+X-SW-Source: 2001-q1/msg00248.html
+Content-type: multipart/mixed; boundary="----------=_1583532846-65438-32"
 
-Robert Collins wrote:
-> 
-> Hi,
->     Chris Faylor has asked to bring a discussion we've been having
-> cygwin-developers to the newlib list. The topic it pthread type
-> definitions && pthread defines.
-> 
-> I've include a couple of extracts below, but the short summary and
-> history is
-> I'm attempting to extend the current cygwin pthreads support, going from
-> specifications at www.opengroup.org. As part of that work I wanted to
-> move the cygwin pthread*_t type definitions to sys/types.h which the
-> standard says is appropriate.
-> 
-> When I did that I noticed that
-> a) (minor) newlib has pthread DEFINES in sys/types - the specs I'm
-> reading suggest they should be in pthreads.h and
+This is a multi-part message in MIME format...
 
-Yes, the PTHREAD_xxx defines should be in pthread.h.  Only the _t types should be in sys/types.h.
+------------=_1583532846-65438-32
+Content-length: 153
 
-> b) (major) new has typedef'd the pthread*_t types as structs, not
-> pointers. IMO having theortically opaque types defined as structs is
-> dangerous - both because you cannot extend the capabilities in the
-> future without breaking the ABI and because it encourages userland
-> programs to alter the contents directly rather than via the API.
-> 
-> It should be safe from an ABI point of view to convert from structs to
-> void* pointers, as long as dependent system libraries are able to use a
-> different typedef at compile time (in cygwin I have a #ifndef
-> __INSIDE_CYGWIN__ \ userland types \#else \system types\#endif). However
-> if any user programs have 'peeked' inside the structures, they will need
-> to be rebuilt when their system library gets updated..
->
+http://www.opengroup.org/onlinepubs/7908799/xsh/tzset.html
+specifies tzname, not _tzname. Also attached is a little test program
+written from the specs.
 
-Again, I agree with you.
+------------=_1583532846-65438-32
+Content-Type: text/plain; charset=us-ascii; name="tz.changelog"
+Content-Disposition: inline; filename="tz.changelog"
+Content-Transfer-Encoding: base64
+Content-Length: 265
 
-Joel, you are being cc'd  as these changes modify code added for RTEMS.  Any problems with making
-these changes (i.e. does the RTEMS stuff have to be protected for the time-being)?
+MjAwMS0wMy0yMSAgUm9iZXJ0IENvbGxpbnMgIDxyYnRjb2xsaW5zQGhvdG1h
+aWwuY29tPgoKCWh0dHA6Ly93d3cub3Blbmdyb3VwLm9yZy9vbmxpbmVwdWJz
+Lzc5MDg3OTkveHNoL3R6c2V0Lmh0bWwgCglzcGVjaWZpZXMgdHpuYW1lLCBu
+b3QgX3R6bmFtZS4gRGVmaW5lIHR6bmFtZSB0byBfdHpuYW1lIGlmIGl0IGlz
+IG5vdCBkZWZpbmVkLgo=
 
--- Jeff J.
- 
-> Rob
-> 
-> On Thu, Mar 22, 2001 at 08:16:57AM +1100, Robert Collins wrote:
-> >Well we can't turn on _POSIX_THREADS. And I don't think we should...
-> >a) I've read enough of the spec now to say fairly confidently that
-> >cygwin will not be conformant for a very long time. (Setting the stack
-> >address, setting a guard buffer for the stack...). So turning on
-> >_POSIX_THREADS will be misleading. Autoconf feature tests find all the
-> >functions quite well.
-> >b) the newlib _POSIX_THREADS types are broken IMO. They are reasonable
-> >structures and so forth but for userland includes they should be opaque
-> >to the user, and not a struct but rather a struct pointer to allow
-> >behind the scenes changes without breaking the ABI. (better yet, a void
-> >* for real opaqueness).
-> >c) the newlib includes have things in weird places- the pthreads
-> >#defines should be in pthreads.h not sys/types.
-> 
-> Ok.  I didn't know this.  I wonder how much should be handled by fixing
-> newlib, though?  If there are changes that make things more conformant
-> then they should go in newlib.  I am sure that the newlib maintainers
-> would like to fix things if they're out of whack.
-> 
-> cgf
-> 
-> ----- Original Message -----
-> From: "Christopher Faylor" <cgf@redhat.com>
-> To: <cygwin-patches@cygwin.com>
-> Sent: Thursday, March 22, 2001 9:30 AM
-> Subject: Re: cygwin/newlib types patchs
-> 
-> > On Thu, Mar 22, 2001 at 09:23:19AM +1100, Robert Collins wrote:
-> > >On the technical side the newlib maintainers are facing the same
-> problem
-> > >I did with pthreads (Changing at this date may break ABI and or
-> existing
-> > >#if code. Secondly they may have users who have used the fact that
-> the
-> > >userland includes allowed access to the internal elements of the *_t
-> > >types. (Which is a bad thing). I understand newlib exists because
-> > >proprietary software can be linked to it when it's sold under the
-> second
-> > >licence... so the maintainers may well have contractual issues crop
-> up
-> > >if they start fixing these things up.
-> >
-> > I think that all of the pthreads stuff was added by external
-> contributors,
-> > actually.
-> >
-> > Would you mind raising this issue on the newlib mailing list?  If no
-> one
-> > seems interested then we'll pursue a cygwin-only solution.
-> >
-> > cgf
-> >
+------------=_1583532846-65438-32
+Content-Type: text/x-diff; charset=us-ascii; name="tz.patch"
+Content-Disposition: inline; filename="tz.patch"
+Content-Transfer-Encoding: base64
+Content-Length: 720
+
+SW5kZXg6IGluY2x1ZGUvdGltZS5oCj09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0K
+UkNTIGZpbGU6IC9jdnMvc3JjL3NyYy9uZXdsaWIvbGliYy9pbmNsdWRlL3Rp
+bWUuaCx2CnJldHJpZXZpbmcgcmV2aXNpb24gMS40CmRpZmYgLXUgLXAgLXIx
+LjQgdGltZS5oCi0tLSB0aW1lLmgJMjAwMC8xMi8xMiAwMToyNDowOAkxLjQK
+KysrIHRpbWUuaAkyMDAxLzAzLzI3IDA2OjA5OjUzCkBAIC02Niw2ICs2Niw5
+IEBAIHN0cnVjdCB0bSAqX0VYRlVOKGxvY2FsdGltZV9yLAkoY29uc3QgdGkK
+IGV4dGVybiBfX0lNUE9SVCB0aW1lX3QgX3RpbWV6b25lOwogZXh0ZXJuIF9f
+SU1QT1JUIGludCBfZGF5bGlnaHQ7CiBleHRlcm4gX19JTVBPUlQgY2hhciAq
+X3R6bmFtZVsyXTsKKyNpZm5kZWYgdHpuYW1lCisjZGVmaW5lIHR6bmFtZSBf
+dHpuYW1lCisjZW5kaWYKIAogY2hhciAqX0VYRlVOKHRpbWV6b25lLCAodm9p
+ZCkpOwogdm9pZCBfRVhGVU4odHpzZXQsICh2b2lkKSk7Cg==
+
+------------=_1583532846-65438-32
+Content-Type: text/x-c; charset=us-ascii; name="tztest.c"
+Content-Disposition: inline; filename="tztest.c"
+Content-Transfer-Encoding: base64
+Content-Length: 151
+
+I2luY2x1ZGUgPHN0ZGlvLmg+CiNpbmNsdWRlIDx0aW1lLmg+CgptYWluICgp
+CnsKICB0enNldCgpOwogIHByaW50Zigic3RkOiVzXG5kc3Q6JXNcbiIsdHpu
+YW1lWzBdLHR6bmFtZVsxXSk7Cn0K
+
+------------=_1583532846-65438-32--
