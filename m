@@ -1,80 +1,34 @@
 From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: w32api patch
-Date: Mon, 11 Dec 2000 10:13:00 -0000
-Message-id: <20001211131337.A7293@redhat.com>
-X-SW-Source: 2000-q4/msg00045.html
+To: "'cygwin-patches@cygwin.com'" <cygwin-patches@cygwin.com>
+Subject: Re: Mouse support
+Date: Thu, 14 Dec 2000 20:42:00 -0000
+Message-id: <20001214234247.A24428@redhat.com>
+References: <F10D23B02E54D011A0AB0020AF9CEFE999EE92@lynx.ceddec.com> <20001211123552.A1066@redhat.com>
+X-SW-Source: 2000-q4/msg00046.html
 
-The patch below is necessary when installing cross toolchains.  This
-mimics the behavior of the cygwin directory.
+On Mon, Dec 11, 2000 at 12:35:52PM -0500, Christopher Faylor wrote:
+>On Mon, Dec 11, 2000 at 10:48:12AM -0500, Town, Brad wrote:
+>>Attached is a patch to fhandler_console.cc that allows enabling and
+>>disabling the mouse based on ^[[?1000h/l.  It's not perfect, but it works
+>>well.  Included is a ChangeLog entry.
+>>
+>>Also, terribly minor point:  It seems that the mouse code I submitted has
+>>been included in the CVS sources, but my ChangeLog entry hasn't yet
+>>appeared.
+>
+>Sorry.  That was a mistake.  I'll revert the code until I have a chance to
+>analyze your new patch.
 
+Apologies again, Brad, but I had problems applying your patch.  It didn't
+seem to install cleanly to the current CVS version.
+
+I've reverted the changes that I unintentionally applied and have
+checked in a fresh version of fhandler_console.cc.  I've added some
+crude understanding of when a '<ESC>[?' is detected.  Could you adapt
+your changes to use that and submit everything all over again, including
+an up-to-date changelog?
+
+When you do that, I'll check everything in.
+
+Thanks,
 cgf
-
-Mon Dec 11 13:11:36 2000  Christopher Faylor <cgf@cygnus.com>
-
-	* lib/Makefile.in: Install headers and libraries in tooldir.
-
-Index: lib/Makefile.in
-===================================================================
-RCS file: /cvs/uberbaum/winsup/w32api/lib/Makefile.in,v
-retrieving revision 1.4
-diff -u -p -r1.4 Makefile.in
---- Makefile.in	2000/11/06 16:17:16	1.4
-+++ Makefile.in	2000/12/11 18:12:49
-@@ -22,7 +22,15 @@ program_transform_name = @program_transf
- exec_prefix = @exec_prefix@
- bindir = @bindir@
- libdir = @libdir@
--tooldir = $(exec_prefix)/$(target_alias)
-+ifeq ($(target_alias),$(host_alias))
-+ifeq ($(build_alias),$(host_alias))
-+tooldir:=$(exec_prefix)
-+else
-+tooldir:=$(exec_prefix)/$(target_alias)
-+endif
-+else
-+tooldir:=$(exec_prefix)/$(target_alias)
-+endif
- datadir = @datadir@
- infodir = @infodir@
- includedir = @includedir@
-@@ -158,16 +166,16 @@ xuninstall-headers:
- install: install-libraries install-headers
- 
- install-libraries: all
--	$(mkinstalldirs) $(exec_prefix)/lib
-+	$(mkinstalldirs) $(tooldir)/lib
- 	for i in $(LIBS); do \
--		$(INSTALL_DATA) $$i $(exec_prefix)/lib/$$i ; \
-+		$(INSTALL_DATA) $$i $(tooldir)/lib/$$i ; \
- 	done
- 
- install-headers:
--	$(mkinstalldirs) $(exec_prefix)/include/w32api
-+	$(mkinstalldirs) $(tooldir)/include/w32api
- 	for i in $(HEADERS); do \
--		$(INSTALL_DATA) $(srcdir)/../include/$$i $(exec_prefix)/include/w32api/$$i ; \
--		echo "#include <w32api/$$i>" > $(exec_prefix)/include/$$i ; \
-+		$(INSTALL_DATA) $(srcdir)/../include/$$i $(tooldir)/include/w32api/$$i ; \
-+		echo "#include <w32api/$$i>" > $(tooldir)/include/$$i ; \
- 	done
- 
- # uninstall headers and libraries 
-@@ -175,14 +183,14 @@ uninstall: uninstall-libraries uninstall
- 
- uninstall-libraries:
- 	@for i in $(LIBS); do \
--		rm -f $(exec_prefix)/lib/$$i ; \
-+		rm -f $(tooldir)/lib/$$i ; \
- 	done
- 
- uninstall-headers:
- 	@for i in $(HEADERS); do \
--		rm -f $(exec_prefix)/include/w32api/$$i ; \
-+		rm -f $(tooldir)/include/w32api/$$i ; \
- 	done
--	rmdir $(exec_prefix)/include/w32api
-+	rmdir $(tooldir)/include/w32api
- 
- dist:
- 	mkdir $(distdir)/include
