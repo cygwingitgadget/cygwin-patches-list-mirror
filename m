@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2879-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 17908 invoked by alias); 28 Aug 2002 15:50:23 -0000
+Return-Path: <cygwin-patches-return-2880-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 18587 invoked by alias); 28 Aug 2002 15:52:41 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,38 +7,50 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 17893 invoked from network); 28 Aug 2002 15:50:22 -0000
-Date: Wed, 28 Aug 2002 08:50:00 -0000
+Received: (qmail 18573 invoked from network); 28 Aug 2002 15:52:41 -0000
+Date: Wed, 28 Aug 2002 08:52:00 -0000
 From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: Readv/writev patch
-Message-ID: <20020828155017.GG4346@redhat.com>
+Subject: Re: [PATCH]: export getc_unlocked, getchar_unlocked, putc_unlocked, putchar_unlocked
+Message-ID: <20020828155236.GH4346@redhat.com>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <01aa01c24dda$cc5384b0$6132bc3e@BABEL> <20020828123735.B10870@cygbert.vinschen.de> <000301c24ea4$dc61b870$6132bc3e@BABEL>
+References: <3D6BBC26.2060408@netscape.net> <20020828125231.C10870@cygbert.vinschen.de> <3D6CAECC.8070403@netscape.net> <20020828133044.G5475@cygbert.vinschen.de>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <000301c24ea4$dc61b870$6132bc3e@BABEL>
+In-Reply-To: <20020828133044.G5475@cygbert.vinschen.de>
 User-Agent: Mutt/1.3.23.1i
-X-SW-Source: 2002-q3/txt/msg00327.txt.bz2
+X-SW-Source: 2002-q3/txt/msg00328.txt.bz2
 
-On Wed, Aug 28, 2002 at 03:59:42PM +0100, Conrad Scott wrote:
->> I also don't like these C++ cast operators since the Plain-C casts
->>are doing quite the same but are way easier to read.  Perhaps I'm just
->>old-fashioned.
+On Wed, Aug 28, 2002 at 01:30:44PM +0200, Corinna Vinschen wrote:
+>On Wed, Aug 28, 2002 at 07:06:52AM -0400, Nicholas Wourms wrote:
+>> Corinna Vinschen wrote:
+>> 
+>> >On Tue, Aug 27, 2002 at 01:51:34PM -0400, Nicholas Wourms wrote:
+>> >
+>> >>   * cygwin.din: Export getc_unlocked, getchar_unlocked,
+>> >>   putc_unlocked, putchar_unlocked functions.
+>> >>   * include/cygwin/version.h: Bump api minor.
+>> >>
+>> >
+>> >Applied.  Thanks, but you forgot the ChangeLog for the doc dir.
+>> >
+>> >Tsk, tsk, tsk, ;-)
+>> >
+>> Corinna,
+>> 
+>> Chris had told me not to do changelogs for documentation.  If you want 
+>> them, then in future changes I will do so.
 >
->I rather prefer the C++ cast operators since they're both clearer and
->safer: e.g.  using a const_cast guarantees that that all you're doing
->is removing the const-ness of something.  I've seen too many bugs
->before now where someone's added a cast (just to remove a const or
->something simple) and then changed the underlying object's type
->elsewhere and the cast still works with no complaint yet is now not
->doing the right thing at all.  If you're feeling determinedly
->old-fashioned I'll take them out but you will have to realise that it
->will be with great pain and suffering on my part :-)
+>Hmm, I didn't know that.  I forgot Chris' motivation somehow...
 
-Sorry, but I'm with Corinna on this one.  I'd rather keep the code
-consistent.
+It's an FSF policy for ChangeLogs.  I don't modify the ChangeLog when
+the docs are in a source directory.
+
+However, there *is* a ChangeLog in the doc directory, however, and you
+can see that I've updated it.  I think that a directory which is
+primarily documentation can have the documentation updated, even if that
+seems a tad inconsistent.
 
 cgf
