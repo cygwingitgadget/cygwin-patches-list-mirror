@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1997-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 18441 invoked by alias); 23 Mar 2002 06:52:47 -0000
+Return-Path: <cygwin-patches-return-1998-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 22428 invoked by alias); 26 Mar 2002 10:14:13 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,109 +7,87 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 18409 invoked from network); 23 Mar 2002 06:52:45 -0000
-Message-ID: <035701c1d237$0fdf4810$5b46fea9@mchasecompaq>
-From: "Michael A Chase" <mchase@ix.netcom.com>
-To: <cygwin-patches@cygwin.com>
-Cc: "Robert Collins" <robert.collins@itdomain.com.au>,
-	"Pavel Tsekov" <ptsekov@gmx.net>,
-	"Seitz, Matt" <mseitz@snapserver.com>
-References: <FC169E059D1A0442A04C40F86D9BA76008AB7D@itdomain003.itdomain.net.au>
-Subject: [PATCH]Setup.Exe causes Application Error at 0x78001750
-Date: Tue, 26 Mar 2002 02:14:00 -0000
+Received: (qmail 22414 invoked from network); 26 Mar 2002 10:14:12 -0000
+Date: Tue, 26 Mar 2002 02:30:00 -0000
+From: Pavel Tsekov <ptsekov@syntrex.com>
+Reply-To: Pavel Tsekov <cygwin@cygwin.com>
+Organization: Syntrex, Inc.
+X-Priority: 3 (Normal)
+Message-ID: <747589232.20020326111351@syntrex.com>
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] setup.exe: mkdir.cc. was: setup.exe crash
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
-	boundary="----=_NextPart_000_033C_01C1D1F3.7E5C97A0"
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-SW-Source: 2002-q1/txt/msg00354.txt.bz2
+Content-Type: multipart/mixed; boundary="----------297E96210C50F0"
+X-SW-Source: 2002-q1/txt/msg00355.txt.bz2
 
-This is a multi-part message in MIME format.
-
-------=_NextPart_000_033C_01C1D1F3.7E5C97A0
-Content-Type: text/plain;
-	charset="iso-8859-1"
+------------297E96210C50F0
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-Content-length: 1411
+Content-length: 1353
 
-From: "Robert Collins" <robert.collins@itdomain.com.au>
-To: "Pavel Tsekov" <ptsekov@gmx.net>; <cygwin-apps@cygwin.com>
-Cc: "Seitz, Matt" <mseitz@snapserver.com>; <cygwin@cygwin.com>
-Sent: Friday, March 22, 2002 20:33
-Subject: RE: [Possible BUG and a fix] Re[2]: Setup.Exe causes Application
-Error at 0x78001750
+Here is a solution for this problem. Please, review.
 
+To reproduce the crash write manually a path with non-existent drive
+in the local package directory edit control.
 
-> From: Pavel Tsekov [mailto:ptsekov@gmx.net]
-> Sent: Saturday, March 23, 2002 11:03 AM
+The reason for this crash is that mkdir_p tries to create the path
+recursevly and does not care if its actually a path component or a
+drive spec.
 
->   strcpy (dp, dots);
->   delete[] dots;
->   key = String (dp);
->
-> LOOK HERE - This is not right - we should delete at the base
-> of the block, not somewhere in the middle of it.
->   delete[] dp;
->
-> We can do something like that
-> char *dp = ....
-> char *dp_save = dp;
->
->  ....
->
->  delete[] dp_save;
+I've tried a setup.exe with this patch applied and with very long path
+and it works just fine.
 
-] Huh? delete[]dp; is the last reference to dp. delete[]dots; is the last
-] reference to dots. Whats the problem?
+This is a forwarded message
+From: Colman Curtin <colman.curtin@trintech.com>
+To: cygwin@cygwin.com
+Date: Monday, March 25, 2002, 11:46:56 PM
+Subject: setup.exe crash
 
-dp is modified so doesn't point to the base of the allocated area by the
-time delete[] dp is called.  A separate working variable should be used
-rather than modifying the allocation pointer.
+===8<==============Original message text===============
+Hi
+I have setup.exe point to a local network mapping for its local Package
+directory.
+I noticed when I rebooted, not having the mapping set up to reconnect, that
+setup.exe crashed when it tried to move on from that screen with the
+following error;
+"The exception unknown software exception (0xc00000fd) occurred in the
+application at location 0x77f7f12a.
+That was the only trouble its given me.
+
+setup.exe version 2.194.2.15
+Wint4 sp6a
+
+-Coley.
+
 --
-Mac :})
-** I normally forward private questions to the appropriate mail list. **
-Ask Smarter: http://www.tuxedo.org/~esr/faqs/smart-questions.html
-Give a hobbit a fish and he eats fish for a day.
-Give a hobbit a ring and he eats fish for an age.
-
-Changelog:
-
-2002-03-22  Michael A Chase <mchase@ix.netcom.com>
-
-    * site.cc (site_list_type::init): Preserve allocation pointer for key
-buffer.
+Unsubscribe info:      http://cygwin.com/ml/#unsubscribe-simple
+Bug reporting:         http://cygwin.com/bugs.html
+Documentation:         http://cygwin.com/docs.html
+FAQ:                   http://cygwin.com/faq/
 
 
-------=_NextPart_000_033C_01C1D1F3.7E5C97A0
-Content-Type: application/octet-stream;
-	name="cinstall-mac-020322-1.patch"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment;
-	filename="cinstall-mac-020322-1.patch"
-Content-length: 683
+===8<===========End of original message text===========
+------------297E96210C50F0
+Content-Type: application/octet-stream; name="mkdir.cc.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="mkdir.cc.patch"
+Content-length: 972
 
---- site.cc-0	Mon Feb 18 11:19:25 2002=0A=
-+++ site.cc	Fri Mar 22 22:34:51 2002=0A=
-@@ -64,7 +64,8 @@ site_list_type::init (String const &newu=0A=
-=20=0A=
-=20=20=20=0A=
-   dot =3D dots + strlen (dots);=0A=
--  char *dp =3D new char[2 * newurl.size() + 3];=0A=
-+  char *dp0 =3D new char[2 * newurl.size() + 3];=0A=
-+  char *dp =3D dp0;=0A=
-   while (dot !=3D dots)=0A=
-     {=0A=
-       if (*dot =3D=3D '.' || *dot =3D=3D '/')=0A=
-@@ -82,7 +83,7 @@ site_list_type::init (String const &newu=0A=
-   strcpy (dp, dots);=0A=
-   delete[] dots;=0A=
-   key =3D String (dp);=0A=
--  delete[] dp;=0A=
-+  delete[] dp0;=0A=
- }=0A=
-=20=0A=
- site_list_type::site_list_type (String const &newurl)=0A=
+LS0tIC4uLy4uLy4uLy4uL3NyYy93aW5zdXAvY2luc3RhbGwvbWtkaXIuY2MJ
+VHVlIE5vdiAxMyAwMTo0OTozMiAyMDAxCisrKyAuLi8uLi8uLi8uLi9jeWd3
+aW4tc25hcHNob3Qvd2luc3VwL2NpbnN0YWxsL21rZGlyLmNjCVR1ZSBNYXIg
+MjYgMTA6MDQ6MDggMjAwMgpAQCAtNjksMTMgKzY5LDIyIEBAIG1rZGlyX3Ag
+KGludCBpc2FkaXIsIGNvbnN0IGNoYXIgKmluX3BhdGgKICAgaWYgKCFzbGFz
+aCkKICAgICByZXR1cm4gMDsKIAorICAvLyBUcnlpbmcgdG8gY3JlYXRlIGEg
+ZHJpdmUuLi4gSXQncyB0aW1lIHRvIGdpdmUgdXAuCisgIGlmICgoKHNsYXNo
+IC0gcGF0aCkgPT0gMikgJiYgKHBhdGhbMV0gPT0gJzonKSkKKyAgICByZXR1
+cm4gLTE7CisKICAgc2F2ZWRfY2hhciA9ICpzbGFzaDsKICAgKnNsYXNoID0g
+MDsKLSAgaWYgKG1rZGlyX3AgKDEsIHBhdGgpKQorICBzd2l0Y2ggKG1rZGly
+X3AgKDEsIHBhdGgpKQogICAgIHsKLSAgICAgICpzbGFzaCA9IHNhdmVkX2No
+YXI7Ci0gICAgICByZXR1cm4gMTsKKyAgICAgIGNhc2UgMToKKyAgICAgICAg
+KnNsYXNoID0gc2F2ZWRfY2hhcjsKKyAgICAgICAgcmV0dXJuIDE7CisgICAg
+ICBjYXNlIC0xOgorICAgICAgICAvLyBCb3VuY2UgdGhlIGVycm9yIHVwIHRv
+IHRoZSBjaGFpbi4uLgorICAgICAgICByZXR1cm4gLTE7CiAgICAgfQorICAK
+ICAgKnNsYXNoID0gc2F2ZWRfY2hhcjsKIAogICBpZiAoIWlzYWRpcikK
 
-------=_NextPart_000_033C_01C1D1F3.7E5C97A0--
+------------297E96210C50F0--
