@@ -1,39 +1,54 @@
-From: Christopher Faylor <cgf@redhat.com>
-To: Christopher Faylor <cygwin-patches@cygwin.com>
-Subject: Re: tty-slave read() patch
-Date: Wed, 28 Feb 2001 19:53:00 -0000
-Message-id: <20010228224710.A756@redhat.com>
-References: <115104181535.20010228192351@logos-m.ru> <20010228140956.L2327@redhat.com> <192120339128.20010228235310@logos-m.ru> <20010228210002.A9086@redhat.com>
-X-SW-Source: 2001-q1/msg00138.html
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
+To: cygpatch <cygwin-patches@cygwin.com>
+Subject: Re: fhandler_console
+Date: Thu, 01 Mar 2001 01:16:00 -0000
+Message-id: <20010301101600.C874@cygbert.vinschen.de>
+References: <16286062992.20010216183758@logos-m.ru> <20010219214951.A23483@redhat.com> <7888578378.20010220130012@logos-m.ru> <17613156858.20010223151715@logos-m.ru> <20010226191432.E6209@redhat.com> <20010228182620.R8464@cygbert.vinschen.de> <109112986916.20010228215037@logos-m.ru> <20010228203308.V8464@cygbert.vinschen.de> <83117508187.20010228230559@logos-m.ru>
+X-SW-Source: 2001-q1/msg00139.html
 
-On Wed, Feb 28, 2001 at 09:00:02PM -0500, Christopher Faylor wrote:
->On Wed, Feb 28, 2001 at 11:53:10PM +0300, Egor Duda wrote:
->>CF>    Won't  this  cause  problems when communicating with non-cygwin
->>CF> applications?
->>
->>as far as i can understand from source, if slave have pipe's handle to
->>get  input  from  master, it can assume that master is cygwin process.
->>that  means  that  opening input_mutex from slave's side is safe, this
->>mutex  (end  event) should already exist. if cygwin master opens  pipe
->>and  communicate   though  it  with  non-cygwin  child, it will freely
->>acquire and release input mutex, since noone else hold it.
->>
->>the  only  possible  problem is that master can have two children, one
->>cygwin  and  one non-cygwin, and they both are trying to read. in this
->>case  it's  possible that cygwin child will see input_available_event,
->>but  won't  see  any  data in pipe, since non-cygwin child had already
->>eaten it. but i think it was the same in old code, too.
->>
->>i've  tested  it  in  either  tty  or  notty  mode and with non-cygwin
->>programs in local console and via ssh.
->
->So, a non-cygwin program running under ssh, via a pty, will work correctly?
->In that case, check her in, with much thanks.
->
->One minor nit, however.  Please adhere to the coding standards of the
->code your changing.  You seem to have added at least one or two
-      you're
+On Wed, Feb 28, 2001 at 11:05:59PM +0300, Egor Duda wrote:
+> Hi!
+> 
+> Wednesday, 28 February, 2001 Corinna Vinschen cygwin-patches@cygwin.com wrote:
+> 
+> CV> On Wed, Feb 28, 2001 at 09:50:37PM +0300, Egor Duda wrote:
+> >> Wednesday, 28 February, 2001 Corinna Vinschen cygwin-patches@cygwin.com wrote:
+> >> 
+> >> CV> your patch seems to have some problems on the local console window
+> >> CV> at least on W2K.
+> >> 
+> >> CV> When I open a console window with
+> >> 
+> >> CV> tcsh, CYGWIN=tty: Only the first line is used at all. The background
+> >> CV>                   color of the prompt is correct, behind the cursor
+> >> CV>                   it's inverted.
+> >> 
+> >> CV> bash, CYGWIN=tty: The first line is inverted, no cursor, no interaction.
+> >> 
+> >> CV> tcsh, CYGWIN=notty: Crash, ia message box tells me that an instruction
+> >> CV>                     at address x61061d48 points to 0x00000068.
+> >> 
+> >> CV> bash, CYGWIN=notty: Same behaviour as tcsh with CYGWIN=tty, really!
+> >> 
+> >> CV> When I revert the patch to fhandler_console.cc, everything is ok.
+> >> 
+> >> hmm.  i  cannot test in on win2k right now, but can you please test it
+> >> with  attached terminfo entry? 
+> 
+> CV> No avail.
+> 
+> >>  Would you mind sending me bash and tcsh rc  files?
+> 
+> CV> I'll send them with private email.
+> 
+> tested  them  with  your  rc files, it still works ok. can you send me
+> strace for first and/or second case?
 
-Grrr...  Pet peeve...
+Ok. With private mail.
 
-cgf
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
