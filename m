@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5273-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 7727 invoked by alias); 22 Dec 2004 18:54:36 -0000
+Return-Path: <cygwin-patches-return-5274-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 8870 invoked by alias); 23 Dec 2004 16:42:24 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,47 +7,119 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 7268 invoked from network); 22 Dec 2004 18:54:26 -0000
+Received: (qmail 8809 invoked from network); 23 Dec 2004 16:42:17 -0000
 Received: from unknown (HELO apmail1.astralpoint.com) (65.114.186.130)
-  by sourceware.org with SMTP; 22 Dec 2004 18:54:26 -0000
+  by sourceware.org with SMTP; 23 Dec 2004 16:42:17 -0000
 Received: from [127.0.0.1] (helo=phumblet.no-ip.org)
 	by usched40576.usa1ma.alcatel.com with esmtp (Exim 4.43)
-	id I950IL-0000RH-GR
-	for cygwin-patches@cygwin.com; Wed, 22 Dec 2004 13:54:21 -0500
-Message-ID: <41C9C2DB.99D0D9F3@phumblet.no-ip.org>
-Date: Wed, 22 Dec 2004 18:54:00 -0000
+	id I96P2G-0000CN-0V
+	for cygwin-patches@cygwin.com; Thu, 23 Dec 2004 11:42:16 -0500
+Message-ID: <41CAF567.365C09F7@phumblet.no-ip.org>
+Date: Thu, 23 Dec 2004 16:42:00 -0000
 From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
 Reply-To: pierre.humblet@ieee.org
 MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
-Subject: Re: [Patch] Fixing the PROCESS_DUP_HANDLE security hole.
-References: <20041116054156.GA17214@trixie.casa.cgf.cx> <419A1F7B.8D59A9C9@phumblet.no-ip.org> <20041116155640.GA22397@trixie.casa.cgf.cx> <20041120062339.GA31757@trixie.casa.cgf.cx> <3.0.5.32.20041202211311.00820770@incoming.verizon.net> <3.0.5.32.20041204114528.0081fc00@incoming.verizon.net> <3.0.5.32.20041204130111.0081fd50@incoming.verizon.net> <20041205010020.GA20101@trixie.casa.cgf.cx> <20041213202505.GB27768@trixie.casa.cgf.cx> <41BEFBA5.97CA687B@phumblet.no-ip.org> <20041214154214.GE498@trixie.casa.cgf.cx> <41C99D2A.B5C4C418@phumblet.no-ip.org> <41C9C088.9E9B16E3@phumblet.no-ip.org>
+Subject: [PATCH]: Still stripping
 Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-SW-Source: 2004-q4/txt/msg00274.txt.bz2
+X-SW-Source: 2004-q4/txt/msg00275.txt.bz2
 
-
-
-"Pierre A. Humblet" wrote:
-> 
-> "Pierre A. Humblet" wrote:
-> >
-> > When running try_spawn with the snapshot, during the sleep period
-> > ps reports
-> >
-> >       690     443     690        232    0 11054 10:32:21 <defunct>
-> >       464     690     690        464    0 11054 10:32:21 /c/WINNT/system32/notepad
-> 
-> FWIW, I was thinking about this during lunch.
-> The basic issue is that the pipe to the parent is not closed in the spawned
-> Windows process. One way out is to make the pipe non-inheritable and
-> duplicate it either in the parent (fork and spawn, except detach)
-> or in the child (exec). Now that subproc_ready is back, it doesn't matter
-> that an exec'ed Windows process does not duplicate the pipe.
-
-Actually, the parent is supposed to disappear anyway in the case of
-an exec. So it could make the pipe inheritable just before the exec.
-In multithreaded programs, other threads should be forbidden to
-fork and spawn once a thread has called exec.
+In a case such as "abc..exe", the posix_path "abc." should not be
+stripped. The patch below only strips the posix path if the win32
+path was stripped. I don't think that the posix path can be empty
+in that case.
 
 Pierre
+ 
+
+2004-12-23  Pierre Humblet <pierre.humblet@ieee.org>
+
+	* path.h (path_conv::set_normalized_path): Add second argument.
+	* path.cc (path_conv::check): Declare, set and use "strip_tail".
+	(path_conv::set_normalized_path): Add and use second argument,
+	replacing all tail stripping tests.
+
+
+
+Index: path.h
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/path.h,v
+retrieving revision 1.67
+diff -u -p -r1.67 path.h
+--- path.h      2 Oct 2004 02:20:20 -0000       1.67
++++ path.h      23 Dec 2004 16:07:45 -0000
+@@ -214,7 +214,7 @@ class path_conv
+   unsigned __stdcall ndisk_links (DWORD);
+   char *normalized_path;
+   size_t normalized_path_size;
+-  void set_normalized_path (const char *) __attribute__ ((regparm (2)));
++  void set_normalized_path (const char *, bool strip=false) __attribute__ ((regparm (2)));
+   DWORD get_symlink_length () { return symlink_length; };
+  private:
+   DWORD symlink_length;  
+Index: path.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/path.cc,v
+retrieving revision 1.333
+diff -u -p -r1.333 path.cc
+--- path.cc     22 Dec 2004 11:31:30 -0000      1.333
++++ path.cc     23 Dec 2004 16:24:52 -0000
+@@ -424,21 +424,18 @@ path_conv::fillin (HANDLE h)
+ }
+ 
+ void
+-path_conv::set_normalized_path (const char *path_copy)
++path_conv::set_normalized_path (const char *path_copy, bool strip_tail)
+ {
+   char *eopath = strchr (path, '\0');
+-  size_t n;
++  char *p = strchr (path_copy, '\0');
+ 
+-  if (dev.devn != FH_FS || !*path_copy || strncmp (path_copy, "//./", 4) == 0)
+-    n = strlen (path_copy) + 1;
+-  else
++  if (strip_tail)
+     {
+-      char *p = strchr (path_copy, '\0');
+-      while (*--p == '.' || *p == ' ')
+-       continue;
+-      p[1] = '\0';
+-      n = 2 + p - path_copy;
++      while (p[-1] == '.' || p[-1] == ' ')
++        p--;
++      *p = '\0';
+     }
++   size_t n = p + 1 - path_copy;
+ 
+   normalized_path = path + sizeof (path) - n;
+   if (normalized_path > eopath)
+@@ -804,6 +801,7 @@ path_conv::check (const char *src, unsig
+     add_ext_from_sym (sym);
+ 
+ out:
++  bool strip_tail = false;
+   /* If the user wants a directory, do not return a symlink */
+   if (!need_directory || error)
+     /* nothing to do */;
+@@ -836,7 +834,10 @@ out:
+          if (!tail)
+            /* nothing */;
+          else if (tail[-1] != '\\')
+-           *tail = '\0';
++           {
++             *tail = '\0';
++             strip_tail = true;
++           }
+          else
+            {
+              error = ENOENT;
+@@ -901,7 +902,7 @@ out:
+     {
+       if (tail < path_end && tail > path_copy + 1)
+        *tail = '/';
+-      set_normalized_path (path_copy);
++      set_normalized_path (path_copy, strip_tail);
+     }
+ 
+ #if 0
