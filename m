@@ -1,31 +1,46 @@
-From: Chris Faylor <cgf@cygnus.com>
-To: cygwin-patches@sources.redhat.com
-Subject: Re: Set argv[0] in the win32 style for non-Cygwin applications.
-Date: Wed, 27 Sep 2000 09:48:00 -0000
-Message-id: <20000927124720.E8818@cygnus.com>
-References: <s1sog1chnr4.fsf@jaist.ac.jp> <20000925112318.A9745@cygnus.com> <s1sg0mmgduk.fsf@jaist.ac.jp>
-X-SW-Source: 2000-q3/msg00102.html
+From: Corinna Vinschen <vinschen@cygnus.com>
+To: cygpatch <cygwin-patches@sources.redhat.com>
+Subject: New files and changes in w32api
+Date: Mon, 02 Oct 2000 02:38:00 -0000
+Message-id: <39D8578A.DC1EE8F7@cygnus.com>
+X-SW-Source: 2000-q4/msg00000.html
 
-On Wed, Sep 27, 2000 at 10:32:19PM +0900, Kazuhiro Fujieda wrote:
->>>> On Mon, 25 Sep 2000 11:23:19 -0400
->>>> Chris Faylor <cgf@cygnus.com> said:
->
->> This is a good idea (and I think the code used to do this) but it should
->> probably just always force the first argument into Windows format.  A cygwin
->> app will always use the argv array and a non-cygwin app will always use the
->> argument list, so...
->
->I misunderstood how the iscygexec method works. I believed it
->should examine whether a file is a cygwin app. I expected too
->much of it without reading the code. It isn't so easy.
+Hi,
 
-It could do that but I don't think there would be any gain since it would imply
-a lot of disk I/O.
+I have added some stuff to w32api:
 
-A file is currently considered to be a "cygwin executable" (iscygexec is
-true) if it comes from a directory mounted with a "-X" option.  In this
-case spawn_guts will only prepare a UNIX-style argv and environ list for
-the execed process.  Otherwise it will produce both a Windows command
-and environment list and a UNIX style.
+When implementing /dev/mem for NT/W2K one needs access to the native
+NT API. The corresponding header is fragmentary:
 
-cgf
+- include/ntdef.h
+
+All other new files and changes are by-products of investigating
+the Win32 APIs "Internet Protocol Helper" and "RAS/Remote Access".
+
+The Internet Protocol Helper suite is introduced with Win98 and
+NT4 SP4. The headers and the library stub are complete from the
+Win98/NT4SP4 point of view (I hope). New functions and types
+introduced with W2K/ME are not part of those new files for now:
+
+- lib/iphlpapi.def
+- include/ipifcons.h
+- include/iphlpapi.h
+- include/iptypes.h
+- include/iprtrmib.h
+- include/ipexport.h
+
+To get more information about the RAS interfaces I tried using
+RasEnumDevices(). Not that helpful for me but no reason to throwaway.
+So, that's new:
+
+- lib/rasapi32.def: Add symbols for RasEnumDevicesA and RasEnumDevicesW.
+- include/ras.h:    Fragmentary new header, currently only containing
+                    the stuff needed for RasEnumDevices.
+
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                        mailto:cygwin@sources.redhat.com
+Red Hat, Inc.
+mailto:vinschen@cygnus.com
