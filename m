@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4712-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 9528 invoked by alias); 6 May 2004 09:25:54 -0000
+Return-Path: <cygwin-patches-return-4713-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 30242 invoked by alias); 6 May 2004 09:43:36 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,50 +7,53 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 9489 invoked from network); 6 May 2004 09:25:54 -0000
-Date: Thu, 06 May 2004 09:25:00 -0000
+Received: (qmail 30232 invoked from network); 6 May 2004 09:43:35 -0000
+Date: Thu, 06 May 2004 09:43:00 -0000
 From: Corinna Vinschen <vinschen@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: Patch to handle Win32 named pipes as file names
-Message-ID: <20040506092553.GU2201@cygbert.vinschen.de>
+Subject: Re: [Patch]: chdir
+Message-ID: <20040506094334.GV2201@cygbert.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <BAY9-F27kwn9Wgtc2S6000011ec@hotmail.com>
+References: <20040505002003.GA8846@coe.bosbc.com> <3.0.5.32.20040504200359.007fcec0@incoming.verizon.net> <20040505002003.GA8846@coe.bosbc.com> <3.0.5.32.20040505004236.007ff280@incoming.verizon.net> <20040505095134.GA6206@cygbert.vinschen.de> <3.0.5.32.20040505235853.00806100@incoming.verizon.net>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <BAY9-F27kwn9Wgtc2S6000011ec@hotmail.com>
+In-Reply-To: <3.0.5.32.20040505235853.00806100@incoming.verizon.net>
 User-Agent: Mutt/1.4.2i
-X-SW-Source: 2004-q2/txt/msg00064.txt.bz2
+X-SW-Source: 2004-q2/txt/msg00065.txt.bz2
 
-Stephen,
+On May  5 23:58, Pierre A. Humblet wrote:
+> After mulling over it, I simplified chdir even more
+> in the interest of uniformity (it matters for unc paths).
+> Now cwd.set is always called with only the native_dir.
+> 
+> That means that cwd.set always attempts to build the
+> Posix wd through the mount table.
+> Up to now that was only the case when a symlink was
+> involved in the translation, or there was a ":" or a "\" 
+> in the directory name, or check_case was not relaxed.
+> 
+> Pierre
+> 
+> 2004-05-06  Pierre Humblet <pierre.humblet@ieee.org>
+> 
+> 	* path.cc (chdir): Do not check for trailing spaces.
+> 	Do not set native_dir to c:\ for virtual devices.
+> 	Pass only native_dir to cwd.set.
+> 	(cwdstuff::set): Assume posix_cwd is already normalized.
 
-On May  4 22:36, Stephen Cleary wrote:
-> Attached is a patch, ChangeLog, and one new file that allows Cygwin 
-> programs to open Win32 named pipe instances (e.g., "\\.\pipe\pipename") 
-> through an open() call. The resulting handle will appear like a FIFO to the 
-> calling program.
+Looks pretty good to me.  I think calling cwd.set always with a
+NULL pointer is a good idea.  The resulting posix path is guaranteed
+to be right.
 
-while I really appreciate the effort, that's not what we expect from
-an fhandler to do.  Cygwin is a POSIX layer.  An fhandler should at
-least try to come up with a POSIX-like translation of a Windows
-capability, in this case, converting Windows named pipes into POSIX
-FIFOs on the API level.  What your code is doing is just allowing to
-use Windows named pipes untranslated and treating them as FIFOs in
-stat().
-
-The ability to open/read/write/close WIndows named pipes should already
-be available without much of a code change.  Paths like //./pipe/foo
-should go through untranslated, just treated like normal files.  If that
-doesn't work, feel free to fix the code snippets which accidentally disallow
-that.
-
-However, if you want to contribute code to Cygwin, we need a copyright
-assignment from you, filled out and snail mailed to Red Hat.  Please
-see http://cygwin.com/contrib.html for details.
+Did you try find(1)?  Do you recall the problems we had with find years
+ago when crossing a mount point?  I tried to create a scenario but
+either it works fine or I failed to set that up correctly.  It would
+be nice if we could make sure that these cases work.  I tried some
+combinations with symlinks and they are working well, AFAICS.
 
 
-I hope that's not too discouraging,
 Corinna
 
 -- 
