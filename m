@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5142-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 15494 invoked by alias); 18 Nov 2004 15:21:52 -0000
+Return-Path: <cygwin-patches-return-5143-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 3509 invoked by alias); 18 Nov 2004 17:06:51 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,45 +7,30 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 15424 invoked from network); 18 Nov 2004 15:21:42 -0000
-Received: from unknown (HELO cgf.cx) (66.30.17.189)
-  by sourceware.org with SMTP; 18 Nov 2004 15:21:42 -0000
-Received: by cgf.cx (Postfix, from userid 201)
-	id BA6771B3E5; Thu, 18 Nov 2004 10:22:06 -0500 (EST)
-Date: Thu, 18 Nov 2004 15:21:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
-To: cygwin-patches@cygwin.com
+Received: (qmail 3495 invoked from network); 18 Nov 2004 17:06:47 -0000
+Received: from unknown (HELO mail.epost.de) (193.28.100.151)
+  by sourceware.org with SMTP; 18 Nov 2004 17:06:47 -0000
+Received: from seneca.benny.turtle-trading.net.epost.de (193.99.153.30) by mail.epost.de (7.2.033.1) (authenticated as Benjamin.Riefenstahl)
+        id 419C047000010DAF for cygwin-patches@cygwin.com; Thu, 18 Nov 2004 18:06:46 +0100
+To: cygwin-patches mailing-list <cygwin-patches@cygwin.com>
 Subject: Re: [Patch] cygcheck: eprintf + display_error: Do more.
-Message-ID: <20041118152206.GD10795@trixie.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
 References: <n2m-g.cnhqes.3vv4uqn.1@buzzy-box.bavag>
-Mime-Version: 1.0
+From: Benjamin Riefenstahl <Benjamin.Riefenstahl@epost.de>
+Date: Thu, 18 Nov 2004 17:06:00 -0000
+In-Reply-To: <n2m-g.cnhqes.3vv4uqn.1@buzzy-box.bavag> (Bas van Gompel's
+ message of "Thu, 18 Nov 2004 09:52:04 +0100 (MET)")
+Message-ID: <m33bz7w0hn.fsf@seneca.benny.turtle-trading.net>
+User-Agent: Gnus/5.1001 (Gnus v5.10.1) Emacs/21.3.50 (gnu/linux)
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <n2m-g.cnhqes.3vv4uqn.1@buzzy-box.bavag>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2004-q4/txt/msg00143.txt.bz2
+X-SW-Source: 2004-q4/txt/msg00144.txt.bz2
 
-On Thu, Nov 18, 2004 at 09:52:04AM +0100, Bas van Gompel wrote:
->Hi,
->
->This patch enables eprintf. It also causes stdout and stderr to be
->synchronzied (using fflush) when they refer to the same file-descriptor.
->
->Also, when stdout and stderr have a different number, and stdout is not
->a tty, the error-message is copied to stdout, allowing it to be easily
->captured in a cygcheck.out.
->
->(I'm aware that generally it is a bad idea to do things like this, but
->cygcheck being what it is, I think this ought to be an exception.)
+Hi Bas,
 
-I think the generally bad idea is a bad idea for a reason.
+Bas van Gompel writes:
+> +  if (fileno (stdout) != fileno (stderr) [...]
 
-If we are going to redirect stuff like this, why not just forego the use
-of stderr entirely and use stdout for all messages?
+I thought that fileno(stdout) is *always* 1 and fileno(stderr) is
+*always* 2.  Isn't that true?
 
-Also, rather than explicitly flushing, why not just set setbuf (stdout, NULL)
-setbuf (stderr, NULL) in main()?
-
-cgf
+benny
