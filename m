@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4231-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 20372 invoked by alias); 24 Sep 2003 21:25:46 -0000
+Return-Path: <cygwin-patches-return-4232-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 12511 invoked by alias); 25 Sep 2003 00:44:02 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,47 +7,51 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 20360 invoked from network); 24 Sep 2003 21:25:45 -0000
-Subject: Re: Deep directory support
-From: Robert Collins <rbcollins@cygwin.com>
-To: "Parker, Ron" <rdparker@butlermfg.com>
-Cc: cygwin-patches@cygwin.com
-In-Reply-To: <71A0F7B0F1F4F94F85F3D64C4BD0CCFE02BF2478@bmkc1svmail01.am.mfg>
-References: <71A0F7B0F1F4F94F85F3D64C4BD0CCFE02BF2478@bmkc1svmail01.am.mfg>
-Content-Type: multipart/signed; micalg=pgp-sha1; protocol="application/pgp-signature"; boundary="=-vzzT0VFqxdbtAn10rK5C"
-Message-Id: <1064438740.939.48.camel@localhost>
+Received: (qmail 12502 invoked from network); 25 Sep 2003 00:44:01 -0000
+Date: Thu, 25 Sep 2003 00:44:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: Fixing the delete queue security
+Message-ID: <20030925004355.GA13801@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <3.0.5.32.20030915211808.0081d6d0@incoming.verizon.net>
 Mime-Version: 1.0
-Date: Wed, 24 Sep 2003 21:25:00 -0000
-X-SW-Source: 2003-q3/txt/msg00247.txt.bz2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3.0.5.32.20030915211808.0081d6d0@incoming.verizon.net>
+User-Agent: Mutt/1.4.1i
+X-SW-Source: 2003-q3/txt/msg00248.txt.bz2
 
+On Mon, Sep 15, 2003 at 09:18:08PM -0400, Pierre A. Humblet wrote:
+>2003-09-15  Pierre Humblet <pierre.humblet@ieee.org>
+>
+>	* shared_info.h (class user_info): New.
+>	(cygwin_user_h): New.
+>	(user_shared): New.
+>	(enum shared_locations): Replace SH_MOUNT_TABLE by SH_USER_SHARED;
+>	(mount_table): Change from variable to macro.
+>	* shared.cc: Use sizeof(user_info) in "offsets".
+>	(user_shared_initialize): Add "reinit" argument to indicate need
+>	to reinitialize the mapping. Replace "mount_table" by "user_shared"
+>	throughout. Call user_shared->mountinfo.init and 
+>	user_shared->delqueue.init.
+>	(shared_info::initialize): Do not call delqueue.init.
+>	(memory_init): Add argument to user_shared_initialize.
+>	* child_info.h (child_info::mount_h): Delete. 
+>	(child_info::user_h): New.	
+>	* sigpproc.cc (init_child_info): Use user_h instead of mount_h.
+>	* dcrt0.cc (_dll_crt0): Ditto.
+>	* fhandler_disk_file.cc (fhandler_disk_file::close): Use 
+>	user_shared->delqueue instead of cygwin_shared->delqueue.
+>	* fhandler_virtual.cc (fhandler_virtual::close): Ditto.
+>	* syscalls.cc (close_all_files): Ditto.
+>	(unlink): Ditto.
+>	(seteuid32): Add argument to user_shared_initialize.
 
---=-vzzT0VFqxdbtAn10rK5C
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-Content-length: 285
+This is ok.
 
-On Thu, 2003-09-25 at 02:23, Parker, Ron wrote:
+Please check in.  You'll have to accommodate the new layout after my
+checkin but it should apply with only minor problems.
 
-> Any thoughts or input?
-
-Well, cygwin-patches isn't the right discussion point for this, it's
-reserved for patches - I'll reply, but over in cygwin@.
-
-Rob
---=20
-GPG key available at: <http://members.aardvark.net.au/lifeless/keys.txt>.
-
---=-vzzT0VFqxdbtAn10rK5C
-Content-Type: application/pgp-signature; name=signature.asc
-Content-Description: This is a digitally signed message part
-Content-length: 189
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.2 (GNU/Linux)
-
-iD8DBQA/cgvUI5+kQ8LJcoIRAsvrAJwO4d+kH6Dnf2vm/cv/ATjRqUKa1wCgk+G0
-R+GTw/kD4rggS/6d288iVYA=
-=4MGL
------END PGP SIGNATURE-----
-
---=-vzzT0VFqxdbtAn10rK5C--
+cgf
