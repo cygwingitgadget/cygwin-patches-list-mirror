@@ -1,20 +1,35 @@
-From: "Jason Gouger" <cygwin@jason-gouger.com>
-To: <cygwin-patches@cygwin.com>
-Subject: RE: PATCH: getcwd() pathstyle
-Date: Mon, 08 Jan 2001 00:37:00 -0000
-Message-id: <GIEAKOJACGCDOHKHFLIHMEIECAAA.cygwin@jason-gouger.com>
-References: <20010107231202.A24911@redhat.com>
-X-SW-Source: 2001-q1/msg00017.html
+From: Earnie Boyd <earnie_boyd@yahoo.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: Updated the "Contributing" link on the cygwin site
+Date: Mon, 08 Jan 2001 06:04:00 -0000
+Message-id: <3A59C8F3.DD7AEACE@yahoo.com>
+References: <20010108000637.A25359@redhat.com>
+X-SW-Source: 2001-q1/msg00018.html
 
-> 1) Check out this link for the correct formatting of ChangeLog entries:
+Christopher Faylor wrote:
+> 
+> I have just updated the "Contributing" or "How do I help out?" link at
+> http://cygwin.com/contrib.html .
+> 
+> I've added more words about what is expected for ChangeLog entries and
+> diffs, removed some somewhat obsolete info, and most importantly, changed
+> all of the "Cygnus" entries to "Red Hat".
+> 
 
-Here's the corrected ChangeLog:
+Oops, the cygwin.gif still says and links to Cygnus.
 
-Sun Jan 7 18:45:22 2001  Jason Gouger <cygwin@jason-gouger.com>
+> Please give this page a peek if you are planning on contributing code to
+> the Cygwin DLL or its helper utilities.
+> 
 
-* environ.cc (known): new configuration entry pathstyle.
-* winsup.h (pathstyle_start_init): header definition for new function.
-* path.cc (pathstyle): enumerated type definition/declaration for pathstyle.
-(pathstyle_start_init): new function to initialize pathstyle configuration.
-(getcwd): change to return different pathstyles, 'posix' /usr/local/bin,
-'win32' C:/cygwin/usr/local/bin, and 'dos' C:\cygwin\usr\local\bin.
+You might want to mention the cygwin-cvs and newlib-cvs lists.
+
+> Thanks,
+> cgf
+
+You're welcome,
+Earnie
+
+_________________________________________________________
+Do You Yahoo!?
+Get your free @yahoo.com address at http://mail.yahoo.com
