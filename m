@@ -1,27 +1,33 @@
 From: Corinna Vinschen <vinschen@cygnus.com>
 To: cygdev <cygwin-developers@sources.redhat.com>, cygpatch <cygwin-patches@sources.redhat.com>
-Subject: [PATCH]: variable blocksize for tapes
-Date: Sun, 23 Jul 2000 12:45:00 -0000
-Message-id: <397B4B56.AAAFD3A4@cygnus.com>
-X-SW-Source: 2000-q3/msg00029.html
+Subject: [PATCH]: New implementation for /dev/[u]random
+Date: Mon, 24 Jul 2000 04:43:00 -0000
+Message-id: <397C2BE5.DA513A25@cygnus.com>
+X-SW-Source: 2000-q3/msg00030.html
 
-Hi,
+Hi all,
 
-I have checked in a patch to fhandler_dev_raw and fhandler_dev_tape
-so that variable blocksize tapes are supported now on tape drives
-which support that.
+I have checked in a patch which changes the implementation
+of /dev/random and /dev/urandom as follows:
 
-I would be glad if somebody can test it, too. As usual it works
-"for me" but there may still be an error or two...
+- If initialization of the system crypto provider or retrieving
+  the entropy source fails, reading from /dev/random fails as well.
 
-To switch a tape device to variable blocksize, you'll have to
-set blocksize to 0. Since this isn't supported by my current
-mt version 1.9, I have patched it and copied the new version
-1.9.1 to
+- If that happens when using /dev/urandom, a pseudo random number
+  generator (the same as used in DJGPP) is used as a fallback
+  entropy source.
 
-ftp://sources.redhat.com/pub/cygwin/private/cygwin-extras-392/mt-1.9.1.tar.gz
+- In either case it's now possible to thrill the entropy source
+  (system _and_ pseudo) by writing to the device.
 
-Thanks in advance,
+The difference in handling /dev/random in contrast to /dev/urandom
+is reasoned by it's purpose as a source for "very high quality 
+randomness" as it's described in the Linux man page random(4)
+while /dev/urandom is explicitly allowed to use a substitute.
+
+For clearness: `sshd' uses /dev/urandom so it should work now under
+any circumstances.
+
 Corinna
 
 -- 
