@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4905-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 6224 invoked by alias); 21 Aug 2004 13:55:23 -0000
+Return-Path: <cygwin-patches-return-4906-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 11628 invoked by alias); 21 Aug 2004 14:06:38 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,44 +7,39 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 6212 invoked from network); 21 Aug 2004 13:55:23 -0000
-Date: Sat, 21 Aug 2004 13:55:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
+Received: (qmail 11614 invoked from network); 21 Aug 2004 14:06:37 -0000
+Message-Id: <3.0.5.32.20040821100229.007ea100@incoming.verizon.net>
+X-Sender: vze1u1tg@incoming.verizon.net (Unverified)
+Date: Sat, 21 Aug 2004 14:06:00 -0000
 To: cygwin-patches@cygwin.com
-Subject: Re: [Patch] Update for the testsuite, devdsp
-Message-ID: <20040821135602.GD9451@trixie.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3.0.5.32.20040816230955.0080fb30@incoming.verizon.net>
+From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
+Subject: Re: [Patch]: fhandler_dsp.cc
+In-Reply-To: <20040821135505.GC9451@trixie.casa.cgf.cx>
+References: <3.0.5.32.20040816230400.00810670@incoming.verizon.net>
+ <01C4821C.DCA0AFF0.Gerd.Spalink@t-online.de>
+ <3.0.5.32.20040816230400.00810670@incoming.verizon.net>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3.0.5.32.20040816230955.0080fb30@incoming.verizon.net>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2004-q3/txt/msg00057.txt.bz2
+Content-Type: text/plain; charset="us-ascii"
+X-SW-Source: 2004-q3/txt/msg00058.txt.bz2
 
-On Mon, Aug 16, 2004 at 11:09:55PM -0400, Pierre A. Humblet wrote:
->This patch is a merge of what Gerd sent on July 17 and of
->my changes to match the improved capability of the driver.
+At 09:55 AM 8/21/2004 -0400, Christopher Faylor wrote:
+>On Mon, Aug 16, 2004 at 11:04:00PM -0400, Pierre A. Humblet wrote:
+>>Following Gerd's comments, here is an updated patch that also improves 
+>>the internal error handling. It follows Gerd's approach.
+>>
+>>He has not answered my previous e-mail but he has indicated he would
+>>be in vacation for two weeks, so this is not unexpected.
+>> 
+>>I have also verified that the code passes Gerd's new nasty dup test.
+>>I think we are good to go for now.
 >
->This is the first time I run the testsuite, and it was on WinME. 
->There were more failures than I expected, e.g. in mmap. I don't
->know how this compares to NT.
+>If Gerd is on vacation and he has previously commented on your patch
+>favorably, I think it makes sense to check this in and tweak things
+>later, if there are problems.  I'd like to get a 1.5.11 released and if
+>this helps things then we probably want it.
 
-I've run the test suite fairly recently and the failures are what I'd
-expect.  I haven't run it on Win9x/Me for some time.
+Using her extraordinary powers, Corinna had read your mind and has
+already applied the patch.
 
-Please check this in, too.
+Pierre
 
-cgf
-
->2004-08-17 Gerd Spalink <Gerd.Spalink@t-online.de>
->	    Pierre Humblet <Pierre.Humblet@ieee.org>
->
->	* devdsp.c: Outputs the names of the main test functions.
->	(forkrectest): Expect child success.
->	(forkplaytest): Ditto.
->	(syncwithchild): Output the child status and the desired value.
->	(sinegenw): Reduce volume of the beep.
->	(sinegenb): Ditto.
->	(dup_test): New test.
