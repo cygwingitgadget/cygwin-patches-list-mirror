@@ -1,135 +1,48 @@
-From: egor duda <deo@logos-m.ru>
+From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: memory leak in cygheap
-Date: Thu, 27 Sep 2001 09:53:00 -0000
-Message-id: <15294469449.20010927205156@logos-m.ru>
-X-SW-Source: 2001-q3/msg00213.html
-Content-type: multipart/mixed; boundary="----------=_1583532849-65438-109"
+Subject: Re: memory leak in cygheap
+Date: Thu, 27 Sep 2001 10:59:00 -0000
+Message-id: <20010927140039.A32577@redhat.com>
+References: <15294469449.20010927205156@logos-m.ru>
+X-SW-Source: 2001-q3/msg00214.html
 
-This is a multi-part message in MIME format...
+On Thu, Sep 27, 2001 at 08:51:56PM +0400, egor duda wrote:
+>Hi!
+>
+>  this simple program:
+>
+>#include <sys/types.h>
+>#include <dirent.h>
+>
+>int main ()
+>{
+>  DIR* x = 0;
+>  for (;;)
+>    {
+>      x = opendir ("/");
+>      closedir (x);
+>    }
+>  return 0;
+>}
+>
+>leaks memory and eventually dies with "can't allocate cygwin heap"
+>error message.
+>
+>attached patch fix this.
+>do we need this "no free names" logic at all? the only suspicious
+>place is fhandler_disk_file::open () where we were storing pointer to
+>real_path's win32_path, so if it was changing later we were staying in
+>sync with those changes. but i can't see why it may change after open
+>is called, so making duplicate looks safe for me. Comments?
 
-------------=_1583532849-65438-109
-Content-length: 745
+We've recently changed build_fhandler so that it probably isn't necessary
+to use the no_free_names anymore.
 
-Hi!
+I don't have a lot of time to investigate right now, but it's possible that
+we can now get rid of this entirely.
 
-  this simple program:
+So, I think your patch is probably overkill.  Thanks for bringing it to my
+attention, though.  I was wondering if we had this problem and you verified
+that we did.
 
-#include <sys/types.h>
-#include <dirent.h>
-
-int main ()
-{
-  DIR* x = 0;
-  for (;;)
-    {
-      x = opendir ("/");
-      closedir (x);
-    }
-  return 0;
-}
-
-leaks memory and eventually dies with "can't allocate cygwin heap"
-error message.
-
-attached patch fix this.
-do we need this "no free names" logic at all? the only suspicious
-place is fhandler_disk_file::open () where we were storing pointer to
-real_path's win32_path, so if it was changing later we were staying in
-sync with those changes. but i can't see why it may change after open
-is called, so making duplicate looks safe for me. Comments?
-
-egor.            mailto:deo@logos-m.ru icq 5165414 fidonet 2:5020/496.19
-cygheap-leak.diff
-cygheap-leak.ChangeLog
-
-
-------------=_1583532849-65438-109
-Content-Type: text/plain; charset=us-ascii; name="cygheap-leak.ChangeLog"
-Content-Disposition: inline; filename="cygheap-leak.ChangeLog"
-Content-Transfer-Encoding: base64
-Content-Length: 704
-
-MjAwMS0wOS0yNyAgRWdvciBEdWRhICA8ZGVvQGxvZ29zLW0ucnU+CgoJKiBm
-aGFuZGxlci5oIChjbGFzcyBmaGFuZGxlcl9iYXNlOjp1bnNldF9uYW1lKTog
-TmV3IGZ1bmN0aW9uLgoJKiBmaGFuZGxlci5jYyAoZmhhbmRsZXJfYmFzZTo6
-dW5zZXRfbmFtZSk6IERlYWxsb2NhdGUgY3lnaGVhcAoJbWVtb3J5IHVzZWQg
-Zm9yIGZpbGUgbmFtZXMgYW5kIHVuc2V0IHRoZSBuYW1lcy4KCShmaGFuZGxl
-cl9iYXNlOjpzZXRfbmFtZSk6IFVzZSBpdC4gRWxpbWluYXRlIG5vX2ZyZWVf
-bmFtZXMgKCkKCWxvZ2ljIHRvIGF2b2lkIG1lbW9yeSBsZWFrcy4KCShmaGFu
-ZGxlcl9iYXNlOjp+ZmhhbmRsZXJfYmFzZSk6IERpdHRvLgoJKGZoYW5kbGVy
-X2Rpc2tfZmlsZTo6ZmhhbmRsZXJfZGlza19maWxlKTogRWxpbWluYXRlIG5v
-X2ZyZWVfbmFtZXMgKCkKCWxvZ2ljLgoJKGZoYW5kbGVyX2Rpc2tfZmlsZTo6
-b3Blbik6IERpdHRvLiBBbHdheXMgYWxsb2NhdGUgc3BhY2UgZm9yCgl3aW4z
-Ml9wYXRoX25hbWUgb24gY3lnaGVhcC4K
-
-------------=_1583532849-65438-109
-Content-Type: text/x-diff; charset=us-ascii; name="cygheap-leak.diff"
-Content-Disposition: inline; filename="cygheap-leak.diff"
-Content-Transfer-Encoding: base64
-Content-Length: 3750
-
-SW5kZXg6IGZoYW5kbGVyLmNjCj09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KUkNT
-IGZpbGU6IC9jdnMvdWJlcmJhdW0vd2luc3VwL2N5Z3dpbi9maGFuZGxlci5j
-Yyx2CnJldHJpZXZpbmcgcmV2aXNpb24gMS44NwpkaWZmIC11IC1wIC0yIC1y
-MS44NyBmaGFuZGxlci5jYwotLS0gZmhhbmRsZXIuY2MJMjAwMS8wOS8yMiAy
-MTo0NDowNwkxLjg3CisrKyBmaGFuZGxlci5jYwkyMDAxLzA5LzI3IDE2OjMz
-OjM1CkBAIC00OCw0ICs0OCwxNCBAQCBmaGFuZGxlcl9iYXNlOjpvcGVyYXRv
-ciA9KGZoYW5kbGVyX2Jhc2UgCiB9CiAKK3ZvaWQKK2ZoYW5kbGVyX2Jhc2U6
-OnVuc2V0X25hbWUgKCkKK3sKKyAgaWYgKHVuaXhfcGF0aF9uYW1lICE9IE5V
-TEwgJiYgdW5peF9wYXRoX25hbWUgIT0gZmhhbmRsZXJfZGlza19kdW1teV9u
-YW1lKQorICAgIGNmcmVlICh1bml4X3BhdGhfbmFtZSk7CisgIGlmICh3aW4z
-Ml9wYXRoX25hbWUgIT0gTlVMTCAmJiB3aW4zMl9wYXRoX25hbWUgIT0gZmhh
-bmRsZXJfZGlza19kdW1teV9uYW1lKQorICAgIGNmcmVlICh3aW4zMl9wYXRo
-X25hbWUpOworICB1bml4X3BhdGhfbmFtZSA9IHdpbjMyX3BhdGhfbmFtZSA9
-IE5VTEw7Cit9CisKIGludAogZmhhbmRsZXJfYmFzZTo6cHV0c19yZWFkYWhl
-YWQgKGNvbnN0IGNoYXIgKnMsIHNpemVfdCBsZW4gPSAoc2l6ZV90KSAtMSkK
-QEAgLTE1MywxMyArMTYzLDYgQEAgdm9pZAogZmhhbmRsZXJfYmFzZTo6c2V0
-X25hbWUgKGNvbnN0IGNoYXIgKnVuaXhfcGF0aCwgY29uc3QgY2hhciAqd2lu
-MzJfcGF0aCwgaW50IHVuaXQpCiB7Ci0gIGlmICghbm9fZnJlZV9uYW1lcyAo
-KSkKLSAgICB7Ci0gICAgICBpZiAodW5peF9wYXRoX25hbWUgIT0gTlVMTCAm
-JiB1bml4X3BhdGhfbmFtZSAhPSBmaGFuZGxlcl9kaXNrX2R1bW15X25hbWUp
-Ci0JY2ZyZWUgKHVuaXhfcGF0aF9uYW1lKTsKLSAgICAgIGlmICh3aW4zMl9w
-YXRoX25hbWUgIT0gTlVMTCAmJiB1bml4X3BhdGhfbmFtZSAhPSBmaGFuZGxl
-cl9kaXNrX2R1bW15X25hbWUpCi0JY2ZyZWUgKHdpbjMyX3BhdGhfbmFtZSk7
-Ci0gICAgfQorICB1bnNldF9uYW1lICgpOwogCi0gIHVuaXhfcGF0aF9uYW1l
-ID0gd2luMzJfcGF0aF9uYW1lID0gTlVMTDsKICAgaWYgKHVuaXhfcGF0aCA9
-PSBOVUxMIHx8ICEqdW5peF9wYXRoKQogICAgIHJldHVybjsKQEAgLTEyMTgs
-MTQgKzEyMjEsNyBAQCBmaGFuZGxlcl9iYXNlOjpmaGFuZGxlcl9iYXNlIChE
-V09SRCBkZXZ0CiBmaGFuZGxlcl9iYXNlOjp+ZmhhbmRsZXJfYmFzZSAodm9p
-ZCkKIHsKLSAgaWYgKCFub19mcmVlX25hbWVzICgpKQotICAgIHsKLSAgICAg
-IGlmICh1bml4X3BhdGhfbmFtZSAhPSBOVUxMICYmIHVuaXhfcGF0aF9uYW1l
-ICE9IGZoYW5kbGVyX2Rpc2tfZHVtbXlfbmFtZSkKLQljZnJlZSAodW5peF9w
-YXRoX25hbWUpOwotICAgICAgaWYgKHdpbjMyX3BhdGhfbmFtZSAhPSBOVUxM
-ICYmIHdpbjMyX3BhdGhfbmFtZSAhPSBmaGFuZGxlcl9kaXNrX2R1bW15X25h
-bWUpCi0JY2ZyZWUgKHdpbjMyX3BhdGhfbmFtZSk7Ci0gICAgfQorICB1bnNl
-dF9uYW1lICgpOwogICBpZiAocmFidWYpCiAgICAgZnJlZSAocmFidWYpOwot
-ICB1bml4X3BhdGhfbmFtZSA9IHdpbjMyX3BhdGhfbmFtZSA9IE5VTEw7CiB9
-CiAKQEAgLTEyMzcsNSArMTIzMyw0IEBAIGZoYW5kbGVyX2Rpc2tfZmlsZTo6
-ZmhhbmRsZXJfZGlza19maWxlICgKIHsKICAgc2V0X2NiIChzaXplb2YgKnRo
-aXMpOwotICBzZXRfbm9fZnJlZV9uYW1lcyAoKTsKICAgdW5peF9wYXRoX25h
-bWUgPSB3aW4zMl9wYXRoX25hbWUgPSBmaGFuZGxlcl9kaXNrX2R1bW15X25h
-bWU7CiB9CkBAIC0xMjYxLDUgKzEyNTYsNCBAQCBmaGFuZGxlcl9kaXNrX2Zp
-bGU6Om9wZW4gKGNvbnN0IGNoYXIgKnBhCiAKICAgc2V0X25hbWUgKHBhdGgs
-IHJlYWxfcGF0aC5nZXRfd2luMzIgKCkpOwotICBzZXRfbm9fZnJlZV9uYW1l
-cyAoMCk7CiAgIHJldHVybiBvcGVuIChyZWFsX3BhdGgsIGZsYWdzLCBtb2Rl
-KTsKIH0KQEAgLTEyNzAsNiArMTI2NCw2IEBAIGZoYW5kbGVyX2Rpc2tfZmls
-ZTo6b3BlbiAocGF0aF9jb252JiByZWEKICAgaWYgKGdldF93aW4zMl9uYW1l
-ICgpID09IGZoYW5kbGVyX2Rpc2tfZHVtbXlfbmFtZSkKICAgICB7Ci0gICAg
-ICB3aW4zMl9wYXRoX25hbWUgPSByZWFsX3BhdGguZ2V0X3dpbjMyICgpOwot
-ICAgICAgc2V0X25vX2ZyZWVfbmFtZXMgKCk7CisgICAgICBjaGFyICpwID0g
-cmVhbF9wYXRoLmdldF93aW4zMiAoKTsKKyAgICAgIHdpbjMyX3BhdGhfbmFt
-ZSA9IChwID8gY3N0cmR1cCAocCkgOiBOVUxMKTsKICAgICB9CiAKSW5kZXg6
-IGZoYW5kbGVyLmgKPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1MgZmlsZTog
-L2N2cy91YmVyYmF1bS93aW5zdXAvY3lnd2luL2ZoYW5kbGVyLmgsdgpyZXRy
-aWV2aW5nIHJldmlzaW9uIDEuODMKZGlmZiAtdSAtcCAtMiAtcjEuODMgZmhh
-bmRsZXIuaAotLS0gZmhhbmRsZXIuaAkyMDAxLzA5LzI0IDIxOjUwOjQ0CTEu
-ODMKKysrIGZoYW5kbGVyLmgJMjAwMS8wOS8yNyAxNjozMzozNQpAQCAtMTg0
-LDQgKzE4NCw2IEBAIHByb3RlY3RlZDoKICAgRFdPUkQgb3Blbl9zdGF0dXM7
-CiAKKyAgdm9pZCB1bnNldF9uYW1lICgpOworCiBwdWJsaWM6CiAgIHZvaWQg
-c2V0X25hbWUgKGNvbnN0IGNoYXIgKiB1bml4X3BhdGgsIGNvbnN0IGNoYXIg
-KiB3aW4zMl9wYXRoID0gTlVMTCwK
-
-------------=_1583532849-65438-109--
+cgf
