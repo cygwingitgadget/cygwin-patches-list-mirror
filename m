@@ -1,73 +1,95 @@
-From: Christopher Faylor <cgf@redhat.com>
-To: Cygwin Patches <cygwin-patches@cygwin.com>
+From: Brian Keener <bkeener@thesoftwaresource.com>
+To: DJ Delorie <dj@delorie.com>
+Cc: cygwin patches <cygwin-patches@sources.redhat.com>
 Subject: Re: [patch] Setup.exe choose.cc selection enhancement based on file existence
-Date: Tue, 06 Feb 2001 18:40:00 -0000
-Message-id: <20010206214102.B14711@redhat.com>
-References: <VA.0000062c.02a8582a@thesoftwaresource.com>
-X-SW-Source: 2001-q1/msg00050.html
+Date: Tue, 06 Feb 2001 19:41:00 -0000
+Message-id: <VA.0000062f.02ffe21e@thesoftwaresource.com>
+References: <200102070226.VAA23607@envy.delorie.com>
+X-SW-Source: 2001-q1/msg00051.html
 
-On Tue, Feb 06, 2001 at 09:05:18PM -0500, Brian Keener wrote:
->The following change enhances the Setup.exe selection criteria for which 
->files to show in the partial/full lists so that the selection criteria 
->now include the installation method selected and the 
->existence/non-existence of the installation file for each package as well 
->as slightly different logic on Prev, Curr, and Test.
->     
->Sorry about the fact the attachment but the code diff was bigger than my 
->email would allow me to send  but here is the Changelog entry
+DJ Delorie wrote:
+> This is big enough to require legal papers.  Chris, do we have them
+> from Brian?
 
-This looks good but, please check out the Contributing section of the
-web page.  It contains a link and some hints on ChangeLog formatting.
-This one is a little "off", unfortunately.
+Probably not - you only ever asked for a verbal okay from me about my self employment and that no 
+employer would object.
 
-I'll leave it to DJ to approve this change though, since it is so
-substantial.
+> 80 colums or so?  Use a helper macro if that makes it more readable.
 
-cgf
+I will work on it and see about shortening them.  Being that I am a newbie though, and I hate to admit 
+this, but I don't know how to use a helper macro.  And I hate to break this into a bunch of nested 
+ifs.
 
->2001-02-05  Brian Keener   <bkeener@thesoftwaresource.com>
->        *  choose.cc (paint) : modified message for nothing to download  
->        vs nothing to install/update.
->        (list_click) : modified to skip versions in selection process if 
->        installing from local directory and installation file does not   
->        exist. Also leaves Source Action set to N/A if the source file   
->        does not exist and installing from local directory.
->        (check_existance) : new method to check current existence of
->        installation files based on selected installation method.
->        (set_existance) : new method to set the current existence of 
->        installation files based on selected installation method.
->        (best_trust) : decision process modified for best trust to base 
->        decision on current trust selected (IE: prev, curr, or test) and
->        existence of file and installation method selected.
->        (default_trust) : added logic to capture the current trust level 
->        and the trust selected for the given package.
->        (set_full_list) : expanded the decision criteria for displaying a 
->        package in the selection list to include existence/non-existance 
->        of the file and the selected installation method.
->        (build_labels) : modified criteria for label addition to include
->        installation method and file existence/non-existance.
->        (create_listview) : modification to establish the trust on       
->        packages before setting up the display list.  Also modification  
->        to set Current trust button as the default.
->        (dialog_cmd) : set response for Prev, Curr, Test button push to  
->        perform a reset of the selection list as well as setting the     
->        default trust.
->        (scan2) : modification to use the new method get_package_version 
->        and also enhanced handling of the build for the structures       
->        package and extra.
->        (get_package_version) : new method to provide for reusable code  
->        for determining the package version from the file name for a     
->        specified trust.
->        (read_installed_db) : modification to use the new method 
->        get_package_version and also enhanced handling of the build for  
->        the structures package and extra.
->        (do_choose) : modification for additional initialization of      
->        package and extra structures.  Uses read_installed_db all the    
->        time despite install method.  Enhancement and changes to output  
->        display for expanded code meanings and clarified output for      
->        packages and available versions in the setup.log.full log file.
->        *  ini.h :  added install_exists and source_exists and           
->        in_partial_list to the structure definition for package.
->        *  res.rc (IDD_CHOOSE) : Modify to choose dialog such that Prev, 
->        Curr, and Test pushbuttons become Radio Buttons instead thus     
->        allowing the operator to better determine which is selected.
+> I suggest "check_src" instead of "which_file".  It's more intuitive
+> that way.
+
+I can do that - makes sense to me
+
+> > + /*  TRUST_PREV=0, TRUST_CURR=1,TRUST_TEST=2,NTRUST=3 and TRUST_UNKNOWN =3 (deliberately left out 
+> > of NTRUST */
+> 
+> Why is this comment here?
+
+Was a reminder for me what the values were - I can remove it.
+
+> > +                package[i].info[t].in_partial_list = 1-package[i].info[t].install_exists;
+> 
+> Use !, not 1-, for boolean inversion.  Don't rely on the value being 0 or 1.
+> 
+Actually - would you believe I had it that way at first and then ended up changing it because of some 
+bug I was chasing which this probably wasn't related to anyway
+
+> 
+> More wrapping.  Check them all; I won't comment on any others I find.
+> 
+I'll work on them.
+
+> > -        /* we intentionally skip TRUST_PREV */
+> > -        if (t != TRUST_PREV || !extra[i].installed_ver)
+> > -   extra[i].in_partial_list = 1;
+> > - 
+> 
+> Nearly all packages have a previous version available.  If you don't
+> skip TRUST_PREV (at least, in the old source), all packages end up
+> being listed in the partial list, because there's always something the
+> user can do.  This wasn't the "right thing" to do for most people.
+> What happens with your changes?
+> 
+Actually,  my version bases it on what is installed and which is selected (Prev, Curr, and Test) and 
+whether we selected to do a net install, download or installed from a local directory.  My trust is 
+only based what they selected (IE: Prev, Curr, Test) and then if the file exist and we selected 
+install from local directory or doesn't exist and we selected download or if we selected install from 
+net.  Based on the installation method and what trust we selected will dictate what files will be 
+displayed in the partial list.  If I selected Download - only files which do not already exist are 
+displayed and if I selected install from local directory then only files which do exist are displayed.
+Based on which I selected (curr,prev,test) then I will display and select the appropriate caption by 
+default those file which currently do not have that version installed.  You really need to give it a 
+try.
+
+> >       Char *install; /* file name to install */
+> >       int install_size; /* in bytes */
+> > +     int install_exists; /* install file exists on disk */
+> 
+> You shouldn't need this.  If the install file doesn't
+> exist, then 'char *install' would be NULL.
+
+I do a little more with *install and there may be a name there but the install_exists is actually 
+telling me do I have a file on disk or not so I know what to do in a download or install from local 
+directory scenario.
+
+> 
+> > +     int source_exists;  /* source file exists on disk */
+> 
+> Ditto here.
+
+Ditto - see previous answer.
+> 
+> > +     int in_partial_list;/* display this version in partial list */
+> 
+> This shouldn't be here; it's private to the chooser.  It
+> should go in chooser's corresponding struct.
+
+This is new.  It is still in both places - in chooser it pertains to the different versions whereas 
+this one I added pertains to the package as a whole.
+
+
