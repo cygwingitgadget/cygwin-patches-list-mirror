@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2638-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 12905 invoked by alias); 12 Jul 2002 14:49:39 -0000
+Return-Path: <cygwin-patches-return-2639-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 28697 invoked by alias); 12 Jul 2002 15:20:30 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,65 +7,160 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 12890 invoked from network); 12 Jul 2002 14:49:38 -0000
-Date: Fri, 12 Jul 2002 07:49:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Cc: Jacek Trzcinski <jacek@certum.pl>
-Subject: Re: Assignment received from Jacek Trzcinski
-Message-ID: <20020712144938.GA4972@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com,
-	Jacek Trzcinski <jacek@certum.pl>
-References: <20020711170416.GA29920@redhat.com> <3D2E872F.476FBDEC@certum.pl> <20020712095524.E10982@cygbert.vinschen.de>
+Received: (qmail 28682 invoked from network); 12 Jul 2002 15:20:29 -0000
+Date: Fri, 12 Jul 2002 08:20:00 -0000
+To: cygwin-patches <cygwin-patches@cygwin.com>
+Subject: Re: [Setup] [Patch] New Views for Skipped Packages and Installed Packages (keeps)
+Message-Id: <VA.00000bf1.00258f45@thesoftwaresource.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20020712095524.E10982@cygbert.vinschen.de>
-User-Agent: Mutt/1.3.23.1i
-X-SW-Source: 2002-q3/txt/msg00086.txt.bz2
+Content-Type: multipart/mixed; boundary="Next part of message (VA.00000bf1.00258f45:thesoftwaresource.com)"
+From: Brian Keener <bkeener@thesoftwaresource.com>
+Reply-To: bkeener@thesoftwaresource.com
+In-Reply-To: <000501c22951$a948b740$0200a8c0@lifelesswks>
+References: <000501c22951$a948b740$0200a8c0@lifelesswks>
+X-SW-Source: 2002-q3/txt/msg00087.txt.bz2
 
-On Fri, Jul 12, 2002 at 09:55:24AM +0200, Corinna Vinschen wrote:
->On Fri, Jul 12, 2002 at 09:37:19AM +0200, Jacek Trzcinski wrote:
->> 23 May 2001 Jacek Trzcinski <jacek@certum.pl>
->> 
->>     * cygwin/fhandler.h: new members of fhandler_serial class - rts,
->>     dtr and method ioctl()
->>     * cygwin/fhandler_serial.cc: implementation of ioctl method from
->>     fhandler_serial class. It supports three commands - TIOCMGET,TIOCMSET
->>     and TIOCINQ. Changes made in other methods of the class caused either
->>     by found error (in method tcflush) or by necessity implementation of
->>     TIOCMGET(for RTS and DTR signal) in Windows 9x environment.
->>     * cygwin/include/sys/termios.h: new constants added to support
->>     ioctl method from class fhandler_serial
->
->Hi Jacek,
->
->could you please look over your ChangeLog entry again?
->
->- Begin capitalized after the colon.
->- Finish sentence with a full stop.
->- Tell briefly what has changed, not why.
->- Tell it for each function.
->- The ChangeLog file is in the cygwin directory so don't mention
->  the cygwin/ prefix before each file.
->
->Example:
->
->	* fhandler_serial.cc (fhandler_serial::fhandler_serial): Add
->	initialization of dtr and rts.
->	(fhandler_serial::ioctl): New function.
->
->Either way, it would be nice if your changes would match current CVS
->regardless what Chris said.  Quote: "If your patch is against the
->current cvs source we will review it ASAP.  If it isn't, it will
->take a little longer..."
+This is a Mime message, which your current mail reader
+may not understand. Parts of the message will appear as
+text. To process the rest, use a Mime compatible reader
+or Base64 conversion utility.
 
-Right.  I knew I'd regret adding that sentence.
+--Next part of message (VA.00000bf1.00258f45:thesoftwaresource.com)
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8bit
+Content-length: 473
 
-Make that "If it isn't, and it doesn't apply perfectly, we'll ask for
-it to be against current CVS source."  Your patch applied but there was
-some "fuzz" and, of course, neither Corinna or I know if this is fine
-or not since we aren't familiar with your patch.
+Robert Collins wrote:
+> Sure. It doesn't apply for me - what branch is it against? If it's
+> against HEAD, can you please post it as an attachment?
 
-cgf
+I thought these changes were listed in the README under wishlist, but at any 
+rate it is against HEAD (I thought).  I'll show my stupidity once again since I 
+don't guess I realized we currently had other branches working.
+
+Where would I go via the Web to check active branches or better yet can I get 
+CVS to tell me?
+
+Bk
+
+
+--Next part of message (VA.00000bf1.00258f45:thesoftwaresource.com)
+Content-Type: application/octet-stream; name="viewchng"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="viewchng"
+Content-length: 6763
+
+MjAwMi0wNy0xMSAgQnJpYW4gS2VlbmVyICA8YmtlZW5lckB0aGVzb2Z0d2Fy
+ZXNvdXJjZS5jb20+DQoNCiAgICAgICAgKiBQaWNrVmlldy5jYyAoUGlja1Zp
+ZXc6OnZpZXdzKTogVHdvIG5ldyB2aWV3cyBhZGRlZCBmb3IgU2tpcHBlZA0K
+ICAgICAgICBwYWNrYWdlcyBhbmQgSW5zdGFsbGVkIFBhY2thZ2VzIG5vdCBy
+ZXF1aXJpbmcgdXBkYXRlLg0KICAgICAgICAoUGlja1ZpZXc6OnNldF9oZWFk
+ZXJzICgpICk6IERpdHRvLg0KICAgICAgICAoUGlja1ZpZXc6OmNsZWFyX3Zp
+ZXcgKHZvaWQpICk6IERpdHRvLg0KICAgICAgICAoUGlja1ZpZXc6OnZpZXdz
+OjpjYXB0aW9uICgpICk6IFR3byBuZXcgY2FwdGlvbiBhZGRlZCBmb3IgdGhl
+IG5ldw0KICAgICAgICB2aWV3cyBhZGRlZCBmb3IgU2tpcHBlZCBhbmQgSW5z
+dGFsbGVkIFBhY2thZ2VzLg0KICAgICAgICAqIFBpY2tWaWV3Lmg6IFR3byBu
+ZXcgdmlld3MgZm9yIFNraXBwZWQgcGFja2FnZXMgYW5kIEluc3RhbGxlZA0K
+ICAgICAgICBwYWNrYWdlcyBhZGRlZCB0byBwdWJsaWMgY2xhc3Mgdmlldy4N
+CiAgICAgICAgKiBjaG9vc2UuY2MgKHNldF92aWV3X21vZGUpOiBUd28gbmV3
+IHZpZXdzIGFkZGVkIGZvciBTa2lwcGVkDQogICAgICAgIHBhY2thZ2VzIGFu
+ZCBJbnN0YWxsZWQgUGFja2FnZXMgbm90IHJlcXVpcmluZyB1cGRhdGUuDQoN
+Cg0KPyBhdXRvbTR0ZS5jYWNoZQ0KPyBiejJsaWIvYXV0b200dGUuY2FjaGUN
+Cj8gbGliZ2V0b3B0KysvY2ZnYXV4DQo/IGxpYmdldG9wdCsrL2FjbG9jYWwu
+bTQNCj8gbGliZ2V0b3B0KysvYXV0b200dGUuY2FjaGUNCj8gbGliZ2V0b3B0
+KysvY29uZmlndXJlDQo/IGxpYmdldG9wdCsrL01ha2VmaWxlLmluDQo/IGxp
+YmdldG9wdCsrL2luY2x1ZGUvYXV0b2NvbmYuaC5pbg0KPyB6bGliL2F1dG9t
+NHRlLmNhY2hlDQpJbmRleDogUGlja1ZpZXcuY2MNCj09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT0NClJDUyBmaWxlOiAvY3ZzL2N5Z3dpbi1hcHBzL3NldHVwL1Bp
+Y2tWaWV3LmNjLHYNCnJldHJpZXZpbmcgcmV2aXNpb24gMi45DQpkaWZmIC11
+IC1wIC1yMi45IFBpY2tWaWV3LmNjDQotLS0gUGlja1ZpZXcuY2MJOCBKdWwg
+MjAwMiAxMjo1MjowOCAtMDAwMAkyLjkNCisrKyBQaWNrVmlldy5jYwkxMSBK
+dWwgMjAwMiAxNDoyMzozOCAtMDAwMA0KQEAgLTQ3LDggKzQ3LDEwIEBAIHN0
+YXRpYyBQaWNrVmlldzo6SGVhZGVyIGNhdF9oZWFkZXJzW10gPSANCiAvLyBQ
+aWNrVmlldzo6IHZpZXdzDQogY29uc3QgUGlja1ZpZXc6OnZpZXdzIFBpY2tW
+aWV3Ojp2aWV3czo6VW5rbm93biAoMCk7DQogY29uc3QgUGlja1ZpZXc6OnZp
+ZXdzIFBpY2tWaWV3Ojp2aWV3czo6UGFja2FnZUZ1bGwgKDEpOw0KLWNvbnN0
+IFBpY2tWaWV3Ojp2aWV3cyBQaWNrVmlldzo6dmlld3M6OlBhY2thZ2UgPSBQ
+aWNrVmlldzo6dmlld3MgKDIpOw0KLWNvbnN0IFBpY2tWaWV3Ojp2aWV3cyBQ
+aWNrVmlldzo6dmlld3M6OkNhdGVnb3J5ICgzKTsNCitjb25zdCBQaWNrVmll
+dzo6dmlld3MgUGlja1ZpZXc6OnZpZXdzOjpQYWNrYWdlICgyKTsNCitjb25z
+dCBQaWNrVmlldzo6dmlld3MgUGlja1ZpZXc6OnZpZXdzOjpQYWNrYWdlS2Vl
+cHMgKDMpOw0KK2NvbnN0IFBpY2tWaWV3Ojp2aWV3cyBQaWNrVmlldzo6dmll
+d3M6OlBhY2thZ2VTa2lwcyA9IFBpY2tWaWV3Ojp2aWV3cyAoNCk7DQorY29u
+c3QgUGlja1ZpZXc6OnZpZXdzIFBpY2tWaWV3Ojp2aWV3czo6Q2F0ZWdvcnkg
+KDUpOw0KIA0KIC8vIERvSW5zZXJ0SXRlbSAtIGluc2VydHMgYW4gaXRlbSBp
+bnRvIGEgaGVhZGVyIGNvbnRyb2wuDQogLy8gUmV0dXJucyB0aGUgaW5kZXgg
+b2YgdGhlIG5ldyBpdGVtLg0KQEAgLTgyLDcgKzg0LDkgQEAgUGlja1ZpZXc6
+OnNldF9oZWFkZXJzICgpDQogICBpZiAodmlld19tb2RlID09IHZpZXdzOjpV
+bmtub3duKQ0KICAgICByZXR1cm47DQogICBpZiAodmlld19tb2RlID09IHZp
+ZXdzOjpQYWNrYWdlRnVsbCB8fA0KLSAgICAgIHZpZXdfbW9kZSA9PSB2aWV3
+czo6UGFja2FnZSkNCisgICAgICB2aWV3X21vZGUgPT0gdmlld3M6OlBhY2th
+Z2UgfHwNCisgICAgICB2aWV3X21vZGUgPT0gdmlld3M6OlBhY2thZ2VLZWVw
+cyB8fA0KKyAgICAgIHZpZXdfbW9kZSA9PSB2aWV3czo6UGFja2FnZVNraXBz
+KQ0KICAgICB7DQogICAgICAgaGVhZGVycyA9IHBrZ19oZWFkZXJzOw0KICAg
+ICAgIGN1cnJlbnRfY29sID0gMDsNCkBAIC0xNTQsNiArMTU4LDEwIEBAIFBp
+Y2tWaWV3Ojp2aWV3czo6Y2FwdGlvbiAoKQ0KICAgICBjYXNlIDI6DQogICAg
+ICAgcmV0dXJuICJQYXJ0aWFsIjsNCiAgICAgY2FzZSAzOg0KKyAgICAgIHJl
+dHVybiAiSW5zdGFsbGVkIjsNCisgICAgY2FzZSA0Og0KKyAgICAgIHJldHVy
+biAiU2tpcHBlZCI7DQorICAgIGNhc2UgNToNCiAgICAgICByZXR1cm4gIkNh
+dGVnb3J5IjsNCiAgICAgZGVmYXVsdDoNCiAgICAgICByZXR1cm4gIiI7DQpA
+QCAtMjEwLDcgKzIxOCw5IEBAIFBpY2tWaWV3OjpjbGVhcl92aWV3ICh2b2lk
+KQ0KICAgaWYgKHZpZXdfbW9kZSA9PSB2aWV3czo6VW5rbm93bikNCiAgICAg
+cmV0dXJuOw0KICAgaWYgKHZpZXdfbW9kZSA9PSB2aWV3czo6UGFja2FnZUZ1
+bGwgfHwNCi0gICAgICB2aWV3X21vZGUgPT0gdmlld3M6OlBhY2thZ2UpDQor
+ICAgICAgdmlld19tb2RlID09IHZpZXdzOjpQYWNrYWdlIHx8DQorICAgICAg
+dmlld19tb2RlID09IHZpZXdzOjpQYWNrYWdlS2VlcHMgfHwNCisgICAgICB2
+aWV3X21vZGUgPT0gdmlld3M6OlBhY2thZ2VTa2lwcykNCiAgICAgY29udGVu
+dHMuU2hvd0xhYmVsIChmYWxzZSk7DQogICBlbHNlIGlmICh2aWV3X21vZGUg
+PT0gdmlld3M6OkNhdGVnb3J5KQ0KICAgICBjb250ZW50cy5TaG93TGFiZWwg
+KCk7DQpJbmRleDogUGlja1ZpZXcuaA0KPT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PQ0KUkNTIGZpbGU6IC9jdnMvY3lnd2luLWFwcHMvc2V0dXAvUGlja1ZpZXcu
+aCx2DQpyZXRyaWV2aW5nIHJldmlzaW9uIDIuNA0KZGlmZiAtdSAtcCAtcjIu
+NCBQaWNrVmlldy5oDQotLS0gUGlja1ZpZXcuaAkyNyBNYXIgMjAwMiAxMjoy
+MToxOSAtMDAwMAkyLjQNCisrKyBQaWNrVmlldy5oCTExIEp1bCAyMDAyIDE0
+OjIzOjM5IC0wMDAwDQpAQCAtNzksNiArNzksOCBAQCBwdWJsaWM6DQogICAg
+IHN0YXRpYyBjb25zdCB2aWV3cyBVbmtub3duOw0KICAgICBzdGF0aWMgY29u
+c3Qgdmlld3MgUGFja2FnZUZ1bGw7DQogICAgIHN0YXRpYyBjb25zdCB2aWV3
+cyBQYWNrYWdlOw0KKyAgICBzdGF0aWMgY29uc3Qgdmlld3MgUGFja2FnZUtl
+ZXBzOw0KKyAgICBzdGF0aWMgY29uc3Qgdmlld3MgUGFja2FnZVNraXBzOw0K
+ICAgICBzdGF0aWMgY29uc3Qgdmlld3MgQ2F0ZWdvcnk7DQogICAgIHN0YXRp
+YyBjb25zdCB2aWV3cyBOVmlldzsNCiAgICAgICB2aWV3cyAoKTpfdmFsdWUg
+KDApDQpAQCAtODcsNyArODksNyBAQCBwdWJsaWM6DQogICAgIHZpZXdzIChp
+bnQgYUludCkNCiAgICAgew0KICAgICAgIF92YWx1ZSA9IGFJbnQ7DQotICAg
+ICAgaWYgKF92YWx1ZSA8IDAgfHwgX3ZhbHVlID4gMykNCisgICAgICBpZiAo
+X3ZhbHVlIDwgMCB8fCBfdmFsdWUgPiA1KQ0KIAlfdmFsdWUgPSAwOw0KICAg
+ICB9DQogICAgIHZpZXdzICYgb3BlcmF0b3IrKyAoKTsNCkluZGV4OiBjaG9v
+c2UuY2MNCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NClJDUyBmaWxlOiAvY3Zz
+L2N5Z3dpbi1hcHBzL3NldHVwL2Nob29zZS5jYyx2DQpyZXRyaWV2aW5nIHJl
+dmlzaW9uIDIuMTA1DQpkaWZmIC11IC1wIC1yMi4xMDUgY2hvb3NlLmNjDQot
+LS0gY2hvb3NlLmNjCTcgSnVsIDIwMDIgMTU6MTQ6NDkgLTAwMDAJMi4xMDUN
+CisrKyBjaG9vc2UuY2MJMTEgSnVsIDIwMDIgMTQ6MjM6NDMgLTAwMDANCkBA
+IC0zNjAsOSArMzYwLDI4IEBAIHNldF92aWV3X21vZGUgKEhXTkQgaCwgUGlj
+a1ZpZXc6OnZpZXdzIG0NCiAgICAgICBmb3IgKHNpemVfdCBuID0gMTsgbiA8
+PSBkYi5wYWNrYWdlcy5udW1iZXIgKCk7IG4rKykNCiAJew0KIAkgIHBhY2th
+Z2VtZXRhICYgcGtnID0gKmRiLnBhY2thZ2VzW25dOw0KLQkgIGlmICgoIXBr
+Zy5kZXNpcmVkICYmIHBrZy5pbnN0YWxsZWQpDQorCSAgaWYgKCghcGtnLmRl
+c2lyZWQgJiYgcGtnLmluc3RhbGxlZCkgDQogCSAgICAgIHx8IChwa2cuZGVz
+aXJlZCAmJiAocGtnLmRlc2lyZWQucGlja2VkICgpIA0KIAkJCQkgIHx8IHBr
+Zy5kZXNpcmVkLnNvdXJjZVBhY2thZ2UoKS5waWNrZWQoKSkpKQ0KKwkgICAg
+Y2hvb3Nlci0+aW5zZXJ0X3BrZyAocGtnKTsNCisJfQ0KKyAgICB9DQorICBl
+bHNlIGlmIChjaG9vc2VyLT5nZXRfdmlld19tb2RlICgpID09IFBpY2tWaWV3
+Ojp2aWV3czo6UGFja2FnZUtlZXBzKQ0KKyAgICB7DQorICAgICAgZm9yIChz
+aXplX3QgbiA9IDE7IG4gPD0gZGIucGFja2FnZXMubnVtYmVyICgpOyBuKysp
+DQorCXsNCisJICBwYWNrYWdlbWV0YSAmIHBrZyA9ICpkYi5wYWNrYWdlc1tu
+XTsNCisJICBpZiAocGtnLmluc3RhbGxlZCAmJiBwa2cuZGVzaXJlZCAmJiAh
+cGtnLmRlc2lyZWQucGlja2VkKCkgDQorCSAgICAgICYmICFwa2cuZGVzaXJl
+ZC5zb3VyY2VQYWNrYWdlKCkucGlja2VkKCkpDQorCSAgICBjaG9vc2VyLT5p
+bnNlcnRfcGtnIChwa2cpOw0KKwl9DQorICAgIH0NCisgIGVsc2UgaWYgKGNo
+b29zZXItPmdldF92aWV3X21vZGUgKCkgPT0gUGlja1ZpZXc6OnZpZXdzOjpQ
+YWNrYWdlU2tpcHMpDQorICAgIHsNCisgICAgICBmb3IgKHNpemVfdCBuID0g
+MTsgbiA8PSBkYi5wYWNrYWdlcy5udW1iZXIgKCk7IG4rKykNCisJew0KKwkg
+IHBhY2thZ2VtZXRhICYgcGtnID0gKmRiLnBhY2thZ2VzW25dOw0KKwkgIGlm
+ICghcGtnLmRlc2lyZWQgJiYgIXBrZy5pbnN0YWxsZWQpDQogCSAgICBjaG9v
+c2VyLT5pbnNlcnRfcGtnIChwa2cpOw0KIAl9DQogICAgIH0NCg==
+
+--Next part of message (VA.00000bf1.00258f45:thesoftwaresource.com)--
+This is the end of the Mime message.
