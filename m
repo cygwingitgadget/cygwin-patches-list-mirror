@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4170-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 32171 invoked by alias); 6 Sep 2003 02:04:27 -0000
+Return-Path: <cygwin-patches-return-4171-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 21758 invoked by alias); 6 Sep 2003 02:18:37 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,53 +7,50 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 32162 invoked from network); 6 Sep 2003 02:04:26 -0000
-X-Authentication-Warning: slinky.cs.nyu.edu: pechtcha owned process doing -bs
-Date: Sat, 06 Sep 2003 02:04:00 -0000
-From: Igor Pechtchanski <pechtcha@cs.nyu.edu>
-Reply-To: cygwin-patches@cygwin.com
+Received: (qmail 21746 invoked from network); 6 Sep 2003 02:18:36 -0000
+Date: Sat, 06 Sep 2003 02:18:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] cygcheck: don't fail integrity check on empty package
-In-Reply-To: <20030906020301.GA4981@redhat.com>
-Message-ID: <Pine.GSO.4.56.0309052203380.7348@slinky.cs.nyu.edu>
-References: <Pine.GSO.4.56.0309052041170.7348@slinky.cs.nyu.edu>
- <Pine.GSO.4.56.0309052046590.7348@slinky.cs.nyu.edu> <20030906020301.GA4981@redhat.com>
-Importance: Normal
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-SW-Source: 2003-q3/txt/msg00186.txt.bz2
+Subject: Re: nanosleep patch 1
+Message-ID: <20030906021835.GA5109@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <3.0.5.32.20030904214017.0081d6d0@incoming.verizon.net>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3.0.5.32.20030904214017.0081d6d0@incoming.verizon.net>
+User-Agent: Mutt/1.4.1i
+X-SW-Source: 2003-q3/txt/msg00187.txt.bz2
 
-On Fri, 5 Sep 2003, Christopher Faylor wrote:
-
-> On Fri, Sep 05, 2003 at 08:53:54PM -0400, Igor Pechtchanski wrote:
-> >On Fri, 5 Sep 2003, Igor Pechtchanski wrote:
-> >>This patch fixes the erroneous failure of "cygcheck -c" when the
-> >>package is empty (and thus the file list for it is missing), e.g.,
-> >>XFree86-base.
-> >
-> >Sorry, I've messed up the ChangeLog entry.  The correct one is included
-> >below.
-> >
-> >>==============================================================================
-> >>ChangeLog:
-> >2003-09-05 Igor Pechtchanski <pechtcha@cs.nyu.edu>
-> >
-> >* dump_setup.cc (check_package_files): Don't fail on empty package.
+On Thu, Sep 04, 2003 at 09:40:17PM -0400, Pierre A. Humblet wrote:
+>This is part 1 of the patch I sent yesterday.
+>See previous mails for background  info.
+>Here are some more details:
 >
-> I'll check this in but I wonder if the printfs here shouldn't be fprintf(stderr
-> since they are sort of an error condition.
->
-> cgf
+>hires_ms::minperiod    Make NO_COPY for per process initialization.
+>hires_ms::resolution   For use in sleep and alarm
+>hires_ms::dmsecs       Ditto
+>_DELAY_MAX             Ditto
+>hires_ms::~hires_ms    Delete, rely on Windows end of process cleanup.
+>                       Note that previous version could call timeEndPeriod
+>                       even when timeBeginPeriod had not been called.
 
-Perhaps, but they are only printed if verbose output is requested, so
-presumably the user wants to see them on stdout.
-	Igor
--- 
-				http://cs.nyu.edu/~pechtcha/
-      |\      _,,,---,,_		pechtcha@cs.nyu.edu
-ZZZzz /,`.-'`'    -.  ;-;;,_		igor@watson.ibm.com
-     |,4-  ) )-,_. ,\ (  `'-'		Igor Pechtchanski, Ph.D.
-    '---''(_/--'  `-'\_) fL	a.k.a JaguaR-R-R-r-r-r-.-.-.  Meow!
+I guess I'm not making my point very clearly.  Here's an example of what
+I'd like to see.
 
-"I have since come to realize that being between your mentor and his route
-to the bathroom is a major career booster."  -- Patrick Naughton
+"I've deleted the destructor for hires_ms because all of the uses of it
+are static so the appropriate cleanup will be handled automatically
+anyway.  In fact, since the destructor is always invoked regardless of
+whether the static variable has been used, it would end up uselessly
+calling timeEndPeriod."
+
+Descriptions like this make the reason for the change obvious.  Merely
+stating that something is basically a challenge to go try to recreate
+your thought process.  Scratching my head over "I wonder why he thinks
+that" is what causes patch acceptance to be delayed.
+
+Anyway, since I now understand the reason for the above mentioned
+change, I've checked it in.  Now on to the rest of your patch...
+
+cgf
