@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4535-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 29757 invoked by alias); 23 Jan 2004 16:09:40 -0000
+Return-Path: <cygwin-patches-return-4536-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 12137 invoked by alias); 23 Jan 2004 20:19:23 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,43 +7,69 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 29683 invoked from network); 23 Jan 2004 16:09:38 -0000
-Date: Fri, 23 Jan 2004 16:09:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [Patch]: secret event
-Message-ID: <20040123160938.GB6773@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3.0.5.32.20040122183313.00839860@incoming.verizon.net> <20040123095952.GC12512@cygbert.vinschen.de> <20040123151621.GC10708@redhat.com> <401145F5.5ECCA8DF@phumblet.no-ip.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <401145F5.5ECCA8DF@phumblet.no-ip.org>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2004-q1/txt/msg00025.txt.bz2
+Received: (qmail 12105 invoked from network); 23 Jan 2004 20:19:22 -0000
+Message-ID: <01C3E1F6.8D472400.Gerd.Spalink@t-online.de>
+From: Gerd.Spalink@t-online.de (Gerd Spalink)
+Reply-To: "Gerd.Spalink@t-online.de" <Gerd.Spalink@t-online.de>
+To: 'Corinna Vinschen' <cygwin-patches@cygwin.com>
+Subject: RE: patch for audio recording with /dev/dsp
+Date: Fri, 23 Jan 2004 20:19:00 -0000
+Organization: privat
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Seen: false
+X-ID: SgJf-YZSYeC5xkS+rPs8Di5PCkX8qGwF2vYLZ8mzPaj-LLj6X+ODwq
+X-SW-Source: 2004-q1/txt/msg00026.txt.bz2
 
-On Fri, Jan 23, 2004 at 11:04:05AM -0500, Pierre A. Humblet wrote:
->
->Christopher Faylor wrote:
->> 
->> 
->> I agree, with one nit.  Was there a reason for getting rid of the handle
->> protection in this patch?  We are apparently stumbling over a problem with
->> handle corruption in the current CVS so removing a chance for protection
->> seems like we're going backwards.
->
->The previous code was assuming that a handle would never change from
->inheritable to non-inheritable (or conversely) and was protecting it
->accordingly.
->That's not true anymore and I don't know how to protect in that situation.
+Hi Corinna,
 
-Ah, of course.  I should have realized that.  I make similar tradeoffs in
-the tty stuff for similar reasons.
+Yes, I'm on the cygwin-patches and cygwin-developers mailing lists (and I also peek into the cygwin mailing
+list now and then at cygwin.com), so I read your message.
 
-Well, Volker's problem is confirmed as some strange handle corruption.
-I always seem to be poised at the uncertain cusp of thinking that the
-handle protection code is stupid and should be removed, and thinking
-that it is useful and should be augmented...
+Regarding the copyright assignment, I haven't sent yet the part that my employer should sign,
+but I'm working on it. My personal part should be at RedHat already.
 
-cgf
+Gerd
+
+-----Original Message-----
+From:	Corinna Vinschen [SMTP:cygwin-patches@cygwin.com]
+Sent:	Freitag, 23. Januar 2004 11:12
+To:	Gerd.Spalink@t-online.de
+Cc:	cygwin-patches@cygwin.com
+Subject:	Re: patch for audio recording with /dev/dsp
+
+Hi Gerd,
+
+I'm not sure if you read this.  Are you going to send us a copyright
+assignment according to http://cygwin.com/contrib.html ?
+
+Corinna
+
+On Dec  8 00:35, Christopher Faylor wrote:
+> On Mon, Dec 08, 2003 at 03:37:19AM +0100, Gerd Spalink wrote:
+> >Hi,
+> >
+> >This patch changes the device /dev/dsp so that audio recording works.
+> >I have tested it with
+> >cp /dev/dsp test.wav         (stop by hitting ctrl-C)
+> >and subsequent playback with
+> >cp test.wav /dev/dsp
+> >
+> >I also tested successfully with bplay of the gramofile package
+> >(with some hangups that I link to the terminal handling of this software).
+> >
+> >I am now considering implementing /dev/mixer ...
+> >
+> >Any suggestions?
+> 
+> Thanks for the patch but have you checked out http://cygwin.com/contrib.html ?
+> AFAIK, we don't have an assignment on file with you so we can't
+> incorporate any substantial patches from you into cygwin.
+> 
+> cgf
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
