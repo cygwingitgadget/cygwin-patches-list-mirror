@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4140-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 26243 invoked by alias); 29 Aug 2003 12:15:30 -0000
+Return-Path: <cygwin-patches-return-4141-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 32734 invoked by alias); 29 Aug 2003 14:18:14 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,187 +7,69 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 26184 invoked from network); 29 Aug 2003 12:15:28 -0000
-Date: Fri, 29 Aug 2003 12:15:00 -0000
-From: Elfyn McBratney <elfyn@cygwin.com>
+Received: (qmail 32718 invoked from network); 29 Aug 2003 14:18:13 -0000
+Message-ID: <3F4F60A9.78B2260@phumblet.no-ip.org>
+Date: Fri, 29 Aug 2003 14:18:00 -0000
+From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
+Reply-To: Pierre.Humblet@ieee.org
+X-Accept-Language: en,pdf
+MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
-Subject: Small patch for the FAQ
-Message-ID: <20030829121814.GR614@emcb.co.uk>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="vkogqOf2sHV7VnPd"
-Content-Disposition: inline
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2003-q3/txt/msg00156.txt.bz2
-
-
---vkogqOf2sHV7VnPd
+Subject: Re: Signal handling tune up.
+References: <3F43B482.AC7F68F4@phumblet.no-ip.org> <20030819024617.GA6581@redhat.com> <3.0.5.32.20030818201736.0080e4e0@mail.attbi.com> <3.0.5.32.20030818201736.0080e4e0@mail.attbi.com> <3.0.5.32.20030818222927.008114e0@incoming.verizon.net> <20030819024617.GA6581@redhat.com> <3.0.5.32.20030819084636.0081c730@incoming.verizon.net> <20030819143305.GA17431@redhat.com> <3F43B482.AC7F68F4@phumblet.no-ip.org> <3.0.5.32.20030828205339.0081f920@incoming.verizon.net> <20030829011926.GA16898@redhat.com>
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-length: 3739
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2003-q3/txt/msg00157.txt.bz2
 
-Index: how-programming.texinfo
-===================================================================
-RCS file: /cvs/src/src/winsup/doc/how-programming.texinfo,v
-retrieving revision 1.25
-diff -u -u -p -r1.25 how-programming.texinfo
---- how-programming.texinfo	13 Feb 2003 14:20:32 -0000	1.25
-+++ how-programming.texinfo	29 Aug 2003 12:11:04 -0000
-@@ -6,12 +6,15 @@ If you are willing to be a package maint
- volunteers to prepare and maintain packages, because the priority of the
- Cygwin Team is Cygwin itself.
- 
--There will be a separate web page where all the details are documented,
--but this is not prepared yet.  Meanwhile, pore through the cygwin-apps
--mailing archives (start at @file{http://cygwin.com/lists.html}), and
--subscribe.  Charles Wilson posted a short recipe of what's involved,
--using texinfo as an example,
--at @file{http://cygwin.com/ml/cygwin-apps/2000-11/msg00055.html}.  This
-+There's a Cygwin Contributor's Guide on the project web page available
-+here @file{http://cygwin.com/setup.html}, which details everything you'll
-+need to know about being a package maintainer.  If you need any extra
-+help you can ask on cygwin-apps @emph{at} cygwin @emph{dot} com mailing
-+list, or alternatively you can search the cygwin-apps archives
-+(start at @file{http://http://cygwin.com/lists.html}), as your question
-+may well have been asked before.  Charles Wilson posted a short recipe
-+of what's involved, using texinfo as an example, available at
-+@file{http://cygwin.com/ml/cygwin-apps/2000-11/msg00055.html}.  This
- should give you an idea of what is required.
- 
- You should announce your intentions to the general cygwin list, in case
-Index: how-resources.texinfo
-===================================================================
-RCS file: /cvs/src/src/winsup/doc/how-resources.texinfo,v
-retrieving revision 1.7
-diff -u -u -p -r1.7 how-resources.texinfo
---- how-resources.texinfo	21 Feb 2003 20:13:55 -0000	1.7
-+++ how-resources.texinfo	29 Aug 2003 12:11:05 -0000
-@@ -18,10 +18,6 @@ There is a comprehensive Cygwin User's G
- and an API Reference at
- @file{http://cygwin.com/cygwin-api/cygwin-api.html}.
- 
--There is an interesting paper about Cygwin from the 1998 USENIX Windows
--NT Workshop Proceedings at
--@file{http://cygwin.com/usenix-98/cygwin.html}.
--
- You can find documentation for the individual GNU tools at
- @file{http://www.fsf.org/manual/}.  (You should read GNU manuals from a
- local mirror, check @file{http://www.fsf.org/server/list-mirrors.html}
-Index: what.texinfo
-===================================================================
-RCS file: /cvs/src/src/winsup/doc/what.texinfo,v
-retrieving revision 1.21
-diff -u -u -p -r1.21 what.texinfo
---- what.texinfo	27 Jul 2002 23:05:45 -0000	1.21
-+++ what.texinfo	29 Aug 2003 12:11:06 -0000
-@@ -32,17 +32,16 @@ exhibit different limitations, on the va
- 
- @section Where can I get it?
- 
--The main location for the Cygwin project is
--@file{http://cygwin.com/}.  There you should find
--everything you need for Cygwin, including links for download and setup,
--a current list of ftp mirror sites, a User's Guide, an API Reference,
--mailing lists and archives, and additional ported software.
-+The home page for the Cygwin project is @file{http://cygwin.com/}.
-+There you should find everything you need for Cygwin, including links
-+for download and setup, a current list of ftp mirror sites,
-+a User's Guide, an API Reference, mailing lists and archives, and
-+additional ported software.
- 
- You can find documentation for the individual GNU tools at
- @file{http://www.fsf.org/manual/}.  (You should read GNU manuals from a
- local mirror.  Check @file{http://www.fsf.org/server/list-mirrors.html}
- for a list of them.)
--
- 
- @section Is it free software?
- 
+Christopher Faylor wrote:
 
--- Elfyn
+> >I was planning to also eventually propose patches for the  following,
+> >but it's more efficient to tell Chris while he is working on the code
+> >and before I forget:
+> >1) sigcatch_nosync could be an event instead of a semaphore. This
+> >   doesn't affect the logic and will cut down useless loops, mainly
+> >   at high load with pending_signals set.
+> 
+> Are you seeing a lot of loops through the signal handler due to
+> semaphores being > 1?
 
---vkogqOf2sHV7VnPd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename="cygfaq.patch"
-Content-length: 3729
+Yes, in heavy traffic. That's what made me think of this.
 
-Index: how-programming.texinfo
-===================================================================
-RCS file: /cvs/src/src/winsup/doc/how-programming.texinfo,v
-retrieving revision 1.25
-diff -u -u -p -r1.25 how-programming.texinfo
---- how-programming.texinfo	13 Feb 2003 14:20:32 -0000	1.25
-+++ how-programming.texinfo	29 Aug 2003 12:11:04 -0000
-@@ -6,12 +6,15 @@ If you are willing to be a package maint
- volunteers to prepare and maintain packages, because the priority of the
- Cygwin Team is Cygwin itself.
- 
--There will be a separate web page where all the details are documented,
--but this is not prepared yet.  Meanwhile, pore through the cygwin-apps
--mailing archives (start at @file{http://cygwin.com/lists.html}), and
--subscribe.  Charles Wilson posted a short recipe of what's involved,
--using texinfo as an example,
--at @file{http://cygwin.com/ml/cygwin-apps/2000-11/msg00055.html}.  This
-+There's a Cygwin Contributor's Guide on the project web page available
-+here @file{http://cygwin.com/setup.html}, which details everything you'll
-+need to know about being a package maintainer.  If you need any extra
-+help you can ask on cygwin-apps @emph{at} cygwin @emph{dot} com mailing
-+list, or alternatively you can search the cygwin-apps archives
-+(start at @file{http://http://cygwin.com/lists.html}), as your question
-+may well have been asked before.  Charles Wilson posted a short recipe
-+of what's involved, using texinfo as an example, available at
-+@file{http://cygwin.com/ml/cygwin-apps/2000-11/msg00055.html}.  This
- should give you an idea of what is required.
- 
- You should announce your intentions to the general cygwin list, in case
-Index: how-resources.texinfo
-===================================================================
-RCS file: /cvs/src/src/winsup/doc/how-resources.texinfo,v
-retrieving revision 1.7
-diff -u -u -p -r1.7 how-resources.texinfo
---- how-resources.texinfo	21 Feb 2003 20:13:55 -0000	1.7
-+++ how-resources.texinfo	29 Aug 2003 12:11:05 -0000
-@@ -18,10 +18,6 @@ There is a comprehensive Cygwin User's G
- and an API Reference at
- @file{http://cygwin.com/cygwin-api/cygwin-api.html}.
- 
--There is an interesting paper about Cygwin from the 1998 USENIX Windows
--NT Workshop Proceedings at
--@file{http://cygwin.com/usenix-98/cygwin.html}.
--
- You can find documentation for the individual GNU tools at
- @file{http://www.fsf.org/manual/}.  (You should read GNU manuals from a
- local mirror, check @file{http://www.fsf.org/server/list-mirrors.html}
-Index: what.texinfo
-===================================================================
-RCS file: /cvs/src/src/winsup/doc/what.texinfo,v
-retrieving revision 1.21
-diff -u -u -p -r1.21 what.texinfo
---- what.texinfo	27 Jul 2002 23:05:45 -0000	1.21
-+++ what.texinfo	29 Aug 2003 12:11:06 -0000
-@@ -32,17 +32,16 @@ exhibit different limitations, on the va
- 
- @section Where can I get it?
- 
--The main location for the Cygwin project is
--@file{http://cygwin.com/}.  There you should find
--everything you need for Cygwin, including links for download and setup,
--a current list of ftp mirror sites, a User's Guide, an API Reference,
--mailing lists and archives, and additional ported software.
-+The home page for the Cygwin project is @file{http://cygwin.com/}.
-+There you should find everything you need for Cygwin, including links
-+for download and setup, a current list of ftp mirror sites,
-+a User's Guide, an API Reference, mailing lists and archives, and
-+additional ported software.
- 
- You can find documentation for the individual GNU tools at
- @file{http://www.fsf.org/manual/}.  (You should read GNU manuals from a
- local mirror.  Check @file{http://www.fsf.org/server/list-mirrors.html}
- for a list of them.)
--
- 
- @section Is it free software?
- 
+> >2) When a signal is pending but blocked, pending_signals is set and
+> >   sig_dispatch_pending() signals the sigthread. It would be more
+> >   efficient to have a pending_signal_mask and to do mask comparison
+> >   in sig_dispatch_pending(). It's just a courtesy call, no interlock
+> >   is necessary.
+> 
+> There are all sorts of optimizations like this which could be done. 
 
---vkogqOf2sHV7VnPd--
+I proposed those two because they are straightforward and will have 
+an impact.
+ 
+> Do you think that an occasional loop through the signal handler is slowing
+> things down that much?  Do you think that sig_dispatch_pending gets
+> called a lot with all pending signals blocked?  Are you convinced that
+> you can set a mask in a non-raceable way?
+
+Yes in heavy traffic, and it contributes the the trashing phenomenon
+I saw with SIGALRM (system has to work even more in heavy load).
+
+Races in sig_dispatch_pending() could occur because either a) the mask 
+changes, or because b) pending_signal_mask changes. 
+a) isn't a problem in the long run because with pthreads a mask can only 
+be changed by its thread (there is no process mask). 
+Races can occur with b), but races already occur today with pending_signals.
+That's not a problem because sig_dispatch_pending() is a "good will" call, 
+it can afford to have an occasional miss or a false alarm.
+
+I am also starting to look at the relation with pthread and signals.
+I noticed that sigactions are currently per thread, which isn't Posix. 
+An immediate fix is to change "getsig (int sig)" in pinfo.h, you will
+need to touch it anyway when you pull the sigactions out of pinfo.
+Also I haven't yet found the private sigtodo for the main thread, nor
+its mask.
+Trying to imagine a possible implementation, I think it would help to have
+per thread sigsave's, to avoid failed interrupts when delivering signals
+to several threads.
+
+Pierre
