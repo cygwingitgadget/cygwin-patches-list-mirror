@@ -1,115 +1,76 @@
-From: egor duda <deo@logos-m.ru>
-To: cygwin-patches@cygwin.com
-Subject: generating /etc/passwd and /etc/group for domians with users with cyrillic names
-Date: Mon, 09 Apr 2001 11:42:00 -0000
-Message-id: <130292291322.20010409223921@logos-m.ru>
-X-SW-Source: 2001-q2/msg00023.html
-Content-type: multipart/mixed; boundary="----------=_1583532847-65438-37"
+From: "Michael A. Chase" <mchase@ix.netcom.com>
+To: <cygwin-patches@cygwin.com>
+Subject: [PATCH]Add help option to mount and umount
+Date: Tue, 10 Apr 2001 09:22:00 -0000
+Message-id: <000c01c0c1da$475de120$6d31273f@ca.boeing.com>
+X-SW-Source: 2001-q2/msg00024.html
+Content-type: multipart/mixed; boundary="----------=_1583532847-65438-38"
 
 This is a multi-part message in MIME format...
 
-------------=_1583532847-65438-37
-Content-length: 280
+------------=_1583532847-65438-38
+Content-length: 358
 
-Hi!
+It's going to take a while to figure out who at Oracle should sign the
+disclaimer for me, so here's the help option part of the previous patch.
 
-  currently, mkpasswd and mkgroup print garbage if user name or group
-name contains cyrillic symbols. attached patch fixes that.
+You can discard the ChangeLog if you like, this really just completes the
+changes made on 2 April.
+--
+Mac :})
+Give a hobbit a fish and he'll eat fish for a day.
+Give a hobbit a ring and he'll eat fish for an age.
 
-egor.            mailto:deo@logos-m.ru icq 5165414 fidonet 2:5020/496.19
-mkpasswd-unicode-convertion.diff
-mkpasswd-unicode-convertion.ChangeLog
-
-
-------------=_1583532847-65438-37
+------------=_1583532847-65438-38
 Content-Type: text/plain; charset=us-ascii;
- name="mkpasswd-unicode-convertion.ChangeLog"
-Content-Disposition: inline; filename="mkpasswd-unicode-convertion.ChangeLog"
+ name="ChangeLog-winsup-utils-mac-2"
+Content-Disposition: inline; filename="ChangeLog-winsup-utils-mac-2"
 Content-Transfer-Encoding: base64
-Content-Length: 427
+Content-Length: 383
 
-MjAwMS0wNC0wOSAgRWdvciBEdWRhICA8ZGVvQGxvZ29zLW0ucnU+CgoJKiBt
-a2dyb3VwLmMgKHVuaTJhbnNpKTogVXNlIG5hdGl2ZSBtZXRob2QgdG8gY29u
-dmVydCBmcm9tIFVuaWNvZGUKCXRvIG11bHRpLWJ5dGUgc3RyaW5ncy4KCSog
-bWtwYXNzd2QuYyAodW5pMmFuc2kpOiBEaXR0by4KCShlbnVtX2xvY2FsX2dy
-b3Vwcyk6IFBhc3MgYnVmZmVyIHNpemUgd2hlbiBjb252ZXJ0aW5nIHN0cmlu
-Zy4KCShlbnVtX2dyb3Vwcyk6IERpdHRvLgoJKiBta3Bhc3N3ZC5jIChlbnVt
-X3VzZXJzKTogRGl0dG8uCgkoZW51bV9sb2NhbF9ncm91cHMpOiBEaXR0by4K
+MjAwMS0wNC0xMCAgTWljaGFlbCBBIENoYXNlIDxtY2hhc2VAaXgubmV0Y29t
+LmNvbT4KCiAgICAqIG1vdW50LmNjIChsb25nb3B0cyk6IEFkZCBoZWxwIHRv
+IG9wdGlvbnMgbGlzdC4KICAgICAgICAgICAgICAgKG9wdHMpOiBBZGQgJ2gn
+IHRvIG9wdGlvbnMgc3RyaW5nLgogICAgKiB1bW91bnQuY2MgKGxvbmdvcHRz
+KTogQWRkIGhlbHAgdG8gb3B0aW9ucyBsaXN0LgogICAgICAgICAgICAgICAg
+KG9wdHMpOiBBZGQgJ2gnIHRvIG9wdGlvbnMgc3RyaW5nIGFuZCBjaGFuZ2Ug
+J1InIHRvICdBJy4K
 
-------------=_1583532847-65438-37
-Content-Type: text/x-diff; charset=us-ascii;
- name="mkpasswd-unicode-convertion.diff"
-Content-Disposition: inline; filename="mkpasswd-unicode-convertion.diff"
+------------=_1583532847-65438-38
+Content-Type: text/x-diff; charset=us-ascii; name="mount.cc-patch"
+Content-Disposition: inline; filename="mount.cc-patch"
 Content-Transfer-Encoding: base64
-Content-Length: 4100
+Content-Length: 663
 
-SW5kZXg6IG1rZ3JvdXAuYwo9PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBm
-aWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL3V0aWxzL21rZ3JvdXAuYyx2CnJl
-dHJpZXZpbmcgcmV2aXNpb24gMS40CmRpZmYgLXUgLXAgLTIgLXIxLjQgbWtn
-cm91cC5jCi0tLSBta2dyb3VwLmMJMjAwMC8xMS8wOCAxNTowMDowMgkxLjQK
-KysrIG1rZ3JvdXAuYwkyMDAxLzA0LzA5IDE4OjAxOjAwCkBAIC05Myw5ICs5
-Myw4IEBAIHBzeF9kaXIgKGNoYXIgKmluLCBjaGFyICpvdXQpCiAKIHZvaWQK
-LXVuaTJhbnNpIChMUFdTVFIgd2NzLCBjaGFyICptYnMpCit1bmkyYW5zaSAo
-TFBXU1RSIHdjcywgY2hhciAqbWJzLCBpbnQgc2l6ZSkKIHsKICAgaWYgKHdj
-cykKLSAgICB3Y3N0b21icyAobWJzLCB3Y3MsICh3Y3NsZW4gKHdjcykgKyAx
-KSAqIHNpemVvZiAoV0NIQVIpKTsKLQorICAgIFdpZGVDaGFyVG9NdWx0aUJ5
-dGUgKENQX0FDUCwgMCwgd2NzLCAtMSwgbWJzLCBzaXplLCBOVUxMLCBOVUxM
-KTsKICAgZWxzZQogICAgICptYnMgPSAnXDAnOwpAQCAtMTQyLDUgKzE0MSw1
-IEBAIGVudW1fbG9jYWxfZ3JvdXBzIChpbnQgcHJpbnRfc2lkcykKIAkgIERX
-T1JEIGdpZDsKIAkgIFNJRF9OQU1FX1VTRSBhY2NfdHlwZTsKLQkgIHVuaTJh
-bnNpIChidWZmZXJbaV0ubGdycGkwX25hbWUsIGxvY2FsZ3JvdXBfbmFtZSk7
-CisJICB1bmkyYW5zaSAoYnVmZmVyW2ldLmxncnBpMF9uYW1lLCBsb2NhbGdy
-b3VwX25hbWUsIHNpemVvZiAobG9jYWxncm91cF9uYW1lKSk7CiAKIAkgIGlm
-ICghTG9va3VwQWNjb3VudE5hbWUgKE5VTEwsIGxvY2FsZ3JvdXBfbmFtZSwg
-cHNpZCwKQEAgLTE5OSw1ICsxOTgsNSBAQCBlbnVtX2dyb3VwcyAoTFBXU1RS
-IHNlcnZlcm5hbWUsIGludCBwcmluCiAKICAgaWYgKHNlcnZlcm5hbWUpCi0g
-ICAgdW5pMmFuc2kgKHNlcnZlcm5hbWUsIGFuc2lfc3J2bmFtZSk7CisgICAg
-dW5pMmFuc2kgKHNlcnZlcm5hbWUsIGFuc2lfc3J2bmFtZSwgc2l6ZW9mIChh
-bnNpX3Nydm5hbWUpKTsKIAogICBkbwpAQCAtMjMzLDUgKzIzMiw1IEBAIGVu
-dW1fZ3JvdXBzIChMUFdTVFIgc2VydmVybmFtZSwgaW50IHByaW4KIAogCSAg
-aW50IGdpZCA9IGJ1ZmZlcltpXS5ncnBpMl9ncm91cF9pZDsKLQkgIHVuaTJh
-bnNpIChidWZmZXJbaV0uZ3JwaTJfbmFtZSwgZ3JvdXBuYW1lKTsKKwkgIHVu
-aTJhbnNpIChidWZmZXJbaV0uZ3JwaTJfbmFtZSwgZ3JvdXBuYW1lLCBzaXpl
-b2YgKGdyb3VwbmFtZSkpOwogICAgICAgICAgIGlmIChwcmludF9zaWRzKQog
-ICAgICAgICAgICAgewpJbmRleDogbWtwYXNzd2QuYwo9PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL3V0aWxz
-L21rcGFzc3dkLmMsdgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuNwpkaWZmIC11
-IC1wIC0yIC1yMS43IG1rcGFzc3dkLmMKLS0tIG1rcGFzc3dkLmMJMjAwMC8x
-Mi8wNyAxMDozMTowMQkxLjcKKysrIG1rcGFzc3dkLmMJMjAwMS8wNC8wOSAx
-ODowMTowMApAQCAtOTMsOSArOTMsOCBAQCBwc3hfZGlyIChjaGFyICppbiwg
-Y2hhciAqb3V0KQogCiB2b2lkCi11bmkyYW5zaSAoTFBXU1RSIHdjcywgY2hh
-ciAqbWJzKQordW5pMmFuc2kgKExQV1NUUiB3Y3MsIGNoYXIgKm1icywgaW50
-IHNpemUpCiB7CiAgIGlmICh3Y3MpCi0gICAgd2NzdG9tYnMgKG1icywgd2Nz
-LCAod2NzbGVuICh3Y3MpICsgMSkgKiBzaXplb2YgKFdDSEFSKSk7Ci0KKyAg
-ICBXaWRlQ2hhclRvTXVsdGlCeXRlIChDUF9BQ1AsIDAsIHdjcywgLTEsIG1i
-cywgc2l6ZSwgTlVMTCwgTlVMTCk7CiAgIGVsc2UKICAgICAqbWJzID0gJ1ww
-JzsKQEAgLTExNCw1ICsxMTMsNSBAQCBlbnVtX3VzZXJzIChMUFdTVFIgc2Vy
-dmVybmFtZSwgaW50IHByaW50CiAKICAgaWYgKHNlcnZlcm5hbWUpCi0gICAg
-dW5pMmFuc2kgKHNlcnZlcm5hbWUsIGFuc2lfc3J2bmFtZSk7CisgICAgdW5p
-MmFuc2kgKHNlcnZlcm5hbWUsIGFuc2lfc3J2bmFtZSwgc2l6ZW9mIChhbnNp
-X3Nydm5hbWUpKTsKIAogICBkbwpAQCAtMTUzLDggKzE1Miw4IEBAIGVudW1f
-dXNlcnMgKExQV1NUUiBzZXJ2ZXJuYW1lLCBpbnQgcHJpbnQKIAkgIGludCB1
-aWQgPSBidWZmZXJbaV0udXNyaTNfdXNlcl9pZDsKIAkgIGludCBnaWQgPSBi
-dWZmZXJbaV0udXNyaTNfcHJpbWFyeV9ncm91cF9pZDsKLQkgIHVuaTJhbnNp
-IChidWZmZXJbaV0udXNyaTNfbmFtZSwgdXNlcm5hbWUpOwotCSAgdW5pMmFu
-c2kgKGJ1ZmZlcltpXS51c3JpM19mdWxsX25hbWUsIGZ1bGxuYW1lKTsKKwkg
-IHVuaTJhbnNpIChidWZmZXJbaV0udXNyaTNfbmFtZSwgdXNlcm5hbWUsIHNp
-emVvZiAodXNlcm5hbWUpKTsKKwkgIHVuaTJhbnNpIChidWZmZXJbaV0udXNy
-aTNfZnVsbF9uYW1lLCBmdWxsbmFtZSwgc2l6ZW9mIChmdWxsbmFtZSkpOwog
-CSAgaG9tZWRpcl93MzJbMF0gPSBob21lZGlyX3BzeFswXSA9ICdcMCc7Ci0J
-ICB1bmkyYW5zaSAoYnVmZmVyW2ldLnVzcmkzX2hvbWVfZGlyLCBob21lZGly
-X3czMik7CisJICB1bmkyYW5zaSAoYnVmZmVyW2ldLnVzcmkzX2hvbWVfZGly
-LCBob21lZGlyX3czMiwgc2l6ZW9mIChob21lZGlyX3czMikpOwogCSAgaWYg
-KHByaW50X2N5Z3BhdGgpCiAJICAgIGN5Z3dpbl9jb252X3RvX3Bvc2l4X3Bh
-dGggKGhvbWVkaXJfdzMyLCBob21lZGlyX3BzeCk7CkBAIC0yNjUsNSArMjY0
-LDUgQEAgZW51bV9sb2NhbF9ncm91cHMgKGludCBwcmludF9zaWRzKQogCSAg
-RFdPUkQgZ2lkOwogCSAgU0lEX05BTUVfVVNFIGFjY190eXBlOwotCSAgdW5p
-MmFuc2kgKGJ1ZmZlcltpXS5sZ3JwaTBfbmFtZSwgbG9jYWxncm91cF9uYW1l
-KTsKKwkgIHVuaTJhbnNpIChidWZmZXJbaV0ubGdycGkwX25hbWUsIGxvY2Fs
-Z3JvdXBfbmFtZSwgc2l6ZW9mIChsb2NhbGdyb3VwX25hbWUpKTsKIAogCSAg
-aWYgKCFMb29rdXBBY2NvdW50TmFtZSAoTlVMTCwgbG9jYWxncm91cF9uYW1l
-LCBwc2lkLAo=
+LS0tIG1vdW50LmNjLTAJVHVlIEFwciAxMCAwODozODo0NCAyMDAxCisrKyBt
+b3VudC5jYwlUdWUgQXByIDEwIDA4OjQ4OjI3IDIwMDEKQEAgLTg3LDYgKzg3
+LDcgQEAgZG9fbW91bnQgKGNvbnN0IGNoYXIgKmRldiwgY29uc3QgY2hhciAq
+dwogCiBzdHJ1Y3Qgb3B0aW9uIGxvbmdvcHRzW10gPQogeworICB7ImhlbHAi
+LCBub19hcmd1bWVudCwgTlVMTCwgJ2gnIH0sCiAgIHsiYmluYXJ5Iiwgbm9f
+YXJndW1lbnQsIE5VTEwsICdiJ30sCiAgIHsiZm9yY2UiLCBub19hcmd1bWVu
+dCwgTlVMTCwgJ2YnfSwKICAgeyJzeXN0ZW0iLCBub19hcmd1bWVudCwgTlVM
+TCwgJ3MnfSwKQEAgLTEwMCw3ICsxMDEsNyBAQCBzdHJ1Y3Qgb3B0aW9uIGxv
+bmdvcHRzW10gPQogICB7TlVMTCwgMCwgTlVMTCwgMH0KIH07CiAKLWNoYXIg
+b3B0c1tdID0gImJmc3R1eFhwaWMiOworY2hhciBvcHRzW10gPSAiaGJmc3R1
+eFhwaWMiOwogCiBzdGF0aWMgdm9pZAogdXNhZ2UgKHZvaWQpCg==
 
-------------=_1583532847-65438-37--
+------------=_1583532847-65438-38
+Content-Type: text/x-diff; charset=us-ascii; name="umount.cc-patch"
+Content-Disposition: inline; filename="umount.cc-patch"
+Content-Transfer-Encoding: base64
+Content-Length: 692
+
+LS0tIHVtb3VudC5jYy0wCVR1ZSBBcHIgMTAgMDg6Mzg6NDQgMjAwMQorKysg
+dW1vdW50LmNjCVR1ZSBBcHIgMTAgMDg6NDk6NDAgMjAwMQpAQCAtMjUsNiAr
+MjUsNyBAQCBzdGF0aWMgY29uc3QgY2hhciAqcHJvZ25hbWU7CiAKIHN0cnVj
+dCBvcHRpb24gbG9uZ29wdHNbXSA9CiB7CisgIHsiaGVscCIsIG5vX2FyZ3Vt
+ZW50LCBOVUxMLCAnaCcgfSwKICAgeyJyZW1vdmUtYWxsLW1vdW50cyIsIG5v
+X2FyZ3VtZW50LCBOVUxMLCAnQSd9LAogICB7InJlbW92ZS1jeWdkcml2ZS1w
+cmVmaXgiLCBub19hcmd1bWVudCwgTlVMTCwgJ2MnfSwKICAgeyJyZW1vdmUt
+c3lzdGVtLW1vdW50cyIsIG5vX2FyZ3VtZW50LCBOVUxMLCAnUyd9LApAQCAt
+MzQsNyArMzUsNyBAQCBzdHJ1Y3Qgb3B0aW9uIGxvbmdvcHRzW10gPQogICB7
+TlVMTCwgMCwgTlVMTCwgMH0KIH07CiAKLWNoYXIgb3B0c1tdID0gIlJTVXN1
+YyI7CitjaGFyIG9wdHNbXSA9ICJoQVNVc3VjIjsKIAogc3RhdGljIHZvaWQK
+IHVzYWdlICh2b2lkKQo=
+
+------------=_1583532847-65438-38--
