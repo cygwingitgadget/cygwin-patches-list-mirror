@@ -1,89 +1,18 @@
-From: egor duda <deo@logos-m.ru>
+From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@sources.redhat.com
-Subject: codepage:oem doesn't affect forkee
-Date: Mon, 11 Jun 2001 13:17:00 -0000
-Message-id: <1805808602.20010612001554@logos-m.ru>
-X-SW-Source: 2001-q2/msg00284.html
-Content-type: multipart/mixed; boundary="----------=_1583532848-65438-64"
+Subject: Re: codepage:oem doesn't affect forkee
+Date: Mon, 11 Jun 2001 14:22:00 -0000
+Message-id: <20010611172255.A16697@redhat.com>
+References: <1805808602.20010612001554@logos-m.ru>
+X-SW-Source: 2001-q2/msg00285.html
 
-This is a multi-part message in MIME format...
+On Tue, Jun 12, 2001 at 12:15:54AM +0400, egor duda wrote:
+>Hi!
+>
+>  File APIs mode is currently set during environment parsing. when
+>process is fork child, current_codepage is taken from parent, but
+>actual OS File APIs mode is set by default. this patch fixes this.
 
-------------=_1583532848-65438-64
-Content-length: 337
+Looks good.  Please check in.
 
-Hi!
-
-  File APIs mode is currently set during environment parsing. when
-process is fork child, current_codepage is taken from parent, but
-actual OS File APIs mode is set by default. this patch fixes this.
-
-egor.            mailto:deo@logos-m.ru icq 5165414 fidonet 2:5020/496.19
-forkee-codepage-init.diff
-forkee-codepage-init.ChangeLog
-
-
-------------=_1583532848-65438-64
-Content-Type: text/plain; charset=us-ascii;
- name="forkee-codepage-init.ChangeLog"
-Content-Disposition: inline; filename="forkee-codepage-init.ChangeLog"
-Content-Transfer-Encoding: base64
-Content-Length: 366
-
-MjAwMS0wNi0xMiAgRWdvciBEdWRhICA8ZGVvQGxvZ29zLW0ucnU+CgoJKiBl
-bnZpcm9uLmNjIChzZXRfZmlsZV9hcGlfbW9kZSk6IE5ldyBmdW5jdGlvbi4g
-TW92ZSBzZXR0aW5nCglvZiBmaWxlIEFQSXMgbW9kZSAoT0VNL0FOU0kpIGhl
-cmUuCgkoY29kZXBhZ2VfaW5pdCk6IEZyb20gaGVyZS4KCSogd2luc3VwLmgg
-KHNldF9maWxlX2FwaV9tb2RlKTogRGVjbGFyZSBpdC4KCSogZm9yay5jYyAo
-Zm9ya19jaGlsZCk6IFNldCBmaWxlIEFQSXMgbW9kZSBpbiBmb3JrZWUuCg==
-
-------------=_1583532848-65438-64
-Content-Type: text/x-diff; charset=us-ascii; name="forkee-codepage-init.diff"
-Content-Disposition: inline; filename="forkee-codepage-init.diff"
-Content-Transfer-Encoding: base64
-Content-Length: 2619
-
-SW5kZXg6IGVudmlyb24uY2MKPT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1Mg
-ZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vZW52aXJvbi5jYyx2
-CnJldHJpZXZpbmcgcmV2aXNpb24gMS41MApkaWZmIC11IC1wIC0yIC1yMS41
-MCBlbnZpcm9uLmNjCi0tLSBlbnZpcm9uLmNjCTIwMDEvMDUvMTEgMDM6Mjc6
-MjIJMS41MAorKysgZW52aXJvbi5jYwkyMDAxLzA2LzExIDIwOjA3OjE3CkBA
-IC00MjQsNCArNDI0LDE5IEBAIGNoZWNrX2Nhc2VfaW5pdCAoY29uc3QgY2hh
-ciAqYnVmKQogfQogCit2b2lkCitzZXRfZmlsZV9hcGlfbW9kZSAoY29kZXBh
-Z2VfdHlwZSBjcCkKK3sKKyAgaWYgKGNwID09IG9lbV9jcCkKKyAgICB7Cisg
-ICAgICBTZXRGaWxlQXBpc1RvT0VNICgpOworICAgICAgZGVidWdfcHJpbnRm
-ICgiRmlsZSBBUElzIHNldCB0byBPRU0iKTsKKyAgICB9CisgIGVsc2UgaWYg
-KGNwID09IGFuc2lfY3ApCisgICAgeworICAgICAgU2V0RmlsZUFwaXNUb0FO
-U0kgKCk7CisgICAgICBkZWJ1Z19wcmludGYgKCJGaWxlIEFQSXMgc2V0IHRv
-IEFOU0kiKTsKKyAgICB9Cit9CisKIHN0YXRpYyB2b2lkCiBjb2RlcGFnZV9p
-bml0IChjb25zdCBjaGFyICpidWYpCkBAIC00MzMsMTIgKzQ0OCwxMCBAQCBj
-b2RlcGFnZV9pbml0IChjb25zdCBjaGFyICpidWYpCiAgICAgewogICAgICAg
-Y3VycmVudF9jb2RlcGFnZSA9IG9lbV9jcDsKLSAgICAgIFNldEZpbGVBcGlz
-VG9PRU0gKCk7Ci0gICAgICBkZWJ1Z19wcmludGYgKCJGaWxlIEFQSXMgc2V0
-IHRvIE9FTSIpOworICAgICAgc2V0X2ZpbGVfYXBpX21vZGUgKGN1cnJlbnRf
-Y29kZXBhZ2UpOwogICAgIH0KICAgZWxzZSBpZiAoc3RyY21wIChidWYsICJh
-bnNpIik9PSAwKQogICAgIHsKICAgICAgIGN1cnJlbnRfY29kZXBhZ2UgPSBh
-bnNpX2NwOwotICAgICAgU2V0RmlsZUFwaXNUb0FOU0kgKCk7Ci0gICAgICBk
-ZWJ1Z19wcmludGYgKCJGaWxlIEFQSXMgc2V0IHRvIEFOU0kiKTsKKyAgICAg
-IHNldF9maWxlX2FwaV9tb2RlIChjdXJyZW50X2NvZGVwYWdlKTsKICAgICB9
-CiAgIGVsc2UKSW5kZXg6IGZvcmsuY2MKPT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vZm9yay5j
-Yyx2CnJldHJpZXZpbmcgcmV2aXNpb24gMS40NwpkaWZmIC11IC1wIC0yIC1y
-MS40NyBmb3JrLmNjCi0tLSBmb3JrLmNjCTIwMDEvMDUvMjAgMDE6MTk6MjAJ
-MS40NworKysgZm9yay5jYwkyMDAxLzA2LzExIDIwOjA3OjE3CkBAIC0yNzIs
-NCArMjcyLDYgQEAgZm9ya19jaGlsZCAoSEFORExFJiBoUGFyZW50LCBkbGwg
-KiZmaXJzdAogICAgIH0KIAorICBzZXRfZmlsZV9hcGlfbW9kZSAoY3VycmVu
-dF9jb2RlcGFnZSk7CisKICAgTUFMTE9DX0NIRUNLOwogCkluZGV4OiB3aW5z
-dXAuaAo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3Ny
-Yy9zcmMvd2luc3VwL2N5Z3dpbi93aW5zdXAuaCx2CnJldHJpZXZpbmcgcmV2
-aXNpb24gMS41NgpkaWZmIC11IC1wIC0yIC1yMS41NiB3aW5zdXAuaAotLS0g
-d2luc3VwLmgJMjAwMS8wNS8wNCAyMTowMjoxNQkxLjU2CisrKyB3aW5zdXAu
-aAkyMDAxLzA2LzExIDIwOjA3OjMwCkBAIC0xNjMsNCArMTYzLDYgQEAgZXh0
-ZXJuICJDIiB2b2lkIGVycm9yX3N0YXJ0X2luaXQgKGNvbnN0IAogZXh0ZXJu
-ICJDIiBpbnQgdHJ5X3RvX2RlYnVnIChib29sIHdhaXRsb29wID0gMSk7CiAK
-K3ZvaWQgc2V0X2ZpbGVfYXBpX21vZGUgKGNvZGVwYWdlX3R5cGUpOworCiBl
-eHRlcm4gaW50IGN5Z3dpbl9maW5pc2hlZF9pbml0aWFsaXppbmc7CiAK
-
-------------=_1583532848-65438-64--
+cgf
