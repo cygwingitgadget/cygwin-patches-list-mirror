@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5240-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 13426 invoked by alias); 17 Dec 2004 21:00:41 -0000
+Return-Path: <cygwin-patches-return-5241-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 5819 invoked by alias); 17 Dec 2004 23:01:17 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,53 +7,75 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 13353 invoked from network); 17 Dec 2004 21:00:35 -0000
-Received: from unknown (HELO green.qinip.net) (62.100.30.36)
-  by sourceware.org with SMTP; 17 Dec 2004 21:00:35 -0000
-Received: from buzzy-box (hmm-dca-ap02-d05-015.dial.freesurf.nl [195.18.78.15])
-	by green.qinip.net (Postfix) with SMTP
-	id 33AD344B2; Fri, 17 Dec 2004 21:59:57 +0100 (MET)
-Message-ID: <n2m-g.cpvkqo.3vvegs9.1@buzzy-box.bavag>
-From: Bas van Gompel <cygwin-patches.buzz@bavag.tmfweb.nl>
-Subject: Re: [Patch] cygcheck: eprintf + display_error: Do /something/.
-References: <n2m-g.cpt7kf.3vvb68n.1@buzzy-box.bavag> <20041217020205.GA26712@trixie.casa.cgf.cx> <n2m-g.cptl2c.3vvd6ov.1@buzzy-box.bavag> <20041217025607.GE26712@trixie.casa.cgf.cx> <n2m-g.cptncf.3vv6gv7.1@buzzy-box.bavag> <20041217061932.GH26712@trixie.casa.cgf.cx> <n2m-g.cpu9so.3vvckrb.1@buzzy-box.bavag> <20041217094301.GG9277@cygbert.vinschen.de>
-Reply-To: cygwin-patches mailing-list <cygwin-patches@cygwin.com>
-Organisation: Ehm...
-User-Agent: slrn/0.9.8.1 (Win32) Hamster/2.0.6.0 Korrnews/4.2
+Received: (qmail 5771 invoked from network); 17 Dec 2004 23:01:09 -0000
+Received: from unknown (HELO apmail1.astralpoint.com) (65.114.186.130)
+  by sourceware.org with SMTP; 17 Dec 2004 23:01:09 -0000
+Received: from [127.0.0.1] (helo=phumblet.no-ip.org)
+	by usched40576.usa1ma.alcatel.com with esmtp (Exim 4.43)
+	id I8W2LT-0000DY-NQ
+	for cygwin-patches@cygwin.com; Fri, 17 Dec 2004 18:01:05 -0500
+Message-ID: <41C36530.89F5A621@phumblet.no-ip.org>
+Date: Fri, 17 Dec 2004 23:01:00 -0000
+From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
+Reply-To: pierre.humblet@ieee.org
+MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
-In-Reply-To: <20041217094301.GG9277@cygbert.vinschen.de>
-Date: Fri, 17 Dec 2004 21:00:00 -0000
-X-SW-Source: 2004-q4/txt/msg00241.txt.bz2
+Subject: Re: Patch to allow trailing dots on managed mounts
+References: <41C1A1F4.CD3CC833@phumblet.no-ip.org> <20041216150040.GA23488@trixie.casa.cgf.cx> <20041216155339.GA16474@cygbert.vinschen.de> <20041216155707.GG23488@trixie.casa.cgf.cx> <20041216160322.GC16474@cygbert.vinschen.de> <3.0.5.32.20041216220441.0082a400@incoming.verizon.net> <20041217032627.GF26712@trixie.casa.cgf.cx> <3.0.5.32.20041216224347.0082d210@incoming.verizon.net> <20041217061741.GG26712@trixie.casa.cgf.cx> <41C31496.4D9140C7@phumblet.no-ip.org> <20041217175649.GA1237@trixie.casa.cgf.cx>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2004-q4/txt/msg00242.txt.bz2
 
-Op Fri, 17 Dec 2004 10:43:01 +0100 schreef Corinna Vinschen
-in <20041217094301.GG9277@cygbert.vinschen.de>:
-:  On Dec 17 09:46, Bas van Gompel wrote:
-: > Op Fri, 17 Dec 2004 01:19:32 -0500 schreef Christopher Faylor
-: > in <20041217061932.GH26712@trixie.casa.cgf.cx>:
-[...]
-: > :   Ok.  I don't see any reason to check for ttyness, then.  If this is an issue
-: > :  then lets just flush stdout prior to doing anything with stderr.  Flushing
-: > :  stderr should always be a no-op.
-: >
-: > It isn't (a no-op). (See the snippet in my previous mail.) Is this a
-: > difference between cygwin and mingw, maybe?
-:
-:  Hmm, if stderr is not unbuffered in mingw, then that should be fixed
-:  in mingw, shouldn't it?
+Christopher Faylor wrote:
 
-I guess so...
+> While I detest the trailing dot crap, I don't want cygwin to be inconsistent.
+> I don't want ls /bin./ls.exe to fail but ls /cygdrive/c/bin./ls.exe to work.
 
-I'll try and look into this, if noone else does.
+Assuming a normal install, the first one is c:\cygwin\bin.\ls.exe,
+which would NOT fail, while the second is c:\bin.\ls.exe, which would
+fail as expected (not due to dots).
 
-What about the patch? It shouldn't hurt, and the flush of stderr can
-be removed, once this has been fixed in mingw.
+You probably mean /usr/bin./ls.exe (fail) vs. /cygdrive/c/cygwin/bin./ls.exe
+(no fail, although NtCreateFile fails and Cygwin backs off to alternate code).
+Cygwin has always behaved that way (still does), without generating
+complaints about inconsistencies. 
 
+We can't fix Windows, but I don't see why we should add processing 
+to disallow behavior that it allows, or mimic its crazy behavior
+when we don't have to.
 
-L8r,
+> I'm not sure that it makes sense for ln -s foo "bar." to actually create a file
+> with a trailing dot on a non-managed mount either.  That seems to expose an
+> implementation detail of the way links are handled and it seems inconsistent
+> to me.
 
-Buzz.
--- 
-  ) |  | ---/ ---/  Yes, this | This message consists of true | I do not
---  |  |   /    /   really is |   and false bits entirely.    | mail for
-  ) |  |  /    /    a 72 by 4 +-------------------------------+ any1 but
---  \--| /--- /---  .sigfile. |   |perl -pe "s.u(z)\1.as."    | me. 4^re
+Perhaps, but nobody has complained about it over the years!
+Look at it positively: Cygwin can implement symbolic link names in a Posix
+way, without tail dot/space limitations. Ditto with /proc/registry.
+Actually if one is porting some code that has a hardcoded filename ending
+with a dot, it's nice to have a simple way (symbolic link to valid Windows
+name) of making it work.
+
+> If we are "fixing" this (I firmly believe that the code in path_conv is never
+> really going to be right) then I don't want to add inconsistencies.
+
+I agree that path_conv is never going to be "right". I would 
+not reduce functionality nor open new holes merely to reduce 
+inconsistencies due to Windows.
+
+Would it be better to eliminate the inconsistency by allowing 
+ls /usr/bin./ls.exe (and how many dots? spaces?) or by disallowing 
+ls /cygdrive/c/cygwin/bin./ls.exe (and ls c:/cygwin/bin./ls.exe) ? 
+I can argue either way, with a preference for disallowing
+(to avoid accidental aliasing, although it breaks precedent,
+and because on NT, "touch /cygdrive/c/cygwin/bin./ls.exe" fails
+naturally).
+Overall I would leave the inconsistency as it is, and blame it
+on Windows and on Cygwin tradition.
+
+There are repeated complaints about /usr/bin/somefile not having the
+same binary/text mode as /cygdrive/c/cygwin/bin/somefile or 
+c:\cygwin\bin\somefile. We rightly dismiss them, although that can
+be seen as an inconsistency, and it's purely a Cygwin issue. 
+
+Pierre
