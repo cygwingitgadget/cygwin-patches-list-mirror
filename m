@@ -1,38 +1,27 @@
-From: "Town, Brad" <btown@ceddec.com>
-To: "'cygpatch'" <cygwin-patches@cygwin.com>
-Subject: RE: Mouse support
-Date: Mon, 04 Dec 2000 08:06:00 -0000
-Message-id: <F10D23B02E54D011A0AB0020AF9CEFE988FA81@lynx.ceddec.com>
-X-SW-Source: 2000-q4/msg00037.html
+From: Egor Duda <deo@logos-m.ru>
+To: Christopher Faylor <cygwin-patches@cygwin.com>
+Subject: Re: oem/ansi codepage support
+Date: Mon, 04 Dec 2000 08:18:00 -0000
+Message-id: <71165146488.20001204191621@logos-m.ru>
+References: <129109438394.20001129174705@logos-m.ru> <20001202000129.C4544@redhat.com>
+X-SW-Source: 2000-q4/msg00038.html
 
-Corinna Vinschen [ mailto:vinschen@redhat.com ] wrote:
-> "Town, Brad" wrote:
-> > I tried adding a member variable to fhandler_console to flag
-> > whether or not the mouse should be used, but it gets called 
-> by a different
-> > instance of fhandler_console.
-> > 
-> > My enable/disable code works if the mouse flag is a global 
-> static variable,
-> > but I don't think that's the Right Thing to Do.  Hints?
-> 
-> Sure. Create the member variable again and care for copying it
-> to the next instance via fhandler_console::dup(). I guess that
-> should work.
+Hi!
 
-Hmm.  I had tried that, but it didn't work.  I'm guessing that it's because
-the console is duped before the mouse is enabled; enabling the mouse within
-the "main" fhandler_console instance doesn't enable it in the "foreground"
-fhandler_console instance.  (I'm probably way off in both my understanding
-and my terminology here.)
+Saturday, 02 December, 2000 Christopher Faylor cgf@redhat.com wrote:
 
-What should the behavior be?  Should enabling the mouse in one console
-instance enable it in all?  After all, there really is only one console,
-right?  Or should it enable it in the "foreground" fhandler_console
-instance?
+CF> The patch looks good but isn't there an LC_something environment
+CF> variable that is equivalent to this on Linux.
 
-With the global-flag code, hitting ^Z during a mouse-enabled ncurses program
-disables the mouse, and typing "fg" in bash reenables it.  Maybe a global
-flag isn't the wrong way to go.  (Sure feels like it, though.)
+CF> If so, I would like to use that (even though I suggested using the Cygwin
+CF> env variable).
 
-Brad
+i agree  with Kazuhiro here. My patch is dealing with "kernel" part of
+cygwin.  On  Linux,  filesystem  translations  are controlled by mount
+options   and   console is controlled via driver's ioctl. so, i think,
+CYGWIN variable is more adequate than LC_* here.
+
+I'm not sure about globbing code in winsup/cygwin/miscfuncs.cc, though.
+
+Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
+
