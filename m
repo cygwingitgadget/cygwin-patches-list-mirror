@@ -1,49 +1,32 @@
-From: Corinna Vinschen <corinna@vinschen.de>
-To: cygpatch <cygwin-patches@sourceware.cygnus.com>
-Subject: [PATCH]: Changes in process startup code
-Date: Mon, 19 Jun 2000 10:55:00 -0000
-Message-id: <394E5E78.FC4D70F@vinschen.de>
-X-SW-Source: 2000-q2/msg00109.html
+From: Earnie Boyd <earnie_boyd@yahoo.com>
+To: Corinna Vinschen <corinna@vinschen.de>, cygpatch <cygwin-patches@sourceware.cygnus.com>
+Subject: Re: [PATCH]: uinfo.cc or "all commands start soooooow slow"
+Date: Wed, 21 Jun 2000 20:00:00 -0000
+Message-id: <20000622030046.25151.qmail@web124.yahoomail.com>
+X-SW-Source: 2000-q2/msg00110.html
 
-I have just checked in a patch which adds the following
-features to cygwin when running on NT/W2K:
+--- Corinna Vinschen <corinna@vinschen.de> wrote:
+> 
+> I have found that on NT/W2K systems that functions are called,
+> regardless of the ntsec setting. My patch fixes that.
+> 
 
-- User SID is now only retrieved if ntsec is ON.
+Yep, sure did.  Thanks for the patch.  I've just tested this with my laptop
+unplugged from the domain controller.  Much improved.  Do I hear a cygwin-1.1.3
+in the near future?
 
-That should result in a considerable speed up if ntsec is OFF.
+Cheers,
 
-- User logon informations are now only retrieved on the
-  first parent process or if the user context changes
-  (eg. via sshd, ftpd, login).
-- First the code tries to get that information from the
-  localhost and only if that failes, it tries to get them
-  from the logon server.
+=====
+---
+   Earnie Boyd: < mailto:earnie_boyd@yahoo.com >
+            __Cygwin: POSIX on Windows__
+Cygwin Newbies: < http://www.freeyellow.com/members5/gw32/index.html >
+           __Minimalist GNU for Windows__
+  Mingw32 List: < http://www.egroups.com/group/mingw32/ >
+    Mingw Home: < http://www.mingw.org/ >
 
-Advantage of the above patches should be a considerable
-speed up with ntsec ON and at least some speed up with
-ntsec OFF.
-
-- If user context changes, the environment is adjusted.
-  The following variable are changed according to the new
-  user:
-
-	HOMEDRIVE
-	HOMEPATH
-	LOGONSERVER
-	USERDOMAIN
-	USERNAME
-	USERPROFILE
-
-- If a new process is spawned in a new user context
-  (CreateProcessAsUser), the dll tries to load the users
-  registry hive.
-
-  Advantage: Each user has it's own mount points also when
-  logged on via telnet/ssh etc.
-
-  Disadvantage: Changes made to the users registry hive
-  in a telnet/ssh session are lost on reboot because there's
-  currently no code which would be able to save the hive
-  back again. 
-
-COrinna
+__________________________________________________
+Do You Yahoo!?
+Send instant messages with Yahoo! Messenger.
+http://im.yahoo.com/
