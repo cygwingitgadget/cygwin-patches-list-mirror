@@ -1,31 +1,21 @@
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: RFP : shell defaults
-Date: Sun, 16 Dec 2001 09:26:00 -0000
-Message-ID: <20011216172634.GF28210@redhat.com>
-References: <104801c18603$c811fb10$0200a8c0@lifelesswks> <Pine.LNX.4.21.0112161721240.2658-100000@lupus.ago.vpn>
-X-SW-Source: 2001-q4/msg00325.html
-Message-ID: <20011216092600.I2kLWASS7_qlypd846VXQ_1ujtHEl49YPaEjl-9ItFs@z>
+From: "Robert Collins" <robert.collins@itdomain.com.au>
+To: <cygwin-patches@cygwin.com>, "Jan Nieuwenhuizen" <janneke@gnu.org>
+Subject: Re: setup.exe remove scripts [Was: Re: experimental texmf packages]
+Date: Sun, 16 Dec 2001 15:42:00 -0000
+Message-ID: <15c601c1868b$543c7930$0200a8c0@lifelesswks>
+References: <m3bshtmxhb.fsf@appel.lilypond.org> <878764062.20011128173421@nyckelpiga.de> <m37ks9lgxi.fsf@appel.lilypond.org> <4434079433.20011129221637@familiehaase.de> <m3oflgy98n.fsf@appel.lilypond.org> <9517228633.20011203135833@familiehaase.de> <m3lmgkwgeu.fsf@appel.lilypond.org> <3C0D8535.D67735D1@ece.gatech.edu> <m33d2pam3l.fsf@appel.lilypond.org> <00d501c17d93$1936c990$0200a8c0@lifelesswks> <m3zo4x7obb.fsf@appel.lilypond.org> <m38zcdssxd.fsf@appel.lilypond.org> <01a801c18036$3d447350$0200a8c0@lifelesswks> <m3itbhqowz.fsf@appel.lilypond.org> <027001c18040$c91651f0$0200a8c0@lifelesswks> <m3wuzth3l1.fsf@appel.lilypond.org> <04db01c18302$e66cae60$0200a8c0@lifelesswks> <m3667ax540.fsf@appel.lilypond.org> <105201c18604$ea001670$0200a8c0@lifelesswks> <3C1CB581.7E2DF6E3@yahoo.com> <m31yhv9lh1.fsf@appel.lilypond.org>
+X-SW-Source: 2001-q4/msg00326.html
+Message-ID: <20011216154200.8RQO89x-mBgrdT0_F6tfgElJjTvSoyzpsZSQaQKdWIE@z>
 
-On Sun, Dec 16, 2001 at 05:25:11PM +0100, Alexander Gottwald wrote:
->On Sun, 16 Dec 2001, Robert Collins wrote:
->> If someone wants to follow my notes in reply to Corinna and create a
->> shell defaults package, that would be great. AFAIK all distro's generate
->> a very simply prompt for you, and then leave it up to you.
+Strangely enough, building from CVS works fine for me - w32api seems
+fine.
+
+----- Original Message -----
+From: "Jan Nieuwenhuizen" <janneke@gnu.org>
+...
+> > Can you remind me as to what's broke?
 >
->One thing that might be useful: 
->
->SuSE Linux sets PROFILEREAD=yes as first thing in /etc/profile and
->all $HOME/.profile depend on this and read /etc/profile if this is
->not set. 
->
->Running cygwin and accessing homes on a SuSE box will fall into an 
->never ending loop.
+> From an earlier mail (haven't checked latest cvs):
 
-And, it sounds like (possibly) running Mandrake linux and accessing home
-on a SuSE box will fall into an infinite loop, and (definitely) running
-Red Hat will do so.
 
-This sounds like a dubious feature to me.
-
-cgf
+Rob
