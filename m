@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2868-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 15466 invoked by alias); 26 Aug 2002 14:00:27 -0000
+Return-Path: <cygwin-patches-return-2869-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 2710 invoked by alias); 26 Aug 2002 17:56:56 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,346 +7,288 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 15451 invoked from network); 26 Aug 2002 14:00:26 -0000
-Message-ID: <015b01c24d09$50499840$6132bc3e@BABEL>
-From: "Conrad Scott" <Conrad.Scott@dsl.pipex.com>
-To: <cygwin-patches@cygwin.com>
-Subject: fhandler_socket & sigframe patch
-Date: Mon, 26 Aug 2002 07:00:00 -0000
+Received: (qmail 2685 invoked from network); 26 Aug 2002 17:56:54 -0000
+Date: Mon, 26 Aug 2002 10:56:00 -0000
+From: Bart Oldeman <bart.oldeman@btinternet.com>
+X-X-Sender:  <enbeo@enm-bo-lt.enm.bris.ac.uk>
+To: =?iso-8859-1?q?Danny=20Smith?= <danny_r_smith_2001@yahoo.co.nz>
+cc:  <cygwin-patches@cygwin.com>
+Subject: Re: [PATCH] winsock related changes for w32api
+In-Reply-To: <20020826084803.41470.qmail@web14504.mail.yahoo.com>
+Message-ID: <Pine.LNX.4.33.0208261813120.17877-100000@enm-bo-lt.enm.bris.ac.uk>
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
-	boundary="----=_NextPart_000_0158_01C24D11.B1921980"
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-SW-Source: 2002-q3/txt/msg00316.txt.bz2
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-SW-Source: 2002-q3/txt/msg00317.txt.bz2
 
-This is a multi-part message in MIME format.
+On Mon, 26 Aug 2002, Danny Smith wrote:
 
-------=_NextPart_000_0158_01C24D11.B1921980
-Content-Type: text/plain;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: 7bit
-Content-length: 804
+> No it is not fine. We need explict A and W SERVICE_INFO structure definitions.
 
-Another batch of stuff from the pit:
+OK - I see what you mean and corrected that now.
 
-The fhandler_socket class is unique in that many of its methods
-contain a sigframe.  None of the other fhandler classes do this;
-instead the sigframe is in the system call itself (in syscalls.cc
-or wherever).
+> This is not fine either. Did you read the FIXME in winsock2.h next to include
+> #<nspapi.h.>  My reading of the Windows Sockest 2.2 spec is that is not meant
+> to depend on other api's.
+>
+> The FIXME refers to getting rid of dependence of winsock on service provider
+> api, not reinforcing that dependence
 
-Attached is a patch to move these declarations from the
-fhandler_socket methods into the relevant functions, mostly in
-net.cc; I've also had to add one to the ioctl system call in
-ioctl.cc.
+I tried addressing what the FIXME said, by defining a __CSADDR_T_DEFINED
+guard.
 
-Apart from the *important* and *critical* reasons of beauty and
-consistency :-), another excuse for the change is that there are
-occasionally two sigframe's, e.g. in fhandler_close() where one
-already exists in syscalls.cc close().  Maybe not important but .
-. .
+third try...
 
-I've also swept up a couple more strace touch-ups that my last
-patch missed out.
+Bart
 
-Enjoy!
+2002-08-26  Bart Oldeman  <bart.oldeman@btinternet.com>
 
-// Conrad
+        * include/winsock2.h (SOCKET_ADDRESS): define if
+	__CSADDR_T_DEFINED is not defined (copied from nspapi.h). Removed
+	FIXME comment.
+        (CSADDR_INFO): Ditto.
+        * include/nspapi.h (SOCKET_ADDRESS) Only define if
+	__CSADDR_T_DEFINED is not defined.
+	(CSADDR_INFO): Ditto.
+        (BLOB): Added structure and typedef if not already defined.
+        (NS_*): Add defines.
+        (SERVICE_*): Ditto.
+        (SERVICE_ADDRESS): Add structure and typedefs.
+        (SERVICE_ADDRESSES): Ditto.
+        (SERVICE_INFO[AW]): Ditto, and add UNICODE mappings.
+        (LPSERVICE_ASYNC_INFO): Add typedef.
+        (SetService[AW], GetAddressByName[AW]): Add prototypes and UNICODE
+	mappings.
+        * include/wsipx.h: New file.
+        * include/svcguid.h: New file.
 
-
-------=_NextPart_000_0158_01C24D11.B1921980
-Content-Type: text/plain;
-	name="ChangeLog.txt"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
-	filename="ChangeLog.txt"
-Content-length: 882
-
-2002-08-26  Conrad Scott  <conrad.scott@dsl.pipex.com>
-
-	* fhandler_socket.cc (fhandler_socket::check_peer_secret_event):
-	Fix strace message.
-	(fhandler_socket::connect): Remove sigframe.
-	(fhandler_socket::accept): Ditto.
-	(fhandler_socket::getsockname): Ditto.
-	(fhandler_socket::getpeername): Ditto.
-	(fhandler_socket::recvfrom): Ditto.
-	(fhandler_socket::recvmsg): Ditto.
-	(fhandler_socket::sendto): Ditto.
-	(fhandler_socket::sendmsg): Ditto.
-	(fhandler_socket::close): Ditto.
-	(fhandler_socket::ioctl): Ditto.
-	* ioctl.cc (ioctl): Add sigframe.
-	*net.cc (cygwin_sendto): Ditto.
-	(cygwin_recvfrom): Ditto.
-	(cygwin_recvfrom): Ditto.
-	(cygwin_connect): Ditto.
-	(cygwin_shutdown): Ditto.
-	(cygwin_getpeername): Ditto.
-	(cygwin_accept): Ditto.  Improve strace message.
-	(cygwin_getsockname): Ditto.  Ditto.
-	(cygwin_recvmsg): Ditto.  Ditto.
-	(cygwin_sendmsg): Fix strace message.
-
-------=_NextPart_000_0158_01C24D11.B1921980
-Content-Type: text/plain;
-	name="sigframe.patch.txt"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment;
-	filename="sigframe.patch.txt"
-Content-length: 7482
-
-Index: fhandler_socket.cc
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-RCS file: /cvs/src/src/winsup/cygwin/fhandler_socket.cc,v
-retrieving revision 1.59
-diff -u -p -r1.59 fhandler_socket.cc
---- fhandler_socket.cc	26 Aug 2002 09:57:26 -0000	1.59
-+++ fhandler_socket.cc	26 Aug 2002 13:49:19 -0000
-@@ -203,7 +203,7 @@ fhandler_socket::check_peer_secret_event
-   ev =3D CreateEvent (&sec_all_nih, FALSE, FALSE, buf);
-   if (!ev && GetLastError () =3D=3D ERROR_ALREADY_EXISTS)
-     {
--      debug_printf ("%s event already exist");
-+      debug_printf ("event \"%s\" already exists", buf);
-       ev =3D OpenEvent (EVENT_ALL_ACCESS, FALSE, buf);
-     }
-=20
-@@ -406,8 +406,6 @@ fhandler_socket::connect (const struct s
-   sockaddr_in sin;
-   int secret [4];
-=20
--  sigframe thisframe (mainthread);
--
-   if (!get_inet_addr (name, namelen, &sin, &namelen, secret))
-     return -1;
-=20
-@@ -486,8 +484,6 @@ fhandler_socket::accept (struct sockaddr
-   BOOL secret_check_failed =3D FALSE;
-   BOOL in_progress =3D FALSE;
-=20
--  sigframe thisframe (mainthread);
--
-   /* Allows NULL peer and len parameters. */
-   struct sockaddr_in peer_dummy;
-   int len_dummy;
-@@ -624,8 +620,6 @@ fhandler_socket::getsockname (struct soc
- {
-   int res =3D -1;
-=20
--  sigframe thisframe (mainthread);
--
-   if (get_addr_family () =3D=3D AF_LOCAL)
-     {
-       struct sockaddr_un *sun =3D (struct sockaddr_un *) name;
-@@ -659,8 +653,6 @@ fhandler_socket::getsockname (struct soc
- int
- fhandler_socket::getpeername (struct sockaddr *name, int *namelen)
- {
--  sigframe thisframe (mainthread);
--
-   int res =3D ::getpeername (get_socket (), name, namelen);
-   if (res)
-     set_winsock_errno ();
-@@ -682,8 +674,6 @@ fhandler_socket::recvfrom (void *ptr, si
-   wsock_event wsock_evt;
-   LPWSAOVERLAPPED ovr;
-=20
--  sigframe thisframe (mainthread);
--
-   if (is_nonblocking () || !(ovr =3D wsock_evt.prepare ()))
-     {
-       debug_printf ("Fallback to winsock 1 recvfrom call");
-@@ -723,8 +713,6 @@ fhandler_socket::recvmsg (struct msghdr=20
-   char *buf, *p;
-   struct iovec *iov =3D msg->msg_iov;
-=20
--  sigframe thisframe (mainthread);
--
-   if (get_addr_family () =3D=3D AF_LOCAL)
-     {
-       /* On AF_LOCAL sockets the (fixed-size) name of the shared memory
-@@ -771,8 +759,6 @@ fhandler_socket::sendto (const void *ptr
-   LPWSAOVERLAPPED ovr;
-   sockaddr_in sin;
-=20
--  sigframe thisframe (mainthread);
--
-   if (to && !get_inet_addr (to, tolen, &sin, &tolen))
-     return -1;
-=20
-@@ -844,8 +830,6 @@ fhandler_socket::sendmsg (const struct m
- int
- fhandler_socket::shutdown (int how)
- {
--  sigframe thisframe (mainthread);
--
-   int res =3D ::shutdown (get_socket (), how);
-=20
-   if (res)
-@@ -872,8 +856,6 @@ fhandler_socket::close ()
- {
-   int res =3D 0;
-=20
--  sigframe thisframe (mainthread);
--
-   /* HACK to allow a graceful shutdown even if shutdown() hasn't been
-      called by the application. Note that this isn't the ultimate
-      solution but it helps in many cases. */
-@@ -915,8 +897,6 @@ fhandler_socket::ioctl (unsigned int cmd
-   int res;
-   struct ifconf ifc, *ifcp;
-   struct ifreq *ifr, *ifrp;
--
--  sigframe thisframe (mainthread);
-=20
-   switch (cmd)
-     {
-Index: ioctl.cc
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-RCS file: /cvs/src/src/winsup/cygwin/ioctl.cc,v
-retrieving revision 1.15
-diff -u -p -r1.15 ioctl.cc
---- ioctl.cc	13 Jan 2002 20:03:03 -0000	1.15
-+++ ioctl.cc	26 Aug 2002 13:49:19 -0000
-@@ -20,11 +20,14 @@ details. */
- #include "path.h"
- #include "dtable.h"
- #include "cygheap.h"
-+#include "sigproc.h"
- #include <sys/termios.h>
-=20
- extern "C" int
- ioctl (int fd, int cmd, ...)
- {
-+  sigframe thisframe (mainthread);
+Index: include/nspapi.h
+===================================================================
+RCS file: /cvs/src/src/winsup/w32api/include/nspapi.h,v
+retrieving revision 1.2
+diff -u -r1.2 nspapi.h
+--- include/nspapi.h	9 Mar 2002 09:04:09 -0000	1.2
++++ include/nspapi.h	26 Aug 2002 17:46:23 -0000
+@@ -7,6 +7,39 @@
+ #ifdef __cplusplus
+ extern "C" {
+ #endif
 +
-   cygheap_fdget cfd (fd);
-   if (cfd < 0)
-     return -1;
-Index: net.cc
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-RCS file: /cvs/src/src/winsup/cygwin/net.cc,v
-retrieving revision 1.122
-diff -u -p -r1.122 net.cc
---- net.cc	26 Aug 2002 09:57:26 -0000	1.122
-+++ net.cc	26 Aug 2002 13:49:19 -0000
-@@ -568,6 +568,8 @@ cygwin_sendto (int fd, const void *buf,=20
- 	       const struct sockaddr *to, int tolen)
- {
-   int res;
-+  sigframe thisframe (mainthread);
++#define NS_ALL		0
 +
-   fhandler_socket *fh =3D get (fd);
-=20
-   if ((len && __check_invalid_read_ptr_errno (buf, (unsigned) len))
-@@ -589,6 +591,8 @@ cygwin_recvfrom (int fd, void *buf, int=20
- 		 struct sockaddr *from, int *fromlen)
- {
-   int res;
-+  sigframe thisframe (mainthread);
++#define NS_SAP		1
++#define NS_NDS		2
++#define NS_PEER_BROWSE	3
 +
-   fhandler_socket *fh =3D get (fd);
-=20
-   if ((len && __check_null_invalid_struct_errno (buf, (unsigned) len))
-@@ -742,6 +746,8 @@ extern "C" int
- cygwin_connect (int fd, const struct sockaddr *name, int namelen)
- {
-   int res;
-+  sigframe thisframe (mainthread);
++#define NS_TCPIP_LOCAL	10
++#define NS_TCPIP_HOSTS	11
++#define NS_DNS		12
++#define NS_NETBT	13
++#define NS_WINS		14
 +
-   fhandler_socket *fh =3D get (fd);
-=20
-   if (__check_invalid_read_ptr_errno (name, namelen) || !fh)
-@@ -1002,6 +1008,8 @@ extern "C" int
- cygwin_accept (int fd, struct sockaddr *peer, int *len)
- {
-   int res;
-+  sigframe thisframe (mainthread);
++#define NS_NBP		20
 +
-   fhandler_socket *fh =3D get (fd);
-=20
-   if ((peer && (check_null_invalid_struct_errno (len)
-@@ -1011,7 +1019,7 @@ cygwin_accept (int fd, struct sockaddr *
-   else
-     res =3D fh->accept (peer, len);
-=20
--  syscall_printf ("%d =3D accept (%d, %p, %d)", res, fd, peer, len);
-+  syscall_printf ("%d =3D accept (%d, %p, %p)", res, fd, peer, len);
-   return res;
++#define NS_MS		30
++#define NS_STDA		31
++#define NS_NTDS		32
++
++#define NS_X500		40
++#define NS_NIS		41
++#define NS_NISPLUS	42
++
++#define NS_WRQ		50
++
++#define SERVICE_REGISTER	1
++#define SERVICE_DEREGISTER	2
++#define SERVICE_FLUSH		3
++#define SERVICE_FLAG_HARD	0x00000002
++
++#if defined (_WINSOCK_H) || defined (_WINSOCK2_H) /* needed for LPSOCKADDR */
++#ifndef __CSADDR_T_DEFINED /* also in winsock2.h, but not in winsock.h */
++#define __CSADDR_T_DEFINED
+ typedef struct _SOCKET_ADDRESS {
+ 	LPSOCKADDR lpSockaddr;
+ 	INT iSockaddrLength;
+@@ -17,6 +50,71 @@
+ 	INT iSocketType;
+ 	INT iProtocol;
+ } CSADDR_INFO,*PCSADDR_INFO,*LPCSADDR_INFO;
++#endif
++#endif
++
++#ifndef __BLOB_T_DEFINED /* also in wtypes.h and winsock2.h */
++#define __BLOB_T_DEFINED
++typedef struct _BLOB {
++	ULONG	cbSize;
++	BYTE	*pBlobData;
++} BLOB,*PBLOB,*LPBLOB;
++#endif
++
++typedef struct _SERVICE_ADDRESS {
++	DWORD dwAddressType;
++	DWORD dwAddressFlags;
++	DWORD dwAddressLength;
++	DWORD dwPrincipalLength;
++	BYTE *lpAddress;
++	BYTE *lpPrincipal;
++} SERVICE_ADDRESS;
++typedef struct _SERVICE_ADDRESSES {
++	DWORD dwAddressCount;
++	SERVICE_ADDRESS Addresses[1];
++} SERVICE_ADDRESSES, *PSERVICE_ADDRESSES, *LPSERVICE_ADDRESSES;
++typedef struct _SERVICE_INFOA {
++	LPGUID lpServiceType;
++	LPSTR lpServiceName;
++	LPSTR lpComment;
++	LPSTR lpLocale;
++	DWORD dwDisplayHint;
++	DWORD dwVersion;
++	DWORD dwTime;
++	LPSTR lpMachineName;
++	LPSERVICE_ADDRESSES lpServiceAddress;
++	BLOB ServiceSpecificInfo;
++} SERVICE_INFOA, *LPSERVICE_INFOA;
++typedef struct _SERVICE_INFOW {
++	LPGUID lpServiceType;
++	LPWSTR lpServiceName;
++	LPWSTR lpComment;
++	LPWSTR lpLocale;
++	DWORD dwDisplayHint;
++	DWORD dwVersion;
++	DWORD dwTime;
++	LPWSTR lpMachineName;
++	LPSERVICE_ADDRESSES lpServiceAddress;
++	BLOB ServiceSpecificInfo;
++} SERVICE_INFOW, *LPSERVICE_INFOW;
++
++typedef void *LPSERVICE_ASYNC_INFO;
++INT WINAPI SetServiceA(DWORD,DWORD,DWORD,LPSERVICE_INFOA,LPSERVICE_ASYNC_INFO,LPDWORD);
++INT WINAPI SetServiceW(DWORD,DWORD,DWORD,LPSERVICE_INFOA,LPSERVICE_ASYNC_INFO,LPDWORD);
++INT WINAPI GetAddressByNameA(DWORD,LPGUID,LPSTR,LPINT,DWORD,LPSERVICE_ASYNC_INFO,LPVOID,LPDWORD,LPTSTR,LPDWORD);
++INT WINAPI GetAddressByNameW(DWORD,LPGUID,LPWSTR,LPINT,DWORD,LPSERVICE_ASYNC_INFO,LPVOID,LPDWORD,LPTSTR,LPDWORD);
++#ifdef UNICODE
++typedef SERVICE_INFOW SERVICE_INFO, *LPSERVICE_INFO;
++#define _SERVICE_INFO SERVICE_INFOW
++#define SetService SetServiceW
++#define GetAddressByName GetAddressByNameW
++#else
++typedef SERVICE_INFOA SERVICE_INFO, *LPSERVICE_INFO;
++#define _SERVICE_INFO SERVICE_INFOA
++#define SetService SetServiceA
++#define GetAddressByName GetAddressByNameA
++#endif
++
+ #ifdef __cplusplus
  }
-=20
-@@ -1036,6 +1044,8 @@ extern "C" int
- cygwin_getsockname (int fd, struct sockaddr *addr, int *namelen)
- {
-   int res;
-+  sigframe thisframe (mainthread);
-+
-   fhandler_socket *fh =3D get (fd);
-=20
-   if (check_null_invalid_struct_errno (namelen)
-@@ -1045,7 +1055,7 @@ cygwin_getsockname (int fd, struct socka
-   else
-     res =3D fh->getsockname (addr, namelen);
-=20
--  syscall_printf ("%d =3D getsockname (%d, %p, %d)", res, fd, addr, namele=
-n);
-+  syscall_printf ("%d =3D getsockname (%d, %p, %p)", res, fd, addr, namele=
-n);
-   return res;
- }
-=20
-@@ -1070,6 +1080,8 @@ extern "C" int
- cygwin_shutdown (int fd, int how)
- {
-   int res;
-+  sigframe thisframe (mainthread);
-+
-   fhandler_socket *fh =3D get (fd);
-=20
-   if (!fh)
-@@ -1133,6 +1145,8 @@ extern "C" int
- cygwin_getpeername (int fd, struct sockaddr *name, int *len)
- {
-   int res;
-+  sigframe thisframe (mainthread);
-+
-   fhandler_socket *fh =3D get (fd);
-=20
-   if (check_null_invalid_struct_errno (len)
-@@ -2087,6 +2101,8 @@ extern "C" int
- cygwin_recvmsg (int fd, struct msghdr *msg, int flags)
- {
-   int res;
-+  sigframe thisframe (mainthread);
-+
-   fhandler_socket *fh =3D get (fd);
-=20
-   if (check_null_invalid_struct_errno (msg)
-@@ -2098,7 +2114,7 @@ cygwin_recvmsg (int fd, struct msghdr *m
-   else
-     res =3D fh->recvmsg (msg, flags);
-=20
--  syscall_printf ("%d =3D recvmsg (%d, %p, %d)", res, fd, msg, flags);
-+  syscall_printf ("%d =3D recvmsg (%d, %p, %x)", res, fd, msg, flags);
-   return res;
- }
-=20
-@@ -2118,6 +2134,6 @@ cygwin_sendmsg (int fd, const struct msg
-   else
-     res =3D fh->sendmsg (msg, flags);
-=20
--  syscall_printf ("%d =3D recvmsg (%d, %p, %d)", res, fd, msg, flags);
-+  syscall_printf ("%d =3D sendmsg (%d, %p, %x)", res, fd, msg, flags);
-   return res;
- }
+ #endif
+Index: include/winsock2.h
+===================================================================
+RCS file: /cvs/src/src/winsup/w32api/include/winsock2.h,v
+retrieving revision 1.17
+diff -u -r1.17 winsock2.h
+--- include/winsock2.h	20 Aug 2002 00:36:09 -0000	1.17
++++ include/winsock2.h	26 Aug 2002 17:46:32 -0000
+@@ -734,23 +734,26 @@
+ 	WSAECOMPARATOR	ecHow;
+ } WSAVERSION, *PWSAVERSION, *LPWSAVERSION;
 
-------=_NextPart_000_0158_01C24D11.B1921980--
+-/*
+- * FIXME: nspapi.h has definition of SOCKET_ADDRESS needed by
+- * SOCKET_ADDRESS_LIST and  LPCSADDR_INFO, needed in WSAQuery
+- * but itself needs LPSOCKADDR which is defined earlier in this file
+- * Incuding nspapi.h here works for now, but may need to change
+- * as nspapi.h actually starts to define the Name Space Provider API.
+- * MSDN docs say that SOCKET_ADDRESS is defined in winsock2.h.
+- */
+-
+-#include <nspapi.h>
++#ifndef __CSADDR_T_DEFINED /* also in nspapi.h */
++#define __CSADDR_T_DEFINED
++typedef struct _SOCKET_ADDRESS {
++	LPSOCKADDR lpSockaddr;
++	INT iSockaddrLength;
++} SOCKET_ADDRESS,*PSOCKET_ADDRESS,*LPSOCKET_ADDRESS;
++typedef struct _CSADDR_INFO {
++	SOCKET_ADDRESS LocalAddr;
++	SOCKET_ADDRESS RemoteAddr;
++	INT iSocketType;
++	INT iProtocol;
++} CSADDR_INFO,*PCSADDR_INFO,*LPCSADDR_INFO;
++#endif
 
+ typedef struct _SOCKET_ADDRESS_LIST {
+     INT             iAddressCount;
+     SOCKET_ADDRESS  Address[1];
+ } SOCKET_ADDRESS_LIST, * LPSOCKET_ADDRESS_LIST;
+
+-#ifndef __BLOB_T_DEFINED /* also in wtypes.h */
++#ifndef __BLOB_T_DEFINED /* also in wtypes.h and nspapi.h */
+ #define __BLOB_T_DEFINED
+ typedef struct _BLOB {
+ 	ULONG	cbSize;
+--- /dev/null	Wed Apr 24 18:21:26 2002
++++ include/wsipx.h	Sun Aug 25 16:34:00 2002
+@@ -0,0 +1,28 @@
++/* WSIPX.H - initially taken from the Wine project
++ */
++
++#ifndef _WSIPX_H
++#define _WSIPX_H
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
++
++#ifdef __cplusplus
++extern "C" {
++#endif /* defined(__cplusplus) */
++
++#define NSPROTO_IPX	1000
++#define NSPROTO_SPX	1256
++#define NSPROTO_SPXII	1257
++
++typedef struct sockaddr_ipx {
++	short sa_family;
++	char sa_netnum[4];
++	char sa_nodenum[6];
++	unsigned short sa_socket;
++} SOCKADDR_IPX, *PSOCKADDR_IPX, *LPSOCKADDR_IPX;
++
++#ifdef __cplusplus
++}
++#endif
++#endif
+--- /dev/null	Wed Apr 24 18:21:26 2002
++++ include/svcguid.h	Sun Aug 25 16:54:58 2002
+@@ -0,0 +1,33 @@
++#ifndef _SVCGUID_H
++#define _SVCGUID_H
++#if __GNUC__ >=3
++#pragma GCC system_header
++#endif
++
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++#define SVCID_NETWARE(_SapId) \
++	{ (0x000B << 16) | (_SapId), 0, 0, { 0xC0,0,0,0,0,0,0,0x46 } }
++
++#define SAPID_FROM_SVCID_NETWARE(_g) \
++	((WORD)(_g->Data1 & 0xFFFF))
++
++#define SET_NETWARE_SVCID(_g,_SapId) { \
++	(_g)->Data1 = (0x000B << 16 ) | (_SapId); \
++	(_g)->Data2 = 0; \
++	(_g)->Data3 = 0; \
++	(_g)->Data4[0] = 0xC0; \
++	(_g)->Data4[1] = 0x0; \
++	(_g)->Data4[2] = 0x0; \
++	(_g)->Data4[3] = 0x0; \
++	(_g)->Data4[4] = 0x0; \
++	(_g)->Data4[5] = 0x0; \
++	(_g)->Data4[6] = 0x0; \
++	(_g)->Data4[7] = 0x46; }
++
++#ifdef __cplusplus
++}
++#endif
++#endif
