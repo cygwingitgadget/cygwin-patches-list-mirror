@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2450-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 18030 invoked by alias); 17 Jun 2002 21:09:37 -0000
+Return-Path: <cygwin-patches-return-2451-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 28701 invoked by alias); 18 Jun 2002 01:37:41 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,55 +7,136 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 17989 invoked from network); 17 Jun 2002 21:09:34 -0000
-Message-ID: <032601c21643$81228be0$6132bc3e@BABEL>
-From: "Conrad Scott" <Conrad.Scott@dsl.pipex.com>
-To: <cygwin-patches@cygwin.com>
-References: <003c01c213f3$2ed077f0$6132bc3e@BABEL> <005801c213f6$ab0e2a30$6132bc3e@BABEL> <20020615010600.GB5699@redhat.com> <005b01c21465$b97a07f0$0100a8c0@advent02>
-Subject: Re: Mount interaction with /dev & /proc entries
-Date: Mon, 17 Jun 2002 14:09:00 -0000
-MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-SW-Source: 2002-q2/txt/msg00433.txt.bz2
+Received: (qmail 28678 invoked from network); 18 Jun 2002 01:37:38 -0000
+Message-Id: <3.0.5.32.20020617213433.007fcca0@mail.attbi.com>
+X-Sender: phumblet@mail.attbi.com
+Date: Mon, 17 Jun 2002 18:37:00 -0000
+To: cygwin-patches@cygwin.comX,cygwin-patches@cygwin.com
+From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
+Subject: Re: Reorganizing internal_getlogin() patch is in
+In-Reply-To: <20020616051506.GA6188@redhat.com>
+References: <3.0.5.32.20020616000701.007f7df0@mail.attbi.com>
+ <20020613052709.GA17779@redhat.com>
+ <20020613052709.GA17779@redhat.com>
+ <3.0.5.32.20020616000701.007f7df0@mail.attbi.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+X-SW-Source: 2002-q2/txt/msg00434.txt.bz2
 
-"Chris January" <chris@atomice.net> wrote:
-> Well, when I was writing the /proc stuff, I wrote it on the premise
-there
-> was an imaginary proc filesystem mounted a /proc. This means if you
-chroot,
-> that filesystem won't be mounted at /proc anymore and hence it is
-correct
-> that /proc doesn't work. i.e. the path handling is done with mount
-points in
-> mind.
+At 01:15 AM 6/16/2002 -0400, Christopher Faylor wrote:
+>On Sun, Jun 16, 2002 at 12:07:01AM -0400, Pierre A. Humblet wrote:
+>>I noticed several nits:
+>>spawn.cc:    line accidentally deleted, diff below.
+>
+>That's odd.  I thought that the removal of this line was one of the
+>goals of your changes.  I guess we should rename this field, as you
+>suggested, since it is being used as a flag now.
 
-I'm sympathetic to this approach and I realised it was deliberate -- I
-should have addressed you directly on this: sorry about that, I
-(wrongly) assume that most of the DLL code is the sole interest of the
-good folks at RedHat rather than any of the contributors.
+Well, the assignment of that variable to myself->uid was nuked, but
+it's needed as a flag. By the way I failed to notice that the line
+      ciresrv.moreinfo->uid = getuid32 ();
+in the normal CreateProcess branch was also removed.
+You may want to change to something like 
+      ciresrv.moreinfo->newuid = FALSE;
 
-Anyhow, I was thinking more that while the mount system is as it is
-now (i.e. you've no choice about where the /proc vfs is "mounted"),
-it's either going to remain or disappear when someone's chroot'ed.
-Since then it can be done "right" at the moment, I thought it would be
-better at least to be consistent :-) i.e. make it the same as /dev,
-the only other vfs. But since my patch was broken, it's all a bit
-academic :-(
+>I am still having a hard time understanding why we have to set these
+>variables at all.  My preference would be to wipe them from the
+>environment.
 
-> I would argue, as Chris F has suggested above, that this is best
-left for
-> the re-write of the mount stuff.
+I second that. Those variables are not present in Win95/98/Me, 
+so I expect most programs must have another way of getting the 
+info if it isn't in the env.
+Unfortunately Microsoft keep adding such personalized variables. 
+On Win2000 I noticed APPDATA, TMP and TEMP. TMP and TEMP seem 
+particularly bad, the child may not be able to access it after setuid(). 
+Should they be nuked also or replaced by something sensible?
 
-I'm happily agreeing with both Chris F and yourself that this is best
-left for that re-write, then it can be done "right".
+>One of the things I liked about my patch was that it could potentially
+>speed up process spawning a lot since there is no need to do things like
+>query the domain.  I hate the fact that every cygwin program has to pay
+>the penalty for the probably unusual occurrence of a program or script
+>relying on these environment variables.
 
-Cheers,
+The current Cygwin is already efficient when there is not setuid().
+The changes impact the setuid case, and help greatly for 
+"forking servers".
 
-// Conrad
+>>b) Unfortunately, postponing the evaluation of variables cannot be done
+past 
+>>CreateProcessAsUser. After that point LookupAccountSid returns 
+>>incorrect values (this would happen when the child is cygwin but the 
+>>grandchild isn't).
+>
+>Why is this?  How does Windows manage to allow you to login, then?  Is it
+>using some kind of undocumented mechanism?
 
+Corinna is the real expert on this. See sentence "> But _inside_ of "
+toward the bottom of
+http://www.cvsnt.org/pipermail/cvsnt/2001-December/002863.html
 
+>I don't understand what you mean by "env" and "/bin/env".  The type command
+>in bash tells me that env == /bin/env.
+
+Sorry I thought I had a standard setup... Here c:\xxxxx\cygwin is mounted to /
+and  c:\xxxxx\cygwin\bin to /usr/bin  (cygexec). "Type bin" returns
+/usr/bin/env
+So /bin/env and env can produce diff results.
+
+>>I don't understand the logic for SYSTEMDRIVE and SYSTEMROOT. It looks
+>>like if they are not in the cygwin env then they are looked up in the
+>>Windows env (this would mean that the program has deleted them (?)).
+>
+>This is nothing new.  This is the code that Egor introduced some time
+>ago.  The environment being studied in this code is not necessarily the
+>complete user environment.  It can be the environment passed in via
+>something like execvpe.
+
+Good point, but when Igor did it, was the optimization where
+the Windows env could be NULL already there? 
+Won't  "if (GetEnvironmentVariable (name, p + namelen, vallen))"
+fail in that case? Using the Windows system call should always work. 
+By the way, do you know why Igor thought these were needed?
+ 
+>If a user actually goes out of their way to remove these variables from
+>their environment then we're just following their wishes.  
+
+Does removing it from the Cygwin env cause GetEnvironmentVariable (name, ..)
+to fail?
+
+>>uinfo.cc:  (no diff yet, can use help)
+>>a) cygheap_user.pname is set to the Cygwin user name. There should also 
+>>be an entry for the Windows user name. It should be initialized from the 
+>>same LookupAccountSid call that returns the domain. I don't provide a patch 
+>>because I don't see how to do that elegantly... 
+>
+>Is this new?  It sounds like env_name should be returning the Windows name.
+>I've done that.
+
+Corinna allowed different Cygwin and Windows name a while ago. I find it 
+useful, e.g. when Windows names have spaces, or when the same name appears
+in different domains. env_name returns "name ()", which is set in set_name(),
+which is called in seteuid() with the Cygwin name from passwd. 
+name () is also returned by getlogin () (in uinfo.cc).
+
+>>b) NetUserGetInfo() must always be called with the env_logsrv, otherwise
+>>name aliasing can occur. Don't call if env_logsrv is NULL, which should
+>>be the case only for SYSTEM.
+
+See next e-mail. 
+
+>>Also I don't see the need to copy HOMEDRIVE and HOMEPATH to
+homedrive_env_buf
+>>and homepath_env_buf when HOME already exists.
+>
+>For the same reason as we are meticulously saving all of these other
+environment
+>variables, I guess.  Somebody could use them.
+
+Silly me. But shouldn't USERPROFILE also be saved? 
+Also, depending on what you want to do about those variables, it may make
+sense
+to save them when you process the Windows environment when a cygwin program
+is 
+first entered, together with the other special cases.
+
+Pierre
