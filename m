@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4211-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 7261 invoked by alias); 13 Sep 2003 01:25:11 -0000
+Return-Path: <cygwin-patches-return-4212-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 8818 invoked by alias); 13 Sep 2003 17:17:49 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,57 +7,39 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 7252 invoked from network); 13 Sep 2003 01:25:11 -0000
-Date: Sat, 13 Sep 2003 01:25:00 -0000
+Received: (qmail 8808 invoked from network); 13 Sep 2003 17:17:48 -0000
+Date: Sat, 13 Sep 2003 17:17:00 -0000
 From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] pthread patch - Thomas Pfaff, please note
-Message-ID: <20030913012508.GA2870@redhat.com>
+Subject: Re: Fixing a security hole in pinfo.
+Message-ID: <20030913171746.GA21878@redhat.com>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
+References: <3.0.5.32.20030911000542.00818340@incoming.verizon.net> <20030911041545.GA27495@redhat.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20030911041545.GA27495@redhat.com>
 User-Agent: Mutt/1.4.1i
-X-SW-Source: 2003-q3/txt/msg00227.txt.bz2
+X-SW-Source: 2003-q3/txt/msg00228.txt.bz2
 
-Thomas, I made the change below to stop a SEGV on thread exit as evinced
-by the threadidafterfork test in the testsuite.
+On Thu, Sep 11, 2003 at 12:15:45AM -0400, Christopher Faylor wrote:
+>On Thu, Sep 11, 2003 at 12:05:42AM -0400, Pierre A. Humblet wrote:
+>>2003-09-11  Pierre Humblet <pierre.humblet@ieee.org>
+>>
+>>        * include/sys/cygwin.h: Rename PID_UNUSED to PID_MAP_RW.
+>>        * pinfo.cc (pinfo_init): Initialize myself->gid.
+>>        (pinfo::init): Create the "access" variable, set it appropriately
+>>        and use it to specify the requested access.
+>>        * exceptions.cc (sig_handle_tty_stop): Add PID_MAP_RW in pinfo parent.
+>>        * signal.cc (kill_worker): Ditto for pinfo dest.
+>>        * syscalls.cc (setpgid): Ditto for pinfo p.
+>
+>I'm going to hold off on checking this in until 1.5.4 is released.
+>Otherwise, it looks ok.
 
-The problem is that this code overwrites impure_ptr with the contents of
-the thread which called fork, which is not the correct thing to do since
-_impure_ptr contains global information not present in the calling threads
-reent structure.
+Checked in.
 
-I hope it makes sense.  If there is some better way to do this, please
-feel free to check it in.  This looked right to me, though.
+Thanks.
 
 cgf
-
-2003-09-12  Christopher Faylor  <cgf@redhat.com>
-
-        * thread.cc (MTinterface::fixup_after_fork): Remove code which 
-        potentially overwrote _impure pointer with contents of thread which
-        invoked fork since this eliminates important information like the
-        pointer to the atexit queue.
-
-
-Index: thread.cc
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/thread.cc,v
-retrieving revision 1.131
-retrieving revision 1.132
-diff -u -p -r1.131 -r1.132
---- thread.cc	26 Jul 2003 04:53:59 -0000	1.131
-+++ thread.cc	13 Sep 2003 01:21:32 -0000	1.132
-@@ -224,10 +224,6 @@ MTinterface::fixup_after_fork (void)
-   /* As long as the signal handling not multithreaded
-      switch reents storage back to _impure_ptr for the mainthread
-      to support fork from threads other than the mainthread */
--  struct _reent *reent_old = __getreent ();
--
--  if (reent_old && _impure_ptr != reent_old)
--    *_impure_ptr = *reent_old;
-   reents._clib = _impure_ptr;
-   reents._winsup = &winsup_reent;
-   winsup_reent._process_logmask = LOG_UPTO (LOG_DEBUG);
