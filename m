@@ -1,35 +1,32 @@
-From: "Robert Collins" <robert.collins@itdomain.com.au>
-To: "Corinna Vinschen" <cygwin-patches@cygwin.com>, <cygwin-patches@sourceware.cygnus.com>
-Subject: RE: cygwin daemon/shm
-Date: Mon, 17 Sep 2001 16:35:00 -0000
-Message-id: <EA18B9FA0FE4194AA2B4CDB91F73C0EF08F185@itdomain002.itdomain.net.au>
-X-SW-Source: 2001-q3/msg00162.html
+From: "Ralf Habacker" <Ralf.Habacker@freenet.de>
+To: <cygwin-patches@cygwin.com>
+Subject: RE: Patch for ssp on win2k
+Date: Tue, 18 Sep 2001 05:20:00 -0000
+Message-id: <000a01c1402b$461cd2b0$651c440a@BRAMSCHE>
+References: <20010917131718.A10615@redhat.com>
+X-SW-Source: 2001-q3/msg00163.html
 
-> -----Original Message-----
-> From: Corinna Vinschen [ mailto:cygwin-patches@cygwin.com ]
-> 
-> On Tue, Sep 18, 2001 at 08:08:16AM +1000, Robert Collins wrote:
-> > On Tue, 2001-09-18 at 03:01, Corinna Vinschen wrote:
-> > > just so that you don't feel alone :-)
-> > 
-> > Thank you. I was wondering... :}.
-> 
-> We're still here, just busy...
+> On Mon, Sep 17, 2001 at 09:45:42AM +0200, Ralf Habacker wrote:
+> >on win2k ssp crashes sometimes while handling LOAD_DLL_DEBUG_EVENT
+> caused by an
+> >unhandled rv return value of ReadProcessMemory(). The patch fixes this.
+>
+> I didn't spend too much time investigating the code but it looks like this
+> is a workaround rather than a fix.
+Probably you're right. But because the current implementation contains already
+lines
+with "(unknown)" status, I have added an additional condition to produce this.
+If you look that ssp is crashing without it, it is a fix.
 
-Chris had mentioned that privately. (Note the smiley above).
- 
-> > Ah, yes. Well I haven't benchmarked it, but FWIW my machine seems no
-> > slower with it running.
-> 
-> You're talking about starting Cygwin processes?  Do they connect
-> to the server already?
+If 'rv' is wrong then does that mean
+> that ReadProcessMemory failed?  If so, that is the correct test for this.
 
-Yes, during dcrt startup, after signals are inited, a version check if
-the daemon is performed. If no response is recieved, all daemon calls
-are skipped and errors returned to the calling function. I'm thinking
-about tweaking that, to perform that check at the first daemon call, as
-this would avoid all delay associated with finding a dead daemon until a
-daemon function was called. However this introduces more syncronisation.
-It's a tradeoff really.
- 
-Rob
+I don't know if this a condition indicate a failure. rc contains an adress which
+direct into the ntdll.dll.
+Perhaps it means something other as used currently, but examinig the content
+under that adress produces
+no additional infos for me.
+
+>
+> cgf
+>
