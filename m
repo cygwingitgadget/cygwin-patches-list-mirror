@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3296-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 3919 invoked by alias); 10 Dec 2002 10:34:41 -0000
+Return-Path: <cygwin-patches-return-3297-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 27245 invoked by alias); 10 Dec 2002 12:45:36 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,29 +7,46 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 3909 invoked from network); 10 Dec 2002 10:34:39 -0000
-Date: Tue, 10 Dec 2002 02:34:00 -0000
+Received: (qmail 27225 invoked from network); 10 Dec 2002 12:45:28 -0000
+Date: Tue, 10 Dec 2002 04:45:00 -0000
 From: Corinna Vinschen <cygwin-patches@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: Internal get{pw,gr}XX calls
-Message-ID: <20021210113437.C7796@cygbert.vinschen.de>
+Message-ID: <20021210134526.D7796@cygbert.vinschen.de>
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3.0.5.32.20021129005937.00835100@h00207811519c.ne.client2.attbi.com> <3.0.5.32.20021126000911.00833190@mail.attbi.com> <3.0.5.32.20021126000911.00833190@mail.attbi.com> <3.0.5.32.20021129005937.00835100@h00207811519c.ne.client2.attbi.com> <3.0.5.32.20021129131134.00835870@mail.attbi.com>
+References: <20021129184501.E1398@cygbert.vinschen.de> <3.0.5.32.20021126000911.00833190@mail.attbi.com> <3.0.5.32.20021126000911.00833190@mail.attbi.com> <3.0.5.32.20021129005937.00835100@h00207811519c.ne.client2.attbi.com> <20021129184501.E1398@cygbert.vinschen.de> <3.0.5.32.20021201000321.0082b440@h00207811519c.ne.client2.attbi.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3.0.5.32.20021129131134.00835870@mail.attbi.com>
+In-Reply-To: <3.0.5.32.20021201000321.0082b440@h00207811519c.ne.client2.attbi.com>
 User-Agent: Mutt/1.3.22.1i
-X-SW-Source: 2002-q4/txt/msg00247.txt.bz2
+X-SW-Source: 2002-q4/txt/msg00248.txt.bz2
 
-On Fri, Nov 29, 2002 at 01:11:34PM -0500, Pierre A. Humblet wrote:
-> This is from the opengroup:
-> If the correct value is outside the range of representable values, 
-> LONG_MAX or LONG_MIN is returned (according to the sign of the value),
-> and errno is set to [ERANGE]. 
+On Sun, Dec 01, 2002 at 12:03:21AM -0500, Pierre A. Humblet wrote:
+> 2002-11-30  Pierre Humblet <pierre.humblet@ieee.org>
+> 
+> 	* pwdgrp.h (pwdgrp_check::pwdgrp_state): Replace by 
+> 	pwdgrp_check::isinitializing ().
+> 	(pwdgrp_check::isinitializing): Create.
+> 	* passwd.cc (grab_int): Change type to unsigned, use strtoul and 
+> 	set the pointer content to 0 if the field is invalid.
+> 	(parse_pwd): Move validity test after getting pw_gid.
+> 	(read_etc_passwd): Replace "passwd_state <= " by 
+> 	passwd_state::isinitializing ().	
+> 	(internal_getpwuid): Ditto.
+> 	(internal_getpwnam): Ditto.
+> 	(getpwent): Ditto.
+> 	(getpass): Ditto.
+> 	* grp.cc (parse_grp): Use strtoul for gr_gid and verify the validity.
+> 	(read_etc_group): Replace "group_state <= " by 
+> 	group_state::isinitializing (). 
+> 	(internal_getgrgid): Ditto.
+> 	(getgrent32): Ditto.
+> 	(internal_getgrent): Ditto.
 
-Pierre, can you give me a link to this info?
+I've applied the initial patch plus this one.
 
+Thanks,
 Corinna
 
 -- 
