@@ -1,53 +1,64 @@
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: einval-on-wrong-args patch
-Date: Fri, 16 Feb 2001 10:09:00 -0000
-Message-id: <20010216130953.E19766@redhat.com>
-References: <12986060127.20010216183755@logos-m.ru> <20010216120709.B19422@redhat.com> <19294003970.20010216205019@logos-m.ru>
-X-SW-Source: 2001-q1/msg00083.html
+From: Mike Simons <msimons@moria.simons-clan.com>
+To: cygwin-patches@sources.redhat.com
+Subject: [PATCH] settimeofday ... attempt 1
+Date: Mon, 19 Feb 2001 02:51:00 -0000
+Message-id: <20010219093133.F16141@moria.simons-clan.com>
+X-SW-Source: 2001-q1/msg00084.html
 
-On Fri, Feb 16, 2001 at 08:50:19PM +0300, Egor Duda wrote:
->Hi!
->
->Friday, 16 February, 2001 Christopher Faylor cgf@redhat.com wrote:
->
->>>  return  EINVAL  if  signal()  or  lseek()  are  called  with illegal
->>>arguments.
->
->CF> Either your signal() change is not quite right, or sigaction() is wrong.
->CF> sigaction() allows setting the handler for SIGKILL to SIG_DFL.  Is
->CF> that incorrect?  If not, then please modify your change (and check it in).
->CF> If it is the incorrect behavior, could you fix sigaction, too?
->
->SUSv2 is a bit vague on the subject, but this program
->
->#include <stdio.h>
->#include <signal.h>
->
->main ()
->{
->  struct sigaction act;
->  act.sa_handler = SIG_DFL;
->  act.sa_flags = 0;
->  act.sa_sigaction = NULL;
->  sigemptyset ( &act.sa_mask );
->  if ( signal ( SIGKILL, SIG_DFL ) == SIG_ERR ) perror ("signal" );
->  if ( sigaction ( SIGKILL, NULL, NULL ) ) perror ( "sigaction1" );
->  if ( sigaction ( SIGKILL, &act, NULL ) ) perror ( "sigaction2" );
->}
->
->when run on linux, prints
->
->signal: Invalid argument
->sigaction2: Invalid argument
->
->so  perhaps sigaction should be fixed. moreover, SUSv2 says that if we
->add SIGKILL or SIGSTOP to sa_mask, this should be silently ignored.
+Morning all,
 
-Hopefully that much is true, at least.
+  I am amazed at how well this library and tool chain works...
 
-Would you mind checking in your patch and fixing sigaction to conform to
-linux?
+  I have not attempted to build cygwin with the following patch.
 
-Thanks,
-cgf
+  I have built a ntpdate binary (from ntp-4.0.99j) for win95/98 
+which contains the code below in the ntp sources and that appears
+to correctly set the system time.  
+
+  Let me know if there are any suggestions/problems...
+
+    TTFN,
+      Mike Simons
+
+
+msimons@truth:~/cygwin/src/winsup/cygwin$ cvs diff -u times.cc
+Index: times.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/times.cc,v
+retrieving revision 1.12
+diff -u -r1.12 times.cc
+--- times.cc    2000/10/28 05:41:43     1.12
++++ times.cc    2001/02/19 10:37:27
+@@ -92,10 +92,29 @@
+
+ /* settimeofday: BSD */
+ extern "C" int
+-settimeofday (const struct timeval *, const struct timezone *)
++settimeofday (const struct timeval *tv, const struct timezone *tz)
+ {
+-  set_errno (ENOSYS);
+-  return -1;
++  SYSTEMTIME st;
++  struct tm *ptm;
++  int res;
++
++  tz = tz;
++
++  ptm = gmtime(&tv->tv_sec);
++  st.wYear         = ptm->tm_year + 1900;
++  st.wMonth        = ptm->tm_mon + 1;
++  st.wDayOfWeek    = ptm->tm_wday;
++  st.wDay          = ptm->tm_mday;
++  st.wHour         = ptm->tm_hour;
++  st.wMinute       = ptm->tm_min;
++  st.wSecond       = ptm->tm_sec;
++  st.wMilliseconds = tv->tv_usec / 1000;
++
++  res = !SetSystemTime(&st);
++
++  syscall_printf ("%d = settimeofday (%x, %x)", res, p, z);
++
++  return res;
+ }
+
+ /* timezone: standards? */
