@@ -1,33 +1,39 @@
-From: Jason Tishler <Jason.Tishler@dothill.com>
-To: Norman Vine <nhv@cape.com>
-Cc: "'Robert Collins'" <robert.collins@itdomain.com.au>, "'Greg Smith'" <gsmith@nc.rr.com>, cygwin-patches@cygwin.com
+From: "Robert Collins" <robert.collins@itdomain.com.au>
+To: <cygwin-patches@cygwin.com>
 Subject: Re: Deadly embrace between pthread_cond_wait and pthread_cond_signal
-Date: Thu, 21 Jun 2001 13:02:00 -0000
-Message-id: <20010621160246.F138@dothill.com>
-References: <002401c0fa86$74d12880$a300a8c0@nhv>
-X-SW-Source: 2001-q2/msg00325.html
+Date: Thu, 21 Jun 2001 15:27:00 -0000
+Message-id: <047001c0faa1$a8315d60$0200a8c0@lifelesswks>
+References: <3B3181E5.E6F0D06A@nc.rr.com> <01da01c0fa5f$1bfe6d70$0200a8c0@lifelesswks> <20010621142602.A9643@redhat.com>
+X-SW-Source: 2001-q2/msg00326.html
 
-Norman,
+----- Original Message -----
+From: "Christopher Faylor" <cgf@redhat.com>
+To: <cygwin-patches@cygwin.com>
+Sent: Friday, June 22, 2001 4:26 AM
+Subject: Re: Deadly embrace between pthread_cond_wait and
+pthread_cond_signal
 
-On Thu, Jun 21, 2001 at 03:14:54PM -0400, Norman Vine wrote:
-> THANK YOU GREG and ROB :-)))
 
-I would also like to thank Rob for implementing the missing pthreads
-functionality and Greg for helping to isolate and debug these issues.
+> On Fri, Jun 22, 2001 at 12:33:15AM +1000, Robert Collins wrote:
+> >Correct a deadlock situation...
+> >Changelog:
+> >2001-06-22  Robert Collins  rbtcollins@hotmail.com
+> >
+> >    * thread.cc (__pthread_cond_timedwait): Lock the waiting mutex
+> >before the condition protect mutex to avoid deadlocking.
+> >    (__pthread_cond_wait): Ditto.
+> >
+> >
+> >Greg, as far as speed goes, there is a major optimisation I want to
+> >make, which is to make all process private mutex's critical sections,
+> >instead of system wide mutex's. This should be a lot faster... when I
+> >get that done :].
+>
+> Looks good.
+> I'm somewhat computer handicapped this week.  Can you check this in
+yourself,
+> Robert?
 
-> I have not done exhaustive testing yet but..... 
-> It appears that with this patch 
-> Python threading WORKS !!
+No problem. Done.
 
-How long does it take to run the Python regression tests with threading
-enabled?
-
-Thanks,
-Jason
-
--- 
-Jason Tishler
-Director, Software Engineering       Phone: 732.264.8770 x235
-Dot Hill Systems Corp.               Fax:   732.264.8798
-82 Bethany Road, Suite 7             Email: Jason.Tishler@dothill.com
-Hazlet, NJ 07730 USA                 WWW:   http://www.dothill.com
+Rob
