@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3747-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 8606 invoked by alias); 26 Mar 2003 20:22:17 -0000
+Return-Path: <cygwin-patches-return-3748-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 7124 invoked by alias); 26 Mar 2003 21:47:27 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,48 +7,41 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 8597 invoked from network); 26 Mar 2003 20:22:16 -0000
-Date: Wed, 26 Mar 2003 20:22:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: "Cygwin-Patches@Cygwin.Com" <cygwin-patches@cygwin.com>
+Received: (qmail 7105 invoked from network); 26 Mar 2003 21:47:27 -0000
+Message-ID: <3E821FEE.2000408@hekimian.com>
+Date: Wed, 26 Mar 2003 21:47:00 -0000
+X-Sybari-Trust: 1b4c2b77 36b09be0 04609a3e 00000109
+From: Joe Buehler <jbuehler@hekimian.com>
+Reply-To:  jbuehler@hekimian.com
+Organization: Spirent Communications, Inc.
+User-Agent: Mozilla/5.0 (Windows; U; WinNT4.0; en-US; rv:1.3) Gecko/20030312
+X-Accept-Language: en-us, en
+MIME-Version: 1.0
+To: Corinna Vinschen <cygwin-patches@cygwin.com>
 Subject: Re: [PATCH] performance patch for /proc/registry -- version 2
-Message-ID: <20030326202213.GZ23762@cygbert.vinschen.de>
-Mail-Followup-To: "Cygwin-Patches@Cygwin.Com" <cygwin-patches@cygwin.com>
-References: <LPEHIHGCJOAIPFLADJAHAEHODHAA.chris@atomice.net> <3E820411.1020100@hekimian.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3E820411.1020100@hekimian.com>
-User-Agent: Mutt/1.4i
-X-SW-Source: 2003-q1/txt/msg00396.txt.bz2
+References: <LPEHIHGCJOAIPFLADJAHAEHODHAA.chris@atomice.net> <3E820411.1020100@hekimian.com> <20030326202213.GZ23762@cygbert.vinschen.de>
+In-Reply-To: <20030326202213.GZ23762@cygbert.vinschen.de>
+X-Enigmail-Version: 0.73.1.0
+X-Enigmail-Supports: pgp-inline, pgp-mime
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2003-q1/txt/msg00397.txt.bz2
 
-On Wed, Mar 26, 2003 at 02:48:33PM -0500, Joe Buehler wrote:
-> Chris January wrote:
+Corinna Vinschen wrote:
+
+> However... am I doing something wrong?  I'm trying to find out what the
+> performance improvement is on my XP box and both versions of the DLL
+> (w/ and w/o your patch) are running 7.5 minutes for 
 > 
-> >How common are ACLs > 4096 bytes? Could you try calling RegKeyGetSecurity
-> >twice? First with a length of 0. Then RegKeyGetSecurity will set length to
-> >the required buffer size which you can allocate dynamically using new.
+>   ls -lR /proc/registry > /dev/null
 > 
-> Whatever Corinna or Christopher want me to do is fine with me.  I just
-> copied some code from elsewhere in Cygwin.
+> Or is that only a problem on older systems?  You're running NT4SP5, right?
+> 
+> Other than that your patch looks fine.
 
-It's ok to use the 4K for now.  I'm sure there are more dangerous places
-in the code where we're currently using a 4K buffer for SDs or ACLs as well.
-
-However... am I doing something wrong?  I'm trying to find out what the
-performance improvement is on my XP box and both versions of the DLL
-(w/ and w/o your patch) are running 7.5 minutes for 
-
-  ls -lR /proc/registry > /dev/null
-
-Or is that only a problem on older systems?  You're running NT4SP5, right?
-
-Other than that your patch looks fine.
-
-
-Corinna
-
+It may be that XP has the WIN32 API fixed.  The different is drastic
+on my NT4 SP5 box.  You can see the difference just by doing
+ls -l /proc/registry/HKEY_LOCAL_MACHINE.  With patch comes back instantly,
+without you have to sit and wait.
 -- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+Joe Buehler
