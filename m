@@ -1,71 +1,71 @@
-From: Christopher Faylor <cgf@redhat.com>
+From: Egor Duda <deo@logos-m.ru>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] settimeofday ... attempt 1
-Date: Mon, 19 Feb 2001 18:55:00 -0000
-Message-id: <20010219215508.C23483@redhat.com>
-References: <20010219093133.F16141@moria.simons-clan.com>
-X-SW-Source: 2001-q1/msg00089.html
+Subject: signal semaphores inheritance
+Date: Tue, 20 Feb 2001 08:25:00 -0000
+Message-id: <1616663500.20010220192409@logos-m.ru>
+X-SW-Source: 2001-q1/msg00090.html
+Content-type: multipart/mixed; boundary="----------=_1583532846-65438-8"
 
-On Mon, Feb 19, 2001 at 09:31:33AM -0500, Mike Simons wrote:
->Morning all,
->
->  I am amazed at how well this library and tool chain works...
->
->  I have not attempted to build cygwin with the following patch.
->
->  I have built a ntpdate binary (from ntp-4.0.99j) for win95/98 
->which contains the code below in the ntp sources and that appears
->to correctly set the system time.  
->
->  Let me know if there are any suggestions/problems...
+This is a multi-part message in MIME format...
 
-See the contributing link at http://cygwin.com/ if you want to
-formally contribute this code.
+------------=_1583532846-65438-8
+Content-length: 469
 
-cgf
+Hi!
 
->msimons@truth:~/cygwin/src/winsup/cygwin$ cvs diff -u times.cc
->Index: times.cc
->===================================================================
->RCS file: /cvs/src/src/winsup/cygwin/times.cc,v
->retrieving revision 1.12
->diff -u -r1.12 times.cc
->--- times.cc    2000/10/28 05:41:43     1.12
->+++ times.cc    2001/02/19 10:37:27
->@@ -92,10 +92,29 @@
->
-> /* settimeofday: BSD */
-> extern "C" int
->-settimeofday (const struct timeval *, const struct timezone *)
->+settimeofday (const struct timeval *tv, const struct timezone *tz)
-> {
->-  set_errno (ENOSYS);
->-  return -1;
->+  SYSTEMTIME st;
->+  struct tm *ptm;
->+  int res;
->+
->+  tz = tz;
->+
->+  ptm = gmtime(&tv->tv_sec);
->+  st.wYear         = ptm->tm_year + 1900;
->+  st.wMonth        = ptm->tm_mon + 1;
->+  st.wDayOfWeek    = ptm->tm_wday;
->+  st.wDay          = ptm->tm_mday;
->+  st.wHour         = ptm->tm_hour;
->+  st.wMinute       = ptm->tm_min;
->+  st.wSecond       = ptm->tm_sec;
->+  st.wMilliseconds = tv->tv_usec / 1000;
->+
->+  res = !SetSystemTime(&st);
->+
->+  syscall_printf ("%d = settimeofday (%x, %x)", res, p, z);
->+
->+  return res;
-> }
->
-> /* timezone: standards? */
+  if  ntsec is on and cygwin app a.exe  (with pid x) starts non-cygwin
+app  b.exe,  b.exe  inherits  cygwin1S3.sigcatch.x semaphore. if a.exe
+dies  and  b.exe continue  execution,  and  if  new  cygwin  app c.exe
+got  pid  x it, fails to create sigcatch semaphore. looks like typo in
+getsem() to me. is this patch ok?
 
--- 
-cgf@cygnus.com                        Red Hat, Inc.
-http://sources.redhat.com/            http://www.redhat.com/
+Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
+signal-semaphore-no-inherit.diff
+signal-semaphore-no-inherit.ChangeLog
+
+
+------------=_1583532846-65438-8
+Content-Type: text/x-diff; charset=us-ascii;
+ name="signal-semaphore-no-inherit.ChangeLog"
+Content-Disposition: inline; filename="signal-semaphore-no-inherit.ChangeLog"
+Content-Transfer-Encoding: base64
+Content-Length: 822
+
+SW5kZXg6IHNpZ3Byb2MuY2MKPT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1Mg
+ZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vc2lncHJvYy5jYyx2
+CnJldHJpZXZpbmcgcmV2aXNpb24gMS43MgpkaWZmIC11IC1wIC0yIC1yMS43
+MiBzaWdwcm9jLmNjCi0tLSBzaWdwcm9jLmNjCTIwMDEvMDIvMTAgMDQ6MjA6
+NTIJMS43MgorKysgc2lncHJvYy5jYwkyMDAxLzAyLzIwIDE1OjU3OjQ4CkBA
+IC05MDAsNSArOTAwLDUgQEAgZ2V0c2VtIChfcGluZm8gKnAsIGNvbnN0IGNo
+YXIgKnN0ciwgaW50IAogCiAgICAgICBEV09SRCB3aW5waWQgPSBHZXRDdXJy
+ZW50UHJvY2Vzc0lkICgpOwotICAgICAgaCA9IENyZWF0ZVNlbWFwaG9yZSAo
+YWxsb3dfbnRzZWMgPyBzZWNfdXNlciAoc2FfYnVmKSA6ICZzZWNfbm9uZV9u
+aWgsCisgICAgICBoID0gQ3JlYXRlU2VtYXBob3JlIChhbGxvd19udHNlYyA/
+IHNlY191c2VyX25paCAoc2FfYnVmKSA6ICZzZWNfbm9uZV9uaWgsCiAJCQkg
+ICBpbml0LCBtYXgsIHN0ciA9IHNoYXJlZF9uYW1lIChzdHIsIHdpbnBpZCkp
+OwogICAgICAgcCA9IG15c2VsZjsK
+
+------------=_1583532846-65438-8
+Content-Type: text/x-diff; charset=us-ascii;
+ name="signal-semaphore-no-inherit.diff"
+Content-Disposition: inline; filename="signal-semaphore-no-inherit.diff"
+Content-Transfer-Encoding: base64
+Content-Length: 822
+
+SW5kZXg6IHNpZ3Byb2MuY2MKPT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1Mg
+ZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vc2lncHJvYy5jYyx2
+CnJldHJpZXZpbmcgcmV2aXNpb24gMS43MgpkaWZmIC11IC1wIC0yIC1yMS43
+MiBzaWdwcm9jLmNjCi0tLSBzaWdwcm9jLmNjCTIwMDEvMDIvMTAgMDQ6MjA6
+NTIJMS43MgorKysgc2lncHJvYy5jYwkyMDAxLzAyLzIwIDE1OjU3OjQ4CkBA
+IC05MDAsNSArOTAwLDUgQEAgZ2V0c2VtIChfcGluZm8gKnAsIGNvbnN0IGNo
+YXIgKnN0ciwgaW50IAogCiAgICAgICBEV09SRCB3aW5waWQgPSBHZXRDdXJy
+ZW50UHJvY2Vzc0lkICgpOwotICAgICAgaCA9IENyZWF0ZVNlbWFwaG9yZSAo
+YWxsb3dfbnRzZWMgPyBzZWNfdXNlciAoc2FfYnVmKSA6ICZzZWNfbm9uZV9u
+aWgsCisgICAgICBoID0gQ3JlYXRlU2VtYXBob3JlIChhbGxvd19udHNlYyA/
+IHNlY191c2VyX25paCAoc2FfYnVmKSA6ICZzZWNfbm9uZV9uaWgsCiAJCQkg
+ICBpbml0LCBtYXgsIHN0ciA9IHNoYXJlZF9uYW1lIChzdHIsIHdpbnBpZCkp
+OwogICAgICAgcCA9IG15c2VsZjsK
+
+------------=_1583532846-65438-8--
