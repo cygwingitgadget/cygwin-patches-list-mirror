@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2737-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 9568 invoked by alias); 27 Jul 2002 01:01:28 -0000
+Return-Path: <cygwin-patches-return-2738-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 3311 invoked by alias); 27 Jul 2002 18:44:37 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,27 +7,45 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 9554 invoked from network); 27 Jul 2002 01:01:28 -0000
-Date: Fri, 26 Jul 2002 18:01:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
+Received: (qmail 3297 invoked from network); 27 Jul 2002 18:44:37 -0000
+Date: Sat, 27 Jul 2002 11:44:00 -0000
+From: David MacMahon <cygwin@smartsc.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: UNIX domain socket patch
-Message-ID: <20020727010140.GK25444@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
+Subject: Re: time(time_t*) problem
+Message-ID: <20020727115519.B1675@SmartSC.com>
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <03f001c23504$5be06890$6132bc3e@BABEL>
+References: <20020725160113.GG10541@redhat.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <03f001c23504$5be06890$6132bc3e@BABEL>
-User-Agent: Mutt/1.3.23.1i
-X-SW-Source: 2002-q3/txt/msg00185.txt.bz2
+User-Agent: Mutt/1.3.22.1i
+X-SW-Source: 2002-q3/txt/msg00186.txt.bz2
 
-On Sat, Jul 27, 2002 at 01:27:15AM +0100, Conrad Scott wrote:
->This is a rather long email, so I've made out like I was back in
->ISO 9001 land and gone overboard with the "change request".  Enjoy
+On Thu, Jul 25, 2002 at 12:01:13PM -0400, Christopher Faylor wrote:
+> Thanks for the patch and for the rationalization of why it was
+> necessary.  Until I read your message, I thought that cygwin was working
+> correctly.  Now I can see that it obviously wasn't.
 
-For the record, I'd like Corinna and/or Egor to comment on this patch.
+You're welcome.  I suppose the other patch to write would be for CVS's
+configure(.in?) file to detect which version of cygwin is being used so
+that an extra second can be added to the sleep time on earlier versions
+of cygwin.  I'm not promising anything, but it could be a good exercise
+for me to learn about autoconf (et al)...
 
-Thanks,
-cgf
+> I also love patches that remove code and make cygwin faster, too.  :-)
+
+Me, too!  Many such patches are (probably) possible, but the hard part is
+figuring out which bits of code can be removed safely.
+
+> The patch has been committed.
+
+Great!  Looking back through times.cc's history, I see that this
+behavior has been in there since this file was added to CVS.  Is there
+any place to see the pre-CVS history of this file?
+
+Dave
+
+-- 
+David MacMahon, President
+Smart Software Consulting
+http://www.smartsc.com
