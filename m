@@ -1,43 +1,46 @@
 From: Corinna Vinschen <cygwin-patches@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: Patch: socket protocol parameter not handled correctly.
-Date: Sat, 17 Mar 2001 09:05:00 -0000
-Message-id: <20010317180512.P20900@cygbert.vinschen.de>
-References: <001a01c0aef5$26d22260$b20c1918@nc.rr.com>
-X-SW-Source: 2001-q1/msg00196.html
+Date: Sat, 17 Mar 2001 09:15:00 -0000
+Message-id: <20010317181544.Q20900@cygbert.vinschen.de>
+References: <001a01c0aef5$26d22260$b20c1918@nc.rr.com> <20010317180512.P20900@cygbert.vinschen.de>
+X-SW-Source: 2001-q1/msg00197.html
 
-On Sat, Mar 17, 2001 at 10:15:50AM -0500, Mathew Brozowski wrote:
-> I have been recently working on a port or a ping program to cygwin.  After I
-> got past the header problems (which I hope to send a separate patch for
-> soon) and got everything building it still wasn't working.  I used tcpdump
-> on a linux machine and found that the packets being sent were not encoded
-> with the ICMP protocol identifier but with the identifier 0.  I tracked it
-> down to the fact that the cygwin_socket routine wasn't passing the protocol
-> parameter to the Windows socket call.  After fixing this rebuilding the
-> cygwin1.dll the ping program worked great!  Here's the patch minor though it
-> is.
-> 
-> Matt Brozowski
-> 
-> Sat Mar 17 09:51:32 2001 Mathew Brozowski <brozow@tavve.com>
-> 
->  * net.cc (cygwin_socket): Pass protocol parameter to socket call.
-> 
-> --- net.cc-orig Sat Mar 17 09:46:08 2001
-> +++ net.cc Sat Mar 17 09:49:10 2001
-> @@ -352,7 +352,7 @@ cygwin_socket (int af, int type, int pro
->      {
->        debug_printf ("socket (%d, %d, %d)", af, type, protocol);
-> 
-> -      soc = socket (AF_INET, type, 0);
-> +      soc = socket (AF_INET, type, protocol);
-> 
->        if (soc == INVALID_SOCKET)
->   {
+On Sat, Mar 17, 2001 at 06:05:12PM +0100, Corinna Vinschen wrote:
+> On Sat, Mar 17, 2001 at 10:15:50AM -0500, Mathew Brozowski wrote:
+> > I have been recently working on a port or a ping program to cygwin.  After I
+> > got past the header problems (which I hope to send a separate patch for
+> > soon) and got everything building it still wasn't working.  I used tcpdump
+> > on a linux machine and found that the packets being sent were not encoded
+> > with the ICMP protocol identifier but with the identifier 0.  I tracked it
+> > down to the fact that the cygwin_socket routine wasn't passing the protocol
+> > parameter to the Windows socket call.  After fixing this rebuilding the
+> > cygwin1.dll the ping program worked great!  Here's the patch minor though it
+> > is.
+> > 
+> > Matt Brozowski
+> > 
+> > Sat Mar 17 09:51:32 2001 Mathew Brozowski <brozow@tavve.com>
+> > 
+> >  * net.cc (cygwin_socket): Pass protocol parameter to socket call.
+> > 
+> > --- net.cc-orig Sat Mar 17 09:46:08 2001
+> > +++ net.cc Sat Mar 17 09:49:10 2001
+> > @@ -352,7 +352,7 @@ cygwin_socket (int af, int type, int pro
+> >      {
+> >        debug_printf ("socket (%d, %d, %d)", af, type, protocol);
+> > 
+> > -      soc = socket (AF_INET, type, 0);
+> > +      soc = socket (AF_INET, type, protocol);
 
-Thanks for tracking this down.
+Grand maleur. I had to change that to
 
-Applied,
++      soc = socket (AF_INET, type, AF_UNIX ? 0 : protocol);
+
+to avoid a WSAEPROTONOSUPPORT error when address family was set
+to AF_UNIX/AF_LOCAL.
+
+Thanks anyway,
 Corinna
 
 -- 
