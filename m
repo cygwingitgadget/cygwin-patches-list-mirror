@@ -1,158 +1,262 @@
-From: "Ronald Landheer" <info@rlsystems.net>
-To: "Robert Collins" <robert.collins@itdomain.com.au>, <cygwin-patches@cygwin.com>
-Subject: RE: fhandlers codebase, magic dirs, etc.
-Date: Sun, 30 Sep 2001 04:56:00 -0000
-Message-id: <NFBBLOMHALONCDMPGBLFGENFCCAA.info@rlsystems.net>
-References: <047901c14938$9f0a67a0$01000001@lifelesswks>
-X-SW-Source: 2001-q3/msg00241.html
+From: "Norman Vine" <nhv@cape.com>
+To: "'Robert Collins'" <robert.collins@itdomain.com.au>, "'Jason Tishler'" <jason@tishler.net>
+Cc: <cygwin-patches@cygwin.com>
+Subject: RE: fix cond_race... was RE: src/winsup/cygwin ChangeLog thread.cc thread.h ...
+Date: Sun, 30 Sep 2001 05:21:00 -0000
+Message-id: <003201c149ab$0e16e020$a300a8c0@nhv>
+References: <04f101c1496c$bfb636d0$01000001@lifelesswks>
+X-SW-Source: 2001-q3/msg00242.html
+Content-type: multipart/mixed; boundary="----------=_1583532849-65438-112"
 
-Hello Robert,
+This is a multi-part message in MIME format...
 
->>>> As I'm going to be working on the opendir(), readdir() and stat()
->>>> problems with magic dirs, I just want to make sure I got some
->>>> things straight, and make some things clear, so here goes:
->>>> First off: as I understand it, the readdir() and opendir() code is
->>>> not part of the fhandlers, but should be, so should be migrated
->>>> there, and the existing opendir() and readdir() implementation
->>>> should call the ones in the fhandlers to take care of the dirty
->>>> work, correct?
->>> check.
->> Oh in any case, I will :) I was just hoping that someone would know
->> very sure and fill in details..
-> I meant this in the context of a checklist - "check" or "fail". You
-> had it right.
-Ah, OK :)
+------------=_1583532849-65438-112
+Content-length: 1540
 
->>>> Depending on the type of fhandler that finds stuff in the requested
->>>> opendir() call, the opendir() wrapper should or should not continue
->>>> to the other fhandler classes' opendir() implementations - e.g. in
->>>> /registry, only registry items will be listed, and no files,
->>>> correct?
->>> the opendir wrapper will look very similar to the open wrapper. That
->>> is to say that there is one and only one fhandler that matches a
->>> specific path. So there is no "continue to" logic at all.
->> That would depend on how they're implemented: if an fhandler handles
->> (and shows) a type of file, and that type of file can occur in
->> different types of directories (say: a real file can exist in /dev)
->> that the "continue to" logic is there. If the fhandler handles a type
->> of directory, and shows everything in it, then there's no "continue
->> to" logic to be followed.
->> I don't know what the best approach is yet - but I guess the second
->> one would seem most obvious..
-> I disagree. If a "real" file can exist in /dev, that is the
-> responsibility of the dev fhandler to manage that. The dev fhandler
-> will still do all the grunt work. A directory is just a file that
-> points to other files. So the logic for what fhandler looks after a
-> fiven directory is _identical_ as for looking after files.
-Then you *do* agree - with the second option: if a fhandler handles a 
-type of directory - say, the /dev dir - the fhandler for it shows 
-everything in it, and there's no "continue to" logic to be followed.
+ Robert Collins writes:
+>
+>----- Original Message -----
+>From: "Norman Vine"
+>
+>> Robert Collins writes:
+>>
+>> >----- Original Message -----
+>> >From: "Jason Tishler" <jason@tishler.net>
+>> >>
+>> >> On Fri, Sep 28, 2001 at 05:48:16PM +1000, Robert Collins wrote:
+>> >> > Well this patch should make evreything good -  fixing the critical
+>> >> > section induced race.
+>> >>
+>> >> At the risk of appearing dense...  Should this patch fix the pthreads
+hang
+>> >> trigger by Python's test_threadedtempfile regression test?
+>> >
+>> >I've checked in my completed code. I -cannot- tickle this bug via my
+>> >test suite at all now. (I found that one of my test scripts was slightly
+>> >buggy in that it made an incorrect assumption - it was passing when this
+>> >bug was tickled - correcting that let me hit this bug nearly every time
+>> >:]).
+>> >
+>> >So please, give it a go and see how it fares.
+>>
+>> This now causes a hard crash in any of the Python threading tests
+>> with an attempt to read memory at 0x00000018 failure.
+>>
+>> Note I believe this started, for me at least, with the
+>second piece of this  patch.
+>> Also note that I could not tickle this bug before.
+>
+>Interesting. Well I can drop you an updated test case which I'm sure
+>will tickle the older .dll. Also I found that backgrounding the window
+>the test is running in took the chance of hitting the bug from "very
+>likely" to "sure thing" - if you'll excuse the technical talk :].
+>
+>> Win2k sp2  Cygwin=ntsec   python src 2-1.1-2 from cygwin distribution
+>>
 
-I hadn't decided between the two yet, but with a bit of thought - i.e. 
-the concept of mounting the fhandler for /dev at /dev settling in my 
-synapses - I agree with not having the "continue to" logic: it's just a 
-matter of who owns the directory, and asking him (the proper fhandler) 
-for the data.
+See attached
 
->>>> Codebase: I haven't gotten familiar with it yet - I'll be starting
->>>> that now. As a result, the above suggestions may be complete
->>>> bullshit and should be regarded with that possibility in mind. This
->>>> is just what a tired mind got from a discussion on the cygwin
->>>> mailing list..
->>> fairly close. I have one thing to add and that is that the readdir
->>> wrapper needs to add (and when necessary override) the fhandler
->>> returned entries for mounted fhandlers below the open node. An
->>> example: in / we mount a registry fhandler at /registry, and a devfs
->>> handler at /devfs. Opendir (/) goes to the fhandler_base (which IMO
->>> should be split into fhandler_win32 and a real fhandler_base that
->>> has almost no functionality - different discussion though ;}).
->>> lets say that there is a dir called registry in the cygwin root, and
->>> not one called dev. We want ls / to show both registry and dev.
->>> Now, special case 1: readdir (/ (fhandler_base)) returns a
->>> "registry" entry. The readdir wrapper sees that "registry" conflicts
->>> with the mount table entry /registry and replaces any relevant
->>> metadata in the response to the calling app. Such metadata could be
->>> obtained by a call to stat (/registry (which ends up going to
->>> fhandler_registry))
->>> Special case 2: (BTW: I'm assuming readdir() returns unsorted
->>> entries here). readdir (/ (fhandler_base)) returns end-of-list, and
->>> the readdir wrapper notices that "dev" has not been listed. So the
->>> wrapper adds "dev" to the returned list.
->> Here, I would propose a "continue to" strategy - which leaves less
->> real work for the wrapper: just ask each of the classes whether they
->> have anything to add to the list: give them all the list - which
->> starts empty - and have them add to the end. Look for duplicates
->> after the last one et voilÃ .
-> Again, I disagree. Remember that a class is simply code - no real
-> data. By asking all the classes you are making this entirely special
-> case, and not data driven. You are also making the fhandlers more
-> complex internally. By using the mount table, the system becomes data
-> driven, not code driven, and less code is needed in each fhandler.
-You're right - I don't agree with myself either :)
 
-> * Huh? Not sure of the meaning of these two paragraphs. Time for me to
-> read susv2 on this I think.
-Never mind - my mind was skipping over a rope while it should be 
-balancing a wire.. The "data driven" approach is better - doesn't 
-require as much special coding, and wouldn't require the "completeness 
-over optimisation" approach to coding. (Though that is generally a 
-reasonable approach to start out with).
- 
->>>> Documentation: I have the tendency to document my source code
->>>> thouroughly, which generally provides enough technical
->>>> documentation to build a how-this-works document on, if needed,
->>>> I'll be happy to make such documentation too..
->>>> All that being said, I just have one question left: does it make
->>>> sense for me to checkout the CVS sources of the fhandler_*.cc,
->>>> dir.cc, syscalls.cc, etc. files, or are they not likely to have
->>>> been changed since 1.3.3-2?
->>> they change all the time. The best bet is to CVS checkout the lot.
->>> And then either subscribe to cygwin-cvs and update as needed, or use
->>> cvs diff a fair bit, or just get in the routine of doing cvs update
->>> -Pd before you start hacking each evening/morning/whenever. Update
->>> regularly so that incremental changes don't cause you merge
->>> nightmare.
->>> Also a good idea if chris is willing, is for you to create a cvs
->>> branch for this project, so you can be developing under change
->>> control, which will give you a bit more flexability. Then as things
->>> become stable, you can produce specific patches for specific
->>> achievements/milestones.
->> I'm already subscribed to the cygwin-cvs list - have been for about a
->> week now. I'll be downloading the CVS then..
->> As for making a branch in the repository and allowing me access - it
->> might be a good idea, but I don't know how necessary it will be: I
->> have my own repository here, in which I'll be putting whatever I do
->> for cygwin under version control as well, so making big patches
->> should not be a problem. A branch in the repository is only
->> interesting if others will be working on the same thing (i.e. fixing
->> the magic dirs problems), which is not current (I think?).
-> I have some interest in this, and was planning on the occasional peek
-> :].
-> 
->> I've taken a look at the current stat() implementation. My guess is
->> it can't stay: should be replaced by a call to the stat()s in the
->> fhandlers asking "is this yours?", again, followed by some conflict
->> resolution..
-> NO!. Or rather "yes th current stat is win32 only and it has to go,
-> but this continuation meme you have will make your life very very
-> hard".
-With some more second though, I agree this would make my life harder. Though the current stat() implementation should go, replaced by something more general/generic.
-I agree it should not be a "does this belong to you?" approach, but I 
-guess it should be done by the fhandler handling whatever 
-directory/mount point is being looked in..
+------------=_1583532849-65438-112
+Content-Type: text/plain; charset=us-ascii; name="bt"
+Content-Disposition: inline; filename="bt"
+Content-Transfer-Encoding: base64
+Content-Length: 11883
 
-> Examine _open (). Examine it a little further with my mount table
-> alterations. Stat should look identical. There is _no_ continuation
-> issue or strategy involved in this architecture. _ever_.
-I will - I'll have a look. It's likely to be a lot like what stat() 
-should offer..
+RDpcdXNyXHNyY1xweXRob24tMi4xLjE+ZDovYmluL2dkYi5leGUgLW53IC91
+c3Ivc3JjL3B5dGhvbi0yLjEuMS9weXRob24uZXhlIDEwMDQKCkdOVSBnZGIg
+NS4wICgyMDAxMDQyOC0xKQpDb3B5cmlnaHQgMjAwMSBGcmVlIFNvZnR3YXJl
+IEZvdW5kYXRpb24sIEluYy4KR0RCIGlzIGZyZWUgc29mdHdhcmUsIGNvdmVy
+ZWQgYnkgdGhlIEdOVSBHZW5lcmFsIFB1YmxpYyBMaWNlbnNlLCBhbmQgeW91
+IGFyZQp3ZWxjb21lIHRvIGNoYW5nZSBpdCBhbmQvb3IgZGlzdHJpYnV0ZSBj
+b3BpZXMgb2YgaXQgdW5kZXIgY2VydGFpbiBjb25kaXRpb25zLgpUeXBlICJz
+aG93IGNvcHlpbmciIHRvIHNlZSB0aGUgY29uZGl0aW9ucy4KVGhlcmUgaXMg
+YWJzb2x1dGVseSBubyB3YXJyYW50eSBmb3IgR0RCLiAgVHlwZSAic2hvdyB3
+YXJyYW50eSIgZm9yIGRldGFpbHMuClRoaXMgR0RCIHdhcyBjb25maWd1cmVk
+IGFzICJpNjg2LXBjLWN5Z3dpbiIuLi4KL3Vzci9zcmMvcHl0aG9uLTIuMS4x
+LzEwMDQ6IE5vIHN1Y2ggZmlsZSBvciBkaXJlY3RvcnkuCkF0dGFjaGluZyB0
+byBwcm9ncmFtIGAvdXNyL3NyYy9weXRob24tMi4xLjEvcHl0aG9uLmV4ZScs
+IHByb2Nlc3MgMTAwNAoKUHJvZ3JhbSByZWNlaXZlZCBzaWduYWwgU0lHU0VH
+ViwgU2VnbWVudGF0aW9uIGZhdWx0LgoKUHJvZ3JhbSByZWNlaXZlZCBzaWdu
+YWwgU0lHU0VHViwgU2VnbWVudGF0aW9uIGZhdWx0LgoKUHJvZ3JhbSByZWNl
+aXZlZCBzaWduYWwgU0lHU0VHViwgU2VnbWVudGF0aW9uIGZhdWx0LgoKUHJv
+Z3JhbSByZWNlaXZlZCBzaWduYWwgU0lHU0VHViwgU2VnbWVudGF0aW9uIGZh
+dWx0LgoKUHJvZ3JhbSByZWNlaXZlZCBzaWduYWwgU0lHU0VHViwgU2VnbWVu
+dGF0aW9uIGZhdWx0LgoKUHJvZ3JhbSByZWNlaXZlZCBzaWduYWwgU0lHU0VH
+ViwgU2VnbWVudGF0aW9uIGZhdWx0LgoKUHJvZ3JhbSByZWNlaXZlZCBzaWdu
+YWwgU0lHU0VHViwgU2VnbWVudGF0aW9uIGZhdWx0LgoKUHJvZ3JhbSByZWNl
+aXZlZCBzaWduYWwgU0lHU0VHViwgU2VnbWVudGF0aW9uIGZhdWx0LgoKLS0t
+VHlwZSA8cmV0dXJuPiB0byBjb250aW51ZSwgb3IgcSA8cmV0dXJuPiB0byBx
+dWl0LS0tcQpRdWl0CihnZGIpIGJ0CiMwICAweDc3ZjgyMWUxIGluIF9saWJr
+ZXJuZWwzMl9hX2luYW1lICgpCiMxICAweDYxMDYyZTBjIGluIHB0aHJlYWRf
+bXV0ZXg6OkxvY2sgKHRoaXM9MHgwKQogICAgYXQgL3NyYy9jeWd3aW4vc3Jj
+L3dpbnN1cC9jeWd3aW4vdGhyZWFkLmNjOjY5NAojMiAgMHg2MTA2NDUyYSBp
+biBfX3B0aHJlYWRfY29uZF9kb3dhaXQgKGNvbmQ9MHhhMDVlNmZjLCBtdXRl
+eD0weGEwNWU3MDAsCiAgICB3YWl0bGVuZ3RoPS0xKSBhdCAvc3JjL2N5Z3dp
+bi9zcmMvd2luc3VwL2N5Z3dpbi90aHJlYWQuY2M6MTc3NgojMyAgMHg2MTA2
+NDY0MCBpbiBwdGhyZWFkX2NvbmRfd2FpdCAoY29uZD0weGEwNWU2ZmMsIG11
+dGV4PTB4YTA1ZTcwMCkKICAgIGF0IC9zcmMvY3lnd2luL3NyYy93aW5zdXAv
+Y3lnd2luL3RocmVhZC5jYzoxODA2CiM0ICAweDYxZDkyOGE1IGluIFB5VGhy
+ZWFkX2FjcXVpcmVfbG9jayAobG9jaz0weGEwNWU2ZjgsIHdhaXRmbGFnPTEp
+CiAgICBhdCBQeXRob24vdGhyZWFkX3B0aHJlYWQuaDozMTMKIzUgIDB4NjFk
+NzIxZjYgaW4gZXZhbF9jb2RlMiAoY289MHhhMDdhYzQ4LCBnbG9iYWxzPTB4
+YTA4OGFhNCwgbG9jYWxzPTB4MCwKICAgIGFyZ3M9MHhhMGI4NmNjLCBhcmdj
+b3VudD0wLCBrd3M9MHhhMGI4NmNjLCBrd2NvdW50PTAsIGRlZnM9MHhhMDUw
+NWU4LAogICAgZGVmY291bnQ9MSwgY2xvc3VyZT0weDApIGF0IFB5dGhvbi9j
+ZXZhbC5jOjcyMQojNiAgMHg2MWQ3NjQwNSBpbiBmYXN0X2Z1bmN0aW9uIChm
+dW5jPTB4YTA4MDBlNCwgcHBfc3RhY2s9MHgyMmY4ZmMsIG49MCwgbmE9MCwK
+ICAgIG5rPTApIGF0IFB5dGhvbi9jZXZhbC5jOjMwMjIKIzcgIDB4NjFkNzQ4
+NWQgaW4gZXZhbF9jb2RlMiAoY289MHhhMDdiMmUwLCBnbG9iYWxzPTB4YTA4
+OGFhNCwgbG9jYWxzPTB4MCwKICAgIGFyZ3M9MHhhMGI2M2YwLCBhcmdjb3Vu
+dD0xLCBrd3M9MHgwLCBrd2NvdW50PTAsIGRlZnM9MHhhMDgwMzMwLAogICAg
+ZGVmY291bnQ9NiwgY2xvc3VyZT0weDApIGF0IFB5dGhvbi9jZXZhbC5jOjE5
+NzIKIzggIDB4NjFkNzYzMDMgaW4gY2FsbF9ldmFsX2NvZGUyIChmdW5jPTB4
+YTA4MDJlYywgYXJnPTB4YTBiNjNlNCwga3c9MHgwKQogICAgYXQgUHl0aG9u
+L2NldmFsLmM6Mjk2NgojOSAgMHg2MWQ3NWU0MiBpbiBjYWxsX29iamVjdCAo
+ZnVuYz0weGEwODAyZWMsIGFyZz0weGEwYjYzZTQsIGt3PTB4MCkKICAgIGF0
+IFB5dGhvbi9jZXZhbC5jOjI4MDUKIzEwIDB4NjFkNzYxYjkgaW4gY2FsbF9t
+ZXRob2QgKGZ1bmM9MHhhMDgwMmVjLCBhcmc9MHhhMDE1MGY0LCBrdz0weDAp
+CiAgICBhdCBQeXRob24vY2V2YWwuYzoyOTIzCiMxMSAweDYxZDc1ZTJlIGlu
+IGNhbGxfb2JqZWN0IChmdW5jPTB4YTBiNzkwYywgYXJnPTB4YTAxNTBmNCwg
+a3c9MHgwKQotLS1UeXBlIDxyZXR1cm4+IHRvIGNvbnRpbnVlLCBvciBxIDxy
+ZXR1cm4+IHRvIHF1aXQtLS0KICAgIGF0IFB5dGhvbi9jZXZhbC5jOjI4MDMK
+IzEyIDB4NjFkNzVjOGUgaW4gUHlFdmFsX0NhbGxPYmplY3RXaXRoS2V5d29y
+ZHMgKGZ1bmM9MHhhMGI3OTBjLAogICAgYXJnPTB4YTAxNTBmNCwga3c9MHgw
+KSBhdCBQeXRob24vY2V2YWwuYzoyNzQwCiMxMyAweDYxZDQ4NjM2IGluIFB5
+SW5zdGFuY2VfTmV3IChrbGFzcz0weGEwOWZhZGMsIGFyZz0weGEwMTUwZjQs
+IGt3PTB4MCkKICAgIGF0IE9iamVjdHMvY2xhc3NvYmplY3QuYzo0ODkKIzE0
+IDB4NjFkNzVlNmEgaW4gY2FsbF9vYmplY3QgKGZ1bmM9MHhhMDlmYWRjLCBh
+cmc9MHhhMDE1MGY0LCBrdz0weDApCiAgICBhdCBQeXRob24vY2V2YWwuYzoy
+ODA5CiMxNSAweDYxZDc2NmYwIGluIGRvX2NhbGwgKGZ1bmM9MHhhMDlmYWRj
+LCBwcF9zdGFjaz0weDIyZmI4YywgbmE9MCwgbms9MCkKICAgIGF0IFB5dGhv
+bi9jZXZhbC5jOjMxMjMKIzE2IDB4NjFkNzQ4NzcgaW4gZXZhbF9jb2RlMiAo
+Y289MHhhMDg2NDY4LCBnbG9iYWxzPTB4YTAxNTQ0YywgbG9jYWxzPTB4MCwK
+ICAgIGFyZ3M9MHhhMDIwZjg0LCBhcmdjb3VudD0wLCBrd3M9MHhhMDIwZjg0
+LCBrd2NvdW50PTAsIGRlZnM9MHgwLAogICAgZGVmY291bnQ9MCwgY2xvc3Vy
+ZT0weDApIGF0IFB5dGhvbi9jZXZhbC5jOjE5NzUKIzE3IDB4NjFkNzY0MDUg
+aW4gZmFzdF9mdW5jdGlvbiAoZnVuYz0weGEwOWY0NWMsIHBwX3N0YWNrPTB4
+MjJmY2JjLCBuPTAsIG5hPTAsCiAgICBuaz0wKSBhdCBQeXRob24vY2V2YWwu
+YzozMDIyCiMxOCAweDYxZDc0ODVkIGluIGV2YWxfY29kZTIgKGNvPTB4YTA3
+ZDI1OCwgZ2xvYmFscz0weGEwMTU0NGMsCiAgICBsb2NhbHM9MHhhMDE1NDRj
+LCBhcmdzPTB4MCwgYXJnY291bnQ9MCwga3dzPTB4MCwga3djb3VudD0wLCBk
+ZWZzPTB4MCwKICAgIGRlZmNvdW50PTAsIGNsb3N1cmU9MHgwKSBhdCBQeXRo
+b24vY2V2YWwuYzoxOTcyCiMxOSAweDYxZDcxNDgwIGluIFB5RXZhbF9FdmFs
+Q29kZSAoY289MHhhMDdkMjU4LCBnbG9iYWxzPTB4YTAxNTQ0YywKICAgIGxv
+Y2Fscz0weGEwMTU0NGMpIGF0IFB5dGhvbi9jZXZhbC5jOjM0MQojMjAgMHg2
+MWQ4ZjYzOSBpbiBydW5fbm9kZSAobj0weGEwNWM4NjgsCiAgICBmaWxlbmFt
+ZT0weDYxNGQ1MTY0ICJMaWIvdGVzdC90ZXN0X3RocmVhZGVkdGVtcGZpbGUu
+cHkiLAogICAgZ2xvYmFscz0weGEwMTU0NGMsIGxvY2Fscz0weGEwMTU0NGMs
+IGZsYWdzPTB4MjJmZTcwKQogICAgYXQgUHl0aG9uL3B5dGhvbnJ1bi5jOjEw
+NDUKIzIxIDB4NjFkOGY1ZWEgaW4gcnVuX2Vycl9ub2RlIChuPTB4YTA1Yzg2
+OCwKLS0tVHlwZSA8cmV0dXJuPiB0byBjb250aW51ZSwgb3IgcSA8cmV0dXJu
+PiB0byBxdWl0LS0tCiAgICBmaWxlbmFtZT0weDYxNGQ1MTY0ICJMaWIvdGVz
+dC90ZXN0X3RocmVhZGVkdGVtcGZpbGUucHkiLAogICAgZ2xvYmFscz0weGEw
+MTU0NGMsIGxvY2Fscz0weGEwMTU0NGMsIGZsYWdzPTB4MjJmZTcwKQogICAg
+YXQgUHl0aG9uL3B5dGhvbnJ1bi5jOjEwMzIKIzIyIDB4NjFkOGY1YmEgaW4g
+UHlSdW5fRmlsZUV4RmxhZ3MgKGZwPTB4YTAxMDM3NCwKICAgIGZpbGVuYW1l
+PTB4NjE0ZDUxNjQgIkxpYi90ZXN0L3Rlc3RfdGhyZWFkZWR0ZW1wZmlsZS5w
+eSIsIHN0YXJ0PTI1NywKICAgIGdsb2JhbHM9MHhhMDE1NDRjLCBsb2NhbHM9
+MHhhMDE1NDRjLCBjbG9zZWl0PTEsIGZsYWdzPTB4MjJmZTcwKQogICAgYXQg
+UHl0aG9uL3B5dGhvbnJ1bi5jOjEwMjMKIzIzIDB4NjFkOGU4NjQgaW4gUHlS
+dW5fU2ltcGxlRmlsZUV4RmxhZ3MgKGZwPTB4YTAxMDM3NCwKICAgIGZpbGVu
+YW1lPTB4NjE0ZDUxNjQgIkxpYi90ZXN0L3Rlc3RfdGhyZWFkZWR0ZW1wZmls
+ZS5weSIsIGNsb3NlaXQ9MSwKICAgIGZsYWdzPTB4MjJmZTcwKSBhdCBQeXRo
+b24vcHl0aG9ucnVuLmM6NjY1CiMyNCAweDYxZDhlMzBjIGluIFB5UnVuX0Fu
+eUZpbGVFeEZsYWdzIChmcD0weGEwMTAzNzQsCiAgICBmaWxlbmFtZT0weDYx
+NGQ1MTY0ICJMaWIvdGVzdC90ZXN0X3RocmVhZGVkdGVtcGZpbGUucHkiLCBj
+bG9zZWl0PTEsCiAgICBmbGFncz0weDIyZmU3MCkgYXQgUHl0aG9uL3B5dGhv
+bnJ1bi5jOjQ3OQojMjUgMHg2MWQ5NGE2OCBpbiBQeV9NYWluIChhcmdjPTIs
+IGFyZ3Y9MHg2MTRkNTBmNCkgYXQgTW9kdWxlcy9tYWluLmM6MzIwCiMyNiAw
+eDAwNDAxMDYxIGluIG1haW4gKGFyZ2M9MiwgYXJndj0weDYxNGQ1MGY0KSBh
+dCBNb2R1bGVzL3B5dGhvbi5jOjEwCiMyNyAweDYxMDAzZjQyIGluIGRsbF9j
+cnQwXzEgKCkgYXQgL3NyYy9jeWd3aW4vc3JjL3dpbnN1cC9jeWd3aW4vZGNy
+dDAuY2M6NzcyCiMyOCAweDYxMDA0MTcxIGluIF9kbGxfY3J0MCAoKSBhdCAv
+c3JjL2N5Z3dpbi9zcmMvd2luc3VwL2N5Z3dpbi9kY3J0MC5jYzo4NDAKIzI5
+IDB4NjEwMDQxYjAgaW4gZGxsX2NydDAgKHVwdHI9MHgwKQogICAgYXQgL3Ny
+Yy9jeWd3aW4vc3JjL3dpbnN1cC9jeWd3aW4vZGNydDAuY2M6ODUyCiMzMCAw
+eDAwNDAxMGJmIGluIGN5Z3dpbl9jcnQwICgpCiAgICBhdCAvc3JjL2N5Z3dp
+bi9zcmMvd2luc3VwL2N5Z3dpbi9saWIvY3lnd2luX2NydDAuYzozMwooZ2Ri
+KSBzZWxlY3QgMQpDdXJyZW50IGxhbmd1YWdlOiAgYXV0bzsgY3VycmVudGx5
+IGMrKwooZ2RiKSBpbmZvIGxvY2Fscwp0aGlzID0gKHB0aHJlYWRfbXV0ZXgg
+KikgMHg0CihnZGIpIHVwCiMyICAweDYxMDY0NTJhIGluIF9fcHRocmVhZF9j
+b25kX2Rvd2FpdCAoY29uZD0weGEwNWU2ZmMsIG11dGV4PTB4YTA1ZTcwMCwK
+ICAgIHdhaXRsZW5ndGg9LTEpIGF0IC9zcmMvY3lnd2luL3NyYy93aW5zdXAv
+Y3lnd2luL3RocmVhZC5jYzoxNzc2CjE3NzYgICAgICAoKmNvbmQpLT5tdXRl
+eC0+TG9jayAoKTsKKGdkYikgaW5mbyBsb2NhbHMKY29uZCA9IChwdGhyZWFk
+X2NvbmRfdCAqKSAweGEwNWU2ZmMKbXV0ZXggPSAocHRocmVhZF9tdXRleF90
+ICopIDB4YTA1ZTcwMAp3YWl0bGVuZ3RoID0gNApydiA9IDAKKGdkYikgdXAK
+IzMgIDB4NjEwNjQ2NDAgaW4gcHRocmVhZF9jb25kX3dhaXQgKGNvbmQ9MHhh
+MDVlNmZjLCBtdXRleD0weGEwNWU3MDApCiAgICBhdCAvc3JjL2N5Z3dpbi9z
+cmMvd2luc3VwL2N5Z3dpbi90aHJlYWQuY2M6MTgwNgoxODA2ICAgICAgcmV0
+dXJuIF9fcHRocmVhZF9jb25kX2Rvd2FpdCAoY29uZCwgbXV0ZXgsIElORklO
+SVRFKTsKKGdkYikgaW5mbyBsb2NhbHMKY29uZCA9IChwdGhyZWFkX2NvbmRf
+dCAqKSAweDQKbXV0ZXggPSAocHRocmVhZF9tdXRleF90ICopIDB4NAooZ2Ri
+KSB1cAojNCAgMHg2MWQ5MjhhNSBpbiBQeVRocmVhZF9hY3F1aXJlX2xvY2sg
+KGxvY2s9MHhhMDVlNmY4LCB3YWl0ZmxhZz0xKQogICAgYXQgUHl0aG9uL3Ro
+cmVhZF9wdGhyZWFkLmg6MzEzCjMxMyAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgc3RhdHVzID0gcHRocmVhZF9jb25kX3dhaXQoJnRoZWxvY2stPmxv
+Y2tfcmVsZWFzCmVkLApDdXJyZW50IGxhbmd1YWdlOiAgYXV0bzsgY3VycmVu
+dGx5IGMKKGdkYikgaW5mbyBsb2NhbHMKbG9jayA9IDB4YTA1ZTZmOApzdWNj
+ZXNzID0gMTY4MTU4OTc2CnN0YXR1cyA9IDQKZXJyb3IgPSAwCihnZGIpIHVw
+CiM1ICAweDYxZDcyMWY2IGluIGV2YWxfY29kZTIgKGNvPTB4YTA3YWM0OCwg
+Z2xvYmFscz0weGEwODhhYTQsIGxvY2Fscz0weDAsCiAgICBhcmdzPTB4YTBi
+ODZjYywgYXJnY291bnQ9MCwga3dzPTB4YTBiODZjYywga3djb3VudD0wLCBk
+ZWZzPTB4YTA1MDVlOCwKICAgIGRlZmNvdW50PTEsIGNsb3N1cmU9MHgwKSBh
+dCBQeXRob24vY2V2YWwuYzo3MjEKNzIxICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIFB5VGhyZWFkX2FjcXVpcmVfbG9jayhpbnRlcnBy
+ZXRlcl9sb2NrLAoxKTsKKGdkYikgaW5mbyBsb2NhbHMKZ2xvYmFscyA9IChQ
+eU9iamVjdCAqKSAweDQKbG9jYWxzID0gKFB5T2JqZWN0ICopIDB4NAphcmdz
+ID0gKFB5T2JqZWN0ICoqKSAweGEwN2EzNTgKc3RhY2tfcG9pbnRlciA9IChQ
+eU9iamVjdCAqKikgMHhhMGI2MDUwCm5leHRfaW5zdHIgPSAodW5zaWduZWQg
+Y2hhciAqKSAweGEwN2FjMGQgInQiCm9wY29kZSA9IDEyNApvcGFyZyA9IDAK
+d2h5ID0gV0hZX05PVAplcnIgPSAwCnggPSAoUHlPYmplY3QgKikgMHhhMDdh
+MzU4CnYgPSAoUHlPYmplY3QgKikgMHhhMDEwNTg4CncgPSAoUHlPYmplY3Qg
+KikgMHhhMDdhYzIwCnUgPSAoUHlPYmplY3QgKikgMHhmZmZmZmZmZgp0ID0g
+KFB5T2JqZWN0ICopIDB4YTA3YTM1OApzdHJlYW0gPSAoUHlPYmplY3QgKikg
+MHgwCmYgPSAoUHlGcmFtZU9iamVjdCAqKSAweGEwYjVmMDAKZmFzdGxvY2Fs
+cyA9IChQeU9iamVjdCAqKikgMHhhMGI2MDQ4CmZyZWV2YXJzID0gKFB5T2Jq
+ZWN0ICoqKSAweGEwYjYwNGMKcmV0dmFsID0gKFB5T2JqZWN0ICopIDB4MAp0
+c3RhdGUgPSAoUHlUaHJlYWRTdGF0ZSAqKSAweGEwMTA1ODgKZmlyc3RfaW5z
+dHIgPSAodW5zaWduZWQgY2hhciAqKSAweGEwN2FiZjQgIlwxNzcyXDAwMVwx
+NzczXDAwMVwxNzc0XDAwMXQiCihnZGIpIHVwCiM2ICAweDYxZDc2NDA1IGlu
+IGZhc3RfZnVuY3Rpb24gKGZ1bmM9MHhhMDgwMGU0LCBwcF9zdGFjaz0weDIy
+ZjhmYywgbj0wLCBuYT0wLAogICAgbms9MCkgYXQgUHl0aG9uL2NldmFsLmM6
+MzAyMgozMDIyICAgICAgICAgICAgcmV0dXJuIGV2YWxfY29kZTIoKFB5Q29k
+ZU9iamVjdCAqKWNvLCBnbG9iYWxzLAooZ2RiKSBpbmZvIGxvY2FscwpmdW5j
+ID0gKFB5T2JqZWN0ICopIDB4NApwcF9zdGFjayA9IChQeU9iamVjdCAqKiop
+IDB4NApuYSA9IDQKbmsgPSAwCmNvID0gKFB5T2JqZWN0ICopIDB4YTA3YWM0
+OApnbG9iYWxzID0gKFB5T2JqZWN0ICopIDB4YTA4OGFhNAphcmdkZWZzID0g
+KFB5T2JqZWN0ICopIDB4NApjbG9zdXJlID0gKFB5T2JqZWN0ICopIDB4NApk
+ID0gKFB5T2JqZWN0ICoqKSAweGEwNTA1ZTgKbmQgPSAyMTQ3MzQ0Mzg0Cihn
+ZGIpIHVwCiM3ICAweDYxZDc0ODVkIGluIGV2YWxfY29kZTIgKGNvPTB4YTA3
+YjJlMCwgZ2xvYmFscz0weGEwODhhYTQsIGxvY2Fscz0weDAsCiAgICBhcmdz
+PTB4YTBiNjNmMCwgYXJnY291bnQ9MSwga3dzPTB4MCwga3djb3VudD0wLCBk
+ZWZzPTB4YTA4MDMzMCwKICAgIGRlZmNvdW50PTYsIGNsb3N1cmU9MHgwKSBh
+dCBQeXRob24vY2V2YWwuYzoxOTcyCjE5NzIgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgeCA9IGZhc3RfZnVuY3Rpb24oZnVuYywg
+JnN0YWNrX3BvaW50CmVyLAooZ2RiKSBpbmZvIGxvY2FscwpuYSA9IDE2ODMz
+MTk0MApuayA9IDAKbiA9IDAKcGZ1bmMgPSAoUHlPYmplY3QgKiopIDB4YTBi
+ODZjOApmdW5jID0gKFB5T2JqZWN0ICopIDB4MApnbG9iYWxzID0gKFB5T2Jq
+ZWN0ICopIDB4NApsb2NhbHMgPSAoUHlPYmplY3QgKikgMHg0CmFyZ3MgPSAo
+UHlPYmplY3QgKiopIDB4YTA4OGFhNApzdGFja19wb2ludGVyID0gKFB5T2Jq
+ZWN0ICoqKSAweGEwYjg2Y2MKbmV4dF9pbnN0ciA9ICh1bnNpZ25lZCBjaGFy
+ICopIDB4YTA3YWUyMiAiXDIwM1wwMDEiCm9wY29kZSA9IDEzMQpvcGFyZyA9
+IDAKd2h5ID0gV0hZX05PVAplcnIgPSAwCnggPSAoUHlPYmplY3QgKikgMHhh
+MDgwMGU0CnYgPSAoUHlPYmplY3QgKikgMHhhMDUwNWU4CncgPSAoUHlPYmpl
+Y3QgKikgMHhhMDdiMTI4CnUgPSAoUHlPYmplY3QgKikgMHgwCnQgPSAoUHlP
+YmplY3QgKikgMHhhMDg4YWE0CnN0cmVhbSA9IChQeU9iamVjdCAqKSAweDAK
+ZiA9IChQeUZyYW1lT2JqZWN0ICopIDB4YTBiODU2MApmYXN0bG9jYWxzID0g
+KFB5T2JqZWN0ICoqKSAweGEwYjg2YTgKZnJlZXZhcnMgPSAoUHlPYmplY3Qg
+KiopIDB4YTBiODZjNApyZXR2YWwgPSAoUHlPYmplY3QgKikgMHgwCi0tLVR5
+cGUgPHJldHVybj4gdG8gY29udGludWUsIG9yIHEgPHJldHVybj4gdG8gcXVp
+dC0tLQp0c3RhdGUgPSAoUHlUaHJlYWRTdGF0ZSAqKSAweGEwMTA1ODgKZmly
+c3RfaW5zdHIgPSAodW5zaWduZWQgY2hhciAqKSAweGEwN2FkY2MgIlwxNzdD
+XDAwMVwxNzdFXDAwMXQiCihnZGIpIHVwCiM4ICAweDYxZDc2MzAzIGluIGNh
+bGxfZXZhbF9jb2RlMiAoZnVuYz0weGEwODAyZWMsIGFyZz0weGEwYjYzZTQs
+IGt3PTB4MCkKICAgIGF0IFB5dGhvbi9jZXZhbC5jOjI5NjYKMjk2NiAgICAg
+ICAgICAgIHJlc3VsdCA9IGV2YWxfY29kZTIoCihnZGIpIGluZm8gbG9jYWxz
+CnJlc3VsdCA9IChQeU9iamVjdCAqKSAweDAKYXJnZGVmcyA9IChQeU9iamVj
+dCAqKSAweDQKZCA9IChQeU9iamVjdCAqKikgMHhhMDgwMzMwCmsgPSAoUHlP
+YmplY3QgKiopIDB4MApuayA9IDQKbmQgPSA2CihnZGIpCg==
 
-> I'm happy to draw up a how-fhandlers-work document if needed. (I think
-> I grok them, Chris or Corinna will probably want to confirm what I
-> write :})
-Please do - you probably know the layout already, which means that I 
-don't have to start at nothing figuring out how it works.
-
-Greetz!
-
-Ronald
+------------=_1583532849-65438-112--
