@@ -1,34 +1,42 @@
-From: Chris Faylor <cgf@cygnus.com>
+From: Vadim Egorov <egorovv@mailandnews.com>
 To: cygwin-patches@sourceware.cygnus.com
 Subject: Re: [egorovv@mailandnews.com: inet_network]
-Date: Wed, 19 Apr 2000 21:47:00 -0000
-Message-id: <20000420004658.A18246@cygnus.com>
-References: <20000419134603.A15867@cygnus.com> <200004191752.NAA03943@envy.delorie.com> <20000419135549.D15867@cygnus.com> <200004191757.NAA03992@envy.delorie.com> <itygkq3z.fsf@mailandnews.com> <20000419194209.C17112@cygnus.com> <uog758k80.fsf@mailandnews.com> <20000420003524.A18106@cygnus.com> <uitxd8jr8.fsf@mailandnews.com>
-X-SW-Source: 2000-q2/msg00020.html
+Date: Wed, 19 Apr 2000 22:07:00 -0000
+Message-id: <uem818ip0.fsf@mailandnews.com>
+References: <20000419134603.A15867@cygnus.com> <200004191752.NAA03943@envy.delorie.com> <20000419135549.D15867@cygnus.com> <200004191757.NAA03992@envy.delorie.com> <itygkq3z.fsf@mailandnews.com> <20000419194209.C17112@cygnus.com> <uog758k80.fsf@mailandnews.com> <20000420003524.A18106@cygnus.com> <uitxd8jr8.fsf@mailandnews.com> <20000420004658.A18246@cygnus.com>
+X-SW-Source: 2000-q2/msg00021.html
 
-On Thu, Apr 20, 2000 at 08:43:39AM +0400, Vadim Egorov wrote:
->Chris Faylor <cgf@cygnus.com> writes:
->
->> On Thu, Apr 20, 2000 at 08:33:35AM +0400, Vadim Egorov wrote:
->> >Chris Faylor <cgf@cygnus.com> writes:
->>>>On Tue, Mar 21, 2000 at 11:47:12PM +0300, Vadim Egorov wrote:
->>>>>One more way is to borow it -- glibc contains quite compact and
->>>>>independent one -- though I'm not quite sure about cygwin policy in
->>>>>this respect.
->>>>
->>>>We can't borrow from glibc due to license considerations,
->>>>unfortunately.  BSD, on the other hand...
->>>>
->>>As I found both FreeBSD and glibc contain the same code of inet_network
->>>(with slightest diffs).
->>
->>There should be no problem using BSD code.  We use it in other places
->>in Cygwin.
->>
->Then I'll try it.  Is it a better solution then using undocumented
->wsock32.dll feature?
+Chris Faylor <cgf@cygnus.com> writes:
 
-If the undocumented feature is in W95, W98, NT4, and NT2000, then, no.  I
-don't think it is a better solution, unless it is a miniscule amount of code.
+> On Thu, Apr 20, 2000 at 08:43:39AM +0400, Vadim Egorov wrote:
+> >Chris Faylor <cgf@cygnus.com> writes:
+> >
+> >> On Thu, Apr 20, 2000 at 08:33:35AM +0400, Vadim Egorov wrote:
+> >> >Chris Faylor <cgf@cygnus.com> writes:
+> >>>>On Tue, Mar 21, 2000 at 11:47:12PM +0300, Vadim Egorov wrote:
+> >>>>>One more way is to borow it -- glibc contains quite compact and
+> >>>>>independent one -- though I'm not quite sure about cygwin policy in
+> >>>>>this respect.
+> >>>>
+> >>>>We can't borrow from glibc due to license considerations,
+> >>>>unfortunately.  BSD, on the other hand...
+> >>>>
+> >>>As I found both FreeBSD and glibc contain the same code of inet_network
+> >>>(with slightest diffs).
+> >>
+> >>There should be no problem using BSD code.  We use it in other places
+> >>in Cygwin.
+> >>
+> >Then I'll try it.  Is it a better solution then using undocumented
+> >wsock32.dll feature?
+> 
+> If the undocumented feature is in W95, W98, NT4, and NT2000, then, no.  I
+> don't think it is a better solution, unless it is a miniscule amount of code.
+> 
+> cgf
+> 
+I have checked them all and all versions of wsock32.dll contain inet_network.
 
-cgf
+-- 
+Regards,
+Vadim Egorov 
