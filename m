@@ -1,22 +1,122 @@
-From: Robert Collins <robert.collins@itdomain.com.au>
-To: Corinna Vinschen <cygwin-patches@cygwin.com>
-Subject: Re: [PATCH]: `wincap' instead of `os_being_run' and `iswinnt'
-Date: Wed, 12 Sep 2001 15:53:00 -0000
-Message-id: <1000335244.31768.39.camel@lifelesswks>
-References: <20010912202058.H1285@cygbert.vinschen.de>
-X-SW-Source: 2001-q3/msg00138.html
+From: egor duda <deo@logos-m.ru>
+To: cygwin-patches@cygwin.com
+Subject: yet another "pedantic" patch
+Date: Thu, 13 Sep 2001 08:47:00 -0000
+Message-id: <11495323718.20010913194455@logos-m.ru>
+X-SW-Source: 2001-q3/msg00139.html
+Content-type: multipart/mixed; boundary="----------=_1583532848-65438-97"
 
-On Thu, 2001-09-13 at 04:20, Corinna Vinschen wrote:
-> I have just checked in a huge patch which changes all code which
-> asks for the OS to behave different on different systems.
-> 
-> The global variables `os_being_run' and `iswinnt' are eliminated.
-> 
-> Instead we have a new global variable called `wincap' which is
-> the only member of class `wincapc'. The definition of that stuff
-> is in the new file wincap.h.
+This is a multi-part message in MIME format...
 
-Nice. It's the logical extension of what I'd started with the daemon
-patch for expediency.
+------------=_1583532848-65438-97
+Content-length: 342
 
-Rob
+Hi!
+
+  I've added input parameter checking to some functions so that new
+tests in the testsuite will run smoothly.
+
+Does anybody know why we link with libstdc++? I've removed it and
+everything links and runs ok.
+
+egor.            mailto:deo@logos-m.ru icq 5165414 fidonet 2:5020/496.19
+check-args-validity.diff
+check-args-validity.ChangeLog
+
+
+------------=_1583532848-65438-97
+Content-Type: text/plain; charset=us-ascii;
+ name="check-args-validity.ChangeLog"
+Content-Disposition: inline; filename="check-args-validity.ChangeLog"
+Content-Transfer-Encoding: base64
+Content-Length: 334
+
+MjAwMS0wOS0xMyAgRWdvciBEdWRhICA8ZGVvQGxvZ29zLW0ucnU+CgoJKiBN
+YWtlZmlsZS5pbjogRG9uJ3QgbGluayB3aXRoIGxpYnN0ZGMrKwoJKiBwYXRo
+LmNjIChzeW1saW5rKTogQ2hlY2sgYXJndW1lbnRzIGZvciB2YWxpZGl0eS4K
+CShnZXRjd2QpOiBEaXR0by4KCSogc3lzY2FsbHMuY2MgKGZ0cnVuY2F0ZSk6
+IERpdHRvLgoJKiB0aW1lcy5jYyAodGltZXMpOiBEaXR0by4KCSogdW5hbWUu
+Y2MgKHVuYW1lKTogRGl0dG8uCg==
+
+------------=_1583532848-65438-97
+Content-Type: text/x-diff; charset=us-ascii; name="check-args-validity.diff"
+Content-Disposition: inline; filename="check-args-validity.diff"
+Content-Transfer-Encoding: base64
+Content-Length: 4506
+
+SW5kZXg6IE1ha2VmaWxlLmluCj09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KUkNT
+IGZpbGU6IC9jdnMvdWJlcmJhdW0vd2luc3VwL2N5Z3dpbi9NYWtlZmlsZS5p
+bix2CnJldHJpZXZpbmcgcmV2aXNpb24gMS42MQpkaWZmIC11IC1wIC0yIC1y
+MS42MSBNYWtlZmlsZS5pbgotLS0gTWFrZWZpbGUuaW4JMjAwMS8wOS8xMiAx
+Nzo0NjozNQkxLjYxCisrKyBNYWtlZmlsZS5pbgkyMDAxLzA5LzEzIDE1OjM2
+OjMyCkBAIC0yMDAsNSArMjAwLDUgQEAgbmV3LSQoRExMX05BTUUpOiAkKExE
+U0NSSVBUKSAkKERMTF9PRklMRQogCS1lICQoRExMX0VOVFJZKSAkKERFRl9G
+SUxFKSAkKERMTF9PRklMRVMpIHZlcnNpb24ubyB3aW52ZXIubyBcCiAJJChE
+TExfSU1QT1JUUykgJChNQUxMT0NfT0JKKSAkKExJQk0pICQoTElCQykgXAot
+CS1sc3RkYysrIC1sZ2NjIC1sc2hlbGwzMiAtbHV1aWQKKwktbGdjYyAtbHNo
+ZWxsMzIgLWx1dWlkCiAKIGRsbF9vZmlsZXM6ICQoRExMX09GSUxFUykKSW5k
+ZXg6IHBhdGguY2MKPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1MgZmlsZTog
+L2N2cy91YmVyYmF1bS93aW5zdXAvY3lnd2luL3BhdGguY2MsdgpyZXRyaWV2
+aW5nIHJldmlzaW9uIDEuMTYyCmRpZmYgLXUgLXAgLTIgLXIxLjE2MiBwYXRo
+LmNjCi0tLSBwYXRoLmNjCTIwMDEvMDkvMDcgMjE6MzI6MDQJMS4xNjIKKysr
+IHBhdGguY2MJMjAwMS8wOS8xMyAxNTozNjozMwpAQCAtMjQwMCw0ICsyNDAw
+LDE0IEBAIHN5bWxpbmsgKGNvbnN0IGNoYXIgKnRvcGF0aCwgY29uc3QgY2hh
+ciAKICAgU0VDVVJJVFlfQVRUUklCVVRFUyBzYSA9IHNlY19ub25lX25paDsK
+IAorICBpZiAodG9wYXRoWzBdID09IDApCisgICAgeworICAgICAgc2V0X2Vy
+cm5vIChFSU5WQUwpOworICAgICAgZ290byBkb25lOworICAgIH0KKworICBp
+ZiAoY2hlY2tfbnVsbF9lbXB0eV9zdHJfZXJybm8gKHRvcGF0aCkgfHwKKyAg
+ICAgIGNoZWNrX251bGxfZW1wdHlfc3RyX2Vycm5vIChmcm9tcGF0aCkpCisg
+ICAgZ290byBkb25lOworCiAgIHdpbjMyX3BhdGguY2hlY2sgKGZyb21wYXRo
+LCBQQ19TWU1fTk9GT0xMT1cpOwogICBpZiAoYWxsb3dfd2luc3ltbGlua3Mg
+JiYgIXdpbjMyX3BhdGguZXJyb3IpCkBAIC0yNDE2LDkgKzI0MjYsNCBAQCBz
+eW1saW5rIChjb25zdCBjaGFyICp0b3BhdGgsIGNvbnN0IGNoYXIgCiAgIHN5
+c2NhbGxfcHJpbnRmICgic3ltbGluayAoJXMsICVzKSIsIHRvcGF0aCwgd2lu
+MzJfcGF0aC5nZXRfd2luMzIgKCkpOwogCi0gIGlmICh0b3BhdGhbMF0gPT0g
+MCkKLSAgICB7Ci0gICAgICBzZXRfZXJybm8gKEVJTlZBTCk7Ci0gICAgICBn
+b3RvIGRvbmU7Ci0gICAgfQogICBpZiAoc3RybGVuICh0b3BhdGgpID49IE1B
+WF9QQVRIKQogICAgIHsKQEAgLTI5ODUsNSArMjk5MCwxMCBAQCBjaGFyICoK
+IGdldGN3ZCAoY2hhciAqYnVmLCBzaXplX3QgdWxlbikKIHsKLSAgcmV0dXJu
+IGN5Z2hlYXAtPmN3ZC5nZXQgKGJ1ZiwgMSwgMSwgdWxlbik7CisgIGNoYXIq
+IHJlcyA9IE5VTEw7CisgIGlmICghYnVmIHx8IHVsZW4gPT0gMCkKKyAgICBz
+ZXRfZXJybm8gKEVJTlZBTCk7CisgIGVsc2UgaWYgKCFfX2NoZWNrX251bGxf
+aW52YWxpZF9zdHJ1Y3RfZXJybm8gKGJ1ZiwgdWxlbikpCisgICAgcmVzID0g
+Y3lnaGVhcC0+Y3dkLmdldCAoYnVmLCAxLCAxLCB1bGVuKTsKKyAgcmV0dXJu
+IHJlczsKIH0KIApJbmRleDogc3lzY2FsbHMuY2MKPT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PQpSQ1MgZmlsZTogL2N2cy91YmVyYmF1bS93aW5zdXAvY3lnd2lu
+L3N5c2NhbGxzLmNjLHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjE0NApkaWZm
+IC11IC1wIC0yIC1yMS4xNDQgc3lzY2FsbHMuY2MKLS0tIHN5c2NhbGxzLmNj
+CTIwMDEvMDkvMTIgMTc6NDY6MzYJMS4xNDQKKysrIHN5c2NhbGxzLmNjCTIw
+MDEvMDkvMTMgMTU6MzY6MzUKQEAgLTE3NjksNSArMTc2OSw5IEBAIGZ0cnVu
+Y2F0ZSAoaW50IGZkLCBvZmZfdCBsZW5ndGgpCiAgIGludCByZXMgPSAtMTsK
+IAotICBpZiAoY3lnaGVhcC0+ZmR0YWIubm90X29wZW4gKGZkKSkKKyAgaWYg
+KGxlbmd0aCA8IDApCisgICAgeworICAgICAgc2V0X2Vycm5vIChFSU5WQUwp
+OworICAgIH0KKyAgZWxzZSBpZiAoY3lnaGVhcC0+ZmR0YWIubm90X29wZW4g
+KGZkKSkKICAgICB7CiAgICAgICBzZXRfZXJybm8gKEVCQURGKTsKSW5kZXg6
+IHRpbWVzLmNjCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KUkNTIGZpbGU6IC9j
+dnMvdWJlcmJhdW0vd2luc3VwL2N5Z3dpbi90aW1lcy5jYyx2CnJldHJpZXZp
+bmcgcmV2aXNpb24gMS4yMgpkaWZmIC11IC1wIC0yIC1yMS4yMiB0aW1lcy5j
+YwotLS0gdGltZXMuY2MJMjAwMS8wOS8xMiAxNzo0NjozNgkxLjIyCisrKyB0
+aW1lcy5jYwkyMDAxLzA5LzEzIDE1OjM2OjM1CkBAIC01Myw0ICs1Myw3IEBA
+IHRpbWVzIChzdHJ1Y3QgdG1zICogYnVmKQogICBGSUxFVElNRSBjcmVhdGlv
+bl90aW1lLCBleGl0X3RpbWUsIGtlcm5lbF90aW1lLCB1c2VyX3RpbWU7CiAK
+KyAgaWYgKGNoZWNrX251bGxfaW52YWxpZF9zdHJ1Y3RfZXJybm8gKGJ1Zikp
+CisgICAgcmV0dXJuICgoY2xvY2tfdCkgLTEpOworCiAgIERXT1JEIHRpY2tz
+ID0gR2V0VGlja0NvdW50ICgpOwogICAvKiBUaWNrcyBpcyBpbiBtaWxsaXNl
+Y29uZHMsIGNvbnZlcnQgdG8gb3VyIHRpY2tzLiBVc2UgbG9uZyBsb25nIHRv
+IHByZXZlbnQKSW5kZXg6IHVuYW1lLmNjCj09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT0KUkNTIGZpbGU6IC9jdnMvdWJlcmJhdW0vd2luc3VwL2N5Z3dpbi91bmFt
+ZS5jYyx2CnJldHJpZXZpbmcgcmV2aXNpb24gMS4xNApkaWZmIC11IC1wIC0y
+IC1yMS4xNCB1bmFtZS5jYwotLS0gdW5hbWUuY2MJMjAwMS8wOS8xMiAxNzo0
+NjozNwkxLjE0CisrKyB1bmFtZS5jYwkyMDAxLzA5LzEzIDE1OjM2OjM1CkBA
+IC0yMiw0ICsyMiw4IEBAIHVuYW1lIChzdHJ1Y3QgdXRzbmFtZSAqbmFtZSkK
+ICAgRFdPUkQgbGVuOwogICBTWVNURU1fSU5GTyBzeXNpbmZvOworCisgIGlm
+IChjaGVja19udWxsX2ludmFsaWRfc3RydWN0X2Vycm5vIChuYW1lKSkKKyAg
+ICByZXR1cm4gLTE7CisgICAgCiAgIGNoYXIgKnNucCA9IHN0cnN0ciAgKGN5
+Z3dpbl92ZXJzaW9uLmRsbF9idWlsZF9kYXRlLCAiU05QIik7CiAK
+
+------------=_1583532848-65438-97--
