@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2354-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 26090 invoked by alias); 7 Jun 2002 08:39:30 -0000
+Return-Path: <cygwin-patches-return-2355-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 4068 invoked by alias); 7 Jun 2002 11:12:47 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,164 +7,38 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 26032 invoked from network); 7 Jun 2002 08:39:27 -0000
-Date: Fri, 07 Jun 2002 01:39:00 -0000
-From: egor duda <deo@logos-m.ru>
-Reply-To: egor duda <cygwin-patches@cygwin.com>
-Organization: deo
-X-Priority: 3 (Normal)
-Message-ID: <47151556727.20020607123750@logos-m.ru>
-To: Corinna Vinschen <cygwin-patches@cygwin.com>
+Received: (qmail 4051 invoked from network); 7 Jun 2002 11:12:44 -0000
+Date: Fri, 07 Jun 2002 04:12:00 -0000
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
+To: cygpatch <cygwin-patches@cygwin.com>
 Subject: Re: regtool support for remote registry
-In-Reply-To: <20020606152859.B22789@cygbert.vinschen.de>
-References: <13970794877.20020606141146@logos-m.ru>
- <20020606152859.B22789@cygbert.vinschen.de>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="----------431CAC9180F75DC"
-X-SW-Source: 2002-q2/txt/msg00337.txt.bz2
-
-------------431CAC9180F75DC
+Message-ID: <20020607131242.C23093@cygbert.vinschen.de>
+Mail-Followup-To: cygpatch <cygwin-patches@cygwin.com>
+References: <13970794877.20020606141146@logos-m.ru> <20020606152859.B22789@cygbert.vinschen.de> <47151556727.20020607123750@logos-m.ru>
+Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-Content-length: 876
+Content-Disposition: inline
+In-Reply-To: <47151556727.20020607123750@logos-m.ru>
+User-Agent: Mutt/1.3.22.1i
+X-SW-Source: 2002-q2/txt/msg00338.txt.bz2
 
-Hi!
+On Fri, Jun 07, 2002 at 12:37:50PM +0400, Egor Duda wrote:
+> CV> Just a question:  Wouldn't it make sense to use a syntax as rcp/scp:
+> CV>   regtool get bumba:\machine\software\microsoft\...
+> CV> This together with the capability to use forward slashes looks
+> CV> more unixy:
+> CV>   regtool get bumba:/machine/software/microsoft/...
+> CV> In this context I see for the first time, that the usage doesn't
+> CV> say anything about using forward slashes.   Shouldn't we add a word
+> CV> that this is possible, too?
+> 
+> No probs. This should support both formats.
 
-Thursday, 06 June, 2002 Corinna Vinschen cygwin-patches@cygwin.com wrote:
+Thanks!  Applied.
 
-CV> On Thu, Jun 06, 2002 at 02:11:46PM +0400, Egor Duda wrote:
->>   Attached patch allows regtool to access registry on remote hosts,
->> e.g.:
->> 
->> regtool get \\bumba\machine\software\microsoft\windows\currentVersion\programFilesDir
+Corinna
 
-CV> Just a question:  Wouldn't it make sense to use a syntax as rcp/scp:
-CV>   regtool get bumba:\machine\software\microsoft\...
-CV> This together with the capability to use forward slashes looks
-CV> more unixy:
-CV>   regtool get bumba:/machine/software/microsoft/...
-CV> In this context I see for the first time, that the usage doesn't
-CV> say anything about using forward slashes.   Shouldn't we add a word
-CV> that this is possible, too?
-
-No probs. This should support both formats.
-
-Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
-------------431CAC9180F75DC
-Content-Type: application/octet-stream; name="regtool-remote-registry-support-2.diff"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="regtool-remote-registry-support-2.diff"
-Content-length: 5966
-
-SW5kZXg6IHJlZ3Rvb2wuY2MKPT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1Mg
-ZmlsZTogL2N2cy91YmVyYmF1bS93aW5zdXAvdXRpbHMvcmVndG9vbC5jYyx2
-CnJldHJpZXZpbmcgcmV2aXNpb24gMS45CmRpZmYgLXUgLXAgLTIgLXIxLjkg
-cmVndG9vbC5jYwotLS0gcmVndG9vbC5jYwkzIEp1biAyMDAyIDAyOjU3OjU1
-IC0wMDAwCTEuOQorKysgcmVndG9vbC5jYwk3IEp1biAyMDAyIDA4OjMxOjQ2
-IC0wMDAwCkBAIC05MiwxMCArOTIsMTQgQEAgdXNhZ2UgKEZJTEUgKndoZXJl
-ID0gc3RkZXJyKQogICBpZiAod2hlcmUgPT0gc3Rkb3V0KQogICAgIGZwcmlu
-dGYgKHdoZXJlLCAiIgotICAgICJLRVkgaXMgaW4gdGhlIGZvcm1hdCBcXHBy
-ZWZpeFxcS0VZXFxLRVlcXFZBTFVFLCB3aGVyZSBwcmVmaXggaXMgYW55IG9m
-OlxuIgotICAgICIgIFxccm9vdCAgICAgSEtDUiAgSEtFWV9DTEFTU0VTX1JP
-T1RcbiIKLSAgICAiICBcXGNvbmZpZyAgIEhLQ0MgIEhLRVlfQ1VSUkVOVF9D
-T05GSUdcbiIKLSAgICAiICBcXHVzZXIgICAgIEhLQ1UgIEhLRVlfQ1VSUkVO
-VF9VU0VSXG4iCi0gICAgIiAgXFxtYWNoaW5lICBIS0xNICBIS0VZX0xPQ0FM
-X01BQ0hJTkVcbiIKLSAgICAiICBcXHVzZXJzICAgIEhLVSAgIEhLRVlfVVNF
-UlNcbiIKKyAgICAiS0VZIGlzIGluIHRoZSBmb3JtYXQgW2hvc3RdXFxwcmVm
-aXhcXEtFWVxcS0VZXFxWQUxVRSwgd2hlcmUgaG9zdCBpcyBvcHRpb25hbFxu
-IgorICAgICJyZW1vdGUgaG9zdCBpbiBlaXRoZXIgXFxcXGhvc3RuYW1lIG9y
-IGhvc3RuYW1lOiBmb3JtYXQgYW5kIHByZWZpeCBpcyBhbnkgb2Y6XG4iCisg
-ICAgIiAgcm9vdCAgICAgSEtDUiAgSEtFWV9DTEFTU0VTX1JPT1QgKGxvY2Fs
-IG9ubHkpXG4iCisgICAgIiAgY29uZmlnICAgSEtDQyAgSEtFWV9DVVJSRU5U
-X0NPTkZJRyAobG9jYWwgb25seSlcbiIKKyAgICAiICB1c2VyICAgICBIS0NV
-ICBIS0VZX0NVUlJFTlRfVVNFUiAobG9jYWwgb25seSlcbiIKKyAgICAiICBt
-YWNoaW5lICBIS0xNICBIS0VZX0xPQ0FMX01BQ0hJTkVcbiIKKyAgICAiICB1
-c2VycyAgICBIS1UgICBIS0VZX1VTRVJTXG4iCisgICAgIlxuIgorICAgICJZ
-b3UgY2FuIHVzZSBmb3J3YXJkIHNsYXNoICgnLycpIGFzIGEgc2VwYXJhdG9y
-IGluc3RlYWQgb2YgYmFja3NsYXNoLCBpblxuIgorICAgICJ0aGF0IGNhc2Ug
-YmFja3NsYXNoIGlzIHRyZWF0ZWQgYXMgZXNjYXBlIGNoYXJhY3RlclxuIgog
-ICAgICIiKTsKICAgZnByaW50ZiAod2hlcmUsICIiCkBAIC0xMzcsNSArMTQx
-LDUgQEAgRmFpbCAoRFdPUkQgcnYpCiAJCSAgICAgfCBGT1JNQVRfTUVTU0FH
-RV9GUk9NX1NZU1RFTSwKIAkJICAgICAwLCBydiwgMCwgKENIQVIgKikgJiBi
-dWYsIDAsIDApOwotICAgICAgZnByaW50ZiAoc3RkZXJyLCAiRXJyb3I6ICVz
-XG4iLCBidWYpOworICAgICAgZnByaW50ZiAoc3RkZXJyLCAiRXJyb3IgKCVs
-ZCk6ICVzXG4iLCBydiwgYnVmKTsKICAgICAgIExvY2FsRnJlZSAoYnVmKTsK
-ICAgICB9CkBAIC0yNTIsMTAgKzI1NiwzNiBAQCB2b2lkCiBmaW5kX2tleSAo
-aW50IGhvd21hbnlwYXJ0cywgUkVHU0FNIGFjY2VzcykKIHsKLSAgY2hhciAq
-biA9IGFyZ3ZbMF0sICplLCBjOworICBIS0VZIGJhc2U7CisgIGludCBydjsK
-KyAgY2hhciAqbiA9IGFyZ3ZbMF0sICplLCAqaCwgYzsKKyAgY2hhciogaG9z
-dCA9IE5VTEw7CiAgIGludCBpOwogICBpZiAoKm4gPT0gJy8nKQogICAgIHRy
-YW5zbGF0ZSAobik7Ci0gIHdoaWxlICgqbiA9PSAnXFwnKQorICBpZiAoKm4g
-IT0gJ1xcJykKKyAgICB7CisgICAgICAvKiBleHBlY3QgaG9zdDova2V5L3Zh
-bHVlIGZvcm1hdCAqLworICAgICAgaG9zdCA9IChjaGFyKikgbWFsbG9jIChz
-dHJsZW4gKG4pICsgMSk7CisgICAgICBob3N0WzBdID0gaG9zdCBbMV0gPSAn
-XFwnOyAKKyAgICAgIGZvciAoZSA9IG4sIGggPSBob3N0ICsgMjsgKmUgJiYg
-KmUgIT0gJzonOyBlKyssIGgrKykKKyAgICAgICAgKmggPSAqZTsKKyAgICAg
-ICpoID0gMDsKKyAgICAgIG4gPSBlICsgMTsKKyAgICAgIGlmICgqbiA9PSAn
-LycpCisgICAgICAgIHRyYW5zbGF0ZSAobik7CisgICAgfQorICBlbHNlIGlm
-IChuWzBdID09ICdcXCcgJiYgblsxXSA9PSAnXFwnKQorICAgIHsKKyAgICAg
-IC8qIGV4cGVjdCAvL2hvc3Qva2V5L3ZhbHVlIGZvcm1hdCAqLworICAgICAg
-aG9zdCA9IChjaGFyKikgbWFsbG9jIChzdHJsZW4gKG4pICsgMSk7CisgICAg
-ICBob3N0WzBdID0gaG9zdFsxXSA9ICdcXCc7IAorICAgICAgZm9yIChlID0g
-biArIDIsIGggPSBob3N0ICsgMjsgKmUgJiYgKmUgIT0gJ1xcJzsgZSsrLCBo
-KyspCisgICAgICAgICpoID0gKmU7CisgICAgICAqaCA9IDA7CisgICAgICBu
-ID0gZTsKKyAgICB9CisgIHdoaWxlICgqbiAhPSAnXFwnKQogICAgIG4rKzsK
-KyAgKm4rKyA9IDA7CiAgIGZvciAoZSA9IG47ICplICYmICplICE9ICdcXCc7
-IGUrKyk7CiAgIGMgPSAqZTsKQEAgLTI5MywxMiArMzIzLDIyIEBAIGZpbmRf
-a2V5IChpbnQgaG93bWFueXBhcnRzLCBSRUdTQU0gYWNjZXMKIAl9CiAgICAg
-fQorICBpZiAoaG9zdCkKKyAgICB7CisgICAgICBydiA9IFJlZ0Nvbm5lY3RS
-ZWdpc3RyeSAoaG9zdCwgd2twcmVmaXhlc1tpXS5rZXksICZiYXNlKTsKKyAg
-ICAgIGlmIChydiAhPSBFUlJPUl9TVUNDRVNTKQorCUZhaWwgKHJ2KTsKKyAg
-ICAgIGZyZWUgKGhvc3QpOworICAgIH0KKyAgZWxzZQorICAgIGJhc2UgPSB3
-a3ByZWZpeGVzW2ldLmtleTsKKwogICBpZiAoblswXSA9PSAwKQorICAgIGtl
-eSA9IGJhc2U7CisgIGVsc2UKICAgICB7Ci0gICAgICBrZXkgPSB3a3ByZWZp
-eGVzW2ldLmtleTsKLSAgICAgIHJldHVybjsKKyAgICAgIHJ2ID0gUmVnT3Bl
-bktleUV4IChiYXNlLCBuLCAwLCBhY2Nlc3MsICZrZXkpOworICAgICAgaWYg
-KHJ2ICE9IEVSUk9SX1NVQ0NFU1MpCisJRmFpbCAocnYpOwogICAgIH0KLSAg
-aW50IHJ2ID0gUmVnT3BlbktleUV4ICh3a3ByZWZpeGVzW2ldLmtleSwgbiwg
-MCwgYWNjZXNzLCAma2V5KTsKLSAgaWYgKHJ2ICE9IEVSUk9SX1NVQ0NFU1Mp
-Ci0gICAgRmFpbCAocnYpOwogICAvL3ByaW50Zigia2V5IGAlcycgdmFsdWUg
-YCVzJ1xuIiwgbiwgdmFsdWUpOwogfQpJbmRleDogdXRpbHMuc2dtbAo9PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3ViZXJiYXVtL3dp
-bnN1cC91dGlscy91dGlscy5zZ21sLHYKcmV0cmlldmluZyByZXZpc2lvbiAx
-LjIyCmRpZmYgLXUgLXAgLTIgLXIxLjIyIHV0aWxzLnNnbWwKLS0tIHV0aWxz
-LnNnbWwJMiBKdW4gMjAwMiAxNzo0NjozOCAtMDAwMAkxLjIyCisrKyB1dGls
-cy5zZ21sCTcgSnVuIDIwMDIgMDg6MzE6NDYgLTAwMDAKQEAgLTcwOSwxMCAr
-NzA5LDEzIEBAIFJlZ3Rvb2wgQ29weXJpZ2h0IChjKSAyMDAwIFJlZCBIYXQg
-SW5jCiAgcmVndG9vbCBbLXFdIGdldCBba2V5XHZhbHVlXSAgLSBwcmludHMg
-dmFsdWUgdG8gc3Rkb3V0CiAgICAgIC1xPXF1aWV0LCBubyBlcnJvciBtc2cs
-IGp1c3QgcmV0dXJuIG5vbnplcm8gZXhpdCBpZiBrZXkvdmFsdWUgbWlzc2lu
-ZwotIGtleXMgYXJlIGxpa2UgXHByZWZpeFxrZXlca2V5XGtleVx2YWx1ZSwg
-d2hlcmUgcHJlZml4IGlzIGFueSBvZjoKLSAgIHJvb3QgICAgIEhLQ1IgIEhL
-RVlfQ0xBU1NFU19ST09UCi0gICBjb25maWcgICBIS0NDICBIS0VZX0NVUlJF
-TlRfQ09ORklHCi0gICB1c2VyICAgICBIS0NVICBIS0VZX0NVUlJFTlRfVVNF
-UgotICAgbWFjaGluZSAgSEtMTSAgSEtFWV9MT0NBTF9NQUNISU5FCi0gICB1
-c2VycyAgICBIS1UgICBIS0VZX1VTRVJTCisga2V5IGlzIGluIHRoZSBmb3Jt
-YXQgW2hvc3RdXHByZWZpeFxLRVlcS0VZXFZBTFVFLCB3aGVyZSBob3N0IGlz
-IG9wdGlvbmFsCisgcmVtb3RlIGhvc3QgaW4gZWl0aGVyIFxcaG9zdG5hbWUg
-b3IgaG9zdG5hbWU6IGZvcm1hdCBhbmQgcHJlZml4IGlzIGFueSBvZjoKKyBy
-b290ICAgICBIS0NSICBIS0VZX0NMQVNTRVNfUk9PVCAobG9jYWwgb25seSkK
-KyBjb25maWcgICBIS0NDICBIS0VZX0NVUlJFTlRfQ09ORklHIChsb2NhbCBv
-bmx5KQorIHVzZXIgICAgIEhLQ1UgIEhLRVlfQ1VSUkVOVF9VU0VSIChsb2Nh
-bCBvbmx5KQorIG1hY2hpbmUgIEhLTE0gIEhLRVlfTE9DQUxfTUFDSElORQor
-IHVzZXJzICAgIEhLVSAgIEhLRVlfVVNFUlMKKyBZb3UgY2FuIHVzZSBmb3J3
-YXJkIHNsYXNoICgnLycpIGFzIGEgc2VwYXJhdG9yIGluc3RlYWQgb2YgYmFj
-a3NsYXNoLCBpbgorIHRoYXQgY2FzZSBiYWNrc2xhc2ggaXMgdHJlYXRlZCBh
-cyBlc2NhcGUgY2hhcmFjdGVyLgogIGV4YW1wbGU6IFx1c2VyXHNvZnR3YXJl
-XE1pY3Jvc29mdFxDbG9ja1xpRm9ybWF0CiA8L3NjcmVlbj4K
-
-------------431CAC9180F75DC
-Content-Type: application/octet-stream; name="regtool-remote-registry-support-2.ChangeLog"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="regtool-remote-registry-support-2.ChangeLog"
-Content-length: 249
-
-MjAwMi0wNi0wNiAgRWdvciBEdWRhIDxkZW9AbG9nb3MtbS5ydT4KCgkqIHJl
-Z3Rvb2wuY2MgKEZhaWwpOiBCZSBtb3JlIHZlcmJvc2UuCgkoZmluZF9rZXkp
-OiBBZGQgc3VwcG9ydCBmb3IgcmVtb3RlIHJlZ2lzdHJ5IGFjY2Vzcy4KCSh1
-c2FnZSk6IERvY3VtZW50IGl0LgoJKiB1dGlscy5zZ21sOiBEb2N1bWVudCBp
-dC4K
-
-------------431CAC9180F75DC--
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
