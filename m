@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5233-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 4208 invoked by alias); 17 Dec 2004 06:16:43 -0000
+Return-Path: <cygwin-patches-return-5234-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 5021 invoked by alias); 17 Dec 2004 06:18:33 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,41 +7,69 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 4163 invoked from network); 17 Dec 2004 06:16:32 -0000
+Received: (qmail 4941 invoked from network); 17 Dec 2004 06:18:23 -0000
 Received: from unknown (HELO cgf.cx) (66.30.17.189)
-  by sourceware.org with SMTP; 17 Dec 2004 06:16:32 -0000
+  by sourceware.org with SMTP; 17 Dec 2004 06:18:23 -0000
 Received: by cgf.cx (Postfix, from userid 201)
-	id 6A8321B401; Fri, 17 Dec 2004 01:17:41 -0500 (EST)
-Date: Fri, 17 Dec 2004 06:16:00 -0000
+	id F04B21B401; Fri, 17 Dec 2004 01:19:32 -0500 (EST)
+Date: Fri, 17 Dec 2004 06:18:00 -0000
 From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: Patch to allow trailing dots on managed mounts
-Message-ID: <20041217061741.GG26712@trixie.casa.cgf.cx>
+To: cygwin-patches mailing-list <cygwin-patches@cygwin.com>
+Subject: Re: [Patch] cygcheck: eprintf + display_error: Do /something/.
+Message-ID: <20041217061932.GH26712@trixie.casa.cgf.cx>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20041217032627.GF26712@trixie.casa.cgf.cx> <20041216160322.GC16474@cygbert.vinschen.de> <41C1A1F4.CD3CC833@phumblet.no-ip.org> <20041216150040.GA23488@trixie.casa.cgf.cx> <20041216155339.GA16474@cygbert.vinschen.de> <20041216155707.GG23488@trixie.casa.cgf.cx> <20041216160322.GC16474@cygbert.vinschen.de> <3.0.5.32.20041216220441.0082a400@incoming.verizon.net> <20041217032627.GF26712@trixie.casa.cgf.cx> <3.0.5.32.20041216224347.0082d210@incoming.verizon.net>
+Mail-Followup-To: cygwin-patches mailing-list <cygwin-patches@cygwin.com>
+References: <n2m-g.cpt7kf.3vvb68n.1@buzzy-box.bavag> <20041217020205.GA26712@trixie.casa.cgf.cx> <n2m-g.cptl2c.3vvd6ov.1@buzzy-box.bavag> <20041217025607.GE26712@trixie.casa.cgf.cx> <n2m-g.cptncf.3vv6gv7.1@buzzy-box.bavag>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3.0.5.32.20041216224347.0082d210@incoming.verizon.net>
+In-Reply-To: <n2m-g.cptncf.3vv6gv7.1@buzzy-box.bavag>
 User-Agent: Mutt/1.4.1i
-X-SW-Source: 2004-q4/txt/msg00234.txt.bz2
+X-SW-Source: 2004-q4/txt/msg00235.txt.bz2
 
-On Thu, Dec 16, 2004 at 10:43:47PM -0500, Pierre A. Humblet wrote:
->At 10:27 PM 12/16/2004 -0500, Christopher Faylor wrote:
->>On Thu, Dec 16, 2004 at 10:26:27PM -0500, Christopher Faylor wrote:
->>>I don't see how it could be correct for the slash checking code not to
->>>be "in the loop".  Won't this cause a problem if you've done
->>
->>Ah, nevermind.  I see that your patch handles that.
->>
->OK.
+On Fri, Dec 17, 2004 at 04:33:10AM +0100, Bas van Gompel wrote:
+>Op Thu, 16 Dec 2004 21:56:07 -0500 schreef Christopher Faylor
+>in <20041217025607.GE26712@trixie.casa.cgf.cx>:
+>:  On Fri, Dec 17, 2004 at 03:51:47AM +0100, Bas van Gompel wrote:
 >
->The key point in my patch is that it's the output Win32 path
->that must be checked, not the input path.
+>[...]
+>
+>: > I seem to be making a mess here... The point is to have the error-messages
+>: > appear at about the appropriate point in the output, not bunched together
+>: > near the beginning or end. Here is another attempt. This time, do the
+>: > flushing when both are ttys or neither are.
+>:
+>:   I still don't see the point.  There is no need to do explicit flushes if
+>:  both stdout and stderr are ttys.  In the case of stdout the flush should
+>:  occur every time there's a newline.  In the case of stderr, the flush
+>:  should happen after every write.
+>
+>So, the test can exclude the case where both are ttys. (Did I say I was
+>making a mess?) Here is a sample of ``cygcheck -s -v -r >cygcheck.out
+>2>&1'', when some (network) drives can not be read:
+>
+>
+>...
+>zip                     2.3-6
+>zlib                    1.2.2-1
+>zsh                     4.2.0-2
+>Use -h to see help about each section
+>cygcheck: dump_sysinfo: GetVolumeInformation() failed: 5
+>cygcheck: dump_sysinfo: GetVolumeInformation() failed: 5
+>
+>
+>Another version of the ChangeLog-entry/patch:
+>
+>2004-12-17  Bas van Gompel  <cygwin-patch.buzz@bavag.tmfweb.nl>
+>
+>	* cygcheck.cc (eprintf): Flush stdout before, and stderr after output,
+>	when stdout and stderr both don't refer to ttys.
+>	(display_error): Use eprintf.
 
-How can that be?  As I mentioned previously, if you don't perform the
-fixups prior to inspecting the mount table then "ls /bin.........."
-won't work.
+Ok.  I don't see any reason to check for ttyness, then.  If this is an issue
+then lets just flush stdout prior to doing anything with stderr.  Flushing
+stderr should always be a no-op.
+
+Or, we could just make stdout always unbuffered.
 
 cgf
