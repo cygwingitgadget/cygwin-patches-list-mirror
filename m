@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3153-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 10558 invoked by alias); 11 Nov 2002 16:16:45 -0000
+Return-Path: <cygwin-patches-return-3154-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 30062 invoked by alias); 12 Nov 2002 03:03:53 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,43 +7,36 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 10516 invoked from network); 11 Nov 2002 16:16:35 -0000
-Date: Mon, 11 Nov 2002 08:16:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: Make ip.h and tcp.h work under -fnative-struct or -fms-bitfields
-Message-ID: <20021111161644.GB16199@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3DCF707D.2010205@netstd.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3DCF707D.2010205@netstd.com>
-User-Agent: Mutt/1.5.1i
-X-SW-Source: 2002-q4/txt/msg00104.txt.bz2
+Received: (qmail 30053 invoked from network); 12 Nov 2002 03:03:52 -0000
+Message-ID: <3DD06F9B.1010102@netstd.com>
+Date: Mon, 11 Nov 2002 19:03:00 -0000
+From: Wu Yongwei <adah@netstd.com>
+Organization: Kingnet Security, Inc.
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.0.1) Gecko/20020823 Netscape/7.0
+X-Accept-Language: en, en-us, zh-cn, zh
+MIME-Version: 1.0
+To: cygwin-patches <cygwin-patches@cygwin.com>
+Subject: Re: Make ip.h and tcp.h work under -fnative-struct or -mms-bitfields
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2002-q4/txt/msg00105.txt.bz2
 
-On Mon, Nov 11, 2002 at 04:55:25PM +0800, Wu Yongwei wrote:
->Hi,
->
->What's the status of this patch?
->
->----------
->ChangeLog:
->
->2002-10-28  Wu Yongwei <adah@netstd.com>
->
->    * ip.h (struct ip): Use u_char to indicate bitfields to make it
->    work with -fnative-struct/-fms-bitfields.
->    (struct ip_timestamp): Ditto.
->    * tcp.h (struct tcphdr): Ditto.
->----------
->
->Am I really going the wrong way (any examples)? Or should I submit a new 
->patch as Danny suggests?
+Sorry for my ignorance and noise, but I still want to ask what problems 
+could occur if I use u_char instead of u_int to denote bit fields.
 
-Danny's suggestion is correct.  The rest of the header files which accomodate
-this are probably using __attribute__((packed)) .  The argument that the header
-works ok for you on MSVC is a non-issue for cygwin.
+Any answer is appreciated.
+
+(Of course I would like to have a header file working across all my 
+Windows compilers. Others may appreciate it too.)
+
+Best regards,
+
+Wu Yongwei
+
+--- Original Message from Christopher Faylor ---
+
+Danny's suggestion is correct.  The rest of the header files which 
+accomodate this are probably using __attribute__((packed)) .  The 
+argument that the header works ok for you on MSVC is a non-issue for cygwin.
 
 cgf
