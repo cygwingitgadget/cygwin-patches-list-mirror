@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2824-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 13525 invoked by alias); 15 Aug 2002 20:00:26 -0000
+Return-Path: <cygwin-patches-return-2826-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 13728 invoked by alias); 15 Aug 2002 20:00:30 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,68 +7,146 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 13464 invoked from network); 15 Aug 2002 20:00:25 -0000
+Received: (qmail 13588 invoked from network); 15 Aug 2002 20:00:28 -0000
 Date: Thu, 15 Aug 2002 13:00:00 -0000
 From: Thomas Pfaff <tpfaff@gmx.net>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] new mutex implementation
-Message-ID: <Pine.WNT.4.44.0208152047310.-376009@thomas.kefrig-pfaff.de>
+Subject: [PATCH] Interlocked functions
+Message-ID: <Pine.WNT.4.44.0208152120090.-376009@thomas.kefrig-pfaff.de>
 X-X-Sender: thomas@gw.kefrig-pfaff.de
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: MULTIPART/MIXED; BOUNDARY="7256760-27862-1029440332=:-376009"
 X-AntiVirus: scanned for viruses by NGI Next Generation Internet (http://www.ngi.de/)
-X-SW-Source: 2002-q3/txt/msg00272.txt.bz2
+X-SW-Source: 2002-q3/txt/msg00274.txt.bz2
+
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
+
+--7256760-27862-1029440332=:-376009
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-length: 985
 
 
-This patch contains a new mutex implementation.
+With my mutex implementation i ran into the problem that the
+InterlockedCompareExchange call ist not available on Win95.
 
-The advantages are:
+IMHO there exist 3 possibilities:
 
-- Same code on Win9x and NT. Actual are critical sections used on NT and
-kernel mutexes on 9x.
-- Posix compliant error codes.
-- State is preserved after fork as it should.
-- Supports both errorchecking and recursive mutexes.
-- Should be at least as fast as critical sections.
-- Will make us all rich and happy.
+Do not apply my mutexes :-(
+Drop support for WIN95.
+Create assembler versions of the interlocked functions. Now the code will
+not on run on old i386 machines. This is my favourite solution.
 
-Unfortunately the pthread_mutex_trylock call requires
-InterlockedCompareExchange that is not available on Win95.
-See my next patch for a workaround.
+Chris has alreay created inline functions for Interlocked... in winbase.h,
+i have added an ilockcmpexch and converted them into real functions in a
+new file called winbase.c because i had some trouble with O2 optimization
+and the inline functions.
 
-Just like critical sections it will use a counter and a semaphore to block
-other threads. The semaphore is only used when at least one thread is
-waiting, otherwise a kernel transition is not needed.
+2002-08-15  Thomas Pfaff  <tpfaff@gmx.net>
 
-With these mutexes the default type has changed from recursive to
-errorchecking, this is also the default on all other pthread platforms
-that i know (except Linux where the default is FAST where you will not get
-an EDEADLOCK on locking twice, it WILL deadlock instead).
+	* Makefile.in: Added winbase.o in object file list.
+	* winbase.c: New file.
+	(ilockincr): New function.
+	(ilockdecr): Ditto.
+	(ilockexch): Ditto.
+	(ilockcmpexch): Ditto.
+	* winbase.h: Changed default to use own interlocked functions
+	(ilockincr): Removed.
+	(ilockdecr): Ditto.
+	(ilockexch): Ditto.
+	(InterlockedCompareExchange) : New define.
 
-With my previous 2 patches and this one i was able to build and run a
-threaded perl that has passed all tests (to be true it failed 3 but these
-were really not pthread related).
+--7256760-27862-1029440332=:-376009
+Content-Type: TEXT/plain; name="pthread_winbase.patch"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.WNT.4.44.0208152138520.-376009@thomas.kefrig-pfaff.de>
+Content-Description: 
+Content-Disposition: attachment; filename="pthread_winbase.patch"
+Content-length: 5007
 
-2002-08-15  Thomas Pfaff <tpfaff@gmx.net>
+ZGlmZiAtdXJwTiBzcmMub2xkL3dpbnN1cC9jeWd3aW4vTWFrZWZpbGUuaW4g
+c3JjL3dpbnN1cC9jeWd3aW4vTWFrZWZpbGUuaW4KLS0tIHNyYy5vbGQvd2lu
+c3VwL2N5Z3dpbi9NYWtlZmlsZS5pbglUdWUgQXVnICA2IDE2OjI3OjQ5IDIw
+MDIKKysrIHNyYy93aW5zdXAvY3lnd2luL01ha2VmaWxlLmluCVRodSBBdWcg
+IDggMTQ6MDM6MDMgMjAwMgpAQCAtMTM1LDcgKzEzNSw3IEBAIERMTF9PRklM
+RVM6PWFzc2VydC5vIGF1dG9sb2FkLm8gY3lnaGVhcC4KIAlzZWxlY3QubyBz
+aGFyZWQubyBzaG0ubyBzaG9ydGN1dC5vIHNpZ25hbC5vIHNpZ3Byb2MubyBz
+bWFsbHByaW50Lm8gXAogCXNwYXduLm8gc3RyYWNlLm8gc3Ryc2VwLm8gc3lu
+Yy5vIHN5c2NhbGxzLm8gc3lzY29uZi5vIHN5c2xvZy5vIFwKIAl0ZXJtaW9z
+Lm8gdGhyZWFkLm8gdGltZXMubyB0dHkubyB1aW5mby5vIHVuYW1lLm8gdjhf
+cmVnZXhwLm8gXAotCXY4X3JlZ2Vycm9yLm8gdjhfcmVnc3ViLm8gd2FpdC5v
+IHdpbmNhcC5vIHdpbmRvdy5vIFwKKwl2OF9yZWdlcnJvci5vIHY4X3JlZ3N1
+Yi5vIHdhaXQubyB3aW5iYXNlLm8gd2luY2FwLm8gd2luZG93Lm8gXAogCSQo
+RVhUUkFfRExMX09GSUxFUykgJChFWFRSQV9PRklMRVMpICQoTUFMTE9DX09G
+SUxFUykgJChNVF9TQUZFX09CSkVDVFMpCiAKIEdNT05fT0ZJTEVTOj1nbW9u
+Lm8gbWNvdW50Lm8gcHJvZmlsLm8KZGlmZiAtdXJwTiBzcmMub2xkL3dpbnN1
+cC9jeWd3aW4vd2luYmFzZS5jIHNyYy93aW5zdXAvY3lnd2luL3dpbmJhc2Uu
+YwotLS0gc3JjLm9sZC93aW5zdXAvY3lnd2luL3dpbmJhc2UuYwlUaHUgSmFu
+ICAxIDAxOjAwOjAwIDE5NzAKKysrIHNyYy93aW5zdXAvY3lnd2luL3dpbmJh
+c2UuYwlUaHUgQXVnICA4IDE0OjAzOjAwIDIwMDIKQEAgLTAsMCArMSw1NSBA
+QAorI2luY2x1ZGUgIndpbnN1cC5oIgorCisjaWZuZGVmIF9fTk9fSU5URVJM
+T0NLRURfXworCitsb25nIGlsb2NraW5jciAobG9uZyAqbSkKK3sKKyAgaW50
+IF9fcmVzOworICBfX2FzbV9fKCJcblwKKyAgICBtb3ZsICQxLCUwXG5cCisg
+ICAgbG9jayB4YWRkICUwLCglMSlcblwKKyAgICBpbmMgICUwXG4iCisgICAg
+OiAiPWEiIChfX3JlcyksICI9cSIgKG0pCisgICAgOiAiMSIgKG0pCisgICAg
+OiAibWVtb3J5IiApOworICByZXR1cm4gX19yZXM7Cit9CisKK2xvbmcgaWxv
+Y2tkZWNyIChsb25nICptKQoreworICBpbnQgX19yZXM7CisgIF9fYXNtX18o
+IlxuXAorICAgIG1vdmwgJDB4ZmZmZmZmZmYsJTBcblwKKyAgICBsb2NrIHhh
+ZGQgJTAsKCUxKVxuXAorICAgIGRlYyAgJTBcbiIKKyAgICA6ICI9YSIgKF9f
+cmVzKSwgIj1xIiAobSkKKyAgICA6ICIxIiAobSkKKyAgICA6ICJtZW1vcnki
+ICk7CisgIHJldHVybiBfX3JlczsKK30KKworbG9uZyBpbG9ja2V4Y2ggKGxv
+bmcgKnQsIGxvbmcgdikKK3sKKyAgaW50IF9fcmVzOworICBfX2FzbV9fKCJc
+blwKKyAgICBtb3ZsICglMSksJTBcblwKKzE6ICBsb2NrIGNtcHhjaGdsICUz
+LCglMSlcblwKKyAgICBqbmUgMWJcbiIKKyAgICA6ICI9YSIgKF9fcmVzKSwg
+Ij1xIiAodCkKKyAgICA6ICIxIiAodCksICJxIiAodikKKyAgICA6ICJtZW1v
+cnkiICk7CisgIHJldHVybiBfX3JlczsKK30KKworbG9uZyBpbG9ja2NtcGV4
+Y2ggKGxvbmcgKnQsIGxvbmcgdiwgbG9uZyBjKQoreworICBpbnQgX19yZXM7
+CisgIF9fYXNtX18oIlxuXAorICAgIGxvY2sgY21weGNoZ2wgJTMsKCUxKVxu
+IgorICAgIDogIj1hIiAoX19yZXMpLCAiPXEiICh0KQorICAgIDogIjEiICh0
+KSwgInEiICh2KSwgIjAiIChjKQorICAgIDogIm1lbW9yeSIgKTsKKyAgcmV0
+dXJuIF9fcmVzOworfQorCisjZW5kaWYgLypfX05PX0lOVEVSTE9DS0VEX18q
+LwpkaWZmIC11cnBOIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi93aW5iYXNlLmgg
+c3JjL3dpbnN1cC9jeWd3aW4vd2luYmFzZS5oCi0tLSBzcmMub2xkL3dpbnN1
+cC9jeWd3aW4vd2luYmFzZS5oCU1vbiBKdW4gMjQgMTc6NTI6MTcgMjAwMgor
+Kysgc3JjL3dpbnN1cC9jeWd3aW4vd2luYmFzZS5oCVRodSBBdWcgIDggMTQ6
+MDM6MDEgMjAwMgpAQCAtNywzOSArNywyMyBAQAogI2RlZmluZSBfV0lOQkFT
+RTJfSAogI2VuZGlmCiAKLSNpZm5kZWYgX1dJTkJBU0UyX0gKLSNkZWZpbmUg
+X1dJTkJBU0UyX0gKKyNpZiBkZWZpbmVkKF9fSU5TSURFX0NZR1dJTl9fKSAm
+JiAhZGVmaW5lZCAoX19OT19JTlRFUkxPQ0tFRF9fKQogCi1leHRlcm4gX19p
+bmxpbmVfXyBsb25nIGlsb2NraW5jciAobG9uZyAqbSkKLXsKLSAgcmVnaXN0
+ZXIgaW50IF9fcmVzOwotICBfX2FzbV9fIF9fdm9sYXRpbGVfXyAoIlxuXAot
+CW1vdmwJJDEsJTBcblwKLQlsb2NrCXhhZGQgJTAsKCUxKVxuXAotCWluYwkl
+MFxuXAotCSI6ICI9YSIgKF9fcmVzKSwgIj1yIiAobSk6ICIxIiAobSkpOwot
+ICByZXR1cm4gX19yZXM7Ci19Ci1leHRlcm4gX19pbmxpbmVfXyBsb25nIGls
+b2NrZGVjciAobG9uZyAqbSkKLXsKLSAgcmVnaXN0ZXIgaW50IF9fcmVzOwot
+ICBfX2FzbV9fIF9fdm9sYXRpbGVfXyAoIlxuXAotCW1vdmwJJDB4ZmZmZmZm
+ZmYsJTBcblwKLQlsb2NrCXhhZGQgJTAsKCUxKVxuXAotCWRlYwklMFxuXAot
+CSI6ICI9YSIgKF9fcmVzKSwgIj1yIiAobSk6ICIxIiAobSkpOwotICByZXR1
+cm4gX19yZXM7Ci19Ci1leHRlcm4gX19pbmxpbmVfXyBsb25nIGlsb2NrZXhj
+aCAobG9uZyAqdCwgbG9uZyB2KQotewotICByZWdpc3RlciBpbnQgX19yZXM7
+Ci0gIF9fYXNtX18gX192b2xhdGlsZV9fICgiXG5cCi0JbW92bAkoJTIpLCUw
+XG5cCi0xOglsb2NrCWNtcHhjaGdsICUzLCglMSlcblwKLQlqbmUgMWJcblwK
+LSAJIjogIj1hIiAoX19yZXMpLCAiPWMiICh0KTogIjEiICh0KSwgImQiICh2
+KSk7Ci0gIHJldHVybiBfX3JlczsKKyNpZm5kZWYgX19JTlRFUkxPQ0tFRF9E
+RUZJTkVEX18KKyNkZWZpbmUgX19JTlRFUkxPQ0tFRF9ERUZJTkVEX18KKwor
+I2lmZGVmIF9fY3BsdXNwbHVzCitleHRlcm4gIkMiIHsKKyNlbmRpZgorCits
+b25nIGlsb2NraW5jciAobG9uZyAqbSk7Citsb25nIGlsb2NrZGVjciAobG9u
+ZyAqbSk7Citsb25nIGlsb2NrZXhjaCAobG9uZyAqdCwgbG9uZyB2KTsKK2xv
+bmcgaWxvY2tjbXBleGNoIChsb25nICp0LCBsb25nIHYsIGxvbmcgYyk7CisK
+KyNpZmRlZiBfX2NwbHVzcGx1cwogfQorI2VuZGlmCiAKICN1bmRlZiBJbnRl
+cmxvY2tlZEluY3JlbWVudAogI2RlZmluZSBJbnRlcmxvY2tlZEluY3JlbWVu
+dCBpbG9ja2luY3IKQEAgLTQ3LDYgKzMxLDE1IEBAIGV4dGVybiBfX2lubGlu
+ZV9fIGxvbmcgaWxvY2tleGNoIChsb25nICoKICNkZWZpbmUgSW50ZXJsb2Nr
+ZWREZWNyZW1lbnQgaWxvY2tkZWNyCiAjdW5kZWYgSW50ZXJsb2NrZWRFeGNo
+YW5nZQogI2RlZmluZSBJbnRlcmxvY2tlZEV4Y2hhbmdlIGlsb2NrZXhjaAor
+I3VuZGVmIEludGVybG9ja2VkQ29tcGFyZUV4Y2hhbmdlCisjZGVmaW5lIElu
+dGVybG9ja2VkQ29tcGFyZUV4Y2hhbmdlIGlsb2NrY21wZXhjaAorCisjZW5k
+aWYgLypfX0lOVEVSTE9DS0VEX0RFRklORURfXyovCisKKyNlbmRpZiAvKmRl
+ZmluZWQoX19JTlNJREVfQ1lHV0lOX18pICYmICFkZWZpbmVkIChfX05PX0lO
+VEVSTE9DS0VEX18pKi8KKworI2lmbmRlZiBfV0lOQkFTRTJfSAorI2RlZmlu
+ZSBfV0lOQkFTRTJfSAogCiBleHRlcm4gbG9uZyB0bHNfaXg7CiBleHRlcm4g
+Y2hhciAqIHZvbGF0aWxlICpfX3N0YWNrYmFzZSBfX2FzbV9fICgiJWZzOjQi
+KTsK
 
-	* include/pthread.h: Added define for errorchecking mutexes,
-	changed default mutex type.
-	* thread.cc (pthread_mutex::pthread_mutex): New implemented.
-	(pthread_mutex::~pthread_mutex): Ditto.
-	(pthread_mutex::Lock): Ditto.
-	(pthread_mutex::TryLock): Ditto.
-	(pthread_mutex::UnLock): Ditto.
-	(pthread_mutex::Destroy): New method.
-	(pthread_mutex::SetOwner): Ditto.
-	(pthread_mutex::fixup_after_fork): Preserve state after fork.
-	(__pthread_mutex_destroy): Call pthread_mutex::Destroy to destroy
-	mutex.
-	(__pthread_mutexattr_settype): Allow errorchecking and recursive
-	types.
-	* thread.h (pthread_mutex::criticalsection): Removed.
-	(pthread_mutex::lock_counter): New member.
-	(pthread_mutex::recursion_counter): Ditto.
-	(pthread_mutex::owner): Ditto.
-	(pthread_mutex::type): Ditto.
-	(pthread_mutex::Destroy): New method.
-	(pthread_mutex::SetOwner): Ditto.
+--7256760-27862-1029440332=:-376009--
