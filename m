@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4266-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 21929 invoked by alias); 30 Sep 2003 03:22:35 -0000
+Return-Path: <cygwin-patches-return-4267-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 21459 invoked by alias); 30 Sep 2003 12:16:11 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,36 +7,58 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 21920 invoked from network); 30 Sep 2003 03:22:35 -0000
-Message-Id: <3.0.5.32.20030929230848.00833740@incoming.verizon.net>
-X-Sender: vze1u1tg@incoming.verizon.net (Unverified)
-Date: Tue, 30 Sep 2003 03:22:00 -0000
+Received: (qmail 21450 invoked from network); 30 Sep 2003 12:16:10 -0000
+Date: Tue, 30 Sep 2003 12:16:00 -0000
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
 To: cygwin-patches@cygwin.com
-From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
-Subject: Re: [Patch]: Fixing the PROCESS_DUP_HANDLE security hole (part
-  1).
-In-Reply-To: <20030930031448.GA22866@redhat.com>
-References: <3.0.5.32.20030929215525.0082c4f0@incoming.verizon.net>
- <3.0.5.32.20030929215525.0082c4f0@incoming.verizon.net>
+Subject: Re: New program: cygtweak
+Message-ID: <20030930121609.GA2022@cygbert.vinschen.de>
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <Pine.GSO.4.44.0208161539040.21909-100000@slinky.cs.nyu.edu> <20030927034235.GA18807@redhat.com> <Pine.GSO.4.56.0309271124210.3193@slinky.cs.nyu.edu>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-X-SW-Source: 2003-q3/txt/msg00282.txt.bz2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Pine.GSO.4.56.0309271124210.3193@slinky.cs.nyu.edu>
+User-Agent: Mutt/1.4.1i
+X-SW-Source: 2003-q3/txt/msg00283.txt.bz2
 
-At 11:14 PM 9/29/2003 -0400, you wrote:
->On Mon, Sep 29, 2003 at 09:55:25PM -0400, Pierre A. Humblet wrote:
->>Here is a patch that allows to open master ttys without giving
->>full access to the process, at least for access to the ctty. 
->>
->>It works by snooping the ctty pipe handles and duplicating them
->>on the cygheap, for use by future opens in descendant processes.
->>
->>It passes all the tests I tried, but considering my lack of knowledge
->>about ttys, everything is possible.
->
->Does it pass doing an "echo > /dev/tty1" where /dev/tty1 is a tty in
->another command window?
+On Sat, Sep 27, 2003 at 12:42:50PM -0400, Igor Pechtchanski wrote:
+> The only thing I didn't test were the rules in the Makefile,
+> so if someone could please double-check them, it'd be great. 
 
-Of course, but not (anymore) if the command is issued by a user that
-has no access rights to /dev/tty1.
+> Index: winsup/utils/Makefile.in
+> ===================================================================
+> RCS file: /cvs/src/src/winsup/utils/Makefile.in,v
+> retrieving revision 1.53
+> diff -u -p -r1.53 Makefile.in
+> --- winsup/utils/Makefile.in	12 Sep 2003 01:51:21 -0000	1.53
+> +++ winsup/utils/Makefile.in	27 Sep 2003 16:24:54 -0000
+> @@ -84,12 +84,17 @@ PROGS:=warn_dumper $(PROGS)
+>  CLEAN_PROGS+=dumper.exe
+>  endif
+>  
+> +PROGS+=cygprogctl
+> +
+>  .SUFFIXES:
+>  .NOEXPORT:
+>  
+>  .PHONY: all install clean realclean warn_dumper
+>  
+>  all: Makefile $(PROGS)
+> +
+> +cygprogctl: $(srcdir)/cygprogctl
+> +	cp -p $< $@
+>  
+>  strace.exe: strace.o path.o $(MINGW_DEP_LDLIBS)
+>  ifdef VERBOSE
 
-Pierre
+Wouldn't it be sufficient to add $(srcdir)/cygprogctl to PROGS and to
+drop the copy rule?  The script only needs installing and that should
+work then.
+
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
