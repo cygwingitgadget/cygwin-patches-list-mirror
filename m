@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2712-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 30362 invoked by alias); 25 Jul 2002 10:54:00 -0000
+Return-Path: <cygwin-patches-return-2713-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 9021 invoked by alias); 25 Jul 2002 15:29:36 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,44 +7,81 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 30342 invoked from network); 25 Jul 2002 10:53:59 -0000
-Date: Thu, 25 Jul 2002 03:54:00 -0000
-From: egor duda <deo@logos-m.ru>
-Reply-To: egor duda <cygwin-patches@cygwin.com>
-Organization: deo
-X-Priority: 3 (Normal)
-Message-ID: <147614140186.20020725145317@logos-m.ru>
-To: Robert Collins <robert.collins@syncretize.net>
-CC: cygwin-patches@cygwin.com
-Subject: Re: src/winsup/cygwin ChangeLog cygwin.din
-In-Reply-To: <1027592838.31744.0.camel@lifelesswks>
-References: <20020724073803.17255.qmail@sources.redhat.com>
- <145518762130.20020724122337@logos-m.ru> <20020724153129.GE13558@redhat.com>
- <149608496601.20020725131913@logos-m.ru> <1027592838.31744.0.camel@lifelesswks>
+Received: (qmail 9007 invoked from network); 25 Jul 2002 15:29:35 -0000
+Message-ID: <3D401950.1070803@netscape.net>
+Date: Thu, 25 Jul 2002 08:29:00 -0000
+From: Nicholas Wourms <nwourms@netscape.net>
+User-Agent: Mozilla/5.0 (Windows; U; Win 9x 4.90; en-US; rv:1.0rc2) Gecko/20020512 Netscape/7.0b1
+X-Accept-Language: en-us, en
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+To: 'Cygwin-Patches' <cygwin-patches@sources.redhat.com>
+Subject: qt patch for winnt.h
+Content-Type: multipart/mixed;
+ boundary="------------090009070302040003070903"
+X-SW-Source: 2002-q3/txt/msg00161.txt.bz2
+
+
+--------------090009070302040003070903
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Transfer-Encoding: 7bit
-X-SW-Source: 2002-q3/txt/msg00160.txt.bz2
+Content-length: 856
 
-Hi!
+Hi,
 
-Thursday, 25 July, 2002 Robert Collins robert.collins@syncretize.net wrote:
+As you may or may not know, I'm going to be providing the QT-2.3.1 
+package for the main cygwin distribution.  However, an annoying 
+"feature" of QT is that one of its typdefs conflicts with a typedef in 
+winnt.h [typedef void *HANDLE].  However, QT  requires [typedef unsigned 
+int HANDLE] and refuses to compile with the wrong typedef.  Ralf has 
+tried everything over at the kde-cygwin project to get around this 
+without tampering with the system headers.  In the end, however, we 
+discovered that it would require a massive overhaul of qt-2 to do this. 
+ Therefore we think it would be much more simple to just add a gaurded 
+#ifndef to winnt.h.  That way it will continue to work as it always has 
+-- unless you define QT_CYGWIN -- in which case the typedef for qt would 
+be used instead.  Attached is the patch and ChangeLog.
 
-RC> On Thu, 2002-07-25 at 19:19, egor duda wrote:
->> Wednesday, 24 July, 2002 Christopher Faylor cgf@redhat.com wrote:
->> CF> Hmm.  I wonder if we could automatically generate the version number
->> CF> when cygwin.din changes.
->> 
->> Well, maybe. I'm not sure if we can say "accidental changes" such as
->> touching cygwin.din or converting it from textmode to binmode or
->> something like that from real changes in export table. Anyway, manual
->> updating of version.h is not much work, if you're reminded about it.
+Cheers,
+Nicholas
 
-RC> It will never hurt to bump API minor, as that is a forwards
-RC> compatability flag, not a backwards one. Worst case: we have a few
-RC> never-released API versions.
+--------------090009070302040003070903
+Content-Type: text/plain;
+ name="ChangeLog.txt"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline;
+ filename="ChangeLog.txt"
+Content-length: 105
 
-I suppose we want not only indicate that api has been changed, but
-also update a comment in version.h which says what exactly is changed.
+2002-07-25  Nicholas Wourms  <nwourms@netscape.net>
 
-Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
+    * winnt.h (HANDLE): Add guard for compiling qt.
+
+--------------090009070302040003070903
+Content-Type: text/plain;
+ name="qt-cygwin.diff"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline;
+ filename="qt-cygwin.diff"
+Content-length: 665
+
+Index: winnt.h
+===================================================================
+RCS file: /cvs/src/src/winsup/w32api/include/winnt.h,v
+retrieving revision 1.52
+diff -u -3 -p -u -p -r1.52 winnt.h
+--- winnt.h 17 Jul 2002 03:37:45 -0000  1.52
++++ winnt.h 25 Jul 2002 15:09:11 -0000
+@@ -108,7 +108,11 @@ typedef const TCHAR *LPCTSTR;
+ #define TEXT(q) __TEXT(q)    
+ typedef SHORT *PSHORT;
+ typedef LONG *PLONG;
++#ifndef QT_CYGWIN  /* To allow qt to compile under Cygwin */
+ typedef void *HANDLE;
++#else
++typedef unsigned int HANDLE;
++#endif /* QT_CYGWIN */
+ typedef HANDLE *PHANDLE,*LPHANDLE;
+ #ifdef STRICT
+ #define DECLARE_HANDLE(n) typedef struct n##__{int i;}*n
+
+--------------090009070302040003070903--
