@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3735-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 23917 invoked by alias); 22 Mar 2003 20:47:09 -0000
+Return-Path: <cygwin-patches-return-3736-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 28617 invoked by alias); 22 Mar 2003 20:57:47 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,36 +7,60 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 23908 invoked from network); 22 Mar 2003 20:47:09 -0000
-Message-ID: <20030322204708.28388.qmail@web20009.mail.yahoo.com>
-Date: Sat, 22 Mar 2003 20:47:00 -0000
-From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+Received: (qmail 28603 invoked from network); 22 Mar 2003 20:57:46 -0000
+Message-Id: <3.0.5.32.20030322155544.007fbb90@incoming.verizon.net>
+X-Sender: vze1u1tg@incoming.verizon.net
+Date: Sat, 22 Mar 2003 20:57:00 -0000
+To: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>,
+ cygwin-patches@cygwin.com
+From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
 Subject: Re: Patched doc/setup-net.sgml
-To: cygwin-patches@cygwin.com
-In-Reply-To: <20030322202931.GA9060@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-X-SW-Source: 2003-q1/txt/msg00384.txt.bz2
+In-Reply-To: <20030322201132.GA216@world-gov>
+Mime-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+X-SW-Source: 2003-q1/txt/msg00385.txt.bz2
 
---- Christopher Faylor <cgf@redhat.com> wrote:
-> >> Feel free to update the cygwin web pages if you want.
-> >
-> >OK... how?
-> 
-> CVS - :ext:cygwin.com:/cvs/cygwin
+At 02:11 PM 3/22/2003 -0600, Joshua Daniel Franklin wrote:
+>I just committed a big pactch to doc/setup-net.sgml that more or less
+>documents setup.exe. Resulting HTML can temporarily be seen at:
+>
+><http://iocc.com/~joshua/cygwin/setup-net.html>
+>
+>2003-03-22  Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+>
+>        * setup-net.sgml: Document setup.exe
 
-I've got this ready to go, but there are quite a few small 
-differences between the ones in htdocs/cygwin-ug-net and my
-cygwin-ug-net, I suspect related to:
+Thanks Joshua. Here are three comments
 
--CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
--"><LINK
-+CONTENT="Modular DocBook HTML Stylesheet Version 1.44"><LINK
+The Root Directory for Cygwin (default C:\cygwin) will become '/' within
+your Cygwin installation. 
+***
+Perhaps add that you must have write access to the parent directory (here
+c:\) 
+and the inheritances in the acl of the parent will determine the access to
+the 
+installed files
+****
 
-Is this going to matter? All the filenames are the same, but some
-of the internal links change. 
+All Windows drives can be accessed with the /cygdrive/X/ virtual directory
+and Cygwin's mount utility. 
+****
+That's not setup related. Delete?
+****
 
-__________________________________________________
-Do you Yahoo!?
-Yahoo! Platinum - Watch CBS' NCAA March Madness, live on your desktop!
-http://platinum.yahoo.com
+The Install For options of All Users or Just Me are especially for
+multiuser systems or Domain users. If you have a single-user workstation,
+this option probably does not concern you. If you are seeking to rollout
+Cygwin on a large Domain, you will want to think carefully about the
+implications of each type and possibly consult the Cygwin mailing list
+archives about others' experiences.
+****
+This option is mysterious and the explanation above does not give any food for
+thought in "think carefully about the implications". Is it about the mounts
+in the 
+registry? Anything else? 
+Given that the daemons use the system mounts, wouldn't it be a good idea to 
+set them?
+****
+
+Pierre
