@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2790-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 32762 invoked by alias); 7 Aug 2002 18:28:25 -0000
+Return-Path: <cygwin-patches-return-2791-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 10215 invoked by alias); 7 Aug 2002 20:01:35 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,101 +7,124 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 32747 invoked from network); 7 Aug 2002 18:28:25 -0000
-X-Authentication-Warning: slinky.cs.nyu.edu: pechtcha owned process doing -bs
-Date: Wed, 07 Aug 2002 11:28:00 -0000
-From: Igor Pechtchanski <pechtcha@cs.nyu.edu>
-Reply-To: cygwin-patches@cygwin.com
+Received: (qmail 10186 invoked from network); 7 Aug 2002 20:01:33 -0000
+Date: Wed, 07 Aug 2002 13:01:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: regtool support for custom key separators
-Message-ID: <Pine.GSO.4.44.0208071426430.16431-100000@slinky.cs.nyu.edu>
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-SW-Source: 2002-q3/txt/msg00238.txt.bz2
+Subject: Re: IsBad*Ptr patch
+Message-ID: <20020807200131.GA9098@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <040201c23e37$256b0810$6132bc3e@BABEL>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <040201c23e37$256b0810$6132bc3e@BABEL>
+User-Agent: Mutt/1.3.23.1i
+X-SW-Source: 2002-q3/txt/msg00239.txt.bz2
 
-I'm re-sending this because the original message had BASE64 attachments.
+On Wed, Aug 07, 2002 at 06:23:26PM +0100, Conrad Scott wrote:
+>I've attached a patch that starts from changing the signature of
+>__check_null_invalid_struct and __check_null_invalid_struct_errno
+>to take a non-const void *.  Previously they took a const argument
+>and as a result, were being called in a couple of places on const
+>system call arguments that should have had
+>__check_invalid_read_ptr_errno called on them.
 
-Hi all,
+I don't understand why changing the const is necessary.  AFAICT, it is
+accurate, even if IsBad*Ptr doesn't take a const pointer.
 
-The attached patch allows the users of regtool to specify a custom separator
-between the key and the value for the 'set' and 'unset' actions.
-E.g.
-	regtool -K@ set "/HKLM/SOFTWARE/Cygnus Solutions/Cygwin/Program Options@c:\\\\cygwin\\\\bin\\\\ssh.exe" "tty export"
-
-This is necessary for creating registry values with names containing a '\\'.
-	Igor
--- 
-				http://cs.nyu.edu/~pechtcha/
-      |\      _,,,---,,_		pechtcha@cs.nyu.edu
-ZZZzz /,`.-'`'    -.  ;-;;,_		igor@watson.ibm.com
-     |,4-  ) )-,_. ,\ (  `'-'		Igor Pechtchanski
-    '---''(_/--'  `-'\_) fL	a.k.a JaguaR-R-R-r-r-r-.-.-.  Meow!
-
-It took the computational power of three Commodore 64s to fly to the moon.
-It takes a 486 to run Windows 95.  Something is wrong here. -- SC sig file
+More comments follow.
 
 
-2002-08-07  Igor Pechtchanski <pechtcha@cs.nyu.edu>
+(Btw, would you mind adding a 'p' to your diffs, i.e., 'cvs diff -up'?
+This makes it easier to see what function is changing).
 
-	* regtool.cc (find_key): Add support for custom key separator.
-	(usage): Document it.
+>   if (__check_null_invalid_struct_errno (buf, (unsigned) len)
+>-      || check_null_invalid_struct_errno (fromlen)
+>-      || (from && __check_null_invalid_struct_errno (from, (unsigned) *fromlen))
+>+      || (from
+>+	  && (check_null_invalid_struct_errno (fromlen)
+>+	      ||__check_null_invalid_struct_errno (from, (unsigned) *fromlen)))
 
+Are you sure fromlen is allowed to be invalid if from == NULL?  I don't see this
+from SUSv2.
 
-Index: utils/regtool.cc
-===================================================================
-RCS file: /cvs/src/src/winsup/utils/regtool.cc,v
-retrieving revision 1.10
-diff -u -p -2 -r1.10 regtool.cc
---- utils/regtool.cc	7 Jun 2002 11:12:16 -0000	1.10
-+++ utils/regtool.cc	7 Aug 2002 16:53:46 -0000
-@@ -15,4 +15,6 @@ details. */
- #include <windows.h>
+>@@ -970,7 +978,7 @@
+> extern "C" struct hostent *
+> cygwin_gethostbyaddr (const char *addr, int len, int type)
+> {
+>-  if (__check_null_invalid_struct_errno (addr, len))
+>+  if (__check_invalid_read_ptr_errno (addr, len))
+>     return NULL;
 
-+#define DEFAULT_KEY_SEPARATOR '\\'
-+
- enum
- {
-@@ -20,4 +22,6 @@ enum
- } key_type = KT_AUTO;
+Isn't addr writable?  invalid_struct_errno checks that addr is in writable
+memory.
+ 
+>@@ -1011,13 +1018,13 @@
+> extern "C" int
+> cygwin_bind (int fd, const struct sockaddr *my_addr, int addrlen)
+> {
+>-  if (__check_null_invalid_struct_errno (my_addr, addrlen))
+>-    return -1;
+>-
+>-  int res = -1;
+>-
+>+  int res;
+>   fhandler_socket *fh = get (fd);
+>-  if (fh)
+>+
+>+  if (__check_invalid_read_ptr_errno (my_addr, addrlen)
+>+      || !fh)
+>+    res = -1;
+>+  else
+>     res = fh->bind (my_addr, addrlen);
 
-+char key_sep = DEFAULT_KEY_SEPARATOR;
-+
- #define LIST_KEYS	0x01
- #define LIST_VALS	0x02
-@@ -40,8 +44,9 @@ static struct option longopts[] =
-   {"verbose", no_argument, NULL, 'v'},
-   {"version", no_argument, NULL, 'V'},
-+  {"key-separator", required_argument, NULL, 'K'},
-   {NULL, 0, NULL, 0}
- };
+Ditto.
 
--static char opts[] = "ehiklmpqsvV";
-+static char opts[] = "ehiklmpqsvVK::";
+>   syscall_printf ("%d = bind (%d, %x, %d)", res, fd, my_addr, addrlen);
+>@@ -1028,14 +1035,14 @@
+> extern "C" int
+> cygwin_getsockname (int fd, struct sockaddr *addr, int *namelen)
+> {
+>-  if (check_null_invalid_struct_errno (namelen)
+>-      || __check_null_invalid_struct_errno (addr, (unsigned) *namelen))
+>-    return -1;
+>-
+>-  int res = -1;
+>-
+>+  int res;
+>   fhandler_socket *fh = get (fd);
+>-  if (fh)
+>+
+>+  if (check_null_invalid_struct_errno (namelen)
+>+      || __check_null_invalid_struct_errno (addr, (unsigned) *namelen)
+>+      || !fh)
+>+    res = -1;
+>+  else
+>     res = fh->getsockname (addr, namelen);
 
- int listwhat = 0;
-@@ -84,4 +89,7 @@ usage (FILE *where = stderr)
-   " -s, --string         set type to REG_SZ\n"
-   "\n"
-+  "Options for 'set' and 'unset' Actions:\n"
-+  " -K<c>, --key-separator[=]<c>  set key separator to <c> instead of '\\'\n"
-+  "\n"
-   "Other Options:\n"
-   " -h, --help     output usage information and exit\n"
-@@ -309,7 +317,7 @@ find_key (int howmanyparts, REGSAM acces
-   if (howmanyparts > 1)
-     {
--      while (n < e && *e != '\\')
-+      while (n < e && *e != key_sep)
- 	e--;
--      if (*e != '\\')
-+      if (*e != key_sep)
- 	{
- 	  key = wkprefixes[i].key;
-@@ -662,4 +670,7 @@ main (int argc, char **_argv)
- 	  print_version ();
- 	  exit (0);
-+	case 'K':
-+	  key_sep = *optarg;
-+	  break;
- 	default :
- 	  usage ();
+Hmm.  Why is getsockname different from gethostbyaddr?
+
+>@@ -1161,13 +1169,12 @@
+>   int res;
+>   fhandler_socket *fh = get (fd);
+> 
+>-  if (__check_invalid_read_ptr_errno (buf, len) || !fh)
+>+  if ((len &&__check_invalid_read_ptr_errno (buf, len)) || !fh)
+>     res = -1;
+>   else
+>     res = fh->send (buf, len, flags);
+> 
+>   syscall_printf ("%d = send (%d, %x, %d, %x)", res, fd, buf, len, flags);
+>-
+>   return res;
+> }
+
+This is one of a few places where you've explictly checked for len before
+calling a __check routine.  Are you sure that is the way linux works?
+
+There are more of these philosophy type questions in this patch but the
+same basic questions apply.
+
+cgf 
