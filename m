@@ -1,20 +1,26 @@
-From: Christopher Faylor <cgf@redhat.com>
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: signal semaphores inheritance
-Date: Tue, 20 Feb 2001 09:29:00 -0000
-Message-id: <20010220122932.D29938@redhat.com>
-References: <12317106818.20010220193133@logos-m.ru>
-X-SW-Source: 2001-q1/msg00092.html
+Date: Tue, 20 Feb 2001 09:47:00 -0000
+Message-id: <20010220184706.C908@cygbert.vinschen.de>
+References: <1616663500.20010220192409@logos-m.ru>
+X-SW-Source: 2001-q1/msg00093.html
 
-On Tue, Feb 20, 2001 at 07:31:33PM +0300, Egor Duda wrote:
->Hi!
->
->  oops. sorry, sent wrong diff and changelog.
+On Tue, Feb 20, 2001 at 07:24:09PM +0300, Egor Duda wrote:
+> Hi!
+> 
+>   if  ntsec is on and cygwin app a.exe  (with pid x) starts non-cygwin
+> app  b.exe,  b.exe  inherits  cygwin1S3.sigcatch.x semaphore. if a.exe
+> dies  and  b.exe continue  execution,  and  if  new  cygwin  app c.exe
+> got  pid  x it, fails to create sigcatch semaphore. looks like typo in
+> getsem() to me. is this patch ok?
 
-I don't see a ChangeLog here either.  :-)
+Did you check it with apps chenging the user context? AFAIR I had
+a reason using an inheritable SD...
 
-The patch looks correct, though.  Nice catch.
+Corinna
 
-Please apply it.
-
-cgf
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
