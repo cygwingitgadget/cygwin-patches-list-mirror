@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4164-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 12205 invoked by alias); 4 Sep 2003 14:06:30 -0000
+Return-Path: <cygwin-patches-return-4165-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 8517 invoked by alias); 5 Sep 2003 01:42:03 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,69 +7,188 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 12186 invoked from network); 4 Sep 2003 14:06:30 -0000
-Message-ID: <3F5746ED.B9AE81B4@phumblet.no-ip.org>
-Date: Thu, 04 Sep 2003 14:06:00 -0000
-From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
-Reply-To: Pierre.Humblet@ieee.org
-X-Accept-Language: en,pdf
-MIME-Version: 1.0
+Received: (qmail 8499 invoked from network); 5 Sep 2003 01:42:01 -0000
+Message-Id: <3.0.5.32.20030904214017.0081d6d0@incoming.verizon.net>
+X-Sender: vze1u1tg@incoming.verizon.net (Unverified)
+Date: Fri, 05 Sep 2003 01:42:00 -0000
 To: cygwin-patches@cygwin.com
-Subject: Re: [Patch] nanosleep()
-References: <3.0.5.32.20030903232651.00814100@incoming.verizon.net>
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-SW-Source: 2003-q3/txt/msg00180.txt.bz2
+From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
+Subject: nanosleep patch 1
+Mime-Version: 1.0
+Content-Type: multipart/mixed; boundary="=====================_1062740417==_"
+X-SW-Source: 2003-q3/txt/msg00181.txt.bz2
 
-Christopher Faylor wrote:
->On Wed, Sep 03, 2003 at 11:26:51PM -0400, Pierre A. Humblet wrote:
->>This patch to nanosleep, sleep and usleep 
->>a) makes them Posix conformant: the system clock (gettimeofday) must 
->>   advance by at least d during Xsleep(d) 
->>  (e.g. exim relies on this to create unique ids).
->
->And it doesn't, do that now, because...?
-  it doesn't round up to the clock resolution (see ChangeLog)
+--=====================_1062740417==_
+Content-Type: text/plain; charset="us-ascii"
+Content-length: 984
 
->>b) improves the resolution of the result by using the multimedia 
->>   timer. 
->
->And it does that how...?
-  by calling timeGetTime instead of GetTickCount (see ChangeLog)
+This is part 1 of the patch I sent yesterday.
+See previous mails for background  info.
+Here are some more details:
 
->>c) calls timeBeginPeriod in forked processes.
->
->This one at least doesn't deserve a discussion.  Or does it?  Is
->timeBeginPeriod necessary in a forked process?
- By a strict reading of MS, yes. I have also experimented. On at 
- least one system I have noticed the clock resolution in the child 
- getting worse after the death of its parent. This seems to indicate
- that (at least some) Windows considers all processes when setting
- the resolution, but it wouldn't be safe to assume that there always
- is some other process with the desired resolution.
-
->Large patches with lots of reorganization and minimal explanation about
->why are quite time consuming to review.  This is why on most patches
->list the usual rule is one patch per concept.  I meant to mention this
->after your massive signal patch.
->
->For instance, c) above is a concept.  It could probably have been a
->separate patch.
->
->So, I would appreciate it if you could break this down into separate
->concepts and explain the concepts as you go along.  Call me selfish, but
->it reduces my workload to have you explain what you are doing in bite
->size chunks so that I don't have to spend a lot of time trying to
->separate out your patch into separate issues myself.
-
-OK, that will be for tonight. I will split into two patches: 
-1) hires.h and times.cc, basically adding two methods to class hires_ms
-   and changing minperiod to static NO_COPY.
-2) signals.cc, applying the new methods to nanosleep and making minor
-   fixes.
-Note that if I had sent only the first one I would have had to justify
-why the new methods are useful and you would have had to trust that 
-they are. Now you can judge directly.
-The complexity of this patch is minimal.
+hires_ms::minperiod    Make NO_COPY for per process initialization.
+hires_ms::resolution   For use in sleep and alarm
+hires_ms::dmsecs       Ditto
+_DELAY_MAX             Ditto
+hires_ms::~hires_ms    Delete, rely on Windows end of process cleanup.
+                       Note that previous version could call timeEndPeriod
+                       even when timeBeginPeriod had not been called.
 
 Pierre
+
+2003-09-04  Pierre Humblet <pierre.humblet@ieee.org>
+
+	* hires.h (_DELAY_MAX): Define.
+	(hires_ms::minperiod): Declare static.
+	(hires_ms::resolution): New.
+	(hires_ms::dmsecs): New.
+	(hires_ms::~hires_ms): Delete.
+ 	(gtod): Declare. 
+	* time.c (hires_ms::prime): Always calculate minperiod and 
+	set it to 1 in case of failure.
+	(hires_ms::resolution): Define.
+	(hires_ms::~hires_ms): Delete.
+	(hires_ms::usecs): Check minperiod to prime.
+	(gtod) Define as global.
+
+
+--=====================_1062740417==_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment; filename="sleep1.diff"
+Content-length: 3914
+
+Index: hires.h
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+RCS file: /cvs/src/src/winsup/cygwin/hires.h,v
+retrieving revision 1.4
+diff -u -p -r1.4 hires.h
+--- hires.h	30 Sep 2002 02:51:21 -0000	1.4
++++ hires.h	5 Sep 2003 01:15:00 -0000
+@@ -33,14 +33,30 @@ class hires_us : hires_base
+   LONGLONG usecs (bool justdelta);
+ };
+
++/* Largest delay in ms for sleep and alarm calls.
++   Allow actual delay to exceed requested delay by 10 s.
++   Express as multiple of 1000 (i.e. seconds) + max resolution
++   The tv_sec argument in timeval structures cannot exceed _DELAY_MAX / 10=
+00 -1,
++   so that adding fractional part and rounding won't exceed _DELAY_MAX */
++#define _DELAY_MAX (((UINT_MAX - 10000) / 1000) * 1000) + 10
++
+ class hires_ms : hires_base
+ {
+   DWORD initime_ms;
+   LARGE_INTEGER initime_us;
+-  UINT minperiod;
++  static UINT minperiod;
+   void prime ();
+  public:
+   LONGLONG usecs (bool justdelta);
+-  ~hires_ms ();
++  UINT dmsecs () { return timeGetTime (); }
++  UINT resolution ()
++    {
++      if (!minperiod)
++	prime ();
++      return minperiod;
++    }
+ };
++
++extern hires_ms gtod;
++
+ #endif /*__HIRES_H__*/
+Index: times.cc
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+RCS file: /cvs/src/src/winsup/cygwin/times.cc,v
+retrieving revision 1.46
+diff -u -p -r1.46 times.cc
+--- times.cc	17 Jul 2003 05:27:03 -0000	1.46
++++ times.cc	5 Sep 2003 01:15:01 -0000
+@@ -146,7 +146,6 @@ totimeval (struct timeval *dst, FILETIME
+ extern "C" int
+ gettimeofday (struct timeval *tv, struct timezone *tz)
+ {
+-  static hires_ms gtod;
+   static bool tzflag;
+   LONGLONG now =3D gtod.usecs (false);
+   if (now =3D=3D (LONGLONG) -1)
+@@ -620,37 +619,44 @@ hires_us::usecs (bool justdelta)
+   return justdelta ? now.QuadPart : primed_ft.QuadPart + now.QuadPart;
+ }
+
++hires_ms gtod;
++UINT NO_COPY hires_ms::minperiod;
++
+ void
+ hires_ms::prime ()
+ {
+   TIMECAPS tc;
+   FILETIME f;
+-  int priority =3D GetThreadPriority (GetCurrentThread ());
+-  SetThreadPriority (GetCurrentThread (), THREAD_PRIORITY_TIME_CRITICAL);
+
+-  if (timeGetDevCaps (&tc, sizeof (tc)) !=3D TIMERR_NOERROR)
+-    minperiod =3D 0;
+-  else
++  if (!minperiod)
++    if (timeGetDevCaps (&tc, sizeof (tc)) !=3D TIMERR_NOERROR)
++      minperiod =3D 1;
++    else
++      {
++	minperiod =3D min (max (tc.wPeriodMin, 1), tc.wPeriodMax);
++	timeBeginPeriod (minperiod);
++      }
++
++  if (!inited)
+     {
+-      minperiod =3D min (max (tc.wPeriodMin, 1), tc.wPeriodMax);
+-      timeBeginPeriod (minperiod);
++      int priority =3D GetThreadPriority (GetCurrentThread ());
++      SetThreadPriority (GetCurrentThread (), THREAD_PRIORITY_TIME_CRITICA=
+L);
++      initime_ms =3D timeGetTime ();
++      GetSystemTimeAsFileTime (&f);
++      SetThreadPriority (GetCurrentThread (), priority);
++
++      inited =3D 1;
++      initime_us.HighPart =3D f.dwHighDateTime;
++      initime_us.LowPart =3D f.dwLowDateTime;
++      initime_us.QuadPart -=3D FACTOR;
++      initime_us.QuadPart /=3D 10;
+     }
+-
+-  initime_ms =3D timeGetTime ();
+-  GetSystemTimeAsFileTime (&f);
+-  SetThreadPriority (GetCurrentThread (), priority);
+-
+-  inited =3D 1;
+-  initime_us.HighPart =3D f.dwHighDateTime;
+-  initime_us.LowPart =3D f.dwLowDateTime;
+-  initime_us.QuadPart -=3D FACTOR;
+-  initime_us.QuadPart /=3D 10;
+ }
+
+ LONGLONG
+ hires_ms::usecs (bool justdelta)
+ {
+-  if (!inited)
++  if (!minperiod) /* NO_COPY variable */
+     prime ();
+   DWORD now =3D timeGetTime ();
+   // FIXME: Not sure how this will handle the 49.71 day wrap around
+@@ -658,7 +664,3 @@ hires_ms::usecs (bool justdelta)
+   return res;
+ }
+
+-hires_ms::~hires_ms ()
+-{
+-  timeEndPeriod (minperiod);
+-}
+
+--=====================_1062740417==_--
