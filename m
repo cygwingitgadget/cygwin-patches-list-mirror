@@ -1,40 +1,58 @@
-From: Corinna Vinschen <corinna@vinschen.de>
-To: Chris Faylor <cgf@cygnus.com>
-Cc: cygpatch <cygwin-patches@sourceware.cygnus.com>
-Subject: Re: [RFA]: some speed up changes
-Date: Mon, 24 Apr 2000 08:00:00 -0000
-Message-id: <3904605E.4AC3C5EB@vinschen.de>
-References: <3902C84A.C0ED2C59@vinschen.de> <20000423103954.A5811@cygnus.com> <39038021.94903485@vinschen.de> <20000423205219.B6243@cygnus.com>
-X-SW-Source: 2000-q2/msg00031.html
+From: Earnie Boyd <earnie_boyd@yahoo.com>
+To: cygwin-patches@sourceware.cygnus.com
+Subject: [RFC] Change to bash configure.in
+Date: Mon, 24 Apr 2000 14:25:00 -0000
+Message-id: <20000424212503.21931.qmail@web110.yahoomail.com>
+X-SW-Source: 2000-q2/msg00032.html
+Content-type: multipart/mixed; boundary="----------=_1583532845-65437-0"
 
-Chris Faylor wrote:
-> [...]
-> Ok.  I see what you're saying now.  The other reason for the
-> get_file_attribute (I hate to be defending this in any way since it's
-> not my code) is, I think, to be able to set the "symlink" flag so that
-> we don't have to rely on the system attribute.  But that is not
-> happening in symlink_info::check.  Maybe I accidentally deleted it at
-> some point.
+This is a multi-part message in MIME format...
 
-I'm not sure if I'm the only person who is thinking that way but
-I really like the solution with the system bit. It has the advantage
-that requesting is fast and it's working for all file systems.
+------------=_1583532845-65437-0
+Content-length: 152
 
-Maybe we have to rearrange things to work with samba later again
-but I would like to discuss this with Jeremy.
+ 
+ 
 
-> >> Also, rather than test for os_being_run == winNT, couldn't you be
-> >> using the has_acls() method?
-> >
-> >Maybe but that would disallow further usage of the file handle in
-> >ntea.cc. What's about a test for allow_ntsec resp. allow_ntea?
-> 
-> Yeah.  I think I like that better.  Are these flags only used in the
-> case of has_acls () && allow_ntea?
+__________________________________________________
+Do You Yahoo!?
+Send online invitations with Yahoo! Invites.
+http://invites.yahoo.com
+bash.diff
 
-Forget all about this discussion. I have more problems with access
-rights of ordinary users now than ever before. Dull as I am, I had
-tested everything as admin user. Grrr....
-I'm just trying a complete different way...
 
-Corinna
+------------=_1583532845-65437-0
+Content-Type: text/x-diff; charset=us-ascii; name="bash.diff"
+Content-Disposition: inline; filename="bash.diff"
+Content-Transfer-Encoding: base64
+Content-Length: 1627
+
+Q2hhbmdlTG9nOgoKICAgICAgMjAwMC4wNC4yNCAgZWFybmllX2JveWRAeWFo
+b28uY29tCiAgICAgIENoYW5nZSBjb25maWd1cmUuaW4gdG86CgkgbG9vayBm
+b3Igc3VwcG9ydCBmaWxlcyBpbiB0aGUgdG9wIGRpcmVjdG9yeSBmb3IgdW5p
+Zm9ybWl0eS4KCSB3b3JrIHdpdGggYXV0b2NvbmYtMi4xMy4KIApJbmRleDog
+Y29uZmlndXJlLmluCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KUkNTIGZpbGU6
+IC8uQ1ZTL2Jhc2gvY29uZmlndXJlLmluLHYKcmV0cmlldmluZyByZXZpc2lv
+biAxLjEuMS4xCmRpZmYgLXUgLTMgLXIxLjEuMS4xIGNvbmZpZ3VyZS5pbgot
+LS0gY29uZmlndXJlLmluCTIwMDAvMDQvMjEgMTM6MTY6MDkJMS4xLjEuMQor
+KysgY29uZmlndXJlLmluCTIwMDAvMDQvMjQgMjA6NDI6MTgKQEAgLTE1LDcg
+KzE1LDcgQEAKIEFDX1BSRVJFUSgyLjEzKQogCiBkbmwgd2hlcmUgdG8gZmlu
+ZCBpbnN0YWxsLnNoLCBjb25maWcuc3ViLCBhbmQgY29uZmlnLmd1ZXNzCi1B
+Q19DT05GSUdfQVVYX0RJUiguL3N1cHBvcnQpCitBQ19DT05GSUdfQVVYX0RJ
+UiguLikKIAogZG5sIGNhbm9uaWNhbGl6ZSB0aGUgaG9zdCBhbmQgb3Mgc28g
+d2UgY2FuIGRvIHNvbWUgdHJpY2t5IHRoaW5ncyBiZWZvcmUKIGRubCBwYXJz
+aW5nIG9wdGlvbnMKQEAgLTU1LDkgKzU1LDYgQEAKICotY3lnd2luKikJb3B0
+X2dudV9tYWxsb2M9bm8gOzsJIyBDeWdudXMncyBDeWd3aW4gZW52aXJvbm1l
+bnQKIGVzYWMKIAotZG5sIENZR05VUyBMT0NBTDogQ2FsbCBFWEVFWFQKLUFD
+X0VYRUVYVAotCiBkbmwgYXJndW1lbnRzIHRvIGNvbmZpZ3VyZQogZG5sIHBh
+Y2thZ2VzCiBBQ19BUkdfV0lUSChhZnMsIC0td2l0aC1hZnMJCWlmIHlvdSBh
+cmUgcnVubmluZyBBRlMsIG9wdF9hZnM9JHdpdGh2YWwpCkBAIC03MjUsNiAr
+NzIyLDkgQEAKIAogI0FDX1NVQlNUKEFMTE9DQV9TT1VSQ0UpCiAjQUNfU1VC
+U1QoQUxMT0NBX09CSkVDVCkKKworZG5sIENZR05VUyBMT0NBTDogQ2FsbCBF
+WEVFWFQKK0FDX0VYRUVYVAogCiBBQ19PVVRQVVQoW01ha2VmaWxlIGJ1aWx0
+aW5zL01ha2VmaWxlIGxpYi9yZWFkbGluZS9NYWtlZmlsZSBsaWIvZ2xvYi9N
+YWtlZmlsZSBcCiAJICBsaWIvbWFsbG9jL01ha2VmaWxlIGxpYi9zaC9NYWtl
+ZmlsZSBsaWIvdGVybWNhcC9NYWtlZmlsZSBcCg==
+
+------------=_1583532845-65437-0--
