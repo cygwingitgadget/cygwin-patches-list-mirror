@@ -1,78 +1,37 @@
-From: "Michael A. Chase" <mchase@ix.netcom.com>
-To: <cygwin-patches@cygwin.com>
-Subject: [PATCH]Sample setup.ini
-Date: Sat, 30 Jun 2001 16:52:00 -0000
-Message-id: <01a301c101bf$61839840$6464648a@ca.boeing.com>
-References: <000201c1014a$19cf53b0$6464648a@ca.boeing.com> <04c901c10160$4005e1a0$806410ac@local> <20010630120243.D12695@redhat.com> <20010630153329.A16134@redhat.com>
-X-SW-Source: 2001-q2/msg00390.html
-Content-type: multipart/mixed; boundary="----------=_1583532848-65438-88"
+From: Christopher Faylor <cgf@redhat.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH]List Categories and Requireds in setup.log.full
+Date: Sat, 30 Jun 2001 20:17:00 -0000
+Message-id: <20010630231734.A2590@redhat.com>
+References: <016801c101b0$310b2390$6464648a@ca.boeing.com>
+X-SW-Source: 2001-q2/msg00391.html
 
-This is a multi-part message in MIME format...
+On Sat, Jun 30, 2001 at 02:59:33PM -0700, Michael A. Chase wrote:
+>I don't know where to start, but perhaps the choose dialog box's
+>horizontal size could be set dynamically.  We seem to go through having
+>to re-size it by hand rather often.  In this case, I simply bumped the
+>applicable x dimensions by 100.
 
-------------=_1583532848-65438-88
-Content-length: 766
+I agree that the dialog box should be auto-resized.  I'd have to
+research where to start with this.  I think I did this in a previous
+life but I don't remember how.
 
-The precinstall version doesn't have the rule necessary to accept multiple
-categories for a package.  I think that is one of the desired features the
-upcoming version will provide.
+>In do_choose(), I also re-restored the change that removed "\r" from
+>messages sent to setup.log.full and again changed the source_exists
+>logic so local copies of source archives are mentioned in
+>setup.log.full.  I don't mention them in this ChangeLog entry since
+>they are already in ChangeLog.
 
-The interim version seems to have forgotten how to handle locally available
-source archives, but that should be acceptable pending the new setup.exe.
-It handles source archives fine when installing from the net.
---
-Mac :})
-** I normally forward private questions to the appropriate mail list. **
-Give a hobbit a fish and he eats fish for a day.
-Give a hobbit a ring and he eats fish for an age.
+I checked in most of these.  I didn't checkin your changes to make the
+log messages indicate the function where the error occurred.  I agree
+that this is useful information but I don't think that we should be
+adding it in only these two places.  I think that log() should probably
+be a macro that passes __PRETTY_FUNCTION__ as the first argument to a
+__log function.  Then every log message will have the function name
+automatically.  This is basically how cygwin does it.
 
-ChangeLog
+I also didn't check in your other changes to set_action.  I would rather
+keep the tests all within one switch statement.
 
-Sat Jun 30 16:42:50  2001  Michael A Chase  <mchase@ix.netcom.com>
-
-    * ini.h: Define add_category().
-    * iniparse.y: Add rules and dummy function for multiple categories.
-
-
-------------=_1583532848-65438-88
-Content-Type: text/x-diff; charset=us-ascii; name="ini.h-pre-patch"
-Content-Disposition: inline; filename="ini.h-pre-patch"
-Content-Transfer-Encoding: base64
-Content-Length: 476
-
-LS0tIGluaS0yLjc4LjIuMS5oCVNhdCBKdW4gMzAgMTY6MzU6MzEgMjAwMQor
-KysgaW5pLmgJU2F0IEp1biAzMCAxNjoyMDo0OSAyMDAxCkBAIC0xNDQsNiAr
-MTQ0LDcgQEAgUGFja2FnZSAqbmV3X3BhY2thZ2UgKGNoYXIgKm5hbWUpOwog
-dm9pZAlpbmlfaW5pdCAoY2hhciAqc3RyaW5nKTsKIFBhY2thZ2UgKmdldHBr
-Z2J5bmFtZSAoY29uc3QgY2hhciAqcGtnbmFtZSk7CiB2b2lkICAgIG5ld19y
-ZXF1aXJlbWVudCAoUGFja2FnZSAqcGFja2FnZSwgY2hhciAqZGVwZW5kc29u
-KTsKK3ZvaWQgICAgYWRkX2NhdGVnb3J5IChQYWNrYWdlICpwYWNrYWdlLCBj
-aGFyICpjYXQpOwogCiAjaWZkZWYgX19jcGx1c3BsdXMKIH0K
-
-------------=_1583532848-65438-88
-Content-Type: text/x-diff; charset=us-ascii; name="iniparse.y-pre-patch"
-Content-Disposition: inline; filename="iniparse.y-pre-patch"
-Content-Transfer-Encoding: base64
-Content-Length: 1168
-
-LS0tIGluaXBhcnNlLTIuNzguMi4xLnkJU2F0IEp1biAzMCAxNTozMDozNiAy
-MDAxCisrKyBpbmlwYXJzZS55CVNhdCBKdW4gMzAgMTY6MDg6MjEgMjAwMQpA
-QCAtODYsNyArODYsNyBAQCBzaW1wbGVfbGluZQogIDogVkVSU0lPTiBTVFJJ
-TkcJCXsgY3B0LT52ZXJzaW9uID0gJDI7IH0KICB8IFNERVNDIFNUUklORwkJ
-CXsgY3AtPnNkZXNjID0gJDI7IH0KICB8IExERVNDIFNUUklORwkJCXsgY3At
-PmxkZXNjID0gJDI7IH0KLSB8IENBVEVHT1JZIFNUUklORwkJeyBjcC0+Y2F0
-ZWdvcnkgPSAkMjsgfQorIHwgQ0FURUdPUlkgY2F0ZWdvcmllcwogIHwgUkVR
-VUlSRVMgcmVxdWlyZXMKICB8IElOU1RBTEwgU1RSSU5HIFNUUklORwl7IGNw
-dC0+aW5zdGFsbCA9ICQyOwogCQkJCSAgY3B0LT5pbnN0YWxsX3NpemUgPSBh
-dG9pKCQzKTsKQEAgLTExNiw2ICsxMTYsMTIgQEAgcmVxdWlyZXMKICB8IFNU
-UklORwkJCXsgbmV3X3JlcXVpcmVtZW50KGNwLCAkMSk7IH0KICA7CiAKK2Nh
-dGVnb3JpZXMKKyA6IFNUUklORwkJCXsgYWRkX2NhdGVnb3J5IChjcCwgJDEp
-OworIAkJCQl9IGNhdGVnb3JpZXMKKyB8IFNUUklORwkJCXsgYWRkX2NhdGVn
-b3J5IChjcCwgJDEpOyB9CisgOworCiAlJQogCiBQYWNrYWdlICpwYWNrYWdl
-ID0gTlVMTDsKQEAgLTE1OCw0ICsxNjQsMTAgQEAgbmV3X3JlcXVpcmVtZW50
-KFBhY2thZ2UgKnBhY2thZ2UsIGNoYXIgKgogICBkcC0+bmV4dCA9IGNwLT5y
-ZXF1aXJlZDsKICAgZHAtPnBhY2thZ2UgPSBkZXBlbmRzb247CiAgIGNwLT5y
-ZXF1aXJlZCA9IGRwOworfQorCit2b2lkCithZGRfY2F0ZWdvcnkgKFBhY2th
-Z2UgKnBhY2thZ2UsIGNoYXIgKmNhdCkKK3sKKyAgLyogcGxhY2Vob2xkZXIg
-Ki8KIH0K
-
-------------=_1583532848-65438-88--
+Thanks for the patch!
+cgf
