@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3201-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 1980 invoked by alias); 18 Nov 2002 03:57:14 -0000
+Return-Path: <cygwin-patches-return-3202-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 21508 invoked by alias); 18 Nov 2002 21:26:27 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,775 +7,462 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 1904 invoked from network); 18 Nov 2002 03:57:11 -0000
-Message-Id: <3.0.5.32.20021117224418.0083ac70@mail.attbi.com>
-X-Sender: phumblet@mail.attbi.com
-Date: Sun, 17 Nov 2002 19:57:00 -0000
+Received: (qmail 21494 invoked from network); 18 Nov 2002 21:26:25 -0000
+From: "Craig McGeachie" <slapdau@yahoo.com.au>
 To: cygwin-patches@cygwin.com
-From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
-Subject: Re: ntsec patch #4: passwd and group
-In-Reply-To: <3DD50A44.40CF5707@ieee.org>
-References: <20021108171918.P21920@cygbert.vinschen.de>
- <3DCBEFF5.850B999E@ieee.org>
- <20021111145612.T10395@cygbert.vinschen.de>
- <3DCFC6BB.570DF472@ieee.org>
- <20021111174720.X10395@cygbert.vinschen.de>
- <3DCFE314.3B5B45AB@ieee.org>
- <20021111183423.A10395@cygbert.vinschen.de>
- <3DCFF8AE.66CBD751@ieee.org>
- <20021112144038.F10395@cygbert.vinschen.de>
- <3DD13433.D618DC4F@ieee.org>
- <20021112181849.K10395@cygbert.vinschen.de>
-Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="=====================_1037609058==_"
-X-SW-Source: 2002-q4/txt/msg00152.txt.bz2
-
---=====================_1037609058==_
-Content-Type: text/plain; charset="us-ascii"
-Content-length: 1896
-
-Corinna,
-
-Almost same as last week, but with the diff and ChangeLog against current CVS.
-I also made a small change.
-
-Pierre
-
-At 09:52 AM 11/15/2002 -0500, Pierre A. Humblet wrote:
->Corinna,
->
->Here is the ntsec patch #4 diff. As discussed before, the main motivation
->was to handle more robustly incomplete passwd and group files.
->In the process I fixed some bugs in related code and added
->getpwsid and getgrsid.
->
->This does not try to completely address the issue of invalid pointers
->after a re-read of passwd and group, that will be for later.
->
->Note that there is a small bug fix in the getgroup32 code from
->yesterday and some streamlining in is_grp_member.
-
-(bug is already fixed in CVS)
+Date: Mon, 18 Nov 2002 13:26:00 -0000
+MIME-Version: 1.0
+Content-type: Multipart/Mixed; boundary=Message-Boundary-3613
+Subject: PATCH: Implementation of functions in netdb.h
+Message-ID: <3DDA11BD.5862.1E11B85E@localhost>
+Priority: normal
+X-SW-Source: 2002-q4/txt/msg00153.txt.bz2
 
 
-2002/11/18  Pierre Humblet  <pierre.humblet@ieee.org>
+--Message-Boundary-3613
+Content-type: text/plain; charset=US-ASCII
+Content-transfer-encoding: 7BIT
+Content-description: Mail message body
+Content-length: 1968
 
-	* security.h: Declare getpwsid and getgrsid. Undeclare 
-	internal_getpwent. Define DEFAULT_UID_NT. Change DEFAULT_GID.
-	* passwd.cc (getpwsid): Create.
-	(internal_getpwent): Suppress.
-	(read_etc_passwd): Make static. Rewrite the code for the completion
-	line. Set curr_lines to 0.
-	(parse_pwd): Change type to static int. Return 0 for short lines.
-	(add_pwd_line): Pay attention to the value of parse_pwd.     
-	(search_for): Do not look for nor return the DEFAULT_UID.
-	* grp.cc (read_etc_group): Make static. Free gr_mem and set 
-	curr_lines to 0. Always call add_pwd_line. Rewrite the code for the 
-	completion line.
-	(parse_grp): If grp.gr_mem is empty, set it to &null_ptr.
-	Never NULL gr_passwd. 
-	(getgrgid32): Only return the default if ntsec is off and the gid is 
-	ILLEGAL_GID.
-	* sec_helper.cc (cygsid::get_id): Use getpwsid and getgrsid;
-	(cygsid_getfrompw): Clean up last line.
-	(cygsid_getfromgr): Ditto.
-	(is_grp_member): Use getpwuid32 and getgrgid32.
-	* uinfo.cc (internal_getlogin): Set DEFAULT_GID at start.
-	Use getpwsid. Move the read of /etc/group after the second access 
-	of /etc/passwd. Change some debug_printf. 
+This is an implementation of [set|get|end][serv|proto]ent functions as
+defined in netdb.h.  It was written primarily so I could port the DHCP
+software from ISC to Cygwin.
 
---=====================_1037609058==_
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment; filename="pwd.diff"
-Content-length: 19920
+Firstly, this is a larger than trivial submission, I suppose I will 
+have fill in a standard assignment form.  However, I thought I post 
+this first to see if I'm on the right track.
 
---- security.h.orig	2002-11-12 22:07:16.000000000 -0500
-+++ security.h	2002-11-15 19:15:34.000000000 -0500
-@@ -11,7 +11,8 @@ details. */
- #include <accctrl.h>
+This has been coded against the 1.3.14-1 sources.  That's what was 
+available when I started, and I can't read the CVS repository directly.
 
- #define DEFAULT_UID DOMAIN_USER_RID_ADMIN
--#define DEFAULT_GID DOMAIN_ALIAS_RID_ADMINS
-+#define DEFAULT_UID_NT 400 /* Non conflicting number */
-+#define DEFAULT_GID 401
+I only have the W2K machine to work and test on.  Consequently I can't 
+be
+sure that the Win95/98/ME path names for the protocol and services 
+files
+are correct and work.  If they aren't, then the files will not be 
+opened,
+and all calls to get[serv|proto]ent will return NULL. the set and end
+functions will quietly do nothing.
 
- #define MAX_SID_LEN 40
- #define MAX_DACL_LEN(n) (sizeof (ACL) \
-@@ -208,6 +209,8 @@ extern BOOL allow_smbntsec;
-    I didn't find a better place to declare them. */
- extern struct passwd *internal_getpwent (int);
- extern struct __group32 *internal_getgrent (int);
-+extern struct passwd *getpwsid (cygsid &);
-+extern struct __group32 *getgrsid (cygsid &);
+I have implemented all the functions in a new file called netdb.cc.  I
+wasn't sure if I should add the new file, or add functions to net.cc.  
+I
+went for the new file, in the expectation that I would add get|set|end
+functions for the hosts and networks files and some stage in the 
+future.
 
- /* File manipulation */
- int __stdcall set_process_privileges ();
---- passwd.cc.orig	2002-10-24 01:08:58.000000000 -0400
-+++ passwd.cc	2002-11-16 13:30:12.000000000 -0500
-@@ -27,7 +27,7 @@ details. */
-    on the first call that needs information from it. */
+2002-11-19 Craig McGeachie <slapdau@yahoo.com.au>
+ * netdb.cc (open_system_file, get_entire_line, get_alias_list)
+ (open_services_file, parse_services_line, free_servent)
+ (cygwin_setservent, cygwin_getservent, cygwin_endservent)
+ (open_protocol_file, parse_protocol_line, free_protoent)
+ (cygwin_setprotoent, cygwin_getprotoent, cygwin_endprotoent):
+ Create a new file implementing the service and protocol
+ enumeration functions in netdb.h.
+ * Makeile.in (DLL_OFILES): Add reference to the new netdb.cc
+ file.
+ * cygwin.din : Add new aliased exports for service and
+ protocol enumerations in netdb.cc.
 
- static struct passwd *passwd_buf;	/* passwd contents in memory */
--static int curr_lines;
-+static int curr_lines =3D -1;
- static int max_lines;
+----------------+-------------------------------------------------
+Craig McGeachie | #include <cheesy_tag.h>
++64(21)037-6917 | while (!inebriated) c2h5oh=(++bottle)->contents;
+----------------+-------------------------------------------------
 
- static pwdgrp_check passwd_state;
-@@ -74,7 +74,7 @@ grab_int (char **p)
- }
 
- /* Parse /etc/passwd line into passwd structure. */
--void
-+static int
- parse_pwd (struct passwd &res, char *buf)
- {
-   /* Allocate enough room for the passwd struct and all the strings
-@@ -82,6 +82,8 @@ parse_pwd (struct passwd &res, char *buf
-   size_t len =3D strlen (buf);
-   if (buf[--len] =3D=3D '\r')
-     buf[len] =3D '\0';
-+  if (len < 6)
-+    return 0;
 
-   res.pw_name =3D grab_string (&buf);
-   res.pw_passwd =3D grab_string (&buf);
-@@ -91,6 +93,7 @@ parse_pwd (struct passwd &res, char *buf
-   res.pw_gecos =3D grab_string (&buf);
-   res.pw_dir =3D  grab_string (&buf);
-   res.pw_shell =3D grab_string (&buf);
-+  return 1;
- }
+--Message-Boundary-3613
+Content-type: text/plain; charset=US-ASCII
+Content-transfer-encoding: 7BIT
+Content-description: Text from file 'netdb.patch'
+Content-length: 9666
 
- /* Add one line from /etc/passwd into the password cache */
-@@ -102,7 +105,8 @@ add_pwd_line (char *line)
- 	max_lines +=3D 10;
- 	passwd_buf =3D (struct passwd *) realloc (passwd_buf, max_lines * sizeof =
-(struct passwd));
-       }
--    parse_pwd (passwd_buf[curr_lines++], line);
-+    if (parse_pwd (passwd_buf[curr_lines], line))
-+      curr_lines++;
- }
-
- class passwd_lock
-@@ -125,10 +129,32 @@ class passwd_lock
-
- pthread_mutex_t NO_COPY passwd_lock::mutex =3D (pthread_mutex_t) PTHREAD_M=
-UTEX_INITIALIZER;
-
+diff -uprN ../../cygwin-1.3.14-1-orig/winsup/cygwin/Makefile.in ./cygwin/Makefile.in
+--- ../../cygwin-1.3.14-1-orig/winsup/cygwin/Makefile.in	2002-10-21 14:03:32.000000000 +1300
++++ ./cygwin/Makefile.in	2002-11-18 23:39:35.000000000 +1300
+@@ -137,7 +137,7 @@ DLL_OFILES:=assert.o autoload.o cygheap.
+ 	fhandler_tty.o fhandler_virtual.o fhandler_windows.o \
+ 	fhandler_zero.o fnmatch.o fork.o glob.o grp.o heap.o init.o \
+ 	ioctl.o ipc.o localtime.o malloc.o malloc_wrapper.o \
+-	miscfuncs.o mmap.o msg.o net.o ntea.o passwd.o path.o pinfo.o \
++	miscfuncs.o mmap.o msg.o net.o netdb.o ntea.o passwd.o path.o pinfo.o \
+ 	pipe.o poll.o pthread.o regcomp.o regerror.o regexec.o \
+ 	regfree.o registry.o resource.o scandir.o sched.o sec_acl.o \
+ 	sec_helper.o security.o select.o sem.o shared.o shm.o signal.o \
+diff -uprN ../../cygwin-1.3.14-1-orig/winsup/cygwin/cygwin.din ./cygwin/cygwin.din
+--- ../../cygwin-1.3.14-1-orig/winsup/cygwin/cygwin.din	2002-10-21 14:03:32.000000000 +1300
++++ ./cygwin/cygwin.din	2002-11-19 08:49:16.000000000 +1300
+@@ -1297,3 +1297,9 @@ acltotext
+ _acltotext = acltotext
+ aclfromtext
+ _aclfromtext = aclfromtext
++setprotoent = cygwin_setprotoent
++setservent = cygwin_setservent
++getservent = cygwin_getservent
++getprotoent = cygwin_getprotoent
++endprotoent = cygwin_endprotoent
++endservent = cygwin_endservent
+diff -uprN ../../cygwin-1.3.14-1-orig/winsup/cygwin/netdb.cc ./cygwin/netdb.cc
+--- ../../cygwin-1.3.14-1-orig/winsup/cygwin/netdb.cc	1970-01-01 12:00:00.000000000 +1200
++++ ./cygwin/netdb.cc	2002-11-19 09:30:37.000000000 +1300
+@@ -0,0 +1,357 @@
++/* netdb.cc: network database related routines.
++
++   Copyright 1996, 1997, 1998, 1999, 2000, 2001, 2002 Red Hat, Inc.
++
++This file is part of Cygwin.
++
++This software is a copyrighted work licensed under the terms of the
++Cygwin license.  Please consult the file "CYGWIN_LICENSE" for
++details. */
++
++#include "winsup.h"
++#include <windows.h>
++#include <sys/cygwin.h>
++#include <stdio.h>
++#include <string.h>
++#include <stdlib.h>
++#include <netdb.h>
++
 +/* Cygwin internal */
-+/* If this ever becomes non-reentrant, update all the getpw*_r functions */
-+static struct passwd *
-+search_for (__uid32_t uid, const char *name)
++static FILE *
++open_system_file (const char *relative_path)
 +{
-+  struct passwd *res =3D 0;
-+
-+  for (int i =3D 0; i < curr_lines; i++)
++  char win32_name[MAX_PATH];
++  char posix_name[MAX_PATH];
++  if (wincap.is_winnt())
 +    {
-+      res =3D passwd_buf + i;
-+      /* on Windows NT user names are case-insensitive */
-+      if (name)
-+        {
-+	  if (strcasematch (name, res->pw_name))
-+	    return res;
-+	}
-+      else if (uid =3D=3D (__uid32_t) res->pw_uid)
-+	return res;
++      if (! GetSystemDirectory (win32_name, MAX_PATH) ) return NULL;
++      strcat (win32_name, "\\drivers\\etc\\");
 +    }
-+  return NULL;
-+}
-+
- /* Read in /etc/passwd and save contents in the password cache.
-    This sets passwd_state to loaded or emulated so functions in this file =
-can
-    tell that /etc/passwd has been read in or will be emulated. */
--void
-+static void
- read_etc_passwd ()
- {
-   static pwdgrp_read pr;
-@@ -146,97 +172,71 @@ read_etc_passwd ()
-   if (passwd_state !=3D initializing)
-     {
-       passwd_state =3D initializing;
-+      curr_lines =3D 0;
-       if (pr.open ("/etc/passwd"))
- 	{
- 	  char *line;
- 	  while ((line =3D pr.gets ()) !=3D NULL)
--	    if (strlen (line))
--	      add_pwd_line (line);
-+	    add_pwd_line (line);
-
- 	  passwd_state.set_last_modified (pr.get_fhandle (), pr.get_fname ());
--	  passwd_state =3D loaded;
- 	  pr.close ();
- 	  debug_printf ("Read /etc/passwd, %d lines", curr_lines);
- 	}
--      else
--	{
--	  static char linebuf[1024];
-
--	  if (wincap.has_security ())
--	    {
--	      HANDLE ptok;
--	      cygsid tu, tg;
--	      DWORD siz;
--
--	      if (OpenProcessToken (hMainProc, TOKEN_QUERY, &ptok))
--		{
--		  if (GetTokenInformation (ptok, TokenUser, &tu, sizeof tu,
--					   &siz)
--		      && GetTokenInformation (ptok, TokenPrimaryGroup, &tg,
--					      sizeof tg, &siz))
--		    {
--		      char strbuf[100];
--		      snprintf (linebuf, sizeof (linebuf),
--				"%s::%lu:%lu:%s:%s:/bin/sh",
--				cygheap->user.name (),
--				*GetSidSubAuthority (tu,
--					     *GetSidSubAuthorityCount(tu) - 1),
--				*GetSidSubAuthority (tg,
--					     *GetSidSubAuthorityCount(tg) - 1),
--				tu.string (strbuf), getenv ("HOME") ?: "/");
--		      debug_printf ("Emulating /etc/passwd: %s", linebuf);
--		      add_pwd_line (linebuf);
--		      passwd_state =3D emulated;
--		    }
--		  CloseHandle (ptok);
--		}
--	    }
--	  if (passwd_state !=3D emulated)
--	    {
--	      snprintf (linebuf, sizeof (linebuf), "%s::%u:%u::%s:/bin/sh",
--			cygheap->user.name (), (unsigned) DEFAULT_UID,
--			(unsigned) DEFAULT_GID, getenv ("HOME") ?: "/");
--	      debug_printf ("Emulating /etc/passwd: %s", linebuf);
--	      add_pwd_line (linebuf);
--	      passwd_state =3D emulated;
--	    }
-+      static char linebuf[1024];
-+      char strbuf[128] =3D "";
-+      BOOL searchentry =3D TRUE;
-+      __uid32_t default_uid =3D DEFAULT_UID;
-+      struct passwd *pw;
-+
-+      if (wincap.has_security ())
-+	{
-+	  cygsid tu =3D cygheap->user.sid ();
-+	  tu.string (strbuf);
-+	  if (myself->uid =3D=3D ILLEGAL_UID &&
-+	      (searchentry =3D !getpwsid (tu)))
-+	    default_uid =3D DEFAULT_UID_NT;
- 	}
--
-+      if (searchentry &&
-+	  (!(pw =3D search_for (0, cygheap->user.name ())) ||
-+	   (myself->uid !=3D ILLEGAL_UID &&
-+	    myself->uid !=3D (__uid32_t) pw->pw_uid  &&
-+	    !search_for (myself->uid, NULL))))
-+	{
-+	  snprintf (linebuf, sizeof (linebuf), "%s:*:%u:%u:,%s:%s:/bin/sh",
-+		    cygheap->user.name (),
-+		    myself->uid =3D=3D ILLEGAL_UID?default_uid:myself->uid,
-+		    myself->gid,
-+		    strbuf, getenv ("HOME") ?: "/");
-+	  debug_printf ("Completing /etc/passwd: %s", linebuf);
-+	  add_pwd_line (linebuf);
-+	}
-+      passwd_state =3D loaded;
-     }
--
-   return;
- }
-
--/* Cygwin internal */
--/* If this ever becomes non-reentrant, update all the getpw*_r functions */
--static struct passwd *
--search_for (__uid32_t uid, const char *name)
-+struct passwd *
-+getpwsid (cygsid &sid)
- {
--  struct passwd *res =3D 0;
--  struct passwd *default_pw =3D 0;
-+  struct passwd *pw;
-+  char *ptr1, *ptr2, *endptr;
-+  char sid_string[128] =3D {0,','};
-
--  for (int i =3D 0; i < curr_lines; i++)
-+  if (curr_lines < 0 && passwd_state  <=3D initializing)
-+    read_etc_passwd ();
-+
-+  if (sid.string (sid_string + 2))
-     {
--      res =3D passwd_buf + i;
--      if (res->pw_uid =3D=3D DEFAULT_UID)
--	default_pw =3D res;
--      /* on Windows NT user names are case-insensitive */
--      if (name)
--	{
--	  if (strcasematch (name, res->pw_name))
--	    return res;
--	}
--      else if (uid =3D=3D (__uid32_t) res->pw_uid)
--	return res;
-+      endptr =3D strchr (sid_string + 2, 0) - 1;
-+      for (int i =3D 0; i < curr_lines; i++)
-+	if ((pw =3D passwd_buf + i)->pw_dir > pw->pw_gecos + 8)
-+	  for (ptr1 =3D endptr, ptr2 =3D pw->pw_dir - 2;
-+	       *ptr1 =3D=3D *ptr2; ptr2--)
-+	    if (!*--ptr1)
-+	      return pw;
-     }
--
--  /* Return default passwd entry if passwd is emulated or it's a
--     request for the current user. */
--  if (passwd_state !=3D loaded
--      || (!name && uid =3D=3D myself->uid)
--      || (name && strcasematch (name, cygheap->user.name ())))
--    return default_pw;
--
-   return NULL;
- }
-
-@@ -399,6 +399,7 @@ setpassent ()
-   return 0;
- }
-
-+#if 0 /* Unused */
- /* Internal function. ONLY USE THIS INTERNALLY, NEVER `getpwent'!!! */
- struct passwd *
- internal_getpwent (int pos)
-@@ -410,6 +411,7 @@ internal_getpwent (int pos)
-     return passwd_buf + pos;
-   return NULL;
- }
-+#endif
-
- extern "C" char *
- getpass (const char * prompt)
---- grp.cc.orig	2002-11-17 19:57:58.000000000 -0500
-+++ grp.cc	2002-11-16 13:28:58.000000000 -0500
-@@ -30,7 +30,7 @@ details. */
-    on the first call that needs information from it. */
-
- static struct __group32 *group_buf;		/* group contents in memory */
--static int curr_lines;
-+static int curr_lines =3D -1;
- static int max_lines;
-
- /* Position in the group cache */
-@@ -41,6 +41,7 @@ static int grp_pos =3D 0;
- #endif
-
- static pwdgrp_check group_state;
-+static char * NO_COPY null_ptr =3D NULL;
-
- static int
- parse_grp (struct __group32 &grp, char *line)
-@@ -62,13 +63,11 @@ parse_grp (struct __group32 &grp, char *
-   if (dp)
-     {
-       *dp++ =3D '\0';
--      if (!strlen (grp.gr_passwd))
--	grp.gr_passwd =3D NULL;
--
-       grp.gr_gid =3D strtol (dp, NULL, 10);
-       dp =3D strchr (dp, ':');
-       if (dp)
- 	{
-+	  grp.gr_mem =3D &null_ptr;
- 	  if (*++dp)
- 	    {
- 	      int i =3D 0;
-@@ -87,11 +86,9 @@ parse_grp (struct __group32 &grp, char *
- 		    }
- 		  namearray[i++] =3D dp;
- 		  namearray[i] =3D NULL;
-+		  grp.gr_mem =3D namearray;
- 		}
--	      grp.gr_mem =3D namearray;
- 	    }
--	  else
--	    grp.gr_mem =3D (char **) calloc (1, sizeof (char *));
- 	  return 1;
- 	}
-     }
-@@ -134,9 +131,7 @@ pthread_mutex_t NO_COPY group_lock::mute
- /* Read in /etc/group and save contents in the group cache */
- /* This sets group_in_memory_p to 1 so functions in this file can
-    tell that /etc/group has been read in */
--/* FIXME: should be static but this is called in uinfo_init outside this
--   file */
--void
-+static void
- read_etc_group ()
- {
-   static pwdgrp_read gr;
-@@ -150,76 +145,74 @@ read_etc_group ()
-   if (group_state !=3D initializing)
-     {
-       group_state =3D initializing;
-+      for (int i =3D 0; i < curr_lines; i++)
-+	if ((group_buf + i)->gr_mem !=3D &null_ptr)
-+	  free ((group_buf + i)->gr_mem);
-+
-+      curr_lines =3D 0;
-       if (gr.open ("/etc/group"))
- 	{
- 	  char *line;
- 	  while ((line =3D gr.gets ()) !=3D NULL)
--	    if (strlen (line))
--	      add_grp_line (line);
-+            add_grp_line (line);
-
- 	  group_state.set_last_modified (gr.get_fhandle (), gr.get_fname ());
--	  group_state =3D loaded;
- 	  gr.close ();
- 	  debug_printf ("Read /etc/group, %d lines", curr_lines);
- 	}
--      else /* /etc/group doesn't exist -- create default one in memory */
--	{
--	  char group_name [UNLEN + 1];
--	  DWORD group_name_len =3D UNLEN + 1;
--	  char domain_name [INTERNET_MAX_HOST_NAME_LENGTH + 1];
--	  DWORD domain_name_len =3D INTERNET_MAX_HOST_NAME_LENGTH + 1;
--	  SID_NAME_USE acType;
-+
-+      /* Complete /etc/group in memory if needed */
-+      if (!getgrgid32 (myself->gid))
-+        {
- 	  static char linebuf [200];
-+	  char group_name [UNLEN + 1] =3D "unknown";
-+	  char strbuf[128] =3D "";
-
- 	  if (wincap.has_security ())
--	    {
--	      HANDLE ptok;
--	      cygsid tg;
--	      DWORD siz;
--
--	      if (OpenProcessToken (hMainProc, TOKEN_QUERY, &ptok))
--		{
--		  if (GetTokenInformation (ptok, TokenPrimaryGroup, &tg,
--					   sizeof tg, &siz)
--		      && LookupAccountSidA (NULL, tg, group_name,
--					    &group_name_len, domain_name,
--					    &domain_name_len, &acType))
--		    {
--		      char strbuf[100];
--		      snprintf (linebuf, sizeof (linebuf), "%s:%s:%lu:",
--				group_name,
--				tg.string (strbuf),
--				*GetSidSubAuthority (tg,
--					     *GetSidSubAuthorityCount (tg) - 1));
--		      debug_printf ("Emulating /etc/group: %s", linebuf);
--		      add_grp_line (linebuf);
--		      group_state =3D emulated;
--		    }
--		  CloseHandle (ptok);
--		}
--	    }
--	  if (group_state !=3D emulated)
--	    {
--	      strncpy (group_name, "Administrators", sizeof (group_name));
--	      if (!LookupAccountSidA (NULL, well_known_admins_sid, group_name,
--				      &group_name_len, domain_name,
--				      &domain_name_len, &acType))
--		{
--		  strcpy (group_name, "unknown");
--		  debug_printf ("Failed to get local admins group name. %E");
-+            {
-+	      DWORD group_name_len =3D UNLEN + 1;
-+	      char domain_name [INTERNET_MAX_HOST_NAME_LENGTH + 1];
-+	      DWORD domain_name_len =3D INTERNET_MAX_HOST_NAME_LENGTH + 1;
-+	      SID_NAME_USE acType;
-+	      struct __group32 *gr;
-+
-+	      cygheap->user.groups.pgsid.string (strbuf);
-+	      if (!(gr =3D getgrsid (cygheap->user.groups.pgsid)))
-+	        {
-+		  if (!LookupAccountSidA (NULL, cygheap->user.groups.pgsid,
-+					  group_name, &group_name_len,
-+					  domain_name, &domain_name_len,
-+					  &acType))
-+		    debug_printf ("Failed to get primary group name. %E");
- 		}
--	      snprintf (linebuf, sizeof (linebuf), "%s::%u:", group_name,
--			(unsigned) DEFAULT_GID);
--	      debug_printf ("Emulating /etc/group: %s", linebuf);
--	      add_grp_line (linebuf);
--	      group_state =3D emulated;
-+	      else
-+		strlcpy (group_name, gr->gr_name, sizeof (group_name));
- 	    }
-+	  snprintf (linebuf, sizeof (linebuf), "%s:%s:%lu:%s",
-+		    group_name, strbuf, myself->gid, cygheap->user.name ());
-+	  debug_printf ("Completing /etc/group: %s", linebuf);
-+	  add_grp_line (linebuf);
- 	}
-+      group_state =3D loaded;
-     }
--
-   return;
- }
-
-+struct __group32 *
-+getgrsid (cygsid &sid)
-+{
-+  char sid_string[128];
-+
-+  if (curr_lines < 0 && group_state  <=3D initializing)
-+    read_etc_group ();
-+
-+  if (sid.string (sid_string))
-+    for (int i =3D 0; i < curr_lines; i++)
-+      if (!strcmp (sid_string, (group_buf + i)->gr_passwd))
-+        return group_buf + i;
-+  return NULL;
-+}
-+
- static
- struct __group16 *
- grp32togrp16 (struct __group16 *gp16, struct __group32 *gp32)
-@@ -246,13 +239,12 @@ getgrgid32 (__gid32_t gid)
-
-   for (int i =3D 0; i < curr_lines; i++)
-     {
--      if (group_buf[i].gr_gid =3D=3D DEFAULT_GID)
-+      if (group_buf[i].gr_gid =3D=3D myself->gid)
- 	default_grp =3D group_buf + i;
-       if (group_buf[i].gr_gid =3D=3D gid)
- 	return group_buf + i;
-     }
--
--  return allow_ntsec ? NULL : default_grp;
-+  return (!allow_ntsec && gid =3D=3D ILLEGAL_GID)?default_grp:NULL;
- }
-
- extern "C" struct __group16 *
-@@ -482,13 +474,9 @@ setgroups32 (int ngroups, const __gid32_
-       for (int gidy =3D 0; gidy < gidx; gidy++)
- 	if (grouplist[gidy] =3D=3D grouplist[gidx])
- 	  goto found; /* Duplicate */
--      for (int gidy =3D 0; (gr =3D internal_getgrent (gidy)); ++gidy)
--	if (gr->gr_gid =3D=3D (__gid32_t) grouplist[gidx])
--	  {
--	    if (gsids.addfromgr (gr))
--	      goto found;
--	    break;
--	  }
-+      if ((gr =3D getgrgid32 (grouplist[gidx])) &&
-+	  gsids.addfromgr (gr))
-+	goto found;
-       debug_printf ("No sid found for gid %d", grouplist[gidx]);
-       gsids.free_sids ();
-       set_errno (EINVAL);
---- sec_helper.cc.orig	2002-11-14 17:41:00.000000000 -0500
-+++ sec_helper.cc	2002-11-16 16:18:10.000000000 -0500
-@@ -118,21 +118,20 @@ BOOL
- cygsid::getfrompw (const struct passwd *pw)
- {
-   char *sp =3D (pw && pw->pw_gecos) ? strrchr (pw->pw_gecos, ',') : NULL;
--  return (*this =3D sp ? sp + 1 : "") !=3D NULL;
-+  return (*this =3D sp ? sp + 1 : sp) !=3D NULL;
- }
-
- BOOL
- cygsid::getfromgr (const struct __group32 *gr)
- {
-   char *sp =3D (gr && gr->gr_passwd) ? gr->gr_passwd : NULL;
--  return (*this =3D sp ?: "") !=3D NULL;
-+  return (*this =3D sp) !=3D NULL;
- }
-
- __uid32_t
- cygsid::get_id (BOOL search_grp, int *type)
- {
-   /* First try to get SID from passwd or group entry */
--  cygsid sid;
-   __uid32_t id =3D ILLEGAL_UID;
-
-   if (!search_grp)
-@@ -140,42 +139,25 @@ cygsid::get_id (BOOL search_grp, int *ty
-       struct passwd *pw;
-       if (*this =3D=3D cygheap->user.sid ())
- 	id =3D myself->uid;
--      else
--	for (int pidx =3D 0; (pw =3D internal_getpwent (pidx)); ++pidx)
--          {
--	    if (sid.getfrompw (pw) && sid =3D=3D psid)
--	      {
--		id =3D pw->pw_uid;
--		break;
--	      }
--	  }
-+      else if ((pw =3D getpwsid (*this)))
-+	id =3D pw->pw_uid;
-       if (id !=3D ILLEGAL_UID)
- 	{
- 	  if (type)
- 	    *type =3D USER;
- 	   return id;
--	 }
-+	}
-     }
-   if (search_grp || type)
-     {
-       struct __group32 *gr;
-       if (cygheap->user.groups.pgsid =3D=3D psid)
- 	id =3D myself->gid;
--      else
--	for (int gidx =3D 0; (gr =3D internal_getgrent (gidx)); ++gidx)
--	  {
--	    if (sid.getfromgr (gr) && sid =3D=3D psid)
--	      {
--		id =3D gr->gr_gid;
--		break;
--	      }
--	  }
--      if (id !=3D ILLEGAL_UID)
--	{
--	  if (type)
--	    *type =3D GROUP;
--	}
--     }
-+      else if ((gr =3D getgrsid (*this)))
-+	id =3D gr->gr_gid;
-+      if (id !=3D ILLEGAL_UID && type)
-+	*type =3D GROUP;
-+    }
-   return id;
- }
-
-@@ -208,24 +190,17 @@ is_grp_member (__uid32_t uid, __gid32_t
-     }
-
-   /* Otherwise try getting info from examining passwd and group files. */
--  for (int idx =3D 0; (pw =3D internal_getpwent (idx)); ++idx)
--    if ((__uid32_t) pw->pw_uid =3D=3D uid)
--      {
--	/* If gid =3D=3D primary group of uid, return immediately. */
--	if ((__gid32_t) pw->pw_gid =3D=3D gid)
--	  return TRUE;
--	/* Otherwise search for supplementary user list of this group. */
--	for (idx =3D 0; (gr =3D internal_getgrent (idx)); ++idx)
--	  if ((__gid32_t) gr->gr_gid =3D=3D gid)
--	    {
--	      if (gr->gr_mem)
--		for (idx =3D 0; gr->gr_mem[idx]; ++idx)
--		  if (strcasematch (cygheap->user.name (), gr->gr_mem[idx]))
--		    return TRUE;
--	      return FALSE;
--	    }
--        return FALSE;
--      }
-+  if ((pw =3D getpwuid32 (uid)))
-+    {
-+      /* If gid =3D=3D primary group of uid, return immediately. */
-+      if ((__gid32_t) pw->pw_gid =3D=3D gid)
-+	return TRUE;
-+      /* Otherwise search for supplementary user list of this group. */
-+      if ((gr =3D getgrgid32 (gid)) && gr->gr_mem)
-+	for (idx =3D 0; gr->gr_mem[idx]; ++idx)
-+	  if (strcasematch (cygheap->user.name (), gr->gr_mem[idx]))
-+	    return TRUE;
-+    }
-   return FALSE;
- }
-
---- uinfo.cc.orig	2002-11-02 11:51:30.000000000 -0500
-+++ uinfo.cc	2002-11-04 21:00:14.000000000 -0500
-@@ -34,10 +34,11 @@ void
- internal_getlogin (cygheap_user &user)
- {
-   struct passwd *pw =3D NULL;
-+  HANDLE ptok =3D INVALID_HANDLE_VALUE;
-
-+  myself->gid =3D DEFAULT_GID;
-   if (wincap.has_security ())
-     {
--      HANDLE ptok =3D INVALID_HANDLE_VALUE;
-       DWORD siz;
-       cygsid tu;
-       DWORD ret =3D 0;
-@@ -58,52 +59,39 @@ internal_getlogin (cygheap_user &user)
- 	 If we have a SID, try to get the corresponding Cygwin
- 	 password entry. Set user name which can be different
- 	 from the Windows user name */
--       if (ret)
--	 {
--	  cygsid gsid (NO_SID);
--	  cygsid psid;
--
--	  for (int pidx =3D 0; (pw =3D internal_getpwent (pidx)); ++pidx)
--	    if (psid.getfrompw (pw) && EqualSid (user.sid (), psid))
--	      {
--		user.set_name (pw->pw_name);
--		struct __group32 *gr =3D getgrgid32 (pw->pw_gid);
--		if (gr)
--		  if (!gsid.getfromgr (gr))
--		      gsid =3D NO_SID;
--		break;
--	      }
--
--	  /* Set token owner to the same value as token user and
--	     primary group to the group in /etc/passwd. */
-+      if (ret)
-+	{
-+	  if ((pw =3D getpwsid (tu)))
-+	    user.set_name (pw->pw_name);
-+	  /* Set token owner to the same value as token user */
- 	  if (!SetTokenInformation (ptok, TokenOwner, &tu, sizeof tu))
- 	    debug_printf ("SetTokenInformation(TokenOwner): %E");
--	  if (gsid)
--	    {
--	      user.groups.pgsid =3D gsid;
--	      if (!SetTokenInformation (ptok, TokenPrimaryGroup,
--					&gsid, sizeof gsid))
--		debug_printf ("SetTokenInformation(TokenPrimaryGroup): %E");
--	    }
- 	 }
--      if (ptok !=3D INVALID_HANDLE_VALUE)
--	CloseHandle (ptok);
-     }
-
--  if (!pw)
--    pw =3D getpwnam (user.name ());
--
--  if (pw)
-+  if (!pw && !(pw =3D getpwnam (user.name ())))
-+    debug_printf("user name not found in augmented /etc/passwd");
 +  else
-     {
-       myself->uid =3D pw->pw_uid;
-       myself->gid =3D pw->pw_gid;
-+      if (wincap.has_security ())
++    {
++      if (! GetWindowsDirectory (win32_name, MAX_PATH) ) return NULL;
++      strcat (win32_name, "\\");
++    }
++  strcat (win32_name, relative_path);
++  cygwin_conv_to_full_posix_path (win32_name, posix_name);
++  return fopen (posix_name, "r");
++}
++
++/* Cygwin internal */
++static char *
++get_entire_line (FILE *fd)
++{
++  static const int BUFF_SIZE = 1024;
++  struct line_fragment {
++    char buffer[BUFF_SIZE];
++    line_fragment *next;
++  };
++  line_fragment *fragment_list_head = NULL;
++  line_fragment *fragment = NULL;
++  int fragment_count = 0;
++  char *result;
++  do
++    {
++      line_fragment *new_fragment = (line_fragment *) malloc (sizeof (line_fragment));
++      if (! fragment_list_head) fragment_list_head = new_fragment;
++      if (fragment) fragment->next = new_fragment;
++      fragment = new_fragment;
++      fragment->next = NULL;
++      *fragment->buffer = '\0';
++      result = fgets (fragment->buffer, BUFF_SIZE, fd);
++      ++fragment_count;
++    }
++  while (result && !strchr (fragment->buffer, '\n'));
++  if (*fragment_list_head->buffer != '\0')
++    {
++      char *concatenated_line = (char *) calloc (fragment_count * BUFF_SIZE , sizeof(char));
++      *concatenated_line = '\0';
++      fragment = fragment_list_head;
++      while (fragment != NULL)
 +        {
-+	  cygsid gsid;
-+	  if (gsid.getfromgr (getgrgid32 (pw->pw_gid)))
-+	    {
-+	      /* Set primary group to the group in /etc/passwd. */
-+	      user.groups.pgsid =3D gsid;
-+	      if (!SetTokenInformation (ptok, TokenPrimaryGroup,
-+					&gsid, sizeof gsid))
-+		debug_printf ("SetTokenInformation(TokenPrimaryGroup): %E");
-+	    }
-+	  else
-+	    debug_printf ("gsid not found in augmented /etc/group");
-+	}
-     }
--  else
--    {
--      myself->uid =3D DEFAULT_UID;
--      myself->gid =3D DEFAULT_GID;
--    }
--
-+  if (ptok !=3D INVALID_HANDLE_VALUE)
-+    CloseHandle (ptok);
-   (void) cygheap->user.ontherange (CH_HOME, pw);
++          line_fragment *previous = fragment;
++          strcat(concatenated_line, fragment->buffer);
++          fragment = fragment->next;
++          free(previous);
++        }
++      return concatenated_line;
++    }
++  else
++    {
++      fragment = fragment_list_head;
++      while (fragment != NULL)
++        {
++          line_fragment *previous = fragment;
++          fragment = fragment->next;
++          free(previous);
++        }
++      return NULL;
++    }
++}
++
++static const char *SPACE = " \t\n\r\f";
++
++/* Cygwin internal */
++static void
++get_alias_list(char ***aliases)
++{ 
++  struct alias_t {
++    char *alias_name;
++    alias_t *next;
++  };
++  alias_t *alias_list_head = NULL, *alias_list_tail = NULL;
++  char *alias;
++  int alias_count = 0;
++  alias = strtok(NULL, SPACE);
++  while (alias)
++    {
++      ++alias_count;
++      alias_t *new_alias = (alias_t *) malloc (sizeof (alias_t));
++      if (!alias_list_head) alias_list_head = new_alias;
++      if (alias_list_tail) alias_list_tail->next = new_alias;
++      new_alias->next = NULL;
++      new_alias->alias_name = alias;
++      alias_list_tail = new_alias;
++      alias = strtok(NULL, SPACE);
++    }
++  *aliases = (char**) calloc (alias_count + 1, sizeof(char *));
++  char **current_entry = *aliases;
++  while (alias_list_head)
++    {
++      alias_t *previous = alias_list_head;
++      *current_entry = strdup (alias_list_head->alias_name);
++      alias_list_head = alias_list_head->next;
++      free (previous);
++      ++current_entry;
++    }
++  *current_entry = NULL;
++}
++
++/* Cygwin internal */
++static FILE *
++open_services_file ()
++{
++  return open_system_file ("services");
++}
++
++/* Cygwin internal */
++static bool
++parse_services_line (FILE *svc_file, struct servent *sep)
++{
++  char *line;
++  while ((line = get_entire_line (svc_file)))
++    {
++      char *name, *port, *protocol;
++      
++      line[strcspn (line, "#")] = '\0'; // truncate at comment marker.
++      name = strtok(line, SPACE);
++      if (!name)
++        {
++          free(line);
++          continue;
++        }
++      port = strtok(NULL, SPACE);
++      protocol = strchr(port, '/');
++      *protocol++ = '\0';
++      sep->s_name = strdup (name);
++      sep->s_port = atoi (port);
++      sep->s_proto = strdup (protocol);
++      get_alias_list(& sep->s_aliases);
++      free (line);
++      return true;
++    }
++  return false;
++}
++
++static FILE *svc_file = NULL;
++static long int svc_read_pos = 0;
++static struct servent current_servent;
++
++/* Cygwin internal */
++static void
++free_servent (struct servent *sep)
++{
++  free (sep->s_name);
++  free (sep->s_proto);
++  char ** current = sep->s_aliases;
++  while (current && *current)
++    {
++      free (*current);
++      ++current;
++    }
++  free (sep->s_aliases);
++  sep->s_name = NULL;
++  sep->s_port = 0;
++  sep->s_proto = NULL;
++  sep->s_aliases = NULL;
++}
++
++extern "C" void
++cygwin_setservent (int stay_open)
++{
++  if (svc_file)
++    {
++      fclose (svc_file);
++    }
++  if (stay_open)
++    {
++      svc_file = open_services_file ();
++    }
++  free_servent (&current_servent);
++  svc_read_pos = 0;
++}
++
++extern "C" struct servent *
++cygwin_getservent (void)
++{
++  FILE *fd;
++  if (svc_file)
++    {
++      fd = svc_file;
++    }
++  else
++    {
++      fd = open_services_file ();
++      if (!fd) return NULL;
++      fseek (fd, svc_read_pos, SEEK_SET);
++    }
++  free_servent (&current_servent);
++  bool found = parse_services_line (fd, &current_servent);
++  if (!svc_file)
++    {
++      svc_read_pos = ftell(fd);
++      fclose(fd);
++    }
++  if (found)
++    {
++      return &current_servent;
++    }
++  else
++    {
++      return NULL;
++    }
++}
++
++extern "C" void
++cygwin_endservent (void)
++{
++  if (svc_file)
++    {
++      fclose (svc_file);
++      svc_file = NULL;
++    }
++  free_servent (&current_servent);
++  svc_read_pos = 0;  
++}
++
++/* Cygwin internal */
++static FILE *
++open_protocol_file ()
++{
++  return open_system_file ("protocol");
++}
++
++/* Cygwin internal */
++static bool
++parse_protocol_line (FILE *proto_file, struct protoent *pep)
++{
++  char *line;
++  while ((line = get_entire_line (proto_file)))
++    {
++      char *name, *protocol;
++      
++      line[strcspn (line, "#")] = '\0'; // truncate at comment marker.
++      name = strtok(line, SPACE);
++      if (!name)
++        {
++          free(line);
++          continue;
++        }
++      protocol = strtok(NULL, SPACE);
++      pep->p_name = strdup (name);
++      pep->p_proto = atoi (protocol);
++      get_alias_list(& pep->p_aliases);
++      free (line);
++      return true;
++    }
++  return false;
++}
++
++static FILE *proto_file = NULL;
++static long int proto_read_pos = 0;
++static struct protoent current_protoent;
++
++/* Cygwin internal */
++static void
++free_protoent (struct protoent *pep)
++{
++  free (pep->p_name);
++  char ** current = pep->p_aliases;
++  while (current && *current)
++    {
++      free (*current);
++      ++current;
++    }
++  free (pep->p_aliases);
++  pep->p_name = NULL;
++  pep->p_proto = 0;
++  pep->p_aliases = NULL;
++}
++
++extern "C" void
++cygwin_setprotoent (int stay_open)
++{
++  if (proto_file)
++    {
++      fclose (proto_file);
++    }
++  if (stay_open)
++    {
++      proto_file = open_protocol_file ();
++    }
++  free_protoent (&current_protoent);
++  proto_read_pos = 0;
++}
++
++extern "C" struct protoent *
++cygwin_getprotoent (void)
++{
++  FILE *fd;
++  if (proto_file)
++    {
++      fd = proto_file;
++    }
++  else
++    {
++      fd = open_protocol_file ();
++      if (!fd) return NULL;
++      fseek (fd, proto_read_pos, SEEK_SET);
++    }
++  free_protoent (&current_protoent);
++  bool found = parse_protocol_line (fd, &current_protoent);
++  if (!proto_file)
++    {
++      proto_read_pos = ftell(fd);
++      fclose(fd);
++    }
++  if (found)
++    {
++      return &current_protoent;
++    }
++  else
++    {
++      return NULL;
++    }
++}
++
++extern "C" void
++cygwin_endprotoent (void)
++{
++  if (proto_file)
++    {
++      fclose (proto_file);
++      proto_file = NULL;
++    }
++  free_protoent (&current_protoent);
++  proto_read_pos = 0;  
++}
 
-   return;
-
---=====================_1037609058==_--
+--Message-Boundary-3613--
