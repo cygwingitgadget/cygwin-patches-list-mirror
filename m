@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3812-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 21253 invoked by alias); 15 Apr 2003 08:59:39 -0000
+Return-Path: <cygwin-patches-return-3813-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 7341 invoked by alias); 15 Apr 2003 19:55:10 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,144 +7,382 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 21232 invoked from network); 15 Apr 2003 08:59:38 -0000
-X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
-Date: Tue, 15 Apr 2003 08:59:00 -0000
-From: Thomas Pfaff <tpfaff@gmx.net>
-To: cygwin-patches@cygwin.com
-Subject: [RFA] enable finline-functions optimization
-Message-ID: <Pine.WNT.4.44.0304151046400.259-200000@algeria.intern.net>
-X-X-Sender: pfaff@antarctica.intern.net
+Received: (qmail 7321 invoked from network); 15 Apr 2003 19:55:10 -0000
+From: "Chris January" <chris@atomice.net>
+To: "Cygwin-Patches@Cygwin.Com" <cygwin-patches@cygwin.com>
+Subject: hostid patch
+Date: Tue, 15 Apr 2003 19:55:00 -0000
+Message-ID: <LPEHIHGCJOAIPFLADJAHCEMJDIAA.chris@atomice.net>
 MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="759923-918-1050397153=:259"
-X-SW-Source: 2003-q2/txt/msg00039.txt.bz2
+Content-Type: multipart/mixed;
+	boundary="----=_NextPart_000_003E_01C30391.4C70ADA0"
+X-Priority: 3 (Normal)
+X-MSMail-Priority: Normal
+Importance: Normal
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2800.1106
+X-SW-Source: 2003-q2/txt/msg00040.txt.bz2
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
+This is a multi-part message in MIME format.
 
---759923-918-1050397153=:259
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-Content-length: 825
+------=_NextPart_000_003E_01C30391.4C70ADA0
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+Content-length: 262
 
+*Not* tested on anything other than Windows XP.
 
-It seems that  __attribute__(used) does not work in conjunction with
-__asm__ ("function name without _"). If i remove the  __asm__ stuff it
-works as expected.
-This patch will keep the functions static.
+Adds gethostid function to Cygwin. Three patches: one for Cygwin, one for
+newlib and one for w32api.
+If I've done anything wrong let me know and I'll try to fix it.
 
-2003-04-15  Thomas Pfaff  <tpfaff@gmx.net>
+Chris
 
-	* Makefile.in: Add finline-functions optimization to CXXFLAGS.
-	* autoload.cc (LoadDLLprime): Rename std_dll_init to
-	_std_dll_init.
-	(std_dll_init): Remove name mangling prototype. Add attributes
-	used and noinline.
-	(wsock_init): Ditto.
-	Change wsock_init to _wsock_init in wsock32 and ws2_32
-	LoadDLLprime.
-	* exceptions.cc (unused_sig_wrapper): Remove prototype. Add
-	attributes used and noinline.
-	* pwdgrp.h ((pwdgrp (passwd *&)): Remove inline code.
-	(pwdgrp (__group32 *&)): Ditto.
-	* grp.cc (pwdgrp (passwd *&)): Outline constructor.
-	(pwdgrp (__group32 *&)): Ditto.
+---
+Christopher January www.atomice.com
 
---759923-918-1050397153=:259
-Content-Type: TEXT/plain; name="finline-functions.patch"
-Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.WNT.4.44.0304151059130.259@algeria.intern.net>
-Content-Description: 
-Content-Disposition: attachment; filename="finline-functions.patch"
-Content-length: 5348
+------=_NextPart_000_003E_01C30391.4C70ADA0
+Content-Type: text/plain;
+	name="cpuid.h"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+	filename="cpuid.h"
+Content-length: 594
 
-ZGlmZiAtdXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi9NYWtlZmlsZS5pbiBz
-cmMvd2luc3VwL2N5Z3dpbi9NYWtlZmlsZS5pbgotLS0gc3JjLm9sZC93aW5z
-dXAvY3lnd2luL01ha2VmaWxlLmluCTIwMDMtMDQtMDkgMTA6MTM6NTYuMDAw
-MDAwMDAwICswMjAwCisrKyBzcmMvd2luc3VwL2N5Z3dpbi9NYWtlZmlsZS5p
-bgkyMDAzLTA0LTA5IDEwOjE3OjM5LjAwMDAwMDAwMCArMDIwMApAQCAtODAs
-NiArODAsOSBAQCBDRkxBR1M9QENGTEFHU0AKIG92ZXJyaWRlIENGTEFHUys9
-LU1NRCAkeyQoKkYpX0NGTEFHU30KIENYWD1AQ1hYQAogQ1hYRkxBR1M9QENY
-WEZMQUdTQAoraWZlcSAoJChDWUdJTkxJTkUpLDEpCitvdmVycmlkZSBDWFhG
-TEFHUys9LWZpbmxpbmUtZnVuY3Rpb25zCitlbmRpZgogCiBBUjo9QEFSQAog
-QVJfRkxBR1M6PXF2CmRpZmYgLXVycCBzcmMub2xkL3dpbnN1cC9jeWd3aW4v
-YXV0b2xvYWQuY2Mgc3JjL3dpbnN1cC9jeWd3aW4vYXV0b2xvYWQuY2MKLS0t
-IHNyYy5vbGQvd2luc3VwL2N5Z3dpbi9hdXRvbG9hZC5jYwkyMDAzLTA0LTA5
-IDEwOjEyOjU4LjAwMDAwMDAwMCArMDIwMAorKysgc3JjL3dpbnN1cC9jeWd3
-aW4vYXV0b2xvYWQuY2MJMjAwMy0wNC0xNSAxMDo0MzoyNy4wMDAwMDAwMDAg
-KzAyMDAKQEAgLTU4LDcgKzU4LDcgQEAgZGV0YWlscy4gKi8KICNkZWZpbmUg
-TG9hZERMTHByaW1lKGRsbG5hbWUsIGluaXRfYWxzbykgX19hc21fXyAoIglc
-blwKICAgLnNlY3Rpb24JLiIgI2RsbG5hbWUgIl9pbmZvLFwid1wiCQlcblwK
-ICAgLmxpbmtvbmNlCQkJCQkJXG5cCi0gIC5sb25nCQlzdGRfZGxsX2luaXQJ
-CQkJXG5cCisgIC5sb25nCQlfc3RkX2RsbF9pbml0CQkJCVxuXAogICAubG9u
-ZwkJMAkJCQkJXG5cCiAgIC5sb25nCQktMQkJCQkJXG5cCiAgIC5sb25nCQki
-ICNpbml0X2Fsc28gIgkJCQlcblwKQEAgLTIwMSw4ICsyMDEsNyBAQCB1bmlv
-biByZXRjaGFpbgogfTsKIAogLyogVGhlIHN0YW5kYXJkIERMTCBpbml0aWFs
-aXphdGlvbiByb3V0aW5lLiAqLwotc3RhdGljIGxvbmcgbG9uZyBzdGRfZGxs
-X2luaXQgKCkgX19hc21fXyAoInN0ZF9kbGxfaW5pdCIpIF9fYXR0cmlidXRl
-X18gKCh1bnVzZWQpKTsKLXN0YXRpYyBsb25nIGxvbmcKK19fYXR0cmlidXRl
-X18gKCh1c2VkLCBub2lubGluZSkpIHN0YXRpYyBsb25nIGxvbmcKIHN0ZF9k
-bGxfaW5pdCAoKQogewogICBIQU5ETEUgaDsKQEAgLTI0MSw5ICsyNDAsOCBA
-QCBzdGRfZGxsX2luaXQgKCkKIH0KIAogLyogSW5pdGlhbGl6YXRpb24gZnVu
-Y3Rpb24gZm9yIHdpbnNvY2sgc3R1ZmYuICovCi1zdGF0aWMgbG9uZyBsb25n
-IHdzb2NrX2luaXQgKCkgX19hc21fXyAoIndzb2NrX2luaXQiKSBfX2F0dHJp
-YnV0ZV9fICgodW51c2VkLCByZWdwYXJtKDEpKSk7CiBib29sIE5PX0NPUFkg
-d3NvY2tfc3RhcnRlZCA9IDA7Ci1zdGF0aWMgbG9uZyBsb25nCitfX2F0dHJp
-YnV0ZV9fICgodXNlZCwgbm9pbmxpbmUsIHJlZ3Bhcm0oMSkpKSBzdGF0aWMg
-bG9uZyBsb25nCiB3c29ja19pbml0ICgpCiB7CiAgIHN0YXRpYyBMT05HIE5P
-X0NPUFkgaGVyZSA9IC0xTDsKQEAgLTMwNCw4ICszMDIsOCBAQCB3c29ja19p
-bml0ICgpCiAgIHJldHVybiByZXQubGw7CiB9CiAKLUxvYWRETExwcmltZSAo
-d3NvY2szMiwgd3NvY2tfaW5pdCkKLUxvYWRETExwcmltZSAod3MyXzMyLCB3
-c29ja19pbml0KQorTG9hZERMTHByaW1lICh3c29jazMyLCBfd3NvY2tfaW5p
-dCkKK0xvYWRETExwcmltZSAod3MyXzMyLCBfd3NvY2tfaW5pdCkKIAogTG9h
-ZERMTGZ1bmMgKEFjY2Vzc0NoZWNrLCAzMiwgYWR2YXBpMzIpCiBMb2FkRExM
-ZnVuYyAoQWRkQWNjZXNzQWxsb3dlZEFjZSwgMTYsIGFkdmFwaTMyKQpkaWZm
-IC11cnAgc3JjLm9sZC93aW5zdXAvY3lnd2luL2V4Y2VwdGlvbnMuY2Mgc3Jj
-L3dpbnN1cC9jeWd3aW4vZXhjZXB0aW9ucy5jYwotLS0gc3JjLm9sZC93aW5z
-dXAvY3lnd2luL2V4Y2VwdGlvbnMuY2MJMjAwMy0wNC0wOSAxMDoxMzoyMS4w
-MDAwMDAwMDAgKzAyMDAKKysrIHNyYy93aW5zdXAvY3lnd2luL2V4Y2VwdGlv
-bnMuY2MJMjAwMy0wNC0xNSAxMDo0MjoyMy4wMDAwMDAwMDAgKzAyMDAKQEAg
-LTEyMDMsMTIgKzEyMDMsMTAgQEAgcmVzZXRfc2lnbmFsX2Fycml2ZWQgKCkK
-ICAgc2lncHJvY19wcmludGYgKCJyZXNldCBzaWduYWxfYXJyaXZlZCIpOwog
-fQogCi1zdGF0aWMgdm9pZCB1bnVzZWRfc2lnX3dyYXBwZXIgKCkgX19hdHRy
-aWJ1dGVfXygoY29uc3QsIHVudXNlZCkpOwotCiAjdW5kZWYgZXJybm8KICNk
-ZWZpbmUgZXJybm8gKChEV09SRCB2b2xhdGlsZSkgX2ltcHVyZV9wdHIpICsg
-KCgoY2hhciAqKSAmX2ltcHVyZV9wdHItPl9lcnJubykgLSAoKGNoYXIgKikg
-X2ltcHVyZV9wdHIpKQogCi1zdGF0aWMgdm9pZAorX19hdHRyaWJ1dGVfXygo
-Y29uc3QsIHVzZWQsIG5vaW5saW5lKSkgc3RhdGljIHZvaWQKIHVudXNlZF9z
-aWdfd3JhcHBlciAoKQogewogLyogU2lnbmFsIGNsZWFudXAgc3R1ZmYuICBD
-bGVhbnMgdXAgc3RhY2sgKHRvbyBiYWQgdGhhdCB3ZSBkaWRuJ3QKZGlmZiAt
-dXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi9ncnAuY2Mgc3JjL3dpbnN1cC9j
-eWd3aW4vZ3JwLmNjCi0tLSBzcmMub2xkL3dpbnN1cC9jeWd3aW4vZ3JwLmNj
-CTIwMDMtMDQtMDkgMTA6MTM6MzUuMDAwMDAwMDAwICswMjAwCisrKyBzcmMv
-d2luc3VwL2N5Z3dpbi9ncnAuY2MJMjAwMy0wNC0wOSAxMDoxNTo0MS4wMDAw
-MDAwMDAgKzAyMDAKQEAgLTEwOCw2ICsxMDgsMjEgQEAgcHdkZ3JwOjpyZWFk
-X2dyb3VwICgpCiAgIHJldHVybjsKIH0KIAorcHdkZ3JwOjpwd2RncnAgKHBh
-c3N3ZCAqJnBidWYpIDoKKyAgcHdkZ3JwX2J1Zl9lbGVtX3NpemUgKHNpemVv
-ZiAoKnBidWYpKSwgcGFzc3dkX2J1ZiAoJnBidWYpCit7CisgIHJlYWQgPSAm
-cHdkZ3JwOjpyZWFkX3Bhc3N3ZDsKKyAgcGFyc2UgPSAmcHdkZ3JwOjpwYXJz
-ZV9wYXNzd2Q7CisgIG5ld19tdXRvIChwZ2xvY2spOworfQorcHdkZ3JwOjpw
-d2RncnAgKF9fZ3JvdXAzMiAqJmdidWYpIDoKKyAgcHdkZ3JwX2J1Zl9lbGVt
-X3NpemUgKHNpemVvZiAoKmdidWYpKSwgZ3JvdXBfYnVmICgmZ2J1ZikKK3sK
-KyAgcmVhZCA9ICZwd2RncnA6OnJlYWRfZ3JvdXA7CisgIHBhcnNlID0gJnB3
-ZGdycDo6cGFyc2VfZ3JvdXA7CisgIG5ld19tdXRvIChwZ2xvY2spOworfQor
-CiBzdHJ1Y3QgX19ncm91cDMyICoKIGludGVybmFsX2dldGdyc2lkIChjeWdw
-c2lkICZzaWQpCiB7CmRpZmYgLXVycCBzcmMub2xkL3dpbnN1cC9jeWd3aW4v
-cHdkZ3JwLmggc3JjL3dpbnN1cC9jeWd3aW4vcHdkZ3JwLmgKLS0tIHNyYy5v
-bGQvd2luc3VwL2N5Z3dpbi9wd2RncnAuaAkyMDAzLTA0LTA5IDEwOjEzOjQy
-LjAwMDAwMDAwMCArMDIwMAorKysgc3JjL3dpbnN1cC9jeWd3aW4vcHdkZ3Jw
-LmgJMjAwMy0wNC0wOSAxMDoxNTo0MS4wMDAwMDAwMDAgKzAyMDAKQEAgLTc3
-LDE4ICs3Nyw2IEBAIHB1YmxpYzoKICAgICBwZ2xvY2stPnJlbGVhc2UgKCk7
-CiAgIH0KIAotICBwd2RncnAgKHBhc3N3ZCAqJnBidWYpIDoKLSAgICBwd2Rn
-cnBfYnVmX2VsZW1fc2l6ZSAoc2l6ZW9mICgqcGJ1ZikpLCBwYXNzd2RfYnVm
-ICgmcGJ1ZikKLSAgICB7Ci0gICAgICByZWFkID0gJnB3ZGdycDo6cmVhZF9w
-YXNzd2Q7Ci0gICAgICBwYXJzZSA9ICZwd2RncnA6OnBhcnNlX3Bhc3N3ZDsK
-LSAgICAgIG5ld19tdXRvIChwZ2xvY2spOwotICAgIH0KLSAgcHdkZ3JwIChf
-X2dyb3VwMzIgKiZnYnVmKSA6Ci0gICAgcHdkZ3JwX2J1Zl9lbGVtX3NpemUg
-KHNpemVvZiAoKmdidWYpKSwgZ3JvdXBfYnVmICgmZ2J1ZikKLSAgICB7Ci0g
-ICAgICByZWFkID0gJnB3ZGdycDo6cmVhZF9ncm91cDsKLSAgICAgIHBhcnNl
-ID0gJnB3ZGdycDo6cGFyc2VfZ3JvdXA7Ci0gICAgICBuZXdfbXV0byAocGds
-b2NrKTsKLSAgICB9CisgIHB3ZGdycCAocGFzc3dkIComcGJ1Zik7CisgIHB3
-ZGdycCAoX19ncm91cDMyIComZ2J1Zik7CiB9Owo=
+#ifndef CPUID_H
+#define CPUID_H
 
---759923-918-1050397153=:259--
+inline void
+cpuid (unsigned *a, unsigned *b, unsigned *c, unsigned *d, unsigned in)
+{
+  asm ("cpuid"
+       : "=a" (*a),
+         "=b" (*b),
+         "=c" (*c),
+         "=d" (*d)
+       : "a" (in));
+}
+
+inline bool
+can_set_flag (unsigned flag)
+{
+  unsigned r1, r2;
+  asm("pushfl\n"
+      "popl %0\n"
+      "movl %0, %1\n"
+      "xorl %2, %0\n"
+      "pushl %0\n"
+      "popfl\n"
+      "pushfl\n"
+      "popl %0\n"
+      "pushl %1\n"
+      "popfl\n"
+      : "=&r" (r1), "=&r" (r2)
+      : "ir" (flag)
+  );
+  return ((r1 ^ r2) & flag) != 0;
+}
+
+#endif // !CPUID_H
+
+------=_NextPart_000_003E_01C30391.4C70ADA0
+Content-Type: text/plain;
+	name="cygwin_hostid.ChangeLog.txt"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+	filename="cygwin_hostid.ChangeLog.txt"
+Content-length: 355
+
+2003-04-15  Chris January <chris@atomice.net>
+
+	* autoload.cc: Add load statement for UuidCreate, and
+	UuidCreateSequential.
+	* cpuid.h: New file.	
+	* cygwin.din: Export gethostid.
+	* fhandler_proc.cc (cpuid): Move to cpuid.h.
+	(can_set_flag): Move to cpuid.h.
+	* syscalls.cc (gethostid): New function.
+	* version.h: Bump DLL minor version number to 83.
+	
+------=_NextPart_000_003E_01C30391.4C70ADA0
+Content-Type: application/octet-stream;
+	name="cygwin_hostid.patch"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment;
+	filename="cygwin_hostid.patch"
+Content-length: 7417
+
+Index: cygwin/autoload.cc=0A=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
+RCS file: /cvs/src/src/winsup/cygwin/autoload.cc,v=0A=
+retrieving revision 1.66=0A=
+diff -r1.66 autoload.cc=0A=
+525a526,528=0A=
+>=20=0A=
+> LoadDLLfuncEx (UuidCreate, 4, rpcrt4, 1)=0A=
+> LoadDLLfuncEx (UuidCreateSequential, 4, rpcrt4, 1)=0A=
+Index: cygwin/cygwin.din=0A=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
+RCS file: /cvs/src/src/winsup/cygwin/cygwin.din,v=0A=
+retrieving revision 1.85=0A=
+diff -r1.85 cygwin.din=0A=
+567a568,569=0A=
+> gethostid=0A=
+> _gethostid =3D gethostid=0A=
+Index: cygwin/fhandler_proc.cc=0A=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
+RCS file: /cvs/src/src/winsup/cygwin/fhandler_proc.cc,v=0A=
+retrieving revision 1.27=0A=
+diff -r1.27 fhandler_proc.cc=0A=
+30a31=0A=
+> #include "cpuid.h"=0A=
+552,582d552=0A=
+<=20=0A=
+< static inline void=0A=
+< cpuid (unsigned *a, unsigned *b, unsigned *c, unsigned *d, unsigned in)=
+=0A=
+< {=0A=
+<   asm ("cpuid"=0A=
+<        : "=3Da" (*a),=0A=
+< 	 "=3Db" (*b),=0A=
+< 	 "=3Dc" (*c),=0A=
+< 	 "=3Dd" (*d)=0A=
+<        : "a" (in));=0A=
+< }=0A=
+<=20=0A=
+< static inline bool=0A=
+< can_set_flag (unsigned flag)=0A=
+< {=0A=
+<   unsigned r1, r2;=0A=
+<   asm("pushfl\n"=0A=
+<       "popl %0\n"=0A=
+<       "movl %0, %1\n"=0A=
+<       "xorl %2, %0\n"=0A=
+<       "pushl %0\n"=0A=
+<       "popfl\n"=0A=
+<       "pushfl\n"=0A=
+<       "popl %0\n"=0A=
+<       "pushl %1\n"=0A=
+<       "popfl\n"=0A=
+<       : "=3D&r" (r1), "=3D&r" (r2)=0A=
+<       : "ir" (flag)=0A=
+<   );=0A=
+<   return ((r1 ^ r2) & flag) !=3D 0;=0A=
+< }=0A=
+Index: cygwin/syscalls.cc=0A=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
+RCS file: /cvs/src/src/winsup/cygwin/syscalls.cc,v=0A=
+retrieving revision 1.263=0A=
+diff -r1.263 syscalls.cc=0A=
+38a39=0A=
+> #include <rpc.h>=0A=
+57a59,60=0A=
+> #include "cpuid.h"=0A=
+> #include "registry.h"=0A=
+2726a2730,2835=0A=
+> }=0A=
+>=20=0A=
+> extern "C"=0A=
+> long gethostid(void)=0A=
+> {=0A=
+>   unsigned data[13] =3D {0x92895012,=0A=
+>                        0x10293412,=0A=
+>                        0x29602018,=0A=
+>                        0x81928167,=0A=
+>                        0x34601329,=0A=
+>                        0x75630198,=0A=
+>                        0x89860395,=0A=
+>                        0x62897564,=0A=
+>                        0x00194362,=0A=
+>                        0x20548593,=0A=
+>                        0x96839102,=0A=
+>                        0x12219854,=0A=
+>                        0x00290012};=0A=
+>=20=0A=
+>   bool has_cpuid =3D false;=0A=
+>=20=0A=
+>   if (!can_set_flag (0x00040000))=0A=
+>     debug_printf ("386 processor - no cpuid");=0A=
+>   else=0A=
+>     {=0A=
+>       debug_printf ("486 processor");=0A=
+>       if (can_set_flag (0x00200000))=0A=
+>         {=0A=
+>           debug_printf ("processor supports CPUID instruction");=0A=
+>           has_cpuid =3D true;=0A=
+>         }=0A=
+>       else=0A=
+>         debug_printf ("processor does not support CPUID instruction");=0A=
+>     }=0A=
+>   if (has_cpuid)=0A=
+>     {=0A=
+>       unsigned maxf, unused[3];=0A=
+>       cpuid (&maxf, &unused[0], &unused[1], &unused[2], 0);=0A=
+>       maxf &=3D 0xffff;=0A=
+>       if (maxf >=3D 1)=0A=
+>         {=0A=
+>           unsigned features;=0A=
+>           cpuid (&data[0], &unused[0], &unused[1], &features, 1);=0A=
+>           if (features & (1 << 18))=0A=
+>             {=0A=
+>               debug_printf ("processor has psn");=0A=
+>               if (maxf >=3D 3)=0A=
+>                 {=0A=
+>                   cpuid (&unused[0], &unused[1], &data[1], &data[2], 3);=
+=0A=
+>                   debug_printf ("Processor PSN: %04x-%04x-%04x-%04x-%04x-=
+%04x",=0A=
+>                                 data[0] >> 16, data[0] & 0xffff, data[2] =
+>> 16, data[2] & 0xffff, data[1] >> 16, data[1] & 0xffff);=0A=
+>                 }=0A=
+>             }=0A=
+>           else=0A=
+>             debug_printf ("processor does not have psn");=0A=
+>         }=0A=
+>     }=0A=
+>=20=0A=
+>   UUID Uuid;=0A=
+>   RPC_STATUS status =3D UuidCreateSequential (&Uuid);=0A=
+>   if (GetLastError () =3D=3D ERROR_PROC_NOT_FOUND)=0A=
+>     status =3D UuidCreate (&Uuid);=0A=
+>   if (status =3D=3D RPC_S_OK)=0A=
+>     {=0A=
+>       data[4] =3D *(unsigned *)&Uuid.Data4[2];=0A=
+>       data[5] =3D *(unsigned short *)&Uuid.Data4[6];=0A=
+>       // Unfortunately Windows will sometimes pick a virtual Ethernet car=
+d=0A=
+>       // e.g. VMWare Virtual Ethernet Adaptor=0A=
+>       debug_printf ("MAC address of first Ethernet card: %02x:%02x:%02x:%=
+02x:%02x:%02x",=0A=
+>                     Uuid.Data4[2], Uuid.Data4[3], Uuid.Data4[4],=0A=
+>                     Uuid.Data4[5], Uuid.Data4[6], Uuid.Data4[7]);=0A=
+>     }=0A=
+>   else=0A=
+>     {=0A=
+>       debug_printf ("no Ethernet card installed");=0A=
+>     }=0A=
+>=20=0A=
+>   reg_key key (HKEY_LOCAL_MACHINE, KEY_READ, "SOFTWARE", "Microsoft", "Wi=
+ndows", "CurrentVersion", NULL);=0A=
+>   key.get_string ("ProductId", (char *)&data[6], 24, "00000-000-0000000-0=
+0000");=0A=
+>   debug_printf ("Windows Product ID: %s", (char *)&data[6]);=0A=
+>=20=0A=
+>   GetDiskFreeSpaceEx ("C:\\", NULL, (PULARGE_INTEGER) &data[11], NULL);=
+=0A=
+>   if (GetLastError () =3D=3D ERROR_PROC_NOT_FOUND)=0A=
+>     GetDiskFreeSpace ("C:\\", NULL, NULL, NULL, (DWORD *)&data[11]);=0A=
+>=20=0A=
+>   debug_printf ("hostid entropy: %08x %08x %08x %08x "=0A=
+>                                 "%08x %08x %08x %08x "=0A=
+>                                 "%08x %08x %08x %08x "=0A=
+>                                 "%08x",=0A=
+>                                 data[0], data[1],=0A=
+>                                 data[2], data[3],=0A=
+>                                 data[4], data[5],=0A=
+>                                 data[6], data[7],=0A=
+>                                 data[8], data[9],=0A=
+>                                 data[10], data[11],=0A=
+>                                 data[12]);=0A=
+>=20=0A=
+>   long hostid =3D 0x40291372;=0A=
+>   // a random hashing algorithm=0A=
+>   // dependancy on md5 is probably too costly=0A=
+>   for (int i=3D0;i<13;i++)=0A=
+>         hostid ^=3D ((data[i] << (i << 2)) | (data[i] >> (32 - (i << 2)))=
+);=0A=
+>=20=0A=
+>   debug_printf ("hostid: %08x", hostid);=0A=
+>=20=0A=
+>   return hostid;=0A=
+Index: cygwin/include/cygwin/version.h=0A=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
+RCS file: /cvs/src/src/winsup/cygwin/include/cygwin/version.h,v=0A=
+retrieving revision 1.114=0A=
+diff -r1.114 version.h=0A=
+201a202=0A=
+>        83: Export gethostid=0A=
+207c208=0A=
+< #define CYGWIN_VERSION_API_MINOR 82=0A=
+---=0A=
+> #define CYGWIN_VERSION_API_MINOR 83=0A=
+
+------=_NextPart_000_003E_01C30391.4C70ADA0
+Content-Type: text/plain;
+	name="newlib_hostid.ChangeLog.txt"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+	filename="newlib_hostid.ChangeLog.txt"
+Content-length: 127
+
+2003-04-15  Chris January <chris@atomice.net>
+
+	* newlib/libc/include/sys/unistd.h: add declaration for gethostid on
+	Cygwin.
+	
+------=_NextPart_000_003E_01C30391.4C70ADA0
+Content-Type: application/octet-stream;
+	name="newlib_hostid.patch"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment;
+	filename="newlib_hostid.patch"
+Content-length: 467
+
+Index: newlib/libc/include/sys/unistd.h=0A=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
+RCS file: /cvs/src/src/newlib/libc/include/sys/unistd.h,v=0A=
+retrieving revision 1.42=0A=
+diff -r1.42 unistd.h=0A=
+62a63,65=0A=
+> #if defined(__CYGWIN__)=0A=
+> long    _EXFUN(gethostid, (void));=0A=
+> #endif=0A=
+
+------=_NextPart_000_003E_01C30391.4C70ADA0
+Content-Type: text/plain;
+	name="w32api_hostid.ChangeLog.txt"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+	filename="w32api_hostid.ChangeLog.txt"
+Content-length: 152
+
+2003-04-15  Chris January <chris@atomice.net>
+
+	* rpcdce.h: Add declaration for UuidCreateSequential.
+	* rpcrt4.def: Add entry for UuidCreateSequential.
+------=_NextPart_000_003E_01C30391.4C70ADA0
+Content-Type: application/octet-stream;
+	name="w32api_hostid.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+	filename="w32api_hostid.patch"
+Content-length: 497
+
+Index: w32api/include/rpcdce.h
+===================================================================
+RCS file: /cvs/src/src/winsup/w32api/include/rpcdce.h,v
+retrieving revision 1.5
+diff -r1.5 rpcdce.h
+368a369
+> RPC_STATUS RPC_ENTRY UuidCreateSequential(UUID*);
+Index: w32api/lib/rpcrt4.def
+===================================================================
+RCS file: /cvs/src/src/winsup/w32api/lib/rpcrt4.def,v
+retrieving revision 1.1.1.1
+diff -r1.1.1.1 rpcrt4.def
+346a347
+> UuidCreateSequential@4
+
+------=_NextPart_000_003E_01C30391.4C70ADA0--
