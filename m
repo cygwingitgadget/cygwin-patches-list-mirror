@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3635-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 22030 invoked by alias); 27 Feb 2003 12:29:56 -0000
+Return-Path: <cygwin-patches-return-3636-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 4021 invoked by alias); 27 Feb 2003 15:22:04 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,50 +7,110 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 22021 invoked from network); 27 Feb 2003 12:29:56 -0000
-Subject: Re: [PATCH] add support for PTHREAD_MUTEX_NORMAL
-From: Robert Collins <rbcollins@cygwin.com>
-To: Thomas Pfaff <tpfaff@gmx.net>
-Cc: cygwin-patches@cygwin.com
-In-Reply-To: <Pine.WNT.4.44.0302271028080.285-201000@algeria.intern.net>
-References: <Pine.WNT.4.44.0302271028080.285-201000@algeria.intern.net>
-Content-Type: multipart/signed; micalg=pgp-sha1; protocol="application/pgp-signature"; boundary="=-dJVffB5KdXMRDzofEwh0"
-Organization: 
-Message-Id: <1046348989.2137.22.camel@localhost>
-Mime-Version: 1.0
-Date: Thu, 27 Feb 2003 12:29:00 -0000
-X-SW-Source: 2003-q1/txt/msg00284.txt.bz2
+Received: (qmail 4011 invoked from network); 27 Feb 2003 15:22:03 -0000
+X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
+Date: Thu, 27 Feb 2003 15:22:00 -0000
+From: Thomas Pfaff <tpfaff@gmx.net>
+To: cygwin-patches@cygwin.com
+Subject: [PATCH]: interruptable connect
+Message-ID: <Pine.WNT.4.44.0302271616590.314-200000@algeria.intern.net>
+X-X-Sender: pfaff@antarctica.intern.net
+MIME-Version: 1.0
+Content-Type: MULTIPART/MIXED; BOUNDARY="2789423-20251-1046359226=:314"
+Content-ID: <Pine.WNT.4.44.0302271621170.314@algeria.intern.net>
+X-SW-Source: 2003-q1/txt/msg00285.txt.bz2
+
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
+
+--2789423-20251-1046359226=:314
+Content-Type: TEXT/PLAIN; CHARSET=US-ASCII
+Content-ID: <Pine.WNT.4.44.0302271621171.314@algeria.intern.net>
+Content-length: 288
 
 
---=-dJVffB5KdXMRDzofEwh0
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-Content-length: 385
+Hi Corinna,
 
-On Thu, 2003-02-27 at 23:26, Thomas Pfaff wrote:
-> This patch adds support for PTHREAD_MUTEX_NORMAL (fast and
-> deadlocking) mutexes and slightly modifies the lock counter logic.
-> The counter now start at 0.
+this is a slightly modified version of my proposed solution from
+yesterday. Not tested exhaustiv but seems to work pretty well.
 
+Thomas
 
-I'll review these this weekend - if you haven't heard anything on
-Monday, please prod me :}.
+2003-03-27  Thomas Pfaff  <tpfaff@gmx.net>
 
-Rob
---=20
-GPG key available at: <http://users.bigpond.net.au/robertc/keys.txt>.
+	* fhandler_socket.cc (fhandler_socket::connect): Add support for
+	an interruptable connect.
 
---=-dJVffB5KdXMRDzofEwh0
-Content-Type: application/pgp-signature; name=signature.asc
-Content-Description: This is a digitally signed message part
-Content-length: 189
+--2789423-20251-1046359226=:314
+Content-Type: TEXT/PLAIN; NAME="intr_connect.patch"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.WNT.4.44.0302271620260.314@algeria.intern.net>
+Content-Description: 
+Content-Disposition: ATTACHMENT; FILENAME="intr_connect.patch"
+Content-length: 3782
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.2.1 (GNU/Linux)
+LS0tIGZoYW5kbGVyX3NvY2tldC5jYy5vcmcJMjAwMy0wMi0yNyAxNjoxNDo0
+OS4wMDAwMDAwMDAgKzAxMDAKKysrIGZoYW5kbGVyX3NvY2tldC5jYwkyMDAz
+LTAyLTI3IDE2OjE1OjU5LjAwMDAwMDAwMCArMDEwMApAQCAtNDMxLDYgKzQz
+MSw4IEBAIG91dDoKIGludAogZmhhbmRsZXJfc29ja2V0Ojpjb25uZWN0IChj
+b25zdCBzdHJ1Y3Qgc29ja2FkZHIgKm5hbWUsIGludCBuYW1lbGVuKQogewor
+ICBXU0FFVkVOVCBldlsyXSA9IHsgV1NBX0lOVkFMSURfRVZFTlQsIHNpZ25h
+bF9hcnJpdmVkIH07CisgIEJPT0wgaW50ZXJydXB0ZWQgPSBGQUxTRTsKICAg
+aW50IHJlcyA9IC0xOwogICBCT09MIHNlY3JldF9jaGVja19mYWlsZWQgPSBG
+QUxTRTsKICAgQk9PTCBpbl9wcm9ncmVzcyA9IEZBTFNFOwpAQCAtNDQwLDEy
+ICs0NDIsNjMgQEAgZmhhbmRsZXJfc29ja2V0Ojpjb25uZWN0IChjb25zdCBz
+dHJ1Y3QgcwogICBpZiAoIWdldF9pbmV0X2FkZHIgKG5hbWUsIG5hbWVsZW4s
+ICZzaW4sICZuYW1lbGVuLCBzZWNyZXQpKQogICAgIHJldHVybiAtMTsKIAor
+ICBpZiAoIWlzX25vbmJsb2NraW5nICgpICYmICFpc19jb25uZWN0X3BlbmRp
+bmcgKCkpCisgICAgeworICAgICAgZXZbMF0gPSBXU0FDcmVhdGVFdmVudCAo
+KTsKKyAgICAgIFdTQUV2ZW50U2VsZWN0IChnZXRfc29ja2V0ICgpLCBldlsw
+XSwgRkRfQ09OTkVDVCk7CisgICAgfQorCiAgIHJlcyA9IDo6Y29ubmVjdCAo
+Z2V0X3NvY2tldCAoKSwgKHNvY2thZGRyICopICZzaW4sIG5hbWVsZW4pOwor
+ICBpZiAocmVzICYmICFpc19ub25ibG9ja2luZyAoKSAmJiAhaXNfY29ubmVj
+dF9wZW5kaW5nICgpICYmCisgICAgICBXU0FHZXRMYXN0RXJyb3IgKCkgPT0g
+V1NBRVdPVUxEQkxPQ0spCisgICAgeworCisgICAgICBXU0FORVRXT1JLRVZF
+TlRTIHNvY2tfZXZlbnQ7CisgICAgICBpbnQgd2FpdF9yZXN1bHQ7CisKKyAg
+ICAgIHdhaXRfcmVzdWx0ID0gV1NBV2FpdEZvck11bHRpcGxlRXZlbnRzICgy
+LCBldiwgRkFMU0UsIFdTQV9JTkZJTklURSwgRkFMU0UpOworCisgICAgICBp
+ZiAod2FpdF9yZXN1bHQgPT0gV1NBX1dBSVRfRVZFTlRfMCkKKyAgICAgICAg
+V1NBRW51bU5ldHdvcmtFdmVudHMgKGdldF9zb2NrZXQgKCksIGV2WzBdLCAm
+c29ja19ldmVudCk7CisKKyAgICAgIC8qIFVuc2V0IGV2ZW50cyBmb3IgY29u
+bmVjdGluZyBzb2NrZXQgYW5kCisgICAgICAgICBzd2l0Y2ggYmFjayB0byBi
+bG9ja2luZyBtb2RlICovCisgICAgICBXU0FFdmVudFNlbGVjdCAoZ2V0X3Nv
+Y2tldCAoKSwgZXZbMF0sIDApOworICAgICAgdW5zaWduZWQgbG9uZyBub25i
+bG9ja2luZyA9IDA7CisgICAgICBpb2N0bHNvY2tldCAoZ2V0X3NvY2tldCAo
+KSwgRklPTkJJTywgJm5vbmJsb2NraW5nKTsKKworICAgICAgc3dpdGNoICh3
+YWl0X3Jlc3VsdCkKKyAgICAgICAgeworICAgICAgICBjYXNlIFdTQV9XQUlU
+X0VWRU5UXzA6CisgICAgICAgICAgaWYgKHNvY2tfZXZlbnQubE5ldHdvcmtF
+dmVudHMgJiBGRF9DT05ORUNUKQorICAgICAgICAgICAgeworICAgICAgICAg
+ICAgICBpZiAoc29ja19ldmVudC5pRXJyb3JDb2RlW0ZEX0NPTk5FQ1RfQklU
+XSkKKyAgICAgICAgICAgICAgICBXU0FTZXRMYXN0RXJyb3IgKHNvY2tfZXZl
+bnQuaUVycm9yQ29kZVtGRF9DT05ORUNUX0JJVF0pOworICAgICAgICAgICAg
+ICBlbHNlCisgICAgICAgICAgICAgICAgcmVzID0gMDsKKyAgICAgICAgICAg
+IH0KKyAgICAgICAgICAvKiBlbHNlOyA6IFNob3VsZCBuZXZlciBoYXBwZW4g
+c2luY2UgRkRfQ09OTkVDVCBpcyB0aGUgb25seQorICAgICAgICAgICAgIGV2
+ZW50IHRoYXQgaGFzIGJlZW4gc2VsZWN0ZWQgKi8KKyAgICAgICAgICBicmVh
+azsKKworICAgICAgICBjYXNlIFdTQV9XQUlUX0VWRU5UXzAgKyAxOgorICAg
+ICAgICAgIGRlYnVnX3ByaW50ZiAoInNpZ25hbCByZWNlaXZlZCBkdXJpbmcg
+Y29ubmVjdCIpOworICAgICAgICAgIFdTQVNldExhc3RFcnJvciAoV1NBRUlO
+UFJPR1JFU1MpOworICAgICAgICAgIGludGVycnVwdGVkID0gVFJVRTsKKyAg
+ICAgICAgICBicmVhazsKKworICAgICAgICBjYXNlIFdTQV9XQUlUX0ZBSUxF
+RDoKKyAgICAgICAgZGVmYXVsdDogLyogU2hvdWxkIG5ldmVyIGhhcHBlbiAq
+LworICAgICAgICAgIFdTQVNldExhc3RFcnJvciAoV1NBRUZBVUxUKTsKKyAg
+ICAgICAgICBicmVhazsKKyAgICAgICAgfQorICAgIH0KKwogICBpZiAocmVz
+KQogICAgIHsKICAgICAgIC8qIFNwZWNpYWwgaGFuZGxpbmcgZm9yIGNvbm5l
+Y3QgdG8gcmV0dXJuIHRoZSBjb3JyZWN0IGVycm9yIGNvZGUKIAkgd2hlbiBj
+YWxsZWQgb24gYSBub24tYmxvY2tpbmcgc29ja2V0LiAqLwotICAgICAgaWYg
+KGlzX25vbmJsb2NraW5nICgpKQorICAgICAgaWYgKGlzX25vbmJsb2NraW5n
+ICgpIHx8IGlzX2Nvbm5lY3RfcGVuZGluZyAoKSkKIAl7CiAJICBEV09SRCBl
+cnIgPSBXU0FHZXRMYXN0RXJyb3IgKCk7CiAJICBpZiAoZXJyID09IFdTQUVX
+T1VMREJMT0NLIHx8IGVyciA9PSBXU0FFQUxSRUFEWSkKQEAgLTQ5Myw2ICs1
+NDYsMTMgQEAgZmhhbmRsZXJfc29ja2V0Ojpjb25uZWN0IChjb25zdCBzdHJ1
+Y3QgcwogICAgIHNldF9jb25uZWN0X3N0YXRlIChDT05ORUNUX1BFTkRJTkcp
+OwogICBlbHNlCiAgICAgc2V0X2Nvbm5lY3Rfc3RhdGUgKENPTk5FQ1RFRCk7
+CisKKyAgaWYgKGV2WzBdICE9IFdTQV9JTlZBTElEX0VWRU5UKQorICAgIFdT
+QUNsb3NlRXZlbnQgKGV2WzBdKTsKKworICBpZiAoaW50ZXJydXB0ZWQpCisg
+ICAgc2V0X2Vycm5vIChFSU5UUik7CisKICAgcmV0dXJuIHJlczsKIH0KIAo=
 
-iD8DBQA+XgS9I5+kQ8LJcoIRAhxIAKDFjXTOlg4qsiPu8aQvh40PDQ7ZWgCg0KCe
-IVM8e/4qLGzstfMVPGQmwe4=
-=8Oje
------END PGP SIGNATURE-----
-
---=-dJVffB5KdXMRDzofEwh0--
+--2789423-20251-1046359226=:314--
