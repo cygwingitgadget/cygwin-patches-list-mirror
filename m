@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4160-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 31496 invoked by alias); 4 Sep 2003 01:04:53 -0000
+Return-Path: <cygwin-patches-return-4159-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 31239 invoked by alias); 4 Sep 2003 01:04:38 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,29 +7,29 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 31487 invoked from network); 4 Sep 2003 01:04:53 -0000
+Received: (qmail 31227 invoked from network); 4 Sep 2003 01:04:38 -0000
 Date: Thu, 04 Sep 2003 01:04:00 -0000
 From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: Patch 2: fix for mount -m command
-Message-ID: <20030904010453.GB28465@redhat.com>
+Subject: Re: Patch1: fix for mount -m command.
+Message-ID: <20030904010437.GA28465@redhat.com>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20030904003201.65133.qmail@web10007.mail.yahoo.com>
+References: <20030904003012.6705.qmail@web10009.mail.yahoo.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20030904003201.65133.qmail@web10007.mail.yahoo.com>
+In-Reply-To: <20030904003012.6705.qmail@web10009.mail.yahoo.com>
 User-Agent: Mutt/1.4.1i
-X-SW-Source: 2003-q3/txt/msg00176.txt.bz2
+X-SW-Source: 2003-q3/txt/msg00175.txt.bz2
 
-On Wed, Sep 03, 2003 at 05:32:01PM -0700, AJ Reins wrote:
+On Wed, Sep 03, 2003 at 05:30:12PM -0700, AJ Reins wrote:
 >2003-09-01  AJ Reins  <reinsaj@yahoo.com>
 >
->	* mount.cc (mount_commands): Add handling of option managed.
+>	* mount.cc (mount_commands): Ensure user mode is actually
+>	user mode and not the default system mode.
 
-Applied, with previous caveat.
-
-Thanks.
+Applied but please, in the future, don't rename the files to something
+like mount1.cc and use the '-up' option.
 
 cgf
