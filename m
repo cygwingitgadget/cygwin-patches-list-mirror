@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5061-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 22954 invoked by alias); 15 Oct 2004 20:54:06 -0000
+Return-Path: <cygwin-patches-return-5062-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 8201 invoked by alias); 16 Oct 2004 00:14:39 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,41 +7,83 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 22945 invoked from network); 15 Oct 2004 20:54:05 -0000
-Message-ID: <n2m-g.ckpihh.3vsgh5n.1@buzzy-box.bavag>
+Received: (qmail 8185 invoked from network); 16 Oct 2004 00:14:38 -0000
+Message-ID: <n2m-g.ckprr1.3vvf2a7.1@buzzy-box.bavag>
 From: Bas van Gompel <cygwin-patches.buzz@bavag.tmfweb.nl>
-Subject: Re: [Patch] testsuite and newlib's signal.h.
-References: <n2m-g.ckmcqg.3vvbujf.1@buzzy-box.bavag> <20041014155559.GD22814@trixie.casa.cgf.cx>
-In-Reply-To: <20041014155559.GD22814@trixie.casa.cgf.cx>
+Subject: Re: [Patch] cygcheck: pretty_id misbehaving.
+References: <n2m-g.ckm5nu.3vvc0mv.1@buzzy-box.bavag> <20041014173621.GG22814@trixie.casa.cgf.cx> <n2m-g.ckol7v.3vshjpb.1@buzzy-box.bavag> <20041015135904.GD29569@trixie.casa.cgf.cx>
+In-Reply-To: <20041015135904.GD29569@trixie.casa.cgf.cx>
 Reply-To: cygwin-patches mailing-list <cygwin-patches@cygwin.com>
 Organisation: Ehm...
 To: cygwin-patches@cygwin.com
-Date: Fri, 15 Oct 2004 20:54:00 -0000
-X-SW-Source: 2004-q4/txt/msg00062.txt.bz2
+Date: Sat, 16 Oct 2004 00:14:00 -0000
+X-SW-Source: 2004-q4/txt/msg00063.txt.bz2
 
-Op Thu, 14 Oct 2004 11:55:59 -0400 schreef Christopher Faylor
-in <20041014155559.GD22814@trixie.casa.cgf.cx>:
-:  On Thu, Oct 14, 2004 at 05:31:31PM +0200, Bas van Gompel wrote:
-: > Another trivial patch, a bit kludgy...
+Op Fri, 15 Oct 2004 09:59:04 -0400 schreef Christopher Faylor
+in <20041015135904.GD29569@trixie.casa.cgf.cx>:
+:  On Fri, Oct 15, 2004 at 02:03:24PM +0200, Bas van Gompel wrote:
+: > ChangeLog-entry:
 : >
-: > ATM the testsuite does not build, because
-: > newlib/libc/include/sys/signal.h includes newlib/libc/include/signal.h.
+: > 2004-10-15  Bas van Gompel  <cygwin-patch.buzz@bavag.tmfweb.nl>
+: >
+: > 	* cygcheck.cc (pretty_id): Don't exit, return. Correct layout.
 :
-:   This is a recent change to sys/signal.h and it is supposed to "just
-:  work".  
+:   Thanks.  I've checked in a variation of this patch.
 
-I was aware of that.
+Here we go again.
 
-:  If it isn't working then please report the problem to the newlib
-:  mailing list.
+:  I don't see any reason to guard against n being zero
 
-I also noticed this change was instigated by you. As I'm not subscribed
-to the newlib-list and have no idea of how to fix this, apart from
-applying the patch, or undoing the newlib change, which I think is a
-good thing in principle (the newlib change, not undoing it), I was
-hoping you'd take action on this (or just apply the patch).
+Is there a limit on the length of user/group-names?
 
-I'll subscribe the newlib-list, and --if you insist-- report there.
+:  or to negate
+:  sz repeatedly inside of a loop.
+
+My plan was to not negate sz at all, use the printf format-flag ``-''.
+``man 3 printf'':
+| Negative field widths are not supported; if you attempt to specify
+| a negative field width, it is interpreted as a minus (`-') flag
+| followed by a positive field width.
+
+Also, space needs to be allocated for the trailing `\0` on uid and
+gid, and notice there isn't a space at the end of the printf format.
+
+HTH, HAND.
+
+
+ChangeLog-entry:
+
+2004-10-16  Bas van Gompel  <cygwin-patch.buzz@bavag.tmfweb.nl>
+
+	* cygcheck.cc (pretty_id): Allocate space for trailing '\0' on uid and
+	guid. Don't negate sz. Fix printf-format.
+
+
+--- src/winsup/utils/cygcheck.cc	15 Oct 2004 13:57:56 -0000	1.50
++++ src/winsup/utils/cygcheck.cc	15 Oct 2004 21:29:29 -0000
+@@ -816,8 +816,8 @@ pretty_id (const char *s, char *cygwin, 
+   char **ng = groups - 1;
+   size_t len_uid = strlen (uid);
+   size_t len_gid = strlen (gid);
+-  *++ng = groups[0] = (char *) alloca (len_uid += sizeof ("UID: )") - 1);
+-  *++ng = groups[1] = (char *) alloca (len_gid += sizeof ("GID: )") - 1);
++  *++ng = groups[0] = (char *) alloca ((len_uid += sizeof ("UID: )") - 1) + 1);
++  *++ng = groups[1] = (char *) alloca ((len_gid += sizeof ("GID: )") - 1) + 1);
+   sprintf (groups[0], "UID: %s)", uid);
+   sprintf (groups[1], "GID: %s)", gid);
+   size_t sz = max (len_uid, len_gid);
+@@ -837,10 +837,9 @@ pretty_id (const char *s, char *cygwin, 
+   printf ("\nOutput from %s (%s)\n", id, s);
+   int n = 80 / (int) ++sz;
+   int i = n ? n - 2 : 0;
+-  sz = -sz;
+   for (char **g = groups; g <= ng; g++)
+     if ((g != ng) && (++i < n))
+-      printf ("%*s ", sz, *g);
++      printf ("%-*s", sz, *g);
+     else
+       {
+ 	puts (*g);
 
 
 L8r,
