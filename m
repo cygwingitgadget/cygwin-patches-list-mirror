@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2363-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 21567 invoked by alias); 7 Jun 2002 18:18:31 -0000
+Return-Path: <cygwin-patches-return-2364-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 30837 invoked by alias); 7 Jun 2002 18:42:35 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,32 +7,56 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 21550 invoked from network); 7 Jun 2002 18:18:29 -0000
-Date: Fri, 07 Jun 2002 11:18:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: "'cygwin-patches@cygwin.com'" <cygwin-patches@cygwin.com>
-Subject: Re: sem_getvalue patch
-Message-ID: <20020607201828.X30892@cygbert.vinschen.de>
-Mail-Followup-To: "'cygwin-patches@cygwin.com'" <cygwin-patches@cygwin.com>
-References: <911C684A29ACD311921800508B7293BA037D309E@cnmail>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <911C684A29ACD311921800508B7293BA037D309E@cnmail>
-User-Agent: Mutt/1.3.22.1i
-X-SW-Source: 2002-q2/txt/msg00346.txt.bz2
+Received: (qmail 30823 invoked from network); 7 Jun 2002 18:42:35 -0000
+X-MimeOLE: Produced By Microsoft Exchange V6.0.5762.3
+content-class: urn:content-classes:message
+MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Subject: RE: sem_getvalue patch
+Date: Fri, 07 Jun 2002 11:42:00 -0000
+Message-ID: <3D848382FB72E249812901444C6BDB1D0AA17D@exchange.timesys.com>
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+From: "Robb, Sam" <sam.robb@timesys.com>
+To: <cygwin-patches@cygwin.com>
+X-SW-Source: 2002-q2/txt/msg00347.txt.bz2
 
-On Fri, Jun 07, 2002 at 01:47:26PM -0400, Mark Bradshaw wrote:
-> This may shed some light as well.  No guarantees as to the veracity.  Saw it
-> on slashdot a while back.
-> 
-> http://tmn.dyndns.org/~dcormier/tilly.html
+Thanks all for the advice... I just got out of a meeting where
+I requested a disclaimer for Cygwin contributions, figuring
+that in this case, it was better to ask permission than to beg
+forgiveness. It may take a while, though.
 
-This only covers US law...
+-Samrobb
 
-Corinna
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+> -----Original Message-----
+> From: Christopher Faylor [mailto:cgf@redhat.com]
+> Sent: Friday, June 07, 2002 1:40 PM
+> To: cygwin-patches@cygwin.com
+> Subject: Re: sem_getvalue patch
+>=20
+>=20
+> On Fri, Jun 07, 2002 at 01:22:17PM -0400, Robb, Sam wrote:
+> >> Btw, if you don't already have a form on file, we'll need an=20
+> >> assignment form for this patch.  See=20
+> http://cygwin.com/contrib.html .
+> >
+> >No, I don't have one on file... I'll see about getting one to
+> >you soon.
+> >
+> >On a related note: under what circumstances does RedHat generally
+> >want/need an employer disclaimer for Cygwin contributions?
+>=20
+> If you are employed as a programmer, most companies have you sign some
+> kind of form saying that your work belongs to them.  If the form can,
+> in any way, be construed as covering cygwin patches then your employer
+> needs to be involved.
+>=20
+> Or, to put it another way, if you sign a form, indicating that you own
+> the rights to your changes, and your employer disagrees and=20
+> comes after
+> Red Hat for the changes, guess who's going to be in hot water?
+>=20
+> cgf
+>=20
