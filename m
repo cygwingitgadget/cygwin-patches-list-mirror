@@ -1,53 +1,42 @@
-From: Earnie Boyd <earnie_boyd@yahoo.com>
-To: Robert Collins <robert.collins@itdomain.com.au>
-Cc: cygwin-patches@cygwin.com
+From: "Robert Collins" <robert.collins@itdomain.com.au>
+To: <cygwin-patches@cygwin.com>
 Subject: Re: tzname
-Date: Tue, 27 Mar 2001 05:58:00 -0000
-Message-id: <3AC09C62.9EF2183B@yahoo.com>
-References: <EA18B9FA0FE4194AA2B4CDB91F73C0EF02E2B2@itdomain002.itdomain.net.au> <3AC09288.13581E12@yahoo.com> <018601c0b6c0$03170430$0200a8c0@lifelesswks>
-X-SW-Source: 2001-q1/msg00252.html
+Date: Tue, 27 Mar 2001 06:01:00 -0000
+Message-id: <01aa01c0b6c6$293a4b80$0200a8c0@lifelesswks>
+References: <EA18B9FA0FE4194AA2B4CDB91F73C0EF02E2B2@itdomain002.itdomain.net.au> <3AC09288.13581E12@yahoo.com> <018601c0b6c0$03170430$0200a8c0@lifelesswks> <3AC09C62.9EF2183B@yahoo.com>
+X-SW-Source: 2001-q1/msg00253.html
 
-Robert Collins wrote:
-> 
-> ----- Original Message -----
-> From: "Earnie Boyd" <earnie_boyd@yahoo.com>
-> To: "Robert Collins" <robert.collins@itdomain.com.au>
-> Cc: <cygwin-patches@cygwin.com>
-> Sent: Tuesday, March 27, 2001 11:15 PM
-> Subject: Re: tzname
-> 
-> > Robert Collins wrote:
-> > >
-> > > http://www.opengroup.org/onlinepubs/7908799/xsh/tzset.html
-> > > specifies tzname, not _tzname. Also attached is a little test
-> program
-> > > written from the specs.
-> > >
-> >
-> > Does http://www.opengroup.org == POSIX?
-> >
-> > Earnie.
-> >
-> > _________________________________________________________
-> > Do You Yahoo!?
-> > Get your free @yahoo.com address at http://mail.yahoo.com
-> >
-> >
-> 
-> Pretty closely. All their specs are derived from the posix specs, but
-> I've found them more accessible :]
-> 
-> Everything I've actually cross checked has matched.
-> 
+----- Original Message -----
+From: "Earnie Boyd" <earnie_boyd@yahoo.com>
+To: "Robert Collins" <robert.collins@itdomain.com.au>
+Cc: <cygwin-patches@cygwin.com>
+Sent: Tuesday, March 27, 2001 11:57 PM
+Subject: Re: tzname
 
-That's good to hear.  I've used the opengroup for reference before and
-glad to know I can count on it.
 
-Q: Is _tznames an ANSI spec?  Cygwin supports both ANSI and POSIX.
+> Robert Collins wrote:
+> >
+> > ----- Original Message -----
+> > From: "Earnie Boyd" <earnie_boyd@yahoo.com>
+> > To: "Robert Collins" <robert.collins@itdomain.com.au>
+> >
+> > Everything I've actually cross checked has matched.
+> >
+>
+> That's good to hear.  I've used the opengroup for reference before and
+> glad to know I can count on it.
 
-Earnie.
+<grin> it's not quite the same thing :]
 
-_________________________________________________________
-Do You Yahoo!?
-Get your free @yahoo.com address at http://mail.yahoo.com
+> Q: Is _tznames an ANSI spec?  Cygwin supports both ANSI and POSIX.
+>
+
+No idea - I went to build a package (netsaint), it had tzname hard coded
+(well that or tm->timezone via configure), so I goooooogled for tzname,
+read the spec, compared with cygwin, tried a define.. it worked and
+voila a patch was mailed.
+
+My personal concept: patch the OS not the package :]
+
+Rob.
 
