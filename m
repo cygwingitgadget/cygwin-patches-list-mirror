@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5289-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 23961 invoked by alias); 24 Dec 2004 13:45:49 -0000
+Return-Path: <cygwin-patches-return-5290-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 11356 invoked by alias); 24 Dec 2004 15:39:31 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,101 +7,46 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 23930 invoked from network); 24 Dec 2004 13:45:43 -0000
-Received: from unknown (HELO phumblet.no-ip.org) (68.163.186.67)
-  by sourceware.org with SMTP; 24 Dec 2004 13:45:43 -0000
-Received: from [192.168.1.156] (helo=hpn5170)
-	by phumblet.no-ip.org with smtp (Exim 4.43)
-	id I98BPL-00HEDH-PK
-	for cygwin-patches@cygwin.com; Fri, 24 Dec 2004 08:48:57 -0500
-Message-Id: <3.0.5.32.20041224084029.00825100@incoming.verizon.net>
-X-Sender: vze1u1tg@incoming.verizon.net (Unverified)
-Date: Fri, 24 Dec 2004 13:45:00 -0000
+Received: (qmail 11326 invoked from network); 24 Dec 2004 15:39:25 -0000
+Received: from unknown (HELO cgf.cx) (66.30.17.189)
+  by sourceware.org with SMTP; 24 Dec 2004 15:39:25 -0000
+Received: by cgf.cx (Postfix, from userid 201)
+	id 3AC8A1B4C2; Fri, 24 Dec 2004 10:40:59 -0500 (EST)
+Date: Fri, 24 Dec 2004 15:39:00 -0000
+From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
 To: cygwin-patches@cygwin.com
-From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
 Subject: Re: [Patch] Fixing the PROCESS_DUP_HANDLE security hole.
-In-Reply-To: <3.0.5.32.20041224005402.007c88f0@incoming.verizon.net>
-References: <20041224052526.GB22543@trixie.casa.cgf.cx>
- <3.0.5.32.20041223235959.0081ba80@incoming.verizon.net>
- <20041205010020.GA20101@trixie.casa.cgf.cx>
- <20041213202505.GB27768@trixie.casa.cgf.cx>
- <41BEFBA5.97CA687B@phumblet.no-ip.org>
- <20041214154214.GE498@trixie.casa.cgf.cx>
- <41C99D2A.B5C4C418@phumblet.no-ip.org>
- <41C9C088.9E9B16E3@phumblet.no-ip.org>
- <3.0.5.32.20041223182306.00824b60@incoming.verizon.net>
- <3.0.5.32.20041223215420.0082b790@incoming.verizon.net>
- <3.0.5.32.20041223230550.0081e100@incoming.verizon.net>
- <3.0.5.32.20041223235959.0081ba80@incoming.verizon.net>
+Message-ID: <20041224154059.GD22966@trixie.casa.cgf.cx>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20041213202505.GB27768@trixie.casa.cgf.cx> <41BEFBA5.97CA687B@phumblet.no-ip.org> <20041214154214.GE498@trixie.casa.cgf.cx> <41C99D2A.B5C4C418@phumblet.no-ip.org> <41C9C088.9E9B16E3@phumblet.no-ip.org> <3.0.5.32.20041223182306.00824b60@incoming.verizon.net> <3.0.5.32.20041223215420.0082b790@incoming.verizon.net> <3.0.5.32.20041223230550.0081e100@incoming.verizon.net> <3.0.5.32.20041223235959.0081ba80@incoming.verizon.net> <3.0.5.32.20041224084029.00825100@incoming.verizon.net>
 Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-X-SW-Source: 2004-q4/txt/msg00290.txt.bz2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3.0.5.32.20041224084029.00825100@incoming.verizon.net>
+User-Agent: Mutt/1.4.1i
+X-SW-Source: 2004-q4/txt/msg00291.txt.bz2
 
-At 12:54 AM 12/24/2004 -0500, Pierre A. Humblet wrote:
->At 12:25 AM 12/24/2004 -0500, Christopher Faylor wrote:
->>On Thu, Dec 23, 2004 at 11:59:59PM -0500, Pierre A. Humblet wrote:
->>>At 11:35 PM 12/23/2004 -0500, Christopher Faylor wrote:
->>>>I don't think you need it.  You just need to tell a process which is
->>>>about to exec after having been execed to make sure that its
->>>>wr_proc_pipe is valid.
->>>
->>>Yes, that's the key. So the question is only about method. Either the
-parent
->>>guarantees that the child has a valid handle, or the child must check
->>>that it already has a valid handle or wait until it does. 
->>
->>I have just implemented code which causes an execed child to wait for the
->>parent to fill in its wr_proc_pipe if it is going to exec again.  It uses
->>a busy loop but I think it's unlikely that the loop will be exercised too
->>often.
+On Fri, Dec 24, 2004 at 08:40:29AM -0500, Pierre A. Humblet wrote:
+>At 12:54 AM 12/24/2004 -0500, Pierre A. Humblet wrote:
+>I think the way out is as follows:
+>Toward the end of spawn_guts:
 >
->It's late, but I am trying to go through all permutations.
->Here is a strange one. 
->Cygwin process A started from Windows execs a Windows process B.
->We are in the case where A
->      if (!myself->wr_proc_pipe)
->       {
->         myself.remember (true);
->         wait_for_myself = true;
+>ciresrv.sync (myself, INFINITE);   [always]
 >
->The problem is that later there is
 >if (wait_for_myself)
->  waitpid (myself->pid, &res, 0);
->else
->  ciresrv.sync (myself, INFINITE);
->
->Process A takes the first branch (waitpid), although it's the
->second branch that will call GetExitCodeProcess.
->So A will see its logical self terminate, but it won't get the
->exit status of B. 
->Right? Going to sleep on this.
+>   waitpid (myself->pid, &dummy, 0);
+> [For clarity, these two lines should be brought down
+>  inside the case _P_OVERLAY: ]
 
-I think the way out is as follows:
-Toward the end of spawn_guts:
+Yes, I thought of this last night as I was trying to sleep.  It also
+dawned on me that I need to synchronize wr_proc_pipe any time it is
+used.  Otherwise an exec followed by a quick SIGSTOP may not work.
 
-ciresrv.sync (myself, INFINITE);   [always]
+I almost got up to make these changes but, instead, I just dreamed
+about them all night and had a crappy night's sleep.
 
-if (wait_for_myself)
-   waitpid (myself->pid, &dummy, 0);
- [For clarity, these two lines should be brought down
-  inside the case _P_OVERLAY: ]
+The change to pinfo::exit didn't occur to me but it is logical.  I
+have made that change.
 
-and in pinfo::exit, change ExitProcess (n) to
-ExitProcess (exitcode)
-
-There is NO NEED for a Cygwin process started from Windows to
-start a new exec'ed process in suspended state.
-
-The ciressrv.sync will collect the exit status of any Windows
-process.
-The purpose of the waitpid is to wait for the process chain to be
-finished. But waitpid will fail if the child had terminated before
-the pipe could be duplicated. That't why waitpid uses "dummy".
-At any rate the final return value of the chain is safely set in
-the exitstatus.
-
-The change in pinfo::exit is to handle the "norecord" case. In that
-case the value of n is meaningless, the correct exit code is already
-set in exitcode.
-
-Pierre
+cgf
