@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3669-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 19989 invoked by alias); 4 Mar 2003 16:35:25 -0000
+Return-Path: <cygwin-patches-return-3670-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 28196 invoked by alias); 5 Mar 2003 08:01:42 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,32 +7,32 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 19980 invoked from network); 4 Mar 2003 16:35:25 -0000
-Date: Tue, 04 Mar 2003 16:35:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: Cygwin-Patches <cygwin-patches@cygwin.com>
-Subject: Re: socket dup() patch
-Message-ID: <20030304163523.GB1193@cygbert.vinschen.de>
-Mail-Followup-To: Cygwin-Patches <cygwin-patches@cygwin.com>
-References: <20030304134025.GA1308@tishler.net>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20030304134025.GA1308@tishler.net>
-User-Agent: Mutt/1.4i
-X-SW-Source: 2003-q1/txt/msg00318.txt.bz2
+Received: (qmail 28182 invoked from network); 5 Mar 2003 08:01:41 -0000
+X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
+Date: Wed, 05 Mar 2003 08:01:00 -0000
+From: Thomas Pfaff <tpfaff@gmx.net>
+To: Robert Collins <rbcollins@cygwin.com>
+cc: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] add support for PTHREAD_MUTEX_NORMAL
+In-Reply-To: <1046348989.2137.22.camel@localhost>
+Message-ID: <Pine.WNT.4.44.0303050901080.247-100000@algeria.intern.net>
+X-X-Sender: pfaff@antarctica.intern.net
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-SW-Source: 2003-q1/txt/msg00319.txt.bz2
 
-On Tue, Mar 04, 2003 at 08:40:25AM -0500, Jason Tishler wrote:
-> 2003-03-04  Jason Tishler <jason@tishler.net>
-> 
-> 	* fhandler_socket.cc (fhandler_socket::dup): Initialize type.
 
-Applied.
 
-Thanks,
-Corinna
+On Thu, 27 Feb 2003, Robert Collins wrote:
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+> On Thu, 2003-02-27 at 23:26, Thomas Pfaff wrote:
+> > This patch adds support for PTHREAD_MUTEX_NORMAL (fast and
+> > deadlocking) mutexes and slightly modifies the lock counter logic.
+> > The counter now start at 0.
+>
+>
+> I'll review these this weekend - if you haven't heard anything on
+> Monday, please prod me :}.
+>
+
+Ping
