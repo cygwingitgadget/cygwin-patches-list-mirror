@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1973-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 3498 invoked by alias); 11 Mar 2002 18:04:47 -0000
+Return-Path: <cygwin-patches-return-1974-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 20943 invoked by alias); 11 Mar 2002 18:16:38 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,84 +7,131 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 3468 invoked from network); 11 Mar 2002 18:04:45 -0000
-Message-ID: <006201c1c927$8d05f550$0100a8c0@advent02>
-From: "Chris January" <chris@atomice.net>
-To: <cygwin-patches@cygwin.com>
-Subject: msync patch
-Date: Mon, 11 Mar 2002 10:16:00 -0000
+Received: (qmail 20862 invoked from network); 11 Mar 2002 18:16:34 -0000
+Message-ID: <20020311181627.8971.qmail@web20001.mail.yahoo.com>
+Date: Mon, 11 Mar 2002 10:31:00 -0000
+From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+Subject: (small) kill.cc patch
+To: cygwin-patches@cygwin.com
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
-	boundary="----=_NextPart_000_005F_01C1C927.8C1AAAF0"
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-SW-Source: 2002-q1/txt/msg00330.txt.bz2
+Content-Type: multipart/mixed; boundary="0-71534906-1015870587=:5027"
+X-SW-Source: 2002-q1/txt/msg00331.txt.bz2
 
-This is a multi-part message in MIME format.
+--0-71534906-1015870587=:5027
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-length: 431
 
-------=_NextPart_000_005F_01C1C927.8C1AAAF0
-Content-Type: text/plain;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: 7bit
-Content-length: 489
+Here is a patch that moves the functions in kill.cc to the top.
+That's all it does.
 
-This patch modifies msync in mmap.cc so that you can call msync with an
-address which occurs in the middle of an mmap'ed region. It also fixes the
-bug where the address in the relevant mmap_record would not match the one
-passed to msync if the offset of the mmap'ed region within the file was not
-on a dwAllocationGranularity boundary.
+This is for consistency with the other utils.
 
-Regards
-Chris
-
-2002-03-11  Christopher January <chris@atomice.net>
-
- * mmap.cc (msync): Match addresses which are in the middle
- of an mmap'ed region.
+2001-03-11 Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+* kill.cc (usage) move to top of file
+          (getsig) ditto
+          (forcekill) ditto
 
 
-------=_NextPart_000_005F_01C1C927.8C1AAAF0
-Content-Type: application/octet-stream;
-	name="mmap.patch"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment;
-	filename="mmap.patch"
-Content-length: 928
+__________________________________________________
+Do You Yahoo!?
+Try FREE Yahoo! Mail - the world's greatest free email!
+http://mail.yahoo.com/
+--0-71534906-1015870587=:5027
+Content-Type: text/plain; name="kill.cc-patch"
+Content-Description: kill.cc-patch
+Content-Disposition: inline; filename="kill.cc-patch"
+Content-length: 1918
 
-Index: mmap.cc=0A=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
-RCS file: /cvs/src/src/winsup/cygwin/mmap.cc,v=0A=
-retrieving revision 1.52=0A=
-diff -u -3 -p -u -p -a -b -B -r1.52 mmap.cc=0A=
---- mmap.cc	2002/02/25 17:47:47	1.52=0A=
-+++ mmap.cc	2002/03/11 17:48:45=0A=
-@@ -664,7 +664,8 @@ msync (caddr_t addr, size_t len, int fla=0A=
- 	  for (int li =3D 0; li < l->nrecs; ++li)=0A=
- 	    {=0A=
- 	      mmap_record *rec =3D l->recs + li;=0A=
--	      if (rec->get_address () =3D=3D addr)=0A=
-+              caddr_t rec_addr =3D rec->get_address ();=0A=
-+              if (addr >=3D rec_addr && addr < rec_addr + rec->get_size ()=
-)=0A=
- 		{=0A=
- 		  fhandler_base *fh =3D rec->alloc_fh ();=0A=
- 		  int ret =3D fh->msync (rec->get_handle (), addr, len, flags);=0A=
+--- kill.cc-orig	Sun Feb 24 13:28:27 2002
++++ kill.cc	Mon Mar 11 12:07:40 2002
+@@ -17,9 +17,42 @@ details. */
+ #include <windows.h>
+ #include <sys/cygwin.h>
+ 
+-static void usage (void);
+-static int __stdcall getsig (char *);
+-static void __stdcall forcekill (int, int, int);
++static void
++usage (void)
++{
++  fprintf (stderr, "Usage: kill [-sigN] pid1 [pid2 ...]\n");
++  exit (1);
++}
++
++static int
++getsig (char *in_sig)
++{
++  char *sig;
++  char buf[80];
++
++  if (strncmp (in_sig, "SIG", 3) == 0)
++    sig = in_sig;
++  else
++    {
++      sprintf (buf, "SIG%s", in_sig);
++      sig = buf;
++    }
++  return (strtosigno (sig) ?: atoi (in_sig));
++}
++
++static void __stdcall
++forcekill (int pid, int sig, int wait)
++{
++  external_pinfo *p = (external_pinfo *) cygwin_internal (CW_GETPINFO_FULL, pid);
++  if (!p)
++    return;
++  HANDLE h = OpenProcess (PROCESS_TERMINATE, FALSE, (DWORD) p->dwProcessId);
++  if (!h)
++    return;
++  if (!wait || WaitForSingleObject (h, 200) != WAIT_OBJECT_0)
++    TerminateProcess (h, sig << 8);
++  CloseHandle (h);
++}
+ 
+ int
+ main (int argc, char **argv)
+@@ -82,41 +115,4 @@ sig0:
+       argv++;
+     }
+   return ret;
+-}
+-
+-static void
+-usage (void)
+-{
+-  fprintf (stderr, "Usage: kill [-sigN] pid1 [pid2 ...]\n");
+-  exit (1);
+-}
+-
+-static int
+-getsig (char *in_sig)
+-{
+-  char *sig;
+-  char buf[80];
+-
+-  if (strncmp (in_sig, "SIG", 3) == 0)
+-    sig = in_sig;
+-  else
+-    {
+-      sprintf (buf, "SIG%s", in_sig);
+-      sig = buf;
+-    }
+-  return (strtosigno (sig) ?: atoi (in_sig));
+-}
+-
+-static void __stdcall
+-forcekill (int pid, int sig, int wait)
+-{
+-  external_pinfo *p = (external_pinfo *) cygwin_internal (CW_GETPINFO_FULL, pid);
+-  if (!p)
+-    return;
+-  HANDLE h = OpenProcess (PROCESS_TERMINATE, FALSE, (DWORD) p->dwProcessId);
+-  if (!h)
+-    return;
+-  if (!wait || WaitForSingleObject (h, 200) != WAIT_OBJECT_0)
+-    TerminateProcess (h, sig << 8);
+-  CloseHandle (h);
+ }
 
-------=_NextPart_000_005F_01C1C927.8C1AAAF0
-Content-Type: application/octet-stream;
-	name="ChangeLog.mmap"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
-	filename="ChangeLog.mmap"
-Content-length: 136
-
-2002-03-11  Christopher January <chris@atomice.net>
-
-	* mmap.cc (msync): Match addresses which are in the middle
-	of an mmap'ed region.
-
-------=_NextPart_000_005F_01C1C927.8C1AAAF0--
+--0-71534906-1015870587=:5027--
