@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2491-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 11742 invoked by alias); 23 Jun 2002 07:16:13 -0000
+Return-Path: <cygwin-patches-return-2492-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 27624 invoked by alias); 23 Jun 2002 07:58:25 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,13 +7,13 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 11716 invoked from network); 23 Jun 2002 07:16:06 -0000
+Received: (qmail 27576 invoked from network); 23 Jun 2002 07:58:21 -0000
 From: "Robert Collins" <robert.collins@syncretize.net>
-To: "'Thomas Pfaff'" <tpfaff@gmx.net>,
+To: "'Conrad Scott'" <Conrad.Scott@dsl.pipex.com>,
 	<cygwin-patches@cygwin.com>
-Subject: RE: Pthreads patches
-Date: Sun, 23 Jun 2002 00:58:00 -0000
-Message-ID: <000501c21a85$d6d522a0$0200a8c0@lifelesswks>
+Subject: RE: Resubmission of cygwin_daemon patch.
+Date: Sun, 23 Jun 2002 02:33:00 -0000
+Message-ID: <000601c21a8b$bd8324e0$0200a8c0@lifelesswks>
 MIME-Version: 1.0
 Content-Type: text/plain;
 	charset="us-ascii"
@@ -22,47 +22,31 @@ X-Priority: 3 (Normal)
 X-MSMail-Priority: Normal
 Importance: Normal
 X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-In-Reply-To: <3D0F0777.EA957049@gmx.net>
-X-SW-Source: 2002-q2/txt/msg00474.txt.bz2
+In-Reply-To: <077501c21929$e6e84350$6132bc3e@BABEL>
+X-SW-Source: 2002-q2/txt/msg00475.txt.bz2
 
-Thanks Thomas, this is good. I'm checking it in now.
+Ok, I've got some feedback for you...
+
+I need to have a good think about some of what's being presented.
+
+The following things are unconditionally good:
+The pure virtual transport changes
+The recoverable approach, and instance detection changes. (actually, I'd
+like to suggest a global mutex be owned and tested against rather than
+checking for the socket being present. But that's orthogonal).
+Command line help
+
+I'll be extracting the above and committing to head sometime shortly
+after 1.3.11 gets released. Or if that doesn't happen within a week,
+then soon anyway :}.
+
+On the thoughtful side:
+There seems to be a lot of code duplication - definitions copied to make
+private versions, that sort of thing. Can you elaborate on why? I
+strongly prefer to only have one instance of such things to prevent skew
+occuring.
+Why have you removed the __OUTSIDE_CYGWIN__ for cygserver_shm.cc ?
+
+That's all for now, gotta run - sorry.
 
 Rob
-
-> -----Original Message-----
-> From: cygwin-patches-owner@cygwin.com 
-> [mailto:cygwin-patches-owner@cygwin.com] On Behalf Of Thomas Pfaff
-> Sent: Tuesday, 18 June 2002 8:12 PM
-> To: cygwin-patches@cygwin.com
-> Subject: Re: Pthreads patches
-> 
-> 
-> I am sorry, but i recognized that my patch was incomplete. The diff
-> included only threads.cc.
-> I have attached a new one.
-> 
-> Thomas
-> 
-> 2002-06-12  Thomas Pfaff  <tpfaff@gmx.net>
-> 
-> 	* thread.h (pthread::cleanup_stack): Renamed cleanup_handlers to
-> 	cleanup_stack.
-> 	* thread.cc (pthread::pthread): Ditto.
-> 	(pthread::create): Fixed mutex verification.
-> 	(pthread::push_cleanup_handler): Renamed cleanup_handlers to
-> 	cleanup_stack.
-> 	Mutex calls removed, used InterlockedExchangePointer instead.
-> 	(pthread::pop_cleanup_handler): Renamed cleanup_handlers to
-> 	cleanup_stack.
-> 	(pthread::pop_all_cleanup_handlers): Ditto.
-> 	(__pthread_once): Check state first and return if already done.
-> 	(__pthread_join): DEADLOCK test reverted to __pthread_equal
-> 	call.
-> 	(__pthread_detach): Unlock mutex before deletion.
-> 
-> Robert Collins wrote:
-> > 
-> > I'll review this latest patch in ~20 hours. (i.e. tomorrow night).
-> > 
-> > Rob
-> 
