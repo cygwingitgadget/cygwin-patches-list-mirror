@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2196-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 4777 invoked by alias); 19 May 2002 17:31:32 -0000
+Return-Path: <cygwin-patches-return-2197-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 12880 invoked by alias); 20 May 2002 22:34:06 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,72 +7,197 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 4762 invoked from network); 19 May 2002 17:31:31 -0000
-Message-Id: <3.0.5.32.20020519132851.007f2b80@mail.attbi.com>
-X-Sender: phumblet@mail.attbi.com
-Date: Sun, 19 May 2002 10:31:00 -0000
+Received: (qmail 12855 invoked from network); 20 May 2002 22:34:01 -0000
+Date: Mon, 20 May 2002 15:34:00 -0000
+From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+X-X-Sender: joshua@iocc.com
 To: cygwin-patches@cygwin.com
-From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
-Subject: lsa handle in security.cc
-Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-X-SW-Source: 2002-q2/txt/msg00180.txt.bz2
+Subject: getfacl help/version patch
+Message-ID: <Pine.CYG.4.44.0205201732160.664-200000@iocc.com>
+MIME-Version: 1.0
+Content-Type: MULTIPART/MIXED; BOUNDARY="-559023410-339825506-1021933981=:664"
+X-SW-Source: 2002-q2/txt/msg00181.txt.bz2
 
-The invalid value for an lsa handle in security.cc
-is inconsistent. It is initially NULL, but in 
-close_local_policy () it is INVALID_HANDLE_VALUE.
-Calling LsaClose(NULL) causes a fault, at least in gdb.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
 
-The patch uses INVALID_HANDLE_VALUE uniformly, instead of 
-NULL. The converse would probably work as well, not sure
-which is better.
+---559023410-339825506-1021933981=:664
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-length: 469
 
-Pierre
+Here is a patch to getfacl that adds longopts for all options,
+standardizes the usage output, and adds the GNU standard --version option.
 
-2002-05-19  Pierre Humblet <pierre.humblet@ieee.org>
+2002-05-07  Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+	* getfacl.c (usage) Standardize usage output. Change return type to
+	static void. Remove examples of output.
+	(print_examples) New function.
+	(print_version) New function.
+	(longopts) Added longopts for all options.
+	(main) Accommodate new help and version options.
 
-	* security.cc (open_local_policy): Initialize lsa to	INVALID_HANDLE_VALUE
-instead of NULL.
- 	(get_logon_server_and_user_domain): Test for
-	INVALID_HANDLE_VALUE instead of NULL.
-	(create_token): Both of the above. 
+---559023410-339825506-1021933981=:664
+Content-Type: TEXT/PLAIN; charset=US-ASCII; name="getfacl.c-patch"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.CYG.4.44.0205201733010.664@iocc.com>
+Content-Description: 
+Content-Disposition: attachment; filename="getfacl.c-patch"
+Content-length: 9378
 
+LS0tIGdldGZhY2wuYy1vcmlnCVN1biBGZWIgMjQgMTM6Mjg6MjcgMjAwMg0K
+KysrIGdldGZhY2wuYwlNb24gTWF5IDIwIDE3OjI0OjQ4IDIwMDINCkBAIC0x
+LDYgKzEsNiBAQA0KIC8qIGdldGZhY2wuYw0KIA0KLSAgIENvcHlyaWdodCAy
+MDAwLCAyMDAxIFJlZCBIYXQgSW5jLg0KKyAgIENvcHlyaWdodCAyMDAwLCAy
+MDAxLCAyMDAyIFJlZCBIYXQgSW5jLg0KIA0KICAgIFdyaXR0ZW4gYnkgQ29y
+aW5uYSBWaW5zY2hlbiA8dmluc2NoZW5AcmVkaGF0LmNvbT4NCiANCkBAIC0y
+MCw2ICsyMCw5IEBAIGRldGFpbHMuICovDQogI2luY2x1ZGUgPHN5cy9zdGF0
+Lmg+DQogI2luY2x1ZGUgPHN0cmluZy5oPg0KIA0KK3N0YXRpYyBjb25zdCBj
+aGFyIHZlcnNpb25bXSA9ICIkUmV2aXNpb246IDEuMTMgJCI7DQorc3RhdGlj
+IGNoYXIgKnByb2dfbmFtZTsNCisNCiBjaGFyICoNCiBwZXJtc3RyIChtb2Rl
+X3QgcGVybSkNCiB7DQpAQCAtNTgsNjggKzYxLDkwIEBAIGdyb3VwbmFtZSAo
+Z2lkX3QgZ2lkKQ0KICAgcmV0dXJuIGdidWY7DQogfQ0KIA0KLSNkZWZpbmUg
+cG4odHh0KQlmcHJpbnRmIChmcCwgdHh0ICJcbiIsIG5hbWUpDQotI2RlZmlu
+ZSBwKHR4dCkJZnByaW50ZiAoZnAsIHR4dCAiXG4iKQ0KLQ0KLWludA0KLXVz
+YWdlIChjb25zdCBjaGFyICpuYW1lLCBpbnQgaGVscCkNCitzdGF0aWMgdm9p
+ZA0KK3VzYWdlIChGSUxFICogc3RyZWFtKQ0KIHsNCi0gIEZJTEUgKmZwID0g
+aGVscCA/IHN0ZG91dCA6IHN0ZGVycjsNCisgIGZwcmludGYgKHN0cmVhbSwg
+IlVzYWdlOiAlcyBbLWFkbl0gRklMRSBbRklMRTIuLi5dXG4iDQorICAgICAg
+ICAgICAgIkRpc3BsYXkgZmlsZSBhbmQgZGlyZWN0b3J5IGFjY2VzcyBjb250
+cm9sIGxpc3RzIChBQ0xzKS5cbiINCisgICAgICAgICAgICAiXG4iDQorICAg
+ICAgICAgICAgIiAgLWEsIC0tYWxsICAgICAgZGlzcGxheSB0aGUgZmlsZW5h
+bWUsIHRoZSBvd25lciwgdGhlIGdyb3VwLCBhbmRcbiINCisgICAgICAgICAg
+ICAiICAgICAgICAgICAgICAgICB0aGUgQUNMIG9mIHRoZSBmaWxlXG4iDQor
+ICAgICAgICAgICAgIiAgLWQsIC0tZGlyICAgICAgZGlzcGxheSB0aGUgZmls
+ZW5hbWUsIHRoZSBvd25lciwgdGhlIGdyb3VwLCBhbmRcbiINCisgICAgICAg
+ICAgICAiICAgICAgICAgICAgICAgICB0aGUgZGVmYXVsdCBBQ0wgb2YgdGhl
+IGRpcmVjdG9yeSwgaWYgaXQgZXhpc3RzXG4iDQorICAgICAgICAgICAgIiAg
+LWUsIC0tZXhhbXBsZXMgb3V0cHV0IGV4YW1wbGVzIGFuZCBleHBsYW5hdGlv
+biBvZiBvdXRwdXQgYW5kIGV4aXRcbiINCisgICAgICAgICAgICAiICAtaCwg
+LS1oZWxwICAgICBvdXRwdXQgdXNhZ2UgaW5mb3JtYXRpb24gYW5kIGV4aXRc
+biINCisgICAgICAgICAgICAiICAtbiwgLS1ub25hbWUgICBkaXNwbGF5IHVz
+ZXIgYW5kIGdyb3VwIElEcyBpbnN0ZWFkIG9mIG5hbWVzXG4iDQorICAgICAg
+ICAgICAgIiAgLXYsIC0tdmVyc2lvbiAgb3V0cHV0IHZlcnNpb24gaW5mb3Jt
+YXRpb24gYW5kIGV4aXRcblxuIg0KKyAgICAgICAgICAgICJBQ0wgb3V0cHV0
+IGZvciBtdWx0aXBsZSBmaWxlcyBpcyBzZXBhcmF0ZWQgYnkgYSBibGFuayBs
+aW5lXG5cbiINCisgICAgICAgICAgICAiUmVwb3J0IGJ1Z3MgdG8gPGN5Z3dp
+bkBjeWd3aW4uY29tPi5cbiINCisgICAgICAgICAgICAiIiwgcHJvZ19uYW1l
+KTsNCit9DQogDQotICBwbiAoInVzYWdlOiAlcyBbLWFkbl0gZmlsZS4uLiIp
+Ow0KLSAgaWYgKCFoZWxwKQ0KLSAgICBwbiAoIlRyeSBgJXMgLS1oZWxwJyBm
+b3IgbW9yZSBpbmZvcm1hdGlvbi4iKTsNCi0gIGVsc2UNCi0gICAgew0KLSAg
+ICAgIHAgKCIiKTsNCi0gICAgICBwICgiRGlzcGxheSBmaWxlIGFuZCBkaXJl
+Y3RvcnkgYWNjZXNzIGNvbnRyb2wgbGlzdHMgKEFDTHMpLiIpOw0KLSAgICAg
+IHAgKCIiKTsNCi0gICAgICBwICgiRm9yIGVhY2ggYXJndW1lbnQgdGhhdCBp
+cyBhIHJlZ3VsYXIgZmlsZSwgc3BlY2lhbCBmaWxlIG9yIik7DQotICAgICAg
+cCAoImRpcmVjdG9yeSwgZ2V0ZmFjbCBkaXNwbGF5cyB0aGUgb3duZXIsIHRo
+ZSBncm91cCwgYW5kIHRoZSBBQ0wuIik7DQotICAgICAgcCAoIkZvciBkaXJl
+Y3RvcmllcyBnZXRmYWNsIGRpc3BsYXlzIGFkZGl0aW9uYWxseSB0aGUgZGVm
+YXVsdCBBQ0wuIik7DQotICAgICAgcCAoIiIpOw0KLSAgICAgIHAgKCJXaXRo
+IG5vIG9wdGlvbnMgc3BlY2lmaWVkLCBnZXRmYWNsIGRpc3BsYXlzIHRoZSBm
+aWxlbmFtZSwgdGhlIik7DQotICAgICAgcCAoIm93bmVyLCB0aGUgZ3JvdXAs
+IGFuZCBib3RoIHRoZSBBQ0wgYW5kIHRoZSBkZWZhdWx0IEFDTCwgaWYgaXQi
+KTsNCi0gICAgICBwICgiZXhpc3RzLiIpOw0KLSAgICAgIHAgKCIiKTsNCi0g
+ICAgICBwICgiVGhlIGZvbGxvd2luZyBvcHRpb25zIGFyZSBzdXBwb3J0ZWQ6
+Iik7DQotICAgICAgcCAoIiIpOw0KLSAgICAgIHAgKCItYSAgIERpc3BsYXkg
+dGhlIGZpbGVuYW1lLCB0aGUgb3duZXIsIHRoZSBncm91cCwgYW5kIHRoZSBB
+Q0wiKTsNCi0gICAgICBwICgiICAgICBvZiB0aGUgZmlsZS4iKTsNCi0gICAg
+ICBwICgiIik7DQotICAgICAgcCAoIi1kICAgRGlzcGxheSB0aGUgZmlsZW5h
+bWUsIHRoZSBvd25lciwgdGhlIGdyb3VwLCBhbmQgdGhlIGRlZmF1bHQiKTsN
+Ci0gICAgICBwICgiICAgICBBQ0wgb2YgdGhlIGRpcmVjdG9yeSwgaWYgaXQg
+ZXhpc3RzLiIpOw0KLSAgICAgIHAgKCIiKTsNCi0gICAgICBwICgiLW4gICBE
+aXNwbGF5IHVzZXIgYW5kIGdyb3VwIElEcyBpbnN0ZWFkIG9mIG5hbWVzLiIp
+Ow0KLSAgICAgIHAgKCIiKTsNCi0gICAgICBwICgiVGhlIGZvcm1hdCBmb3Ig
+QUNMIG91dHB1dCBpcyBhcyBmb2xsb3dzOiIpOw0KLSAgICAgIHAgKCIgICAg
+ICMgZmlsZTogZmlsZW5hbWUiKTsNCi0gICAgICBwICgiICAgICAjIG93bmVy
+OiBuYW1lIG9yIHVpZCIpOw0KLSAgICAgIHAgKCIgICAgICMgZ3JvdXA6IG5h
+bWUgb3IgdWlkIik7DQotICAgICAgcCAoIiAgICAgdXNlcjo6cGVybSIpOw0K
+LSAgICAgIHAgKCIgICAgIHVzZXI6bmFtZSBvciB1aWQ6cGVybSIpOw0KLSAg
+ICAgIHAgKCIgICAgIGdyb3VwOjpwZXJtIik7DQotICAgICAgcCAoIiAgICAg
+Z3JvdXA6bmFtZSBvciBnaWQ6cGVybSIpOw0KLSAgICAgIHAgKCIgICAgIG1h
+c2s6cGVybSIpOw0KLSAgICAgIHAgKCIgICAgIG90aGVyOnBlcm0iKTsNCi0g
+ICAgICBwICgiICAgICBkZWZhdWx0OnVzZXI6OnBlcm0iKTsNCi0gICAgICBw
+ICgiICAgICBkZWZhdWx0OnVzZXI6bmFtZSBvciB1aWQ6cGVybSIpOw0KLSAg
+ICAgIHAgKCIgICAgIGRlZmF1bHQ6Z3JvdXA6OnBlcm0iKTsNCi0gICAgICBw
+ICgiICAgICBkZWZhdWx0Omdyb3VwOm5hbWUgb3IgZ2lkOnBlcm0iKTsNCi0g
+ICAgICBwICgiICAgICBkZWZhdWx0Om1hc2s6cGVybSIpOw0KLSAgICAgIHAg
+KCIgICAgIGRlZmF1bHQ6b3RoZXI6cGVybSIpOw0KLSAgICAgIHAgKCIiKTsN
+Ci0gICAgICBwICgiV2hlbiBtdWx0aXBsZSBmaWxlcyBhcmUgc3BlY2lmaWVk
+IG9uIHRoZSBjb21tYW5kIGxpbmUsIGEgYmxhbmsiKTsNCi0gICAgICBwICgi
+bGluZSBzZXBhcmF0ZXMgdGhlIEFDTHMgZm9yIGVhY2ggZmlsZS4iKTsNCi0g
+ICAgfQ0KLSAgcmV0dXJuIDE7DQorc3RhdGljIHZvaWQNCitwcmludF9leGFt
+cGxlcyAoKQ0KK3sNCisgIHByaW50ZiAoIlxuIg0KKyAgICAgICAgICAgICAg
+IkZvciBlYWNoIGFyZ3VtZW50IHRoYXQgaXMgYSByZWd1bGFyIGZpbGUsIHNw
+ZWNpYWwgZmlsZSBvclxuIg0KKyAgICAgICAgICAgICAgImRpcmVjdG9yeSwg
+Z2V0ZmFjbCBkaXNwbGF5cyB0aGUgb3duZXIsIHRoZSBncm91cCwgYW5kIHRo
+ZSBBQ0wuXG4iDQorICAgICAgICAgICAgICAiRm9yIGRpcmVjdG9yaWVzIGdl
+dGZhY2wgZGlzcGxheXMgYWRkaXRpb25hbGx5IHRoZSBkZWZhdWx0IEFDTC5c
+biINCisgICAgICAgICAgICAgICJcbiINCisgICAgICAgICAgICAgICJXaXRo
+IG5vIG9wdGlvbnMgc3BlY2lmaWVkLCBnZXRmYWNsIGRpc3BsYXlzIHRoZSBm
+aWxlbmFtZSwgdGhlXG4iDQorICAgICAgICAgICAgICAib3duZXIsIHRoZSBn
+cm91cCwgYW5kIGJvdGggdGhlIEFDTCBhbmQgdGhlIGRlZmF1bHQgQUNMLCBp
+ZiBpdFxuIg0KKyAgICAgICAgICAgICAgImV4aXN0cy5cbiINCisgICAgICAg
+ICAgICAgICJcbiINCisgICAgICAgICAgICAgICJUaGUgZm9ybWF0IGZvciBB
+Q0wgb3V0cHV0IGlzIGFzIGZvbGxvd3M6XG4iDQorICAgICAgICAgICAgICAi
+ICAgICAjIGZpbGU6IGZpbGVuYW1lXG4iDQorICAgICAgICAgICAgICAiICAg
+ICAjIG93bmVyOiBuYW1lIG9yIHVpZFxuIg0KKyAgICAgICAgICAgICAgIiAg
+ICAgIyBncm91cDogbmFtZSBvciB1aWRcbiINCisgICAgICAgICAgICAgICIg
+ICAgIHVzZXI6OnBlcm1cbiINCisgICAgICAgICAgICAgICIgICAgIHVzZXI6
+bmFtZSBvciB1aWQ6cGVybVxuIg0KKyAgICAgICAgICAgICAgIiAgICAgZ3Jv
+dXA6OnBlcm1cbiINCisgICAgICAgICAgICAgICIgICAgIGdyb3VwOm5hbWUg
+b3IgZ2lkOnBlcm1cbiINCisgICAgICAgICAgICAgICIgICAgIG1hc2s6cGVy
+bVxuIg0KKyAgICAgICAgICAgICAgIiAgICAgb3RoZXI6cGVybVxuIg0KKyAg
+ICAgICAgICAgICAgIiAgICAgZGVmYXVsdDp1c2VyOjpwZXJtXG4iDQorICAg
+ICAgICAgICAgICAiICAgICBkZWZhdWx0OnVzZXI6bmFtZSBvciB1aWQ6cGVy
+bVxuIg0KKyAgICAgICAgICAgICAgIiAgICAgZGVmYXVsdDpncm91cDo6cGVy
+bVxuIg0KKyAgICAgICAgICAgICAgIiAgICAgZGVmYXVsdDpncm91cDpuYW1l
+IG9yIGdpZDpwZXJtXG4iDQorICAgICAgICAgICAgICAiICAgICBkZWZhdWx0
+Om1hc2s6cGVybVxuIg0KKyAgICAgICAgICAgICAgIiAgICAgZGVmYXVsdDpv
+dGhlcjpwZXJtXG4iDQorICAgICAgICAgICAgICAiXG4iDQorICAgICAgICAg
+ICAgICAiV2hlbiBtdWx0aXBsZSBmaWxlcyBhcmUgc3BlY2lmaWVkIG9uIHRo
+ZSBjb21tYW5kIGxpbmUsIGEgYmxhbmtcbiINCisgICAgICAgICAgICAgICJs
+aW5lIHNlcGFyYXRlcyB0aGUgQUNMcyBmb3IgZWFjaCBmaWxlLlxuIik7DQog
+fQ0KIA0KIHN0cnVjdCBvcHRpb24gbG9uZ29wdHNbXSA9IHsNCisgIHsiYWxs
+Iiwgbm9fYXJndW1lbnQsIE5VTEwsICdhJ30sDQorICB7ImRpciIsIG5vX2Fy
+Z3VtZW50LCBOVUxMLCAnZCd9LA0KKyAgeyJleGFtcGxlcyIsIG5vX2FyZ3Vt
+ZW50LCBOVUxMLCAnZSd9LA0KICAgeyJoZWxwIiwgbm9fYXJndW1lbnQsIE5V
+TEwsICdoJ30sDQorICB7Im5vbmFtZSIsIG5vX2FyZ3VtZW50LCBOVUxMLCAn
+bid9LA0KKyAgeyJ2ZXJzaW9uIiwgbm9fYXJndW1lbnQsIE5VTEwsICd2J30s
+DQogICB7MCwgbm9fYXJndW1lbnQsIE5VTEwsIDB9DQogfTsNCiANCitzdGF0
+aWMgdm9pZA0KK3ByaW50X3ZlcnNpb24gKCkNCit7DQorICBjb25zdCBjaGFy
+ICp2ID0gc3RyY2hyICh2ZXJzaW9uLCAnOicpOw0KKyAgaW50IGxlbjsNCisg
+IGlmICghdikNCisgICAgew0KKyAgICAgIHYgPSAiPyI7DQorICAgICAgbGVu
+ID0gMTsNCisgICAgfQ0KKyAgZWxzZQ0KKyAgICB7DQorICAgICAgdiArPSAy
+Ow0KKyAgICAgIGxlbiA9IHN0cmNociAodiwgJyAnKSAtIHY7DQorICAgIH0N
+CisgIHByaW50ZiAoIlwNCitnZXRmYWNsIChjeWd3aW4pICUuKnNcblwNCitB
+Q0wgVXRpbGl0eVxuXA0KK0NvcHlyaWdodCAoYykgMjAwMCwgMjAwMSwgMjAw
+MiBSZWQgSGF0LCBJbmMuXG5cDQorQ29tcGlsZWQgb24gJXMiLCBsZW4sIHYs
+IF9fREFURV9fKTsNCit9DQorDQogaW50DQogbWFpbiAoaW50IGFyZ2MsIGNo
+YXIgKiphcmd2KQ0KIHsNCkBAIC0xMzIsNyArMTU3LDE1IEBAIG1haW4gKGlu
+dCBhcmdjLCBjaGFyICoqYXJndikNCiAgIHN0cnVjdCBzdGF0IHN0Ow0KICAg
+YWNsZW50X3QgYWNsc1tNQVhfQUNMX0VOVFJJRVNdOw0KIA0KLSAgd2hpbGUg
+KChjID0gZ2V0b3B0X2xvbmcgKGFyZ2MsIGFyZ3YsICJhZG4iLCBsb25nb3B0
+cywgTlVMTCkpICE9IEVPRikNCisgIHByb2dfbmFtZSA9IHN0cnJjaHIgKGFy
+Z3ZbMF0sICcvJyk7DQorICBpZiAocHJvZ19uYW1lID09IE5VTEwpDQorICAg
+IHByb2dfbmFtZSA9IHN0cnJjaHIgKGFyZ3ZbMF0sICdcXCcpOw0KKyAgaWYg
+KHByb2dfbmFtZSA9PSBOVUxMKQ0KKyAgICBwcm9nX25hbWUgPSBhcmd2WzBd
+Ow0KKyAgZWxzZQ0KKyAgICBwcm9nX25hbWUrKzsNCisNCisgIHdoaWxlICgo
+YyA9IGdldG9wdF9sb25nIChhcmdjLCBhcmd2LCAiYWRlaG52IiwgbG9uZ29w
+dHMsIE5VTEwpKSAhPSBFT0YpDQogICAgIHN3aXRjaCAoYykNCiAgICAgICB7
+DQogICAgICAgY2FzZSAnYSc6DQpAQCAtMTQxLDE2ICsxNzQsMjggQEAgbWFp
+biAoaW50IGFyZ2MsIGNoYXIgKiphcmd2KQ0KICAgICAgIGNhc2UgJ2QnOg0K
+IAlkb3B0ID0gMTsNCiAJYnJlYWs7DQorICAgICAgY2FzZSAnZSc6DQorICAg
+ICAgIHVzYWdlIChzdGRvdXQpOw0KKyAgICAgICBwcmludF9leGFtcGxlcyAo
+KTsNCisgICAgICAgcmV0dXJuIDA7DQorICAgICAgY2FzZSAnaCc6DQorICAg
+ICAgIHVzYWdlIChzdGRvdXQpOw0KKyAgICAgICByZXR1cm4gMDsNCiAgICAg
+ICBjYXNlICduJzoNCiAJbm9wdCA9IDE7DQogCWJyZWFrOw0KLSAgICAgIGNh
+c2UgJ2gnOg0KLSAgICAgICByZXR1cm4gdXNhZ2UgKGFyZ3ZbMF0sIDEpOw0K
+KyAgICAgIGNhc2UgJ3YnOg0KKyAgICAgICBwcmludF92ZXJzaW9uICgpOw0K
+KyAgICAgICByZXR1cm4gMDsNCiAgICAgICBkZWZhdWx0Og0KLQlyZXR1cm4g
+dXNhZ2UgKGFyZ3ZbMF0sIDApOw0KKwl1c2FnZSAoc3RkZXJyKTsNCisJcmV0
+dXJuIDE7DQogICAgICAgfQ0KICAgaWYgKG9wdGluZCA+IGFyZ2MgLSAxKQ0K
+LSAgICByZXR1cm4gdXNhZ2UgKGFyZ3ZbMF0sIDApOw0KKyAgICB7DQorICAg
+ICAgdXNhZ2UgKHN0ZGVycik7DQorICAgICAgcmV0dXJuIDE7DQorICAgIH0N
+CiAgIHdoaWxlICgoYyA9IG9wdGluZCsrKSA8IGFyZ2MpDQogICAgIHsNCiAg
+ICAgICBpZiAoc3RhdCAoYXJndltjXSwgJnN0KSkNCg==
 
---- security.cc.orig    2002-05-17 05:32:46.000000000 -0400
-+++ security.cc 2002-05-19 12:07:10.000000000 -0400
-@@ -180,7 +180,7 @@
- open_local_policy ()
- {
-   LSA_OBJECT_ATTRIBUTES oa = { 0, 0, 0, 0, 0, 0 };
--  LSA_HANDLE lsa = NULL;
-+  LSA_HANDLE lsa = INVALID_HANDLE_VALUE;
- 
-   NTSTATUS ret = LsaOpenPolicy(NULL, &oa, POLICY_EXECUTE, &lsa);
-   if (ret != STATUS_SUCCESS)
-@@ -258,7 +258,7 @@
- {
-   BOOL ret = FALSE;
-   LSA_HANDLE lsa = open_local_policy ();
--  if (lsa)
-+  if (lsa != INVALID_HANDLE_VALUE)
-     {
-       ret = get_lsa_srv_inf (lsa, logonserver, userdomain);
-       close_local_policy (lsa);
-@@ -723,7 +723,7 @@
- create_token (cygsid &usersid, cygsid &pgrpsid)
- {
-   NTSTATUS ret;
--  LSA_HANDLE lsa = NULL;
-+  LSA_HANDLE lsa = INVALID_HANDLE_VALUE;
-   char logonserver[INTERNET_MAX_HOST_NAME_LENGTH + 1];
-   int old_priv_state;
- 
-@@ -764,7 +764,7 @@
-     goto out;
- 
-   /* Open policy object. */
--  if (!(lsa = open_local_policy ()))
-+  if ((lsa = open_local_policy ()) == INVALID_HANDLE_VALUE)
-     goto out;
- 
-   /* Get logon server. */
+---559023410-339825506-1021933981=:664--
