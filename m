@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3492-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 11983 invoked by alias); 4 Feb 2003 22:54:14 -0000
+Return-Path: <cygwin-patches-return-3493-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 29071 invoked by alias); 5 Feb 2003 13:48:04 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,38 +7,65 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 11914 invoked from network); 4 Feb 2003 22:54:13 -0000
-X-Authentication-Warning: hp2.xraylith.wisc.edu: khan owned process doing -bs
-Date: Tue, 04 Feb 2003 22:54:00 -0000
-From: Mumit Khan <khan@nanotech.wisc.edu>
-To: <cygwin-patches@cygwin.com>
-Subject: Re: [patch] Tcl 20030128-3 changes to handle cygwin pathnames
-In-Reply-To: <20030203011505.GA14800@redhat.com>
-Message-ID: <Pine.HPX.4.33.0302041645530.27424-100000@hp2.xraylith.wisc.edu>
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-SW-Source: 2003-q1/txt/msg00141.txt.bz2
+Received: (qmail 29054 invoked from network); 5 Feb 2003 13:48:02 -0000
+Date: Wed, 05 Feb 2003 13:48:00 -0000
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: security.cc
+Message-ID: <20030205134800.GR5822@cygbert.vinschen.de>
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <3.0.5.32.20030204103816.008064e0@mail.attbi.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3.0.5.32.20030204103816.008064e0@mail.attbi.com>
+User-Agent: Mutt/1.4i
+X-SW-Source: 2003-q1/txt/msg00142.txt.bz2
 
-On Sun, 2 Feb 2003, Christopher Faylor wrote:
+Hi Pierre,
 
-> Wow.  Do i have to suffer with this tcl crap in YA cygwin mailing list?
->
-> If you want to submit patches for tcl/tk, use the insight mailing list.
->
-> This would not be the correct place for this patch even if there wasn't
-> a more appropriate place that I have mentioned 127 times already.
+On Tue, Feb 04, 2003 at 10:38:16AM -0500, Pierre A. Humblet wrote:
+> This patch defines a new function get_sids_info that greatly reduces
+> the number of passwd/group lookups, compared to the current approach.
 
-I apologize for sending the patch to the wrong list. I do hope the end
-result will be that it will indeed cut down on all the tcl crap in cygwin
-lists.
+this new get_sids_info() function does reimplement the functionality
+of is_grp_member() in just a slightly different way.  I think that's
+pretty unlucky since now we have two functions doing nearly the same.
+Wouldn't it make sense to replace the remaining is_grp_member() calls
+in sec_acl.cc by calls to get_sids_info(), too?
 
-> Mumit, you were once a valued contributor to the project but that doesn't
-> give you a grandfather clause for sending off-topic posts to cygwin-patches.
+> 2003/02/04  Pierre Humblet  <pierre.humblet@ieee.org>
 
-I deserve the rebuke for sending an off topic patch, but I'm dismayed at
-the ad hominem attack. Rest assured that I will not make this mistake
-again.
+Could you please use the common format for the date in the ChangeLog,
+using dashes instead of slashes?  Thanks.
 
-Mumit
+> 	* sec_helper.cc (get_sids_info): New function.
+> 	* security.cc (extract_nt_dom_user): Simplify with strechr.
+> 	(get_user_groups): Initialize glen to MAX_SID_LEN.
+> 	(get_user_local_groups): Ditto.
+> 	(get_attribute_from_acl): Define ace_sid as cygpsid.
+> 	(get_nt_attribute): Define owner_sid and group_sid as cygpsid.
+> 	Call get_sids_info instead of cygsid.get_{u,g}id and is_grp_member.
+> 	(get_nt_object_attribute): Ditto.
+> 	(alloc_sd): Define ace_sid as cygpsid.
+
+Otherwise applied with a minor change:
+
+> +  if (!GetSecurityDescriptorOwner (psd, (void **) &owner_sid, &dummy))
+  +  if (!GetSecurityDescriptorOwner (psd, (PSID *) &owner_sid, &dummy))
+
+> +  if (!GetSecurityDescriptorGroup (psd, (void **) &group_sid, &dummy))
+  +  if (!GetSecurityDescriptorGroup (psd, (PSID *) &group_sid, &dummy))
+
+> +					(void **) &owner_sid, (void **) &group_sid,
+  +					(PSID *) &owner_sid,
+  +					(PSID *) &group_sid,
 
 
+Thanks,
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
