@@ -1,126 +1,67 @@
-From: "Michael A. Chase" <mchase@ix.netcom.com>
-To: <cygwin-patches@cygwin.com>
-Subject: [PATCH]Write Mount Commands
-Date: Mon, 03 Sep 2001 12:37:00 -0000
-Message-id: <000c01c134af$0f165ed0$200a0a0a@us.oracle.com>
-X-SW-Source: 2001-q3/msg00091.html
-Content-type: multipart/mixed; boundary="----------=_1583532848-65438-94"
+From: Kazuhiro Fujieda <fujieda@jaist.ac.jp>
+To: cygwin-patches@cygwin.com
+Subject: a bug in restoring the console.
+Date: Mon, 03 Sep 2001 12:41:00 -0000
+Message-id: <s1szo8c6p0y.fsf@jaist.ac.jp>
+X-SW-Source: 2001-q3/msg00092.html
 
-This is a multi-part message in MIME format...
+I succeeded to enjoy the feature saving/restoring the console
+with less and the latest termcap, but found a bug on NT4/Win2k.
 
-------------=_1583532848-65438-94
-Content-length: 875
+Less can't restore the previous screen properly when it starts
+on the down-scrollable console window. It can scroll the console
+buffer. When it terminates, the sequence restoring the cursor
+included in `te' scrolls back and breaks the restored screen.
 
-Here's the patch to mount to tell it to write the commands needed to
-re-create the current mount table.
+It is triggered by the wrong implementation of the feature
+saving/restoring the cursor position. It shouldn't save the
+position of the console buffer, but the cursor position.
 
-Users of Win9x might be confused if they create the commands from a bash
-prompt and then try to run the resulting file from command.com.  In my
-system (which has binary mount points),
-   mount -m > file
-produced a file with NL line endings which command.com chokes on.  Running
-the same command from the MSDOS prompt produced a file with CRLF line
-endings.
---
-Mac :})
-Give a hobbit a fish and he eats fish for a day.
-Give a hobbit a ring and he eats fish for an age.
+The following patch corrects the implementation and can solve my 
+problem.
 
-Changelog:
+2001-09-04  Kazuhiro Fujieda  <fujieda@jaist.ac.jp>
 
-2001-09-03  Michael A Chase <mchase@ix.netcom.com>
+	* fhandler_console.cc (fhandler_console::char_command): Save the cursor
+	position relative to the top of the window.
+	* fhandler_cc (fhandler_console::write): Ditto.
 
-    * mount.cc (longopts): Add mount-commands to options list.
-               (usage): Add mount-commands option.
-               (mount_commands): New function writes commands to recreate
-                                 current mounts.
+Index: fhandler_console.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/fhandler_console.cc,v
+retrieving revision 1.57
+diff -u -p -r1.57 fhandler_console.cc
+--- fhandler_console.cc	2001/08/07 05:15:59	1.57
++++ fhandler_console.cc	2001/09/03 19:38:00
+@@ -1306,9 +1306,10 @@ fhandler_console::char_command (char c)
+       break;
+     case 's':   /* Save cursor position */
+       cursor_get (&savex, &savey);
++      savey -= info.winTop;
+       break;
+     case 'u':   /* Restore cursor position */
+-      cursor_set (FALSE, savex, savey);
++      cursor_set (TRUE, savex, savey);
+       break;
+     case 'I':	/* TAB */
+       cursor_get (&x, &y);
+@@ -1543,12 +1544,13 @@ fhandler_console::write (const void *vsr
+ 	    }
+ 	  else if (*src == '8')		/* Restore cursor position */
+ 	    {
+-	      cursor_set (FALSE, savex, savey);
++	      cursor_set (TRUE, savex, savey);
+ 	      state_ = normal;
+ 	    }
+ 	  else if (*src == '7')		/* Save cursor position */
+ 	    {
+ 	      cursor_get (&savex, &savey);
++	      savey -= info.winTop;
+ 	      state_ = normal;
+ 	    }
+ 	  else if (*src == 'R')
 
-
-------------=_1583532848-65438-94
-Content-Type: text/x-diff; charset=us-ascii; name="mount.cc-patch"
-Content-Disposition: inline; filename="mount.cc-patch"
-Content-Transfer-Encoding: base64
-Content-Length: 4848
-
-LS0tIG1vdW50LmNjLm9yaWcJTW9uIFNlcCAgMyAwODo0MjoxMiAyMDAxCisr
-KyBtb3VudC5jYwlNb24gU2VwICAzIDA5OjU1OjA5IDIwMDEKQEAgLTIyLDYg
-KzIyLDcgQEAgZGV0YWlscy4gKi8KICNlbmRpZgogI2luY2x1ZGUgPGVycm5v
-Lmg+CiAKK3N0YXRpYyB2b2lkIG1vdW50X2NvbW1hbmRzICh2b2lkKTsKIHN0
-YXRpYyB2b2lkIHNob3dfbW91bnRzICh2b2lkKTsKIHN0YXRpYyB2b2lkIHNo
-b3dfY3lnZHJpdmVfaW5mbyAodm9pZCk7CiBzdGF0aWMgdm9pZCBjaGFuZ2Vf
-Y3lnZHJpdmVfcHJlZml4IChjb25zdCBjaGFyICpuZXdfcHJlZml4LCBpbnQg
-ZmxhZ3MpOwpAQCAtOTgsMTAgKzk5LDExIEBAIHN0cnVjdCBvcHRpb24gbG9u
-Z29wdHNbXSA9CiAgIHsiY3lnd2luLWV4ZWN1dGFibGUiLCBub19hcmd1bWVu
-dCwgTlVMTCwgJ1gnfSwKICAgeyJzaG93LWN5Z2RyaXZlLXByZWZpeCIsIG5v
-X2FyZ3VtZW50LCBOVUxMLCAncCd9LAogICB7ImltcG9ydC1vbGQtbW91bnRz
-Iiwgbm9fYXJndW1lbnQsIE5VTEwsICdpJ30sCisgIHsibW91bnQtY29tbWFu
-ZHMiLCBub19hcmd1bWVudCwgTlVMTCwgJ20nfSwKICAge05VTEwsIDAsIE5V
-TEwsIDB9CiB9OwogCi1jaGFyIG9wdHNbXSA9ICJoYmZzdHV4WHBpYyI7Citj
-aGFyIG9wdHNbXSA9ICJoYmZzdHV4WHBpY20iOwogCiBzdGF0aWMgdm9pZAog
-dXNhZ2UgKHZvaWQpCkBAIC0xMjEsNiArMTIzLDggQEAgdXNhZ2UgKHZvaWQp
-CiAgIC14LCAtLWV4ZWN1dGFibGUgICAgICAgICAgICAgIHRyZWF0IGFsbCBm
-aWxlcyB1bmRlciBtb3VudCBwb2ludCBhcyBleGVjdXRhYmxlc1xuXAogICAt
-WCwgLS1jeWd3aW4tZXhlY3V0YWJsZSAgICAgICB0cmVhdCBhbGwgZmlsZXMg
-dW5kZXIgbW91bnQgcG9pbnQgYXMgY3lnd2luXG5cCiAJCQkJZXhlY3V0YWJs
-ZXNcblwKKyAgLW0sIC0tbW91bnQtY29tbWFuZHMgICAgICAgICAgd3JpdGUg
-bW91bnQgY29tbWFuZHMgdG8gcmVwbGFjZSB1c2VyIGFuZFxuXAorICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICBzeXN0ZW0gbW91bnQgcG9pbnRz
-IGFuZCBjeWdkcml2ZSBwcmVmaXhlc1xuXAogIiwgcHJvZ25hbWUpOwogICBl
-eGl0ICgxKTsKIH0KQEAgLTEzNSw3ICsxMzksOCBAQCBtYWluIChpbnQgYXJn
-YywgY2hhciAqKmFyZ3YpCiAgICAgbmFkYSwKICAgICBzYXdfY2hhbmdlX2N5
-Z2RyaXZlX3ByZWZpeCwKICAgICBzYXdfaW1wb3J0X29sZF9tb3VudHMsCi0g
-ICAgc2F3X3Nob3dfY3lnZHJpdmVfcHJlZml4CisgICAgc2F3X3Nob3dfY3ln
-ZHJpdmVfcHJlZml4LAorICAgIHNhd19tb3VudF9jb21tYW5kcwogICB9IGRv
-X3doYXQgPSBuYWRhOwogCiAgIHByb2duYW1lID0gYXJndlswXTsKQEAgLTE4
-OCw2ICsxOTMsMTIgQEAgbWFpbiAoaW50IGFyZ2MsIGNoYXIgKiphcmd2KQog
-ICAgICAgY2FzZSAneCc6CiAJZmxhZ3MgfD0gTU9VTlRfRVhFQzsKIAlicmVh
-azsKKyAgICAgIGNhc2UgJ20nOgorCWlmIChkb193aGF0ID09IG5hZGEpCisJ
-ICBkb193aGF0ID0gc2F3X21vdW50X2NvbW1hbmRzOworCWVsc2UKKwkgIHVz
-YWdlICgpOworCWJyZWFrOwogICAgICAgZGVmYXVsdDoKIAl1c2FnZSAoKTsK
-ICAgICAgIH0KQEAgLTIxMSw2ICsyMjIsMTEgQEAgbWFpbiAoaW50IGFyZ2Ms
-IGNoYXIgKiphcmd2KQogCXVzYWdlICgpOwogICAgICAgc2hvd19jeWdkcml2
-ZV9pbmZvICgpOwogICAgICAgYnJlYWs7CisgICAgY2FzZSBzYXdfbW91bnRf
-Y29tbWFuZHM6CisgICAgICBpZiAob3B0aW5kIDw9IGFyZ2MpCisJdXNhZ2Ug
-KCk7CisgICAgICBtb3VudF9jb21tYW5kcyAoKTsKKyAgICAgIGJyZWFrOwog
-ICAgIGRlZmF1bHQ6CiAgICAgICBpZiAob3B0aW5kICE9IChhcmdjIC0gMSkp
-CiAJewpAQCAtMjMxLDYgKzI0Nyw2MiBAQCBtYWluIChpbnQgYXJnYywgY2hh
-ciAqKmFyZ3YpCiAKICAgLyogTk9UUkVBQ0hFRCAqLwogICByZXR1cm4gMDsK
-K30KKworc3RhdGljIHZvaWQKK21vdW50X2NvbW1hbmRzICh2b2lkKQorewor
-ICBGSUxFICptID0gc2V0bW50ZW50ICgiLy1ub3QtdXNlZC0iLCAiciIpOwor
-ICBzdHJ1Y3QgbW50ZW50ICpwOworICBjaGFyICpjOworICBjb25zdCBjaGFy
-ICpmb3JtYXRfbW50ID0gIm1vdW50JXMgXCIlc1wiIFwiJXNcIlxuIjsKKyAg
-Y29uc3QgY2hhciAqZm9ybWF0X2N5ZyA9ICJtb3VudCVzIC0tY2hhbmdlLWN5
-Z2RyaXZlLXByZWZpeCBcIiVzXCJcbiI7CisgIGNoYXIgb3B0c1tNQVhfUEFU
-SF07CisgIGNoYXIgdXNlcltNQVhfUEFUSF07CisgIGNoYXIgc3lzdGVtW01B
-WF9QQVRIXTsKKyAgY2hhciB1c2VyX2ZsYWdzW01BWF9QQVRIXTsKKyAgY2hh
-ciBzeXN0ZW1fZmxhZ3NbTUFYX1BBVEhdOworCisgIC8vIHdyaXRlIG1vdW50
-IGNvbW1hbmRzIGZvciB1c2VyIGFuZCBzeXN0ZW0gbW91bnQgcG9pbnRzCisg
-IHdoaWxlICgocCA9IGdldG1udGVudCAobSkpICE9IE5VTEwpIHsKKyAgICBz
-dHJjcHkob3B0cywgIiAtZiIpOworICAgIGlmICAgICAgKHAtPm1udF90eXBl
-WzBdID09ICd1JykKKyAgICAgIHN0cmNhdCAob3B0cywgIiAtdSIpOworICAg
-IGVsc2UgaWYgKHAtPm1udF90eXBlWzBdID09ICdzJykKKyAgICAgIHN0cmNh
-dCAob3B0cywgIiAtcyIpOworICAgIGlmICAgICAgKHAtPm1udF9vcHRzWzBd
-ID09ICdiJykKKyAgICAgIHN0cmNhdCAob3B0cywgIiAtYiIpOworICAgIGVs
-c2UgaWYgKHAtPm1udF9vcHRzWzBdID09ICd0JykKKyAgICAgIHN0cmNhdCAo
-b3B0cywgIiAtdCIpOworICAgIGlmIChzdHJzdHIgKHAtPm1udF9vcHRzLCAi
-LGV4ZWMiKSkKKyAgICAgIHN0cmNhdCAob3B0cywgIiAteCIpOworICAgIHdo
-aWxlICgoYyA9IHN0cmNociAocC0+bW50X2ZzbmFtZSwgJ1xcJykpICE9IE5V
-TEwpCisgICAgICAqYyA9ICcvJzsKKyAgICBwcmludGYgKGZvcm1hdF9tbnQs
-IG9wdHMsIHAtPm1udF9mc25hbWUsIHAtPm1udF9kaXIpOworICB9CisgIGVu
-ZG1udGVudCAobSk7CisKKyAgLy8gd3JpdGUgbW91bnQgY29tbWFuZHMgZm9y
-IGN5Z2RyaXZlIHByZWZpeGVzCisgIGN5Z3dpbl9pbnRlcm5hbCAoQ1dfR0VU
-X0NZR0RSSVZFX0lORk8sIHVzZXIsIHN5c3RlbSwgdXNlcl9mbGFncywKKwkJ
-ICAgc3lzdGVtX2ZsYWdzKTsKKyAgaWYgKHN0cmxlbiAodXNlcikgPiAwKSB7
-CisgICAgc3RyY3B5IChvcHRzLCAiICAgIik7CisgICAgaWYgICAgICAodXNl
-cl9mbGFnc1swXSA9PSAnYicpCisgICAgICBzdHJjYXQgKG9wdHMsICIgLWIi
-KTsKKyAgICBlbHNlIGlmICh1c2VyX2ZsYWdzWzBdID09ICd0JykKKyAgICAg
-IHN0cmNhdCAob3B0cywgIiAtdCIpOworICAgIHByaW50ZiAoZm9ybWF0X2N5
-Zywgb3B0cywgdXNlcik7CisgIH0KKyAgaWYgKHN0cmxlbiAoc3lzdGVtKSA+
-IDApIHsKKyAgICBzdHJjcHkgKG9wdHMsICIgLXMiKTsKKyAgICBpZiAgICAg
-IChzeXN0ZW1fZmxhZ3NbMF0gPT0gJ2InKQorICAgICAgc3RyY2F0IChvcHRz
-LCAiIC1iIik7CisgICAgZWxzZSBpZiAoc3lzdGVtX2ZsYWdzWzBdID09ICd0
-JykKKyAgICAgIHN0cmNhdCAob3B0cywgIiAtdCIpOworICAgIHByaW50ZiAo
-Zm9ybWF0X2N5Zywgb3B0cywgc3lzdGVtKTsKKyAgfQorCisgIGV4aXQoMCk7
-CiB9CiAKIHN0YXRpYyB2b2lkCg==
-
-------------=_1583532848-65438-94--
+____
+  | AIST      Kazuhiro Fujieda <fujieda@jaist.ac.jp>
+  | HOKURIKU  Center for Information Science
+o_/ 1990      Japan Advanced Institute of Science and Technology
