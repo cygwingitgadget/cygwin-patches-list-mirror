@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2209-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 8344 invoked by alias); 23 May 2002 03:50:12 -0000
+Return-Path: <cygwin-patches-return-2210-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 13296 invoked by alias); 23 May 2002 03:55:27 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,160 +7,568 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 8329 invoked from network); 23 May 2002 03:50:11 -0000
-Date: Wed, 22 May 2002 20:50:00 -0000
-From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
-X-X-Sender: joshua@iocc.com
+Received: (qmail 13260 invoked from network); 23 May 2002 03:55:24 -0000
+Message-Id: <3.0.5.32.20020522235216.00800c40@mail.attbi.com>
+X-Sender: phumblet@mail.attbi.com
+Date: Wed, 22 May 2002 20:55:00 -0000
 To: cygwin-patches@cygwin.com
-Subject: mount --version pathc 
-Message-ID: <Pine.CYG.4.44.0205222248400.600-200000@iocc.com>
-MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="-559023410-1073122922-1022125751=:600"
-X-SW-Source: 2002-q2/txt/msg00193.txt.bz2
+From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
+Subject: Patches to seteuid() etc...
+Mime-Version: 1.0
+Content-Type: multipart/mixed; boundary="=====================_1022140336==_"
+X-SW-Source: 2002-q2/txt/msg00194.txt.bz2
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
+--=====================_1022140336==_
+Content-Type: text/plain; charset="us-ascii"
+Content-length: 637
 
----559023410-1073122922-1022125751=:600
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-Content-length: 394
+Hello Corinna,
 
-Here is a --version patch for mount.  I also alphabetized longopts,
-opts, and the getopt case statement.
+Here are the patches to seteuid etc.. discussed recently.
 
-ChangeLog:
+Pierre
 
-2002-05-22  Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
-	* mount.cc (version) New global variable.
-	(usage) Standardize usage output. Accomodate new version option.
-	(print_version) New function.
-	(longopts) Accomodate new version option.
-	(opts) Ditto.
-	(main) Ditto.
+2002-05-22  Pierre Humblet <pierre.humblet@ieee.org>
 
----559023410-1073122922-1022125751=:600
-Content-Type: TEXT/PLAIN; charset=US-ASCII; name="mount.cc-patch"
-Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.CYG.4.44.0205222249110.600@iocc.com>
-Content-Description: 
-Content-Disposition: attachment; filename="mount.cc-patch"
-Content-length: 7011
+	* syscalls.cc (seteuid): Do not take allow_ntsec into account. 
+	Attempt to use an existing or new token even when the uid
+	matches orig_uid, but the gid is not in the process token. 
+	Major reorganization after several incremental changes.
+	(setegid): Do not take allow_ntsec into account. Minor
+	reorganization after several incremental changes.
+	* security.cc (create_token): Call __sec_user() instead of
+	sec_user() to remove dependence on allow_ntsec. Verify that
+	the returned sd is non-null.
 
-LS0tIG1vdW50LmNjLW9yaWcJV2VkIE1heSAyMiAyMjoxNzowMiAyMDAyDQor
-KysgbW91bnQuY2MJV2VkIE1heSAyMiAyMjo0NToxNiAyMDAyDQpAQCAtMSw2
-ICsxLDYgQEANCiAvKiBtb3VudC5jYw0KIA0KLSAgIENvcHlyaWdodCAxOTk2
-LCAxOTk3LCAxOTk4LCAxOTk5LCAyMDAwLCAyMDAxIFJlZCBIYXQsIEluYy4N
-CisgICBDb3B5cmlnaHQgMTk5NiwgMTk5NywgMTk5OCwgMTk5OSwgMjAwMCwg
-MjAwMSwgMjAwMiBSZWQgSGF0LCBJbmMuDQogDQogVGhpcyBmaWxlIGlzIHBh
-cnQgb2YgQ3lnd2luLg0KIA0KQEAgLTMzLDYgKzMzLDcgQEAgc3RhdGljIGlu
-dCBtb3VudF9hbHJlYWR5X2V4aXN0cyAoY29uc3QgYw0KIC8vIHN0YXRpYyBz
-aG9ydCBjcmVhdGVfbWlzc2luZ19kaXJzID0gRkFMU0U7DQogc3RhdGljIHNo
-b3J0IGZvcmNlID0gRkFMU0U7DQogDQorc3RhdGljIGNvbnN0IGNoYXIgdmVy
-c2lvbltdID0gIiRSZXZpc2lvbjogMS4xNCAkIjsNCiBzdGF0aWMgY29uc3Qg
-Y2hhciAqcHJvZ25hbWU7DQogDQogc3RhdGljIHZvaWQNCkBAIC0xMTEsNDYg
-KzExMiw3MyBAQCBkb19tb3VudCAoY29uc3QgY2hhciAqZGV2LCBjb25zdCBj
-aGFyICp3DQogDQogc3RhdGljIHN0cnVjdCBvcHRpb24gbG9uZ29wdHNbXSA9
-DQogew0KLSAgeyJoZWxwIiwgbm9fYXJndW1lbnQsIE5VTEwsICdoJyB9LA0K
-ICAgeyJiaW5hcnkiLCBub19hcmd1bWVudCwgTlVMTCwgJ2InfSwNCi0gIHsi
-Zm9yY2UiLCBub19hcmd1bWVudCwgTlVMTCwgJ2YnfSwNCi0gIHsic3lzdGVt
-Iiwgbm9fYXJndW1lbnQsIE5VTEwsICdzJ30sDQotICB7InRleHQiLCBub19h
-cmd1bWVudCwgTlVMTCwgJ3QnfSwNCi0gIHsidXNlciIsIG5vX2FyZ3VtZW50
-LCBOVUxMLCAndSd9LA0KLSAgeyJleGVjdXRhYmxlIiwgbm9fYXJndW1lbnQs
-IE5VTEwsICd4J30sDQotICB7Im5vLWV4ZWN1dGFibGUiLCBub19hcmd1bWVu
-dCwgTlVMTCwgJ0UnfSwNCiAgIHsiY2hhbmdlLWN5Z2RyaXZlLXByZWZpeCIs
-IG5vX2FyZ3VtZW50LCBOVUxMLCAnYyd9LA0KICAgeyJjeWd3aW4tZXhlY3V0
-YWJsZSIsIG5vX2FyZ3VtZW50LCBOVUxMLCAnWCd9LA0KLSAgeyJzaG93LWN5
-Z2RyaXZlLXByZWZpeCIsIG5vX2FyZ3VtZW50LCBOVUxMLCAncCd9LA0KKyAg
-eyJleGVjdXRhYmxlIiwgbm9fYXJndW1lbnQsIE5VTEwsICd4J30sDQorICB7
-ImZvcmNlIiwgbm9fYXJndW1lbnQsIE5VTEwsICdmJ30sDQorICB7ImhlbHAi
-LCBub19hcmd1bWVudCwgTlVMTCwgJ2gnIH0sDQogICB7ImltcG9ydC1vbGQt
-bW91bnRzIiwgbm9fYXJndW1lbnQsIE5VTEwsICdpJ30sDQogICB7Im1vdW50
-LWNvbW1hbmRzIiwgbm9fYXJndW1lbnQsIE5VTEwsICdtJ30sDQorICB7Im5v
-LWV4ZWN1dGFibGUiLCBub19hcmd1bWVudCwgTlVMTCwgJ0UnfSwNCisgIHsi
-c2hvdy1jeWdkcml2ZS1wcmVmaXgiLCBub19hcmd1bWVudCwgTlVMTCwgJ3An
-fSwNCisgIHsic3lzdGVtIiwgbm9fYXJndW1lbnQsIE5VTEwsICdzJ30sDQor
-ICB7InRleHQiLCBub19hcmd1bWVudCwgTlVMTCwgJ3QnfSwNCisgIHsidXNl
-ciIsIG5vX2FyZ3VtZW50LCBOVUxMLCAndSd9LA0KKyAgeyJ2ZXJzaW9uIiwg
-bm9fYXJndW1lbnQsIE5VTEwsICd2J30sDQogICB7TlVMTCwgMCwgTlVMTCwg
-MH0NCiB9Ow0KIA0KLXN0YXRpYyBjaGFyIG9wdHNbXSA9ICJoYmZzdHV4WEVw
-aWNtIjsNCitzdGF0aWMgY2hhciBvcHRzW10gPSAiYmNmaGltcHN0dXZ4RVgi
-Ow0KIA0KIHN0YXRpYyB2b2lkDQotdXNhZ2UgKHZvaWQpDQordXNhZ2UgKEZJ
-TEUgKndoZXJlID0gc3RkZXJyKQ0KIHsNCi0gIGZwcmludGYgKHN0ZGVyciwg
-IlVzYWdlOiAlcyBbT1BUSU9OXSBbPHdpbjMycGF0aD4gPHBvc2l4cGF0aD5d
-XG5cDQorICBmcHJpbnRmICh3aGVyZSwgIlVzYWdlOiAlcyBbT1BUSU9OXSBb
-PHdpbjMycGF0aD4gPHBvc2l4cGF0aD5dXG5cDQogICAtYiwgLS1iaW5hcnkg
-ICAgICAgICAgICAgICAgICB0ZXh0IGZpbGVzIGFyZSBlcXVpdmFsZW50IHRv
-IGJpbmFyeSBmaWxlc1xuXA0KIAkJCQkobmV3bGluZSA9IFxcbilcblwNCiAg
-IC1jLCAtLWNoYW5nZS1jeWdkcml2ZS1wcmVmaXggIGNoYW5nZSB0aGUgY3ln
-ZHJpdmUgcGF0aCBwcmVmaXggdG8gPHBvc2l4cGF0aD5cblwNCiAgIC1mLCAt
-LWZvcmNlICAgICAgICAgICAgICAgICAgIGZvcmNlIG1vdW50LCBkb24ndCB3
-YXJuIGFib3V0IG1pc3NpbmcgbW91bnRcblwNCiAJCQkJcG9pbnQgZGlyZWN0
-b3JpZXNcblwNCisgIC1oLCAtLWhlbHAgICAgICAgICAgICAgICAgICAgIG91
-dHB1dCB1c2FnZSBpbmZvcm1hdGlvbiBhbmQgZXhpdFxuXA0KICAgLWksIC0t
-aW1wb3J0LW9sZC1tb3VudHMgICAgICAgY29weSBvbGQgcmVnaXN0cnkgbW91
-bnQgdGFibGUgbW91bnRzIGludG8gdGhlXG5cDQogICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICBjdXJyZW50IG1vdW50IGFyZWFzXG5cDQorICAt
-bSwgLS1tb3VudC1jb21tYW5kcyAgICAgICAgICB3cml0ZSBtb3VudCBjb21t
-YW5kcyB0byByZXBsYWNlIHVzZXIgYW5kXG5cDQorCQkJCXN5c3RlbSBtb3Vu
-dCBwb2ludHMgYW5kIGN5Z2RyaXZlIHByZWZpeGVzXG5cDQogICAtcCwgLS1z
-aG93LWN5Z2RyaXZlLXByZWZpeCAgICBzaG93IHVzZXIgYW5kL29yIHN5c3Rl
-bSBjeWdkcml2ZSBwYXRoIHByZWZpeFxuXA0KICAgLXMsIC0tc3lzdGVtICAg
-ICAoZGVmYXVsdCkgICAgYWRkIHN5c3RlbS13aWRlIG1vdW50IHBvaW50XG5c
-DQogICAtdCwgLS10ZXh0ICAgICAgIChkZWZhdWx0KSAgICB0ZXh0IGZpbGVz
-IGdldCBcXHJcXG4gbGluZSBlbmRpbmdzXG5cDQogICAtdSwgLS11c2VyICAg
-ICAgICAgICAgICAgICAgICBhZGQgdXNlci1vbmx5IG1vdW50IHBvaW50XG5c
-DQorICAtdiwgLS12ZXJzaW9uICAgICAgICAgICAgICAgICBvdXRwdXQgdmVy
-c2lvbiBpbmZvcm1hdGlvbiBhbmQgZXhpdFxuXA0KICAgLXgsIC0tZXhlY3V0
-YWJsZSAgICAgICAgICAgICAgdHJlYXQgYWxsIGZpbGVzIHVuZGVyIG1vdW50
-IHBvaW50IGFzIGV4ZWN1dGFibGVzXG5cDQorICAtRSwgLS1uby1leGVjdXRh
-YmxlICAgICAgICAgICB0cmVhdCBhbGwgZmlsZXMgdW5kZXIgbW91bnQgcG9p
-bnQgYXMgXG5cDQorCQkJCW5vbi1leGVjdXRhYmxlc1xuXA0KICAgLVgsIC0t
-Y3lnd2luLWV4ZWN1dGFibGUgICAgICAgdHJlYXQgYWxsIGZpbGVzIHVuZGVy
-IG1vdW50IHBvaW50IGFzIGN5Z3dpblxuXA0KIAkJCQlleGVjdXRhYmxlc1xu
-XA0KLSAgLW0sIC0tbW91bnQtY29tbWFuZHMgICAgICAgICAgd3JpdGUgbW91
-bnQgY29tbWFuZHMgdG8gcmVwbGFjZSB1c2VyIGFuZFxuXA0KLQkJCQlzeXN0
-ZW0gbW91bnQgcG9pbnRzIGFuZCBjeWdkcml2ZSBwcmVmaXhlc1xuXA0KICIs
-IHByb2duYW1lKTsNCi0gIGV4aXQgKDEpOw0KKyAgZXhpdCAod2hlcmUgPT0g
-c3RkZXJyID8gMSA6IDApOw0KK30NCisNCitzdGF0aWMgdm9pZA0KK3ByaW50
-X3ZlcnNpb24gKCkNCit7DQorICBjb25zdCBjaGFyICp2ID0gc3RyY2hyICh2
-ZXJzaW9uLCAnOicpOw0KKyAgaW50IGxlbjsNCisgIGlmICghdikNCisgICAg
-ew0KKyAgICAgIHYgPSAiPyI7DQorICAgICAgbGVuID0gMTsNCisgICAgfQ0K
-KyAgZWxzZQ0KKyAgICB7DQorICAgICAgdiArPSAyOw0KKyAgICAgIGxlbiA9
-IHN0cmNociAodiwgJyAnKSAtIHY7DQorICAgIH0NCisgIHByaW50ZiAoIlwN
-CislcyAoY3lnd2luKSAlLipzXG5cDQorRmlsZXN5c3RlbSBVdGlsaXR5XG5c
-DQorQ29weXJpZ2h0IDE5OTYsIDE5OTcsIDE5OTgsIDE5OTksIDIwMDAsIDIw
-MDEsIDIwMDIgUmVkIEhhdCwgSW5jLlxuXA0KK0NvbXBpbGVkIG9uICVzIiwg
-cHJvZ25hbWUsIGxlbiwgdiwgX19EQVRFX18pOw0KIH0NCiANCiBpbnQNCkBA
-IC0xNjgsNyArMTk2LDEzIEBAIG1haW4gKGludCBhcmdjLCBjaGFyICoqYXJn
-dikNCiAgICAgc2F3X21vdW50X2NvbW1hbmRzDQogICB9IGRvX3doYXQgPSBu
-YWRhOw0KIA0KLSAgcHJvZ25hbWUgPSBhcmd2WzBdOw0KKyAgcHJvZ25hbWUg
-PSBzdHJyY2hyIChhcmd2WzBdLCAnLycpOw0KKyAgaWYgKHByb2duYW1lID09
-IE5VTEwpDQorICAgIHByb2duYW1lID0gc3RycmNociAoYXJndlswXSwgJ1xc
-Jyk7DQorICBpZiAocHJvZ25hbWUgPT0gTlVMTCkNCisgICAgcHJvZ25hbWUg
-PSBhcmd2WzBdOw0KKyAgZWxzZQ0KKyAgICBwcm9nbmFtZSsrOw0KIA0KICAg
-aWYgKGFyZ2MgPT0gMSkNCiAgICAgew0KQEAgLTE5MSwxMiArMjI1LDIxIEBA
-IG1haW4gKGludCBhcmdjLCBjaGFyICoqYXJndikNCiAgICAgICBjYXNlICdm
-JzoNCiAJZm9yY2UgPSBUUlVFOw0KIAlicmVhazsNCisgICAgICBjYXNlICdo
-JzoNCisJdXNhZ2UgKHN0ZG91dCk7DQorCWJyZWFrOw0KICAgICAgIGNhc2Ug
-J2knOg0KIAlpZiAoZG9fd2hhdCA9PSBuYWRhKQ0KIAkgIGRvX3doYXQgPSBz
-YXdfaW1wb3J0X29sZF9tb3VudHM7DQogCWVsc2UNCiAJICB1c2FnZSAoKTsN
-CiAJYnJlYWs7DQorICAgICAgY2FzZSAnbSc6DQorCWlmIChkb193aGF0ID09
-IG5hZGEpDQorCSAgZG9fd2hhdCA9IHNhd19tb3VudF9jb21tYW5kczsNCisJ
-ZWxzZQ0KKwkgIHVzYWdlICgpOw0KKwlicmVhazsNCiAgICAgICBjYXNlICdw
-JzoNCiAJaWYgKGRvX3doYXQgPT0gbmFkYSkNCiAJICBkb193aGF0ID0gc2F3
-X3Nob3dfY3lnZHJpdmVfcHJlZml4Ow0KQEAgLTIxMyw4ICsyNTYsOSBAQCBt
-YWluIChpbnQgYXJnYywgY2hhciAqKmFyZ3YpDQogCWZsYWdzICY9IH5NT1VO
-VF9TWVNURU07DQogCWRlZmF1bHRfZmxhZyA9IDA7DQogCWJyZWFrOw0KLSAg
-ICAgIGNhc2UgJ1gnOg0KLQlmbGFncyB8PSBNT1VOVF9DWUdXSU5fRVhFQzsN
-CisgICAgICBjYXNlICd2JzoNCisJcHJpbnRfdmVyc2lvbiAoKTsNCisJcmV0
-dXJuIDA7DQogCWJyZWFrOw0KICAgICAgIGNhc2UgJ3gnOg0KIAlmbGFncyB8
-PSBNT1VOVF9FWEVDOw0KQEAgLTIyMiwxMSArMjY2LDggQEAgbWFpbiAoaW50
-IGFyZ2MsIGNoYXIgKiphcmd2KQ0KICAgICAgIGNhc2UgJ0UnOg0KIAlmbGFn
-cyB8PSBNT1VOVF9OT1RFWEVDOw0KIAlicmVhazsNCi0gICAgICBjYXNlICdt
-JzoNCi0JaWYgKGRvX3doYXQgPT0gbmFkYSkNCi0JICBkb193aGF0ID0gc2F3
-X21vdW50X2NvbW1hbmRzOw0KLQllbHNlDQotCSAgdXNhZ2UgKCk7DQorICAg
-ICAgY2FzZSAnWCc6DQorCWZsYWdzIHw9IE1PVU5UX0NZR1dJTl9FWEVDOw0K
-IAlicmVhazsNCiAgICAgICBkZWZhdWx0Og0KIAl1c2FnZSAoKTsNCg==
+--=====================_1022140336==_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment; filename="syscalls.cc.diff"
+Content-length: 16744
 
----559023410-1073122922-1022125751=:600--
+--- syscalls.cc.orig	2002-05-16 05:30:48.000000000 -0400
++++ syscalls.cc	2002-05-21 20:30:22.000000000 -0400
+@@ -1947,274 +1947,248 @@
+ extern "C" int
+ seteuid (__uid16_t uid)
+ {
++  if (!wincap.has_security ()) return 0;
++
++  if (uid =3D=3D ILLEGAL_UID)
++    {
++      debug_printf ("new euid =3D=3D illegal euid, nothing happens");
++      return 0;
++    }
++
+   sigframe thisframe (mainthread);
+-  if (wincap.has_security ())
++  DWORD ulen =3D UNLEN + 1;
++  DWORD dlen =3D INTERNET_MAX_HOST_NAME_LENGTH + 1;
++  char orig_username[UNLEN + 1];
++  char orig_domain[INTERNET_MAX_HOST_NAME_LENGTH + 1];
++  char username[UNLEN + 1];
++  char domain[INTERNET_MAX_HOST_NAME_LENGTH + 1];
++  cygsid usersid, pgrpsid;
++  HANDLE ptok, sav_token;
++  BOOL sav_impersonated, sav_token_is_internal_token;
++  BOOL process_ok, explicitly_created_token =3D FALSE;
++  struct passwd * pw_new, * pw_cur;
++  cygheap_user user;
++  PSID origpsid, psid2 =3D NO_SID;
++
++  debug_printf ("uid: %d myself->gid: %d", uid, myself->gid);
++
++  pw_new =3D getpwuid (uid);
++  if (!usersid.getfrompw (pw_new) ||
++      (!pgrpsid.getfromgr (getgrgid (myself->gid))))
+     {
+-      char orig_username[UNLEN + 1];
+-      char orig_domain[INTERNET_MAX_HOST_NAME_LENGTH + 1];
+-      char username[UNLEN + 1];
+-      DWORD ulen =3D UNLEN + 1;
+-      char domain[INTERNET_MAX_HOST_NAME_LENGTH + 1];
+-      DWORD dlen =3D INTERNET_MAX_HOST_NAME_LENGTH + 1;
+-      SID_NAME_USE use;
+-
+-      if (uid =3D=3D ILLEGAL_UID || uid =3D=3D myself->uid)
+-	{
+-	  debug_printf ("new euid =3D=3D current euid, nothing happens");
+-	  return 0;
+-	}
+-      struct passwd *pw_new =3D getpwuid (uid);
+-      if (!pw_new)
+-	{
+-	  set_errno (EINVAL);
+-	  return -1;
++      set_errno (EINVAL);
++      return -1;
++    }
++  /* Save current information */
++  sav_token =3D cygheap->user.token;
++  sav_impersonated =3D cygheap->user.impersonated;
++  char *env;
++  orig_username[0] =3D orig_domain[0] =3D '\0';
++  if ((env =3D getenv ("USERNAME")))
++    strlcpy (orig_username, env, sizeof(orig_username));
++  if ((env =3D getenv ("USERDOMAIN")))
++    strlcpy (orig_domain, env, sizeof(orig_domain));
++
++  RevertToSelf();
++  if (!OpenProcessToken (GetCurrentProcess (),
++			 TOKEN_QUERY | TOKEN_ADJUST_DEFAULT, &ptok))
++    {
++      __seterrno ();
++      goto failed;
++    }
++  /* Verify if the process token is suitable.
++     Currently we do not try to differentiate between
++	 internal tokens and others */
++  process_ok =3D verify_token(ptok, usersid, pgrpsid);
++  debug_printf("Process token %sverified", process_ok?"":"not ");
++  if (process_ok)
++    {
++      if (cygheap->user.token =3D=3D INVALID_HANDLE_VALUE ||
++	  ! cygheap->user.impersonated )
++        {
++	  CloseHandle (ptok);
++	  return 0; /* No change */
+ 	}
++      else cygheap->user.impersonated =3D FALSE;
++    }
+
+-      cygsid tok_usersid;
+-      DWORD siz;
+-
+-      char *env;
+-      orig_username[0] =3D orig_domain[0] =3D '\0';
+-      if ((env =3D getenv ("USERNAME")))
+-	strncat (orig_username, env, UNLEN + 1);
+-      if ((env =3D getenv ("USERDOMAIN")))
+-	strncat (orig_domain, env, INTERNET_MAX_HOST_NAME_LENGTH + 1);
+-      if (uid =3D=3D cygheap->user.orig_uid)
+-	{
+-
+-	  debug_printf ("RevertToSelf () (uid =3D=3D orig_uid, token=3D%d)",
+-			cygheap->user.token);
+-	  RevertToSelf ();
+-	  if (cygheap->user.token !=3D INVALID_HANDLE_VALUE)
+-	    cygheap->user.impersonated =3D FALSE;
+-
+-	  HANDLE ptok =3D INVALID_HANDLE_VALUE;
+-	  if (!OpenProcessToken (GetCurrentProcess (), TOKEN_QUERY, &ptok))
+-	    debug_printf ("OpenProcessToken(): %E\n");
+-	  else if (!GetTokenInformation (ptok, TokenUser, &tok_usersid,
+-					 sizeof tok_usersid, &siz))
+-	    debug_printf ("GetTokenInformation(): %E");
+-	  else if (!LookupAccountSid (NULL, tok_usersid, username, &ulen,
+-				      domain, &dlen, &use))
+-	    debug_printf ("LookupAccountSid(): %E");
+-	  else
+-	    {
+-	      setenv ("USERNAME", username, 1);
+-	      setenv ("USERDOMAIN", domain, 1);
+-	    }
+-	  if (ptok !=3D INVALID_HANDLE_VALUE)
++  if (!process_ok && cygheap->user.token !=3D INVALID_HANDLE_VALUE)
++    {
++      /* Verify if the current tokem is suitable */
++      BOOL token_ok =3D verify_token (cygheap->user.token, usersid, pgrpsi=
+d,
++				    & sav_token_is_internal_token);
++      debug_printf("Thread token %d %sverified",
++		   cygheap->user.token, token_ok?"":"not ");
++      if (token_ok)
++        {
++	  /* Return if current token is valid */
++	  if (cygheap->user.impersonated)
++	  {
+ 	    CloseHandle (ptok);
++	    if (!ImpersonateLoggedOnUser (cygheap->user.token))
++	      system_printf ("Impersonating in seteuid failed: %E");
++	    return 0; /* No change */
++	  }
+ 	}
++      else cygheap->user.token =3D INVALID_HANDLE_VALUE;
++    }
++
++  /* Set process def dacl to allow access to impersonated token */
++  char dacl_buf[MAX_DACL_LEN(5)];
++  if (usersid !=3D (origpsid =3D  cygheap->user.orig_sid())) psid2 =3D use=
+rsid;
++  if (sec_acl ((PACL) dacl_buf, FALSE, origpsid, psid2))
++    {
++      TOKEN_DEFAULT_DACL tdacl;
++      tdacl.DefaultDacl =3D (PACL) dacl_buf;
++      if (!SetTokenInformation (ptok, TokenDefaultDacl,
++				&tdacl, sizeof dacl_buf))
++	debug_printf ("SetTokenInformation"
++		      "(TokenDefaultDacl): %E");
++    }
++  CloseHandle (ptok);
++
++  if (!process_ok && cygheap->user.token =3D=3D INVALID_HANDLE_VALUE)
++    {
++      /* If no impersonation token is available, try to
++	 authenticate using NtCreateToken() or subauthentication. */
++      cygheap->user.token =3D create_token (usersid, pgrpsid);
++      if (cygheap->user.token !=3D INVALID_HANDLE_VALUE)
++	explicitly_created_token =3D TRUE;
+       else
+-	{
+-	  cygsid usersid, pgrpsid, origsid;
+-	  HANDLE sav_token =3D INVALID_HANDLE_VALUE;
+-	  BOOL sav_impersonation;
+-	  BOOL current_token_is_internal_token =3D FALSE;
+-	  BOOL explicitely_created_token =3D FALSE;
+-
+-	  struct __group16 *gr =3D getgrgid (myself->gid);
+-	  debug_printf ("myself->gid: %d, gr: %d", myself->gid, gr);
+-
+-	  usersid.getfrompw (pw_new);
+-	  pgrpsid.getfromgr (gr);
+-
+-	  /* Only when ntsec is ON! */
+-	  /* Check if new user =3D=3D user of impersonation token and
+-	     - if reasonable - new pgrp =3D=3D pgrp of impersonation token. */
+-	  if (allow_ntsec && cygheap->user.token !=3D INVALID_HANDLE_VALUE)
+-	    {
+-	      if (!verify_token(cygheap->user.token, usersid, pgrpsid,
+-				& current_token_is_internal_token))
+-		{
+-		  /* If not, RevertToSelf and close old token. */
+-		  debug_printf ("tsid !=3D usersid");
+-		  RevertToSelf ();
+-		  sav_token =3D cygheap->user.token;
+-		  sav_impersonation =3D cygheap->user.impersonated;
+-		  cygheap->user.token =3D INVALID_HANDLE_VALUE;
+-		  cygheap->user.impersonated =3D FALSE;
+-		}
+-	    }
+-
+-	  /* Only when ntsec is ON! */
+-	  /* If no impersonation token is available, try to
+-	     authenticate using NtCreateToken() or subauthentication. */
+-	  if (allow_ntsec && cygheap->user.token =3D=3D INVALID_HANDLE_VALUE)
+-	    {
+-	      HANDLE ptok =3D INVALID_HANDLE_VALUE;
+-
+-	      ptok =3D create_token (usersid, pgrpsid);
+-	      if (ptok !=3D INVALID_HANDLE_VALUE)
+-		explicitely_created_token =3D TRUE;
+-	      else
+-		{
+-		  /* create_token failed. Try subauthentication. */
+-		  debug_printf ("create token failed, try subauthentication.");
+-		  ptok =3D subauth (pw_new);
+-		}
+-	      if (ptok !=3D INVALID_HANDLE_VALUE)
+-		{
+-		  cygwin_set_impersonation_token (ptok);
+-		  /* If sav_token was internally created, destroy it. */
+-		  if (sav_token !=3D INVALID_HANDLE_VALUE &&
+-		      current_token_is_internal_token)
+-		    CloseHandle (sav_token);
+-		}
+-	      else if (sav_token !=3D INVALID_HANDLE_VALUE)
+-		cygheap->user.token =3D sav_token;
+-	    }
+-	  /* If no impersonation is active but an impersonation
+-	     token is available, try to impersonate. */
+-	  if (cygheap->user.token !=3D INVALID_HANDLE_VALUE &&
+-	      !cygheap->user.impersonated)
+-	    {
+-	      debug_printf ("Impersonate (uid =3D=3D %d)", uid);
+-	      RevertToSelf ();
+-
+-	      /* If the token was explicitely created, all information has
+-		 already been set correctly. */
+-	      if (!explicitely_created_token)
+-		{
+-		  /* Try setting owner to same value as user. */
+-		  if (usersid &&
+-		      !SetTokenInformation (cygheap->user.token, TokenOwner,
+-					    &usersid, sizeof usersid))
+-		    debug_printf ("SetTokenInformation(user.token, "
+-				  "TokenOwner): %E");
+-		  /* Try setting primary group in token to current group
+-		     if token not explicitely created. */
+-		  if (pgrpsid &&
+-		      !SetTokenInformation (cygheap->user.token,
+-					    TokenPrimaryGroup,
+-					    &pgrpsid, sizeof pgrpsid))
+-		    debug_printf ("SetTokenInformation(user.token, "
+-				  "TokenPrimaryGroup): %E");
+-		}
+-	      /* Set process def dacl to allow access to impersonated token */
+-	      char dacl_buf[MAX_DACL_LEN(5)];
+-	      origsid =3D cygheap->user.orig_sid ();
+-	      if (usersid && origsid &&
+-		  sec_acl((PACL) dacl_buf, FALSE, origsid, usersid))
+-	        {
+-		  HANDLE ptok =3D INVALID_HANDLE_VALUE;
+-		  TOKEN_DEFAULT_DACL tdacl;
+-		  tdacl.DefaultDacl =3D (PACL) dacl_buf;
+-		  if (!OpenProcessToken (GetCurrentProcess (), TOKEN_ADJUST_DEFAULT,
+-					 &ptok))
+-		    debug_printf ("OpenProcessToken(): %E");
+-		  else
+-		    {
+-		      if (!SetTokenInformation (ptok, TokenDefaultDacl,
+-						&tdacl, sizeof dacl_buf))
+-			debug_printf ("SetTokenInformation"
+-				      "(TokenDefaultDacl): %E");
+-		    }
+-		  if (ptok !=3D INVALID_HANDLE_VALUE) CloseHandle (ptok);
+-		}
+-	      /* Now try to impersonate. */
+-	      if (!LookupAccountSid (NULL, usersid, username, &ulen,
+-				     domain, &dlen, &use))
+-		debug_printf ("LookupAccountSid (): %E");
+-	      else if (!ImpersonateLoggedOnUser (cygheap->user.token))
+-		system_printf ("Impersonating (%d) in set(e)uid failed: %E",
+-			       cygheap->user.token);
+-	      else
+-		{
+-		  cygheap->user.impersonated =3D TRUE;
+-		  setenv ("USERNAME", username, 1);
+-		  setenv ("USERDOMAIN", domain, 1);
+-		}
+-	    }
++        {
++	  /* create_token failed. Try subauthentication. */
++	  debug_printf ("create token failed, try subauthentication.");
++	  cygheap->user.token =3D subauth (pw_new);
++	  if (cygheap->user.token =3D=3D INVALID_HANDLE_VALUE) goto failed;
+ 	}
++    }
+
+-      cygheap_user user;
+-      /* user.token is used in internal_getlogin () to determine if
+-	 impersonation is active. If so, the token is used for
+-	 retrieving user's SID. */
+-      user.token =3D cygheap->user.impersonated ? cygheap->user.token
+-					      : INVALID_HANDLE_VALUE;
+-      /* Unsetting these both env vars is necessary to get NetUserGetInfo()
+-	 called in internal_getlogin ().  Otherwise the wrong path is used
+-	 after a user switch, probably. */
+-      unsetenv ("HOMEDRIVE");
+-      unsetenv ("HOMEPATH");
+-      struct passwd *pw_cur =3D internal_getlogin (user);
+-      if (pw_cur !=3D pw_new)
+-	{
+-	  debug_printf ("Diffs!!! token: %d, cur: %d, new: %d, orig: %d",
+-			cygheap->user.token, pw_cur->pw_uid,
+-			pw_new->pw_uid, cygheap->user.orig_uid);
+-	  setenv ("USERNAME", orig_username, 1);
+-	  setenv ("USERDOMAIN", orig_domain, 1);
+-	  set_errno (EPERM);
+-	  return -1;
++  /* Lookup username and domain before impersonating,
++     LookupAccountSid() returns a different answer afterwards. */
++  SID_NAME_USE use;
++  if (!LookupAccountSid (NULL, usersid, username, &ulen,
++			 domain, &dlen, &use))
++    {
++      debug_printf ("LookupAccountSid (): %E");
++      __seterrno ();
++      goto failed;
++    }
++  /* If using the token, set info and impersonate */
++  if (! process_ok )
++    {
++      /* If the token was explicitly created, all information has
++	 already been set correctly. */
++      if (!explicitly_created_token)
++        {
++	  /* Try setting owner to same value as user. */
++	  if (!SetTokenInformation (cygheap->user.token, TokenOwner,
++				    &usersid, sizeof usersid))
++	    debug_printf ("SetTokenInformation(user.token, "
++			  "TokenOwner): %E");
++	  /* Try setting primary group in token to current group */
++	  if (!SetTokenInformation (cygheap->user.token,
++				    TokenPrimaryGroup,
++				    &pgrpsid, sizeof pgrpsid))
++	    debug_printf ("SetTokenInformation(user.token, "
++			  "TokenPrimaryGroup): %E");
++	}
++      /* Now try to impersonate. */
++      if (!ImpersonateLoggedOnUser (cygheap->user.token))
++        {
++	  debug_printf ("ImpersonateLoggedOnUser %E");
++	  __seterrno ();
++	  goto failed;
+ 	}
++      cygheap->user.impersonated =3D TRUE;
++    }
++
++  /* user.token is used in internal_getlogin () to determine if
++     impersonation is active. If so, the token is used for
++     retrieving user's SID. */
++  user.token =3D cygheap->user.impersonated ? cygheap->user.token
++                                          : INVALID_HANDLE_VALUE;
++  /* Unsetting these two env vars is necessary to get NetUserGetInfo()
++     called in internal_getlogin ().  Otherwise the wrong path is used
++     after a user switch, probably. */
++  unsetenv ("HOMEDRIVE");
++  unsetenv ("HOMEPATH");
++  setenv ("USERDOMAIN", domain, 1);
++  setenv ("USERNAME", username, 1);
++  pw_cur =3D internal_getlogin (user);
++  if (pw_cur =3D=3D pw_new)
++    {
++      /* If sav_token was internally created and is replaced, destroy it. =
+*/
++      if (sav_token !=3D INVALID_HANDLE_VALUE &&
++	  sav_token !=3D cygheap->user.token &&
++	  sav_token_is_internal_token)
++	CloseHandle (sav_token);
+       myself->uid =3D uid;
+       cygheap->user =3D user;
++      return 0;
+     }
+-  else
+-    set_errno (ENOSYS);
+-  debug_printf ("real: %d, effective: %d", cygheap->user.real_uid, myself-=
+>uid);
+-  return 0;
++  debug_printf ("Diffs!!! token: %d, cur: %d, new: %d, orig: %d",
++		cygheap->user.token, pw_cur->pw_uid,
++		pw_new->pw_uid, cygheap->user.orig_uid);
++  set_errno (EPERM);
++
++ failed:
++  setenv ("USERNAME", orig_username, 1);
++  setenv ("USERDOMAIN", orig_domain, 1);
++  cygheap->user.token =3D sav_token;
++  cygheap->user.impersonated =3D sav_impersonated;
++  if ( cygheap->user.token !=3D INVALID_HANDLE_VALUE &&
++       cygheap->user.impersonated &&
++       !ImpersonateLoggedOnUser (cygheap->user.token))
++    system_printf ("Impersonating in seteuid failed: %E");
++  return -1;
+ }
+
+ /* setegid: from System V.  */
+ extern "C" int
+ setegid (__gid16_t gid)
+ {
++  if ((!wincap.has_security ()) ||
++      (gid =3D=3D ILLEGAL_GID))
++    return 0;
++
+   sigframe thisframe (mainthread);
+-  if (wincap.has_security ())
+-    {
+-      if (gid !=3D ILLEGAL_GID)
+-	{
+-	  struct __group16 *gr;
++  cygsid gsid;
++  HANDLE ptok;
+
+-	  if (!(gr =3D getgrgid (gid)))
+-	    {
+-	      set_errno (EINVAL);
+-	      return -1;
+-	    }
+-	  myself->gid =3D gid;
+-	  if (allow_ntsec)
+-	    {
+-	      cygsid gsid;
+-	      HANDLE ptok;
+-
+-	      if (gsid.getfromgr (gr))
+-		{
+-		  /* Remove impersonation */
+-		  if (cygheap->user.token !=3D INVALID_HANDLE_VALUE
+-		      && cygheap->user.impersonated)
+-		    {
+-		      if (!SetTokenInformation (cygheap->user.token,
+-						TokenPrimaryGroup,
+-						&gsid, sizeof gsid))
+-			debug_printf ("SetTokenInformation(primary, "
+-				      "TokenPrimaryGroup): %E");
+-		      RevertToSelf ();
+-		    }
+-		  if (!OpenProcessToken (GetCurrentProcess (),
+-					 TOKEN_ADJUST_DEFAULT,
+-					 &ptok))
+-		    debug_printf ("OpenProcessToken(): %E\n");
+-		  else
+-		    {
+-		      if (!SetTokenInformation (ptok, TokenPrimaryGroup,
+-						&gsid, sizeof gsid))
+-			debug_printf ("SetTokenInformation(process, "
+-				      "TokenPrimaryGroup): %E");
+-		      CloseHandle (ptok);
+-		    }
+-		  if (cygheap->user.token !=3D INVALID_HANDLE_VALUE
+-		      && cygheap->user.impersonated)
+-		    ImpersonateLoggedOnUser (cygheap->user.token);
+-		}
+-	    }
+-	}
++  if (!(gsid.getfromgr (getgrgid (gid))))
++    {
++      set_errno (EINVAL);
++      return -1;
+     }
++  myself->gid =3D gid;
++
++  /* If impersonated, update primary group and revert */
++  if (cygheap->user.token !=3D INVALID_HANDLE_VALUE
++      && cygheap->user.impersonated)
++    {
++      if (!SetTokenInformation (cygheap->user.token,
++				TokenPrimaryGroup,
++				&gsid, sizeof gsid))
++	debug_printf ("SetTokenInformation(thread, "
++		      "TokenPrimaryGroup): %E");
++      RevertToSelf ();
++    }
++  if (!OpenProcessToken (GetCurrentProcess (),
++			 TOKEN_ADJUST_DEFAULT,
++			 &ptok))
++    debug_printf ("OpenProcessToken(): %E\n");
+   else
+-    set_errno (ENOSYS);
++    {
++      if (!SetTokenInformation (ptok, TokenPrimaryGroup,
++				&gsid, sizeof gsid))
++	debug_printf ("SetTokenInformation(process, "
++		      "TokenPrimaryGroup): %E");
++      CloseHandle (ptok);
++    }
++  if (cygheap->user.token !=3D INVALID_HANDLE_VALUE
++      && cygheap->user.impersonated
++      && !ImpersonateLoggedOnUser (cygheap->user.token))
++    system_printf ("Impersonating in setegid failed: %E");
+   return 0;
+ }
+
+
+--=====================_1022140336==_
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: attachment; filename="security.cc.diff"
+Content-length: 820
+
+--- security.cc.orig	2002-05-21 19:34:44.000000000 -0400
++++ security.cc	2002-05-21 19:39:12.000000000 -0400
+@@ -854,10 +854,11 @@
+   else
+     {
+       /* Set security descriptor and primary group */
+-      psa = sec_user (sa_buf, usersid);
+-      if (!SetSecurityDescriptorGroup (
+-                   (PSECURITY_DESCRIPTOR) psa->lpSecurityDescriptor,
+-                   special_pgrp?pgrpsid:well_known_null_sid, FALSE))
++      psa = __sec_user (sa_buf, usersid, TRUE);
++      if (psa->lpSecurityDescriptor && 
++	  !SetSecurityDescriptorGroup (
++	      (PSECURITY_DESCRIPTOR) psa->lpSecurityDescriptor,
++	      special_pgrp?pgrpsid:well_known_null_sid, FALSE))
+           debug_printf ("SetSecurityDescriptorGroup %E");
+       /* Convert to primary token. */
+       if (!DuplicateTokenEx (token, MAXIMUM_ALLOWED, psa,
+
+--=====================_1022140336==_--
