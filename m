@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2422-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 668 invoked by alias); 13 Jun 2002 22:29:52 -0000
+Return-Path: <cygwin-patches-return-2423-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 17441 invoked by alias); 13 Jun 2002 22:58:58 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,89 +7,88 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 585 invoked from network); 13 Jun 2002 22:29:51 -0000
-Message-ID: <3D091A96.2090505@netscape.net>
-Date: Thu, 13 Jun 2002 15:29:00 -0000
+Received: (qmail 17427 invoked from network); 13 Jun 2002 22:58:57 -0000
+Message-ID: <3D092144.7060209@netscape.net>
+Date: Thu, 13 Jun 2002 15:58:00 -0000
 From: Nicholas Wourms <nwourms@netscape.net>
 User-Agent: Mozilla/5.0 (Windows; U; Win 9x 4.90; en-US; rv:1.0rc2) Gecko/20020512 Netscape/7.0b1
 X-Accept-Language: en-us, en
 MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
-Subject: Patch to calls.texinfo
+Subject: More doco updates
 Content-Type: multipart/mixed;
- boundary="------------060008060103090000040201"
-X-SW-Source: 2002-q2/txt/msg00405.txt.bz2
+ boundary="------------050708040403040607080703"
+X-SW-Source: 2002-q2/txt/msg00406.txt.bz2
 
 
---------------060008060103090000040201
+--------------050708040403040607080703
 Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Transfer-Encoding: 7bit
-Content-length: 229
+Content-length: 472
 
-Chris,
+Hi,
 
-I updated calls.texinfo to reflect the implimentation of pthreads 
-functions that have been implemented.  You said no changelog entry was 
-necessary for "Documentation", as such I have not included one.
+This is an update to cvs.html, which shows the examples with the new 
+prompt style.  It also provides clarification on the cvs update 
+procedure, since "cvs update" alone will cause the entire src tree to be 
+pulled if you have "update -dP" in your ".cvsrc" file.  I've seen more 
+then a few repositories which encourage people to keep that setting, so 
+I have revised the update procedure to use a method which Robert 
+reccommended the other day.
+
 
 Cheers,
 Nicholas
 
---------------060008060103090000040201
-Content-Type: text/plain;
- name="calls.texinfo.diff"
+--------------050708040403040607080703
+Content-Type: text/html;
+ name="cvs.html.diff"
 Content-Transfer-Encoding: 7bit
 Content-Disposition: inline;
- filename="calls.texinfo.diff"
-Content-length: 2511
+ filename="cvs.html.diff"
+Content-length: 1303
 
-Index: calls.texinfo
+Index: cvs.html
 ===================================================================
-RCS file: /cvs/src/src/winsup/doc/calls.texinfo,v
-retrieving revision 1.3
-diff -u -3 -p -u -p -r1.3 calls.texinfo
---- calls.texinfo   20 Jul 2000 11:04:33 -0000  1.3
-+++ calls.texinfo   13 Jun 2002 22:24:34 -0000
-@@ -405,12 +405,12 @@ net release.)}
+RCS file: /cvs/cygwin/htdocs/cvs.html,v
+retrieving revision 1.13
+diff -u -3 -p -u -p -r1.13 cvs.html
+--- cvs.html    7 Jan 2002 16:13:16 -0000   1.13
++++ cvs.html    13 Jun 2002 22:47:32 -0000
+@@ -32,7 +32,7 @@ what password to use.  The password is t
+ <tt>anoncvs </tt>:</p>
  
- @item Synchronization (Section 11)
- @itemize @code
--@item pthread_cond_broadcast: P96 11.4.3.1 -- unimplemented
--@item pthread_cond_destroy: P96 11.4.2.1 -- unimplemented
--@item pthread_cond_init: P96 11.4.2.1 -- unimplemented
--@item pthread_cond_signal: P96 11.4.3.1 -- unimplemented
--@item pthread_cond_timedwait: P96 11.4.4.1 -- unimplemented
--@item pthread_cond_wait: P96 11.4.4.1 -- unimplemented
-+@item pthread_cond_broadcast: P96 11.4.3.1
-+@item pthread_cond_destroy: P96 11.4.2.1
-+@item pthread_cond_init: P96 11.4.2.1
-+@item pthread_cond_signal: P96 11.4.3.1
-+@item pthread_cond_timedwait: P96 11.4.4.1
-+@item pthread_cond_wait: P96 11.4.4.1
- @item pthread_condattr_destroy: P96 11.4.1.1 -- unimplemented
- @item pthread_condattr_getpshared: P96 11.4.1.1 -- unimplemented
- @item pthread_condattr_init: P96 11.4.1.1 -- unimplemented
-@@ -451,18 +451,18 @@ net release.)}
- @item pthread_attr_getschedparam: P96 13.5.1.1 -- unimplemented
- @item pthread_attr_getschedpolicy: P96 13.5.1.1 -- unimplemented
- @item pthread_attr_getscope: P96 13.5.1.1 -- unimplemented
--@item pthread_attr_setinheritsched: P96 13.5.1.1 -- unimplemented
-+@item pthread_attr_setinheritsched: P96 13.5.1.1
- @item pthread_attr_setschedparam: P96 13.5.1.1 -- unimplemented
- @item pthread_attr_setschedpolicy: P96 13.5.1.1 -- unimplemented
- @item pthread_attr_setscope: P96 13.5.1.1 -- unimplemented
--@item pthread_getschedparam: P96 13.5.2.1 -- unimplemented
-+@item pthread_getschedparam: P96 13.5.2.1
- @item pthread_mutex_getprioceiling: P96 13.6.2.1 -- unimplemented
- @item pthread_mutex_setprioceiling: P96 13.6.2.1 -- unimplemented
- @item pthread_mutexattr_getprioceiling: P96 13.6.1.1 -- unimplemented
- @item pthread_mutexattr_getprotocol: P96 13.6.1.1 -- unimplemented
- @item pthread_mutexattr_setprioceiling: P96 13.6.1.1 -- unimplemented
- @item pthread_mutexattr_setprotocol: P96 13.6.1.1 -- unimplemented
--@item pthread_setschedparam: P96 13.5.2.1 -- unimplemented
-+@item pthread_setschedparam: P96 13.5.2.1
- @item sched_get_priority_max: P96 13.3.6.1 -- unimplemented
- @item sched_get_priority_min: P96 13.3.6.1 -- unimplemented
- @item sched_getparam: P96 13.3.2.1 -- unimplemented
+ <pre>
+-bash$ cvs login
++$ cvs login
+ (Logging in to anoncvs@sources.redhat.com)
+ CVS password: <i>anoncvs</i>
+ </pre>
+@@ -48,15 +48,20 @@ again.</p>
+ <p>To get the Cygwin sources, do this:
+ 
+ <pre>
+-bash$ cvs checkout winsup
++$ cvs checkout winsup
+ </pre>
+ 
+ <p>This will create a subdirectory called <tt>src</tt> and fill it
+-with the core sources.  Once you have the latest sources, "<tt>cvs
+-update</tt>" will get any changes since your last update.</p>
++with the core sources.</p>
+ 
+-<p>Please refer to the <A href="http://cygwin.com/faq/">
+-FAQ</a>
++<p>To keep your sources current with the latest changes in the CVS
++repository, switch to the <tt>src</tt> directory and do this:
++
++<pre>
++$ for f in *; do cvs -z3 up -Pd $f; done
++</pre>
++
++<p>Please refer to the <A href="http://cygwin.com/faq/">FAQ</A>
+ for information on building cygwin.  Hint: You need to configure and
+ build in a separate directory from the source.</p>
+ <pre>
 
---------------060008060103090000040201--
+--------------050708040403040607080703--
