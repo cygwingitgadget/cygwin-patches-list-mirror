@@ -1,29 +1,36 @@
-From: Christopher Faylor <cgf@redhat.com>
-To: "'cygwin-patches@cygwin.com'" <cygwin-patches@cygwin.com>
-Subject: Re: 'clear' does not clear entire screen (affects vim also)
-Date: Thu, 16 Nov 2000 19:03:00 -0000
-Message-id: <20001116220244.A25442@redhat.com>
-References: <F10D23B02E54D011A0AB0020AF9CEFE988FA0F@lynx.ceddec.com>
-X-SW-Source: 2000-q4/msg00017.html
+From: Egor Duda <deo@logos-m.ru>
+To: cygwin-patches@sourceware.cygnus.com
+Subject: typo in cygwin/Makefile.in breaks testsuite
+Date: Wed, 22 Nov 2000 07:16:00 -0000
+Message-id: <10530498554.20001122181511@logos-m.ru>
+X-SW-Source: 2000-q4/msg00018.html
 
-On Thu, Nov 16, 2000 at 04:08:18PM -0500, Town, Brad wrote:
->(This was sent to the cygwin-patches list rather than the cygwin list.)
->
->The ChangeLog entry is attached.  Is there a better way to do this sort of
->thing?  For example, should I send a ChangeLog entry along with proposed
->patches?  Should I send proposed patches to cygwin-patches instead?
+Hi!
 
-Yes, you should send the ChangeLog entry plus patch to cygwin-patches.
-That's the best way to handle cygwin patches.
+Index: winsup/cygwin/Makefile.in
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/Makefile.in,v
+retrieving revision 1.43
+diff -c -2 -r1.43 Makefile.in
+*** winsup/cygwin/Makefile.in 2000/11/16 20:32:27     1.43
+--- winsup/cygwin/Makefile.in 2000/11/22 15:09:38
+***************
+*** 186,190 ****
+  new-$(LIB_NAME): $(LIB_NAME)
+        $(DLLTOOL) --as=$(AS) --dllname new-$(DLL_NAME) --def $(DEF_FILE) --output-lib new-templib.a
+!       $(AR) rcv new-temp.a $(LIBCOS)
+        mv new-templib.a new-$(LIB_NAME)
+  
+--- 186,190 ----
+  new-$(LIB_NAME): $(LIB_NAME)
+        $(DLLTOOL) --as=$(AS) --dllname new-$(DLL_NAME) --def $(DEF_FILE) --output-lib new-templib.a
+!       $(AR) rcv new-templib.a $(LIBCOS)
+        mv new-templib.a new-$(LIB_NAME)
+  
 
->BTW, the copyright assignment form is almost ready -- I'm waiting to get the
->employer part back.  Perhaps I'll send the first two parts now and the third
->part when I get it.
+2000-11-22  Egor Duda <deo@logos-m.ru>
 
-It's best to send it all at once.  Otherwise you'll confuse Rose.
+        * Makefile.in: Fix library name.
 
-This patch is small enough to accept as is, though, IMO.
+Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
 
-I've committed it.  Thanks very much for providing it.
-
-cgf
