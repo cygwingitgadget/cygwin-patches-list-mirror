@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3913-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 15618 invoked by alias); 26 May 2003 18:39:23 -0000
+Return-Path: <cygwin-patches-return-3914-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 5497 invoked by alias); 27 May 2003 07:15:29 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,75 +7,129 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 15608 invoked from network); 26 May 2003 18:39:22 -0000
-Date: Mon, 26 May 2003 18:39:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
+Received: (qmail 5470 invoked from network); 27 May 2003 07:15:28 -0000
+X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
+Date: Tue, 27 May 2003 07:15:00 -0000
+From: Thomas Pfaff <tpfaff@gmx.net>
 To: cygwin-patches@cygwin.com
-Subject: Re: df and ls for root directories on Win9X
-Message-ID: <20030526183920.GC16861@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3.0.5.32.20030525175432.00807100@incoming.verizon.net> <20030525091901.GA875@cygbert.vinschen.de> <3.0.5.32.20030523183423.008059c0@mail.attbi.com> <20030525091901.GA875@cygbert.vinschen.de> <3.0.5.32.20030525175432.00807100@incoming.verizon.net> <3.0.5.32.20030526121109.0080ca30@incoming.verizon.net>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3.0.5.32.20030526121109.0080ca30@incoming.verizon.net>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2003-q2/txt/msg00140.txt.bz2
+Subject: [PATCH] Re: [corinna-cygwin@cygwin.com: Re: ENOTSOCK errors with
+ cygwin dll 1.3.21 and 1.3.22]
+In-Reply-To: <F0E13277A26BD311944600500454CCD05217D2@antarctica.intern.net>
+Message-ID: <Pine.WNT.4.44.0305261633550.288-200000@algeria.intern.net>
+X-X-Sender: pfaff@antarctica.intern.net
+MIME-Version: 1.0
+Content-Type: MULTIPART/MIXED; BOUNDARY="450268-5568-1053960033=:288"
+Content-ID: <Pine.WNT.4.44.0305270901020.1168@algeria.intern.net>
+X-SW-Source: 2003-q2/txt/msg00141.txt.bz2
 
-On Mon, May 26, 2003 at 12:11:09PM -0400, Pierre A. Humblet wrote:
->At 11:54 AM 5/26/2003 -0400, Christopher Faylor wrote:
->>On Sun, May 25, 2003 at 05:54:32PM -0400, Pierre A. Humblet wrote:
->>>At 12:48 PM 5/25/2003 -0400, Christopher Faylor wrote:
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
+
+--450268-5568-1053960033=:288
+Content-Type: TEXT/PLAIN; CHARSET=US-ASCII
+Content-ID: <Pine.WNT.4.44.0305270901021.1168@algeria.intern.net>
+Content-length: 1048
+
+
+
+On Mon, 26 May 2003, Corinna Vinschen wrote:
+
+> Ouch!  That's the implementation of sock_event::load().  It uses a bunch
+> of functions which are only available in WinSock2.
 >
->>>>Um.  I am still reviewing the fstat_by_name stuff.  I will be making
->>>>changes to this.
->>>>
->>>I hope you find a more elegant way to determine when it's a root directory.
->>
->>The previous code obviously went out of its way to handle a special
->>case.  It was not a "bug" that it filled out an array and changed "c:\"
->>to "c:\*".
+> I've checked in a patch to fhandler_socket::connect() and
+> fhandler_socket::accept()).  Could you test it please?  Basically it's
+> just checking for WinSock2 availability before calling sock_event::load()
+> and sock_event::wait().
 >
->Except that it didn't work. FindFirstFile( subdir/*) returns first a handle
->to subdir and then to all files in subdir. That's the behavior the code
->was relying on.
 
-The code was relying on the fact that *something* was returned.  It wasn't
-relying on any other behavior than that.  It probably should have cleared
-out the size though, at least.
+Corinna,
 
->However FindFirstFile(rootdir/*) only returns handles to the files in 
->rootdir. That caused aliasing as my original e-mail illustrated.
->Also the original code was not noticing root dirs with UNC paths.
+may i suggest the attached patch to solve this issue. Instead of checking
+winsock2_active at 3 different locations i would move this into
+sock_event::load. If winsock2 is not active or something with the event
+select will fail continue in non interruptible mode.
 
-Yep.  There should have been a FIXME comment to that effect.
- 
->>I'm away from my computer now so I can't easily check to see what you
->>did but it looks like you made the root directory always assume today's
->>date.
->
->No, Dec 31 1969. That's the same on my WinNT (which calls fstat_by_handle).
+Thomas
 
-Ugh.
- 
->>I also had a problem with this:
->>+  else if (pc->isdir () && strlen (*pc) <= strlen (pc->root_dir ()))
->>
->>Isn't the strlen check just a more expensive and less clear way of doing
->>a strcmp?  i.e.,
->>
->>+  else if (pc->isdir () && strcmp (*pc, pc->root_dir () == 0)
->
->That's why I refered to "more elegant" above. The strcmp works for
->c:\ but not for UNC paths. An "isprefix()" function would be just what we
->need. 
+2003-05-27  Thomas Pfaff  <tpfaff@gmx.net>
 
-Actually, I meant strncmp but you'd end up doing more work with strncmp.
+	* fhandler_socket.cc (sock_event::~sock_event): New method.
+	(sock_event::load): Change to void. Check if winsock2 is available.
+	(socke_event::wait): Return 0 if interruptible mode is not available.
+	(fhandler_socket::connect): Remove checks for winsock2 availability.
+	(fhandler_socket::accept): Ditto.
 
-We have an isprefix function already but it also needs a length field
-and so would be no faster.
+--450268-5568-1053960033=:288
+Content-Type: TEXT/plain; name="fhandler_socket.patch"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.WNT.4.44.0305270915100.1168@algeria.intern.net>
+Content-Description: 
+Content-Disposition: attachment; filename="fhandler_socket.patch"
+Content-length: 3766
 
-So, nevermind, the patch is fine.
+LS0tIGZoYW5kbGVyX3NvY2tldC5jYy5vcmcJMjAwMy0wNS0yNiAxNjowODox
+Ni4wMDAwMDAwMDAgKzAyMDAKKysrIGZoYW5kbGVyX3NvY2tldC5jYwkyMDAz
+LTA1LTI3IDA5OjA1OjM4LjAwMDAwMDAwMCArMDIwMApAQCAtMTMxLDMxICsx
+MzEsNDQgQEAgcHVibGljOgogICAgICAgZXZbMF0gPSBXU0FfSU5WQUxJRF9F
+VkVOVDsKICAgICAgIGV2WzFdID0gc2lnbmFsX2Fycml2ZWQ7CiAgICAgfQot
+ICBib29sIGxvYWQgKFNPQ0tFVCBzb2NrLCBpbnQgdHlwZV9iaXQpCisgIH5z
+b2NrX2V2ZW50ICgpCiAgICAgewotICAgICAgaWYgKChldlswXSA9IFdTQUNy
+ZWF0ZUV2ZW50ICgpKSA9PSBXU0FfSU5WQUxJRF9FVkVOVCkKLQlyZXR1cm4g
+ZmFsc2U7CisgICAgICBpZiAoZXZbMF0gIT0gV1NBX0lOVkFMSURfRVZFTlQp
+CisgICAgICAgIENsb3NlSGFuZGxlIChldlswXSk7CisgICAgfQorICB2b2lk
+IGxvYWQgKFNPQ0tFVCBzb2NrLCBpbnQgdHlwZV9iaXQpCisgICAgeworICAg
+ICAgaWYgKCF3aW5zb2NrMl9hY3RpdmUpCisgICAgICAgIC8qIENhbiBub3Qg
+d2FpdCBmb3Igc2lnbmFsIGlmIHdpbnNvY2syIGlzIG5vdCBhY3RpdmUgKi8K
+KyAgICAgICAgcmV0dXJuOworCisgICAgICBpZiAoZXZbMF0gPT0gV1NBX0lO
+VkFMSURfRVZFTlQpCisgICAgICAgIGlmICgoZXZbMF0gPSBXU0FDcmVhdGVF
+dmVudCAoKSkgPT0gV1NBX0lOVkFMSURfRVZFTlQpCisgICAgICAgICAgcmV0
+dXJuOworCiAgICAgICBldnRfc29jayA9IHNvY2s7CiAgICAgICBldnRfdHlw
+ZV9iaXQgPSB0eXBlX2JpdDsKICAgICAgIGlmIChXU0FFdmVudFNlbGVjdCAo
+ZXZ0X3NvY2ssIGV2WzBdLCAxIDw8IGV2dF90eXBlX2JpdCkpCiAJewogCSAg
+V1NBQ2xvc2VFdmVudCAoZXZbMF0pOwogCSAgZXZbMF0gPSBXU0FfSU5WQUxJ
+RF9FVkVOVDsKLQkgIHJldHVybiBmYWxzZTsKIAl9Ci0gICAgICByZXR1cm4g
+dHJ1ZTsKICAgICB9CiAgIGludCB3YWl0ICgpCiAgICAgewogICAgICAgV1NB
+TkVUV09SS0VWRU5UUyBzb2NrX2V2ZW50OwotICAgICAgaW50IHdhaXRfcmVz
+dWx0ID0gV1NBV2FpdEZvck11bHRpcGxlRXZlbnRzICgyLCBldiwgRkFMU0Us
+IFdTQV9JTkZJTklURSwKKyAgICAgIGludCB3YWl0X3Jlc3VsdDsKKworICAg
+ICAgaWYgKGV2WzBdID09IFdTQV9JTlZBTElEX0VWRU5UKQorICAgICAgICBy
+ZXR1cm4gMDsKKworICAgICAgd2FpdF9yZXN1bHQgPSBXU0FXYWl0Rm9yTXVs
+dGlwbGVFdmVudHMgKDIsIGV2LCBGQUxTRSwgV1NBX0lORklOSVRFLAogCQkJ
+CQkJICBGQUxTRSk7CiAgICAgICBpZiAod2FpdF9yZXN1bHQgPT0gV1NBX1dB
+SVRfRVZFTlRfMCkKIAlXU0FFbnVtTmV0d29ya0V2ZW50cyAoZXZ0X3NvY2ss
+IGV2WzBdLCAmc29ja19ldmVudCk7CiAKICAgICAgIC8qIENsZWFudXAsICBS
+ZXZlcnQgdG8gYmxvY2tpbmcuICovCiAgICAgICBXU0FFdmVudFNlbGVjdCAo
+ZXZ0X3NvY2ssIGV2WzBdLCAwKTsKLSAgICAgIFdTQUNsb3NlRXZlbnQgKGV2
+WzBdKTsKICAgICAgIHVuc2lnbmVkIGxvbmcgbm9uYmxvY2tpbmcgPSAwOwog
+ICAgICAgaW9jdGxzb2NrZXQgKGV2dF9zb2NrLCBGSU9OQklPLCAmbm9uYmxv
+Y2tpbmcpOwogCkBAIC01NjQsMTYgKzU3NywxMiBAQCBmaGFuZGxlcl9zb2Nr
+ZXQ6OmNvbm5lY3QgKGNvbnN0IHN0cnVjdCBzCiAgIGlmICghZ2V0X2luZXRf
+YWRkciAobmFtZSwgbmFtZWxlbiwgJnNpbiwgJm5hbWVsZW4sIHNlY3JldCkp
+CiAgICAgcmV0dXJuIC0xOwogCi0gIGlmICh3aW5zb2NrMl9hY3RpdmUgJiYg
+IWlzX25vbmJsb2NraW5nICgpICYmICFpc19jb25uZWN0X3BlbmRpbmcgKCkp
+Ci0gICAgaWYgKCFldnQubG9hZCAoZ2V0X3NvY2tldCAoKSwgRkRfQ09OTkVD
+VF9CSVQpKQotICAgICAgewotCXNldF93aW5zb2NrX2Vycm5vICgpOwotCXJl
+dHVybiAtMTsKLSAgICAgIH0KKyAgaWYgKCFpc19ub25ibG9ja2luZyAoKSAm
+JiAhaXNfY29ubmVjdF9wZW5kaW5nICgpKQorICAgIGV2dC5sb2FkIChnZXRf
+c29ja2V0ICgpLCBGRF9DT05ORUNUX0JJVCk7CiAKICAgcmVzID0gOjpjb25u
+ZWN0IChnZXRfc29ja2V0ICgpLCAoc29ja2FkZHIgKikgJnNpbiwgbmFtZWxl
+bik7CiAKLSAgaWYgKHdpbnNvY2syX2FjdGl2ZSAmJiByZXMgJiYgIWlzX25v
+bmJsb2NraW5nICgpICYmICFpc19jb25uZWN0X3BlbmRpbmcgKCkgJiYKKyAg
+aWYgKHJlcyAmJiAhaXNfbm9uYmxvY2tpbmcgKCkgJiYgIWlzX2Nvbm5lY3Rf
+cGVuZGluZyAoKSAmJgogICAgICAgV1NBR2V0TGFzdEVycm9yICgpID09IFdT
+QUVXT1VMREJMT0NLKQogICAgIHN3aXRjaCAoZXZ0LndhaXQgKCkpCiAgICAg
+ICB7CkBAIC02ODQsMTQgKzY5MywxMCBAQCBmaGFuZGxlcl9zb2NrZXQ6OmFj
+Y2VwdCAoc3RydWN0IHNvY2thZGRyCiAgIGlmIChsZW4gJiYgKCh1bnNpZ25l
+ZCkgKmxlbiA8IHNpemVvZiAoc3RydWN0IHNvY2thZGRyX2luKSkpCiAgICAg
+KmxlbiA9IHNpemVvZiAoc3RydWN0IHNvY2thZGRyX2luKTsKIAotICBpZiAo
+d2luc29jazJfYWN0aXZlICYmICFpc19ub25ibG9ja2luZyAoKSkKKyAgaWYg
+KCFpc19ub25ibG9ja2luZyAoKSkKICAgICB7CiAgICAgICBzb2NrX2V2ZW50
+IGV2dDsKLSAgICAgIGlmICghZXZ0LmxvYWQgKGdldF9zb2NrZXQgKCksIEZE
+X0FDQ0VQVF9CSVQpKQotCXsKLQkgIHNldF93aW5zb2NrX2Vycm5vICgpOwot
+CSAgcmV0dXJuIC0xOwotCX0KKyAgICAgIGV2dC5sb2FkIChnZXRfc29ja2V0
+ICgpLCBGRF9BQ0NFUFRfQklUKTsKICAgICAgIHN3aXRjaCAoZXZ0LndhaXQg
+KCkpCiAJewogCSAgY2FzZSAxOiAvKiBTaWduYWwgKi8K
 
-cgf
+--450268-5568-1053960033=:288--
