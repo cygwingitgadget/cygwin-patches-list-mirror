@@ -1,19 +1,43 @@
-From: Christopher Faylor <cgf@redhat.com>
+From: "Dr. Volker Zell" <Dr.Volker.Zell@oracle.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [Fwd: winsup/cygwin ChangeLog include/sys/file.h]
-Date: Tue, 08 May 2001 07:19:00 -0000
-Message-id: <20010508101744.A23530@redhat.com>
-References: <3AF7F604.2B307F35@yahoo.com> <20010508100633.B23273@redhat.com> <20010508100842.A23422@redhat.com> <3AF7FFFC.24015AFE@yahoo.com>
-X-SW-Source: 2001-q2/msg00203.html
+Cc: bleau@igb.umontreal.ca
+Subject: Re: [patch] setup.exe changes for Redownload/Reinstall Current version or Sources only - Part 2
+Date: Tue, 08 May 2001 09:21:00 -0000
+Message-id: <kvitjb3j7r.fsf@vzell.de.oracle.com>
+References: <VA.00000757.0015edd1@thesoftwaresource.com> <20010508000842.A3591@redhat.com>
+X-SW-Source: 2001-q2/msg00204.html
 
-On Tue, May 08, 2001 at 10:17:32AM -0400, Earnie Boyd wrote:
->> Btw, I don't know if you are monitoring the newlib cvs mailing list but if you
->> are, my change probably wouldn't have jumped out at you because I screwed up
->> the ChangeLog entry.
->> 
->
->Ditto.h ;)
+>>>>> "Christopher" == Christopher Faylor <cgf@redhat.com> writes:
 
-Yeah, yeah, rub it in...
+    Christopher> On Thu, May 03, 2001 at 05:06:38PM -0400, Brian Keener wrote:
+    >> And now here is the actual diff for the change.
 
-cgf
+    Christopher> I've applied this patch.
+
+    Christopher> I like the "Reinstall" option but I am not quite sure what the
+    Christopher> "Sources" option does.  It will install the sources from the
+    Christopher> requested source, whether it is the internet or the local directory,
+    Christopher> right?
+
+    Christopher> One problem that I had is that the installation of the sources
+    Christopher> ignored my mount setting for /usr/src and/or /src.  It extracted
+    Christopher> directly to (in my case) f:/cygwin/usr/src which made the extraction
+    Christopher> invisible to me, since /usr/src is mounted elsewhere.
+
+The same happened to me with the latest opengl-1.1.0-4.tar.gz package.
+Some files were installed directly under in my case D:\usr\lib and D:\usr\bin.
+But my mount table looks like the following so the files were effektively invisible
+to me.
+
+C:\gnu on /gnu type system (binmode)
+D:\bin on /usr/bin type system (binmode)
+D:\lib on /usr/lib type system (binmode)
+C: on /dev/c type system (binmode)
+D: on / type system (binmode)
+b: on /b type system (binmode,noumount)
+e: on /e type system (binmode,noumount)
+f: on /f type system (binmode,noumount)
+
+
+Ciao
+  Volker
