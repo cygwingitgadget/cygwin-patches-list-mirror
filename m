@@ -1,46 +1,40 @@
 From: Charles Wilson <cwilson@ece.gatech.edu>
 To: cygwin-patches@sources.redhat.com
-Subject: [patch] partial /dev/clipboard support for cygwin
-Date: Thu, 12 Oct 2000 22:54:00 -0000
-Message-id: <39E6A45B.100411BB@ece.gatech.edu>
-X-SW-Source: 2000-q4/msg00002.html
-Content-type: multipart/mixed; boundary="----------=_1583532846-65437-14"
+Subject: [patch] limited /dev/clipboard support
+Date: Sat, 14 Oct 2000 17:04:00 -0000
+Message-id: <39E601F1.567BE0C1@ece.gatech.edu>
+X-SW-Source: 2000-q4/msg00003.html
+Content-type: multipart/mixed; boundary="----------=_1583532846-65437-15"
 
 This is a multi-part message in MIME format...
 
-------------=_1583532846-65437-14
-Content-length: 2122
+------------=_1583532846-65437-15
+Content-length: 1781
 
-(my apologies if this is a duplicate message; I'm having trouble with my
-mail server)
-
-This patch provides limited /dev/clipboard capability for cygwin.  The
+This patch provides limited /dev/clipboard support for cygwin.  The
 limitations are:
 
-1) read-only
+  1) read-only
+  2) /dev/clipboard must be read as a whole, not in small chunks. 
+(/bin/cat seems to use a 1024 byte buffer, so if the contents of the
+clipboard is more than 1023 bytes, "cat /dev/clipboard" returns 1023
+good characters followed either by (length - 1023) garbage chars or
+"Hangup")
 
-2) /dev/clipboard can only be read all-at-once -- no buffering.  It
-should be possible to provide seek() capability so that the contents of
-the clipboard can be read in multiple small chunks, but thread safety is
-an issue.  I felt it best to get the initial support into cygwin, and
-then try to add seek() support and buffering. 
+#2 shouldn't be too difficult to fix, but I'm not sure how to go about
+it and still be thread-safe.  However, I figured it was best to get this
+in, and then try to fix it.  The following test program shows that
+"all-at-once" reads will work okay; change BUFSZ to be larger than
+whatever you put into the clipboard (using notepad or putclip.exe from
+http://cygutils.netpedia.net/misc.tar.gz ).
 
-Note that since /bin/cat uses a small buffer (1024 bytes), "cat
-/dev/clipboard" only works reliably if the contents of the clipboard is
-smaller than 1024.  The following snippet of code can be used to
-demonstrate that, with a large enough buffer, "read the whole thing at
-once" *does* work.  Just change 'BUFSZ' to a value larger than the
-clipboard contents.  (For testing purposes, I found the "putclip"
-program useful -- so I could "put" a file of known size into the windows
-clipboard.  You can get putclip from
-http://cygutils.netpedia.net/misc.tar.gz )
 
-----clip-----
+----snip----
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
 
-#define BUFSZ 72000
+#define BUFSZ 4096
 
 int main(int argc, char * argv[])
 {
@@ -51,29 +45,29 @@ int main(int argc, char * argv[])
 	buf[BUFSZ] = '\0';
 	printf("%s", buf);
 }
-------clip-----
+----snip----
+
 
 --Chuck
 
-2000-10-13  Charles Wilson  <cwilson@ece.gatech.edu>
 
-	* winsup/cygwin/Makefile.in: add libuser32.a to the list of
-DLL_IMPORTS,
-	and include fhandler_clipboard.o in the list of DLL_OFILES
-	* winsup/cygwin/dtable.cc (dtable::build_fhander): check for
-FH_CLIPBOARD
-	* winsup/cygwin/fhandler.h: add fhandler_dev_clipboard to comments, add
-	FH_CLIPBOARD to fhandler enum
-	* winsup/cygwin/fhandler.h (fhandler_dev_clipboard): new declaration
-	* winsup/cygwin/path.cc (windows_device_names): add "\\dev\\clipboard"
-	* winsup/cygwin/path.cc (get_device_number): check for FH_CLIPBOARD
-	* winsup/cygwin/winsup.h: add a few more #defines from winuser.h
+2000-10-12  Charles Wilson  <cwilson@ece.gatech.edu>
+
 	* winsup/cygwin/fhandler_clipboard.cc: new file
-fhandler_clipboard.cc.gz
+	* winsup/cygwin/Makefile.in: add libuser32.a to the DLL_IMPORTS list,
+	and include fhandler_clipboard.o in DLL_OFILES list.
+	* winsup/cygwin/fhandler.h: add FH_CLIPBOARD to the devices enum.
+	* winsup/cygwin/fhandler.h (fhandler_dev_clipboard): new
+	* winsup/cygwin/path.cc (windows_device_names): add "\\dev\\clipboard"
+	* winsup/cygwin/path.cc (get_device_number): check for "clipboard"
+	* winsup/cygwin/winsup.h: declare a few more functions from winuser.h
+	* winsup/cygwin/dtable.cc (dtable::build_fhandler): check for 
+	FH_CLIPBOARD in switch().
 clipboard.patch6a.gz
+fhandler_clipboard.cc.gz
 
 
-------------=_1583532846-65437-14
+------------=_1583532846-65437-15
 Content-Type: application/x-gzip; charset=binary; name="clipboard.patch6a.gz"
 Content-Disposition: inline; filename="clipboard.patch6a.gz"
 Content-Transfer-Encoding: base64
@@ -119,7 +113,7 @@ mk7Hmf4Us/1ZRvH6xe3lQOiXhNOqV5jLpQdmZNa/ji5vNjTK8GciKRf4RXLG
 8/gaYuuGnxHAY1/uc3qNBYdYD9hFWpJm4V6yd2xEgIWz6Ckg8IwHdXkjXt+m
 ODPsF+RwJIfJUA7dTii+mR58tvIxbfwLxetXVXoTAAA=
 
-------------=_1583532846-65437-14
+------------=_1583532846-65437-15
 Content-Type: application/x-gzip; charset=binary;
  name="fhandler_clipboard.cc.gz"
 Content-Disposition: inline; filename="fhandler_clipboard.cc.gz"
@@ -145,4 +139,4 @@ Bx5H1R0a/uccWr3GPmuQrkT1jAGQxrShZB3U24VQWSrL4tNzRgBI/fNB9P3L
 iFb16mxylAk25rb35tQmrthqbKuTb71YFaSLP4mZrp9K0s/D0eeeSwqOa3WC
 HDW2T/ybgpYD/w1ZjWoNuwYAAA==
 
-------------=_1583532846-65437-14--
+------------=_1583532846-65437-15--
