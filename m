@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2088-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 21240 invoked by alias); 19 Apr 2002 21:07:32 -0000
+Return-Path: <cygwin-patches-return-2089-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 20187 invoked by alias); 19 Apr 2002 22:05:02 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,97 +7,61 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 21188 invoked from network); 19 Apr 2002 21:07:28 -0000
-Subject: patch to prevent cc1 warnings
-From: Thomas Fitzsimmons <fitzsim@redhat.com>
-To: newlib@sources.redhat.com
-Cc: cygwin-patches@sources.redhat.com
-Content-Type: multipart/mixed; boundary="=-pu09Pss5BhuiFg0U2ip8"
-Date: Fri, 19 Apr 2002 14:07:00 -0000
-Message-Id: <1019250448.28936.32.camel@toggle>
-Mime-Version: 1.0
-X-SW-Source: 2002-q2/txt/msg00072.txt.bz2
-
-
---=-pu09Pss5BhuiFg0U2ip8
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
-Content-length: 1243
-
-
-This patch + regenerating newlib configuration files prevents cc1
-warnings like:
-
-cc1: warning: changing search order for system directory
-"/notnfs/fitzsim/src-newlib-cygwin/i686-pc-cygwin/newlib/targ-include"
-cc1: warning:   as it is the same as non-system directory
-"../../targ-include"
-cc1: warning: changing search order for system directory
-"/home/fitzsim/sources/src-gcc-devel/gcc/newlib/libc/include"
-cc1: warning:   as it has already been specified as a non-system
-directory
-
-cc1: warning: changing search order for system directory
-"/home/fitzsim/sources/src-gcc-devel/gcc/winsup/cygwin/include"
-cc1: warning:   as it has already been specified as a non-system
-directory
-cc1: warning: changing search order for system directory
-"/home/fitzsim/sources/src-gcc-devel/gcc/winsup/w32api/include"
-cc1: warning:   as it has already been specified as a non-system
-directory
-
-Previously, these includes were specified as -isystem's in the top-level
-configure.in's FLAGS_FOR_TARGET, AND as -I's in newlib_cflags in
-newlib's acinclude.m4.  This patch removes the -I flags from
-newlib_cflags.
-
-Any objections?
-
-Tom
-
--- 
-Thomas Fitzsimmons
-Red Hat Canada Limited        e-mail: fitzsim@redhat.com
-2323 Yonge Street, Suite 300
-Toronto, ON M4P2C9
-
---=-pu09Pss5BhuiFg0U2ip8
-Content-Disposition: attachment; filename=newlib-cc1-warnings-patch
+Received: (qmail 20075 invoked from network); 19 Apr 2002 22:05:00 -0000
+content-class: urn:content-classes:message
+Subject: RE: [PATCH] dtors run twice on dll detach (update)
+MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=ISO-8859-1
-Content-length: 1116
+Date: Fri, 19 Apr 2002 15:05:00 -0000
+X-MimeOLE: Produced By Microsoft Exchange V6.0.5762.3
+Message-ID: <FC169E059D1A0442A04C40F86D9BA7600C5E7F@itdomain003.itdomain.net.au>
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+From: "Robert Collins" <robert.collins@itdomain.com.au>
+To: <cygwin-patches@cygwin.com>
+X-SW-Source: 2002-q2/txt/msg00073.txt.bz2
 
-Index: acinclude.m4
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-RCS file: /cvs/src/src/newlib/acinclude.m4,v
-retrieving revision 1.6
-diff -c -r1.6 acinclude.m4
-*** acinclude.m4	27 Feb 2002 23:55:40 -0000	1.6
---- acinclude.m4	19 Apr 2002 20:55:43 -0000
-***************
-*** 141,158 ****
-=20=20
-  . [$]{newlib_basedir}/configure.host
-=20=20
-- case [$]{newlib_basedir} in
-- /* | [A-Za-z]:[/\\]*) newlib_flagbasedir=3D[$]{newlib_basedir} ;;
-- *) newlib_flagbasedir=3D'[$](top_builddir)/'[$]{newlib_basedir} ;;
-- esac
--=20
-- newlib_cflags=3D"[$]{newlib_cflags} -I"'[$](top_builddir)'"/$1/targ-inclu=
-de -I[$]{newlib_flagbasedir}/libc/include"
-- case "${host}" in
--   *-*-cygwin*)
--     newlib_cflags=3D"[$]{newlib_cflags} -I[$]{newlib_flagbasedir}/../wins=
-up/cygwin/include  -I[$]{newlib_flagbasedir}/../winsup/w32api/include"
--     ;;
-- esac
--=20
-  newlib_cflags=3D"[$]{newlib_cflags} -fno-builtin"
-=20=20
-  NEWLIB_CFLAGS=3D${newlib_cflags}
---- 141,146 ----
 
---=-pu09Pss5BhuiFg0U2ip8--
+
+> -----Original Message-----
+> From: Christopher Faylor [mailto:cgf@redhat.com]=20
+> Sent: Saturday, April 20, 2002 12:42 AM
+> To: cygwin-patches@cygwin.com
+> Subject: Re: [PATCH] dtors run twice on dll detach (update)
+>=20
+>=20
+> On Fri, Apr 19, 2002 at 10:46:28PM +1000, Robert Collins wrote:
+> >
+> >
+> >> -----Original Message-----
+> >> From: Thomas Pfaff [mailto:tpfaff@gmx.net]
+> >> Sent: Wednesday, April 17, 2002 5:08 PM
+> >
+> >> > Since i can not judge which function is obsolete (i guess=20
+> >> > dll_global_dtors
+> >> > is) i have attached a small patch that will make sure that
+> >> the dtors run
+> >> > only once.
+> >
+> >I'm not sure that either function is obsolete - I'll let=20
+> Chris/Corinna=20
+> >comment on that.. Your patch looked good, and corrected a=20
+> test case I=20
+> >happened to have hanging around, so I've checked this in as an=20
+> >appropriate solution. Thanks for the patch.
+>=20
+> If one of the functions is obsolete, it should be deleted.=20=20
+> That means that the patch does *not* look good.  It needs to=20
+> be reviewed.
+>=20
+> That plus the fact that you don't have global checkin=20
+> privileges for cygwin =3D=3D cgf reverts the patch.
+
+Ookay. I don't think that either function is obsolete... and neither you
+nor Corinna had commented.=20=20
+
+Anyay, I'v reviewed, given feedback, it's in your court.
+
+Rob
