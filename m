@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2408-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 10754 invoked by alias); 13 Jun 2002 04:43:39 -0000
+Return-Path: <cygwin-patches-return-2409-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 31052 invoked by alias); 13 Jun 2002 05:26:44 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,66 +7,41 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 10740 invoked from network); 13 Jun 2002 04:43:39 -0000
-Date: Wed, 12 Jun 2002 21:43:00 -0000
+Received: (qmail 31038 invoked from network); 13 Jun 2002 05:26:43 -0000
+Date: Wed, 12 Jun 2002 22:26:00 -0000
 From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: Reorganizing internal_getlogin()
-Message-ID: <20020613044406.GA15352@redhat.com>
+Subject: Reorganizing internal_getlogin() -- modified Pierre patch
+Message-ID: <20020613052709.GA17779@redhat.com>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3.0.5.32.20020612230833.0080d100@mail.attbi.com> <3.0.5.32.20020612205711.007f7300@mail.attbi.com> <3.0.5.32.20020612205711.007f7300@mail.attbi.com> <3.0.5.32.20020612230833.0080d100@mail.attbi.com> <3.0.5.32.20020612233905.0080d100@mail.attbi.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="ZPt4rx8FFjLCG7dd"
+Content-Type: multipart/mixed; boundary="x+6KMIRAuhnl3hBn"
 Content-Disposition: inline
-In-Reply-To: <3.0.5.32.20020612233905.0080d100@mail.attbi.com>
 User-Agent: Mutt/1.3.23.1i
-X-SW-Source: 2002-q2/txt/msg00391.txt.bz2
+X-SW-Source: 2002-q2/txt/msg00392.txt.bz2
 
 
---ZPt4rx8FFjLCG7dd
+--x+6KMIRAuhnl3hBn
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-length: 1672
+Content-length: 273
 
-On Wed, Jun 12, 2002 at 11:39:05PM -0400, Pierre A. Humblet wrote:
->That's a good thing.  I am curious to see how.  I was hitting the fact
->that once you are impersonated LookupAccountSid won't work properly, so
->spawn_guts was the latest moment I could use it.
+Ok, here's a patch with the rest of the environment fleshed out (I hope).
 
-Btw, I don't claim to have solved any sid-related problems.  I probably
-introduced some problems, in fact.  I was just trying to set up a
-framework in which you or Corinna could work by introducing
-(essentially) environment variable callbacks.  I was also trying to
-avoid unnecessary multiple passes through the environment.
+I don't know enough about this stuff to know if this works or not but it
+doesn't core dump in very simple test cases.
 
-Reexamining what you did in spawn_guts, it looks like there may still be
-a need to call the environment builder in two separate places.  One
-before CreateProcess and one immediately before CreateProcessAsUser.
-That's not happening now.
+Does it make sense?  That's the question.
 
-I have a first stab at a modified version of your patch below.  I tried
-to keep to the letter of your patch except where I disagreed with
-formatting or commenting.  The one thing missing is plugging some of the
-missing environment variable info in for LOGONSERVER and USERDOMAIN.
-It's too late for me to think about that.
-
-Stupid question time: Do we *really* need to set these environment
-variables?  What would break if we just didn't set them?  I can't
-imagine any well-written software relying on these being set correctly.
-How can you rely on something that a user could modify?  I know that
-cygwin did/does in some cases, but it almost looks like it was doing it
-just so that they could be passed on to subprocesses.
-
-I wouldn't be adverse to just wiping them out in the setuid case unless
-there was a really good reason not to do so.
+Now I'm *really* going to bed.
 
 cgf
 
---ZPt4rx8FFjLCG7dd
+--x+6KMIRAuhnl3hBn
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=p
-Content-length: 17736
+Content-length: 22886
 
 ? child_info.s
 ? cygcontrib
@@ -81,8 +56,36 @@ RCS file: /cvs/uberbaum/winsup/cygwin/cygheap.cc,v
 retrieving revision 1.53
 diff -u -p -r1.53 cygheap.cc
 --- cygheap.cc	12 Jun 2002 05:13:53 -0000	1.53
-+++ cygheap.cc	13 Jun 2002 04:42:38 -0000
-@@ -472,27 +472,24 @@ cygheap_user::set_domain (const char *ne
++++ cygheap.cc	13 Jun 2002 05:24:40 -0000
+@@ -445,54 +445,34 @@ cygheap_user::set_name (const char *new_
+   pname = cstrdup (new_name ? new_name : "");
+   homedrive = NULL;
+   homepath = NULL;
+-}
+-
+-void
+-cygheap_user::set_logsrv (const char *new_logsrv)
+-{
+   if (plogsrv)
+     cfree (plogsrv);
+-  if (!new_logsrv || !*new_logsrv)
+-    plogsrv = NULL;
+-  else
+-    {
+-      plogsrv = (char *) cmalloc (HEAP_STR, strlen (new_logsrv) + 3) + 2;
+-      strcpy (plogsrv, new_logsrv);
+-    }
+-}
+-
+-void
+-cygheap_user::set_domain (const char *new_domain)
+-{
+   if (pdomain)
+     cfree (pdomain);
+-  pdomain = (new_domain && *new_domain) ? cstrdup (new_domain) : NULL;
++  plogsrv = pdomain = NULL;
+ }
+ 
  BOOL
  cygheap_user::set_sid (PSID new_sid)
  {
@@ -131,25 +134,40 @@ RCS file: /cvs/uberbaum/winsup/cygwin/cygheap.h,v
 retrieving revision 1.41
 diff -u -p -r1.41 cygheap.h
 --- cygheap.h	12 Jun 2002 05:13:54 -0000	1.41
-+++ cygheap.h	13 Jun 2002 04:42:38 -0000
-@@ -89,7 +89,9 @@ enum homebodies
- {
-   CH_HOMEDRIVE,
-   CH_HOMEPATH,
--  CH_HOME
-+  CH_HOME,
-+  CH_LOGSRV,
-+  CH_DOMAIN
- };
++++ cygheap.h	13 Jun 2002 05:24:40 -0000
+@@ -123,21 +123,19 @@ public:
+   void set_name (const char *new_name);
+   const char *name () const { return pname; }
  
- struct passwd;
-@@ -135,6 +137,7 @@ public:
-   const char *domain () const { return pdomain; }
+-  void set_logsrv (const char *new_logsrv);
+-  const char *logsrv () const { return plogsrv; }
+-
+   const char *env_logsrv ();
+   const char *env_homepath ();
+   const char *env_homedrive ();
+   const char *env_userprofile ();
+-
+-  void set_domain (const char *new_domain);
+-  const char *domain () const { return pdomain; }
++  const char *env_domain ();
++  const char *env_name ();
  
    BOOL set_sid (PSID new_sid);
 +  BOOL set_orig_sid ();
    PSID sid () const { return psid; }
    PSID orig_sid () const { return orig_psid; }
+ 
++#if 0
+   void operator =(cygheap_user &user)
+   {
+     set_name (user.name ());
+@@ -145,6 +143,7 @@ public:
+     set_domain (user.domain ());
+     set_sid (user.sid ());
+   }
++#endif
+   const char *ontherange (homebodies what, struct passwd * = NULL);
+ };
  
 Index: dcrt0.cc
 ===================================================================
@@ -157,7 +175,7 @@ RCS file: /cvs/uberbaum/winsup/cygwin/dcrt0.cc,v
 retrieving revision 1.129
 diff -u -p -r1.129 dcrt0.cc
 --- dcrt0.cc	10 Jun 2002 17:08:09 -0000	1.129
-+++ dcrt0.cc	13 Jun 2002 04:42:39 -0000
++++ dcrt0.cc	13 Jun 2002 05:24:41 -0000
 @@ -608,7 +608,6 @@ dll_crt0_1 ()
  				  DUPLICATE_SAME_ACCESS | DUPLICATE_CLOSE_SOURCE))
  	      h = NULL;
@@ -187,13 +205,73 @@ diff -u -p -r1.129 dcrt0.cc
  
    /* Initialize signal/subprocess handling. */
    sigproc_init ();
+Index: environ.cc
+===================================================================
+RCS file: /cvs/uberbaum/winsup/cygwin/environ.cc,v
+retrieving revision 1.69
+diff -u -p -r1.69 environ.cc
+--- environ.cc	13 Jun 2002 01:28:51 -0000	1.69
++++ environ.cc	13 Jun 2002 05:24:42 -0000
+@@ -765,6 +765,8 @@ static NO_COPY spenv spenvs[] =
+   {"LOGONSERVER=", &cygheap_user::env_logsrv},
+   {"SYSTEMDRIVE=", NULL},
+   {"SYSTEMROOT=", NULL},
++  {"USERDOMAIN=", &cygheap_user::env_name},
++  {"USERNAME=", &cygheap_user::env_domain},
+   {"USERPROFILE=", &cygheap_user::env_userprofile},
+ };
+ 
+Index: security.cc
+===================================================================
+RCS file: /cvs/uberbaum/winsup/cygwin/security.cc,v
+retrieving revision 1.101
+diff -u -p -r1.101 security.cc
+--- security.cc	11 Jun 2002 02:08:00 -0000	1.101
++++ security.cc	13 Jun 2002 05:24:43 -0000
+@@ -256,15 +256,15 @@ get_lsa_srv_inf (LSA_HANDLE lsa, char *l
+ #endif
+ 
+ BOOL
+-get_logon_server (const char * domain, char * server, WCHAR *wserver)
++get_logon_server (const char *domain, char *server, WCHAR *wserver)
+ {
+   WCHAR wdomain[INTERNET_MAX_HOST_NAME_LENGTH + 1];
+   NET_API_STATUS ret;
+   WCHAR * buf;
+   DWORD size = INTERNET_MAX_HOST_NAME_LENGTH + 1;
+ 
+-  if ((GetComputerNameA(server + 2, &size)) &&
+-      !strcasecmp(domain, server + 2))
++  if ((GetComputerName (server + 2, &size)) &&
++      strcasematch (domain, server + 2))
+     {
+       server[0] = server[1] = '\\';
+       if (wserver)
+@@ -274,7 +274,7 @@ get_logon_server (const char * domain, c
+ 
+   /* Try to get the primary domain controller for the domain */
+   sys_mbstowcs (wdomain, domain, INTERNET_MAX_HOST_NAME_LENGTH + 1);
+-  if ((ret = NetGetDCName(NULL, wdomain, (LPBYTE *) &buf)) == STATUS_SUCCESS)
++  if ((ret = NetGetDCName (NULL, wdomain, (LPBYTE *) &buf)) == STATUS_SUCCESS)
+     {
+       sys_wcstombs (server, buf, INTERNET_MAX_HOST_NAME_LENGTH + 1);
+       if (wserver)
+@@ -511,7 +511,7 @@ get_group_sidlist (cygsidlist &grp_list,
+     }
+   else
+     {
+-      if (!get_logon_server( domain, server, wserver))
++      if (!get_logon_server (domain, server, wserver))
+         return FALSE;
+       if (my_grps)
+ 	{
 Index: spawn.cc
 ===================================================================
 RCS file: /cvs/uberbaum/winsup/cygwin/spawn.cc,v
 retrieving revision 1.106
 diff -u -p -r1.106 spawn.cc
 --- spawn.cc	12 Jun 2002 05:13:54 -0000	1.106
-+++ spawn.cc	13 Jun 2002 04:42:40 -0000
++++ spawn.cc	13 Jun 2002 05:24:44 -0000
 @@ -567,8 +567,6 @@ spawn_guts (const char * prog_arg, const
    ciresrv.moreinfo->argc = newargv.argc;
    ciresrv.moreinfo->argv = newargv;
@@ -265,7 +343,7 @@ RCS file: /cvs/uberbaum/winsup/cygwin/syscalls.cc,v
 retrieving revision 1.202
 diff -u -p -r1.202 syscalls.cc
 --- syscalls.cc	11 Jun 2002 16:06:15 -0000	1.202
-+++ syscalls.cc	13 Jun 2002 04:42:42 -0000
++++ syscalls.cc	13 Jun 2002 05:24:46 -0000
 @@ -1943,8 +1943,6 @@ mkfifo (const char *_path, mode_t mode)
    return -1;
  }
@@ -378,7 +456,7 @@ RCS file: /cvs/uberbaum/winsup/cygwin/uinfo.cc,v
 retrieving revision 1.71
 diff -u -p -r1.71 uinfo.cc
 --- uinfo.cc	13 Jun 2002 03:04:50 -0000	1.71
-+++ uinfo.cc	13 Jun 2002 04:42:42 -0000
++++ uinfo.cc	13 Jun 2002 05:24:46 -0000
 @@ -27,100 +27,37 @@ details. */
  #include "cygerrno.h"
  #include "cygheap.h"
@@ -597,5 +675,75 @@ diff -u -p -r1.71 uinfo.cc
  }
  
  extern "C" char *
+@@ -328,10 +244,10 @@ cygheap_user::ontherange (homebodies wha
+ 	  sys_mbstowcs (wuser, name (), sizeof (wuser) / sizeof (*wuser));
+ 	  if ((ret = NetUserGetInfo (NULL, wuser, 3, (LPBYTE *)&ui)))
+ 	    {
+-	      if (logsrv ())
++	      if (env_logsrv ())
+ 		{
+ 		  WCHAR wlogsrv[INTERNET_MAX_HOST_NAME_LENGTH + 3];
+-		  strcat (strcpy (buf, "\\\\"), logsrv ());
++		  strcpy (buf, env_logsrv ());
+ 		  sys_mbstowcs (wlogsrv, buf, sizeof (wlogsrv) / sizeof(*wlogsrv));
+ 		  ret = NetUserGetInfo (wlogsrv, wuser, 3,(LPBYTE *)&ui);
+ 		}
+@@ -383,17 +299,41 @@ cygheap_user::ontherange (homebodies wha
+ const char *
+ cygheap_user::env_logsrv ()
+ {
+-  char *p = plogsrv - 2;
++  if (plogsrv)
++    return plogsrv;
+ 
+-  *p = p[1] = '\\';
+-  return p;
++  char logsrv[INTERNET_MAX_HOST_NAME_LENGTH + 3];
++  if (!get_logon_server (env_domain (), logsrv, NULL))
++    return NULL;
++  return plogsrv = cstrdup (logsrv);
++}
++
++const char *
++cygheap_user::env_domain ()
++{
++  if (pdomain)
++    return pdomain;
++
++  char username[UNLEN + 1];
++  DWORD ulen = sizeof (username);
++  char userdomain[DNLEN + 1];
++  DWORD dlen = sizeof (userdomain);
++  SID_NAME_USE use;
++
++  if (!LookupAccountSid (NULL, sid (), username, &ulen,
++			 userdomain, &dlen, &use))
++    {
++      __seterrno ();
++      return NULL;
++    }
++  return pdomain = cstrdup (userdomain);
+ }
+ 
+ const char *
+ cygheap_user::env_userprofile ()
+ {
+   static char buf[512]; /* FIXME: This shouldn't be static. */
+-  if (strcasematch (name (), "SYSTEM") || !domain () || !logsrv ())
++  if (strcasematch (name (), "SYSTEM") || !env_domain () || !env_logsrv ())
+     return NULL;
+ 
+   if (get_registry_hive_path (sid (), buf))
+@@ -412,4 +352,10 @@ const char *
+ cygheap_user::env_homedrive ()
+ {
+   return ontherange (CH_HOMEDRIVE);
++}
++
++const char *
++cygheap_user::env_name ()
++{
++  return name ();
+ }
 
---ZPt4rx8FFjLCG7dd--
+--x+6KMIRAuhnl3hBn--
