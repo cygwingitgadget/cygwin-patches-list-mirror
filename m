@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4825-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 30059 invoked by alias); 4 Jun 2004 00:08:03 -0000
+Return-Path: <cygwin-patches-return-4826-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 19562 invoked by alias); 4 Jun 2004 00:51:37 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,41 +7,36 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 30049 invoked from network); 4 Jun 2004 00:08:03 -0000
-Date: Fri, 04 Jun 2004 00:08:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
+Received: (qmail 19528 invoked from network); 4 Jun 2004 00:51:36 -0000
+Message-Id: <3.0.5.32.20040603204818.00806dd0@incoming.verizon.net>
+X-Sender: vze1u1tg@incoming.verizon.net (Unverified)
+Date: Fri, 04 Jun 2004 00:51:00 -0000
 To: cygwin-patches@cygwin.com
-Subject: Re: XP crash (OT)
-Message-ID: <20040604000801.GA23653@coe.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3.0.5.32.20040531184611.0080be60@incoming.verizon.net> <40BF81C4.1020105@att.net> <20040603203500.GA6889@coe.casa.cgf.cx> <20040603221458.GA8514@coe.casa.cgf.cx> <20040603222926.GA8964@coe.casa.cgf.cx> <40BFB018.3090306@att.net>
+From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
+Subject: [Patch]: fchdir
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <40BFB018.3090306@att.net>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2004-q2/txt/msg00177.txt.bz2
+Content-Type: text/plain; charset="us-ascii"
+X-SW-Source: 2004-q2/txt/msg00178.txt.bz2
 
-On Thu, Jun 03, 2004 at 07:11:20PM -0400, David Fritz wrote:
->Christopher Faylor wrote:
->
->[...]
->>>Interestingly enough, I just added some checking to fhandler_base::open 
->>>which
->>>used RtlIsDosDeviceName_U.  It caused a reboot of my XP system every time
->>>I tried it.  That's a first for XP.
->>
->>
->>Oops.  No, that was the result of passing garbage to
->>InitializeObjectAttributes apparently.  Seems like a pretty serious XP
->>bug regardless.
->[...]
->
->Are you sure?  InitializeObjectAttributes() is a macro.
->
->How was the garbage being passed?
+2004-06-04  Pierre Humblet <pierre.humblet@ieee.org>
 
-Maybe it was NtCreateFile, then.
+	* path.cc (fchdir): Pass the Posix path to chdir.
 
-cgf
+
+
+Index: path.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/path.cc,v
+retrieving revision 1.315
+diff -u -p -r1.315 path.cc
+--- path.cc     2 Jun 2004 21:20:53 -0000       1.315
++++ path.cc     4 Jun 2004 00:50:05 -0000
+@@ -3358,7 +3358,7 @@ fchdir (int fd)
+   int res;
+   cygheap_fdget cfd (fd);
+   if (cfd >= 0)
+-    res = chdir (cfd->get_win32_name ());
++    res = chdir (cfd->get_name ());
+   else
+     res = -1;
+ 
