@@ -1,153 +1,115 @@
-From: "Michael A. Chase" <mchase@ix.netcom.com>
-To: <cygwin-patches@cygwin.com>
-Subject: [PATCH]Change mount utility to write commands (TODO 20000704.101353)
-Date: Sun, 08 Apr 2001 20:26:00 -0000
-Message-id: <002201c0c0a4$b16771d0$f930273f@ca.boeing.com>
-X-SW-Source: 2001-q2/msg00018.html
-Content-type: multipart/mixed; boundary="----------=_1583532847-65438-36"
+From: "Robert Collins" <robert.collins@itdomain.com.au>
+To: <cygwin-patches@cygwin.com>, <newlib@sources.redhat.com>
+Subject: Re: cygwin/newlib types patchs
+Date: Mon, 09 Apr 2001 01:15:00 -0000
+Message-id: <003c01c0c0cd$1f0fed20$0200a8c0@lifelesswks>
+References: <008101c0b1e6$d2b92f80$0200a8c0@lifelesswks> <20010321090559.F3149@redhat.com> <20010321091547.I3149@redhat.com> <000b01c0b24c$43e45530$0200a8c0@lifelesswks> <20010321170610.C9775@redhat.com> <026301c0b255$8982d130$0200a8c0@lifelesswks> <20010321173020.F9775@redhat.com> <029301c0b258$06fb42d0$0200a8c0@lifelesswks> <3ABBA589.74CED71C@cygnus.com> <3AC21396.979DB2C7@OARcorp.com> <3AC21E12.17F10166@OARcorp.com> <3AC227E5.5A31051C@OARcorp.com> <3AC249A8.1ADD0384@cygnus.com> <018a01c0b7d0$f4957510$0200a8c0@lifelesswks> <3AC37051.7807901A@cygnus.com> <00c701c0b8a1$417b77f0$0200a8c0@lifelesswks> <3AC3D715.2EE2DB6@cygnus.com>
+X-SW-Source: 2001-q2/msg00019.html
 
-This is a multi-part message in MIME format...
-
-------------=_1583532847-65438-36
-Content-length: 408
-
-The patch to winsup/utils/mount.cc adds function mount_commands().  The
-resulting output works with the new mount and the one in the current binary
-distribution both as a shell script and as a batch file.
-
-I noticed that mount and umount don't include the help option, so I added it
-to both.
---
-Mac :})
-Give a hobbit a fish and he'll eat fish for a day.
-Give a hobbit a ring and he'll eat fish for an age.
+----- Original Message -----
+From: "J. Johnston" <jjohnstn@cygnus.com>
+To: "Robert Collins" <robert.collins@itdomain.com.au>
+Cc: "Joel Sherrill" <joel.sherrill@OARcorp.com>;
+<cygwin-patches@cygwin.com>; <newlib@sources.redhat.com>
+Sent: Friday, March 30, 2001 10:45 AM
+Subject: Re: cygwin/newlib types patchs
 
 
+> Robert Collins wrote:
+> >
+> > ----- Original Message -----
+> > From: "J. Johnston" <jjohnstn@cygnus.com>
+> > To: "Robert Collins" <robert.collins@itdomain.com.au>
+> > Cc: "Joel Sherrill" <joel.sherrill@OARcorp.com>;
+> > <cygwin-patches@cygwin.com>; <newlib@sources.redhat.com>
+> > Sent: Friday, March 30, 2001 3:26 AM
+> > Subject: Re: cygwin/newlib types patchs
+> >
+> > > Robert Collins wrote:
+> > > >
+> > > >
+> > > > Uhmm yes :] I've actually put the cygwin ones in cygwin/types.h,
+but
+> > as
+> > > > long as it's system specific it doesn't really matter.
+> > > >
+> > >
+> > > So, what are you proposing?  I still contend that removing all the
+> > system pthread
+> > > types into the sys directories is the clean way to implement this
+and
+> > the best
+> > > long term solution for adding other system pthread implementations
+in
+> > the future.
+> > > I don't think overriding the entire types header is warranted.
+> > >
+> > > Unless you have a better proposal, I am going to do this so it
+would
+> > save me the work
+> > > if as part of your change you simply split the pthread types into
+> > sys/pthreadtypes.h and
+> > > put the RTEMS stuff in the RTEMS directory and the Cygwin stuff in
+the
+> > Cygwin directory.
+> > >
+> > > -- Jeff J.
+> > >
+> >
+> > I don't know how rtems is laid out - what I am proposing was
+> > src/newlib/libc/include/sys/types.h includes <cygwin/types.h> (which
+> > only overrides pthreads at the moment)
+> > src/winsup/cygwin/include/cygwin/types.h contains the types that
+were
+> > conflicting with rtems.
+> >
+> > Where should I #include the rtems header from?
+>
+> src/newlib/libc/include/sys/types.h should include
+<sys/pthreadtypes.h>.  Ideally, this can be
+> protected by a check for #if defined (_POSIX_THREADS) in which case
+<sys/features.h> must be
+> included outside of the RTEMS check and
+src/newlib/libc/include/sys/features.h must be updated to
+> set _POSIX_THREADS for Cygwin.
+>
+> A default src/newlib/libc/include/sys/pthreadtypes.h can be made which
+has defaults for all of the
+> pthread types (your generic void * types) or alternatively these types
+can be put in
+> /src/newlib/libc/sys/cygwin/sys/pthreadtypes.h
+>
+> Put the RTEMS pthread type stuff from sys/types.h into
+src/newlib/libc/sys/rtems/sys/pthreadtypes.h
+> (no need for RTEMS markers and you should bring along the #include
+<sys/sched.h>).
+>
+> If you are ok with the PTHREAD constants from sys/types.h then put
+them into pthread.h where they
+> belong.  If there is conflict between RTEMS and Cygwin for the values
+of the constants, then add __
+> versions in the appropriate system-specific pthreadtypes.h and add a
+check in pthread.h to allow
+> overriding the constants with their __ versions.
+>
+> -- Jeff J.
+>
 
-------------=_1583532847-65438-36
-Content-Type: text/plain; charset=us-ascii;
- name="ChangeLog-winsup-utils-mac-1"
-Content-Disposition: inline; filename="ChangeLog-winsup-utils-mac-1"
-Content-Transfer-Encoding: base64
-Content-Length: 379
+Sorry It's taken me so long to get back to this. Currently cygwin
+completely ignores the newlib pthread.h
 
-MjAwMS0wNC0wOCAgTWljaGFlbCBBIENoYXNlIDxtY2hhc2VAaXgubmV0Y29t
-LmNvbT4KCiAgICAqIHVtb3VudC5jYyAobG9uZ29wdHMpOiBBZGQgaGVscCB0
-byBvcHRpb25zIGxpc3QuCiAgICAqIG1vdW50LmNjIChsb25nb3B0cyk6IEFk
-ZCBoZWxwIGFuZCBtb3VudC1jb21tYW5kcyB0byBvcHRpb25zIGxpc3QuCiAg
-ICAgICAgICAgICAgICh1c2FnZSk6IEFkZCBvcHRpb24gbW91bnQtY29tbWFu
-ZHMuCiAgICAgICAgICAgICAgIChtb3VudF9jb21tYW5kcyk6IEFkZCBmdW5j
-dGlvbi4KCg==
+If you look at the patch I initally submitted to cygwin,
+http://www.cygwin.com/ml/cygwin-patches/2001-q1/msg00221.html
 
-------------=_1583532847-65438-36
-Content-Type: text/x-diff; charset=us-ascii; name="mount.cc-patch"
-Content-Disposition: inline; filename="mount.cc-patch"
-Content-Transfer-Encoding: base64
-Content-Length: 5173
+It includes a cygwin specific header (which already existed, although it
+was blank). As such it's a step in the direction you've outlined. Rather
+than tackle the full job now I'd like to see this go in as is. It fixes
+some build problems on cygwin. I'm happy to follow this up with a more
+comprehensive tackle cleaning the whole lot up, but I'm running out of
+space for separate working directories with my current cygwin work -
+which is new features, not existing code reorganisation. For me, that's
+a higher priority..
 
-LS0tIG1vdW50LmNjLTAJVGh1IEFwciAgNSAwOTo0MDo1MyAyMDAxCisrKyBt
-b3VudC5jYwlTdW4gQXByICA4IDE2OjM2OjU0IDIwMDEKQEAgLTIyLDYgKzIy
-LDcgQEAgZGV0YWlscy4gKi8KICNlbmRpZgogI2luY2x1ZGUgPGVycm5vLmg+
-CiAKK3N0YXRpYyB2b2lkIG1vdW50X2NvbW1hbmRzICh2b2lkKTsKIHN0YXRp
-YyB2b2lkIHNob3dfbW91bnRzICh2b2lkKTsKIHN0YXRpYyB2b2lkIHNob3df
-Y3lnZHJpdmVfaW5mbyAodm9pZCk7CiBzdGF0aWMgdm9pZCBjaGFuZ2VfY3ln
-ZHJpdmVfcHJlZml4IChjb25zdCBjaGFyICpuZXdfcHJlZml4LCBpbnQgZmxh
-Z3MpOwpAQCAtODcsNiArODgsNyBAQCBkb19tb3VudCAoY29uc3QgY2hhciAq
-ZGV2LCBjb25zdCBjaGFyICp3CiAKIHN0cnVjdCBvcHRpb24gbG9uZ29wdHNb
-XSA9CiB7CisgIHsiaGVscCIsIG5vX2FyZ3VtZW50LCBOVUxMLCAnaCcgfSwK
-ICAgeyJiaW5hcnkiLCBub19hcmd1bWVudCwgTlVMTCwgJ2InfSwKICAgeyJm
-b3JjZSIsIG5vX2FyZ3VtZW50LCBOVUxMLCAnZid9LAogICB7InN5c3RlbSIs
-IG5vX2FyZ3VtZW50LCBOVUxMLCAncyd9LApAQCAtOTcsMTAgKzk5LDExIEBA
-IHN0cnVjdCBvcHRpb24gbG9uZ29wdHNbXSA9CiAgIHsiY3lnd2luLWV4ZWN1
-dGFibGUiLCBub19hcmd1bWVudCwgTlVMTCwgJ1gnfSwKICAgeyJzaG93LWN5
-Z2RyaXZlLXByZWZpeCIsIG5vX2FyZ3VtZW50LCBOVUxMLCAncCd9LAogICB7
-ImltcG9ydC1vbGQtbW91bnRzIiwgbm9fYXJndW1lbnQsIE5VTEwsICdpJ30s
-CisgIHsibW91bnQtY29tbWFuZHMiLCBub19hcmd1bWVudCwgTlVMTCwgJ20n
-fSwKICAge05VTEwsIDAsIE5VTEwsIDB9CiB9OwogCi1jaGFyIG9wdHNbXSA9
-ICJiZnN0dXhYcGljIjsKK2NoYXIgb3B0c1tdID0gImhiZnN0dXhYcGljbSI7
-CiAKIHN0YXRpYyB2b2lkCiB1c2FnZSAodm9pZCkKQEAgLTEyMCw2ICsxMjMs
-OCBAQCB1c2FnZSAodm9pZCkKICAgLXgsIC0tZXhlY3V0YWJsZSAgICAgICAg
-ICAgICAgdHJlYXQgYWxsIGZpbGVzIHVuZGVyIG1vdW50IHBvaW50IGFzIGV4
-ZWN1dGFibGVzXG5cCiAgIC1YLCAtLWN5Z3dpbi1leGVjdXRhYmxlICAgICAg
-IHRyZWF0IGFsbCBmaWxlcyB1bmRlciBtb3VudCBwb2ludCBhcyBjeWd3aW5c
-blwKIAkJCQlleGVjdXRhYmxlc1xuXAorICAtbSwgLS1tb3VudC1jb21tYW5k
-cyAgICAgICAgICB3cml0ZSBtb3VudCBjb21tYW5kcyB0byByZXBsYWNlIHVz
-ZXIgYW5kXG5cCisgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN5
-c3RlbSBtb3VudCBwb2ludHMgYW5kIGN5Z2RyaXZlIHByZWZpeGVzXG5cCiAi
-LCBwcm9nbmFtZSk7CiAgIGV4aXQgKDEpOwogfQpAQCAtMTM0LDcgKzEzOSw4
-IEBAIG1haW4gKGludCBhcmdjLCBjaGFyICoqYXJndikKICAgICBuYWRhLAog
-ICAgIHNhd19jaGFuZ2VfY3lnZHJpdmVfcHJlZml4LAogICAgIHNhd19pbXBv
-cnRfb2xkX21vdW50cywKLSAgICBzYXdfc2hvd19jeWdkcml2ZV9wcmVmaXgK
-KyAgICBzYXdfc2hvd19jeWdkcml2ZV9wcmVmaXgsCisgICAgc2F3X21vdW50
-X2NvbW1hbmRzCiAgIH0gZG9fd2hhdCA9IG5hZGE7CiAKICAgcHJvZ25hbWUg
-PSBhcmd2WzBdOwpAQCAtMTg3LDYgKzE5MywxMiBAQCBtYWluIChpbnQgYXJn
-YywgY2hhciAqKmFyZ3YpCiAgICAgICBjYXNlICd4JzoKIAlmbGFncyB8PSBN
-T1VOVF9FWEVDOwogCWJyZWFrOworICAgICAgY2FzZSAnbSc6CisJaWYgKGRv
-X3doYXQgPT0gbmFkYSkKKwkgIGRvX3doYXQgPSBzYXdfbW91bnRfY29tbWFu
-ZHM7CisJZWxzZQorCSAgdXNhZ2UgKCk7CisJYnJlYWs7CiAgICAgICBkZWZh
-dWx0OgogCXVzYWdlICgpOwogICAgICAgfQpAQCAtMjEwLDYgKzIyMiwxMSBA
-QCBtYWluIChpbnQgYXJnYywgY2hhciAqKmFyZ3YpCiAJdXNhZ2UgKCk7CiAg
-ICAgICBzaG93X2N5Z2RyaXZlX2luZm8gKCk7CiAgICAgICBicmVhazsKKyAg
-ICBjYXNlIHNhd19tb3VudF9jb21tYW5kczoKKyAgICAgIGlmIChvcHRpbmQg
-PD0gYXJnYykKKwl1c2FnZSAoKTsKKyAgICAgIG1vdW50X2NvbW1hbmRzICgp
-OworICAgICAgYnJlYWs7CiAgICAgZGVmYXVsdDoKICAgICAgIGlmIChvcHRp
-bmQgIT0gKGFyZ2MgLSAxKSkKIAl7CkBAIC0yMjcsNiArMjQ0LDYyIEBAIG1h
-aW4gKGludCBhcmdjLCBjaGFyICoqYXJndikKIAogICAvKiBOT1RSRUFDSEVE
-ICovCiAgIHJldHVybiAwOworfQorCitzdGF0aWMgdm9pZAorbW91bnRfY29t
-bWFuZHMgKHZvaWQpCit7CisgIEZJTEUgKm0gPSBzZXRtbnRlbnQgKCIvLW5v
-dC11c2VkLSIsICJyIik7CisgIHN0cnVjdCBtbnRlbnQgKnA7CisgIGNoYXIg
-KmM7CisgIGNvbnN0IGNoYXIgKmZvcm1hdF9tbnQgPSAibW91bnQlcyBcIiVz
-XCIgXCIlc1wiXG4iOworICBjb25zdCBjaGFyICpmb3JtYXRfY3lnID0gIm1v
-dW50JXMgLS1jaGFuZ2UtY3lnZHJpdmUtcHJlZml4IFwiJXNcIlxuIjsKKyAg
-Y2hhciBvcHRzW01BWF9QQVRIXTsKKyAgY2hhciB1c2VyW01BWF9QQVRIXTsK
-KyAgY2hhciBzeXN0ZW1bTUFYX1BBVEhdOworICBjaGFyIHVzZXJfZmxhZ3Nb
-TUFYX1BBVEhdOworICBjaGFyIHN5c3RlbV9mbGFnc1tNQVhfUEFUSF07CisK
-KyAgLy8gd3JpdGUgbW91bnQgY29tbWFuZHMgZm9yIHVzZXIgYW5kIHN5c3Rl
-bSBtb3VudCBwb2ludHMKKyAgd2hpbGUgKChwID0gZ2V0bW50ZW50IChtKSkg
-IT0gTlVMTCkgeworICAgIHN0cmNweShvcHRzLCAiIC1mIik7CisgICAgaWYg
-ICAgICAocC0+bW50X3R5cGVbMF0gPT0gJ3UnKQorICAgICAgc3RyY2F0IChv
-cHRzLCAiIC11Iik7CisgICAgZWxzZSBpZiAocC0+bW50X3R5cGVbMF0gPT0g
-J3MnKQorICAgICAgc3RyY2F0IChvcHRzLCAiIC1zIik7CisgICAgaWYgICAg
-ICAocC0+bW50X29wdHNbMF0gPT0gJ2InKQorICAgICAgc3RyY2F0IChvcHRz
-LCAiIC1iIik7CisgICAgZWxzZSBpZiAocC0+bW50X29wdHNbMF0gPT0gJ3Qn
-KQorICAgICAgc3RyY2F0IChvcHRzLCAiIC10Iik7CisgICAgaWYgKHN0cnN0
-ciAocC0+bW50X29wdHMsICIsZXhlYyIpKQorICAgICAgc3RyY2F0IChvcHRz
-LCAiIC14Iik7CisgICAgd2hpbGUgKChjID0gc3RyY2hyIChwLT5tbnRfZnNu
-YW1lLCAnXFwnKSkgIT0gTlVMTCkKKyAgICAgICpjID0gJy8nOworICAgIHBy
-aW50ZiAoZm9ybWF0X21udCwgb3B0cywgcC0+bW50X2ZzbmFtZSwgcC0+bW50
-X2Rpcik7CisgIH0KKyAgZW5kbW50ZW50IChtKTsKKworICAvLyB3cml0ZSBt
-b3VudCBjb21tYW5kcyBmb3IgY3lnZHJpdmUgcHJlZml4ZXMKKyAgY3lnd2lu
-X2ludGVybmFsIChDV19HRVRfQ1lHRFJJVkVfSU5GTywgdXNlciwgc3lzdGVt
-LCB1c2VyX2ZsYWdzLAorCQkgICBzeXN0ZW1fZmxhZ3MpOworICBpZiAoc3Ry
-bGVuICh1c2VyKSA+IDApIHsKKyAgICBzdHJjcHkgKG9wdHMsICIgICAiKTsK
-KyAgICBpZiAgICAgICh1c2VyX2ZsYWdzWzBdID09ICdiJykKKyAgICAgIHN0
-cmNhdCAob3B0cywgIiAtYiIpOworICAgIGVsc2UgaWYgKHVzZXJfZmxhZ3Nb
-MF0gPT0gJ3QnKQorICAgICAgc3RyY2F0IChvcHRzLCAiIC10Iik7CisgICAg
-cHJpbnRmIChmb3JtYXRfY3lnLCBvcHRzLCB1c2VyKTsKKyAgfQorICBpZiAo
-c3RybGVuIChzeXN0ZW0pID4gMCkgeworICAgIHN0cmNweSAob3B0cywgIiAt
-cyIpOworICAgIGlmICAgICAgKHN5c3RlbV9mbGFnc1swXSA9PSAnYicpCisg
-ICAgICBzdHJjYXQgKG9wdHMsICIgLWIiKTsKKyAgICBlbHNlIGlmIChzeXN0
-ZW1fZmxhZ3NbMF0gPT0gJ3QnKQorICAgICAgc3RyY2F0IChvcHRzLCAiIC10
-Iik7CisgICAgcHJpbnRmIChmb3JtYXRfY3lnLCBvcHRzLCBzeXN0ZW0pOwor
-ICB9CisKKyAgZXhpdCgwKTsKIH0KIAogc3RhdGljIHZvaWQK
 
-------------=_1583532847-65438-36
-Content-Type: text/x-diff; charset=us-ascii; name="umount.cc-patch"
-Content-Disposition: inline; filename="umount.cc-patch"
-Content-Transfer-Encoding: base64
-Content-Length: 692
+Rob
 
-LS0tIHVtb3VudC5jYy0wCVN1biBBcHIgIDggMTY6NDE6MDcgMjAwMQorKysg
-dW1vdW50LmNjCVN1biBBcHIgIDggMTY6Mzk6NDggMjAwMQpAQCAtMjUsNiAr
-MjUsNyBAQCBzdGF0aWMgY29uc3QgY2hhciAqcHJvZ25hbWU7CiAKIHN0cnVj
-dCBvcHRpb24gbG9uZ29wdHNbXSA9CiB7CisgIHsiaGVscCIsIG5vX2FyZ3Vt
-ZW50LCBOVUxMLCAnaCcgfSwKICAgeyJyZW1vdmUtYWxsLW1vdW50cyIsIG5v
-X2FyZ3VtZW50LCBOVUxMLCAnQSd9LAogICB7InJlbW92ZS1jeWdkcml2ZS1w
-cmVmaXgiLCBub19hcmd1bWVudCwgTlVMTCwgJ2MnfSwKICAgeyJyZW1vdmUt
-c3lzdGVtLW1vdW50cyIsIG5vX2FyZ3VtZW50LCBOVUxMLCAnUyd9LApAQCAt
-MzQsNyArMzUsNyBAQCBzdHJ1Y3Qgb3B0aW9uIGxvbmdvcHRzW10gPQogICB7
-TlVMTCwgMCwgTlVMTCwgMH0KIH07CiAKLWNoYXIgb3B0c1tdID0gIlJTVXN1
-YyI7CitjaGFyIG9wdHNbXSA9ICJoUlNVc3VjIjsKIAogc3RhdGljIHZvaWQK
-IHVzYWdlICh2b2lkKQo=
-
-------------=_1583532847-65438-36--
