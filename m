@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1553-listarch-cygwin-patches=sourceware.cygnus.com@sources.redhat.com>
-Received: (qmail 21995 invoked by alias); 28 Nov 2001 19:27:37 -0000
+Return-Path: <cygwin-patches-return-1554-listarch-cygwin-patches=sourceware.cygnus.com@sources.redhat.com>
+Received: (qmail 25579 invoked by alias); 28 Nov 2001 22:59:26 -0000
 Mailing-List: contact cygwin-patches-help@sourceware.cygnus.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@sources.redhat.com>
@@ -7,43 +7,41 @@ List-Post: <mailto:cygwin-patches@sources.redhat.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@sources.redhat.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@sources.redhat.com
-Received: (qmail 21975 invoked from network); 28 Nov 2001 19:27:36 -0000
-Date: Mon, 29 Oct 2001 13:10:00 -0000
-From: Alexander Gottwald <Alexander.Gottwald@informatik.tu-chemnitz.de>
-Cc: cygwin-patches@cygwin.com
-Subject: RE: [PATCH] setup.exe: Stop NetIO_HTTP from treating entire stream
- as a  header
-In-Reply-To: <1006914349.637.4.camel@lifelesswks>
-Message-ID: <Pine.LNX.4.21.0111282007530.1783-100000@lupus.ago.vpn>
+Received: (qmail 25559 invoked from network); 28 Nov 2001 22:59:22 -0000
+Message-ID: <036301c17860$1e63e020$0200a8c0@lifelesswks>
+From: "Robert Collins" <robert.collins@itdomain.com.au>
+To: <cygwin-patches@cygwin.com>
+References: <NCBBIHCHBLCMLBLOBONKOEJNCHAA.g.r.vansickle@worldnet.att.net> <00c001c17804$e7c479e0$0200a8c0@lifelesswks> <20011128170742.GD2287@redhat.com>
+Subject: Re: [PATCH] (Updated) setup.exe: Stop NetIO_HTTP from treating entire stream as a header
+Date: Mon, 29 Oct 2001 13:15:00 -0000
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-SW-Source: 2001-q4/txt/msg00085.txt.bz2
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-OriginalArrivalTime: 28 Nov 2001 22:59:20.0414 (UTC) FILETIME=[5065FFE0:01C17860]
+X-SW-Source: 2001-q4/txt/msg00086.txt.bz2
 
-On 28 Nov 2001, Robert Collins wrote:
+----- Original Message -----
+From: "Christopher Faylor" <cgf@redhat.com>
+To: <cygwin-patches@cygwin.com>
+Sent: Thursday, November 29, 2001 4:07 AM
+Subject: Re: [PATCH] (Updated) setup.exe: Stop NetIO_HTTP from treating
+entire stream as a header
 
-> ===
-> NULL
-> 
-> #define NULL <either 0, 0L, or (void *)0> [0 in C++]
-> 
-> The macro yields a null pointer constant that is usable as an address
-> constant expression.
-> ===
 
-I was once told that NULL might not be equal to 0 on all platforms. So 
-there may be a platform where NULL equals to - let say -1 -. Any test
-(!pointer) is on this platform pure nonsense. (pointer != NULL) would 
-be correct. And so am I coding. I don't wan't to see my code crash 
-just because of the assumption that the pointer to core[0] is not valid.
+> On Wed, Nov 28, 2001 at 11:04:56PM +1100, Robert Collins wrote:
+> >GULP. I just checked in my entire sandbox by mistake. HEAD is now
+broken
+> >until I fix that up. ugh.
+>
+> I know how you feel.  I've been doing that a lot lately.  For me,
+that's
+> a sign of multi-tasking breakdown...
 
-This is - afair - defined for C. For C++ I have no clues. But in my 
-opinion it would be much better to test explicitly for an invalid pointer 
-than implicitly. (pointer != NULL) than (pointer != 0)
+Yep, got a little to much on right now.
 
-bye
-    ago
--- 
- Alexander.Gottwald@informatik.tu-chemnitz.de 
- http://www.gotti.org           ICQ: 126018723
- phone: +49 3725 349 80 80	mobile: +49 172 7854017
- 4. Chemnitzer Linux-Tag http://www.tu-chemnitz.de/linux/tag/lt4
+Rob
