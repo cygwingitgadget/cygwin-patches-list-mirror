@@ -1,22 +1,51 @@
-From: Matt <matt@use.net>
-To: <cygwin-patches@cygwin.com>
-Subject: Re: Cut and paste problem with cygwin 1.3.1
-Date: Thu, 26 Apr 2001 12:57:00 -0000
-Message-id: <Pine.NEB.4.30.0104261250290.1458-100000@cesium.clock.org>
-References: <20010426142044.B6609@redhat.com>
-X-SW-Source: 2001-q2/msg00169.html
+From: Kazuhiro Fujieda <fujieda@jaist.ac.jp>
+To: cygwin-patches@cygwin.com
+Subject: Use _REENT_INIT to initialize the reent structure of newlib.
+Date: Thu, 26 Apr 2001 13:28:00 -0000
+Message-id: <s1sk847o183.fsf@jaist.ac.jp>
+X-SW-Source: 2001-q2/msg00170.html
 
-On Thu, 26 Apr 2001, Christopher Faylor wrote:
+The thread_init_wrapper doesn't properly initialize the reent
+structure of newlib. It has some non-zero fields other than
+_stdin, _stdout, and _stderr.
 
-> If you've reproduced it and this patch fixes it, then please check
-> this in.
->
-> I wonder why I can't duplicate it...
+2001-04-27  Kazuhiro Fujieda  <fujieda@jaist.ac.jp>
 
-What platform are you/he using? 1.3.1 still has the same copy/paste
-problem in win9x that I reported a while back. (trying to paste does
-nothing.) STill haven't gotten around to debugging it, maybe sometime this
-weekend...
+	* thread.cc (thread_init_wrapper): Use _REENT_INIT to initialize
+	the reent structure of newlib.
 
---
-http://www.clock.org/~matt
+Index: thread.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/thread.cc,v
+retrieving revision 1.28
+diff -u -p -r1.28 thread.cc
+--- thread.cc	2001/04/23 02:56:19	1.28
++++ thread.cc	2001/04/26 20:20:00
+@@ -737,7 +737,7 @@ thread_init_wrapper (void *_arg)
+   pthread *thread = (pthread *) _arg;
+   struct __reent_t local_reent;
+   struct _winsup_t local_winsup;
+-  struct _reent local_clib;
++  struct _reent local_clib = _REENT_INIT(local_clib);
+ 
+   struct sigaction _sigs[NSIG];
+   sigset_t _sig_mask;		/* one set for everything to ignore. */
+@@ -748,13 +748,7 @@ thread_init_wrapper (void *_arg)
+   thread->sigmask = &_sig_mask;
+   thread->sigtodo = _sigtodo;
+ 
+-  memset (&local_clib, 0, sizeof (struct _reent));
+   memset (&local_winsup, 0, sizeof (struct _winsup_t));
+-
+-  local_clib._errno = 0;
+-  local_clib._stdin = &local_clib.__sf[0];
+-  local_clib._stdout = &local_clib.__sf[1];
+-  local_clib._stderr = &local_clib.__sf[2];
+ 
+   local_reent._clib = &local_clib;
+   local_reent._winsup = &local_winsup;
+
+____
+  | AIST      Kazuhiro Fujieda <fujieda@jaist.ac.jp>
+  | HOKURIKU  School of Information Science
+o_/ 1990      Japan Advanced Institute of Science and Technology
