@@ -1,32 +1,26 @@
-From: "Dr. Volker Zell" <Dr.Volker.Zell@oracle.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: config/i386/cygwin.h Use msvcrt for -mno-cygwin
-Date: Sat, 13 Jan 2001 01:38:00 -0000
-Message-id: <kv4rz36b7r.fsf@vzell.de.oracle.com>
-References: <3A5CCC11.9CF6AC25@yahoo.com> <200101102103.QAA26304@envy.delorie.com> <3A5CCFFC.D20B5B56@yahoo.com> <20010110162922.A4790@redhat.com>
-X-SW-Source: 2001-q1/msg00034.html
+From: Jason Tishler <Jason.Tishler@dothill.com>
+To: Cygwin-Patches <cygwin-patches@sources.redhat.com>
+Subject: setlogmask() patch
+Date: Sun, 21 Jan 2001 19:48:00 -0000
+Message-id: <20010121225155.A1272@dothill.com>
+X-SW-Source: 2001-q1/msg00035.html
 
->>>>> "Christopher" == Christopher Faylor <cgf@redhat.com> writes:
+See attach for (trivial) patch and ChangeLog entry to add back
+setlogmask() to Cygwin.  Note that I followed the other syslog exports
+and exported setlogmask() as _setlogmask() too.  I don't know if this
+was correct.
 
-    Christopher> On Wed, Jan 10, 2001 at 04:11:24PM -0500, Earnie Boyd wrote:
-    >> DJ Delorie wrote:
-    >>> 
-    >>> gcc patches need to be sent to gcc-patches@gcc.gnu.org if you want
-    >>> them applied to the master sources.
-    >> 
-    >> This was mostly for Chris.  He's working on some other changes and I
-    >> promised him this.
+To apply the patch, use the following:
 
-    Christopher> I've got them, thanks.
+    $ cd src/winsup/cygwin
+    $ # save attached patch to /tmp
+    $ patch </tmp/setlogmask.patch
 
-    Christopher> My sources had drifted a little but there was nothing major.  I'll make
-    Christopher> a test release tonight.
+Jason
 
-    Christopher> What does everyone think about making -mno-win32 the default?
-
-Yes, please
-
-    Christopher> cgf
-
-Ciao
-  Volker
+-- 
+Jason Tishler
+Director, Software Engineering       Phone: +1 (732) 264-8770 x235
+Dot Hill Systems Corp.               Fax:   +1 (732) 264-8798
+82 Bethany Road, Suite 7             Email: Jason.Tishler@dothill.com
+Hazlet, NJ 07730 USA                 WWW:   http://www.dothill.com
