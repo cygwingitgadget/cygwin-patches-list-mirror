@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2532-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 666 invoked by alias); 27 Jun 2002 17:18:56 -0000
+Return-Path: <cygwin-patches-return-2533-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 7333 invoked by alias); 28 Jun 2002 09:51:21 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,40 +7,84 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 645 invoked from network); 27 Jun 2002 17:18:54 -0000
-Message-ID: <3D1B48A9.60909@netscape.net>
-Date: Fri, 28 Jun 2002 02:51:00 -0000
-From: Nicholas Wourms <nwourms@netscape.net>
-User-Agent: Mozilla/5.0 (Windows; U; Win 9x 4.90; en-US; rv:1.0rc2) Gecko/20020512 Netscape/7.0b1
-X-Accept-Language: en-us, en
-MIME-Version: 1.0
+Received: (qmail 7319 invoked from network); 28 Jun 2002 09:51:20 -0000
+Date: Fri, 28 Jun 2002 03:57:00 -0000
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: A minor patch to Makefile.in
-References: <3D19F55E.3070800@netscape.net> <3D19F812.70509@netscape.net> <20020627152129.GA6961@redhat.com> <3D1B3783.7030201@netscape.net> <20020627160909.GE7598@redhat.com> <3D1B4293.30707@netscape.net> <20020627165803.GC28018@redhat.com>
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Transfer-Encoding: 7bit
-X-SW-Source: 2002-q2/txt/msg00515.txt.bz2
+Subject: Re: Patch to pass file descriptors
+Message-ID: <20020628115118.Z1188@cygbert.vinschen.de>
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <Pine.GSO.4.30L.0206261539550.20345-600000@biohazard-cafe.mit.edu>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Pine.GSO.4.30L.0206261539550.20345-600000@biohazard-cafe.mit.edu>
+User-Agent: Mutt/1.3.22.1i
+X-SW-Source: 2002-q2/txt/msg00516.txt.bz2
 
-Christopher Faylor wrote:
+On Wed, Jun 26, 2002 at 03:45:07PM -0400, David E Euresti wrote:
+> Hello,
+> 	I finally am able to send in the patch to pass file descriptors.
+> There's still some work to be done like adding security and such, but
+> otherwise it works.
+> There are two new files cygserver_handle.cc and cygserver_handle.h  these
+> go into src/winsup/cygwin
 
->You're right.  You'll need a copyright assignment.
->
-Ok, well I'll work on getting that situated.
+I have a problem with this patch.  First of all, it doesn't fit well
+into current CVS since I've moved most of the socket I/O implementation
+into fhandler_socket.cc a few days ago.
 
->Nope.  As someone who really detests automake, you can probably guess
->why that would be so.
->
->And, since every directory underneath winsup has different configuration
->requirements, it really doesn't make much sense to merge them.  I really
->don't see a big deal here.  There's nothing broken that requires fixing
->as far as I can tell.
->
-I see, well I suppose that is one way to look at it.  Anyhow, are the 
-gettext m4 macros (part of the gettext package) installed on 
-sources.redhat.com?  The reason being that there is no point in 
-reinventing the wheel when a perfectly good set of macros are already 
-defined.  I ask only because I assume you will regenerate configure and 
-aclocal.m4 from my changes to configure.in.
+More problematic is the approach to use cygserver for this.  I've talked
+to Chris about passing descriptors and we agree in that we want to try
+under all circumstances to find a solution which doesn't need cygserver.
+A stand-alone cygwin1.dll should allow that.  Since descriptor passing
+only works on AF_UNIX sockets anyway and these are encapsulated inside
+of Cygwin, we don't have to care for any backward compatibility.
 
-Cheers,
-Nicholas
+So we discussed an approach which basically acts like this:
+
+We could actually use a piece of shared mem, this is created by the
+sending process and filled with it's own pid, the handles and possible
+extra information (The stuff which you've packed into that structure,
+binmode/textmode etc.).  Then it sends a datablock on the socket, giving
+additionally the "name" of the shared memory.  Now it blocks, waiting
+for some sort of "signal" given by the receiving process.  Signalling
+could be accomplished using a named event object using the same name
+as the shared mem object.
+
+The receiving process extracts the name info, opens the shared mem
+and reads the info.  Now it tries to duplicate the handles which
+may or may not work.  If it works, it signals the originator that
+everything's perfectly fine.
+
+If it doesn't work, it fills it's own winpid into the shared mem
+and signals "Hey, I'm lost here!".  Now it waits for a signal of
+the sender process.  The sender gets the pid and tries by itself
+to duplicate the handles.  If that works, it fills the handles into
+the shared memory or it gives up.  Either way, it signals the result
+to the receiver.  The receiver evaluates the signal, either creating
+matching fhandlers or returning fd=-1 and signals the sender that
+it's done.  Then it closes the shared mem.
+
+The sender knows that we're done, closes the shared mem and returns.
+
+The above approach depends on the PROCESS_DUP_HANDLE rights of the
+involved processes unfortunately.  So, a slighty different way is,
+the receiving process could duplicate it's own process handle for
+the sender, giving the PROCESS_DUP_HANDLE permission, and return this
+handle to the sender.  Then the sender always (mostly?) has the 
+permission to create the handles for the receiver.
+
+What do you think?
+
+I'm actually very interested in getting that working so I'd appreciate
+if we could work together on this.
+
+
+Thanks in advance,
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
