@@ -1,26 +1,46 @@
-From: Chris Faylor <cgf@cygnus.com>
-To: Egor Duda <deo@logos-m.ru>
-Cc: cygpatch <cygwin-patches@sourceware.cygnus.com>
-Subject: Re: error_start patch
-Date: Tue, 04 Jul 2000 12:08:00 -0000
-Message-id: <20000704150841.A2846@cygnus.com>
-References: <2891.000522@logos-m.ru>
-X-SW-Source: 2000-q3/msg00009.html
+From: DJ Delorie <dj@delorie.com>
+To: cygwin-patches@sourceware.cygnus.com
+Cc: khan@xraylith.wisc.edu
+Subject: shlobj.h patch
+Date: Tue, 11 Jul 2000 10:33:00 -0000
+Message-id: <200007111733.NAA02079@envy.delorie.com>
+X-SW-Source: 2000-q3/msg00010.html
 
-On Mon, May 22, 2000 at 09:24:02PM +0400, Egor Duda wrote:
->Below is a patch to prevent cygwin's JIT debugger (specified via
->'error_start') from being spawned recursively, in case when debugger
->throws exception itself.  It also allows to notify the debugee
->that  we've    done    with   debugging   and  it  can  exit in peace.
->debugger can post event named
->
->"cygwin_error_start_event_<debugee_win32_pid>"
->
->instead of
->
->(gdb) set keep_looping=0
->(gdb) c
+I've committed this (Mumit take note):
 
-Applied.  And, only a month or so late. :-)
-
-cgf
+Index: ChangeLog
+===================================================================
+RCS file: /cvs/src/src/winsup/w32api/ChangeLog,v
+retrieving revision 1.21
+diff -p -2 -r1.21 ChangeLog
+*** ChangeLog	2000/06/27 18:21:31	1.21
+--- ChangeLog	2000/07/11 17:21:11
+***************
+*** 1,2 ****
+--- 1,6 ----
++ 2000-07-11  DJ Delorie  <dj@cygnus.com>
++ 
++ 	* include/shlobj.h: add CSIDL_COMMON_*
++ 
+  Tue Jun 27 19:35:00 2000  Corinna Vinschen <corinna@vinschen.de>
+  
+Index: include/shlobj.h
+===================================================================
+RCS file: /cvs/src/src/winsup/w32api/include/shlobj.h,v
+retrieving revision 1.3
+diff -p -2 -r1.3 shlobj.h
+*** shlobj.h	2000/04/25 19:13:51	1.3
+--- shlobj.h	2000/07/11 17:21:11
+*************** extern "C" {
+*** 127,130 ****
+--- 127,136 ----
+  #define CSIDL_FONTS	20
+  #define CSIDL_TEMPLATES	21
++ #define CSIDL_COMMON_STARTMENU	22
++ #define CSIDL_COMMON_PROGRAMS	23
++ #define CSIDL_COMMON_STARTUP	24
++ #define CSIDL_COMMON_DESKTOPDIRECTORY	25
++ #define CSIDL_COMMON_ALTSTARTUP	30
++ #define CSIDL_COMMON_FAVORITES	31
+  #define CFSTR_SHELLIDLIST	"Shell IDList Array"
+  #define CFSTR_SHELLIDLISTOFFSET	"Shell Object Offsets"
