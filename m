@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4223-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 15053 invoked by alias); 16 Sep 2003 20:53:26 -0000
+Return-Path: <cygwin-patches-return-4224-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 25111 invoked by alias); 16 Sep 2003 21:01:18 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,33 +7,38 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 15026 invoked from network); 16 Sep 2003 20:53:25 -0000
-Date: Tue, 16 Sep 2003 20:53:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
+Received: (qmail 25095 invoked from network); 16 Sep 2003 21:01:17 -0000
+X-Authentication-Warning: eos.vss.fsi.com: ford owned process doing -bs
+Date: Tue, 16 Sep 2003 21:01:00 -0000
+From: Brian Ford <ford@vss.fsi.com>
+X-X-Sender: ford@eos
 To: cygwin-patches@cygwin.com
 Subject: Re: gethostid and GetDiskFreeSpaceEx on NT4
-Message-ID: <20030916205320.GM23057@redhat.com>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <Pine.GSO.4.56.0309161447260.685@eos>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.GSO.4.56.0309161447260.685@eos>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2003-q3/txt/msg00239.txt.bz2
+Message-ID: <Pine.GSO.4.56.0309161555340.685@eos>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-SW-Source: 2003-q3/txt/msg00240.txt.bz2
 
-On Tue, Sep 16, 2003 at 02:58:54PM -0500, Brian Ford wrote:
->The attached patch fixes the Cygwin testsuite failure I mentioned here:
->
->http://www.cygwin.com/ml/cygwin-developers/2003-09/msg00019.html
->
->2003-09-16  Brian Ford <ford@vss.fsi.com>
->
->	* syscalls.cc (gethostid): GetDiskFreeSpaceEx call on NT4
->	requires lpFreeBytesAvailable argument.
+cgf wrote:
 
-The only question I have is why are you the only person seeing this problem?
-What OS are you running?  I don't see a problem on XP or 2000.
+> The only question I have is why are you the only person seeing this
+> problem?  What OS are you running?  I don't see a problem on XP or 2000.
+>
+I thought the OS was clear from the subject and the comment in the patch,
+but here is more detail:
 
-cgf
+Microsoft Windows NT
+4.00.1381
+
+It should be NT 4 with all the latest windows update stuff patched.  But,
+this is an SGI 320, and so subject to all kinds of possibly weird stuff.
+
+Sorry, I really don't mean to be difficult.
+
+-- 
+Brian Ford
+Senior Realtime Software Engineer
+VITAL - Visual Simulation Systems
+FlightSafety International
+Phone: 314-551-8460
+Fax:   314-551-8444
