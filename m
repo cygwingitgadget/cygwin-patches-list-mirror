@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2585-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 21443 invoked by alias); 3 Jul 2002 08:37:51 -0000
+Return-Path: <cygwin-patches-return-2586-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 16931 invoked by alias); 3 Jul 2002 09:20:39 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,135 +7,42 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 21400 invoked from network); 3 Jul 2002 08:37:48 -0000
-Date: Wed, 03 Jul 2002 01:37:00 -0000
-From: egor duda <deo@logos-m.ru>
-Reply-To: egor duda <cygwin-patches@cygwin.com>
-Organization: deo
-X-Priority: 3 (Normal)
-Message-ID: <14464996970.20020703123443@logos-m.ru>
+Received: (qmail 16889 invoked from network); 3 Jul 2002 09:20:37 -0000
+Date: Wed, 03 Jul 2002 02:20:00 -0000
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: --enable-auto-import extension
-In-Reply-To: <903891375.20020702193614@logos-m.ru>
-References: <1212929671.20020628141818@logos-m.ru>
- <3D1D08A1.9070505@ece.gatech.edu> <180259441557.20020701104656@logos-m.ru>
- <3D20C981.8020407@ece.gatech.edu> <903891375.20020702193614@logos-m.ru>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="----------E01231B83179B856"
-X-SW-Source: 2002-q3/txt/msg00033.txt.bz2
-
-------------E01231B83179B856
+Subject: Re: [PATCH] 2.try: Interruptable accept
+Message-ID: <20020703112036.S21857@cygbert.vinschen.de>
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <Pine.WNT.4.44.0207030945050.298-200000@algeria.intern.net>
+Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-Content-length: 299
+Content-Disposition: inline
+In-Reply-To: <Pine.WNT.4.44.0207030945050.298-200000@algeria.intern.net>
+User-Agent: Mutt/1.3.22.1i
+X-SW-Source: 2002-q3/txt/msg00034.txt.bz2
 
-Hi!
+On Wed, Jul 03, 2002 at 10:05:37AM +0200, Thomas Pfaff wrote:
+> 
+> This version is based on WSAEventSelect.
+> I am working on an interruptable connect now.
+> 
+> Thomas
 
-Tuesday, 02 July, 2002 egor duda deo@logos-m.ru wrote:
+Thanks Thomas, that looks good.  I've applied it with two minor changes:
 
-ed> Ok, i've finalized patch and test.
+- I've turned around your comparisons to conform to the rest of the code.
+  It's hard to read if that suddenly changes in the middle of something.
+  I'd appricate if you could do this in your next patch by yourself.
 
-Attached is a patch to add support runtime pseudo-relocations in
-cygwin once/if binutils with support for them are released.
+- I've changed your comments to plain-C comments.  The comment after
+  the call to ::accept was the only C++ comment in the code anyway and
+  I've eliminated it.
 
-Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
-------------E01231B83179B856
-Content-Type: application/octet-stream; name="cygwin-runtime-pseudo-reloc-support.ChangeLog"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="cygwin-runtime-pseudo-reloc-support.ChangeLog"
-Content-length: 517
+Thanks,
+Corinna
 
-MjAwMi0wNy0wMiAgRWdvciBEdWRhICA8ZGVvQGxvZ29zLW0ucnU+CgoJKiBs
-aWIvY3J0MC5oOiBEZWNsYXJlIF9wZWkzODZfcnVudGltZV9yZWxvY2F0b3Iu
-CgkqIGRjcnQwLmMgKF9wZWkzODZfcnVudGltZV9yZWxvY2F0b3IpOiBQZXJm
-b3JtIHBzZXVkbyByZWxvY3MuCgkqIGN5Z3dpbi5kaW46IEV4cG9ydCBfcGVp
-Mzg2X3J1bnRpbWVfcmVsb2NhdG9yLgoJKiBsaWIvY3lnd2luX2NydDAuYzog
-SW1wb3J0IHN5bWJvbHMgcG9pbnRpbmcgdG8gdGFibGUgb2YgcHNldWRvCgly
-ZWxvY3MuCgkoY3lnd2luX2NydDApOiBQZXJmb3JtIHBzZXVkbyByZWxvY3Mg
-YXQgc3RhcnR1cC4KCSogaW5jbHVkZS9jeWd3aW4vdmVyc2lvbi5oOiBCdW1w
-IEFQSSBtaW5vciB2ZXJzaW9uLgo=
-
-------------E01231B83179B856
-Content-Type: application/octet-stream; name="cygwin-runtime-pseudo-reloc-support.diff"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="cygwin-runtime-pseudo-reloc-support.diff"
-Content-length: 4632
-
-SW5kZXg6IGN5Z3dpbi5kaW4KPT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1Mg
-ZmlsZTogL2N2cy91YmVyYmF1bS93aW5zdXAvY3lnd2luL2N5Z3dpbi5kaW4s
-dgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuNTMKZGlmZiAtdSAtcCAtMiAtcjEu
-NTMgY3lnd2luLmRpbgotLS0gY3lnd2luLmRpbgkyIEp1bCAyMDAyIDA4OjQ0
-OjU0IC0wMDAwCTEuNTMKKysrIGN5Z3dpbi5kaW4JMyBKdWwgMjAwMiAwNjoy
-Mzo0NyAtMDAwMApAQCAtMTQ4LDQgKzE0OCw1IEBAIGRsbF9ub25jeWd3aW5f
-ZGxsY3J0MAogY3lnd2luX2RldGFjaF9kbGwKIGN5Z3dpbjMyX2RldGFjaF9k
-bGwgPSBjeWd3aW5fZGV0YWNoX2RsbAorX3BlaTM4Nl9ydW50aW1lX3JlbG9j
-YXRvcgogQERFRl9ETExfRU5UUllACiBkcmVtCkluZGV4OiBkY3J0MC5jYwo9
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3ViZXJiYXVt
-L3dpbnN1cC9jeWd3aW4vZGNydDAuY2MsdgpyZXRyaWV2aW5nIHJldmlzaW9u
-IDEuMTM1CmRpZmYgLXUgLXAgLTIgLXIxLjEzNSBkY3J0MC5jYwotLS0gZGNy
-dDAuY2MJMjcgSnVuIDIwMDIgMjA6NDQ6MjcgLTAwMDAJMS4xMzUKKysrIGRj
-cnQwLmNjCTMgSnVsIDIwMDIgMDY6MjM6NDcgLTAwMDAKQEAgLTEyNCw0ICsx
-MjQsMjUgQEAgY2hhciAqb2xkX3RpdGxlOwogY2hhciB0aXRsZV9idWZbVElU
-TEVTSVpFICsgMV07CiAKK3R5cGVkZWYgc3RydWN0CisgIHsKKyAgICBEV09S
-RCBhZGRlbmQ7CisgICAgRFdPUkQgdGFyZ2V0OworICB9CitydW50aW1lX3Bz
-ZXVkb19yZWxvYzsKKworZXh0ZXJuICJDIiB2b2lkIF9wZWkzODZfcnVudGlt
-ZV9yZWxvY2F0b3IgKHZvaWQqLCB2b2lkKiwgdm9pZCopOworCit2b2lkCitf
-cGVpMzg2X3J1bnRpbWVfcmVsb2NhdG9yICh2b2lkKiBzdGFydCwgdm9pZCog
-ZW5kLCB2b2lkKiBiYXNlKQoreworICBEV09SRCByZWxvY190YXJnZXQ7Cisg
-IHJ1bnRpbWVfcHNldWRvX3JlbG9jKiByOworICBmb3IgKHIgPSAocnVudGlt
-ZV9wc2V1ZG9fcmVsb2MqKSBzdGFydDsgciA8IChydW50aW1lX3BzZXVkb19y
-ZWxvYyopIGVuZDsgcisrKQorICAgIHsKKyAgICAgIHJlbG9jX3RhcmdldCA9
-IChEV09SRCkgYmFzZSArIHItPnRhcmdldDsKKyAgICAgICooKERXT1JEKikg
-cmVsb2NfdGFyZ2V0KSArPSByLT5hZGRlbmQ7CisgICAgfQorfQorCiBzdGF0
-aWMgdm9pZAogZG9fZ2xvYmFsX2R0b3JzICh2b2lkKQpJbmRleDogaW5jbHVk
-ZS9jeWd3aW4vdmVyc2lvbi5oCj09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KUkNT
-IGZpbGU6IC9jdnMvdWJlcmJhdW0vd2luc3VwL2N5Z3dpbi9pbmNsdWRlL2N5
-Z3dpbi92ZXJzaW9uLmgsdgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuNjYKZGlm
-ZiAtdSAtcCAtMiAtcjEuNjYgdmVyc2lvbi5oCi0tLSBpbmNsdWRlL2N5Z3dp
-bi92ZXJzaW9uLmgJMiBKdWwgMjAwMiAwOTo0MDowNyAtMDAwMAkxLjY2Cisr
-KyBpbmNsdWRlL2N5Z3dpbi92ZXJzaW9uLmgJMyBKdWwgMjAwMiAwNjoyMzo0
-OSAtMDAwMApAQCAtMTUzLDQgKzE1Myw1IEBAIGRldGFpbHMuICovCiAgICAg
-ICAgNTM6IEV4cG9ydCBzdHJsY2F0LCBzdHJsY3B5LgogICAgICAgIDU0OiBF
-eHBvcnQgX19mcGNsYXNzaWZ5ZCwgX19mcGNsYXNzaWZ5ZiwgX19zaWduYml0
-ZCwgX19zaWduYml0Zi4KKyAgICAgICA1NTogRXhwb3J0IF9wZWkzODZfcnVu
-dGltZV9yZWxvY2F0b3IuCiAgICAgICovCiAKQEAgLTE1OCw1ICsxNTksNSBA
-QCBkZXRhaWxzLiAqLwogCiAjZGVmaW5lIENZR1dJTl9WRVJTSU9OX0FQSV9N
-QUpPUiAwCi0jZGVmaW5lIENZR1dJTl9WRVJTSU9OX0FQSV9NSU5PUiA1NAor
-I2RlZmluZSBDWUdXSU5fVkVSU0lPTl9BUElfTUlOT1IgNTUKIAogICAgICAv
-KiBUaGVyZSBpcyBhbHNvIGEgY29tcGF0aWJpdHkgdmVyc2lvbiBudW1iZXIg
-YXNzb2NpYXRlZCB3aXRoIHRoZQpJbmRleDogbGliL2NydDAuaAo9PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3ViZXJiYXVtL3dpbnN1
-cC9jeWd3aW4vbGliL2NydDAuaCx2CnJldHJpZXZpbmcgcmV2aXNpb24gMS4z
-CmRpZmYgLXUgLXAgLTIgLXIxLjMgY3J0MC5oCi0tLSBsaWIvY3J0MC5oCTEx
-IFNlcCAyMDAxIDIwOjAxOjAyIC0wMDAwCTEuMworKysgbGliL2NydDAuaAkz
-IEp1bCAyMDAyIDA2OjIzOjQ5IC0wMDAwCkBAIC0xMyw0ICsxMyw2IEBAIGV4
-dGVybiAiQyIgewogI2VuZGlmCiAKK3ZvaWQgX3BlaTM4Nl9ydW50aW1lX3Jl
-bG9jYXRvciAodm9pZCosIHZvaWQqLCB2b2lkICopOworCiBzdHJ1Y3QgcGVy
-X3Byb2Nlc3M7CiB0eXBlZGVmIGludCAoKk1haW5GdW5jKSAoaW50IGFyZ2Ms
-IGNoYXIgKmFyZ3ZbXSwgY2hhciAqKmVudik7CkluZGV4OiBsaWIvY3lnd2lu
-X2NydDAuYwo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3Zz
-L3ViZXJiYXVtL3dpbnN1cC9jeWd3aW4vbGliL2N5Z3dpbl9jcnQwLmMsdgpy
-ZXRyaWV2aW5nIHJldmlzaW9uIDEuOApkaWZmIC11IC1wIC0yIC1yMS44IGN5
-Z3dpbl9jcnQwLmMKLS0tIGxpYi9jeWd3aW5fY3J0MC5jCTE0IE5vdiAyMDAx
-IDEwOjQ3OjU0IC0wMDAwCTEuOAorKysgbGliL2N5Z3dpbl9jcnQwLmMJMyBK
-dWwgMjAwMiAwNjoyMzo0OSAtMDAwMApAQCAtMTcsNCArMTcsOCBAQCBkZXRh
-aWxzLiAqLwogZXh0ZXJuIHZvaWQgZGxsX2NydDBfX0ZQMTFwZXJfcHJvY2Vz
-cyAoc3RydWN0IHBlcl9wcm9jZXNzICopICBfX2RlY2xzcGVjIChkbGxpbXBv
-cnQpIF9fYXR0cmlidXRlICgobm9yZXR1cm4pKTsKIAorZXh0ZXJuIGNoYXIg
-X19SVU5USU1FX1BTRVVET19SRUxPQ19MSVNUX187CitleHRlcm4gY2hhciBf
-X1JVTlRJTUVfUFNFVURPX1JFTE9DX0xJU1RfRU5EX187CitleHRlcm4gY2hh
-ciBfaW1hZ2VfYmFzZV9fOworCiAvKiBmb3IgbWFpbiBtb2R1bGUgKi8KIHZv
-aWQKQEAgLTIyLDQgKzI2LDcgQEAgY3lnd2luX2NydDAgKE1haW5GdW5jIGYp
-CiB7CiAgIHN0cnVjdCBwZXJfcHJvY2VzcyAqdTsKKyAgX3BlaTM4Nl9ydW50
-aW1lX3JlbG9jYXRvciAoJl9fUlVOVElNRV9QU0VVRE9fUkVMT0NfTElTVF9f
-LAorCQkJICAgICAmX19SVU5USU1FX1BTRVVET19SRUxPQ19MSVNUX0VORF9f
-LAorCQkJICAgICAmX2ltYWdlX2Jhc2VfXyk7CiAgIGlmIChfY3lnd2luX2Ny
-dDBfY29tbW9uIChmLCBOVUxMKSkKICAgICB1ID0gTlVMTDsJCS8qIE5ld2Vy
-IERMTC4gIFVzZSBETEwgaW50ZXJuYWwgcGVyX3Byb2Nlc3MuICovCg==
-
-------------E01231B83179B856--
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
