@@ -1,36 +1,36 @@
 From: Earnie Boyd <earnie_boyd@yahoo.com>
-To: cygpatch <cygwin-patches@sources.redhat.com>
-Subject: Re: w32api/include/winnt.h LPTOKEN_SOURCE definition added by Corinna on  2000-07-21
-Date: Mon, 30 Oct 2000 15:42:00 -0000
-Message-id: <20001030234223.27302.qmail@web123.yahoomail.com>
-X-SW-Source: 2000-q4/msg00014.html
+To: cygwin-patches@sources.redhat.com
+Subject: Re: src/winsup/cinstall ChangeLog desktop.cc
+Date: Wed, 08 Nov 2000 11:14:00 -0000
+Message-id: <20001108191409.10579.qmail@web112.yahoomail.com>
+X-SW-Source: 2000-q4/msg00015.html
 
---- Corinna Vinschen <vinschen@redhat.com> wrote:
-> Earnie Boyd wrote:
-> > 
-> > Corinna,
-> > 
-> > Where is the documentation for this definition?  I can find PTOKEN_SOURCE
-> but
-> > not LPTOKEN_SOURCE via the GOOGLE search engine.
-> 
-> Documentation? Only MSDN. But you're right. Microsoft defines only
-> PTOKEN_SOURCE, not LPTOKEN_SOURCE. I went one step beyond.
-> 
-
-I'll remove it.
+Shouldn't this patch wait until the changes for mkpasswd and mkgroup have made
+distribution?
 
 Cheers,
+Earnie
+--- corinna@sourceware.cygnus.com wrote:
+> CVSROOT:	/cvs/src
+> Module name:	src
+> Changes by:	corinna@sources.redhat.com	2000-11-08 08:24:39
+> 
+> Modified files:
+> 	winsup/cinstall: ChangeLog desktop.cc 
+> 
+> Log message:
+> 	* desktop.cc (make_passwd_group): Don't exit when started
+> 	on 9x/ME since mkpasswd/mkgroup are usable on 9x/ME now.
+> 
+> Patches:
+>
+http://sources.redhat.com/cgi-bin/cvsweb.cgi/src/winsup/cinstall/ChangeLog.diff?cvsroot=src&r1=2.25&r2=2.26
+>
+http://sources.redhat.com/cgi-bin/cvsweb.cgi/src/winsup/cinstall/desktop.cc.diff?cvsroot=src&r1=2.4&r2=2.5
+> 
 
-=====
-Earnie Boyd
-mailto:earnie_boyd@yahoo.com
-
----         < http://earniesystems.safeshopper.com >         ---
---- Cygwin: POSIX on Windows < http://gw32.freeyellow.com/ > ---
----   Minimalist GNU for Windows < http://www.mingw.org/ >   ---
 
 __________________________________________________
 Do You Yahoo!?
-Yahoo! Messenger - Talk while you surf!  It's FREE.
-http://im.yahoo.com/
+Thousands of Stores.  Millions of Products.  All in one Place.
+http://shopping.yahoo.com/
