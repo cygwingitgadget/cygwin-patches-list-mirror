@@ -1,30 +1,26 @@
 From: Egor Duda <deo@logos-m.ru>
 To: cygwin-patches@cygwin.com
 Subject: signal semaphores inheritance
-Date: Tue, 20 Feb 2001 08:25:00 -0000
-Message-id: <1616663500.20010220192409@logos-m.ru>
-X-SW-Source: 2001-q1/msg00090.html
-Content-type: multipart/mixed; boundary="----------=_1583532846-65438-8"
+Date: Tue, 20 Feb 2001 08:33:00 -0000
+Message-id: <12317106818.20010220193133@logos-m.ru>
+X-SW-Source: 2001-q1/msg00091.html
+Content-type: multipart/mixed; boundary="----------=_1583532846-65438-9"
 
 This is a multi-part message in MIME format...
 
-------------=_1583532846-65438-8
-Content-length: 469
+------------=_1583532846-65438-9
+Content-length: 197
 
 Hi!
 
-  if  ntsec is on and cygwin app a.exe  (with pid x) starts non-cygwin
-app  b.exe,  b.exe  inherits  cygwin1S3.sigcatch.x semaphore. if a.exe
-dies  and  b.exe continue  execution,  and  if  new  cygwin  app c.exe
-got  pid  x it, fails to create sigcatch semaphore. looks like typo in
-getsem() to me. is this patch ok?
+  oops. sorry, sent wrong diff and changelog.
 
 Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
-signal-semaphore-no-inherit.diff
 signal-semaphore-no-inherit.ChangeLog
+signal-semaphore-no-inherit.diff
 
 
-------------=_1583532846-65438-8
+------------=_1583532846-65438-9
 Content-Type: text/x-diff; charset=us-ascii;
  name="signal-semaphore-no-inherit.ChangeLog"
 Content-Disposition: inline; filename="signal-semaphore-no-inherit.ChangeLog"
@@ -46,7 +42,7 @@ IHNlY191c2VyX25paCAoc2FfYnVmKSA6ICZzZWNfbm9uZV9uaWgsCiAJCQkg
 ICBpbml0LCBtYXgsIHN0ciA9IHNoYXJlZF9uYW1lIChzdHIsIHdpbnBpZCkp
 OwogICAgICAgcCA9IG15c2VsZjsK
 
-------------=_1583532846-65438-8
+------------=_1583532846-65438-9
 Content-Type: text/x-diff; charset=us-ascii;
  name="signal-semaphore-no-inherit.diff"
 Content-Disposition: inline; filename="signal-semaphore-no-inherit.diff"
@@ -68,4 +64,4 @@ IHNlY191c2VyX25paCAoc2FfYnVmKSA6ICZzZWNfbm9uZV9uaWgsCiAJCQkg
 ICBpbml0LCBtYXgsIHN0ciA9IHNoYXJlZF9uYW1lIChzdHIsIHdpbnBpZCkp
 OwogICAgICAgcCA9IG15c2VsZjsK
 
-------------=_1583532846-65438-8--
+------------=_1583532846-65438-9--
