@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5192-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 2092 invoked by alias); 6 Dec 2004 19:54:44 -0000
+Return-Path: <cygwin-patches-return-5193-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 13334 invoked by alias); 11 Dec 2004 08:51:16 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,81 +7,51 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 1891 invoked from network); 6 Dec 2004 19:54:37 -0000
-Received: from unknown (HELO green.qinip.net) (62.100.30.36)
-  by sourceware.org with SMTP; 6 Dec 2004 19:54:37 -0000
-Received: from buzzy-box (hmm-dca-ap03-d12-060.dial.freesurf.nl [62.100.11.60])
-	by green.qinip.net (Postfix) with SMTP
-	id B495D4366; Mon,  6 Dec 2004 20:54:34 +0100 (MET)
-Message-ID: <n2m-g.cp2gdj.3vvajm7.1@buzzy-box.bavag>
-From: Bas van Gompel <cygwin-patches.buzz@bavag.tmfweb.nl>
-Subject: Re: [Patch] fhandler.cc (pust_readahead): end-condition off.
-References: <n2m-g.cp0gle.3vsh6i5.1@buzzy-box.bavag> <20041206151619.GA11120@trixie.casa.cgf.cx>
-Reply-To: cygwin-patches mailing-list <cygwin-patches@cygwin.com>
-Organisation: Ehm...
-User-Agent: slrn/0.9.8.1 (Win32) Hamster/2.0.6.0 Korrnews/4.2
+Received: (qmail 13311 invoked from network); 11 Dec 2004 08:51:11 -0000
+Received: from unknown (HELO cygbert.vinschen.de) (80.132.108.209)
+  by sourceware.org with SMTP; 11 Dec 2004 08:51:11 -0000
+Received: by cygbert.vinschen.de (Postfix, from userid 500)
+	id D232157E53; Sat, 11 Dec 2004 09:53:19 +0100 (CET)
+Date: Sat, 11 Dec 2004 08:51:00 -0000
+From: Corinna Vinschen <vinschen@redhat.com>
 To: cygwin-patches@cygwin.com
-In-Reply-To: <20041206151619.GA11120@trixie.casa.cgf.cx>
-Date: Mon, 06 Dec 2004 19:54:00 -0000
-X-SW-Source: 2004-q4/txt/msg00193.txt.bz2
+Subject: Re: [Patch] fhandler.cc (pust_readahead): end-condition off.
+Message-ID: <20041211085319.GA13243@cygbert.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <n2m-g.cp0gle.3vsh6i5.1@buzzy-box.bavag>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <n2m-g.cp0gle.3vsh6i5.1@buzzy-box.bavag>
+User-Agent: Mutt/1.4.2i
+X-SW-Source: 2004-q4/txt/msg00194.txt.bz2
 
-Op Mon, 6 Dec 2004 10:16:19 -0500 schreef Christopher Faylor
-in <20041206151619.GA11120@trixie.casa.cgf.cx>:
-:  On Mon, Dec 06, 2004 at 02:45:10AM +0100, Bas van Gompel wrote:
-[...]
+On Dec  6 02:45, Bas van Gompel wrote:
+> 2004-12-06 Bas van Gompel  <cygwin-patch@bavag.tmfweb.nl>
+> 
+> 	* fhandler.cc (fhandler_base::puts_readahead): Fix end-condition.
+> 
+> 
+> --- src/winsup/cygwin-mmod/fhandler.cc	5 Dec 2004 07:28:27 -0000	1.209
+> +++ src/winsup/cygwin-mmod/fhandler.cc	6 Dec 2004 01:14:14 -0000
+> @@ -54,7 +54,7 @@ int
+>  fhandler_base::puts_readahead (const char *s, size_t len)
+>  {
+>    int success = 1;
+> -  while ((*s || (len != (size_t) -1 && len--))
+> +  while ((len == (size_t) -1 ? *s : len--)
+>  	 && (success = put_readahead (*s++) > 0))
+>      continue;
+>    return success;
 
-: > 	* fhandler.cc (fhandler_base::puts_readahead): Fix end-condition.
-:
-:   This patch changes things so that len characters are always output if
-:  len is != -1.  It has been a while since I worked on this code but it's
-:  not clear that that is correct.
-
-I found following clues:
-
-
-C1:
-`cvs annotate -r1.16 fhandler.cc`, line 75:
-| 1.1          (cgf      17-Feb-00):   while ((((len == (size_t) -1) && *s) || len--) &&
-
-This code seems to intend to not test ``*s'' when len != -1.
-
-
-C2:
-`cvs annotate fhandler.cc` (for current version), line 57
-| 1.17         (corinna  09-May-00):   while ((*s || (len != (size_t) -1 && len--))
-ChangeLog-2000 about above change:
-| 	* fhandler.cc (fhandler_base::puts_readahead): Change
-| 	while condition to disallow wild runs.
-
-The wild runs would occur when *s became 0, len would then be
-decremented to -2. This ``new'' code does not seem to want to decrement
-len when ``*s'' is nonzero.
+Yes, that looks better.  I'd say the patch is correct.  Please apply.
 
 
-C3:
-(fhandler_tty.cc (fhandler_pty_master::accept_input):)
-...
-|      rc = WriteFile (get_output_handle (), p, bytes_left, &written, NULL);
-...
-| 	  p += written;
-| 	  bytes_left -= written;
-...
-| 	      puts_readahead (p, bytes_left);
+Thanks,
+Corinna
 
-
-I don't think there is a reason to not send all that wasn't written,
-to the readahead-buffer.
-[...]
-
-
-I hope this helps.
-
-
-L8r,
-
-Buzz.
 -- 
-  ) |  | ---/ ---/  Yes, this | This message consists of true | I do not
---  |  |   /    /   really is |   and false bits entirely.    | mail for
-  ) |  |  /    /    a 72 by 4 +-------------------------------+ any1 but
---  \--| /--- /---  .sigfile. |   |perl -pe "s.u(z)\1.as."    | me. 4^re
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          mailto:cygwin@cygwin.com
+Red Hat, Inc.
