@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5015-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 3480 invoked by alias); 5 Oct 2004 14:40:06 -0000
+Return-Path: <cygwin-patches-return-5016-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 12022 invoked by alias); 5 Oct 2004 14:45:46 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,48 +7,41 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 3447 invoked from network); 5 Oct 2004 14:40:04 -0000
-Date: Tue, 05 Oct 2004 14:40:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
+Received: (qmail 11837 invoked from network); 5 Oct 2004 14:45:44 -0000
+Date: Tue, 05 Oct 2004 14:45:00 -0000
+From: Corinna Vinschen <vinschen@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [Patch] pinfo.cc: second CreatePipe, not first.
-Message-ID: <20041005144025.GC13719@trixie.casa.cgf.cx>
+Subject: Re: [Patch] cygcheck: warn about empty path-components
+Message-ID: <20041005144649.GB30752@cygbert.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <n2m-g.cjt3mt.3vvcq0n.1@buzzy-box.bavag> <20041005021043.GA7897@trixie.casa.cgf.cx> <n2m-g.cjtq1h.3vvba3b.1@buzzy-box.bavag>
+References: <n2m-g.cjth8v.3vsj9uv.1@buzzy-box.bavag> <20041005081629.GI6702@cygbert.vinschen.de> <Pine.CYG.4.58.0410050902580.5620@fordpc.vss.fsi.com> <20041005143458.GB13719@trixie.casa.cgf.cx>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <n2m-g.cjtq1h.3vvba3b.1@buzzy-box.bavag>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2004-q4/txt/msg00016.txt.bz2
+In-Reply-To: <20041005143458.GB13719@trixie.casa.cgf.cx>
+User-Agent: Mutt/1.4.2i
+X-SW-Source: 2004-q4/txt/msg00017.txt.bz2
 
-On Tue, Oct 05, 2004 at 09:45:53AM +0200, Bas van Gompel wrote:
->Op Mon, 4 Oct 2004 22:10:43 -0400 schreef Christopher Faylor
->in <20041005021043.GA7897@trixie.casa.cgf.cx>:
->:  On Tue, Oct 05, 2004 at 03:49:20AM +0200, Bas van Gompel wrote:
->
->[...]
->
->: > 	* pinfo.cc (_pinfo::commune_send): Make debugging output less ambiguous.
->:
->:   I've applied this patch.  Thanks.
->:
->:  I used a slightly less ambiguous ChangeLog, though. :-)
->
->``Correct debugging output.'' is less ambiguous? If you say so... :]
+On Oct  5 10:34, Christopher Faylor wrote:
+> On Tue, Oct 05, 2004 at 09:09:31AM -0500, Brian Ford wrote:
+> >The current directory is specified by a null path name, which can appear
+> >immediately after the equal sign, between two colon delimiters anywhere in
+> >the path list, or at the end of the path list.
+> >[...]
+> >I believe this is a valid construct and I have used it frequently.
+> 
+> Ditto.
+> 
+> PATH=/foo::/bar
+> 
+> means search for /foo, then the current directory, then /bar.
 
-Yes, it is.  Having two debugging messages say "first" is obviously a
-mistake that should be corrected.  It wasn't ambiguous.  It was wrong.
+Oh, interesting.  I never even thought about using an empty path.
 
->BTW: What was your change to fhandler_termios.cc about? I see no
->ChangeLog-entry/cvs message for that.
+Corinna
 
-That was a mistaken checkin.  I've reverted it.  Thanks for the heads up.
-
->BTW2: Did you see the question at the bottom of my other mail?
-
-No, I didn't but the answer to your question is "I don't know it would
-take some research to figure out."
-
-cgf
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          mailto:cygwin@cygwin.com
+Red Hat, Inc.
