@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5109-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 7018 invoked by alias); 1 Nov 2004 02:01:49 -0000
+Return-Path: <cygwin-patches-return-5110-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 20958 invoked by alias); 3 Nov 2004 02:17:09 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,96 +7,122 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 6989 invoked from network); 1 Nov 2004 02:01:47 -0000
+Received: (qmail 20942 invoked from network); 3 Nov 2004 02:17:07 -0000
 Received: from unknown (HELO phumblet.no-ip.org) (68.163.203.248)
-  by sourceware.org with SMTP; 1 Nov 2004 02:01:47 -0000
+  by sourceware.org with SMTP; 3 Nov 2004 02:17:07 -0000
 Received: from [192.168.1.156] (helo=hpn5170)
 	by phumblet.no-ip.org with smtp (Exim 4.43)
-	id I6H9RB-001JJB-NC
-	for cygwin-patches@cygwin.com; Sun, 31 Oct 2004 21:04:23 -0500
-Message-Id: <3.0.5.32.20041031205707.0082c210@incoming.verizon.net>
+	id I6KZSX-0082E7-0B
+	for cygwin-patches@cygwin.com; Tue, 02 Nov 2004 21:19:45 -0500
+Message-Id: <3.0.5.32.20041102211220.00827d50@incoming.verizon.net>
 X-Sender: vze1u1tg@incoming.verizon.net (Unverified)
-Date: Mon, 01 Nov 2004 02:01:00 -0000
+Date: Wed, 03 Nov 2004 02:17:00 -0000
 To: cygwin-patches@cygwin.com
 From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
-Subject: Re: [Patch] unlink
-In-Reply-To: <20041031234730.GA4220@trixie.casa.cgf.cx>
-References: <3.0.5.32.20041031101448.0082c630@incoming.verizon.net>
- <3.0.5.32.20041030223054.008277e0@incoming.verizon.net>
- <4182BDCF.3C04BAF8@phumblet.no-ip.org>
- <4182BDCF.3C04BAF8@phumblet.no-ip.org>
- <3.0.5.32.20041030223054.008277e0@incoming.verizon.net>
- <3.0.5.32.20041031101448.0082c630@incoming.verizon.net>
+Subject: [PATCH] kill -f
 Mime-Version: 1.0
+Content-Type: multipart/mixed; boundary="=====================_1099465940==_"
+X-SW-Source: 2004-q4/txt/msg00111.txt.bz2
+
+--=====================_1099465940==_
 Content-Type: text/plain; charset="us-ascii"
-X-SW-Source: 2004-q4/txt/msg00110.txt.bz2
+Content-length: 294
 
-At 06:47 PM 10/31/2004 -0500, you wrote:
->On Sun, Oct 31, 2004 at 10:14:48AM -0500, Pierre A. Humblet wrote:
->>At 11:36 PM 10/30/2004 -0400, Christopher Faylor wrote:
->>>On Sat, Oct 30, 2004 at 10:30:54PM -0400, Pierre A. Humblet wrote:
->>>>At 01:39 PM 10/30/2004 -0400, you wrote:
->>>>>On Fri, Oct 29, 2004 at 06:01:51PM -0400, Pierre A. Humblet wrote:
->>>>>>Here is a patch that should allow unlink() to handle
->>>>>>nul etc.. on local disks.
->>>>>>
->>>>>>It's a cut and paste of Corinna's open on NT and the
->>>>>>existing CreateFile.
->>>>>> 
->>>>>>It works on normal files. I haven't tested with the
->>>>>>special names because I forgot how to create them !
->>>>>>Feedback welcome.
->>>>>>
->>>>>>XXXXX This should NOT be applied in 1.5.12 XXXXXX
->>>>>>
->>>>>>Pierre
->>>>>>
->>>>>>2004-10-29  Pierre Humblet <pierre.humblet@ieee.org>
->>>>>>
->>>>>>	* syscalls.cc (nt_delete): New function.
->>>>>>	(unlink): Call nt_delete instead of CreateFile and remove
->>>>>>	unreachable code.
->>>>>
->>>>>Corinna suggested something similar to me a couple of months ago but I
->>>>>wanted to wait for things to settle down somewhat after the original
->>>>>use of NtCreateFile.
->>>>>
->>>>>On reflection, however, wouldn't it be a little easier just to prepend
->>>>>the path being deleted with a: \\.\ so that "rm nul" would eventually
->>>>>translate to DeleteFile("\\.\c:\foo\null") (I'm not using true C
->>>>>backslash quoting here)?  I don't know if that would work on Windows 9x,
->>>>>though.
->>>>
->>>>That would work on NT, but then one would need to check if the input
->>>>path didn't already have the form //./xx, worry about exceeding max 
->>>>pathlength, etc...
->>>
->>>Other than being able to delete special filenames is there any other
->>>benefit to using NtCreateFile to delete files?
->>
->>I can only think of speed. But I don't see a downside either, given that
->>we use it in open().
->>
->>>If path length was an issue we could use '//?/' instead since the length
->>>restriction is a lot larger there.  So, it would be something like:
->>>
->>>  char *path;
->>>  char newpath[strlen (win32_name) + 4] = "\\\\?\";
->>>  if  (win32_name[0] != '\\')
->>>      path = strcat (newpath, win32_name);
->>>  else
->>>      path = win32_name;
->>>
->>>and then you'd use path throughout from then on.
->>
->>Have you tried it? According to MSDN you need to use the Unicode version
->>if you do that.
->
->Yes.  I created and deleted a file using '//?/d:/nul' from the command line.
-
-It's interesting that //?/ also works as an escape with the ascii version.
-But on re-reading MSDN, the unicode version should only be needed when
-the pathlength exceeds 260 chars.
-BTW, don't try that on WinME. I ended up having to power the PC down.
+This patch allows kill.exe -f to deal with Win9x pids.
 
 Pierre
+
+2004-11-03  Pierre Humblet <pierre.humblet@ieee.org>
+
+	* kill.cc (forcekill): Do not pass negative pids to 
+	cygwin_internal.
+	(main): Make pid a long long and distinguish between pids,
+	gpids (i.e. negative pids) and Win9x pids.
+
+--=====================_1099465940==_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment; filename="kill.diff"
+Content-length: 2364
+
+Index: kill.cc
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+RCS file: /cvs/src/src/winsup/utils/kill.cc,v
+retrieving revision 1.24
+diff -u -p -b -r1.24 kill.cc
+--- kill.cc	27 May 2004 15:15:51 -0000	1.24
++++ kill.cc	2 Nov 2004 16:05:44 -0000
+@@ -17,6 +17,7 @@ details. */
+ #include <windows.h>
+ #include <sys/cygwin.h>
+ #include <getopt.h>
++#include <limits.h>
+
+ static const char version[] =3D "$Revision: 1.14 $";
+ static char *prog_name;
+@@ -157,7 +158,10 @@ forcekill (int pid, int sig, int wait)
+   // try to acquire SeDebugPrivilege
+   get_debug_priv();
+
+-  external_pinfo *p =3D (external_pinfo *) cygwin_internal (CW_GETPINFO_FU=
+LL, pid);
++  external_pinfo *p =3D NULL;
++  /* cygwin_internal misinterprets negative pids (Win9x pids) */
++  if (pid > 0)
++    p =3D (external_pinfo *) cygwin_internal (CW_GETPINFO_FULL, pid);
+   DWORD dwpid =3D p ? p->dwProcessId : (DWORD) pid;
+   HANDLE h =3D OpenProcess (PROCESS_TERMINATE, FALSE, (DWORD) dwpid);
+   if (!h)
+@@ -195,7 +199,7 @@ main (int argc, char **argv)
+   opterr =3D 0;
+
+   char *p;
+-  int pid =3D 0;
++  long long int pid =3D 0;
+
+   for (;;)
+     {
+@@ -235,7 +239,7 @@ main (int argc, char **argv)
+ 	case '?':
+ 	  if (gotasig)
+ 	    {
+-	      pid =3D strtol (argv[optind], &p, 10);
++	      pid =3D strtoll (argv[optind], &p, 10);
+ 	      if (pid < 0)
+ 		goto out;
+ 	      usage ();
+@@ -258,23 +262,23 @@ out:
+   while (*argv !=3D NULL)
+     {
+       if (!pid)
+-	pid =3D strtol (*argv, &p, 10);
+-      if (*p !=3D '\0')
++	pid =3D strtoll (*argv, &p, 10);
++      if (pid < LONG_MIN || pid > ULONG_MAX || *p !=3D '\0')
+ 	{
+ 	  fprintf (stderr, "%s: illegal pid: %s\n", prog_name, *argv);
+ 	  ret =3D 1;
+ 	}
+-      else if (kill (pid, sig) =3D=3D 0)
++      else if (pid <=3D LONG_MAX && kill ((pid_t) pid, sig) =3D=3D 0)
+ 	{
+ 	  if (force)
+-	    forcekill (pid, sig, 1);
++	    forcekill ((pid_t) pid, sig, 1);
+ 	}
+-      else if (force && sig !=3D 0)
+-	forcekill (pid, sig, 0);
++      else if (pid > 0 && (force || pid > LONG_MAX) && sig !=3D 0)
++	forcekill ((pid_t) pid, sig, 0);
+       else
+ 	{
+ 	  char buf[1000];
+-	  sprintf (buf, "%s %d", prog_name, pid);
++	  sprintf (buf, "%s %lld", prog_name, pid);
+ 	  perror (buf);
+ 	  ret =3D 1;
+ 	}
+
+--=====================_1099465940==_--
