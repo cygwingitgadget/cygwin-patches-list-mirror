@@ -1,24 +1,42 @@
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: storing symlink in extended attribute (on ntfs)
-Date: Wed, 30 May 2001 22:27:00 -0000
-Message-id: <20010531012740.A21788@redhat.com>
-References: <1791875116.20010510172000@logos-m.ru> <12912395994.20010510201521@logos-m.ru> <20010511142639.A26920@redhat.com> <64168820861.20010512154228@logos-m.ru> <178350282529.20010514180653@logos-m.ru> <18289228183.20010524164714@logos-m.ru> <20010529214139.B14906@redhat.com> <13839205033.20010530104808@logos-m.ru> <20010530095435.C17603@redhat.com>
-X-SW-Source: 2001-q2/msg00271.html
+From: "Michael A. Chase" <mchase@ix.netcom.com>
+To: <cygwin-patches@cygwin.com>
+Subject: [PATCH]Setup version in setup.log
+Date: Thu, 31 May 2001 11:51:00 -0000
+Message-id: <00d801c0ea02$60a47a40$0332273f@ca.boeing.com>
+References: <000b01c0e741$63e0a0d0$6e3a243f@ca.boeing.com>
+X-SW-Source: 2001-q2/msg00272.html
 
-On Wed, May 30, 2001 at 09:54:35AM -0400, Christopher Faylor wrote:
->Ok.  I have some pending changes to path.cc that I would like to get in
->before you checkin your changes.  I am storing the DriveType and
->volume information in the path_conv class now.  I'll check this in
->as soon as I've had a chance to test it some more.
+I still haven't gotten the disclaimer from my company, but I hope you can
+consider this a minor change.
 
-Ok.  These are checked in.  I made all sorts of changes to propate the
-remoteness of the path from path_conv and then it turned out that I'd
-misdiagnosed the problem I was fixing and I really didn't need it.
+ChangeLog:
 
-I left the setting in because I suspect that it will still be useful,
-though.
+2001-05-31  Michael Chase mchase@ix.netcom.com
 
-So, go ahead and check your stuff in, Egor.
+    * main.cc (WinMain): Add setup version to starting setup.log entry
 
-cgf
+Patch:
+
+--- old/main.cc Wed Sep  6 20:09:30 2000
++++ new/main.cc Sun May 27 23:30:22 2001
+@@ -37,6 +37,7 @@ static char *cvsid = "\n%%% $Id: main.cc
+ #include "find.h"
+ #include "mount.h"
+ #include "log.h"
++#include "version.h"
+
+ #include "port.h"
+
+@@ -57,7 +58,7 @@ WinMain (HINSTANCE h,
+
+   next_dialog = IDD_SPLASH;
+
+-  log (LOG_TIMESTAMP, "Starting cygwin install");
++  log (LOG_TIMESTAMP, "Starting cygwin install version %s", version);
+
+   char cwd[_MAX_PATH];
+   GetCurrentDirectory (sizeof (cwd), cwd);
+
+
+
+
