@@ -1,22 +1,39 @@
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: fhandler_console
-Date: Mon, 26 Feb 2001 16:15:00 -0000
-Message-id: <20010226191432.E6209@redhat.com>
-References: <16286062992.20010216183758@logos-m.ru> <20010219214951.A23483@redhat.com> <7888578378.20010220130012@logos-m.ru> <17613156858.20010223151715@logos-m.ru>
-X-SW-Source: 2001-q1/msg00118.html
+From: Egor Duda <deo@logos-m.ru>
+To: Corinna Vinschen <cygwin-patches@cygwin.com>
+Subject: Re: lseek() fails to seek on /dev/fd0 ('\\.\A:')
+Date: Tue, 27 Feb 2001 01:47:00 -0000
+Message-id: <12658340509.20010227124539@logos-m.ru>
+References: <u67ae79bw6v.fsf@rachel.hq.vtech> <u671ysl8xda.fsf@rachel.hq.vtech> <613331659.20010226160225@logos-m.ru> <3A9A621F.7661F240@yahoo.com> <20010226161735.P27406@cygbert.vinschen.de> <1825816804.20010226221015@logos-m.ru> <20010227004550.X27406@cygbert.vinschen.de>
+X-SW-Source: 2001-q1/msg00119.html
 
-On Fri, Feb 23, 2001 at 03:17:15PM +0300, Egor Duda wrote:
->i've   moved   console  state variables inside fhandler_console class.
->this is a combined patch (with raw keyboard mode patch i sent sometime
->ago). it adds 4 new rendition commands (\033[24;27;39;49m), compatible
->with  linux console and already described in Chuck's terminfo file for
->cygwin, and emulate "blink" attribute with bright background.
+Hi!
 
-Wow, you've done a lot of work here.  It all looks fine.  Please check it
-in.
+Tuesday, 27 February, 2001 Corinna Vinschen cygwin-patches@cygwin.com wrote:
 
-Thanks for your incredible effort.  It is much appreciated.  IMO, it makes
-things much more structured in the console code.
+CV> On Mon, Feb 26, 2001 at 10:10:15PM +0300, Egor Duda wrote:
+>> CV> Indeed. I would be interested in the trivial patch as well.
+>> 
+>> well, almost trivial ;-)
+>> It's not fully compatible with linux, as it doesn't allow seeking past
+>> the  end  of  media (i think this is ok), and, alas, for NT only :( (i
+>> don't  think  this  is ok, but i haven't found a way to get media size
+>> under w9x)
 
-cgf
+CV> Did you try that even on raw partitions (\\.\X:)? From the MSDN:
+
+CV> "The IOCTL_DISK_GET_DRIVE_GEOMETRY control code retrieves information
+CV>  about the physical disk's geometry"
+ 
+CV> so I assume it will only work for raw harddisks (\\.\physicaldriveN).
+
+Yep,    you're    right.    I    can    work    around    this    with
+IOCTL_DISK_GET_PARTITION_INFO  ioctl,  but here comes the problem with
+off_t  and  size_t being long int :(  So we won't be able to work with
+drives  and  partitions  longer  then  2G  (which  are  very  frequent
+nowadays). Should we return EINVAL in such cases?
+
+BTW,   does   anybody  have  MO drives around to test this ioctls with
+partitioned removable media?
+
+Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
+
