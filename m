@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3218-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 24760 invoked by alias); 22 Nov 2002 14:55:32 -0000
+Return-Path: <cygwin-patches-return-3219-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 21141 invoked by alias); 22 Nov 2002 16:15:43 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,30 +7,55 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 24743 invoked from network); 22 Nov 2002 14:55:30 -0000
-X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
-Date: Fri, 22 Nov 2002 06:55:00 -0000
-From: Thomas Pfaff <tpfaff@gmx.net>
-To: Robert Collins <rbcollins@cygwin.com>
-cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Patch for MTinterface
-In-Reply-To: <1036502950.17049.51.camel@lifelesswks>
-Message-ID: <Pine.WNT.4.44.0211221554320.379-100000@algeria.intern.net>
-X-X-Sender: pfaff@antarctica.intern.net
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-SW-Source: 2002-q4/txt/msg00169.txt.bz2
+Received: (qmail 21132 invoked from network); 22 Nov 2002 16:15:41 -0000
+Date: Fri, 22 Nov 2002 08:15:00 -0000
+From: Jason Tishler <jason@tishler.net>
+Subject: version.h yank and put patch
+To: Cygwin-Patches <cygwin-patches@cygwin.com>
+Mail-followup-to: Cygwin-Patches <cygwin-patches@cygwin.com>
+Message-id: <20021122162119.GC1584@tishler.net>
+MIME-version: 1.0
+Content-type: multipart/mixed; boundary="Boundary_(ID_PwhbjCKjih1pC9ptdDJOkA)"
+User-Agent: Mutt/1.4i
+X-SW-Source: 2002-q4/txt/msg00170.txt.bz2
 
 
+--Boundary_(ID_PwhbjCKjih1pC9ptdDJOkA)
+Content-type: text/plain; charset=us-ascii
+Content-transfer-encoding: 7BIT
+Content-disposition: inline
+Content-length: 166
 
-On Tue, 5 Nov 2002, Robert Collins wrote:
+See attached.
 
-> Overall this looks good. What happens to non-cygwinapi created threads
-> now though? You mention you don't agree with the code, but I can't see
-> (from a brief look) how you correct it.
->
-> BTW: I'm currently packing to move house, so don't expect much feedback
-> until late next week, or early the week after :[.
->
+Thanks,
+Jason
 
-Ping
+-- 
+PGP/GPG Key: http://www.tishler.net/jason/pubkey.asc or key servers
+Fingerprint: 7A73 1405 7F2B E669 C19D  8784 1AFD E4CC ECF4 8EF6
+
+--Boundary_(ID_PwhbjCKjih1pC9ptdDJOkA)
+Content-type: text/plain; charset=us-ascii; NAME=version.h.diff
+Content-transfer-encoding: 7BIT
+Content-disposition: attachment; filename=version.h.diff
+Content-length: 572
+
+Index: version.h
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/include/cygwin/version.h,v
+retrieving revision 1.85
+diff -u -p -r1.85 version.h
+--- version.h	15 Nov 2002 19:04:36 -0000	1.85
++++ version.h	22 Nov 2002 16:12:16 -0000
+@@ -162,7 +162,7 @@ details. */
+        62: Erroneously bumped.
+        63: Export pututline.
+        64: Export fseeko, ftello
+-       65: Export fseeko, ftello
++       65: Export siginterrupt
+      */
+ 
+      /* Note that we forgot to bump the api for ualarm, strtoll, strtoull */
+
+--Boundary_(ID_PwhbjCKjih1pC9ptdDJOkA)--
