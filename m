@@ -1,156 +1,140 @@
 From: "Robert Collins" <robert.collins@itdomain.com.au>
-To: "Ronald Landheer" <info@rlsystems.net>, <cygwin-patches@cygwin.com>
-Subject: Re: fhandlers codebase, magic dirs, etc.
-Date: Sun, 30 Sep 2001 16:03:00 -0000
-Message-id: <00d701c14a04$497f03f0$01000001@lifelesswks>
-References: <NFBBLOMHALONCDMPGBLFCENKCCAA.info@rlsystems.net>
-X-SW-Source: 2001-q3/msg00250.html
+To: <cygwin-patches@cygwin.com>
+Cc: <cygwin-apps@cygwin.com>
+Subject: baby steps vs overhaul
+Date: Sun, 30 Sep 2001 16:45:00 -0000
+Message-id: <00e301c14a0a$3090f820$01000001@lifelesswks>
+X-SW-Source: 2001-q3/msg00251.html
 
------ Original Message -----
-From: "Ronald Landheer" <info@rlsystems.net>
-To: "Robert Collins" <robert.collins@itdomain.com.au>;
-<cygwin-patches@cygwin.com>
-Sent: Monday, October 01, 2001 6:02 AM
-Subject: RE: fhandlers codebase, magic dirs, etc.
+I've cross posted this, because it should really be on -developers, but
+I'm not sure if Ronald is there. Certainly -apps is a better place
+than -patches - and anyone can subscribe to -apps.
+
+I've got my fingers in a few open source projects - mainly Squid and
+Cygwin though. I watch closely the lists for a handfull of others.
+
+I've seen two main approaches to changing the architecture of an open
+source project. I'm going to call them the overhaul and baby steps
+approaches.
+
+The Overhaul approach.
+In this approach a new CVS branch is created for the new code. Develop
+progress's at a rapid pace. Things are broken, and fixed again.
+Occasionally a bug is found that is relevant to the HEAD branch an
+backported. When the original sponsors of the work get it to a usable
+(in terms of stability and feature completeness) point, _they will often
+start using it_. That is nearly a kiss of death. Why? because the
+motiviation to get it acceptable to the gatekeepers of the HEAD branch
+is gone. Also, the HEAD branch has proceeded at its own pace, and
+incompatible changes have occured. Disruption _will_ occur when they try
+to merge the two. It can eventually happen, but it can be quite
+disruptive. See for example libtool and the MLB branch. The merge was
+_way_ over due when it happened. OTOH Apache 2.0 seems to have managed
+this approach successfully. However they set a deliberate target for the
+overhaul, so the whole project knew what was happening.
+
+My 2c here: When doing a overhaul, 3 things are needed:
+1) Complete backing from the project 'team'.
+2) A commitment from the project team to work with the folk doing the
+overhaul to prevent introducing new features that conflict with the
+overhauled code. At a minimum those who want to introduce the feature
+have to do it on both branches.
+3) A clear (and realistic) release point for the bait-and-switch (when
+the overhauled code is merged onto the HEAD) to occur.
+
+The baby steps approach.
+In this approach a new CVS branch is created for the new code. At every
+opportunity the usuable subsection of the code base is merged into HEAD.
+Depending on the release approach for the project 'opportunity' can have
+different meanings. Typically a merge would occur immediately after a
+stable release went out the door, and not merges would occur in the
+freeze leading up to a new stable release. All changes to HEAD are
+incorporated into the branch, so it only contains a bare minimum of
+differences. At some points, architectural changes that affect 40% or
+50% of the codebase may have to be incorporated. These are handled no
+differently. They are pulled into HEAD in the smallest chunks that can
+be made. They may not be optimal, or ideal when they go into HEAD, but
+they will
+a) work
+b) not be (substantially) worse than what was there.
+c) any new features will be off-by-default.
+In this approach, there is never any significant reason to use the
+development branch for any length of time, because the features are
+rolled into HEAD at speed.
+
+My 2x here: When doing a baby steps architectural change, 2 things are
+needed:
+1) Complete backing from the project 'team'.
+2) Willingness from the project developers to live with the occasional
+hiccup that *will* occur when extracting a minimal change from the
+development branch - the tradeoff being that if any feature in HEAD is
+broken the change is (relatively) small and isolated.
 
 
-Hi Robert,
+Those paying attention may notice that the baby steps jives very well
+with the release-early release-often approach. In fact both methods
+allow this, the difference being that the overhaul will do parallel
+releases and the baby steps will do regular merges to HEAD. Also these
+are simply the extreme cases, things can be done in the middle.
 
-> Ronald, if you are using a MS mailer, are you sending HTML mail? I
-> notice that HTML mails that get stripped seem to confuse MS Outlook
-> express, which is what I have open today :].
-I am using M$ Outlook 2000 for mail, but I always send text-only (with
-one minor exception in the last week).
-I don't know what's confusing your mailer :(
+I've overhauled the authentication system in Squid, from a
+non-orthogonal incrementally grown item, to a modular system allowing
+multiple authentication schemes with differing semantics, and including
+today NTLM and Digest authentication. This was accomplished via a
+baby-steps approach. The initial work was merged in when all the core
+architectural changes had occured (kindof a mini-overhaul), but _way_
+before everything was stable. And things have changed substantially
+since then. All the development work is done on a branch, and changes
+merged in when they are stable.
 
-* I'm trying to pin it down. I have Outlook2k in the office, I'll test
-that tomorrow. Q: Are you sending via an exchange server, or are you in
-"internet mode"?
+As for cygwin and this file system handler/file handler overhaul. (Which
+Ronald, I do agree should be the target)....
 
-> ah yes, on closer inspection I can see what you mean... and that does
-> need to be thought through. The concept of special nodes is not
-> currently clear in cygwin. That is, some files with special names get
-> diverted to specific fhandlers - ie /dev/null - which is one of the
-> things that this work promises to eliminate (or at least remove from
-> the core code to a "devfs" fhandler. And files opened via specific
-> system calls, such as bind, are diverted to different fhandlers via
-> the internal fd table. But unless I've missed something, no file
-> located by a path is diverted _based on the 'type' of the file_. The
-> reason for that is that there is no mechanism to query the parent node
-> of the file for it's fhandler type. (And that's how it should be done,
-> rather than iterating through the fhandlers.) There are bits of code
-> that resemble this - ie detecting /dev/null as mentioned before - but
-> they only go so far. My 2c for this one is to leave it for another
-> day. Simply consider all files as being 'owned' by the fhandler
-> associated with the longest matching mount entry. Extend the
-> build_fhandler (?? writing from memory) class factory to have that
-> matching fhandler act as a factory for files located within its
-> domain. If the file actually needs a different fhandler, then that
-> matching fhandler's factory will return a fhandler of the appropriate
-> type. Make that factory function a virtual, with the default to return
-> "this" and for the general case, you will have no coding to do. Then
-> for something like devfs, where the sub paths "null", "clipboard" and
-> so on are different classes, the devfs factory creates instances of
-> the appropriate fhandler. What we are really doing is federating the
-> class factory. This, like the stat change to be similar to open is a
-> fundamental change, but one that adds significant opportunities. (BTW:
-> this particular change is probably about 50 lines of code in total -
-> somewhat trivial).
-The only problem I still see here is one of logic: handling any file as
-owned by the fhandler that happens to be mounted at the longest matching
-mountpoint means *every* fhandler should be able to handle *every* type
-of file that *might* exist within the space of "owns". This means that
+I _suggest_ (Hey, I'm not the one coding here :]) something like the
+following:
+A set of mini-targets none of which will destabilise cygwin, and the sum
+of which achieves the goal. Yes, a baby steps approach.
+Here's a _possible_ list.
+1) Add a file system handler base class. Add a win32 fshandler
+derivative class.
+-- a release could occur
+2) Add the capability to manipulate the mount table with associated
+fshandlers. (this involves altering mount.exe as well.)
+3) Alter setup to understand the updated mount table.
+-- a release could occur
+4,4a,4b,...) One function at a time alter the existing
+fhandler-centric-code to use the fshandler concept to obtain the correct
+fhandler to use.
+-- a release could occur between any of the 4x steps
+5) Create a (pick one: devfs or registryfs) fshandler.
+-- a release could occur
+6) Move the current stat to the win32 fshandler.
+-- a release could occur
+7) Implement stat () in devfs.
+-- a release could occur
+8) Move opendir and readdir to the win32 fshandler.
+-- a release could occur
+9) Implement opendir and readdir in devfs.
+-- a release could occur
+10) Alter the readdir wrapper to override returned entries with
+mountpoint information.
+-- a release could occur
+11) Alter setup to add /dev as a mount point for devfs.
+-- complete.
 
-* Not quite. The fhandler needs to be able to _identify_ the appropriate
-fhandler for every file. This is a very different thing.
+Perhaps I'm labouring the point? This will IMO get the architectural
+overhaul complete, without ever hurting the current cygwin. There will
+be points where the *new* code is not feature complete. I.e. at point 6)
+calling stat() on /dev/clipboard WHEN devfs is mount at /dev will fail.
+Who cares? Only someone who has gone to the deliberate effort of
+mounting devfs at /dev will ever take that code path - and that means
+it's a developer.
 
-handling *any* type of file that might occur anywhere must be a _very_
-basic feature - i.e. a virtual method, part of the most common
-denominator of inherited virtual methods. That may require some
-explaining - which can be done, ofcourse, but IIRC, Li-Kai Liu had a
-point in this direction to make on the original thread over at
-cygwin@cygwin.com (the thread was called "[PATCH] ls & "magic" cygdrive
-dir (was: RE: cygdrive stuff)").
-Personally, I think the code will be a lot better off when the long-term
-goal of splitting filesystem handling and file handling is what we shoot
-for now: it will be clearer who gets to do what, and most of the actual
-file handling stuff is already there anyway.
+You will note that the changes to stat() and the like are the _last
+things_ to happen. Thats because they work now, and cannot work
+'correctly' until the architecture is changed.
 
-* Sure. No argument.
-
-What would have to be done is design a good system of filesystem
-handling - which is kinda what we're doing here anyway. To me, the logic
-telling us to do that is a lot clearer than just leaving it for later.
-Chris talked about small incremental steps for OpenSource software
-development. I agree that that is better in most cases, but in this
-case, redesigning the system is, IMHO, the way to go, as it repairs the
-bug reported by Salvador earlier, reaches a goal that has been there for
-some time, clears up the codebase, and makes it a lot easier to add new
-functionalities later. (It would have to be branched off the main stream
-Cygwin code, though, as replacing something is generally done by taking
-it out and putting something in its place, and taking the current system
-out would break Cygwin terribly..).
-
-* Baby steps _can be done_. I'll draw up a new email on this.
-
-One problem with this approach is that it will take a while, and I don't
-know how stable the rest of the API: as all of Cygwin is changing
-continually, hooking this into the rest of Cygwin may require different
-hooks at different times..
-Another problem is that I definitely have to get the sandpaper out and
-grate the rust off my C++, but OK..
-
->> I hadn't decided between the two yet, but with a bit of thought -
->> i.e. the concept of mounting the fhandler for /dev at /dev settling
->> in my synapses - I agree with not having the "continue to" logic:
->> it's just a matter of who owns the directory, and asking him (the
->> proper fhandler) for the data.
-> Yes exactly my point. You where correct however, in that there are two
-> cases and both have to be addressed. So the solution is to *do both*.
-> Pass the responsibility onto the proper fhandler (as determined by the
-> mount table) and if it has special virtual stuff to do, it does it.)
-Exactly: pass the responsability to the owner of the place. If, for
-example, I want to open a _file_ in /dev, I call the handler (owner) of
-/dev to open it, who sees it's a normal file and opens it accordingly -
-whether opening a normal file should be part of the job of the handler
-of /dev, or should be part of the job of a class that handles regular
-files - I'd go for the second (i.e. mount an fhandler over each regular
-file to handle those, and a file system handler over each part of the
-file system).
-
-** I'm a little confused my the term mount here. By mount I mean write
-an entry into the registry to identify where different fhandlers take
-over. i.e. devfs at /dev.
-
-I.e. the open() function would pretty much do this:
-* where is it? (who owns it?)
-* ask the owner: what is it? (who should handle it)
-* tell the handler: open it!
-A call to stat() would just do the first two.
-
-** I have a similar concept. BTW stat() looks inside the file on cygwin,
-to see if it is executable by magic number on FAT where there is no
-native win32 x bit. This can be skipped on NT when ntsec is on, and
-obviously should not be done when we have direct support for other fs's
-with a x bit.
-My idea of stat looks like:
-* owner = who 'owns' "filename";
-* owner->stat().
-Because its the owner of the file that knows how to retrieve metadata.
-My idea of open for comparison:
-* owner = who 'owns' "filename";
-* handler = owner->makefhandler("filename");
-* handler->open (parameters);
-
-You'll note that the existing open looks very similar to this: create an
-appropriate fhandler, and then get it to do the open.
-
-Hopefully that shows why you want the longest mount point match. The
-win32 filesystem handling code should never get asked _anything_ about
-/registry/HKEY_LOCAL_MACHINE.
-
-But likewise the device filesystem handler doesn't directly know how to
-open the clipboard, so we pass the responsibility for identifying the
-fhandler to the filesystem handler.
+I'm not authoritative for cygwin - this is only _my_ opinion. (Hey I
+didn't say I don't have an ego though :}).
 
 Rob
