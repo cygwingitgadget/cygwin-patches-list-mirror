@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5147-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 12895 invoked by alias); 20 Nov 2004 18:48:39 -0000
+Return-Path: <cygwin-patches-return-5148-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 16806 invoked by alias); 20 Nov 2004 18:56:18 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,56 +7,62 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 12864 invoked from network); 20 Nov 2004 18:48:36 -0000
-Received: from unknown (HELO cgf.cx) (66.30.17.189)
-  by sourceware.org with SMTP; 20 Nov 2004 18:48:36 -0000
-Received: by cgf.cx (Postfix, from userid 201)
-	id AEEDA1B3E5; Sat, 20 Nov 2004 13:49:13 -0500 (EST)
-Date: Sat, 20 Nov 2004 18:48:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
+Received: (qmail 16429 invoked from network); 20 Nov 2004 18:56:13 -0000
+Received: from unknown (HELO phumblet.no-ip.org) (68.163.190.188)
+  by sourceware.org with SMTP; 20 Nov 2004 18:56:13 -0000
+Received: from [192.168.1.156] (helo=hpn5170)
+	by phumblet.no-ip.org with smtp (Exim 4.43)
+	id I7HRF1-002VRL-8C
+	for cygwin-patches@cygwin.com; Sat, 20 Nov 2004 13:59:25 -0500
+Message-Id: <3.0.5.32.20041120135116.007e8ae0@incoming.verizon.net>
+X-Sender: vze1u1tg@incoming.verizon.net (Unverified)
+Date: Sat, 20 Nov 2004 18:56:00 -0000
 To: cygwin-patches@cygwin.com
-Subject: Re: [Patch] Fixing the PROCESS_DUP_HANDLE security hole.
-Message-ID: <20041120184913.GA2765@trixie.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20041116155640.GA22397@trixie.casa.cgf.cx> <3.0.5.32.20041111224857.00819b20@incoming.verizon.net> <3.0.5.32.20041111224857.00819b20@incoming.verizon.net> <3.0.5.32.20041111235225.00818340@incoming.verizon.net> <20041114051158.GG7554@trixie.casa.cgf.cx> <20041116054156.GA17214@trixie.casa.cgf.cx> <419A1F7B.8D59A9C9@phumblet.no-ip.org> <20041116155640.GA22397@trixie.casa.cgf.cx> <3.0.5.32.20041120125458.00821b80@incoming.verizon.net>
+From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
+Subject: [Patch] debug_printf edits
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3.0.5.32.20041120125458.00821b80@incoming.verizon.net>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2004-q4/txt/msg00148.txt.bz2
+Content-Type: text/plain; charset="us-ascii"
+X-SW-Source: 2004-q4/txt/msg00149.txt.bz2
 
-On Sat, Nov 20, 2004 at 12:54:58PM -0500, Pierre A. Humblet wrote:
->At 01:23 AM 11/20/2004 -0500, Christopher Faylor wrote:
->>On Tue, Nov 16, 2004 at 10:56:40AM -0500, Christopher Faylor wrote:
->>I've also added an 'exitcode' field to _pinfo so that a Cygwin process
->>will set the error code in a UNIX fashion based on whether it is exiting
->>due to a signal or with a normal exit().  Unfortunately, this means that
->>I don't know quite what to do with exit codes from Windows processes.
->>This is the last remaining problem before I check things in.  This
->>problem just occurred to me as I was typing in the ChangeLog and it may
->>be the one reason why you actually need to do the reparenting tango.
->
->For Windows process, why can't you keep doing what was done before
->            case WAIT_OBJECT_0:
->              sigproc_printf ("subprocess exited");
->              DWORD exitcode;
->              if (!GetExitCodeProcess (pi.hProcess, &exitcode))
->                exitcode = 1;
->
->and copy the Windows exit code to the exitcode field? Or did you remove the
->subproc_ready as well?
+Here are minor changes that facilitate grepping traces. 
 
-Yes, all of the reparenting logic is gone, including "subproc_ready"; at
-least as far as exec is concerned.  hProcess doesn't exist in _pinfo
-anymore.
+Pierre
 
-I got the functionality back by essentially implementing reparenting in
-a different way, but, now that I've done this, it seems that I don't
-need the pipe anymore, even though it does make communication between a
-parent and child convenient.  So, I still have some cogitating to do.
+2004-11-20  Pierre Humblet <pierre.humblet@ieee.org>
 
-That's ok.  Sleep is overrated.
+	* fhandler.cc (fhandler::write): Remove debug_printf.
+	* pipe.cc (fhandler_pipe::create): Edit syscall_printf format.
 
-cgf
+Index: fhandler.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/fhandler.cc,v
+retrieving revision 1.206
+diff -u -p -r1.206 fhandler.cc
+--- fhandler.cc 12 Sep 2004 03:47:56 -0000      1.206
++++ fhandler.cc 20 Nov 2004 18:52:33 -0000
+@@ -914,7 +914,6 @@ fhandler_base::write (const void *ptr, s
+        }
+     }
+ 
+-  debug_printf ("%d = write (%p, %d)", res, ptr, len);
+   return res;
+ }
+ 
+Index: pipe.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/pipe.cc,v
+retrieving revision 1.64
+diff -u -p -r1.64 pipe.cc
+--- pipe.cc     12 Sep 2004 03:47:56 -0000      1.64
++++ pipe.cc     20 Nov 2004 18:52:33 -0000
+@@ -380,7 +380,7 @@ fhandler_pipe::create (fhandler_pipe *fh
+        }
+     }
+ 
+-  syscall_printf ("%d = ([%p, %p], %d, %p)", res, fhs[0], fhs[1], psize,
+mode);
++  syscall_printf ("%d = pipe ([%p, %p], %d, %p)", res, fhs[0], fhs[1],
+psize, mode);
+   return res;
+ }
+ 
