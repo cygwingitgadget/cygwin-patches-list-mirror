@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5009-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 30851 invoked by alias); 5 Oct 2004 05:15:18 -0000
+Return-Path: <cygwin-patches-return-5010-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 27954 invoked by alias); 5 Oct 2004 07:45:57 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,48 +7,37 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 30749 invoked from network); 5 Oct 2004 05:15:15 -0000
-Message-ID: <n2m-g.cjth8v.3vsj9uv.1@buzzy-box.bavag>
-X-Newsgroups: local.ml.cygwin-patches
+Received: (qmail 27934 invoked from network); 5 Oct 2004 07:45:56 -0000
+Message-ID: <n2m-g.cjtq1h.3vvba3b.1@buzzy-box.bavag>
 From: Bas van Gompel <cygwin-patches.buzz@bavag.tmfweb.nl>
-Subject: [Patch] cygcheck: warn about empty path-components
-Reply-To: Buzz <ngs@bavag.tmfweb.nl>
+Subject: Re: [Patch] pinfo.cc: second CreatePipe, not first.
+References: <n2m-g.cjt3mt.3vvcq0n.1@buzzy-box.bavag> <20041005021043.GA7897@trixie.casa.cgf.cx>
+In-Reply-To: <20041005021043.GA7897@trixie.casa.cgf.cx>
 Organisation: Ehm...
-User-Agent: slrn/0.9.8.0pl1 (CYGWIN_95-4.0) Hamster/2.0.5.5
+User-Agent: slrn/0.9.8.0 (Win32) Hamster/2.0.6.0
 To: cygwin-patches@cygwin.com
-X-Gate: Hamster/2.0.5.5 NewsToMail-Gate
-X-Processed-By: Eudora 6.0.1.1, Hamster Classic 2.0.5.5, KorrNews 4.2
-Date: Tue, 05 Oct 2004 05:15:00 -0000
-X-SW-Source: 2004-q4/txt/msg00010.txt.bz2
+Reply-To: cygwin-patches mailing-list <cygwin-patches@cygwin.com>
+Date: Tue, 05 Oct 2004 07:45:00 -0000
+X-SW-Source: 2004-q4/txt/msg00011.txt.bz2
 
-Hi,
+Op Mon, 4 Oct 2004 22:10:43 -0400 schreef Christopher Faylor
+in <20041005021043.GA7897@trixie.casa.cgf.cx>:
+:  On Tue, Oct 05, 2004 at 03:49:20AM +0200, Bas van Gompel wrote:
 
-This little patch makes cygcheck warn about empty path-components
-(leading/trailing/double ':'/';' in $PATH).
+[...]
 
+: > 	* pinfo.cc (_pinfo::commune_send): Make debugging output less ambiguous.
+:
+:   I've applied this patch.  Thanks.
+:
+:  I used a slightly less ambiguous ChangeLog, though. :-)
 
-ChangeLog-entry:
+``Correct debugging output.'' is less ambiguous? If you say so... :]
 
-2004-10-05  Bas van Gompel  <cygwin-patch.buzz@bavag.tmfweb.nl>
+BTW: What was your change to fhandler_termios.cc about? I see no
+ChangeLog-entry/cvs message for that.
 
-	* cygcheck.cc (dump_sysinfo): Warn about empty path-components.
-
-
---- src/winsup/utils/cygcheck.cc	4 Oct 2004 09:42:08 -0000	1.44
-+++ src/winsup/utils/cygcheck.cc	5 Oct 2004 02:19:35 -0000
-@@ -957,7 +957,10 @@ dump_sysinfo ()
-   while (1)
-     {
-       for (e = s; *e && *e != sep; e++);
--      printf ("\t%.*s\n", e - s, s);
-+      if (e-s)
-+	printf ("\t%.*s\n", e - s, s);
-+      else
-+	puts ("\tWarning: Empty path-component");
-       count_path_items++;
-       if (!*e)
- 	break;
-
+BTW2: Did you see the question at the bottom of my other mail?
 
 L8r,
 
@@ -57,4 +46,4 @@ Buzz.
   ) |  | ---/ ---/  Yes, this | This message consists of true | I do not
 --  |  |   /    /   really is |   and false bits entirely.    | mail for
   ) |  |  /    /    a 72 by 4 +-------------------------------+ any1 but
---  \--| /--- /---  .sigfile. |   |perl -pe "s.u(z)\1.as."    | me. 4^r
+--  \--| /--- /---  .sigfile. |   |perl -pe "s.u(z)\1.as."    | me. 4^re
