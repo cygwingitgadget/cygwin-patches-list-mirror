@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1921-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 31133 invoked by alias); 27 Feb 2002 18:09:36 -0000
+Return-Path: <cygwin-patches-return-1922-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 7906 invoked by alias); 27 Feb 2002 18:22:06 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,169 +7,33 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 31104 invoked from network); 27 Feb 2002 18:09:32 -0000
-Message-ID: <20020227180923.76253.qmail@web20005.mail.yahoo.com>
-Date: Wed, 27 Feb 2002 10:22:00 -0000
+Received: (qmail 7876 invoked from network); 27 Feb 2002 18:22:04 -0000
+Message-ID: <20020227182203.79171.qmail@web20005.mail.yahoo.com>
+Date: Wed, 27 Feb 2002 12:56:00 -0000
 From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
-Subject: Re: version information for cygcheck 
+Subject: Re: help/version patches
 To: cygwin-patches@cygwin.com
+In-Reply-To: <20020227162528.GA2205@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="0-2096267733-1014833363=:74226"
-X-SW-Source: 2002-q1/txt/msg00278.txt.bz2
-
---0-2096267733-1014833363=:74226
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-length: 795
+X-SW-Source: 2002-q1/txt/msg00279.txt.bz2
 
---- Warren Young <warren@etr-usa.com> wrote:
-> Joshua Daniel Franklin wrote:
-> > 
-> >  -z, --version      output version information and exit
-> > 
-> > I used -z since -v is --verbose. It could also have no character
-> > option if that would be better. 
+
+--- Christopher Faylor <cgf@redhat.com> wrote:
+> There's no need for a loop.  There really shouldn't be any need to
+> accommodate the missing colon but it doesn't hurt too much to add a test
+> case.
 > 
-> Why not -V?
+> I've checked in a modified version of your patch.  I cleaned up some of
+> the non-GNU formatting, added a ChangeLog, and added a "print_version"
+> function which parses the 'version' array for version info.
+> 
+> I appreciate the submission very much but, next time, I would also
+> appreciate a ChangeLog and more attention to formatting issues.
 
-No no no. Makes much too much sense. You'd think I was adding version
-information for the users or someting.
-
-Lastest patch: 
-corrects copyright dates
-version now -V, not -z
-
-I think this one's going to work, so here's a changelog:
-
-2001-02-27  Joshua Daniel Franklin  <joshuadfranklin@yahoo.com>
-
-* cygcheck.cc: added -V --version option, corrected -h to output to stdout
-
+Sorry, I didn't read this first. Ignore my last message.
 
 __________________________________________________
 Do You Yahoo!?
 Yahoo! Greetings - Send FREE e-cards for every occasion!
 http://greetings.yahoo.com
---0-2096267733-1014833363=:74226
-Content-Type: text/plain; name="cygcheck.cc-patch"
-Content-Description: cygcheck.cc-patch
-Content-Disposition: inline; filename="cygcheck.cc-patch"
-Content-length: 3544
-
---- cygcheck.cc-orig	Sun Feb 24 13:28:27 2002
-+++ cygcheck.cc	Wed Feb 27 11:57:32 2002
-@@ -1,6 +1,6 @@
- /* cygcheck.cc
- 
--   Copyright 1998, 1999, 2000, 2001 Red Hat, Inc.
-+   Copyright 1998, 1999, 2000, 2001, 2002 Red Hat, Inc.
- 
-    This file is part of Cygwin.
- 
-@@ -33,6 +33,8 @@ typedef __int64 longlong;
- 
- void dump_setup (int, char **, bool);
- 
-+const char *revision="$Revision: 1.22 $ ";
-+
- const char *known_env_vars[] = {
-   "c_include_path",
-   "compiler_path",
-@@ -1216,17 +1218,19 @@ check_keys ()
- }
- 
- void
--usage ()
-+usage (FILE *stream, int status)
- {
--  fprintf (stderr, "Usage: cygcheck [OPTIONS] [program ...]\n");
--  fprintf (stderr, "  -c, --check-setup = check packages installed via setup.exe\n");
--  fprintf (stderr, "  -s, --sysinfo     = system information (not with -k)\n");
--  fprintf (stderr, "  -v, --verbose     = verbose output (indented) (for -s or programs)\n");
--  fprintf (stderr, "  -r, --registry    = registry search (requires -s)\n");
--  fprintf (stderr, "  -k, --keycheck    = perform a keyboard check session (not with -s)\n");
--  fprintf (stderr, "  -h, --help        = give help about the info (not with -c)\n");
--  fprintf (stderr, "You must at least give either -s or -k or a program name\n");
--  exit (1);
-+  fprintf (stream, "\
-+Usage: cygcheck [OPTIONS] [program ...]\n\
-+ -c, --check-setup  check packages installed via setup.exe\n\
-+ -s, --sysinfo      system information (not with -k)\n\
-+ -v, --verbose      verbose output (indented) (for -s or programs)\n\
-+ -r, --registry     registry search (requires -s)\n\
-+ -k, --keycheck     perform a keyboard check session (not with -s)\n\
-+ -h, --help         give help about the info (not with -c)\n\
-+ -V, --version      output version information and exit\n\
-+You must at least give either -s or -k or a program name\n");
-+  exit (status);
- }
- 
- struct option longopts[] = {
-@@ -1236,15 +1240,32 @@ struct option longopts[] = {
-   {"verbose", no_argument, NULL, 'v'},
-   {"keycheck", no_argument, NULL, 'k'},
-   {"help", no_argument, NULL, 'h'},
-+  {"version", no_argument, 0, 'V'},
-   {0, no_argument, NULL, 0}
- };
- 
--char opts[] = "srvkhc";
-+char opts[] = "chkrsvV";
- 
- int
- main (int argc, char **argv)
- {
-   int i;
-+  char *version;
-+  
-+  /* Get version number out of the autogenerated revision string  */
-+  (void *) version = malloc(sizeof(revision));
-+  strcpy(version, revision+9);
-+  if (version[0] != ':')
-+    *version=0;
-+  else
-+  {
-+    version = version+2;
-+    char *temp=version + strlen (version);
-+    while (isspace((int)*--temp) || *temp=='$' && temp >= version)
-+      temp[1]='\0';
-+  }
-+
-+  version[strlen(version)-1]= 0;
- 
-   while ((i = getopt_long (argc, argv, opts, longopts, NULL)) != EOF)
-     switch (i)
-@@ -1267,17 +1288,27 @@ main (int argc, char **argv)
-       case 'h':
- 	givehelp = 1;
- 	break;
-+      case 'V':
-+        printf ("cygcheck (cygwin) %s\n", version);
-+        printf ("System Checker\n");
-+        printf ("Copyright 1998, 1999, 2000, 2001, 2002 Red Hat, Inc.\n");
-+        fputs ("Compiled "__DATE__"\n", stdout);
-+        exit (0);
-       default:
--	usage ();
-+	usage (stderr, 1);
-        /*NOTREACHED*/}
-   argc -= optind;
-   argv += optind;
- 
--  if (argc == 0 && !sysinfo && !keycheck && !check_setup)
--    usage ();
-+  if (argc == 0 && !sysinfo && !keycheck && !check_setup) {
-+     if (givehelp)
-+	usage (stdout, 0);
-+     else
-+	usage (stderr, 1);
-+     }
- 
-   if ((check_setup || sysinfo) && keycheck)
--    usage ();
-+	usage (stderr, 1);
- 
-   if (keycheck)
-     return check_keys ();
-
---0-2096267733-1014833363=:74226--
