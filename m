@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4392-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 23356 invoked by alias); 14 Nov 2003 23:53:23 -0000
+Return-Path: <cygwin-patches-return-4393-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 2541 invoked by alias); 15 Nov 2003 04:43:52 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,35 +7,40 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 23343 invoked from network); 14 Nov 2003 23:53:22 -0000
-Message-ID: <3FB56B10.3020108@cygwin.com>
-Date: Fri, 14 Nov 2003 23:53:00 -0000
-From: Robert Collins <rbcollins@cygwin.com>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.5b) Gecko/20030723 Thunderbird/0.1
-X-Accept-Language: en-us, en
-MIME-Version: 1.0
-To:  cygwin-patches@cygwin.com
+Received: (qmail 2532 invoked from network); 15 Nov 2003 04:43:51 -0000
+Date: Sat, 15 Nov 2003 04:43:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
+To: cygwin-patches@cygwin.com
 Subject: Re: For masochists: the leap o faith
-References: <3FB4D81C.6010808@cygwin.com> <3FB53BAE.3000803@cygwin.com> <20031114220708.GA26100@redhat.com>
-In-Reply-To: <20031114220708.GA26100@redhat.com>
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Transfer-Encoding: 7bit
-X-SW-Source: 2003-q4/txt/msg00111.txt.bz2
+Message-ID: <20031115044347.GA29583@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <3FB4D81C.6010808@cygwin.com> <3FB53BAE.3000803@cygwin.com> <20031114220708.GA26100@redhat.com> <3FB55BCE.8030304@cygwin.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3FB55BCE.8030304@cygwin.com>
+User-Agent: Mutt/1.4.1i
+X-SW-Source: 2003-q4/txt/msg00112.txt.bz2
 
-Christopher Faylor wrote:
+On Sat, Nov 15, 2003 at 09:48:46AM +1100, Robert Collins wrote:
+>Christopher Faylor wrote:
+>>It is fairly unusual for PATH_MAX to be many times greater than what is
+>>support by pathconf.
+>
+>And yet:
+>http://www.opengroup.org/onlinepubs/007908799/xsh/fpathconf.html
 
-> For the record, I don't have any problems with changing PATH_MAX to
-> CYG_PATH_MAX as a first step for this change.  Small steps are, as
-> always, appreciated.
+Yes, I've already (obviously?) been to SUSv3.  I wasn't talking about
+standards.  I was talking about common practice.
 
-Ok, so thats done.
+If you have a common practice web site that you want to show me then
+that might be a convincing argument.  Otherwise, I'll have to fall back
+on my personal UNIX experience.
 
-What about, for a next step, simply the introduction of the thunk layer 
-- with only A calls used by it. No Unicode, no length changes. ?
+I'm not vetoing the change because PATH_MAX is potentially large.  I was
+kind of hoping (because I'm in incurable optimist) to start a discussion
+with people who were familiar with packages that used PATH_MAX.  How
+SUSv3 defines PATH_MAX is irrelevant to existing programs.
 
-Thats probably the most verbose change, with the least variety in 
-approach. From there on in we can debate the relative merits of 
-path_conv state versus IOThunkState and the like without a huge patch in 
-the wings.
-
-Rob
+cgf
