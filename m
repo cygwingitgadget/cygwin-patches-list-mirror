@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5291-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 20650 invoked by alias); 24 Dec 2004 22:16:15 -0000
+Return-Path: <cygwin-patches-return-5292-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 28431 invoked by alias); 26 Dec 2004 07:30:22 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,41 +7,64 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 20613 invoked from network); 24 Dec 2004 22:16:09 -0000
-Received: from unknown (HELO rproxy.gmail.com) (64.233.170.199)
-  by sourceware.org with SMTP; 24 Dec 2004 22:16:09 -0000
-Received: by rproxy.gmail.com with SMTP id f1so72625rne
-        for <cygwin-patches@cygwin.com>; Fri, 24 Dec 2004 14:16:09 -0800 (PST)
-Received: by 10.38.67.64 with SMTP id p64mr44061rna;
-        Fri, 24 Dec 2004 14:16:09 -0800 (PST)
-Received: by 10.38.76.4 with HTTP; Fri, 24 Dec 2004 14:16:08 -0800 (PST)
-Message-ID: <cb51e2e041224141679497c00@mail.gmail.com>
-Date: Fri, 24 Dec 2004 22:16:00 -0000
-From: Joshua Daniel Franklin <joshuadfranklin@gmail.com>
-Reply-To: Joshua Daniel Franklin <joshuadfranklin@gmail.com>
+Received: (qmail 28398 invoked from network); 26 Dec 2004 07:30:16 -0000
+Received: from unknown (HELO rproxy.gmail.com) (64.233.170.197)
+  by sourceware.org with SMTP; 26 Dec 2004 07:30:16 -0000
+Received: by rproxy.gmail.com with SMTP id i8so224850rne
+        for <cygwin-patches@cygwin.com>; Sat, 25 Dec 2004 23:30:13 -0800 (PST)
+Received: by 10.39.2.55 with SMTP id e55mr417805rni;
+        Sat, 25 Dec 2004 23:30:13 -0800 (PST)
+Received: by 10.38.89.80 with HTTP; Sat, 25 Dec 2004 23:30:13 -0800 (PST)
+Message-ID: <fd80972e04122523307f0a1922@mail.gmail.com>
+Date: Sun, 26 Dec 2004 07:30:00 -0000
+From: Jeremy Lin <jeremy.lin@gmail.com>
+Reply-To: Jeremy Lin <jeremy.lin@gmail.com>
 To: cygwin-patches@cygwin.com
-Subject: keep Cygwin docs well-formed and valid
+Subject: pipe chmod patch
 Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-X-SW-Source: 2004-q4/txt/msg00292.txt.bz2
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_249_2754456.1104046213548"
+X-SW-Source: 2004-q4/txt/msg00293.txt.bz2
 
-I just did a commit that touched a lot of sgml files. Now both the
-User's Guide (cygwin-ug-net.sgml) and API Reference (cygwin-api.sgml)
-are well-formed and valid DocBook XML. The current SGML tools still
-work fine with it, but I hope to move the doc Makefile to xmlto soon
-to end the confusion with different SGML toolchains (as far as I know
-xmlto is standard across platforms, and it's already packaged for
-Cygwin).
+------=_Part_249_2754456.1104046213548
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Content-length: 268
 
-For anyone who edits the documentation, though, please keep the files
-well-formed and valid! This means:
+This trivial patch allows chmod to work on FIFOs. Actually, it doesn't
+seem to allow changing mode for group or other, but it's good enough
+for my purposes (i.e., to make 'screen' be able to detach/attach). Let
+me know if anything needs to be changed.
 
---All tags should be in lower case (like <orderedlist>, not <oRdErEdLiSt)
---If you open a <para>, close it with </para>
---Use entities for 8-bit characters, like &copy; for =A9 and &reg; for =AE.
---Close empty tags, though note that <xref> is weirdly NOT empty but
-should be used like this: <xref linkend=3D"cygpath"></xref>
---Always put tag attributes in quotes
+Thanks,
+Jeremy
 
-Thanks.
+------=_Part_249_2754456.1104046213548
+Content-Type: application/octet-stream; name="fifo.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="fifo.patch"
+Content-length: 1184
+
+LS0tIGZoYW5kbGVyLmgub3JpZwkyMDA0LTEyLTI1IDIyOjIwOjIwLjU3Mzc2
+ODAwMCAtMDgwMAorKysgZmhhbmRsZXIuaAkyMDA0LTEyLTI1IDIyOjIwOjI4
+LjI5NDg3MDQwMCAtMDgwMApAQCAtNDM0LDYgKzQzNCw3IEBACiAgIHNlbGVj
+dF9yZWNvcmQgKnNlbGVjdF9leGNlcHQgKHNlbGVjdF9yZWNvcmQgKnMpOwog
+ICB2b2lkIHNldF9jbG9zZV9vbl9leGVjIChib29sIHZhbCk7CiAgIHZvaWQg
+X19zdGRjYWxsIHJlYWQgKHZvaWQgKnB0ciwgc2l6ZV90JiBsZW4pIF9fYXR0
+cmlidXRlX18gKChyZWdwYXJtICgzKSkpOworICBpbnQgX19zdGRjYWxsIGZj
+aG1vZCAobW9kZV90IG1vZGUpIF9fYXR0cmlidXRlX18gKChyZWdwYXJtICgx
+KSkpOwogICBpbnQgY2xvc2UgKCk7CiAgIHZvaWQgY3JlYXRlX2d1YXJkIChT
+RUNVUklUWV9BVFRSSUJVVEVTICpzYSkge2d1YXJkID0gQ3JlYXRlTXV0ZXgg
+KHNhLCBGQUxTRSwgTlVMTCk7fQogICBpbnQgZHVwIChmaGFuZGxlcl9iYXNl
+ICpjaGlsZCk7Ci0tLSBwaXBlLmNjLm9yaWcJMjAwNC0xMi0yNSAyMjoxOTo0
+OS40NjkwNDE2MDAgLTA4MDAKKysrIHBpcGUuY2MJMjAwNC0xMi0yNSAyMzow
+MToyNi42MTk3NjgwMDAgLTA4MDAKQEAgLTUzLDYgKzUzLDEzIEBACiAgICAg
+c2V0X25vX2luaGVyaXRhbmNlICh3cml0ZXBpcGVfZXhpc3RzLCB2YWwpOwog
+fQogCitpbnQgX19zdGRjYWxsCitmaGFuZGxlcl9waXBlOjpmY2htb2QgKG1v
+ZGVfdCBtb2RlKQoreworICBleHRlcm4gaW50IGNobW9kX2RldmljZSAocGF0
+aF9jb252JiBwYywgbW9kZV90IG1vZGUpOworICByZXR1cm4gY2htb2RfZGV2
+aWNlIChwYywgbW9kZSk7Cit9CisKIHN0cnVjdCBwaXBlYXJncwogewogICBm
+aGFuZGxlcl9iYXNlICpmaDsK
+
+------=_Part_249_2754456.1104046213548--
