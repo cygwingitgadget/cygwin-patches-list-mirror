@@ -1,49 +1,41 @@
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: stamp winver_stamp only on success
-Date: Thu, 27 Sep 2001 11:04:00 -0000
-Message-id: <20010927140505.C32577@redhat.com>
-References: <00c001c1474c$ce1e1890$01000001@lifelesswks>
-X-SW-Source: 2001-q3/msg00216.html
+From: egor duda <deo@logos-m.ru>
+To: Christopher Faylor <cygwin-patches@cygwin.com>
+Subject: Re: src/winsup/cygwin ChangeLog thread.cc thread.h ...
+Date: Thu, 27 Sep 2001 11:08:00 -0000
+Message-id: <099067241.20010927220834@logos-m.ru>
+References: <20010925114527.23687.qmail@sourceware.cygnus.com> <14472692346.20010927144858@logos-m.ru> <007b01c14743$2a0005b0$01000001@lifelesswks> <12280602580.20010927170049@logos-m.ru> <008301c1475e$afb0c4e0$01000001@lifelesswks> <20010927140440.B32577@redhat.com>
+X-SW-Source: 2001-q3/msg00217.html
 
-On Thu, Sep 27, 2001 at 10:06:13PM +1000, Robert Collins wrote:
->I've had some trouble with recent version changes, with cygwin_version.h
->not being found - which is how I noticed this...
+Hi!
 
-Please check this in.
+Thursday, 27 September, 2001 Christopher Faylor cgf@redhat.com wrote:
 
-Thanks.
+>>I'm having some trouble with cvs+ssh with this patch .. though I'm not
+>>sure why. For a little while I though it might be chris's tuesday
+>>sleep(1) change, because I was getting strange results from pspec> I'm
+>>not sure though.
 
-cgf
+CF> Huh?  What is my "sleep(1)" change?  The only change I made on Tuesday was
+CF> to fhandler_tty_common::ready_for_read.  How would that affect cvs?
 
->Thu Sep 27 22:00:00 2001 Robert Collins rbtcollins@itdomain.com.au
->
->    * Makefile.in: Only stamp winver_stamp on success.
->
->====
->Index: Makefile.in
->===================================================================
->RCS file: /cvs/src/src/winsup/cygwin/Makefile.in,v
->retrieving revision 1.63
->diff -u -p -r1.63 Makefile.in
->--- Makefile.in 2001/09/24 22:49:12     1.63
->+++ Makefile.in 2001/09/27 12:03:42
->@@ -210,8 +210,8 @@ version.cc winver.o: winver_stamp
-> winver_stamp: mkvers.sh include/cygwin/version.h winver.rc
->$(DLL_OFILES)
->        @echo "Making version.o and winver.o";\
->        $(SHELL) ${word 1,$^} ${word 2,$^} ${word 3,$^} $(WINDRES) && \
->-       touch $@ && \
->-       $(COMPILE_CXX) -o version.o version.cc
->+       $(COMPILE_CXX) -o version.o version.cc && \
->+       touch $@
->
-> cygrun.exe : cygrun.o $(LIB_NAME) $(w32api_lib)/libuser32.a \
->             $(w32api_lib)/libshell32.a $(w32api_lib)/libkernel32.a
->
->
->
+it does. i've seen the following at the end of strace (where ssh
+seemed to block in ReadFile() on empty pipe)
 
--- 
-cgf@cygnus.com                        Red Hat, Inc.
-http://sources.redhat.com/            http://www.redhat.com/
+  517 12076688 [main] ssh 7436 peek_socket: considering handle 0x24
+  242 12076930 [main] ssh 7436 peek_socket: adding read fd_set /dev/tcp, fd 4
+  235 12077165 [main] ssh 7436 peek_socket: adding write fd_set /dev/tcp, fd 4
+  291 12077456 [main] ssh 7436 peek_socket: WINSOCK_SELECT returned 1
+  434 12077890 [main] ssh 7436 set_bits: me 0xA013CC0, testing fd 4 (/dev/tcp)
+  281 12078171 [main] ssh 7436 set_bits: ready 1
+  242 12078413 [main] ssh 7436 peek_pipe: already ready
+  236 12078649 [main] ssh 7436 set_bits: me 0xA013C78, testing fd 0 (/dev/piper)
+  241 12078890 [main] ssh 7436 set_bits: ready 1
+  233 12079123 [main] ssh 7436 select_stuff::poll: returning 2
+  242 12079365 [main] ssh 7436 select_stuff::cleanup: calling cleanup routines
+  248 12079613 [main] ssh 7436 select_stuff::~select_stuff: deleting select records
+  694 12080307 [main] ssh 7436 _read: read (0, 0x24AD7C4, 8192) blocking, sigcatchers 3
+  320 12080627 [main] ssh 7436 peek_pipe: /dev/piper, saw EOF
+  261 12080888 [main] ssh 7436 peek_pipe: saw eof on '/dev/piper'
+  238 12081126 [main] ssh 7436 fhandler_pipe::ready_for_read: returning 1
+
+Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
