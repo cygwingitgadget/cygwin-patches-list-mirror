@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2547-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 4946 invoked by alias); 30 Jun 2002 12:57:28 -0000
+Return-Path: <cygwin-patches-return-2548-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 7676 invoked by alias); 30 Jun 2002 13:10:16 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,100 +7,35 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 4932 invoked from network); 30 Jun 2002 12:57:26 -0000
-X-WM-Posted-At: avacado.atomice.net; Sun, 30 Jun 02 14:00:57 +0100
-Message-ID: <00c501c22036$2cfd0f20$0100a8c0@advent02>
-From: "Chris January" <chris@atomice.net>
-To: <cygwin-patches@cygwin.com>
-Subject: Fw: dup tty error.
-Date: Sun, 30 Jun 2002 06:10:00 -0000
-MIME-Version: 1.0
-Content-Type: multipart/mixed;
-	boundary="----=_NextPart_000_00C2_01C2203E.8E93B060"
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-SW-Source: 2002-q2/txt/msg00530.txt.bz2
+Received: (qmail 7658 invoked from network); 30 Jun 2002 13:10:15 -0000
+Date: Sun, 30 Jun 2002 10:13:00 -0000
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
+To: cygpatch <cygwin-patches@cygwin.com>
+Subject: Re: Windows username in get_group_sidlist
+Message-ID: <20020630151013.H1247@cygbert.vinschen.de>
+Mail-Followup-To: cygpatch <cygwin-patches@cygwin.com>
+References: <3D1726E7.4EC19839@ieee.org> <3.0.5.32.20020623235117.008008f0@mail.attbi.com> <20020624120506.Z22705@cygbert.vinschen.de> <20020624130226.GA19789@redhat.com> <20020624151450.G22705@cygbert.vinschen.de> <3D1726E7.4EC19839@ieee.org> <3.0.5.32.20020629191915.0080d930@mail.attbi.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3.0.5.32.20020629191915.0080d930@mail.attbi.com>
+User-Agent: Mutt/1.3.22.1i
+X-SW-Source: 2002-q2/txt/msg00531.txt.bz2
 
-This is a multi-part message in MIME format.
+On Sat, Jun 29, 2002 at 07:19:15PM -0400, Pierre A. Humblet wrote:
+> 2002-06-29  Pierre Humblet <pierre.humblet@ieee.org>
+> 
+> 	security.cc (extract_nt_dom_user): Check for all buffer overflows.
+> 	Call LookupAccountSid after trying to get domain & user from passwd. 
+> 	Only accept correct syntax for U-domain\username. 
+> 	(get_group_sidlist): Obtain the domain and user by calling 
+> 	extract_nt_dom_user instead of LookupAccountSid.
 
-------=_NextPart_000_00C2_01C2203E.8E93B060
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Content-length: 886
+Thanks, Pierre.  I've applied the "soft" version.
 
-originally posted to the wrong list
+Corinna
 
-> Normally i would expect to see this error, say, 1 in 2 times I click the
-> Cygwin icon. But yesterday I clicked it about 30 times and I keep getting
-> the same error.
-> Error follows:
->       3 [main] bash 776 fhandler_base::dup: dup(/dev/tty) failed, handle
-B,
-> Win32 error 87
-> readline: warning: rl_prep_terminal: cannot get terminal settingsâ]0;~
-> â[32mchris@ADVENT02 â[33m~â[0m
-> See this thread for more details:
-> http://sources.redhat.com/ml/cygwin/2002-05/msg01415.html
->
-> Attached is a patch which fixes the bug, by giving the console window
-title
-> more time (up to 1 second) to change. FindWindow is called in a loop, so
-for
-> the normal execution path there is no extra overhead.
->
-> Chris
->
-> ---
-> 2002-06-30  Christopher January <chris@atomice.net>
->
->  * tty.cc (tty_list::allocate_tty): retry FindWindow if it fails.
-
-
-------=_NextPart_000_00C2_01C2203E.8E93B060
-Content-Type: text/plain;
-	name="Changelog.tty.txt"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
-	filename="Changelog.tty.txt"
-Content-length: 119
-
-2002-06-30  Christopher January <chris@atomice.net>
-
-	* tty.cc (tty_list::allocate_tty): retry FindWindow if it fails.
-
-------=_NextPart_000_00C2_01C2203E.8E93B060
-Content-Type: application/octet-stream;
-	name="tty.cc.patch"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment;
-	filename="tty.cc.patch"
-Content-length: 963
-
-Index: tty.cc=0A=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=0A=
-RCS file: /cvs/src/src/winsup/cygwin/tty.cc,v=0A=
-retrieving revision 1.35=0A=
-diff -u -3 -p -u -p -r1.35 tty.cc=0A=
---- tty.cc	5 Jun 2002 04:01:43 -0000	1.35=0A=
-+++ tty.cc	30 Jun 2002 12:42:04 -0000=0A=
-@@ -216,8 +216,11 @@ tty_list::allocate_tty (int with_console=0A=
-=20=0A=
-       __small_sprintf (buf, "cygwin.find.console.%d", myself->pid);=0A=
-       SetConsoleTitle (buf);=0A=
--      Sleep (40);=0A=
--      console =3D FindWindow (NULL, buf);=0A=
-+      for (int times =3D 0; times < 25 && console =3D=3D NULL; times++)=0A=
-+	    {=0A=
-+		  Sleep (40);=0A=
-+          console =3D FindWindow (NULL, buf);=0A=
-+	    }=0A=
-       SetConsoleTitle (oldtitle);=0A=
-       Sleep (40);=0A=
-       ReleaseMutex (title_mutex);=0A=
-=0A=
-
-------=_NextPart_000_00C2_01C2203E.8E93B060--
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
