@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3524-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 24779 invoked by alias); 6 Feb 2003 14:54:00 -0000
+Return-Path: <cygwin-patches-return-3525-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 3774 invoked by alias); 6 Feb 2003 15:06:04 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,31 +7,45 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 24758 invoked from network); 6 Feb 2003 14:53:52 -0000
-Date: Thu, 06 Feb 2003 14:54:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: Corinna Vinschen <cygwin-patches@cygwin.com>
+Received: (qmail 3756 invoked from network); 6 Feb 2003 15:06:03 -0000
+Message-ID: <009b01c2cdf1$410e64f0$78d96f83@pomello>
+From: "Max Bowsher" <maxb@ukf.net>
+To: <cygwin-patches@cygwin.com>
+References: <Pine.GSO.4.44.0302060941150.15853-100000@slinky.cs.nyu.edu>
 Subject: Re: ntsec odds and ends
-Message-ID: <20030206145328.GH5822@cygbert.vinschen.de>
-Mail-Followup-To: Corinna Vinschen <cygwin-patches@cygwin.com>
-References: <20030206140616.GF5822@cygbert.vinschen.de> <Pine.GSO.4.44.0302060941150.15853-100000@slinky.cs.nyu.edu>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.GSO.4.44.0302060941150.15853-100000@slinky.cs.nyu.edu>
-User-Agent: Mutt/1.4i
-X-SW-Source: 2003-q1/txt/msg00173.txt.bz2
+Date: Thu, 06 Feb 2003 15:06:00 -0000
+MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2800.1106
+X-SW-Source: 2003-q1/txt/msg00174.txt.bz2
 
-On Thu, Feb 06, 2003 at 09:49:32AM -0500, Igor Pechtchanski wrote:
-> Umm, Corinna, suppose some misguided soul would actually create a user
-> named "mkpasswd" (or a group called "mkgroup")?  What then?  Perhaps a
-> note in the User Guide's ntsec section is in order?  Or an FAQ?
+> On Thu, 6 Feb 2003, Corinna Vinschen wrote:
+>>> -      char group_name [UNLEN + 1] = "mkgroup";
+>>> +      char group_name [UNLEN + 1] = "run mkgroup";
+>>
+>> I didn't commit this change.
+>>
+>>> +      if (myself->uid == UNKNOWN_UID)
+>>> + strcpy (group_name, "run mkpasswd"); /* Feedback... */
+>>
+>> I've changed that to just "mkpasswd".
+>>
+>> I don't like to introduce group names with spaces in it.  And since
+>> they are longer than 8 chars, they'd get truncated by ls anyway.
 
-Feel free to write one.
+Having a space in the names makes it much more obvious that something odd is
+happening. And these names should never be allowed to persist for long.
 
-Corinna
+Perhaps you would consider some punctuation in the names instead?
+e.g.: <mkpasswd> <mkgroup>
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+Truncation by ls shouldn't matter much. I would say that a new user is more
+likely to notice "run mkpa" than "mkpasswd".
+
+
+
+Max.
