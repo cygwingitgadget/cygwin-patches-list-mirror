@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4263-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 15422 invoked by alias); 27 Sep 2003 16:42:52 -0000
+Return-Path: <cygwin-patches-return-4264-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 5566 invoked by alias); 30 Sep 2003 02:08:23 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,290 +7,353 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 15405 invoked from network); 27 Sep 2003 16:42:51 -0000
-X-Authentication-Warning: slinky.cs.nyu.edu: pechtcha owned process doing -bs
-Date: Sat, 27 Sep 2003 16:42:00 -0000
-From: Igor Pechtchanski <pechtcha@cs.nyu.edu>
-Reply-To: cygwin-patches@cygwin.com
+Received: (qmail 5555 invoked from network); 30 Sep 2003 02:08:22 -0000
+Message-Id: <3.0.5.32.20030929215525.0082c4f0@incoming.verizon.net>
+X-Sender: vze1u1tg@incoming.verizon.net (Unverified)
+Date: Tue, 30 Sep 2003 02:08:00 -0000
 To: cygwin-patches@cygwin.com
-Subject: Re: New program: cygtweak
-In-Reply-To: <20030927034235.GA18807@redhat.com>
-Message-ID: <Pine.GSO.4.56.0309271124210.3193@slinky.cs.nyu.edu>
-References: <Pine.GSO.4.44.0208161539040.21909-100000@slinky.cs.nyu.edu>
- <20030927034235.GA18807@redhat.com>
-Importance: Normal
-MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="-559023410-2026989069-1064680970=:3193"
-X-SW-Source: 2003-q3/txt/msg00279.txt.bz2
+From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
+Subject: [Patch]: Fixing the PROCESS_DUP_HANDLE security hole (part 1).
+Mime-Version: 1.0
+Content-Type: multipart/mixed; boundary="=====================_1064901325==_"
+X-SW-Source: 2003-q3/txt/msg00280.txt.bz2
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
+--=====================_1064901325==_
+Content-Type: text/plain; charset="us-ascii"
+Content-length: 921
 
----559023410-2026989069-1064680970=:3193
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-Content-length: 2319
+Here is a patch that allows to open master ttys without giving
+full access to the process, at least for access to the ctty. 
 
-On Fri, 26 Sep 2003, Christopher Faylor wrote:
+It works by snooping the ctty pipe handles and duplicating them
+on the cygheap, for use by future opens in descendant processes.
 
-> On Fri, Aug 16, 2002 at 03:42:21PM -0400, Igor Pechtchanski wrote:
-> >I've tried submitting this twice before, and had gotten no reaction.  I'm
-> >trying to find out what the proper procedure is and which list should this
-> >be sent to.  I'd also like to discuss the appropriate name for this little
-> >app, as well as get your comments on its usefulness.  To avoid retyping
-> >and clogging up the list, I'm providing a link to the latest submission
-> >below.
-> >
-> >http://www.cygwin.com/ml/cygwin-patches/2002-q3/msg00261.html
->
-> I know it's amazingly late to be responding to this but I'd like to reconsider
-> it, although I'm not wild about the 'cygtweak' name.
->
-> Maybe cygoption would be better?  And, if you're still interested in submitting
-> this (and I wouldn't blame you if you weren't given that it's been more than
-> a year) we'd need this to be added to the utils.sgml file, also.
->
-> cgf
+It passes all the tests I tried, but considering my lack of knowledge
+about ttys, everything is possible.
 
-Well, I think I've gotten the hang of the procedures by now (that was one
-of my first submissions -- WOW, time flies).  No, it's not too late, and I
-still think this would be useful.
+Pierre
 
-Yep, the message actually says that "cygtweak" should be renamed.  I think
-"cygprogctl" is even better than "cygoption", so that's the name I used.
-I've also changed the headers and copyrights appropriately.
 
-Attached is a patch against the latest CVS that adds the "cygprogctl"
-script with a description in utils.sgml and the appropriate rules in
-Makefile.in.  The only thing I didn't test were the rules in the Makefile,
-so if someone could please double-check them, it'd be great.  As usual,
-the ChangeLog is below.
-	Igor
-=============================================================================
-ChangeLog:
-2003-09-27  Igor Pechtchanski  <pechtcha@cs.nyu.edu>
+2003-09-29  Pierre Humblet <pierre.humblet@ieee.org>
 
-	* cygprogctl: New shell script.
-	* Makefile.in: Add rules for cygprogctl.
-	* utils.sgml: Add section on cygprogctl.
+	* cygheap.h (class cygheap_ctty): Create.
+	(struct init_cygheap): Add inherited_ctty member.
+	* cygheap.cc: Include pinfo.h.
+	(cygheap_ctty::acquire): Create.
+	(cygheap_ctty::pass): Ditto.
+	(cygheap_ctty::close): Ditto.
+	* fhandler_tty.cc (fhandler_tty_slave::open): Call
+	cygheap->inherited_ctty.pass and cygheap->inherited_ctty.acquire.
+	* tty.cc (tty::common_init): Remove call to SetKernelObjectSecurity
+	and edit some comments.
+	* syscalls.cc (setsid): Call cygheap->inherited_ctty.close.
 
--- 
-				http://cs.nyu.edu/~pechtcha/
-      |\      _,,,---,,_		pechtcha@cs.nyu.edu
-ZZZzz /,`.-'`'    -.  ;-;;,_		igor@watson.ibm.com
-     |,4-  ) )-,_. ,\ (  `'-'		Igor Pechtchanski, Ph.D.
-    '---''(_/--'  `-'\_) fL	a.k.a JaguaR-R-R-r-r-r-.-.-.  Meow!
+--=====================_1064901325==_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment; filename="tty.diff"
+Content-length: 9358
 
-"I have since come to realize that being between your mentor and his route
-to the bathroom is a major career booster."  -- Patrick Naughton
----559023410-2026989069-1064680970=:3193
-Content-Type: TEXT/PLAIN; charset=US-ASCII; name="cygprogctl-add.patch"
-Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.GSO.4.56.0309271242500.3193@slinky.cs.nyu.edu>
-Content-Description: 
-Content-Disposition: attachment; filename="cygprogctl-add.patch"
-Content-length: 12221
+Index: cygheap.h
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+RCS file: /cvs/src/src/winsup/cygwin/cygheap.h,v
+retrieving revision 1.67
+diff -u -p -r1.67 cygheap.h
+--- cygheap.h	27 Sep 2003 01:56:36 -0000	1.67
++++ cygheap.h	30 Sep 2003 01:53:07 -0000
+@@ -241,12 +241,22 @@ struct user_heap_info
+   unsigned chunk;
+ };
 
-SW5kZXg6IHdpbnN1cC91dGlscy9jeWdwcm9nY3RsDQo9PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09DQpSQ1MgZmlsZTogd2luc3VwL3V0aWxzL2N5Z3Byb2djdGwN
-CmRpZmYgLU4gd2luc3VwL3V0aWxzL2N5Z3Byb2djdGwNCi0tLSAvZGV2L251
-bGwJMSBKYW4gMTk3MCAwMDowMDowMCAtMDAwMA0KKysrIHdpbnN1cC91dGls
-cy9jeWdwcm9nY3RsCTI3IFNlcCAyMDAzIDE2OjI0OjU0IC0wMDAwDQpAQCAt
-MCwwICsxLDE1NCBAQA0KKyMhL2Jpbi9zaA0KKyMNCisjIGN5Z3Byb2djdGwg
-LS0gYWRkIG9yIHJlbW92ZSBwcm9ncmFtLXNwZWNpZmljIHZhbHVlcyBmb3Ig
-dGhlIENZR1dJTg0KKyMgZW52aXJvbm1lbnQgdmFyaWFibGUuDQorIw0KKyMg
-Q29weXJpZ2h0IChjKSAyMDAzLCBSZWQgSGF0LCBJbmMNCisjIA0KKyMgV3Jp
-dHRlbiBieSBJZ29yIFBlY2h0Y2hhbnNraSA8cGVjaHRjaGFAY3Mubnl1LmVk
-dT4NCisjDQorIyBUaGlzIGZpbGUgaXMgcGFydCBvZiBDeWd3aW4uDQorIyAN
-CisjIFRoaXMgc29mdHdhcmUgaXMgYSBjb3B5cmlnaHRlZCB3b3JrIGxpY2Vu
-c2VkIHVuZGVyIHRoZSB0ZXJtcyBvZiB0aGUNCisjIEN5Z3dpbiBsaWNlbnNl
-LiAgUGxlYXNlIGNvbnN1bHQgdGhlIGZpbGUgIkNZR1dJTl9MSUNFTlNFIiBm
-b3INCisjIGRldGFpbHMuDQorIw0KKw0KK2lmIFsgIiQxIiA9IGRlYnVnIF07
-IHRoZW4NCisgICAgc2V0IC14DQorICAgIHNoaWZ0DQorZmkNCisNCitwcm9n
-bmFtZT1gYmFzZW5hbWUgJDBgDQordmVyc2lvbj0nJFJldmlzaW9uOiAxLjI5
-ICQnDQordmVyc2lvbj0iYGVjaG8gIiR2ZXJzaW9uIiB8IHNlZCAtZSAncy9e
-XCRSZXZpc2lvbjogLy8nIC1lICdzLyBcJCQvLydgIg0KKw0KK1JFR1RPT0w9
-L3Vzci9iaW4vcmVndG9vbA0KK1JFR0tFWT0iL0hLTE0vU09GVFdBUkUvQ3ln
-bnVzIFNvbHV0aW9ucy9DeWd3aW4vUHJvZ3JhbSBPcHRpb25zIg0KKw0KK2lm
-IFsgISAteCAkUkVHVE9PTCBdOyB0aGVuDQorICAgIGVjaG8gIiRwcm9nbmFt
-ZTogQ2FuJ3QgZmluZCAkUkVHVE9PTCwgZXhpdGluZy4iIDE+JjINCisgICAg
-ZXhpdCAxDQorZmkNCisNCit3aGlsZSBbICQjIC1uZSAwIF07IGRvDQorICAg
-IGNhc2UgJDEgaW4NCisgICAgLXYgfCAtLXZlcmJvc2UpDQorICAgICAgICAg
-ICAgdmVyYm9zZT0iWUVTIiA7Ow0KKw0KKyAgICAtbiB8IC0tbm9leGVjKQ0K
-KyAgICAgICAgICAgIHZlcmJvc2U9IllFUyINCisgICAgICAgICAgICBub2V4
-ZWM9IllFUyIgOzsNCisNCisgICAgLWEgfCAtLWFkZC1wcm9ncmFtLW92ZXJy
-aWRlKQ0KKyAgICAgICAgICAgIGlmIFsgLW4gIiRhY3Rpb24iIF07IHRoZW4N
-CisgICAgICAgICAgICAgICAgZWNobyAiJHByb2duYW1lOiBQbGVhc2Ugc3Bl
-Y2lmeSBvbmx5IG9uZSBhY3Rpb24uIiAxPiYyDQorICAgICAgICAgICAgICAg
-IGV4aXQgMA0KKyAgICAgICAgICAgIGZpDQorICAgICAgICAgICAgYWN0aW9u
-PSJBREQiDQorICAgICAgICAgICAgcHJvZ3JhbT0iJDIiDQorICAgICAgICAg
-ICAgY3lnd2luPSIkMyINCisgICAgICAgICAgICBzaGlmdA0KKyAgICAgICAg
-ICAgIHNoaWZ0OzsNCisNCisgICAgLXIgfCAtLXJlbW92ZS1wcm9ncmFtLW92
-ZXJyaWRlKQ0KKyAgICAgICAgICAgIGlmIFsgLW4gIiRhY3Rpb24iIF07IHRo
-ZW4NCisgICAgICAgICAgICAgICAgZWNobyAiJHByb2duYW1lOiBQbGVhc2Ug
-c3BlY2lmeSBvbmx5IG9uZSBhY3Rpb24uIiAxPiYyDQorICAgICAgICAgICAg
-ICAgIGV4aXQgMA0KKyAgICAgICAgICAgIGZpDQorICAgICAgICAgICAgYWN0
-aW9uPSJSRU1PVkUiDQorICAgICAgICAgICAgcHJvZ3JhbT0iJDIiDQorICAg
-ICAgICAgICAgc2hpZnQ7Ow0KKw0KKyAgICAtZSB8IC0tZXhwb3J0KQ0KKyAg
-ICAgICAgICAgIGlmIFsgLXogIiRhY3Rpb24iIF07IHRoZW4NCisgICAgICAg
-ICAgICAgICAgZWNobyAiJHByb2duYW1lOiBQbGVhc2Ugc3BlY2lmeSBhbiBh
-Y3Rpb24gZmlyc3QuIiAxPiYyDQorICAgICAgICAgICAgZWxpZiBbICIkYWN0
-aW9uIiAhPSBBREQgXTsgdGhlbg0KKyAgICAgICAgICAgICAgICBlY2hvICIk
-cHJvZ25hbWU6IFdhcm5pbmc6IC1lIGlnbm9yZWQgZm9yIC1yLiIgMT4mMg0K
-KyAgICAgICAgICAgIGVsc2UNCisgICAgICAgICAgICAgICAgZXhwb3J0PSJZ
-RVMiDQorICAgICAgICAgICAgZmk7Ow0KKw0KKyAgICAtViB8IC12ZXJzaW9u
-IHwgLS12ZXJzaW9uKQ0KKyAgICAgICAgICAgIGVjaG8gJHByb2duYW1lOiB2
-ZXJzaW9uICR2ZXJzaW9uIDE+JjINCisgICAgICAgICAgICBleGl0IDAgOzsN
-CisNCisgICAgLWggfCAtaGVscCB8IC0taGVscCkNCisgICAgICAgICAgICBl
-Y2hvICJVc2FnZTogJHByb2duYW1lIFstdnwtbl0gYWN0aW9uIGFjdGlvbi1z
-cGVjaWZpYy1wYXJhbXMiIDE+JjINCisgICAgICAgICAgICBlY2hvICIgIHdo
-ZXJlIGFjdGlvbiBpcyBvbmUgb2YiIDE+JjINCisgICAgICAgICAgICBlY2hv
-ICIgICAgLWF8LS1hZGQtcHJvZ3JhbS1vdmVycmlkZSBwcm9ncmFtIFwkQ1lH
-V0lOLXZhbHVlIFstZXwtLWV4cG9ydF0iIDE+JjINCisgICAgICAgICAgICBl
-Y2hvICIgICAgICAgICAgICAgIGFkZHMgYW4gb3ZlcnJpZGUgZm9yIHRoZSB2
-YWx1ZSBvZiB0aGUgQ1lHV0lOIHZhcmlhYmxlIiAxPiYyDQorICAgICAgICAg
-ICAgZWNobyAiICAgICAgICAgICAgICB3aGVuIGludm9raW5nIHRoZSBwcm9n
-cmFtIiAxPiYyDQorICAgICAgICAgICAgZWNobyAiICAgICAgICAgICAgICAt
-LWV4cG9ydCBleHBvcnRzIHRoZSB2YWx1ZSB0byBhbGwgY2hpbGRyZW4gb2Yg
-dGhlIGdpdmVuIHByb2dyYW0iIDE+JjINCisgICAgICAgICAgICBlY2hvICIg
-ICAgLXJ8LS1yZW1vdmUtcHJvZ3JhbS1vdmVycmlkZSBwcm9ncmFtIiAxPiYy
-DQorICAgICAgICAgICAgZWNobyAiICAgICAgICAgICAgICByZW1vdmVzIGFu
-IG92ZXJyaWRlIGZvciBhIGdpdmVuIHByb2dyYW0iIDE+JjINCisgICAgICAg
-ICAgICBlY2hvIDE+JjINCisgICAgICAgICAgICBlY2hvICJJZiAtLXZlcmJv
-c2Ugb3IgLXYgaXMgc3BlY2lmaWVkLCB0aGUgcmVnaXN0cnkgbW9kaWZpY2F0
-aW9uIGFjdGlvbnMgYXJlIHByaW50ZWQiIDE+JjINCisgICAgICAgICAgICBl
-Y2hvICJJZiAtLW5vZXhlYyBvciAtbiBpcyBzcGVjaWZpZWQsIG5vIGNvbW1h
-bmRzIHRoYXQgY2hhbmdlIHRoZSByZWdpc3RyeSB3aWxsIGJlIHJ1biIgMT4m
-Mg0KKyAgICAgICAgICAgIGVjaG8gIiAgTm90ZSB0aGF0IC0tbm9leGVjIGlt
-cGxpZXMgLS12ZXJib3NlIiAxPiYyDQorICAgICAgICAgICAgZWNobyAxPiYy
-DQorICAgICAgICAgICAgZWNobyAiRXhhbXBsZXM6ICRwcm9nbmFtZSAtdiAt
-LWFkZC1wcm9ncmFtLW92ZXJyaWRlIC91c3Ivc2Jpbi9pbmV0ZCAndHR5JyAt
-LWV4cG9ydCIgMT4mMg0KKyAgICAgICAgICAgIGVjaG8gIiAgICAgICAgICAk
-cHJvZ25hbWUgLS1yZW1vdmUtcHJvZ3JhbS1vdmVycmlkZSAvdXNyL3NiaW4v
-c3NoZCIgMT4mMg0KKyAgICAgICAgICAgIGV4aXQgMCA7Ow0KKw0KKyAgICAq
-KQ0KKyAgICAgICAgICAgIGVjaG8gIiRwcm9nbmFtZTogSW52YWxpZCBhcmd1
-bWVudChzKS4iIDE+JjINCisgICAgICAgICAgICBlY2hvICJUcnkgJyRwcm9n
-bmFtZSAtLWhlbHAnIGZvciBtb3JlIGluZm9ybWF0aW9uLiIgMT4mMg0KKyAg
-ICAgICAgICAgIGV4aXQgMSA7Ow0KKyAgICBlc2FjDQorICAgIHNoaWZ0DQor
-ZG9uZQ0KKw0KK2lmIFsgLXogIiRhY3Rpb24iIF07IHRoZW4NCisgICAgZWNo
-byAiJHByb2duYW1lOiBNaXNzaW5nIGFyZ3VtZW50KHMpLiIgMT4mMg0KKyAg
-ICBlY2hvICJUcnkgJyRwcm9nbmFtZSAtLWhlbHAnIGZvciBtb3JlIGluZm9y
-bWF0aW9uLiIgMT4mMg0KKyAgICBleGl0IDENCitmaQ0KKw0KK2Nhc2UgJHBy
-b2dyYW0gaW4NCisvKikgcHJvZ3JhbT1gY3lncGF0aCAtdyAiJHByb2dyYW0i
-IHwgc2VkICdzL1xcXFwvXFxcXFxcXFwvZydgIDs7DQorZXNhYw0KKw0KK2Nh
-c2UgJGFjdGlvbiBpbg0KK0FERCkNCisgICAgICAgICMgRmlyc3QgY2hlY2sg
-aWYgdGhlIGtleSBleGlzdHMNCisgICAgICAgIGlmICEgJFJFR1RPT0wgLXEg
-Y2hlY2sgIiRSRUdLRVkiOyB0aGVuDQorICAgICAgICAgICAgaWYgWyAtbiAi
-JHZlcmJvc2UiIF07IHRoZW4NCisgICAgICAgICAgICAgICAgZWNobyAiJHBy
-b2duYW1lOiBcIiRSRUdLRVlcIiBub3QgZm91bmQsIGFkZGluZy4iDQorICAg
-ICAgICAgICAgZmkNCisgICAgICAgICAgICBpZiBbIC16ICIkbm9leGVjIiBd
-OyB0aGVuDQorICAgICAgICAgICAgICAgICRSRUdUT09MIGFkZCAiJFJFR0tF
-WSINCisgICAgICAgICAgICBlbHNlDQorICAgICAgICAgICAgICAgIGVjaG8g
-IiRSRUdUT09MIGFkZCBcIiRSRUdLRVlcIiINCisgICAgICAgICAgICBmaQ0K
-KyAgICAgICAgZmkNCisgICAgICAgICMgVGFjayBvbiAiZXhwb3J0IiBpZiBu
-ZWVkZWQNCisgICAgICAgIGlmIFsgLW4gIiRleHBvcnQiIF07IHRoZW4NCisg
-ICAgICAgICAgICBjeWd3aW49IiRjeWd3aW4gZXhwb3J0Ig0KKyAgICAgICAg
-ZmkNCisgICAgICAgICMgTm93IGFkZCB0aGUgY29ycmVzcG9uZGluZyB2YWx1
-ZQ0KKyAgICAgICAgaWYgWyAtbiAiJHZlcmJvc2UiIF07IHRoZW4NCisgICAg
-ICAgICAgICBlY2hvICIkcHJvZ25hbWU6IFNldHRpbmcgXCIkUkVHS0VZLyRw
-cm9ncmFtXCIgdG8gXCIkY3lnd2luXCIuIg0KKyAgICAgICAgZmkNCisgICAg
-ICAgIGlmIFsgLXogIiRub2V4ZWMiIF07IHRoZW4NCisgICAgICAgICAgICAk
-UkVHVE9PTCAtS0AgLXMgc2V0ICIkUkVHS0VZQCRwcm9ncmFtIiAiJGN5Z3dp
-biINCisgICAgICAgICAgICBleGl0ICQ/DQorICAgICAgICBlbHNlDQorICAg
-ICAgICAgICAgZWNobyAiJFJFR1RPT0wgLUtAIC1zIHNldCBcIiRSRUdLRVlA
-JHByb2dyYW1cIiBcIiRjeWd3aW5cIiINCisgICAgICAgIGZpDQorICAgICAg
-ICA7Ow0KKw0KK1JFTU9WRSkNCisgICAgICAgICMgUmVtb3ZlIHRoZSBjb3Jy
-ZXNwb25kaW5nIHZhbHVlDQorICAgICAgICBpZiBbIC1uICIkdmVyYm9zZSIg
-XTsgdGhlbg0KKyAgICAgICAgICAgIGVjaG8gIiRwcm9nbmFtZTogUmVtb3Zp
-bmcgXCIkUkVHS0VZLyRwcm9ncmFtXCIuIg0KKyAgICAgICAgZmkNCisgICAg
-ICAgIGlmIFsgLXogIiRub2V4ZWMiIF07IHRoZW4NCisgICAgICAgICAgICAk
-UkVHVE9PTCAtS0AgdW5zZXQgIiRSRUdLRVlAJHByb2dyYW0iDQorICAgICAg
-ICAgICAgZXhpdCAkPw0KKyAgICAgICAgZWxzZQ0KKyAgICAgICAgICAgIGVj
-aG8gIiRSRUdUT09MIC1LQCB1bnNldCBcIiRSRUdLRVlAJHByb2dyYW1cIiIN
-CisgICAgICAgIGZpDQorICAgICAgICA7Ow0KK2VzYWMNCisNCkluZGV4OiB3
-aW5zdXAvdXRpbHMvTWFrZWZpbGUuaW4NCj09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT0NClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL3V0aWxzL01ha2Vm
-aWxlLmluLHYNCnJldHJpZXZpbmcgcmV2aXNpb24gMS41Mw0KZGlmZiAtdSAt
-cCAtcjEuNTMgTWFrZWZpbGUuaW4NCi0tLSB3aW5zdXAvdXRpbHMvTWFrZWZp
-bGUuaW4JMTIgU2VwIDIwMDMgMDE6NTE6MjEgLTAwMDAJMS41Mw0KKysrIHdp
-bnN1cC91dGlscy9NYWtlZmlsZS5pbgkyNyBTZXAgMjAwMyAxNjoyNDo1NCAt
-MDAwMA0KQEAgLTg0LDEyICs4NCwxNyBAQCBQUk9HUzo9d2Fybl9kdW1wZXIg
-JChQUk9HUykNCiBDTEVBTl9QUk9HUys9ZHVtcGVyLmV4ZQ0KIGVuZGlmDQog
-DQorUFJPR1MrPWN5Z3Byb2djdGwNCisNCiAuU1VGRklYRVM6DQogLk5PRVhQ
-T1JUOg0KIA0KIC5QSE9OWTogYWxsIGluc3RhbGwgY2xlYW4gcmVhbGNsZWFu
-IHdhcm5fZHVtcGVyDQogDQogYWxsOiBNYWtlZmlsZSAkKFBST0dTKQ0KKw0K
-K2N5Z3Byb2djdGw6ICQoc3JjZGlyKS9jeWdwcm9nY3RsDQorCWNwIC1wICQ8
-ICRADQogDQogc3RyYWNlLmV4ZTogc3RyYWNlLm8gcGF0aC5vICQoTUlOR1df
-REVQX0xETElCUykNCiBpZmRlZiBWRVJCT1NFDQpJbmRleDogd2luc3VwL3V0
-aWxzL3V0aWxzLnNnbWwNCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NClJDUyBm
-aWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL3V0aWxzL3V0aWxzLnNnbWwsdg0K
-cmV0cmlldmluZyByZXZpc2lvbiAxLjQzDQpkaWZmIC11IC1wIC1yMS40MyB1
-dGlscy5zZ21sDQotLS0gd2luc3VwL3V0aWxzL3V0aWxzLnNnbWwJNSBBdWcg
-MjAwMyAwMTowNjoyMiAtMDAwMAkxLjQzDQorKysgd2luc3VwL3V0aWxzL3V0
-aWxzLnNnbWwJMjcgU2VwIDIwMDMgMTY6MjQ6NTQgLTAwMDANCkBAIC0xNzYs
-NiArMTc2LDU3IEBAIG90aGVyIGZvcm1hdHMuPC9wYXJhPg0KIA0KIDwvc2Vj
-dDI+DQogDQorPHNlY3QyIGlkPSJjeWdwcm9nY3RsIj48dGl0bGU+Y3lncHJv
-Z2N0bDwvdGl0bGU+DQorDQorPHNjcmVlbj4NCitVc2FnZTogY3lncHJvZ2N0
-bCBbLXZ8LW5dIGFjdGlvbiBhY3Rpb24tc3BlY2lmaWMtcGFyYW1zDQorICB3
-aGVyZSBhY3Rpb24gaXMgb25lIG9mDQorICAgIC1hfC0tYWRkLXByb2dyYW0t
-b3ZlcnJpZGUgcHJvZ3JhbSAkQ1lHV0lOLXZhbHVlIFstZXwtLWV4cG9ydF0N
-CisgICAgICAgICAgICAgIGFkZHMgYW4gb3ZlcnJpZGUgZm9yIHRoZSB2YWx1
-ZSBvZiB0aGUgQ1lHV0lOIHZhcmlhYmxlDQorICAgICAgICAgICAgICB3aGVu
-IGludm9raW5nIHRoZSBwcm9ncmFtDQorICAgICAgICAgICAgICAtLWV4cG9y
-dCBleHBvcnRzIHRoZSB2YWx1ZSB0byBhbGwgY2hpbGRyZW4gb2YgdGhlIGdp
-dmVuIHByb2dyYW0NCisgICAgLXJ8LS1yZW1vdmUtcHJvZ3JhbS1vdmVycmlk
-ZSBwcm9ncmFtDQorICAgICAgICAgICAgICByZW1vdmVzIGFuIG92ZXJyaWRl
-IGZvciBhIGdpdmVuIHByb2dyYW0NCisNCitJZiAtLXZlcmJvc2Ugb3IgLXYg
-aXMgc3BlY2lmaWVkLCB0aGUgcmVnaXN0cnkgbW9kaWZpY2F0aW9uIGFjdGlv
-bnMgYXJlIHByaW50ZWQNCitJZiAtLW5vZXhlYyBvciAtbiBpcyBzcGVjaWZp
-ZWQsIG5vIGNvbW1hbmRzIHRoYXQgY2hhbmdlIHRoZSByZWdpc3RyeSB3aWxs
-IGJlIHJ1bg0KKyAgTm90ZSB0aGF0IC0tbm9leGVjIGltcGxpZXMgLS12ZXJi
-b3NlDQorDQorRXhhbXBsZXM6IGN5Z3Byb2djdGwgLXYgLS1hZGQtcHJvZ3Jh
-bS1vdmVycmlkZSAvdXNyL3NiaW4vaW5ldGQgJ3R0eScgLS1leHBvcnQNCisg
-ICAgICAgICAgY3lncHJvZ2N0bCAtLXJlbW92ZS1wcm9ncmFtLW92ZXJyaWRl
-IC91c3Ivc2Jpbi9zc2hkDQorPC9zY3JlZW4+DQorDQorPHBhcmE+VGhlIDxj
-b21tYW5kPmN5Z3Byb2djdGw8L2NvbW1hbmQ+IHByb2dyYW0gaXMgYSB3cmFw
-cGVyIGFyb3VuZA0KKzxjb21tYW5kPnJlZ3Rvb2w8L2NvbW1hbmQ+IHRvIGFs
-bG93IG1hbmlwdWxhdGluZyBwcm9ncmFtLXNwZWNpZmljIHZhbHVlcw0KK29m
-IHRoZSA8ZW1waGFzaXM+Q1lHV0lOPC9lbXBoYXNpcz4gdmFyaWFibGUgaW4g
-dGhlIHJlZ2lzdHJ5LiAgQ3lnd2luDQorYWxsb3dzIG92ZXJyaWRpbmcgdGhl
-IHZhbHVlIG9mIHRoZSA8ZW1waGFzaXM+Q1lHV0lOPC9lbXBoYXNpcz4gdmFy
-aWFibGUgZm9yDQoraW5kaXZpZHVhbCBwcm9ncmFtcyAoYW5kIHRoZWlyIGNo
-aWxkcmVuKS4NCitUaGlzIGlzIHVzZWZ1bCBmb3Igc2VydmVyIHByb2dyYW1z
-LCBmb3IgZXhhbXBsZSwgPGNvbW1hbmQ+c3NoZDwvY29tbWFuZD4NCitvciA8
-Y29tbWFuZD5pbmV0ZDwvY29tbWFuZD4uPC9wYXJhPg0KKw0KKzxwYXJhPlRv
-IGFkZCBhIHByb2dyYW0tc3BlY2lmaWMgPGVtcGhhc2lzPkNZR1dJTjwvZW1w
-aGFzaXM+IHZhbHVlIG92ZXJyaWRlLA0KK3NwZWNpZnkgdGhlIDxsaXRlcmFs
-Pi1hPC9saXRlcmFsPiBmbGFnLCBmb2xsb3dlZCBieSB0aGUgcHJvZ3JhbSBu
-YW1lIGFuZCB0aGUNCit2YWx1ZSBvZiB0aGUgPGVtcGhhc2lzPkNZR1dJTjwv
-ZW1waGFzaXM+IHZhcmlhYmxlIGZvciB0aGF0IHByb2dyYW0uICBUaGUNCitw
-cm9ncmFtIG5hbWUgc2hvdWxkIGJlIGFuIGFic29sdXRlIHBhdGggdG8gdGhl
-IGV4ZWN1dGFibGUuICBUaGUgdmFsdWUgb2YgdGhlDQorPGVtcGhhc2lzPkNZ
-R1dJTjwvZW1waGFzaXM+IHZhcmlhYmxlIHNob3VsZCBiZSA8ZW1waGFzaXM+
-b25lPC9lbXBoYXNpcz4NCitwYXJhbWV0ZXIsIHNvIGl0IG5lZWRzIHRvIGJl
-IHByb3Blcmx5IHF1b3RlZC4gIElmIHRoZSA8bGl0ZXJhbD4tZTwvbGl0ZXJh
-bD4NCitvcHRpb24gaXMgc3BlY2lmaWVkLCB0aGUgPGVtcGhhc2lzPkNZR1dJ
-TjwvZW1waGFzaXM+IHZhbHVlIHdpbGwNCithbHNvIGJlIGV4cG9ydGVkIHRv
-IGFsbCBjaGlsZCBwcm9jZXNzZXMgdGhhdCB0aGUgcHJvZ3JhbSBzcGF3bnMu
-PC9wYXJhPg0KKw0KKzxwYXJhPlRvIHJlbW92ZSBhIHByZXZpb3VzbHkgc3Bl
-Y2lmaWVkIG92ZXJyaWRlLCBzcGVjaWZ5IHRoZQ0KKzxsaXRlcmFsPi1yPC9s
-aXRlcmFsPiBmbGFnLCBmb2xsb3dlZCBieSB0aGUgcHJvZ3JhbSBuYW1lLiAg
-VGhlIG5leHQgdGltZQ0KK3RoZSBwcm9ncmFtIHJ1bnMsIHRoZSB2YWx1ZSBv
-ZiA8ZW1waGFzaXM+Q1lHV0lOPC9lbXBoYXNpcz4gd2lsbCBiZSB0YWtlbg0K
-K2Zyb20gdGhlIGVudmlyb25tZW50LjwvcGFyYT4NCisNCis8cGFyYT5UaGUg
-PGxpdGVyYWw+LXY8L2xpdGVyYWw+IG9wdGlvbiBjYXVzZXMgPGNvbW1hbmQ+
-Y3lncHJvZ2N0bDwvY29tbWFuZD4NCit0byBwcmludCBvdXQgdGhlIGV4YWN0
-IDxjb21tYW5kPnJlZ3Rvb2w8L2NvbW1hbmQ+IGludm9jYXRpb25zIHRvIHNl
-dCB0aGUNCis8ZW1waGFzaXM+Q1lHV0lOPC9lbXBoYXNpcz4gb3ZlcnJpZGUg
-YmVmb3JlIHRoZXkgYXJlIGV4ZWN1dGVkLiAgVXNlIHRoZQ0KKzxsaXRlcmFs
-Pi1uPC9saXRlcmFsPiBvcHRpb24gdG8gcHJpbnQgb3V0IHRoZSBpbnZvY2F0
-aW9ucyB3aXRob3V0IGFjdHVhbGx5DQorbW9kaWZ5aW5nIHRoZSByZWdpc3Ry
-eS4NCitOb3RlIHRoYXQgPGxpdGVyYWw+LW48L2xpdGVyYWw+IGltcGxpZXMg
-PGxpdGVyYWw+LXY8L2xpdGVyYWw+LjwvcGFyYT4NCisNCis8L3NlY3QyPg0K
-Kw0KIDxzZWN0MiBpZD0iZHVtcGVyIj48dGl0bGU+ZHVtcGVyPC90aXRsZT4N
-CiANCiA8c2NyZWVuPg0K
++class cygheap_ctty
++{
++  HANDLE from_master, to_master;
++public:
++  void acquire (fhandler_tty_slave &);
++  void close ();
++  bool pass (fhandler_tty_slave &);
++};
++
+ struct init_cygheap
+ {
+   _cmalloc_entry *chain;
+   char *buckets[32];
+   cygheap_root root;
+   cygheap_user user;
++  cygheap_ctty inherited_ctty;
+   user_heap_info user_heap;
+   mode_t umask;
+   HANDLE shared_h;
+Index: cygheap.cc
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+RCS file: /cvs/src/src/winsup/cygwin/cygheap.cc,v
+retrieving revision 1.86
+diff -u -p -r1.86 cygheap.cc
+--- cygheap.cc	27 Sep 2003 01:56:36 -0000	1.86
++++ cygheap.cc	30 Sep 2003 01:53:08 -0000
+@@ -23,6 +23,7 @@
+ #include "sync.h"
+ #include "shared_info.h"
+ #include "sigproc.h"
++#include "pinfo.h"
 
----559023410-2026989069-1064680970=:3193--
+ init_cygheap NO_COPY *cygheap;
+ void NO_COPY *cygheap_max;
+@@ -444,3 +445,76 @@ cygheap_user::set_name (const char *new_
+   cfree_and_set (pwinname);
+ }
+
++/* Snoop ctty pipe handles to inheritable handles in the cygheap */
++void
++cygheap_ctty::acquire (fhandler_tty_slave & slave)
++{
++
++  if (slave.tc->ntty !=3D myself->ctty || from_master)
++    {
++      debug_printf ("Nothing to do");
++      return;
++    }
++
++  if (!DuplicateHandle (hMainProc, slave.get_io_handle (),
++			hMainProc, &from_master, 0, TRUE,
++			DUPLICATE_SAME_ACCESS))
++    debug_printf ("can't duplicate input, %E");
++  else if (!DuplicateHandle (hMainProc, slave.get_output_handle (),
++			     hMainProc, &to_master, 0, TRUE,
++			     DUPLICATE_SAME_ACCESS))
++    {
++      CloseHandle (from_master);
++      from_master =3D NULL;
++      debug_printf ("can't duplicate output, %E");
++    }
++  else
++    {
++      debug_printf("Got them");
++      ProtectHandle1INH(from_master, cygheap_from_master);
++      ProtectHandle1INH(to_master, cygheap_to_master);
++    }
++}
++
++/* Pass duplicated ctty pipe handles to slave tty */
++bool
++cygheap_ctty::pass (fhandler_tty_slave & slave)
++{
++  if (slave.tc->ntty !=3D myself->ctty || !from_master)
++    return false;
++
++  HANDLE from_master_local =3D NULL, to_master_local =3D NULL;
++
++  if (!DuplicateHandle (hMainProc, from_master,
++			hMainProc, &from_master_local, 0, TRUE,
++			DUPLICATE_SAME_ACCESS))
++    debug_printf ("can't duplicate input, %E");
++  else if (!DuplicateHandle (hMainProc, to_master,
++			hMainProc, &to_master_local, 0, TRUE,
++			DUPLICATE_SAME_ACCESS))
++    {
++      debug_printf ("can't duplicate output, %E");
++      CloseHandle (from_master_local);
++    }
++  else
++    {
++      debug_printf("OK");
++      slave.set_io_handle (from_master_local);
++      slave.set_output_handle (to_master_local);
++      return true;
++    }
++  return false;
++}
++
++void
++cygheap_ctty::close()
++{
++  if (to_master)
++    ForceCloseHandle1 (to_master, cygheap_to_master);
++  if (from_master)
++    ForceCloseHandle1 (from_master, cygheap_from_master);
++
++  to_master =3D from_master =3D NULL;
++
++  debug_printf ("OK");
++}
+Index: fhandler_tty.cc
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+RCS file: /cvs/src/src/winsup/cygwin/fhandler_tty.cc,v
+retrieving revision 1.110
+diff -u -p -r1.110 fhandler_tty.cc
+--- fhandler_tty.cc	27 Sep 2003 03:14:07 -0000	1.110
++++ fhandler_tty.cc	30 Sep 2003 01:53:10 -0000
+@@ -509,54 +509,61 @@ fhandler_tty_slave::open (int flags, mod
+       return 0;
+     }
+
+-  HANDLE from_master_local, to_master_local;
++  /* Try inherited handles, if we are the ctty */
++  if (!cygheap->inherited_ctty.pass (*this))
++    {
++      HANDLE from_master_local, to_master_local;
+
+ #ifdef USE_SERVER
+-  if (!wincap.has_security ()
+-      || cygserver_running =3D=3D CYGSERVER_UNAVAIL
+-      || !cygserver_attach_tty (&from_master_local, &to_master_local))
++      if (!wincap.has_security ()
++	  || cygserver_running =3D=3D CYGSERVER_UNAVAIL
++	  || !cygserver_attach_tty (&from_master_local, &to_master_local)) {}
+ #endif
+-    {
+-      termios_printf ("cannot dup handles via server. using old method.");
++      {
++	termios_printf ("cannot dup handles via server. using old method.");
+
+-      HANDLE tty_owner =3D OpenProcess (PROCESS_DUP_HANDLE, FALSE,
+-				      get_ttyp ()->master_pid);
+-      termios_printf ("tty own handle %p",tty_owner);
+-      if (tty_owner =3D=3D NULL)
+-	{
+-	  termios_printf ("can't open tty (%d) handle process %d",
+-			  get_unit (), get_ttyp ()->master_pid);
+-	  __seterrno ();
+-	  return 0;
+-	}
++
++	HANDLE tty_owner =3D OpenProcess (PROCESS_DUP_HANDLE, FALSE,
++					get_ttyp ()->master_pid);
++	termios_printf ("tty own handle %p",tty_owner);
++	if (tty_owner =3D=3D NULL)
++	  {
++	    termios_printf ("can't open tty (%d) handle process %d",
++			    get_unit (), get_ttyp ()->master_pid);
++	    __seterrno ();
++	    return 0;
++	  }
++
++	if (!DuplicateHandle (tty_owner, get_ttyp ()->from_master,
++			      hMainProc, &from_master_local, 0, TRUE,
++			      DUPLICATE_SAME_ACCESS))
++	  {
++	    termios_printf ("can't duplicate input, %E");
++	    __seterrno ();
++	    return 0;
++	  }
+
+-      if (!DuplicateHandle (tty_owner, get_ttyp ()->from_master,
+-			    hMainProc, &from_master_local, 0, TRUE,
+-			    DUPLICATE_SAME_ACCESS))
+-	{
+-	  termios_printf ("can't duplicate input, %E");
+-	  __seterrno ();
+-	  return 0;
+-	}
++	if (!DuplicateHandle (tty_owner, get_ttyp ()->to_master,
++			      hMainProc, &to_master_local, 0, TRUE,
++			      DUPLICATE_SAME_ACCESS))
++	  {
++	    termios_printf ("can't duplicate output, %E");
++	    __seterrno ();
++	    return 0;
++	  }
++	CloseHandle (tty_owner);
++      }
+
+-      if (!DuplicateHandle (tty_owner, get_ttyp ()->to_master,
+-			  hMainProc, &to_master_local, 0, TRUE,
+-			  DUPLICATE_SAME_ACCESS))
+-	{
+-	  termios_printf ("can't duplicate output, %E");
+-	  __seterrno ();
+-	  return 0;
+-	}
+-      CloseHandle (tty_owner);
+-    }
++      termios_printf ("duplicated from_master %p->%p from tty_owner",
++		      get_ttyp ()->from_master, from_master_local);
++      termios_printf ("duplicated to_master %p->%p from tty_owner",
++		      get_ttyp ()->to_master, to_master_local);
+
+-  termios_printf ("duplicated from_master %p->%p from tty_owner",
+-      get_ttyp ()->from_master, from_master_local);
+-  termios_printf ("duplicated to_master %p->%p from tty_owner",
+-      get_ttyp ()->to_master, to_master_local);
++      set_io_handle (from_master_local);
++      set_output_handle (to_master_local);
+
+-  set_io_handle (from_master_local);
+-  set_output_handle (to_master_local);
++      cygheap->inherited_ctty.acquire (*this);
++    }
+
+   set_open_status ();
+   if (fhandler_console::open_fhs++ =3D=3D 0 && !GetConsoleCP ()
+@@ -1377,3 +1384,4 @@ fhandler_tty_master::init_console ()
+   console->set_r_no_interrupt (1);
+   return 0;
+ }
++
+Index: tty.cc
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+RCS file: /cvs/src/src/winsup/cygwin/tty.cc,v
+retrieving revision 1.57
+diff -u -p -r1.57 tty.cc
+--- tty.cc	25 Sep 2003 00:37:17 -0000	1.57
++++ tty.cc	30 Sep 2003 01:53:11 -0000
+@@ -408,27 +408,17 @@ tty::common_init (fhandler_pty_master *p
+
+   master_pid =3D GetCurrentProcessId ();
+
+-  /* Allow the others to open us (for handle duplication) */
++  /* We do not open allow the others to open us (for handle duplication)
++     but rely on cygheap->inherited_ctty for descendant processes.
++     In the future the cygserver may allow access by others. */
+
+-  /* FIXME: we shold NOT set the security wide open when the
+-     daemon is running
+-   */
++#ifdef USE_SERVER
+   if (wincap.has_security ())
+     {
+-#ifdef USE_SERVER
+       if (cygserver_running =3D=3D CYGSERVER_UNKNOWN)
+ 	cygserver_init ();
+-#endif
+-
+-      if (
+-#ifdef USE_SERVER
+-	  cygserver_running !=3D CYGSERVER_OK &&
+-#endif
+-	  !SetKernelObjectSecurity (hMainProc,
+-				       DACL_SECURITY_INFORMATION,
+-				       get_null_sd ()))
+-	system_printf ("Can't set process security, %E");
+     }
++#endif
+
+   /* Create synchronisation events */
+
+Index: syscalls.cc
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+RCS file: /cvs/src/src/winsup/cygwin/syscalls.cc,v
+retrieving revision 1.295
+diff -u -p -r1.295 syscalls.cc
+--- syscalls.cc	27 Sep 2003 05:44:58 -0000	1.295
++++ syscalls.cc	30 Sep 2003 01:53:15 -0000
+@@ -312,6 +312,7 @@ setsid (void)
+ 	  syscall_printf ("freeing console");
+ 	  FreeConsole ();
+ 	}
++      cygheap->inherited_ctty.close ();
+       myself->ctty =3D -1;
+       myself->sid =3D getpid ();
+       myself->pgid =3D getpid ();
+
+--=====================_1064901325==_--
