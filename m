@@ -1,172 +1,71 @@
-From: "Robert Collins" <robert.collins@itdomain.com.au>
-To: "Suhaib Siddiqi" <ssiddiqi@inspirepharm.com>, <cygwin-xfree@sources.redhat.com>
-Cc: <cygwin-patches@cygwin.com>
-Subject: [PATCH] Re: pthread
-Date: Mon, 16 Apr 2001 04:06:00 -0000
-Message-id: <00b701c0c665$49c99c80$0200a8c0@lifelesswks>
-References: <7F2B9185F0196F44B59990759B91B1C23C35BA@ins-exch.inspirepharm.com>
-X-SW-Source: 2001-q2/msg00072.html
-Content-type: multipart/mixed; boundary="----------=_1583532847-65438-45"
+From: Earnie Boyd <earnie_boyd@yahoo.com>
+To: Cygwin Patches <cygwin-patches@cygwin.com>
+Cc: MinGW Dvlpr <mingw-dvlpr@lists.sourceforge.net>
+Subject: Re: [Fwd: w32api and gcc -pedantic]]
+Date: Mon, 16 Apr 2001 06:25:00 -0000
+Message-id: <3ADAF2AA.2AE1A652@yahoo.com>
+X-SW-Source: 2001-q2/msg00073.html
 
-This is a multi-part message in MIME format...
+Unless someone can give me a reasonable counter to Danny's reply below,
+I'm not accepting this patch.
 
-------------=_1583532847-65438-45
-Content-length: 972
+Earnie.
 
-Hi Suhaib,
-    here are the two missing functions. If you aren't setup to compile
-cygwin1.dll let me know and I'll mail you mine.
-
-Rob
-
-===
-Mon Apr 16 21:02:00 2001  Robert Collins <rbtcollins@hotmail.com>
-
- * cygwin.din: Export New functions.
- * passwd.cc (read_etc_passwd): Make race safe.
- (getpwuid_r): New function.
- (getpwnam_r): New function.
-
-===
+-------- Original Message --------
+Subject: Re: [MinGW-dvlpr] [Fwd: w32api and gcc -pedantic]
+Date: Sat, 14 Apr 2001 07:30:01 +1000 (EST)
+From: Danny Smith <danny_r_smith_2001@yahoo.co.nz>
+Reply-To: mingw-dvlpr@lists.sourceforge.net
+To: mingw-dvlpr@lists.sourceforge.net
 
 
------ Original Message -----
-From: "Suhaib Siddiqi" <ssiddiqi@inspirepharm.com>
-To: "'Robert Collins '" <robert.collins@itdomain.com.au>; "Suhaib
-Siddiqi" <ssiddiqi@inspirepharm.com>; <cygwin-xfree@sources.redhat.com>
-Sent: Monday, April 16, 2001 9:57 AM
-Subject: RE: pthread
+--- Earnie Boyd <earnie_boyd@yahoo.com> wrote: > What do others
+(especially
+Danny) on this list think of this patch?
+> 
+> Earnie.
+> 
+> -------- Original Message --------
+> Subject: w32api and gcc -pedantic
+> Date: Fri, 13 Apr 2001 23:10:57 +0400
+> From: egor duda <deo@logos-m.ru>
+> Reply-To: egor duda <cygwin-patches@cygwin.com>
+> Organization: deo
+> To: cygwin-patches@cygwin.com
+> 
+> Hi!
+> 
+>   w32api headers currently contain a number of anonymous structs and
+> unions. So, gcc prints a bunch of warnings when invoked with -pedantic
+> on program which #include <windows.h>. this patch is to avoid those
+> warnings.
+> 
+> egor.            mailto:deo@logos-m.ru icq 5165414 fidonet 2:5020/496.19
 
 
->
-> > Because I am unable to compile libX11.dll, therefore I do not know
-> what else
-> > is brokem, because all the other DLLs and xclients link to libX11.a.
->
-> That's cool. I expected this to be a step by step endeavour. Thanks
-for
-> trying.
->
-> Rob
->
-> > Suhaib
-> >
->
-> Oh sure... it will be many step by step endeavour.
->
-> Suhaib
->
+My reading of C99 standard (section 6.7.2.1) is that nameless
+unions/structures
+are now part of standard.  The fix should go into GCC not the mingw
+headers. 
+GCC -pedantic -std=iso9899:199x should not raise warnings about unnamed
+structures; GCC -pedantic -std=iso9899:199409 should.
 
-------------=_1583532847-65438-45
-Content-Type: text/plain; charset=us-ascii; name="getpwnam_r.ChangeLog"
-Content-Disposition: inline; filename="getpwnam_r.ChangeLog"
-Content-Transfer-Encoding: base64
-Content-Length: 289
+I think the warnings should stay for now, since they are extensions to
+the
+currently supported standard.
 
-TW9uIEFwciAxNiAyMTowMjowMCAyMDAxICBSb2JlcnQgQ29sbGlucyA8cmJ0
-Y29sbGluc0Bob3RtYWlsLmNvbT4KCgkqIGN5Z3dpbi5kaW46IEV4cG9ydCBO
-ZXcgZnVuY3Rpb25zLgoJKiBwYXNzd2QuY2MgKHJlYWRfZXRjX3Bhc3N3ZCk6
-IE1ha2UgcmFjZSBzYWZlLgoJKGdldHB3dWlkX3IpOiBOZXcgZnVuY3Rpb24u
-CgkoZ2V0cHduYW1fcik6IE5ldyBmdW5jdGlvbi4KCg==
+Danny
 
-------------=_1583532847-65438-45
-Content-Type: text/x-diff; charset=us-ascii; name="getpwnam_r.patch"
-Content-Disposition: inline; filename="getpwnam_r.patch"
-Content-Transfer-Encoding: base64
-Content-Length: 5633
+_____________________________________________________________________________
+http://movies.yahoo.com.au - Yahoo! Movies
+- Now showing: Dude Where's My Car, The Wedding Planner, Traffic..
 
-SW5kZXg6IGN5Z3dpbi5kaW4KPT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1Mg
-ZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vY3lnd2luLmRpbix2
-CnJldHJpZXZpbmcgcmV2aXNpb24gMS4yNgpkaWZmIC11IC1wIC1yMS4yNiBj
-eWd3aW4uZGluCi0tLSBjeWd3aW4uZGluCTIwMDEvMDQvMTMgMTU6Mjg6MjAJ
-MS4yNgorKysgY3lnd2luLmRpbgkyMDAxLzA0LzE2IDExOjAxOjE1CkBAIC05
-MzMsOCArOTMzLDEwIEBAIGdldHB3ZHVpZAogX2dldHB3ZHVpZCA9IGdldHB3
-ZHVpZAogZ2V0cHduYW0KIF9nZXRwd25hbSA9IGdldHB3bmFtCitnZXRwd25h
-bV9yCiBnZXRwd3VpZAogX2dldHB3dWlkID0gZ2V0cHd1aWQKK2dldHB3dWlk
-X3IKIGdldHBncnAKIF9nZXRwZ3JwID0gZ2V0cGdycAogZ2V0Z3JlbnQKSW5k
-ZXg6IHBhc3N3ZC5jYwo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBmaWxl
-OiAvY3ZzL3NyYy9zcmMvd2luc3VwL2N5Z3dpbi9wYXNzd2QuY2MsdgpyZXRy
-aWV2aW5nIHJldmlzaW9uIDEuMTcKZGlmZiAtdSAtcCAtcjEuMTcgcGFzc3dk
-LmNjCi0tLSBwYXNzd2QuY2MJMjAwMS8wMS8yOCAwNTo1MToxNAkxLjE3Cisr
-KyBwYXNzd2QuY2MJMjAwMS8wNC8xNiAxMTowMToxNQpAQCAtMTIyLDYgKzEy
-MiwyMCBAQCByZWFkX2V0Y19wYXNzd2QgKCkKIHsKICAgICBleHRlcm4gaW50
-IHBhc3N3ZF9zZW07CiAgICAgY2hhciBsaW5lYnVmWzEwMjRdOworICAgIC8q
-IEEgbXV0ZXggaXMgb2sgZm9yIHNwZWVkIGhlcmUgLSBwdGhyZWFkcyB3aWxs
-IHVzZSBjcml0aWNhbCBzZWN0aW9ucyBub3QgbXV0ZXgncworICAgICAqIGZv
-ciBub24tc2hhcmVkIG11dGV4cyBpbiB0aGUgZnV0dXJlLiBBbHNvLCB0aGlz
-IGZ1bmN0aW9uIHdpbGwgYXQgbW9zdCBiZSBjYWxsZWQKKyAgICAgKiBvbmNl
-IGZyb20gZWFjaCB0aHJlYWQsIGFmdGVyIHRoYXQgdGhlIHBhc3N3ZF9zdGF0
-ZSB0ZXN0IHdpbGwgc3VjY2VlZAorICAgICAqLworICAgIHN0YXRpYyBwdGhy
-ZWFkX211dGV4X3QgZXRjX3Bhc3N3ZF9tdXRleCA9IChwdGhyZWFkX211dGV4
-X3QpIFBUSFJFQURfTVVURVhfSU5JVElBTElaRVI7CisgICAgcHRocmVhZF9t
-dXRleF9sb2NrKCZldGNfcGFzc3dkX211dGV4KTsKKworICAgIC8qIGlmIHdl
-IGdvdCBibG9ja2VkIGJ5IHRoZSBtdXRleCwgdGhlbiBldGNfcGFzc3dkIG1h
-eSBoYXZlIGJlZW4gcHJvY2Vzc2VkICovCisgICAgaWYgKCEocGFzc3dkX3N0
-YXRlID09IHVuaW5pdGlhbGl6ZWQpKQorICAgICAgeworICAgICAgICBwdGhy
-ZWFkX211dGV4X3VubG9jaygmZXRjX3Bhc3N3ZF9tdXRleCk7CisgICAgICAg
-IHJldHVybjsKKyAgICAgIH0KKwogICAgICsrcGFzc3dkX3NlbTsKICAgICBG
-SUxFICpmID0gZm9wZW4gKCIvZXRjL3Bhc3N3ZCIsICJydCIpOwogICAgIC0t
-cGFzc3dkX3NlbTsKQEAgLTE0NSw5ICsxNTksMTEgQEAgcmVhZF9ldGNfcGFz
-c3dkICgpCiAJYWRkX3B3ZF9saW5lIChsaW5lYnVmKTsKIAlwYXNzd2Rfc3Rh
-dGUgPSBlbXVsYXRlZDsKICAgICAgIH0KKyAgICBwdGhyZWFkX211dGV4X3Vu
-bG9jaygmZXRjX3Bhc3N3ZF9tdXRleCk7CiB9CiAKIC8qIEN5Z3dpbiBpbnRl
-cm5hbCAqLworLyogSWYgdGhpcyBldmVyIGJlY29tZXMgbm9uLXJlZW50cmFu
-dCwgdXBkYXRlIGFsbCB0aGUgZ2V0cHcqX3IgZnVuY3Rpb25zICovCiBzdGF0
-aWMgc3RydWN0IHBhc3N3ZCAqCiBzZWFyY2hfZm9yICh1aWRfdCB1aWQsIGNv
-bnN0IGNoYXIgKm5hbWUpCiB7CkBAIC0xODgsNiArMjA0LDQwIEBAIGdldHB3
-dWlkICh1aWRfdCB1aWQpCiAgIHJldHVybiBzZWFyY2hfZm9yICh1aWQsIDAp
-OwogfQogCitleHRlcm4gIkMiIGludCAKK2dldHB3dWlkX3IgKHVpZF90IHVp
-ZCwgc3RydWN0IHBhc3N3ZCAqcHdkLCBjaGFyICpidWZmZXIsIHNpemVfdCBi
-dWZzaXplLCBzdHJ1Y3QgcGFzc3dkICoqcmVzdWx0KQoreworICAqcmVzdWx0
-ID0gTlVMTDsKKworICBpZiAoIXB3ZCB8fCAhYnVmZmVyKQorICAgIHJldHVy
-biBFUkFOR0U7CisKKyAgaWYgKHBhc3N3ZF9zdGF0ZSA9PSB1bmluaXRpYWxp
-emVkKQorICAgIHJlYWRfZXRjX3Bhc3N3ZCAoKTsKKworICBzdHJ1Y3QgcGFz
-c3dkICp0ZW1wcHcgPSBzZWFyY2hfZm9yICh1aWQsIDApOworCisgIGlmICgh
-dGVtcHB3KQorICAgIHJldHVybiAwOworCisgIC8qIGNoZWNrIG5lZWRlZCBi
-dWZmZXIgc2l6ZS4gKi8KKyAgc2l6ZV90IG5lZWRzaXplID0gc3RybGVuICh0
-ZW1wcHctPnB3X25hbWUpICsgc3RybGVuICh0ZW1wcHctPnB3X2RpcikgKyBz
-dHJsZW4gKHRlbXBwdy0+cHdfc2hlbGwpOworICBpZiAobmVlZHNpemUgPiBi
-dWZzaXplKQorICAgIHJldHVybiBFUkFOR0U7CisKKyAgLyogbWFrZSBhIGNv
-cHkgb2YgdGVtcHB3ICovCisgICpyZXN1bHQgPSBwd2Q7CisgIHB3ZC0+cHdf
-dWlkID0gdGVtcHB3LT5wd191aWQ7CisgIHB3ZC0+cHdfZ2lkID0gdGVtcHB3
-LT5wd19naWQ7CisgIHB3ZC0+cHdfbmFtZSA9IGJ1ZmZlcjsKKyAgcHdkLT5w
-d19kaXIgPSBidWZmZXIgKyBzdHJsZW4gKHRlbXBwdy0+cHdfbmFtZSk7Cisg
-IHB3ZC0+cHdfc2hlbGwgPSBidWZmZXIgKyBzdHJsZW4gKHRlbXBwdy0+cHdf
-bmFtZSkgKyBzdHJsZW4gKHRlbXBwdy0+cHdfZGlyKTsKKyAgc3RyY3B5IChw
-d2QtPnB3X25hbWUsIHRlbXBwdy0+cHdfbmFtZSk7CisgIHN0cmNweSAocHdk
-LT5wd19kaXIsIHRlbXBwdy0+cHdfZGlyKTsKKyAgc3RyY3B5IChwd2QtPnB3
-X3NoZWxsLCB0ZW1wcHctPnB3X3NoZWxsKTsKKyAgcmV0dXJuIDA7Cit9CisK
-IGV4dGVybiAiQyIgc3RydWN0IHBhc3N3ZCAqCiBnZXRwd25hbSAoY29uc3Qg
-Y2hhciAqbmFtZSkKIHsKQEAgLTE5NSw2ICsyNDUsNDUgQEAgZ2V0cHduYW0g
-KGNvbnN0IGNoYXIgKm5hbWUpCiAgICAgcmVhZF9ldGNfcGFzc3dkICgpOwog
-CiAgIHJldHVybiBzZWFyY2hfZm9yICgwLCBuYW1lKTsKK30KKworCisvKiB0
-aGUgbWF4IHNpemUgYnVmZmVyIHdlIGNhbiBleHBlY3QgdG8gCisgKiB1c2Ug
-aXMgcmV0dXJuZWQgdmlhIHN5c2NvbmYgd2l0aCBfU0NfR0VUUFdfUl9TSVpF
-X01BWC4KKyAqIFRoaXMgbWF5IG5lZWQgdXBkYXRpbmchIC0gUm9iIENvbGxp
-bnMgQXByaWwgMjAwMS4KKyAqLworZXh0ZXJuICJDIiBpbnQKK2dldHB3bmFt
-X3IgKGNvbnN0IGNoYXIgKm5hbSwgc3RydWN0IHBhc3N3ZCAqcHdkLCBjaGFy
-ICpidWZmZXIsIHNpemVfdCBidWZzaXplLCBzdHJ1Y3QgcGFzc3dkICoqcmVz
-dWx0KQoreworICAqcmVzdWx0ID0gTlVMTDsKKworICBpZiAoIXB3ZCB8fCAh
-YnVmZmVyIHx8ICFuYW0pCisgICAgcmV0dXJuIEVSQU5HRTsKKworICBpZiAo
-cGFzc3dkX3N0YXRlID09IHVuaW5pdGlhbGl6ZWQpCisgICAgcmVhZF9ldGNf
-cGFzc3dkICgpOworCisgIHN0cnVjdCBwYXNzd2QgKnRlbXBwdyA9IHNlYXJj
-aF9mb3IgKDAsIG5hbSk7CisKKyAgaWYgKCF0ZW1wcHcpCisgICAgcmV0dXJu
-IDA7CisKKyAgLyogY2hlY2sgbmVlZGVkIGJ1ZmZlciBzaXplLiAqLworICBz
-aXplX3QgbmVlZHNpemUgPSBzdHJsZW4gKHRlbXBwdy0+cHdfbmFtZSkgKyBz
-dHJsZW4gKHRlbXBwdy0+cHdfZGlyKSArIHN0cmxlbiAodGVtcHB3LT5wd19z
-aGVsbCk7CisgIGlmIChuZWVkc2l6ZSA+IGJ1ZnNpemUpCisgICAgcmV0dXJu
-IEVSQU5HRTsKKyAgICAKKyAgLyogbWFrZSBhIGNvcHkgb2YgdGVtcHB3ICov
-CisgICpyZXN1bHQgPSBwd2Q7CisgIHB3ZC0+cHdfdWlkID0gdGVtcHB3LT5w
-d191aWQ7CisgIHB3ZC0+cHdfZ2lkID0gdGVtcHB3LT5wd19naWQ7CisgIHB3
-ZC0+cHdfbmFtZSA9IGJ1ZmZlcjsKKyAgcHdkLT5wd19kaXIgPSBidWZmZXIg
-KyBzdHJsZW4gKHRlbXBwdy0+cHdfbmFtZSk7CisgIHB3ZC0+cHdfc2hlbGwg
-PSBidWZmZXIgKyBzdHJsZW4gKHRlbXBwdy0+cHdfbmFtZSkgKyBzdHJsZW4g
-KHRlbXBwdy0+cHdfZGlyKTsKKyAgc3RyY3B5IChwd2QtPnB3X25hbWUsIHRl
-bXBwdy0+cHdfbmFtZSk7CisgIHN0cmNweSAocHdkLT5wd19kaXIsIHRlbXBw
-dy0+cHdfZGlyKTsKKyAgc3RyY3B5IChwd2QtPnB3X3NoZWxsLCB0ZW1wcHct
-PnB3X3NoZWxsKTsKKyAgcmV0dXJuIDA7CiB9CiAKIGV4dGVybiAiQyIgc3Ry
-dWN0IHBhc3N3ZCAqCg==
+_______________________________________________
+MinGW-dvlpr mailing list
+MinGW-dvlpr@lists.sourceforge.net
+http://lists.sourceforge.net/lists/listinfo/mingw-dvlpr
 
-------------=_1583532847-65438-45--
+_________________________________________________________
+Do You Yahoo!?
+Get your free @yahoo.com address at http://mail.yahoo.com
+
