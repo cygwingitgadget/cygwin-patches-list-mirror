@@ -1,43 +1,43 @@
-From: Christopher Faylor <cgf@redhat.com>
+From: Kazuhiro Fujieda <fujieda@jaist.ac.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: Patch: More options for regtool
-Date: Wed, 10 Jan 2001 05:29:00 -0000
-Message-id: <20010110082944.A25695@redhat.com>
-References: <000601c07ae7$404bd700$0200a8c0@fred>
-X-SW-Source: 2001-q1/msg00021.html
+Subject: Wait_sig can't dispatch SIGCONT.
+Date: Wed, 10 Jan 2001 05:43:00 -0000
+Message-id: <s1sd7dvplpg.fsf@jaist.ac.jp>
+X-SW-Source: 2001-q1/msg00022.html
 
-On Wed, Jan 10, 2001 at 01:25:19AM -0800, Tony Sideris wrote:
->PS: I apoligize if i missed something. I read the FAQs on contributing, hope
->i got it all...
+Wait_sig can't dispatch SIGCONT.
+For example, cat will choke aftern the following session.
+$ cat
+^Z
+[1]+  Stopped                 cat
+$ fg
+cat
 
-Actually, please go back and read the Contributing web page again.  The
-entry below is not correct.  If you could tell me where I got things
-wrong, I'll try to clarify the information on the contrib.html web page.
+The following patch can solve this problem.
 
-Specifically, there should not be multiple lines for "global", the file
-should only be listed once, and the entries should begin with a tab.
+ChangeLog:
+Wed Jan 10 22:08:30 2001  Kazuhiro Fujieda  <fujieda@jaist.ac.jp>
 
-Thanks for your submission, though.  We'll evaluate the patch itself soon.
+	* sigproc.cc (wait_sig): Don't block SIGCONT incorrectly.
 
-cgf
+Index: sigproc.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/sigproc.cc,v
+retrieving revision 1.67
+diff -u -p -r1.67 sigproc.cc
+--- sigproc.cc	2001/01/08 04:02:01	1.67
++++ sigproc.cc	2001/01/10 13:03:20
+@@ -1150,7 +1150,7 @@ wait_sig (VOID *)
+ 
+ 	      if (sig > 0 && sig != SIGKILL && sig != SIGSTOP &&
+ 		  (sigismember (& myself->getsigmask (), sig) ||
+-		   myself->process_state & PID_STOPPED))
++		   (sig != SIGCONT && myself->process_state & PID_STOPPED)))
+ 		{
+ 		  sigproc_printf ("sig %d blocked", sig);
+ 		  break;
 
->Tue Jan 09 10:26:23 2001  Tony Sideris  <tonys1110@home.com>
->
-> * regtool.cc (global): Add LIST_KEYS, LIST_VALS, and LIST_ALL
-> constants.
-> * regtool.cc (global): Add int listwhat, and int postfix.
-> * regtool.cc (global): Modify usage_msg to document -p, -k, and -l.
-> * regtool.cc (Fail): Add call to LocalFree to free memory
-> allocated by FormatMessage (unrelated to new options).
-> * regtool.cc (cmd_list): Add code to implement -p, -k, and -l
-> options, this involved checking 'listwhat' and 'postfix' and
-> acting accordingly.
-> * utils.sgml: Updated usage message to reflect the new options.
->
-
-
-
-
--- 
-cgf@cygnus.com                        Red Hat, Inc.
-http://sources.redhat.com/            http://www.redhat.com/
+____
+  | AIST      Kazuhiro Fujieda <fujieda@jaist.ac.jp>
+  | HOKURIKU  School of Information Science
+o_/ 1990      Japan Advanced Institute of Science and Technology
