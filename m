@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3789-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 27437 invoked by alias); 5 Apr 2003 16:27:53 -0000
+Return-Path: <cygwin-patches-return-3790-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 31726 invoked by alias); 5 Apr 2003 16:45:09 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,37 +7,43 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 27426 invoked from network); 5 Apr 2003 16:27:52 -0000
-Message-ID: <20030405162752.41084.qmail@web20007.mail.yahoo.com>
-Date: Sat, 05 Apr 2003 16:27:00 -0000
-From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+Received: (qmail 31717 invoked from network); 5 Apr 2003 16:45:08 -0000
+Message-Id: <3.0.5.32.20030405114536.007ff540@incoming.verizon.net>
+X-Sender: vze1u1tg@incoming.verizon.net
+Date: Sat, 05 Apr 2003 16:45:00 -0000
+To: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>,
+ cygwin-patches@cygwin.com
+From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
 Subject: Re: mkpasswd and mkgroup
-To: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>, cygwin-patches@cygwin.com
-In-Reply-To: <3.0.5.32.20030404195241.007f4a40@mail.attbi.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-X-SW-Source: 2003-q2/txt/msg00016.txt.bz2
+In-Reply-To: <20030405162752.41084.qmail@web20007.mail.yahoo.com>
+References: <3.0.5.32.20030404195241.007f4a40@mail.attbi.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+X-SW-Source: 2003-q2/txt/msg00017.txt.bz2
 
---- "Pierre A. Humblet" <Pierre.Humblet@ieee.org> wrote:
-> Corinna,
+At 08:27 AM 4/5/2003 -0800, Joshua Daniel Franklin wrote:
+>--- "Pierre A. Humblet" <Pierre.Humblet@ieee.org> wrote:
 
-Hmm. I feel like I'm eavesdropping.
+>> - allows to specify several domains at once with -d
+>
+>I just don't understand this one. Can someone be logged into 
+>multiple domains at once?
+You don't need to be logged in if the domains have a trust
+relationship (AFAIK).
 
-> Following remarks made on the list this patch
-> - allows to specify several domains at once with -d
+>> - only prints SYSTEM and specials when the -l switch is given
+>
+>Isn't this a rather abrupt change from how these utilities have
+>been working? 
+Nobody should ever populate /etc/passwd with -d without having
+a -l (either concurrent or in a separate call), so SYSTEM will
+be there. The current program causes duplicate entries because 
+SYSTEM (and others) are added in each call. People have reported
+writing scripts to remove duplicates, so I am just trying to be 
+nice and avoid having them. 
 
-I just don't understand this one. Can someone be logged into 
-multiple domains at once?
+>Also, please do a patch for utils.sgml explaining the significance
+>of the new functionality.
+Sure.
 
-> - only prints SYSTEM and specials when the -l switch is given
-
-Isn't this a rather abrupt change from how these utilities have
-been working? 
-
-Also, please do a patch for utils.sgml explaining the significance
-of the new functionality.
-
-__________________________________________________
-Do you Yahoo!?
-Yahoo! Tax Center - File online, calculators, forms, and more
-http://tax.yahoo.com
+Pierre
