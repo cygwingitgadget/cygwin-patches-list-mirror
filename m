@@ -1,90 +1,135 @@
-From: "Robert Collins" <robert.collins@itdomain.com.au>
-To: "Robert Collins" <robert.collins@itdomain.com.au>, "egor duda" <cygwin-patches@cygwin.com>
-Cc: <cygwin-patches@cygwin.com>
-Subject: Re: src/winsup/cygwin ChangeLog thread.cc thread.h ...
-Date: Thu, 27 Sep 2001 07:14:00 -0000
-Message-id: <008d01c1475e$e970db70$01000001@lifelesswks>
-References: <20010925114527.23687.qmail@sourceware.cygnus.com> <14472692346.20010927144858@logos-m.ru> <007b01c14743$2a0005b0$01000001@lifelesswks> <12280602580.20010927170049@logos-m.ru> <008301c1475e$afb0c4e0$01000001@lifelesswks>
-X-SW-Source: 2001-q3/msg00212.html
+From: egor duda <deo@logos-m.ru>
+To: cygwin-patches@cygwin.com
+Subject: memory leak in cygheap
+Date: Thu, 27 Sep 2001 09:53:00 -0000
+Message-id: <15294469449.20010927205156@logos-m.ru>
+X-SW-Source: 2001-q3/msg00213.html
+Content-type: multipart/mixed; boundary="----------=_1583532849-65438-109"
 
-Oh, and I have no objection to the large patch of mine being rolled back
-if need be (if this tomorrow/this weekend isn't soon enough).
+This is a multi-part message in MIME format...
 
-Rob
+------------=_1583532849-65438-109
+Content-length: 745
 
------ Original Message -----
-From: "Robert Collins" <robert.collins@itdomain.com.au>
-To: "egor duda" <cygwin-patches@cygwin.com>
-Cc: <cygwin-patches@cygwin.com>
-Sent: Friday, September 28, 2001 12:14 AM
-Subject: Re: src/winsup/cygwin ChangeLog thread.cc thread.h ...
+Hi!
+
+  this simple program:
+
+#include <sys/types.h>
+#include <dirent.h>
+
+int main ()
+{
+  DIR* x = 0;
+  for (;;)
+    {
+      x = opendir ("/");
+      closedir (x);
+    }
+  return 0;
+}
+
+leaks memory and eventually dies with "can't allocate cygwin heap"
+error message.
+
+attached patch fix this.
+do we need this "no free names" logic at all? the only suspicious
+place is fhandler_disk_file::open () where we were storing pointer to
+real_path's win32_path, so if it was changing later we were staying in
+sync with those changes. but i can't see why it may change after open
+is called, so making duplicate looks safe for me. Comments?
+
+egor.            mailto:deo@logos-m.ru icq 5165414 fidonet 2:5020/496.19
+cygheap-leak.diff
+cygheap-leak.ChangeLog
 
 
-> Ok this is a quick-and-it-couldbe-cleaner patch.
->
-> It's interim - this weekend I'll make time to roll the logic
-throughout
-> thread.cc. The patch doesn't introduce any new issues though, and it
-is
-> the correct IMO step to solving the issue(s) I was trying to address
-> with my last lets-break-cygwin patch.
->
-> I have _no_ idea why it worked at all after I built that .dll :}. The
-> fault for those wanting the grisly details was that I changed the
-> semantics of verifyableobject_isvalid without updating the tests
-against
-> the return code. Doh.
->
-> I'm having some trouble with cvs+ssh with this patch .. though I'm not
-> sure why. For a little while I though it might be chris's tuesday
-> sleep(1) change, because I was getting strange results from pspec> I'm
-> not sure though.
->
-> Anyway, I don't have time to complete a binary search now...
->
-> What I have established is that the faulty change (other than my
-> thread.cc snafu) is sometime between 1am tuesday 25th and now. In
-other
-> words, a dll built from cvs @tuesday 1am, with the most recent
-thread.cc
-> and thread.h and this patch seems to run ok. The cond_wait bug seems
-> particularly ticklish however, and that may be the cvs+ssh problem I
-was
-> seeing.
->
-> So, you can ignore this blurb :].
->
-> I'm not checking this patch in _yet_ as I'm still confirming that
-> everything is really ok. I'll have a little time in the office
-tomorrow
-> to follow up, it's bedtime now though.
->
-> Rob
->
-> ----- Original Message -----
-> From: "egor duda" <deo@logos-m.ru>
-> To: "Robert Collins" <robert.collins@itdomain.com.au>
-> Cc: <cygwin-patches@cygwin.com>
-> Sent: Thursday, September 27, 2001 11:00 PM
-> Subject: Re: src/winsup/cygwin ChangeLog thread.cc thread.h ...
->
->
-> > Hi!
-> >
-> > Thursday, 27 September, 2001 Robert Collins
-> robert.collins@itdomain.com.au wrote:
-> >
-> > >> rscc>         * thread.cc (pthread_cond::BroadCast): Use address
-> with
-> > RC> verifyable_object_isvalid().
-> > >> rscc>         (pthread_cond::Signal): Ditto.
-> > >>
-> > >> [...]
-> > >>
-> > >> Robert, i have problems with your last patch. at program startup
-> > >> read_etc_passwd() is called recursively and second call blocks at
-> > >> pthread_mutex_lock()
->
->
->
->
+------------=_1583532849-65438-109
+Content-Type: text/plain; charset=us-ascii; name="cygheap-leak.ChangeLog"
+Content-Disposition: inline; filename="cygheap-leak.ChangeLog"
+Content-Transfer-Encoding: base64
+Content-Length: 704
+
+MjAwMS0wOS0yNyAgRWdvciBEdWRhICA8ZGVvQGxvZ29zLW0ucnU+CgoJKiBm
+aGFuZGxlci5oIChjbGFzcyBmaGFuZGxlcl9iYXNlOjp1bnNldF9uYW1lKTog
+TmV3IGZ1bmN0aW9uLgoJKiBmaGFuZGxlci5jYyAoZmhhbmRsZXJfYmFzZTo6
+dW5zZXRfbmFtZSk6IERlYWxsb2NhdGUgY3lnaGVhcAoJbWVtb3J5IHVzZWQg
+Zm9yIGZpbGUgbmFtZXMgYW5kIHVuc2V0IHRoZSBuYW1lcy4KCShmaGFuZGxl
+cl9iYXNlOjpzZXRfbmFtZSk6IFVzZSBpdC4gRWxpbWluYXRlIG5vX2ZyZWVf
+bmFtZXMgKCkKCWxvZ2ljIHRvIGF2b2lkIG1lbW9yeSBsZWFrcy4KCShmaGFu
+ZGxlcl9iYXNlOjp+ZmhhbmRsZXJfYmFzZSk6IERpdHRvLgoJKGZoYW5kbGVy
+X2Rpc2tfZmlsZTo6ZmhhbmRsZXJfZGlza19maWxlKTogRWxpbWluYXRlIG5v
+X2ZyZWVfbmFtZXMgKCkKCWxvZ2ljLgoJKGZoYW5kbGVyX2Rpc2tfZmlsZTo6
+b3Blbik6IERpdHRvLiBBbHdheXMgYWxsb2NhdGUgc3BhY2UgZm9yCgl3aW4z
+Ml9wYXRoX25hbWUgb24gY3lnaGVhcC4K
+
+------------=_1583532849-65438-109
+Content-Type: text/x-diff; charset=us-ascii; name="cygheap-leak.diff"
+Content-Disposition: inline; filename="cygheap-leak.diff"
+Content-Transfer-Encoding: base64
+Content-Length: 3750
+
+SW5kZXg6IGZoYW5kbGVyLmNjCj09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KUkNT
+IGZpbGU6IC9jdnMvdWJlcmJhdW0vd2luc3VwL2N5Z3dpbi9maGFuZGxlci5j
+Yyx2CnJldHJpZXZpbmcgcmV2aXNpb24gMS44NwpkaWZmIC11IC1wIC0yIC1y
+MS44NyBmaGFuZGxlci5jYwotLS0gZmhhbmRsZXIuY2MJMjAwMS8wOS8yMiAy
+MTo0NDowNwkxLjg3CisrKyBmaGFuZGxlci5jYwkyMDAxLzA5LzI3IDE2OjMz
+OjM1CkBAIC00OCw0ICs0OCwxNCBAQCBmaGFuZGxlcl9iYXNlOjpvcGVyYXRv
+ciA9KGZoYW5kbGVyX2Jhc2UgCiB9CiAKK3ZvaWQKK2ZoYW5kbGVyX2Jhc2U6
+OnVuc2V0X25hbWUgKCkKK3sKKyAgaWYgKHVuaXhfcGF0aF9uYW1lICE9IE5V
+TEwgJiYgdW5peF9wYXRoX25hbWUgIT0gZmhhbmRsZXJfZGlza19kdW1teV9u
+YW1lKQorICAgIGNmcmVlICh1bml4X3BhdGhfbmFtZSk7CisgIGlmICh3aW4z
+Ml9wYXRoX25hbWUgIT0gTlVMTCAmJiB3aW4zMl9wYXRoX25hbWUgIT0gZmhh
+bmRsZXJfZGlza19kdW1teV9uYW1lKQorICAgIGNmcmVlICh3aW4zMl9wYXRo
+X25hbWUpOworICB1bml4X3BhdGhfbmFtZSA9IHdpbjMyX3BhdGhfbmFtZSA9
+IE5VTEw7Cit9CisKIGludAogZmhhbmRsZXJfYmFzZTo6cHV0c19yZWFkYWhl
+YWQgKGNvbnN0IGNoYXIgKnMsIHNpemVfdCBsZW4gPSAoc2l6ZV90KSAtMSkK
+QEAgLTE1MywxMyArMTYzLDYgQEAgdm9pZAogZmhhbmRsZXJfYmFzZTo6c2V0
+X25hbWUgKGNvbnN0IGNoYXIgKnVuaXhfcGF0aCwgY29uc3QgY2hhciAqd2lu
+MzJfcGF0aCwgaW50IHVuaXQpCiB7Ci0gIGlmICghbm9fZnJlZV9uYW1lcyAo
+KSkKLSAgICB7Ci0gICAgICBpZiAodW5peF9wYXRoX25hbWUgIT0gTlVMTCAm
+JiB1bml4X3BhdGhfbmFtZSAhPSBmaGFuZGxlcl9kaXNrX2R1bW15X25hbWUp
+Ci0JY2ZyZWUgKHVuaXhfcGF0aF9uYW1lKTsKLSAgICAgIGlmICh3aW4zMl9w
+YXRoX25hbWUgIT0gTlVMTCAmJiB1bml4X3BhdGhfbmFtZSAhPSBmaGFuZGxl
+cl9kaXNrX2R1bW15X25hbWUpCi0JY2ZyZWUgKHdpbjMyX3BhdGhfbmFtZSk7
+Ci0gICAgfQorICB1bnNldF9uYW1lICgpOwogCi0gIHVuaXhfcGF0aF9uYW1l
+ID0gd2luMzJfcGF0aF9uYW1lID0gTlVMTDsKICAgaWYgKHVuaXhfcGF0aCA9
+PSBOVUxMIHx8ICEqdW5peF9wYXRoKQogICAgIHJldHVybjsKQEAgLTEyMTgs
+MTQgKzEyMjEsNyBAQCBmaGFuZGxlcl9iYXNlOjpmaGFuZGxlcl9iYXNlIChE
+V09SRCBkZXZ0CiBmaGFuZGxlcl9iYXNlOjp+ZmhhbmRsZXJfYmFzZSAodm9p
+ZCkKIHsKLSAgaWYgKCFub19mcmVlX25hbWVzICgpKQotICAgIHsKLSAgICAg
+IGlmICh1bml4X3BhdGhfbmFtZSAhPSBOVUxMICYmIHVuaXhfcGF0aF9uYW1l
+ICE9IGZoYW5kbGVyX2Rpc2tfZHVtbXlfbmFtZSkKLQljZnJlZSAodW5peF9w
+YXRoX25hbWUpOwotICAgICAgaWYgKHdpbjMyX3BhdGhfbmFtZSAhPSBOVUxM
+ICYmIHdpbjMyX3BhdGhfbmFtZSAhPSBmaGFuZGxlcl9kaXNrX2R1bW15X25h
+bWUpCi0JY2ZyZWUgKHdpbjMyX3BhdGhfbmFtZSk7Ci0gICAgfQorICB1bnNl
+dF9uYW1lICgpOwogICBpZiAocmFidWYpCiAgICAgZnJlZSAocmFidWYpOwot
+ICB1bml4X3BhdGhfbmFtZSA9IHdpbjMyX3BhdGhfbmFtZSA9IE5VTEw7CiB9
+CiAKQEAgLTEyMzcsNSArMTIzMyw0IEBAIGZoYW5kbGVyX2Rpc2tfZmlsZTo6
+ZmhhbmRsZXJfZGlza19maWxlICgKIHsKICAgc2V0X2NiIChzaXplb2YgKnRo
+aXMpOwotICBzZXRfbm9fZnJlZV9uYW1lcyAoKTsKICAgdW5peF9wYXRoX25h
+bWUgPSB3aW4zMl9wYXRoX25hbWUgPSBmaGFuZGxlcl9kaXNrX2R1bW15X25h
+bWU7CiB9CkBAIC0xMjYxLDUgKzEyNTYsNCBAQCBmaGFuZGxlcl9kaXNrX2Zp
+bGU6Om9wZW4gKGNvbnN0IGNoYXIgKnBhCiAKICAgc2V0X25hbWUgKHBhdGgs
+IHJlYWxfcGF0aC5nZXRfd2luMzIgKCkpOwotICBzZXRfbm9fZnJlZV9uYW1l
+cyAoMCk7CiAgIHJldHVybiBvcGVuIChyZWFsX3BhdGgsIGZsYWdzLCBtb2Rl
+KTsKIH0KQEAgLTEyNzAsNiArMTI2NCw2IEBAIGZoYW5kbGVyX2Rpc2tfZmls
+ZTo6b3BlbiAocGF0aF9jb252JiByZWEKICAgaWYgKGdldF93aW4zMl9uYW1l
+ICgpID09IGZoYW5kbGVyX2Rpc2tfZHVtbXlfbmFtZSkKICAgICB7Ci0gICAg
+ICB3aW4zMl9wYXRoX25hbWUgPSByZWFsX3BhdGguZ2V0X3dpbjMyICgpOwot
+ICAgICAgc2V0X25vX2ZyZWVfbmFtZXMgKCk7CisgICAgICBjaGFyICpwID0g
+cmVhbF9wYXRoLmdldF93aW4zMiAoKTsKKyAgICAgIHdpbjMyX3BhdGhfbmFt
+ZSA9IChwID8gY3N0cmR1cCAocCkgOiBOVUxMKTsKICAgICB9CiAKSW5kZXg6
+IGZoYW5kbGVyLmgKPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1MgZmlsZTog
+L2N2cy91YmVyYmF1bS93aW5zdXAvY3lnd2luL2ZoYW5kbGVyLmgsdgpyZXRy
+aWV2aW5nIHJldmlzaW9uIDEuODMKZGlmZiAtdSAtcCAtMiAtcjEuODMgZmhh
+bmRsZXIuaAotLS0gZmhhbmRsZXIuaAkyMDAxLzA5LzI0IDIxOjUwOjQ0CTEu
+ODMKKysrIGZoYW5kbGVyLmgJMjAwMS8wOS8yNyAxNjozMzozNQpAQCAtMTg0
+LDQgKzE4NCw2IEBAIHByb3RlY3RlZDoKICAgRFdPUkQgb3Blbl9zdGF0dXM7
+CiAKKyAgdm9pZCB1bnNldF9uYW1lICgpOworCiBwdWJsaWM6CiAgIHZvaWQg
+c2V0X25hbWUgKGNvbnN0IGNoYXIgKiB1bml4X3BhdGgsIGNvbnN0IGNoYXIg
+KiB3aW4zMl9wYXRoID0gTlVMTCwK
+
+------------=_1583532849-65438-109--
