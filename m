@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3749-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 24444 invoked by alias); 26 Mar 2003 22:56:59 -0000
+Return-Path: <cygwin-patches-return-3750-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 29899 invoked by alias); 26 Mar 2003 23:04:23 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,35 +7,30 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 24422 invoked from network); 26 Mar 2003 22:56:58 -0000
-Date: Wed, 26 Mar 2003 22:56:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: [ford@vss.fsi.com: [PATCH] Trivial pthread testsuite fixes]
-Message-ID: <20030326225727.GC12110@redhat.com>
-Mail-Followup-To: cygwin-patches@cygwin.com
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.5.1i
-X-SW-Source: 2003-q1/txt/msg00398.txt.bz2
-
-I assume that these patches are to clean up some warnings.  Do they
-make sense?
-
-For the record, cygwin's goal is a "No warnings ever" policy.  If you
-see warnings after making a change, you should fix the warnings.  Please
-don't ignore them.
-
-cgf
-
------ Forwarded message from Brian Ford <ford@vss.fsi.com> -----
-
+Received: (qmail 29890 invoked from network); 26 Mar 2003 23:04:22 -0000
+X-Authentication-Warning: eos.vss.fsi.com: ford owned process doing -bs
+Date: Wed, 26 Mar 2003 23:04:00 -0000
 From: Brian Ford <ford@vss.fsi.com>
-To: cygwin@cygwin.com
+X-X-Sender: ford@eos
+To: cygwin-patches@cygwin.com
 Subject: [PATCH] Trivial pthread testsuite fixes
-Date: Wed, 26 Mar 2003 15:59:44 -0600 (CST)
-Mail-Followup-To: cygwin@cygwin.com
+Message-ID: <Pine.GSO.4.44.0303261659310.29553-200000@eos>
+MIME-Version: 1.0
+Content-Type: MULTIPART/MIXED; BOUNDARY="-559023410-126398554-1048119469=:6272"
+Content-ID: <Pine.GSO.4.44.0303261547321.29553@eos>
+X-SW-Source: 2003-q1/txt/msg00399.txt.bz2
+
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
+
+---559023410-126398554-1048119469=:6272
+Content-Type: TEXT/PLAIN; CHARSET=US-ASCII
+Content-ID: <Pine.GSO.4.44.0303261547322.29553@eos>
+Content-length: 592
+
+Redirected to here from cygwin@cygwin.com since I now have posting
+privileges.  Thanks Elfyn McBratney.
 
 2003-03-26  Brian Ford  <ford@vss.fsi.com>
 
@@ -45,68 +40,75 @@ Mail-Followup-To: cygwin@cygwin.com
 	* winsup.api/pthread/condvar9.c (mythread): Likewise.
 	* winsup.api/pthread/rwlock7.c (main): Use ftime instead of _ftime.
 
-Index: winsup.api/pthread/condvar7.c
-===================================================================
-RCS file: /cvs/src/src/winsup/testsuite/winsup.api/pthread/condvar7.c,v
-retrieving revision 1.1
-diff -u -p -r1.1 condvar7.c
---- winsup.api/pthread/condvar7.c	18 Mar 2003 19:51:58 -0000	1.1
-+++ winsup.api/pthread/condvar7.c	26 Mar 2003 21:45:47 -0000
-@@ -97,7 +97,7 @@ mythread(void * arg)
- #ifdef _MSC_VER
- #pragma inline_depth(0)
- #endif
--  pthread_cleanup_push(pthread_mutex_unlock, (void *) &cvthing.lock);
-+  pthread_cleanup_push((void *) pthread_mutex_unlock, (void *) &cvthing.lock);
- 
-   while (! (cvthing.shared > 0))
-     assert(pthread_cond_timedwait(&cvthing.notbusy, &cvthing.lock, &abstime) == 0);
-Index: winsup.api/pthread/condvar9.c
-===================================================================
-RCS file: /cvs/src/src/winsup/testsuite/winsup.api/pthread/condvar9.c,v
-retrieving revision 1.1
-diff -u -p -r1.1 condvar9.c
---- winsup.api/pthread/condvar9.c	18 Mar 2003 19:51:58 -0000	1.1
-+++ winsup.api/pthread/condvar9.c	26 Mar 2003 21:45:47 -0000
-@@ -102,7 +102,7 @@ mythread(void * arg)
- #ifdef _MSC_VER
- #pragma inline_depth(0)
- #endif
--  pthread_cleanup_push(pthread_mutex_unlock, (void *) &cvthing.lock);
-+  pthread_cleanup_push((void *) pthread_mutex_unlock, (void *) &cvthing.lock);
- 
-   while (! (cvthing.shared > 0))
-     assert(pthread_cond_timedwait(&cvthing.notbusy, &cvthing.lock, &abstime) == 0);
-Index: winsup.api/pthread/rwlock7.c
-===================================================================
-RCS file: /cvs/src/src/winsup/testsuite/winsup.api/pthread/rwlock7.c,v
-retrieving revision 1.1
-diff -u -p -r1.1 rwlock7.c
---- winsup.api/pthread/rwlock7.c	18 Mar 2003 20:04:24 -0000	1.1
-+++ winsup.api/pthread/rwlock7.c	26 Mar 2003 21:45:47 -0000
-@@ -131,7 +131,7 @@ main (int argc, char *argv[])
-       assert(pthread_rwlock_init (&data[data_count].lock, NULL) == 0);
-     }
- 
--  _ftime(&currSysTime1);
-+  ftime(&currSysTime1);
- 
-   /*
-    * Create THREADS threads to access shared data.
-@@ -177,7 +177,7 @@ main (int argc, char *argv[])
-   printf ("%d thread updates, %d data updates\n",
-           thread_updates, data_updates);
- 
--  _ftime(&currSysTime2);
-+  ftime(&currSysTime2);
- 
-   printf( "\nstart: %ld/%d, stop: %ld/%d, duration:%ld\n",
-           currSysTime1.time,currSysTime1.millitm,
+-- 
+Brian Ford
+Senior Realtime Software Engineer
+VITAL - Visual Simulation Systems
+FlightSafety International
+Phone: 314-551-8460
+Fax:   314-551-8444
 
---
-Unsubscribe info:      http://cygwin.com/ml/#unsubscribe-simple
-Bug reporting:         http://cygwin.com/bugs.html
-Documentation:         http://cygwin.com/docs.html
-FAQ:                   http://cygwin.com/faq/
+---559023410-126398554-1048119469=:6272
+Content-Type: TEXT/PLAIN; CHARSET=US-ASCII; NAME="winsup.api.patch"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.GSO.4.44.0303261559430.29553@eos>
+Content-Description: 
+Content-Disposition: ATTACHMENT; FILENAME="winsup.api.patch"
+Content-length: 3246
 
------ End forwarded message -----
+SW5kZXg6IHdpbnN1cC5hcGkvcHRocmVhZC9jb25kdmFyNy5jDQo9PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09DQpSQ1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1
+cC90ZXN0c3VpdGUvd2luc3VwLmFwaS9wdGhyZWFkL2NvbmR2YXI3LmMsdg0K
+cmV0cmlldmluZyByZXZpc2lvbiAxLjENCmRpZmYgLXUgLXAgLXIxLjEgY29u
+ZHZhcjcuYw0KLS0tIHdpbnN1cC5hcGkvcHRocmVhZC9jb25kdmFyNy5jCTE4
+IE1hciAyMDAzIDE5OjUxOjU4IC0wMDAwCTEuMQ0KKysrIHdpbnN1cC5hcGkv
+cHRocmVhZC9jb25kdmFyNy5jCTI2IE1hciAyMDAzIDIxOjQ1OjQ3IC0wMDAw
+DQpAQCAtOTcsNyArOTcsNyBAQCBteXRocmVhZCh2b2lkICogYXJnKQ0KICNp
+ZmRlZiBfTVNDX1ZFUg0KICNwcmFnbWEgaW5saW5lX2RlcHRoKDApDQogI2Vu
+ZGlmDQotICBwdGhyZWFkX2NsZWFudXBfcHVzaChwdGhyZWFkX211dGV4X3Vu
+bG9jaywgKHZvaWQgKikgJmN2dGhpbmcubG9jayk7DQorICBwdGhyZWFkX2Ns
+ZWFudXBfcHVzaCgodm9pZCAqKSBwdGhyZWFkX211dGV4X3VubG9jaywgKHZv
+aWQgKikgJmN2dGhpbmcubG9jayk7DQogDQogICB3aGlsZSAoISAoY3Z0aGlu
+Zy5zaGFyZWQgPiAwKSkNCiAgICAgYXNzZXJ0KHB0aHJlYWRfY29uZF90aW1l
+ZHdhaXQoJmN2dGhpbmcubm90YnVzeSwgJmN2dGhpbmcubG9jaywgJmFic3Rp
+bWUpID09IDApOw0KSW5kZXg6IHdpbnN1cC5hcGkvcHRocmVhZC9jb25kdmFy
+OS5jDQo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09DQpSQ1MgZmlsZTogL2N2cy9z
+cmMvc3JjL3dpbnN1cC90ZXN0c3VpdGUvd2luc3VwLmFwaS9wdGhyZWFkL2Nv
+bmR2YXI5LmMsdg0KcmV0cmlldmluZyByZXZpc2lvbiAxLjENCmRpZmYgLXUg
+LXAgLXIxLjEgY29uZHZhcjkuYw0KLS0tIHdpbnN1cC5hcGkvcHRocmVhZC9j
+b25kdmFyOS5jCTE4IE1hciAyMDAzIDE5OjUxOjU4IC0wMDAwCTEuMQ0KKysr
+IHdpbnN1cC5hcGkvcHRocmVhZC9jb25kdmFyOS5jCTI2IE1hciAyMDAzIDIx
+OjQ1OjQ3IC0wMDAwDQpAQCAtMTAyLDcgKzEwMiw3IEBAIG15dGhyZWFkKHZv
+aWQgKiBhcmcpDQogI2lmZGVmIF9NU0NfVkVSDQogI3ByYWdtYSBpbmxpbmVf
+ZGVwdGgoMCkNCiAjZW5kaWYNCi0gIHB0aHJlYWRfY2xlYW51cF9wdXNoKHB0
+aHJlYWRfbXV0ZXhfdW5sb2NrLCAodm9pZCAqKSAmY3Z0aGluZy5sb2NrKTsN
+CisgIHB0aHJlYWRfY2xlYW51cF9wdXNoKCh2b2lkICopIHB0aHJlYWRfbXV0
+ZXhfdW5sb2NrLCAodm9pZCAqKSAmY3Z0aGluZy5sb2NrKTsNCiANCiAgIHdo
+aWxlICghIChjdnRoaW5nLnNoYXJlZCA+IDApKQ0KICAgICBhc3NlcnQocHRo
+cmVhZF9jb25kX3RpbWVkd2FpdCgmY3Z0aGluZy5ub3RidXN5LCAmY3Z0aGlu
+Zy5sb2NrLCAmYWJzdGltZSkgPT0gMCk7DQpJbmRleDogd2luc3VwLmFwaS9w
+dGhyZWFkL3J3bG9jazcuYw0KPT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ0KUkNT
+IGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvdGVzdHN1aXRlL3dpbnN1cC5h
+cGkvcHRocmVhZC9yd2xvY2s3LmMsdg0KcmV0cmlldmluZyByZXZpc2lvbiAx
+LjENCmRpZmYgLXUgLXAgLXIxLjEgcndsb2NrNy5jDQotLS0gd2luc3VwLmFw
+aS9wdGhyZWFkL3J3bG9jazcuYwkxOCBNYXIgMjAwMyAyMDowNDoyNCAtMDAw
+MAkxLjENCisrKyB3aW5zdXAuYXBpL3B0aHJlYWQvcndsb2NrNy5jCTI2IE1h
+ciAyMDAzIDIxOjQ1OjQ3IC0wMDAwDQpAQCAtMTMxLDcgKzEzMSw3IEBAIG1h
+aW4gKGludCBhcmdjLCBjaGFyICphcmd2W10pDQogICAgICAgYXNzZXJ0KHB0
+aHJlYWRfcndsb2NrX2luaXQgKCZkYXRhW2RhdGFfY291bnRdLmxvY2ssIE5V
+TEwpID09IDApOw0KICAgICB9DQogDQotICBfZnRpbWUoJmN1cnJTeXNUaW1l
+MSk7DQorICBmdGltZSgmY3VyclN5c1RpbWUxKTsNCiANCiAgIC8qDQogICAg
+KiBDcmVhdGUgVEhSRUFEUyB0aHJlYWRzIHRvIGFjY2VzcyBzaGFyZWQgZGF0
+YS4NCkBAIC0xNzcsNyArMTc3LDcgQEAgbWFpbiAoaW50IGFyZ2MsIGNoYXIg
+KmFyZ3ZbXSkNCiAgIHByaW50ZiAoIiVkIHRocmVhZCB1cGRhdGVzLCAlZCBk
+YXRhIHVwZGF0ZXNcbiIsDQogICAgICAgICAgIHRocmVhZF91cGRhdGVzLCBk
+YXRhX3VwZGF0ZXMpOw0KIA0KLSAgX2Z0aW1lKCZjdXJyU3lzVGltZTIpOw0K
+KyAgZnRpbWUoJmN1cnJTeXNUaW1lMik7DQogDQogICBwcmludGYoICJcbnN0
+YXJ0OiAlbGQvJWQsIHN0b3A6ICVsZC8lZCwgZHVyYXRpb246JWxkXG4iLA0K
+ICAgICAgICAgICBjdXJyU3lzVGltZTEudGltZSxjdXJyU3lzVGltZTEubWls
+bGl0bSwNCg==
+
+---559023410-126398554-1048119469=:6272--
