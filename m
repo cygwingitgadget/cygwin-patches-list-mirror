@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2555-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 6498 invoked by alias); 1 Jul 2002 11:09:34 -0000
+Return-Path: <cygwin-patches-return-2556-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 7369 invoked by alias); 1 Jul 2002 11:12:49 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,89 +7,99 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 6467 invoked from network); 1 Jul 2002 11:09:24 -0000
-Date: Mon, 01 Jul 2002 04:09:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
+Received: (qmail 7283 invoked from network); 1 Jul 2002 11:12:47 -0000
+X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
+Date: Mon, 01 Jul 2002 04:12:00 -0000
+From: Thomas Pfaff <tpfaff@gmx.net>
 To: cygwin-patches@cygwin.com
-Subject: Re: Patch to pass file descriptors
-Message-ID: <20020701130922.E20028@cygbert.vinschen.de>
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <Pine.LNX.4.33.0206291214370.4768-100000@this> <20020701100414.B17641@cygbert.vinschen.de> <006a01c220e0$6735afd0$1800a8c0@LAPTOP> <04b901c220e6$bceb2850$6132bc3e@BABEL>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <04b901c220e6$bceb2850$6132bc3e@BABEL>
-User-Agent: Mutt/1.3.22.1i
-X-SW-Source: 2002-q3/txt/msg00003.txt.bz2
+Subject: [PATCH] interruptable accept
+Message-ID: <Pine.WNT.4.44.0207011223180.359-200000@algeria.intern.net>
+X-X-Sender: pfaff@antarctica.intern.net
+MIME-Version: 1.0
+Content-Type: MULTIPART/MIXED; BOUNDARY="1256998-28050-1025520247=:359"
+Content-ID: <Pine.WNT.4.44.0207011248380.363@algeria.intern.net>
+X-SW-Source: 2002-q3/txt/msg00004.txt.bz2
 
-On Mon, Jul 01, 2002 at 11:04:49AM +0100, Conrad Scott wrote:
-> "Robert Collins" <robert.collins@syncretize.net> wrote:
-> > "Corinna Vinschen" <cygwin-patches@cygwin.com> wrote:
-> > > A change in the concept would eliminate that.  The sender process
-> > > could start a thread and duplicate all file handlers/HANDLEs.  So
-> > > the main thread in the sender isn't blocked.  The receiver is
-> blocked
-> > > anyway since it has to wait until all file handle information has
-> > > been correctly transmitted/regenerated.
-> >
-> > This is still incomplete, the parent now cannot exit(). I think that
-> it is a
-> > reasonable fall-back position for when the cygserver isn't running
-> though.
-> 
-> If this is a problem, the sender could always create a new process to
-> hold the handles until the receiver collected them. That sounds a bit
-> too heavy just to send a file descriptor but I don't expect that it
-> would done often enough to be unacceptable.
-> 
-> I suppose the issue here is not one of full Posix compliance (as none
-> of the discussion so far has approached that: e.g. how about sending
-> the file descriptor of a process's entry in the /proc fs?) but of what
-> needs to be done to cover enough cases to be useful. Corinna mentioned
-> that she'd want to use this in sshd (as I understood it): what's the
-> requirement there? Presumably the daemon's not about to exit and it's
-> only sending socket file descriptors? (all just guesses). If that
-> covers most of the uses, a non-cygserver implementation will be good
-> enough; the cygserver version is just to claim full Posix compliance
-> (one day) :-)
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
 
-You got it.  Therefore a thread is ok.  Calling another process is
-basically too much effort, IMO.
+--1256998-28050-1025520247=:359
+Content-Type: TEXT/PLAIN; CHARSET=US-ASCII
+Content-ID: <Pine.WNT.4.44.0207011248381.363@algeria.intern.net>
+Content-length: 657
 
-Is POSIX compliance actually a problem at all?  I don't think so.
-SUSv3 doesn't mention descriptor passing in sendmsg/recvmsg at all.
-What we're trying to do is some sort of BSD compatibility.  I don't
-even demand full compatibility (e. g. the Cygwin header still defines
-the old style msghdr definition), I just want to pass descriptors
-for the most typical class of problems.  Sshd passes pseudo tty
-descriptors in the privsep code.  That, sockets, pipes and files
-are the most important ones.  Everything else can follow later.
 
-> I lost track in the discussion of why shared memory was needed to pass
-> information between sender and receiver: why can't the sender just
-> send the data directly via the socket rather than putting it in shared
-> memory? The only reason I can see is to get around security issues in
+This patch is not 100% perfect and could be done better (faster response
+on incoming signal) with async Events but this would require a much larger
+patch (Call AsyncEventSelect, WaitForMultipleObjects (socket and signal),
+check for pending connection and set socket back to blocking mode).
+Therefore i decided to use select and check for signal every 100ms. IMHO a
+max of 100 ms delay for a pending signal is acceptable here and is at
+least better than the current implementation.
 
-The shared mem allows to perform any sort of black magic between
-two process and I'm trying to minimize the probablity that sender
-and receiver processes mess up the stream of data on the socket.
+Thomas
 
-> duplicating the handles (i.e. the receiver sending its pid back to the
-> sender if it can't duplicate them). But the idea of the sender
-> duplicating its process handle with the relevant permissions would get
-> around that (?). The information passed could also include (the name
-> of?) a mutex that (a thread in) the sender waits on to know when it
-> can close the handles. Or am I missing something?
+Changelog
 
-Not really.  You can use the same name for both objects, the mutex and
-the shmem.  One of the processes needs enough privileges to call a
-OpenProcess(PROCESS_DUP_HANDLE) on the other process.  This can be
-figured out by just exchanging the Windows PIDs.  If this isn't possible,
-we're stuck anyway and it would require the cygserver solution.
+2002-07-01  Thomas Pfaff  <tpfaff@gmx.net>
 
-Corinna
+	*net.cc: Include select.h
+	(cygwin_accept): If socket is nonblocking check for a pending
+	signal every 100ms.
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+--1256998-28050-1025520247=:359
+Content-Type: TEXT/PLAIN; NAME="accept_intr.patch"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.WNT.4.44.0207011249010.363@algeria.intern.net>
+Content-Description: 
+Content-Disposition: ATTACHMENT; FILENAME="accept_intr.patch"
+Content-length: 2745
+
+ZGlmZiAtdXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi9uZXQuY2Mgc3JjL3dp
+bnN1cC9jeWd3aW4vbmV0LmNjCi0tLSBzcmMub2xkL3dpbnN1cC9jeWd3aW4v
+bmV0LmNjCVR1ZSBKdW4gMTEgMDQ6NTI6MDcgMjAwMgorKysgc3JjL3dpbnN1
+cC9jeWd3aW4vbmV0LmNjCU1vbiBKdWwgIDEgMTI6NDc6MzEgMjAwMgpAQCAt
+MjMsNiArMjMsNyBAQCBkZXRhaWxzLiAqLwogI2luY2x1ZGUgPG5ldGRiLmg+
+CiAjZGVmaW5lIFVTRV9TWVNfVFlQRVNfRkRfU0VUCiAjaW5jbHVkZSA8d2lu
+c29jazIuaD4KKyNpbmNsdWRlICJzZWxlY3QuaCIKICNpbmNsdWRlICJjeWdl
+cnJuby5oIgogI2luY2x1ZGUgInNlY3VyaXR5LmgiCiAjaW5jbHVkZSAiZmhh
+bmRsZXIuaCIKQEAgLTEyMDMsNiArMTIwNCw0NCBAQCBjeWd3aW5fYWNjZXB0
+IChpbnQgZmQsIHN0cnVjdCBzb2NrYWRkciAqCiAgICAgICAgKi8KICAgICAg
+IGlmIChsZW4gJiYgKCh1bnNpZ25lZCkgKmxlbiA8IHNpemVvZiAoc3RydWN0
+IHNvY2thZGRyX2luKSkpCiAJKmxlbiA9IHNpemVvZiAoc3RydWN0IHNvY2th
+ZGRyX2luKTsKKworICAgICAgaWYgKCFzb2NrLT5pc19ub25ibG9ja2luZygp
+KQorICAgICAgICB7CisgICAgICAgICAgZm9yICg7OykKKyAgICAgICAgICAg
+IHsKKyAgICAgICAgICAgICAgc3RydWN0IHRpbWV2YWwgdGltZW91dDsKKyAg
+ICAgICAgICAgICAgd2luc29ja19mZF9zZXQgcmVhZF9mZF9zZXQ7CisKKyAg
+ICAgICAgICAgICAgLy8gY2hlY2sgZm9yIHNpZ25hbCBldmVyeSAxMDAgbXMK
+KyAgICAgICAgICAgICAgdGltZW91dC50dl9zZWMgPSAwOworICAgICAgICAg
+ICAgICB0aW1lb3V0LnR2X3VzZWMgPSAxMDAgKiAxMDAwOworCisgICAgICAg
+ICAgICAgIFdJTlNPQ0tfRkRfWkVSTyAoJnJlYWRfZmRfc2V0KTsKKyAgICAg
+ICAgICAgICAgV0lOU09DS19GRF9TRVQgKChIQU5ETEUpc29jay0+Z2V0X3Nv
+Y2tldCAoKSwgJnJlYWRfZmRfc2V0KTsKKyAgICAgICAgICAgICAgCisgICAg
+ICAgICAgICAgIHJlcyA9IFdJTlNPQ0tfU0VMRUNUICgwLCAmcmVhZF9mZF9z
+ZXQsIE5VTEwsIE5VTEwsICZ0aW1lb3V0KTsKKyAgICAgICAgICAgICAgaWYo
+IHJlcyA9PSBTT0NLRVRfRVJST1IgKQorICAgICAgICAgICAgICAgIHsKKyAg
+ICAgICAgICAgICAgICAgIC8vIEVycm9yIG9jY3VyZWQ6IHN0b3Agc2VsZWN0
+IGxvb3AKKyAgICAgICAgICAgICAgICAgIGRlYnVnX3ByaW50ZiAoIldpblNv
+Y2sgc2VsZWN0IGZhaWxlZCIpOworICAgICAgICAgICAgICAgICAgYnJlYWs7
+CisgICAgICAgICAgICAgICAgfQorICAgICAgICAgICAgICBlbHNlIGlmIChy
+ZXMgPT0gMCkKKyAgICAgICAgICAgICAgICB7CisgICAgICAgICAgICAgICAg
+ICAvLyBUaW1lb3V0OiBjaGVjayBmb3IgcGVuZGluZyBzaWduYWwKKyAgICAg
+ICAgICAgICAgICAgIGlmIChXYWl0Rm9yU2luZ2xlT2JqZWN0IChzaWduYWxf
+YXJyaXZlZCwgMCkgPT0gV0FJVF9PQkpFQ1RfMCkKKyAgICAgICAgICAgICAg
+ICAgICAgeworICAgICAgICAgICAgICAgICAgICAgIGRlYnVnX3ByaW50ZiAo
+InNpZ25hbCByZWNlaXZlZCBkdXJpbmcgYWNjZXB0Iik7CisgICAgICAgICAg
+ICAgICAgICAgICAgc2V0X2Vycm5vIChFSU5UUik7CisgICAgICAgICAgICAg
+ICAgICAgICAgcmVzID0gLTE7CisgICAgICAgICAgICAgICAgICAgICAgZ290
+byBkb25lOworICAgICAgICAgICAgICAgICAgICB9ICAgICAgICAgICAgICAg
+ICAgCisgICAgICAgICAgICAgICAgfQorICAgICAgICAgICAgICBlbHNlIGlm
+IChXSU5TT0NLX0ZEX0lTU0VUICgoSEFORExFKXNvY2stPmdldF9zb2NrZXQg
+KCksICZyZWFkX2ZkX3NldCkpCisgICAgICAgICAgICAgICAgLy8gY29ubmVj
+dCBpcyBwZW5kaW5nCisgICAgICAgICAgICAgICAgYnJlYWs7CisgICAgICAg
+ICAgICB9ICAgICAgICAgICAgICAKKyAgICAgICAgfQogCiAgICAgICByZXMg
+PSBhY2NlcHQgKHNvY2stPmdldF9zb2NrZXQgKCksIHBlZXIsIGxlbik7ICAv
+LyBjYW4ndCB1c2UgYSBibG9ja2luZyBjYWxsIGluc2lkZSBhIGxvY2sKIAo=
+
+--1256998-28050-1025520247=:359--
