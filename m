@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3721-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 27708 invoked by alias); 19 Mar 2003 22:05:18 -0000
+Return-Path: <cygwin-patches-return-3722-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 20682 invoked by alias); 19 Mar 2003 22:22:49 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,55 +7,47 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 27516 invoked from network); 19 Mar 2003 22:05:16 -0000
-Subject: Re: [PATCH] pthread_equal
+Received: (qmail 20607 invoked from network); 19 Mar 2003 22:22:48 -0000
+Subject: Re: [PATCH] updated pthread list patch
 From: Robert Collins <rbcollins@cygwin.com>
 To: Thomas Pfaff <tpfaff@gmx.net>
 Cc: cygwin-patches@cygwin.com
-In-Reply-To: <Pine.WNT.4.44.0303191449530.257-200000@algeria.intern.net>
-References: <Pine.WNT.4.44.0303191449530.257-200000@algeria.intern.net>
-Content-Type: multipart/signed; micalg=pgp-sha1; protocol="application/pgp-signature"; boundary="=-pdHUA7Dt8z+r7MvlxLGn"
+In-Reply-To: <Pine.WNT.4.44.0303191454490.257-200000@algeria.intern.net>
+References: <Pine.WNT.4.44.0303191454490.257-200000@algeria.intern.net>
+Content-Type: multipart/signed; micalg=pgp-sha1; protocol="application/pgp-signature"; boundary="=-OkTdaq5lnGWHMkt2UNi9"
 Organization: 
-Message-Id: <1048111508.5305.166.camel@localhost>
+Message-Id: <1048112562.5299.175.camel@localhost>
 Mime-Version: 1.0
-Date: Wed, 19 Mar 2003 22:05:00 -0000
-X-SW-Source: 2003-q1/txt/msg00370.txt.bz2
+Date: Wed, 19 Mar 2003 22:22:00 -0000
+X-SW-Source: 2003-q1/txt/msg00371.txt.bz2
 
 
---=-pdHUA7Dt8z+r7MvlxLGn
+--=-OkTdaq5lnGWHMkt2UNi9
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
-Content-length: 795
+Content-length: 782
 
-On Thu, 2003-03-20 at 00:54, Thomas Pfaff wrote:
-> 2003-03-19  Thomas Pfaff  <tpfaff@gmx.net>
->=20
-> 	* pthread.cc (pthread_equal): Replacement for pthread_equal in
-> 	thread.cc.
-> 	* thread.cc: Rename pthread_equal to pthread::equal throughout.
-> 	(pthread_equal): Remove.
-> 	* thread.h (pthread::equal): New static method.
+I'm happy with changing the method naming format, but is it GNU
+standard? Thats a requirement for the cygwin project.
 
-This seems mostly pointless to me.
+http://www.gnu.org/prep/standards_26.html#SEC26 says that=20
+"For example, you should use names like ignore_space_change_flag; don't
+use names like iCantReadThis."
 
-A few notes:
+Now, I happen to disagree with the GNU conventions here, particularly as
+they don't have a C++ section (and C doesn't have the same degree of
+name space conflicts that C++ does) :}. But, the pthread code should
+stay within the GNU guidelines.
 
-Why use a static method? you'll always have one pthread to compare to ,
-so using operator =3D=3D is appropriate. In fact, operator =3D=3D already d=
-oes
-the right thing as it is the entire contents of pthread_equal.
+So, I'm sorry to have you jumping through hoops, but can you please
+change your patch so that all new methods use the GNU convention here.
 
-So: where pthread_equal is used internally, you could switch to (for
-instance)
-=3D=3D
- if (&thread =3D=3D joiner)
-=3D=3D
-
+Other than that, please apply it.
 Rob
 --=20
 GPG key available at: <http://users.bigpond.net.au/robertc/keys.txt>.
 
---=-pdHUA7Dt8z+r7MvlxLGn
+--=-OkTdaq5lnGWHMkt2UNi9
 Content-Type: application/pgp-signature; name=signature.asc
 Content-Description: This is a digitally signed message part
 Content-length: 189
@@ -63,9 +55,9 @@ Content-length: 189
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.2.1 (GNU/Linux)
 
-iD8DBQA+eOmTI5+kQ8LJcoIRAmpEAJ99DcrpkJ/AqyepYMYHPVBko3JnGwCdE8qS
-sXY5YCGwyxCVtjDRQ4ihrQE=
-=nnss
+iD8DBQA+eO2yI5+kQ8LJcoIRAhVjAJ9tKZVAyqQpZFgoBcH9kArm9lV7iwCfVDW4
+rlXGgQWGbId09/lY+Ty2waU=
+=uiuU
 -----END PGP SIGNATURE-----
 
---=-pdHUA7Dt8z+r7MvlxLGn--
+--=-OkTdaq5lnGWHMkt2UNi9--
