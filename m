@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2182-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 1301 invoked by alias); 13 May 2002 12:11:14 -0000
+Return-Path: <cygwin-patches-return-2183-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 20284 invoked by alias); 13 May 2002 13:07:38 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,33 +7,40 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 1270 invoked from network); 13 May 2002 12:11:10 -0000
-Date: Mon, 13 May 2002 05:11:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygpatch <cygwin-patches@cygwin.com>
-Subject: Re: Security patches
-Message-ID: <20020513141107.F6264@cygbert.vinschen.de>
-Mail-Followup-To: cygpatch <cygwin-patches@cygwin.com>
-References: <3CD92ECC.2377927E@ieee.org> <3CB58D37.52F084E@ieee.org> <3.0.5.32.20020309192813.007fcb70@pop.ne.mediaone.net> <20020314133309.Q29574@cygbert.vinschen.de> <3C90B0D7.EB06F222@ieee.org> <3CB58D37.52F084E@ieee.org> <3.0.5.32.20020507223050.007b2550@mail.attbi.com> <20020508131529.D9238@cygbert.vinschen.de> <3CD92ECC.2377927E@ieee.org> <3.0.5.32.20020509204655.007fc620@mail.attbi.com>
-Mime-Version: 1.0
+Received: (qmail 20269 invoked from network); 13 May 2002 13:07:33 -0000
+Message-ID: <20020513130713.35710.qmail@web20005.mail.yahoo.com>
+Date: Mon, 13 May 2002 06:07:00 -0000
+From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+Subject: Re: long-option kill patch
+To: cygwin-patches@cygwin.com
+In-Reply-To: <20020513052403.GA22985@redhat.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3.0.5.32.20020509204655.007fc620@mail.attbi.com>
-User-Agent: Mutt/1.3.22.1i
-X-SW-Source: 2002-q2/txt/msg00166.txt.bz2
+X-SW-Source: 2002-q2/txt/msg00167.txt.bz2
 
-On Thu, May 09, 2002 at 08:46:55PM -0400, Pierre A. Humblet wrote:
-> At 04:23 PM 5/8/2002 +0200, Corinna Vinschen wrote:
-> >You can retrieve the value of `orig_psid' by calling the method
-> >`orig_sid()' now.
+
+--- Christopher Faylor <cgf@redhat.com> wrote:
+> On Sun, May 12, 2002 at 08:30:09PM -0700, Joshua Daniel Franklin wrote:
+> >Is there something wrong with the patch for kill.cc?
+> >It's a very simple patch:
+> >
+> >http://www.cygwin.com/ml/cygwin-patches/2002-q2/msg00146.html
+> >
+> >I'd be happy to fix it if there is something wrong, but I'm
+> >not psycic about what...
 > 
-> Doing just that.
+> As I'd previously indicated, I preferred if the option processing was
+> done via getopt.  I just checked in a patch to do that.  I also
+> implemented the -l and -s options.
+> 
+> Sorry for not providing feedback, I'd had a partial implementation
+> sitting in my sandbox and I just polished it off tonight.
+> 
 
-Thanks, applied.
+I'm impressed. After I saw the util-linux version of kill didn't use
+getopt I gave up on it. Obviously, I'll stick with being an admin...
 
-Corinna
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+__________________________________________________
+Do You Yahoo!?
+LAUNCH - Your Yahoo! Music Experience
+http://launch.yahoo.com
