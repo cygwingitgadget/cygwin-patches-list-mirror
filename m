@@ -1,42 +1,63 @@
-From: Christopher Faylor <cgf@redhat.com>
+From: Egor Duda <deo@logos-m.ru>
 To: cygwin-patches@cygwin.com
-Subject: Re: 1.1.8: access violation in dlopen
-Date: Wed, 14 Feb 2001 12:21:00 -0000
-Message-id: <20010214152117.A18567@redhat.com>
-References: <56.735ed4b.27bc0850@aol.com>
-X-SW-Source: 2001-q1/msg00071.html
+Subject: \033[xx;yy;zzm patch
+Date: Wed, 14 Feb 2001 13:28:00 -0000
+Message-id: <1772701184.20010215002717@logos-m.ru>
+X-SW-Source: 2001-q1/msg00072.html
+Content-type: multipart/mixed; boundary="----------=_1583532846-65438-5"
 
-Thanks for the patch.  Please check out the Contributing link at
-cygwin.com and provide an accompanying ChangeLog and I'll apply the
-patch.
+This is a multi-part message in MIME format...
 
-cgf
+------------=_1583532846-65438-5
+Content-length: 146
 
-On Wed, Feb 14, 2001 at 11:12:00AM -0500, Chrisiasci@aol.com wrote:
->I add a problem where dlopen would access violate if passed a non-existent dll.
->
->The problem is that is this case, LoadLibrary is called with a NULL pointer.
->It also seems that this does not always AV (depending on Os version...).
->
->What this patch does is only checking the null pointer case and returning without trying to call LoadLibrary.
->
->
->
->--- dlfcn.cc.ori        Tue Oct 10 02:00:50 2000
->+++ dlfcn.cc    Wed Feb 14 14:54:40 2001
->@@ -177,7 +177,10 @@ dlopen (const char *name, int)
->     {
->       /* handle for the named library */
->       const char *fullpath = get_full_path_of_dll (name);
->-      ret = (void *) LoadLibrary (fullpath);
->+      if (fullpath)
->+      {
->+       ret = (void *) LoadLibrary (fullpath);
->+      }
->     }
->
->   if (!ret)
+Hi!
 
--- 
-cgf@cygnus.com                        Red Hat, Inc.
-http://sources.redhat.com/            http://www.redhat.com/
+  
+
+Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
+unknown-rendition-codes.diff
+unknown-rendition-codes.ChangeLog
+
+
+------------=_1583532846-65438-5
+Content-Type: text/plain; charset=us-ascii;
+ name="unknown-rendition-codes.ChangeLog"
+Content-Disposition: inline; filename="unknown-rendition-codes.ChangeLog"
+Content-Transfer-Encoding: base64
+Content-Length: 224
+
+MjAwMS0wMi0xNCAgRWdvciBEdWRhICA8ZGVvQGxvZ29zLW0ucnU+CgoJKiBm
+aGFuZGxlcl9jb25zb2xlLmNjIChmaGFuZGxlcl9jb25zb2xlOjpjaGFyX2Nv
+bW1hbmQpOiBJZ25vcmUKCXVua25vd24gcmVuZGl0aW9uIGNvZGVzIGluIFww
+MzNbeHg7eXltIGNvbnRyb2wgc2VxdWVuY2VzCg==
+
+------------=_1583532846-65438-5
+Content-Type: text/x-diff; charset=us-ascii;
+ name="unknown-rendition-codes.diff"
+Content-Disposition: inline; filename="unknown-rendition-codes.diff"
+Content-Transfer-Encoding: base64
+Content-Length: 1196
+
+SW5kZXg6IHdpbnN1cC9jeWd3aW4vZmhhbmRsZXJfY29uc29sZS5jYwo9PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2lu
+c3VwL2N5Z3dpbi9maGFuZGxlcl9jb25zb2xlLmNjLHYKcmV0cmlldmluZyBy
+ZXZpc2lvbiAxLjM2CmRpZmYgLXUgLXIxLjM2IGZoYW5kbGVyX2NvbnNvbGUu
+Y2MKLS0tIHdpbnN1cC9jeWd3aW4vZmhhbmRsZXJfY29uc29sZS5jYwkyMDAx
+LzAxLzI4IDA1OjUxOjE0CTEuMzYKKysrIHdpbnN1cC9jeWd3aW4vZmhhbmRs
+ZXJfY29uc29sZS5jYwkyMDAxLzAyLzE0IDIxOjIyOjI4CkBAIC05ODYsMTMg
+Kzk4Niw2IEBACiAJICAgICBjYXNlIDQ3OiAgICAvKiBXSElURSBiYWNrZ3Jv
+dW5kICovCiAJICAgICAgIGJnID0gQkFDS0dST1VORF9CTFVFIHwgQkFDS0dS
+T1VORF9HUkVFTiB8IEJBQ0tHUk9VTkRfUkVEOwogCSAgICAgICBicmVhazsK
+LQkgICAgIGRlZmF1bHQ6Ci0JICAgICAgIGZnID0gZGVmYXVsdF9jb2xvciAm
+IChGT1JFR1JPVU5EX0JMVUUgfCBGT1JFR1JPVU5EX0dSRUVOIHwKLQkJCQkg
+ICAgIEZPUkVHUk9VTkRfUkVEKTsKLQkgICAgICAgYmcgPSBkZWZhdWx0X2Nv
+bG9yICYgKEJBQ0tHUk9VTkRfQkxVRSB8IEJBQ0tHUk9VTkRfR1JFRU4gfAot
+CQkJCSAgICAgQkFDS0dST1VORF9SRUQgfCBCQUNLR1JPVU5EX0lOVEVOU0lU
+WSk7Ci0JICAgICAgIGJvbGQgPSBkZWZhdWx0X2NvbG9yICYgRk9SRUdST1VO
+RF9JTlRFTlNJVFk7Ci0JICAgICAgIGJyZWFrOwogCSAgIH0KIAkgU2V0Q29u
+c29sZVRleHRBdHRyaWJ1dGUgKGdldF9vdXRwdXRfaGFuZGxlICgpLCBmZyB8
+IGJnIHwgYm9sZCk7CiAgICAgICBicmVhazsK
+
+------------=_1583532846-65438-5--
