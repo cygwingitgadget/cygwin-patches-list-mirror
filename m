@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3514-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 11821 invoked by alias); 5 Feb 2003 21:27:17 -0000
+Return-Path: <cygwin-patches-return-3515-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 23226 invoked by alias); 6 Feb 2003 00:50:08 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,255 +7,411 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 11812 invoked from network); 5 Feb 2003 21:27:16 -0000
-Message-Id: <3.0.5.32.20030205162645.007fd100@h00207811519c.ne.client2.attbi.com>
-X-Sender: pierre@h00207811519c.ne.client2.attbi.com
-Date: Wed, 05 Feb 2003 21:27:00 -0000
+Received: (qmail 23215 invoked from network); 6 Feb 2003 00:50:07 -0000
+Date: Thu, 06 Feb 2003 00:50:00 -0000
+From: Vaclav Haisman <V.Haisman@sh.cvut.cz>
 To: cygwin-patches@cygwin.com
-From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
-Subject: Re: ntsec odds and ends (cygcheck augmentation?)
-In-Reply-To: <20030205183009.GI15400@redhat.com>
-References: <3.0.5.32.20030205123403.007e8a80@h00207811519c.ne.client2.attbi.com>
- <20030205164834.GE15400@redhat.com>
- <3.0.5.32.20030205114159.00800620@mail.attbi.com>
- <20030205164834.GE15400@redhat.com>
- <3.0.5.32.20030205123403.007e8a80@h00207811519c.ne.client2.attbi.com>
-Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="=====================_1044498405==_"
-X-SW-Source: 2003-q1/txt/msg00163.txt.bz2
-
---=====================_1044498405==_
-Content-Type: text/plain; charset="us-ascii"
-Content-length: 1047
-
-At 01:30 PM 2/5/2003 -0500, Christopher Faylor wrote:
->I think that initial feedback is a *great* idea but if cygcheck can
->provide some kind of information that would allow diagnosing a
->problem, that would be useful, too.
->
->Maybe it could just dump selected fields from /etc/passwd and
->/etc/group.
-
-I found the check program I had written and attach it FYI, 
-have fun testing weird cases.
-
-Simple things, such as dumping /etc/passwd fields, can easily be done 
-from a script, perhaps providing immediate feedback.
-
-I am off till late Sunday. It would be nice if a consensus could emerge 
-on how to best solve the recurring problems faced by new users. 
-I am convinced that a new setup.exe, with a new passwd-grp.sh and no 
-passwd-grp.bat, would solve 90% of the problems.
-
-Meanwhile Cygwin has always made progress from experimentations and one
-could give a shot at what I tried in the latest patch.
-
-I am still interested to hear if "mkpasswd -l -c" provides a correct 
-entry (the last line) for domain users, in all circumstances. 
-
-Pierre
+Subject: Implementation of sched_rr_get_interval for NT systems.
+Message-ID: <20030206012720.V68017-100000@logout.sh.cvut.cz>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Scanned-By: AMaViS at Silicon Hill
+X-Spam-Status: No, hits=-1.3 required=5.0
+	tests=CARRIAGE_RETURNS,PATCH_CONTEXT_DIFF,SPAM_PHRASE_00_01
+	version=2.43
+X-Spam-Level: 
+X-SW-Source: 2003-q1/txt/msg00164.txt.bz2
 
 
---=====================_1044498405==_
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment; filename="cygntsec.c"
-Content-length: 5841
+Hi,
+this patch implements sched_rr_get_interval for NT systems. The patch consists
+of two parts.
 
-#include <stdio.h>
-#include <string.h>
-#include <limits.h>
-#include <unistd.h>
-#include <pwd.h>
-#include <grp.h>
-#include <windows.h>
+The first part is detection of NT server systems, NT servers have different
+time quanta than workstations. Unfortunately the server detection is not
+perfect because GetVersionEx call with OSVERSIONINFOEX structure is supported
+only on NT 4 SP6 and newer system. Therefore new is_system wincaps flag
+defaults to false as I assume that there are more NT workstations than servers.
 
-#define DEFAULT_UID_NT 400
-#define DEFAULT_GID 401
+The second part is implementation of sched_rr_get_interval in sched.cc itself.
+I have used two main sources of informations about time quanta for NT systems.
+Those sources are two web pages:
+http://www.microsoft.com/mspress/books/sampchap/4354c.asp
+http://www.jsifaq.com/SUBH/tip3700/rh3795.htm
 
-char usidstring [100], gsidstring [100];
+Vaclav Haisman
 
-void sidstring (char *nsidstr, PSID psid)
-{
-  char *t =3D nsidstr;
-  DWORD i;
-  int s;
 
-  strcpy (t, "S-1-");
-  t +=3D sizeof ("S-1-") - 1;
-  s =3D sprintf (t, "%u", GetSidIdentifierAuthority (psid)->Value[5]);
-  for (i =3D 0; i < *GetSidSubAuthorityCount (psid); ++i)
-    s =3D sprintf (t +=3D s, "-%lu", *GetSidSubAuthority (psid, i));
-}
+2003-02-06  Vaclav Haisman  <V.Haisman@sh.cvut.cz>
+	* Makefile.in: Add libusr32.a to DLL_IMPORTS.
+	* wincap.h (wincaps::is_server): New flag.
+	(wincapc::version): Change type to OSVERSIONINFOEX.
+	(wincapc::is_server): New function.
+	* wincap.cc (wincap_unknown::is_server): New initializer.
+	(wincap_95): Ditto.
+	(wincap_95osr2): Ditto.
+	(wincap_98): Ditto.
+	(wincap_me): Ditto.
+	(wincap_nt3): Ditto.
+	(wincap_nt4): Ditto.
+	(wincap_nt4sp4): Ditto.
+	(wincap_2000): Ditto.
+	(wincap_xp): Ditto.
+	(wincapc::init): Adapt to OSVERSIONINFOEX. Add detection of NT
+	server systems.
+	* sched.cc: Include windows.h and registry.h.
+	(sched_rr_get_interval): Re-implement for NT systems.
 
-void getsids ()
-{
-  HANDLE ptok;
-  struct {
-    PSID psid;
-    char buffer[40];
-  } sid;
-  DWORD siz;
 
-  if (!OpenProcessToken (GetCurrentProcess (), TOKEN_QUERY, &ptok))
-    fprintf(stderr, "I cannot read my process access token.\n"
-	    "Windows error %ld.\n", GetLastError ());
-  else
-    {
-      if (!GetTokenInformation (ptok, TokenUser, &sid, sizeof sid, &siz))
-	fprintf(stderr, "I cannot get my own user SID.\n"
-		"Windows error %ld.\n", GetLastError ());
-      else
-	sidstring (usidstring, sid.psid);
-      if (!GetTokenInformation (ptok, TokenPrimaryGroup, &sid, sizeof sid, =
-&siz))
-	fprintf(stderr, "I cannot get my own group SID.\n"
-		"Windows error %ld.\n", GetLastError ());
-      else
-	sidstring (gsidstring, sid.psid);
-      CloseHandle (ptok);
-    }
-  if (!*usidstring || !*gsidstring)
-    exit (1);
-}
+Index: cygwin/Makefile.in
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/Makefile.in,v
+retrieving revision 1.114
+diff -p -c -r1.114 Makefile.in
+*** cygwin/Makefile.in	24 Jan 2003 03:53:46 -0000	1.114
+--- cygwin/Makefile.in	5 Feb 2003 23:58:43 -0000
+*************** EXTRA_OFILES=$(bupdir1)/libiberty/random
+*** 141,147 ****
 
-int main()
-{
-  gid_t grouplist[NGROUPS_MAX];
-  int n;
-  struct passwd * pw =3D NULL;
-  struct group * gr =3D NULL;
-  char * ptr =3D NULL;
-  int isnt;
+  MALLOC_OFILES=@MALLOC_OFILES@
 
-  /* Verify /etc/passwd */
-  if ((isnt =3D !(GetVersion () & 0x80000000)))
-    {
-      getsids ();
-      if (getuid () =3D=3D DEFAULT_UID_NT)
-	fprintf(stdout, "My uid is %d. This value is a reserved default.\n"
-		"  It is used when /etc/passwd does not contain my Windows name %s\n"
-		"  nor my user SID %s.\n",
-		getuid (), getlogin (), usidstring);
-      else if (getpwuid (DEFAULT_UID_NT))
-	fprintf(stdout, "uid %d is a reserved default.\n"
-		"  It should not appear in /etc/passwd.\n",
-		DEFAULT_UID_NT);
-    }
-  else if (getgid () =3D=3D DEFAULT_GID)
-    fprintf(stdout, "My gid is %d. This value is a reserved default.\n"
-	    "  It is used when /etc/passwd does not contain my name %s\n"
-	    "  nor a default entry with uid 500.\n",
-	    getgid (), getlogin ());
+! DLL_IMPORTS:=$(w32api_lib)/libkernel32.a
 
-  for (n =3D 0; n < 2; n++)
-    {
-      char msg [100];
-      if (n =3D=3D 0)
-        {
-	  sprintf (msg, "uid %d", getuid ());
-	  pw =3D getpwuid (getuid ());
-	}
-      else
-        {
-	  sprintf (msg, "name %s", getlogin ());
-	  pw =3D getpwnam (getlogin ());
-	}
-      if (!pw)
-	fprintf(stdout, "My %s does not appear in /etc/passwd.\n", msg);
-      else
-        {
-	  if (isnt)
-	    {
-	      if (!(ptr =3D strrchr (pw->pw_gecos, ',')) || strncmp (++ptr, "S-1-"=
-, 4))
-		fprintf(stdout, "A passwd entry for my %s does not contain a SID.\n",
-			msg);
-	      else if (strcmp (ptr, usidstring))
-		fprintf(stdout, "A passwd entry for my %s does not contain my SID %s.\n",
-			msg, usidstring);
-	    }
-	  if (strcasecmp (pw->pw_name, getlogin ()))
-	    fprintf(stdout, "A passwd entry for my %s contains name %s instead of =
-my name %s.\n"
-		    "  This is legitimate but unusual.\n",
-		    msg, pw->pw_name, getlogin ());
-	  if (pw->pw_uid !=3D getuid ())
-	    {
-	      fprintf(stdout, "A passwd entry for my %s contains uid %d instead of=
- my uid %d.\n",
-		      msg, pw->pw_uid, getuid ());
-	      if (sizeof (uid_t) =3D=3D 2 && pw->pw_uid >=3D USHRT_MAX)
-		fprintf(stdout, "  Currently uid's are short unsigned integers.\n");
-	    }
-	  if (pw->pw_gid !=3D getgid ())
-	    {
-	      fprintf(stdout, "A passwd entry for my %s contains gid %d instead of=
- my gid %d.\n",
-		      msg, pw->pw_gid, getgid ());
-	      if (sizeof (gid_t) =3D=3D 2 && pw->pw_gid >=3D USHRT_MAX)
-		fprintf(stdout, "  Currently gid's are short unsigned integers.\n");
-	    }
-	}
-    }
+  # Please maintain this list in sorted order, with maximum files per 80 col line
+  DLL_OFILES:=assert.o autoload.o cxx.o cygheap.o cygserver_client.o \
+--- 141,147 ----
 
-  /* Verify /etc/group */
-  if (((isnt && getuid () !=3D DEFAULT_UID_NT)
-       || (!isnt && getgid () !=3D DEFAULT_GID))
-      && getgrgid (DEFAULT_GID))
-    fprintf(stdout, "gid %d is a reserved default.\n"
-	    "  It should not appear in /etc/group.\n",
-	    DEFAULT_GID);
-  /* Use getgrent to detect possible augmented entry at end */
-  setgrent ();
-  while ((gr =3D getgrent ()))
-    if (gr->gr_gid =3D=3D getgid ())
-      break;
-  if (gr =3D=3D NULL)
-    fprintf(stdout, "My gid %d does not appear in /etc/group.\n",
-	    getgid ());
-  else
-    {
-      if (isnt)
-	{
-	  if (strncmp (gr->gr_passwd, "S-1-", 4))
-	    fprintf(stdout, "A group entry for my gid %d does not contain a SID.\n=
-",
-		    getgid ());
-	  else if (strcmp (gr->gr_passwd, gsidstring))
-	    fprintf(stdout, "A group entry for my gid %d contains SID %s\n"
-		    "  instead of my group SID %s.\n",
-		    getgid (), gr->gr_passwd, gsidstring);
-	  if ((ptr =3D getenv ("CYGWIN")) && strstr (ptr, "nontsec"))
-	    fprintf(stdout, "ntsec is turned off. Groups cannot be verified.\n");
-	  else if (!(n =3D getgroups (NGROUPS_MAX, grouplist)))
-	    perror ("getgroups");
-	  else
-	    {
-	      while (--n >=3D 0 && grouplist[n] !=3D getgid ())
-	      if (n < 0)
-		fprintf(stdout, "My gid %d is not one of my Windows groups.\n",
-			getgid ());
-	    }
-	}
-      /* Check for possible augmented entry at end */
-      if (getgid () !=3D DEFAULT_GID
-	  && ((isnt && !strcmp (gr->gr_passwd, gsidstring))
-	   || (!isnt && !strcmp (gr->gr_name, "unknown") && !gr->gr_passwd[0]))
-	  && gr->gr_mem[0] && !gr->gr_mem[1] && !strcmp (gr->gr_mem[0], getlogin (=
-))
-	  && getgrent () =3D=3D NULL)
-	{
-	  if (!strcmp (gr->gr_name, "unknown"))
-	    fprintf(stdout, "My group name is \"%s\".\n"
-		    "  This suggests that my gid %d does not appear in /etc/group.\n",
-		    gr->gr_name, getgid ());
-	  else if (isnt)
-	    fprintf(stdout, "Verify that my gid %d appears in /etc/group.\n",
-		    getgid ());
-	}
-    }
-  exit (0);
-}
+  MALLOC_OFILES=@MALLOC_OFILES@
 
---=====================_1044498405==_--
+! DLL_IMPORTS:=$(w32api_lib)/libkernel32.a $(w32api_lib)/libuser32.a
+
+  # Please maintain this list in sorted order, with maximum files per 80 col line
+  DLL_OFILES:=assert.o autoload.o cxx.o cygheap.o cygserver_client.o \
+Index: cygwin/sched.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/sched.cc,v
+retrieving revision 1.7
+diff -p -c -r1.7 sched.cc
+*** cygwin/sched.cc	13 Nov 2002 19:36:12 -0000	1.7
+--- cygwin/sched.cc	5 Feb 2003 23:58:55 -0000
+***************
+*** 14,19 ****
+--- 14,20 ----
+  # include "config.h"
+  #endif
+
++ #include <windows.h>
+  #include "winsup.h"
+  #include <limits.h>
+  #include <errno.h>
+***************
+*** 25,30 ****
+--- 26,33 ----
+  #include "pinfo.h"
+  /* for getpid */
+  #include <unistd.h>
++ #include "registry.h"
++
+
+  /* Win32 priority to UNIX priority Mapping.
+     For now, I'm just following the spec: any range of priorities is ok.
+*************** sched_getscheduler (pid_t pid)
+*** 249,270 ****
+  }
+
+  /* get the time quantum for pid
+!
+!    We can't return -11, errno ENOSYS, because that implies that
+!    sched_get_priority_max & min are also not supported (according to the spec)
+!    so some spec-driven autoconf tests will likely assume they aren't present either
+!
+!    returning ESRCH might confuse some applications (if they assumed that when
+!    rr_get_interval is called on pid 0 it always works).
+!
+!    If someone knows the time quanta for the various win32 platforms, then a
+!    simple check for the os we're running on will finish this function
+  */
+  int
+  sched_rr_get_interval (pid_t pid, struct timespec *interval)
+  {
+!   set_errno (ESRCH);
+!   return -1;
+  }
+
+  /* set the scheduling parameters */
+--- 252,322 ----
+  }
+
+  /* get the time quantum for pid
+!
+!    Implemented only for NT systems, it fails and sets errno to ESRCH
+!    for non-NT systems.
+  */
+  int
+  sched_rr_get_interval (pid_t pid, struct timespec *interval)
+  {
+!   static const char quantable[2][2][3] =
+!     {{{12, 24, 36}, { 6, 12, 18}},
+!      {{36, 36, 36}, {18, 18, 18}}};
+!   /* FIXME: Clocktickinterval can be 15 ms for multi-processor system. */
+!   static const int clocktickinterval = 10;
+!   static const int quantapertick = 3;
+!
+!   HWND forwin;
+!   DWORD forprocid;
+!   int vfindex, slindex, qindex, prisep;
+!   long nsec;
+!
+!   if (!wincap.is_winnt ())
+!     {
+!       set_errno (ESRCH);
+!       return -1;
+!     }
+!
+!   forwin = GetForegroundWindow ();
+!   if (!forwin)
+!     GetWindowThreadProcessId (forwin, &forprocid);
+!   else
+!     forprocid = 0;
+!
+!   reg_key reg (HKEY_LOCAL_MACHINE, KEY_READ, "SYSTEM", "CurrentControlSet",
+!                "Control", "PriorityControl", NULL);
+!   prisep = reg.get_int ("Win32PrioritySeparation", 2);
+!   pinfo pi (pid ? pid : myself->pid);
+!   if (!pi)
+!     {
+!       set_errno(ESRCH);
+!       return -1;
+!     }
+!
+!   if (pi->dwProcessId == forprocid)
+!     {
+!       qindex = prisep & 3;
+!       qindex = qindex == 3 ? 2 : qindex;
+!     }
+!   else
+!     qindex = 0;
+!   vfindex = ((prisep >> 2) & 3) % 3;
+!   if (vfindex == 0)
+!     vfindex = wincap.is_server () || prisep & 3 == 0 ? 1 : 0;
+!   else
+!     vfindex -= 1;
+!   slindex = ((prisep >> 4) & 3) % 3;
+!   if (slindex == 0)
+!     slindex = wincap.is_server () ? 1 : 0;
+!   else
+!     slindex -= 1;
+!
+!   nsec = quantable[vfindex][slindex][qindex] / quantapertick
+!     * clocktickinterval * 1000000;
+!   interval->tv_sec = nsec / 1000000000;
+!   interval->tv_nsec = nsec % 1000000000;
+!
+!   return 0;
+  }
+
+  /* set the scheduling parameters */
+Index: cygwin/wincap.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/wincap.cc,v
+retrieving revision 1.18
+diff -p -c -r1.18 wincap.cc
+*** cygwin/wincap.cc	15 Oct 2002 17:04:20 -0000	1.18
+--- cygwin/wincap.cc	5 Feb 2003 23:58:58 -0000
+*************** static NO_COPY wincaps wincap_unknown =
+*** 16,21 ****
+--- 16,22 ----
+    chunksize:0x0,
+    shared:FILE_SHARE_READ | FILE_SHARE_WRITE,
+    is_winnt:false,
++   is_server:false,
+    access_denied_on_delete:false,
+    has_delete_on_close:false,
+    has_page_guard:false,
+*************** static NO_COPY wincaps wincap_95 = {
+*** 55,60 ****
+--- 56,62 ----
+    chunksize:32 * 1024 * 1024,
+    shared:FILE_SHARE_READ | FILE_SHARE_WRITE,
+    is_winnt:false,
++   is_server:false,
+    access_denied_on_delete:true,
+    has_delete_on_close:false,
+    has_page_guard:false,
+*************** static NO_COPY wincaps wincap_95osr2 = {
+*** 94,99 ****
+--- 96,102 ----
+    chunksize:32 * 1024 * 1024,
+    shared:FILE_SHARE_READ | FILE_SHARE_WRITE,
+    is_winnt:false,
++   is_server:false,
+    access_denied_on_delete:true,
+    has_delete_on_close:false,
+    has_page_guard:false,
+*************** static NO_COPY wincaps wincap_98 = {
+*** 133,138 ****
+--- 136,142 ----
+    chunksize:32 * 1024 * 1024,
+    shared:FILE_SHARE_READ | FILE_SHARE_WRITE,
+    is_winnt:false,
++   is_server:false,
+    access_denied_on_delete:true,
+    has_delete_on_close:false,
+    has_page_guard:false,
+*************** static NO_COPY wincaps wincap_98se = {
+*** 172,177 ****
+--- 176,182 ----
+    chunksize:32 * 1024 * 1024,
+    shared:FILE_SHARE_READ | FILE_SHARE_WRITE,
+    is_winnt:false,
++   is_server:false,
+    access_denied_on_delete:true,
+    has_delete_on_close:false,
+    has_page_guard:false,
+*************** static NO_COPY wincaps wincap_me = {
+*** 211,216 ****
+--- 216,222 ----
+    chunksize:32 * 1024 * 1024,
+    shared:FILE_SHARE_READ | FILE_SHARE_WRITE,
+    is_winnt:false,
++   is_server:false,
+    access_denied_on_delete:true,
+    has_delete_on_close:false,
+    has_page_guard:false,
+*************** static NO_COPY wincaps wincap_nt3 = {
+*** 250,255 ****
+--- 256,262 ----
+    chunksize:0,
+    shared:FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+    is_winnt:true,
++   is_server:false,
+    access_denied_on_delete:false,
+    has_delete_on_close:true,
+    has_page_guard:true,
+*************** static NO_COPY wincaps wincap_nt4 = {
+*** 289,294 ****
+--- 296,302 ----
+    chunksize:0,
+    shared:FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+    is_winnt:true,
++   is_server:false,
+    access_denied_on_delete:false,
+    has_delete_on_close:true,
+    has_page_guard:true,
+*************** static NO_COPY wincaps wincap_nt4sp4 = {
+*** 328,333 ****
+--- 336,342 ----
+    chunksize:0,
+    shared:FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+    is_winnt:true,
++   is_server:false,
+    access_denied_on_delete:false,
+    has_delete_on_close:true,
+    has_page_guard:true,
+*************** static NO_COPY wincaps wincap_2000 = {
+*** 367,372 ****
+--- 376,382 ----
+    chunksize:0,
+    shared:FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+    is_winnt:true,
++   is_server:false,
+    access_denied_on_delete:false,
+    has_delete_on_close:true,
+    has_page_guard:true,
+*************** static NO_COPY wincaps wincap_xp = {
+*** 406,411 ****
+--- 416,422 ----
+    chunksize:0,
+    shared:FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+    is_winnt:true,
++   is_server:false,
+    access_denied_on_delete:false,
+    has_delete_on_close:true,
+    has_page_guard:true,
+*************** wincapc::init ()
+*** 450,458 ****
+    if (caps)
+      return;		// already initialized
+
+!   memset (&version, 0, sizeof version);
+!   version.dwOSVersionInfoSize = sizeof version;
+!   GetVersionEx (&version);
+
+    switch (version.dwPlatformId)
+      {
+--- 461,469 ----
+    if (caps)
+      return;		// already initialized
+
+!   memset (&version, 0, sizeof version);
+!   version.dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
+!   GetVersionEx (reinterpret_cast<LPOSVERSIONINFO>(&version));
+
+    switch (version.dwPlatformId)
+      {
+*************** wincapc::init ()
+*** 515,520 ****
+--- 526,540 ----
+  	caps = &wincap_unknown;
+  	break;
+      }
++
++   if (((wincaps *)this->caps)->is_winnt && version.dwMajorVersion > 4)
++     {
++       version.dwOSVersionInfoSize = sizeof version;
++       GetVersionEx (reinterpret_cast<LPOSVERSIONINFO>(&version));
++       if (version.wProductType != VER_NT_WORKSTATION)
++ 	((wincaps *)this->caps)->is_server = true;
++     }
++
+    __small_sprintf (osnam, "%s-%d.%d", os, version.dwMajorVersion,
+  		   version.dwMinorVersion);
+  }
+Index: cygwin/wincap.h
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/wincap.h,v
+retrieving revision 1.14
+diff -p -c -r1.14 wincap.h
+*** cygwin/wincap.h	15 Oct 2002 17:04:20 -0000	1.14
+--- cygwin/wincap.h	5 Feb 2003 23:58:59 -0000
+*************** struct wincaps
+*** 17,22 ****
+--- 17,23 ----
+    DWORD    chunksize;
+    int      shared;
+    unsigned is_winnt                                     : 1;
++   unsigned is_server                                    : 1;
+    unsigned access_denied_on_delete                      : 1;
+    unsigned has_delete_on_close                          : 1;
+    unsigned has_page_guard                               : 1;
+*************** struct wincaps
+*** 53,61 ****
+
+  class wincapc
+  {
+!   OSVERSIONINFO version;
+!   char          osnam[40];
+!   void          *caps;
+
+  public:
+    void init ();
+--- 54,62 ----
+
+  class wincapc
+  {
+!   OSVERSIONINFOEX  version;
+!   char             osnam[40];
+!   void             *caps;
+
+  public:
+    void init ();
+*************** public:
+*** 70,75 ****
+--- 71,77 ----
+    DWORD IMPLEMENT (chunksize)
+    int   IMPLEMENT (shared)
+    bool  IMPLEMENT (is_winnt)
++   bool  IMPLEMENT (is_server)
+    bool  IMPLEMENT (access_denied_on_delete)
+    bool  IMPLEMENT (has_delete_on_close)
+    bool  IMPLEMENT (has_page_guard)
