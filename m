@@ -1,25 +1,20 @@
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: Cygwin half of pthread update
-Date: Thu, 12 Apr 2001 09:08:00 -0000
-Message-id: <20010412180758.A30816@cygbert.vinschen.de>
-References: <03f001c0c2ed$3b89acd0$0200a8c0@lifelesswks> <20010411232520.C32524@redhat.com> <05df01c0c305$d4bef0f0$0200a8c0@lifelesswks> <20010412113539.A5879@redhat.com>
-X-SW-Source: 2001-q2/msg00040.html
+From: Christopher Faylor <cgf@redhat.com>
+To: Cygwin Patches <cygwin-patches@cygwin.com>
+Subject: Re: Who's watching cygwin-info@redhat.com??
+Date: Thu, 12 Apr 2001 09:48:00 -0000
+Message-id: <20010412124842.A14417@redhat.com>
+References: <200104121459.f3CExjd11445@cygmund.cygnus.com>
+X-SW-Source: 2001-q2/msg00041.html
 
-On Thu, Apr 12, 2001 at 11:35:39AM -0400, Christopher Faylor wrote:
-> On Thu, Apr 12, 2001 at 02:05:30PM +1000, Robert Collins wrote:
-> >Committed.
-> 
-> What happened to the ChangeLog?  You shouldn't check in stuff without
-> a ChangeLog entry.
+I've replied personally.
 
-Why is there a symbol `mkfifo' in cygwin.din but nowhere is the function?
-I can't link the dll anymore. Sure I can but I have to patch cygwin.din
-then.
+cgf
 
-Corinna
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+On Thu, Apr 12, 2001 at 08:39:24AM -0600, Mark Paulus wrote:
+>Hi,
+>
+>I have sent in a couple of notes to cygwin-info@redhat.com about
+>an intellectual rights exception, and i have heard nothing back.  Is
+>anyone monitoring that email address, and if so, can I get a status?
+>(I've got this patch in limbo, and want to know whether to just drop
+>it, or wait a little longer)
