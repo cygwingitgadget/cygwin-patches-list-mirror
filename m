@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4484-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 15692 invoked by alias); 8 Dec 2003 05:35:35 -0000
+Return-Path: <cygwin-patches-return-4485-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 13183 invoked by alias); 8 Dec 2003 06:27:38 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,40 +7,42 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 15672 invoked from network); 8 Dec 2003 05:35:29 -0000
-Date: Mon, 08 Dec 2003 05:35:00 -0000
+Received: (qmail 13154 invoked from network); 8 Dec 2003 06:27:37 -0000
+Date: Mon, 08 Dec 2003 06:27:00 -0000
 From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: patch for audio recording with /dev/dsp
-Message-ID: <20031208053529.GA31384@redhat.com>
+Subject: Re: [Patch]: Fixing the PROCESS_DUP_HANDLE security hole (part 1).
+Message-ID: <20031208062734.GA6855@redhat.com>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <01C3BD3C.95EC61D0.Gerd.Spalink@t-online.de>
+References: <3.0.5.32.20030929215525.0082c4f0@incoming.verizon.net> <3.0.5.32.20030929215525.0082c4f0@incoming.verizon.net> <3.0.5.32.20031207222431.00829420@incoming.verizon.net>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <01C3BD3C.95EC61D0.Gerd.Spalink@t-online.de>
+In-Reply-To: <3.0.5.32.20031207222431.00829420@incoming.verizon.net>
 User-Agent: Mutt/1.4.1i
-X-SW-Source: 2003-q4/txt/msg00203.txt.bz2
+X-SW-Source: 2003-q4/txt/msg00204.txt.bz2
 
-On Mon, Dec 08, 2003 at 03:37:19AM +0100, Gerd Spalink wrote:
->Hi,
+On Sun, Dec 07, 2003 at 10:24:31PM -0500, Pierre A. Humblet wrote:
+>It's mostly fine (rxvt and notty) but starting the following from DOS
+>creates a slew of warning from the handler protection code (below).
+>However the shell is functional.
+>tty reports /dev/tty, instead of /dev/ttyN with 1.5.5
 >
->This patch changes the device /dev/dsp so that audio recording works.
->I have tested it with
->cp /dev/dsp test.wav         (stop by hitting ctrl-C)
->and subsequent playback with
->cp test.wav /dev/dsp
->
->I also tested successfully with bplay of the gramofile package
->(with some hangups that I link to the terminal handling of this software).
->
->I am now considering implementing /dev/mixer ...
->
->Any suggestions?
+>@echo off
+>set CYGWIN=tty
+>C:
+>chdir \progra~1\cygwin\bin
+>bash --login -i
 
-Thanks for the patch but have you checked out http://cygwin.com/contrib.html ?
-AFAIK, we don't have an assignment on file with you so we can't
-incorporate any substantial patches from you into cygwin.
+This is odd, since this is specifically how I tested cygwin prior to checking
+everything in.  I can't duplicate this.
+
+I initially couldn't duplicate the 'tty' problem either, but after my
+15th clean rebuild, I did see it.  I don't know why I wasn't seeing it
+before.
+
+I've checked in a fix for the ttyname and a shot in the dark for the
+mark_closed problems.
 
 cgf
