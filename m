@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3216-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 19852 invoked by alias); 22 Nov 2002 14:46:51 -0000
+Return-Path: <cygwin-patches-return-3217-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 21357 invoked by alias); 22 Nov 2002 14:54:08 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,36 +7,309 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 19833 invoked from network); 22 Nov 2002 14:46:46 -0000
-Date: Fri, 22 Nov 2002 06:46:00 -0000
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
-To: cygwin-patches@cygwin.com
+Received: (qmail 21064 invoked from network); 22 Nov 2002 14:54:06 -0000
+Message-ID: <3DDE4528.3BDCDCEF@ieee.org>
+Date: Fri, 22 Nov 2002 06:54:00 -0000
+From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
+X-Accept-Language: en,pdf
+MIME-Version: 1.0
+To: Corinna Vinschen <cygwin-patches@cygwin.com>
 Subject: Re: More passwd/group patches
-Message-ID: <20021122154644.N1398@cygbert.vinschen.de>
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3DDE3FB9.2AFAA199@ieee.org>
-Mime-Version: 1.0
+References: <3DDE3FB9.2AFAA199@ieee.org> <20021122154644.N1398@cygbert.vinschen.de>
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3DDE3FB9.2AFAA199@ieee.org>
-User-Agent: Mutt/1.3.22.1i
-X-SW-Source: 2002-q4/txt/msg00167.txt.bz2
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2002-q4/txt/msg00168.txt.bz2
 
-On Fri, Nov 22, 2002 at 09:31:21AM -0500, Pierre A. Humblet wrote:
-> Corinna,
+Corinna Vinschen wrote:
+
 > 
-> I am done with the next series of passwd/group patches
-> to separate internal and external calls.
-> They affect sec_acl.cc, thus we should probably discuss
-> and finalize patch ntsec #2 before I send this one.
+> Could you please resend your mail with patch #2?  It allows
+> me to follow up simply.
 
-Could you please resend your mail with patch #2?  It allows
-me to follow up simply.
+Here it is, cut and pasted from the web site.
 
-Thanks,
-Corinna
+Pierre
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+*******************************************************************
+Hello again, Corinna,
+
+while stracing "ls -l" to verify the "uid == gid" changes, I 
+noticed that it was calling acl(). That intrigued me because 
+I had never noticed "ls -l" displaying acl related info.
+ 
+One thing led to another and to the attached patch. 
+The main problem was that acl(GETACLCNT) was always 
+reporting 0.
+
+Now ls -l displays a "+" when a file acl contains more ace's 
+than necessary to represent the modes (as documented in the ls
+info page). 
+
+As you know the cygwin implementation of acl's isn't complete. 
+Two things are a somewhat confusing:
+- the mask isn't implemented. I suggest that it would be better
+  to report it as "rwx" than to set it to the group bits (as 
+  Cygwin does now). Also note it in the man page.
+- the default acl (of a directory) is not taken into account
+  by Cygwin when creating files with ntsec on. Still it is 
+  useful info because but it reflects the (Windows) behavior 
+  when ntsec is off. This could be added in the man page.
+
+2002-11-06  Pierre Humblet <pierre.humblet@ieee.org>
+
+	* sec_acl.cc (getace): Fix the behavior when allow and
+	deny entries are present in arbitrary order.
+	(getacl): Report the actual number of entries when 
+	aclbufp is NULL, even if nentries is zero. Fix the mask 
+	reporting, handle the case where the owner and group sids
+	are equal and streamline the code.
+	(acl_worker): Take allow_ntsec into account.
+
+--- sec_acl.cc.orig	2002-10-23 22:33:36.000000000 -0400
++++ sec_acl.cc	2002-10-27 12:24:30.000000000 -0500
+@@ -213,29 +213,41 @@ setacl (const char *file, int nentries, 
+   return write_sd (file, psd, sd_size);
+ }
+ 
++/* Always set the user, group and other bits.
++   Access denied bits are in the high positions */
++#define ALLOW_R (S_IRUSR | S_IRGRP | S_IROTH)
++#define ALLOW_W (S_IWUSR | S_IWGRP | S_IWOTH)
++#define ALLOW_X (S_IXUSR | S_IXGRP | S_IXOTH)
++#define DENY_R 040000
++#define DENY_W 020000
++#define DENY_X 010000
++
+ static void
+ getace (__aclent16_t &acl, int type, int id, DWORD win_ace_mask, DWORD win_ace_type)
+ {
+   acl.a_type = type;
+   acl.a_id = id;
+ 
+-  if (win_ace_mask & FILE_READ_DATA)
++  if ((win_ace_mask & FILE_READ_DATA) &&
++      !(acl.a_perm & (ALLOW_R | DENY_R)))
+     if (win_ace_type == ACCESS_ALLOWED_ACE_TYPE)
+-      acl.a_perm |= (acl.a_perm & S_IRGRP) ? 0 : S_IRUSR;
++      acl.a_perm |= ALLOW_R;
+     else if (win_ace_type == ACCESS_DENIED_ACE_TYPE)
+-      acl.a_perm &= ~S_IRGRP;
++      acl.a_perm |= DENY_R;
+ 
+-  if (win_ace_mask & FILE_WRITE_DATA)
++  if ((win_ace_mask & FILE_WRITE_DATA) &&
++      !(acl.a_perm & (ALLOW_W | DENY_W)))
+     if (win_ace_type == ACCESS_ALLOWED_ACE_TYPE)
+-      acl.a_perm |= (acl.a_perm & S_IWGRP) ? 0 : S_IWUSR;
++      acl.a_perm |= ALLOW_W;
+     else if (win_ace_type == ACCESS_DENIED_ACE_TYPE)
+-      acl.a_perm &= ~S_IWGRP;
++      acl.a_perm |= DENY_W;
+ 
+-  if (win_ace_mask & FILE_EXECUTE)
++  if ((win_ace_mask & FILE_EXECUTE) &&
++      !(acl.a_perm & (ALLOW_X | DENY_X)))
+     if (win_ace_type == ACCESS_ALLOWED_ACE_TYPE)
+-      acl.a_perm |= (acl.a_perm & S_IXGRP) ? 0 : S_IXUSR;
++      acl.a_perm |= ALLOW_X;
+     else if (win_ace_type == ACCESS_DENIED_ACE_TYPE)
+-      acl.a_perm &= ~S_IXGRP;
++      acl.a_perm |= DENY_X;
+ }
+ 
+ static int
+@@ -281,6 +293,7 @@ getacl (const char *file, DWORD attr, in
+   lacl[1].a_type = GROUP_OBJ;
+   lacl[1].a_id = gid;
+   lacl[2].a_type = OTHER_OBJ;
++  lacl[3].a_type = CLASS_OBJ;
+ 
+   PACL acl;
+   BOOL acl_exists;
+@@ -292,106 +305,91 @@ getacl (const char *file, DWORD attr, in
+       return -1;
+     }
+ 
+-  int pos, i;
++  int pos, i, types_def = 0;
+ 
+   if (!acl_exists || !acl)
+-    {
+-      for (pos = 0; pos < MIN_ACL_ENTRIES; ++pos)
+-	lacl[pos].a_perm = S_IRWXU | S_IRWXG | S_IRWXO;
+-      pos = nentries < MIN_ACL_ENTRIES ? nentries : MIN_ACL_ENTRIES;
+-      memcpy (aclbufp, lacl, pos * sizeof (__aclent16_t));
+-      return pos;
+-    }
+-
+-  for (i = 0; i < acl->AceCount && (!nentries || i < nentries); ++i)
+-    {
+-      ACCESS_ALLOWED_ACE *ace;
+-
+-      if (!GetAce (acl, i, (PVOID *) &ace))
+-	continue;
++    for (pos = 0; pos < MIN_ACL_ENTRIES; ++pos)
++      lacl[pos].a_perm = ALLOW_R | ALLOW_W | ALLOW_X;
++  else
++    {
++      for (i = 0; i < acl->AceCount; ++i)
++	{
++	  ACCESS_ALLOWED_ACE *ace;
++	  
++	  if (!GetAce (acl, i, (PVOID *) &ace))
++	    continue;
+ 
+-      cygsid ace_sid ((PSID) &ace->SidStart);
+-      int id;
+-      int type = 0;
++	  cygsid ace_sid ((PSID) &ace->SidStart);
++	  int id;
++	  int type = 0;
+ 
+-      if (ace_sid == well_known_world_sid)
+-	{
+-	  type = OTHER_OBJ;
+-	  id = 0;
+-	}
+-      else if (ace_sid == owner_sid)
+-	{
+-	  type = USER_OBJ;
+-	  id = uid;
+-	}
+-      else if (ace_sid == group_sid)
+-	{
+-	  type = GROUP_OBJ;
+-	  id = gid;
+-	}
+-      else
+-	{
+-	  id = ace_sid.get_id (FALSE, &type);
+-	  if (type != GROUP)
++	  if (ace_sid == well_known_world_sid)
++	    {
++	      type = OTHER_OBJ;
++	      id = 0;
++	    }
++	  else if (ace_sid == group_sid)
++	    {
++	      type = GROUP_OBJ;
++	      id = gid;
++	    }
++	  else if (ace_sid == owner_sid)
+ 	    {
+-	      int type2 = 0;
+-	      int id2 = ace_sid.get_id (TRUE, &type2);
+-	      if (type2 == GROUP)
++	      type = USER_OBJ;
++	      id = uid;
++	    }
++	  else
++	    {
++	      id = ace_sid.get_id (FALSE, &type);
++	      if (type != GROUP)
+ 		{
+-		  id = id2;
+-		  type = GROUP;
++		  int type2 = 0;
++		  int id2 = ace_sid.get_id (TRUE, &type2);
++		  if (type2 == GROUP)
++		    {
++		      id = id2;
++		      type = GROUP;
++		    }
+ 		}
+ 	    }
++	  if (!type)
++	    continue;
++	  if (!(ace->Header.AceFlags & INHERIT_ONLY))
++	    {
++	      if ((pos = searchace (lacl, MAX_ACL_ENTRIES, type, id)) >= 0)
++		getace (lacl[pos], type, id, ace->Mask, ace->Header.AceType);
++	    }
++	  if ((ace->Header.AceFlags & SUB_CONTAINERS_AND_OBJECTS_INHERIT)
++	      && (attr & FILE_ATTRIBUTE_DIRECTORY))
++	    {
++	      type |= ACL_DEFAULT;
++	      types_def |= type;
++	      if ((pos = searchace (lacl, MAX_ACL_ENTRIES, type, id)) >= 0)
++		getace (lacl[pos], type, id, ace->Mask, ace->Header.AceType);
++	    }
+ 	}
+-      if (!type)
+-	continue;
+-      if (!(ace->Header.AceFlags & INHERIT_ONLY))
+-	{
+-	  if ((pos = searchace (lacl, MAX_ACL_ENTRIES, type, id)) >= 0)
+-	    getace (lacl[pos], type, id, ace->Mask, ace->Header.AceType);
+-	}
+-      if ((ace->Header.AceFlags & SUB_CONTAINERS_AND_OBJECTS_INHERIT)
+-	  && (attr & FILE_ATTRIBUTE_DIRECTORY))
+-	{
+-	  type |= ACL_DEFAULT;
+-	  if ((pos = searchace (lacl, MAX_ACL_ENTRIES, type, id)) >= 0)
+-	    getace (lacl[pos], type, id, ace->Mask, ace->Header.AceType);
++      /* Include CLASS_OBJ to insure count > 4 (MIN_ACL_ENTRIES)
++	 if any default ace exists */
++      lacl[3].a_perm = lacl[1].a_perm;
++      int dgpos;
++      if ((types_def & (USER|GROUP)) 
++	  && ((dgpos = searchace (lacl, MAX_ACL_ENTRIES, DEF_GROUP_OBJ)),
++	      (pos = searchace (lacl, MAX_ACL_ENTRIES, DEF_CLASS_OBJ)) >= 0))
++	{
++	  lacl[pos].a_type = DEF_CLASS_OBJ;
++	  lacl[pos].a_perm = lacl[dgpos].a_perm;
+ 	}
+     }
+   if ((pos = searchace (lacl, MAX_ACL_ENTRIES, 0)) < 0)
+     pos = MAX_ACL_ENTRIES;
+-  for (i = 0; i < pos; ++i)
+-    {
+-      lacl[i].a_perm = (lacl[i].a_perm & S_IRWXU)
+-		       & ~((lacl[i].a_perm & S_IRWXG) << 3);
+-      lacl[i].a_perm |= (lacl[i].a_perm & S_IRWXU) >> 3
+-			| (lacl[i].a_perm & S_IRWXU) >> 6;
+-    }
+-  if ((searchace (lacl, MAX_ACL_ENTRIES, USER) >= 0
+-       || searchace (lacl, MAX_ACL_ENTRIES, GROUP) >= 0)
+-      && (pos = searchace (lacl, MAX_ACL_ENTRIES, CLASS_OBJ)) >= 0)
+-    {
+-      lacl[pos].a_type = CLASS_OBJ;
+-      lacl[pos].a_perm =
+-	  lacl[searchace (lacl, MAX_ACL_ENTRIES, GROUP_OBJ)].a_perm;
+-    }
+-  int dgpos;
+-  if ((searchace (lacl, MAX_ACL_ENTRIES, DEF_USER) >= 0
+-       || searchace (lacl, MAX_ACL_ENTRIES, DEF_GROUP) >= 0)
+-      && (dgpos = searchace (lacl, MAX_ACL_ENTRIES, DEF_GROUP_OBJ)) >= 0
+-      && (pos = searchace (lacl, MAX_ACL_ENTRIES, DEF_CLASS_OBJ)) >= 0
+-      && (attr & FILE_ATTRIBUTE_DIRECTORY))
+-    {
+-      lacl[pos].a_type = DEF_CLASS_OBJ;
+-      lacl[pos].a_perm = lacl[dgpos].a_perm;
+-    }
+-  if ((pos = searchace (lacl, MAX_ACL_ENTRIES, 0)) < 0)
+-    pos = MAX_ACL_ENTRIES;
+-  if (pos > nentries)
+-    pos = nentries;
+-  if (aclbufp)
++  if (aclbufp) {
++    if (EqualSid (owner_sid, group_sid)) 
++      lacl[0].a_perm = lacl[1].a_perm;
++    aclsort (pos, 0, aclbufp);
++    if (pos > nentries)
++      pos = nentries;
+     memcpy (aclbufp, lacl, pos * sizeof (__aclent16_t));
+-  aclsort (pos, 0, aclbufp);
++  }
+   syscall_printf ("%d = getacl (%s)", pos, file);
+   return pos;
+ }
+@@ -472,7 +470,7 @@ acl_worker (const char *path, int cmd, i
+       syscall_printf ("-1 = acl (%s)", path);
+       return -1;
+     }
+-  if (!real_path.has_acls ())
++  if (!real_path.has_acls () || !allow_ntsec)
+     {
+       struct __stat64 st;
+       int ret = -1;
