@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4037-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 21933 invoked by alias); 5 Aug 2003 03:05:15 -0000
+Return-Path: <cygwin-patches-return-4038-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 27044 invoked by alias); 5 Aug 2003 04:49:48 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,32 +7,35 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 21923 invoked from network); 5 Aug 2003 03:05:15 -0000
-Date: Tue, 05 Aug 2003 03:05:00 -0000
+Received: (qmail 27035 invoked from network); 5 Aug 2003 04:49:48 -0000
+Date: Tue, 05 Aug 2003 04:49:00 -0000
 From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] readdir (): Do not set 'errno' if end of dir is encountered
-Message-ID: <20030805030514.GA3631@redhat.com>
+Subject: Re: [PATCH] patch.cc: cygdrive_getmntent () - Unify behaviour with fhandler_cygdrive
+Message-ID: <20030805044947.GA5641@redhat.com>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <15875.1060051753@www57.gmx.net>
+References: <20030802141248.GB16831@redhat.com> <13970.1059840677@www56.gmx.net>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <15875.1060051753@www57.gmx.net>
+In-Reply-To: <13970.1059840677@www56.gmx.net>
 User-Agent: Mutt/1.4.1i
-X-SW-Source: 2003-q3/txt/msg00053.txt.bz2
+X-SW-Source: 2003-q3/txt/msg00054.txt.bz2
 
-On Tue, Aug 05, 2003 at 04:49:13AM +0200, Pavel Tsekov wrote:
->2003-08-05  Pavel Tsekov  <ptsekov@gmx.net>
+On Sat, Aug 02, 2003 at 06:11:17PM +0200, Pavel Tsekov wrote:
+>> On Sat, Aug 02, 2003 at 01:53:21PM +0200, Pavel Tsekov wrote:
+>> >Here is a simple patch which makes the behaviour of getmntent ()
+>> >consistent with the one of fhandler_cygdrive.
+>> 
+>> The reason this is there is to avoid long delays in mount table
+>> listings.
 >
->	* fhandler_disk_file.cc (fhandler_cygdrive::readdir): Do not change
->	'errno' if end of directory condition is encountered as per SUSv2.
->	* fhandler_proc.cc (fhandler_proc::readdir): Ditto.
->	* fhandler_process (fhandler_process::readdir): Ditto.
->	* fhandler_registry (fhandler_registry::readdir): Ditto.
+>Well, I guessed so, but it would be more convinient and consistent if
+>calling getmntent() could retrieve all the accesible (mounted) drives.
+>Anyway, I guess i'll be using readdir () :)
 
-Applied.
+After giving this a couple days of thought, I decided that this was
+not hobgoblin related so I'm going to check this in.
 
-Thanks,
 cgf
