@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1923-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 870 invoked by alias); 27 Feb 2002 20:56:35 -0000
+Return-Path: <cygwin-patches-return-1924-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 15754 invoked by alias); 27 Feb 2002 22:27:19 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,119 +7,82 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 837 invoked from network); 27 Feb 2002 20:56:35 -0000
-Message-ID: <20020227205634.45738.qmail@web20003.mail.yahoo.com>
-Date: Wed, 27 Feb 2002 14:27:00 -0000
-From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
-Subject: cygpath copyright/version patch
-To: cygwin-patches@cygwin.com
-In-Reply-To: <20020227162528.GA2205@redhat.com>
+Received: (qmail 15725 invoked from network); 27 Feb 2002 22:27:17 -0000
+Message-ID: <002c01c1bfde$36552840$0100a8c0@advent02>
+From: "Chris January" <chris@atomice.net>
+To: <cygwin-patches@cygwin.com>
+References: <008901c1b1be$80b36e70$0100a8c0@advent02> <20020210043745.GA5128@redhat.com> <006401c1b998$c106f230$0100a8c0@advent02> <20020219230649.GC4626@redhat.com> <024601c1b9a3$2f8fb700$0100a8c0@advent02> <20020220003104.GD22591@redhat.com> <20020225164230.GA17325@redhat.com> <001301c1be40$647220b0$0100a8c0@advent02> <20020225214630.GD22795@redhat.com> <00b501c1bec2$ae997530$0100a8c0@advent02> <20020227170138.GA2380@redhat.com>
+Subject: Re: /proc and /proc/registry
+Date: Wed, 27 Feb 2002 15:55:00 -0000
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="0-354990715-1014843394=:42318"
-X-SW-Source: 2002-q1/txt/msg00280.txt.bz2
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-SW-Source: 2002-q1/txt/msg00281.txt.bz2
 
---0-354990715-1014843394=:42318
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-length: 1208
+> >> 1) The copyrights still need to be changed.
+> >Done.
+> >> 2) The code formatting still is not correct.
+> >Now piped through indent with a few touch-ups.
+> >> 3) You have a lot of calls to normalize_posix_path.  Is that really
+> >>    necessary?  It seems to be called a lot.  If it is really necessary,
+> >>    I'd prefer that it just be called in dtable::build_fhandler and made
+> >>    the standard "unix_path_name".
+> >Done.
+> >> 4) Could you generate the diff using 'cvs diff -up"
+> >Done. The new files are diff'ed against /dev/null and are appended to the
+> >output of cvs diff.
 
---- Christopher Faylor <cgf@redhat.com> wrote:
-> I've checked in a modified version of your patch.  I cleaned up some of
-> the non-GNU formatting, added a ChangeLog, and added a "print_version"
-> function which parses the 'version' array for version info.
-> 
-Your patch looks much cleaner. I will try to read up on GNU formatting to avoid
-this in the future. I assume my indenting was off. 
+<--snip-->
 
-Here is a patch for cygpath that fixes the copyright dates I changed
-incorrectly. It also uses cgf's print_version() instead of the previous
-hard-coded and wrong version. (The current cygpath.exe outputs version 1.2,
-while in reality the CVS version is 1.13.) The first line of the new version
-output is in the GNU standard "file (package) #.##", i.e. "cygpath (cygwin)
-1.13" or "ls (fileutils) 4.1". It also initializes the variable 'o' to prevent
-a compiler warning.
+> >+  if (*path == 0)
+> >+    return FH_PROC;
+>
+> How could this happen?
+This occurs when the path is actually just /proc. Compare with
+fhandler_proc::exists which does the same thing.
 
-Changelog:
+> >+  int pid = atoi (path);
+> >+  winpids pids;
+> >+  for (unsigned i = 0; i < pids.npids; i++)
+> >+    {
+> >+      _pinfo *p = pids[i];
+> >+
+> >+      if (!proc_exists (p))
+> >+        continue;
+> >+
+> >+      if (p->pid == pid)
+> >+        return FH_PROCESS;
+> >+    }
+> >+  return FH_PROC;
+> >+}
+>
+> Is this right?  If I type /proc/qwerty this returns FH_PROC?
+Yes, this is by design. Any path in /proc should be handled by a sub-class
+of fhandler_virtual. This way path.cc (chdir/path_conv::check) can call
+fhandler_virtual::exists on the path to check whether it actually exists or
+not. Arguably FH_BAD could be returned here instead. It's an arbitary
+decision so I accept anyone else's opinion.
 
-2002-02-27 Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+> >--- /dev/null Tue Feb 26 12:31:06 2002
+> >+++ fhandler_virtual.cc Tue Feb 26 11:14:04 2002
+> >@@ -0,0 +1,228 @@
+> >+DIR *
+> >+fhandler_virtual::opendir (path_conv & real_name)
+> >+{
+> >+  return opendir (get_name());
+> >+}
+>
+> I don't see how this can be right.  Won't this induce infinite recursion?
+No - opendir is overloaded in fhandler_virtual. The idea is that virtual
+fhandler (i.e. classes that derive from fhandler_virtual) methods
+consistently get passed a unix path instead of a reference to a path_conv
+instance.
 
-* cygpath.cc (print_version): New function.
-(main): Accommodate new version function. Initialize 'o' to prevent warning.
+Regards
+Chris
 
-__________________________________________________
-Do You Yahoo!?
-Yahoo! Greetings - Send FREE e-cards for every occasion!
-http://greetings.yahoo.com
---0-354990715-1014843394=:42318
-Content-Type: text/plain; name="cygpath.cc-patch"
-Content-Description: cygpath.cc-patch
-Content-Disposition: inline; filename="cygpath.cc-patch"
-Content-length: 1469
-
---- cygpath.cc-orig	Sun Feb 24 13:28:27 2002
-+++ cygpath.cc	Wed Feb 27 14:32:51 2002
-@@ -1,5 +1,5 @@
- /* cygpath.cc -- convert pathnames between Windows and Unix format
--   Copyright 1998-2002 Red Hat, Inc.
-+   Copyright 1998, 1999, 2000, 2001, 2002 Red Hat, Inc.
- 
- This file is part of Cygwin.
- 
-@@ -21,6 +21,8 @@ details. */
- #include <sys/cygwin.h>
- #include <ctype.h>
- 
-+static const char version[] = "$Revision: 1.13 $";
-+
- static char *prog_name;
- static char *file_arg;
- static char *close_arg;
-@@ -231,6 +233,28 @@ doit (char *filename)
-   puts (buf);
- }
- 
-+static void
-+print_version ()
-+{
-+  const char *v = strchr (version, ':');
-+  int len;
-+  if (!v)
-+    {
-+      v = "?";
-+      len = 1;
-+    }
-+  else
-+    {
-+      v += 2;
-+      len = strchr (v, ' ') - v;
-+    }
-+  printf ("\
-+cygpath (cygwin) %.*s\n\
-+Path Conversion Utility\n\
-+Copyright 1998, 1999, 2000, 2001, 2002 Red Hat, Inc.\n\
-+Compiled on %s", len, v, __DATE__);
-+}
-+
- int
- main (int argc, char **argv)
- {
-@@ -257,6 +281,7 @@ main (int argc, char **argv)
-   options_from_file_flag = 0;
-   allusers_flag = 0;
-   output_flag = 0;
-+  o=0;
-   while ((c = getopt_long (argc, argv, (char *) "hac:f:opsSuvwWiDPA", long_options, (int *) NULL))
- 	 != EOF)
-     {
-@@ -341,8 +366,7 @@ main (int argc, char **argv)
- 	  break;
- 
- 	case 'v':
--	  printf ("Cygwin path conversion version 1.2\n");
--	  printf ("Copyright 1998-2002 Red Hat, Inc.\n");
-+          print_version();
- 	  exit (0);
- 
- 	default:
-
---0-354990715-1014843394=:42318--
