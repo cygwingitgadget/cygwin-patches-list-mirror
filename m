@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1676-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 13075 invoked by alias); 12 Jan 2002 12:33:15 -0000
+Return-Path: <cygwin-patches-return-1677-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 9734 invoked by alias); 12 Jan 2002 18:17:19 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,38 +7,54 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 13060 invoked from network); 12 Jan 2002 12:33:15 -0000
-Message-ID: <911C684A29ACD311921800508B7293BA037D29E9@cnmail>
-From: Mark Bradshaw <bradshaw@staff.crosswalk.com>
-To: 'Corinna Vinschen' <cygwin-patches@cygwin.com>
-Subject: FW: [PATCH] mkpasswd.c - allows selection of specific user
-Date: Sat, 12 Jan 2002 04:33:00 -0000
+Received: (qmail 9718 invoked from network); 12 Jan 2002 18:17:16 -0000
+From: "Ralf Habacker" <Ralf.Habacker@freenet.de>
+To: <cygwin-patches@cygwin.com>
+Subject: RE: Problem with winsup/cinstall compilation
+Date: Sat, 12 Jan 2002 10:17:00 -0000
+Message-ID: <00b901c19b94$f7c9ff00$651c440a@BRAMSCHE>
 MIME-Version: 1.0
-X-Mailer: Internet Mail Service (5.5.2653.19)
-Content-Type: text/plain
-X-SW-Source: 2002-q1/txt/msg00033.txt.bz2
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3 (Normal)
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook 8.5, Build 4.71.2173.0
+In-Reply-To: <20020111165045.GC24106@redhat.com>
+X-MimeOLE: Produced By Microsoft MimeOLE V5.50.4133.2400
+Importance: Normal
+X-SW-Source: 2002-q1/txt/msg00034.txt.bz2
 
-That's what I (a sys admin) thought too.  I like that.  I think I'll try the
-brackets and see how it looks.
+EMail: Ralf.Habacker@saght.tessag.com
 
 > -----Original Message-----
-> From: Robert Collins [mailto:robert.collins@itdomain.com.au]
-> Sent: Saturday, January 12, 2002 4:19 AM
+> From: cygwin-patches-owner@cygwin.com
+> [mailto:cygwin-patches-owner@cygwin.com]On Behalf Of Christopher Faylor
+> Sent: Friday, January 11, 2002 5:51 PM
 > To: cygwin-patches@cygwin.com
-> Subject: Re: [PATCH] mkpasswd.c - allows selection of specific user
-> 
-> 
-> ----- Original Message -----
-> From: "Christopher Faylor" <cgf@redhat.com>
-> > These are nice changes, but I have a few observations:
-> 
-> > 2) I don't think there is any reason to report the number if you
-> >    are translating the text, so, I'd prefer:
+> Subject: Re: Problem with winsup/cinstall compilation
+>
+>
+> On Fri, Jan 11, 2002 at 03:45:06PM +0100, Ralf Habacker wrote:
+> >>
+> >> Ralf, I've checked this in.
+> >>
+> >> However: Your changelog was atrocious.
+> >>
+> >> The changes are meant to be 'proper' sentences. That means
+> >> capitalisation is important, as is spelling.
+> >>
+> >> Next time I'll reject the patch and get you to fix it up. That wastes
+> >> time (yours) though, so I'd really prefer it if the changelog is
+> >> acceptable first time round.
 > >
-> >    mkpasswd: The user name could not be found
-> 
-> My 2c: keep the number. Put it in brackets or something. It's
-> a _lot_ easier for sysadmins.
-> 
-> Rob
-> 
+> >I have looked in the cygwin ChangeLog for making a proper ChangeLog, but don't recognized
+> >this details. Sorry
+>
+> http://cygwin.com/contrib.html
+>
+I have read this and I see many "what not to do statements" relating changelog. I think it
+would be easier and faster to read if some true examples are included at this page. :-)
+
+Ralf
+
