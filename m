@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2021-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 27258 invoked by alias); 3 Apr 2002 18:12:08 -0000
+Return-Path: <cygwin-patches-return-2022-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 11414 invoked by alias); 4 Apr 2002 04:39:52 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,65 +7,71 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 27237 invoked from network); 3 Apr 2002 18:12:07 -0000
-Date: Wed, 03 Apr 2002 10:12:00 -0000
-To: cygwin-apps@cygwin.com,
-    cygwin-patches@cygwin.com
-Subject: Re: Patch for Setup.exe problem and for mklink2.cc
-Message-Id: <VA.00000b1a.003b4a45@thesoftwaresource.com>
-From: Brian Keener <bkeener@thesoftwaresource.com>
-Reply-To: bkeener@thesoftwaresource.com
-In-Reply-To: <E16qEjA-0007iC-00@smtp2.cistron.nl>
-References: <E16qEjA-0007iC-00@smtp2.cistron.nl>
-X-SW-Source: 2002-q2/txt/msg00005.txt.bz2
+Received: (qmail 11400 invoked from network); 4 Apr 2002 04:39:51 -0000
+Message-ID: <20020404043951.19820.qmail@web20010.mail.yahoo.com>
+Date: Wed, 03 Apr 2002 20:39:00 -0000
+From: Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+Subject: stackdump.sgml new file
+To: cygwin-patches@cygwin.com
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="0-162781151-1017895191=:17861"
+X-SW-Source: 2002-q2/txt/msg00006.txt.bz2
 
- wrote:
-> > As for the &'s, I wonder if it's a w32api reference issue? The compiler
-> 
-> > complains if they are present for me.
-> 
-> For me it is the opposite. g++ complains when they are *not*
-> 
-> present.
->
-I believe this might be related to the above discussion so I thought I would 
-add this - I updated my cinstall (Setup.exe) node from HEAD in cvs (cvs update 
--rHEAD) on Monday and now when I try to compile on my Win2000 laptop I get the 
-following error:
+--0-162781151-1017895191=:17861
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-length: 1223
 
-make[2]: Entering directory `/usr/develop/obj/i686-pc-cygwin/winsup/cinstall'
-/usr/bin/c++ -L/usr/develop/obj/i686-pc-cygwin/winsup 
--L/usr/develop/obj/i686-pc-cygwin/winsup/cygwin 
--L/usr/develop/obj/i686-pc-cygwin/winsup/w32api/lib -isystem 
-/usr/develop/src/winsup/include -isystem /usr/develop/src/winsup/cygwin/include 
--isystem /usr/develop/src/winsup/w32api/include -isystem 
-/usr/develop/src/newlib/libc/sys/cygwin -isystem 
-/usr/develop/src/newlib/libc/sys/cygwin32 
--B/usr/develop/obj/i686-pc-cygwin/newlib/ -isystem 
-/usr/develop/obj/i686-pc-cygwin/newlib/targ-include -isystem 
-/usr/develop/src/newlib/libc/include -MMD -g -O2 -mno-cygwin -I. 
--I/usr/develop/src/winsup/cinstall -I/usr/develop/src/winsup/mingw/include  
--I/usr/develop/src/winsup/bz2lib -mwindows -c -o mklink2.o 
-/usr/develop/src/winsup/cinstall/mklink2.cc
-/usr/develop/src/winsup/cinstall/mklink2.cc: In function `void 
-make_link_2(const char *, const char *, const char *, const char *)':
-/usr/develop/src/winsup/cinstall/mklink2.cc:24: cannot convert 
-`CLSID_ShellLink' from type `const GUID' to type `const CLSID *'
-/usr/develop/src/winsup/cinstall/mklink2.cc:25: cannot convert 
-`IID_IPersistFile' from type `_GUID' to type `const IID *'
-make[2]: *** [mklink2.o] Error 1
-make[2]: Leaving directory `/usr/develop/obj/i686-pc-cygwin/winsup/cinstall'
-make[1]: *** [cinstall] Error 1
-make[1]: Leaving directory `/usr/develop/obj/i686-pc-cygwin/winsup'
-make: *** [all-target-winsup] Error 2
-~
-$ 
+I was thinking about writing some updated documentation as requested
+lately on the mailing list
+(http://www.cygwin.com/ml/cygwin/2002-03/msg01633.html)
+I've started by writing a new file to document the existance of the 
+cygwin_stackdump() function. ChangeLog:
 
-I have tried reinstalling the w32api packages for version 1.1-1, 1.2-1 and 
-1.2-2 as well as other various packages in an attempt to resolve but still get 
-the same error when I compile.  
+2001-04-03  Joshua Daniel Franklin <joshuadfranklin@yahoo.com>
+	* stackdump.sgml: New file. Document cygwin_stackdump() function.
 
-I see the patch that Ton van Overbeek and I am about to try that - will this 
-become a standard patch.
+The function is described as "Temporary?" when first mentioned in the
+ChangeLog, but since it appears to have been around since the first
+net-release:
+http://www.cygwin.com/ml/cygwin-announce/2000/msg00000.html
+I thought it's probably permanent enough to have its own sgml file.
 
+I'm not abandoning my quest to add --help and --version options to all
+the utils, but I've got two patches out right now and would like to wait on 
+these to keep it all managable in my thought. For reference, the patches are
+for mkpasswd (similar to the applied mkgroup patch):
+http://cygwin.com/ml/cygwin-patches/2002-q1/msg00352.html
 
+and for kill.cc:
+http://cygwin.com/ml/cygwin-patches/2002-q1/msg00339.html
+
+__________________________________________________
+Do You Yahoo!?
+Yahoo! Tax Center - online filing with TurboTax
+http://taxes.yahoo.com/
+--0-162781151-1017895191=:17861
+Content-Type: text/html; name="stackdump.sgml-patch"
+Content-Description: stackdump.sgml-patch
+Content-Disposition: inline; filename="stackdump.sgml-patch"
+Content-length: 375
+
+--- stackdump.sgml-orig	Wed Apr  3 21:36:00 2002
++++ stackdump.sgml	Wed Apr  3 20:57:07 2002
+@@ -0,0 +1,14 @@
++
++<sect1 id="func-cygwin-stackdump">
++<title>cygwin_stackdump</title>
++
++<funcsynopsis>
++<funcdef>extern "C" void
++<function>cygwin_stackdump</function></funcdef>
++<void>
++</funcsynopsis>
++
++<para> Produce a stackdump from the called location
++</para>
++
++</sect1>
+
+--0-162781151-1017895191=:17861--
