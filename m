@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3679-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 18005 invoked by alias); 11 Mar 2003 01:08:10 -0000
+Return-Path: <cygwin-patches-return-3680-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 3653 invoked by alias); 11 Mar 2003 07:03:02 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,52 +7,154 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 17989 invoked from network); 11 Mar 2003 01:08:10 -0000
-Message-Id: <3.0.5.32.20030310200902.007f3100@mail.attbi.com>
-X-Sender: phumblet@mail.attbi.com (Unverified)
-Date: Tue, 11 Mar 2003 01:08:00 -0000
-To: cygwin-patches@cygwin.com
-From: "Pierre A. Humblet" <Pierre.Humblet@ieee.org>
-Subject: fhandler_socket::dup
-Mime-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-X-SW-Source: 2003-q1/txt/msg00328.txt.bz2
+Received: (qmail 3642 invoked from network); 11 Mar 2003 07:03:00 -0000
+content-class: urn:content-classes:message
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+	boundary="----_=_NextPart_001_01C2E79C.3F65986C"
+X-MimeOLE: Produced By Microsoft Exchange V6.0.6375.0
+Subject: A patch for the cygwin1.dll console handler
+Date: Tue, 11 Mar 2003 07:03:00 -0000
+Message-ID: <C691E039D3895C44AB8DFD006B950FB409D18D@lanmhs50.rd.francetelecom.fr>
+X-MS-Has-Attach: yes
+X-MS-TNEF-Correlator: 
+From: "COTTO Daniel FTRD/DMI/CAE" <daniel.cotto@rd.francetelecom.com>
+To: <cygwin-patches@cygwin.com>
+X-OriginalArrivalTime: 11 Mar 2003 07:02:58.0787 (UTC) FILETIME=[3F9B9330:01C2E79C]
+X-SW-Source: 2003-q1/txt/msg00329.txt.bz2
 
-Corinna,
+This is a multi-part message in MIME format.
 
-Here is a patch to have fhandler_socket::dup return success
-or failure (related to the problem seen by Jason Tishler).
+------_=_NextPart_001_01C2E79C.3F65986C
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+Content-length: 664
 
-Pierre
+Hello,
 
-2003-03-11  Pierre Humblet  <pierre.humblet@ieee.org>
+I have made a patch to the cygwin1.dll .
+Its main purpose is to allow a nul character to be input from a french keyb=
+oard. Also this patch adds some othre functions keys. If you are interreste=
+d you have the diff -up file from the last cvs 03/03/2003 05:00  fhandler_c=
+onsole.cc
 
-	* fhandler_socket.cc (fhandler_socket::fixup_after_fork):
-	Set io_handle to INVALID_SOCKET in case of failure.
-	(fhandler_socket::dup): Return 0 iff the io_handle is valid.
+the binding added are:
+* ctrl-spc: nul character
+* ctrl-f1 through ctrl-f10: \e7~ through \e16~
+* alt-f1 through alt f10: \e[38~ through \e[47~
+* app key binded to: \e[50~
+* ctrl-tab and alt tab bind to esc tab.=20
+* and some other minor binding; (see the attachment).
+
+If you want, you can use this patch and you can add it to a next  version o=
+f cygwin1.dll.
 
 
-Index: fhandler_socket.cc
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/fhandler_socket.cc,v
-retrieving revision 1.86
-diff -u -p -r1.86 fhandler_socket.cc
---- fhandler_socket.cc  9 Mar 2003 20:31:07 -0000       1.86
-+++ fhandler_socket.cc  11 Mar 2003 00:21:18 -0000
-@@ -344,6 +344,7 @@ fhandler_socket::fixup_after_fork (HANDL
-                                   prot_info_ptr, 0, 0)) == INVALID_SOCKET)
-     {
-       debug_printf ("WSASocket error");
-+      set_io_handle ((HANDLE) new_sock);
-       set_winsock_errno ();
-     }
-   else if (!new_sock && !winsock2_active)
-@@ -389,7 +390,7 @@ fhandler_socket::dup (fhandler_base *chi
-   if (winsock2_active)
-     {
-       fhs->fixup_after_fork (hMainProc);
--      return 0;
-+      return get_io_handle () == (HANDLE) INVALID_SOCKET;
-     }
-   return fhandler_base::dup (child);
- }
+Daniel.
+
+
+------_=_NextPart_001_01C2E79C.3F65986C
+Content-Type: application/octet-stream;
+	name="fhandler_console.diff"
+Content-Transfer-Encoding: base64
+Content-Description: fhandler_console.diff
+Content-Disposition: attachment;
+	filename="fhandler_console.diff"
+Content-length: 5625
+
+LS0tIGZoYW5kbGVyX2NvbnNvbGUub3JpZwkyMDAzLTAzLTAzIDA1OjAwOjE3
+LjAwMDAwMDAwMCArMDEwMAorKysgZmhhbmRsZXJfY29uc29sZS5jYwkyMDAz
+LTAzLTEwIDIwOjI1OjIwLjAwMDAwMDAwMCArMDEwMApAQCAtMzI5LDcgKzMy
+OSw5IEBAIGZoYW5kbGVyX2NvbnNvbGU6OnJlYWQgKHZvaWQgKnB2LCBzaXpl
+X3QKICNkZWZpbmUgQUxUX1BSRVNTRUQgKExFRlRfQUxUX1BSRVNTRUQgfCBS
+SUdIVF9BTFRfUFJFU1NFRCkKICNkZWZpbmUgQ1RSTF9QUkVTU0VEIChMRUZU
+X0NUUkxfUFJFU1NFRCB8IFJJR0hUX0NUUkxfUFJFU1NFRCkKIAotCSAgaWYg
+KHdjaCA9PSAwIHx8CisJICBpZiAod2NoID09IDAgfHwgLyogTlVMTCBjaGFy
+YWN0ZXIgKi8KKwkgICAgICB3Y2ggPT0gMzIgfHwgLyogc3BhY2UgKi8KKwkg
+ICAgICB3Y2ggPT0gOSB8fCAvKiB0YWIgKi8KIAkgICAgICAvKiBhcnJvdy9m
+dW5jdGlvbiBrZXlzICovCiAJICAgICAgKGlucHV0X3JlYy5FdmVudC5LZXlF
+dmVudC5kd0NvbnRyb2xLZXlTdGF0ZSAmIEVOSEFOQ0VEX0tFWSkpCiAJICAg
+IHsKQEAgLTMzNyw2ICszMzksOCBAQCBmaGFuZGxlcl9jb25zb2xlOjpyZWFk
+ICh2b2lkICpwdiwgc2l6ZV90CiAJICAgICAgaWYgKCF0b2FkZCkKIAkJY29u
+dGludWU7CiAJICAgICAgbnJlYWQgPSBzdHJsZW4gKHRvYWRkKTsKKwkgICAg
+ICBpZiAobnJlYWQgPT0gMCkgLyogdG9yZWFkID09ICJcMFwwIiAqLworCQlu
+cmVhZCsrOwogCSAgICB9CiAJICBlbHNlCiAJICAgIHsKQEAgLTE2MDgsMzIg
+KzE2MTIsMzcgQEAgc3RhdGljIHN0cnVjdCB7CiAgIGNvbnN0IGNoYXIgKnZh
+bFs0XTsKIH0ga2V5dGFibGVbXSBOT19DT1BZID0gewogCSAgICAgICAvKiBO
+T1JNQUwgKi8gIC8qIFNISUZUICovICAgIC8qIENUUkwgKi8gICAgICAgLyog
+QUxUICovCi0gIHtWS19MRUZULAl7IlwwMzNbRCIsCSJcMDMzW0QiLAkiXDAz
+M1tEIiwJIlwwMzNcMDMzW0QifX0sCi0gIHtWS19SSUdIVCwJeyJcMDMzW0Mi
+LAkiXDAzM1tDIiwJIlwwMzNbQyIsCSJcMDMzXDAzM1tDIn19LAotICB7Vktf
+VVAsCXsiXDAzM1tBIiwJIlwwMzNbQSIsCSJcMDMzW0EiLAkiXDAzM1wwMzNb
+QSJ9fSwKLSAge1ZLX0RPV04sCXsiXDAzM1tCIiwJIlwwMzNbQiIsCSJcMDMz
+W0IiLAkiXDAzM1wwMzNbQiJ9fSwKLSAge1ZLX1BSSU9SLAl7IlwwMzNbNX4i
+LAkiXDAzM1s1fiIsCSJcMDMzWzV+IiwJIlwwMzNcMDMzWzV+In19LAotICB7
+VktfTkVYVCwJeyJcMDMzWzZ+IiwJIlwwMzNbNn4iLAkiXDAzM1s2fiIsCSJc
+MDMzXDAzM1s2fiJ9fSwKLSAge1ZLX0hPTUUsCXsiXDAzM1sxfiIsCSJcMDMz
+WzF+IiwJIlwwMzNbMX4iLAkiXDAzM1wwMzNbMX4ifX0sCi0gIHtWS19FTkQs
+CXsiXDAzM1s0fiIsCSJcMDMzWzR+IiwJIlwwMzNbNH4iLAkiXDAzM1wwMzNb
+NH4ifX0sCi0gIHtWS19JTlNFUlQsCXsiXDAzM1syfiIsCSJcMDMzWzJ+IiwJ
+IlwwMzNbMn4iLAkiXDAzM1wwMzNbMn4ifX0sCi0gIHtWS19ERUxFVEUsCXsi
+XDAzM1szfiIsCSJcMDMzWzN+IiwJIlwwMzNbM34iLAkiXDAzM1wwMzNbM34i
+fX0sCi0gIHtWS19GMSwJeyJcMDMzW1tBIiwJIlwwMzNbMjN+IiwJTlVMTCwJ
+CU5VTEx9fSwKLSAge1ZLX0YyLAl7IlwwMzNbW0IiLAkiXDAzM1syNH4iLAlO
+VUxMLAkJTlVMTH19LAotICB7VktfRjMsCXsiXDAzM1tbQyIsCSJcMDMzWzI1
+fiIsCU5VTEwsCQlOVUxMfX0sCi0gIHtWS19GNCwJeyJcMDMzW1tEIiwJIlww
+MzNbMjZ+IiwJTlVMTCwJCU5VTEx9fSwKLSAge1ZLX0Y1LAl7IlwwMzNbW0Ui
+LAkiXDAzM1syOH4iLAlOVUxMLAkJTlVMTH19LAotICB7VktfRjYsCXsiXDAz
+M1sxN34iLAkiXDAzM1syOX4iLAkiXDAzNiIsCQlOVUxMfX0sCi0gIHtWS19G
+NywJeyJcMDMzWzE4fiIsCSJcMDMzWzMxfiIsCU5VTEwsCQlOVUxMfX0sCi0g
+IHtWS19GOCwJeyJcMDMzWzE5fiIsCSJcMDMzWzMyfiIsCU5VTEwsCQlOVUxM
+fX0sCi0gIHtWS19GOSwJeyJcMDMzWzIwfiIsCSJcMDMzWzMzfiIsCU5VTEws
+CQlOVUxMfX0sCi0gIHtWS19GMTAsCXsiXDAzM1syMX4iLAkiXDAzM1szNH4i
+LAlOVUxMLAkJTlVMTH19LAotICB7VktfRjExLAl7IlwwMzNbMjN+IiwJTlVM
+TCwJCU5VTEwsCQlOVUxMfX0sCi0gIHtWS19GMTIsCXsiXDAzM1syNH4iLAlO
+VUxMLAkJTlVMTCwJCU5VTEx9fSwKLSAge1ZLX05VTVBBRDUsCXsiXDAzM1tH
+IiwJTlVMTCwJCU5VTEwsCQlOVUxMfX0sCi0gIHtWS19DTEVBUiwJeyJcMDMz
+W0ciLAlOVUxMLAkJTlVMTCwJCU5VTEx9fSwKKyAge1ZLX0xFRlQsCXsiXDAz
+M1tEIiwJIlwwMzNbRCIsCSJcMDMzXDAzM1tEIiwJIlwwMzNcMDMzW0QifX0s
+CisgIHtWS19SSUdIVCwJeyJcMDMzW0MiLAkiXDAzM1tDIiwJIjAzM1wwMzNb
+QyIsCSJcMDMzXDAzM1tDIn19LAorICB7VktfVVAsCXsiXDAzM1tBIiwJIlww
+MzNbQSIsCSJcMDMzXDAzM1tBIiwJIlwwMzNcMDMzW0EifX0sCisgIHtWS19E
+T1dOLAl7IlwwMzNbQiIsCSJcMDMzW0IiLAkiXDAzM1wwMzNbQiIsCSJcMDMz
+XDAzM1tCIn19LAorICB7VktfUFJJT1IsCXsiXDAzM1s1fiIsCSJcMDMzWzV+
+IiwJIlwwMzNcMDMzWzV+IiwJIlwwMzNcMDMzWzV+In19LAorICB7VktfTkVY
+VCwJeyJcMDMzWzZ+IiwJIlwwMzNbNn4iLAkiXDAzM1wwMzNbNn4iLAkiXDAz
+M1wwMzNbNn4ifX0sCisgIHtWS19IT01FLAl7IlwwMzNbMX4iLAkiXDAzM1sx
+fiIsCSJcMDMzXDAzM1sxfiIsCSJcMDMzXDAzM1sxfiJ9fSwKKyAge1ZLX0VO
+RCwJeyJcMDMzWzR+IiwJIlwwMzNbNH4iLAkiXDAzM1wwMzNbNH4iLAkiXDAz
+M1wwMzNbNH4ifX0sCisgIHtWS19JTlNFUlQsCXsiXDAzM1syfiIsCSJcMDMz
+WzJ+IiwJIlwwMzNcMDMzWzJ+IiwJIlwwMzNcMDMzWzJ+In19LAorICB7Vktf
+REVMRVRFLAl7IlwwMzNbM34iLAkiXDAzM1szfiIsCSJcMDMzXDAzM1szfiIs
+CSJcMDMzXDAzM1szfiJ9fSwKKyAge1ZLX0YxLAl7IlwwMzNbW0EiLAkiXDAz
+M1syM34iLAkiXDAzM1s3fiIsCSJcMDMzWzM4fiJ9fSwKKyAge1ZLX0YyLAl7
+IlwwMzNbW0IiLAkiXDAzM1syNH4iLAkiXDAzM1s4fiIsCSJcMDMzWzM5fiJ9
+fSwKKyAge1ZLX0YzLAl7IlwwMzNbW0MiLAkiXDAzM1syNX4iLAkiXDAzM1s5
+fiIsCSJcMDMzWzQwfiJ9fSwKKyAge1ZLX0Y0LAl7IlwwMzNbW0QiLAkiXDAz
+M1syNn4iLAkiXDAzM1sxMH4iLAkiXDAzM1s0MX4ifX0sCisgIHtWS19GNSwJ
+eyJcMDMzW1tFIiwJIlwwMzNbMjh+IiwJIlwwMzNbMTF+IiwJIlwwMzNbNDJ+
+In19LAorICB7VktfRjYsCXsiXDAzM1sxN34iLAkiXDAzM1syOX4iLAkiXDAz
+M1sxMn4iLAkiXDAzM1s0M34ifX0sCisgIHtWS19GNywJeyJcMDMzWzE4fiIs
+CSJcMDMzWzMxfiIsCSJcMDMzWzEzfiIsCSJcMDMzWzQ0fiJ9fSwKKyAge1ZL
+X0Y4LAl7IlwwMzNbMTl+IiwJIlwwMzNbMzJ+IiwJIlwwMzNbMTR+IiwJIlww
+MzNbNDV+In19LAorICB7VktfRjksCXsiXDAzM1syMH4iLAkiXDAzM1szM34i
+LAkiXDAzM1sxNX4iLAkiXDAzM1s0Nn4ifX0sCisgIHtWS19GMTAsCXsiXDAz
+M1syMX4iLAkiXDAzM1szNH4iLAkiXDAzM1sxNn4iLAkiXDAzM1s0N34ifX0s
+CisgIHtWS19GMTEsCXsiXDAzM1syN34iLAkiXDAzM1szNX4iLAkiXDAzM1sz
+N34iLAkiXDAzM1s0OH4ifX0sCisgIHtWS19GMTIsCXsiXDAzM1szMH4iLAki
+XDAzM1szNn4iLAkiXDAzM1szN34iLAkiXDAzM1s0OX4ifX0sCisgIHtWS19O
+VU1QQUQ1LAl7IlwwMzNbRyIsCSJcMDMzW0ciLAkiXDAzM1wwMzNbRyIsCSJc
+MDMzXDAzM1tHIn19LAorICB7VktfQ0xFQVIsCXsiXDAzM1tHIiwJIlwwMzNb
+RyIsCSJcMDMzXDAzM1tHIiwJIlwwMzNcMDMzW0cifX0sCisgIHtWS19BUFBT
+LAl7IlwwMzNbNTB+IiwJIlwwMzNbNTF+IiwJIlwwMzNbNTJ+IiwJIlwwMzNb
+NTN+In19LAorICB7VktfU1BBQ0UsCXsiICIsCQkiICIsCQkiXDAiLAkJIlww
+MzMgIn19LAorICB7VktfVEFCLCAgICAgCXsiXHQiLAkJIlx0IiwJCSJcMDMz
+XHQiLAkiXDAzM1x0In19LAogICB7JzYnLAkJe05VTEwsCQlOVUxMLAkJIlww
+MzYiLAkJTlVMTH19LAotICB7MCwJCXsiIiwJCU5VTEwsCQlOVUxMLAkJTlVM
+TH19CisgIHsnMicsCQl7TlVMTCwJCU5VTEwsCQkiXDAiLAkJTlVMTH19LAor
+ICB7MHhEQiwJe05VTEwsCQlOVUxMLAkJIlwwMzciLAkJTlVMTH19LAorICB7
+MCwJCXsiXDAiLAkJTlVMTCwJCU5VTEwsCQlOVUxMfX0KIH07CiAKIGNvbnN0
+IGNoYXIgKgo=
+
+------_=_NextPart_001_01C2E79C.3F65986C--
