@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3867-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 28909 invoked by alias); 21 May 2003 16:10:46 -0000
+Return-Path: <cygwin-patches-return-3868-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 26567 invoked by alias); 21 May 2003 16:22:46 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,50 +7,101 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 28890 invoked from network); 21 May 2003 16:10:45 -0000
-X-Authentication-Warning: slinky.cs.nyu.edu: pechtcha owned process doing -bs
-Date: Wed, 21 May 2003 16:10:00 -0000
-From: Igor Pechtchanski <pechtcha@cs.nyu.edu>
-Reply-To: cygwin-patches@cygwin.com
-To: Micha Nelissen <mdvpost@hotmail.com>
-cc: cygwin-patches@cygwin.com
+Received: (qmail 26520 invoked from network); 21 May 2003 16:22:45 -0000
+Date: Wed, 21 May 2003 16:22:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
+To: cygwin-patches@cygwin.com
 Subject: Re: Patch for line draw characters problem & screen scrolling
-In-Reply-To: <BAY1-DAV29JOMyQlmLF00020bf3@hotmail.com>
-Message-ID: <Pine.GSO.4.44.0305211207540.26639-100000@slinky.cs.nyu.edu>
-Importance: Normal
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-SW-Source: 2003-q2/txt/msg00094.txt.bz2
+Message-ID: <20030521162232.GC3096@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <BAY1-DAV24HHGNZ4mF100020af2@hotmail.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BAY1-DAV24HHGNZ4mF100020af2@hotmail.com>
+User-Agent: Mutt/1.4.1i
+X-SW-Source: 2003-q2/txt/msg00095.txt.bz2
 
-On Wed, 21 May 2003, Micha Nelissen wrote:
-
-> Hi,
+On Wed, May 21, 2003 at 05:32:33PM +0200, Micha Nelissen wrote:
+>Hi,
 >
-> > First of all, this is a big patch which requires an assignment
-> > which copies over the copyright ownership to RedHat.
+>Several problems encountered and tried to fix:
 >
-> Ok, but where to send this assignment form?
+>1) line draw characters not showing up in combination Command Prompt with
+>bash.
+>2) screen scrolling fixed for termcap entry 'cs' -> screen split is very
+>fast and cool.
+>3) end-of-buffer cursor out of range; see changelog for more details.
 >
-> > Second, the ChangeLog doesn't adhere to the ChangeLog standards.
+>This is my first patch, so please don't flame ;). I am open to suggestions.
 >
-> I have taken a look at http://www.gnu.org/prep/standards_42.html. On what
-> ground(s) does it not comply?
+>Regards,
+
+>2003-05-21  Micha Nelissen  <mdvpost@hotmail.com>
 >
-> Regards,
-> Micha.
+>* fhandler.h (dev_console): add title state variables.
+>* fhandler_console.cc (get_tty_stuff): save old console title.
 
-Micha,
+Why?  This wasn't mentioned in your description of the patch.
 
-The assignment form itself (at the URL Corinna provided --
-<http://cygwin.com/contrib.html>) contains the address to mail it to.
-	Igor
--- 
-				http://cs.nyu.edu/~pechtcha/
-      |\      _,,,---,,_		pechtcha@cs.nyu.edu
-ZZZzz /,`.-'`'    -.  ;-;;,_		igor@watson.ibm.com
-     |,4-  ) )-,_. ,\ (  `'-'		Igor Pechtchanski
-    '---''(_/--'  `-'\_) fL	a.k.a JaguaR-R-R-r-r-r-.-.-.  Meow!
+>* fhandler_console.cc (macro: srTop, srBottom; char_command): scroll_region is
+>not relative to window top.
 
-"I have since come to realize that being between your mentor and his route
-to the bathroom is a major career booster."  -- Patrick Naughton
+I'm not 100% sure what you're saying here, but if you set a scroll
+region and then send a "goto line 1" escape sequence, I believe that, by
+default, you go to actual line one on the screen, not the first line of
+the scroll region.  This behavior is controlled by some escape sequence.
+rustle, rustle.  <ESC>[?6h and <ESC>[?6l
 
+>* fhandler_console.cc (scroll_screen): renamed variables sr1, sr2 to srScroll,
+>srClip respectively which is clearer.
+
+That's a gratuitous change, the bane of patch receivers everywhere.
+
+>* fhandler_console.cc (scroll_screen, char_command, write_normal): more debug
+>info.
+
+Your debug output is in a different format than the rest of the debug
+output in that file.  Granted, this is flexible, but your patch seems to
+be extremely wordy.
+
+>* fhandler_console.cc (write_normal): end of buffer check enables cursor to be
+>out of range; it better emulates *nix terminal behaviour; ie. it is now
+>possible to write a single character at right bottom of console buffer without
+>the console scrolling the buffer.
+
+How is this similar to UNIX?  If I do a:
+
+sleep 5; echo hello
+
+and then scroll my xterm up, xterm scrolls down when hello is printed.  It
+sounds like your patch would not cause this to happen.
+
+>* fhandler_console.cc (write_normal): cancelled premature optimization, do
+>always use scroll_screen instead of '\n' sometimes
+
+No.  This section of code has been hacked back and forth for years.  This
+one is not going to happen.
+
+>* fhandler_write.cc (write): if `user' clears title, then don't add `|'
+
+I must be missing something.  Why is "|" being added to the title at all?
+
+General comments about the rest of the patch:
+
+1) Please break it up into smaller sets for approval.  Large patches like
+this which attempt multiple things are difficult to review.
+
+2) There is occasional deviation from GNU coding standards in your patch.
+Specifically, there are missing spaces after commas and coercions.
+
+3) You comment out some code rather than deleting it outright.  There's
+no reason to leave old code around.
+
+4) As Corinna mentioned, you need to send in an assignment.  The contributing
+page has details.
+
+Thanks for all of your hard work on this patch.
+
+cgf
