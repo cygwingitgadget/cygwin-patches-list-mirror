@@ -1,37 +1,17 @@
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
+From: Benjamin Riefenstahl <Benjamin.Riefenstahl@epost.de>
 To: cygwin-patches@cygwin.com
-Subject: Re: uid and gid for domain accounts.
-Date: Sun, 15 Apr 2001 07:12:00 -0000
-Message-id: <20010415161230.T20490@cygbert.vinschen.de>
-References: <s1sofu2oyxc.fsf@jaist.ac.jp> <3AD5E2A6.A0B35CD1@yahoo.com> <s1slmp5q390.fsf@jaist.ac.jp>
-X-SW-Source: 2001-q2/msg00066.html
+Subject: Re: Console codepage
+Date: Sun, 15 Apr 2001 07:38:00 -0000
+Message-id: <m3puee8bz2.fsf@benny-ppc.crocodial.de>
+References: <u7l3fv26h.fsf@mail.epost.de> <20010128154852.A20701@redhat.com> <m3hezz8o0c.fsf@benny-ppc.crocodial.de> <20010408144157.A30790@redhat.com> <20010408204737.B23313@redhat.com>
+X-SW-Source: 2001-q2/msg00067.html
 
-On Fri, Apr 13, 2001 at 05:20:27AM +0900, Kazuhiro Fujieda wrote:
-> >>> On Thu, 12 Apr 2001 13:15:18 -0400
-> >>> Earnie Boyd <earnie_boyd@yahoo.com> said:
-> 
-> > Sounds great, when can we expect the patches?
-> 
-> Just now.
-> 
-> 2001-04-13  Kazuhiro Fujieda  <fujieda@jaist.ac.jp>
-> 
-> 	* mkgroup.c (enum_groups): Use RID + offset specified an additional
-> 	argument as ID.
-> 	(usage): Add description of -o option.
-> 	(longopts, opts): Add specifications of -o/--id-offset option.
-> 	(main): Add -o option. Invoke enum_groups with specified offset.
-> 	* mkpasswd.c (enum_users): Just like mkgroup.c.
-> 	(usage, longopts, opts): Ditto.
-> 	(main): Add -o option. Invoke enum_users with specified offset
-> 	only against domain accounts.
+Hi,
 
+Christopher Faylor <cgf@redhat.com> writes:
+> I made enough changes that this needs to be retested.
 
-Thanks Kazuhiro, I have just checked it in.
+Looks o.k. here with interactive tests covering the combinations of
+chcp 850 vs 1252 and CYGWIN=codepage:ansi vs oem.
 
-Corinna
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+so long, benny
