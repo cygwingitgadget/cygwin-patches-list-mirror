@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2384-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 32625 invoked by alias); 10 Jun 2002 19:56:35 -0000
+Return-Path: <cygwin-patches-return-2385-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 13734 invoked by alias); 10 Jun 2002 23:01:46 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,56 +7,46 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 32487 invoked from network); 10 Jun 2002 19:56:33 -0000
-Message-ID: <008801c210b9$248538e0$6132bc3e@BABEL>
+Received: (qmail 13706 invoked from network); 10 Jun 2002 23:01:44 -0000
+Message-ID: <017001c210d3$0077f2c0$6132bc3e@BABEL>
 From: "Conrad Scott" <Conrad.Scott@dsl.pipex.com>
 To: <cygwin-patches@cygwin.com>
-Subject: cygserver debug output patch
-Date: Mon, 10 Jun 2002 12:56:00 -0000
+References: <008801c210b9$248538e0$6132bc3e@BABEL>
+Subject: Re: cygserver debug output patch
+Date: Mon, 10 Jun 2002 16:01:00 -0000
 MIME-Version: 1.0
 Content-Type: multipart/mixed;
-	boundary="----=_NextPart_000_0085_01C210C1.860C70D0"
+	boundary="----=_NextPart_000_016D_01C210DB.61E9CDF0"
 X-Priority: 3
 X-MSMail-Priority: Normal
 X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-SW-Source: 2002-q2/txt/msg00367.txt.bz2
+X-SW-Source: 2002-q2/txt/msg00368.txt.bz2
 
 This is a multi-part message in MIME format.
 
-------=_NextPart_000_0085_01C210C1.860C70D0
+------=_NextPart_000_016D_01C210DB.61E9CDF0
 Content-Type: text/plain;
 	charset="iso-8859-1"
 Content-Transfer-Encoding: 7bit
-Content-length: 2402
+Content-length: 1959
 
-I've made some changes to the cygserver code to "harmonize" the debugging
-output. I've created a new header file, woutsup.h (and sorry for the bad
-pun), for cygserver files compiled w/o __INSIDE_CYGWIN__ (i.e. outside the
-cygwin dll).
+"Conrad Scott" <Conrad.Scott@dsl.pipex.com> wrote:
+> I've made some changes to the cygserver code to "harmonize" the debugging
+> output.
 
-This defines the same set of XXX_printf macros as does sys/strace.h: of
-these, system_printf maps to a printf on stderr and the others ditto if the
-DEBUGGING flag is given (i.e. --enable-debugging) and no-ops otherwise. They
-also use __PRETTY_FUNCTION__ to give more information about the problem
-location.
+I also realise, now that I come to run things *without* cygserver running,
+that I've made things *far* too noisy. So, here's a replacement for the
+previous patch that calms things down somewhat (i.e. the winsup.patch
+attached to this email supercedes the previous email's one). This version
+doesn't generate any output to stderr in normal running except for the
+cygserver itself (I think, hope and pray etc.).
 
-I've also added more debugging calls into the code, whenever I got really
-lost, basically :-)
+I've also attached an incremental patch (from the last version to this) for
+those who've already applied that patch (sorry about that Nicholas).
 
-Apart from that, just a couple of minor changes to a pthread_once_t
-initialisation and some pure virtual functions on the
-cygserver_transport_base class.
-
-I hope this is all fine (Robert et al). I'll continue with some more hacking
-around fun. Umm . . . sorry, make that "careful development" :-)
-
-Cheers.
+Anyhow, enjoy etc.
 
 // Conrad
-
-p.s. I've attached the new "woutsup.h" file separately as I couldn't
-convince cvs diff to put it into the patch file. I thought the -N flag
-should do it, but I had no luck. Could someone give me a hint? Thanks.
 
 2002-06-10  Conrad Scott  <conrad.scott@dsl.pipex.com>
 
@@ -90,13 +80,13 @@ should do it, but I had no luck. Could someone give me a hint? Thanks.
  (transport_layer_base::connect): Ditto.
 
 
-------=_NextPart_000_0085_01C210C1.860C70D0
+------=_NextPart_000_016D_01C210DB.61E9CDF0
 Content-Type: application/octet-stream;
 	name="winsup.patch"
 Content-Transfer-Encoding: quoted-printable
 Content-Disposition: attachment;
 	filename="winsup.patch"
-Content-length: 45805
+Content-length: 45803
 
 ? woutsup.h=0A=
 Index: cygserver.cc=0A=
@@ -1150,7 +1140,7 @@ _pipes::sec_all_nih;=0A=
        if (GetLastError () !=3D ERROR_PIPE_BUSY)=0A=
  	{=0A=
 -	  debug_printf ("Error opening the pipe (%lu)\n", GetLastError ());=0A=
-+	  system_printf ("Error opening the pipe (%lu)", GetLastError ());=0A=
++	  debug_printf ("Error opening the pipe (%lu)", GetLastError ());=0A=
  	  pipe =3D NULL;=0A=
  	  return false;=0A=
  	}=0A=
@@ -1274,7 +1264,7 @@ rrno);=0A=
    if (cygwin_connect (fd, &sockdetails, sdlen) < 0)=0A=
      {=0A=
 -      debug_printf("client connect failure %d\n", errno);=0A=
-+      system_printf("client connect failure %d", errno);=0A=
++      debug_printf("client connect failure %d", errno);=0A=
        ::close (fd);=0A=
        return false;=0A=
      }=0A=
@@ -1450,7 +1440,46 @@ diff -u -w -u -r1.3 cygserver_transport.h=0A=
 =20=0A=
  #endif /* _CYGSERVER_TRANSPORT_ */=0A=
 
-------=_NextPart_000_0085_01C210C1.860C70D0
+------=_NextPart_000_016D_01C210DB.61E9CDF0
+Content-Type: text/plain;
+	name="ChangeLog.txt"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+	filename="ChangeLog.txt"
+Content-length: 1232
+
+2002-06-10  Conrad Scott  <conrad.scott@dsl.pipex.com>
+
+	* cygserver.cc: Move to "woutsup.h". Use new XXX_printf functions
+	throughout.
+	* cygserver_client.cc: Ditto.
+	* cygserver_process.cc: Ditto.
+	(process_init): Initialise with PTHREAD_ONCE_INIT.
+	* cygserver_shm.cc: Move to "woutsup.h". Use new XXX_printf
+	functions throughout.
+	* cygserver_transport.cc: Ditto.
+	(transport_layer_base::transport_layer_base): Removed (redundant).
+	(transport_layer_base::listen): Now pure virtual.
+	(transport_layer_base::accept): Ditto.
+	(transport_layer_base::close): Ditto.
+	(transport_layer_base::read): Ditto.
+	(transport_layer_base::write): Ditto.
+	(transport_layer_base::connect): Ditto.
+	* cygserver_transport_pipes.cc: Move to "woutsup.h". Use new
+	XXX_printf functions throughout.
+	* cygserver_transport_sockets.cc: Ditto.
+	* threaded_queue.cc: Ditto.
+	* woutsup.h: New file.
+	* include/cygwin/cygserver_transport.h
+	(transport_layer_base::transport_layer_base): Removed (redundant).
+	(transport_layer_base::listen): Now pure virtual.
+	(transport_layer_base::accept): Ditto.
+	(transport_layer_base::close): Ditto.
+	(transport_layer_base::read): Ditto.
+	(transport_layer_base::write): Ditto.
+	(transport_layer_base::connect): Ditto.
+
+------=_NextPart_000_016D_01C210DB.61E9CDF0
 Content-Type: application/octet-stream;
 	name="woutsup.h"
 Content-Transfer-Encoding: quoted-printable
@@ -1564,44 +1593,38 @@ extern "C" DWORD WINAPI GetLastError (void);=0A=
 #define thread_printf __noop_printf=0A=
 #endif=0A=
 
-------=_NextPart_000_0085_01C210C1.860C70D0
-Content-Type: text/plain;
-	name="ChangeLog.txt"
-Content-Transfer-Encoding: 7bit
+------=_NextPart_000_016D_01C210DB.61E9CDF0
+Content-Type: application/octet-stream;
+	name="incremental.patch"
+Content-Transfer-Encoding: quoted-printable
 Content-Disposition: attachment;
-	filename="ChangeLog.txt"
-Content-length: 1232
+	filename="incremental.patch"
+Content-length: 1002
 
-2002-06-10  Conrad Scott  <conrad.scott@dsl.pipex.com>
+--- cygserver_transport_sockets.cc	2002-06-10 23:55:44.000000000 +0100=0A=
++++ /pack/src/cygwin/HEAD.src/winsup/cygwin/cygserver_transport_sockets.cc	=
+2002-06-10 23:51:32.000000000 +0100=0A=
+@@ -125,7 +125,7 @@=0A=
+   fd =3D cygwin_socket (AF_UNIX, SOCK_STREAM, 0);=0A=
+   if (cygwin_connect (fd, &sockdetails, sdlen) < 0)=0A=
+     {=0A=
+-      system_printf("client connect failure %d", errno);=0A=
++      debug_printf("client connect failure %d", errno);=0A=
+       ::close (fd);=0A=
+       return false;=0A=
+     }=0A=
+--- cygserver_transport_pipes.cc	2002-06-10 23:55:31.000000000 +0100=0A=
++++ /pack/src/cygwin/HEAD.src/winsup/cygwin/cygserver_transport_pipes.cc	20=
+02-06-10 23:51:32.000000000 +0100=0A=
+@@ -175,7 +175,7 @@=0A=
+=20=0A=
+       if (GetLastError () !=3D ERROR_PIPE_BUSY)=0A=
+ 	{=0A=
+-	  system_printf ("Error opening the pipe (%lu)", GetLastError ());=0A=
++	  debug_printf ("Error opening the pipe (%lu)", GetLastError ());=0A=
+ 	  pipe =3D NULL;=0A=
+ 	  return false;=0A=
+ 	}=0A=
 
-	* cygserver.cc: Move to "woutsup.h". Use new XXX_printf functions
-	throughout.
-	* cygserver_client.cc: Ditto.
-	* cygserver_process.cc: Ditto.
-	(process_init): Initialise with PTHREAD_ONCE_INIT.
-	* cygserver_shm.cc: Move to "woutsup.h". Use new XXX_printf
-	functions throughout.
-	* cygserver_transport.cc: Ditto.
-	(transport_layer_base::transport_layer_base): Removed (redundant).
-	(transport_layer_base::listen): Now pure virtual.
-	(transport_layer_base::accept): Ditto.
-	(transport_layer_base::close): Ditto.
-	(transport_layer_base::read): Ditto.
-	(transport_layer_base::write): Ditto.
-	(transport_layer_base::connect): Ditto.
-	* cygserver_transport_pipes.cc: Move to "woutsup.h". Use new
-	XXX_printf functions throughout.
-	* cygserver_transport_sockets.cc: Ditto.
-	* threaded_queue.cc: Ditto.
-	* woutsup.h: New file.
-	* include/cygwin/cygserver_transport.h
-	(transport_layer_base::transport_layer_base): Removed (redundant).
-	(transport_layer_base::listen): Now pure virtual.
-	(transport_layer_base::accept): Ditto.
-	(transport_layer_base::close): Ditto.
-	(transport_layer_base::read): Ditto.
-	(transport_layer_base::write): Ditto.
-	(transport_layer_base::connect): Ditto.
-
-------=_NextPart_000_0085_01C210C1.860C70D0--
+------=_NextPart_000_016D_01C210DB.61E9CDF0--
 
