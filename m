@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1867-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 29822 invoked by alias); 13 Feb 2002 02:53:03 -0000
+Return-Path: <cygwin-patches-return-1868-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 18033 invoked by alias); 18 Feb 2002 22:20:48 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,37 +7,63 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 29787 invoked from network); 13 Feb 2002 02:53:02 -0000
-Date: Mon, 18 Feb 2002 14:20:00 -0000
-From: Christopher Faylor <cgf@redhat.com>
-To: cygwin-patches@cygwin.com
-Cc: cygwin@cygwin.com
-Subject: Re: RCS 5.7 (?)
-Message-ID: <20020213025259.GK28002@redhat.com>
-Reply-To: cygwin@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com, cygwin@cygwin.com
-References: <004601c1b437$4c883380$2801a8c0@dcuthbert2k> <005801c1b438$abcc8480$2801a8c0@dcuthbert2k>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <005801c1b438$abcc8480$2801a8c0@dcuthbert2k>
-User-Agent: Mutt/1.3.23.1i
-X-SW-Source: 2002-q1/txt/msg00224.txt.bz2
+Received: (qmail 17959 invoked from network); 18 Feb 2002 22:20:40 -0000
+Message-ID: <000201c1b8ca$74cd7110$f400a8c0@mchasecompaq>
+From: "Michael A Chase" <mchase@ix.netcom.com>
+To: <cygwin-patches@cygwin.com>
+Subject: [PATCH]Correct setup.exe log file line endings
+Date: Mon, 18 Feb 2002 15:00:00 -0000
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+	boundary="----=_NextPart_000_0005_01C1B886.B9B1A4C0"
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-SW-Source: 2002-q1/txt/msg00225.txt.bz2
 
-On Wed, Feb 13, 2002 at 11:46:43AM +0900, Dylan Cuthbert wrote:
->Weird - I notice that RCS 5.7 is in the setup package listing.  Is this
->really the case?
+This is a multi-part message in MIME format.
 
-Of course.
+------=_NextPart_000_0005_01C1B886.B9B1A4C0
+Content-Type: text/plain;
+	charset="Windows-1252"
+Content-Transfer-Encoding: 7bit
+Content-length: 500
 
->I have the full installation of cygwin 1.39 but the standard rcs
->command set (rcs/rdiff etc) doesn't seem to exist?
+The log_save() currently writes "'" instead of "\n" at the end of log lines
+that don't already have "\n" at the end.
+--
+Mac :})
+** I normally forward private questions to the appropriate mail list. **
+Ask Smarter: http://www.tuxedo.org/~esr/faqs/smart-questions.htm
+Give a hobbit a fish and he eats fish for a day.
+Give a hobbit a ring and he eats fish for an age.
 
-Cygwin 1.3.9 is the DLL version number.  It has no bearing on RCS.  If
-you don't have RCS on your system, you need to run setup.exe again and
-select it for installation.  It doesn't happen automatically.
+ChangeLog:
 
-I've redirected this query to cygwin@cygwin.com.  Please confine
-responses to that mailing list.  This doesn't belong on cygwin-patches.
+2002-02-18  Michael A Chase <mchase@ix.netcom.com>
 
-cgf
+    * log.cc (log_save): Put "\n" at end of log lines instead of "'".
+
+------=_NextPart_000_0005_01C1B886.B9B1A4C0
+Content-Type: application/octet-stream;
+	name="cinstall-mac-020218-1.patch"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment;
+	filename="cinstall-mac-020218-1.patch"
+Content-length: 360
+
+--- log.cc-0	Mon Feb 18 11:19:22 2002=0A=
++++ log.cc	Mon Feb 18 13:58:51 2002=0A=
+@@ -106,7 +106,7 @@ log_save (int babble, String const &file=0A=
+ 	  char *tstr =3D l->msg.cstr();=0A=
+ 	  f->write (tstr, strlen (tstr));=0A=
+ 	  if (tstr[strlen (tstr) - 1] !=3D '\n')=0A=
+-	    f->write ("'\n", 1);=0A=
++	    f->write ("\n", 1);=0A=
+ 	}=0A=
+     }=0A=
+=20=0A=
+
+------=_NextPart_000_0005_01C1B886.B9B1A4C0--
+
