@@ -1,25 +1,25 @@
-From: Corinna Vinschen <cygwin-patches@cygwin.com>
+From: Christopher Faylor <cgf@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: try to enable appropriate privilege before loading user's hive
-Date: Tue, 14 Aug 2001 02:23:00 -0000
-Message-id: <20010814112347.B17709@cygbert.vinschen.de>
-References: <19956432105.20010814122213@logos-m.ru>
-X-SW-Source: 2001-q3/msg00079.html
+Subject: Re: patch for cygpath
+Date: Tue, 14 Aug 2001 20:25:00 -0000
+Message-id: <20010814232550.A10958@redhat.com>
+References: <C2D7D58DBFE9D111B0480060086E963504AC5262@mail.gft.de> <20010807115941.F27996@redhat.com>
+X-SW-Source: 2001-q3/msg00080.html
 
-On Tue, Aug 14, 2001 at 12:22:13PM +0400, egor duda wrote:
-> Hi!
-> 
->   i've noticed that sshd fails to load user's hive even when run from
-> LocalSystem account. I wonder if there's somthing wrong in my config
-> or we should apply this patch?
-> 
-> egor.            mailto:deo@logos-m.ru icq 5165414 fidonet 2:5020/496.19
+On Tue, Aug 07, 2001 at 11:59:41AM -0400, Christopher Faylor wrote:
+>I don't have much of an opinion on this patch however it seems to
+>needlessly complicate cygpath for minimal gain.
+>
+>I also don't see why cygpath would need to output the windows version of
+>windows/system.  That sort of bypasses the "cyg" part of things.
+>
+>However, I'm willing to be overruled if people have a strong opinion
+>about this.
 
-Thanks for tracking that down. Please check it in,
+The votes were in favor for this patch so I have checked it in.
 
-Corinna
+Thanks for your time and effort in creating this patch.
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Developer                                mailto:cygwin@cygwin.com
-Red Hat, Inc.
+I also appreciate the nice ChangeLog entry.  :-)
+
+cgf
