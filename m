@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4658-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 27161 invoked by alias); 10 Apr 2004 00:51:17 -0000
+Return-Path: <cygwin-patches-return-4659-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 2942 invoked by alias); 10 Apr 2004 00:53:25 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,31 +7,42 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 27117 invoked from network); 10 Apr 2004 00:51:15 -0000
-Date: Sat, 10 Apr 2004 00:51:00 -0000
+Received: (qmail 2776 invoked from network); 10 Apr 2004 00:53:24 -0000
+Date: Sat, 10 Apr 2004 00:53:00 -0000
 From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [Patch]: path.cc
-Message-ID: <20040410005113.GA4147@coe>
+Subject: Re: [PATCH] thread self handling revised
+Message-ID: <20040410005322.GA3972@coe>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3.0.5.32.20040404095756.00804cc0@incoming.verizon.net> <3.0.5.32.20040403214940.007f2650@incoming.verizon.net> <3.0.5.32.20040403214940.007f2650@incoming.verizon.net> <3.0.5.32.20040404095756.00804cc0@incoming.verizon.net> <3.0.5.32.20040404234622.00800100@incoming.verizon.net>
+References: <14630.1080813525@www21.gmx.net>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3.0.5.32.20040404234622.00800100@incoming.verizon.net>
+In-Reply-To: <14630.1080813525@www21.gmx.net>
 User-Agent: Mutt/1.4.1i
-X-OriginalArrivalTime: 10 Apr 2004 00:50:08.0541 (UTC) FILETIME=[C57BECD0:01C41E95]
-X-SW-Source: 2004-q2/txt/msg00010.txt.bz2
+X-OriginalArrivalTime: 10 Apr 2004 00:52:16.0645 (UTC) FILETIME=[11D70B50:01C41E96]
+X-SW-Source: 2004-q2/txt/msg00011.txt.bz2
 
-On Sun, Apr 04, 2004 at 11:46:22PM -0400, Pierre A. Humblet wrote:
->2004-04-05  Pierre Humblet <pierre.humblet@ieee.org>
+On Thu, Apr 01, 2004 at 11:58:45AM +0200, Thomas Pfaff wrote:
+>Rethinking the changes to pthread::init_mainthread i came to the conclusion
+>that this stuff can be made simpler and cleaner.
+>The changes to init_maintread are reverted, the thread self pointer for an
+>unknown thread is now set in pthread::self.
 >
->	* path.cc (path_conv::check): Optimize symlink replacements.
+>2004-04-01  Thomas Pfaff  <tpfaff@gmx.net>
+>
+>	* thread.h (pthread::init_mainthread): Remove parameter forked.
+>	(pthread::set_tls_self_pointer): New static function.
+>	* thread.cc (MTinterface::fixup_after_fork): Change call to
+>	pthread::init_mainthread.
+>	(pthread::init_mainthread): Remove parameter forked. Simplify
+>	thread self pointer handling.
+>	(pthread::self): Set thread self pointer to null_pthread if
+>	thread has not been initialized.
+>	(pthread::set_tls_self_pointer): New static function.
 
-I've checked both of these in and am generating a snapshot now.
+Applied.  Sorry for the delay.
 
-Could you advertise its existence on cygwin at cygwin, Pierre?  I think
-we need feedback on these changes before we go live with a new release.
-
+Thanks,
 cgf
