@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4831-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 10940 invoked by alias); 8 Jun 2004 10:01:18 -0000
+Return-Path: <cygwin-patches-return-4832-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 14503 invoked by alias); 8 Jun 2004 10:12:00 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,68 +7,38 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 10921 invoked from network); 8 Jun 2004 10:01:16 -0000
-Date: Tue, 08 Jun 2004 10:01:00 -0000
-From: Corinna Vinschen <vinschen@redhat.com>
+Received: (qmail 14481 invoked from network); 8 Jun 2004 10:11:56 -0000
+Message-ID: <40C59105.1000202@msgid.corpit.ru>
+Date: Tue, 08 Jun 2004 10:12:00 -0000
+From: Egor Duda <deo@corpit.ru>
+User-Agent: Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.6) Gecko/20040413 Debian/1.6-5
+MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
 Subject: Re: make IPC_INFO visible to ipc system utilities only
-Message-ID: <20040608100117.GA17957@cygbert.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <40C5871E.9010801@msgid.corpit.ru>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <40C5871E.9010801@msgid.corpit.ru>
-User-Agent: Mutt/1.4.2i
-X-SW-Source: 2004-q2/txt/msg00183.txt.bz2
+References: <40C5871E.9010801@msgid.corpit.ru> <20040608100117.GA17957@cygbert.vinschen.de>
+In-Reply-To: <20040608100117.GA17957@cygbert.vinschen.de>
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2004-q2/txt/msg00184.txt.bz2
 
-On Jun  8 13:30, Egor Duda wrote:
-> Hi!
+Corinna Vinschen wrote:
+>>Currently IPC_INFO is defined whenever we include sys/sem.h, but struct
+>>seminfo, which is returned by semctl(IPC_INFO) is defined only for
+>>_KERNEL applications. This inconsistency breaks, for instance,
+>>libmudflap builds. I believe there's no point to have IPC_INFO in
+>>non-_KERNEL application
 > 
-> Currently IPC_INFO is defined whenever we include sys/sem.h, but struct
-> seminfo, which is returned by semctl(IPC_INFO) is defined only for
-> _KERNEL applications. This inconsistency breaks, for instance,
-> libmudflap builds. I believe there's no point to have IPC_INFO in
-> non-_KERNEL application
-
-  as long as we can't get semctl(IPC_INFO) results right anyway.
-  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  What is the author trying to tell me here?!?
-
-Corinna
-
-> Patch attached.
 > 
-> egor
-> 
+>   as long as we can't get semctl(IPC_INFO) results right anyway.
+>   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   What is the author trying to tell me here?!?
 
-> 2004-Jun-08  Egor Duda <deo@corpit.ru>
-> 
-> 	* include/cygwin/ipc.h: Make IPC_INFO visible only for ipc system
-> 	utilities, to make it consistent with declaration of struct seminfo.
-> 
+I was unclear here, probably. I meant that "userspace application", i.e. 
+application which includes sys/sem.h but don't define _KERNEL, may call 
+semctl(IPC_INFO), but result of this call will have no meaning for 
+application since it can't interpret it.
 
-> Index: include/cygwin/ipc.h
-> ===================================================================
-> RCS file: /cvs/src/src/winsup/cygwin/include/cygwin/ipc.h,v
-> retrieving revision 1.6
-> diff -u -p -2 -r1.6 ipc.h
-> --- include/cygwin/ipc.h	3 Jun 2004 19:51:10 -0000	1.6
-> +++ include/cygwin/ipc.h	8 Jun 2004 07:27:29 -0000
-> @@ -49,5 +49,8 @@ struct ipc_perm
->  #define IPC_SET  0x1001		/* Set options. */
->  #define IPC_STAT 0x1002		/* Get options. */
-> +
-> +#ifdef _KERNEL
->  #define IPC_INFO 0x1003		/* For ipcs(8). */
-> +#define
->  
->  #ifdef _KERNEL
-> 
+So by "we" in underscored sentence i meant "userspace", non-system ipc 
+application.
 
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Co-Project Leader          mailto:cygwin@cygwin.com
-Red Hat, Inc.
+egor
