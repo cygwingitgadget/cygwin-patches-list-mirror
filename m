@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1650-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 14198 invoked by alias); 3 Jan 2002 09:46:40 -0000
+Return-Path: <cygwin-patches-return-1651-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 18141 invoked by alias); 3 Jan 2002 09:54:20 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,178 +7,403 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 14184 invoked from network); 3 Jan 2002 09:46:40 -0000
-From: "Gary R. Van Sickle" <g.r.vansickle@worldnet.att.net>
-To: "Robert Collins" <robert.collins@itdomain.com.au>
+Received: (qmail 18125 invoked from network); 3 Jan 2002 09:54:14 -0000
+Message-ID: <08f801c1943c$9ea47090$0200a8c0@lifelesswks>
+From: "Robert Collins" <robert.collins@itdomain.com.au>
+To: "Gary R. Van Sickle" <g.r.vansickle@worldnet.att.net>
 Cc: <cygwin-patches@cygwin.com>
-Subject: RE: setup.exe remove scripts [Was: Re: experimental texmf packages]
-Date: Thu, 03 Jan 2002 01:46:00 -0000
-Message-ID: <NCBBIHCHBLCMLBLOBONKKEDICIAA.g.r.vansickle@worldnet.att.net>
+References: <NCBBIHCHBLCMLBLOBONKKEDICIAA.g.r.vansickle@worldnet.att.net>
+Subject: Re: setup.exe remove scripts [Was: Re: experimental texmf packages]
+Date: Thu, 03 Jan 2002 01:54:00 -0000
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
-	boundary="----=_NextPart_000_0005_01C19409.3F280B50"
-X-Priority: 3 (Normal)
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook IMO, Build 9.0.2416 (9.0.2911.0)
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-In-Reply-To: <08d701c19438$cbf8bc80$0200a8c0@lifelesswks>
-Importance: Normal
-X-SW-Source: 2002-q1/txt/msg00007.txt.bz2
-
-This is a multi-part message in MIME format.
-
-------=_NextPart_000_0005_01C19409.3F280B50
 Content-Type: text/plain;
 	charset="iso-8859-1"
 Content-Transfer-Encoding: 7bit
-Content-length: 1139
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-OriginalArrivalTime: 03 Jan 2002 09:54:12.0144 (UTC) FILETIME=[988D7300:01C1943C]
+X-SW-Source: 2002-q1/txt/msg00008.txt.bz2
 
-> -----Original Message-----
-> From: Robert Collins [mailto:robert.collins@itdomain.com.au]
-> Sent: Thursday, January 03, 2002 3:27 AM
-> To: Jan Nieuwenhuizen; Gary R. Van Sickle
-> Cc: cygwin-patches@cygwin.com
-> Subject: Re: setup.exe remove scripts [Was: Re: experimental texmf
-> packages]
+
+===
+----- Original Message -----
+From: "Gary R. Van Sickle" <g.r.vansickle@worldnet.att.net>
+To: "Robert Collins" <robert.collins@itdomain.com.au>
+Cc: <cygwin-patches@cygwin.com>
+Sent: Thursday, January 03, 2002 8:46 PM
+Subject: RE: setup.exe remove scripts [Was: Re: experimental texmf
+packages]
+
+
+> > -----Original Message-----
+> > From: Robert Collins [mailto:robert.collins@itdomain.com.au]
+> > Sent: Thursday, January 03, 2002 3:27 AM
+> > To: Jan Nieuwenhuizen; Gary R. Van Sickle
+> > Cc: cygwin-patches@cygwin.com
+> > Subject: Re: setup.exe remove scripts [Was: Re: experimental texmf
+> > packages]
+> >
+> >
+> > Right.  I completley naffed my sandbox with Gary's work in it :[.
+> >
+> > Gary... can I please have that missing bit of the changelog?
+> >
+> > Jan, I'll get your patch in straight after I commit Gary's.
+> >
 >
->
-> Right.  I completley naffed my sandbox with Gary's work in it :[.
->
-> Gary... can I please have that missing bit of the changelog?
->
-> Jan, I'll get your patch in straight after I commit Gary's.
->
+> Attached, but see my last comment in my previous post - it appears to
+be broken
+> as far as downloading setup.ini now.  Don't know if it's you or me or
+what yet.
 
-Attached, but see my last comment in my previous post - it appears to be broken
-as far as downloading setup.ini now.  Don't know if it's you or me or what yet.
+You :]. Well probably :]. One step at a time. As I wrote, I totalled
+*trashed* my sandbox.
 
-Will also send a new diff against a current cvs update as soon the load average
-goes down and I can get in, if that will be of any help.  Otherwise feel free to
-ignore it, there's only one non-cvs-diff-related change, in Makefile.in (and
-this line is *not* in the attached changelog on the assumption you won't need
-the patch):
+> Will also send a new diff against a current cvs update as soon the
+load average
+> goes down and I can get in, if that will be of any help.  Otherwise
+feel free to
+> ignore it, there's only one non-cvs-diff-related change, in
+Makefile.in (and
+> this line is *not* in the attached changelog on the assumption you
+won't need
+> the patch):
 
-	* Makefile.in (iniparse.cc iniparse.h): Change "@mv iniparse.cc.h iniparse.h"
-to "@mv iniparse.hh iniparse.h".
+I'd love a patch with the following:
+ * cistring.cc: Ran d2u.
+ * cistring.h: Ditto.
+ * desktop.h: Ditto.
+ * localdir.h: Ditto.
+ * net.h: Ditto.
+ * proppage.h: Ditto.
+ * propsheet.h: Ditto.
+ * root.h: Ditto.
+ * source.h: Ditto.
+ * splash.h: Ditto.
+ * threebar.cc: Ditto.
+ * threebar.h: Ditto.
 
---
-Gary R. Van Sickle
-Brewer.  Patriot.
+and all *your* changes as per the last patch you gave me, that doesn't
+back out any previous patches from Chris or me..
+Such a patch would save me a huge amount of time. I'm attaching a sample
+file so you can see my confusion... (it's the double >>>> 's that are
+worrying me.)
 
-------=_NextPart_000_0005_01C19409.3F280B50
-Content-Type: application/octet-stream;
-	name="ChangeLog.setup.grvs"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment;
-	filename="ChangeLog.setup.grvs"
-Content-length: 4700
+As for your Makefile.in iniparse Change, I think that's wrong (at first
+glance) as Chris already patched that to allow both new and old bisons.
 
-2001-12-30  Gary R. Van Sickle  <g.r.vansickle@worldnet.att.net>=0A=
-=0A=
-	* res.rc: Resize and rearrange property page dialog templates=0A=
-	to bring them in line with "Microsoft's Backward Compatible Wizard 97"=0A=
-	specification.=0A=
-	(IDD_SITE): Add an edit control and an "Add" button in order to=0A=
-	combine the IDD_SITE and IDD_OTHER_URL functionality onto one page.=0A=
-	(IDD_OTHER_URL): Remove dialog template.=0A=
-	(IDD_DLSTATUS): Remove dialog template.=0A=
-=0A=
-	* propsheet.cc (PropSheetProc): New function.  Add minimize box=0A=
-	here instead of in PropertyPage::DialogProc.=0A=
-	(PropSheet::Create): Change to use creation callback PropSheetProc.=0A=
-	(DLGTEMPLATEEX): Add 'hidden' Windows struct definition.=0A=
-=0A=
-	* propsheet.h: Run indent.=0A=
-	* proppage.h: Run indent.=0A=
-=0A=
-	* proppage.cc (PropertyPage::DialogProc): Remove minimize-box-adding=0A=
-	functionality.  Remove commented-out "PropSheet_SetWizButtons" calls.=0A=
-	Add support for calling virtual OnMessageCmd.  Add setting of fonts in=0A=
-	WM_INITDIALOG handler.=0A=
-	(resource.h): New include for resource IDs.=0A=
-=0A=
-	* site.cc (SitePage::OnBack): Remove NEXT() macro invocation.=0A=
-	(SitePage::OnActivate): New member function.=0A=
-	(load_dialog): Remove.  Functionality subsumed into=0A=
-	SitePage::OnActivate.=0A=
-	(save_dialog): Change to support both list and user URLs.  Remove=0A=
-	OTHER_IDX and mirror_idx logic.=0A=
-	(SitePage::PopulateListBox): New member function.=0A=
-	(SitePage::CheckControlsAndDisableAccordingly): New member function.=0A=
-	(SitePage::OnMessageCmd): New override.=0A=
-	(check_if_enable_next): Remove.=0A=
-	(dialog_cmd): Remove.=0A=
-	(do_download_site_info_thread): Remove calls to NEXT() macro.=0A=
-	(SitePage::Create): Call the single-param PropertyPage::Create=0A=
-	overload.=0A=
-	(other_url): New static taken from other.cc.=0A=
-	(SitePage::OnNext): Remove mirror_idx logic.=0A=
-	(SitePage::OnInit): Remove "Other URL" entry from list box.  Remove=0A=
-	list box populating code, now handled in SitePage::PopulateListBox.=0A=
-	(mirror_idx, NO_IDX, OTHER_IDX): Remove.=0A=
-	(save_site_url): Fix potential buffer overflow problem.  Switched to=0A=
-	TCHAR in grossly premature preparation for multilingual support.=0A=
-	* site.h (SitePage::OnActivate): New member function.=0A=
-	(SitePage::CheckControlsAndDisableAccordingly) New member.=0A=
-	(SitePage::OnMessageCmd): New override.=0A=
-	(do_download_site_info_thread): Add MessageBox call on failure to=0A=
-	download site list.=0A=
-=0A=
-	* splash.cc (SplashPage::OnInit): Set the font for the title.=0A=
-=0A=
-	* window.h (Window::IsButtonChecked): New member function declaration.=0A=
-	(Window::OnMessageCmd): New member function.=0A=
-	(Window::SetDlgItemFont): New member function declaration.=0A=
-	(Window::MAXFONTS, Window::Fonts, Window::FontCounter): New data=0A=
-	members.=0A=
-	* window.cc (Window::IsButtonChecked): New member function definition.=0A=
-	(Window::SetDlgItemFont): New member function definition.=0A=
-	(Window::Window): Add initialization for FontCounter.=0A=
-	(Window::~Window): Delete any fonts we created.=0A=
-=0A=
-	* desktop.cc (etc_profile): Remove "test -f ./.bashrc && . ./.bashrc"=0A=
-	from the generated /etc/profile.  Bash will source this file=0A=
-	automatically, and having this here merely results in .bashrc being=0A=
-	executed twice.=0A=
-=0A=
-	* geturl.cc (progress): Remove the "3" field width from the "%3d"=0A=
-	percent-complete format indicator.  Causes line to not start at=0A=
-	beginning of text box, and does little to help with "jumping", since=0A=
-	the "bytes downloaded so far" field is variable-width anyway.  Change=0A=
-	kb/s format field to "%03.1" to 0-pad the kb/s number in the event of=0A=
-	painfully slow connections, or temporary slowdowns in faster=0A=
-	connections should such more-instantaneous functionality become=0A=
-	available.=0A=
-=0A=
-	* net.h (NetPage::OnMessageCmd): New member function declaration.=0A=
-	(NetPage::CheckIfEnableNext): New member function declaration.=0A=
-	* net.cc (NetPage::OnMessageCmd): New member function definition.=0A=
-	(dialog_cmd): Remove, subsumed into NetPage::OnMessageCmd.=0A=
-	(check_if_enable_next): Remove.=0A=
-	(NetPage::CheckIfEnableNext): New member function, subsumes=0A=
-	check_if_enable_next.=0A=
-	(propsheet.h): Add include.=0A=
-	(NetPage::Init): Add call to CheckIfEnableNext.=0A=
-	(load_dialog): Remove call to check_if_enable_next.=0A=
-	(NetPage::Create): Call single-template-ID-parameter overload of=0A=
-	PropertyPage::Create instead of three-parameter one.=0A=
-=0A=
-	* Makefile.in (OBJS): Remove other.o.=0A=
-	* other.cc: Remove file.=0A=
-=0A=
-=0A=
-=0A=
-=0A=
-=0A=
-=0A=
-=0A=
-=0A=
-=0A=
-=0A=
-=0A=
-=0A=
-=0A=
-=0A=
-=0A=
+Rob
 
-------=_NextPart_000_0005_01C19409.3F280B50--
+=== net.cc (stuffed) ===
+/*
+ * Copyright (c) 2000, Red Hat, Inc.
+ *
+ *     This program is free software; you can redistribute it and/or
+modify
+ *     it under the terms of the GNU General Public License as published
+by
+ *     the Free Software Foundation; either version 2 of the License, or
+ *     (at your option) any later version.
+ *
+ *     A copy of the GNU General Public License can be found at
+ *     http://www.gnu.org/
+ *
+ * Written by DJ Delorie <dj@cygnus.com>
+ *
+ */
+
+/* The purpose of this file is to get the network configuration
+   information from the user. */
+
+#if 0
+static const char *cvsid =
+  "\n%%% $Id: net.cc,v 2.8 2001/12/23 12:13:29 rbcollins Exp $\n";
+#endif
+
+#include "win32.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include "dialog.h"
+#include "resource.h"
+#include "state.h"
+#include "msg.h"
+#include "log.h"
+
+<<<<<<< net.cc
+<<<<<<< net.cc
+#include "net.h"
+#include "propsheet.h"
+#include "threebar.h"
+extern ThreeBarProgressPage Progress;
+
+=======
+>>>>>>> 2.7
+=======
+#include "net.h"
+
+#include "threebar.h"
+extern ThreeBarProgressPage Progress;
+
+>>>>>>> 2.8
+static int rb[] = { IDC_NET_IE5, IDC_NET_DIRECT, IDC_NET_PROXY, 0 };
+
+void
+NetPage::CheckIfEnableNext ()
+{
+  int e = 0, p = 0, pu = 0;
+  DWORD ButtonFlags = PSWIZB_BACK;
+
+  if (net_method == IDC_NET_IE5)
+    pu = 1;
+  if (net_method == IDC_NET_IE5 || net_method == IDC_NET_DIRECT)
+    e = 1;
+  else if (net_method == IDC_NET_PROXY)
+    {
+      p = pu = 1;
+      if (net_proxy_host && net_proxy_port)
+ e = 1;
+    }
+ if (e)
+ {
+  // There's something in the proxy and port boxes, enable "Next".
+  ButtonFlags |= PSWIZB_NEXT;
+ }
+
+  GetOwner ()->SetButtons (ButtonFlags);
+
+  EnableWindow (GetDlgItem (IDC_PROXY_HOST), p);
+  EnableWindow (GetDlgItem (IDC_PROXY_PORT), p);
+}
+
+static void
+load_dialog (HWND h)
+{
+  rbset (h, rb, net_method);
+  eset (h, IDC_PROXY_HOST, net_proxy_host);
+  if (net_proxy_port == 0)
+    net_proxy_port = 80;
+  eset (h, IDC_PROXY_PORT, net_proxy_port);
+}
+
+static void
+save_dialog (HWND h)
+{
+  net_method = rbget (h, rb);
+  net_proxy_host = eget (h, IDC_PROXY_HOST, net_proxy_host);
+  net_proxy_port = eget (h, IDC_PROXY_PORT);
+}
+
+<<<<<<< net.cc
+bool
+NetPage::Create ()
+=======
+static BOOL
+dialog_cmd (HWND h, int id, HWND hwndctl, UINT code)
+{
+  switch (id)
+    {
+
+    case IDC_NET_IE5:
+    case IDC_NET_DIRECT:
+    case IDC_NET_PROXY:
+    case IDC_PROXY_HOST:
+    case IDC_PROXY_PORT:
+      save_dialog (h);
+      check_if_enable_next (h);
+      break;
+    }
+  return 0;
+}
+
+bool
+NetPage::Create ()
+>>>>>>> 2.8
+{
+<<<<<<< net.cc
+  return PropertyPage::Create (IDD_NET);
+=======
+  return PropertyPage::Create (NULL, dialog_cmd, IDD_NET);
+>>>>>>> 2.8
+}
+
+void
+NetPage::OnInit ()
+{
+  HWND h = GetHWND ();
+
+  net_method = IDC_NET_DIRECT;
+<<<<<<< net.cc
+  load_dialog (h);
+  CheckIfEnableNext();
+
+  // Check to see if any radio buttons are selected. If not, select a
+default.
+  if ((!SendMessage (GetDlgItem (IDC_NET_IE5), BM_GETCHECK, 0, 0) ==
+       BST_CHECKED)
+      && (!SendMessage (GetDlgItem (IDC_NET_PROXY), BM_GETCHECK, 0, 0)
+   == BST_CHECKED))
+    {
+      SendMessage (GetDlgItem (IDC_NET_DIRECT), BM_CLICK, 0, 0);
+    }
+}
+
+<<<<<<< net.cc
+long
+NetPage::OnNext ()
+{
+  save_dialog (GetHWND ());
+=======
+  load_dialog (h);
+
+  // Check to see if any radio buttons are selected. If not, select a
+default.
+  if ((!SendMessage (GetDlgItem (IDC_NET_IE5), BM_GETCHECK, 0, 0) ==
+       BST_CHECKED)
+      && (!SendMessage (GetDlgItem (IDC_NET_PROXY), BM_GETCHECK, 0, 0)
+   == BST_CHECKED))
+    {
+      SendMessage (GetDlgItem (IDC_NET_DIRECT), BM_CLICK, 0, 0);
+    }
+}
+
+long
+NetPage::OnNext ()
+{
+  save_dialog (GetHWND ());
+>>>>>>> 2.8
+
+  log (0, "net: %s",
+       (net_method == IDC_NET_IE5) ? "IE5" :
+       (net_method == IDC_NET_DIRECT) ? "Direct" : "Proxy");
+<<<<<<< net.cc
+
+  Progress.SetActivateTask (WM_APP_START_SITE_INFO_DOWNLOAD);
+  return IDD_INSTATUS;
+}
+
+long
+NetPage::OnBack ()
+{
+  save_dialog (GetHWND ());
+=======
+    case IDC_NET_IE5:
+    case IDC_NET_DIRECT:
+    case IDC_NET_PROXY:
+    case IDC_PROXY_HOST:
+    case IDC_PROXY_PORT:
+      save_dialog (h);
+      check_if_enable_next (h);
+      break;
+
+    case IDOK:
+      save_dialog (h);
+      switch (source)
+ {
+ case IDC_SOURCE_NETINST:
+ case IDC_SOURCE_DOWNLOAD:
+   NEXT (IDD_SITE);
+   break;
+ case IDC_SOURCE_CWD:
+   NEXT (0);
+   break;
+ default:
+   msg ("source is default? %d\n", source);
+   NEXT (0);
+ }
+      break;
+
+    case IDC_BACK:
+      save_dialog (h);
+      NEXT (IDD_LOCAL_DIR);
+      break;
+
+    case IDCANCEL:
+      NEXT (0);
+      break;
+    }
+>>>>>>> 2.7
+  return 0;
+=======
+
+  Progress.SetActivateTask (WM_APP_START_SITE_INFO_DOWNLOAD);
+  return IDD_INSTATUS;
+}
+
+long
+NetPage::OnBack ()
+{
+  save_dialog (GetHWND ());
+  return 0;
+>>>>>>> 2.8
+}
+
+<<<<<<< net.cc
+bool
+NetPage::OnMessageCmd (int id, HWND hwndctl, UINT code)
+=======
+static BOOL CALLBACK
+dialog_proc (HWND h, UINT message, WPARAM wParam, LPARAM lParam)
+>>>>>>> 2.7
+{
+<<<<<<< net.cc
+  switch (id)
+    {
+    case IDC_NET_IE5:
+    case IDC_NET_DIRECT:
+    case IDC_NET_PROXY:
+    case IDC_PROXY_HOST:
+    case IDC_PROXY_PORT:
+      save_dialog (GetHWND());
+      CheckIfEnableNext ();
+      break;
+
+    default:
+      // Wasn't recognized or handled.
+      return false;
+    }
+=======
+  switch (message)
+    {
+    case WM_INITDIALOG:
+      load_dialog (h);
+
+      // Check to see if any radio buttons are selected. If not, select
+a default.
+      if (
+   (!SendMessage (GetDlgItem (h, IDC_NET_IE5), BM_GETCHECK, 0, 0) ==
+    BST_CHECKED)
+   && (!SendMessage (GetDlgItem (h, IDC_NET_PROXY), BM_GETCHECK, 0, 0)
+       == BST_CHECKED))
+ {
+   SendMessage (GetDlgItem (h, IDC_NET_DIRECT), BM_CLICK, 0, 0);
+ }
+      return FALSE;
+    case WM_COMMAND:
+      return HANDLE_WM_COMMAND (h, wParam, lParam, dialog_cmd);
+    }
+  return FALSE;
+}
+>>>>>>> 2.7
+
+<<<<<<< net.cc
+  // Was handled since we never got to default above.
+  return true;
+=======
+void
+do_net (HINSTANCE h)
+{
+  int rv = 0;
+
+  net_method = IDC_NET_DIRECT;
+  rv = DialogBox (h, MAKEINTRESOURCE (IDD_NET), 0, dialog_proc);
+  if (rv == -1)
+    fatal (IDS_DIALOG_FAILED);
+
+  log (0, "net: %s",
+       (net_method == IDC_NET_IE5) ? "IE5" :
+       (net_method == IDC_NET_DIRECT) ? "Direct" : "Proxy");
+>>>>>>> 2.7
+}
+
