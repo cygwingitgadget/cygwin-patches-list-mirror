@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-3872-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 16579 invoked by alias); 21 May 2003 17:22:33 -0000
+Return-Path: <cygwin-patches-return-3873-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 23530 invoked by alias); 21 May 2003 17:25:04 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,63 +7,53 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 16546 invoked from network); 21 May 2003 17:22:33 -0000
-X-Originating-IP: [62.21.237.84]
-X-Originating-Email: [mdvpost@hotmail.com]
-From: "Micha Nelissen" <mdvpost@hotmail.com>
-To: <cygwin-patches@cygwin.com>
-References: <Pine.GSO.4.44.0305211259290.26639-100000@slinky.cs.nyu.edu>
+Received: (qmail 23511 invoked from network); 21 May 2003 17:25:04 -0000
+Date: Wed, 21 May 2003 17:25:00 -0000
+From: Christopher Faylor <cgf@redhat.com>
+To: cygwin-patches@cygwin.com
 Subject: Re: Patch for line draw characters problem & screen scrolling
-Date: Wed, 21 May 2003 17:22:00 -0000
-MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2800.1165
-Message-ID: <BAY1-DAV30uFjc9QhVb00020b4b@hotmail.com>
-X-OriginalArrivalTime: 21 May 2003 17:22:32.0908 (UTC) FILETIME=[907088C0:01C31FBD]
-X-SW-Source: 2003-q2/txt/msg00099.txt.bz2
+Message-ID: <20030521172450.GB5744@redhat.com>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20030521162232.GC3096@redhat.com> <Pine.GSO.4.44.0305211259290.26639-100000@slinky.cs.nyu.edu>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Pine.GSO.4.44.0305211259290.26639-100000@slinky.cs.nyu.edu>
+User-Agent: Mutt/1.4.1i
+X-SW-Source: 2003-q2/txt/msg00100.txt.bz2
 
-Igor Pechtchanski wrote:
-> On Wed, 21 May 2003, Christopher Faylor wrote:
->
+On Wed, May 21, 2003 at 01:06:36PM -0400, Igor Pechtchanski wrote:
+>On Wed, 21 May 2003, Christopher Faylor wrote:
 >> On Wed, May 21, 2003 at 05:32:33PM +0200, Micha Nelissen wrote:
->>> * fhandler_console.cc (write_normal): end of buffer check enables
->>> cursor to be out of range; it better emulates *nix terminal
->>> behaviour; ie. it is now possible to write a single character at
->>> right bottom of console buffer without the console scrolling the
->>> buffer.
+>> >Several problems encountered and tried to fix:
+>> >* fhandler_console.cc (write_normal): end of buffer check enables cursor to be
+>> >out of range; it better emulates *nix terminal behaviour; ie. it is now
+>> >possible to write a single character at right bottom of console buffer without
+>> >the console scrolling the buffer.
 >>
+>> How is this similar to UNIX?  If I do a:
+>>
+>> sleep 5; echo hello
+>>
+>> and then scroll my xterm up, xterm scrolls down when hello is printed.  It
+>> sounds like your patch would not cause this to happen.
+>
+>This behavior is controlled, at least in an xterm, by the "Scroll to
+>Bottom on Tty Output" resource.  In the Windows console, no such control
+>is available, and it does scroll to bottom on output (just verified that).
+>I think that's what Micha is trying to fix...  Please correct me if I'm
+>wrong.
+>
+>Micha, if the above is correct, you'll probably want to introduce some
+>sort of control that will let users switch back and forth, according to
+>their preferences.
 
-> This behavior is controlled, at least in an xterm, by the "Scroll to
-> Bottom on Tty Output" resource.  In the Windows console, no such
+Yep.  This is similar to the other "just jump to first line of scroll region"
+change.  You can't change the default behavior like this without providing
+a method for controlling it.  Maybe xterm has some sort of escape sequence
+for controlling this behavior which could be emulated in cygwin.
 
-We're getting all the scrolling confused. My explanation was not clear
-enough.
+FWIW, I *like* the scroll to bottom behavior.
 
-Let me define terms as I see them:
-- buffer: all data which the user is able to see with the use of the
-scrollbar.
-- window: data which the use is able to see without the use of the
-scrollbar.
-
-They are 2 types of scrolling:
-1) using the scrollbar to change the current window position in the buffer
-2) when you write at the last line of the buffer and the cursor 'wraps',
-then we need a new line to write next output.
-
-I am referring to the second type of scrolling. When a character is written
-in the very right bottom 'cell', then windows *immediately* 'scrolls' (2) to
-the next line. I don't want that. *nix behaviour (as I saw it) only scrolls
-if *another* character is written. So temporarily the cursor is
-'out-of-range' ie. outside the buffer. If another character is written
-*without* moving the cursor, then *and only then* all output is moved up.
-
-BTW: you will receive a new set of patches, replacing this one large patch,
-later. I will hopefully clear up the other issues when I send those.
-
-Hope this clears it up,
-
-Micha.
+cgf
