@@ -1,33 +1,34 @@
-From: Chris Faylor <cgf@cygnus.com>
+From: Kazuhiro Fujieda <fujieda@jaist.ac.jp>
 To: cygwin-patches@sourceware.cygnus.com
 Subject: Re: preliminary patch2 for i18n: change the code page to ANSI.
-Date: Mon, 03 Jul 2000 16:05:00 -0000
-Message-id: <20000703190459.A30846@cygnus.com>
-References: <s1saefyooqa.fsf@jaist.ac.jp>
-X-SW-Source: 2000-q3/msg00002.html
+Date: Mon, 03 Jul 2000 19:05:00 -0000
+Message-id: <s1s8zviodkm.fsf@jaist.ac.jp>
+References: <s1saefyooqa.fsf@jaist.ac.jp> <20000703190459.A30846@cygnus.com>
+X-SW-Source: 2000-q3/msg00003.html
 
-On Tue, Jul 04, 2000 at 07:03:57AM +0900, Kazuhiro Fujieda wrote:
->Index: fhandler_console.cc
->===================================================================
->RCS file: /cvs/src/src/winsup/cygwin/fhandler_console.cc,v
->retrieving revision 1.8
->diff -u -p -r1.8 fhandler_console.cc
->--- fhandler_console.cc	2000/04/24 21:41:11	1.8
->+++ fhandler_console.cc	2000/07/03 14:19:32
->@@ -179,7 +179,9 @@ fhandler_console::read (void *pv, size_t
-> 	  !input_rec.Event.KeyEvent.bKeyDown)
-> 	continue;
+>>> On Mon, 3 Jul 2000 19:04:59 -0400
+>>> Chris Faylor <cgf@cygnus.com> said:
+
+> >-      if (ich == 0 || (ich & 0xff) == 0xe0)  /* arrow/function keys */
+> >+      if (ich == 0 ||
+> >+	  /* arrow/function keys */
+> >+	  (input_rec.Event.KeyEvent.dwControlKeyState & ENHANCED_KEY))
+> > 	{
+> > 	  toadd = get_nonascii_key (input_rec);
+> > 	  if (!toadd)
 > 
->-      if (ich == 0 || (ich & 0xff) == 0xe0)  /* arrow/function keys */
->+      if (ich == 0 ||
->+	  /* arrow/function keys */
->+	  (input_rec.Event.KeyEvent.dwControlKeyState & ENHANCED_KEY))
-> 	{
-> 	  toadd = get_nonascii_key (input_rec);
-> 	  if (!toadd)
+> Have you tested this change under Windows 95/98?
 
-Have you tested this change under Windows 95/98?  This test against 0xe0
-was a recent addition from someone who claimed that it made things work
-better under 95 or 98, I believe.
+Yes, I tested it under Windows 98 and found it to work fine.
 
-cgf
+> This test against 0xe0 was a recent addition from someone who
+> claimed that it made things work better under 95 or 98, I
+> believe.
+
+You are right. Before you added the test against 0xe0, this test
+was done only against 0. It couldn't distinguish extended keys
+under Win9x.
+____
+  | AIST      Kazuhiro Fujieda <fujieda@jaist.ac.jp>
+  | HOKURIKU  School of Information Science
+o_/ 1990      Japan Advanced Institute of Science and Technology
