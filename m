@@ -1,25 +1,41 @@
-From: Christopher Faylor <cgf@redhat.com>
-To: cygpatch <cygwin-patches@cygwin.com>
+From: "Luis Lozano" <luislozano@webhostix.com>
+To: <cygwin-patches@cygwin.com>
+Subject: RE: New terminal capability in fhandler_console.cc
+Date: Sun, 01 Apr 2001 01:13:00 -0000
+Message-id: <DIEAKMIHJPPCIOMFJDFNIEPNCAAA.luislozano@webhostix.com>
+References: <20010330104728.E12718@redhat.com>
+X-SW-Source: 2001-q2/msg00000.html
+
+-----Original Message-----
+From: luislozano@webhostix.com [ mailto:luislozano@webhostix.com]On
+Behalf Of Christopher Faylor
+Sent: Viernes, 30 de Marzo del 2001 07:47 AM
+To: cygpatch
 Subject: Re: New terminal capability in fhandler_console.cc
-Date: Sat, 31 Mar 2001 13:06:00 -0000
-Message-id: <20010331160650.C3440@redhat.com>
-References: <20010330131541.P16622@cygbert.vinschen.de> <20010330104728.E12718@redhat.com> <20010330192244.X16622@cygbert.vinschen.de> <20010330170201.A29301@redhat.com> <20010331015252.A16622@cygbert.vinschen.de> <20010330193658.F31805@redhat.com> <20010331113118.A8711@cygbert.vinschen.de> <20010331124602.A2693@redhat.com> <20010331201712.G16622@cygbert.vinschen.de> <20010331204205.I16622@cygbert.vinschen.de>
-X-SW-Source: 2001-q1/msg00284.html
 
-On Sat, Mar 31, 2001 at 08:42:05PM +0200, Corinna Vinschen wrote:
->Wait. They don't seem to be implemented as you describe them above.
->They are like
->
->	\E[%d@ and \E[%dP
->
->And I don't understand the sense of an additional parameter. While
->\E[%p1%d@ would make sense, I think "ic" is only for moving to make
->place for additional characters. Inserting N * char c is provided by
->switching to insert mode (im) and then repeating char c N times (rp).
->Do I miss something?
 
-I don't think so.  The \E[%p1%d@ essentially means to use the first
-parameter for the next %d.  This just causes %d the line to be moved
-over %d characters to the right.
+On Fri, Mar 30, 2001 at 01:15:41PM +0200, Corinna Vinschen wrote:
+>Hi,
+>
+>I've just checked in a patch to fhandler_console.cc which adds a
+>terminal capability to the windows console.
+>
+>ESC [ ? 47 h	==   Save screen content
+>ESC [ ? 47 l    ==   Restore screen content
+>
+>This allows adding the termcap capabilities `ti' and `te' to the
+>"cygwin" terminal entry in the same way as they are defined for
+>xterm:
+>
+>	:te=\E[2J\E[?47l\E8:ti=\E7\E[?47h:
+>
+>That enables vim to restore the old screen content after quitting
+>the same way in a console window as it does in a xterm window.
+
+Nice.  I'm constantly surprised when vim doesn't act this way.
+
+How about implementing "insert a character" for your next trick?
+
+Then, we're getting dangerously close to vt100 functionality, I think.
 
 cgf
