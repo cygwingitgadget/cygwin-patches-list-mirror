@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2072-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 4924 invoked by alias); 18 Apr 2002 10:11:42 -0000
+Return-Path: <cygwin-patches-return-2073-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 8796 invoked by alias); 18 Apr 2002 11:31:35 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,156 +7,85 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 4882 invoked from network); 18 Apr 2002 10:11:38 -0000
-X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
-Date: Thu, 18 Apr 2002 03:11:00 -0000
-From: Thomas Pfaff <tpfaff@gmx.net>
-To: cygwin-patches@cygwin.com
-Subject: [PATCH] minor pthread fixes
-Message-ID: <F0E13277A26BD311944600500454CCD050ACA9-101000@antarctica.intern.net>
-X-X-Sender: pfaff@antarctica.intern.net
+Received: (qmail 8731 invoked from network); 18 Apr 2002 11:31:17 -0000
+content-class: urn:content-classes:message
+Subject: RE: [PATCH] minor pthread fixes
 MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="97269-9090-1019122553=:301"
-Content-ID: <Pine.WNT.4.44.0204181205540.301@algeria.intern.net>
-X-SW-Source: 2002-q2/txt/msg00056.txt.bz2
+Content-Type: text/plain;
+	charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 18 Apr 2002 04:31:00 -0000
+X-MimeOLE: Produced By Microsoft Exchange V6.0.5762.3
+Message-ID: <FC169E059D1A0442A04C40F86D9BA7600C5E67@itdomain003.itdomain.net.au>
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+From: "Robert Collins" <robert.collins@itdomain.com.au>
+To: "Thomas Pfaff" <tpfaff@gmx.net>,
+	<cygwin-patches@cygwin.com>
+X-SW-Source: 2002-q2/txt/msg00057.txt.bz2
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
+Hi Thomas! It's great to see someone else also interested in pthreads. I
+look forward to your work on cancellation - that's been in my TODO list
+for far too long.
 
---97269-9090-1019122553=:301
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-Content-ID: Pine.WNT.4.44.0204181137291.301@algeria.intern.net
-Content-length: 1401
+re: 1. Good catch, this definitely needs fixing. Also an excellent catch
+on pthread_join (pthread_self(),...)
 
+Regarding 2:, again  a good catch.=20
 
-This patch contains some small pthread fixes:
+I'll commit this to CVS this weekend, I've a bit of spare time coming
+up.
 
-1. the pthread class allocated in __pthread_create never was freed. This
-   resulted in a memory leak and an unclosed handle.
-   Depending on the state of of the thread it is deleted now in
-   __pthread_exit or __pthread_join
-2. The InterlockedIncrement (&MT_INTERFACE->threadcount) in
-   __pthread_create is misplaced. If the newly created thread terminates
-   fast enough the threadcount will be decremented before it was
-   incremented, which will result in an exit from __pthread_exit instead
-   of an ExitThread.
+Rob
 
-Comments are very welcome, because i like to add more patches regarding
-cancellation which is incomplete, a better mutex implementation (the
-current one has only recursive mutexes and is slow on win9x) ... .
-
-Thanks,
-Thomas
-
-
-2002-04-18  Thomas Pfaff  <tpfaff@gmx.net>
-
- 	* thread.h (pthread::joiner): New member.
- 	* thread.cc (pthread::pthread): Initialize joiner to NULL
-	(pthread::create): Increment of thread counter moved from
-	__pthread_create to this location.
-	(__pthread_create): Increment thread counter removed.
-	(thread_init_wrapper): Set joiner to self when thread was created
-	detached.
-	(__pthread_exit): delete thread when it is detached and not
-	joined.
-	(__pthread_join): Check for deadlock and delete thread when it has
-	terminated.
-	(__pthread_detach): Set joiner to self when thread state
-	changed to detached.
-
-
---97269-9090-1019122553=:301
-Content-Type: APPLICATION/OCTET-STREAM; name="pthread_fixes.patch"
-Content-Transfer-Encoding: BASE64
-Content-ID: Pine.WNT.4.44.0204181135530.301@algeria.intern.net
-Content-Description: 
-Content-Disposition: attachment; filename="pthread_fixes.patch"
-Content-length: 5039
-
-ZGlmZiAtdXJwIGN5Z3dpbi5vbGQvd2luc3VwL2N5Z3dpbi90aHJlYWQuY2Mg
-Y3lnd2luL3dpbnN1cC9jeWd3aW4vdGhyZWFkLmNjCi0tLSBjeWd3aW4ub2xk
-L3dpbnN1cC9jeWd3aW4vdGhyZWFkLmNjCVR1ZSBKYW4gIDggMDU6MTY6MzAg
-MjAwMgorKysgY3lnd2luL3dpbnN1cC9jeWd3aW4vdGhyZWFkLmNjCVRodSBB
-cHIgMTggMTE6Mjg6MDIgMjAwMgpAQCAtMzQ2LDcgKzM0Niw3IEBAIE1UaW50
-ZXJmYWNlOjpmaXh1cF9hZnRlcl9mb3JrICh2b2lkKQogfQogCiBwdGhyZWFk
-OjpwdGhyZWFkICgpOnZlcmlmeWFibGVfb2JqZWN0IChQVEhSRUFEX01BR0lD
-KSwgd2luMzJfb2JqX2lkICgwKSwKLWNhbmNlbHN0YXRlICgwKSwgY2FuY2Vs
-dHlwZSAoMCkKKyAgICAgICAgICAgICAgICAgICAgY2FuY2Vsc3RhdGUgKDAp
-LCBjYW5jZWx0eXBlICgwKSwgam9pbmVyKE5VTEwpCiB7CiB9CiAKQEAgLTM4
-Myw2ICszODMsNyBAQCBwdGhyZWFkOjpjcmVhdGUgKHZvaWQgKigqZnVuYykg
-KHZvaWQgKiksCiAgICAgbWFnaWMgPSAwOwogICBlbHNlCiAgICAgeworICAg
-ICAgIEludGVybG9ja2VkSW5jcmVtZW50ICgmTVRfSU5URVJGQUNFLT50aHJl
-YWRjb3VudCk7CiAgICAgICAvKkZJWE1FOiBzZXQgdGhlIHByaW9yaXR5IGFw
-cHJvcHJpYXRlbHkgZm9yIHN5c3RlbSBjb250ZW50aW9uIHNjb3BlICovCiAg
-ICAgICBpZiAoYXR0ci5pbmhlcml0c2NoZWQgPT0gUFRIUkVBRF9FWFBMSUNJ
-VF9TQ0hFRCkKIAl7CkBAIC05MDcsNiArOTA4LDEwIEBAIHRocmVhZF9pbml0
-X3dyYXBwZXIgKHZvaWQgKl9hcmcpCiAgIC8qdGhlIE9TIGRvZXNuJ3QgY2hl
-Y2sgdGhpcyBmb3IgPD0gNjQgVGxzIGVudHJpZXMgKHByZSB3aW4yaykgKi8K
-ICAgVGxzU2V0VmFsdWUgKE1UX0lOVEVSRkFDRS0+dGhyZWFkX3NlbGZfZHdU
-bHNJbmRleCwgdGhyZWFkKTsKIAorICAvLyBpZiB0aHJlYWQgaXMgZGV0YWNo
-ZWQgZm9yY2UgY2xlYW51cCBvbiBleGl0CisgIGlmICh0aHJlYWQtPmF0dHIu
-am9pbmFibGUgPT0gUFRIUkVBRF9DUkVBVEVfREVUQUNIRUQpCisgICAgdGhy
-ZWFkLT5qb2luZXIgPSBfX3B0aHJlYWRfc2VsZigpOworCiAjaWZkZWYgX0NZ
-R19USFJFQURfRkFJTFNBRkUKICAgaWYgKF9SRUVOVCA9PSBfaW1wdXJlX3B0
-cikKICAgICBzeXN0ZW1fcHJpbnRmICgibG9jYWwgc3RvcmFnZSBmb3IgdGhy
-ZWFkIGlzbid0IHNldHVwIGNvcnJlY3RseSIpOwpAQCAtOTQ0LDcgKzk0OSw2
-IEBAIF9fcHRocmVhZF9jcmVhdGUgKHB0aHJlYWRfdCAqdGhyZWFkLCBjb24K
-ICAgICAgICp0aHJlYWQgPSBOVUxMOwogICAgICAgcmV0dXJuIEVBR0FJTjsK
-ICAgICB9Ci0gIEludGVybG9ja2VkSW5jcmVtZW50ICgmTVRfSU5URVJGQUNF
-LT50aHJlYWRjb3VudCk7CiAKICAgcmV0dXJuIDA7CiB9CkBAIC0xNDkwLDEx
-ICsxNDk0LDE2IEBAIF9fcHRocmVhZF9hdHRyX2Rlc3Ryb3kgKHB0aHJlYWRf
-YXR0cl90ICoKIHZvaWQKIF9fcHRocmVhZF9leGl0ICh2b2lkICp2YWx1ZV9w
-dHIpCiB7Ci0gIGNsYXNzIHB0aHJlYWQgKnRocmVhZCA9IF9fcHRocmVhZF9z
-ZWxmICgpOworICBwdGhyZWFkX3QgdGhyZWFkID0gX19wdGhyZWFkX3NlbGYg
-KCk7CiAKICAgTVRfSU5URVJGQUNFLT5kZXN0cnVjdG9ycy5JdGVyYXRlTnVs
-bCAoKTsKIAotICB0aHJlYWQtPnJldHVybl9wdHIgPSB2YWx1ZV9wdHI7Cisg
-IC8vIGNsZWFudXAgaWYgdGhyZWFkIGlzIGluIGRldGFjaGVkIHN0YXRlIGFu
-ZCBub3Qgam9pbmVkCisgIGlmKCBfX3B0aHJlYWRfZXF1YWwoJnRocmVhZC0+
-am9pbmVyLCAmdGhyZWFkICkgKQorICAgIGRlbGV0ZSB0aHJlYWQ7CisgIGVs
-c2UKKyAgICB0aHJlYWQtPnJldHVybl9wdHIgPSB2YWx1ZV9wdHI7CisKICAg
-aWYgKEludGVybG9ja2VkRGVjcmVtZW50ICgmTVRfSU5URVJGQUNFLT50aHJl
-YWRjb3VudCkgPT0gMCkKICAgICBleGl0ICgwKTsKICAgZWxzZQpAQCAtMTUw
-NCw2ICsxNTEzLDggQEAgX19wdGhyZWFkX2V4aXQgKHZvaWQgKnZhbHVlX3B0
-cikKIGludAogX19wdGhyZWFkX2pvaW4gKHB0aHJlYWRfdCAqdGhyZWFkLCB2
-b2lkICoqcmV0dXJuX3ZhbCkKIHsKKyAgIHB0aHJlYWRfdCBqb2luZXIgPSBf
-X3B0aHJlYWRfc2VsZigpOworCiAgIC8qRklYTUU6IHdhaXQgb24gdGhlIHRo
-cmVhZCBjYW5jZWxsYXRpb24gZXZlbnQgYXMgd2VsbCAtIHdlIGFyZSBhIGNh
-bmNlbGxhdGlvbiBwb2ludCovCiAgIGlmICh2ZXJpZnlhYmxlX29iamVjdF9p
-c3ZhbGlkICh0aHJlYWQsIFBUSFJFQURfTUFHSUMpICE9IFZBTElEX09CSkVD
-VCkKICAgICByZXR1cm4gRVNSQ0g7CkBAIC0xNTExLDE1ICsxNTIyLDI2IEBA
-IF9fcHRocmVhZF9qb2luIChwdGhyZWFkX3QgKnRocmVhZCwgdm9pZCAKICAg
-aWYgKCgqdGhyZWFkKS0+YXR0ci5qb2luYWJsZSA9PSBQVEhSRUFEX0NSRUFU
-RV9ERVRBQ0hFRCkKICAgICB7CiAgICAgICBpZiAocmV0dXJuX3ZhbCkKLQkq
-cmV0dXJuX3ZhbCA9IE5VTEw7CisgICAgICAgICpyZXR1cm5fdmFsID0gTlVM
-TDsKICAgICAgIHJldHVybiBFSU5WQUw7CiAgICAgfQorCisgIGVsc2UgaWYo
-IF9fcHRocmVhZF9lcXVhbCh0aHJlYWQsICZqb2luZXIgKSApCisgICAgewor
-ICAgICAgaWYgKHJldHVybl92YWwpCisgICAgICAgICpyZXR1cm5fdmFsID0g
-TlVMTDsKKyAgICAgIHJldHVybiBFREVBRExLOworICAgIH0KKwogICBlbHNl
-CiAgICAgewogICAgICAgKCp0aHJlYWQpLT5hdHRyLmpvaW5hYmxlID0gUFRI
-UkVBRF9DUkVBVEVfREVUQUNIRUQ7CisgICAgICAoKnRocmVhZCktPmpvaW5l
-ciA9IGpvaW5lcjsKICAgICAgIFdhaXRGb3JTaW5nbGVPYmplY3QgKCgqdGhy
-ZWFkKS0+d2luMzJfb2JqX2lkLCBJTkZJTklURSk7CiAgICAgICBpZiAocmV0
-dXJuX3ZhbCkKLQkqcmV0dXJuX3ZhbCA9ICgqdGhyZWFkKS0+cmV0dXJuX3B0
-cjsKKyAgICAgICAgICpyZXR1cm5fdmFsID0gKCp0aHJlYWQpLT5yZXR1cm5f
-cHRyOworICAgICAgLy8gY2xlYW51cAorICAgICAgZGVsZXRlICgqdGhyZWFk
-KTsKICAgICB9CS8qRW5kIGlmICovCiAKICAgcHRocmVhZF90ZXN0Y2FuY2Vs
-ICgpOwpAQCAtMTUzNSwxMSArMTU1NywxMyBAQCBfX3B0aHJlYWRfZGV0YWNo
-IChwdGhyZWFkX3QgKnRocmVhZCkKIAogICBpZiAoKCp0aHJlYWQpLT5hdHRy
-LmpvaW5hYmxlID09IFBUSFJFQURfQ1JFQVRFX0RFVEFDSEVEKQogICAgIHsK
-LSAgICAgICgqdGhyZWFkKS0+cmV0dXJuX3B0ciA9IE5VTEw7CiAgICAgICBy
-ZXR1cm4gRUlOVkFMOwogICAgIH0KIAogICAoKnRocmVhZCktPmF0dHIuam9p
-bmFibGUgPSBQVEhSRUFEX0NSRUFURV9ERVRBQ0hFRDsKKyAgLy8gZm9yY2Ug
-Y2xlYW51cCBvbiBleGl0CisgICgqdGhyZWFkKS0+am9pbmVyID0gKnRocmVh
-ZDsKKwogICByZXR1cm4gMDsKIH0KIApkaWZmIC11cnAgY3lnd2luLm9sZC93
-aW5zdXAvY3lnd2luL3RocmVhZC5oIGN5Z3dpbi93aW5zdXAvY3lnd2luL3Ro
-cmVhZC5oCi0tLSBjeWd3aW4ub2xkL3dpbnN1cC9jeWd3aW4vdGhyZWFkLmgJ
-V2VkIEZlYiAyMCAwNDoyNTowMSAyMDAyCisrKyBjeWd3aW4vd2luc3VwL2N5
-Z3dpbi90aHJlYWQuaAlUaHUgQXByIDE4IDEwOjA5OjI0IDIwMDIKQEAgLTIz
-OSw2ICsyMzksNyBAQCBwdWJsaWM6CiAgIHZvaWQgKnJldHVybl9wdHI7CiAg
-IGJvb2wgc3VzcGVuZGVkOwogICBpbnQgY2FuY2Vsc3RhdGUsIGNhbmNlbHR5
-cGU7CisgIHB0aHJlYWRfdCBqb2luZXI7CiAgIC8vIGludCBqb2luYWJsZTsK
-IAogICBEV09SRCBHZXRUaHJlYWRJZCAoKQo=
-
---97269-9090-1019122553=:301--
+> -----Original Message-----
+> From: Thomas Pfaff [mailto:tpfaff@gmx.net]=20
+> Sent: Thursday, April 18, 2002 8:11 PM
+> To: cygwin-patches@cygwin.com
+> Subject: [PATCH] minor pthread fixes
+>=20
+>=20
+>=20
+> This patch contains some small pthread fixes:
+>=20
+> 1. the pthread class allocated in __pthread_create never was=20
+> freed. This
+>    resulted in a memory leak and an unclosed handle.
+>    Depending on the state of of the thread it is deleted now in
+>    __pthread_exit or __pthread_join
+> 2. The InterlockedIncrement (&MT_INTERFACE->threadcount) in
+>    __pthread_create is misplaced. If the newly created thread=20
+> terminates
+>    fast enough the threadcount will be decremented before it was
+>    incremented, which will result in an exit from=20
+> __pthread_exit instead
+>    of an ExitThread.
+>=20
+> Comments are very welcome, because i like to add more patches=20
+> regarding cancellation which is incomplete, a better mutex=20
+> implementation (the current one has only recursive mutexes=20
+> and is slow on win9x) ... .
+>=20
+> Thanks,
+> Thomas
+>=20
+>=20
+> 2002-04-18  Thomas Pfaff  <tpfaff@gmx.net>
+>=20
+>  	* thread.h (pthread::joiner): New member.
+>  	* thread.cc (pthread::pthread): Initialize joiner to NULL
+> 	(pthread::create): Increment of thread counter moved from
+> 	__pthread_create to this location.
+> 	(__pthread_create): Increment thread counter removed.
+> 	(thread_init_wrapper): Set joiner to self when thread=20
+> was created
+> 	detached.
+> 	(__pthread_exit): delete thread when it is detached and not
+> 	joined.
+> 	(__pthread_join): Check for deadlock and delete thread=20
+> when it has
+> 	terminated.
+> 	(__pthread_detach): Set joiner to self when thread state
+> 	changed to detached.
+>=20
+>=20
