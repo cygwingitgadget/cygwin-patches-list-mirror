@@ -1,139 +1,25 @@
-From: egor duda <deo@logos-m.ru>
-To: "Ralf Habacker" <Ralf.Habacker@saght.tessag.com>
-Cc: "Robert Collins" <robert.collins@itdomain.com.au>, cygwin-patches@cygwin.com
+From: Christopher Faylor <cgf@redhat.com>
+To: cygwin-patches@cygwin.com
 Subject: Re: accept() failed message on kde 1.1.2 ??
-Date: Mon, 18 Jun 2001 09:58:00 -0000
-Message-id: <78364396524.20010618205749@logos-m.ru>
-References: <001501c0f802$79fdc0b0$6e032bb7@BRAMSCHE> <100357399493.20010618190112@logos-m.ru>
-X-SW-Source: 2001-q2/msg00318.html
-Content-type: multipart/mixed; boundary="----------=_1583532848-65438-74"
+Date: Mon, 18 Jun 2001 18:58:00 -0000
+Message-id: <20010618215925.A25668@redhat.com>
+References: <001501c0f802$79fdc0b0$6e032bb7@BRAMSCHE> <100357399493.20010618190112@logos-m.ru> <78364396524.20010618205749@logos-m.ru>
+X-SW-Source: 2001-q2/msg00319.html
 
-This is a multi-part message in MIME format...
+On Mon, Jun 18, 2001 at 08:57:49PM +0400, egor duda wrote:
+>Hi!
+>
+>ed> i'd try to figure out some way to fix it.
+>
+>i think this patch will do.  i still have some reservations about
+>non-blocking sockets, but it should definitely help with XFree problems
+>Ralf and Robert reported.  Please give it a try and tell if it helps.
 
-------------=_1583532848-65438-74
-Content-length: 414
+Do you want to check this in, Egor?  I didn't look at it enough to
+understand what was going on but I trust your judgement.  You can consider
+yourself the maintainer of this code if you want.  That means you don't
+need my approval to check stuff in there.
 
-Hi!
+I would appreciate a heads up if you are doing anything major, though.
 
-ed> i'd try to figure out some way to fix it.
-
-i think this patch will do. i still have some reservations about
-non-blocking sockets, but it should definitely help with XFree problems
-Ralf and Robert reported. Please give it a try and tell if it helps.
-
-Egor.            mailto:deo@logos-m.ru ICQ 5165414 FidoNet 2:5020/496.19
-af_unix-socket-security-race-fix.diff
-af_unix-socket-security-race-fix.ChangeLog
-
-
-------------=_1583532848-65438-74
-Content-Type: text/plain; charset=us-ascii;
- name="af_unix-socket-security-race-fix.ChangeLog"
-Content-Disposition: inline;
- filename="af_unix-socket-security-race-fix.ChangeLog"
-Content-Transfer-Encoding: base64
-Content-Length: 558
-
-MjAwMS0wNi0xOCAgRWdvciBEdWRhICA8ZGVvQGxvZ29zLW0ucnU+CgoJKiBm
-aGFuZGxlcl9zb2NrZXQuY2MgKGZoYW5kbGVyX3NvY2tldDo6c2lnbmFsX3Nl
-Y3JldF9ldmVudCk6IE5ldwoJZnVuY3Rpb24uCgkqIGZoYW5kbGVyLmg6IERl
-Y2xhcmUgaXQuCgkqIGZoYW5kbGVyX3NvY2tldC5jYyAoZmhhbmRsZXJfc29j
-a2V0OjpjcmVhdGVfc2VjcmV0X2V2ZW50KTogRG9uJ3QKCXNpZ25hbCBzZWNy
-ZXQgZXZlbnQgaW1tZWRpYXRlbHkuCgkoZmhhbmRsZXJfc29ja2V0OjpjaGVj
-a19wZWVyX3NlY3JldF9ldmVudCk6IERvIGl0IGFmdGVyIHBlZXIgZXZlbnQK
-CXdhcyBvcGVuZWQuCgkqIG5ldC5jYyAoY3lnd2luX2Nvbm5lY3QpOiBPciBp
-ZiBzb2NrZXQgaXMgbm9uLWJsb2NraW5nLgoJKGN5Z3dpbl9hY2NlcHQpOiBE
-aXR0by4K
-
-------------=_1583532848-65438-74
-Content-Type: text/x-diff; charset=us-ascii;
- name="af_unix-socket-security-race-fix.diff"
-Content-Disposition: inline; filename="af_unix-socket-security-race-fix.diff"
-Content-Transfer-Encoding: base64
-Content-Length: 5011
-
-SW5kZXg6IGZoYW5kbGVyLmgKPT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1Mg
-ZmlsZTogL2N2cy91YmVyYmF1bS93aW5zdXAvY3lnd2luL2ZoYW5kbGVyLmgs
-dgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuNjMKZGlmZiAtdSAtcCAtMiAtcjEu
-NjMgZmhhbmRsZXIuaAotLS0gZmhhbmRsZXIuaAkyMDAxLzA2LzE0IDE4OjIx
-OjE3CTEuNjMKKysrIGZoYW5kbGVyLmgJMjAwMS8wNi8xOCAxNjo0MzoxOApA
-QCAtMzk4LDQgKzM5OCw1IEBAIHB1YmxpYzoKICAgSEFORExFIGNyZWF0ZV9z
-ZWNyZXRfZXZlbnQgKGludCAqc2VjcmV0ID0gTlVMTCk7CiAgIGludCBjaGVj
-a19wZWVyX3NlY3JldF9ldmVudCAoc3RydWN0IHNvY2thZGRyX2luICpwZWVy
-LCBpbnQgKnNlY3JldCA9IE5VTEwpOworICB2b2lkIHNpZ25hbF9zZWNyZXRf
-ZXZlbnQgKCk7CiAgIHZvaWQgY2xvc2Vfc2VjcmV0X2V2ZW50ICgpOwogfTsK
-SW5kZXg6IGZoYW5kbGVyX3NvY2tldC5jYwo9PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09ClJDUyBmaWxlOiAvY3ZzL3ViZXJiYXVtL3dpbnN1cC9jeWd3aW4vZmhh
-bmRsZXJfc29ja2V0LmNjLHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjkKZGlm
-ZiAtdSAtcCAtMiAtcjEuOSBmaGFuZGxlcl9zb2NrZXQuY2MKLS0tIGZoYW5k
-bGVyX3NvY2tldC5jYwkyMDAxLzA1LzE1IDA4OjQyOjE1CTEuOQorKysgZmhh
-bmRsZXJfc29ja2V0LmNjCTIwMDEvMDYvMTggMTY6NDM6MTgKQEAgLTEwNCw4
-ICsxMDQsNSBAQCBmaGFuZGxlcl9zb2NrZXQ6OmNyZWF0ZV9zZWNyZXRfZXZl
-bnQgKGluCiAKICAgaWYgKHNlY3JldF9ldmVudCkKLSAgICB7Ci0gICAgICBQ
-cm90ZWN0SGFuZGxlIChzZWNyZXRfZXZlbnQpOwotICAgICAgU2V0RXZlbnQg
-KHNlY3JldF9ldmVudCk7Ci0gICAgfQorICAgIFByb3RlY3RIYW5kbGUgKHNl
-Y3JldF9ldmVudCk7CiAKICAgcmV0dXJuIHNlY3JldF9ldmVudDsKQEAgLTEx
-Myw0ICsxMTAsMTEgQEAgZmhhbmRsZXJfc29ja2V0OjpjcmVhdGVfc2VjcmV0
-X2V2ZW50IChpbgogCiB2b2lkCitmaGFuZGxlcl9zb2NrZXQ6OnNpZ25hbF9z
-ZWNyZXRfZXZlbnQgKCkKK3sKKyAgaWYgKHNlY3JldF9ldmVudCkKKyAgICBT
-ZXRFdmVudCAoc2VjcmV0X2V2ZW50KTsKK30KKwordm9pZAogZmhhbmRsZXJf
-c29ja2V0OjpjbG9zZV9zZWNyZXRfZXZlbnQgKCkKIHsKQEAgLTEzNiw0ICsx
-NDAsNiBAQCBmaGFuZGxlcl9zb2NrZXQ6OmNoZWNrX3BlZXJfc2VjcmV0X2V2
-ZW50CiAgICAgICBldiA9IE9wZW5FdmVudCAoRVZFTlRfQUxMX0FDQ0VTUywg
-RkFMU0UsIGJ1Zik7CiAgICAgfQorCisgIHNpZ25hbF9zZWNyZXRfZXZlbnQg
-KCk7CiAKICAgaWYgKGV2KQpJbmRleDogbmV0LmNjCj09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT0KUkNTIGZpbGU6IC9jdnMvdWJlcmJhdW0vd2luc3VwL2N5Z3dp
-bi9uZXQuY2MsdgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuNTcKZGlmZiAtdSAt
-cCAtMiAtcjEuNTcgbmV0LmNjCi0tLSBuZXQuY2MJMjAwMS8wNi8wMyAyMjox
-ODoxOQkxLjU3CisrKyBuZXQuY2MJMjAwMS8wNi8xOCAxNjo0MzoxOQpAQCAt
-NzQwLDQgKzc0MCw1IEBAIGN5Z3dpbl9jb25uZWN0IChpbnQgZmQsCiAgIGlu
-dCByZXM7CiAgIEJPT0wgc2VjcmV0X2NoZWNrX2ZhaWxlZCA9IEZBTFNFOwor
-ICBCT09MIGluX3Byb2dyZXNzID0gRkFMU0U7CiAgIGZoYW5kbGVyX3NvY2tl
-dCAqc29jayA9IGdldCAoZmQpOwogICBzb2NrYWRkcl9pbiBzaW47CkBAIC03
-NjAsNSArNzYxLDggQEAgY3lnd2luX2Nvbm5lY3QgKGludCBmZCwKIAkgICAg
-IHdoZW4gY2FsbGVkIHRvIGVhcmx5IG9uIGEgbm9uLWJsb2NraW5nIHNvY2tl
-dC4gKi8KIAkgIGlmIChXU0FHZXRMYXN0RXJyb3IgKCkgPT0gV1NBRVdPVUxE
-QkxPQ0spCi0gCSAgICBXU0FTZXRMYXN0RXJyb3IgKFdTQUVJTlBST0dSRVNT
-KTsKKwkgICAgeworCSAgICAgIFdTQVNldExhc3RFcnJvciAoV1NBRUlOUFJP
-R1JFU1MpOworCSAgICAgIGluX3Byb2dyZXNzID0gVFJVRTsKKwkgICAgfQog
-CiAJICBzZXRfd2luc29ja19lcnJubyAoKTsKQEAgLTc2Niw1ICs3NzAsNSBA
-QCBjeWd3aW5fY29ubmVjdCAoaW50IGZkLAogICAgICAgaWYgKHNvY2stPmdl
-dF9hZGRyX2ZhbWlseSAoKSA9PSBBRl9VTklYKQogICAgICAgICB7Ci0gICAg
-ICAgICAgaWYgKCFyZXMgfHwgZXJybm8gPT0gRUlOUFJPR1JFU1MpCisgICAg
-ICAgICAgaWYgKCFyZXMgfHwgaW5fcHJvZ3Jlc3MpCiAgICAgICAgICAgICB7
-CiAgICAgICAgICAgICAgIGlmICghc29jay0+Y3JlYXRlX3NlY3JldF9ldmVu
-dCAoc2VjcmV0KSkKQEAgLTc3Miw0ICs3NzYsNiBAQCBjeWd3aW5fY29ubmVj
-dCAoaW50IGZkLAogCQkgIHNlY3JldF9jaGVja19mYWlsZWQgPSBUUlVFOwog
-CQl9CisJICAgICAgZWxzZSBpZiAoaW5fcHJvZ3Jlc3MpCisJCXNvY2stPnNp
-Z25hbF9zZWNyZXRfZXZlbnQgKCk7CiAgICAgICAgICAgICB9CiAKQEAgLTg4
-OCw0ICs4OTQsNSBAQCBjeWd3aW5fYWNjZXB0IChpbnQgZmQsIHN0cnVjdCBz
-b2NrYWRkciAqCiAgIGludCByZXMgPSAtMTsKICAgQk9PTCBzZWNyZXRfY2hl
-Y2tfZmFpbGVkID0gRkFMU0U7CisgIEJPT0wgaW5fcHJvZ3Jlc3MgPSBGQUxT
-RTsKICAgc2lnZnJhbWUgdGhpc2ZyYW1lIChtYWludGhyZWFkKTsKIApAQCAt
-OTAyLDE2ICs5MDksMTkgQEAgY3lnd2luX2FjY2VwdCAoaW50IGZkLCBzdHJ1
-Y3Qgc29ja2FkZHIgKgogICAgICAgcmVzID0gYWNjZXB0IChzb2NrLT5nZXRf
-c29ja2V0ICgpLCBwZWVyLCBsZW4pOyAgLy8gY2FuJ3QgdXNlIGEgYmxvY2tp
-bmcgY2FsbCBpbnNpZGUgYSBsb2NrCiAKKyAgICAgIGlmICgoU09DS0VUKSBy
-ZXMgPT0gKFNPQ0tFVCkgSU5WQUxJRF9TT0NLRVQgJiYKKwkgIFdTQUdldExh
-c3RFcnJvciAoKSA9PSBXU0FFV09VTERCTE9DSykKKwlpbl9wcm9ncmVzcyA9
-IFRSVUU7CisKICAgICAgIGlmIChzb2NrLT5nZXRfYWRkcl9mYW1pbHkgKCkg
-PT0gQUZfVU5JWCkKICAgICAgICAgewotICAgICAgICAgIGlmICgoKFNPQ0tF
-VCkgcmVzICE9IChTT0NLRVQpIElOVkFMSURfU09DS0VUIHx8Ci0gICAgICAg
-ICAgICAgICBXU0FHZXRMYXN0RXJyb3IgKCkgPT0gV1NBRVdPVUxEQkxPQ0sp
-KQotICAgICAgICAgICAgewotICAgICAgICAgICAgICBpZiAoIXNvY2stPmNy
-ZWF0ZV9zZWNyZXRfZXZlbnQgKCkpCi0JCXsKLQkJICBzZWNyZXRfY2hlY2tf
-ZmFpbGVkID0gVFJVRTsKLSAgICAgICAgICAgICAgICB9Ci0gICAgICAgICAg
-ICB9CisJICBpZiAoKFNPQ0tFVCkgcmVzICE9IChTT0NLRVQpIElOVkFMSURf
-U09DS0VUIHx8IGluX3Byb2dyZXNzKQorCSAgICB7CisJICAgICAgaWYgKCFz
-b2NrLT5jcmVhdGVfc2VjcmV0X2V2ZW50ICgpKQorCQlzZWNyZXRfY2hlY2tf
-ZmFpbGVkID0gVFJVRTsKKwkgICAgICBlbHNlIGlmIChpbl9wcm9ncmVzcykK
-KwkJc29jay0+c2lnbmFsX3NlY3JldF9ldmVudCAoKTsKKwkgICAgfQogCi0g
-ICAgICAgICAgaWYgKCFzZWNyZXRfY2hlY2tfZmFpbGVkICYmCisJICBpZiAo
-IXNlY3JldF9jaGVja19mYWlsZWQgJiYKICAgICAgICAgICAgICAgKFNPQ0tF
-VCkgcmVzICE9IChTT0NLRVQpIElOVkFMSURfU09DS0VUKQogICAgICAgICAg
-ICAgewo=
-
-------------=_1583532848-65438-74--
+cgf
