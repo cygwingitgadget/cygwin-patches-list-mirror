@@ -1,78 +1,41 @@
 From: Corinna Vinschen <vinschen@cygnus.com>
 To: cygpatch <cygwin-patches@sourceware.cygnus.com>
-Subject: [PATCH]: Some new (mostly W2K related) stuff in w32api
-Date: Tue, 27 Jun 2000 11:43:00 -0000
-Message-id: <3958F5D6.81AAB550@cygnus.com>
-X-SW-Source: 2000-q2/msg00113.html
+Subject: Re: [PATCH]: Changes in process startup code
+Date: Wed, 28 Jun 2000 10:53:00 -0000
+Message-id: <395A3B8C.51C28D47@cygnus.com>
+References: <394E5E78.FC4D70F@vinschen.de> <3954F3AC.FA935179@cygnus.com>
+X-SW-Source: 2000-q2/msg00114.html
 
-First of all, I have created a new import library definition file
-for PSAPI.DLL. While psapi.h already exists since January, the
-related psapi.def file was still missing.
+I had to patch that patch another times.
 
-Then I have added some defines and typedefs to w32api. They are
-some sort of by-product while experimenting with new W2K
-features:
+For some reason you can't rely on the process token returning
+the correct user information after ImpersonateLoggedOnUser()
+is called. Strange thing: It worked for me if the impersonated
+user is a simple user without administrator privileges. Not so,
+if the impersonated user is member of the admins group.
 
-winbase.h:
-==========
+Yeah, I know what you want to say, but: There's a difference
+between the UserToken and the OwnerToken of a process. My user
+`corinna' is member of admins and the user SID of my processes
+is `corinna' while the owner SID is `administrators'. For some
+reason this isn't valid anymore after an impersonation.
 
-Some new stream ids for use in BackupRead(), BackupWrite():
-	BACKUP_OBJECT_ID
-	BACKUP_REPARSE_DATA
-	BACKUP_SPARSE_BLOCK
-
-New file open flags, used in CreateFile():
-	FILE_FLAG_OPEN_REPARSE_POINT
-	FILE_FLAG_OPEN_NO_RECALL
-        
-winioctl.h:
-===========
-
-New device io control codes for use in DeviceIoControl():
-	FSCTL_GET_REPARSE_POINT
-	FSCTL_SET_REPARSE_POINT
-	FSCTL_DELETE_REPARSE_POINT
-	
-winnt.h:
-========
-
-Added typedef for GUID which is used in later typedefs.
-
-New file attributes returned by GetFileAttribute()
-	FILE_ATTRIBUTE_ENCRYPTED
-	FILE_ATTRIBUTE_SPARSE_FILE
-	FILE_ATTRIBUTE_REPARSE_POINT
-	FILE_ATTRIBUTE_NOT_CONTENT_INDEXED
-
-New volume attributes returned by GetVolumeInformation():
-	FILE_VOLUME_QUOTAS
-	FILE_SUPPORTS_SPARSE_FILES
-	FILE_SUPPORTS_REPARSE_POINTS
-	FILE_SUPPORTS_REMOTE_STORAGE
-	FILE_SUPPORTS_OBJECT_IDS
-	FILE_SUPPORTS_ENCRYPTION
-
-Added several reparse point defines and macros:
-	REPARSE_DATA_BUFFER_HEADER_SIZE
-	REPARSE_GUID_DATA_BUFFER_HEADER_SIZE
-	MAXIMUM_REPARSE_DATA_BUFFER_SIZE
-	IO_REPARSE_TAG_RESERVED_ZERO
-	IO_REPARSE_TAG_RESERVED_ONE
-	IO_REPARSE_TAG_RESERVED_RANGE
-	IsReparseTagMicrosoft
-	IsReparseTagHighLatency
-	IsReparseTagNameSurrogate
-	IO_REPARSE_TAG_VALID_VALUES
-	IsReparseTagValid
-	IO_REPARSE_TAG_SYMBOLIC_LINK
-	IO_REPARSE_TAG_MOUNT_POINT
-
-and related typedefs:
-	REPARSE_DATA_BUFFER
-	REPARSE_GUID_DATA_BUFFER
-	REPARSE_POINT_INFORMATION
+internal_getlogin() now uses the impersonation token if
+impersonation took place and the process token otherwise.
 
 Corinna
+
+Corinna Vinschen wrote:
+> 
+> I have just checked in a patch related to that patch:
+> 
+> - On fork() and spawn() I have copied pointers(!) to SID's from
+>   parent to child process. This is corrected now.
+> - Before calling LookupAccountName() I try to get the SID from
+>   the access token of the current process. This should work for
+>   99.999% of all processes and should therefore speed up process
+>   startup with ntsec ON quite more. Nevertheless _if_ that fails,
+>   it would try the LookupAccountName, though.
 
 -- 
 Corinna Vinschen
