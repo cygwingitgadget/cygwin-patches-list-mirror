@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-2112-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 8019 invoked by alias); 25 Apr 2002 09:33:14 -0000
+Return-Path: <cygwin-patches-return-2113-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 18666 invoked by alias); 25 Apr 2002 16:31:02 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,164 +7,83 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 7987 invoked from network); 25 Apr 2002 09:33:08 -0000
-X-Authentication-Warning: atacama.four-d.de: mail set sender to <tpfaff@gmx.net> using -f
-Date: Thu, 25 Apr 2002 02:33:00 -0000
-From: Thomas Pfaff <tpfaff@gmx.net>
-To: cygwin-patches@cygwin.com
-Subject: [PATCH] added locks in pthread code
-Message-ID: <Pine.WNT.4.44.0204251117110.349-101000@algeria.intern.net>
-X-X-Sender: pfaff@antarctica.intern.net
+Received: (qmail 18623 invoked from network); 25 Apr 2002 16:30:59 -0000
+Message-ID: <3CC82FE0.6020108@ece.gatech.edu>
+Date: Thu, 25 Apr 2002 09:31:00 -0000
+From: Charles Wilson <cwilson@ece.gatech.edu>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:0.9.4) Gecko/20011019 Netscape6/6.2
+X-Accept-Language: en-us
 MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="956895-17464-1019727179=:349"
-X-SW-Source: 2002-q2/txt/msg00096.txt.bz2
+To: Charles Wilson <cwilson@ece.gatech.edu>
+CC: Robert Collins <robert.collins@itdomain.com.au>,
+	cygwin-patches@cygwin.com
+Subject: Re: Packaging information
+References: <FC169E059D1A0442A04C40F86D9BA7600C5EF2@itdomain003.itdomain.net.au> <3CC780C0.5080302@ece.gatech.edu>
+Content-Type: multipart/mixed;
+ boundary="------------050807070803080001090809"
+X-SW-Source: 2002-q2/txt/msg00097.txt.bz2
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
+This is a multi-part message in MIME format.
+--------------050807070803080001090809
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-length: 880
 
---956895-17464-1019727179=:349
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-Content-length: 649
 
-The patch will add locks via mutex around critical code to protect against
-race conditions and fix __pthread_detach to cleanup when thread has
-already terminated. This an incremental update again.
 
-Greetings,
-Thomas
+Charles Wilson wrote:
 
-2002-04-25  Thomas Pfaff  <tpfaff@gmx.net>
+>>> Hey, yeah -- that'll work.  Where should generic-* go -- in one of 
+>>> the existing repositories under cygwin-apps (probably not), or should 
+>>> I create another?  If I should create another, what should it be 
+>>> called? resources?
+>>>
+>>
+>> Hmm. Lets be a bit more specific - why not call the module "packaging".
+>> Then the generics can go in /templates or /samples or something like
+>> that.
+> 
+> 
+> 
+> sounds find to me.
+> 
+> packaging/
+> packaging/ChangeLog
+> packaging/templates/
+> packaging/templates/generic-build-script
+> packaging/templates/generic-readme
 
-	* thread.h (pthread::mutex): new member
-	* thread.cc (pthread::pthread): Set mutex to NULL.
-	(pthread::~pthread): Destroy mutex.
-	(pthread::create): Initialize mutex.
-	(thread_init_wrapper): Protect against race.
-	(__pthread_cleanup_push): Ditto.
-	(__pthread_exit): Ditto.
-	(__pthread_join): Ditto
-	(__pthread_detach): Protect against race and cleanup if thread has
-	already terminated.
 
---956895-17464-1019727179=:349
-Content-Type: APPLICATION/octet-stream; name="pthread_lock.patch"
-Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.WNT.4.44.0204251132590.349@algeria.intern.net>
-Content-Description: 
-Content-Disposition: attachment; filename="pthread_lock.patch"
-Content-length: 6767
+Okay -- I've done this.  But, I've run into a snag: the cygwin-apps 
+repository is not accessible via cvsweb.  Can somebody apply this patch 
+to the file 'cvsweb.conf' in the 'cgi-bin' module of the 'sourceware' 
+repository? (I don't have write access to that module).
 
-ZGlmZiAtdXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi90aHJlYWQuY2Mgc3Jj
-L3dpbnN1cC9jeWd3aW4vdGhyZWFkLmNjCi0tLSBzcmMub2xkL3dpbnN1cC9j
-eWd3aW4vdGhyZWFkLmNjCVRodSBBcHIgMjUgMTA6MTE6MzAgMjAwMgorKysg
-c3JjL3dpbnN1cC9jeWd3aW4vdGhyZWFkLmNjCVRodSBBcHIgMjUgMTA6NDk6
-MjIgMjAwMgpAQCAtMzQ2LDcgKzM0Niw4IEBAIE1UaW50ZXJmYWNlOjpmaXh1
-cF9hZnRlcl9mb3JrICh2b2lkKQogfQogCiBwdGhyZWFkOjpwdGhyZWFkICgp
-OnZlcmlmeWFibGVfb2JqZWN0IChQVEhSRUFEX01BR0lDKSwgd2luMzJfb2Jq
-X2lkICgwKSwKLSAgICAgICAgICAgICAgICAgICAgY2FuY2Vsc3RhdGUgKDAp
-LCBjYW5jZWx0eXBlICgwKSwgY2xlYW51cF9oYW5kbGVycyhOVUxMKSwgam9p
-bmVyKE5VTEwpCisgICAgICAgICAgICAgICAgICAgIGNhbmNlbHN0YXRlICgw
-KSwgY2FuY2VsdHlwZSAoMCksIG11dGV4KE5VTEwpLAorICAgICAgICAgICAg
-ICAgICAgICBjbGVhbnVwX2hhbmRsZXJzKE5VTEwpLCBqb2luZXIoTlVMTCkK
-IHsKIH0KIApAQCAtMzU0LDYgKzM1NSw3IEBAIHB0aHJlYWQ6On5wdGhyZWFk
-ICgpCiB7CiAgIGlmICh3aW4zMl9vYmpfaWQpCiAgICAgQ2xvc2VIYW5kbGUg
-KHdpbjMyX29ial9pZCk7CisgIF9fcHRocmVhZF9tdXRleF9kZXN0cm95KCZt
-dXRleCk7CiB9CiAKIApAQCAtMzYxLDYgKzM2Myw4IEBAIHZvaWQKIHB0aHJl
-YWQ6OmNyZWF0ZSAodm9pZCAqKCpmdW5jKSAodm9pZCAqKSwgcHRocmVhZF9h
-dHRyICpuZXdhdHRyLAogCQkgdm9pZCAqdGhyZWFkYXJnKQogeworICBpbnQg
-dGVtcGVycjsKKwogICAvKmFscmVhZHkgcnVubmluZyA/ICovCiAgIGlmICh3
-aW4zMl9vYmpfaWQpCiAgICAgcmV0dXJuOwpAQCAtMzc1LDYgKzM3OSwxNCBA
-QCBwdGhyZWFkOjpjcmVhdGUgKHZvaWQgKigqZnVuYykgKHZvaWQgKiksCiAg
-IGZ1bmN0aW9uID0gZnVuYzsKICAgYXJnID0gdGhyZWFkYXJnOwogCisgIGlm
-ICgodGVtcGVyciA9IF9fcHRocmVhZF9tdXRleF9pbml0ICgmbXV0ZXgsIE5V
-TEwpKSkKKyAgICB7CisgICAgICBzeXN0ZW1fcHJpbnRmICgiY291bGRuJ3Qg
-aW5pdCBtdXRleCwgdGhpcyAlcCBlcnJubyAlZCIsIHRoaXMsIHRlbXBlcnIp
-OworICAgICAgLyp3ZSBuZWVkIHRoZSBtdXRleCBmb3IgY29ycmVjdCBiZWhh
-dmlvdXIgKi8KKyAgICAgIG1hZ2ljID0gMDsKKyAgICAgIHJldHVybjsKKyAg
-ICB9CisKICAgd2luMzJfb2JqX2lkID0gOjpDcmVhdGVUaHJlYWQgKCZzZWNf
-bm9uZV9uaWgsIGF0dHIuc3RhY2tzaXplLAogCQkJCShMUFRIUkVBRF9TVEFS
-VF9ST1VUSU5FKSB0aHJlYWRfaW5pdF93cmFwcGVyLAogCQkJCXRoaXMsIENS
-RUFURV9TVVNQRU5ERUQsICZ0aHJlYWRfaWQpOwpAQCAtOTA4LDkgKzkyMCwx
-MSBAQCB0aHJlYWRfaW5pdF93cmFwcGVyICh2b2lkICpfYXJnKQogICAvKnRo
-ZSBPUyBkb2Vzbid0IGNoZWNrIHRoaXMgZm9yIDw9IDY0IFRscyBlbnRyaWVz
-IChwcmUgd2luMmspICovCiAgIFRsc1NldFZhbHVlIChNVF9JTlRFUkZBQ0Ut
-PnRocmVhZF9zZWxmX2R3VGxzSW5kZXgsIHRocmVhZCk7CiAKKyAgX19wdGhy
-ZWFkX211dGV4X2xvY2soJnRocmVhZC0+bXV0ZXgpOwogICAvLyBpZiB0aHJl
-YWQgaXMgZGV0YWNoZWQgZm9yY2UgY2xlYW51cCBvbiBleGl0CiAgIGlmICh0
-aHJlYWQtPmF0dHIuam9pbmFibGUgPT0gUFRIUkVBRF9DUkVBVEVfREVUQUNI
-RUQgJiYgdGhyZWFkLT5qb2luZXIgPT0gTlVMTCkKICAgICB0aHJlYWQtPmpv
-aW5lciA9IF9fcHRocmVhZF9zZWxmKCk7CisgIF9fcHRocmVhZF9tdXRleF91
-bmxvY2soJnRocmVhZC0+bXV0ZXgpOwogCiAjaWZkZWYgX0NZR19USFJFQURf
-RkFJTFNBRkUKICAgaWYgKF9SRUVOVCA9PSBfaW1wdXJlX3B0cikKQEAgLTEy
-MjUsOCArMTIzOSwxMyBAQCBfX3B0aHJlYWRfY2xlYW51cF9wdXNoIChfX3B0
-aHJlYWRfY2xlYW51CiB7CiAgIHB0aHJlYWRfdCB0aHJlYWQgPSBfX3B0aHJl
-YWRfc2VsZiAoKTsKIAorICAvLyBjbGVhbnVwX3B1c2ggaXMgbm90IGFzeW5j
-IGNhbmNlbCBzYWZlCisgIF9fcHRocmVhZF9tdXRleF9sb2NrKCZ0aHJlYWQt
-Pm11dGV4KTsKKwogICBoYW5kbGVyLT5uZXh0ID0gdGhyZWFkLT5jbGVhbnVw
-X2hhbmRsZXJzOwogICB0aHJlYWQtPmNsZWFudXBfaGFuZGxlcnMgPSBoYW5k
-bGVyOworCisgIF9fcHRocmVhZF9tdXRleF91bmxvY2soJnRocmVhZC0+bXV0
-ZXgpOwogfQogCiB2b2lkCkBAIC0xNTM3LDExICsxNTU2LDE1IEBAIF9fcHRo
-cmVhZF9leGl0ICh2b2lkICp2YWx1ZV9wdHIpCiAKICAgTVRfSU5URVJGQUNF
-LT5kZXN0cnVjdG9ycy5JdGVyYXRlTnVsbCAoKTsKIAotICAvLyBjbGVhbnVw
-IGlmIHRocmVhZCBpcyBpbiBkZXRhY2hlZCBzdGF0ZSBhbmQgbm90IGpvaW5l
-ZAorICBfX3B0aHJlYWRfbXV0ZXhfbG9jaygmdGhyZWFkLT5tdXRleCk7CiAg
-IGlmKCBfX3B0aHJlYWRfZXF1YWwoJnRocmVhZC0+am9pbmVyLCAmdGhyZWFk
-ICkgKQorICAgIC8vIGNsZWFudXAgaWYgdGhyZWFkIGlzIGluIGRldGFjaGVk
-IHN0YXRlIGFuZCBub3Qgam9pbmVkCiAgICAgZGVsZXRlIHRocmVhZDsKICAg
-ZWxzZQotICAgIHRocmVhZC0+cmV0dXJuX3B0ciA9IHZhbHVlX3B0cjsKKyAg
-ICB7CisgICAgICBfX3B0aHJlYWRfbXV0ZXhfdW5sb2NrKCZ0aHJlYWQtPm11
-dGV4KTsKKyAgICAgIHRocmVhZC0+cmV0dXJuX3B0ciA9IHZhbHVlX3B0cjsK
-KyAgICB9CiAKICAgaWYgKEludGVybG9ja2VkRGVjcmVtZW50ICgmTVRfSU5U
-RVJGQUNFLT50aHJlYWRjb3VudCkgPT0gMCkKICAgICBleGl0ICgwKTsKQEAg
-LTE1NTgsMjQgKzE1ODEsMjcgQEAgX19wdGhyZWFkX2pvaW4gKHB0aHJlYWRf
-dCAqdGhyZWFkLCB2b2lkIAogICBpZiAodmVyaWZ5YWJsZV9vYmplY3RfaXN2
-YWxpZCAodGhyZWFkLCBQVEhSRUFEX01BR0lDKSAhPSBWQUxJRF9PQkpFQ1Qp
-CiAgICAgcmV0dXJuIEVTUkNIOwogCi0gIGlmICgoKnRocmVhZCktPmF0dHIu
-am9pbmFibGUgPT0gUFRIUkVBRF9DUkVBVEVfREVUQUNIRUQpCisgIGlmKCBf
-X3B0aHJlYWRfZXF1YWwodGhyZWFkLCAmam9pbmVyICkgKQogICAgIHsKICAg
-ICAgIGlmIChyZXR1cm5fdmFsKQogICAgICAgICAqcmV0dXJuX3ZhbCA9IE5V
-TEw7Ci0gICAgICByZXR1cm4gRUlOVkFMOworICAgICAgcmV0dXJuIEVERUFE
-TEs7CiAgICAgfQogCi0gIGVsc2UgaWYoIF9fcHRocmVhZF9lcXVhbCh0aHJl
-YWQsICZqb2luZXIgKSApCisgIF9fcHRocmVhZF9tdXRleF9sb2NrKCYoKnRo
-cmVhZCktPm11dGV4KTsKKyAgaWYgKCgqdGhyZWFkKS0+YXR0ci5qb2luYWJs
-ZSA9PSBQVEhSRUFEX0NSRUFURV9ERVRBQ0hFRCkKICAgICB7CisgICAgICAg
-X19wdGhyZWFkX211dGV4X3VubG9jaygmKCp0aHJlYWQpLT5tdXRleCk7CiAg
-ICAgICBpZiAocmV0dXJuX3ZhbCkKICAgICAgICAgKnJldHVybl92YWwgPSBO
-VUxMOwotICAgICAgcmV0dXJuIEVERUFETEs7CisgICAgICByZXR1cm4gRUlO
-VkFMOwogICAgIH0KIAogICBlbHNlCiAgICAgewogICAgICAgKCp0aHJlYWQp
-LT5qb2luZXIgPSBqb2luZXI7CiAgICAgICAoKnRocmVhZCktPmF0dHIuam9p
-bmFibGUgPSBQVEhSRUFEX0NSRUFURV9ERVRBQ0hFRDsKKyAgICAgICBfX3B0
-aHJlYWRfbXV0ZXhfdW5sb2NrKCYoKnRocmVhZCktPm11dGV4KTsKICAgICAg
-IFdhaXRGb3JTaW5nbGVPYmplY3QgKCgqdGhyZWFkKS0+d2luMzJfb2JqX2lk
-LCBJTkZJTklURSk7CiAgICAgICBpZiAocmV0dXJuX3ZhbCkKICAgICAgICAg
-ICpyZXR1cm5fdmFsID0gKCp0aHJlYWQpLT5yZXR1cm5fcHRyOwpAQCAtMTU5
-NCwxNCArMTYyMCwyMyBAQCBfX3B0aHJlYWRfZGV0YWNoIChwdGhyZWFkX3Qg
-KnRocmVhZCkKICAgaWYgKHZlcmlmeWFibGVfb2JqZWN0X2lzdmFsaWQgKHRo
-cmVhZCwgUFRIUkVBRF9NQUdJQykgIT0gVkFMSURfT0JKRUNUKQogICAgIHJl
-dHVybiBFU1JDSDsKIAorICBfX3B0aHJlYWRfbXV0ZXhfbG9jaygmKCp0aHJl
-YWQpLT5tdXRleCk7CiAgIGlmICgoKnRocmVhZCktPmF0dHIuam9pbmFibGUg
-PT0gUFRIUkVBRF9DUkVBVEVfREVUQUNIRUQpCiAgICAgeworICAgICAgX19w
-dGhyZWFkX211dGV4X3VubG9jaygmKCp0aHJlYWQpLT5tdXRleCk7CiAgICAg
-ICByZXR1cm4gRUlOVkFMOwogICAgIH0KIAotICAvLyBmb3JjZSBjbGVhbnVw
-IG9uIGV4aXQKLSAgKCp0aHJlYWQpLT5qb2luZXIgPSAqdGhyZWFkOwotICAo
-KnRocmVhZCktPmF0dHIuam9pbmFibGUgPSBQVEhSRUFEX0NSRUFURV9ERVRB
-Q0hFRDsKKyAgLy8gY2hlY2sgaWYgdGhyZWFkIGlzIHN0aWxsIGFsaXZlCisg
-IGlmKCBXQUlUX1RJTUVPVVQgPT0gV2FpdEZvclNpbmdsZU9iamVjdCAoKCp0
-aHJlYWQpLT53aW4zMl9vYmpfaWQsIDApICkKKyAgICB7CisgICAgICAoKnRo
-cmVhZCktPmpvaW5lciA9ICp0aHJlYWQ7CisgICAgICAoKnRocmVhZCktPmF0
-dHIuam9pbmFibGUgPSBQVEhSRUFEX0NSRUFURV9ERVRBQ0hFRDsKKyAgICAg
-IF9fcHRocmVhZF9tdXRleF91bmxvY2soJigqdGhyZWFkKS0+bXV0ZXgpOwor
-ICAgIH0KKyAgZWxzZQorICAgIC8vIHRocmVhZCBoYXMgYWxyZWFkeSB0ZXJt
-aW5hdGVkCisgICAgZGVsZXRlICgqdGhyZWFkKTsKIAogICByZXR1cm4gMDsK
-IH0KZGlmZiAtdXJwIHNyYy5vbGQvd2luc3VwL2N5Z3dpbi90aHJlYWQuaCBz
-cmMvd2luc3VwL2N5Z3dpbi90aHJlYWQuaAotLS0gc3JjLm9sZC93aW5zdXAv
-Y3lnd2luL3RocmVhZC5oCVRodSBBcHIgMjUgMTA6MTE6MzAgMjAwMgorKysg
-c3JjL3dpbnN1cC9jeWd3aW4vdGhyZWFkLmgJVGh1IEFwciAyNSAwOToxNTox
-NyAyMDAyCkBAIC0yMzksNiArMjM5LDcgQEAgcHVibGljOgogICB2b2lkICpy
-ZXR1cm5fcHRyOwogICBib29sIHN1c3BlbmRlZDsKICAgaW50IGNhbmNlbHN0
-YXRlLCBjYW5jZWx0eXBlOworICBwdGhyZWFkX211dGV4ICptdXRleDsKICAg
-X19wdGhyZWFkX2NsZWFudXBfaGFuZGxlciAqY2xlYW51cF9oYW5kbGVyczsK
-ICAgcHRocmVhZF90IGpvaW5lcjsKICAgLy8gaW50IGpvaW5hYmxlOwo=
+--Chuck
 
---956895-17464-1019727179=:349--
+
+--------------050807070803080001090809
+Content-Type: text/plain;
+ name="cvsweb.conf.diff"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline;
+ filename="cvsweb.conf.diff"
+Content-length: 616
+
+Index: cvsweb.conf
+===================================================================
+RCS file: /cvs/sourceware/cgi-bin/cvsweb.conf,v
+retrieving revision 1.51
+diff -u -r1.51 cvsweb.conf
+--- cvsweb.conf	17 Sep 2001 22:55:40 -0000	1.51
++++ cvsweb.conf	25 Apr 2002 16:28:54 -0000
+@@ -29,6 +29,7 @@
+             'c++-embedded' => '/cvs/c++-embedded',
+             'cgen' => '/cvs/src',
+             'cygwin' => '/cvs/cygwin',
++            'cygwin-apps' => '/cvs/cygwin-apps',
+ 	    'cygwin-xfree' => '/cvs/cygwin-xfree',
+             'docbook-tools' => '/cvs/docbook-tools',
+             'dominion' => '/cvs/dominion',
+
+--------------050807070803080001090809--
