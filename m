@@ -1,180 +1,39 @@
-From: "Gareth Pearce" <tilps@hotmail.com>
-To: <cygwin-patches@cygwin.com>, <newlib@sources.redhat.com>
-Subject: [PATCH] - add setbuffer/setlinebuf functions
-Date: Sat, 17 Nov 2001 00:10:00 -0000
-Message-ID: <OE28g1rEjoT2Y89RdrU0001288b@hotmail.com>
-X-SW-Source: 2001-q4/msg00230.html
-Content-type: multipart/mixed; boundary="----------=_1583532850-65438-117"
-Message-ID: <20011117001000.cm2qxqV7YsI7AeU3q1ggSx3nVoUD1QGzHWhhqCgQevQ@z>
+From: Corinna Vinschen <cygwin-patches@cygwin.com>
+To: cygwin-patches@sourceware.cygnus.com
+Subject: Re: [PATCH] Mask mnemonics and expressions, help, version, getopts_long() for strace
+Date: Sat, 17 Nov 2001 01:48:00 -0000
+Message-ID: <20011117104821.A25284@cygbert.vinschen.de>
+References: <NCBBIHCHBLCMLBLOBONKMEFPCHAA.g.r.vansickle@worldnet.att.net>
+X-SW-Source: 2001-q4/msg00231.html
+Message-ID: <20011117014800.nHprOg299I07zjQbOUEJ08Ig_KxvBwc_uder702Gbd0@z>
 
-This is a multi-part message in MIME format...
+On Thu, Nov 15, 2001 at 07:24:12AM -0600, Gary R. Van Sickle wrote:
+> 12th time's the charm;-)!:
+> 
+> 2001-11-15  Gary R. Van Sickle  <g.r.vansickle@worldnet.att.net>
+> 
+> 	* strace.cc (main): Change getopt() to getopt_long().
+> 	Add support for help and version info.
+> 	Use new parse_mask() function for -m/--mask option.
+> 	(longopts): Add long options structure.
+> 	(opts): Move options string from getopts call to static var.
+> 	(usage): Print usage information.
+> 	(SCCSid): Version info.
+> 	(version): New function for displaying version info.
+> 	(parse_mask): New function supporting parsing of mnemonics,
+> 	hex, and basic expressions in masks.
+> 	(mnemonic2ul): New mnemonic parsing function.
+> 	(tag_mask_mnemonic): New type.
+> 	(mnemonic_table): New table of mnemonics for mnemonic2ul() to
+> 	search through.
 
-------------=_1583532850-65438-117
-Content-length: 931
 
-Hi
+Applied.
 
-I noticed that these 2 functions were not part of the newlib library - even
-though they are defined in the headers.
-Attached is 2 patches one for a new file setbuffer.c in libc/stdio/ and the
-other for modifications to the makefiles in that directory.
+Thanks,
+Corinna
 
-This is my first go at something like this - so it wouldnt supprise me if I
-have something amiss, feel free to tell me what I need to do to correct
-this, or if I am out of place trying to get this added.
-
-If this goes in, I will submit another patch for the cygwin.din to export
-these if that is needed.
-
-ChangeLog entry
-
-2001-11-17  Gareth Pearce  <tilps@hotmail.com>
-
-        * libc/stdio/Makefile.am: Modify to add setbuffer.c
-        * libc/stdio/Makefile.in: Modify to add setbuffer.c
-        * libc/stdio/setbuffer.c: New file to add support for
-setbuffer/setlinebuf
-        (setbuffer): New function - calls setvbuf
-        (setlinebuf): New function - calls setvbuf
-
-------------=_1583532850-65438-117
-Content-Type: text/x-diff; charset=us-ascii; name="setbuffer.patch1"
-Content-Disposition: inline; filename="setbuffer.patch1"
-Content-Transfer-Encoding: base64
-Content-Length: 2579
-
-LS0tIE1ha2VmaWxlLmFtCTIwMDEvMDQvMjAgMjI6NTA6NTEJMS4zCisrKyBN
-YWtlZmlsZS5hbQkyMDAxLzExLzE3IDA3OjUyOjQ4CkBAIC01Myw2ICs1Myw3
-IEBAIGxpYl9hX1NPVVJDRVMgPSBcCiAJcmdldC5jIAkJCQlcCiAJc2NhbmYu
-YyAJCQlcCiAJc2V0YnVmLmMgCQkJXAorCXNldGJ1ZmZlci5jIAkJCVwKIAlz
-ZXR2YnVmLmMgCQkJXAogCXNpcHJpbnRmLmMgCQkJXAogCXNucHJpbnRmLmMJ
-CQlcCkBAIC0xMTMsNiArMTE0LDcgQEAgQ0hFV09VVF9GSUxFUyA9IFwKIAly
-ZW5hbWUuZGVmCQlcCiAJcmV3aW5kLmRlZgkJXAogCXNldGJ1Zi5kZWYJCVwK
-KwlzZXRidWZmZXIuZGVmCQlcCiAJc2V0dmJ1Zi5kZWYJCVwKIAlzaXByaW50
-Zi5kZWYJCVwKIAlzcHJpbnRmLmRlZgkJXApAQCAtMTU1LDYgKzE1Nyw3IEBA
-IHB1dHMubzogZnZ3cml0ZS5oCiByZWZpbGwubzogbG9jYWwuaAogc2NhbmYu
-bzogbG9jYWwuaAogc2V0YnVmLm86IGxvY2FsLmgKK3NldGJ1ZmZlci5vOiBs
-b2NhbC5oCiBzZXR2YnVmLm86IGxvY2FsLmgKIHNpcHJpbnRmLm86IGxvY2Fs
-LmgKIHNwcmludGYubzogbG9jYWwuaAotLS0gTWFrZWZpbGUuaW4JMjAwMS8w
-NC8yMCAyMjo1MDo1MQkxLjMKKysrIE1ha2VmaWxlLmluCTIwMDEvMTEvMTcg
-MDc6NTI6NTEKQEAgLTEzNSw2ICsxMzUsNyBAQCBsaWJfYV9TT1VSQ0VTID0g
-XAogCXJnZXQuYyAJCQkJXAogCXNjYW5mLmMgCQkJXAogCXNldGJ1Zi5jIAkJ
-CVwKKwlzZXRidWZmZXIuYyAJCQlcCiAJc2V0dmJ1Zi5jIAkJCVwKIAlzaXBy
-aW50Zi5jIAkJCVwKIAlzbnByaW50Zi5jCQkJXApAQCAtMTkzLDYgKzE5NCw3
-IEBAIENIRVdPVVRfRklMRVMgPSBcCiAJcmVuYW1lLmRlZgkJXAogCXJld2lu
-ZC5kZWYJCVwKIAlzZXRidWYuZGVmCQlcCisJc2V0YnVmZmVyLmRlZgkJXAog
-CXNldHZidWYuZGVmCQlcCiAJc2lwcmludGYuZGVmCQlcCiAJc3ByaW50Zi5k
-ZWYJCVwKQEAgLTIyNiw5ICsyMjgsOSBAQCBmcHJpbnRmLm8gZnB1dGMubyBm
-cHV0cy5vIGZyZWFkLm8gZnJlb3BlCiBmdGVsbC5vIGZ2d3JpdGUubyBmd2Fs
-ay5vIGZ3cml0ZS5vIGdldGMubyBnZXRjaGFyLm8gZ2V0cy5vIGdldHcubyBc
-CiBpcHJpbnRmLm8gbWFrZWJ1Zi5vIG1rdGVtcC5vIHBlcnJvci5vIHByaW50
-Zi5vIHB1dGMubyBwdXRjaGFyLm8gcHV0cy5vIFwKIHB1dHcubyByZWZpbGwu
-byByZW1vdmUubyByZW5hbWUubyByZXdpbmQubyByZ2V0Lm8gc2NhbmYubyBz
-ZXRidWYubyBcCi1zZXR2YnVmLm8gc2lwcmludGYubyBzbnByaW50Zi5vIHNw
-cmludGYubyBzc2NhbmYubyBzdGRpby5vIHRtcGZpbGUubyBcCi10bXBuYW0u
-byB1bmdldGMubyB2ZnByaW50Zi5vIHZmc2NhbmYubyB2cHJpbnRmLm8gdnNj
-YW5mLm8gdnNucHJpbnRmLm8gXAotdnNwcmludGYubyB2c3NjYW5mLm8gd2J1
-Zi5vIHdzZXR1cC5vCitzZXRidWZmZXIubyBzZXR2YnVmLm8gc2lwcmludGYu
-byBzbnByaW50Zi5vIHNwcmludGYubyBzc2NhbmYubyBzdGRpby5vIFwKK3Rt
-cGZpbGUubyB0bXBuYW0ubyB1bmdldGMubyB2ZnByaW50Zi5vIHZmc2NhbmYu
-byB2cHJpbnRmLm8gdnNjYW5mLm8gXAordnNucHJpbnRmLm8gdnNwcmludGYu
-byB2c3NjYW5mLm8gd2J1Zi5vIHdzZXR1cC5vCiBDRkxBR1MgPSBAQ0ZMQUdT
-QAogQ09NUElMRSA9ICQoQ0MpICQoREVGUykgJChJTkNMVURFUykgJChBTV9D
-UFBGTEFHUykgJChDUFBGTEFHUykgJChBTV9DRkxBR1MpICQoQ0ZMQUdTKQog
-Q0NMRCA9ICQoQ0MpCkBAIC00MzIsNiArNDM0LDcgQEAgcHV0cy5vOiBmdndy
-aXRlLmgKIHJlZmlsbC5vOiBsb2NhbC5oCiBzY2FuZi5vOiBsb2NhbC5oCiBz
-ZXRidWYubzogbG9jYWwuaAorc2V0YnVmZmVyLm86IGxvY2FsLmgKIHNldHZi
-dWYubzogbG9jYWwuaAogc2lwcmludGYubzogbG9jYWwuaAogc3ByaW50Zi5v
-OiBsb2NhbC5oCg==
-
-------------=_1583532850-65438-117
-Content-Type: text/x-diff; charset=us-ascii; name="setbuffer.patch2"
-Content-Disposition: inline; filename="setbuffer.patch2"
-Content-Transfer-Encoding: base64
-Content-Length: 5039
-
-LS0tIHNldGJ1ZmZlci5jLkVNUFRZCVNhdCBOb3YgMTcgMTg6NTU6MTEgMjAw
-MQorKysgc2V0YnVmZmVyLmMJU2F0IE5vdiAxNyAxNzo0NDoyMyAyMDAxCkBA
-IC0wLDAgKzEsMTI1IEBACisvKgorICogQ29weXJpZ2h0IChjKSAxOTkwIFRo
-ZSBSZWdlbnRzIG9mIHRoZSBVbml2ZXJzaXR5IG9mIENhbGlmb3JuaWEuCisg
-KiBBbGwgcmlnaHRzIHJlc2VydmVkLgorICoKKyAqIFJlZGlzdHJpYnV0aW9u
-IGFuZCB1c2UgaW4gc291cmNlIGFuZCBiaW5hcnkgZm9ybXMgYXJlIHBlcm1p
-dHRlZAorICogcHJvdmlkZWQgdGhhdCB0aGUgYWJvdmUgY29weXJpZ2h0IG5v
-dGljZSBhbmQgdGhpcyBwYXJhZ3JhcGggYXJlCisgKiBkdXBsaWNhdGVkIGlu
-IGFsbCBzdWNoIGZvcm1zIGFuZCB0aGF0IGFueSBkb2N1bWVudGF0aW9uLAor
-ICogYWR2ZXJ0aXNpbmcgbWF0ZXJpYWxzLCBhbmQgb3RoZXIgbWF0ZXJpYWxz
-IHJlbGF0ZWQgdG8gc3VjaAorICogZGlzdHJpYnV0aW9uIGFuZCB1c2UgYWNr
-bm93bGVkZ2UgdGhhdCB0aGUgc29mdHdhcmUgd2FzIGRldmVsb3BlZAorICog
-YnkgdGhlIFVuaXZlcnNpdHkgb2YgQ2FsaWZvcm5pYSwgQmVya2VsZXkuICBU
-aGUgbmFtZSBvZiB0aGUKKyAqIFVuaXZlcnNpdHkgbWF5IG5vdCBiZSB1c2Vk
-IHRvIGVuZG9yc2Ugb3IgcHJvbW90ZSBwcm9kdWN0cyBkZXJpdmVkCisgKiBm
-cm9tIHRoaXMgc29mdHdhcmUgd2l0aG91dCBzcGVjaWZpYyBwcmlvciB3cml0
-dGVuIHBlcm1pc3Npb24uCisgKiBUSElTIFNPRlRXQVJFIElTIFBST1ZJREVE
-IGBgQVMgSVMnJyBBTkQgV0lUSE9VVCBBTlkgRVhQUkVTUyBPUgorICogSU1Q
-TElFRCBXQVJSQU5USUVTLCBJTkNMVURJTkcsIFdJVEhPVVQgTElNSVRBVElP
-TiwgVEhFIElNUExJRUQKKyAqIFdBUlJBTlRJRVMgT0YgTUVSQ0hBTlRBQklM
-SVRZIEFORCBGSVRORVNTIEZPUiBBIFBBUlRJQ1VMQVIgUFVSUE9TRS4KKyAq
-LworCisvKiAKK01vZGlmaWVkIGNvcHkgb2Ygc2V0YnVmLmMgdG8gc3VwcG9y
-dCBzZXRidWZmZXIgYW5kIHNldGxpbmVidWYgZnVuY3Rpb25zCitkZWZpbmVk
-IGFzIHBhcnQgb2YgQlNELgorTW9kaWZpY2F0aW9ucyBieSBHYXJldGggUGVh
-cmNlLCAyMDAxLgorKi8KKworLyoKK0ZVTkNUSU9OCis8PHNldGJ1ZmZlcj4+
-LS0tc3BlY2lmeSBmdWxsIGJ1ZmZlcmluZyBmb3IgYSBmaWxlIG9yIHN0cmVh
-bSB3aXRoIHNpemUKKworSU5ERVgKKwlzZXRidWZmZXIKKworQU5TSV9TWU5P
-UFNJUworCSNpbmNsdWRlIDxzdGRpby5oPgorCXZvaWQgc2V0YnVmZmVyKEZJ
-TEUgKjxbZnBdPiwgY2hhciAqPFtidWZdPiwgaW50IDxbc2l6ZV0+KTsKKwor
-VFJBRF9TWU5PUFNJUworCSNpbmNsdWRlIDxzdGRpby5oPgorCXZvaWQgc2V0
-YnVmZmVyKDxbZnBdPiwgPFtidWZdPiwgPFtzaXplXT4pCisJRklMRSAqPFtm
-cF0+OworCWNoYXIgKjxbYnVmXT47CisJaW50IDxbc2l6ZV0+OworCitERVND
-UklQVElPTgorPDxzZXRidWZmZXI+PiBzcGVjaWZpZXMgdGhhdCBvdXRwdXQg
-dG8gdGhlIGZpbGUgb3Igc3RyZWFtIGlkZW50aWZpZWQgYnkKKzxbZnBdPiBz
-aG91bGQgYmUgZnVsbHkgYnVmZmVyZWQuICBBbGwgb3V0cHV0IGZvciB0aGlz
-IGZpbGUgd2lsbCBnbyB0byBhCitidWZmZXIgKG9mIHNpemUgPFtzaXplXT4p
-LiAgT3V0cHV0IHdpbGwgYmUgcGFzc2VkIG9uIHRvIHRoZSBob3N0IHN5c3Rl
-bQorb25seSB3aGVuIHRoZSBidWZmZXIgaXMgZnVsbCwgb3Igd2hlbiBhbiBp
-bnB1dCBvcGVyYXRpb24gaW50ZXJ2ZW5lcy4KKworWW91IG1heSwgaWYgeW91
-IHdpc2gsIHN1cHBseSB5b3VyIG93biBidWZmZXIgYnkgcGFzc2luZyBhIHBv
-aW50ZXIgdG8KK2l0IGFzIHRoZSBhcmd1bWVudCA8W2J1Zl0+LiAgSXQgbXVz
-dCBoYXZlIHNpemUgPFtzaXplXT4uICBZb3UgY2FuCithbHNvIHVzZSA8PE5V
-TEw+PiBhcyB0aGUgdmFsdWUgb2YgPFtidWZdPiwgdG8gc2lnbmFsIHRoYXQg
-dGhlCis8PHNldGJ1ZmZlcj4+IGZ1bmN0aW9uIGlzIHRvIGFsbG9jYXRlIHRo
-ZSBidWZmZXIuCisKK1dBUk5JTkdTCitZb3UgbWF5IG9ubHkgdXNlIDw8c2V0
-YnVmZmVyPj4gYmVmb3JlIHBlcmZvcm1pbmcgYW55IGZpbGUgb3BlcmF0aW9u
-CitvdGhlciB0aGFuIG9wZW5pbmcgdGhlIGZpbGUuCisKK0lmIHlvdSBzdXBw
-bHkgYSBub24tbnVsbCA8W2J1Zl0+LCB5b3UgbXVzdCBlbnN1cmUgdGhhdCB0
-aGUgYXNzb2NpYXRlZAorc3RvcmFnZSBjb250aW51ZXMgdG8gYmUgYXZhaWxh
-YmxlIHVudGlsIHlvdSBjbG9zZSB0aGUgc3RyZWFtCitpZGVudGlmaWVkIGJ5
-IDxbZnBdPi4KKworUkVUVVJOUworPDxzZXRidWZmZXI+PiBkb2VzIG5vdCBy
-ZXR1cm4gYSByZXN1bHQuCisKK1BPUlRBQklMSVRZCitUaGlzIGZ1bmN0aW9u
-IGNvbWVzIGZyb20gQlNEIG5vdCBBTlNJIG9yIFBPU0lYLgorCitTdXBwb3J0
-aW5nIE9TIHN1YnJvdXRpbmVzIHJlcXVpcmVkOiA8PGNsb3NlPj4sIDw8ZnN0
-YXQ+PiwgPDxpc2F0dHk+PiwKKzw8bHNlZWs+PiwgPDxyZWFkPj4sIDw8c2Jy
-az4+LCA8PHdyaXRlPj4uCisKKworRlVOQ1RJT04KKworPDxzZXRsaW5lYnVm
-Pj4tLS1zcGVjaWZ5IGxpbmUgYnVmZmVyaW5nIGZvciBhIGZpbGUgb3Igc3Ry
-ZWFtCisKK0lOREVYCisJc2V0bGluZWJ1ZgorCitBTlNJX1NZTk9QU0lTCisJ
-I2luY2x1ZGUgPHN0ZGlvLmg+CisJdm9pZCBzZXRsaW5lYnVmKEZJTEUgKjxb
-ZnBdPik7CisKK1RSQURfU1lOT1BTSVMKKwkjaW5jbHVkZSA8c3RkaW8uaD4K
-Kwl2b2lkIHNldGxpbmVidWYoPFtmcF0+KQorCUZJTEUgKjxbZnBdPjsKKwor
-REVTQ1JJUFRJT04KKzw8c2V0bGluZWJ1Zj4+IHNwZWNpZmllcyB0aGF0IG91
-dHB1dCB0byB0aGUgZmlsZSBvciBzdHJlYW0gaWRlbnRpZmllZCBieQorPFtm
-cF0+IHNob3VsZCBiZSBsaW5lIGJ1ZmZlcmVkLiAgVGhpcyBjYXVzZXMgdGhl
-IGZpbGUgb3Igc3RyZWFtIHRvIHBhc3MKK29uIG91dHB1dCB0byB0aGUgaG9z
-dCBzeXN0ZW0gYXQgZXZlcnkgbmV3bGluZSwgYXMgd2VsbCBhcyB3aGVuIHRo
-ZQorYnVmZmVyIGlzIGZ1bGwsIG9yIHdoZW4gYW4gaW5wdXQgb3BlcmF0aW9u
-IGludGVydmVuZXMuCisKK1dBUk5JTkdTCitZb3UgbWF5IG9ubHkgdXNlIDw8
-c2V0bGluZWJ1Zj4+IGJlZm9yZSBwZXJmb3JtaW5nIGFueSBmaWxlIG9wZXJh
-dGlvbgorb3RoZXIgdGhhbiBvcGVuaW5nIHRoZSBmaWxlLgorCitSRVRVUk5T
-Cis8PHNldGxpbmVidWY+PiByZXR1cm5zIGFzIHBlciBzZXR2YnVmLgorCitQ
-T1JUQUJJTElUWQorVGhpcyBmdW5jdGlvbiBjb21lcyBmcm9tIEJTRCBub3Qg
-QU5TSSBvciBQT1NJWC4KKworU3VwcG9ydGluZyBPUyBzdWJyb3V0aW5lcyBy
-ZXF1aXJlZDogPDxjbG9zZT4+LCA8PGZzdGF0Pj4sIDw8aXNhdHR5Pj4sCis8
-PGxzZWVrPj4sIDw8cmVhZD4+LCA8PHNicms+PiwgPDx3cml0ZT4+LgorKi8K
-KworI2luY2x1ZGUgPF9hbnNpLmg+CisjaW5jbHVkZSA8c3RkaW8uaD4KKyNp
-bmNsdWRlICJsb2NhbC5oIgorCit2b2lkCitfREVGVU4gKHNldGJ1ZmZlciwg
-KGZwLCBidWYsIHNpemUpLAorCUZJTEUgKiBmcCBfQU5ECisJY2hhciAqYnVm
-IF9BTkQKKwlpbnQgc2l6ZSkKK3sKKyAgKHZvaWQpIHNldHZidWYgKGZwLCBi
-dWYsIGJ1ZiA/IF9JT0ZCRiA6IF9JT05CRiwgKHNpemVfdCkgc2l6ZSk7Cit9
-CisKK2ludAorX0RFRlVOIChzZXRsaW5lYnVmLCAoZnApLAorCUZJTEUgKiBm
-cCkKK3sKKyAgcmV0dXJuIChzZXR2YnVmIChmcCwgKGNoYXIgKikgTlVMTCwg
-X0lPTEJGLCAoc2l6ZV90KSAwKSk7Cit9Cg==
-
-------------=_1583532850-65438-117--
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Developer                                mailto:cygwin@cygwin.com
+Red Hat, Inc.
