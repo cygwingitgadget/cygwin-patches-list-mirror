@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4882-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 11675 invoked by alias); 26 Jul 2004 13:21:13 -0000
+Return-Path: <cygwin-patches-return-4883-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 24814 invoked by alias); 27 Jul 2004 01:36:59 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,40 +7,57 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 11656 invoked from network); 26 Jul 2004 13:21:12 -0000
-Date: Mon, 26 Jul 2004 13:21:00 -0000
-From: Corinna Vinschen <vinschen@redhat.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Fix AMD flags in /proc/cpuinfo
-Message-ID: <20040726132118.GE30714@cygbert.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <0c9501c4730a$71ea1550$0207a8c0@avocado>
+Received: (qmail 24801 invoked from network); 27 Jul 2004 01:36:58 -0000
+Message-Id: <3.0.5.32.20040726213310.0080be30@incoming.verizon.net>
+X-Sender: vze1u1tg@incoming.verizon.net (Unverified)
+Date: Tue, 27 Jul 2004 01:36:00 -0000
+To: "Gerd.Spalink@t-online.de" <Gerd.Spalink@t-online.de>,
+ cygwin-patches@cygwin.com
+From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
+Subject: RE: Fix dup for /dev/dsp
+In-Reply-To: <3.0.5.32.20040724120400.00808b80@incoming.verizon.net>
+References: <01C47174.AD674DB0.Gerd.Spalink@t-online.de>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0c9501c4730a$71ea1550$0207a8c0@avocado>
-User-Agent: Mutt/1.4.2i
-X-SW-Source: 2004-q3/txt/msg00034.txt.bz2
+Content-Type: text/plain; charset="us-ascii"
+X-SW-Source: 2004-q3/txt/msg00035.txt.bz2
 
-On Jul 26 13:16, Chris January wrote:
-> This patch extends Tomas Ukkonen's earlier AMD fix by removing
-> Intel-specific flags from /proc/cpuinfo on AMD processors. It also adds
-> support for a few more AMD-specific flags. Output for the flags field on
-> /proc/cpuinfo on my AMD Athlon XP now matches Linux. I changed a few of
-> the names for Intel extended features to match Linux.
+At 12:04 PM 7/24/2004 -0400, Pierre A. Humblet wrote:
+<snip>
 
-Thanks, applied.
+>But the current code seems to assume a shared memory. Otherwise setting
+>the "owner" to the current PID is completely useless (except perhaps
+>if a fork occurs while the device is playing. Doing that would be 
+>an interesting test!) My 2 cents are that I would try to remove owner.
+>While doing so we would see if (and why) it's helpful after all. 
 
-Just a friendly hint:  Next time, please include the ChangeLog entry inline
-and formatted to fit into 80 columns.  It's much simpler to add to the
-ChangeLog file then.
+Gerd, (sorry for previous misspells)
 
+Following up on one of my earlier questions, I have looked at the possible
+"states" of the /dev/dsp driver and what would happen following a fork.
 
-Thanks,
-Corinna
+There are basically 3 states:
+1) /dev/dsp just opened
+     - R/W flag set
+2) After 1st write/read
+     - Audio_X_ exists
+     - Windows audio driver opened
+     - handle audio::dev_ != NULL
+     - audio::owner == PID
+3) After reset/stop
+     - Audio_X_ exists
+     - Windows audio driver closed
+     - handle audio_X::dev_ keeps its old value
+     - audio_X::owner == 0
+     from here go back to 2 or close.
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Co-Project Leader          mailto:cygwin@cygwin.com
-Red Hat, Inc.
+If a fork occurs in state 2), the "owner" will be set to the 
+PPID in the child. The child will remain locked out.
+
+Suggestions:
+  - get rid of owner and related tests. 
+  - reset dev_ to 0 when closing Windows driver
+  - use dev_ to determine what calls can be made to
+    the Windows driver
+  - reset dev_ to 0 in fixup-after-fork
+
+Pierre
