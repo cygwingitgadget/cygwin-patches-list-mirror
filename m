@@ -1,25 +1,52 @@
-From: Kazuhiro Fujieda <fujieda@jaist.ac.jp>
-To: Corinna Vinschen <cygwin-patches@cygwin.com>
-Subject: Re: [RFD, PATCH]: Set "hidden" attribute when creating files/dirs/symlinks with trailing dot
-Date: Mon, 12 Nov 2001 05:22:00 -0000
-Message-ID: <s1su1w05dk7.fsf@jaist.ac.jp>
-References: <20011112014116.B2618@cygbert.vinschen.de>
-X-SW-Source: 2001-q4/msg00204.html
-Message-ID: <20011112052200.D-g2BWV7Gcu9XZ1bK1mS67yh9qa-xSFp9457un1mtyU@z>
+From: "Robert Collins" <robert.collins@itdomain.com.au>
+To: "CP List" <Cygwin-Patches@Cygwin.Com>
+Cc: "Gareth Pearce" <tilps@hotmail.com>
+Subject: Re: [Patch] setup.exe - no skip/keep option buggyness
+Date: Mon, 12 Nov 2001 14:32:00 -0000
+Message-ID: <02c901c16bca$1a7e5fa0$0200a8c0@lifelesswks>
+References: <OE65oDk9X2VFyBUMeEk0000ecac@hotmail.com> <01fe01c16916$a920a350$0200a8c0@lifelesswks> <3BEBC8F6.3B150BA3@yahoo.com> <021401c16976$7a591380$0200a8c0@lifelesswks> <3BEFCB8E.C0507FBD@yahoo.com>
+X-SW-Source: 2001-q4/msg00205.html
+Message-ID: <20011112143200.kZQp7zUgI0N7_ChtVcQxALH8sScBBgDAgNVtnzQagC8@z>
 
->>> On Mon, 12 Nov 2001 01:41:16 +0100
->>> Corinna Vinschen <cygwin-patches@cygwin.com> said:
+----- Original Message -----
+From: "Earnie Boyd" <earnie_boyd@yahoo.com>
 
-> I thought it would be a good idea to ask for your opinion on that
-> patch first.
 
-I think it is a good idea.
+> Robert Collins wrote:
+>
+> > There was an earlier thread on skip vs keep, and what they mean.
+> >
+> > It was on cyg-apps IIRC.
+> >
+>
+> That's fine, I half recall the thread and at the time didn't have time
+to
+> voice an opinion.  I know skip is intended for the not-installed
+packages
+> and keep is intended for the already-installed packages.  However, in
+the
+> current invocation skip is relative to both and IMO should still be
+relative
+> to both.  Skip for the not-installed means leave it not-installed
+(i.e.:
+> leave it as is) and skip for the already-installed means don't update
+what I
+> have (i.e.: leave it as is).  Setup does this now, there isn't a
+coding
+> change for it.  IMHO, keep should be removed in favor of skip.  As I
+said,
+> it may be too late to say anything but...
+>
 
-I guess you would take account of it, the Samba server has a
-similar feature. I enjoy it when I look into my home directory
-on UNIX with the Windows explorer. It can prevent 124 dotted
-files in the directory from bothering me.
-____
-  | AIST      Kazuhiro Fujieda <fujieda@jaist.ac.jp>
-  | HOKURIKU  Center for Information Science
-o_/ 1990      Japan Advanced Institute of Science and Technology
+At this point, I'm against any code changes that aren't release
+critical.
+
+I'm happy for this to be debated to death for the HEAD branch though.
+I'm not convinced that having a separate skip/keep for the user makes
+sense, but then I'm not convinced that a spin control is best their
+either..
+
+Certainly the innards of choose.cc need reworking, and I'd kinda like to
+do that before bit twiddling choose.cc's gui.
+
+Rob
