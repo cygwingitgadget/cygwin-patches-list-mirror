@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5093-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 14725 invoked by alias); 28 Oct 2004 11:39:53 -0000
+Return-Path: <cygwin-patches-return-5094-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 10846 invoked by alias); 28 Oct 2004 16:59:45 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,44 +7,64 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 14613 invoked from network); 28 Oct 2004 11:39:50 -0000
-Received: from unknown (HELO sccrmhc11.comcast.net) (204.127.202.55)
-  by sourceware.org with SMTP; 28 Oct 2004 11:39:50 -0000
-Received: from althea (pcp04242302pcs.eatntn01.nj.comcast.net[68.38.102.230])
-          by comcast.net (sccrmhc11) with ESMTP
-          id <2004102811394901100km513e>; Thu, 28 Oct 2004 11:39:50 +0000
-Received: from [127.0.0.1] (helo=althea.tishler.net)
-	by althea with smtp (Exim 4.30)
-	id I6ALTF-0001N0-BD; Thu, 28 Oct 2004 07:41:39 -0400
-Received: by althea.tishler.net (sSMTP sendmail emulation); Thu, 28 Oct 2004 07:41:39 -0400
-Date: Thu, 28 Oct 2004 11:39:00 -0000
-From: Jason Tishler <jason@tishler.net>
-To: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
-Cc: cygwin-patches@cygwin.com
+Received: (qmail 10837 invoked from network); 28 Oct 2004 16:59:43 -0000
+Received: from unknown (HELO esds.vss.fsi.com) (66.136.174.213)
+  by sourceware.org with SMTP; 28 Oct 2004 16:59:43 -0000
+Received: from fordpc.vss.fsi.com (fordpc [198.51.27.93])
+	by esds.vss.fsi.com (8.11.6+Sun/8.9.1) with ESMTP id i9SGxhn04937
+	for <cygwin-patches@cygwin.com>; Thu, 28 Oct 2004 11:59:43 -0500 (CDT)
+Date: Thu, 28 Oct 2004 16:59:00 -0000
+From: Brian Ford <ford@vss.fsi.com>
+Reply-To: cygwin-patches@cygwin.com
+To: cygwin-patches@cygwin.com
 Subject: Re: [Patch] Deimpersonate while accessing HKLM
-Message-ID: <20041028114138.GA2112@tishler.net>
-Mail-Followup-To: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>,
-	cygwin-patches@cygwin.com
-References: <3.0.5.32.20041027203301.0081e7d0@incoming.verizon.net>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 In-Reply-To: <3.0.5.32.20041027203301.0081e7d0@incoming.verizon.net>
-User-Agent: Mutt/1.4.1i
-X-SW-Source: 2004-q4/txt/msg00094.txt.bz2
+Message-ID: <Pine.CYG.4.58.0410281157530.2216@fordpc.vss.fsi.com>
+References: <3.0.5.32.20041027203301.0081e7d0@incoming.verizon.net>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-SW-Source: 2004-q4/txt/msg00095.txt.bz2
 
-Pierre,
+On Wed, 27 Oct 2004, Pierre A. Humblet wrote:
 
-On Wed, Oct 27, 2004 at 08:33:01PM -0400, Pierre A. Humblet wrote:
 > This patch should fix the chdir problem reported by Jason Tishler.
 > It deimpersonates while reading the mounts and cygdrive in HKLM.
+>
+> For ease of initialization, the unused cygheap->user tokens are
+> now set to NO_IMPERSONATION (instead of INVALID_HANDLE_VALUE),
+> which is #defined as NULL.
+> If the argument of cygwin_set_impersonation_token() is
+> INVALID_HANDLE_VALUE, it is changed to NO_IMPERSONATION.
 
-I can confirm that the above solves the proftpd chdir problem.  I really
-appreciate you tracking this down.
+This may very well be user error, but I thought it important to report.
+After compiling current CVS I get a slew of:
 
-Thanks,
-Jason
+53 [main] sh 3064 cygheap_user::reimpersonate: ImpersonateLoggedOnUser:
+Win32 error 6
+
+So, I thought I'd do a clean build.  Then I get:
+
+../../cygwin/libiberty/fibheap.c: In function `fibheap_union':
+../../cygwin/libiberty/fibheap.c:166: warning: implicit declaration of
+function `free'
+../../cygwin/libiberty/fibheap.c: In function `fibheap_delete_node':
+../../cygwin/libiberty/fibheap.c:285: error: `LONG_MIN' undeclared (first
+use in this function)
+../../cygwin/libiberty/fibheap.c:285: error: (Each undeclared identifier
+is reported only once
+../../cygwin/libiberty/fibheap.c:285: error: for each function it appears
+in.)
+../../cygwin/libiberty/fibheap.c: In function `fibheap_consolidate':
+../../cygwin/libiberty/fibheap.c:395: warning: implicit declaration of
+function `memset'
+
+which I'm sure has nothing to do with this patch.
+
+I'll look deeper when I have more time.  Thanks.
 
 -- 
-PGP/GPG Key: http://www.tishler.net/jason/pubkey.asc or key servers
-Fingerprint: 7A73 1405 7F2B E669 C19D  8784 1AFD E4CC ECF4 8EF6
+Brian Ford
+Senior Realtime Software Engineer
+VITAL - Visual Simulation Systems
+FlightSafety International
+the best safety device in any aircraft is a well-trained pilot...
