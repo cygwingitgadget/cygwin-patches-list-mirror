@@ -1,54 +1,37 @@
-From: Robert Collins <robert.collins@itdomain.com.au>
-To: Corinna Vinschen <cygwin-patches@cygwin.com>
-Subject: Re: [PATCH]: Check modification time on /etc/passwd and /etc/group
-Date: Fri, 03 Aug 2001 06:36:00 -0000
-Message-id: <996845317.24251.9.camel@lifelesswks>
-References: <20010731203820.U490@cygbert.vinschen.de> <20010803144012.X23782@cygbert.vinschen.de> <996843821.24208.3.camel@lifelesswks> <20010803151518.Y23782@cygbert.vinschen.de>
-X-SW-Source: 2001-q3/msg00046.html
+From: Christopher Faylor <cgf@redhat.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: close-on-exec handles are left open by exec parent
+Date: Fri, 03 Aug 2001 08:31:00 -0000
+Message-id: <20010803113109.D26623@redhat.com>
+References: <71194343130.20010802183838@logos-m.ru>
+X-SW-Source: 2001-q3/msg00047.html
 
-On 03 Aug 2001 15:15:18 +0200, Corinna Vinschen wrote:
-> On Fri, Aug 03, 2001 at 11:03:46PM +1000, Robert Collins wrote:
-> > On 03 Aug 2001 14:40:12 +0200, Corinna Vinschen wrote:
-> > > > +  operator pwd_state ()
-> > > > +    {
-> > > > +      struct stat st;
-> > > > +
-> > > > +      if (!stat ("/etc/passwd", &st) && st.st_mtime > last_modified)
-> > > > +	{
-> > > > +	  state = uninitialized;
-> > > > +	  last_modified = st.st_mtime;
-> > > > +	}
-> > > > +      return state;
-> > > > +    }
-> > We're reentrant here because of the stat() call. You need to alter the
-> > read_etc_passwd(function to not recurse forever (as is done for the
-> > fopen call - thats the passwd_state !=initilizing test). (Or have you
-> > tested for that particular race?)
-> 
-> I'm not quite sure if I know what you mean. Could you explain that
-> in a more detailed way? As for testing, I'm using a Cygwin DLL with
-> this patch since I've created the patch.
+On Thu, Aug 02, 2001 at 06:38:38PM +0400, egor duda wrote:
+>Hi!
+>
+>  here's the proposed patch. it also contains a fix FreeConsole ()
+>related bug -- when cygwin application frees its console,
+>"process_input" thread may be still running. When console is closed,
+>WaitForMultipleObjects () with console handle returns WAIT_FAILED, so
+>"process_input" thread starts cycling and eating CPU.
 
-Have you tried touch /etc/passwd? 
-What I mean is that the following code cycle seems inevitable to me :
+Ack! I don't understand why you've introduced another synchronization
+event.  Why not just close all of the fds after the program has been
+successfully executed?  Once CreateProcess has executed, the handles will
+be opened by the new process.
 
-read_etc_password
-\->check_state
-   \->stat()
-      \->check acls
-         \->(couple of steps here from memory)
-            \->read_etc_password
-               \->check_state
+I really don't want to have YA synchronization point between the parent
+and the child.  It seems like that will cause a hang with spawn P_NOWAIT
+of a non-cygwin process which is something that I'm currently trying to
+fix.
 
-and so on. There was a similar loop with fopen() whcih we discussed when
-we introduced getpwuid_r.
+Now that I think of it, removed a close_all_files call from spawn.cc a
+while ago.  I think that I thought that it was slowing things down.  Or,
+maybe it was causing api_fatal to stop printing anything.  However, I'd
+rather have a correctly working program for now and worry about api_fatal
+later, so, I propose the (untested) patch below which puts the close_all_files
+back.
 
-Rob
+Doesn't this solve the problem?
 
-> Corinna
-> 
-> -- 
-> Corinna Vinschen                  Please, send mails regarding Cygwin to
-> Cygwin Developer                                mailto:cygwin@cygwin.com
-> Red Hat, Inc.
-
+cgf
