@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-4984-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 13826 invoked by alias); 23 Sep 2004 02:35:11 -0000
+Return-Path: <cygwin-patches-return-4985-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 6376 invoked by alias); 23 Sep 2004 07:19:45 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,127 +7,58 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 13411 invoked from network); 23 Sep 2004 02:35:04 -0000
-Reply-To: <cygwin@cygwin.com>
-From: "Gary R. Van Sickle" <g.r.vansickle@worldnet.att.net>
-To: <cygwin-patches@cygwin.com>
-Subject: RE: [PATCH]: Still path.cc
-Date: Thu, 23 Sep 2004 02:35:00 -0000
-MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-In-Reply-To: <20040922220723.GA7717@trixie.casa.cgf.cx>
-X-SW-Source: 2004-q3/txt/msg00136.txt.bz2
-Message-ID: <20040923023500.GGzzrgO1H551QHFD_YHci8uI0slrfBvHvjSWAPVQYbM@z>
+Received: (qmail 6361 invoked from network); 23 Sep 2004 07:19:44 -0000
+Message-ID: <n2m-g.ciu2h5.3vsgpvd.1@buzzy-box.bavag>
+From: Bas van Gompel <cygwin-patches.buzz@bavag.tmfweb.nl>
+Subject: Re: [Patch] Trailing spaces in cygcheck -cd or -s output.
+References: <n2m-g.cibek2.3vvfqsr.1@buzzy-box.bavag> <20040922115453.GZ17670@cygbert.vinschen.de>
+Reply-To: <cygwin-patches mailing-list <cygwin-patches#cygwin.com@green.qinip.net>
+Organisation: Ehm...
+User-Agent: slrn/0.9.8.0 (Win32) Hamster/2.0.5.5
+To: cygwin-patches@cygwin.com
+Date: Thu, 23 Sep 2004 07:19:00 -0000
+X-SW-Source: 2004-q3/txt/msg00137.txt.bz2
 
-[Followups to cygwin@ since we're out of -patches' charter, also indicating
-no desire for private correspondence/tantrums on this topic]
+Op Wed, 22 Sep 2004 13:54:53 +0200 schreef Corinna Vinschen
+in <20040922115453.GZ17670@cygbert.vinschen.de>:
+:  On Sep 16 07:26, Bas van Gompel wrote:
 
-> On Wed, Sep 22, 2004 at 11:07:09AM -0500, Brian Ford wrote:
-> >You can't win here.  If you're a developer like person, the 
-> answer to 
-> >bug reports is usually "fix it yourslef if it's important to 
-> you".  If 
-> >you don't report it, but say thank you when someone fixes 
-> it, you get 
-> >"shame on you for not reporting this serious bug".
-> 
-> You apparently aren't paying very close attention.
-> 
+[dump_setup.cc (dump_setup): Avoid trailing spaces on package-list.]
 
-Or has read any cygwin list for any length of time.
+:  Thanks for the patch.  I've applied the patch plus an additional patch which
+:  adds an `if (check_files)' to simplify the expressions in (now two) printf's.
 
-(BTW, I for one could never have predicted your knee-jerk passive-aggressive
-reaction to a perfectly accurate statement there.  Touche.)
+Thanks, that's much more readable.
 
-> If you provide a simple test case to the cygwin list, you are 
-> generally thanked for the simple test case and eventually 
-> someone will fix it.
-> 
+Now one can eliminate a spurious ``strlen'', as well.
 
-True enough.
+ChangeLog-entry:
 
-> If you report a vague bug, you will either be ignored or 
-> there will be some attempt from cygwin mailing list regulars 
-> to purify the problem from, e.g., into "cygwin bash hangs 
-> when I do something.  Please help!"
-> to "cygwin bash hangs when I type 'cd ..somewhere' using 
-> cygwin 1.5.11 (cygcheck output included)"
-> 
+2004-09-23  Bas van Gompel  <cygwin-patch.buzz@bavag.tmfweb.nl>
 
-Or, subjected to a bunch of abuse from you.  Brian clearly indicated that he
-didn't know whether he had a "simple test case" (I assume typing
-'..whatever' is simple enough) or a "vague bug" which as you indicate would
-at best have been ignored.  Clearly he:
+	* dump_setup.cc (dump_setup): Remove unneeded strlen when check_files
+	is not set.
 
-1.  Knew that "I have a vague bug and don't have time to investigate it, but
-this seems to cause it" would almost certainly result in exactly the kind of
-BS you simultaneously deny exists and dispense with abandon in your post
-(why heck, a simple 'Thank you!' does that!).
-2.  Already had his Recommended Daily Allowance of BS, and wasn't all that
-hungry for more.
+Patch:
 
-Look me in the eye and tell me my cause-and-effect analysis in #1 is
-incorrect Chris.
+--- src/winsup/utils/dump_setup.cc	22 Sep 2004 11:50:51 -0000	1.15
++++ src/winsup/utils/dump_setup.cc	23 Sep 2004 05:26:51 -0000
+@@ -403,8 +403,8 @@ dump_setup (int verbose, char **argv, bo
+ 		check_package_files (verbose, packages[i].name)
+ 		  ? "     OK" : "     Incomplete");
+       else
+-	printf ("%-*s %-*s\n", package_len, packages[i].name,
+-	      strlen(packages[i].ver), packages[i].ver);
++	printf ("%-*s %s\n", package_len, packages[i].name,
++	      packages[i].ver);
+       fflush(stdout);
+     }
+ 
+L8r,
 
-> If you report a bug to the cygwin-developers list, you are 
-> either ignored or (more likely) told to fix it yourself since 
-> everyone who joins cygwin-developers is supposed to be at 
-> least mildly familiar with the DLL and has claimed to want to 
-> improve cygwin.  cygwin-developers is also not a bug-reporting list.
-> 
-
-In fact, there is no cygwin bug-reporting list, such as a "cygwin-bugs@".
-Gcc has one (well, a bugzilla-fed list, but still) (DISCLAIMER: This
-observation is not to be construed as a demand for anybody, especially
-Chris, to do anything).  But where does -developers@ come into play here?  I
-apologize, perhaps I haven't been paying very close attention, so feel free
-to let it fly Chris.  Get it all out of your system, at least for another
-month or so.
-
-> If you provide a patch, you are generally thanked for the 
-> patch although there is often some back and forth before the 
-> patch goes in.
-
-Also true enough.
-
->  (Some people become outraged by this and 
-> never send a patch again)
-> 
-
-Well, since IIRC Brian's made quite a few valuable donations, here's hoping
-he isn't as outraged by your abuse as by rights he should be.
-
-> If you mention that you saw the same simple bug long ago and 
-> never reported it (and why you'd bother to do that is 
-> perplexing), then you will probably be matter-of-factly told 
-> that you should have reported it earlier.
-> 
-
-Matter of fact, you will have "shame" heaped upon you if you do that.  Even
-more matter-of-factly, you'll have "shame" heaped upon you if you're
-*ignored* as well!  As a matter of fact, one would seem to be forced to
-conclude that (dare I say it?)... you can't win here.
-
-And there's no need to worry about how much attention I've been paying.
-
-> And, predictably the response to that will generally be "I 
-> didn't have enough time", "It wasn't my fault", or "It's your fault".
-> 
-> Actually, now that I think of it it's usually all three.
-> 
-> HTH.
-
-God you are a piece of work Faylor.  What caused all these problems you
-suffer from, this hatred of your fellow man?  Or do you just have absolutely
-*zero* people-skills and don't even know what your typing?  Or what?  What's
-wrong Chris?  Maybe we can debug *you*, and reap the benefits of your
-work[1] without having to endure the BS.  Help us help you, Chris.
-
-Help us, help you.
-
+Buzz.
 -- 
-Gary R. Van Sickle
-[1] DISCLAIMER: This statement is not to be construed as a 'Thank you' and
-is therefore *NOT* fair game in anyone's mind for directing "shame" at me.
+  ) |  | ---/ ---/  Yes, this | This message consists of true | I do not
+--  |  |   /    /   really is |   and false bits entirely.    | mail for
+  ) |  |  /    /    a 72 by 4 +-------------------------------+ any1 but
+--  \--| /--- /---  .sigfile. |   |perl -pe "s.u(z)\1.as."    | me. 4^re
