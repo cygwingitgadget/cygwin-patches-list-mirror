@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-1870-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
-Received: (qmail 14576 invoked by alias); 19 Feb 2002 00:40:34 -0000
+Return-Path: <cygwin-patches-return-1871-listarch-cygwin-patches=sourceware.cygnus.com@cygwin.com>
+Received: (qmail 6957 invoked by alias); 19 Feb 2002 22:54:57 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,40 +7,37 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 14515 invoked from network); 19 Feb 2002 00:40:27 -0000
-Subject: Re: [PATCH]setup.exe passwd-grp.bat being created when not needed
-From: Robert Collins <robert.collins@itdomain.com.au>
-To: Michael A Chase <mchase@ix.netcom.com>
-Cc: cygwin-patches@cygwin.com
-In-Reply-To: <002801c1b8d0$0042a300$f400a8c0@mchasecompaq>
-References: <002801c1b8d0$0042a300$f400a8c0@mchasecompaq>
-Content-Type: text/plain
+Received: (qmail 6875 invoked from network); 19 Feb 2002 22:54:57 -0000
+Message-ID: <006401c1b998$c106f230$0100a8c0@advent02>
+From: "Chris January" <chris@atomice.net>
+To: <cygwin-patches@cygwin.com>
+References: <008901c1b1be$80b36e70$0100a8c0@advent02> <20020210043745.GA5128@redhat.com>
+Subject: Re: /proc and /proc/registry
+Date: Tue, 19 Feb 2002 15:06:00 -0000
+MIME-Version: 1.0
+Content-Type: text/plain;
+	charset="iso-8859-1"
 Content-Transfer-Encoding: 7bit
-X-Mailer: Evolution/1.0 (Preview Release)
-Date: Tue, 19 Feb 2002 14:54:00 -0000
-Message-Id: <1014079272.2005.3.camel@lifelesswks>
-Mime-Version: 1.0
-X-OriginalArrivalTime: 19 Feb 2002 00:40:26.0107 (UTC) FILETIME=[05B4CCB0:01C1B8DE]
-X-SW-Source: 2002-q1/txt/msg00227.txt.bz2
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-SW-Source: 2002-q1/txt/msg00228.txt.bz2
 
-On Tue, 2002-02-19 at 09:59, Michael A Chase wrote:
-> Currently /etc/postinstall/passwd-grp.bat is opened before the need for it
-> is determined.  This results in the file always being executed even though
-> it is normally empty.   This patch may eliminate the flashing console window
-> at the end of setup.exe when no action is expected.
-> 
-> I left the iostream::mkpath_p() call at the top of the function to make sure
-> /etc/postinstall/ always exists after make_passwd_group() is called.  This
-> appears to be the only place the directory is created explicitly.
-> 
-> Sorry for the separate patches.  The two issues are independent and I didn't
-> notice this until I'd already sent the previous patch.  The patches may be
-> combined if you wish.
+> On Sat, Feb 09, 2002 at 11:07:09PM -0000, Chris January wrote:
+> >The attached patch (against cygwin-1.3.9-1/winsup/cygwin) adds support
+for a
+> >/proc virtual filesystem and a read-only version of /proc/registry. I've
+> >read http://cygwin.com/assign.txt but need to sort out the legalese
+before
+> >doing anything.
+> >Partically fufills Cygwin TODO item:
+> >2001-11-08    /proc filesystem    Nicos
+> I wish I could get people to look at sending in an assigment *before*
+> they start doing work.  It would save a lot of time, I think.
+Can you please verify if you have received the copyright assignment form or
+not.
 
-Actually, I prefer separate patchs - it's easier to pick n choose.
-Thanks.
-
-Both applied.
-
-Rob
+Regards
+Chris
 
