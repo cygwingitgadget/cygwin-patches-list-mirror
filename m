@@ -1,40 +1,42 @@
-From: "Robert Collins" <robert.collins@itdomain.com.au>
-To: <cygwin-patches@cygwin.com>
-Subject: Re: fix cond_race... was RE: src/winsup/cygwin ChangeLog thread.cc thread.h ...
-Date: Fri, 28 Sep 2001 01:10:00 -0000
-Message-id: <000701c147f5$44f52280$01000001@lifelesswks>
-References: <EA18B9FA0FE4194AA2B4CDB91F73C0EF08F1DA@itdomain002.itdomain.net.au> <20010928035840.A2535@redhat.com>
-X-SW-Source: 2001-q3/msg00229.html
+From: Christopher Faylor <cgf@redhat.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: src/winsup/cygwin ChangeLog thread.cc thread.h ...
+Date: Fri, 28 Sep 2001 01:17:00 -0000
+Message-id: <20010928040408.A2767@redhat.com>
+References: <14472692346.20010927144858@logos-m.ru> <007b01c14743$2a0005b0$01000001@lifelesswks> <12280602580.20010927170049@logos-m.ru> <008301c1475e$afb0c4e0$01000001@lifelesswks> <20010927140440.B32577@redhat.com> <099067241.20010927220834@logos-m.ru> <20010928020326.A1798@redhat.com> <35145686916.20010928110534@logos-m.ru> <20010928032700.A2382@redhat.com> <20010928033327.A2415@redhat.com>
+X-SW-Source: 2001-q3/msg00230.html
 
------ Original Message -----
-From: "Christopher Faylor" <cgf@redhat.com>
-To: <cygwin-patches@cygwin.com>
-Sent: Friday, September 28, 2001 5:58 PM
-Subject: Re: fix cond_race... was RE: src/winsup/cygwin ChangeLog
-thread.cc thread.h ...
+On Fri, Sep 28, 2001 at 03:33:27AM -0400, Christopher Faylor wrote:
+>On Fri, Sep 28, 2001 at 03:27:00AM -0400, Christopher Faylor wrote:
+>>On Fri, Sep 28, 2001 at 11:05:34AM +0400, egor duda wrote:
+>>>Hi!
+>>>
+>>>Friday, 28 September, 2001 Christopher Faylor cgf@redhat.com wrote:
+>>>
+>>>>>  320 12080627 [main] ssh 7436 peek_pipe: /dev/piper, saw EOF
+>>>>>  261 12080888 [main] ssh 7436 peek_pipe: saw eof on '/dev/piper'
+>>>>>  238 12081126 [main] ssh 7436 fhandler_pipe::ready_for_read: returning 1
+>>>
+>>>CF> As usual, I can't duplicate this problem.  I did see one oddity in some of the new
+>>>CF> code that I added.  I'll check in a patch for that shortly.
+>>>
+>>>Your last checkin fixed both cvs+ssh and testsuite's kill02 (it was
+>>>blocking on pipe read too) problems for me. Thanks!
+>>
+>>Phew.  I am now noticing a SEGV in zsh when it tries to run perl, though.
+>>
+>>Could that be due to pthread_mutex problems in passwd.cc and grp.cc?
+>
+>To answer my own question: No.  It seems like it is related to CYGWIN=ntsec.
+>If I have this set, then zsh/fork/exec dies when starting perl, apparently in
+>malloc.  If I don't have CYGWIN=ntsec, then everything works ok.
+>
+>I don't know why yet.
 
+It's not related to ntsec.  Adding *any* environment variable seems to
+trigger it.
 
-> Rob,
-> Why not just check them both in?
+I'm going back to debugging this but I didn't want Corinna to think that
+there was a problem with the ntsec code.
 
-Well the previous one was incomplete in a technical sense, I just wanted
-you folk to have something working.
-
-As for this one, I will be checking it in, but I am running *very* late
-to a dinner appointment... I mailed out from the office, and am typing
-this from the house, on my way out.
-
-> I don't know if anyone is familiar enough with the *threads.cc code
-> to comment on your changes so if you have a fix that you think works,
-> then why not just check it in?
-
-I plan to. My internal quality control isn't passed yet - I have more
-testing *I* want to do... These patches are still in "rough mode".
-
-> Btw, I do have one minor nit:  I think that the spelling is
-'verifiable'
-> not 'verifyable'.
-
-It's a class name :}. s&r can be done if needed :}.
-
-Rob
+cgf
