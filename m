@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5412-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 15067 invoked by alias); 20 Apr 2005 04:16:11 -0000
+Return-Path: <cygwin-patches-return-5413-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 23244 invoked by alias); 20 Apr 2005 04:28:17 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,37 +7,42 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 14929 invoked from network); 20 Apr 2005 04:16:07 -0000
+Received: (qmail 23189 invoked from network); 20 Apr 2005 04:28:11 -0000
 Received: from unknown (HELO cgf.cx) (66.30.17.189)
-  by sourceware.org with SMTP; 20 Apr 2005 04:16:07 -0000
+  by sourceware.org with SMTP; 20 Apr 2005 04:28:11 -0000
 Received: by cgf.cx (Postfix, from userid 201)
-	id D12ED13C07F; Wed, 20 Apr 2005 00:16:06 -0400 (EDT)
-Date: Wed, 20 Apr 2005 04:16:00 -0000
+	id 9046D13C07F; Wed, 20 Apr 2005 00:28:10 -0400 (EDT)
+Date: Wed, 20 Apr 2005 04:28:00 -0000
 From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [Fwd: RE: ssh problem on Windows XP]
-Message-ID: <20050420041606.GA12762@trixie.casa.cgf.cx>
+To: "'cygwin-patches@cygwin.com'" <cygwin-patches@cygwin.com>
+Subject: Re: Update of fhandler-tut.txt
+Message-ID: <20050420042810.GB12762@trixie.casa.cgf.cx>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20050121173426.GA16347@cygbert.vinschen.de> <20050122205845.A3967E54A@carnage.curl.com>
+Mail-Followup-To: "'cygwin-patches@cygwin.com'" <cygwin-patches@cygwin.com>
+References: <01C4D582.180CE6E0.Gerd.Spalink@t-online.de>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20050122205845.A3967E54A@carnage.curl.com>
+In-Reply-To: <01C4D582.180CE6E0.Gerd.Spalink@t-online.de>
 User-Agent: Mutt/1.5.8i
-X-SW-Source: 2005-q2/txt/msg00008.txt.bz2
+X-SW-Source: 2005-q2/txt/msg00009.txt.bz2
 
-On Sat, Jan 22, 2005 at 03:58:45PM -0500, Bob Byrnes wrote:
->On Jan 21,  6:34pm, Corinna Vinschen wrote:
->-- Subject: [Fwd: RE: ssh problem on Windows XP]
->>
->> is there any chance that we get a fix in the next couple of weeks?
+On Sun, Nov 28, 2004 at 07:40:19PM +0100, Gerd Spalink wrote:
+>When trying to add an experimental /dev/mixer, I found that
+>the fhandler tutorial was obsolete. This patch brings it up-to-date.
 >
->I remain absolutely committed to fixing the problems that have been
->reported, but I can't say that I'll have a fix in that timeframe,
->because I have some urgent deadlines for other projects.  Maybe
->early to mid-February?
+>ChangeLog Entry:
+>
+>2004-11-28 Gerd Spalink <Gerd.Spalink@t-online.de>
+>
+>* fhandler-tut.txt: Update description to cygwin 1.5.13
 
-Any update on this, Bob?
+I'm going through my email archives and see that I never applied this
+patch.
+
+That oversight has been rectified.  I've checked it in with some minor
+tweaks.
+
+Thanks for the patch and sorry for the extreme delay.
 
 cgf
