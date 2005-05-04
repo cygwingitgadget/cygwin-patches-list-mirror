@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5421-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 15555 invoked by alias); 4 May 2005 00:17:41 -0000
+Return-Path: <cygwin-patches-return-5422-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 7349 invoked by alias); 4 May 2005 01:20:20 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,62 +7,37 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 15516 invoked from network); 4 May 2005 00:17:33 -0000
-Received: from unknown (HELO ciao.gmane.org) (80.91.229.2)
-  by sourceware.org with SMTP; 4 May 2005 00:17:33 -0000
-Received: from root by ciao.gmane.org with local (Exim 4.43)
-	id 1DT7T1-0002lZ-4I
-	for cygwin-patches@cygwin.com; Wed, 04 May 2005 02:10:19 +0200
-Received: from nat.electric-cloud.com ([63.82.0.114])
-        by main.gmane.org with esmtp (Gmexim 0.1 (Debian))
-        id 1AlnuQ-0007hv-00
-        for <cygwin-patches@cygwin.com>; Wed, 04 May 2005 02:10:19 +0200
-Received: from foo by nat.electric-cloud.com with local (Gmexim 0.1 (Debian))
-        id 1AlnuQ-0007hv-00
-        for <cygwin-patches@cygwin.com>; Wed, 04 May 2005 02:10:19 +0200
+Received: (qmail 7322 invoked from network); 4 May 2005 01:20:16 -0000
+Received: from unknown (HELO cgf.cx) (66.30.17.189)
+  by sourceware.org with SMTP; 4 May 2005 01:20:16 -0000
+Received: by cgf.cx (Postfix, from userid 201)
+	id EDDF413C7E2; Tue,  3 May 2005 21:20:15 -0400 (EDT)
+Date: Wed, 04 May 2005 01:20:00 -0000
+From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
 To: cygwin-patches@cygwin.com
-From:  "Usman Muzaffar" <foo@muzaffar.org>
-Subject:  [PATCH] fix startup race in shared.cc
-Date: Wed, 04 May 2005 00:17:00 -0000
-Message-ID: <d593nc$uam$1@sea.gmane.org>
-Reply-To:  "Usman Muzaffar" <foo@muzaffar.org>
-X-SW-Source: 2005-q2/txt/msg00017.txt.bz2
+Subject: Re: [PATCH] fix startup race in shared.cc
+Message-ID: <20050504012015.GE23476@trixie.casa.cgf.cx>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <d593nc$uam$1@sea.gmane.org>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d593nc$uam$1@sea.gmane.org>
+User-Agent: Mutt/1.5.8i
+X-SW-Source: 2005-q2/txt/msg00018.txt.bz2
 
+On Tue, May 03, 2005 at 05:11:44PM -0700, Usman Muzaffar wrote:
+>Still seeing incorrect "version mismatch" messages for processes
+>starting simultaneously on dual-processor systems; I believe this
+>patch to the recent locking work in shared.cc fixes the "user shared
+>memory version" errors I'm seeing.
 
-Still seeing incorrect "version mismatch" messages for processes
-starting simultaneously on dual-processor systems; I believe this
-patch to the recent locking work in shared.cc fixes the "user shared
-memory version" errors I'm seeing.
+I don't believe that your patch goes far enough to ensure the
+consistency of the shared memory before checking things.  I've checked
+in a change which should ensure that the area has been initialized
+before it is used.
 
-Thanks,
--Usman
+Thanks for the patch and for pointing to the location of the problem.
 
-
-
-2005-05-03  Usman Muzaffar <foo@muzaffar.org>
-
-* shared.cc (user_shared_initialize): Check for mismatched user
-  shared memory version with result from InterlockedExchange to
-  avoid startup race.
-
-
-Index: cygwin/shared.cc
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/shared.cc,v
-retrieving revision 1.94
-diff -u -p -r1.94 shared.cc
---- cygwin/shared.cc 30 Apr 2005 17:07:05 -0000 1.94
-+++ cygwin/shared.cc 3 May 2005 23:20:02 -0000
-@@ -199,8 +199,8 @@ user_shared_initialize (bool reinit)
-       /* Initialize the queue of deleted files.  */
-       user_shared->delqueue.init ();
-     }
--  else if (user_shared->version != USER_VERSION_MAGIC)
--    multiple_cygwin_problem ("user shared memory version", user_shared->version, USER_VERSION_MAGIC);
-+  else if (sversion != USER_VERSION_MAGIC)
-+    multiple_cygwin_problem ("user shared memory version", sversion, USER_VERSION_MAGIC);
-   else if (user_shared->cb != sizeof (*user_shared))
-     multiple_cygwin_problem ("user shared memory size", user_shared->cb, sizeof (*user_shared));
-   else
-
-
+cgf
