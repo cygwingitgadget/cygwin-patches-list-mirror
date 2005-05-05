@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5422-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 7349 invoked by alias); 4 May 2005 01:20:20 -0000
+Return-Path: <cygwin-patches-return-5423-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 26782 invoked by alias); 5 May 2005 16:40:29 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,37 +7,41 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 7322 invoked from network); 4 May 2005 01:20:16 -0000
-Received: from unknown (HELO cgf.cx) (66.30.17.189)
-  by sourceware.org with SMTP; 4 May 2005 01:20:16 -0000
-Received: by cgf.cx (Postfix, from userid 201)
-	id EDDF413C7E2; Tue,  3 May 2005 21:20:15 -0400 (EDT)
-Date: Wed, 04 May 2005 01:20:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
+Received: (qmail 26390 invoked from network); 5 May 2005 16:40:09 -0000
+Received: from unknown (HELO ciao.gmane.org) (80.91.229.2)
+  by sourceware.org with SMTP; 5 May 2005 16:40:09 -0000
+Received: from list by ciao.gmane.org with local (Exim 4.43)
+	id 1DTjH6-0006B4-Ln
+	for cygwin-patches@cygwin.com; Thu, 05 May 2005 18:32:32 +0200
+Received: from nat.electric-cloud.com ([63.82.0.114])
+        by main.gmane.org with esmtp (Gmexim 0.1 (Debian))
+        id 1AlnuQ-0007hv-00
+        for <cygwin-patches@cygwin.com>; Thu, 05 May 2005 18:32:32 +0200
+Received: from foo by nat.electric-cloud.com with local (Gmexim 0.1 (Debian))
+        id 1AlnuQ-0007hv-00
+        for <cygwin-patches@cygwin.com>; Thu, 05 May 2005 18:32:32 +0200
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] fix startup race in shared.cc
-Message-ID: <20050504012015.GE23476@trixie.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <d593nc$uam$1@sea.gmane.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d593nc$uam$1@sea.gmane.org>
-User-Agent: Mutt/1.5.8i
-X-SW-Source: 2005-q2/txt/msg00018.txt.bz2
+From:  "Usman Muzaffar" <foo@muzaffar.org>
+Subject:  Re: [PATCH] fix startup race in shared.cc
+Date: Thu, 05 May 2005 16:40:00 -0000
+Message-ID: <d5dhoi$c8k$1@sea.gmane.org>
+References:  <d593nc$uam$1@sea.gmane.org> <20050504012015.GE23476@trixie.casa.cgf.cx>
+Reply-To:  "Usman Muzaffar" <foo@muzaffar.org>
+X-SW-Source: 2005-q2/txt/msg00019.txt.bz2
 
-On Tue, May 03, 2005 at 05:11:44PM -0700, Usman Muzaffar wrote:
->Still seeing incorrect "version mismatch" messages for processes
->starting simultaneously on dual-processor systems; I believe this
->patch to the recent locking work in shared.cc fixes the "user shared
->memory version" errors I'm seeing.
 
-I don't believe that your patch goes far enough to ensure the
-consistency of the shared memory before checking things.  I've checked
-in a change which should ensure that the area has been initialized
-before it is used.
+"Christopher Faylor" <cgf-no-personal-reply-please@cygwin.com> wrote in message
+> I don't believe that your patch goes far enough to ensure the
+> consistency of the shared memory before checking things.  I've checked
+> in a change which should ensure that the area has been initialized
+> before it is used.
 
-Thanks for the patch and for pointing to the location of the problem.
+That's great, thanks. Will there be a snapshot that includes the
+next patch? The cygwin.com/snapshots page says both that snapshots are
+generated "on a period basis" and "sporadically" - wasn't sure if that
+meant I should request one or just be patient. :)
 
-cgf
+Thanks again for the prompt attention.
+-Usman
+
+
