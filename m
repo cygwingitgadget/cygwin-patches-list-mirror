@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5464-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 30859 invoked by alias); 18 May 2005 13:17:13 -0000
+Return-Path: <cygwin-patches-return-5465-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 21890 invoked by alias); 18 May 2005 13:34:17 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,33 +7,54 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 30757 invoked from network); 18 May 2005 13:16:56 -0000
-Received: from unknown (HELO dessent.net) (66.17.244.20)
-  by sourceware.org with SMTP; 18 May 2005 13:16:56 -0000
-Received: from localhost ([127.0.0.1] helo=dessent.net)
-	by dessent.net with esmtp (Exim 4.44)
-	id 1DYOPt-0001y3-RC
-	for cygwin-patches@cygwin.com; Wed, 18 May 2005 13:16:53 +0000
-Message-ID: <428B408C.96758F8B@dessent.net>
-Date: Wed, 18 May 2005 13:17:00 -0000
-From: Brian Dessent <brian@dessent.net>
-MIME-Version: 1.0
+Received: (qmail 21524 invoked from network); 18 May 2005 13:34:05 -0000
+Received: from unknown (HELO cgf.cx) (66.30.17.189)
+  by sourceware.org with SMTP; 18 May 2005 13:34:05 -0000
+Received: by cgf.cx (Postfix, from userid 201)
+	id 39B7D13C1FE; Wed, 18 May 2005 09:34:17 -0400 (EDT)
+Date: Wed, 18 May 2005 13:34:00 -0000
+From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [patch] update documentation Was: cygwin-host-setup does not 
- install   sshd
-References: <200505171327.AA676593880@mail.rabinglove.com> <428AB86F.75BC27A0@dessent.net> <20050518081023.GN18174@calimero.vinschen.de> <428B1AD4.A568D71B@dessent.net> <20050518112457.GT18174@calimero.vinschen.de> <428B2E2E.A21DA6DF@dessent.net> <20050518122405.GU18174@calimero.vinschen.de>
+Subject: Re: [patch] gcc4 fixes
+Message-ID: <20050518133417.GB19793@trixie.casa.cgf.cx>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <428A7520.7FD9925C@dessent.net> <20050518080133.GA25438@calimero.vinschen.de>
+Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-SW-Source: 2005-q2/txt/msg00060.txt.bz2
+Content-Disposition: inline
+In-Reply-To: <20050518080133.GA25438@calimero.vinschen.de>
+User-Agent: Mutt/1.5.8i
+X-SW-Source: 2005-q2/txt/msg00061.txt.bz2
 
-Corinna Vinschen wrote:
+On Wed, May 18, 2005 at 10:01:33AM +0200, Corinna Vinschen wrote:
+>On May 17 15:50, Brian Dessent wrote:
+>> diff -u -r1.109 mmap.cc
+>> --- mmap.cc	2 May 2005 03:50:07 -0000	1.109
+>> +++ mmap.cc	17 May 2005 22:40:14 -0000
+>> @@ -500,14 +500,14 @@
+>>      }
+>>  }
+>>  
+>> +static DWORD granularity = getshmlba ();
+>> +
+>>  extern "C" void *
+>>  mmap64 (void *addr, size_t len, int prot, int flags, int fd, _off64_t off)
+>>  {
+>>    syscall_printf ("addr %x, len %u, prot %x, flags %x, fd %d, off %D",
+>>  		  addr, len, prot, flags, fd, off);
+>>  
+>> -  static DWORD granularity = getshmlba ();
+>> -
+>>    /* Error conditions according to SUSv2 */
+>>    if (off % getpagesize ()
+>>        || (!(flags & MAP_SHARED) && !(flags & MAP_PRIVATE))
+>> 
+>
+>While this might help to avoid... something, I'm seriously wondering
+>what's wrong with this expression.  Why does each new version of gcc
+>add new incompatibilities?
 
-> > Alright.  I am not sure how to push out the new version to the web site,
-> > so someone else will have to do that (or tell me what to do - check in
-> > the .html files into the website CVS or something?)
-> 
-> Yep.  cvs -d :ext:cygwin.com:/cvs/cygwin co htdocs
+Well, it might actually be "a gcc bug".
 
-Got it, thanks.
-
-Brian
+cgf
