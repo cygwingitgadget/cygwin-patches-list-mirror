@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5475-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 20135 invoked by alias); 19 May 2005 11:05:00 -0000
+Return-Path: <cygwin-patches-return-5476-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 23865 invoked by alias); 19 May 2005 12:24:58 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,51 +7,56 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 15921 invoked from network); 19 May 2005 10:58:42 -0000
-Received: from unknown (HELO SERRANO.CAM.ARTIMI.COM) (217.40.213.68)
-  by sourceware.org with SMTP; 19 May 2005 10:58:42 -0000
-Received: from mace ([192.168.1.25]) by SERRANO.CAM.ARTIMI.COM with Microsoft SMTPSVC(6.0.3790.211);
-	 Thu, 19 May 2005 11:58:41 +0100
-From: "Dave Korn" <dave.korn@artimi.com>
-To: <cygwin-patches@cygwin.com>
-Subject: RE: [Patch]: mkdir -p and network drives
-Date: Thu, 19 May 2005 11:05:00 -0000
+Received: (qmail 22477 invoked from network); 19 May 2005 12:23:38 -0000
+Received: from unknown (HELO rwcrmhc14.comcast.net) (216.148.227.89)
+  by sourceware.org with SMTP; 19 May 2005 12:23:38 -0000
+Received: from [192.168.0.100] (c-24-10-254-137.hsd1.ut.comcast.net[24.10.254.137])
+          by comcast.net (rwcrmhc14) with ESMTP
+          id <2005051912233701400c6pe7e>; Thu, 19 May 2005 12:23:37 +0000
+Message-ID: <428C8547.1070504@byu.net>
+Date: Thu, 19 May 2005 12:24:00 -0000
+From: Eric Blake <ebb9@byu.net>
+Reply-To:  cygwin@cygwin.com
+User-Agent: Mozilla Thunderbird 1.0.2 (Windows/20050317)
 MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="us-ascii"
+To: Vance Turner <vance.turner@sbcglobal.net>
+CC:  cygwin@cygwin.com,  cygwin-patches@cygwin.com
+Subject: Re: [Patch]: mkdir -p and network drives
+References: <200505190506.j4J56RqA011354@stennis.byu.edu>
+In-Reply-To: <200505190506.j4J56RqA011354@stennis.byu.edu>
+Content-Type: text/plain; charset=ISO-8859-1
 Content-Transfer-Encoding: 7bit
-In-Reply-To: <20050519051326.GA23707@trixie.casa.cgf.cx>
-Message-ID: <SERRANOQOkAy2OheSXV00000062@SERRANO.CAM.ARTIMI.COM>
-X-OriginalArrivalTime: 19 May 2005 10:58:41.0455 (UTC) FILETIME=[B7C373F0:01C55C61]
-X-SW-Source: 2005-q2/txt/msg00071.txt.bz2
+X-SW-Source: 2005-q2/txt/msg00072.txt.bz2
 
-----Original Message----
->From: Christopher Faylor
->Sent: 19 May 2005 06:13
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-> On Wed, May 18, 2005 at 10:09:35PM -0700, Vance Turner wrote:
->> Additional note
->> 
->> ls -lRC - not working
->> ls -RCl - working
->> 
->> If you point out the source I will fix it.
+Wrong list.  Redirecting.
+
+According to Vance Turner on 5/18/2005 11:06 PM:
+> I usually don't write you guys, I follow the thread to see how development
+> is going.
 > 
-> 1) This is not a bug reporting list.
+> Just a note. The ls command is't quite right.
 > 
-> 2) This does not, as far as I can tell, have anything to do with the
-> subject of this message.  You seem to be starting an unrelated thread.
-> 
-> Please use the main cygwin mailing list for reporting bugs.
-> 
-> cgf
+>  Ls -lRC wil not recursively list the files and directories in verbose mode.
+> The l flag seems to be ignored.
 
+Per POSIX,
+http://www.opengroup.org/onlinepubs/009695399/utilities/ls.html, -C and -l
+are mutually exclusive, and the last one specified wins.  You are right
+that the -l flag is ignored in your example, but it is not a bug.
 
-  Also, "ls -C" and "ls -l" are mutually exclusive.  Whichever one you place
-last on the command line wins.  NAB.
+- --
+Life is short - so eat dessert first!
 
+Eric Blake             ebb9@byu.net
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.0 (Cygwin)
+Comment: Public key at home.comcast.net/~ericblake/eblake.gpg
+Comment: Using GnuPG with Thunderbird - http://enigmail.mozdev.org
 
-    cheers,
-      DaveK
--- 
-Can't think of a witty .sigline today....
+iD8DBQFCjIVH84KuGfSFAYARAs53AJ9yVbtYsTOixPy09xEmMoJnA4InDQCg2XqZ
+UVT2dXJWEg5kLgrnZ22cqm4=
+=b5ty
+-----END PGP SIGNATURE-----
