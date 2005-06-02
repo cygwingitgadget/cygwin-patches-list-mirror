@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5504-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 27981 invoked by alias); 1 Jun 2005 23:05:13 -0000
+Return-Path: <cygwin-patches-return-5505-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 24823 invoked by alias); 2 Jun 2005 12:45:19 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,31 +7,62 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 27969 invoked by uid 22791); 1 Jun 2005 23:05:08 -0000
-Received: from c-66-30-17-189.hsd1.ma.comcast.net (HELO cgf.cx) (66.30.17.189)
-    by sourceware.org (qpsmtpd/0.30-dev) with ESMTP; Wed, 01 Jun 2005 23:05:08 +0000
-Received: by cgf.cx (Postfix, from userid 201)
-	id C1B8A13C098; Wed,  1 Jun 2005 19:05:06 -0400 (EDT)
-Date: Wed, 01 Jun 2005 23:05:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
-To: Cygwin patches <cygwin-patches@cygwin.com>
-Subject: Re: memset & 'VirtualQuery'
-Message-ID: <20050601230506.GD20901@trixie.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: Cygwin patches <cygwin-patches@cygwin.com>
-References: <003601c566f0$b7de23a0$96cefea9@none>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <003601c566f0$b7de23a0$96cefea9@none>
-User-Agent: Mutt/1.5.8i
-X-SW-Source: 2005-q2/txt/msg00100.txt.bz2
+Received: (qmail 24656 invoked by uid 22791); 2 Jun 2005 12:45:05 -0000
+Received: from [82.139.192.138] (HELO koeln.convey.de) (82.139.192.138)
+    by sourceware.org (qpsmtpd/0.30-dev) with ESMTP; Thu, 02 Jun 2005 12:45:05 +0000
+Received: from [192.168.1.12] (192.168.1.12:3983)
+	by koeln.convey.de with [XMail 1.20 ESMTP Server]
+	id <SEF7BE> for <cygwin-patches@cygwin.com> from <gerrit@familiehaase.de>;
+	Thu, 2 Jun 2005 14:45:01 +0200
+Message-ID: <429EFF4D.4080603@familiehaase.de>
+Date: Thu, 02 Jun 2005 12:45:00 -0000
+From: "Gerrit P. Haase" <gerrit@familiehaase.de>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.7.8) Gecko/20050511
+MIME-Version: 1.0
+To: Brian Dessent <brian@dessent.net>
+CC:  cygwin-patches@cygwin.com
+Subject: Re: [patch] gcc4 fixes
+References: <428A7520.7FD9925C@dessent.net> <20050518080133.GA25438@calimero.vinschen.de> <20050518133417.GB19793@trixie.casa.cgf.cx> <428B480D.E465C6E8@dessent.net>
+In-Reply-To: <428B480D.E465C6E8@dessent.net>
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2005-q2/txt/msg00101.txt.bz2
 
-On Wed, Jun 01, 2005 at 11:27:30PM +0200, Christophe Jaillet wrote:
->when looking thrue cygwin code looking for function 'VirtualQuery', we can
->see that it is passed a structure (MEMORY_BASIC_INFORMATION).
->In some cases, this structure is memset'ed to 0 before the call, sometimes,
->not.
+Brian Dessent wrote:
 
-Please send questions or observations to the cygwin mailing list.  This
-mailing list is for patches only.
+> Christopher Faylor wrote:
+> 
+> 
+>>>While this might help to avoid... something, I'm seriously wondering
+>>>what's wrong with this expression.  Why does each new version of gcc
+>>>add new incompatibilities?
+>>
+>>Well, it might actually be "a gcc bug".
+> 
+> 
+> Here I admit to using a snapshot verion of gcc and not the 4.0 release,
+> primarily because I had read of bug reports e.g. KDE blacklisting 4.0
+> entirely in their build scripts due to compiler problems.  So who knows,
+> maybe I should try with a release build.
+> 
+> $ g++-4 -v
+> Using built-in specs.
+> Target: i686-pc-cygwin
+> Configured with: ../gcc-4.1-20050501/configure --verbose
+> --prefix=/usr/local --exec-prefix=/usr/local --sysconfdir=/etc
+> --libdir=/usr/local/lib --libexecdir=/usr/local/lib
+> --mandir=/usr/local/man --infodir=/usr/local/info --program-suffix=-4
+> --enable-languages=c,c++ --disable-nls --without-included-gettext
+> --with-system-zlib --enable-interpreter --enable-threads=posix
+> --enable-sjlj-exceptions --disable-version-specific-runtime-libs
+> --disable-win32-registry
+> Thread model: posix
+> gcc version 4.1.0 20050501 (experimental)
+
+I want to switch using --disable-sjlj-exceptions with gcc-4.x, could you 
+try to build with this instead of --enabl-sjlj?
+
+
+Gerrit
+-- 
+=^..^=
