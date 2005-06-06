@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5511-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 30927 invoked by alias); 5 Jun 2005 03:10:43 -0000
+Return-Path: <cygwin-patches-return-5512-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 28094 invoked by alias); 6 Jun 2005 19:03:25 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,58 +7,926 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 30917 invoked by uid 22791); 5 Jun 2005 03:10:40 -0000
-Received: from c-66-30-17-189.hsd1.ma.comcast.net (HELO cgf.cx) (66.30.17.189)
-    by sourceware.org (qpsmtpd/0.30-dev) with ESMTP; Sun, 05 Jun 2005 03:10:40 +0000
-Received: by cgf.cx (Postfix, from userid 201)
-	id E468613C28E; Sat,  4 Jun 2005 23:10:38 -0400 (EDT)
-Date: Sun, 05 Jun 2005 03:10:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
+Received: (qmail 27989 invoked by uid 22791); 6 Jun 2005 19:03:10 -0000
+Received: from nat.electric-cloud.com (HELO main.electric-cloud.com) (63.82.0.114)
+    by sourceware.org (qpsmtpd/0.30-dev) with ESMTP; Mon, 06 Jun 2005 19:03:10 +0000
+Received: from fulgurite.electric-cloud.com (fulgurite.electric-cloud.com [192.168.1.58])
+	(authenticated bits=0)
+	by main.electric-cloud.com (8.12.9/8.12.9) with ESMTP id j56J37M2006706
+	(version=TLSv1/SSLv3 cipher=RC4-MD5 bits=128 verify=NO)
+	for <cygwin-patches@cygwin.com>; Mon, 6 Jun 2005 12:03:07 -0700
+Subject: [Patch] Testing loads of cygwin1.dll from MinGW and MSVC
+From: Max Kaehn <slothman@electric-cloud.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [Patch] Loading cygwin1.dll from MinGW and MSVC
-Message-ID: <20050605031038.GA7230@trixie.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1117839489.5031.23.camel@fulgurite> <cb51e2e050604175349d5e698@mail.gmail.com> <20050605005955.GC2706@trixie.casa.cgf.cx> <Pine.GSO.4.61.0506042302550.15703@slinky.cs.nyu.edu>
+Content-Type: text/plain
+Message-Id: <1118084587.5031.128.camel@fulgurite>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.GSO.4.61.0506042302550.15703@slinky.cs.nyu.edu>
-User-Agent: Mutt/1.5.8i
-X-SW-Source: 2005-q2/txt/msg00107.txt.bz2
+Date: Mon, 06 Jun 2005 19:03:00 -0000
+Content-Transfer-Encoding: 7bit
+X-Spam-Not-Checked:  Messages over 100K or from internal Electric Cloud machines are not checked
+X-SW-Source: 2005-q2/txt/msg00108.txt.bz2
 
-On Sat, Jun 04, 2005 at 11:09:10PM -0400, Igor Pechtchanski wrote:
->On Sat, 4 Jun 2005, Christopher Faylor wrote:
->
->> On Sat, Jun 04, 2005 at 05:53:56PM -0700, Joshua Daniel Franklin wrote:
->> >On 6/3/05, Max Kaehn wrote:
->> >>This patch contains the changes to make it possible to dynamically load
->> >>cygwin1.dll from MinGW and MSVC applications.  The changes to dcrt0.cc
->> >>are minimal and only affect cygwin_dll_init().  I've also added a MinGW
->> >>test program to testsuite and a FAQ so people will be able to locate
->> >>the test program easily.
->> >
->> >Assuming the code patches are fine, instead of a new section could we
->> >just add your FAQ hint to "How do I link against `cygwin1.dll' with
->> >Visual Studio?" <http://cygwin.com/faq/faq_toc.html#TOC102> The title
->> >could be changed to something like "How do I use `cygwin1.dll' with
->> >MinGW or Visual Studio?"
->> >
->> >I'm a little torn since I'm not sure this is actually frequently asked
->> >but it's certainly good to have the info.  Ideally I can put it in the
->> >User's Guide.
->>
->> Oops.  I just applied the patch to the doc area.  This is entirely your call.
->> I should have waited for your approval.
->>
->> If you want to me to revert the patch, please let me know.  Otherwise, please
->> just massage it as you see fit.
->>
->> FWIW, I think this does qualify as both a FAQ and a user's guide addition.
->
->And is much appreciated.  This is very useful functionality, and somebody
->had to do it, so Max did.  Thanks.
+This patch contains a revised version of the "cygload" test utility,
+this time with better adherence to cygwin naming and indentation.
+---
+ChangeLog for winsup/testsuite:
 
-Yep.  There's another gold star coming as soon as everything is in.
+2005-05-27  Max Kaehn <slothman@electric-cloud.com>
 
-cgf
+	* Makefile:  now tests cygload.
+	* cygload:  New directory.
+	* cygload/README:  New file.
+	* cygload/Makefile:  Ditto.
+	* cygload/cygload.h:  Ditto.
+	* cygload/cygload.cc:  Ditto.
+	* cygload/cygload.exp:  Ditto.
+---
+Index: Makefile.in
+===================================================================
+RCS file: /cvs/src/src/winsup/testsuite/Makefile.in,v
+retrieving revision 1.19
+diff -u -p -r1.19 Makefile.in
+--- Makefile.in	6 Jul 2003 21:45:21 -0000	1.19
++++ Makefile.in	6 Jun 2005 18:45:33 -0000
+@@ -186,7 +186,8 @@ check: $(TESTSUP_LIB_NAME) $(RUNTIME) cy
+ 	   TCL_LIBRARY=`cd .. ; cd ${srcdir}/../../tcl/library ; pwd` ; \
+ 	    export TCL_LIBRARY ; fi ; \
+ 	PATH=$(bupdir)/cygwin:$${PATH} ;\
+-	$(RUNTEST) --tool winsup $(RUNTESTFLAGS)
++	$(RUNTEST) --tool winsup $(RUNTESTFLAGS) ;\
++	$(RUNTEST) --tool cygload $(RUNTESTFLAGS)
+ 
+ cygrun.o: cygrun.c
+ 	$(CC) $(MINGW_CFLAGS) -o $@ -c $<
+diff -up /dev/null cygload/README
+--- /dev/null	2003-01-30 02:24:37.000000000 -0800
++++ cygload/README	2005-05-27 14:31:06.000000000 -0700
+@@ -0,0 +1,18 @@
++cygload demonstrates how to dynamically load cygwin1.dll.  The default
++build uses MinGW to compile it; the Makefile also shows how to build
++it using the Microsoft compiler.
++
++By default, the program will silently test basic functionality:
++        * Making space on the stack for cygtls
++        * Loading and initializing cygwin1.dll
++        * Path translation
++        * Error handling
++        * Signal handling
++
++Command line parameters are:
++
++    -v                 Verbose output
++    -testinterrupts    Pause for 30 seconds to allow testing command line
++                       interrupts (^C)
++    -cygwin xxx        Specifies an alternative DLL to load instead of
++                       cygwin1.dll.
+diff -up /dev/null cygload/Makefile
+--- /dev/null	2003-01-30 02:24:37.000000000 -0800
++++ cygload/Makefile	2005-06-06 11:33:10.000000000 -0700
+@@ -0,0 +1,36 @@
++# Makefile for cygload
++
++###
++### MinGW options
++###
++CC = gcc
++CFLAGS = -mno-cygwin -Wall
++LINKFLAGS = -lstdc++ -Wl,-e,_cygloadCRTStartup@0
++
++###
++### MSVC options
++###
++ifndef MSVCDir
++MSVCDir = C:/cygwin/usr/local/tools/i686_win32/vc7/Vc7
++endif
++
++CL = $(MSVCDir)/bin/cl
++# If you want to look at the assembly, add "/Famsvc-cygload.asm /FAs".
++MSVCCFLAGS = /nologo /GX /MDd /Zi /W4 /TP
++MSVCINCLUDES = /I $(MSVCDir)/include /I $(MSVCDir)/PlatformSDK/Include
++# Using /ENTRY seems to automatically invoke /NODEFAULTLIBS.
++MSVCLIBS = /link /LIBPATH:$(MSVCDir)/lib /LIBPATH:$(MSVCDir)/PlatformSDK/lib \
++	/ENTRY:cygloadCRTStartup uuid.lib msvcprtd.lib msvcrtd.lib \
++	oldnames.lib kernel32.lib
++
++all:	mingw-cygload.exe
++
++mingw-cygload.exe:	cygload.cc cygload.h
++	$(CC) $(CFLAGS) $< -o $@ $(LINKFLAGS)
++
++msvc-cygload.exe:	cygload.cc cygload.h
++	$(CL) $(MSVCCFLAGS) $(MSVCINCLUDES) $< /o $@ $(MSVCLIBS)
++
++clean:
++	rm -f msvc-cygload.exe msvc-cygload.ilk mscv-cygload.obj \
++		msvc-cygload.pdb vc70.pdb mingw-cygload.exe
+diff -up /dev/null cygload/cygload.h
+--- /dev/null	2003-01-30 02:24:37.000000000 -0800
++++ cygload/cygload.h	2005-06-06 10:39:48.000000000 -0700
+@@ -0,0 +1,155 @@
++// cygload.h                                      -*- C++ -*-
++//
++// Copyright 2005, Red Hat, Inc.
++//
++// Written by Max Kaehn <slothman@electric-cloud.com>
++//
++// This software is a copyrighted work licensed under the terms of the
++// Cygwin license.  Please consult the file "CYGWIN_LICENSE" for details.
++//
++// Note that dynamically linking to cygwin1.dll automatically places your code
++// under the GPL unless you purchase a Cygwin Contract with Red Hat, Inc.
++// See http://www.redhat.com/software/cygwin/ for more information.
++
++// This program has large numbers of progress messages so as to provide
++// maximum information about crash locations for anyone without access to
++// a Microsoft debugger.
++
++
++// This file contains the basic infrastructure for connecting an MSVC
++// process to Cygwin.
++
++#ifndef __CYGLOAD_H__
++#define __CYGLOAD_H__
++
++#include <windows.h>            // for GetProcAddress()
++#include <functional>           // for pointer_to_unary_function
++#include <stdexcept>            // for runtime_error
++#include <string>
++#include <map>
++#include <vector>
++
++// Convert GetLastError() to a human-readable STL exception.
++class windows_error : public std::runtime_error {
++public:
++  windows_error(const char *message, const char *detail = NULL)
++    : runtime_error(format(GetLastError(), message, detail)) { }
++  windows_error(DWORD error, const char *message, const char *detail = NULL)
++    : runtime_error(format(error, message, detail)) { }
++
++  static std::string format(DWORD error, const char *message,
++      const char *detail);
++};
++
++namespace cygwin {
++
++  // Cygwin keeps important thread-local information at the top of the
++  // stack.  Its DllMain-equivalent will do the right thing for any threads
++  // you spawn, but you need to declare one of these as the very first thing
++  // in your main() function so horrible things won't happen when cygwin
++  // overwrites your stack.  This will back up the data that will be
++  // overwritten and restore it when the destructor is called.
++  class padding {
++  public:
++    padding();
++    ~padding();
++
++    // Verifies that padding has been declared.
++    static void check();
++
++  private:
++    std::vector<char> _backup;
++    char *_stackbase, *_end;
++
++    // gdb reports sizeof(_cygtls) == 3964 at the time of this writing.
++    // This is at the end of the object so it'll be toward the bottom
++    // of the stack when it gets declared.
++    char _padding[4096];
++
++    static padding *_main;
++    static DWORD _mainTID;
++  };
++
++  // This hooks your application up to cygwin:  it loads cygwin1.dll,
++  // initializes it properly, grabs some important symbols, and
++  // spawns a thread to let you receive signals from cygwin.
++  class connector {
++  public:
++    connector(const char *dll = "cygwin1.dll");
++    ~connector();
++
++    // A wrapper around GetProcAddress() for fetching symbols from the
++    // cygwin DLL.  Can throw windows_error.
++    template <class T> void get_symbol(const char *name, T &fn) const;
++
++    // Wrappers for errno() and strerror().
++    int err_no() const;
++    std::string str_error(int) const;
++
++    // Converting between the worlds of Windows and Cygwin.
++    std::string unix_path(const std::string &windows) const;
++    std::string win_path(const std::string &unix) const;
++
++  private:
++    HMODULE _library;
++
++    int *(*_errno)();
++    const char *(*_strerror)(int);
++    void (*_conv_to_full_posix_path)(const char *, char *);
++    void (*_conv_to_full_win32_path)(const char *, char *);
++
++  public:
++    // The constructor will automatically hook you up for receiving
++    // cygwin signals.  Just specify a signal and pass in a signal_handler.
++    typedef std::pointer_to_unary_function<int,void> signal_handler;
++    signal_handler *set_handler(int signal, signal_handler *);
++
++  private:
++    // Cygwin signals can only be received in threads that are calling
++    // interruptible functions or otherwise ready to intercept signals, so
++    // we spawn a thread that does nothing but call sigwait().
++
++    // This is the entry point:
++    static DWORD WINAPI signal_thread(void *);
++    // It runs this:
++    void await_signal();
++    // And will execute this on receipt of any signal for which it's
++    // registered:
++    void handle_signals(int);
++
++    HANDLE _signal_thread;
++    bool _waiting_for_signals, _signal_thread_done;
++    CRITICAL_SECTION _thread_mutex;
++
++    typedef std::map<int, signal_handler *> callback_list;
++    callback_list _signal_handlers;
++  };
++
++  template <class T> void connector::get_symbol(const char *name,
++      T &symbol) const
++  {
++    FARPROC retval = NULL;
++
++    retval = GetProcAddress(_library, name);
++
++    if (retval == NULL)
++      throw windows_error("GetProcAddress", name);
++
++    symbol = reinterpret_cast<T>(retval);
++  }
++
++  // cygwin::error converts errno to a human-readable exception.
++  class error : public std::runtime_error {
++  public:
++    error(connector *c, const char *function, const char *detail = NULL)
++      : runtime_error(format(c, c->err_no(), function, detail)) { }
++    error(connector *c, int err_no, const char *function,
++        const char *detail = NULL)
++      : runtime_error(format(c, err_no, function, detail)) { }
++
++    static std::string format(connector *c, int err_no,
++        const char *message, const char *detail);
++  };
++}
++
++#endif // __CYGLOAD_H__
+diff -up /dev/null cygload/cygload.cc
+--- /dev/null	2003-01-30 02:24:37.000000000 -0800
++++ cygload/cygload.cc	2005-06-06 11:31:18.000000000 -0700
+@@ -0,0 +1,602 @@
++// cygload.cpp
++//
++// Copyright 2005, Red Hat, Inc.
++//
++// Written by Max Kaehn <slothman@electric-cloud.com>
++//
++// This software is a copyrighted work licensed under the terms of the
++// Cygwin license.  Please consult the file "CYGWIN_LICENSE" for details.
++//
++// Note that dynamically linking to cygwin1.dll automatically places your code
++// under the GPL unless you purchase a Cygwin Contract with Red Hat, Inc.
++// See http://www.redhat.com/software/cygwin/ for more information.
++
++
++// Options for this program:
++// -v              Verbose output.  Normal operation is entirely silent,
++//                 save for errors.
++// -testinterrupts Pauses the program for 30 seconds so you can demonstrate
++//                 that it handles ^C properly.
++// -cygwin         Name of DLL to load.  Defaults to "cygwin1.dll".
++
++#include "cygload.h"
++#include <iostream>
++#include <sstream>
++#include <vector>
++#include <errno.h>              // for ENOENT
++#include <sys/types.h>
++#include <sys/stat.h>
++
++using std::cout;
++using std::cerr;
++using std::endl;
++using std::string;
++
++cygwin::padding *cygwin::padding::_main = NULL;
++DWORD cygwin::padding::_mainTID = 0;
++
++// A few cygwin constants.
++static const int SIGHUP = 1;
++static const int SIGINT = 2;
++static const int SIGTERM = 15;  // Cygwin won't deliver this one to us;
++                                // expect unadorned "kill" to just kill
++                                // your process.
++static const int SIGSTOP = 17;  // Cygwin insists on delivering SIGSTOP to
++                                // the main thread.  If your main thread
++                                // is not interruptible, you'll miss the
++                                // signal and ignore the request to suspend.
++static const int SIGTSTP = 18;  // ^Z on a tty.
++static const int SIGCONT = 19;  // Resume a stopped process.
++static const int SIGUSR1 = 30;
++static const int SIGUSR2 = 31;
++
++// Using *out instead of cout.  In verbose mode, out == &cout.
++static std::ostream *out = NULL;
++
++cygwin::padding::padding()
++{
++  _main = this;
++  _mainTID = GetCurrentThreadId();
++
++  _end = _padding + sizeof(_padding);
++  char *stackbase;
++#ifdef __GNUC__
++  __asm__ (
++    "movl %%fs:4, %0"
++    :"=r"(stackbase)
++    );
++#else
++  __asm {
++    mov eax, fs:[4];
++    mov stackbase, eax;
++  }
++#endif
++  _stackbase = stackbase;
++
++  // We've gotten as close as we can to the top of the stack.  Even
++  // subverting the entry point, though, still doesn't get us there-- I'm
++  // getting 64 bytes in use before the entry point.  So we back up the data
++  // there and restore it when the destructor is called:
++  if ((_stackbase - _end) != 0) {
++    size_t delta = (_stackbase - _end);
++
++    _backup.resize(delta);
++
++    memcpy(&(_backup[0]), _end, delta);
++  }
++}
++
++cygwin::padding::~padding()
++{
++  _main = NULL;
++
++  if (_backup.size())
++    {
++      memcpy(_end, &(_backup[0]), _backup.size());
++    }
++}
++
++void
++cygwin::padding::check()
++{
++  if (_main == NULL)
++    throw std::runtime_error("No padding declared!");
++  if (_mainTID != GetCurrentThreadId())
++    throw std::runtime_error("You need to initialize cygwin::connector "
++        "in the same thread in which you declared the padding.");
++
++  if (_main->_backup.size())
++    *out << "Warning!  Stack base is "
++         << static_cast<void *>(_main->_stackbase)
++         << ".  padding ends at " << static_cast<void *>(_main->_end)
++         << ".  Delta is " << (_main->_stackbase - _main->_end)
++         << ".  Stack variables could be overwritten!" << endl;
++}
++
++
++
++cygwin::connector::connector(const char *dll)
++{
++  // This will throw if padding is not in place.
++  padding::check();
++
++  *out << "Loading " << dll << "..." << endl;
++
++  // This should call init.cc:dll_entry() with DLL_PROCESS_ATTACH,
++  // which calls dll_crt0_0().
++  if ((_library = LoadLibrary(dll)) == NULL)
++    throw windows_error("LoadLibrary", dll);
++
++  *out << "Initializing cygwin..." << endl;
++
++  // This calls dcrt0.cc:cygwin_dll_init(), which calls dll_crt0_1(),
++  // which will, among other things:
++  // * spawn the cygwin signal handling thread from sigproc_init()
++  // * initialize the thread-local storage for this thread and overwrite
++  //   the first 4K of the stack
++  void (*cyginit)();
++  get_symbol("cygwin_dll_init", cyginit);
++  (*cyginit)();
++
++  *out << "Loading symbols..." << endl;
++
++  // Pick up the function pointers for the basic infrastructure.
++  get_symbol("__errno", _errno);
++  get_symbol("strerror", _strerror);
++  get_symbol("cygwin_conv_to_full_posix_path", _conv_to_full_posix_path);
++  get_symbol("cygwin_conv_to_full_win32_path", _conv_to_full_win32_path);
++
++  // Note that you need to be running an interruptible cygwin function if
++  // you want to receive signals.  You can use the standard signal()
++  // mechanism if you're willing to have your main thread spend all its time
++  // in interruptible cygwin functions like sleep().  Christopher Faylor
++  // cautions that this solution "could be slightly racy":  if a second
++  // signal comes in before the first one is done processing, the thread
++  // won't be back in sigwait() to catch it.
++  *out << "Spawning signal handling thread..." << endl;
++
++  _waiting_for_signals = true;
++  _signal_thread_done = false;
++  InitializeCriticalSection(&_thread_mutex);
++
++  DWORD tid;
++
++  _signal_thread = CreateThread(
++    NULL,                   // Default security.
++    32768,                  // Adjust the stack size as appropriate
++    // for what your signal handler needs in
++    // order to run, and then add 4K for
++    // cygtls.
++    &signal_thread,         // Function to call
++    this,                   // Context
++    0,                      // Flags
++    &tid);                  // Thread ID
++
++  if (_signal_thread == NULL)
++    throw windows_error("CreateThread", "signal_thread");
++}
++
++cygwin::connector::~connector()
++{
++  try {
++    // First, shut down signal handling.
++    int (*raze)(int);
++    int (*pthread_join)(void *, void **);
++
++    get_symbol("raise", raze);
++    get_symbol("pthread_join", pthread_join);
++
++    // Tell the listener to shut down...
++    _waiting_for_signals = false;
++    int err = 0;
++    EnterCriticalSection(&_thread_mutex);
++    if (!_signal_thread_done)
++      err = raze(SIGUSR2);
++    LeaveCriticalSection(&_thread_mutex);
++    if (err) cerr << error(this, "raise", "SIGUSR2").what() << endl;
++    // ...and get the thread to join.
++    if (!CloseHandle(_signal_thread))
++      throw windows_error("CloseHandle", "signal_thread");
++
++    // This should call init.cc:dll_entry() with DLL_PROCESS_DETACH.
++    if (!FreeLibrary(_library))
++      throw windows_error("FreeLibrary", "cygwin1.dll");
++  }
++  catch (std::exception &x) {
++    cerr << x.what() << endl;
++  }
++}
++
++DWORD WINAPI
++cygwin::connector::signal_thread(void *param)
++{
++  connector *that = reinterpret_cast<connector *>(param);
++
++  try
++    {
++      that->await_signal();
++    }
++  catch(std::exception &x)
++    {
++      cerr << "signal_thread caught " << x.what() << endl;
++      return 0;
++    }
++  return 0;
++}
++
++void
++cygwin::connector::await_signal()
++{
++  // Wait for signals.
++  unsigned long sigset[32];
++  int sig;
++  int (*empty)(void *);
++  int (*add)(void *, int);
++  int (*wait)(void *, int *);
++
++  get_symbol("sigemptyset", empty);
++  get_symbol("sigaddset", add);
++  get_symbol("sigwait", wait);
++
++  empty(sigset);
++  add(sigset, SIGHUP);
++  add(sigset, SIGINT);
++//  add(sigset, SIGSTOP);
++//  add(sigset, SIGTSTP);       // I can't get this to suspend properly, so
++                                // I'll leave it up to chance that the main
++                                // thread is interruptible.
++  add(sigset, SIGUSR1);
++  add(sigset, SIGUSR2);
++
++  while (_waiting_for_signals)
++    {
++      int err = wait(sigset, &sig);
++      if (err) cerr << error(this, "sigwait").what() << endl;
++      else *out << "Received signal " << sig << "." << endl;
++      switch (sig) {
++        case SIGUSR2:
++          if(!_waiting_for_signals)
++            {
++              // SIGUSR2 is how ~connector wakes this thread
++              goto done;
++            }
++          break;
++        default:
++          break;
++      }
++      handle_signals(sig);
++    }
++done:
++  EnterCriticalSection(&_thread_mutex);
++  _signal_thread_done = true;
++  LeaveCriticalSection(&_thread_mutex);
++
++  *out << "await_signal done." << endl;
++}
++
++cygwin::connector::signal_handler *
++cygwin::connector::set_handler(int signal, signal_handler *handler)
++{
++  signal_handler *retval = _signal_handlers[signal];
++
++  if (handler == NULL)
++    _signal_handlers.erase(signal);
++  else
++    _signal_handlers[signal] = handler;
++
++  return retval;
++}
++
++void
++cygwin::connector::handle_signals(int sig)
++{
++  callback_list::iterator h = _signal_handlers.find(sig);
++
++  if (h != _signal_handlers.end())
++    {
++      try
++      {
++        signal_handler *handler = h->second;
++        (*handler)(sig);
++        return;
++      }
++      catch (std::exception &x)
++      {
++        cerr << "cygwin::connector::handle_signals caught "
++             << x.what() << "!" << endl;
++        return;
++      }
++    }
++
++  cerr << "No handler for signal " << sig << "!" << endl;
++}
++
++int
++cygwin::connector::err_no() const
++{
++  int *e = (*_errno)();
++  if (e == NULL) {
++    return -1;
++  }
++  return *e;
++}
++
++string
++cygwin::connector::str_error(int err_no) const
++{
++  string retval;
++
++  const char *s = (*_strerror)(err_no);
++  if (s != NULL)
++    {
++      retval = s;
++    } else {
++      std::ostringstream o;
++      o << "Unexpected errno " << err_no;
++      retval = o.str();
++    }
++
++  return retval;
++}
++
++string
++cygwin::connector::unix_path(const string &windows) const
++{
++  char buf[MAX_PATH];
++
++  _conv_to_full_posix_path(windows.c_str(), buf);
++
++  return string(buf);
++}
++
++string
++cygwin::connector::win_path(const string &unix) const
++{
++  char buf[MAX_PATH];
++
++  _conv_to_full_win32_path(unix.c_str(), buf);
++
++  return string(buf);
++}
++
++///////////////////////////////////////////////////////////////////////////////
++///////////////////////////////////////////////////////////////////////////////
++
++string cygwin::error::format(
++  cygwin::connector *c,
++  int err_no,
++  const char *message,
++  const char *detail)
++{
++  std::ostringstream ret;
++
++  ret << message;
++  if (detail)
++    {
++      ret << "(" << detail << ")";
++    }
++  ret << ":  " << c->str_error(err_no);
++
++  return ret.str();
++}
++
++string windows_error::format(
++  DWORD error,
++  const char *message,
++  const char *detail)
++{
++  std::ostringstream ret;
++  char buf[512];
++  DWORD bytes;
++
++  ret << message;
++  if (detail)
++    ret << "(" << detail << ")";
++  ret << ":  ";
++
++  bytes = FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, 0, error,
++      MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
++      buf, sizeof(buf), 0);
++
++  if (bytes == 0)
++    ret << "Unexpected Windows error " << error;
++  else
++    {
++      // Remove trailing whitespace
++      char *p = buf + bytes - 1;
++      while (isspace(*p)) *p-- = '\0';
++      ret << buf << " (" << error << ")";
++    }
++
++  return ret.str();
++}
++
++///////////////////////////////////////////////////////////////////////////////
++///////////////////////////////////////////////////////////////////////////////
++
++extern "C" int mainCRTStartup();
++
++// This just pushes 4K onto the stack, backs up the original stack, and
++// jumps into the regular startup code.  This avoids having to worry about
++// backing up argc and argv.
++extern "C" int __stdcall cygloadCRTStartup()
++{
++  cygwin::padding padding;
++  return mainCRTStartup();
++}
++
++///////////////////////////////////////////////////////////////////////////////
++///////////////////////////////////////////////////////////////////////////////
++
++static void
++hangup(int sig)
++{
++  cout << "Hangup (" << sig << ")." << endl;
++}
++
++static void
++interrupt(int sig)
++{
++  cerr << "Interrupt (" << sig << ")!" << endl;
++  exit(0);
++}
++
++static int caught = false;
++
++static void
++catch_signal(int)
++{
++  *out << "Signals are working." << endl;
++  caught = true;
++}
++
++int
++main(int argc, char *argv[])
++{
++  // If you do not want to use cygloadCRTStartup() as an entry point,
++  // uncomment this line, but be sure to have *everything* you want
++  // from the stack below it backed up before you call the
++  // constructor for cygwin::connector.
++  //cygwin::padding padding;
++
++  std::ostringstream output;
++  bool verbose = false, testinterrupts = false;
++  const char *dll = "cygwin1.dll";
++
++  out = &output;
++
++  for (int i = 1; i < argc; ++i)
++    {
++      string arg = string(argv[i]);
++
++      if (arg == "-v")
++        {
++          verbose = true;
++          out = &cout;
++        } else if (arg == "-testinterrupts")
++          testinterrupts = true;
++      else if (arg == "-cygwin")
++        {
++          if (i+1 >= argc)
++            {
++              cerr << "Need to supply an argument with -cygwin." << endl;
++              return 255;
++            }
++          dll = argv[++i];
++        }
++    }
++
++
++  try
++    {
++      *out << "Connecting to cygwin..." << endl;
++      cygwin::connector cygwin(dll);
++      *out << "Successfully connected." << endl;
++
++      string result = cygwin.str_error(ENOENT);
++
++      if (result != "No such file or directory")
++        {
++          cerr << "strerror(ENOENT) returned \""
++               << result
++               << "\" instead of \"No such file or directory\"!"
++               << endl;
++          return 1;
++        } else if (verbose) {
++          *out << "strerror(ENOENT) = " << result << endl;
++        }
++
++      // Path conversion:  from cygwin to Windows...
++      result = cygwin.win_path("/usr");
++      struct _stat statbuf;
++      if (::_stat(result.c_str(), &statbuf) < 0)
++        {
++          cerr << "stat(\"" << result << "\") failed!" << endl;
++          return 2;
++        } else if (verbose) {
++          *out << "/usr == " << result << endl;
++        }
++
++      // ...and back:
++      char buf[MAX_PATH], scratch[256];
++      GetSystemDirectory(buf, sizeof(buf));
++      int (*cygstat)(const char *, void *);
++      cygwin.get_symbol("stat", cygstat);
++
++      if (cygstat(buf, scratch) < 0)
++        {
++          cerr << "cygwin stat(\"" << buf << "\") failed!" << endl;
++          return 3;
++        } else if (verbose) {
++          *out << buf << " == " << cygwin.unix_path(buf) << endl;
++        }
++
++      // Test error handling.  This should output
++      // "open(/potrzebie/furshlugginer):  No such file or directory"
++      {
++        int (*cygopen)(const char *, int);
++        cygwin.get_symbol("open", cygopen);
++
++        if (cygopen("/potrzebie/furshlugginer", 0 /* O_RDONLY */) < 0)
++          {
++            int err = cygwin.err_no();
++            if (err != ENOENT)
++              {
++                cerr << "cygwin open(\"/potrzebie/furshlugginer\", "
++                    "O_RDONLY):  expected to fail with ENOENT, got "
++                     << err << "!" << endl;
++                return 4;
++              }
++            if (verbose)
++              *out << cygwin::error(&cygwin, "open",
++                  "/potrzebie/furshlugginer").what()
++                   << endl;
++          } else {
++            cerr << "/potrzebie/furshlugginer should not exist!"
++                 << endl;
++            return 5;
++          }
++      }
++
++      // And signal handling:
++      std::pointer_to_unary_function<int,void> h1(&hangup);
++      std::pointer_to_unary_function<int,void> h2(&interrupt);
++      std::pointer_to_unary_function<int,void> h3(&catch_signal);
++      cygwin.set_handler(SIGHUP, &h1);
++      cygwin.set_handler(SIGINT, &h2);
++      cygwin.set_handler(SIGUSR1, &h3);
++
++      // Make sure the signal handler thread has had time to start...
++      Sleep(100);
++      // Send a test signal to set "caught" to true...
++      int (*raze)(int);
++      cygwin.get_symbol("raise", raze);
++      raze(SIGUSR1);
++      // And give the thread time to wait for the shutdown signal.
++      Sleep(100);
++
++      if (testinterrupts)
++        {
++          // This is a worst case scenario for testing interrupts:  the
++          // main thread is in a long-duration Windows API call.  This
++          // makes the main thread uninterruptible; cygwin will retry
++          // 20 times, with a low_priority_sleep(0) between each try.
++          cout << "Sleeping for 30 seconds, waiting for a signal..." << endl;
++          Sleep(30000);
++          cout << "Done waiting." << endl;
++        }
++    }
++  catch (std::exception &x)
++    {
++      cerr << x.what() << endl;
++      return 2;
++    }
++
++  if (caught)
++    return 0;
++  else
++    {
++      cerr << "Never received SIGUSR1." << endl;
++      return 1;
++    }
++}
+diff -up /dev/null cygload/site.exp
+--- /dev/null	2003-01-30 02:24:37.000000000 -0800
++++ cygload/cygload.exp	2005-06-06 11:44:13.000000000 -0700
+@@ -0,0 +1,40 @@
++source "site.exp"
++
++if { ! [isnative] } {
++    verbose "skipping cygload because it's not native \"$target_triplet\" != \"$build_triplet\""
++    return
++}
++
++proc ws_spawn {cmd args} {
++    global rv
++    verbose "running $cmd\n"
++    set rv {}
++    # First item in rv is the return code, second item is the message
++    lappend rv [catch "exec $cmd" message] $message
++    verbose send "catchCode = $rv\n"
++}
++
++ws_spawn "gcc -mno-cygwin $srcdir/$subdir/cygload.cpp -o mingw-cygload.exe -lstdc++ -Wl,-e,_cygloadCRTStartup@0"
++
++if { $rv != {0 {}} } {
++    verbose -log "$rv"
++    fail "cygload (compile)"
++} else {
++    if { $verbose } {
++        set redirect_output "./mingw-cygwin.log"
++    } else {
++        set redirect_output /dev/null
++    }
++    set windows_runtime_root [exec cygpath -m $runtime_root]
++    ws_spawn "./mingw-cygload.exe -cygwin $windows_runtime_root/cygwin0.dll > $redirect_output"
++    if { $rv != {0 {}} } {
++        verbose -log "cygload: $rv"
++        fail "cygload (execute)"
++    } else {
++        pass "cygload"
++    }
++    catch { file delete "mingw-cygload.exe" } err
++    if { $err != "" } {
++        note "error deleting mingw-cygload.exe: $err"
++    }
++}
+
