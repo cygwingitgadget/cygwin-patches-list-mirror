@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5551-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 4967 invoked by alias); 3 Jul 2005 02:06:47 -0000
+Return-Path: <cygwin-patches-return-5552-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 2860 invoked by alias); 4 Jul 2005 08:44:23 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,43 +7,55 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 4781 invoked by uid 22791); 3 Jul 2005 02:06:44 -0000
-Received: from c-24-61-23-223.hsd1.ma.comcast.net (HELO cgf.cx) (24.61.23.223)
-    by sourceware.org (qpsmtpd/0.30-dev) with ESMTP; Sun, 03 Jul 2005 02:06:44 +0000
-Received: by cgf.cx (Postfix, from userid 201)
-	id 532DF13C0D2; Sat,  2 Jul 2005 22:06:38 -0400 (EDT)
-Date: Sun, 03 Jul 2005 02:06:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
+Received: (qmail 2688 invoked by uid 22791); 4 Jul 2005 08:44:15 -0000
+Received: from p54941b94.dip0.t-ipconnect.de (HELO calimero.vinschen.de) (84.148.27.148)
+    by sourceware.org (qpsmtpd/0.30-dev) with ESMTP; Mon, 04 Jul 2005 08:44:15 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id 4F9E2544122; Mon,  4 Jul 2005 10:44:24 +0200 (CEST)
+Date: Mon, 04 Jul 2005 08:44:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [patch] add -p option to cygcheck to query website package search
-Message-ID: <20050703020638.GA18348@trixie.casa.cgf.cx>
+Subject: Re: [PATCH]: cygwin_internal
+Message-ID: <20050704084424.GW21074@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <42B7215D.309F67EE@dessent.net> <20050622004924.GA28600@trixie.casa.cgf.cx>
+References: <044501c57e45$06cba620$3e0010ac@wirelessworld.airvananet.com> <20050701185405.GP21074@calimero.vinschen.de> <20050701191146.GB15927@trixie.casa.cgf.cx> <20050702085326.GQ21074@calimero.vinschen.de>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20050622004924.GA28600@trixie.casa.cgf.cx>
-User-Agent: Mutt/1.5.8i
-X-SW-Source: 2005-q3/txt/msg00006.txt.bz2
+In-Reply-To: <20050702085326.GQ21074@calimero.vinschen.de>
+User-Agent: Mutt/1.4.2i
+X-SW-Source: 2005-q3/txt/msg00007.txt.bz2
 
-On Tue, Jun 21, 2005 at 08:49:24PM -0400, Christopher Faylor wrote:
->On Mon, Jun 20, 2005 at 01:04:45PM -0700, Brian Dessent wrote:
->>Here is a patch that implements the -p option to cygcheck that was
->>mentioned on the list previously.  It uses the WinInet API to hit the
->>package-grep.cgi URL on cygwin.com with the search regexp supplied by
->>the user.
->
->I appreciate your doing this Brian.  I won't be able to really
->investigate this and comment on it until Saturday but I wanted to
->respond to your email, at least so you would know the status.  I think
->that, on a quick inspection, the cygcheck stuff is fine (and I like the
->rewording of the help) but I have a different idea for how to handle
->the package_grep.cgi part but I need to do some more research.
+On Jul  2 10:53, Corinna Vinschen wrote:
+> On Jul  1 15:11, Christopher Faylor wrote:
+> > On Fri, Jul 01, 2005 at 08:54:05PM +0200, Corinna Vinschen wrote:
+> > >On Jul  1 09:58, Pierre A. Humblet wrote:
+> > >>The situation is that exim has the concept that some groups are
+> > >>privileged and can have write access to the configuration file.  They
+> > >>are normally initialized to hard values set at compile time.
+> > >>
+> > >>The Cygwin port of exim fakes things up so that the gid of Admins
+> > >>(obtained from cygwin_internal) is put in the list of exim's privileged
+> > >>groups.  The problem is that the gid obtained by cygwin_internal (from
+> > >>the Admins sid) may not match the gid reported by stat, which is
+> > >>obtained by cygpsid::get_id () from the same Admins sid.
+> > >
+> > >Ok, that makes sense.  It seems that cygserver can stumble over the
+> > >same problem.
+> > >
+> > >Chris, is removing cygwin_regname ok with you?
+> > 
+> > Yep.
+> 
+> Please check in, Pierre.
 
-As is probably obvious, I didn't do this last Saturday.
+I've checked in now.
 
-I am going to hold off putting this in 1.5.18 but it will be in 1.5.19,
-as soon as I modify the perl script on sourceware.org.
 
-cgf
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          mailto:cygwin@cygwin.com
+Red Hat, Inc.
