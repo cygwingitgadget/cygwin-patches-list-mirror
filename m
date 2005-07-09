@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5564-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 24913 invoked by alias); 9 Jul 2005 07:01:04 -0000
+Return-Path: <cygwin-patches-return-5565-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 24690 invoked by alias); 9 Jul 2005 08:22:59 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,116 +7,46 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 24848 invoked by uid 22791); 9 Jul 2005 07:00:56 -0000
-Received: from wproxy.gmail.com (HELO wproxy.gmail.com) (64.233.184.202)
-    by sourceware.org (qpsmtpd/0.30-dev) with ESMTP; Sat, 09 Jul 2005 07:00:56 +0000
-Received: by wproxy.gmail.com with SMTP id i13so608410wra
-        for <cygwin-patches@cygwin.com>; Sat, 09 Jul 2005 00:00:54 -0700 (PDT)
-Received: by 10.54.48.54 with SMTP id v54mr2246554wrv;
-        Sat, 09 Jul 2005 00:00:54 -0700 (PDT)
-Received: by 10.54.62.17 with HTTP; Sat, 9 Jul 2005 00:00:54 -0700 (PDT)
-Message-ID: <cd3b087a0507090000d5e0c53@mail.gmail.com>
-Date: Sat, 09 Jul 2005 07:01:00 -0000
-From: Nicholas Wourms <nwourms@gmail.com>
-Reply-To: Nicholas Wourms <nwourms@gmail.com>
+Received: (qmail 24501 invoked by uid 22791); 9 Jul 2005 08:22:48 -0000
+Received: from p54940fb4.dip0.t-ipconnect.de (HELO calimero.vinschen.de) (84.148.15.180)
+    by sourceware.org (qpsmtpd/0.30-dev) with ESMTP; Sat, 09 Jul 2005 08:22:48 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id 7526B6D4237; Sat,  9 Jul 2005 10:22:57 +0200 (CEST)
+Date: Sat, 09 Jul 2005 08:22:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH]: (Retry) Add get{delim,line} symbol alias to avoid autoconf detection failures
+Subject: Re: [PATCH]: Add get{delim,line} symbol alias to avoid autoconf detection failures
+Message-ID: <20050709082257.GP7507@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <cd3b087a05070822235f78def6@mail.gmail.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; 
-	boundary="----=_Part_3931_5598522.1120892454888"
-X-SW-Source: 2005-q3/txt/msg00019.txt.bz2
-
-------=_Part_3931_5598522.1120892454888
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-length: 103
+In-Reply-To: <cd3b087a05070822235f78def6@mail.gmail.com>
+User-Agent: Mutt/1.4.2i
+X-SW-Source: 2005-q3/txt/msg00020.txt.bz2
 
-Sorry,
+On Jul  9 01:23, Nicholas Wourms wrote:
+> Hi Corinna,
+> 
+> I saw that you exported __get{delim,line} in the cygwin dll.  I've had
+> this modification locally for awhile now.  There are a number of
+> autoconfiscated applications which check for these functions and use
+> them if present.  Unfortunately, autoconf's AC_CHECK_FUNCS will not
+> pickup CPP definitions in headers because the test links to the c
+> library using a phony prototype.  Thus, in order to facilitate
+> autoconf, I've added the necessary resource aliases.  I've also taken
+> the liberty of replacing the CPP definitions with actual function
+> prototypes for  improved clarity.   The patch for doing these
+> operations is attached.  I hope you find it satisfactory.
 
-I forgot to include cdefs.h.  The ChangeLog and the fixed patch is attached.
+Thanks, applied.  I've just shortened the ChangeLog slightly.
 
-Cheers,
-Nicholas
 
-------=_Part_3931_5598522.1120892454888
-Content-Type: text/plain; name="ChangeLog.txt"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="ChangeLog.txt"
-Content-length: 497
+Corinna
 
-MjAwNS0wNy0wOSAgTmljaG9sYXMgV291cm1zICA8bndvdXJtc0BnbWFpbC5j
-b20+CgoJKiBjeWd3aW4uZGluIChnZXRsaW5lKTogQWRkIHN5bWJvbCBhbGlh
-cyB0byBhdm9pZCBwcm9ibGVtcyB3aXRoCglhdXRvY29uZidzIEFDX0NIRUNL
-X0ZVTkNTIG1hY3JvLgoJKGdldGRlbGltKTogTGlrZXdpc2UuCgkqIGluY2x1
-ZGUvc3lzL3N0ZGlvLmggKGdldGxpbmUpOiBJbXByb3ZlIGNsYXJpdHkgYnkg
-cmVwbGFjaW5nIHRoZSBjcHAKCWRlZmluaXRpb24gd2l0aCBhIHByb3BlciBm
-dW5jdGlvbiBwcm90b3R5cGUuCgkoZ2V0ZGVsaW0pOiAgTGlrZXdpc2UuCgkq
-IGluY2x1ZGUvY3lnd2luL3ZlcnNpb24uaDogQnVtcCBBUEkgbWlub3IgbnVt
-YmVyLg==
-
-------=_Part_3931_5598522.1120892454888
-Content-Type: application/octet-stream; name="getdelim-getline-autoconf-fix.2.patch"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="getdelim-getline-autoconf-fix.2.patch"
-Content-length: 3477
-
-SW5kZXg6IGN5Z3dpbi5kaW4KPT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1Mg
-ZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vY3lnd2luLmRpbix2
-CnJldHJpZXZpbmcgcmV2aXNpb24gMS4xNDEKZGlmZiAtdSAtcCAtcjEuMTQx
-IGN5Z3dpbi5kaW4KLS0tIGN5Z3dpbi5kaW4JOCBKdWwgMjAwNSAwODoyNDox
-MiAtMDAwMAkxLjE0MQorKysgY3lnd2luLmRpbgk5IEp1bCAyMDA1IDA1OjIy
-OjE2IC0wMDAwCkBAIC0zNSw4ICszNSw2IEBAIF9fZXByaW50ZiBTSUdGRQog
-X19lcnJubyBOT1NJR0ZFCiBfX2ZwY2xhc3NpZnlkIE5PU0lHRkUKIF9fZnBj
-bGFzc2lmeWYgTk9TSUdGRQotX19nZXRsaW5lIE5PU0lHRkUKLV9fZ2V0ZGVs
-aW0gTk9TSUdGRQogX19nZXRyZWVudCBOT1NJR0ZFCiBfX2luZmluaXR5IE5P
-U0lHRkUKIF9fbWFpbiBOT1NJR0ZFCkBAIC02MTMsNiArNjExLDggQEAgZ2V0
-Y2hhcl91bmxvY2tlZCBTSUdGRQogX2dldGNoYXJfdW5sb2NrZWQgPSBnZXRj
-aGFyX3VubG9ja2VkIFNJR0ZFCiBnZXRjd2QgU0lHRkUKIF9nZXRjd2QgPSBn
-ZXRjd2QgU0lHRkUKK19fZ2V0ZGVsaW0gTk9TSUdGRQorZ2V0ZGVsaW0gPSBf
-X2dldGRlbGltIE5PU0lHRkUKIGdldGRvbWFpbm5hbWUgU0lHRkUKIF9nZXRk
-b21haW5uYW1lID0gZ2V0ZG9tYWlubmFtZSBTSUdGRQogZ2V0ZHRhYmxlc2l6
-ZSBOT1NJR0ZFCkBAIC02NDQsNiArNjQ0LDggQEAgX2dldGdyb3VwcyA9IGdl
-dGdyb3VwcyBTSUdGRQogX2dldGdyb3VwczMyID0gZ2V0Z3JvdXBzMzIgU0lH
-RkUKIGdldGhvc3RpZCBTSUdGRQogZ2V0aXRpbWVyIFNJR0ZFCitfX2dldGxp
-bmUgTk9TSUdGRQorZ2V0bGluZSA9IF9fZ2V0bGluZSBOT1NJR0ZFCiBnZXRs
-b2dpbl9yIE5PU0lHRkUKIGdldGxvZ2luIE5PU0lHRkUKIF9nZXRsb2dpbiA9
-IGdldGxvZ2luIE5PU0lHRkUKSW5kZXg6IGluY2x1ZGUvY3lnd2luL3ZlcnNp
-b24uaAo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3Ny
-Yy9zcmMvd2luc3VwL2N5Z3dpbi9pbmNsdWRlL2N5Z3dpbi92ZXJzaW9uLmgs
-dgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuMTk3CmRpZmYgLXUgLXAgLXIxLjE5
-NyB2ZXJzaW9uLmgKLS0tIGluY2x1ZGUvY3lnd2luL3ZlcnNpb24uaAk4IEp1
-bCAyMDA1IDA4OjI0OjEyIC0wMDAwCTEuMTk3CisrKyBpbmNsdWRlL2N5Z3dp
-bi92ZXJzaW9uLmgJOSBKdWwgMjAwNSAwNToyMjoxNiAtMDAwMApAQCAtMjYw
-LDEyICsyNjAsMTMgQEAgZGV0YWlscy4gKi8KICAgICAgIDEzMTogRXhwb3J0
-IGluZXRfbnRvcCwgaW5ldF9wdG9uLgogICAgICAgMTMyOiBBZGQgR0xPQl9M
-SU1JVCBmbGFnIHRvIGdsb2IuCiAgICAgICAxMzM6IEV4cG9ydCBfX2dldGxp
-bmUsIF9fZ2V0ZGVsaW0uCisgICAgICAxMzQ6IEV4cG9ydCBnZXRsaW5lLCBn
-ZXRkZWxpbS4KICAgICAgKi8KIAogICAgICAvKiBOb3RlIHRoYXQgd2UgZm9y
-Z290IHRvIGJ1bXAgdGhlIGFwaSBmb3IgdWFsYXJtLCBzdHJ0b2xsLCBzdHJ0
-b3VsbCAqLwogCiAjZGVmaW5lIENZR1dJTl9WRVJTSU9OX0FQSV9NQUpPUiAw
-Ci0jZGVmaW5lIENZR1dJTl9WRVJTSU9OX0FQSV9NSU5PUiAxMzMKKyNkZWZp
-bmUgQ1lHV0lOX1ZFUlNJT05fQVBJX01JTk9SIDEzNAogCiAgICAgIC8qIFRo
-ZXJlIGlzIGFsc28gYSBjb21wYXRpYml0eSB2ZXJzaW9uIG51bWJlciBhc3Nv
-Y2lhdGVkIHdpdGggdGhlCiAJc2hhcmVkIG1lbW9yeSByZWdpb25zLiAgSXQg
-aXMgaW5jcmVtZW50ZWQgd2hlbiBpbmNvbXBhdGlibGUKSW5kZXg6IGluY2x1
-ZGUvc3lzL3N0ZGlvLmgKPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1MgZmls
-ZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vaW5jbHVkZS9zeXMvc3Rk
-aW8uaCx2CnJldHJpZXZpbmcgcmV2aXNpb24gMS40CmRpZmYgLXUgLXAgLXIx
-LjQgc3RkaW8uaAotLS0gaW5jbHVkZS9zeXMvc3RkaW8uaAk4IEp1bCAyMDA1
-IDA4OjI0OjEzIC0wMDAwCTEuNAorKysgaW5jbHVkZS9zeXMvc3RkaW8uaAk5
-IEp1bCAyMDA1IDA1OjIyOjE2IC0wMDAwCkBAIC0xMSw2ICsxMSw3IEBAIGRl
-dGFpbHMuICovCiAjaWZuZGVmIF9TWVNfU1RESU9fSF8KICNkZWZpbmUgX1NZ
-U19TVERJT19IXwogCisjaW5jbHVkZSA8c3lzL2NkZWZzLmg+CiAjaW5jbHVk
-ZSA8c3lzL2xvY2suaD4KIAogI2lmICFkZWZpbmVkKF9fU0lOR0xFX1RIUkVB
-RF9fKQpAQCAtMjUsNyArMjYsMTEgQEAgZGV0YWlscy4gKi8KICMgIGVuZGlm
-CiAjZW5kaWYKIAotI2RlZmluZSBnZXRsaW5lIF9fZ2V0bGluZQotI2RlZmlu
-ZSBnZXRkZWxpbSBfX2dldGRlbGltCitfX0JFR0lOX0RFQ0xTCisKK3NzaXpl
-X3QJX0VYRlVOKGdldGxpbmUsIChjaGFyICoqLCBzaXplX3QgKiwgRklMRSAq
-KSk7Citzc2l6ZV90CV9FWEZVTihnZXRkZWxpbSwgKGNoYXIgKiosIHNpemVf
-dCAqLCBpbnQsIEZJTEUgKikpOworCitfX0VORF9ERUNMUwogCiAjZW5kaWYK
-
-------=_Part_3931_5598522.1120892454888--
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          mailto:cygwin@cygwin.com
+Red Hat, Inc.
