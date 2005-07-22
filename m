@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5585-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 20864 invoked by alias); 22 Jul 2005 01:18:03 -0000
+Return-Path: <cygwin-patches-return-5586-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 15294 invoked by alias); 22 Jul 2005 02:03:35 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,366 +7,50 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 20784 invoked by uid 22791); 22 Jul 2005 01:17:38 -0000
-Received: from service.sh.cvut.cz (HELO service.sh.cvut.cz) (147.32.127.214)
-    by sourceware.org (qpsmtpd/0.30-dev) with ESMTP; Fri, 22 Jul 2005 01:17:38 +0000
-Received: from localhost (localhost [127.0.0.1])
-	by service.sh.cvut.cz (Postfix) with ESMTP id 27D291A3325
-	for <cygwin-patches@cygwin.com>; Fri, 22 Jul 2005 03:17:36 +0200 (CEST)
-Received: from service.sh.cvut.cz ([127.0.0.1])
-	by localhost (service [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 02708-07 for <cygwin-patches@cygwin.com>;
-	Fri, 22 Jul 2005 03:17:33 +0200 (CEST)
-Received: from logout.sh.cvut.cz (logout.sh.cvut.cz [147.32.127.203])
-	by service.sh.cvut.cz (Postfix) with ESMTP id E4A5F1A3339
-	for <cygwin-patches@cygwin.com>; Fri, 22 Jul 2005 03:17:33 +0200 (CEST)
-Received: from logout (logout [147.32.127.203])
-	by logout.sh.cvut.cz (Postfix) with ESMTP id 00C8E3C306
-	for <cygwin-patches@cygwin.com>; Fri, 22 Jul 2005 03:17:34 +0200 (CEST)
-Date: Fri, 22 Jul 2005 01:18:00 -0000
-From: Vaclav Haisman <V.Haisman@sh.cvut.cz>
+Received: (qmail 14792 invoked by uid 22791); 22 Jul 2005 02:03:30 -0000
+Received: from c-24-61-23-223.hsd1.ma.comcast.net (HELO cgf.cx) (24.61.23.223)
+    by sourceware.org (qpsmtpd/0.30-dev) with ESMTP; Fri, 22 Jul 2005 02:03:30 +0000
+Received: by cgf.cx (Postfix, from userid 201)
+	id 6A02013C0EC; Thu, 21 Jul 2005 22:03:29 -0400 (EDT)
+Date: Fri, 22 Jul 2005 02:03:00 -0000
+From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Set FILE_ATTRIBUTE_TEMPORARY on files opened by mkstemp()
- on WinNT
-In-Reply-To: <20050721234356.GB24848@trixie.casa.cgf.cx>
-Message-ID: <20050722030953.N49904@logout.sh.cvut.cz>
-References: <20050722011722.L38147@logout.sh.cvut.cz>
- <20050721234356.GB24848@trixie.casa.cgf.cx>
-MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="0-315358923-1121995053=:49904"
-X-Virus-Checked: Checked by ClamAV on sourceware.org
-X-SW-Source: 2005-q3/txt/msg00040.txt.bz2
+Subject: Re: [PATCH] Set FILE_ATTRIBUTE_TEMPORARY on files opened by mkstemp() on WinNT
+Message-ID: <20050722020329.GA2430@trixie.casa.cgf.cx>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20050722011722.L38147@logout.sh.cvut.cz> <20050721234356.GB24848@trixie.casa.cgf.cx> <20050722030953.N49904@logout.sh.cvut.cz>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20050722030953.N49904@logout.sh.cvut.cz>
+User-Agent: Mutt/1.5.8i
+X-SW-Source: 2005-q3/txt/msg00041.txt.bz2
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
-
---0-315358923-1121995053=:49904
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-Content-length: 1990
-
-On Thu, 21 Jul 2005, Christopher Faylor wrote:
-
-> On Fri, Jul 22, 2005 at 01:32:50AM +0200, Vaclav Haisman wrote:
-> >the attached patch sets FILE_ATTRIBUTE_TEMPORARY on files opened by
-> >mkstemp() on WinNT class systems.  Theoretically the OS should then be
-> >less eager to write such files onto the physical storage and use cache
-> >instead.
+On Fri, Jul 22, 2005 at 03:17:33AM +0200, Vaclav Haisman wrote:
+>On Thu, 21 Jul 2005, Christopher Faylor wrote:
+>>On Fri, Jul 22, 2005 at 01:32:50AM +0200, Vaclav Haisman wrote:
+>>>the attached patch sets FILE_ATTRIBUTE_TEMPORARY on files opened by
+>>>mkstemp() on WinNT class systems.  Theoretically the OS should then be
+>>>less eager to write such files onto the physical storage and use cache
+>>>instead.
+>>
+>>Thank you for the patch but unless you can demonstrate some obvious
+>>performance improvements I don't think we'll be applying it.  You've
+>>slowed down (slightly) the common case of calling open for the uncommon
+>>case of calling mk?temp.
 >
-> Thank you for the patch but unless you can demonstrate some obvious
-> performance improvements I don't think we'll be applying it.  You've
-> slowed down (slightly) the common case of calling open for the uncommon
-> case of calling mk?temp.
+>I am not sure what kind of slow down do you mean.  Is it the one extra
+>call?
 
-I am not sure what kind of slow down do you mean. Is it the one extra call? In
-that case the attached modified patch should fix it. The call to
-open_with_attributes() in open() gets inlined, I have checked the resulting .s
-file.
+It was more than one extra call, but yes.
 
->
-> Also, if this was to be accepted, the preference for this type of thing
-> is to add a capability like wincap.has_file_attribute_temporary () rather
-> than just relying on is_winnt ().
+>In that case the attached modified patch should fix it.  The call to
+>open_with_attributes() in open() gets inlined, I have checked the
+>resulting .s file.
 
-Done.
+Can you demonstrate some obvious performance improvements?  Does it
+speed up configure, make bash start up faster, make the rxvt window
+faster to show up?
 
->
-> cgf
->
-
-
-VH
-
-
-2005-07-22  Vaclav Haisman  <v.haisman@sh.cvut.cz>
-
-	* wincap.h (wincap::has_file_attribute_temporary): New field.
-	(wincapc::has_file_attribute_temporary): New accessor.
-	* wincap.cc (wincap_unknown): Initialize
-	has_file_attribute_temporary field.
-	(wincap_95): Ditto.
-	(wincap_95osr2): Ditto.
-	(wincap_98): Ditto.
-	(wincap_98se): Ditto.
-	(wincap_me): Ditto.
-	(wincap_nt3): Ditto.
-	(wincap_nt4): Ditto.
-	(wincap_nt4sp4): Ditto.
-	(wincap_2000): Ditto.
-	(wincap_xp): Ditto.
-	(wincap_2003): Ditto.
-	* syscalls.cc (open_with_attributes): Rename open() to
-	open_with_attributes(). Add fileattr parameter and use it. Add
-	explicit mode_t parameter for mode. Tweak debugging
-	syscall_printf() calls to reflect the new parameter.
-	(open): Reimplement using open_with_attributes().
-	* fhandler.cc (fhandler_base::open): Use pc.file_attributes() when
-	opening disk file.
-	* mktemp.cc (_gettemp): Set FILE_ATTRIBUTE_TEMPORARY on WinNT
-	using open_with_attributes().
-
---0-315358923-1121995053=:49904
-Content-Type: TEXT/PLAIN; charset=US-ASCII; name="file_attribute_temporary.patch"
-Content-Transfer-Encoding: BASE64
-Content-ID: <20050722031733.J49904@logout.sh.cvut.cz>
-Content-Description: 
-Content-Disposition: attachment; filename="file_attribute_temporary.patch"
-Content-length: 13575
-
-SW5kZXg6IGZoYW5kbGVyLmNjDQo9PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQpS
-Q1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXIu
-Y2Msdg0KcmV0cmlldmluZyByZXZpc2lvbiAxLjIzOQ0KZGlmZiAtdSAtcCAt
-ZCAtcjEuMjM5IGZoYW5kbGVyLmNjDQotLS0gZmhhbmRsZXIuY2MJNiBKdWwg
-MjAwNSAyMDowNTowMCAtMDAwMAkxLjIzOQ0KKysrIGZoYW5kbGVyLmNjCTIy
-IEp1bCAyMDA1IDAxOjA3OjQ1IC0wMDAwDQpAQCAtNjM5LDcgKzYzOSwxMCBA
-QCBmaGFuZGxlcl9iYXNlOjpvcGVuIChpbnQgZmxhZ3MsIG1vZGVfdCBtDQog
-DQogICBpZiAoZmxhZ3MgJiBPX0NSRUFUICYmIGdldF9kZXZpY2UgKCkgPT0g
-RkhfRlMpDQogICAgIHsNCi0gICAgICBmaWxlX2F0dHJpYnV0ZXMgPSBGSUxF
-X0FUVFJJQlVURV9OT1JNQUw7DQorICAgICAgaWYgKHBjLmZpbGVfYXR0cmli
-dXRlcyAoKSA9PSBJTlZBTElEX0ZJTEVfQVRUUklCVVRFUykNCisgICAgICAg
-IGZpbGVfYXR0cmlidXRlcyA9IEZJTEVfQVRUUklCVVRFX05PUk1BTDsNCisg
-ICAgICBlbHNlDQorICAgICAgICBmaWxlX2F0dHJpYnV0ZXMgPSBwYy5maWxl
-X2F0dHJpYnV0ZXMgKCk7DQogICAgICAgLyogSWYgbW9kZSBoYXMgbm8gd3Jp
-dGUgYml0cyBzZXQsIHdlIHNldCB0aGUgUi9PIGF0dHJpYnV0ZS4gKi8NCiAg
-ICAgICBpZiAoIShtb2RlICYgKFNfSVdVU1IgfCBTX0lXR1JQIHwgU19JV09U
-SCkpKQ0KIAlmaWxlX2F0dHJpYnV0ZXMgfD0gRklMRV9BVFRSSUJVVEVfUkVB
-RE9OTFk7DQpJbmRleDogbWt0ZW1wLmNjDQo9PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09DQpSQ1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vbWt0
-ZW1wLmNjLHYNCnJldHJpZXZpbmcgcmV2aXNpb24gMS4yDQpkaWZmIC11IC1w
-IC1kIC1yMS4yIG1rdGVtcC5jYw0KLS0tIG1rdGVtcC5jYwkyNSBNYXkgMjAw
-NSAwMzo0Mzo1OCAtMDAwMAkxLjINCisrKyBta3RlbXAuY2MJMjIgSnVsIDIw
-MDUgMDE6MDc6NDYgLTAwMDANCkBAIC0xMDEsMTEgKzEwMSwxNSBAQCBfZ2V0
-dGVtcChjaGFyICpwYXRoLCBpbnQgKmRvb3BlbiwgaW50IGRvDQogCX0NCiAg
-ICAgfQ0KIA0KKyAgRFdPUkQgY29uc3QgZmlsZWF0dHIgPSB3aW5jYXAuaGFz
-X2ZpbGVfYXR0cmlidXRlX3RlbXBvcmFyeSAoKSA/IA0KKyAgICBGSUxFX0FU
-VFJJQlVURV9URU1QT1JBUlkgOiBGSUxFX0FUVFJJQlVURV9OT1JNQUw7DQog
-ICBmb3IgKDs7KQ0KICAgICB7DQogICAgICAgaWYgKGRvb3BlbikNCiAJew0K
-LQkgIGlmICgoKmRvb3BlbiA9IG9wZW4gKHBhdGgsIE9fQ1JFQVQgfCBPX0VY
-Q0wgfCBPX1JEV1IsIDA2MDApKSA+PSAwKQ0KKyAgICAgICAgICBleHRlcm4g
-aW50IG9wZW5fd2l0aF9hdHRyaWJ1dGVzIChjb25zdCBjaGFyICosIGludCwg
-bW9kZV90LCBEV09SRCk7DQorCSAgaWYgKCgqZG9vcGVuID0gb3Blbl93aXRo
-X2F0dHJpYnV0ZXMgKHBhdGgsIE9fQ1JFQVQgfCBPX0VYQ0wgfCBPX1JEV1Is
-DQorICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAwNjAwLCBmaWxlYXR0cikpID49IDApDQogCSAgICByZXR1cm4gMTsN
-CiAJICBpZiAoZXJybm8gIT0gRUVYSVNUKQ0KIAkgICAgcmV0dXJuIDA7DQpJ
-bmRleDogc3lzY2FsbHMuY2MNCj09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NClJD
-UyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL2N5Z3dpbi9zeXNjYWxscy5j
-Yyx2DQpyZXRyaWV2aW5nIHJldmlzaW9uIDEuMzg2DQpkaWZmIC11IC1wIC1k
-IC1yMS4zODYgc3lzY2FsbHMuY2MNCi0tLSBzeXNjYWxscy5jYwk2IEp1bCAy
-MDA1IDIwOjA1OjAzIC0wMDAwCTEuMzg2DQorKysgc3lzY2FsbHMuY2MJMjIg
-SnVsIDIwMDUgMDE6MDc6NDcgLTAwMDANCkBAIC01MzksMTggKzUzOSwxNyBA
-QCBkb25lOg0KICAgcmV0dXJuIHJlczsNCiB9DQogDQotLyogX29wZW4gKi8N
-Ci0vKiBuZXdsaWIncyBmY250bC5oIGRlZmluZXMgX29wZW4gYXMgdGFraW5n
-IHZhcmlhYmxlIGFyZ3Mgc28gd2UgbXVzdA0KLSAgIGNvcnJlc3BvbmQuICBU
-aGUgdGhpcmQgYXJnIGlmIGl0IGV4aXN0cyBpczogbW9kZV90IG1vZGUuICov
-DQotZXh0ZXJuICJDIiBpbnQNCi1vcGVuIChjb25zdCBjaGFyICp1bml4X3Bh
-dGgsIGludCBmbGFncywgLi4uKQ0KKw0KK2ludCBvcGVuX3dpdGhfYXR0cmli
-dXRlcyAoY29uc3QgY2hhciAqdW5peF9wYXRoLCBpbnQgZmxhZ3MsIG1vZGVf
-dCBtb2RlLCANCisgICAgICAgICAgICAgICAgICAgICAgICAgIERXT1JEIGZp
-bGVhdHRyKSBfX2F0dHJpYnV0ZV9fICgodXNlZCkpOw0KK2V4dGVybiBpbmxp
-bmUgaW50DQorb3Blbl93aXRoX2F0dHJpYnV0ZXMgKGNvbnN0IGNoYXIgKnVu
-aXhfcGF0aCwgaW50IGZsYWdzLCBtb2RlX3QgbW9kZSwgDQorICAgICAgICAg
-ICAgICAgICAgICAgIERXT1JEIGZpbGVhdHRyKQ0KIHsNCiAgIGludCByZXMg
-PSAtMTsNCi0gIHZhX2xpc3QgYXA7DQotICBtb2RlX3QgbW9kZSA9IDA7DQog
-ICBzaWdfZGlzcGF0Y2hfcGVuZGluZyAoKTsNCiANCi0gIHN5c2NhbGxfcHJp
-bnRmICgib3BlbiAoJXMsICVwKSIsIHVuaXhfcGF0aCwgZmxhZ3MpOw0KKyAg
-c3lzY2FsbF9wcmludGYgKCJvcGVuICglcywgJXAsICVwLCAlcCkiLCB1bml4
-X3BhdGgsIGZsYWdzLCBtb2RlLCBmaWxlYXR0cik7DQogICBteWZhdWx0IGVm
-YXVsdDsNCiAgIGlmIChlZmF1bHQuZmF1bHRlZCAoRUZBVUxUKSkNCiAgICAg
-LyogZXJybm8gYWxyZWFkeSBzZXQgKi87DQpAQCAtNTU4LDMwICs1NTcsMzYg
-QEAgb3BlbiAoY29uc3QgY2hhciAqdW5peF9wYXRoLCBpbnQgZmxhZ3MsIA0K
-ICAgICBzZXRfZXJybm8gKEVOT0VOVCk7DQogICBlbHNlDQogICAgIHsNCi0g
-ICAgICAvKiBjaGVjayBmb3Igb3B0aW9uYWwgbW9kZSBhcmd1bWVudCAqLw0K
-LSAgICAgIHZhX3N0YXJ0IChhcCwgZmxhZ3MpOw0KLSAgICAgIG1vZGUgPSB2
-YV9hcmcgKGFwLCBtb2RlX3QpOw0KLSAgICAgIHZhX2VuZCAoYXApOw0KLQ0K
-ICAgICAgIGZoYW5kbGVyX2Jhc2UgKmZoOw0KICAgICAgIGN5Z2hlYXBfZmRu
-ZXcgZmQ7DQogDQogICAgICAgaWYgKGZkID49IDApDQogCXsNCiAJICBpZiAo
-IShmaCA9IGJ1aWxkX2ZoX25hbWUgKHVuaXhfcGF0aCwgTlVMTCwgUENfU1lN
-X0ZPTExPVykpKQ0KLQkgICAgcmVzID0gLTE7CQkvLyBlcnJubyBhbHJlYWR5
-IHNldA0KLQkgIGVsc2UgaWYgKCgoZmxhZ3MgJiAoT19DUkVBVCB8IE9fRVhD
-TCkpID09IChPX0NSRUFUIHwgT19FWENMKSkgJiYgZmgtPmV4aXN0cyAoKSkN
-CisgICAgICAgICAgICB7DQorICAgICAgICAgICAgICByZXMgPSAtMTsJCS8v
-IGVycm5vIGFscmVhZHkgc2V0DQorICAgICAgICAgICAgICBnb3RvIG91dDsN
-CisgICAgICAgICAgICB9DQorCSAgZWxzZSBpZiAoKChmbGFncyAmIChPX0NS
-RUFUIHwgT19FWENMKSkgPT0gKE9fQ1JFQVQgfCBPX0VYQ0wpKSANCisgICAg
-ICAgICAgICAgICYmIGZoLT5leGlzdHMgKCkpDQogCSAgICB7DQogCSAgICAg
-IGRlbGV0ZSBmaDsNCiAJICAgICAgcmVzID0gLTE7DQogCSAgICAgIHNldF9l
-cnJubyAoRUVYSVNUKTsNCisgICAgICAgICAgICAgIGdvdG8gb3V0Ow0KIAkg
-ICAgfQ0KIAkgIGVsc2UgaWYgKGZoLT5pc19mc19zcGVjaWFsICgpICYmIGZo
-LT5kZXZpY2VfYWNjZXNzX2RlbmllZCAoZmxhZ3MpKQ0KIAkgICAgew0KIAkg
-ICAgICBkZWxldGUgZmg7DQogCSAgICAgIHJlcyA9IC0xOw0KKyAgICAgICAg
-ICAgICAgZ290byBvdXQ7DQogCSAgICB9DQotCSAgZWxzZSBpZiAoIWZoLT5v
-cGVuIChmbGFncywgKG1vZGUgJiAwNzc3NykgJiB+Y3lnaGVhcC0+dW1hc2sp
-KQ0KKyAgICAgICAgICANCisgICAgICAgICAgaWYgKHN0YXRpY19jYXN0PERX
-T1JEICY+KCpmaCkgPT0gSU5WQUxJRF9GSUxFX0FUVFJJQlVURVMpDQorICAg
-ICAgICAgICAgc3RhdGljX2Nhc3Q8RFdPUkQgJj4oKmZoKSA9IGZpbGVhdHRy
-Ow0KKyAgICAgICAgICBlbHNlDQorICAgICAgICAgICAgc3RhdGljX2Nhc3Q8
-RFdPUkQgJj4oKmZoKSA9IHN0YXRpY19jYXN0PERXT1JEICY+KCpmaCkgfCBm
-aWxlYXR0cjsNCisJICBpZiAoIWZoLT5vcGVuIChmbGFncywgKG1vZGUgJiAw
-Nzc3NykgJiB+Y3lnaGVhcC0+dW1hc2spKQ0KIAkgICAgew0KIAkgICAgICBk
-ZWxldGUgZmg7DQogCSAgICAgIHJlcyA9IC0xOw0KQEAgLTU5NSwxMCArNjAw
-LDMxIEBAIG9wZW4gKGNvbnN0IGNoYXIgKnVuaXhfcGF0aCwgaW50IGZsYWdz
-LCANCiAJfQ0KICAgICB9DQogDQotICBzeXNjYWxsX3ByaW50ZiAoIiVkID0g
-b3BlbiAoJXMsICVwKSIsIHJlcywgdW5peF9wYXRoLCBmbGFncyk7DQorIG91
-dDoNCisgIHN5c2NhbGxfcHJpbnRmICgiJWQgPSBvcGVuICglcywgJXAsICVw
-LCAlcCkiLCByZXMsIHVuaXhfcGF0aCwgZmxhZ3MsIG1vZGUsDQorICAgICAg
-ICAgICAgICAgICAgZmlsZWF0dHIpOw0KICAgcmV0dXJuIHJlczsNCiB9DQog
-DQorDQorLyogX29wZW4gKi8NCisvKiBuZXdsaWIncyBmY250bC5oIGRlZmlu
-ZXMgX29wZW4gYXMgdGFraW5nIHZhcmlhYmxlIGFyZ3Mgc28gd2UgbXVzdA0K
-KyAgIGNvcnJlc3BvbmQuICBUaGUgdGhpcmQgYXJnIGlmIGl0IGV4aXN0cyBp
-czogbW9kZV90IG1vZGUuICovDQorZXh0ZXJuICJDIiBpbnQNCitvcGVuIChj
-b25zdCBjaGFyICp1bml4X3BhdGgsIGludCBmbGFncywgLi4uKQ0KK3sNCisg
-IHZhX2xpc3QgYXA7DQorICBpbnQgcmV0Ow0KKyAgbW9kZV90IG1vZGU7DQor
-DQorICB2YV9zdGFydCAoYXAsIGZsYWdzKTsNCisgIG1vZGUgPSBmbGFncyAm
-IE9fQ1JFQVQgPyB2YV9hcmcgKGFwLCBtb2RlX3QpIDogMDsNCisgIHJldCA9
-IG9wZW5fd2l0aF9hdHRyaWJ1dGVzICh1bml4X3BhdGgsIGZsYWdzLCBtb2Rl
-LCBGSUxFX0FUVFJJQlVURV9OT1JNQUwpOw0KKyAgdmFfZW5kIChhcCk7DQor
-DQorICByZXR1cm4gcmV0Ow0KK30NCisNCiBFWFBPUlRfQUxJQVMgKG9wZW4s
-IF9vcGVuICkNCiBFWFBPUlRfQUxJQVMgKG9wZW4sIF9vcGVuNjQgKQ0KIA0K
-SW5kZXg6IHdpbmNhcC5jYw0KPT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ0KUkNT
-IGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvY3lnd2luL3dpbmNhcC5jYyx2
-DQpyZXRyaWV2aW5nIHJldmlzaW9uIDEuNDANCmRpZmYgLXUgLXAgLWQgLXIx
-LjQwIHdpbmNhcC5jYw0KLS0tIHdpbmNhcC5jYwkzMCBKdW4gMjAwNSAwMjo1
-MjoxNCAtMDAwMAkxLjQwDQorKysgd2luY2FwLmNjCTIyIEp1bCAyMDA1IDAx
-OjA3OjQ4IC0wMDAwDQpAQCAtNTksNyArNTksOCBAQCBzdGF0aWMgTk9fQ09Q
-WSB3aW5jYXBzIHdpbmNhcF91bmtub3duID0gDQogICBoYXNfZXh0ZW5kZWRf
-cHJpb3JpdHlfY2xhc3M6ZmFsc2UsDQogICBoYXNfZ3VpZF92b2x1bWVzOmZh
-bHNlLA0KICAgZGV0ZWN0X3dpbjE2X2V4ZTp0cnVlLA0KLSAgaGFzX251bGxf
-Y29uc29sZV9oYW5kbGVyX3JvdXRpbmU6ZmFsc2UNCisgIGhhc19udWxsX2Nv
-bnNvbGVfaGFuZGxlcl9yb3V0aW5lOmZhbHNlLA0KKyAgaGFzX2ZpbGVfYXR0
-cmlidXRlX3RlbXBvcmFyeTpmYWxzZQ0KIH07DQogDQogc3RhdGljIE5PX0NP
-UFkgd2luY2FwcyB3aW5jYXBfOTUgPSB7DQpAQCAtMTEwLDcgKzExMSw4IEBA
-IHN0YXRpYyBOT19DT1BZIHdpbmNhcHMgd2luY2FwXzk1ID0gew0KICAgaGFz
-X2V4dGVuZGVkX3ByaW9yaXR5X2NsYXNzOmZhbHNlLA0KICAgaGFzX2d1aWRf
-dm9sdW1lczpmYWxzZSwNCiAgIGRldGVjdF93aW4xNl9leGU6dHJ1ZSwNCi0g
-IGhhc19udWxsX2NvbnNvbGVfaGFuZGxlcl9yb3V0aW5lOmZhbHNlDQorICBo
-YXNfbnVsbF9jb25zb2xlX2hhbmRsZXJfcm91dGluZTpmYWxzZSwNCisgIGhh
-c19maWxlX2F0dHJpYnV0ZV90ZW1wb3Jhcnk6ZmFsc2UNCiB9Ow0KIA0KIHN0
-YXRpYyBOT19DT1BZIHdpbmNhcHMgd2luY2FwXzk1b3NyMiA9IHsNCkBAIC0x
-NjEsNyArMTYzLDggQEAgc3RhdGljIE5PX0NPUFkgd2luY2FwcyB3aW5jYXBf
-OTVvc3IyID0gew0KICAgaGFzX2V4dGVuZGVkX3ByaW9yaXR5X2NsYXNzOmZh
-bHNlLA0KICAgaGFzX2d1aWRfdm9sdW1lczpmYWxzZSwNCiAgIGRldGVjdF93
-aW4xNl9leGU6dHJ1ZSwNCi0gIGhhc19udWxsX2NvbnNvbGVfaGFuZGxlcl9y
-b3V0aW5lOmZhbHNlDQorICBoYXNfbnVsbF9jb25zb2xlX2hhbmRsZXJfcm91
-dGluZTpmYWxzZSwNCisgIGhhc19maWxlX2F0dHJpYnV0ZV90ZW1wb3Jhcnk6
-ZmFsc2UNCiB9Ow0KIA0KIHN0YXRpYyBOT19DT1BZIHdpbmNhcHMgd2luY2Fw
-Xzk4ID0gew0KQEAgLTIxMiw3ICsyMTUsOCBAQCBzdGF0aWMgTk9fQ09QWSB3
-aW5jYXBzIHdpbmNhcF85OCA9IHsNCiAgIGhhc19leHRlbmRlZF9wcmlvcml0
-eV9jbGFzczpmYWxzZSwNCiAgIGhhc19ndWlkX3ZvbHVtZXM6ZmFsc2UsDQog
-ICBkZXRlY3Rfd2luMTZfZXhlOnRydWUsDQotICBoYXNfbnVsbF9jb25zb2xl
-X2hhbmRsZXJfcm91dGluZTpmYWxzZQ0KKyAgaGFzX251bGxfY29uc29sZV9o
-YW5kbGVyX3JvdXRpbmU6ZmFsc2UsDQorICBoYXNfZmlsZV9hdHRyaWJ1dGVf
-dGVtcG9yYXJ5OmZhbHNlDQogfTsNCiANCiBzdGF0aWMgTk9fQ09QWSB3aW5j
-YXBzIHdpbmNhcF85OHNlID0gew0KQEAgLTI2Myw3ICsyNjcsOCBAQCBzdGF0
-aWMgTk9fQ09QWSB3aW5jYXBzIHdpbmNhcF85OHNlID0gew0KICAgaGFzX2V4
-dGVuZGVkX3ByaW9yaXR5X2NsYXNzOmZhbHNlLA0KICAgaGFzX2d1aWRfdm9s
-dW1lczpmYWxzZSwNCiAgIGRldGVjdF93aW4xNl9leGU6dHJ1ZSwNCi0gIGhh
-c19udWxsX2NvbnNvbGVfaGFuZGxlcl9yb3V0aW5lOmZhbHNlDQorICBoYXNf
-bnVsbF9jb25zb2xlX2hhbmRsZXJfcm91dGluZTpmYWxzZSwNCisgIGhhc19m
-aWxlX2F0dHJpYnV0ZV90ZW1wb3Jhcnk6ZmFsc2UNCiB9Ow0KIA0KIHN0YXRp
-YyBOT19DT1BZIHdpbmNhcHMgd2luY2FwX21lID0gew0KQEAgLTMxNCw3ICsz
-MTksOCBAQCBzdGF0aWMgTk9fQ09QWSB3aW5jYXBzIHdpbmNhcF9tZSA9IHsN
-CiAgIGhhc19leHRlbmRlZF9wcmlvcml0eV9jbGFzczpmYWxzZSwNCiAgIGhh
-c19ndWlkX3ZvbHVtZXM6ZmFsc2UsDQogICBkZXRlY3Rfd2luMTZfZXhlOnRy
-dWUsDQotICBoYXNfbnVsbF9jb25zb2xlX2hhbmRsZXJfcm91dGluZTpmYWxz
-ZQ0KKyAgaGFzX251bGxfY29uc29sZV9oYW5kbGVyX3JvdXRpbmU6ZmFsc2Us
-DQorICBoYXNfZmlsZV9hdHRyaWJ1dGVfdGVtcG9yYXJ5OmZhbHNlDQogfTsN
-CiANCiBzdGF0aWMgTk9fQ09QWSB3aW5jYXBzIHdpbmNhcF9udDMgPSB7DQpA
-QCAtMzY1LDcgKzM3MSw4IEBAIHN0YXRpYyBOT19DT1BZIHdpbmNhcHMgd2lu
-Y2FwX250MyA9IHsNCiAgIGhhc19leHRlbmRlZF9wcmlvcml0eV9jbGFzczpm
-YWxzZSwNCiAgIGhhc19ndWlkX3ZvbHVtZXM6ZmFsc2UsDQogICBkZXRlY3Rf
-d2luMTZfZXhlOmZhbHNlLA0KLSAgaGFzX251bGxfY29uc29sZV9oYW5kbGVy
-X3JvdXRpbmU6dHJ1ZQ0KKyAgaGFzX251bGxfY29uc29sZV9oYW5kbGVyX3Jv
-dXRpbmU6dHJ1ZSwNCisgIGhhc19maWxlX2F0dHJpYnV0ZV90ZW1wb3Jhcnk6
-dHJ1ZQ0KIH07DQogDQogc3RhdGljIE5PX0NPUFkgd2luY2FwcyB3aW5jYXBf
-bnQ0ID0gew0KQEAgLTQxNiw3ICs0MjMsOCBAQCBzdGF0aWMgTk9fQ09QWSB3
-aW5jYXBzIHdpbmNhcF9udDQgPSB7DQogICBoYXNfZXh0ZW5kZWRfcHJpb3Jp
-dHlfY2xhc3M6ZmFsc2UsDQogICBoYXNfZ3VpZF92b2x1bWVzOmZhbHNlLA0K
-ICAgZGV0ZWN0X3dpbjE2X2V4ZTpmYWxzZSwNCi0gIGhhc19udWxsX2NvbnNv
-bGVfaGFuZGxlcl9yb3V0aW5lOnRydWUNCisgIGhhc19udWxsX2NvbnNvbGVf
-aGFuZGxlcl9yb3V0aW5lOnRydWUsDQorICBoYXNfZmlsZV9hdHRyaWJ1dGVf
-dGVtcG9yYXJ5OnRydWUNCiB9Ow0KIA0KIHN0YXRpYyBOT19DT1BZIHdpbmNh
-cHMgd2luY2FwX250NHNwNCA9IHsNCkBAIC00NjcsNyArNDc1LDggQEAgc3Rh
-dGljIE5PX0NPUFkgd2luY2FwcyB3aW5jYXBfbnQ0c3A0ID0gew0KICAgaGFz
-X2V4dGVuZGVkX3ByaW9yaXR5X2NsYXNzOmZhbHNlLA0KICAgaGFzX2d1aWRf
-dm9sdW1lczpmYWxzZSwNCiAgIGRldGVjdF93aW4xNl9leGU6ZmFsc2UsDQot
-ICBoYXNfbnVsbF9jb25zb2xlX2hhbmRsZXJfcm91dGluZTp0cnVlDQorICBo
-YXNfbnVsbF9jb25zb2xlX2hhbmRsZXJfcm91dGluZTp0cnVlLA0KKyAgaGFz
-X2ZpbGVfYXR0cmlidXRlX3RlbXBvcmFyeTp0cnVlDQogfTsNCiANCiBzdGF0
-aWMgTk9fQ09QWSB3aW5jYXBzIHdpbmNhcF8yMDAwID0gew0KQEAgLTUxOCw3
-ICs1MjcsOCBAQCBzdGF0aWMgTk9fQ09QWSB3aW5jYXBzIHdpbmNhcF8yMDAw
-ID0gew0KICAgaGFzX2V4dGVuZGVkX3ByaW9yaXR5X2NsYXNzOnRydWUsDQog
-ICBoYXNfZ3VpZF92b2x1bWVzOnRydWUsDQogICBkZXRlY3Rfd2luMTZfZXhl
-OmZhbHNlLA0KLSAgaGFzX251bGxfY29uc29sZV9oYW5kbGVyX3JvdXRpbmU6
-dHJ1ZQ0KKyAgaGFzX251bGxfY29uc29sZV9oYW5kbGVyX3JvdXRpbmU6dHJ1
-ZSwNCisgIGhhc19maWxlX2F0dHJpYnV0ZV90ZW1wb3Jhcnk6dHJ1ZQ0KIH07
-DQogDQogc3RhdGljIE5PX0NPUFkgd2luY2FwcyB3aW5jYXBfeHAgPSB7DQpA
-QCAtNTY5LDcgKzU3OSw4IEBAIHN0YXRpYyBOT19DT1BZIHdpbmNhcHMgd2lu
-Y2FwX3hwID0gew0KICAgaGFzX2V4dGVuZGVkX3ByaW9yaXR5X2NsYXNzOnRy
-dWUsDQogICBoYXNfZ3VpZF92b2x1bWVzOnRydWUsDQogICBkZXRlY3Rfd2lu
-MTZfZXhlOmZhbHNlLA0KLSAgaGFzX251bGxfY29uc29sZV9oYW5kbGVyX3Jv
-dXRpbmU6dHJ1ZQ0KKyAgaGFzX251bGxfY29uc29sZV9oYW5kbGVyX3JvdXRp
-bmU6dHJ1ZSwNCisgIGhhc19maWxlX2F0dHJpYnV0ZV90ZW1wb3Jhcnk6dHJ1
-ZQ0KIH07DQogDQogc3RhdGljIE5PX0NPUFkgd2luY2FwcyB3aW5jYXBfMjAw
-MyA9IHsNCkBAIC02MjAsNyArNjMxLDggQEAgc3RhdGljIE5PX0NPUFkgd2lu
-Y2FwcyB3aW5jYXBfMjAwMyA9IHsNCiAgIGhhc19leHRlbmRlZF9wcmlvcml0
-eV9jbGFzczp0cnVlLA0KICAgaGFzX2d1aWRfdm9sdW1lczp0cnVlLA0KICAg
-ZGV0ZWN0X3dpbjE2X2V4ZTpmYWxzZSwNCi0gIGhhc19udWxsX2NvbnNvbGVf
-aGFuZGxlcl9yb3V0aW5lOnRydWUNCisgIGhhc19udWxsX2NvbnNvbGVfaGFu
-ZGxlcl9yb3V0aW5lOnRydWUsDQorICBoYXNfZmlsZV9hdHRyaWJ1dGVfdGVt
-cG9yYXJ5OnRydWUNCiB9Ow0KIA0KIHdpbmNhcGMgd2luY2FwOw0KSW5kZXg6
-IHdpbmNhcC5oDQo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQpSQ1MgZmlsZTog
-L2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vd2luY2FwLmgsdg0KcmV0cmll
-dmluZyByZXZpc2lvbiAxLjMyDQpkaWZmIC11IC1wIC1kIC1yMS4zMiB3aW5j
-YXAuaA0KLS0tIHdpbmNhcC5oCTMwIEp1biAyMDA1IDAyOjUyOjE0IC0wMDAw
-CTEuMzINCisrKyB3aW5jYXAuaAkyMiBKdWwgMjAwNSAwMTowNzo0OCAtMDAw
-MA0KQEAgLTYxLDYgKzYxLDcgQEAgc3RydWN0IHdpbmNhcHMNCiAgIHVuc2ln
-bmVkIGhhc19ndWlkX3ZvbHVtZXMJCQkJOiAxOw0KICAgdW5zaWduZWQgZGV0
-ZWN0X3dpbjE2X2V4ZQkJCQk6IDE7DQogICB1bnNpZ25lZCBoYXNfbnVsbF9j
-b25zb2xlX2hhbmRsZXJfcm91dGluZQkJOiAxOw0KKyAgdW5zaWduZWQgaGFz
-X2ZpbGVfYXR0cmlidXRlX3RlbXBvcmFyeQkJCTogMTsNCiB9Ow0KIA0KIGNs
-YXNzIHdpbmNhcGMNCkBAIC0xMjYsNiArMTI3LDcgQEAgcHVibGljOg0KICAg
-Ym9vbAlJTVBMRU1FTlQgKGhhc19ndWlkX3ZvbHVtZXMpDQogICBib29sCUlN
-UExFTUVOVCAoZGV0ZWN0X3dpbjE2X2V4ZSkNCiAgIGJvb2wJSU1QTEVNRU5U
-IChoYXNfbnVsbF9jb25zb2xlX2hhbmRsZXJfcm91dGluZSkNCisgIGJvb2wJ
-SU1QTEVNRU5UIChoYXNfZmlsZV9hdHRyaWJ1dGVfdGVtcG9yYXJ5KQ0KIA0K
-ICN1bmRlZiBJTVBMRU1FTlQNCiB9Ow0K
-
---0-315358923-1121995053=:49904
-Content-Type: TEXT/PLAIN; charset=US-ASCII; name="file_attribute_temporary.ChangeLog"
-Content-Transfer-Encoding: BASE64
-Content-ID: <20050722031733.K49904@logout.sh.cvut.cz>
-Content-Description: 
-Content-Disposition: attachment; filename="file_attribute_temporary.ChangeLog"
-Content-length: 1371
-
-MjAwNS0wNy0yMiAgVmFjbGF2IEhhaXNtYW4gIDx2LmhhaXNtYW5Ac2guY3Z1
-dC5jej4NDQoNDQoJKiB3aW5jYXAuaCAod2luY2FwOjpoYXNfZmlsZV9hdHRy
-aWJ1dGVfdGVtcG9yYXJ5KTogTmV3IGZpZWxkLg0NCgkod2luY2FwYzo6aGFz
-X2ZpbGVfYXR0cmlidXRlX3RlbXBvcmFyeSk6IE5ldyBhY2Nlc3Nvci4NDQoJ
-KiB3aW5jYXAuY2MgKHdpbmNhcF91bmtub3duKTogSW5pdGlhbGl6ZQ0NCglo
-YXNfZmlsZV9hdHRyaWJ1dGVfdGVtcG9yYXJ5IGZpZWxkLg0NCgkod2luY2Fw
-Xzk1KTogRGl0dG8uDQ0KCSh3aW5jYXBfOTVvc3IyKTogRGl0dG8uDQ0KCSh3
-aW5jYXBfOTgpOiBEaXR0by4NDQoJKHdpbmNhcF85OHNlKTogRGl0dG8uDQ0K
-CSh3aW5jYXBfbWUpOiBEaXR0by4NDQoJKHdpbmNhcF9udDMpOiBEaXR0by4N
-DQoJKHdpbmNhcF9udDQpOiBEaXR0by4NDQoJKHdpbmNhcF9udDRzcDQpOiBE
-aXR0by4NDQoJKHdpbmNhcF8yMDAwKTogRGl0dG8uDQ0KCSh3aW5jYXBfeHAp
-OiBEaXR0by4NDQoJKHdpbmNhcF8yMDAzKTogRGl0dG8uDQ0KCSogc3lzY2Fs
-bHMuY2MgKG9wZW5fd2l0aF9hdHRyaWJ1dGVzKTogUmVuYW1lIG9wZW4oKSB0
-bw0NCglvcGVuX3dpdGhfYXR0cmlidXRlcygpLiBBZGQgZmlsZWF0dHIgcGFy
-YW1ldGVyIGFuZCB1c2UgaXQuIEFkZA0NCglleHBsaWNpdCBtb2RlX3QgcGFy
-YW1ldGVyIGZvciBtb2RlLiBUd2VhayBkZWJ1Z2dpbmcNDQoJc3lzY2FsbF9w
-cmludGYoKSBjYWxscyB0byByZWZsZWN0IHRoZSBuZXcgcGFyYW1ldGVyLg0N
-Cgkob3Blbik6IFJlaW1wbGVtZW50IHVzaW5nIG9wZW5fd2l0aF9hdHRyaWJ1
-dGVzKCkuDQ0KCSogZmhhbmRsZXIuY2MgKGZoYW5kbGVyX2Jhc2U6Om9wZW4p
-OiBVc2UgcGMuZmlsZV9hdHRyaWJ1dGVzKCkgd2hlbg0NCglvcGVuaW5nIGRp
-c2sgZmlsZS4NDQoJKiBta3RlbXAuY2MgKF9nZXR0ZW1wKTogU2V0IEZJTEVf
-QVRUUklCVVRFX1RFTVBPUkFSWSBvbiBXaW5OVA0NCgl1c2luZyBvcGVuX3dp
-dGhfYXR0cmlidXRlcygpLg0NCg==
-
---0-315358923-1121995053=:49904--
+cgf
