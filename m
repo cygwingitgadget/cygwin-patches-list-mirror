@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5589-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 4742 invoked by alias); 22 Jul 2005 19:43:48 -0000
+Return-Path: <cygwin-patches-return-5590-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 27892 invoked by alias); 29 Jul 2005 10:24:55 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,78 +7,69 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 4723 invoked by uid 22791); 22 Jul 2005 19:43:42 -0000
-Received: from service.sh.cvut.cz (HELO service.sh.cvut.cz) (147.32.127.214)
-    by sourceware.org (qpsmtpd/0.30-dev) with ESMTP; Fri, 22 Jul 2005 19:43:42 +0000
-Received: from localhost (localhost [127.0.0.1])
-	by service.sh.cvut.cz (Postfix) with ESMTP id 544BA1A3386
-	for <cygwin-patches@cygwin.com>; Fri, 22 Jul 2005 21:43:40 +0200 (CEST)
-Received: from service.sh.cvut.cz ([127.0.0.1])
-	by localhost (service [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 25581-07 for <cygwin-patches@cygwin.com>;
-	Fri, 22 Jul 2005 21:43:39 +0200 (CEST)
-Received: from logout.sh.cvut.cz (logout.sh.cvut.cz [147.32.127.203])
-	by service.sh.cvut.cz (Postfix) with ESMTP id 852AF1A337C
-	for <cygwin-patches@cygwin.com>; Fri, 22 Jul 2005 21:43:39 +0200 (CEST)
-Received: from logout (logout [147.32.127.203])
-	by logout.sh.cvut.cz (Postfix) with ESMTP id 69CD33C316
-	for <cygwin-patches@cygwin.com>; Fri, 22 Jul 2005 21:43:47 +0200 (CEST)
-Date: Fri, 22 Jul 2005 19:43:00 -0000
-From: Vaclav Haisman <V.Haisman@sh.cvut.cz>
+Received: (qmail 27864 invoked by uid 22791); 29 Jul 2005 10:24:51 -0000
+Received: from mailgw1.wm.net (HELO mailgw1.wm.net) (194.18.224.214)
+    by sourceware.org (qpsmtpd/0.30-dev) with ESMTP; Fri, 29 Jul 2005 10:24:51 +0000
+Received: from WMSI001556.corp.wmdata.net (wmbridgehead.wmdata.se [164.9.238.12])
+	by mailgw1.wm.net (BorderWare MXtreme Mail Firewall) with ESMTP id FABDC348AL
+	for <cygwin-patches@cygwin.com>; Fri, 29 Jul 2005 12:24:48 +0200 (CEST)
+Received: from WMRI000166.corp.wmdata.net ([164.9.238.15]) by WMSI001556.corp.wmdata.net with Microsoft SMTPSVC(6.0.3790.0);
+	 Fri, 29 Jul 2005 12:24:48 +0200
+Received: from 172.27.117.80 ([172.27.117.80]) by WMRI000166.corp.wmdata.net ([164.9.238.19]) via Exchange Front-End Server mail.wmdata.com ([164.9.238.13]) with Microsoft Exchange Server HTTP-DAV ;
+ Fri, 29 Jul 2005 10:24:48 +0000
+Received: from tkuwhuuskartlnx.novogroup.com by mail.wmdata.com; 29 Jul 2005 13:24:48 +0300
+Subject: Fix seg fault in fork_parent
+From: Arto Huusko <arto.huusko@wmdata.fi>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Set FILE_ATTRIBUTE_TEMPORARY on files opened by mkstemp()
- on WinNT
-In-Reply-To: <20050722182842.GA1503@trixie.casa.cgf.cx>
-Message-ID: <20050722213948.D72295@logout.sh.cvut.cz>
-References: <20050722011722.L38147@logout.sh.cvut.cz>
- <20050721234356.GB24848@trixie.casa.cgf.cx> <20050722030953.N49904@logout.sh.cvut.cz>
- <20050722020329.GA2430@trixie.casa.cgf.cx> <20050722121047.U55258@logout.sh.cvut.cz>
- <20050722182842.GA1503@trixie.casa.cgf.cx>
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
-X-SW-Source: 2005-q3/txt/msg00044.txt.bz2
+Content-Type: multipart/mixed; boundary="=-MenitA14MdNPdmKilwra"
+Date: Fri, 29 Jul 2005 10:24:00 -0000
+Message-Id: <1122632688.7369.160.camel@tkuwhuuskartlnx.novogroup.com>
+Mime-Version: 1.0
+X-SW-Source: 2005-q3/txt/msg00045.txt.bz2
 
-On Fri, 22 Jul 2005, Christopher Faylor wrote:
 
-> On Fri, Jul 22, 2005 at 12:28:08PM +0200, Vaclav Haisman wrote:
-> >On Thu, 21 Jul 2005, Christopher Faylor wrote:
-> >>On Fri, Jul 22, 2005 at 03:17:33AM +0200, Vaclav Haisman wrote:
-> >>>On Thu, 21 Jul 2005, Christopher Faylor wrote:
-> >>>>On Fri, Jul 22, 2005 at 01:32:50AM +0200, Vaclav Haisman wrote:
-> >>>>>the attached patch sets FILE_ATTRIBUTE_TEMPORARY on files opened by
-> >>>>>mkstemp() on WinNT class systems.  Theoretically the OS should then be
-> >>>>>less eager to write such files onto the physical storage and use cache
-> >>>>>instead.
-> >>>>
-> >>>>Thank you for the patch but unless you can demonstrate some obvious
-> >>>>performance improvements I don't think we'll be applying it.  You've
-> >>>>slowed down (slightly) the common case of calling open for the uncommon
-> >>>>case of calling mk?temp.
-> >>>
-> >>>I am not sure what kind of slow down do you mean.  Is it the one extra
-> >>>call?
-> >>
-> >>It was more than one extra call, but yes.
-> >>
-> >>>In that case the attached modified patch should fix it.  The call to
-> >>>open_with_attributes() in open() gets inlined, I have checked the
-> >>>resulting .s file.
-> >>
-> >>Can you demonstrate some obvious performance improvements?  Does it
-> >>speed up configure, make bash start up faster, make the rxvt window
-> >>faster to show up?
-> >
-> >I don't think that any of the extra ifs and assignments could cause any
-> >measurable slowdown.  I also do not think that there are any _obvious_
-> >speed ups.  It is merely a hint to the cache subsystem, not a silver
-> >bullet.
->
-> I wasn't asking if there was a slowdown.  I wanted to know the rationale
-> for this change.  Increasing code complexity for no obvious gain is not
-> something that I want to do.
+--=-MenitA14MdNPdmKilwra
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
+Content-length: 425
 
-The only rationale I can offer is the docs
-(http://msdn.microsoft.com/library/default.asp?url=/library/en-us/fileio/fs/createfile.asp)
-and that it makes sense.
+This patch fixes null deref in fork_parent() when pinfo::init fails.
 
-VH
+I'm sorry the patch is not against CVS, but I am unable to use CVS from
+where I work. If this is not acceptable, please tell me, and I can try
+to do this from home.
+
+In any case, the patch is against fork.cc rev 1.156.
+
+
+2005-07-29  Arto Huusko  <arto.huusko@wmdata.fi>
+
+	* fork.cc (fork_parent): Fix null deref if creation of pinfo
+	of the child fails.
+
+
+--=-MenitA14MdNPdmKilwra
+Content-Disposition: attachment; filename=fork.patch
+Content-Type: text/x-patch; name=fork.patch; charset=us-ascii
+Content-Transfer-Encoding: base64
+Content-length: 1005
+
+LS0tIGZvcmsuY2MJMjAwNS0wNy0yOSAxMToyNDo1My4yNTI3NDkyMzUgKzAz
+MDANCisrKyBmb3JrLmNjLmZpeGVkCTIwMDUtMDctMjkgMTE6MjU6MDcuMjk2
+MjE2NjYzICswMzAwDQpAQCAtMzcwLDggKzM3MCw2IEBAIGZvcmtfcGFyZW50
+IChIQU5ETEUmLCBkbGwgKiZmaXJzdF9kbGwsIGINCiANCiAgIGludCBjaGls
+ZF9waWQgPSBjeWd3aW5fcGlkIChwaS5kd1Byb2Nlc3NJZCk7DQogICBwaW5m
+byBjaGlsZCAoY2hpbGRfcGlkLCAxKTsNCi0gIGNoaWxkLT5zdGFydF90aW1l
+ID0gdGltZSAoTlVMTCk7IC8qIFJlZ2lzdGVyIGNoaWxkJ3Mgc3RhcnRpbmcg
+dGltZS4gKi8NCi0gIGNoaWxkLT5uaWNlID0gbXlzZWxmLT5uaWNlOw0KIA0K
+ICAgaWYgKCFjaGlsZCkNCiAgICAgew0KQEAgLTM4MSw2ICszNzksOSBAQCBm
+b3JrX3BhcmVudCAoSEFORExFJiwgZGxsIComZmlyc3RfZGxsLCBiDQogICAg
+ICAgZ290byBjbGVhbnVwOw0KICAgICB9DQogDQorICBjaGlsZC0+c3RhcnRf
+dGltZSA9IHRpbWUgKE5VTEwpOyAvKiBSZWdpc3RlciBjaGlsZCdzIHN0YXJ0
+aW5nIHRpbWUuICovDQorICBjaGlsZC0+bmljZSA9IG15c2VsZi0+bmljZTsN
+CisNCiAgIC8qIEluaXRpYWxpemUgdGhpbmdzIHRoYXQgYXJlIGRvbmUgbGF0
+ZXIgaW4gZGxsX2NydDBfMSB0aGF0IGFyZW4ndCBkb25lDQogICAgICBmb3Ig
+dGhlIGZvcmtlZS4gICovDQogICBzdHJjcHkgKGNoaWxkLT5wcm9nbmFtZSwg
+bXlzZWxmLT5wcm9nbmFtZSk7DQo=
+
+--=-MenitA14MdNPdmKilwra--
