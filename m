@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5600-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 2436 invoked by alias); 1 Aug 2005 19:25:16 -0000
+Return-Path: <cygwin-patches-return-5601-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 27604 invoked by alias); 1 Aug 2005 21:46:52 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,202 +7,140 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 2371 invoked by uid 22791); 1 Aug 2005 19:25:11 -0000
-Received: from zipcon.net (HELO zipcon.net) (209.221.136.5)
-    by sourceware.org (qpsmtpd/0.30-dev) with SMTP; Mon, 01 Aug 2005 19:25:11 +0000
-Received: (qmail 14860 invoked from network); 1 Aug 2005 12:25:07 -0700
-Received: from unknown (HELO efn.org) (209.221.136.31)
-  by mail.zipcon.net with SMTP; 1 Aug 2005 12:25:07 -0700
-Received: by efn.org (sSMTP sendmail emulation); Mon, 1 Aug 2005 12:25:11 -0700
-Date: Mon, 01 Aug 2005 19:25:00 -0000
-From: Yitzchak Scott-Thoennes <sthoenna@efn.org>
+Received: (qmail 27585 invoked by uid 22791); 1 Aug 2005 21:46:47 -0000
+Received: from rwcrmhc14.comcast.net (HELO rwcrmhc12.comcast.net) (204.127.198.54)
+    by sourceware.org (qpsmtpd/0.30-dev) with ESMTP; Mon, 01 Aug 2005 21:46:47 +0000
+Received: from [192.168.15.2] (c-65-96-128-135.hsd1.ma.comcast.net[65.96.128.135])
+          by comcast.net (rwcrmhc14) with SMTP
+          id <2005080121464301400h4qsde>; Mon, 1 Aug 2005 21:46:43 +0000
+Date: Mon, 01 Aug 2005 21:46:00 -0000
+From: Mike Gorse <mgorse@alum.wpi.edu>
+X-X-Sender: mgorse@mgorse.dhs.org
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] TIOCMBI[SC]
-Message-ID: <20050801192510.GA3656@efn.org>
-References: <20050801111552.GA2844@efn.org> <20050801165639.GK14783@calimero.vinschen.de>
-Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="UlVJffcvxoiEqYs2"
-Content-Disposition: inline
-In-Reply-To: <20050801165639.GK14783@calimero.vinschen.de>
-User-Agent: Mutt/1.4.2.1i
-X-SW-Source: 2005-q3/txt/msg00055.txt.bz2
+Subject: Re: fix possible segfault creating detached thread
+In-Reply-To: <20050801165048.GJ14783@calimero.vinschen.de>
+Message-ID: <Pine.LNX.4.61.0508011734480.4321@mgorse.dhs.org>
+References: <Pine.LNX.4.61.0507311501560.1072@mgorse.dhs.org>
+ <20050801165048.GJ14783@calimero.vinschen.de>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII; format=flowed
+X-SW-Source: 2005-q3/txt/msg00056.txt.bz2
 
+On Mon, 1 Aug 2005, Corinna Vinschen wrote:
 
---UlVJffcvxoiEqYs2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-length: 1055
+>> This patch fixes a seg fault when a thread is created in a detached state
+>> and terminates the first time it is scheduled.  pthread::create (the
+>> four-parameter version) calls the three-parameter pthread::create function
+>> which unlocks the mutex, allowing the called thread to be scheduled, then
+>> exits at which point the outer create function calls is_good_objectg(),
+>> but this causes a core dump if pthread::exit() has already been called and
+>> deleted the pthread object.
+>
+> Thanks for the patch.  First, please let me point you to
+> http://cygwin.com/contrib.html.  The important information here is that
+> you'll need to fill out a copyright assignment form and snail mail it
+> to Red Hat if you want to get in patches.  The only exception are
+> insignificant patches in terms of changed lines of code.  The usual rule of
+> thumb here is not more than 10 lines.  Well, your patch only changes
+> roughly 12 lines, so I'd let slip it in.
 
-On Mon, Aug 01, 2005 at 06:56:39PM +0200, Corinna Vinschen wrote:
-> On Aug  1 04:15, Yitzchak Scott-Thoennes wrote:
-> > I don't have a serial device to test this with, but it's just selected
-> > parts of the TIOCMSET handling slightly adapted.
-> 
-> I'm not serial I/O savvy, but the change looks pretty much ok.  I'm just
-> not exactly glad that the functionality itself is duplicated.  Would you
-> mind a rewrite so that the functionality is not copied, for instance by
-> creating a private method which does it, or by recursively calling
-> fhandler_serial::ioctl() with tweaked arguments (TIOCMSET)?
+I didn't think that my patch was significant enough that I would need to 
+do that, but I will if necessary.
 
-No problem.  How does this look?
+> However, there are three tiny problems:
 
-2005-08-01  Yitzchak Scott-Thoennes  <sthoenna@efn.org>
+[snip]
 
-	* include/sys/termios.h: Define TIOCMBIS and TIOCMBIC.
-        * fhandler.h (class fhandler_serial): Declare switch_modem_lines.
-	* fhandler_serial.cc (fhandler_serial::switch_modem_lines): New
-        static function to set or clear DTR and/or RTS.
-        (fhandler_serial::ioctl): Use switch_modem_lines for TIOCMSET
-        and new TIOCMBIS and TIOCMBIC.
+Here is a corrected ChangeLog and patch:
 
+2005-08-01 Michael Gorse <mgorse@alum.wpi.edu>
 
---UlVJffcvxoiEqYs2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename="tiocmbi.patch"
-Content-length: 3352
+         * thread.cc (pthread::create(3 args)): Make bool.
+         (pthread_null::create): Ditto.
+         thread.h: Ditto.
 
---- winsup/cygwin/include/sys/termios.h.orig	2005-05-01 20:50:10.000000000 -0700
-+++ winsup/cygwin/include/sys/termios.h	2005-08-01 02:22:34.361969600 -0700
-@@ -1,6 +1,6 @@
- /* sys/termios.h
- 
--   Copyright 1997, 1998, 1999, 2000, 2001, 2002, 2003 Red Hat, Inc.
-+   Copyright 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2005 Red Hat, Inc.
- 
- This file is part of Cygwin.
- 
-@@ -14,6 +14,8 @@ details. */
- #define _SYS_TERMIOS_H
- 
- #define	TIOCMGET	0x5415
-+#define	TIOCMBIS	0x5416
-+#define	TIOCMBIC	0x5417
- #define	TIOCMSET	0x5418
- #define	TIOCINQ		0x541B
- 
---- winsup/cygwin/fhandler.h.orig	2005-07-29 10:04:46.000000000 -0700
-+++ winsup/cygwin/fhandler.h	2005-08-01 11:46:07.884528000 -0700
-@@ -722,6 +722,7 @@ class fhandler_serial: public fhandler_b
-   int tcdrain ();
-   int tcflow (int);
-   int ioctl (unsigned int cmd, void *);
-+  int switch_modem_lines (int set, int clr);
-   int tcsetattr (int a, const struct termios *t);
-   int tcgetattr (struct termios *t);
-   _off64_t lseek (_off64_t, int) { return 0; }
---- winsup/cygwin/fhandler_serial.cc.orig	2005-07-06 13:05:00.000000000 -0700
-+++ winsup/cygwin/fhandler_serial.cc	2005-08-01 11:50:49.269139200 -0700
-@@ -376,6 +376,56 @@ fhandler_serial::tcflow (int action)
- }
- 
- 
-+/* switch_modem_lines: set or clear RTS and/or DTR */
-+int
-+fhandler_serial::switch_modem_lines (int set, int clr)
-+{
-+  int res = 0;
+         * pthread.cc (pthread_create(4 args)): Check return of inner create
+         rather than calling is_good_object().
+
+Index: thread.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/thread.cc,v
+retrieving revision 1.190
+diff -u -p -r1.190 thread.cc
+--- thread.cc	6 Jul 2005 20:05:03 -0000	1.190
++++ thread.cc	31 Jul 2005 02:13:14 -0000
+@@ -491,13 +491,15 @@ pthread::precreate (pthread_attr *newatt
+      magic = 0;
+  }
+
+-void
++bool
+  pthread::create (void *(*func) (void *), pthread_attr *newattr,
+  		 void *threadarg)
+  {
++  bool retval;
 +
-+  if (set & TIOCM_RTS)
-+    {
-+      if (EscapeCommFunction (get_handle (), SETRTS))
-+        rts = TIOCM_RTS;
-+      else
-+        {
-+          __seterrno ();
-+          res = -1;
-+        }
-+    }
-+  else if (clr & TIOCM_RTS)
-+    {
-+      if (EscapeCommFunction (get_handle (), CLRRTS))
-+        rts = 0;
-+      else
-+        {
-+          __seterrno ();
-+          res = -1;
-+        }
-+    }
-+  if (set & TIOCM_DTR)
-+    {
-+      if (EscapeCommFunction (get_handle (), SETDTR))
-+        rts = TIOCM_DTR;
-+      else
-+        {
-+          __seterrno ();
-+          res = -1;
-+        }
-+    }
-+  else if (clr & TIOCM_DTR)
-+    {
-+      if (EscapeCommFunction (get_handle (), CLRDTR))
-+        rts = 0;
-+      else
-+        {
-+          __seterrno ();
-+          res = -1;
-+        }
-+    }
-+
-+  return res;
-+}
-+
- /* ioctl: */
- int
- fhandler_serial::ioctl (unsigned int cmd, void *buffer)
-@@ -432,44 +482,17 @@ fhandler_serial::ioctl (unsigned int cmd
- 	  }
- 	break;
-       case TIOCMSET:
--	if (ipbuffer & TIOCM_RTS)
--	  {
--	    if (EscapeCommFunction (get_handle (), SETRTS))
--	      rts = TIOCM_RTS;
--	    else
--	      {
--		__seterrno ();
--		res = -1;
--	      }
--	  }
--	else
--	  {
--	    if (EscapeCommFunction (get_handle (), CLRRTS))
--	      rts = 0;
--	    else
--	      {
--		__seterrno ();
--		res = -1;
--	      }
--	  }
--	if (ipbuffer & TIOCM_DTR)
--	  {
--	    if (EscapeCommFunction (get_handle (), SETDTR))
--	      dtr = TIOCM_DTR;
--	    else
--	      {
--		__seterrno ();
--		res = -1;
--	      }
--	  }
--	else if (EscapeCommFunction (get_handle (), CLRDTR))
--	  dtr = 0;
--	else
--	  {
--	    __seterrno ();
--	    res = -1;
--	  }
-+        if (switch_modem_lines (ipbuffer, ~ ipbuffer))
-+          res = -1;
- 	break;
-+      case TIOCMBIS:
-+	if (switch_modem_lines (ipbuffer, 0))
-+          res = -1;
-+        break;
-+      case TIOCMBIC:
-+	if (switch_modem_lines (0, ipbuffer))
-+          res = -1;
-+        break;
-       case TIOCCBRK:
- 	if (ClearCommBreak (get_handle ()) == 0)
- 	  {
+    precreate (newattr);
+    if (!magic)
+-    return;
++    return false;
 
---UlVJffcvxoiEqYs2--
+    function = func;
+    arg = threadarg;
+@@ -517,7 +519,9 @@ pthread::create (void *(*func) (void *),
+        while (!cygtls)
+  	low_priority_sleep (0);
+      }
++  retval = magic;
+    mutex.unlock ();
++  return retval;
+  }
+
+  void
+@@ -1993,8 +1997,7 @@ pthread::create (pthread_t *thread, cons
+      return EINVAL;
+
+    *thread = new pthread ();
+-  (*thread)->create (start_routine, attr ? *attr : NULL, arg);
+-  if (!is_good_object (thread))
++  if (!(*thread)->create (start_routine, attr ? *attr : NULL, arg))
+      {
+        delete (*thread);
+        *thread = NULL;
+@@ -3262,9 +3265,10 @@ pthread_null::~pthread_null ()
+  {
+  }
+
+-void
++bool
+  pthread_null::create (void *(*)(void *), pthread_attr *, void *)
+  {
++  return true;
+  }
+
+  void
+Index: thread.h
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/thread.h,v
+retrieving revision 1.100
+diff -u -p -r1.100 thread.h
+--- thread.h	5 Jul 2005 03:16:46 -0000	1.100
++++ thread.h	31 Jul 2005 02:10:52 -0000
+@@ -380,7 +380,7 @@ public:
+    HANDLE cancel_event;
+    pthread_t joiner;
+
+-  virtual void create (void *(*)(void *), pthread_attr *, void *);
++  virtual bool create (void *(*)(void *), pthread_attr *, void *);
+
+    pthread ();
+    virtual ~pthread ();
+@@ -473,7 +473,7 @@ class pthread_null : public pthread
+    /* From pthread These should never get called
+    * as the ojbect is not verifyable
+    */
+-  void create (void *(*)(void *), pthread_attr *, void *);
++  bool create (void *(*)(void *), pthread_attr *, void *);
+    void exit (void *value_ptr) __attribute__ ((noreturn));
+    int cancel ();
+    void testcancel ();
