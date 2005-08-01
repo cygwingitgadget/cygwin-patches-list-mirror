@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5597-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 13760 invoked by alias); 1 Aug 2005 11:15:56 -0000
+Return-Path: <cygwin-patches-return-5598-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 2047 invoked by alias); 1 Aug 2005 16:50:59 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,117 +7,102 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 13746 invoked by uid 22791); 1 Aug 2005 11:15:52 -0000
-Received: from zipcon.net (HELO zipcon.net) (209.221.136.5)
-    by sourceware.org (qpsmtpd/0.30-dev) with SMTP; Mon, 01 Aug 2005 11:15:52 +0000
-Received: (qmail 31086 invoked from network); 1 Aug 2005 04:21:33 -0700
-Received: from unknown (HELO efn.org) (209.221.136.27)
-  by mail.zipcon.net with SMTP; 1 Aug 2005 04:21:33 -0700
-Received: by efn.org (sSMTP sendmail emulation); Mon, 1 Aug 2005 04:15:53 -0700
-Date: Mon, 01 Aug 2005 11:15:00 -0000
-From: Yitzchak Scott-Thoennes <sthoenna@efn.org>
+Received: (qmail 1978 invoked by uid 22791); 1 Aug 2005 16:50:51 -0000
+Received: from p54941846.dip0.t-ipconnect.de (HELO calimero.vinschen.de) (84.148.24.70)
+    by sourceware.org (qpsmtpd/0.30-dev) with ESMTP; Mon, 01 Aug 2005 16:50:51 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id 8A73B6D4256; Mon,  1 Aug 2005 18:50:48 +0200 (CEST)
+Date: Mon, 01 Aug 2005 16:50:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] TIOCMBI[SC]
-Message-ID: <20050801111552.GA2844@efn.org>
+Subject: Re: fix possible segfault creating detached thread
+Message-ID: <20050801165048.GJ14783@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <Pine.LNX.4.61.0507311501560.1072@mgorse.dhs.org>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="fUYQa+Pmc3FrFX/N"
-Content-Disposition: inline
-User-Agent: Mutt/1.4.2.1i
-X-SW-Source: 2005-q3/txt/msg00052.txt.bz2
-
-
---fUYQa+Pmc3FrFX/N
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-length: 318
+In-Reply-To: <Pine.LNX.4.61.0507311501560.1072@mgorse.dhs.org>
+User-Agent: Mutt/1.4.2i
+X-SW-Source: 2005-q3/txt/msg00053.txt.bz2
 
-I don't have a serial device to test this with, but it's just selected
-parts of the TIOCMSET handling slightly adapted.
+On Jul 31 15:17, Mike Gorse wrote:
+> This patch fixes a seg fault when a thread is created in a detached state 
+> and terminates the first time it is scheduled.  pthread::create (the 
+> four-parameter version) calls the three-parameter pthread::create function 
+> which unlocks the mutex, allowing the called thread to be scheduled, then 
+> exits at which point the outer create function calls is_good_objectg(), 
+> but this causes a core dump if pthread::exit() has already been called and 
+> deleted the pthread object.
 
-2005-08-01  Yitzchak Scott-Thoennes  <sthoenna@efn.org>
+Thanks for the patch.  First, please let me point you to
+http://cygwin.com/contrib.html.  The important information here is that
+you'll need to fill out a copyright assignment form and snail mail it
+to Red Hat if you want to get in patches.  The only exception are 
+insignificant patches in terms of changed lines of code.  The usual rule of
+thumb here is not more than 10 lines.  Well, your patch only changes
+roughly 12 lines, so I'd let slip it in.
 
-	* fhandler_serial.cc (fhandler_serial::ioctl): Implement TIOCMBIS and
-	TIOCMBIC.
-	* include/sys/termios.h: Define TIOCMBIS and TIOCMBIC
+However, there are three tiny problems:
 
-.
+> 2005-07-31 Michael Gorse <mgorse@alum.wpi.edu>
+> 
+>         * thread.cc (pthread::create): Make bool.
+>         * thread.cc (pthread_null::create): Ditto.
 
---fUYQa+Pmc3FrFX/N
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename="tiocmbi.patch"
-Content-length: 1627
+Wrong ChangeLog entry format.  Don't repeat the name of the file for each
+change.  Compare with the current ChangeLog file.  And don't add an empty
+line for each changed file, unless the changes are unrelated.
 
---- winsup/cygwin/include/sys/termios.h.orig	2005-05-01 20:50:10.000000000 -0700
-+++ winsup/cygwin/include/sys/termios.h	2005-08-01 02:22:34.361969600 -0700
-@@ -1,6 +1,6 @@
- /* sys/termios.h
- 
--   Copyright 1997, 1998, 1999, 2000, 2001, 2002, 2003 Red Hat, Inc.
-+   Copyright 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2005 Red Hat, Inc.
- 
- This file is part of Cygwin.
- 
-@@ -14,6 +14,8 @@
- #define _SYS_TERMIOS_H
- 
- #define	TIOCMGET	0x5415
-+#define	TIOCMBIS	0x5416
-+#define	TIOCMBIC	0x5417
- #define	TIOCMSET	0x5418
- #define	TIOCINQ		0x541B
- 
---- winsup/cygwin/fhandler_serial.cc.orig	2005-07-06 13:05:00.000000000 -0700
-+++ winsup/cygwin/fhandler_serial.cc	2005-08-01 02:31:30.993608000 -0700
-@@ -470,6 +470,50 @@ fhandler_serial::ioctl (unsigned int cmd
- 	    res = -1;
- 	  }
- 	break;
-+      case TIOCMBIS:
-+	if (ipbuffer & TIOCM_RTS)
-+	  {
-+	    if (EscapeCommFunction (get_handle (), SETRTS))
-+	      rts = TIOCM_RTS;
-+	    else
-+	      {
-+		__seterrno ();
-+		res = -1;
-+	      }
-+	  }
-+	if (ipbuffer & TIOCM_DTR)
-+	  {
-+	    if (EscapeCommFunction (get_handle (), SETDTR))
-+	      dtr = TIOCM_DTR;
-+	    else
-+	      {
-+		__seterrno ();
-+		res = -1;
-+	      }
-+	  }
-+	break;
-+      case TIOCMBIC:
-+	if (ipbuffer & TIOCM_RTS)
-+	  {
-+	    if (EscapeCommFunction (get_handle (), CLRRTS))
-+	      rts = 0;
-+	    else
-+	      {
-+		__seterrno ();
-+		res = -1;
-+	      }
-+	  }
-+	if (ipbuffer & TIOCM_DTR)
-+	  {
-+	    if (EscapeCommFunction (get_handle (), CLRDTR))
-+	      dtr = 0;
-+	    else
-+	      {
-+		__seterrno ();
-+		res = -1;
-+	      }
-+	  }
-+	break;
-       case TIOCCBRK:
- 	if (ClearCommBreak (get_handle ()) == 0)
- 	  {
+>         * thread.h: Ditto.
+> 
+>         * pthread.cc (pthread_create): Check return of inner create rather
+>         than calling is_good_object().
 
---fUYQa+Pmc3FrFX/N--
+This entry definitely doesn't match your below patch.  Is there really
+any change in pthread.cc and did you forget to send it or is that rather
+a typo and you meant to note the change to pthread::create(3 args) in
+thread.cc?
+
+> Index: thread.cc
+> ===================================================================
+> RCS file: /cvs/src/src/winsup/cygwin/thread.cc,v
+> retrieving revision 1.190
+> diff -u -p -r1.190 thread.cc
+> --- thread.cc	6 Jul 2005 20:05:03 -0000	1.190
+> +++ thread.cc	31 Jul 2005 02:13:14 -0000
+> @@ -491,13 +491,15 @@ pthread::precreate (pthread_attr *newatt
+>      magic = 0;
+>  }
+> 
+> -void
+> +bool
+>  pthread::create (void *(*func) (void *), pthread_attr *newattr,
+>  		 void *threadarg)
+>  {
+> +  bool retval;
+> +
+>    precreate (newattr);
+>    if (!magic)
+> -    return;
+> +    return false;
+> 
+>    function = func;
+>    arg = threadarg;
+> @@ -517,7 +519,9 @@ pthread::create (void *(*func) (void *),
+>        while (!cygtls)
+>  	low_priority_sleep (0);
+>      }
+> +  retval =magic;
+
+Please add a space after the '='.  Looks good otherwise.
+
+
+Thanks in advance,
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          mailto:cygwin@cygwin.com
+Red Hat, Inc.
