@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5602-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 996 invoked by alias); 2 Aug 2005 00:31:22 -0000
+Return-Path: <cygwin-patches-return-5603-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 11890 invoked by alias); 2 Aug 2005 09:18:21 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,114 +7,56 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 968 invoked by uid 22791); 2 Aug 2005 00:31:16 -0000
-Received: from rwcrmhc11.comcast.net (HELO rwcrmhc11.comcast.net) (204.127.198.35)
-    by sourceware.org (qpsmtpd/0.30-dev) with ESMTP; Tue, 02 Aug 2005 00:31:16 +0000
-Received: from [192.168.15.2] (c-65-96-128-135.hsd1.ma.comcast.net[65.96.128.135])
-          by comcast.net (rwcrmhc11) with SMTP
-          id <2005080200061301300hqdmre>; Tue, 2 Aug 2005 00:06:14 +0000
-Date: Tue, 02 Aug 2005 00:31:00 -0000
-From: Mike Gorse <mgorse@alum.wpi.edu>
-X-X-Sender: mgorse@mgorse.dhs.org
+Received: (qmail 11867 invoked by uid 22791); 2 Aug 2005 09:18:14 -0000
+Received: from p54941596.dip0.t-ipconnect.de (HELO calimero.vinschen.de) (84.148.21.150)
+    by sourceware.org (qpsmtpd/0.30-dev) with ESMTP; Tue, 02 Aug 2005 09:18:14 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id DE11A6D4256; Tue,  2 Aug 2005 11:18:11 +0200 (CEST)
+Date: Tue, 02 Aug 2005 09:18:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: fix possible segfault creating detached thread
-Message-ID: <Pine.LNX.4.61.0508012001310.4694@mgorse.dhs.org>
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII; format=flowed
-X-SW-Source: 2005-q3/txt/msg00057.txt.bz2
+Subject: Re: [PATCH] TIOCMBI[SC]
+Message-ID: <20050802091811.GM14783@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20050801111552.GA2844@efn.org> <20050801165639.GK14783@calimero.vinschen.de> <20050801192510.GA3656@efn.org>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20050801192510.GA3656@efn.org>
+User-Agent: Mutt/1.4.2i
+X-SW-Source: 2005-q3/txt/msg00058.txt.bz2
 
-ARGH!  I really need to be more careful...  Sorry for all the emails.
+On Aug  1 12:25, Yitzchak Scott-Thoennes wrote:
+> On Mon, Aug 01, 2005 at 06:56:39PM +0200, Corinna Vinschen wrote:
+> > On Aug  1 04:15, Yitzchak Scott-Thoennes wrote:
+> > > I don't have a serial device to test this with, but it's just selected
+> > > parts of the TIOCMSET handling slightly adapted.
+> > 
+> > I'm not serial I/O savvy, but the change looks pretty much ok.  I'm just
+> > not exactly glad that the functionality itself is duplicated.  Would you
+> > mind a rewrite so that the functionality is not copied, for instance by
+> > creating a private method which does it, or by recursively calling
+> > fhandler_serial::ioctl() with tweaked arguments (TIOCMSET)?
+> 
+> No problem.  How does this look?
+> 
+> 2005-08-01  Yitzchak Scott-Thoennes  <sthoenna@efn.org>
+> 
+> 	* include/sys/termios.h: Define TIOCMBIS and TIOCMBIC.
+>         * fhandler.h (class fhandler_serial): Declare switch_modem_lines.
+> 	* fhandler_serial.cc (fhandler_serial::switch_modem_lines): New
+>         static function to set or clear DTR and/or RTS.
+>         (fhandler_serial::ioctl): Use switch_modem_lines for TIOCMSET
+>         and new TIOCMBIS and TIOCMBIC.
 
-One last correction...
+Thanks, applied.  I've also bumped the API minor version number in
+include/cygwin/version.h.
 
-2005-08-01 Michael Gorse <mgorse@alum.wpi.edu>
 
-         * thread.cc (pthread::create(3 args)): Make bool.
-         (pthread_null::create): Ditto.
-         thread.h: Ditto.
+Corinna
 
-         * thread.cc (pthread::create(4 args)): Check return of inner
-         create  rather than calling is_good_object().
-
-Index: thread.cc
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/thread.cc,v
-retrieving revision 1.190
-diff -u -p -r1.190 thread.cc
---- thread.cc	6 Jul 2005 20:05:03 -0000	1.190
-+++ thread.cc	31 Jul 2005 02:13:14 -0000
-@@ -491,13 +491,15 @@ pthread::precreate (pthread_attr *newatt
-     magic = 0;
-  }
-
--void
-+bool
-  pthread::create (void *(*func) (void *), pthread_attr *newattr,
-  		 void *threadarg)
-  {
-+  bool retval;
-+
-  precreate (newattr);
-  if (!magic)
--    return;
-+    return false;
-
-  function = func;
-  arg = threadarg;
-@@ -517,7 +519,9 @@ pthread::create (void *(*func) (void *),
-  while (!cygtls)
-  	low_priority_sleep (0);
-      }
-+  retval = magic;
-    mutex.unlock ();
-+  return retval;
-  }
-
-  void
-@@ -1993,8 +1997,7 @@ pthread::create (pthread_t *thread, cons
-  return EINVAL;
-
-    *thread = new pthread ();
--  (*thread)->create (start_routine, attr ? *attr : NULL, arg);
--  if (!is_good_object (thread))
-+  if (!(*thread)->create (start_routine, attr ? *attr : NULL, arg))
-  {
-  delete (*thread);
-  *thread = NULL;
-@@ -3262,9 +3265,10 @@ pthread_null::~pthread_null ()
-  {
-  }
-
--void
-+bool
-  pthread_null::create (void *(*)(void *), pthread_attr *, void *)
-  {
-+  return true;
-  }
-
-  void
-Index: thread.h
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/thread.h,v
-retrieving revision 1.100
-diff -u -p -r1.100 thread.h
---- thread.h	5 Jul 2005 03:16:46 -0000	1.100
-+++ thread.h	31 Jul 2005 02:10:52 -0000
-@@ -380,7 +380,7 @@ public:
-  HANDLE cancel_event;
-  pthread_t joiner;
-
--  virtual void create (void *(*)(void *), pthread_attr *, void *);
-+  virtual bool create (void *(*)(void *), pthread_attr *, void *);
-
-  pthread ();
-  virtual ~pthread ();
-@@ -473,7 +473,7 @@ class pthread_null : public pthread
-  /* From pthread These should never get called
-  * as the ojbect is not verifyable
-  */
--  void create (void *(*)(void *), pthread_attr *, void *);
-+  bool create (void *(*)(void *), pthread_attr *, void *);
-  void exit (void *value_ptr) __attribute__ ((noreturn));
-  int cancel ();
-  void testcancel ();
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          mailto:cygwin@cygwin.com
+Red Hat, Inc.
