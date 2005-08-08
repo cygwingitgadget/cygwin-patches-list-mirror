@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5610-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 5250 invoked by alias); 8 Aug 2005 11:19:48 -0000
+Return-Path: <cygwin-patches-return-5611-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 14792 invoked by alias); 8 Aug 2005 11:46:22 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,219 +7,47 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 5205 invoked by uid 22791); 8 Aug 2005 11:19:34 -0000
-Received: from ns2.bln1.siemens.de (HELO ns2.bln1.siemens.de) (194.138.127.35)
-    by sourceware.org (qpsmtpd/0.30-dev) with ESMTP; Mon, 08 Aug 2005 11:19:34 +0000
-Received: from ns-srv-2.bln1.siemens.de (stbf7654 [194.138.127.67])
-	by ns2.bln1.siemens.de (8.12.10/8.12.10/MTA) with ESMTP id j78BJVdr023721
-	for <cygwin-patches@cygwin.com>; Mon, 8 Aug 2005 13:19:31 +0200 (MEST)
-Received: from scotty.bln1.siemens.de (stbd7124.bln1.siemens.de [192.168.120.17])
-	by ns-srv-2.bln1.siemens.de (8.12.10/8.12.10/MTA) with SMTP id j78BJQDm025624
-	for cygwin-patches@cygwin.com; Mon, 8 Aug 2005 13:19:26 +0200 (MEST)
-Date: Mon, 08 Aug 2005 11:19:00 -0000
-Message-Id: <200508081119.j78BJQDm025624@ns-srv-2.bln1.siemens.de>
-To: cygwin-patches@cygwin.com
-From: Thomas Wolff <towo@computer.org>
-Subject: [Patch] /etc/termcap missing eA capabilities
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary=%%message-boundary%%
-X-Virus-Checked: Checked by ClamAV on sourceware.org
-X-SW-Source: 2005-q3/txt/msg00065.txt.bz2
+Received: (qmail 14757 invoked by uid 22791); 8 Aug 2005 11:46:17 -0000
+Received: from mail-n.franken.de (HELO ilsa.franken.de) (193.175.24.27)
+    by sourceware.org (qpsmtpd/0.30-dev) with ESMTP; Mon, 08 Aug 2005 11:46:17 +0000
+Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])
+	by ilsa.franken.de (Postfix) with ESMTP
+	id 9D79F245D3; Mon,  8 Aug 2005 13:46:14 +0200 (CEST)
+Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])
+	by aqua.hirmke.de (Postfix) with ESMTP
+	id 21A1DDB123; Mon,  8 Aug 2005 13:46:14 +0200 (CEST)
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id B73D86D4258; Mon,  8 Aug 2005 13:46:13 +0200 (CEST)
+Date: Mon, 08 Aug 2005 11:46:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: cygwin@cygwin.com
+Cc: cygwin-patches@cygwin.com
+Subject: Re: [Patch] /etc/termcap missing eA capabilities
+Message-ID: <20050808114613.GA14783@calimero.vinschen.de>
+Reply-To: cygwin@cygwin.com
+Mail-Followup-To: cygwin@cygwin.com, cygwin-patches@cygwin.com
+References: <200508081119.j78BJQDm025624@ns-srv-2.bln1.siemens.de>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <200508081119.j78BJQDm025624@ns-srv-2.bln1.siemens.de>
+User-Agent: Mutt/1.4.2i
+X-SW-Source: 2005-q3/txt/msg00066.txt.bz2
+
+On Aug  8 13:19, Thomas Wolff wrote:
+> 2005-08-05  Thomas Wolff  <towo@computer.org>
+> 
+> 	* termcap: Updated xterm and rxvt (from /usr/share/terminfo 
+> 	using infocmp) to include the eA capability in order to enable 
+> 	programs to enable the alternate character set.
+
+Wrong mailing list.  cygwin-patches is for patches to the Cygwin package
+only.  Redirected to the cygwin ML.
 
 
---%%message-boundary%%
-Content-Type: text/plain
-Content-length: 1432
+Corinna
 
-Hello,
-there is an interworking problem for programs that link to libtermcap 
-and want to use the alternate character set ("VT100 block graphics").
-The termcap capability to enable usage of the alternate character set 
-mode is missing from /etc/termcap so e.g. menu borders would appear 
-as letters rather than graphic lines and corners.
-
-The attached patch fixes the problem (assuming the termcap file 
-gets installed into /etc; I couldn't try because make install did 
-not work for some reason, even configure had not worked without tricks).
-Please integrate the patch and release an updated termcap.
-(I am delaying the announcement of package update of my editor mined 
-until this problem gets fixed.)
-
-Background info: This has recently become a problem because due to 
-a mis-interpretation of VT100 behaviour, using the eA/enacs capability 
-had not been necessary in earlier xterm versions for a while when usage 
-of the alternate character set was enabled by default. According to 
-Thomas Dickey (the maintainer of xterm) this "bug" was recently fixed, 
-introducing the interworking problem for programs that assumed the 
-accustomed simpler usage.
-
-Thank you very much and kind regards,
-Thomas Wolff
-
-
-2005-08-05  Thomas Wolff  <towo@computer.org>
-
-	* termcap: Updated xterm and rxvt (from /usr/share/terminfo 
-	using infocmp) to include the eA capability in order to enable 
-	programs to enable the alternate character set.
-
-
---%%message-boundary%%
-Content-Type: application/octet-stream; name="termcap.patch"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="termcap.patch"
-Content-length: 9183
-
-ZGlmZiAtdXAgdGVybWNhcC0yMDA1MDQyMS0xL3Rlcm1jYXAgdGVybWNhcC0y
-MDA1MDQyMS0xLnBhdGNoL3Rlcm1jYXAKLS0tIHRlcm1jYXAtMjAwNTA0MjEt
-MS90ZXJtY2FwCTIwMDUtMDQtMjEgMjI6MzY6NTUuMDAxMDAwMDAwICswMjAw
-CisrKyB0ZXJtY2FwLTIwMDUwNDIxLTEucGF0Y2gvdGVybWNhcAkyMDA1LTA4
-LTA1IDE0OjQ3OjA4LjU0NTM3NDAwMCArMDIwMApAQCAtMjE0LDI3ICsyMTQs
-NiBAQCBsaW51eC1tb25vfExpbnV4IGNvbnNvbGUsIG5vIGNvbG9yOlwKIAk6
-Q29AOnBhQDpcCiAJOkFCQDpTYkA6U2ZAOnRjPWxpbnV4OgogCi0jCVJlY29u
-c3RydWN0ZWQgdmlhIGluZm9jbXAgZnJvbSBmaWxlOiAvdXNyL2xvY2FsL3No
-YXJlL3Rlcm1pbmZvL3Ivcnh2dAotcnh2dHxyeHZ0IHRlcm1pbmFsIGVtdWxh
-dG9yIChYIFdpbmRvdyBTeXN0ZW0pOlwKLQk6YW06ZW86a206bWk6bXM6eG46
-eG86XAotCTpjbyM4MDppdCM4OmxpIzI0OlwKLQk6QUw9XEVbJWRMOkRDPVxF
-WyVkUDpETD1cRVslZE06RE89XEVbJWRCOklDPVxFWyVkQDpcCi0JOksxPVxF
-T3c6SzI9XEVPdTpLMz1cRU95Oks0PVxFT3E6SzU9XEVPczpMRT1cRVslZEQ6
-XAotCTpSST1cRVslZEM6VVA9XEVbJWRBOmFlPV5POmFsPVxFW0w6YXM9Xk46
-Ymw9Xkc6Y2Q9XEVbSjpcCi0JOmNlPVxFW0s6Y2w9XEVbSFxFWzJKOmNtPVxF
-WyVpJWQ7JWRIOmNyPV5NOlwKLQk6Y3M9XEVbJWklZDslZHI6Y3Q9XEVbM2c6
-ZGM9XEVbUDpkbD1cRVtNOmRvPV5KOmVpPVxFWzRsOlwKLQk6aG89XEVbSDpp
-MT1cRVs/NDdsXEU9XEVbPzFsOmljPVxFW0A6aW09XEVbNGg6XAotCTppcz1c
-RVtyXEVbbVxFWzJKXEVbSFxFWz83aFxFWz8xOzM7NDs2bFxFWzRsOlwKLQk6
-azA9XEVbMjF+OmsxPVxFWzExfjprMj1cRVsxMn46azM9XEVbMTN+Oms0PVxF
-WzE0fjpcCi0JOms1PVxFWzE1fjprNj1cRVsxN346azc9XEVbMTh+Oms4PVxF
-WzE5fjprOT1cRVsyMH46XAotCTprRD1cRVszfjprST1cRVsyfjprTj1cRVs2
-fjprUD1cRVs1fjprYj1eSDprZD1cRVtCOmtlPVxFPjpcCi0JOmtoPVxFWzd+
-OmtsPVxFW0Q6a3I9XEVbQzprcz1cRT06a3U9XEVbQTpsZT1eSDptYj1cRVs1
-bTpcCi0JOm1kPVxFWzFtOm1lPVxFW21cMDE3Om1yPVxFWzdtOm5kPVxFW0M6
-cmM9XEU4OnNjPVxFNzpcCi0JOnNlPVxFWzI3bTpzZj1eSjpzbz1cRVs3bTpz
-cj1cRU06c3Q9XEVIOnRhPV5JOlwKLQk6dGU9XEVbMkpcRVs/NDdsXEU4OnRp
-PVxFN1xFWz80N2g6dWU9XEVbMjRtOnVwPVxFW0E6XAotCTp1cz1cRVs0bTp2
-Yj1cRVs/NWhcRVs/NWw6dmU9XEVbPzI1aDp2aT1cRVs/MjVsOlwKLQk6dnM9
-XEVbPzI1aDoKLQogcnh2dC1jeWd3aW4tbmF0aXZlfHJ4dnQgdGVybWluYWwg
-ZW11bGF0b3IgKG5hdGl2ZSBNUyBXaW5kb3cgU3lzdGVtIHBvcnQpIG9uIGN5
-Z3dpbjpcCiAJOmFjPStcMjU3LFwyNTYtXjBcMzMzYFwwMDRhXDI2MWZcMzcw
-Z1wzNjFoXDI2MGpcMzMxa1wyNzdsXDMzMm1cMzAwblwzMDVvfnBcMzA0cVwz
-MDRyXDMwNHNfdFwzMDN1XDI2NHZcMzAxd1wzMDJ4XDI2M3lcMzYzelwzNjJ7
-XDM0M3xcMzMwflwzNzY6XAogCTp0Yz1yeHZ0OgpAQCAtMjU1LDIzICsyMzQs
-NiBAQCB2dDEwMHx2dDEwMC1hbXxkZWMgdnQxMDAgKHcvYWR2YW5jZWQgdmlk
-CiAJOnNjPVxFNzpzZT1cRVttOnNmPV5KOnNvPVxFWzdtOnNyPVxFTTpzdD1c
-RUg6dGE9Xkk6dWU9XEVbbTpcCiAJOnVwPVxFW0E6dXM9XEVbNG06CiAKLSMJ
-UmVjb25zdHJ1Y3RlZCB2aWEgaW5mb2NtcCBmcm9tIGZpbGU6IC91c3Ivc2hh
-cmUvdGVybWluZm8veC94dGVybS1yNgoteHRlcm0tcjZ8eHRlcm18eHRlcm0g
-WDExUjYgdmVyc2lvbjpcCi0JOmFtOmttOm1pOm1zOnhuOlwKLQk6Y28jODA6
-aXQjODpsaSMyNDpcCi0JOkFMPVxFWyVkTDpEQz1cRVslZFA6REw9XEVbJWRN
-OkRPPVxFWyVkQjpMRT1cRVslZEQ6XAotCTpSST1cRVslZEM6VVA9XEVbJWRB
-OmFlPV5POmFsPVxFW0w6YXM9Xk46Ymw9Xkc6Y2Q9XEVbSjpcCi0JOmNlPVxF
-W0s6Y2w9XEVbSFxFWzJKOmNtPVxFWyVpJWQ7JWRIOmNyPV5NOlwKLQk6Y3M9
-XEVbJWklZDslZHI6Y3Q9XEVbM2c6ZGM9XEVbUDpkbD1cRVtNOmRvPV5KOmVp
-PVxFWzRsOlwKLQk6aG89XEVbSDppbT1cRVs0aDpcCi0JOmlzPVxFN1xFW3Jc
-RVttXEVbPzdoXEVbPzE7Mzs0OzZsXEVbNGxcRThcRT46azE9XEVPUDpcCi0J
-OmsyPVxFT1E6azM9XEVPUjprND1cRU9TOms1PVxFWzE1fjprNj1cRVsxN346
-azc9XEVbMTh+OlwKLQk6azg9XEVbMTl+Oms5PVxFWzIwfjprRD1cRVszfjpr
-ST1cRVsyfjprTj1cRVs2fjprUD1cRVs1fjpcCi0JOmtiPV5IOmtkPVxFT0I6
-a2U9XEVbPzFsXEU+OmtoPVxFWzF+OmtsPVxFT0Q6a3I9XEVPQzpcCi0JOmtz
-PVxFWz8xaFxFPTprdT1cRU9BOmxlPV5IOm1kPVxFWzFtOm1lPVxFW206bXI9
-XEVbN206XAotCTpuZD1cRVtDOnJjPVxFODpzYz1cRTc6c2U9XEVbbTpzZj1e
-Sjpzbz1cRVs3bTpzcj1cRU06dGE9Xkk6XAotCTp0ZT1cRVsySlxFWz80N2xc
-RTg6dGk9XEU3XEVbPzQ3aDp1ZT1cRVttOnVwPVxFW0E6XAotCTp1cz1cRVs0
-bToKIFNDfHNjcmVlbnxWVCAxMDAvQU5TSSBYMy42NCB2aXJ0dWFsIHRlcm1p
-bmFsOlwKIAk6YW06eG46bXM6bWk6RzA6a206XAogCTpETz1cRVslZEI6TEU9
-XEVbJWREOlJJPVxFWyVkQzpVUD1cRVslZEE6YnM6YnQ9XEVbWjpcCkBAIC0y
-OTUsMyArMjU3LDc4IEBAIFNCfHNjcmVlbi1iY2V8VlQgMTAwL0FOU0kgWDMu
-NjQgdmlydHVhbCAKIAk6dXQ6dGM9c2NyZWVuOgogU0h8c2NyZWVuLXN8VlQg
-MTAwL0FOU0kgWDMuNjQgdmlydHVhbCB0ZXJtaW5hbCB3aXRoIGhhcmRzdGF0
-dXMgbGluZTpcCiAJOnRzPVxFXzpmcz1cRVxcOmRzPVxFX1xFXFw6dGM9c2Ny
-ZWVuOgorCisjCVJlY29uc3RydWN0ZWQgdmlhIGluZm9jbXAgZnJvbSBmaWxl
-OiAvdXNyL3NoYXJlL3Rlcm1pbmZvL3gveHRlcm0KK3h0ZXJtfFgxMSB0ZXJt
-aW5hbCBlbXVsYXRvcjpcCisJOjVpOk5QOmFtOmttOm1pOm1zOnV0OnhuOlwK
-Kwk6Q28jODpjbyM4MDppdCM4OmxpIzI0OnBhIzY0OlwKKwk6IzI9XEVPMkg6
-IzM9XEVbMjsyfjojND1cRU8yRDolYz1cRVs2OzJ+OiVlPVxFWzU7Mn46XAor
-CTolaT1cRU8yQzoqND1cRVszOzJ+Oio3PVxFTzJGOkA3PVxFT0Y6QDg9XEVP
-TTpBQj1cRVs0JWRtOlwKKwk6QUY9XEVbMyVkbTpBTD1cRVslZEw6REM9XEVb
-JWRQOkRMPVxFWyVkTTpETz1cRVslZEI6XAorCTpGMT1cRVsyM346RjI9XEVb
-MjR+OkYzPVxFTzJQOkY0PVxFTzJROkY1PVxFTzJSOkY2PVxFTzJTOlwKKwk6
-Rjc9XEVbMTU7Mn46Rjg9XEVbMTc7Mn46Rjk9XEVbMTg7Mn46RkE9XEVbMTk7
-Mn46XAorCTpGQj1cRVsyMDsyfjpGQz1cRVsyMTsyfjpGRD1cRVsyMzsyfjpG
-RT1cRVsyNDsyfjpcCisJOkZGPVxFTzVQOkZHPVxFTzVROkZIPVxFTzVSOkZJ
-PVxFTzVTOkZKPVxFWzE1OzV+OlwKKwk6Rks9XEVbMTc7NX46Rkw9XEVbMTg7
-NX46Rk09XEVbMTk7NX46Rk49XEVbMjA7NX46XAorCTpGTz1cRVsyMTs1fjpG
-UD1cRVsyMzs1fjpGUT1cRVsyNDs1fjpGUj1cRU82UDpGUz1cRU82UTpcCisJ
-OkZUPVxFTzZSOkZVPVxFTzZTOkZWPVxFWzE1OzZ+OkZXPVxFWzE3OzZ+OkZY
-PVxFWzE4OzZ+OlwKKwk6Rlk9XEVbMTk7Nn46Rlo9XEVbMjA7Nn46RmE9XEVb
-MjE7Nn46RmI9XEVbMjM7Nn46XAorCTpGYz1cRVsyNDs2fjpJQz1cRVslZEA6
-SzI9XEVPRTpLbT1cRVtNOkxFPVxFWyVkRDpcCisJOlJBPVxFWz83bDpSST1c
-RVslZEM6U0E9XEVbPzdoOlwKKwk6Li5TYj1cRVs0JT8lcDElezF9JT0ldDQl
-ZSVwMSV7M30lPSV0NiVlJXAxJXs0fSU9JXQxJWUlcDElezZ9JT0ldDMlZSVw
-MSVkJTttOlwKKwk6Li5TZj1cRVszJT8lcDElezF9JT0ldDQlZSVwMSV7M30l
-PSV0NiVlJXAxJXs0fSU9JXQxJWUlcDElezZ9JT0ldDMlZSVwMSVkJTttOlwK
-Kwk6VVA9XEVbJWRBOlwKKwk6YWM9YGBhYWZmZ2dpaWpqa2tsbG1tbm5vb3Bw
-cXFycnNzdHR1dXZ2d3d4eHl5enp7e3x8fX1+fjpcCisJOmFlPV5POmFsPVxF
-W0w6YXM9Xk46Ymw9Xkc6YnQ9XEVbWjpjYj1cRVsxSzpjZD1cRVtKOmNlPVxF
-W0s6XAorCTpjaD1cRVslaSVkRzpjbD1cRVtIXEVbMko6Y209XEVbJWklZDsl
-ZEg6Y3I9Xk06XAorCTpjcz1cRVslaSVkOyVkcjpjdD1cRVszZzpjdj1cRVsl
-aSVkZDpkYz1cRVtQOmRsPVxFW006XAorCTpkbz1eSjplQT1cRShCXEUpMDpl
-Yz1cRVslZFg6ZWk9XEVbNGw6aG89XEVbSDppbT1cRVs0aDpcCisJOmlzPVxF
-WyFwXEVbPzM7NGxcRVs0bFxFPjprMT1cRU9QOmsyPVxFT1E6azM9XEVPUjpc
-CisJOms0PVxFT1M6azU9XEVbMTV+Oms2PVxFWzE3fjprNz1cRVsxOH46azg9
-XEVbMTl+OlwKKwk6azk9XEVbMjB+Oms7PVxFWzIxfjprQj1cRVtaOmtEPVxF
-WzN+OmtJPVxFWzJ+OmtOPVxFWzZ+OlwKKwk6a1A9XEVbNX46a2I9Xkg6a2Q9
-XEVPQjprZT1cRVs/MWxcRT46a2g9XEVPSDprbD1cRU9EOlwKKwk6a3I9XEVP
-Qzprcz1cRVs/MWhcRT06a3U9XEVPQTpsZT1eSDptYj1cRVs1bTptZD1cRVsx
-bTpcCisJOm1lPVxFW21cMDE3Om1rPVxFWzhtOm1sPVxFbDptcj1cRVs3bTpt
-dT1cRW06bmQ9XEVbQzpcCisJOm9wPVxFWzM5OzQ5bTpwZj1cRVs0aTpwbz1c
-RVs1aTpwcz1cRVtpOnIxPVxFYzpcCisJOnIyPVxFWyFwXEVbPzM7NGxcRVs0
-bFxFPjpyYz1cRTg6XAorCTouLnNhPVxFWzAlPyVwNiV0OzElOyU/JXAyJXQ7
-NCU7JT8lcDElcDMlfCV0OzclOyU/JXA0JXQ7NSU7JT8lcDcldDs4JTttJT8l
-cDkldFwwMTYlZVwwMTclOzpcCisJOnNjPVxFNzpzZT1cRVsyN206c2Y9Xko6
-c289XEVbN206c3I9XEVNOnN0PVxFSDp0YT1eSTpcCisJOnRlPVxFWz8xMDQ5
-bDp0aT1cRVs/MTA0OWg6dTY9XEVbJWklZDslZFI6dTc9XEVbNm46XAorCTp1
-OD1cRVs/MTsyYzp1OT1cRVtjOnVlPVxFWzI0bTp1cD1cRVtBOnVzPVxFWzRt
-OlwKKwk6dmI9XEVbPzVoXEVbPzVsOnZlPVxFWz8yNWg6dmk9XEVbPzI1bDoK
-KyMJUmVjb25zdHJ1Y3RlZCB2aWEgaW5mb2NtcCBmcm9tIGZpbGU6IC91c3Iv
-c2hhcmUvdGVybWluZm8vci9yeHZ0CityeHZ0fHJ4dnQgdGVybWluYWwgZW11
-bGF0b3IgKFggV2luZG93IFN5c3RlbSk6XAorCTphbTpiczplbzprbTptaTpt
-czp1dDp4bjp4bzpcCisJOkNvIzg6Y28jODA6aXQjODpsaSMyNDpwYSM2NDpc
-CisJOiMyPVxFWzckOiM0PVxFW2Q6JWM9XEVbNiQ6JWU9XEVbNSQ6JWk9XEVb
-YzoqND1cRVszJDpcCisJOio2PVxFWzR+Oio3PVxFWzgkOkAwPVxFWzF+OkA3
-PVxFWzh+OkA4PVxFT006QUI9XEVbNCVkbTpcCisJOkFGPVxFWzMlZG06QUw9
-XEVbJWRMOkRMPVxFWyVkTTpETz1cRVslZEI6RjE9XEVbMjN+OlwKKwk6RjI9
-XEVbMjR+OkYzPVxFWzI1fjpGND1cRVsyNn46RjU9XEVbMjh+OkY2PVxFWzI5
-fjpcCisJOkY3PVxFWzMxfjpGOD1cRVszMn46Rjk9XEVbMzN+OkZBPVxFWzM0
-fjpGQj1cRVsyMyQ6XAorCTpGQz1cRVsyNCQ6RkQ9XEVbMTFeOkZFPVxFWzEy
-XjpGRj1cRVsxM146Rkc9XEVbMTReOlwKKwk6Rkg9XEVbMTVeOkZJPVxFWzE3
-XjpGSj1cRVsxOF46Rks9XEVbMTleOkZMPVxFWzIwXjpcCisJOkZNPVxFWzIx
-XjpGTj1cRVsyM146Rk89XEVbMjReOkZQPVxFWzI1XjpGUT1cRVsyNl46XAor
-CTpGUj1cRVsyOF46RlM9XEVbMjleOkZUPVxFWzMxXjpGVT1cRVszMl46RlY9
-XEVbMzNeOlwKKwk6Rlc9XEVbMzReOkZYPVxFWzIzQDpGWT1cRVsyNEA6SUM9
-XEVbJWRAOksxPVxFT3c6SzI9XEVPdTpcCisJOkszPVxFT3k6SzQ9XEVPcTpL
-NT1cRU9zOkttPVxFW006TEU9XEVbJWREOlJJPVxFWyVkQzpcCisJOlVQPVxF
-WyVkQTpcCisJOmFjPWBgYWFmZmdnampra2xsbW1ubm9vcHBxcXJyc3N0dHV1
-dnZ3d3h4eXl6ent7fHx9fX5+OlwKKwk6YWU9Xk86YWw9XEVbTDphcz1eTjpi
-bD1eRzpjYj1cRVsxSzpjZD1cRVtKOmNlPVxFW0s6XAorCTpjaD1cRVslaSVk
-RzpjbD1cRVtIXEVbMko6Y209XEVbJWklZDslZEg6Y3I9Xk06XAorCTpjcz1c
-RVslaSVkOyVkcjpjdD1cRVszZzpjdj1cRVslaSVkZDpkbD1cRVtNOmRvPV5K
-OlwKKwk6ZUE9XEUoQlxFKTA6ZWk9XEVbNGw6aG89XEVbSDppMT1cRVs/NDds
-XEU9XEVbPzFsOlwKKwk6aWM9XEVbQDppbT1cRVs0aDpcCisJOmlzPVxFW3Jc
-RVttXEVbMkpcRVtIXEVbPzdoXEVbPzE7Mzs0OzZsXEVbNGw6XAorCTprMD1c
-RVsyMX46azE9XEVPUDprMj1cRU9ROmszPVxFT1I6azQ9XEVPUzprNT1cRVsx
-NX46XAorCTprNj1cRVsxN346azc9XEVbMTh+Oms4PVxFWzE5fjprOT1cRVsy
-MH46azs9XEVbMjF+OlwKKwk6a0I9XEVbWjprRD1cRVszfjprRT1cRVs4Xjpr
-ST1cRVsyfjprTj1cRVs2fjprUD1cRVs1fjpcCisJOmtiPV5IOmtkPVxFW0I6
-a2U9XEU+OmtoPVxFWzd+OmtsPVxFW0Q6a3I9XEVbQzprcz1cRT06XAorCTpr
-dT1cRVtBOmxlPV5IOm1iPVxFWzVtOm1kPVxFWzFtOm1lPVxFW21cMDE3Om1y
-PVxFWzdtOlwKKwk6bmQ9XEVbQzpvcD1cRVszOTs0OW06XAorCTpyMT1cRT5c
-RVsxOzM7NDs1OzZsXEVbPzdoXEVbbVxFW3JcRVsySlxFW0g6XAorCTpyMj1c
-RVtyXEVbbVxFWzJKXEVbSFxFWz83aFxFWz8xOzM7NDs2bFxFWzRsXEU+XEVb
-PzEwMDBsXEVbPzI1aDpcCisJOnJjPVxFODpzMD1cRShCOnMxPVxFKDA6XAor
-CTouLnNhPVxFWzAlPyVwNiV0OzElOyU/JXAyJXQ7NCU7JT8lcDElcDMlfCV0
-OzclOyU/JXA0JXQ7NSU7bSU/JXA5JXRcMDE2JWVcMDE3JTs6XAorCTpzYz1c
-RTc6c2U9XEVbMjdtOnNmPV5KOnNvPVxFWzdtOnNyPVxFTTpzdD1cRUg6dGE9
-Xkk6XAorCTp0ZT1cRVsySlxFWz80N2xcRTg6dGk9XEU3XEVbPzQ3aDp1ZT1c
-RVsyNG06dXA9XEVbQTpcCisJOnVzPVxFWzRtOnZiPVxFWz81aFxFWz81bDp2
-ZT1cRVs/MjVoOnZpPVxFWz8yNWw6Cg==
-
---%%message-boundary%%--
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          mailto:cygwin@cygwin.com
+Red Hat, Inc.
