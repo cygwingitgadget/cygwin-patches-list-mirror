@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5633-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 11725 invoked by alias); 28 Aug 2005 20:49:48 -0000
+Return-Path: <cygwin-patches-return-5634-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 30143 invoked by alias); 28 Aug 2005 21:22:38 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,48 +7,37 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 11713 invoked by uid 22791); 28 Aug 2005 20:49:43 -0000
+Received: (qmail 30134 invoked by uid 22791); 28 Aug 2005 21:22:35 -0000
 Received: from green.qinip.net (HELO green.qinip.net) (62.100.30.36)
-    by sourceware.org (qpsmtpd/0.30-dev) with ESMTP; Sun, 28 Aug 2005 20:49:43 +0000
-Received: from buzzy-box (hmm-dca-ap03-d13-219.dial.freesurf.nl [62.100.12.219])
+    by sourceware.org (qpsmtpd/0.30-dev) with ESMTP; Sun, 28 Aug 2005 21:22:35 +0000
+Received: from buzzy-box (hmm-dca-ap03-d07-146.dial.freesurf.nl [62.100.6.146])
 	by green.qinip.net (Postfix) with SMTP
-	id 739BD4474; Sun, 28 Aug 2005 22:49:39 +0200 (MET DST)
-Message-ID: <n2m-g.detf2n.3vv9c19.1@buzzy-box.bavag>
+	id 7ECCB4469; Sun, 28 Aug 2005 23:22:30 +0200 (MET DST)
+Message-ID: <n2m-g.deth4p.3vv9c19.1@buzzy-box.bavag>
 From: Bas van Gompel <cygwin-patches.buzz@bavag.tmfweb.nl>
-Subject: [patch] Don't append extra NUL to registry-strings.
+Subject: Re: [Patch] readdir_r: fix sense of error-test.
+References: <n2m-g.deqn2t.3vv7q2b.1@buzzy-box.bavag> <20050828171644.GA23108@trixie.casa.cgf.cx>
 Reply-To: cygwin-patches mailing-list <cygwin-patches@cygwin.com>
 Organisation: Ehm...
 User-Agent: slrn/0.9.8.1 (Win32) Hamster/2.0.7.0 KorrNews/4.2
 To: cygwin-patches@cygwin.com
-Date: Sun, 28 Aug 2005 20:49:00 -0000
-X-SW-Source: 2005-q3/txt/msg00088.txt.bz2
+In-Reply-To: <20050828171644.GA23108@trixie.casa.cgf.cx>
+Date: Sun, 28 Aug 2005 21:22:00 -0000
+X-SW-Source: 2005-q3/txt/msg00089.txt.bz2
 
-Hi,
+Op Sun, 28 Aug 2005 13:16:44 -0400 schreef Christopher Faylor
+in <20050828171644.GA23108@trixie.casa.cgf.cx>:
+:  On Sat, Aug 27, 2005 at 09:58:47PM +0200, Bas van Gompel wrote:
+: > If you want to see why this really does not require a copyright-
+: > assignment, view the diff with testsuite/winsup.api/ltp/readdir01.c,
+: > and remove all parts which are just comments.
+:
+:   Btw, you can't just grab someone else's source code and put your
+:  own copyright on it.
 
-When RegQueryValueEx returns a string-type, the final NUL is included
-in the returned size. I suggest dropping it.
+Right. Any suggestion as to how better approach this?
 
-
-A ChangeLog-entry?
-
-2005-08-28  Bas van Gompel  <cygwin-patch.buzz@bavag.tmfweb.nl>
-
-	*fhandler_registry.cc	(fhandler_registry::fill_filebuf): Don't
-	keep terminating null-character on string-types.
-
-
-diff -u -p -r1.33 fhandler_registry.cc
---- src/winsup/cygwin/fhandler_registry.cc	24 Aug 2005 04:38:39 -0000	1.33
-+++ src/winsup/cygwin/fhandler_registry.cc	28 Aug 2005 17:38:18 -0000
-@@ -599,6 +599,8 @@ fhandler_registry::fill_filebuf ()
-       while (error == ERROR_MORE_DATA);
-       filesize = size;
-     }
-+  if (type == REG_SZ || type == REG_MULTI_SZ || type == REG_EXPAND_SZ)
-+    filesize--;
-   return true;
- value_not_found:
-   DWORD buf_size = CYG_MAX_PATH;
+[TITT[TLM]L as you prefer.]
 
 
 L8r,
