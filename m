@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5638-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 10198 invoked by alias); 30 Aug 2005 10:33:36 -0000
+Return-Path: <cygwin-patches-return-5639-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 20021 invoked by alias); 4 Sep 2005 03:06:07 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,47 +7,50 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 10126 invoked by uid 22791); 30 Aug 2005 10:33:28 -0000
-Received: from host217-40-213-68.in-addr.btopenworld.com (HELO SERRANO.CAM.ARTIMI.COM) (217.40.213.68)
-    by sourceware.org (qpsmtpd/0.30-dev) with ESMTP; Tue, 30 Aug 2005 10:33:28 +0000
-Received: from mace ([192.168.1.25]) by SERRANO.CAM.ARTIMI.COM with Microsoft SMTPSVC(6.0.3790.1830);
-	 Tue, 30 Aug 2005 11:33:26 +0100
-From: "Dave Korn" <dave.korn@artimi.com>
-To: <cygwin-patches@cygwin.com>
-Subject: RE: [patch] Don't append extra NUL to registry-strings.
-Date: Tue, 30 Aug 2005 10:33:00 -0000
-MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Received: (qmail 19999 invoked by uid 22791); 4 Sep 2005 03:06:02 -0000
+Received: from green.qinip.net (HELO green.qinip.net) (62.100.30.36)
+    by sourceware.org (qpsmtpd/0.30-dev) with ESMTP; Sun, 04 Sep 2005 03:06:02 +0000
+Received: from buzzy-box (hmm-dca-ap03-d02-029.dial.freesurf.nl [62.100.1.29])
+	by green.qinip.net (Postfix) with SMTP
+	id 8EB27428D; Sun,  4 Sep 2005 05:05:57 +0200 (MET DST)
+Message-ID: <n2m-g.dfdcb0.3vv82fr.1@buzzy-box.bavag>
+From: Bas van Gompel <cygwin-patches.buzz@bavag.tmfweb.nl>
+Subject: Re: [patch] Don't append extra NUL to registry-strings.
+References: <n2m-g.detf2n.3vv9c19.1@buzzy-box.bavag> <20050829082119.GA24845@calimero.vinschen.de>
+Reply-To: cygwin-patches mailing-list <cygwin-patches@cygwin.com>
+Organisation: Ehm...
+User-Agent: slrn/0.9.8.1 (Win32) Hamster/2.0.7.0 KorrNews/4.2
+To: cygwin-patches@cygwin.com
 In-Reply-To: <20050829082119.GA24845@calimero.vinschen.de>
-Message-ID: <SERRANO4brJta07SaZ600000362@SERRANO.CAM.ARTIMI.COM>
-X-SW-Source: 2005-q3/txt/msg00093.txt.bz2
+Date: Sun, 04 Sep 2005 03:06:00 -0000
+X-SW-Source: 2005-q3/txt/msg00094.txt.bz2
 
-----Original Message----
->From: Corinna Vinschen
->Sent: 29 August 2005 09:21
+Op Mon, 29 Aug 2005 10:21:19 +0200 schreef Corinna Vinschen
+in <20050829082119.GA24845@calimero.vinschen.de>:
+:  On Aug 28 22:49, Bas van Gompel wrote:
+: > Hi,
+: >
+: > When RegQueryValueEx returns a string-type, the final NUL is included
+: > in the returned size. I suggest dropping it.
+:
+:  I see what you're up to, but there would be two reasons not to drop the
+:  trailing \0.  First, the \0 is part of the "file content" in a way.  
 
-> On Aug 28 22:49, Bas van Gompel wrote:
->> Hi,
->> 
->> When RegQueryValueEx returns a string-type, the final NUL is included
->> in the returned size. I suggest dropping it.
-> 
-> I see what you're up to, but there would be two reasons not to drop the
-> trailing \0.  First, the \0 is part of the "file content" in a way.
+Don't file-systems have their own way of reporting ends (EOF)?
 
-  To me this is the even more important reason.  Some registry strings do
-include the trailing zero, some don't; cygwin shouldn't tamper with it.  And
-it would seem _very_ wrong to me if by querying a value, and then using the
-result returned to re-set the value, the value should change in length.
+:  Second, it would break backward compatibility with applications using
+:  /proc/registry.  This latter point concerns me a bit, though it can
+:  naturally only affect Cygwin applications.
 
-  And since the patch unconditionally chops one off the size without
-verifying whether or not the nul terminator is actually present, it would do
-the wrong thing for some strings.
+Hmmm... :( ... possibly the CYGWIN-environment-variable might have room
+for something like ``registry:raw,data'' (default, for  now) to mean
+``as is'', and other options might cause various levels of verbosity/
+interpretation... (I know SHTDI, but would P be TC for such a thing?)
 
 
-    cheers,
-      DaveK
+L8r,
 -- 
-Can't think of a witty .sigline today....
+  ) |  | ---/ ---/  Yes, this | This message consists of true | I do not
+--  |  |   /    /   really is |   and false bits entirely.    | mail for
+  ) |  |  /    /    a 72 by 4 +-------------------------------+ any1 but
+--  \--| /--- /---  .sigfile. |   |perl -pe "s.u(z)\1.as."    | me. 4^re
