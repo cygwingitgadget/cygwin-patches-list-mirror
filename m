@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5645-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 15909 invoked by alias); 8 Sep 2005 09:25:19 -0000
+Return-Path: <cygwin-patches-return-5646-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 9015 invoked by alias); 10 Sep 2005 15:00:08 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,51 +7,57 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 15820 invoked by uid 22791); 8 Sep 2005 09:25:02 -0000
-Received: from mail-n.franken.de (HELO ilsa.franken.de) (193.175.24.27)
-    by sourceware.org (qpsmtpd/0.30-dev) with ESMTP; Thu, 08 Sep 2005 09:25:02 +0000
-Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])
-	by ilsa.franken.de (Postfix) with ESMTP id C4685245CD
-	for <cygwin-patches@cygwin.com>; Thu,  8 Sep 2005 11:24:59 +0200 (CEST)
-Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])
-	by aqua.hirmke.de (Postfix) with ESMTP id A275AD6502
-	for <cygwin-patches@cygwin.com>; Thu,  8 Sep 2005 11:24:58 +0200 (CEST)
-Received: by calimero.vinschen.de (Postfix, from userid 500)
-	id 6CCEF544122; Thu,  8 Sep 2005 11:24:58 +0200 (CEST)
-Date: Thu, 08 Sep 2005 09:25:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Received: (qmail 8711 invoked by uid 22791); 10 Sep 2005 14:59:46 -0000
+Received: from main.gmane.org (HELO ciao.gmane.org) (80.91.229.2)
+    by sourceware.org (qpsmtpd/0.30-dev) with ESMTP; Sat, 10 Sep 2005 14:59:46 +0000
+Received: from list by ciao.gmane.org with local (Exim 4.43)
+	id 1EE6m6-0005xi-V6
+	for cygwin-patches@cygwin.com; Sat, 10 Sep 2005 16:56:15 +0200
+Received: from c-67-172-242-110.hsd1.ut.comcast.net ([67.172.242.110])
+        by main.gmane.org with esmtp (Gmexim 0.1 (Debian))
+        id 1AlnuQ-0007hv-00
+        for <cygwin-patches@cygwin.com>; Sat, 10 Sep 2005 16:56:14 +0200
+Received: from ebb9 by c-67-172-242-110.hsd1.ut.comcast.net with local (Gmexim 0.1 (Debian))
+        id 1AlnuQ-0007hv-00
+        for <cygwin-patches@cygwin.com>; Sat, 10 Sep 2005 16:56:14 +0200
 To: cygwin-patches@cygwin.com
-Subject: Re: [patch] Don't append extra NUL to registry-strings.
-Message-ID: <20050908092458.GA9966@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <n2m-g.dfddna.3vvbaub.1@buzzy-box.bavag> <SERRANOF2fPmsSVhGOD000000e6@SERRANO.CAM.ARTIMI.COM> <n2m-g.dfnqh4.3vv7psd.1@buzzy-box.bavag>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <n2m-g.dfnqh4.3vv7psd.1@buzzy-box.bavag>
-User-Agent: Mutt/1.4.2i
-X-SW-Source: 2005-q3/txt/msg00100.txt.bz2
+From:  Eric Blake <ebb9@byu.net>
+Subject:  PING: fix =?utf-8?b?QVJHX01BWA==?=
+Date: Sat, 10 Sep 2005 15:00:00 -0000
+Message-ID:  <loom.20050910T164247-175@post.gmane.org>
+References:  <loom.20050906T172937-420@post.gmane.org>
+Mime-Version:  1.0
+Content-Type:  text/plain; charset=us-ascii
+Content-Transfer-Encoding:  7bit
+User-Agent: Loom/3.14 (http://gmane.org/)
+X-SW-Source: 2005-q3/txt/msg00101.txt.bz2
 
-On Sep  7 23:27, Bas van Gompel wrote:
-> 2005-09-07  Bas van Gompel  <cygwin-patch.buzz@bavag.tmfweb.nl>
+Eric Blake <ebb9 <at> byu.net> writes:
+
+Just making sure this patch didn't fall through the cracks...
+
 > 
-> 	* regtool.cc: Extend copyright-years.
-> 	(print_version): Ditto.
-> 	(cmd_list): Don't depend on terminating '\0' being present on
-> 	string-values.
-> 	(cmd_get): Don't attempt to read more than present, but keep
-> 	extra space for terminating '\0'. Really output REG_BINARY.
-> 	Don't leak memory.
-> 	(cmd_set): Include trailing '\0' in string's length.
+> 2005-09-06  Eric Blake  <ebb9 <at> byu.net>
+> 
+> 	* include/limits.h (ARG_MAX): New limit.
+> 	* sysconf.cc (sysconf): _SC_ARG_MAX: Use it.
 
-Applied.
+Even with your recent patches to make cygwin programs receive longer command
+lines, whether or not they are not mounted cygexec, ARG_MAX should still reflect
+the worst case limit so that programs (like xargs) that use ARG_MAX will work
+reliably even when invoking non-cygwin programs that are really bound by the 32k
+limit.
 
+Maybe it is worth adding _PC_ARG_MAX as an extension to the standards for
+pathconf(), so that programs that are aware of cygwin's dependence on the path
+being executed determining the length of the max command line can use pathconf()
+instead of sysconf() to obtain a more accurate limit.  Something like this:
+sysconf(_SC_ARG_MAX) --> 32k
+pathconf("notepad", _PC_ARG_MAX) --> 32k (performs PATH search if /, \ not in
+filename)
+pathconf("/bin/echo", _PC_ARG_MAX) --> 8M (or whatever limit can be determined)
+pathconf("nonesuch", _PC_ARG_MAX) --> -1, errno = ENOENT
 
-Thanks,
-Corinna
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          mailto:cygwin@cygwin.com
-Red Hat, Inc.
+Then xargs could use this non-standard extension to allow larger command lines
+when the target utility is a known cygwin executable, rather than penalizing all
+cygwin programs to the safe 32k limit of ARG_MAX.
