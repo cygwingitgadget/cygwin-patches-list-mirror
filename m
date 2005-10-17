@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-5661-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 28894 invoked by alias); 14 Oct 2005 02:16:16 -0000
+Return-Path: <cygwin-patches-return-5662-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 16575 invoked by alias); 17 Oct 2005 21:26:47 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,47 +7,67 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sources.redhat.com/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sources.redhat.com/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 28828 invoked by uid 22791); 14 Oct 2005 02:16:09 -0000
-Received: from c-24-61-23-223.hsd1.ma.comcast.net (HELO cgf.cx) (24.61.23.223)
-    by sourceware.org (qpsmtpd/0.30-dev) with ESMTP; Fri, 14 Oct 2005 02:16:09 +0000
-Received: by cgf.cx (Postfix, from userid 201)
-	id 1CFF213C101; Fri, 14 Oct 2005 02:15:58 +0000 (UTC)
-Date: Fri, 14 Oct 2005 02:16:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
+Received: (qmail 16556 invoked by uid 22791); 17 Oct 2005 21:26:43 -0000
+Received: from mail-n.franken.de (HELO ilsa.franken.de) (193.175.24.27)
+    by sourceware.org (qpsmtpd/0.30-dev) with ESMTP; Mon, 17 Oct 2005 21:26:43 +0000
+Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])
+	by ilsa.franken.de (Postfix) with ESMTP id C3BE3245D3
+	for <cygwin-patches@cygwin.com>; Mon, 17 Oct 2005 23:26:40 +0200 (CEST)
+Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])
+	by aqua.hirmke.de (Postfix) with ESMTP id 25D1EAAFF5
+	for <cygwin-patches@cygwin.com>; Mon, 17 Oct 2005 23:26:40 +0200 (CEST)
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+	id F38D8544122; Mon, 17 Oct 2005 23:26:39 +0200 (CEST)
+Date: Mon, 17 Oct 2005 21:26:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [patch] Create directories with 755 instead of 644.
-Message-ID: <20051014021558.GA4476@trixie.casa.cgf.cx>
+Subject: Re: [PATCH] Re: IP_MULTICAST_IF et all / Winsock[2] value conflict
+Message-ID: <20051017212639.GA19398@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <434EC646.2070800@acm.org>
+References: <Pine.CYG.4.58.0509291103421.2244@PC1163-8460-XP.flightsafety.com> <20050929165053.GU12256@calimero.vinschen.de> <Pine.CYG.4.58.0509291152490.2244@PC1163-8460-XP.flightsafety.com> <20050930081701.GB27423@calimero.vinschen.de> <Pine.CYG.4.58.0509300947210.2244@PC1163-8460-XP.flightsafety.com> <20050930200048.GE12256@calimero.vinschen.de> <Pine.CYG.4.58.0509301817260.1904@PC1163-8460-XP.flightsafety.com> <20051003165358.GA4436@calimero.vinschen.de> <Pine.CYG.4.58.0510031213250.1904@PC1163-8460-XP.flightsafety.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <434EC646.2070800@acm.org>
-User-Agent: Mutt/1.5.8i
-X-SW-Source: 2005-q4/txt/msg00003.txt.bz2
+In-Reply-To: <Pine.CYG.4.58.0510031213250.1904@PC1163-8460-XP.flightsafety.com>
+User-Agent: Mutt/1.4.2i
+X-SW-Source: 2005-q4/txt/msg00004.txt.bz2
 
-On Thu, Oct 13, 2005 at 01:40:38PM -0700, David Rothenberger wrote:
->I attempted to build the Cygwin DLL from CVS today and encountered 
->permission denied errors from the install target in winsup/cygwin. The 
->problem appears to be that directories are precreated using "install -m 
->644". With 644 permissions, subsequent install calls to copy files to 
->those directories fail.
+On Oct  3 12:25, Brian Ford wrote:
+> On Mon, 3 Oct 2005, Corinna Vinschen wrote:
+> 
+> > On Sep 30 18:39, Brian Ford wrote:
+> > > On Fri, 30 Sep 2005, Corinna Vinschen wrote:
+> > > > Actually we have two states, applications built before we changed the
+> > > > header file and applications built after we changed the header file.
+> > >
+> > > Let's just not change it ;-).
+> >
+> > No, let's change it.  Winsock2 is the way to go.  Winsock1 is just old
+> > stuff.  Since Cygwin is using Winsock2 when running on a 98 system or
+> > above, and since applications using the old/wrong Winsock1 values are
+> > broken right now anyway, there's no gain to keep the old values and
+> > force all new (and supposed to be working) applications to go through
+> > a translation stage.  Let the old applications suffer, not the new ones.
+> 
+> That's a reasonably convincing argument.  I just wish fixing this didn't
+> require an application recompile.  I didn't think that was the Cygwin
+> philosophy...<time passes>  Oh, you mean do the translation only for older
+> apps?  That sounds good.
 
-Sigh.  Yes, this is a recent problem.
+I've just applied a patch, which does all of that, removing the last remains
+of Winsock1 support, as well as changing the IPPROTO_IP values in
+include/cygwin/socket.h to the new Winsock2 values, as well as checking
+for the applications ABI version number so that older applications get
+the values translated into the new Winsock2 values in setsockopt/getsockopt
+on the fly.
 
->The following patch fixed the problem for me.
+This still needs some testing.
 
-Your patch translates to using "install -m 644 -m 755".
 
-I'll check in a variation which just uses install -d, as I intended.
+Corinna
 
->ChangeLog for winsup/cygwin:
->
->2005-10-13  David Rothenberger <daveroth@acm.org>
->
->	* Makefile.in:  Create directories with 755 permissions.
-
-Thanks for the patch.
-
-cgf
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          cygwin AT cygwin DOT com
+Red Hat, Inc.
