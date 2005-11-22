@@ -1,5 +1,22 @@
-Return-Path: <cygwin-patches-return-5676-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 20344 invoked by alias); 11 Nov 2005 01:41:21 -0000
+Return-Path: <cygwin-patches-return-5677-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 14641 invoked by alias); 22 Nov 2005 17:25:44 -0000
+Received: (qmail 14618 invoked by uid 22791); 22 Nov 2005 17:25:43 -0000
+X-Spam-Check-By: sourceware.org
+Received: from cgf.cx (HELO cgf.cx) (24.61.23.223)     by sourceware.org (qpsmtpd/0.31.1) with ESMTP; Tue, 22 Nov 2005 17:25:43 +0000
+Received: by cgf.cx (Postfix, from userid 201) 	id 8304013C1B0; Tue, 22 Nov 2005 12:25:40 -0500 (EST)
+Date: Tue, 22 Nov 2005 17:25:00 -0000
+From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: [patch] add -p option to cygcheck to query website package search
+Message-ID: <20051122172540.GA21639@trixie.casa.cgf.cx>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <42B7215D.309F67EE@dessent.net>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <42B7215D.309F67EE@dessent.net>
+User-Agent: Mutt/1.5.11
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -7,124 +24,40 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-Received: (qmail 20206 invoked by uid 22791); 11 Nov 2005 01:41:14 -0000
-Received: from web32913.mail.mud.yahoo.com (HELO web32913.mail.mud.yahoo.com) (68.142.206.60)
-    by sourceware.org (qpsmtpd/0.30-dev) with SMTP; Fri, 11 Nov 2005 01:41:14 +0000
-Received: (qmail 74272 invoked by uid 60001); 11 Nov 2005 01:41:12 -0000
-Message-ID: <20051111014112.74270.qmail@web32913.mail.mud.yahoo.com>
-Received: from [67.184.71.55] by web32913.mail.mud.yahoo.com via HTTP; Thu, 10 Nov 2005 17:41:12 PST
-Date: Fri, 11 Nov 2005 01:41:00 -0000
-From: Brian Gunlogson <bmg300@yahoo.com>
-Subject: [w32api PATCH] Add Get/SetClassLongPtr API
-To: cygwin-patches@cygwin.com
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="0-134772709-1131673272=:71863"
-Content-Transfer-Encoding: 8bit
-X-SW-Source: 2005-q4/txt/msg00018.txt.bz2
+X-SW-Source: 2005-q4/txt/msg00019.txt.bz2
 
---0-134772709-1131673272=:71863
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8bit
-Content-Id: 
-Content-Disposition: inline
-Content-length: 330
+On Mon, Jun 20, 2005 at 01:04:45PM -0700, Brian Dessent wrote:
+>Here is a patch that implements the -p option to cygcheck that was
+>mentioned on the list previously.  It uses the WinInet API to hit the
+>package-grep.cgi URL on cygwin.com with the search regexp supplied by
+>the user.
 
-I also sent this patch to mingw's patch tracker on sourceforge.
+Five+ months later, I've checked in (most of) this patch to cygcheck.cc
+and the documentation.
 
+It seems like the bug fix that was in the patch was no longer needed
+since it didn't apply and the code around the fix had changed.
 
-Changelog:
+One reason for the delay was that I wanted to do things a little
+differently in package-grep.cgi.  I think I've done that, with the help
+of HTML::TreeBuilder.  So, there is now a "text" option to this script,
+similar to your patch, which will just dump raw text.
 
-2005-11-10 Brian Gunlogson
+Another reason for the delay was that I didn't want to add another way
+to overload the old sourceware.org.  However, the new system is
+perfectly capable of handling anything we can throw at it for the
+foreseeable future, so this seemed like a good time to implement this
+functionality.
 
-* lib/user32.def, include/winuser.h (Get/SetClassLongPtr): Added API and the related constants.
+Other than that, your patch just went in as-is.  I'm going to make a
+snapshot with this change in it soon, Brian, so if you have some new
+insights after five months, please let me know so that I can incorporate
+them.
 
+I apologize for the very long lag time in getting this patch in. I do
+appreciate your addition of this functionality to cygcheck.exe.  I hope
+that it will be a useful addition to our bag of tech support tricks.
 
-		
-__________________________________ 
-Yahoo! FareChase: Search multiple travel sites in one click.
-http://farechase.yahoo.com
---0-134772709-1131673272=:71863
-Content-Type: application/octet-stream; name="w32api-brian-2005-11-10.patch"
-Content-Transfer-Encoding: base64
-Content-Description: 2467823416-w32api-brian-2005-11-10.patch
-Content-Disposition: attachment; filename="w32api-brian-2005-11-10.patch"
-Content-length: 4592
+Thanks again.
 
-ZGlmZiAtdXIgdzMyYXBpLTMuNS1zcmMtb3JpZy9pbmNsdWRlL3dpbnVzZXIu
-aCB3MzJhcGktMy41L2luY2x1ZGUvd2ludXNlci5oCi0tLSB3MzJhcGktMy41
-LXNyYy1vcmlnL2luY2x1ZGUvd2ludXNlci5oCTIwMDUtMDgtMTAgMTk6NTk6
-NDkuMDAwMDAwMDAwIC0wNTAwCisrKyB3MzJhcGktMy41L2luY2x1ZGUvd2lu
-dXNlci5oCTIwMDUtMTEtMTAgMTY6MzI6MTUuMDAwMDAwMDAwIC0wNjAwCkBA
-IC02MTIsNiArNjEyLDEzIEBACiAjZGVmaW5lIEdDTF9NRU5VTkFNRSAoLTgp
-CiAjZGVmaW5lIEdDTF9TVFlMRSAoLTI2KQogI2RlZmluZSBHQ0xfV05EUFJP
-QyAoLTI0KQorI2RlZmluZSBHQ0xQX01FTlVOQU1FICgtOCkKKyNkZWZpbmUg
-R0NMUF9IQlJCQUNLR1JPVU5EICgtMTApCisjZGVmaW5lIEdDTFBfSENVUlNP
-UiAoLTEyKQorI2RlZmluZSBHQ0xQX0hJQ09OICgtMTQpCisjZGVmaW5lIEdD
-TFBfSE1PRFVMRSAoLTE2KQorI2RlZmluZSBHQ0xQX1dORFBST0MgKC0yNCkK
-KyNkZWZpbmUgR0NMUF9ISUNPTlNNICgtMzQpCiAjaWYgMAogICAgIC8qIFRo
-aXMgaXMgc3VwcG9zZWQgdG8gYmUgZGVmaW5lZCBieSB0aGUgcHJvZ3JhbSB1
-c2luZyBpdCBub3QgZGVmaW5lZAogICAgICAgIGluIHRoZSB3MzJhcGkgaGVh
-ZGVycy4gIEkndmUgbGVmdCBpdCBoZXJlIGZvciBkb2N1bWVudGF0aW9uIHB1
-cnBvc2VzLgpAQCAtMzQ1Myw2ICszNDYwLDggQEAKIFdJTlVTRVJBUEkgQk9P
-TCBXSU5BUEkgR2V0Q2xhc3NJbmZvRXhXKEhJTlNUQU5DRSxMUENXU1RSLExQ
-V05EQ0xBU1NFWFcpOwogV0lOVVNFUkFQSSBEV09SRCBXSU5BUEkgR2V0Q2xh
-c3NMb25nQShIV05ELGludCk7CiBXSU5VU0VSQVBJIERXT1JEIFdJTkFQSSBH
-ZXRDbGFzc0xvbmdXKEhXTkQsaW50KTsKK1dJTlVTRVJBUEkgVUxPTkdfUFRS
-IFdJTkFQSSBHZXRDbGFzc0xvbmdQdHJBKEhXTkQsaW50KTsKK1dJTlVTRVJB
-UEkgVUxPTkdfUFRSIFdJTkFQSSBHZXRDbGFzc0xvbmdQdHJXKEhXTkQsaW50
-KTsKIFdJTlVTRVJBUEkgaW50IFdJTkFQSSBHZXRDbGFzc05hbWVBKEhXTkQs
-TFBTVFIsaW50KTsKIFdJTlVTRVJBUEkgaW50IFdJTkFQSSBHZXRDbGFzc05h
-bWVXKEhXTkQsTFBXU1RSLGludCk7CiBXSU5VU0VSQVBJIFdPUkQgV0lOQVBJ
-IEdldENsYXNzV29yZChIV05ELGludCk7CkBAIC0zNzc2LDYgKzM3ODUsOCBA
-QAogV0lOVVNFUkFQSSBCT09MIFdJTkFQSSBTZXRDYXJldFBvcyhpbnQsaW50
-KTsKIFdJTlVTRVJBUEkgRFdPUkQgV0lOQVBJIFNldENsYXNzTG9uZ0EoSFdO
-RCxpbnQsTE9ORyk7CiBXSU5VU0VSQVBJIERXT1JEIFdJTkFQSSBTZXRDbGFz
-c0xvbmdXKEhXTkQsaW50LExPTkcpOworV0lOVVNFUkFQSSBVTE9OR19QVFIg
-V0lOQVBJIFNldENsYXNzTG9uZ1B0ckEoSFdORCxpbnQsTE9OR19QVFIpOwor
-V0lOVVNFUkFQSSBVTE9OR19QVFIgV0lOQVBJIFNldENsYXNzTG9uZ1B0clco
-SFdORCxpbnQsTE9OR19QVFIpOwogV0lOVVNFUkFQSSBXT1JEIFdJTkFQSSBT
-ZXRDbGFzc1dvcmQoSFdORCxpbnQsV09SRCk7CiBXSU5VU0VSQVBJIEhBTkRM
-RSBXSU5BUEkgU2V0Q2xpcGJvYXJkRGF0YShVSU5ULEhBTkRMRSk7CiBXSU5V
-U0VSQVBJIEhXTkQgV0lOQVBJIFNldENsaXBib2FyZFZpZXdlcihIV05EKTsK
-QEAgLTM5ODksNiArNDAwMCw3IEBACiAjZGVmaW5lIEdldENsYXNzSW5mbyBH
-ZXRDbGFzc0luZm9XCiAjZGVmaW5lIEdldENsYXNzSW5mb0V4IEdldENsYXNz
-SW5mb0V4VwogI2RlZmluZSBHZXRDbGFzc0xvbmcgR2V0Q2xhc3NMb25nVwor
-I2RlZmluZSBHZXRDbGFzc0xvbmdQdHIgR2V0Q2xhc3NMb25nUHRyVwogI2Rl
-ZmluZSBHZXRDbGFzc05hbWUgR2V0Q2xhc3NOYW1lVwogI2RlZmluZSBHZXRD
-bGlwYm9hcmRGb3JtYXROYW1lIEdldENsaXBib2FyZEZvcm1hdE5hbWVXCiAj
-ZGVmaW5lIEdldERsZ0l0ZW1UZXh0IEdldERsZ0l0ZW1UZXh0VwpAQCAtNDA1
-Myw2ICs0MDY1LDcgQEAKICNkZWZpbmUgU2VuZE1lc3NhZ2VUaW1lb3V0IFNl
-bmRNZXNzYWdlVGltZW91dFcKICNkZWZpbmUgU2VuZE5vdGlmeU1lc3NhZ2Ug
-U2VuZE5vdGlmeU1lc3NhZ2VXCiAjZGVmaW5lIFNldENsYXNzTG9uZyBTZXRD
-bGFzc0xvbmdXCisjZGVmaW5lIFNldENsYXNzTG9uZ1B0ciBTZXRDbGFzc0xv
-bmdQdHJXCiAjZGVmaW5lIFNldERsZ0l0ZW1UZXh0IFNldERsZ0l0ZW1UZXh0
-VwogI2RlZmluZSBTZXRNZW51SXRlbUluZm8gU2V0TWVudUl0ZW1JbmZvVwog
-I2RlZmluZSBTZXRQcm9wIFNldFByb3BXCkBAIC00MTU0LDYgKzQxNjcsNyBA
-QAogI2RlZmluZSBHZXRDbGFzc0luZm8gR2V0Q2xhc3NJbmZvQQogI2RlZmlu
-ZSBHZXRDbGFzc0luZm9FeCBHZXRDbGFzc0luZm9FeEEKICNkZWZpbmUgR2V0
-Q2xhc3NMb25nIEdldENsYXNzTG9uZ0EKKyNkZWZpbmUgR2V0Q2xhc3NMb25n
-UHRyIEdldENsYXNzTG9uZ1B0ckEKICNkZWZpbmUgR2V0Q2xhc3NOYW1lIEdl
-dENsYXNzTmFtZUEKICNkZWZpbmUgR2V0Q2xpcGJvYXJkRm9ybWF0TmFtZSBH
-ZXRDbGlwYm9hcmRGb3JtYXROYW1lQQogI2RlZmluZSBHZXREbGdJdGVtVGV4
-dCBHZXREbGdJdGVtVGV4dEEKQEAgLTQyMTgsNiArNDIzMiw3IEBACiAjZGVm
-aW5lIFNlbmRNZXNzYWdlVGltZW91dCBTZW5kTWVzc2FnZVRpbWVvdXRBCiAj
-ZGVmaW5lIFNlbmROb3RpZnlNZXNzYWdlIFNlbmROb3RpZnlNZXNzYWdlQQog
-I2RlZmluZSBTZXRDbGFzc0xvbmcgU2V0Q2xhc3NMb25nQQorI2RlZmluZSBT
-ZXRDbGFzc0xvbmdQdHIgU2V0Q2xhc3NMb25nUHRyQQogI2RlZmluZSBTZXRE
-bGdJdGVtVGV4dCBTZXREbGdJdGVtVGV4dEEKICNkZWZpbmUgU2V0TWVudUl0
-ZW1JbmZvIFNldE1lbnVJdGVtSW5mb0EKICNkZWZpbmUgU2V0UHJvcCBTZXRQ
-cm9wQQpkaWZmIC11ciB3MzJhcGktMy41LXNyYy1vcmlnL2xpYi91c2VyMzIu
-ZGVmIHczMmFwaS0zLjUvbGliL3VzZXIzMi5kZWYKLS0tIHczMmFwaS0zLjUt
-c3JjLW9yaWcvbGliL3VzZXIzMi5kZWYJMjAwNS0wOC0xMCAxOTo1OTo1MC4w
-MDAwMDAwMDAgLTA1MDAKKysrIHczMmFwaS0zLjUvbGliL3VzZXIzMi5kZWYJ
-MjAwNS0xMS0xMCAxNjoxMjozNC4wMDAwMDAwMDAgLTA2MDAKQEAgLTIzMiw2
-ICsyMzIsOCBAQAogR2V0Q2xhc3NJbmZvV0AxMgogR2V0Q2xhc3NMb25nQUA4
-CiBHZXRDbGFzc0xvbmdXQDgKK0dldENsYXNzTG9uZ1B0ckFAOAorR2V0Q2xh
-c3NMb25nUHRyV0A4CiBHZXRDbGFzc05hbWVBQDEyCiBHZXRDbGFzc05hbWVX
-QDEyCiBHZXRDbGFzc1dvcmRAOApAQCAtNTE1LDYgKzUxNyw4IEBACiBTZXRD
-YXJldFBvc0A4CiBTZXRDbGFzc0xvbmdBQDEyCiBTZXRDbGFzc0xvbmdXQDEy
-CitTZXRDbGFzc0xvbmdQdHJBQDEyCitTZXRDbGFzc0xvbmdQdHJXQDEyCiBT
-ZXRDbGFzc1dvcmRAMTIKIFNldENsaXBib2FyZERhdGFAOAogU2V0Q2xpcGJv
-YXJkVmlld2VyQDQK
-
---0-134772709-1131673272=:71863--
+cgf
