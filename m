@@ -1,22 +1,21 @@
-Return-Path: <cygwin-patches-return-5677-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 14641 invoked by alias); 22 Nov 2005 17:25:44 -0000
-Received: (qmail 14618 invoked by uid 22791); 22 Nov 2005 17:25:43 -0000
+Return-Path: <cygwin-patches-return-5678-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 26643 invoked by alias); 24 Nov 2005 22:02:57 -0000
+Received: (qmail 26633 invoked by uid 22791); 24 Nov 2005 22:02:57 -0000
 X-Spam-Check-By: sourceware.org
-Received: from cgf.cx (HELO cgf.cx) (24.61.23.223)     by sourceware.org (qpsmtpd/0.31.1) with ESMTP; Tue, 22 Nov 2005 17:25:43 +0000
-Received: by cgf.cx (Postfix, from userid 201) 	id 8304013C1B0; Tue, 22 Nov 2005 12:25:40 -0500 (EST)
-Date: Tue, 22 Nov 2005 17:25:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [patch] add -p option to cygcheck to query website package search
-Message-ID: <20051122172540.GA21639@trixie.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <42B7215D.309F67EE@dessent.net>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <42B7215D.309F67EE@dessent.net>
-User-Agent: Mutt/1.5.11
+Received: from mailout01.sul.t-online.com (HELO mailout01.sul.t-online.com) (194.25.134.80)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Thu, 24 Nov 2005 22:02:55 +0000
+Received: from fwd34.aul.t-online.de  	by mailout01.sul.t-online.com with smtp  	id 1EfPB7-0008Fh-01; Thu, 24 Nov 2005 23:02:53 +0100
+Received: from [10.3.2.2] (ZkYXCoZCQeb8VoiZ84ngNfLpZFME7Ef5LHR07QOs2KyTWBuOgWoN6O@[80.137.71.58]) by fwd34.sul.t-online.de 	with esmtp id 1EfPB5-1gwMCG0; Thu, 24 Nov 2005 23:02:51 +0100
+Message-ID: <43863896.4080203@t-online.de>
+Date: Thu, 24 Nov 2005 22:02:00 -0000
+From: Christian Franke <Christian.Franke@t-online.de>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8b) Gecko/20050217
+MIME-Version: 1.0
+To:  cygwin-patches@cygwin.com
+Subject: Allow to send SIGQUIT via Ctrl+BREAK (patch included)
+Content-Type: multipart/mixed;  boundary="------------040302040900030002080500"
+X-ID: ZkYXCoZCQeb8VoiZ84ngNfLpZFME7Ef5LHR07QOs2KyTWBuOgWoN6O
+X-TOI-MSGID: bdcedbf8-7ac8-47e0-9348-5a00a25b934f
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -24,40 +23,72 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2005-q4/txt/msg00019.txt.bz2
+X-SW-Source: 2005-q4/txt/msg00020.txt.bz2
 
-On Mon, Jun 20, 2005 at 01:04:45PM -0700, Brian Dessent wrote:
->Here is a patch that implements the -p option to cygcheck that was
->mentioned on the list previously.  It uses the WinInet API to hit the
->package-grep.cgi URL on cygwin.com with the search regexp supplied by
->the user.
+This is a multi-part message in MIME format.
+--------------040302040900030002080500
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-length: 634
 
-Five+ months later, I've checked in (most of) this patch to cygcheck.cc
-and the documentation.
+Hi,
 
-It seems like the bug fix that was in the patch was no longer needed
-since it didn't apply and the code around the fix had changed.
+unlike Linux & friends, Cygwin cannot send a SIGQUIT via keyboard.
+The SIGQUIT key simulated in termios does only work if app reads from 
+console.
+Both console events ^C and ^BREAK are mapped to SIGINT.
 
-One reason for the delay was that I wanted to do things a little
-differently in package-grep.cgi.  I think I've done that, with the help
-of HTML::TreeBuilder.  So, there is now a "text" option to this script,
-similar to your patch, which will just dump raw text.
+Suggest to add some option to send SIGQUIT via ^BREAK.
 
-Another reason for the delay was that I didn't want to add another way
-to overload the old sourceware.org.  However, the new system is
-perfectly capable of handling anything we can throw at it for the
-foreseeable future, so this seemed like a good time to implement this
-functionality.
+A simple patch is attached.
 
-Other than that, your patch just went in as-is.  I'm going to make a
-snapshot with this change in it soon, Brian, so if you have some new
-insights after five months, please let me know so that I can incorporate
-them.
+It sends SIGQUIT on ^BREAK if both VINTR and VQUIT are set to ^C.
+As a positive side effect, this disables any other SIGQUIT key in termios.
 
-I apologize for the very long lag time in getting this patch in. I do
-appreciate your addition of this functionality to cygcheck.exe.  I hope
-that it will be a useful addition to our bag of tech support tricks.
+Testcase:
 
-Thanks again.
+$ sleep 1000
+[^BREAK]
 
-cgf
+$ ./stty quit ^C
+$ sleep 1000
+[^BREAK]
+Quit (core dumped)
+
+$ ./stty quit ^X
+$ sleep 1000
+[^BREAK]
+
+$ echo Thanks for any comment
+Thanks for any comment
+
+Christian
+
+
+--------------040302040900030002080500
+Content-Type: text/plain;
+ name="cygwin-sigbreak-patch.txt"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline;
+ filename="cygwin-sigbreak-patch.txt"
+Content-length: 670
+
+--- exceptions.cc.orig	2005-07-01 17:49:40.001000000 +0200
++++ exceptions.cc	2005-11-24 22:41:02.765867700 +0100
+@@ -888,8 +888,13 @@
+        that we have handled the signal).  At this point, type should be
+        a CTRL_C_EVENT or CTRL_BREAK_EVENT. */
+     {
++      int sig = SIGINT;
++      /* If intr and quit are both mapped to ^C, send SIGQUIT on ^BREAK */
++      if (type == CTRL_BREAK_EVENT
++          && t->ti.c_cc[VINTR] == 3 && t->ti.c_cc[VQUIT] == 3)
++        sig = SIGQUIT;
+       t->last_ctrl_c = GetTickCount ();
+-      killsys (-myself->pid, SIGINT);
++      killsys (-myself->pid, sig);
+       t->last_ctrl_c = GetTickCount ();
+       return TRUE;
+     }
+
+--------------040302040900030002080500--
