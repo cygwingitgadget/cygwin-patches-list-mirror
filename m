@@ -1,22 +1,19 @@
-Return-Path: <cygwin-patches-return-5685-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 15058 invoked by alias); 25 Nov 2005 22:02:50 -0000
-Received: (qmail 15047 invoked by uid 22791); 25 Nov 2005 22:02:49 -0000
+Return-Path: <cygwin-patches-return-5686-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 13056 invoked by alias); 7 Dec 2005 21:19:17 -0000
+Received: (qmail 13045 invoked by uid 22791); 7 Dec 2005 21:19:16 -0000
 X-Spam-Check-By: sourceware.org
-Received: from cgf.cx (HELO cgf.cx) (24.61.23.223)     by sourceware.org (qpsmtpd/0.31.1) with ESMTP; Fri, 25 Nov 2005 22:02:48 +0000
-Received: by cgf.cx (Postfix, from userid 201) 	id BAA1413D354; Fri, 25 Nov 2005 17:02:46 -0500 (EST)
-Date: Fri, 25 Nov 2005 22:02:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
+Received: from nproxy.gmail.com (HELO nproxy.gmail.com) (64.233.182.206)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Wed, 07 Dec 2005 21:19:14 +0000
+Received: by nproxy.gmail.com with SMTP id o25so150871nfa         for <cygwin-patches@cygwin.com>; Wed, 07 Dec 2005 13:19:12 -0800 (PST)
+Received: by 10.49.41.2 with SMTP id t2mr127310nfj;         Wed, 07 Dec 2005 13:19:12 -0800 (PST)
+Received: by 10.49.3.12 with HTTP; Wed, 7 Dec 2005 13:19:12 -0800 (PST)
+Message-ID: <80fd4e750512071319r4ae0bc2fj9c0fb5b9e29c398f@mail.gmail.com>
+Date: Wed, 07 Dec 2005 21:19:00 -0000
+From: Pekka Pessi <ppessi@gmail.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: Allow to send SIGQUIT via Ctrl+BREAK (patch included)
-Message-ID: <20051125220246.GC12445@trixie.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <43863896.4080203@t-online.de> <20051125012622.GA12798@trixie.casa.cgf.cx> <1EfYLi-05iS2a0@fwd29.aul.t-online.de> <20051125164139.GD8670@trixie.casa.cgf.cx> <4387696F.9000409@t-online.de> <20051125195256.GA11390@trixie.casa.cgf.cx> <43877550.8090602@t-online.de>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <43877550.8090602@t-online.de>
-User-Agent: Mutt/1.5.11
+Subject: [patch] Handling non-winsock flags in fhandler_socket.cc
+MIME-Version: 1.0
+Content-Type: multipart/mixed;  	boundary="----=_Part_6046_1783718.1133990352233"
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -24,31 +21,85 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2005-q4/txt/msg00027.txt.bz2
+X-SW-Source: 2005-q4/txt/msg00028.txt.bz2
 
-On Fri, Nov 25, 2005 at 09:34:24PM +0100, Christian Franke wrote:
->Christopher Faylor wrote:
->>On Fri, Nov 25, 2005 at 08:43:43PM +0100, Christian Franke wrote:
->>>OK, let's forget the patch ;-)
->>
->>Actually, I have done some more testing myself and Windows doesn't work
->>the way that I remembered.  It seems like CTRL-BREAK isn't handled by
->>signal(SIGINT, ...).  So, I was wrong about this.
->
->MSVCRT maps CTRL-C to SIGINT, CTRL-BREAK to an extra SIGBREAK.  So it
->is possible to map this to SIGQUIT with a simple hack:
->
->#ifdef SIGBREAK
->#undef SIGQUIT
->#define SIGQUIT SIGBREAK
->#endif
->
->This isn't possible with Cygwin (in notty mode), because CTRL-C and
->CTRL-BREAK cannot be distinguished.
+------=_Part_6046_1783718.1133990352233
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+Content-length: 440
 
-I'm not sure why you're reexplaining this after I said I'd incorporate
-the patch but I'm not concerned about making no-cygwin programs work.  I
-just didn't want to veer from what I thought was standard Windows
-behavior in absence of any other standard.
+Hello,
 
-cgf
+ I found a problem with sendmsg() failng when MSG_NOSIGNAL is used. It
+looks like MSG_WINMASK is used in sendto() but not in sendmsg().
+
+The patch that should fix the problem is made against
+fhandler_socket.cc revision 1.176 ("should" because I did not get
+around to compile the whole shebang). It clears extra flags when
+calling ws2 functions in all cases of sendmsg(), recvmsg() and
+recvfrom().
+
+--
+Pekka.Pessi@{nokia.com,iki.fi}
+
+------=_Part_6046_1783718.1133990352233
+Content-Type: text/x-patch; name=sendmsg-flags.patch; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="sendmsg-flags.patch"
+Content-length: 1726
+
+--- fhandler_socket.cc.virgin	2005-12-07 16:54:41.888415954 +0200
++++ fhandler_socket.cc	2005-12-07 16:58:43.031808869 +0200
+@@ -1041,7 +1041,7 @@ fhandler_socket::recvfrom (void *ptr, si
+ 	{
+ 	  do
+ 	    {
+-	      DWORD lflags = (DWORD) flags;
++	      DWORD lflags = (DWORD) (MSG_WINMASK & flags);
+ 	      res = WSARecvFrom (get_socket (), &wsabuf, 1, &ret, &lflags,
+ 				 from, fromlen, NULL, NULL);
+ 	    }
+@@ -1118,8 +1118,9 @@ fhandler_socket::recvmsg (struct msghdr 
+   DWORD ret = 0;
+ 
+   if (is_nonblocking () || closed () || async_io ())
++    DWORD lflags = (DWORD) (MSG_WINMASK & flags);
+     res = WSARecvFrom (get_socket (), wsabuf, iovcnt, &ret,
+-		       (DWORD *) &flags, from, fromlen, NULL, NULL);
++		       &lflags, from, fromlen, NULL, NULL);
+   else
+     {
+       HANDLE evt;
+@@ -1127,7 +1128,7 @@ fhandler_socket::recvmsg (struct msghdr 
+ 	{
+ 	  do
+ 	    {
+-	      DWORD lflags = (DWORD) flags;
++	      DWORD lflags = (DWORD) (MSG_WINMASK & flags);
+ 	      res = WSARecvFrom (get_socket (), wsabuf, iovcnt, &ret,
+ 				 &lflags, from, fromlen, NULL, NULL);
+ 	    }
+@@ -1271,7 +1272,7 @@ fhandler_socket::sendmsg (const struct m
+ 
+   if (is_nonblocking () || closed () || async_io ())
+     res = WSASendTo (get_socket (), wsabuf, iovcnt, &ret,
+-		     flags, (struct sockaddr *) msg->msg_name,
++		     flags & MSG_WINMASK, (struct sockaddr *) msg->msg_name,
+ 		     msg->msg_namelen, NULL, NULL);
+   else
+     {
+@@ -1281,7 +1282,7 @@ fhandler_socket::sendmsg (const struct m
+ 	  do
+ 	    {
+ 	      res = WSASendTo (get_socket (), wsabuf, iovcnt,
+-			       &ret, flags,
++			       &ret, flags & MSG_WINMASK,
+ 			       (struct sockaddr *) msg->msg_name,
+ 			       msg->msg_namelen, NULL, NULL);
+ 	    }
+
+
+
+
+------=_Part_6046_1783718.1133990352233--
