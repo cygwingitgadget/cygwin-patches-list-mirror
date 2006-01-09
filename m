@@ -1,20 +1,22 @@
-Return-Path: <cygwin-patches-return-5704-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 28050 invoked by alias); 6 Jan 2006 18:21:53 -0000
-Received: (qmail 28041 invoked by uid 22791); 6 Jan 2006 18:21:53 -0000
+Return-Path: <cygwin-patches-return-5705-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 17316 invoked by alias); 9 Jan 2006 12:37:21 -0000
+Received: (qmail 17306 invoked by uid 22791); 9 Jan 2006 12:37:20 -0000
 X-Spam-Check-By: sourceware.org
-Received: from nat.electric-cloud.com (HELO main.electric-cloud.com) (63.82.0.114)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Fri, 06 Jan 2006 18:21:52 +0000
-Received: from fulgurite.electric-cloud.com (FULGURITE.electric-cloud.com [192.168.1.160]) 	by main.electric-cloud.com (8.13.1/8.13.1) with ESMTP id k06ILoV1022067 	(version=TLSv1/SSLv3 cipher=RC4-MD5 bits=128 verify=NO) 	for <cygwin-patches@cygwin.com>; Fri, 6 Jan 2006 10:21:50 -0800
-Subject: Re: sigproc_init() handling CreateThread() failures
-From: Max Kaehn <slothman@electric-cloud.com>
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.31.1) with ESMTP; Mon, 09 Jan 2006 12:37:19 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 48FF0544001; Mon,  9 Jan 2006 13:37:17 +0100 (CET)
+Date: Mon, 09 Jan 2006 12:37:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-In-Reply-To: <1136497979.6371.31.camel@fulgurite>
-References: <1136494247.6371.16.camel@fulgurite> 	 <20060105211752.GE26305@trixie.casa.cgf.cx> 	 <1136497979.6371.31.camel@fulgurite>
-Content-Type: text/plain
-Date: Fri, 06 Jan 2006 18:21:00 -0000
-Message-Id: <1136571707.4111.0.camel@fulgurite>
+Subject: Re: export getsubopt
+Message-ID: <20060109123717.GA22745@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <loom.20060106T162823-127@post.gmane.org>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-IsSubscribed: yes
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <loom.20060106T162823-127@post.gmane.org>
+User-Agent: Mutt/1.4.2i
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -22,25 +24,23 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q1/txt/msg00013.txt.bz2
+X-SW-Source: 2006-q1/txt/msg00014.txt.bz2
 
-On Thu, 2006-01-05 at 13:52 -0800, Max Kaehn wrote:
-> On Thu, 2006-01-05 at 16:17 -0500, Christopher Faylor wrote:
-> > But, that is the whole point of setting my_sendsig to
-> > INVALID_HANDLE_VALUE.
+On Jan  6 15:29, Eric Blake wrote:
+> Since POSIX requires getsubopt, and newlib provides it, here goes (and let's 
+> hope this patch applies cleaner than my previous two):
 > 
-> Which I would've picked up if I had read the change log (RTFCL). :-P
+> 2006-01-06  Eric Blake  <ebb9@byu.net>
 > 
-> > >       * sigproc.cc (no_signals_available):  test for my_sendsig ==
-> > >       INVALID_HANDLE_VALUE.
-> 
-> > This seems like it should work.  Does it have the same effect?
-> 
-> It looks good; I'll put it on the test machine and fire it up.  I
-> can usually get the problem to reproduce by leaving a cycle of
-> repeated builds running overnight, and I'll post the result
-> to this thread tomorrow.
+> 	* cygwin.din: Export getsubopt.
+> 	* include/cygwin/version.h: Bump API minor version.
 
-20 builds haven't reproduced the problem.  Thanks!
+Thanks, applied.
 
 
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          cygwin AT cygwin DOT com
+Red Hat
