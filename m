@@ -1,19 +1,22 @@
-Return-Path: <cygwin-patches-return-5717-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 10289 invoked by alias); 21 Jan 2006 07:10:34 -0000
-Received: (qmail 10277 invoked by uid 22791); 21 Jan 2006 07:10:33 -0000
+Return-Path: <cygwin-patches-return-5718-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 6592 invoked by alias); 21 Jan 2006 12:14:31 -0000
+Received: (qmail 6581 invoked by uid 22791); 21 Jan 2006 12:14:31 -0000
 X-Spam-Check-By: sourceware.org
-Received: from bay103-f10.bay103.hotmail.com (HELO hotmail.com) (65.54.174.20)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Sat, 21 Jan 2006 07:10:32 +0000
-Received: from mail pickup service by hotmail.com with Microsoft SMTPSVC; 	 Fri, 20 Jan 2006 23:10:31 -0800
-Message-ID: <BAY103-F10482309B205ED1887658FD31E0@phx.gbl>
-Received: from 65.54.174.200 by by103fd.bay103.hotmail.msn.com with HTTP; 	Sat, 21 Jan 2006 07:10:30 GMT
-X-Sender: devinteske@hotmail.com
-From: "Devin Teske" <devinteske@hotmail.com>
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.31.1) with ESMTP; Sat, 21 Jan 2006 12:14:30 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 5EA2C544001; Sat, 21 Jan 2006 13:14:27 +0100 (CET)
+Date: Sat, 21 Jan 2006 12:14:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Bcc:
-Subject: full .lnk support
-Date: Sat, 21 Jan 2006 07:10:00 -0000
+Subject: Re: full .lnk support
+Message-ID: <20060121121427.GA20745@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <BAY103-F10482309B205ED1887658FD31E0@phx.gbl>
 Mime-Version: 1.0
-Content-Type: text/plain; format=flowed
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BAY103-F10482309B205ED1887658FD31E0@phx.gbl>
+User-Agent: Mutt/1.4.2i
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -21,49 +24,54 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q1/txt/msg00026.txt.bz2
+X-SW-Source: 2006-q1/txt/msg00027.txt.bz2
 
-Hey there,
+On Jan 20 23:10, Devin Teske wrote:
+> Hey there,
+> 
+> first time poster, but I'm not a member of the list, so please reply 
+> directly.
+> 
+> After 8 long months, I have fully reverse-engineered the Windows `.lnk' 
+> (shortcut) file format and have a core function set for creating/resolving 
+> them. I know that cygwin ALREADY understands Windows shortcuts, but not 
+> only barely. Cygwin does not resolve shortcuts created by windows.
+> 
+> It is worth noting that there are multiple versions of the shortcut file 
+> format (binary fields were added in Windows NT/2000/XP that differ from Win 
+> 9x). Also, when cygwin creates a shortcut, it does not have the icon of the 
+> source file when viewed in explorer (not going to explain why exactly, I'll 
+> keep it short for now) because cygwin (to be blunt) creates crappy shortcut 
+> files.
 
-first time poster, but I'm not a member of the list, so please reply 
-directly.
+The format used is compatible to the format used by U/Win.  Plus, we're
+adding an ITEMIDLIST which helps newer Windows versions to identify the
+target type correctly.
 
-After 8 long months, I have fully reverse-engineered the Windows `.lnk' 
-(shortcut) file format and have a core function set for creating/resolving 
-them. I know that cygwin ALREADY understands Windows shortcuts, but not only 
-barely. Cygwin does not resolve shortcuts created by windows.
+The interesting feature of our and U/Win's symlinks is that they can be
+identified as Cygwin resp. U/Win symlinks.  This is especially important
+to *not* identify natively generated shortcuts as symlinks.
 
-It is worth noting that there are multiple versions of the shortcut file 
-format (binary fields were added in Windows NT/2000/XP that differ from Win 
-9x). Also, when cygwin creates a shortcut, it does not have the icon of the 
-source file when viewed in explorer (not going to explain why exactly, I'll 
-keep it short for now) because cygwin (to be blunt) creates crappy shortcut 
-files.
+Windows native shortcuts contain a lot of information which isn't
+contained in normal symlinks, for instance icons, dial-up information
+and more weird stuff.  When we started using shortcuts as symlinks, we
+treated every shortcut as symlink.  But we had to drop this very soon
+again.  Archivers like tar or cpio treat symlinks specially.  They don;t
+try to save a file but only a path to the symlink target.  If you treat
+all shortcuts as symlinks, they are packed as symlinks by archivers.
+When you unpack them, all the extra information contained in a shortcut
+is lost.  That's the reason we differ between shortcuts and
+symlink-shortcuts.
 
-I can personally attest to the most difficult task it was to decipher the 
-binary format of this file (it's not documented anywhere, because Microsoft 
-does not want you to create them manually but use the Shell32 API). However, 
-I'm able to create them and they have support for all the enhanced features 
-of the new format (Win XP) as well as the original version (Win 9x/NT/2000). 
-Windows doesn't know any better that they were created manually (as binary 
-data). However, cygwin craps out reading them, because it can't read 
-anything but the stunted format (cygwin uses a constant string literal for 
-the header which doesn't match the real deal).
+So, sorry, but no, we're not interested in changing the code to treat
+all shortcuts as symlinks or to create symlink-shortcuts in a way which
+disallows us to differ they from native shortcuts.  Been there, done
+that.
 
-I know that if you simply just wanted full/native shortcut support, you'd 
-just use the Win32 API to create/manage them, however one of the advantages 
-of doing it the way I did, means that I can create them without the Win32 
-API (ie. on Mac OS X, UNIX, Linux, etc.). Which also means that you could 
-say... build this into samba to understand shortcuts that clients running 
-windows create on the share.
 
-Well, the whole point of me writing this is to assess the value of something 
-like this and whether it is something that is wanted. I think that it might 
-be a nice addition (as I've been a long time cygwin user, and am hesitant to 
-switch to SFU or anything else). Would like to know that if I contribute 
-this, that it is something that will be gladly welcomed since it took such a 
-long time to reverse engineer that god-forsaken format.
+Corinna
 
-Cheers,
-Devin
-
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          cygwin AT cygwin DOT com
+Red Hat
