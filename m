@@ -1,17 +1,20 @@
-Return-Path: <cygwin-patches-return-5722-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 1869 invoked by alias); 25 Jan 2006 14:14:54 -0000
-Received: (qmail 1854 invoked by uid 22791); 25 Jan 2006 14:14:53 -0000
+Return-Path: <cygwin-patches-return-5723-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 21738 invoked by alias); 25 Jan 2006 14:51:15 -0000
+Received: (qmail 21724 invoked by uid 22791); 25 Jan 2006 14:51:12 -0000
 X-Spam-Check-By: sourceware.org
-Received: from ACCESS1.CIMS.NYU.EDU (HELO access1.cims.nyu.edu) (128.122.81.155)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Wed, 25 Jan 2006 14:14:50 +0000
-Received: from localhost (localhost [127.0.0.1]) 	by access1.cims.nyu.edu (8.12.10+Sun/8.12.10) with ESMTP id k0PEEmA7015339 	for <cygwin-patches@cygwin.com>; Wed, 25 Jan 2006 09:14:48 -0500 (EST)
-Date: Wed, 25 Jan 2006 14:14:00 -0000
-From: Igor Peshansky <pechtcha@cs.nyu.edu>
+Received: from mailgw02.flightsafety.com (HELO mailgw02.flightsafety.com) (66.109.90.21)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Wed, 25 Jan 2006 14:51:11 +0000
+Received: from mailgw02.flightsafety.com (localhost [127.0.0.1]) 	by mailgw02.flightsafety.com (8.13.1/8.13.1) with ESMTP id k0PEnWux023337 	for <cygwin-patches@cygwin.com>; Wed, 25 Jan 2006 09:49:32 -0500 (EST)
+Received: from xgate2k3.flightsafety.com ([192.168.31.134]) 	by mailgw02.flightsafety.com (8.13.1/8.13.1) with ESMTP id k0PEnUOc023315 	for <cygwin-patches@cygwin.com>; Wed, 25 Jan 2006 09:49:32 -0500 (EST)
+Received: from srv1163ex1.flightsafety.com ([198.51.28.39]) by xgate2k3.flightsafety.com with Microsoft SMTPSVC(6.0.3790.1830); 	 Wed, 25 Jan 2006 09:51:34 -0500
+Received: from pc1163-8460-xp ([198.51.27.93]) by srv1163ex1.flightsafety.com with Microsoft SMTPSVC(6.0.3790.1830); 	 Wed, 25 Jan 2006 08:51:33 -0600
+Date: Wed, 25 Jan 2006 14:51:00 -0000
+From: Brian Ford <Brian.Ford@flightsafety.com>
 Reply-To: cygwin-patches@cygwin.com
 To: cygwin-patches@cygwin.com
 Subject: Re: [Patch] regtool: Add load/unload commands and --binary option
-In-Reply-To: <20060125105240.GM8318@calimero.vinschen.de>
-Message-ID: <Pine.GSO.4.63.0601250907210.2078@access1.cims.nyu.edu>
-References: <43D6876F.9080608@t-online.de> <20060125105240.GM8318@calimero.vinschen.de>
+In-Reply-To: <Pine.GSO.4.63.0601250907210.2078@access1.cims.nyu.edu>
+Message-ID: <Pine.CYG.4.58.0601250849500.3176@PC1163-8460-XP.flightsafety.com>
+References: <43D6876F.9080608@t-online.de> <20060125105240.GM8318@calimero.vinschen.de>  <Pine.GSO.4.63.0601250907210.2078@access1.cims.nyu.edu>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 X-IsSubscribed: yes
@@ -22,64 +25,18 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q1/txt/msg00031.txt.bz2
+X-SW-Source: 2006-q1/txt/msg00032.txt.bz2
 
-On Wed, 25 Jan 2006, Corinna Vinschen wrote:
+On Wed, 25 Jan 2006, Igor Peshansky wrote:
 
-> On Jan 24 21:00, Christian Franke wrote:
-> > Hi,
-> >
-> > the attached patch adds commands "load" and "unload" and options "-b,
-> > --binary" to regtool.
-> >
-> > Load a registry hive from PATH into new SUBKEY:
-> >
-> > regtool load KEY\SUBKEY PATH
-> >
-> > Unload and remove SUBKEY later:
-> >
-> > regtool unload KEY\SUBKEY
-> >
-> > Print REG_BINARY value as hex:
-> >
-> > regtool -b get KEY\VALUE
-> >
-> > Set REG_BINARY value from hex args:
-> >
-> > regtool -b set KEY\VALUE XX XX XX XX ...
-> >
-> > [snip]
-> > Thanks for any comment
->
-> Thanks for this patch, it looks pretty useful.
-> [snip]
+> I'm not aware of any program that does the reverse (hex dump->binary),
+> but writing a perl script for that is trivial.
 
-I wonder if it would be better to use stdin/stdout for binary data (or
-even add a -f option for set).  IMHO,
+xxd -r ;-).
 
-regtool -b get KEY1\\VALUE | regtool -b set KEY2\\VALUE
-
-or
-
-regtool -b get KEY1\\VALUE | regtool -b set -f - KEY2\\VALUE
-
-looks cleaner than storing the hex encoding into a string...  If you want
-a hex dump,
-
-regtool -b get KEY1\\VALUE | od -t x1
-
-will do it.  I'm not aware of any program that does the reverse
-(hex dump->binary), but writing a perl script for that is trivial.
-
-That said, I also think this functionality would be very useful.
-	Igor
 -- 
-				http://cs.nyu.edu/~pechtcha/
-      |\      _,,,---,,_	    pechtcha@cs.nyu.edu | igor@watson.ibm.com
-ZZZzz /,`.-'`'    -.  ;-;;,_		Igor Peshansky, Ph.D. (name changed!)
-     |,4-  ) )-,_. ,\ (  `'-'		old name: Igor Pechtchanski
-    '---''(_/--'  `-'\_) fL	a.k.a JaguaR-R-R-r-r-r-.-.-.  Meow!
-
-"Las! je suis sot... -Mais non, tu ne l'es pas, puisque tu t'en rends compte."
-"But no -- you are no fool; you call yourself a fool, there's proof enough in
-that!" -- Rostand, "Cyrano de Bergerac"
+Brian Ford
+Lead Realtime Software Engineer
+VITAL - Visual Simulation Systems
+FlightSafety International
+the best safety device in any aircraft is a well-trained pilot...
