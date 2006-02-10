@@ -1,22 +1,21 @@
-Return-Path: <cygwin-patches-return-5739-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 24956 invoked by alias); 6 Feb 2006 18:02:45 -0000
-Received: (qmail 24945 invoked by uid 22791); 6 Feb 2006 18:02:44 -0000
+Return-Path: <cygwin-patches-return-5740-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 24032 invoked by alias); 10 Feb 2006 23:52:12 -0000
+Received: (qmail 24021 invoked by uid 22791); 10 Feb 2006 23:52:12 -0000
 X-Spam-Check-By: sourceware.org
-Received: from cgf.cx (HELO cgf.cx) (24.61.23.223)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Mon, 06 Feb 2006 18:02:42 +0000
-Received: by cgf.cx (Postfix, from userid 201) 	id 0734813C0F8; Mon,  6 Feb 2006 13:02:41 -0500 (EST)
-Date: Mon, 06 Feb 2006 18:02:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [patch] fix spurious SIGSEGV faults under Cygwin
-Message-ID: <20060206180240.GC6428@trixie.casa.cgf.cx>
+Received: from mailgw01n.flightsafety.com (HELO mailgw01n.flightsafety.com) (66.109.90.23)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Fri, 10 Feb 2006 23:52:10 +0000
+Received: from mailgw01n.flightsafety.com (localhost [127.0.0.1]) 	by mailgw01n.flightsafety.com (8.13.1/8.13.1) with ESMTP id k1ANpemM010643 	for <cygwin-patches@cygwin.com>; Fri, 10 Feb 2006 18:51:40 -0500 (EST)
+Received: from VXS2.flightsafety.com (internal-31-146.flightsafety.com [192.168.31.146]) 	by mailgw01n.flightsafety.com (8.13.1/8.13.1) with ESMTP id k1ANpdLR010638 	for <cygwin-patches@cygwin.com>; Fri, 10 Feb 2006 18:51:39 -0500 (EST)
+Received: from srv1163ex1.flightsafety.com ([198.51.28.39]) by VXS2.flightsafety.com with Microsoft SMTPSVC(6.0.3790.1830); 	 Fri, 10 Feb 2006 18:52:55 -0500
+Received: from pc1163-8460-xp ([198.51.27.93]) by srv1163ex1.flightsafety.com with Microsoft SMTPSVC(6.0.3790.1830); 	 Fri, 10 Feb 2006 17:52:54 -0600
+Date: Fri, 10 Feb 2006 23:52:00 -0000
+From: Brian Ford <Brian.Ford@flightsafety.com>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <43E1FA66.216E236C@dessent.net> <43E22C81.1C4600BA@dessent.net> <20060202170558.GD22365@trixie.casa.cgf.cx>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20060202170558.GD22365@trixie.casa.cgf.cx>
-User-Agent: Mutt/1.5.11
+To: cygwin-patches@cygwin.com
+Subject: clock_[get|set]time timespec conversions
+Message-ID: <Pine.CYG.4.58.0602101743300.1780@PC1163-8460-XP.flightsafety.com>
+MIME-Version: 1.0
+Content-Type: MULTIPART/MIXED; BOUNDARY="-559023410-1720703112-1139615625=:1780"
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -24,48 +23,61 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q1/txt/msg00048.txt.bz2
+X-SW-Source: 2006-q1/txt/msg00049.txt.bz2
 
-On Thu, Feb 02, 2006 at 12:05:58PM -0500, Christopher Faylor wrote:
->On Thu, Feb 02, 2006 at 08:00:01AM -0800, Brian Dessent wrote:
->>Brian Dessent wrote:
->>
->>>  #define _CYGWIN_SIGNAL_STRING "cYgSiGw00f"
->>> +#define _CYGWIN_FAULT_IGNORE_STRING "cYgfAuLtIg"
->>> +#define _CYGWIN_FAULT_NOIGNORE_STRING "cYgNofAuLtIg"
->>
->>Sigh, this breaks strace under Cygwin, I should have tested more.  Sorry
->>about that.  Apparently strace expects anything starting with the 'cYg'
->>prefix to be followed by a hex number.  I thought that since
->>_CYGWIN_SIGNAL_STRING already existed and didn't follow that format it
->>was safe to add more, but that's not the case.
->>
->>So, should I pick another prefix that's not 'cYg'?  Or instead use
->>something like "cYg0 ..." since strace seems to just ignore the string
->>if its value is 0?  Or something else?
->
->Brian,
->Thanks for the patch but I've been working on this too and, so far, I think
->it is possible to have a very minimal way of dealing with this problem.  I
->haven't had time to delve into it too deeply but I have been exploring this
->problem on and off for a couple of weeks.  If the situation at work calms
->down a little I may be able to finish up what I've been working on.
->
->OTOH, if what I have is really not working then I'll take a look at what
->you've done.
->
->Again, thanks for the patch.  I probably should have sent a heads up that
->I was working on this.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
 
-Actually, my minimal solution died in annoying ways.  I don't really
-understand why.
+---559023410-1720703112-1139615625=:1780
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-length: 587
 
-So, I opted to push forward on my work to make cygwin signals recognized
-(using _CYGWIN_SIGNAL_STRING) by gdb.  I have something now which
-ignores exceptions in the cygwin DLL when they are based on a myfault
-interrupt and it has the added benefit of potentially allowing SIGABRT,
-SIGQUIT, and other signals to be noticed by gdb.
+It's late and I haven't had time to test this, but I thought it deserved a
+look.  There appears to be some confusion (at least in my head) about the
+units of gtod.resolution() and minperiod.
 
-So, thanks again for the patch and sorry for the duplication of effort.
+2006-02-10  Brian Ford  <Brian.Ford@FlightSafety.com>
 
-cgf
+	* times.cc (clock_gettime): Properly convert ms period to struct
+	timespec.
+	(clock_settime): Likewise reverse convert.
+
+Let me know if I'm just crazy ;-).  Thanks.
+
+-- 
+Brian Ford
+Lead Realtime Software Engineer
+VITAL - Visual Simulation Systems
+FlightSafety International
+the best safety device in any aircraft is a well-trained pilot...
+---559023410-1720703112-1139615625=:1780
+Content-Type: TEXT/PLAIN; charset=US-ASCII; name="times.cc.patch"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.CYG.4.58.0602101753450.1780@PC1163-8460-XP.flightsafety.com>
+Content-Description: 
+Content-Disposition: attachment; filename="times.cc.patch"
+Content-length: 1164
+
+SW5kZXg6IHRpbWVzLmNjDQo9PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQpSQ1Mg
+ZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vdGltZXMuY2Msdg0K
+cmV0cmlldmluZyByZXZpc2lvbiAxLjg3DQpkaWZmIC11IC1wIC1yMS44NyB0
+aW1lcy5jYw0KLS0tIHRpbWVzLmNjCTEzIERlYyAyMDA1IDAyOjU1OjExIC0w
+MDAwCTEuODcNCisrKyB0aW1lcy5jYwkxMCBGZWIgMjAwNiAyMzo0MjoxOSAt
+MDAwMA0KQEAgLTcxMSw4ICs3MTEsOCBAQCBjbG9ja19nZXRyZXMgKGNsb2Nr
+aWRfdCBjbGtfaWQsIHN0cnVjdCB0DQogDQogICBEV09SRCBwZXJpb2QgPSBn
+dG9kLnJlc29sdXRpb24gKCk7DQogDQotICB0cC0+dHZfc2VjID0gcGVyaW9k
+IC8gMTAwMDAwMDsNCi0gIHRwLT50dl9uc2VjID0gKHBlcmlvZCAlIDEwMDAw
+MDApICogMTAwMDsNCisgIHRwLT50dl9zZWMgPSBwZXJpb2QgLyAxMDAwOw0K
+KyAgdHAtPnR2X25zZWMgPSAocGVyaW9kICUgMTAwMCkgKiAxMDAwMDAwOw0K
+IA0KICAgcmV0dXJuIDA7DQogfQ0KQEAgLTczMCw3ICs3MzAsNyBAQCBjbG9j
+a19zZXRyZXMgKGNsb2NraWRfdCBjbGtfaWQsIHN0cnVjdCB0DQogICBpZiAo
+cGVyaW9kX3NldCkNCiAgICAgdGltZUVuZFBlcmlvZCAobWlucGVyaW9kKTsN
+CiANCi0gIERXT1JEIHBlcmlvZCA9ICh0cC0+dHZfc2VjICogMTAwMCkgKyAo
+KHRwLT50dl9uc2VjKSAvIDEwMDApOw0KKyAgRFdPUkQgcGVyaW9kID0gKHRw
+LT50dl9zZWMgKiAxMDAwKSArICgodHAtPnR2X25zZWMpIC8gMTAwMDAwMCk7
+DQogDQogICBpZiAodGltZUJlZ2luUGVyaW9kIChwZXJpb2QpKQ0KICAgICB7
+DQo=
+
+---559023410-1720703112-1139615625=:1780--
