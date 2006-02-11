@@ -1,22 +1,22 @@
-Return-Path: <cygwin-patches-return-5742-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 5482 invoked by alias); 11 Feb 2006 00:09:13 -0000
-Received: (qmail 5472 invoked by uid 22791); 11 Feb 2006 00:09:12 -0000
+Return-Path: <cygwin-patches-return-5744-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 18803 invoked by alias); 11 Feb 2006 10:34:23 -0000
+Received: (qmail 18785 invoked by uid 22791); 11 Feb 2006 10:34:22 -0000
 X-Spam-Check-By: sourceware.org
-Received: from cgf.cx (HELO cgf.cx) (24.61.23.223)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Sat, 11 Feb 2006 00:09:12 +0000
-Received: by cgf.cx (Postfix, from userid 201) 	id DC06313C0F8; Fri, 10 Feb 2006 19:09:10 -0500 (EST)
-Date: Sat, 11 Feb 2006 00:09:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.31.1) with ESMTP; Sat, 11 Feb 2006 10:34:20 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 4832E544001; Sat, 11 Feb 2006 11:34:18 +0100 (CET)
+Date: Sat, 11 Feb 2006 10:34:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: clock_[get|set]time timespec conversions
-Message-ID: <20060211000910.GA17732@trixie.casa.cgf.cx>
+Subject: Re: [Patch] regtool: Add load/unload commands and --binary option
+Message-ID: <20060211103418.GM14219@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <Pine.CYG.4.58.0602101743300.1780@PC1163-8460-XP.flightsafety.com>
+References: <43D6876F.9080608@t-online.de> <20060125105240.GM8318@calimero.vinschen.de> <43D7E666.8080803@t-online.de> <20060126091944.GT8318@calimero.vinschen.de>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Pine.CYG.4.58.0602101743300.1780@PC1163-8460-XP.flightsafety.com>
-User-Agent: Mutt/1.5.11
+In-Reply-To: <20060126091944.GT8318@calimero.vinschen.de>
+User-Agent: Mutt/1.4.2i
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -24,17 +24,27 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q1/txt/msg00051.txt.bz2
+X-SW-Source: 2006-q1/txt/msg00053.txt.bz2
 
-On Fri, Feb 10, 2006 at 05:53:45PM -0600, Brian Ford wrote:
->2006-02-10  Brian Ford  <Brian.Ford@FlightSafety.com>
->
->	* times.cc (clock_gettime): Properly convert ms period to struct
->	timespec.
->	(clock_settime): Likewise reverse convert.
->
+Hi Christian,
 
-Applied.  I changed the ChangeLog entery to be, IMO, slightly more
-informative, however.
+On Jan 26 10:19, Corinna Vinschen wrote:
+> On Jan 25 21:58, Christian Franke wrote:
+> > Will send the snail mail with the legal stuff soon ;-)
+> 
+> Thanks, I'm looking forward.  Sorry for the hassle, but we still didn't
+> get legal permit for a simpler method.
+> 
+> Please be patient, this might take some time.
 
-cgf
+your assignment has finally arrived and is signed.  Do you have a 
+new version of your regtool patch available, after this discussion
+took place?
+
+
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          cygwin AT cygwin DOT com
+Red Hat
