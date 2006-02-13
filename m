@@ -1,22 +1,24 @@
-Return-Path: <cygwin-patches-return-5750-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 8839 invoked by alias); 13 Feb 2006 19:02:05 -0000
-Received: (qmail 8666 invoked by uid 22791); 13 Feb 2006 19:02:04 -0000
+Return-Path: <cygwin-patches-return-5751-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 4825 invoked by alias); 13 Feb 2006 19:43:25 -0000
+Received: (qmail 4803 invoked by uid 22791); 13 Feb 2006 19:43:21 -0000
 X-Spam-Check-By: sourceware.org
-Received: from cgf.cx (HELO cgf.cx) (24.61.23.223)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Mon, 13 Feb 2006 19:02:03 +0000
-Received: by cgf.cx (Postfix, from userid 201) 	id E7F0A13C0F8; Mon, 13 Feb 2006 14:02:01 -0500 (EST)
-Date: Mon, 13 Feb 2006 19:02:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Add missing include to mntent.h
-Message-ID: <20060213190201.GF7865@trixie.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <Pine.GSO.4.63.0602131347010.17217@access1.cims.nyu.edu>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.GSO.4.63.0602131347010.17217@access1.cims.nyu.edu>
-User-Agent: Mutt/1.5.11
+Received: from mailout02.sul.t-online.com (HELO mailout02.sul.t-online.com) (194.25.134.17)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Mon, 13 Feb 2006 19:43:16 +0000
+Received: from fwd34.aul.t-online.de  	by mailout02.sul.t-online.com with smtp  	id 1F8jbO-00017f-00; Mon, 13 Feb 2006 20:43:14 +0100
+Received: from [10.3.2.2] (XLkd4BZareMeeyEG96P-NHZNgi3Hp9DezVoYnIbgeF14zySbhMu4sZ@[80.137.102.249]) by fwd34.sul.t-online.de 	with esmtp id 1F8jb9-24x6yu0; Mon, 13 Feb 2006 20:42:59 +0100
+Message-ID: <43F0E145.6080109@t-online.de>
+Date: Mon, 13 Feb 2006 19:43:00 -0000
+From: Christian Franke <Christian.Franke@t-online.de>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.0.1) Gecko/20060130 SeaMonkey/1.0
+MIME-Version: 1.0
+To:  cygwin-patches@cygwin.com
+Subject: Re: [Patch] regtool: Add load/unload commands and --binary option
+References: <43D6876F.9080608@t-online.de> <20060125105240.GM8318@calimero.vinschen.de> <43D7E666.8080803@t-online.de> <20060126091944.GT8318@calimero.vinschen.de> <20060211103418.GM14219@calimero.vinschen.de>
+In-Reply-To: <20060211103418.GM14219@calimero.vinschen.de>
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ID: XLkd4BZareMeeyEG96P-NHZNgi3Hp9DezVoYnIbgeF14zySbhMu4sZ
+X-TOI-MSGID: f0610cc2-cbba-4c84-90d5-4ea52d974b95
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -24,17 +26,33 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q1/txt/msg00059.txt.bz2
+X-SW-Source: 2006-q1/txt/msg00060.txt.bz2
 
-On Mon, Feb 13, 2006 at 01:47:48PM -0500, Igor Peshansky wrote:
->==============================================================================
->2006-02-03  Igor Peshansky  <pechtcha@cs.nyu.edu>
+Hi Corrinna,
+
+you wrote:
+> Hi Christian,
 >
->	* include/mntent.h: Add missing #include.
+> On Jan 26 10:19, Corinna Vinschen wrote:
+>   
+>> On Jan 25 21:58, Christian Franke wrote:
+>>     
+>>> Will send the snail mail with the legal stuff soon ;-)
+>>>       
+>> Thanks, I'm looking forward.  Sorry for the hassle, but we still didn't
+>> get legal permit for a simpler method.
+>>
+>> Please be patient, this might take some time.
+>>     
+>
+> your assignment has finally arrived and is signed.  Do you have a 
+> new version of your regtool patch available, after this discussion
+> took place?
+>   
 
-Applied, but please see the previous comment about using the proper date in
-a ChangeLog.
+No, sorry. Hope to find some time in about a week.
 
-Thanks.
+I'm still not sure how to handle binary registry values in a way most 
+useful inside of scripts.
 
-cgf
+Christian
