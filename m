@@ -1,19 +1,22 @@
-Return-Path: <cygwin-patches-return-5752-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 8269 invoked by alias); 14 Feb 2006 14:12:18 -0000
-Received: (qmail 8259 invoked by uid 22791); 14 Feb 2006 14:12:17 -0000
+Return-Path: <cygwin-patches-return-5753-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 11410 invoked by alias); 15 Feb 2006 10:43:06 -0000
+Received: (qmail 11395 invoked by uid 22791); 15 Feb 2006 10:43:05 -0000
 X-Spam-Check-By: sourceware.org
-Received: from smtpout12-01.prod.mesa1.secureserver.net (HELO smtpout12-01.prod.mesa1.secureserver.net) (68.178.232.3)     by sourceware.org (qpsmtpd/0.31) with SMTP; Tue, 14 Feb 2006 14:12:14 +0000
-Received: (qmail 22740 invoked from network); 14 Feb 2006 14:12:13 -0000
-Received: from unknown (HELO gem-wbe05.mesa1.secureserver.net) (64.202.189.37)   by smtpout12-01.prod.mesa1.secureserver.net with SMTP; 14 Feb 2006 14:12:13 -0000
-Received: (qmail 11761 invoked by uid 99); 14 Feb 2006 14:12:13 -0000
-Date: Tue, 14 Feb 2006 14:12:00 -0000
-From: "Jerry D. Hedden" <jerry@hedden.us>
-Subject: [PATCH] Add -p option to ps command
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.31.1) with ESMTP; Wed, 15 Feb 2006 10:43:04 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 36FFE544001; Wed, 15 Feb 2006 11:43:02 +0100 (CET)
+Date: Wed, 15 Feb 2006 10:43:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Message-ID: <20060214071213.fb30e530d17747c2b054d625b8945d88.fc30277bd8.wbe@email.secureserver.net>
-MIME-Version: 1.0
-Content-Type: MULTIPART/mixed; BOUNDARY="-901765699-1718767376-1139926333=:863"
-X-IsSubscribed: yes
+Subject: Re: [Patch] regtool: Add load/unload commands and --binary option
+Message-ID: <20060215104302.GA13856@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <43D6876F.9080608@t-online.de> <20060125105240.GM8318@calimero.vinschen.de> <43D7E666.8080803@t-online.de> <20060126091944.GT8318@calimero.vinschen.de> <20060211103418.GM14219@calimero.vinschen.de> <43F0E145.6080109@t-online.de>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <43F0E145.6080109@t-online.de>
+User-Agent: Mutt/1.4.2i
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -21,153 +24,26 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q1/txt/msg00061.txt.bz2
+X-SW-Source: 2006-q1/txt/msg00062.txt.bz2
 
----901765699-1718767376-1139926333=:863
-Content-Type: TEXT/plain; CHARSET=US-ASCII
-Content-length: 184
+On Feb 13 20:43, Christian Franke wrote:
+> you wrote:
+> >your assignment has finally arrived and is signed.  Do you have a 
+> >new version of your regtool patch available, after this discussion
+> >took place?
+> 
+> No, sorry. Hope to find some time in about a week.
+> 
+> I'm still not sure how to handle binary registry values in a way most 
+> useful inside of scripts.
 
-Attached is a patch to add a -p option to the ps command to show
-information for only a single PID:  ps -p PID
-This option is available on other implementations of ps (e.g., Solaris).
+By default, binary data should go as binary data over the pipe.  And
+this is all what's needed, in theory, since tools like xxd exist.
 
----901765699-1718767376-1139926333=:863
-Content-Type: TEXT/x-c;
-	name="ps.cc.patch"; CHARSET=US-ASCII
-Content-Transfer-Encoding: BASE64
-Content-Disposition: attachment; filename="ps.cc.patch"
-Content-length: 3124
 
-SW5kZXg6IHdpbnN1cC91dGlscy9wcy5jYw0KPT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PQ0KLS0tIHBzLmNjLm9yaWcJMjAwNi0wMi0xMyAxNzoxOToyNC4wMDAw
-MDAwMDAgLTA1MDANCisrKyBwcy5jYwkyMDA2LTAyLTEzIDE3OjUzOjIwLjAw
-MDAwMDAwMCAtMDUwMA0KQEAgLTI5LDYgKzI5LDcgQEANCiAgIHsiZnVsbCIs
-IG5vX2FyZ3VtZW50LCBOVUxMLCAnZicgfSwNCiAgIHsiaGVscCIsIG5vX2Fy
-Z3VtZW50LCBOVUxMLCAnaCcgfSwNCiAgIHsibG9uZyIsIG5vX2FyZ3VtZW50
-LCBOVUxMLCAnbCcgfSwNCisgIHsicHJvY2VzcyIsIHJlcXVpcmVkX2FyZ3Vt
-ZW50LCBOVUxMLCAncCd9LA0KICAgeyJzdW1tYXJ5Iiwgbm9fYXJndW1lbnQs
-IE5VTEwsICdzJyB9LA0KICAgeyJ1c2VyIiwgcmVxdWlyZWRfYXJndW1lbnQs
-IE5VTEwsICd1J30sDQogICB7InZlcnNpb24iLCBub19hcmd1bWVudCwgTlVM
-TCwgJ3YnfSwNCkBAIC0zNiw3ICszNyw3IEBADQogICB7TlVMTCwgMCwgTlVM
-TCwgMH0NCiB9Ow0KIA0KLXN0YXRpYyBjaGFyIG9wdHNbXSA9ICJhZWZobHN1
-OnZXIjsNCitzdGF0aWMgY2hhciBvcHRzW10gPSAiYWVmaGxwOnN1OnZXIjsN
-CiANCiB0eXBlZGVmIEJPT0wgKFdJTkFQSSAqRU5VTVBST0NFU1NNT0RVTEVT
-KSgNCiAgIEhBTkRMRSBoUHJvY2VzcywgICAgICAvLyBoYW5kbGUgdG8gdGhl
-IHByb2Nlc3MNCkBAIC0yMDAsNyArMjAxLDcgQEANCiB1c2FnZSAoRklMRSAq
-IHN0cmVhbSwgaW50IHN0YXR1cykNCiB7DQogICBmcHJpbnRmIChzdHJlYW0s
-ICJcDQotVXNhZ2U6ICVzIFstYWVmbHNdIFstdSBVSURdXG5cDQorVXNhZ2U6
-ICVzIFstYWVmbHNdIFstdSBVSURdIFstcCBQSURdXG5cDQogUmVwb3J0IHBy
-b2Nlc3Mgc3RhdHVzXG5cDQogXG5cDQogIC1hLCAtLWFsbCAgICAgICBzaG93
-IHByb2Nlc3NlcyBvZiBhbGwgdXNlcnNcblwNCkBAIC0yMDgsNiArMjA5LDcg
-QEANCiAgLWYsIC0tZnVsbCAgICAgIHNob3cgcHJvY2VzcyB1aWRzLCBwcGlk
-c1xuXA0KICAtaCwgLS1oZWxwICAgICAgb3V0cHV0IHVzYWdlIGluZm9ybWF0
-aW9uIGFuZCBleGl0XG5cDQogIC1sLCAtLWxvbmcgICAgICBzaG93IHByb2Nl
-c3MgdWlkcywgcHBpZHMsIHBnaWRzLCB3aW5waWRzXG5cDQorIC1wLCAtLXBy
-b2Nlc3MgICBzaG93IGluZm9ybWF0aW9uIGZvciBzcGVjaWZpZWQgUElEXG5c
-DQogIC1zLCAtLXN1bW1hcnkgICBzaG93IHByb2Nlc3Mgc3VtbWFyeVxuXA0K
-ICAtdSwgLS11c2VyICAgICAgbGlzdCBwcm9jZXNzZXMgb3duZWQgYnkgVUlE
-XG5cDQogIC12LCAtLXZlcnNpb24gICBvdXRwdXQgdmVyc2lvbiBpbmZvcm1h
-dGlvbiBhbmQgZXhpdFxuXA0KQEAgLTI0NCw3ICsyNDYsNyBAQA0KIG1haW4g
-KGludCBhcmdjLCBjaGFyICphcmd2W10pDQogew0KICAgZXh0ZXJuYWxfcGlu
-Zm8gKnA7DQotICBpbnQgYWZsYWcsIGxmbGFnLCBmZmxhZywgc2ZsYWcsIHVp
-ZDsNCisgIGludCBhZmxhZywgbGZsYWcsIGZmbGFnLCBzZmxhZywgdWlkLCBw
-cm9jX2lkOw0KICAgY3lnd2luX2dldGluZm9fdHlwZXMgcXVlcnkgPSBDV19H
-RVRQSU5GTzsNCiAgIGNvbnN0IGNoYXIgKmR0aXRsZSA9ICIgICAgUElEIFRU
-WSAgICAgU1RJTUUgQ09NTUFORFxuIjsNCiAgIGNvbnN0IGNoYXIgKmRmbXQg
-ICA9ICIlN2QlNHMlMTBzICVzXG4iOw0KQEAgLTI1Niw2ICsyNTgsNyBAQA0K
-IA0KICAgYWZsYWcgPSBsZmxhZyA9IGZmbGFnID0gc2ZsYWcgPSAwOw0KICAg
-dWlkID0gZ2V0dWlkICgpOw0KKyAgcHJvY19pZCA9IC0xOw0KICAgbGZsYWcg
-PSAxOw0KIA0KICAgcHJvZ19uYW1lID0gc3RycmNociAoYXJndlswXSwgJy8n
-KTsNCkBAIC0yODEsNiArMjg0LDkgQEANCiAgICAgICBjYXNlICdsJzoNCiAJ
-bGZsYWcgPSAxOw0KIAlicmVhazsNCisgICAgICBjYXNlICdwJzoNCisJcHJv
-Y19pZCA9IGF0b2kgKG9wdGFyZyk7DQorCWJyZWFrOw0KICAgICAgIGNhc2Ug
-J3MnOg0KIAlzZmxhZyA9IDE7DQogCWJyZWFrOw0KQEAgLTMyOCw2ICszMzQs
-OSBAQA0KICAgICAgICAocCA9IChleHRlcm5hbF9waW5mbyAqKSBjeWd3aW5f
-aW50ZXJuYWwgKHF1ZXJ5LCBwaWQgfCBDV19ORVhUUElEKSk7DQogICAgICAg
-IHBpZCA9IHAtPnBpZCkNCiAgICAgew0KKyAgICAgIGlmICgocHJvY19pZCA+
-IDApICYmIChwLT5waWQgIT0gcHJvY19pZCkpIHsNCisgICAgICAgICAgY29u
-dGludWU7DQorICAgICAgfQ0KICAgICAgIGlmICghYWZsYWcpDQogCWlmIChw
-LT52ZXJzaW9uID49IEVYVEVSTkFMX1BJTkZPX1ZFUlNJT05fMzJfQklUKQ0K
-IAkgIHsNCg==
+Corinna
 
----901765699-1718767376-1139926333=:863
-Content-Type: TEXT/plain,English;
-	name="cygwin-ug-net.sgml.patch"; CHARSET=US-ASCII
-Content-Transfer-Encoding: BASE64
-Content-Disposition: attachment; filename="cygwin-ug-net.sgml.patch"
-Content-length: 1989
-
-LS0tIGN5Z3dpbi11Zy1uZXQuc2dtbC5vcmlnCTIwMDYtMDItMTQgMDg6NTk6
-NDIuMDAwMDAwMDAwIC0wNTAwDQorKysgY3lnd2luLXVnLW5ldC5zZ21sCTIw
-MDYtMDItMTQgMDk6MDE6MzguMDAwMDAwMDAwIC0wNTAwDQpAQCAtMzgzNCw3
-ICszODM0LDcgQEANCiA8c2VjdDIgaWQ9InBzIj48dGl0bGU+cHM8L3RpdGxl
-Pg0KIA0KIDxzY3JlZW4+DQotVXNhZ2U6IHBzIFstYWVmbHNdIFstdSBVSURd
-DQorVXNhZ2U6IHBzIFstYWVmbHNdIFstdSBVSURdIFstcCBQSURdDQogUmVw
-b3J0IHByb2Nlc3Mgc3RhdHVzDQogDQogIC1hLCAtLWFsbCAgICAgICBzaG93
-IHByb2Nlc3NlcyBvZiBhbGwgdXNlcnMNCkBAIC0zODQyLDYgKzM4NDIsNyBA
-QA0KICAtZiwgLS1mdWxsICAgICAgc2hvdyBwcm9jZXNzIHVpZHMsIHBwaWRz
-DQogIC1oLCAtLWhlbHAgICAgICBvdXRwdXQgdXNhZ2UgaW5mb3JtYXRpb24g
-YW5kIGV4aXQNCiAgLWwsIC0tbG9uZyAgICAgIHNob3cgcHJvY2VzcyB1aWRz
-LCBwcGlkcywgcGdpZHMsIHdpbnBpZHMNCisgLXAsIC0tcHJvY2VzcyAgIHNo
-b3cgaW5mb3JtYXRpb24gZm9yIHNwZWNpZmllZCBQSUQNCiAgLXMsIC0tc3Vt
-bWFyeSAgIHNob3cgcHJvY2VzcyBzdW1tYXJ5DQogIC11LCAtLXVzZXIgICAg
-ICBsaXN0IHByb2Nlc3NlcyBvd25lZCBieSBVSUQNCiAgLXYsIC0tdmVyc2lv
-biAgIG91dHB1dCB2ZXJzaW9uIGluZm9ybWF0aW9uIGFuZCBleGl0DQpAQCAt
-Mzg4MCw3ICszODgxLDkgQEANCiBtb2RlLCBzaG93aW5nIGEgImxvbmciIGxp
-c3Rpbmcgd2l0aCBhbGwgdGhlIGFib3ZlIGNvbHVtbnMuIFRoZSBvdGhlciBk
-aXNwbGF5DQogb3B0aW9uIGlzIDxsaXRlcmFsPi1zPC9saXRlcmFsPiwgd2hp
-Y2ggb3V0cHV0cyBhIHNob3J0ZXIgbGlzdGluZyBvZiBqdXN0DQogUElELCBU
-VFksIFNUSU1FLCBhbmQgQ09NTUFORC4gVGhlIDxsaXRlcmFsPi11PC9saXRl
-cmFsPiBvcHRpb24gYWxsb3dzIHlvdQ0KLXRvIHNob3cgb25seSBwcm9jZXNz
-ZXMgb3duZWQgYnkgYSBzcGVjaWZpYyB1c2VyLiBUaGUgPGxpdGVyYWw+LVc8
-L2xpdGVyYWw+DQordG8gc2hvdyBvbmx5IHByb2Nlc3NlcyBvd25lZCBieSBh
-IHNwZWNpZmljIHVzZXIuIFRoZSA8bGl0ZXJhbD4tcDwvbGl0ZXJhbD4NCitv
-cHRpb24gYWxsb3dzIHlvdSB0byBzaG93IGluZm9ybWF0aW9uIGZvciBvbmx5
-IHRoZSBwcm9jZXNzIHdpdGggdGhlDQorc3BlY2lmaWVkIFBJRC4gVGhlIDxs
-aXRlcmFsPi1XPC9saXRlcmFsPg0KIG9wdGlvbiBjYXVzZXMgPGNvbW1hbmQ+
-cHM8L2NvbW1hbmQ+IHNob3cgbm9uLUN5Z3dpbiBXaW5kb3dzIHByb2Nlc3Nl
-cyBhcyANCiB3ZWxsIGFzIEN5Z3dpbiBwcm9jZXNzZXMuIFRoZSBXSU5QSUQg
-aXMgYWxzbyB0aGUgUElELCBhbmQgdGhleSBjYW4gYmUga2lsbGVkDQogd2l0
-aCB0aGUgQ3lnd2luIDxjb21tYW5kPmtpbGw8L2NvbW1hbmQ+IGNvbW1hbmQn
-cyA8bGl0ZXJhbD4tZjwvbGl0ZXJhbD4NCg==
-
----901765699-1718767376-1139926333=:863
-Content-Type: TEXT/plain,English;
-	name="cygwin-ug-net.texi.patch"; CHARSET=US-ASCII
-Content-Transfer-Encoding: BASE64
-Content-Disposition: attachment; filename="cygwin-ug-net.texi.patch"
-Content-length: 1814
-
-LS0tIGN5Z3dpbi11Zy1uZXQudGV4aS5vcmlnCTIwMDYtMDItMTQgMDk6MDM6
-MDYuMDAwMDAwMDAwIC0wNTAwDQorKysgY3lnd2luLXVnLW5ldC50ZXhpCTIw
-MDYtMDItMTQgMDk6MDI6MTAuMDAwMDAwMDAwIC0wNTAwDQpAQCAtMzg3Myw3
-ICszODczLDcgQEANCiANCiBAZXhhbXBsZQ0KIA0KLVVzYWdlOiBwcyBbLWFl
-ZmxzXSBbLXUgVUlEXQ0KK1VzYWdlOiBwcyBbLWFlZmxzXSBbLXUgVUlEXSBb
-LXAgUElEXQ0KIFJlcG9ydCBwcm9jZXNzIHN0YXR1cw0KIA0KICAtYSwgLS1h
-bGwgICAgICAgc2hvdyBwcm9jZXNzZXMgb2YgYWxsIHVzZXJzDQpAQCAtMzg4
-MSw2ICszODgxLDcgQEANCiAgLWYsIC0tZnVsbCAgICAgIHNob3cgcHJvY2Vz
-cyB1aWRzLCBwcGlkcw0KICAtaCwgLS1oZWxwICAgICAgb3V0cHV0IHVzYWdl
-IGluZm9ybWF0aW9uIGFuZCBleGl0DQogIC1sLCAtLWxvbmcgICAgICBzaG93
-IHByb2Nlc3MgdWlkcywgcHBpZHMsIHBnaWRzLCB3aW5waWRzDQorIC1wLCAt
-LXByb2Nlc3MgICBzaG93IGluZm9ybWF0aW9uIGZvciBzcGVjaWZpZWQgUElE
-DQogIC1zLCAtLXN1bW1hcnkgICBzaG93IHByb2Nlc3Mgc3VtbWFyeQ0KICAt
-dSwgLS11c2VyICAgICAgbGlzdCBwcm9jZXNzZXMgb3duZWQgYnkgVUlEDQog
-IC12LCAtLXZlcnNpb24gICBvdXRwdXQgdmVyc2lvbiBpbmZvcm1hdGlvbiBh
-bmQgZXhpdA0KQEAgLTM5MTUsNyArMzkxNiw5IEBADQogbW9kZSwgc2hvd2lu
-ZyBhICJsb25nIiBsaXN0aW5nIHdpdGggYWxsIHRoZSBhYm92ZSBjb2x1bW5z
-LiBUaGUgb3RoZXIgZGlzcGxheQ0KIG9wdGlvbiBpcyBAc2FtcHstc30sIHdo
-aWNoIG91dHB1dHMgYSBzaG9ydGVyIGxpc3Rpbmcgb2YganVzdA0KIFBJRCwg
-VFRZLCBTVElNRSwgYW5kIENPTU1BTkQuIFRoZSBAc2FtcHstdX0gb3B0aW9u
-IGFsbG93cyB5b3UNCi10byBzaG93IG9ubHkgcHJvY2Vzc2VzIG93bmVkIGJ5
-IGEgc3BlY2lmaWMgdXNlci4gVGhlIEBzYW1wey1XfQ0KK3RvIHNob3cgb25s
-eSBwcm9jZXNzZXMgb3duZWQgYnkgYSBzcGVjaWZpYyB1c2VyLiBUaGUgQHNh
-bXB7LXB9DQorb3B0aW9uIGFsbG93cyB5b3UgdG8gc2hvdyBpbmZvcm1hdGlv
-biBmb3Igb25seSB0aGUgcHJvY2VzcyB3aXRoIHRoZQ0KK3NwZWNpZmllZCBQ
-SUQuIFRoZSBAc2FtcHstV30NCiBvcHRpb24gY2F1c2VzIEBjb2Rle3BzfSBz
-aG93IG5vbi1DeWd3aW4gV2luZG93cyBwcm9jZXNzZXMgYXMgDQogd2VsbCBh
-cyBDeWd3aW4gcHJvY2Vzc2VzLiBUaGUgV0lOUElEIGlzIGFsc28gdGhlIFBJ
-RCwgYW5kIHRoZXkgY2FuIGJlIGtpbGxlZA0KIHdpdGggdGhlIEN5Z3dpbiBA
-Y29kZXtraWxsfSBjb21tYW5kJ3MgQHNhbXB7LWZ9DQo=
-
----901765699-1718767376-1139926333=:863--
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          cygwin AT cygwin DOT com
+Red Hat
