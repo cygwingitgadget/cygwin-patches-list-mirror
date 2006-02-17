@@ -1,22 +1,19 @@
-Return-Path: <cygwin-patches-return-5766-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 16761 invoked by alias); 17 Feb 2006 14:11:25 -0000
-Received: (qmail 16751 invoked by uid 22791); 17 Feb 2006 14:11:25 -0000
+Return-Path: <cygwin-patches-return-5767-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 13266 invoked by alias); 17 Feb 2006 15:06:12 -0000
+Received: (qmail 13255 invoked by uid 22791); 17 Feb 2006 15:06:11 -0000
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.31.1) with ESMTP; Fri, 17 Feb 2006 14:11:23 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 4EBCD544001; Fri, 17 Feb 2006 15:11:20 +0100 (CET)
-Date: Fri, 17 Feb 2006 14:11:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] cygcheck: follow symbolic links
-Message-ID: <20060217141120.GX26541@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <Pine.GSO.4.63.0602131341020.17217@access1.cims.nyu.edu> <20060216160637.GQ26541@calimero.vinschen.de> <Pine.GSO.4.63.0602161116540.22053@access1.cims.nyu.edu> <20060217113100.GT26541@calimero.vinschen.de> <Pine.GSO.4.63.0602170900350.1592@access1.cims.nyu.edu>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.GSO.4.63.0602170900350.1592@access1.cims.nyu.edu>
-User-Agent: Mutt/1.4.2i
+Received: from host217-40-213-68.in-addr.btopenworld.com (HELO SERRANO.CAM.ARTIMI.COM) (217.40.213.68)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Fri, 17 Feb 2006 15:06:09 +0000
+Received: from rainbow ([192.168.1.165]) by SERRANO.CAM.ARTIMI.COM with Microsoft SMTPSVC(6.0.3790.1830); 	 Fri, 17 Feb 2006 15:06:07 +0000
+From: "Dave Korn" <dave.korn@artimi.com>
+To: <cygwin-patches@cygwin.com>
+Subject: RE: [PATCH] cygcheck: follow symbolic links
+Date: Fri, 17 Feb 2006 15:06:00 -0000
+Message-ID: <012701c633d3$adb73960$a501a8c0@CAM.ARTIMI.COM>
+MIME-Version: 1.0
+Content-Type: text/plain; 	charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+In-Reply-To: <Pine.GSO.4.63.0602170902090.1592@access1.cims.nyu.edu>
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -24,24 +21,67 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q1/txt/msg00075.txt.bz2
+X-SW-Source: 2006-q1/txt/msg00076.txt.bz2
 
-On Feb 17 09:06, Igor Peshansky wrote:
-> On Fri, 17 Feb 2006, Corinna Vinschen wrote:
-> > Well, what I meant isn't readlink but symlink_info::check_shortcut and
-> > cmp_shortcut_header.  It would be helpful if the rules to identify a
-> > symlink are identical, wouldn't it?  As for the PE headers, that's fine.
+On 17 February 2006 14:05, Igor Peshansky wrote:
+
+> On Fri, 17 Feb 2006, Dave Korn wrote:
 > 
-> It would certainly help, but then we would need to extract the bit of code
-> that deals with symlinks and put it in a Cygwin-independent static
-> library.  See my reply to Dave.
+>> On 16 February 2006 17:27, Igor Peshansky wrote:
+>> 
+>>> On Thu, 16 Feb 2006, Corinna Vinschen wrote:
+>> 
+>>>> - Couldn't you just reuse the readlink implementation in
+>>>>   ../cygwin/path.cc as is, to avoid having to different implementations?
+>>> 
+>>> Umm, most of that code is very general purpose, and has too much extra
+>>> stuff in it.
+>> 
+>>   I think you may have misoptimised for speed rather than
+>> maintainability. Cygcheck isn't something that people expect to run a
+>> million times per second in an inner loop.
+> 
+> No, but I thought ease of understanding implied maintainability...
 
-No, just copy the relevant bits to utils/path.cc.
+  Yes, but cutting and pasting the same code into a duplicated location
+doesn't make it any clearer, and in fact it impacts both maintainability _and_
+clarity when it starts to diverge and someone come to look at it six months
+later and wonders "Why has this functionality been implemented twice and why
+are the two versions slightly different and which one is meant to be the right
+way of doing it"
+
+> Besides, I'm sure binutils, for one, has the code for reading chunks of
+> application code and finding the DLL dependencies -- why aren't we reusing
+> that?  The answer: too much work to extract the needed bits in the form
+> that would be usable in both places.
+
+  hmmm... maybe we should think about that....
 
 
-Corinna
+>>>  I basically used part of it (symlink_info::check_shortcut)
+>>> for my implementation.  I wanted something lightweight and easy to
+>>> understand
+>> 
+>>   Perhaps you could have just exported it (or a convenient interface to
+>> it) instead?
+> 
+> Ahem.  You are forgetting that cygcheck is not a Cygwin program, so we
+> can't introduce a dependency on cygwin1.dll.  We'd have to create an
+> independent (static?) library that both cygcheck and Cygwin depended on...
 
+  Not necessarily.  We could unify it so they both build from the same one
+single shared copy of path.cc instead of having the real deal in winsup/cygwin
+and a stripped down copy that has to be manually synced every now and again in
+winsup/utils... of course, that's really getting fairly sidetracked from the
+issue you were trying to directly deal with.  But longterm it would be good if
+they both got their code from the same place.
+
+  Hey, does anyone know off the top of their heads of any other chunks of code
+shared like this between cygwin and utils?  I could make it a sort-of long
+term code tidyup project to try and get better sharing and reuse...
+
+
+    cheers,
+      DaveK
 -- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+Can't think of a witty .sigline today....
