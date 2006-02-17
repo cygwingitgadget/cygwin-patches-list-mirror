@@ -1,19 +1,22 @@
-Return-Path: <cygwin-patches-return-5760-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 29427 invoked by alias); 16 Feb 2006 17:46:10 -0000
-Received: (qmail 29417 invoked by uid 22791); 16 Feb 2006 17:46:10 -0000
+Return-Path: <cygwin-patches-return-5761-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 12673 invoked by alias); 17 Feb 2006 11:18:49 -0000
+Received: (qmail 12662 invoked by uid 22791); 17 Feb 2006 11:18:49 -0000
 X-Spam-Check-By: sourceware.org
-Received: from smtpout11-02.prod.mesa1.secureserver.net (HELO smtpout11-02.prod.mesa1.secureserver.net) (68.178.232.2)     by sourceware.org (qpsmtpd/0.31) with SMTP; Thu, 16 Feb 2006 17:46:08 +0000
-Received: (qmail 26998 invoked from network); 16 Feb 2006 17:46:07 -0000
-Received: from unknown (HELO gem-wbe14.prod.mesa1.secureserver.net) (64.202.189.101)   by smtpout11-02.prod.mesa1.secureserver.net with SMTP; 16 Feb 2006 17:46:07 -0000
-Received: (qmail 17111 invoked by uid 99); 16 Feb 2006 17:46:07 -0000
-Date: Thu, 16 Feb 2006 17:46:00 -0000
-From: "Jerry D. Hedden" <jerry@hedden.us>
-Subject: RE: [PATCH] Add -p option to ps command
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.31.1) with ESMTP; Fri, 17 Feb 2006 11:18:48 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500) 	id B50FB544001; Fri, 17 Feb 2006 12:18:45 +0100 (CET)
+Date: Fri, 17 Feb 2006 11:18:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Message-ID: <20060216104607.fb30e530d17747c2b054d625b8945d88.ac8efb9ae7.wbe@email.secureserver.net>
-MIME-Version: 1.0
-Content-Type: TEXT/plain; CHARSET=US-ASCII
-X-IsSubscribed: yes
+Subject: Re: [PATCH] Add -p option to ps command
+Message-ID: <20060217111845.GS26541@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20060216104607.fb30e530d17747c2b054d625b8945d88.ac8efb9ae7.wbe@email.secureserver.net>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20060216104607.fb30e530d17747c2b054d625b8945d88.ac8efb9ae7.wbe@email.secureserver.net>
+User-Agent: Mutt/1.4.2i
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -21,42 +24,31 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q1/txt/msg00069.txt.bz2
+X-SW-Source: 2006-q1/txt/msg00070.txt.bz2
 
-> -------- Original Message --------
-> Subject: Re: [PATCH] Add -p option to ps command
-> From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-> Date: Thu, February 16, 2006 10:09 am
-> To: cygwin-patches@cygwin.com
+On Feb 16 10:46, Jerry D. Hedden wrote:
+> > -------- Original Message --------
+> > Subject: Re: [PATCH] Add -p option to ps command
+> > From: Corinna Vinschen <corinna-cygwin@XXXXXXX.XXX)
+
+
+Would you please don't copy raw email addresses in your replies?
+
+http://cygwin.com/acronyms/#PCYMTNQREAIYR
+
+
+> 2006-02-16  Jerry D. Hedden  <jerry@hedden.us>
 > 
-> On Feb 16 07:58, Jerry D. Hedden wrote:
-> > Thanks.  I realized one minor oversight.  Using -p should imply -a so
-> > that even if the PID is not owned by the current user, it will still
-> > get listed.  I've attached a patch for this (just a one line addition)
-> > that builds on top of the previous patch (i.e., apply it against
-> > version 1.20 of ps.cc).  Thanks again.
-> 
-> > Index: src/winsup/utils/ps.cc
-> > ===================================================================
-> > --- ps.cc  1.20
-> > +++ ps.cc
-> > @@ -286,6 +286,7 @@
-> >  	break;
-> >        case 'p':
-> >  	proc_id = atoi (optarg);
-> > +	aflag = 1;
-> >  	break;
-> >        case 's':
-> >  	sflag = 1;
-> 
-> What about the ChangeLog entry?  http://cygwin.com/contrib.html
+> 	* ps.cc (main): -p implies -a
 
-I'll get this right one of these days.  Thanks for your patience.
-
-Changelog entry:
-
-2006-02-16  Jerry D. Hedden  <jerry@hedden.us>
-
-	* ps.cc (main): -p implies -a
+I've applied the patch, but your ChangeLog entry is a bit short.
+I've changed it to "Set aflag if -p option is given."
 
 
+Thanks,
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          cygwin AT cygwin DOT com
+Red Hat
