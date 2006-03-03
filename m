@@ -1,19 +1,23 @@
-Return-Path: <cygwin-patches-return-5791-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 17319 invoked by alias); 3 Mar 2006 17:13:56 -0000
-Received: (qmail 17309 invoked by uid 22791); 3 Mar 2006 17:13:56 -0000
+Return-Path: <cygwin-patches-return-5792-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 32701 invoked by alias); 3 Mar 2006 17:42:06 -0000
+Received: (qmail 32691 invoked by uid 22791); 3 Mar 2006 17:42:05 -0000
 X-Spam-Check-By: sourceware.org
-Received: from web53004.mail.yahoo.com (HELO web53004.mail.yahoo.com) (206.190.49.34)     by sourceware.org (qpsmtpd/0.31) with SMTP; Fri, 03 Mar 2006 17:13:55 +0000
-Received: (qmail 40141 invoked by uid 60001); 3 Mar 2006 17:13:53 -0000
-Message-ID: <20060303171353.40139.qmail@web53004.mail.yahoo.com>
-Received: from [69.141.137.97] by web53004.mail.yahoo.com via HTTP; Fri, 03 Mar 2006 09:13:53 PST
-Date: Fri, 03 Mar 2006 17:13:00 -0000
-From: Gary Zablackis <gzabl@yahoo.com>
-Subject: Re: Patch for silent crash with Cygwin1.dll v 1.5.19-4
-To: cygwin-patches@cygwin.com
-In-Reply-To: <20060302185429.GD7292@trixie.casa.cgf.cx>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8bit
+Received: from zipcon.net (HELO zipcon.net) (209.221.136.5)     by sourceware.org (qpsmtpd/0.31) with SMTP; Fri, 03 Mar 2006 17:42:03 +0000
+Received: (qmail 6637 invoked from network); 3 Mar 2006 09:44:56 -0800
+Received: from unknown (HELO efn.org) (209.221.136.22)   by mail.zipcon.net with SMTP; 3 Mar 2006 09:44:56 -0800
+Received: by efn.org (sSMTP sendmail emulation); Fri, 3 Mar 2006 09:41:57 -0800
+Date: Fri, 03 Mar 2006 17:42:00 -0000
+From: Yitzchak Scott-Thoennes <sthoenna@efn.org>
+To: Dave Korn <dave.korn@artimi.com>
+Cc: cygwin-patches@cygwin.com
+Subject: Re: [Patch] regtool: Add load/unload commands and --binary option
+Message-ID: <20060303174157.GA3704@efn.org>
+References: <20060303094621.GP3184@calimero.vinschen.de> <03f701c63ec4$0eee53d0$a501a8c0@CAM.ARTIMI.COM>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <03f701c63ec4$0eee53d0$a501a8c0@CAM.ARTIMI.COM>
+User-Agent: Mutt/1.4.2.1i
 X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -22,42 +26,27 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q1/txt/msg00100.txt.bz2
+X-SW-Source: 2006-q1/txt/msg00101.txt.bz2
 
---- Christopher Faylor
-<cgf-no-personal-reply-please@cygwin.com> wrote:
-
-> The "efault.faulted()" two lines above your change
-> is supposed to catch
-> NULL dereferences.  I suspect that you were probably
-> misled by the fact
-> that gdb might show a SEGV in this function but that
-> is to be expected
-> (see lots of discussion in the cygwin mailing list
-> about this) and there
-> are patches pending for gdb which will work around
-> this behavior.
+On Fri, Mar 03, 2006 at 01:12:01PM -0000, Dave Korn wrote:
+> On 03 March 2006 09:46, Corinna Vinschen wrote:
 > 
-> So, sorry, but I doubt that this is actually your
-> problem.
+> > 
+> > Btw., since you seem to be interested in hacking the registry...  would
+> > you also be interested to introduce registry write access below
+> > /proc/registry inside of the Cygwin DLL?  That would be extra cool.
+> > I'm not quite sure how to handle the mapping from file types to
+> > registry key types, but there might be some simple way which I'm just
+> > too blind to see.
 > 
-> cgf
 > 
+>   Hey, how about using pseudo filename-extensions on the pseudo-files that
+> represent registry keys?
 
-Christopher,
+As long as we are how-bouting, I'm looking at
 
-Actually, as far as I can see, the "efault.faulted()"
-does NOT catch the NULL dereference, unless it is
-confused about where to return. If it did, the code I
-added should not stop my program from crashing. I will
-go back and look into this further, though, to see if
-I have missed something.
+http://search.cpan.org/~tyemq/Win32-TieRegistry-0.24/TieRegistry.pm
 
-Thanks for your time.
-
-Gary
-
-__________________________________________________
-Do You Yahoo!?
-Tired of spam?  Yahoo! Mail has the best spam protection around 
-http://mail.yahoo.com 
+as another example of non-traditional access to the registry.  How
+about /proc/registry//machinename/... to access the registry of other
+computers on the network?  Or is // not at the beginning a no-no?
