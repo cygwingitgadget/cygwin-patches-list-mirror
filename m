@@ -1,17 +1,18 @@
-Return-Path: <cygwin-patches-return-5787-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 5558 invoked by alias); 3 Mar 2006 16:02:20 -0000
-Received: (qmail 5541 invoked by uid 22791); 3 Mar 2006 16:02:19 -0000
+Return-Path: <cygwin-patches-return-5788-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 15762 invoked by alias); 3 Mar 2006 16:10:07 -0000
+Received: (qmail 15751 invoked by uid 22791); 3 Mar 2006 16:10:07 -0000
 X-Spam-Check-By: sourceware.org
-Received: from ACCESS1.CIMS.NYU.EDU (HELO access1.cims.nyu.edu) (128.122.81.155)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Fri, 03 Mar 2006 16:02:11 +0000
-Received: from localhost (localhost [127.0.0.1]) 	by access1.cims.nyu.edu (8.12.10+Sun/8.12.10) with ESMTP id k23G27fo009959 	for <cygwin-patches@cygwin.com>; Fri, 3 Mar 2006 11:02:07 -0500 (EST)
-Date: Fri, 03 Mar 2006 16:02:00 -0000
+Received: from ACCESS1.CIMS.NYU.EDU (HELO access1.cims.nyu.edu) (128.122.81.155)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Fri, 03 Mar 2006 16:10:02 +0000
+Received: from localhost (localhost [127.0.0.1]) 	by access1.cims.nyu.edu (8.12.10+Sun/8.12.10) with ESMTP id k23G9xfo011413; 	Fri, 3 Mar 2006 11:09:59 -0500 (EST)
+Date: Fri, 03 Mar 2006 16:10:00 -0000
 From: Igor Peshansky <pechtcha@cs.nyu.edu>
 Reply-To: cygwin-patches@cygwin.com
-To: cygwin-patches@cygwin.com
-Subject: Re: [Patch] regtool: Add load/unload commands and --binary option
-In-Reply-To: <20060303094621.GP3184@calimero.vinschen.de>
-Message-ID: <Pine.GSO.4.63.0603031058150.9494@access1.cims.nyu.edu>
-References: <43D6876F.9080608@t-online.de> <20060125105240.GM8318@calimero.vinschen.de>  <43D7E666.8080803@t-online.de> <20060126091944.GT8318@calimero.vinschen.de>  <20060211103418.GM14219@calimero.vinschen.de> <43F0E145.6080109@t-online.de>  <20060215104302.GA13856@calimero.vinschen.de> <4405F274.6080009@t-online.de>  <20060301222502.GW3184@calimero.vinschen.de> <44075CAA.8030009@t-online.de>  <20060303094621.GP3184@calimero.vinschen.de>
+To: Dave Korn <dave.korn@artimi.com>
+cc: cygwin-patches@cygwin.com
+Subject: RE: [Patch] regtool: Add load/unload commands and --binary option
+In-Reply-To: <041901c63ed8$d10bb020$a501a8c0@CAM.ARTIMI.COM>
+Message-ID: <Pine.GSO.4.63.0603031106010.9494@access1.cims.nyu.edu>
+References: <041901c63ed8$d10bb020$a501a8c0@CAM.ARTIMI.COM>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 X-IsSubscribed: yes
@@ -22,30 +23,49 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q1/txt/msg00096.txt.bz2
+X-SW-Source: 2006-q1/txt/msg00097.txt.bz2
 
-On Fri, 3 Mar 2006, Corinna Vinschen wrote:
+On Fri, 3 Mar 2006, Dave Korn wrote:
 
-> Btw., since you seem to be interested in hacking the registry...  would
-> you also be interested to introduce registry write access below
-> /proc/registry inside of the Cygwin DLL?  That would be extra cool.
-> I'm not quite sure how to handle the mapping from file types to
-> registry key types, but there might be some simple way which I'm just
-> too blind to see.
+> > That's actually an interesting idea.  I was always thinking along
+> > the lines of using POSIX file types (plain,socket,pipe,...).
+> >
+> > What if a key "foo.sz" really exists and somebody wants to create
+> > a registry key "foo"?
+>
+>   No problem.  If you want to create foo, you write to "foo.sz".  If you
+> want to create foo.sz, you have to write to "foo.sz.sz".  Unless of
+> course foo.sz is a dword, in which case you'd write to "foo.sz.dw", etc
+> etc.
+>
+> > When reading "foo", which file is meant?
+>
+>   There can only be one at a time, because in the registry there can
+> only be one value with the name foo, regardless of what type it has.
+>
+> > What's the order of checking suffixes?
+>
+>   I'm proposing that the suffix is only used when creating or writing to
+> the file, to determine the type, but the suffix is stripped off for
+> generating the actual name, and is not shown in dir listings, and is not
+> required to open the file for read.
+>
+> > When somebody writes to a key "foo", what's the default suffix, er...,
+> > key type?  Or does that fail with an error message?
+>
+>   Either; I haven't a strong opinion on the matter.
 
-Hmm, there is currently no way for the programs to find out the registry
-key type, unless we introduce new functionality into stat() or something.
+Now, what if you write a file as foo.sz, and then write it as foo.dw.  Do
+we change the key type?  Do we fail with ENOENT?  What is the semantics
+there?
 
-As it is, why would the programs need to know the key type, anyway?  They
-just write the data, and fhandler_registry takes care of converting it to
-the right format (using arbirtary conventions of some sort).  The only
-potential problems are REG_MULTI_SZ and REG_EXPAND_SZ (in the former case
-it's a question of picking a string delimiter, and in the latter it's
-about annotating expandable values).
-
-Am I missing something?
+Also, this suffix idea reminds me more of versions on VMS or streams on
+NT, rather than real extensions.  I wonder if we could/should use "foo:dw"
+or "foo:sz", rather than using the extension...  IOW, "foo.sz" might be a
+valid filename, but "foo:sz" already cannot be on certain filesystems...
+The question about using two different filetypes in a row still applies,
+though.
 	Igor
-P.S. Thanks a lot to Christian for this cool functionality.
 -- 
 				http://cs.nyu.edu/~pechtcha/
       |\      _,,,---,,_	    pechtcha@cs.nyu.edu | igor@watson.ibm.com
