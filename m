@@ -1,21 +1,19 @@
-Return-Path: <cygwin-patches-return-5800-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 12232 invoked by alias); 5 Mar 2006 01:15:42 -0000
-Received: (qmail 12222 invoked by uid 22791); 5 Mar 2006 01:15:41 -0000
+Return-Path: <cygwin-patches-return-5801-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 4216 invoked by alias); 6 Mar 2006 14:14:16 -0000
+Received: (qmail 4201 invoked by uid 22791); 6 Mar 2006 14:14:15 -0000
 X-Spam-Check-By: sourceware.org
-Received: from sccrmhc14.comcast.net (HELO sccrmhc14.comcast.net) (204.127.200.84)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Sun, 05 Mar 2006 01:15:38 +0000
-Received: from [192.168.0.100] (c-24-10-241-225.hsd1.ut.comcast.net[24.10.241.225])           by comcast.net (sccrmhc14) with ESMTP           id <2006030501153501400e5k7be>; Sun, 5 Mar 2006 01:15:35 +0000
-Message-ID: <440A3B91.9000702@byu.net>
-Date: Sun, 05 Mar 2006 01:15:00 -0000
-From: Eric Blake <ebb9@byu.net>
-User-Agent: Thunderbird 1.5 (Windows/20051201)
+Received: from web53001.mail.yahoo.com (HELO web53001.mail.yahoo.com) (206.190.49.31)     by sourceware.org (qpsmtpd/0.31) with SMTP; Mon, 06 Mar 2006 14:14:13 +0000
+Received: (qmail 85094 invoked by uid 60001); 6 Mar 2006 14:14:12 -0000
+Message-ID: <20060306141411.85092.qmail@web53001.mail.yahoo.com>
+Received: from [69.141.137.97] by web53001.mail.yahoo.com via HTTP; Mon, 06 Mar 2006 06:14:11 PST
+Date: Mon, 06 Mar 2006 14:14:00 -0000
+From: Gary Zablackis <gzabl@yahoo.com>
+Subject: Re: Patch for silent crash with Cygwin1.dll v 1.5.19-4
+To: cygwin-patches@cygwin.com
+In-Reply-To: <20060305004908.GB16741@trixie.casa.cgf.cx>
 MIME-Version: 1.0
-To: Yitzchak Scott-Thoennes <sthoenna@efn.org>
-CC: Dave Korn <dave.korn@artimi.com>,  cygwin-patches@cygwin.com
-Subject: Re: [Patch] regtool: Add load/unload commands and --binary option
-References: <20060303094621.GP3184@calimero.vinschen.de> <03f701c63ec4$0eee53d0$a501a8c0@CAM.ARTIMI.COM> <20060303174157.GA3704@efn.org>
-In-Reply-To: <20060303174157.GA3704@efn.org>
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8bit
 X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -24,30 +22,44 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q1/txt/msg00109.txt.bz2
+X-SW-Source: 2006-q1/txt/msg00110.txt.bz2
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+--- Christopher Faylor
+<cgf-no-personal-reply-please@cygwin.com> wrote:
 
-According to Yitzchak Scott-Thoennes on 3/3/2006 10:41 AM:
+> You have missed how efault.faulted() is supposed to
+> be operating and,
+> AFAICT, *does* operate throughout the Cygwin DLL. 
+> It really is supposed
+> to be catching NULL dereferences.
 > 
-> as another example of non-traditional access to the registry.  How
-> about /proc/registry//machinename/... to access the registry of other
-> computers on the network?  Or is // not at the beginning a no-no?
+> It's possible of course, that there is something
+> wrong with efault.faulted()
+> but that doesn't mean we need to extra code around
+> efault.faulted.  It means
+> that efault.faulted needs to be fixed.
+> 
+> i.e., we need to fix the problem not the symptom.
+> 
+> cgf
+> 
+I did some more research over the weekend and my
+problem seems to only come when loading a dll via
+dlopen() and run_ctors() is called from dll:init() and
+pthread_key_create() is called during the time that
+run_ctors() is active. I still have not found who is
+calling pthread_key_create(), but will be working on
+this as time permits this week.
 
-// is only special at the beginning.  Anywhere else in a filename, POSIX
-requires /proc/registry/foo and /proc/registry//foo to name the same file.
+It's been several years since I did any assembly
+language coding, so I have to study what's going on
+when efault.faulted() returns non-zero - and figure
+out how to get gdb to step through the assembly code.
 
-- --
-Life is short - so eat dessert first!
+Thanks,
+Gary
 
-Eric Blake             ebb9@byu.net
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.2.1 (Cygwin)
-Comment: Public key at home.comcast.net/~ericblake/eblake.gpg
-Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org
-
-iD8DBQFECjuR84KuGfSFAYARAo38AJwNlRpqrR339r9FqVc+0ZNLRNHOkwCgz4T0
-l02999MPTlIgJCPO/UU6cQg=
-=mlnF
------END PGP SIGNATURE-----
+__________________________________________________
+Do You Yahoo!?
+Tired of spam?  Yahoo! Mail has the best spam protection around 
+http://mail.yahoo.com 
