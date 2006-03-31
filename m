@@ -1,21 +1,22 @@
-Return-Path: <cygwin-patches-return-5810-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 31029 invoked by alias); 31 Mar 2006 14:50:40 -0000
-Received: (qmail 31010 invoked by uid 22791); 31 Mar 2006 14:50:39 -0000
+Return-Path: <cygwin-patches-return-5811-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 1036 invoked by alias); 31 Mar 2006 14:59:14 -0000
+Received: (qmail 1007 invoked by uid 22791); 31 Mar 2006 14:59:12 -0000
 X-Spam-Check-By: sourceware.org
-Received: from main.gmane.org (HELO ciao.gmane.org) (80.91.229.2)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Fri, 31 Mar 2006 14:50:36 +0000
-Received: from root by ciao.gmane.org with local (Exim 4.43) 	id 1FPKwy-0005WE-Ap 	for cygwin-patches@cygwin.com; Fri, 31 Mar 2006 16:50:08 +0200
-Received: from c-24-10-50-211.hsd1.ca.comcast.net ([24.10.50.211])         by main.gmane.org with esmtp (Gmexim 0.1 (Debian))         id 1AlnuQ-0007hv-00         for <cygwin-patches@cygwin.com>; Fri, 31 Mar 2006 16:50:08 +0200
-Received: from cinder_bdt by c-24-10-50-211.hsd1.ca.comcast.net with local (Gmexim 0.1 (Debian))         id 1AlnuQ-0007hv-00         for <cygwin-patches@cygwin.com>; Fri, 31 Mar 2006 16:50:08 +0200
+Received: from fios.cgf.cx (HELO cgf.cx) (71.248.179.247)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Fri, 31 Mar 2006 14:59:11 +0000
+Received: by cgf.cx (Postfix, from userid 201) 	id 599E513C1B5; Fri, 31 Mar 2006 09:59:10 -0500 (EST)
+Date: Fri, 31 Mar 2006 14:59:00 -0000
+From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
 To: cygwin-patches@cygwin.com
-From:  Bryan D. Thomas <cinder_bdt@yahoo.com>
-Subject:  wtf fix for sh prep
-Date: Fri, 31 Mar 2006 14:50:00 -0000
-Message-ID:  <loom.20060331T164407-365@post.gmane.org>
-Mime-Version:  1.0
-Content-Type:  text/plain; charset=us-ascii
-Content-Transfer-Encoding:  7bit
-User-Agent: Loom/3.14 (http://gmane.org/)
-X-IsSubscribed: yes
+Subject: Re: wtf fix for sh prep
+Message-ID: <20060331145910.GD14263@trixie.casa.cgf.cx>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <loom.20060331T164407-365@post.gmane.org>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <loom.20060331T164407-365@post.gmane.org>
+User-Agent: Mutt/1.5.11
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -23,40 +24,20 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q1/txt/msg00119.txt.bz2
+X-SW-Source: 2006-q1/txt/msg00120.txt.bz2
 
-http://cygwin.com/acronyms/#KOTPPLAUOP
+On Fri, Mar 31, 2006 at 02:47:24PM +0000, Bryan D. Thomas wrote:
+>http://cygwin.com/acronyms/#KOTPPLAUOP
+>
+>wtf didn't have this one.
 
-wtf didn't have this one.
+Sorry but this is not a list for random patches to packages.
+This is a list for submitting patches to the Cygwin DLL and the other
+components of the "winsup" directory (if you aren't sure what this
+means, then you shouldn't be sending email here).
 
-wtf includes a version of OLOCA from 2003.  I downloaded the source package and
-found how to get the new one, so I'm happy.  I did have to modify the makefile
-to get it to work, though.
+Please use the main cygwin list for this type of thing.
 
-If this patch is accepted, maybe at the same time, a 2006 version of OLOCA would
-go in?
+See: http://cygwin.com/lists.html .
 
-Best Regards,
-Bryan
-
-$ ./wtf-0.0.4-6.sh prep
-./wtf-0.0.4-6.sh: line 64: syntax error near unexpected token `&&'
-./wtf-0.0.4-6.sh: line 64: `  && mkdirs )'
-
-===================================================================
---- wtf-0.0.4-6.sh      2003-11-25 16:42:58.000000000 -0800
-+++ wtf-new.sh  2006-03-31 06:38:42.953125000 -0800
-@@ -60,8 +60,8 @@
-   (cd ${topdir} && \
-   tar xvjf ${src_orig_pkg} && \
-   cd ${topdir} && \
--  patch -p0 < ${src_patch}
--  && mkdirs )
-+  patch -p0 < ${src_patch} && \
-+  mkdirs )
- }
- conf() {
-   (cd ${objdir} && \
-
-===================================================================
-
+cgf
