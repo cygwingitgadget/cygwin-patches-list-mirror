@@ -1,18 +1,18 @@
-Return-Path: <cygwin-patches-return-5822-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 22698 invoked by alias); 15 Apr 2006 16:12:58 -0000
-Received: (qmail 22688 invoked by uid 22791); 15 Apr 2006 16:12:57 -0000
+Return-Path: <cygwin-patches-return-5823-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 27877 invoked by alias); 15 Apr 2006 16:31:43 -0000
+Received: (qmail 27867 invoked by uid 22791); 15 Apr 2006 16:31:43 -0000
 X-Spam-Check-By: sourceware.org
-Received: from rwcrmhc12.comcast.net (HELO rwcrmhc12.comcast.net) (204.127.192.82)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Sat, 15 Apr 2006 16:12:55 +0000
-Received: from rmailcenter76.comcast.net ([204.127.197.158])           by comcast.net (rwcrmhc12) with SMTP           id <20060415161254m12003oohse>; Sat, 15 Apr 2006 16:12:54 +0000
-Received: from [24.10.241.225] by rmailcenter76.comcast.net; 	Sat, 15 Apr 2006 16:12:53 +0000
+Received: from rwcrmhc12.comcast.net (HELO rwcrmhc12.comcast.net) (204.127.192.82)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Sat, 15 Apr 2006 16:31:41 +0000
+Received: from rmailcenter06.comcast.net ([204.127.197.116])           by comcast.net (rwcrmhc12) with SMTP           id <20060415163139m12003nlk6e>; Sat, 15 Apr 2006 16:31:39 +0000
+Received: from [24.10.241.225] by rmailcenter06.comcast.net; 	Sat, 15 Apr 2006 16:31:39 +0000
 From: ericblake@comcast.net (Eric Blake)
 To: cygwin-patches@cygwin.com
-Subject: limits.h missing constants
-Date: Sat, 15 Apr 2006 16:12:00 -0000
-Message-Id: <041520061612.3774.44411B850002AC8100000EBE22064244130A050E040D0C079D0A@comcast.net>
+Subject: Re: limits.h missing constants
+Date: Sat, 15 Apr 2006 16:31:00 -0000
+Message-Id: <041520061631.27477.44411FEB00052FA500006B5522007348300A050E040D0C079D0A@comcast.net>
 X-Mailer: AT&T Message Center Version 1 (Apr 11 2006)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="NextPart_Webmail_9m3u9jl4l_3774_1145117573_0"
+Content-Type: multipart/mixed; boundary="NextPart_Webmail_9m3u9jl4l_27477_1145118699_0"
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -20,37 +20,36 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q2/txt/msg00010.txt.bz2
+X-SW-Source: 2006-q2/txt/msg00011.txt.bz2
 
 
---NextPart_Webmail_9m3u9jl4l_3774_1145117573_0
+--NextPart_Webmail_9m3u9jl4l_27477_1145118699_0
 Content-Type: text/plain
 Content-Transfer-Encoding: 8bit
-Content-length: 894
+Content-length: 631
 
-CVS gettext had a compilation warning due to a missing value
-for CHARCLASS_NAME_MAX.  Cygwin regex currently only supports
-char-class names of up to 6 characters (for example, "[:xdigit:]"),
-but POSIX requires a minimum of 14 when locales are free to
-define their own char-class names.  While I was at it, I
-noticed that several of the limits.h constants that are required
-to be the same across all platforms were missing or incorrect.
-And we might as well publicize our limit for declaring ELOOP on
-symlink chains, rather than keeping it hidden in path.h.
+> 2006-04-15  Eric Blake  <ebb9@byu.net>
+> 
+> 	* include/limits.h (_POSIX_*, _POSIX2_*, _XOPEN_*): Define missing
+> 	standard constants, and correct invalid ones.
+> 	(CHARCLASS_NAME_MAX): Define.
+> 	(SYMLOOP_MAX): Define.
+> 	* path.h (MAX_LINK_DEPTH): Define in terms of SYMLOOP_MAX.
+> 	* regex/regcomp.c (p_b_cclass): Limit length of char class name.
 
-2006-04-15  Eric Blake  <ebb9@byu.net>
+Oops - wrong version of the patch (path.h needs to include limits.h
+as in this corrected version, for SYMLOOP_MAX to work).
 
-	* include/limits.h (_POSIX_*, _POSIX2_*, _XOPEN_*): Define missing
-	standard constants, and correct invalid ones.
-	(CHARCLASS_NAME_MAX): Define.
-	(SYMLOOP_MAX): Define.
-	* path.h (MAX_LINK_DEPTH): Define in terms of SYMLOOP_MAX.
-	* regex/regcomp.c (p_b_cclass): Limit length of char class name.
+Also, if you want to double-check my limits.h values, see
+http://www.opengroup.org/onlinepubs/009695399/basedefs/limits.h.html#tag_13_24
 
---NextPart_Webmail_9m3u9jl4l_3774_1145117573_0
+-- 
+Eric Blake
+
+--NextPart_Webmail_9m3u9jl4l_27477_1145118699_0
 Content-Type: application/octet-stream; name="cygwin.patch"
 Content-Transfer-Encoding: 7bit
-Content-length: 3963
+Content-length: 4150
 
 Index: include/limits.h
 ===================================================================
@@ -58,7 +57,7 @@ RCS file: /cvs/src/src/winsup/cygwin/include/limits.h,v
 retrieving revision 1.16
 diff -u -p -r1.16 limits.h
 --- include/limits.h	29 May 2005 10:05:56 -0000	1.16
-+++ include/limits.h	15 Apr 2006 15:43:29 -0000
++++ include/limits.h	15 Apr 2006 16:22:53 -0000
 @@ -131,6 +131,12 @@ details. */
  /* Maximum length of a path component. */
  #define NAME_MAX 255
@@ -140,8 +139,16 @@ RCS file: /cvs/src/src/winsup/cygwin/path.h,v
 retrieving revision 1.88
 diff -u -p -r1.88 path.h
 --- path.h	28 Feb 2006 20:26:52 -0000	1.88
-+++ path.h	15 Apr 2006 15:43:29 -0000
-@@ -260,7 +260,7 @@ class path_conv
++++ path.h	15 Apr 2006 16:22:53 -0000
+@@ -14,6 +14,7 @@ details. */
+ #include <sys/ioctl.h>
+ #include <fcntl.h>
+ #include <ntdef.h>
++#include <limits.h>
+ 
+ inline bool
+ has_attribute (DWORD attributes, DWORD attribs_to_test)
+@@ -260,7 +261,7 @@ class path_conv
  #define SHORTCUT_HDR_SIZE       76
  
  /* Maximum depth of symlinks (after which ELOOP is issued).  */
@@ -156,7 +163,7 @@ RCS file: /cvs/src/src/winsup/cygwin/regex/regcomp.c,v
 retrieving revision 1.3
 diff -u -p -r1.3 regcomp.c
 --- regex/regcomp.c	30 Sep 2002 02:51:22 -0000	1.3
-+++ regex/regcomp.c	15 Apr 2006 15:43:29 -0000
++++ regex/regcomp.c	15 Apr 2006 16:22:54 -0000
 @@ -731,6 +731,11 @@ register cset *cs;
  	while (MORE() && isalpha(PEEK()))
  		NEXT();
@@ -170,4 +177,4 @@ diff -u -p -r1.3 regcomp.c
  		if (strncmp(cp->name, sp, len) == 0 && cp->name[len] == '\0')
  			break;
 
---NextPart_Webmail_9m3u9jl4l_3774_1145117573_0--
+--NextPart_Webmail_9m3u9jl4l_27477_1145118699_0--
