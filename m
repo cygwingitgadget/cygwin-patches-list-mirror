@@ -1,22 +1,20 @@
-Return-Path: <cygwin-patches-return-5826-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 30130 invoked by alias); 17 Apr 2006 15:10:25 -0000
-Received: (qmail 30118 invoked by uid 22791); 17 Apr 2006 15:10:24 -0000
+Return-Path: <cygwin-patches-return-5827-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 7649 invoked by alias); 18 Apr 2006 00:37:45 -0000
+Received: (qmail 7639 invoked by uid 22791); 18 Apr 2006 00:37:45 -0000
 X-Spam-Check-By: sourceware.org
-Received: from fios.cgf.cx (HELO cgf.cx) (71.248.179.247)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Mon, 17 Apr 2006 15:10:20 +0000
-Received: by cgf.cx (Postfix, from userid 201) 	id F02FA13C01E; Mon, 17 Apr 2006 11:10:18 -0400 (EDT)
-Date: Mon, 17 Apr 2006 15:10:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: mkstemp vs. text mode
-Message-ID: <20060417151018.GB28972@trixie.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4443879E.1000406@byu.net>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4443879E.1000406@byu.net>
-User-Agent: Mutt/1.5.11
+Received: from mtiwmhc11.worldnet.att.net (HELO mtiwmhc11.worldnet.att.net) (204.127.131.115)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Tue, 18 Apr 2006 00:37:44 +0000
+Received: from dfw5rb41 (h-66-167-81-67.chcgilgm.dynamic.covad.net[66.167.81.67])           by worldnet.att.net (mtiwmhc11) with SMTP           id <200604180037421110050m9ie>; Tue, 18 Apr 2006 00:37:42 +0000
+From: "Gary R. Van Sickle" <g.r.vansickle@worldnet.att.net>
+To: <cygwin-patches@cygwin.com>
+Subject: RE: mkstemp vs. text mode
+Date: Tue, 18 Apr 2006 00:37:00 -0000
+Message-ID: <001601c66280$4be7dba0$020aa8c0@DFW5RB41>
+MIME-Version: 1.0
+Content-Type: text/plain; 	charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Office Outlook 11
+In-Reply-To: <20060417151018.GB28972@trixie.casa.cgf.cx>
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -24,32 +22,26 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q2/txt/msg00014.txt.bz2
+X-SW-Source: 2006-q2/txt/msg00015.txt.bz2
 
-On Mon, Apr 17, 2006 at 06:18:38AM -0600, Eric Blake wrote:
->Should we change mkstemp to always open in binary mode, regardless of
->the mount mode of the directory of the template name?  Arguments for
->this is that mkstemp is often used by programs for binary data, where a
->text-mode /tmp mount point would corrupt that data if we defer to the
->mount point.  Also, a temp file is an intermediate data storage
->location, similar to pipes, and we currently treat pipes as binary by
->default; a program copying data to a temp file, then from there to a
->final destination, only needs text mode on the final destination.
->Programs that really want a text-mode temp file can do setmode after
->the fact, but this is probably less common.
->
->This should still be a trivial patch.  Meanwhile, I will start the
->process of getting an employee disclaimer for Red Hat (it took me
->almost a year to get one signed for FSF).
->
->2006-04-17 Eric Blake <ebb9@byu.net>
->
->	* mktemp.cc (_gettemp): Open temp files in binary mode.
+> From: Christopher Faylor
+[snip]
+> Yes, I think it makes sense to open temp files in binary but 
+> I'll bet that someone is relying on textmode behavior.  
 
-Yes, I think it makes sense to open temp files in binary but I'll bet
-that someone is relying on textmode behavior.  Nevertheless, I've
-applied the patch.
+I'll see that bet and raise you; I'll bet this results in massive problems.
 
-Let the cygwin ML whines begin...
+> Nevertheless, I've applied the patch.
+> 
+> Let the cygwin ML whines begin...
+> 
+> cgf
 
-cgf
+Ok, I'm about to give it a try (assuming this is in the latest snapshot).
+When I have some positive results, I shall post them to cygwin@.  If I have
+negative results, should I post them there as well, or would that be
+considered a "whine"?
+
+-- 
+Gary R. Van Sickle
+ 
