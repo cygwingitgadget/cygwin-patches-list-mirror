@@ -1,19 +1,20 @@
-Return-Path: <cygwin-patches-return-5828-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 8589 invoked by alias); 18 Apr 2006 00:41:00 -0000
-Received: (qmail 8578 invoked by uid 22791); 18 Apr 2006 00:41:00 -0000
+Return-Path: <cygwin-patches-return-5829-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 1070 invoked by alias); 20 Apr 2006 01:55:59 -0000
+Received: (qmail 1043 invoked by uid 22791); 20 Apr 2006 01:55:58 -0000
 X-Spam-Check-By: sourceware.org
-Received: from mtiwmhc11.worldnet.att.net (HELO mtiwmhc11.worldnet.att.net) (204.127.131.115)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Tue, 18 Apr 2006 00:40:57 +0000
-Received: from dfw5rb41 (h-66-167-81-67.chcgilgm.dynamic.covad.net[66.167.81.67])           by worldnet.att.net (mtiwmhc11) with SMTP           id <200604180040561110050dghe>; Tue, 18 Apr 2006 00:40:56 +0000
+Received: from mtiwmhc11.worldnet.att.net (HELO mtiwmhc11.worldnet.att.net) (204.127.131.115)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Thu, 20 Apr 2006 01:55:57 +0000
+Received: from dfw5rb41 (h-66-167-81-67.chcgilgm.dynamic.covad.net[66.167.81.67])           by worldnet.att.net (mtiwmhc11) with SMTP           id <20060420015555111004vsbue>; Thu, 20 Apr 2006 01:55:55 +0000
 From: "Gary R. Van Sickle" <g.r.vansickle@worldnet.att.net>
 To: <cygwin-patches@cygwin.com>
-Subject: RE: mkstemp vs. text mode
-Date: Tue, 18 Apr 2006 00:41:00 -0000
-Message-ID: <001701c66280$bf5cbe20$020aa8c0@DFW5RB41>
+Cc: <cygwin@cygwin.com>
+Subject: [NON-WHINE] RE: mkstemp vs. text mode
+Date: Thu, 20 Apr 2006 01:55:00 -0000
+Message-ID: <001701c6641d$8e1e2fd0$020aa8c0@DFW5RB41>
 MIME-Version: 1.0
-Content-Type: text/plain; 	charset="us-ascii"
+Content-Type: text/plain; 	charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
 X-Mailer: Microsoft Office Outlook 11
-In-Reply-To: <001601c66280$4be7dba0$020aa8c0@DFW5RB41>
+In-Reply-To: <001701c66280$bf5cbe20$020aa8c0@DFW5RB41>
 X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -22,37 +23,30 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q2/txt/msg00016.txt.bz2
+X-SW-Source: 2006-q2/txt/msg00017.txt.bz2
 
 > From: Gary R. Van Sickle
 > 
-> > From: Christopher Faylor
-> [snip]
-> > Yes, I think it makes sense to open temp files in binary 
-> but I'll bet 
-> > that someone is relying on textmode behavior.
-> 
-> I'll see that bet and raise you; I'll bet this results in 
-> massive problems.
-> 
-> > Nevertheless, I've applied the patch.
+> > From: Gary R. Van Sickle
 > > 
-> > Let the cygwin ML whines begin...
+> > > From: Christopher Faylor
+> > [snip]
+> > > Yes, I think it makes sense to open temp files in binary
+> > but I'll bet
+> > > that someone is relying on textmode behavior.
 > > 
-> > cgf
-> 
-> Ok, I'm about to give it a try (assuming this is in the 
-> latest snapshot).
-> When I have some positive results, I shall post them to 
-> cygwin@.  If I have negative results, should I post them 
-> there as well, or would that be considered a "whine"?
-> 
-> --
-> Gary R. Van Sickle
+> > I'll see that bet and raise you; I'll bet this results in massive 
+> > problems.
+> > 
 
-Last snapshot 4/13, never mind: any potential whine reports will have to
-wait for another day.
+Welp, looks like I (probably) lose that hand (happily).  Using:
+
+CYGWIN_NT-5.1 DFW5RB41 1.5.20s(0.155/4/2) 20060418 12:31:05 i686 Cygwin
+
+with a /tmp mounted as text mode works fine for a configure, build, and
+install of wxWindows.  The configure does most of the temp file
+machinations, with about 2000 add, modify, and remove events in the /tmp
+directory, as reported by a program I have for monitoring such things.
 
 -- 
 Gary R. Van Sickle
- 
