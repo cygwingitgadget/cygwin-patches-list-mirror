@@ -1,20 +1,22 @@
-Return-Path: <cygwin-patches-return-5853-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 620 invoked by alias); 19 May 2006 15:56:58 -0000
-Received: (qmail 599 invoked by uid 22791); 19 May 2006 15:56:57 -0000
+Return-Path: <cygwin-patches-return-5854-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 2799 invoked by alias); 19 May 2006 20:18:00 -0000
+Received: (qmail 2787 invoked by uid 22791); 19 May 2006 20:18:00 -0000
 X-Spam-Check-By: sourceware.org
-Received: from mail.artimi.com (HELO mail.artimi.com) (217.40.213.68)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Fri, 19 May 2006 15:56:53 +0000
-Received: from mail.artimi.com ([192.168.1.3]) by mail.artimi.com with Microsoft SMTPSVC(6.0.3790.1830); 	 Fri, 19 May 2006 16:56:51 +0100
-Received: from rainbow ([192.168.1.165]) by mail.artimi.com with Microsoft SMTPSVC(6.0.3790.1830); 	 Fri, 19 May 2006 16:56:50 +0100
-From: "Dave Korn" <dave.korn@artimi.com>
-To: <cygwin-patches@cygwin.com>
-Subject: RE: Open sockets non-overlapped?
-Date: Fri, 19 May 2006 15:56:00 -0000
-Message-ID: <01cf01c67b5c$d78bd130$a501a8c0@CAM.ARTIMI.COM>
+Received: from py-out-1112.google.com (HELO py-out-1112.google.com) (64.233.166.178)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Fri, 19 May 2006 20:17:57 +0000
+Received: by py-out-1112.google.com with SMTP id o67so979520pye         for <cygwin-patches@cygwin.com>; Fri, 19 May 2006 13:17:56 -0700 (PDT)
+Received: by 10.35.17.8 with SMTP id u8mr469751pyi;         Fri, 19 May 2006 13:17:56 -0700 (PDT)
+Received: by 10.35.9.14 with HTTP; Fri, 19 May 2006 13:17:56 -0700 (PDT)
+Message-ID: <ba40711f0605191317y235cf432t4588157fb26d97f0@mail.gmail.com>
+Date: Fri, 19 May 2006 20:18:00 -0000
+From: "Lev Bishop" <lev.bishop@gmail.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: Open sockets non-overlapped?
+In-Reply-To: <20060519153031.GB30564@trixie.casa.cgf.cx>
 MIME-Version: 1.0
-Content-Type: text/plain; 	charset="iso-8859-1"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 11
-In-Reply-To: <ba40711f0605190819h4dfc5870l18a1919149a4f2d9@mail.gmail.com>
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+References: <ba40711f0605190819h4dfc5870l18a1919149a4f2d9@mail.gmail.com> 	 <20060519153031.GB30564@trixie.casa.cgf.cx>
 X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -23,56 +25,20 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q2/txt/msg00041.txt.bz2
+X-SW-Source: 2006-q2/txt/msg00042.txt.bz2
 
-On 19 May 2006 16:20, Lev Bishop wrote:
+On 5/19/06, Christopher Faylor wrote:
+> On Fri, May 19, 2006 at 11:19:45AM -0400, Lev Bishop wrote:
+> >Here's a trivial little patch for your consideration (while I wait for
+> >my copyright assignment to go through).
+> >
+> >It makes it so that cygwin sockets can be passed usefully to windows
+> >processes. Eg:
+> >$ cmd /c dir > /dev/tcp/localhost/5001
+>
+> AFAIK, /dev/tcp/localhost is neither a linux nor a cygwin construction.
 
-> Here's a trivial little patch for your consideration (while I wait for
-> my copyright assignment to go through).
-> 
-> It makes it so that cygwin sockets can be passed usefully to windows
-> processes. Eg:
-> $ cmd /c dir > /dev/tcp/localhost/5001
-> However, it's not perfect -- if the windows process just exits, then
-> the connection is reset, not shut down gracefully.  
+Did you try it?
+(It's a bash construction).
 
-  Well, if the windows process just exits, that is exactly what it has done.
-A socket should be shut down gracefully if the app calls shutdown(), and if it
-just calls close() the socket should be reset.  That's what "gracefully"
-means.
-
-> Playing with
-> SO_LINGER doesn't seem to help here. Only way I can think of to make
-> it work would be to have the cygwin stub that waits for windows
-> processes to exit, to keep a handle on the socket, poll for when the
-> windows process closes the socket (using NtQuerySystemInformation
-> SystemHandleInformation?) and when it does, close down the socket
-> gracefully.
-
-  It probably shouldn't be made to "work" because that would be altering the
-semantics of sockets. 
- 
-> Anyway, this adds new functionality and doesn't seem to break anything
-> that worked before.
-
-  What, you've tested /everything/ that worked before?  ;)
-
-http://cygwin.com/ml/cygwin/2005-03/msg01003.html
-------------------------quote------------------------
-"If you create a socket using the Winsock 2 WSASocket API and you need to
-apply a timeout in receive or send operations on the socket, you must
-specify the WSA_FLAG_OVERLAPPED flag in the WSASocket call."
-
-From the MSDN website article
-http://support.microsoft.com/default.aspx?scid=kb;en-us;181610.
-------------------------quote------------------------
-
-  Are we /sure/ cygwin doesn't *depend* on overlapped sockets?  In particular,
-can a non-overlapped read be interrupted by a signal?  Have you tested this
-vs. both blocking and non-blocking sockets?  This seems to me to be a highly
-risky change; I'd like to know what testing you've done.
-
-    cheers,
-      DaveK
--- 
-Can't think of a witty .sigline today....
+Lev
