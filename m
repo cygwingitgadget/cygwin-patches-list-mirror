@@ -1,22 +1,19 @@
-Return-Path: <cygwin-patches-return-5855-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 4122 invoked by alias); 19 May 2006 20:21:54 -0000
-Received: (qmail 3989 invoked by uid 22791); 19 May 2006 20:21:53 -0000
+Return-Path: <cygwin-patches-return-5856-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 5121 invoked by alias); 21 May 2006 01:43:23 -0000
+Received: (qmail 5111 invoked by uid 22791); 21 May 2006 01:43:22 -0000
 X-Spam-Check-By: sourceware.org
-Received: from pool-71-248-179-19.bstnma.fios.verizon.net (HELO cgf.cx) (71.248.179.19)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Fri, 19 May 2006 20:21:51 +0000
-Received: by cgf.cx (Postfix, from userid 201) 	id A81CA13C01F; Fri, 19 May 2006 16:21:49 -0400 (EDT)
-Date: Fri, 19 May 2006 20:21:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
+Received: from py-out-1112.google.com (HELO py-out-1112.google.com) (64.233.166.182)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Sun, 21 May 2006 01:43:18 +0000
+Received: by py-out-1112.google.com with SMTP id o67so1209961pye         for <cygwin-patches@cygwin.com>; Sat, 20 May 2006 18:43:17 -0700 (PDT)
+Received: by 10.35.101.9 with SMTP id d9mr540506pym;         Sat, 20 May 2006 18:43:16 -0700 (PDT)
+Received: by 10.35.30.7 with HTTP; Sat, 20 May 2006 18:43:16 -0700 (PDT)
+Message-ID: <ba40711f0605201843g3ed55755ue3140fd2b1b66acb@mail.gmail.com>
+Date: Sun, 21 May 2006 01:43:00 -0000
+From: "Lev Bishop" <lev.bishop@gmail.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: Open sockets non-overlapped?
-Message-ID: <20060519202149.GC2667@trixie.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <ba40711f0605190819h4dfc5870l18a1919149a4f2d9@mail.gmail.com> <20060519153031.GB30564@trixie.casa.cgf.cx> <ba40711f0605191317y235cf432t4588157fb26d97f0@mail.gmail.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ba40711f0605191317y235cf432t4588157fb26d97f0@mail.gmail.com>
-User-Agent: Mutt/1.5.11
+Subject: Getting the pipe guard
+MIME-Version: 1.0
+Content-Type: multipart/mixed;  	boundary="----=_Part_468_17523270.1148175796426"
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -24,23 +21,130 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q2/txt/msg00043.txt.bz2
+X-SW-Source: 2006-q2/txt/msg00044.txt.bz2
 
-On Fri, May 19, 2006 at 04:17:56PM -0400, Lev Bishop wrote:
->On 5/19/06, Christopher Faylor wrote:
->>On Fri, May 19, 2006 at 11:19:45AM -0400, Lev Bishop wrote:
->>>Here's a trivial little patch for your consideration (while I wait for
->>>my copyright assignment to go through).
->>>
->>>It makes it so that cygwin sockets can be passed usefully to windows
->>>processes. Eg:
->>>$ cmd /c dir > /dev/tcp/localhost/5001
->>
->>AFAIK, /dev/tcp/localhost is neither a linux nor a cygwin construction.
->
->Did you try it?
->(It's a bash construction).
 
-Yes, I tried it in zsh.  So, apparently it is bash-only.
+------=_Part_468_17523270.1148175796426
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+Content-length: 2173
 
-cgf
+I was trying to make nonblocking pipe reads actually not block. Here's
+an example of the problem:
+
+bash-3.1$ exec 8< <(while :; do sleep 1 ; echo -n \* ; done )
+bash-3.1$ cat <&8 >/dev/null &
+[2] 308
+bash-3.1$ dd iflag=3Dnonblock bs=3D1 <&8
+dd: reading `standard input': Resource temporarily unavailable
+0+0 records in
+0+0 records out
+0 bytes (0 B) copied, 3.2 seconds, 0.0 kB/s
+
+I tracked down the problem and made the attached patch to get the
+guard mutex, which I believe was cgf's intention when he put get_guard
+(I'm guessing from the changelogs, here), since the previous code was
+a no-op.
+
+2006-05-15 Lev Bishop <lev.bishop+cygwin@gmail.com>
+=09
+	* select.cc (fhandler_pipe::ready_for_read): Actually get the
+	guard mutex.
+
+However, although this improves things, the "nonblocking" read can
+still block for the duration of one read in the other process. I
+deduce that, despite the msdn article on PeekNamedPipe:
+> The function always returns immediately, even if there is no data in the
+> pipe. The wait mode of a named pipe handle (blocking or nonblocking) has
+> no effect on the function.
+...actually it can block for the duration of another process's
+blocking read. Presumably, windows has an internal guard mutex of it's
+own.....
+
+There are 2 questions I have related to this:
+1) Why does cygwin go to all the trouble of having guard mutexes and
+so on for it's pipes, to simulate nonblocking operations (imperfectly
+for pipe reads, not at all for pipe writes) when there's the
+PIPE_NOWAIT flag available which appears to do it in a built-in
+fashion? Has this been considered and rejected for some reason I can't
+think of?
+2) In my example above I had 2 descriptors to the same pipe, one set
+blocking and one nonblocking. Unix behaviour doesn't allow this
+because O_NONBLOCK applies to the file description, not to a
+particular file descriptor. The same goes for O_APPEND, O_ASYNC, etc.
+For full unix compatibility these flags (and I would guess various
+parts of the fhandler_xxx structures, like my fhandler_socket::chunk)
+would have to be put in shared regions or similar. Has something like
+this been contemplated?
+
+Consider this patch untested at present.
+
+L
+
+------=_Part_468_17523270.1148175796426
+Content-Type: text/plain; name=selectpatch; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Attachment-Id: f_engogh0b
+Content-Disposition: attachment; filename="selectpatch"
+Content-length: 814
+
+Index: select.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/select.cc,v
+retrieving revision 1.123
+diff -u -p -d -r1.123 select.cc
+--- select.cc	24 Apr 2006 15:16:45 -0000	1.123
++++ select.cc	21 May 2006 00:56:04 -0000
+@@ -689,14 +689,18 @@ pipe_cleanup (select_record *, select_st
+ int
+ fhandler_pipe::ready_for_read (int fd, DWORD howlong)
+ {
+-  int res;
++  int res = true;
++  const HANDLE w4[2] = {signal_arrived, get_guard ()};
+   if (howlong)
+-    res = true;
++    {
++      if (w4[2] && WAIT_OBJECT_0 == WaitForMultipleObjects (2, w4, 0, INFINITE))
++	{
++	  set_sig_errno (EINTR);
++	  return 0;
++	}
++    }
+   else
+     res = fhandler_base::ready_for_read (fd, howlong);
+-
+-  if (res)
+-    get_guard ();
+   return res;
+ }
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------=_Part_468_17523270.1148175796426--
