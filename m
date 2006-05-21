@@ -1,21 +1,21 @@
-Return-Path: <cygwin-patches-return-5861-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 8418 invoked by alias); 21 May 2006 21:06:13 -0000
-Received: (qmail 6381 invoked by uid 22791); 21 May 2006 21:05:57 -0000
+Return-Path: <cygwin-patches-return-5862-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 7257 invoked by alias); 21 May 2006 21:18:36 -0000
+Received: (qmail 7179 invoked by uid 22791); 21 May 2006 21:18:27 -0000
 X-Spam-Check-By: sourceware.org
-Received: from pool-71-248-179-19.bstnma.fios.verizon.net (HELO cgf.cx) (71.248.179.19)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Sun, 21 May 2006 21:04:45 +0000
-Received: by cgf.cx (Postfix, from userid 201) 	id 3499A13C01F; Sun, 21 May 2006 17:04:44 -0400 (EDT)
-Date: Sun, 21 May 2006 21:06:00 -0000
+Received: from pool-71-248-179-19.bstnma.fios.verizon.net (HELO cgf.cx) (71.248.179.19)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Sun, 21 May 2006 21:18:03 +0000
+Received: by cgf.cx (Postfix, from userid 201) 	id DBA3713C01F; Sun, 21 May 2006 17:18:01 -0400 (EDT)
+Date: Sun, 21 May 2006 21:18:00 -0000
 From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: Getting the pipe guard
-Message-ID: <20060521210444.GA25110@trixie.casa.cgf.cx>
+Subject: Re: Using newer autoconf in src/winsup directory
+Message-ID: <20060521211801.GB26270@trixie.casa.cgf.cx>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <ba40711f0605201843g3ed55755ue3140fd2b1b66acb@mail.gmail.com> <20060521052641.GA17087@trixie.casa.cgf.cx> <ba40711f0605210754s7a10f603k79d883f4b1b6748d@mail.gmail.com> <ba40711f0605210756l74ecdd59qc0c6eff214b54fb4@mail.gmail.com>
+References: <200605042047.NAA19831@hpsje.cup.hp.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ba40711f0605210756l74ecdd59qc0c6eff214b54fb4@mail.gmail.com>
+In-Reply-To: <200605042047.NAA19831@hpsje.cup.hp.com>
 User-Agent: Mutt/1.5.11
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -24,20 +24,20 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q2/txt/msg00049.txt.bz2
+X-SW-Source: 2006-q2/txt/msg00050.txt.bz2
 
-On Sun, May 21, 2006 at 10:56:53AM -0400, Lev Bishop wrote:
->>On 5/21/06, Christopher Faylor wrote:
->>
->>> I've checked in a variation of the above plus some modifications to
->>> pipe.cc which prevent some handle stomping and may make things work
->>> better.
->
->Did you actually check in a change to select.cc? I'm not seeing it.
->(But I'm not all that good with cvs so maybe it's my fault)
+On Thu, May 04, 2006 at 01:47:25PM -0700, Steve Ellcey wrote:
+>I have been working to move the src tree at soureware.org to a newer
+>version of autoconf.  The reason for this is so that we can, in turn,
+>move to a newer version of libtool.  Would it be possible to rebuild the
+>configure scripts in src/winsup with a recent version of autoconf, like
+>autoconf 2.59?  Most parts of the src tree have already moved to this
+>version.
 
-Oops.  No.  I've checked this in along with some more changes which deal
-with handle inheritance.  I decided that the way I dealt with
-inheritance originally was probably best.
+I tried to rebuild the top-level configure.in with autoconf 2.59 but
+there were a few complaints.  If you have patches to deal with the
+problems updating to a newer version, they would be appreciated.
+Otherwise, I'll probably wait for someone who knows more about autoconf
+to offer changes.
 
 cgf
