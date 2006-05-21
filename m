@@ -1,13 +1,13 @@
-Return-Path: <cygwin-patches-return-5858-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 3372 invoked by alias); 21 May 2006 13:56:58 -0000
-Received: (qmail 3362 invoked by uid 22791); 21 May 2006 13:56:57 -0000
+Return-Path: <cygwin-patches-return-5859-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 9611 invoked by alias); 21 May 2006 14:55:37 -0000
+Received: (qmail 9601 invoked by uid 22791); 21 May 2006 14:55:36 -0000
 X-Spam-Check-By: sourceware.org
-Received: from py-out-1112.google.com (HELO py-out-1112.google.com) (64.233.166.181)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Sun, 21 May 2006 13:56:55 +0000
-Received: by py-out-1112.google.com with SMTP id o67so1282008pye         for <cygwin-patches@cygwin.com>; Sun, 21 May 2006 06:56:53 -0700 (PDT)
-Received: by 10.35.88.17 with SMTP id q17mr3248336pyl;         Sun, 21 May 2006 06:56:53 -0700 (PDT)
-Received: by 10.35.30.7 with HTTP; Sun, 21 May 2006 06:56:53 -0700 (PDT)
-Message-ID: <ba40711f0605210656p10c0fc86g2110a835789521d3@mail.gmail.com>
-Date: Sun, 21 May 2006 13:56:00 -0000
+Received: from py-out-1112.google.com (HELO py-out-1112.google.com) (64.233.166.179)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Sun, 21 May 2006 14:55:34 +0000
+Received: by py-out-1112.google.com with SMTP id o67so1289377pye         for <cygwin-patches@cygwin.com>; Sun, 21 May 2006 07:54:02 -0700 (PDT)
+Received: by 10.35.15.11 with SMTP id s11mr849980pyi;         Sun, 21 May 2006 07:54:02 -0700 (PDT)
+Received: by 10.35.30.7 with HTTP; Sun, 21 May 2006 07:54:01 -0700 (PDT)
+Message-ID: <ba40711f0605210754s7a10f603k79d883f4b1b6748d@mail.gmail.com>
+Date: Sun, 21 May 2006 14:55:00 -0000
 From: "Lev Bishop" <lev.bishop@gmail.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: Getting the pipe guard
@@ -25,15 +25,21 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q2/txt/msg00046.txt.bz2
+X-SW-Source: 2006-q2/txt/msg00047.txt.bz2
 
 On 5/21/06, Christopher Faylor wrote:
-> The above code seems to be needed but I can't see how it could affect the
-> non-blocking case since "howlong" is only set in the blocking case.
 
-It affects the nonblocking case because it stops a blocking reader
-from sneaking in between a nonblocking reader returning from
-ready_for_read() and when the nonblocking reader actually does the
-read.
+> I've checked in a variation of the above plus some modifications to
+> pipe.cc which prevent some handle stomping and may make things work
+> better.
 
-L
+I see that your patch makes writepipe_exists non-inheritable. This
+means that if you pass a pipe to a windows process, which in turn
+passes it to another process, the writepipe_exists will be gone, and
+cygwin will think the pipe is closed, AFAICT. So something like:
+bash$ ls | cmd /c more
+will not work any more. I think... I can't check this, because I don't
+have access to old versions of windows where writepipe_exists is
+actually used.
+
+Lev
