@@ -1,22 +1,19 @@
-Return-Path: <cygwin-patches-return-5875-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 14944 invoked by alias); 24 May 2006 17:13:39 -0000
-Received: (qmail 14933 invoked by uid 22791); 24 May 2006 17:13:38 -0000
+Return-Path: <cygwin-patches-return-5876-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 24878 invoked by alias); 24 May 2006 19:59:13 -0000
+Received: (qmail 24857 invoked by uid 22791); 24 May 2006 19:59:12 -0000
 X-Spam-Check-By: sourceware.org
-Received: from pool-71-248-179-19.bstnma.fios.verizon.net (HELO cgf.cx) (71.248.179.19)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Wed, 24 May 2006 17:13:37 +0000
-Received: by cgf.cx (Postfix, from userid 201) 	id DC90013C01F; Wed, 24 May 2006 13:13:35 -0400 (EDT)
-Date: Wed, 24 May 2006 17:13:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
+Received: from nat.electric-cloud.com (HELO main.electric-cloud.com) (63.82.0.114)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Wed, 24 May 2006 19:59:10 +0000
+Received: from fulgurite.electric-cloud.com (fulgurite.electric-cloud.com [192.168.1.37]) 	(authenticated bits=0) 	by main.electric-cloud.com (8.13.1/8.13.1) with ESMTP id k4OJx7B2024390 	(version=TLSv1/SSLv3 cipher=RC4-MD5 bits=128 verify=NO) 	for <cygwin-patches@cygwin.com>; Wed, 24 May 2006 12:59:07 -0700
+Subject: Updating cygload for new CYGTLS_PADSIZE
+From: Max Kaehn <slothman@electric-cloud.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: Using newer autoconf in src/winsup directory
-Message-ID: <20060524171335.GE25356@trixie.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <000001c67e3c$dfb77e80$9d6d65da@anykey> <20060523145159.GB9036@trixie.casa.cgf.cx>
+Content-Type: text/plain
+Date: Wed, 24 May 2006 19:59:00 -0000
+Message-Id: <1148500747.4166.7.camel@fulgurite>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20060523145159.GB9036@trixie.casa.cgf.cx>
-User-Agent: Mutt/1.5.11
+X-Mailer: Evolution 2.0.2 (2.0.2-27)
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -24,33 +21,40 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q2/txt/msg00063.txt.bz2
+X-SW-Source: 2006-q2/txt/msg00064.txt.bz2
 
-On Tue, May 23, 2006 at 10:51:59AM -0400, Christopher Faylor wrote:
->On Tue, May 23, 2006 at 07:45:32PM +1200, Danny Smith wrote:
->>RE: http://cygwin.com/ml/cygwin-patches/2006-q2/msg00051.html
->>
->>I am not subscribed to cygwin-patches so I'm posting here.  Forgive me
->>if I've transgressed boundares, but I've always considered mingw as a
->>cygwin-dependent app.
->>
->>Applying the above patch, running aclocal and then autoconf-2.5x, then
->>./configure ---host=mingw32 --target=mingw32 works for mingw and w32api
->>subdirs from a cygwin bash shell.
->>
->>I haven't tried with msys tools since I don't have them.
->
->Didn't you notice some problems with AC_CONFIG_AUX_DIR being set
->incorrectly, Danny?
->
->I found this and a few problems with the patch, where Cygwin is
->concerned.  I'm testing some changes now and hope to have something
->checked in soon.
+Some of my coworkers ran into mysterious problems when working
+with the latest snapshots of the Cygwin DLL, and I discovered that
+CYGTLS_PADSIZE recently grew beyond the expectations of the cygload
+test utility.  This should fix it:
 
-It's checked in.  I had to make a few changes throughout but it seems
-to work now.
 
-Thanks, Steve, for providing the patch that led me in the right
-direction.
+2006-05-24	Max Kaehn <slothman@electric-cloud.com>
 
-cgf
+	* winsup.api/cygload.h:  Increase padding size to
+	16384 bytes.
+
+
+
+Index: cygload.h
+===================================================================
+RCS file: /cvs/src/src/winsup/testsuite/winsup.api/cygload.h,v
+retrieving revision 1.1
+diff -u -p -r1.1 cygload.h
+--- cygload.h   2 Jan 2006 06:15:58 -0000       1.1
++++ cygload.h   24 May 2006 19:46:21 -0000
+@@ -63,10 +63,11 @@ namespace cygwin
+     std::vector< char > _backup;
+     char *_stackbase, *_end;
+
+-    // gdb reports sizeof(_cygtls) == 3964 at the time of this writing.
++    // gdb reports sizeof(_cygtls) == 4212 at the time of this writing,
++    // and CYGTLS_PADSIZE = 3 * sizeof(_cygtls).
+     // This is at the end of the object so it'll be toward the bottom
+     // of the stack when it gets declared.
+-    char _padding[8192];
++    char _padding[16384];
+
+     static padding *_main;
+     static DWORD _mainTID;
+
