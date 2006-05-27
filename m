@@ -1,19 +1,22 @@
-Return-Path: <cygwin-patches-return-5876-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 24878 invoked by alias); 24 May 2006 19:59:13 -0000
-Received: (qmail 24857 invoked by uid 22791); 24 May 2006 19:59:12 -0000
+Return-Path: <cygwin-patches-return-5877-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 1525 invoked by alias); 27 May 2006 19:46:47 -0000
+Received: (qmail 1514 invoked by uid 22791); 27 May 2006 19:46:46 -0000
 X-Spam-Check-By: sourceware.org
-Received: from nat.electric-cloud.com (HELO main.electric-cloud.com) (63.82.0.114)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Wed, 24 May 2006 19:59:10 +0000
-Received: from fulgurite.electric-cloud.com (fulgurite.electric-cloud.com [192.168.1.37]) 	(authenticated bits=0) 	by main.electric-cloud.com (8.13.1/8.13.1) with ESMTP id k4OJx7B2024390 	(version=TLSv1/SSLv3 cipher=RC4-MD5 bits=128 verify=NO) 	for <cygwin-patches@cygwin.com>; Wed, 24 May 2006 12:59:07 -0700
-Subject: Updating cygload for new CYGTLS_PADSIZE
-From: Max Kaehn <slothman@electric-cloud.com>
+Received: from pool-71-248-179-19.bstnma.fios.verizon.net (HELO cgf.cx) (71.248.179.19)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Sat, 27 May 2006 19:46:42 +0000
+Received: by cgf.cx (Postfix, from userid 201) 	id CBE6013C01F; Sat, 27 May 2006 14:53:12 -0400 (EDT)
+Date: Sat, 27 May 2006 19:46:00 -0000
+From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
 To: cygwin-patches@cygwin.com
-Content-Type: text/plain
-Date: Wed, 24 May 2006 19:59:00 -0000
-Message-Id: <1148500747.4166.7.camel@fulgurite>
+Subject: Re: Patch for silent crash with Cygwin1.dll v 1.5.19-4
+Message-ID: <20060527185312.GA7655@trixie.casa.cgf.cx>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20060412154109.GA13171@trixie.casa.cgf.cx> <20060413124822.4608.qmail@web53001.mail.yahoo.com> <20060413162456.GD26309@trixie.casa.cgf.cx>
 Mime-Version: 1.0
-X-Mailer: Evolution 2.0.2 (2.0.2-27)
-Content-Transfer-Encoding: 7bit
-X-IsSubscribed: yes
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20060413162456.GD26309@trixie.casa.cgf.cx>
+User-Agent: Mutt/1.5.11
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -21,40 +24,63 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q2/txt/msg00064.txt.bz2
+X-SW-Source: 2006-q2/txt/msg00065.txt.bz2
 
-Some of my coworkers ran into mysterious problems when working
-with the latest snapshots of the Cygwin DLL, and I discovered that
-CYGTLS_PADSIZE recently grew beyond the expectations of the cygload
-test utility.  This should fix it:
+On Thu, Apr 13, 2006 at 12:24:56PM -0400, Christopher Faylor wrote:
+>On Thu, Apr 13, 2006 at 05:48:22AM -0700, Gary Zablackis wrote:
+>>> The exception handler is supposed to be initialized
+>>> in
+>>> _cygtls::init_thread which is called from
+>>> initialize_main_tls.
+>>> Why is that not happening?
+>>
+>>It does happen.  However, later on when the program calls dlopen ()
+>>(which will happen, e.g., when a python program imports a dll),
+>>LoadLibrary () gets called.  LoadLibrary () then installs its own
+>>exception handler.  The MS exception handler does NOT pass control back
+>>to the Cygwin exception handler (it is not obligated to).
+>
+>You haven't proved that the cygwin exception handler is actually
+>installed at the time when you are reporting problems.  Repeating
+>that "it does happen" is not a proof.
+>
+>>What is causing our problem is that when LoadLibrary () loads a dll,
+>>the following sequence of events occurs (NOTE: I have left out some of
+>>the intervening calls in the following sequence):
+>>  _cygwin_dll_entry@12 () calls dll_dllcrt0 ()
+>>                    which calls dll::init()
+>>                    which calls per_module::run_ctors
+>>()
+>>                    which calls pthread::once ()
+>>                    which calls pthread_key_create ()
+>>                    which calls 
+>>                         verifyably_object_isvalid ()
+>>                    which has the code:
+>>                     myfault efault;
+>>                     if (efault.faulted ())
+>>                       return INVALID_OBJECT;
+>>                    ...
+>>                     if ((*object)->magic != magic)
+>>                      return INVALID_OBJECT;
+>>                     return VALID_OBJECT;
+>>
+>>This last bit generates an exception which gets handled by the MS
+>>exception handler which decides the error must be fatal to the loading
+>>of the dll and sends us back to dlopen ().
+>
+>There *really* is no reason to repeat this.  It has been explained many
+>times.  One thing missing from the above, however, is something which
+>shows that the cygwin exception handler is actually installed at the
+>point when this all occurs.
 
+I took some time today to see if my assumption was true and, yes, it is
+possible that this function will be called before cygwin has completed
+its installation, meaning that it is not safe to use _my_tls.
 
-2006-05-24	Max Kaehn <slothman@electric-cloud.com>
+I've also verified that, as you say, when this function is called, there
+are a bunch of other exception handlers installed before Cygwin's.
 
-	* winsup.api/cygload.h:  Increase padding size to
-	16384 bytes.
+So, I've installed a variation of your patch in CVS.  Maybe this will fix
+all of the problems people are reporting with DLLs.
 
-
-
-Index: cygload.h
-===================================================================
-RCS file: /cvs/src/src/winsup/testsuite/winsup.api/cygload.h,v
-retrieving revision 1.1
-diff -u -p -r1.1 cygload.h
---- cygload.h   2 Jan 2006 06:15:58 -0000       1.1
-+++ cygload.h   24 May 2006 19:46:21 -0000
-@@ -63,10 +63,11 @@ namespace cygwin
-     std::vector< char > _backup;
-     char *_stackbase, *_end;
-
--    // gdb reports sizeof(_cygtls) == 3964 at the time of this writing.
-+    // gdb reports sizeof(_cygtls) == 4212 at the time of this writing,
-+    // and CYGTLS_PADSIZE = 3 * sizeof(_cygtls).
-     // This is at the end of the object so it'll be toward the bottom
-     // of the stack when it gets declared.
--    char _padding[8192];
-+    char _padding[16384];
-
-     static padding *_main;
-     static DWORD _mainTID;
-
+cgf
