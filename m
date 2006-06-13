@@ -1,22 +1,23 @@
-Return-Path: <cygwin-patches-return-5885-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 18163 invoked by alias); 12 Jun 2006 14:01:25 -0000
-Received: (qmail 18053 invoked by uid 22791); 12 Jun 2006 14:01:23 -0000
+Return-Path: <cygwin-patches-return-5886-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 31422 invoked by alias); 13 Jun 2006 01:43:32 -0000
+Received: (qmail 31409 invoked by uid 22791); 13 Jun 2006 01:43:31 -0000
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.31.1) with ESMTP; Mon, 12 Jun 2006 14:00:26 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 5D16D544008; Mon, 12 Jun 2006 16:00:23 +0200 (CEST)
-Date: Mon, 12 Jun 2006 14:01:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Received: from py-out-1112.google.com (HELO py-out-1112.google.com) (64.233.166.181)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Tue, 13 Jun 2006 01:43:29 +0000
+Received: by py-out-1112.google.com with SMTP id c30so1745506pyc         for <cygwin-patches@cygwin.com>; Mon, 12 Jun 2006 18:43:27 -0700 (PDT)
+Received: by 10.35.96.7 with SMTP id y7mr5206287pyl;         Mon, 12 Jun 2006 18:43:27 -0700 (PDT)
+Received: by 10.35.30.7 with HTTP; Mon, 12 Jun 2006 18:43:27 -0700 (PDT)
+Message-ID: <ba40711f0606121843n11ad2155g5fa37362e91c401e@mail.gmail.com>
+Date: Tue, 13 Jun 2006 01:43:00 -0000
+From: "Lev Bishop" <lev.bishop@gmail.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: Addition to the testsuite & cygwin patch
-Message-ID: <20060612140023.GD2129@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <00ab01c673b5$969108c0$280010ac@wirelessworld.airvananet.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Subject: Re: Open sockets non-overlapped?
+In-Reply-To: <20060612131046.GC2129@calimero.vinschen.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
 Content-Disposition: inline
-In-Reply-To: <00ab01c673b5$969108c0$280010ac@wirelessworld.airvananet.com>
-User-Agent: Mutt/1.4.2i
+References: <ba40711f0605190819h4dfc5870l18a1919149a4f2d9@mail.gmail.com> 	 <01cf01c67b5c$d78bd130$a501a8c0@CAM.ARTIMI.COM> 	 <20060612131046.GC2129@calimero.vinschen.de>
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -24,33 +25,50 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q2/txt/msg00073.txt.bz2
+X-SW-Source: 2006-q2/txt/msg00074.txt.bz2
 
-On May  9 18:11, Pierre A. Humblet wrote:
-> The main purpose of this patch is to contribute the attached file to
-> testsuite/winsup.api. It checks that Cygwin can support a user
-> supplied version of malloc.
-> However the patch below is required to make it work and to
-> support versions of malloc that don't call sbrk.
-> 
-> Pierre
-> 
-> 2006-05-09  Pierre Humblet  Pierre.Humblet@ieee.org
-> 
->    * winsup.api/malloc.c: New file
-> 
-> 2006-05-09  Pierre Humblet  Pierre.Humblet@ieee.org
-> 
-> * heap.cc (heap_init): Only commit if allocsize is not zero.
+On 6/12/06, Corinna Vinschen wrote:
+>
+> I found that using WSASocket(!OVERLAPPED) instead of socket results in
+> sshd misbehaviour (scp takes a long time to start copying files, an
+> interactive logon doesn't print the prompt until the user presses the
+> return key).  I didn't try to debug this, lazy as I am.
 
-I applied this change.  I just renamed malloc.c to user_malloc.c to
-have a slightly more self-describing file name.
+Strange. I don't run sshd, but I've been using this patch for a while
+now and not noticed any problems. Maybe I'll try installing sshd one
+of these days and see if I see those issues you describe.
 
+> Additionally, I'm really curious *why* opening the socket without the
+> overlapped attribute should create a socket being more useful to native
+> Windows processes than standard, overlapped attributed sockets.  After
+> all the only visible difference is that a socket with the overlapped
+> attribute set can use overlapped operations, which the non-overlapped
+> socket can't.  It does not mean that overlapping I/O is forced on the
+> socket.  It's just adding a capability.
 
-Thanks,
-Corinna
+It doesn't make it any less useful to native processes _as a socket
+handle_ but it does make a difference when the native processes use it
+_as a file handle_. As you know, the semantics of WriteFile() et al
+change completely depending on whether they get an overlapped handle
+or not (eg the LPOVERLAPPED parameter either _must_ be null or _must
+not_ be null, on 95/98/Me) . And there seems to be no way to tell
+whether a handle you've inherited was opened overlapped or not (short
+of using the NT API: NtQueryInformationFile FILE_MODE_INFORMATION) and
+no way to reset the mode once the file has been opened. So
+applications are effectively forced to assume their GetStdHandle()s'
+are non-overlapped.
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+> Actually, with a matching server listening on port 5001 (nc -l -p 5001),
+> I don't see any difference between using socket or WSASocket in the `cmd
+> /c dir > /dev/tcp/localhost/5001' example.  In both cases cmd refuses to
+> send anything useful to the server, printing "There is not enough space
+> on the disk."
+
+Hmph. It works for me. Must be some difference in our configurations,
+windows versions, etc. I note that msdn warns that using socket
+handles as file handles is an optional feature and not all providers
+support it. I guess the provider must be both a Winsock provider and
+also a file-system driver in order to make this work. Maybe you have
+some LSPs on your machine or something?
+
+Lev
