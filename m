@@ -1,22 +1,20 @@
-Return-Path: <cygwin-patches-return-5898-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 13718 invoked by alias); 16 Jun 2006 00:08:11 -0000
-Received: (qmail 13677 invoked by uid 22791); 16 Jun 2006 00:08:11 -0000
+Return-Path: <cygwin-patches-return-5899-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 29586 invoked by alias); 23 Jun 2006 13:20:48 -0000
+Received: (qmail 29574 invoked by uid 22791); 23 Jun 2006 13:20:47 -0000
 X-Spam-Check-By: sourceware.org
-Received: from py-out-1112.google.com (HELO py-out-1112.google.com) (64.233.166.183)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Fri, 16 Jun 2006 00:08:08 +0000
-Received: by py-out-1112.google.com with SMTP id d80so423940pyd         for <cygwin-patches@cygwin.com>; Thu, 15 Jun 2006 17:08:07 -0700 (PDT)
-Received: by 10.35.121.9 with SMTP id y9mr3800442pym;         Thu, 15 Jun 2006 17:08:07 -0700 (PDT)
-Received: by 10.35.30.7 with HTTP; Thu, 15 Jun 2006 17:08:07 -0700 (PDT)
-Message-ID: <ba40711f0606151708q32bd1045h883c7e20bb6983b6@mail.gmail.com>
-Date: Fri, 16 Jun 2006 00:08:00 -0000
-From: "Lev Bishop" <lev.bishop@gmail.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: Open sockets non-overlapped?
-In-Reply-To: <20060615164424.GA16683@calimero.vinschen.de>
+Received: from mail.artimi.com (HELO mail.artimi.com) (194.72.81.2)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Fri, 23 Jun 2006 13:20:40 +0000
+Received: from mail.artimi.com ([192.168.1.3]) by mail.artimi.com with Microsoft SMTPSVC(6.0.3790.1830); 	 Fri, 23 Jun 2006 14:20:37 +0100
+Received: from rainbow ([192.168.1.165]) by mail.artimi.com with Microsoft SMTPSVC(6.0.3790.1830); 	 Fri, 23 Jun 2006 14:20:36 +0100
+From: "Dave Korn" <dave.korn@artimi.com>
+To: "'Cygwin patches'" <cygwin-patches@cygwin.com>
+Subject: RE: [PATCH] tcgetattr() doesn't support 50 baud
+Date: Fri, 23 Jun 2006 13:20:00 -0000
+Message-ID: <00f501c696c7$d09d8400$a501a8c0@CAM.ARTIMI.COM>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Type: text/plain; 	charset="Windows-1252"
 Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-References: <ba40711f0605190819h4dfc5870l18a1919149a4f2d9@mail.gmail.com> 	 <20060612131046.GC2129@calimero.vinschen.de> 	 <ba40711f0606121843n11ad2155g5fa37362e91c401e@mail.gmail.com> 	 <ba40711f0606121959g2a1acf17g5e6963e811676f71@mail.gmail.com> 	 <20060613083243.GC16683@calimero.vinschen.de> 	 <ba40711f0606130411m5d56ecc0jae17571d7d192d44@mail.gmail.com> 	 <ba40711f0606130847mba77fd5h84f329096fdbf847@mail.gmail.com> 	 <20060613155208.GO16683@calimero.vinschen.de> 	 <ba40711f0606150907x9fb33efy463582520fa300f0@mail.gmail.com> 	 <20060615164424.GA16683@calimero.vinschen.de>
+X-Mailer: Microsoft Office Outlook 11
+In-Reply-To: <449BCFD1.4070007@gmail.com>
 X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -25,22 +23,31 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q2/txt/msg00086.txt.bz2
+X-SW-Source: 2006-q2/txt/msg00087.txt.bz2
 
-On 6/15/06, Corinna Vinschen wrote:
-> On Jun 15 12:07, Lev Bishop wrote:
+On 23 June 2006 12:26, Lapo Luchini wrote:
 
-> > Just to spell it out: the problem shown in my testcase, is only
-> > exibited with overlapped sockets. Non-overlapped don't have any
-> > problem. Which is strange to me, since MSDN makes no mention of
-> > situations where setsockopt() can block.
->
-> Erm... I tested your testcase and I can reproduce the hang only when
-> using NON-overlapped sockets  created with WSASocket(..., 0).
-> It works fine with overlapped sockets created with select or
-> WSASocket(..., WSA_FLAG_OVERLAPPED).  I assume the above is just a
-> typo?
+[ Thread TITTPL'd! ]
 
-Yes, a typo, sorry about that.
+> Lapo Luchini wrote:
+>> I'll try and add the support for B50 in in and send a patch ASAP.
+>> 
+> Modified, patched, and tested:
+> 
+> --- fhandler_serial.cc.orig    2006-01-16 18:14:36.000000000 +0100
+> +++ fhandler_serial.cc    2006-06-23 11:49:26.000000000 +0200
+> @@ -608,6 +608,9 @@
+>       0 is an invalid bitrate in Win32 */
+>        dropDTR = true;
+>        break;
+> +    case B50:
+> +      state.BaudRate = 50;
+> +      break;
 
-L
+  I suggest adding a comment here, as with the 230,400 baud case below,
+explaining that there isn't a CBR_ symbol to use here.
+
+    cheers,
+      DaveK
+-- 
+Can't think of a witty .sigline today....
