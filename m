@@ -1,22 +1,22 @@
-Return-Path: <cygwin-patches-return-5917-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 1381 invoked by alias); 6 Jul 2006 15:58:35 -0000
-Received: (qmail 1368 invoked by uid 22791); 6 Jul 2006 15:58:34 -0000
+Return-Path: <cygwin-patches-return-5918-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 18114 invoked by alias); 7 Jul 2006 00:41:15 -0000
+Received: (qmail 18103 invoked by uid 22791); 7 Jul 2006 00:41:15 -0000
 X-Spam-Check-By: sourceware.org
-Received: from pool-71-248-179-44.bstnma.fios.verizon.net (HELO cgf.cx) (71.248.179.44)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Thu, 06 Jul 2006 15:58:33 +0000
-Received: by cgf.cx (Postfix, from userid 201) 	id 6A4CE13C020; Thu,  6 Jul 2006 11:58:31 -0400 (EDT)
-Date: Thu, 06 Jul 2006 15:58:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: Command line argument to setup.exe for a package list to install
-Message-ID: <20060706155831.GD9433@trixie.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <BAY116-F30A7FAD6F54EE89A15115591770@phx.gbl>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BAY116-F30A7FAD6F54EE89A15115591770@phx.gbl>
-User-Agent: Mutt/1.5.11
+Received: from okigate.oki.co.jp (HELO iscan1.intra.oki.co.jp) (202.226.91.194)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Fri, 07 Jul 2006 00:41:12 +0000
+Received: from s24c53.dm1.oii.oki.co.jp (IDENT:root@localhost.localdomain [127.0.0.1]) 	by iscan1.intra.oki.co.jp (8.9.3/8.9.3) with ESMTP id JAA05714; 	Fri, 7 Jul 2006 09:41:09 +0900
+Received: from [10.161.35.40] (suzuki611-note.ngo.okisoft.co.jp [10.161.35.40]) 	by s24c53.dm1.oii.oki.co.jp (8.11.6/8.11.2) with ESMTP id k670f8d25093; 	Fri, 7 Jul 2006 09:41:09 +0900
+Message-ID: <44ADADD0.8000803@oki.com>
+Date: Fri, 07 Jul 2006 00:41:00 -0000
+From: SUZUKI Hisao <suzuki611@oki.com>
+User-Agent: Thunderbird 1.5.0.4 (Macintosh/20060516)
+MIME-Version: 1.0
+To: Dave Korn <dave.korn@artimi.com>, cygwin-patches@cygwin.com
+Subject: Re: UTF-8 Cygwin
+References: <037101c6a0f5$749bb130$a501a8c0@CAM.ARTIMI.COM>
+In-Reply-To: <037101c6a0f5$749bb130$a501a8c0@CAM.ARTIMI.COM>
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -24,23 +24,52 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q3/txt/msg00012.txt.bz2
+X-SW-Source: 2006-q3/txt/msg00013.txt.bz2
 
-On Thu, Jul 06, 2006 at 12:30:03PM +0100, Mike Rose wrote:
->Hi,
->
->We like cygwin for remotely managing windows computers using ssh. Therefore 
->we like a command line install of cygwin sshd:
->http://www.tcm.phy.cam.ac.uk/~mr349/cygwin_install.html
->
->Here's the patch that my colleague did:
->http://www.tcm.phy.cam.ac.uk/~mr349/cygwin.patch
->It is definitely not the best code, but it works and meets our needs and 
->maybe will be helpful to the cygwin project.
+Dave Korn wrote:
+> On 06 July 2006 07:28, SUZUKI Hisao wrote:
+> 
+> 
+>> Sorry, but I cannot access to CVS server because of firewall.  So the
+>> patch file was made from the cygwin-1.5.20-1-src.
+> 
+>   Here it is, blindly applied to current CVS and then regenerated.  I've
+> checked that it still builds and I've installed and started running with it.
+> I'll report any quirks I find, but I'm not likely to be using the UTF-8
+> features; I'll just look out for any possible breakage of existing stuff.
 
-This isn't a cygwin patch, it's a setup.exe patch.
+Thank you!
 
-Would you mind sending this to the cygwin-apps mailing list?  That is
-where we discuss setup.exe.
+>   Just a couple of comments that I noticed straight away: there's lots of
+> commented out blocks that should be removed if they aren't going to be used,
+> and there's a worrying number of XXX tags that suggest some work remains to be
+> done....?
 
-cgf
+The tags had meant so in the early stage of development
+circa 1 March indeed.  During testing and debugging, they
+have been remained and used as the marks where I touched
+the source specifically.  Generally, I have replaced every
+occurrence of ANSI-WIN32 API that operates on a file name
+with macros in winsup.h
+
+And a few tags means some work remains yet really.  They
+are in miscfuncs.cc, where I put codes that replace ANSI-
+WIN32 API generally:
+
+u_mbstowcs:  combining form conversion needs work on
+    combining grave, acute etc. especially.
+
+GetCommandLineU:  a large fixed-size dynamic buffer is
+    used.  It just works fine for most cases, and falls
+    back gracefully for ASCII input.  It operates well
+    in 99% cases.  For the rest cases, it needs work
+    (in such cases, you will see wrong conversion of
+    non-ASCII characters for now).
+
+I'm sorry for confusion.
+
+>     cheers,
+>       DaveK
+
+Regards,
+-- SUZUKI Hisao
