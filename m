@@ -1,22 +1,23 @@
-Return-Path: <cygwin-patches-return-5924-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 25262 invoked by alias); 17 Jul 2006 20:47:44 -0000
-Received: (qmail 25242 invoked by uid 22791); 17 Jul 2006 20:47:44 -0000
+Return-Path: <cygwin-patches-return-5925-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 1586 invoked by alias); 17 Jul 2006 22:54:05 -0000
+Received: (qmail 1575 invoked by uid 22791); 17 Jul 2006 22:54:03 -0000
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.31.1) with ESMTP; Mon, 17 Jul 2006 20:47:42 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 07F6454C004; Mon, 17 Jul 2006 22:47:39 +0200 (CEST)
-Date: Mon, 17 Jul 2006 20:47:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Received: from mailgw01n.flightsafety.com (HELO mailgw01n.flightsafety.com) (66.109.90.23)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Mon, 17 Jul 2006 22:53:53 +0000
+Received: from xgate2k3.flightsafety.com ([192.168.31.134]) 	by mailgw01n.flightsafety.com (8.13.6.20060614/8.13.6) with ESMTP id k6HMrpce007959 	for <cygwin-patches@cygwin.com>; Mon, 17 Jul 2006 18:53:51 -0400 (EDT) 	(envelope-from brian.ford@flightsafety.com)
+Received: from srv1163ex1.flightsafety.com ([198.51.28.39]) by xgate2k3.flightsafety.com with Microsoft SMTPSVC(6.0.3790.1830); 	 Mon, 17 Jul 2006 18:54:09 -0400
+Received: from pc1163-8460-xp ([198.51.27.93]) by srv1163ex1.flightsafety.com with Microsoft SMTPSVC(6.0.3790.1830); 	 Mon, 17 Jul 2006 17:54:08 -0500
+Date: Mon, 17 Jul 2006 22:54:00 -0000
+From: Brian Ford <Brian.Ford@flightsafety.com>
+Reply-To: cygwin-patches@cygwin.com
 To: cygwin-patches@cygwin.com
 Subject: Re: allow read into untouched noreserve mappings
-Message-ID: <20060717204739.GA27029@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <Pine.CYG.4.58.0607121318080.2284@PC1163-8460-XP.flightsafety.com> <20060712202215.GS8759@calimero.vinschen.de> <Pine.CYG.4.58.0607121536330.3784@PC1163-8460-XP.flightsafety.com> <20060713103431.GA17383@calimero.vinschen.de> <Pine.CYG.4.58.0607130933400.1164@PC1163-8460-XP.flightsafety.com> <Pine.CYG.4.58.0607131315110.3316@PC1163-8460-XP.flightsafety.com> <20060714091601.GD8759@calimero.vinschen.de> <Pine.CYG.4.58.0607140931050.3316@PC1163-8460-XP.flightsafety.com> <20060714155523.GL8759@calimero.vinschen.de> <Pine.CYG.4.58.0607171205100.2704@PC1163-8460-XP.flightsafety.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.CYG.4.58.0607171205100.2704@PC1163-8460-XP.flightsafety.com>
-User-Agent: Mutt/1.4.2i
+In-Reply-To: <20060717204739.GA27029@calimero.vinschen.de>
+Message-ID: <Pine.CYG.4.58.0607171732120.1780@PC1163-8460-XP.flightsafety.com>
+References: <Pine.CYG.4.58.0607121318080.2284@PC1163-8460-XP.flightsafety.com>  <20060712202215.GS8759@calimero.vinschen.de>  <Pine.CYG.4.58.0607121536330.3784@PC1163-8460-XP.flightsafety.com>  <20060713103431.GA17383@calimero.vinschen.de>  <Pine.CYG.4.58.0607130933400.1164@PC1163-8460-XP.flightsafety.com>  <Pine.CYG.4.58.0607131315110.3316@PC1163-8460-XP.flightsafety.com>  <20060714091601.GD8759@calimero.vinschen.de>  <Pine.CYG.4.58.0607140931050.3316@PC1163-8460-XP.flightsafety.com>  <20060714155523.GL8759@calimero.vinschen.de>  <Pine.CYG.4.58.0607171205100.2704@PC1163-8460-XP.flightsafety.com>  <20060717204739.GA27029@calimero.vinschen.de>
+MIME-Version: 1.0
+Content-Type: MULTIPART/MIXED; BOUNDARY="-559023410-1956010333-1153175754=:1780"
+Content-ID: <Pine.CYG.4.58.0607171736050.1780@PC1163-8460-XP.flightsafety.com>
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -24,41 +25,214 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q3/txt/msg00019.txt.bz2
+X-SW-Source: 2006-q3/txt/msg00020.txt.bz2
 
-On Jul 17 12:25, Brian Ford wrote:
-> On Fri, 14 Jul 2006, Corinna Vinschen wrote:
-> 
-> > The idea is to have features working for most cases and then
-> > to get it working gradually better.
-> 
-> Well, in that spirit then, the attached patch allows read and varients to
-> use untouched noreserve mappings as buffers.  If this is accepted, I'll
-> consider doing something similar for recvmsg and recvfrom.  That should
-> cover the majority of cases, I believe.
-> 
-> 2006-07-17  Brian Ford  <Brian.Ford@FlightSafety.com>
-> 
-> 	* winsup.h (mmap_commit_noreserve_pages): New prototype.
-> 	* mmap.cc (fhandler_base::raw_read): New function.
-> 	* fhandler.cc (fhandler_base::raw_read): Call it for
-> 	INVALID_PARAMETER errors, and retry on success to allow
-> 	reads into untouched MAP_NORESERVE buffers.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
 
-Sorry but... ERROR_INVALID_PARAMETER?  When I debugged this I got
-ERROR_NOACCESS.  What system was that running on?
+---559023410-1956010333-1153175754=:1780
+Content-Type: TEXT/PLAIN; CHARSET=US-ASCII
+Content-ID: <Pine.CYG.4.58.0607171736051.1780@PC1163-8460-XP.flightsafety.com>
+Content-length: 1410
 
-I would rather see the mmap_commit_noreserve_pages functionality folded
-into the existing mmap_is_attached_or_noreserve_page function (add
-parameter, see if len == 0 or > 0, yada yada yada) so that there's
-only one function which does the work, regardless from where it's called.
+On Mon, 17 Jul 2006, Corinna Vinschen wrote:
 
-Other than that it looks like a good start.
+> Sorry but... ERROR_INVALID_PARAMETER?  When I debugged this I got
+> ERROR_NOACCESS.
 
+You are correct.  The case fall through combined with the earlier EISDIR
+error confused me.  That, and the fact that the patch actually worked ;-).
 
-Corinna
+> I would rather see the mmap_commit_noreserve_pages functionality folded
+> into the existing mmap_is_attached_or_noreserve_page function (add
+> parameter, see if len == 0 or > 0, yada yada yada) so that there's
+> only one function which does the work, regardless from where it's called.
+
+I was trying to be less intrusive and that looked messy.  Oh, well...
+
+Untested this time because I have to run to an appointment.
+
+2006-07-17  Brian Ford  <Brian.Ford@FlightSafety.com>
+
+	* winsup.h (mmap_region_status): New enum.
+	(mmap_is_attached_or_noreserve_page): Adjust prototype and rename
+	as below.
+	* mmap.cc (mmap_is_attached_or_noreserve_page):  Rename
+	mmap_is_attached_or_noreserve.  Add region length parameter.
+	Return enum above.
+	* exceptions.cc (_cygtls::handle_exceptions): Accomodate above.
+	* fhandler.cc (fhandler_base::raw_read): Call above for NOACCESS
+	errors and retry on success to allow reads into untouched
+	MAP_NORESERVE buffers.
 
 -- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+Brian Ford
+Lead Realtime Software Engineer
+VITAL - Visual Simulation Systems
+FlightSafety International
+the best safety device in any aircraft is a well-trained crew...
+.
+
+
+---559023410-1956010333-1153175754=:1780
+Content-Type: TEXT/PLAIN; charset=US-ASCII; name="read_noreserve.patch"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.CYG.4.58.0607171754060.1780@PC1163-8460-XP.flightsafety.com>
+Content-Description: 
+Content-Disposition: attachment; filename="read_noreserve.patch"
+Content-length: 9195
+
+SW5kZXg6IGV4Y2VwdGlvbnMuY2MNCj09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0N
+ClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL2N5Z3dpbi9leGNlcHRp
+b25zLmNjLHYNCnJldHJpZXZpbmcgcmV2aXNpb24gMS4yOTYNCmRpZmYgLXUg
+LXAgLXUgLXAgLXIxLjI5NiBleGNlcHRpb25zLmNjDQotLS0gZXhjZXB0aW9u
+cy5jYwkxMyBKdWwgMjAwNiAwODozMzozNCAtMDAwMAkxLjI5Ng0KKysrIGV4
+Y2VwdGlvbnMuY2MJMTcgSnVsIDIwMDYgMjI6MzE6MTEgLTAwMDANCkBAIC01
+MjYsMTIgKzUyNiwxMiBAQCBfY3lndGxzOjpoYW5kbGVfZXhjZXB0aW9ucyAo
+RVhDRVBUSU9OX1JFDQogICAgICAgYnJlYWs7DQogDQogICAgIGNhc2UgU1RB
+VFVTX0FDQ0VTU19WSU9MQVRJT046DQotICAgICAgc3dpdGNoIChtbWFwX2lz
+X2F0dGFjaGVkX29yX25vcmVzZXJ2ZV9wYWdlIChlLT5FeGNlcHRpb25JbmZv
+cm1hdGlvblsxXSkpDQorICAgICAgc3dpdGNoIChtbWFwX2lzX2F0dGFjaGVk
+X29yX25vcmVzZXJ2ZSAoKHZvaWQgKillLT5FeGNlcHRpb25JbmZvcm1hdGlv
+blsxXSwNCisJCQkJCSAgICAgMSkpDQogICAgICAgICB7DQotCWNhc2UgMjoJ
+CS8qIE1BUF9OT1JFU0VSVkUgcGFnZSwgbm93IGNvbW1pdGVkLiAqLw0KKwlj
+YXNlIE1NQVBfTk9SRVNFUlZFX0NPTU1JVEVEOg0KIAkgIHJldHVybiAwOw0K
+LQljYXNlIDE6CQkvKiBNQVBfTk9SRVNFUlZFIHBhZ2UsIGNvbW1pdCBmYWls
+ZWQsIG9yDQotCQkJICAgYWNjZXNzIHRvIG1tYXAgcGFnZSBiZXlvbmQgRU9G
+LiAqLw0KKwljYXNlIE1NQVBfUkFJU0VfU0lHQlVTOgkvKiBjb21taXQgZmFp
+bGVkIGZvciBub3Jlc2VydmUgb3IgYmV5b25kIEVPRi4gKi8NCiAJICBzaS5z
+aV9zaWdubyA9IFNJR0JVUzsNCiAJICBzaS5zaV9jb2RlID0gQlVTX09CSkVS
+UjsNCiAJICBicmVhazsNCkluZGV4OiBmaGFuZGxlci5jYw0KPT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PQ0KUkNTIGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAv
+Y3lnd2luL2ZoYW5kbGVyLmNjLHYNCnJldHJpZXZpbmcgcmV2aXNpb24gMS4y
+NTYNCmRpZmYgLXUgLXAgLXUgLXAgLXIxLjI1NiBmaGFuZGxlci5jYw0KLS0t
+IGZoYW5kbGVyLmNjCTEzIEp1bCAyMDA2IDIwOjU2OjI0IC0wMDAwCTEuMjU2
+DQorKysgZmhhbmRsZXIuY2MJMTcgSnVsIDIwMDYgMjI6MzE6MTEgLTAwMDAN
+CkBAIC0yMjMsOCArMjIzLDEwIEBAIGZoYW5kbGVyX2Jhc2U6OnJhd19yZWFk
+ICh2b2lkICpwdHIsIHNpemUNCiANCiAgIEhBTkRMRSBoID0gTlVMTDsJLyog
+Z3J1bWJsZSAqLw0KICAgaW50IHByaW8gPSAwOwkJLyogZGl0dG8gKi8NCisg
+IGludCB0cnlfbm9yZXNlcnZlID0gMTsNCiAgIERXT1JEIGxlbiA9IHVsZW47
+DQogDQorcmV0cnk6DQogICB1bGVuID0gKHNpemVfdCkgLTE7DQogICBpZiAo
+cmVhZF9zdGF0ZSkNCiAgICAgew0KQEAgLTI1OSw2ICsyNjEsMTkgQEAgZmhh
+bmRsZXJfYmFzZTo6cmF3X3JlYWQgKHZvaWQgKnB0ciwgc2l6ZQ0KIAkgICAg
+ICBieXRlc19yZWFkID0gMDsNCiAJICAgICAgYnJlYWs7DQogCSAgICB9DQor
+CSAgaWYgKHRyeV9ub3Jlc2VydmUpDQorCSAgICB7DQorCSAgICAgIHRyeV9u
+b3Jlc2VydmUgPSAwOw0KKwkgICAgICBzd2l0Y2ggKG1tYXBfaXNfYXR0YWNo
+ZWRfb3Jfbm9yZXNlcnZlIChwdHIsIGxlbikpDQorCQl7DQorCQljYXNlIE1N
+QVBfTk9SRVNFUlZFX0NPTU1JVEVEOg0KKwkJICBnb3RvIHJldHJ5Ow0KKwkJ
+Y2FzZSBNTUFQX1JBSVNFX1NJR0JVUzoNCisJCSAgcmFpc2UoU0lHQlVTKTsN
+CisJCWNhc2UgTU1BUF9OT05FOg0KKwkJICBicmVhazsNCisJCX0NCisJICAg
+IH0NCiAJY2FzZSBFUlJPUl9JTlZBTElEX0ZVTkNUSU9OOg0KIAljYXNlIEVS
+Uk9SX0lOVkFMSURfUEFSQU1FVEVSOg0KIAljYXNlIEVSUk9SX0lOVkFMSURf
+SEFORExFOg0KSW5kZXg6IG1tYXAuY2MNCj09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT0NClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL2N5Z3dpbi9tbWFw
+LmNjLHYNCnJldHJpZXZpbmcgcmV2aXNpb24gMS4xMzANCmRpZmYgLXUgLXAg
+LXUgLXAgLXIxLjEzMCBtbWFwLmNjDQotLS0gbW1hcC5jYwkxMyBKdWwgMjAw
+NiAxMDoyOToyMSAtMDAwMAkxLjEzMA0KKysrIG1tYXAuY2MJMTcgSnVsIDIw
+MDYgMjI6MzE6MTIgLTAwMDANCkBAIC05MDAsNDQgKzkwMCw1OSBAQCBtYXA6
+OmRlbF9saXN0ICh1bnNpZ25lZCBpKQ0KIH0NCiANCiAvKiBUaGlzIGZ1bmN0
+aW9uIGlzIGNhbGxlZCBmcm9tIGV4Y2VwdGlvbl9oYW5kbGVyIHdoZW4gYSBz
+ZWdtZW50YXRpb24NCi0gICB2aW9sYXRpb24gaGFzIGhhcHBlbmVkLiAgV2Ug
+aGF2ZSB0d28gY2FzZXMgdG8gY2hlY2sgaGVyZS4NCisgICB2aW9sYXRpb24g
+aGFzIG9jY3VycmVkLiAgSXQgc2hvdWxkIGFsc28gYmUgY2FsbGVkIGZyb20g
+YWxsIEN5Z3dpbg0KKyAgIGZ1bmN0aW9ucyB0aGF0IHdhbnQgdG8gc3VwcG9y
+dCBwYXNzaW5nIG5vcmVzZXJ2ZSBtbWFwIHBhZ2UgYWRkcmVzc2VzDQorICAg
+dG8gV2luZG93cyBzeXN0ZW0gY2FsbHMuICBJbiB0aGF0IGNhc2UsIGl0IHNo
+b3VsZCBiZSBjYWxsZWQgb25seSBhZnRlcg0KKyAgIGEgc3lzdGVtIGNhbGwg
+aW5kaWNhdGVzIHRoYXQgdGhlIGFwcGxpY2F0aW9uIGJ1ZmZlciBwYXNzZWQg
+aGFkIGFuDQorICAgaW52YWxpZCB2aXJ0dWFsIGFkZHJlc3MgdG8gYXZvaWQg
+YW55IHBlcmZvcm1hbmNlIGltcGFjdCBpbiBub24tbm9yZXNlcnZlDQorICAg
+Y2FzZXMuDQogICAgDQotICAgRmlyc3QsIGlzIGl0IGFuIGFkZHJlc3Mgd2l0
+aGluICJhdHRhY2hlZCIgbW1hcCBwYWdlcyAoaW5kaWNhdGVkIGJ5DQotICAg
+dGhlIF9fUFJPVF9BVFRBQ0ggcHJvdGVjdGlvbiwgc2VlIHRoZXJlKT8gIElu
+IHRoaXMgY2FzZSB0aGUgZnVuY3Rpb24NCi0gICByZXR1cm5zIDEgYW5kIHRo
+ZSBleGNlcHRpb25faGFuZGxlciByYWlzZXMgU0lHQlVTLCBhcyBkZW1hbmRl
+ZCBieSB0aGUNCi0gICBtZW1vcnkgcHJvdGVjdGlvbiBleHRlbnNpb24gZGVz
+Y3JpYmVkIGluIFNVU3YzIChzZWUgdGhlIG1tYXAgbWFuDQotICAgcGFnZSku
+DQotICAgDQotICAgU2Vjb25kLCBjaGVjayBpZiB0aGUgYWRkcmVzcyBpcyB3
+aXRoaW4gIm5vcmVzZXJ2ZSIgbW1hcCBwYWdlcw0KLSAgIChpbmRpY2F0ZWQg
+YnkgTUFQX05PUkVTRVJWRSBmbGFnKS4gIElmIHNvLCB0aGUgZnVuY3Rpb24g
+Y2FsbHMNCi0gICBWaXJ0dWFsQWxsb2MgdG8gY29tbWl0IHRoZSBwYWdlIGFu
+ZCByZXR1cm5zIDIuICBUaGUgZXhjZXB0aW9uIGhhbmRsZXINCi0gICB0aGVu
+IGp1c3QgcmV0dXJucyB3aXRoIDAgYW5kIHRoZSBhZmZlY3RlZCBhcHBsaWNh
+dGlvbiByZXRyaWVzIHRoZQ0KLSAgIGZhaWxpbmcgbWVtb3J5IGFjY2Vzcy4g
+IElmIFZpcnR1YWxBbGxvYyBmYWlscywgdGhlIGZ1bmN0aW9uIHJldHVybnMN
+Ci0gICAxLCBzbyB0aGF0IHRoZSBleGNlcHRpb24gaGFuZGxlciByYWlzZXMg
+YSBTSUdCVVMsIGFzIGRlc2NyaWJlZCBpbiB0aGUNCi0gICBNQVBfTk9SRVNF
+UlZFIG1hbiBwYWdlcyBmb3IgTGludXggYW5kIFNvbGFyaXMuDQotICAgDQot
+ICAgSW4gYW55IG90aGVyIGNhc2UgMCBpcyByZXR1cm5lZCBhbmQgYSBub3Jt
+YWwgU0lHU0VHViBpcyByYWlzZWQuICovDQotaW50DQotbW1hcF9pc19hdHRh
+Y2hlZF9vcl9ub3Jlc2VydmVfcGFnZSAoVUxPTkdfUFRSIGFkZHIpDQorICAg
+Q2hlY2sgaWYgdGhlIGFkZHJlc3MgcmFuZ2UgaXMgYWxsIHdpdGhpbiBub3Jl
+c2VydmUgbW1hcCByZWdpb25zLiAgSWYgc28sDQorICAgY2FsbCBWaXJ0dWFs
+QWxsb2MgdG8gY29tbWl0IHRoZSBwYWdlcyBhbmQgcmV0dXJuIE1NQVBfTk9S
+RVNFUlZFX0NPTU1JVEVEDQorICAgb24gc3VjY2Vzcy4gIElmIHRoZSBwYWdl
+IGhhcyBfX1BST1RfQVRUQUNIIChTVVN2MyBtZW1vcnkgcHJvdGVjdGlvbg0K
+KyAgIGV4dGVuc2lvbiksIG9yIGlmIFZpcnV0YWxBbGxvYyBmYWlscywgcmV0
+dXJuIE1NQVBfUkFJU0VfU0lHQlVTLg0KKyAgIE90aGVyd2lzZSwgcmV0dXJu
+IE1NQVBfTk9ORSBpZiB0aGUgYWRkcmVzcyByYW5nZSBpcyBub3QgY292ZXJl
+ZCBieSBhbg0KKyAgIGF0dGFjaGVkIG9yIG5vcmVzZXJ2ZSBtYXAuDQorDQor
+ICAgT24gTUFQX05PUkVTRVJWRV9DT01NSVRFRCwgdGhlIGV4ZWNlcHRpb24g
+aGFuZGxlciBzaG91bGQgcmV0dXJuIDAgdG8NCisgICBhbGxvdyB0aGUgYXBw
+bGljYXRpb24gdG8gcmV0cnkgdGhlIG1lbW9yeSBhY2Nlc3MsIG9yIHRoZSBj
+YWxsaW5nIEN5Z3dpbg0KKyAgIGZ1bmN0aW9uIHNob3VsZCByZXRyeSB0aGUg
+V2luZG93cyBzeXN0ZW0gY2FsbC4gKi8NCittbWFwX3JlZ2lvbl9zdGF0dXMN
+CittbWFwX2lzX2F0dGFjaGVkX29yX25vcmVzZXJ2ZSAodm9pZCAqYWRkciwg
+c2l6ZV90IGxlbikNCiB7DQotICBsaXN0ICptYXBfbGlzdDsNCi0gIGxvbmcg
+cmVjb3JkX2lkeDsNCi0gIGNhZGRyX3QgdV9hZGRyOw0KLSAgRFdPUkQgdV9s
+ZW47DQotICBEV09SRCBwYWdlc2l6ZSA9IGdldHN5c3RlbXBhZ2VzaXplICgp
+Ow0KKyAgbGlzdCAqbWFwX2xpc3QgPSBtbWFwcGVkX2FyZWFzLmdldF9saXN0
+X2J5X2ZkICgtMSk7DQogDQotICBhZGRyID0gcm91bmRkb3duIChhZGRyLCBw
+YWdlc2l6ZSk7DQotICBpZiAoIShtYXBfbGlzdCA9IG1tYXBwZWRfYXJlYXMu
+Z2V0X2xpc3RfYnlfZmQgKC0xKSkpDQotICAgIHJldHVybiAwOw0KLSAgaWYg
+KChyZWNvcmRfaWR4ID0gbWFwX2xpc3QtPnNlYXJjaF9yZWNvcmQgKChjYWRk
+cl90KWFkZHIsIHBhZ2VzaXplLA0KLQkJCQkJICAgICB1X2FkZHIsIHVfbGVu
+LCAtMSkpIDwgMCkNCi0gICAgcmV0dXJuIDA7DQotICBpZiAobWFwX2xpc3Qt
+PmdldF9yZWNvcmQgKHJlY29yZF9pZHgpLT5hdHRhY2hlZCAoKSkNCi0gICAg
+cmV0dXJuIDE7DQotICBpZiAoIW1hcF9saXN0LT5nZXRfcmVjb3JkIChyZWNv
+cmRfaWR4KS0+bm9yZXNlcnZlICgpKQ0KLSAgICByZXR1cm4gMDsNCi0gIERX
+T1JEIG5ld19wcm90ID0gbWFwX2xpc3QtPmdldF9yZWNvcmQgKHJlY29yZF9p
+ZHgpLT5nZW5fcHJvdGVjdCAoKTsNCi0gIHJldHVybiBWaXJ0dWFsQWxsb2Mg
+KCh2b2lkICopYWRkciwgcGFnZXNpemUsIE1FTV9DT01NSVQsIG5ld19wcm90
+KSA/IDIgOiAxOw0KKyAgaWYgKG1hcF9saXN0ID09IE5VTEwpDQorICAgIHJl
+dHVybiBNTUFQX05PTkU7DQorDQorICB3aGlsZSAobGVuID4gMCkgDQorICAg
+IHsNCisgICAgICBjYWRkcl90IHVfYWRkcjsNCisgICAgICBEV09SRCB1X2xl
+bjsNCisgICAgICBsb25nIHJlY29yZF9pZHggPSBtYXBfbGlzdC0+c2VhcmNo
+X3JlY29yZCAoKGNhZGRyX3QpYWRkciwgMSwNCisJCQkJCQkgdV9hZGRyLCB1
+X2xlbiwgLTEpOw0KKyAgICAgIGlmIChyZWNvcmRfaWR4IDwgMCkNCisJcmV0
+dXJuIE1NQVBfTk9ORTsNCisNCisgICAgICBtbWFwX3JlY29yZCAqcmVjID0g
+bWFwX2xpc3QtPmdldF9yZWNvcmQgKHJlY29yZF9pZHgpOw0KKyAgICAgIGlm
+IChyZWMtPmF0dGFjaGVkICgpKQ0KKwlyZXR1cm4gTU1BUF9SQUlTRV9TSUdC
+VVM7DQorICAgICAgaWYgKCFyZWMtPm5vcmVzZXJ2ZSAoKSkNCisJcmV0dXJu
+IE1NQVBfTk9ORTsNCisNCisgICAgICBzaXplX3QgY29tbWl0X2xlbiA9IHVf
+bGVuIC0gKChjaGFyICopYWRkciAtIHVfYWRkcik7DQorICAgICAgaWYgKGNv
+bW1pdF9sZW4gPiBsZW4pDQorCWNvbW1pdF9sZW4gPSBsZW47DQorDQorICAg
+ICAgaWYgKFZpcnR1YWxBbGxvYyAoYWRkciwgY29tbWl0X2xlbiwgTUVNX0NP
+TU1JVCwgcmVjLT5nZW5fcHJvdGVjdCAoKSkNCisJICA9PSBOVUxMKQ0KKwly
+ZXR1cm4gTU1BUF9SQUlTRV9TSUdCVVM7DQorDQorICAgICAgYWRkciAgPSAo
+Y2hhciAqKWFkZHIgKyBjb21taXRfbGVuOw0KKyAgICAgIGxlbiAgLT0gY29t
+bWl0X2xlbjsNCisgICAgfQ0KKw0KKyAgICByZXR1cm4gTU1BUF9OT1JFU0VS
+VkVfQ09NTUlURUQ7DQogfQ0KIA0KIHN0YXRpYyBjYWRkcl90DQpJbmRleDog
+d2luc3VwLmgNCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0NClJDUyBmaWxlOiAv
+Y3ZzL3NyYy9zcmMvd2luc3VwL2N5Z3dpbi93aW5zdXAuaCx2DQpyZXRyaWV2
+aW5nIHJldmlzaW9uIDEuMTg5DQpkaWZmIC11IC1wIC11IC1wIC1yMS4xODkg
+d2luc3VwLmgNCi0tLSB3aW5zdXAuaAkxMyBKdWwgMjAwNiAwODozMzozNCAt
+MDAwMAkxLjE4OQ0KKysrIHdpbnN1cC5oCTE3IEp1bCAyMDA2IDIyOjMxOjEy
+IC0wMDAwDQpAQCAtMjk5LDcgKzI5OSwxMyBAQCBzaXplX3QgZ2V0c3lzdGVt
+cGFnZXNpemUgKCk7DQogDQogLyogbW1hcCBmdW5jdGlvbnMuICovDQogdm9p
+ZCBtbWFwX2luaXQgKCk7DQotaW50IG1tYXBfaXNfYXR0YWNoZWRfb3Jfbm9y
+ZXNlcnZlX3BhZ2UgKFVMT05HX1BUUiBhZGRyKTsNCitlbnVtIG1tYXBfcmVn
+aW9uX3N0YXR1cw0KKyAgew0KKyAgICBNTUFQX05PTkUsDQorICAgIE1NQVBf
+UkFJU0VfU0lHQlVTLA0KKyAgICBNTUFQX05PUkVTRVJWRV9DT01NSVRFRA0K
+KyAgfTsNCittbWFwX3JlZ2lvbl9zdGF0dXMgbW1hcF9pc19hdHRhY2hlZF9v
+cl9ub3Jlc2VydmUgKHZvaWQgKmFkZHIsIHNpemVfdCBsZW4pOw0KIA0KIGlu
+dCB3aW5wcmlvX3RvX25pY2UgKERXT1JEKSBfX2F0dHJpYnV0ZV9fICgocmVn
+cGFybSAoMSkpKTsNCiBEV09SRCBuaWNlX3RvX3dpbnByaW8gKGludCAmKSBf
+X2F0dHJpYnV0ZV9fICgocmVncGFybSAoMSkpKTsNCg==
+
+---559023410-1956010333-1153175754=:1780--
