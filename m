@@ -1,22 +1,22 @@
-Return-Path: <cygwin-patches-return-5939-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 25236 invoked by alias); 24 Jul 2006 11:14:09 -0000
-Received: (qmail 25225 invoked by uid 22791); 24 Jul 2006 11:14:08 -0000
+Return-Path: <cygwin-patches-return-5940-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 16910 invoked by alias); 26 Jul 2006 22:53:23 -0000
+Received: (qmail 16896 invoked by uid 22791); 26 Jul 2006 22:53:22 -0000
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.31.1) with ESMTP; Mon, 24 Jul 2006 11:14:05 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 42BD86D42F4; Mon, 24 Jul 2006 13:14:02 +0200 (CEST)
-Date: Mon, 24 Jul 2006 11:14:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] cygcheck: follow symbolic links
-Message-ID: <20060724111402.GG11991@calimero.vinschen.de>
+Received: from mailgw04.flightsafety.com (HELO mailgw04.flightsafety.com) (66.109.93.21)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Wed, 26 Jul 2006 22:53:15 +0000
+Received: from mailgw04.flightsafety.com (localhost [127.0.0.1]) 	by mailgw04.flightsafety.com (8.13.6/8.13.1) with ESMTP id k6QMmr4L028895 	for <cygwin-patches@cygwin.com>; Wed, 26 Jul 2006 18:48:53 -0400 (EDT)
+Received: from dradmast.flightsafety.com ([192.168.93.130]) 	by mailgw04.flightsafety.com (8.13.6/8.13.1) with ESMTP id k6QMmqNL028891 	for <cygwin-patches@cygwin.com>; Wed, 26 Jul 2006 18:48:52 -0400 (EDT)
+Received: from srv1163ex1.flightsafety.com ([198.51.28.39]) by dradmast.flightsafety.com with Microsoft SMTPSVC(6.0.3790.211); 	 Wed, 26 Jul 2006 17:53:33 -0500
+Received: from pc1163-8460-xp ([198.51.27.93]) by srv1163ex1.flightsafety.com with Microsoft SMTPSVC(6.0.3790.1830); 	 Wed, 26 Jul 2006 17:53:31 -0500
+Date: Wed, 26 Jul 2006 22:53:00 -0000
+From: Brian Ford <Brian.Ford@flightsafety.com>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <Pine.GSO.4.63.0602131341020.17217@access1.cims.nyu.edu> <20060216160637.GQ26541@calimero.vinschen.de> <Pine.GSO.4.63.0602161116540.22053@access1.cims.nyu.edu> <20060217113100.GT26541@calimero.vinschen.de> <Pine.GSO.4.63.0602170900350.1592@access1.cims.nyu.edu> <Pine.GSO.4.63.0602221335110.4972@access1.cims.nyu.edu> <20060223112956.GF4294@calimero.vinschen.de> <Pine.GSO.4.63.0602230913440.13565@access1.cims.nyu.edu> <Pine.GSO.4.63.0607191036580.13093@access1.cims.nyu.edu>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.GSO.4.63.0607191036580.13093@access1.cims.nyu.edu>
-User-Agent: Mutt/1.4.2i
+To: cygwin-patches@cygwin.com
+Subject: check_iovec cleanup
+Message-ID: <Pine.CYG.4.58.0607261730550.2352@PC1163-8460-XP.flightsafety.com>
+MIME-Version: 1.0
+Content-Type: MULTIPART/MIXED; BOUNDARY="-559023410-1450828668-1153953886=:2352"
+Content-ID: <Pine.CYG.4.58.0607261753320.1740@PC1163-8460-XP.flightsafety.com>
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -24,75 +24,141 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q3/txt/msg00034.txt.bz2
+X-SW-Source: 2006-q3/txt/msg00035.txt.bz2
 
-On Jul 21 20:52, Igor Peshansky wrote:
-> In any case, here's the latest incarnation, with get_word and get_dword
-> folded into path.cc, and display_error returned to cygcheck.cc, where it
-> belongs.  Tested reasonably well (with symlinks pointing to symlinks,
-> etc).  I'll let you judge the neatness of the ChangeLog entry.  If I'm
-> lucky, this might just get into 1.5.21[*].
-> 	Igor
-> [*] Corinna, I'm guessing this is sufficiently different that you can't
-> accept it without "the fax" -- I'll keep pinging the guy who's holding
-> this up, but this message is also supposed to confirm that there is a
-> working patch, and the delay is simply bureaucratic.  Oh, the
-> frustration...  If you judge the changes from the previous incarnation
-> to not be significant, just go ahead and apply this, given the previous
-> approval.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
 
-The latest fax was about this change, so I think this should still be
-covered, shouldn't it?  Ping the guy nevertheless.  We should stay on
-the safe side in legal questions.
+---559023410-1450828668-1153953886=:2352
+Content-Type: TEXT/PLAIN; CHARSET=US-ASCII
+Content-ID: <Pine.CYG.4.58.0607261753321.1740@PC1163-8460-XP.flightsafety.com>
+Content-length: 876
 
-I'd be happy to apply the patch, but it would be nice if you could tweak
-the formatting somewhat:
+I think this removes some redundancy and a questionable check while being
+more straight forward and covering more possible fault cases.  Please let
+me know if I missed a reason it had to be that way.
 
-> +  if (GetLastError () != NO_ERROR) display_error ("get_dword");
+2006-07-26  Brian Ford  <Brian.Ford@FlightSafety.com>
 
-The display_error call should be on its own line, as usual.  This
-happens multiple times in your patch.
-
-> +  if (is_exe (fh))
-> +    dll_info (path, fh, lvl, 1);
-> +  else if (is_symlink (fh))
-> +    display_error ("track_down: Huh?  Got a symlink!");
-
-Is that really the supposed message here?
-
-> +      printf (" - Not a DLL: magic number %x (%d) '%s'\n", magic, magic, (char *)&magic);
-
-Please split the printf so that it's not longer than 80 chars.
-
-> +      /* TODO: check for invalid path contents (see ../cygwin/path.cc:3313 */
-
-Since source code lines are most volatile, I'd not refer to a line number
-in another source code.  Just mention the function name. */
-
-> +      if (got != sizeof (buf) || memcmp (buf, SYMLINK_COOKIE, sizeof (buf)) != 0)
-
-Split the line, please.
-
-> +      if (SetFilePointer (fh, 0x4c + offset + 4, 0, FILE_BEGIN) == INVALID_SET_FILE_POINTER
-
-Same here.
-
-> +	{
-> +	  return false;
-> +	}
-
-I'd rather not have these one liners in curly brackets.  It's a bit
-irritating since sometimes you put them in curly brackets, sometimes you
-don't.
-
-
-The code looks ok, otherwise.
-
-
-Thanks,
-Corinna
+	* miscfuncs.cc (dummytest): Delete.
+	(check_iovec): Remove forwrite argument.  Let caller setup fault
+	handler and don't explicitly test for valid buffers.
+	* winsup.h (check_iovec_for_read): Delete define.
+	(check_iovec_for_write): Likewise.
+	(check_iovec): Adjust prototype.
+	* net.cc (cygwin_recvmsg): Adjust for above.
+	(cygwin_sendmsg): Likewise.
+	* syscalls.cc (readv): Setup fault handling here and adjust for
+	above.
+	(writev): Likewise.
 
 -- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+Brian Ford
+Lead Realtime Software Engineer
+VITAL - Visual Simulation Systems
+FlightSafety International
+the best safety device in any aircraft is a well-trained crew...
+---559023410-1450828668-1153953886=:2352
+Content-Type: TEXT/PLAIN; CHARSET=US-ASCII; NAME="check_iovec_cleanup.patch"
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.CYG.4.58.0607261744460.2352@PC1163-8460-XP.flightsafety.com>
+Content-Description: 
+Content-Disposition: ATTACHMENT; FILENAME="check_iovec_cleanup.patch"
+Content-length: 5637
+
+SW5kZXg6IG1pc2NmdW5jcy5jYw0KPT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ0K
+UkNTIGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvY3lnd2luL21pc2NmdW5j
+cy5jYyx2DQpyZXRyaWV2aW5nIHJldmlzaW9uIDEuNDENCmRpZmYgLXUgLXAg
+LXIxLjQxIG1pc2NmdW5jcy5jYw0KLS0tIG1pc2NmdW5jcy5jYwkyOCBNYXkg
+MjAwNiAxNTo1MDoxNCAtMDAwMAkxLjQxDQorKysgbWlzY2Z1bmNzLmNjCTI2
+IEp1bCAyMDA2IDIyOjI4OjUzIC0wMDAwDQpAQCAtMTU5LDEzICsxNTksOCBA
+QCBjaGVja19pbnZhbGlkX3ZpcnR1YWxfYWRkciAoY29uc3Qgdm9pZCAqDQog
+ICByZXR1cm4gMDsNCiB9DQogDQotc3RhdGljIGNoYXIgX19hdHRyaWJ1dGVf
+XyAoKG5vaW5saW5lKSkNCi1kdW1teXRlc3QgKHZvbGF0aWxlIGNoYXIgKnAp
+DQotew0KLSAgcmV0dXJuICpwOw0KLX0NCiBzc2l6ZV90DQotY2hlY2tfaW92
+ZWMgKGNvbnN0IHN0cnVjdCBpb3ZlYyAqaW92LCBpbnQgaW92Y250LCBib29s
+IGZvcndyaXRlKQ0KK2NoZWNrX2lvdmVjIChjb25zdCBzdHJ1Y3QgaW92ZWMg
+KmlvdiwgaW50IGlvdmNudCkNCiB7DQogICBpZiAoaW92Y250IDw9IDAgfHwg
+aW92Y250ID4gSU9WX01BWCkNCiAgICAgew0KQEAgLTE3MywxMCArMTY4LDYg
+QEAgY2hlY2tfaW92ZWMgKGNvbnN0IHN0cnVjdCBpb3ZlYyAqaW92LCBpbg0K
+ICAgICAgIHJldHVybiAtMTsNCiAgICAgfQ0KIA0KLSAgbXlmYXVsdCBlZmF1
+bHQ7DQotICBpZiAoZWZhdWx0LmZhdWx0ZWQgKEVGQVVMVCkpDQotICAgIHJl
+dHVybiAtMTsNCi0NCiAgIHNpemVfdCB0b3QgPSAwOw0KIA0KICAgd2hpbGUg
+KGlvdmNudCAhPSAwKQ0KQEAgLTE4NywyMSArMTc4LDEzIEBAIGNoZWNrX2lv
+dmVjIChjb25zdCBzdHJ1Y3QgaW92ZWMgKmlvdiwgaW4NCiAJICByZXR1cm4g
+LTE7DQogCX0NCiANCi0gICAgICB2b2xhdGlsZSBjaGFyICpwID0gKChjaGFy
+ICopIGlvdi0+aW92X2Jhc2UpICsgaW92LT5pb3ZfbGVuIC0gMTsNCi0gICAg
+ICBpZiAoIWlvdi0+aW92X2xlbikNCi0JLyogbm90aGluZyB0byBkbyAqLzsN
+Ci0gICAgICBlbHNlIGlmICghZm9yd3JpdGUpDQotCSpwICA9IGR1bW15dGVz
+dCAocCk7DQotICAgICAgZWxzZQ0KLQlkdW1teXRlc3QgKHApOw0KLQ0KICAg
+ICAgIGlvdisrOw0KICAgICAgIGlvdmNudC0tOw0KICAgICB9DQogDQogICBh
+c3NlcnQgKHRvdCA8PSBTU0laRV9NQVgpOw0KIA0KLSAgcmV0dXJuIChzc2l6
+ZV90KSB0b3Q7DQorICByZXR1cm4gdG90Ow0KIH0NCiANCiBVSU5UDQpJbmRl
+eDogbmV0LmNjDQo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQpSQ1MgZmlsZTog
+L2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vbmV0LmNjLHYNCnJldHJpZXZp
+bmcgcmV2aXNpb24gMS4yMTQNCmRpZmYgLXUgLXAgLXIxLjIxNCBuZXQuY2MN
+Ci0tLSBuZXQuY2MJMjUgSnVsIDIwMDYgMTk6MjM6MjMgLTAwMDAJMS4yMTQN
+CisrKyBuZXQuY2MJMjYgSnVsIDIwMDYgMjI6Mjg6NTUgLTAwMDANCkBAIC0y
+MDY4LDcgKzIwNjgsNyBAQCBjeWd3aW5fcmVjdm1zZyAoaW50IGZkLCBzdHJ1
+Y3QgbXNnaGRyICptDQogICAgIHJlcyA9IC0xOw0KICAgZWxzZQ0KICAgICB7
+DQotICAgICAgcmVzID0gY2hlY2tfaW92ZWNfZm9yX3JlYWQgKG1zZy0+bXNn
+X2lvdiwgbXNnLT5tc2dfaW92bGVuKTsNCisgICAgICByZXMgPSBjaGVja19p
+b3ZlYyAobXNnLT5tc2dfaW92LCBtc2ctPm1zZ19pb3ZsZW4pOw0KICAgICAg
+IGlmIChyZXMgPiAwKQ0KIAlyZXMgPSBmaC0+cmVjdm1zZyAobXNnLCBmbGFn
+cywgcmVzKTsgLy8gcmVzID09IGlvdmVjIHRvdA0KICAgICB9DQpAQCAtMjA5
+MSw3ICsyMDkxLDcgQEAgY3lnd2luX3NlbmRtc2cgKGludCBmZCwgY29uc3Qg
+c3RydWN0IG1zZw0KICAgICByZXMgPSAtMTsNCiAgIGVsc2UNCiAgICAgew0K
+LSAgICAgIHJlcyA9IGNoZWNrX2lvdmVjX2Zvcl93cml0ZSAobXNnLT5tc2df
+aW92LCBtc2ctPm1zZ19pb3ZsZW4pOw0KKyAgICAgIHJlcyA9IGNoZWNrX2lv
+dmVjIChtc2ctPm1zZ19pb3YsIG1zZy0+bXNnX2lvdmxlbik7DQogICAgICAg
+cmVzID0gZmgtPnNlbmRtc2cgKG1zZywgZmxhZ3MsIHJlcyk7IC8vIHJlcyA9
+PSBpb3ZlYyB0b3QNCiAgICAgfQ0KIA0KSW5kZXg6IHN5c2NhbGxzLmNjDQo9
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09DQpSQ1MgZmlsZTogL2N2cy9zcmMvc3Jj
+L3dpbnN1cC9jeWd3aW4vc3lzY2FsbHMuY2Msdg0KcmV0cmlldmluZyByZXZp
+c2lvbiAxLjQwNA0KZGlmZiAtdSAtcCAtcjEuNDA0IHN5c2NhbGxzLmNjDQot
+LS0gc3lzY2FsbHMuY2MJMjUgSnVsIDIwMDYgMTk6MjM6MjMgLTAwMDAJMS40
+MDQNCisrKyBzeXNjYWxscy5jYwkyNiBKdWwgMjAwNiAyMjoyODo1NSAtMDAw
+MA0KQEAgLTQ0NSw3ICs0NDUsMTQgQEAgcmVhZHYgKGludCBmZCwgY29uc3Qg
+c3RydWN0IGlvdmVjICpjb25zdA0KIA0KICAgaW50IHJlcyA9IC0xOw0KIA0K
+LSAgY29uc3Qgc3NpemVfdCB0b3QgPSBjaGVja19pb3ZlY19mb3JfcmVhZCAo
+aW92LCBpb3ZjbnQpOw0KKyAgbXlmYXVsdCBlZmF1bHQ7DQorICBpZiAoZWZh
+dWx0LmZhdWx0ZWQgKEVGQVVMVCkpDQorICAgIHsNCisgICAgICByZXMgPSAt
+MTsNCisgICAgICBnb3RvIGRvbmU7DQorICAgIH0NCisNCisgIGNvbnN0IHNz
+aXplX3QgdG90ID0gY2hlY2tfaW92ZWMgKGlvdiwgaW92Y250KTsNCiANCiAg
+IGlmICh0b3QgPD0gMCkNCiAgICAgew0KQEAgLTUyNywxMSArNTM0LDE3IEBA
+IHdyaXRldiAoY29uc3QgaW50IGZkLCBjb25zdCBzdHJ1Y3QgaW92ZWMNCiB7
+DQogICBpbnQgcmVzID0gLTE7DQogICBzaWdfZGlzcGF0Y2hfcGVuZGluZyAo
+KTsNCi0gIGNvbnN0IHNzaXplX3QgdG90ID0gY2hlY2tfaW92ZWNfZm9yX3dy
+aXRlIChpb3YsIGlvdmNudCk7DQogDQogICBjeWdoZWFwX2ZkZ2V0IGNmZCAo
+ZmQpOw0KLSAgaWYgKGNmZCA8IDApDQotICAgIGdvdG8gZG9uZTsNCisgIG15
+ZmF1bHQgZWZhdWx0Ow0KKw0KKyAgaWYgKGVmYXVsdC5mYXVsdGVkIChFRkFV
+TFQpIHx8IGNmZCA8IDApDQorICAgIHsNCisgICAgICByZXMgPSAtMTsNCisg
+ICAgICBnb3RvIGRvbmU7DQorICAgIH0NCisNCisgIGNvbnN0IHNzaXplX3Qg
+dG90ID0gY2hlY2tfaW92ZWMgKGlvdiwgaW92Y250KTsNCiANCiAgIGlmICh0
+b3QgPD0gMCkNCiAgICAgew0KSW5kZXg6IHdpbnN1cC5oDQo9PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09DQpSQ1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9j
+eWd3aW4vd2luc3VwLmgsdg0KcmV0cmlldmluZyByZXZpc2lvbiAxLjE5MA0K
+ZGlmZiAtdSAtcCAtcjEuMTkwIHdpbnN1cC5oDQotLS0gd2luc3VwLmgJMjUg
+SnVsIDIwMDYgMTk6MjM6MjMgLTAwMDAJMS4xOTANCisrKyB3aW5zdXAuaAky
+NiBKdWwgMjAwNiAyMjoyODo1NSAtMDAwMA0KQEAgLTI2Myw5ICsyNjMsNyBA
+QCB2b2lkIGluaXRfZ2xvYmFsX3NlY3VyaXR5ICgpOw0KIA0KIGludCBfX3N0
+ZGNhbGwgY2hlY2tfaW52YWxpZF92aXJ0dWFsX2FkZHIgKGNvbnN0IHZvaWQg
+KnMsIHVuc2lnbmVkIHN6KSBfX2F0dHJpYnV0ZV9fICgocmVncGFybSgyKSkp
+Ow0KIA0KLXNzaXplX3QgY2hlY2tfaW92ZWMgKGNvbnN0IHN0cnVjdCBpb3Zl
+YyAqLCBpbnQsIGJvb2wpIF9fYXR0cmlidXRlX18gKChyZWdwYXJtKDMpKSk7
+DQotI2RlZmluZSBjaGVja19pb3ZlY19mb3JfcmVhZChhLCBiKSBjaGVja19p
+b3ZlYyAoKGEpLCAoYiksIGZhbHNlKQ0KLSNkZWZpbmUgY2hlY2tfaW92ZWNf
+Zm9yX3dyaXRlKGEsIGIpIGNoZWNrX2lvdmVjICgoYSksIChiKSwgdHJ1ZSkN
+Citzc2l6ZV90IGNoZWNrX2lvdmVjIChjb25zdCBzdHJ1Y3QgaW92ZWMgKiwg
+aW50KSBfX2F0dHJpYnV0ZV9fICgocmVncGFybSgyKSkpOw0KIA0KICNkZWZp
+bmUgc2V0X3dpbnNvY2tfZXJybm8oKSBfX3NldF93aW5zb2NrX2Vycm5vIChf
+X0ZVTkNUSU9OX18sIF9fTElORV9fKQ0KIHZvaWQgX19zZXRfd2luc29ja19l
+cnJubyAoY29uc3QgY2hhciAqZm4sIGludCBsbikgX19hdHRyaWJ1dGVfXyAo
+KHJlZ3Bhcm0oMikpKTsNCg==
+
+---559023410-1450828668-1153953886=:2352--
