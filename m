@@ -1,22 +1,21 @@
-Return-Path: <cygwin-patches-return-5951-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 22680 invoked by alias); 31 Jul 2006 07:32:58 -0000
-Received: (qmail 22669 invoked by uid 22791); 31 Jul 2006 07:32:57 -0000
+Return-Path: <cygwin-patches-return-5952-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 4996 invoked by alias); 17 Aug 2006 16:17:30 -0000
+Received: (qmail 4980 invoked by uid 22791); 17 Aug 2006 16:17:29 -0000
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.31.1) with ESMTP; Mon, 31 Jul 2006 07:32:53 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 6FED454C007; Mon, 31 Jul 2006 09:32:51 +0200 (CEST)
-Date: Mon, 31 Jul 2006 07:32:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: Bug fix and enchantment in cygpath.cc
-Message-ID: <20060731073251.GE8152@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <44CB2A70.9020807@po4ta.com> <20060730124524.GC8152@calimero.vinschen.de> <44CCB327.6010607@po4ta.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <44CCB327.6010607@po4ta.com>
-User-Agent: Mutt/1.4.2i
+Received: from imo-d06.mx.aol.com (HELO imo-d06.mx.aol.com) (205.188.157.38)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Thu, 17 Aug 2006 16:17:23 +0000
+Received: from kbarticle889459@aim.com 	by imo-d06.mx.aol.com (mail_out_v38_r7.6.) id s.269.e69c49b (57869) 	 for <cygwin-patches@cygwin.com>; Thu, 17 Aug 2006 12:17:17 -0400 (EDT)
+Received: from  lh34ig2hgb (pool-70-20-177-184.phil.east.verizon.net [70.20.177.184]) by air-ia01.mail.aol.com (v111.7) with ESMTP id MAILINIA13-e20d44e4968c92; Thu, 17 Aug 2006 12:17:16 -0400
+From: "Charli Li" <KBarticle889459@aim.com>
+To: "Cygwin-Patches Mailing List" <cygwin-patches@cygwin.com>
+Subject: FW: Patch for script of util-linux-2.12r-2 with zsh.
+Date: Thu, 17 Aug 2006 16:17:00 -0000
+Message-ID: <LLEBLEDLPAKFHFKGNDBMAEPJCBAA.KBarticle889459@aim.com>
+MIME-Version: 1.0
+Content-Type: text/plain; 	charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook IMO, Build 9.0.6604 (9.0.2911.0)
+X-AOL-IP: 70.20.177.184
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -24,42 +23,43 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q3/txt/msg00046.txt.bz2
+X-SW-Source: 2006-q3/txt/msg00047.txt.bz2
 
-On Jul 30 16:24, Ilya wrote:
-> Corinna Vinschen wrote:
-> >On Jul 29 12:29, Ilya wrote:
-> >  
-> >>This patch is against cygpath.cc 1.42.
-> >>In 1.43 addressed bug was already fixed, but I believe my fix is a bit 
-> >>better.
-> >>
-> >>Current fix just returns filename, in case filename is for a nonexistent 
-> >>file.  I think that internal short to long file name conversion routine 
-> >>could be used in this case, because it deals ok with nonexistent files.
-> >>    
-> >
-> >If you could regenerate your patch so that it's against current CVS, I
-> >will take it, since its size will then be below the "trivial fix" rule.
-> >Please see http://cygwin.com/contrib.html, "Before you get started",
-> >second paragraph.
-> >
-> >
-> >Thanks,
-> >Corinna
-> >  
-> No problem :)
->[...]
-> 	* cygpath.cc (get_long_name): Fallback to get_long_path_name_w32impl.
-> 	Properly null-terminate 'buf'.
+Redirected to the Cygwin-Patches Mailing List.
 
-Thanks.  Applied with minor changes.
-
-
-Corinna
-
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+Charli
+>-----Original Message-----
+>From: LIM Fung-Chai
+>Sent: Thursday, August 17, 2006 8:31 AM
+>To: Cygwin Mailing List
+>Subject: Patch for script of util-linux-2.12r-2 with zsh.
+>
+>
+>Hi,
+>
+>Here's a patch to make util-linux-2.12r-2/misc-utils/script work with
+>zsh (the best and the greatest :-), and possibly with csh and tcsh as well.
+>
+>diff -Naur util-linux-2.12r/misc-utils/script.c
+>util-linux-2.12r-3/misc-utils/script.c
+>--- util-linux-2.12r/misc-utils/script.c        2006-02-24
+>11:27:55.000000000 +0800
+>+++ util-linux-2.12r-3/misc-utils/script.c      2006-08-17
+>20:21:40.734375000 +0800
+>@@ -431,8 +431,10 @@
+>        (void) tcsetattr(slave, TCSAFLUSH, &tt);
+>        (void) ioctl(slave, TIOCSWINSZ, (char *)&win);
+> #endif
+>+#ifdef __CYGWIN__
+>+       (void) login_tty (slave);
+>+#else
+>        (void) setsid();
+>-#ifndef __CYGWIN__
+>        (void) ioctl(slave, TIOCSCTTY, 0);
+> #endif
+> }
+>
+>Regards,
+>LIM Fung-Chai
+>
+>
