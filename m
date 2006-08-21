@@ -1,22 +1,21 @@
-Return-Path: <cygwin-patches-return-5957-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 4560 invoked by alias); 20 Aug 2006 05:39:19 -0000
-Received: (qmail 4526 invoked by uid 22791); 20 Aug 2006 05:39:18 -0000
+Return-Path: <cygwin-patches-return-5958-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 32657 invoked by alias); 21 Aug 2006 17:52:22 -0000
+Received: (qmail 32646 invoked by uid 22791); 21 Aug 2006 17:52:22 -0000
 X-Spam-Check-By: sourceware.org
-Received: from pool-71-248-179-229.bstnma.fios.verizon.net (HELO cgf.cx) (71.248.179.229)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Sun, 20 Aug 2006 05:39:17 +0000
-Received: by cgf.cx (Postfix, from userid 201) 	id E266213C049; Sat, 19 Aug 2006 17:44:58 -0400 (EDT)
-Date: Sun, 20 Aug 2006 05:39:00 -0000
-From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
+Received: from nf-out-0910.google.com (HELO nf-out-0910.google.com) (64.233.182.190)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Mon, 21 Aug 2006 17:52:13 +0000
+Received: by nf-out-0910.google.com with SMTP id d4so430224nfe         for <cygwin-patches@cygwin.com>; Mon, 21 Aug 2006 10:52:06 -0700 (PDT)
+Received: by 10.49.29.2 with SMTP id g2mr8033904nfj;         Mon, 21 Aug 2006 10:52:06 -0700 (PDT)
+Received: by 10.78.179.13 with HTTP; Mon, 21 Aug 2006 10:52:06 -0700 (PDT)
+Message-ID: <a6355d0d0608211052l6f756d9fq16f6ed3f1f7bba3e@mail.gmail.com>
+Date: Mon, 21 Aug 2006 17:52:00 -0000
+From: "Wang Yiping" <ypwangandy@gmail.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] pread bug fix
-Message-ID: <20060819214458.GB8981@trixie.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <200608191811.AA01438@k7.kit.hi-ho.ne.jp>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Subject: [PATCH] do_mount bug fix
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Content-Disposition: inline
-In-Reply-To: <200608191811.AA01438@k7.kit.hi-ho.ne.jp>
-User-Agent: Mutt/1.5.11
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -24,19 +23,43 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q3/txt/msg00052.txt.bz2
+X-SW-Source: 2006-q3/txt/msg00053.txt.bz2
 
-On Sun, Aug 20, 2006 at 03:11:37AM +0900, Hideki IWAMOTO wrote:
->When current file offset is not zero, pread from disk file always fails.
->
->
->2006-08-20 Hideki Iwamoto  <h-iwamoto@kit.hi-ho.ne.jp>
->
->	* fhandler_disk_file.cc (fhandler_disk_file::pread): Fix comparison
->	of return value of lseek.
+When doing managed mount with none exist win32path It can't umount again.
+We have to delete the entry from the windows registry by hand.
 
-Applied.
+$ df
+Filesystem           1K-blocks      Used Available Use% Mounted on
+D:\dev\cygwin\home\ypeang\tmp
+                      36862556  32039836   4822720  87% /home/ypwang/tmp
+$ umount /home/ypwang/tmp
+umount: /home/ypwang/tmp: No such file or directory
 
-Thanks for the patch.
 
-cgf
+2006-08-21  Yiping Wang  <ypwangandy@gmail.com>
+
+        * mount.cc (do_mount): Exit with error msg when using managed mount
+        option on none exist win32path.
+
+Index: mount.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/utils/mount.cc,v
+retrieving revision 1.37
+diff -u -p -r1.37 mount.cc
+--- mount.cc    3 Aug 2005 09:23:39 -0000       1.37
++++ mount.cc    21 Aug 2006 17:41:03 -0000
+@@ -122,6 +122,8 @@ do_mount (const char *dev, const char *w
+              exit (1);
+            }
+        }
++      else
++        error (dev);
+     }
+
+   if (mount (dev, where, flags))
+
+
+
+Best Regards
+
+Andy
