@@ -1,21 +1,21 @@
-Return-Path: <cygwin-patches-return-5967-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 18018 invoked by alias); 29 Aug 2006 15:35:48 -0000
-Received: (qmail 17991 invoked by uid 22791); 29 Aug 2006 15:35:46 -0000
+Return-Path: <cygwin-patches-return-5968-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 21794 invoked by alias); 29 Aug 2006 15:38:33 -0000
+Received: (qmail 21747 invoked by uid 22791); 29 Aug 2006 15:38:32 -0000
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.31.1) with ESMTP; Tue, 29 Aug 2006 15:35:44 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500) 	id DBC5F6D429F; Tue, 29 Aug 2006 17:35:40 +0200 (CEST)
-Date: Tue, 29 Aug 2006 15:35:00 -0000
-From: Corinna Vinschen <vinschen@redhat.com>
-To: gcc-patches@gcc.gnu.org, gdb-patches@sourceware.org, 	binutils@sourceware.org, mingw-patches@lists.sourceforge.net, 	cygwin-patches@cygwin.com
+Received: from mx1.redhat.com (HELO mx1.redhat.com) (66.187.233.31)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Tue, 29 Aug 2006 15:38:28 +0000
+Received: from int-mx1.corp.redhat.com (int-mx1.corp.redhat.com [172.16.52.254]) 	by mx1.redhat.com (8.12.11.20060308/8.12.11) with ESMTP id k7TFcRZI009186; 	Tue, 29 Aug 2006 11:38:27 -0400
+Received: from post-office.corp.redhat.com (post-office.corp.redhat.com [172.16.52.227]) 	by int-mx1.corp.redhat.com (8.12.11.20060308/8.12.11) with ESMTP id k7TFcRiA016379; 	Tue, 29 Aug 2006 11:38:27 -0400
+Received: from greed.delorie.com (dj.cipe.redhat.com [10.0.0.222]) 	by post-office.corp.redhat.com (8.11.6/8.11.6) with ESMTP id k7TFcNl18631; 	Tue, 29 Aug 2006 11:38:23 -0400
+Received: from greed.delorie.com (greed.delorie.com [127.0.0.1]) 	by greed.delorie.com (8.13.1/8.13.1) with ESMTP id k7TFcKOb027473; 	Tue, 29 Aug 2006 11:38:20 -0400
+Received: (from dj@localhost) 	by greed.delorie.com (8.13.1/8.13.1/Submit) id k7TFcFXh027470; 	Tue, 29 Aug 2006 11:38:15 -0400
+Date: Tue, 29 Aug 2006 15:38:00 -0000
+Message-Id: <200608291538.k7TFcFXh027470@greed.delorie.com>
+From: DJ Delorie <dj@redhat.com>
+To: drow@false.org
+CC: gcc-patches@gcc.gnu.org, gdb-patches@sourceware.org,         binutils@sourceware.org, mingw-patches@lists.sourceforge.net,         cygwin-patches@cygwin.com
+In-reply-to: <20060829153206.GA19040@nevyn.them.org> (message from Daniel 	Jacobowitz on Tue, 29 Aug 2006 11:32:06 -0400)
 Subject: Re: [RFC] Simplify MinGW canadian crosses
-Message-ID: <20060829153540.GA20893@calimero.vinschen.de>
-Mail-Followup-To: gcc-patches@gcc.gnu.org, gdb-patches@sourceware.org, 	binutils@sourceware.org, mingw-patches@lists.sourceforge.net, 	cygwin-patches@cygwin.com
-References: <20060829114107.GA17951@calimero.vinschen.de> <20060829124525.GA13245@nevyn.them.org> <200608291459.k7TExRDT026512@greed.delorie.com> <20060829150948.GA18308@nevyn.them.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20060829150948.GA18308@nevyn.them.org>
-User-Agent: Mutt/1.4.2i
+References: <20060829114107.GA17951@calimero.vinschen.de> <20060829124525.GA13245@nevyn.them.org> <200608291459.k7TExRDT026512@greed.delorie.com> <20060829150948.GA18308@nevyn.them.org> <200608291523.k7TFNUR6027243@greed.delorie.com> <20060829153206.GA19040@nevyn.them.org>
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -23,44 +23,8 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q3/txt/msg00062.txt.bz2
-
-On Aug 29 11:09, Daniel Jacobowitz wrote:
-> On Tue, Aug 29, 2006 at 10:59:27AM -0400, DJ Delorie wrote:
-> > 
-> > > If you want to build some code that runs on mingw, I don't think
-> > > that having mingw tools installed is an unreasonable requirement.
-> > 
-> > This is how you *get* mingw tools installed.  The same logic that
-> > gives you a canadian (worst case) also gives you host-x-host.
-> 
-> Not so, unless I'm vastly confused.
-> 
-> Corinna is trying to generate --host=i686-mingw32 tools, with a
-> different --target.  This requires at least a --target=i686-mingw32
-> compiler coming from elsewhere.  That compiler can build the
-> --host=i686-mingw32 libraries, and usually should.
-> 
-> This is more like adding support for using the in tree newlib with an
-> arm-linux compiler so that you could build GCC to run on arm-linux,
-> without having to install an arm-linux C library first.  That's why
-> I'm dubious about the value.  But maybe Corinna has some good example
-> of when you want to do this?
-
-Sorry, but that's not the deal.  Using my patches, you can install a
-standard source tree, including gcc, gdb, binutils, [...], and last but
-not least the winsup directory on, say, a Linux machine, and then build
-a complete three stage canadian cross on *Linux*, which generates a
-i686-pc-mingw32-x-arm-elf toolchain.  You don't have to install the MinGW
-libraries and header files somewhere on the Linux machine and tweak the
-build process to find them.  Everything comes out of the same source
-tree.  From my point of view this simplifies stuff, it doesn't make it
-more complicated.
+X-SW-Source: 2006-q3/txt/msg00063.txt.bz2
 
 
-Corinna
-
--- 
-Corinna Vinschen
-Cygwin Project Co-Leader
-Red Hat
+I'll let Corinna answer herself, but I don't think we're trying to do
+anything differently than what we already do for Cygwin.
