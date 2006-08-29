@@ -1,23 +1,21 @@
-Return-Path: <cygwin-patches-return-5963-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 17292 invoked by alias); 21 Aug 2006 18:47:55 -0000
-Received: (qmail 17279 invoked by uid 22791); 21 Aug 2006 18:47:54 -0000
+Return-Path: <cygwin-patches-return-5964-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 10654 invoked by alias); 29 Aug 2006 14:56:28 -0000
+Received: (qmail 10640 invoked by uid 22791); 29 Aug 2006 14:56:26 -0000
 X-Spam-Check-By: sourceware.org
-Received: from nf-out-0910.google.com (HELO nf-out-0910.google.com) (64.233.182.188)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Mon, 21 Aug 2006 18:47:51 +0000
-Received: by nf-out-0910.google.com with SMTP id d4so443818nfe         for <cygwin-patches@cygwin.com>; Mon, 21 Aug 2006 11:47:48 -0700 (PDT)
-Received: by 10.48.162.15 with SMTP id k15mr8132708nfe;         Mon, 21 Aug 2006 11:47:48 -0700 (PDT)
-Received: by 10.78.179.13 with HTTP; Mon, 21 Aug 2006 11:47:48 -0700 (PDT)
-Message-ID: <a6355d0d0608211147v21e81a5ct8506cb3c257fe2e1@mail.gmail.com>
-Date: Mon, 21 Aug 2006 18:47:00 -0000
-From: "Wang Yiping" <ypwangandy@gmail.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] do_mount bug fix
-In-Reply-To: <20060821183113.GA28854@trixie.casa.cgf.cx>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-References: <a6355d0d0608211052l6f756d9fq16f6ed3f1f7bba3e@mail.gmail.com> 	 <20060821175837.GF24551@trixie.casa.cgf.cx> 	 <a6355d0d0608211111kcac6b0q51f8073a0d3c26d3@mail.gmail.com> 	 <a6355d0d0608211117n7a6fb985y68579fc3205679ed@mail.gmail.com> 	 <20060821183113.GA28854@trixie.casa.cgf.cx>
-X-IsSubscribed: yes
+Received: from mx1.redhat.com (HELO mx1.redhat.com) (66.187.233.31)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Tue, 29 Aug 2006 14:56:23 +0000
+Received: from int-mx1.corp.redhat.com (int-mx1.corp.redhat.com [172.16.52.254]) 	by mx1.redhat.com (8.12.11.20060308/8.12.11) with ESMTP id k7TEuLan020655; 	Tue, 29 Aug 2006 10:56:21 -0400
+Received: from post-office.corp.redhat.com (post-office.corp.redhat.com [172.16.52.227]) 	by int-mx1.corp.redhat.com (8.12.11.20060308/8.12.11) with ESMTP id k7TEuFpO000528; 	Tue, 29 Aug 2006 10:56:15 -0400
+Received: from greed.delorie.com (dj.cipe.redhat.com [10.0.0.222]) 	by post-office.corp.redhat.com (8.11.6/8.11.6) with ESMTP id k7TEuBl11782; 	Tue, 29 Aug 2006 10:56:12 -0400
+Received: from greed.delorie.com (greed.delorie.com [127.0.0.1]) 	by greed.delorie.com (8.13.1/8.13.1) with ESMTP id k7TEu68f026479; 	Tue, 29 Aug 2006 10:56:06 -0400
+Received: (from dj@localhost) 	by greed.delorie.com (8.13.1/8.13.1/Submit) id k7TEu0Zf026476; 	Tue, 29 Aug 2006 10:56:00 -0400
+Date: Tue, 29 Aug 2006 14:56:00 -0000
+Message-Id: <200608291456.k7TEu0Zf026476@greed.delorie.com>
+From: DJ Delorie <dj@redhat.com>
+To: vinschen@redhat.com
+CC: gcc-patches@gcc.gnu.org, gdb-patches@sourceware.org,         binutils@sourceware.org, mingw-patches@lists.sourceforge.net,         cygwin-patches@cygwin.com
+In-reply-to: <20060829114107.GA17951@calimero.vinschen.de> (message from 	Corinna Vinschen on Tue, 29 Aug 2006 13:41:07 +0200)
+Subject: Re: [RFC] Simplify MinGW canadian crosses
+References:  <20060829114107.GA17951@calimero.vinschen.de>
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
@@ -25,16 +23,8 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q3/txt/msg00058.txt.bz2
+X-SW-Source: 2006-q3/txt/msg00059.txt.bz2
 
-> Sorry but it has always been possible to mount nonexistent directories
-> on Cygwin and, obviously, as you've noted, you do need to use the -u
-> option on umount when you've mounted using -u.
->
-> cgf
->
-OK, then I will retrive back my patch :-)  and Thanks for you reply.
 
-Best Regards
-
-andy
+The libiberty and toplevel changes are OK with me, if the mingw
+maintainer agrees.
