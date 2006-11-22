@@ -1,270 +1,121 @@
-Return-Path: <cygwin-patches-return-5997-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 26194 invoked by alias); 14 Nov 2006 17:53:10 -0000
-Received: (qmail 26181 invoked by uid 22791); 14 Nov 2006 17:53:08 -0000
+Return-Path: <cygwin-patches-return-5998-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 14569 invoked by alias); 22 Nov 2006 17:21:06 -0000
+Received: (qmail 14529 invoked by uid 22791); 22 Nov 2006 17:21:03 -0000
 X-Spam-Check-By: sourceware.org
-Received: from 66-162-92-75.static.twtelecom.net (HELO saturn.p3corpnet.pivot3.com) (66.162.92.75)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Tue, 14 Nov 2006 17:53:01 +0000
-Content-class: urn:content-classes:message
+Received: from ns2.bln1.siemens.de (HELO ns2.bln1.siemens.de) (194.138.127.35)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Wed, 22 Nov 2006 17:20:56 +0000
+Received: from ns-srv-2.bln1.siemens.de (stbf7654 [194.138.127.67]) 	by ns2.bln1.siemens.de (8.13.5/8.13.5/MTA) with ESMTP id kAMHKo9Q028720 	for <cygwin-patches@cygwin.com>; Wed, 22 Nov 2006 18:20:50 +0100 (MET)
+Received: from scotty.bln1.siemens.de (stbd7124.bln1.siemens.de [192.168.120.17]) 	by ns-srv-2.bln1.siemens.de (8.13.5/8.13.5/MTA) with SMTP id kAMHKjP2020766 	for cygwin-patches@cygwin.com; Wed, 22 Nov 2006 18:20:45 +0100 (MET)
+Date: Wed, 22 Nov 2006 17:21:00 -0000
+Message-Id: <200611221720.kAMHKjP2020766@ns-srv-2.bln1.siemens.de>
+From: Thomas Wolff <towo@computer.org>
+To: cygwin-patches@cygwin.com
+Subject: [Patch] bug # 514 deja vu (cygwin console color handling)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 	boundary="----_=_NextPart_001_01C70815.B8CE8478"
-Subject: Re: Patch to mapping up to 128 SCSI Disk Devices
-Date: Tue, 14 Nov 2006 17:53:00 -0000
-Message-ID: <E05F1FD208D5AA45B78B3983479ECF08E43735@saturn.p3corpnet.pivot3.com>
-From: "Loh, Joe" <joel@pivot3.com>
-To: <cygwin-patches@cygwin.com>
+Content-Type: multipart/mixed; boundary=%%message-boundary%%
+References: <E1CeJAV-0007GT-00@mrelayng.kundenserver.de>
+In-Reply-To: <E1CeJAV-0007GT-00@mrelayng.kundenserver.de>
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
+List-Id: <cygwin-patches.cygwin.com>
 List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
 List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q4/txt/msg00015.txt.bz2
-
-This is a multi-part message in MIME format.
-
-------_=_NextPart_001_01C70815.B8CE8478
-Content-Type: text/plain;
-	charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-Content-length: 912
+X-SW-Source: 2006-q4/txt/msg00016.txt.bz2
 
 
-> > +  else if (drive < 112)          // /dev/sdcs -to- /dev/sddh
-> > +    {
-> > +      base =3D DEV_SD6_MAJOR;
-> > +      drive -=3D 96;
-> > +    }
-> > +  // NOTE: This will cause multiple /dev/sddx entries in
-> > +  //       /proc/partitions if there are more than 128 devices
->
-> Any problem to fix that and to get rid of this comment?  If not,
-> can you please convert the comment to C-style /**/?
+--%%message-boundary%%
+Content-Type: text/plain
+Content-length: 2012
 
-We did not attempt to change the implementation due to lack of fully
-understanding the implications of how this function is called.  We did
-noticed the behavior in /proc/partition when we first attempted to
-connect using the stock 1.5.19 cygwin.  Hence, we felt it may help
-others to document the behavior.  Our intent is to increase the device
-mapping with minimal change to existing implementation.
+I noticed that the reverse color bug
+ http://sourceware.org/bugzilla/show_bug.cgi?id=514
+shows up again in recent cygwin1.dll updates. My previous patch 
+is still in the source but additional code apparently has the same 
+effect of rendering output unreadable; the effect is the following:
+* foreground is set bright
+* screen mode is set to reverse
+* cygwin wrongly assumes that the reverse foreground colour (which 
+  actually used to be the non-bright background color) should be 
+  set to bright, which is obviously a wrong idea and often results 
+  in a contrast that renders the output almost unreadable
 
-We have converted all comments to use C-style /**/ and attached the
-patch as a file instead.
+The attached shell script test514 demonstrates the bug.
+The attached patch is an attempt to fix the bug again.
+Unfortunately, I could not compile it due to the following mysterious 
+make error:
 
-Thanks,
-Joe
+make[4]: Entering directory `/usr/src/cygwin-1.5.22-patch/i686-pc-cygwin/newlib'
+rm -f libm.a
+ln libm/libm.a libm.a >/dev/null 2>/dev/null || cp libm/libm.a libm.a
+rm -rf libc.a libg.a tmp
+mkdir tmp
+cd tmp; \
+         ar x ../libm.a lib_a-s_isinf.o lib_a-sf_isinf.o lib_a-s_isnan.o lib_a-sf_isnan.o lib_a-s_isinfd.o lib_a-sf_isinff.o lib_a-s_isnand.o lib_a-sf_isnanf.o lib_a-s_nan.o lib_a-sf_nan.o lib_a-s_ldexp.o lib_a-sf_ldexp.o lib_a-s_frexp.o lib_a-sf_frexp.o lib_a-s_modf.o lib_a-sf_modf.o lib_a-s_scalbn.o lib_a-sf_scalbn.o lib_a-s_finite.o lib_a-sf_finite.o lib_a-s_copysign.o lib_a-sf_copysign.o lib_a-s_infconst.o ; \
+         ar x ../libc/libc.a ; \
+         ar rc ../libc.a *.o
+/bin/sh: line 3: /bin/ar: Argument list too long
+make[4]: *** [libc.a] Error 126
 
-------_=_NextPart_001_01C70815.B8CE8478
-Content-Type: application/octet-stream;
-	name="patch.jl-061114"
+
+I would appreciate if someone (who can successfully compile cygwin1.dll) 
+could check the patch, please, and the result.
+
+Thanks a lot.
+Thomas
+
+
+2006-11-22  Thomas Wolff  <towo@computer.org>
+
+* fhandler_console.cc (set_color): Avoid (again) inappropriate intensity 
+     interchanging that used to render reverse output unreadable 
+     when (non-reversed) text is bright.
+     See http://sourceware.org/bugzilla/show_bug.cgi?id=514
+
+
+
+--%%message-boundary%%
+Content-Type: text/plain
+Content-length: 975
+
+--- cygwin-1.5.22-1/winsup/cygwin/fhandler_console.cc	2006-07-03 17:29:10.001000000 +0200
++++ cygwin-1.5.22-patch/winsup/cygwin/fhandler_console.cc	2006-11-22 17:37:15.518677900 +0100
+@@ -948,6 +948,8 @@ dev_console::set_color (HANDLE h)
+ 	       (save_fg & FOREGROUND_BLUE  ? BACKGROUND_BLUE  : 0) |
+ 	       (save_fg & FOREGROUND_INTENSITY ? BACKGROUND_INTENSITY : 0);
+     }
++
++  /* apply attributes */
+   if (underline)
+     win_fg = underline_color;
+   /* emulate blink with bright background */
+@@ -956,7 +958,12 @@ dev_console::set_color (HANDLE h)
+   if (intensity == INTENSITY_INVISIBLE)
+     win_fg = win_bg;
+   else if (intensity == INTENSITY_BOLD)
+-    win_fg |= FOREGROUND_INTENSITY;
++    /* apply foreground intensity only in non-reverse mode! */
++    if (reverse) 
++      win_bg |= BACKGROUND_INTENSITY;
++    else
++      win_fg |= FOREGROUND_INTENSITY;
++
+   current_win32_attr = win_fg | win_bg;
+   if (h)
+     SetConsoleTextAttribute (h, current_win32_attr);
+
+--%%message-boundary%%
+Content-Type: application/octet-stream; name="test514"
 Content-Transfer-Encoding: base64
-Content-Description: patch.jl-061114
-Content-Disposition: attachment;
-	filename="patch.jl-061114"
-Content-length: 12420
+Content-Disposition: attachment; filename="test514"
+Content-length: 305
 
-SW5kZXg6IGRldmljZXMuaAo9PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBm
-aWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL2N5Z3dpbi9kZXZpY2VzLmgsdgpy
-ZXRyaWV2aW5nIHJldmlzaW9uIDEuMjIKZGlmZiAtdSAtcjEuMjIgZGV2aWNl
-cy5oCi0tLSBkZXZpY2VzLmgJMiBEZWMgMjAwNSAwMDozNzoyMSAtMDAwMAkx
-LjIyCisrKyBkZXZpY2VzLmgJMTQgTm92IDIwMDYgMTc6NDg6MjUgLTAwMDAK
-QEAgLTY1LDggKzY1LDIwIEBACiAKICAgREVWX1NEX01BSk9SID0gOCwKICAg
-REVWX1NEMV9NQUpPUiA9IDY1LAorICBERVZfU0QyX01BSk9SID0gNjYsCisg
-IERFVl9TRDNfTUFKT1IgPSA2NywKKyAgREVWX1NENF9NQUpPUiA9IDY4LAor
-ICBERVZfU0Q1X01BSk9SID0gNjksCisgIERFVl9TRDZfTUFKT1IgPSA3MCwK
-KyAgREVWX1NEN19NQUpPUiA9IDcxLAogICBGSF9TRCAgICAgID0gRkhERVYg
-KERFVl9TRF9NQUpPUiwgMCksCiAgIEZIX1NEMSAgICAgPSBGSERFViAoREVW
-X1NEMV9NQUpPUiwgMCksCisgIEZIX1NEMiAgICAgPSBGSERFViAoREVWX1NE
-Ml9NQUpPUiwgMCksCisgIEZIX1NEMyAgICAgPSBGSERFViAoREVWX1NEM19N
-QUpPUiwgMCksCisgIEZIX1NENCAgICAgPSBGSERFViAoREVWX1NENF9NQUpP
-UiwgMCksCisgIEZIX1NENSAgICAgPSBGSERFViAoREVWX1NENV9NQUpPUiwg
-MCksCisgIEZIX1NENiAgICAgPSBGSERFViAoREVWX1NENl9NQUpPUiwgMCks
-CisgIEZIX1NENyAgICAgPSBGSERFViAoREVWX1NEN19NQUpPUiwgMCksCiAg
-IEZIX1NEQSAgICAgPSBGSERFViAoREVWX1NEX01BSk9SLCAwKSwKICAgRkhf
-U0RCICAgICA9IEZIREVWIChERVZfU0RfTUFKT1IsIDE2KSwKICAgRkhfU0RD
-ICAgICA9IEZIREVWIChERVZfU0RfTUFKT1IsIDMyKSwKQEAgLTkzLDYgKzEw
-NSwxMDggQEAKICAgRkhfU0RYICAgICA9IEZIREVWIChERVZfU0QxX01BSk9S
-LCAxMTIpLAogICBGSF9TRFkgICAgID0gRkhERVYgKERFVl9TRDFfTUFKT1Is
-IDEyOCksCiAgIEZIX1NEWiAgICAgPSBGSERFViAoREVWX1NEMV9NQUpPUiwg
-MTQ0KSwKKyAgRkhfU0RBQSAgICA9IEZIREVWIChERVZfU0QxX01BSk9SLCAx
-NjApLAorICBGSF9TREFCICAgID0gRkhERVYgKERFVl9TRDFfTUFKT1IsIDE3
-NiksCisgIEZIX1NEQUMgICAgPSBGSERFViAoREVWX1NEMV9NQUpPUiwgMTky
-KSwKKyAgRkhfU0RBRCAgICA9IEZIREVWIChERVZfU0QxX01BSk9SLCAyMDgp
-LAorICBGSF9TREFFICAgID0gRkhERVYgKERFVl9TRDFfTUFKT1IsIDIyNCks
-CisgIEZIX1NEQUYgICAgPSBGSERFViAoREVWX1NEMV9NQUpPUiwgMjQwKSwK
-KyAgRkhfU0RBRyAgICA9IEZIREVWIChERVZfU0QyX01BSk9SLCAwKSwKKyAg
-RkhfU0RBSCAgICA9IEZIREVWIChERVZfU0QyX01BSk9SLCAxNiksCisgIEZI
-X1NEQUkgICAgPSBGSERFViAoREVWX1NEMl9NQUpPUiwgMzIpLAorICBGSF9T
-REFKICAgID0gRkhERVYgKERFVl9TRDJfTUFKT1IsIDQ4KSwKKyAgRkhfU0RB
-SyAgICA9IEZIREVWIChERVZfU0QyX01BSk9SLCA2NCksCisgIEZIX1NEQUwg
-ICAgPSBGSERFViAoREVWX1NEMl9NQUpPUiwgODApLAorICBGSF9TREFNICAg
-ID0gRkhERVYgKERFVl9TRDJfTUFKT1IsIDk2KSwKKyAgRkhfU0RBTiAgICA9
-IEZIREVWIChERVZfU0QyX01BSk9SLCAxMTIpLAorICBGSF9TREFPICAgID0g
-RkhERVYgKERFVl9TRDJfTUFKT1IsIDEyOCksCisgIEZIX1NEQVAgICAgPSBG
-SERFViAoREVWX1NEMl9NQUpPUiwgMTQ0KSwKKyAgRkhfU0RBUSAgICA9IEZI
-REVWIChERVZfU0QyX01BSk9SLCAxNjApLAorICBGSF9TREFSICAgID0gRkhE
-RVYgKERFVl9TRDJfTUFKT1IsIDE3NiksCisgIEZIX1NEQVMgICAgPSBGSERF
-ViAoREVWX1NEMl9NQUpPUiwgMTkyKSwKKyAgRkhfU0RBVCAgICA9IEZIREVW
-IChERVZfU0QyX01BSk9SLCAyMDgpLAorICBGSF9TREFVICAgID0gRkhERVYg
-KERFVl9TRDJfTUFKT1IsIDIyNCksCisgIEZIX1NEQVYgICAgPSBGSERFViAo
-REVWX1NEMl9NQUpPUiwgMjQwKSwKKyAgRkhfU0RBVyAgICA9IEZIREVWIChE
-RVZfU0QzX01BSk9SLCAwKSwKKyAgRkhfU0RBWCAgICA9IEZIREVWIChERVZf
-U0QzX01BSk9SLCAxNiksCisgIEZIX1NEQVkgICAgPSBGSERFViAoREVWX1NE
-M19NQUpPUiwgMzIpLAorICBGSF9TREFaICAgID0gRkhERVYgKERFVl9TRDNf
-TUFKT1IsIDQ4KSwKKyAgRkhfU0RCQSAgICA9IEZIREVWIChERVZfU0QzX01B
-Sk9SLCA2NCksCisgIEZIX1NEQkIgICAgPSBGSERFViAoREVWX1NEM19NQUpP
-UiwgODApLAorICBGSF9TREJDICAgID0gRkhERVYgKERFVl9TRDNfTUFKT1Is
-IDk2KSwKKyAgRkhfU0RCRCAgICA9IEZIREVWIChERVZfU0QzX01BSk9SLCAx
-MTIpLAorICBGSF9TREJFICAgID0gRkhERVYgKERFVl9TRDNfTUFKT1IsIDEy
-OCksCisgIEZIX1NEQkYgICAgPSBGSERFViAoREVWX1NEM19NQUpPUiwgMTQ0
-KSwKKyAgRkhfU0RCRyAgICA9IEZIREVWIChERVZfU0QzX01BSk9SLCAxNjAp
-LAorICBGSF9TREJIICAgID0gRkhERVYgKERFVl9TRDNfTUFKT1IsIDE3Niks
-CisgIEZIX1NEQkkgICAgPSBGSERFViAoREVWX1NEM19NQUpPUiwgMTkyKSwK
-KyAgRkhfU0RCSiAgICA9IEZIREVWIChERVZfU0QzX01BSk9SLCAyMDgpLAor
-ICBGSF9TREJLICAgID0gRkhERVYgKERFVl9TRDNfTUFKT1IsIDIyNCksCisg
-IEZIX1NEQkwgICAgPSBGSERFViAoREVWX1NEM19NQUpPUiwgMjQwKSwKKyAg
-RkhfU0RCTSAgICA9IEZIREVWIChERVZfU0Q0X01BSk9SLCAwKSwKKyAgRkhf
-U0RCTiAgICA9IEZIREVWIChERVZfU0Q0X01BSk9SLCAxNiksCisgIEZIX1NE
-Qk8gICAgPSBGSERFViAoREVWX1NENF9NQUpPUiwgMzIpLAorICBGSF9TREJQ
-ICAgID0gRkhERVYgKERFVl9TRDRfTUFKT1IsIDQ4KSwKKyAgRkhfU0RCUSAg
-ICA9IEZIREVWIChERVZfU0Q0X01BSk9SLCA2NCksCisgIEZIX1NEQlIgICAg
-PSBGSERFViAoREVWX1NENF9NQUpPUiwgODApLAorICBGSF9TREJTICAgID0g
-RkhERVYgKERFVl9TRDRfTUFKT1IsIDk2KSwKKyAgRkhfU0RCVCAgICA9IEZI
-REVWIChERVZfU0Q0X01BSk9SLCAxMTIpLAorICBGSF9TREJVICAgID0gRkhE
-RVYgKERFVl9TRDRfTUFKT1IsIDEyOCksCisgIEZIX1NEQlYgICAgPSBGSERF
-ViAoREVWX1NENF9NQUpPUiwgMTQ0KSwKKyAgRkhfU0RCVyAgICA9IEZIREVW
-IChERVZfU0Q0X01BSk9SLCAxNjApLAorICBGSF9TREJYICAgID0gRkhERVYg
-KERFVl9TRDRfTUFKT1IsIDE3NiksCisgIEZIX1NEQlkgICAgPSBGSERFViAo
-REVWX1NENF9NQUpPUiwgMTkyKSwKKyAgRkhfU0RCWiAgICA9IEZIREVWIChE
-RVZfU0Q0X01BSk9SLCAyMDgpLAorICBGSF9TRENBICAgID0gRkhERVYgKERF
-Vl9TRDRfTUFKT1IsIDIyNCksCisgIEZIX1NEQ0IgICAgPSBGSERFViAoREVW
-X1NENF9NQUpPUiwgMjQwKSwKKyAgRkhfU0RDQyAgICA9IEZIREVWIChERVZf
-U0Q1X01BSk9SLCAwKSwKKyAgRkhfU0RDRCAgICA9IEZIREVWIChERVZfU0Q1
-X01BSk9SLCAxNiksCisgIEZIX1NEQ0UgICAgPSBGSERFViAoREVWX1NENV9N
-QUpPUiwgMzIpLAorICBGSF9TRENGICAgID0gRkhERVYgKERFVl9TRDVfTUFK
-T1IsIDQ4KSwKKyAgRkhfU0RDRyAgICA9IEZIREVWIChERVZfU0Q1X01BSk9S
-LCA2NCksCisgIEZIX1NEQ0ggICAgPSBGSERFViAoREVWX1NENV9NQUpPUiwg
-ODApLAorICBGSF9TRENJICAgID0gRkhERVYgKERFVl9TRDVfTUFKT1IsIDk2
-KSwKKyAgRkhfU0RDSiAgICA9IEZIREVWIChERVZfU0Q1X01BSk9SLCAxMTIp
-LAorICBGSF9TRENLICAgID0gRkhERVYgKERFVl9TRDVfTUFKT1IsIDEyOCks
-CisgIEZIX1NEQ0wgICAgPSBGSERFViAoREVWX1NENV9NQUpPUiwgMTQ0KSwK
-KyAgRkhfU0RDTSAgICA9IEZIREVWIChERVZfU0Q1X01BSk9SLCAxNjApLAor
-ICBGSF9TRENOICAgID0gRkhERVYgKERFVl9TRDVfTUFKT1IsIDE3NiksCisg
-IEZIX1NEQ08gICAgPSBGSERFViAoREVWX1NENV9NQUpPUiwgMTkyKSwKKyAg
-RkhfU0RDUCAgICA9IEZIREVWIChERVZfU0Q1X01BSk9SLCAyMDgpLAorICBG
-SF9TRENRICAgID0gRkhERVYgKERFVl9TRDVfTUFKT1IsIDIyNCksCisgIEZI
-X1NEQ1IgICAgPSBGSERFViAoREVWX1NENV9NQUpPUiwgMjQwKSwKKyAgRkhf
-U0RDUyAgICA9IEZIREVWIChERVZfU0Q2X01BSk9SLCAwKSwKKyAgRkhfU0RD
-VCAgICA9IEZIREVWIChERVZfU0Q2X01BSk9SLCAxNiksCisgIEZIX1NEQ1Ug
-ICAgPSBGSERFViAoREVWX1NENl9NQUpPUiwgMzIpLAorICBGSF9TRENWICAg
-ID0gRkhERVYgKERFVl9TRDZfTUFKT1IsIDQ4KSwKKyAgRkhfU0RDVyAgICA9
-IEZIREVWIChERVZfU0Q2X01BSk9SLCA2NCksCisgIEZIX1NEQ1ggICAgPSBG
-SERFViAoREVWX1NENl9NQUpPUiwgODApLAorICBGSF9TRENZICAgID0gRkhE
-RVYgKERFVl9TRDZfTUFKT1IsIDk2KSwKKyAgRkhfU0RDWiAgICA9IEZIREVW
-IChERVZfU0Q2X01BSk9SLCAxMTIpLAorICBGSF9TRERBICAgID0gRkhERVYg
-KERFVl9TRDZfTUFKT1IsIDEyOCksCisgIEZIX1NEREIgICAgPSBGSERFViAo
-REVWX1NENl9NQUpPUiwgMTQ0KSwKKyAgRkhfU0REQyAgICA9IEZIREVWIChE
-RVZfU0Q2X01BSk9SLCAxNjApLAorICBGSF9TREREICAgID0gRkhERVYgKERF
-Vl9TRDZfTUFKT1IsIDE3NiksCisgIEZIX1NEREUgICAgPSBGSERFViAoREVW
-X1NENl9NQUpPUiwgMTkyKSwKKyAgRkhfU0RERiAgICA9IEZIREVWIChERVZf
-U0Q2X01BSk9SLCAyMDgpLAorICBGSF9TRERHICAgID0gRkhERVYgKERFVl9T
-RDZfTUFKT1IsIDIyNCksCisgIEZIX1NEREggICAgPSBGSERFViAoREVWX1NE
-Nl9NQUpPUiwgMjQwKSwKKyAgRkhfU0RESSAgICA9IEZIREVWIChERVZfU0Q3
-X01BSk9SLCAwKSwKKyAgRkhfU0RESiAgICA9IEZIREVWIChERVZfU0Q3X01B
-Sk9SLCAxNiksCisgIEZIX1NEREsgICAgPSBGSERFViAoREVWX1NEN19NQUpP
-UiwgMzIpLAorICBGSF9TRERMICAgID0gRkhERVYgKERFVl9TRDdfTUFKT1Is
-IDQ4KSwKKyAgRkhfU0RETSAgICA9IEZIREVWIChERVZfU0Q3X01BSk9SLCA2
-NCksCisgIEZIX1NERE4gICAgPSBGSERFViAoREVWX1NEN19NQUpPUiwgODAp
-LAorICBGSF9TRERPICAgID0gRkhERVYgKERFVl9TRDdfTUFKT1IsIDk2KSwK
-KyAgRkhfU0REUCAgICA9IEZIREVWIChERVZfU0Q3X01BSk9SLCAxMTIpLAor
-ICBGSF9TRERRICAgID0gRkhERVYgKERFVl9TRDdfTUFKT1IsIDEyOCksCisg
-IEZIX1NERFIgICAgPSBGSERFViAoREVWX1NEN19NQUpPUiwgMTQ0KSwKKyAg
-RkhfU0REUyAgICA9IEZIREVWIChERVZfU0Q3X01BSk9SLCAxNjApLAorICBG
-SF9TRERUICAgID0gRkhERVYgKERFVl9TRDdfTUFKT1IsIDE3NiksCisgIEZI
-X1NERFUgICAgPSBGSERFViAoREVWX1NEN19NQUpPUiwgMTkyKSwKKyAgRkhf
-U0REViAgICA9IEZIREVWIChERVZfU0Q3X01BSk9SLCAyMDgpLAorICBGSF9T
-RERXICAgID0gRkhERVYgKERFVl9TRDdfTUFKT1IsIDIyNCksCisgIEZIX1NE
-RFggICAgPSBGSERFViAoREVWX1NEN19NQUpPUiwgMjQwKSwKIAogICBGSF9N
-RU0gICAgID0gRkhERVYgKDEsIDEpLAogICBGSF9LTUVNICAgID0gRkhERVYg
-KDEsIDIpLAkvKiBub3QgaW1wbGVtZW50ZWQgeWV0ICovCkluZGV4OiBkZXZp
-Y2VzLmluCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KUkNTIGZpbGU6IC9jdnMv
-c3JjL3NyYy93aW5zdXAvY3lnd2luL2RldmljZXMuaW4sdgpyZXRyaWV2aW5n
-IHJldmlzaW9uIDEuMTQKZGlmZiAtdSAtcjEuMTQgZGV2aWNlcy5pbgotLS0g
-ZGV2aWNlcy5pbgk5IE9jdCAyMDA2IDA4OjI3OjIzIC0wMDAwCTEuMTQKKysr
-IGRldmljZXMuaW4JMTQgTm92IDIwMDYgMTc6NDg6MjUgLTAwMDAKQEAgLTg1
-LDcgKzg1LDE1IEBACiAiL2Rldi9zY2QlKDAtMTUpZCIsIEJSQUNLKEZIREVW
-KERFVl9DRFJPTV9NQUpPUiwgeyQxfSkpLCAiXFxEZXZpY2VcXENkUm9teyQx
-fSIKICIvZGV2L3NyJSgwLTE1KWQiLCBCUkFDSyhGSERFVihERVZfQ0RST01f
-TUFKT1IsIHskMX0pKSwgIlxcRGV2aWNlXFxDZFJvbXskMX0iCiAiL2Rldi9z
-ZCV7YS16fXMiLCBCUkFDSyhGSF9TRHt1YyAkMX0pLCAiXFxEZXZpY2VcXEhh
-cmRkaXNre29yZCgkMSkgLSBvcmQoJ2EnKX1cXFBhcnRpdGlvbjAiCisiL2Rl
-di9zZGEle2Eten1zIiwgQlJBQ0soRkhfU0RBe3VjICQxfSksICJcXERldmlj
-ZVxcSGFyZGRpc2t7MjYgKyBvcmQoJDEpIC0gb3JkKCdhJyl9XFxQYXJ0aXRp
-b24wIgorIi9kZXYvc2RiJXthLXp9cyIsIEJSQUNLKEZIX1NEQnt1YyAkMX0p
-LCAiXFxEZXZpY2VcXEhhcmRkaXNrezUyICsgb3JkKCQxKSAtIG9yZCgnYScp
-fVxcUGFydGl0aW9uMCIKKyIvZGV2L3NkYyV7YS16fXMiLCBCUkFDSyhGSF9T
-REN7dWMgJDF9KSwgIlxcRGV2aWNlXFxIYXJkZGlza3s3OCArIG9yZCgkMSkg
-LSBvcmQoJ2EnKX1cXFBhcnRpdGlvbjAiCisiL2Rldi9zZGQle2EteH1zIiwg
-QlJBQ0soRkhfU0REe3VjICQxfSksICJcXERldmljZVxcSGFyZGRpc2t7MTA0
-ICsgb3JkKCQxKSAtIG9yZCgnYScpfVxcUGFydGl0aW9uMCIKICIvZGV2L3Nk
-JXthLXp9cyUoMS0xNSlkIiwgQlJBQ0soRkhfU0R7dWMgJDF9IHwgeyQyfSks
-ICJcXERldmljZVxcSGFyZGRpc2t7b3JkKCQxKSAtIG9yZCgnYScpfVxcUGFy
-dGl0aW9ueyQyICUgMTZ9IgorIi9kZXYvc2RhJXthLXp9cyUoMS0xNSlkIiwg
-QlJBQ0soRkhfU0RBe3VjICQxfSB8IHskMn0pLCAiXFxEZXZpY2VcXEhhcmRk
-aXNrezI2ICsgb3JkKCQxKSAtIG9yZCgnYScpfVxcUGFydGl0aW9ueyQyICUg
-MTZ9IgorIi9kZXYvc2RiJXthLXp9cyUoMS0xNSlkIiwgQlJBQ0soRkhfU0RC
-e3VjICQxfSB8IHskMn0pLCAiXFxEZXZpY2VcXEhhcmRkaXNrezUyICsgb3Jk
-KCQxKSAtIG9yZCgnYScpfVxcUGFydGl0aW9ueyQyICUgMTZ9IgorIi9kZXYv
-c2RjJXthLXp9cyUoMS0xNSlkIiwgQlJBQ0soRkhfU0RDe3VjICQxfSB8IHsk
-Mn0pLCAiXFxEZXZpY2VcXEhhcmRkaXNrezc4ICsgb3JkKCQxKSAtIG9yZCgn
-YScpfVxcUGFydGl0aW9ueyQyICUgMTZ9IgorIi9kZXYvc2RkJXthLXh9cyUo
-MS0xNSlkIiwgQlJBQ0soRkhfU0REe3VjICQxfSB8IHskMn0pLCAiXFxEZXZp
-Y2VcXEhhcmRkaXNrezEwNCArIG9yZCgkMSkgLSBvcmQoJ2EnKX1cXFBhcnRp
-dGlvbnskMiAlIDE2fSIKICIvZGV2L2ttc2ciLCBCUkFDSyhGSF9LTVNHKSwg
-IlxcXFwuXFxtYWlsc2xvdFxcY3lnd2luXFxkZXZcXGttc2ciCiAiL2RldiIs
-IEJSQUNLKEZIX0RFViksICIvZGV2IgogJW90aGVyCXtyZXR1cm4JTlVMTDt9
-CkBAIC0xNDYsMTIgKzE1NCw0NCBAQAogZGV2aWNlOjpwYXJzZWRpc2sgKGlu
-dCBkcml2ZSwgaW50IHBhcnQpCiB7CiAgIGludCBiYXNlOwotICBpZiAoZHJp
-dmUgPCAoJ3EnIC0gJ2EnKSkKKyAgaWYgKGRyaXZlIDwgKCdxJyAtICdhJykp
-ICAgICAgLyogL2Rldi9zZGEgLXRvLSAvZGV2L3NkcCAqLwogICAgIGJhc2Ug
-PSBERVZfU0RfTUFKT1I7Ci0gIGVsc2UKKyAgZWxzZSBpZiAoZHJpdmUgPCAz
-MikgICAgICAgICAgLyogL2Rldi9zZHEgLXRvLSAvZGV2L3NkYWYgKi8KICAg
-ICB7CiAgICAgICBiYXNlID0gREVWX1NEMV9NQUpPUjsKICAgICAgIGRyaXZl
-IC09ICdxJyAtICdhJzsKICAgICB9CisgIGVsc2UgaWYgKGRyaXZlIDwgNDgp
-ICAgICAgICAgIC8qIC9kZXYvc2RhZyAtdG8tIC9kZXYvc2RhdiAqLworICAg
-IHsKKyAgICAgIGJhc2UgPSBERVZfU0QyX01BSk9SOworICAgICAgZHJpdmUg
-LT0gMzI7CisgICAgfQorICBlbHNlIGlmIChkcml2ZSA8IDY0KSAgICAgICAg
-ICAvKiAvZGV2L3NkYXcgLXRvLSAvZGV2L3NkYmwgKi8KKyAgICB7CisgICAg
-ICBiYXNlID0gREVWX1NEM19NQUpPUjsKKyAgICAgIGRyaXZlIC09IDQ4Owor
-ICAgIH0KKyAgZWxzZSBpZiAoZHJpdmUgPCA4MCkgICAgICAgICAgLyogL2Rl
-di9zZGJtIC10by0gL2Rldi9zZGNiICovCisgICAgeworICAgICAgYmFzZSA9
-IERFVl9TRDRfTUFKT1I7CisgICAgICBkcml2ZSAtPSA2NDsKKyAgICB9Cisg
-IGVsc2UgaWYgKGRyaXZlIDwgOTYpICAgICAgICAgIC8qIC9kZXYvc2RjYyAt
-dG8tIC9kZXYvc2RjciAqLworICAgIHsKKyAgICAgIGJhc2UgPSBERVZfU0Q1
-X01BSk9SOworICAgICAgZHJpdmUgLT0gODA7CisgICAgfQorICBlbHNlIGlm
-IChkcml2ZSA8IDExMikgICAgICAgICAgLyogL2Rldi9zZGNzIC10by0gL2Rl
-di9zZGRoICovCisgICAgeworICAgICAgYmFzZSA9IERFVl9TRDZfTUFKT1I7
-CisgICAgICBkcml2ZSAtPSA5NjsKKyAgICB9CisgIC8qIE5PVEU6IFRoaXMg
-d2lsbCBjYXVzZSBtdWx0aXBsZSAvZGV2L3NkZHggZW50cmllcyBpbgorICAg
-ICAgICAgICAvcHJvYy9wYXJ0aXRpb25zIGlmIHRoZXJlIGFyZSBtb3JlIHRo
-YW4gMTI4IGRldmljZXMgKi8KKyAgZWxzZSAgICAgICAgICAgICAgICAgICAg
-ICAgICAgIC8qIC9kZXYvc2RkaSAtdG8tIC9kZXYvc2RkeCAqLworICAgIHsK
-KyAgICAgIGJhc2UgPSBERVZfU0Q3X01BSk9SOworICAgICAgZHJpdmUgLT0g
-MTEyOworICAgIH0KICAgcGFyc2UgKGJhc2UsIHBhcnQgKyAoZHJpdmUgKiAx
-NikpOwogfQpJbmRleDogZHRhYmxlLmNjCj09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT0KUkNTIGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvY3lnd2luL2R0YWJs
-ZS5jYyx2CnJldHJpZXZpbmcgcmV2aXNpb24gMS4xNzAKZGlmZiAtdSAtcjEu
-MTcwIGR0YWJsZS5jYwotLS0gZHRhYmxlLmNjCTYgTm92IDIwMDYgMTM6NDY6
-MjQgLTAwMDAJMS4xNzAKKysrIGR0YWJsZS5jYwkxNCBOb3YgMjAwNiAxNzo0
-ODoyNSAtMDAwMApAQCAtMzg0LDYgKzM4NCwxMiBAQAogICAgIGNhc2UgREVW
-X0NEUk9NX01BSk9SOgogICAgIGNhc2UgREVWX1NEX01BSk9SOgogICAgIGNh
-c2UgREVWX1NEMV9NQUpPUjoKKyAgICBjYXNlIERFVl9TRDJfTUFKT1I6Cisg
-ICAgY2FzZSBERVZfU0QzX01BSk9SOgorICAgIGNhc2UgREVWX1NENF9NQUpP
-UjoKKyAgICBjYXNlIERFVl9TRDVfTUFKT1I6CisgICAgY2FzZSBERVZfU0Q2
-X01BSk9SOgorICAgIGNhc2UgREVWX1NEN19NQUpPUjoKICAgICAgIGZoID0g
-Y25ldyAoZmhhbmRsZXJfZGV2X2Zsb3BweSkgKCk7CiAgICAgICBicmVhazsK
-ICAgICBjYXNlIERFVl9UQVBFX01BSk9SOgo=
+IyEgL2Jpbi9zaAoKZWNobyAiG1szMjs0MDsxbSBicmlnaHQgZ3JlZW4gb24g
+YmxhY2sgIgplY2hvICIbWzdtIHJldmVyc2UgIiAiG1swbTwtIHJldmVyc2U7
+IgplY2hvICIgc2hvdWxkIGFjdHVhbGx5IGJlIGJsYWNrIG9uIGJyaWdodCBn
+cmVlbiIKZWNobyAiIHdpdGggdGhlIGJ1ZywgaXQncyBncmF5IChicmlnaHQg
+YmxhY2spIG9uIChkaW0pIGdyZWVuIHNvIGFsbW9zdCB1bnJlYWRhYmxlIgoK
 
-------_=_NextPart_001_01C70815.B8CE8478--
+--%%message-boundary%%--
