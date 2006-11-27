@@ -1,17 +1,22 @@
-Return-Path: <cygwin-patches-return-6005-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 19053 invoked by alias); 27 Nov 2006 15:47:21 -0000
-Received: (qmail 19042 invoked by uid 22791); 27 Nov 2006 15:47:21 -0000
+Return-Path: <cygwin-patches-return-6006-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 3550 invoked by alias); 27 Nov 2006 16:16:53 -0000
+Received: (qmail 3535 invoked by uid 22791); 27 Nov 2006 16:16:52 -0000
 X-Spam-Check-By: sourceware.org
-Received: from 66-162-92-75.static.twtelecom.net (HELO saturn.p3corpnet.pivot3.com) (66.162.92.75)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Mon, 27 Nov 2006 15:47:13 +0000
-Content-class: urn:content-classes:message
-MIME-Version: 1.0
-Content-Type: text/plain; 	charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-Subject: RE: Patch to mapping up to 128 SCSI Disk Devices
-Date: Mon, 27 Nov 2006 15:47:00 -0000
-Message-ID: <E05F1FD208D5AA45B78B3983479ECF08F0A75D@saturn.p3corpnet.pivot3.com>
-From: "Loh, Joe" <joel@pivot3.com>
-To: <cygwin-patches@cygwin.com>
+Received: from pool-71-248-179-54.bstnma.fios.verizon.net (HELO cgf.cx) (71.248.179.54)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Mon, 27 Nov 2006 16:16:45 +0000
+Received: by cgf.cx (Postfix, from userid 201) 	id C7C3A13D3C7; Mon, 27 Nov 2006 11:16:43 -0500 (EST)
+Date: Mon, 27 Nov 2006 16:16:00 -0000
+From: Christopher Faylor <cgf-no-personal-reply-please@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: [RFC][patch] cygwin/singal.h is not compatible with -std=c89 or -std=c99
+Message-ID: <20061127161643.GB551@trixie.casa.cgf.cx>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <4568655E.6030403@sh.cvut.cz> <20061127083341.GB8385@calimero.vinschen.de> <20061127151759.GA30938@trixie.casa.cgf.cx> <20061127153519.GF8385@calimero.vinschen.de>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20061127153519.GF8385@calimero.vinschen.de>
+User-Agent: Mutt/1.5.11
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -20,33 +25,21 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q4/txt/msg00023.txt.bz2
+X-SW-Source: 2006-q4/txt/msg00024.txt.bz2
 
-Corinna Vinschen wrote:
-> On Nov 14 11:52, Loh, Joe wrote:
->> [...]
->> We have converted all comments to use C-style /**/ and attached the
->> patch as a file instead.
->=20
-> Your copyright assignment has arrived and got signed, so I took the
-> opportunity to apply your patch.  Thanks.=20
->=20
->=20
-> Looking forward to see more patches,
-> Corinna
->=20
->=20
-> P.S.: Just a friendly reminder, you're all the time using "we" in the
-> context of this patch.  I've positively assumed now that this patch
-> has been created by yourself.  If other developers in your company
-> want to provide patches, please make sure they all have a copyright
-> assignment in place.  I do not like these legal hassles, but I have
-> to follow them, sorry.=20=20=20=20=20
+On Mon, Nov 27, 2006 at 04:35:19PM +0100, Corinna Vinschen wrote:
+>On Nov 27 10:17, Christopher Faylor wrote:
+>> How about the alternative "Don't do that" approach?  I think there are
+>> other parts of the header files which won't work with -std=c89.  I've
+>> always been coding with the understanding that this is a GNU C environment.
+>
+>Well, BSD and Linux are using the more portable approach.  Why should
+>Cygwin stand back?
 
-Thank you for accepting and applying the patch.  There is one other
-person involved in testing the modified DLL, the patch itself is created
-by me.
+Because the "portable" approach pollutes the namespace and, if we change
+this, there are several other places which also need to be changed.
 
-Appreciate the responsiveness.
+Anonymous unions are a feature of gcc and MSVC.  If we really have to do
+this then I would like to adopt the convention of  using __extension__.
 
-Joe
+cgf
