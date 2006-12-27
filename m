@@ -1,19 +1,22 @@
-Return-Path: <cygwin-patches-return-6017-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 16321 invoked by alias); 27 Dec 2006 18:23:58 -0000
-Received: (qmail 16311 invoked by uid 22791); 27 Dec 2006 18:23:57 -0000
+Return-Path: <cygwin-patches-return-6018-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 18194 invoked by alias); 27 Dec 2006 18:27:54 -0000
+Received: (qmail 18183 invoked by uid 22791); 27 Dec 2006 18:27:53 -0000
 X-Spam-Check-By: sourceware.org
-Received: from ug-out-1314.google.com (HELO ug-out-1314.google.com) (66.249.92.170)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Wed, 27 Dec 2006 18:23:53 +0000
-Received: by ug-out-1314.google.com with SMTP id j40so3755806ugd         for <cygwin-patches@cygwin.com>; Wed, 27 Dec 2006 10:23:50 -0800 (PST)
-Received: by 10.78.204.7 with SMTP id b7mr69693hug.1167243467335;         Wed, 27 Dec 2006 10:17:47 -0800 (PST)
-Received: by 10.78.70.11 with HTTP; Wed, 27 Dec 2006 10:17:47 -0800 (PST)
-Message-ID: <bbf4cf4f0612271017n55eb7689x522da466d733f9f3@mail.gmail.com>
-Date: Wed, 27 Dec 2006 18:23:00 -0000
-From: "Stephen More" <stephen.more@gmail.com>
+Received: from pool-71-248-179-54.bstnma.fios.verizon.net (HELO cgf.cx) (71.248.179.54)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Wed, 27 Dec 2006 18:27:49 +0000
+Received: by cgf.cx (Postfix, from userid 201) 	id 832AA13D1CD; Wed, 27 Dec 2006 13:27:47 -0500 (EST)
+Date: Wed, 27 Dec 2006 18:27:00 -0000
+From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Additional Proxy support needed
-MIME-Version: 1.0
-Content-Type: multipart/mixed;  	boundary="----=_Part_35892_26202751.1167243467308"
-X-IsSubscribed: yes
+Subject: Re: Additional Proxy support needed
+Message-ID: <20061227182747.GA31996@trixie.casa.cgf.cx>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <bbf4cf4f0612271017n55eb7689x522da466d733f9f3@mail.gmail.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bbf4cf4f0612271017n55eb7689x522da466d733f9f3@mail.gmail.com>
+User-Agent: Mutt/1.5.11
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -22,142 +25,23 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2006-q4/txt/msg00035.txt.bz2
+X-SW-Source: 2006-q4/txt/msg00036.txt.bz2
 
+On Wed, Dec 27, 2006 at 01:17:47PM -0500, Stephen More wrote:
+>Currently setup only supports Proxy-Authenticate: Basic
+>
+>If a proxy does not support basic, it no longer stays in a loop, it
+>will log and return.
+>
+>At some point I hope to submit another patch that implements
+>Proxy-Authenticate: NTLM.
+>
+>-Stephen More
+>
+>
+>P.S. This is my first submission to cygwin-patches
 
-------=_Part_35892_26202751.1167243467308
-Content-Type: text/plain; charset=ISO-8859-1; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-Content-length: 303
+Sorry, but this is the wrong mailing list.  Please use cygwin-apps
+for patches to setup.exe.
 
-Currently setup only supports Proxy-Authenticate: Basic
-
-If a proxy does not support basic, it no longer stays in a loop, it
-will log and return.
-
-At some point I hope to submit another patch that implements
-Proxy-Authenticate: NTLM.
-
-
--Stephen More
-
-
-P.S. This is my first submission to cygwin-patches
-
-------=_Part_35892_26202751.1167243467308
-Content-Type: application/octet-stream; name=setup.diff
-Content-Transfer-Encoding: base64
-X-Attachment-Id: f_ew829zlk
-Content-Disposition: attachment; filename="setup.diff"
-Content-length: 5604
-
-T25seSBpbiBzZXR1cC0wLndpcDogLmRlcHMKT25seSBpbiBzZXR1cC0wLndp
-cDogTWFrZWZpbGUKQ29tbW9uIHN1YmRpcmVjdG9yaWVzOiBzZXR1cC0wL2Nm
-Z2F1eCBhbmQgc2V0dXAtMC53aXAvY2ZnYXV4Ck9ubHkgaW4gc2V0dXAtMC53
-aXA6IGNvbmZpZy5jYWNoZQpPbmx5IGluIHNldHVwLTAud2lwOiBjb25maWcu
-bG9nCk9ubHkgaW4gc2V0dXAtMC53aXA6IGNvbmZpZy5zdGF0dXMKQ29tbW9u
-IHN1YmRpcmVjdG9yaWVzOiBzZXR1cC0wL2NzdV91dGlsIGFuZCBzZXR1cC0w
-LndpcC9jc3VfdXRpbApDb21tb24gc3ViZGlyZWN0b3JpZXM6IHNldHVwLTAv
-bGliZ2V0b3B0KysgYW5kIHNldHVwLTAud2lwL2xpYmdldG9wdCsrCkNvbW1v
-biBzdWJkaXJlY3Rvcmllczogc2V0dXAtMC9saWJtZDUtcmZjIGFuZCBzZXR1
-cC0wLndpcC9saWJtZDUtcmZjCk9ubHkgaW4gc2V0dXAtMC53aXA6IGxpYnRv
-b2wKZGlmZiAtdXAgc2V0dXAtMC9uZXRpby5jYyBzZXR1cC0wLndpcC9uZXRp
-by5jYwotLS0gc2V0dXAtMC9uZXRpby5jYwkyMDA1LTA1LTA0IDEwOjUyOjM0
-LjAwMDAwMDAwMCAtMDQwMAorKysgc2V0dXAtMC53aXAvbmV0aW8uY2MJMjAw
-Ni0xMi0yNyAxMTozMjoxNC4zNDA0NjY2MDAgLTA1MDAKQEAgLTUwLDYgKzUw
-LDEyIEBAIGNoYXIgKk5ldElPOjpuZXRfcHJveHlfcGFzc3dkOwogY2hhciAq
-TmV0SU86Om5ldF9mdHBfdXNlcjsKIGNoYXIgKk5ldElPOjpuZXRfZnRwX3Bh
-c3N3ZDsKIAorYm9vbCBOZXRJTzo6YmFzaWMgPSBmYWxzZTsKK2Jvb2wgTmV0
-SU86Om50bG0gPSBmYWxzZTsKK2Jvb2wgTmV0SU86OmtlcmJlcm9zID0gZmFs
-c2U7Citib29sIE5ldElPOjpuZWdvdGlhdGUgPSBmYWxzZTsKKworCiBOZXRJ
-Tzo6TmV0SU8gKGNoYXIgY29uc3QgKlB1cmwpCiB7CiAgIHNldF91cmwgKFB1
-cmwpOwpkaWZmIC11cCBzZXR1cC0wL25ldGlvLmggc2V0dXAtMC53aXAvbmV0
-aW8uaAotLS0gc2V0dXAtMC9uZXRpby5oCTIwMDUtMDUtMDQgMTA6NTI6MzQu
-MDAwMDAwMDAwIC0wNDAwCisrKyBzZXR1cC0wLndpcC9uZXRpby5oCTIwMDYt
-MTItMjcgMTE6MzE6NDIuOTUzMDU2MDAwIC0wNTAwCkBAIC0zNSw2ICszNSwx
-MCBAQCBwcm90ZWN0ZWQ6CiAgIHN0YXRpYyBjaGFyICpuZXRfZnRwX3VzZXI7
-CiAgIHN0YXRpYyBjaGFyICpuZXRfZnRwX3Bhc3N3ZDsKIAorICBzdGF0aWMg
-Ym9vbCBiYXNpYzsKKyAgc3RhdGljIGJvb2wgbnRsbTsKKyAgc3RhdGljIGJv
-b2wga2VyYmVyb3M7CisgIHN0YXRpYyBib29sIG5lZ290aWF0ZTsKIAogcHVi
-bGljOgogICAvKiBpZiBub256ZXJvLCB0aGlzIGlzIHRoZSBlc3RpbWF0ZWQg
-dG90YWwgZmlsZSBzaXplICovCmRpZmYgLXVwIHNldHVwLTAvbmlvLWh0dHAu
-Y2Mgc2V0dXAtMC53aXAvbmlvLWh0dHAuY2MKLS0tIHNldHVwLTAvbmlvLWh0
-dHAuY2MJMjAwNi0wNC0yNSAyMzoyNToyOC4wMDAwMDAwMDAgLTA0MDAKKysr
-IHNldHVwLTAud2lwL25pby1odHRwLmNjCTIwMDYtMTItMjcgMTE6MTg6MzMu
-NzA1NzU4MjAwIC0wNTAwCkBAIC0zOCw2ICszOCw4IEBAIHN0YXRpYyBjb25z
-dCBjaGFyICpjdnNpZCA9CiAjZGVmaW5lIF9zdHJuaWNtcCBzdHJuY2FzZWNt
-cAogI2VuZGlmCiAKKyNpbmNsdWRlICJMb2dTaW5nbGV0b24uaCIKKwogc3Rh
-dGljIGNoYXIgc2l4MnByWzY0XSA9IHsKICAgJ0EnLCAnQicsICdDJywgJ0Qn
-LCAnRScsICdGJywgJ0cnLCAnSCcsICdJJywgJ0onLCAnSycsICdMJywgJ00n
-LAogICAnTicsICdPJywgJ1AnLCAnUScsICdSJywgJ1MnLCAnVCcsICdVJywg
-J1YnLCAnVycsICdYJywgJ1knLCAnWicsCkBAIC0xMjIsMTEgKzEyNCwxMSBA
-QCByZXRyeV9nZXQ6CiAgIGVsc2UKICAgICBzLT5wcmludGYgKCJIb3N0OiAl
-czolZFxyXG4iLCBob3N0LCBwb3J0KTsKIAotICBpZiAobmV0X3VzZXIgJiYg
-bmV0X3Bhc3N3ZCkKKyAgaWYgKG5ldF91c2VyICYmIG5ldF9wYXNzd2QgJiYg
-YmFzaWMpCiAgICAgcy0+cHJpbnRmICgiQXV0aG9yaXphdGlvbjogQmFzaWMg
-JXNcclxuIiwKIAkgICAgICAgYmFzZTY0X2VuY29kZSAobmV0X3VzZXIsIG5l
-dF9wYXNzd2QpKTsKIAotICBpZiAobmV0X3Byb3h5X3VzZXIgJiYgbmV0X3By
-b3h5X3Bhc3N3ZCkKKyAgaWYgKG5ldF9wcm94eV91c2VyICYmIG5ldF9wcm94
-eV9wYXNzd2QgJiYgYmFzaWMpCiAgICAgcy0+cHJpbnRmICgiUHJveHktQXV0
-aG9yaXphdGlvbjogQmFzaWMgJXNcclxuIiwKIAkgICAgICAgYmFzZTY0X2Vu
-Y29kZSAobmV0X3Byb3h5X3VzZXIsIG5ldF9wcm94eV9wYXNzd2QpKTsKIApA
-QCAtMTM5LDYgKzE0MSw5IEBAIHJldHJ5X2dldDoKICAgaWYgKCFsKQogICAg
-IHJldHVybjsKICAgc3NjYW5mIChsLCAiJSpzICVkIiwgJmNvZGUpOworCisg
-IGxvZyAoTE9HX1BMQUlOKSA8PCAiSFRUUCBFcnJvciBDb2RlOiAiIDw8IGNv
-ZGUgPDwgZW5kTG9nOworCiAgIGlmIChjb2RlID49IDMwMCAmJiBjb2RlIDwg
-NDAwKQogICAgIHsKICAgICAgIHdoaWxlICgobCA9IHMtPmdldHMgKCkpICE9
-IDApCkBAIC0xNjUsMTAgKzE3MCw0MCBAQCByZXRyeV9nZXQ6CiAgICAgfQog
-ICBpZiAoY29kZSA9PSA0MDcpCQkvKiBwcm94eSBhdXRob3JpemF0aW9uIHJl
-cXVpcmVkICovCiAgICAgewotICAgICAgZ2V0X3Byb3h5X2F1dGggKE5VTEwp
-OwotICAgICAgZGVsZXRlCi0JczsKLSAgICAgIGdvdG8gcmV0cnlfZ2V0Owor
-CisJLy8gRWF0IHRoZSBoZWFkZXIsIHBpY2tpbmcgb3V0IHRoZSBQcm94eS1B
-dXRoZW50aWNhdGUgaW4gdGhlIHByb2Nlc3MKKyAgICAgICAgd2hpbGUgKCgo
-bCA9IHMtPmdldHMgKCkpICE9IE5VTEwpICYmICgqbCAhPSAnXDAnKSkKKyAg
-ICAgICAgeworICAgICAgICAgICAgICBpZiAoX3N0cm5pY21wIChsLCAiUHJv
-eHktQXV0aGVudGljYXRlOiBCYXNpYyIsIDI1KSA9PSAwKQorICAgICAgICAg
-ICAgICAgICAgYmFzaWMgPSB0cnVlOworCSAgICAgIGVsc2UgaWYgKF9zdHJu
-aWNtcCAobCwgIlByb3h5LUF1dGhlbnRpY2F0ZTogTlRMTSIsIDI0KSA9PSAw
-KQorCQkgIG50bG0gPSB0cnVlOworCSAgICAgIGVsc2UgaWYgKF9zdHJuaWNt
-cCAobCwgIlByb3h5LUF1dGhlbnRpY2F0ZTogS2VyYmVyb3MiLCAyOCkgPT0g
-MCkKKwkJICBrZXJiZXJvcyA9IHRydWU7CisgICAgICAgICAgICAgIGVsc2Ug
-aWYgKF9zdHJuaWNtcCAobCwgIlByb3h5LUF1dGhlbnRpY2F0ZTogTmVnb3Rp
-YXRlIiwgMjkpID09IDApCisJCSAgbmVnb3RpYXRlID0gdHJ1ZTsKKyAgICAg
-ICAgfQorCisJbG9nIChMT0dfQkFCQkxFKSA8PCAiQmFzaWMgYWxsb3dlZCAi
-IDw8IGJhc2ljIDw8IGVuZExvZzsKKyAgICAgICAgbG9nIChMT0dfQkFCQkxF
-KSA8PCAiTlRMTSBhbGxvd2VkICIgPDwgbnRsbSA8PCBlbmRMb2c7CisgICAg
-ICAgIGxvZyAoTE9HX0JBQkJMRSkgPDwgIktlcmJlcm9zIGFsbG93ZWQ6ICIg
-PDwga2VyYmVyb3MgPDwgZW5kTG9nOworICAgICAgICBsb2cgKExPR19CQUJC
-TEUpIDw8ICJOZWdvdGlhdGUgYWxsb3dlZDogIiA8PCBuZWdvdGlhdGUgPDwg
-ZW5kTG9nOworCQorCWRlbGV0ZQorICAgICAgICAgIHM7CisKKwlpZiggYmFz
-aWMgKQorCXsKKwkgICAgICBnZXRfcHJveHlfYXV0aCAoTlVMTCk7CisJICAg
-ICAgZ290byByZXRyeV9nZXQ7CisJfQorCisJLy8gT3RoZXIgUHJveHktQXV0
-aGVudGljYXRlIG1ldGhvZHMgY3VycmVudGx5IG5vdCBzdXBwb3J0ZWQKKwls
-b2cgKExPR19QTEFJTikgPDwgIlNvcnJ5LCBvbmx5IFByb3h5LUF1dGhlbnRp
-Y2F0ZTogQmFzaWMgaXMgY3VycmVudGx5IGltcGxlbWVudGVkLiIgPDwgZW5k
-TG9nOworCisgICAgICAgIHMgPSBOVUxMOworCXJldHVybjsKKwkKICAgICB9
-CiAgIGlmIChjb2RlID09IDUwMAkJLyogZnRwIGF1dGhlbnRpY2F0aW9uIHRo
-cm91Z2ggcHJveHkgcmVxdWlyZWQgKi8KICAgICAgICYmIG5ldF9tZXRob2Qg
-PT0gSURDX05FVF9QUk9YWSAmJiAhc3RybmNtcCAoUHVybCwgImZ0cDovLyIs
-IDYpKQpAQCAtMjEwLDYgKzI0NSw4IEBAIE5ldElPX0hUVFA6Om9rICgpCiB7
-CiAgIGlmIChzICYmIHMtPm9rICgpKQogICAgIHJldHVybiAxOworCisgIGxv
-ZyAoTE9HX1BMQUlOKSA8PCAiTmV0SU9fSFRUUCBpcyBub3Qgb2siIDw8IGVu
-ZExvZzsKICAgcmV0dXJuIDA7CiB9CiAKQ29tbW9uIHN1YmRpcmVjdG9yaWVz
-OiBzZXR1cC0wL3Rlc3RzIGFuZCBzZXR1cC0wLndpcC90ZXN0cwo=
-
-------=_Part_35892_26202751.1167243467308
-Content-Type: application/octet-stream; name=ChangeLog
-Content-Transfer-Encoding: base64
-X-Attachment-Id: f_ew82ag2n
-Content-Disposition: attachment; filename="ChangeLog"
-Content-length: 375
-
-MjAwNi0xMi0yNyAgU3RlcGhlbiBNb3JlICA8c3RlcGhlbi5tb3JlQGdtYWls
-LmNvbT4KCiAgICAgICAgKiBuZXRpby5jYyAoYmFzaWMsIG50bG0sIGtlcmJl
-cm9zLCBuZWdvdGlhdGUpOiBBZGRlZCBmaWVsZHMuIAoJKiBuZXRpby5oIChi
-YXNpYywgbnRsbSwga2VyYmVyb3MsIG5lZ290aWF0ZSk6IEFkZGVkIGZpZWxk
-cy4KICAgICAgICAqIG5pby1odHRwLmNjIChOZXRJT19IVFRQOjpOZXRJT19I
-VFRQKTogQWRkZWQgbG9nZ2luZyBmb3Igbm9uLWltcGxlbWVudGVkIHByb3hp
-ZXMuIAo=
-
-------=_Part_35892_26202751.1167243467308--
+cgf
