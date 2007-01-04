@@ -1,21 +1,21 @@
-Return-Path: <cygwin-patches-return-6028-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 23711 invoked by alias); 3 Jan 2007 15:59:18 -0000
-Received: (qmail 23701 invoked by uid 22791); 3 Jan 2007 15:59:18 -0000
+Return-Path: <cygwin-patches-return-6029-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 3255 invoked by alias); 4 Jan 2007 09:19:59 -0000
+Received: (qmail 3243 invoked by uid 22791); 4 Jan 2007 09:19:59 -0000
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.31.1) with ESMTP; Wed, 03 Jan 2007 15:59:11 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 0CF206D42FC; Wed,  3 Jan 2007 16:59:08 +0100 (CET)
-Date: Wed, 03 Jan 2007 15:59:00 -0000
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.31.1) with ESMTP; Thu, 04 Jan 2007 09:19:54 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 666F16D42FF; Thu,  4 Jan 2007 10:19:51 +0100 (CET)
+Date: Thu, 04 Jan 2007 09:19:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: Increase st_blksize to 64k
-Message-ID: <20070103155908.GD4106@calimero.vinschen.de>
+Message-ID: <20070104091951.GA410@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <Pine.CYG.4.58.0701021158490.2464@PC1163-8460-XP.flightsafety.com> <20070102184551.GA18182@trixie.casa.cgf.cx> <Pine.CYG.4.58.0701021301510.2464@PC1163-8460-XP.flightsafety.com> <20070103121620.GB4106@calimero.vinschen.de> <459BADB3.7080705@byu.net> <20070103133557.GC4106@calimero.vinschen.de> <20070103154028.GB19858@trixie.casa.cgf.cx>
+References: <Pine.CYG.4.58.0701021158490.2464@PC1163-8460-XP.flightsafety.com> <20070102184551.GA18182@trixie.casa.cgf.cx> <Pine.CYG.4.58.0701021301510.2464@PC1163-8460-XP.flightsafety.com> <20070103121620.GB4106@calimero.vinschen.de> <459BADB3.7080705@byu.net> <20070103133557.GC4106@calimero.vinschen.de> <Pine.CYG.4.58.0701030944070.2464@PC1163-8460-XP.flightsafety.com>
 Mime-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20070103154028.GB19858@trixie.casa.cgf.cx>
+In-Reply-To: <Pine.CYG.4.58.0701030944070.2464@PC1163-8460-XP.flightsafety.com>
 User-Agent: Mutt/1.4.2.2i
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -25,48 +25,36 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2007-q1/txt/msg00009.txt.bz2
+X-SW-Source: 2007-q1/txt/msg00010.txt.bz2
 
-On Jan  3 10:40, Christopher Faylor wrote:
-> On Wed, Jan 03, 2007 at 02:35:57PM +0100, Corinna Vinschen wrote:
-> >On Jan  3 06:20, Eric Blake wrote:
-> >> -----BEGIN PGP SIGNED MESSAGE-----
-> >> Hash: SHA1
-> >> 
-> >> According to Corinna Vinschen on 1/3/2007 5:16 AM:
-> >> > 
-> >> > Setting st_blksize to 64K might be a good idea for disk I/O if the value
-> >> > is actually used by applications.  Do you have a specific example or a
-> >> > test result from a Cygwin application which shows the advantage of
-> >> > setting st_blksize to this value?  I assume there was some actual case
-> >> > which led you to make this change ;)
-> >> 
-> >> Did you read the original link?
-> >> http://sourceware.org/ml/cygwin/2006-12/msg00911.html
-> >
-> >Urgh, sorry, no.  I missed it even twice, once when scanning the Cygwin
-> >list to see what happened since Christmas, and once in Brian's mail
-> >starting this thread.
-> >
-> >So it appears to make much sense to set the blocksize to 64K.  The
-> >only question would be whether to use getpagesize() or a hard coded
-> >value.  It seems to me that the 64K allocation granularity and using
-> >64K as buffer size in disk I/O coincide so I tend to agree that it
-> >makes sort of sense to use getpagesize at this point.  What do you
-> >think, Chris?
+On Jan  3 09:56, Brian Ford wrote:
+> On Wed, 3 Jan 2007, Corinna Vinschen wrote:
 > 
-> I don't think getpagesize should be linked to this value.  The fact that
-> both are 64K seems to be a coincidence to me.  This wasn't mentioned in
-> the document that Brian mentioned was it?
+> > So it appears to make much sense to set the blocksize to 64K.
 > 
-> If we specifically want to use 64K block sizes then I think we should
-> specifically say that rather than relying on some other unrelated mechanism
-> to return a 64K constant.
+> blocksize is not really the proper term here as it is very confusing.
+> Preferred or optimal I/O size is a better choice in my opinion.
+> 
+> > The only question would be whether to use getpagesize() or a hard coded
+> > value.  It seems to me that the 64K allocation granularity and using 64K
+> > as buffer size in disk I/O coincide so I tend to agree that it makes
+> > sort of sense to use getpagesize at this point.
+> 
+> More supporting evidence from
+> http://research.microsoft.com/BARC/Sequential_IO/Win2K_IO_MSTR_2000_55.doc :
+> 
+> ...each (8KB) buffered random write is actually a 64KB random read and
+> then an 8KB write.  When a buffered write request is received, the cache
+> manager memory maps a 256KB view into the file. It then pages in the 64KB
+> frame continuing the changed 8KB, and modifies that 8KB of data.  This
+> means that for each buffered random write includes one or more 64KB reads.
+> The right side of Figure 11 shows this 100% IO penalty.
 
-Ok, I'll apply Brians patch with 64K hardcoded plus a comment why this
-looks like a good idea, performance-wise.
+Interesting.  I just applied a patch along the lines of your patch and
+what we discussed in this thread.
 
 
+Thanks,
 Corinna
 
 -- 
