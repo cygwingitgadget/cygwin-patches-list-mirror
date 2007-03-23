@@ -1,21 +1,22 @@
-Return-Path: <cygwin-patches-return-6047-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 4784 invoked by alias); 22 Mar 2007 22:07:42 -0000
-Received: (qmail 4686 invoked by uid 22791); 22 Mar 2007 22:07:41 -0000
+Return-Path: <cygwin-patches-return-6048-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 27862 invoked by alias); 23 Mar 2007 09:22:07 -0000
+Received: (qmail 27831 invoked by uid 22791); 23 Mar 2007 09:22:05 -0000
 X-Spam-Check-By: sourceware.org
-Received: from mail.artimi.com (HELO mail.artimi.com) (194.72.81.2)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Thu, 22 Mar 2007 22:07:37 +0000
-Received: from rainbow ([192.168.8.46]) by mail.artimi.com with Microsoft SMTPSVC(6.0.3790.3959); 	 Thu, 22 Mar 2007 22:07:34 +0000
-From: "Dave Korn" <dave.korn@artimi.com>
-To: <cygwin-patches@cygwin.com>
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.31.1) with ESMTP; Fri, 23 Mar 2007 09:22:00 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 4B74C6D42F9; Fri, 23 Mar 2007 10:21:57 +0100 (CET)
+Date: Fri, 23 Mar 2007 09:22:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] w32api: Correct Unicode/Ansi defines for GetMappedFileName
+Message-ID: <20070323092157.GA18589@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20070322210856.GV23239@flim.org>
-Subject: RE: [PATCH] w32api: Correct Unicode/Ansi defines for GetMappedFileName
-Date: Thu, 22 Mar 2007 22:07:00 -0000
-Message-ID: <007401c76cce$7ebb37d0$2e08a8c0@CAM.ARTIMI.COM>
-MIME-Version: 1.0
-Content-Type: text/plain; 	charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 11
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 In-Reply-To: <20070322210856.GV23239@flim.org>
-X-IsSubscribed: yes
+User-Agent: Mutt/1.4.2.2i
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -24,20 +25,33 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2007-q1/txt/msg00028.txt.bz2
+X-SW-Source: 2007-q1/txt/msg00029.txt.bz2
 
-On 22 March 2007 21:09, Matthew Gregan wrote:
+Hi Matthew,
 
+On Mar 23 09:08, Matthew Gregan wrote:
 > Hi,
 > 
 > Attached is a small patch to correct the Unicode and Ansi defines that
 > expose the appropriate W/A variant of GetMappedFileName.
+> 
+> 2007-03-23  Matthew Gregan  <kinetik@flim.org>
+> 
+>        * include/psapi.h (GetMappedFileName): Rename from GetMappedFilenameEx.
+> 
 
-  Looks obviously correct to me.  There's no such thing as the -Ex version of
-the function at all.  Wonder where that piece of urban mythology came from?
+Thanks for the patch.  I've applied it.
+
+Btw., the w32api is officially maintained by the MinGW folks, see the
+README.w32api file.  Patches to w32api are better off in the appropriate
+mingw mailing list.
 
 
-    cheers,
-      DaveK
+Thanks again,
+Corinna
+
+
 -- 
-Can't think of a witty .sigline today....
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          cygwin AT cygwin DOT com
+Red Hat
