@@ -1,22 +1,20 @@
-Return-Path: <cygwin-patches-return-6060-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 27479 invoked by alias); 4 Apr 2007 18:19:15 -0000
-Received: (qmail 27457 invoked by uid 22791); 4 Apr 2007 18:19:14 -0000
+Return-Path: <cygwin-patches-return-6061-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 30566 invoked by alias); 6 Apr 2007 01:35:22 -0000
+Received: (qmail 30551 invoked by uid 22791); 6 Apr 2007 01:35:21 -0000
 X-Spam-Check-By: sourceware.org
-Received: from pool-71-248-179-87.bstnma.fios.verizon.net (HELO cgf.cx) (71.248.179.87)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Wed, 04 Apr 2007 19:19:08 +0100
-Received: by cgf.cx (Postfix, from userid 201) 	id 523D52B41A; Wed,  4 Apr 2007 14:19:07 -0400 (EDT)
-Date: Wed, 04 Apr 2007 18:19:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] getmntent()->mnt_type values that match Linux...
-Message-ID: <20070404181907.GA17856@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <45FE2DF8.40709@icculus.org> <46136153.8030000@icculus.org> <20070404084930.GK20261@calimero.vinschen.de> <20070404160309.GB1672@calimero.vinschen.de> <20070404181833.GA17836@ednor.casa.cgf.cx>
+Received: from alnrmhc13.comcast.net (HELO alnrmhc13.comcast.net) (204.127.225.93)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Fri, 06 Apr 2007 02:35:19 +0100
+Received: from [192.168.0.103] (c-67-186-254-72.hsd1.co.comcast.net[67.186.254.72])           by comcast.net (alnrmhc13) with ESMTP           id <20070406013517b1300jpf2ne>; Fri, 6 Apr 2007 01:35:17 +0000
+Message-ID: <4615A415.4080700@byu.net>
+Date: Fri, 06 Apr 2007 01:35:00 -0000
+From: Eric Blake <ebb9@byu.net>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.0.10) Gecko/20070221 Thunderbird/1.5.0.10 Mnenhy/0.7.5.666
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20070404181833.GA17836@ednor.casa.cgf.cx>
-User-Agent: Mutt/1.5.14 (2007-02-12)
+To:  cygwin-patches@cygwin.com
+Subject: Re: stdint.h bug
+References: <loom.20070403T201330-772@post.gmane.org> <20070403191301.GA13159@ednor.casa.cgf.cx> <4612FF7F.6080705@byu.net> <20070404073832.GG20261@calimero.vinschen.de>
+In-Reply-To: <20070404073832.GG20261@calimero.vinschen.de>
+Content-Type: multipart/mixed;  boundary="------------080206040505050806070808"
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -25,32 +23,69 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2007-q2/txt/msg00006.txt.bz2
+X-SW-Source: 2007-q2/txt/msg00007.txt.bz2
 
-On Wed, Apr 04, 2007 at 02:18:33PM -0400, Christopher Faylor wrote:
->On Wed, Apr 04, 2007 at 06:03:09PM +0200, Corinna Vinschen wrote:
->>Ryan,
->>
->>On Apr  4 10:49, Corinna Vinschen wrote:
->>> On Apr  4 04:26, Ryan C. Gordon wrote:
->>> > 
->>> > >mnt_type is always "system" or "user" ... this patch changes this to 
->>> > >make an earnest effort to match what a GNU/Linux system would report, 
->>> > >and moves the system/user string to mnt_opts.
->>> > 
->>> > I sent in the copyright assignment paperwork for this around two weeks 
->>> > ago...just wanted to follow up to see if that was ever received, and if 
->>> > so, if this patch can be committed or needs further work.
->>> 
->>> Sorry, I didn't get the note from our dept so far.  I'll investigate...
->>
->>your assignment arrived and has been signed.
->>
->>Chris, are you going to review the patch?
->
->Yep.  I'll do it in the next couple of days.
+This is a multi-part message in MIME format.
+--------------080206040505050806070808
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+Content-length: 918
 
-Actually, I'd appreciate it if the patch could be resubmitted against
-current CVS.
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-cgf
+According to Corinna Vinschen on 4/4/2007 1:38 AM:
+> On Apr  3 19:29, Eric Blake wrote:
+>> 	* include/stdint.h (WINT_MIN, WINT_MAX): Fix definition.
+> 
+> Thanks, applied.
+
+A two-line patch, and I _still_ managed to botch it.  POSIX requires that
+WINT_MIN be unsigned if (wint_t)0 promotes to an unsigned type.
+
+Or in other words, (-1 < WINT_MIN) == ((wint_t) -1 < 0) must be true.
+
+2007-04-05  Eric Blake  <ebb9@byu.net>
+
+	* include/stdint.h (WINT_MIN): Fix sign.
+
+- --
+Don't work too hard, make some time for fun as well!
+
+Eric Blake             ebb9@byu.net
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.5 (Cygwin)
+Comment: Public key at home.comcast.net/~ericblake/eblake.gpg
+Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org
+
+iD8DBQFGFaQV84KuGfSFAYARAmW8AJ9QGdXtWbUxllUGN9n0FgONCtOHWACcDxRT
+gD5ZhCiGstr+Dx4lr8tsgi8=
+=sA5w
+-----END PGP SIGNATURE-----
+
+--------------080206040505050806070808
+Content-Type: text/plain;
+ name="cygwin.patch7"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline;
+ filename="cygwin.patch7"
+Content-length: 460
+
+Index: include/stdint.h
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/include/stdint.h,v
+retrieving revision 1.8
+diff -u -p -r1.8 stdint.h
+--- include/stdint.h	4 Apr 2007 07:37:53 -0000	1.8
++++ include/stdint.h	6 Apr 2007 01:31:37 -0000
+@@ -158,7 +158,7 @@ typedef unsigned long long uintmax_t;
+ #endif
+ 
+ #ifndef WINT_MIN
+-#define WINT_MIN 0
++#define WINT_MIN 0U
+ #define WINT_MAX UINT_MAX
+ #endif
+ 
+
+--------------080206040505050806070808--
