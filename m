@@ -1,22 +1,21 @@
-Return-Path: <cygwin-patches-return-6068-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 28429 invoked by alias); 18 Apr 2007 13:07:40 -0000
-Received: (qmail 28310 invoked by uid 22791); 18 Apr 2007 13:07:38 -0000
+Return-Path: <cygwin-patches-return-6069-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 3153 invoked by alias); 18 Apr 2007 13:18:04 -0000
+Received: (qmail 3139 invoked by uid 22791); 18 Apr 2007 13:18:04 -0000
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.31.1) with ESMTP; Wed, 18 Apr 2007 14:07:35 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500) 	id D81166D4803; Wed, 18 Apr 2007 15:07:32 +0200 (CEST)
-Date: Wed, 18 Apr 2007 13:07:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Received: from dessent.net (HELO dessent.net) (69.60.119.225)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Wed, 18 Apr 2007 14:18:02 +0100
+Received: from localhost ([127.0.0.1] helo=dessent.net) 	by dessent.net with esmtp (Exim 4.50) 	id 1HeA2p-0006br-T1 	for cygwin-patches@cygwin.com; Wed, 18 Apr 2007 13:17:59 +0000
+Message-ID: <46261A87.CDE8726C@dessent.net>
+Date: Wed, 18 Apr 2007 13:18:00 -0000
+From: Brian Dessent <brian@dessent.net>
+Reply-To: cygwin-patches@cygwin.com
+X-Mailer: Mozilla 4.79 [en] (Windows NT 5.0; U)
+MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
 Subject: Re: [patch] support -gdwarf-2 when creating cygwin1.dbg
-Message-ID: <20070418130732.GK5799@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <462612A9.20E19FEB@dessent.net> <20070418125857.GA4589@trixie.casa.cgf.cx>
-Mime-Version: 1.0
+References: <462612A9.20E19FEB@dessent.net> <20070418125857.GA4589@trixie.casa.cgf.cx> <20070418130732.GK5799@calimero.vinschen.de>
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20070418125857.GA4589@trixie.casa.cgf.cx>
-User-Agent: Mutt/1.4.2.2i
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -25,39 +24,38 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2007-q2/txt/msg00014.txt.bz2
+X-SW-Source: 2007-q2/txt/msg00015.txt.bz2
 
-On Apr 18 08:58, Christopher Faylor wrote:
-> On Wed, Apr 18, 2007 at 05:44:25AM -0700, Brian Dessent wrote:
-> >The attached patch allows for dllfixdbg to copy DWARF-2 debug sections
-> >into the .dbg file.  There was also an (accidently?) duplicated section
-> >in the cygwin.sc linker script that I removed while I was there.
-> >[...]
+Christopher Faylor wrote:
+
 > Thanks for doing this.  Please check in.  Can we switch to dwarf-2 by
 > default in the cygwin makefile(s)?
 
-As long as we use a 3.x or 4.0.x gcc it should be ok.  Later gcc's
-explicitely switch off the generation of a DW_CFA_offset column in the
-.debug_frame CIE header information, which breaks backtracing in GDB.
-There's an explicit
+I thought about that, but the problem is anything you do to *FLAGS in
+winsup/cygwin won't affect flags used in the other dirs like libiberty
+or newlib, and so unless you set CXXFLAGS and CFLAGS when you do
+toplevel configure, you'll end up with a mish-mash of some stabs and
+some DW2 in the .dbg file.
 
-#define DWARF2_UNWIND_INFO 0
+Corinna Vinschen wrote:
 
-in gcc/config/i386/cygming.h right now.  The accompanying comment is
+> As long as we use a 3.x or 4.0.x gcc it should be ok.  Later gcc's
+> explicitely switch off the generation of a DW_CFA_offset column in the
+> .debug_frame CIE header information, which breaks backtracing in GDB.
 
-/* DWARF2 Unwinding doesn't work with exception handling yet.  To make
-   it work, we need to build a libgcc_s.dll, and dcrt0.o should be
-   changed to call __register_frame_info/__deregister_frame_info.  */
+Hmm, I think I read something about that on the gcc list.  Is this just
+a case of gcc switching to doing TheActualRightThing and gdb not having
+being updated yet?
 
-I didn't see any problem with using dwarf2 in Cygwin so far and actually
-it lets GDB behave much better than with stabs.  I'm not fluent enough
-with this low-level stuff so I don't quite understand what this
-__register_frame_info/__deregister_frame_info stuff is about.
+> There's an explicit
+> 
+> #define DWARF2_UNWIND_INFO 0
+> 
+> in gcc/config/i386/cygming.h right now.  The accompanying comment is
 
+Aren't we talking about two different things here?  That's for unwinding
+during exception handling, but you can still leave that at 0 (and use
+--enable-sjlj-exceptions) and still get the benefit of -gdwarf-2 for
+gdb's consumption.
 
-Corinna
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+Brian
