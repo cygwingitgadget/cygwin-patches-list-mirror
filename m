@@ -1,23 +1,22 @@
-Return-Path: <cygwin-patches-return-6084-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 9837 invoked by alias); 15 May 2007 06:40:59 -0000
-Received: (qmail 9822 invoked by uid 22791); 15 May 2007 06:40:56 -0000
+Return-Path: <cygwin-patches-return-6085-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 11648 invoked by alias); 15 May 2007 16:46:14 -0000
+Received: (qmail 11635 invoked by uid 22791); 15 May 2007 16:46:13 -0000
 X-Spam-Check-By: sourceware.org
-Received: from icculus.org (HELO icculus.org) (67.106.77.212)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Tue, 15 May 2007 06:40:52 +0000
-Received: (qmail 13196 invoked by uid 305); 15 May 2007 02:39:03 -0400
-Received: from icculus@icculus.org by gamehenge by uid 305 with qmail-scanner-1.22   (clamdscan: 0.75.1.  Clear:RC:1(75.181.37.52):.   Processed in 0.046433 secs); 15 May 2007 06:39:03 -0000
-Received: from unknown (HELO ?192.168.1.129?) (icculus@75.181.37.52)   by icculus.org with ESMTPA; 15 May 2007 02:39:03 -0400
-Message-ID: <464955E9.5040105@icculus.org>
-Date: Tue, 15 May 2007 06:40:00 -0000
-From: "Ryan C. Gordon" <icculus@icculus.org>
-User-Agent: Thunderbird 1.5.0.10 (X11/20070403)
-MIME-Version: 1.0
-To:  cygwin-patches@cygwin.com
-Subject: Re: [PATCH] getmntent()->mnt_type values that match Linux...
-References: <45FE2DF8.40709@icculus.org> <46136153.8030000@icculus.org> <20070404084930.GK20261@calimero.vinschen.de> <20070404160309.GB1672@calimero.vinschen.de> <20070404181833.GA17836@ednor.casa.cgf.cx> <20070404181907.GA17856@ednor.casa.cgf.cx> <46165DF3.6000503@icculus.org> <46169574.4020205@icculus.org> <20070416145004.GA13761@trixie.casa.cgf.cx> <20070515012835.GA12106@ednor.casa.cgf.cx>
-In-Reply-To: <20070515012835.GA12106@ednor.casa.cgf.cx>
-Content-Type: text/plain; charset=ISO-8859-1; format=flowed
-Content-Transfer-Encoding: 7bit
-X-IsSubscribed: yes
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.31.1) with ESMTP; Tue, 15 May 2007 16:46:10 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 5D4D26D4803; Tue, 15 May 2007 18:46:07 +0200 (CEST)
+Date: Tue, 15 May 2007 16:46:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: Dumper produces unuseable dumps (fix).
+Message-ID: <20070515164607.GL4310@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <46310D90.8050703@portugalmail.pt> <20070427062022.GC4978@calimero.vinschen.de> <4053daab0704270801i5c198166n343f8f7f76edc435@mail.gmail.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4053daab0704270801i5c198166n343f8f7f76edc435@mail.gmail.com>
+User-Agent: Mutt/1.4.2.2i
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,15 +25,31 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2007-q2/txt/msg00030.txt.bz2
+X-SW-Source: 2007-q2/txt/msg00031.txt.bz2
+
+Hi Pedro,
+
+On Apr 27 16:01, Pedro Alves wrote:
+> On 4/27/07, Corinna Vinschen wrote:
+> 
+> >Unfortunately, the patch is too big to fall under the trivial patch
+> >rule, so Red Hat needs a signed copyright assignment from you.
+> >Please have a look on http://cygwin.com/contrib.html, especially the
+> >"Before you get started" section, which has a link to the assignment
+> >form.  As soon as we got the signed form from you, the patch can go
+> >in.
+> >
+> 
+> Ok, form signed and sent.
+
+I just asked at our office and I got told that your copyright assignment
+didn't arrive yet.  Can you check what happened?
 
 
-> Thanks for the patch and apologies again for forgetting about it.
+Thanks,
+Corinna
 
-In a strange twist of fate, the counter-signed copyright assignment 
-papers just showed up from Red Hat today, so I guess that was good 
-timing.   :)
-
-Thanks for committing the patch!
-
---ryan.
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          cygwin AT cygwin DOT com
+Red Hat
