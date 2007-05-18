@@ -1,22 +1,24 @@
-Return-Path: <cygwin-patches-return-6089-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 13628 invoked by alias); 18 May 2007 19:45:33 -0000
-Received: (qmail 13608 invoked by uid 22791); 18 May 2007 19:45:32 -0000
+Return-Path: <cygwin-patches-return-6090-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 8880 invoked by alias); 18 May 2007 20:23:53 -0000
+Received: (qmail 8867 invoked by uid 22791); 18 May 2007 20:23:52 -0000
 X-Spam-Check-By: sourceware.org
-Received: from pool-71-248-179-68.bstnma.fios.verizon.net (HELO cgf.cx) (71.248.179.68)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Fri, 18 May 2007 19:45:29 +0000
-Received: by cgf.cx (Postfix, from userid 201) 	id F3A052B353; Fri, 18 May 2007 15:45:26 -0400 (EDT)
-Date: Fri, 18 May 2007 19:45:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [Patch] Segfault on unaligned lseek() on /dev/sdX (was: [ITP] 	ddrescue  1.3)
-Message-ID: <20070518194526.GA3586@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <464DF837.6020304@t-online.de>
+Received: from mailout03.sul.t-online.com (HELO mailout03.sul.t-online.com) (194.25.134.81)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Fri, 18 May 2007 20:23:50 +0000
+Received: from fwd30.aul.t-online.de  	by mailout03.sul.t-online.com with smtp  	id 1Hp8zK-0006VX-02; Fri, 18 May 2007 22:23:46 +0200
+Received: from [10.3.2.2] (TETUsEZH8ed2-Watq+GdDjRcy1OTzUIQuRswLh1dEOC6QKVLruIJ0L@[217.235.243.100]) by fwd30.sul.t-online.de 	with esmtp id 1Hp8zA-0EdALQ0; Fri, 18 May 2007 22:23:36 +0200
+Message-ID: <464E0B4D.8020602@t-online.de>
+Date: Fri, 18 May 2007 20:23:00 -0000
+From: Christian Franke <Christian.Franke@t-online.de>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.2pre) Gecko/20070111 SeaMonkey/1.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <464DF837.6020304@t-online.de>
-User-Agent: Mutt/1.5.14 (2007-02-12)
+To:  cygwin-patches@cygwin.com
+Subject: Re: [Patch] Segfault on unaligned lseek() on /dev/sdX (was: [ITP]  	ddrescue  1.3)
+References: <464DF837.6020304@t-online.de> <20070518194526.GA3586@ednor.casa.cgf.cx>
+In-Reply-To: <20070518194526.GA3586@ednor.casa.cgf.cx>
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ID: TETUsEZH8ed2-Watq+GdDjRcy1OTzUIQuRswLh1dEOC6QKVLruIJ0L
+X-TOI-MSGID: 084f1fec-0c51-4d22-ae8c-774bc851b71d
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -25,34 +27,29 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2007-q2/txt/msg00035.txt.bz2
+X-SW-Source: 2007-q2/txt/msg00036.txt.bz2
 
-On Fri, May 18, 2007 at 09:02:15PM +0200, Christian Franke wrote:
->Hi,
+Christopher Faylor wrote:
+> On Fri, May 18, 2007 at 09:02:15PM +0200, Christian Franke wrote:
+>   
+>> ...
+>>
+>>
+>>     
 >
->Cygwin 1.5.24-2 segfaults on unaligned lseek() on raw block devices with 
->sector size >512 bytes.
->
->Testcases:
->$ dd skip=1000 bs=2047 if=/dev/scd0 of=/dev/null
->
->$ ddrescue -c 1 /dev/scd0 file.iso
->
->
->This is due to a fixed 512 byte buffer in fhandler_dev_floppy::lseek().
->It is still present in HEAD revision.
->
->The attached patch should fix. It should work for any sector size.
->(Smoke-)tested with 1.5.24-2 (too busy to test with current CVS, sorry).
->
->2007-05-18  Christian Franke <franke@computer.org>
->
->	* fhandler_floppy.cc (fhandler_dev_floppy::lseek): Fixed segfault on
->	unaligned seek due to fixed size buffer.
->
+> It seems like this could be done without the heavyweight use of malloc,
+> like use an automatic array of length 512 + 4 and calculate an aligned
+> address from that.
+>   
 
-It seems like this could be done without the heavyweight use of malloc,
-like use an automatic array of length 512 + 4 and calculate an aligned
-address from that.
+Sorry, no. "unaligned seek" does not refer to memory here.
 
-cgf
+It should mean "seek position not aligned to raw device sector size".
+This is 2048 for CD/DVD and results in a segfault.
+Windows may even report larger sizes in DISK_GEOMETRY_EX.BytesPerSector.
+
+Possible slow speed in the unaligned case is IMO a minor issue .
+For maximum speed, the related tools like dd can easily be configured to 
+read (a multiple of) sector size.
+
+Christian
