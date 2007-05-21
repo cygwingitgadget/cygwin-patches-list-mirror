@@ -1,22 +1,24 @@
-Return-Path: <cygwin-patches-return-6099-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 15076 invoked by alias); 21 May 2007 13:34:29 -0000
-Received: (qmail 15049 invoked by uid 22791); 21 May 2007 13:34:28 -0000
+Return-Path: <cygwin-patches-return-6100-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 24709 invoked by alias); 21 May 2007 17:15:54 -0000
+Received: (qmail 24671 invoked by uid 22791); 21 May 2007 17:15:48 -0000
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.31.1) with ESMTP; Mon, 21 May 2007 13:34:23 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 26D756D4803; Mon, 21 May 2007 15:34:21 +0200 (CEST)
-Date: Mon, 21 May 2007 13:34:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: declare hsearch_r
-Message-ID: <20070521133421.GB6003@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <465197C9.4060002@byu.net>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <465197C9.4060002@byu.net>
-User-Agent: Mutt/1.4.2.2i
+Received: from mailout06.sul.t-online.com (HELO mailout06.sul.t-online.com) (194.25.134.19)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Mon, 21 May 2007 17:15:42 +0000
+Received: from fwd31.aul.t-online.de  	by mailout06.sul.t-online.com with smtp  	id 1HqBTv-0003h4-02; Mon, 21 May 2007 19:15:39 +0200
+Received: from [10.3.2.2] (SrcxCkZVgezg7yRDappNLyavWiEf+6ulLPB1nJF8KPoc33+K-9fg8q@[217.235.232.143]) by fwd31.sul.t-online.de 	with esmtp id 1HqBTl-1ggxSS0; Mon, 21 May 2007 19:15:29 +0200
+Message-ID: <4651D3B1.3030908@t-online.de>
+Date: Mon, 21 May 2007 17:15:00 -0000
+From: Christian Franke <Christian.Franke@t-online.de>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.2pre) Gecko/20070111 SeaMonkey/1.1
+MIME-Version: 1.0
+To:  cygwin-patches@cygwin.com
+Subject: Re: [Patch] Segfault on unaligned lseek() on /dev/sdX (was: [ITP]  ddrescue 1.3)
+References: <464DF837.6020304@t-online.de> <20070518194526.GA3586@ednor.casa.cgf.cx> <464ECCBA.3000700@portugalmail.pt> <464EE7C1.3000709@t-online.de> <465062E9.4030003@t-online.de> <20070521092201.GA6003@calimero.vinschen.de>
+In-Reply-To: <20070521092201.GA6003@calimero.vinschen.de>
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ID: SrcxCkZVgezg7yRDappNLyavWiEf+6ulLPB1nJF8KPoc33+K-9fg8q
+X-TOI-MSGID: a9881f9b-fcd0-4ebd-900c-55dc6e12466b
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -25,17 +27,21 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2007-q2/txt/msg00045.txt.bz2
+X-SW-Source: 2007-q2/txt/msg00046.txt.bz2
 
-On May 21 06:59, Eric Blake wrote:
-> 	* include/search.h (hsearch_r): Provide declaration.
+Corinna Vinschen wrote:
+> As for the devbuf part of the patch, it's missing a ChangeLog entry.
+> Can you please send one, possibly in present tense?  (Your first
+> ChangeLog was incorrectly written in past tense)
+>
+>   
 
-Thanks, applied.
+
+2007-05-21  Christian Franke <franke@computer.org>
+
+	* fhandler_floppy.cc (fhandler_dev_floppy::lseek): Don't invalidate
+	devbuf if new position is within buffered range.
 
 
-Corinna
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+Christian
