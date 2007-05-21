@@ -1,23 +1,22 @@
-Return-Path: <cygwin-patches-return-6100-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 24709 invoked by alias); 21 May 2007 17:15:54 -0000
-Received: (qmail 24671 invoked by uid 22791); 21 May 2007 17:15:48 -0000
+Return-Path: <cygwin-patches-return-6101-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 13189 invoked by alias); 21 May 2007 21:34:39 -0000
+Received: (qmail 13177 invoked by uid 22791); 21 May 2007 21:34:37 -0000
 X-Spam-Check-By: sourceware.org
-Received: from mailout06.sul.t-online.com (HELO mailout06.sul.t-online.com) (194.25.134.19)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Mon, 21 May 2007 17:15:42 +0000
-Received: from fwd31.aul.t-online.de  	by mailout06.sul.t-online.com with smtp  	id 1HqBTv-0003h4-02; Mon, 21 May 2007 19:15:39 +0200
-Received: from [10.3.2.2] (SrcxCkZVgezg7yRDappNLyavWiEf+6ulLPB1nJF8KPoc33+K-9fg8q@[217.235.232.143]) by fwd31.sul.t-online.de 	with esmtp id 1HqBTl-1ggxSS0; Mon, 21 May 2007 19:15:29 +0200
-Message-ID: <4651D3B1.3030908@t-online.de>
-Date: Mon, 21 May 2007 17:15:00 -0000
-From: Christian Franke <Christian.Franke@t-online.de>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.2pre) Gecko/20070111 SeaMonkey/1.1
+Received: from ug-out-1314.google.com (HELO ug-out-1314.google.com) (66.249.92.169)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Mon, 21 May 2007 21:34:30 +0000
+Received: by ug-out-1314.google.com with SMTP id j40so49975ugd         for <cygwin-patches@cygwin.com>; Mon, 21 May 2007 14:34:22 -0700 (PDT)
+Received: by 10.67.90.1 with SMTP id s1mr64830ugl.1179783230004;         Mon, 21 May 2007 14:33:50 -0700 (PDT)
+Received: from ?88.210.68.65? ( [88.210.68.65])         by mx.google.com with ESMTP id 59sm180214ugf.2007.05.21.14.33.48;         Mon, 21 May 2007 14:33:49 -0700 (PDT)
+Message-ID: <4652101E.3010706@portugalmail.pt>
+Date: Mon, 21 May 2007 21:34:00 -0000
+From: Pedro Alves <pedro_alves@portugalmail.pt>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; pt-BR; rv:1.8.0.10) Gecko/20070221 Thunderbird/1.5.0.10 Mnenhy/0.7.4.0
 MIME-Version: 1.0
-To:  cygwin-patches@cygwin.com
-Subject: Re: [Patch] Segfault on unaligned lseek() on /dev/sdX (was: [ITP]  ddrescue 1.3)
-References: <464DF837.6020304@t-online.de> <20070518194526.GA3586@ednor.casa.cgf.cx> <464ECCBA.3000700@portugalmail.pt> <464EE7C1.3000709@t-online.de> <465062E9.4030003@t-online.de> <20070521092201.GA6003@calimero.vinschen.de>
-In-Reply-To: <20070521092201.GA6003@calimero.vinschen.de>
+To: cygwin-patches@cygwin.com
+Subject: Re: Dumper produces unuseable dumps (fix).
+References: <46310D90.8050703@portugalmail.pt> 	 <20070427062022.GC4978@calimero.vinschen.de> 	 <4053daab0704270801i5c198166n343f8f7f76edc435@mail.gmail.com> 	 <20070515164607.GL4310@calimero.vinschen.de> <4053daab0705170529q60767bb7mf19c2643a6ef79eb@mail.gmail.com>
+In-Reply-To: <4053daab0705170529q60767bb7mf19c2643a6ef79eb@mail.gmail.com>
 Content-Type: text/plain; charset=ISO-8859-1; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ID: SrcxCkZVgezg7yRDappNLyavWiEf+6ulLPB1nJF8KPoc33+K-9fg8q
-X-TOI-MSGID: a9881f9b-fcd0-4ebd-900c-55dc6e12466b
 X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -27,21 +26,21 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2007-q2/txt/msg00046.txt.bz2
+X-SW-Source: 2007-q2/txt/msg00047.txt.bz2
 
-Corinna Vinschen wrote:
-> As for the devbuf part of the patch, it's missing a ChangeLog entry.
-> Can you please send one, possibly in present tense?  (Your first
-> ChangeLog was incorrectly written in past tense)
->
->   
+Pedro Alves wrote:
 
+> I'll have new papers from my employer in a few days, and I'll resubmit 
+> them.
+> 
 
-2007-05-21  Christian Franke <franke@computer.org>
+Just to let you know:
+Papers signed and sent.
+Let's hope this time the plain doesn't go any near the Bermuda
+Triangle.
 
-	* fhandler_floppy.cc (fhandler_dev_floppy::lseek): Don't invalidate
-	devbuf if new position is within buffered range.
+Please ping me when the papers are in; I may have an
+updated patch by then.
 
-
-
-Christian
+Cheers,
+Pedro Alves
