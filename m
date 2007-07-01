@@ -1,20 +1,20 @@
-Return-Path: <cygwin-patches-return-6124-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 29399 invoked by alias); 27 Jun 2007 12:52:40 -0000
-Received: (qmail 29389 invoked by uid 22791); 27 Jun 2007 12:52:39 -0000
+Return-Path: <cygwin-patches-return-6125-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 2896 invoked by alias); 1 Jul 2007 08:11:42 -0000
+Received: (qmail 2886 invoked by uid 22791); 1 Jul 2007 08:11:42 -0000
 X-Spam-Check-By: sourceware.org
-Received: from rwcrmhc14.comcast.net (HELO rwcrmhc14.comcast.net) (204.127.192.84)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Wed, 27 Jun 2007 12:52:36 +0000
-Received: from [192.168.0.103] (c-24-10-242-83.hsd1.co.comcast.net[24.10.242.83])           by comcast.net (rwcrmhc14) with ESMTP           id <20070627125235m1400ngfrle>; Wed, 27 Jun 2007 12:52:35 +0000
-Message-ID: <46825E07.6070301@byu.net>
-Date: Wed, 27 Jun 2007 12:52:00 -0000
-From: Eric Blake <ebb9@byu.net>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.0.12) Gecko/20070509 Thunderbird/1.5.0.12 Mnenhy/0.7.5.666
+Received: from an-out-0708.google.com (HELO an-out-0708.google.com) (209.85.132.244)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Sun, 01 Jul 2007 08:11:40 +0000
+Received: by an-out-0708.google.com with SMTP id d14so235327and         for <cygwin-patches@cygwin.com>; Sun, 01 Jul 2007 01:11:38 -0700 (PDT)
+Received: by 10.100.8.18 with SMTP id 18mr3064001anh.1183277498754;         Sun, 01 Jul 2007 01:11:38 -0700 (PDT)
+Received: by 10.100.135.10 with HTTP; Sun, 1 Jul 2007 01:11:38 -0700 (PDT)
+Message-ID: <f062943a0707010111o3cf09fddj846a8d89a568cd1f@mail.gmail.com>
+Date: Sun, 01 Jul 2007 08:11:00 -0000
+From: "Przemek Czerkas" <pczerkas@gmail.com>
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] w32api: added CSIDLs
 MIME-Version: 1.0
-To:  cygwin-patches@cygwin.com
-Subject: Re: C99 assert
-References: <loom.20070626T181404-544@post.gmane.org> <46816D73.8050202@redhat.com> <loom.20070626T220222-433@post.gmane.org> <4681B668.3010201@byu.net> <20070627073510.GC15182@calimero.vinschen.de>
-In-Reply-To: <20070627073510.GC15182@calimero.vinschen.de>
-Content-Type: text/plain; charset=ISO-8859-1
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
 Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -24,38 +24,26 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2007-q2/txt/msg00070.txt.bz2
+X-SW-Source: 2007-q3/txt/msg00000.txt.bz2
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+2007-07-01  Przemek Czerkas  <pczerkas@gmail.com>
 
-According to Corinna Vinschen on 6/27/2007 1:35 AM:
->> 2007-06-26  Eric Blake
->>
->> 	* assert.cc (__assert_func): New function, to match newlib header
->> 	change.
->> 	* cygwin.din: Export __assert_func.
->> 	* include/cygwin/version.h: Bump API minor number.
-> 
-> Yeees, barely.  This is on the verge of being non-trivial, however.
+	* include/shlobj.h: Added CSIDL_MYMUSIC
+	Added CSIDL_MYVIDEO
 
-Applied.
-
-> Any chance you can sign the copyright assignment?  Please?
-
-I'll try talking to my management at work today, once again, about the
-prospects of signing it.
-
-- --
-Don't work too hard, make some time for fun as well!
-
-Eric Blake             ebb9@byu.net
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.5 (Cygwin)
-Comment: Public key at home.comcast.net/~ericblake/eblake.gpg
-Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org
-
-iD8DBQFGgl4H84KuGfSFAYARAkQuAKC1tPJ30XsDik9kPng84SqWHqgUrACfY+SV
-mU7KDEHOzXlzrxfNDvzJ4+w=
-=4SGM
------END PGP SIGNATURE-----
+Index: shlobj.h
+===================================================================
+RCS file: /cvs/src/src/winsup/w32api/include/shlobj.h,v
+retrieving revision 1.46
+diff -u -r1.46 shlobj.h
+--- shlobj.h	25 Jul 2006 00:22:19 -0000	1.46
++++ shlobj.h	1 Jul 2007 07:40:06 -0000
+@@ -157,6 +157,8 @@
+ #define CSIDL_SENDTO	9
+ #define CSIDL_BITBUCKET	10
+ #define CSIDL_STARTMENU	11
++#define CSIDL_MYMUSIC	13
++#define CSIDL_MYVIDEO	14
+ #define CSIDL_DESKTOPDIRECTORY	16
+ #define CSIDL_DRIVES	17
+ #define CSIDL_NETWORK	18
