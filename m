@@ -1,22 +1,19 @@
-Return-Path: <cygwin-patches-return-6126-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 5267 invoked by alias); 2 Jul 2007 09:47:56 -0000
-Received: (qmail 5257 invoked by uid 22791); 2 Jul 2007 09:47:55 -0000
+Return-Path: <cygwin-patches-return-6127-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 10020 invoked by alias); 18 Jul 2007 15:06:51 -0000
+Received: (qmail 10006 invoked by uid 22791); 18 Jul 2007 15:06:50 -0000
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.31.1) with ESMTP; Mon, 02 Jul 2007 09:47:53 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 3BD8C6D47FF; Mon,  2 Jul 2007 11:47:51 +0200 (CEST)
-Date: Mon, 02 Jul 2007 09:47:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Received: from dessent.net (HELO dessent.net) (69.60.119.225)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Wed, 18 Jul 2007 15:06:42 +0000
+Received: from localhost ([127.0.0.1] helo=dessent.net) 	by dessent.net with esmtp (Exim 4.50) 	id 1IBB6u-0007rw-J0 	for cygwin-patches@cygwin.com; Wed, 18 Jul 2007 15:06:40 +0000
+Message-ID: <469E2C57.3A8BD304@dessent.net>
+Date: Wed, 18 Jul 2007 15:06:00 -0000
+From: Brian Dessent <brian@dessent.net>
+X-Mailer: Mozilla 4.79 [en] (Windows NT 5.0; U)
+MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] w32api: added CSIDLs
-Message-ID: <20070702094751.GA5518@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <f062943a0707010111o3cf09fddj846a8d89a568cd1f@mail.gmail.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f062943a0707010111o3cf09fddj846a8d89a568cd1f@mail.gmail.com>
-User-Agent: Mutt/1.4.2.2i
+Subject: Re: Doc change request
+References: <20070717040309.GA29644@trixie.casa.cgf.cx>
+Content-Type: multipart/mixed;  boundary="------------40C045C12B0B037127C79B95"
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -25,42 +22,78 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2007-q3/txt/msg00001.txt.bz2
+X-SW-Source: 2007-q3/txt/msg00002.txt.bz2
 
-Hi Przemek,
+This is a multi-part message in MIME format.
+--------------40C045C12B0B037127C79B95
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Content-length: 1313
 
-On Jul  1 10:11, Przemek Czerkas wrote:
-> 	* include/shlobj.h: Added CSIDL_MYMUSIC
-> 	Added CSIDL_MYVIDEO
+Christopher Faylor wrote:
+
+> Could I ask someone to do a search and replace on the docs and
+> change all occurrences of /usr/man and /usr/doc to /usr/share/man
+> and /usr/share/doc?
 > 
-> Index: shlobj.h
-> ===================================================================
-> RCS file: /cvs/src/src/winsup/w32api/include/shlobj.h,v
-> retrieving revision 1.46
-> diff -u -r1.46 shlobj.h
-> --- shlobj.h	25 Jul 2006 00:22:19 -0000	1.46
-> +++ shlobj.h	1 Jul 2007 07:40:06 -0000
-> @@ -157,6 +157,8 @@
-> #define CSIDL_SENDTO	9
-> #define CSIDL_BITBUCKET	10
-> #define CSIDL_STARTMENU	11
-> +#define CSIDL_MYMUSIC	13
-> +#define CSIDL_MYVIDEO	14
-> #define CSIDL_DESKTOPDIRECTORY	16
-> #define CSIDL_DRIVES	17
-> #define CSIDL_NETWORK	18
+> Brian, do you have time to do this?  I think you touched the
+> documentation list so you're "it".
 
-Thanks for the patch.  I've applied it.
+I can only find a total of three references to either directory,
+and two of them mention it the context of "this was the old location":
 
-Btw., the w32api is officially maintained by the MinGW folks, see the
-README.w32api file.  Patches to w32api are better off in the appropriate
-mingw mailing list.
+faq-resources.xml-15-list what man pages the package includes.)  Some older packages still keep
+faq-resources.xml:16:their documentation in <literal>/usr/doc/</literal>
+faq-resources.xml-17-instead of <literal>/usr/share/doc/</literal>.
 
+setup-net.sgml:235:Relevant documentation can be found in the <literal>/usr/doc/Cygwin/</literal> 
+setup-net.sgml-236-or <literal>/usr/share/doc/Cygwin/</literal> directory.
 
-Thanks again,
-Corinna
+The only remaining one is a glancing reference in the FAQ to rxvt,
+and it needs cleaning up anyway as it refers to ash.  If the attached
+fix is OK I will update the htdocs copy too.
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+faq-using.xml-864-<para>Don't invoke as simply ``rxvt'' because that will run /bin/sh (really
+faq-using.xml-865-ash) which is not a good interactive shell.  For details see
+faq-using.xml:866:<literal>/usr/doc/Cygwin/rxvt-&lt;ver&gt;.README</literal>.
+
+Unless my grep-fu failed that's it.
+
+Brian
+--------------40C045C12B0B037127C79B95
+Content-Type: text/plain; charset=us-ascii;
+ name="faq-rxvt-readme-path.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline;
+ filename="faq-rxvt-readme-path.patch"
+Content-length: 1118
+
+2007-07-18  Brian Dessent  <brian@dessent.net>
+
+	* faq-using.xml (faq.using.console-window): Mention FHS location of
+	docs and remove outdated reference to ash.
+
+Index: faq-using.xml
+===================================================================
+RCS file: /cvs/src/src/winsup/doc/faq-using.xml,v
+retrieving revision 1.6
+diff -u -p -r1.6 faq-using.xml
+--- faq-using.xml	26 Aug 2006 19:11:00 -0000	1.6
++++ faq-using.xml	18 Jul 2007 14:59:31 -0000
+@@ -859,11 +859,8 @@ this message from the Cygwin mailing lis
+ You can use it with or without X11.  You can resize it easily by
+ dragging an edge or corner.  Copy and paste is easy with the left and
+ middle mouse buttons, respectively.  It will honor settings in your
+-~/.Xdefaults file, even without X.
+-</para>
+-<para>Don't invoke as simply ``rxvt'' because that will run /bin/sh (really
+-ash) which is not a good interactive shell.  For details see
+-<literal>/usr/doc/Cygwin/rxvt-&lt;ver&gt;.README</literal>.
++~/.Xdefaults file, even without X.  For details see
++<literal>/usr/share/doc/Cygwin/rxvt-&lt;ver&gt;.README</literal>.
+ </para>
+ </answer></qandaentry>
+ 
+
+--------------40C045C12B0B037127C79B95--
+
