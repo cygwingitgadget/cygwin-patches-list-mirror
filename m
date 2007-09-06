@@ -1,20 +1,22 @@
-Return-Path: <cygwin-patches-return-6140-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 19212 invoked by alias); 6 Sep 2007 18:53:09 -0000
-Received: (qmail 19202 invoked by uid 22791); 6 Sep 2007 18:53:08 -0000
+Return-Path: <cygwin-patches-return-6141-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 7898 invoked by alias); 6 Sep 2007 19:08:26 -0000
+Received: (qmail 7887 invoked by uid 22791); 6 Sep 2007 19:08:25 -0000
 X-Spam-Check-By: sourceware.org
-Received: from dessent.net (HELO dessent.net) (69.60.119.225)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Thu, 06 Sep 2007 18:53:04 +0000
-Received: from localhost ([127.0.0.1] helo=dessent.net) 	by dessent.net with esmtp (Exim 4.50) 	id 1ITMTO-0005Ys-NM 	for cygwin-patches@cygwin.com; Thu, 06 Sep 2007 18:53:02 +0000
-Message-ID: <46E04C8E.DF3755CC@dessent.net>
-Date: Thu, 06 Sep 2007 18:53:00 -0000
-From: Brian Dessent <brian@dessent.net>
-X-Mailer: Mozilla 4.79 [en] (Windows NT 5.0; U)
-MIME-Version: 1.0
+Received: from pool-71-174-251-188.bstnma.fios.verizon.net (HELO ednor.cgf.cx) (71.174.251.188)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Thu, 06 Sep 2007 19:08:21 +0000
+Received: by ednor.cgf.cx (Postfix, from userid 201) 	id BFFBF2B35A; Thu,  6 Sep 2007 15:08:19 -0400 (EDT)
+Date: Thu, 06 Sep 2007 19:08:00 -0000
+From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: [patch] Fix multithreaded snprintf
-References: <46E04739.F0B0D169@dessent.net> <20070906183325.GA19790@ednor.casa.cgf.cx>
+Message-ID: <20070906190819.GA19860@ednor.casa.cgf.cx>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <46E04739.F0B0D169@dessent.net> <20070906183325.GA19790@ednor.casa.cgf.cx> <46E04C8E.DF3755CC@dessent.net>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-IsSubscribed: yes
+Content-Disposition: inline
+In-Reply-To: <46E04C8E.DF3755CC@dessent.net>
+User-Agent: Mutt/1.5.16 (2007-06-09)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -23,18 +25,15 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2007-q3/txt/msg00015.txt.bz2
+X-SW-Source: 2007-q3/txt/msg00016.txt.bz2
 
-Christopher Faylor wrote:
+On Thu, Sep 06, 2007 at 11:53:02AM -0700, Brian Dessent wrote:
+>Christopher Faylor wrote:
+>> Nice catch!
+>
+>I wish I could say I caught this by inspection but it was only by single
+>stepping through python guts that it became apparent what was going on.
 
-> Go ahead and check this in but could you add a comment indicating that
-> this part of include/sys/stdio.h has to be kept in sync with newlib?
+Better you than me.  :-)
 
-Done.
-
-> Nice catch!
-
-I wish I could say I caught this by inspection but it was only by single
-stepping through python guts that it became apparent what was going on.
-
-Brian
+cgf
