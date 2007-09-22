@@ -1,22 +1,23 @@
-Return-Path: <cygwin-patches-return-6146-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 17767 invoked by alias); 8 Sep 2007 02:57:30 -0000
-Received: (qmail 17754 invoked by uid 22791); 8 Sep 2007 02:57:29 -0000
+Return-Path: <cygwin-patches-return-6147-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 20838 invoked by alias); 22 Sep 2007 12:48:29 -0000
+Received: (qmail 20828 invoked by uid 22791); 22 Sep 2007 12:48:29 -0000
 X-Spam-Check-By: sourceware.org
-Received: from pool-71-174-251-188.bstnma.fios.verizon.net (HELO ednor.cgf.cx) (71.174.251.188)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Sat, 08 Sep 2007 02:57:21 +0000
-Received: by ednor.cgf.cx (Postfix, from userid 201) 	id 269DB2B353; Fri,  7 Sep 2007 22:57:20 -0400 (EDT)
-Date: Sat, 08 Sep 2007 02:57:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
+Received: from wish.cooper.edu (HELO wish.cooper.edu) (199.98.16.74)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Sat, 22 Sep 2007 12:48:23 +0000
+Received: from wish.cooper.edu (farley2.cooper.edu [199.98.16.43]) 	by localhost (Postfix) with SMTP id DBD9613602E5 	for <cygwin-patches@cygwin.com>; Sat, 22 Sep 2007 08:48:21 -0400 (EDT)
+Received: from wish.cooper.edu (localhost.localdomain [127.0.0.1]) 	by wish.cooper.edu (Postfix) with ESMTP id B1C9213602E4 	for <cygwin-patches@cygwin.com>; Sat, 22 Sep 2007 08:48:21 -0400 (EDT)
+Received: from 71.190.219.188         (SquirrelMail authenticated user lent)         by wish.cooper.edu with HTTP;         Sat, 22 Sep 2007 08:48:21 -0400 (EDT)
+Message-ID: <4043.71.190.219.188.1190465301.squirrel@wish.cooper.edu>
+Date: Sat, 22 Sep 2007 12:48:00 -0000
+Subject: setup.exe's README patched to mention needed packages bison and       flex.
+From: lent@cooper.edu
 To: cygwin-patches@cygwin.com
-Subject: Re: [patch] inline __getreent in newlib
-Message-ID: <20070908025720.GA10008@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <46E08F5C.D534F44E@dessent.net> <20070907001523.GA27234@ednor.casa.cgf.cx> <46E0A004.2BA35626@dessent.net> <46E1DC70.57961D04@dessent.net>
+User-Agent: SquirrelMail/1.4.6
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <46E1DC70.57961D04@dessent.net>
-User-Agent: Mutt/1.5.16 (2007-06-09)
+Content-Type: text/plain;charset=iso-8859-1
+Content-Transfer-Encoding: 8bit
+References:
+In-Reply-To:
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -25,48 +26,52 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2007-q3/txt/msg00021.txt.bz2
+X-SW-Source: 2007-q3/txt/msg00022.txt.bz2
 
-On Fri, Sep 07, 2007 at 04:19:12PM -0700, Brian Dessent wrote:
->Brian Dessent wrote:
->
->> Done.  I added the following comment to config.h to hopefully clarify
->> the situation:
->> 
->> /* The following provides an inline version of __getreent() for newlib,
->>    which will be used throughout the library whereever there is a _r
->>    version of a function that takes _REENT.  This saves the overhead
->>    of a function call for what amounts to a simple computation.
->> 
->>    The definition below is essentially equivalent to the one in cygtls.h
->>    (&_my_tls.local_clib) however it uses a fixed precomputed
->>    offset rather than dereferencing a field of a structure.
->> 
->>    Including tlsoffets.h here in order to get this constant offset
->>    tls_local_clib is a bit of a hack, but the alternative would require
->>    dragging the entire definition of struct _cygtls (a large and complex
->>    Cygwin internal data structure) into newlib.  The machinery to
->>    compute these offsets already exists for the sake of gendef so
->>    we might as well just use it here.  */
->
->Turns out that <sys/config.h> includes <cygwin/config.h>, which leads to
->this breakage when the winsup headers are installed in the system
->location:
->
->$ echo "#include <math.h>" | gcc -x c -
->In file included from /usr/include/sys/config.h:180,
->                 from /usr/include/_ansi.h:16,
->                 from /usr/include/sys/reent.h:13,
->                 from /usr/include/math.h:5,
->                 from <stdin>:1:
->/usr/include/cygwin/config.h:22:27: ../tlsoffsets.h: No such file or
->directory
->
->Attached patch fixes the situation by only exposing this when
->_COMPILING_NEWLIB.  Ok?
+To successfully build setup.exe, after downloading the files via:
 
-Yes.
+$ cvs -z3 -d :pserver:anoncvs@sources.redhat.com:/cvs/cygwin-apps co setup
 
-Thanks.
+two additional packages are required.
+These packages are bison and flex.
 
-cgf
+I made a patch to the README.
+
+$ cvs -z3 -d :pserver:anoncvs@sources.redhat.com:/cvs/cygwin-apps diff -uN
+>patch.20070922
+
+and the patch is included below.
+
+Hope this helps,
+Chris Lent
+<lent@cooper.edu>
+Adjunct Associate Professor of Computer Science,
+Advisor to First-Year Engineering Students,
+Manager, Louis and Jeanette Brooks Engineering Design Center (BEDC) Tel:
++1.212.353.4350
+---------------------------------------------------------------------------------------------------------
+
+
+Index: setup/README
+=================================================================== RCS
+file: /cvs/cygwin-apps/setup/README,v
+retrieving revision 2.39
+diff -u -r2.39 README
+--- setup/README        21 Feb 2007 07:05:18 -0000      2.39
++++ setup/README        22 Sep 2007 11:20:46 -0000
+@@ -6,6 +6,8 @@
+ -------------
+ Setup should build out-of-the-box on any Cygwin environment that has all
+the
+ required packages installed:
++  - bison
++  - flex
+   - gcc-mingw-g++
+   - make
+   - mingw-zlib
+
+
+
+
+
+
