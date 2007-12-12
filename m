@@ -1,20 +1,20 @@
-Return-Path: <cygwin-patches-return-6188-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 15774 invoked by alias); 11 Dec 2007 19:03:14 -0000
-Received: (qmail 15762 invoked by uid 22791); 11 Dec 2007 19:03:14 -0000
+Return-Path: <cygwin-patches-return-6189-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 23719 invoked by alias); 12 Dec 2007 17:59:28 -0000
+Received: (qmail 23708 invoked by uid 22791); 12 Dec 2007 17:59:27 -0000
 X-Spam-Check-By: sourceware.org
-Received: from mail.artimi.com (HELO mail.artimi.com) (194.72.81.2)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Tue, 11 Dec 2007 19:03:09 +0000
-Received: from rainbow ([192.168.8.46]) by mail.artimi.com with Microsoft SMTPSVC(6.0.3790.3959); 	 Tue, 11 Dec 2007 19:03:06 +0000
-From: "Dave Korn" <dave.korn@artimi.com>
-To: <cygwin-patches@cygwin.com>
-References: <0b0d01c83bef$e9364690$2e08a8c0@CAM.ARTIMI.COM> <20071211141852.GA3619@ednor.casa.cgf.cx> <0b1e01c83c01$cb11e2c0$2e08a8c0@CAM.ARTIMI.COM> <20071211143847.GA3719@ednor.casa.cgf.cx> <0b2301c83c09$f075e6d0$2e08a8c0@CAM.ARTIMI.COM> <20071211153658.GB9398@calimero.vinschen.de> <0b2a01c83c0e$2b025140$2e08a8c0@CAM.ARTIMI.COM> <20071211162352.GA10441@calimero.vinschen.de>
-Subject: RE: Cygheap page boundary allocation bug.
-Date: Tue, 11 Dec 2007 19:03:00 -0000
-Message-ID: <001001c83c28$764179a0$2e08a8c0@CAM.ARTIMI.COM>
+Received: from rv-out-0910.google.com (HELO rv-out-0910.google.com) (209.85.198.185)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Wed, 12 Dec 2007 17:59:17 +0000
+Received: by rv-out-0910.google.com with SMTP id b22so266629rvf.38         for <cygwin-patches@cygwin.com>; Wed, 12 Dec 2007 09:59:15 -0800 (PST)
+Received: by 10.141.136.19 with SMTP id o19mr516540rvn.250.1197482355639;         Wed, 12 Dec 2007 09:59:15 -0800 (PST)
+Received: by 10.140.188.9 with HTTP; Wed, 12 Dec 2007 09:59:15 -0800 (PST)
+Message-ID: <55c2fd8a0712120959q7d8cec61vb37a24c569cfb0c2@mail.gmail.com>
+Date: Wed, 12 Dec 2007 17:59:00 -0000
+From: "Craig MacGregor" <cmacgreg@gmail.com>
+To: cygwin-patches@cygwin.com
+Subject: [patch] poll() return value is actually that of select()
 MIME-Version: 1.0
-Content-Type: text/plain; 	charset="US-ASCII"
+Content-Type: text/plain; charset=ISO-8859-1
 Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 11
-In-Reply-To: <20071211162352.GA10441@calimero.vinschen.de>
+Content-Disposition: inline
 X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -24,30 +24,106 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2007-q4/txt/msg00040.txt.bz2
+X-SW-Source: 2007-q4/txt/msg00041.txt.bz2
 
-On 11 December 2007 16:24, Corinna Vinschen wrote:
+bug example src: http://pastebin.com/f719e4c11
 
-> I know why I had no problem.  I didn't update my local copy of w32api
-> for a while.  Now that I updated I'm stuck like you are.  Please apply
-> your patch (at least as a stop-gap measure) for now and, if you don't
-> mind, discuss it on the mingw list.
+First off... I've been happily using Cygwin for years, glad I finally
+have a patch to contribute...Thanks!
 
-Applied:
+While testing some socket code on Cygwin and Linux, I noticed the
+returns from poll() were always twice what they were on Linux when a
+socket had been closed remotely and then polled().
 
-2007-12-11  Dave Korn  <dave.korn@artimi.com>
+From  'man 2 poll' on debian:
 
-	* include/wincrypt.h (PCRYPT_DECODE_PARA):  Add missing typedef.
-	(CERT_POLICY_MAPPINGS_INFO):  Move before CERT_POLICY_MAPPING.
+"On success, a positive number is returned; this is the number of
+structures which have non-zero revents fields (in other words, those
+descriptors  with  events  or errors  reported).   A  value  of 0
+indicates that the call timed out and no file descriptors were ready.
+On error, -1 is returned, and errno is set appropriately."
 
-Posted:
+Digging deeper, I found that Cygwin's poll() is implemented with
+cygwin_select(), and thus returns the total number of ISSET events,
+instead of just the number of fds with events. Thus, the behavior is:
 
-http://sourceforge.net/mailarchive/forum.php?thread_name=000001c83c26%24be2070c0
-%242e08a8c0%40CAM.ARTIMI.COM&forum_name=mingw-users
+ "On  success,  select()  and  pselect() return the number of file
+descriptors contained in the three returned descriptor sets (that is,
+the total number  of  bits that  are  set  in readfds, writefds,
+exceptfds) which may be zero if the timeout expires before anything
+interesting happens.  On error, -1 is returned, and errno is  set
+appropriately;  the sets and timeout become undefined, so do not rely
+on their contents after an error."
 
-[or http://tinyurl.com/2x7vlg to avoid wrapping].
+Attached is some goo which makes poll() work as expected.... compiled,
+tested, works... fyi, as of 9:30am EST string.h broke the build, i had
+to roll it back.
 
-    cheers,
-      DaveK
--- 
-Can't think of a witty .sigline today....
+-craig
+
+--------
+2007-12-12  Craig MacGregor  <cmacgreg@gmail.com>
+
+	* poll.cc (poll): Return count of fds with events instead of total event count
+
+Index: cygwin/poll.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/poll.cc,v
+retrieving revision 1.48
+diff -u -p -r1.48 poll.cc
+--- cygwin/poll.cc      31 Jul 2006 14:27:56 -0000      1.48
++++ cygwin/poll.cc      12 Dec 2007 13:29:53 -0000
+@@ -76,15 +76,18 @@ poll (struct pollfd *fds, nfds_t nfds, i
+   if (invalid_fds)
+     return invalid_fds;
+
+-  int ret = cygwin_select (max_fd + 1, read_fds, write_fds,
+except_fds, timeout < 0 ? NULL : &tv);
++  int ret = cygwin_select (max_fd + 1, read_fds, write_fds,
+except_fds, timeout < 0 ? NULL : &tv);
++
++  int ir = 0, ret_p = 0;
++    /* Count fds in ISSETs for return, but just once each */
+
+   if (ret > 0)
+-    for (unsigned int i = 0; i < nfds; ++i)
++    for (unsigned int i = 0; i < nfds; ret_p+=ir, ir = 0, ++i)
+       {
+        if (fds[i].fd >= 0)
+          {
+            if (cygheap->fdtab.not_open (fds[i].fd))
+-             fds[i].revents = POLLHUP;
++             ir = 1, fds[i].revents = POLLHUP;
+            else
+              {
+                fhandler_socket *sock;
+@@ -98,22 +101,23 @@ poll (struct pollfd *fds, nfds_t nfds, i
+                     will return -1 with errno set to the appropriate value."
+                     So it looks like there's actually no good reason to
+                     return POLLERR. */
+-                 fds[i].revents |= POLLIN;
++                 ir = 1, fds[i].revents |= POLLIN;
+                /* Handle failed connect. */
+                if (FD_ISSET(fds[i].fd, write_fds)
+                    && (sock = cygheap->fdtab[fds[i].fd]->is_socket ())
+                    && sock->connect_state () == connect_failed)
+-                 fds[i].revents |= (POLLIN | POLLERR);
++                 ir = 1, fds[i].revents |= (POLLIN | POLLERR);
+                else
+                  {
+                    if (FD_ISSET(fds[i].fd, write_fds))
+-                     fds[i].revents |= POLLOUT;
++                     ir = 1, fds[i].revents |= POLLOUT;
+                    if (FD_ISSET(fds[i].fd, except_fds))
+-                     fds[i].revents |= POLLPRI;
++                     ir = 1, fds[i].revents |= POLLPRI;
+                  }
+              }
+-         }
++         }
++
+       }
+
+-  return ret;
++  return !ret_p ? ret : ret_p;
+ }
