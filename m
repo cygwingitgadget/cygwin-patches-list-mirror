@@ -1,21 +1,21 @@
-Return-Path: <cygwin-patches-return-6231-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 26337 invoked by alias); 7 Jan 2008 13:09:44 -0000
-Received: (qmail 26327 invoked by uid 22791); 7 Jan 2008 13:09:43 -0000
+Return-Path: <cygwin-patches-return-6232-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 26880 invoked by alias); 7 Jan 2008 13:11:24 -0000
+Received: (qmail 26868 invoked by uid 22791); 7 Jan 2008 13:11:24 -0000
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.31.1) with ESMTP; Mon, 07 Jan 2008 13:09:25 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 0064B6D4811; Mon,  7 Jan 2008 14:09:21 +0100 (CET)
-Date: Mon, 07 Jan 2008 13:09:00 -0000
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.31.1) with ESMTP; Mon, 07 Jan 2008 13:11:05 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500) 	id C38AF6D4811; Mon,  7 Jan 2008 14:11:02 +0100 (CET)
+Date: Mon, 07 Jan 2008 13:11:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: BLODA FAQ entry.
-Message-ID: <20080107130921.GN29568@calimero.vinschen.de>
+Subject: Re: [patch] un-NT-ify cygcheck (was: cygwin 1.5.25-7: cygcheck 	does   not   work?)
+Message-ID: <20080107131102.GO29568@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <074301c84a42$46df85d0$2e08a8c0@CAM.ARTIMI.COM> <20071229180628.GE24999@ednor.casa.cgf.cx> <000b01c84d71$8acf6530$2e08a8c0@CAM.ARTIMI.COM> <20080102190756.GA1178@ednor.casa.cgf.cx> <000f01c84d78$23aaf5c0$2e08a8c0@CAM.ARTIMI.COM>
+References: <476A726D.50100@byu.net> <476A78EF.2322FB0A@dessent.net> <476A8729.5C05B169@dessent.net> <20071220211130.GA28771@ednor.casa.cgf.cx> <047a01c84375$2f2cf810$2e08a8c0@CAM.ARTIMI.COM> <20071221030715.GB28930@ednor.casa.cgf.cx> <476B3472.17126868@dessent.net> <20071222094851.GA27315@calimero.vinschen.de> <20071222160838.GA6034@ednor.casa.cgf.cx> <20071223092832.GM29568@calimero.vinschen.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <000f01c84d78$23aaf5c0$2e08a8c0@CAM.ARTIMI.COM>
+In-Reply-To: <20071223092832.GM29568@calimero.vinschen.de>
 User-Agent: Mutt/1.5.16 (2007-06-09)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -25,36 +25,34 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2008-q1/txt/msg00005.txt.bz2
+X-SW-Source: 2008-q1/txt/msg00006.txt.bz2
 
-On Jan  2 19:46, Dave Korn wrote:
-> On 02 January 2008 19:08, Christopher Faylor wrote:
-> > On Wed, Jan 02, 2008 at 06:59:03PM -0000, Dave Korn wrote:
-> >> On 29 December 2007 18:06, Christopher Faylor wrote:
-> >>> On Sat, Dec 29, 2007 at 05:43:09PM -0000, Dave Korn wrote:
-> >>>>  The long-promised FAQ entry.
-> >>>> [...]
-> >>> [...]
-> >>  Hmm, I thought the website might update itself automagically when the
-> >> sources are changed, but I guess not.  How do we get the online version of
-> >> the FAQ to rebuild?
+Hi Chris,
+
+On Dec 23 10:28, Corinna Vinschen wrote:
+> On Dec 22 11:08, Christopher Faylor wrote:
+> > On Sat, Dec 22, 2007 at 10:48:51AM +0100, Corinna Vinschen wrote:
+> > >On Dec 20 19:35, Brian Dessent wrote:
+> > >> Christopher Faylor wrote:
+> > >> 
+> > >> > Unless Corinna says differently, I think she wants to be in control of
+> > >> > what goes into the branch so I don't want to suggest that you should
+> > >> > check it in there too.
+> > >> 
+> > >> Okay, I'll let her take care of the branch since she's been handling all
+> > >> the releases from it.
+> > >
+> > >Please check it in to the branch.  I guess it might be a good idea to
+> > >release a 1.5.27-8 at one point.  I'll be more or less unavailable the
+> > >next two weeks but perhaps I can release a new version over christmas.
 > > 
-> > It isn't automatic.  I usually wait for "someone" with dessent skills in
-> > creating the pages and transferring them to the right location to do this.
-> > 
-> > cgf
+> > I have some pipe-related patches that probably should go into the branch
+> > too, FYI.  I'm just waiting for word that they fix a reported problem.
 > 
->   Ah.  Who, to judge from lack of posting, is still away on xmas/newyear break
-> of some description.  (I could /probably/ update just the two related pages
-> with copies freshly built from source, but I'd rather someone who's done it
-> regularly before and knows of any hidden gotcha's did it, or at least said if
-> it's really that simple before I went and borked anything.)  Guess I'll just
-> be patient.
+> Ok, I'll wait.  No worries.
 
-Erm... are you talking about me, by any chance?  I have now updated
-the FAQ.  Fortunately it's quite simple by using cvs.  I don't know
-of any hidden gotchas.  If there are any, I'd be as screwed up as
-anybody :)
+Did you get feedback about your change?
+
 
 Corinna
 
