@@ -1,21 +1,22 @@
-Return-Path: <cygwin-patches-return-6247-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 6367 invoked by alias); 22 Feb 2008 01:01:52 -0000
-Received: (qmail 6355 invoked by uid 22791); 22 Feb 2008 01:01:51 -0000
+Return-Path: <cygwin-patches-return-6248-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 32542 invoked by alias); 22 Feb 2008 05:00:47 -0000
+Received: (qmail 32529 invoked by uid 22791); 22 Feb 2008 05:00:46 -0000
 X-Spam-Check-By: sourceware.org
-Received: from nf-out-0910.google.com (HELO nf-out-0910.google.com) (64.233.182.188)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Fri, 22 Feb 2008 01:01:24 +0000
-Received: by nf-out-0910.google.com with SMTP id b2so195887nfb.18         for <cygwin-patches@cygwin.com>; Thu, 21 Feb 2008 17:01:22 -0800 (PST)
-Received: by 10.142.188.4 with SMTP id l4mr8174331wff.183.1203642080534;         Thu, 21 Feb 2008 17:01:20 -0800 (PST)
-Received: by 10.142.125.4 with HTTP; Thu, 21 Feb 2008 17:01:20 -0800 (PST)
-Message-ID: <674fdff20802211701u1a866d2fw2bb21047ecc5e8ea@mail.gmail.com>
-Date: Fri, 22 Feb 2008 01:01:00 -0000
-From: "Noel Burton-Krahn" <noel@burton-krahn.com>
+Received: from pool-72-74-94-250.bstnma.fios.verizon.net (HELO ednor.cgf.cx) (72.74.94.250)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Fri, 22 Feb 2008 05:00:23 +0000
+Received: by ednor.cgf.cx (Postfix, from userid 201) 	id 7A86862D2D7; Fri, 22 Feb 2008 00:00:21 -0500 (EST)
+Date: Fri, 22 Feb 2008 05:00:00 -0000
+From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: PATCH: avoid system shared memory version mismatch detected by versioning shared memory name
-In-Reply-To: <674fdff20802211641p19f7b3a1pb3f843ba262dfde6@mail.gmail.com>
+Subject: Re: PATCH: avoid system shared memory version mismatch detected by 	versioning shared memory name
+Message-ID: <20080222050020.GA17196@ednor.casa.cgf.cx>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <674fdff20802211641p19f7b3a1pb3f843ba262dfde6@mail.gmail.com> <674fdff20802211701u1a866d2fw2bb21047ecc5e8ea@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed;  	boundary="----=_Part_9940_16076408.1203642080519"
-References: <674fdff20802211641p19f7b3a1pb3f843ba262dfde6@mail.gmail.com>
-X-IsSubscribed: yes
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <674fdff20802211701u1a866d2fw2bb21047ecc5e8ea@mail.gmail.com>
+User-Agent: Mutt/1.5.16 (2007-06-09)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -24,92 +25,33 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2008-q1/txt/msg00021.txt.bz2
+X-SW-Source: 2008-q1/txt/msg00022.txt.bz2
 
+On Thu, Feb 21, 2008 at 05:01:20PM -0800, Noel Burton-Krahn wrote:
+>This is a patch to avoid the "system shared memory version mismatch
+>detected" problem when two applications use different versions of
+>Cygwin.  My solution is to append the Cygwin version number to the
+>name of the shared memory segment, so only Cygwin with the same
+>version share a memory space.
+>
+>ChangeLog
+>2008-02-21  Noel Burton-Krahn  <noel@burton-krahn.com>
+>
+>    * shared.cc (shared_name): always add USER_VERSION_MAGIC to the
+>    shared memory space name so multiple versions of Cygwin keep their
+>     own shared memory space.  No more "system shared memory version
+>    mismatch detected"  errors.
 
-------=_Part_9940_16076408.1203642080519
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-Content-length: 1500
+Thanks for the patch but the whole reason for this detection and others
+in the DLL is to disallow multiple copies of cygwin1.dll from running at
+the same time.  This isn't a bug, it's a feature.  That's why we have
+the detection in the first place.
 
-This is a patch to avoid the "system shared memory version mismatch
-detected" problem when two applications use different versions of
-Cygwin.  My solution is to append the Cygwin version number to the
-name of the shared memory segment, so only Cygwin with the same
-version share a memory space.
+As you can see from other checks in the dll, the shared memory region
+is just one of the things that are checked for.  If you need to have
+two copies of the DLL for debugging then there are ways to do that.
+But, in general, it is not a good idea to use two versions of the DLL
+unless you really know what you are doing, so we are not going to
+be making it trivially possible for everyone to do that.
 
-ChangeLog
-2008-02-21  Noel Burton-Krahn  <noel@burton-krahn.com>
-
-    * shared.cc (shared_name): always add USER_VERSION_MAGIC to the
-    shared memory space name so multiple versions of Cygwin keep their
-     own shared memory space.  No more "system shared memory version
-    mismatch detected"  errors.
-
-
-
-Here's how I tested it:
-
-1. save the attached patch
-
-cygwin-snapshot-20080219-1-versioned-shared-memory.patch
-
-2. patch and build:
-
- wget http://cygwin.com/snapshots/cygwin-src-20080219.tar.bz2
-tar jxf cygwin-src-20080219.tar.bz2
- cd cygwin-snapshot-20080219-1
-patch -p1 < ../cygwin-snapshot-20080219-1-versioned-shared-memory.patch
- ./configure
-make
-
-3. replace cygwin1.dll with the new one
-
-# the compiled cygwin1.dll will not conflict with other cygwins at
-# other versions. You can copy it over the cygwin1.dll in one of your
-# conflicting applications
-  #
-cp ./i686-pc-cygwin/winsup/cygwin/new-cygwin1.dll ./cygwin1.dll
-
-It worked for me.  Let me know how it goes for you.
-
-By the way, there's another gotcha here.  Cygwin keeps its mount
-points in the registry, so your mount.bat script will overwrite
-existing cygwin mount points.  To clean up I had to run the cygwin
-setup again.
-
-~Noel
-
-------=_Part_9940_16076408.1203642080519
-Content-Type: application/octet-stream;
- name=cygwin-snapshot-20080219-1-versioned-shared-memory.patch
-Content-Transfer-Encoding: base64
-X-Attachment-Id: f_fcxzyzho
-Content-Disposition: attachment;
- filename=cygwin-snapshot-20080219-1-versioned-shared-memory.patch
-Content-length: 1249
-
-ZGlmZiAtdXIgY3lnd2luLXNuYXBzaG90LTIwMDgwMjE5LTEvd2luc3VwL2N5
-Z3dpbi9zaGFyZWQuY2MgY3lnd2luLXNuYXBzaG90LTIwMDgwMjE5LTEtbm9l
-bGJrL3dpbnN1cC9jeWd3aW4vc2hhcmVkLmNjCi0tLSBjeWd3aW4tc25hcHNo
-b3QtMjAwODAyMTktMS93aW5zdXAvY3lnd2luL3NoYXJlZC5jYwkyMDA3LTEy
-LTEzIDA0OjU1OjQxLjAwMDAwMDAwMCAtMDgwMAorKysgY3lnd2luLXNuYXBz
-aG90LTIwMDgwMjE5LTEtbm9lbGJrL3dpbnN1cC9jeWd3aW4vc2hhcmVkLmNj
-CTIwMDgtMDItMjEgMTY6MDY6MzMuMTU2MjUwMDAwIC0wODAwCkBAIC0zOSw4
-ICszOSwxNSBAQAogewogICBleHRlcm4gYm9vbCBfY3lnd2luX3Rlc3Rpbmc7
-CiAKLSAgX19zbWFsbF9zcHJpbnRmIChyZXRfYnVmLCAiJXMlcy4lcy4lZCIs
-IGN5Z2hlYXAtPnNoYXJlZF9wcmVmaXgsCi0JCSAgIGN5Z3dpbl92ZXJzaW9u
-LnNoYXJlZF9pZCwgc3RyLCBudW0pOworICAvLyBOb2VsIEJ1cnRvbi1LcmFo
-biA8bm9lbEBidXJ0b24ta3JhaG4uY29tPiAtIEZlYiAyMSwgMjAwOCAKKyAg
-Ly8gYWx3YXlzIGFkZCBVU0VSX1ZFUlNJT05fTUFHSUMgdG8gdGhlIHNoYXJl
-ZCBtZW1vcnkgc3BhY2UgbmFtZSBzbworICAvLyBtdWx0aXBsZSB2ZXJzaW9u
-cyBvZiBDeWd3aW4gYWxsIGhhdmUgdGhlaXIgb3duIG1lbW9yeSBzcGFjZS4K
-KyAgX19zbWFsbF9zcHJpbnRmKHJldF9idWYsICIlcyVzLiVzLiVkLiVkIgor
-CQkgICxjeWdoZWFwLT5zaGFyZWRfcHJlZml4CisJCSAgLGN5Z3dpbl92ZXJz
-aW9uLnNoYXJlZF9pZCwgc3RyLCBudW0KKwkJICAsVVNFUl9WRVJTSU9OX01B
-R0lDCisJCSAgKTsKKwogICBpZiAoX2N5Z3dpbl90ZXN0aW5nKQogICAgIHN0
-cmNhdCAocmV0X2J1ZiwgY3lnd2luX3ZlcnNpb24uZGxsX2J1aWxkX2RhdGUp
-OwogICByZXR1cm4gcmV0X2J1ZjsK
-
-------=_Part_9940_16076408.1203642080519--
+cgf
