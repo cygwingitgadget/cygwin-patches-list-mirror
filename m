@@ -1,21 +1,21 @@
-Return-Path: <cygwin-patches-return-6281-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 15033 invoked by alias); 10 Mar 2008 19:09:04 -0000
-Received: (qmail 15023 invoked by uid 22791); 10 Mar 2008 19:09:03 -0000
+Return-Path: <cygwin-patches-return-6282-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 26706 invoked by alias); 10 Mar 2008 20:11:24 -0000
+Received: (qmail 26695 invoked by uid 22791); 10 Mar 2008 20:11:24 -0000
 X-Spam-Check-By: sourceware.org
-Received: from pool-72-74-94-250.bstnma.fios.verizon.net (HELO ednor.cgf.cx) (72.74.94.250)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Mon, 10 Mar 2008 19:08:42 +0000
-Received: by ednor.cgf.cx (Postfix, from userid 201) 	id B26F12D1F02; Mon, 10 Mar 2008 15:08:40 -0400 (EDT)
-Date: Mon, 10 Mar 2008 19:09:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.31.1) with ESMTP; Mon, 10 Mar 2008 20:10:56 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500) 	id A23BD6D430A; Mon, 10 Mar 2008 21:10:53 +0100 (CET)
+Date: Mon, 10 Mar 2008 20:11:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: [patch] cygcheck.cc update for cygpath()
-Message-ID: <20080310190840.GB16745@ednor.casa.cgf.cx>
+Message-ID: <20080310201053.GA11785@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20080309032437.GB6777@ednor.casa.cgf.cx> <47D36406.F7D7AB61@dessent.net> <20080309092806.GW18407@calimero.vinschen.de> <20080309143819.GB8192@ednor.casa.cgf.cx> <20080309151440.GB18407@calimero.vinschen.de> <20080309162800.GB13754@ednor.casa.cgf.cx> <47D4266A.CE301EDE@dessent.net> <20080309195509.GD18407@calimero.vinschen.de> <20080309232000.GC14815@ednor.casa.cgf.cx> <20080310103444.GF18407@calimero.vinschen.de>
+References: <47D36406.F7D7AB61@dessent.net> <20080309092806.GW18407@calimero.vinschen.de> <20080309143819.GB8192@ednor.casa.cgf.cx> <20080309151440.GB18407@calimero.vinschen.de> <20080309162800.GB13754@ednor.casa.cgf.cx> <47D4266A.CE301EDE@dessent.net> <20080309195509.GD18407@calimero.vinschen.de> <20080309232000.GC14815@ednor.casa.cgf.cx> <20080310103444.GF18407@calimero.vinschen.de> <20080310190840.GB16745@ednor.casa.cgf.cx>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20080310103444.GF18407@calimero.vinschen.de>
+In-Reply-To: <20080310190840.GB16745@ednor.casa.cgf.cx>
 User-Agent: Mutt/1.5.16 (2007-06-09)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -25,58 +25,51 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2008-q1/txt/msg00055.txt.bz2
+X-SW-Source: 2008-q1/txt/msg00056.txt.bz2
 
-On Mon, Mar 10, 2008 at 11:34:44AM +0100, Corinna Vinschen wrote:
->On Mar  9 19:20, Christopher Faylor wrote:
->> On Sun, Mar 09, 2008 at 08:55:09PM +0100, Corinna Vinschen wrote:
->> >On Mar  9 11:03, Brian Dessent wrote:
->> >> Christopher Faylor wrote:
->> >> 
->> >> > I guess I misunderstood.  I thought that the current working directory
->> >> > could be derived through some complicated combination of Nt*() calls.
->> >> 
->> >> I could be wrong here but the way I understood it, there is no concept
->> >> of a working directory at the NT level, that is something that is
->> >> maintained by the Win32 layer.
->> >
->> >That's right.  NT doesn't have a notion what a cwd is.  It only has the
->> >OBJECT_ATTRIBUTES structure which defines an object by an absolute path,
->> >or by a path relative to a directory handle.
->> >
->> >The cwd is maintained by kernel32.dll in a per-process structure called
->> >RTL_USER_PROCESS_PARAMETERS.  The cwd is stored as path (always with
->> >trailing backslash) and as handle.
->> 
->> Duh, right.  I knew that.  I've seen the code.
->> 
->> So, maybe we could make sure the handle was inherited and pass it along
->> in a _CYGWIN_PWD=0x239487 format to the child?
->
->Well, sure, we could do that.  But here's still a small problem.
->
->The Win32 functions like CreateFileW don't have a way to use the
->directory handle together with the relative path name as the native NT
->functions have.  So, to be able to create an absolute path name, the
->application would have to find out the path the handle refers to using
->the native NT function ZwQueryObject.  What it gets, however, is not
->directly usable with Win32 functions:
->
->  Input path:                  c:\home\cgf
->  Equivalent Win32 long path:  \\?\c:\home\cgf
->
->  ZwQueryObject returns:       \Device\HarddiskVolume1\home\cgf
->
->By iterating through the DOS device list returned by QueryDosDevice the
->application could now find out that C: is a NT symlink to
->\Device\HarddiskVolume1 and then in turn create the path \\?\C:\home\cgf
->from that.  Sounds rather too complicated to me.
+On Mar 10 15:08, Christopher Faylor wrote:
+> However, I don't understand what a mingw app would see when it is started
+> from Cygwin now.  What would a standard windows app think that its cwd would
+> be if it's cd'ed deep into a 32K long path.
 
-That much I do understand since I've been struggling with that issue trying
-to get pipes to work reliably.
+Right now, Cygwin copies its CWD into the user parameter block, as long
+as it is < 260 chars.  When a Cygwin process cd's into a long path, this
+copy just doesn't happen.  So, the cwd of a MingW application started
+from that Cygwin process would be the last Cygwin cwd path < 260
+characters within this process tree.
 
-However, I don't understand what a mingw app would see when it is started
-from Cygwin now.  What would a standard windows app think that its cwd would
-be if it's cd'ed deep into a 32K long path.
+This is what I started to discuss in
+http://cygwin.com/ml/cygwin-developers/2007-10/msg00008.html
 
-cgf
+As a result of this discussion we had five options what to do when
+spawning a native app from Cygwin, if the Cygwin process is in a long
+cwd:
+
+1. Return ENAMETOOLONG and don't start the native child.
+
+2. CWD for the native child is set to $SYSTEMROOT.
+
+3. CWD is set to the root of the current drive (either X:\ or
+   \\server\share).
+
+4. CWD is set to the longest leading path component of CWD which still
+   fits into MAX_PATH.
+
+5. Start the native app in the last CWD we were in which was < MAX_PATH.
+
+Implemented right now is option 5 since that's the most easy to implement
+because it practically didn't need any changes to the existing code.
+
+The general consensus seemed to lean towards option 1 or 3, so maybe
+this whole problem is going to be a non-issue...?
+
+Sigh, somehow it would be a pity if our own tools suffer from that
+restriction.
+
+
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          cygwin AT cygwin DOT com
+Red Hat
