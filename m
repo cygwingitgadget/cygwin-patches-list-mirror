@@ -1,21 +1,22 @@
-Return-Path: <cygwin-patches-return-6311-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 19513 invoked by alias); 19 Mar 2008 00:57:51 -0000
-Received: (qmail 19500 invoked by uid 22791); 19 Mar 2008 00:57:49 -0000
+Return-Path: <cygwin-patches-return-6312-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 5257 invoked by alias); 19 Mar 2008 03:00:46 -0000
+Received: (qmail 5244 invoked by uid 22791); 19 Mar 2008 03:00:45 -0000
 X-Spam-Check-By: sourceware.org
-Received: from dessent.net (HELO dessent.net) (69.60.119.225)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Wed, 19 Mar 2008 00:57:25 +0000
-Received: from localhost ([127.0.0.1] helo=dessent.net) 	by dessent.net with esmtp (Exim 4.50) 	id 1JbmcN-00028L-0p 	for cygwin-patches@cygwin.com; Wed, 19 Mar 2008 00:57:23 +0000
-Message-ID: <47E064F3.A98E112A@dessent.net>
-Date: Wed, 19 Mar 2008 00:57:00 -0000
-From: Brian Dessent <brian@dessent.net>
-Reply-To: cygwin-patches@cygwin.com
-X-Mailer: Mozilla 4.79 [en] (Windows NT 5.0; U)
-MIME-Version: 1.0
+Received: from pool-72-74-94-250.bstnma.fios.verizon.net (HELO ednor.cgf.cx) (72.74.94.250)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Wed, 19 Mar 2008 03:00:29 +0000
+Received: by ednor.cgf.cx (Postfix, from userid 201) 	id 12DF7B638A; Tue, 18 Mar 2008 23:00:28 -0400 (EDT)
+Date: Wed, 19 Mar 2008 03:00:00 -0000
+From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] better stackdumps
-References: <47E05D34.FCC2E30A@dessent.net> <47E05FBE.B57EF4A2@dessent.net> <Pine.GSO.4.63.0803182040020.8440@access1.cims.nyu.edu>
+Message-ID: <20080319030027.GC22446@ednor.casa.cgf.cx>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <47E05D34.FCC2E30A@dessent.net>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-IsSubscribed: yes
+Content-Disposition: inline
+In-Reply-To: <47E05D34.FCC2E30A@dessent.net>
+User-Agent: Mutt/1.5.16 (2007-06-09)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -24,19 +25,57 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2008-q1/txt/msg00085.txt.bz2
+X-SW-Source: 2008-q1/txt/msg00086.txt.bz2
 
-Igor Peshansky wrote:
+On Tue, Mar 18, 2008 at 05:24:20PM -0700, Brian Dessent wrote:
+>
+>This patch adds the ability to see functions/symbols in the .stackdump
+>files generated when there's a fault.  It parses the export sections of
+>each loaded module and finds the closest exported address for each stack
+>frame address.  This of course won't be perfect as it will show the
+>wrong function if the frame is in the middle of a non-exported function,
+>but it's better than what we have now.
+>
+>This also uses a couple of tricks to make the output more sensible.  It
+>can "see through" the sigfe wrappers and print the actual functions
+>being wrapped.  It also has a set of internal symbols that it consults
+>for symbols in Cygwin.  This allows it to get the bottom frame correct
+>(_dll_crt0_1) even though that function isn't exported.  If there are
+>any other such functions they can be easily added to the 'hints' array.
+>
+>Also attached is a sample output of an invalid C program and the
+>resulting stackdump.  Note that the frame labeled _sigbe really should
+>be a frame somewhere inside the main .exe.  I pondered trying to extract
+>the sigbe's return address off the signal stack and using that for the
+>label but I haven't quite gotten there, since I can't think of a
+>reliable way to figure out the correct location on the tls stack where
+>the real return address is stored.
+>
+>Of course the labeling works for any module/dll, not just cygwin1.dll,
+>but I didn't have a more elaborate testcase to demonstrate.
+>
+>Brian
+>2008-03-18  Brian Dessent  <brian@dessent.net>
+>
+>	* exceptions.cc (maybe_adjust_va_for_sigfe): New function to cope
+>	with signal wrappers.
+>	(prettyprint_va): New function that attempts to find a symbolic
+>	name for a memory location by walking the export sections of all
+>	modules.
+>	(stackdump): Call it.
+>	* gendef: Mark __sigfe as a global so that its address can be
+>	used by the backtrace code.
+>	* ntdll.h (struct _PEB_LDR_DATA): Declare.
+>	(struct _LDR_MODULE): Declare.
+>	(struct _PEB): Use actual LDR_DATA type for LdrData.
+>	(RtlImageDirectoryEntryToData): Declare.
 
-> Would it make sense to force a newline before the function name and to
-> display it with a small indent?  That way people who want the old-style
-> stackdump could just feed the new one into "grep -v '^  '" or something...
+Sorry, but I don't like this concept.  This bloats the cygwin DLL for a
+condition that would be better served by either using gdb or generating
+a real coredump.
 
-Yes, that would be one way.  That actually reminds me of another issue
-that I forgot to mention: glibc has a backtrace API that can be called
-from user-code at any time, not just at faults.  At the moment we are
-exporting something similar called cygwin_stackdump but we don't declare
-it in any header.  Would it be worthwhile to try to match the glibc API
-and export it under the same name/output format?
+OTOH, adding a list of loaded dlls to a stackdump might not be a bad
+idea so that some postprocessing program could generate the same output
+as long as that didn't add too much code to cygwin.
 
-Brian
+cgf
