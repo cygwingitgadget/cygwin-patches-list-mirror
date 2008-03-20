@@ -1,22 +1,22 @@
-Return-Path: <cygwin-patches-return-6315-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 8851 invoked by alias); 19 Mar 2008 21:39:25 -0000
-Received: (qmail 8839 invoked by uid 22791); 19 Mar 2008 21:39:24 -0000
+Return-Path: <cygwin-patches-return-6316-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 11796 invoked by alias); 20 Mar 2008 10:35:55 -0000
+Received: (qmail 11783 invoked by uid 22791); 20 Mar 2008 10:35:54 -0000
 X-Spam-Check-By: sourceware.org
-Received: from dessent.net (HELO dessent.net) (69.60.119.225)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Wed, 19 Mar 2008 21:39:07 +0000
-Received: from localhost ([127.0.0.1] helo=dessent.net) 	by dessent.net with esmtp (Exim 4.50) 	id 1Jc5zz-00059l-1B; Wed, 19 Mar 2008 21:39:03 +0000
-Message-ID: <47E187F7.235A85B7@dessent.net>
-Date: Wed, 19 Mar 2008 21:39:00 -0000
-From: Brian Dessent <brian@dessent.net>
-Reply-To: cygwin-patches@cygwin.com
-X-Mailer: Mozilla 4.79 [en] (Windows NT 5.0; U)
-MIME-Version: 1.0
-To: Pedro Alves <pedro_alves@portugalmail.pt>
-CC: cygwin-patches@cygwin.com
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.31.1) with ESMTP; Thu, 20 Mar 2008 10:35:34 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 0F84B6D430A; Thu, 20 Mar 2008 11:35:32 +0100 (CET)
+Date: Thu, 20 Mar 2008 10:35:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] better stackdumps
-References: <47E05D34.FCC2E30A@dessent.net> <20080319030027.GC22446@ednor.casa.cgf.cx> <47E137C7.8AE02BC4@dessent.net> <200803192102.48661.pedro_alves@portugalmail.pt>
+Message-ID: <20080320103532.GO19345@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <47E05D34.FCC2E30A@dessent.net> <20080319030027.GC22446@ednor.casa.cgf.cx> <47E137C7.8AE02BC4@dessent.net>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-IsSubscribed: yes
+Content-Disposition: inline
+In-Reply-To: <47E137C7.8AE02BC4@dessent.net>
+User-Agent: Mutt/1.5.16 (2007-06-09)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -25,95 +25,39 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2008-q1/txt/msg00089.txt.bz2
+X-SW-Source: 2008-q1/txt/msg00090.txt.bz2
 
-Pedro Alves wrote:
+On Mar 19 08:56, Brian Dessent wrote:
+> Christopher Faylor wrote:
+> 
+> > Sorry, but I don't like this concept.  This bloats the cygwin DLL for a
+> > condition that would be better served by either using gdb or generating
+> > a real coredump.
+> 
+> I hear you, but part of the motivation for writing this was a recent
+> thread the other week on the gdb list where the poster asked how to get
+> symbols in a Cygwin stackdump file.  I suggested the same thing, setting
+> error_start=dumper to get a real core dump.  They did, and the result
+> was completely useless.  Here is what dumper gives you for the same
+> simple testcase:
+> [...]
+> addr2line also seems to be totally unequipped to deal with separate .dbg
+> information, as I can't get it to output a thing even though both a.exe
+> and cygwin1.dll have full debug symbols:
+> 
+> $ addr2line -e a.exe 0x610F74B1
+> ??:0
 
-> Sorry I missed the discussion at gdb@.  What does info sharelibrary say?
-> The last I looked at this, it worked.  Is this broken in gdb head
-> and on the cygwin distributed gdb?
+Is it a big problem to fix addr2line to deal with .dbg files?
 
-With gdb CVS HEAD, it gives:
+I like your idea to add names to the stackdump especially because of
+addr2line's brokenness.  But, actually, if addr2line would work with
+.dbg files, there would be no reason to add this to the stackdump file.
 
-(gdb) i sh
-From        To          Syms Read   Shared Object Library
-0x7c901000  0x7c9afe88  No          C:\WINXP\system32\ntdll.dll
-0x7c801000  0x7c8f4bec  No          C:\WINXP\system32\kernel32.dll
-0x61001000  0x61280000  No          C:\cygwin\bin\cygwin1.dll
-0x77dd1000  0x77e6ab38  No          C:\WINXP\system32\ADVAPI32.DLL
-0x77e71000  0x77f01464  No          C:\WINXP\system32\RPCRT4.dll
-0x77fe1000  0x77ff0884  No          C:\WINXP\system32\Secur32.dll
-0x77b41000  0x77b61360  No          C:\WINXP\system32\Apphelp.dll
 
-And after that, the backtrace can at least name the DLL, but is still
-otherwise useless:
+Corinna
 
-(gdb) thr apply all bt
-
-Thread 3 (process 0):
-#0  0x7c90eb94 in ?? () from C:\WINXP\system32\ntdll.dll
-
-Thread 2 (process 0):
-#0  0x7c90eb94 in ?? () from C:\WINXP\system32\ntdll.dll
-
-Thread 1 (process 1):
-#0  0x7c90eb94 in ?? () from C:\WINXP\system32\ntdll.dll
-
-"info target" still lists every section as just "loadnn".
-
-With gdb 6.5.50.20060706 as packaged by Cygwin, the result is
-approximately the same except with posix paths (and the main .exe module
-is present too):
-
-(gdb) i sh
-From        To          Syms Read   Shared Object Library
-0x00401000  0x004013d0  No         
-/home/brian/testcases/backtrace/a.exe
-0x7c901000  0x7c97b6fe  No          /winxp/system32/ntdll.dll
-0x7c801000  0x7c883111  No          /winxp/system32/kernel32.dll
-0x61001000  0x61118994  No          /usr/bin/cygwin1.dll
-0x77dd1000  0x77e452d9  No          /winxp/system32/advapi32.dll
-0x77e71000  0x77ef3353  No          /winxp/system32/rpcrt4.dll
-0x77fe1000  0x77fed1dc  No          /winxp/system32/secur32.dll
-0x77b41000  0x77b5d60c  No          /winxp/system32/apphelp.dll
-
-(gdb) thr apply all bt
-
-Thread 3 (process 4992):
-#0  0x7c95077b in ntdll!KiIntSystemCall () from
-/winxp/system32/ntdll.dll
-
-Thread 2 (process 6304):
-#0  0x7c90eb94 in ntdll!LdrAccessResource () from
-/winxp/system32/ntdll.dll
-Cannot access memory at address 0x7c90eb94
-
-Thread 1 (process 8100):
-#0  0x7c90eb94 in ntdll!LdrAccessResource () from
-/winxp/system32/ntdll.dll
-Cannot access memory at address 0x7c90eb94
-
-In both cases the core was produced by current Cygwin CVS dumper.exe.
-
-> Is this something that would be nice to have in gdb then?
-
-If gdb has debug symbols available then it's irrelevent because the info
-there is correct: the address for printf in the symbols is the real
-function.  It's just that the thing exported as "printf" by the DLL
-actually points to _sigfe_printf, which is of course the whole point of
-the wrappers.  So this matters only to code that's not using debug
-symbols but just looking at export tables.  Now certainly gdb does that
-a lot too so I suppose it would be nice to have there, but the main case
-where cygwin1.dbg is present is unaffected.
-
-The problem with adapting it for gdb is that _sigfe is not a public
-symbol and so the heuristic for detecting a signal wrapper would have to
-either loosely trigger on any entry that starts with the "push/jmp"
-sequence, or it would have to somehow otherwise figure out the location
-of _sigfe so that it can verify the location of the jmp before calling
-it a wrapper.  Realistically if the heuristic is going to be limited to
-cygwin1.dll then I suppose it's not such a risk to assume any entrypoint
-that starts out that way is in fact a signal wrapper: by my count 1036
-of the current 1749 exports of the DLL are wrapped this way.
-
-Brian
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          cygwin AT cygwin DOT com
+Red Hat
