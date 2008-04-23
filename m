@@ -1,22 +1,19 @@
-Return-Path: <cygwin-patches-return-6328-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 21022 invoked by alias); 24 Mar 2008 00:18:41 -0000
-Received: (qmail 21008 invoked by uid 22791); 24 Mar 2008 00:18:41 -0000
+Return-Path: <cygwin-patches-return-6329-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 11660 invoked by alias); 23 Apr 2008 19:18:45 -0000
+Received: (qmail 11643 invoked by uid 22791); 23 Apr 2008 19:18:43 -0000
 X-Spam-Check-By: sourceware.org
-Received: from pool-72-74-94-32.bstnma.fios.verizon.net (HELO ednor.cgf.cx) (72.74.94.32)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Mon, 24 Mar 2008 00:18:24 +0000
-Received: by ednor.cgf.cx (Postfix, from userid 201) 	id AF1976675E8; Sun, 23 Mar 2008 20:18:22 -0400 (EDT)
-Date: Mon, 24 Mar 2008 00:18:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [patch] recognise when an exec()d process terminates due to 	unhandled exception
-Message-ID: <20080324001822.GB4381@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <47D9D8D3.17BC1E3B@dessent.net> <47D9E70D.ED6C84CB@dessent.net> <20080314141331.GB20808@ednor.casa.cgf.cx> <47DB689F.8FC91752@dessent.net> <20080323035119.GA2554@ednor.casa.cgf.cx> <47E6C20F.B0477BF0@dessent.net> <20080324000906.GA4381@ednor.casa.cgf.cx>
+Received: from ti-out-0910.google.com (HELO ti-out-0910.google.com) (209.85.142.188)     by sourceware.org (qpsmtpd/0.31) with ESMTP; Wed, 23 Apr 2008 19:18:14 +0000
+Received: by ti-out-0910.google.com with SMTP id y8so1243943tia.14         for <cygwin-patches@cygwin.com>; Wed, 23 Apr 2008 12:18:11 -0700 (PDT)
+Received: by 10.151.106.4 with SMTP id i4mr13588ybm.189.1208978290489;         Wed, 23 Apr 2008 12:18:10 -0700 (PDT)
+Received: from ?192.168.0.100? ( [24.76.249.6])         by mx.google.com with ESMTPS id q13sm504728qbq.8.2008.04.23.12.18.09         (version=TLSv1/SSLv3 cipher=RC4-MD5);         Wed, 23 Apr 2008 12:18:10 -0700 (PDT)
+Message-ID: <480F8B7D.5080908@users.sourceforge.net>
+Date: Wed, 23 Apr 2008 19:18:00 -0000
+From: "Yaakov (Cygwin Ports)" <yselkowitz@users.sourceforge.net>
+User-Agent: Thunderbird 2.0.0.12 (Windows/20080213)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20080324000906.GA4381@ednor.casa.cgf.cx>
-User-Agent: Mutt/1.5.16 (2007-06-09)
+To: cygwin-patches@cygwin.com
+Subject: wait.h
+Content-Type: multipart/mixed;  boundary="------------060000050702070406030302"
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -25,35 +22,86 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2008-q1/txt/msg00102.txt.bz2
+X-SW-Source: 2008-q2/txt/msg00000.txt.bz2
 
-On Sun, Mar 23, 2008 at 08:09:06PM -0400, Christopher Faylor wrote:
->On Sun, Mar 23, 2008 at 01:48:15PM -0700, Brian Dessent wrote:
->>Christopher Faylor wrote:
->>>After poking at this a little, I think it would be better to issue a
->>>linux-like error message.
->>>
->>>In my sandbox, I now have this:
->>>
->>>bash-3.2$ ./libtest /cygdrive/s/test/libtest.exe: error while loading
->>>shared libraries: liba.dll: cannot open shared object file: No such
->>>file or directory
->>>
->>>I haven't done the work to report on missing symbols yet but I think
->>>that's a much less common error condition.
->>
->>Excellent.  The wording isn't really that important to me.  But I think
->>what is important is that we don't allow the situation where something
->>was unable to start and we are totally silent.  That leads to confusion
->>because people start to try to debug or blame the program being run
->>when in fact the program never saw the light of day in the first place.
->>It's totally baffling when it happens and you're not aware to look for
->>it.  So even if we can't give the name of the symbol in the case of a
->>missing import, I think it's still important to say something.
->
->Yes.  I really have been meaning to fix this for a long time.  It's my
->fault that cygwin has this bug.  I appreciate your point the way to
-                                                         ing
->how this could be solved.
+This is a multi-part message in MIME format.
+--------------060000050702070406030302
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-length: 641
 
-cgf
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+glibc ships a <wait.h> which contains only one line:
+
+#include <sys/wait.h>
+
+I know of at least three packages that #include <wait.h> instead of
+<sys/wait.h>.  Could such a header please be added to Cygwin (preferably
+to both branches)?
+
+Patch attached; I presume this is trivial enough to not require a
+copyright assignment.
+
+
+Yaakov
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.9 (Cygwin)
+Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org
+
+iEYEAREIAAYFAkgPi30ACgkQpiWmPGlmQSOIMgCg3ZFsz6Zc+nld3dEG+OnNuud9
+5oMAn1T1hG2bJJ5JFhziC0w9ffN9aWW2
+=ObqW
+-----END PGP SIGNATURE-----
+
+--------------060000050702070406030302
+Content-Type: text/plain;
+ name="wait.h.diff"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline;
+ filename="wait.h.diff"
+Content-length: 1073
+
+Index: ChangeLog
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/ChangeLog,v
+retrieving revision 1.4116
+diff -u -r1.4116 ChangeLog
+--- ChangeLog	23 Apr 2008 11:19:57 -0000	1.4116
++++ ChangeLog	23 Apr 2008 17:48:09 -0000
+@@ -1,3 +1,7 @@
++2008-04-23  Yaakov (Cygwin Ports) <yselkowitz@users.sourceforge.net>
++
++	* include/wait.h: New file.
++
+ 2008-04-23  Corinna Vinschen  <corinna@vinschen.de>
+ 
+ 	* posix.sgml: Add openat, faccessat, fchmodat, fchownat, fstatat,
+Index: include/wait.h
+===================================================================
+RCS file: include/wait.h
+diff -N include/wait.h
+--- /dev/null	1 Jan 1970 00:00:00 -0000
++++ include/wait.h	23 Apr 2008 17:48:09 -0000
+@@ -0,0 +1,16 @@
++/* wait.h
++
++   Copyright 2008 Red Hat, Inc.
++
++This file is part of Cygwin.
++
++This software is a copyrighted work licensed under the terms of the
++Cygwin license.  Please consult the file "CYGWIN_LICENSE" for
++details. */
++
++#ifndef _WAIT_H
++#define _WAIT_H
++
++#include <sys/wait.h>
++
++#endif /* _WAIT_H */
+
+
+
+--------------060000050702070406030302--
