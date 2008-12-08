@@ -1,19 +1,22 @@
-Return-Path: <cygwin-patches-return-6379-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 6790 invoked by alias); 8 Dec 2008 23:04:26 -0000
-Received: (qmail 6772 invoked by uid 22791); 8 Dec 2008 23:04:25 -0000
+Return-Path: <cygwin-patches-return-6380-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 31160 invoked by alias); 8 Dec 2008 23:54:27 -0000
+Received: (qmail 31150 invoked by uid 22791); 8 Dec 2008 23:54:26 -0000
 X-Spam-Check-By: sourceware.org
-Received: from vms042pub.verizon.net (HELO vms042pub.verizon.net) (206.46.252.42)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 08 Dec 2008 23:03:46 +0000
-Received: from PHUMBLETLAPXP ([12.6.244.148])  by vms042.mailsrvcs.net (Sun Java System Messaging Server 6.2-6.01 (built Apr  3 2006)) with ESMTPA id <0KBK00C9XYPOPE70@vms042.mailsrvcs.net> for  cygwin-patches@cygwin.com; Mon, 08 Dec 2008 17:03:24 -0600 (CST)
-Date: Mon, 08 Dec 2008 23:04:00 -0000
-From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
+Received: from yx-out-1718.google.com (HELO yx-out-1718.google.com) (74.125.44.154)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 08 Dec 2008 23:52:43 +0000
+Received: by yx-out-1718.google.com with SMTP id 4so555994yxp.38         for <cygwin-patches@cygwin.com>; Mon, 08 Dec 2008 15:52:41 -0800 (PST)
+Received: by 10.64.183.6 with SMTP id g6mr3337025qbf.17.1228780360371;         Mon, 08 Dec 2008 15:52:40 -0800 (PST)
+Received: from ?192.168.0.100? (S0106001346f94b85.wp.shawcable.net [24.76.249.6])         by mx.google.com with ESMTPS id 12sm8663583qbw.29.2008.12.08.15.52.39         (version=TLSv1/SSLv3 cipher=RC4-MD5);         Mon, 08 Dec 2008 15:52:39 -0800 (PST)
+Message-ID: <493DB346.2070909@users.sourceforge.net>
+Date: Mon, 08 Dec 2008 23:54:00 -0000
+From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
+User-Agent: Thunderbird 2.0.0.18 (Windows/20081105)
+MIME-Version: 1.0
+To: cygwin-patches@cygwin.com
 Subject: Re: <resolv.h> requires <netinet/in.h>
-To: "Yaakov \(Cygwin/X\)" <yselkowitz@users.sourceforge.net>, 	<cygwin-patches@cygwin.com>
-Message-id: <024501c95989$2c07cc70$940410ac@wirelessworld.airvananet.com>
-MIME-version: 1.0
-Content-type: text/plain; charset=iso-8859-1
-Content-transfer-encoding: 7bit
-References: <493DA370.30006@users.sourceforge.net>
-X-IsSubscribed: yes
+References: <493DA370.30006@users.sourceforge.net> <024501c95989$2c07cc70$940410ac@wirelessworld.airvananet.com>
+In-Reply-To: <024501c95989$2c07cc70$940410ac@wirelessworld.airvananet.com>
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -22,36 +25,48 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2008-q4/txt/msg00023.txt.bz2
+X-SW-Source: 2008-q4/txt/msg00024.txt.bz2
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+Pierre A. Humblet wrote:
+> Every version of man resolver that I have ever seen specifies:
+> 
+> SYNOPSIS 
+>      #include <sys/types.h>
+>      #include <netinet/in.h>
+>      #include <arpa/nameser.h>
+>      #include <resolv.h>
+> 
+> So it's up to the user to include the right files.
+
+Perhaps so, but:
+
+1) <resolv.h> already #includes all of those headers *except* for
+<netinet/in.h>.
+
+2) this does not match Linux behaviour:
+
+http://sourceware.org/cgi-bin/cvsweb.cgi/libc/resolv/resolv.h?cvsroot=glibc
+
+As I stated, my STC was based on a configure test which works on other
+platforms; I don't see why we shouldn't match that.
+
+> Sure we can make an exception for Cygwin, but the same program can then fail elsewhere.
+
+I agree that for portability, a program should not assume that #include
+<resolv.h> automatically #include <netinet/in.h> and use the latter's
+functions or typedefs.  But the bottom line here is that <resolv.h>
+requires struct sockaddr_in, so it needs that #include.
 
 
------ Original Message ----- 
-From: "Yaakov (Cygwin/X)" 
-To: <cygwin-patches>
-Sent: Monday, December 08, 2008 5:45 PM
-Subject: <resolv.h> requires <netinet/in.h>
+Yaakov
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.9 (Cygwin)
+Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org
 
-
-| -----BEGIN PGP SIGNED MESSAGE-----
-| Hash: SHA256
-| 
-| This affects both minires-1.02 and Cygwin 1.7.0-34.  STC based on a
-| configure test:
-
-**************
-
-This is far from the 1st time that this issue comes up.
-resolv.h is completely standard, it comes from a bind distribution.
-
-Every version of man resolver that I have ever seen specifies:
-
-SYNOPSIS 
-     #include <sys/types.h>
-     #include <netinet/in.h>
-     #include <arpa/nameser.h>
-     #include <resolv.h>
-
-So it's up to the user to include the right files.
-Sure we can make an exception for Cygwin, but the same program can then fail elsewhere.
-
-Pierre
+iEYEAREIAAYFAkk9s0YACgkQpiWmPGlmQSMO/ACg1fIAqsvbkNC3CF3XnM/hQmBD
+emwAn3jFN6zrj55wieyYvNawpI/HOkD4
+=uV4z
+-----END PGP SIGNATURE-----
