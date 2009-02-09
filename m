@@ -1,24 +1,19 @@
-Return-Path: <cygwin-patches-return-6410-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 11698 invoked by alias); 18 Jan 2009 23:13:44 -0000
-Received: (qmail 11547 invoked by uid 22791); 18 Jan 2009 23:13:43 -0000
-X-SWARE-Spam-Status: No, hits=-1.6 required=5.0 	tests=AWL,BAYES_00,SARE_MSGID_LONG40,SPF_PASS
+Return-Path: <cygwin-patches-return-6411-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 2603 invoked by alias); 9 Feb 2009 07:19:49 -0000
+Received: (qmail 2591 invoked by uid 22791); 9 Feb 2009 07:19:47 -0000
+X-SWARE-Spam-Status: No, hits=2.1 required=5.0 	tests=AWL,BAYES_00,SARE_MSGID_LONG40,SPF_PASS
 X-Spam-Check-By: sourceware.org
-Received: from mail-ew0-f11.google.com (HELO mail-ew0-f11.google.com) (209.85.219.11)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sun, 18 Jan 2009 23:13:29 +0000
-Received: by ewy4 with SMTP id 4so741041ewy.2         for <cygwin-patches@cygwin.com>; Sun, 18 Jan 2009 15:13:26 -0800 (PST)
-Received: by 10.210.89.4 with SMTP id m4mr6437181ebb.12.1232320406917;         Sun, 18 Jan 2009 15:13:26 -0800 (PST)
-Received: by 10.210.81.20 with HTTP; Sun, 18 Jan 2009 15:13:26 -0800 (PST)
-Message-ID: <2ca21dcc0901181513i2b7f24bey2d2b7dd4514d62ee@mail.gmail.com>
-Date: Sun, 18 Jan 2009 23:13:00 -0000
-From: "Dave Korn" <dave.korn.cygwin@googlemail.com>
-To: "DJ Delorie" <dj@redhat.com>
-Subject: Re: [PATCH/libiberty] Fix PR38903 Cygwin GCC bootstrap failure [was Re: Libiberty issue vs cygwin [was Re: This is a Cygwin failure yeah?]]
-Cc: gcc-patches@gcc.gnu.org, binutils@sourceware.org, gdb-patches@sourceware.org,  	cygwin-patches@cygwin.com, kirkshorts@googlemail.com
-In-Reply-To: <200901182157.n0ILvr72020268@greed.delorie.com>
+Received: from fk-out-0910.google.com (HELO fk-out-0910.google.com) (209.85.128.190)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 09 Feb 2009 07:19:40 +0000
+Received: by fk-out-0910.google.com with SMTP id z23so1453634fkz.2         for <cygwin-patches@cygwin.com>; Sun, 08 Feb 2009 23:19:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
+Received: by 10.223.109.148 with SMTP id j20mr888143fap.43.1234163976311; Sun,  	08 Feb 2009 23:19:36 -0800 (PST)
+Date: Mon, 09 Feb 2009 07:19:00 -0000
+Message-ID: <83b27df30902082319v6195318ch3e1e843f4f1631e4@mail.gmail.com>
+Subject: [PATCH] w32api fixes
+From: Michael James <james.me@gmail.com>
+To: mingw-users@lists.sourceforge.net, cygwin-patches@cygwin.com
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-References: <2ca21dcc0901171652s44c72ca7teb1ca6041344e4a4@mail.gmail.com> 	 <200901181707.n0IH7AGJ013144@greed.delorie.com> 	 <2ca21dcc0901181338l41a01dafm256938683877ce59@mail.gmail.com> 	 <200901182157.n0ILvr72020268@greed.delorie.com>
 X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -28,15 +23,80 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2009-q1/txt/msg00008.txt.bz2
+X-SW-Source: 2009-q1/txt/msg00009.txt.bz2
 
-DJ Delorie wrote:
->>   Thanks, applied.  I'm feeling lazy: there's still an auto-merger
->> that'll port it across to src/ for me, isn't there?
+Some corrections to w32api I needed while porting an application to
+mingw in this patch.
+
+Index: ChangeLog
+===================================================================
+RCS file: /cvs/src/src/winsup/w32api/ChangeLog,v
+retrieving revision 1.985
+diff -r1.985 ChangeLog
+0a1,12
+> 2009-02-08  Michael James  <james.me@gmail.com>
 >
-> Semi-automatic.
-
-  Nah, then I won't trouble you; I've applied it to src/.
-
-    cheers,
-      DaveK.
+>       * include/wingdi.h (CLEARTYPE_QUALITY): Define.
+>       * include/winuser.h (WM_KEYLAST): Alternative definition when
+>       _WIN32_WINNT >= 0x0501.
+>       (WM_UNICHAR,UNICODE_NOCHAR): Define.
+>       * lib/comctl32.def (DefSubclassProc@16,GetWindowSubclass@16,
+>       RemoveWindowSubclass@12): Add exports.
+>       * lib/gdi32.def (GetDCBrushColor@4,GetDCPenColor@4): Add exports.
+>       * lib/msimg32.def (GetDCBrushColor@4,GetDCPenColor@4): Remove exports,
+>       belong in gdi32.def originally in msimg32 due to bad documentation.
+>
+Index: include/wingdi.h
+===================================================================
+RCS file: /cvs/src/src/winsup/w32api/include/wingdi.h,v
+retrieving revision 1.61
+diff -r1.61 wingdi.h
+361c361
+< //http://www.pinvoke.net/default.aspx/Structures/LOGFONT.html
+---
+> /* http://www.pinvoke.net/default.aspx/Structures/LOGFONT.html */
+374a375,377
+> #if _WIN32_WINNT >= 0x0500
+> #define CLEARTYPE_QUALITY 5
+> #endif
+Index: include/winuser.h
+===================================================================
+RCS file: /cvs/src/src/winsup/w32api/include/winuser.h,v
+retrieving revision 1.128
+diff -r1.128 winuser.h
+1556a1557,1561
+> #if _WIN32_WINNT >= 0x0501
+> #define WM_KEYLAST 265
+> #define WM_UNICHAR 265
+> #define UNICODE_NOCHAR 0xffff
+> #else
+1557a1563
+> #endif
+Index: lib/comctl32.def
+===================================================================
+RCS file: /cvs/src/src/winsup/w32api/lib/comctl32.def,v
+retrieving revision 1.5
+diff -r1.5 comctl32.def
+42a43
+> DefSubclassProc@16
+57a59
+> GetWindowSubclass@16
+103a106
+> RemoveWindowSubclass@12
+Index: lib/gdi32.def
+===================================================================
+RCS file: /cvs/src/src/winsup/w32api/lib/gdi32.def,v
+retrieving revision 1.9
+diff -r1.9 gdi32.def
+145a146
+> GetDCBrushColor@4
+146a148
+> GetDCPenColor@4
+Index: lib/msimg32.def
+===================================================================
+RCS file: /cvs/src/src/winsup/w32api/lib/msimg32.def,v
+retrieving revision 1.2
+diff -r1.2 msimg32.def
+4,5d3
+< GetDCBrushColor@4
+< GetDCPenColor@4
