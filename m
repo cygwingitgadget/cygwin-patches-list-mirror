@@ -1,15 +1,15 @@
-Return-Path: <cygwin-patches-return-6411-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 2603 invoked by alias); 9 Feb 2009 07:19:49 -0000
-Received: (qmail 2591 invoked by uid 22791); 9 Feb 2009 07:19:47 -0000
-X-SWARE-Spam-Status: No, hits=2.1 required=5.0 	tests=AWL,BAYES_00,SARE_MSGID_LONG40,SPF_PASS
+Return-Path: <cygwin-patches-return-6412-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 22740 invoked by alias); 24 Feb 2009 23:39:04 -0000
+Received: (qmail 22730 invoked by uid 22791); 24 Feb 2009 23:39:03 -0000
+X-SWARE-Spam-Status: No, hits=0.1 required=5.0 	tests=AWL,BAYES_00,SARE_MSGID_LONG40,SPF_PASS
 X-Spam-Check-By: sourceware.org
-Received: from fk-out-0910.google.com (HELO fk-out-0910.google.com) (209.85.128.190)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 09 Feb 2009 07:19:40 +0000
-Received: by fk-out-0910.google.com with SMTP id z23so1453634fkz.2         for <cygwin-patches@cygwin.com>; Sun, 08 Feb 2009 23:19:36 -0800 (PST)
+Received: from mail-bw0-f165.google.com (HELO mail-bw0-f165.google.com) (209.85.218.165)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 24 Feb 2009 23:38:59 +0000
+Received: by bwz9 with SMTP id 9so6542518bwz.2         for <cygwin-patches@cygwin.com>; Tue, 24 Feb 2009 15:38:56 -0800 (PST)
 MIME-Version: 1.0
-Received: by 10.223.109.148 with SMTP id j20mr888143fap.43.1234163976311; Sun,  	08 Feb 2009 23:19:36 -0800 (PST)
-Date: Mon, 09 Feb 2009 07:19:00 -0000
-Message-ID: <83b27df30902082319v6195318ch3e1e843f4f1631e4@mail.gmail.com>
-Subject: [PATCH] w32api fixes
+Received: by 10.223.122.15 with SMTP id j15mr227842far.74.1235518736242; Tue,  	24 Feb 2009 15:38:56 -0800 (PST)
+Date: Tue, 24 Feb 2009 23:39:00 -0000
+Message-ID: <83b27df30902241538m1aa5b85bh8e7ebee11e11ece6@mail.gmail.com>
+Subject: [PATCH] w32api fixes commctrl.h listview
 From: Michael James <james.me@gmail.com>
 To: mingw-users@lists.sourceforge.net, cygwin-patches@cygwin.com
 Content-Type: text/plain; charset=UTF-8
@@ -23,80 +23,33 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2009-q1/txt/msg00009.txt.bz2
+X-SW-Source: 2009-q1/txt/msg00010.txt.bz2
 
-Some corrections to w32api I needed while porting an application to
-mingw in this patch.
+A simple patch. My application was misbehaving only when built with
+mingw. It turned out that this incorrect header value was at fault. I
+am also submitting this patch to the mingw patch tracker on
+sourceforge.
 
+Does anyone have an estimate on how long these patches take to be
+incorporated into the main repository?
+
+
+Index: include/commctrl.h
+===================================================================
+RCS file: /cvs/src/src/winsup/w32api/include/commctrl.h,v
+retrieving revision 1.66
+diff -r1.66 commctrl.h
+1059c1059
+< #define LVIF_COLUMNS 256
+---
+> #define LVIF_COLUMNS 512
 Index: ChangeLog
 ===================================================================
 RCS file: /cvs/src/src/winsup/w32api/ChangeLog,v
-retrieving revision 1.985
-diff -r1.985 ChangeLog
-0a1,12
-> 2009-02-08  Michael James  <james.me@gmail.com>
+retrieving revision 1.986
+diff -r1.986 ChangeLog
+0a1,4
+> 2009-02-24  Michael James  <james.me@gmail.com>
 >
->       * include/wingdi.h (CLEARTYPE_QUALITY): Define.
->       * include/winuser.h (WM_KEYLAST): Alternative definition when
->       _WIN32_WINNT >= 0x0501.
->       (WM_UNICHAR,UNICODE_NOCHAR): Define.
->       * lib/comctl32.def (DefSubclassProc@16,GetWindowSubclass@16,
->       RemoveWindowSubclass@12): Add exports.
->       * lib/gdi32.def (GetDCBrushColor@4,GetDCPenColor@4): Add exports.
->       * lib/msimg32.def (GetDCBrushColor@4,GetDCPenColor@4): Remove exports,
->       belong in gdi32.def originally in msimg32 due to bad documentation.
+>       * include/commctrl.h (LVIF_COLUMNS): Fix definition.
 >
-Index: include/wingdi.h
-===================================================================
-RCS file: /cvs/src/src/winsup/w32api/include/wingdi.h,v
-retrieving revision 1.61
-diff -r1.61 wingdi.h
-361c361
-< //http://www.pinvoke.net/default.aspx/Structures/LOGFONT.html
----
-> /* http://www.pinvoke.net/default.aspx/Structures/LOGFONT.html */
-374a375,377
-> #if _WIN32_WINNT >= 0x0500
-> #define CLEARTYPE_QUALITY 5
-> #endif
-Index: include/winuser.h
-===================================================================
-RCS file: /cvs/src/src/winsup/w32api/include/winuser.h,v
-retrieving revision 1.128
-diff -r1.128 winuser.h
-1556a1557,1561
-> #if _WIN32_WINNT >= 0x0501
-> #define WM_KEYLAST 265
-> #define WM_UNICHAR 265
-> #define UNICODE_NOCHAR 0xffff
-> #else
-1557a1563
-> #endif
-Index: lib/comctl32.def
-===================================================================
-RCS file: /cvs/src/src/winsup/w32api/lib/comctl32.def,v
-retrieving revision 1.5
-diff -r1.5 comctl32.def
-42a43
-> DefSubclassProc@16
-57a59
-> GetWindowSubclass@16
-103a106
-> RemoveWindowSubclass@12
-Index: lib/gdi32.def
-===================================================================
-RCS file: /cvs/src/src/winsup/w32api/lib/gdi32.def,v
-retrieving revision 1.9
-diff -r1.9 gdi32.def
-145a146
-> GetDCBrushColor@4
-146a148
-> GetDCPenColor@4
-Index: lib/msimg32.def
-===================================================================
-RCS file: /cvs/src/src/winsup/w32api/lib/msimg32.def,v
-retrieving revision 1.2
-diff -r1.2 msimg32.def
-4,5d3
-< GetDCBrushColor@4
-< GetDCPenColor@4
