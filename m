@@ -1,19 +1,22 @@
-Return-Path: <cygwin-patches-return-6421-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 26471 invoked by alias); 3 Mar 2009 01:37:30 -0000
-Received: (qmail 26456 invoked by uid 22791); 3 Mar 2009 01:37:29 -0000
-X-SWARE-Spam-Status: No, hits=4.4 required=5.0 	tests=AWL,BAYES_20,BOTNET,J_CHICKENPOX_26,J_CHICKENPOX_32,MSGID_FROM_MTA_HEADER
+Return-Path: <cygwin-patches-return-6422-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 18167 invoked by alias); 3 Mar 2009 12:01:57 -0000
+Received: (qmail 17431 invoked by uid 22791); 3 Mar 2009 12:01:54 -0000
 X-Spam-Check-By: sourceware.org
-Received: from vms173001pub.verizon.net (HELO vms173001pub.verizon.net) (206.46.173.1)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 03 Mar 2009 01:37:22 +0000
-Received: from pool-70-19-158-99.bos.east.verizon.net ([70.19.158.99])  by vms173001.mailsrvcs.net  (Sun Java(tm) System Messaging Server 6.3-7.04 (built Sep 26 2008; 32bit))  with ESMTPA id <0KFW0072OPTQUMJ2@vms173001.mailsrvcs.net> for  cygwin-patches@cygwin.com; Mon, 02 Mar 2009 19:37:06 -0600 (CST)
-Message-id: <0KFW0072QPTQUMJ2@vms173001.mailsrvcs.net>
-Received: from [192.168.1.10] (helo=Compaq.phumblet.no-ip.org) 	by phumblet.no-ip.org with esmtp (Exim 4.69) 	(envelope-from <pierre@phumblet.no-ip.org>) 	id KFWPTQ-0000LG-AA	for cygwin-patches@cygwin.com; Mon,  02 Mar 2009 20:37:02 -0500
-Date: Tue, 03 Mar 2009 01:37:00 -0000
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 03 Mar 2009 12:01:46 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500) 	id B53616D418D; Tue,  3 Mar 2009 13:01:34 +0100 (CET)
+Date: Tue, 03 Mar 2009 12:01:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-From: "Pierre A. Humblet" <pierre@phumblet.no-ip.org>
-Subject: [Patch] gethostbyname2  again
-MIME-version: 1.0
-Content-type: multipart/mixed; boundary="=====================_494863734==_"
-X-IsSubscribed: yes
+Subject: Re: [Patch] gethostbyname2  again
+Message-ID: <20090303120134.GR10046@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <0KFW0072QPTQUMJ2@vms173001.mailsrvcs.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0KFW0072QPTQUMJ2@vms173001.mailsrvcs.net>
+User-Agent: Mutt/1.5.19 (2009-02-20)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -22,489 +25,711 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
-X-SW-Source: 2009-q1/txt/msg00019.txt.bz2
+X-SW-Source: 2009-q1/txt/msg00020.txt.bz2
+
+[Chris, can you have a look into Pierre's dup_ent changes?  Thanks.]
 
 
---=====================_494863734==_
-Content-Type: text/plain; charset="us-ascii"; format=flowed
-Content-length: 2549
+Hi Pierre,
 
-Corinna,
+On Mar  2 20:36, Pierre A. Humblet wrote:
+> Corinna,
+>
+> OK, here we go again.
+>
+> This version calls res_query and all the work is done in net.cc.
 
-OK, here we go again.
+First of all, thanks for doing that.
 
-This version calls res_query and all the work is done in net.cc.
-As discussed before that means a lot of work is wasted when using the 
-Windows resolver.
-    That will be improved later.
-There is no progress on the issue of resolving local names (NetBIOS 
-over TCP) for now,
-     so it's not a perfect replacement for the native gethostbyname yet.
+> - Because of the above, asm/byteorder.h doesn't get pulled in either,  
+> and I couldn't use
+>   some ntoh macros (see memcpy4to6).
+> - I could have included asm/byteorder separately but that causes  
+> conflicts with the local ntoh
+>   definitions in net.cc.
 
-Misc nits and notes:
-- Including resolv.h in net.cc causes havoc because it pulls in 
-cygwin/in.h which conflicts
-   with winsock2.h.   I worked around that by 
-defining   _CYGWIN_IN_H  before including resolv.h
-- Because of the above, asm/byteorder.h doesn't get pulled in either, 
-and I couldn't use
-   some ntoh macros (see memcpy4to6).
-- I could have included asm/byteorder separately but that causes 
-conflicts with the local ntoh
-   definitions in net.cc.
-- Because arpa/nameser.h is now pulled in,  IN6ADDRSZ etc are now 
-defined, but in a way different
-   from done in the snippet of code cut & pasted from bind. I didn't 
-want to change that piece (in
-   case you want to keep in intact for some reason) and I ended up 
-undefining  IN6ADDRSZ etc .
--  There is a new helper function dn_length1 which logically belongs 
-in minires.c, although it shouldn't
-    be exported by the dll.  However if I place it in minires.c, then 
-the linker doesn't find it.
-    Fixing that probably involves some Makefile magic.
-- I structured the code with a helper function gethostby_helper. That 
-will make it very easy to support
-    a gethostbyaddress some day, if needed.
-- The helper function avoids using dup_ent (there is enough copying 
-already). I created a new
-    realloc_ent function, and call it from both dup_ent and the 
-helper. That caused minor
-    changes in the 4 versions of dup_ent, and I don't know exactly 
-what format to use in the ChangeLog
-- This  is much more complex than the first way of doing things. Needs testing!
-- The patch is long, see the attachment. There is also a test program attached.
+I fixed that by moving the definitions of ntohl and friends to the end
+of the file and by defining them according to the definitions in
+asm/byteorder.h.  That's what POSIX demands anyway.
 
-Pierre
+> - Because arpa/nameser.h is now pulled in,  IN6ADDRSZ etc are now  
+> defined, but in a way different
+>   from done in the snippet of code cut & pasted from bind. I didn't want 
+> to change that piece (in
+>   case you want to keep in intact for some reason) and I ended up  
+> undefining  IN6ADDRSZ etc .
 
-2009-03-02  Pierre Humblet <Pierre.Humblet@ieee.org>
+I removed thatto use the definitions from nameser_compat.h.  They are
+equivalent anyway.
 
-	* net.cc: define _CYGWIN_IN_H and include resolv.h.
-	(realloc_ent): New function.
-	(dup_ent): Remove dst argument and call realloc_ent.
-	(memcpy4to6): New function.
-	(dn_length1): New function.
-	(gethostby_helper): New function.
-	(gethostbyname2): New function.
-	* cygwin.din: Export gethostbyname2.
-	* libc/minires.c (get_options): Look for "inet6" and apply bounds
-	to "retry" and "retrans".
-	(res_ninit): Set the default options at the beginning.
-	(dn_expand): Fix "off by one".
+> -  There is a new helper function dn_length1 which logically belongs in 
+> minires.c, although it shouldn't
+>    be exported by the dll.  However if I place it in minires.c, then the 
+> linker doesn't find it.
+
+You missed to define it as a `extern "C" function.
+
+>    Fixing that probably involves some Makefile magic.
+
+No, it's sufficent to define it as extern "C".  I changed your patch
+so that dn_length1 is now declared in the `extern "C" declaration
+block at the start of net.cc and I moved the function into minires.c.
+
+> - I structured the code with a helper function gethostby_helper. That  
+> will make it very easy to support
+>    a gethostbyaddress some day, if needed.
+> - The helper function avoids using dup_ent (there is enough copying  
+> already). I created a new
+>    realloc_ent function, and call it from both dup_ent and the helper. 
+> That caused minor
+>    changes in the 4 versions of dup_ent, and I don't know exactly what 
+> format to use in the ChangeLog
+
+The patch looks good to me.  I only changed the definition of realloc_ent
+to be a static function.
+
+> - This  is much more complex than the first way of doing things. Needs testing!
+> - The patch is long, see the attachment. There is also a test program attached.
+
+All my usual network applications are still working fine.
+
+I attached the entire patch again with my changes.  I had to change the
+gethostby_helper function to define some of the variables at the start
+of the function, othewise gcc complained about jumps to a label crossing
+variable initializations.  The bump of the API minor number in
+include/cygwin/version.h was missing.  I also tweaked the formatting a bit.
+
+The ChangeLog entry is the same as in the OP, except for the additional
+reference to include/cygwin/version.h.  Please have a look.
+
+Chris, the dup_ent code is yours.  Can you have a look if the realloc_ent
+changes are ok with you?
 
 
+Thanks,
+Corinna
 
-  
---=====================_494863734==_
-Content-Type: application/octet-stream; name="gethostbyname2_b.diff"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="gethostbyname2_b.diff"
-Content-length: 22725
 
-SW5kZXg6IENoYW5nZUxvZwo9PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBm
-aWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL2N5Z3dpbi9DaGFuZ2VMb2csdgpy
-ZXRyaWV2aW5nIHJldmlzaW9uIDEuNDM4OQpkaWZmIC11IC1wIC1yMS40Mzg5
-IENoYW5nZUxvZwotLS0gQ2hhbmdlTG9nCTI3IEZlYiAyMDA5IDAwOjM0OjM5
-IC0wMDAwCTEuNDM4OQorKysgQ2hhbmdlTG9nCTIgTWFyIDIwMDkgMjM6MTY6
-MDggLTAwMDAKQEAgLTEsMyArMSwxOCBAQAorMjAwOS0wMy0wMiAgUGllcnJl
-IEh1bWJsZXQgPFBpZXJyZS5IdW1ibGV0QGllZWUub3JnPgorCisJKiBuZXQu
-Y2M6IGRlZmluZSBfQ1lHV0lOX0lOX0ggYW5kIGluY2x1ZGUgcmVzb2x2Lmgu
-CisJKHJlYWxsb2NfZW50KTogTmV3IGZ1bmN0aW9uLgorCShkdXBfZW50KTog
-UmVtb3ZlIGRzdCBhcmd1bWVudCBhbmQgY2FsbCByZWFsbG9jX2VudC4KKwko
-bWVtY3B5NHRvNik6IE5ldyBmdW5jdGlvbi4KKwkoZG5fbGVuZ3RoMSk6IE5l
-dyBmdW5jdGlvbi4KKwkoZ2V0aG9zdGJ5X2hlbHBlcik6IE5ldyBmdW5jdGlv
-bi4KKwkoZ2V0aG9zdGJ5bmFtZTIpOiBOZXcgZnVuY3Rpb24uIAorCSogY3ln
-d2luLmRpbjogRXhwb3J0IGdldGhvc3RieW5hbWUyLgorCSogbGliYy9taW5p
-cmVzLmMgKGdldF9vcHRpb25zKTogTG9vayBmb3IgImluZXQ2IiBhbmQgYXBw
-bHkgYm91bmRzCisJdG8gInJldHJ5IiBhbmQgInJldHJhbnMiLgorCShyZXNf
-bmluaXQpOiBTZXQgdGhlIGRlZmF1bHQgb3B0aW9ucyBhdCB0aGUgYmVnaW5u
-aW5nLgorCShkbl9leHBhbmQpOiBGaXggIm9mZiBieSBvbmUiLgorCQogMjAw
-OS0wMi0yNiAgQ2hyaXN0b3BoZXIgRmF5bG9yICA8bWUrY3lnd2luQGNnZi5j
-eD4KIAogCSogZHRhYmxlLmNjIChkdGFibGU6OnNlbGVjdF9yZWFkKTogQWRk
-IGFiaWxpdHkgdG8gb3ZlcnJpZGUgZmguCkluZGV4OiBjeWd3aW4uZGluCj09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT0KUkNTIGZpbGU6IC9jdnMvc3JjL3NyYy93
-aW5zdXAvY3lnd2luL2N5Z3dpbi5kaW4sdgpyZXRyaWV2aW5nIHJldmlzaW9u
-IDEuMjAyCmRpZmYgLXUgLXAgLXIxLjIwMiBjeWd3aW4uZGluCi0tLSBjeWd3
-aW4uZGluCTE5IEZlYiAyMDA5IDA5OjIyOjUxIC0wMDAwCTEuMjAyCisrKyBj
-eWd3aW4uZGluCTIgTWFyIDIwMDkgMjM6MTY6MDggLTAwMDAKQEAgLTYzNSw2
-ICs2MzUsNyBAQCBfZ2V0Z3JvdXBzID0gZ2V0Z3JvdXBzIFNJR0ZFCiBfZ2V0
-Z3JvdXBzMzIgPSBnZXRncm91cHMzMiBTSUdGRQogZ2V0aG9zdGJ5YWRkciA9
-IGN5Z3dpbl9nZXRob3N0YnlhZGRyIFNJR0ZFCiBnZXRob3N0YnluYW1lID0g
-Y3lnd2luX2dldGhvc3RieW5hbWUgU0lHRkUKK2dldGhvc3RieW5hbWUyIFNJ
-R0ZFCiBnZXRob3N0aWQgU0lHRkUKIGdldGhvc3RuYW1lID0gY3lnd2luX2dl
-dGhvc3RuYW1lIFNJR0ZFCiBfZ2V0aG9zdG5hbWUgPSBjeWd3aW5fZ2V0aG9z
-dG5hbWUgU0lHRkUKSW5kZXg6IG5ldC5jYwo9PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09ClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL2N5Z3dpbi9uZXQu
-Y2MsdgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuMjQ4CmRpZmYgLXUgLXAgLXIx
-LjI0OCBuZXQuY2MKLS0tIG5ldC5jYwkxNiBTZXAgMjAwOCAwMjowNDoyNyAt
-MDAwMAkxLjI0OAorKysgbmV0LmNjCTIgTWFyIDIwMDkgMjM6MTY6MTAgLTAw
-MDAKQEAgLTQyLDYgKzQyLDggQEAgZGV0YWlscy4gKi8KICNpbmNsdWRlICJj
-eWd3aW4vaW42LmgiCiAjaW5jbHVkZSAiaWZhZGRycy5oIgogI2luY2x1ZGUg
-InRsc19wYnVmLmgiCisjZGVmaW5lIF9DWUdXSU5fSU5fSCAKKyNpbmNsdWRl
-IDxyZXNvbHYuaD4KIAogZXh0ZXJuICJDIgogewpAQCAtMjk1LDYgKzI5Nywz
-MyBAQCBzdHJ1Y3QgcHNlcnZlbnQKIAogc3RhdGljIGNvbnN0IGNoYXIgKmVu
-dG5hbWVzW10gPSB7Imhvc3QiLCAicHJvdG8iLCAic2VydiJ9OwogCit1bmlv
-bmVudCAqIHJlYWxsb2NfZW50IChpbnQgc3osIHVuaW9uZW50OjpzdHJ1Y3Rf
-dHlwZSB0eXBlKQoreworICAvKiBBbGxvY2F0ZSB0aGUgc3RvcmFnZSBuZWVk
-ZWQuICBBbGxvY2F0ZSBhIHJvdW5kZWQgc2l6ZSB0byBhdHRlbXB0IHRvIGZv
-cmNlCisgICAgIHJldXNlIG9mIHRoaXMgYnVmZmVyIHNvIHRoYXQgYSBwb29y
-bHktd3JpdHRlbiBjYWxsZXIgd2lsbCBub3QgYmUgdXNpbmcKKyAgICAgYSBm
-cmVlZCBidWZmZXIuICovCisgIHVuc2lnbmVkIHJzeiA9IDI1NiAqICgoc3og
-KyAyNTUpIC8gMjU2KTsKKyAgdW5pb25lbnQgKiBkc3QsICogcHRyOworICBz
-d2l0Y2ggKHR5cGUpCisgICAgeworICAgIGNhc2UgdW5pb25lbnQ6OnRfaG9z
-dGVudDoKKyAgICAgIGRzdCA9IF9teV90bHMubG9jYWxzLmhvc3RlbnRfYnVm
-OworICAgICAgYnJlYWs7CisgICAgY2FzZSB1bmlvbmVudDo6dF9wcm90b2Vu
-dDoKKyAgICAgIGRzdCA9X215X3Rscy5sb2NhbHMucHJvdG9lbnRfYnVmOwor
-ICAgICAgYnJlYWs7CisgICAgY2FzZSB1bmlvbmVudDo6dF9zZXJ2ZW50Ogor
-ICAgICAgZHN0ID1fbXlfdGxzLmxvY2Fscy5zZXJ2ZW50X2J1ZjsKKyAgICAg
-IGJyZWFrOworICAgIGRlZmF1bHQ6CisgICAgICByZXR1cm4gTlVMTDsKKyAg
-ICB9CisgIHB0ciA9ICh1bmlvbmVudCAqKSByZWFsbG9jIChkc3QsIHJzeik7
-CisgIGlmIChwdHIpCisgICAgZHN0ID0gcHRyOworICByZXR1cm4gcHRyOwor
-fQorCiAvKiBHZW5lcmljICJkdXAgYSB7aG9zdCxwcm90byxzZXJ2fWVudCBz
-dHJ1Y3R1cmUiIGZ1bmN0aW9uLgogICAgVGhpcyBpcyBjb21wbGljYXRlZCBi
-ZWNhdXNlIHdlIG5lZWQgdG8gYmUgYWJsZSB0byBmcmVlIHRoZQogICAgc3Ry
-dWN0dXJlIGF0IGFueSBwb2ludCBhbmQgd2UgY2FuJ3QgcmVseSBvbiB0aGUg
-cG9pbnRlciBjb250ZW50cwpAQCAtMzA5LDEyICszMzgsOCBAQCBzdGF0aWMg
-dm9pZCAqCiAjZWxzZQogc3RhdGljIGlubGluZSB2b2lkICoKICNlbmRpZgot
-ZHVwX2VudCAodW5pb25lbnQgKiZkc3QsIHVuaW9uZW50ICpzcmMsIHVuaW9u
-ZW50OjpzdHJ1Y3RfdHlwZSB0eXBlKQorZHVwX2VudCAodW5pb25lbnQgKnNy
-YywgdW5pb25lbnQ6OnN0cnVjdF90eXBlIHR5cGUpCiB7Ci0gIGlmIChkc3Qp
-Ci0gICAgZGVidWdfcHJpbnRmICgib2xkICVzZW50IHN0cnVjdHVyZSBcIiVz
-XCIgJXBcbiIsIGVudG5hbWVzW3R5cGVdLAotCQkgIGRzdC0+bmFtZSwgZHN0
-KTsKLQogICBpZiAoIXNyYykKICAgICB7CiAgICAgICBzZXRfd2luc29ja19l
-cnJubyAoKTsKQEAgLTM0MSw3ICszNjYsNyBAQCBkdXBfZW50ICh1bmlvbmVu
-dCAqJmRzdCwgdW5pb25lbnQgKnNyYywgCiAgICAgICBicmVhazsKICAgICB9
-CiAKLSAgLyogRXZlcnkgKmVudCBiZWdpbnMgd2l0aCBhIG5hbWUuICBDYWxj
-dWxhdGUgaXQncyBsZW5ndGguICovCisgIC8qIEV2ZXJ5ICplbnQgYmVnaW5z
-IHdpdGggYSBuYW1lLiAgQ2FsY3VsYXRlIGl0cyBsZW5ndGguICovCiAgIGlu
-dCBuYW1lbGVuID0gc3RybGVuX3JvdW5kIChzcmMtPm5hbWUpOwogICBzeiA9
-IHN0cnVjdF9zeiArIG5hbWVsZW47CiAKQEAgLTM4NiwxMSArNDExLDcgQEAg
-ZHVwX2VudCAodW5pb25lbnQgKiZkc3QsIHVuaW9uZW50ICpzcmMsIAogCX0K
-ICAgICB9CiAKLSAgLyogQWxsb2NhdGUgdGhlIHN0b3JhZ2UgbmVlZGVkLiAg
-QWxsb2NhdGUgYSByb3VuZGVkIHNpemUgdG8gYXR0ZW1wdCB0byBmb3JjZQot
-ICAgICByZXVzZSBvZiB0aGlzIGJ1ZmZlciBzbyB0aGF0IGEgcG9vcmx5LXdy
-aXR0ZW4gY2FsbGVyIHdpbGwgbm90IGJlIHVzaW5nCi0gICAgIGEgZnJlZWQg
-YnVmZmVyLiAqLwotICB1bnNpZ25lZCByc3ogPSAyNTYgKiAoKHN6ICsgMjU1
-KSAvIDI1Nik7Ci0gIGRzdCA9ICh1bmlvbmVudCAqKSByZWFsbG9jIChkc3Qs
-IHJzeik7CisgIHVuaW9uZW50ICogZHN0ID0gcmVhbGxvY19lbnQgKHN6LCB0
-eXBlKTsKIAogICBpZiAoZHN0KQogICAgIHsKQEAgLTQ1NiwxOSArNDc3LDE5
-IEBAIGR1cF9lbnQgKHVuaW9uZW50IComZHN0LCB1bmlvbmVudCAqc3JjLCAK
-IHN0YXRpYyBpbmxpbmUgaG9zdGVudCAqCiBkdXBfZW50IChob3N0ZW50ICpz
-cmMpCiB7Ci0gIHJldHVybiAoaG9zdGVudCAqKSBkdXBfZW50IChfbXlfdGxz
-LmxvY2Fscy5ob3N0ZW50X2J1ZiwgKHVuaW9uZW50ICopIHNyYywgdW5pb25l
-bnQ6OnRfaG9zdGVudCk7CisgIHJldHVybiAoaG9zdGVudCAqKSBkdXBfZW50
-ICgodW5pb25lbnQgKikgc3JjLCB1bmlvbmVudDo6dF9ob3N0ZW50KTsKIH0K
-IAogc3RhdGljIGlubGluZSBwcm90b2VudCAqCiBkdXBfZW50IChwcm90b2Vu
-dCAqc3JjKQogewotICByZXR1cm4gKHByb3RvZW50ICopIGR1cF9lbnQgKF9t
-eV90bHMubG9jYWxzLnByb3RvZW50X2J1ZiwgKHVuaW9uZW50ICopIHNyYywg
-dW5pb25lbnQ6OnRfcHJvdG9lbnQpOworICByZXR1cm4gKHByb3RvZW50ICop
-IGR1cF9lbnQgKCh1bmlvbmVudCAqKSBzcmMsIHVuaW9uZW50Ojp0X3Byb3Rv
-ZW50KTsKIH0KIAogc3RhdGljIGlubGluZSBzZXJ2ZW50ICoKIGR1cF9lbnQg
-KHNlcnZlbnQgKnNyYykKIHsKLSAgcmV0dXJuIChzZXJ2ZW50ICopIGR1cF9l
-bnQgKF9teV90bHMubG9jYWxzLnNlcnZlbnRfYnVmLCAodW5pb25lbnQgKikg
-c3JjLCB1bmlvbmVudDo6dF9zZXJ2ZW50KTsKKyAgcmV0dXJuIChzZXJ2ZW50
-ICopIGR1cF9lbnQgKCh1bmlvbmVudCAqKSBzcmMsIHVuaW9uZW50Ojp0X3Nl
-cnZlbnQpOwogfQogCiAvKiBleHBvcnRlZCBhcyBnZXRwcm90b2J5bmFtZTog
-c3RhbmRhcmRzPyAqLwpAQCAtODg4LDYgKzkwOSwzMjIgQEAgY3lnd2luX2dl
-dGhvc3RieWFkZHIgKGNvbnN0IGNoYXIgKmFkZHIsIAogICByZXR1cm4gcmVz
-OwogfQogCitzdGF0aWMgdm9pZCAKK21lbWNweTR0bzYgKGNoYXIgKiBkc3Qs
-IGNvbnN0IHVfY2hhciAqIHNyYykKK3sKKyAgLy8gIGNvbnN0IHVuc2lnbmVk
-IGludCBoW10gPSB7MCwgMCwgX19jb25zdGFudF9odG9ubCAoMHhGRkZGKX07
-CisgIGNvbnN0IHVuc2lnbmVkIGludCBoW10gPSB7MCwgMCwgMHhGRkZGMDAw
-MH07CisgIG1lbWNweSAoZHN0LCBoLCAxMik7CisgIG1lbWNweSAoZHN0ICsg
-MTIsIHNyYywgTlNfSU5BRERSU1opOworfQorCisvKioqKioqKioqKioqKioq
-KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioq
-KioqKioKKyAqIGRuX2xlbmd0aDEgICAgRm9yIGludGVybmFsIHVzZQorICog
-ICAgICAgICAgICAgICBSZXR1cm4gbGVuZ3RoIG9mIHVuY29tcHJlc3Nlc2Vk
-IG5hbWUgaW5jbCBmaW5hbCAwLgorICoqKioqKioqKioqKioqKioqKioqKioq
-KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqLwor
-CitpbnQgZG5fbGVuZ3RoMShjb25zdCB1bnNpZ25lZCBjaGFyICptc2csIGNv
-bnN0IHVuc2lnbmVkIGNoYXIgKmVvbW9yaWcsCisJICAgICAgIGNvbnN0IHVu
-c2lnbmVkIGNoYXIgKmNvbXBfZG4pCit7CisgIHVuc2lnbmVkIGludCBsZW4s
-IGxlbmd0aCA9IDA7CisKKyAgZXJybm8gPSBFSU5WQUw7CisgIGlmIChjb21w
-X2RuID49IGVvbW9yaWcpCisgICAgZ290byBleHBhbmRfZmFpbDsKKyAgZWxz
-ZSB3aGlsZSAoKGxlbiA9ICpjb21wX2RuKyspICE9IDApIHsKKyAgICBpZiAo
-bGVuIDw9IE1BWExBQkVMKSB7CisgICAgICBpZiAoKGNvbXBfZG4gKz0gbGVu
-KSA8PSBlb21vcmlnKQorCWxlbmd0aCArPSBsZW4gKyAxOworICAgICAgZWxz
-ZQorCWdvdG8gZXhwYW5kX2ZhaWw7CisgICAgfQorICAgIGVsc2UgaWYgKGxl
-biA+PSAoMTI4KzY0KSkgeworICAgICAgY29tcF9kbiA9IG1zZyArICgoKGxl
-biAmIH4oMTI4KzY0KSkgPDwgOCkgKyAqY29tcF9kbik7CisgICAgICBpZiAo
-Y29tcF9kbiA+PSBlb21vcmlnKQorCWdvdG8gZXhwYW5kX2ZhaWw7CisgICAg
-fQorICAgIGVsc2UKKyAgICAgIGdvdG8gZXhwYW5kX2ZhaWw7CisgIH0KKyAg
-cmV0dXJuIGxlbmd0aDsKKworZXhwYW5kX2ZhaWw6CisgIHJldHVybiAtMTsK
-K30KKworc3RhdGljIGhvc3RlbnQgKiAKK2dldGhvc3RieV9oZWxwZXIgKCBj
-b25zdCBjaGFyICogbmFtZSwgY29uc3QgaW50IGFmLCBjb25zdCBpbnQgdHlw
-ZSwKKwkJCQkgICAgIGNvbnN0IGludCBhZGRyc2l6ZV9pbiwgY29uc3QgaW50
-IGFkZHJzaXplX291dCkKK3sKKyAgLyogTm9uIHB1YmxpYyBmdW5jdGlvbiBp
-biBtaW5pcmVzLmMgKi8KKyAgZXh0ZXJuIGludCBkbl9sZW5ndGgxKGNvbnN0
-IHVuc2lnbmVkIGNoYXIgKm1zZywgY29uc3QgdW5zaWduZWQgY2hhciAqZW9t
-b3JpZywKKwkJCWNvbnN0IHVuc2lnbmVkIGNoYXIgKmNvbXBfZG4pOworICAK
-KyAgLyogR2V0IHRoZSBkYXRhIGZyb20gdGhlIG5hbWUgc2VydmVyICovCisg
-IGNvbnN0IGludCBtYXhjb3VudCA9IDM7CisgIGludCBvbGRfZXJybm8sIGFu
-Y291bnQgPSAwLCBhbmxlbiA9IDEwMjQsIG1zZ3NpemUgPSAwOworICB1X2No
-YXIgKiBwdHIsICogbXNnID0gTlVMTDsKKyAgd2hpbGUgKChhbmxlbiA+IG1z
-Z3NpemUpICYmIChhbmNvdW50KysgPCBtYXhjb3VudCkpCisgICAgeworICAg
-ICAgbXNnc2l6ZSA9IGFubGVuOworICAgICAgcHRyID0gKHVfY2hhciAqKSBy
-ZWFsbG9jIChtc2csIG1zZ3NpemUpOworICAgICAgaWYgKHB0ciA9PSBOVUxM
-ICkKKwl7CisJICBvbGRfZXJybm8gPSBlcnJubzsKKwkgIGZyZWUgKG1zZyk7
-CisJICBzZXRfZXJybm8gKG9sZF9lcnJubyk7CisJICBoX2Vycm5vID0gTkVU
-REJfSU5URVJOQUw7CisJICByZXR1cm4gTlVMTDsKKwl9CisgICAgICBtc2cg
-PSBwdHI7CisgICAgICBhbmxlbiA9IHJlc19zZWFyY2ggKG5hbWUsIG5zX2Nf
-aW4sIHR5cGUsIG1zZywgbXNnc2l6ZSk7CisgICAgfSAKKworICBpZiAoYW5j
-b3VudCA+PSBtYXhjb3VudCkKKyAgICB7CisgICAgICBmcmVlIChtc2cpOwor
-ICAgICAgaF9lcnJubyA9IE5PX1JFQ09WRVJZOworICAgICAgcmV0dXJuIE5V
-TEw7CisgICAgfQorICBpZiAoYW5sZW4gPCAwKSAvKiBlcnJubyBhbmQgaF9l
-cnJubyBhcmUgc2V0ICovCisgICAgeworICAgICAgb2xkX2Vycm5vID0gZXJy
-bm87CisgICAgICBmcmVlIChtc2cpOworICAgICAgc2V0X2Vycm5vIChvbGRf
-ZXJybm8pOworICAgICAgcmV0dXJuIE5VTEw7IAorICAgIH0KKyAgdV9jaGFy
-ICogZW9tc2cgPSBtc2cgKyBhbmxlbiAtIDE7CisKKworICAvKiBXZSBzY2Fu
-IHRoZSBhbnN3ZXIgcmVjb3JkcyB0byBkZXRlcm1pbmUgdGhlIHJlcXVpcmVk
-IG1lbW9yeSBzaXplLiAKKyAgICAgVGhleSBjYW4gYmUgY29ycnVwdGVkIGFu
-ZCB3ZSBkb24ndCBmdWxseSB0cnVzdCB0aGF0IHRoZSBtZXNzYWdlCisgICAg
-IGZvbGxvd3MgdGhlIHN0YW5kYXJkIGV4YWN0bHkuIGdsaWJjIGFwcGxpZXMg
-c29tZSBjaGVja3MgdGhhdAorICAgICB3ZSBlbXVsYXRlLgorICAgICBUaGUg
-YW5zd2VycyBhcmUgY29waWVkIGluIHRoZSBob3N0ZW50IHN0cnVjdHVyZSBp
-biBhIHNlY29uZCBzY2FuLgorICAgICBUbyBzaW1wbGlmeSB0aGUgc2Vjb25k
-IHNjYW4gd2Ugc3RvcmUgaW5mb3JtYXRpb24gYXMgZm9sbG93czoKKyAgICAg
-LSAiY2xhc3MiIGlzIHJlcGxhY2VkIGJ5IHRoZSBjb21wcmVzc2VkIG5hbWUg
-c2l6ZQorICAgICAtIHRoZSBmaXJzdCAxNiBiaXRzIG9mIHRoZSAidHRsIiBz
-dG9yZSB0aGUgZXhwYW5kZWQgbmFtZSBzaXplICsgMSAKKyAgICAgLSB0aGUg
-bGFzdCAxNiBiaXRzIG9mIHRoZSAidHRsIiBzdG9yZSB0aGUgb2Zmc2V0IHRv
-IHRoZSBuZXh0IHZhbGlkIHJlY29yZC4KKyAgICAgTm90ZSB0aGF0ICJ0eXBl
-IiBpcyByZXdyaXR0ZW4gaW4gaG9zdCBieXRlIG9yZGVyLiAqLworICAKKyAg
-Y2xhc3MgcmVjb3JkIHsKKyAgcHVibGljOgorICAgIHVuc2lnbmVkIHR5cGU6
-IDE2OwkJLy8gdHlwZQorICAgIHVuc2lnbmVkIGNvbXBsZW46IDE2OyAgICAg
-ICAvLyBjbGFzcyBvciBjb21wcmVzc2VkIGxlbmd0aAorICAgIHVuc2lnbmVk
-IG5hbWVsZW4xOiAxNjsgICAgICAvLyBleHBhbmRlZCBsZW5ndGggKHdpdGgg
-ZmluYWwgMCkKKyAgICB1bnNpZ25lZCBuZXh0X286IDE2OyAgICAgICAgLy8g
-b2Zmc2V0IHRvIG5leHQgdmFsaWQKKyAgICB1bnNpZ25lZCBzaXplOiAxNjsg
-ICAgICAgICAgLy8gZGF0YSBzaXplCisgICAgdV9jaGFyIGRhdGFbXTsgICAg
-ICAgICAgICAgIC8vIGRhdGEKKyAgICByZWNvcmQgKiBuZXh0ICgpIHsgcmV0
-dXJuIChyZWNvcmQgKikgKCgoY2hhciAqKSB0aGlzKSArIG5leHRfbyk7IH0K
-KyAgICB2b2lkIHNldF9uZXh0ICggcmVjb3JkICogbnh0KSB7IG5leHRfbyA9
-ICgoY2hhciAqKSBueHQpIC0gKChjaGFyICopIHRoaXMpOyB9CisgICAgdV9j
-aGFyICogbmFtZSAoKSB7IHJldHVybiAodV9jaGFyICopICgoKGNoYXIgKikg
-dGhpcykgLSBjb21wbGVuKTsgfQorICB9OworCisgIHJlY29yZCAqIGFucHRy
-ID0gTlVMTCwgKiBwcmV2cHRyID0gTlVMTCwgKiBjdXJwdHI7CisgIGludCBp
-LCBhbGlhc19jb3VudCA9IDAsIHN0cmluZ19zaXplID0gMCwgYWRkcmVzc19j
-b3VudCA9IDA7CisgIGludCBjb21wbGVuLCBuYW1lbGVuMSA9IDAsIGFkZHJl
-c3NfbGVuID0gMCwgYW50eXBlLCBhbmNsYXNzLCBhbnNpemU7CisKKyAgLyog
-R2V0IHRoZSBjb3VudCBvZiBhbnN3ZXJzICovCisgIGFuY291bnQgPSBudG9o
-cyAoKChIRUFERVIgKikgbXNnKS0+YW5jb3VudCk7CisKKyAgLyogU2tpcCB0
-aGUgcXVlc3Rpb24sIGl0IHdhcyB2ZXJpZmllZCBieSByZXNfc2VuZCAqLwor
-ICBwdHIgPSBtc2cgKyBzaXplb2YgKEhFQURFUik7CisgIGlmICgoY29tcGxl
-biA9IGRuX3NraXBuYW1lIChwdHIsIGVvbXNnKSkgPCAwKQorICAgIGdvdG8g
-Y29ycnVwdGVkOyAgICAKKyAgLyogUG9pbnQgdG8gdGhlIGJlZ2lubmluZyBv
-ZiB0aGUgYW5zd2VyIHNlY3Rpb24gKi8KKyAgcHRyICs9IGNvbXBsZW4gKyBO
-U19RRklYRURTWjsKKyAgCisgIC8qIFNjYW4gdGhlIGFuc3dlciByZWNvcmRz
-IHRvIGRldGVybWluZSB0aGUgc2l6ZXMgKi8KKyAgZm9yIChpID0gMDsgaSA8
-IGFuY291bnQ7IGkrKywgcHRyID0gY3VycHRyLT5kYXRhICsgYW5zaXplKQor
-ICAgIHsKKyAgICAgIGlmICgoY29tcGxlbiA9IGRuX3NraXBuYW1lIChwdHIs
-IGVvbXNnKSkgPCAwKQorCWdvdG8gY29ycnVwdGVkOworCisgICAgICBjdXJw
-dHIgPSAocmVjb3JkICopIChwdHIgKyBjb21wbGVuKTsKKyAgICAgIGFudHlw
-ZSA9IG50b2hzIChjdXJwdHItPnR5cGUpOworICAgICAgYW5jbGFzcyA9IG50
-b2hzIChjdXJwdHItPmNvbXBsZW4pOworICAgICAgYW5zaXplID0gbnRvaHMg
-KGN1cnB0ci0+c2l6ZSk7CisgICAgICAvKiBDbGFzcyBtdXN0IGJlIGludGVy
-bmV0ICovCisgICAgICBpZiAoYW5jbGFzcyAhPSBuc19jX2luKQorCWNvbnRp
-bnVlOworCisgICAgICBjdXJwdHItPmNvbXBsZW4gPSBjb21wbGVuOworICAg
-ICAgaWYgKChuYW1lbGVuMSA9IGRuX2xlbmd0aDEgKG1zZywgZW9tc2csIGN1
-cnB0ci0+IG5hbWUoKSkpIDw9IDApCisJZ290byBjb3JydXB0ZWQ7CisKKyAg
-ICAgIGlmIChhbnR5cGUgPT0gbnNfdF9jbmFtZSkgCisJeworCSAgYWxpYXNf
-Y291bnQrKzsKKwkgIHN0cmluZ19zaXplICs9IG5hbWVsZW4xOworCX0KKyAg
-ICAgIGVsc2UgaWYgKGFudHlwZSA9PSB0eXBlKQorCXsKKwkgIGFuc2l6ZSA9
-IG50b2hzIChjdXJwdHItPnNpemUpOworCSAgaWYgKGFuc2l6ZSAhPSBhZGRy
-c2l6ZV9pbikKKwkgICAgY29udGludWU7CisJICBpZiAoYWRkcmVzc19jb3Vu
-dCA9PSAwKQorCSAgICB7CisJICAgICAgYWRkcmVzc19sZW4gPSBuYW1lbGVu
-MTsKKwkgICAgICBzdHJpbmdfc2l6ZSArPSBuYW1lbGVuMTsKKwkgICAgfQor
-CSAgZWxzZSBpZiAoYWRkcmVzc19sZW4gIT0gbmFtZWxlbjEpCisJICAgIGNv
-bnRpbnVlOworCSAgYWRkcmVzc19jb3VudCsrOworCX0KKyAgICAgIC8qIFVw
-ZGF0ZSB0aGUgcmVjb3JkcyAqLworICAgICAgY3VycHRyLT50eXBlID0gYW50
-eXBlOyAvKiBIb3N0IGJ5dGUgb3JkZXIgKi8KKyAgICAgIGN1cnB0ci0+bmFt
-ZWxlbjEgPSBuYW1lbGVuMTsKKyAgICAgIGlmICghIGFucHRyKQorCWFucHRy
-ID0gcHJldnB0ciA9IGN1cnB0cjsKKyAgICAgIGVsc2UKKwl7CisJICBwcmV2
-cHRyLT5zZXRfbmV4dCAoY3VycHRyKTsKKwkgIHByZXZwdHIgPSBjdXJwdHI7
-CisJfQorICAgIH0KKworICAvKiBJZiB0aGVyZSBpcyBubyBhZGRyZXNzLCBx
-dWl0ICovCisgIGlmIChhZGRyZXNzX2NvdW50ID09IDApCisgICAgeworICAg
-ICAgZnJlZSAobXNnKTsKKyAgICAgIGhfZXJybm8gPSBOT19EQVRBOworICAg
-ICAgcmV0dXJuIE5VTEw7CisgICAgfQorICAKKyAgLyogRGV0ZXJtaW5lIHRo
-ZSB0b3RhbCBzaXplICovCisgIGludCBzeiA9IERXT1JEX3JvdW5kIChzaXpl
-b2YoaG9zdGVudCkpCisgICAgKyBzaXplb2YgKGNoYXIgKikgKiAoYWxpYXNf
-Y291bnQgKyBhZGRyZXNzX2NvdW50ICsgMikKKyAgICArIHN0cmluZ19zaXpl
-CisgICAgKyBhZGRyZXNzX2NvdW50ICogYWRkcnNpemVfb3V0OworCisgIGhv
-c3RlbnQgKiByZXQgPSAoaG9zdGVudCAqKSByZWFsbG9jX2VudCAoc3osIHVu
-aW9uZW50Ojp0X2hvc3RlbnQpOworICBpZiAoISByZXQpIAorICAgIHsKKyAg
-ICAgIG9sZF9lcnJubyA9IGVycm5vOworICAgICAgZnJlZSAobXNnKTsKKyAg
-ICAgIHNldF9lcnJubyAob2xkX2Vycm5vKTsKKyAgICAgIGhfZXJybm8gPSBO
-RVREQl9JTlRFUk5BTDsKKyAgICAgIHJldHVybiBOVUxMOworICAgIH0KKwor
-ICByZXQtPmhfYWRkcnR5cGUgPSBhZjsKKyAgcmV0LT5oX2xlbmd0aCA9IGFk
-ZHJzaXplX291dDsKKyAgcmV0LT5oX2FsaWFzZXMgPSAoY2hhciAqKikgKCgo
-Y2hhciAqKSByZXQpICsgRFdPUkRfcm91bmQgKHNpemVvZihob3N0ZW50KSkp
-OworICByZXQtPmhfYWRkcl9saXN0ID0gcmV0LT5oX2FsaWFzZXMgKyBhbGlh
-c19jb3VudCArIDE7CisgIGNoYXIgKiBzdHJpbmdfcHRyID0gKGNoYXIgKikg
-KHJldC0+aF9hZGRyX2xpc3QgKyBhZGRyZXNzX2NvdW50ICsgMSk7CisgCisg
-IC8qIFJlc2NhbiB0aGUgYW5zd2VycyAqLworICBhbmNvdW50ID0gYWxpYXNf
-Y291bnQgKyBhZGRyZXNzX2NvdW50OyAvKiBWYWxpZCByZWNvcmRzICovCisg
-IGFsaWFzX2NvdW50ID0gYWRkcmVzc19jb3VudCA9IDA7CisKKyAgZm9yIChp
-ID0gMCwgY3VycHRyID0gYW5wdHI7IGkgPCBhbmNvdW50OyBpKyssIGN1cnB0
-ciA9IGN1cnB0ci0+bmV4dCAoKSkKKyAgICB7CisgICAgICBhbnR5cGUgPSBj
-dXJwdHItPnR5cGU7CisgICAgICBpZiAoYW50eXBlID09IG5zX3RfY25hbWUp
-IAorCXsKKwkgIGNvbXBsZW4gPSBkbl9leHBhbmQgKG1zZywgZW9tc2csIGN1
-cnB0ci0+bmFtZSAoKSwgc3RyaW5nX3B0ciwgc3RyaW5nX3NpemUpOworI2lm
-ZGVmIERFQlVHR0lORworCSAgaWYgKGNvbXBsZW4gIT0gY3VycHRyLT5jb21w
-bGVuKSAgCisJICAgIGdvIHRvIGRlYnVnZ2luZzsKKyNlbmRpZgorCSAgcmV0
-LT5oX2FsaWFzZXNbYWxpYXNfY291bnQrK10gPSBzdHJpbmdfcHRyOworCSAg
-bmFtZWxlbjEgPSBjdXJwdHItPm5hbWVsZW4xOworCSAgc3RyaW5nX3B0ciAr
-PSBuYW1lbGVuMTsKKwkgIHN0cmluZ19zaXplIC09IG5hbWVsZW4xOwkgIAor
-CSAgY29udGludWU7CisJfQorICAgICAgaWYgKGFudHlwZSA9PSB0eXBlKQor
-CSAgICB7CisJICAgICAgaWYgKGFkZHJlc3NfY291bnQgPT0gMCkKKwkJewor
-CQkgIGNvbXBsZW4gPSBkbl9leHBhbmQgKG1zZywgZW9tc2csIGN1cnB0ci0+
-bmFtZSgpLCBzdHJpbmdfcHRyLCBzdHJpbmdfc2l6ZSk7CisjaWZkZWYgREVC
-VUdHSU5HCisJCSAgaWYgKGNvbXBsZW4gIT0gY3VycHRyLT5jb21wbGVuKSAg
-CisJCSAgICBnbyB0byBkZWJ1Z2dpbmc7CisjZW5kaWYKKwkJICByZXQtPmhf
-bmFtZSA9IHN0cmluZ19wdHI7CisJCSAgbmFtZWxlbjEgPSBjdXJwdHItPm5h
-bWVsZW4xOworCQkgIHN0cmluZ19wdHIgKz0gbmFtZWxlbjE7CisJCSAgc3Ry
-aW5nX3NpemUgLT0gbmFtZWxlbjE7CSAgCisJCX0KKwkgICAgICByZXQtPmhf
-YWRkcl9saXN0W2FkZHJlc3NfY291bnQrK10gPSBzdHJpbmdfcHRyOworCSAg
-ICAgIGlmIChhZGRyc2l6ZV9pbiAhPSBhZGRyc2l6ZV9vdXQpCisJCW1lbWNw
-eTR0bzYgKHN0cmluZ19wdHIsIGN1cnB0ci0+ZGF0YSk7CisJICAgICAgZWxz
-ZQorCQltZW1jcHkgKHN0cmluZ19wdHIsIGN1cnB0ci0+ZGF0YSwgYWRkcnNp
-emVfaW4pOworCSAgICAgIHN0cmluZ19wdHIgKz0gYWRkcnNpemVfb3V0Owor
-CSAgICAgIHN0cmluZ19zaXplIC09IGFkZHJzaXplX291dDsKKwkgICAgICBj
-b250aW51ZTsKKwkgICAgfQorI2lmZGVmIERFQlVHR0lORworICAgICAgLyog
-U2hvdWxkIG5vdCBnZXQgaGVyZSAqLworICAgICAgZ28gdG8gZGVidWdnaW5n
-OworI2VuZGlmCisgICAgfQorI2lmZGVmIERFQlVHR0lORworICBpZiAoc3Ry
-aW5nX3NpemUgPCAwKSAgCisgICAgZ28gdG8gZGVidWdnaW5nOworI2VuZGlm
-ICAgICAgCisgIAorICBmcmVlIChtc2cpOworCisgIHJldC0+aF9hbGlhc2Vz
-W2FsaWFzX2NvdW50XSA9IE5VTEw7CisgIHJldC0+aF9hZGRyX2xpc3RbYWRk
-cmVzc19jb3VudF0gPSBOVUxMOworIAorICByZXR1cm4gcmV0OworCisgY29y
-cnVwdGVkOgorICBmcmVlIChtc2cpOworICAvKiBIb3BlZnVsbHkgbWVzc2Fn
-ZSBjb3JydXB0aW9uIGVycm9ycyBhcmUgdGVtcG9yYXJ5LgorICAgICBTaG91
-bGQgaXQgYmUgTk9fUkVDT1ZFUlkgPyAqLworICBoX2Vycm5vID0gVFJZX0FH
-QUlOOworICByZXR1cm4gTlVMTDsKKworCisjaWZkZWYgREVCVUdHSU5HCisg
-ZGVidWdnaW5nOgorICAgc3lzdGVtX3ByaW50ZiAoIlBsZWFzZSBkZWJ1Zy4i
-KTsKKyAgIGZyZWUgKG1zZyk7CisgICBmcmVlIChyZXQpOworICAgaF9lcnJu
-byA9IE5PX1JFQ09WRVJZOworICAgcmV0dXJuIE5VTEw7CisjZW5kaWYKK30K
-KworLyogZ2V0aG9zdGJ5bmFtZTI6IHN0YW5kYXJkcz8gKi8KK2V4dGVybiAi
-QyIgc3RydWN0IGhvc3RlbnQgKgorZ2V0aG9zdGJ5bmFtZTIgKGNvbnN0IGNo
-YXIgKm5hbWUsIGludCBhZikKK3sKKyAgc2lnX2Rpc3BhdGNoX3BlbmRpbmcg
-KCk7CisgIG15ZmF1bHQgZWZhdWx0OworICBpZiAoZWZhdWx0LmZhdWx0ZWQg
-KEVGQVVMVCkpCisgICAgcmV0dXJuIE5VTEw7CisKKyAgaWYgKCEoX3Jlcy5v
-cHRpb25zICYgUkVTX0lOSVQpKQorICAgICAgcmVzX2luaXQoKTsKKyAgYm9v
-bCB2NHRvNiA9IF9yZXMub3B0aW9ucyAmIFJFU19VU0VfSU5FVDY7CisKKyAg
-aW50IHR5cGUsIGFkZHJzaXplX2luLCBhZGRyc2l6ZV9vdXQ7CisgIHN3aXRj
-aCAoYWYpIAorICAgIHsKKyAgICBjYXNlIEFGX0lORVQ6CisgICAgICBhZGRy
-c2l6ZV9pbiA9IE5TX0lOQUREUlNaOworICAgICAgYWRkcnNpemVfb3V0ID0g
-KHY0dG82KSA/IE5TX0lONkFERFJTWjpOU19JTkFERFJTWjsKKyAgICAgIHR5
-cGUgPSBuc190X2E7CisgICAgICBicmVhazsKKyAgICBjYXNlIEFGX0lORVQ2
-OgorICAgICAgYWRkcnNpemVfaW4gPSBhZGRyc2l6ZV9vdXQgPSBOU19JTjZB
-RERSU1o7CisgICAgICB0eXBlID0gbnNfdF9hYWFhOworICAgICAgYnJlYWs7
-CisgICAgZGVmYXVsdDoKKyAgICAgIHNldF9lcnJubyAoRUFGTk9TVVBQT1JU
-KTsKKyAgICAgIGhfZXJybm8gPSBORVREQl9JTlRFUk5BTDsKKyAgICAgIHJl
-dHVybiBOVUxMOworICAgIH0KKyAgCisgIHJldHVybiBnZXRob3N0YnlfaGVs
-cGVyIChuYW1lLCBhZiwgdHlwZSwgYWRkcnNpemVfaW4sIGFkZHJzaXplX291
-dCk7Cit9CisKIC8qIGV4cG9ydGVkIGFzIGFjY2VwdDogc3RhbmRhcmRzPyAq
-LwogZXh0ZXJuICJDIiBpbnQKIGN5Z3dpbl9hY2NlcHQgKGludCBmZCwgc3Ry
-dWN0IHNvY2thZGRyICpwZWVyLCBzb2NrbGVuX3QgKmxlbikKQEAgLTI0OTks
-NiArMjgzNiwxMCBAQCBjeWd3aW5fc2VuZG1zZyAoaW50IGZkLCBjb25zdCBz
-dHJ1Y3QgbXNnCiAgIHJldHVybiByZXM7CiB9CiAKKyN1bmRlZglJTjZBRERS
-U1oKKyN1bmRlZglJTkFERFJTWgorI3VuZGVmICBJTlQxNlNaCisKIC8qIFRo
-aXMgaXMgZnJvbSB0aGUgQklORCA0LjkuNCByZWxlYXNlLCBtb2RpZmllZCB0
-byBjb21waWxlIGJ5IGl0c2VsZiAqLwogCiAvKiBDb3B5cmlnaHQgKGMpIDE5
-OTYgYnkgSW50ZXJuZXQgU29mdHdhcmUgQ29uc29ydGl1bS4KSW5kZXg6IGxp
-YmMvbWluaXJlcy5jCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KUkNTIGZpbGU6
-IC9jdnMvc3JjL3NyYy93aW5zdXAvY3lnd2luL2xpYmMvbWluaXJlcy5jLHYK
-cmV0cmlldmluZyByZXZpc2lvbiAxLjUKZGlmZiAtdSAtcCAtcjEuNSBtaW5p
-cmVzLmMKLS0tIGxpYmMvbWluaXJlcy5jCTMgRGVjIDIwMDggMTY6Mzc6NTMg
-LTAwMDAJMS41CisrKyBsaWJjL21pbmlyZXMuYwkyIE1hciAyMDA5IDIzOjE2
-OjEwIC0wMDAwCkBAIC05OSw2ICs5OSwxMSBAQCBzdGF0aWMgdm9pZCBnZXRf
-b3B0aW9ucyhyZXNfc3RhdGUgc3RhdHAsCiAgICAgICBEUFJJTlRGKHN0YXRw
-LT5vcHRpb25zICYgUkVTX0RFQlVHLCAiJXM6IDFcbiIsIHdvcmRzW2ldKTsK
-ICAgICAgIGNvbnRpbnVlOwogICAgIH0KKyAgICBpZiAoIXN0cmNhc2VjbXAo
-ImluZXQ2Iiwgd29yZHNbaV0pKSB7CisgICAgICBzdGF0cC0+b3B0aW9ucyB8
-PSBSRVNfVVNFX0lORVQ2OworICAgICAgRFBSSU5URihzdGF0cC0+b3B0aW9u
-cyAmIFJFU19ERUJVRywgIiVzOiAxXG4iLCB3b3Jkc1tpXSk7CisgICAgICBj
-b250aW51ZTsKKyAgICB9CiAgICAgaWYgKCFzdHJjYXNlY21wKCJvc3F1ZXJ5
-Iiwgd29yZHNbaV0pKSB7CiAgICAgICBzdGF0cC0+dXNlX29zID0gMTsKICAg
-ICAgIERQUklOVEYoc3RhdHAtPm9wdGlvbnMgJiBSRVNfREVCVUcsICIlczog
-MVxuIiwgd29yZHNbaV0pOwpAQCAtMTE0LDE2ICsxMTksMjIgQEAgc3RhdGlj
-IHZvaWQgZ2V0X29wdGlvbnMocmVzX3N0YXRlIHN0YXRwLAogCSBjb250aW51
-ZTsKIAkgfQogICAgICAgKi8KLSAgICAgIGlmICghc3RyY2FzZWNtcCgicmV0
-cnkiLCB3b3Jkc1tpXSkpIHsKKyAgICAgIGlmICghc3RyY2FzZWNtcCgicmV0
-cnkiLCB3b3Jkc1tpXSkKKwkgIHx8ICFzdHJjYXNlY21wKCJhdHRlbXB0cyIs
-IHdvcmRzW2ldKSkgewogCWlmICh2YWx1ZSA8IDEpCiAJICB2YWx1ZSA9IDE7
-CisJZWxzZSBpZiAodmFsdWUgPiBSRVNfTUFYUkVUUlkpCisJICB2YWx1ZSA9
-IFJFU19NQVhSRVRSWTsKIAlzdGF0cC0+cmV0cnkgPSB2YWx1ZTsKIAlEUFJJ
-TlRGKHN0YXRwLT5vcHRpb25zICYgUkVTX0RFQlVHLCAiJXM6ICVkXG4iLCB3
-b3Jkc1tpXSwgdmFsdWUpOwogCWNvbnRpbnVlOwogICAgICAgfQotICAgICAg
-aWYgKCFzdHJjYXNlY21wKCJyZXRyYW5zIiwgd29yZHNbaV0pKSB7CisgICAg
-ICBpZiAoIXN0cmNhc2VjbXAoInJldHJhbnMiLCB3b3Jkc1tpXSkKKwkgIHx8
-ICFzdHJjYXNlY21wKCJ0aW1lb3V0Iiwgd29yZHNbaV0pKSB7CiAJaWYgKHZh
-bHVlIDwgMSkKIAkgIHZhbHVlID0gMTsKKwllbHNlIGlmICh2YWx1ZSA+IFJF
-U19NQVhSRVRSQU5TKQorCSAgdmFsdWUgPSBSRVNfTUFYUkVUUkFOUzsKIAlz
-dGF0cC0+cmV0cmFucyA9IHZhbHVlOwogCURQUklOVEYoc3RhdHAtPm9wdGlv
-bnMgJiBSRVNfREVCVUcsICIlczogJWRcbiIsIHdvcmRzW2ldLCB2YWx1ZSk7
-CiAJY29udGludWU7CkBAIC0yNzAsNiArMjgxLDkgQEAgaW50IHJlc19uaW5p
-dChyZXNfc3RhdGUgc3RhdHApCiAgIGludCBpOwogCiAgIHN0YXRwLT5yZXNf
-aF9lcnJubyA9IE5FVERCX1NVQ0NFU1M7CisgICAvKiBPbmx5IGRlYnVnIG1h
-eSBiZSBzZXQgYmVmb3JlIGNhbGxpbmcgaW5pdCAqLworICBzdGF0cC0+b3B0
-aW9ucyAmPSBSRVNfREVCVUc7CisgIHN0YXRwLT5vcHRpb25zIHw9IFJFU19J
-TklUIHwgUkVTX0RFRkFVTFQ7CiAgIHN0YXRwLT5uc2NvdW50ID0gMDsKICAg
-c3RhdHAtPm9zX3F1ZXJ5ID0gTlVMTDsKICAgc3RhdHAtPnJldHJhbnMgPSBS
-RVNfVElNRU9VVDsgLyogdGltZW91dCBpbiBzZWNvbmRzICovCkBAIC0yOTks
-OSArMzEzLDYgQEAgaW50IHJlc19uaW5pdChyZXNfc3RhdGUgc3RhdHApCiAg
-ICAgc3RhdHAtPm5zYWRkcl9saXN0W2ldLnNpbl9wb3J0ID0gaHRvbnMoTkFN
-RVNFUlZFUl9QT1JUKTsKICAgICBiemVybyhzdGF0cC0+bnNhZGRyX2xpc3Rb
-aV0uc2luX3plcm8sIHNpemVvZihzdGF0cC0+bnNhZGRyX2xpc3RbaV0uc2lu
-X3plcm8pKTsKICAgfQotICAvKiBPbmx5IGRlYnVnIG1heSBiZSBzZXQgYmVm
-b3JlIGNhbGxpbmcgaW5pdCAqLwotICBzdGF0cC0+b3B0aW9ucyAmPSBSRVNf
-REVCVUc7Ci0gIHN0YXRwLT5vcHRpb25zIHw9IFJFU19JTklUIHwgUkVTX0RF
-RkFVTFQ7CiAgIHJldHVybiAwOwogfQogCkBAIC04MDYsNyArODE3LDcgQEAg
-aW50IGRuX2V4cGFuZChjb25zdCB1bnNpZ25lZCBjaGFyICptc2csIAogICAg
-IGV4cF9kbisrOwogICBlbHNlIGRvIHsKICAgICBpZiAobGVuIDw9IE1BWExB
-QkVMKSB7Ci0gICAgICBpZiAoKGxlbmd0aCAtPSAobGVuICsgMSkpID4gMCAv
-KiBOZWVkIHNwYWNlIGZvciBmaW5hbCAuICovCisgICAgICBpZiAoKGxlbmd0
-aCAtPSAobGVuICsgMSkpID49IDAgLyogTmVlZCBzcGFjZSBmb3IgZmluYWwg
-LiAqLwogCSAgJiYgY29tcF9kbiArIGxlbiA8PSBlb21vcmlnKSB7CiAJZG8g
-eyAqZXhwX2RuKysgPSAqY29tcF9kbisrOyB9IHdoaWxlICgtLWxlbiAhPSAw
-KTsKIAkqZXhwX2RuKysgPSAnLic7CkBAIC04MzYsNyArODQ3LDYgQEAgZXhw
-YW5kX2ZhaWw6CiAgIHJldHVybiAtMTsKIH0KIAotCiAvKioqKioqKioqKioq
-KioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioqKioq
-KioqKioqKioKICAqCiAgZG5fY29tcAo=
+ 	* net.cc: define _CYGWIN_IN_H and include resolv.h.
+ 	(realloc_ent): New function.
+ 	(dup_ent): Remove dst argument and call realloc_ent.
+ 	(memcpy4to6): New function.
+ 	(dn_length1): New function.
+ 	(gethostby_helper): New function.
+ 	(gethostbyname2): New function.
+ 	* cygwin.din: Export gethostbyname2.
+ 	* libc/minires.c (get_options): Look for "inet6" and apply bounds
+ 	to "retry" and "retrans".
+ 	(res_ninit): Set the default options at the beginning.
+ 	(dn_expand): Fix "off by one".
+	* include/cygwin/version.h: Bump API minor number.
 
---=====================_494863734==_
-Content-Type: application/octet-stream; name="try_gethostbyname.c"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="try_gethostbyname.c"
-Content-length: 1477
 
-I2luY2x1ZGUgPHN5cy9zb2NrZXQuaD4KI2luY2x1ZGUgPG5ldGRiLmg+CiNp
-bmNsdWRlIDxzdGRpby5oPgojaW5jbHVkZSA8ZXJybm8uaD4KZXh0ZXJuIGlu
-dCBoX2Vycm5vOwoKZXh0ZXJuIHN0cnVjdCBob3N0ZW50ICogZ2V0aG9zdGJ5
-bmFtZTIgKGNvbnN0IGNoYXIgKm5hbWUsIGludCBhZik7Cgp2b2lkIHByaW50
-X2hvc3RlbnQoc3RydWN0IGhvc3RlbnQgKiBwdHIpCnsKICBpbnQgaSwgajsK
-ICBwcmludGYoIkVycm5vICVkIGhfZXJybm8gJWRcbiIsIGVycm5vLCBoX2Vy
-cm5vKTsKICBpZiAocHRyKSAKICAgIHsKICAgICAgcHJpbnRmKCJoX2FkZHJ0
-eXBlOiAldSwgaF9sZW5ndGg6ICVkXG4iLCBwdHItPmhfYWRkcnR5cGUsIHB0
-ci0+aF9sZW5ndGgpOwogICAgICBwcmludGYoImhfbmFtZTogJXNcbiIsIHB0
-ci0+aF9uYW1lKTsKICAgICAgZm9yIChpID0gMDsgcHRyLT5oX2FsaWFzZXNb
-aV07IGkrKykKCXByaW50ZigiaF9hbGlhczogJXNcbiIsIHB0ci0+aF9hbGlh
-c2VzW2ldKTsKICAgICAgZm9yIChpID0gMDsgcHRyLT5oX2FkZHJfbGlzdFtp
-XTsgaSsrKSB7CglwcmludGYoImhfYWRkcjogIik7Cglmb3IgKGogPSAwOyBq
-IDwgcHRyLT5oX2xlbmd0aDsgaisrKQoJcHJpbnRmKCIldS4iLCAqKCgodW5z
-aWduZWQgY2hhciAqKSBwdHItPmhfYWRkcl9saXN0W2ldKSArIGopKTsKCXBy
-aW50ZigiXG4iKTsKICAgICAgfQogICAgfQp9CgptYWluKGludCBhcmdjLCBj
-aGFyICoqIGFyZ3YpCnsKICBpZiAoYXJnYyA+IDEpCiAgICB7CiAgICAgIHBy
-aW50ZigiR2V0aG9zdGJ5bmFtZVxuIik7CiAgICAgIHByaW50X2hvc3RlbnQo
-Z2V0aG9zdGJ5bmFtZShhcmd2WzFdKSk7CgogICAgICBwcmludGYoIlxuR2V0
-aG9zdGJ5bmFtZTIgQUZfSU5FVFxuIik7CiAgICAgIHByaW50X2hvc3RlbnQo
-Z2V0aG9zdGJ5bmFtZTIoYXJndlsxXSwgQUZfSU5FVCkpOwogCiAgICAgIHBy
-aW50ZigiXG5HZXRob3N0YnluYW1lMiBBRl9JTkVUNlxuIik7CiAgICAgIHBy
-aW50X2hvc3RlbnQoZ2V0aG9zdGJ5bmFtZTIoYXJndlsxXSwgQUZfSU5FVDYp
-KTsKICAgIH0KICBlbHNlCiAgICBwcmludGYoIlByb3ZpZGUgYSBuYW1lXG4i
-KTsKfQoJCgo=
+Index: cygwin.din
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/cygwin.din,v
+retrieving revision 1.202
+diff -u -p -r1.202 cygwin.din
+--- cygwin.din	19 Feb 2009 09:22:51 -0000	1.202
++++ cygwin.din	3 Mar 2009 11:54:11 -0000
+@@ -635,6 +635,7 @@ _getgroups = getgroups SIGFE
+ _getgroups32 = getgroups32 SIGFE
+ gethostbyaddr = cygwin_gethostbyaddr SIGFE
+ gethostbyname = cygwin_gethostbyname SIGFE
++gethostbyname2 SIGFE
+ gethostid SIGFE
+ gethostname = cygwin_gethostname SIGFE
+ _gethostname = cygwin_gethostname SIGFE
+Index: net.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/net.cc,v
+retrieving revision 1.249
+diff -u -p -r1.249 net.cc
+--- net.cc	3 Mar 2009 11:44:17 -0000	1.249
++++ net.cc	3 Mar 2009 11:54:12 -0000
+@@ -1,7 +1,7 @@
+ /* net.cc: network-related routines.
+ 
+    Copyright 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
+-   2005, 2006, 2007 Red Hat, Inc.
++   2005, 2006, 2007, 2008, 2009 Red Hat, Inc.
+ 
+ This file is part of Cygwin.
+ 
+@@ -43,6 +43,8 @@ details. */
+ #include "cygwin/in6.h"
+ #include "ifaddrs.h"
+ #include "tls_pbuf.h"
++#define _CYGWIN_IN_H 
++#include <resolv.h>
+ 
+ extern "C"
+ {
+@@ -53,6 +55,9 @@ extern "C"
+   int sscanf (const char *, const char *, ...);
+   int cygwin_inet_aton(const char *, struct in_addr *);
+   const char *cygwin_inet_ntop (int, const void *, char *, socklen_t);
++  int dn_length1(const unsigned char *, const unsigned char *,
++		 const unsigned char *);
++  
+ }				/* End of "C" section */
+ 
+ const struct in6_addr in6addr_any = {{IN6ADDR_ANY_INIT}};
+@@ -264,6 +269,34 @@ struct pservent
+ 
+ static const char *entnames[] = {"host", "proto", "serv"};
+ 
++static unionent *
++realloc_ent (int sz, unionent::struct_type type)
++{
++  /* Allocate the storage needed.  Allocate a rounded size to attempt to force
++     reuse of this buffer so that a poorly-written caller will not be using
++     a freed buffer. */
++  unsigned rsz = 256 * ((sz + 255) / 256);
++  unionent * dst, * ptr;
++  switch (type)
++    {
++    case unionent::t_hostent:
++      dst = _my_tls.locals.hostent_buf;
++      break;
++    case unionent::t_protoent:
++      dst =_my_tls.locals.protoent_buf;
++      break;
++    case unionent::t_servent:
++      dst =_my_tls.locals.servent_buf;
++      break;
++    default:
++      return NULL;
++    }
++  ptr = (unionent *) realloc (dst, rsz);
++  if (ptr)
++    dst = ptr;
++  return ptr;
++}
++
+ /* Generic "dup a {host,proto,serv}ent structure" function.
+    This is complicated because we need to be able to free the
+    structure at any point and we can't rely on the pointer contents
+@@ -278,12 +311,8 @@ static void *
+ #else
+ static inline void *
+ #endif
+-dup_ent (unionent *&dst, unionent *src, unionent::struct_type type)
++dup_ent (unionent *src, unionent::struct_type type)
+ {
+-  if (dst)
+-    debug_printf ("old %sent structure \"%s\" %p\n", entnames[type],
+-		  dst->name, dst);
+-
+   if (!src)
+     {
+       set_winsock_errno ();
+@@ -310,7 +339,7 @@ dup_ent (unionent *&dst, unionent *src, 
+       break;
+     }
+ 
+-  /* Every *ent begins with a name.  Calculate it's length. */
++  /* Every *ent begins with a name.  Calculate its length. */
+   int namelen = strlen_round (src->name);
+   sz = struct_sz + namelen;
+ 
+@@ -355,11 +384,7 @@ dup_ent (unionent *&dst, unionent *src, 
+ 	}
+     }
+ 
+-  /* Allocate the storage needed.  Allocate a rounded size to attempt to force
+-     reuse of this buffer so that a poorly-written caller will not be using
+-     a freed buffer. */
+-  unsigned rsz = 256 * ((sz + 255) / 256);
+-  dst = (unionent *) realloc (dst, rsz);
++  unionent *dst = realloc_ent (sz, type);
+ 
+   if (dst)
+     {
+@@ -425,19 +450,19 @@ dup_ent (unionent *&dst, unionent *src, 
+ static inline hostent *
+ dup_ent (hostent *src)
+ {
+-  return (hostent *) dup_ent (_my_tls.locals.hostent_buf, (unionent *) src, unionent::t_hostent);
++  return (hostent *) dup_ent ((unionent *) src, unionent::t_hostent);
+ }
+ 
+ static inline protoent *
+ dup_ent (protoent *src)
+ {
+-  return (protoent *) dup_ent (_my_tls.locals.protoent_buf, (unionent *) src, unionent::t_protoent);
++  return (protoent *) dup_ent ((unionent *) src, unionent::t_protoent);
+ }
+ 
+ static inline servent *
+ dup_ent (servent *src)
+ {
+-  return (servent *) dup_ent (_my_tls.locals.servent_buf, (unionent *) src, unionent::t_servent);
++  return (servent *) dup_ent ((unionent *) src, unionent::t_servent);
+ }
+ 
+ /* exported as getprotobyname: standards? */
+@@ -857,6 +882,287 @@ cygwin_gethostbyaddr (const char *addr, 
+   return res;
+ }
+ 
++static void 
++memcpy4to6 (char *dst, const u_char *src)
++{
++  const unsigned int h[] = {0, 0, htonl (0xFFFF)};
++  memcpy (dst, h, 12);
++  memcpy (dst + 12, src, NS_INADDRSZ);
++}
++
++static hostent * 
++gethostby_helper (const char *name, const int af, const int type,
++		  const int addrsize_in, const int addrsize_out)
++{
++  /* Get the data from the name server */
++  const int maxcount = 3;
++  int old_errno, ancount = 0, anlen = 1024, msgsize = 0;
++  u_char *ptr, *msg = NULL;
++  int sz;
++  hostent *ret;
++  char *string_ptr;
++
++  while ((anlen > msgsize) && (ancount++ < maxcount))
++    {
++      msgsize = anlen;
++      ptr = (u_char *) realloc (msg, msgsize);
++      if (ptr == NULL )
++	{
++	  old_errno = errno;
++	  free (msg);
++	  set_errno (old_errno);
++	  h_errno = NETDB_INTERNAL;
++	  return NULL;
++	}
++      msg = ptr;
++      anlen = res_search (name, ns_c_in, type, msg, msgsize);
++    } 
++
++  if (ancount >= maxcount)
++    {
++      free (msg);
++      h_errno = NO_RECOVERY;
++      return NULL;
++    }
++  if (anlen < 0) /* errno and h_errno are set */
++    {
++      old_errno = errno;
++      free (msg);
++      set_errno (old_errno);
++      return NULL; 
++    }
++  u_char *eomsg = msg + anlen - 1;
++
++
++  /* We scan the answer records to determine the required memory size. 
++     They can be corrupted and we don't fully trust that the message
++     follows the standard exactly. glibc applies some checks that
++     we emulate.
++     The answers are copied in the hostent structure in a second scan.
++     To simplify the second scan we store information as follows:
++     - "class" is replaced by the compressed name size
++     - the first 16 bits of the "ttl" store the expanded name size + 1 
++     - the last 16 bits of the "ttl" store the offset to the next valid record.
++     Note that "type" is rewritten in host byte order. */
++  
++  class record {
++  public:
++    unsigned type: 16;		// type
++    unsigned complen: 16;       // class or compressed length
++    unsigned namelen1: 16;      // expanded length (with final 0)
++    unsigned next_o: 16;        // offset to next valid
++    unsigned size: 16;          // data size
++    u_char data[];              // data
++    record * next () { return (record *) (((char *) this) + next_o); }
++    void set_next ( record * nxt) { next_o = ((char *) nxt) - ((char *) this); }
++    u_char * name () { return (u_char *) (((char *) this) - complen); }
++  };
++
++  record * anptr = NULL, * prevptr = NULL, * curptr;
++  int i, alias_count = 0, string_size = 0, address_count = 0;
++  int complen, namelen1 = 0, address_len = 0, antype, anclass, ansize;
++
++  /* Get the count of answers */
++  ancount = ntohs (((HEADER *) msg)->ancount);
++
++  /* Skip the question, it was verified by res_send */
++  ptr = msg + sizeof (HEADER);
++  if ((complen = dn_skipname (ptr, eomsg)) < 0)
++    goto corrupted;    
++  /* Point to the beginning of the answer section */
++  ptr += complen + NS_QFIXEDSZ;
++  
++  /* Scan the answer records to determine the sizes */
++  for (i = 0; i < ancount; i++, ptr = curptr->data + ansize)
++    {
++      if ((complen = dn_skipname (ptr, eomsg)) < 0)
++	goto corrupted;
++
++      curptr = (record *) (ptr + complen);
++      antype = ntohs (curptr->type);
++      anclass = ntohs (curptr->complen);
++      ansize = ntohs (curptr->size);
++      /* Class must be internet */
++      if (anclass != ns_c_in)
++	continue;
++
++      curptr->complen = complen;
++      if ((namelen1 = dn_length1 (msg, eomsg, curptr-> name())) <= 0)
++	goto corrupted;
++
++      if (antype == ns_t_cname) 
++	{
++	  alias_count++;
++	  string_size += namelen1;
++	}
++      else if (antype == type)
++	{
++	  ansize = ntohs (curptr->size);
++	  if (ansize != addrsize_in)
++	    continue;
++	  if (address_count == 0)
++	    {
++	      address_len = namelen1;
++	      string_size += namelen1;
++	    }
++	  else if (address_len != namelen1)
++	    continue;
++	  address_count++;
++	}
++      /* Update the records */
++      curptr->type = antype; /* Host byte order */
++      curptr->namelen1 = namelen1;
++      if (! anptr)
++	anptr = prevptr = curptr;
++      else
++	{
++	  prevptr->set_next (curptr);
++	  prevptr = curptr;
++	}
++    }
++
++  /* If there is no address, quit */
++  if (address_count == 0)
++    {
++      free (msg);
++      h_errno = NO_DATA;
++      return NULL;
++    }
++  
++  /* Determine the total size */
++  sz = DWORD_round (sizeof(hostent))
++       + sizeof (char *) * (alias_count + address_count + 2)
++       + string_size
++       + address_count * addrsize_out;
++
++  ret = (hostent *) realloc_ent (sz, unionent::t_hostent);
++  if (! ret) 
++    {
++      old_errno = errno;
++      free (msg);
++      set_errno (old_errno);
++      h_errno = NETDB_INTERNAL;
++      return NULL;
++    }
++
++  ret->h_addrtype = af;
++  ret->h_length = addrsize_out;
++  ret->h_aliases = (char **) (((char *) ret) + DWORD_round (sizeof(hostent)));
++  ret->h_addr_list = ret->h_aliases + alias_count + 1;
++  string_ptr = (char *) (ret->h_addr_list + address_count + 1);
++ 
++  /* Rescan the answers */
++  ancount = alias_count + address_count; /* Valid records */
++  alias_count = address_count = 0;
++
++  for (i = 0, curptr = anptr; i < ancount; i++, curptr = curptr->next ())
++    {
++      antype = curptr->type;
++      if (antype == ns_t_cname) 
++	{
++	  complen = dn_expand (msg, eomsg, curptr->name (), string_ptr, string_size);
++#ifdef DEBUGGING
++	  if (complen != curptr->complen)  
++	    go to debugging;
++#endif
++	  ret->h_aliases[alias_count++] = string_ptr;
++	  namelen1 = curptr->namelen1;
++	  string_ptr += namelen1;
++	  string_size -= namelen1;	  
++	  continue;
++	}
++      if (antype == type)
++	    {
++	      if (address_count == 0)
++		{
++		  complen = dn_expand (msg, eomsg, curptr->name(), string_ptr, string_size);
++#ifdef DEBUGGING
++		  if (complen != curptr->complen)  
++		    go to debugging;
++#endif
++		  ret->h_name = string_ptr;
++		  namelen1 = curptr->namelen1;
++		  string_ptr += namelen1;
++		  string_size -= namelen1;	  
++		}
++	      ret->h_addr_list[address_count++] = string_ptr;
++	      if (addrsize_in != addrsize_out)
++		memcpy4to6 (string_ptr, curptr->data);
++	      else
++		memcpy (string_ptr, curptr->data, addrsize_in);
++	      string_ptr += addrsize_out;
++	      string_size -= addrsize_out;
++	      continue;
++	    }
++#ifdef DEBUGGING
++      /* Should not get here */
++      go to debugging;
++#endif
++    }
++#ifdef DEBUGGING
++  if (string_size < 0)  
++    go to debugging;
++#endif      
++  
++  free (msg);
++
++  ret->h_aliases[alias_count] = NULL;
++  ret->h_addr_list[address_count] = NULL;
++ 
++  return ret;
++
++ corrupted:
++  free (msg);
++  /* Hopefully message corruption errors are temporary.
++     Should it be NO_RECOVERY ? */
++  h_errno = TRY_AGAIN;
++  return NULL;
++
++
++#ifdef DEBUGGING
++ debugging:
++   system_printf ("Please debug.");
++   free (msg);
++   free (ret);
++   h_errno = NO_RECOVERY;
++   return NULL;
++#endif
++}
++
++/* gethostbyname2: standards? */
++extern "C" struct hostent *
++gethostbyname2 (const char *name, int af)
++{
++  sig_dispatch_pending ();
++  myfault efault;
++  if (efault.faulted (EFAULT))
++    return NULL;
++
++  if (!(_res.options & RES_INIT))
++      res_init();
++  bool v4to6 = _res.options & RES_USE_INET6;
++
++  int type, addrsize_in, addrsize_out;
++  switch (af) 
++    {
++    case AF_INET:
++      addrsize_in = NS_INADDRSZ;
++      addrsize_out = (v4to6) ? NS_IN6ADDRSZ : NS_INADDRSZ;
++      type = ns_t_a;
++      break;
++    case AF_INET6:
++      addrsize_in = addrsize_out = NS_IN6ADDRSZ;
++      type = ns_t_aaaa;
++      break;
++    default:
++      set_errno (EAFNOSUPPORT);
++      h_errno = NETDB_INTERNAL;
++      return NULL;
++    }
++  
++  return gethostby_helper (name, af, type, addrsize_in, addrsize_out);
++}
++
+ /* exported as accept: standards? */
+ extern "C" int
+ cygwin_accept (int fd, struct sockaddr *peer, socklen_t *len)
+@@ -2486,10 +2792,6 @@ cygwin_sendmsg (int fd, const struct msg
+  * SOFTWARE.
+  */
+ 
+-#define	IN6ADDRSZ	16
+-#define	INADDRSZ	 4
+-#define	INT16SZ		 2
+-
+ /* int
+  * inet_pton4(src, dst)
+  *	like inet_aton() but without all the hexadecimal and shorthand.
+Index: include/cygwin/version.h
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/include/cygwin/version.h,v
+retrieving revision 1.284
+diff -u -p -r1.284 version.h
+--- include/cygwin/version.h	19 Feb 2009 09:22:51 -0000	1.284
++++ include/cygwin/version.h	3 Mar 2009 11:54:12 -0000
+@@ -349,12 +349,13 @@ details. */
+       198: Export reallocf.
+       199: Export open_wmemstream.
+       200: Export mbsnrtowcs, wcsnrtombs.
++      201: Export gethostbyname2.
+      */
+ 
+      /* Note that we forgot to bump the api for ualarm, strtoll, strtoull */
+ 
+ #define CYGWIN_VERSION_API_MAJOR 0
+-#define CYGWIN_VERSION_API_MINOR 200
++#define CYGWIN_VERSION_API_MINOR 201
+ 
+      /* There is also a compatibity version number associated with the
+ 	shared memory regions.  It is incremented when incompatible
+Index: libc/minires.c
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/libc/minires.c,v
+retrieving revision 1.5
+diff -u -p -r1.5 minires.c
+--- libc/minires.c	3 Dec 2008 16:37:53 -0000	1.5
++++ libc/minires.c	3 Mar 2009 11:54:12 -0000
+@@ -1,6 +1,6 @@
+ /* minires.c.  Stub synchronous resolver for Cygwin.
+ 
+-   Copyright 2006, 2008 Red Hat, Inc.
++   Copyright 2006, 2008, 2009 Red Hat, Inc.
+ 
+    Written by Pierre A. Humblet <Pierre.Humblet@ieee.org>
+ 
+@@ -99,6 +99,11 @@ static void get_options(res_state statp,
+       DPRINTF(statp->options & RES_DEBUG, "%s: 1\n", words[i]);
+       continue;
+     }
++    if (!strcasecmp("inet6", words[i])) {
++      statp->options |= RES_USE_INET6;
++      DPRINTF(statp->options & RES_DEBUG, "%s: 1\n", words[i]);
++      continue;
++    }
+     if (!strcasecmp("osquery", words[i])) {
+       statp->use_os = 1;
+       DPRINTF(statp->options & RES_DEBUG, "%s: 1\n", words[i]);
+@@ -114,16 +119,22 @@ static void get_options(res_state statp,
+ 	 continue;
+ 	 }
+       */
+-      if (!strcasecmp("retry", words[i])) {
++      if (!strcasecmp("retry", words[i])
++	  || !strcasecmp("attempts", words[i])) {
+ 	if (value < 1)
+ 	  value = 1;
++	else if (value > RES_MAXRETRY)
++	  value = RES_MAXRETRY;
+ 	statp->retry = value;
+ 	DPRINTF(statp->options & RES_DEBUG, "%s: %d\n", words[i], value);
+ 	continue;
+       }
+-      if (!strcasecmp("retrans", words[i])) {
++      if (!strcasecmp("retrans", words[i])
++	  || !strcasecmp("timeout", words[i])) {
+ 	if (value < 1)
+ 	  value = 1;
++	else if (value > RES_MAXRETRANS)
++	  value = RES_MAXRETRANS;
+ 	statp->retrans = value;
+ 	DPRINTF(statp->options & RES_DEBUG, "%s: %d\n", words[i], value);
+ 	continue;
+@@ -270,6 +281,9 @@ int res_ninit(res_state statp)
+   int i;
+ 
+   statp->res_h_errno = NETDB_SUCCESS;
++   /* Only debug may be set before calling init */
++  statp->options &= RES_DEBUG;
++  statp->options |= RES_INIT | RES_DEFAULT;
+   statp->nscount = 0;
+   statp->os_query = NULL;
+   statp->retrans = RES_TIMEOUT; /* timeout in seconds */
+@@ -299,9 +313,6 @@ int res_ninit(res_state statp)
+     statp->nsaddr_list[i].sin_port = htons(NAMESERVER_PORT);
+     bzero(statp->nsaddr_list[i].sin_zero, sizeof(statp->nsaddr_list[i].sin_zero));
+   }
+-  /* Only debug may be set before calling init */
+-  statp->options &= RES_DEBUG;
+-  statp->options |= RES_INIT | RES_DEFAULT;
+   return 0;
+ }
+ 
+@@ -806,7 +817,7 @@ int dn_expand(const unsigned char *msg, 
+     exp_dn++;
+   else do {
+     if (len <= MAXLABEL) {
+-      if ((length -= (len + 1)) > 0 /* Need space for final . */
++      if ((length -= (len + 1)) >= 0 /* Need space for final . */
+ 	  && comp_dn + len <= eomorig) {
+ 	do { *exp_dn++ = *comp_dn++; } while (--len != 0);
+ 	*exp_dn++ = '.';
+@@ -836,7 +847,6 @@ expand_fail:
+   return -1;
+ }
+ 
+-
+ /*****************************************************************
+  *
+  dn_comp
+@@ -926,8 +936,7 @@ int dn_comp(const char * exp_dn, u_char 
+ }
+ 
+ /*****************************************************************
+- *
+- dn_skipname
++ * dn_skipname
+ 
+  Measures the compressed domain name length and returns it.
+  *****************************************************************/
+@@ -949,3 +958,38 @@ int dn_skipname(const unsigned char *com
+ 
+   return comp_dn - comp_dn_orig;
+ }
++
++/*****************************************************************
++ * dn_length1    For internal use
++
++ Return length of uncompressesed name incl final 0.
++ *****************************************************************/
++
++int dn_length1(const unsigned char *msg, const unsigned char *eomorig,
++	       const unsigned char *comp_dn)
++{
++  unsigned int len, length = 0;
++
++  errno = EINVAL;
++  if (comp_dn >= eomorig)
++    goto expand_fail;
++  else while ((len = *comp_dn++) != 0) {
++    if (len <= MAXLABEL) {
++      if ((comp_dn += len) <= eomorig)
++	length += len + 1;
++      else
++	goto expand_fail;
++    }
++    else if (len >= (128+64)) {
++      comp_dn = msg + (((len & ~(128+64)) << 8) + *comp_dn);
++      if (comp_dn >= eomorig)
++	goto expand_fail;
++    }
++    else
++      goto expand_fail;
++  }
++  return length;
++
++expand_fail:
++  return -1;
++}
 
---=====================_494863734==_--
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          cygwin AT cygwin DOT com
+Red Hat
