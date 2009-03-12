@@ -1,22 +1,20 @@
-Return-Path: <cygwin-patches-return-6432-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 25205 invoked by alias); 6 Mar 2009 16:33:04 -0000
-Received: (qmail 25164 invoked by uid 22791); 6 Mar 2009 16:33:02 -0000
+Return-Path: <cygwin-patches-return-6433-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 10257 invoked by alias); 12 Mar 2009 05:47:46 -0000
+Received: (qmail 10246 invoked by uid 22791); 12 Mar 2009 05:47:45 -0000
+X-SWARE-Spam-Status: No, hits=-2.0 required=5.0 	tests=AWL,BAYES_00,HK_OBFDOM,J_CHICKENPOX_52,SPF_PASS
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 06 Mar 2009 16:32:57 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 7F3C86D42F4; Fri,  6 Mar 2009 17:32:45 +0100 (CET)
-Date: Fri, 06 Mar 2009 16:33:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [Patch] gethostbyname2  again
-Message-ID: <20090306163245.GP10046@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <0KFW0072QPTQUMJ2@vms173001.mailsrvcs.net> <20090303153801.GA17180@ednor.casa.cgf.cx> <0b1b01c99c28$8a2c6540$4e0410ac@wirelessworld.airvananet.com> <20090306054449.GA3971@ednor.casa.cgf.cx> <029a01c99e69$94a1dbc0$4e0410ac@wirelessworld.airvananet.com> <20090306144928.GA5418@ednor.casa.cgf.cx> <02d701c99e74$10b71a40$4e0410ac@wirelessworld.airvananet.com>
+Received: from mail-qy0-f115.google.com (HELO mail-qy0-f115.google.com) (209.85.221.115)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 12 Mar 2009 05:47:41 +0000
+Received: by qyk13 with SMTP id 13so522968qyk.18         for <cygwin-patches@cygwin.com>; Wed, 11 Mar 2009 22:47:38 -0700 (PDT)
+Received: by 10.224.67.76 with SMTP id q12mr12514376qai.279.1236836858540;         Wed, 11 Mar 2009 22:47:38 -0700 (PDT)
+Received: from ?192.168.0.101? (S0106001346f94b85.wp.shawcable.net [24.76.249.6])         by mx.google.com with ESMTPS id 5sm810625ywd.39.2009.03.11.22.47.37         (version=TLSv1/SSLv3 cipher=RC4-MD5);         Wed, 11 Mar 2009 22:47:38 -0700 (PDT)
+Message-ID: <49B8A1F8.1030306@users.sourceforge.net>
+Date: Thu, 12 Mar 2009 05:47:00 -0000
+From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
+User-Agent: Thunderbird 2.0.0.19 (Windows/20081209)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <02d701c99e74$10b71a40$4e0410ac@wirelessworld.airvananet.com>
-User-Agent: Mutt/1.5.19 (2009-02-20)
+To: cygwin-patches@cygwin.com
+Subject: errno.h: ESTRPIPE
+Content-Type: multipart/mixed;  boundary="------------070808010905040705020805"
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,29 +24,58 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q1/txt/msg00030.txt.bz2
+X-SW-Source: 2009-q1/txt/msg00031.txt.bz2
 
-On Mar  6 10:56, Pierre A. Humblet wrote:
-> From: "Christopher Faylor" <cgf-use-the-mailinglist-please>
-> | This is ok with one very minor formatting nit.  Please check in with an
-> | appropriate changelog.
-> | 
-> | >+static inline hostent *
-> | >+realloc_ent (int sz, hostent * )
-> |                                ^
-> |                          extra space
-> 
-> OK. I can't do that before Mon eve. It would be easier if Corinna could merge this
-> patch and the previous one (she has the latest version) and apply the whole thing
-> at once, with one changelog  block. 
+This is a multi-part message in MIME format.
+--------------070808010905040705020805
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+Content-length: 459
 
-Done.  Thanks again for this function.  This will give us a few new
-occasions for the future, as I pointed out in my first reply.
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+Corresponding patch just sent to newlib@.
+
+2009-03-11  Yaakov Selkowitz <yselkowitz@users.sourceforge.net>
+
+	* errno.cc (_sys_errlist): Add ESTRPIPE.
 
 
-Corinna
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.9 (Cygwin)
+Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org
+
+iEYEAREIAAYFAkm4ofgACgkQpiWmPGlmQSMrMACeJvUcrUQDnIrEVoiV58hruydi
+Wb4AnRfbMgIVXEuH5qyvsrARXfJfWY7t
+=4jCZ
+-----END PGP SIGNATURE-----
+
+--------------070808010905040705020805
+Content-Type: text/x-patch;
+ name="winsup-ESTRPIPE.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline;
+ filename="winsup-ESTRPIPE.patch"
+Content-length: 690
+
+Index: cygwin/errno.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/errno.cc,v
+retrieving revision 1.70
+diff -u -r1.70 errno.cc
+--- cygwin/errno.cc	16 Jan 2009 12:17:27 -0000	1.70
++++ cygwin/errno.cc	12 Mar 2009 05:42:24 -0000
+@@ -287,7 +287,8 @@
+ /* EOVERFLOW 139 */	  "Value too large for defined data type",
+ /* ECANCELED 140 */	  "Operation canceled",
+ /* ENOTRECOVERABLE 141 */ "State not recoverable",
+-/* EOWNERDEAD 142 */	  "Previous owner died"
++/* EOWNERDEAD 142 */	  "Previous owner died",
++/* ESTRPIPE 143 */	  "Streams pipe error"
+ };
+ 
+ int NO_COPY_INIT _sys_nerr = sizeof (_sys_errlist) / sizeof (_sys_errlist[0]);
+
+--------------070808010905040705020805--
