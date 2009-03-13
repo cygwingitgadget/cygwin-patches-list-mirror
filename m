@@ -1,23 +1,23 @@
-Return-Path: <cygwin-patches-return-6439-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 5465 invoked by alias); 13 Mar 2009 14:51:16 -0000
-Received: (qmail 5455 invoked by uid 22791); 13 Mar 2009 14:51:15 -0000
+Return-Path: <cygwin-patches-return-6440-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 7776 invoked by alias); 13 Mar 2009 18:16:50 -0000
+Received: (qmail 7766 invoked by uid 22791); 13 Mar 2009 18:16:49 -0000
+X-SWARE-Spam-Status: No, hits=-2.2 required=5.0 	tests=AWL,BAYES_00
 X-Spam-Check-By: sourceware.org
-Received: from pool-173-76-42-111.bstnma.fios.verizon.net (HELO cgf.cx) (173.76.42.111)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 13 Mar 2009 14:50:37 +0000
-Received: from ednor.cgf.cx (ednor.casa.cgf.cx [192.168.187.5]) 	by cgf.cx (Postfix) with ESMTP id BB7AA13C022 	for <cygwin-patches@cygwin.com>; Fri, 13 Mar 2009 10:50:26 -0400 (EDT)
-Received: by ednor.cgf.cx (Postfix, from userid 201) 	id AC4D92B385; Fri, 13 Mar 2009 10:50:26 -0400 (EDT)
-Date: Fri, 13 Mar 2009 14:51:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
+Received: from etr-usa.com (HELO etr-usa.com) (130.94.180.135)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 13 Mar 2009 18:16:42 +0000
+Received: (qmail 13886 invoked by uid 13447); 13 Mar 2009 18:16:40 -0000
+Received: from unknown (HELO [172.20.0.42]) ([71.213.157.42])           (envelope-sender <warren@etr-usa.com>)           by 130.94.180.135 (qmail-ldap-1.03) with SMTP           for <cygwin-patches@cygwin.com>; 13 Mar 2009 18:16:40 -0000
+Message-ID: <49BAA2F4.1060907@etr-usa.com>
+Date: Fri, 13 Mar 2009 18:16:00 -0000
+From: Warren Young <warren@etr-usa.com>
+User-Agent: Thunderbird 2.0.0.19 (Windows/20081209)
+MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
 Subject: Re: errno.h: ESTRPIPE
-Message-ID: <20090313145026.GB11253@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <49B8A1F8.1030306@users.sourceforge.net> <20090312085748.GE14431@calimero.vinschen.de> <49B98AC4.1040202@users.sourceforge.net> <20090313103036.GA13010@calimero.vinschen.de> <49BA4D48.1030705@etr-usa.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <49BA4D48.1030705@etr-usa.com>
-User-Agent: Mutt/1.5.16 (2007-06-09)
+References: <49B8A1F8.1030306@users.sourceforge.net> <20090312085748.GE14431@calimero.vinschen.de> <49B98AC4.1040202@users.sourceforge.net> <20090313103036.GA13010@calimero.vinschen.de> <49BA4D48.1030705@etr-usa.com> <20090313145026.GB11253@ednor.casa.cgf.cx>
+In-Reply-To: <20090313145026.GB11253@ednor.casa.cgf.cx>
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -27,37 +27,22 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q1/txt/msg00037.txt.bz2
+X-SW-Source: 2009-q1/txt/msg00038.txt.bz2
 
-On Fri, Mar 13, 2009 at 06:10:48AM -0600, Warren Young wrote:
-> Corinna Vinschen wrote:
->> This is very Linux device specific and this never occurs on Cygwin.
->> What about just defining this error code to some arbitrary value like
->>   #ifdef __CYGWIN__
->>   #define ESTRPIPE 9999
->>   #endif
->
-> I like it.  If there are any other errno constants supported by Linux but 
-> not Cygwin, you could also define them with the same value.  It would 
-> effectively be the "this never happens" value.
+Christopher Faylor wrote:
+> Defining a unique value means that, if we do decide at some point to add
+> functionality which utilizes that errno the will be no need to recompile
+> the application.
 
-I'm not sure that you got this but I think Corinna was suggesting that
-this should be defined in the code in question rather than in Cygwin
-itself.
+If you think Cygwin might at some point learn to send certain errnos, 
+they should use low values, as the standard ones do.  The point of using 
+9999 is to say "we'll never need this one," perhaps because it just 
+doesn't make sense for Cygwin.
 
-I don't have a problem defining unique errnos that currently never
-happen if it makes Cygwin more compatible with Linux.  I just think that
-the value should be marked as
-
-/* Linux compatibility: this currently can never happen */
-
-Yaakov's intent was to reduce the amount of special casing required when
-porting to Cygwin to remove the need to do #ifdef __CYGWIN__'s.  I think
-he knows that he could have ifdef'ed this since I suspect that he's had
-to do that many times in the past.
-
-Defining a unique value means that, if we do decide at some point to add
-functionality which utilizes that errno the will be no need to recompile
-the application.
-
-cgf
+I'd be surprised if there were actually errnos used by other *ixes that 
+Cygwin currently doesn't use, which are also not understood well enough 
+such that you can't predict whether Cygwin will ever need them for more 
+than compatibility.  Obviously the future is wide open and holds endless 
+surprises, but isn't Cygwin mature enough by now that its wish list is 
+mostly populated by obvious things?  Is there really a lot of stuff 
+coming in these days where you say, "didn't see that coming!"?
