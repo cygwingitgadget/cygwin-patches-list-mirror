@@ -1,22 +1,20 @@
-Return-Path: <cygwin-patches-return-6440-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 7776 invoked by alias); 13 Mar 2009 18:16:50 -0000
-Received: (qmail 7766 invoked by uid 22791); 13 Mar 2009 18:16:49 -0000
-X-SWARE-Spam-Status: No, hits=-2.2 required=5.0 	tests=AWL,BAYES_00
+Return-Path: <cygwin-patches-return-6441-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 32436 invoked by alias); 13 Mar 2009 19:48:32 -0000
+Received: (qmail 31991 invoked by uid 22791); 13 Mar 2009 19:48:31 -0000
+X-SWARE-Spam-Status: No, hits=-2.6 required=5.0 	tests=BAYES_00
 X-Spam-Check-By: sourceware.org
-Received: from etr-usa.com (HELO etr-usa.com) (130.94.180.135)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 13 Mar 2009 18:16:42 +0000
-Received: (qmail 13886 invoked by uid 13447); 13 Mar 2009 18:16:40 -0000
-Received: from unknown (HELO [172.20.0.42]) ([71.213.157.42])           (envelope-sender <warren@etr-usa.com>)           by 130.94.180.135 (qmail-ldap-1.03) with SMTP           for <cygwin-patches@cygwin.com>; 13 Mar 2009 18:16:40 -0000
-Message-ID: <49BAA2F4.1060907@etr-usa.com>
-Date: Fri, 13 Mar 2009 18:16:00 -0000
-From: Warren Young <warren@etr-usa.com>
-User-Agent: Thunderbird 2.0.0.19 (Windows/20081209)
+Received: from axentia.se (HELO axentia.se) (87.96.186.132)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 13 Mar 2009 19:48:25 +0000
+Subject: RE: errno.h: ESTRPIPE
+Date: Fri, 13 Mar 2009 19:48:00 -0000
 MIME-Version: 1.0
-To: cygwin-patches@cygwin.com
-Subject: Re: errno.h: ESTRPIPE
-References: <49B8A1F8.1030306@users.sourceforge.net> <20090312085748.GE14431@calimero.vinschen.de> <49B98AC4.1040202@users.sourceforge.net> <20090313103036.GA13010@calimero.vinschen.de> <49BA4D48.1030705@etr-usa.com> <20090313145026.GB11253@ednor.casa.cgf.cx>
-In-Reply-To: <20090313145026.GB11253@ednor.casa.cgf.cx>
-Content-Type: text/plain; charset=ISO-8859-1; format=flowed
-Content-Transfer-Encoding: 7bit
+Message-ID: <BF8A7E40A996804A81035E1D83DD64FF34F79E@saxon.Axentiatech.local>
+Content-Type: text/plain; 	charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <49BA4D48.1030705@etr-usa.com>
+Content-class: urn:content-classes:message
+References: <49B8A1F8.1030306@users.sourceforge.net> <20090312085748.GE14431@calimero.vinschen.de> <49B98AC4.1040202@users.sourceforge.net> <20090313103036.GA13010@calimero.vinschen.de> <49BA4D48.1030705@etr-usa.com>
+From: "Peter Rosin" <peda@axentia.se>
+To: <cygwin-patches@cygwin.com>
 X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -27,22 +25,37 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q1/txt/msg00038.txt.bz2
+X-SW-Source: 2009-q1/txt/msg00039.txt.bz2
 
-Christopher Faylor wrote:
-> Defining a unique value means that, if we do decide at some point to add
-> functionality which utilizes that errno the will be no need to recompile
-> the application.
+Warren Young skrev:
+> Corinna Vinschen wrote:
+> > This is very Linux device specific and this never occurs on Cygwin.
+> > What about just defining this error code to some arbitrary=20
+> value like
+> >=20
+> >   #ifdef __CYGWIN__
+> >   #define ESTRPIPE 9999
+> >   #endif
+>=20
+> I like it.  If there are any other errno constants supported by Linux=20
+> but not Cygwin, you could also define them with the same value.  It=20
+> would effectively be the "this never happens" value.
 
-If you think Cygwin might at some point learn to send certain errnos, 
-they should use low values, as the standard ones do.  The point of using 
-9999 is to say "we'll never need this one," perhaps because it just 
-doesn't make sense for Cygwin.
+That a bad suggestion.
 
-I'd be surprised if there were actually errnos used by other *ixes that 
-Cygwin currently doesn't use, which are also not understood well enough 
-such that you can't predict whether Cygwin will ever need them for more 
-than compatibility.  Obviously the future is wide open and holds endless 
-surprises, but isn't Cygwin mature enough by now that its wish list is 
-mostly populated by obvious things?  Is there really a lot of stuff 
-coming in these days where you say, "didn't see that coming!"?
+Consider code like this:
+
+switch (errno) {
+case -ESTRPIPE:
+	capers();
+	break;
+case -EFOOBAR:
+	cucumber();
+	break;
+}
+
+If both ESTRPIPE and EFOOBAR are defined to 9999 that doesn't work too
+well, and you end up having cygwin specific patches in any case.
+
+Cheers,
+Peter
