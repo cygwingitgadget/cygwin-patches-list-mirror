@@ -1,23 +1,24 @@
-Return-Path: <cygwin-patches-return-6471-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 23125 invoked by alias); 4 Apr 2009 03:36:03 -0000
-Received: (qmail 22795 invoked by uid 22791); 4 Apr 2009 03:36:02 -0000
+Return-Path: <cygwin-patches-return-6472-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 27095 invoked by alias); 4 Apr 2009 04:01:00 -0000
+Received: (qmail 27077 invoked by uid 22791); 4 Apr 2009 04:00:59 -0000
+X-SWARE-Spam-Status: No, hits=-2.4 required=5.0 	tests=AWL,BAYES_00,SPF_PASS
 X-Spam-Check-By: sourceware.org
-Received: from pool-173-76-58-89.bstnma.fios.verizon.net (HELO cgf.cx) (173.76.58.89)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sat, 04 Apr 2009 03:35:55 +0000
-Received: from ednor.cgf.cx (ednor.casa.cgf.cx [192.168.187.5]) 	by cgf.cx (Postfix) with ESMTP id 374E713C022 	for <cygwin-patches@cygwin.com>; Fri,  3 Apr 2009 23:35:45 -0400 (EDT)
-Received: by ednor.cgf.cx (Postfix, from userid 201) 	id 29B7B331501; Fri,  3 Apr 2009 23:35:45 -0400 (EDT)
-Date: Sat, 04 Apr 2009 03:36:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
+Received: from mail-ew0-f173.google.com (HELO mail-ew0-f173.google.com) (209.85.219.173)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sat, 04 Apr 2009 04:00:54 +0000
+Received: by ewy21 with SMTP id 21so1241962ewy.2         for <cygwin-patches@cygwin.com>; Fri, 03 Apr 2009 21:00:51 -0700 (PDT)
+Received: by 10.210.116.16 with SMTP id o16mr1460270ebc.13.1238817651802;         Fri, 03 Apr 2009 21:00:51 -0700 (PDT)
+Received: from ?82.6.108.62? (cpc2-cmbg8-0-0-cust61.cmbg.cable.ntl.com [82.6.108.62])         by mx.google.com with ESMTPS id 10sm3835344eyz.49.2009.04.03.21.00.51         (version=SSLv3 cipher=RC4-MD5);         Fri, 03 Apr 2009 21:00:51 -0700 (PDT)
+Message-ID: <49D6DDDD.4030504@gmail.com>
+Date: Sat, 04 Apr 2009 04:01:00 -0000
+From: Dave Korn <dave.korn.cygwin@googlemail.com>
+User-Agent: Thunderbird 2.0.0.17 (Windows/20080914)
+MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] Fix type inconsistencies in stdint.h
-Message-ID: <20090404033545.GA3386@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <49D6B8D7.4020907@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <49D6B8D7.4020907@gmail.com>
-User-Agent: Mutt/1.5.16 (2007-06-09)
+References: <49D6B8D7.4020907@gmail.com> <20090404033545.GA3386@ednor.casa.cgf.cx>
+In-Reply-To: <20090404033545.GA3386@ednor.casa.cgf.cx>
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -27,48 +28,23 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q2/txt/msg00013.txt.bz2
+X-SW-Source: 2009-q2/txt/msg00014.txt.bz2
 
-On Sat, Apr 04, 2009 at 02:33:11AM +0100, Dave Korn wrote:
->
->    Hi team,
->
->  Upstream GCC just gained the ability to know all about the stdint.h types
->and limits internally.  If you're interested in the background, see
->
->    http://gcc.gnu.org/ml/gcc/2009-04/msg00000.html
->
->and thread for further reading.
->
->  I've submitted the necessary info for the cygwin GCC backend, and now the
->associated testcases show up a few bugs in our stdint.h declarations.
->Basically:-
->
->- uint32_t is "unsigned int", but UINT32_MAX is an unsigned long int constant
->(denoted by the 'UL' suffix).
->- int_least32_t is "long", where INT_LEAST32_MIN and INT_LEAST32_MAX are plain
->(unsuffixed) int constants.
->- int_fast16_t and int_fast32_t are both "long", where INT_FAST16/32_MIN/MAX
->are all plain (unsuffixed) ints.
->- intptr_t is "long" but INTPTR_MIN and INTPTR_MAX lack the "L" suffix and so
->are just ints.
->- size_t is "unsigned int" but the SIZE_MAX constant is unsigned long.
->
->  This is bad because if the value of one of these MIN or MAX limits is not of
->the correct integer type matching the integer type it is used in conjunction
->with, there will be an implicit cast operation anytime you assign the
->wrongly-typed value to a variable of the type for which it is supposed to be
->the limit.
->
->  The attached patch fixes all these by adjusting only the suffix letters.  OK
->for head?
->
->winsup/cygwin/ChangeLog
->
->	* include/stdint.h (UINT32_MAX, INT_LEAST32_MIN, INT_LEAST32_MAX,
->	INT_FAST16_MIN, INT_FAST32_MIN, INT_FAST16_MAX, INT_FAST32_MAX,
->	INTPTR_MIN, INTPTR_MAX, SIZE_MAX):  Fix integer constant suffixes.
+Christopher Faylor wrote:
 
-Many of the changes introduce divergence from Linux.  Why is that?
+>>  The attached patch fixes all these by adjusting only the suffix letters.  OK
+>> for head?
+>>
+>> winsup/cygwin/ChangeLog
+>>
+>> 	* include/stdint.h (UINT32_MAX, INT_LEAST32_MIN, INT_LEAST32_MAX,
+>> 	INT_FAST16_MIN, INT_FAST32_MIN, INT_FAST16_MAX, INT_FAST32_MAX,
+>> 	INTPTR_MIN, INTPTR_MAX, SIZE_MAX):  Fix integer constant suffixes.
+> 
+> Many of the changes introduce divergence from Linux.  Why is that?
 
-cgf
+  Because our stdint.h types are divergent from Linux, and changing them
+instead could cause yet another ABI break.
+
+    cheers,
+      DaveK
