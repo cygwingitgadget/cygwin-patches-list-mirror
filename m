@@ -1,24 +1,22 @@
-Return-Path: <cygwin-patches-return-6476-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 5511 invoked by alias); 4 Apr 2009 07:13:40 -0000
-Received: (qmail 5501 invoked by uid 22791); 4 Apr 2009 07:13:39 -0000
-X-SWARE-Spam-Status: No, hits=-2.4 required=5.0 	tests=AWL,BAYES_00,SPF_PASS
+Return-Path: <cygwin-patches-return-6477-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 19987 invoked by alias); 4 Apr 2009 09:45:14 -0000
+Received: (qmail 19976 invoked by uid 22791); 4 Apr 2009 09:45:13 -0000
 X-Spam-Check-By: sourceware.org
-Received: from mail-ew0-f173.google.com (HELO mail-ew0-f173.google.com) (209.85.219.173)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sat, 04 Apr 2009 07:13:33 +0000
-Received: by ewy21 with SMTP id 21so1266283ewy.2         for <cygwin-patches@cygwin.com>; Sat, 04 Apr 2009 00:13:31 -0700 (PDT)
-Received: by 10.210.71.13 with SMTP id t13mr1540159eba.80.1238829210982;         Sat, 04 Apr 2009 00:13:30 -0700 (PDT)
-Received: from ?82.6.108.62? (cpc2-cmbg8-0-0-cust61.cmbg.cable.ntl.com [82.6.108.62])         by mx.google.com with ESMTPS id 23sm3953284eya.26.2009.04.04.00.13.30         (version=SSLv3 cipher=RC4-MD5);         Sat, 04 Apr 2009 00:13:30 -0700 (PDT)
-Message-ID: <49D70B05.6020509@gmail.com>
-Date: Sat, 04 Apr 2009 07:13:00 -0000
-From: Dave Korn <dave.korn.cygwin@googlemail.com>
-User-Agent: Thunderbird 2.0.0.17 (Windows/20080914)
-MIME-Version: 1.0
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sat, 04 Apr 2009 09:45:07 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 181486D554E; Sat,  4 Apr 2009 11:44:51 +0200 (CEST)
+Date: Sat, 04 Apr 2009 09:45:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Fix type inconsistencies in stdint.h
-References: <49D6B8D7.4020907@gmail.com> <20090404033545.GA3386@ednor.casa.cgf.cx> <49D6DDDD.4030504@gmail.com> <20090404062459.GB22452@ednor.casa.cgf.cx>
-In-Reply-To: <20090404062459.GB22452@ednor.casa.cgf.cx>
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 7bit
-X-IsSubscribed: yes
+Subject: Re: [PATCH] Add uchar.h
+Message-ID: <20090404094450.GA7844@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <49D60CC2.8090205@gmail.com> <20090403143528.GA468@calimero.vinschen.de> <49D69271.7040805@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <49D69271.7040805@gmail.com>
+User-Agent: Mutt/1.5.19 (2009-02-20)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -28,31 +26,48 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q2/txt/msg00018.txt.bz2
+X-SW-Source: 2009-q2/txt/msg00019.txt.bz2
 
-Christopher Faylor wrote:
+On Apr  3 23:49, Dave Korn wrote:
+> Corinna Vinschen wrote:
+> > On Apr  3 14:18, Dave Korn wrote:
+> >> Dave Korn wrote:
+> >>>  I've got a bit of a load on right now what with gcc back in stage1.
+> >>   However, as part of dealing with that I did try throwing together one of
+> >> these.  I wrote this from scratch based solely on reading n1040; it's
+> >> skeletal, but at least provides the two new unicode typedefs.  Want it?
+> > 
+> > Care to explain?
+> > 
+> > - What's n1040?
+> 
+>   An extension to the language standard specified by the ISO/IEC
+> JTC1/SC22/WG14 working group for the C language and targeted for the
+> forthcoming C1X update.
+> 
+> http://www.open-std.org/jtc1/sc22/WG14/
+> 
+> and specifically
+> 
+> http://www.open-std.org/jtc1/sc22/WG14/www/projects#19769
+> 
+> TR 19769: New character types in C
+> 
+> WG14 is working on a TR on new character types, including support for UTF-16.
+> The title is: TR 19769 - Extensions for the programming language C to support
+> new character data types. The latest draft, approved for publication, is in
+> document N1040.
 
-  Ah, I could address a bit more to these two questions as well:
+Thank you, I read it now.  Apart from thinking that it's a tad bit early
+to introduce this header, I also think this would better fit into
+newlib.  Btw, the functionality is quite easy to hack.  If this actually
+becomes a standard, we can very quickly introduce the header *and* the
+implementation.
 
-> Isn't a long 32 bits?  What would be the ABI breakage in changing that
-> one typedef rather than lots of #defines?  
 
-  Yes, a long is 32 bits, but while that makes for binary ABI
-(calling-convention) compatibility it isn't the same thing in the C and C++
-types system.  Therefore the underlying types are an inextricably woven part
-of the overall C-language ABI as well as their physical bit sizes.  Changing
-them certainly has the potential to change the ABI, particularly in C++, but I
-think it also might potentially render some of the compiler's aliasing
-assumptions invalid when linking code using the new definitions against
-objects or libraries using the old.
+Corinna
 
-  Changing the limits #defines, OTOH, is absolutely guaranteed ABI neutral.
-They really are "just constants" at runtime, and constants don't get mangled
-or alias anything.  So I reckon it's a safer way to proceed and I don't yet
-see any potential 64-bit problems down the line if we leave everything as it
-currently stands.
-
-  Can you see anything I've overlooked in this analysis?
-
-    cheers,
-      DaveK
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          cygwin AT cygwin DOT com
+Red Hat
