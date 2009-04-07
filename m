@@ -1,22 +1,23 @@
-Return-Path: <cygwin-patches-return-6490-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 15766 invoked by alias); 7 Apr 2009 13:15:55 -0000
-Received: (qmail 15754 invoked by uid 22791); 7 Apr 2009 13:15:52 -0000
+Return-Path: <cygwin-patches-return-6491-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 14492 invoked by alias); 7 Apr 2009 14:47:29 -0000
+Received: (qmail 14153 invoked by uid 22791); 7 Apr 2009 14:47:15 -0000
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 07 Apr 2009 13:15:45 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 8E3826D5521; Tue,  7 Apr 2009 15:15:34 +0200 (CEST)
-Date: Tue, 07 Apr 2009 13:15:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Received: from pool-173-76-58-89.bstnma.fios.verizon.net (HELO cgf.cx) (173.76.58.89)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 07 Apr 2009 14:47:11 +0000
+Received: from ednor.cgf.cx (ednor.casa.cgf.cx [192.168.187.5]) 	by cgf.cx (Postfix) with ESMTP id AA2BA13C022 	for <cygwin-patches@cygwin.com>; Tue,  7 Apr 2009 10:47:00 -0400 (EDT)
+Received: by ednor.cgf.cx (Postfix, from userid 201) 	id 7176C60E37B; Tue,  7 Apr 2009 10:47:00 -0400 (EDT)
+Date: Tue, 07 Apr 2009 14:47:00 -0000
+From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] Fix type inconsistencies in stdint.h
-Message-ID: <20090407131534.GY852@calimero.vinschen.de>
+Message-ID: <20090407144659.GA22338@ednor.casa.cgf.cx>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <49D6B8D7.4020907@gmail.com> <20090404033545.GA3386@ednor.casa.cgf.cx> <49D6DDDD.4030504@gmail.com> <20090404062459.GB22452@ednor.casa.cgf.cx> <49DB4D95.7000903@byu.net> <49DB4FC4.7020903@cwilson.fastmail.fm>
+References: <49D6B8D7.4020907@gmail.com> <20090404033545.GA3386@ednor.casa.cgf.cx> <49D6DDDD.4030504@gmail.com> <20090404062459.GB22452@ednor.casa.cgf.cx> <49D70B05.6020509@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <49DB4FC4.7020903@cwilson.fastmail.fm>
-User-Agent: Mutt/1.5.19 (2009-02-20)
+In-Reply-To: <49D70B05.6020509@gmail.com>
+User-Agent: Mutt/1.5.16 (2007-06-09)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,127 +27,38 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q2/txt/msg00032.txt.bz2
+X-SW-Source: 2009-q2/txt/msg00033.txt.bz2
 
-On Apr  7 09:06, Charles Wilson wrote:
-> Eric Blake wrote:
-> > Making the ABI change now (which
-> > probably won't affect C apps, but will definitely affect any C++ code that
-> > used uint32_t and friends in mangled names) 
-> >
-> > But I'm with Dave that IF we decide
-> > the ABI change is the right thing to do, then NOW is the only time worth
-> > doing it.
-> 
-> Especially as the transition to
-> gcc4/dw2-eh/shared-libgcc/shared-libstdc++/--enable-fully-dynamic-string
-> is *definitely* an ABI break for C++, anyway.
+On Sat, Apr 04, 2009 at 08:23:49AM +0100, Dave Korn wrote:
+>Christopher Faylor wrote:
+>
+>  Ah, I could address a bit more to these two questions as well:
+>
+>> Isn't a long 32 bits?  What would be the ABI breakage in changing that
+>> one typedef rather than lots of #defines?  
+>
+>  Yes, a long is 32 bits, but while that makes for binary ABI
+>(calling-convention) compatibility it isn't the same thing in the C and C++
+>types system.  Therefore the underlying types are an inextricably woven part
+>of the overall C-language ABI as well as their physical bit sizes.  Changing
+>them certainly has the potential to change the ABI, particularly in C++, but I
+>think it also might potentially render some of the compiler's aliasing
+>assumptions invalid when linking code using the new definitions against
+>objects or libraries using the old.
+>
+>Changing the limits #defines, OTOH, is absolutely guaranteed ABI
+>neutral.  They really are "just constants" at runtime, and constants
+>don't get mangled or alias anything.  So I reckon it's a safer way to
+>proceed and I don't yet see any potential 64-bit problems down the line
+>if we leave everything as it currently stands.
+>
+>Can you see anything I've overlooked in this analysis?
 
-Good point, I guess.  So, if we all agree on that, I'd suggest to
-change Dave's patch to the one below.
+I don't entirely understand when people think it's ok to make sweeping
+changes for 1.7 and when they think we need to be conservative.
 
+I think it is very regrettable that Cygwin doesn't have the same int
+types as linux and it would be interesting to see how much would be
+broken by changing these types.
 
-Corinna
-
-
-	* include/stdint.h (int_least32_t): Define as int.
-	(uint_least32_t): Ditto, unsigned.
-	(int_fast16_t): Define as int.
-	(int_fast32_t): Ditto.
-	(uint_fast16_t): Ditto, unsigned.
-	(uint_fast32_t): Ditto.
-	(UINT32_MAX): Remove `L' long marker.
-	(UINT_LEAST32_MAX): Ditto.
-	(UINT_FAST16_MAX): Ditto.
-	(UINT_FAST32_MAX): Ditto.
-	(INT32_C): Ditto.
-	(UINT32_C): Ditto.
-
-
-Index: include/stdint.h
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/include/stdint.h,v
-retrieving revision 1.10
-diff -u -p -r1.10 stdint.h
---- include/stdint.h	17 May 2008 21:34:05 -0000	1.10
-+++ include/stdint.h	7 Apr 2009 13:12:48 -0000
-@@ -33,24 +33,24 @@ typedef unsigned long long uint64_t;
- 
- typedef signed char int_least8_t;
- typedef short int_least16_t;
--typedef long int_least32_t;
-+typedef int int_least32_t;
- typedef long long int_least64_t;
- 
- typedef unsigned char uint_least8_t;
- typedef unsigned short uint_least16_t;
--typedef unsigned long uint_least32_t;
-+typedef unsigned int uint_least32_t;
- typedef unsigned long long uint_least64_t;
- 
- /* Fastest minimum-width integer types */
- 
- typedef signed char int_fast8_t;
--typedef long int_fast16_t;
--typedef long int_fast32_t;
-+typedef int int_fast16_t;
-+typedef int int_fast32_t;
- typedef long long int_fast64_t;
- 
- typedef unsigned char uint_fast8_t;
--typedef unsigned long uint_fast16_t;
--typedef unsigned long uint_fast32_t;
-+typedef unsigned int uint_fast16_t;
-+typedef unsigned int uint_fast32_t;
- typedef unsigned long long uint_fast64_t;
- 
- /* Integer types capable of holding object pointers */
-@@ -80,7 +80,7 @@ typedef unsigned long long uintmax_t;
- 
- #define UINT8_MAX (255)
- #define UINT16_MAX (65535)
--#define UINT32_MAX (4294967295UL)
-+#define UINT32_MAX (4294967295U)
- #define UINT64_MAX (18446744073709551615ULL)
- 
- /* Limits of minimum-width integer types */
-@@ -97,7 +97,7 @@ typedef unsigned long long uintmax_t;
- 
- #define UINT_LEAST8_MAX (255)
- #define UINT_LEAST16_MAX (65535)
--#define UINT_LEAST32_MAX (4294967295UL)
-+#define UINT_LEAST32_MAX (4294967295U)
- #define UINT_LEAST64_MAX (18446744073709551615ULL)
- 
- /* Limits of fastest minimum-width integer types */
-@@ -113,8 +113,8 @@ typedef unsigned long long uintmax_t;
- #define INT_FAST64_MAX (9223372036854775807LL)
- 
- #define UINT_FAST8_MAX (255)
--#define UINT_FAST16_MAX (4294967295UL)
--#define UINT_FAST32_MAX (4294967295UL)
-+#define UINT_FAST16_MAX (4294967295U)
-+#define UINT_FAST32_MAX (4294967295U)
- #define UINT_FAST64_MAX (18446744073709551615ULL)
- 
- /* Limits of integer types capable of holding object pointers */
-@@ -166,12 +166,12 @@ typedef unsigned long long uintmax_t;
- 
- #define INT8_C(x) x
- #define INT16_C(x) x
--#define INT32_C(x) x ## L
-+#define INT32_C(x) x
- #define INT64_C(x) x ## LL
- 
- #define UINT8_C(x) x
- #define UINT16_C(x) x
--#define UINT32_C(x) x ## UL
-+#define UINT32_C(x) x ## U
- #define UINT64_C(x) x ## ULL
- 
- /* Macros for greatest-width integer constant expressions */
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+cgf
