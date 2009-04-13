@@ -1,23 +1,24 @@
-Return-Path: <cygwin-patches-return-6508-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 25023 invoked by alias); 13 Apr 2009 16:59:39 -0000
-Received: (qmail 25010 invoked by uid 22791); 13 Apr 2009 16:59:38 -0000
+Return-Path: <cygwin-patches-return-6509-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 12248 invoked by alias); 13 Apr 2009 17:23:42 -0000
+Received: (qmail 12236 invoked by uid 22791); 13 Apr 2009 17:23:41 -0000
+X-SWARE-Spam-Status: No, hits=-2.4 required=5.0 	tests=AWL,BAYES_00,SPF_PASS
 X-Spam-Check-By: sourceware.org
-Received: from pool-173-76-58-89.bstnma.fios.verizon.net (HELO cgf.cx) (173.76.58.89)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 13 Apr 2009 16:59:33 +0000
-Received: from ednor.cgf.cx (ednor.casa.cgf.cx [192.168.187.5]) 	by cgf.cx (Postfix) with ESMTP id 6010B13C023 	for <cygwin-patches@cygwin.com>; Mon, 13 Apr 2009 12:59:23 -0400 (EDT)
-Received: by ednor.cgf.cx (Postfix, from userid 201) 	id 5A8222B35E; Mon, 13 Apr 2009 12:59:23 -0400 (EDT)
-Date: Mon, 13 Apr 2009 16:59:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Add libz to dumper.exe link  [was Re: Re: speclib vs. 	-lc  trouble.]
-Message-ID: <20090413165923.GA13222@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <49E3641E.6040407@gmail.com>
+Received: from mail-fx0-f176.google.com (HELO mail-fx0-f176.google.com) (209.85.220.176)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 13 Apr 2009 17:23:37 +0000
+Received: by fxm24 with SMTP id 24so2280487fxm.2         for <cygwin-patches@cygwin.com>; Mon, 13 Apr 2009 10:23:34 -0700 (PDT)
+Received: by 10.103.6.18 with SMTP id j18mr3443531mui.33.1239643413910;         Mon, 13 Apr 2009 10:23:33 -0700 (PDT)
+Received: from ?82.6.108.62? (cpc2-cmbg8-0-0-cust61.cmbg.cable.ntl.com [82.6.108.62])         by mx.google.com with ESMTPS id y6sm10558915mug.27.2009.04.13.10.23.33         (version=SSLv3 cipher=RC4-MD5);         Mon, 13 Apr 2009 10:23:33 -0700 (PDT)
+Message-ID: <49E3778C.2020706@gmail.com>
+Date: Mon, 13 Apr 2009 17:23:00 -0000
+From: Dave Korn <dave.korn.cygwin@googlemail.com>
+User-Agent: Thunderbird 2.0.0.17 (Windows/20080914)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <49E3641E.6040407@gmail.com>
-User-Agent: Mutt/1.5.16 (2007-06-09)
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Add libz to dumper.exe link  [was Re: Re: speclib vs.  -lc  trouble.]
+References: <49E3641E.6040407@gmail.com> <20090413165923.GA13222@ednor.casa.cgf.cx>
+In-Reply-To: <20090413165923.GA13222@ednor.casa.cgf.cx>
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -27,48 +28,18 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q2/txt/msg00050.txt.bz2
+X-SW-Source: 2009-q2/txt/msg00051.txt.bz2
 
-On Mon, Apr 13, 2009 at 05:11:10PM +0100, Dave Korn wrote:
->  Ok?
->
->winsup/utils/ChangeLog
->
->	* Makefile.in (libz):  New makefile variable.
->	(build_dumper):  Test it was correctly set.
->	(dumper.exe):  Use it.
->
->Index: winsup/utils/Makefile.in
->===================================================================
->RCS file: /cvs/src/src/winsup/utils/Makefile.in,v
->retrieving revision 1.82
->diff -p -u -r1.82 Makefile.in
->--- winsup/utils/Makefile.in	18 Mar 2009 04:19:05 -0000	1.82
->+++ winsup/utils/Makefile.in	13 Apr 2009 15:07:21 -0000
->@@ -81,14 +81,16 @@ ldh.exe: MINGW_LDFLAGS := -nostdlib -lke
-> # Check for dumper's requirements and enable it if found.
-> LIBICONV := @libiconv@
-> libbfd   := ${shell $(CC) -B$(bupdir2)/bfd/ --print-file-name=libbfd.a}
->+# Recent libbfd requires libz as it handles compressed files.
->+libz     := ${shell $(CC) -B$(bupdir2)/zlib/ --print-file-name=libz.a}
-> libintl  := ${shell $(CC) -B$(bupdir2)/intl/ --print-file-name=libintl.a}
->-build_dumper := ${shell test -r $(libbfd) -a -r $(libintl) -a -n "$(LIBICONV)" && echo 1}
->+build_dumper := ${shell test -r $(libbfd) -a -r $(libz) -a -r $(libintl) -a -n "$(LIBICONV)" && echo 1}
-> ifdef build_dumper
-> CYGWIN_BINS += dumper.exe
-> dumper.o module_info.o parse_pe.o: CXXFLAGS += -I$(bupdir2)/bfd -I$(updir1)/include
-> dumper.o parse_pe.o: dumper.h
-> dumper.exe: module_info.o parse_pe.o
->-dumper.exe: ALL_LDFLAGS += ${libbfd} ${libintl} -L$(bupdir1)/libiberty $(LIBICONV) -liberty
->+dumper.exe: ALL_LDFLAGS += ${libbfd} ${libintl} ${libz} -L$(bupdir1)/libiberty $(LIBICONV) -liberty
-> else
-> all: warn_dumper
-> endif
+Christopher Faylor wrote:
 
-I think you can get by with just adding -lz to the ALL_LDFLAGS line and
-removing the other stuff.  The tests for libintl and libbfd are supposed
-to just detect if the appropriate directories are available.  There
-isn't likely going to be a libz two levels above cygwin's source
-directory so I don't see any reason to specfically check for it.
+> I think you can get by with just adding -lz to the ALL_LDFLAGS line and
+> removing the other stuff.  The tests for libintl and libbfd are supposed
+> to just detect if the appropriate directories are available.  There
+> isn't likely going to be a libz two levels above cygwin's source
+> directory so I don't see any reason to specfically check for it.
 
-cgf
+  I thought that might happen in a combined tree build with /src and /gcc
+together?
+
+    cheers,
+      DaveK
