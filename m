@@ -1,20 +1,23 @@
-Return-Path: <cygwin-patches-return-6521-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 16294 invoked by alias); 20 May 2009 12:51:26 -0000
-Received: (qmail 16284 invoked by uid 22791); 20 May 2009 12:51:25 -0000
-X-SWARE-Spam-Status: No, hits=-1.6 required=5.0 	tests=AWL,BAYES_00,J_CHICKENPOX_32,SPF_SOFTFAIL
+Return-Path: <cygwin-patches-return-6522-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 19920 invoked by alias); 20 May 2009 14:57:56 -0000
+Received: (qmail 19903 invoked by uid 22791); 20 May 2009 14:57:55 -0000
 X-Spam-Check-By: sourceware.org
-Received: from qmta02.emeryville.ca.mail.comcast.net (HELO QMTA02.emeryville.ca.mail.comcast.net) (76.96.30.24)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 20 May 2009 12:51:18 +0000
-Received: from OMTA01.emeryville.ca.mail.comcast.net ([76.96.30.11]) 	by QMTA02.emeryville.ca.mail.comcast.net with comcast 	id tnsl1b0050EPchoA2orJKW; Wed, 20 May 2009 12:51:18 +0000
-Received: from [192.168.0.101] ([24.10.247.15]) 	by OMTA01.emeryville.ca.mail.comcast.net with comcast 	id torG1b00C0Lg2Gw8MorHNG; Wed, 20 May 2009 12:51:17 +0000
-Message-ID: <4A13FCC7.6010603@byu.net>
-Date: Wed, 20 May 2009 12:51:00 -0000
-From: Eric Blake <ebb9@byu.net>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.21) Gecko/20090302 Thunderbird/2.0.0.21 Mnenhy/0.7.6.666
-MIME-Version: 1.0
+Received: from pool-173-48-46-134.bstnma.fios.verizon.net (HELO cgf.cx) (173.48.46.134)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 20 May 2009 14:57:49 +0000
+Received: from ednor.cgf.cx (ednor.casa.cgf.cx [192.168.187.5]) 	by cgf.cx (Postfix) with ESMTP id 3D30713C023 	for <cygwin-patches@cygwin.com>; Wed, 20 May 2009 10:57:38 -0400 (EDT)
+Received: by ednor.cgf.cx (Postfix, from userid 201) 	id 1503C604337; Wed, 20 May 2009 10:57:39 -0400 (EDT)
+Date: Wed, 20 May 2009 14:57:00 -0000
+From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: avoid compiler warning with DEBUGGING
-Content-Type: multipart/mixed;  boundary="------------050704060902040608030905"
-X-IsSubscribed: yes
+Subject: Re: avoid compiler warning with DEBUGGING
+Message-ID: <20090520145738.GA12742@ednor.casa.cgf.cx>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <4A13FCC7.6010603@byu.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4A13FCC7.6010603@byu.net>
+User-Agent: Mutt/1.5.16 (2007-06-09)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -24,62 +27,22 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q2/txt/msg00063.txt.bz2
+X-SW-Source: 2009-q2/txt/msg00064.txt.bz2
 
-This is a multi-part message in MIME format.
---------------050704060902040608030905
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 7bit
-Content-length: 705
+On Wed, May 20, 2009 at 06:51:19AM -0600, Eric Blake wrote:
+>-----BEGIN PGP SIGNED MESSAGE-----
+>Hash: SHA1
+>
+>I noticed a complaint about comparing signed and unsigned values, when
+>compiling with DEBUGGING enabled.  net.cc also has a lot of trailing blanks.
+>
+>2009-05-20  Eric Blake  <ebb9@byu.net>
+>
+>	* net.cc (gethostby_helper): Use correct signedness.
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+I've applied this even though I couldn't duplicate the problem with gcc 4.
+I think that may be a first since gcc 4 is much more picky than gcc 3.4.
 
-I noticed a complaint about comparing signed and unsigned values, when
-compiling with DEBUGGING enabled.  net.cc also has a lot of trailing blanks.
+Thanks.
 
-2009-05-20  Eric Blake  <ebb9@byu.net>
-
-	* net.cc (gethostby_helper): Use correct signedness.
-
-- --
-Don't work too hard, make some time for fun as well!
-
-Eric Blake             ebb9@byu.net
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.9 (Cygwin)
-Comment: Public key at home.comcast.net/~ericblake/eblake.gpg
-Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org
-
-iEYEARECAAYFAkoT/McACgkQ84KuGfSFAYB5yACbBSHBbYlplWSHVtl32doXLLRP
-tFYAni2YcsLFsNUgUp62jYlqGc82jD/y
-=WPYH
------END PGP SIGNATURE-----
-
---------------050704060902040608030905
-Content-Type: text/plain;
- name="cygwin.patch15"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline;
- filename="cygwin.patch15"
-Content-length: 601
-
-diff --git a/winsup/cygwin/net.cc b/winsup/cygwin/net.cc
-index cb0a5cd..79b2dfa 100644
---- a/winsup/cygwin/net.cc
-+++ b/winsup/cygwin/net.cc
-@@ -960,7 +960,8 @@ gethostby_helper (const char *name, const int af, const int type,
-
-   record * anptr = NULL, * prevptr = NULL, * curptr;
-   int i, alias_count = 0, string_size = 0, address_count = 0;
--  int complen, namelen1 = 0, address_len = 0, antype, anclass, ansize;
-+  unsigned int complen;
-+  int namelen1 = 0, address_len = 0, antype, anclass, ansize;
-
-   /* Get the count of answers */
-   ancount = ntohs (((HEADER *) msg)->ancount);
--- 
-1.6.2.4
-
-
---------------050704060902040608030905--
+cgf
