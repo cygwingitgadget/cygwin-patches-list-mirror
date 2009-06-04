@@ -1,24 +1,22 @@
-Return-Path: <cygwin-patches-return-6539-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 22975 invoked by alias); 4 Jun 2009 03:15:59 -0000
-Received: (qmail 22965 invoked by uid 22791); 4 Jun 2009 03:15:59 -0000
-X-SWARE-Spam-Status: No, hits=-2.4 required=5.0 	tests=AWL,BAYES_00,SPF_PASS
+Return-Path: <cygwin-patches-return-6540-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 6608 invoked by alias); 4 Jun 2009 15:11:14 -0000
+Received: (qmail 6555 invoked by uid 22791); 4 Jun 2009 15:11:12 -0000
 X-Spam-Check-By: sourceware.org
-Received: from mail-bw0-f226.google.com (HELO mail-bw0-f226.google.com) (209.85.218.226)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 04 Jun 2009 03:15:50 +0000
-Received: by bwz26 with SMTP id 26so448061bwz.2         for <cygwin-patches@cygwin.com>; Wed, 03 Jun 2009 20:15:47 -0700 (PDT)
-Received: by 10.103.24.11 with SMTP id b11mr984059muj.90.1244085347400;         Wed, 03 Jun 2009 20:15:47 -0700 (PDT)
-Received: from ?192.168.2.99? (cpc2-cmbg8-0-0-cust61.cmbg.cable.ntl.com [82.6.108.62])         by mx.google.com with ESMTPS id 14sm2182701muo.3.2009.06.03.20.15.46         (version=SSLv3 cipher=RC4-MD5);         Wed, 03 Jun 2009 20:15:46 -0700 (PDT)
-Message-ID: <4A273F2B.80004@gmail.com>
-Date: Thu, 04 Jun 2009 03:15:00 -0000
-From: Dave Korn <dave.korn.cygwin@googlemail.com>
-User-Agent: Thunderbird 2.0.0.17 (Windows/20080914)
-MIME-Version: 1.0
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 04 Jun 2009 15:11:04 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500) 	id E1DA96D4186; Thu,  4 Jun 2009 17:10:53 +0200 (CEST)
+Date: Thu, 04 Jun 2009 15:11:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH?]  Separate pthread patches, #2 take 3
-References: <4A270656.8090704@gmail.com> <4A270BA4.3080602@gmail.com> <20090604014145.GB15999@ednor.casa.cgf.cx> <4A273967.6090703@gmail.com> <20090604030825.GA27249@ednor.casa.cgf.cx>
-In-Reply-To: <20090604030825.GA27249@ednor.casa.cgf.cx>
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 7bit
-X-IsSubscribed: yes
+Subject: Re: [PATCH?]  Separate pthread patches, #2 take 2.
+Message-ID: <20090604151053.GX23519@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <4A270656.8090704@gmail.com> <4A2716AF.9070101@gmail.com> <4A2728F8.8020907@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4A2728F8.8020907@gmail.com>
+User-Agent: Mutt/1.5.19 (2009-02-20)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -28,24 +26,30 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q2/txt/msg00081.txt.bz2
+X-SW-Source: 2009-q2/txt/msg00082.txt.bz2
 
-Christopher Faylor wrote:
-> On Thu, Jun 04, 2009 at 04:03:03AM +0100, Dave Korn wrote:
->> but it's a horrible bit of code.  Declaring the memory location as input only,
->> then clobbering all of memory and potentially confusing the optimisers with
->> type aliasing casts?  It makes me very uneasy.
+On Jun  4 02:52, Dave Korn wrote:
+> Dave Korn wrote:
+> > Dave Korn wrote:
+> >>   The attached patch implements ilockexch and ilockcmpexch, using the inline
+> >> asm definition from __arch_compare_and_exchange_val_32_acq in
+> >> glibc-2.10.1/sysdeps/i386/i486/bits/atomic.h, trivially expanded inline rather
+> >> than in its original preprocessor macro form.
+> >>
+> >>   It generates incorrect code.
+> > 
+> >   This much looks like it's probably a compiler bug.  
 > 
-> Ok.  I'm convinced.  Please check in whatever you think is best.
+>   Let's see whether anyone else agrees:
 > 
-> cgf
+>         http://gcc.gnu.org/ml/gcc/2009-06/msg00053.html
 
-  I will wait and see what advice the gcc list has to offer on the topic
-first.  It may yet cast a new light on things.  (Or it may just confirm my
-suspicions that even in trusted and well-tested library code, there has been a
-fair deal of ad-hoc-ery and copypastaing of inline asms that people didn't
-really grok.)  I'll also see if I can dig up any recent PRs or fixes that
-might have a bearing on why we get better code from HEAD than 4.3.
+When you checked in this change, I'll create a 1.7.0-49 test release.
 
-    cheers,
-      DaveK
+
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          cygwin AT cygwin DOT com
+Red Hat
