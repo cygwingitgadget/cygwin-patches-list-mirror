@@ -1,23 +1,21 @@
-Return-Path: <cygwin-patches-return-6551-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 23859 invoked by alias); 3 Jul 2009 19:26:40 -0000
-Received: (qmail 23846 invoked by uid 22791); 3 Jul 2009 19:26:39 -0000
+Return-Path: <cygwin-patches-return-6552-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 29750 invoked by alias); 4 Jul 2009 12:34:57 -0000
+Received: (qmail 29739 invoked by uid 22791); 4 Jul 2009 12:34:56 -0000
+X-SWARE-Spam-Status: No, hits=-1.9 required=5.0 	tests=AWL,BAYES_00,HK_OBFDOM,J_CHICKENPOX_82,SPF_PASS
 X-Spam-Check-By: sourceware.org
-Received: from pool-98-110-183-121.bstnma.fios.verizon.net (HELO cgf.cx) (98.110.183.121)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 03 Jul 2009 19:26:33 +0000
-Received: from ednor.cgf.cx (ednor.casa.cgf.cx [192.168.187.5]) 	by cgf.cx (Postfix) with ESMTP id 381EE3B0008 	for <cygwin-patches@cygwin.com>; Fri,  3 Jul 2009 15:26:22 -0400 (EDT)
-Received: by ednor.cgf.cx (Postfix, from userid 201) 	id B43441A5661; Fri,  3 Jul 2009 15:26:21 -0400 (EDT)
-Date: Fri, 03 Jul 2009 19:26:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: mkstemps
-Message-ID: <20090703192620.GA2371@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4A46A3AB.2060604@byu.net>  <20090628103249.GX30864@calimero.vinschen.de>  <4A4DFA3E.2010909@byu.net>  <4A4DFAE4.3090008@byu.net>  <20090703130134.GB12258@calimero.vinschen.de>  <20090703151740.GA26910@ednor.casa.cgf.cx>  <4A4E59AE.60904@byu.net>
+Received: from mail-ew0-f213.google.com (HELO mail-ew0-f213.google.com) (209.85.219.213)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sat, 04 Jul 2009 12:34:49 +0000
+Received: by ewy9 with SMTP id 9so3276300ewy.2         for <cygwin-patches@cygwin.com>; Sat, 04 Jul 2009 05:34:46 -0700 (PDT)
+Received: by 10.210.118.14 with SMTP id q14mr3001227ebc.74.1246710886686;         Sat, 04 Jul 2009 05:34:46 -0700 (PDT)
+Received: from ?192.168.2.99? (cpc2-cmbg8-0-0-cust61.cmbg.cable.ntl.com [82.6.108.62])         by mx.google.com with ESMTPS id 5sm11214975eyf.12.2009.07.04.05.34.45         (version=SSLv3 cipher=RC4-MD5);         Sat, 04 Jul 2009 05:34:46 -0700 (PDT)
+Message-ID: <4A4F4F5B.8090806@gmail.com>
+Date: Sat, 04 Jul 2009 12:34:00 -0000
+From: Dave Korn <dave.korn.cygwin@googlemail.com>
+User-Agent: Thunderbird 2.0.0.17 (Windows/20080914)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4A4E59AE.60904@byu.net>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+To: cygwin-patches@cygwin.com
+Subject: AttachConsole broken autoload
+Content-Type: multipart/mixed;  boundary="------------080109040404070904070404"
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -27,35 +25,80 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q3/txt/msg00005.txt.bz2
+X-SW-Source: 2009-q3/txt/msg00006.txt.bz2
 
-On Fri, Jul 03, 2009 at 01:19:10PM -0600, Eric Blake wrote:
->-----BEGIN PGP SIGNED MESSAGE-----
->Hash: SHA1
->
->According to Christopher Faylor on 7/3/2009 9:17 AM:
->> Is there some reason why we're not just using the newlib version of all
->> of these functions?  I have stared at the code in mktemp.cc and the only
->> thing I see that seems to be Cygwin specific is the arc4random function.
->> Is the security that this provides the only reason not to use newlib?
->> 
->> That is probably a good enough reason right there but I was just
->> wondering.
->
->Well, before today, cygwin had mkdtemp but newlib didn't.  But you are
->correct that after today, the only substantial difference is getpid() vs.
->arc4random().  For mkstemp, this is not an issue.  But guess which one is
->more predictable, and thus makes for a less secure mktemp (even though we
->already have a compiler warning that mktemp is insecure)?
->
->Maybe it would be worth pushing the arc4random approach to newlib?
+This is a multi-part message in MIME format.
+--------------080109040404070904070404
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+Content-length: 1228
 
-I'm not sure exactly how you'd do that.  Obviously you can use
-/dev/random on linux.  For windows, you'd have to port windows-specific
-functions to newlib.  I don't think there is any precedent for that.
 
-Sounds like more work than it's worth.
+  Got this error when I tried to run with a DLL built from today's CVS HEAD:
 
-Nevermind.
+> ---------------------------
+> bash.exe - Entry Point Not Found
+> ---------------------------
+> The procedure entry point AttachConsole could not be located in the dynamic link library KERNEL32.dll. 
+> ---------------------------
+> OK   
+> ---------------------------
 
-cgf
+  Checked that it doesn't exist on W2K:
+
+http://msdn.microsoft.com/en-us/library/ms681952(VS.85).aspx
+> Minimum supported client	Windows XP
+> Minimum supported server	Windows Server 2003
+
+  Something's gone wrong with the autoload definition, because here's the
+reference:
+
+> $ nm fhandler_console.o | grep AttachConsole
+>          U _AttachConsole@4
+
+... but here's the definition:
+
+> $ nm autoload.o | grep AttachConsole
+> 00000000 T _AttachConsole@0
+> 00000000 T _win32_AttachConsole@0
+
+... leading to the DLL still having an explicit import for it:
+
+> $ dumpbin /imports new-cygwin1.dll | grep AttachConsole
+>                    D  AttachConsole
+
+  Attached patch looks like the obvious fix to me and builds a DLL without an
+import for AttachConsole; resulting DLL loads and runs on W2k.  Ok?
+
+	* autoload.cc (AttachConsole):  Correct size of args.
+
+    cheers,
+      DaveK
+
+
+--------------080109040404070904070404
+Content-Type: text/x-c;
+ name="autoload-attachconsole-fix.diff"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline;
+ filename="autoload-attachconsole-fix.diff"
+Content-length: 674
+
+Index: winsup/cygwin/autoload.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/autoload.cc,v
+retrieving revision 1.161
+diff -p -u -r1.161 autoload.cc
+--- winsup/cygwin/autoload.cc	3 Jul 2009 10:50:51 -0000	1.161
++++ winsup/cygwin/autoload.cc	4 Jul 2009 12:27:59 -0000
+@@ -409,7 +409,7 @@ LoadDLLfuncEx2 (SendARP, 16, iphlpapi, 1
+ 
+ LoadDLLfunc (CoTaskMemFree, 4, ole32)
+ 
+-LoadDLLfuncEx (AttachConsole, 0, kernel32, 1)
++LoadDLLfuncEx (AttachConsole, 4, kernel32, 1)
+ LoadDLLfuncEx (FindFirstVolumeA, 8, kernel32, 1)
+ LoadDLLfuncEx (FindNextVolumeA, 12, kernel32, 1)
+ LoadDLLfuncEx (FindVolumeClose, 4, kernel32, 1)
+
+--------------080109040404070904070404--
