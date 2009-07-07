@@ -1,23 +1,23 @@
-Return-Path: <cygwin-patches-return-6559-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 9214 invoked by alias); 7 Jul 2009 17:56:33 -0000
-Received: (qmail 9203 invoked by uid 22791); 7 Jul 2009 17:56:32 -0000
+Return-Path: <cygwin-patches-return-6561-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 12026 invoked by alias); 7 Jul 2009 20:28:19 -0000
+Received: (qmail 12011 invoked by uid 22791); 7 Jul 2009 20:28:18 -0000
+X-SWARE-Spam-Status: No, hits=-1.8 required=5.0 	tests=AWL,BAYES_00,J_CHICKENPOX_62,J_CHICKENPOX_82,SPF_PASS
 X-Spam-Check-By: sourceware.org
-Received: from pool-98-110-183-121.bstnma.fios.verizon.net (HELO cgf.cx) (98.110.183.121)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 07 Jul 2009 17:56:25 +0000
-Received: from ednor.cgf.cx (ednor.casa.cgf.cx [192.168.187.5]) 	by cgf.cx (Postfix) with ESMTP id 5BDFC3B0008 	for <cygwin-patches@cygwin.com>; Tue,  7 Jul 2009 13:56:15 -0400 (EDT)
-Received: by ednor.cgf.cx (Postfix, from userid 201) 	id 515842B380; Tue,  7 Jul 2009 13:56:15 -0400 (EDT)
-Date: Tue, 07 Jul 2009 17:56:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
+Received: from mail-ew0-f213.google.com (HELO mail-ew0-f213.google.com) (209.85.219.213)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 07 Jul 2009 20:28:11 +0000
+Received: by ewy9 with SMTP id 9so5719168ewy.2         for <cygwin-patches@cygwin.com>; Tue, 07 Jul 2009 13:28:08 -0700 (PDT)
+Received: by 10.210.35.10 with SMTP id i10mr7687821ebi.52.1246998488554;         Tue, 07 Jul 2009 13:28:08 -0700 (PDT)
+Received: from ?192.168.2.99? (cpc2-cmbg8-0-0-cust61.cmbg.cable.ntl.com [82.6.108.62])         by mx.google.com with ESMTPS id 5sm465209eyh.40.2009.07.07.13.28.07         (version=SSLv3 cipher=RC4-MD5);         Tue, 07 Jul 2009 13:28:08 -0700 (PDT)
+Message-ID: <4A53B2D3.6000405@gmail.com>
+Date: Tue, 07 Jul 2009 20:28:00 -0000
+From: Dave Korn <dave.korn.cygwin@googlemail.com>
+User-Agent: Thunderbird 2.0.0.17 (Windows/20080914)
+MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] Libstdc++ support changes.
-Message-ID: <20090707175615.GB4609@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4A537645.1070004@gmail.com>  <20090707171858.GR12258@calimero.vinschen.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20090707171858.GR12258@calimero.vinschen.de>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+References: <4A537645.1070004@gmail.com>  <20090707171858.GR12258@calimero.vinschen.de> <20090707175615.GB4609@ednor.casa.cgf.cx>
+In-Reply-To: <20090707175615.GB4609@ednor.casa.cgf.cx>
+Content-Type: multipart/mixed;  boundary="------------020904040704010805030508"
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -27,99 +27,107 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q3/txt/msg00013.txt.bz2
+X-SW-Source: 2009-q3/txt/msg00015.txt.bz2
 
-On Tue, Jul 07, 2009 at 07:18:58PM +0200, Corinna Vinschen wrote:
->Hi Dave,
->
->Thanks for doing that stuff!
->
->On Jul  7 17:22, Dave Korn wrote:
->> 
->>     Hi all,
->> 
->>   I just got done doing a C/C++/libstdc++-v3 test run against GCC HEAD using
->> the Cygwin DLL built with these patches, and everything worked.  In
->> particular, it passed these tests:
->> 
->> > FAIL: g++.old-deja/g++.abi/cxa_vec.C execution test
->> > FAIL: g++.old-deja/g++.brendan/new3.C execution test
->> 
->> ... which fail on current 4.3.2-2 using shared libstdc++ DLL precisely because
->> they expect to be able to interpose libstdc++'s own internal calls to the
->> allocation operators.  I've also been using it in daily use (and before that,
->> the previous spin of this patch) for a while now and nothing unusual has been
->> showing up.
->> [...]
->
->This looks pretty good to me.  I have just two formal nits.
->
->In the ChangeLogs,
->
->> 	* Makefile.common (COMPILE_CXX):  Add support for per-file overrides
->
->please use just one space after the colon.
->
->At some points you're using different comment types rather freely.
->Here's an example.
->
->> Index: winsup/cygwin/libstdcxx_wrapper.cc
->> ===================================================================
->> RCS file: winsup/cygwin/libstdcxx_wrapper.cc
->> diff -N winsup/cygwin/libstdcxx_wrapper.cc
->> --- /dev/null	1 Jan 1970 00:00:00 -0000
->> +++ winsup/cygwin/libstdcxx_wrapper.cc	7 Jul 2009 15:21:57 -0000
->> @@ -0,0 +1,91 @@
->> +/* libstdcxx_wrapper.cc
->> +
->> +   Copyright 2009 Red Hat, Inc.
->> +
->> +This file is part of Cygwin.
->> +
->> +This software is a copyrighted work licensed under the terms of the
->> +Cygwin license.  Please consult the file "CYGWIN_LICENSE" for
->> +details.  */
->
->^^^^^
->That's ok.
->
->> +
->> +
->> +/* We provide these stubs to call into a user's
->> +   provided ONDEE replacement if there is one - otherwise
->> +   it must fall back to the standard libstdc++ version.
->> +*/
->
->^^^^^
->The comment closing */ should be at the end of the last line of comment,
->rather than starting a new line.
->
->> +#include "winsup.h"
->> +#include "cygwin-cxx.h"
->> +#include "perprocess.h"
->> +
->> +// We are declaring asm names for the functions we define here, as we want
->> +// to define the wrappers in this file.  GCC links everything with wrappers
->> +// around the standard C++ memory management operators; these are the wrappers,
->> +// but we want the compiler to know they are the malloc operators and not have
->> +// it think they're just any old function matching 'extern "C" _wrap_*'.
->
->^^^^^
->While we have a couple of // comments in Cygwin, it would be nice to at
->least don't use them for multiline comments and comments on their own
->line.  Use
->
->  /* This is a comment. */
->  /* This is
->     another comment. */
->
->instead.
->
->Other than that it looks like you tested this a lot so it's fine with
->me.  Maybe Chris has some additional comment.
+This is a multi-part message in MIME format.
+--------------020904040704010805030508
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+Content-length: 840
 
-Nope.  I noticed the comment style too (and missed the two spaces after
-the colon).  Obviously not a big deal but it would be nice to have them
-consistent.
+Christopher Faylor wrote:
+> On Tue, Jul 07, 2009 at 07:18:58PM +0200, Corinna Vinschen wrote:
 
-cgf
+>> In the ChangeLogs,
+>> please use just one space after the colon.
+
+> Nope.  I noticed the comment style too (and missed the two spaces after
+> the colon).  Obviously not a big deal but it would be nice to have them
+> consistent.
+
+  All tidied up and committed.  I even added missing pre-terminator spaces to
+a couple of existing comments where they were in diff hunks anyway.
+
+  As you mentioned the ChangeLog thing, well I always thought of that as the
+start of a sentence, not counting the file/function name which I think of as
+being like the number at the start of an itemised list item.  Anyway it's in
+the coding standards that way, so I went back and fixed up my old entries.
+Committed the attached as obvious.
+
+    cheers,
+      DaveK
+
+--------------020904040704010805030508
+Content-Type: text/x-c;
+ name="changelog-fixups.diff"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline;
+ filename="changelog-fixups.diff"
+Content-length: 1915
+
+Index: ChangeLog
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/ChangeLog,v
+retrieving revision 1.4560
+diff -p -u -r1.4560 ChangeLog
+--- ChangeLog	7 Jul 2009 20:12:44 -0000	1.4560
++++ ChangeLog	7 Jul 2009 20:24:08 -0000
+@@ -116,7 +116,7 @@
+ 
+ 2009-07-04  Dave Korn  <dave.korn.cygwin@gmail.com>
+ 
+-	* autoload.cc (AttachConsole):  Correct size of args.
++	* autoload.cc (AttachConsole): Correct size of args.
+ 
+ 2009-07-03  Christopher Faylor  <me+cygwin@cgf.cx>
+ 
+@@ -495,8 +495,8 @@
+ 
+ 2009-06-05  Dave Korn  <dave.korn.cygwin@gmail.com>
+ 
+-	* winbase.h (ilockexch):  Fix asm constraints.
+-	(ilockcmpexch):  Likewise.
++	* winbase.h (ilockexch): Fix asm constraints.
++	(ilockcmpexch): Likewise.
+ 
+ 2009-06-05  Corinna Vinschen  <corinna@vinschen.de>
+ 
+@@ -523,8 +523,8 @@
+ 
+ 2009-06-04  Dave Korn  <dave.korn.cygwin@gmail.com>
+ 
+-	* thread.cc (__cygwin_lock_lock):  Delete racy optimisation.
+-	(__cygwin_lock_unlock):  Likewise.
++	* thread.cc (__cygwin_lock_lock): Delete racy optimisation.
++	(__cygwin_lock_unlock): Likewise.
+ 
+ 2009-06-03  IWAMURO Motnori  <deenheart@gmail.com>
+ 
+@@ -857,10 +857,10 @@
+ 
+ 2009-04-13  Dave Korn  <dave.korn.cygwin@gmail.com>
+ 
+-	* include/stdint.h (intptr_t):  Remove long from type.
+-	(uintptr_t):  Likewise.
+-	(INTPTR_MIN):  Remove 'L' suffix.
+-	(INTPTR_MAX, UINTPTR_MAX):  Likewise.
++	* include/stdint.h (intptr_t): Remove long from type.
++	(uintptr_t): Likewise.
++	(INTPTR_MIN): Remove 'L' suffix.
++	(INTPTR_MAX, UINTPTR_MAX): Likewise.
+ 
+ 2009-04-12  Christopher Faylor  <me+cygwin@cgf.cx>
+ 
+@@ -894,8 +894,8 @@
+ 
+ 2009-04-11  Dave Korn <dave.korn.cygwin@googlemail.com>
+ 
+-	* include/stdint.h (INTPTR_MIN, INTPTR_MAX):  Add 'L' suffix.
+-	(WINT_MAX):  Add 'U' suffix.
++	* include/stdint.h (INTPTR_MIN, INTPTR_MAX): Add 'L' suffix.
++	(WINT_MAX): Add 'U' suffix.
+ 
+ 2009-04-10  Christopher Faylor  <me+cygwin@cgf.cx>
+ 
+
+--------------020904040704010805030508--
