@@ -1,22 +1,24 @@
-Return-Path: <cygwin-patches-return-6567-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 13018 invoked by alias); 8 Jul 2009 09:06:58 -0000
-Received: (qmail 13006 invoked by uid 22791); 8 Jul 2009 09:06:58 -0000
+Return-Path: <cygwin-patches-return-6568-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 1436 invoked by alias); 8 Jul 2009 16:24:28 -0000
+Received: (qmail 1423 invoked by uid 22791); 8 Jul 2009 16:24:27 -0000
+X-SWARE-Spam-Status: No, hits=-2.4 required=5.0 	tests=AWL,BAYES_00,SPF_PASS
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 08 Jul 2009 09:06:49 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 76D456D5598; Wed,  8 Jul 2009 11:06:38 +0200 (CEST)
-Date: Wed, 08 Jul 2009 09:06:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Received: from mail-ew0-f213.google.com (HELO mail-ew0-f213.google.com) (209.85.219.213)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 08 Jul 2009 16:24:17 +0000
+Received: by ewy9 with SMTP id 9so6335334ewy.2         for <cygwin-patches@cygwin.com>; Wed, 08 Jul 2009 09:24:14 -0700 (PDT)
+Received: by 10.211.180.19 with SMTP id h19mr9000916ebp.22.1247070254154;         Wed, 08 Jul 2009 09:24:14 -0700 (PDT)
+Received: from ?192.168.2.99? (cpc2-cmbg8-0-0-cust61.cmbg.cable.ntl.com [82.6.108.62])         by mx.google.com with ESMTPS id 10sm352669eyz.41.2009.07.08.09.24.11         (version=SSLv3 cipher=RC4-MD5);         Wed, 08 Jul 2009 09:24:11 -0700 (PDT)
+Message-ID: <4A54CB28.1090703@gmail.com>
+Date: Wed, 08 Jul 2009 16:24:00 -0000
+From: Dave Korn <dave.korn.cygwin@googlemail.com>
+User-Agent: Thunderbird 2.0.0.17 (Windows/20080914)
+MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] Re: 1.7 winbase.h (ilockcmpexch) compile error
-Message-ID: <20090708090638.GY12258@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <Pine.CYG.4.58.0906241239470.2248@PC1163-8460-XP.flightsafety.com> <4A53BC5D.7010401@gmail.com> <4A53E449.4020504@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4A53E449.4020504@gmail.com>
-User-Agent: Mutt/1.5.19 (2009-02-20)
+References: <Pine.CYG.4.58.0906241239470.2248@PC1163-8460-XP.flightsafety.com> <4A53BC5D.7010401@gmail.com> <4A53E449.4020504@gmail.com> <20090708090638.GY12258@calimero.vinschen.de>
+In-Reply-To: <20090708090638.GY12258@calimero.vinschen.de>
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,44 +28,30 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q3/txt/msg00021.txt.bz2
+X-SW-Source: 2009-q3/txt/msg00022.txt.bz2
 
-On Jul  8 01:11, Dave Korn wrote:
-> Dave Korn wrote:
-> 
-> >   It doesn't do anything about the reload failure, which is a bug in GCC-3,
-> > since the usage is a standard usage supported by the documentation.  It's
-> > possible that it may disappear as a side-effect, in which case all the better.
-> 
->   Nope, no such luck.
-> 
->   Also, the libstdc++ patch has really done for compiling it with gcc-3, which
-> doesn't support the weak attribute.  It also has a bug that for some reason
-> two of the wrapper functions in libstdcxx_malloc.cc are emitted under their
-> real names, rather than the asm("__real__*") name specified.  There's also the
-> inline asm bug and there's a number of other warnings about type conversions.
-> 
->   All of these could in theory be worked around.  We could compile the files
-> using the inline asm with -O0, and fix the type conversion warnings(*), and we
-> would have to work around the lack of support for weaks in the compiler by
-> providing the definition of the __cygwin_cxx_malloc struct in assembler
-> source, and probably the same for the wrapper function names, but I'm not
-> inclined to do so unless there's serious demand for it.
+Corinna Vinschen wrote:
+> On Jul  8 01:11, Dave Korn wrote:
 
-So we can't build Cygwin with gcc-3 anymore?  I'm wondering if I'm
-concerned or annoyed or sad or angry about that...
+> But seriously, I'm still using gcc 4.3.2 20080827 (alpha-testing) 1
+> for building Cygwin.  Is that sufficient for now or should I upgrade?
 
-[...time passes...]
+  That's 4.3.2-1, no?  I've been using nothing but 4.3.2-2 for a while now.
+The problems are known, and none of them affect the Cygwin DLL:
 
-Hmm, no, not really.  What was the problem again?
+- redirected gfortran IO when using libgfortran DLL
+- shared lib java completely borked
+- libstdc++ dll operators new/delete not replaceable.
 
-But seriously, I'm still using gcc 4.3.2 20080827 (alpha-testing) 1
-for building Cygwin.  Is that sufficient for now or should I upgrade?
+  I'll have 4.3.3-1 out shortly.  Java will revert to static linking only, for
+the moment, but I know what the problem is and how to fix it.  Libstdc++ is
+taken care of.  The fortran IO problem I have debugged and solved, but it
+needs to be fixed in the cygwin DLL - it's an order-of-termination problem,
+that I'll post about on the -dev list shortly.  It should be the best one yet
+and as near as dammit what I'd call production-ready.
 
+  Hopefully I'll also be able to get most of my patches upstream in time for
+4.5.0; libstdc++ will be the first priority there.
 
-Corinna
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+    cheers,
+      DaveK
