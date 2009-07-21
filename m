@@ -1,20 +1,19 @@
-Return-Path: <cygwin-patches-return-6574-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 26157 invoked by alias); 17 Jul 2009 23:37:38 -0000
-Received: (qmail 26146 invoked by uid 22791); 17 Jul 2009 23:37:37 -0000
-X-SWARE-Spam-Status: No, hits=-1.5 required=5.0 	tests=AWL,BAYES_00,HK_OBFDOM,J_CHICKENPOX_64,SARE_URI_CONS7,SPF_PASS,URI_NOVOWEL
+Return-Path: <cygwin-patches-return-6575-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 30232 invoked by alias); 21 Jul 2009 12:09:19 -0000
+Received: (qmail 30222 invoked by uid 22791); 21 Jul 2009 12:09:18 -0000
+X-SWARE-Spam-Status: No, hits=-1.4 required=5.0 	tests=AWL,BAYES_00,HK_OBFDOM,J_CHICKENPOX_62,SPF_SOFTFAIL
 X-Spam-Check-By: sourceware.org
-Received: from mail-ew0-f205.google.com (HELO mail-ew0-f205.google.com) (209.85.219.205)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 17 Jul 2009 23:37:31 +0000
-Received: by ewy1 with SMTP id 1so1215016ewy.2         for <cygwin-patches@cygwin.com>; Fri, 17 Jul 2009 16:37:29 -0700 (PDT)
-Received: by 10.210.60.8 with SMTP id i8mr2025221eba.41.1247873849038;         Fri, 17 Jul 2009 16:37:29 -0700 (PDT)
-Received: from ?192.168.2.99? (cpc2-cmbg8-0-0-cust61.cmbg.cable.ntl.com [82.6.108.62])         by mx.google.com with ESMTPS id 24sm4252121eyx.23.2009.07.17.16.37.28         (version=SSLv3 cipher=RC4-MD5);         Fri, 17 Jul 2009 16:37:28 -0700 (PDT)
-Message-ID: <4A610E3A.7030602@gmail.com>
-Date: Fri, 17 Jul 2009 23:37:00 -0000
-From: Dave Korn <dave.korn.cygwin@googlemail.com>
-User-Agent: Thunderbird 2.0.0.17 (Windows/20080914)
+Received: from qmta15.emeryville.ca.mail.comcast.net (HELO QMTA15.emeryville.ca.mail.comcast.net) (76.96.27.228)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 21 Jul 2009 12:09:11 +0000
+Received: from OMTA14.emeryville.ca.mail.comcast.net ([76.96.30.60]) 	by QMTA15.emeryville.ca.mail.comcast.net with comcast 	id JbqJ1c0021HpZEsAFc9BUx; Tue, 21 Jul 2009 12:09:11 +0000
+Received: from [192.168.0.101] ([24.10.247.15]) 	by OMTA14.emeryville.ca.mail.comcast.net with comcast 	id Jc991c0040Lg2Gw8ac9ADT; Tue, 21 Jul 2009 12:09:10 +0000
+Message-ID: <4A65AFE8.1070903@byu.net>
+Date: Tue, 21 Jul 2009 12:09:00 -0000
+From: Eric Blake <ebb9@byu.net>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.22) Gecko/20090605 Thunderbird/2.0.0.22 Mnenhy/0.7.6.666
 MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
-Subject: [committed] Remove stray space in asm name.
-Content-Type: multipart/mixed;  boundary="------------010103060609030204090904"
+Subject: bug in dup2
+Content-Type: multipart/mixed;  boundary="------------060602020700010109040701"
 X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -25,55 +24,64 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q3/txt/msg00028.txt.bz2
+X-SW-Source: 2009-q3/txt/msg00029.txt.bz2
 
 This is a multi-part message in MIME format.
---------------010103060609030204090904
+--------------060602020700010109040701
 Content-Type: text/plain; charset=ISO-8859-1
 Content-Transfer-Encoding: 7bit
-Content-length: 533
+Content-length: 737
 
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-  I spotted this trivial (and, for reasons you can probably guess at,
-harmless) typo shortly after committing the patch in the first place, and now
-have found a spare moment to fix it.  So, committed as
-not-just-obvious-but-blindingly-so:
+POSIX requires dup2(1,1) to return 1 (if stdout is open), not 0.  I wonder
+how long that bug has been present?  And the STC:
 
-winsup/cygwin/ChangeLog:
+#include <unistd.h>
+int main() { return dup2 (1, 1); }
 
-	* libstdcxx_wrapper.cc (operator delete):  Remove stray space in
-	asm name.
+2009-07-21  Eric Blake  <ebb9@byu.net>
 
-  As an anti-Murphy precaution, I did make sure it all still compiled before I
-checked it in.  (I'm just getting down to work on the fortran/atexit/dtors thing.)
+	* dtable.cc (dup2): Correct return value for no-op.
 
-    cheers,
-      DaveK
+- --
+Don't work too hard, make some time for fun as well!
 
+Eric Blake             ebb9@byu.net
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.9 (Cygwin)
+Comment: Public key at home.comcast.net/~ericblake/eblake.gpg
+Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org
 
---------------010103060609030204090904
-Content-Type: text/x-c;
- name="wrapper-asm-name-typofix.diff"
+iEUEARECAAYFAkplr+gACgkQ84KuGfSFAYBSRwCXVTmu0J1jhB22KZLl7kVPEtL2
+8QCghsc7m0X7YsfqJDEHT3NLgRu23Bs=
+=W7zw
+-----END PGP SIGNATURE-----
+
+--------------060602020700010109040701
+Content-Type: text/plain;
+ name="cygwin.patch17"
 Content-Transfer-Encoding: 7bit
 Content-Disposition: inline;
- filename="wrapper-asm-name-typofix.diff"
-Content-length: 793
+ filename="cygwin.patch17"
+Content-length: 427
 
-Index: winsup/cygwin/libstdcxx_wrapper.cc
+Index: dtable.cc
 ===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/libstdcxx_wrapper.cc,v
-retrieving revision 1.1
-diff -p -u -r1.1 libstdcxx_wrapper.cc
---- winsup/cygwin/libstdcxx_wrapper.cc	7 Jul 2009 20:12:44 -0000	1.1
-+++ winsup/cygwin/libstdcxx_wrapper.cc	17 Jul 2009 22:51:02 -0000
-@@ -28,7 +28,7 @@ extern void *operator new(std::size_t sz
- extern void *operator new[](std::size_t sz) throw (std::bad_alloc)
- 			__asm__ ("___wrap__Znaj");
- extern void operator delete(void *p) throw()
--			__asm__ ("___wrap__ZdlPv ");
-+			__asm__ ("___wrap__ZdlPv");
- extern void operator delete[](void *p) throw()
- 			__asm__ ("___wrap__ZdaPv");
- extern void *operator new(std::size_t sz, const std::nothrow_t &nt) throw()
+RCS file: /cvs/src/src/winsup/cygwin/dtable.cc,v
+retrieving revision 1.199
+diff -u -p -r1.199 dtable.cc
+--- dtable.cc	6 Jul 2009 15:11:30 -0000	1.199
++++ dtable.cc	21 Jul 2009 12:07:48 -0000
+@@ -621,7 +621,7 @@ dtable::dup2 (int oldfd, int newfd)
+ 
+   if (newfd == oldfd)
+     {
+-      res = 0;
++      res = newfd;
+       goto done;
+     }
+ 
 
---------------010103060609030204090904--
+--------------060602020700010109040701--
