@@ -1,22 +1,20 @@
-Return-Path: <cygwin-patches-return-6576-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 14139 invoked by alias); 21 Jul 2009 13:29:32 -0000
-Received: (qmail 14103 invoked by uid 22791); 21 Jul 2009 13:29:31 -0000
+Return-Path: <cygwin-patches-return-6577-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 29941 invoked by alias); 26 Jul 2009 21:45:27 -0000
+Received: (qmail 29928 invoked by uid 22791); 26 Jul 2009 21:45:26 -0000
+X-SWARE-Spam-Status: No, hits=-2.3 required=5.0 	tests=AWL,BAYES_00,J_CHICKENPOX_66,SPF_PASS
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 21 Jul 2009 13:29:25 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500) 	id CDD8B6D559F; Tue, 21 Jul 2009 15:29:14 +0200 (CEST)
-Date: Tue, 21 Jul 2009 13:29:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: bug in dup2
-Message-ID: <20090721132914.GA1739@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4A65AFE8.1070903@byu.net>
+Received: from mail-qy0-f174.google.com (HELO mail-qy0-f174.google.com) (209.85.221.174)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sun, 26 Jul 2009 21:45:17 +0000
+Received: by qyk4 with SMTP id 4so3220889qyk.18         for <cygwin-patches@cygwin.com>; Sun, 26 Jul 2009 14:45:14 -0700 (PDT)
+Received: by 10.224.60.195 with SMTP id q3mr5393291qah.65.1248644714817;         Sun, 26 Jul 2009 14:45:14 -0700 (PDT)
+Received: from ?192.168.0.101? (S010600112f237275.wp.shawcable.net [24.76.241.98])         by mx.google.com with ESMTPS id 5sm9379200qwg.35.2009.07.26.14.45.13         (version=TLSv1/SSLv3 cipher=RC4-MD5);         Sun, 26 Jul 2009 14:45:14 -0700 (PDT)
+Message-ID: <4A6CCE6A.6040509@users.sourceforge.net>
+Date: Sun, 26 Jul 2009 21:45:00 -0000
+From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.1) Gecko/20090715 Thunderbird/3.0b3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4A65AFE8.1070903@byu.net>
-User-Agent: Mutt/1.5.19 (2009-02-20)
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] remaining reference to CYGWIN=server
+Content-Type: multipart/mixed;  boundary="------------010602020202090306060202"
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,29 +24,47 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q3/txt/msg00030.txt.bz2
+X-SW-Source: 2009-q3/txt/msg00031.txt.bz2
 
-On Jul 21 06:09, Eric Blake wrote:
-> -----BEGIN PGP SIGNED MESSAGE-----
-> Hash: SHA1
-> 
-> POSIX requires dup2(1,1) to return 1 (if stdout is open), not 0.  I wonder
-> how long that bug has been present?  And the STC:
-> 
-> #include <unistd.h>
-> int main() { return dup2 (1, 1); }
-> 
-> 2009-07-21  Eric Blake  <ebb9@byu.net>
-> 
-> 	* dtable.cc (dup2): Correct return value for no-op.
+This is a multi-part message in MIME format.
+--------------010602020202090306060202
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-length: 84
 
-Applied.
+posix.sgml still contains a reference to CYGWIN="server".  Patch attached.
 
 
-Thanks for catching,
-Corinna
+Yaakov
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+--------------010602020202090306060202
+Content-Type: text/plain;
+ name="cygwin-api-std-notes.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="cygwin-api-std-notes.patch"
+Content-length: 837
+
+2009-07-26  Yaakov Selkowitz <yselkowitz@users.sourceforge.net>
+
+	* posix.sgml (std-notes): Remove obsolete reference to CYGWIN=server.
+
+Index: posix.sgml
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/posix.sgml,v
+retrieving revision 1.36
+diff -u -r1.36 posix.sgml
+--- posix.sgml	26 Jul 2009 09:34:35 -0000	1.36
++++ posix.sgml	26 Jul 2009 21:31:50 -0000
+@@ -1408,8 +1408,6 @@
+ <function>shmdt</function>, <function>shmget</function>,
+ <function>msgctl</function>, <function>msgget</function>,
+ <function>msgrcv</function> and <function>msgsnd</function> are only
+-available when cygserver is running and the <envar>CYGWIN</envar>
+-environment variable is set so that it contains the string
+-<envar>server</envar>.</para>
++available when cygserver is running.</para>
+ 
+ </sect1>
+
+--------------010602020202090306060202--
