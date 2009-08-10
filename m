@@ -1,23 +1,23 @@
-Return-Path: <cygwin-patches-return-6590-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 12021 invoked by alias); 10 Aug 2009 04:15:01 -0000
-Received: (qmail 12010 invoked by uid 22791); 10 Aug 2009 04:15:00 -0000
-X-SWARE-Spam-Status: No, hits=-1.9 required=5.0 	tests=AWL,BAYES_00,J_CHICKENPOX_42,J_CHICKENPOX_63,SPF_PASS
+Return-Path: <cygwin-patches-return-6591-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 25568 invoked by alias); 10 Aug 2009 14:44:30 -0000
+Received: (qmail 25449 invoked by uid 22791); 10 Aug 2009 14:44:28 -0000
+X-SWARE-Spam-Status: No, hits=-1.1 required=5.0 	tests=AWL,BAYES_05,J_CHICKENPOX_42
 X-Spam-Check-By: sourceware.org
-Received: from mail-ew0-f217.google.com (HELO mail-ew0-f217.google.com) (209.85.219.217)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 10 Aug 2009 04:14:54 +0000
-Received: by ewy17 with SMTP id 17so2834917ewy.2         for <cygwin-patches@cygwin.com>; Sun, 09 Aug 2009 21:14:51 -0700 (PDT)
-Received: by 10.210.80.17 with SMTP id d17mr1676519ebb.67.1249877691447;         Sun, 09 Aug 2009 21:14:51 -0700 (PDT)
-Received: from ?192.168.2.99? (cpc2-cmbg8-0-0-cust61.cmbg.cable.ntl.com [82.6.108.62])         by mx.google.com with ESMTPS id 7sm10140928eyb.30.2009.08.09.21.14.50         (version=SSLv3 cipher=RC4-MD5);         Sun, 09 Aug 2009 21:14:50 -0700 (PDT)
-Message-ID: <4A7FA1E0.7070209@gmail.com>
-Date: Mon, 10 Aug 2009 04:15:00 -0000
-From: Dave Korn <dave.korn.cygwin@googlemail.com>
-User-Agent: Thunderbird 2.0.0.17 (Windows/20080914)
-MIME-Version: 1.0
+Received: from mailgw.c5altus.com (HELO mailgw02.flightsafety.com) (66.109.90.21)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 10 Aug 2009 14:44:21 +0000
+Received: from mailgw02.flightsafety.com (localhost [127.0.0.1]) 	by localhost (Postfix) with SMTP id 39E532DACDA 	for <cygwin-patches@cygwin.com>; Mon, 10 Aug 2009 10:44:19 -0400 (EDT)
+Received: from VXS2.flightsafety.com (unknown [192.168.31.146]) 	by mailgw02.flightsafety.com (Postfix) with ESMTP id 2795D2DACC3 	for <cygwin-patches@cygwin.com>; Mon, 10 Aug 2009 10:44:19 -0400 (EDT)
+Received: from srv1163ex1.flightsafety.com ([198.51.28.39]) by VXS2.flightsafety.com with Microsoft SMTPSVC(6.0.3790.3959); 	 Mon, 10 Aug 2009 10:44:18 -0400
+Received: from fordpc ([198.51.27.93]) by srv1163ex1.flightsafety.com with Microsoft SMTPSVC(6.0.3790.3959); 	 Mon, 10 Aug 2009 09:44:18 -0500
+Date: Mon, 10 Aug 2009 14:44:00 -0000
+From: Brian Ford <Brian.Ford@FlightSafety.com>
+Reply-To: cygwin-patches@cygwin.com
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCHes] Misc aliasing fixes for building DLL with gcc-4.5.0
-References: <4A7F8FF5.5060701@gmail.com> <20090810040452.GB610@ednor.casa.cgf.cx>
-In-Reply-To: <20090810040452.GB610@ednor.casa.cgf.cx>
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <4A7FA1E0.7070209@gmail.com>
+Message-ID: <Pine.CYG.4.58.0908100940080.2736@PC1163-8460-XP.flightsafety.com>
+References: <4A7F8FF5.5060701@gmail.com> <20090810040452.GB610@ednor.casa.cgf.cx>  <4A7FA1E0.7070209@gmail.com>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -28,39 +28,32 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q3/txt/msg00044.txt.bz2
+X-SW-Source: 2009-q3/txt/msg00045.txt.bz2
 
-Christopher Faylor wrote:
-> On Mon, Aug 10, 2009 at 04:11:49AM +0100, Dave Korn wrote:
->> 	* fhandler_tty.cc (process_input): Add dummy return to silence warning.
->> 	(process_ioctl): Likewise.
-> 
-> Shouldn't these be defined with __attribute__ ((noreturn))?
+On Mon, 10 Aug 2009, Dave Korn wrote:
 
-  They probably should also, but (I forgot to mention) I tried it and it didn't
-solve the warning.
+> Christopher Faylor wrote:
+> > On Mon, Aug 10, 2009 at 04:11:49AM +0100, Dave Korn wrote:
+> >
+> >> 	* fork.cc (cygfork): New name with friendable C++ linkage for ...
+> >> 	(fork): ... un-friendable extern "C" function becomes stub calling it.
+> >> 	(class frok): Declare cygfork() friend, not fork(), avoiding PR41020.
+> >
+> > Also, referring to a bug without explaining what the problem either in
+> > the source code or the ChangeLog is a guaranteed way to cause confusion
+> > tomorrow after a memory cache refresh.
+>
+>   You mean the PR notation?  Hopefully GCC's bugzilla will still be there
+> tomorrow!  Anyway, with a bit of luck we won't end up needing this one at all.
 
->> 	* fork.cc (cygfork): New name with friendable C++ linkage for ...
->> 	(fork): ... un-friendable extern "C" function becomes stub calling it.
->> 	(class frok): Declare cygfork() friend, not fork(), avoiding PR41020.
-> 
-> Ugh.  I don't like this.  fork is slow enough and complicated enough
-> without adding this kind of workaround.  If this is a problem with
-> declaring an 'extern "C"' friend function then it should be fixable by
-> just making fork() a C++ function but exporting it as a "C" function
-> in cygwin.din.
+From my point of view, adding GCC in front of PR41020 would help someone
+who tries to figure out what this means years down the road.  Without the
+other context of this thread, I would not have any idea what software that
+PR applied to.
 
-  My turn to say "ugh"!  The wrapper function would translate down to a single
-'jmp' if -fno-omit-frame-pointer was in effect, but as things stand it's a bit
-ugly.  So maybe we should let both of these rest for a while and see how things
-pan out upstream.
-
-> Also, referring to a bug without explaining what the problem either in
-> the source code or the ChangeLog is a guaranteed way to cause confusion
-> tomorrow after a memory cache refresh.
-
-  You mean the PR notation?  Hopefully GCC's bugzilla will still be there
-tomorrow!  Anyway, with a bit of luck we won't end up needing this one at all.
-
-    cheers,
-      DaveK
+-- 
+Brian Ford
+Staff Realtime Software Engineer
+VITAL - Visual Simulation Systems
+FlightSafety International
+the best safety device in any aircraft is a well-trained crew...
