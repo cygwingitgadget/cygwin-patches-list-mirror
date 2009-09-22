@@ -1,22 +1,23 @@
-Return-Path: <cygwin-patches-return-6627-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 22658 invoked by alias); 21 Sep 2009 18:27:41 -0000
-Received: (qmail 22633 invoked by uid 22791); 21 Sep 2009 18:27:41 -0000
+Return-Path: <cygwin-patches-return-6628-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 1337 invoked by alias); 22 Sep 2009 04:10:09 -0000
+Received: (qmail 1324 invoked by uid 22791); 22 Sep 2009 04:10:08 -0000
+X-SWARE-Spam-Status: No, hits=0.2 required=5.0 	tests=AWL,BAYES_40,J_CHICKENPOX_52,J_CHICKENPOX_62,J_CHICKENPOX_82,SPF_SOFTFAIL
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 21 Sep 2009 18:27:37 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 6A2DE6D5598; Mon, 21 Sep 2009 20:27:27 +0200 (CEST)
-Date: Mon, 21 Sep 2009 18:27:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [1.7] bugs in faccessat
-Message-ID: <20090921182727.GB17099@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <loom.20090903T175736-252@post.gmane.org> <4AA01449.6060707@byu.net> <20090903191856.GB3998@ednor.casa.cgf.cx> <20090903210438.GA25677@calimero.vinschen.de> <4AB2D42E.8060407@byu.net> <20090921081622.GD20981@calimero.vinschen.de>
+Received: from qmta08.emeryville.ca.mail.comcast.net (HELO QMTA08.emeryville.ca.mail.comcast.net) (76.96.30.80)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 22 Sep 2009 04:10:03 +0000
+Received: from OMTA04.emeryville.ca.mail.comcast.net ([76.96.30.35]) 	by QMTA08.emeryville.ca.mail.comcast.net with comcast 	id jdT31c0020lTkoCA8gA3BQ; Tue, 22 Sep 2009 04:10:03 +0000
+Received: from [192.168.0.101] ([24.10.247.15]) 	by OMTA04.emeryville.ca.mail.comcast.net with comcast 	id jgA11c0060Lg2Gw8QgA2t7; Tue, 22 Sep 2009 04:10:02 +0000
+Message-ID: <4AB84E17.5050503@byu.net>
+Date: Tue, 22 Sep 2009 04:10:00 -0000
+From: Eric Blake <ebb9@byu.net>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.23) Gecko/20090812 Thunderbird/2.0.0.23 Mnenhy/0.7.6.666
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20090921081622.GD20981@calimero.vinschen.de>
-User-Agent: Mutt/1.5.19 (2009-02-20)
+To: cygwin-patches@cygwin.com
+Subject: Re: fcntl bug
+References: <4A8F0944.5020004@byu.net>  <4A8F1819.9060209@sipxx.com>  <4A8F19DC.8060104@byu.net>  <20090822001027.GB8375@ednor.casa.cgf.cx>  <loom.20090824T170139-863@post.gmane.org>  <4A9B1A3B.9070600@byu.net>  <20090831005538.GH2068@ednor.casa.cgf.cx>  <4AA013D2.5060702@byu.net> <20090903191717.GA3998@ednor.casa.cgf.cx>
+In-Reply-To: <20090903191717.GA3998@ednor.casa.cgf.cx>
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,40 +27,34 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q3/txt/msg00081.txt.bz2
+X-SW-Source: 2009-q3/txt/msg00082.txt.bz2
 
-Hi Eric,
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-On Sep 21 10:16, Corinna Vinschen wrote:
-> On Sep 17 18:28, Eric Blake wrote:
-> > -----BEGIN PGP SIGNED MESSAGE-----
-> > Hash: SHA1
-> > 
-> > According to Corinna Vinschen on 9/3/2009 3:04 PM:
-> > > Thanks for the patches Eric, but, here's a problem.  We still have no
-> > > copyright assignment in place from you.  The fcntl patch is barely
-> > > trivial, but the faccessat patch certainly isn't anymore.  Would it
-> > > be a big problem for you to send the filled out copyright assignemnt form
-> > > from http://cygwin.com/assign.txt to Red Hat ASAP?  With any luck it
-> > > will have arrived and will be signed before I'm back from vacation.
-> > 
-> > Any word on whether my papers have been processed yet?  It's been more
-> > than a week since I mailed them, and although the USPS isn't lightning
-> > fast, a week is generally long enough for domestic mail.
+According to Christopher Faylor on 9/3/2009 1:17 PM:
+>> 	* dtable.h (OPEN_MAX_MAX): New macro.
+>> 	* resource.cc (getrlimit) [RLIMIT_NOFILE]: Use it.
+>> 	* dtable.cc (dtable::extend): Likewise.
+>> 	* fcntl.cc (fcntl64): Obey POSIX rules.
+>> 	* syscalls.cc (dup2): Likewise.
 > 
-> Sorry for the delay, I'm back from vacation just today.  The copyright
-> assignment papers arrived last week, but they are not yet signed, as far
-> as I can see.  I've just written a mail to indicate that we need the OK
-> from legal ASAP.
+> Thanks for the patch.  Go ahead and check this in.
+> 
+> In particular, thanks for turning (100 * NOFILE_INCR) into a #define.
 
-Your copyright assignment has been signed, so we're all set.  Please
-apply the approved patches at your earliest convenience.
+Now applied.
 
+- --
+Don't work too hard, make some time for fun as well!
 
-Cool to have you with us now!
-Corinna
+Eric Blake             ebb9@byu.net
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.9 (Cygwin)
+Comment: Public key at home.comcast.net/~ericblake/eblake.gpg
+Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+iEYEARECAAYFAkq4ThcACgkQ84KuGfSFAYDTpACgpTumH8GA1N2jkwFdjaUfbnli
+DW8AoIFSRWSH7R1te3aTrBgK5fZy9pnZ
+=Naje
+-----END PGP SIGNATURE-----
