@@ -1,21 +1,21 @@
-Return-Path: <cygwin-patches-return-6635-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 24286 invoked by alias); 25 Sep 2009 03:32:02 -0000
-Received: (qmail 24272 invoked by uid 22791); 25 Sep 2009 03:32:01 -0000
-X-SWARE-Spam-Status: No, hits=-0.7 required=5.0 	tests=AWL,BAYES_00,J_CHICKENPOX_32,J_CHICKENPOX_42,J_CHICKENPOX_55,J_CHICKENPOX_82,SPF_SOFTFAIL
+Return-Path: <cygwin-patches-return-6636-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 25390 invoked by alias); 25 Sep 2009 03:35:23 -0000
+Received: (qmail 25378 invoked by uid 22791); 25 Sep 2009 03:35:22 -0000
+X-SWARE-Spam-Status: No, hits=-1.2 required=5.0 	tests=AWL,BAYES_00,J_CHICKENPOX_29,J_CHICKENPOX_82,SPF_SOFTFAIL
 X-Spam-Check-By: sourceware.org
-Received: from qmta15.emeryville.ca.mail.comcast.net (HELO QMTA15.emeryville.ca.mail.comcast.net) (76.96.27.228)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 25 Sep 2009 03:31:56 +0000
-Received: from OMTA07.emeryville.ca.mail.comcast.net ([76.96.30.59]) 	by QMTA15.emeryville.ca.mail.comcast.net with comcast 	id kr0D1c0011GXsucAFrXw5q; Fri, 25 Sep 2009 03:31:56 +0000
-Received: from [192.168.0.101] ([24.10.247.15]) 	by OMTA07.emeryville.ca.mail.comcast.net with comcast 	id krXu1c0020Lg2Gw8TrXv5G; Fri, 25 Sep 2009 03:31:55 +0000
-Message-ID: <4ABC39A1.1060702@byu.net>
-Date: Fri, 25 Sep 2009 03:32:00 -0000
+Received: from qmta03.emeryville.ca.mail.comcast.net (HELO QMTA03.emeryville.ca.mail.comcast.net) (76.96.30.32)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 25 Sep 2009 03:35:12 +0000
+Received: from OMTA16.emeryville.ca.mail.comcast.net ([76.96.30.72]) 	by QMTA03.emeryville.ca.mail.comcast.net with comcast 	id kram1c0081ZMdJ4A3rbCDY; Fri, 25 Sep 2009 03:35:12 +0000
+Received: from [192.168.0.101] ([24.10.247.15]) 	by OMTA16.emeryville.ca.mail.comcast.net with comcast 	id krhj1c0020Lg2Gw8crhkfN; Fri, 25 Sep 2009 03:41:45 +0000
+Message-ID: <4ABC3A64.1030609@byu.net>
+Date: Fri, 25 Sep 2009 03:35:00 -0000
 From: Eric Blake <ebb9@byu.net>
 User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.23) Gecko/20090812 Thunderbird/2.0.0.23 Mnenhy/0.7.6.666
 MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
-Subject: Re: [1.7] rename/renameat error
-References: <4AA52B5E.8060509@byu.net>  <20090907192046.GA12492@calimero.vinschen.de>  <loom.20090909T005422-847@post.gmane.org>  <loom.20090909T183010-83@post.gmane.org>  <loom.20090922T225033-801@post.gmane.org>  <4ABA1B92.9080406@byu.net>  <20090923133015.GA16976@calimero.vinschen.de>  <20090923140905.GA2527@ednor.casa.cgf.cx>  <20090923160846.GA18954@calimero.vinschen.de> <20090923164127.GB3172@ednor.casa.cgf.cx>
-In-Reply-To: <20090923164127.GB3172@ednor.casa.cgf.cx>
-Content-Type: multipart/mixed;  boundary="------------090602080703080100010607"
+Subject: Re: [1.7] bugs in faccessat
+References: <loom.20090903T175736-252@post.gmane.org>
+In-Reply-To: <loom.20090903T175736-252@post.gmane.org>
+Content-Type: multipart/mixed;  boundary="------------070009000401060508080606"
 X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -26,49 +26,36 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q3/txt/msg00089.txt.bz2
+X-SW-Source: 2009-q3/txt/msg00090.txt.bz2
 
 This is a multi-part message in MIME format.
---------------090602080703080100010607
+--------------070009000401060508080606
 Content-Type: text/plain; charset=ISO-8859-1
 Content-Transfer-Encoding: 7bit
-Content-length: 1649
+Content-length: 1363
 
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-According to Christopher Faylor on 9/23/2009 10:41 AM:
->> Also less risky would be to make changes locally in mkdir, link, and
->> rename for now.
+According to Eric Blake on 9/3/2009 9:58 AM:
+> Second, it is not performing the proper checks when AT_EACCESS is set and the 
+> applications' effective id differs from the real id (to fix this would require 
+> adding a parameter to fhandler_base::fhaccess).
 
-Done - this patch narrows the scope of the changes to just the interfaces
-in question.  I've also tested that it made it through the coreutils
-testsuite without any regressions.
-
-> 
-> I'm not clear if this is a regression or not.  If it isn't a regression,
-> I'd opt for leaving it until 1.7.2.
-
-Now that I'm not touching path.cc, these are all much more self-contained,
-and make cygwin more consistent with Linux.  For example:
-
-touch a
-ln -s c b
-link a b/
-
-should fail because b/ is not an existing directory, but without this
-patch, it succeeds and creates the regular file c as a link to a.
+Actually, faccessat(,AT_EACCESS) was right, but access() and faccessat(,0)
+were doing the wrong thing (using effective id instead of real id when
+doing the permission check).  I think I got it all right, but please
+double-check me.
 
 2009-09-24  Eric Blake  <ebb9@byu.net>
 
-	* syscalls.cc (link): Delete obsolete comment.  Reject directories
-	and missing source up front.
-	(rename): Use correct errno for trailing '.'.  Allow trailing
-	slash to newpath iff oldpath is directory.
-	* dir.cc (mkdir): Reject dangling symlink with trailing slash.
-	* fhandler_disk_file.cc (fhandler_disk_file::link): Reject
-	trailing slash.
-	* fhandler.cc (fhandler_base::link): Match Linux errno.
+	* fhandler.h (fhandler_base::fhaccess): Add parameter.
+	* security.h (check_file_access, check_registry_access): Likewise.
+	* security.cc (check_file_access, check_registry_access)
+	(check_access): Implement new parameter.
+	* fhandler.cc (fhandler_base::fhaccess): Likewise.
+	(device_access_denied): Update caller.
+	* syscalls.cc (access, faccessat): Update callers.
 
 - --
 Don't work too hard, make some time for fun as well!
@@ -79,175 +66,216 @@ Version: GnuPG v1.4.9 (Cygwin)
 Comment: Public key at home.comcast.net/~ericblake/eblake.gpg
 Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
 
-iEYEARECAAYFAkq8OaEACgkQ84KuGfSFAYAiLACghYLCFaIGmFR4AuzKAmBuQcg/
-kFoAoJcX+ufE6YUq7S1AeVRvHtyZ30wc
-=4otJ
+iEYEARECAAYFAkq8OmQACgkQ84KuGfSFAYD5ggCglYCjeUDkJF30Bn455/MoEkrn
+ynkAn29rXYxx0RV47hEXpAqkVoFijiz2
+=mWIO
 -----END PGP SIGNATURE-----
 
---------------090602080703080100010607
+--------------070009000401060508080606
 Content-Type: text/plain;
- name="cygwin.patch21"
+ name="cygwin.patch22"
 Content-Transfer-Encoding: 7bit
 Content-Disposition: inline;
- filename="cygwin.patch21"
-Content-length: 4718
-
-diff --git a/winsup/cygwin/dir.cc b/winsup/cygwin/dir.cc
-index 2b9125f..b7c31e4 100644
---- a/winsup/cygwin/dir.cc
-+++ b/winsup/cygwin/dir.cc
-@@ -1,6 +1,7 @@
- /* dir.cc: Posix directory-related routines
-
--   Copyright 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2006, 2007 Red Hat, Inc.
-+   Copyright 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2006, 2007,
-+   2009 Red Hat, Inc.
-
- This file is part of Cygwin.
-
-@@ -21,6 +22,7 @@ details. */
- #include "dtable.h"
- #include "cygheap.h"
- #include "cygtls.h"
-+#include "tls_pbuf.h"
-
- extern "C" int
- dirfd (DIR *dir)
-@@ -273,11 +275,26 @@ mkdir (const char *dir, mode_t mode)
- {
-   int res = -1;
-   fhandler_base *fh = NULL;
-+  size_t dlen;
-+  char *newbuf;
-+  tmp_pathbuf tp;
-
-   myfault efault;
-   if (efault.faulted (EFAULT))
-     return -1;
-
-+  /* POSIX says mkdir("symlink-to-missing/") should create the
-+     directory "missing", but Linux rejects it with EEXIST.  Copy
-+     Linux behavior for now.  */
-+
-+  dlen = strlen (dir);
-+  if (isdirsep (dir[dlen - 1]))
-+    {
-+      stpcpy (newbuf = tp.c_get (), dir);
-+      while (dlen > 0 && isdirsep (dir[dlen - 1]))
-+        newbuf[--dlen] = '\0';
-+      dir = newbuf;
-+    }
-   if (!(fh = build_fh_name (dir, NULL, PC_SYM_NOFOLLOW)))
-     goto done;   /* errno already set */;
+ filename="cygwin.patch22"
+Content-length: 6769
 
 diff --git a/winsup/cygwin/fhandler.cc b/winsup/cygwin/fhandler.cc
-index b52d7c2..44311ca 100644
+index 44311ca..7a7d801 100644
 --- a/winsup/cygwin/fhandler.cc
 +++ b/winsup/cygwin/fhandler.cc
-@@ -1541,7 +1541,7 @@ fhandler_base::ftruncate (_off64_t length, bool allow_truncate)
- int
- fhandler_base::link (const char *newpath)
- {
--  set_errno (EINVAL);
-+  set_errno (EPERM);
-   return -1;
+@@ -344,11 +344,11 @@ fhandler_base::device_access_denied (int flags)
+   if (!mode)
+     mode |= R_OK;
+
+-  return fhaccess (mode);
++  return fhaccess (mode, true);
  }
 
-diff --git a/winsup/cygwin/fhandler_disk_file.cc b/winsup/cygwin/fhandler_disk_file.cc
-index 214be47..4c4b559 100644
---- a/winsup/cygwin/fhandler_disk_file.cc
-+++ b/winsup/cygwin/fhandler_disk_file.cc
-@@ -1186,6 +1186,7 @@ fhandler_disk_file::ftruncate (_off64_t length, bool allow_truncate)
  int
- fhandler_disk_file::link (const char *newpath)
+-fhandler_base::fhaccess (int flags)
++fhandler_base::fhaccess (int flags, bool effective)
  {
-+  size_t nlen = strlen (newpath);
-   path_conv newpc (newpath, PC_SYM_NOFOLLOW | PC_POSIX, stat_suffixes);
-   if (newpc.error)
+   int res = -1;
+   if (error ())
+@@ -373,12 +373,12 @@ fhandler_base::fhaccess (int flags)
+     goto eaccess_done;
+   else if (has_acls ())
      {
-@@ -1200,7 +1201,13 @@ fhandler_disk_file::link (const char *newpath)
-       return -1;
+-      res = check_file_access (pc, flags);
++      res = check_file_access (pc, flags, effective);
+       goto done;
      }
-
--  char new_buf[strlen (newpath) + 5];
-+  if (isdirsep (newpath[nlen - 1]) || has_dot_last_component (newpath, false))
-+    {
-+      set_errno (ENOENT);
-+      return -1;
-+    }
-+
-+  char new_buf[nlen + 5];
-   if (!newpc.error)
+   else if (get_device () == FH_REGISTRY && open (O_RDONLY, 0) && get_handle ())
      {
-       if (pc.is_lnk_special ())
+-      res = check_registry_access (get_handle (), flags);
++      res = check_registry_access (get_handle (), flags, effective);
+       close ();
+       return res;
+     }
+@@ -389,12 +389,12 @@ fhandler_base::fhaccess (int flags)
+
+   if (flags & R_OK)
+     {
+-      if (st.st_uid == myself->uid)
++      if (st.st_uid == (effective ? myself->uid : cygheap->user.real_uid))
+ 	{
+ 	  if (!(st.st_mode & S_IRUSR))
+ 	    goto eaccess_done;
+ 	}
+-      else if (st.st_gid == myself->gid)
++      else if (st.st_gid == (effective ? myself->gid : cygheap->user.real_gid))
+ 	{
+ 	  if (!(st.st_mode & S_IRGRP))
+ 	    goto eaccess_done;
+@@ -405,12 +405,12 @@ fhandler_base::fhaccess (int flags)
+
+   if (flags & W_OK)
+     {
+-      if (st.st_uid == myself->uid)
++      if (st.st_uid == (effective ? myself->uid : cygheap->user.real_uid))
+ 	{
+ 	  if (!(st.st_mode & S_IWUSR))
+ 	    goto eaccess_done;
+ 	}
+-      else if (st.st_gid == myself->gid)
++      else if (st.st_gid == (effective ? myself->gid : cygheap->user.real_gid))
+ 	{
+ 	  if (!(st.st_mode & S_IWGRP))
+ 	    goto eaccess_done;
+@@ -421,12 +421,12 @@ fhandler_base::fhaccess (int flags)
+
+   if (flags & X_OK)
+     {
+-      if (st.st_uid == myself->uid)
++      if (st.st_uid == (effective ? myself->uid : cygheap->user.real_uid))
+ 	{
+ 	  if (!(st.st_mode & S_IXUSR))
+ 	    goto eaccess_done;
+ 	}
+-      else if (st.st_gid == myself->gid)
++      else if (st.st_gid == (effective ? myself->gid : cygheap->user.real_gid))
+ 	{
+ 	  if (!(st.st_mode & S_IXGRP))
+ 	    goto eaccess_done;
+diff --git a/winsup/cygwin/fhandler.h b/winsup/cygwin/fhandler.h
+index 1544cc6..dd9b591 100644
+--- a/winsup/cygwin/fhandler.h
++++ b/winsup/cygwin/fhandler.h
+@@ -392,7 +392,7 @@ class fhandler_base
+   bool is_fs_special () {return pc.is_fs_special ();}
+   bool issymlink () {return pc.issymlink ();}
+   bool device_access_denied (int) __attribute__ ((regparm (2)));
+-  int fhaccess (int flags) __attribute__ ((regparm (2)));
++  int fhaccess (int flags, bool) __attribute__ ((regparm (3)));
+ };
+
+ class fhandler_mailslot : public fhandler_base
+diff --git a/winsup/cygwin/security.cc b/winsup/cygwin/security.cc
+index 00a8c32..8c67fc9 100644
+--- a/winsup/cygwin/security.cc
++++ b/winsup/cygwin/security.cc
+@@ -1,7 +1,7 @@
+ /* security.cc: NT file access control functions
+
+    Copyright 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,
+-   2006, 2007 Red Hat, Inc.
++   2006, 2007, 2009 Red Hat, Inc.
+
+    Originaly written by Gunther Ebert, gunther.ebert@ixos-leipzig.de
+    Completely rewritten by Corinna Vinschen <corinna@vinschen.de>
+@@ -725,15 +725,16 @@ set_file_attribute (HANDLE handle, path_conv &pc,
+
+ static int
+ check_access (security_descriptor &sd, GENERIC_MAPPING &mapping,
+-	      DWORD desired, int flags)
++	      DWORD desired, int flags, bool effective)
+ {
+   int ret = -1;
+   BOOL status;
+   DWORD granted;
+   DWORD plen = sizeof (PRIVILEGE_SET) + 3 * sizeof (LUID_AND_ATTRIBUTES);
+   PPRIVILEGE_SET pset = (PPRIVILEGE_SET) alloca (plen);
+-  HANDLE tok = cygheap->user.issetuid () ? cygheap->user.imp_token ()
+-					 : hProcImpToken;
++  HANDLE tok = ((cygheap->user.issetuid () && effective)
++		? cygheap->user.imp_token ()
++		: hProcImpToken);
+
+   if (!tok && !DuplicateTokenEx (hProcToken, MAXIMUM_ALLOWED, NULL,
+ 				 SecurityImpersonation, TokenImpersonation,
+@@ -794,7 +795,7 @@ check_access (security_descriptor &sd, GENERIC_MAPPING &mapping,
+ }
+
+ int
+-check_file_access (path_conv &pc, int flags)
++check_file_access (path_conv &pc, int flags, bool effective)
+ {
+   security_descriptor sd;
+   int ret = -1;
+@@ -810,13 +811,13 @@ check_file_access (path_conv &pc, int flags)
+   if (flags & X_OK)
+     desired |= FILE_EXECUTE;
+   if (!get_file_sd (NULL, pc, sd))
+-    ret = check_access (sd, mapping, desired, flags);
++    ret = check_access (sd, mapping, desired, flags, effective);
+   debug_printf ("flags %x, ret %d", flags, ret);
+   return ret;
+ }
+
+ int
+-check_registry_access (HANDLE hdl, int flags)
++check_registry_access (HANDLE hdl, int flags, bool effective)
+ {
+   security_descriptor sd;
+   int ret = -1;
+@@ -832,7 +833,7 @@ check_registry_access (HANDLE hdl, int flags)
+   if (flags & X_OK)
+     desired |= KEY_QUERY_VALUE;
+   if (!get_reg_sd (hdl, sd))
+-    ret = check_access (sd, mapping, desired, flags);
++    ret = check_access (sd, mapping, desired, flags, effective);
+   /* As long as we can't write the registry... */
+   if (flags & W_OK)
+     {
+diff --git a/winsup/cygwin/security.h b/winsup/cygwin/security.h
+index 7b09bc0..be0ebd4 100644
+--- a/winsup/cygwin/security.h
++++ b/winsup/cygwin/security.h
+@@ -350,8 +350,8 @@ LONG __stdcall set_file_sd (HANDLE fh, path_conv &, security_descriptor &sd,
+ 			    bool is_chown);
+ bool __stdcall add_access_allowed_ace (PACL acl, int offset, DWORD attributes, PSID sid, size_t &len_add, DWORD inherit);
+ bool __stdcall add_access_denied_ace (PACL acl, int offset, DWORD attributes, PSID sid, size_t &len_add, DWORD inherit);
+-int __stdcall check_file_access (path_conv &, int);
+-int __stdcall check_registry_access (HANDLE, int);
++int __stdcall check_file_access (path_conv &, int, bool effective = true);
++int __stdcall check_registry_access (HANDLE, int, bool effective = true);
+
+ void set_security_attribute (path_conv &pc, int attribute,
+ 			     PSECURITY_ATTRIBUTES psa,
 diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
-index 542a122..b00404d 100644
+index b00404d..15dbc87 100644
 --- a/winsup/cygwin/syscalls.cc
 +++ b/winsup/cygwin/syscalls.cc
-@@ -1124,13 +1124,6 @@ isatty (int fd)
- }
- EXPORT_ALIAS (isatty, _isatty)
-
--/* Under NT, try to make a hard link using backup API.  If that
--   fails or we are Win 95, just copy the file.
--   FIXME: We should actually be checking partition type, not OS.
--   Under NTFS, we should support hard links.  On FAT partitions,
--   we should just copy the file.
--*/
--
- extern "C" int
- link (const char *oldpath, const char *newpath)
- {
-@@ -1145,6 +1138,10 @@ link (const char *oldpath, const char *newpath)
-       debug_printf ("got %d error from build_fh_name", fh->error ());
-       set_errno (fh->error ());
+@@ -1569,7 +1569,7 @@ access (const char *fn, int flags)
+       fhandler_base *fh = build_fh_name (fn, NULL, PC_SYM_FOLLOW, stat_suffixes);
+       if (fh)
+ 	{
+-	  res =  fh->fhaccess (flags);
++	  res =  fh->fhaccess (flags, false);
+ 	  delete fh;
+ 	}
      }
-+  else if (fh->pc.isdir ())
-+    set_errno (EPERM); /* We do not permit linking directories.  */
-+  else if (!fh->pc.exists ())
-+    set_errno (ENOENT);
-   else
-     res = fh->link (newpath);
-
-@@ -1650,13 +1647,13 @@ rename (const char *oldpath, const char *newpath)
-   if (has_dot_last_component (oldpath, true))
-     {
-       oldpc.check (oldpath, PC_SYM_NOFOLLOW, stat_suffixes);
--      set_errno (oldpc.isdir () ? EBUSY : ENOTDIR);
-+      set_errno (oldpc.isdir () ? EINVAL : ENOTDIR);
-       goto out;
-     }
-   if (has_dot_last_component (newpath, true))
-     {
-       newpc.check (newpath, PC_SYM_NOFOLLOW, stat_suffixes);
--      set_errno (!newpc.exists () ? ENOENT : newpc.isdir () ? EBUSY : ENOTDIR);
-+      set_errno (!newpc.exists () ? ENOENT : newpc.isdir () ? EINVAL : ENOTDIR);
-       goto out;
-     }
-
-@@ -1701,6 +1698,11 @@ rename (const char *oldpath, const char *newpath)
-   nlen = strlen (newpath);
-   if (isdirsep (newpath[nlen - 1]))
-     {
-+      if (!oldpc.isdir())
-+	{
-+	  set_errno (ENOTDIR);
-+	  goto out;
-+	}
-       stpcpy (newbuf = tp.c_get (), newpath);
-       while (nlen > 0 && isdirsep (newbuf[nlen - 1]))
- 	newbuf[--nlen] = '\0';
-@@ -1718,7 +1720,7 @@ rename (const char *oldpath, const char *newpath)
-       set_errno (EROFS);
-       goto out;
-     }
--  if (new_dir_requested && !newpc.isdir ())
-+  if (new_dir_requested && newpc.exists() && !newpc.isdir ())
-     {
-       set_errno (ENOTDIR);
-       goto out;
+@@ -3864,7 +3864,7 @@ faccessat (int dirfd, const char *pathname, int mode, int flags)
+ 					     stat_suffixes);
+ 	  if (fh)
+ 	    {
+-	      res =  fh->fhaccess (mode);
++	      res =  fh->fhaccess (mode, flags & AT_EACCESS);
+ 	      delete fh;
+ 	    }
+ 	}
 -- 
 1.6.5.rc1
 
 
---------------090602080703080100010607--
+--------------070009000401060508080606--
