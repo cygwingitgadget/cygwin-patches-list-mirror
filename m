@@ -1,22 +1,23 @@
-Return-Path: <cygwin-patches-return-6666-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 836 invoked by alias); 30 Sep 2009 15:55:59 -0000
-Received: (qmail 815 invoked by uid 22791); 30 Sep 2009 15:55:58 -0000
+Return-Path: <cygwin-patches-return-6667-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 30335 invoked by alias); 30 Sep 2009 19:04:38 -0000
+Received: (qmail 30177 invoked by uid 22791); 30 Sep 2009 19:04:37 -0000
+X-SWARE-Spam-Status: No, hits=-2.0 required=5.0 	tests=BAYES_00,SPF_SOFTFAIL
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 30 Sep 2009 15:55:54 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 8D8AD6D5598; Wed, 30 Sep 2009 17:55:43 +0200 (CEST)
-Date: Wed, 30 Sep 2009 15:55:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Received: from qmta07.emeryville.ca.mail.comcast.net (HELO QMTA07.emeryville.ca.mail.comcast.net) (76.96.30.64)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 30 Sep 2009 19:04:25 +0000
+Received: from OMTA14.emeryville.ca.mail.comcast.net ([76.96.30.60]) 	by QMTA07.emeryville.ca.mail.comcast.net with comcast 	id n2YG1c0031HpZEsA774R5q; Wed, 30 Sep 2009 19:04:25 +0000
+Received: from [192.168.0.101] ([24.10.247.15]) 	by OMTA14.emeryville.ca.mail.comcast.net with comcast 	id n74P1c00C0Lg2Gw8a74QK4; Wed, 30 Sep 2009 19:04:24 +0000
+Message-ID: <4AC3ABA4.9090905@byu.net>
+Date: Wed, 30 Sep 2009 19:04:00 -0000
+From: Eric Blake <ebb9@byu.net>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.23) Gecko/20090812 Thunderbird/2.0.0.23 Mnenhy/0.7.6.666
+MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
 Subject: Re: detect . in a/.//
-Message-ID: <20090930155543.GP7193@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4AC34A01.4070509@byu.net> <20090930152438.GA11977@ednor.casa.cgf.cx> <20090930153451.GA12182@ednor.casa.cgf.cx>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <4AC34A01.4070509@byu.net>  <20090930152438.GA11977@ednor.casa.cgf.cx> <20090930153451.GA12182@ednor.casa.cgf.cx>
 In-Reply-To: <20090930153451.GA12182@ednor.casa.cgf.cx>
-User-Agent: Mutt/1.5.19 (2009-02-20)
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,49 +27,34 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q3/txt/msg00120.txt.bz2
+X-SW-Source: 2009-q3/txt/msg00121.txt.bz2
 
-On Sep 30 11:34, Christopher Faylor wrote:
-> bool
-> has_dot_last_component (const char *dir, bool test_dot_dot)
-> {
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+According to Christopher Faylor on 9/30/2009 9:34 AM:
+>> Is this function supposed to detect just "." or "*/."?
+
+Both.
+
 >   /* SUSv3: . and .. are not allowed as last components in various system
 >      calls.  Don't test for backslash path separator since that's a Win32
 >      path following Win32 rules. */
 >   const char *last_comp = strrchr (dir, '\0');
-> 
->   if (last_comp == dir)
->     return false;       /* Empty string.  Probably shouldn't happen here? */
-> 
->   /* Detect run of trailing slashes */
->   while (last_comp > dir && *--last_comp == '/')
->     continue;
-> 
->   /* Detect just a run of slashes or a path that does not end with a slash. */
->   if (*last_comp != '.')
->     return false;
-> 
->   /* We know we have a trailing dot here.  Check that it really is a standalone "."
->      path component by checking that it is at the beginning of the string or is
->      preceded by a "/" */
->   if (last_comp == dir || *--last_comp == '/')
->     return true;
-> 
->   /* If we're not checking for '..' we're done.  Ditto if we're now pointing to
->      a non-dot. */
->   if (!test_dot_dot || *last_comp != '.')
->     return false;               /* either not testing for .. or this was not '..' */
-> 
->   /* Repeat previous test for standalone or path component. */
->   return last_comp == dir || last_comp[-1] == '/';
-> }
 
-Looks good to me.  Easier to understand than the current code.
+Looked like a decent rewrite to me, except why did you use strrchr instead
+of strchr to find the end of the string?
 
+- --
+Don't work too hard, make some time for fun as well!
 
-Corinna
+Eric Blake             ebb9@byu.net
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.9 (Cygwin)
+Comment: Public key at home.comcast.net/~ericblake/eblake.gpg
+Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+iEYEARECAAYFAkrDq6QACgkQ84KuGfSFAYDkEQCgt4wpQPmooB5IhJgPDI/jLJjI
+ScEAoIc9OlvPD8CYUVYt6r1QABYn8tyD
+=CEG6
+-----END PGP SIGNATURE-----
