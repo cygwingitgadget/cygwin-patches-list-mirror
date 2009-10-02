@@ -1,23 +1,21 @@
-Return-Path: <cygwin-patches-return-6668-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 18267 invoked by alias); 30 Sep 2009 19:31:30 -0000
-Received: (qmail 18252 invoked by uid 22791); 30 Sep 2009 19:31:28 -0000
+Return-Path: <cygwin-patches-return-6669-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 8426 invoked by alias); 2 Oct 2009 20:56:47 -0000
+Received: (qmail 8415 invoked by uid 22791); 2 Oct 2009 20:56:47 -0000
+X-SWARE-Spam-Status: No, hits=-2.2 required=5.0 	tests=AWL,BAYES_00,HK_OBFDOM,SPF_PASS
 X-Spam-Check-By: sourceware.org
-Received: from pool-98-110-183-151.bstnma.fios.verizon.net (HELO cgf.cx) (98.110.183.151)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 30 Sep 2009 19:31:22 +0000
-Received: from ednor.cgf.cx (ednor.casa.cgf.cx [192.168.187.5]) 	by cgf.cx (Postfix) with ESMTP id 1021813C002 	for <cygwin-patches@cygwin.com>; Wed, 30 Sep 2009 15:31:13 -0400 (EDT)
-Received: by ednor.cgf.cx (Postfix, from userid 201) 	id 0F6282B352; Wed, 30 Sep 2009 15:31:13 -0400 (EDT)
-Date: Wed, 30 Sep 2009 19:31:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: detect . in a/.//
-Message-ID: <20090930193112.GA15083@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4AC34A01.4070509@byu.net>  <20090930152438.GA11977@ednor.casa.cgf.cx>  <20090930153451.GA12182@ednor.casa.cgf.cx>  <4AC3ABA4.9090905@byu.net>
+Received: from mail-ew0-f218.google.com (HELO mail-ew0-f218.google.com) (209.85.219.218)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 02 Oct 2009 20:56:43 +0000
+Received: by ewy18 with SMTP id 18so1584764ewy.43         for <cygwin-patches@cygwin.com>; Fri, 02 Oct 2009 13:56:40 -0700 (PDT)
+Received: by 10.210.6.21 with SMTP id 21mr26193ebf.58.1254517000467;         Fri, 02 Oct 2009 13:56:40 -0700 (PDT)
+Received: from ?192.168.2.99? (cpc2-cmbg8-0-0-cust61.cmbg.cable.ntl.com [82.6.108.62])         by mx.google.com with ESMTPS id 7sm413295eyb.13.2009.10.02.13.56.39         (version=SSLv3 cipher=RC4-MD5);         Fri, 02 Oct 2009 13:56:39 -0700 (PDT)
+Message-ID: <4AC66C72.7070102@gmail.com>
+Date: Fri, 02 Oct 2009 20:56:00 -0000
+From: Dave Korn <dave.korn.cygwin@googlemail.com>
+User-Agent: Thunderbird 2.0.0.17 (Windows/20080914)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4AC3ABA4.9090905@byu.net>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+To: cygwin-patches@cygwin.com
+Subject: [patch] Update build flags for new compiler feature
+Content-Type: multipart/mixed;  boundary="------------040509080601000807090102"
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -27,25 +25,60 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q3/txt/msg00122.txt.bz2
+X-SW-Source: 2009-q4/txt/msg00000.txt.bz2
 
-On Wed, Sep 30, 2009 at 01:04:04PM -0600, Eric Blake wrote:
->According to Christopher Faylor on 9/30/2009 9:34 AM:
->>> Is this function supposed to detect just "." or "*/."?
->
->Both.
->
->>   /* SUSv3: . and .. are not allowed as last components in various system
->>      calls.  Don't test for backslash path separator since that's a Win32
->>      path following Win32 rules. */
->>   const char *last_comp = strrchr (dir, '\0');
->
->Looked like a decent rewrite to me, except why did you use strrchr instead
->of strchr to find the end of the string?
+This is a multi-part message in MIME format.
+--------------040509080601000807090102
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+Content-length: 826
 
-Oops.  That was an oversight.  I'll change it to strchr and check it in.
-Thanks for catching that.
 
-Btw, I've only confirmed that this compiles.  I haven't actually tested it.
+  So, nobody did ask for a compiler version check(*), so here's the patch plus
+changelog, and I'd like to get separate OKs from both cgf and cv to say that
+you've each either updated your cross-build environments or don't mind
+patching the flag back out locally until you can.
 
-cgf
+winsup/cygwin/ChangeLog:
+
+	* Makefile.in (CFLAGS): Add -mno-use-libstdc-wrappers
+
+  (In case anyone was wondering, I think CFLAGS, rather than CXXFLAGS, is the
+right place to add it; it applies to cross-language mixed linking situations
+as much as it does to C++ alone).
+
+    cheers,
+      DaveK
+-- 
+(*) - I'm perfectly happy with the notion that if you want to run with the
+bleeding edge y'gotta keep your prerequisites up-to-date too, and cygwin is
+after all a self-hosted environment, and the distro compiler certainly
+supports this feature :)
+
+--------------040509080601000807090102
+Content-Type: text/x-c;
+ name="no-wrap-dll.diff"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline;
+ filename="no-wrap-dll.diff"
+Content-length: 682
+
+Index: winsup/cygwin/Makefile.in
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/Makefile.in,v
+retrieving revision 1.229
+diff -p -u -r1.229 Makefile.in
+--- winsup/cygwin/Makefile.in	12 Jul 2009 21:15:46 -0000	1.229
++++ winsup/cygwin/Makefile.in	2 Oct 2009 15:31:32 -0000
+@@ -55,7 +55,8 @@ CC:=@CC@
+ # FIXME: Which is it, CC or CC_FOR_TARGET?
+ CC_FOR_TARGET:=$(CC)
+ CFLAGS=@CFLAGS@
+-override CFLAGS+=-MMD ${$(*F)_CFLAGS} -Werror -fmerge-constants -ftracer $(CCEXTRA)
++override CFLAGS+=-MMD ${$(*F)_CFLAGS} -Werror -fmerge-constants -ftracer \
++  -mno-use-libstdc-wrappers $(CCEXTRA)
+ CXX=@CXX@
+ override CXXFLAGS=@CXXFLAGS@
+ 
+
+--------------040509080601000807090102--
