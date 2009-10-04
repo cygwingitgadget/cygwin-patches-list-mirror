@@ -1,22 +1,21 @@
-Return-Path: <cygwin-patches-return-6685-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 2992 invoked by alias); 4 Oct 2009 13:53:23 -0000
-Received: (qmail 2982 invoked by uid 22791); 4 Oct 2009 13:53:22 -0000
-X-SWARE-Spam-Status: No, hits=-2.5 required=5.0 	tests=AWL,BAYES_00,SPF_PASS
+Return-Path: <cygwin-patches-return-6686-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 25820 invoked by alias); 4 Oct 2009 19:08:29 -0000
+Received: (qmail 25809 invoked by uid 22791); 4 Oct 2009 19:08:29 -0000
+X-SWARE-Spam-Status: No, hits=-1.8 required=5.0 	tests=AWL,BAYES_00
 X-Spam-Check-By: sourceware.org
-Received: from mail-ew0-f218.google.com (HELO mail-ew0-f218.google.com) (209.85.219.218)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sun, 04 Oct 2009 13:53:19 +0000
-Received: by ewy18 with SMTP id 18so2551029ewy.43         for <cygwin-patches@cygwin.com>; Sun, 04 Oct 2009 06:53:16 -0700 (PDT)
-Received: by 10.211.132.37 with SMTP id j37mr5809595ebn.76.1254664394676;         Sun, 04 Oct 2009 06:53:14 -0700 (PDT)
-Received: from ?192.168.2.99? (cpc2-cmbg8-0-0-cust61.cmbg.cable.ntl.com [82.6.108.62])         by mx.google.com with ESMTPS id 7sm2367591eyb.13.2009.10.04.06.53.13         (version=SSLv3 cipher=RC4-MD5);         Sun, 04 Oct 2009 06:53:14 -0700 (PDT)
-Message-ID: <4AC8AC37.4050306@gmail.com>
-Date: Sun, 04 Oct 2009 13:53:00 -0000
-From: Dave Korn <dave.korn.cygwin@googlemail.com>
-User-Agent: Thunderbird 2.0.0.17 (Windows/20080914)
+Received: from mailout11.t-online.de (HELO mailout11.t-online.de) (194.25.134.85)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sun, 04 Oct 2009 19:08:24 +0000
+Received: from fwd05.aul.t-online.de  	by mailout11.t-online.de with smtp  	id 1MuWRR-0003sV-00; Sun, 04 Oct 2009 21:08:21 +0200
+Received: from [10.3.2.2] (TWP1-ZZlghuHcND04JSCqSQH5qPQdL0FN9DecTnGUpygQX+Cojyec1OHjW7DTGhw5d@[217.235.186.109]) by fwd05.aul.t-online.de 	with esmtp id 1MuWRF-01kcJk0; Sun, 4 Oct 2009 21:08:09 +0200
+Message-ID: <4AC8F299.1020303@t-online.de>
+Date: Sun, 04 Oct 2009 19:08:00 -0000
+From: Christian Franke <Christian.Franke@t-online.de>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.23) Gecko/20090825 SeaMonkey/1.1.18
 MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
-Subject: Re: [patch] Update build flags for new compiler feature
-References: <4AC66C72.7070102@gmail.com> <20091002221933.GB12372@ednor.casa.cgf.cx> <20091003120854.GA22019@calimero.vinschen.de> <4AC74BB5.9060503@gmail.com> <20091003130644.GJ7193@calimero.vinschen.de> <4AC75235.1070403@gmail.com> <4AC84E5A.7040203@gmail.com> <20091004112648.GE4563@calimero.vinschen.de>
-In-Reply-To: <20091004112648.GE4563@calimero.vinschen.de>
-Content-Type: text/plain; charset=ISO-8859-1
+Subject: Re: [Patch] Allow to disable root privileges with CYGWIN=noroot
+References: <4A993580.4060604@t-online.de> <20090829192050.GA32405@calimero.vinschen.de> <4A999EC2.2070801@t-online.de> <20090830090314.GB2648@calimero.vinschen.de> <4A9AD529.3060107@t-online.de> <20090901183209.GA14650@calimero.vinschen.de> <20091004123006.GF4563@calimero.vinschen.de> <20091004125455.GG4563@calimero.vinschen.de>
+In-Reply-To: <20091004125455.GG4563@calimero.vinschen.de>
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
 Content-Transfer-Encoding: 7bit
 X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
@@ -28,21 +27,55 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q4/txt/msg00016.txt.bz2
+X-SW-Source: 2009-q4/txt/msg00017.txt.bz2
+
+Hi Corinna,
 
 Corinna Vinschen wrote:
+> New patch attached.  I made the test a bit more foolproof, hopefully.
+> And a restricted token does not require to load the user's registry hive,
+> nor should Cygwin try to enable the backup/restore permissions in the
+> new token.  That spoils the idea of a restricted token a bit...
+> ...
+>
+>   
 
-> Since I have a running gcc-4.34 now, do you still want me to do that?
-> Plaese keep in mind that I'm a lazy cow...
+Thanks!
 
-  Efficient use of resources != laziness.  No, I wouldn't suggest doing that,
-what you ended up with by hacking the header files should (in theory, anyway)
-be the same as what you would get if the autoconf tests had done it for you.
+> +  bool request_restricted_uid_switch =
+> +     uid == myself->uid
+> +     && (   (cygheap->user.external_token != NO_IMPERSONATION
+> +	     && IsTokenRestricted (cygheap->user.external_token))
+> +	 || (cygheap->user.external_token == NO_IMPERSONATION
+> +	     && cygheap->user.issetuid ()
+> +	     && IsTokenRestricted (cygheap->user.curr_primary_token)));
+>   
 
-  Now that all the related mysteries are solved, I'll go ahead and commit that
-patch to the build flags.  (I just thought it would be kind of wrong of me to
-leave HEAD in a state where the one and only actual RedHat staffer working on
-the project couldn't compile it!)
 
-    cheers,
-      DaveK
+Unfortunately this does not work for a typical use case: an admin 
+process creates a restricted token with standard user rights. The 
+function IsTokenRestricted() returns TRUE only if the token contains 
+'restricted SIDs'.
+(http://msdn.microsoft.com/en-us/library/aa379137(VS.85).aspx)
+
+Test with tokens returned by SaferComputeTokenFromLevel():
+(http://msdn.microsoft.com/en-us/library/ms972827.aspx)
+
+SAFER_LEVELID_NORMALUSER:  IsTokenRestricted()=FALSE
+SAFER_LEVELID_CONSTRAINED: IsTokenRestricted()=TRUE
+SAFER_LEVELID_UNTRUSTED:   IsTokenRestricted()=TRUE
+
+BTW: Only NORMALUSER is works for Cygwin. Using DropMyRights.exe to 
+start of a Cygwin process with a CONTRAINED token results in:
+
+5 [sig] true 3788 C:\cygwin-1.7\bin\true.exe:
+   *** fatal error - couldn't create signal pipe, Win32 error 5
+
+
+There is apparently no function to check whether a token is a result of 
+CreateRestrictedToken() or SaferComputeTokenFromLevel().
+
+Would'nt it be easier to add a new function 
+'cygwin_set_restricted_token(token)' instead of the test of the token type?
+
+Christian
