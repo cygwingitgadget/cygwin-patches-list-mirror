@@ -1,22 +1,23 @@
-Return-Path: <cygwin-patches-return-6706-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 1887 invoked by alias); 5 Oct 2009 20:28:50 -0000
-Received: (qmail 1872 invoked by uid 22791); 5 Oct 2009 20:28:47 -0000
-X-SWARE-Spam-Status: No, hits=-3.2 required=5.0 	tests=AWL,BAYES_00,HK_OBFDOM,RCVD_IN_DNSWL_LOW,SPF_PASS
+Return-Path: <cygwin-patches-return-6707-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 5882 invoked by alias); 5 Oct 2009 20:39:32 -0000
+Received: (qmail 5870 invoked by uid 22791); 5 Oct 2009 20:39:31 -0000
 X-Spam-Check-By: sourceware.org
-Received: from out1.smtp.messagingengine.com (HELO out1.smtp.messagingengine.com) (66.111.4.25)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 05 Oct 2009 20:28:40 +0000
-Received: from compute1.internal (compute1.internal [10.202.2.41]) 	by gateway1.messagingengine.com (Postfix) with ESMTP id 83288831ED 	for <cygwin-patches@cygwin.com>; Mon,  5 Oct 2009 16:28:38 -0400 (EDT)
-Received: from heartbeat1.messagingengine.com ([10.202.2.160])   by compute1.internal (MEProxy); Mon, 05 Oct 2009 16:28:38 -0400
-Received: from [192.168.1.3] (user-0c6sbc4.cable.mindspring.com [24.110.45.132]) 	by mail.messagingengine.com (Postfix) with ESMTPSA id E5C7774B86; 	Mon,  5 Oct 2009 16:28:37 -0400 (EDT)
-Message-ID: <4ACA56F2.30303@cwilson.fastmail.fm>
-Date: Mon, 05 Oct 2009 20:28:00 -0000
-From: Charles Wilson <cygwin@cwilson.fastmail.fm>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.8.1.23) Gecko/20090812 Thunderbird/2.0.0.23 Mnenhy/0.7.6.666
-MIME-Version: 1.0
+Received: from pool-173-76-48-2.bstnma.east.verizon.net (HELO cgf.cx) (173.76.48.2)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 05 Oct 2009 20:39:26 +0000
+Received: from ednor.cgf.cx (ednor.casa.cgf.cx [192.168.187.5]) 	by cgf.cx (Postfix) with ESMTP id 114F33B0003 	for <cygwin-patches@cygwin.com>; Mon,  5 Oct 2009 16:39:17 -0400 (EDT)
+Received: by ednor.cgf.cx (Postfix, from userid 201) 	id 0B4E12B352; Mon,  5 Oct 2009 16:39:17 -0400 (EDT)
+Date: Mon, 05 Oct 2009 20:39:00 -0000
+From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: Add wrappers for ExitProcess, TerminateProcess
-References: <4ACA4323.5080103@cwilson.fastmail.fm> <4ACA47AF.7070703@gmail.com> <4ACA4B76.5050209@gmail.com> <4ACA4ADF.6000205@cwilson.fastmail.fm> <4ACA4EE6.5000303@gmail.com> <4ACA4EE6.1020803@cwilson.fastmail.fm> <4ACA52EC.2070409@gmail.com>
-In-Reply-To: <4ACA52EC.2070409@gmail.com>
-Content-Type: multipart/mixed;  boundary="------------050702040008040407080308"
+Message-ID: <20091005203916.GB9289@ednor.casa.cgf.cx>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <4ACA4323.5080103@cwilson.fastmail.fm>  <20091005202722.GG12789@calimero.vinschen.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20091005202722.GG12789@calimero.vinschen.de>
+User-Agent: Mutt/1.5.20 (2009-06-14)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,286 +27,41 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q4/txt/msg00037.txt.bz2
+X-SW-Source: 2009-q4/txt/msg00038.txt.bz2
 
-This is a multi-part message in MIME format.
---------------050702040008040407080308
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 7bit
-Content-length: 922
+On Mon, Oct 05, 2009 at 10:27:22PM +0200, Corinna Vinschen wrote:
+>On Oct  5 15:04, Charles Wilson wrote:
+>> Normally, posix programs should call abort(), exit(), _exit(), kill() --
+>> or various pthread functions -- to terminate operation (either their
+>> own, or that of some other processes/thread).  However, there are two
+>> cases where the win32 ExitProcess and TerminateProcess functions might
+>> justifiably be called:
+>>   1) inside cygwin's own process startup/shutdown implementation
+>>   2) "Native" programs that use the w32api throughout, but are compiled
+>> using the cygwin compiler (e.g. without -mno-cygwin). [*]
+>> 
+>> However, the ExitProcess and TerminateProcess functions, when called
+>> directly, do not allow for the 'exit status' maintained by cygwin to be
+>> set. This can be a problem when such cygwin applications are exec'ed by
+>> other cygwin apps: cygwin's code for exec'ing children doesn't ever
+>> check the value of GetExitCodeProcess as set by these win32 functions,
+>> if the child application is also a cygwin app.
+>> 
+>> The attached patch address this problem, by providing two wrappers:
+>>   cygwin_terminate_process <--> TerminateProcess
+>>   cygwin_exit_process      <--> ExitProcess
+>
+>I have some doubts that we really need such a functionality externally
+>available, outside of the limited scenario of something like
+>pseudo-reloc.  An API for those knowing what this is about is very
+>likely sufficient.  What about
+>
+>   cygwin_internal (CW_TERMINATE_PROCESS);
+>   cygwin_internal (CW_EXIT_PROCESS);
+>
+>No new entry point, no need to document it.
 
-Dave Korn wrote:
-> Charles Wilson wrote:
-> 
->> By moving the definition to globals.cc, we get its extern declaration in
->> the autogenerated globals.h -- which everybody includes via winsup.h.
-> 
->   Ooh, I forgot we had that.  Makes sense then.
+Big ditto, except obviously both of those need an extra exit code
+argument.
 
-As revised:
-
-
-2009-10-04  Charles Wilson  <...>
-
-	Add cygwin wrappers for ExitProcess and TerminateProcess.
-	* include/sys/cygwin.h: Declare new functions
-	cygwin_exit_process and cygwin_terminate_process.
-	* cygwin.din: Add new functions cygwin_exit_process and
-	cygwin_terminate_process.
-	* dcrt0.cc (cygwin_exit_process): New function.
-	(cygwin_terminate_process): New function.
-	* include/cygwin/version.h: Bump version.
-	* pinfo.h (pinfo::set_exit_code): New method.
-	* pinfo.cc (pinfo::set_exit_code): New, refactored from...
-	(pinfo::maybe_set_exit_code_from_windows): here. Call it.
-	* exceptions.cc: Move global variable sigExeced...
-	* globals.cc: here.
-
-
---
-Chuck
-
---------------050702040008040407080308
-Content-Type: text/plain;
- name="01-cygwin-terminate-process.patch-2"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline;
- filename="01-cygwin-terminate-process.patch-2"
-Content-length: 8327
-
-? .globals.cc.swp
-? lib/cygwin1.def
-? lib/pseudo-reloc.c.save
-Index: cygwin.din
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/cygwin.din,v
-retrieving revision 1.216
-diff -u -p -r1.216 cygwin.din
---- cygwin.din	26 Sep 2009 21:01:10 -0000	1.216
-+++ cygwin.din	5 Oct 2009 19:52:51 -0000
-@@ -250,6 +250,7 @@ cygwin_conv_to_win32_path SIGFE
- cygwin_create_path SIGFE
- cygwin_detach_dll SIGFE_MAYBE
- cygwin_dll_init NOSIGFE
-+cygwin_exit_process NOSIGFE
- cygwin_internal NOSIGFE
- cygwin_logon_user SIGFE
- cygwin_posix_path_list_p NOSIGFE
-@@ -258,6 +259,7 @@ cygwin_posix_to_win32_path_list_buf_size
- cygwin_set_impersonation_token SIGFE
- cygwin_split_path NOSIGFE
- cygwin_stackdump SIGFE
-+cygwin_terminate_process NOSIGFE
- cygwin_umount SIGFE
- cygwin_win32_to_posix_path_list SIGFE
- cygwin_win32_to_posix_path_list_buf_size SIGFE
-Index: dcrt0.cc
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/dcrt0.cc,v
-retrieving revision 1.365
-diff -u -p -r1.365 dcrt0.cc
---- dcrt0.cc	2 Oct 2009 14:58:10 -0000	1.365
-+++ dcrt0.cc	5 Oct 2009 19:52:52 -0000
-@@ -41,6 +41,8 @@ details. */
- 
- 
- extern "C" void cygwin_exit (int) __attribute__ ((noreturn));
-+extern "C" BOOL cygwin_terminate_process (HANDLE, UINT);
-+extern "C" void cygwin_exit_process (UINT) __attribute__ ((noreturn));
- extern "C" void __sinit (_reent *);
- 
- static int NO_COPY envc;
-@@ -1136,6 +1138,67 @@ _exit (int n)
-   do_exit (((DWORD) n & 0xff) << 8);
- }
- 
-+/* DOCTOOL-START
-+ <title>cygwin_terminate_process</title>
-+
-+  <funcsynopsis><funcprototype>
-+    <funcdef>extern "C" BOOL
-+      <function>cygwin_terminate_process</function>
-+      </funcdef>
-+      <paramdef>HANDLE <parameter>process</parameter></paramdef>
-+      <paramdef>UINT <parameter>status</parameter></paramdef>
-+  </funcprototype></funcsynopsis>
-+
-+  <para>Cygwin-specific wrapper for win32 TerminateProcess. It
-+ensures that if used to terminate the current process, then the
-+correct exit code will be made available to this process's parent
-+(if that parent is also a cygwin process). Otherwise, it simply
-+delegates to the win32 TerminateProcess.</para>
-+
-+  <para>This function should be used in cygwin programs instead
-+of TerminateProcess. Ordinarily, however, the ANSI abort() or the
-+POSIX _exit() function should be preferred over either
-+TerminateProcess or cygwin_terminate_process when used to terminate
-+the current process. Similarly, the POSIX kill() function should
-+be used to terminate cygwin processes other than the current one.
-+</sect1>
-+
-+   DOCTOOL-END */
-+extern "C" BOOL
-+cygwin_terminate_process (HANDLE process, UINT status)
-+{
-+  if (process == GetCurrentProcess())
-+    myself.set_exit_code ((DWORD)status);
-+
-+  return TerminateProcess (process, status);
-+}
-+
-+/* DOCTOOL-START
-+ <title>cygwin_exit_process</title>
-+
-+  <funcsynopsis><funcprototype>
-+    <funcdef>extern "C" void
-+      <function>cygwin_exit_process</function>
-+      </funcdef>
-+      <paramdef>UINT <parameter>status</parameter></paramdef>
-+  </funcprototype></funcsynopsis>
-+
-+  <para>Cygwin-specific wrapper for win32 ExitProcess, which
-+ensures that parent cygwin process receives the specified status
-+as an exit code, before calling ExitProcess. This function should
-+be used in cygwin programs instead of ExitProcess. Ordinarily,
-+however, the ANSI exit() function should be preferred over either
-+ExitProcess or cygwin_exit_process.</para>
-+</sect1>
-+
-+   DOCTOOL-END */
-+extern "C" void
-+cygwin_exit_process (UINT status)
-+{
-+  myself.set_exit_code ((DWORD)status);
-+  ExitProcess (status);
-+}
-+
- extern "C" void
- __api_fatal (const char *fmt, ...)
- {
-Index: exceptions.cc
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/exceptions.cc,v
-retrieving revision 1.335
-diff -u -p -r1.335 exceptions.cc
---- exceptions.cc	19 Sep 2009 15:34:19 -0000	1.335
-+++ exceptions.cc	5 Oct 2009 19:52:52 -0000
-@@ -40,7 +40,6 @@ extern void sigdelayed ();
- };
- 
- extern child_info_spawn *chExeced;
--int NO_COPY sigExeced;
- 
- static BOOL WINAPI ctrl_c_handler (DWORD);
- static WCHAR windows_system_directory[1024];
-Index: globals.cc
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/globals.cc,v
-retrieving revision 1.9
-diff -u -p -r1.9 globals.cc
---- globals.cc	24 Aug 2009 11:14:30 -0000	1.9
-+++ globals.cc	5 Oct 2009 19:52:52 -0000
-@@ -49,6 +49,10 @@ SYSTEM_INFO system_info;
- /* Set in init.cc.  Used to check if Cygwin DLL is dynamically loaded. */
- int NO_COPY dynamically_loaded;
- 
-+/* set in exceptions.cc.  Used to store the desired exit value when
-+   a process is killed by a signal */
-+int NO_COPY sigExeced;
-+
- bool display_title;
- bool strip_title_path;
- bool allow_glob = true;
-Index: pinfo.cc
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/pinfo.cc,v
-retrieving revision 1.253
-diff -u -p -r1.253 pinfo.cc
---- pinfo.cc	12 Jul 2009 21:15:47 -0000	1.253
-+++ pinfo.cc	5 Oct 2009 19:52:52 -0000
-@@ -136,11 +136,18 @@ status_exit (DWORD x)
- 
- # define self (*this)
- void
-+pinfo::set_exit_code (DWORD x)
-+{
-+  if (x >= 0xc0000000UL)
-+    x = status_exit (x);
-+  self->exitcode = EXITCODE_SET | (sigExeced ?: (x & 0xff) << 8);
-+}
-+
-+void
- pinfo::maybe_set_exit_code_from_windows ()
- {
-   DWORD x = 0xdeadbeef;
-   DWORD oexitcode = self->exitcode;
--  extern int sigExeced;
- 
-   if (hProcess && !(self->exitcode & EXITCODE_SET))
-     {
-@@ -148,9 +155,7 @@ pinfo::maybe_set_exit_code_from_windows 
- 						   process hasn't quite exited
- 						   after closing pipe */
-       GetExitCodeProcess (hProcess, &x);
--      if (x >= 0xc0000000UL)
--	x = status_exit (x);
--      self->exitcode = EXITCODE_SET | (sigExeced ?: (x & 0xff) << 8);
-+      set_exit_code (x);
-     }
-   sigproc_printf ("pid %d, exit value - old %p, windows %p, cygwin %p",
- 		  self->pid, oexitcode, x, self->exitcode);
-Index: pinfo.h
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/pinfo.h,v
-retrieving revision 1.108
-diff -u -p -r1.108 pinfo.h
---- pinfo.h	20 Dec 2008 17:32:31 -0000	1.108
-+++ pinfo.h	5 Oct 2009 19:52:52 -0000
-@@ -155,6 +155,7 @@ public:
-   }
-   void exit (DWORD n) __attribute__ ((noreturn, regparm(2)));
-   void maybe_set_exit_code_from_windows () __attribute__ ((regparm(1)));
-+  void set_exit_code (DWORD n) __attribute__ ((regparm(2)));
-   _pinfo *operator -> () const {return procinfo;}
-   int operator == (pinfo *x) const {return x->procinfo == procinfo;}
-   int operator == (pinfo &x) const {return x.procinfo == procinfo;}
-Index: include/cygwin/version.h
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/include/cygwin/version.h,v
-retrieving revision 1.299
-diff -u -p -r1.299 version.h
---- include/cygwin/version.h	26 Sep 2009 21:01:10 -0000	1.299
-+++ include/cygwin/version.h	5 Oct 2009 19:52:53 -0000
-@@ -368,12 +368,13 @@ details. */
-       212: Add and export libstdc++ malloc wrappers.
-       213: Export canonicalize_file_name, eaccess, euidaccess.
-       214: Export execvpe, fexecve.
-+      215: Export cygwin_terminate_process, cygwin_exit_process.
-      */
- 
-      /* Note that we forgot to bump the api for ualarm, strtoll, strtoull */
- 
- #define CYGWIN_VERSION_API_MAJOR 0
--#define CYGWIN_VERSION_API_MINOR 214
-+#define CYGWIN_VERSION_API_MINOR 215
- 
-      /* There is also a compatibity version number associated with the
- 	shared memory regions.  It is incremented when incompatible
-Index: include/sys/cygwin.h
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/include/sys/cygwin.h,v
-retrieving revision 1.80
-diff -u -p -r1.80 cygwin.h
---- include/sys/cygwin.h	7 Jul 2009 20:12:44 -0000	1.80
-+++ include/sys/cygwin.h	5 Oct 2009 19:52:53 -0000
-@@ -94,6 +94,8 @@ extern void *cygwin_create_path (cygwin_
- extern pid_t cygwin_winpid_to_pid (int);
- extern int cygwin_posix_path_list_p (const char *);
- extern void cygwin_split_path (const char *, char *, char *);
-+extern void cygwin_exit_process (unsigned int status) __attribute__((noreturn));
-+extern BOOL cygwin_terminate_process (HANDLE process, unsigned int status);
- 
- struct __cygwin_perfile
- {
-
---------------050702040008040407080308--
+cgf
