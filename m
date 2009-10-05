@@ -1,22 +1,23 @@
-Return-Path: <cygwin-patches-return-6689-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 31138 invoked by alias); 4 Oct 2009 20:08:57 -0000
-Received: (qmail 31128 invoked by uid 22791); 4 Oct 2009 20:08:57 -0000
+Return-Path: <cygwin-patches-return-6690-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 30365 invoked by alias); 5 Oct 2009 00:28:46 -0000
+Received: (qmail 30355 invoked by uid 22791); 5 Oct 2009 00:28:46 -0000
+X-SWARE-Spam-Status: No, hits=-2.0 required=5.0 	tests=BAYES_00,SPF_SOFTFAIL
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sun, 04 Oct 2009 20:08:53 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 352A06D55B9; Sun,  4 Oct 2009 22:08:43 +0200 (CEST)
-Date: Sun, 04 Oct 2009 20:08:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [Patch] Allow to disable root privileges with CYGWIN=noroot
-Message-ID: <20091004200843.GK4563@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4A993580.4060604@t-online.de> <20090829192050.GA32405@calimero.vinschen.de> <4A999EC2.2070801@t-online.de> <20090830090314.GB2648@calimero.vinschen.de> <4A9AD529.3060107@t-online.de> <20090901183209.GA14650@calimero.vinschen.de> <20091004123006.GF4563@calimero.vinschen.de> <20091004125455.GG4563@calimero.vinschen.de> <4AC8F299.1020303@t-online.de> <20091004195723.GH4563@calimero.vinschen.de>
+Received: from qmta15.emeryville.ca.mail.comcast.net (HELO QMTA15.emeryville.ca.mail.comcast.net) (76.96.27.228)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 05 Oct 2009 00:28:40 +0000
+Received: from OMTA02.emeryville.ca.mail.comcast.net ([76.96.30.19]) 	by QMTA15.emeryville.ca.mail.comcast.net with comcast 	id oo6m1c01q0QkzPwAFoUgPL; Mon, 05 Oct 2009 00:28:40 +0000
+Received: from [192.168.0.101] ([24.10.247.15]) 	by OMTA02.emeryville.ca.mail.comcast.net with comcast 	id ooUe1c00N0Lg2Gw8NoUf6n; Mon, 05 Oct 2009 00:28:40 +0000
+Message-ID: <4AC93DB5.5020303@byu.net>
+Date: Mon, 05 Oct 2009 00:28:00 -0000
+From: Eric Blake <ebb9@byu.net>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.23) Gecko/20090812 Thunderbird/2.0.0.23 Mnenhy/0.7.6.666
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20091004195723.GH4563@calimero.vinschen.de>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+To: cygwin-patches@cygwin.com
+Subject: Re: [patch] Update build flags for new compiler feature
+References: <4AC66C72.7070102@gmail.com>
+In-Reply-To: <4AC66C72.7070102@gmail.com>
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,43 +27,33 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q4/txt/msg00020.txt.bz2
+X-SW-Source: 2009-q4/txt/msg00021.txt.bz2
 
-On Oct  4 21:57, Corinna Vinschen wrote:
-> On Oct  4 21:08, Christian Franke wrote:
-> > Hi Corinna,
-> >[...]
-> > Unfortunately this does not work for a typical use case: an admin process 
-> > creates a restricted token with standard user rights. The function 
-> > IsTokenRestricted() returns TRUE only if the token contains 'restricted 
-> > SIDs'.
-> > (http://msdn.microsoft.com/en-us/library/aa379137(VS.85).aspx)
-> 
-> Bummer.
-> 
-> > There is apparently no function to check whether a token is a result of 
-> > CreateRestrictedToken() or SaferComputeTokenFromLevel().
-> >
-> > Would'nt it be easier to add a new function 
-> > 'cygwin_set_restricted_token(token)' instead of the test of the token type?
-> 
-> The idea was to avoid another non-standard system call.  Maybe you're
-> right, but we should create another cygwin_internal call instead, like,
-> say,
-> 
->   cygwin_internal (CW_SET_RESTRICTED_TOKEN, token_handle);
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-...and maybe it's time to create a cygwin_internal call which replaces
-cygwin_set_impersonation_token and deprecate cygwin_set_impersonation_token
-in the long run.  So, instead of the above we could have this call
-taking a HANDLE and a BOOL value:
+According to Dave Korn on 10/2/2009 3:11 PM:
+>   So, nobody did ask for a compiler version check(*), so here's the patch plus
+> changelog, and I'd like to get separate OKs from both cgf and cv to say that
+> you've each either updated your cross-build environments or don't mind
+> patching the flag back out locally until you can.
 
-  cygwin_internal (CW_SET_EXTERNAL_TOKEN, token_handle, restricted?);
+I just noticed that the gcc-4 available on 1.5 is no longer sufficient to
+do a self-hosted build of 1.7.  Not a show-stopper, since I have
+successfully built self-hosted under 1.7 using the latest patch, but it
+was kind of kind of convenient being able to build under 1.5, as it meant
+fewer cygwin 1.7 processes to stop before installing a just-built dll.
 
+- --
+Don't work too hard, make some time for fun as well!
 
-Corinna
+Eric Blake             ebb9@byu.net
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.9 (Cygwin)
+Comment: Public key at home.comcast.net/~ericblake/eblake.gpg
+Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+iEYEARECAAYFAkrJPbUACgkQ84KuGfSFAYA2AACguMNRRTlBF8Xr13GFuXYIXGY2
+ys8AniPju+xmh4U7FcDNGA4kR7y9cG7b
+=4LaJ
+-----END PGP SIGNATURE-----
