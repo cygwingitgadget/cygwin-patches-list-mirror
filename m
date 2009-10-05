@@ -1,23 +1,23 @@
-Return-Path: <cygwin-patches-return-6690-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 30365 invoked by alias); 5 Oct 2009 00:28:46 -0000
-Received: (qmail 30355 invoked by uid 22791); 5 Oct 2009 00:28:46 -0000
-X-SWARE-Spam-Status: No, hits=-2.0 required=5.0 	tests=BAYES_00,SPF_SOFTFAIL
+Return-Path: <cygwin-patches-return-6691-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 32199 invoked by alias); 5 Oct 2009 01:44:27 -0000
+Received: (qmail 32187 invoked by uid 22791); 5 Oct 2009 01:44:26 -0000
+X-SWARE-Spam-Status: No, hits=-2.6 required=5.0 	tests=AWL,BAYES_00,SPF_PASS
 X-Spam-Check-By: sourceware.org
-Received: from qmta15.emeryville.ca.mail.comcast.net (HELO QMTA15.emeryville.ca.mail.comcast.net) (76.96.27.228)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 05 Oct 2009 00:28:40 +0000
-Received: from OMTA02.emeryville.ca.mail.comcast.net ([76.96.30.19]) 	by QMTA15.emeryville.ca.mail.comcast.net with comcast 	id oo6m1c01q0QkzPwAFoUgPL; Mon, 05 Oct 2009 00:28:40 +0000
-Received: from [192.168.0.101] ([24.10.247.15]) 	by OMTA02.emeryville.ca.mail.comcast.net with comcast 	id ooUe1c00N0Lg2Gw8NoUf6n; Mon, 05 Oct 2009 00:28:40 +0000
-Message-ID: <4AC93DB5.5020303@byu.net>
-Date: Mon, 05 Oct 2009 00:28:00 -0000
-From: Eric Blake <ebb9@byu.net>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.23) Gecko/20090812 Thunderbird/2.0.0.23 Mnenhy/0.7.6.666
+Received: from qw-out-1920.google.com (HELO qw-out-1920.google.com) (74.125.92.144)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 05 Oct 2009 01:44:19 +0000
+Received: by qw-out-1920.google.com with SMTP id 4so727092qwk.20         for <cygwin-patches@cygwin.com>; Sun, 04 Oct 2009 18:44:17 -0700 (PDT)
+Received: by 10.224.93.146 with SMTP id v18mr2823997qam.78.1254707057763;         Sun, 04 Oct 2009 18:44:17 -0700 (PDT)
+Received: from ?192.168.0.101? (S010600112f237275.wp.shawcable.net [24.76.241.98])         by mx.google.com with ESMTPS id 2sm146343qwi.45.2009.10.04.18.44.15         (version=TLSv1/SSLv3 cipher=RC4-MD5);         Sun, 04 Oct 2009 18:44:16 -0700 (PDT)
+Message-ID: <4AC94F6F.60308@users.sourceforge.net>
+Date: Mon, 05 Oct 2009 01:44:00 -0000
+From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.4pre) Gecko/20090915 Thunderbird/3.0b4
 MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
-Subject: Re: [patch] Update build flags for new compiler feature
-References: <4AC66C72.7070102@gmail.com>
-In-Reply-To: <4AC66C72.7070102@gmail.com>
-Content-Type: text/plain; charset=ISO-8859-1
+Subject: Re: [PATCH] --std=c89 error in sys/signal.h
+References: <4AC2732D.5090304@users.sourceforge.net> <20090929223320.GA8901@ednor.casa.cgf.cx> <4AC2A7B5.3070105@users.sourceforge.net> <4AC2B02E.7010805@users.sourceforge.net>
+In-Reply-To: <4AC2B02E.7010805@users.sourceforge.net>
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
 Content-Transfer-Encoding: 7bit
-X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -27,33 +27,32 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q4/txt/msg00021.txt.bz2
+X-SW-Source: 2009-q4/txt/msg00022.txt.bz2
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+On 29/09/2009 20:11, Yaakov (Cygwin/X) wrote:
+> On 29/09/2009 19:35, Yaakov (Cygwin/X) wrote:
+>> Anyway, to answer the question, AFAICS in glibc, <signal.h> #include
+>> <bits/types.h> unconditionally[1]. (<sys/signal.h> is just one line:
+>> #include <signal.h> [2])
+>>
+>> So should I take the first route, patching newlib instead?
+>
+> OTOH, this comment in the offending hunk of <sys/signal.h> (which is
+> only for Cygwin and RTEMS) makes me wonder:
+>
+> /* The first argument to kill should be pid_t. Right now
+> <sys/types.h> always defines pid_t to be int. If that ever
+> changes, then we will need to do something else, perhaps along the
+> lines of <machine/types.h>. */
+> int _EXFUN(kill, (int, int));
+> int _EXFUN(killpg, (pid_t, int));
+>
+> Is that supposed to mean that we don't want to use pid_t here at all,
+> and the intended solution would be to change killpg to (int, int), as
+> ugly as that is, leaving only <cygwin/signal.h> needing the #include
+> <sys/types.h>?
 
-According to Dave Korn on 10/2/2009 3:11 PM:
->   So, nobody did ask for a compiler version check(*), so here's the patch plus
-> changelog, and I'd like to get separate OKs from both cgf and cv to say that
-> you've each either updated your cross-build environments or don't mind
-> patching the flag back out locally until you can.
+Ping?
 
-I just noticed that the gcc-4 available on 1.5 is no longer sufficient to
-do a self-hosted build of 1.7.  Not a show-stopper, since I have
-successfully built self-hosted under 1.7 using the latest patch, but it
-was kind of kind of convenient being able to build under 1.5, as it meant
-fewer cygwin 1.7 processes to stop before installing a just-built dll.
 
-- --
-Don't work too hard, make some time for fun as well!
-
-Eric Blake             ebb9@byu.net
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.9 (Cygwin)
-Comment: Public key at home.comcast.net/~ericblake/eblake.gpg
-Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
-
-iEYEARECAAYFAkrJPbUACgkQ84KuGfSFAYA2AACguMNRRTlBF8Xr13GFuXYIXGY2
-ys8AniPju+xmh4U7FcDNGA4kR7y9cG7b
-=4LaJ
------END PGP SIGNATURE-----
+Yaakov
