@@ -1,23 +1,22 @@
-Return-Path: <cygwin-patches-return-6693-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 16269 invoked by alias); 5 Oct 2009 04:56:27 -0000
-Received: (qmail 16257 invoked by uid 22791); 5 Oct 2009 04:56:26 -0000
+Return-Path: <cygwin-patches-return-6694-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 626 invoked by alias); 5 Oct 2009 08:38:15 -0000
+Received: (qmail 611 invoked by uid 22791); 5 Oct 2009 08:38:14 -0000
 X-Spam-Check-By: sourceware.org
-Received: from pool-173-76-48-2.bstnma.east.verizon.net (HELO cgf.cx) (173.76.48.2)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 05 Oct 2009 04:56:22 +0000
-Received: from ednor.cgf.cx (ednor.casa.cgf.cx [192.168.187.5]) 	by cgf.cx (Postfix) with ESMTP id 37B1C13C002 	for <cygwin-patches@cygwin.com>; Mon,  5 Oct 2009 00:56:11 -0400 (EDT)
-Received: by ednor.cgf.cx (Postfix, from userid 201) 	id 2E6762B352; Mon,  5 Oct 2009 00:56:11 -0400 (EDT)
-Date: Mon, 05 Oct 2009 04:56:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 05 Oct 2009 08:38:09 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 723EE6D5598; Mon,  5 Oct 2009 10:37:59 +0200 (CEST)
+Date: Mon, 05 Oct 2009 08:38:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [patch] Update build flags for new compiler feature
-Message-ID: <20091005045611.GB10682@ednor.casa.cgf.cx>
+Subject: Re: [PATCH] --std=c89 error in sys/signal.h
+Message-ID: <20091005083759.GA12170@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4AC66C72.7070102@gmail.com>  <20091002221933.GB12372@ednor.casa.cgf.cx>  <20091003120854.GA22019@calimero.vinschen.de>  <4AC74BB5.9060503@gmail.com>  <20091003130644.GJ7193@calimero.vinschen.de>  <4AC75235.1070403@gmail.com>  <4AC84E5A.7040203@gmail.com>  <20091004112648.GE4563@calimero.vinschen.de>  <4AC8AC37.4050306@gmail.com>
+References: <4AC2732D.5090304@users.sourceforge.net> <20090929223320.GA8901@ednor.casa.cgf.cx> <4AC2A7B5.3070105@users.sourceforge.net> <4AC2B02E.7010805@users.sourceforge.net> <4AC94F6F.60308@users.sourceforge.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4AC8AC37.4050306@gmail.com>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+In-Reply-To: <4AC94F6F.60308@users.sourceforge.net>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -27,28 +26,38 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q4/txt/msg00024.txt.bz2
+X-SW-Source: 2009-q4/txt/msg00025.txt.bz2
 
-On Sun, Oct 04, 2009 at 03:07:51PM +0100, Dave Korn wrote:
->Corinna Vinschen wrote:
->>Since I have a running gcc-4.34 now, do you still want me to do that?
->>Please keep in mind that I'm a lazy cow...
+On Oct  4 20:44, Yaakov S wrote:
+> On 29/09/2009 20:11, Yaakov (Cygwin/X) wrote:
+>> On 29/09/2009 19:35, Yaakov (Cygwin/X) wrote:
+>>> Anyway, to answer the question, AFAICS in glibc, <signal.h> #include
+>>> <bits/types.h> unconditionally[1]. (<sys/signal.h> is just one line:
+>>> #include <signal.h> [2])
+>>>
+>>> So should I take the first route, patching newlib instead?
+
+Newlib, methinks.
+
+>> int _EXFUN(kill, (int, int));
+>> int _EXFUN(killpg, (pid_t, int));
+>>
+>> Is that supposed to mean that we don't want to use pid_t here at all,
+>> and the intended solution would be to change killpg to (int, int), as
+>> ugly as that is, leaving only <cygwin/signal.h> needing the #include
+>> <sys/types.h>?
 >
->Efficient use of resources != laziness.  No, I wouldn't suggest doing
->that, what you ended up with by hacking the header files should (in
->theory, anyway) be the same as what you would get if the autoconf tests
->had done it for you.
->
->Now that all the related mysteries are solved, I'll go ahead and commit
->that patch to the build flags.  (I just thought it would be kind of
->wrong of me to leave HEAD in a state where the one and only actual
->RedHat staffer working on the project couldn't compile it!)
+> Ping?
 
-FWIW, I have a running cross-compiled version of 4.34 too.  And I also
-updated my binutils while I was at it.
+I think the newlib kill declaration should be changed to pid_t, since
+that's simply correct per POSIX.
 
-The latest snapshot has been built with that combination.
+I can;t believe the RTEMS people have a problem with that.
 
-Thanks for all of your hard gcc work, Dave.
 
-cgf
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          cygwin AT cygwin DOT com
+Red Hat
