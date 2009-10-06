@@ -1,20 +1,22 @@
-Return-Path: <cygwin-patches-return-6714-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 12655 invoked by alias); 6 Oct 2009 09:09:14 -0000
-Received: (qmail 12644 invoked by uid 22791); 6 Oct 2009 09:09:12 -0000
+Return-Path: <cygwin-patches-return-6715-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 30920 invoked by alias); 6 Oct 2009 14:40:36 -0000
+Received: (qmail 30907 invoked by uid 22791); 6 Oct 2009 14:40:34 -0000
+X-SWARE-Spam-Status: No, hits=-3.2 required=5.0 	tests=AWL,BAYES_00,HK_OBFDOM,RCVD_IN_DNSWL_LOW,SPF_PASS
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 06 Oct 2009 09:09:04 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 21C746D5598; Tue,  6 Oct 2009 11:08:53 +0200 (CEST)
-Date: Tue, 06 Oct 2009 09:09:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Fix tcgetpgrp output
-Message-ID: <20091006090853.GJ12789@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
+Received: from out2.smtp.messagingengine.com (HELO out2.smtp.messagingengine.com) (66.111.4.26)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 06 Oct 2009 14:40:30 +0000
+Received: from compute1.internal (compute1.internal [10.202.2.41]) 	by gateway1.messagingengine.com (Postfix) with ESMTP id 666A8887F8 	for <cygwin-patches@cygwin.com>; Tue,  6 Oct 2009 10:40:28 -0400 (EDT)
+Received: from heartbeat2.messagingengine.com ([10.202.2.161])   by compute1.internal (MEProxy); Tue, 06 Oct 2009 10:40:28 -0400
+Received: from [192.168.1.3] (user-0c6sbc4.cable.mindspring.com [24.110.45.132]) 	by mail.messagingengine.com (Postfix) with ESMTPSA id 9EBD51F333; 	Tue,  6 Oct 2009 10:40:27 -0400 (EDT)
+Message-ID: <4ACB56D5.4060606@cwilson.fastmail.fm>
+Date: Tue, 06 Oct 2009 14:40:00 -0000
+From: Charles Wilson <cygwin@cwilson.fastmail.fm>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.8.1.23) Gecko/20090812 Thunderbird/2.0.0.23 Mnenhy/0.7.6.666
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.5.17 (2007-11-01)
+To: cygwin-patches@cygwin.com
+Subject: Re: Add wrappers for ExitProcess, TerminateProcess
+References: <4ACA4323.5080103@cwilson.fastmail.fm> <20091005202722.GG12789@calimero.vinschen.de> <4ACA5BC7.6090908@cwilson.fastmail.fm> <20091006034229.GA12172@ednor.casa.cgf.cx> <4ACAC079.2020105@cwilson.fastmail.fm> <20091006074620.GA13712@calimero.vinschen.de>
+In-Reply-To: <20091006074620.GA13712@calimero.vinschen.de>
+Content-Type: multipart/mixed;  boundary="------------080106080909030400000607"
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -24,208 +26,243 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q4/txt/msg00045.txt.bz2
+X-SW-Source: 2009-q4/txt/msg00046.txt.bz2
 
-Hi,
+This is a multi-part message in MIME format.
+--------------080106080909030400000607
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+Content-length: 1376
+
+Corinna Vinschen wrote:
+
+> I can live with both variations, though I like the one entry point idea
+> as in `cygwin_internal (CW_EXIT_PROCESS, UINT, bool)'  more.
+
+As re-implemented, attached. (I used the windows BOOL type, rather than
+the C99/C++ bool type).  Test case:
 
 
-I'd like to have your opinion for this patch before I check it in, since
-I'm not sure this is the right way to fix it.
-
-When I debugged the luit/tcsh problem yesterday, I found that the
-tcgetpgrp function does not behave as advertised.
-
-Per POSIX, the tcgetpgrp function returns the pgrp ID only if the file
-descriptor references the controlling tty of the process.  If the
-process has no ctty, or if the descriptor references another tty not
-being the controlling tty, the function is supposed to set errno to
-ENOTTY and return -1.
-
-Cygwin OTOH, always returns the pgid of the tty, even if it's not the
-controlling tty of the process.  This leads potentially to weird
-results, as you can see in the output of the testcase below.
-
-And then there's Linux, with a tiny special case.
-
-If a Linux process opens the master side of a pty and then calls
-tcgetpgrp on this file, the tcgetpgrp will return 0.  However, as soon
-as a child process has called setsid() and opened the slave side of the
-pty and made that tty its controlling tty, tcgetprgrp(master) returns
-the own pid, not 0.  Don't look into the Linux man page, this behaviour
-is not documented.
-
-I checked that on Solaris as well, and Solaris behaves POSIX-compliant.
-Here the master side returns -1/ENOTTY, unless you open the master side
-without the O_NOCTTY flag and the opening process has no controlling tty
-at that time.
-
-My patch makes Cygwin behave like Linux.  It's just an additional test
-in tcgetpgrp.  I'm not sure if that's TRTTD for two reasons.
-
-- Since Linux behaves obviously not POSIX-compliant with respect to the
-  master pty, I'm not sure we should really reflect Linux literally.
-  Maybe it's better to behave POSIX-compliant and return -1/ENOTTY for a
-  non-controlling master all the time, just as on Solaris?
-
-- My first approach changed the actual values in tc->pgid, rather than
-  just making a test for the ctty in tcgetprgrp.  I'm still wondering if
-  the code should better try to maintain the correct values in the
-  datastructures, or if it's better to just have this check in tcgetpgrp.
-
-Ok, I used the following test application to verify the behaviour on
-Linux, Solaris, and Cygwin:
-
-==== SNIP ====
-#define _XOPEN_SOURCE
+===================================
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
-#include <sys/fcntl.h>
-#include <sys/wait.h>
-#include <unistd.h>
-#include <termios.h>
-#include <sys/ioctl.h>
+#include <windows.h>
+#include <ntdef.h>
+#include <sys/cygwin.h>
 
-int main ()
+#define STATUS_ILLEGAL_DLL_RELOCATION ((NTSTATUS) 0xc0000269)
+#define STATUS_ILLEGAL_DLL_PSEUDO_RELOCATION ((NTSTATUS) 0xe0000269)
+#define STATUS_DLL_NOT_FOUND          ((NTSTATUS) 0xc0000135)
+
+int main(int argc, char* argv[])
 {
-  int master, slave, status;
-  char pts[256];
-
-  printf ("parent pid: %d\n", getpid ());
-  if ((master = open ("/dev/ptmx", O_RDWR | O_NOCTTY)) >= 0)
-    {
-      int ret; 
-      grantpt (master);
-      unlockpt (master);
-      printf ("parent tcgetpgrp master: %d\n", tcgetpgrp (master));
-      strcpy (pts, ptsname (master));
-      switch (fork ())
-      	{
-	case -1:
-	  break;
-	case 0:	// child
-	  ret = setsid ();
-	  printf ("child pid: %d (setsid: %d)\n", getpid (), ret);
-	  printf ("child tcgetpgrp master before open: %d\n", tcgetpgrp (master));
-	  if ((slave = open (pts, O_RDWR)) >= 0)
-	    {
-	      printf ("child tcgetpgrp master after open: %d\n", tcgetpgrp (master));
-	      printf ("child tcgetpgrp slave: %d\n", tcgetpgrp (slave));
-	      close (slave);
-	    }
-	  break;
-	default:// parent
-	  wait (&status);
-	  printf ("parent tcgetpgrp master: %d\n", tcgetpgrp (master));
-	  break;
-	}
-      close (master);
-      return 0;
-    }
-  return 1;
+  cygwin_internal (CW_EXIT_PROCESS,
+                   STATUS_ILLEGAL_DLL_RELOCATION,
+                   TRUE);
+//                   FALSE);
+  exit (1);
 }
-==== SNAP ====
+===================================
 
-Output on Linux:
-
-  parent pid: 14670
-  parent tcgetpgrp master: 0
-  child pid: 14671 (setsid: 14671)
-  child tcgetpgrp master before open: 0
-  child tcgetpgrp master after open: 14671
-  child tcgetpgrp slave: 14671
-  parent tcgetpgrp master: 0
-
-Output on Solaris 10:
-
-  parent pid: 20372
-  parent tcgetpgrp master: -1
-  child pid: 20374 (setsid: 20374)
-  child tcgetpgrp master before open: -1
-  child tcgetpgrp master after open: -1
-  child tcgetpgrp slave: 20374
-  parent tcgetpgrp master: -1
-
-Output on Cygwin without my patch:
-
-  parent pid: 3704
-  parent tcgetpgrp master: 3704
-  child pid: 1056 (setsid: 1056)
-  child tcgetpgrp master before open: 3704
-  child tcgetpgrp master after open: 1056
-  child tcgetpgrp slave: 1056
-  parent tcgetpgrp master: 1056
-
-Output on Cygwin with my patch:
-
-  parent pid: 4016
-  parent tcgetpgrp master: 0
-  child pid: 872 (setsid: 872)
-  child tcgetpgrp master before open: 0
-  child tcgetpgrp master after open: 872
-  child tcgetpgrp slave: 872
-  parent tcgetpgrp master: 0
-
-So my patch results in a behaviour just like on Linux for now.
-
-Patch attached.
+$ gcc -o foo.exe foo.c
+$ ./foo.exe
+$ echo $?
+127
 
 
-Corinna
+2009-10-05  Charles Wilson  <...>
 
+	Add cygwin wrapper for ExitProcess and TerminateProcess.
+	* include/sys/cygwin.h: Declare new cygwin_getinfo_type
+	CW_EXIT_PROCESS.
+	* external.cc (exit_process): New function.
+	(cygwin_internal): Handle CW_EXIT_PROCESS.
+	* pinfo.h (pinfo::set_exit_code): New method.
+	* pinfo.cc (pinfo::set_exit_code): New, refactored from...
+	(pinfo::maybe_set_exit_code_from_windows): here. Call it.
+	* exceptions.cc: Move global variable sigExeced...
+	* globals.cc: here.
 
-	* fhandler.h (fhandler_pty_master::tcgetpgrp): Declare.
-	* fhandler_termios.cc (fhandler_termios::tcgetpgrp): Only return
-	valid pgid if tty is controlling tty.  Set errno to ENOTTY and
-	return -1 otherwise.
-	(fhandler_pty_master::tcgetpgrp): New function.  Return 0 for
-	master side of pty if it's not the controlling tty of the process.
+OK?
 
+--
+Chuck
 
-Index: fhandler.h
+--------------080106080909030400000607
+Content-Type: text/plain;
+ name="01-cygwin-terminate-process.patch-4"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline;
+ filename="01-cygwin-terminate-process.patch-4"
+Content-length: 6037
+
+Index: winsup/cygwin/exceptions.cc
 ===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/fhandler.h,v
-retrieving revision 1.381
-diff -u -p -r1.381 fhandler.h
---- fhandler.h	28 Sep 2009 12:10:32 -0000	1.381
-+++ fhandler.h	6 Oct 2009 08:58:34 -0000
-@@ -1109,6 +1109,7 @@ public:
-   int dup (fhandler_base *);
-   void fixup_after_fork (HANDLE parent);
-   void fixup_after_exec ();
-+  int tcgetpgrp ();
+RCS file: /cvs/src/src/winsup/cygwin/exceptions.cc,v
+retrieving revision 1.335
+diff -u -p -r1.335 exceptions.cc
+--- winsup/cygwin/exceptions.cc	19 Sep 2009 15:34:19 -0000	1.335
++++ winsup/cygwin/exceptions.cc	6 Oct 2009 13:47:35 -0000
+@@ -40,7 +40,6 @@ extern void sigdelayed ();
  };
  
- class fhandler_tty_master: public fhandler_pty_master
-Index: fhandler_termios.cc
+ extern child_info_spawn *chExeced;
+-int NO_COPY sigExeced;
+ 
+ static BOOL WINAPI ctrl_c_handler (DWORD);
+ static WCHAR windows_system_directory[1024];
+Index: winsup/cygwin/external.cc
 ===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/fhandler_termios.cc,v
-retrieving revision 1.74
-diff -u -p -r1.74 fhandler_termios.cc
---- fhandler_termios.cc	3 Jan 2009 05:12:20 -0000	1.74
-+++ fhandler_termios.cc	6 Oct 2009 08:58:34 -0000
-@@ -99,7 +99,16 @@ fhandler_termios::tcsetpgrp (const pid_t
- int
- fhandler_termios::tcgetpgrp ()
- {
--  return tc->pgid;
-+  if (myself->ctty != -1 && myself->ctty == tc->ntty)
-+    return tc->pgid;
-+  set_errno (ENOTTY);
-+  return -1;
-+}
-+
-+int
-+fhandler_pty_master::tcgetpgrp ()
-+{
-+  return myself->ctty != -1 && myself->ctty == tc->ntty ? tc->pgid : 0;
+RCS file: /cvs/src/src/winsup/cygwin/external.cc,v
+retrieving revision 1.107
+diff -u -p -r1.107 external.cc
+--- winsup/cygwin/external.cc	21 Sep 2009 02:19:31 -0000	1.107
++++ winsup/cygwin/external.cc	6 Oct 2009 13:47:36 -0000
+@@ -32,6 +32,7 @@ details. */
+ #include <iptypes.h>
+ 
+ child_info *get_cygwin_startup_info ();
++static void exit_process (UINT, BOOL) __attribute__((noreturn));
+ 
+ static winpids pids;
+ 
+@@ -161,6 +162,37 @@ sync_winenv ()
+   free (envblock);
  }
  
++/*
++ * Cygwin-specific wrapper for win32 ExitProcess and TerminateProcess.
++ * It ensures that the correct exit code, derived from the specified
++ * status value, will be made available to this process's parent (if
++ * that parent is also a cygwin process). If useTerminateProcess is
++ * TRUE, then TerminateProcess(GetCurrentProcess(),...) will be used;
++ * otherwise, ExitProcess(...) is called.
++ *
++ * Used by startup code for cygwin processes which is linked statically
++ * into applications, and is not part of the cygwin DLL -- which is why
++ * this interface is exposed. "Normal" programs should use ANSI exit(),
++ * ANSI abort(), or POSIX _exit(), rather than this function -- because
++ * calling ExitProcess or TerminateProcess, even through this wrapper,
++ * skips much of the cygwin process cleanup code.
++ */
++static void
++exit_process (UINT status, BOOL useTerminateProcess)
++{
++  pid_t pid = getpid ();
++  external_pinfo * ep = fillout_pinfo (pid, 1);
++  DWORD dwpid = ep ? ep->dwProcessId : pid;
++  pinfo p (pid, PID_MAP_RW);
++  if ((dwpid == GetCurrentProcessId()) && (p->pid == ep->pid))
++    p.set_exit_code ((DWORD)status);
++  if (useTerminateProcess)
++    TerminateProcess (GetCurrentProcess(), status);
++  /* avoid 'else' clause to silence warning */
++  ExitProcess (status);
++}
++
++
+ extern "C" unsigned long
+ cygwin_internal (cygwin_getinfo_types t, ...)
+ {
+@@ -375,6 +407,12 @@ cygwin_internal (cygwin_getinfo_types t,
+ 	  seterrno(file, line);
+ 	}
+ 	break;
++      case CW_EXIT_PROCESS:
++	{
++	  UINT status = va_arg (arg, UINT);
++	  BOOL useTerminateProcess = va_arg (arg, BOOL);
++	  exit_process (status, useTerminateProcess); /* no return */
++	}
+ 
+       default:
+ 	break;
+Index: winsup/cygwin/globals.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/globals.cc,v
+retrieving revision 1.9
+diff -u -p -r1.9 globals.cc
+--- winsup/cygwin/globals.cc	24 Aug 2009 11:14:30 -0000	1.9
++++ winsup/cygwin/globals.cc	6 Oct 2009 13:47:36 -0000
+@@ -49,6 +49,10 @@ SYSTEM_INFO system_info;
+ /* Set in init.cc.  Used to check if Cygwin DLL is dynamically loaded. */
+ int NO_COPY dynamically_loaded;
+ 
++/* set in exceptions.cc.  Used to store the desired exit value when
++   a process is killed by a signal */
++int NO_COPY sigExeced;
++
+ bool display_title;
+ bool strip_title_path;
+ bool allow_glob = true;
+Index: winsup/cygwin/pinfo.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/pinfo.cc,v
+retrieving revision 1.253
+diff -u -p -r1.253 pinfo.cc
+--- winsup/cygwin/pinfo.cc	12 Jul 2009 21:15:47 -0000	1.253
++++ winsup/cygwin/pinfo.cc	6 Oct 2009 13:47:36 -0000
+@@ -136,11 +136,18 @@ status_exit (DWORD x)
+ 
+ # define self (*this)
  void
++pinfo::set_exit_code (DWORD x)
++{
++  if (x >= 0xc0000000UL)
++    x = status_exit (x);
++  self->exitcode = EXITCODE_SET | (sigExeced ?: (x & 0xff) << 8);
++}
++
++void
+ pinfo::maybe_set_exit_code_from_windows ()
+ {
+   DWORD x = 0xdeadbeef;
+   DWORD oexitcode = self->exitcode;
+-  extern int sigExeced;
+ 
+   if (hProcess && !(self->exitcode & EXITCODE_SET))
+     {
+@@ -148,9 +155,7 @@ pinfo::maybe_set_exit_code_from_windows 
+ 						   process hasn't quite exited
+ 						   after closing pipe */
+       GetExitCodeProcess (hProcess, &x);
+-      if (x >= 0xc0000000UL)
+-	x = status_exit (x);
+-      self->exitcode = EXITCODE_SET | (sigExeced ?: (x & 0xff) << 8);
++      set_exit_code (x);
+     }
+   sigproc_printf ("pid %d, exit value - old %p, windows %p, cygwin %p",
+ 		  self->pid, oexitcode, x, self->exitcode);
+Index: winsup/cygwin/pinfo.h
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/pinfo.h,v
+retrieving revision 1.108
+diff -u -p -r1.108 pinfo.h
+--- winsup/cygwin/pinfo.h	20 Dec 2008 17:32:31 -0000	1.108
++++ winsup/cygwin/pinfo.h	6 Oct 2009 13:47:36 -0000
+@@ -155,6 +155,7 @@ public:
+   }
+   void exit (DWORD n) __attribute__ ((noreturn, regparm(2)));
+   void maybe_set_exit_code_from_windows () __attribute__ ((regparm(1)));
++  void set_exit_code (DWORD n) __attribute__ ((regparm(2)));
+   _pinfo *operator -> () const {return procinfo;}
+   int operator == (pinfo *x) const {return x->procinfo == procinfo;}
+   int operator == (pinfo &x) const {return x.procinfo == procinfo;}
+Index: winsup/cygwin/include/sys/cygwin.h
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/include/sys/cygwin.h,v
+retrieving revision 1.80
+diff -u -p -r1.80 cygwin.h
+--- winsup/cygwin/include/sys/cygwin.h	7 Jul 2009 20:12:44 -0000	1.80
++++ winsup/cygwin/include/sys/cygwin.h	6 Oct 2009 13:47:36 -0000
+@@ -142,7 +142,8 @@ typedef enum
+     CW_CYGTLS_PADSIZE,
+     CW_SET_DOS_FILE_WARNING,
+     CW_SET_PRIV_KEY,
+-    CW_SETERRNO
++    CW_SETERRNO,
++    CW_EXIT_PROCESS
+   } cygwin_getinfo_types;
+ 
+ #define CW_NEXTPID	0x80000000	/* or with pid to get next one */
 
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+--------------080106080909030400000607--
