@@ -1,23 +1,23 @@
-Return-Path: <cygwin-patches-return-6724-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 15215 invoked by alias); 6 Oct 2009 19:51:40 -0000
-Received: (qmail 15203 invoked by uid 22791); 6 Oct 2009 19:51:39 -0000
-X-SWARE-Spam-Status: No, hits=-3.5 required=5.0 	tests=AWL,BAYES_00,RCVD_IN_DNSWL_LOW,SPF_PASS
+Return-Path: <cygwin-patches-return-6725-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 14589 invoked by alias); 6 Oct 2009 20:18:44 -0000
+Received: (qmail 14578 invoked by uid 22791); 6 Oct 2009 20:18:43 -0000
+X-SWARE-Spam-Status: No, hits=-1.8 required=5.0 	tests=AWL,BAYES_00
 X-Spam-Check-By: sourceware.org
-Received: from out2.smtp.messagingengine.com (HELO out2.smtp.messagingengine.com) (66.111.4.26)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 06 Oct 2009 19:51:34 +0000
-Received: from compute1.internal (compute1.internal [10.202.2.41]) 	by gateway1.messagingengine.com (Postfix) with ESMTP id 3B0C688ABC 	for <cygwin-patches@cygwin.com>; Tue,  6 Oct 2009 15:51:33 -0400 (EDT)
-Received: from heartbeat2.messagingengine.com ([10.202.2.161])   by compute1.internal (MEProxy); Tue, 06 Oct 2009 15:51:33 -0400
-Received: from [192.168.1.3] (user-0c6sbc4.cable.mindspring.com [24.110.45.132]) 	by mail.messagingengine.com (Postfix) with ESMTPSA id CA597F2D; 	Tue,  6 Oct 2009 15:51:32 -0400 (EDT)
-Message-ID: <4ACB9FBE.5080700@cwilson.fastmail.fm>
-Date: Tue, 06 Oct 2009 19:51:00 -0000
-From: Charles Wilson <cygwin@cwilson.fastmail.fm>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.8.1.23) Gecko/20090812 Thunderbird/2.0.0.23 Mnenhy/0.7.6.666
+Received: from mailout02.t-online.de (HELO mailout02.t-online.de) (194.25.134.17)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 06 Oct 2009 20:18:38 +0000
+Received: from fwd05.aul.t-online.de  	by mailout02.t-online.de with smtp  	id 1MvGRn-0005i1-01; Tue, 06 Oct 2009 22:15:47 +0200
+Received: from [10.3.2.2] (rxJGbyZfwhvRVXPN9F53XMwNDX2u921b0jBua+sur-o7yFncRQTDo9E1NeRaGiDQYw@[217.235.232.40]) by fwd05.aul.t-online.de 	with esmtp id 1MvGRa-1UKrCa0; Tue, 6 Oct 2009 22:15:34 +0200
+Message-ID: <4ACBA568.9080608@t-online.de>
+Date: Tue, 06 Oct 2009 20:18:00 -0000
+From: Christian Franke <Christian.Franke@t-online.de>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.23) Gecko/20090825 SeaMonkey/1.1.18
 MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
-Subject: Re: Add wrappers for ExitProcess, TerminateProcess
-References: <4ACA4323.5080103@cwilson.fastmail.fm>  <20091005202722.GG12789@calimero.vinschen.de>  <4ACA5BC7.6090908@cwilson.fastmail.fm>  <20091006034229.GA12172@ednor.casa.cgf.cx>  <4ACAC079.2020105@cwilson.fastmail.fm>  <20091006074620.GA13712@calimero.vinschen.de>  <4ACB56D5.4060606@cwilson.fastmail.fm>  <4ACB670F.2070209@cwilson.fastmail.fm>  <20091006182221.GD18135@ednor.casa.cgf.cx>  <4ACB9042.3070104@cwilson.fastmail.fm> <20091006193502.GA18384@ednor.casa.cgf.cx>
-In-Reply-To: <20091006193502.GA18384@ednor.casa.cgf.cx>
-Content-Type: text/plain; charset=ISO-8859-1
+Subject: Re: [Patch] Allow to disable root privileges with CYGWIN=noroot
+References: <4A993580.4060604@t-online.de> <20090829192050.GA32405@calimero.vinschen.de> <4A999EC2.2070801@t-online.de> <20090830090314.GB2648@calimero.vinschen.de> <4A9AD529.3060107@t-online.de> <20090901183209.GA14650@calimero.vinschen.de> <20091004123006.GF4563@calimero.vinschen.de> <20091004125455.GG4563@calimero.vinschen.de> <4AC8F299.1020303@t-online.de> <20091004195723.GH4563@calimero.vinschen.de> <20091004200843.GK4563@calimero.vinschen.de>
+In-Reply-To: <20091004200843.GK4563@calimero.vinschen.de>
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
 Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -27,63 +27,31 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q4/txt/msg00055.txt.bz2
+X-SW-Source: 2009-q4/txt/msg00056.txt.bz2
 
-Christopher Faylor wrote:
-> On Tue, Oct 06, 2009 at 02:45:22PM -0400, Charles Wilson wrote:
->> Christopher Faylor wrote:
->>
->>> Looks good with a minor kvetch: Could you use "bool" instead of "BOOL"
->>> for variables that don't have to be passed to a Windows function that
->>> takes a BOOL argument?
->> For the static function exit_process(), sure. But the argument list
->> accepted by cygwin_internal() should be C-compatible, shouldn't it? So,
->> how about the following?
-> 
-> "bool" is C-compatible.  You just have to #include <stdbool.h> .
+Corinna Vinschen wrote:
+> ...and maybe it's time to create a cygwin_internal call which replaces
+> cygwin_set_impersonation_token and deprecate cygwin_set_impersonation_token
+> in the long run.  So, instead of the above we could have this call
+> taking a HANDLE and a BOOL value:
+>
+>   cygwin_internal (CW_SET_EXTERNAL_TOKEN, token_handle, restricted?);
+>
+>   
 
-I keep forgetting about stdbool.
+OK.
 
-> But now that you mention it, I wonder if we really should have to
-> require an #include <windows.h> to use this.  Maybe it should just
-> be unsigned long.
+I have a very first experimental version which works for me. It also 
+requires a new flag 'cygheap->user.is_restricted_token' to tell 
+spawn_guts() to use CreateProcessAsUser().
 
-I don't see that /that/ makes much difference. Some of the existing
-cygwin_internal calls already expect DWORD argument (sure, you could
-pass them as unsigned long instead).  Or
-CW_GET_POSIX_SECURITY_ATTRIBUTE, which expects a PSECURITY_ATTRIBUTES.
+I will post the patch in a few days.
 
-So, it's really a question of what do we want the user to have to
-#include when they call, specifically, cygwin_internal(CW_EXIT_PROCESS,...).
+A question:
 
-Well, obviously, <sys/cygwin.h>.  They may or may not require <ntdef.h>
-if they want to use pre-defined STATUS_* values.  But to me, the kicker
-is: this is a wrapper/replacement for the w32 functions ExitProcess and
-TerminateProcess. So...if someone *was* going to include <windows.h> in
-order to call /those/ functions, I don't see why they'd object to doing
-so to call the cygwin_internal(CW_EXIT_PROCESS,...) wrapper.
+Why does seteuid32() call 'set_cygwin_privileges ()' on 'curr_imp_token' 
+and not on 'curr_primary_token' ? The curr_primary_token is used for 
+impersonation and therefore the privileges are not set for the thread 
+itself.
 
-OTOH, this particular value is not even passed to those underlying w32
-functions -- it's only used as part of the *cygwin* cygwin_internal
-implementation.  Since we no longer pass a HANDLE to the
-TerminateProcess wrapper, it does seem a bit icky to #include
-<windows.h> only for a BOOL type that we don't even pass to the w32
-functions.  Why should *cygwin* deliberately choose to use braindead w32
-"types" when it doesn't need to?
-
-...meh.
-
-Having said all that, I really don't care one way or the other. We have
-three possibilities:
-
-1) current iteration (BOOL in cygwin_internal coerced to bool for static
-function exit_process)
-2) use bool throughout exceptions.cc, and expect caller to use C++ bool,
-C99 bool, or stdbool.h bool.
-3) use bool in static function exit_process, use unsigned long in
-cygwin_internal and callers.
-
-You guys pick one, and I'll do it that way.
-
---
-Chuck
+Christian
