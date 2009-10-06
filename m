@@ -1,23 +1,23 @@
-Return-Path: <cygwin-patches-return-6725-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 14589 invoked by alias); 6 Oct 2009 20:18:44 -0000
-Received: (qmail 14578 invoked by uid 22791); 6 Oct 2009 20:18:43 -0000
-X-SWARE-Spam-Status: No, hits=-1.8 required=5.0 	tests=AWL,BAYES_00
+Return-Path: <cygwin-patches-return-6726-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 19811 invoked by alias); 6 Oct 2009 20:29:29 -0000
+Received: (qmail 19799 invoked by uid 22791); 6 Oct 2009 20:29:29 -0000
 X-Spam-Check-By: sourceware.org
-Received: from mailout02.t-online.de (HELO mailout02.t-online.de) (194.25.134.17)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 06 Oct 2009 20:18:38 +0000
-Received: from fwd05.aul.t-online.de  	by mailout02.t-online.de with smtp  	id 1MvGRn-0005i1-01; Tue, 06 Oct 2009 22:15:47 +0200
-Received: from [10.3.2.2] (rxJGbyZfwhvRVXPN9F53XMwNDX2u921b0jBua+sur-o7yFncRQTDo9E1NeRaGiDQYw@[217.235.232.40]) by fwd05.aul.t-online.de 	with esmtp id 1MvGRa-1UKrCa0; Tue, 6 Oct 2009 22:15:34 +0200
-Message-ID: <4ACBA568.9080608@t-online.de>
-Date: Tue, 06 Oct 2009 20:18:00 -0000
-From: Christian Franke <Christian.Franke@t-online.de>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.23) Gecko/20090825 SeaMonkey/1.1.18
-MIME-Version: 1.0
+Received: from pool-173-76-48-2.bstnma.east.verizon.net (HELO cgf.cx) (173.76.48.2)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 06 Oct 2009 20:29:25 +0000
+Received: from ednor.cgf.cx (ednor.casa.cgf.cx [192.168.187.5]) 	by cgf.cx (Postfix) with ESMTP id C076B3B0002 	for <cygwin-patches@cygwin.com>; Tue,  6 Oct 2009 16:29:15 -0400 (EDT)
+Received: by ednor.cgf.cx (Postfix, from userid 201) 	id BCCBE2B352; Tue,  6 Oct 2009 16:29:15 -0400 (EDT)
+Date: Tue, 06 Oct 2009 20:29:00 -0000
+From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [Patch] Allow to disable root privileges with CYGWIN=noroot
-References: <4A993580.4060604@t-online.de> <20090829192050.GA32405@calimero.vinschen.de> <4A999EC2.2070801@t-online.de> <20090830090314.GB2648@calimero.vinschen.de> <4A9AD529.3060107@t-online.de> <20090901183209.GA14650@calimero.vinschen.de> <20091004123006.GF4563@calimero.vinschen.de> <20091004125455.GG4563@calimero.vinschen.de> <4AC8F299.1020303@t-online.de> <20091004195723.GH4563@calimero.vinschen.de> <20091004200843.GK4563@calimero.vinschen.de>
-In-Reply-To: <20091004200843.GK4563@calimero.vinschen.de>
-Content-Type: text/plain; charset=ISO-8859-1; format=flowed
-Content-Transfer-Encoding: 7bit
-X-IsSubscribed: yes
+Subject: Re: Add wrappers for ExitProcess, TerminateProcess
+Message-ID: <20091006202915.GA18969@ednor.casa.cgf.cx>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <4ACA5BC7.6090908@cwilson.fastmail.fm>  <20091006034229.GA12172@ednor.casa.cgf.cx>  <4ACAC079.2020105@cwilson.fastmail.fm>  <20091006074620.GA13712@calimero.vinschen.de>  <4ACB56D5.4060606@cwilson.fastmail.fm>  <4ACB670F.2070209@cwilson.fastmail.fm>  <20091006182221.GD18135@ednor.casa.cgf.cx>  <4ACB9042.3070104@cwilson.fastmail.fm>  <20091006193502.GA18384@ednor.casa.cgf.cx>  <4ACB9FBE.5080700@cwilson.fastmail.fm>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4ACB9FBE.5080700@cwilson.fastmail.fm>
+User-Agent: Mutt/1.5.20 (2009-06-14)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -27,31 +27,20 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q4/txt/msg00056.txt.bz2
+X-SW-Source: 2009-q4/txt/msg00057.txt.bz2
 
-Corinna Vinschen wrote:
-> ...and maybe it's time to create a cygwin_internal call which replaces
-> cygwin_set_impersonation_token and deprecate cygwin_set_impersonation_token
-> in the long run.  So, instead of the above we could have this call
-> taking a HANDLE and a BOOL value:
+On Tue, Oct 06, 2009 at 03:51:26PM -0400, Charles Wilson wrote:
+>Having said all that, I really don't care one way or the other. We have
+>three possibilities:
 >
->   cygwin_internal (CW_SET_EXTERNAL_TOKEN, token_handle, restricted?);
->
->   
+>1) current iteration (BOOL in cygwin_internal coerced to bool for static
+>function exit_process)
+>2) use bool throughout exceptions.cc, and expect caller to use C++ bool,
+>C99 bool, or stdbool.h bool.
 
-OK.
+Since, as you say, we use DWORD in other places, I'm going to opt for
+what I originally proposed.  Change BOOL to bool since there is no reason
+to use the Windows API BOOL type.  Do that everywhere in your change that
+it makes sense.  Leave the UINT alone.
 
-I have a very first experimental version which works for me. It also 
-requires a new flag 'cygheap->user.is_restricted_token' to tell 
-spawn_guts() to use CreateProcessAsUser().
-
-I will post the patch in a few days.
-
-A question:
-
-Why does seteuid32() call 'set_cygwin_privileges ()' on 'curr_imp_token' 
-and not on 'curr_primary_token' ? The curr_primary_token is used for 
-impersonation and therefore the privileges are not set for the thread 
-itself.
-
-Christian
+cgf
