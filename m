@@ -1,22 +1,22 @@
-Return-Path: <cygwin-patches-return-6720-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 26196 invoked by alias); 6 Oct 2009 18:22:36 -0000
-Received: (qmail 26185 invoked by uid 22791); 6 Oct 2009 18:22:35 -0000
+Return-Path: <cygwin-patches-return-6721-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 26996 invoked by alias); 6 Oct 2009 18:24:47 -0000
+Received: (qmail 26983 invoked by uid 22791); 6 Oct 2009 18:24:46 -0000
 X-Spam-Check-By: sourceware.org
-Received: from pool-173-76-48-2.bstnma.east.verizon.net (HELO cgf.cx) (173.76.48.2)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 06 Oct 2009 18:22:31 +0000
-Received: from ednor.cgf.cx (ednor.casa.cgf.cx [192.168.187.5]) 	by cgf.cx (Postfix) with ESMTP id DC9893B000F 	for <cygwin-patches@cygwin.com>; Tue,  6 Oct 2009 14:22:21 -0400 (EDT)
-Received: by ednor.cgf.cx (Postfix, from userid 201) 	id DC00C2B352; Tue,  6 Oct 2009 14:22:21 -0400 (EDT)
-Date: Tue, 06 Oct 2009 18:22:00 -0000
+Received: from pool-173-76-48-2.bstnma.east.verizon.net (HELO cgf.cx) (173.76.48.2)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 06 Oct 2009 18:24:34 +0000
+Received: from ednor.cgf.cx (ednor.casa.cgf.cx [192.168.187.5]) 	by cgf.cx (Postfix) with ESMTP id 79F5A3B0002 	for <cygwin-patches@cygwin.com>; Tue,  6 Oct 2009 14:24:24 -0400 (EDT)
+Received: by ednor.cgf.cx (Postfix, from userid 201) 	id 776162B352; Tue,  6 Oct 2009 14:24:24 -0400 (EDT)
+Date: Tue, 06 Oct 2009 18:24:00 -0000
 From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: Add wrappers for ExitProcess, TerminateProcess
-Message-ID: <20091006182221.GD18135@ednor.casa.cgf.cx>
+Subject: Re: Fix tcgetpgrp output
+Message-ID: <20091006182424.GE18135@ednor.casa.cgf.cx>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4ACA4323.5080103@cwilson.fastmail.fm>  <20091005202722.GG12789@calimero.vinschen.de>  <4ACA5BC7.6090908@cwilson.fastmail.fm>  <20091006034229.GA12172@ednor.casa.cgf.cx>  <4ACAC079.2020105@cwilson.fastmail.fm>  <20091006074620.GA13712@calimero.vinschen.de>  <4ACB56D5.4060606@cwilson.fastmail.fm>  <4ACB670F.2070209@cwilson.fastmail.fm>
+References: <20091006090853.GJ12789@calimero.vinschen.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4ACB670F.2070209@cwilson.fastmail.fm>
+In-Reply-To: <20091006090853.GJ12789@calimero.vinschen.de>
 User-Agent: Mutt/1.5.20 (2009-06-14)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -27,36 +27,26 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q4/txt/msg00051.txt.bz2
+X-SW-Source: 2009-q4/txt/msg00052.txt.bz2
 
-On Tue, Oct 06, 2009 at 11:49:35AM -0400, Charles Wilson wrote:
->Charles Wilson wrote:
->>> I can live with both variations, though I like the one entry point idea
->>> as in `cygwin_internal (CW_EXIT_PROCESS, UINT, bool)'  more.
->> 
->> As re-implemented, attached. (I used the windows BOOL type, rather than
->> the C99/C++ bool type).  Test case:
+On Tue, Oct 06, 2009 at 11:08:53AM +0200, Corinna Vinschen wrote:
+>Hi,
 >
->AND...regenerated the patch against this morning's CVS, in which the
->sigExeced stuff was committed. (Patch unchanged except exceptions.cc ang
->globals.cc stuff removed from patch).
 >
->2009-10-05  Charles Wilson  <...>
+>I'd like to have your opinion for this patch before I check it in, since
+>I'm not sure this is the right way to fix it.
 >
->	Add cygwin wrapper for ExitProcess and TerminateProcess.
->	* include/sys/cygwin.h: Declare new cygwin_getinfo_type
->	CW_EXIT_PROCESS.
->	* external.cc (exit_process): New function.
->	(cygwin_internal): Handle CW_EXIT_PROCESS.
->	* pinfo.h (pinfo::set_exit_code): New method.
->	* pinfo.cc (pinfo::set_exit_code): New, refactored from...
->	(pinfo::maybe_set_exit_code_from_windows): here. Call it.
+>When I debugged the luit/tcsh problem yesterday, I found that the
+>tcgetpgrp function does not behave as advertised.
+>
+>Per POSIX, the tcgetpgrp function returns the pgrp ID only if the file
+>descriptor references the controlling tty of the process.  If the
+>process has no ctty, or if the descriptor references another tty not
+>being the controlling tty, the function is supposed to set errno to
+>ENOTTY and return -1.
 
-Looks good with a minor kvetch: Could you use "bool" instead of "BOOL"
-for variables that don't have to be passed to a Windows function that
-takes a BOOL argument?
+Ouch.  I can't believe that behavior has lasted for so long.
 
-If you make that change, I'm fine with this change.  And thanks, once again,
-for seeing this through.
+The patch looks good to me.
 
 cgf
