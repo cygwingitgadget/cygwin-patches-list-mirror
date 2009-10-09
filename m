@@ -1,21 +1,21 @@
-Return-Path: <cygwin-patches-return-6754-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 6341 invoked by alias); 9 Oct 2009 12:46:15 -0000
-Received: (qmail 6330 invoked by uid 22791); 9 Oct 2009 12:46:14 -0000
-X-SWARE-Spam-Status: No, hits=-2.0 required=5.0 	tests=AWL,BAYES_00,SPF_SOFTFAIL
+Return-Path: <cygwin-patches-return-6755-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 3761 invoked by alias); 9 Oct 2009 21:42:51 -0000
+Received: (qmail 3740 invoked by uid 22791); 9 Oct 2009 21:42:49 -0000
+X-SWARE-Spam-Status: No, hits=-1.8 required=5.0 	tests=AWL,BAYES_00
 X-Spam-Check-By: sourceware.org
-Received: from qmta07.emeryville.ca.mail.comcast.net (HELO QMTA07.emeryville.ca.mail.comcast.net) (76.96.30.64)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 09 Oct 2009 12:46:10 +0000
-Received: from OMTA03.emeryville.ca.mail.comcast.net ([76.96.30.27]) 	by QMTA07.emeryville.ca.mail.comcast.net with comcast 	id qcCk1c0060b6N64A7cm95p; Fri, 09 Oct 2009 12:46:09 +0000
-Received: from [192.168.0.101] ([24.10.247.15]) 	by OMTA03.emeryville.ca.mail.comcast.net with comcast 	id qcm71c00C0Lg2Gw8Pcm8Lt; Fri, 09 Oct 2009 12:46:09 +0000
-Message-ID: <4ACF307F.1040604@byu.net>
-Date: Fri, 09 Oct 2009 12:46:00 -0000
-From: Eric Blake <ebb9@byu.net>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.23) Gecko/20090812 Thunderbird/2.0.0.23 Mnenhy/0.7.6.666
+Received: from mailout09.t-online.de (HELO mailout09.t-online.de) (194.25.134.84)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 09 Oct 2009 21:42:44 +0000
+Received: from fwd03.aul.t-online.de  	by mailout09.t-online.de with smtp  	id 1MwNEX-00021S-00; Fri, 09 Oct 2009 23:42:41 +0200
+Received: from [10.3.2.2] (bKCQFZZX8hxC2-dPPWkw9pkv6tE--i0qN7JDfYgOWbD0acbga62Di5+eQ41PzMSgXJ@[217.235.234.183]) by fwd03.aul.t-online.de 	with esmtp id 1MwNEU-0JGnVA0; Fri, 9 Oct 2009 23:42:38 +0200
+Message-ID: <4ACFAE4D.90502@t-online.de>
+Date: Fri, 09 Oct 2009 21:42:00 -0000
+From: Christian Franke <Christian.Franke@t-online.de>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.23) Gecko/20090825 SeaMonkey/1.1.18
 MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
-Subject: Re: utimensat UTIME_NOW granularity bug
-References: <loom.20091008T221131-292@post.gmane.org>  <20091008212425.GB2068@ednor.casa.cgf.cx>  <4ACEACBA.4030904@byu.net> <20091009045800.GA17335@ednor.casa.cgf.cx>
-In-Reply-To: <20091009045800.GA17335@ednor.casa.cgf.cx>
-Content-Type: multipart/mixed;  boundary="------------050403040901020005080804"
+Subject: Re: [Patch] Allow to disable root privileges with CYGWIN=noroot
+References: <4A993580.4060604@t-online.de> <20090829192050.GA32405@calimero.vinschen.de> <4A999EC2.2070801@t-online.de> <20090830090314.GB2648@calimero.vinschen.de> <4A9AD529.3060107@t-online.de> <20090901183209.GA14650@calimero.vinschen.de> <20091004123006.GF4563@calimero.vinschen.de> <20091004125455.GG4563@calimero.vinschen.de> <4AC8F299.1020303@t-online.de> <20091004195723.GH4563@calimero.vinschen.de> <20091004200843.GK4563@calimero.vinschen.de>
+In-Reply-To: <20091004200843.GK4563@calimero.vinschen.de>
+Content-Type: multipart/mixed;  boundary="------------020000050809080008020700"
 X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -26,275 +26,357 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q4/txt/msg00085.txt.bz2
+X-SW-Source: 2009-q4/txt/msg00086.txt.bz2
 
 This is a multi-part message in MIME format.
---------------050403040901020005080804
-Content-Type: text/plain; charset=ISO-8859-1
+--------------020000050809080008020700
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
 Content-Transfer-Encoding: 7bit
-Content-length: 2721
+Content-length: 2885
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
+Corinna Vinschen wrote:
+> ...and maybe it's time to create a cygwin_internal call which replaces
+> cygwin_set_impersonation_token and deprecate cygwin_set_impersonation_token
+> in the long run.  So, instead of the above we could have this call
+> taking a HANDLE and a BOOL value:
+>
+>   cygwin_internal (CW_SET_EXTERNAL_TOKEN, token_handle, restricted?);
+>
+>
+>   
 
-According to Christopher Faylor on 10/8/2009 10:58 PM:
-> 
-> I don't like "MILLION" or "BILLION".  I think a real number is clearer
-> for that.  Maybe it's jsut me but when I see million I can't help myself
-> from checking to see if it's 1000000 or 1024*1024.  And, if you're going
-> to assign constants to 1 with a bunch of zeros where do you draw the
-> line?
+Attached a patch (based on your patch) which works for me on XP SP3.
 
-OK, here's the respin without the churn.
+Note that unlike with setuid(other_uid), fork() and exec() do not fail 
+for non-system processes.
 
-> 
-> It looks like you either don't need the systime() call or it should
-> call systime_ns.
 
-Done.  hires_us still uses systime().
+A simple Testcase: Exec with most privileges removed:
 
-> 
->>       long long x = time_in->tv_sec * NSPERSEC +
->> -			    time_in->tv_nsec / (NSPERSEC/100000) + FACTOR;
->> +			    time_in->tv_nsec / (BILLION / NSPERSEC) + FACTOR;
-> 
-> I'm too tired now to figure out why you switched these but it seems
-> odd that you switched the numerator and denominator  here but
-> 
->>   long long x = time_in->tv_sec * NSPERSEC +
->> -			time_in->tv_usec * (NSPERSEC/1000000) + FACTOR;
->> +			time_in->tv_usec * (NSPERSEC / MILLION) + FACTOR;
+int main(int argc, char **argv)
+{
+  if (argc < 2) {
+    printf("Usage: %s command args ...\n", argv[0]); return 1;
+  }
 
-Because the number 100000 is unrelated to anything else in this file; just
-because NSPERSEC/1000000 gives the right answer doesn't mean it expresses
-the right equation.  We are really calculating these two values:
+  HANDLE pt, rt;
+  if (!OpenProcessToken(GetCurrentProcess (), TOKEN_ALL_ACCESS, &pt)) {
+    printf("OpenProcessToken failed\n"); return 1;
+  }
+  if (!CreateRestrictedToken(pt, DISABLE_MAX_PRIVILEGE,
+      0, (PSID_AND_ATTRIBUTES)0, 0, (PLUID_AND_ATTRIBUTES)0,
+      0, (PSID_AND_ATTRIBUTES)0, &rt)) {
+    printf("CreateRestrictedToken failed\n"); return 1;
+  }
+  if (!SetHandleInformation(rt, HANDLE_FLAG_INHERIT,
+      HANDLE_FLAG_INHERIT)) {
+    printf("SetHandleInformation failed\n"); return 1;
+  }
 
-tv_nsec / 100 (nsecs) - scaling down
-tv_nsec * 10 (usecs) - scaling up
+  cygwin_internal(CW_SET_EXTERNAL_TOKEN, rt, CW_TOKEN_RESTRICTED);
 
-so that x will be in terms of 100ns ticks.  The relations should be:
+  // seteuid(getuid()) would allow child to revert to original privileges.
+  setuid(getuid());
 
-/ 100 = 1000000000/NSPERSEC = 1000000000/10000000
-*  10 =   NSPERSEC/1000000  =   10000000/1000000
+  execvp(argv[1], argv+1);
+  perror("exec");
+  return 1;
+}
 
-since NSPERSEC falls in between nanoseconds and microseconds.
+Running e.g. 'ls /proc/registry/HKEY_LOCAL_MACHINE/SECURITY' from an 
+admin with and without the above program shows the difference.
+(The process is not really restricted because the admin group is not 
+removed :-)
 
-(By the way, I love git - it makes it very easy to rebase a patch against
-CVS).
 
-2009-10-09  Eric Blake  <ebb9@byu.net>
+I would suggest to add another cygwin_internal() call to check if 
+current process is considered 'equivalent root'. This could be used e.g. 
+by shells to set the root prompt properly.
+http://sourceware.org/ml/cygwin/2009-09/msg00138.html
 
-	* hires.h (hires_ms): Change initime_us to initime_ns, with 10x
-	more resolution.
-	(hires_ms::nsecs): New prototype.
-	(hires_ms::usecs, hires_ms::msecs, hires_ms::uptime): Adjust.
-	* times.cc (systime_ns): New helper function.
-	(hires_ms::prime): Use it for more resolution.
-	(hires_ms::usecs): Change to...
-	(hires_ms::nsecs): ...with more resolution.
-	(clock_gettime): Use more resolution.
-	(systime): Rewrite in terms of systime_ns.
-	(timespec_to_filetime): Rewrite math to reflect true operation.
-	* fhandler_disk_file.cc (utimens_fs): Get current time before
-	opening handle, using higher resolution.
+Christian
 
-- --
-Don't work too hard, make some time for fun as well!
+2009-10-09  Christian Franke  <franke@computer.org>
+            Corinna Vinschen  <corinna@vinschen.de>
 
-Eric Blake             ebb9@byu.net
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.9 (Cygwin)
-Comment: Public key at home.comcast.net/~ericblake/eblake.gpg
-Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
+	* include/sys/cygwin.h: Add new cygwin_getinfo_type
+	CW_SET_EXTERNAL_TOKEN.
+	Add new enum CW_TOKEN_IMPERSONATION, CW_TOKEN_RESTRICTED.
+	* cygheap.h (cyguser): New flags ext_token_is_restricted,
+	curr_token_is_restricted and setuid_to_restricted.
+	* external.cc (cygwin_internal): Add CW_SET_EXTERNAL_TOKEN.
+	* fork.cc (frok::child): Abort if reimpersonate fails.
+	* sec_auth.cc (cygwin_set_impersonation_token): Set
+	ext_token_is_restricted flag.
+	* spawn.cc (spawn_guts): Use CreateProcessAsUserW if
+	restricted token was enabled by setuid ().
+	Do not create new window station in this case.
+	* syscalls.cc (seteuid32): Add handling of restricted
+	external tokens.
+	(setuid32): Set setuid_to_restricted flag.
+	* uinfo.cc (uinfo_init): Do not reimpersonate if
+	restricted token was enabled by setuid ().
+	Abort if reimpersonate fails.
+	Initialize user.*_restricted flags.
 
-iEYEARECAAYFAkrPMH8ACgkQ84KuGfSFAYA9jgCfa+431ch8i/qqCgFFNMgqCUy2
-6qYAoJhUWLC0DNaRawytPNM+LYpzixCm
-=3A7g
------END PGP SIGNATURE-----
 
---------------050403040901020005080804
-Content-Type: text/plain;
- name="cygwin.patch30"
+
+--------------020000050809080008020700
+Content-Type: text/x-diff;
+ name="cygwin-1.7-restricted-token.patch"
 Content-Transfer-Encoding: 7bit
 Content-Disposition: inline;
- filename="cygwin.patch30"
-Content-length: 5146
+ filename="cygwin-1.7-restricted-token.patch"
+Content-length: 9688
 
-diff --git a/winsup/cygwin/fhandler_disk_file.cc b/winsup/cygwin/fhandler_disk_file.cc
-index 1e6a781..eb40d05 100644
---- a/winsup/cygwin/fhandler_disk_file.cc
-+++ b/winsup/cygwin/fhandler_disk_file.cc
-@@ -1282,6 +1282,22 @@ fhandler_base::utimens_fs (const struct timespec *tvp)
-   struct timespec tmp[2];
-   bool closeit = false;
-
-+  clock_gettime (CLOCK_REALTIME, &timeofday);
-+  if (!tvp)
-+    tmp[1] = tmp[0] = timeofday;
-+  else
-+    {
-+      if ((tvp[0].tv_nsec < UTIME_NOW || tvp[0].tv_nsec > 999999999L)
-+	  || (tvp[1].tv_nsec < UTIME_NOW || tvp[1].tv_nsec > 999999999L))
+diff --git a/winsup/cygwin/cygheap.h b/winsup/cygwin/cygheap.h
+index 7a39de6..b8ffd3f 100644
+--- a/winsup/cygwin/cygheap.h
++++ b/winsup/cygwin/cygheap.h
+@@ -108,6 +108,9 @@ public:
+   HANDLE internal_token;
+   HANDLE curr_primary_token;
+   HANDLE curr_imp_token;
++  bool ext_token_is_restricted;  /* external_token is restricted token */
++  bool curr_token_is_restricted; /* curr_primary_token is restricted token */
++  bool setuid_to_restricted;     /* switch to restricted token by setuid () */
+ 
+   /* CGF 2002-06-27.  I removed the initializaton from this constructor
+      since this class is always allocated statically.  That means that everything
+diff --git a/winsup/cygwin/external.cc b/winsup/cygwin/external.cc
+index 38b8c71..9b030c9 100644
+--- a/winsup/cygwin/external.cc
++++ b/winsup/cygwin/external.cc
+@@ -413,6 +413,15 @@ cygwin_internal (cygwin_getinfo_types t, ...)
+ 	  int useTerminateProcess = va_arg (arg, int);
+ 	  exit_process (status, !!useTerminateProcess); /* no return */
+ 	}
++      case CW_SET_EXTERNAL_TOKEN:
 +	{
-+	  set_errno (EINVAL);
-+	  return -1;
++	  HANDLE token = va_arg (arg, HANDLE);
++	  int type = va_arg (arg, int);
++	  cygheap->user.external_token = (token == INVALID_HANDLE_VALUE
++	      ? NO_IMPERSONATION : token);
++	  cygheap->user.ext_token_is_restricted = (type == CW_TOKEN_RESTRICTED);
 +	}
-+      tmp[0] = (tvp[0].tv_nsec == UTIME_NOW) ? timeofday : tvp[0];
-+      tmp[1] = (tvp[1].tv_nsec == UTIME_NOW) ? timeofday : tvp[1];
-+    }
-+  debug_printf ("incoming lastaccess %08x %08x", tmp[0].tv_sec, tmp[0].tv_nsec);
++	break;
+ 
+       default:
+ 	break;
+diff --git a/winsup/cygwin/fork.cc b/winsup/cygwin/fork.cc
+index 49ff2e1..5ae69c7 100644
+--- a/winsup/cygwin/fork.cc
++++ b/winsup/cygwin/fork.cc
+@@ -188,7 +188,10 @@ frok::child (volatile char * volatile here)
+ 
+   set_cygwin_privileges (hProcToken);
+   clear_procimptoken ();
+-  cygheap->user.reimpersonate ();
 +
-   if (!get_handle ())
-     {
-       query_open (query_write_attributes);
-@@ -1301,25 +1317,6 @@ fhandler_base::utimens_fs (const struct timespec *tvp)
-       closeit = true;
-     }
-
--  gettimeofday (reinterpret_cast<struct timeval *> (&timeofday), 0);
--  timeofday.tv_nsec *= 1000;
--  if (!tvp)
--    tmp[1] = tmp[0] = timeofday;
--  else
--    {
--      if ((tvp[0].tv_nsec < UTIME_NOW || tvp[0].tv_nsec > 999999999L)
--	  || (tvp[1].tv_nsec < UTIME_NOW || tvp[1].tv_nsec > 999999999L))
--	{
--	  if (closeit)
--	    close_fs ();
--	  set_errno (EINVAL);
--	  return -1;
--	}
--      tmp[0] = (tvp[0].tv_nsec == UTIME_NOW) ? timeofday : tvp[0];
--      tmp[1] = (tvp[1].tv_nsec == UTIME_NOW) ? timeofday : tvp[1];
--    }
--  debug_printf ("incoming lastaccess %08x %08x", tmp[0].tv_sec, tmp[0].tv_nsec);
--
-   IO_STATUS_BLOCK io;
-   FILE_BASIC_INFORMATION fbi;
-
-diff --git a/winsup/cygwin/hires.h b/winsup/cygwin/hires.h
-index 3c7bd27..e91df06 100644
---- a/winsup/cygwin/hires.h
-+++ b/winsup/cygwin/hires.h
-@@ -1,6 +1,6 @@
- /* hires.h: Definitions for hires clock calculations
-
--   Copyright 2002, 2003, 2004, 2005 Red Hat, Inc.
-+   Copyright 2002, 2003, 2004, 2005, 2009 Red Hat, Inc.
-
- This file is part of Cygwin.
-
-@@ -39,14 +39,15 @@ class hires_us : hires_base
-
- class hires_ms : hires_base
- {
--  LONGLONG initime_us;
-+  LONGLONG initime_ns;
-   void prime ();
-  public:
--  LONGLONG usecs ();
--  LONGLONG msecs () {return usecs () / 1000LL;}
-+  LONGLONG nsecs ();
-+  LONGLONG usecs () {return nsecs () / 10LL;}
-+  LONGLONG msecs () {return nsecs () / 10000LL;}
-   UINT dmsecs () { return timeGetTime (); }
-   UINT resolution ();
--  LONGLONG uptime () {return (usecs () - initime_us) / 1000LL;}
-+  LONGLONG uptime () {return (nsecs () - initime_ns) / 10000LL;}
- };
-
- extern hires_ms gtod;
-diff --git a/winsup/cygwin/times.cc b/winsup/cygwin/times.cc
-index f89a72a..573c4c0 100644
---- a/winsup/cygwin/times.cc
-+++ b/winsup/cygwin/times.cc
-@@ -29,7 +29,7 @@ details. */
- #define NSPERSEC 10000000LL
-
- static inline LONGLONG
--systime ()
-+systime_ns ()
- {
-   LARGE_INTEGER x;
-   FILETIME ft;
-@@ -37,10 +37,15 @@ systime ()
-   x.HighPart = ft.dwHighDateTime;
-   x.LowPart = ft.dwLowDateTime;
-   x.QuadPart -= FACTOR;		/* Add conversion factor for UNIX vs. Windows base time */
--  x.QuadPart /= 10;		/* Convert to microseconds */
-   return x.QuadPart;
- }
-
-+static inline LONGLONG
-+systime ()
++  if (!cygheap->user.reimpersonate ())
++    /* User possibly set an external token without HANDLE_FLAG_INHERIT.  */
++    api_fatal ("reimpersonate after fork failed (%d)", (int)GetLastError());
+ 
+ #ifdef DEBUGGING
+   if (GetEnvironmentVariableA ("FORKDEBUG", NULL, 0))
+diff --git a/winsup/cygwin/include/sys/cygwin.h b/winsup/cygwin/include/sys/cygwin.h
+index 5f38278..ce9bebf 100644
+--- a/winsup/cygwin/include/sys/cygwin.h
++++ b/winsup/cygwin/include/sys/cygwin.h
+@@ -143,9 +143,17 @@ typedef enum
+     CW_SET_DOS_FILE_WARNING,
+     CW_SET_PRIV_KEY,
+     CW_SETERRNO,
+-    CW_EXIT_PROCESS
++    CW_EXIT_PROCESS,
++    CW_SET_EXTERNAL_TOKEN
+   } cygwin_getinfo_types;
+ 
++/* Token type for CW_SET_EXTERNAL_TOKEN */
++enum
 +{
-+  return systime_ns () / 10;
-+}
++  CW_TOKEN_IMPERSONATION = 0,
++  CW_TOKEN_RESTRICTED    = 1
++};
 +
- /* Cygwin internal */
- static unsigned long long __stdcall
- __to_clock_t (FILETIME *src, int flag)
-@@ -191,7 +196,7 @@ timespec_to_filetime (const struct timespec *time_in, FILETIME *out)
-   else
-     {
-       long long x = time_in->tv_sec * NSPERSEC +
--			    time_in->tv_nsec / (NSPERSEC/100000) + FACTOR;
-+			    time_in->tv_nsec / (1000000000/NSPERSEC) + FACTOR;
-       out->dwHighDateTime = x >> 32;
-       out->dwLowDateTime = x;
-     }
-@@ -667,7 +672,7 @@ hires_ms::prime ()
-     {
-       int priority = GetThreadPriority (GetCurrentThread ());
-       SetThreadPriority (GetCurrentThread (), THREAD_PRIORITY_TIME_CRITICAL);
--      initime_us = systime () - (((LONGLONG) timeGetTime ()) * 1000LL);
-+      initime_ns = systime_ns () - (((LONGLONG) timeGetTime ()) * 10000LL);
-       inited = true;
-       SetThreadPriority (GetCurrentThread (), priority);
-     }
-@@ -675,18 +680,18 @@ hires_ms::prime ()
- }
-
- LONGLONG
--hires_ms::usecs ()
-+hires_ms::nsecs ()
+ #define CW_NEXTPID	0x80000000	/* or with pid to get next one */
+ unsigned long cygwin_internal (cygwin_getinfo_types, ...);
+ 
+diff --git a/winsup/cygwin/sec_auth.cc b/winsup/cygwin/sec_auth.cc
+index 028b5a8..c84a7e5 100644
+--- a/winsup/cygwin/sec_auth.cc
++++ b/winsup/cygwin/sec_auth.cc
+@@ -35,6 +35,7 @@ cygwin_set_impersonation_token (const HANDLE hToken)
  {
-   if (!inited)
-     prime ();
-
--  LONGLONG t = systime ();
--  LONGLONG res = initime_us + (((LONGLONG) timeGetTime ()) * 1000LL);
--  if (res < (t - 40000LL))
-+  LONGLONG t = systime_ns ();
-+  LONGLONG res = initime_ns + (((LONGLONG) timeGetTime ()) * 10000LL);
-+  if (res < (t - 40 * 10000LL))
+   debug_printf ("set_impersonation_token (%d)", hToken);
+   cygheap->user.external_token = hToken == INVALID_HANDLE_VALUE ? NO_IMPERSONATION : hToken;
++  cygheap->user.ext_token_is_restricted = false;
+ }
+ 
+ void
+diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
+index 5c86c4b..a6ac9f0 100644
+--- a/winsup/cygwin/spawn.cc
++++ b/winsup/cygwin/spawn.cc
+@@ -537,7 +537,8 @@ loop:
+   if (!cygheap->user.issetuid ()
+       || (cygheap->user.saved_uid == cygheap->user.real_uid
+ 	  && cygheap->user.saved_gid == cygheap->user.real_gid
+-	  && !cygheap->user.groups.issetgroups ()))
++	  && !cygheap->user.groups.issetgroups ()
++	  && !cygheap->user.setuid_to_restricted))
      {
-       inited = false;
-       prime ();
--      res = initime_us + (((LONGLONG) timeGetTime ()) * 1000LL);
-+      res = initime_ns + (((LONGLONG) timeGetTime ()) * 10000LL);
+       rc = CreateProcessW (runpath,	  /* image name - with full path */
+ 			   wone_line,	  /* what was passed to exec */
+@@ -571,7 +572,8 @@ loop:
+ 	 risk, but we don't want to disable this behaviour for older
+ 	 OSes because it's still heavily used by some users.  They have
+ 	 been warned. */
+-      if (wcscasecmp (wstname, L"WinSta0") != 0)
++      if (!cygheap->user.setuid_to_restricted
++	  && wcscasecmp (wstname, L"WinSta0") != 0)
+ 	{
+ 	  WCHAR sid[128];
+ 
+diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
+index 1529cb6..5cfad3b 100644
+--- a/winsup/cygwin/syscalls.cc
++++ b/winsup/cygwin/syscalls.cc
+@@ -2664,7 +2664,28 @@ seteuid32 (__uid32_t uid)
+   debug_printf ("uid: %u myself->uid: %u myself->gid: %u",
+ 		uid, myself->uid, myself->gid);
+ 
+-  if (uid == myself->uid && !cygheap->user.groups.ischanged)
++  /* Same uid as we're just running under is usually a no-op.
++
++     Except we have an external token which is a restricted token.  Or,
++     the external token is NULL, but the current impersonation token is
++     a restricted token.  This allows to restrict user rights temporarily
++     like this:
++
++       cygwin_internal(CW_SET_EXTERNAL_TOKEN, restricted_token,
++                       CW_TOKEN_RESTRICTED);
++       setuid (getuid ());
++       [...do stuff with restricted rights...]
++       cygwin_internal(CW_SET_EXTERNAL_TOKEN, INVALID_HANDLE_VALUE,
++                       CW_TOKEN_RESTRICTED);
++       setuid (getuid ());
++
++    Note that using the current uid is a requirement!  Starting with Windows
++    Vista, we have restricted tokens galore (UAC), so this is really just
++    a special case to restict your own processes to lesser rights. */
++  bool request_restricted_uid_switch = (uid == myself->uid
++      && cygheap->user.ext_token_is_restricted);
++  if (uid == myself->uid && !cygheap->user.groups.ischanged
++      && !request_restricted_uid_switch)
+     {
+       debug_printf ("Nothing happens");
+       return 0;
+@@ -2686,6 +2707,21 @@ seteuid32 (__uid32_t uid)
+   cygheap->user.deimpersonate ();
+ 
+   /* Verify if the process token is suitable. */
++  /* First of all, skip all checks if a switch to a restricted token has been
++     requested, or if trying to switch back from it. */
++  if (request_restricted_uid_switch)
++    {
++      if (cygheap->user.external_token != NO_IMPERSONATION)
++	{
++	  debug_printf ("Switch to restricted token");
++	  new_token = cygheap->user.external_token;
++	}
++      else
++	{
++	  debug_printf ("Switch back from restricted token");
++	  new_token = hProcToken;
++	}
++    }
+   /* TODO, CV 2008-11-25: The check against saved_sid is a kludge and a
+      shortcut.  We must check if it's really feasible in the long run.
+      The reason to add this shortcut is this:  sshd switches back to the
+@@ -2701,7 +2737,7 @@ seteuid32 (__uid32_t uid)
+      Therefore we try this shortcut now.  When switching back to the
+      privileged user, we probably always want a correct (aka original)
+      user token for this privileged user, not only in sshd. */
+-  if ((uid == cygheap->user.saved_uid && usersid == cygheap->user.saved_sid ())
++  else if ((uid == cygheap->user.saved_uid && usersid == cygheap->user.saved_sid ())
+       || verify_token (hProcToken, usersid, groups))
+     new_token = hProcToken;
+   /* Verify if the external token is suitable */
+@@ -2763,9 +2799,12 @@ seteuid32 (__uid32_t uid)
+ 
+   if (new_token != hProcToken)
+     {
+-      /* Avoid having HKCU use default user */
+-      WCHAR name[128];
+-      load_registry_hive (usersid.string (name));
++      if (!request_restricted_uid_switch)
++	{
++	  /* Avoid having HKCU use default user */
++	  WCHAR name[128];
++	  load_registry_hive (usersid.string (name));
++	}
+ 
+       /* Try setting owner to same value as user. */
+       if (!SetTokenInformation (new_token, TokenOwner,
+@@ -2790,6 +2829,8 @@ seteuid32 (__uid32_t uid)
+   cygheap->user.set_sid (usersid);
+   cygheap->user.curr_primary_token = new_token == hProcToken ? NO_IMPERSONATION
+ 							: new_token;
++  cygheap->user.curr_token_is_restricted = false;
++  cygheap->user.setuid_to_restricted = false;
+   if (cygheap->user.curr_imp_token != NO_IMPERSONATION)
+     {
+       CloseHandle (cygheap->user.curr_imp_token);
+@@ -2805,6 +2846,7 @@ seteuid32 (__uid32_t uid)
+ 	  cygheap->user.curr_primary_token = NO_IMPERSONATION;
+ 	  return -1;
+ 	}
++      cygheap->user.curr_token_is_restricted = request_restricted_uid_switch;
+       set_cygwin_privileges (cygheap->user.curr_primary_token);
+       set_cygwin_privileges (cygheap->user.curr_imp_token);
      }
-   return res;
+@@ -2835,7 +2877,11 @@ setuid32 (__uid32_t uid)
+ {
+   int ret = seteuid32 (uid);
+   if (!ret)
+-    cygheap->user.real_uid = myself->uid;
++    {
++      cygheap->user.real_uid = myself->uid;
++      /* If restricted token, forget original privileges on exec ().  */
++      cygheap->user.setuid_to_restricted = cygheap->user.curr_token_is_restricted;
++    }
+   debug_printf ("real: %d, effective: %d", cygheap->user.real_uid, myself->uid);
+   return ret;
  }
-@@ -700,12 +705,12 @@ clock_gettime (clockid_t clk_id, struct timespec *tp)
-       return -1;
+diff --git a/winsup/cygwin/uinfo.cc b/winsup/cygwin/uinfo.cc
+index 8adfd37..56c2f47 100644
+--- a/winsup/cygwin/uinfo.cc
++++ b/winsup/cygwin/uinfo.cc
+@@ -136,9 +136,12 @@ uinfo_init ()
+   else if (cygheap->user.issetuid ()
+ 	   && cygheap->user.saved_uid == cygheap->user.real_uid
+ 	   && cygheap->user.saved_gid == cygheap->user.real_gid
+-	   && !cygheap->user.groups.issetgroups ())
++	   && !cygheap->user.groups.issetgroups ()
++	   && !cygheap->user.setuid_to_restricted)
+     {
+-      cygheap->user.reimpersonate ();
++      if (!cygheap->user.reimpersonate ())
++	/* User possibly set an external token without HANDLE_FLAG_INHERIT.  */
++	api_fatal ("reimpersonate after exec failed (%d)", (int)GetLastError());
+       return;
      }
-
--  LONGLONG now = gtod.usecs ();
-+  LONGLONG now = gtod.nsecs ();
-   if (now == (LONGLONG) -1)
-     return -1;
-
--  tp->tv_sec = now / 1000000;
--  tp->tv_nsec = (now % 1000000) * 1000;
-+  tp->tv_sec = now / NSPERSEC;
-+  tp->tv_nsec = (now % NSPERSEC) * (1000000000 / NSPERSEC);
-   return 0;
+   else
+@@ -150,6 +153,9 @@ uinfo_init ()
+   cygheap->user.internal_token = NO_IMPERSONATION;
+   cygheap->user.curr_primary_token = NO_IMPERSONATION;
+   cygheap->user.curr_imp_token = NO_IMPERSONATION;
++  cygheap->user.ext_token_is_restricted = false;
++  cygheap->user.curr_token_is_restricted = false;
++  cygheap->user.setuid_to_restricted = false;
+   cygheap->user.set_saved_sid ();	/* Update the original sid */
+   cygheap->user.reimpersonate ();
  }
 
--- 
-1.6.5.rc1
-
-
---------------050403040901020005080804--
+--------------020000050809080008020700--
