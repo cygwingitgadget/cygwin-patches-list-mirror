@@ -1,22 +1,23 @@
-Return-Path: <cygwin-patches-return-6761-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 12629 invoked by alias); 13 Oct 2009 10:25:19 -0000
-Received: (qmail 12610 invoked by uid 22791); 13 Oct 2009 10:25:17 -0000
+Return-Path: <cygwin-patches-return-6762-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 21722 invoked by alias); 13 Oct 2009 12:01:42 -0000
+Received: (qmail 21449 invoked by uid 22791); 13 Oct 2009 12:01:41 -0000
+X-SWARE-Spam-Status: No, hits=-2.0 required=5.0 	tests=AWL,BAYES_00,SPF_SOFTFAIL
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 13 Oct 2009 10:25:13 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500) 	id C2AA96D5598; Tue, 13 Oct 2009 12:25:02 +0200 (CEST)
-Date: Tue, 13 Oct 2009 10:25:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Received: from qmta07.emeryville.ca.mail.comcast.net (HELO QMTA07.emeryville.ca.mail.comcast.net) (76.96.30.64)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 13 Oct 2009 12:01:35 +0000
+Received: from OMTA05.emeryville.ca.mail.comcast.net ([76.96.30.43]) 	by QMTA07.emeryville.ca.mail.comcast.net with comcast 	id sBdG1c0050vp7WLA7C1bLB; Tue, 13 Oct 2009 12:01:35 +0000
+Received: from [192.168.0.101] ([24.10.247.15]) 	by OMTA05.emeryville.ca.mail.comcast.net with comcast 	id sC1Z1c0050Lg2Gw8RC1aKF; Tue, 13 Oct 2009 12:01:35 +0000
+Message-ID: <4AD46C1F.7080902@byu.net>
+Date: Tue, 13 Oct 2009 12:01:00 -0000
+From: Eric Blake <ebb9@byu.net>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.23) Gecko/20090812 Thunderbird/2.0.0.23 Mnenhy/0.7.6.666
+MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
 Subject: Re: [Patch] Allow to disable root privileges with CYGWIN=noroot
-Message-ID: <20091013102502.GG11169@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4A9AD529.3060107@t-online.de> <20090901183209.GA14650@calimero.vinschen.de> <20091004123006.GF4563@calimero.vinschen.de> <20091004125455.GG4563@calimero.vinschen.de> <4AC8F299.1020303@t-online.de> <20091004195723.GH4563@calimero.vinschen.de> <20091004200843.GK4563@calimero.vinschen.de> <4ACFAE4D.90502@t-online.de> <20091010100831.GA13581@calimero.vinschen.de> <4AD243ED.6080505@t-online.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <4A999EC2.2070801@t-online.de> <20090830090314.GB2648@calimero.vinschen.de> <4A9AD529.3060107@t-online.de> <20090901183209.GA14650@calimero.vinschen.de> <20091004123006.GF4563@calimero.vinschen.de> <20091004125455.GG4563@calimero.vinschen.de> <4AC8F299.1020303@t-online.de> <20091004195723.GH4563@calimero.vinschen.de> <20091004200843.GK4563@calimero.vinschen.de> <4ACFAE4D.90502@t-online.de> <20091010100831.GA13581@calimero.vinschen.de> <4AD243ED.6080505@t-online.de>
 In-Reply-To: <4AD243ED.6080505@t-online.de>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,75 +27,45 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q4/txt/msg00092.txt.bz2
+X-SW-Source: 2009-q4/txt/msg00093.txt.bz2
 
-On Oct 11 22:45, Christian Franke wrote:
-> Corinna Vinschen wrote:
->> Thanks for the patch.  You did check that the normal setuid/seteuid
->> cases still work, didn't you?
->>
->>   
->
-> Yes.
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
 
-Cool.  I just tested it myself and it looks good.
+According to Christian Franke on 10/11/2009 2:45 PM:
+> 2009-10-11  Christian Franke  <franke@computer.org>
+>            Corinna Vinschen  <corinna@vinschen.de>
+> 
+>     * include/sys/cygwin.h: Add new cygwin_getinfo_type
+>     CW_SET_EXTERNAL_TOKEN.
+>     Add new enum CW_TOKEN_IMPERSONATION, CW_TOKEN_RESTRICTED.
 
->> What's wrong with:
->>
->>   for i in $(id -G);
->>   do
->>     [ $i -eq 544 ] && PS1='# '
->>   done
->>
->>   
->
-> Is OK, except if admin group is mapped to other gid (0?) in /etc/group.
+Shouldn't we also bump version.h when adding new CW_ flags?
 
-It isn't in the default case.  And it's important that there is a way
-to handle this with simple POSIXy means.
+> +      case CW_SET_EXTERNAL_TOKEN:
+> +	{
+> +	  HANDLE token = va_arg (arg, HANDLE);
+> +	  int type = va_arg (arg, int);
+> +	  set_imp_token (token, type);
+> +	  return 0;
+> +	}
 
-> I removed the error check and set HANDLE_FLAG_INHERIT in seteuid32().
+Not the first time this is done in this function.  But generally,
+shouldn't we follow the good practice of using va_end any time we used
+va_arg, in case cygwin is ever ported to a system where va_end is more
+than a no-op?  [At least, I'm assuming that __builtin_va_end() is a no-op
+for x86?]
 
-Oh, sure!  That's much simpler than duplicating the token handle at
-set_imp_token time.
+- --
+Don't work too hard, make some time for fun as well!
 
->> Do I miss something or is the setuid_to_restricted flag equivalent to
->> the curr_token_is_restricted flag [...]
->
-> setuid_to_restricted is only set in setuid32, not in seteuid32. If 
-> seteuid(geteuid()) is called, the behaviour is similar to the ruid != euid 
-> case: The exec()ed process can revert to the original token.
+Eric Blake             ebb9@byu.net
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.9 (Cygwin)
+Comment: Public key at home.comcast.net/~ericblake/eblake.gpg
+Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
 
-Ok, so I missed something, sorry.
-
-> 	* include/sys/cygwin.h: Add new cygwin_getinfo_type
-> 	CW_SET_EXTERNAL_TOKEN.
-> 	Add new enum CW_TOKEN_IMPERSONATION, CW_TOKEN_RESTRICTED.
-> 	* cygheap.h (cyguser): New flags ext_token_is_restricted,
-> 	curr_token_is_restricted and setuid_to_restricted.
-> 	* external.cc (cygwin_internal): Add CW_SET_EXTERNAL_TOKEN.
-> 	* sec_auth.cc (set_imp_token): New function.
-> 	(cygwin_set_impersonation_token): Call set_imp_token ().
-> 	* security.h (set_imp_token): New prototype.
-> 	* spawn.cc (spawn_guts): Use CreateProcessAsUserW if
-> 	restricted token was enabled by setuid ().
-> 	Do not create new window station in this case.
-> 	* syscalls.cc (seteuid32): Add handling of restricted
-> 	external tokens. Set HANDLE_FLAG_INHERIT for primary token.
-> 	(setuid32): Set setuid_to_restricted flag.
-> 	* uinfo.cc (uinfo_init): Do not reimpersonate if
-> 	restricted token was enabled by setuid ().
-> 	Initialize user.*_restricted flags.
-
-Patch checked in.
-
-Thanks for doing this.  Would you have fun to provide a tool for the
-net distro which uses this feature?
-
-
-Corinna
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+iEYEARECAAYFAkrUbB4ACgkQ84KuGfSFAYAHOQCgt+MI1ALkqnMMwPX6QlJ7VwJZ
+mYMAn37mvgvZDZzBw27vXcKutLGwilpW
+=8hvQ
+-----END PGP SIGNATURE-----
