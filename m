@@ -1,23 +1,24 @@
-Return-Path: <cygwin-patches-return-6789-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 30995 invoked by alias); 18 Oct 2009 19:07:42 -0000
-Received: (qmail 30984 invoked by uid 22791); 18 Oct 2009 19:07:42 -0000
-X-SWARE-Spam-Status: No, hits=-3.5 required=5.0 	tests=AWL,BAYES_00,RCVD_IN_DNSWL_LOW,SPF_PASS
+Return-Path: <cygwin-patches-return-6790-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 3672 invoked by alias); 18 Oct 2009 20:07:50 -0000
+Received: (qmail 3662 invoked by uid 22791); 18 Oct 2009 20:07:49 -0000
+X-SWARE-Spam-Status: No, hits=-2.5 required=5.0 	tests=AWL,BAYES_00,SPF_PASS
 X-Spam-Check-By: sourceware.org
-Received: from out1.smtp.messagingengine.com (HELO out1.smtp.messagingengine.com) (66.111.4.25)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sun, 18 Oct 2009 19:07:38 +0000
-Received: from compute1.internal (compute1.internal [10.202.2.41]) 	by gateway1.messagingengine.com (Postfix) with ESMTP id F25EBACA93 	for <cygwin-patches@cygwin.com>; Sun, 18 Oct 2009 15:07:36 -0400 (EDT)
-Received: from heartbeat1.messagingengine.com ([10.202.2.160])   by compute1.internal (MEProxy); Sun, 18 Oct 2009 15:07:36 -0400
-Received: from [192.168.1.3] (user-0c6sbc4.cable.mindspring.com [24.110.45.132]) 	by mail.messagingengine.com (Postfix) with ESMTPSA id 8BEC64EB29; 	Sun, 18 Oct 2009 15:07:36 -0400 (EDT)
-Message-ID: <4ADB6773.3090605@cwilson.fastmail.fm>
-Date: Sun, 18 Oct 2009 19:07:00 -0000
-From: Charles Wilson <cygwin@cwilson.fastmail.fm>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.8.1.23) Gecko/20090812 Thunderbird/2.0.0.23 Mnenhy/0.7.6.666
+Received: from mail-ew0-f223.google.com (HELO mail-ew0-f223.google.com) (209.85.219.223)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sun, 18 Oct 2009 20:07:45 +0000
+Received: by ewy23 with SMTP id 23so3591322ewy.2         for <cygwin-patches@cygwin.com>; Sun, 18 Oct 2009 13:07:42 -0700 (PDT)
+Received: by 10.211.155.11 with SMTP id h11mr3816719ebo.40.1255896462426;         Sun, 18 Oct 2009 13:07:42 -0700 (PDT)
+Received: from ?192.168.2.99? (cpc2-cmbg8-0-0-cust61.cmbg.cable.ntl.com [82.6.108.62])         by mx.google.com with ESMTPS id 5sm434879eyh.17.2009.10.18.13.07.41         (version=SSLv3 cipher=RC4-MD5);         Sun, 18 Oct 2009 13:07:41 -0700 (PDT)
+Message-ID: <4ADB7910.8040000@gmail.com>
+Date: Sun, 18 Oct 2009 20:07:00 -0000
+From: Dave Korn <dave.korn.cygwin@googlemail.com>
+User-Agent: Thunderbird 2.0.0.17 (Windows/20080914)
 MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
 Subject: Re: Honor DESTDIR in w32api and mingw
-References: <4AD78C5B.2080107@cwilson.fastmail.fm> <4AD7C107.6000803@byu.net> <4AD7D356.8030703@cwilson.fastmail.fm> <4AD8DE16.3030506@cwilson.fastmail.fm> <20091018084824.GA25560@calimero.vinschen.de> <4ADB22B8.5060108@cwilson.fastmail.fm> <4ADB3D80.4050108@gmail.com> <4ADB542B.6020701@cwilson.fastmail.fm> <4ADB5F8A.7080902@gmail.com>
-In-Reply-To: <4ADB5F8A.7080902@gmail.com>
+References: <4AD78C5B.2080107@cwilson.fastmail.fm> <4AD7C107.6000803@byu.net> <4AD7D356.8030703@cwilson.fastmail.fm> <4AD8DE16.3030506@cwilson.fastmail.fm> <20091018084824.GA25560@calimero.vinschen.de> <4ADB22B8.5060108@cwilson.fastmail.fm> <4ADB3D80.4050108@gmail.com> <4ADB542B.6020701@cwilson.fastmail.fm> <4ADB5F8A.7080902@gmail.com> <4ADB6773.3090605@cwilson.fastmail.fm>
+In-Reply-To: <4ADB6773.3090605@cwilson.fastmail.fm>
 Content-Type: text/plain; charset=ISO-8859-1
 Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -27,41 +28,14 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q4/txt/msg00120.txt.bz2
+X-SW-Source: 2009-q4/txt/msg00121.txt.bz2
 
-Dave Korn wrote:
->   Yes, I think everything that lives in the /src repository should consider
-> itself obliged to adhere to the common conventions.  If they really find it
-> onerous,
+Charles Wilson wrote:
 
-Remember, that was just my impression given the current discussion, some
-previous ones like the old 2006 argument about Corinna's patches to
-"Simplify MinGW canadian crosses", and snarky comments in the repo like
-the one I quoted.  Nobody has actually come out and SAID such a thing.
+> Well, except for poor Chris Sutcliff. It'd double his workload.
 
-> it occurs to me that they could always move mingw sideways - to a
-> different repository still on the sourceware.org cvs server
+  We'd have to find a way to not impose a burden on him, such as implementing
+an auto merger of some sort (cf. libiberty/).
 
-Meh. There's been continual talk about such reorganization:
-
-http://osdir.com/ml/gnu.mingw.devel/2006-03/msg00013.html
-http://www.nabble.com/Putting-GCC-machinery-into-MinGW-CVS-td24187752.html
-
-but little has come of that. Most recently, the mingw website/wiki was
-moved to a new provider (not sf), although the lists, CVS (for all but
-mingw-runtime and w32api), and file distribution remain at sf -- with
-plans to move the file distribution to the new provider eventually, as well.
-
-But AFAIK there are no *current* plans to (a) move the
-non-mingwrt/w32api CVS anywhere, or (b) move the lists, or (c) rearrange
-the mingwrt/w32api stuff now under src/.
-
-> - and we could
-> import a mildly-forked version of their packages into winsup just like we
-> would with any other external library.  That ought to be able to accommodate
-> everyone's wishes, no?
-
-Well, except for poor Chris Sutcliff. It'd double his workload.
-
---
-Chuck
+    cheers,
+      DaveK
