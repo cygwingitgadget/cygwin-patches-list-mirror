@@ -1,22 +1,22 @@
-Return-Path: <cygwin-patches-return-6791-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 22336 invoked by alias); 18 Oct 2009 23:27:02 -0000
-Received: (qmail 22316 invoked by uid 22791); 18 Oct 2009 23:27:00 -0000
+Return-Path: <cygwin-patches-return-6792-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 32415 invoked by alias); 22 Oct 2009 22:37:43 -0000
+Received: (qmail 32386 invoked by uid 22791); 22 Oct 2009 22:37:35 -0000
 X-SWARE-Spam-Status: No, hits=-3.3 required=5.0 	tests=AWL,BAYES_00,HK_OBFDOM,RCVD_IN_DNSWL_LOW,SPF_PASS
 X-Spam-Check-By: sourceware.org
-Received: from out1.smtp.messagingengine.com (HELO out1.smtp.messagingengine.com) (66.111.4.25)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sun, 18 Oct 2009 23:26:51 +0000
-Received: from compute1.internal (compute1.internal [10.202.2.41]) 	by gateway1.messagingengine.com (Postfix) with ESMTP id 2B9ACAC2F9 	for <cygwin-patches@cygwin.com>; Sun, 18 Oct 2009 19:26:50 -0400 (EDT)
-Received: from heartbeat1.messagingengine.com ([10.202.2.160])   by compute1.internal (MEProxy); Sun, 18 Oct 2009 19:26:50 -0400
-Received: from [192.168.1.3] (user-0c6sbc4.cable.mindspring.com [24.110.45.132]) 	by mail.messagingengine.com (Postfix) with ESMTPSA id 54D284FBC2; 	Sun, 18 Oct 2009 19:26:49 -0400 (EDT)
-Message-ID: <4ADBA434.4010400@cwilson.fastmail.fm>
-Date: Sun, 18 Oct 2009 23:27:00 -0000
+Received: from out2.smtp.messagingengine.com (HELO out2.smtp.messagingengine.com) (66.111.4.26)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 22 Oct 2009 22:37:25 +0000
+Received: from compute2.internal (compute2.internal [10.202.2.42]) 	by gateway1.messagingengine.com (Postfix) with ESMTP id E9980B421B 	for <cygwin-patches@cygwin.com>; Thu, 22 Oct 2009 18:37:23 -0400 (EDT)
+Received: from heartbeat1.messagingengine.com ([10.202.2.160])   by compute2.internal (MEProxy); Thu, 22 Oct 2009 18:37:24 -0400
+Received: from [192.168.1.3] (user-0c6sbc4.cable.mindspring.com [24.110.45.132]) 	by mail.messagingengine.com (Postfix) with ESMTPSA id 499CA6EEF3; 	Thu, 22 Oct 2009 18:37:23 -0400 (EDT)
+Message-ID: <4AE0DE77.3090300@cwilson.fastmail.fm>
+Date: Thu, 22 Oct 2009 22:37:00 -0000
 From: Charles Wilson <cygwin@cwilson.fastmail.fm>
 User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.8.1.23) Gecko/20090812 Thunderbird/2.0.0.23 Mnenhy/0.7.6.666
 MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
 Subject: Re: Honor DESTDIR in w32api and mingw
-References: <4AD78C5B.2080107@cwilson.fastmail.fm> <4AD7C107.6000803@byu.net> <4AD7D356.8030703@cwilson.fastmail.fm> <4AD8DE16.3030506@cwilson.fastmail.fm> <20091018084824.GA25560@calimero.vinschen.de> <4ADB22B8.5060108@cwilson.fastmail.fm> <4ADB3D80.4050108@gmail.com> <4ADB542B.6020701@cwilson.fastmail.fm> <4ADB5F8A.7080902@gmail.com>
-In-Reply-To: <4ADB5F8A.7080902@gmail.com>
-Content-Type: multipart/mixed;  boundary="------------020902050007020600050909"
+References: <4AD78C5B.2080107@cwilson.fastmail.fm>
+In-Reply-To: <4AD78C5B.2080107@cwilson.fastmail.fm>
+Content-Type: multipart/mixed;  boundary="------------000103070903060308010500"
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,102 +26,24 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q4/txt/msg00122.txt.bz2
+X-SW-Source: 2009-q4/txt/msg00123.txt.bz2
 
 This is a multi-part message in MIME format.
---------------020902050007020600050909
+--------------000103070903060308010500
 Content-Type: text/plain; charset=ISO-8859-1
 Content-Transfer-Encoding: 7bit
-Content-length: 3675
+Content-length: 790
 
-Dave Korn wrote:
-> Yes, I think everything that lives in the /src repository should
-> consider itself obliged to adhere to the common conventions. ... That
-> ought to be able to accommodate everyone's wishes, no?
+Latest rev, based on feedback @ mingw-dvlpr.  Avoid gmake conditionals
+and use explicit rules, instead. Detect problems in all applicable
+installation paths, not just $(prefix).
 
-With regards to the limited issue of DESTDIR (not all the other issues
-surrounding mingw/ and w32api/ as subdirs of the winsup tree), the
-following revised patch ought to make everybody happy.
-
-
-We'll see what Keith says -- I've pasted a copy of my latest message to
-mingw-dvlpr, below:
-
-Keith Marshall wrote:
-> I would rather say that it [DESTDIR] is deliberately
-> unsupported, because it cannot be made to work, on the platform for 
-> which the code is designated.
-
-The real issue is that when configured such that prefix (or any other
-configured directory like includedir) contains X:, then DESTDIR won't work.
-
-If prefix does not contain X:, then DESTDIR will work whether it does or
-does not itself contain Y: -- subject to the usual caveats about does
-the destination exist, do you have permission to write or create
-directories there, etc.
-
-And if neither prefix nor DESTDIR contain X:, as is the usual case when
-win32 is not involved, then DESTDIR will work (subject to the usual
-caveats).
-
-So, how about we flag that with an explicit error message, thus making
-it clear that the answer to "Doctor, it hurts when I do this" is "Don't
-do that then -- it is *not supported*"
-
-$ make -n install DESTDIR=/tmp/foo prefix=C:/bob
-Makefile:26: *** DESTDIR not supported when prefix contains win32 path:
-C:/bob.  Stop.
-
-This is the key bit of code, repeated in all 7 makefiles:
-
-prefix_drive:=$(shell echo "$(prefix)" | sed -n -e 's|\(^.:\).*$$|\1|p')
-ifneq (,$(DESTDIR))
-ifneq (,$(prefix_drive))
-$(error DESTDIR not supported when prefix contains win32 path: $(prefix))
-endif
-endif
-
-
-I could extend the error message, as below if desired:
-
-$ make -n install DESTDIR=/tmp/foo prefix=C:/bob
-Makefile:44: *** DESTDIR not supported when $(prefix) contains win32
-path: C:/bob. Try this instead: 'make install prefix=/tmp/foo/bob'.  Stop.
-
-Which would look like this:
-
-prefix_drive:=$(shell echo "$(prefix)" | sed -n -e 's|\(^.:\).*$$|\1|p')
-ifneq (,$(DESTDIR))
-ifneq (,$(prefix_drive))
-prefix_path:=$(shell echo "$(prefix)" | sed -e 's|^.:||')
-$(error DESTDIR not supported when $$(prefix) contains win32 path:
-$(prefix). Try this instead: 'make install prefix=$(DESTDIR)$(prefix_path)')
-endif
-endif
-
-
-
-
-I suppose it's possible for prefix to contain a posix-style path, but
-some OTHER configured directory to be win32-style. This error-checking
-won't catch that.  But if somebody does "--prefix=/foo
---includedir=C:\bar" and then they ALSO try to do a DESTDIR
-install...frankly, if they complain about that on the list we should
-break out the giant clue-bat and metaphorically beat them with it. That
-setup is just...pathological.
-
-
-Anyway, this allows for mingw/ and winsup/ to support DESTDIR like the
-rest of src -- for those platforms and configurations where it will
-actually work; while making it clear that for win32ish configuration
-"Don't Do That".
-
-Revised patch attached.
-
-2009-10-18  Charles Wilson  <...>
+2009-10-22  Charles Wilson  <...>
 
 	Honor DESTDIR for winsup/mingw and winsup/w32api.
-	Error if $(prefix) contains win32 path but DESTDIR non-empty.
+	Detect and report error if installation paths are win32
+	format, but DESTDIR is non-empty.
+
 	* winsup/mingw/Makefile.in: Honor DESTDIR and add to
 	FLAGS_TO_PASS.
 	* winsup/mingw/mingwex/Makefile.in: Honor DESTDIR.
@@ -136,13 +58,13 @@ Revised patch attached.
 --
 Chuck
 
---------------020902050007020600050909
+--------------000103070903060308010500
 Content-Type: text/plain;
- name="mingw-destdir.patch3"
+ name="mingw-destdir.patch4"
 Content-Transfer-Encoding: 7bit
 Content-Disposition: inline;
- filename="mingw-destdir.patch3"
-Content-length: 12835
+ filename="mingw-destdir.patch4"
+Content-length: 16846
 
 Index: mingw/Makefile.in
 ===================================================================
@@ -150,23 +72,30 @@ RCS file: /cvs/src/src/winsup/mingw/Makefile.in,v
 retrieving revision 1.89
 diff -u -p -r1.89 Makefile.in
 --- mingw/Makefile.in	27 Jul 2009 20:27:09 -0000	1.89
-+++ mingw/Makefile.in	18 Oct 2009 22:52:37 -0000
-@@ -36,6 +36,14 @@ target_alias = @target_alias@
- with_cross_host = @with_cross_host@
- prefix = @prefix@
- conf_prefix = @prefix@
-+
-+prefix_drive:=$(shell echo "$(prefix)" | sed -n -e 's|\(^.:\).*$$|\1|p')
-+ifneq (,$(DESTDIR))
-+ifneq (,$(prefix_drive))
-+$(error DESTDIR not supported when prefix contains win32 path: $(prefix))
-+endif
-+endif
-+
- host_os = @host_os@
++++ mingw/Makefile.in	22 Oct 2009 20:43:27 -0000
+@@ -90,6 +90,7 @@ inst_bindir:=$(tooldir)/bin
+ inst_includedir:=$(tooldir)/include/mingw
+ inst_libdir:=$(tooldir)/lib/mingw
+ inst_docdir:=$(tooldir)/share/doc/mingw-runtime
++need-DESTDIR-compatibility = prefix exec_prefix tooldir mandir
+ else
+ ifneq (,$(with_cross_host))
+ #
+@@ -104,11 +105,13 @@ inst_bindir:=$(tooldir)/bin
+ inst_includedir:=$(tooldir)/include
+ inst_libdir:=$(tooldir)/lib
+ inst_docdir:=$(tooldir)/share/doc/mingw-runtime
++need-DESTDIR-compatibility = prefix exec_prefix tooldir mandir
+ else
+ inst_bindir:=$(bindir)
+ inst_includedir:=$(includedir)
+ inst_libdir:=$(libdir)
+ inst_docdir:=$(prefix)/doc/runtime
++need-DESTDIR-compatibility = prefix bindir includedir libdir mandir
+ endif
+ endif
  
- datarootdir = @datarootdir@
-@@ -204,6 +212,7 @@ FLAGS_TO_PASS:=\
+@@ -204,6 +207,7 @@ FLAGS_TO_PASS:=\
  	RANLIB="$(RANLIB)" \
  	LD="$(LD)" \
  	DLLTOOL="$(DLLTOOL)" \
@@ -174,7 +103,7 @@ diff -u -p -r1.89 Makefile.in
  	exec_prefix="$(exec_prefix)" \
  	bindir="$(bindir)" \
  	libdir="$(libdir)" \
-@@ -274,7 +283,7 @@ all_dlls_host: $(DLLS)
+@@ -274,7 +278,7 @@ all_dlls_host: $(DLLS)
  
  install_dlls_host:
  	for i in $(DLLS); do \
@@ -183,15 +112,36 @@ diff -u -p -r1.89 Makefile.in
  	done
  
  _libm_dummy.o:
-@@ -494,37 +503,37 @@ info-html:
+@@ -493,25 +497,44 @@ info-html:
+ 
  install-info: info
  
- install-dirs:
+-install-dirs:
 -	$(mkinstalldirs) $(inst_bindir)
 -	$(mkinstalldirs) $(inst_includedir)
 -	$(mkinstalldirs) $(inst_libdir)
 -	$(mkinstalldirs) $(inst_docdir)
 -	$(mkinstalldirs) $(mandir)/man$(mansection)
++.PHONY: check-DESTDIR-compatibility $(need-DESTDIR-compatibility)
++
++check-DESTDIR-compatibility:
++	 @test -z "$(DESTDIR)" || { status=0; \
++	   for path in $(need-DESTDIR-compatibility); do \
++	     $(MAKE) --no-print-directory $$path  DESTDIR="$(DESTDIR)" || status=$$?; \
++	     test 0 -eq $$status || break ;\
++	   done; \
++	   exit $$status; }
++
++$(need-DESTDIR-compatibility):
++	 @case "$($@)" in *:*) \
++	   echo DESTDIR is not supported when $@ contains Win32 path \`$($@)\'\; \
++	   try adding \`$@=$(shell echo '$($@)' | sed s,:,:$(DESTDIR),)\' to \`[overrides ...]\', \
++	   and execute \`make install [overrides ...]\' instead. ;\
++	   exit 2 ;; \
++	 esac
++
++install-dirs: check-DESTDIR-compatibility
++	@echo all DESTDIR checks passed
 +	$(mkinstalldirs) $(DESTDIR)$(inst_bindir)
 +	$(mkinstalldirs) $(DESTDIR)$(inst_includedir)
 +	$(mkinstalldirs) $(DESTDIR)$(inst_libdir)
@@ -212,15 +162,12 @@ diff -u -p -r1.89 Makefile.in
 +		$(INSTALL_DATA) $(srcdir)/$$i $(DESTDIR)$(inst_docdir)/$$i ; \
  	done
  	for sub in . sys ; do \
- 		dstdir=$(inst_includedir)/$$sub ; \
--		$(mkinstalldirs) $$dstdir ; \
-+		$(mkinstalldirs) $(DESTDIR)$$dstdir ; \
+-		dstdir=$(inst_includedir)/$$sub ; \
++		dstdir=$(DESTDIR)$(inst_includedir)/$$sub ; \
+ 		$(mkinstalldirs) $$dstdir ; \
  		for i in $(srcdir)/include/$$sub/*.h ; do \
--		  $(INSTALL_DATA) $$i $$dstdir/`basename $$i` ; \
-+		  $(INSTALL_DATA) $$i $(DESTDIR)$$dstdir/`basename $$i` ; \
- 		done ; \
- 	done
- #
+ 		  $(INSTALL_DATA) $$i $$dstdir/`basename $$i` ; \
+@@ -521,10 +544,10 @@ install: all install-dirs $(install_dlls
  # This provisional hack installs the only manpage we have at present...
  # It simply CANNOT suffice, when we have more manpages to ship.
  #
@@ -240,26 +187,34 @@ RCS file: /cvs/src/src/winsup/mingw/mingwex/Makefile.in,v
 retrieving revision 1.47
 diff -u -p -r1.47 Makefile.in
 --- mingw/mingwex/Makefile.in	27 Jul 2009 20:27:09 -0000	1.47
-+++ mingw/mingwex/Makefile.in	18 Oct 2009 22:52:37 -0000
-@@ -14,6 +14,13 @@ objdir = .
- target_alias = @target_alias@
- prefix = @prefix@
++++ mingw/mingwex/Makefile.in	22 Oct 2009 20:43:27 -0000
+@@ -255,10 +255,30 @@ info-html:
  
-+prefix_drive:=$(shell echo "$(prefix)" | sed -n -e 's|\(^.:\).*$$|\1|p')
-+ifneq (,$(DESTDIR))
-+ifneq (,$(prefix_drive))
-+$(error DESTDIR not supported when prefix contains win32 path: $(prefix))
-+endif
-+endif
-+
- datarootdir = @datarootdir@
- program_transform_name = @program_transform_name@
- exec_prefix = @exec_prefix@
-@@ -256,9 +263,9 @@ info-html:
  install-info: info
  
- install: all
+-install: all
 -	$(mkinstalldirs) $(inst_libdir)
++need-DESTDIR-compatibility = prefix libdir
++.PHONY: check-DESTDIR-compatibility $(need-DESTDIR-compatibility)
++
++check-DESTDIR-compatibility:
++	 @test -z "$(DESTDIR)" || { status=0; \
++	   for path in $(need-DESTDIR-compatibility); do \
++	     $(MAKE) --no-print-directory $$path  DESTDIR="$(DESTDIR)" || status=$$?; \
++	     test 0 -eq $$status || break ;\
++	   done; \
++	   exit $$status; }
++
++$(need-DESTDIR-compatibility):
++	 @case "$($@)" in *:*) \
++	   echo DESTDIR is not supported when $@ contains Win32 path \`$($@)\'\; \
++	   try adding \`$@=$(shell echo '$($@)' | sed s,:,:$(DESTDIR),)\' to \`[overrides ...]\', \
++	   and execute \`make install [overrides ...]\' instead. ;\
++	   exit 2 ;; \
++	 esac
++
++install: all check-DESTDIR-compatibility
++	@echo all DESTDIR checks passed
 +	$(mkinstalldirs) $(DESTDIR)$(inst_libdir)
  	for i in $(LIBS); do \
 -		$(INSTALL_DATA) $$i $(inst_libdir)/$$i ; \
@@ -273,26 +228,34 @@ RCS file: /cvs/src/src/winsup/mingw/profile/Makefile.in,v
 retrieving revision 1.17
 diff -u -p -r1.17 Makefile.in
 --- mingw/profile/Makefile.in	27 Jul 2009 20:27:09 -0000	1.17
-+++ mingw/profile/Makefile.in	18 Oct 2009 22:52:37 -0000
-@@ -14,6 +14,13 @@ objdir = .
- target_alias = @target_alias@
- prefix = @prefix@
++++ mingw/profile/Makefile.in	22 Oct 2009 20:43:27 -0000
+@@ -128,18 +128,38 @@ info-html:
  
-+prefix_drive:=$(shell echo "$(prefix)" | sed -n -e 's|\(^.:\).*$$|\1|p')
-+ifneq (,$(DESTDIR))
-+ifneq (,$(prefix_drive))
-+$(error DESTDIR not supported when prefix contains win32 path: $(prefix))
-+endif
-+endif
-+
- datarootdir = @datarootdir@
- program_transform_name = @program_transform_name@
- exec_prefix = @exec_prefix@
-@@ -129,17 +136,17 @@ info-html:
  install-info: info
  
- install: all
+-install: all
 -	$(mkinstalldirs) $(inst_libdir) 
++need-DESTDIR-compatibility = prefix libdir includedir
++.PHONY: check-DESTDIR-compatibility $(need-DESTDIR-compatibility)
++
++check-DESTDIR-compatibility:
++	 @test -z "$(DESTDIR)" || { status=0; \
++	   for path in $(need-DESTDIR-compatibility); do \
++	     $(MAKE) --no-print-directory $$path  DESTDIR="$(DESTDIR)" || status=$$?; \
++	     test 0 -eq $$status || break ;\
++	   done; \
++	   exit $$status; }
++
++$(need-DESTDIR-compatibility):
++	 @case "$($@)" in *:*) \
++	   echo DESTDIR is not supported when $@ contains Win32 path \`$($@)\'\; \
++	   try adding \`$@=$(shell echo '$($@)' | sed s,:,:$(DESTDIR),)\' to \`[overrides ...]\', \
++	   and execute \`make install [overrides ...]\' instead. ;\
++	   exit 2 ;; \
++	 esac
++
++install: all check-DESTDIR-compatibility
++	@echo all DESTDIR checks passed
 +	$(mkinstalldirs) $(DESTDIR)$(inst_libdir) 
  	for i in $(LIBS); do \
 -		$(INSTALL_DATA) $$i $(inst_libdir)/$$i ; \
@@ -317,23 +280,8 @@ RCS file: /cvs/src/src/winsup/w32api/Makefile.in,v
 retrieving revision 1.47
 diff -u -p -r1.47 Makefile.in
 --- w32api/Makefile.in	6 Dec 2008 02:25:28 -0000	1.47
-+++ w32api/Makefile.in	18 Oct 2009 22:52:37 -0000
-@@ -19,6 +19,14 @@ host_alias = @host@
- target_alias = @target@
- prefix = @prefix@
- conf_prefix = @prefix@
-+
-+prefix_drive:=$(shell echo "$(prefix)" | sed -n -e 's|\(^.:\).*$$|\1|p')
-+ifneq (,$(DESTDIR))
-+ifneq (,$(prefix_drive))
-+$(error DESTDIR not supported when prefix contains win32 path: $(prefix))
-+endif
-+endif
-+
- # FIXME: this needs an appropriate AC_SUBST
- host_os = mingw32
- 
-@@ -58,6 +66,7 @@ FLAGS_TO_PASS = \
++++ w32api/Makefile.in	22 Oct 2009 20:43:28 -0000
+@@ -58,6 +58,7 @@ FLAGS_TO_PASS = \
  	RANLIB="$(RANLIB)" \
  	LD="$(LD)" \
  	DLLTOOL="$(DLLTOOL)" \
@@ -341,29 +289,23 @@ diff -u -p -r1.47 Makefile.in
  	TAR="$(TAR)" \
  	TARFLAGS="$(TARFLAGS)" \
  	TARFILEEXT="$(TARFILEEXT)" \
+@@ -89,7 +90,7 @@ test:
+ 
+ install uninstall:
+ 	for i in $(SUBDIRS); do \
+-		(cd $$i; $(MAKE) $@); \
++		(cd $$i; $(MAKE) $@ $(FLAGS_TO_PASS)); \
+ 	done
+ 
+ ifdef SNAPDATE
 Index: w32api/lib/Makefile.in
 ===================================================================
 RCS file: /cvs/src/src/winsup/w32api/lib/Makefile.in,v
 retrieving revision 1.46
 diff -u -p -r1.46 Makefile.in
 --- w32api/lib/Makefile.in	29 Jan 2008 21:18:49 -0000	1.46
-+++ w32api/lib/Makefile.in	18 Oct 2009 22:52:37 -0000
-@@ -23,6 +23,14 @@ build_alias = @build@
- target_alias = @target@
- with_cross_host = @with_cross_host@
- prefix = @prefix@
-+
-+prefix_drive:=$(shell echo "$(prefix)" | sed -n -e 's|\(^.:\).*$$|\1|p')
-+ifneq (,$(DESTDIR))
-+ifneq (,$(prefix_drive))
-+$(error DESTDIR not supported when prefix contains win32 path: $(prefix))
-+endif
-+endif
-+
- includedir:=@includedir@
- 
- program_transform_name = @program_transform_name@
-@@ -101,6 +109,7 @@ FLAGS_TO_PASS = \
++++ w32api/lib/Makefile.in	22 Oct 2009 20:43:28 -0000
+@@ -101,6 +101,7 @@ FLAGS_TO_PASS = \
  	RANLIB="$(RANLIB)" \
  	LD="$(LD)" \
  	DLLTOOL="$(DLLTOOL)" \
@@ -371,19 +313,47 @@ diff -u -p -r1.46 Makefile.in
  	TAR="$(TAR)" \
  	TARFLAGS="$(TARFLAGS)" \
  	TARFILEEXT="$(TARFILEEXT)" \
-@@ -213,19 +222,19 @@ lib%.a: %.o
+@@ -208,24 +209,45 @@ lib%.a: %.o
+ 	$(AR) rc $@ $*.o
+ 	$(RANLIB) $@
+ 
++need-DESTDIR-compatibility = prefix libdir includedir
++.PHONY: check-DESTDIR-compatibility $(need-DESTDIR-compatibility)
++
++check-DESTDIR-compatibility:
++	@test -z "$(DESTDIR)" || { status=0; \
++	  for path in $(need-DESTDIR-compatibility); do \
++	    $(MAKE) --no-print-directory $$path  DESTDIR="$(DESTDIR)" || status=$$?; \
++	    test 0 -eq $$status || break ;\
++	  done; \
++	  exit $$status; }
++
++$(need-DESTDIR-compatibility):
++	@case "$($@)" in *:*) \
++	  echo DESTDIR is not supported when $@ contains Win32 path \`$($@)\'\; \
++	  try adding \`$@=$(shell echo '$($@)' | sed s,:,:$(DESTDIR),)\' to \`[overrides ...]\', \
++	  and execute \`make install [overrides ...]\' instead. ;\
++	  exit 2 ;; \
++	esac
++
+ .PHONY: install install-libraries install-headers install-ddk
+ # install headers and libraries in a target specified directory.
  install: install-libraries install-headers install-ddk install-directx
  
- install-libraries: all
+-install-libraries: all
 -	$(mkinstalldirs) $(inst_libdir)
++install-libraries: all check-DESTDIR-compatibility
++	@echo all DESTDIR checks passed
 +	$(mkinstalldirs) $(DESTDIR)$(inst_libdir)
  	for i in $(LIBS); do \
 -		$(INSTALL_DATA) $$i $(inst_libdir)/$$i ; \
 +		$(INSTALL_DATA) $$i $(DESTDIR)$(inst_libdir)/$$i ; \
  	done
  
- install-headers:
+-install-headers:
 -	$(mkinstalldirs) $(inst_includedir)
++install-headers: check-DESTDIR-compatibility
++	@echo all DESTDIR checks passed
 +	$(mkinstalldirs) $(DESTDIR)$(inst_includedir)
  	for i in $(HEADERS); do \
 -		$(INSTALL_DATA) $(srcdir)/../include/$$i $(inst_includedir)/$$i ; \
@@ -397,9 +367,13 @@ diff -u -p -r1.46 Makefile.in
  	done
  
  install-ddk: install-libraries install-headers
-@@ -239,15 +248,15 @@ uninstall: uninstall-ddk uninstall-direc
+@@ -237,17 +259,19 @@ install-directx: install-libraries insta
+ # uninstall headers and libraries from a target specified directory
+ uninstall: uninstall-ddk uninstall-directx uninstall-libraries uninstall-headers
  
- uninstall-libraries:
+-uninstall-libraries:
++uninstall-libraries: check-DESTDIR-compatibility
++	@echo all DESTDIR checks passed
  	@for i in $(LIBS); do \
 -		rm -f $(inst_libdir)/$$i ; \
 +		rm -f $(DESTDIR)$(inst_libdir)/$$i ; \
@@ -407,7 +381,9 @@ diff -u -p -r1.46 Makefile.in
 -	rmdir $(inst_libdir)
 +	rmdir $(DESTDIR)$(inst_libdir)
  
- uninstall-headers:
+-uninstall-headers:
++uninstall-headers: check-DESTDIR-compatibility
++	@echo all DESTDIR checks passed
  	@for i in $(HEADERS); do \
 -		rm -r $(inst_includedir)/$$i ; \
 +		rm -r $(DESTDIR)$(inst_includedir)/$$i ; \
@@ -423,35 +399,47 @@ RCS file: /cvs/src/src/winsup/w32api/lib/ddk/Makefile.in,v
 retrieving revision 1.5
 diff -u -p -r1.5 Makefile.in
 --- w32api/lib/ddk/Makefile.in	12 Sep 2006 00:29:04 -0000	1.5
-+++ w32api/lib/ddk/Makefile.in	18 Oct 2009 22:52:37 -0000
-@@ -19,6 +19,14 @@ build_alias = @build@
- target_alias = @target@
- with_cross_host = @with_cross_host@
- prefix = @prefix@
-+
-+prefix_drive:=$(shell echo "$(prefix)" | sed -n -e 's|\(^.:\).*$$|\1|p')
-+ifneq (,$(DESTDIR))
-+ifneq (,$(prefix_drive))
-+$(error DESTDIR not supported when prefix contains win32 path: $(prefix))
-+endif
-+endif
-+
- includedir:=@includedir@
++++ w32api/lib/ddk/Makefile.in	22 Oct 2009 20:43:28 -0000
+@@ -141,35 +141,58 @@ lib%.a: %.o
+ 	$(AR) rc $@ $*.o
+ 	$(RANLIB) $@
  
- program_transform_name = @program_transform_name@
-@@ -145,15 +153,15 @@ lib%.a: %.o
++need-DESTDIR-compatibility = prefix libdir includedir
++.PHONY: check-DESTDIR-compatibility $(need-DESTDIR-compatibility)
++
++check-DESTDIR-compatibility:
++	@test -z "$(DESTDIR)" || { status=0; \
++	  for path in $(need-DESTDIR-compatibility); do \
++	    $(MAKE) --no-print-directory $$path  DESTDIR="$(DESTDIR)" || status=$$?; \
++	    test 0 -eq $$status || break ;\
++	  done; \
++	exit $$status; }
++
++$(need-DESTDIR-compatibility):
++	@case "$($@)" in *:*) \
++	  echo DESTDIR is not supported when $@ contains Win32 path \`$($@)\'\; \
++	  try adding \`$@=$(shell echo '$($@)' | sed s,:,:$(DESTDIR),)\' to \`[overrides ...]\', \
++	  and execute \`make install [overrides ...]\' instead. ;\
++	  exit 2 ;; \
++	esac
++
+ # install headers and libraries in a target specified directory.
  install: install-libraries install-headers
  
- install-libraries: all
+-install-libraries: all
 -	$(mkinstalldirs) $(inst_libdir)
++install-libraries: all check-DESTDIR-compatibility
++	@echo all DESTDIR checks passed
 +	$(mkinstalldirs) $(DESTDIR)$(inst_libdir)
  	for i in $(LIBS); do \
 -		$(INSTALL_DATA) $$i $(inst_libdir)/$$i ; \
 +		$(INSTALL_DATA) $$i $(DESTDIR)$(inst_libdir)/$$i ; \
  	done
  
- install-headers:
+-install-headers:
 -	$(mkinstalldirs) $(inst_includedir)
++install-headers: check-DESTDIR-compatibility
++	@echo all DESTDIR checks passed
 +	$(mkinstalldirs) $(DESTDIR)$(inst_includedir)
  	for i in $(HEADERS); do \
 -		$(INSTALL_DATA) $(srcdir)/../../include/ddk/$$i $(inst_includedir)/$$i ; \
@@ -459,9 +447,11 @@ diff -u -p -r1.5 Makefile.in
  	done
  
  # uninstall headers and libraries from a target specified directory
-@@ -161,15 +169,15 @@ uninstall: uninstall-libraries uninstall
+ uninstall: uninstall-libraries uninstall-headers
  
- uninstall-libraries:
+-uninstall-libraries:
++uninstall-libraries: check-DESTDIR-compatibility
++	@echo all DESTDIR checks passed
  	@for i in $(LIBS); do \
 -		rm -f $(inst_libdir)/$$i ; \
 +		rm -f $(DESTDIR)$(inst_libdir)/$$i ; \
@@ -469,7 +459,9 @@ diff -u -p -r1.5 Makefile.in
 -	rmdir $(inst_libdir)
 +	rmdir $(DESTDIR)$(inst_libdir)
  
- uninstall-headers:
+-uninstall-headers:
++uninstall-headers: check-DESTDIR-compatibility
++	@echo all DESTDIR checks passed
  	@for i in $(HEADERS); do \
 -		rm -r $(inst_includedir)/$$i ; \
 +		rm -r $(DESTDIR)$(inst_includedir)/$$i ; \
@@ -485,35 +477,47 @@ RCS file: /cvs/src/src/winsup/w32api/lib/directx/Makefile.in,v
 retrieving revision 1.4
 diff -u -p -r1.4 Makefile.in
 --- w32api/lib/directx/Makefile.in	12 Sep 2006 00:29:04 -0000	1.4
-+++ w32api/lib/directx/Makefile.in	18 Oct 2009 22:52:37 -0000
-@@ -19,6 +19,14 @@ build_alias = @build@
- target_alias = @target@
- with_cross_host = @with_cross_host@
- prefix = @prefix@
-+
-+prefix_drive:=$(shell echo "$(prefix)" | sed -n -e 's|\(^.:\).*$$|\1|p')
-+ifneq (,$(DESTDIR))
-+ifneq (,$(prefix_drive))
-+$(error DESTDIR not supported when prefix contains win32 path: $(prefix))
-+endif
-+endif
-+
- includedir:=@includedir@
++++ w32api/lib/directx/Makefile.in	22 Oct 2009 20:43:28 -0000
+@@ -166,35 +166,58 @@ lib%.a: %.o
+ 	$(AR) rc $@ $*.o
+ 	$(RANLIB) $@
  
- program_transform_name = @program_transform_name@
-@@ -170,15 +178,15 @@ lib%.a: %.o
++need-DESTDIR-compatibility = prefix libdir includedir
++.PHONY: check-DESTDIR-compatibility $(need-DESTDIR-compatibility)
++
++check-DESTDIR-compatibility:
++	@test -z "$(DESTDIR)" || { status=0; \
++	  for path in $(need-DESTDIR-compatibility); do \
++	    $(MAKE) --no-print-directory $$path  DESTDIR="$(DESTDIR)" || status=$$?; \
++	    test 0 -eq $$status || break ;\
++	  done; \
++	  exit $$status; }
++
++$(need-DESTDIR-compatibility):
++	@case "$($@)" in *:*) \
++	  echo DESTDIR is not supported when $@ contains Win32 path \`$($@)\'\; \
++	  try adding \`$@=$(shell echo '$($@)' | sed s,:,:$(DESTDIR),)\' to \`[overrides ...]\', \
++	  and execute \`make install [overrides ...]\' instead. ;\
++	  exit 2 ;; \
++	esac
++
+ # install headers and libraries in a target specified directory.
  install: install-libraries install-headers
  
- install-libraries: all
+-install-libraries: all
 -	$(mkinstalldirs) $(inst_libdir)
++install-libraries: all check-DESTDIR-compatibility
++	@echo all DESTDIR checks passed
 +	$(mkinstalldirs) $(DESTDIR)$(inst_libdir)
  	for i in $(LIBS); do \
 -		$(INSTALL_DATA) $$i $(inst_libdir)/$$i ; \
 +		$(INSTALL_DATA) $$i $(DESTDIR)$(inst_libdir)/$$i ; \
  	done
  
- install-headers:
+-install-headers:
 -	$(mkinstalldirs) $(inst_includedir)
++install-headers: check-DESTDIR-compatibility
++	@echo all DESTDIR checks passed
 +	$(mkinstalldirs) $(DESTDIR)$(inst_includedir)
  	for i in $(HEADERS); do \
 -		$(INSTALL_DATA) $(srcdir)/../../include/directx/$$i $(inst_includedir)/$$i ; \
@@ -521,9 +525,11 @@ diff -u -p -r1.4 Makefile.in
  	done
  
  # uninstall headers and libraries from a target specified directory
-@@ -186,15 +194,15 @@ uninstall: uninstall-libraries uninstall
+ uninstall: uninstall-libraries uninstall-headers
  
- uninstall-libraries:
+-uninstall-libraries:
++uninstall-libraries: check-DESTDIR-compatibility
++	@echo all DESTDIR checks passed
  	@for i in $(LIBS); do \
 -		rm -f $(inst_libdir)/$$i ; \
 +		rm -f $(DESTDIR)$(inst_libdir)/$$i ; \
@@ -531,7 +537,9 @@ diff -u -p -r1.4 Makefile.in
 -	rmdir $(inst_libdir)
 +	rmdir $(DESTDIR)$(inst_libdir)
  
- uninstall-headers:
+-uninstall-headers:
++uninstall-headers: check-DESTDIR-compatibility
++	@echo all DESTDIR checks passed
  	@for i in $(HEADERS); do \
 -		rm -r $(inst_includedir)/$$i ; \
 +		rm -r $(DESTDIR)$(inst_includedir)/$$i ; \
@@ -542,4 +550,4 @@ diff -u -p -r1.4 Makefile.in
  
  dist:
 
---------------020902050007020600050909--
+--------------000103070903060308010500--
