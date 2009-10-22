@@ -1,22 +1,22 @@
-Return-Path: <cygwin-patches-return-6792-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 32415 invoked by alias); 22 Oct 2009 22:37:43 -0000
-Received: (qmail 32386 invoked by uid 22791); 22 Oct 2009 22:37:35 -0000
-X-SWARE-Spam-Status: No, hits=-3.3 required=5.0 	tests=AWL,BAYES_00,HK_OBFDOM,RCVD_IN_DNSWL_LOW,SPF_PASS
+Return-Path: <cygwin-patches-return-6793-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 1321 invoked by alias); 22 Oct 2009 23:09:58 -0000
+Received: (qmail 1307 invoked by uid 22791); 22 Oct 2009 23:09:57 -0000
+X-SWARE-Spam-Status: No, hits=-3.5 required=5.0 	tests=AWL,BAYES_00,RCVD_IN_DNSWL_LOW,SPF_PASS
 X-Spam-Check-By: sourceware.org
-Received: from out2.smtp.messagingengine.com (HELO out2.smtp.messagingengine.com) (66.111.4.26)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 22 Oct 2009 22:37:25 +0000
-Received: from compute2.internal (compute2.internal [10.202.2.42]) 	by gateway1.messagingengine.com (Postfix) with ESMTP id E9980B421B 	for <cygwin-patches@cygwin.com>; Thu, 22 Oct 2009 18:37:23 -0400 (EDT)
-Received: from heartbeat1.messagingengine.com ([10.202.2.160])   by compute2.internal (MEProxy); Thu, 22 Oct 2009 18:37:24 -0400
-Received: from [192.168.1.3] (user-0c6sbc4.cable.mindspring.com [24.110.45.132]) 	by mail.messagingengine.com (Postfix) with ESMTPSA id 499CA6EEF3; 	Thu, 22 Oct 2009 18:37:23 -0400 (EDT)
-Message-ID: <4AE0DE77.3090300@cwilson.fastmail.fm>
-Date: Thu, 22 Oct 2009 22:37:00 -0000
+Received: from out2.smtp.messagingengine.com (HELO out2.smtp.messagingengine.com) (66.111.4.26)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 22 Oct 2009 23:09:54 +0000
+Received: from compute2.internal (compute2.internal [10.202.2.42]) 	by gateway1.messagingengine.com (Postfix) with ESMTP id A8F4DB555F 	for <cygwin-patches@cygwin.com>; Thu, 22 Oct 2009 19:09:52 -0400 (EDT)
+Received: from heartbeat1.messagingengine.com ([10.202.2.160])   by compute2.internal (MEProxy); Thu, 22 Oct 2009 19:09:53 -0400
+Received: from [192.168.1.3] (user-0c6sbc4.cable.mindspring.com [24.110.45.132]) 	by mail.messagingengine.com (Postfix) with ESMTPSA id 381BB6EED1; 	Thu, 22 Oct 2009 19:09:52 -0400 (EDT)
+Message-ID: <4AE0E614.4030305@cwilson.fastmail.fm>
+Date: Thu, 22 Oct 2009 23:09:00 -0000
 From: Charles Wilson <cygwin@cwilson.fastmail.fm>
 User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.8.1.23) Gecko/20090812 Thunderbird/2.0.0.23 Mnenhy/0.7.6.666
 MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
 Subject: Re: Honor DESTDIR in w32api and mingw
-References: <4AD78C5B.2080107@cwilson.fastmail.fm>
-In-Reply-To: <4AD78C5B.2080107@cwilson.fastmail.fm>
-Content-Type: multipart/mixed;  boundary="------------000103070903060308010500"
+References: <4AD78C5B.2080107@cwilson.fastmail.fm> <4AE0DE77.3090300@cwilson.fastmail.fm>
+In-Reply-To: <4AE0DE77.3090300@cwilson.fastmail.fm>
+Content-Type: multipart/mixed;  boundary="------------060103090009030406010300"
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,528 +26,87 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q4/txt/msg00123.txt.bz2
+X-SW-Source: 2009-q4/txt/msg00124.txt.bz2
 
 This is a multi-part message in MIME format.
---------------000103070903060308010500
+--------------060103090009030406010300
 Content-Type: text/plain; charset=ISO-8859-1
 Content-Transfer-Encoding: 7bit
-Content-length: 790
+Content-length: 323
 
-Latest rev, based on feedback @ mingw-dvlpr.  Avoid gmake conditionals
-and use explicit rules, instead. Detect problems in all applicable
-installation paths, not just $(prefix).
+Charles Wilson wrote:
+> Latest rev, based on feedback @ mingw-dvlpr.  Avoid gmake conditionals
+> and use explicit rules, instead. Detect problems in all applicable
+> installation paths, not just $(prefix).
+> 
+> 2009-10-22  Charles Wilson  <...>
 
-2009-10-22  Charles Wilson  <...>
-
-	Honor DESTDIR for winsup/mingw and winsup/w32api.
-	Detect and report error if installation paths are win32
-	format, but DESTDIR is non-empty.
-
-	* winsup/mingw/Makefile.in: Honor DESTDIR and add to
-	FLAGS_TO_PASS.
-	* winsup/mingw/mingwex/Makefile.in: Honor DESTDIR.
-	* winsup/mingw/profile/Makefile.in: Honor DESTDIR.
-	* winsup/w32api/Makefile.in Honor DESTDIR and add to
-	FLAGS_TO_PASS.
-	* winsup/w32api/lib/Makefile.in: Honor DESTDIR and add to
-	FLAGS_TO_PASS.
-	* winsup/w32api/lib/ddk/Makefile.in: Honor DESTDIR.
-	* w32api/lib/directx/Makefile.in: Honor DESTDIR.
+Attached in .gz form, so that the web archive doesn't inline it.
 
 --
 Chuck
 
---------------000103070903060308010500
-Content-Type: text/plain;
- name="mingw-destdir.patch4"
-Content-Transfer-Encoding: 7bit
+
+
+--------------060103090009030406010300
+Content-Type: application/gzip;
+ name="mingw-destdir.patch4.gz"
+Content-Transfer-Encoding: base64
 Content-Disposition: inline;
- filename="mingw-destdir.patch4"
-Content-length: 16846
+ filename="mingw-destdir.patch4.gz"
+Content-length: 3160
 
-Index: mingw/Makefile.in
-===================================================================
-RCS file: /cvs/src/src/winsup/mingw/Makefile.in,v
-retrieving revision 1.89
-diff -u -p -r1.89 Makefile.in
---- mingw/Makefile.in	27 Jul 2009 20:27:09 -0000	1.89
-+++ mingw/Makefile.in	22 Oct 2009 20:43:27 -0000
-@@ -90,6 +90,7 @@ inst_bindir:=$(tooldir)/bin
- inst_includedir:=$(tooldir)/include/mingw
- inst_libdir:=$(tooldir)/lib/mingw
- inst_docdir:=$(tooldir)/share/doc/mingw-runtime
-+need-DESTDIR-compatibility = prefix exec_prefix tooldir mandir
- else
- ifneq (,$(with_cross_host))
- #
-@@ -104,11 +105,13 @@ inst_bindir:=$(tooldir)/bin
- inst_includedir:=$(tooldir)/include
- inst_libdir:=$(tooldir)/lib
- inst_docdir:=$(tooldir)/share/doc/mingw-runtime
-+need-DESTDIR-compatibility = prefix exec_prefix tooldir mandir
- else
- inst_bindir:=$(bindir)
- inst_includedir:=$(includedir)
- inst_libdir:=$(libdir)
- inst_docdir:=$(prefix)/doc/runtime
-+need-DESTDIR-compatibility = prefix bindir includedir libdir mandir
- endif
- endif
- 
-@@ -204,6 +207,7 @@ FLAGS_TO_PASS:=\
- 	RANLIB="$(RANLIB)" \
- 	LD="$(LD)" \
- 	DLLTOOL="$(DLLTOOL)" \
-+	DESTDIR="$(DESTDIR)" \
- 	exec_prefix="$(exec_prefix)" \
- 	bindir="$(bindir)" \
- 	libdir="$(libdir)" \
-@@ -274,7 +278,7 @@ all_dlls_host: $(DLLS)
- 
- install_dlls_host:
- 	for i in $(DLLS); do \
--		$(INSTALL_PROGRAM) $$i $(inst_bindir)/$$i ; \
-+		$(INSTALL_PROGRAM) $$i $(DESTDIR)$(inst_bindir)/$$i ; \
- 	done
- 
- _libm_dummy.o:
-@@ -493,25 +497,44 @@ info-html:
- 
- install-info: info
- 
--install-dirs:
--	$(mkinstalldirs) $(inst_bindir)
--	$(mkinstalldirs) $(inst_includedir)
--	$(mkinstalldirs) $(inst_libdir)
--	$(mkinstalldirs) $(inst_docdir)
--	$(mkinstalldirs) $(mandir)/man$(mansection)
-+.PHONY: check-DESTDIR-compatibility $(need-DESTDIR-compatibility)
-+
-+check-DESTDIR-compatibility:
-+	 @test -z "$(DESTDIR)" || { status=0; \
-+	   for path in $(need-DESTDIR-compatibility); do \
-+	     $(MAKE) --no-print-directory $$path  DESTDIR="$(DESTDIR)" || status=$$?; \
-+	     test 0 -eq $$status || break ;\
-+	   done; \
-+	   exit $$status; }
-+
-+$(need-DESTDIR-compatibility):
-+	 @case "$($@)" in *:*) \
-+	   echo DESTDIR is not supported when $@ contains Win32 path \`$($@)\'\; \
-+	   try adding \`$@=$(shell echo '$($@)' | sed s,:,:$(DESTDIR),)\' to \`[overrides ...]\', \
-+	   and execute \`make install [overrides ...]\' instead. ;\
-+	   exit 2 ;; \
-+	 esac
-+
-+install-dirs: check-DESTDIR-compatibility
-+	@echo all DESTDIR checks passed
-+	$(mkinstalldirs) $(DESTDIR)$(inst_bindir)
-+	$(mkinstalldirs) $(DESTDIR)$(inst_includedir)
-+	$(mkinstalldirs) $(DESTDIR)$(inst_libdir)
-+	$(mkinstalldirs) $(DESTDIR)$(inst_docdir)
-+	$(mkinstalldirs) $(DESTDIR)$(mandir)/man$(mansection)
- 
- install: all install-dirs $(install_dlls_host)
- 	for i in $(LIBS); do \
--		$(INSTALL_DATA) $$i $(inst_libdir)/$$i ; \
-+		$(INSTALL_DATA) $$i $(DESTDIR)$(inst_libdir)/$$i ; \
- 	done
- 	for i in $(CRT0S); do \
--		$(INSTALL_DATA) $$i $(inst_libdir)/$$i ; \
-+		$(INSTALL_DATA) $$i $(DESTDIR)$(inst_libdir)/$$i ; \
- 	done
- 	for i in $(INSTDOCS); do \
--		$(INSTALL_DATA) $(srcdir)/$$i $(inst_docdir)/$$i ; \
-+		$(INSTALL_DATA) $(srcdir)/$$i $(DESTDIR)$(inst_docdir)/$$i ; \
- 	done
- 	for sub in . sys ; do \
--		dstdir=$(inst_includedir)/$$sub ; \
-+		dstdir=$(DESTDIR)$(inst_includedir)/$$sub ; \
- 		$(mkinstalldirs) $$dstdir ; \
- 		for i in $(srcdir)/include/$$sub/*.h ; do \
- 		  $(INSTALL_DATA) $$i $$dstdir/`basename $$i` ; \
-@@ -521,10 +544,10 @@ install: all install-dirs $(install_dlls
- # This provisional hack installs the only manpage we have at present...
- # It simply CANNOT suffice, when we have more manpages to ship.
- #
--	$(mkinstalldirs) $(mandir)/man$(mansection)
--	$(INSTALL_DATA) $(srcdir)/man/dirname.man $(mandir)/man$(mansection)/`\
-+	$(mkinstalldirs) $(DESTDIR)$(mandir)/man$(mansection)
-+	$(INSTALL_DATA) $(srcdir)/man/dirname.man $(DESTDIR)$(mandir)/man$(mansection)/`\
- 	  echo dirname.man|sed '$(manpage_transform);s,man$$,$(mansection),'`
--	$(INSTALL_DATA) $(srcdir)/man/dirname.man $(mandir)/man$(mansection)/`\
-+	$(INSTALL_DATA) $(srcdir)/man/dirname.man $(DESTDIR)$(mandir)/man$(mansection)/`\
- 	  echo basename.man|sed '$(manpage_transform);s,man$$,$(mansection),'`
- #
- # End provisional hack.
-Index: mingw/mingwex/Makefile.in
-===================================================================
-RCS file: /cvs/src/src/winsup/mingw/mingwex/Makefile.in,v
-retrieving revision 1.47
-diff -u -p -r1.47 Makefile.in
---- mingw/mingwex/Makefile.in	27 Jul 2009 20:27:09 -0000	1.47
-+++ mingw/mingwex/Makefile.in	22 Oct 2009 20:43:27 -0000
-@@ -255,10 +255,30 @@ info-html:
- 
- install-info: info
- 
--install: all
--	$(mkinstalldirs) $(inst_libdir)
-+need-DESTDIR-compatibility = prefix libdir
-+.PHONY: check-DESTDIR-compatibility $(need-DESTDIR-compatibility)
-+
-+check-DESTDIR-compatibility:
-+	 @test -z "$(DESTDIR)" || { status=0; \
-+	   for path in $(need-DESTDIR-compatibility); do \
-+	     $(MAKE) --no-print-directory $$path  DESTDIR="$(DESTDIR)" || status=$$?; \
-+	     test 0 -eq $$status || break ;\
-+	   done; \
-+	   exit $$status; }
-+
-+$(need-DESTDIR-compatibility):
-+	 @case "$($@)" in *:*) \
-+	   echo DESTDIR is not supported when $@ contains Win32 path \`$($@)\'\; \
-+	   try adding \`$@=$(shell echo '$($@)' | sed s,:,:$(DESTDIR),)\' to \`[overrides ...]\', \
-+	   and execute \`make install [overrides ...]\' instead. ;\
-+	   exit 2 ;; \
-+	 esac
-+
-+install: all check-DESTDIR-compatibility
-+	@echo all DESTDIR checks passed
-+	$(mkinstalldirs) $(DESTDIR)$(inst_libdir)
- 	for i in $(LIBS); do \
--		$(INSTALL_DATA) $$i $(inst_libdir)/$$i ; \
-+		$(INSTALL_DATA) $$i $(DESTDIR)$(inst_libdir)/$$i ; \
- 	done
- 
- clean:
-Index: mingw/profile/Makefile.in
-===================================================================
-RCS file: /cvs/src/src/winsup/mingw/profile/Makefile.in,v
-retrieving revision 1.17
-diff -u -p -r1.17 Makefile.in
---- mingw/profile/Makefile.in	27 Jul 2009 20:27:09 -0000	1.17
-+++ mingw/profile/Makefile.in	22 Oct 2009 20:43:27 -0000
-@@ -128,18 +128,38 @@ info-html:
- 
- install-info: info
- 
--install: all
--	$(mkinstalldirs) $(inst_libdir) 
-+need-DESTDIR-compatibility = prefix libdir includedir
-+.PHONY: check-DESTDIR-compatibility $(need-DESTDIR-compatibility)
-+
-+check-DESTDIR-compatibility:
-+	 @test -z "$(DESTDIR)" || { status=0; \
-+	   for path in $(need-DESTDIR-compatibility); do \
-+	     $(MAKE) --no-print-directory $$path  DESTDIR="$(DESTDIR)" || status=$$?; \
-+	     test 0 -eq $$status || break ;\
-+	   done; \
-+	   exit $$status; }
-+
-+$(need-DESTDIR-compatibility):
-+	 @case "$($@)" in *:*) \
-+	   echo DESTDIR is not supported when $@ contains Win32 path \`$($@)\'\; \
-+	   try adding \`$@=$(shell echo '$($@)' | sed s,:,:$(DESTDIR),)\' to \`[overrides ...]\', \
-+	   and execute \`make install [overrides ...]\' instead. ;\
-+	   exit 2 ;; \
-+	 esac
-+
-+install: all check-DESTDIR-compatibility
-+	@echo all DESTDIR checks passed
-+	$(mkinstalldirs) $(DESTDIR)$(inst_libdir) 
- 	for i in $(LIBS); do \
--		$(INSTALL_DATA) $$i $(inst_libdir)/$$i ; \
-+		$(INSTALL_DATA) $$i $(DESTDIR)$(inst_libdir)/$$i ; \
- 	done
- 	for i in $(CRT0S); do \
--		$(INSTALL_DATA) $$i $(inst_libdir)/$$i ; \
-+		$(INSTALL_DATA) $$i $(DESTDIR)$(inst_libdir)/$$i ; \
- 	done
- 	for sub in . ; do \
--	$(mkinstalldirs) $(inst_includedir)/$$sub ; \
-+	$(mkinstalldirs) $(DESTDIR)$(inst_includedir)/$$sub ; \
- 		for i in $(srcdir)/$$sub/*.h ; do \
--		  $(INSTALL_DATA) $$i $(inst_includedir)/$$sub/`basename $$i` ; \
-+		  $(INSTALL_DATA) $$i $(DESTDIR)$(inst_includedir)/$$sub/`basename $$i` ; \
- 		done ; \
- 	done
- 
-Index: w32api/Makefile.in
-===================================================================
-RCS file: /cvs/src/src/winsup/w32api/Makefile.in,v
-retrieving revision 1.47
-diff -u -p -r1.47 Makefile.in
---- w32api/Makefile.in	6 Dec 2008 02:25:28 -0000	1.47
-+++ w32api/Makefile.in	22 Oct 2009 20:43:28 -0000
-@@ -58,6 +58,7 @@ FLAGS_TO_PASS = \
- 	RANLIB="$(RANLIB)" \
- 	LD="$(LD)" \
- 	DLLTOOL="$(DLLTOOL)" \
-+	DESTDIR="$(DESTDIR)" \
- 	TAR="$(TAR)" \
- 	TARFLAGS="$(TARFLAGS)" \
- 	TARFILEEXT="$(TARFILEEXT)" \
-@@ -89,7 +90,7 @@ test:
- 
- install uninstall:
- 	for i in $(SUBDIRS); do \
--		(cd $$i; $(MAKE) $@); \
-+		(cd $$i; $(MAKE) $@ $(FLAGS_TO_PASS)); \
- 	done
- 
- ifdef SNAPDATE
-Index: w32api/lib/Makefile.in
-===================================================================
-RCS file: /cvs/src/src/winsup/w32api/lib/Makefile.in,v
-retrieving revision 1.46
-diff -u -p -r1.46 Makefile.in
---- w32api/lib/Makefile.in	29 Jan 2008 21:18:49 -0000	1.46
-+++ w32api/lib/Makefile.in	22 Oct 2009 20:43:28 -0000
-@@ -101,6 +101,7 @@ FLAGS_TO_PASS = \
- 	RANLIB="$(RANLIB)" \
- 	LD="$(LD)" \
- 	DLLTOOL="$(DLLTOOL)" \
-+	DESTDIR="$(DESTDIR)" \
- 	TAR="$(TAR)" \
- 	TARFLAGS="$(TARFLAGS)" \
- 	TARFILEEXT="$(TARFILEEXT)" \
-@@ -208,24 +209,45 @@ lib%.a: %.o
- 	$(AR) rc $@ $*.o
- 	$(RANLIB) $@
- 
-+need-DESTDIR-compatibility = prefix libdir includedir
-+.PHONY: check-DESTDIR-compatibility $(need-DESTDIR-compatibility)
-+
-+check-DESTDIR-compatibility:
-+	@test -z "$(DESTDIR)" || { status=0; \
-+	  for path in $(need-DESTDIR-compatibility); do \
-+	    $(MAKE) --no-print-directory $$path  DESTDIR="$(DESTDIR)" || status=$$?; \
-+	    test 0 -eq $$status || break ;\
-+	  done; \
-+	  exit $$status; }
-+
-+$(need-DESTDIR-compatibility):
-+	@case "$($@)" in *:*) \
-+	  echo DESTDIR is not supported when $@ contains Win32 path \`$($@)\'\; \
-+	  try adding \`$@=$(shell echo '$($@)' | sed s,:,:$(DESTDIR),)\' to \`[overrides ...]\', \
-+	  and execute \`make install [overrides ...]\' instead. ;\
-+	  exit 2 ;; \
-+	esac
-+
- .PHONY: install install-libraries install-headers install-ddk
- # install headers and libraries in a target specified directory.
- install: install-libraries install-headers install-ddk install-directx
- 
--install-libraries: all
--	$(mkinstalldirs) $(inst_libdir)
-+install-libraries: all check-DESTDIR-compatibility
-+	@echo all DESTDIR checks passed
-+	$(mkinstalldirs) $(DESTDIR)$(inst_libdir)
- 	for i in $(LIBS); do \
--		$(INSTALL_DATA) $$i $(inst_libdir)/$$i ; \
-+		$(INSTALL_DATA) $$i $(DESTDIR)$(inst_libdir)/$$i ; \
- 	done
- 
--install-headers:
--	$(mkinstalldirs) $(inst_includedir)
-+install-headers: check-DESTDIR-compatibility
-+	@echo all DESTDIR checks passed
-+	$(mkinstalldirs) $(DESTDIR)$(inst_includedir)
- 	for i in $(HEADERS); do \
--		$(INSTALL_DATA) $(srcdir)/../include/$$i $(inst_includedir)/$$i ; \
-+		$(INSTALL_DATA) $(srcdir)/../include/$$i $(DESTDIR)$(inst_includedir)/$$i ; \
- 	done
--	$(mkinstalldirs) $(inst_includedir)/GL
-+	$(mkinstalldirs) $(DESTDIR)$(inst_includedir)/GL
- 	for i in $(GL_HEADERS); do \
--		$(INSTALL_DATA) $(srcdir)/../include/GL/$$i $(inst_includedir)/GL/$$i ; \
-+		$(INSTALL_DATA) $(srcdir)/../include/GL/$$i $(DESTDIR)$(inst_includedir)/GL/$$i ; \
- 	done
- 
- install-ddk: install-libraries install-headers
-@@ -237,17 +259,19 @@ install-directx: install-libraries insta
- # uninstall headers and libraries from a target specified directory
- uninstall: uninstall-ddk uninstall-directx uninstall-libraries uninstall-headers
- 
--uninstall-libraries:
-+uninstall-libraries: check-DESTDIR-compatibility
-+	@echo all DESTDIR checks passed
- 	@for i in $(LIBS); do \
--		rm -f $(inst_libdir)/$$i ; \
-+		rm -f $(DESTDIR)$(inst_libdir)/$$i ; \
- 	done
--	rmdir $(inst_libdir)
-+	rmdir $(DESTDIR)$(inst_libdir)
- 
--uninstall-headers:
-+uninstall-headers: check-DESTDIR-compatibility
-+	@echo all DESTDIR checks passed
- 	@for i in $(HEADERS); do \
--		rm -r $(inst_includedir)/$$i ; \
-+		rm -r $(DESTDIR)$(inst_includedir)/$$i ; \
- 	done
--	rmdir $(inst_includedir)
-+	rmdir $(DESTDIR)$(inst_includedir)
- 
- uninstall-ddk:
- 	cd ddk && $(MAKE) -C uninstall $(FLAGS_TO_PASS)
-Index: w32api/lib/ddk/Makefile.in
-===================================================================
-RCS file: /cvs/src/src/winsup/w32api/lib/ddk/Makefile.in,v
-retrieving revision 1.5
-diff -u -p -r1.5 Makefile.in
---- w32api/lib/ddk/Makefile.in	12 Sep 2006 00:29:04 -0000	1.5
-+++ w32api/lib/ddk/Makefile.in	22 Oct 2009 20:43:28 -0000
-@@ -141,35 +141,58 @@ lib%.a: %.o
- 	$(AR) rc $@ $*.o
- 	$(RANLIB) $@
- 
-+need-DESTDIR-compatibility = prefix libdir includedir
-+.PHONY: check-DESTDIR-compatibility $(need-DESTDIR-compatibility)
-+
-+check-DESTDIR-compatibility:
-+	@test -z "$(DESTDIR)" || { status=0; \
-+	  for path in $(need-DESTDIR-compatibility); do \
-+	    $(MAKE) --no-print-directory $$path  DESTDIR="$(DESTDIR)" || status=$$?; \
-+	    test 0 -eq $$status || break ;\
-+	  done; \
-+	exit $$status; }
-+
-+$(need-DESTDIR-compatibility):
-+	@case "$($@)" in *:*) \
-+	  echo DESTDIR is not supported when $@ contains Win32 path \`$($@)\'\; \
-+	  try adding \`$@=$(shell echo '$($@)' | sed s,:,:$(DESTDIR),)\' to \`[overrides ...]\', \
-+	  and execute \`make install [overrides ...]\' instead. ;\
-+	  exit 2 ;; \
-+	esac
-+
- # install headers and libraries in a target specified directory.
- install: install-libraries install-headers
- 
--install-libraries: all
--	$(mkinstalldirs) $(inst_libdir)
-+install-libraries: all check-DESTDIR-compatibility
-+	@echo all DESTDIR checks passed
-+	$(mkinstalldirs) $(DESTDIR)$(inst_libdir)
- 	for i in $(LIBS); do \
--		$(INSTALL_DATA) $$i $(inst_libdir)/$$i ; \
-+		$(INSTALL_DATA) $$i $(DESTDIR)$(inst_libdir)/$$i ; \
- 	done
- 
--install-headers:
--	$(mkinstalldirs) $(inst_includedir)
-+install-headers: check-DESTDIR-compatibility
-+	@echo all DESTDIR checks passed
-+	$(mkinstalldirs) $(DESTDIR)$(inst_includedir)
- 	for i in $(HEADERS); do \
--		$(INSTALL_DATA) $(srcdir)/../../include/ddk/$$i $(inst_includedir)/$$i ; \
-+		$(INSTALL_DATA) $(srcdir)/../../include/ddk/$$i $(DESTDIR)$(inst_includedir)/$$i ; \
- 	done
- 
- # uninstall headers and libraries from a target specified directory
- uninstall: uninstall-libraries uninstall-headers
- 
--uninstall-libraries:
-+uninstall-libraries: check-DESTDIR-compatibility
-+	@echo all DESTDIR checks passed
- 	@for i in $(LIBS); do \
--		rm -f $(inst_libdir)/$$i ; \
-+		rm -f $(DESTDIR)$(inst_libdir)/$$i ; \
- 	done
--	rmdir $(inst_libdir)
-+	rmdir $(DESTDIR)$(inst_libdir)
- 
--uninstall-headers:
-+uninstall-headers: check-DESTDIR-compatibility
-+	@echo all DESTDIR checks passed
- 	@for i in $(HEADERS); do \
--		rm -r $(inst_includedir)/$$i ; \
-+		rm -r $(DESTDIR)$(inst_includedir)/$$i ; \
- 	done
--	rmdir $(inst_includedir)
-+	rmdir $(DESTDIR)$(inst_includedir)
- 
- 
- dist:
-Index: w32api/lib/directx/Makefile.in
-===================================================================
-RCS file: /cvs/src/src/winsup/w32api/lib/directx/Makefile.in,v
-retrieving revision 1.4
-diff -u -p -r1.4 Makefile.in
---- w32api/lib/directx/Makefile.in	12 Sep 2006 00:29:04 -0000	1.4
-+++ w32api/lib/directx/Makefile.in	22 Oct 2009 20:43:28 -0000
-@@ -166,35 +166,58 @@ lib%.a: %.o
- 	$(AR) rc $@ $*.o
- 	$(RANLIB) $@
- 
-+need-DESTDIR-compatibility = prefix libdir includedir
-+.PHONY: check-DESTDIR-compatibility $(need-DESTDIR-compatibility)
-+
-+check-DESTDIR-compatibility:
-+	@test -z "$(DESTDIR)" || { status=0; \
-+	  for path in $(need-DESTDIR-compatibility); do \
-+	    $(MAKE) --no-print-directory $$path  DESTDIR="$(DESTDIR)" || status=$$?; \
-+	    test 0 -eq $$status || break ;\
-+	  done; \
-+	  exit $$status; }
-+
-+$(need-DESTDIR-compatibility):
-+	@case "$($@)" in *:*) \
-+	  echo DESTDIR is not supported when $@ contains Win32 path \`$($@)\'\; \
-+	  try adding \`$@=$(shell echo '$($@)' | sed s,:,:$(DESTDIR),)\' to \`[overrides ...]\', \
-+	  and execute \`make install [overrides ...]\' instead. ;\
-+	  exit 2 ;; \
-+	esac
-+
- # install headers and libraries in a target specified directory.
- install: install-libraries install-headers
- 
--install-libraries: all
--	$(mkinstalldirs) $(inst_libdir)
-+install-libraries: all check-DESTDIR-compatibility
-+	@echo all DESTDIR checks passed
-+	$(mkinstalldirs) $(DESTDIR)$(inst_libdir)
- 	for i in $(LIBS); do \
--		$(INSTALL_DATA) $$i $(inst_libdir)/$$i ; \
-+		$(INSTALL_DATA) $$i $(DESTDIR)$(inst_libdir)/$$i ; \
- 	done
- 
--install-headers:
--	$(mkinstalldirs) $(inst_includedir)
-+install-headers: check-DESTDIR-compatibility
-+	@echo all DESTDIR checks passed
-+	$(mkinstalldirs) $(DESTDIR)$(inst_includedir)
- 	for i in $(HEADERS); do \
--		$(INSTALL_DATA) $(srcdir)/../../include/directx/$$i $(inst_includedir)/$$i ; \
-+		$(INSTALL_DATA) $(srcdir)/../../include/directx/$$i $(DESTDIR)$(inst_includedir)/$$i ; \
- 	done
- 
- # uninstall headers and libraries from a target specified directory
- uninstall: uninstall-libraries uninstall-headers
- 
--uninstall-libraries:
-+uninstall-libraries: check-DESTDIR-compatibility
-+	@echo all DESTDIR checks passed
- 	@for i in $(LIBS); do \
--		rm -f $(inst_libdir)/$$i ; \
-+		rm -f $(DESTDIR)$(inst_libdir)/$$i ; \
- 	done
--	rmdir $(inst_libdir)
-+	rmdir $(DESTDIR)$(inst_libdir)
- 
--uninstall-headers:
-+uninstall-headers: check-DESTDIR-compatibility
-+	@echo all DESTDIR checks passed
- 	@for i in $(HEADERS); do \
--		rm -r $(inst_includedir)/$$i ; \
-+		rm -r $(DESTDIR)$(inst_includedir)/$$i ; \
- 	done
--	rmdir $(inst_includedir)
-+	rmdir $(DESTDIR)$(inst_includedir)
- 
- 
- dist:
+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
 
---------------000103070903060308010500--
+--------------060103090009030406010300--
