@@ -1,23 +1,22 @@
-Return-Path: <cygwin-patches-return-6806-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 27074 invoked by alias); 26 Oct 2009 14:51:03 -0000
-Received: (qmail 27059 invoked by uid 22791); 26 Oct 2009 14:51:02 -0000
-X-SWARE-Spam-Status: No, hits=-3.5 required=5.0 	tests=AWL,BAYES_00,RCVD_IN_DNSWL_LOW,SPF_PASS
+Return-Path: <cygwin-patches-return-6807-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 28421 invoked by alias); 28 Oct 2009 02:25:21 -0000
+Received: (qmail 28405 invoked by uid 22791); 28 Oct 2009 02:25:20 -0000
+X-SWARE-Spam-Status: No, hits=-2.5 required=5.0 	tests=AWL,BAYES_00,SPF_PASS
 X-Spam-Check-By: sourceware.org
-Received: from out3.smtp.messagingengine.com (HELO out3.smtp.messagingengine.com) (66.111.4.27)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 26 Oct 2009 14:50:57 +0000
-Received: from compute2.internal (compute2.internal [10.202.2.42]) 	by gateway1.messagingengine.com (Postfix) with ESMTP id 71938BABB4 	for <cygwin-patches@cygwin.com>; Mon, 26 Oct 2009 10:50:55 -0400 (EDT)
-Received: from heartbeat2.messagingengine.com ([10.202.2.161])   by compute2.internal (MEProxy); Mon, 26 Oct 2009 10:50:54 -0400
-Received: from [192.168.1.3] (user-0c6sbc4.cable.mindspring.com [24.110.45.132]) 	by mail.messagingengine.com (Postfix) with ESMTPSA id 1D6E29D8C; 	Mon, 26 Oct 2009 10:50:55 -0400 (EDT)
-Message-ID: <4AE5B711.5080801@cwilson.fastmail.fm>
-Date: Mon, 26 Oct 2009 14:51:00 -0000
-From: Charles Wilson <cygwin@cwilson.fastmail.fm>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.8.1.23) Gecko/20090812 Thunderbird/2.0.0.23 Mnenhy/0.7.6.666
+Received: from qw-out-1920.google.com (HELO qw-out-1920.google.com) (74.125.92.146)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 28 Oct 2009 02:25:13 +0000
+Received: by qw-out-1920.google.com with SMTP id 4so80520qwk.20         for <cygwin-patches@cygwin.com>; Tue, 27 Oct 2009 19:25:11 -0700 (PDT)
+Received: by 10.224.105.73 with SMTP id s9mr8954177qao.78.1256696711432;         Tue, 27 Oct 2009 19:25:11 -0700 (PDT)
+Received: from ?192.168.0.101? (S010600112f237275.wp.shawcable.net [24.76.241.98])         by mx.google.com with ESMTPS id 22sm287294qyk.2.2009.10.27.19.25.10         (version=TLSv1/SSLv3 cipher=RC4-MD5);         Tue, 27 Oct 2009 19:25:10 -0700 (PDT)
+Message-ID: <4AE7AB8A.308@users.sourceforge.net>
+Date: Wed, 28 Oct 2009 02:25:00 -0000
+From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.4pre) Gecko/20090915 Thunderbird/3.0b4
 MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
-Subject: Re: Sync pseudo-reloc.c, round #2
-References: <4AE4A701.3050206@cwilson.fastmail.fm>  <4AE4B419.1060502@cwilson.fastmail.fm>  <20091025211540.GA1658@ednor.casa.cgf.cx>  <4AE4E16F.6040700@cwilson.fastmail.fm>  <4AE5B44E.2070302@cwilson.fastmail.fm> <20091026144301.GC15778@ednor.casa.cgf.cx>
-In-Reply-To: <20091026144301.GC15778@ednor.casa.cgf.cx>
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 7bit
+Subject: Re: [1.7] Case-sensitive programs exist but cannot both be run
+References: <4AD7F017.5080609@users.sourceforge.net> <20091016080302.GO27964@calimero.vinschen.de> <4AD832FB.2050901@users.sourceforge.net> <4AD8393C.6040805@lysator.liu.se> <20091016100210.GC31638@calimero.vinschen.de>
+In-Reply-To: <20091016100210.GC31638@calimero.vinschen.de>
+Content-Type: multipart/mixed;  boundary="------------020502020308070407090902"
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -27,14 +26,61 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q4/txt/msg00137.txt.bz2
+X-SW-Source: 2009-q4/txt/msg00138.txt.bz2
 
-Christopher Faylor wrote:
->> OK? (and sorry for all the churn; hopefully this is the last of it)
-> 
-> Yes.
+This is a multi-part message in MIME format.
+--------------020502020308070407090902
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-length: 275
 
-Thanks, committed (phew!)
+On 16/10/2009 05:02, Corinna Vinschen wrote:
+> Something along the lines of "there's no way to determine which one of
+> it will be started since starting applications is still case-insensitive
+> due to WIndows limitations" might make sense.
 
---
-Chuck
+Revised patch attached.
+
+
+Yaakov
+
+--------------020502020308070407090902
+Content-Type: text/x-patch;
+ name="doc-pathnames-programs.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="doc-pathnames-programs.patch"
+Content-length: 1581
+
+2009-10-27  Yaakov Selkowitz  <yselkowitz@users.sourceforge.net>
+
+	* pathnames.sgml: Add limitation of case sensitivity with CreateProcess.
+
+Index: pathnames.sgml
+===================================================================
+RCS file: /cvs/src/src/winsup/doc/pathnames.sgml,v
+retrieving revision 1.46
+diff -u -r1.46 pathnames.sgml
+--- pathnames.sgml	9 Oct 2009 11:19:18 -0000	1.46
++++ pathnames.sgml	28 Oct 2009 02:24:10 -0000
+@@ -489,10 +489,14 @@
+ </note>
+ 
+ <para>After you set this registry value to 0, Cygwin will be case-sensitive
+-by default on NTFS and NFS filesystems.  Be aware that using two filenames
+-which only differ by case might result in some weird interoperability
+-issues with native Win32 applications.  You're using case-sensitivity 
+-at your own risk.  You have been warned!</para>
++by default on NTFS and NFS filesystems.  However, there are limitations: 
++while two <emphasis role='bold'>programs</emphasis> <filename>Abc.exe</filename>
++and <filename>aBc.exe</filename> can be created and accessed like other files,
++starting applications is still case-insensitive due to Windows limitations
++and so the program you try to launch may not be the one actually started.  Also,
++be aware that using two filenames which only differ by case might
++result in some weird interoperability issues with native Win32 applications.  
++You're using case-sensitivity at your own risk.  You have been warned! </para>
+ 
+ <para>Even if you use case-sensitivity, it might be feasible to switch to
+ case-insensitivity for certain paths for better interoperability with
+
+--------------020502020308070407090902--
