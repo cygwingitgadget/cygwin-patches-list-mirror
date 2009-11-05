@@ -1,21 +1,21 @@
-Return-Path: <cygwin-patches-return-6810-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 7710 invoked by alias); 2 Nov 2009 16:38:07 -0000
-Received: (qmail 7699 invoked by uid 22791); 2 Nov 2009 16:38:07 -0000
+Return-Path: <cygwin-patches-return-6811-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 11693 invoked by alias); 5 Nov 2009 14:03:47 -0000
+Received: (qmail 11603 invoked by uid 22791); 5 Nov 2009 14:03:46 -0000
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 02 Nov 2009 16:38:02 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500) 	id F25F06D41A0; Mon,  2 Nov 2009 17:37:51 +0100 (CET)
-Date: Mon, 02 Nov 2009 16:38:00 -0000
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 05 Nov 2009 14:03:43 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 712526D4195; Thu,  5 Nov 2009 15:03:32 +0100 (CET)
+Date: Thu, 05 Nov 2009 14:03:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: patch: Protect tcsh init scripts against home dirs with spaces  in  	them
-Message-ID: <20091102163751.GB2749@calimero.vinschen.de>
+Subject: Re: [Patch] Allow to disable root privileges  with CYGWIN=noroot
+Message-ID: <20091105140332.GO26344@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <51e5f6120911020821h3c3f1273sffa9107e22099eaa@mail.gmail.com>  <51e5f6120911020831p61107af8u4193cbd1d81cb38c@mail.gmail.com>  <51e5f6120911020832g715ce5c7v2bb0d60d8e662698@mail.gmail.com>
+References: <20091004195723.GH4563@calimero.vinschen.de>  <20091004200843.GK4563@calimero.vinschen.de>  <4ACFAE4D.90502@t-online.de>  <20091010100831.GA13581@calimero.vinschen.de>  <4AD243ED.6080505@t-online.de>  <20091013102502.GG11169@calimero.vinschen.de>  <4AD4E38A.2050301@t-online.de>  <20091014104003.GA24593@calimero.vinschen.de>  <1My1yO-0KvdnE0@fwd09.aul.t-online.de>  <20091014120237.GA27964@calimero.vinschen.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <51e5f6120911020832g715ce5c7v2bb0d60d8e662698@mail.gmail.com>
+In-Reply-To: <20091014120237.GA27964@calimero.vinschen.de>
 User-Agent: Mutt/1.5.20 (2009-06-14)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -26,23 +26,36 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q4/txt/msg00141.txt.bz2
+X-SW-Source: 2009-q4/txt/msg00142.txt.bz2
 
-On Nov  2 08:32, Jeremy Elson wrote:
-> Hi,
-> I'm not sure if this is a cygwin bug or an upstream bug, but I've
-> found a bug in the latest
-> cygwin 1.7 beta that prevents tcsh from initializing correctly in home
-> directories with spaces
+Hi Christian,
 
-Very wrong mailing list.  See http://cygwin.com/lists.html
+On Oct 14 14:02, Corinna Vinschen wrote:
+> On Oct 14 13:24, Christian Franke wrote:
+> > Corinna Vinschen wrote:
+> > > 
+> > > Cool.  Another interesting option could be to remove the domain admins
+> > > group as well, if the user is a domain user and, of course, removing
+> > > any single user right, similar to the "capsh" tool under SELinux.
+> > > 
+> > 
+> > Yes, makes sense.
+> > 
+> > 
+> > > I'm just not sure if that tool should be part of the Cygwin package or
+> > > a package of its own right.  I'm leaning towards the latter choice.
+> > > 
+> > > 
+> > 
+> > ... or add it to the cygutils package ?
+> 
+> Sure, if Chuck likes the idea.
 
-This is an upstream bug which has been fixed long ago.  The
-/etc/defaults/etc/profile.d/complete.tcsh of tcsh in the 1.7 distro does
-not have the bug.  Just replace your /etc/profile.d/complete.tcsh with
-that one.
+did you talk to Chuck in the meantime?  Or are you contemplating the
+idea to put this in a separate package?
 
 
+Thanks,
 Corinna
 
 -- 
