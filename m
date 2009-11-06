@@ -1,22 +1,21 @@
-Return-Path: <cygwin-patches-return-6815-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 16735 invoked by alias); 6 Nov 2009 17:39:33 -0000
-Received: (qmail 16724 invoked by uid 22791); 6 Nov 2009 17:39:33 -0000
-X-SWARE-Spam-Status: No, hits=-1.3 required=5.0 	tests=AWL,BAYES_00,RCVD_IN_JMF_BR
+Return-Path: <cygwin-patches-return-6816-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 20454 invoked by alias); 6 Nov 2009 21:55:57 -0000
+Received: (qmail 20442 invoked by uid 22791); 6 Nov 2009 21:55:57 -0000
+X-SWARE-Spam-Status: No, hits=-1.9 required=5.0 	tests=AWL,BAYES_00,SARE_MSGID_LONG40,SPF_PASS
 X-Spam-Check-By: sourceware.org
-Received: from mailout08.t-online.de (HELO mailout08.t-online.de) (194.25.134.20)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 06 Nov 2009 17:39:28 +0000
-Received: from fwd05.aul.t-online.de  	by mailout08.t-online.de with smtp  	id 1N6SmT-0003DF-05; Fri, 06 Nov 2009 18:39:25 +0100
-Received: from [10.3.2.2] (bHcOMgZSghb9QhV+phvEKW-9HXxFyp1RcNajPl1RY5FsOv5bqBx5aYqwPc4RAwUw9m@[217.235.173.103]) by fwd05.aul.t-online.de 	with esmtp id 1N6SmJ-1NWU520; Fri, 6 Nov 2009 18:39:15 +0100
-Message-ID: <4AF45F43.3090401@t-online.de>
-Date: Fri, 06 Nov 2009 17:39:00 -0000
-From: Christian Franke <Christian.Franke@t-online.de>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.23) Gecko/20090825 SeaMonkey/1.1.18
+Received: from qw-out-1920.google.com (HELO qw-out-1920.google.com) (74.125.92.145)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 06 Nov 2009 21:55:53 +0000
+Received: by qw-out-1920.google.com with SMTP id 4so221050qwk.20         for <cygwin-patches@cygwin.com>; Fri, 06 Nov 2009 13:55:52 -0800 (PST)
 MIME-Version: 1.0
+Received: by 10.229.2.23 with SMTP id 23mr666217qch.87.1257544551914; Fri, 06  	Nov 2009 13:55:51 -0800 (PST)
+In-Reply-To: <0M7Ual-1MBB3j1CFD-00whzl@mrelayeu.kundenserver.de>
+References: <0M7Ual-1MBB3j1CFD-00whzl@mrelayeu.kundenserver.de>
+Date: Fri, 06 Nov 2009 21:55:00 -0000
+Message-ID: <416096c60911061355vac592d4y4c76435689301aad@mail.gmail.com>
+Subject: Re: console enhancements: mouse events
+From: Andy Koppe <andy.koppe@gmail.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [Patch] Allow to disable root privileges  with CYGWIN=noroot
-References: <4AC8F299.1020303@t-online.de> <20091004195723.GH4563@calimero.vinschen.de> <20091004200843.GK4563@calimero.vinschen.de> <4ACFAE4D.90502@t-online.de> <20091010100831.GA13581@calimero.vinschen.de> <4AD243ED.6080505@t-online.de> <20091013102502.GG11169@calimero.vinschen.de> <4AD4E38A.2050301@t-online.de> <20091014104003.GA24593@calimero.vinschen.de> <1My1yO-0KvdnE0@fwd09.aul.t-online.de> <20091014120237.GA27964@calimero.vinschen.de> <4AF367BA.2000005@cwilson.fastmail.fm>
-In-Reply-To: <4AF367BA.2000005@cwilson.fastmail.fm>
-Content-Type: text/plain; charset=ISO-8859-1; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -27,42 +26,54 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q4/txt/msg00146.txt.bz2
+X-SW-Source: 2009-q4/txt/msg00147.txt.bz2
 
-Charles Wilson wrote:
-> Corinna Vinschen wrote:
->   
->> On Oct 14 13:24, Christian Franke wrote:
->>     
->>> Corinna Vinschen wrote:
->>>       
->>>> Cool.  Another interesting option could be to remove the domain admins
->>>> group as well, if the user is a domain user and, of course, removing
->>>> any single user right, similar to the "capsh" tool under SELinux.
->>>>
->>>>         
->>> Yes, makes sense.
->>>
->>>
->>>       
->>>> I'm just not sure if that tool should be part of the Cygwin package or
->>>> a package of its own right.  I'm leaning towards the latter choice.
->>>>
->>>>
->>>>         
->>> ... or add it to the cygutils package ?
->>>       
->> Sure, if Chuck likes the idea.
->>     
->
-> I've no objections to incorporating this/these utilities into cygutils.
->  Take a look at
-> http://cygwin.com/cgi-bin/cvsweb.cgi/cygutils/HOW-TO-CONTRIBUTE?rev=1.11&cvsroot=cygwin-apps
-> to see how best to integrate the tool(s) into cygutils.
->   
+2009/11/6 Thomas Wolff:
+> * I would like to fix some key assignments:
+> =C2=A0- Control-(Shift-)6 inputs Control-^ which is not proper on interna=
+tional
+> =C2=A0 =C2=A0keyboards if Shift-6 is not "^", Control-^ (the key) does no=
+t input
+> =C2=A0 =C2=A0Control-^ (the character) on the other hand; the same glitch
+> =C2=A0 =C2=A0occurs in the pure Windows console, however.
+> =C2=A0 =C2=A0Unfortunately, with the functions being used it is not possi=
+ble to
+> =C2=A0 =C2=A0detect that shifted key "^" was hit together with Control; o=
+nly
+> =C2=A0 =C2=A0keycodes/scancodes are available when Control/Shift/Alt are =
+used. So
+> =C2=A0 =C2=A0I don't know whether this can easily be fixed. It works in m=
+intty but
+> =C2=A0 =C2=A0I think mintty uses different Windows functions.
 
-I will provide a patch to add the 'cygdrop' tool soon.
+Mintty roughly does the following for Ctrl(+Shift)+symbol combinations:
+- obtain the keymap using GetKeyboardState()
+- set the state of the Ctrl key to released
+- invoke ToUnicode() to get the character code according to the keyboard la=
+yout
+- if the character code is one of [\]_^? send the corresponding control code
+- otherwise, set the state of both Ctrl and Alt to pressed (this is
+equivalent to AltGr), and try ToUnicode() again
 
+The last step means that e.g. Ctrl+9 on a German keyboard will send
+^]. The proper combination would be Ctrl+AltGr+9, but since
+AltGr=3D=3DCtrl+Alt, that can't be distinguished from AltGr+9 without
+Ctrl. (Well, not without somewhat dodgy trickery anyway.)
 
-Thanks,
-Christian
+Btw, ^[, ^], and ^\ are actually available as Ctrl+=C3=BC, Ctrl+plus, and
+Ctrl+# in the German keyboard layout, but those combinations make no
+sense unless you're familiar with the US layout. It's similar with
+many, but by no means all, other layouts. (Microsoft's Keyboard Layout
+Creator is a good way to inspect different layouts.)
+
+> =C2=A0- Pressing something like Alt-=C3=B6 on a German keyboard leaves an=
+ illegal UTF-8
+> =C2=A0 =C2=A0sequence (the second byte of the respective sequence) in inp=
+ut, apparently
+> =C2=A0 =C2=A0because Alt-0xC3 is handled somehow. Don't know, though, whe=
+ther this is
+> =C2=A0 =C2=A0a cygwin console issue or maybe a readline issue.
+
+Readline issue. It's fine in zsh.
+
+Andy
