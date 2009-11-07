@@ -1,22 +1,23 @@
-Return-Path: <cygwin-patches-return-6816-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 20454 invoked by alias); 6 Nov 2009 21:55:57 -0000
-Received: (qmail 20442 invoked by uid 22791); 6 Nov 2009 21:55:57 -0000
-X-SWARE-Spam-Status: No, hits=-1.9 required=5.0 	tests=AWL,BAYES_00,SARE_MSGID_LONG40,SPF_PASS
+Return-Path: <cygwin-patches-return-6817-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 28710 invoked by alias); 7 Nov 2009 10:08:26 -0000
+Received: (qmail 28697 invoked by uid 22791); 7 Nov 2009 10:08:25 -0000
 X-Spam-Check-By: sourceware.org
-Received: from qw-out-1920.google.com (HELO qw-out-1920.google.com) (74.125.92.145)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 06 Nov 2009 21:55:53 +0000
-Received: by qw-out-1920.google.com with SMTP id 4so221050qwk.20         for <cygwin-patches@cygwin.com>; Fri, 06 Nov 2009 13:55:52 -0800 (PST)
-MIME-Version: 1.0
-Received: by 10.229.2.23 with SMTP id 23mr666217qch.87.1257544551914; Fri, 06  	Nov 2009 13:55:51 -0800 (PST)
-In-Reply-To: <0M7Ual-1MBB3j1CFD-00whzl@mrelayeu.kundenserver.de>
-References: <0M7Ual-1MBB3j1CFD-00whzl@mrelayeu.kundenserver.de>
-Date: Fri, 06 Nov 2009 21:55:00 -0000
-Message-ID: <416096c60911061355vac592d4y4c76435689301aad@mail.gmail.com>
-Subject: Re: console enhancements: mouse events
-From: Andy Koppe <andy.koppe@gmail.com>
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sat, 07 Nov 2009 10:08:18 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 524E86D434D; Sat,  7 Nov 2009 11:08:07 +0100 (CET)
+Date: Sat, 07 Nov 2009 10:08:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-IsSubscribed: yes
+Subject: Re: console enhancements: mouse events
+Message-ID: <20091107100807.GA14099@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <0M7Ual-1MBB3j1CFD-00whzl@mrelayeu.kundenserver.de>  <416096c60911061355vac592d4y4c76435689301aad@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <416096c60911061355vac592d4y4c76435689301aad@mail.gmail.com>
+User-Agent: Mutt/1.5.20 (2009-06-14)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,54 +27,48 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q4/txt/msg00147.txt.bz2
+X-SW-Source: 2009-q4/txt/msg00148.txt.bz2
 
-2009/11/6 Thomas Wolff:
-> * I would like to fix some key assignments:
-> =C2=A0- Control-(Shift-)6 inputs Control-^ which is not proper on interna=
-tional
-> =C2=A0 =C2=A0keyboards if Shift-6 is not "^", Control-^ (the key) does no=
-t input
-> =C2=A0 =C2=A0Control-^ (the character) on the other hand; the same glitch
-> =C2=A0 =C2=A0occurs in the pure Windows console, however.
-> =C2=A0 =C2=A0Unfortunately, with the functions being used it is not possi=
-ble to
-> =C2=A0 =C2=A0detect that shifted key "^" was hit together with Control; o=
-nly
-> =C2=A0 =C2=A0keycodes/scancodes are available when Control/Shift/Alt are =
-used. So
-> =C2=A0 =C2=A0I don't know whether this can easily be fixed. It works in m=
-intty but
-> =C2=A0 =C2=A0I think mintty uses different Windows functions.
+On Nov  6 21:55, Andy Koppe wrote:
+> 2009/11/6 Thomas Wolff:
+> > * I would like to fix some key assignments:
+> >  - Control-(Shift-)6 inputs Control-^ which is not proper on international
+> >    keyboards if Shift-6 is not "^", Control-^ (the key) does not input
+> >    Control-^ (the character) on the other hand; the same glitch
+> >    occurs in the pure Windows console, however.
+> >    Unfortunately, with the functions being used it is not possible to
+> >    detect that shifted key "^" was hit together with Control; only
+> >    keycodes/scancodes are available when Control/Shift/Alt are used. So
+> >    I don't know whether this can easily be fixed. It works in mintty but
+> >    I think mintty uses different Windows functions.
+> 
+> Mintty roughly does the following for Ctrl(+Shift)+symbol combinations:
+> - obtain the keymap using GetKeyboardState()
+> - set the state of the Ctrl key to released
+> - invoke ToUnicode() to get the character code according to the keyboard layout
+> - if the character code is one of [\]_^? send the corresponding control code
+> - otherwise, set the state of both Ctrl and Alt to pressed (this is
+> equivalent to AltGr), and try ToUnicode() again
+> 
+> The last step means that e.g. Ctrl+9 on a German keyboard will send
+> ^]. The proper combination would be Ctrl+AltGr+9, but since
+> AltGr==Ctrl+Alt, that can't be distinguished from AltGr+9 without
+> Ctrl. (Well, not without somewhat dodgy trickery anyway.)
 
-Mintty roughly does the following for Ctrl(+Shift)+symbol combinations:
-- obtain the keymap using GetKeyboardState()
-- set the state of the Ctrl key to released
-- invoke ToUnicode() to get the character code according to the keyboard la=
-yout
-- if the character code is one of [\]_^? send the corresponding control code
-- otherwise, set the state of both Ctrl and Alt to pressed (this is
-equivalent to AltGr), and try ToUnicode() again
+How does that work for ^^?  The ^ key is a deadkey on the german keyboard
+layout, so the actual char value is only generated after pressing the key
+twice.  Just curious.
 
-The last step means that e.g. Ctrl+9 on a German keyboard will send
-^]. The proper combination would be Ctrl+AltGr+9, but since
-AltGr=3D=3DCtrl+Alt, that can't be distinguished from AltGr+9 without
-Ctrl. (Well, not without somewhat dodgy trickery anyway.)
+> Btw, ^[, ^], and ^\ are actually available as Ctrl+ü, Ctrl+plus, and
+> Ctrl+# in the German keyboard layout, but those combinations make no
+> sense unless you're familiar with the US layout.
 
-Btw, ^[, ^], and ^\ are actually available as Ctrl+=C3=BC, Ctrl+plus, and
-Ctrl+# in the German keyboard layout, but those combinations make no
-sense unless you're familiar with the US layout. It's similar with
-many, but by no means all, other layouts. (Microsoft's Keyboard Layout
-Creator is a good way to inspect different layouts.)
+Indeed.
 
-> =C2=A0- Pressing something like Alt-=C3=B6 on a German keyboard leaves an=
- illegal UTF-8
-> =C2=A0 =C2=A0sequence (the second byte of the respective sequence) in inp=
-ut, apparently
-> =C2=A0 =C2=A0because Alt-0xC3 is handled somehow. Don't know, though, whe=
-ther this is
-> =C2=A0 =C2=A0a cygwin console issue or maybe a readline issue.
 
-Readline issue. It's fine in zsh.
+Corinna
 
-Andy
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          cygwin AT cygwin DOT com
+Red Hat
