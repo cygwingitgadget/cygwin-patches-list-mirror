@@ -1,22 +1,21 @@
-Return-Path: <cygwin-patches-return-6843-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 8991 invoked by alias); 18 Nov 2009 20:48:20 -0000
-Received: (qmail 8908 invoked by uid 22791); 18 Nov 2009 20:48:13 -0000
+Return-Path: <cygwin-patches-return-6844-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 1465 invoked by alias); 19 Nov 2009 15:27:36 -0000
+Received: (qmail 1454 invoked by uid 22791); 19 Nov 2009 15:27:35 -0000
 X-Spam-Check-By: sourceware.org
-Received: from pool-173-76-42-77.bstnma.fios.verizon.net (HELO cgf.cx) (173.76.42.77)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 18 Nov 2009 20:47:20 +0000
-Received: from ednor.cgf.cx (ednor.casa.cgf.cx [192.168.187.5]) 	by cgf.cx (Postfix) with ESMTP id DB1733B0002 	for <cygwin-patches@cygwin.com>; Wed, 18 Nov 2009 15:47:09 -0500 (EST)
-Received: by ednor.cgf.cx (Postfix, from userid 201) 	id 8CA5E2B352; Wed, 18 Nov 2009 15:47:09 -0500 (EST)
-Date: Wed, 18 Nov 2009 20:48:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 19 Nov 2009 15:26:43 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500) 	id B7E576D41A0; Thu, 19 Nov 2009 16:26:32 +0100 (CET)
+Date: Thu, 19 Nov 2009 15:27:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: patch: sleep/nanosleep bug
-Message-ID: <20091118204709.GA3461@ednor.casa.cgf.cx>
+Subject: Re: console enhancements: mouse events
+Message-ID: <20091119152632.GJ29173@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4B045581.4040301@byu.net>
+References: <0M7Ual-1MBB3j1CFD-00whzl@mrelayeu.kundenserver.de>  <20091106101448.GA2568@calimero.vinschen.de>  <4AF73FEC.2050300@towo.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4B045581.4040301@byu.net>
+In-Reply-To: <4AF73FEC.2050300@towo.net>
 User-Agent: Mutt/1.5.20 (2009-06-14)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -27,17 +26,34 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q4/txt/msg00174.txt.bz2
+X-SW-Source: 2009-q4/txt/msg00175.txt.bz2
 
-On Wed, Nov 18, 2009 at 01:13:53PM -0700, Eric Blake wrote:
->2009-11-18  Eric Blake  <ebb9@byu.net>
->
->	* signal.cc (nanosleep): Support 'infinite' sleep times.
->	(sleep): Avoid uninitialized memory.
+Tom,
 
-Sorry but, while I agree with the basic idea, this seems like
-unnecessary use of recursion.  It seems like you could accomplish the
-same thing by just putting the cancelable_wait in a for loop.  I think
-adding recursion here obfuscates the function unnecesarily.
+On Nov  8 23:02, towo@towo.net wrote:
+> Corinna Vinschen schrieb:
+> >On Nov  6 09:20, Thomas Wolff wrote:
+> >>Hi,
+> >>About enhancements of cygwin console features, I've now worked
+> >>out a patch which does the following:
+> >
+> >Thanks for the patch, it looks like a nice addition.
+> >
+> >However, there's the problem of the copyright assignment.  As described
+> >on the http://cygwin.com/contrib.html page, in the "Before you get
+> >started" section, we can't take non-trivial patches without have a
+> >signed copyright assignment form (http://cygwin.com/assign.txt) in place.
+> It's in the envelope.
 
-cgf
+Your copyright assignment has been countersigned and we're ready to
+go.  Could you please resend the latest version of your patch so we
+can have another look into it?
+
+
+Thanks,
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          cygwin AT cygwin DOT com
+Red Hat
