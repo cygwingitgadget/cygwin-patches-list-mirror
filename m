@@ -1,21 +1,22 @@
-Return-Path: <cygwin-patches-return-6857-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 25889 invoked by alias); 26 Nov 2009 12:47:06 -0000
-Received: (qmail 25879 invoked by uid 22791); 26 Nov 2009 12:47:05 -0000
+Return-Path: <cygwin-patches-return-6858-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 2366 invoked by alias); 26 Nov 2009 16:54:00 -0000
+Received: (qmail 2349 invoked by uid 22791); 26 Nov 2009 16:53:58 -0000
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 26 Nov 2009 12:47:02 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 16A9E6D4481; Thu, 26 Nov 2009 13:46:51 +0100 (CET)
-Date: Thu, 26 Nov 2009 12:47:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Received: from pool-173-76-42-77.bstnma.fios.verizon.net (HELO cgf.cx) (173.76.42.77)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 26 Nov 2009 16:53:54 +0000
+Received: from ednor.cgf.cx (ednor.casa.cgf.cx [192.168.187.5]) 	by cgf.cx (Postfix) with ESMTP id 376C23B0002 	for <cygwin-patches@cygwin.com>; Thu, 26 Nov 2009 11:53:44 -0500 (EST)
+Received: by ednor.cgf.cx (Postfix, from userid 201) 	id 38B2C2B352; Thu, 26 Nov 2009 11:53:44 -0500 (EST)
+Date: Thu, 26 Nov 2009 16:54:00 -0000
+From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [Patch] override-able installation_root
-Message-ID: <20091126124650.GS29173@calimero.vinschen.de>
+Subject: Re: patch: sleep/nanosleep bug
+Message-ID: <20091126165344.GB18148@ednor.casa.cgf.cx>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4B0D3920.3020907@shaddybaddah.name>  <20091126112042.GO29173@calimero.vinschen.de>  <4B0E6D0B.8070501@shaddybaddah.name>
+References: <4B045581.4040301@byu.net>  <20091118204709.GA3461@ednor.casa.cgf.cx>  <4B06A48C.5050904@byu.net>  <4B0D2CE5.4000000@byu.net>  <20091126112121.GP29173@calimero.vinschen.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4B0E6D0B.8070501@shaddybaddah.name>
+In-Reply-To: <20091126112121.GP29173@calimero.vinschen.de>
 User-Agent: Mutt/1.5.20 (2009-06-14)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -26,43 +27,27 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q4/txt/msg00188.txt.bz2
+X-SW-Source: 2009-q4/txt/msg00189.txt.bz2
 
-On Nov 26 22:56, Shaddy Baddah wrote:
-> Hi,
-> 
-> Corinna Vinschen wrote:
-> >Sorry, but no.  We won't accept this patch.  We have deliberately chosen
-> >to get away from the dependency to the Windows registry, and we really
-> >don't want to add it back again.
-> Thank you for the response. Fair enough. But is it no to the idea of
-> an overridable installation_root, or to doing by way of a registry
-> setting? Is there another way to do this that would be reasonable?
-> Say the use of an environment variable? Other?
+On Thu, Nov 26, 2009 at 12:21:21PM +0100, Corinna Vinschen wrote:
+>On Nov 25 06:11, Eric Blake wrote:
+>> -----BEGIN PGP SIGNED MESSAGE-----
+>> Hash: SHA1
+>> 
+>> According to Eric Blake on 11/20/2009 7:15 AM:
+>> >>> 	* signal.cc (nanosleep): Support 'infinite' sleep times.
+>> >>> 	(sleep): Avoid uninitialized memory.
+>> >> Sorry but, while I agree with the basic idea, this seems like
+>> >> unnecessary use of recursion.  It seems like you could accomplish the
+>> >> same thing by just putting the cancelable_wait in a for loop.  I think
+>> >> adding recursion here obfuscates the function unnecesarily.
+>> > 
+>> > How about the following, then?  Same changelog.
+>> 
+>> Ping.
+>
+>Do you think we need it in 1.7.1?
 
-Don't know yet, but certainly not an environment variable since these
-are read after the installation root has been handled.  And again, this
-isn't something for 1.7.1.
+No, I don't think so.  I'll get to this after Thanksgiving.
 
-> >Btw., for a non-trivial patch like this you need to file a copyright
-> >assignment.  See http://cygwin.com/contrib.html, the "Before you get
-> >started" section.
-> Fair enough. I estimated that it was trivial, but I accept that it isn't.
-
-Trivial are very small patches, usually < 10 lines.  They also should
-only fix something, not add new features.
-
-> >That's on my TODO list and PTC.  It will have to wait until after 1.7.1
-> >as well, though.
-> I'll ask around about copyright assignment. If I can get that
-> sorted, I'll try and help with that effort.
-
-Just use the copyright asignment form at http://cygwin.com/assign.txt
-
-
-Corinna
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+cgf
