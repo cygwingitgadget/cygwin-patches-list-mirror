@@ -1,22 +1,22 @@
-Return-Path: <cygwin-patches-return-6872-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 24625 invoked by alias); 16 Dec 2009 15:56:40 -0000
-Received: (qmail 24615 invoked by uid 22791); 16 Dec 2009 15:56:39 -0000
+Return-Path: <cygwin-patches-return-6873-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 23018 invoked by alias); 16 Dec 2009 16:09:07 -0000
+Received: (qmail 23007 invoked by uid 22791); 16 Dec 2009 16:09:05 -0000
 X-Spam-Check-By: sourceware.org
-Received: from pool-173-76-42-77.bstnma.fios.verizon.net (HELO cgf.cx) (173.76.42.77)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 16 Dec 2009 15:56:35 +0000
-Received: from ednor.cgf.cx (ednor.casa.cgf.cx [192.168.187.5]) 	by cgf.cx (Postfix) with ESMTP id 8874B3B0002 	for <cygwin-patches@cygwin.com>; Wed, 16 Dec 2009 10:56:25 -0500 (EST)
-Received: by ednor.cgf.cx (Postfix, from userid 201) 	id 3914A2B352; Wed, 16 Dec 2009 10:56:25 -0500 (EST)
-Date: Wed, 16 Dec 2009 15:56:00 -0000
+Received: from pool-173-76-42-77.bstnma.fios.verizon.net (HELO cgf.cx) (173.76.42.77)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 16 Dec 2009 16:09:00 +0000
+Received: from ednor.cgf.cx (ednor.casa.cgf.cx [192.168.187.5]) 	by cgf.cx (Postfix) with ESMTP id 153303B0002 	for <cygwin-patches@cygwin.com>; Wed, 16 Dec 2009 11:08:51 -0500 (EST)
+Received: by ednor.cgf.cx (Postfix, from userid 201) 	id 11C842B352; Wed, 16 Dec 2009 11:08:51 -0500 (EST)
+Date: Wed, 16 Dec 2009 16:09:00 -0000
 From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [Patch] ps command returns 1 if PID not found
-Message-ID: <20091216155624.GA31219@ednor.casa.cgf.cx>
+Subject: Re: patch: sleep/nanosleep bug
+Message-ID: <20091216160851.GB31219@ednor.casa.cgf.cx>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <b4864b490912082352s369fc0e4me50de3883d782100@mail.gmail.com>
+References: <4B045581.4040301@byu.net>  <20091118204709.GA3461@ednor.casa.cgf.cx>  <4B06A48C.5050904@byu.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b4864b490912082352s369fc0e4me50de3883d782100@mail.gmail.com>
+In-Reply-To: <4B06A48C.5050904@byu.net>
 User-Agent: Mutt/1.5.20 (2009-06-14)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -27,57 +27,52 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q4/txt/msg00203.txt.bz2
+X-SW-Source: 2009-q4/txt/msg00204.txt.bz2
 
-On Wed, Dec 09, 2009 at 06:52:14PM +1100, Ryan Dortmans wrote:
->Attached is a small patch for ps to return 1 if the option --process
->is passed and the PID is not found. This is the behaviour in other
->versions of ps.
+On Fri, Nov 20, 2009 at 07:15:40AM -0700, Eric Blake wrote:
+>-----BEGIN PGP SIGNED MESSAGE-----
+>Hash: SHA1
+>
+>According to Christopher Faylor on 11/18/2009 1:47 PM:
+>> On Wed, Nov 18, 2009 at 01:13:53PM -0700, Eric Blake wrote:
+>>> 2009-11-18  Eric Blake  <ebb9@byu.net>
+>>>
+>>> 	* signal.cc (nanosleep): Support 'infinite' sleep times.
+>>> 	(sleep): Avoid uninitialized memory.
+>> 
+>> Sorry but, while I agree with the basic idea, this seems like
+>> unnecessary use of recursion.  It seems like you could accomplish the
+>> same thing by just putting the cancelable_wait in a for loop.  I think
+>> adding recursion here obfuscates the function unnecesarily.
+>
+>How about the following, then?  Same changelog.
 
-Sorry but returning 1 doesn't make sense and it isn't the way that linux
-works.  It actually returns 0.
+It wonder if your while (!done) loop could be expressed as a for loop but
+it isn't enough of an issue to block inclusion of this patch.
 
-I haven't tested this but it seems to do what you want.
+So, thanks for the patch and please check in.  This will then go into 1.7.2.
 
 cgf
 
-Index: ps.cc
-===================================================================
-RCS file: /cvs/uberbaum/winsup/utils/ps.cc,v
-retrieving revision 1.26
-diff -d -u -r1.26 ps.cc
---- ps.cc	11 May 2009 14:01:17 -0000	1.26
-+++ ps.cc	16 Dec 2009 15:56:20 -0000
-@@ -258,6 +258,7 @@
- {
-   external_pinfo *p;
-   int aflag, lflag, fflag, sflag, uid, proc_id;
-+  bool found_proc_id = true;
-   cygwin_getinfo_types query = CW_GETPINFO;
-   const char *dtitle = "    PID TTY     STIME COMMAND\n";
-   const char *dfmt   = "%7d%4s%10s %s\n";
-@@ -299,6 +300,7 @@
-       case 'p':
- 	proc_id = atoi (optarg);
- 	aflag = 1;
-+	found_proc_id = false;
- 	break;
-       case 's':
- 	sflag = 1;
-@@ -369,6 +371,8 @@
-     {
-       if ((proc_id > 0) && (p->pid != proc_id))
- 	continue;
-+      else
-+	found_proc_id = true;
- 
-       if (aflag)
- 	/* nothing to do */;
-@@ -499,6 +503,5 @@
-     }
-   (void) cygwin_internal (CW_UNLOCK_PINFO);
- 
--  return 0;
-+  return found_proc_id ? 0 : 1;
- }
--
+>+
+>+  while (!done)
+>     {
+>-      _my_tls.call_signal_handler ();
+>-      set_errno (EINTR);
+>-      res = -1;
+>+      /* Divide user's input into transactions no larger than 49.7
+>+         days at a time.  */
+>+      if (sec > HIRES_DELAY_MAX)
+>+        {
+>+          req = ((HIRES_DELAY_MAX * 1000 + resolution - 1)
+>+                 / resolution * resolution);
+>+          sec -= HIRES_DELAY_MAX;
+>+        }
+>+      else
+>+        {
+>+          req = ((sec * 1000 + (rqtp->tv_nsec + 999999) / 1000000
+>+                  + resolution - 1) / resolution) * resolution;
+>+          sec = 0;
+>+          done = true;
+>+        }
+>+
