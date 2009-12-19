@@ -1,22 +1,22 @@
-Return-Path: <cygwin-patches-return-6879-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 17457 invoked by alias); 19 Dec 2009 00:57:49 -0000
-Received: (qmail 17440 invoked by uid 22791); 19 Dec 2009 00:57:47 -0000
-X-SWARE-Spam-Status: No, hits=-1.7 required=5.0 	tests=AWL,BAYES_00,HK_OBFDOM,SPF_SOFTFAIL
+Return-Path: <cygwin-patches-return-6880-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 30729 invoked by alias); 19 Dec 2009 15:42:23 -0000
+Received: (qmail 30717 invoked by uid 22791); 19 Dec 2009 15:42:22 -0000
 X-Spam-Check-By: sourceware.org
-Received: from qmta09.emeryville.ca.mail.comcast.net (HELO QMTA09.emeryville.ca.mail.comcast.net) (76.96.30.96)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sat, 19 Dec 2009 00:57:43 +0000
-Received: from OMTA19.emeryville.ca.mail.comcast.net ([76.96.30.76]) 	by QMTA09.emeryville.ca.mail.comcast.net with comcast 	id JotF1d00A1eYJf8A9oxiMs; Sat, 19 Dec 2009 00:57:42 +0000
-Received: from [192.168.0.104] ([24.10.244.244]) 	by OMTA19.emeryville.ca.mail.comcast.net with comcast 	id Joxg1d00L5H651C01oxhJs; Sat, 19 Dec 2009 00:57:42 +0000
-Message-ID: <4B2C250C.8020504@byu.net>
-Date: Sat, 19 Dec 2009 00:57:00 -0000
-From: Eric Blake <ebb9@byu.net>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.23) Gecko/20090812 Thunderbird/2.0.0.23 Mnenhy/0.7.6.666
-MIME-Version: 1.0
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sat, 19 Dec 2009 15:42:18 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 9F0E36D417D; Sat, 19 Dec 2009 16:42:06 +0100 (CET)
+Date: Sat, 19 Dec 2009 15:42:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: patch: sleep/nanosleep bug
-References: <4B045581.4040301@byu.net>  <20091118204709.GA3461@ednor.casa.cgf.cx>  <4B06A48C.5050904@byu.net> <20091216160851.GB31219@ednor.casa.cgf.cx> <4B2A3A64.2010005@byu.net>
-In-Reply-To: <4B2A3A64.2010005@byu.net>
-Content-Type: multipart/mixed;  boundary="------------080303080107040707070903"
-X-IsSubscribed: yes
+Subject: Re: console enhancements: mouse events etc
+Message-ID: <20091219154206.GA20349@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <4B1C04D1.8010707@towo.net>  <20091214114715.GG8059@calimero.vinschen.de>  <4B266528.7090006@towo.net>  <20091214162953.GO8059@calimero.vinschen.de>  <4B266F9B.6070204@towo.net>  <20091214171323.GS8059@calimero.vinschen.de>  <20091215130036.GA19394@calimero.vinschen.de>  <4B28ACE8.1050305@towo.net>  <20091216145627.GM8059@calimero.vinschen.de>  <4B29934A.80902@towo.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4B29934A.80902@towo.net>
+User-Agent: Mutt/1.5.20 (2009-06-14)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,77 +26,85 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2009-q4/txt/msg00210.txt.bz2
+X-SW-Source: 2009-q4/txt/msg00211.txt.bz2
 
-This is a multi-part message in MIME format.
---------------080303080107040707070903
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 7bit
-Content-length: 1058
+On Dec 17 03:11, Thomas Wolff wrote:
+> Hi,
+> here is my VT100 graphics mode patch, plus the one-liner I forgot to
+> mention in the change log last time, I hope that's OK.
+> Thomas
 
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA1
-
-According to Eric Blake on 12/17/2009 7:04 AM:
-> According to Christopher Faylor on 12/16/2009 9:08 AM:
->>> How about the following, then?  Same changelog.
->> It wonder if your while (!done) loop could be expressed as a for loop but
->> it isn't enough of an issue to block inclusion of this patch.
+> 	* fhandler_console.cc (write_console): Check for VT100 
+> 	graphics mode and transform wide characters in ASCII small 
+> 	letter range to corresponding graphics.
+> 	(__vt100_conv): Table to transform small ASCII letters to line 
+> 	drawing graphics for use in VT100 graphics mode.
+> 	(write_normal): Check for SO/SI control characters to 
+> 	enable/disable VT100 graphics mode.
+> 	(base_chars): Enable SO/SI control characters for detection.
+> 	(write): Check for ESC ( 0 / ESC ( B escape sequences to 
+> 	enable/disable VT100 graphics mode. Also detect ">" while 
+> 	parsing ESC [ sequences to distinguish specific requests.
+> 	(char_command): Distinguish Secondary from Primary Device Attribute 
+> 	request to report more details about cygwin console terminal version.
+> 	* fhandler.h (vt100_graphics_mode_active): New flag to indicate mode.
+> 	(saw_greater_than_sign): New parse flag for ESC [ > sequences.
+> 	(gotparen, gotrparen): New state values to parse ESC ( / ) sequences.
 > 
->> So, thanks for the patch and please check in.  This will then go into 1.7.2.
-> 
-> Thanks; committed now.
+> 	* fhandler_console.cc (read): Allow combined Alt-AltGr modifiers 
+> 	to also produce an ESC prefix like a plain Alt modifier, e.g. to make 
+> 	Alt-@ work on a keyboard where @ is AltGr-q.
 
-And I botched it.  I'm pushing this followup as obvious (HIRES_DELAY_MAX
-is in ms, not s).
+Thanks, applied with a change.  I removed the whole lot of question
+marks which were apparently meant to be the UTF-8 representation of the
+vt100 graphical chars, and replaced them with the textual description
+from the Unicode character table, like this:
 
-2009-12-18  Eric Blake  <ebb9@byu.net>
+  /* VT100 line drawing graphics mode maps `abcdefghijklmnopqrstuvwxyz{|}~ to
+     graphical characters */
+  static wchar_t __vt100_conv [31] = {
+	  0x25C6, /* Black Diamond */
+	  0x2592, /* Medium Shade */
+	  0x2409, /* Symbol for Horizontal Tabulation */
+	  0x240C, /* Symbol for Form Feed */
+	  0x240D, /* Symbol for Carriage Return */
+	  0x240A, /* Symbol for Line Feed */
+	  0x00B0, /* Degree Sign */
+	  0x00B1, /* Plus-Minus Sign */
+	  0x2424, /* Symbol for Newline */
+	  0x240B, /* Symbol for Vertical Tabulation */
+	  0x2518, /* Box Drawings Light Up And Left */
+	  0x2510, /* Box Drawings Light Down And Left */
+	  0x250C, /* Box Drawings Light Down And Right */
+	  0x2514, /* Box Drawings Light Up And Right */
+	  0x253C, /* Box Drawings Light Vertical And Horizontal */
+	  0x23BA, /* Horizontal Scan Line-1 */
+	  0x23BB, /* Horizontal Scan Line-3 */
+	  0x2500, /* Box Drawings Light Horizontal */
+	  0x23BC, /* Horizontal Scan Line-7 */
+	  0x23BD, /* Horizontal Scan Line-9 */
+	  0x251C, /* Box Drawings Light Vertical And Right */
+	  0x2524, /* Box Drawings Light Vertical And Left */
+	  0x2534, /* Box Drawings Light Up And Horizontal */
+	  0x252C, /* Box Drawings Light Down And Horizontal */
+	  0x2502, /* Box Drawings Light Vertical */
+	  0x2264, /* Less-Than Or Equal To */
+	  0x2265, /* Greater-Than Or Equal To */
+	  0x03C0, /* Greek Small Letter Pi */
+	  0x2260, /* Not Equal To */
+	  0x00A3, /* Pound Sign */
+	  0x00B7, /* Middle Dot */
+  };
 
-	* signal.cc (nanosleep): Fix bug in previous patch.
+This avoids usage of any non-ASCII characters in the sources.  While
+UTF-8 is a good idea in general, we should avoid to use it in the
+source code.
 
-- --
-Don't work too hard, make some time for fun as well!
 
-Eric Blake             ebb9@byu.net
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.9 (Cygwin)
-Comment: Public key at home.comcast.net/~ericblake/eblake.gpg
-Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
+Thanks,
+Corinna
 
-iEYEARECAAYFAkssJQwACgkQ84KuGfSFAYACYwCgx4ae754jxdms7BBIkNTPiK2O
-o4wAnRkd86VviazT0jqQJleUjvTZ5Ti8
-=epx6
------END PGP SIGNATURE-----
-
---------------080303080107040707070903
-Content-Type: text/plain;
- name="cygwin.patch34"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline;
- filename="cygwin.patch34"
-Content-length: 798
-
-Index: signal.cc
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/signal.cc,v
-retrieving revision 1.89
-diff -u -p -r1.89 signal.cc
---- signal.cc	17 Dec 2009 14:04:04 -0000	1.89
-+++ signal.cc	19 Dec 2009 00:56:36 -0000
-@@ -102,11 +102,11 @@ nanosleep (const struct timespec *rqtp, 
-     {
-       /* Divide user's input into transactions no larger than 49.7
-          days at a time.  */
--      if (sec > HIRES_DELAY_MAX)
-+      if (sec > HIRES_DELAY_MAX / 1000)
-         {
--          req = ((HIRES_DELAY_MAX * 1000 + resolution - 1)
-+          req = ((HIRES_DELAY_MAX + resolution - 1)
-                  / resolution * resolution);
--          sec -= HIRES_DELAY_MAX;
-+          sec -= HIRES_DELAY_MAX / 1000;
-         }
-       else
-         {
-
---------------080303080107040707070903--
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          cygwin AT cygwin DOT com
+Red Hat
