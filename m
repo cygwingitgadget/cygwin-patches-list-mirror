@@ -1,19 +1,22 @@
-Return-Path: <cygwin-patches-return-6897-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 20989 invoked by alias); 10 Jan 2010 19:39:59 -0000
-Received: (qmail 20979 invoked by uid 22791); 10 Jan 2010 19:39:59 -0000
-X-SWARE-Spam-Status: No, hits=-2.0 required=5.0 	tests=BAYES_00,SARE_MSGID_LONG40,SPF_PASS
+Return-Path: <cygwin-patches-return-6898-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 13890 invoked by alias); 10 Jan 2010 21:28:35 -0000
+Received: (qmail 13878 invoked by uid 22791); 10 Jan 2010 21:28:35 -0000
 X-Spam-Check-By: sourceware.org
-Received: from mail-fx0-f223.google.com (HELO mail-fx0-f223.google.com) (209.85.220.223)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sun, 10 Jan 2010 19:39:55 +0000
-Received: by fxm23 with SMTP id 23so17621424fxm.18         for <cygwin-patches@cygwin.com>; Sun, 10 Jan 2010 11:39:52 -0800 (PST)
-MIME-Version: 1.0
-Received: by 10.239.193.137 with SMTP id j9mr983999hbi.206.1263152392232; Sun,  	10 Jan 2010 11:39:52 -0800 (PST)
-Date: Sun, 10 Jan 2010 19:39:00 -0000
-Message-ID: <416096c61001101139s28d568f0x7ab944987d4dbff5@mail.gmail.com>
-Subject: making scanf byte-clean(er)
-From: Andy Koppe <andy.koppe@gmail.com>
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sun, 10 Jan 2010 21:28:31 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500) 	id AE56C6D4190; Sun, 10 Jan 2010 22:28:20 +0100 (CET)
+Date: Sun, 10 Jan 2010 21:28:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Content-Type: multipart/mixed; boundary=001485f6308aa2de3f047cd49580
-X-IsSubscribed: yes
+Subject: Re: making scanf byte-clean(er)
+Message-ID: <20100110212820.GB14511@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <416096c61001101139s28d568f0x7ab944987d4dbff5@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <416096c61001101139s28d568f0x7ab944987d4dbff5@mail.gmail.com>
+User-Agent: Mutt/1.5.20 (2009-06-14)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -23,109 +26,30 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2010-q1/txt/msg00013.txt.bz2
+X-SW-Source: 2010-q1/txt/msg00014.txt.bz2
+
+On Jan 10 19:39, Andy Koppe wrote:
+> Attached is a patch for making the scanf format string (more)
+> byte-transparent. It actually couldn't deal with non-ASCII chars at
+> all, even valid ones, due to comparing an 'unsigned char' with a
+> (signed) 'char'. And when encountering an invalid byte, it would go
+> backwards in the format string. Finally, it wrongly reset the
+> multibyte conversion state for every character and used the same state
+> object for the format string and %ls arguments.
+> 
+> I thought I'd send the patch here for review first before sending it
+> upstream. Hope that makes sense.
+
+Well... we're all reading newlib anyway and the code you're changing is
+affecting all newlib targets, not just Cygwin.  If you remove the
+vfprintf patch and add the missing ChangeLog entry before sending it to
+the newlib list, we might better discuss it right there.
 
 
---001485f6308aa2de3f047cd49580
-Content-Type: text/plain; charset=UTF-8
-Content-length: 553
+Thanks again,
+Corinna
 
-Attached is a patch for making the scanf format string (more)
-byte-transparent. It actually couldn't deal with non-ASCII chars at
-all, even valid ones, due to comparing an 'unsigned char' with a
-(signed) 'char'. And when encountering an invalid byte, it would go
-backwards in the format string. Finally, it wrongly reset the
-multibyte conversion state for every character and used the same state
-object for the format string and %ls arguments.
-
-I thought I'd send the patch here for review first before sending it
-upstream. Hope that makes sense.
-
-Andy
-
---001485f6308aa2de3f047cd49580
-Content-Type: application/octet-stream; name="scanf.patch"
-Content-Disposition: attachment; filename="scanf.patch"
-Content-Transfer-Encoding: base64
-X-Attachment-Id: f_g4a899zk0
-Content-length: 4697
-
-SW5kZXg6IGxpYmMvc3RkaW8vdmZwcmludGYuYwo9PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09ClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvbmV3bGliL2xpYmMvc3Rk
-aW8vdmZwcmludGYuYyx2CnJldHJpZXZpbmcgcmV2aXNpb24gMS43NgpkaWZm
-IC11IC1yMS43NiB2ZnByaW50Zi5jCi0tLSBsaWJjL3N0ZGlvL3ZmcHJpbnRm
-LmMJMTggTm92IDIwMDkgMDk6NDk6NTYgLTAwMDAJMS43NgorKysgbGliYy9z
-dGRpby92ZnByaW50Zi5jCTEwIEphbiAyMDEwIDE5OjM3OjA0IC0wMDAwCkBA
-IC03MjQsOCArNzI0LDEyIEBACiAJICAgICAgICBjcCA9IGZtdDsKICNpZmRl
-ZiBfTUJfQ0FQQUJMRQogCSAgICAgICAgd2hpbGUgKChuID0gX19tYnRvd2Mg
-KGRhdGEsICZ3YywgZm10LCBNQl9DVVJfTUFYLAotCQkJCSAgICAgIF9fbG9j
-YWxlX2NoYXJzZXQgKCksICZzdGF0ZSkpID4gMCkgewotICAgICAgICAgICAg
-ICAgICAgICBpZiAod2MgPT0gJyUnKQorCQkJCSAgICAgIF9fbG9jYWxlX2No
-YXJzZXQgKCksICZzdGF0ZSkpICE9IDApIHsKKyAgICAgICAgICAgICAgICAg
-ICAgaWYgKG4gPCAwKSB7CisgICAgICAgICAgICAgICAgICAgICAgICBtZW1z
-ZXQgKCZzdGF0ZSwgMCwgc2l6ZW9mIHN0YXRlKTsKKyAgICAgICAgICAgICAg
-ICAgICAgICAgIG4gPSAxOworICAgICAgICAgICAgICAgICAgICB9CisgICAg
-ICAgICAgICAgICAgICAgIGVsc2UgaWYgKHdjID09ICclJykKICAgICAgICAg
-ICAgICAgICAgICAgICAgIGJyZWFrOwogICAgICAgICAgICAgICAgICAgICBm
-bXQgKz0gbjsKIAkJfQpJbmRleDogbGliYy9zdGRpby92ZnNjYW5mLmMKPT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3JjL25l
-d2xpYi9saWJjL3N0ZGlvL3Zmc2NhbmYuYyx2CnJldHJpZXZpbmcgcmV2aXNp
-b24gMS40OApkaWZmIC11IC1yMS40OCB2ZnNjYW5mLmMKLS0tIGxpYmMvc3Rk
-aW8vdmZzY2FuZi5jCTE4IE5vdiAyMDA5IDA5OjQ5OjU3IC0wMDAwCTEuNDgK
-KysrIGxpYmMvc3RkaW8vdmZzY2FuZi5jCTEwIEphbiAyMDEwIDE5OjM3OjA0
-IC0wMDAwCkBAIC00NTksNyArNDU5LDcgQEAKICAgdV9sb25nICgqY2NmbilD
-Q0ZOX1BBUkFNUz0wOwkvKiBjb252ZXJzaW9uIGZ1bmN0aW9uIChzdHJ0b2wv
-c3RydG91bCkgKi8KICAgY2hhciBjY2x0YWJbMjU2XTsJCS8qIGNoYXJhY3Rl
-ciBjbGFzcyB0YWJsZSBmb3IgJVsuLi5dICovCiAgIGNoYXIgYnVmW0JVRl07
-CQkvKiBidWZmZXIgZm9yIG51bWVyaWMgY29udmVyc2lvbnMgKi8KLSAgY2hh
-ciAqbHB0cjsgICAgICAgICAgICAgICAgICAgLyogbGl0ZXJhbCBwb2ludGVy
-ICovCisgIHVuc2lnbmVkIGNoYXIgKmxwdHI7ICAgICAgICAgIC8qIGxpdGVy
-YWwgcG9pbnRlciAqLwogCiAgIGNoYXIgKmNwOwogICBzaG9ydCAqc3A7CkBA
-IC01MDEsMTYgKzUwMSwyNSBAQAogCiAgIG5hc3NpZ25lZCA9IDA7CiAgIG5y
-ZWFkID0gMDsKKyNpZmRlZiBfTUJfQ0FQQUJMRQorICBtZW1zZXQgKCZzdGF0
-ZSwgMCwgc2l6ZW9mIChzdGF0ZSkpOworI2VuZGlmCisKICAgZm9yICg7OykK
-ICAgICB7CiAjaWZuZGVmIF9NQl9DQVBBQkxFCiAgICAgICB3YyA9ICpmbXQ7
-CiAjZWxzZQotICAgICAgbWVtc2V0ICgmc3RhdGUsICdcMCcsIHNpemVvZiAo
-c3RhdGUpKTsKICAgICAgIG5ieXRlcyA9IF9fbWJ0b3djIChycHRyLCAmd2Ms
-IGZtdCwgTUJfQ1VSX01BWCwgX19sb2NhbGVfY2hhcnNldCAoKSwKIAkJCSAm
-c3RhdGUpOworICAgICAgaWYgKG5ieXRlcyA8IDApIHsKKwl3YyA9IDB4RkZG
-RDsgLyogVW5pY29kZSByZXBsYWNlbWVudCBjaGFyYWN0ZXIgKi8KKwluYnl0
-ZXMgPSAxOworCW1lbXNldCAoJnN0YXRlLCAwLCBzaXplb2YgKHN0YXRlKSk7
-CisgICAgICB9CiAjZW5kaWYKICAgICAgIGZtdCArPSBuYnl0ZXM7CisKICAg
-ICAgIGlmICh3YyA9PSAwKQogCWdvdG8gYWxsX2RvbmU7CiAgICAgICBpZiAo
-bmJ5dGVzID09IDEgJiYgaXNzcGFjZSAod2MpKQpAQCAtODM5LDYgKzg0OCw4
-IEBACiAjaWYgIWRlZmluZWQoX0VMSVhfTEVWRUwpIHx8IF9FTElYX0xFVkVM
-ID49IDIKICAgICAgICAgICBpZiAoZmxhZ3MgJiBMT05HKQogICAgICAgICAg
-ICAgeworICAgICAgICAgICAgICBtYnN0YXRlX3Qgc3RhdGU7CisgICAgICAg
-ICAgICAgIG1lbXNldCAoJnN0YXRlLCAwLCBzaXplb2YgKG1ic3RhdGVfdCkp
-OwogICAgICAgICAgICAgICBpZiAoKGZsYWdzICYgU1VQUFJFU1MpID09IDAp
-CiAgICAgICAgICAgICAgICAgd2NwID0gR0VUX0FSRyAoTiwgYXAsIHdjaGFy
-X3QgKik7CiAgICAgICAgICAgICAgIGVsc2UKQEAgLTg1MSw3ICs4NjIsNiBA
-QAogICAgICAgICAgICAgICAgICAgYnVmW24rK10gPSAqZnAtPl9wOwogICAg
-ICAgICAgICAgICAgICAgZnAtPl9yIC09IDE7CiAgICAgICAgICAgICAgICAg
-ICBmcC0+X3AgKz0gMTsKLSAgICAgICAgICAgICAgICAgIG1lbXNldCAoKF9Q
-VFIpJnN0YXRlLCAnXDAnLCBzaXplb2YgKG1ic3RhdGVfdCkpOwogICAgICAg
-ICAgICAgICAgICAgaWYgKChtYnNsZW4gPSBfbWJydG93Y19yIChycHRyLCB3
-Y3AsIGJ1ZiwgbiwgJnN0YXRlKSkKICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgID09IChzaXplX3Qp
-LTEpCiAgICAgICAgICAgICAgICAgICAgIGdvdG8gaW5wdXRfZmFpbHVyZTsg
-LyogSW52YWxpZCBzZXF1ZW5jZSAqLwpAQCAtOTcxLDYgKzk4MSw4IEBACiAg
-ICAgICAgICAgaWYgKGZsYWdzICYgTE9ORykKICAgICAgICAgICAgIHsKICAg
-ICAgICAgICAgICAgLyogUHJvY2VzcyAlUyBhbmQgJWxzIHBsYWNlaG9sZGVy
-cyAqLworICAgICAgICAgICAgICBtYnN0YXRlX3Qgc3RhdGU7CisgICAgICAg
-ICAgICAgIG1lbXNldCAoJnN0YXRlLCAwLCBzaXplb2YgKG1ic3RhdGVfdCkp
-OwogICAgICAgICAgICAgICBpZiAoKGZsYWdzICYgU1VQUFJFU1MpID09IDAp
-CiAgICAgICAgICAgICAgICAgd2NwID0gR0VUX0FSRyAoTiwgYXAsIHdjaGFy
-X3QgKik7CiAgICAgICAgICAgICAgIGVsc2UKQEAgLTk4Myw3ICs5OTUsNiBA
-QAogICAgICAgICAgICAgICAgICAgYnVmW24rK10gPSAqZnAtPl9wOwogICAg
-ICAgICAgICAgICAgICAgZnAtPl9yIC09IDE7CiAgICAgICAgICAgICAgICAg
-ICBmcC0+X3AgKz0gMTsKLSAgICAgICAgICAgICAgICAgIG1lbXNldCAoKF9Q
-VFIpJnN0YXRlLCAnXDAnLCBzaXplb2YgKG1ic3RhdGVfdCkpOwogICAgICAg
-ICAgICAgICAgICAgaWYgKChtYnNsZW4gPSBfbWJydG93Y19yIChycHRyLCB3
-Y3AsIGJ1ZiwgbiwgJnN0YXRlKSkKICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPT0gKHNpemVfdCkt
-MSkKICAgICAgICAgICAgICAgICAgICAgZ290byBpbnB1dF9mYWlsdXJlOwo=
-
---001485f6308aa2de3f047cd49580--
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          cygwin AT cygwin DOT com
+Red Hat
