@@ -1,21 +1,21 @@
-Return-Path: <cygwin-patches-return-6919-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 1694 invoked by alias); 14 Jan 2010 18:52:25 -0000
-Received: (qmail 1684 invoked by uid 22791); 14 Jan 2010 18:52:24 -0000
+Return-Path: <cygwin-patches-return-6920-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 10688 invoked by alias); 15 Jan 2010 15:42:20 -0000
+Received: (qmail 10666 invoked by uid 22791); 15 Jan 2010 15:42:19 -0000
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 14 Jan 2010 18:52:21 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500) 	id A2F026D417D; Thu, 14 Jan 2010 19:52:10 +0100 (CET)
-Date: Thu, 14 Jan 2010 18:52:00 -0000
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 15 Jan 2010 15:42:14 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500) 	id DBA206D417D; Fri, 15 Jan 2010 16:42:03 +0100 (CET)
+Date: Fri, 15 Jan 2010 15:42:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: dup3/O_CLOEXEC/F_DUPFD_CLOEXEC, take 2
-Message-ID: <20100114185210.GI14511@calimero.vinschen.de>
+Subject: Re: dup3/O_CLOEXEC/F_DUPFD_CLOEXEC
+Message-ID: <20100115154203.GA5885@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20100114163556.GF14511@calimero.vinschen.de>  <20100114165401.GG9964@ednor.casa.cgf.cx>
+References: <20100113212537.GB14511@calimero.vinschen.de>  <4B4E96D3.90300@byu.net>  <20100114114700.GC3428@calimero.vinschen.de>  <20100114115711.GD3428@calimero.vinschen.de>  <4B4F15FB.1050309@byu.net>  <20100114131744.GA26286@calimero.vinschen.de>  <0KW8000XUOMKUEK7@vms173003.mailsrvcs.net>  <20100114160953.GB26286@calimero.vinschen.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20100114165401.GG9964@ednor.casa.cgf.cx>
+In-Reply-To: <20100114160953.GB26286@calimero.vinschen.de>
 User-Agent: Mutt/1.5.20 (2009-06-14)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -26,26 +26,36 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2010-q1/txt/msg00035.txt.bz2
+X-SW-Source: 2010-q1/txt/msg00036.txt.bz2
 
-On Jan 14 11:54, Christopher Faylor wrote:
-> On Thu, Jan 14, 2010 at 05:35:56PM +0100, Corinna Vinschen wrote:
-> >Hi,
-> >
-> >here's the next iteration of the patch.  It takes the comments to the
-> >first iteration into account, adds the pipe2 call, and uses O_CLOEXEC in
-> >the POSIX IPC foo_open calls.  I also ran all three testcases provided
-> >by Eric as well as a handcrafted test for open, which I created from the
-> >pipe2 testcase.  All tests ran successfully.
-> >
-> >I'd appreciate another review.
+On Jan 14 17:09, Corinna Vinschen wrote:
+> On Jan 14 08:39, Pierre A. Humblet wrote:
+> > At 08:17 AM 1/14/2010, Corinna Vinschen wrote:
+> > >On Jan 14 06:02, Eric Blake wrote:
+> > >> In a multi-threaded app, any fd that is opened only temporarily, such as
+> > >> the one in mq_open, should be opened with O_CLOEXEC, so that no other
+> > >> thread can win a race and do a fork/exec inside the window when the
+> > >> temporary fd was open.  So even though mq_open does not leak an fd to the
+> > >> current process, it should pass O_CLOEXEC as part of its internal open()
+> > >> call in order to avoid leaking the fd to unrelated child processes.
+> > >
+> > >Uh, ok, that makes sense.
+> > >
+> > >I'll send a revised patch later today.  It will also include the pipe2
+> > >implementation.
+> > 
+> > For the same reason we should also have SOCK_CLOEXEC, and
+> > SOCK_NONBLOCK while we are at it. I would use them in minires.
 > 
-> Ship it!
+> Sure, but probably not yet, as far as my hack time is concerned.  But
+> of course SHTDI, PTC, and all that.  I'd be glad for it, actually.
 
-Done.
+It was simpler than I anticipated.  I just applied a patch to implement
+accept4, and SOCK_NONBLOCK as well as SOCK_CLOEXEC for socket,
+socketpair and accept4.
 
 
-Thanks for the review,
+HTH,
 Corinna
 
 -- 
