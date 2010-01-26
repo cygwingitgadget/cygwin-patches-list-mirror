@@ -1,22 +1,20 @@
-Return-Path: <cygwin-patches-return-6933-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 11316 invoked by alias); 26 Jan 2010 16:10:56 -0000
-Received: (qmail 11294 invoked by uid 22791); 26 Jan 2010 16:10:54 -0000
+Return-Path: <cygwin-patches-return-6934-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 16557 invoked by alias); 26 Jan 2010 19:28:19 -0000
+Received: (qmail 16459 invoked by uid 22791); 26 Jan 2010 19:28:18 -0000
+X-SWARE-Spam-Status: No, hits=-2.5 required=5.0 	tests=AWL,BAYES_00,SPF_PASS
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 26 Jan 2010 16:10:47 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 9A92F6D418B; Tue, 26 Jan 2010 17:10:36 +0100 (CET)
-Date: Tue, 26 Jan 2010 16:10:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: console enhancements: mouse events etc
-Message-ID: <20100126161036.GA31281@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4B266F9B.6070204@towo.net>  <20091214171323.GS8059@calimero.vinschen.de>  <20091215130036.GA19394@calimero.vinschen.de>  <4B28ACE8.1050305@towo.net>  <20091216145627.GM8059@calimero.vinschen.de>  <4B29934A.80902@towo.net>  <4B2C0715.8090108@towo.net>  <20091221101216.GA5632@calimero.vinschen.de>  <20100125190806.GA9166@calimero.vinschen.de>  <4B5F0585.9070903@towo.net>
+Received: from mail-qy0-f199.google.com (HELO mail-qy0-f199.google.com) (209.85.221.199)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 26 Jan 2010 19:28:11 +0000
+Received: by qyk37 with SMTP id 37so1267273qyk.18         for <cygwin-patches@cygwin.com>; Tue, 26 Jan 2010 11:28:09 -0800 (PST)
+Received: by 10.220.127.66 with SMTP id f2mr2001223vcs.82.1264534073642;         Tue, 26 Jan 2010 11:27:53 -0800 (PST)
+Received: from ?192.168.0.101? (S010600112f237275.wp.shawcable.net [24.76.241.98])         by mx.google.com with ESMTPS id 26sm8152091vws.4.2010.01.26.11.27.52         (version=TLSv1/SSLv3 cipher=RC4-MD5);         Tue, 26 Jan 2010 11:27:52 -0800 (PST)
+Message-ID: <4B5F423E.1000903@users.sourceforge.net>
+Date: Tue, 26 Jan 2010 19:28:00 -0000
+From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.7) Gecko/20100111 Thunderbird/3.0.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4B5F0585.9070903@towo.net>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+To: cygwin-patches@cygwin.com
+Subject: [COMMITTED] doc: d2u/u2d in cygutils
+Content-Type: multipart/mixed;  boundary="------------030107000903020107020203"
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,35 +24,49 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2010-q1/txt/msg00049.txt.bz2
+X-SW-Source: 2010-q1/txt/msg00050.txt.bz2
 
-On Jan 26 16:08, Thomas Wolff wrote:
-> On 25.01.2010 20:08, Corinna Vinschen wrote:
-> >Hi Thomas,
-> >...
-> >can you please create a patch to add some words to the "What's new and
-> >what changed from 1.7.1 to 1.7.2" section in the User's Guide
-> >(winsup/doc/new-features.sgml), in terms of your console enhancements?
-> Hi, changelog and patch attached. I had already looked for a web or
-> man page describing console features to amend that but apparently
-> there is none.
-> Thomas
+This is a multi-part message in MIME format.
+--------------030107000903020107020203
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-length: 184
 
-> 2010-01-26  Thomas Wolff  <towo@towo.net>
-> 
-> 	* new-features.sgml (Device related changes): List console enhancements:
-> 	Modified function and keypad keys, VT100 line drawing graphics mode, 
-> 	Alt-AltGr combinations, enhanced mouse and focus event reporting, 
-> 	attribute escape sequences.
-> 
+In winsup/doc/faq-api.xml, d2u/u2d are incorrectly listed in the 
+util-linux package.  They are, and have always been, part of cygutils.
 
-Thanks!  I checked in a slighly shortened version and I added it to
-the new 1.7.2 feature section.
+Attached patch committed as obvious.
 
 
-Corinna
+Yaakov
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+--------------030107000903020107020203
+Content-Type: text/x-patch;
+ name="faq-api-d2u.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="faq-api-d2u.patch"
+Content-length: 852
+
+2010-01-26  Yaakov Selkowitz  <yselkowitz@users.sourceforge.net>
+
+	* faq-api.xml: d2u/u2d are from cygutils, not util-linux.
+
+Index: faq-api.xml
+===================================================================
+RCS file: /cvs/src/src/winsup/doc/faq-api.xml,v
+retrieving revision 1.5
+diff -u -r1.5 faq-api.xml
+--- faq-api.xml	31 Mar 2009 10:54:28 -0000	1.5
++++ faq-api.xml	26 Jan 2010 19:02:41 -0000
+@@ -69,7 +69,7 @@
+ (unfortunate exception: Notepad).  So we suggest to use binary mode
+ as much as possible and only convert files from or to DOS text mode
+ using tools specifically created to do that job, for instance, d2u and
+-u2d from the util-linux package.
++u2d from the cygutils package.
+ </para>
+ <para>It is rather easy for the porter of a Unix package to fix the source
+ code by supplying the appropriate file processing mode switches to the
+
+--------------030107000903020107020203--
