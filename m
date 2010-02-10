@@ -1,23 +1,19 @@
-Return-Path: <cygwin-patches-return-6951-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 547 invoked by alias); 10 Feb 2010 01:13:55 -0000
-Received: (qmail 537 invoked by uid 22791); 10 Feb 2010 01:13:54 -0000
-X-SWARE-Spam-Status: No, hits=-3.6 required=5.0 	tests=AWL,BAYES_00,RCVD_IN_DNSWL_LOW,SPF_PASS
+Return-Path: <cygwin-patches-return-6952-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 28792 invoked by alias); 10 Feb 2010 21:17:31 -0000
+Received: (qmail 28781 invoked by uid 22791); 10 Feb 2010 21:17:30 -0000
+X-SWARE-Spam-Status: No, hits=-2.0 required=5.0 	tests=BAYES_00,SARE_MSGID_LONG40,SPF_PASS
 X-Spam-Check-By: sourceware.org
-Received: from out2.smtp.messagingengine.com (HELO out2.smtp.messagingengine.com) (66.111.4.26)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 10 Feb 2010 01:13:47 +0000
-Received: from compute1.internal (compute1.internal [10.202.2.41]) 	by gateway1.messagingengine.com (Postfix) with ESMTP id 3AA7CE0B65 	for <cygwin-patches@cygwin.com>; Tue,  9 Feb 2010 20:13:46 -0500 (EST)
-Received: from heartbeat1.messagingengine.com ([10.202.2.160])   by compute1.internal (MEProxy); Tue, 09 Feb 2010 20:13:46 -0500
-Received: from [192.168.1.3] (user-0c6sbd2.cable.mindspring.com [24.110.45.162]) 	by mail.messagingengine.com (Postfix) with ESMTPSA id BEBE74AC1C3; 	Tue,  9 Feb 2010 20:13:45 -0500 (EST)
-Message-ID: <4B72083C.2090205@cwilson.fastmail.fm>
-Date: Wed, 10 Feb 2010 01:13:00 -0000
-From: Charles Wilson <cygwin@cwilson.fastmail.fm>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.8.1.23) Gecko/20090812 Thunderbird/2.0.0.23 Mnenhy/0.7.6.666
+Received: from mail-fx0-f214.google.com (HELO mail-fx0-f214.google.com) (209.85.220.214)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 10 Feb 2010 21:17:26 +0000
+Received: by fxm6 with SMTP id 6so511797fxm.18         for <cygwin-patches@cygwin.com>; Wed, 10 Feb 2010 13:17:23 -0800 (PST)
 MIME-Version: 1.0
+Received: by 10.239.164.14 with SMTP id r14mr92768hbd.60.1265836643128; Wed,  	10 Feb 2010 13:17:23 -0800 (PST)
+Date: Wed, 10 Feb 2010 21:17:00 -0000
+Message-ID: <416096c61002101317x6ee2698epaa4ba260af39dcba@mail.gmail.com>
+Subject: [PATCH] internal_setlocale tweak
+From: Andy Koppe <andy.koppe@gmail.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: console enhancements: mouse events etc
-References: <4B266F9B.6070204@towo.net>  <20091214171323.GS8059@calimero.vinschen.de>  <20091215130036.GA19394@calimero.vinschen.de>  <4B28ACE8.1050305@towo.net>  <20091216145627.GM8059@calimero.vinschen.de>  <4B29934A.80902@towo.net>  <4B2C0715.8090108@towo.net>  <20091221101216.GA5632@calimero.vinschen.de>  <20100125190806.GA9166@calimero.vinschen.de>  <4B5F0585.9070903@towo.net> <20100126161036.GA31281@calimero.vinschen.de> <4B718CB8.7070308@towo.net>
-In-Reply-To: <4B718CB8.7070308@towo.net>
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary=001485f19a30751567047f458fac
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -27,23 +23,56 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2010-q1/txt/msg00067.txt.bz2
+X-SW-Source: 2010-q1/txt/msg00068.txt.bz2
 
-Thomas Wolff wrote:
-> Actually, I just remember again that I though I should change the
-> terminfo entry too. Just - where's the source to patch?
 
-http://mirrors.kernel.org/sources.redhat.com/cygwin/release/terminfo/terminfo-5.7_20091114-13-src.tar.bz2
+--001485f19a30751567047f458fac
+Content-Type: text/plain; charset=UTF-8
+Content-length: 243
 
-That -src package is basically just a wrapper around terminfo.src from
-ncurses-5.7 (as of patch level 20091114).  So, the ultimate upstream
-source is actually ncurses.  But I split it out specifically so that we
-could do faster updates of terminfo (rebuilding all of ncurses simply to
-change two characters in /usr/share/terminfo/[63|c]/cygwin is rather silly).
+winsup/cygwin/ChangeLog:
+	* nlsfuncs.cc (internal_setlocale, initial_setlocale):
+	Move check whether charset has changed to internal_setlocale,
+	to avoid unnecessary work when invoked via CW_INT_SETLOCALE.
 
-So, send me patches against terminfo.src from that -src tarball, and
-once we've got it figured out, I'll push it upstream to the ncurses
-maintainer.
+Sufficiently trivial, I hope.
 
---
-Chuck
+Andy
+
+--001485f19a30751567047f458fac
+Content-Type: application/octet-stream; name="int_setlocale.patch"
+Content-Disposition: attachment; filename="int_setlocale.patch"
+Content-Transfer-Encoding: base64
+X-Attachment-Id: f_g5im5dcj0
+Content-length: 1664
+
+SW5kZXg6IG5sc2Z1bmNzLmNjCj09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KUkNT
+IGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvY3lnd2luL25sc2Z1bmNzLmNj
+LHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjIxCmRpZmYgLXUgLXIxLjIxIG5s
+c2Z1bmNzLmNjCi0tLSBubHNmdW5jcy5jYwkxMCBGZWIgMjAxMCAxMjoyOToy
+NiAtMDAwMAkxLjIxCisrKyBubHNmdW5jcy5jYwkxMCBGZWIgMjAxMCAyMTow
+NjoxMyAtMDAwMApAQCAtMTEyOSwxMiArMTEyOSwxNyBAQAogICAvKiBGSVhN
+RTogSXQgY291bGQgYmUgbmVjZXNzYXJ5IHRvIGNvbnZlcnQgdGhlIGVudGly
+ZSBlbnZpcm9ubWVudCwKIAkgICAgbm90IGp1c3QgUEFUSC4gKi8KICAgdG1w
+X3BhdGhidWYgdHA7Ci0gIGNoYXIgKnBhdGggPSBnZXRlbnYgKCJQQVRIIik7
+CisgIGNoYXIgKnBhdGg7CiAgIHdjaGFyX3QgKndfcGF0aCA9IE5VTEwsICp3
+X2N3ZDsKIAorICAvKiBEb24ndCBkbyBhbnl0aGluZyBpZiB0aGUgY2hhcnNl
+dCBoYXNuJ3QgYWN0dWFsbHkgY2hhbmdlZC4gKi8KKyAgaWYgKHN0cmNtcCAo
+Y3lnaGVhcC0+bG9jYWxlLmNoYXJzZXQsIF9fbG9jYWxlX2NoYXJzZXQgKCkp
+ID09IDApCisgICAgcmV0dXJuOworCiAgIGRlYnVnX3ByaW50ZiAoIkN5Z3dp
+biBjaGFyc2V0IGNoYW5nZWQgZnJvbSAlcyB0byAlcyIsCiAJCWN5Z2hlYXAt
+PmxvY2FsZS5jaGFyc2V0LCBfX2xvY2FsZV9jaGFyc2V0ICgpKTsKICAgLyog
+RmV0Y2ggUEFUSCBhbmQgQ1dEIGFuZCBjb252ZXJ0IHRvIHdjaGFyX3QgaW4g
+cHJldmlvdXMgY2hhcnNldC4gKi8KKyAgcGF0aCA9IGdldGVudiAoIlBBVEgi
+KTsKICAgaWYgKHBhdGggJiYgKnBhdGgpCS8qICRQQVRIIGNhbiBiZSBwb3Rl
+bnRpYWxseSB1bnNldC4gKi8KICAgICB7CiAgICAgICB3X3BhdGggPSB0cC53
+X2dldCAoKTsKQEAgLTExNzUsOCArMTE4MCw3IEBACiBpbml0aWFsX3NldGxv
+Y2FsZSAoKQogewogICBjaGFyICpyZXQgPSBfc2V0bG9jYWxlX3IgKF9SRUVO
+VCwgTENfQ1RZUEUsICIiKTsKLSAgaWYgKHJldCAmJiBjaGVja19jb2RlcGFn
+ZSAocmV0KQotICAgICAgJiYgc3RyY21wIChjeWdoZWFwLT5sb2NhbGUuY2hh
+cnNldCwgX19sb2NhbGVfY2hhcnNldCAoKSkgIT0gMCkKKyAgaWYgKHJldCAm
+JiBjaGVja19jb2RlcGFnZSAocmV0KSkKICAgICBpbnRlcm5hbF9zZXRsb2Nh
+bGUgKCk7CiB9CiAK
+
+--001485f19a30751567047f458fac--
