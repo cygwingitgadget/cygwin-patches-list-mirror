@@ -1,23 +1,24 @@
-Return-Path: <cygwin-patches-return-6963-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 22562 invoked by alias); 14 Feb 2010 14:00:20 -0000
-Received: (qmail 22550 invoked by uid 22791); 14 Feb 2010 14:00:19 -0000
-X-SWARE-Spam-Status: No, hits=-2.5 required=5.0 	tests=AWL,BAYES_00,RCVD_IN_DNSWL_LOW,SPF_PASS
+Return-Path: <cygwin-patches-return-6964-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 3121 invoked by alias); 14 Feb 2010 17:15:40 -0000
+Received: (qmail 3109 invoked by uid 22791); 14 Feb 2010 17:15:40 -0000
+X-SWARE-Spam-Status: No, hits=-2.5 required=5.0 	tests=AWL,BAYES_00,SPF_PASS
 X-Spam-Check-By: sourceware.org
-Received: from out2.smtp.messagingengine.com (HELO out2.smtp.messagingengine.com) (66.111.4.26)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sun, 14 Feb 2010 14:00:16 +0000
-Received: from compute1.internal (compute1 [10.202.2.41]) 	by gateway1.messagingengine.com (Postfix) with ESMTP id B70E3E01A3 	for <cygwin-patches@cygwin.com>; Sun, 14 Feb 2010 09:00:14 -0500 (EST)
-Received: from heartbeat2.messagingengine.com ([10.202.2.161])   by compute1.internal (MEProxy); Sun, 14 Feb 2010 09:00:14 -0500
-Received: from [192.168.1.3] (user-0c6sbd2.cable.mindspring.com [24.110.45.162]) 	by mail.messagingengine.com (Postfix) with ESMTPSA id 5904297E3; 	Sun, 14 Feb 2010 09:00:14 -0500 (EST)
-Message-ID: <4B7801E1.6090708@cwilson.fastmail.fm>
-Date: Sun, 14 Feb 2010 14:00:00 -0000
-From: Charles Wilson <cygwin@cwilson.fastmail.fm>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.8.1.23) Gecko/20090812 Thunderbird/2.0.0.23 Mnenhy/0.7.6.666
+Received: from ey-out-1920.google.com (HELO ey-out-1920.google.com) (74.125.78.146)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sun, 14 Feb 2010 17:15:35 +0000
+Received: by ey-out-1920.google.com with SMTP id 4so1537345eyg.14         for <cygwin-patches@cygwin.com>; Sun, 14 Feb 2010 09:15:32 -0800 (PST)
+Received: by 10.213.109.203 with SMTP id k11mr2909317ebp.47.1266167732476;         Sun, 14 Feb 2010 09:15:32 -0800 (PST)
+Received: from ?192.168.2.99? (cpc2-cmbg8-0-0-cust61.cmbg.cable.ntl.com [82.6.108.62])         by mx.google.com with ESMTPS id 24sm13164804eyx.14.2010.02.14.09.15.30         (version=SSLv3 cipher=RC4-MD5);         Sun, 14 Feb 2010 09:15:31 -0800 (PST)
+Message-ID: <4B7833D4.5090301@gmail.com>
+Date: Sun, 14 Feb 2010 17:15:00 -0000
+From: Dave Korn <dave.korn.cygwin@googlemail.com>
+User-Agent: Thunderbird 2.0.0.17 (Windows/20080914)
 MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
 Subject: Re: Add xdr support
-References: <4B764A1F.6060003@cwilson.fastmail.fm>  <20100213113509.GJ5683@calimero.vinschen.de>  <4B76C334.8080101@cwilson.fastmail.fm>  <20100213210122.GA20649@ednor.casa.cgf.cx>  <4B773B70.8040208@cwilson.fastmail.fm>  <4B778315.9090300@gmail.com>  <4B778E43.5020701@cwilson.fastmail.fm> <20100214102059.GP5683@calimero.vinschen.de>
-In-Reply-To: <20100214102059.GP5683@calimero.vinschen.de>
+References: <4B764A1F.6060003@cwilson.fastmail.fm>  <20100213113509.GJ5683@calimero.vinschen.de>  <4B76C334.8080101@cwilson.fastmail.fm>  <20100213210122.GA20649@ednor.casa.cgf.cx> <20100214101834.GO5683@calimero.vinschen.de>
+In-Reply-To: <20100214101834.GO5683@calimero.vinschen.de>
 Content-Type: text/plain; charset=ISO-8859-1
 Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -27,39 +28,17 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2010-q1/txt/msg00079.txt.bz2
+X-SW-Source: 2010-q1/txt/msg00080.txt.bz2
 
-Corinna Vinschen wrote:
-> On Feb 14 00:46, Charles Wilson wrote:
->> Well, historical oddities notwithstanding, I think newlib /is/ the
->> correct place, simply because I can easily see a demand/need for XDR
->> code on other newlib targets.  But obviously the ultimate call is Jeff
->> J's -- although I'm not planning on even submitting it over there unless
->> this group decides it is the correct thing to do.
-> 
-> Well, ultimately it's your decision where you provide this stuff.  After
-> all, you're the one who did all the work 
+On 14/02/2010 10:18, Corinna Vinschen wrote:
 
-Well, sure -- but as a practical matter, a single word from you or cgf,
-on the newlib list, can torpedo the contribution in Jeff's mind, I'm
-sure.  So...
+> I don't know if that works, but it would be really cool if a single
+> DLL import lib like libcygwin.a could export symbols from different
+> DLLs.  That way we could create a cygxdr1.dll which contains the XDR
+> functions, but which could be linked against by just the default linking
+> against libcygwin.a.
 
-> and if you think that newlib is
-> a good place, then, so be it.
+  Why would we do that?
 
-Ok, but since cgf raised the issue first, I'd like to hear again from
-him.  On another note, other than the 'where to put it' issue and the
-'where should the initialization code go', any other substantive
-comments on the code itself?
-
-Or, pending cgf, would you rather wait until I repost over on the newlib
-list, or a decision not to do so and to respin is made?
-
-> Personally I never used nor needed XDR,
-> but that doesn't mean it's useless for others.
-
-Well, you've USED it, just not directly.  It's part of the core
-implementation of the RPC and NFS protocols.
-
---
-Chuck
+    cheers,
+      DaveK
