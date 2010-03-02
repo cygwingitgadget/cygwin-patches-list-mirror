@@ -1,21 +1,22 @@
-Return-Path: <cygwin-patches-return-6998-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 7485 invoked by alias); 2 Mar 2010 18:09:29 -0000
-Received: (qmail 7471 invoked by uid 22791); 2 Mar 2010 18:09:27 -0000
+Return-Path: <cygwin-patches-return-6999-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 18933 invoked by alias); 2 Mar 2010 18:22:52 -0000
+Received: (qmail 18915 invoked by uid 22791); 2 Mar 2010 18:22:51 -0000
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Tue, 02 Mar 2010 18:09:24 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500) 	id B8E036D42F5; Tue,  2 Mar 2010 19:09:21 +0100 (CET)
-Date: Tue, 02 Mar 2010 18:09:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Received: from pool-173-48-46-17.bstnma.fios.verizon.net (HELO cgf.cx) (173.48.46.17)     by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Tue, 02 Mar 2010 18:22:47 +0000
+Received: from ednor.cgf.cx (ednor.casa.cgf.cx [192.168.187.5]) 	by cgf.cx (Postfix) with ESMTP id 40C5013C0C8 	for <cygwin-patches@cygwin.com>; Tue,  2 Mar 2010 13:22:46 -0500 (EST)
+Received: by ednor.cgf.cx (Postfix, from userid 201) 	id 3C6362B352; Tue,  2 Mar 2010 13:22:46 -0500 (EST)
+Date: Tue, 02 Mar 2010 18:22:00 -0000
+From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: Add xdr support
-Message-ID: <20100302180921.GO5683@calimero.vinschen.de>
+Message-ID: <20100302182246.GC12665@ednor.casa.cgf.cx>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4B764A1F.6060003@cwilson.fastmail.fm>  <4B8D2F9D.4090309@cwilson.fastmail.fm>
+References: <4B764A1F.6060003@cwilson.fastmail.fm>  <4B8D2F9D.4090309@cwilson.fastmail.fm>  <20100302180921.GO5683@calimero.vinschen.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4B8D2F9D.4090309@cwilson.fastmail.fm>
+In-Reply-To: <20100302180921.GO5683@calimero.vinschen.de>
 User-Agent: Mutt/1.5.20 (2009-06-14)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -26,48 +27,18 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2010-q1/txt/msg00114.txt.bz2
+X-SW-Source: 2010-q1/txt/msg00115.txt.bz2
 
-On Mar  2 10:32, Charles Wilson wrote:
-> Charles Wilson wrote:
-> > The attached patch(es) add XDR support to cygwin. eXternal Data
-> 
-> Now that newlib has accepted the XDR patches, the following simply
-> exports those symbols. It also ensures that the (rare) xdr error
-> messages are handled by cygwin as they are in glibc: print them to
-> stderr (unlike the previous patch, which printed them to cygwin's debug
-> strace).
-> 
-> I know we're in the run-up to 1.7.2, so it may be prudent to delay these
-> changes until after that, which is fine by me.
+On Tue, Mar 02, 2010 at 07:09:21PM +0100, Corinna Vinschen wrote:
+>The patch is missing the related changes to cygwin/posix.sgml and
+>doc/new-features.sgml.
 
-These functions don't interfere with existing functionality at all,
-so I don't see a reason to keep them out of 1.7.2...
+#(*& I HAVE to get out a new version of cygwin-doc!  I'll try to do
+that this week.
 
-> 2010-03-02  Charles Wilson  <...>
-> 
-> 	Add XDR support.
-> 	* cygwin.din: Export xdr functions.
-> 	* include/cygwin/version.h: Bump version.
-> 	* cygxdr.cc: New.
-> 	* cygxdr.h: New.
-> 	* dcrt0.cc (dll_crt0_1): Print the (rare) xdr-related
-> 	error messages to stderr.
-> 	* Makefile.in: Add cygxdr.
+After Chuck has updated the documentation, of course.
 
-...and I would *love* to apply the patches, but unfortunately there's a
-serious, VERY serious problem with this patch.
+Ah, right!  That's it!  I was waiting for Chuck.  That's why there
+has been no update for six months.
 
-The patch is missing the related changes to cygwin/posix.sgml and
-doc/new-features.sgml.
-
-Would you mind to send a second patch for the documentation?
-
-
-Thanks,
-Corinna
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+cgf
