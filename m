@@ -1,23 +1,22 @@
-Return-Path: <cygwin-patches-return-7014-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 22206 invoked by alias); 30 Mar 2010 16:39:46 -0000
-Received: (qmail 22191 invoked by uid 22791); 30 Mar 2010 16:39:45 -0000
+Return-Path: <cygwin-patches-return-7015-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 442 invoked by alias); 30 Mar 2010 20:01:47 -0000
+Received: (qmail 348 invoked by uid 22791); 30 Mar 2010 20:01:46 -0000
+X-SWARE-Spam-Status: No, hits=-1.9 required=5.0 	tests=BAYES_00,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)     by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Tue, 30 Mar 2010 16:39:40 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500) 	id 7C9BB6D435B; Tue, 30 Mar 2010 18:39:37 +0200 (CEST)
-Date: Tue, 30 Mar 2010 16:39:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Received: from moutng.kundenserver.de (HELO moutng.kundenserver.de) (212.227.126.187)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 30 Mar 2010 20:01:41 +0000
+Received: from [192.168.69.1] (dslb-088-073-021-211.pools.arcor-ip.net [88.73.21.211]) 	by mrelayeu.kundenserver.de (node=mreu0) with ESMTP (Nemesis) 	id 0M7nzI-1Nakqb00zA-00voI2; Tue, 30 Mar 2010 21:56:37 +0200
+Message-ID: <4BB257B0.7000505@towo.net>
+Date: Tue, 30 Mar 2010 20:01:00 -0000
+From: Thomas Wolff <towo@towo.net>
+User-Agent: Thunderbird 2.0.0.23 (X11/20090812)
+MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
 Subject: Re: console enhancements: mouse events etc
-Message-ID: <20100330163937.GA16571@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4B2C0715.8090108@towo.net>  <20091221101216.GA5632@calimero.vinschen.de>  <20100125190806.GA9166@calimero.vinschen.de>  <4B5F0585.9070903@towo.net>  <20100330095912.GZ18364@calimero.vinschen.de>  <4BB1D83A.8010406@towo.net>  <20100330142200.GA12926@calimero.vinschen.de>  <4BB21CBF.7030701@towo.net>  <20100330161503.GB18364@calimero.vinschen.de>  <416096c61003300936i55764afeqf06d84251cd9a9b7@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+References: <20091216145627.GM8059@calimero.vinschen.de> 	 <4B2C0715.8090108@towo.net> 	 <20091221101216.GA5632@calimero.vinschen.de> 	 <20100125190806.GA9166@calimero.vinschen.de> 	 <4B5F0585.9070903@towo.net> 	 <20100330095912.GZ18364@calimero.vinschen.de> 	 <4BB1D83A.8010406@towo.net> 	 <20100330142200.GA12926@calimero.vinschen.de> 	 <4BB21CBF.7030701@towo.net> 	 <20100330161503.GB18364@calimero.vinschen.de> <416096c61003300936i55764afeqf06d84251cd9a9b7@mail.gmail.com>
 In-Reply-To: <416096c61003300936i55764afeqf06d84251cd9a9b7@mail.gmail.com>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -27,20 +26,22 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2010-q1/txt/msg00130.txt.bz2
+X-SW-Source: 2010-q1/txt/msg00131.txt.bz2
 
-On Mar 30 17:36, Andy Koppe wrote:
-> > How can I enforce printing garbage so I
-> > can test the reset command?
-> 
+Andy Koppe schrieb:
+>>  How can I enforce printing garbage so I
+>> can test the reset command?
+>>     
+>
 > echo $'\e(0'
+>   
+and echo ^N (Control-N) for the other mode, which is more likely to 
+occur by binary output;
+the enable sequence for it is echo ^[)0 (same as above, with ')' instead 
+of '(').
 
-Thanks, works fine.  Just like the reset command now.
+And I forgot the following sentence for the change log:
+(fhandler_console::write) Reset VT100 graphic mode flags on terminal 
+full reset (ESC c).
 
-
-Corinna
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+Thomas
