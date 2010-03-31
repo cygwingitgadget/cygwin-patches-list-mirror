@@ -1,22 +1,23 @@
-Return-Path: <cygwin-patches-return-7015-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 442 invoked by alias); 30 Mar 2010 20:01:47 -0000
-Received: (qmail 348 invoked by uid 22791); 30 Mar 2010 20:01:46 -0000
-X-SWARE-Spam-Status: No, hits=-1.9 required=5.0 	tests=BAYES_00,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS
+Return-Path: <cygwin-patches-return-7016-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 25144 invoked by alias); 31 Mar 2010 22:32:27 -0000
+Received: (qmail 25124 invoked by uid 22791); 31 Mar 2010 22:32:26 -0000
+X-SWARE-Spam-Status: No, hits=-2.5 required=5.0 	tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_LOW,TW_RX
 X-Spam-Check-By: sourceware.org
-Received: from moutng.kundenserver.de (HELO moutng.kundenserver.de) (212.227.126.187)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 30 Mar 2010 20:01:41 +0000
-Received: from [192.168.69.1] (dslb-088-073-021-211.pools.arcor-ip.net [88.73.21.211]) 	by mrelayeu.kundenserver.de (node=mreu0) with ESMTP (Nemesis) 	id 0M7nzI-1Nakqb00zA-00voI2; Tue, 30 Mar 2010 21:56:37 +0200
-Message-ID: <4BB257B0.7000505@towo.net>
-Date: Tue, 30 Mar 2010 20:01:00 -0000
-From: Thomas Wolff <towo@towo.net>
-User-Agent: Thunderbird 2.0.0.23 (X11/20090812)
+Received: from out3.smtp.messagingengine.com (HELO out3.smtp.messagingengine.com) (66.111.4.27)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 31 Mar 2010 22:32:22 +0000
+Received: from compute2.internal (compute2.internal [10.202.2.42]) 	by gateway1.messagingengine.com (Postfix) with ESMTP id 75946E9C63; 	Wed, 31 Mar 2010 18:32:20 -0400 (EDT)
+Received: from heartbeat1.messagingengine.com ([10.202.2.160])   by compute2.internal (MEProxy); Wed, 31 Mar 2010 18:32:20 -0400
+Received: from [192.168.1.3] (user-0c6sbd2.cable.mindspring.com [24.110.45.162]) 	by mail.messagingengine.com (Postfix) with ESMTPSA id E4F304C71D4; 	Wed, 31 Mar 2010 18:32:19 -0400 (EDT)
+Message-ID: <4BB3CD56.1040901@cwilson.fastmail.fm>
+Date: Wed, 31 Mar 2010 22:32:00 -0000
+From: Charles Wilson <cygwin@cwilson.fastmail.fm>
+Reply-To: cygwin-patches@cygwin.com
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.8.1.23) Gecko/20090812 Thunderbird/2.0.0.23 Mnenhy/0.7.6.666
 MIME-Version: 1.0
-To: cygwin-patches@cygwin.com
-Subject: Re: console enhancements: mouse events etc
-References: <20091216145627.GM8059@calimero.vinschen.de> 	 <4B2C0715.8090108@towo.net> 	 <20091221101216.GA5632@calimero.vinschen.de> 	 <20100125190806.GA9166@calimero.vinschen.de> 	 <4B5F0585.9070903@towo.net> 	 <20100330095912.GZ18364@calimero.vinschen.de> 	 <4BB1D83A.8010406@towo.net> 	 <20100330142200.GA12926@calimero.vinschen.de> 	 <4BB21CBF.7030701@towo.net> 	 <20100330161503.GB18364@calimero.vinschen.de> <416096c61003300936i55764afeqf06d84251cd9a9b7@mail.gmail.com>
-In-Reply-To: <416096c61003300936i55764afeqf06d84251cd9a9b7@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-IsSubscribed: yes
+To: Cygwin Mailing List <cygwin@cygwin.com>, cygwin-patches@cygwin.com
+Subject: Re: FW: special font characters in rxvt
+References: <4BABAE0A.7090903@bopp.net> <2BF01EB27B56CC478AD6E5A0A28931F2D14369@A1DAL1SWPES19MB.ams.acs-inc.net>
+In-Reply-To: <2BF01EB27B56CC478AD6E5A0A28931F2D14369@A1DAL1SWPES19MB.ams.acs-inc.net>
+Content-Type: multipart/mixed;  boundary="------------000205090605010502010502"
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,22 +27,139 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2010-q1/txt/msg00131.txt.bz2
+X-SW-Source: 2010-q1/txt/msg00132.txt.bz2
 
-Andy Koppe schrieb:
->>  How can I enforce printing garbage so I
->> can test the reset command?
->>     
->
-> echo $'\e(0'
->   
-and echo ^N (Control-N) for the other mode, which is more likely to 
-occur by binary output;
-the enable sequence for it is echo ^[)0 (same as above, with ')' instead 
-of '(').
+This is a multi-part message in MIME format.
+--------------000205090605010502010502
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+Content-length: 302
 
-And I forgot the following sentence for the change log:
-(fhandler_console::write) Reset VT100 graphic mode flags on terminal 
-full reset (ESC c).
+On 3/31/2010 4:50 PM, Nellis, Kenneth wrote:
+> If rxvt use is to be discouraged, maybe it should be deemphasized 
+> in the User's Guide under Console Programs:
+> 
+> http://cygwin.com/cygwin-ug-net/using-effectively.html#using-console
 
-Thomas
+
+Good idea. How about this (followup to cygwin-patches):
+
+--
+Chuck
+
+--------------000205090605010502010502
+Content-Type: application/x-patch;
+ name="discourage-rxvt.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="discourage-rxvt.patch"
+Content-length: 6418
+
+SW5kZXg6IGN5Z3dpbmVudi5zZ21sCj09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0K
+UkNTIGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvZG9jL2N5Z3dpbmVudi5z
+Z21sLHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjM4CmRpZmYgLXUgLXAgLXIx
+LjM4IGN5Z3dpbmVudi5zZ21sCi0tLSBjeWd3aW5lbnYuc2dtbAkxMiBKYW4g
+MjAxMCAxNjo0MDo1MyAtMDAwMAkxLjM4CisrKyBjeWd3aW5lbnYuc2dtbAkz
+MSBNYXIgMjAxMCAyMjozMToyNSAtMDAwMApAQCAtOTcsNyArOTcsNyBAQCBO
+b3RlIHRoYXQgdGhpcyBoYXMgYmVlbiBjaGFuZ2VkIHN1Y2ggdGhhCiBleHBl
+Y3RlZCBpbnN0ZWFkIG9mIF5aLCBhbmQgaXMgc2V0dGFibGUgdmlhIDxjb21t
+YW5kPnN0dHk8L2NvbW1hbmQ+LgogVGhpcyBvcHRpb24gbXVzdCBiZSBzcGVj
+aWZpZWQgYmVmb3JlIHN0YXJ0aW5nIGEgQ3lnd2luIHNoZWxsIAogYW5kIGl0
+IGNhbm5vdCBiZSBjaGFuZ2VkIGluIHRoZSBzaGVsbC4gIEl0IHNob3VsZCBu
+b3QgYmUgc2V0IHdoZW4gdXNpbmcKLW90aGVyIHRlcm1pbmFscyAoaS5lLiwg
+cnh2dCBvciB4dGVybSkuIAorb3RoZXIgdGVybWluYWxzIChpLmUuLCBtaW50
+dHkgb3IgeHRlcm0pLiAKIDwvcGFyYT4KIDwvbGlzdGl0ZW0+CiAKSW5kZXg6
+IGVmZmVjdGl2ZWx5LnNnbWwKPT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1Mg
+ZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9kb2MvZWZmZWN0aXZlbHkuc2dt
+bCx2CnJldHJpZXZpbmcgcmV2aXNpb24gMS43CmRpZmYgLXUgLXAgLXIxLjcg
+ZWZmZWN0aXZlbHkuc2dtbAotLS0gZWZmZWN0aXZlbHkuc2dtbAkxMiBNYXIg
+MjAxMCAxMDozMzowOCAtMDAwMAkxLjcKKysrIGVmZmVjdGl2ZWx5LnNnbWwJ
+MzEgTWFyIDIwMTAgMjI6MzE6MjUgLTAwMDAKQEAgLTg3LDExICs4NywxMiBA
+QCBXaW5kb3dzIHByb2dyYW1zLCB1c2UgYSBET1MgcHJvbXB0LCBydW5uCiBj
+b21tYW5kIG9yIHNjcmlwdC4gTmV4dCB3b3VsZCBiZSB0byBydW4gPGNvbW1h
+bmQ+YmFzaDwvY29tbWFuZD4gd2l0aGluIAogYSBkZWZhdWx0IERPUyBib3gu
+IFRvIG1ha2UgQ3lnd2luIG1vcmUgVW5peCBjb21wYXRpYmxlIGluIHRoaXMg
+Y2FzZSwgCiBzZXQgPGVudmFyPkNZR1dJTj10dHk8L2VudmFyPiAoc2VlIDx4
+cmVmIGxpbmtlbmQ9InVzaW5nLWN5Z3dpbmVudiI+PC94cmVmPikuCi1BbHRl
+cm5hdGl2ZWx5LCB0aGUgb3B0aW9uYWwgPHN5c3RlbWl0ZW0+cnh2dDwvc3lz
+dGVtaXRlbT4gcGFja2FnZSBwcm92aWRlcyAKLWEgbmF0aXZlLVdpbmRvd3Mg
+dmVyc2lvbiBvZiB0aGUgcG9wdWxhciBYMTEgdGVybWluYWwgZW11bGF0b3Ig
+KGl0IGlzIG5vdCAKLW5lY2Vzc2FyeSB0byBzZXQgPGVudmFyPkNZR1dJTj10
+dHk8L2VudmFyPiB3aXRoIDxjb21tYW5kPnJ4dnQ8L2NvbW1hbmQ+KS4gCi1V
+c2luZyA8Y29tbWFuZD5yeHZ0LmV4ZTwvY29tbWFuZD4gcHJvdmlkZXMgdGhl
+IG1vc3QgVW5peC1saWtlIGVudmlyb25tZW50LCAKLWJ1dCBleHBlY3Qgc29t
+ZSBjb21wYXRpYmlsaXR5IHByb2JsZW1zIHdpdGggV2luZG93cyBwcm9ncmFt
+cy4KK0FsdGVybmF0aXZlbHksIHRoZSBvcHRpb25hbCA8c3lzdGVtaXRlbT5t
+aW50dHk8L3N5c3RlbWl0ZW0+IHBhY2thZ2UgcHJvdmlkZXMgCithIG5hdGl2
+ZS1XaW5kb3dzIEdVSSBjb25zb2xlIHRoYXQgc3VwZXJpb3IgaW4gbWFueSB3
+YXlzIHRvIHRoZQorPGxpdGVyYWw+Y21kLmV4ZTwvbGl0ZXJhbD4gY29uc29s
+ZS4gKEl0IGlzIG5vdCBuZWNlc3NhcnkgdG8gc2V0Cis8ZW52YXI+Q1lHV0lO
+PXR0eTwvZW52YXI+IHdpdGggPGNvbW1hbmQ+bWludHR5PC9jb21tYW5kPiku
+IAorVXNpbmcgPGNvbW1hbmQ+bWludHR5LmV4ZTwvY29tbWFuZD4gcHJvdmlk
+ZXMgdGhlIG1vc3QgVW5peC1saWtlCitlbnZpcm9ubWVudCwgYnV0IGV4cGVj
+dCBzb21lIGNvbXBhdGliaWxpdHkgcHJvYmxlbXMgd2l0aCBXaW5kb3dzIHBy
+b2dyYW1zLgogPC9wYXJhPgogCiA8L3NlY3QyPgpJbmRleDogZmFxLXVzaW5n
+LnhtbAo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3Ny
+Yy9zcmMvd2luc3VwL2RvYy9mYXEtdXNpbmcueG1sLHYKcmV0cmlldmluZyBy
+ZXZpc2lvbiAxLjMyCmRpZmYgLXUgLXAgLXIxLjMyIGZhcS11c2luZy54bWwK
+LS0tIGZhcS11c2luZy54bWwJMTcgTWFyIDIwMTAgMTA6MTI6MzIgLTAwMDAJ
+MS4zMgorKysgZmFxLXVzaW5nLnhtbAkzMSBNYXIgMjAxMCAyMjozMToyNSAt
+MDAwMApAQCAtNTgwLDkgKzU4MCwxMCBAQCBmb3IgbW9yZSBkZXRhaWxzLgog
+PHF1ZXN0aW9uPjxwYXJhPkhvdyBjYW4gSSBjb3B5IGFuZCBwYXN0ZSBpbnRv
+IEN5Z3dpbiBjb25zb2xlIHdpbmRvd3M/PC9wYXJhPjwvcXVlc3Rpb24+CiA8
+YW5zd2VyPgogCi08cGFyYT5GaXJzdCwgY29uc2lkZXIgdXNpbmcgcnh2dCBv
+ciBtaW50dHkgaW5zdGVhZCBvZiB0aGUgc3RhbmRhcmQgY29uc29sZQotd2lu
+ZG93LiAgSW4gcnh2dC9taW50dHksIHNlbGVjdGluZyB3aXRoIHRoZSBsZWZ0
+LW1vdXNlIGFsc28gY29waWVzLAotYW5kIG1pZGRsZS1tb3VzZSBwYXN0ZXMu
+ICBJdCBjb3VsZG4ndCBiZSBlYXNpZXIhCis8cGFyYT5GaXJzdCwgY29uc2lk
+ZXIgdXNpbmcgbWludHR5IG9yIGFuIFgxMS1iYXNlZCB0ZXJtaW5hbCBzdWNo
+IGFzCit4dGVybSBvciByeHZ0LXVuaWNvZGUsIGluc3RlYWQgb2YgdGhlIHN0
+YW5kYXJkIGNvbnNvbGUgd2luZG93LiAgSW4KK21pbnR0eSBhbmQgbW9zdCBY
+MTEtYmFzZWQgdGVybWluYWxzLCBzZWxlY3Rpbmcgd2l0aCB0aGUgbGVmdC1t
+b3VzZQorYWxzbyBjb3BpZXMsIGFuZCBtaWRkbGUtbW91c2UgcGFzdGVzLiAg
+SXQgY291bGRuJ3QgYmUgZWFzaWVyIQogPC9wYXJhPgogPHBhcmE+SW4gV2lu
+ZG93cydzIGNvbnNvbGUgd2luZG93LCBvcGVuIHRoZSBwcm9wZXJ0aWVzIGRp
+YWxvZy4KIFRoZSBvcHRpb25zIGNvbnRhaW4gYSB0b2dnbGUgYnV0dG9uLCBu
+YW1lZCAiUXVpY2sgZWRpdCBtb2RlIi4gIEl0IG11c3QKQEAgLTk0Niw5ICs5
+NDcsMTIgQEAgRW1hY3Mgb3IgWEVtYWNzIGZyb20gQ3lnd2luIFNldHVwLgog
+PHF1ZXN0aW9uPjxwYXJhPklzIHRoZXJlIGEgYmV0dGVyIGFsdGVybmF0aXZl
+IHRvIHRoZSBzdGFuZGFyZCBjb25zb2xlIHdpbmRvdz88L3BhcmE+PC9xdWVz
+dGlvbj4KIDxhbnN3ZXI+CiAKLTxwYXJhPlllcyEgIFVzZSByeHZ0IG9yIG1p
+bnR0eSBpbnN0ZWFkLiAgQm90aCBhcmUgb3B0aW9uYWwgcGFja2FnZXMgaW4K
+LUN5Z3dpbiBTZXR1cC4gIFlvdSBjYW4gdXNlIHJ4dnQgd2l0aCBvciB3aXRo
+b3V0IFgxMSwgd2hpbGUgbWludHR5IGlzIGEgCi1DeWd3aW4gYXBwbGljYXRp
+b24gcHJvdmlkaW5nIGEgbmF0aXZlIEdVSS4KKzxwYXJhPlllcyEgIFVzZSBt
+aW50dHkgb3IgYW4gWDExLWJhc2VkIHRlcm1pbmFsIHN1Y2ggYXMgeHRlcm0g
+b3Igcnh2dC11bmljb2RlCitpbnN0ZWFkLiAgVGhlc2UgYXJlIG9wdGlvbmFs
+IHBhY2thZ2VzIGluIEN5Z3dpbiBTZXR1cC4gIE1pbnR0eSBpcyBhIEN5Z3dp
+bgorYXBwbGljYXRpb24gcHJvdmlkaW5nIGEgbmF0aXZlIEdVSSwgd2hpbGUg
+dGhlIG90aGVycyByZXF1aXJlIHJ1bm5pbmcgYSBYLXNlcnZlcgorc3VjaCBh
+cyBYV2luIChhbHNvIGFuIG9wdGlvbmFsIGRvd25sb2FkKS4gIEluIHRoZSBw
+YXN0LCB0aGUgcnh2dCBwYWNrYWdlIHdhcworcmVjb21tZW5kZWQsIGJ1dCBp
+dCBkb2VzIG5vdCBzdXBwb3J0IGFsdGVybmF0ZSBjaGFyYWN0ZXIgc2V0cyBh
+bmQgdGh1cyBkb2VzIG5vdAord29yayB3ZWxsIHdpdGggdGhlIG5ldywgbmF0
+aW9uYWwtbGFuZ3VhZ2UtYXdhcmUgY3lnd2luLTEuNy4KIDwvcGFyYT4KIDwv
+YW5zd2VyPjwvcWFuZGFlbnRyeT4KIApJbmRleDogc2V0dXAtbmV0LnNnbWwK
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3Jj
+L3dpbnN1cC9kb2Mvc2V0dXAtbmV0LnNnbWwsdgpyZXRyaWV2aW5nIHJldmlz
+aW9uIDEuMjIKZGlmZiAtdSAtcCAtcjEuMjIgc2V0dXAtbmV0LnNnbWwKLS0t
+IHNldHVwLW5ldC5zZ21sCTE2IEphbiAyMDEwIDE4OjA2OjI3IC0wMDAwCTEu
+MjIKKysrIHNldHVwLW5ldC5zZ21sCTMxIE1hciAyMDEwIDIyOjMxOjI1IC0w
+MDAwCkBAIC0yMTUsNyArMjE1LDggQEAgc2hvd3MgcHJvZ3Jlc3MgYmFycyBm
+b3IgdGhlIGN1cnJlbnQgdGFzawogPHBhcmE+CiBZb3UgbWF5IGNob29zZSB0
+byBpbnN0YWxsIHNob3J0Y3V0cyBvbiB0aGUgRGVza3RvcCBhbmQvb3IgU3Rh
+cnQgTWVudQogdG8gc3RhcnQgYSA8bGl0ZXJhbD5iYXNoPC9saXRlcmFsPiBz
+aGVsbC4gSWYgeW91IHByZWZlciB0byB1c2UgYSBkaWZmZXJlbnQKLXNoZWxs
+IG9yIHRoZSBuYXRpdmUgV2luZG93cyB2ZXJzaW9uIG9mIDxsaXRlcmFsPnJ4
+dnQ8L2xpdGVyYWw+LCB5b3UgY2FuCitzaGVsbCBvciBhIGNvbnNvbGUgaG9z
+dC90ZXJtaW5hbCBlbXVsYXRvciBvdGhlciB0aGFuIGNtZC5leGUgKHN1Y2gg
+YXMKKzxsaXRlcmFsPm1pbnR0eTwvbGl0ZXJhbD4gb3IgPGxpdGVyYWw+eHRl
+cm08L2xpdGVyYWw+KSwgeW91IGNhbgogdXNlIHRoZXNlIHNob3J0Y3V0cyBh
+cyBhIGd1aWRlIHRvIGNyZWF0aW5nIHlvdXIgb3duLiAKIDwvcGFyYT4KIDwv
+c2VjdDI+Cg==
+
+--------------000205090605010502010502--
