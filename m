@@ -1,23 +1,24 @@
-Return-Path: <cygwin-patches-return-7026-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 24543 invoked by alias); 5 May 2010 20:30:55 -0000
-Received: (qmail 24508 invoked by uid 22791); 5 May 2010 20:30:50 -0000
+Return-Path: <cygwin-patches-return-7027-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 27764 invoked by alias); 5 May 2010 23:28:48 -0000
+Received: (qmail 27750 invoked by uid 22791); 5 May 2010 23:28:47 -0000
+X-SWARE-Spam-Status: No, hits=-2.2 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,T_TO_NO_BRKTS_FREEMAIL
 X-Spam-Check-By: sourceware.org
-Received: from pool-173-76-55-5.bstnma.fios.verizon.net (HELO cgf.cx) (173.76.55.5)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Wed, 05 May 2010 20:30:44 +0000
-Received: from ednor.cgf.cx (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id 577A213C061	for <cygwin-patches@cygwin.com>; Wed,  5 May 2010 16:30:42 -0400 (EDT)
-Received: by ednor.cgf.cx (Postfix, from userid 201)	id 526A22B352; Wed,  5 May 2010 16:30:42 -0400 (EDT)
-Date: Wed, 05 May 2010 20:30:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
+Received: from mail-ww0-f43.google.com (HELO mail-ww0-f43.google.com) (74.125.82.43)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 05 May 2010 23:28:36 +0000
+Received: by wwi18 with SMTP id 18so1147763wwi.2        for <cygwin-patches@cygwin.com>; Wed, 05 May 2010 16:28:33 -0700 (PDT)
+Received: by 10.227.145.197 with SMTP id e5mr3301305wbv.190.1273102113695;        Wed, 05 May 2010 16:28:33 -0700 (PDT)
+Received: from [192.168.2.99] (cpc2-cmbg8-0-0-cust61.cmbg.cable.ntl.com [82.6.108.62])        by mx.google.com with ESMTPS id y23sm2389401wby.22.2010.05.05.16.28.30        (version=SSLv3 cipher=RC4-MD5);        Wed, 05 May 2010 16:28:31 -0700 (PDT)
+Message-ID: <4BE203AD.4080606@gmail.com>
+Date: Wed, 05 May 2010 23:28:00 -0000
+From: Dave Korn <dave.korn.cygwin@googlemail.com>
+User-Agent: Thunderbird 2.0.0.17 (Windows/20080914)
+MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
 Subject: Re: CFA: pseudo-reloc v2
-Message-ID: <20100505203042.GA15996@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4AC7910E.1010900@cwilson.fastmail.fm> <4AC82056.7060308@cwilson.fastmail.fm> <4BE1A2C5.4090604@gmail.com> <20100505175614.GA6651@ednor.casa.cgf.cx> <4BE1BFCC.6060703@gmail.com> <20100505191317.GA14692@ednor.casa.cgf.cx> <4BE1CB8C.8020301@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4BE1CB8C.8020301@gmail.com>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+References: <4AC7910E.1010900@cwilson.fastmail.fm> <4AC82056.7060308@cwilson.fastmail.fm> <4BE1A2C5.4090604@gmail.com> <20100505175614.GA6651@ednor.casa.cgf.cx> <4BE1BFCC.6060703@gmail.com> <20100505191317.GA14692@ednor.casa.cgf.cx> <4BE1CB8C.8020301@gmail.com> <20100505203042.GA15996@ednor.casa.cgf.cx>
+In-Reply-To: <20100505203042.GA15996@ednor.casa.cgf.cx>
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -27,77 +28,65 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2010-q2/txt/msg00009.txt.bz2
+X-SW-Source: 2010-q2/txt/msg00010.txt.bz2
 
-On Wed, May 05, 2010 at 08:48:28PM +0100, Dave Korn wrote:
->On 05/05/2010 20:13, Christopher Faylor wrote:
->
->> Yeah, I realized that two seconds after sending the message.  However,
->> is this particular problem really an issue for DLLs?  DLLs should get
->> their data/bss updated after _pei386_runtime_relocator() is called.  So
->> it seems like you'd get the same thing being written twice.  It's not
->> optimal but it shouldn't be fatal.
->> 
->> The program's data/bss is different since that gets copied during DLL
->> initialization and before _pei386_runtime_relocator() is (was) called.  So
->> I could see how it could be screwed up.
->
->  Ah, right; I wasn't looking at how much later the dll sections got copied, I
->just figured the safest and consistent solution was just to treat everything
->the same.
->
->> That's basically it and I have it more-or-less coded but I haven't
->> finished thinking about DLLs.  Maybe that's more complication than is
->> warranted.  I have to do more research there.  We could, and I think
->> should, put most of the code in pseudo_reloc.c in cygwin1.dll, though,
->> rather than duplicate it in every source file.
->
->  Yeh, the only thing we need in the source file is to capture the module's
->idea of its section start/end pointers, as we already do in the per_process;
->we could consider passing pointers to the pseudo-relocs in that as well, but
->horrible backward-compatibility problems could arise.  It would make sense to
->inline the remnants of _pei386_runtime_relocator into _cygwin_crt0_common and
->do away with the pseudo-reloc.c file altogether.
->
->> This information is all recorded for fork() so it should be doable.  It is
->> more complicated to do it outside of the program but, like I said, it allows
->> us to fix problems by a new release of the DLL rather than telling people
->> "You must relink your program".
->
->  Yeh.  Unfortunately it's too late to help with this time, but it would help
->any future problem (so long as it didn't require us to capture additional data
->in the lib/ part of the executable but could be fixed with what we were
->already passing to the Cygwin DLL).
+On 05/05/2010 21:30, Christopher Faylor wrote:
 
-I have something written now.  I'll dig through the cygwin archives to
-see if I can find the original message which started this but are there
-other test cases that I could use to verify that I caught all of the
-code paths in the DLL?
+> I have something written now.  I'll dig through the cygwin archives to
+> see if I can find the original message which started this but are there
+> other test cases that I could use to verify that I caught all of the
+> code paths in the DLL?
 
-Chuck?  Do you have anything I could use to test what I did?
+  http://cygwin.com/ml/cygwin/2010-04/msg00957.html comes with a couple of
+testcases attached, although you can only be sure they've worked by running
+them and seeing that no .stackdump file was generated in your $CWD.
 
-What I did:
+> Chuck?  Do you have anything I could use to test what I did?
 
-1) Move pseudo-reloc.c out of lib and into the dll (making
-it a c++ file in the process).
+  There were some fork-related testcases in the original thread, but I didn't
+refer back to them when I was revising this, so they're probably worth verifying:
+   http://www.cygwin.com/ml/cygwin-developers/2009-10/msg00052.html
 
-2) Record the three values needed by _pei386_runtime_relocator in the
-per_process structure.
+> What I did:
+> 
+> 1) Move pseudo-reloc.c out of lib and into the dll (making
+> it a c++ file in the process).
+> 
+> 2) Record the three values needed by _pei386_runtime_relocator in the
+> per_process structure.
 
-3) Modify _pei386_runtime_relocator() to take a per_process * argument
-and to check that the api of the per_process structure supports the
-additional three values.
+  That bit worries me - even adding a single pointer in a place where there
+would never have been a field before caused us enough trouble!  But, it's
+probably the right thing to do; it's the defined mechanism for conveying
+image-specific information from the module to the cygwin dll.
 
-4) For fork call _pei386_runtime_relocator() before the copy of the program's
-data/bss in child_info_fork::handle_fork().
+> 3) Modify _pei386_runtime_relocator() to take a per_process * argument
+> and to check that the api of the per_process structure supports the
+> additional three values.
 
-5) For non-fork, call _pei386_runtime_relocator() in dll_crt0_1().
+  Changing per_process was not as easy as I had hoped when I did it!
 
-6) For dll's, call _pei386_runtime_relocator() in dll_list::alloc().
+> 4) For fork call _pei386_runtime_relocator() before the copy of the program's
+> data/bss in child_info_fork::handle_fork().
+> 
+> 5) For non-fork, call _pei386_runtime_relocator() in dll_crt0_1().
+> 
+> 6) For dll's, call _pei386_runtime_relocator() in dll_list::alloc().
 
-I haven't added any optimizations to make this implementation avoid
-copying the data/bss but that is doable using Dave's technique.  It
-just isn't needed now since the fork data copy should always trump
-_pei386_runtime_relocator().
+  Re-ordering startup is the thing I didn't want to approach.  The separation,
+serialisation and ordering between process attach and first thread attach is
+probably as reliable as anything we could hope for though.
 
-cgf
+> I haven't added any optimizations to make this implementation avoid
+> copying the data/bss but that is doable using Dave's technique.  It
+> just isn't needed now since the fork data copy should always trump
+> _pei386_runtime_relocator().
+
+  Well, as long as it works it must make sense; it's just a matter of which we
+figure is more long-term reliable and maintainable: your approach depends on
+inferences about which things happen in which order during startup, mine
+depends on inferences about which sections of the EI get copied from the
+parent during a fork.  So, this post is a commentary, rather than an objection.
+
+    cheers,
+      DaveK
