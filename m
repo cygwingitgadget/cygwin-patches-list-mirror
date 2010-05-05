@@ -1,19 +1,22 @@
-Return-Path: <cygwin-patches-return-7020-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 17847 invoked by alias); 27 Apr 2010 15:18:10 -0000
-Received: (qmail 17828 invoked by uid 22791); 27 Apr 2010 15:18:08 -0000
-X-SWARE-Spam-Status: No, hits=-1.8 required=5.0 	tests=BAYES_00,RCVD_IN_DNSWL_NONE,SPF_FAIL,TW_CG,T_FRT_SLUT
+Return-Path: <cygwin-patches-return-7021-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 13986 invoked by alias); 5 May 2010 16:35:25 -0000
+Received: (qmail 13957 invoked by uid 22791); 5 May 2010 16:35:20 -0000
+X-SWARE-Spam-Status: No, hits=-2.2 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,T_TO_NO_BRKTS_FREEMAIL
 X-Spam-Check-By: sourceware.org
-Received: from qmta01.emeryville.ca.mail.comcast.net (HELO qmta01.emeryville.ca.mail.comcast.net) (76.96.30.16)     by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 27 Apr 2010 15:18:04 +0000
-Received: from omta19.emeryville.ca.mail.comcast.net ([76.96.30.76]) 	by qmta01.emeryville.ca.mail.comcast.net with comcast 	id AcZQ1e0071eYJf8A1fJ3gY; Tue, 27 Apr 2010 15:18:03 +0000
-Received: from [192.168.0.5] ([98.202.176.54]) 	by omta19.emeryville.ca.mail.comcast.net with comcast 	id AfJ11e00E1Anwcq01fJ2Jc; Tue, 27 Apr 2010 15:18:03 +0000
-Message-ID: <4BD7001C.8080303@redhat.com>
-Date: Tue, 27 Apr 2010 15:18:00 -0000
-From: Eric Blake <eblake@redhat.com>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.23) Gecko/20090812 Thunderbird/2.0.0.23 Mnenhy/0.7.6.666
+Received: from mail-bw0-f214.google.com (HELO mail-bw0-f214.google.com) (209.85.218.214)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 05 May 2010 16:35:12 +0000
+Received: by bwz6 with SMTP id 6so3378562bwz.19        for <cygwin-patches@cygwin.com>; Wed, 05 May 2010 09:35:09 -0700 (PDT)
+Received: by 10.204.74.77 with SMTP id t13mr1113077bkj.7.1273077309081;        Wed, 05 May 2010 09:35:09 -0700 (PDT)
+Received: from [192.168.2.99] (cpc2-cmbg8-0-0-cust61.cmbg.cable.ntl.com [82.6.108.62])        by mx.google.com with ESMTPS id 24sm326815bkr.0.2010.05.05.09.35.03        (version=SSLv3 cipher=RC4-MD5);        Wed, 05 May 2010 09:35:04 -0700 (PDT)
+Message-ID: <4BE1A2C5.4090604@gmail.com>
+Date: Wed, 05 May 2010 16:35:00 -0000
+From: Dave Korn <dave.korn.cygwin@googlemail.com>
+User-Agent: Thunderbird 2.0.0.17 (Windows/20080914)
 MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
-Subject: work around gcc bug in signal.h
-Content-Type: multipart/signed; micalg=pgp-sha1;  protocol="application/pgp-signature";  boundary="------------enigF533DA74E8F6FB1348605F3D"
+Subject: Re: CFA: pseudo-reloc v2
+References: <4AC7910E.1010900@cwilson.fastmail.fm> <4AC82056.7060308@cwilson.fastmail.fm>
+In-Reply-To: <4AC82056.7060308@cwilson.fastmail.fm>
+Content-Type: multipart/mixed; boundary="------------030900090304080303000405"
 X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -24,178 +27,231 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2010-q2/txt/msg00003.txt.bz2
-
-This is an OpenPGP/MIME signed message (RFC 2440 and 3156)
---------------enigF533DA74E8F6FB1348605F3D
-Content-Type: multipart/mixed;
- boundary="------------010301070105000307030608"
+X-SW-Source: 2010-q2/txt/msg00004.txt.bz2
 
 This is a multi-part message in MIME format.
---------------010301070105000307030608
+--------------030900090304080303000405
 Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-Content-length: 824
+Content-Transfer-Encoding: 7bit
+Content-length: 2627
 
-I had already written this patch, and was in the process of testing it,
-before cgf voted it down.  I'm still posting it for the record, as it
-would allow us to be source-compatible with Linux while we wait for the
-gcc bug to be fixed.
+[ redirected from cygwin-developers. ]
+On 04/10/2009 05:11, Charles Wilson wrote:
+[ thread seriously necro'd! ]
+> Dave Korn wrote:
+>> Charles Wilson wrote:
+>>>   120 void
+>>>   121 _pei386_runtime_relocator ()
+>>>   122 {
+>>>   123   static int was_init = 0;
+>>>   124   if (was_init)
+>>>   125     return;
+>>>   126   ++was_init;
+>>>   127   do_pseudo_reloc (&__RUNTIME_PSEUDO_RELOC_LIST__,&__RUNTIME_PSEUDO_RELOC_LIST_END__,&_image_base__);
+>>>   128 }
+>>   Maybe that static should be NO_COPY?  If everything gets remapped in the
+>> forkee, do the relocs need rerunning?  (I'm not sure about the behaviour of
+>> NtCreateProcess w.r.t modified .text section pages.)
+> 
+> Good guess!  With the following patch, all of these fork tests perform
+> as expected.
 
-For that matter, even if this patch is not applied, we might still want to
-consider simplifying things in siginfo_t - an anonymous union containing a
-single anonymous struct containing a single anonymous union seems
-wasteful, and we can prune two of those scopes whether or not we also name
-the outer union.
+  Aha, not so good as all that after all!  We need to re-apply relocs in the
+forkee - but only if they *don't* point to regions covered by the .data/.bss
+section copying at startup.  Argh!
 
-2010-04-27  Eric Blake  <eblake@redhat.com>
+>  One oddity; it turns out that __INSIDE_CYGWIN__ is not
+> defined inside pseudo-reloc.c, so I used __CYGWIN__ as a guard.
 
-	* include/cygwin/signal.h (siginfo_t, sigaction): Work around gcc
-	bug with member initialization of anonymous union members.
+  Dunno if we ever went into that, but it's right; pseudo-reloc.o is part of
+the CRT in winsup/cygwin/lib/, and is linked statically into every exe and
+(user) dll, but is not part of the cygwin1 dll.  Hence not "inside Cygwin".
 
---=20
-Eric Blake   eblake@redhat.com    +1-801-349-2682
-Libvirt virtualization library http://libvirt.org
+  So, the attached is my proposed fix.  It resolves the problem reported on
+the main list the other day(*) and the supplied testcases all work once it's
+applied.  There are two things that people might want to change: the minor one
+is that I let a couple of the lines get a bit long, but no longer than we
+already have in the definition of NO_COPY at the top of the file, so I didn't
+wrap them for the sake of one trailing word.  The slightly bigger one is that,
+if I remember, the reason for having non-#if-CYGWIN code in the file at all is
+to make any potential future merges from upstream MinGW sources theoretically
+easier, but now that I've had to diverge the internal interfaces anyway, is
+there any reason not to just delete the whole lot?
 
---------------010301070105000307030608
-Content-Type: text/plain;
- name="cygwin.patch36"
-Content-Transfer-Encoding: quoted-printable
+winsup/cygwin/ChangeLog:
+
+	lib/pseudo-reloc.c (memskip_t): New struct and typedef.
+	(__write_memory): Accept an optional memskip_t argument and avoid
+	writing to any memory ranges mentioned in the linked list.
+	(do_pseudo_reloc): Accept an optional memskip_t argument and pass
+	it through in all calls to __write_memory.
+	(_pei386_runtime_relocator): When reapplying relocs in a forked
+	child process, avoid doubly-relocating the .data and .bss sections
+	that were copied from the parent.
+
+    cheers,
+      DaveK
+-- 
+(*) - http://cygwin.com/ml/cygwin/2010-04/msg00957.html
+
+
+--------------030900090304080303000405
+Content-Type: text/x-c;
+ name="fix-double-relocs.diff"
+Content-Transfer-Encoding: 7bit
 Content-Disposition: attachment;
- filename="cygwin.patch36"
-Content-length: 3119
+ filename="fix-double-relocs.diff"
+Content-length: 6665
 
----
- winsup/cygwin/ChangeLog               |    5 +++
- winsup/cygwin/include/cygwin/signal.h |   62 ++++++++++++++++++-----------=
----
- 2 files changed, 40 insertions(+), 27 deletions(-)
-
-diff --git a/winsup/cygwin/include/cygwin/signal.h b/winsup/cygwin/include/=
-cygwin/signal.h
-index 25d501d..4fcfd33 100644
---- a/winsup/cygwin/include/cygwin/signal.h
-+++ b/winsup/cygwin/include/cygwin/signal.h
-@@ -1,6 +1,6 @@
- /* signal.h
-
--  Copyright 2004, 2005, 2006 Red Hat, Inc.
-+  Copyright 2004, 2005, 2006, 2010 Red Hat, Inc.
-
-   This file is part of Cygwin.
-
-@@ -97,40 +97,46 @@ typedef struct
-   uid_t si_uid;				/* sender's uid */
-   int si_errno;				/* errno associated with signal */
-
--  __extension__ union
-+  /* GCC bug 10676: we must use macros instead of anonymous unions,
-+     to allow member initialization syntax to work.  */
-+  union
-   {
-     __uint32_t __pad[32];		/* plan for future growth */
--    struct _sigcommune _si_commune;	/* cygwin ipc */
--    __extension__ union
-+    struct _sigcommune __si_commune;	/* cygwin ipc */
-+    union
-     {
-       /* timers */
-       struct
-       {
--	union
--	{
--	  struct
--	  {
--	    timer_t si_tid;		/* timer id */
--	    unsigned int si_overrun;	/* overrun count */
--	  };
--	  sigval_t si_sigval;		/* signal value */
--	  sigval_t si_value;		/* signal value */
--	};
--      };
--    };
-+	timer_t __si_tid;		/* timer id */
-+	unsigned int __si_overrun;	/* overrun count */
-+      } __timer;
-+      sigval_t __si_sigval;		/* signal value */
-+      sigval_t __si_value;		/* signal value */
-+    } __value;
-
-     /* SIGCHLD */
--    __extension__ struct
-+    struct
-     {
--      int si_status;			/* exit code */
--      clock_t si_utime;			/* user time */
--      clock_t si_stime;			/* system time */
--    };
-+      int __si_status;			/* exit code */
-+      clock_t __si_utime;		/* user time */
-+      clock_t __si_stime;		/* system time */
-+    } __child;
-
-     /* core dumping signals */
--    void *si_addr;			/* faulting address */
--  };
-+    void *__si_addr;			/* faulting address */
-+  } __si;
- } siginfo_t;
-+#define _si_commune	__si.__si_commune
-+#define si_tid		__si.__value.__timer.__si_tid
-+#define si_overrun	__si.__value.__timer.__si_overrun
-+#define si_sigval	__si.__value.__si_sigval
-+#define si_value	__si.__value.__si_value
-+#define si_status	__si.__child.__si_status
-+#define si_utime	__si.__child.__si_utime
-+#define si_stime	__si.__child.__si_stime
-+#define si_addr		__si.__si_addr
+Index: winsup/cygwin/lib/pseudo-reloc.c
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/lib/pseudo-reloc.c,v
+retrieving revision 1.4
+diff -p -u -r1.4 pseudo-reloc.c
+--- winsup/cygwin/lib/pseudo-reloc.c	26 Oct 2009 14:50:09 -0000	1.4
++++ winsup/cygwin/lib/pseudo-reloc.c	5 May 2010 16:04:46 -0000
+@@ -78,6 +78,20 @@ typedef struct {
+   DWORD version;
+ } runtime_pseudo_reloc_v2;
+ 
++/* This trivial struct is passed right down through do_pseudo_reloc
++   to __write_memory where it is used to avoid re-relocating those
++   memory areas that we know will have been pre-relocated by copying
++   from the parent of a forked child process.  Since there will only
++   ever be two ranges it's not worth worrying hugely about making it
++   efficient so a simple singly-linked list will do; if we ever start
++   encountering user applications with more than a few hundred or so
++   pseudo-relocs, there might come a time to rethink this.  */
++typedef struct memskip {
++  DWORD start;
++  DWORD end;
++  const struct memskip *next;
++} memskip_t;
 +
- #pragma pack(pop)
-
- enum
-@@ -194,14 +200,16 @@ typedef void (*_sig_func_ptr)(int);
-
- struct sigaction
+ static void ATTRIBUTE_NORETURN
+ __report_error (const char *msg, ...)
  {
--  __extension__ union
-+  union
-   {
--    _sig_func_ptr sa_handler;  		/* SIG_DFL, SIG_IGN, or pointer to a func=
-tion */
--    void  (*sa_sigaction) ( int, siginfo_t *, void * );
--  };
-+    _sig_func_ptr __sa_handler;  		/* SIG_DFL, SIG_IGN, or pointer to a fu=
-nction */
-+    void  (*__sa_sigaction) ( int, siginfo_t *, void * );
-+  } __sa;
-   sigset_t sa_mask;
-   int sa_flags;
- };
-+#define sa_handler	__sa.__sa_handler
-+#define sa_sigaction	__sa.__sa_sigaction
+@@ -169,7 +183,7 @@ __report_error (const char *msg, ...)
+  * is folded into the (writable) .data when --enable-auto-import.
+  */
+ static void
+-__write_memory (void *addr, const void *src, size_t len)
++__write_memory (void *addr, const void *src, size_t len, const memskip_t *skipranges)
+ {
+   MEMORY_BASIC_INFORMATION b;
+   DWORD oldprot;
+@@ -177,6 +191,13 @@ __write_memory (void *addr, const void *
+   if (!len)
+     return;
+ 
++  while (skipranges)
++    {
++      if ((skipranges->start <= (DWORD)addr) && (skipranges->end > (DWORD)addr))
++	return;
++      skipranges = skipranges->next;
++    }
++
+   if (!VirtualQuery (addr, &b, sizeof(b)))
+     {
+       __report_error ("  VirtualQuery failed for %d bytes at address %p",
+@@ -198,7 +219,7 @@ __write_memory (void *addr, const void *
+ #define RP_VERSION_V2 1
+ 
+ static void
+-do_pseudo_reloc (void * start, void * end, void * base)
++do_pseudo_reloc (void * start, void * end, void * base, const memskip_t *skipranges)
+ {
+   ptrdiff_t addr_imp, reldata;
+   ptrdiff_t reloc_target = (ptrdiff_t) ((char *)end - (char*)start);
+@@ -259,7 +280,7 @@ do_pseudo_reloc (void * start, void * en
+ 	  DWORD newval;
+ 	  reloc_target = (ptrdiff_t) base + o->target;
+ 	  newval = (*((DWORD*) reloc_target)) + o->addend;
+-	  __write_memory ((void *) reloc_target, &newval, sizeof(DWORD));
++	  __write_memory ((void *) reloc_target, &newval, sizeof(DWORD), skipranges);
+ 	}
+       return;
+     }
+@@ -337,17 +358,17 @@ do_pseudo_reloc (void * start, void * en
+       switch ((r->flags & 0xff))
+ 	{
+          case 8:
+-           __write_memory ((void *) reloc_target, &reldata, 1);
++           __write_memory ((void *) reloc_target, &reldata, 1, skipranges);
+ 	   break;
+ 	 case 16:
+-           __write_memory ((void *) reloc_target, &reldata, 2);
++           __write_memory ((void *) reloc_target, &reldata, 2, skipranges);
+ 	   break;
+ 	 case 32:
+-           __write_memory ((void *) reloc_target, &reldata, 4);
++           __write_memory ((void *) reloc_target, &reldata, 4, skipranges);
+ 	   break;
+ #ifdef _WIN64
+ 	 case 64:
+-           __write_memory ((void *) reloc_target, &reldata, 8);
++           __write_memory ((void *) reloc_target, &reldata, 8, skipranges);
+ 	   break;
+ #endif
+ 	}
+@@ -357,11 +378,57 @@ do_pseudo_reloc (void * start, void * en
+ void
+ _pei386_runtime_relocator (void)
+ {
++  /* We only want to apply the pseudo-relocs once, so we use this once-only
++     guard variable - no need for complex serialisation or synchronisation
++     here, as we're in early start-up (if an exe) or at process attach time
++     (if a dll) and we'll be implicitly running single-threaded anyway.
++
++     However, when we fork a process, the OS creates fresh mappings of all
++     the image files, so the pseudo-relocs all get wiped out and we need
++     to reapply them; hence, the guard variable is NO_COPY, so that it
++     starts from zero again in the forked child, and we apply the relocs
++     again.  */
+   static NO_COPY int was_init = 0;
++  /* But it isn't quite that simple.  During fork startup the parent and
++     child co-operate to synchronize the memory: code in the Cygwin DLL
++     copies across all the (non-read-only) data and bss sections of the
++     exe and loaded dlls, not to mention heap and stack areas; this is
++     how all the variables in the child end up with the same content as
++     the parent, but it effectively pre-applies any pseudo-relocs that
++     point into those regions for us, as their effect has been copied
++     from the parent.  We need to avoid re-applying them when we fork
++     or the data will end up doubly-relocated and pointing randomly into
++     space, which is obviously a problem.  So we also have a once-only
++     guard variable that does *not* use the NO_COPY attribute; this
++     guard variable won't be reset on a fork but will remain set from
++     the parent, letting us infer that we are re-applying pseudo-relocs
++     in a child process rather than applying them for the first time
++     in an entirely newly-created process.  */
++  static char was_forked = 0;
++  /* In that case, we want to avoid applying any pseudo-relocs that we
++     know will already have been copied, pre-applied, from the parent's
++     .data and .bss sections.  See the references to child_copy() in
++     dcrt0.cc#child_info_fork::handle_fork() and fork.cc#frok::parent()
++     for the details.  We take advantage here of the fact that this code
++     is part of the winsup/cygwin/lib/ runtime library startup code,
++     linked as a static object into each exe and dll rather than being
++     part of the Cygwin DLL itself; this means we can simply look at the
++     linker-supplied labels marking the start and end of our own .data
++     and .bss sections to know which memory areas to avoid re-relocating,
++     and don't have to worry about any complicated mechanism for the DLL
++     to inform us which memory areas it copied.  Phew!  */
++  extern char _data_start__, _data_end__, _bss_start__, _bss_end__;
++  static const memskip_t skipchain[2] = {
++    { .start = (DWORD)&_data_start__, .end = (DWORD)&_data_end__, .next = &skipchain[1] },
++    { .start = (DWORD)&_bss_start__, .end = (DWORD)&_bss_end__, .next = 0 }
++  };
++
+   if (was_init)
+     return;
+   ++was_init;
+   do_pseudo_reloc (&__RUNTIME_PSEUDO_RELOC_LIST__,
+ 		   &__RUNTIME_PSEUDO_RELOC_LIST_END__,
+-		   &__MINGW_LSYMBOL(_image_base__));
++		   &__MINGW_LSYMBOL(_image_base__),
++		   was_forked ? skipchain : NULL);
++  was_forked = 1;
+ }
 
- #define SA_NOCLDSTOP 1   		/* Do not generate SIGCHLD when children
- 					   stop */
---=20
-1.7.0.4
-
-
---------------010301070105000307030608--
-
---------------enigF533DA74E8F6FB1348605F3D
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-Content-length: 320
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.9 (Cygwin)
-Comment: Public key at home.comcast.net/~ericblake/eblake.gpg
-Comment: Using GnuPG with Mozilla - http://enigmail.mozdev.org/
-
-iEYEARECAAYFAkvXACkACgkQ84KuGfSFAYCYXQCfZnp7H9/j0+hJZbxehCY6YgE3
-1aAAn00KXfG66nhPSDGZadSMp3eACrTi
-=gyyz
------END PGP SIGNATURE-----
-
---------------enigF533DA74E8F6FB1348605F3D--
+--------------030900090304080303000405--
