@@ -1,24 +1,23 @@
-Return-Path: <cygwin-patches-return-7027-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 27764 invoked by alias); 5 May 2010 23:28:48 -0000
-Received: (qmail 27750 invoked by uid 22791); 5 May 2010 23:28:47 -0000
-X-SWARE-Spam-Status: No, hits=-2.2 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,T_TO_NO_BRKTS_FREEMAIL
+Return-Path: <cygwin-patches-return-7028-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 17628 invoked by alias); 6 May 2010 03:08:28 -0000
+Received: (qmail 17617 invoked by uid 22791); 6 May 2010 03:08:27 -0000
+X-SWARE-Spam-Status: No, hits=-2.7 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_LOW
 X-Spam-Check-By: sourceware.org
-Received: from mail-ww0-f43.google.com (HELO mail-ww0-f43.google.com) (74.125.82.43)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 05 May 2010 23:28:36 +0000
-Received: by wwi18 with SMTP id 18so1147763wwi.2        for <cygwin-patches@cygwin.com>; Wed, 05 May 2010 16:28:33 -0700 (PDT)
-Received: by 10.227.145.197 with SMTP id e5mr3301305wbv.190.1273102113695;        Wed, 05 May 2010 16:28:33 -0700 (PDT)
-Received: from [192.168.2.99] (cpc2-cmbg8-0-0-cust61.cmbg.cable.ntl.com [82.6.108.62])        by mx.google.com with ESMTPS id y23sm2389401wby.22.2010.05.05.16.28.30        (version=SSLv3 cipher=RC4-MD5);        Wed, 05 May 2010 16:28:31 -0700 (PDT)
-Message-ID: <4BE203AD.4080606@gmail.com>
-Date: Wed, 05 May 2010 23:28:00 -0000
-From: Dave Korn <dave.korn.cygwin@googlemail.com>
-User-Agent: Thunderbird 2.0.0.17 (Windows/20080914)
+Received: from out1.smtp.messagingengine.com (HELO out1.smtp.messagingengine.com) (66.111.4.25)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 06 May 2010 03:08:23 +0000
+Received: from compute1.internal (compute1.internal [10.202.2.41])	by gateway1.messagingengine.com (Postfix) with ESMTP id 8A620F2F91	for <cygwin-patches@cygwin.com>; Wed,  5 May 2010 23:08:21 -0400 (EDT)
+Received: from heartbeat1.messagingengine.com ([10.202.2.160])  by compute1.internal (MEProxy); Wed, 05 May 2010 23:08:21 -0400
+Received: from [192.168.1.3] (unknown [24.110.45.162])	by mail.messagingengine.com (Postfix) with ESMTPSA id 305144A6014;	Wed,  5 May 2010 23:08:21 -0400 (EDT)
+Message-ID: <4BE23275.1030009@cwilson.fastmail.fm>
+Date: Thu, 06 May 2010 03:08:00 -0000
+From: Charles Wilson <cygwin@cwilson.fastmail.fm>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.8.1.23) Gecko/20090812 Thunderbird/2.0.0.23 Mnenhy/0.7.6.666
 MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
 Subject: Re: CFA: pseudo-reloc v2
-References: <4AC7910E.1010900@cwilson.fastmail.fm> <4AC82056.7060308@cwilson.fastmail.fm> <4BE1A2C5.4090604@gmail.com> <20100505175614.GA6651@ednor.casa.cgf.cx> <4BE1BFCC.6060703@gmail.com> <20100505191317.GA14692@ednor.casa.cgf.cx> <4BE1CB8C.8020301@gmail.com> <20100505203042.GA15996@ednor.casa.cgf.cx>
-In-Reply-To: <20100505203042.GA15996@ednor.casa.cgf.cx>
+References: <4AC7910E.1010900@cwilson.fastmail.fm> <4AC82056.7060308@cwilson.fastmail.fm> <4BE1A2C5.4090604@gmail.com> <20100505175614.GA6651@ednor.casa.cgf.cx> <4BE1BFCC.6060703@gmail.com> <20100505191317.GA14692@ednor.casa.cgf.cx>
+In-Reply-To: <20100505191317.GA14692@ednor.casa.cgf.cx>
 Content-Type: text/plain; charset=ISO-8859-1
 Content-Transfer-Encoding: 7bit
-X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -28,65 +27,34 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2010-q2/txt/msg00010.txt.bz2
+X-SW-Source: 2010-q2/txt/msg00011.txt.bz2
 
-On 05/05/2010 21:30, Christopher Faylor wrote:
+On 5/5/2010 3:13 PM, Christopher Faylor wrote:
 
-> I have something written now.  I'll dig through the cygwin archives to
-> see if I can find the original message which started this but are there
-> other test cases that I could use to verify that I caught all of the
-> code paths in the DLL?
+> That's basically it and I have it more-or-less coded but I haven't
+> finished thinking about DLLs.  Maybe that's more complication than is
+> warranted.  I have to do more research there.  We could, and I think
+> should, put most of the code in pseudo_reloc.c in cygwin1.dll, though,
+> rather than duplicate it in every source file.
 
-  http://cygwin.com/ml/cygwin/2010-04/msg00957.html comes with a couple of
-testcases attached, although you can only be sure they've worked by running
-them and seeing that no .stackdump file was generated in your $CWD.
+I disagree with this statement.
 
-> Chuck?  Do you have anything I could use to test what I did?
+I spent a lot of effort trying to synchronize our version of
+pseudo_reloc.c with the mingw and mingw64 versions -- specifically so
+that we could leverage Kai's v2 efforts.
 
-  There were some fork-related testcases in the original thread, but I didn't
-refer back to them when I was revising this, so they're probably worth verifying:
-   http://www.cygwin.com/ml/cygwin-developers/2009-10/msg00052.html
+If we -- meaning cygwin -- move most of the guts into the cygwin DLL,
+then ... we either
+  (1) fork our version from the mingw[32|64] version permanently, and
+lose the possibility of "easy" code sharing between the three projects, or
+  (2) this portion of the code lives in both places (pseudo_reloc.c and
+some-other-cygwin-dll-source-file), but is #ifdef'ed in pseudo_reloc.c
+when compiled on cygwin, because there's this other identical copy over
+in some-other-cygwin-dll-source-file.
 
-> What I did:
-> 
-> 1) Move pseudo-reloc.c out of lib and into the dll (making
-> it a c++ file in the process).
-> 
-> 2) Record the three values needed by _pei386_runtime_relocator in the
-> per_process structure.
+Yuck. (I don't mind "losing" the effort I put in, because whatever
+happens we now have v2 support. But...why make it harder if somebody in
+mingw-land invents v3? Or make it harder on them, if WE do?)
 
-  That bit worries me - even adding a single pointer in a place where there
-would never have been a field before caused us enough trouble!  But, it's
-probably the right thing to do; it's the defined mechanism for conveying
-image-specific information from the module to the cygwin dll.
-
-> 3) Modify _pei386_runtime_relocator() to take a per_process * argument
-> and to check that the api of the per_process structure supports the
-> additional three values.
-
-  Changing per_process was not as easy as I had hoped when I did it!
-
-> 4) For fork call _pei386_runtime_relocator() before the copy of the program's
-> data/bss in child_info_fork::handle_fork().
-> 
-> 5) For non-fork, call _pei386_runtime_relocator() in dll_crt0_1().
-> 
-> 6) For dll's, call _pei386_runtime_relocator() in dll_list::alloc().
-
-  Re-ordering startup is the thing I didn't want to approach.  The separation,
-serialisation and ordering between process attach and first thread attach is
-probably as reliable as anything we could hope for though.
-
-> I haven't added any optimizations to make this implementation avoid
-> copying the data/bss but that is doable using Dave's technique.  It
-> just isn't needed now since the fork data copy should always trump
-> _pei386_runtime_relocator().
-
-  Well, as long as it works it must make sense; it's just a matter of which we
-figure is more long-term reliable and maintainable: your approach depends on
-inferences about which things happen in which order during startup, mine
-depends on inferences about which sections of the EI get copied from the
-parent during a fork.  So, this post is a commentary, rather than an objection.
-
-    cheers,
-      DaveK
+--
+Chuck
