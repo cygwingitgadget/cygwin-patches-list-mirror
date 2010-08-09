@@ -1,23 +1,22 @@
-Return-Path: <cygwin-patches-return-7058-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 7375 invoked by alias); 8 Aug 2010 16:33:53 -0000
-Received: (qmail 7351 invoked by uid 22791); 8 Aug 2010 16:33:51 -0000
+Return-Path: <cygwin-patches-return-7059-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 2628 invoked by alias); 9 Aug 2010 03:46:04 -0000
+Received: (qmail 2618 invoked by uid 22791); 9 Aug 2010 03:46:03 -0000
+X-SWARE-Spam-Status: No, hits=-50.9 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE
 X-Spam-Check-By: sourceware.org
-Received: from pool-173-76-48-4.bstnma.east.verizon.net (HELO cgf.cx) (173.76.48.4)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Sun, 08 Aug 2010 16:33:46 +0000
-Received: from ednor.cgf.cx (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id 4470013C061	for <cygwin-patches@cygwin.com>; Sun,  8 Aug 2010 12:33:44 -0400 (EDT)
-Received: by ednor.cgf.cx (Postfix, from userid 201)	id 114BF2B352; Sun,  8 Aug 2010 12:33:44 -0400 (EDT)
-Date: Sun, 08 Aug 2010 16:33:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] POSIX monotonic clock
-Message-ID: <20100808163343.GA3637@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1280782148.6756.81.camel@YAAKOV04> <e9a284aade1fca8f1132eb866f4f7224@shell.sh.cvut.cz> <20100803140420.GA21733@ednor.casa.cgf.cx> <1281243978.1344.0.camel@YAAKOV04>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1281243978.1344.0.camel@YAAKOV04>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+Received: from mail-gx0-f171.google.com (HELO mail-gx0-f171.google.com) (209.85.161.171)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 09 Aug 2010 03:45:56 +0000
+Received: by gxk6 with SMTP id 6so5484576gxk.2        for <cygwin-patches@cygwin.com>; Sun, 08 Aug 2010 20:45:55 -0700 (PDT)
+Received: by 10.100.7.17 with SMTP id 17mr17209975ang.21.1281325555184;        Sun, 08 Aug 2010 20:45:55 -0700 (PDT)
+Received: from [127.0.0.1] (S0106000cf16f58b1.wp.shawcable.net [24.76.240.202])        by mx.google.com with ESMTPS id w6sm7626472anb.23.2010.08.08.20.45.53        (version=SSLv3 cipher=RC4-MD5);        Sun, 08 Aug 2010 20:45:54 -0700 (PDT)
+Subject: Re: [PATCH] define RTLD_LOCAL
+From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
+To: cygwin-patches <cygwin-patches@cygwin.com>
+In-Reply-To: <4C5E6C39.6000802@sh.cvut.cz>
+References: <1281246553.1344.24.camel@YAAKOV04>	 <4C5E6C39.6000802@sh.cvut.cz>
+Content-Type: text/plain; charset="UTF-8"
+Date: Mon, 09 Aug 2010 03:46:00 -0000
+Message-ID: <1281325555.5484.39.camel@YAAKOV04>
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -27,22 +26,37 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2010-q3/txt/msg00018.txt.bz2
+X-SW-Source: 2010-q3/txt/msg00019.txt.bz2
 
-On Sun, Aug 08, 2010 at 12:06:18AM -0500, Yaakov (Cygwin/X) wrote:
->On Tue, 2010-08-03 at 10:04 -0400, Christopher Faylor wrote:
->> On Tue, Aug 03, 2010 at 09:32:47AM +0200, V??clav Haisman wrote:
->> >This looks like you could get monotonic clock going backwards.
->> 
->> That's a good point.  We have that very problem here where I work.
->> However, Yaakov isn't adding anything new here so, if this is a problem,
->> it would be a long-standing one.
->> 
->> It sounds like it would be trivially solvable by setting the processor
->> affinity mask but I'm not sure what that would mean for performance.
->
->So should I hold off on my patch until this can be fixed?
+On Sun, 2010-08-08 at 10:35 +0200, VÃ¡clav Haisman wrote:
+> Is it not undefined in Cygwin because Windows cannot support the behaviour?
+> AFAIK once you do LoadLibrary(A.dll) then any subsequent reference to A.dll
+> and its exports will be satisfied from the already loaded A.dll. IOW, Windows
+> cannot satisfy "The object's symbols shall not be made available for the
+> relocation processing of any other object," as specified by [2].
 
-Nah.  Go ahead.  Thanks.
+Remember that Cygwin's dlopen() does nothing with the second argument,
+so none of RTLD_* actually affect behaviour.  According to your logic,
+we shouldn't define one of RTLD_LAZY or RTLD_NOW, because they can't
+both be true, so our dlopen() isn't fulfilling its meaning.  We define
+both anyway, and I don't see this as any different.
 
-cgf
+Secondly, on Linux, RTLD_LOCAL is essentially the default, so lots
+(most?) software intended primarily for Linux which passes neither it
+nor RTLD_GLOBAL is probably expecting RTLD_LOCAL behaviour anyway.
+Therefore actually defining RTLD_LOCAL isn't a notable change.
+
+Thirdly, several times I have seen the following:
+
+#ifndef RTLD_LOCAL
+#define RTLD_LOCAL 0
+#endif
+
+So they're clearly not too concerned about specific behaviour, they just
+don't require RTLD_GLOBAL and therefore specify the opposite.  Defining
+RTLD_LOCAL ourselves just saves us from patching this in to other
+software.
+
+
+Yaakov
+
