@@ -1,21 +1,21 @@
-Return-Path: <cygwin-patches-return-7061-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 11400 invoked by alias); 9 Aug 2010 07:48:48 -0000
-Received: (qmail 11386 invoked by uid 22791); 9 Aug 2010 07:48:47 -0000
+Return-Path: <cygwin-patches-return-7062-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 9918 invoked by alias); 9 Aug 2010 08:21:03 -0000
+Received: (qmail 9899 invoked by uid 22791); 9 Aug 2010 08:21:01 -0000
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Mon, 09 Aug 2010 07:48:42 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 4641B6D4364; Mon,  9 Aug 2010 09:48:40 +0200 (CEST)
-Date: Mon, 09 Aug 2010 07:48:00 -0000
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Mon, 09 Aug 2010 08:20:56 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 781AE6D4364; Mon,  9 Aug 2010 10:20:53 +0200 (CEST)
+Date: Mon, 09 Aug 2010 08:21:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] define RTLD_LOCAL
-Message-ID: <20100809074840.GC17925@calimero.vinschen.de>
+Subject: Re: [PATCH] implement /proc/filesystems
+Message-ID: <20100809082053.GD17925@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1281246553.1344.24.camel@YAAKOV04>
+References: <1281334969.6576.8.camel@YAAKOV04>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1281246553.1344.24.camel@YAAKOV04>
+In-Reply-To: <1281334969.6576.8.camel@YAAKOV04>
 User-Agent: Mutt/1.5.20 (2009-06-14)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -26,15 +26,19 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2010-q3/txt/msg00021.txt.bz2
+X-SW-Source: 2010-q3/txt/msg00022.txt.bz2
 
-On Aug  8 00:49, Yaakov S wrote:
-> 	* include/dlfcn.h (RTLD_LOCAL): Define.
+On Aug  9 01:22, Yaakov S wrote:
+> 	* fhandler_proc.cc: Add /proc/filesystems virtual file.
+> 	(format_proc_filesystems): New function.
+> 	* mount.cc (fs_names): Move to global scope. Redefine as array
+> 	of { "name", block_device? } structs.
+> 	(fillout_mntent): Use name member of fs_names.
+> 	* mount.h (fs_names): New prototype.
 
-Patch applied.
+Thank you!  Patch applied.  I added an entry to the docs as well.
 
 
-Thanks,
 Corinna
 
 -- 
