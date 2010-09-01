@@ -1,13 +1,13 @@
-Return-Path: <cygwin-patches-return-7072-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 15916 invoked by alias); 1 Sep 2010 18:18:29 -0000
-Received: (qmail 15892 invoked by uid 22791); 1 Sep 2010 18:18:28 -0000
-X-SWARE-Spam-Status: No, hits=-0.8 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,T_TO_NO_BRKTS_FREEMAIL
+Return-Path: <cygwin-patches-return-7073-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 15917 invoked by alias); 1 Sep 2010 18:18:29 -0000
+Received: (qmail 15901 invoked by uid 22791); 1 Sep 2010 18:18:28 -0000
+X-SWARE-Spam-Status: No, hits=-0.9 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,T_TO_NO_BRKTS_FREEMAIL
 X-Spam-Check-By: sourceware.org
 Received: from mail-ew0-f43.google.com (HELO mail-ew0-f43.google.com) (209.85.215.43)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 01 Sep 2010 18:18:22 +0000
-Received: by ewy1 with SMTP id 1so6071101ewy.2        for <cygwin-patches@cygwin.com>; Wed, 01 Sep 2010 11:18:19 -0700 (PDT)
-Received: by 10.213.105.77 with SMTP id s13mr12149518ebo.50.1283365099414;        Wed, 01 Sep 2010 11:18:19 -0700 (PDT)
-Received: from [192.168.0.3] (141.191.216.81.static.g-hn.siw.siwnet.net [81.216.191.141])        by mx.google.com with ESMTPS id a48sm16485848eei.0.2010.09.01.11.18.15        (version=TLSv1/SSLv3 cipher=RC4-MD5);        Wed, 01 Sep 2010 11:18:16 -0700 (PDT)
-Message-ID: <4C7E98E5.4040301@gmail.com>
+Received: by ewy1 with SMTP id 1so6071112ewy.2        for <cygwin-patches@cygwin.com>; Wed, 01 Sep 2010 11:18:20 -0700 (PDT)
+Received: by 10.213.16.211 with SMTP id p19mr11968371eba.88.1283365015283;        Wed, 01 Sep 2010 11:16:55 -0700 (PDT)
+Received: from [192.168.0.3] (141.191.216.81.static.g-hn.siw.siwnet.net [81.216.191.141])        by mx.google.com with ESMTPS id v59sm16489219eeh.22.2010.09.01.11.16.51        (version=TLSv1/SSLv3 cipher=RC4-MD5);        Wed, 01 Sep 2010 11:16:51 -0700 (PDT)
+Message-ID: <4C7E9891.7070207@gmail.com>
 Date: Wed, 01 Sep 2010 18:18:00 -0000
 From: Magnus Holmgren <magnushol@gmail.com>
 User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.2.8) Gecko/20100802 Thunderbird/3.1.2
@@ -26,7 +26,7 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2010-q3/txt/msg00032.txt.bz2
+X-SW-Source: 2010-q3/txt/msg00033.txt.bz2
 
 This patch speeds up process initialization on 64-bit systems. Maybe
 the comment "Initialize signal processing here ..." should be re-worded
