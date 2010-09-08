@@ -1,22 +1,23 @@
-Return-Path: <cygwin-patches-return-7078-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 22779 invoked by alias); 8 Sep 2010 22:27:27 -0000
-Received: (qmail 22768 invoked by uid 22791); 8 Sep 2010 22:27:27 -0000
-X-SWARE-Spam-Status: No, hits=-0.5 required=5.0	tests=AWL,BAYES_00,TW_CP,T_RP_MATCHES_RCVD
+Return-Path: <cygwin-patches-return-7079-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 13690 invoked by alias); 8 Sep 2010 22:41:23 -0000
+Received: (qmail 13662 invoked by uid 22791); 8 Sep 2010 22:41:14 -0000
 X-Spam-Check-By: sourceware.org
-Received: from ixqw-mail-out.ixiacom.com (HELO ixqw-mail-out.ixiacom.com) (66.77.12.12)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 08 Sep 2010 22:27:17 +0000
-Received: from [10.64.33.35] (10.64.33.35) by IXCA-HC1.ixiacom.com (10.200.2.55) with Microsoft SMTP Server (TLS) id 8.1.358.0; Wed, 8 Sep 2010 15:27:15 -0700
-Message-ID: <4C880DC2.1070706@ixiacom.com>
-Date: Wed, 08 Sep 2010 22:27:00 -0000
-From: Earl Chew <echew@ixiacom.com>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.9) Gecko/20100825 Thunderbird/3.1.3
+Received: from pool-173-76-46-163.bstnma.fios.verizon.net (HELO cgf.cx) (173.76.46.163)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Wed, 08 Sep 2010 22:41:10 +0000
+Received: from ednor.cgf.cx (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id BFD6113C061	for <cygwin-patches@cygwin.com>; Wed,  8 Sep 2010 18:41:08 -0400 (EDT)
+Received: by ednor.cgf.cx (Postfix, from userid 201)	id B93D52B352; Wed,  8 Sep 2010 18:41:08 -0400 (EDT)
+Date: Wed, 08 Sep 2010 22:41:00 -0000
+From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: Mounting /tmp at TMP or TEMP as a last resort
+Message-ID: <20100908224108.GB13153@ednor.casa.cgf.cx>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <4C880761.2030503@ixiacom.com> <4C880DC2.1070706@ixiacom.com>
 MIME-Version: 1.0
-To: <cygwin-patches@cygwin.com>
-Subject: Mounting /tmp at TMP or TEMP as a last resort
-References: <4C880761.2030503@ixiacom.com>
-In-Reply-To: <4C880761.2030503@ixiacom.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 7bit
-X-IsSubscribed: yes
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4C880DC2.1070706@ixiacom.com>
+User-Agent: Mutt/1.5.20 (2009-06-14)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,71 +27,23 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2010-q3/txt/msg00038.txt.bz2
+X-SW-Source: 2010-q3/txt/msg00039.txt.bz2
 
-We have an installation that we deploy to a bunch of workstations. We prefer
-if the installation uses the temporary file directory that Windows has already
-allocated for the user.
+On Wed, Sep 08, 2010 at 03:27:14PM -0700, Earl Chew wrote:
+>We have an installation that we deploy to a bunch of workstations. We prefer
+>if the installation uses the temporary file directory that Windows has already
+>allocated for the user.
+>
+>The entry for /tmp in /etc/fstab, or the directory /tmp, is preferred.
+>If neither is found, the patch mounts /tmp at the directory indicated
+>by the environment variable TMP or, if that is not set, TEMP. The patch
+>does nothing if neither environment variable is set.
 
-The entry for /tmp in /etc/fstab, or the directory /tmp, is preferred.
-If neither is found, the patch mounts /tmp at the directory indicated
-by the environment variable TMP or, if that is not set, TEMP. The patch
-does nothing if neither environment variable is set.
+Thanks for the patch but I don't think this is generally useful.  If you
+need to mount /tmp somewhere else then it should be fairly trivial to
+automatically update /etc/fstab.  Corinna may disagree, but I think we
+should keep the parsing of /etc/fstab as lean as possible; particularly
+when there are alternatives to modifying Cygwin to achieve the desired
+result.
 
-Earl
-
---- mount.h.orig	2010-03-18 07:57:09.000000000 -0700
-+++ mount.h	2010-09-08 11:10:23.218802900 -0700
-@@ -140,6 +140,7 @@
-   int nmounts;
-   mount_item mount[MAX_MOUNTS];
- 
-+  static bool got_tmp;
-   static bool got_usr_bin;
-   static bool got_usr_lib;
-   static int root_idx;
---- mount.cc.orig	2010-03-30 03:03:09.000000000 -0700
-+++ mount.cc	2010-09-08 11:35:27.765251900 -0700
-@@ -45,6 +45,7 @@
- #define isproc(path) \
-   (path_prefix_p (proc, (path), proc_len, false))
- 
-+bool NO_COPY mount_info::got_tmp;
- bool NO_COPY mount_info::got_usr_bin;
- bool NO_COPY mount_info::got_usr_lib;
- int NO_COPY mount_info::root_idx = -1;
-@@ -390,6 +391,24 @@
- 		  MOUNT_SYSTEM | MOUNT_BINARY | MOUNT_AUTOMATIC);
-       }
-     }
-+
-+  if (!got_tmp)
-+    {
-+      char tmpdir[PATH_MAX];
-+      if (root_idx < 0)
-+	api_fatal ("root_idx %d, user_shared magic %p, nmounts %d", root_idx, user_shared->version, nmounts);
-+      char *p = stpcpy (tmpdir, mount[root_idx].native_path);
-+      stpcpy (p, "\\tmp");
-+      if (GetFileAttributes (tmpdir) != FILE_ATTRIBUTE_DIRECTORY)
-+        {
-+	  const char *tmp = getenv("TMP");
-+	  if (!tmp)
-+	    tmp = getenv("TEMP");
-+	  if (tmp)
-+	    add_item (tmp, "/tmp",
-+		      MOUNT_SYSTEM | MOUNT_BINARY | MOUNT_AUTOMATIC);
-+	}
-+    }
- }
- 
- static void
-@@ -1342,6 +1361,9 @@
-   if (i == nmounts)
-     nmounts++;
- 
-+  if (strcmp (posixtmp, "/tmp") == 0)
-+    got_tmp = true;
-+
-   if (strcmp (posixtmp, "/usr/bin") == 0)
-     got_usr_bin = true;
- 
+cgf
