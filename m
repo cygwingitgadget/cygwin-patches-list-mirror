@@ -1,23 +1,22 @@
-Return-Path: <cygwin-patches-return-7079-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 13690 invoked by alias); 8 Sep 2010 22:41:23 -0000
-Received: (qmail 13662 invoked by uid 22791); 8 Sep 2010 22:41:14 -0000
+Return-Path: <cygwin-patches-return-7080-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 23256 invoked by alias); 8 Sep 2010 22:59:57 -0000
+Received: (qmail 23243 invoked by uid 22791); 8 Sep 2010 22:59:56 -0000
+X-SWARE-Spam-Status: No, hits=-0.9 required=5.0	tests=AWL,BAYES_00,T_RP_MATCHES_RCVD
 X-Spam-Check-By: sourceware.org
-Received: from pool-173-76-46-163.bstnma.fios.verizon.net (HELO cgf.cx) (173.76.46.163)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Wed, 08 Sep 2010 22:41:10 +0000
-Received: from ednor.cgf.cx (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id BFD6113C061	for <cygwin-patches@cygwin.com>; Wed,  8 Sep 2010 18:41:08 -0400 (EDT)
-Received: by ednor.cgf.cx (Postfix, from userid 201)	id B93D52B352; Wed,  8 Sep 2010 18:41:08 -0400 (EDT)
-Date: Wed, 08 Sep 2010 22:41:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: Mounting /tmp at TMP or TEMP as a last resort
-Message-ID: <20100908224108.GB13153@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4C880761.2030503@ixiacom.com> <4C880DC2.1070706@ixiacom.com>
+Received: from ixqw-mail-out.ixiacom.com (HELO ixqw-mail-out.ixiacom.com) (66.77.12.12)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 08 Sep 2010 22:59:52 +0000
+Received: from [10.64.33.35] (10.64.33.35) by IXCA-HC1.ixiacom.com (10.200.2.55) with Microsoft SMTP Server (TLS) id 8.1.358.0; Wed, 8 Sep 2010 15:59:51 -0700
+Message-ID: <4C881565.7050705@ixiacom.com>
+Date: Wed, 08 Sep 2010 22:59:00 -0000
+From: Earl Chew <echew@ixiacom.com>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.9) Gecko/20100825 Thunderbird/3.1.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4C880DC2.1070706@ixiacom.com>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+To: <cygwin-patches@cygwin.com>
+Subject: Re: Mounting /tmp at TMP or TEMP as a last resort
+References: <4C880761.2030503@ixiacom.com> <4C880DC2.1070706@ixiacom.com> <20100908224108.GB13153@ednor.casa.cgf.cx>
+In-Reply-To: <20100908224108.GB13153@ednor.casa.cgf.cx>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -27,23 +26,27 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2010-q3/txt/msg00039.txt.bz2
+X-SW-Source: 2010-q3/txt/msg00040.txt.bz2
 
-On Wed, Sep 08, 2010 at 03:27:14PM -0700, Earl Chew wrote:
->We have an installation that we deploy to a bunch of workstations. We prefer
->if the installation uses the temporary file directory that Windows has already
->allocated for the user.
->
->The entry for /tmp in /etc/fstab, or the directory /tmp, is preferred.
->If neither is found, the patch mounts /tmp at the directory indicated
->by the environment variable TMP or, if that is not set, TEMP. The patch
->does nothing if neither environment variable is set.
+On 08/09/2010 3:41 PM, Christopher Faylor wrote:
+> Thanks for the patch but I don't think this is generally useful.  If you
+> need to mount /tmp somewhere else then it should be fairly trivial to
+> automatically update /etc/fstab.  Corinna may disagree, but I think we
+> should keep the parsing of /etc/fstab as lean as possible; particularly
+> when there are alternatives to modifying Cygwin to achieve the desired
+> result.
 
-Thanks for the patch but I don't think this is generally useful.  If you
-need to mount /tmp somewhere else then it should be fairly trivial to
-automatically update /etc/fstab.  Corinna may disagree, but I think we
-should keep the parsing of /etc/fstab as lean as possible; particularly
-when there are alternatives to modifying Cygwin to achieve the desired
-result.
+Yes, I understand what you're saying.
 
-cgf
+In our situation, we prefer an out-of-the-box deployment. (We're
+essentially trying to get to a "untar this and use it" state).
+
+That said, I don't think it's possible for /etc/fstab to inspect
+environment variables, so manipulation of /etc/fstab would
+require the assistance of some other script to edit /etc/fstab on
+the fly --- and even then it would be difficult to track changes
+to the environment variables.
+
+Thanks for the quick feedback.
+
+Earl
