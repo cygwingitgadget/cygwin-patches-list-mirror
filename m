@@ -1,22 +1,20 @@
-Return-Path: <cygwin-patches-return-7086-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 12128 invoked by alias); 9 Sep 2010 21:21:50 -0000
-Received: (qmail 12117 invoked by uid 22791); 9 Sep 2010 21:21:49 -0000
-X-SWARE-Spam-Status: No, hits=-1.8 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,T_TO_NO_BRKTS_FREEMAIL
+Return-Path: <cygwin-patches-return-7087-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 22032 invoked by alias); 9 Sep 2010 23:06:54 -0000
+Received: (qmail 22022 invoked by uid 22791); 9 Sep 2010 23:06:52 -0000
+X-SWARE-Spam-Status: No, hits=-1.3 required=5.0	tests=AWL,BAYES_00,T_RP_MATCHES_RCVD
 X-Spam-Check-By: sourceware.org
-Received: from mail-ey0-f171.google.com (HELO mail-ey0-f171.google.com) (209.85.215.171)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 09 Sep 2010 21:21:43 +0000
-Received: by eyg7 with SMTP id 7so1844361eyg.2        for <cygwin-patches@cygwin.com>; Thu, 09 Sep 2010 14:21:41 -0700 (PDT)
-Received: by 10.216.47.196 with SMTP id t46mr352209web.13.1284067300912;        Thu, 09 Sep 2010 14:21:40 -0700 (PDT)
-Received: from [192.168.2.99] (cpc2-cmbg8-0-0-cust61.5-4.cable.virginmedia.com [82.6.108.62])        by mx.google.com with ESMTPS id k46sm1202561weq.10.2010.09.09.14.21.39        (version=SSLv3 cipher=RC4-MD5);        Thu, 09 Sep 2010 14:21:39 -0700 (PDT)
-Message-ID: <4C89551E.9040304@gmail.com>
-Date: Thu, 09 Sep 2010 21:21:00 -0000
-From: Dave Korn <dave.korn.cygwin@gmail.com>
-User-Agent: Thunderbird 2.0.0.17 (Windows/20080914)
+Received: from ixqw-mail-out.ixiacom.com (HELO ixqw-mail-out.ixiacom.com) (66.77.12.12)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 09 Sep 2010 23:06:37 +0000
+Received: from [10.64.33.35] (10.64.33.35) by IXCA-HC1.ixiacom.com (10.200.2.55) with Microsoft SMTP Server (TLS) id 8.1.358.0; Thu, 9 Sep 2010 16:06:35 -0700
+Message-ID: <4C89687A.90107@ixiacom.com>
+Date: Thu, 09 Sep 2010 23:06:00 -0000
+From: Earl Chew <echew@ixiacom.com>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.9) Gecko/20100825 Thunderbird/3.1.3
 MIME-Version: 1.0
-To: cygwin-patches@cygwin.com
+To: <cygwin-patches@cygwin.com>
 Subject: Re: Mounting /tmp at TMP or TEMP as a last resort
-References: <4C880761.2030503@ixiacom.com> <4C880DC2.1070706@ixiacom.com> <20100908224108.GB13153@ednor.casa.cgf.cx> <4C893D9C.6040406@gmail.com> <4C894949.4050908@ixiacom.com>
-In-Reply-To: <4C894949.4050908@ixiacom.com>
-Content-Type: text/plain; charset=ISO-8859-1
+References: <4C880761.2030503@ixiacom.com> <4C880DC2.1070706@ixiacom.com> <20100908224108.GB13153@ednor.casa.cgf.cx> <4C893D9C.6040406@gmail.com> <0af101cb5064$386d4cf0$2a0010ac@wirelessworld.airvananet.com>
+In-Reply-To: <0af101cb5064$386d4cf0$2a0010ac@wirelessworld.airvananet.com>
+Content-Type: text/plain; charset="ISO-8859-1"
 Content-Transfer-Encoding: 7bit
 X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
@@ -28,22 +26,61 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2010-q3/txt/msg00046.txt.bz2
+X-SW-Source: 2010-q3/txt/msg00047.txt.bz2
 
-On 09/09/2010 21:53, Earl Chew wrote:
-> On 09/09/2010 1:03 PM, Dave Korn wrote:
->>> but I think we
->>> should keep the parsing of /etc/fstab as lean as possible; 
->>   I don't understand why.  How many times per second does /etc/fstab get parsed?
-> 
-> I interpreted cgf's comment as not wishing to add to the amount of coupling
-> with /etc/fstab.
-> 
-> /etc/fstab is already parsed for /usr/bin and /usr/lib, so in my mind
-> the additional query for /tmp doesn't seem to add significantly.
+On 09/09/2010 2:16 PM, Pierre A. Humblet wrote:
+> So, for example, if the user logs in interactively while a cron job (or another service)
+> is running, /tmp may be mapped differently than if no cron job is running, because
+> TMP may be defined differently in the service environment.
+> That is not desirable.
 
-  Right, in case I wasn't clear, my question was really shorthand for "it
-can't just be a matter of cycle count, so what is the exact problem?"
+I believe that information is kept in Cygwin shared memory regions on a per-user
+basis. I imagine there would other other unwanted side-effects if this were not the
+case.
 
-    cheers,
-      DaveK
+Assuming this to be the case, services running as SYSTEM or another user
+cannot influence the mount decision of /tmp for the current user.
+
+So the only consideration is if there is a service running alongside the
+currently logged in user.
+
+1. /tmp specified in /etc/fstab
+2. /tmp present on filesystem.
+
+   No difference in behaviour with proposed patch in these cases.
+
+3. /tmp not present in either /etc/fstab or filesystem, and no TMP or TEMP
+
+   No /tmp is available. Programs will have manage without it.
+
+4. /tmp not present in either /etc/fstab or filesystem, but either TMP or TEMP present
+
+   Without the patch, this is the same as case (3).
+
+   Settings for TMP or TEMP are injected into the Win32 process via the
+   User Environment Variables:
+
+	http://msdn.microsoft.com/en-us/library/bb776899%28VS.85%29.aspx
+
+   Thus the service-running-as-user and the logged in user would inherit
+   the same values.
+
+
+I can see one way to subvert (4). It is possible for a service to run as
+a plain Win32 process, modify TMP (or TEMP), then launch the first
+Cygwin process which would then mount /tmp at the modified location.
+
+
+A similar scenario could occur the other way around too.
+
+I think these scenarios are not likely to occur often. Usually TMP and TEMP
+are set as User Environment Variables and don't get changed.
+
+
+If it's important to lock down the location of /tmp, then either create /tmp
+in the filesystem or create an entry in /etc/fstab. This is what you're
+required to do in the current implementation anyway because without it, no
+/tmp is made available (and bash will complain, etc).
+
+
+Earl
