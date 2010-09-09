@@ -1,20 +1,22 @@
-Return-Path: <cygwin-patches-return-7082-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 8561 invoked by alias); 9 Sep 2010 16:37:56 -0000
-Received: (qmail 8485 invoked by uid 22791); 9 Sep 2010 16:37:54 -0000
-X-SWARE-Spam-Status: No, hits=-1.1 required=5.0	tests=AWL,BAYES_00,T_RP_MATCHES_RCVD
+Return-Path: <cygwin-patches-return-7083-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 3357 invoked by alias); 9 Sep 2010 19:41:36 -0000
+Received: (qmail 3345 invoked by uid 22791); 9 Sep 2010 19:41:35 -0000
+X-SWARE-Spam-Status: No, hits=-1.8 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,T_TO_NO_BRKTS_FREEMAIL
 X-Spam-Check-By: sourceware.org
-Received: from ixqw-mail-out.ixiacom.com (HELO ixqw-mail-out.ixiacom.com) (66.77.12.12)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 09 Sep 2010 16:37:50 +0000
-Received: from [10.64.33.35] (10.64.33.35) by IXCA-HC1.ixiacom.com (10.200.2.55) with Microsoft SMTP Server (TLS) id 8.1.358.0; Thu, 9 Sep 2010 09:37:48 -0700
-Message-ID: <4C890D5B.9050609@ixiacom.com>
-Date: Thu, 09 Sep 2010 16:37:00 -0000
-From: Earl Chew <echew@ixiacom.com>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; en-GB; rv:1.9.2.9) Gecko/20100825 Thunderbird/3.1.3
+Received: from mail-ey0-f171.google.com (HELO mail-ey0-f171.google.com) (209.85.215.171)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 09 Sep 2010 19:41:30 +0000
+Received: by eyg7 with SMTP id 7so1717527eyg.2        for <cygwin-patches@cygwin.com>; Thu, 09 Sep 2010 12:41:28 -0700 (PDT)
+Received: by 10.216.38.84 with SMTP id z62mr188662wea.70.1284061281608;        Thu, 09 Sep 2010 12:41:21 -0700 (PDT)
+Received: from [192.168.2.99] (cpc2-cmbg8-0-0-cust61.5-4.cable.virginmedia.com [82.6.108.62])        by mx.google.com with ESMTPS id k46sm1125157weq.34.2010.09.09.12.41.20        (version=SSLv3 cipher=RC4-MD5);        Thu, 09 Sep 2010 12:41:20 -0700 (PDT)
+Message-ID: <4C893D9C.6040406@gmail.com>
+Date: Thu, 09 Sep 2010 19:41:00 -0000
+From: Dave Korn <dave.korn.cygwin@gmail.com>
+User-Agent: Thunderbird 2.0.0.17 (Windows/20080914)
 MIME-Version: 1.0
-To: <cygwin-patches@cygwin.com>
+To: cygwin-patches@cygwin.com
 Subject: Re: Mounting /tmp at TMP or TEMP as a last resort
-References: <4C880761.2030503@ixiacom.com> <4C880DC2.1070706@ixiacom.com> <20100908224108.GB13153@ednor.casa.cgf.cx> <4C881565.7050705@ixiacom.com> <20100909075018.GW16534@calimero.vinschen.de>
-In-Reply-To: <20100909075018.GW16534@calimero.vinschen.de>
-Content-Type: text/plain; charset="UTF-8"
+References: <4C880761.2030503@ixiacom.com> <4C880DC2.1070706@ixiacom.com> <20100908224108.GB13153@ednor.casa.cgf.cx>
+In-Reply-To: <20100908224108.GB13153@ednor.casa.cgf.cx>
+Content-Type: text/plain; charset=ISO-8859-1
 Content-Transfer-Encoding: 7bit
 X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
@@ -26,52 +28,17 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2010-q3/txt/msg00042.txt.bz2
+X-SW-Source: 2010-q3/txt/msg00043.txt.bz2
 
-On 09/09/2010 12:50 AM, Corinna Vinschen wrote:
-> Apart from changing /etc/fstab or /etc/fstab.d/$USER by some installer
-> script, why not just add a one-liner profile script along the lines of
-> 
->  /etc/profile.d/tmp-mnt.sh:
-> 
->    mount -f `cygpath -m "${TEMP}"` /tmp
+On 08/09/2010 23:41, Christopher Faylor wrote:
+>  Corinna may disagree,
 
-That's a pretty good idea.
+  Needless to say, I'm not Corinna!
 
-Some differences I can think of:
+> but I think we
+> should keep the parsing of /etc/fstab as lean as possible; 
 
-a. I suspect this will only be executed by an interactive shell (or one
-   with the right triggering command line options).
+  I don't understand why.  How many times per second does /etc/fstab get parsed?
 
-b. Other shells (eg tcsh) might have other ideas.
-
-c. It won't be successful if the first invoked program is not a shell.
-
-
-I also believe that bash(1) complains if /tmp is not available. This
-would occur prior to executing the mount. A minor issue.
-
-
-We've used Cygwin for a long time and haven't had the need to
-use an installer script in the past.
-
-Admittedly issues with the mount table (way back from 19.1!) have
-always caused some difficulty which we've muddled around, but
-the recent behaviour with the automounting of /usr/bin and /usr/lib
-with respect to the installation root is a great innovation which
-has made all those problems simply go away.
-
-
-Given that TMP and TEMP are standard Windows environment variables:
-
-	http://technet.microsoft.com/en-us/library/ee156595.aspx
-
-it seemed reasonable to have /tmp be equivalent as a default case.
-
-
-This approach has a side-effect of personalizing the location
-of temporary files because each user has a different setting for
-TMP (and TEMP).
-
-
-Earl
+    cheers,
+      DaveK
