@@ -1,21 +1,21 @@
-Return-Path: <cygwin-patches-return-7111-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 15231 invoked by alias); 22 Sep 2010 05:46:10 -0000
-Received: (qmail 15219 invoked by uid 22791); 22 Sep 2010 05:46:08 -0000
-X-SWARE-Spam-Status: No, hits=0.5 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,T_TO_NO_BRKTS_FREEMAIL
+Return-Path: <cygwin-patches-return-7112-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 16202 invoked by alias); 22 Sep 2010 05:50:35 -0000
+Received: (qmail 16188 invoked by uid 22791); 22 Sep 2010 05:50:32 -0000
+X-SWARE-Spam-Status: No, hits=0.5 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,TW_GF,TW_HG,T_TO_NO_BRKTS_FREEMAIL
 X-Spam-Check-By: sourceware.org
-Received: from mail-fx0-f43.google.com (HELO mail-fx0-f43.google.com) (209.85.161.43)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 22 Sep 2010 05:46:04 +0000
-Received: by fxm7 with SMTP id 7so180788fxm.2        for <cygwin-patches@cygwin.com>; Tue, 21 Sep 2010 22:46:02 -0700 (PDT)
-Received: by 10.223.105.144 with SMTP id t16mr5371381fao.9.1285134361787;        Tue, 21 Sep 2010 22:46:01 -0700 (PDT)
-Received: from [10.71.1.25] (wall-ext.hola.org [212.235.66.73])        by mx.google.com with ESMTPS id c20sm4038354fak.33.2010.09.21.22.45.59        (version=SSLv3 cipher=RC4-MD5);        Tue, 21 Sep 2010 22:46:00 -0700 (PDT)
-Message-ID: <4C99980F.5010202@gmail.com>
-Date: Wed, 22 Sep 2010 05:46:00 -0000
+Received: from mail-fx0-f43.google.com (HELO mail-fx0-f43.google.com) (209.85.161.43)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 22 Sep 2010 05:50:26 +0000
+Received: by fxm7 with SMTP id 7so182700fxm.2        for <cygwin-patches@cygwin.com>; Tue, 21 Sep 2010 22:50:24 -0700 (PDT)
+Received: by 10.223.113.71 with SMTP id z7mr4905429fap.3.1285134624336;        Tue, 21 Sep 2010 22:50:24 -0700 (PDT)
+Received: from [10.71.1.25] (wall-ext.hola.org [212.235.66.73])        by mx.google.com with ESMTPS id k25sm4039724fac.17.2010.09.21.22.50.22        (version=SSLv3 cipher=RC4-MD5);        Tue, 21 Sep 2010 22:50:23 -0700 (PDT)
+Message-ID: <4C999916.7080609@gmail.com>
+Date: Wed, 22 Sep 2010 05:50:00 -0000
 From: Yoni Londner <yonihola2@gmail.com>
 User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1.12) Gecko/20100914 Thunderbird/3.0.8
 MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
 Subject: Re: Cygwin Filesystem Performance degradation 1.7.5 vs 1.7.7, and methods for improving performance
-References: <4C84B9EF.9030109@gmail.com> <20100906132409.GB14327@calimero.vinschen.de> <20100910150840.GD16534@calimero.vinschen.de> <20100910172312.GA23015@ednor.casa.cgf.cx> <20100910183940.GA14132@calimero.vinschen.de> <4C8C9408.3060304@gmail.com> <20100912114115.GA1113@calimero.vinschen.de> <4C8E0AC7.9080409@gmail.com> <20100914100533.GC15121@calimero.vinschen.de>
-In-Reply-To: <20100914100533.GC15121@calimero.vinschen.de>
+References: <4C84B9EF.9030109@gmail.com> <20100906132409.GB14327@calimero.vinschen.de> <4C8E0EED.4000606@gmail.com> <20100914093859.GB15121@calimero.vinschen.de>
+In-Reply-To: <20100914093859.GB15121@calimero.vinschen.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-IsSubscribed: yes
@@ -28,101 +28,86 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2010-q3/txt/msg00071.txt.bz2
+X-SW-Source: 2010-q3/txt/msg00072.txt.bz2
 
 Hi,
 
- > There's also the problem of handling NFS shares.  However, I just had an
- > idea how to speed up symlink_info::check without neglecting NFS shares.
- > This will take some time, though since it turns a lot of code upside
- > down.  Stay tuned.
+ > I'm not exactly concerned about Linux being way faster accessing an NTFS
+ > drive.  After all it's the OS itself and comes with it's own NTFS driver
+ > which obviously is streamlined for typical POSIX operations.
 
-This sounds great! Cygwin filesystem performance is a very important 
-issue, and any improvement is more than welcome!
+I did not test & compare to using the Linux NTFS, rather I compared with 
+Linux on VMWARE using the same Windows NTFS.SYS (via the same 
+kernel32.dll APIs):
 
- > I don't understand how you think this should work.  The filter expression
- > given to NtQueryDirectoryFile is either a constant string and has to 
-match
- > the filename exactly, or it contains wildcards.  This is documented
- > behaviour: 
-http://msdn.microsoft.com/en-us/library/ff567047%28VS.85%29.aspx
- > So, "foo" works, "foo*" works, but a list like "foo foo.exe foo.lnk"
- > does not.
+Cygwin: "C:/cygwin/bin/ls.exe /bin" -> cygwin1.dll -> kernel32.dll -> 
+NTOS kernel -> NTFS.SYS driver -> HD
 
-There are two options for stat() and other places the need file info 
-(such as check_symlink):
+linux: "/bin/ls /mnt/hgfs/C/cygwin/bin" -> glibc -> linux kernel -> 
+VMWARE hgfs driver -> vmware_player.exe (on Win32) ->  kernel32.dll -> 
+NTOS kernel -> NTFS.SYS driver -> HD
 
-1) CreateFile(the_dir), then NtQueryDirectoryFile("foo*") and retrieve 
-all the info (including the hardlink), filter out the results in 
-user-mode ("foo", "foo.exe", "foo.lnk"), and then call CloseHandle().
+As you can see the VMWARE path is much longer than Cygwin, and it passes 
+the same APIs and NTFS.SYS driver, and yet it executes much faster.
 
-2) CreateFile(the_dir), NtQueryDirectoryFile("foo"), 
-NtQueryDirectoryFile("foo.exe"), NtQueryDirectoryFile("foo.lnk"), 
-CloseHandle(). The calls to NtQueryDirectoryFile() should be with 
-RestartScan=1, so that the the_dir handle can be reused. Also 
-ReturnSingleEntry=1 can be set to improve performance.
-
-This is instead what is done today in cygwin:
-3) CreateFile("foo"), NtQueryFileInformation(), CloseHandle() (and 
-repeat this for "foo.exe" and "foo.lnk")
-
-I did some performance tests comparing #1 #2 and #3.
-
-I found out that #1 and #2 are both around 10x to 100x (!!!) times 
-faster than #3.
-
-I checked out why, and found out that #1 and #2 don't modify the access 
-time of the file, whereas #3 does. This already immediately causes a 
-huge performance penalty (and it is also not according to the posix 
-standard: stat("foo") should not update atime of "foo").
-Another reason is that the kernel NTFS driver performs automatically 
-read-ahead of the file, thus just stat("foo") (which calls 
-CreateFile("foo") in #3) causes the first 64k of "foo" to be read from 
-the disk - slowing down performance tremendously. Think of "ls /bin" 
-with 3500 files: NTFS reads the first 64K of all the 3500 files! no 
-wonder it takes so long...
-And yet another reason why #3 is way slower than #1 and #2 is the 
-anti-viruses: Nearly all Windows users install an AV (or use Win7 MS 
-AV). These trap and monitor all CreateFile() to regular files (not to 
-directory files). Therefore CreateFile() to a regular file can take a 
-lot lot longer than CreateFile() to a directory.
-
-I would suggest using #2 over #1, since its simpler code-wise, and I did 
-not see any serious performance difference between the two.
+This helps us understand that there is a lot that still can be done in 
+Cygwin's filesystem performance.
 
 Yoni
 
 
-On 14/9/2010 12:05 PM, Corinna Vinschen wrote:
-> On Sep 13 13:28, Yoni Londner wrote:
+On 14/9/2010 11:38 AM, Corinna Vinschen wrote:
+> On Sep 13 13:45, Yoni Londner wrote:
 >> Hi,
 >>
->>> However, isn't that kind of a chicken/egg situation?  If you want to
->>> reuse the content of the FILE_BOTH{_ID}_DIRECTORY_INFORMATION structure
->>> from a previous call to readdir, you would have to call the
+>>>> Abstract: I prepared a patch that improves Cygwin Filesystem
+>>>> performance by x4 on Cygwin 1.7.5 (1.7.5 vanilla 530ms -->   1.7.5
+>>>> patched 120ms). I ported the patch to 1.7.7, did tests, and found
+>>>> out that 1.7.7 had a very serious 9x (!) performance degradation
+>>>> from 1.7.5 (1.7.5 vanilla 530ms -->   1.7.7 vanilla 3900ms -->   1.7.7
+>>>> patched 3500ms), which does makes this patch useless until the
+>>>> performance degradation is fixed.
+>>>
+>>> The problem is, I can't reproduce such a degradation.  If I run sometimg
+>>> like `time ls -l /bin>   /dev/null', the times are very slightly better
+>>> with 1.7.7 than with 1.7.5 (without caching effect 1200ms vs. 1500ms,
+>>> with caching effect 500ms vs. 620ms on average).  Starting with 1.7.6,
+>>> Cygwin reused handles from symlink_info::check in stat() and other
+>>> syscalls.  If there is such degradation under some circumstances, I need
+>>> a reproducible scenario, or at least some strace output which shows at
+>>> which point this happens.  Apart from actual patches this should be
+>>> discussed on the cygwin-developer list.
+>>>
 >>
->> I am not talking about reusing info from a previous readdir.
+>> First of all, even your results of 1200-1500ms (1st time) and
+>> 500-600ms (2nd time) is still way way way too long. On linux with an
+>> NTFS mount of C:/cygwin, this took<2ms!
 >>
->> Every single file cygwin tries to access, it does it in a loop,
->> trying afterwards to check for *.lnk file.
+>> And even on Win32 CMD.EXE this same operation will take you less
+>> than 100ms. which is 5x to 10x faster.
 >>
->> Using the directory query operations, it is possible to get this
->> info faster:
->> instead of getting file info for FOO and then for "FOO.lnk",
->> Cygwin can query the directory info for "FOO FOO.LNK" (for the file
->> requested, plus its possible symlink file).
+>> The main reason for the difference: the Windows CMD.EXE does not
+>> open file handles, which make the NTFS file system to actually go
+>> and read each file's first 16KB of contents (even though you did not
+>> ask for it!).
 >
-> I don't understand how you think this should work.  The filter expression
-> given to NtQueryDirectoryFile is either a constant string and has to match
-> the filename exactly, or it contains wildcards.  This is documented
-> behaviour: http://msdn.microsoft.com/en-us/library/ff567047%28VS.85%29.aspx
-> So, "foo" works, "foo*" works, but a list like "foo foo.exe foo.lnk"
-> does not.
+> I'm not exactly concerned about Linux being way faster accessing an NTFS
+> drive.  After all it's the OS itself and comes with it's own NTFS driver
+> which obviously is streamlined for typical POSIX operations.
 >
-> There's also the problem of handling NFS shares.  However, I just had an
-> idea how to speed up symlink_info::check without neglecting NFS shares.
-> This will take some time, though since it turns a lot of code upside
-> down.  Stay tuned.
+> And then there's Win32 which can go through a dir much faster as well,
+> since it doesn't have to care for POSIX compatibility of the result, and
+> the OS function calls coincidentally match what a cmd "dir" call needs.
+>
+> If you're looking for a fair comparision, why don't you look for
+> Interix?  I did, and what I see is pretty much the same thing we do in
+> Cygwin.  Actually, with the last Cygwin from CVS an ls -lR on a
+> non-marginal directory tree is already faster than the same operation
+> under Interix.
+>
+> That doesn't mean I won't look for more ways to enhance Cygwin's
+> performance, but it won't be by adding CYGWIN environment switches
+> or by neglecting correct information in stat.
 >
 >
 > Corinna
