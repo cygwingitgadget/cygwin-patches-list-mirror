@@ -1,21 +1,22 @@
-Return-Path: <cygwin-patches-return-7114-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 21735 invoked by alias); 22 Sep 2010 09:59:35 -0000
-Received: (qmail 21655 invoked by uid 22791); 22 Sep 2010 09:59:15 -0000
+Return-Path: <cygwin-patches-return-7115-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 32386 invoked by alias); 22 Sep 2010 13:44:35 -0000
+Received: (qmail 32366 invoked by uid 22791); 22 Sep 2010 13:44:24 -0000
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Wed, 22 Sep 2010 09:59:09 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 8F6D16D416D; Wed, 22 Sep 2010 11:59:06 +0200 (CEST)
-Date: Wed, 22 Sep 2010 09:59:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Received: from pool-98-110-186-10.bstnma.fios.verizon.net (HELO cgf.cx) (98.110.186.10)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Wed, 22 Sep 2010 13:44:14 +0000
+Received: from ednor.cgf.cx (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id 908C613C061	for <cygwin-patches@cygwin.com>; Wed, 22 Sep 2010 09:44:12 -0400 (EDT)
+Received: by ednor.cgf.cx (Postfix, from userid 201)	id 825192B352; Wed, 22 Sep 2010 09:44:12 -0400 (EDT)
+Date: Wed, 22 Sep 2010 13:44:00 -0000
+From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: Cygwin Filesystem Performance degradation 1.7.5 vs 1.7.7, and methods for improving performance
-Message-ID: <20100922095906.GG13235@calimero.vinschen.de>
+Message-ID: <20100922134412.GA4817@ednor.casa.cgf.cx>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20100906132409.GB14327@calimero.vinschen.de> <20100910150840.GD16534@calimero.vinschen.de> <20100910172312.GA23015@ednor.casa.cgf.cx> <20100910183940.GA14132@calimero.vinschen.de> <4C8C9408.3060304@gmail.com> <20100912114115.GA1113@calimero.vinschen.de> <4C8E0AC7.9080409@gmail.com> <20100914100533.GC15121@calimero.vinschen.de> <4C99980F.5010202@gmail.com> <20100922093208.GF13235@calimero.vinschen.de>
+References: <4C84B9EF.9030109@gmail.com> <20100906132409.GB14327@calimero.vinschen.de> <4C8E0EED.4000606@gmail.com> <20100914093859.GB15121@calimero.vinschen.de> <4C999916.7080609@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20100922093208.GF13235@calimero.vinschen.de>
+In-Reply-To: <4C999916.7080609@gmail.com>
 User-Agent: Mutt/1.5.20 (2009-06-14)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -26,37 +27,32 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2010-q3/txt/msg00074.txt.bz2
+X-SW-Source: 2010-q3/txt/msg00075.txt.bz2
 
-On Sep 22 11:32, Corinna Vinschen wrote:
-> On Sep 22 07:45, Yoni Londner wrote:
-> > I checked out why, and found out that #1 and #2 don't modify the
-> > access time of the file, whereas #3 does. This already immediately
-> 
-> I just checked this and I can't see that it does.  If it would do
-> so, shouldn't the access time be different every time I call stat?
-> 
->   $ stat foo | grep 'Access: [0-9]'
->   Access: 2010-09-09 16:27:20.769055700 +0200
->   $ stat foo | grep 'Access: [0-9]'
->   Access: 2010-09-09 16:27:20.769055700 +0200
->   $ stat foo | grep 'Access: [0-9]'
->   Access: 2010-09-09 16:27:20.769055700 +0200
-> 
-> I tried it on Windows XP SP3 and Windows 7.
+On Wed, Sep 22, 2010 at 07:50:14AM +0200, Yoni Londner wrote:
+>Hi,
+>
+> > I'm not exactly concerned about Linux being way faster accessing an NTFS
+> > drive.  After all it's the OS itself and comes with it's own NTFS driver
+> > which obviously is streamlined for typical POSIX operations.
+>
+>I did not test & compare to using the Linux NTFS, rather I compared with 
+>Linux on VMWARE using the same Windows NTFS.SYS (via the same 
+>kernel32.dll APIs):
+>
+>Cygwin: "C:/cygwin/bin/ls.exe /bin" -> cygwin1.dll -> kernel32.dll -> 
+>NTOS kernel -> NTFS.SYS driver -> HD
+>
+>linux: "/bin/ls /mnt/hgfs/C/cygwin/bin" -> glibc -> linux kernel -> 
+>VMWARE hgfs driver -> vmware_player.exe (on Win32) ->  kernel32.dll -> 
+>NTOS kernel -> NTFS.SYS driver -> HD
+>
+>As you can see the VMWARE path is much longer than Cygwin, and it passes 
+>the same APIs and NTFS.SYS driver, and yet it executes much faster.
+>
+>This helps us understand that there is a lot that still can be done in 
+>Cygwin's filesystem performance.
 
-Did you test this on a "noacl" mount, or on a filesystem which doesn't
-keep permissions, like FAT?  If so, then I know what happens.  This is
-the executable test in fhandler_base::fstat_helper.  It reads the first
-two bytes from the file to identify executables by their magic number.
-This is especially done to identify shell scripts by their "#!" magic,
-so that they are marked as executable in st_mode.  You can switch this
-off by specifing the "exec" or "notexec" mount options.
+What is /mnt/hgfs/C in this case?  How is it mounted?
 
-
-Corinna
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+cgf
