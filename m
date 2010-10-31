@@ -1,23 +1,22 @@
-Return-Path: <cygwin-patches-return-7126-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 943 invoked by alias); 18 Oct 2010 15:15:56 -0000
-Received: (qmail 855 invoked by uid 22791); 18 Oct 2010 15:15:37 -0000
+Return-Path: <cygwin-patches-return-7127-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 15493 invoked by alias); 31 Oct 2010 00:37:44 -0000
+Received: (qmail 15475 invoked by uid 22791); 31 Oct 2010 00:37:43 -0000
+X-SWARE-Spam-Status: No, hits=-2.0 required=5.0	tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,T_TO_NO_BRKTS_FREEMAIL
 X-Spam-Check-By: sourceware.org
-Received: from pool-98-110-186-10.bstnma.fios.verizon.net (HELO cgf.cx) (98.110.186.10)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Mon, 18 Oct 2010 15:15:31 +0000
-Received: from ednor.cgf.cx (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id 1134A13C061	for <cygwin-patches@cygwin.com>; Mon, 18 Oct 2010 11:15:30 -0400 (EDT)
-Received: by ednor.cgf.cx (Postfix, from userid 201)	id 0F5A32B352; Mon, 18 Oct 2010 11:15:30 -0400 (EDT)
-Date: Mon, 18 Oct 2010 15:15:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
+Received: from mail-ey0-f171.google.com (HELO mail-ey0-f171.google.com) (209.85.215.171)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sun, 31 Oct 2010 00:37:37 +0000
+Received: by eyg5 with SMTP id 5so2691218eyg.2        for <cygwin-patches@cygwin.com>; Sat, 30 Oct 2010 17:37:35 -0700 (PDT)
+Received: by 10.213.34.9 with SMTP id j9mr949712ebd.75.1288485455061;        Sat, 30 Oct 2010 17:37:35 -0700 (PDT)
+Received: from localhost (ppp85-141-233-145.pppoe.mtu-net.ru [85.141.233.145])        by mx.google.com with ESMTPS id v56sm2948271eeh.14.2010.10.30.17.37.33        (version=TLSv1/SSLv3 cipher=RC4-MD5);        Sat, 30 Oct 2010 17:37:34 -0700 (PDT)
+Date: Sun, 31 Oct 2010 00:37:00 -0000
+From: Dmitry Potapov <dpotapov@gmail.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: missing math functions
-Message-ID: <20101018151529.GA14912@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <282260.35125.qm@web25501.mail.ukl.yahoo.com>
+Subject: "regtool -m set" writes 2 extra bytes at the end
+Message-ID: <20101031003731.GA30070@dpotapov.dyndns.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <282260.35125.qm@web25501.mail.ukl.yahoo.com>
 User-Agent: Mutt/1.5.20 (2009-06-14)
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -27,34 +26,45 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2010-q4/txt/msg00005.txt.bz2
+X-SW-Source: 2010-q4/txt/msg00006.txt.bz2
 
-On Mon, Oct 18, 2010 at 04:07:59PM +0100, Marco Atzeri wrote:
->llround and llroundf are available in newlib but not
->exported in cygwin.
->
->http://www.cygwin.com/ml/cygwin/2010-10/msg00351.html
->
->simple path attached to solve the problem.
->
->changelog:
->
->*       winsup/cygwin/cygwin.din : added llround and llroundf
->
->--- src/winsup/cygwin/cygwin.din	2010-10-08 20:25:00.875000000 +0200
->+++ src_new/winsup/cygwin/cygwin.din	2010-10-18 14:31:36.453125000 +0200
->@@ -960,6 +960,8 @@
-> llrint = _f_llrint NOSIGFE
-> llrintf = _f_llrintf NOSIGFE
-> llrintl = _f_llrintl NOSIGFE
->+llround NOSIGFE
->+llroundf NOSIGFE
-> __locale_mb_cur_max NOSIGFE
-> localeconv NOSIGFE
-> _localeconv = localeconv NOSIGFE
+Hi,
 
-Applied with a tweaked ChangeLog.
+The easiest way to demonstrate the problem is to run the following shell
+script:
 
-Thanks again for the patch.
+---- >8 ---
+regtool -m set /HKEY_LOCAL_MACHINE/SOFTWARE/Test 1234
+expected="31 00 32 00 33 00 34 00 00 00 00 00"
+actual="`regtool get -b /HKEY_LOCAL_MACHINE/SOFTWARE/Test`"
 
-cgf
+if [ "$actual" != "$expected" ]; then
+	echo FAILED
+else
+	echo OK
+fi
+---- >8 ---
+
+The patch is below.
+
+--- >8 ---
+Index: regtool.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/utils/regtool.cc,v
+retrieving revision 1.30
+diff -u -r1.30 regtool.cc
+--- regtool.cc	28 Aug 2010 11:22:37 -0000	1.30
++++ regtool.cc	30 Oct 2010 22:56:47 -0000
+@@ -711,7 +711,7 @@
+ 	n += mbstowcs ((wchar_t *) data + n, argv[i], max_n - n) + 1;
+       ((wchar_t *)data)[n] = L'\0';
+       rv = RegSetValueExW (key, value, 0, REG_MULTI_SZ, (const BYTE *) data,
+-			   (max_n + 1) * sizeof (wchar_t));
++			   (n + 1) * sizeof (wchar_t));
+       break;
+     case REG_AUTO:
+       rv = ERROR_SUCCESS;
+--- >8 ---
+
+
+Dmitry
