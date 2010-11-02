@@ -1,13 +1,13 @@
-Return-Path: <cygwin-patches-return-7129-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 1064 invoked by alias); 31 Oct 2010 07:01:26 -0000
-Received: (qmail 1041 invoked by uid 22791); 31 Oct 2010 07:01:23 -0000
-X-SWARE-Spam-Status: No, hits=-1.9 required=5.0	tests=BAYES_00,T_RP_MATCHES_RCVD
+Return-Path: <cygwin-patches-return-7130-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 1964 invoked by alias); 31 Oct 2010 07:46:48 -0000
+Received: (qmail 1952 invoked by uid 22791); 31 Oct 2010 07:46:47 -0000
+X-SWARE-Spam-Status: No, hits=-1.9 required=5.0	tests=AWL,BAYES_00,T_RP_MATCHES_RCVD
 X-Spam-Check-By: sourceware.org
-Received: from mail.lysator.liu.se (HELO mail.lysator.liu.se) (130.236.254.3)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sun, 31 Oct 2010 04:56:04 +0000
+Received: from mail.lysator.liu.se (HELO mail.lysator.liu.se) (130.236.254.3)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sun, 31 Oct 2010 07:46:43 +0000
 Received: from mail.lysator.liu.se (localhost [127.0.0.1])	by mail.lysator.liu.se (Postfix) with ESMTP id 85CB64000B	for <cygwin-patches@cygwin.com>; Sun, 31 Oct 2010 05:56:00 +0100 (CET)
 Received: from [192.168.0.33] (h57n3fls301o1095.telia.com [81.230.178.57])	(using TLSv1 with cipher AES256-SHA (256/256 bits))	(No client certificate requested)	by mail.lysator.liu.se (Postfix) with ESMTP id 600C940003	for <cygwin-patches@cygwin.com>; Sun, 31 Oct 2010 05:56:00 +0100 (CET)
 Message-ID: <4CCCF6DF.5000902@lysator.liu.se>
-Date: Sun, 31 Oct 2010 07:01:00 -0000
+Date: Tue, 02 Nov 2010 17:06:00 -0000
 From: Peter Rosin <peda@lysator.liu.se>
 User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.12) Gecko/20101027 Thunderbird/3.1.6
 MIME-Version: 1.0
@@ -27,7 +27,8 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2010-q4/txt/msg00008.txt.bz2
+X-SW-Source: 2010-q4/txt/msg00009.txt.bz2
+Message-ID: <20101102170600.ZqOGc4KinhEjXw4z88kXrv-JBERCcntB3-z9U4_H0xg@z>
 
 Den 2010-10-31 02:42 skrev Christopher Faylor:
 > [Apologies for previously sending this as private email.  Don't know how
