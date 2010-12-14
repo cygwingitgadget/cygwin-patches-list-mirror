@@ -1,20 +1,22 @@
-Return-Path: <cygwin-patches-return-7137-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 32343 invoked by alias); 10 Dec 2010 22:05:28 -0000
-Received: (qmail 32328 invoked by uid 22791); 10 Dec 2010 22:05:26 -0000
-X-SWARE-Spam-Status: No, hits=0.5 required=5.0	tests=AWL,BAYES_50,RCVD_IN_DNSWL_NONE,T_RP_MATCHES_RCVD,UNPARSEABLE_RELAY
+Return-Path: <cygwin-patches-return-7138-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 19088 invoked by alias); 11 Dec 2010 20:47:16 -0000
+Received: (qmail 19041 invoked by uid 22791); 11 Dec 2010 20:47:03 -0000
 X-Spam-Check-By: sourceware.org
-Received: from mailout09.t-online.de (HELO mailout09.t-online.de) (194.25.134.84)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 10 Dec 2010 22:05:20 +0000
-Received: from fwd09.aul.t-online.de (fwd09.aul.t-online.de )	by mailout09.t-online.de with smtp 	id 1PRB5Y-0000w5-JV; Fri, 10 Dec 2010 23:05:16 +0100
-Received: from [192.168.2.100] (T58JvgZLwhjkDpomU0+OOjCMQbwWD6SquLCZyZJSNQPuWlyYIjJWiLo0TYnNQ1xQO8@[79.224.122.47]) by fwd09.aul.t-online.de	with esmtp id 1PRB5Y-1u3krg0; Fri, 10 Dec 2010 23:05:16 +0100
-Message-ID: <4D02A41C.8030406@t-online.de>
-Date: Sat, 11 Dec 2010 20:47:00 -0000
-From: Christian Franke <Christian.Franke@t-online.de>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1.15) Gecko/20101027 SeaMonkey/2.0.10
-MIME-Version: 1.0
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Sat, 11 Dec 2010 20:46:57 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 631C76D435B; Sat, 11 Dec 2010 21:46:54 +0100 (CET)
+Date: Tue, 14 Dec 2010 21:23:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Ensure that the default ACL contains the standard entries
-Content-Type: multipart/mixed; boundary="------------080406010901010300040109"
-X-IsSubscribed: yes
+Subject: Re: [PATCH] Ensure that the default ACL contains the standard entries
+Message-ID: <20101211204653.GA26611@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <4D02A41C.8030406@t-online.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <4D02A41C.8030406@t-online.de>
+User-Agent: Mutt/1.5.20 (2009-06-14)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -24,103 +26,112 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2010-q4/txt/msg00016.txt.bz2
+X-SW-Source: 2010-q4/txt/msg00017.txt.bz2
 
-This is a multi-part message in MIME format.
---------------080406010901010300040109
-Content-Type: text/plain; charset=ISO-8859-1; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-length: 390
+Hi Christian,
 
-The ACL from Cygwin always contains the three (USER|GROUP|OTHER)_OBJ 
-entries. It might be existing practice elsewhere to return these entries 
-also in the default ACL. The attached patch adds these entries with 
-empty permissions if necessary.
+On Dec 10 23:05, Christian Franke wrote:
+> The ACL from Cygwin always contains the three (USER|GROUP|OTHER)_OBJ
+> entries. It might be existing practice elsewhere to return these
+> entries also in the default ACL. The attached patch adds these
+> entries with empty permissions if necessary.
+> 
+> The patch would fix this rsync issue:
+> http://cygwin.com/ml/cygwin/2010-11/msg00429.html
+> 
+> The logic for DEF_CLASS_OBJ is unchanged.
 
-The patch would fix this rsync issue: 
-http://cygwin.com/ml/cygwin/2010-11/msg00429.html
+Thanks for the patch.  There are two problem with it, unfortunately.
+Consider the setfacl tool.  The -m option basically works like this:
 
-The logic for DEF_CLASS_OBJ is unchanged.
+  acl (path, GETACL);
+  modify_acl ();
+  acl (path, SETACL);
 
-Christian
+Now, what happens with your patch is this.  Let's assume I add a
+single default entry:
+
+  $ getfacl dir
+  [...]
+  user::rwx
+  group::r-x
+  mask::rwx
+  other::r-x
+  $ setfacl -m d:u:corinna:rwx dir
+  [...]
+  user::rwx
+  group::r-x
+  mask::rwx
+  other::r-x
+  default:user::---
+  default:user:corinna:rwx
+  default:group::---
+  default:mask::rwx
+  default:other::---
+
+This looks good, except that the faked default entries for group and
+other are set to 0.  That's rather unexpected.  Actually, by default the
+default entries should reflect the standard permission bits.  At least
+that's what happens in the above example on Linux (I tried with
+different values for the permission bits):
+
+  $ setfacl -m d:u:corinna:rwx dir
+  [...]
+  user::rwx
+  group::r-x
+  mask::rwx
+  other::r-x
+  default:user::rwx
+  default:user:corinna:rwx
+  default:group::r-x
+  default:mask::rwx
+  default:other::r-x
+
+This is rather easy to fix (and you added comments in that place), but
+here comes problem #2.  In reality, the Windows ACL does not contain any
+default entries except for the default entry for user corinna:
+
+  $ icacls dir
+  c:\cygwin\home\corinna\dir VINSCHEN\corinna:(F)
+			     VINSCHEN\vinschen:(RX)
+			     Everyone:(RX)
+			     VINSCHEN\corinna:(OI)(CI)(IO)(RX,W,DC)
+
+Ok, but, what happens if I call setfacl again?  The first call to acl
+in setfacl returns the faked default entries.  So, after modifying the
+acl according to the command line, the SETACL call now still contains
+the faked acl entry.  Which means, they are now written back to the
+dir's ACL.  Just call setfacl with the same command line again:
+
+  $ setfacl -m d:u:corinna:rwx dir
+  $ icacls dir
+  c:\cygwin\home\corinna\tmp VINSCHEN\corinna:(F)
+			     VINSCHEN\vinschen:(RX)
+			     Everyone:(RX)
+			     CREATOR OWNER:(OI)(CI)(IO)(D,Rc,WDAC,WO,RA,WA)
+			     VINSCHEN\corinna:(OI)(CI)(IO)(RX,W,DC)
+			     CREATOR GROUP:(OI)(CI)(IO)(Rc,RA)
+			     Everyone:(OI)(CI)(IO)(Rc,RA)
+
+Even though nothing has changed, the ACL is now different since it
+actually reflects the so far faked default entries.  I'm not sure if
+that's feasible behaviour.  Besides, due to the faked default entries
+defaulting to 0 permissions, subsequently created files in that
+directory will have 000 permissions by default.  Uh oh.
+
+I'm not entirely sure yet, but maybe the acl function should not
+fake these default entries.  From my POV it seems a better approach
+if acl(SETACL) actually creates these entries if *any* default entry
+is in the incoming acl.  And, it should create these entries with
+useful permission values.  This seems to reflect the Linux behaviour
+much closer.  What do you think?  Would you implement this?
+
+Btw., while testing your patch I found a bug in setfacl which disallowed
+to delete user/group-specific default entries.  I opted for rewriting the
+function which examines an incoming acl entry (getaclentry).  Would you
+mind to test this bit, too?  The new code accepts a trailing colon, but
+I think that's ok.  The SGI setfacl tool used on Linux is even more
+relaxed syntax-wise and also accepts trailing colons.
 
 
---------------080406010901010300040109
-Content-Type: text/x-diff;
- name="sec_acl-default.patch"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="sec_acl-default.patch"
-Content-length: 2320
-
-2010-12-10  Christian Franke  <franke@computer.org>
-
-	* sec_acl.cc (getacl): Ensure that the default acl contains
-	at least DEF_(USER|GROUP|OTHER)_OBJ entries.
-
-
-diff --git a/winsup/cygwin/sec_acl.cc b/winsup/cygwin/sec_acl.cc
-index 24f2468..34424a8 100644
---- a/winsup/cygwin/sec_acl.cc
-+++ b/winsup/cygwin/sec_acl.cc
-@@ -357,11 +357,13 @@ getacl (HANDLE handle, path_conv &pc, int nentries, __aclent32_t *aclbufp)
- 	  else if (ace_sid == well_known_creator_group_sid)
- 	    {
- 	      type = GROUP_OBJ | ACL_DEFAULT;
-+	      types_def |= type;
- 	      id = ILLEGAL_GID;
- 	    }
- 	  else if (ace_sid == well_known_creator_owner_sid)
- 	    {
- 	      type = USER_OBJ | ACL_DEFAULT;
-+	      types_def |= type;
- 	      id = ILLEGAL_GID;
- 	    }
- 	  else
-@@ -388,13 +390,38 @@ getacl (HANDLE handle, path_conv &pc, int nentries, __aclent32_t *aclbufp)
- 		getace (lacl[pos], type, id, ace->Mask, ace->Header.AceType);
- 	    }
- 	}
--      /* Include DEF_CLASS_OBJ if any default ace exists */
--      if ((types_def & (USER|GROUP))
--	  && ((pos = searchace (lacl, MAX_ACL_ENTRIES, DEF_CLASS_OBJ)) >= 0))
-+      if (types_def && (pos = searchace (lacl, MAX_ACL_ENTRIES, 0)) >= 0)
- 	{
--	  lacl[pos].a_type = DEF_CLASS_OBJ;
--	  lacl[pos].a_id = ILLEGAL_GID;
--	  lacl[pos].a_perm = S_IROTH | S_IWOTH | S_IXOTH;
-+	  /* Ensure that the default acl contains at
-+	     least DEF_(USER|GROUP|OTHER)_OBJ entries.  */
-+	  if (!(types_def & USER_OBJ))
-+	    {
-+	      lacl[pos].a_type = DEF_USER_OBJ;
-+	      lacl[pos].a_id = uid;
-+	      /* lacl[pos].a_perm = 0; */
-+	      pos++;
-+	    }
-+	  if (!(types_def & GROUP_OBJ) && pos < MAX_ACL_ENTRIES)
-+	    {
-+	      lacl[pos].a_type = DEF_GROUP_OBJ;
-+	      lacl[pos].a_id = gid;
-+	      /* lacl[pos].a_perm = 0; */
-+	      pos++;
-+	    }
-+	  if (!(types_def & OTHER_OBJ) && pos < MAX_ACL_ENTRIES)
-+	    {
-+	      lacl[pos].a_type = DEF_OTHER_OBJ;
-+	      lacl[pos].a_id = ILLEGAL_GID;
-+	      /* lacl[pos].a_perm = 0; */
-+	      pos++;
-+	    }
-+	  /* Include DEF_CLASS_OBJ if any named default ace exists.  */
-+	  if ((types_def & (USER|GROUP)) && pos < MAX_ACL_ENTRIES)
-+	    {
-+	      lacl[pos].a_type = DEF_CLASS_OBJ;
-+	      lacl[pos].a_id = ILLEGAL_GID;
-+	      lacl[pos].a_perm = S_IROTH | S_IWOTH | S_IXOTH;
-+	    }
- 	}
-     }
-   if ((pos = searchace (lacl, MAX_ACL_ENTRIES, 0)) < 0)
-
---------------080406010901010300040109--
+Corinna
