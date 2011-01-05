@@ -1,22 +1,18 @@
-Return-Path: <cygwin-patches-return-7143-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 13519 invoked by alias); 20 Dec 2010 21:33:41 -0000
-Received: (qmail 13501 invoked by uid 22791); 20 Dec 2010 21:33:38 -0000
-X-SWARE-Spam-Status: No, hits=-1.1 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,T_RP_MATCHES_RCVD,UNPARSEABLE_RELAY
+Return-Path: <cygwin-patches-return-7145-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 17526 invoked by alias); 5 Jan 2011 19:50:42 -0000
+Received: (qmail 17503 invoked by uid 22791); 5 Jan 2011 19:50:41 -0000
+X-SWARE-Spam-Status: No, hits=-2.6 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_LOW,TW_YG
 X-Spam-Check-By: sourceware.org
-Received: from mailout01.t-online.de (HELO mailout01.t-online.de) (194.25.134.80)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 20 Dec 2010 21:33:32 +0000
-Received: from fwd09.aul.t-online.de (fwd09.aul.t-online.de )	by mailout01.t-online.de with smtp 	id 1PUnMG-0007fr-3s; Mon, 20 Dec 2010 22:33:28 +0100
-Received: from [192.168.2.100] (Vr7TQ4ZSohc0CaGXFlXRXlHK8t4bhHl0UBqeg2zAoCQ30nVH57j79Lgif5YNQIpgzf@[79.224.119.144]) by fwd09.aul.t-online.de	with esmtp id 1PUnMD-0KcOMy0; Mon, 20 Dec 2010 22:33:25 +0100
-Message-ID: <4D0FCBA5.5020300@t-online.de>
-Date: Wed, 22 Dec 2010 13:31:00 -0000
-From: Christian Franke <Christian.Franke@t-online.de>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1.15) Gecko/20101027 SeaMonkey/2.0.10
+Received: from smtpout.karoo.kcom.com (HELO smtpout.karoo.kcom.com) (212.50.160.34)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 05 Jan 2011 19:50:35 +0000
+Received: from 213-152-38-55.dsl.eclipse.net.uk (HELO [192.168.0.8]) ([213.152.38.55])  by smtpout.karoo.kcom.com with ESMTP; 05 Jan 2011 19:50:33 +0000
+Message-ID: <4D24CB9A.2030906@dronecode.org.uk>
+Date: Wed, 05 Jan 2011 19:50:00 -0000
+From: Jon TURNEY <jon.turney@dronecode.org.uk>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.13) Gecko/20101207 Thunderbird/3.1.7
 MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Ensure that the default ACL contains the standard entries
-References: <4D02A41C.8030406@t-online.de> <20101211204653.GA26611@calimero.vinschen.de> <4D07E02A.2020202@t-online.de> <20101215141149.GW10566@calimero.vinschen.de> <4D090D12.6020407@t-online.de> <20101216111024.GX10566@calimero.vinschen.de>
-In-Reply-To: <20101216111024.GX10566@calimero.vinschen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Subject: [PATCH] cygcheck -s should not imply -d
+Content-Type: multipart/mixed; boundary="------------010207030109010509020406"
 X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -27,123 +23,73 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2010-q4/txt/msg00022.txt.bz2
+X-SW-Source: 2011-q1/txt/msg00000.txt.bz2
 
-Hi Corinna,
-
-Corinna Vinschen wrote:
-> Hi Christian,
->
-> On Dec 15 19:46, Christian Franke wrote:
-> ...
->> BTW: Are there any long term plans to actually implement the acl "mask" ?
->> Should be possible by mapping the "mask" restrictions to deny acl
->> entries for each named entry:
->>      
-> There are no such plans, but that doesn't mean I wouldn't take patches
-> which implement this.  In fact I would be *very* happy to get patches
-> which improve ACL handling, and I'm not finicky in terms of the type
-> of enhancement.  Various ideas come to mind:
->
-> - Fix acl(2) by handling deny ACEs at all.
->
-> - Implement the POSIX 1003.1e functions (maybe simply in terms of
->    the existing Solaris API).
->
-> - Add missing Solaris ACL functions (acl_get, facl_get, acl_set, facl_set,
->    acl_fromtext, acl_totext, acl_free, acl_strip, acl_trivial).
->
-> - Add Solaris NFSv4 ACLs, which, coincidentally, are almost equivalent
->    to Windows ACLs.  This would work nicely for NTFS ACLs, of course.
->    See http://docs.sun.com/app/docs/doc/819-2252/acl-5?l=en&a=view
->
->    
-
-Yes NFSv4 ACLs would make much sense. Coreutils copy-acl.c apparently 
-supports these if available (It copies first POSIX ACL and then NTFS 
-ACL). This may allow that 'cp -a source dest' keeps the NTFS ACL unchanged.
+This is a multi-part message in MIME format.
+--------------010207030109010509020406
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 7bit
+Content-length: 451
 
 
-> - Last but not least:  Actually handle "mask".
->
-> Adding deny entries which correspond to the mask value sounds like an
-> interesting idea.  Of course they shouldn't be added if they are not
-> necessary since deny entries and the problems with the so-called
-> "canonical ACL order" are such a bloody mess.
->
->    
+Currently, for cygcheck -s implies -d.  This seems rather unhelpful.
 
-Does this mean "deny ACEs must precede non-deny ACEs" or are there more 
-requirements?
+I'm afraid I've lost the thread which inspired this, but in it the reporter
+provided cygcheck -svr output as requested, but this did not help diagnose
+what ultimately turned out to be the problem, that a DLL was actually an older
+version (presumably due to replace-in-use problems)
+
+Attached a patch to modify cygcheck so -s no longer implies -d (although -d
+can still be used).
 
 
-> OTOH, if you don't fake the mask entry, you need a way to stick the mask
-> into the Windows ACL.  Even twice, the normal mask and the default mask.
->
-> This only works if you have a SID which you use for this purpose.
->
-> Hmm...
->
-> What about redefining the NULL SID?  Right now three bits in the
-> NULL SID acess mask are used:
->
->    S_ISUID     ->   FILE_APPEND_DATA
->    S_ISGID     ->   FILE_WRITE_DATA
->    S_ISVTX     ->   FILE_READ_DATA
->
-> I don't see that anything speaks against adding other meanings to
-> the remaining 29 bits.  For instance:
->
->    mask-r      ->   FILE_READ_EA
->    mask-w      ->   FILE_WRITE_EA
->    mask-x      ->   FILE_EXECUTE
->    def-mask-r  ->   FILE_READ_ATTRIBUTES
->    def-mask-w  ->   FILE_WRITE_ATTRIBUTES
->    def-mask-x  ->   FILE_DELETE_CHILD
->
-> If we do this, we can add an actual mask and we can not only use it
-> in acl(), but also in alloc_sd().
->
-> Does that sound useful?
->
->    
-
-Yes.
-
-Some few draft 0.0001 ideas:
-
-setacl: If the mask is set and not 'rwx' then add a NTFS deny ACE for 
-each input ACE except 'user::' and 'other:'. The permissions bits of all 
-deny ACEs are set equivalent to ~mask. Use current algorithm to build 
-remaining NTFS non-deny ACE.
-
-getacl: If the mask is set and not 'rwx' then use the current algorithm 
-but ignore all NTFS deny ACEs with permission bits equivalent to ~mask.
-
-chmod: If a mask is set or the current ACL is not minimal then set the 
-mask to group permissions and add deny ACEs accordingly. Otherwise set 
-the owner group ACE to group permissions.
+--------------010207030109010509020406
+Content-Type: text/plain;
+ name="cygcheck_s_not_imply_d.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="cygcheck_s_not_imply_d.patch"
+Content-length: 1467
 
 
-With this ACL:
+2011-01-05  Jon TURNEY  <jon.turney@dronecode.org.uk>
 
-user::rwx
-group::r-x
-user:foo:rwx
-group:bar:r-x
-mask:rwx
-other:r-x
+	* cygcheck.cc (main): don't imply -d from -s option to cygcheck
 
-a chmod 0740 would result a NTFS ACL equivalent to:
+Index: cygcheck.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/utils/cygcheck.cc,v
+retrieving revision 1.124
+diff -u -r1.124 cygcheck.cc
+--- cygcheck.cc	28 Aug 2010 11:22:37 -0000	1.124
++++ cygcheck.cc	5 Jan 2011 15:49:47 -0000
+@@ -2180,7 +2180,7 @@
+   -c, --check-setup    show installed version of PACKAGE and verify integrity\n\
+                        (or for all installed packages if none specified)\n\
+   -d, --dump-only      just list packages, do not verify (with -c)\n\
+-  -s, --sysinfo        produce diagnostic system information (implies -c -d)\n\
++  -s, --sysinfo        produce diagnostic system information (implies -c)\n\
+   -r, --registry       also scan registry for Cygwin settings (with -s)\n\
+   -k, --keycheck       perform a keyboard check session (must be run from a\n\
+                        plain console only, not from a pty/rxvt/xterm)\n\
+@@ -2406,7 +2406,7 @@
+       && unique_object_name_opt)
+     usage (stderr, 1);
+ 
+-  if (dump_only && !check_setup)
++  if (dump_only && !check_setup && !sysinfo)
+     usage (stderr, 1);
+ 
+   if (find_package + list_package + grep_packages > 1)
+@@ -2454,7 +2454,7 @@
+       if (!check_setup)
+ 	{
+ 	  puts ("");
+-	  dump_setup (verbose, NULL, false);
++	  dump_setup (verbose, NULL, !dump_only);
+ 	}
+ 
+       if (!givehelp)
 
-deny:group::-wx
-deny:user:foo:-wx
-deny:group:bar:-wx
-user::rwx
-group::r-x # effective:r--
-user:foo:rwx # effective:r--
-group:bar:r-x # effective:r--
-mask:r--
-other:---
 
-Christian
+--------------010207030109010509020406--
