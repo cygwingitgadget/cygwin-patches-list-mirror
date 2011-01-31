@@ -1,29 +1,20 @@
-Return-Path: <cygwin-patches-return-7157-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 6129 invoked by alias); 29 Jan 2011 06:41:54 -0000
-Received: (qmail 6119 invoked by uid 22791); 29 Jan 2011 06:41:52 -0000
-X-SWARE-Spam-Status: No, hits=-1.2 required=5.0	tests=AWL,BAYES_00,UNPARSEABLE_RELAY
+Return-Path: <cygwin-patches-return-7158-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 9021 invoked by alias); 31 Jan 2011 19:44:21 -0000
+Received: (qmail 9011 invoked by uid 22791); 31 Jan 2011 19:44:20 -0000
+X-SWARE-Spam-Status: No, hits=-0.2 required=5.0	tests=AWL,BAYES_40,RCVD_IN_DNSWL_NONE,T_RP_MATCHES_RCVD,UNPARSEABLE_RELAY
 X-Spam-Check-By: sourceware.org
-Received: from nm11-vm0.bullet.mail.bf1.yahoo.com (HELO nm11-vm0.bullet.mail.bf1.yahoo.com) (98.139.213.136)    by sourceware.org (qpsmtpd/0.43rc1) with SMTP; Sat, 29 Jan 2011 06:41:48 +0000
-Received: from [98.139.212.144] by nm11.bullet.mail.bf1.yahoo.com with NNFMP; 29 Jan 2011 06:41:46 -0000
-Received: from [98.139.213.14] by tm1.bullet.mail.bf1.yahoo.com with NNFMP; 29 Jan 2011 06:41:46 -0000
-Received: from [127.0.0.1] by smtp114.mail.bf1.yahoo.com with NNFMP; 29 Jan 2011 06:41:46 -0000
-Received: from cgf.cx (cgf@72.70.43.36 with login)        by smtp114.mail.bf1.yahoo.com with SMTP; 28 Jan 2011 22:41:45 -0800 PST
-X-Yahoo-SMTP: jenXL62swBAWhMTL3wnej93oaS0ClBQOAKs8jbEbx_o-
-Received: from ednor.cgf.cx (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id 669AD13C0C9	for <cygwin-patches@cygwin.com>; Sat, 29 Jan 2011 01:41:45 -0500 (EST)
-Received: by ednor.cgf.cx (Postfix, from userid 201)	id 16CE232D48C; Sat, 29 Jan 2011 01:41:44 -0500 (EST)
-Date: Sat, 29 Jan 2011 06:41:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Crosscompiling cygserver fix
-Message-ID: <20110129064144.GC18901@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <001301cbbf3e$4cfda540$e6f8efc0$@verizon.net>
+Received: from mailout04.t-online.de (HELO mailout04.t-online.de) (194.25.134.18)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 31 Jan 2011 19:44:15 +0000
+Received: from fwd10.aul.t-online.de (fwd10.aul.t-online.de )	by mailout04.t-online.de with smtp 	id 1PjzfY-0000wK-Kn; Mon, 31 Jan 2011 20:44:12 +0100
+Received: from [192.168.2.100] (JbFFu-ZcrhhPFH3eLAr4XW59VKQ4SCUpRlq-k00ksbuZ5a4bK6bShms1cYVRpuWg38@[79.224.122.203]) by fwd10.aul.t-online.de	with esmtp id 1PjzfS-0gg9dQ0; Mon, 31 Jan 2011 20:44:06 +0100
+Message-ID: <4D471106.4050304@t-online.de>
+Date: Mon, 31 Jan 2011 19:44:00 -0000
+From: Christian Franke <Christian.Franke@t-online.de>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1.15) Gecko/20101027 SeaMonkey/2.0.10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <001301cbbf3e$4cfda540$e6f8efc0$@verizon.net>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] Fix bogus fsync() error
+Content-Type: multipart/mixed; boundary="------------060109000809010803090308"
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -33,31 +24,62 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q1/txt/msg00012.txt.bz2
+X-SW-Source: 2011-q1/txt/msg00013.txt.bz2
 
-On Fri, Jan 28, 2011 at 05:54:20PM -0500, John Foley Junk Mail wrote:
->I've submitted a fix for a problem I came across while trying to build a
->Linux-hosted Cygwin cross compiler. Some of the code in winsup/cygwin relies
->on winsup/cygserver/libcygserver.a, which is currently only compiled on
->Cygwin systems. However, linking cygwin0.dll failed with a host of undefined
->reference errors because LIBSERVER was undefined since I was compiling on a
->Linux system. The attached patch causes libcygserver.a to be compiled
->regardless of the current host.
->
->winsup/ChangeLog:
->
->2011-01-28 Peter Foley <jpfoley2@verizon.net>
->
->	* configure.in: Configure winsup/cygserver regardless of cross_host.
->	* configure: Regenerate.
->
->winsup/cygwin/ChangeLog:
->
->2011-01-28 Peter Foley <jpfoley2@verizon.net>
->
->	* configure.in: Define LIBSERVER regardless of cross_host.
->	* configure: Regenerate.
+This is a multi-part message in MIME format.
+--------------060109000809010803090308
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-length: 495
 
-Applied.  Thanks for the patch.
+If used on raw devices like /dev/sda fsync() always fails with EBADRQC 
+(54) because FlushFileBuffers() always fails with ERROR_INVALID_FUNCTION 
+(1).
 
-cgf
+The attached patch fixes this by simply ignoring this error in the 
+fhandler_base implementation. This should not affect any real flush 
+errors which likely would return other error codes.
+
+An alternative approach would be to ignore the error only in a new 
+fhandler_raw_dev/floppy::fsync(). IMO not worth the effort is this case.
+
+Christian
+
+
+--------------060109000809010803090308
+Content-Type: text/x-patch;
+ name="fsync-rawdev-err.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="fsync-rawdev-err.patch"
+Content-length: 763
+
+2011-01-31  Christian Franke  <franke@computer.org>
+
+	* fhandler.cc (fhandler_base::fsync): Ignore ERROR_INVALID_FUNCTION
+	error from FlushFileBuffers().
+
+
+diff --git a/winsup/cygwin/fhandler.cc b/winsup/cygwin/fhandler.cc
+index c97cc01..d7f46ec 100644
+--- a/winsup/cygwin/fhandler.cc
++++ b/winsup/cygwin/fhandler.cc
+@@ -1588,7 +1588,15 @@ fhandler_base::fsync ()
+     return 0;
+   if (FlushFileBuffers (get_handle ()))
+     return 0;
+-  __seterrno ();
++
++  /* Ignore ERROR_INVALID_FUNCTION because FlushFileBuffers()
++     always fails with this code on raw devices which are
++     unbuffered by default.  */
++  DWORD errcode = GetLastError();
++  if (errcode == ERROR_INVALID_FUNCTION)
++    return 0;
++
++  __seterrno_from_win_error (errcode);
+   return -1;
+ }
+ 
+
+--------------060109000809010803090308--
