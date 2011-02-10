@@ -1,23 +1,22 @@
-Return-Path: <cygwin-patches-return-7180-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 1747 invoked by alias); 10 Feb 2011 12:45:04 -0000
-Received: (qmail 1687 invoked by uid 22791); 10 Feb 2011 12:45:02 -0000
-X-SWARE-Spam-Status: No, hits=-0.9 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,T_TO_NO_BRKTS_FREEMAIL
+Return-Path: <cygwin-patches-return-7181-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 21791 invoked by alias); 10 Feb 2011 13:42:35 -0000
+Received: (qmail 21774 invoked by uid 22791); 10 Feb 2011 13:42:32 -0000
+X-SWARE-Spam-Status: No, hits=-2.0 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_LOW
 X-Spam-Check-By: sourceware.org
-Received: from mail-pz0-f43.google.com (HELO mail-pz0-f43.google.com) (209.85.210.43)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 10 Feb 2011 12:44:57 +0000
-Received: by pzk28 with SMTP id 28so295507pzk.2        for <cygwin-patches@cygwin.com>; Thu, 10 Feb 2011 04:44:55 -0800 (PST)
-Received: by 10.142.135.17 with SMTP id i17mr344145wfd.1.1297341895480;        Thu, 10 Feb 2011 04:44:55 -0800 (PST)
-Received: from [192.168.1.2] ([183.106.96.22])        by mx.google.com with ESMTPS id y42sm1857862wfd.10.2011.02.10.04.44.53        (version=SSLv3 cipher=RC4-MD5);        Thu, 10 Feb 2011 04:44:54 -0800 (PST)
-Message-ID: <4D53DE66.2080805@gmail.com>
-Date: Thu, 10 Feb 2011 12:45:00 -0000
-From: jojelino <jojelino@gmail.com>
-User-Agent: Mozilla/5.0 (Windows NT 5.2; rv:2.0b12pre) Gecko/20110209 Thunderbird/3.3a3pre
+Received: from out1.smtp.messagingengine.com (HELO out1.smtp.messagingengine.com) (66.111.4.25)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 10 Feb 2011 13:42:28 +0000
+Received: from compute2.internal (compute2.nyi.mail.srv.osa [10.202.2.42])	by gateway1.messagingengine.com (Postfix) with ESMTP id EAC612137C	for <cygwin-patches@cygwin.com>; Thu, 10 Feb 2011 08:42:25 -0500 (EST)
+Received: from frontend2.messagingengine.com ([10.202.2.161])  by compute2.internal (MEProxy); Thu, 10 Feb 2011 08:42:25 -0500
+Received: from [192.168.1.3] (user-0c6se63.cable.mindspring.com [24.110.56.195])	by mail.messagingengine.com (Postfix) with ESMTPSA id 8BA2A44D231;	Thu, 10 Feb 2011 08:42:25 -0500 (EST)
+Message-ID: <4D53EB3F.7010608@cwilson.fastmail.fm>
+Date: Thu, 10 Feb 2011 13:42:00 -0000
+From: Charles Wilson <cygwin@cwilson.fastmail.fm>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.8.1.23) Gecko/20090812 Thunderbird/2.0.0.23 Mnenhy/0.7.6.666
 MIME-Version: 1.0
-Newsgroups: gmane.os.cygwin.patches
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] for SIGSEGV, compilation error in gcc 4.6
-References: <AANLkTinBrYcRrRBztY5eKWzon02GtB4t3S5BcLVoA_+D@mail.gmail.com> <20110210100236.GD2305@calimero.vinschen.de>
-In-Reply-To: <20110210100236.GD2305@calimero.vinschen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+References: <AANLkTinBrYcRrRBztY5eKWzon02GtB4t3S5BcLVoA_+D@mail.gmail.com> <20110210100236.GD2305@calimero.vinschen.de> <4D53DE66.2080805@gmail.com>
+In-Reply-To: <4D53DE66.2080805@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -28,33 +27,46 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q1/txt/msg00035.txt.bz2
+X-SW-Source: 2011-q1/txt/msg00036.txt.bz2
 
-On 2011-02-10 19:02, Corinna Vinschen wrote:
+On 2/10/2011 7:47 AM, jojelino wrote:
+> On 2011-02-10 19:02, Corinna Vinschen wrote:
+> 
+>> Also, it would be nice if you would add more words to explain what your
+>> patch is doing.  Just a patch with no explanation is not very inviting
+>> to take a look at it at all.
+> 
+> this patch deals with only "two" problem. and this is "first" one.
+> 
+> static char * (*findenv_func)(const char *, int *) = (char *
+> (*)(const char *, int *)) getearly;
+> findenv_func is declared without __stdcall convention, and it is casting
+> getearly having __stdcall convention with function type without
+> __stdcall convention. to fix this problem, add __stdcall to findenv_func.
 
-> Also, it would be nice if you would add more words to explain what your
-> patch is doing.  Just a patch with no explanation is not very inviting
-> to take a look at it at all.
+"two-liner"
 
-this patch deals with only "two" problem. and this is "first" one.
-
-static char * (*findenv_func)(const char *, int *) = (char *
++typedef char* (__stdcall *pfnenv)(const char*,int*);
+...
+-static char * (*findenv_func)(const char *, int *) = (char *
 (*)(const char *, int *)) getearly;
-findenv_func is declared without __stdcall convention, and it is casting 
-getearly having __stdcall convention with function type without 
-__stdcall convention. to fix this problem, add __stdcall to findenv_func.
++static pfnenv findenv_func = &getearly;
 
-and this is "another" one.
 
-this one deals with compilation error that gcc 4.6 complained. so i just 
-copy & paste __attribute__((regparm (x))) from function declaration to 
-function definition, so i must admit that this one was derived from 
-original cygwin source code. that is, you can fix it without this patch.
+> and this is "another" one.
+> 
+> this one deals with compilation error that gcc 4.6 complained. so i just
+> copy & paste __attribute__((regparm (x))) from function declaration to
+> function definition, so i must admit that this one was derived from
+> original cygwin source code. that is, you can fix it without this patch.
 
- > Did you read http://cygwin.com/contrib.html and the "Before you get
- > started" section?  Did you already send a copyright assignment?
+"mechanical repetition of one-liner"
 
-what i understood is, i fill out the assignment form and snail it to 
-provided address in http://cygwin.com/assign.txt
+I think this patch qualifies under the minor change rule for not needing
+an assignment...although it would be good for the OP to go ahead and
+complete the paperwork for future contributions.
 
-i didn't snail it yet.
+IANAL, blah blah...
+
+--
+Chuck
