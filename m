@@ -1,22 +1,22 @@
-Return-Path: <cygwin-patches-return-7178-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 7036 invoked by alias); 10 Feb 2011 10:03:01 -0000
-Received: (qmail 6989 invoked by uid 22791); 10 Feb 2011 10:02:44 -0000
+Return-Path: <cygwin-patches-return-7179-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 16052 invoked by alias); 10 Feb 2011 11:00:48 -0000
+Received: (qmail 16039 invoked by uid 22791); 10 Feb 2011 11:00:46 -0000
+X-SWARE-Spam-Status: No, hits=-2.5 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Thu, 10 Feb 2011 10:02:39 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 58EC62CA2C0; Thu, 10 Feb 2011 11:02:36 +0100 (CET)
-Date: Thu, 10 Feb 2011 10:03:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] for SIGSEGV, compilation error in gcc 4.6
-Message-ID: <20110210100236.GD2305@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <AANLkTinBrYcRrRBztY5eKWzon02GtB4t3S5BcLVoA_+D@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <AANLkTinBrYcRrRBztY5eKWzon02GtB4t3S5BcLVoA_+D@mail.gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Received: from mail-iy0-f171.google.com (HELO mail-iy0-f171.google.com) (209.85.210.171)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 10 Feb 2011 11:00:42 +0000
+Received: by iyh42 with SMTP id 42so1291263iyh.2        for <cygwin-patches@cygwin.com>; Thu, 10 Feb 2011 03:00:41 -0800 (PST)
+Received: by 10.231.19.77 with SMTP id z13mr22123525iba.166.1297335640960;        Thu, 10 Feb 2011 03:00:40 -0800 (PST)
+Received: from [127.0.0.1] (S0106000cf16f58b1.wp.shawcable.net [174.5.115.130])        by mx.google.com with ESMTPS id gy41sm1133898ibb.11.2011.02.10.03.00.38        (version=SSLv3 cipher=RC4-MD5);        Thu, 10 Feb 2011 03:00:39 -0800 (PST)
+Subject: Re: [PATCH] pthread_yield
+From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
+To: cygwin-patches <cygwin-patches@cygwin.com>
+In-Reply-To: <20110210095415.GB2305@calimero.vinschen.de>
+References: <1297316998.752.10.camel@YAAKOV04>	 <20110210060431.GA11820@ednor.casa.cgf.cx>	 <20110210095415.GB2305@calimero.vinschen.de>
+Content-Type: text/plain; charset="UTF-8"
+Date: Thu, 10 Feb 2011 11:00:00 -0000
+Message-ID: <1297335640.752.12.camel@YAAKOV04>
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,22 +26,16 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q1/txt/msg00033.txt.bz2
+X-SW-Source: 2011-q1/txt/msg00034.txt.bz2
 
-On Feb 10 05:43, jojelino wrote:
-> 2011-02-10    <?@?>
+On Thu, 2011-02-10 at 10:54 +0100, Corinna Vinschen wrote:
+> On Feb 10 01:04, Christopher Faylor wrote:
+> > Please check in.
+> 
+> - Please add the new entry point to doc/new-features.sgml.
 
-Did you read http://cygwin.com/contrib.html and the "Before you get
-started" section?  Did you already send a copyright assignment?
-
-Also, it would be nice if you would add more words to explain what your
-patch is doing.  Just a patch with no explanation is not very inviting
-to take a look at it at all.
+Done and done.
 
 
-Corinna
+Yaakov
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
