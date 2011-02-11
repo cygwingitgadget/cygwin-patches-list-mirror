@@ -1,22 +1,18 @@
-Return-Path: <cygwin-patches-return-7195-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 13067 invoked by alias); 10 Feb 2011 20:23:08 -0000
-Received: (qmail 13056 invoked by uid 22791); 10 Feb 2011 20:23:07 -0000
-X-SWARE-Spam-Status: No, hits=-6.8 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_HI,SPF_HELO_PASS,T_RP_MATCHES_RCVD
+Return-Path: <cygwin-patches-return-7196-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 22504 invoked by alias); 11 Feb 2011 21:38:07 -0000
+Received: (qmail 22490 invoked by uid 22791); 11 Feb 2011 21:38:07 -0000
+X-SWARE-Spam-Status: Yes, hits=6.5 required=5.0	tests=AWL,BAYES_00,BOTNET,RFC_ABUSE_POST,SPF_NEUTRAL
 X-Spam-Check-By: sourceware.org
-Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 10 Feb 2011 20:23:03 +0000
-Received: from int-mx02.intmail.prod.int.phx2.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])	by mx1.redhat.com (8.14.4/8.14.4) with ESMTP id p1AKN2RW024609	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=OK)	for <cygwin-patches@cygwin.com>; Thu, 10 Feb 2011 15:23:02 -0500
-Received: from [10.3.113.122] (ovpn-113-122.phx2.redhat.com [10.3.113.122])	by int-mx02.intmail.prod.int.phx2.redhat.com (8.13.8/8.13.8) with ESMTP id p1AKN1J9024616	for <cygwin-patches@cygwin.com>; Thu, 10 Feb 2011 15:23:01 -0500
-Message-ID: <4D544925.9000001@redhat.com>
-Date: Thu, 10 Feb 2011 20:23:00 -0000
-From: Eric Blake <eblake@redhat.com>
-User-Agent: Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.2.13) Gecko/20101209 Fedora/3.1.7-0.35.b3pre.fc14 Lightning/1.0b3pre Mnenhy/0.8.3 Thunderbird/3.1.7
+Received: from nd216.dnsexit.com (HELO box7.911domain.com) (64.182.102.216)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 11 Feb 2011 21:38:03 +0000
+Received: from server.foleyremote.com (pool-108-28-47-43.washdc.fios.verizon.net [108.28.47.43])	(authenticated bits=0)	by box7.911domain.com (8.13.8/8.13.8) with ESMTP id p1BLc71i016704	(version=TLSv1/SSLv3 cipher=AES128-SHA bits=128 verify=FAIL)	for <cygwin-patches@cygwin.com>; Fri, 11 Feb 2011 16:38:08 -0500
+Received: from SERVER.foleyremote.com ([fe80::b82f:dcd6:c011:915b]) by SERVER.foleyremote.com ([fe80::b82f:dcd6:c011:915b%13]) with mapi id 14.01.0270.001; Fri, 11 Feb 2011 16:37:58 -0500
+From: Peter Foley <pefoley2@verizon.net>
+To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: FW: [PATCH] Crosscompiling configure fix
+Date: Fri, 11 Feb 2011 21:38:00 -0000
+Message-ID: <7630E3AFCCB3F84AB86B9B1EBF730D536AD09289@SERVER.foleyremote.com>
+Content-Type: multipart/mixed;	boundary="_002_7630E3AFCCB3F84AB86B9B1EBF730D536AD09289SERVERfoleyremo_"
 MIME-Version: 1.0
-To: cygwin-patches@cygwin.com
-Subject: Re: provide __xpg_strerror_r
-References: <4D4DAD40.3060904@redhat.com> <20110205202806.GA11118@ednor.casa.cgf.cx> <4D4DB682.3070601@redhat.com> <20110206095423.GA19356@calimero.vinschen.de> <4D532F6B.5080104@redhat.com> <20110210021547.GA26395@ednor.casa.cgf.cx> <20110210095054.GA2305@calimero.vinschen.de> <20110210095530.GC2305@calimero.vinschen.de> <4D542269.3030604@redhat.com> <20110210195852.GA32475@ednor.casa.cgf.cx>
-In-Reply-To: <20110210195852.GA32475@ednor.casa.cgf.cx>
-OpenPGP: url=http://people.redhat.com/eblake/eblake.gpg
-Content-Type: multipart/signed; micalg=pgp-sha256; protocol="application/pgp-signature"; boundary="------------enig27F8B8B393A88BCDF0AA295C"
 X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -27,70 +23,74 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q1/txt/msg00050.txt.bz2
+X-SW-Source: 2011-q1/txt/msg00051.txt.bz2
 
-This is an OpenPGP/MIME signed message (RFC 2440 and 3156)
---------------enig27F8B8B393A88BCDF0AA295C
-Content-Type: text/plain; charset=ISO-8859-1
+
+--_002_7630E3AFCCB3F84AB86B9B1EBF730D536AD09289SERVERfoleyremo_
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
-Content-length: 1190
+Content-length: 982
 
-On 02/10/2011 12:58 PM, Christopher Faylor wrote:
-> On Thu, Feb 10, 2011 at 10:37:45AM -0700, Eric Blake wrote:
->> Pushed, and squashed into minor version 236.  I've also updated
->> new-features.sgml.
->=20
-> Thanks Eric.
+I've submitted a fix for a problem I came across while trying to build a Li=
+nux-hosted Cygwin cross compiler. Autoconf fails in the cygwin and cygserve=
+r directories because the bootstrap compiler cannot link. This patch works =
+around this by defining GCC_NO_EXECUTABLES, which causes autoconf to skip t=
+ests that involve linking.
 
-Shoot - I pushed too early; I'm pushing this follow-up patch to fix the
-temporary build breakage that I introduced (now that strerror_r defaults
-to the POSIX signature, errno.cc has to take efforts to ensure that it
-doesn't conflict when implementing the GNU signature).
+Note: I submitted a previous patch that included this change, however only =
+part of that patch was applied (the removal of AC_ALLOCA) so I am resubmitt=
+ing the GCC_NO_EXECUTABLES part of the patch.
 
-diff --git a/winsup/cygwin/errno.cc b/winsup/cygwin/errno.cc
-index 33a1038..8ee2a75 100644
---- a/winsup/cygwin/errno.cc
-+++ b/winsup/cygwin/errno.cc
-@@ -12,12 +12,14 @@ details. */
- #define _sys_nerr FOO_sys_nerr
- #define sys_nerr FOOsys_nerr
- #define _sys_errlist FOO_sys_errlist
-+#define strerror_r FOO_strerror_r
- #include "winsup.h"
- #include "cygtls.h"
- #include "ntdll.h"
- #undef _sys_nerr
- #undef sys_nerr
- #undef _sys_errlist
-+#undef strerror_r
+Thanks,
 
- /* Table to map Windows error codes to Errno values.  */
- /* FIXME: Doing things this way is a little slow.  It's trivial to change
+Peter Foley
+
+winsup/cygserver/ChangeLog:
+
+2011-02-11 Peter Foley <pefoley2@verizon.net>
+
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 * configure.in: define GCC_NO_EXECUTABLES.
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 * configure: Regenerate.
+
+winsup/cygwin/ChangeLog:
+
+2011-02-11 Peter Foley <pefoley2@verizon.net>
+
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 * configure.in: define GCC_NO_EXECUTABLES.
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 * configure: Regenerate.
 
 
---=20
-Eric Blake   eblake@redhat.com    +1-801-349-2682
-Libvirt virtualization library http://libvirt.org
+--_002_7630E3AFCCB3F84AB86B9B1EBF730D536AD09289SERVERfoleyremo_
+Content-Type: application/octet-stream; name="cross.patch"
+Content-Description: cross.patch
+Content-Disposition: attachment; filename="cross.patch"; size=1011;
+	creation-date="Mon, 07 Feb 2011 22:20:43 GMT";
+	modification-date="Thu, 10 Feb 2011 22:03:21 GMT"
+Content-Transfer-Encoding: base64
+Content-length: 1371
 
+SW5kZXg6IGN5Z3NlcnZlci9jb25maWd1cmUuaW4KPT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWdzZXJ2
+ZXIvY29uZmlndXJlLmluLHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjUKZGlm
+ZiAtdSAtcCAtcjEuNSBjb25maWd1cmUuaW4KLS0tIGN5Z3NlcnZlci9jb25m
+aWd1cmUuaW4JNyBGZWIgMjAxMSAxNjoyMjowMiAtMDAwMAkxLjUKKysrIGN5
+Z3NlcnZlci9jb25maWd1cmUuaW4JMTAgRmViIDIwMTEgMjI6MDM6MDIgLTAw
+MDAKQEAgLTE5LDYgKzE5LDkgQEAgSU5TVEFMTD1gY2QgJHNyY2Rpci8uLi8u
+LjsgZWNobyAkKHB3ZCkvaQogQUNfUFJPR19JTlNUQUxMCiBBQ19DQU5PTklD
+QUxfU1lTVEVNCiAKK200X2luY2x1ZGUoLi4vLi4vY29uZmlnL25vLWV4ZWN1
+dGFibGVzLm00KQorR0NDX05PX0VYRUNVVEFCTEVTCisKIExJQl9BQ19QUk9H
+X0NDCiBMSUJfQUNfUFJPR19DWFgKIApJbmRleDogY3lnd2luL2NvbmZpZ3Vy
+ZS5pbgo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3Ny
+Yy9zcmMvd2luc3VwL2N5Z3dpbi9jb25maWd1cmUuaW4sdgpyZXRyaWV2aW5n
+IHJldmlzaW9uIDEuMzUKZGlmZiAtdSAtcCAtcjEuMzUgY29uZmlndXJlLmlu
+Ci0tLSBjeWd3aW4vY29uZmlndXJlLmluCTcgRmViIDIwMTEgMTY6MjE6MDgg
+LTAwMDAJMS4zNQorKysgY3lnd2luL2NvbmZpZ3VyZS5pbgkxMCBGZWIgMjAx
+MSAyMjowMzowMiAtMDAwMApAQCAtMTgsNiArMTgsOSBAQCBBQ19DT05GSUdf
+QVVYX0RJUiguLi8uLikKIEFDX1BST0dfSU5TVEFMTAogQUNfQ0FOT05JQ0FM
+X1NZU1RFTQogCittNF9pbmNsdWRlKC4uLy4uL2NvbmZpZy9uby1leGVjdXRh
+Ymxlcy5tNCkKK0dDQ19OT19FWEVDVVRBQkxFUworCiBMSUJfQUNfUFJPR19D
+QwogTElCX0FDX1BST0dfQ1hYCiAK
 
---------------enig27F8B8B393A88BCDF0AA295C
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-Content-length: 619
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.11 (GNU/Linux)
-Comment: Public key at http://people.redhat.com/eblake/eblake.gpg
-Comment: Using GnuPG with Fedora - http://enigmail.mozdev.org/
-
-iQEcBAEBCAAGBQJNVEklAAoJEKeha0olJ0Nq7sUH/101kNWk9F+S0DREy1/DP2Ks
-p0CBtqUCEwiYb61djd1bzwAoqaVwJ8zvAwC4cDu8SSZH6F8dzBvC7upwYYvFoHzj
-Z1bnM6+TuC0ZaBo1QbhWB2i0/f4j+xgriGq7YdP3FSqQB7dckhCacwd3FmjgxxbF
-Gqem1XKb6A/Xemmr0w8YkSoSNWlgybp+RmvrBviD81Pm6bOJT6MrFG+YJcC1VBWv
-UODip13Bnw0+3azOusyXcQwrpolui5mDwaaeFdexX3MHtNQGLgSUAF8Gg2aJctpe
-a7a8h0cP1U1Q5zu5vVqMpCwxyaJwlZ/8uQMSzGrdhX92/J/N055wNiuafTQ09RE=
-=fBAT
------END PGP SIGNATURE-----
-
---------------enig27F8B8B393A88BCDF0AA295C--
+--_002_7630E3AFCCB3F84AB86B9B1EBF730D536AD09289SERVERfoleyremo_--
