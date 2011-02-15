@@ -1,18 +1,22 @@
-Return-Path: <cygwin-patches-return-7196-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 22504 invoked by alias); 11 Feb 2011 21:38:07 -0000
-Received: (qmail 22490 invoked by uid 22791); 11 Feb 2011 21:38:07 -0000
-X-SWARE-Spam-Status: Yes, hits=6.5 required=5.0	tests=AWL,BAYES_00,BOTNET,RFC_ABUSE_POST,SPF_NEUTRAL
+Return-Path: <cygwin-patches-return-7197-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 20480 invoked by alias); 15 Feb 2011 15:48:00 -0000
+Received: (qmail 20232 invoked by uid 22791); 15 Feb 2011 15:47:59 -0000
+X-SWARE-Spam-Status: No, hits=-6.8 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_HI,SPF_HELO_PASS,T_RP_MATCHES_RCVD
 X-Spam-Check-By: sourceware.org
-Received: from nd216.dnsexit.com (HELO box7.911domain.com) (64.182.102.216)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 11 Feb 2011 21:38:03 +0000
-Received: from server.foleyremote.com (pool-108-28-47-43.washdc.fios.verizon.net [108.28.47.43])	(authenticated bits=0)	by box7.911domain.com (8.13.8/8.13.8) with ESMTP id p1BLc71i016704	(version=TLSv1/SSLv3 cipher=AES128-SHA bits=128 verify=FAIL)	for <cygwin-patches@cygwin.com>; Fri, 11 Feb 2011 16:38:08 -0500
-Received: from SERVER.foleyremote.com ([fe80::b82f:dcd6:c011:915b]) by SERVER.foleyremote.com ([fe80::b82f:dcd6:c011:915b%13]) with mapi id 14.01.0270.001; Fri, 11 Feb 2011 16:37:58 -0500
-From: Peter Foley <pefoley2@verizon.net>
-To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: FW: [PATCH] Crosscompiling configure fix
-Date: Fri, 11 Feb 2011 21:38:00 -0000
-Message-ID: <7630E3AFCCB3F84AB86B9B1EBF730D536AD09289@SERVER.foleyremote.com>
-Content-Type: multipart/mixed;	boundary="_002_7630E3AFCCB3F84AB86B9B1EBF730D536AD09289SERVERfoleyremo_"
+Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 15 Feb 2011 15:47:54 +0000
+Received: from int-mx09.intmail.prod.int.phx2.redhat.com (int-mx09.intmail.prod.int.phx2.redhat.com [10.5.11.22])	by mx1.redhat.com (8.14.4/8.14.4) with ESMTP id p1FFlrTd009259	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=OK)	for <cygwin-patches@cygwin.com>; Tue, 15 Feb 2011 10:47:53 -0500
+Received: from [10.3.113.118] (ovpn-113-118.phx2.redhat.com [10.3.113.118])	by int-mx09.intmail.prod.int.phx2.redhat.com (8.14.4/8.14.4) with ESMTP id p1FFlq5g017396	for <cygwin-patches@cygwin.com>; Tue, 15 Feb 2011 10:47:53 -0500
+Message-ID: <4D5AA028.8050304@redhat.com>
+Date: Tue, 15 Feb 2011 15:48:00 -0000
+From: Eric Blake <eblake@redhat.com>
+User-Agent: Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.2.13) Gecko/20101209 Fedora/3.1.7-0.35.b3pre.fc14 Lightning/1.0b3pre Mnenhy/0.8.3 Thunderbird/3.1.7
 MIME-Version: 1.0
+To: cygwin-patches@cygwin.com
+Subject: Re: src/winsup/doc ChangeLog new-features.sgml
+References: <20110215153220.24348.qmail@sourceware.org>
+In-Reply-To: <20110215153220.24348.qmail@sourceware.org>
+OpenPGP: url=http://people.redhat.com/eblake/eblake.gpg
+Content-Type: multipart/signed; micalg=pgp-sha256; protocol="application/pgp-signature"; boundary="------------enig41B940D5CB6676B2C8840FAA"
 X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -23,74 +27,53 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q1/txt/msg00051.txt.bz2
+X-SW-Source: 2011-q1/txt/msg00052.txt.bz2
 
-
---_002_7630E3AFCCB3F84AB86B9B1EBF730D536AD09289SERVERfoleyremo_
-Content-Type: text/plain; charset="iso-8859-1"
+This is an OpenPGP/MIME signed message (RFC 2440 and 3156)
+--------------enig41B940D5CB6676B2C8840FAA
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-Content-length: 982
+Content-length: 654
 
-I've submitted a fix for a problem I came across while trying to build a Li=
-nux-hosted Cygwin cross compiler. Autoconf fails in the cygwin and cygserve=
-r directories because the bootstrap compiler cannot link. This patch works =
-around this by defining GCC_NO_EXECUTABLES, which causes autoconf to skip t=
-ests that involve linking.
+On 02/15/2011 08:32 AM, corinna wrote:
+> 	* new-features.sgml (ov-new1.7.8): Document /proc/sys.
+>=20
+> Patches:
+> http://sourceware.org/cgi-bin/cvsweb.cgi/src/winsup/doc/ChangeLog.diff?cv=
+sroot=3Dsrc&r1=3D1.328&r2=3D1.329
+> http://sourceware.org/cgi-bin/cvsweb.cgi/src/winsup/doc/new-features.sgml=
+.diff?cvsroot=3Dsrc&r1=3D1.64&r2=3D1.65
 
-Note: I submitted a previous patch that included this change, however only =
-part of that patch was applied (the removal of AC_ALLOCA) so I am resubmitt=
-ing the GCC_NO_EXECUTABLES part of the patch.
+>  File system access via block devices works.  For instance
+> +(note the trailing backslash!)
+> +<screen>
+> +bash$ cd /proc/sys/Device/HarddiskVolumeShadowCopy1/
 
-Thanks,
+That's a trailing slash, not backslash.
 
-Peter Foley
-
-winsup/cygserver/ChangeLog:
-
-2011-02-11 Peter Foley <pefoley2@verizon.net>
-
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 * configure.in: define GCC_NO_EXECUTABLES.
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 * configure: Regenerate.
-
-winsup/cygwin/ChangeLog:
-
-2011-02-11 Peter Foley <pefoley2@verizon.net>
-
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 * configure.in: define GCC_NO_EXECUTABLES.
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 * configure: Regenerate.
+--=20
+Eric Blake   eblake@redhat.com    +1-801-349-2682
+Libvirt virtualization library http://libvirt.org
 
 
---_002_7630E3AFCCB3F84AB86B9B1EBF730D536AD09289SERVERfoleyremo_
-Content-Type: application/octet-stream; name="cross.patch"
-Content-Description: cross.patch
-Content-Disposition: attachment; filename="cross.patch"; size=1011;
-	creation-date="Mon, 07 Feb 2011 22:20:43 GMT";
-	modification-date="Thu, 10 Feb 2011 22:03:21 GMT"
-Content-Transfer-Encoding: base64
-Content-length: 1371
+--------------enig41B940D5CB6676B2C8840FAA
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+Content-length: 619
 
-SW5kZXg6IGN5Z3NlcnZlci9jb25maWd1cmUuaW4KPT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWdzZXJ2
-ZXIvY29uZmlndXJlLmluLHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjUKZGlm
-ZiAtdSAtcCAtcjEuNSBjb25maWd1cmUuaW4KLS0tIGN5Z3NlcnZlci9jb25m
-aWd1cmUuaW4JNyBGZWIgMjAxMSAxNjoyMjowMiAtMDAwMAkxLjUKKysrIGN5
-Z3NlcnZlci9jb25maWd1cmUuaW4JMTAgRmViIDIwMTEgMjI6MDM6MDIgLTAw
-MDAKQEAgLTE5LDYgKzE5LDkgQEAgSU5TVEFMTD1gY2QgJHNyY2Rpci8uLi8u
-LjsgZWNobyAkKHB3ZCkvaQogQUNfUFJPR19JTlNUQUxMCiBBQ19DQU5PTklD
-QUxfU1lTVEVNCiAKK200X2luY2x1ZGUoLi4vLi4vY29uZmlnL25vLWV4ZWN1
-dGFibGVzLm00KQorR0NDX05PX0VYRUNVVEFCTEVTCisKIExJQl9BQ19QUk9H
-X0NDCiBMSUJfQUNfUFJPR19DWFgKIApJbmRleDogY3lnd2luL2NvbmZpZ3Vy
-ZS5pbgo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3Ny
-Yy9zcmMvd2luc3VwL2N5Z3dpbi9jb25maWd1cmUuaW4sdgpyZXRyaWV2aW5n
-IHJldmlzaW9uIDEuMzUKZGlmZiAtdSAtcCAtcjEuMzUgY29uZmlndXJlLmlu
-Ci0tLSBjeWd3aW4vY29uZmlndXJlLmluCTcgRmViIDIwMTEgMTY6MjE6MDgg
-LTAwMDAJMS4zNQorKysgY3lnd2luL2NvbmZpZ3VyZS5pbgkxMCBGZWIgMjAx
-MSAyMjowMzowMiAtMDAwMApAQCAtMTgsNiArMTgsOSBAQCBBQ19DT05GSUdf
-QVVYX0RJUiguLi8uLikKIEFDX1BST0dfSU5TVEFMTAogQUNfQ0FOT05JQ0FM
-X1NZU1RFTQogCittNF9pbmNsdWRlKC4uLy4uL2NvbmZpZy9uby1leGVjdXRh
-Ymxlcy5tNCkKK0dDQ19OT19FWEVDVVRBQkxFUworCiBMSUJfQUNfUFJPR19D
-QwogTElCX0FDX1BST0dfQ1hYCiAK
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.11 (GNU/Linux)
+Comment: Public key at http://people.redhat.com/eblake/eblake.gpg
+Comment: Using GnuPG with Fedora - http://enigmail.mozdev.org/
 
---_002_7630E3AFCCB3F84AB86B9B1EBF730D536AD09289SERVERfoleyremo_--
+iQEcBAEBCAAGBQJNWqAoAAoJEKeha0olJ0NqyWUH/3wockLqWMFV91m3/HH3E/t+
+03TD2C6a/r3JhXjdzTo72oVgfcBlu0OvqNQ0bi/SefxZB8awD2R3DULRWAji7Aej
+aT/Ogz/5Lkjs5jGQgl7r1lwWwlpDMy9dN5uBdctJ0rVfsMZ1skk3gtvDr5eWMzDh
+xxgu/yrtCwAt5flGvoeLWNVChzZinOOI4DyW62EoQ4fXn+a8u0BGW+Oqgc4fU+tl
+EZ8jtSNdTPJAkktwLInOTwKwodbQZmId8hYVWIrdtJFBS9kAK6GFRHXS6FrVQZ6H
+O+I/+0ov5NVJwzW//fppuITr/uvf9zX6Eb03rMKAETnzCKOR5OpILssSWZMOXLk=
+=Smj7
+-----END PGP SIGNATURE-----
+
+--------------enig41B940D5CB6676B2C8840FAA--
