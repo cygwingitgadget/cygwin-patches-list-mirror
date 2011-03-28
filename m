@@ -1,21 +1,19 @@
-Return-Path: <cygwin-patches-return-7209-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 9947 invoked by alias); 17 Mar 2011 00:03:07 -0000
-Received: (qmail 9936 invoked by uid 22791); 17 Mar 2011 00:03:06 -0000
-X-SWARE-Spam-Status: No, hits=-2.6 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_LOW
+Return-Path: <cygwin-patches-return-7210-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 10380 invoked by alias); 28 Mar 2011 03:38:23 -0000
+Received: (qmail 10357 invoked by uid 22791); 28 Mar 2011 03:38:22 -0000
+X-SWARE-Spam-Status: No, hits=-2.4 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW
 X-Spam-Check-By: sourceware.org
-Received: from smtpout.karoo.kcom.com (HELO smtpout.karoo.kcom.com) (212.50.160.34)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 17 Mar 2011 00:03:01 +0000
-Received: from 213-152-38-55.dsl.eclipse.net.uk (HELO [192.168.0.13]) ([213.152.38.55])  by smtpout.karoo.kcom.com with ESMTP; 17 Mar 2011 00:02:58 +0000
-Message-ID: <4D814FB3.5050405@dronecode.org.uk>
-Date: Thu, 17 Mar 2011 00:03:00 -0000
-From: Jon TURNEY <jon.turney@dronecode.org.uk>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.15) Gecko/20110303 Thunderbird/3.1.9
-MIME-Version: 1.0
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Add an additional relocation attempt pass to load_after_fork()
-References: <4D7CDDC7.5060708@dronecode.org.uk> <1300232277.2104.3.camel@YAAKOV04>
-In-Reply-To: <1300232277.2104.3.camel@YAAKOV04>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Received: from mail-yi0-f43.google.com (HELO mail-yi0-f43.google.com) (209.85.218.43)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 28 Mar 2011 03:38:18 +0000
+Received: by yie16 with SMTP id 16so986510yie.2        for <cygwin-patches@cygwin.com>; Sun, 27 Mar 2011 20:38:17 -0700 (PDT)
+Received: by 10.150.235.5 with SMTP id i5mr3471002ybh.26.1301283497678;        Sun, 27 Mar 2011 20:38:17 -0700 (PDT)
+Received: from [127.0.0.1] (S0106000cf16f58b1.wp.shawcable.net [174.5.115.130])        by mx.google.com with ESMTPS id f5sm1154275ybh.28.2011.03.27.20.38.16        (version=SSLv3 cipher=OTHER);        Sun, 27 Mar 2011 20:38:17 -0700 (PDT)
+Subject: [PATCH] Export strchrnul (pending newlib patch)
+From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
+To: cygwin-patches <cygwin-patches@cygwin.com>
+Content-Type: multipart/mixed; boundary="=-KAAFr2foVOFaByF5SYCL"
+Date: Mon, 28 Mar 2011 03:38:00 -0000
+Message-ID: <1301283496.5408.8.camel@YAAKOV04>
+Mime-Version: 1.0
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -25,24 +23,83 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q1/txt/msg00064.txt.bz2
+X-SW-Source: 2011-q1/txt/msg00065.txt.bz2
 
-On 15/03/2011 23:37, Yaakov (Cygwin/X) wrote:
-> On Sun, 2011-03-13 at 15:07 +0000, Jon TURNEY wrote:
->> Attached is a patch which avoids a fork failure due to remap error in the
->> specific circumstances described in my email [1], by adding an additional pass
->> to load_after_fork() which forces the DLL to be relocated by VirtualAlloc()ing
->> a block of memory at the load address as well.
->>
->> Hopefully it can be seen by inspection that this code doesn't change the
->> behaviour of the first two passes, and so will only be changing the behaviour
->> in what was an fatal error case before.
-> 
-> This patch causes a warning with GCC 4.5:
-> 
-> cc1plus: warnings being treated as errors
-> dll_init.cc: In member function âvoid dll_list::load_after_fork(void*)â:
-> dll_init.cc:328:33: error: converting to non-pointer type âDWORDâ from
-> NULL
 
-Thanks, I guess that should be a 0 instead.
+--=-KAAFr2foVOFaByF5SYCL
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Content-length: 82
+
+Here's the Cygwin patch to export strchrnul(3) once accepted in newlib.
+
+
+Yaakov
+
+
+--=-KAAFr2foVOFaByF5SYCL
+Content-Disposition: attachment; filename="winsup-strchrnul.patch"
+Content-Type: text/x-patch; name="winsup-strchrnul.patch"; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Content-length: 1927
+
+2011-03-27  Yaakov Selkowitz  <yselkowitz@users.sourceforge.net>
+
+	* cygwin.din (strchrnul): Export.
+	* include/cygwin/version.h (CYGWIN_VERSION_API_MINOR): Bump.
+	* posix.sgml (std-gnu): Add strchrnul.
+
+Index: cygwin.din
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/cygwin.din,v
+retrieving revision 1.232
+diff -u -r1.232 cygwin.din
+--- cygwin.din	22 Feb 2011 01:32:42 -0000	1.232
++++ cygwin.din	28 Mar 2011 03:02:47 -0000
+@@ -1583,6 +1583,7 @@
+ _strcat = strcat NOSIGFE
+ strchr NOSIGFE
+ _strchr = strchr NOSIGFE
++strchrnul NOSIGFE
+ strcmp NOSIGFE
+ _strcmp = strcmp NOSIGFE
+ strcoll NOSIGFE
+Index: posix.sgml
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/posix.sgml,v
+retrieving revision 1.53
+diff -u -r1.53 posix.sgml
+--- posix.sgml	10 Feb 2011 10:51:13 -0000	1.53
++++ posix.sgml	28 Mar 2011 03:02:47 -0000
+@@ -1112,6 +1112,7 @@
+     pow10f
+     removexattr
+     setxattr
++    strchrnul
+     tdestroy
+     timegm
+     timelocal
+Index: include/cygwin/version.h
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/include/cygwin/version.h,v
+retrieving revision 1.336
+diff -u -r1.336 version.h
+--- include/cygwin/version.h	1 Mar 2011 22:35:00 -0000	1.336
++++ include/cygwin/version.h	28 Mar 2011 03:02:47 -0000
+@@ -400,12 +400,13 @@
+       234: Export program_invocation_name, program_invocation_short_name.
+       235: Export madvise.
+       236: Export pthread_yield, __xpg_strerror_r.
++      237: Export strchrnul.
+      */
+ 
+      /* Note that we forgot to bump the api for ualarm, strtoll, strtoull */
+ 
+ #define CYGWIN_VERSION_API_MAJOR 0
+-#define CYGWIN_VERSION_API_MINOR 236
++#define CYGWIN_VERSION_API_MINOR 237
+ 
+      /* There is also a compatibity version number associated with the
+ 	shared memory regions.  It is incremented when incompatible
+
+--=-KAAFr2foVOFaByF5SYCL--
