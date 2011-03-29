@@ -1,21 +1,21 @@
-Return-Path: <cygwin-patches-return-7217-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 14860 invoked by alias); 29 Mar 2011 07:51:51 -0000
-Received: (qmail 14826 invoked by uid 22791); 29 Mar 2011 07:51:41 -0000
+Return-Path: <cygwin-patches-return-7218-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 15249 invoked by alias); 29 Mar 2011 07:53:31 -0000
+Received: (qmail 15235 invoked by uid 22791); 29 Mar 2011 07:53:22 -0000
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Tue, 29 Mar 2011 07:51:30 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id D40002C0168; Tue, 29 Mar 2011 09:51:27 +0200 (CEST)
-Date: Tue, 29 Mar 2011 07:51:00 -0000
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Tue, 29 Mar 2011 07:53:16 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id C17F12C0168; Tue, 29 Mar 2011 09:53:13 +0200 (CEST)
+Date: Tue, 29 Mar 2011 07:53:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Fix return value and errno set by sem_init(), sem_destroy() and sem_close()
-Message-ID: <20110329075127.GE15349@calimero.vinschen.de>
+Subject: Re: Provide sys/xattr.h
+Message-ID: <20110329075313.GF15349@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4D91082B.1050102@dronecode.org.uk> <20110328221657.GA12793@ednor.casa.cgf.cx>
+References: <1301384629.4524.24.camel@YAAKOV04>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20110328221657.GA12793@ednor.casa.cgf.cx>
+In-Reply-To: <1301384629.4524.24.camel@YAAKOV04>
 User-Agent: Mutt/1.5.21 (2010-09-15)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -26,41 +26,37 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q1/txt/msg00072.txt.bz2
+X-SW-Source: 2011-q1/txt/msg00073.txt.bz2
 
-On Mar 28 18:16, Christopher Faylor wrote:
-> On Mon, Mar 28, 2011 at 11:14:03PM +0100, Jon TURNEY wrote:
-> >
-> >While looking into some mysterious failures of sem_init() in python, I was
-> >somewhat surprised to find the following comment in python/thread_pthread.h:
-> >
-> >> /*
-> >>  * As of February 2002, Cygwin thread implementations mistakenly report error
-> >>  * codes in the return value of the sem_ calls (like the pthread_ functions).
-> >>  * Correct implementations return -1 and put the code in errno. This supports
-> >>  * either.
-> >>  */
-> >
-> >While this comment refers to sem_wait() and sem_trywait(), which seem to have
-> >been fixed since [1], it seems that sem_init(), sem_destroy() and sem_close()
-> >are still non-conformant with SUS in that (i) they do not set errno, and (ii)
-> >they don't return -1 on failure, instead returning the value which should be
-> >set as errno.
-> >
-> >2011-03-28  Jon TURNEY  <jon.turney@dronecode.org.uk>
-> >
-> >	* thread.cc (semaphore::init, destroy, close): Standards conformance
-> >	fix.  On a failure, return -1 and set errno.
-> >	* thread.h (semaphore::terminate): Save errno since semaphore::close()
-> >	may now modify it.
-> >
-> >[1] http://cygwin.com/ml/cygwin/2002-02/msg01379.html
+On Mar 29 02:43, Yaakov (Cygwin/X) wrote:
+> Historically, the *xattr functions were first provided by SGI libattr
+> and prototyped in <attr/xattr.h>.  Later, glibc added them under
+> <sys/xattr.h>[1], and (on Linux) libattr still provides the symbols for
+> ABI compatibility but they are now just wrappers.
 > 
-> Looks good.  Please check in ASAP so this will make it into 1.7.9.
+> (FWIW, Darwin also provides these symbols in <sys/xattr.h>[2].)
+> 
+> This can be seen very clearly in GLib's configure[3], where
+> <sys/xattr.h> and libc are tested in tandem, followed by <attr/xattr.h>
+> and libattr.  Hence, with only attr/xattr.h present, libattr-devel is
+> required not only for building GLib, but the -lattr becomes hardcoded in
+> the libtool .la files, meaning that libglib2.0-devel would require
+> libattr-devel even though GLib requires no symbols from libattr1.
+> 
+> I see two ways to resolve this:
+> 
+> 1) Move include/attr/xattr.h to include/sys/xattr.h, and ship libattr's
+> attr/xattr.h in libattr-devel, exactly as is done on Linux:
+> 
+> 2011-03-29  Yaakov Selkowitz <yselkowitz@...>
+> 
+> 	* include/attr/xattr.h: Move from here...
+> 	* include/sys/xattr.h: ...to here.
+> 
+> 2) Install a copy of include/attr/xattr.h as <sys/xattr.h>, as in the
+> attached patch.
 
-Jon, your copyright assignment has been forwarded to my manager who's
-going to sign it tomorrow.  So I took the liberty to check in this change
-since I'd like to get out 1.7.9 today.  Actually, today *and* ASAP.
+What about just creating a file sys/attr.h which includes attr/attr.h?
 
 
 Corinna
