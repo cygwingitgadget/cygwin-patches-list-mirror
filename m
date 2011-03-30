@@ -1,24 +1,22 @@
-Return-Path: <cygwin-patches-return-7228-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 25236 invoked by alias); 30 Mar 2011 19:25:19 -0000
-Received: (qmail 25224 invoked by uid 22791); 30 Mar 2011 19:25:18 -0000
-X-SWARE-Spam-Status: No, hits=-2.2 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_LOW,TW_CG
+Return-Path: <cygwin-patches-return-7229-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 20152 invoked by alias); 30 Mar 2011 21:16:23 -0000
+Received: (qmail 20103 invoked by uid 22791); 30 Mar 2011 21:16:04 -0000
 X-Spam-Check-By: sourceware.org
-Received: from out3.smtp.messagingengine.com (HELO out3.smtp.messagingengine.com) (66.111.4.27)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 30 Mar 2011 19:25:12 +0000
-Received: from compute2.internal (compute2.nyi.mail.srv.osa [10.202.2.42])	by gateway1.messagingengine.com (Postfix) with ESMTP id 6628220990	for <cygwin-patches@cygwin.com>; Wed, 30 Mar 2011 15:25:11 -0400 (EDT)
-Received: from frontend1.messagingengine.com ([10.202.2.160])  by compute2.internal (MEProxy); Wed, 30 Mar 2011 15:25:11 -0400
-Received: from [158.147.71.25] (158-147-71-25.harris.com [158.147.71.25])	by mail.messagingengine.com (Postfix) with ESMTPSA id 28B29405760;	Wed, 30 Mar 2011 15:25:11 -0400 (EDT)
-Message-ID: <4D938396.7060407@cwilson.fastmail.fm>
-Date: Wed, 30 Mar 2011 19:25:00 -0000
-From: Charles Wilson <cygwin@cwilson.fastmail.fm>
-Reply-To: Charles Wilson <cygwin@cwilson.fastmail.fm>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.9.2.15) Gecko/20110303 Thunderbird/3.1.9
-MIME-Version: 1.0
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Wed, 30 Mar 2011 21:15:59 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id D3F402C0303; Wed, 30 Mar 2011 23:15:56 +0200 (CEST)
+Date: Wed, 30 Mar 2011 21:16:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: patch for icmp.h
-References: <4D93786B.9050304@bogomips.com>
-In-Reply-To: <4D93786B.9050304@bogomips.com>
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] Add an additional relocation attempt pass to load_after_fork()
+Message-ID: <20110330211556.GE13484@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <4D7CDDC7.5060708@dronecode.org.uk> <20110313152111.GA7064@calimero.vinschen.de> <4D7E908B.4010004@dronecode.org.uk> <20110315075313.GA5722@calimero.vinschen.de> <20110315150412.GA18662@ednor.casa.cgf.cx> <20110315154609.GE4320@calimero.vinschen.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20110315154609.GE4320@calimero.vinschen.de>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -28,63 +26,42 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q1/txt/msg00083.txt.bz2
+X-SW-Source: 2011-q1/txt/msg00084.txt.bz2
 
-On 3/30/2011 2:37 PM, John Paul Morrison wrote:
-> This patch adds missing icmp types and definitions needs for source
-> compatibility, and it seems to work for raw icmp sockets.
-> My only changes is renaming __USE_BSD which is used by Linux. It doesn't
-> look like cygwin has an equivalent and didn't want to add a potentially
-> conflicting #define. The other option would be removing the #ifdef
-> completely.
-...
-> I understand that raw/icmp sockets may be undocumented in Windows;
-> Cygwin and/or windows and/or the myping.c test program may be buggy etc.
-> The test program was able to put a valid ICMP echo request on the wire
-> with correct ip and icmp headers in the correct endianness , so at least
-> some raw socket functions are working
+Hi Jon,
 
-Well, they will only work in general on XP32 and older, not XP64, Vista,
-or newer -- as you need admin rights to muck with raw or icmp sockets on
-those OSs.
+On Mar 15 16:46, Corinna Vinschen wrote:
+> On Mar 15 11:04, Christopher Faylor wrote:
+> > On Tue, Mar 15, 2011 at 08:53:13AM +0100, Corinna Vinschen wrote:
+> > >On Mar 14 22:02, Jon TURNEY wrote:
+> > >> On 13/03/2011 15:21, Corinna Vinschen wrote:
+> > >> > Thanks for the patch, but afaics you don't have a copyright assignment
+> > >> > on file with Red Hat.  It's unfortunately required for substantial
+> > >> > patches.  Please see http://cygwin.com/contrib.html, especially the
+> > >> > "Before you get started" section.
+> > >> 
+> > >> No problem, I have signed and posted an assignment, although I'm not sure I
+> > >> consider this patch 'substantial' :-)
+> > >
+> > >Thanks.  I'm looking forward to get it.
+> > >
+> > >I think your patch is a good idea, but apart from the fact that I have
+> > >to wait for your copyright assignment, I'm reluctant to add it to 1.7.9.
+> > >As you probably have seen in CVS, I'm adding new stuff only to a
+> > >post-1.7.9 branch right now.
+> > 
+> > And, since this is my code, I'd like to have the final approval on whether
+> > it goes in or not.
+> 
+> Sure.
 
-It's interesting this comes up now. Recently there was another thread
-concerning ICMP:
-http://cygwin.com/ml/cygwin/2011-03/msg00449.html
-Especially Corinna's reply:
-> Still, if you think you can make use of the tool anyway, try to fetch
-> the netinet/ip6.h and netinet/icmp6.h headers from FreeBSD.  Both
-
-That advice works here, too: if you want to add stuff to cygwin, you're
-better off using BSD sources instead of GPLed ones (see below).
-
-There was also some talk concerning w32api support for icmp
-functionality, which may (or may not) be relevant:
-http://cygwin.com/ml/cygwin/2011-03/msg00472.html
+Your copyright assignment has been ountersigned by my manager today.
+Chris, are you going to take a look into this patch?
 
 
-> --- snap/usr/include/cygwin/icmp.h    2011-03-27 12:31:43.000000000 -0700
-> +++ /usr/include/cygwin/icmp.h    2011-03-28 16:02:20.842491500 -0700
-> @@ -1 +1,291 @@
->  /* icmp.h */
-> +
-> +
-> +/* Copyright (C) 1991, 92, 93, 95, 96, 97, 99 Free Software Foundation,
-> Inc.
-> +   This file is part of the GNU C Library.
+Corinna
 
-If you're trying to add something to cygwin, it has to be copyright
-assignable to Red Hat or available under a non-copyleft license (like
-BSD) -- because otherwise Red Hat can't add (a) release it commercially,
-nor (b) add the section 10(?) "other open source licenses" exception.
-Since this patch is directly copied from GNU C, to which you do not own
-the rights, you can't then assign them to Red Hat.  So, this patch, in
-this form, can't be accepted (if I'm wrong, I'm sure Corinna or cgf will
-correct me -- but I don't think I am).
-
-And in any case, you'll need to fill out a copyright assignment
-yourself, for any contribution of this size.
-
---
-Chuck
-
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          cygwin AT cygwin DOT com
+Red Hat
