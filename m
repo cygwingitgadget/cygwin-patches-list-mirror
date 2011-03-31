@@ -1,30 +1,19 @@
-Return-Path: <cygwin-patches-return-7230-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 26247 invoked by alias); 30 Mar 2011 21:30:00 -0000
-Received: (qmail 26237 invoked by uid 22791); 30 Mar 2011 21:29:59 -0000
-X-SWARE-Spam-Status: No, hits=-1.7 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,UNPARSEABLE_RELAY
+Return-Path: <cygwin-patches-return-7231-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 23009 invoked by alias); 31 Mar 2011 04:38:01 -0000
+Received: (qmail 22866 invoked by uid 22791); 31 Mar 2011 04:37:59 -0000
+X-SWARE-Spam-Status: No, hits=-2.6 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW
 X-Spam-Check-By: sourceware.org
-Received: from nm5.bullet.mail.ne1.yahoo.com (HELO nm5.bullet.mail.ne1.yahoo.com) (98.138.90.68)    by sourceware.org (qpsmtpd/0.43rc1) with SMTP; Wed, 30 Mar 2011 21:29:54 +0000
-Received: from [98.138.90.51] by nm5.bullet.mail.ne1.yahoo.com with NNFMP; 30 Mar 2011 21:29:53 -0000
-Received: from [98.138.87.1] by tm4.bullet.mail.ne1.yahoo.com with NNFMP; 30 Mar 2011 21:29:53 -0000
-Received: from [127.0.0.1] by omp1001.mail.ne1.yahoo.com with NNFMP; 30 Mar 2011 21:29:53 -0000
-Received: (qmail 29705 invoked from network); 30 Mar 2011 21:29:53 -0000
-Received: from cgf.cx (cgf@72.70.43.165 with login)        by smtp148.mail.mud.yahoo.com with SMTP; 30 Mar 2011 14:29:53 -0700 PDT
-X-Yahoo-SMTP: jenXL62swBAWhMTL3wnej93oaS0ClBQOAKs8jbEbx_o-
-Received: from ednor.cgf.cx (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id 91F384A801A	for <cygwin-patches@cygwin.com>; Wed, 30 Mar 2011 17:29:51 -0400 (EDT)
-Received: by ednor.cgf.cx (Postfix, from userid 201)	id 8FC052B35F; Wed, 30 Mar 2011 17:29:51 -0400 (EDT)
-Date: Wed, 30 Mar 2011 21:30:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Add an additional relocation attempt pass to load_after_fork()
-Message-ID: <20110330212951.GC28494@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4D7CDDC7.5060708@dronecode.org.uk> <20110313152111.GA7064@calimero.vinschen.de> <4D7E908B.4010004@dronecode.org.uk> <20110315075313.GA5722@calimero.vinschen.de> <20110315150412.GA18662@ednor.casa.cgf.cx> <20110315154609.GE4320@calimero.vinschen.de> <20110330211556.GE13484@calimero.vinschen.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20110330211556.GE13484@calimero.vinschen.de>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+Received: from mail-gw0-f43.google.com (HELO mail-gw0-f43.google.com) (74.125.83.43)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 31 Mar 2011 04:37:55 +0000
+Received: by gwj21 with SMTP id 21so1015551gwj.2        for <cygwin-patches@cygwin.com>; Wed, 30 Mar 2011 21:37:54 -0700 (PDT)
+Received: by 10.150.114.11 with SMTP id m11mr2331475ybc.426.1301546274467;        Wed, 30 Mar 2011 21:37:54 -0700 (PDT)
+Received: from [127.0.0.1] (S0106000cf16f58b1.wp.shawcable.net [174.5.115.130])        by mx.google.com with ESMTPS id t12sm444054ybe.15.2011.03.30.21.37.51        (version=SSLv3 cipher=OTHER);        Wed, 30 Mar 2011 21:37:53 -0700 (PDT)
+Subject: [PATCH] compile cyglsa with mingw-w64
+From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
+To: cygwin-patches <cygwin-patches@cygwin.com>
+Content-Type: multipart/mixed; boundary="=-kVsWB0eJzD1yU+pJKDQX"
+Date: Thu, 31 Mar 2011 04:38:00 -0000
+Message-ID: <1301546273.2936.6.camel@YAAKOV04>
+Mime-Version: 1.0
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -34,39 +23,91 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q1/txt/msg00085.txt.bz2
+X-SW-Source: 2011-q1/txt/msg00086.txt.bz2
 
-On Wed, Mar 30, 2011 at 11:15:56PM +0200, Corinna Vinschen wrote:
->Hi Jon,
->
->On Mar 15 16:46, Corinna Vinschen wrote:
->> On Mar 15 11:04, Christopher Faylor wrote:
->> > On Tue, Mar 15, 2011 at 08:53:13AM +0100, Corinna Vinschen wrote:
->> > >On Mar 14 22:02, Jon TURNEY wrote:
->> > >> On 13/03/2011 15:21, Corinna Vinschen wrote:
->> > >> > Thanks for the patch, but afaics you don't have a copyright assignment
->> > >> > on file with Red Hat.  It's unfortunately required for substantial
->> > >> > patches.  Please see http://cygwin.com/contrib.html, especially the
->> > >> > "Before you get started" section.
->> > >> 
->> > >> No problem, I have signed and posted an assignment, although I'm not sure I
->> > >> consider this patch 'substantial' :-)
->> > >
->> > >Thanks.  I'm looking forward to get it.
->> > >
->> > >I think your patch is a good idea, but apart from the fact that I have
->> > >to wait for your copyright assignment, I'm reluctant to add it to 1.7.9.
->> > >As you probably have seen in CVS, I'm adding new stuff only to a
->> > >post-1.7.9 branch right now.
->> > 
->> > And, since this is my code, I'd like to have the final approval on whether
->> > it goes in or not.
->> 
->> Sure.
->
->Your copyright assignment has been ountersigned by my manager today.
->Chris, are you going to take a look into this patch?
 
-yep.
+--=-kVsWB0eJzD1yU+pJKDQX
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Content-length: 282
 
-cgf
+The mingw-w64 toolchain can now be used in place of MSVC to build
+cyglsa64.dll.  I didn't integrate this into the Makefile because that
+would make the toolchain a hard build-time requirement, and I don't
+think that is desirable at this time.
+
+Patch and new file attached.
+
+
+Yaakov
+
+
+--=-kVsWB0eJzD1yU+pJKDQX
+Content-Disposition: attachment; filename="cyglsa-w64.patch"
+Content-Type: text/x-patch; name="cyglsa-w64.patch"; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Content-length: 868
+
+2011-03-30  Yaakov Selkowitz  <yselkowitz@users.sourceforge.net>
+
+	* cyglsa.c: Fix compilation with MinGW-w64 toolchains.
+	* make-64bit-version-with-mingw-w64.sh: New file.
+
+Index: cyglsa.c
+===================================================================
+RCS file: /cvs/src/src/winsup/lsaauth/cyglsa.c,v
+retrieving revision 1.7
+diff -u -r1.7 cyglsa.c
+--- cyglsa.c	29 Jan 2010 19:50:15 -0000	1.7
++++ cyglsa.c	31 Mar 2011 02:33:26 -0000
+@@ -1,6 +1,6 @@
+ /* cyglsa.c: LSA authentication module for Cygwin
+ 
+-   Copyright 2006, 2008, 2010 Red Hat, Inc.
++   Copyright 2006, 2008, 2010, 2011 Red Hat, Inc.
+ 
+    Written by Corinna Vinschen <corinna@vinschen.de>
+ 
+@@ -19,7 +19,7 @@
+ #include <lmcons.h>
+ #include <iptypes.h>
+ #include <ntsecapi.h>
+-#ifdef __MINGW32__
++#if defined(__MINGW32__) && !defined(_W64)
+ #include <ntddk.h>
+ #endif
+ #include "../cygwin/cyglsa.h"
+
+--=-kVsWB0eJzD1yU+pJKDQX
+Content-Type: application/x-shellscript; name="make-64bit-version-with-mingw-w64.sh"
+Content-Disposition: attachment; filename="make-64bit-version-with-mingw-w64.sh"
+Content-Transfer-Encoding: 7bit
+Content-length: 967
+
+#! /bin/sh
+# This script shows how to generate a 64 bit version of cyglsa.dll.
+# The 32 bit version will not work on 64 bit systems.
+#
+# Note that you need MinGW-w64 GCC, headers, and import libs.  On Cygwin,
+# the required packages are: mingw64-x86_64-binutils, mingw64-x86_64-gcc-core,
+# mingw64-x86_64-headers, and mingw64-x86_64-runtime.
+#
+# Note that this is for building inside the source dir as not to interfere
+# with the "official" 32 bit build in the build directory.
+#
+# Install the dll into /bin and use the cyglsa-config script to register it.
+# Don't forget to reboot afterwards.
+#
+# Add "-DDEBUGGING" to CFLAGS below to create debugging output to
+# C:\cyglsa.dbgout at runtime.
+#
+set -e
+
+CC="x86_64-w64-mingw32-gcc"
+CFLAGS="-fno-exceptions -O0 -Wall -Werror"
+LDFLAGS="-s -nostdlib -Wl,--entry,DllMain,--major-os-version,5,--minor-os-version,2"
+LIBS="-ladvapi32 -lkernel32 -lntdll"
+
+$CC $CFLAGS $LDFLAGS -shared -o cyglsa64.dll cyglsa.c mslsa.def $LIBS
+
+--=-kVsWB0eJzD1yU+pJKDQX--
