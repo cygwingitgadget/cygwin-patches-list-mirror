@@ -1,28 +1,19 @@
-Return-Path: <cygwin-patches-return-7245-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 6610 invoked by alias); 3 Apr 2011 23:56:05 -0000
-Received: (qmail 6600 invoked by uid 22791); 3 Apr 2011 23:56:04 -0000
-X-SWARE-Spam-Status: No, hits=-1.6 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,UNPARSEABLE_RELAY
+Return-Path: <cygwin-patches-return-7246-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 7351 invoked by alias); 3 Apr 2011 23:58:50 -0000
+Received: (qmail 7340 invoked by uid 22791); 3 Apr 2011 23:58:49 -0000
+X-SWARE-Spam-Status: No, hits=-2.3 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,TW_CP,TW_FP,TW_UF
 X-Spam-Check-By: sourceware.org
-Received: from nm3-vm0.bullet.mail.bf1.yahoo.com (HELO nm3-vm0.bullet.mail.bf1.yahoo.com) (98.139.212.154)    by sourceware.org (qpsmtpd/0.43rc1) with SMTP; Sun, 03 Apr 2011 23:55:59 +0000
-Received: from [98.139.212.146] by nm3.bullet.mail.bf1.yahoo.com with NNFMP; 03 Apr 2011 23:55:58 -0000
-Received: from [98.139.213.12] by tm3.bullet.mail.bf1.yahoo.com with NNFMP; 03 Apr 2011 23:55:58 -0000
-Received: from [127.0.0.1] by smtp112.mail.bf1.yahoo.com with NNFMP; 03 Apr 2011 23:55:58 -0000
-Received: from cgf.cx (cgf@96.252.118.15 with login)        by smtp112.mail.bf1.yahoo.com with SMTP; 03 Apr 2011 16:55:58 -0700 PDT
-X-Yahoo-SMTP: jenXL62swBAWhMTL3wnej93oaS0ClBQOAKs8jbEbx_o-
-Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id DF0F9428013	for <cygwin-patches@cygwin.com>; Sun,  3 Apr 2011 19:55:57 -0400 (EDT)
-Date: Sun, 03 Apr 2011 23:56:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] make <sys/sysmacros.h> compatible with glibc
-Message-ID: <20110403235557.GA15529@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1301873845.3104.26.camel@YAAKOV04>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1301873845.3104.26.camel@YAAKOV04>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+Received: from mail-gy0-f171.google.com (HELO mail-gy0-f171.google.com) (209.85.160.171)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sun, 03 Apr 2011 23:58:45 +0000
+Received: by gye5 with SMTP id 5so2485710gye.2        for <cygwin-patches@cygwin.com>; Sun, 03 Apr 2011 16:58:44 -0700 (PDT)
+Received: by 10.100.238.5 with SMTP id l5mr4651374anh.145.1301875124312;        Sun, 03 Apr 2011 16:58:44 -0700 (PDT)
+Received: from [127.0.0.1] (S0106000cf16f58b1.wp.shawcable.net [174.5.115.130])        by mx.google.com with ESMTPS id t23sm4777014ano.51.2011.04.03.16.58.43        (version=SSLv3 cipher=OTHER);        Sun, 03 Apr 2011 16:58:43 -0700 (PDT)
+Subject: [PATCH] add information to /proc/version
+From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
+To: cygwin-patches <cygwin-patches@cygwin.com>
+Content-Type: multipart/mixed; boundary="=-vTRaoZJ8ACADMliXMkFG"
+Date: Sun, 03 Apr 2011 23:58:00 -0000
+Message-ID: <1301875126.3104.30.camel@YAAKOV04>
+Mime-Version: 1.0
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -32,90 +23,123 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q2/txt/msg00011.txt.bz2
+X-SW-Source: 2011-q2/txt/msg00012.txt.bz2
 
-On Sun, Apr 03, 2011 at 06:37:25PM -0500, Yaakov (Cygwin/X) wrote:
->When building Qt Creator, I encountered a compile error because its code
->uses 'major' and 'minor' as variable names.  Looking at the current
-><sys/sysmacros.h>, which is pulled in automatically by <sys/types.h>,
->makes it obvious why that doesn't work.
->
->Since this code obviously compiles on Linux, I investigated further,
->starting with:
->
->http://www.kernel.org/doc/man-pages/online/pages/man3/minor.3.html
->
->and running some tests on a Linux system.  In short, with glibc:
->
->1) these are indeed macros, but;
->2) the [name] macros point to gnu_dev_[name] functions;
->3) the latter are defined as inline functions in <sys/sysmacros.h>;
->4) the inline functions are used only if optimization is on.
->
->Based on this, I refactored our existing macros into both inline and
->normal functions.  An additional benefit is type-checking in the
->arguments and return types of these functions.
->
->Patches for winsup/cygwin and winsup/doc attached.
->
->
->Yaakov
->
 
->2011-04-03  Yaakov Selkowitz  <yselkowitz@users.sourceforge.net>
->
->	* include/cygwin/types.h: Move #include <sys/sysmacros.h> to
->	end of header so the latter get the dev_t typedef.
->	* include/sys/sysmacros.h (gnu_dev_major, gnu_dev_minor,
->	gnu_dev_makedev): Prototype and define as inline functions.
->	(major, minor, makedev): Redefine in terms of gnu_dev_*.
->	* miscfuncs.cc (gnu_dev_major, gnu_dev_minor, gnu_dev_makedev):
->	New functions.
->	* cygwin.din (gnu_dev_major, gnu_dev_minor, gnu_dev_makedev): Export.
->	* include/cygwin/version.h (CYGWIN_VERSION_API_MINOR): Bump.
->	* posix.sgml (std-gnu): Add gnu_dev_major, gnu_dev_minor, gnu_dev_makedev.
->
->Index: cygwin.din
->===================================================================
->RCS file: /cvs/src/src/winsup/cygwin/cygwin.din,v
->retrieving revision 1.234
->diff -u -r1.234 cygwin.din
->--- cygwin.din	29 Mar 2011 10:32:40 -0000	1.234
->+++ cygwin.din	3 Apr 2011 20:43:11 -0000
->@@ -802,6 +802,9 @@
-> _gmtime = gmtime SIGFE
-> gmtime_r SIGFE
-> _gmtime_r = gmtime_r SIGFE
->+gnu_dev_major NOSIGFE
->+gnu_dev_makedev NOSIGFE
->+gnu_dev_minor NOSIGFE
-> grantpt NOSIGFE
-> hcreate SIGFE
-> hcreate_r SIGFE
->Index: miscfuncs.cc
->===================================================================
->RCS file: /cvs/src/src/winsup/cygwin/miscfuncs.cc,v
->retrieving revision 1.58
->diff -u -r1.58 miscfuncs.cc
->--- miscfuncs.cc	12 Mar 2010 23:13:47 -0000	1.58
->+++ miscfuncs.cc	3 Apr 2011 20:43:20 -0000
->@@ -1,7 +1,7 @@
-> /* miscfuncs.cc: misc funcs that don't belong anywhere else
-> 
->    Copyright 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
->-   2005, 2006, 2007, 2008 Red Hat, Inc.
->+   2005, 2006, 2007, 2008, 2010, 2011 Red Hat, Inc.
-> 
-> This file is part of Cygwin.
-> 
->@@ -9,6 +9,7 @@
-> Cygwin license.  Please consult the file "CYGWIN_LICENSE" for
-> details. */
-> 
->+#define __INSIDE_CYGWIN_GNU_DEV__
+--=-vTRaoZJ8ACADMliXMkFG
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Content-length: 455
 
-I'd prefer a more descriptive name like "__DONT_DEFINE_INLINE_GNU_DEV" but,
-then again, why do these have to be exported?  Why can't they just be always
-inlined?
+On Linux, /proc/version also displays the username of the kernel
+compiler and the version of gcc used to compile[1].  This patch does the
+same for Cygwin:
 
-cgf
+$ cat /proc/version
+CYGWIN_NT-6.1-WOW64 version 1.7.10(0.238/5/3) (Yaakov@YAAKOV04) (gcc
+version 4.5.2 (GCC) ) 2011-03-30 18:56
+
+Patches for winsup/cygwin and winsup/doc attached.
+
+
+Yaakov
+
+[1] http://docs.redhat.com/docs/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/s2-proc-version.html
+
+
+--=-vTRaoZJ8ACADMliXMkFG
+Content-Disposition: attachment; filename="doc-proc-version.patch"
+Content-Type: text/x-patch; name="doc-proc-version.patch"; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Content-length: 713
+
+2011-04-03  Yaakov Selkowitz  <yselkowitz@users.sourceforge.net>
+
+	* new-features.sgml (ov-new1.7.10): Document additional information
+	in /proc/version.
+
+Index: new-features.sgml
+===================================================================
+RCS file: /cvs/src/src/winsup/doc/new-features.sgml,v
+retrieving revision 1.71
+diff -u -r1.71 new-features.sgml
+--- new-features.sgml	1 Apr 2011 19:49:16 -0000	1.71
++++ new-features.sgml	3 Apr 2011 23:55:49 -0000
+@@ -20,6 +20,15 @@
+ shared memory.
+ </para></listitem>
+ 
++<listitem><para>
++/proc/version now shows the username of whomever compiled the Cygwin DLL
++as well as the version of GCC used when compiling.
++</para></listitem>
++
+ </itemizedlist>
+ 
+ </sect2>
+
+--=-vTRaoZJ8ACADMliXMkFG
+Content-Disposition: attachment; filename="proc-version.patch"
+Content-Type: text/x-patch; name="proc-version.patch"; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Content-length: 1967
+
+2011-04-03  Yaakov Selkowitz  <yselkowitz@users.sourceforge.net>
+
+	* Makefile.in (fhandler_proc_CFLAGS): Define USERNAME, HOSTNAME,
+	and GCC_VERSION.
+	* fhandler_proc.cc (format_proc_version):  Add build machine and GCC
+	version information as on Linux.
+
+Index: Makefile.in
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/Makefile.in,v
+retrieving revision 1.243
+diff -u -r1.243 Makefile.in
+--- Makefile.in	1 Apr 2011 19:48:19 -0000	1.243
++++ Makefile.in	3 Apr 2011 23:38:41 -0000
+@@ -287,6 +287,9 @@
+ uinfo_CFLAGS:=-fomit-frame-pointer
+ endif
+ 
++fhandler_proc_CFLAGS+=-DUSERNAME="\"$(USER)\"" -DHOSTNAME="\"$(HOSTNAME)\""
++fhandler_proc_CFLAGS+=-DGCC_VERSION="\"`$(CC) -v 2>&1 | tail -n 1`\""
++
+ _cygwin_crt0_common_STDINCFLAGS:=yes
+ libstdcxx_wrapper_STDINCFLAGS:=yes
+ cxx_STDINCFLAGS:=yes
+Index: fhandler_proc.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/fhandler_proc.cc,v
+retrieving revision 1.98
+diff -u -r1.98 fhandler_proc.cc
+--- fhandler_proc.cc	2 Apr 2011 11:32:55 -0000	1.98
++++ fhandler_proc.cc	3 Apr 2011 23:38:41 -0000
+@@ -361,15 +361,19 @@
+ static _off64_t
+ format_proc_version (void *, char *&destbuf)
+ {
++  tmp_pathbuf tp;
++  char *buf = tp.c_get ();
++  char *bufptr = buf;
+   struct utsname uts_name;
+ 
+   uname (&uts_name);
+-  destbuf = (char *) crealloc_abort (destbuf, strlen (uts_name.sysname)
+-					      + strlen (uts_name.release)
+-					      + strlen (uts_name.version)
+-					      + 4);
+-  return __small_sprintf (destbuf, "%s %s %s\n",
+-			  uts_name.sysname, uts_name.release, uts_name.version);
++  bufptr += __small_sprintf (bufptr, "%s version %s (%s@%s) (%s) %s\n",
++			  uts_name.sysname, uts_name.release, USERNAME, HOSTNAME,
++			  GCC_VERSION, uts_name.version);
++
++  destbuf = (char *) crealloc_abort (destbuf, bufptr - buf);
++  memcpy (destbuf, buf, bufptr - buf);
++  return bufptr - buf;
+ }
+ 
+ static _off64_t
+
+--=-vTRaoZJ8ACADMliXMkFG--
