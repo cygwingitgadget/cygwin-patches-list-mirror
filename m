@@ -1,20 +1,18 @@
-Return-Path: <cygwin-patches-return-7242-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 8111 invoked by alias); 3 Apr 2011 21:54:41 -0000
-Received: (qmail 8100 invoked by uid 22791); 3 Apr 2011 21:54:40 -0000
+Return-Path: <cygwin-patches-return-7243-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 5935 invoked by alias); 3 Apr 2011 22:37:50 -0000
+Received: (qmail 5726 invoked by uid 22791); 3 Apr 2011 22:37:49 -0000
 X-SWARE-Spam-Status: No, hits=-2.4 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW
 X-Spam-Check-By: sourceware.org
-Received: from mail-gx0-f171.google.com (HELO mail-gx0-f171.google.com) (209.85.161.171)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sun, 03 Apr 2011 21:54:36 +0000
-Received: by gxk22 with SMTP id 22so2460118gxk.2        for <cygwin-patches@cygwin.com>; Sun, 03 Apr 2011 14:54:35 -0700 (PDT)
-Received: by 10.150.169.20 with SMTP id r20mr6153496ybe.311.1301867675475;        Sun, 03 Apr 2011 14:54:35 -0700 (PDT)
-Received: from [127.0.0.1] (S0106000cf16f58b1.wp.shawcable.net [174.5.115.130])        by mx.google.com with ESMTPS id u35sm1880144yba.12.2011.04.03.14.54.34        (version=SSLv3 cipher=OTHER);        Sun, 03 Apr 2011 14:54:34 -0700 (PDT)
-Subject: [PATCH] reorder major-0 devices (was Re: [PATCH] implement /proc/sysvipc/*)
+Received: from mail-yx0-f171.google.com (HELO mail-yx0-f171.google.com) (209.85.213.171)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sun, 03 Apr 2011 22:37:43 +0000
+Received: by yxe42 with SMTP id 42so2471323yxe.2        for <cygwin-patches@cygwin.com>; Sun, 03 Apr 2011 15:37:42 -0700 (PDT)
+Received: by 10.146.216.22 with SMTP id o22mr6226444yag.25.1301870262122;        Sun, 03 Apr 2011 15:37:42 -0700 (PDT)
+Received: from [127.0.0.1] (S0106000cf16f58b1.wp.shawcable.net [174.5.115.130])        by mx.google.com with ESMTPS id c21sm2583217anc.40.2011.04.03.15.37.34        (version=SSLv3 cipher=OTHER);        Sun, 03 Apr 2011 15:37:35 -0700 (PDT)
+Subject: [PATCH] fix make after clean
 From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
 To: cygwin-patches <cygwin-patches@cygwin.com>
-In-Reply-To: <20110401213330.GI3669@calimero.vinschen.de>
-References: <1301650256.3108.4.camel@YAAKOV04>	 <20110401100556.GB24008@calimero.vinschen.de>	 <1301687867.184.10.camel@YAAKOV04>	 <20110401213330.GI3669@calimero.vinschen.de>
-Content-Type: multipart/mixed; boundary="=-xZCdToLye085E7uLpt9+"
-Date: Sun, 03 Apr 2011 21:54:00 -0000
-Message-ID: <1301867677.3104.5.camel@YAAKOV04>
+Content-Type: multipart/mixed; boundary="=-1nAnFAClLmCthE/lQmQi"
+Date: Sun, 03 Apr 2011 22:37:00 -0000
+Message-ID: <1301870258.3104.11.camel@YAAKOV04>
 Mime-Version: 1.0
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -25,44 +23,17 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q2/txt/msg00008.txt.bz2
+X-SW-Source: 2011-q2/txt/msg00009.txt.bz2
 
 
---=-xZCdToLye085E7uLpt9+
+--=-1nAnFAClLmCthE/lQmQi
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-Content-length: 1099
+Content-length: 215
 
-On Fri, 2011-04-01 at 23:33 +0200, Corinna Vinschen wrote:
-> On Apr  1 14:57, Yaakov (Cygwin/X) wrote:
-> > For the sake of clarity, I would reorder it a bit further to
-> > make FH_PROC and friends to one side of major-0 and everything else to
-> > the other side:
-> > 
-> >   /* begin /proc directories */
-> >   FH_PROC    = FHDEV (0, 255),
-> >   FH_REGISTRY= FHDEV (0, 254),
-> >   FH_PROCNET = FHDEV (0, 253),
-> >   FH_PROCESSFD = FHDEV (0, 252),
-> >   FH_PROCSYS = FHDEV (0, 251),
-> >   FH_PROCSYSVIPC = FHDEV (0,250),
-> > 
-> >   FH_PROC_MIN_MINOR = FHDEV (0,200),
-> >   /* end /proc directories */
-> > 
-> >   FH_PIPE    = FHDEV (0, 199),
-> >   FH_PIPER   = FHDEV (0, 198),
-> >   FH_PIPEW   = FHDEV (0, 197),
-> >   FH_FIFO    = FHDEV (0, 196),
-> >   FH_PROCESS = FHDEV (0, 195),
-> >   FH_FS      = FHDEV (0, 194),	/* filesystem based device */
-> >   FH_NETDRIVE= FHDEV (0, 193),
-> >   FH_DEV     = FHDEV (0, 192),
-> > 
-> > As either way this should be a separate changeset IMHO, I have committed
-> > my patch as is and will follow this up on Sunday.
-> 
-> Sounds ok to me.
+If you run make clean in winsup/cygwin followed by make -jX, the build
+fails because devices.cc is not found; it was removed by make clean but
+nothing forced it to be regenerated in time.
 
 Patch attached.
 
@@ -70,93 +41,33 @@ Patch attached.
 Yaakov
 
 
---=-xZCdToLye085E7uLpt9+
-Content-Disposition: attachment; filename="device-major-0-reorder.patch"
-Content-Type: text/x-patch; name="device-major-0-reorder.patch"; charset="UTF-8"
+--=-1nAnFAClLmCthE/lQmQi
+Content-Disposition: attachment; filename="makefile-devices_cc.patch"
+Content-Type: text/x-patch; name="makefile-devices_cc.patch"; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-Content-length: 2598
+Content-length: 715
 
-2011-03-04  Yaakov Selkowitz  <yselkowitz@users.sourceforge.net>
-	    Corinna Vinschen  <corinna@vinschen.de>
+2011-04-03  Yaakov Selkowitz  <yselkowitz@users.sourceforge.net>
 
-	* devices.h (fh_devices): Define FH_PROC_MIN_MINOR.
-	Reorder major-0 devices so that all /proc directories fall
-	between FH_PROC and FH_PROC_MIN_MINOR.
-	* path.h (isproc_dev): Redefine accordingly.
+	* Makefile.in (devices.o): New rule with dependency on devices.cc
+	to assure that the latter exists and is current.
 
-Index: devices.h
+Index: Makefile.in
 ===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/devices.h,v
-retrieving revision 1.27
-diff -u -r1.27 devices.h
---- devices.h	1 Apr 2011 19:48:19 -0000	1.27
-+++ devices.h	3 Apr 2011 21:46:44 -0000
-@@ -1,6 +1,6 @@
- /* devices.h
+RCS file: /cvs/src/src/winsup/cygwin/Makefile.in,v
+retrieving revision 1.243
+diff -u -r1.243 Makefile.in
+--- Makefile.in	1 Apr 2011 19:48:19 -0000	1.243
++++ Makefile.in	3 Apr 2011 21:33:27 -0000
+@@ -443,6 +443,9 @@
+ $(srcdir)/devices.cc: gendevices devices.in devices.h
+ 	${wordlist 1,2,$^} $@
  
--   Copyright 2002, 2003, 2004, 2005, 2007, 2009, 2010 Red Hat, Inc.
-+   Copyright 2002, 2003, 2004, 2005, 2007, 2009, 2010, 2011 Red Hat, Inc.
- 
- This file is part of Cygwin.
- 
-@@ -39,22 +39,25 @@
-   FH_WINDOWS = FHDEV (13, 255),
-   FH_CLIPBOARD=FHDEV (13, 254),
- 
--  FH_PIPE    = FHDEV (0, 255),
--  FH_PIPER   = FHDEV (0, 254),
--  FH_PIPEW   = FHDEV (0, 253),
--  FH_FIFO    = FHDEV (0, 252),
--  FH_PROC    = FHDEV (0, 250),
--  FH_REGISTRY= FHDEV (0, 249),
--  FH_PROCESS = FHDEV (0, 248),
--
--  FH_FS      = FHDEV (0, 247),	/* filesystem based device */
--
--  FH_NETDRIVE= FHDEV (0, 246),
--  FH_DEV     = FHDEV (0, 245),
--  FH_PROCNET = FHDEV (0, 244),
--  FH_PROCESSFD = FHDEV (0, 243),
--  FH_PROCSYS = FHDEV (0, 242),
--  FH_PROCSYSVIPC = FHDEV (0,241),
-+  /* begin /proc directories */
-+  FH_PROC    = FHDEV (0, 255),
-+  FH_REGISTRY= FHDEV (0, 254),
-+  FH_PROCNET = FHDEV (0, 253),
-+  FH_PROCESSFD = FHDEV (0, 252),
-+  FH_PROCSYS = FHDEV (0, 251),
-+  FH_PROCSYSVIPC = FHDEV (0,250),
++devices.o: $(srcdir)/devices.cc
++	$(COMPILE_CXX) -o $@ $<
 +
-+  FH_PROC_MIN_MINOR = FHDEV (0,200),
-+  /* end /proc directories */
-+
-+  FH_PIPE    = FHDEV (0, 199),
-+  FH_PIPER   = FHDEV (0, 198),
-+  FH_PIPEW   = FHDEV (0, 197),
-+  FH_FIFO    = FHDEV (0, 196),
-+  FH_PROCESS = FHDEV (0, 195),
-+  FH_FS      = FHDEV (0, 194),  /* filesystem based device */
-+  FH_NETDRIVE= FHDEV (0, 193),
-+  FH_DEV     = FHDEV (0, 192),
- 
-   DEV_FLOPPY_MAJOR = 2,
-   FH_FLOPPY  = FHDEV (DEV_FLOPPY_MAJOR, 0),
-Index: path.h
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/path.h,v
-retrieving revision 1.155
-diff -u -r1.155 path.h
---- path.h	1 Apr 2011 19:48:19 -0000	1.155
-+++ path.h	3 Apr 2011 21:46:44 -0000
-@@ -18,8 +18,7 @@
- #include <fcntl.h>
- 
- #define isproc_dev(devn) \
--  (devn == FH_PROC || devn == FH_REGISTRY || devn == FH_PROCESS || \
--   devn == FH_PROCNET || devn == FH_PROCSYS || devn == FH_PROCSYSVIPC)
-+  (devn >= FH_PROC_MIN_MINOR && devn <= FH_PROC)
- 
- #define isprocsys_dev(devn) (devn == FH_PROCSYS)
+ ${CURDIR}/libc.a: ${LIB_NAME} ./libm.a libpthread.a libutil.a
+ 	${speclib} -v ${@F}
  
 
---=-xZCdToLye085E7uLpt9+--
+--=-1nAnFAClLmCthE/lQmQi--
