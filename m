@@ -1,21 +1,20 @@
-Return-Path: <cygwin-patches-return-7262-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 28032 invoked by alias); 4 Apr 2011 12:41:33 -0000
-Received: (qmail 28020 invoked by uid 22791); 4 Apr 2011 12:41:32 -0000
-X-SWARE-Spam-Status: No, hits=-2.5 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW
+Return-Path: <cygwin-patches-return-7263-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 28871 invoked by alias); 4 Apr 2011 12:43:42 -0000
+Received: (qmail 28859 invoked by uid 22791); 4 Apr 2011 12:43:41 -0000
+X-SWARE-Spam-Status: No, hits=-2.6 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_LOW,TW_NV
 X-Spam-Check-By: sourceware.org
-Received: from mail-yx0-f171.google.com (HELO mail-yx0-f171.google.com) (209.85.213.171)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 04 Apr 2011 12:41:14 +0000
-Received: by yxe42 with SMTP id 42so2662099yxe.2        for <cygwin-patches@cygwin.com>; Mon, 04 Apr 2011 05:41:13 -0700 (PDT)
-Received: by 10.150.189.4 with SMTP id m4mr6533881ybf.344.1301920873430;        Mon, 04 Apr 2011 05:41:13 -0700 (PDT)
-Received: from [127.0.0.1] (S0106000cf16f58b1.wp.shawcable.net [174.5.115.130])        by mx.google.com with ESMTPS id u35sm2130500yba.27.2011.04.04.05.41.12        (version=SSLv3 cipher=OTHER);        Mon, 04 Apr 2011 05:41:12 -0700 (PDT)
-Subject: Re: [PATCH] make <sys/sysmacros.h> compatible with glibc
-From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
-To: cygwin-patches <cygwin-patches@cygwin.com>
-In-Reply-To: <20110404122647.GQ3669@calimero.vinschen.de>
-References: <1301873845.3104.26.camel@YAAKOV04>	 <20110403235557.GA15529@ednor.casa.cgf.cx>	 <1301875911.3104.39.camel@YAAKOV04>	 <20110404051942.GA30475@ednor.casa.cgf.cx>	 <20110404105430.GN3669@calimero.vinschen.de>	 <1301916432.3104.76.camel@YAAKOV04>	 <20110404122647.GQ3669@calimero.vinschen.de>
-Content-Type: multipart/mixed; boundary="=-mEFM6mPO/wTnvPCL0Jnv"
-Date: Mon, 04 Apr 2011 12:41:00 -0000
-Message-ID: <1301920876.3104.78.camel@YAAKOV04>
-Mime-Version: 1.0
+Received: from smtpout.karoo.kcom.com (HELO smtpout.karoo.kcom.com) (212.50.160.34)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 04 Apr 2011 12:42:42 +0000
+Received: from 213-152-38-55.dsl.eclipse.net.uk (HELO [192.168.0.8]) ([213.152.38.55])  by smtpout.karoo.kcom.com with ESMTP; 04 Apr 2011 13:42:40 +0100
+Message-ID: <4D99BCCE.60407@dronecode.org.uk>
+Date: Mon, 04 Apr 2011 12:43:00 -0000
+From: Jon TURNEY <jon.turney@dronecode.org.uk>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.15) Gecko/20110303 Thunderbird/3.1.9
+MIME-Version: 1.0
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Add an additional relocation attempt pass to load_after_fork()
+References: <4D7CDDC7.5060708@dronecode.org.uk> <20110313152111.GA7064@calimero.vinschen.de> <4D7E908B.4010004@dronecode.org.uk> <20110315075313.GA5722@calimero.vinschen.de> <20110315150412.GA18662@ednor.casa.cgf.cx> <20110315154609.GE4320@calimero.vinschen.de> <20110330211556.GE13484@calimero.vinschen.de> <20110330212951.GC28494@ednor.casa.cgf.cx>
+In-Reply-To: <20110330212951.GC28494@ednor.casa.cgf.cx>
+Content-Type: multipart/mixed; boundary="------------030602080700070900090203"
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -25,117 +24,227 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q2/txt/msg00028.txt.bz2
+X-SW-Source: 2011-q2/txt/msg00029.txt.bz2
 
-
---=-mEFM6mPO/wTnvPCL0Jnv
-Content-Type: text/plain; charset="UTF-8"
+This is a multi-part message in MIME format.
+--------------030602080700070900090203
+Content-Type: text/plain; charset=ISO-8859-1
 Content-Transfer-Encoding: 7bit
-Content-length: 314
+Content-length: 381
 
-On Mon, 2011-04-04 at 14:26 +0200, Corinna Vinschen wrote:
-> On Apr  4 06:27, Yaakov (Cygwin/X) wrote:
-> > Alright, do I still bump CYGWIN_VERSION_API_MINOR for only inline
-> > functions?
+On 30/03/2011 22:29, Christopher Faylor wrote:
+> On Wed, Mar 30, 2011 at 11:15:56PM +0200, Corinna Vinschen wrote:
+>> Chris, are you going to take a look into this patch?
 > 
-> No, that's not necessary.
-> 
-> > What about posix.sgml?
-> 
-> You can skip it as well.
+> yep.
 
-Revised patch attached.
+Attached is an updated version of the patch which fixes the warning identified
+by Yaakov.
 
+I've also attached a slightly cleaned up version of the additional fork
+debugging output patch I was using.
 
-Yaakov
-
-
---=-mEFM6mPO/wTnvPCL0Jnv
-Content-Disposition: attachment; filename="sysmacros-inline.patch"
-Content-Type: text/x-patch; name="sysmacros-inline.patch"; charset="UTF-8"
+--------------030602080700070900090203
+Content-Type: text/plain;
+ name="dll_init.patch"
 Content-Transfer-Encoding: 7bit
-Content-length: 2298
+Content-Disposition: attachment;
+ filename="dll_init.patch"
+Content-length: 3409
 
-2011-04-04  Yaakov Selkowitz  <yselkowitz@users.sourceforge.net>
 
-	* include/cygwin/types.h: Move #include <sys/sysmacros.h> to
-	end of header so the latter get the dev_t typedef.
-	* include/sys/sysmacros.h (gnu_dev_major, gnu_dev_minor,
-	gnu_dev_makedev): Prototype and define as inline functions.
-	(major, minor, makedev): Redefine in terms of gnu_dev_*.
+2011-03-12  Jon TURNEY  <jon.turney@dronecode.org.uk>
 
-Index: include/cygwin/types.h
+	* dll_init.cc (reserve_at, release_at): New functions.
+	(load_after_fork): Make a 3rd pass at trying to load the DLL in
+	the right place.
+
+
+Index: cygwin/dll_init.cc
 ===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/include/cygwin/types.h,v
-retrieving revision 1.33
-diff -u -r1.33 types.h
---- include/cygwin/types.h	29 Mar 2011 10:32:40 -0000	1.33
-+++ include/cygwin/types.h	3 Apr 2011 20:43:20 -0000
-@@ -17,7 +17,6 @@
- #ifndef _CYGWIN_TYPES_H
- #define _CYGWIN_TYPES_H
- 
--#include <sys/sysmacros.h>
- #include <stdint.h>
- #include <endian.h>
- 
-@@ -220,6 +219,8 @@
- #endif /* __INSIDE_CYGWIN__ */
- #endif /* _CYGWIN_TYPES_H */
- 
-+#include <sys/sysmacros.h>
-+
- #ifdef __cplusplus
+--- cygwin/dll_init.cc.orig	2011-03-27 18:19:06.000000000 +0100
++++ cygwin/dll_init.cc	2011-03-28 23:43:47.125000000 +0100
+@@ -254,15 +254,47 @@
+       }
  }
- #endif
-Index: include/sys/sysmacros.h
-===================================================================
-RCS file: /cvs/src/src/winsup/cygwin/include/sys/sysmacros.h,v
-retrieving revision 1.4
-diff -u -r1.4 sysmacros.h
---- include/sys/sysmacros.h	26 Feb 2010 09:36:21 -0000	1.4
-+++ include/sys/sysmacros.h	3 Apr 2011 20:43:20 -0000
-@@ -1,6 +1,6 @@
- /* sys/sysmacros.h
  
--   Copyright 1998, 2001, 2010 Red Hat, Inc.
-+   Copyright 1998, 2001, 2010, 2011 Red Hat, Inc.
- 
- This file is part of Cygwin.
- 
-@@ -11,8 +11,30 @@
- #ifndef _SYS_SYSMACROS_H
- #define _SYS_SYSMACROS_H
- 
--#define major(dev) ((int)(((dev) >> 16) & 0xffff))
--#define minor(dev) ((int)((dev) & 0xffff))
--#define makedev(major, minor) (((major) << 16) | ((minor) & 0xffff))
-+_ELIDABLE_INLINE int gnu_dev_major(dev_t);
-+_ELIDABLE_INLINE int gnu_dev_minor(dev_t);
-+_ELIDABLE_INLINE dev_t gnu_dev_makedev(int, int);
-+
-+_ELIDABLE_INLINE int
-+gnu_dev_major(dev_t dev)
++/* Mark one page at "here" as reserved.  This may force
++   Windows NT to load a DLL elsewhere. */
++static DWORD
++reserve_at (const PWCHAR name, DWORD here)
 +{
-+	return (int)(((dev) >> 16) & 0xffff);
++  DWORD size;
++  MEMORY_BASIC_INFORMATION mb;
++
++  if (!VirtualQuery ((void *) here, &mb, sizeof (mb)))
++    size = 64 * 1024;
++
++  if (mb.State != MEM_FREE)
++    return 0;
++
++  size = mb.RegionSize;
++  if (!VirtualAlloc ((void *) here, size, MEM_RESERVE, PAGE_NOACCESS))
++    api_fatal ("couldn't allocate memory %p(%d) for '%W' alignment, %E\n",
++               here, size, name);
++  return here;
 +}
 +
-+_ELIDABLE_INLINE int
-+gnu_dev_minor(dev_t dev)
++/* Release the memory previously allocated by "reserve_at" above. */
++static void
++release_at (const PWCHAR name, DWORD here)
 +{
-+	return (int)((dev) & 0xffff);
++  if (!VirtualFree ((void *) here, 0, MEM_RELEASE))
++    api_fatal ("couldn't release memory %p for '%W' alignment, %E\n",
++               here, name);
 +}
 +
-+_ELIDABLE_INLINE dev_t
-+gnu_dev_makedev(int maj, int min)
-+{
-+	return (((maj) << 16) | ((min) & 0xffff));
-+}
+ /* Reload DLLs after a fork.  Iterates over the list of dynamically loaded
+    DLLs and attempts to load them in the same place as they were loaded in the
+    parent. */
+ void
+ dll_list::load_after_fork (HANDLE parent)
+ {
++  DWORD preferred_block = 0;
 +
-+#define major(dev) gnu_dev_major(dev)
-+#define minor(dev) gnu_dev_minor(dev)
-+#define makedev(maj, min) gnu_dev_makedev(maj, min)
+   for (dll *d = &dlls.start; (d = d->next) != NULL; )
+     if (d->type == DLL_LOAD)
+-      for (int i = 0; i < 2; i++)
++      for (int i = 0; i < 3; i++)
+ 	{
+ 	  /* See if DLL will load in proper place.  If so, free it and reload
+ 	     it the right way.
+@@ -281,15 +313,26 @@
+ 	      if (h == d->handle)
+ 		h = LoadLibraryW (d->name);
+ 	    }
+-	  /* If we reached here on the second iteration of the for loop
++
++	  /* If we reached here on subsequent iterations of the for loop
+ 	     then there is a lot of memory to release. */
+ 	  if (i > 0)
+ 	    release_upto (d->name, (DWORD) d->handle);
++
++          /* If we reached here on the last iteration of the for loop
++             then there's a bit of memory to release */
++          if (i > 1)
++            {
++              if (preferred_block)
++                release_at(d->name, preferred_block);
++              preferred_block = 0;
++            }
++
+ 	  if (h == d->handle)
+ 	    break;		/* Success */
  
- #endif /* _SYS_SYSMACROS_H */
+-	  if (i > 0)
+-	    /* We tried once to relocate the dll and it failed. */
++	  if (i > 1)
++	    /* We tried to relocate the dll and it failed. */
+ 	    api_fatal ("unable to remap %W to same address as parent: %p != %p",
+ 		       d->name, d->handle, h);
+ 
+@@ -299,6 +342,15 @@
+ 	     second DLL always loads into a different location. So, block all
+ 	     of the memory up to the new load address and try again. */
+ 	  reserve_upto (d->name, (DWORD) d->handle);
++
++          /* Dll *still* loaded in the wrong place.  This can happen if it
++             couldn't load at the preferred base in the parent, but can in
++             the child, due to ordering differences.  Block memory at it's
++             preferred address and try again. */
++          if (i > 0)
++            {
++              preferred_block = reserve_at(d->name, (DWORD)h);
++            }
+ 	}
+   in_forkee = false;
+ }
 
---=-mEFM6mPO/wTnvPCL0Jnv--
+--------------030602080700070900090203
+Content-Type: text/plain;
+ name="dll_init_debug.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="dll_init_debug.patch"
+Content-length: 2804
+
+2011-04-04  Jon TURNEY  <jon.turney@dronecode.org.uk>
+
+	* dll_init.cc (load_after_fork): Add some debug output...
+	* environ.cc (parse_thing): ... controlled by 'forkdebug' setting
+
+
+Index: winsup/cygwin/dll_init.cc
+===================================================================
+--- winsup.orig/cygwin/dll_init.cc	2011-04-02 21:40:02.000000000 +0100
++++ winsup/cygwin/dll_init.cc	2011-04-03 18:47:09.781250000 +0100
+@@ -29,6 +29,7 @@
+ dll_list dlls;
+ 
+ static bool dll_global_dtors_recorded;
++bool fork_debug = FALSE;
+ 
+ /* Run destructors for all DLLs on exit. */
+ void
+@@ -307,6 +308,8 @@
+ 	     above, the second LoadLibrary will not execute its startup code
+ 	     unless it is first unloaded. */
+ 	  HMODULE h = LoadLibraryExW (d->name, NULL, DONT_RESOLVE_DLL_REFERENCES);
++	  if (fork_debug)
++	    system_printf("LoadLibrary %W @ %p (pass %d)", d->name, h, i);
+ 
+ 	  if (!h)
+ 	    system_printf ("can't reload %W, %E", d->name);
+@@ -332,7 +335,11 @@
+             }
+ 
+ 	  if (h == d->handle)
+-	    break;		/* Success */
++            {
++              if (fork_debug)
++                system_printf("successfully mapped %W @ %p", d->name, d->handle);
++              break;		/* Success */
++            }
+ 
+ 	  if (i > 1)
+ 	    /* We tried to relocate the dll and it failed. */
+@@ -344,6 +351,8 @@
+ 	     load into the same address space.  In the "forked" process, the
+ 	     second DLL always loads into a different location. So, block all
+ 	     of the memory up to the new load address and try again. */
++	  if (fork_debug)
++	    system_printf("reserve_upto %p to try to force it to load there", d->handle);
+ 	  reserve_upto (d->name, (DWORD) d->handle);
+ 
+           /* Dll *still* loaded in the wrong place.  This can happen if it
+@@ -352,6 +361,8 @@
+              preferred address and try again. */
+           if (i > 0)
+             {
++              if (fork_debug)
++                system_printf("reserved_at %p to try to force it to load elsewhere", h);
+               preferred_block = reserve_at(d->name, (DWORD)h);
+             }
+ 	}
+Index: winsup/cygwin/environ.cc
+===================================================================
+--- winsup.orig/cygwin/environ.cc	2011-04-02 22:26:44.000000000 +0100
++++ winsup/cygwin/environ.cc	2011-04-02 22:28:10.937500000 +0100
+@@ -37,6 +37,7 @@
+ bool reset_com = false;
+ static bool envcache = true;
+ static bool create_upcaseenv = false;
++extern bool fork_debug;
+ 
+ static char **lastenviron;
+ 
+@@ -605,6 +606,7 @@
+   {"tty", {NULL}, set_process_state, NULL, {{0}, {PID_USETTY}}},
+   {"upcaseenv", {&create_upcaseenv}, justset, NULL, {{false}, {true}}},
+   {"winsymlinks", {&allow_winsymlinks}, justset, NULL, {{false}, {true}}},
++  {"forkdebug", {&fork_debug}, justset, NULL, {{false}, {true}}},
+   {NULL, {0}, justset, 0, {{0}, {0}}}
+ };
+ 
+
+--------------030602080700070900090203--
