@@ -1,32 +1,22 @@
-Return-Path: <cygwin-patches-return-7247-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 7628 invoked by alias); 3 Apr 2011 23:59:04 -0000
-Received: (qmail 7617 invoked by uid 22791); 3 Apr 2011 23:59:03 -0000
-X-SWARE-Spam-Status: No, hits=-101.6 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,UNPARSEABLE_RELAY,USER_IN_WHITELIST
+Return-Path: <cygwin-patches-return-7248-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 10768 invoked by alias); 4 Apr 2011 00:11:56 -0000
+Received: (qmail 10753 invoked by uid 22791); 4 Apr 2011 00:11:54 -0000
+X-SWARE-Spam-Status: No, hits=-2.4 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW
 X-Spam-Check-By: sourceware.org
-Received: from nm4.bullet.mail.bf1.yahoo.com (HELO nm4.bullet.mail.bf1.yahoo.com) (98.139.212.163)    by sourceware.org (qpsmtpd/0.43rc1) with SMTP; Sun, 03 Apr 2011 23:58:59 +0000
-Received: from [98.139.212.149] by nm4.bullet.mail.bf1.yahoo.com with NNFMP; 03 Apr 2011 23:58:58 -0000
-Received: from [98.139.213.15] by tm6.bullet.mail.bf1.yahoo.com with NNFMP; 03 Apr 2011 23:58:58 -0000
-Received: from [127.0.0.1] by smtp115.mail.bf1.yahoo.com with NNFMP; 03 Apr 2011 23:58:58 -0000
-Received: from cgf.cx (cgf@96.252.118.15 with login)        by smtp115.mail.bf1.yahoo.com with SMTP; 03 Apr 2011 16:58:58 -0700 PDT
-X-Yahoo-SMTP: jenXL62swBAWhMTL3wnej93oaS0ClBQOAKs8jbEbx_o-
-Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id 1EF80428048	for <cygwin-patches@cygwin.com>; Sun,  3 Apr 2011 19:58:58 -0400 (EDT)
-Resent-From: Christopher Faylor <me@cgf.cx>
-Resent-Date: Sun, 3 Apr 2011 19:58:58 -0400
-Resent-Message-ID: <20110403235858.GA21638@ednor.casa.cgf.cx>
-Resent-To: cygwin-patches@cygwin.com
-Date: Sun, 03 Apr 2011 23:59:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] fix make after clean
-Message-ID: <20110403230350.GA16226@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1301870258.3104.11.camel@YAAKOV04>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1301870258.3104.11.camel@YAAKOV04>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+Received: from mail-gw0-f43.google.com (HELO mail-gw0-f43.google.com) (74.125.83.43)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 04 Apr 2011 00:11:50 +0000
+Received: by gwj21 with SMTP id 21so2488947gwj.2        for <cygwin-patches@cygwin.com>; Sun, 03 Apr 2011 17:11:49 -0700 (PDT)
+Received: by 10.236.95.176 with SMTP id p36mr8947892yhf.112.1301875909648;        Sun, 03 Apr 2011 17:11:49 -0700 (PDT)
+Received: from [127.0.0.1] (S0106000cf16f58b1.wp.shawcable.net [174.5.115.130])        by mx.google.com with ESMTPS id x74sm2064282yhn.54.2011.04.03.17.11.47        (version=SSLv3 cipher=OTHER);        Sun, 03 Apr 2011 17:11:48 -0700 (PDT)
+Subject: Re: [PATCH] make <sys/sysmacros.h> compatible with glibc
+From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
+To: cygwin-patches <cygwin-patches@cygwin.com>
+In-Reply-To: <20110403235557.GA15529@ednor.casa.cgf.cx>
+References: <1301873845.3104.26.camel@YAAKOV04>	 <20110403235557.GA15529@ednor.casa.cgf.cx>
+Content-Type: text/plain; charset="UTF-8"
+Date: Mon, 04 Apr 2011 00:11:00 -0000
+Message-ID: <1301875911.3104.39.camel@YAAKOV04>
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -36,41 +26,45 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q2/txt/msg00013.txt.bz2
+X-SW-Source: 2011-q2/txt/msg00014.txt.bz2
 
-On Sun, Apr 03, 2011 at 05:37:38PM -0500, Yaakov (Cygwin/X) wrote:
->If you run make clean in winsup/cygwin followed by make -jX, the build
->fails because devices.cc is not found; it was removed by make clean but
->nothing forced it to be regenerated in time.
->
->Patch attached.
->
->
->Yaakov
->
-
->2011-04-03  Yaakov Selkowitz  <yselkowitz@users.sourceforge.net>
->
->	* Makefile.in (devices.o): New rule with dependency on devices.cc
->	to assure that the latter exists and is current.
->
->Index: Makefile.in
->===================================================================
->RCS file: /cvs/src/src/winsup/cygwin/Makefile.in,v
->retrieving revision 1.243
->diff -u -r1.243 Makefile.in
->--- Makefile.in	1 Apr 2011 19:48:19 -0000	1.243
->+++ Makefile.in	3 Apr 2011 21:33:27 -0000
->@@ -443,6 +443,9 @@
-> $(srcdir)/devices.cc: gendevices devices.in devices.h
-> 	${wordlist 1,2,$^} $@
+On Sun, 2011-04-03 at 19:55 -0400, Christopher Faylor wrote:
+> >+#define __INSIDE_CYGWIN_GNU_DEV__
 > 
->+devices.o: $(srcdir)/devices.cc
->+	$(COMPILE_CXX) -o $@ $<
->+
+> I'd prefer a more descriptive name like "__DONT_DEFINE_INLINE_GNU_DEV" 
 
-This can't be right.  In all of the times that I've run a "make clean",
-I have never needed this.  A .o relying on .cc is a given.  You don't
-need an explicit rule.
+The __INSIDE_CYGWIN_foo__ naming scheme seems to be what is used
+elsewhere for similar purposes, hence my choice here.
 
-cgf
+> but, then again, why do these have to be exported?  Why can't they just be
+> always inlined?
+
+I just followed what I observed with glibc:
+
+$ cat test.c 
+#include <sys/types.h>
+#include <stdio.h>
+
+int
+main(void)
+{
+  int maj = 4, min = 64;	/* /dev/ttyS0 */
+  printf("%d, %d = %d\n", maj, min, makedev(maj, min));
+  return 0;
+}
+
+$ gcc -O0 test.c
+
+$ nm a.out | grep " U "
+         U __libc_start_main@@GLIBC_2.0
+         U gnu_dev_makedev@@GLIBC_2.3.3
+         U printf@@GLIBC_2.0
+
+$ gcc -O1 test.c 
+
+$ nm a.out | grep " U "
+         U __libc_start_main@@GLIBC_2.0
+         U printf@@GLIBC_2.0
+
+Yaakov
+
