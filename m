@@ -1,21 +1,21 @@
-Return-Path: <cygwin-patches-return-7257-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 2706 invoked by alias); 4 Apr 2011 10:09:33 -0000
-Received: (qmail 2673 invoked by uid 22791); 4 Apr 2011 10:09:22 -0000
+Return-Path: <cygwin-patches-return-7258-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 7885 invoked by alias); 4 Apr 2011 10:54:53 -0000
+Received: (qmail 7863 invoked by uid 22791); 4 Apr 2011 10:54:41 -0000
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Mon, 04 Apr 2011 10:09:16 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 639F92C0313; Mon,  4 Apr 2011 12:09:13 +0200 (CEST)
-Date: Mon, 04 Apr 2011 10:09:00 -0000
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Mon, 04 Apr 2011 10:54:33 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id A63CB2C0313; Mon,  4 Apr 2011 12:54:30 +0200 (CEST)
+Date: Mon, 04 Apr 2011 10:54:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] reorder major-0 devices (was Re: [PATCH] implement /proc/sysvipc/*)
-Message-ID: <20110404100913.GM3669@calimero.vinschen.de>
+Subject: Re: [PATCH] make <sys/sysmacros.h> compatible with glibc
+Message-ID: <20110404105430.GN3669@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1301650256.3108.4.camel@YAAKOV04> <20110401100556.GB24008@calimero.vinschen.de> <1301687867.184.10.camel@YAAKOV04> <20110401213330.GI3669@calimero.vinschen.de> <1301867677.3104.5.camel@YAAKOV04>
+References: <1301873845.3104.26.camel@YAAKOV04> <20110403235557.GA15529@ednor.casa.cgf.cx> <1301875911.3104.39.camel@YAAKOV04> <20110404051942.GA30475@ednor.casa.cgf.cx>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1301867677.3104.5.camel@YAAKOV04>
+In-Reply-To: <20110404051942.GA30475@ednor.casa.cgf.cx>
 User-Agent: Mutt/1.5.21 (2010-09-15)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -26,61 +26,68 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q2/txt/msg00023.txt.bz2
+X-SW-Source: 2011-q2/txt/msg00024.txt.bz2
 
-On Apr  3 16:54, Yaakov (Cygwin/X) wrote:
-> On Fri, 2011-04-01 at 23:33 +0200, Corinna Vinschen wrote:
-> > On Apr  1 14:57, Yaakov (Cygwin/X) wrote:
-> > > For the sake of clarity, I would reorder it a bit further to
-> > > make FH_PROC and friends to one side of major-0 and everything else to
-> > > the other side:
-> > > 
-> > >   /* begin /proc directories */
-> > >   FH_PROC    = FHDEV (0, 255),
-> > >   FH_REGISTRY= FHDEV (0, 254),
-> > >   FH_PROCNET = FHDEV (0, 253),
-> > >   FH_PROCESSFD = FHDEV (0, 252),
-> > >   FH_PROCSYS = FHDEV (0, 251),
-> > >   FH_PROCSYSVIPC = FHDEV (0,250),
-> > > 
-> > >   FH_PROC_MIN_MINOR = FHDEV (0,200),
-> > >   /* end /proc directories */
-> > > 
-> > >   FH_PIPE    = FHDEV (0, 199),
-> > >   FH_PIPER   = FHDEV (0, 198),
-> > >   FH_PIPEW   = FHDEV (0, 197),
-> > >   FH_FIFO    = FHDEV (0, 196),
-> > >   FH_PROCESS = FHDEV (0, 195),
-> > >   FH_FS      = FHDEV (0, 194),	/* filesystem based device */
-> > >   FH_NETDRIVE= FHDEV (0, 193),
-> > >   FH_DEV     = FHDEV (0, 192),
-> > > 
-> > > As either way this should be a separate changeset IMHO, I have committed
-> > > my patch as is and will follow this up on Sunday.
-> > 
-> > Sounds ok to me.
+On Apr  4 01:19, Christopher Faylor wrote:
+> On Sun, Apr 03, 2011 at 07:11:51PM -0500, Yaakov (Cygwin/X) wrote:
+> >On Sun, 2011-04-03 at 19:55 -0400, Christopher Faylor wrote:
+> >> >+#define __INSIDE_CYGWIN_GNU_DEV__
+> >> 
+> >> I'd prefer a more descriptive name like "__DONT_DEFINE_INLINE_GNU_DEV" 
+> >
+> >The __INSIDE_CYGWIN_foo__ naming scheme seems to be what is used
+> >elsewhere for similar purposes, hence my choice here.
 > 
-> Patch attached.
+> There is a __INSIDE_CYGWIN_NET__ which I apparently added ten years ago
+> but my ideas about naming have changed.  I also added
+> USE_SYS_TYPES_FD_SET which is closer to what I now prefer but it should
+> have had some leading underscores.
+
+USE_SYS_TYPES_FD_SET is 10 years old, too  ;)
+
+> >> but, then again, why do these have to be exported?  Why can't they just be
+> >> always inlined?
+> >
+> >I just followed what I observed with glibc:
+> >
+> >$ cat test.c 
+> >#include <sys/types.h>
+> >#include <stdio.h>
+> >
+> >int
+> >main(void)
+> >{
+> >  int maj = 4, min = 64;	/* /dev/ttyS0 */
+> >  printf("%d, %d = %d\n", maj, min, makedev(maj, min));
+> >  return 0;
+> >}
+> >
+> >$ gcc -O0 test.c
+> >
+> >$ nm a.out | grep " U "
+> >         U __libc_start_main@@GLIBC_2.0
+> >         U gnu_dev_makedev@@GLIBC_2.3.3
+> >         U printf@@GLIBC_2.0
+> >
+> >$ gcc -O1 test.c 
+> >
+> >$ nm a.out | grep " U "
+> >         U __libc_start_main@@GLIBC_2.0
+> >         U printf@@GLIBC_2.0
 > 
-> 
-> Yaakov
-> 
+> Maybe the functions were added to gcc before it had the ability to force
+> inlining.
 
-> 2011-03-04  Yaakov Selkowitz  <...>
-> 	    Corinna Vinschen  <...>
+Apparently they have been added rather late. Per the man page the macros
+existed for a long time, but the exported functions have been added only
+with glibc 2.3.3.
 
-Bzzz.  Please, don't quote raw email addresses, not even as part of
-a patch submission.  Especially don't quote my raw email address.
+> I'll leave it to Corinna but I'd prefer not adding YA export if we can
+> avoid it.
 
-> 	* devices.h (fh_devices): Define FH_PROC_MIN_MINOR.
-> 	Reorder major-0 devices so that all /proc directories fall
-> 	between FH_PROC and FH_PROC_MIN_MINOR.
-> 	* path.h (isproc_dev): Redefine accordingly.
-
-Looks good.  Please apply.
+This is very simple code, so I, too, would prefer to keep it inline.
 
 
-Thanks,
 Corinna
 
 -- 
