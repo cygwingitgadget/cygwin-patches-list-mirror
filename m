@@ -1,28 +1,20 @@
-Return-Path: <cygwin-patches-return-7289-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 10398 invoked by alias); 3 May 2011 21:01:36 -0000
-Received: (qmail 10383 invoked by uid 22791); 3 May 2011 21:01:35 -0000
-X-SWARE-Spam-Status: No, hits=-1.7 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,UNPARSEABLE_RELAY
+Return-Path: <cygwin-patches-return-7290-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 27827 invoked by alias); 4 May 2011 03:09:58 -0000
+Received: (qmail 27813 invoked by uid 22791); 4 May 2011 03:09:58 -0000
+X-SWARE-Spam-Status: No, hits=0.3 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RFC_ABUSE_POST,T_TO_NO_BRKTS_FREEMAIL
 X-Spam-Check-By: sourceware.org
-Received: from nm3.bullet.mail.bf1.yahoo.com (HELO nm3.bullet.mail.bf1.yahoo.com) (98.139.212.162)    by sourceware.org (qpsmtpd/0.43rc1) with SMTP; Tue, 03 May 2011 21:01:21 +0000
-Received: from [98.139.212.148] by nm3.bullet.mail.bf1.yahoo.com with NNFMP; 03 May 2011 21:01:20 -0000
-Received: from [98.139.213.7] by tm5.bullet.mail.bf1.yahoo.com with NNFMP; 03 May 2011 21:01:20 -0000
-Received: from [127.0.0.1] by smtp107.mail.bf1.yahoo.com with NNFMP; 03 May 2011 21:01:20 -0000
-Received: from cgf.cx (cgf@108.49.31.43 with login)        by smtp107.mail.bf1.yahoo.com with SMTP; 03 May 2011 14:01:20 -0700 PDT
-X-Yahoo-SMTP: jenXL62swBAWhMTL3wnej93oaS0ClBQOAKs8jbEbx_o-
-Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id 0208E4A800A	for <cygwin-patches@cygwin.com>; Tue,  3 May 2011 17:01:20 -0400 (EDT)
-Date: Tue, 03 May 2011 21:01:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] pthread_attr_getstack{,addr}, pthread_getattr_np
-Message-ID: <20110503210119.GA1673@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1304350389.6972.11.camel@YAAKOV04> <20110502201124.GA13011@ednor.casa.cgf.cx> <20110503075635.GA1451@calimero.vinschen.de>
+Received: from mail-iy0-f171.google.com (HELO mail-iy0-f171.google.com) (209.85.210.171)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 04 May 2011 03:09:45 +0000
+Received: by iyi20 with SMTP id 20so869000iyi.2        for <cygwin-patches@cygwin.com>; Tue, 03 May 2011 20:09:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20110503075635.GA1451@calimero.vinschen.de>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+Received: by 10.42.99.133 with SMTP id w5mr964415icn.437.1304478584442; Tue, 03 May 2011 20:09:44 -0700 (PDT)
+Received: by 10.231.19.200 with HTTP; Tue, 3 May 2011 20:09:44 -0700 (PDT)
+Date: Wed, 04 May 2011 03:09:00 -0000
+Message-ID: <BANLkTikUJ+opazYOga0URTKj6-6Nw_D+pw@mail.gmail.com>
+Subject: initialize local variable wait_return
+From: Chiheng Xu <chiheng.xu@gmail.com>
+To: cygwin-patches@cygwin.com
+Content-Type: multipart/mixed; boundary=20cf30223f47a48d7904a26a96a7
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -32,31 +24,36 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q2/txt/msg00055.txt.bz2
+X-SW-Source: 2011-q2/txt/msg00056.txt.bz2
 
-On Tue, May 03, 2011 at 09:56:35AM +0200, Corinna Vinschen wrote:
->On May  2 16:11, Christopher Faylor wrote:
->> On Mon, May 02, 2011 at 10:33:09AM -0500, Yaakov (Cygwin/X) wrote:
->> >This implements pthread_attr_getstack(), pthread_attr_getstackaddr, and
->> >pthread_getattr_np(), which I need for webkitgtk.
->> >
->> >In essence, I added a stackaddr member to pthread_attr, which is
->> >accessed (slightly differently) by pthread_attr_getstack{,attr},
->> >behaving just as on Linux.  The bulk of the work is to support
->> >pthread_getattr_np, which provides the real attributes of the given
->> >thread, including the real stack address and size.
->> >
->> >The pthread_attr_setstack{,addr} setters are not implemented, as I have
->> >yet to find a way to set the thread stack address on Windows.  For that
->> >reason I'm not defining _POSIX_THREAD_ATTR_STACKADDR, as the feature is
->> >not yet (fully) implemented.
->> 
->> Cygwin already plays with the stack address.  It has to for situations
->> when you call fork() from a thread.
->
->Isn't that what GetThreadContext/SetThreadContext is for?
 
-If you're just setting ebp/esp yes but you also have to mess around with
-the locations where Windows stores stack frame information.
+--20cf30223f47a48d7904a26a96a7
+Content-Type: text/plain; charset=UTF-8
+Content-length: 15
 
-cgf
+-- 
+Chiheng Xu
+
+--20cf30223f47a48d7904a26a96a7
+Content-Type: application/octet-stream; name="1.patch"
+Content-Disposition: attachment; filename="1.patch"
+Content-Transfer-Encoding: base64
+X-Attachment-Id: f_gn9ow2km0
+Content-length: 810
+
+SW5kZXg6IHdpbnN1cC9jeWd3aW4vZmhhbmRsZXIuY2MKPT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3
+aW4vZmhhbmRsZXIuY2MsdgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuMzgyCmRp
+ZmYgLXUgLXAgLXIxLjM4MiBmaGFuZGxlci5jYwotLS0gd2luc3VwL2N5Z3dp
+bi9maGFuZGxlci5jYwkzIE1heSAyMDExIDEwOjExOjE5IC0wMDAwCTEuMzgy
+CisrKyB3aW5zdXAvY3lnd2luL2ZoYW5kbGVyLmNjCTQgTWF5IDIwMTEgMDI6
+NTQ6MjIgLTAwMDAKQEAgLTE3MzEsNyArMTczMSw3IEBAIGZoYW5kbGVyX2Jh
+c2Vfb3ZlcmxhcHBlZDo6d2FpdF9vdmVybGFwcGUKICAgaWYgKCFnZXRfb3Zl
+cmxhcHBlZCAoKSkKICAgICByZXR1cm4gaW5yZXMgPyBvdmVybGFwcGVkX3N1
+Y2Nlc3MgOiBvdmVybGFwcGVkX2Vycm9yOwogCi0gIHdhaXRfcmV0dXJuIHJl
+czsKKyAgd2FpdF9yZXR1cm4gcmVzID0gb3ZlcmxhcHBlZF9lcnJvcjsKICAg
+RFdPUkQgZXJyID0gR2V0TGFzdEVycm9yICgpOwogICBpZiAobm9uYmxvY2tp
+bmcpCiAgICAgewo=
+
+--20cf30223f47a48d7904a26a96a7--
