@@ -1,28 +1,20 @@
-Return-Path: <cygwin-patches-return-7299-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 28344 invoked by alias); 4 May 2011 15:13:58 -0000
-Received: (qmail 28329 invoked by uid 22791); 4 May 2011 15:13:57 -0000
-X-SWARE-Spam-Status: No, hits=-1.6 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,UNPARSEABLE_RELAY
+Return-Path: <cygwin-patches-return-7300-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 11190 invoked by alias); 4 May 2011 20:10:24 -0000
+Received: (qmail 11147 invoked by uid 22791); 4 May 2011 20:10:15 -0000
+X-SWARE-Spam-Status: No, hits=-1.3 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,T_RP_MATCHES_RCVD,UNPARSEABLE_RELAY
 X-Spam-Check-By: sourceware.org
-Received: from nm28-vm0.bullet.mail.sp2.yahoo.com (HELO nm28-vm0.bullet.mail.sp2.yahoo.com) (98.139.91.234)    by sourceware.org (qpsmtpd/0.43rc1) with SMTP; Wed, 04 May 2011 15:13:43 +0000
-Received: from [98.139.91.63] by nm28.bullet.mail.sp2.yahoo.com with NNFMP; 04 May 2011 15:13:43 -0000
-Received: from [98.136.185.29] by tm3.bullet.mail.sp2.yahoo.com with NNFMP; 04 May 2011 15:13:43 -0000
-Received: from [127.0.0.1] by smtp110.mail.gq1.yahoo.com with NNFMP; 04 May 2011 15:13:43 -0000
-Received: from cgf.cx (cgf@108.49.31.43 with login)        by smtp110.mail.gq1.yahoo.com with SMTP; 04 May 2011 08:13:42 -0700 PDT
-X-Yahoo-SMTP: jenXL62swBAWhMTL3wnej93oaS0ClBQOAKs8jbEbx_o-
-Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id A41464A800A	for <cygwin-patches@cygwin.com>; Wed,  4 May 2011 11:13:41 -0400 (EDT)
-Date: Wed, 04 May 2011 15:13:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] psignal, psiginfo, sys_siglist
-Message-ID: <20110504151341.GD19601@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1304506369.820.15.camel@YAAKOV04> <20110504111826.GA32087@calimero.vinschen.de>
+Received: from mailout03.t-online.de (HELO mailout03.t-online.de) (194.25.134.81)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 04 May 2011 20:10:01 +0000
+Received: from fwd20.aul.t-online.de (fwd20.aul.t-online.de )	by mailout03.t-online.de with smtp 	id 1QHiOT-00063A-L7; Wed, 04 May 2011 22:09:57 +0200
+Received: from [192.168.2.100] (SaP+bcZ-8hyp6P97DwDVRhlsX88MbgB1bflpSgx+ncStI88Ijj3S3R8mGwkqGiEw61@[79.224.116.155]) by fwd20.aul.t-online.de	with esmtp id 1QHiOO-1YmfFw0; Wed, 4 May 2011 22:09:52 +0200
+Message-ID: <4DC1B292.70201@t-online.de>
+Date: Wed, 04 May 2011 20:10:00 -0000
+From: Christian Franke <Christian.Franke@t-online.de>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1.17) Gecko/20110123 SeaMonkey/2.0.12
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20110504111826.GA32087@calimero.vinschen.de>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] False positive from access("/proc/registry/...", F_OK)
+Content-Type: multipart/mixed; boundary="------------000701020307010407020502"
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -32,38 +24,89 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q2/txt/msg00065.txt.bz2
+X-SW-Source: 2011-q2/txt/msg00066.txt.bz2
 
-On Wed, May 04, 2011 at 01:18:26PM +0200, Corinna Vinschen wrote:
->On May  4 05:52, Yaakov (Cygwin/X) wrote:
->> This patch exports psignal() from newlib (once my corresponding patch is
->> accepted) and implements psiginfo() and sys_siglist[].  The first two
->> are POSIX.1-2008, the latter is in BSD and glibc.
->> 
->> Patches for winsup/cygwin and winsup/doc, and a test application,
->> attached.
->> 
->> 
->> Yaakov
->> 
+This is a multi-part message in MIME format.
+--------------000701020307010407020502
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-length: 982
+
+Corinna Vinschen wrote:
+> On Apr 27 12:26, Christian Franke wrote:
+>    
+>> access("/proc/registry/...", F_OK) returns 0 for all (including
+>> nonexistent) entries below a registry key which cannot be opened:
+>>
+>> ...
+>>
+>> Problem was likely introduced by fhandler_registry.cc change 1.52:
+>>
+>>   fhandler_registry::exists ()
+>>   ...
+>>     if (!val_only)
+>>       hKey = open_key (path, KEY_READ, wow64, false);
+>>   - if (hKey != (HKEY) INVALID_HANDLE_VALUE)
+>>   + if (hKey != (HKEY) INVALID_HANDLE_VALUE || get_errno () == EACCES)
+>>       file_type = 1;
+>>     else
+>>
+>> open_key() returns INVALID_HANDLE_VALUE and EACCESS also if an upper
+>> level key cannot be opened. The exists() function returns 1
+>> (virt_directory) then, it should return 0 (virt_none).
+>>      
+> I don't remember anymore why I did that and naturally I also didn't
+> write a comment.
 >
->> 2011-05-04  Yaakov Selkowitz  <yselkowitz@...>
->> 
->> 	* cygwin.din (psiginfo): Export.
->> 	(psignal): Export.
->> 	(sys_siglist): Export.
->> 	* posix.sgml (std-notimpl): Move psiginfo and psignal from here...
->> 	(std-susv4): ... to here.
->> 	(std-deprec): Add sys_siglist.
->> 	* strsig.cc (sys_siglist): New array.
->> 	(psiginfo): New function.
->> 	* include/cygwin/signal.h (sys_siglist): Declare.
->> 	(psiginfo): Declare.
->> 	* include/cygwin/version.h (CYGWIN_VERSION_API_MINOR): Bump.
+> But what you say sounds right to me.  Please create a patch.
 >
->Looks fine to me.  Chris, what do you think?
+>    
 
-The indentation on if and switch is wrong but, other than that minor
-point, it looks fine.
+Done, tested and attached.
 
-cgf
+Christian
+
+
+--------------000701020307010407020502
+Content-Type: text/x-patch;
+ name="registry-fix-eacces.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="registry-fix-eacces.patch"
+Content-length: 1273
+
+2011-05-04  Christian Franke  <franke@computer.org>
+
+	* fhandler_registry.cc (fhandler_registry::exists): Fix regression
+	in EACCES handling.
+	(fhandler_registry::open): Fix "%val" case.
+
+diff --git a/winsup/cygwin/fhandler_registry.cc b/winsup/cygwin/fhandler_registry.cc
+index f2e80ce..beeb0ed 100644
+--- a/winsup/cygwin/fhandler_registry.cc
++++ b/winsup/cygwin/fhandler_registry.cc
+@@ -317,10 +317,12 @@ fhandler_registry::exists ()
+ 
+       if (!val_only)
+ 	hKey = open_key (path, KEY_READ, wow64, false);
+-      if (hKey != (HKEY) INVALID_HANDLE_VALUE || get_errno () == EACCES)
++      if (hKey != (HKEY) INVALID_HANDLE_VALUE)
+ 	file_type = virt_directory;
+       else
+ 	{
++	  /* Key does not exist or open failed with EACCESS,
++	     enumerate subkey and value names of parent key.  */
+ 	  hKey = open_key (path, KEY_READ, wow64, true);
+ 	  if (hKey == (HKEY) INVALID_HANDLE_VALUE)
+ 	    return virt_none;
+@@ -797,7 +799,7 @@ fhandler_registry::open (int flags, mode_t mode)
+ 	handle = open_key (path, KEY_READ, wow64, false);
+       if (handle == (HKEY) INVALID_HANDLE_VALUE)
+ 	{
+-	  if (get_errno () != EACCES)
++	  if (val_only || get_errno () != EACCES)
+ 	    handle = open_key (path, KEY_READ, wow64, true);
+ 	  if (handle == (HKEY) INVALID_HANDLE_VALUE)
+ 	    {
+
+--------------000701020307010407020502--
