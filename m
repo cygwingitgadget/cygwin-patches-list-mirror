@@ -1,19 +1,22 @@
-Return-Path: <cygwin-patches-return-7300-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 11190 invoked by alias); 4 May 2011 20:10:24 -0000
-Received: (qmail 11147 invoked by uid 22791); 4 May 2011 20:10:15 -0000
-X-SWARE-Spam-Status: No, hits=-1.3 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,T_RP_MATCHES_RCVD,UNPARSEABLE_RELAY
+Return-Path: <cygwin-patches-return-7301-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 13265 invoked by alias); 4 May 2011 20:16:18 -0000
+Received: (qmail 13248 invoked by uid 22791); 4 May 2011 20:16:16 -0000
+X-SWARE-Spam-Status: No, hits=-6.7 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_HI,SPF_HELO_PASS,T_RP_MATCHES_RCVD
 X-Spam-Check-By: sourceware.org
-Received: from mailout03.t-online.de (HELO mailout03.t-online.de) (194.25.134.81)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 04 May 2011 20:10:01 +0000
-Received: from fwd20.aul.t-online.de (fwd20.aul.t-online.de )	by mailout03.t-online.de with smtp 	id 1QHiOT-00063A-L7; Wed, 04 May 2011 22:09:57 +0200
-Received: from [192.168.2.100] (SaP+bcZ-8hyp6P97DwDVRhlsX88MbgB1bflpSgx+ncStI88Ijj3S3R8mGwkqGiEw61@[79.224.116.155]) by fwd20.aul.t-online.de	with esmtp id 1QHiOO-1YmfFw0; Wed, 4 May 2011 22:09:52 +0200
-Message-ID: <4DC1B292.70201@t-online.de>
-Date: Wed, 04 May 2011 20:10:00 -0000
-From: Christian Franke <Christian.Franke@t-online.de>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1.17) Gecko/20110123 SeaMonkey/2.0.12
+Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 04 May 2011 20:15:57 +0000
+Received: from int-mx02.intmail.prod.int.phx2.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])	by mx1.redhat.com (8.14.4/8.14.4) with ESMTP id p44KFvVx022037	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=OK)	for <cygwin-patches@cygwin.com>; Wed, 4 May 2011 16:15:57 -0400
+Received: from [10.3.113.2] ([10.3.113.2])	by int-mx02.intmail.prod.int.phx2.redhat.com (8.13.8/8.13.8) with ESMTP id p44KFupe020225	for <cygwin-patches@cygwin.com>; Wed, 4 May 2011 16:15:57 -0400
+Message-ID: <4DC1B3FC.3010209@redhat.com>
+Date: Wed, 04 May 2011 20:16:00 -0000
+From: Eric Blake <eblake@redhat.com>
+User-Agent: Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.2.17) Gecko/20110428 Fedora/3.1.10-1.fc14 Lightning/1.0b3pre Mnenhy/0.8.3 Thunderbird/3.1.10
 MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] False positive from access("/proc/registry/...", F_OK)
-Content-Type: multipart/mixed; boundary="------------000701020307010407020502"
+Subject: Re: [PATCH] False positive from access("/proc/registry/...", F_OK)
+References: <4DC1B292.70201@t-online.de>
+In-Reply-To: <4DC1B292.70201@t-online.de>
+OpenPGP: url=http://people.redhat.com/eblake/eblake.gpg
+Content-Type: multipart/signed; micalg=pgp-sha256; protocol="application/pgp-signature"; boundary="------------enigE785CF1079FC930BE6548EC8"
 X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -24,89 +27,49 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q2/txt/msg00066.txt.bz2
+X-SW-Source: 2011-q2/txt/msg00067.txt.bz2
 
-This is a multi-part message in MIME format.
---------------000701020307010407020502
-Content-Type: text/plain; charset=ISO-8859-1; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-length: 982
+This is an OpenPGP/MIME signed message (RFC 2440 and 3156)
+--------------enigE785CF1079FC930BE6548EC8
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+Content-length: 354
 
-Corinna Vinschen wrote:
-> On Apr 27 12:26, Christian Franke wrote:
->    
->> access("/proc/registry/...", F_OK) returns 0 for all (including
->> nonexistent) entries below a registry key which cannot be opened:
->>
->> ...
->>
->> Problem was likely introduced by fhandler_registry.cc change 1.52:
->>
->>   fhandler_registry::exists ()
->>   ...
->>     if (!val_only)
->>       hKey = open_key (path, KEY_READ, wow64, false);
->>   - if (hKey != (HKEY) INVALID_HANDLE_VALUE)
->>   + if (hKey != (HKEY) INVALID_HANDLE_VALUE || get_errno () == EACCES)
->>       file_type = 1;
->>     else
->>
->> open_key() returns INVALID_HANDLE_VALUE and EACCESS also if an upper
->> level key cannot be opened. The exists() function returns 1
->> (virt_directory) then, it should return 0 (virt_none).
->>      
-> I don't remember anymore why I did that and naturally I also didn't
-> write a comment.
->
-> But what you say sounds right to me.  Please create a patch.
->
->    
+On 05/04/2011 02:09 PM, Christian Franke wrote:
+> Done, tested and attached.
+>=20
+> Christian
+>=20
 
-Done, tested and attached.
+>  	{
+> +	  /* Key does not exist or open failed with EACCESS,
+> +	     enumerate subkey and value names of parent key.  */
 
-Christian
+EACCES, not EACCESS.
+
+--=20
+Eric Blake   eblake@redhat.com    +1-801-349-2682
+Libvirt virtualization library http://libvirt.org
 
 
---------------000701020307010407020502
-Content-Type: text/x-patch;
- name="registry-fix-eacces.patch"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="registry-fix-eacces.patch"
-Content-length: 1273
+--------------enigE785CF1079FC930BE6548EC8
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+Content-length: 619
 
-2011-05-04  Christian Franke  <franke@computer.org>
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.11 (GNU/Linux)
+Comment: Public key at http://people.redhat.com/eblake/eblake.gpg
+Comment: Using GnuPG with Fedora - http://enigmail.mozdev.org/
 
-	* fhandler_registry.cc (fhandler_registry::exists): Fix regression
-	in EACCES handling.
-	(fhandler_registry::open): Fix "%val" case.
+iQEcBAEBCAAGBQJNwbP8AAoJEKeha0olJ0NqM9oH/i8OtJSMbUwVU9iNZaUh+6NX
+zGiR+mlffb71pGBAMQ6vbmH2MS9ox4ZRwmJeQ8VgtxZdKxviuaQbUfydh/aYdt7M
+qit1gSBNEmD3nangJHXzLewR9CvEo64b8NGSW6pDkTCb28Igy0pSrR65T7x5npXn
+JIek1AarQTUEWo0gAnSN2sG6EV5hFpc3uV1yVYdbahOBggX7RZvNgmKAA3trP6Md
+yixfGbLfJKAq+rx4iZEu1Tt31oHjySL+EhqMJErelC4x3OQ87NIioQrLpX1Pz1xY
+gmEexmUfmeh9W2YIvNBJ0XDA/k4Deg/FDx2Y6gFVRNWrKsMxHmhVJqx4HSPO2a4=
+=V870
+-----END PGP SIGNATURE-----
 
-diff --git a/winsup/cygwin/fhandler_registry.cc b/winsup/cygwin/fhandler_registry.cc
-index f2e80ce..beeb0ed 100644
---- a/winsup/cygwin/fhandler_registry.cc
-+++ b/winsup/cygwin/fhandler_registry.cc
-@@ -317,10 +317,12 @@ fhandler_registry::exists ()
- 
-       if (!val_only)
- 	hKey = open_key (path, KEY_READ, wow64, false);
--      if (hKey != (HKEY) INVALID_HANDLE_VALUE || get_errno () == EACCES)
-+      if (hKey != (HKEY) INVALID_HANDLE_VALUE)
- 	file_type = virt_directory;
-       else
- 	{
-+	  /* Key does not exist or open failed with EACCESS,
-+	     enumerate subkey and value names of parent key.  */
- 	  hKey = open_key (path, KEY_READ, wow64, true);
- 	  if (hKey == (HKEY) INVALID_HANDLE_VALUE)
- 	    return virt_none;
-@@ -797,7 +799,7 @@ fhandler_registry::open (int flags, mode_t mode)
- 	handle = open_key (path, KEY_READ, wow64, false);
-       if (handle == (HKEY) INVALID_HANDLE_VALUE)
- 	{
--	  if (get_errno () != EACCES)
-+	  if (val_only || get_errno () != EACCES)
- 	    handle = open_key (path, KEY_READ, wow64, true);
- 	  if (handle == (HKEY) INVALID_HANDLE_VALUE)
- 	    {
-
---------------000701020307010407020502--
+--------------enigE785CF1079FC930BE6548EC8--
