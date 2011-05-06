@@ -1,22 +1,28 @@
-Return-Path: <cygwin-patches-return-7317-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 14951 invoked by alias); 6 May 2011 10:44:04 -0000
-Received: (qmail 14849 invoked by uid 22791); 6 May 2011 10:43:40 -0000
+Return-Path: <cygwin-patches-return-7318-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 15319 invoked by alias); 6 May 2011 15:01:29 -0000
+Received: (qmail 15308 invoked by uid 22791); 6 May 2011 15:01:28 -0000
+X-SWARE-Spam-Status: No, hits=-1.6 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,UNPARSEABLE_RELAY
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Fri, 06 May 2011 10:43:25 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id DA38C2C0578; Fri,  6 May 2011 12:43:22 +0200 (CEST)
-Date: Fri, 06 May 2011 10:44:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Received: from nm18-vm0.bullet.mail.ne1.yahoo.com (HELO nm18-vm0.bullet.mail.ne1.yahoo.com) (98.138.91.37)    by sourceware.org (qpsmtpd/0.43rc1) with SMTP; Fri, 06 May 2011 15:01:13 +0000
+Received: from [98.138.90.50] by nm18.bullet.mail.ne1.yahoo.com with NNFMP; 06 May 2011 15:01:12 -0000
+Received: from [98.138.226.56] by tm3.bullet.mail.ne1.yahoo.com with NNFMP; 06 May 2011 15:01:12 -0000
+Received: from [127.0.0.1] by smtp207.mail.ne1.yahoo.com with NNFMP; 06 May 2011 15:01:11 -0000
+Received: from cgf.cx (cgf@108.49.31.43 with login)        by smtp207.mail.ne1.yahoo.com with SMTP; 06 May 2011 08:01:11 -0700 PDT
+X-Yahoo-SMTP: jenXL62swBAWhMTL3wnej93oaS0ClBQOAKs8jbEbx_o-
+Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id 8D7514A801A	for <cygwin-patches@cygwin.com>; Fri,  6 May 2011 11:01:10 -0400 (EDT)
+Date: Fri, 06 May 2011 15:01:00 -0000
+From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] sysinfo
-Message-ID: <20110506104322.GJ8245@calimero.vinschen.de>
+Message-ID: <20110506150107.GB8417@ednor.casa.cgf.cx>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1304658552.5468.7.camel@YAAKOV04> <20110506081114.GH8245@calimero.vinschen.de> <1304671899.5468.11.camel@YAAKOV04>
+References: <1304658552.5468.7.camel@YAAKOV04> <20110506081114.GH8245@calimero.vinschen.de> <1304671899.5468.11.camel@YAAKOV04> <20110506104322.GJ8245@calimero.vinschen.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1304671899.5468.11.camel@YAAKOV04>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+In-Reply-To: <20110506104322.GJ8245@calimero.vinschen.de>
+User-Agent: Mutt/1.5.20 (2009-06-14)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,65 +32,12 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q2/txt/msg00083.txt.bz2
+X-SW-Source: 2011-q2/txt/msg00084.txt.bz2
 
-On May  6 03:51, Yaakov (Cygwin/X) wrote:
-> On Fri, 2011-05-06 at 10:11 +0200, Corinna Vinschen wrote:
-> > On May  6 00:09, Yaakov (Cygwin/X) wrote:
-> > > This implements sysinfo(2), a GNU extension:
-> > > 
-> > > http://www.kernel.org/doc/man-pages/online/pages/man2/sysinfo.2.html
-> > > 
-> > > The code is partially based on our /proc/meminfo and /proc/uptime code.
-> > > (My next patch will port the former to use sysinfo(2), but the latter
-> > > cannot as it uses .01s resolution, more than sysinfo's 1s.  That patch
-> > > will also fix /proc/meminfo and /proc/swaps for RAM and paging files
-> > > larger than 4GB.)
-> > > 
-> > > Patches for winsup/cygwin and winsup/doc, plus a test program, attached.
-> > > 
-> > > 
-> > > Yaakov
-> > > 
-> > 
-> > > 2011-05-05  Yaakov Selkowitz  <yselkowitz@...>
-> > > 
-> > > 	* sysconf.cc (sysinfo): New function.
-> > > 	* cygwin.din (sysinfo): Export.
-> > > 	* posix.sgml (std-gnu): Add sysinfo.
-> > > 	* include/sys/sysinfo.h (struct sysinfo): Define.
-> > > 	(sysinfo): Declare.
-> > > 	* include/cygwin/version.h (CYGWIN_VERSION_API_MINOR): Bump.
-> > 
-> > That looks good to me.  Just a question...
-> > 
-> > > +  /* FIXME: unsupported */
-> > > +  info->loads[0] = 0UL;
-> > > +  info->loads[1] = 0UL;
-> > > +  info->loads[2] = 0UL;
-> > > +  info->sharedram = 0UL;
-> > > +  info->bufferram = 0UL;
-> > 
-> > Isn't bufferram the sum of paged and non-paged pool?
-> 
-> The comment alongside the bufferram member of struct sysinfo, as defined
-> in the manpage above, says "Memory used by buffers".  A similar meaning
-> is given for the Buffers: line of Linux's /proc/meminfo:
-> 
-> http://docs.redhat.com/docs/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/s2-proc-meminfo.html
-> 
-> So IIUC, no.
+On Fri, May 06, 2011 at 12:43:22PM +0200, Corinna Vinschen wrote:
+>Please check in.
 
-I guess you're right.  The pools are used for everything, not only
-buffers.
+When you do that, please add ,2010 to the list of copyright dates in
+sysconf.cc since the file was changed in 2010.
 
-Please check in.
-
-
-Thanks,
-Corinna
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+cgf
