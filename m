@@ -1,22 +1,19 @@
-Return-Path: <cygwin-patches-return-7321-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 25537 invoked by alias); 7 May 2011 19:00:06 -0000
-Received: (qmail 25185 invoked by uid 22791); 7 May 2011 18:59:47 -0000
+Return-Path: <cygwin-patches-return-7322-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 1525 invoked by alias); 8 May 2011 22:48:54 -0000
+Received: (qmail 1498 invoked by uid 22791); 8 May 2011 22:48:53 -0000
+X-SWARE-Spam-Status: No, hits=-2.5 required=5.0	tests=BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RFC_ABUSE_POST,TW_LR,T_TO_NO_BRKTS_FREEMAIL
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Sat, 07 May 2011 18:59:33 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 4953B2C0578; Sat,  7 May 2011 20:59:29 +0200 (CEST)
-Date: Sat, 07 May 2011 19:00:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Fix access("/proc/registry/HKEY_PERFORMANCE_DATA", R_OK)
-Message-ID: <20110507185929.GA2948@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4DC2D57C.7020009@t-online.de> <20110505172431.GI32085@calimero.vinschen.de> <4DC311C9.1030401@t-online.de> <20110506071407.GG8245@calimero.vinschen.de> <4DC42FB2.2090302@t-online.de>
+Received: from mail-pz0-f43.google.com (HELO mail-pz0-f43.google.com) (209.85.210.43)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sun, 08 May 2011 22:48:39 +0000
+Received: by pzk1 with SMTP id 1so2852952pzk.2        for <cygwin-patches@cygwin.com>; Sun, 08 May 2011 15:48:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <4DC42FB2.2090302@t-online.de>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Received: by 10.142.222.9 with SMTP id u9mr3606330wfg.242.1304894917662; Sun, 08 May 2011 15:48:37 -0700 (PDT)
+Received: by 10.142.14.14 with HTTP; Sun, 8 May 2011 15:48:37 -0700 (PDT)
+Date: Sun, 08 May 2011 22:48:00 -0000
+Message-ID: <BANLkTikgd2eKVtG2gVTktwB8zbwn=9awtg@mail.gmail.com>
+Subject: [PATCH] clock_settime
+From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
+To: cygwin-patches@cygwin.com
+Content-Type: multipart/mixed; boundary=000e0cd150fc0957b904a2cb86d2
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,69 +23,211 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q2/txt/msg00087.txt.bz2
-
-On May  6 19:28, Christian Franke wrote:
-> Corinna Vinschen wrote:
-> >On May  5 23:08, Christian Franke wrote:
-> >>
-> >>No check in rights, sorry :-)
-> >http://sourceware.org/cgi-bin/pdw/ps_form.cgi, project Cygwin, approver me.
-> >
-> 
-> Done - Thanks!
-> 
-> 
-> >However, I just had another look into your patch and I have a problem
-> >here.  On what system and with what type of user account did you test?
-> >
-> >Here's what I get on Windows 2008 and W7:
-> >
-> >$ ~/tests/access /proc/registry/HKEY_PERFORMANCE_DATA
-> >access (/proc/registry/HKEY_PERFORMANCE_DATA, F_OK) = 0
-> >access (/proc/registry/HKEY_PERFORMANCE_DATA, R_OK) = -1<Permission denied>
-> >access (/proc/registry/HKEY_PERFORMANCE_DATA, W_OK) = -1<Read-only file system>
-> >access (/proc/registry/HKEY_PERFORMANCE_DATA, X_OK) = -1<Bad file descriptor>
-> >
-> 
-> Hmm....
-> 
-> >The result is the same on W7 and 2008.  I tried with a normal user
-> >account, as well as with an admin account, with full rights as well as
-> >UAC-restricted.
-> >
-> >
-> 
-> Couldn't test new code in Win7 yet.
-> 
-> Test results:
-> 
-> Current code on XP SP3 and cygwin-5.7.9-1 on WIn7:
-> 
-> access("/proc/registry/HKEY_PERFORMANCE_DATA", F_OK)=0
-> access("/proc/registry/HKEY_PERFORMANCE_DATA", R_OK)=-1 <Bad file
-> descriptor>
-> access("/proc/registry/HKEY_PERFORMANCE_DATA", W_OK)=-1 <Read-only
-> file system>
-> access("/proc/registry/HKEY_PERFORMANCE_DATA", X_OK)=-1 <Bad file
-> descriptor>
-> 
-> Current code + patch on XP
-> 
-> access("/proc/registry/HKEY_PERFORMANCE_DATA", F_OK)=0
-> access("/proc/registry/HKEY_PERFORMANCE_DATA", R_OK)=0
-> access("/proc/registry/HKEY_PERFORMANCE_DATA", W_OK)=-1 <Read-only
-> file system>
-> access("/proc/registry/HKEY_PERFORMANCE_DATA", X_OK)=0
-
-Yeah, right.  On second thought that looks much better.  Please
-check in.
+X-SW-Source: 2011-q2/txt/msg00088.txt.bz2
 
 
-Thanks,
-Corinna
+--000e0cd150fc0957b904a2cb86d2
+Content-Type: text/plain; charset=ISO-8859-1
+Content-length: 605
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+This implements the POSIX clock_settime function, on top of settimeofday:
+
+http://pubs.opengroup.org/onlinepubs/9699919799/functions/clock_settime.html
+http://www.kernel.org/doc/man-pages/online/pages/man3/clock_gettime.3.html
+http://www.kernel.org/doc/man-pages/online/pages/man2/settimeofday.2.html
+
+The fixes to settimeofday are necessary both to match BSD and Linux behaviour,
+and to provide the errnos and return status for clock_settime required by POSIX.
+I also fixed posix.sgml WRT clock_setres.
+
+Patches for winsup/cygwin and winsup/doc, plus test programs for both
+functions, attached.
+
+
+Yaakov
+
+--000e0cd150fc0957b904a2cb86d2
+Content-Type: application/octet-stream; name="clock_settime.patch"
+Content-Disposition: attachment; filename="clock_settime.patch"
+Content-Transfer-Encoding: base64
+X-Attachment-Id: f_gngkemsc0
+Content-length: 6340
+
+MjAxMS0wNS0wOCAgWWFha292IFNlbGtvd2l0eiAgPHlzZWxrb3dpdHpAdXNl
+cnMuc291cmNlZm9yZ2UubmV0PgoKCSogdGltZXMuY2MgKHNldHRpbWVvZmRh
+eSk6IFNldCBlcnJubyB0byBFSU5WQUwgaWYgdHYudHZfbnNlYyBpcwoJaW52
+YWxpZCwgYW5kIHRvIEVQRVJNIGlmIFNldFN5c3RlbVRpbWUgZmFpbHMuICBS
+ZXR1cm4gLTEgaW4gY2FzZQoJb2YgZmFpbHVyZSwgYWxsIGZvciBjb21wYXRp
+YmlsaXR5IHdpdGggQlNEIGFuZCBMaW51eC4KCShjbG9ja19zZXR0aW1lKTog
+TmV3IGZ1bmN0aW9uLgoJKiBjeWd3aW4uZGluIChjbG9ja19zZXR0aW1lKTog
+RXhwb3J0LgoJKiBwb3NpeC5zZ21sIChzdGQtc3VzdjQpOiBBZGQgY2xvY2tf
+c2V0dGltZS4KCU1vdmUgY2xvY2tfc2V0cmVzIGZyb20gaGVyZS4uLgoJKHN0
+ZC1kZXByZWMpOiAuLi4gdG8gaGVyZS4KCShzdGQtbm90ZXMpOiBDb3JyZWN0
+IGxpbWl0YXRpb24gb2YgY2xvY2tfc2V0cmVzIHRvIG9ubHkgQ0xPQ0tfUkVB
+TFRJTUUuCglBZGQgbGltaXRhdGlvbiBvZiBjbG9ja19zZXR0aW1lIHRvIG9u
+bHkgQ0xPQ0tfUkVBTFRJTUUuCgkqIGluY2x1ZGUvY3lnd2luL3ZlcnNpb24u
+aCAoQ1lHV0lOX1ZFUlNJT05fQVBJX01JTk9SKTogQnVtcC4KCkluZGV4OiBj
+eWd3aW4uZGluCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KUkNTIGZpbGU6IC9j
+dnMvc3JjL3NyYy93aW5zdXAvY3lnd2luL2N5Z3dpbi5kaW4sdgpyZXRyaWV2
+aW5nIHJldmlzaW9uIDEuMjM5CmRpZmYgLXUgLXIxLjIzOSBjeWd3aW4uZGlu
+Ci0tLSBjeWd3aW4uZGluCTYgTWF5IDIwMTEgMTg6NTM6MjEgLTAwMDAJMS4y
+MzkKKysrIGN5Z3dpbi5kaW4JOCBNYXkgMjAxMSAwOTowMjoxNCAtMDAwMApA
+QCAtMjIwLDYgKzIyMCw3IEBACiBjbG9ja19nZXRyZXMgU0lHRkUKIGNsb2Nr
+X2dldHRpbWUgU0lHRkUKIGNsb2NrX3NldHJlcyBTSUdGRQorY2xvY2tfc2V0
+dGltZSBTSUdGRQogY2xvZyBOT1NJR0ZFCiBjbG9nZiBOT1NJR0ZFCiBjbG9z
+ZSBTSUdGRQpJbmRleDogcG9zaXguc2dtbAo9PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09ClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL2N5Z3dpbi9wb3Np
+eC5zZ21sLHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjYxCmRpZmYgLXUgLXIx
+LjYxIHBvc2l4LnNnbWwKLS0tIHBvc2l4LnNnbWwJNiBNYXkgMjAxMSAxODo1
+MzoyMSAtMDAwMAkxLjYxCisrKyBwb3NpeC5zZ21sCTggTWF5IDIwMTEgMjI6
+MTk6MjIgLTAwMDAKQEAgLTkyLDcgKzkyLDcgQEAKICAgICBjbG9jawogICAg
+IGNsb2NrX2dldHJlcwkJKHNlZSBjaGFwdGVyICJJbXBsZW1lbnRhdGlvbiBO
+b3RlcyIpCiAgICAgY2xvY2tfZ2V0dGltZQkJKHNlZSBjaGFwdGVyICJJbXBs
+ZW1lbnRhdGlvbiBOb3RlcyIpCi0gICAgY2xvY2tfc2V0cmVzCQkoc2VlIGNo
+YXB0ZXIgIkltcGxlbWVudGF0aW9uIE5vdGVzIikKKyAgICBjbG9ja19zZXR0
+aW1lCQkoc2VlIGNoYXB0ZXIgIkltcGxlbWVudGF0aW9uIE5vdGVzIikKICAg
+ICBjbG9nCiAgICAgY2xvZ2YKICAgICBjbG9zZQpAQCAtMTIxNCw2ICsxMjE0
+LDcgQEAKICAgICBiY21wCQkJKFBPU0lYLjEtMjAwMSwgU1VTdjMpCiAgICAg
+YmNvcHkJCQkoU1VTdjMpCiAgICAgYnplcm8JCQkoU1VTdjMpCisgICAgY2xv
+Y2tfc2V0cmVzCQkoUU5YLCBWeFdvcmtzKSAoc2VlIGNoYXB0ZXIgIkltcGxl
+bWVudGF0aW9uIE5vdGVzIikKICAgICBjdXNlcmlkCQkJKFBPU0lYLjEtMTk4
+OCwgU1VTdjIpCiAgICAgZWN2dAkJCShTVVN2MykKICAgICBlbmR1dGVudAkJ
+CShYUEcyKQpAQCAtMTQzOSw5ICsxNDQwLDkgQEAKIHJlbGF0ZWQgZnVuY3Rp
+b24gY2FsbHMuICBBIHJlYWwgY2hyb290IGZ1bmN0aW9uYWxpdHkgaXMgbm90
+IHN1cHBvcnRlZCBieQogV2luZG93cyBob3dldmVyLjwvcGFyYT4KIAotPHBh
+cmE+PGZ1bmN0aW9uPmNsb2NrX2dldHJlczwvZnVuY3Rpb24+LCA8ZnVuY3Rp
+b24+Y2xvY2tfZ2V0dGltZTwvZnVuY3Rpb24+Ci1hbmQgPGZ1bmN0aW9uPmNs
+b2NrX3NldHJlczwvZnVuY3Rpb24+IG9ubHkgc3VwcG9ydCBDTE9DS19SRUFM
+VElNRSBhbmQKLUNMT0NLX01PTk9UT05JQyBmb3Igbm93LjwvcGFyYT4KKzxw
+YXJhPjxmdW5jdGlvbj5jbG9ja19nZXRyZXM8L2Z1bmN0aW9uPiBhbmQgPGZ1
+bmN0aW9uPmNsb2NrX2dldHRpbWU8L2Z1bmN0aW9uPgorb25seSBzdXBwb3J0
+IENMT0NLX1JFQUxUSU1FIGFuZCBDTE9DS19NT05PVE9OSUMgZm9yIG5vdy4g
+IDxmdW5jdGlvbj5jbG9ja19zZXRyZXM8L2Z1bmN0aW9uPgorYW5kIDxmdW5j
+dGlvbj5jbG9ja19zZXR0aW1lPC9mdW5jdGlvbj4gb25seSBzdXBwb3J0IENM
+T0NLX1JFQUxUSU1FLjwvcGFyYT4KIAogPHBhcmE+QlNEIGZpbGUgbG9ja3Mg
+Y3JlYXRlZCB2aWEgPGZ1bmN0aW9uPmZsb2NrPC9mdW5jdGlvbj4gYXJlIG5v
+dAogcHJvcGFnYXRlZCB0byB0aGUgcGFyZW50IHByb2Nlc3MgYW5kIHNpYmxp
+bmcgcHJvY2Vzc2VzLiAgVGhlIGxvY2tzIGFyZQpJbmRleDogdGltZXMuY2MK
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3Jj
+L3dpbnN1cC9jeWd3aW4vdGltZXMuY2MsdgpyZXRyaWV2aW5nIHJldmlzaW9u
+IDEuMTA3CmRpZmYgLXUgLXIxLjEwNyB0aW1lcy5jYwotLS0gdGltZXMuY2MJ
+MiBNYXkgMjAxMSAxNToyODozNSAtMDAwMAkxLjEwNworKysgdGltZXMuY2MJ
+OCBNYXkgMjAxMSAxNzo1NTozNCAtMDAwMApAQCAtMTExLDYgKzExMSwxMiBA
+QAogCiAgIHR6ID0gdHo7CQkJLyogc2lsZW5jZSB3YXJuaW5nIGFib3V0IHVu
+dXNlZCB2YXJpYWJsZSAqLwogCisgIGlmICh0di0+dHZfdXNlYyA8IDAgfHwg
+dHYtPnR2X3VzZWMgPj0gMTAwMDAwMCkKKyAgICB7CisgICAgICBzZXRfZXJy
+bm8gKEVJTlZBTCk7CisgICAgICByZXR1cm4gLTE7CisgICAgfQorCiAgIHB0
+bSA9IGdtdGltZSAoJnR2LT50dl9zZWMpOwogICBzdC53WWVhcgkgICA9IHB0
+bS0+dG1feWVhciArIDE5MDA7CiAgIHN0LndNb250aAkgICA9IHB0bS0+dG1f
+bW9uICsgMTsKQEAgLTEyMSwxMSArMTI3LDE0IEBACiAgIHN0LndTZWNvbmQg
+ICAgICAgPSBwdG0tPnRtX3NlYzsKICAgc3Qud01pbGxpc2Vjb25kcyA9IHR2
+LT50dl91c2VjIC8gMTAwMDsKIAotICByZXMgPSAhU2V0U3lzdGVtVGltZSAo
+JnN0KTsKKyAgcmVzID0gLSFTZXRTeXN0ZW1UaW1lICgmc3QpOwogICBndG9k
+LnJlc2V0ICgpOwogCiAgIHN5c2NhbGxfcHJpbnRmICgiJWQgPSBzZXR0aW1l
+b2ZkYXkgKCV4LCAleCkiLCByZXMsIHR2LCB0eik7CiAKKyAgaWYgKHJlcyAh
+PSAwKQorICAgIHNldF9lcnJubyAoRVBFUk0pOworCiAgIHJldHVybiByZXM7
+CiB9CiAKQEAgLTYxNCw2ICs2MjMsMjMgQEAKICAgcmV0dXJuIDA7CiB9CiAK
+K2V4dGVybiAiQyIgaW50CitjbG9ja19zZXR0aW1lIChjbG9ja2lkX3QgY2xr
+X2lkLCBjb25zdCBzdHJ1Y3QgdGltZXNwZWMgKnRwKQoreworICBzdHJ1Y3Qg
+dGltZXZhbCB0djsKKworICBpZiAoY2xrX2lkICE9IENMT0NLX1JFQUxUSU1F
+KQorICAgIHsKKyAgICAgIHNldF9lcnJubyAoRUlOVkFMKTsKKyAgICAgIHJl
+dHVybiAtMTsKKyAgICB9CisKKyAgdHYudHZfc2VjID0gdHAtPnR2X3NlYzsK
+KyAgdHYudHZfdXNlYyA9IHRwLT50dl9uc2VjIC8gMTAwMDsKKworICByZXR1
+cm4gc2V0dGltZW9mZGF5ICgmdHYsIE5VTEwpOworfQorCiBzdGF0aWMgRFdP
+UkQgbWlucGVyaW9kOwkvLyBGSVhNRTogTWFpbnRhaW4gcGVyaW9kIGFmdGVy
+IGEgZm9yay4KIAogTE9OR0xPTkcKSW5kZXg6IGluY2x1ZGUvY3lnd2luL3Zl
+cnNpb24uaAo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3Zz
+L3NyYy9zcmMvd2luc3VwL2N5Z3dpbi9pbmNsdWRlL2N5Z3dpbi92ZXJzaW9u
+LmgsdgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuMzQ0CmRpZmYgLXUgLXIxLjM0
+NCB2ZXJzaW9uLmgKLS0tIGluY2x1ZGUvY3lnd2luL3ZlcnNpb24uaAk2IE1h
+eSAyMDExIDE4OjUzOjIxIC0wMDAwCTEuMzQ0CisrKyBpbmNsdWRlL2N5Z3dp
+bi92ZXJzaW9uLmgJOCBNYXkgMjAxMSAwOTowMjoxNSAtMDAwMApAQCAtNDA5
+LDEyICs0MDksMTMgQEAKIAkgICBwdGhyZWFkX2dldGF0dHJfbnAuCiAgICAg
+ICAyNDI6IEV4cG9ydCBwc2lnaW5mbywgcHNpZ25hbCwgc3lzX3NpZ2xpc3Qu
+CiAgICAgICAyNDM6IEV4cG9ydCBzeXNpbmZvLgorICAgICAgMjQ0OiBFeHBv
+cnQgY2xvY2tfc2V0dGltZS4KICAgICAgKi8KIAogICAgICAvKiBOb3RlIHRo
+YXQgd2UgZm9yZ290IHRvIGJ1bXAgdGhlIGFwaSBmb3IgdWFsYXJtLCBzdHJ0
+b2xsLCBzdHJ0b3VsbCAqLwogCiAjZGVmaW5lIENZR1dJTl9WRVJTSU9OX0FQ
+SV9NQUpPUiAwCi0jZGVmaW5lIENZR1dJTl9WRVJTSU9OX0FQSV9NSU5PUiAy
+NDMKKyNkZWZpbmUgQ1lHV0lOX1ZFUlNJT05fQVBJX01JTk9SIDI0NAogCiAg
+ICAgIC8qIFRoZXJlIGlzIGFsc28gYSBjb21wYXRpYml0eSB2ZXJzaW9uIG51
+bWJlciBhc3NvY2lhdGVkIHdpdGggdGhlCiAJc2hhcmVkIG1lbW9yeSByZWdp
+b25zLiAgSXQgaXMgaW5jcmVtZW50ZWQgd2hlbiBpbmNvbXBhdGlibGUK
+
+--000e0cd150fc0957b904a2cb86d2
+Content-Type: text/x-csrc; charset=US-ASCII; name="settimeofday-test.c"
+Content-Disposition: attachment; filename="settimeofday-test.c"
+Content-Transfer-Encoding: base64
+X-Attachment-Id: f_gngkg74i1
+Content-length: 761
+
+I3ByYWdtYSBDQ09EOnNjcmlwdCBubwojcHJhZ21hIENDT0Q6b3B0aW9ucyAt
+bHJ0CgojZGVmaW5lIF9CU0RfU09VUkNFCiNpbmNsdWRlIDxzdGRpby5oPgoj
+aW5jbHVkZSA8c3lzL3RpbWUuaD4KI2luY2x1ZGUgPHVuaXN0ZC5oPgoKI2Rl
+ZmluZSBDSEFOR0UgMzAwCS8qIGZpdmUgbWludXRlcyAqLwojZGVmaW5lIFBB
+VVNFIDUKCmludAptYWluICh2b2lkKQp7CiAgc3RydWN0IHRpbWV2YWwgdHY7
+CiAgc3RydWN0IHRpbWV6b25lIHR6OwogIGludCByZXQ7CgogIGdldHRpbWVv
+ZmRheSAoJnR2LCAmdHopOwoKICB0di50dl9zZWMgLT0gQ0hBTkdFOwojaWZk
+ZWYgVEVTVF9FSU5WQUwKICB0di50dl91c2VjID0gLTE7CiNlbmRpZgogIGlm
+ICgocmV0ID0gc2V0dGltZW9mZGF5ICgmdHYsICZ0eikpKQogICAgZ290byBl
+bmQ7CgogIHNsZWVwIChQQVVTRSk7CgogIHR2LnR2X3NlYyArPSBDSEFOR0Ug
+KyBQQVVTRTsKICByZXQgPSBzZXR0aW1lb2ZkYXkgKCZ0diwgJnR6KTsKCmVu
+ZDoKICBpZiAocmV0KQogICAgcGVycm9yICgic2V0dGltZW9mZGF5LXRlc3Qi
+KTsKICByZXR1cm4gcmV0Owp9Cg==
+
+--000e0cd150fc0957b904a2cb86d2
+Content-Type: text/x-csrc; charset=US-ASCII; name="clock_settime-test.c"
+Content-Disposition: attachment; filename="clock_settime-test.c"
+Content-Transfer-Encoding: base64
+X-Attachment-Id: f_gngkggv02
+Content-length: 960
+
+I3ByYWdtYSBDQ09EOnNjcmlwdCBubwojcHJhZ21hIENDT0Q6b3B0aW9ucyAt
+bHJ0CgojZGVmaW5lIF9YT1BFTl9TT1VSQ0UgNTAwCiNpbmNsdWRlIDxkbGZj
+bi5oPgojaW5jbHVkZSA8c3RkaW8uaD4KI2luY2x1ZGUgPHRpbWUuaD4KI2lu
+Y2x1ZGUgPHVuaXN0ZC5oPgoKI2RlZmluZSBDSEFOR0UgMzAwCS8qIGZpdmUg
+bWludXRlcyAqLwojZGVmaW5lIFBBVVNFIDUKCmludAptYWluICh2b2lkKQp7
+CiAgc3RydWN0IHRpbWVzcGVjIHRwOwogIGludCByZXQ7CiNpZmRlZiBfX0NZ
+R1dJTl9fCiAgaW50ICgqY2xvY2tfc2V0dGltZSkgKGNsb2NraWRfdCwgY29u
+c3Qgc3RydWN0IHRpbWVzcGVjICopOwogIGNsb2NrX3NldHRpbWUgPSBkbHN5
+bSAoZGxvcGVuICgiY3lnd2luMS5kbGwiLCAwKSwgImNsb2NrX3NldHRpbWUi
+KTsKI2VuZGlmCgogIGNsb2NrX2dldHRpbWUgKENMT0NLX1JFQUxUSU1FLCAm
+dHApOwoKICB0cC50dl9zZWMgLT0gQ0hBTkdFOwogIGlmICgocmV0ID0gY2xv
+Y2tfc2V0dGltZSAoQ0xPQ0tfUkVBTFRJTUUsICZ0cCkpKQogICAgZ290byBl
+bmQ7CgogIHNsZWVwIChQQVVTRSk7CgogIHRwLnR2X3NlYyArPSBDSEFOR0Ug
+KyBQQVVTRTsKICByZXQgPSBjbG9ja19zZXR0aW1lIChDTE9DS19SRUFMVElN
+RSwgJnRwKTsKCmVuZDoKICBpZiAocmV0KQogICAgcGVycm9yICgiY2xvY2tf
+c2V0dGltZS10ZXN0Iik7CiAgcmV0dXJuIHJldDsKfQo=
+
+--000e0cd150fc0957b904a2cb86d2
+Content-Type: application/octet-stream; name="doc-clock_settime.patch"
+Content-Disposition: attachment; filename="doc-clock_settime.patch"
+Content-Transfer-Encoding: base64
+X-Attachment-Id: f_gngklci63
+Content-length: 1143
+
+MjAxMS0wNS0wOCAgWWFha292IFNlbGtvd2l0eiAgPHlzZWxrb3dpdHpALi4u
+PgoKCSogbmV3LWZlYXR1cmVzLnNnbWwgKG92LW5ldzEuNy4xMCk6IERvY3Vt
+ZW50IGNsb2NrX3NldHRpbWUuCgpJbmRleDogbmV3LWZlYXR1cmVzLnNnbWwK
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3Jj
+L3dpbnN1cC9kb2MvbmV3LWZlYXR1cmVzLnNnbWwsdgpyZXRyaWV2aW5nIHJl
+dmlzaW9uIDEuNzkKZGlmZiAtdSAtcjEuNzkgbmV3LWZlYXR1cmVzLnNnbWwK
+LS0tIG5ldy1mZWF0dXJlcy5zZ21sCTYgTWF5IDIwMTEgMTg6NTU6MDIgLTAw
+MDAJMS43OQorKysgbmV3LWZlYXR1cmVzLnNnbWwJOCBNYXkgMjAxMSAyMjo0
+Mzo0NSAtMDAwMApAQCAtMzksOCArMzksOSBAQAogPC9wYXJhPjwvbGlzdGl0
+ZW0+CiAKIDxsaXN0aXRlbT48cGFyYT4KLU90aGVyIG5ldyBBUEk6IHBwb2xs
+LCBwc2lnaW5mbywgcHNpZ25hbCwgc3lzX3NpZ2xpc3QsIHB0aHJlYWRfYXR0
+cl9nZXRzdGFjaywKLXB0aHJlYWRfYXR0cl9nZXRzdGFja2FkZHIsIHB0aHJl
+YWRfZ2V0YXR0cl9ucCwgcHRocmVhZF9zZXRzY2hlZHByaW8sIHN5c2luZm8u
+CitPdGhlciBuZXcgQVBJOiBjbG9ja19zZXR0aW1lLCBwcG9sbCwgcHNpZ2lu
+Zm8sIHBzaWduYWwsIHN5c19zaWdsaXN0LAorcHRocmVhZF9hdHRyX2dldHN0
+YWNrLCBwdGhyZWFkX2F0dHJfZ2V0c3RhY2thZGRyLCBwdGhyZWFkX2dldGF0
+dHJfbnAsCitwdGhyZWFkX3NldHNjaGVkcHJpbywgc3lzaW5mby4KIDwvcGFy
+YT48L2xpc3RpdGVtPgogCiA8L2l0ZW1pemVkbGlzdD4K
+
+--000e0cd150fc0957b904a2cb86d2--
