@@ -1,22 +1,23 @@
-Return-Path: <cygwin-patches-return-7325-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 14465 invoked by alias); 10 May 2011 09:26:17 -0000
-Received: (qmail 12348 invoked by uid 22791); 10 May 2011 09:25:50 -0000
+Return-Path: <cygwin-patches-return-7326-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 562 invoked by alias); 10 May 2011 17:30:37 -0000
+Received: (qmail 552 invoked by uid 22791); 10 May 2011 17:30:37 -0000
+X-SWARE-Spam-Status: No, hits=-0.4 required=5.0	tests=AWL,BAYES_40,RCVD_IN_DNSWL_NONE,T_RP_MATCHES_RCVD,UNPARSEABLE_RELAY
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Tue, 10 May 2011 09:25:36 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 1ADCB2C0578; Tue, 10 May 2011 11:25:34 +0200 (CEST)
-Date: Tue, 10 May 2011 09:26:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] tcsetpgrp fails unexpectedly
-Message-ID: <20110510092534.GA25193@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20110404171529.GA6155@ednor.casa.cgf.cx> <20110404192300.C2F931ED79B9@scythe.noid.net> <20110505171054.GE29608@ednor.casa.cgf.cx> <20110505172303.GH32085@calimero.vinschen.de> <20110505181924.GJ32085@calimero.vinschen.de> <20110505200716.GB30765@ednor.casa.cgf.cx>
+Received: from mailout02.t-online.de (HELO mailout02.t-online.de) (194.25.134.17)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 10 May 2011 17:30:23 +0000
+Received: from fwd15.aul.t-online.de (fwd15.aul.t-online.de )	by mailout02.t-online.de with smtp 	id 1QJqlY-0003a5-2p; Tue, 10 May 2011 19:30:36 +0200
+Received: from [192.168.2.100] (ZGPiBZZH8hQGoXGTh7tqihRpc+fkT5DH-MkKVH6nyd7mXBP+sdOmj6eo1qtPfSTZF3@[79.224.118.35]) by fwd15.aul.t-online.de	with esmtp id 1QJql9-0B2QjI0; Tue, 10 May 2011 19:30:11 +0200
+Message-ID: <4DC97623.4040703@t-online.de>
+Date: Tue, 10 May 2011 17:30:00 -0000
+From: Christian Franke <Christian.Franke@t-online.de>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1.17) Gecko/20110123 SeaMonkey/2.0.12
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20110505200716.GB30765@ednor.casa.cgf.cx>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Fix access("/proc/registry/HKEY_PERFORMANCE_DATA", R_OK)
+References: <4DC2D57C.7020009@t-online.de> <20110505172431.GI32085@calimero.vinschen.de> <4DC311C9.1030401@t-online.de> <20110506071407.GG8245@calimero.vinschen.de> <4DC42FB2.2090302@t-online.de> <20110507185929.GA2948@calimero.vinschen.de>
+In-Reply-To: <20110507185929.GA2948@calimero.vinschen.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,42 +27,14 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q2/txt/msg00091.txt.bz2
+X-SW-Source: 2011-q2/txt/msg00092.txt.bz2
 
-On May  5 16:07, Christopher Faylor wrote:
-> On Thu, May 05, 2011 at 08:19:24PM +0200, Corinna Vinschen wrote:
-> >On May  5 19:23, Corinna Vinschen wrote:
-> >> On May  5 13:10, Christopher Faylor wrote:
-> >> > On Mon, Apr 04, 2011 at 12:23:00PM -0700, Tor Perkins wrote:
-> >> > >
-> >> > >> Thanks for the patch and the report.  I'll take a look at this in detail
-> >> > >> in the next couple of days.  However, unfortunately, I think this is a
-> >> > >> large enough submission that it requires an assignment form.
-> >> > >
-> >> > >Thanks for looking into it!
-> >> > >
-> >> > >My assignment form is in the "snail".
-> >> > 
-> >> > Corinna, did you receive this?  Did I miss a notification?
-> >> 
-> >> Thanks for the reminder.  The notification was supposed to go directly
-> >> to you because I was on vacation at the time.  I'll check.
-> >
-> >Due to, let's say, "technical" problems I can't answer this question
-> >before Monday.  It seems the CA arrived and was signed, but somebody
-> >has to check.
-> 
-> Ok.  I'll put this in a cron job to send query email every hour until
-> it's resolved.
+Corinna Vinschen wrote:
+>
+> Yeah, right.  On second thought that looks much better.  Please
+> check in.
+>
+>    
+Done
 
-Resolved.  Tor's copyright assignment made it to Red Hat already weeks
-ago.  The guy I asked to keep you informed during my vacation simply
-forgot...  Sorry about that.
-
-
-Corinna
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+Christian
