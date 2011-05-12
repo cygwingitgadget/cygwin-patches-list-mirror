@@ -1,21 +1,21 @@
-Return-Path: <cygwin-patches-return-7345-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 17323 invoked by alias); 12 May 2011 06:51:56 -0000
-Received: (qmail 17220 invoked by uid 22791); 12 May 2011 06:51:31 -0000
+Return-Path: <cygwin-patches-return-7346-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 17708 invoked by alias); 12 May 2011 12:10:55 -0000
+Received: (qmail 17665 invoked by uid 22791); 12 May 2011 12:10:32 -0000
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Thu, 12 May 2011 06:51:15 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 320C02C0577; Thu, 12 May 2011 08:51:13 +0200 (CEST)
-Date: Thu, 12 May 2011 06:51:00 -0000
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Thu, 12 May 2011 12:10:15 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 6984F2C0577; Thu, 12 May 2011 14:10:12 +0200 (CEST)
+Date: Thu, 12 May 2011 12:10:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Fix /proc/meminfo and /proc/swaps for >4GB
-Message-ID: <20110512065113.GA18135@calimero.vinschen.de>
+Subject: Re: Extending /proc/*/maps
+Message-ID: <20110512121012.GB18135@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1304708638.5504.5.camel@YAAKOV04> <20110509075514.GB2948@calimero.vinschen.de> <1305172698.4700.0.camel@YAAKOV04>
+References: <4DCA1E59.4070800@cs.utoronto.ca> <20110511111455.GC11041@calimero.vinschen.de> <4DCACB72.6070201@cs.utoronto.ca> <20110511193107.GF11041@calimero.vinschen.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1305172698.4700.0.camel@YAAKOV04>
+In-Reply-To: <20110511193107.GF11041@calimero.vinschen.de>
 User-Agent: Mutt/1.5.21 (2010-09-15)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -26,41 +26,90 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q2/txt/msg00111.txt.bz2
+X-SW-Source: 2011-q2/txt/msg00112.txt.bz2
 
-On May 11 22:58, Yaakov (Cygwin/X) wrote:
-> On Mon, 2011-05-09 at 09:55 +0200, Corinna Vinschen wrote:
-> > I'm not sure I understand this new format.  Why do you keep the Mem: and
-> > Swap: lines?  Linux doesn't have them and top appears to work without
-> > them.  And then, why do you print MemShared, HighTotal, and HighFree,
-> > even though they are always 0, but not all the other ~40 lines Linux'
-> > meminfo has, too?
+On May 11 21:31, Corinna Vinschen wrote:
+> On May 11 13:46, Ryan Johnson wrote:
+> > Given that Heap32* has already been reverse-engineered by others,
+> > the main challenge would involve sorting the set of heap block
+> > addresses and distilling them down to a set of allocation bases. We
+> > don't want to do repeated linear searches over 50k+ heap blocks.
 > 
-> Actually, my patch makes no attempt to change the actual format
-> of /proc/meminfo; it changes only what is necessary to handle RAM or
-> swap larger than 4GB by using ULLs instead of ULs.
+> While the base address of the heap is available in
+> DEBUG_HEAP_INFORMATION, I don't see the size of the heap.  Maybe it's in
+> the block of 7 ULONGs marked as "Reserved"?  It must be somewhere.
+> Assuming just that, you could scan the list of blocks once and drop
+> those within the orignal heap allocation.  The remaining blocks are big
+> blocks which have been allocated by additional calls to VirtualAlloc.
 
-That's fine and thanks for that.  I'm only puzzled what's actually
-printed.
+After some debugging, I now have the solution.  If you fetch the heap
+and heap block information using the RtlQueryProcessDebugInformation
+function, you get the list of blocks.  The first block in the list of
+blocks has a flag value of 2.  Let's call it a "start block".  This
+block contains the information about the address and size of the virtual
+memory block reserved for this heap using VirtualAlloc.
 
-> As for modernizing/fixing the format, true, the Mem: and Swap: lines do
-> not exist in modern Linux, nor does the MemShared: line.  I would like
-> to actually define at least HighTotal and HighFree; I'll try to look
-> into that further soon.  As for the rest of Linux's /proc/meminfo, I'll
-> have to see how many other lines can be reasonably determined (if they
-> would exist at all) on Windows.
+Subsequent blocks do not contain address values, but only size values.
+The start of the block is counted relative to the start of the previous
+block.  All these blocks are "in-use", up to the last block which has
+a flag value of 0x100.  This is the free block at the end of the heap.
 
-That would be cool, but that wasn't what I meant.  I was just puzzled
-that you added values which are always 0, but left out others which are
-always 0, too.  I was missing a system, kind of.
+For fixed-size heaps, that's all.  Growable heaps can have multiple
+memory slots reserved with VirtualAlloc.  For these, if there are still
+more blocks, the next block in the list after the free block is a start
+block with a flag value of 2 again.  Here's the algorithm which prints
+only the virtual memory blocks of all heaps:
 
-> So with the ULL changes, if I remove the Mem, Swap, and MemShared lines,
-> will that do for now?
+  typedef struct _HEAPS
+  {
+    ULONG count;
+    DEBUG_HEAP_INFORMATION dhi[1];
+  } HEAPS, *PHEAPS;
 
-Sure.
+  typedef struct _HEAP_BLOCK
+  {
+    ULONG size;
+    ULONG flags;
+    ULONG unknown;
+    ULONG addr;
+  } HEAP_BLOCK, *PHEAP_BLOCK;
+
+  PDEBUG_BUFFER buf;
+  NTSTATUS status;
+
+  buf = RtlCreateQueryDebugBuffer (0, FALSE);
+  if (!buf)
+    {
+      fprintf (stderr, "RtlCreateQueryDebugBuffer returned NULL\n");
+      return 1;
+    }
+  status = RtlQueryProcessDebugInformation (GetCurrentProcessId (),
+					    PDI_HEAPS | PDI_HEAP_BLOCKS,
+					    buf);
+  if (!NT_SUCCESS (status))
+    [...]
+  PHEAPS heaps = (PHEAPS) buf->HeapInformation;
+  if (!heaps)
+    [...]
+  for (int heap_id = 0; heap_id < heaps->count; ++heap_id)
+    {
+      PHEAP_BLOCK blocks = (PHEAP_BLOCK) heaps->dhi[heap_id].Blocks;
+      if (!blocks)
+	[...]
+      uintptr_t addr = 0;
+      for (int block_num = 0; block_num < heaps->dhi[heap_id].BlockCount;
+	   ++block_num)
+	if (blocks[block_num].flags & 2)
+	  printf ("addr 0x%08lx, size %8lu"
+		  blocks[block_num].addr,
+		    blocks[block_num].size);
+    }
+  RtlDestroyQueryDebugBuffer (buf);
+
+As you can imagine, only the blocks I called the start blocks are
+of interest for your struct heap_info.
 
 
-Thanks,
 Corinna
 
 -- 
