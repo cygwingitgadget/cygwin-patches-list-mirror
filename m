@@ -1,19 +1,22 @@
-Return-Path: <cygwin-patches-return-7378-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 346 invoked by alias); 18 May 2011 06:47:19 -0000
-Received: (qmail 336 invoked by uid 22791); 18 May 2011 06:47:18 -0000
-X-SWARE-Spam-Status: No, hits=-2.6 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RFC_ABUSE_POST,T_TO_NO_BRKTS_FREEMAIL
+Return-Path: <cygwin-patches-return-7379-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 22156 invoked by alias); 18 May 2011 18:26:50 -0000
+Received: (qmail 21017 invoked by uid 22791); 18 May 2011 18:26:08 -0000
 X-Spam-Check-By: sourceware.org
-Received: from mail-pz0-f43.google.com (HELO mail-pz0-f43.google.com) (209.85.210.43)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 18 May 2011 06:47:04 +0000
-Received: by pzk1 with SMTP id 1so776698pzk.2        for <cygwin-patches@cygwin.com>; Tue, 17 May 2011 23:47:04 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 10.142.120.42 with SMTP id s42mr887661wfc.400.1305701209160; Tue, 17 May 2011 23:46:49 -0700 (PDT)
-Received: by 10.142.245.18 with HTTP; Tue, 17 May 2011 23:46:49 -0700 (PDT)
-Date: Wed, 18 May 2011 06:47:00 -0000
-Message-ID: <BANLkTimHnhSjBjBUVRgy3+xmrs7mG6srSw@mail.gmail.com>
-Subject: [PATCH] Export __fpurge(3) (pending newlib patch)
-From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Wed, 18 May 2011 18:25:49 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id DE48D2CA6FE; Wed, 18 May 2011 20:25:44 +0200 (CEST)
+Date: Wed, 18 May 2011 18:26:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Content-Type: multipart/mixed; boundary=001636e0a4e0c13d3604a38740d0
+Subject: Re: [PATCH] posix.sgml fixes
+Message-ID: <20110518182544.GV5248@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <BANLkTi=Ri+CfWqakwHk6fOVrVM=4gPTm2A@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <BANLkTi=Ri+CfWqakwHk6fOVrVM=4gPTm2A@mail.gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -23,92 +26,17 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q2/txt/msg00144.txt.bz2
+X-SW-Source: 2011-q2/txt/msg00145.txt.bz2
+
+On May 18 01:08, Yaakov (Cygwin/X) wrote:
+> I have found some more discrepancies in posix.sgml.  Patch attached.
+
+Thanks, go ahead.
 
 
---001636e0a4e0c13d3604a38740d0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-length: 108
+Corinna
 
-These are the patches for exporting __fpurge(3) on our side, once my
-patch on newlib@ is approved.
-
-
-Yaakov
-
---001636e0a4e0c13d3604a38740d0
-Content-Type: application/octet-stream; name="cygwin-__fpurge.patch"
-Content-Disposition: attachment; filename="cygwin-__fpurge.patch"
-Content-Transfer-Encoding: base64
-X-Attachment-Id: f_gntwpgm50
-Content-length: 2660
-
-MjAxMS0wNS0xOCAgWWFha292IFNlbGtvd2l0eiAgPHlzZWxrb3dpdHpALi4u
-PgoKCSogY3lnd2luLmRpbiAoX19mcHVyZ2UpOiBFeHBvcnQuCgkqIHBvc2l4
-LnNnbWwgKHN0ZC1zb2xhcmlzKTogQWRkIF9fZnB1cmdlLgoJKiBpbmNsdWRl
-L2N5Z3dpbi92ZXJzaW9uLmggKENZR1dJTl9WRVJTSU9OX0FQSV9NSU5PUik6
-IEJ1bXAuCgpJbmRleDogY3lnd2luLmRpbgo9PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09ClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL2N5Z3dpbi9jeWd3
-aW4uZGluLHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjI0MwpkaWZmIC11IC1y
-MS4yNDMgY3lnd2luLmRpbgotLS0gY3lnd2luLmRpbgkxOCBNYXkgMjAxMSAw
-MToyNTo0MSAtMDAwMAkxLjI0MworKysgY3lnd2luLmRpbgkxOCBNYXkgMjAx
-MSAwNjoyNzo0MiAtMDAwMApAQCAtNTgyLDYgKzU4Miw3IEBACiBmcHJpbnRm
-IFNJR0ZFCiBfZnByaW50ZiA9IGZwcmludGYgU0lHRkUKIGZwdXJnZSBTSUdG
-RQorX19mcHVyZ2UgU0lHRkUKIGZwdXRjIFNJR0ZFCiBfZnB1dGMgPSBmcHV0
-YyBTSUdGRQogZnB1dHMgU0lHRkUKSW5kZXg6IHBvc2l4LnNnbWwKPT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1
-cC9jeWd3aW4vcG9zaXguc2dtbCx2CnJldHJpZXZpbmcgcmV2aXNpb24gMS42
-NQpkaWZmIC11IC1yMS42NSBwb3NpeC5zZ21sCi0tLSBwb3NpeC5zZ21sCTE4
-IE1heSAyMDExIDAxOjI1OjQxIC0wMDAwCTEuNjUKKysrIHBvc2l4LnNnbWwJ
-MTggTWF5IDIwMTEgMDY6Mjc6NDIgLTAwMDAKQEAgLTExNDcsNiArMTE0Nyw3
-IEBACiA8c2VjdDEgaWQ9InN0ZC1zb2xhcmlzIj48dGl0bGU+U3lzdGVtIGlu
-dGVyZmFjZXMgY29tcGF0aWJsZSB3aXRoIFNvbGFyaXMgb3IgU3VuT1MgZnVu
-Y3Rpb25zOjwvdGl0bGU+CiAKIDxzY3JlZW4+CisgICAgX19mcHVyZ2UKICAg
-ICBhY2wKICAgICBhY2xjaGVjawogICAgIGFjbGZyb21tb2RlCkluZGV4OiBp
-bmNsdWRlL2N5Z3dpbi92ZXJzaW9uLmgKPT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vaW5jbHVk
-ZS9jeWd3aW4vdmVyc2lvbi5oLHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjM0
-OApkaWZmIC11IC1yMS4zNDggdmVyc2lvbi5oCi0tLSBpbmNsdWRlL2N5Z3dp
-bi92ZXJzaW9uLmgJMTggTWF5IDIwMTEgMDE6MjU6NDEgLTAwMDAJMS4zNDgK
-KysrIGluY2x1ZGUvY3lnd2luL3ZlcnNpb24uaAkxOCBNYXkgMjAxMSAwNjoy
-Nzo0MyAtMDAwMApAQCAtNDE2LDEyICs0MTYsMTMgQEAKIAkgICBFeHBvcnQg
-Y2xvY2tfZ2V0Y3B1Y2xvY2tpZCwgcHRocmVhZF9nZXRjcHVjbG9ja2lkLgog
-ICAgICAgMjQ3OiBFeHBvcnQgZXJyb3IsIGVycm9yX2F0X2xpbmUsIGVycm9y
-X21lc3NhZ2VfY291bnQsIGVycm9yX29uZV9wZXJfbGluZSwKIAkgICBlcnJv
-cl9wcmludF9wcm9nbmFtZS4KKyAgICAgIDI0ODogRXhwb3J0IF9fZnB1cmdl
-LgogICAgICAqLwogCiAgICAgIC8qIE5vdGUgdGhhdCB3ZSBmb3Jnb3QgdG8g
-YnVtcCB0aGUgYXBpIGZvciB1YWxhcm0sIHN0cnRvbGwsIHN0cnRvdWxsICov
-CiAKICNkZWZpbmUgQ1lHV0lOX1ZFUlNJT05fQVBJX01BSk9SIDAKLSNkZWZp
-bmUgQ1lHV0lOX1ZFUlNJT05fQVBJX01JTk9SIDI0NworI2RlZmluZSBDWUdX
-SU5fVkVSU0lPTl9BUElfTUlOT1IgMjQ4CiAKICAgICAgLyogVGhlcmUgaXMg
-YWxzbyBhIGNvbXBhdGliaXR5IHZlcnNpb24gbnVtYmVyIGFzc29jaWF0ZWQg
-d2l0aCB0aGUKIAlzaGFyZWQgbWVtb3J5IHJlZ2lvbnMuICBJdCBpcyBpbmNy
-ZW1lbnRlZCB3aGVuIGluY29tcGF0aWJsZQo=
-
---001636e0a4e0c13d3604a38740d0
-Content-Type: application/octet-stream; name="doc-__fpurge.patch"
-Content-Disposition: attachment; filename="doc-__fpurge.patch"
-Content-Transfer-Encoding: base64
-X-Attachment-Id: f_gntwpjgz1
-Content-length: 915
-
-MjAxMS0wNS0xOCAgWWFha292IFNlbGtvd2l0eiAgPHlzZWxrb3dpdHpALi4u
-PgoKCSogbmV3LWZlYXR1cmVzLnNnbWwgKG92LW5ldzEuNy4xMCk6IERvY3Vt
-ZW50IF9fZnB1cmdlLgoKSW5kZXg6IG5ldy1mZWF0dXJlcy5zZ21sCj09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT0KUkNTIGZpbGU6IC9jdnMvc3JjL3NyYy93aW5z
-dXAvZG9jL25ldy1mZWF0dXJlcy5zZ21sLHYKcmV0cmlldmluZyByZXZpc2lv
-biAxLjgzCmRpZmYgLXUgLXIxLjgzIG5ldy1mZWF0dXJlcy5zZ21sCi0tLSBu
-ZXctZmVhdHVyZXMuc2dtbAkxOCBNYXkgMjAxMSAwMToyNjo1NiAtMDAwMAkx
-LjgzCisrKyBuZXctZmVhdHVyZXMuc2dtbAkxOCBNYXkgMjAxMSAwNjozNDow
-NSAtMDAwMApAQCAtNTYsNyArNTYsNyBAQAogPC9wYXJhPjwvbGlzdGl0ZW0+
-CiAKIDxsaXN0aXRlbT48cGFyYT4KLU90aGVyIG5ldyBBUEk6IGNsb2NrX3Nl
-dHRpbWUsIHBwb2xsLCBwc2lnaW5mbywgcHNpZ25hbCwgc3lzX3NpZ2xpc3Qs
-CitPdGhlciBuZXcgQVBJOiBjbG9ja19zZXR0aW1lLCBfX2ZwdXJnZSwgcHBv
-bGwsIHBzaWdpbmZvLCBwc2lnbmFsLCBzeXNfc2lnbGlzdCwKIHB0aHJlYWRf
-c2V0c2NoZWRwcmlvLCBzeXNpbmZvLgogPC9wYXJhPjwvbGlzdGl0ZW0+CiAK
-
---001636e0a4e0c13d3604a38740d0--
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          cygwin AT cygwin DOT com
+Red Hat
