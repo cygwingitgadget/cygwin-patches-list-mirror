@@ -1,28 +1,23 @@
-Return-Path: <cygwin-patches-return-7374-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 1946 invoked by alias); 18 May 2011 01:21:09 -0000
-Received: (qmail 1916 invoked by uid 22791); 18 May 2011 01:21:08 -0000
-X-SWARE-Spam-Status: No, hits=-1.7 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,UNPARSEABLE_RELAY
+Return-Path: <cygwin-patches-return-7375-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 8982 invoked by alias); 18 May 2011 03:35:53 -0000
+Received: (qmail 8854 invoked by uid 22791); 18 May 2011 03:35:52 -0000
+X-SWARE-Spam-Status: No, hits=-1.0 required=5.0	tests=AWL,BAYES_40,DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_LOW
 X-Spam-Check-By: sourceware.org
-Received: from nm27.bullet.mail.bf1.yahoo.com (HELO nm27.bullet.mail.bf1.yahoo.com) (98.139.212.186)    by sourceware.org (qpsmtpd/0.43rc1) with SMTP; Wed, 18 May 2011 01:20:53 +0000
-Received: from [98.139.212.144] by nm27.bullet.mail.bf1.yahoo.com with NNFMP; 18 May 2011 01:20:52 -0000
-Received: from [98.139.213.4] by tm1.bullet.mail.bf1.yahoo.com with NNFMP; 18 May 2011 01:20:52 -0000
-Received: from [127.0.0.1] by smtp104.mail.bf1.yahoo.com with NNFMP; 18 May 2011 01:20:52 -0000
-Received: from cgf.cx (cgf@173.48.46.160 with login)        by smtp104.mail.bf1.yahoo.com with SMTP; 17 May 2011 18:20:52 -0700 PDT
-X-Yahoo-SMTP: jenXL62swBAWhMTL3wnej93oaS0ClBQOAKs8jbEbx_o-
-Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id A8B0B42804C	for <cygwin-patches@cygwin.com>; Tue, 17 May 2011 21:20:51 -0400 (EDT)
-Date: Wed, 18 May 2011 01:21:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
+Received: from out5.smtp.messagingengine.com (HELO out5.smtp.messagingengine.com) (66.111.4.29)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 18 May 2011 03:35:37 +0000
+Received: from compute4.internal (compute4.nyi.mail.srv.osa [10.202.2.44])	by gateway1.messagingengine.com (Postfix) with ESMTP id 25804208E6	for <cygwin-patches@cygwin.com>; Tue, 17 May 2011 23:35:36 -0400 (EDT)
+Received: from frontend1.messagingengine.com ([10.202.2.160])  by compute4.internal (MEProxy); Tue, 17 May 2011 23:35:36 -0400
+Received: from [192.168.1.3] (user-0c6se63.cable.mindspring.com [24.110.56.195])	by mail.messagingengine.com (Postfix) with ESMTPSA id C4F574042B2;	Tue, 17 May 2011 23:35:35 -0400 (EDT)
+Message-ID: <4DD33E74.9030408@cwilson.fastmail.fm>
+Date: Wed, 18 May 2011 03:35:00 -0000
+From: Charles Wilson <cygwin@cwilson.fastmail.fm>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.8.1.23) Gecko/20090812 Thunderbird/2.0.0.23 Mnenhy/0.7.6.666
+MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] error.h
-Message-ID: <20110518012051.GA3616@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
 References: <1305678052.6192.5.camel@YAAKOV04>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 In-Reply-To: <1305678052.6192.5.camel@YAAKOV04>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -32,44 +27,25 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q2/txt/msg00140.txt.bz2
+X-SW-Source: 2011-q2/txt/msg00141.txt.bz2
 
-On Tue, May 17, 2011 at 07:20:47PM -0500, Yaakov (Cygwin/X) wrote:
->This patch series adds error.h and the error(3) functions, a GNU
->extension:
->
->http://www.kernel.org/doc/man-pages/online/pages/man3/error.3.html
->
->I implemented this within Cygwin itself instead of newlib, because it is
->a GNU extension which depends on program_invocation_name, another GNU
->extension available only in Cygwin.
->
->Patches for winsup/cygwin and winsup/doc, the new error.h header, and a
->test application, attached.
->
->
->Yaakov
->
+On 5/17/2011 8:20 PM, Yaakov (Cygwin/X) wrote:
+> This patch series adds error.h and the error(3) functions, a GNU
+> extension:
+> 
+> http://www.kernel.org/doc/man-pages/online/pages/man3/error.3.html
+> 
+> I implemented this within Cygwin itself instead of newlib, because it is
+> a GNU extension which depends on program_invocation_name, another GNU
+> extension available only in Cygwin.
+> 
+> Patches for winsup/cygwin and winsup/doc, the new error.h header, and a
+> test application, attached.
 
->http://www.kernel.org/doc/man-pages/online/pages/man3/error.3.html
->
->2011-05-17  Yaakov Selkowitz  <yselkowitz@...>
->
->	* cygwin.din (error): Export.
->	(error_at_line): Export.
->	(error_message_count): Export.
->	(error_one_per_line): Export.
->	(error_print_progname): Export.
->	* errno.cc (error_message_count): Define.
->	(error_one_per_line): Define.
->	(error_print_progname): Define.
->	(_verror): New static function.
->	(error): New function.
->	(error_at_line): New function.
->	* posix.sgml (std-gnu): Add error, error_at_line.
->	* include/error.h: New header.
->	* include/cygwin/version.h (CYGWIN_VERSION_API_MINOR): Bump.
+Shouldn't the definitions in error.h be guarded by #ifdef GNU_SOURCE or
+something -- or are we relying on error.h itself, as a non-standard
+header, "hiding" the symbols implicitly?   E.g. if you don't want the
+functions, don't include <error.h>?
 
-Looks good.  Please check in.
-
-cgf
+--
+Chuck
