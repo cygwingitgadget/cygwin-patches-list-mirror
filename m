@@ -1,28 +1,22 @@
-Return-Path: <cygwin-patches-return-7388-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 19405 invoked by alias); 23 May 2011 01:36:43 -0000
-Received: (qmail 19227 invoked by uid 22791); 23 May 2011 01:36:42 -0000
-X-SWARE-Spam-Status: No, hits=-0.8 required=5.0	tests=AWL,BAYES_00,RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,UNPARSEABLE_RELAY
+Return-Path: <cygwin-patches-return-7389-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 7752 invoked by alias); 23 May 2011 07:32:27 -0000
+Received: (qmail 7617 invoked by uid 22791); 23 May 2011 07:32:03 -0000
 X-Spam-Check-By: sourceware.org
-Received: from nm13-vm4.bullet.mail.ne1.yahoo.com (HELO nm13-vm4.bullet.mail.ne1.yahoo.com) (98.138.91.173)    by sourceware.org (qpsmtpd/0.43rc1) with SMTP; Mon, 23 May 2011 01:36:28 +0000
-Received: from [98.138.90.52] by nm13.bullet.mail.ne1.yahoo.com with NNFMP; 23 May 2011 01:36:27 -0000
-Received: from [98.138.226.125] by tm5.bullet.mail.ne1.yahoo.com with NNFMP; 23 May 2011 01:36:26 -0000
-Received: from [127.0.0.1] by smtp204.mail.ne1.yahoo.com with NNFMP; 23 May 2011 01:36:24 -0000
-Received: from cgf.cx (cgf@173.48.46.160 with login)        by smtp204.mail.ne1.yahoo.com with SMTP; 22 May 2011 18:36:24 -0700 PDT
-X-Yahoo-SMTP: jenXL62swBAWhMTL3wnej93oaS0ClBQOAKs8jbEbx_o-
-Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id 07B3842804C	for <cygwin-patches@cygwin.com>; Sun, 22 May 2011 21:36:20 -0400 (EDT)
-Date: Mon, 23 May 2011 01:36:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Mon, 23 May 2011 07:31:44 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id E5BCA2CA0E6; Mon, 23 May 2011 09:31:39 +0200 (CEST)
+Date: Mon, 23 May 2011 07:32:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: Improvements to fork handling (1/5)
-Message-ID: <20110523013619.GA5954@ednor.casa.cgf.cx>
+Subject: Re: Improvements to fork handling (2/5)
+Message-ID: <20110523073139.GA17244@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4DCAD5FB.9050508@cs.utoronto.ca> <20110522014135.GA18936@ednor.casa.cgf.cx> <4DD909E8.1050407@cs.utoronto.ca> <20110522202918.GC25762@ednor.casa.cgf.cx>
+References: <4DCAD609.70106@cs.utoronto.ca> <20110522014421.GB18936@ednor.casa.cgf.cx> <4DD958FE.5060208@cs.utoronto.ca>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20110522202918.GC25762@ednor.casa.cgf.cx>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+In-Reply-To: <4DD958FE.5060208@cs.utoronto.ca>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -32,18 +26,63 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q2/txt/msg00154.txt.bz2
+X-SW-Source: 2011-q2/txt/msg00155.txt.bz2
 
-On Sun, May 22, 2011 at 04:29:18PM -0400, Christopher Faylor wrote:
->...I'd prefer that the testing be done in frok:parent when the
->child_copy happens for static and dynamic dlls, maybe by adding a dll
->function which first checks that the data/bss can be copied to the same
->location as the parent.
+On May 22 14:42, Ryan Johnson wrote:
+> On 21/05/2011 9:44 PM, Christopher Faylor wrote:
+> >On Wed, May 11, 2011 at 02:31:37PM -0400, Ryan Johnson wrote:
+> >>Hi all,
+> >>
+> >>This patch has the parent sort its dll list topologically by
+> >>dependencies. Previously, attempts to load a DLL_LOAD dll risked pulling
+> >>in dependencies automatically, and the latter would then not benefit
+> >>from the code which "encourages" them to land in the right places.  The
+> >>dependency tracking is achieved using a simple class which allows to
+> >>introspect a mapped dll image and pull out the dependencies it lists.
+> >>The code currently rebuilds the dependency list at every fork rather
+> >>than attempt to update it properly as modules are loaded and unloaded.
+> >>Note that the topsort optimization affects only cygwin dlls, so any
+> >>windows dlls which are pulled in dynamically (directly or indirectly)
+> >>will still impose the usual risk of address space clobbers.
+> >This seems CPU and memory intensive during a time for which we already
+> >know is very slow.  Is the benefit really worth it?  How much more robust
+> >does it make forking?
+> Topological sorting is O(n), so there's no asymptotic change in
+> performance. Looking up dependencies inside a dll is *very* cheap
+> (2-3 pointer dereferences per dep), and all of this only happens for
+> dynamically-loaded dlls. Given the number of calls to
+> Virtual{Alloc,Query,Free} and LoadDynamicLibraryEx which we make, I
+> would be surprised if the topsort even registered.  That said, it is
+> extra work and will slow down fork.
+> 
+> I have not been able to test how much it helps, but it should help
+> with the test case Jon Turney reported with python a while back [1].
+> In fact, it was that example which made me aware of the potential
+> need for a topsort in the first place.
+> 
+> In theory, this should completely eliminate the case where us
+> loading one DLL pulls in dependencies automatically (= uncontrolled
+> and at Windows' whim). The problem would manifest as a DLL which
+> "loads" in the same wrong place repeatedly when given the choice,
+> and for which we would be unable to VirtualAlloc the offending spot
+> (because the dll in question has non-zero refcount even after we
+> unload it, due to the dll(s) that depend on it. 
 
-Actually, no, I think there's a better way to do that.  I'll check something
-in in the next couple of days.
+There might be a way around this.  It seems to be possible to tweak
+the module list the PEB points to so that you can unload a library
+even though it has dependencies.  Then you can block the unwanted
+space and call LoadLibrary again.  See (*) for a discussion how
+you can unload the exe itself to reload another one.  Maybe that's
+something we can look into as well.  ObNote:  Of course, if we
+could influnce the address at which a DLL gets loaded right from the
+start, it would be the preferrable solution.
 
-I think the rest of your patches have merit too so I'll be checking those
-in as well.  Thanks for all of your work.
 
-cgf
+Corinna
+
+(*) http://www.blizzhackers.cc/viewtopic.php?p=4332690
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          cygwin AT cygwin DOT com
+Red Hat
