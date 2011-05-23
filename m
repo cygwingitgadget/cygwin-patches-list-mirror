@@ -1,28 +1,23 @@
-Return-Path: <cygwin-patches-return-7392-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 8142 invoked by alias); 23 May 2011 20:52:50 -0000
-Received: (qmail 8132 invoked by uid 22791); 23 May 2011 20:52:49 -0000
-X-SWARE-Spam-Status: No, hits=-1.6 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,UNPARSEABLE_RELAY
+Return-Path: <cygwin-patches-return-7391-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 7834 invoked by alias); 23 May 2011 20:52:28 -0000
+Received: (qmail 7807 invoked by uid 22791); 23 May 2011 20:52:27 -0000
+X-SWARE-Spam-Status: No, hits=-6.7 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_HI,SPF_HELO_PASS,T_RP_MATCHES_RCVD
 X-Spam-Check-By: sourceware.org
-Received: from nm9.bullet.mail.sp2.yahoo.com (HELO nm9.bullet.mail.sp2.yahoo.com) (98.139.91.79)    by sourceware.org (qpsmtpd/0.43rc1) with SMTP; Mon, 23 May 2011 20:52:35 +0000
-Received: from [98.139.91.63] by nm9.bullet.mail.sp2.yahoo.com with NNFMP; 23 May 2011 20:52:34 -0000
-Received: from [98.136.185.41] by tm3.bullet.mail.sp2.yahoo.com with NNFMP; 23 May 2011 20:52:34 -0000
-Received: from [127.0.0.1] by smtp102.mail.gq1.yahoo.com with NNFMP; 23 May 2011 20:52:34 -0000
-Received: from cgf.cx (cgf@173.48.46.160 with login)        by smtp102.mail.gq1.yahoo.com with SMTP; 23 May 2011 13:52:33 -0700 PDT
-X-Yahoo-SMTP: jenXL62swBAWhMTL3wnej93oaS0ClBQOAKs8jbEbx_o-
-Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id 79C8D42804D	for <cygwin-patches@cygwin.com>; Mon, 23 May 2011 16:52:32 -0400 (EDT)
+Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 23 May 2011 20:52:13 +0000
+Received: from int-mx12.intmail.prod.int.phx2.redhat.com (int-mx12.intmail.prod.int.phx2.redhat.com [10.5.11.25])	by mx1.redhat.com (8.14.4/8.14.4) with ESMTP id p4NKqDOc008438	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=OK)	for <cygwin-patches@cygwin.com>; Mon, 23 May 2011 16:52:13 -0400
+Received: from [10.3.113.142] (ovpn-113-142.phx2.redhat.com [10.3.113.142])	by int-mx12.intmail.prod.int.phx2.redhat.com (8.14.4/8.14.4) with ESMTP id p4NKqC0I004489	for <cygwin-patches@cygwin.com>; Mon, 23 May 2011 16:52:13 -0400
+Message-ID: <4DDAC8FC.5000508@redhat.com>
 Date: Mon, 23 May 2011 20:52:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
+From: Eric Blake <eblake@redhat.com>
+User-Agent: Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.2.17) Gecko/20110428 Fedora/3.1.10-1.fc14 Lightning/1.0b3pre Mnenhy/0.8.3 Thunderbird/3.1.10
+MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
 Subject: Re: __xpg_strerror_r should not clobber strerror buffer
-Message-ID: <20110523205232.GA7573@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
 References: <4DD8664D.2000407@redhat.com> <20110522013514.GA16516@ednor.casa.cgf.cx> <4DDAC777.5030205@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 In-Reply-To: <4DDAC777.5030205@redhat.com>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+OpenPGP: url=http://people.redhat.com/eblake/eblake.gpg
+Content-Type: multipart/signed; micalg=pgp-sha256; protocol="application/pgp-signature"; boundary="------------enig57B37640CFB8A1E97E8949D5"
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -32,34 +27,73 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q2/txt/msg00158.txt.bz2
+X-SW-Source: 2011-q2/txt/msg00157.txt.bz2
 
-On Mon, May 23, 2011 at 02:45:43PM -0600, Eric Blake wrote:
->Just for the record, I'm having a problem self-building cygwin right
->now, from what looks like mingw issues:
->
->/home/eblake/src/winsup/utils/mingw gcc-4 -B./ -shared
->-Wl,--image-base,0x6FBC0000 -Wl,--entry,_DllMainCRTStartup@12 mthr.o
->mthr_init.o mingwthrd.def -Lmingwex -o mingwm10.dll
->mingwex/libmingwex.a(strtodnrp.o): In function `strtod':
->/home/eblake/src/build/i686-pc-cygwin/winsup/mingw/mingwex/../../../../../winsup/mingw/include/stdlib.h:315:
->multiple definition of `_strtod'
->...
->/usr/lib/gcc/i686-pc-cygwin/4.3.4/../../../../i686-pc-cygwin/bin/ld:
->warning: cannot find entry symbol _DllMainCRTStartup@12; defaulting to
->6fbc1000
->ertr000001.o:(.rdata+0x0): undefined reference to
->`__pei386_runtime_relocator'
->collect2: ld returned 1 exit status
->make[3]: *** [mingwm10.dll] Error 1
->make[3]: Leaving directory
->`/home/eblake/src/build/i686-pc-cygwin/winsup/mingw'
->
->How do we go about getting that resolved?
+This is an OpenPGP/MIME signed message (RFC 2440 and 3156)
+--------------enig57B37640CFB8A1E97E8949D5
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+Content-length: 1407
 
-I sent email to ironh34d regarding the strtod error after you mentioned
-this on irc.  I added an "extern" in front of the strtod definition in
-stdlib.h and that allowed mingw to build but I don't know if it is the
-right fix or not.
+On 05/23/2011 02:45 PM, Eric Blake wrote:
+> On 05/21/2011 07:35 PM, Christopher Faylor wrote:
+>> On Sat, May 21, 2011 at 07:26:37PM -0600, Eric Blake wrote:
+>>> POSIX says that no other function in the standard should clobber the
+>>> strerror buffer.  Our strerror_r is a GNU extension, so it can get away
+>>> with clobbering the buffer (but if we wanted to fix it, we would have to
+>>> separate _my_tls.locals.strerror_buf into two different buffers).
 
-cgf
+Shoot.  This introduced an off-by-one buffer overrun.  I'm pushing this
+followup.  Meanwhile, do we want a second buffer, so that the GNU
+strerror_r won't clobber the strerror buffer?
+
++++ b/winsup/cygwin/ChangeLog
+@@ -2,6 +2,7 @@
+
+ 	* errno.cc (strerror): Print unknown errno as int.
+ 	(__xpg_strerror_r): Likewise, and don't clobber strerror buffer.
++	* cygtls.h (strerror_buf): Resize to allow '-'.
+
+ 2011-05-23  Corinna Vinschen  <corinna@vinschen.de>
+
+diff --git a/winsup/cygwin/cygtls.h b/winsup/cygwin/cygtls.h
+index 4d4306b..f911a6c 100644
+--- a/winsup/cygwin/cygtls.h
++++ b/winsup/cygwin/cygtls.h
+@@ -109,7 +109,7 @@ struct _local_storage
+   } select;
+
+   /* strerror */
+-  char strerror_buf[sizeof ("Unknown error 4294967295")];
++  char strerror_buf[sizeof ("Unknown error -2147483648")];
+
+   /* times.cc */
+   char timezone_buf[20];
+
+
+--=20
+Eric Blake   eblake@redhat.com    +1-801-349-2682
+Libvirt virtualization library http://libvirt.org
+
+
+--------------enig57B37640CFB8A1E97E8949D5
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+Content-length: 619
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.11 (GNU/Linux)
+Comment: Public key at http://people.redhat.com/eblake/eblake.gpg
+Comment: Using GnuPG with Fedora - http://enigmail.mozdev.org/
+
+iQEcBAEBCAAGBQJN2sj8AAoJEKeha0olJ0NqkSkH/2spoXq4snqlIwz6QpzMSPV0
+EjH3UoTN1d2JYCjd7UUI22uj7+WXWyICqw0oKUHyFhCPg2l9V0oHWlVkwnKr7tD7
+F0hNNhlGFXgjb3iPYoEU264QJ4P1lWKHAWEDmc4/gs05T/PkxLL3jP3OAvE5qVBU
+L0CZQkSQ/yWop3wiRKFZyzVIctaVRRNRfLRVF1odWVVp14qvXGs4xdx8KcotHPvV
+ibmyE2D6YmDxVNsz0DMUuu8sFq7JDEEFciLZo8E39+ZFBxC1Wq26mtyYBJ3KoXxq
+fKpEp4oUegNFMOZotdrzaf4sPEn0Oox28/RHf8lHsSILJe90vbiLGoL8mK3Jcbw=
+=/1it
+-----END PGP SIGNATURE-----
+
+--------------enig57B37640CFB8A1E97E8949D5--
