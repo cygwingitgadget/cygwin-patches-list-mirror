@@ -1,27 +1,27 @@
-Return-Path: <cygwin-patches-return-7405-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 28511 invoked by alias); 28 May 2011 20:50:19 -0000
-Received: (qmail 28498 invoked by uid 22791); 28 May 2011 20:50:18 -0000
-X-SWARE-Spam-Status: No, hits=-0.1 required=5.0	tests=AWL,BAYES_50,RCVD_IN_DNSWL_NONE,UNPARSEABLE_RELAY
+Return-Path: <cygwin-patches-return-7406-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 31867 invoked by alias); 28 May 2011 20:59:43 -0000
+Received: (qmail 31854 invoked by uid 22791); 28 May 2011 20:59:43 -0000
+X-SWARE-Spam-Status: No, hits=-0.7 required=5.0	tests=AWL,BAYES_00,RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,UNPARSEABLE_RELAY
 X-Spam-Check-By: sourceware.org
-Received: from nm6.bullet.mail.ne1.yahoo.com (HELO nm6.bullet.mail.ne1.yahoo.com) (98.138.90.69)    by sourceware.org (qpsmtpd/0.43rc1) with SMTP; Sat, 28 May 2011 20:50:03 +0000
-Received: from [98.138.90.50] by nm6.bullet.mail.ne1.yahoo.com with NNFMP; 28 May 2011 20:50:02 -0000
-Received: from [98.138.226.59] by tm3.bullet.mail.ne1.yahoo.com with NNFMP; 28 May 2011 20:50:02 -0000
-Received: from [127.0.0.1] by smtp210.mail.ne1.yahoo.com with NNFMP; 28 May 2011 20:50:02 -0000
-Received: from cgf.cx (cgf@173.48.46.160 with login)        by smtp210.mail.ne1.yahoo.com with SMTP; 28 May 2011 13:50:01 -0700 PDT
+Received: from nm16-vm3.bullet.mail.ne1.yahoo.com (HELO nm16-vm3.bullet.mail.ne1.yahoo.com) (98.138.91.146)    by sourceware.org (qpsmtpd/0.43rc1) with SMTP; Sat, 28 May 2011 20:59:29 +0000
+Received: from [98.138.90.52] by nm16.bullet.mail.ne1.yahoo.com with NNFMP; 28 May 2011 20:59:28 -0000
+Received: from [98.138.226.58] by tm5.bullet.mail.ne1.yahoo.com with NNFMP; 28 May 2011 20:59:28 -0000
+Received: from [127.0.0.1] by smtp209.mail.ne1.yahoo.com with NNFMP; 28 May 2011 20:59:28 -0000
+Received: from cgf.cx (cgf@173.48.46.160 with login)        by smtp209.mail.ne1.yahoo.com with SMTP; 28 May 2011 13:59:28 -0700 PDT
 X-Yahoo-SMTP: jenXL62swBAWhMTL3wnej93oaS0ClBQOAKs8jbEbx_o-
-Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id 446AF42804D;	Sat, 28 May 2011 16:50:01 -0400 (EDT)
-Date: Sat, 28 May 2011 20:50:00 -0000
+Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id 4B6BD42804D	for <cygwin-patches@cygwin.com>; Sat, 28 May 2011 16:59:27 -0400 (EDT)
+Date: Sat, 28 May 2011 20:59:00 -0000
 From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com, Ryan Johnson <ryan.johnson@cs.utoronto.ca>
-Subject: Problems with: Improvements to fork handling (2/5)
-Message-ID: <20110528205000.GA30326@ednor.casa.cgf.cx>
+To: cygwin-patches@cygwin.com
+Subject: Re: Improvements to fork handling (3/5)
+Message-ID: <20110528205927.GA30578@ednor.casa.cgf.cx>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com,	Ryan Johnson <ryan.johnson@cs.utoronto.ca>
-References: <4DCAD609.70106@cs.utoronto.ca>
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <4DCAD629.8010803@cs.utoronto.ca>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4DCAD609.70106@cs.utoronto.ca>
+In-Reply-To: <4DCAD629.8010803@cs.utoronto.ca>
 User-Agent: Mutt/1.5.20 (2009-06-14)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -32,35 +32,29 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q2/txt/msg00171.txt.bz2
+X-SW-Source: 2011-q2/txt/msg00172.txt.bz2
 
-On Wed, May 11, 2011 at 02:31:37PM -0400, Ryan Johnson wrote:
->This patch has the parent sort its dll list topologically by 
->dependencies. Previously, attempts to load a DLL_LOAD dll risked pulling 
->in dependencies automatically, and the latter would then not benefit 
->from the code which "encourages" them to land in the right places. The 
->dependency tracking is achieved using a simple class which allows to 
->introspect a mapped dll image and pull out the dependencies it lists. 
->The code currently rebuilds the dependency list at every fork rather 
->than attempt to update it properly as modules are loaded and unloaded. 
->Note that the topsort optimization affects only cygwin dlls, so any 
->windows dlls which are pulled in dynamically (directly or indirectly) 
->will still impose the usual risk of address space clobbers.
+On Wed, May 11, 2011 at 02:32:09PM -0400, Ryan Johnson wrote:
+>This patch fixes a bug in the reserve_at function which caused it to 
+>sometimes reserve space needed by the dll it was supposed to help land. 
+>This happens when the dll tries to land in a free region which overlaps 
+>the desired location. The new code exploits the image introspection 
+>(patch #2) to get the dll's image size and avoids the corner cases.
 
-Bad news.
+I've installed this patch, eliminating any depencencies on patch 2/5.
 
-I applied this patch and the one after it but then noticed that zsh started
-producing:  "bad address: " errors.
+Btw, please reread the guidelines for ChangeLogs and model your changelog
+entries on what you see in the current ChangeLog and the submissions you
+see here.
 
-path:4: bad address: /share/bin/dopath
-term:1: bad address: /bin/tee
+The ChangeLog shouldn't be sent as an attachment.  It should have the
+"header" including your name and date.  The tense shouldn't be "Changed
+x" but "Change X".  Start entries after the colon with an uppercase
+letter.  The changelog shouldn't be excessively wordy (that's for
+comments:
 
-The errors disappear when I back this patch out.
+http://www.gnu.org/prep/standards/html_node/Change-Logs.html
 
-FWIW, I was running "zsh -l".  I have somewhat complicated
-.zshrc/.zlogin/.zshenv files.  I'll post them if needed.
-
-Until this is fixed, this patch and the subsequent ones which rely on
-it, can't go in.  I did commit this fix but it has been backed out now.
+Thanks for the patch.
 
 cgf
