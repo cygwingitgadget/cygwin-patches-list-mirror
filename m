@@ -1,28 +1,23 @@
-Return-Path: <cygwin-patches-return-7411-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 2896 invoked by alias); 29 May 2011 08:00:41 -0000
-Received: (qmail 2848 invoked by uid 22791); 29 May 2011 08:00:37 -0000
-X-SWARE-Spam-Status: No, hits=-1.7 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,UNPARSEABLE_RELAY
+Return-Path: <cygwin-patches-return-7412-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 6654 invoked by alias); 29 May 2011 08:42:12 -0000
+Received: (qmail 6638 invoked by uid 22791); 29 May 2011 08:42:10 -0000
+X-SWARE-Spam-Status: No, hits=-0.7 required=5.0	tests=AWL,BAYES_00,SPF_NEUTRAL,TW_DB
 X-Spam-Check-By: sourceware.org
-Received: from nm19-vm0.bullet.mail.bf1.yahoo.com (HELO nm19-vm0.bullet.mail.bf1.yahoo.com) (98.139.213.162)    by sourceware.org (qpsmtpd/0.43rc1) with SMTP; Sun, 29 May 2011 08:00:22 +0000
-Received: from [98.139.212.153] by nm19.bullet.mail.bf1.yahoo.com with NNFMP; 29 May 2011 05:58:52 -0000
-Received: from [98.139.211.206] by tm10.bullet.mail.bf1.yahoo.com with NNFMP; 29 May 2011 05:58:52 -0000
-Received: from [127.0.0.1] by smtp215.mail.bf1.yahoo.com with NNFMP; 29 May 2011 05:58:52 -0000
-Received: from cgf.cx (cgf@173.48.46.160 with login)        by smtp215.mail.bf1.yahoo.com with SMTP; 28 May 2011 22:58:51 -0700 PDT
-X-Yahoo-SMTP: jenXL62swBAWhMTL3wnej93oaS0ClBQOAKs8jbEbx_o-
-Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id 308A742804D	for <cygwin-patches@cygwin.com>; Sun, 29 May 2011 01:58:51 -0400 (EDT)
-Date: Sun, 29 May 2011 08:00:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: Problems with: Improvements to fork handling (2/5)
-Message-ID: <20110529055851.GA32323@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4DCAD609.70106@cs.utoronto.ca> <20110528205000.GA30326@ednor.casa.cgf.cx> <4DE179DE.8040008@cs.utoronto.ca> <20110529002317.GA31865@ednor.casa.cgf.cx> <4DE1B101.4000603@cs.utoronto.ca> <4DE1CD9D.20608@gmail.com>
+Received: from smtp0.epfl.ch (HELO smtp0.epfl.ch) (128.178.224.219)    by sourceware.org (qpsmtpd/0.43rc1) with SMTP; Sun, 29 May 2011 08:41:40 +0000
+Received: (qmail 3180 invoked by uid 107); 29 May 2011 05:51:35 -0000
+Received: from 206-248-130-97.dsl.teksavvy.com (HELO discarded) (206.248.130.97) (authenticated)  by smtp0.epfl.ch (AngelmatoPhylax SMTP proxy) with ESMTPA; Sun, 29 May 2011 07:51:35 +0200
+Message-ID: <4DE1DEE7.8030307@cs.utoronto.ca>
+Date: Sun, 29 May 2011 08:42:00 -0000
+From: Ryan Johnson <ryan.johnson@cs.utoronto.ca>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.2.17) Gecko/20110414 Lightning/1.0b2 Thunderbird/3.1.10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+To: cygwin-patches@cygwin.com
+Subject: Bug in cmalloc? Was: Re: Problems with: Improvements to fork handling (2/5)
+References: <4DCAD609.70106@cs.utoronto.ca> <20110528205000.GA30326@ednor.casa.cgf.cx> <4DE179DE.8040008@cs.utoronto.ca> <20110529002317.GA31865@ednor.casa.cgf.cx> <4DE1B101.4000603@cs.utoronto.ca> <4DE1CD9D.20608@gmail.com>
 In-Reply-To: <4DE1CD9D.20608@gmail.com>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -32,10 +27,10 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q2/txt/msg00177.txt.bz2
+X-SW-Source: 2011-q2/txt/msg00178.txt.bz2
 
-On Sat, May 28, 2011 at 09:37:49PM -0700, Daniel Colascione wrote:
->On 5/28/11 7:35 PM, Ryan Johnson wrote:
+On 29/05/2011 12:37 AM, Daniel Colascione wrote:
+> On 5/28/11 7:35 PM, Ryan Johnson wrote:
 >> On 28/05/2011 8:23 PM, Christopher Faylor wrote:
 >>> On Sat, May 28, 2011 at 06:40:30PM -0400, Ryan Johnson wrote:
 >>>> On 28/05/2011 4:50 PM, Christopher Faylor wrote:
@@ -80,34 +75,67 @@ On Sat, May 28, 2011 at 09:37:49PM -0700, Daniel Colascione wrote:
 >>>> can't find any resolution with Google, at least.
 >>> If I had any insight beyond "It works without the patch and it doesn't
 >>> work with it" I would have shared it.
->
 >> Let me rephrase a bit... The error happens too early in fork for gdb to
 >> be any help, and I was hoping you could tell me what part(s) of cygwin
 >> are capable of "raising" this error -- it seems to be a linux (not
 >> Windows) flavor of error message, but the case-insensitive regexp
 >> 'bad.address' does not match anything in the cygwin sources.
->
->The actual string is in strerror.c in newlib, which is why you didn't
->find it with a grep on winsup/cygwin.
+> The actual string is in strerror.c in newlib, which is why you didn't
+> find it with a grep on winsup/cygwin. The error code is EFAULT. There
+> are 127 places in the cygwin1.dll where EFAULT can raised, according to
+> grep '\bEFAULT\b' *.cc. In most of them, EFAULT is raised after
+> something called san has detected that to Windows raised an unexpected
+> structured exception. My hunch would be to look in spawn.cc first, in
+> spawn_guts, but I haven't read your patch in enough detail to narrow the
+> problem down further. strace might be handy.
+Wow. You nailed it. I fired up windbg and had it follow a cmd.exe into 
+bash --login and descendants, and sure enough, there was an access 
+violation when spawn_guts called build_env and the latter called cmalloc.
 
-It doesn't come from newlib.  If you grep "Bad address" in
-winsup/cygwin/* you will see where it comes from.
+Anyway, after a long and twisty debug session, I have reason to believe 
+that either cmalloc/cfree is buggy, or the bug resides somewhere else 
+entirely and my patch just tickles it: freeing memory in the reverse 
+order it was allocated in causes Bad Things (tm) to happen, even on an 
+unpatched version of my 12 May CVS snapshot (which predates my fork 
+patches).
 
-I don't know why grep -i 'bad.address' didn't find anything but it
-really is there.
+It is a known/intentional restriction of the HEAP_2_DLL that memory must 
+be freed in the order it was allocated? The default cygheap most likely 
+has the problem as well -- that's why I was crashing and had to call 
+cmalloc instead of crealloc(NULL, ...).
 
->The error code is EFAULT.  There are 127 places in the cygwin1.dll
->where EFAULT can raised, according to grep '\bEFAULT\b' *.cc.  In most
->of them, EFAULT is raised after something called san has detected that
->to Windows raised an unexpected structured exception.  My hunch would
->be to look in spawn.cc first, in spawn_guts, but I haven't read your
->patch in enough detail to narrow the problem down further.  strace
->might be handy.
+(Hairy details and test case below)
 
-spawn.cc wasn't touched by the patch but I suppose something in the
-modified fork code could affect a subsequent exec.
+Ryan
 
-Anyway, I don't see any indication that the problem is too early for the
-CYGWIN_DEBUG= trick to work.  See how-to-debug-cygwin.txt.
+Details: Disabling the topsort call fixed the problem (no surprise), as 
+did allocating dependencies from static storage rather than calling 
+malloc. I worried the latter just masked the bug, and sure enough, 
+calling cmalloc/cfree on dummy data during the sort brought the bug back 
+-- even though the cmalloc'd memory was never touched (??). However, 
+calling cmalloc/cfree once per dll instead of performing the topsort did 
+not trigger the bug. Reversing order of the list (with cmalloc'd 
+dependencies) instead of topsorting it caused the bug to come back.
 
-cgf
+So, I defined this small function:
+
+static void break_cmalloc(int depth, int maxdepth) {
+     void* x = cmalloc (HEAP_2_DLL, 32);
+     cfree(x);
+     if (depth < maxdepth)
+         break_cmalloc(depth+1, maxdepth);
+}
+
+and called it during fork instead of dlls.topsort(), with maxdepth=5. No 
+bug (as expected).
+
+Then I moved the call to cfree below the recursion, so memory gets freed 
+in reverse order. Bang. Bash goes down and takes mintty with it after 
+briefly flashing 'bad address.' Calling bash from cmd.exe hangs the 
+latter so badly Windows can't kill it (I guess I'll have to reboot).
+
+I rolled back to the last CVS checkout I did (May 12), and the above 
+function reproduces the bug there as well. AFAIK, Corinna had merged my 
+/proc/maps patch by then, but the only fork-related changes were to fix 
+the uninitialized value in that one constructor, and to make failed 
+forkees not call dtors.
