@@ -1,18 +1,19 @@
-Return-Path: <cygwin-patches-return-7419-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 9457 invoked by alias); 1 Jun 2011 16:38:51 -0000
-Received: (qmail 9447 invoked by uid 22791); 1 Jun 2011 16:38:51 -0000
-X-SWARE-Spam-Status: No, hits=0.2 required=5.0	tests=AWL,BAYES_00,TW_CG,T_RP_MATCHES_RCVD
+Return-Path: <cygwin-patches-return-7420-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 24055 invoked by alias); 6 Jun 2011 10:27:41 -0000
+Received: (qmail 24045 invoked by uid 22791); 6 Jun 2011 10:27:40 -0000
+X-SWARE-Spam-Status: No, hits=1.4 required=5.0	tests=AWL,BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RFC_ABUSE_POST,T_TO_NO_BRKTS_FREEMAIL
 X-Spam-Check-By: sourceware.org
-Received: from anoid.noid.net (HELO anoid.noid.net) (74.95.194.161)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 01 Jun 2011 16:38:37 +0000
-Received: from 192.168.127.127	by mx.noid.net (GNU) id p51GcasH000040; Wed, 1 Jun 2011 09:38:36 -0700 (PDT)
-X-Mini-Diatribe: To fix America:	1. Cut government in half	2. Wait thirty years	3. Repeat as necessary
-Received: by scythe.noid.net (Postfix, from userid 0)	id 91E5A1ED73ED; Wed,  1 Jun 2011 09:38:36 -0700 (PDT)
-From: Tor Perkins <cygwin@noid.net>
+Received: from mail-iy0-f171.google.com (HELO mail-iy0-f171.google.com) (209.85.210.171)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 06 Jun 2011 10:27:26 +0000
+Received: by iyi20 with SMTP id 20so4210218iyi.2        for <cygwin-patches@cygwin.com>; Mon, 06 Jun 2011 03:27:26 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 10.231.24.70 with SMTP id u6mr8060148ibb.108.1307356045998; Mon, 06 Jun 2011 03:27:25 -0700 (PDT)
+Received: by 10.231.34.9 with HTTP; Mon, 6 Jun 2011 03:27:25 -0700 (PDT)
+Date: Mon, 06 Jun 2011 10:27:00 -0000
+Message-ID: <BANLkTimrHKK8YrrQ9sFGa5qgt1i6hAQMqA@mail.gmail.com>
+Subject: do some adjustment
+From: Chiheng Xu <chiheng.xu@gmail.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] tcsetpgrp fails unexpectedly
-In-Reply-To: <20110530065904.GA6348@ednor.casa.cgf.cx>
-Message-Id: <20110601163836.91E5A1ED73ED@scythe.noid.net>
-Date: Wed, 01 Jun 2011 16:38:00 -0000
+Content-Type: multipart/mixed; boundary=00151774104ab77c9c04a5088c0a
 X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -23,20 +24,98 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q2/txt/msg00185.txt.bz2
+X-SW-Source: 2011-q2/txt/msg00186.txt.bz2
 
-On Mon, May 30, 2011 at 02:59:04AM -0400, Christopher Faylor wrote:
-> On Mon, Apr 04, 2011 at 09:45:09AM -0700, Tor Perkins wrote:
-> >2011-03-28  Tor Perkins
-> >
-> >  * fhandler_termios.cc (fhandler_termios::bg_check): Do not return EIO
-> >  when a process group has no leader as this is allowed and does not imply
-> >  an orphaned process group.  Add a test for orphaned process groups.
->
-> I've checked this in and added missing pieces to the ChangeLog.
->
-> Thanks for the patch and apologies for the long delay.
->
-> cgf
 
-That's great; thanks for accepting it!   - Tor
+--00151774104ab77c9c04a5088c0a
+Content-Type: text/plain; charset=UTF-8
+Content-length: 276
+
+	* dcrt0.cc (dll_crt0_1): remove call to fork_init().
+	* fork.cc (fork_init): remove.
+	* globals.cc (fork_init): add user_data global variable.
+	* perprocess.h (fork_init): change user_data from macro to variable
+declaration.
+	* pinfo.cc (fork_init): adjust.
+
+
+-- 
+Chiheng Xu
+
+--00151774104ab77c9c04a5088c0a
+Content-Type: application/octet-stream; name="1.p"
+Content-Disposition: attachment; filename="1.p"
+Content-Transfer-Encoding: base64
+X-Attachment-Id: f_gol9khie0
+Content-length: 4116
+
+SW5kZXg6IHdpbnN1cC9jeWd3aW4vZGNydDAuY2MKPT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4v
+ZGNydDAuY2MsdgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuNDAwCmRpZmYgLXUg
+LXAgLXIxLjQwMCBkY3J0MC5jYwotLS0gd2luc3VwL2N5Z3dpbi9kY3J0MC5j
+Ywk2IEp1biAyMDExIDA1OjAyOjA4IC0wMDAwCTEuNDAwCisrKyB3aW5zdXAv
+Y3lnd2luL2RjcnQwLmNjCTYgSnVuIDIwMTEgMTA6MDQ6NDUgLTAwMDAKQEAg
+LTgwNiwxMiArODA2LDYgQEAgZGxsX2NydDBfMSAodm9pZCAqKQogCiAgIF9f
+c2luaXQgKF9pbXB1cmVfcHRyKTsKIAotI2lmZGVmIERFQlVHR0lORwotICB7
+Ci0gIGV4dGVybiB2b2lkIGZvcmtfaW5pdCAoKTsKLSAgZm9ya19pbml0ICgp
+OwotICB9Ci0jZW5kaWYKICAgcGluZm9faW5pdCAoZW52cCwgZW52Yyk7CiAK
+ICAgaWYgKCFvbGRfdGl0bGUgJiYgR2V0Q29uc29sZVRpdGxlICh0aXRsZV9i
+dWYsIFRJVExFU0laRSkpCkluZGV4OiB3aW5zdXAvY3lnd2luL2ZvcmsuY2MK
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3Jj
+L3dpbnN1cC9jeWd3aW4vZm9yay5jYyx2CnJldHJpZXZpbmcgcmV2aXNpb24g
+MS4yMjYKZGlmZiAtdSAtcCAtcjEuMjI2IGZvcmsuY2MKLS0tIHdpbnN1cC9j
+eWd3aW4vZm9yay5jYwk2IEp1biAyMDExIDA1OjAyOjExIC0wMDAwCTEuMjI2
+CisrKyB3aW5zdXAvY3lnd2luL2ZvcmsuY2MJNiBKdW4gMjAxMSAxMDowNDo0
+NSAtMDAwMApAQCAtNjg1LDEyICs2ODUsNiBAQCBmb3JrICgpCiAgIHN5c2Nh
+bGxfcHJpbnRmICgiJWQgPSBmb3JrKCkiLCByZXMpOwogICByZXR1cm4gcmVz
+OwogfQotI2lmZGVmIERFQlVHR0lORwotdm9pZAotZm9ya19pbml0ICgpCi17
+Ci19Ci0jZW5kaWYgLypERUJVR0dJTkcqLwogCiAKIGV4dGVybiAiQyIgaW50
+CkluZGV4OiB3aW5zdXAvY3lnd2luL2dsb2JhbHMuY2MKPT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3
+aW4vZ2xvYmFscy5jYyx2CnJldHJpZXZpbmcgcmV2aXNpb24gMS4yOApkaWZm
+IC11IC1wIC1yMS4yOCBnbG9iYWxzLmNjCi0tLSB3aW5zdXAvY3lnd2luL2ds
+b2JhbHMuY2MJNiBKdW4gMjAxMSAwNTowMjoxMSAtMDAwMAkxLjI4CisrKyB3
+aW5zdXAvY3lnd2luL2dsb2JhbHMuY2MJNiBKdW4gMjAxMSAxMDowNDo0NyAt
+MDAwMApAQCAtMTY1LDggKzE2NSw4IEBAIGV4dGVybiAiQyIKICAgIC8qIHRo
+cmVhZGludGVyZmFjZSAqLyAmX210aW50ZXJmLAogICAgLyogaW1wdXJlX3B0
+ciAqLyBfR0xPQkFMX1JFRU5ULAogICB9OworICBzdHJ1Y3QgcGVyX3Byb2Nl
+c3MgKiB1c2VyX2RhdGEgPSAmX19jeWd3aW5fdXNlcl9kYXRhOwogICBib29s
+IGlnbm9yZV9jYXNlX3dpdGhfZ2xvYjsKICAgaW50IF9jaGVja19mb3JfZXhl
+Y3V0YWJsZSA9IHRydWU7CiB9OwotCiBpbnQgTk9fQ09QWSBfX2FwaV9mYXRh
+bF9leGl0X3ZhbCA9IDE7CkluZGV4OiB3aW5zdXAvY3lnd2luL3BlcnByb2Nl
+c3MuaAo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3Ny
+Yy9zcmMvd2luc3VwL2N5Z3dpbi9wZXJwcm9jZXNzLmgsdgpyZXRyaWV2aW5n
+IHJldmlzaW9uIDEuMwpkaWZmIC11IC1wIC1yMS4zIHBlcnByb2Nlc3MuaAot
+LS0gd2luc3VwL2N5Z3dpbi9wZXJwcm9jZXNzLmgJMjQgSnVuIDIwMDEgMjI6
+MjY6NTIgLTAwMDAJMS4zCisrKyB3aW5zdXAvY3lnd2luL3BlcnByb2Nlc3Mu
+aAk2IEp1biAyMDExIDEwOjA0OjQ3IC0wMDAwCkBAIC0xNiw3ICsxNiw3IEBA
+IGV4dGVybiAiQyIgewogCiAvKiBQb2ludGVyIGludG8gYXBwbGljYXRpb24n
+cyBzdGF0aWMgZGF0YSAqLwogZXh0ZXJuIHN0cnVjdCBwZXJfcHJvY2VzcyBf
+X2N5Z3dpbl91c2VyX2RhdGE7Ci0jZGVmaW5lIHVzZXJfZGF0YSAoJl9fY3ln
+d2luX3VzZXJfZGF0YSkKK2V4dGVybiBzdHJ1Y3QgcGVyX3Byb2Nlc3MgKiB1
+c2VyX2RhdGE7CiAKIC8qIFdlIHVzZSB0aGUgZm9sbG93aW5nIHRvIHRlc3Qg
+dGhhdCBzaXplb2YgaGFzbid0IGNoYW5nZWQuICBXaGVuIGFkZGluZwogICAg
+b3IgZGVsZXRpbmcgbWVtYmVycywgaW5zZXJ0IGZpbGxlcnMgb3IgdXNlIHRo
+ZSByZXNlcnZlZCBlbnRyaWVzLgpJbmRleDogd2luc3VwL2N5Z3dpbi9waW5m
+by5jYwo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3Ny
+Yy9zcmMvd2luc3VwL2N5Z3dpbi9waW5mby5jYyx2CnJldHJpZXZpbmcgcmV2
+aXNpb24gMS4yNzYKZGlmZiAtdSAtcCAtcjEuMjc2IHBpbmZvLmNjCi0tLSB3
+aW5zdXAvY3lnd2luL3BpbmZvLmNjCTQgSnVuIDIwMTEgMDA6Mjk6MTkgLTAw
+MDAJMS4yNzYKKysrIHdpbnN1cC9jeWd3aW4vcGluZm8uY2MJNiBKdW4gMjAx
+MSAxMDowNDo0NyAtMDAwMApAQCAtNDIsOSArNDIsOSBAQCBwaW5mb19iYXNp
+Yzo6cGluZm9fYmFzaWMoKQogICBHZXRNb2R1bGVGaWxlTmFtZVcgKE5VTEws
+IHByb2duYW1lLCBzaXplb2YgKHByb2duYW1lKSk7CiB9CiAKLXBpbmZvX2Jh
+c2ljIG15c2VsZl9pbml0aWFsIE5PX0NPUFk7CitwaW5mb19iYXNpYyBOT19D
+T1BZIG15c2VsZl9pbml0aWFsOwogCi1waW5mbyBOT19DT1BZIG15c2VsZiAo
+c3RhdGljX2Nhc3Q8X3BpbmZvICo+ICgmbXlzZWxmX2luaXRpYWwpKTsJLy8g
+QXZvaWQgbXlzZWxmICE9IE5VTEwgY2hlY2tzCitwaW5mbyBOT19DT1BZIG15
+c2VsZiAgPSAgc3RhdGljX2Nhc3Q8X3BpbmZvICo+ICgmbXlzZWxmX2luaXRp
+YWwpOwkvLyBBdm9pZCBteXNlbGYgIT0gTlVMTCBjaGVja3MKIAogYm9vbCBp
+c190b3BsZXZlbF9wcm9jOwogCg==
+
+--00151774104ab77c9c04a5088c0a--
