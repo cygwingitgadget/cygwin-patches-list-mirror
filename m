@@ -1,28 +1,20 @@
-Return-Path: <cygwin-patches-return-7421-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 23869 invoked by alias); 6 Jun 2011 15:51:44 -0000
-Received: (qmail 23817 invoked by uid 22791); 6 Jun 2011 15:51:43 -0000
-X-SWARE-Spam-Status: No, hits=-1.7 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,UNPARSEABLE_RELAY
+Return-Path: <cygwin-patches-return-7422-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 1247 invoked by alias); 23 Jun 2011 17:53:05 -0000
+Received: (qmail 1235 invoked by uid 22791); 23 Jun 2011 17:53:04 -0000
+X-SWARE-Spam-Status: No, hits=-0.6 required=5.0	tests=AWL,BAYES_05,RCVD_IN_DNSWL_NONE,T_RP_MATCHES_RCVD,UNPARSEABLE_RELAY
 X-Spam-Check-By: sourceware.org
-Received: from nm19-vm0.bullet.mail.bf1.yahoo.com (HELO nm19-vm0.bullet.mail.bf1.yahoo.com) (98.139.213.162)    by sourceware.org (qpsmtpd/0.43rc1) with SMTP; Mon, 06 Jun 2011 15:51:27 +0000
-Received: from [98.139.212.144] by nm19.bullet.mail.bf1.yahoo.com with NNFMP; 06 Jun 2011 15:51:27 -0000
-Received: from [98.139.213.4] by tm1.bullet.mail.bf1.yahoo.com with NNFMP; 06 Jun 2011 15:51:26 -0000
-Received: from [127.0.0.1] by smtp104.mail.bf1.yahoo.com with NNFMP; 06 Jun 2011 15:51:26 -0000
-Received: from cgf.cx (cgf@173.48.46.160 with login)        by smtp104.mail.bf1.yahoo.com with SMTP; 06 Jun 2011 08:51:26 -0700 PDT
-X-Yahoo-SMTP: jenXL62swBAWhMTL3wnej93oaS0ClBQOAKs8jbEbx_o-
-Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id C768242804C	for <cygwin-patches@cygwin.com>; Mon,  6 Jun 2011 11:51:25 -0400 (EDT)
-Date: Mon, 06 Jun 2011 15:51:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: do some adjustment
-Message-ID: <20110606155123.GA3956@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <BANLkTimrHKK8YrrQ9sFGa5qgt1i6hAQMqA@mail.gmail.com>
+Received: from mailout08.t-online.de (HELO mailout08.t-online.de) (194.25.134.20)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 23 Jun 2011 17:52:50 +0000
+Received: from fwd19.aul.t-online.de (fwd19.aul.t-online.de )	by mailout08.t-online.de with smtp 	id 1QZo5A-0007Y6-57; Thu, 23 Jun 2011 19:52:48 +0200
+Received: from [192.168.2.100] (XVRBKTZOghJmkzi7oolJLnvaMKnET9ipqK7ExR-jOTSJuBNgBg-SCpkiTJMuDFCwFY@[79.224.119.35]) by fwd19.t-online.de	with esmtp id 1QZo50-0R9iSW0; Thu, 23 Jun 2011 19:52:38 +0200
+Message-ID: <4E037D68.6090907@t-online.de>
+Date: Thu, 23 Jun 2011 17:53:00 -0000
+From: Christian Franke <Christian.Franke@t-online.de>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.1.19) Gecko/20110420 SeaMonkey/2.0.14
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BANLkTimrHKK8YrrQ9sFGa5qgt1i6hAQMqA@mail.gmail.com>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] Prevent restart of crashing non-Cygwin exe
+Content-Type: multipart/mixed; boundary="------------050209080601010702060202"
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -32,16 +24,93 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q2/txt/msg00187.txt.bz2
+X-SW-Source: 2011-q2/txt/msg00188.txt.bz2
 
-On Mon, Jun 06, 2011 at 06:27:25PM +0800, Chiheng Xu wrote:
->	* dcrt0.cc (dll_crt0_1): remove call to fork_init().
->	* fork.cc (fork_init): remove.
->	* globals.cc (fork_init): add user_data global variable.
->	* perprocess.h (fork_init): change user_data from macro to variable
->declaration.
->	* pinfo.cc (fork_init): adjust.
+This is a multi-part message in MIME format.
+--------------050209080601010702060202
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-length: 727
 
-Sorry.  This patch makes no sense.  It will not be applied.
+If a non-Cygwin .exe started from a Cygwin shell window segfaults, 
+Cygwin restarts the .exe 5 times.
 
-cgf
+Testcase:
+
+$ cat crash.c
+#include <stdio.h>
+
+int main()
+{
+   printf("Hello, "); fflush(stdout);
+   *(char *)0 = 42;
+   printf("World\n");
+   return 0;
+}
+
+$ gcc -o crash-c crash.c
+
+$ ./crash-c
+Hello, Segmentation fault (core dumped)
+
+$ i686-w64-mingw32-gcc -o crash-w crash.c
+
+$ ./crash-w
+Hello, Hello, Hello, Hello, Hello, Hello,
+
+(The repeated outputs are not be visible on 1.7.9-1 when shell runs in a 
+Windows console without CYGWIN=tty)
+
+The problem is that Cygwin retries CreateProcess() if process aborts 
+with an unknown 0xc0000XXXX exit code also for non-Cygwin programs. The 
+attached patch fixes this.
+
+Christian
+
+
+--------------050209080601010702060202
+Content-Type: text/x-diff;
+ name="spawn-no-retry.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="spawn-no-retry.patch"
+Content-length: 1234
+
+2011-06-23  Christian Franke  <franke@computer.org>
+
+	* sigproc.cc (child_info::sync): Add exit_code to debug
+	message.
+	(child_info::proc_retry): Don't retry on unknown exit_code
+	from non-cygwin programs.
+
+diff --git a/winsup/cygwin/sigproc.cc b/winsup/cygwin/sigproc.cc
+index 2f42db2..1e57876 100644
+--- a/winsup/cygwin/sigproc.cc
++++ b/winsup/cygwin/sigproc.cc
+@@ -883,7 +883,8 @@ child_info::sync (pid_t pid, HANDLE& hProcess, DWORD howlong)
+ 	      hProcess = NULL;
+ 	    }
+ 	}
+-      sigproc_printf ("pid %u, WFMO returned %d, res %d", pid, x, res);
++      sigproc_printf ("pid %u, WFMO returned %d, exit_code 0x%x, res %d",
++		      pid, x, exit_code, res);
+     }
+   return res;
+ }
+@@ -915,11 +916,11 @@ child_info::proc_retry (HANDLE h)
+     case EXITCODE_FORK_FAILED: /* windows prevented us from forking */
+       break;
+ 
+-    /* Count down non-recognized exit codes more quickly since they aren't
+-       due to known conditions.  */
+     default:
+-      if (!iscygwin () && (exit_code & 0xffff0000) != 0xc0000000)
++      if (!iscygwin ())
+ 	break;
++      /* Count down non-recognized exit codes more quickly since they aren't
++         due to known conditions.  */
+       if ((retry -= 2) < 0)
+ 	retry = 0;
+       else
+
+--------------050209080601010702060202--
