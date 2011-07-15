@@ -1,28 +1,24 @@
-Return-Path: <cygwin-patches-return-7427-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 23298 invoked by alias); 14 Jul 2011 16:51:20 -0000
-Received: (qmail 23287 invoked by uid 22791); 14 Jul 2011 16:51:19 -0000
-X-SWARE-Spam-Status: No, hits=-1.5 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,TW_EG,UNPARSEABLE_RELAY
+Return-Path: <cygwin-patches-return-7428-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 4069 invoked by alias); 15 Jul 2011 08:05:52 -0000
+Received: (qmail 3961 invoked by uid 22791); 15 Jul 2011 08:05:49 -0000
+X-SWARE-Spam-Status: No, hits=-1.1 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,TW_CG,TW_EG,T_TO_NO_BRKTS_FREEMAIL
 X-Spam-Check-By: sourceware.org
-Received: from nm8.bullet.mail.sp2.yahoo.com (HELO nm8.bullet.mail.sp2.yahoo.com) (98.139.91.78)    by sourceware.org (qpsmtpd/0.43rc1) with SMTP; Thu, 14 Jul 2011 16:50:39 +0000
-Received: from [98.139.91.64] by nm8.bullet.mail.sp2.yahoo.com with NNFMP; 14 Jul 2011 16:50:39 -0000
-Received: from [208.71.42.201] by tm4.bullet.mail.sp2.yahoo.com with NNFMP; 14 Jul 2011 16:50:39 -0000
-Received: from [127.0.0.1] by smtp212.mail.gq1.yahoo.com with NNFMP; 14 Jul 2011 16:50:38 -0000
-Received: from cgf.cx (cgf@108.49.32.184 with login)        by smtp212.mail.gq1.yahoo.com with SMTP; 14 Jul 2011 09:50:38 -0700 PDT
-X-Yahoo-SMTP: jenXL62swBAWhMTL3wnej93oaS0ClBQOAKs8jbEbx_o-
-Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id 7531B13C002	for <cygwin-patches@cygwin.com>; Thu, 14 Jul 2011 12:50:37 -0400 (EDT)
-Date: Thu, 14 Jul 2011 16:51:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
+Received: from mail-iw0-f171.google.com (HELO mail-iw0-f171.google.com) (209.85.214.171)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 15 Jul 2011 08:05:35 +0000
+Received: by iwn34 with SMTP id 34so1127521iwn.2        for <cygwin-patches@cygwin.com>; Fri, 15 Jul 2011 01:05:34 -0700 (PDT)
+Received: by 10.42.122.9 with SMTP id l9mr3394782icr.68.1310717134482;        Fri, 15 Jul 2011 01:05:34 -0700 (PDT)
+Received: from [192.168.1.2] ([118.45.149.131])        by mx.google.com with ESMTPS id g10sm654961ibe.29.2011.07.15.01.05.31        (version=SSLv3 cipher=OTHER);        Fri, 15 Jul 2011 01:05:33 -0700 (PDT)
+Message-ID: <4E1FF4C7.2030605@gmail.com>
+Date: Fri, 15 Jul 2011 08:05:00 -0000
+From: jojelino <jojelino@gmail.com>
+User-Agent: Mozilla/5.0 (Windows NT 5.2; rv:7.0a2) Gecko/20110714 Thunderbird/7.0a2
+MIME-Version: 1.0
+Newsgroups: gmane.os.cygwin.patches
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] fix for sigsegv in gcc 4.6
-Message-ID: <20110714165028.GA15854@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4E1CA325.7090802@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4E1CA325.7090802@gmail.com>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+References: <4E1CA325.7090802@gmail.com> <20110714165028.GA15854@ednor.casa.cgf.cx>
+In-Reply-To: <20110714165028.GA15854@ednor.casa.cgf.cx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -32,23 +28,13 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q3/txt/msg00003.txt.bz2
+X-SW-Source: 2011-q3/txt/msg00004.txt.bz2
 
-On Wed, Jul 13, 2011 at 04:40:21AM +0900, jojelino wrote:
->i think it's about 5 month between preceeding one.
->missing WINAPI(__stdcall) which should had been added for function 
->pointer type is now cause of SIGSEGV. hence it is added.
->this changes applies to winsup/cygwin/environ,autoload.cc 
->winsup/utils/mkpasswd,mkgroup.c,loadlib.h,cygpath.cc
->and in autoload.cc, ebp+4 maybe not frame pointer, but we can make sure 
->it replaces return address by using __builtin_frame_address.
->this change applies to winsup/cygwin/autoload.cc
+On 2011-07-15 ì¤ì  1:50, Christopher Faylor wrote:
+> Given the fact that you're changing a fundamental part of Cygwin, I'd
+> classify this change as nontrivial.  I think you need a copyright
+> assignment as per http://cygwin.com/contrib.html .
 >
->patch,changelog modified are attached as you can see.
->please review it.
-
-Given the fact that you're changing a fundamental part of Cygwin, I'd
-classify this change as nontrivial.  I think you need a copyright
-assignment as per http://cygwin.com/contrib.html .
-
-cgf
+> cgf
+>
+The assignment has been posted.
