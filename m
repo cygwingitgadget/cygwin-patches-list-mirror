@@ -1,22 +1,19 @@
-Return-Path: <cygwin-patches-return-7429-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 30410 invoked by alias); 17 Jul 2011 15:05:29 -0000
-Received: (qmail 30396 invoked by uid 22791); 17 Jul 2011 15:05:27 -0000
-X-SWARE-Spam-Status: No, hits=-1.2 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,TW_EG,TW_VP,T_TO_NO_BRKTS_FREEMAIL
+Return-Path: <cygwin-patches-return-7430-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 20333 invoked by alias); 18 Jul 2011 22:27:18 -0000
+Received: (qmail 20323 invoked by uid 22791); 18 Jul 2011 22:27:17 -0000
+X-SWARE-Spam-Status: No, hits=-2.5 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,T_TO_NO_BRKTS_FREEMAIL
 X-Spam-Check-By: sourceware.org
-Received: from mail-pv0-f171.google.com (HELO mail-pv0-f171.google.com) (74.125.83.171)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sun, 17 Jul 2011 15:05:13 +0000
-Received: by pva4 with SMTP id 4so2918872pva.2        for <cygwin-patches@cygwin.com>; Sun, 17 Jul 2011 08:05:13 -0700 (PDT)
-Received: by 10.68.37.33 with SMTP id v1mr7208071pbj.32.1310915113121;        Sun, 17 Jul 2011 08:05:13 -0700 (PDT)
-Received: from [192.168.1.2] ([118.45.149.131])        by mx.google.com with ESMTPS id v9sm1932449pbm.95.2011.07.17.08.05.09        (version=SSLv3 cipher=OTHER);        Sun, 17 Jul 2011 08:05:10 -0700 (PDT)
-Message-ID: <4E22FA9F.2080004@gmail.com>
-Date: Sun, 17 Jul 2011 15:05:00 -0000
-From: jojelino <jojelino@gmail.com>
-User-Agent: Mozilla/5.0 (Windows NT 5.2; rv:7.0a2) Gecko/20110716 Thunderbird/7.0a2
-MIME-Version: 1.0
+Received: from mail-yi0-f43.google.com (HELO mail-yi0-f43.google.com) (209.85.218.43)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 18 Jul 2011 22:26:45 +0000
+Received: by yib12 with SMTP id 12so1818060yib.2        for <cygwin-patches@cygwin.com>; Mon, 18 Jul 2011 15:26:44 -0700 (PDT)
+Received: by 10.150.175.17 with SMTP id x17mr959099ybe.11.1311028004412;        Mon, 18 Jul 2011 15:26:44 -0700 (PDT)
+Received: from [127.0.0.1] (S0106000cf16f58b1.wp.shawcable.net [174.5.115.130])        by mx.google.com with ESMTPS id v10sm2030494ybv.9.2011.07.18.15.26.43        (version=SSLv3 cipher=OTHER);        Mon, 18 Jul 2011 15:26:43 -0700 (PDT)
+Subject: [PATCH] update sysconf, confstr, limits
+From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] fix for sigsegv in gcc 4.6
-References: <4E1CA325.7090802@gmail.com>
-In-Reply-To: <4E1CA325.7090802@gmail.com>
-Content-Type: multipart/mixed; boundary="------------040606060309070209010208"
+Date: Mon, 18 Jul 2011 22:27:00 -0000
+Content-Type: multipart/mixed; boundary="=-+VpjW81pEDO1/FClfg1s"
+Message-ID: <1311028013.7348.5.camel@YAAKOV04>
+Mime-Version: 1.0
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,166 +23,110 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q3/txt/msg00005.txt.bz2
+X-SW-Source: 2011-q3/txt/msg00006.txt.bz2
 
-This is a multi-part message in MIME format.
---------------040606060309070209010208
-Content-Type: text/plain; charset=UTF-8; format=flowed
+
+--=-+VpjW81pEDO1/FClfg1s
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-Content-length: 122
+Content-length: 276
 
-oh i found SIGSEGV because of code replacing return address in 
-autoload.cc is not preserved using -O2, here is fixed one
+This patch adds return values for recent additions to sysconf() and
+confstr(), and adds a couple of missing <limits.h> defines required by
+POSIX.
 
---------------040606060309070209010208
-Content-Type: text/plain;
- name="winsup-new.diff"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename="winsup-new.diff"
-Content-length: 8622
+This patch, plus the one just posted to newlib@, are required for my
+next patch, a getconf(1) implementation.
 
-SW5kZXg6IHdpbnN1cC9jeWd3aW4vYXV0b2xvYWQuY2MKPT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3
-aW4vYXV0b2xvYWQuY2MsdgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuMjA3CmRp
-ZmYgLXUgLXIxLjIwNyBhdXRvbG9hZC5jYwotLS0gd2luc3VwL2N5Z3dpbi9h
-dXRvbG9hZC5jYwkyOCBNYXkgMjAxMSAxODoxNzowNyAtMDAwMAkxLjIwNwor
-Kysgd2luc3VwL2N5Z3dpbi9hdXRvbG9hZC5jYwkxMiBKdWwgMjAxMSAxOTow
-ODozNCAtMDAwMApAQCAtMjkwLDkgKzI5MCw5IEBACiAgIEludGVybG9ja2Vk
-RGVjcmVtZW50ICgmZGxsLT5oZXJlKTsKIAogICAvKiBLbHVkZ2UgYWxlcnQu
-ICBSZWRpcmVjdHMgdGhlIHJldHVybiBhZGRyZXNzIHRvIGRsbF9jaGFpbi4g
-Ki8KLSAgX19hc21fXyBfX3ZvbGF0aWxlX18gKCIJCVxuXAotCW1vdmwJJGRs
-bF9jaGFpbiw0KCVlYnApCVxuXAotICAiKTsKKyAgZXh0ZXJuIGludCBkbGxj
-aGFpbiBhc20oIiRkbGxfY2hhaW4iKTsKKyAgKigoKHZvbGF0aWxlIGludCop
-X19idWlsdGluX2ZyYW1lX2FkZHJlc3MoMCkpKzEpPWRsbGNoYWluOworCiAK
-ICAgcmV0dXJuIHJldC5sbDsKIH0KQEAgLTMzNyw5ICszMzcsOCBAQAogICAg
-IH0KIAogICAvKiBLbHVkZ2UgYWxlcnQuICBSZWRpcmVjdHMgdGhlIHJldHVy
-biBhZGRyZXNzIHRvIGRsbF9jaGFpbi4gKi8KLSAgX19hc21fXyBfX3ZvbGF0
-aWxlX18gKCIJCVxuXAotCW1vdmwJJGRsbF9jaGFpbiw0KCVlYnApCVxuXAot
-ICAiKTsKKyAgZXh0ZXJuIGludCBkbGxjaGFpbiBhc20oIiRkbGxfY2hhaW4i
-KTsKKyAgKigoKHZvbGF0aWxlIGludCopX19idWlsdGluX2ZyYW1lX2FkZHJl
-c3MoMCkpKzEpPWRsbGNoYWluOwogCiAgIEludGVybG9ja2VkRGVjcmVtZW50
-ICgmaGVyZSk7CiAKSW5kZXg6IHdpbnN1cC9jeWd3aW4vZW52aXJvbi5jYwo9
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMv
-d2luc3VwL2N5Z3dpbi9lbnZpcm9uLmNjLHYKcmV0cmlldmluZyByZXZpc2lv
-biAxLjE5NApkaWZmIC11IC1yMS4xOTQgZW52aXJvbi5jYwotLS0gd2luc3Vw
-L2N5Z3dpbi9lbnZpcm9uLmNjCTQgSnVsIDIwMTEgMTg6MTQ6MzEgLTAwMDAJ
-MS4xOTQKKysrIHdpbnN1cC9jeWd3aW4vZW52aXJvbi5jYwkxMiBKdWwgMjAx
-MSAxOTowODozNCAtMDAwMApAQCAtMzkyLDcgKzM5Miw3IEBACiAgIGZyZWUg
-KHNyYyk7CiAgIE1BTExPQ19DSEVDSzsKIH0KLQordHlwZWRlZiBjaGFyKiAo
-X19zdGRjYWxsICpwZm5lbnYpKGNvbnN0IGNoYXIqLGludCopOwogLyogUmV0
-dXJucyBwb2ludGVyIHRvIHZhbHVlIGFzc29jaWF0ZWQgd2l0aCBuYW1lLCBp
-ZiBhbnksIGVsc2UgTlVMTC4KICAgU2V0cyBvZmZzZXQgdG8gYmUgdGhlIG9m
-ZnNldCBvZiB0aGUgbmFtZS92YWx1ZSBjb21iaW5hdGlvbiBpbiB0aGUKICAg
-ZW52aXJvbm1lbnQgYXJyYXksIGZvciB1c2UgYnkgc2V0ZW52KDMpIGFuZCB1
-bnNldGVudigzKS4KQEAgLTQ0OCw3ICs0NDgsNyBAQAogICByZXR1cm4gTlVM
-TDsKIH0KIAotc3RhdGljIGNoYXIgKiAoKmZpbmRlbnZfZnVuYykoY29uc3Qg
-Y2hhciAqLCBpbnQgKikgPSAoY2hhciAqICgqKShjb25zdCBjaGFyICosIGlu
-dCAqKSkgZ2V0ZWFybHk7CitzdGF0aWMgcGZuZW52IGZpbmRlbnZfZnVuYyA9
-ICZnZXRlYXJseTsKIAogLyogUmV0dXJucyBwdHIgdG8gdmFsdWUgYXNzb2Np
-YXRlZCB3aXRoIG5hbWUsIGlmIGFueSwgZWxzZSBOVUxMLiAgKi8KIApAQCAt
-ODA2LDcgKzgwNiw3IEBACiAgIEZyZWVFbnZpcm9ubWVudFN0cmluZ3NXIChy
-YXdlbnYpOwogCiBvdXQ6Ci0gIGZpbmRlbnZfZnVuYyA9IChjaGFyICogKCop
-KGNvbnN0IGNoYXIqLCBpbnQqKSkgbXlfZmluZGVudjsKKyAgZmluZGVudl9m
-dW5jID0gbXlfZmluZGVudjsKICAgX19jeWd3aW5fZW52aXJvbiA9IGVudnA7
-CiAgIHVwZGF0ZV9lbnZwdHJzICgpOwogICBpZiAoZW52cF9wYXNzZWRfaW4p
-CkluZGV4OiB3aW5zdXAvdXRpbHMvbWtwYXNzd2QuYwo9PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL3V0aWxz
-L21rcGFzc3dkLmMsdgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuNTUKZGlmZiAt
-dSAtcjEuNTUgbWtwYXNzd2QuYwotLS0gd2luc3VwL3V0aWxzL21rcGFzc3dk
-LmMJMjggQXVnIDIwMTAgMTE6MjI6MzcgLTAwMDAJMS41NQorKysgd2luc3Vw
-L3V0aWxzL21rcGFzc3dkLmMJMTIgSnVsIDIwMTEgMTk6MDg6MzQgLTAwMDAK
-QEAgLTc3LDcgKzc3LDcgQEAKICAgSEFORExFIGggPSBMb2FkTGlicmFyeSAo
-Im5ldGFwaTMyLmRsbCIpOwogCiAgIGlmIChoKQotICAgIGRzZ2V0ZGNuYW1l
-ID0gKHZvaWQgKikgR2V0UHJvY0FkZHJlc3MgKGgsICJEc0dldERjTmFtZVci
-KTsKKyAgICBkc2dldGRjbmFtZSA9IChXSU5BUEkgdm9pZCAqKSBHZXRQcm9j
-QWRkcmVzcyAoaCwgIkRzR2V0RGNOYW1lVyIpOwogfQogCiBzdGF0aWMgUFdD
-SEFSCkluZGV4OiB3aW5zdXAvdXRpbHMvbWtncm91cC5jCj09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT0KUkNTIGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvdXRp
-bHMvbWtncm91cC5jLHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjQ4CmRpZmYg
-LXUgLXIxLjQ4IG1rZ3JvdXAuYwotLS0gd2luc3VwL3V0aWxzL21rZ3JvdXAu
-YwkyOCBBdWcgMjAxMCAxMToyMjozNyAtMDAwMAkxLjQ4CisrKyB3aW5zdXAv
-dXRpbHMvbWtncm91cC5jCTEyIEp1bCAyMDExIDE5OjA4OjM0IC0wMDAwCkBA
-IC03Niw3ICs3Niw3IEBACiB7CiAgIEhBTkRMRSBoID0gTG9hZExpYnJhcnkg
-KCJuZXRhcGkzMi5kbGwiKTsKICAgaWYgKGgpCi0gICAgZHNnZXRkY25hbWUg
-PSAodm9pZCAqKSBHZXRQcm9jQWRkcmVzcyAoaCwgIkRzR2V0RGNOYW1lVyIp
-OworICAgIGRzZ2V0ZGNuYW1lID0gKFdJTkFQSSB2b2lkICopIEdldFByb2NB
-ZGRyZXNzIChoLCAiRHNHZXREY05hbWVXIik7CiB9CiAKIHN0YXRpYyBQV0NI
-QVIKSW5kZXg6IHdpbnN1cC91dGlscy9sb2FkbGliLmgKPT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC91dGls
-cy9sb2FkbGliLmgsdgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuMgpkaWZmIC11
-IC1yMS4yIGxvYWRsaWIuaAotLS0gd2luc3VwL3V0aWxzL2xvYWRsaWIuaAky
-OSBNYXIgMjAxMSAxMTowMjo1OCAtMDAwMAkxLjIKKysrIHdpbnN1cC91dGls
-cy9sb2FkbGliLmgJMTIgSnVsIDIwMTEgMTk6MDg6MzQgLTAwMDAKQEAgLTIz
-LDcgKzIzLDcgQEAKIHN0YXRpYyBITU9EVUxFCiBfbG9hZF9zeXNfbGlicmFy
-eSAoY29uc3Qgd2NoYXJfdCAqZGxsKQogewotICBzdGF0aWMgQk9PTCAoKnNl
-dF9kbGxfZGlyZWN0b3J5KShMUENXU1RSKTsKKyAgc3RhdGljIEJPT0wgKFdJ
-TkFQSSAqc2V0X2RsbF9kaXJlY3RvcnkpKExQQ1dTVFIpOwogICBzdGF0aWMg
-V0NIQVIgc3lzZGlyW01BWF9QQVRIXTsKICAgc3RhdGljIFVJTlQgc3lzZGly
-X2xlbjsKIApAQCAtMzksMTAgKzM5LDEwIEBACiAgICAgewogICAgICAgSE1P
-RFVMRSBrMzIgPSBHZXRNb2R1bGVIYW5kbGVXIChMImtlcm5lbDMyLmRsbCIp
-OwogICAgICAgaWYgKGszMikKLSAgICAgIAlzZXRfZGxsX2RpcmVjdG9yeSA9
-IChCT09MICgqKShMUENXU1RSKSkKKyAgICAgIAlzZXRfZGxsX2RpcmVjdG9y
-eSA9IChCT09MIChXSU5BUEkgKikoTFBDV1NUUikpCiAJCSAgICAgR2V0UHJv
-Y0FkZHJlc3MgKGszMiwgIlNldERsbERpcmVjdG9yeVciKTsKICAgICAgIGlm
-ICghc2V0X2RsbF9kaXJlY3RvcnkpCi0Jc2V0X2RsbF9kaXJlY3RvcnkgPSAo
-Qk9PTCAoKikoTFBDV1NUUikpIC0xOworCXNldF9kbGxfZGlyZWN0b3J5ID0g
-KEJPT0wgKFdJTkFQSSAqKShMUENXU1RSKSkgLTE7CiAgICAgICBlbHNlCiAg
-ICAgICAJc2V0X2RsbF9kaXJlY3RvcnkgKEwiIik7CiAgICAgfQpJbmRleDog
-d2luc3VwL3V0aWxzL2N5Z3BhdGguY2MKPT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC91dGlscy9jeWdwYXRo
-LmNjLHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjY1CmRpZmYgLXUgLXIxLjY1
-IGN5Z3BhdGguY2MKLS0tIHdpbnN1cC91dGlscy9jeWdwYXRoLmNjCTYgRGVj
-IDIwMTAgMTM6NDA6MjQgLTAwMDAJMS42NQorKysgd2luc3VwL3V0aWxzL2N5
-Z3BhdGguY2MJMTIgSnVsIDIwMTEgMTk6MDg6MzQgLTAwMDAKQEAgLTYyMyw3
-ICs2MjMsNyBAQAogICBEV09SRCBsZW4gPSBNQVhfUEFUSDsKICAgV0lOMzJf
-RklORF9EQVRBVyB3MzJfZmQ7CiAgIEhJTlNUQU5DRSBrMzI7Ci0gIEJPT0wg
-KCpHZXRQcm9maWxlc0RpcmVjdG9yeUFQdHJXKSAoTFBXU1RSLCBMUERXT1JE
-KSA9IDA7CisgIEJPT0wgKFdJTkFQSSAqR2V0UHJvZmlsZXNEaXJlY3RvcnlB
-UHRyVykgKExQV1NUUiwgTFBEV09SRCkgPSAwOwogCiAgIGJ1ZiA9IGJ1ZjE7
-CiAgIGJ1ZlswXSA9IDA7CkBAIC02NjEsNyArNjYxLDcgQEAKICAgICBjYXNl
-ICdIJzoKICAgICAgIGszMiA9IExvYWRMaWJyYXJ5ICgidXNlcmVudi5kbGwi
-KTsKICAgICAgIGlmIChrMzIpCi0JR2V0UHJvZmlsZXNEaXJlY3RvcnlBUHRy
-VyA9IChCT09MICgqKSAoTFBXU1RSLCBMUERXT1JEKSkKKwlHZXRQcm9maWxl
-c0RpcmVjdG9yeUFQdHJXID0gKEJPT0wgKFdJTkFQSSAqKSAoTFBXU1RSLCBM
-UERXT1JEKSkKIAkgIEdldFByb2NBZGRyZXNzIChrMzIsICJHZXRQcm9maWxl
-c0RpcmVjdG9yeVciKTsKICAgICAgIGlmIChHZXRQcm9maWxlc0RpcmVjdG9y
-eUFQdHJXKQogCSgqR2V0UHJvZmlsZXNEaXJlY3RvcnlBUHRyVykgKHdidWYs
-ICZsZW4pOwpJbmRleDogd2luc3VwL2N5Z3dpbi9DaGFuZ2VMb2cKPT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1
-cC9jeWd3aW4vQ2hhbmdlTG9nLHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjU0
-NDIKZGlmZiAtdSAtcjEuNTQ0MiBDaGFuZ2VMb2cKLS0tIHdpbnN1cC9jeWd3
-aW4vQ2hhbmdlTG9nCTExIEp1bCAyMDExIDAwOjAzOjU0IC0wMDAwCTEuNTQ0
-MgorKysgd2luc3VwL2N5Z3dpbi9DaGFuZ2VMb2cJMTIgSnVsIDIwMTEgMTk6
-MTE6NDMgLTAwMDAKQEAgLTEsMyArMSw4IEBACisyMDExLTA3LTEzICBKaW53
-b28gWWUgIDxqb2plbGlub0BnbWFpbC5jb20+CisKKwkqIGVudmlyb24uY2Mg
-KGZpbmRlbnZfZnVuYyk6IChmaW5kZW52X2Z1bmMpIERlZmluZSBuZXcgcGZu
-LgorCSogYXV0b2xvYWQuY2MgKHN0ZF9kbGxfaW5pdCx3c29ja19pbml0KTog
-VXNlIF9fYnVpbHRpbl9mcmFtZV9hZGRyZXNzIHRvIHJlcGxhY2UgcmV0dXJu
-IGFkZHJlc3MKKwogMjAxMS0wNy0xMCAgQ2hyaXN0b3BoZXIgRmF5bG9yICA8
-bWUuY3lnd2luMjAxMUBjZ2YuY3g+CiAKIAkqIGZoYW5kbGVyX3R0eS5jYyAo
-ZmhhbmRsZXJfcHR5X3NsYXZlOjppb2N0bCk6IFJlbW92ZSBlcnJvbmVvdXMg
-c3VwcG9ydApJbmRleDogd2luc3VwL3V0aWxzL0NoYW5nZUxvZwo9PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2luc3Vw
-L3V0aWxzL0NoYW5nZUxvZyx2CnJldHJpZXZpbmcgcmV2aXNpb24gMS41NTYK
-ZGlmZiAtdSAtcjEuNTU2IENoYW5nZUxvZwotLS0gd2luc3VwL3V0aWxzL0No
-YW5nZUxvZwkxNCBKdW4gMjAxMSAxNTowNDowNCAtMDAwMAkxLjU1NgorKysg
-d2luc3VwL3V0aWxzL0NoYW5nZUxvZwkxMiBKdWwgMjAxMSAxOToxMTo0MyAt
-MDAwMApAQCAtMSwzICsxLDEwIEBACisyMDExLTA3LTEzICBKaW53b28gWWUg
-IDxqb2plbGlub0BnbWFpbC5jb20+CisKKwkqIG1rcGFzc3dkLmM6IERpdHRv
-LgorCSogbWtncm91cC5jIChsb2FkX2RzZ2V0ZGNuYW1lKTogRGl0dG8uCisJ
-KiBsb2FkbGliLmggKF9sb2FkX3N5c19saWJyYXJ5KTogRGl0dG8uCisJKiBj
-eWdwYXRoLmNjIChkb19zeXNmb2xkZXJzKTogQWRkIFdJTkFQSSB0byBmdW5j
-dGlvbiBwb2ludGVyLgorCiAyMDExLTA2LTE0ICBDaHJpc3RvcGhlciBGYXls
-b3IgIDxtZS5jeWd3aW4yMDExQGNnZi5jeD4KIAogCSogbWluZ3c6IEZvcmNl
-IHVzZSBvZiBiYXNoLgo=
 
---------------040606060309070209010208--
+Yaakov
+Cygwin/X
+
+
+--=-+VpjW81pEDO1/FClfg1s
+Content-Disposition: attachment; filename="cygwin-sysconf-update.patch"
+Content-Type: text/x-patch; name="cygwin-sysconf-update.patch"; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Content-length: 2952
+
+2011-07-18  Yaakov Selkowitz  <yselkowitz@users.sourceforge.net>
+
+	* sysconf.cc (sca): Return -1 for _SC_THREAD_ROBUST_PRIO_INHERIT,
+	_SC_THREAD_ROBUST_PRIO_PROTECT, and _SC_XOPEN_UUCP.
+	(SC_MAX): Redefine accordingly.
+	(csa): Return strings for _CS_POSIX_V7_THREADS_CFLAGS,
+	_CS_POSIX_V7_THREADS_LDFLAGS, and _CS_V7_ENV.
+	(CS_MAX): Redefine accordingly.
+	* include/limits.h (LONG_BIT): Define.
+	(WORD_BIT): Define.
+
+Index: sysconf.cc
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/sysconf.cc,v
+retrieving revision 1.59
+diff -u -p -r1.59 sysconf.cc
+--- sysconf.cc	6 Jun 2011 05:02:13 -0000	1.59
++++ sysconf.cc	18 Jul 2011 22:17:42 -0000
+@@ -219,10 +219,13 @@ static struct
+   {cons, {c:_POSIX2_SW_DEV}},		/* 119, _SC_2_SW_DEV */
+   {cons, {c:_POSIX2_UPE}},		/* 120, _SC_2_UPE */
+   {cons, {c:_POSIX2_VERSION}},		/* 121, _SC_2_VERSION */
++  {cons, {c:-1L}},			/* 122, _SC_THREAD_ROBUST_PRIO_INHERIT */
++  {cons, {c:-1L}},			/* 123, _SC_THREAD_ROBUST_PRIO_PROTECT */
++  {cons, {c:-1L}},			/* 124, _SC_XOPEN_UUCP */
+ };
+ 
+ #define SC_MIN _SC_ARG_MAX
+-#define SC_MAX _SC_2_VERSION
++#define SC_MAX _SC_XOPEN_UUCP
+ 
+ /* sysconf: POSIX 4.8.1.1 */
+ /* Allows a portable app to determine quantities of resources or
+@@ -259,7 +262,7 @@ static struct
+   {0, NULL},				/* _CS_POSIX_V6_ILP32_OFF32_CFLAGS */
+   {0, NULL},				/* _CS_POSIX_V6_ILP32_OFF32_LDFLAGS */
+   {0, NULL},				/* _CS_POSIX_V6_ILP32_OFF32_LIBS */
+-  {0, NULL},				/* _CS_POSIX_V6_ILP32_OFF32_LINTFLAGS */
++  {0, NULL},				/* _CS_XBS5_ILP32_OFF32_LINTFLAGS */
+   {ls ("")},				/* _CS_POSIX_V6_ILP32_OFFBIG_CFLAGS */
+   {ls ("")},				/* _CS_POSIX_V6_ILP32_OFFBIG_LDFLAGS */
+   {ls ("")},				/* _CS_POSIX_V6_ILP32_OFFBIG_LIBS */
+@@ -273,10 +276,13 @@ static struct
+   {0, NULL},				/* _CS_POSIX_V6_LPBIG_OFFBIG_LIBS */
+   {0, NULL},				/* _CS_XBS5_LPBIG_OFFBIG_LINTFLAGS */
+   {ls ("POSIX_V6_ILP32_OFFBIG")},	/* _CS_POSIX_V6_WIDTH_RESTRICTED_ENVS */
++  {ls ("")},				/* _CS_POSIX_V7_THREADS_CFLAGS */
++  {ls ("")},				/* _CS_POSIX_V7_THREADS_LDFLAGS */
++  {ls ("POSIXLY_CORRECT=1")},		/* _CS_V7_ENV */
+ };
+ 
+ #define CS_MIN _CS_PATH
+-#define CS_MAX _CS_POSIX_V6_WIDTH_RESTRICTED_ENVS
++#define CS_MAX _CS_V7_ENV
+ 
+ extern "C" size_t
+ confstr (int in, char *buf, size_t len)
+Index: include/limits.h
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/include/limits.h,v
+retrieving revision 1.26
+diff -u -p -r1.26 limits.h
+--- include/limits.h	11 Aug 2009 07:28:22 -0000	1.26
++++ include/limits.h	18 Jul 2011 22:17:42 -0000
+@@ -26,6 +26,14 @@ details. */
+ #undef CHAR_BIT
+ #define CHAR_BIT 8
+ 
++/* Number of bits in a `long'.  */
++#undef LONG_BIT
++#define LONG_BIT 32
++
++/* Number of bits in a `int'.  */
++#undef WORD_BIT
++#define WORD_BIT 32
++
+ /* Maximum length of a multibyte character.  */
+ #ifndef MB_LEN_MAX
+ /* TODO: This is newlib's max value.  We should probably rather define our
+
+--=-+VpjW81pEDO1/FClfg1s--
