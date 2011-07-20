@@ -1,22 +1,28 @@
-Return-Path: <cygwin-patches-return-7439-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 28721 invoked by alias); 20 Jul 2011 14:12:08 -0000
-Received: (qmail 28588 invoked by uid 22791); 20 Jul 2011 14:11:46 -0000
+Return-Path: <cygwin-patches-return-7440-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 15204 invoked by alias); 20 Jul 2011 17:37:36 -0000
+Received: (qmail 15192 invoked by uid 22791); 20 Jul 2011 17:37:35 -0000
+X-SWARE-Spam-Status: No, hits=-0.7 required=5.0	tests=AWL,BAYES_05,RCVD_IN_DNSWL_NONE,TW_CG,UNPARSEABLE_RELAY
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Wed, 20 Jul 2011 14:11:28 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 2B55E2CAE5D; Wed, 20 Jul 2011 16:11:25 +0200 (CEST)
-Date: Wed, 20 Jul 2011 14:12:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Received: from nm27-vm4.bullet.mail.ne1.yahoo.com (HELO nm27-vm4.bullet.mail.ne1.yahoo.com) (98.138.91.187)    by sourceware.org (qpsmtpd/0.43rc1) with SMTP; Wed, 20 Jul 2011 17:37:17 +0000
+Received: from [98.138.90.49] by nm27.bullet.mail.ne1.yahoo.com with NNFMP; 20 Jul 2011 17:37:16 -0000
+Received: from [98.138.226.128] by tm2.bullet.mail.ne1.yahoo.com with NNFMP; 20 Jul 2011 17:37:16 -0000
+Received: from [127.0.0.1] by smtp215.mail.ne1.yahoo.com with NNFMP; 20 Jul 2011 17:37:16 -0000
+X-Yahoo-SMTP: jenXL62swBAWhMTL3wnej93oaS0ClBQOAKs8jbEbx_o-
+Received: from cgf.cx (cgf@108.20.226.5 with login)        by smtp215.mail.ne1.yahoo.com with SMTP; 20 Jul 2011 10:37:16 -0700 PDT
+Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id 554E513C002	for <cygwin-patches@cygwin.com>; Wed, 20 Jul 2011 13:37:14 -0400 (EDT)
+Date: Wed, 20 Jul 2011 17:37:00 -0000
+From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] clock_nanosleep(2)
-Message-ID: <20110720141125.GA15232@calimero.vinschen.de>
+Message-ID: <20110720173703.GA2455@ednor.casa.cgf.cx>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1311126880.7796.9.camel@YAAKOV04> <20110720075654.GA3667@calimero.vinschen.de> <1311153377.7796.66.camel@YAAKOV04> <1311155453.7796.70.camel@YAAKOV04>
+References: <1311126880.7796.9.camel@YAAKOV04> <20110720075654.GA3667@calimero.vinschen.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1311155453.7796.70.camel@YAAKOV04>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+In-Reply-To: <20110720075654.GA3667@calimero.vinschen.de>
+User-Agent: Mutt/1.5.20 (2009-06-14)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,63 +32,13 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q3/txt/msg00015.txt.bz2
+X-SW-Source: 2011-q3/txt/msg00016.txt.bz2
 
-On Jul 20 04:50, Yaakov (Cygwin/X) wrote:
-> On Wed, 2011-07-20 at 04:16 -0500, Yaakov (Cygwin/X) wrote:
-> > On Wed, 2011-07-20 at 09:56 +0200, Corinna Vinschen wrote:
-> > > This doesn't look right.  In contrast to nanosleep, clock_nanosleep
-> > > is not subsumed under the _POSIX_TIMERS option.  In fact it's the only
-> > > function under the _POSIX_CLOCK_SELECTION option.
-> > 
-> > I did some searching, and there are actually two more:
-> > 
-> > http://pubs.opengroup.org/onlinepubs/009695399/functions/pthread_condattr_getclock.html
+On Wed, Jul 20, 2011 at 09:56:54AM +0200, Corinna Vinschen wrote:
+>I haven't much time right now.  If cgf doesn't beat me to it, I'll
+>review the function later.
 
-As long as it's not implemented, I don't see a problem.
+I have a couple of PriA problems to look into at work so I don't have
+much time either.
 
-> > 
-> > The behaviour of the following functions are also affected by this
-> > option:
-> > 
-> > http://pubs.opengroup.org/onlinepubs/009695399/functions/clock_getres.html
-> > http://pubs.opengroup.org/onlinepubs/009695399/functions/pthread_cond_wait.html
-> > 
-> > (It should be noted that the Clock Selection option was merged into the
-> > Base with POSIX.1-2008.)
-> > 
-> > How should we proceed now?
-> 
-> Actually, no need to panic, I took a closer look at this, and it's not
-> all that hard at all, so I'll go ahead and implement
-> pthread_condattr_[gs]etclock() as well.  Just give me a day or two to
-> get it done.  In the meantime, I'll proceed with the revised newlib
-> patch.
-
-Thanks.
-
-The only problem I see is the fact that a call to clock_settime
-influences calls to clock_nanosleep with absolute timeouts(*).
-
-The problem is that we convert absolute timeouts to relative timeouts
-and then use the timeout facility of the WFMO function to handle the
-timeout for us.  IMO this is neither very reliable, nor is it elegant.
-
-So, here's the question.  Shouldn't we better use waitable timers
-to implement this sort of stuff?  Waitable timers are pretty easy to
-use, they support relative and absolute timeouts with an accuracy of 100
-ns in the API and a real accuracy which only depends on the underlying
-HW, and they are especially not subject to the 49.7 days overflow
-problem.
-
-
-Corinna
-
-
-(*) Does it also influence pthread_cond_timedwait?  This information seems
-    to be missing in SUSv4.
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+cgf
