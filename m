@@ -1,22 +1,22 @@
-Return-Path: <cygwin-patches-return-7436-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 28242 invoked by alias); 20 Jul 2011 07:57:40 -0000
-Received: (qmail 28197 invoked by uid 22791); 20 Jul 2011 07:57:16 -0000
+Return-Path: <cygwin-patches-return-7437-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 12991 invoked by alias); 20 Jul 2011 09:16:25 -0000
+Received: (qmail 12977 invoked by uid 22791); 20 Jul 2011 09:16:25 -0000
+X-SWARE-Spam-Status: No, hits=-2.5 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,T_TO_NO_BRKTS_FREEMAIL
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Wed, 20 Jul 2011 07:56:57 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 795342CA505; Wed, 20 Jul 2011 09:56:54 +0200 (CEST)
-Date: Wed, 20 Jul 2011 07:57:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
+Received: from mail-yx0-f171.google.com (HELO mail-yx0-f171.google.com) (209.85.213.171)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 20 Jul 2011 09:16:11 +0000
+Received: by yxk38 with SMTP id 38so11523yxk.2        for <cygwin-patches@cygwin.com>; Wed, 20 Jul 2011 02:16:10 -0700 (PDT)
+Received: by 10.236.170.197 with SMTP id p45mr2582617yhl.522.1311153368961;        Wed, 20 Jul 2011 02:16:08 -0700 (PDT)
+Received: from [127.0.0.1] (S0106000cf16f58b1.wp.shawcable.net [174.5.115.130])        by mx.google.com with ESMTPS id c63sm5159122yhe.46.2011.07.20.02.16.07        (version=SSLv3 cipher=OTHER);        Wed, 20 Jul 2011 02:16:08 -0700 (PDT)
 Subject: Re: [PATCH] clock_nanosleep(2)
-Message-ID: <20110720075654.GA3667@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1311126880.7796.9.camel@YAAKOV04>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1311126880.7796.9.camel@YAAKOV04>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
+To: cygwin-patches@cygwin.com
+Date: Wed, 20 Jul 2011 09:16:00 -0000
+In-Reply-To: <20110720075654.GA3667@calimero.vinschen.de>
+References: <1311126880.7796.9.camel@YAAKOV04>	 <20110720075654.GA3667@calimero.vinschen.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <1311153377.7796.66.camel@YAAKOV04>
+Mime-Version: 1.0
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,63 +26,28 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q3/txt/msg00012.txt.bz2
+X-SW-Source: 2011-q3/txt/msg00013.txt.bz2
 
-Hi Yaakov,
+On Wed, 2011-07-20 at 09:56 +0200, Corinna Vinschen wrote:
+> This doesn't look right.  In contrast to nanosleep, clock_nanosleep
+> is not subsumed under the _POSIX_TIMERS option.  In fact it's the only
+> function under the _POSIX_CLOCK_SELECTION option.
 
-On Jul 19 20:54, Yaakov (Cygwin/X) wrote:
-> This patchset implements the POSIX clock_nanosleep(2) function:
-> 
-> http://pubs.opengroup.org/onlinepubs/9699919799/functions/clock_nanosleep.html
-> http://www.kernel.org/doc/man-pages/online/pages/man2/clock_nanosleep.2.html
-> 
-> In summary, clock_nanosleep(2) replaces nanosleep(2) as the primary
-> sleeping function, with all others rewritten in terms of the former.  It
-> also restores maximum precision to hires_ms::resolution(), saving the
-> <5000 100ns check for the one place where resolution is rounded off.
+I did some searching, and there are actually two more:
 
-I like this, it's probably not only faster but it makes the code better
-readable.  But let's talk about the newlib side first.
+http://pubs.opengroup.org/onlinepubs/009695399/functions/pthread_condattr_getclock.html
 
-> Index: libc/include/time.h
-> ===================================================================
-> RCS file: /cvs/src/src/newlib/libc/include/time.h,v
-> retrieving revision 1.19
-> diff -u -r1.19 time.h
-> --- libc/include/time.h	16 Oct 2008 21:53:58 -0000	1.19
-> +++ libc/include/time.h	15 May 2011 19:22:48 -0000
-> @@ -168,6 +168,9 @@
->  
->  /* High Resolution Sleep, P1003.1b-1993, p. 269 */
->  
-> +int _EXFUN(clock_nanosleep,
-> +  (clockid_t clock_id, int flags, const struct timespec *rqtp,
-> +   struct timespec *rmtp));
->  int _EXFUN(nanosleep, (const struct timespec  *rqtp, struct timespec *rmtp));
->  
->  #ifdef __cplusplus
+The behaviour of the following functions are also affected by this
+option:
 
-This doesn't look right.  In contrast to nanosleep, clock_nanosleep
-is not subsumed under the _POSIX_TIMERS option.  In fact it's the only
-function under the _POSIX_CLOCK_SELECTION option.  So clock_nanosleep
-should be guarded independently of _POSIX_TIMERS, kind of like this:
+http://pubs.opengroup.org/onlinepubs/009695399/functions/clock_getres.html
+http://pubs.opengroup.org/onlinepubs/009695399/functions/pthread_cond_wait.html
 
- #if defined(_POSIX_CLOCK_SELECTION)
- extern "C" {
-   int _EXFUN(clock_nanosleep, ...
+(It should be noted that the Clock Selection option was merged into the
+Base with POSIX.1-2008.)
 
-Additionally _POSIX_CLOCK_SELECTION has to be activated in features.h.
-
-Would you mind to send this patch to the newlib list then?
-
-I haven't much time right now.  If cgf doesn't beat me to it, I'll
-review the function later.
+How should we proceed now?
 
 
-Thanks,
-Corinna
+Yaakov
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
