@@ -1,22 +1,22 @@
-Return-Path: <cygwin-patches-return-7442-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 18356 invoked by alias); 21 Jul 2011 02:22:45 -0000
-Received: (qmail 18344 invoked by uid 22791); 21 Jul 2011 02:22:44 -0000
-X-SWARE-Spam-Status: No, hits=-2.5 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,T_TO_NO_BRKTS_FREEMAIL
+Return-Path: <cygwin-patches-return-7443-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 22064 invoked by alias); 21 Jul 2011 07:54:51 -0000
+Received: (qmail 22036 invoked by uid 22791); 21 Jul 2011 07:54:29 -0000
 X-Spam-Check-By: sourceware.org
-Received: from mail-yx0-f171.google.com (HELO mail-yx0-f171.google.com) (209.85.213.171)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 21 Jul 2011 02:22:30 +0000
-Received: by yxk38 with SMTP id 38so478586yxk.2        for <cygwin-patches@cygwin.com>; Wed, 20 Jul 2011 19:22:29 -0700 (PDT)
-Received: by 10.150.252.20 with SMTP id z20mr41438ybh.193.1311214949326;        Wed, 20 Jul 2011 19:22:29 -0700 (PDT)
-Received: from [127.0.0.1] (S0106000cf16f58b1.wp.shawcable.net [174.5.115.130])        by mx.google.com with ESMTPS id k5sm2242357ybf.8.2011.07.20.19.22.27        (version=SSLv3 cipher=OTHER);        Wed, 20 Jul 2011 19:22:28 -0700 (PDT)
-Subject: Re: [PATCH] clock_nanosleep(2), pthread_condattr_[gs]etclock(3)
-From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Thu, 21 Jul 2011 07:53:50 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 70D462CAE8D; Thu, 21 Jul 2011 09:53:47 +0200 (CEST)
+Date: Thu, 21 Jul 2011 07:54:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Date: Thu, 21 Jul 2011 02:22:00 -0000
+Subject: Re: [PATCH] clock_nanosleep(2), pthread_condattr_[gs]etclock(3)
+Message-ID: <20110721075347.GF15150@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <1311126880.7796.9.camel@YAAKOV04> <20110720075654.GA3667@calimero.vinschen.de> <1311153377.7796.66.camel@YAAKOV04> <1311155453.7796.70.camel@YAAKOV04> <20110720141125.GA15232@calimero.vinschen.de> <1311199441.6248.9.camel@YAAKOV04>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 In-Reply-To: <1311199441.6248.9.camel@YAAKOV04>
-References: <1311126880.7796.9.camel@YAAKOV04>		 <20110720075654.GA3667@calimero.vinschen.de>		 <1311153377.7796.66.camel@YAAKOV04> <1311155453.7796.70.camel@YAAKOV04>		 <20110720141125.GA15232@calimero.vinschen.de>	 <1311199441.6248.9.camel@YAAKOV04>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <1311214958.7552.24.camel@YAAKOV04>
-Mime-Version: 1.0
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,66 +26,53 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q3/txt/msg00018.txt.bz2
+X-SW-Source: 2011-q3/txt/msg00019.txt.bz2
 
-On Wed, 2011-07-20 at 17:03 -0500, Yaakov (Cygwin/X) wrote:
+On Jul 20 17:03, Yaakov (Cygwin/X) wrote:
 > On Wed, 2011-07-20 at 16:11 +0200, Corinna Vinschen wrote:
-> > The only problem I see is the fact that a call to clock_settime
-> > influences calls to clock_nanosleep with absolute timeouts(*).
-
-However, clock_settime() can set only CLOCK_REALTIME, not
-CLOCK_MONOTONIC, so...
-
-> > The problem is that we convert absolute timeouts to relative timeouts
-> > and then use the timeout facility of the WFMO function to handle the
-> > timeout for us.  IMO this is neither very reliable, nor is it elegant.
-> > 
-> > So, here's the question.  Shouldn't we better use waitable timers
-> > to implement this sort of stuff?  Waitable timers are pretty easy to
-> > use, they support relative and absolute timeouts with an accuracy of 100
-> > ns in the API and a real accuracy which only depends on the underlying
-> > HW, and they are especially not subject to the 49.7 days overflow
-> > problem.
+> > (*) Does it also influence pthread_cond_timedwait?  This information seems
+> >     to be missing in SUSv4.
 > 
-> I see your point.  The question is how to use waitable timers for
-> CLOCK_MONOTONIC.
+> The last paragraph of RATIONALE -> Timed Wait Semantics states:
+> 
+> > For cases when the system clock is advanced discontinuously by an
+> > operator, it is expected that implementations process any timed wait
+> > expiring at an intervening time as if that time had actually occurred.
+> 
+> Of course, this would be an old problem with pthread_cond_timedwait().
 
-...therefore we could still handle CLOCK_MONOTONIC timedwait as a
-relative timeout.  So pthread_condattr_[gs]etclock should be correct
-even without this (although it would still gain accuracy), but that does
-leave a problem with clock_nanosleep(TIMER_ABSTIME).
+Thanks, I missed that.
 
-Looking at the other uses of cancelable_wait(), would the following make
-sense:
+> 2011-07-20  Yaakov Selkowitz  <yselkowitz@...>
+> 
+> 	* sysconf.cc (sca): Set _SC_CLOCK_SELECTION to _POSIX_CLOCK_SELECTION.
+> 
+> 2011-07-20  Yaakov Selkowitz  <yselkowitz@...>
+> 
+> 	* cygwin.din (pthread_condattr_getclock): Export.
+> 	(pthread_condattr_setclock): Export.
+> 	* posix.sgml (std-notimpl): Move pthread_condattr_getclock and
+> 	pthread_condattr_setclock from here...
+> 	(std-susv4): ... to here.
+> 	* thread.cc: (pthread_condattr::pthread_condattr): Initialize clock_id.
+> 	(pthread_cond::pthread_cond): Initialize clock_id.
+> 	(pthread_cond_timedwait): Use clock_gettime() instead of gettimeofday()
+> 	in order to support all allowed clocks.
+> 	(pthread_condattr_getclock): New function.
+> 	(pthread_condattr_setclock): New function.
+> 	* thread.h (class pthread_condattr): Add clock_id member.
+> 	(class pthread_cond): Ditto.
+> 	* include/pthread.h: Remove obsolete comment.
+> 	(pthread_condattr_getclock): Declare.
+> 	(pthread_condattr_setclock): Declare.
 
-* change the timeout argument to struct timespec *;
-* cancelable_wait (object, INFINITE) calls change to (object, NULL);
-* cancelable_wait (object, DWORD) calls change to (object, &timespec);
-* then in cancelable_wait:
-
-HANDLE hTimer;
-HANDLE wait_objects[4];
-....
-wait_objects[num++] = object;
-
-if (timeout)
-  {
-    LARGE_INTEGER li;
-    li.QuadPart = (timeout->tv_sec * NSPERSEC) + (timeout->tv_nsec /
-100); /* rounding? */
-    hTimer = CreateWaitableTimer (NULL, FALSE, NULL);
-    SetWaitableTimer (hTimer, &li, 0, NULL, NULL, FALSE); /* handle
-possible error?  what would cause one? */
-    wait_objects[num++] = hTimer;
-  }
-...
-while (1)
-  {
-    res = WaitForMultipleObjects (num, wait_objects, FALSE, INFINITE);
-....
-
-Or am I completely off-base here?
+This patch looks good, please apply.
 
 
-Yaakov
+Thanks,
+Corinna
 
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          cygwin AT cygwin DOT com
+Red Hat
