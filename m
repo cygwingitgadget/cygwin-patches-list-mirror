@@ -1,22 +1,19 @@
-Return-Path: <cygwin-patches-return-7474-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 5719 invoked by alias); 3 Aug 2011 19:10:48 -0000
-Received: (qmail 5659 invoked by uid 22791); 3 Aug 2011 19:10:29 -0000
+Return-Path: <cygwin-patches-return-7475-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 18404 invoked by alias); 4 Aug 2011 05:20:54 -0000
+Received: (qmail 18393 invoked by uid 22791); 4 Aug 2011 05:20:52 -0000
+X-SWARE-Spam-Status: No, hits=-2.6 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,T_TO_NO_BRKTS_FREEMAIL
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Wed, 03 Aug 2011 19:10:13 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 4130F2C05AA; Wed,  3 Aug 2011 21:10:10 +0200 (CEST)
-Date: Wed, 03 Aug 2011 19:10:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] clock_nanosleep(2), round two
-Message-ID: <20110803191010.GA19411@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1312396928.7084.6.camel@YAAKOV04>
+Received: from mail-pz0-f43.google.com (HELO mail-pz0-f43.google.com) (209.85.210.43)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 04 Aug 2011 05:20:35 +0000
+Received: by pzk1 with SMTP id 1so613310pzk.16        for <cygwin-patches@cygwin.com>; Wed, 03 Aug 2011 22:20:35 -0700 (PDT)
+Received: by 10.142.247.2 with SMTP id u2mr354786wfh.379.1312435235183; Wed, 03 Aug 2011 22:20:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1312396928.7084.6.camel@YAAKOV04>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Received: by 10.142.170.6 with HTTP; Wed, 3 Aug 2011 22:20:15 -0700 (PDT)
+From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
+Date: Thu, 04 Aug 2011 05:20:00 -0000
+Message-ID: <CAGvSfexmqdO=i-Bpk_3T8h1knC17J9VHNa5geG33-fQujnwQ0Q@mail.gmail.com>
+Subject: [PATCH] Add /proc/devices
+To: cygwin-patches@cygwin.com
+Content-Type: multipart/mixed; boundary=00504502c5d2fbdb1504a9a723f5
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,30 +23,175 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q3/txt/msg00050.txt.bz2
-
-On Aug  3 13:42, Yaakov (Cygwin/X) wrote:
-> 	* cygwin.din (clock_nanosleep): Export.
-> 	* posix.sgml (std-notimpl): Move clock_nanosleep from here...
-> 	(std-susv4): ... to here.
-> 	(std-notes): Note limitations of clock_nanosleep.
-> 	* signal.cc (clock_nanosleep): Renamed from nanosleep, adding clock_id
-> 	and flags arguments and changing return values throughout.
-> 	Improve checks for illegal rqtp values.  Add support for
-> 	CLOCK_MONOTONIC and TIMER_ABSTIME.
-> 	(nanosleep): Rewrite in terms of clock_nanosleep.
-> 	(sleep): Ditto.
-> 	(usleep): Ditto.
-> 	* thread.cc: Mark clock_nanosleep in list of cancellation points.
-> 	* include/cygwin/version.h (CYGWIN_VERSION_API_MINOR): Bump.
-
-Thumbs up.
+X-SW-Source: 2011-q3/txt/msg00051.txt.bz2
 
 
-Thank you,
-Corinna
+--00504502c5d2fbdb1504a9a723f5
+Content-Type: text/plain; charset=ISO-8859-1
+Content-length: 555
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+This patchset implements /proc/devices[1]:
+
+$ cat /proc/devices
+Character devices:
+  1 mem
+  5 /dev/tty
+  5 /dev/console
+  5 /dev/ptmx
+  9 st
+ 13 misc
+ 14 sound
+117 ttyS
+136 tty
+
+Block devices:
+  2 fd
+  8 sd
+ 11 sr
+ 65 sd
+ 66 sd
+ 67 sd
+ 68 sd
+ 69 sd
+ 70 sd
+ 71 sd
+
+The question is how to handle /dev/tty and /dev/console as the
+apparently vary now, per cgf's remarks on the main list.
+
+Patches for winsup/cygwin and winsup/doc attached.
+
+
+Yaakov
+
+[1] http://docs.redhat.com/docs/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/s2-proc-devices.html
+
+--00504502c5d2fbdb1504a9a723f5
+Content-Type: application/octet-stream; name="cygwin-proc-devices.patch"
+Content-Disposition: attachment; filename="cygwin-proc-devices.patch"
+Content-Transfer-Encoding: base64
+X-Attachment-Id: f_gqx9t5jf0
+Content-length: 5791
+
+MjAxMS0wOC0wNCAgWWFha292IFNlbGtvd2l0eiAgPHlzZWxrb3dpdHpALi4u
+PgoKCSogZGV2aWNlcy5oIChmaF9kZXZpY2VzKTogRGVmaW5lIERFVl9NSVND
+X01BSk9SLCBERVZfTUVNX01BSk9SLAoJREVWX1NPVU5EX01BSk9SLiAgVXNl
+IHRocm91Z2hvdXQuCgkqIGZoYW5kbGVyX3Byb2MuY2MgKHByb2NfdGFiKTog
+QWRkIC9wcm9jL2RldmljZXMgdmlydHVhbCBmaWxlLgoJKGZvcm1hdF9wcm9j
+X2RldmljZXMpOiBOZXcgZnVuY3Rpb24uCgpJbmRleDogZGV2aWNlcy5oCj09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT0KUkNTIGZpbGU6IC9jdnMvc3JjL3NyYy93
+aW5zdXAvY3lnd2luL2RldmljZXMuaCx2CnJldHJpZXZpbmcgcmV2aXNpb24g
+MS4zMgpkaWZmIC11IC1wIC1yMS4zMiBkZXZpY2VzLmgKLS0tIGRldmljZXMu
+aAkxMiBKdW4gMjAxMSAyMDoxNToyNiAtMDAwMAkxLjMyCisrKyBkZXZpY2Vz
+LmgJNCBBdWcgMjAxMSAwNTowNToxOCAtMDAwMApAQCAtNDQsOCArNDQsOSBA
+QCBlbnVtIGZoX2RldmljZXMKICAgREVWX1NFUklBTF9NQUpPUiA9IDExNywK
+ICAgRkhfU0VSSUFMICA9IEZIREVWICgxMTcsIDApLAkvKiAvZGV2L3R0eVM/
+ICovCiAKLSAgRkhfV0lORE9XUyA9IEZIREVWICgxMywgMjU1KSwKLSAgRkhf
+Q0xJUEJPQVJEPUZIREVWICgxMywgMjU0KSwKKyAgREVWX01JU0NfTUFKT1Ig
+PSAxMywKKyAgRkhfV0lORE9XUyA9IEZIREVWIChERVZfTUlTQ19NQUpPUiwg
+MjU1KSwKKyAgRkhfQ0xJUEJPQVJEPUZIREVWIChERVZfTUlTQ19NQUpPUiwg
+MjU0KSwKIAogICAvKiBiZWdpbiAvcHJvYyBkaXJlY3RvcmllcyAqLwogCkBA
+IC0yMjUsMTYgKzIyNiwxOSBAQCBlbnVtIGZoX2RldmljZXMKICAgRkhfU0RE
+VyAgICA9IEZIREVWIChERVZfU0Q3X01BSk9SLCAyMjQpLAogICBGSF9TRERY
+ICAgID0gRkhERVYgKERFVl9TRDdfTUFKT1IsIDI0MCksCiAKLSAgRkhfTUVN
+ICAgICA9IEZIREVWICgxLCAxKSwKLSAgRkhfS01FTSAgICA9IEZIREVWICgx
+LCAyKSwJLyogbm90IGltcGxlbWVudGVkIHlldCAqLwotICBGSF9OVUxMICAg
+ID0gRkhERVYgKDEsIDMpLAotICBGSF9QT1JUICAgID0gRkhERVYgKDEsIDQp
+LAotICBGSF9aRVJPICAgID0gRkhERVYgKDEsIDUpLAotICBGSF9GVUxMICAg
+ID0gRkhERVYgKDEsIDcpLAotICBGSF9SQU5ET00gID0gRkhERVYgKDEsIDgp
+LAotICBGSF9VUkFORE9NID0gRkhERVYgKDEsIDkpLAotICBGSF9LTVNHICAg
+ID0gRkhERVYgKDEsIDExKSwKLSAgRkhfT1NTX0RTUCA9IEZIREVWICgxNCwg
+MyksCisgIERFVl9NRU1fTUFKT1IgPSAxLAorICBGSF9NRU0gICAgID0gRkhE
+RVYgKERFVl9NRU1fTUFKT1IsIDEpLAorICBGSF9LTUVNICAgID0gRkhERVYg
+KERFVl9NRU1fTUFKT1IsIDIpLAkvKiBub3QgaW1wbGVtZW50ZWQgeWV0ICov
+CisgIEZIX05VTEwgICAgPSBGSERFViAoREVWX01FTV9NQUpPUiwgMyksCisg
+IEZIX1BPUlQgICAgPSBGSERFViAoREVWX01FTV9NQUpPUiwgNCksCisgIEZI
+X1pFUk8gICAgPSBGSERFViAoREVWX01FTV9NQUpPUiwgNSksCisgIEZIX0ZV
+TEwgICAgPSBGSERFViAoREVWX01FTV9NQUpPUiwgNyksCisgIEZIX1JBTkRP
+TSAgPSBGSERFViAoREVWX01FTV9NQUpPUiwgOCksCisgIEZIX1VSQU5ET00g
+PSBGSERFViAoREVWX01FTV9NQUpPUiwgOSksCisgIEZIX0tNU0cgICAgPSBG
+SERFViAoREVWX01FTV9NQUpPUiwgMTEpLAorCisgIERFVl9TT1VORF9NQUpP
+UiA9IDE0LAorICBGSF9PU1NfRFNQID0gRkhERVYgKERFVl9TT1VORF9NQUpP
+UiwgMyksCiAKICAgREVWX0NZR0RSSVZFX01BSk9SID0gOTgsCiAgIEZIX0NZ
+R0RSSVZFPSBGSERFViAoREVWX0NZR0RSSVZFX01BSk9SLCAwKSwKSW5kZXg6
+IGZoYW5kbGVyX3Byb2MuY2MKPT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1Mg
+ZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXJfcHJv
+Yy5jYyx2CnJldHJpZXZpbmcgcmV2aXNpb24gMS4xMDcKZGlmZiAtdSAtcCAt
+cjEuMTA3IGZoYW5kbGVyX3Byb2MuY2MKLS0tIGZoYW5kbGVyX3Byb2MuY2MJ
+MTIgSnVuIDIwMTEgMjA6MTU6MjYgLTAwMDAJMS4xMDcKKysrIGZoYW5kbGVy
+X3Byb2MuY2MJNCBBdWcgMjAxMSAwNTowNToxOSAtMDAwMApAQCAtNDYsMTIg
+KzQ2LDE0IEBAIHN0YXRpYyBfb2ZmNjRfdCBmb3JtYXRfcHJvY19zZWxmICh2
+b2lkICoKIHN0YXRpYyBfb2ZmNjRfdCBmb3JtYXRfcHJvY19tb3VudHMgKHZv
+aWQgKiwgY2hhciAqJik7CiBzdGF0aWMgX29mZjY0X3QgZm9ybWF0X3Byb2Nf
+ZmlsZXN5c3RlbXMgKHZvaWQgKiwgY2hhciAqJik7CiBzdGF0aWMgX29mZjY0
+X3QgZm9ybWF0X3Byb2Nfc3dhcHMgKHZvaWQgKiwgY2hhciAqJik7CitzdGF0
+aWMgX29mZjY0X3QgZm9ybWF0X3Byb2NfZGV2aWNlcyAodm9pZCAqLCBjaGFy
+IComKTsKIAogLyogbmFtZXMgb2Ygb2JqZWN0cyBpbiAvcHJvYyAqLwogc3Rh
+dGljIGNvbnN0IHZpcnRfdGFiX3QgcHJvY190YWJbXSA9IHsKICAgeyBfVk4g
+KCIuIiksCQkgRkhfUFJPQywJdmlydF9kaXJlY3RvcnksCU5VTEwgfSwKICAg
+eyBfVk4gKCIuLiIpLAkJIEZIX1BST0MsCXZpcnRfZGlyZWN0b3J5LAlOVUxM
+IH0sCiAgIHsgX1ZOICgiY3B1aW5mbyIpLAkgRkhfUFJPQywJdmlydF9maWxl
+LAlmb3JtYXRfcHJvY19jcHVpbmZvIH0sCisgIHsgX1ZOICgiZGV2aWNlcyIp
+LAkgRkhfUFJPQywJdmlydF9maWxlLAlmb3JtYXRfcHJvY19kZXZpY2VzIH0s
+CiAgIHsgX1ZOICgiZmlsZXN5c3RlbXMiKSwgRkhfUFJPQywJdmlydF9maWxl
+LAlmb3JtYXRfcHJvY19maWxlc3lzdGVtcyB9LAogICB7IF9WTiAoImxvYWRh
+dmciKSwJIEZIX1BST0MsCXZpcnRfZmlsZSwJZm9ybWF0X3Byb2NfbG9hZGF2
+ZyB9LAogICB7IF9WTiAoIm1lbWluZm8iKSwJIEZIX1BST0MsCXZpcnRfZmls
+ZSwJZm9ybWF0X3Byb2NfbWVtaW5mbyB9LApAQCAtMTMwOSw0ICsxMzExLDQ3
+IEBAIGZvcm1hdF9wcm9jX3N3YXBzICh2b2lkICosIGNoYXIgKiZkZXN0YnUK
+ICAgcmV0dXJuIGJ1ZnB0ciAtIGJ1ZjsKIH0KIAorc3RhdGljIF9vZmY2NF90
+Citmb3JtYXRfcHJvY19kZXZpY2VzICh2b2lkICosIGNoYXIgKiZkZXN0YnVm
+KQoreworICB0bXBfcGF0aGJ1ZiB0cDsKKyAgY2hhciAqYnVmID0gdHAuY19n
+ZXQgKCk7CisgIGNoYXIgKmJ1ZnB0ciA9IGJ1ZjsKKworICBidWZwdHIgKz0g
+X19zbWFsbF9zcHJpbnRmIChidWZwdHIsCisJCQkgICAgICJDaGFyYWN0ZXIg
+ZGV2aWNlczpcbiIKKwkJCSAgICAgIiUzZCBtZW1cbiIKKwkJCSAgICAgIiUz
+ZCAvZGV2L3R0eVxuIgorCQkJICAgICAiJTNkIC9kZXYvY29uc29sZVxuIgor
+CQkJICAgICAiJTNkIC9kZXYvcHRteFxuIgorCQkJICAgICAiJTNkIHN0XG4i
+CisJCQkgICAgICIlM2QgbWlzY1xuIgorCQkJICAgICAiJTNkIHNvdW5kXG4i
+CisJCQkgICAgICIlM2QgdHR5U1xuIgorCQkJICAgICAiJTNkIHR0eVxuIgor
+CQkJICAgICAiXG4iCisJCQkgICAgICJCbG9jayBkZXZpY2VzOlxuIgorCQkJ
+ICAgICAiJTNkIGZkXG4iCisJCQkgICAgICIlM2Qgc2RcbiIKKwkJCSAgICAg
+IiUzZCBzclxuIgorCQkJICAgICAiJTNkIHNkXG4iCisJCQkgICAgICIlM2Qg
+c2RcbiIKKwkJCSAgICAgIiUzZCBzZFxuIgorCQkJICAgICAiJTNkIHNkXG4i
+CisJCQkgICAgICIlM2Qgc2RcbiIKKwkJCSAgICAgIiUzZCBzZFxuIgorCQkJ
+ICAgICAiJTNkIHNkXG4iLAorCQkJICAgICBERVZfTUVNX01BSk9SLCBfbWFq
+b3IgKEZIX1RUWSksIF9tYWpvciAoRkhfQ09OU09MRSksCisJCQkgICAgIF9t
+YWpvciAoRkhfUFRZTSksIERFVl9UQVBFX01BSk9SLCBERVZfTUlTQ19NQUpP
+UiwKKwkJCSAgICAgREVWX1NPVU5EX01BSk9SLCBERVZfU0VSSUFMX01BSk9S
+LCBERVZfVFRZU19NQUpPUiwKKwkJCSAgICAgREVWX0ZMT1BQWV9NQUpPUiwg
+REVWX1NEX01BSk9SLCBERVZfQ0RST01fTUFKT1IsCisJCQkgICAgIERFVl9T
+RDFfTUFKT1IsIERFVl9TRDJfTUFKT1IsIERFVl9TRDNfTUFKT1IsCisJCQkg
+ICAgIERFVl9TRDRfTUFKT1IsIERFVl9TRDVfTUFKT1IsIERFVl9TRDZfTUFK
+T1IsCisJCQkgICAgIERFVl9TRDdfTUFKT1IpOworCisgIGRlc3RidWYgPSAo
+Y2hhciAqKSBjcmVhbGxvY19hYm9ydCAoZGVzdGJ1ZiwgYnVmcHRyIC0gYnVm
+KTsKKyAgbWVtY3B5IChkZXN0YnVmLCBidWYsIGJ1ZnB0ciAtIGJ1Zik7Cisg
+IHJldHVybiBidWZwdHIgLSBidWY7Cit9CisKICN1bmRlZiBwcmludAo=
+
+--00504502c5d2fbdb1504a9a723f5
+Content-Type: application/octet-stream; name="doc-proc-devices.patch"
+Content-Disposition: attachment; filename="doc-proc-devices.patch"
+Content-Transfer-Encoding: base64
+X-Attachment-Id: f_gqx9te2v1
+Content-length: 993
+
+MjAxMS0wOC0wNCAgWWFha292IFNlbGtvd2l0eiAgPHlzZWxrb3dpdHpALi4u
+PgoKCSogbmV3LWZlYXR1cmVzLnNnbWwgKG92LW5ldzEuNy4xMCk6IERvY3Vt
+ZW50IC9wcm9jL2RldmljZXMuCgpJbmRleDogbmV3LWZlYXR1cmVzLnNnbWwK
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3Jj
+L3dpbnN1cC9kb2MvbmV3LWZlYXR1cmVzLnNnbWwsdgpyZXRyaWV2aW5nIHJl
+dmlzaW9uIDEuODgKZGlmZiAtdSAtcCAtcjEuODggbmV3LWZlYXR1cmVzLnNn
+bWwKLS0tIG5ldy1mZWF0dXJlcy5zZ21sCTMgQXVnIDIwMTEgMTk6MTg6MDcg
+LTAwMDAJMS44OAorKysgbmV3LWZlYXR1cmVzLnNnbWwJNCBBdWcgMjAxMSAw
+NToxMjozNiAtMDAwMApAQCAtNjMsNiArNjMsMTAgQEAgdG90YWwgbnVtYmVy
+IG9mIHByb2Nlc3Nlcy4KIDwvcGFyYT48L2xpc3RpdGVtPgogCiA8bGlzdGl0
+ZW0+PHBhcmE+CitBZGRlZCAvcHJvYy9kZXZpY2VzLCB3aGljaCBsaXN0cyBz
+dXBwb3J0ZWQgZGV2aWNlIHR5cGVzIGFuZCB0aGVpciBtYWpvciBudW1iZXJz
+LgorPC9wYXJhPjwvbGlzdGl0ZW0+CisKKzxsaXN0aXRlbT48cGFyYT4KIEFk
+ZGVkIC9wcm9jL3N3YXBzLCB3aGljaCBzaG93cyB0aGUgbG9jYXRpb24gYW5k
+IHNpemUgb2YgV2luZG93cyBwYWdpbmcgZmlsZShzKS4KIDwvcGFyYT48L2xp
+c3RpdGVtPgogCg==
+
+--00504502c5d2fbdb1504a9a723f5--
