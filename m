@@ -1,28 +1,19 @@
-Return-Path: <cygwin-patches-return-7487-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 1999 invoked by alias); 19 Aug 2011 19:57:20 -0000
-Received: (qmail 1986 invoked by uid 22791); 19 Aug 2011 19:57:19 -0000
-X-SWARE-Spam-Status: No, hits=-1.5 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,UNPARSEABLE_RELAY
+Return-Path: <cygwin-patches-return-7488-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 5350 invoked by alias); 19 Aug 2011 20:13:17 -0000
+Received: (qmail 5337 invoked by uid 22791); 19 Aug 2011 20:13:15 -0000
+X-SWARE-Spam-Status: No, hits=-2.5 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW
 X-Spam-Check-By: sourceware.org
-Received: from nm29-vm1.bullet.mail.ne1.yahoo.com (HELO nm29-vm1.bullet.mail.ne1.yahoo.com) (98.138.90.63)    by sourceware.org (qpsmtpd/0.43rc1) with SMTP; Fri, 19 Aug 2011 19:57:04 +0000
-Received: from [98.138.90.55] by nm29.bullet.mail.ne1.yahoo.com with NNFMP; 19 Aug 2011 19:57:03 -0000
-Received: from [98.138.226.30] by tm8.bullet.mail.ne1.yahoo.com with NNFMP; 19 Aug 2011 19:57:03 -0000
-Received: from [127.0.0.1] by smtp201.mail.ne1.yahoo.com with NNFMP; 19 Aug 2011 19:57:03 -0000
-X-Yahoo-SMTP: jenXL62swBAWhMTL3wnej93oaS0ClBQOAKs8jbEbx_o-
-Received: from cgf.cx (cgf@108.49.32.9 with login)        by smtp201.mail.ne1.yahoo.com with SMTP; 19 Aug 2011 12:57:03 -0700 PDT
-Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id 930181D00BF	for <cygwin-patches@cygwin.com>; Fri, 19 Aug 2011 15:57:02 -0400 (EDT)
-Date: Fri, 19 Aug 2011 19:57:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Add /proc/devices
-Message-ID: <20110819195702.GB1694@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <CAGvSfexmqdO=i-Bpk_3T8h1knC17J9VHNa5geG33-fQujnwQ0Q@mail.gmail.com> <1313693438.4916.2.camel@YAAKOV04> <20110818195537.GD4955@calimero.vinschen.de> <1313718853.10964.0.camel@YAAKOV04> <20110819115253.GA13364@calimero.vinschen.de> <20110819144402.GC10953@ednor.casa.cgf.cx> <1313783438.2220.12.camel@YAAKOV04>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1313783438.2220.12.camel@YAAKOV04>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+Received: from mail-yx0-f171.google.com (HELO mail-yx0-f171.google.com) (209.85.213.171)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 19 Aug 2011 20:13:01 +0000
+Received: by yxs7 with SMTP id 7so849822yxs.2        for <cygwin-patches@cygwin.com>; Fri, 19 Aug 2011 13:13:00 -0700 (PDT)
+Received: by 10.150.225.4 with SMTP id x4mr200033ybg.106.1313784780573;        Fri, 19 Aug 2011 13:13:00 -0700 (PDT)
+Received: from [192.168.0.100] (S0106000cf16f58b1.wp.shawcable.net [174.5.115.130])        by mx.google.com with ESMTPS id 9sm1580711ybb.1.2011.08.19.13.12.58        (version=SSLv3 cipher=OTHER);        Fri, 19 Aug 2011 13:12:59 -0700 (PDT)
+Subject: [PATCH] <paths.h> additions
+From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
+To: cygwin-patches <cygwin-patches@cygwin.com>
+Date: Fri, 19 Aug 2011 20:13:00 -0000
+Content-Type: multipart/mixed; boundary="=-5W/Mw0rhUZb7cKgWnPZy"
+Message-ID: <1313784780.2220.14.camel@YAAKOV04>
+Mime-Version: 1.0
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -32,43 +23,51 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q3/txt/msg00063.txt.bz2
+X-SW-Source: 2011-q3/txt/msg00064.txt.bz2
 
-On Fri, Aug 19, 2011 at 02:50:24PM -0500, Yaakov (Cygwin/X) wrote:
->On Fri, 2011-08-19 at 10:44 -0400, Christopher Faylor wrote:
->> On Fri, Aug 19, 2011 at 01:52:53PM +0200, Corinna Vinschen wrote:
->> >On Aug 18 20:54, Yaakov (Cygwin/X) wrote:
->> >> 2011-08-18  Yaakov Selkowitz  <yselkowitz@...>
->> >> 
->> >> 	* devices.h (fh_devices): Define DEV_MISC_MAJOR, DEV_MEM_MAJOR,
->> >> 	DEV_SOUND_MAJOR.  Use throughout.
->> >> 	* fhandler_proc.cc (proc_tab): Add /proc/devices and /proc/misc
->> >> 	virtual files.
->> >> 	(format_proc_devices): New function.
->> >> 	(format_proc_misc): New function.
->> >
->> >Yes, I think that's ok.
->> 
->> Isn't it somehow possible to just iterate over dev_storage and generate
->> this automatically rather than hard-coding the names of devices?
->
->I don't think so.  For the most part, /proc/devices doesn't list
->individual devices but only groups thereof, and there is the "misc"
->major device which is only descriptive and not an actual device name.
->There is also the matter of distinguishing between block and character
->devices.
->
->As for /proc/misc, technically it could be done as you describe, but is
->it worth the price of iterating over a 2581-member array to find the two
->matching cases?  If the misc devices would vary based on configuration
->as on Linux, I would see your point, but as we only and always have
->these two, I'm not so sure.
 
-It's not just two matching names.  You could infer most of the device
-abbreviations from the list or you could conceivably change what is
-generated by devices.in so that a table was output automatically.
+--=-5W/Mw0rhUZb7cKgWnPZy
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Content-length: 139
 
-But, I'm not looking for work for you to do.  I was just trying
-to brainstorm.
+This patch adds _PATH_MAILDIR and _PATH_SHELLS to <paths.h>, as found on
+Linux and *BSD.  This will save me a patch to kdeadmin.
 
-cgf
+
+Yaakov
+
+
+--=-5W/Mw0rhUZb7cKgWnPZy
+Content-Disposition: attachment; filename="paths_h.patch"
+Content-Type: text/x-patch; name="paths_h.patch"; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Content-length: 863
+
+2011-08-19  Yaakov Selkowitz  <yselkowitz@...>
+
+	* include/paths.h (_PATH_MAILDIR): Define.
+	(_PATH_SHELLS): Define.
+
+Index: include/paths.h
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/include/paths.h,v
+retrieving revision 1.6
+diff -u -p -r1.6 paths.h
+--- include/paths.h	2 Nov 2010 17:38:36 -0000	1.6
++++ include/paths.h	19 Aug 2011 20:08:11 -0000
+@@ -17,10 +17,12 @@ details. */
+ #define _PATH_DEV	"/dev/"
+ #define _PATH_DEVNULL	"/dev/null"
+ #define _PATH_LASTLOG	"/var/log/lastlog"
++#define _PATH_MAILDIR	"/var/spool/mail/"
+ #define _PATH_MAN	"/usr/share/man"
+ #define _PATH_MEM	"/dev/mem"
+ #define _PATH_MNTTAB	"/etc/fstab"
+ #define _PATH_MOUNTED	"/etc/mtab"
++#define _PATH_SHELLS	"/etc/shells"
+ #define _PATH_STDPATH	"/bin:/usr/sbin:/sbin"
+ #define _PATH_TMP	"/tmp/"
+ #define _PATH_TTY	"/dev/tty"
+
+--=-5W/Mw0rhUZb7cKgWnPZy--
