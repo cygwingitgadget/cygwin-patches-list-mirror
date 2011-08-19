@@ -1,29 +1,22 @@
-Return-Path: <cygwin-patches-return-7485-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 31522 invoked by alias); 19 Aug 2011 14:44:19 -0000
-Received: (qmail 31511 invoked by uid 22791); 19 Aug 2011 14:44:18 -0000
-X-SWARE-Spam-Status: No, hits=-1.7 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,UNPARSEABLE_RELAY
+Return-Path: <cygwin-patches-return-7486-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 32647 invoked by alias); 19 Aug 2011 19:50:55 -0000
+Received: (qmail 32635 invoked by uid 22791); 19 Aug 2011 19:50:54 -0000
+X-SWARE-Spam-Status: No, hits=-2.5 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW
 X-Spam-Check-By: sourceware.org
-Received: from nm39-vm5.bullet.mail.bf1.yahoo.com (HELO nm39-vm5.bullet.mail.bf1.yahoo.com) (72.30.239.149)    by sourceware.org (qpsmtpd/0.43rc1) with SMTP; Fri, 19 Aug 2011 14:44:04 +0000
-Received: from [98.139.212.149] by nm39.bullet.mail.bf1.yahoo.com with NNFMP; 19 Aug 2011 14:44:03 -0000
-Received: from [98.139.212.205] by tm6.bullet.mail.bf1.yahoo.com with NNFMP; 19 Aug 2011 14:44:03 -0000
-Received: from [127.0.0.1] by omp1014.mail.bf1.yahoo.com with NNFMP; 19 Aug 2011 14:44:03 -0000
-Received: (qmail 75166 invoked from network); 19 Aug 2011 14:44:03 -0000
-X-Yahoo-SMTP: jenXL62swBAWhMTL3wnej93oaS0ClBQOAKs8jbEbx_o-
-Received: from cgf.cx (cgf@108.49.32.9 with login)        by smtp108.mail.bf1.yahoo.com with SMTP; 19 Aug 2011 07:44:03 -0700 PDT
-Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id 4CABF1D00BF	for <cygwin-patches@cygwin.com>; Fri, 19 Aug 2011 10:44:03 -0400 (EDT)
-Date: Fri, 19 Aug 2011 14:44:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
+Received: from mail-vw0-f43.google.com (HELO mail-vw0-f43.google.com) (209.85.212.43)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 19 Aug 2011 19:50:40 +0000
+Received: by vws10 with SMTP id 10so3302942vws.2        for <cygwin-patches@cygwin.com>; Fri, 19 Aug 2011 12:50:39 -0700 (PDT)
+Received: by 10.52.21.211 with SMTP id x19mr119175vde.457.1313783438993;        Fri, 19 Aug 2011 12:50:38 -0700 (PDT)
+Received: from [192.168.0.100] (S0106000cf16f58b1.wp.shawcable.net [174.5.115.130])        by mx.google.com with ESMTPS id eq10sm1491686vdb.28.2011.08.19.12.50.36        (version=SSLv3 cipher=OTHER);        Fri, 19 Aug 2011 12:50:37 -0700 (PDT)
 Subject: Re: [PATCH] Add /proc/devices
-Message-ID: <20110819144402.GC10953@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <CAGvSfexmqdO=i-Bpk_3T8h1knC17J9VHNa5geG33-fQujnwQ0Q@mail.gmail.com> <1313693438.4916.2.camel@YAAKOV04> <20110818195537.GD4955@calimero.vinschen.de> <1313718853.10964.0.camel@YAAKOV04> <20110819115253.GA13364@calimero.vinschen.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20110819115253.GA13364@calimero.vinschen.de>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
+To: cygwin-patches <cygwin-patches@cygwin.com>
+Date: Fri, 19 Aug 2011 19:50:00 -0000
+In-Reply-To: <20110819144402.GC10953@ednor.casa.cgf.cx>
+References: <CAGvSfexmqdO=i-Bpk_3T8h1knC17J9VHNa5geG33-fQujnwQ0Q@mail.gmail.com>	 <1313693438.4916.2.camel@YAAKOV04>	 <20110818195537.GD4955@calimero.vinschen.de>	 <1313718853.10964.0.camel@YAAKOV04>	 <20110819115253.GA13364@calimero.vinschen.de>	 <20110819144402.GC10953@ednor.casa.cgf.cx>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <1313783438.2220.12.camel@YAAKOV04>
+Mime-Version: 1.0
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -33,41 +26,39 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q3/txt/msg00061.txt.bz2
+X-SW-Source: 2011-q3/txt/msg00062.txt.bz2
 
-On Fri, Aug 19, 2011 at 01:52:53PM +0200, Corinna Vinschen wrote:
->On Aug 18 20:54, Yaakov (Cygwin/X) wrote:
->> On Thu, 2011-08-18 at 21:55 +0200, Corinna Vinschen wrote:
->> > > 2011-08-18  Yaakov Selkowitz  <yselkowitz@...>
->> > > 
->> > > 	* devices.h (fh_devices): Define DEV_MISC_MAJOR, DEV_MEM_MAJOR,
->> > > 	DEV_SOUND_MAJOR.  Use throughout.
->> > > 	* fhandler_proc.cc (proc_tab): Add /proc/devices and /proc/misc
->> > > 	virtual files.
->> > > 	(format_proc_devices): New function.
->> > > 	(format_proc_misc): New function.
->> > 
->> > I think the patch is basically ok, but it's missing the "cons" entry
->> > for consoles, equivalent to the "tty" entry.
->> 
->> Revised patch attached.  OK to commit?
->> 
->> 
->> Yaakov
->> 
->
->> 2011-08-18  Yaakov Selkowitz  <yselkowitz@...>
->> 
->> 	* devices.h (fh_devices): Define DEV_MISC_MAJOR, DEV_MEM_MAJOR,
->> 	DEV_SOUND_MAJOR.  Use throughout.
->> 	* fhandler_proc.cc (proc_tab): Add /proc/devices and /proc/misc
->> 	virtual files.
->> 	(format_proc_devices): New function.
->> 	(format_proc_misc): New function.
->
->Yes, I think that's ok.
+On Fri, 2011-08-19 at 10:44 -0400, Christopher Faylor wrote:
+> On Fri, Aug 19, 2011 at 01:52:53PM +0200, Corinna Vinschen wrote:
+> >On Aug 18 20:54, Yaakov (Cygwin/X) wrote:
+> >> 2011-08-18  Yaakov Selkowitz  <yselkowitz@...>
+> >> 
+> >> 	* devices.h (fh_devices): Define DEV_MISC_MAJOR, DEV_MEM_MAJOR,
+> >> 	DEV_SOUND_MAJOR.  Use throughout.
+> >> 	* fhandler_proc.cc (proc_tab): Add /proc/devices and /proc/misc
+> >> 	virtual files.
+> >> 	(format_proc_devices): New function.
+> >> 	(format_proc_misc): New function.
+> >
+> >Yes, I think that's ok.
+> 
+> Isn't it somehow possible to just iterate over dev_storage and generate
+> this automatically rather than hard-coding the names of devices?
 
-Isn't it somehow possible to just iterate over dev_storage and generate
-this automatically rather than hard-coding the names of devices?
+I don't think so.  For the most part, /proc/devices doesn't list
+individual devices but only groups thereof, and there is the "misc"
+major device which is only descriptive and not an actual device name.
+There is also the matter of distinguishing between block and character
+devices.
 
-cgf
+As for /proc/misc, technically it could be done as you describe, but is
+it worth the price of iterating over a 2581-member array to find the two
+matching cases?  If the misc devices would vary based on configuration
+as on Linux, I would see your point, but as we only and always have
+these two, I'm not so sure.
+
+Let me know how you want to proceed.
+
+
+Yaakov
+
