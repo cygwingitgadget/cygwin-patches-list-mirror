@@ -1,28 +1,20 @@
-Return-Path: <cygwin-patches-return-7493-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 19935 invoked by alias); 25 Aug 2011 19:33:39 -0000
-Received: (qmail 19916 invoked by uid 22791); 25 Aug 2011 19:33:38 -0000
-X-SWARE-Spam-Status: No, hits=-0.3 required=5.0	tests=AWL,BAYES_50,RCVD_IN_DNSWL_NONE,TW_YG,UNPARSEABLE_RELAY
+Return-Path: <cygwin-patches-return-7495-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 19637 invoked by alias); 26 Aug 2011 02:09:10 -0000
+Received: (qmail 19300 invoked by uid 22791); 26 Aug 2011 02:09:08 -0000
+X-SWARE-Spam-Status: No, hits=-1.1 required=5.0	tests=AWL,BAYES_00,SPF_NEUTRAL,TW_GJ
 X-Spam-Check-By: sourceware.org
-Received: from nm1-vm0.bullet.mail.sp2.yahoo.com (HELO nm1-vm0.bullet.mail.sp2.yahoo.com) (98.139.91.202)    by sourceware.org (qpsmtpd/0.43rc1) with SMTP; Thu, 25 Aug 2011 19:33:24 +0000
-Received: from [98.139.91.66] by nm1.bullet.mail.sp2.yahoo.com with NNFMP; 25 Aug 2011 19:33:24 -0000
-Received: from [208.71.42.196] by tm6.bullet.mail.sp2.yahoo.com with NNFMP; 25 Aug 2011 19:33:24 -0000
-Received: from [127.0.0.1] by smtp207.mail.gq1.yahoo.com with NNFMP; 25 Aug 2011 19:33:24 -0000
-X-Yahoo-SMTP: jenXL62swBAWhMTL3wnej93oaS0ClBQOAKs8jbEbx_o-
-Received: from cgf.cx (cgf@96.252.118.5 with login)        by smtp207.mail.gq1.yahoo.com with SMTP; 25 Aug 2011 12:33:18 -0700 PDT
-Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id BD52B42804D	for <cygwin-patches@cygwin.com>; Thu, 25 Aug 2011 15:33:17 -0400 (EDT)
-Date: Thu, 25 Aug 2011 19:33:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: Overflow cygthreads (those which use simplestub) don't set notify_detached event which may cause timer_delete to hung
-Message-ID: <20110825193317.GA11398@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <CALqHt2Da1+232daBQOVzsg8emudkpgJL+5tPF5rL4ZSSMT9qsg@mail.gmail.com>
+Received: from smtp0.epfl.ch (HELO smtp0.epfl.ch) (128.178.224.219)    by sourceware.org (qpsmtpd/0.43rc1) with SMTP; Fri, 26 Aug 2011 02:08:54 +0000
+Received: (qmail 7624 invoked by uid 107); 26 Aug 2011 02:08:50 -0000
+Received: from 76-10-180-162.dsl.teksavvy.com (HELO discarded) (76.10.180.162) (authenticated)  by smtp0.epfl.ch (AngelmatoPhylax SMTP proxy) with ESMTPA; Fri, 26 Aug 2011 04:08:50 +0200
+Message-ID: <4E570031.4080800@cs.utoronto.ca>
+Date: Fri, 26 Aug 2011 02:09:00 -0000
+From: Ryan Johnson <ryan.johnson@cs.utoronto.ca>
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:5.0) Gecko/20110624 Thunderbird/5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALqHt2Da1+232daBQOVzsg8emudkpgJL+5tPF5rL4ZSSMT9qsg@mail.gmail.com>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+To: cygwin-patches@cygwin.com
+Subject: Extend faq.using to discuss fork failures
+Content-Type: multipart/mixed; boundary="------------010002030601070002000909"
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -32,12 +24,134 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q3/txt/msg00069.txt.bz2
+X-SW-Source: 2011-q3/txt/msg00071.txt.bz2
 
-On Thu, Aug 25, 2011 at 08:06:08PM +0100, Rafal Zwierz wrote:
->* cygthread.cc (cygthread::simplestub): Notify that the thread has
->detached also in freerange thread case.
+This is a multi-part message in MIME format.
+--------------010002030601070002000909
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-length: 415
 
-Looks good.  I'll check this in.  Thanks.
+Hi all,
 
-cgf
+Based on the feedback from cygwin-dev, I've put together a revised pair 
+of faq.using entries: one listing briefly the symptoms of fork failures 
+and what to do about it, and the other giving some details about why 
+fork fails (sometimes in spite of everything we do to compensate).
+
+         * faq-using.xml (faq.using.fixing-fork-failures): Add.
+         (faq.using.why-fork-fails): Add.
+
+Thoughts?
+Ryan
+
+--------------010002030601070002000909
+Content-Type: text/plain;
+ name="faq-fork-patch.txt"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="faq-fork-patch.txt"
+Content-length: 5353
+
+Index: winsup/doc/faq-using.xml
+===================================================================
+RCS file: /cvs/src/src/winsup/doc/faq-using.xml,v
+retrieving revision 1.35
+diff -u -r1.35 faq-using.xml
+--- winsup/doc/faq-using.xml	4 Aug 2011 18:25:41 -0000	1.35
++++ winsup/doc/faq-using.xml	26 Aug 2011 01:58:44 -0000
+@@ -1199,3 +1199,92 @@
+ </listitem>
+ </itemizedlist></para>
+ </answer></qandaentry>
++<qandaentry id='faq.using.fixing-fork-failures'>
++  <question><para>Calls to <literal>fork</literal> fail a lot. How can
++  I fix the problem?</para></question>
++  <answer>
++
++  <para>Unix-like applications make extensive use of
++  <literal>fork</literal>, a function which spawns an exact copy of
++  the running process. Notable fork-using applications include bash
++  (and bash scripts), emacs, gcc, make, perl, python, and
++  ruby. Unfortunately, the Windows ecosystem is quite hostile to a
++  reliable fork implementation, leading to error messages such as:</para>
++  <para><itemizedlist>
++    <listitem>unable to remap <emphasis>$dll</emphasis> to same address as parent</listitem>
++    <listitem>couldn't allocate heap </listitem>
++    <listitem>died waiting for dll loading </listitem>
++    <listitem>child -1 - died waiting for longjmp before initialization</listitem>
++    <listitem>STATUS_ACCESS_VIOLATION </listitem>
++    <listitem>resource temporarily unavailable </listitem>
++  </itemizedlist></para>
++  <para>If you find that frequent fork failures interfere with normal
++  use of cygwin, please try the following: </para>
++  <para><itemizedlist>
++    <listitem>Restart whatever process is trying (and failing) to use
++    <literal>fork</literal>. Sometimes Windows sets up a process
++    environment that is even more hostile to fork than usual.</listitem>
++    <listitem>Ensure that you have eliminated (not just disabled) all
++    software on the BLODA (see <ulink
++    url="http://cygwin.com/faq/faq.using.html#faq.using.bloda"
++    />)</listitem>
++    <listitem>Install the 'rebase' package, read its README in
++    <literal>/usr/share/doc/Cygwin</literal>, and follow the
++    instructions there to run 'rebaseall'.</listitem>
++    </itemizedlist></para>
++  <para>Please note that installing new packages or updating existing
++  ones often undoes the effects of rebaseall and cause fork failures
++  to reappear. If so, just run rebaseall again.
++  </para></answer>
++</qandaentry>
++<qandaentry id='faq.using.why-fork-fails'>
++  <question><para>Why does <literal>fork</literal> fail so much,
++  anyway? (or: Why does <literal>fork</literal> still fail even though
++  I ran rebaseall?)</para></question>
++  <answer>
++  <para>The semantics of <literal>fork</literal> require that a forked
++  child process have <emphasis>exactly</emphasis> the same address
++  space layout as its parent. However, Windows provides no native
++  support for cloning address space between processes and several
++  features actively undermine a reliable <literal>fork</literal>
++  implementation. Three issues are especially prevalent:</para>
++  <para><itemizedlist>
++    <listitem>DLL base address collisions. Unlike *nix shared
++    libraries, which use "position-independent code", Windows shared
++    libraries assume a fixed base address. Whenever the hard-wired
++    address ranges of two DLLs collide (which occurs quite often), the
++    Windows loader must "rebase" one of them to a different
++    address. However, it does not resolve collisions consistently, and
++    may rebase a different dll and/or move it to a different address
++    every time. Cygwin can usually compensate for this effect when it
++    involves libraries opened dynamically, but collisions among
++    statically-linked dlls (dependencies known at compile time) are
++    resolved before <literal>cygwin1.dll</literal> initializes and
++    cannot be fixed afterward. This problem can only be solved by
++    removing the base address conflicts which cause the problem,
++    usually using the <literal>rebaseall</literal> package.</listitem>
++
++    <listitem>Address space layout randomization (ASLR). Starting with
++    Vista, Windows implements ASLR, which means that thread stacks,
++    heap, memory-mapped files, and statically-linked dlls are placed
++    at different (random) locations in each process. This behavior
++    interferes with a proper <literal>fork</literal>, and if an
++    unmovable object (process heap or system dll) ends up at the wrong
++    location, Cygwin can do nothing to compensate (though it will
++    retry a few times automatically). In a 64-bit system, marking
++    executables as large address-ware and rebasing dlls to high
++    addresses has been reported to help, as ASLR affects only the
++    lower 2GB of address space.</listitem>
++
++    <listitem>DLL injection by BLODA. Badly-behaved applications which
++    inject dlls into other processes often manage to clobber important
++    sections of the child's address space, leading to base address
++    collisions which rebasing cannot fix. The only way to resolve this
++    problem is to remove (usually uninstall) the offending
++    app.</listitem></itemizedlist></para>
++    <para>In summary, current Windows implementations make it
++    impossible to implement a perfectly reliable fork, and occasional
++    fork failures are inevitable. PTC.
++    </para>
++  </answer>
++</qandaentry>
+
+--------------010002030601070002000909--
