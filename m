@@ -1,19 +1,19 @@
-Return-Path: <cygwin-patches-return-7495-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 19637 invoked by alias); 26 Aug 2011 02:09:10 -0000
-Received: (qmail 19300 invoked by uid 22791); 26 Aug 2011 02:09:08 -0000
+Return-Path: <cygwin-patches-return-7494-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 18780 invoked by alias); 26 Aug 2011 02:09:02 -0000
+Received: (qmail 18661 invoked by uid 22791); 26 Aug 2011 02:08:59 -0000
 X-SWARE-Spam-Status: No, hits=-1.1 required=5.0	tests=AWL,BAYES_00,SPF_NEUTRAL,TW_GJ
 X-Spam-Check-By: sourceware.org
-Received: from smtp0.epfl.ch (HELO smtp0.epfl.ch) (128.178.224.219)    by sourceware.org (qpsmtpd/0.43rc1) with SMTP; Fri, 26 Aug 2011 02:08:54 +0000
-Received: (qmail 7624 invoked by uid 107); 26 Aug 2011 02:08:50 -0000
-Received: from 76-10-180-162.dsl.teksavvy.com (HELO discarded) (76.10.180.162) (authenticated)  by smtp0.epfl.ch (AngelmatoPhylax SMTP proxy) with ESMTPA; Fri, 26 Aug 2011 04:08:50 +0200
-Message-ID: <4E570031.4080800@cs.utoronto.ca>
+Received: from smtp3.epfl.ch (HELO smtp3.epfl.ch) (128.178.224.226)    by sourceware.org (qpsmtpd/0.43rc1) with SMTP; Fri, 26 Aug 2011 02:08:45 +0000
+Received: (qmail 10327 invoked by uid 107); 26 Aug 2011 02:08:41 -0000
+Received: from 76-10-180-162.dsl.teksavvy.com (HELO discarded) (76.10.180.162) (authenticated)  by smtp3.epfl.ch (AngelmatoPhylax SMTP proxy) with ESMTPA; Fri, 26 Aug 2011 04:08:41 +0200
+Message-ID: <4E570027.9050300@cs.utoronto.ca>
 Date: Fri, 26 Aug 2011 02:09:00 -0000
 From: Ryan Johnson <ryan.johnson@cs.utoronto.ca>
 User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:5.0) Gecko/20110624 Thunderbird/5.0
 MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
 Subject: Extend faq.using to discuss fork failures
-Content-Type: multipart/mixed; boundary="------------010002030601070002000909"
+Content-Type: multipart/mixed; boundary="------------010300080504070607040905"
 X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -24,20 +24,20 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q3/txt/msg00071.txt.bz2
+X-SW-Source: 2011-q3/txt/msg00070.txt.bz2
 
 This is a multi-part message in MIME format.
---------------010002030601070002000909
+--------------010300080504070607040905
 Content-Type: text/plain; charset=ISO-8859-1; format=flowed
 Content-Transfer-Encoding: 7bit
-Content-length: 415
+Content-length: 413
 
 Hi all,
 
-Based on the feedback from cygwin-dev, I've put together a revised pair 
-of faq.using entries: one listing briefly the symptoms of fork failures 
-and what to do about it, and the other giving some details about why 
-fork fails (sometimes in spite of everything we do to compensate).
+Based on the feedback on cygwin-dev, I've put together a revised pair of 
+faq.using entries: one listing briefly the symptoms of fork failures and 
+what to do about it, and the other giving some details about why fork 
+fails (sometimes in spite of everything we do to compensate).
 
          * faq-using.xml (faq.using.fixing-fork-failures): Add.
          (faq.using.why-fork-fails): Add.
@@ -45,7 +45,7 @@ fork fails (sometimes in spite of everything we do to compensate).
 Thoughts?
 Ryan
 
---------------010002030601070002000909
+--------------010300080504070607040905
 Content-Type: text/plain;
  name="faq-fork-patch.txt"
 Content-Transfer-Encoding: 7bit
@@ -154,4 +154,4 @@ diff -u -r1.35 faq-using.xml
 +  </answer>
 +</qandaentry>
 
---------------010002030601070002000909--
+--------------010300080504070607040905--
