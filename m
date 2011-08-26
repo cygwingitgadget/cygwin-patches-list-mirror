@@ -1,15 +1,15 @@
-Return-Path: <cygwin-patches-return-7496-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 20173 invoked by alias); 26 Aug 2011 02:10:28 -0000
-Received: (qmail 20163 invoked by uid 22791); 26 Aug 2011 02:10:27 -0000
-X-SWARE-Spam-Status: No, hits=-0.1 required=5.0	tests=AWL,BAYES_20,SPF_NEUTRAL
+Return-Path: <cygwin-patches-return-7497-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 10136 invoked by alias); 26 Aug 2011 14:08:03 -0000
+Received: (qmail 10079 invoked by uid 22791); 26 Aug 2011 14:08:00 -0000
+X-SWARE-Spam-Status: No, hits=-7.1 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_HI,RP_MATCHES_RCVD,SPF_HELO_PASS
 X-Spam-Check-By: sourceware.org
-Received: from smtp0.epfl.ch (HELO smtp0.epfl.ch) (128.178.224.219)    by sourceware.org (qpsmtpd/0.43rc1) with SMTP; Fri, 26 Aug 2011 02:10:08 +0000
-Received: (qmail 7835 invoked by uid 107); 26 Aug 2011 02:10:05 -0000
-Received: from 76-10-180-162.dsl.teksavvy.com (HELO discarded) (76.10.180.162) (authenticated)  by smtp0.epfl.ch (AngelmatoPhylax SMTP proxy) with ESMTPA; Fri, 26 Aug 2011 04:10:06 +0200
-Message-ID: <4E57007D.2040802@cs.utoronto.ca>
-Date: Fri, 26 Aug 2011 02:10:00 -0000
-From: Ryan Johnson <ryan.johnson@cs.utoronto.ca>
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:5.0) Gecko/20110624 Thunderbird/5.0
+Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 26 Aug 2011 14:07:44 +0000
+Received: from int-mx10.intmail.prod.int.phx2.redhat.com (int-mx10.intmail.prod.int.phx2.redhat.com [10.5.11.23])	by mx1.redhat.com (8.14.4/8.14.4) with ESMTP id p7QE7iMn011816	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=OK)	for <cygwin-patches@cygwin.com>; Fri, 26 Aug 2011 10:07:44 -0400
+Received: from [10.3.113.46] (ovpn-113-46.phx2.redhat.com [10.3.113.46])	by int-mx10.intmail.prod.int.phx2.redhat.com (8.14.4/8.14.4) with ESMTP id p7QE7haT011900	for <cygwin-patches@cygwin.com>; Fri, 26 Aug 2011 10:07:43 -0400
+Message-ID: <4E57A8AF.3000703@redhat.com>
+Date: Fri, 26 Aug 2011 14:08:00 -0000
+From: Eric Blake <eblake@redhat.com>
+User-Agent: Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.2.20) Gecko/20110817 Fedora/3.1.12-1.fc14 Lightning/1.0b3pre Mnenhy/0.8.3 Thunderbird/3.1.12
 MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
 Subject: Re: Extend faq.using to discuss fork failures
@@ -27,21 +27,21 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q3/txt/msg00072.txt.bz2
+X-SW-Source: 2011-q3/txt/msg00073.txt.bz2
 
-Ooops. Mailer hiccup. Please ignore this one.
+On 08/25/2011 08:08 PM, Ryan Johnson wrote:
 
-On 25/08/2011 10:08 PM, Ryan Johnson wrote:
-> Hi all,
->
-> Based on the feedback on cygwin-dev, I've put together a revised pair 
-> of faq.using entries: one listing briefly the symptoms of fork 
-> failures and what to do about it, and the other giving some details 
-> about why fork fails (sometimes in spite of everything we do to 
-> compensate).
->
->         * faq-using.xml (faq.using.fixing-fork-failures): Add.
->         (faq.using.why-fork-fails): Add.
->
-> Thoughts?
-> Ryan
+> Based on the feedback on cygwin-dev, I've put together a revised pair of faq.using entries: one listing briefly the symptoms of fork failures and what to do about it, and the other giving some details about why fork fails (sometimes in spite of everything we do to compensate).
+
+> +
+> +<listitem>DLL injection by BLODA. Badly-behaved applications which
+> +    inject dlls into other processes often manage to clobber important
+> +    sections of the child's address space, leading to base address
+> +    collisions which rebasing cannot fix.
+
+I would suggest adding an <a href=> tag around BLODA, to point users to 
+the list of known bad software.
+
+-- 
+Eric Blake   eblake@redhat.com    +1-801-349-2682
+Libvirt virtualization library http://libvirt.org
