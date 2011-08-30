@@ -1,28 +1,23 @@
-Return-Path: <cygwin-patches-return-7503-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 9196 invoked by alias); 30 Aug 2011 14:58:54 -0000
-Received: (qmail 9185 invoked by uid 22791); 30 Aug 2011 14:58:52 -0000
-X-SWARE-Spam-Status: No, hits=-1.6 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,TW_GJ,UNPARSEABLE_RELAY
+Return-Path: <cygwin-patches-return-7504-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 19316 invoked by alias); 30 Aug 2011 16:29:04 -0000
+Received: (qmail 19301 invoked by uid 22791); 30 Aug 2011 16:29:03 -0000
+X-SWARE-Spam-Status: No, hits=-1.1 required=5.0	tests=AWL,BAYES_00,SPF_NEUTRAL
 X-Spam-Check-By: sourceware.org
-Received: from nm30.bullet.mail.sp2.yahoo.com (HELO nm30.bullet.mail.sp2.yahoo.com) (98.139.91.100)    by sourceware.org (qpsmtpd/0.43rc1) with SMTP; Tue, 30 Aug 2011 14:58:37 +0000
-Received: from [98.139.91.70] by nm30.bullet.mail.sp2.yahoo.com with NNFMP; 30 Aug 2011 14:58:36 -0000
-Received: from [98.136.185.40] by tm10.bullet.mail.sp2.yahoo.com with NNFMP; 30 Aug 2011 14:58:36 -0000
-Received: from [127.0.0.1] by smtp101.mail.gq1.yahoo.com with NNFMP; 30 Aug 2011 14:58:36 -0000
-X-Yahoo-SMTP: jenXL62swBAWhMTL3wnej93oaS0ClBQOAKs8jbEbx_o-
-Received: from cgf.cx (cgf@108.20.226.16 with login)        by smtp101.mail.gq1.yahoo.com with SMTP; 30 Aug 2011 07:58:32 -0700 PDT
-Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id D35DD4A89BF	for <cygwin-patches@cygwin.com>; Tue, 30 Aug 2011 10:58:27 -0400 (EDT)
-Date: Tue, 30 Aug 2011 14:58:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: Extend faq.using to discuss fork failures
-Message-ID: <20110830145827.GB2790@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4E570031.4080800@cs.utoronto.ca> <20110830090020.GE30452@calimero.vinschen.de>
+Received: from smtp3.epfl.ch (HELO smtp3.epfl.ch) (128.178.224.226)    by sourceware.org (qpsmtpd/0.43rc1) with SMTP; Tue, 30 Aug 2011 16:28:42 +0000
+Received: (qmail 11564 invoked by uid 107); 30 Aug 2011 16:28:37 -0000
+Received: from 1055hostc2.starwoodbroadband.com (HELO discarded) (66.17.246.2) (authenticated)  by smtp3.epfl.ch (AngelmatoPhylax SMTP proxy) with ESMTPA; Tue, 30 Aug 2011 18:28:39 +0200
+Message-ID: <4E5CFA53.5060601@cs.utoronto.ca>
+Date: Tue, 30 Aug 2011 16:29:00 -0000
+From: Ryan Johnson <ryan.johnson@cs.utoronto.ca>
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:5.0) Gecko/20110624 Thunderbird/5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20110830090020.GE30452@calimero.vinschen.de>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] profile support
+References: <CADEiHqLZAuJkDJKh4pJ4AOJ1JwUwV06RSkq3GdNihSKhiUswGw@mail.gmail.com> <20110820084946.GA30978@calimero.vinschen.de> <4E533502.4060207@gmail.com> <20110823054003.GA10003@ednor.casa.cgf.cx> <4E5BF23F.8060806@gmail.com> <20110829202346.GA26708@ednor.casa.cgf.cx> <4E5C0177.3090002@gmail.com>
+In-Reply-To: <4E5C0177.3090002@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -32,100 +27,22 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q3/txt/msg00079.txt.bz2
+X-SW-Source: 2011-q3/txt/msg00080.txt.bz2
 
-On Tue, Aug 30, 2011 at 11:00:20AM +0200, Corinna Vinschen wrote:
->Hi Ryan,
->
->Thanks for the FAQ entry.  I had a look now, finally.  Two nits:
->
->On Aug 25 22:08, Ryan Johnson wrote:
->> Index: winsup/doc/faq-using.xml
->> ===================================================================
->> RCS file: /cvs/src/src/winsup/doc/faq-using.xml,v
->> retrieving revision 1.35
->> diff -u -r1.35 faq-using.xml
->> --- winsup/doc/faq-using.xml	4 Aug 2011 18:25:41 -0000	1.35
->> +++ winsup/doc/faq-using.xml	26 Aug 2011 01:58:44 -0000
->> @@ -1199,3 +1199,92 @@
->>  </listitem>
->>  </itemizedlist></para>
->>  </answer></qandaentry>
->> +<qandaentry id='faq.using.fixing-fork-failures'>
->> +  <question><para>Calls to <literal>fork</literal> fail a lot. How can
->> +  I fix the problem?</para></question>
+On 29/08/2011 2:15 PM, jojelino wrote:
+> On 2011-08-30 AM 5:23, Christopher Faylor wrote:
+>> Maybe Corinna will disagree but I think there is way too much code
+>> change here for me to be comfortable with including it.  It looks like
+>> it would be an ongoing maintenance issue, requiring constant vigilance
+>> to avoid code rot.  And, it would have to be very carefully studied to
+>> make sure there aren't more gotchas like 'if "" ""'.
+>>
+> Yes, I see. but there would be months for the missing comments, and i 
+> have not enough time to test this patch for now.
+> and there were bugs in previous patch. so i attach the revised one.
 
-I'd prefer a simple "How do I fix fork failures?"
+I haven't been studying the code, but the phrases "lots of code", "no 
+comments" and "not tested" ring major alarm bells for me...
 
->> +  <answer>
->> +
->> +  <para>Unix-like applications make extensive use of
->> +  <literal>fork</literal>, a function which spawns an exact copy of
->> +  the running process. Notable fork-using applications include bash
->> +  (and bash scripts), emacs, gcc, make, perl, python, and
->> +  ruby. Unfortunately, the Windows ecosystem is quite hostile to a
->> +  reliable fork implementation, leading to error messages such as:</para>
-
-I'd prefer just going straight to the solution without worrying about
-the theory or the ecosystem.  If more discussion is needed, as Corinna
-says, point elsewhere.
-
-So, a listing of potential errors followed by a succint explanation of
-how to fix them is what I'd like to see.  You can move the "Windows ecosystem"
-comments to the next section.
-
->> +  <para><itemizedlist>
->> +    <listitem>unable to remap <emphasis>$dll</emphasis> to same address as parent</listitem>
->> +    <listitem>couldn't allocate heap </listitem>
->> +    <listitem>died waiting for dll loading </listitem>
->> +    <listitem>child -1 - died waiting for longjmp before initialization</listitem>
->> +    <listitem>STATUS_ACCESS_VIOLATION </listitem>
->> +    <listitem>resource temporarily unavailable </listitem>
->> +  </itemizedlist></para>
->> +  <para>If you find that frequent fork failures interfere with normal
->> +  use of cygwin, please try the following: </para>
-
-Please just use something like "Potential solutions for the above errors:"
-
->> +  <para><itemizedlist>
->> +    <listitem>Restart whatever process is trying (and failing) to use
->> +    <literal>fork</literal>. Sometimes Windows sets up a process
->> +    environment that is even more hostile to fork than usual.</listitem>
->> +    <listitem>Ensure that you have eliminated (not just disabled) all
->> +    software on the BLODA (see <ulink
->> +    url="http://cygwin.com/faq/faq.using.html#faq.using.bloda"
->> +    />)</listitem>
->> +    <listitem>Install the 'rebase' package, read its README in
->> +    <literal>/usr/share/doc/Cygwin</literal>, and follow the
->> +    instructions there to run 'rebaseall'.</listitem>
->
->The rebase package is always installed since it's part of the Base
->category.  This entry should be rephrased accordingly.
->
->> +    </itemizedlist></para>
->> +  <para>Please note that installing new packages or updating existing
->> +  ones often undoes the effects of rebaseall and cause fork failures
->> +  to reappear. If so, just run rebaseall again.
->> +  </para></answer>
->> +</qandaentry>
->> +<qandaentry id='faq.using.why-fork-fails'>
->> +  <question><para>Why does <literal>fork</literal> fail so much,
->> +  anyway? (or: Why does <literal>fork</literal> still fail even though
->> +  I ran rebaseall?)</para></question>
->> +  <answer>
->> +  <para>The semantics of <literal>fork</literal> require that a forked
->> +  child process have <emphasis>exactly</emphasis> the same address
->> +  space layout as its parent. However, Windows provides no native
->> +  support for cloning address space between processes and several
->> +  features actively undermine a reliable <literal>fork</literal>
->> +  implementation.
->
->Everything else which follows from here is a good description of the
->inner workings, but that shouldn't go into the FAQ.  What about creating
->a link to the user's guide "Process Creation" section here.  The technical
->details could then go into the "Process Creation" section.
-
-I agree.  I should have thought of that when I mentioned making two
-sections.
-
-cgf
+$0.02
+Ryan
