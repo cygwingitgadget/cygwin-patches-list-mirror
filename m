@@ -1,29 +1,21 @@
-Return-Path: <cygwin-patches-return-7506-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 7234 invoked by alias); 8 Sep 2011 19:10:11 -0000
-Received: (qmail 7223 invoked by uid 22791); 8 Sep 2011 19:10:09 -0000
-X-SWARE-Spam-Status: No, hits=-1.7 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,UNPARSEABLE_RELAY
+Return-Path: <cygwin-patches-return-7507-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 6847 invoked by alias); 9 Sep 2011 12:28:24 -0000
+Received: (qmail 6777 invoked by uid 22791); 9 Sep 2011 12:28:23 -0000
+X-SWARE-Spam-Status: No, hits=-2.2 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE
 X-Spam-Check-By: sourceware.org
-Received: from nm29.bullet.mail.bf1.yahoo.com (HELO nm29.bullet.mail.bf1.yahoo.com) (98.139.212.188)    by sourceware.org (qpsmtpd/0.43rc1) with SMTP; Thu, 08 Sep 2011 19:09:54 +0000
-Received: from [98.139.212.148] by nm29.bullet.mail.bf1.yahoo.com with NNFMP; 08 Sep 2011 19:09:53 -0000
-Received: from [98.139.212.213] by tm5.bullet.mail.bf1.yahoo.com with NNFMP; 08 Sep 2011 19:09:53 -0000
-Received: from [127.0.0.1] by omp1022.mail.bf1.yahoo.com with NNFMP; 08 Sep 2011 19:09:53 -0000
-Received: (qmail 65630 invoked from network); 8 Sep 2011 19:09:53 -0000
-X-Yahoo-SMTP: jenXL62swBAWhMTL3wnej93oaS0ClBQOAKs8jbEbx_o-
-Received: from cgf.cx (cgf@72.70.43.200 with login)        by smtp203.mail.bf1.yahoo.com with SMTP; 08 Sep 2011 12:09:53 -0700 PDT
-Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id B2CD413C00B	for <cygwin-patches@cygwin.com>; Thu,  8 Sep 2011 15:09:52 -0400 (EDT)
-Date: Thu, 08 Sep 2011 19:10:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
+Received: from smtpout.karoo.kcom.com (HELO smtpout.karoo.kcom.com) (212.50.160.34)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 09 Sep 2011 12:28:00 +0000
+Received: from 213-152-38-55.dsl.eclipse.net.uk (HELO [192.168.0.6]) ([213.152.38.55])  by smtpout.karoo.kcom.com with ESMTP; 09 Sep 2011 13:27:59 +0100
+Message-ID: <4E6A0653.5010206@dronecode.org.uk>
+Date: Fri, 09 Sep 2011 12:28:00 -0000
+From: Jon TURNEY <jon.turney@dronecode.org.uk>
+User-Agent: Mozilla/5.0 (Windows NT 5.1; rv:7.0) Gecko/20110905 Thunderbird/7.0
+MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] Fix strace -T
-Message-ID: <20110908190952.GB30425@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4E690B69.6020306@dronecode.org.uk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4E690B69.6020306@dronecode.org.uk>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+References: <4E690B69.6020306@dronecode.org.uk> <20110908190952.GB30425@ednor.casa.cgf.cx>
+In-Reply-To: <20110908190952.GB30425@ednor.casa.cgf.cx>
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -33,21 +25,33 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q3/txt/msg00082.txt.bz2
+X-SW-Source: 2011-q3/txt/msg00083.txt.bz2
 
-On Thu, Sep 08, 2011 at 07:37:29PM +0100, Jon TURNEY wrote:
+On 08/09/2011 20:09, Christopher Faylor wrote:
+> On Thu, Sep 08, 2011 at 07:37:29PM +0100, Jon TURNEY wrote:
+>>
+>> strace -T to toggle stracing of a process doesn't seem to work at the moment.
+>> Attached is a patch to make it work again.
+>>
+>> 2011-09-08  Jon TURNEY<jon.turney@dronecode.org.uk>
+>>
+>> 	* include/sys/strace.h (strace): Add toggle() method
+>> 	* strace.cc (toggle): Implement toggle() method
+>> 	* sigproc.cc (wait_sig): Use strace.toggle() in __SIGSTRACE
 >
->strace -T to toggle stracing of a process doesn't seem to work at the moment. 
->Attached is a patch to make it work again.
->
->2011-09-08  Jon TURNEY  <jon.turney@dronecode.org.uk>
->
->	* include/sys/strace.h (strace): Add toggle() method
->	* strace.cc (toggle): Implement toggle() method
->	* sigproc.cc (wait_sig): Use strace.toggle() in __SIGSTRACE
+> IIRC, the intent was for hello() to toggle (in which case I guess it
+> should be hellogoodbye).  Why do you even need this functionality?
+> I'd just as soon remove it.
 
-IIRC, the intent was for hello() to toggle (in which case I guess it
-should be hellogoodbye).  Why do you even need this functionality?
-I'd just as soon remove it.
+I found it very helpful to have this working when I was looking at a problem 
+which occurred when running the twisted testsuite ([1], I think), as running 
+the entire testsuite with strace enabled greatly slowed it down and generated 
+a vast amount of output, and the problem did not reproduce when running a 
+single test.  Being able to disable strace output until close to the point of 
+failure was useful.
 
-cgf
+I didn't want to touch strace::hello() as it's called from a few other places 
+than __SIGSTRACE processing, and I don't understand them well enough to know 
+if toggling in those places is correct.
+
+[1] http://cygwin.com/ml/cygwin/2011-03/msg00437.html
