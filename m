@@ -1,22 +1,23 @@
-Return-Path: <cygwin-patches-return-7530-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 31878 invoked by alias); 13 Oct 2011 14:43:19 -0000
-Received: (qmail 31837 invoked by uid 22791); 13 Oct 2011 14:42:58 -0000
+Return-Path: <cygwin-patches-return-7531-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 22231 invoked by alias); 2 Nov 2011 19:53:55 -0000
+Received: (qmail 22220 invoked by uid 22791); 2 Nov 2011 19:53:53 -0000
+X-SWARE-Spam-Status: No, hits=-2.0 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,RP_MATCHES_RCVD,TW_CG,UNPARSEABLE_RELAY
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Thu, 13 Oct 2011 14:42:44 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id C30352CBDB1; Thu, 13 Oct 2011 16:42:41 +0200 (CEST)
-Date: Thu, 13 Oct 2011 14:43:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: Add cygwin_internal CW_GET_MODULE_PATH_FOR_ADDR
-Message-ID: <20111013144241.GA22854@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4E96F392.9030605@cwilson.fastmail.fm>
+Received: from mailout09.t-online.de (HELO mailout09.t-online.de) (194.25.134.84)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 02 Nov 2011 19:53:39 +0000
+Received: from fwd00.aul.t-online.de (fwd00.aul.t-online.de )	by mailout09.t-online.de with smtp 	id 1RLgsT-0000lD-4S; Wed, 02 Nov 2011 20:53:37 +0100
+Received: from [192.168.2.108] (bRXIFTZd8hoCzi33qXl2NI-7uJsYUjxlFcLP0SBBKNouT59hjd9KwfsolW-Z2bJZhN@[79.224.122.93]) by fwd00.t-online.de	with esmtp id 1RLgsP-0c5Y120; Wed, 2 Nov 2011 20:53:33 +0100
+Message-ID: <4EB19FBB.5060800@t-online.de>
+Date: Wed, 02 Nov 2011 19:53:00 -0000
+From: Christian Franke <Christian.Franke@t-online.de>
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:7.0.1) Gecko/20110928 Firefox/7.0.1 SeaMonkey/2.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <4E96F392.9030605@cwilson.fastmail.fm>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Prevent restart of crashing non-Cygwin exe
+References: <4E037D68.6090907@t-online.de> <20110624075743.GR3437@calimero.vinschen.de>
+In-Reply-To: <20110624075743.GR3437@calimero.vinschen.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,38 +27,23 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q4/txt/msg00020.txt.bz2
+X-SW-Source: 2011-q4/txt/msg00021.txt.bz2
 
-On Oct 13 10:20, Charles Wilson wrote:
-> >From discussions with Bruno Haible about the slowness of full relocation
-> support in libintl and libiconv, he said:
-> 
-> >   - The Cygwin API only allows me to get _all_ file names behind all
-> >     addresses across the entire current process, and this is slow.
-> 
-> (talking about parsing /proc/self/maps)
-> 
-> >   - It would be useful to have a Cygwin API that gives me the file
-> >     file name behind one particular address in the current process.
-> >     This should not be that slow.
-> 
-> This patch is a proof of concept for the latter.  Naturally, it needs
-> additional work -- updating version.h, real changelog entries,
-> documentation somewhere, etc.  But...is it worth the effort?  Is
-> something like this likely to be accepted?
+On Jun 24, Corinna Vinschen wrote:
+> Hi Christian,
+>
+> On Jun 23 19:52, Christian Franke wrote:
+>> If a non-Cygwin .exe started from a Cygwin shell window segfaults,
+>> Cygwin restarts the .exe 5 times.
+>> [...l]
+>> 	* sigproc.cc (child_info::sync): Add exit_code to debug
+>> 	message.
+>> 	(child_info::proc_retry): Don't retry on unknown exit_code
+>> 	from non-cygwin programs.
+> This looks ok to me, but cgf should have a say here.  He's on vacation
+> for another week, though.
+>
 
-The first and foremost question is, what is the relocation support
-in libintl trying to accomplish?  Why does a internationalization
-library has to know the path of a module based on an address?
-Is that a functionality required on other POSIX systems?
+Problem can still be reproduced with current CVS. Patch is still valid.
 
-Can we discuss this on cygwin-developers first, please?  So far I doubt
-that this makes any sense on Cygwin.
-
-
-Corinna
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+Christian
