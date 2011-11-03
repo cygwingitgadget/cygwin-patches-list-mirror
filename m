@@ -1,21 +1,22 @@
-Return-Path: <cygwin-patches-return-7533-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 21186 invoked by alias); 3 Nov 2011 16:35:34 -0000
-Received: (qmail 20971 invoked by uid 22791); 3 Nov 2011 16:35:30 -0000
-X-SWARE-Spam-Status: No, hits=-2.2 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,TW_GJ
+Return-Path: <cygwin-patches-return-7534-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 26116 invoked by alias); 3 Nov 2011 17:18:36 -0000
+Received: (qmail 26001 invoked by uid 22791); 3 Nov 2011 17:18:07 -0000
 X-Spam-Check-By: sourceware.org
-Received: from smtpout.karoo.kcom.com (HELO smtpout.karoo.kcom.com) (212.50.160.34)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 03 Nov 2011 16:35:14 +0000
-Received: from 213-152-38-55.dsl.eclipse.net.uk (HELO [192.168.0.9]) ([213.152.38.55])  by smtpout.karoo.kcom.com with ESMTP; 03 Nov 2011 16:35:11 +0000
-Message-ID: <4EB2C2CD.1080400@dronecode.org.uk>
-Date: Thu, 03 Nov 2011 16:35:00 -0000
-From: Jon TURNEY <jon.turney@dronecode.org.uk>
-User-Agent: Mozilla/5.0 (Windows NT 5.1; rv:8.0) Gecko/20111101 Thunderbird/8.0
-MIME-Version: 1.0
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Thu, 03 Nov 2011 17:17:51 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 47FF02C0485; Thu,  3 Nov 2011 18:17:48 +0100 (CET)
+Date: Thu, 03 Nov 2011 17:18:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-CC: ryan.johnson@cs.utoronto.ca
 Subject: Re: Extend faq.using to discuss fork failures
-References: <4E570031.4080800@cs.utoronto.ca> <20110830090020.GE30452@calimero.vinschen.de> <4E5CE899.4030605@cs.utoronto.ca>
-In-Reply-To: <4E5CE899.4030605@cs.utoronto.ca>
-Content-Type: multipart/mixed; boundary="------------090707070403050502070207"
+Message-ID: <20111103171748.GJ9159@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <4E570031.4080800@cs.utoronto.ca> <20110830090020.GE30452@calimero.vinschen.de> <4E5CE899.4030605@cs.utoronto.ca> <4EB2C2CD.1080400@dronecode.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <4EB2C2CD.1080400@dronecode.org.uk>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -25,175 +26,63 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q4/txt/msg00023.txt.bz2
+X-SW-Source: 2011-q4/txt/msg00024.txt.bz2
 
-This is a multi-part message in MIME format.
---------------090707070403050502070207
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-length: 642
+Hi Jon,
 
-On 30/08/2011 14:41, Ryan Johnson wrote:
-> That sounds reasonable, though I suspect we'd want want to keep the concluding
-> bits in the FAQ as well. Unfortunately, summertime free time has come to an
-> end so I don't know when I'll get to this next. Perhaps a good compromise for
-> now would be for you to post only the first FAQ question? That would at least
-> cut traffic to the cygwin ML a bit.
+On Nov  3 16:35, Jon TURNEY wrote:
+> On 30/08/2011 14:41, Ryan Johnson wrote:
+> >That sounds reasonable, though I suspect we'd want want to keep the concluding
+> >bits in the FAQ as well. Unfortunately, summertime free time has come to an
+> >end so I don't know when I'll get to this next. Perhaps a good compromise for
+> >now would be for you to post only the first FAQ question? That would at least
+> >cut traffic to the cygwin ML a bit.
+> 
+> I've updated Ryan's patch to hopefully address the comments made,
+> polished the language a bit in places, and split it into a patch for
+> the FAQ which just says how to fix problems and a patch for the UG
+> which contains the technical details.
 
-I've updated Ryan's patch to hopefully address the comments made, polished the 
-language a bit in places, and split it into a patch for the FAQ which just 
-says how to fix problems and a patch for the UG which contains the technical 
-details.
+Thanks for doing that.  I looks good to me, with just one exception.
 
---------------090707070403050502070207
-Content-Type: text/plain;
- name="faq-fork-failures.patch"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename="faq-fork-failures.patch"
-Content-length: 3624
+> +<listitem>Address space layout randomization (ASLR). Starting with
+> +Vista, Windows implements ASLR, which means that thread stacks,
+> +heap, memory-mapped files, and statically-linked dlls are placed
+> +at different (random) locations in each process. This behaviour
+> +interferes with a proper <literal>fork</literal>, and if an
+> +unmovable object (process heap or system dll) ends up at the wrong
+> +location, Cygwin can do nothing to compensate (though it will
+> +retry a few times automatically). In a 64-bit system, marking
+> +executables as large address-ware and rebasing dlls to high
+> +addresses has been reported to help, as ASLR affects only the
+> +lower 2GB of address space.</listitem>
 
-SW5kZXg6IGRvYy9mYXEtdXNpbmcueG1sCj09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT0KUkNTIGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvZG9jL2ZhcS11c2lu
-Zy54bWwsdgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuMzUKZGlmZiAtdSAtcCAt
-cjEuMzUgZmFxLXVzaW5nLnhtbAotLS0gZG9jL2ZhcS11c2luZy54bWwJNCBB
-dWcgMjAxMSAxODoyNTo0MSAtMDAwMAkxLjM1CisrKyBkb2MvZmFxLXVzaW5n
-LnhtbAkzIE5vdiAyMDExIDE2OjI2OjU2IC0wMDAwCkBAIC0xMDk5LDcgKzEw
-OTksNyBAQCBpdC48L3BhcmE+CiBJUHY2IHN0YWNrLCBzZWUgdGhlIDx1bGlu
-ayB1cmw9Imh0dHA6Ly93d3cubWljcm9zb2Z0LmNvbS90ZWNobmV0L25ldHdv
-cmsvaXB2Ni9pcHY2ZmFxLm1zcHgiPk1pY3Jvc29mdCBUZWNoTmV0IElQdjYg
-RkFRIGFydGljbGU8L3VsaW5rPgogPC9wYXJhPjwvYW5zd2VyPjwvcWFuZGFl
-bnRyeT4KIAotPHFhbmRhZW50cnkgaWQ9ImZhcS51c2luZy5ibG9kYSI+Cis8
-cWFuZGFlbnRyeSBpZD0iZmFxLnVzaW5nLmJsb2RhIiB4cmVmbGFiZWw9IkJM
-T0RBIj4KIDxxdWVzdGlvbj48cGFyYT5XaGF0IGFwcGxpY2F0aW9ucyBoYXZl
-IGJlZW4gZm91bmQgdG8gaW50ZXJmZXJlIHdpdGggQ3lnd2luPzwvcGFyYT48
-L3F1ZXN0aW9uPgogPGFuc3dlcj4KIApAQCAtMTE5OSwzICsxMTk5LDM4IEBA
-IHN1Y2ggYXMgdmlydHVhbCBtZW1vcnkgcGFnaW5nIGFuZCBmaWxlIGMKIDwv
-bGlzdGl0ZW0+CiA8L2l0ZW1pemVkbGlzdD48L3BhcmE+CiA8L2Fuc3dlcj48
-L3FhbmRhZW50cnk+CisKKzxxYW5kYWVudHJ5IGlkPSdmYXEudXNpbmcuZml4
-aW5nLWZvcmstZmFpbHVyZXMnPgorICA8cXVlc3Rpb24+PHBhcmE+SG93IGRv
-IEkgZml4IDxsaXRlcmFsPmZvcmsoKTwvbGl0ZXJhbD4gZmFpbHVyZXM/PC9w
-YXJhPjwvcXVlc3Rpb24+CisgIDxhbnN3ZXI+CisgIDxwYXJhPlVuZm9ydHVu
-YXRlbHksIFdpbmRvd3MgY2FuIGJlIHF1aXRlIGhvc3RpbGUgdG8gYQorICBy
-ZWxpYWJsZSBmb3JrKCkgaW1wbGVtZW50YXRpb24sIGxlYWRpbmcgdG8gZXJy
-b3IgbWVzc2FnZXMgc3VjaCBhczo8L3BhcmE+CisgIDxwYXJhPjxpdGVtaXpl
-ZGxpc3Q+CisgICAgPGxpc3RpdGVtPnVuYWJsZSB0byByZW1hcCA8ZW1waGFz
-aXM+c29tZWRsbDwvZW1waGFzaXM+IHRvIHNhbWUgYWRkcmVzcyBhcyBwYXJl
-bnQ8L2xpc3RpdGVtPgorICAgIDxsaXN0aXRlbT5jb3VsZG4ndCBhbGxvY2F0
-ZSBoZWFwPC9saXN0aXRlbT4KKyAgICA8bGlzdGl0ZW0+ZGllZCB3YWl0aW5n
-IGZvciBkbGwgbG9hZGluZzwvbGlzdGl0ZW0+CisgICAgPGxpc3RpdGVtPmNo
-aWxkIC0xIC0gZGllZCB3YWl0aW5nIGZvciBsb25nam1wIGJlZm9yZSBpbml0
-aWFsaXphdGlvbjwvbGlzdGl0ZW0+CisgICAgPGxpc3RpdGVtPlNUQVRVU19B
-Q0NFU1NfVklPTEFUSU9OPC9saXN0aXRlbT4KKyAgICA8bGlzdGl0ZW0+cmVz
-b3VyY2UgdGVtcG9yYXJpbHkgdW5hdmFpbGFibGU8L2xpc3RpdGVtPgorICA8
-L2l0ZW1pemVkbGlzdD48L3BhcmE+CisgIDxwYXJhPlBvdGVudGlhbCBzb2x1
-dGlvbnMgZm9yIHRoZSBhYm92ZSBlcnJvcnM6PC9wYXJhPgorICA8cGFyYT48
-aXRlbWl6ZWRsaXN0PgorICAgIDxsaXN0aXRlbT5SZXN0YXJ0IHdoYXRldmVy
-IHByb2Nlc3MgaXMgdHJ5aW5nIChhbmQgZmFpbGluZykgdG8gdXNlCisgICAg
-PGxpdGVyYWw+Zm9yaygpPC9saXRlcmFsPi4gU29tZXRpbWVzIFdpbmRvd3Mg
-c2V0cyB1cCBhIHByb2Nlc3MKKyAgICBlbnZpcm9ubWVudCB0aGF0IGlzIGV2
-ZW4gbW9yZSBob3N0aWxlIHRvIGZvcmsoKSB0aGFuIHVzdWFsLjwvbGlzdGl0
-ZW0+CisgICAgPGxpc3RpdGVtPkVuc3VyZSB0aGF0IHlvdSBoYXZlIGVsaW1p
-bmF0ZWQgKG5vdCBqdXN0IGRpc2FibGVkKSBhbGwKKyAgICBzb2Z0d2FyZSBv
-biB0aGUgPHhyZWYgbGlua2VuZD0iZmFxLnVzaW5nLmJsb2RhIi8+LgorICAg
-IDwvbGlzdGl0ZW0+CisgICAgPGxpc3RpdGVtPlJlYWQgdGhlICdyZWJhc2Un
-IHBhY2thZ2UgUkVBRE1FIGluCisgICAgPGxpdGVyYWw+L3Vzci9zaGFyZS9k
-b2MvcmViYXNlLzwvbGl0ZXJhbD4sIGFuZCBmb2xsb3cgdGhlCisgICAgaW5z
-dHJ1Y3Rpb25zIHRoZXJlIHRvIHJ1biAncmViYXNlYWxsJy48L2xpc3RpdGVt
-PgorICAgIDwvaXRlbWl6ZWRsaXN0PjwvcGFyYT4KKyAgPHBhcmE+UGxlYXNl
-IG5vdGUgdGhhdCBpbnN0YWxsaW5nIG5ldyBwYWNrYWdlcyBvciB1cGRhdGlu
-ZyBleGlzdGluZworICBvbmVzIHVuZG9lcyB0aGUgZWZmZWN0cyBvZiByZWJh
-c2VhbGwgYW5kIG9mdGVuIGNhdXNlcyBmb3JrKCkgZmFpbHVyZXMKKyAgdG8g
-cmVhcHBlYXIuIElmIHNvLCBqdXN0IHJ1biByZWJhc2VhbGwgYWdhaW4uCisg
-IDwvcGFyYT4KKyAgPHBhcmE+U2VlIHRoZSA8dWxpbmsgdXJsPSJodHRwOi8v
-Y3lnd2luLmNvbS9jeWd3aW4tdWctbmV0L2hpZ2hsaWdodHMuaHRtbCNvdi1o
-aS1wcm9jZXNzIj4KKyAgcHJvY2VzcyBjcmVhdGlvbjwvdWxpbms+IHNlY3Rp
-b24gb2YgdGhlIFVzZXIncyBHdWlkZSBmb3IgdGhlIHRlY2huaWNhbCByZWFz
-b25zIGl0IGlzIHNvCisgIGRpZmZpY3VsdCB0byBtYWtlIDxsaXRlcmFsPmZv
-cmsoKTwvbGl0ZXJhbD4gd29yayByZWxpYWJseS48L3BhcmE+Cis8L2Fuc3dl
-cj4KKzwvcWFuZGFlbnRyeT4K
+Starting with "In a 64-bit system" it's getting a bit weird:
 
---------------090707070403050502070207
-Content-Type: text/plain;
- name="ug-fork-problems.patch"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename="ug-fork-problems.patch"
-Content-length: 4425
+- Starting with 4.5.3, gcc marks executables as large address aware
+  automatically, so this is going to be a lesser problem over time.  Is
+  it worth to mention this at all?  I suppose so, but the user should be
+  pointed to peflags to tests for this property first for the given
+  reason.
 
-SW5kZXg6IGRvYy9vdmVydmlldzIuc2dtbAo9PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09ClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL2RvYy9vdmVydmll
-dzIuc2dtbCx2CnJldHJpZXZpbmcgcmV2aXNpb24gMS4yMApkaWZmIC11IC1w
-IC1yMS4yMCBvdmVydmlldzIuc2dtbAotLS0gZG9jL292ZXJ2aWV3Mi5zZ21s
-CTE4IFNlcCAyMDEwIDE1OjU4OjQ2IC0wMDAwCTEuMjAKKysrIGRvYy9vdmVy
-dmlldzIuc2dtbAkzIE5vdiAyMDExIDE2OjI3OjM2IC0wMDAwCkBAIC0zNDYs
-NiArMzQ2LDYwIEBAIGNhc2VzLCBzdHVicyBvZiBlYWNoIG9mIHRoZXNlIFdp
-bjMyIHByb2MKIHRoZWlyIGV4ZWMnZCBDeWd3aW4gcHJvY2VzcyB0byBleGl0
-LjwvcGFyYT4KIDwvc2VjdDI+CiAKKzxzZWN0MyBpZD0nb3YtaGktcHJvY2Vz
-cy1wcm9ibGVtcyc+Cis8dGl0bGU+UHJvYmxlbXMgd2l0aCBwcm9jZXNzIGNy
-ZWF0aW9uPC90aXRsZT4KKworPHBhcmE+VGhlIHNlbWFudGljcyBvZiA8bGl0
-ZXJhbD5mb3JrPC9saXRlcmFsPiByZXF1aXJlIHRoYXQgYSBmb3JrZWQKK2No
-aWxkIHByb2Nlc3MgaGF2ZSA8ZW1waGFzaXM+ZXhhY3RseTwvZW1waGFzaXM+
-IHRoZSBzYW1lIGFkZHJlc3MKK3NwYWNlIGxheW91dCBhcyBpdHMgcGFyZW50
-LiBIb3dldmVyLCBXaW5kb3dzIHByb3ZpZGVzIG5vIG5hdGl2ZQorc3VwcG9y
-dCBmb3IgY2xvbmluZyBhZGRyZXNzIHNwYWNlIGJldHdlZW4gcHJvY2Vzc2Vz
-IGFuZCBzZXZlcmFsCitmZWF0dXJlcyBhY3RpdmVseSB1bmRlcm1pbmUgYSBy
-ZWxpYWJsZSA8bGl0ZXJhbD5mb3JrPC9saXRlcmFsPgoraW1wbGVtZW50YXRp
-b24uIFRocmVlIGlzc3VlcyBhcmUgZXNwZWNpYWxseSBwcmV2YWxlbnQ6PC9w
-YXJhPgorCis8cGFyYT48aXRlbWl6ZWRsaXN0PgorPGxpc3RpdGVtPkRMTCBi
-YXNlIGFkZHJlc3MgY29sbGlzaW9ucy4gVW5saWtlICpuaXggc2hhcmVkCits
-aWJyYXJpZXMsIHdoaWNoIHVzZSAicG9zaXRpb24taW5kZXBlbmRlbnQgY29k
-ZSIsIFdpbmRvd3Mgc2hhcmVkCitsaWJyYXJpZXMgYXNzdW1lIGEgZml4ZWQg
-YmFzZSBhZGRyZXNzLiBXaGVuZXZlciB0aGUgaGFyZC13aXJlZAorYWRkcmVz
-cyByYW5nZXMgb2YgdHdvIERMTHMgY29sbGlkZSAod2hpY2ggb2NjdXJzIHF1
-aXRlIG9mdGVuKSwgdGhlCitXaW5kb3dzIGxvYWRlciBtdXN0ICJyZWJhc2Ui
-IG9uZSBvZiB0aGVtIHRvIGEgZGlmZmVyZW50CithZGRyZXNzLiBIb3dldmVy
-LCBpdCBtYXkgbm90IHJlc29sdmUgY29sbGlzaW9ucyBjb25zaXN0ZW50bHks
-IGFuZAorbWF5IHJlYmFzZSBhIGRpZmZlcmVudCBkbGwgYW5kL29yIG1vdmUg
-aXQgdG8gYSBkaWZmZXJlbnQgYWRkcmVzcworZXZlcnkgdGltZS4gQ3lnd2lu
-IGNhbiB1c3VhbGx5IGNvbXBlbnNhdGUgZm9yIHRoaXMgZWZmZWN0IHdoZW4g
-aXQKK2ludm9sdmVzIGxpYnJhcmllcyBvcGVuZWQgZHluYW1pY2FsbHksIGJ1
-dCBjb2xsaXNpb25zIGFtb25nCitzdGF0aWNhbGx5LWxpbmtlZCBkbGxzIChk
-ZXBlbmRlbmNpZXMga25vd24gYXQgY29tcGlsZSB0aW1lKSBhcmUKK3Jlc29s
-dmVkIGJlZm9yZSA8bGl0ZXJhbD5jeWd3aW4xLmRsbDwvbGl0ZXJhbD4gaW5p
-dGlhbGl6ZXMgYW5kCitjYW5ub3QgYmUgZml4ZWQgYWZ0ZXJ3YXJkLiBUaGlz
-IHByb2JsZW0gY2FuIG9ubHkgYmUgc29sdmVkIGJ5CityZW1vdmluZyB0aGUg
-YmFzZSBhZGRyZXNzIGNvbmZsaWN0cyB3aGljaCBjYXVzZSB0aGUgcHJvYmxl
-bSwKK3VzdWFsbHkgdXNpbmcgdGhlIDxsaXRlcmFsPnJlYmFzZWFsbDwvbGl0
-ZXJhbD4gdG9vbC48L2xpc3RpdGVtPgorCis8bGlzdGl0ZW0+QWRkcmVzcyBz
-cGFjZSBsYXlvdXQgcmFuZG9taXphdGlvbiAoQVNMUikuIFN0YXJ0aW5nIHdp
-dGgKK1Zpc3RhLCBXaW5kb3dzIGltcGxlbWVudHMgQVNMUiwgd2hpY2ggbWVh
-bnMgdGhhdCB0aHJlYWQgc3RhY2tzLAoraGVhcCwgbWVtb3J5LW1hcHBlZCBm
-aWxlcywgYW5kIHN0YXRpY2FsbHktbGlua2VkIGRsbHMgYXJlIHBsYWNlZAor
-YXQgZGlmZmVyZW50IChyYW5kb20pIGxvY2F0aW9ucyBpbiBlYWNoIHByb2Nl
-c3MuIFRoaXMgYmVoYXZpb3VyCitpbnRlcmZlcmVzIHdpdGggYSBwcm9wZXIg
-PGxpdGVyYWw+Zm9yazwvbGl0ZXJhbD4sIGFuZCBpZiBhbgordW5tb3ZhYmxl
-IG9iamVjdCAocHJvY2VzcyBoZWFwIG9yIHN5c3RlbSBkbGwpIGVuZHMgdXAg
-YXQgdGhlIHdyb25nCitsb2NhdGlvbiwgQ3lnd2luIGNhbiBkbyBub3RoaW5n
-IHRvIGNvbXBlbnNhdGUgKHRob3VnaCBpdCB3aWxsCityZXRyeSBhIGZldyB0
-aW1lcyBhdXRvbWF0aWNhbGx5KS4gSW4gYSA2NC1iaXQgc3lzdGVtLCBtYXJr
-aW5nCitleGVjdXRhYmxlcyBhcyBsYXJnZSBhZGRyZXNzLXdhcmUgYW5kIHJl
-YmFzaW5nIGRsbHMgdG8gaGlnaAorYWRkcmVzc2VzIGhhcyBiZWVuIHJlcG9y
-dGVkIHRvIGhlbHAsIGFzIEFTTFIgYWZmZWN0cyBvbmx5IHRoZQorbG93ZXIg
-MkdCIG9mIGFkZHJlc3Mgc3BhY2UuPC9saXN0aXRlbT4KKworPGxpc3RpdGVt
-PkRMTCBpbmplY3Rpb24gYnkKKzx1bGluayB1cmw9Imh0dHA6Ly9jeWd3aW4u
-Y29tL2ZhcS9mYXEudXNpbmcuaHRtbCNmYXEudXNpbmcuYmxvZGEiPgorQkxP
-REE8L3VsaW5rPi4gQmFkbHktYmVoYXZlZCBhcHBsaWNhdGlvbnMgd2hpY2gK
-K2luamVjdCBkbGxzIGludG8gb3RoZXIgcHJvY2Vzc2VzIG9mdGVuIG1hbmFn
-ZSB0byBjbG9iYmVyIGltcG9ydGFudAorc2VjdGlvbnMgb2YgdGhlIGNoaWxk
-J3MgYWRkcmVzcyBzcGFjZSwgbGVhZGluZyB0byBiYXNlIGFkZHJlc3MKK2Nv
-bGxpc2lvbnMgd2hpY2ggcmViYXNpbmcgY2Fubm90IGZpeC4gVGhlIG9ubHkg
-d2F5IHRvIHJlc29sdmUgdGhpcworcHJvYmxlbSBpcyB0byByZW1vdmUgKHVz
-dWFsbHkgdW5pbnN0YWxsKSB0aGUgb2ZmZW5kaW5nCithcHAuPC9saXN0aXRl
-bT48L2l0ZW1pemVkbGlzdD48L3BhcmE+CisKKzxwYXJhPkluIHN1bW1hcnks
-IGN1cnJlbnQgV2luZG93cyBpbXBsZW1lbnRhdGlvbnMgbWFrZSBpdAoraW1w
-b3NzaWJsZSB0byBpbXBsZW1lbnQgYSBwZXJmZWN0bHkgcmVsaWFibGUgZm9y
-aywgYW5kIG9jY2FzaW9uYWwKK2ZvcmsgZmFpbHVyZXMgYXJlIGluZXZpdGFi
-bGUuCis8L3BhcmE+CisKKzwvc2VjdDM+CisKIDxzZWN0MiBpZD0ib3YtaGkt
-c2lnbmFscyI+PHRpdGxlPlNpZ25hbHM8L3RpdGxlPgogPHBhcmE+V2hlbgog
-YSBDeWd3aW4gcHJvY2VzcyBzdGFydHMsIHRoZSBsaWJyYXJ5IHN0YXJ0cyBh
-IHNlY29uZGFyeSB0aHJlYWQgZm9yCg==
+- Starting with Cygwin 1.7.10, the high address area will be used for
+  the application heap on 64 bit systems and large address aware
+  executables.  Mmaps are located there, too.  This in turn leaves more
+  room for DLLs in the normal 2 Gigs memory area.  Therefore I would not
+  like to suggest rebasing DLLs into the high address area at all.  This
+  should only be done by people who know what they are doing.  Usually
+  there should be enough space in the lower 2 Gigs, especially when heap
+  and mmaps are out of the way, and given that the more recent rebaseall
+  will not create an arbitrary 64K hole between DLLs anymore when
+  rebasing.
 
---------------090707070403050502070207--
+With these changes, feel free to check in the patch.
+
+
+Thanks,
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          cygwin AT cygwin DOT com
+Red Hat
