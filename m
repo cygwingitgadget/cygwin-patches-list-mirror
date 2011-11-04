@@ -1,21 +1,29 @@
-Return-Path: <cygwin-patches-return-7538-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 10279 invoked by alias); 4 Nov 2011 13:40:47 -0000
-Received: (qmail 10263 invoked by uid 22791); 4 Nov 2011 13:40:47 -0000
-X-SWARE-Spam-Status: No, hits=-2.2 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE
+Return-Path: <cygwin-patches-return-7539-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 25747 invoked by alias); 4 Nov 2011 16:22:36 -0000
+Received: (qmail 25733 invoked by uid 22791); 4 Nov 2011 16:22:35 -0000
+X-SWARE-Spam-Status: No, hits=-1.6 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,UNPARSEABLE_RELAY
 X-Spam-Check-By: sourceware.org
-Received: from smtpout.karoo.kcom.com (HELO smtpout.karoo.kcom.com) (212.50.160.34)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 04 Nov 2011 13:40:33 +0000
-Received: from 213-152-38-55.dsl.eclipse.net.uk (HELO [192.168.0.9]) ([213.152.38.55])  by smtpout.karoo.kcom.com with ESMTP; 04 Nov 2011 13:40:31 +0000
-Message-ID: <4EB3EB50.4090400@dronecode.org.uk>
-Date: Fri, 04 Nov 2011 13:40:00 -0000
-From: Jon TURNEY <jon.turney@dronecode.org.uk>
-User-Agent: Mozilla/5.0 (Windows NT 5.1; rv:8.0) Gecko/20111101 Thunderbird/8.0
-MIME-Version: 1.0
+Received: from nm5.access.bullet.mail.mud.yahoo.com (HELO nm5.access.bullet.mail.mud.yahoo.com) (66.94.237.206)    by sourceware.org (qpsmtpd/0.43rc1) with SMTP; Fri, 04 Nov 2011 16:22:20 +0000
+Received: from [66.94.237.197] by nm5.access.bullet.mail.mud.yahoo.com with NNFMP; 04 Nov 2011 16:22:20 -0000
+Received: from [66.94.237.125] by tm8.access.bullet.mail.mud.yahoo.com with NNFMP; 04 Nov 2011 16:22:20 -0000
+Received: from [127.0.0.1] by omp1030.access.mail.mud.yahoo.com with NNFMP; 04 Nov 2011 16:22:20 -0000
+Received: (qmail 28095 invoked from network); 4 Nov 2011 16:22:15 -0000
+X-Yahoo-SMTP: jenXL62swBAWhMTL3wnej93oaS0ClBQOAKs8jbEbx_o-
+Received: from cgf.cx (cgf@98.110.183.46 with login)        by smtp104.vzn.mail.bf1.yahoo.com with SMTP; 04 Nov 2011 09:22:14 -0700 PDT
+Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id 2B42C13C0D3	for <cygwin-patches@cygwin.com>; Fri,  4 Nov 2011 12:22:14 -0400 (EDT)
+Date: Fri, 04 Nov 2011 16:22:00 -0000
+From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: Extend faq.using to discuss fork failures
-References: <4E570031.4080800@cs.utoronto.ca> <20110830090020.GE30452@calimero.vinschen.de> <4E5CE899.4030605@cs.utoronto.ca> <4EB2C2CD.1080400@dronecode.org.uk> <20111103171748.GJ9159@calimero.vinschen.de>
-In-Reply-To: <20111103171748.GJ9159@calimero.vinschen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Message-ID: <20111104162213.GA14697@ednor.casa.cgf.cx>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <4E570031.4080800@cs.utoronto.ca> <20110830090020.GE30452@calimero.vinschen.de> <4E5CE899.4030605@cs.utoronto.ca> <4EB2C2CD.1080400@dronecode.org.uk> <20111103210519.GA4294@ednor.casa.cgf.cx> <4EB3E9D1.5090203@dronecode.org.uk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4EB3E9D1.5090203@dronecode.org.uk>
+User-Agent: Mutt/1.5.20 (2009-06-14)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -25,41 +33,23 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q4/txt/msg00028.txt.bz2
+X-SW-Source: 2011-q4/txt/msg00029.txt.bz2
 
-On 03/11/2011 17:17, Corinna Vinschen wrote:
-> Thanks for doing that.  I looks good to me, with just one exception.
+On Fri, Nov 04, 2011 at 01:34:09PM +0000, Jon TURNEY wrote:
+>On 03/11/2011 21:05, Christopher Faylor wrote:
+>> I would still prefer eschewing actively negative words like "hostile" and just
+>> neutrally stating that Windows does not use a fork/exec model and does not offer
+>> any easy way to implement fork.
 >
->> +<listitem>Address space layout randomization (ASLR). Starting with
->> +Vista, Windows implements ASLR, which means that thread stacks,
->> +heap, memory-mapped files, and statically-linked dlls are placed
->> +at different (random) locations in each process. This behaviour
->> +interferes with a proper<literal>fork</literal>, and if an
->> +unmovable object (process heap or system dll) ends up at the wrong
->> +location, Cygwin can do nothing to compensate (though it will
->> +retry a few times automatically). In a 64-bit system, marking
->> +executables as large address-ware and rebasing dlls to high
->> +addresses has been reported to help, as ASLR affects only the
->> +lower 2GB of address space.</listitem>
->
-> Starting with "In a 64-bit system" it's getting a bit weird:
->
-> - Starting with 4.5.3, gcc marks executables as large address aware
->    automatically, so this is going to be a lesser problem over time.  Is
->    it worth to mention this at all?  I suppose so, but the user should be
->    pointed to peflags to tests for this property first for the given
->    reason.
->
-> - Starting with Cygwin 1.7.10, the high address area will be used for
->    the application heap on 64 bit systems and large address aware
->    executables.  Mmaps are located there, too.  This in turn leaves more
->    room for DLLs in the normal 2 Gigs memory area.  Therefore I would not
->    like to suggest rebasing DLLs into the high address area at all.  This
->    should only be done by people who know what they are doing.  Usually
->    there should be enough space in the lower 2 Gigs, especially when heap
->    and mmaps are out of the way, and given that the more recent rebaseall
->    will not create an arbitrary 64K hole between DLLs anymore when
->    rebasing.
+>Hmm, yes, I'll fix that.
 
-I think it would be simplest just to drop the sentence starting "In a 64-bit 
-system".
+Thanks.
+
+>> I'd also like to see specific errors mentioned so that when people are searching for
+>> a solution to the problem they will be able to find it in the FAQ.
+>
+>Is there something wrong with the itemized list which follows that sentence?
+
+No, sorry.  I'm email challenged at the moment so I missed it.
+
+cgf
