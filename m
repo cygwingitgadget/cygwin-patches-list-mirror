@@ -1,19 +1,22 @@
-Return-Path: <cygwin-patches-return-7549-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 5876 invoked by alias); 4 Dec 2011 07:07:22 -0000
-Received: (qmail 5859 invoked by uid 22791); 4 Dec 2011 07:07:20 -0000
-X-SWARE-Spam-Status: No, hits=3.9 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW
+Return-Path: <cygwin-patches-return-7550-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 5102 invoked by alias); 4 Dec 2011 20:17:34 -0000
+Received: (qmail 5092 invoked by uid 22791); 4 Dec 2011 20:17:32 -0000
+X-SWARE-Spam-Status: No, hits=-2.5 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,TW_MK
 X-Spam-Check-By: sourceware.org
-Received: from mail-ww0-f45.google.com (HELO mail-ww0-f45.google.com) (74.125.82.45)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sun, 04 Dec 2011 07:07:07 +0000
-Received: by wgbds13 with SMTP id ds13so3844863wgb.2        for <cygwin-patches@cygwin.com>; Sat, 03 Dec 2011 23:07:06 -0800 (PST)
+Received: from mail-pz0-f43.google.com (HELO mail-pz0-f43.google.com) (209.85.210.43)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sun, 04 Dec 2011 20:17:18 +0000
+Received: by dadz13 with SMTP id z13so4483815dad.2        for <cygwin-patches@cygwin.com>; Sun, 04 Dec 2011 12:17:17 -0800 (PST)
 MIME-Version: 1.0
-Received: by 10.227.208.71 with SMTP id gb7mr4422890wbb.7.1322982425155; Sat, 03 Dec 2011 23:07:05 -0800 (PST)
-Received: by 10.227.57.82 with HTTP; Sat, 3 Dec 2011 23:07:05 -0800 (PST)
-Date: Sun, 04 Dec 2011 07:07:00 -0000
-Message-ID: <CAL-4N9uVjoqNTXPQGvsjnT+q=KJx9_QNzT-m8U_K=46+zOyheQ@mail.gmail.com>
-Subject: Add support for creating native windows symlinks
-From: Russell Davis <russell.davis@gmail.com>
+Received: by 10.68.33.163 with SMTP id s3mr17028160pbi.64.1323029837751; Sun, 04 Dec 2011 12:17:17 -0800 (PST)
+Received: by 10.68.50.66 with HTTP; Sun, 4 Dec 2011 12:17:17 -0800 (PST)
+In-Reply-To: <CAL-4N9uVjoqNTXPQGvsjnT+q=KJx9_QNzT-m8U_K=46+zOyheQ@mail.gmail.com>
+References: <CAL-4N9uVjoqNTXPQGvsjnT+q=KJx9_QNzT-m8U_K=46+zOyheQ@mail.gmail.com>
+Date: Sun, 04 Dec 2011 20:17:00 -0000
+Message-ID: <CAHWeT-a0uH9_qvE9jPWVq7GJ_g2gm8_-JDeQRZ2Nhp3C5iSpAA@mail.gmail.com>
+Subject: Re: Add support for creating native windows symlinks
+From: Andy Koppe <andy.koppe@gmail.com>
 To: cygwin-patches@cygwin.com
-Content-Type: multipart/mixed; boundary=0015174484307edc1604b33ed9ca
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -24,166 +27,62 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q4/txt/msg00039.txt.bz2
+X-SW-Source: 2011-q4/txt/msg00040.txt.bz2
 
+On 4 December 2011 07:07, Russell Davis wrote:
+> This was discussed before here:
+> http://cygwin.com/ml/cygwin/2008-03/msg00277.html
+>
+> These were the reasons given for not using native symlinks to create
+> cygwin symlinks, along with my responses:
+>
+> - By default, only administrators have the right to create native
+> =C2=A0 symlinks.=C2=A0 Admins running with restricted permissions under U=
+AC don't
+> =C2=A0 have this right.
+>
+> This is true, however the feature can be made optional through the
+> CYGWIN environment variable (just like winsymlinks). For users that
+> can add the permission or disable UAC, the use of native symlinks is a
+> huge step towards making cygwin more unified with the rest of Windows.
+>
+> - When creating a native symlink, you have to define if this symlink
+> =C2=A0 points to a file or a directory.=C2=A0 This makes no sense given t=
+hat
+> =C2=A0 symlinks often are created before the target they point to.
+>
+> Also true. However, the type only matters for Windows' usage of the
+> symlink -- cygwin already treats both the types the same. For example,
+> if a native symlink of type `file` actually points to a directory, it
+> will still work fine inside cygwin. It won't work for Win32 programs
+> that try to access it, but that's still no worse than the status quo
+> -- Win32 programs already can't use cygwin symlinks.
+>
+> Since cygwin already supports reading of native symlinks, I was able
+> to add support for this with a fairly small change. Some edge cases
+> probably still need to be handled (disabling for older versions of
+> windows and unsupported file systems), but I wanted to get this out
+> there for review. The patch is attached.
 
---0015174484307edc1604b33ed9ca
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1579
+Those aren't all the issues with using native symlinks as Cygwin
+symlinks. POSIX symlinks of course are supposed to point to POSIX
+paths, whereas native links point to Windows paths, with the following
+consequences:
 
-This was discussed before here:
-http://cygwin.com/ml/cygwin/2008-03/msg00277.html
+- Native links can't point to special Cygwin paths such as /proc and
+/dev, although I guess that could be fudged.
+- If the meaning of the POSIX path changes due to Cygwin mount point
+changes, native symlinks won't reflect that and point to the wrong
+thing.
+- Native relative links can't cross drive boundaries, whereas relative
+POSIX paths can reach the whole filesystem.
 
-These were the reasons given for not using native symlinks to create
-cygwin symlinks, along with my responses:
+I think the better approach here is to have an ln-like utility that
+creates Windows symlinks, as proposed by Daniel Colascione at
+http://cygwin.com/ml/cygwin/2011-04/msg00059.html. Perhaps it could be
+added to cygutils if it was knocked into appropriate shape. (The main
+advantage over using Windows facilities, in particular cmd.exe's
+mklink builtin, would be an ln-like interface and Cygwin charset
+support.)
 
-- By default, only administrators have the right to create native
-=A0 symlinks.=A0 Admins running with restricted permissions under UAC don't
-=A0 have this right.
-
-This is true, however the feature can be made optional through the
-CYGWIN environment variable (just like winsymlinks). For users that
-can add the permission or disable UAC, the use of native symlinks is a
-huge step towards making cygwin more unified with the rest of Windows.
-
-- When creating a native symlink, you have to define if this symlink
-=A0 points to a file or a directory.=A0 This makes no sense given that
-=A0 symlinks often are created before the target they point to.
-
-Also true. However, the type only matters for Windows' usage of the
-symlink -- cygwin already treats both the types the same. For example,
-if a native symlink of type `file` actually points to a directory, it
-will still work fine inside cygwin. It won't work for Win32 programs
-that try to access it, but that's still no worse than the status quo
--- Win32 programs already can't use cygwin symlinks.
-
-Since cygwin already supports reading of native symlinks, I was able
-to add support for this with a fairly small change. Some edge cases
-probably still need to be handled (disabling for older versions of
-windows and unsupported file systems), but I wanted to get this out
-there for review. The patch is attached.
-
-Cheers,
-Russell Davis
-
---0015174484307edc1604b33ed9ca
-Content-Type: application/octet-stream; name="symlinks.patch"
-Content-Disposition: attachment; filename="symlinks.patch"
-Content-Transfer-Encoding: base64
-X-Attachment-Id: f_gvrpiyqp0
-Content-length: 6723
-
-SW5kZXg6IGN5Z3dpbi9lbnZpcm9uLmNjCj09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT0KUkNTIGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvY3lnd2luL2Vudmly
-b24uY2MsdgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuMTk2CmRpZmYgLXUgLXAg
-LXIxLjE5NiBlbnZpcm9uLmNjCi0tLSBjeWd3aW4vZW52aXJvbi5jYwkyMSBB
-dWcgMjAxMSAxODo0NTowNyAtMDAwMAkxLjE5NgorKysgY3lnd2luL2Vudmly
-b24uY2MJNCBEZWMgMjAxMSAwNjoxNzoxNSAtMDAwMApAQCAtMzUsNiArMzUs
-NyBAQCBkZXRhaWxzLiAqLwogZXh0ZXJuIGJvb2wgZG9zX2ZpbGVfd2Fybmlu
-ZzsKIGV4dGVybiBib29sIGlnbm9yZV9jYXNlX3dpdGhfZ2xvYjsKIGV4dGVy
-biBib29sIGFsbG93X3dpbnN5bWxpbmtzOworZXh0ZXJuIGJvb2wgYWxsb3df
-bmF0aXZlc3ltbGlua3M7CiBib29sIHJlc2V0X2NvbSA9IGZhbHNlOwogCiBz
-dGF0aWMgY2hhciAqKmxhc3RlbnZpcm9uOwpAQCAtMTI0LDYgKzEyNSw3IEBA
-IHN0YXRpYyBzdHJ1Y3QgcGFyc2VfdGhpbmcKICAgeyJyZXNldF9jb20iLCB7
-JnJlc2V0X2NvbX0sIGp1c3RzZXQsIE5VTEwsIHt7ZmFsc2V9LCB7dHJ1ZX19
-fSwKICAgeyJ0dHkiLCB7ZnVuYzogdHR5X2lzX2dvbmV9LCBpc2Z1bmMsIE5V
-TEwsIHt7MH0sIHswfX19LAogICB7IndpbnN5bWxpbmtzIiwgeyZhbGxvd193
-aW5zeW1saW5rc30sIGp1c3RzZXQsIE5VTEwsIHt7ZmFsc2V9LCB7dHJ1ZX19
-fSwKKyAgeyJuYXRpdmVzeW1saW5rcyIsIHsmYWxsb3dfbmF0aXZlc3ltbGlu
-a3N9LCBqdXN0c2V0LCBOVUxMLCB7e2ZhbHNlfSwge3RydWV9fX0sCiAgIHtO
-VUxMLCB7MH0sIGp1c3RzZXQsIDAsIHt7MH0sIHswfX19CiB9OwogCkluZGV4
-OiBjeWd3aW4vcGF0aC5jYwo9PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBm
-aWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL2N5Z3dpbi9wYXRoLmNjLHYKcmV0
-cmlldmluZyByZXZpc2lvbiAxLjY0MApkaWZmIC11IC1wIC1yMS42NDAgcGF0
-aC5jYwotLS0gY3lnd2luL3BhdGguY2MJMyBEZWMgMjAxMSAyMTo0MzoyNiAt
-MDAwMAkxLjY0MAorKysgY3lnd2luL3BhdGguY2MJNCBEZWMgMjAxMSAwNjox
-NzoxNSAtMDAwMApAQCAtMTQxMywxNiArMTQxMywxNyBAQCBjb252X3BhdGhf
-bGlzdCAoY29uc3QgY2hhciAqc3JjLCBjaGFyICpkCiAvKiBJZiBUUlVFIGNy
-ZWF0ZSBzeW1saW5rcyBhcyBXaW5kb3dzIHNob3J0Y3V0cywgaWYgZmFsc2Ug
-Y3JlYXRlIHN5bWxpbmtzCiAgICBhcyBub3JtYWwgZmlsZXMgd2l0aCBtYWdp
-YyBudW1iZXIgYW5kIHN5c3RlbSBiaXQgc2V0LiAqLwogYm9vbCBhbGxvd193
-aW5zeW1saW5rcyA9IGZhbHNlOworYm9vbCBhbGxvd19uYXRpdmVzeW1saW5r
-cyA9IGZhbHNlOwogCiBleHRlcm4gIkMiIGludAogc3ltbGluayAoY29uc3Qg
-Y2hhciAqb2xkcGF0aCwgY29uc3QgY2hhciAqbmV3cGF0aCkKIHsKLSAgcmV0
-dXJuIHN5bWxpbmtfd29ya2VyIChvbGRwYXRoLCBuZXdwYXRoLCBhbGxvd193
-aW5zeW1saW5rcywgZmFsc2UpOworICByZXR1cm4gc3ltbGlua193b3JrZXIg
-KG9sZHBhdGgsIG5ld3BhdGgsIGFsbG93X3dpbnN5bWxpbmtzLCBhbGxvd19u
-YXRpdmVzeW1saW5rcywgZmFsc2UpOwogfQogCiBpbnQKIHN5bWxpbmtfd29y
-a2VyIChjb25zdCBjaGFyICpvbGRwYXRoLCBjb25zdCBjaGFyICpuZXdwYXRo
-LCBib29sIHVzZV93aW5zeW0sCi0JCWJvb2wgaXNkZXZpY2UpCisJCWJvb2wg
-dXNlX25hdGl2ZXN5bSwgYm9vbCBpc2RldmljZSkKIHsKICAgaW50IHJlcyA9
-IC0xOwogICBzaXplX3QgbGVuOwpAQCAtMTQzNiw3ICsxNDM3LDggQEAgc3lt
-bGlua193b3JrZXIgKGNvbnN0IGNoYXIgKm9sZHBhdGgsIGNvbgogICBVTE9O
-RyBhY2Nlc3MgPSBERUxFVEUgfCBGSUxFX0dFTkVSSUNfV1JJVEU7CiAgIHRt
-cF9wYXRoYnVmIHRwOwogICB1bnNpZ25lZCBjaGVja19vcHQ7Ci0gIGJvb2wg
-bWtfd2luc3ltID0gdXNlX3dpbnN5bTsKKyAgYm9vbCBta193aW5zeW0gPSB1
-c2Vfd2luc3ltICYmICF1c2VfbmF0aXZlc3ltOworICBib29sIG1rX25hdGl2
-ZXN5bSA9IHVzZV9uYXRpdmVzeW07CiAgIGJvb2wgaGFzX3RyYWlsaW5nX2Rp
-cnNlcCA9IGZhbHNlOwogCiAgIC8qIFBPU0lYIHNheXMgdGhhdCBlbXB0eSAn
-bmV3cGF0aCcgaXMgaW52YWxpZCBpbnB1dCB3aGlsZSBlbXB0eQpAQCAtMTQ3
-MSw4ICsxNDczLDEyIEBAIHN5bWxpbmtfd29ya2VyIChjb25zdCBjaGFyICpv
-bGRwYXRoLCBjb24KICAgd2luMzJfbmV3cGF0aC5jaGVjayAobmV3cGF0aCwg
-Y2hlY2tfb3B0LCBzdGF0X3N1ZmZpeGVzKTsKICAgLyogTVZGUyBkb2Vzbid0
-IGhhbmRsZSB0aGUgU1lTVEVNIERPUyBhdHRyaWJ1dGUsIGJ1dCBpdCBoYW5k
-bGVzIHRoZSBSL08KICAgICAgYXR0cmlidXRlLiAgVGhlcmVmb3JlIHdlIGNy
-ZWF0ZSBzeW1saW5rcyBvbiBNVkZTIGFsd2F5cyBhcyBzaG9ydGN1dHMuICov
-Ci0gIG1rX3dpbnN5bSB8PSB3aW4zMl9uZXdwYXRoLmZzX2lzX212ZnMgKCk7
-Ci0KKyAgaWYgKHdpbjMyX25ld3BhdGguZnNfaXNfbXZmcyAoKSkKKyAgICB7
-CisgICAgICBta193aW5zeW0gPSB0cnVlOworICAgICAgbWtfbmF0aXZlc3lt
-ID0gZmFsc2U7CisgICAgfQorICAKICAgaWYgKG1rX3dpbnN5bSAmJiAhd2lu
-MzJfbmV3cGF0aC5leGlzdHMgKCkKICAgICAgICYmIChpc2RldmljZSB8fCAh
-d2luMzJfbmV3cGF0aC5mc19pc19uZnMgKCkpKQogICAgIHsKQEAgLTE1MzAs
-NiArMTUzNiwyNyBAQCBzeW1saW5rX3dvcmtlciAoY29uc3QgY2hhciAqb2xk
-cGF0aCwgY29uCiAgICAgICBnb3RvIGRvbmU7CiAgICAgfQogCisgIGlmICht
-a19uYXRpdmVzeW0pCisgICAgeworICAgICAgd2luMzJfb2xkcGF0aC5jaGVj
-ayAob2xkcGF0aCwgUENfU1lNX05PRk9MTE9XLCBzdGF0X3N1ZmZpeGVzKTsK
-KyAgICAgIERXT1JEIGR3RmxhZ3MgPSB3aW4zMl9vbGRwYXRoLmlzZGlyICgp
-ID8gU1lNQk9MSUNfTElOS19GTEFHX0RJUkVDVE9SWSA6IDA7CisgICAgICBp
-ZiAoaXNhYnNwYXRoIChvbGRwYXRoKSkKKyAgICAgICAgeworICAgICAgICAg
-IHJlcyA9IENyZWF0ZVN5bWJvbGljTGluayAod2luMzJfbmV3cGF0aC5nZXRf
-d2luMzIgKCksIHdpbjMyX29sZHBhdGguZ2V0X3dpbjMyICgpLCBkd0ZsYWdz
-KSA/IDAgOiAtMTsKKyAgICAgICAgfQorICAgICAgZWxzZQorICAgICAgICB7
-CisgICAgICAgICAgY2hhciAqb2xkcGF0aF90cmFucyA9IHN0cmR1cCAob2xk
-cGF0aCk7CisgICAgICAgICAgLy8gVHJhbnNmb3JtIHBhdGggc2VwYXJhdG9y
-cworICAgICAgICAgIGZvciAoY2hhciAqcCA9IG9sZHBhdGhfdHJhbnM7IChw
-ID0gc3RyY2hyIChwLCAnLycpKTsgcCsrKQorICAgICAgICAgICAgKnAgPSAn
-XFwnOworCisgICAgICAgICAgcmVzID0gQ3JlYXRlU3ltYm9saWNMaW5rICh3
-aW4zMl9uZXdwYXRoLmdldF93aW4zMiAoKSwgb2xkcGF0aF90cmFucywgZHdG
-bGFncykgPyAwIDogLTE7CisgICAgICAgICAgZnJlZSAob2xkcGF0aF90cmFu
-cyk7CisgICAgICAgIH0KKyAgICAgIGdvdG8gZG9uZTsKKyAgICB9CisgICAg
-CiAgIGlmIChta193aW5zeW0pCiAgICAgewogICAgICAgSVRFTUlETElTVCAq
-cGlkbCA9IE5VTEw7CkluZGV4OiBjeWd3aW4vc3lzY2FsbHMuY2MKPT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1
-cC9jeWd3aW4vc3lzY2FsbHMuY2MsdgpyZXRyaWV2aW5nIHJldmlzaW9uIDEu
-NjA0CmRpZmYgLXUgLXAgLXIxLjYwNCBzeXNjYWxscy5jYwotLS0gY3lnd2lu
-L3N5c2NhbGxzLmNjCTMgRGVjIDIwMTEgMjM6NTU6MjEgLTAwMDAJMS42MDQK
-KysrIGN5Z3dpbi9zeXNjYWxscy5jYwk0IERlYyAyMDExIDA2OjE3OjE1IC0w
-MDAwCkBAIC0yOTIzLDcgKzI5MjMsNyBAQCBta25vZF93b3JrZXIgKGNvbnN0
-IGNoYXIgKnBhdGgsIG1vZGVfdCB0CiAgIGNoYXIgYnVmW3NpemVvZiAoIjpc
-XDAwMDAwMDAwOjAwMDAwMDAwOjAwMDAwMDAwIikgKyBQQVRIX01BWF07CiAg
-IHNwcmludGYgKGJ1ZiwgIjpcXCV4OiV4OiV4IiwgbWFqb3IsIG1pbm9yLAog
-CSAgIHR5cGUgfCAobW9kZSAmIChTX0lSV1hVIHwgU19JUldYRyB8IFNfSVJX
-WE8pKSk7Ci0gIHJldHVybiBzeW1saW5rX3dvcmtlciAoYnVmLCBwYXRoLCB0
-cnVlLCB0cnVlKTsKKyAgcmV0dXJuIHN5bWxpbmtfd29ya2VyIChidWYsIHBh
-dGgsIHRydWUsIGZhbHNlLCB0cnVlKTsKIH0KIAogZXh0ZXJuICJDIiBpbnQK
-SW5kZXg6IGN5Z3dpbi93aW5zdXAuaAo9PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-ClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL2N5Z3dpbi93aW5zdXAu
-aCx2CnJldHJpZXZpbmcgcmV2aXNpb24gMS4yNDAKZGlmZiAtdSAtcCAtcjEu
-MjQwIHdpbnN1cC5oCi0tLSBjeWd3aW4vd2luc3VwLmgJMTQgTm92IDIwMTEg
-MDE6Mjk6NDkgLTAwMDAJMS4yNDAKKysrIGN5Z3dpbi93aW5zdXAuaAk0IERl
-YyAyMDExIDA2OjE3OjE1IC0wMDAwCkBAIC0yNDgsNyArMjQ4LDcgQEAgZXh0
-ZXJuICJDIiB2b2lkIHZrbG9nIChpbnQgcHJpb3JpdHksIGNvbgogZXh0ZXJu
-ICJDIiB2b2lkIGtsb2cgKGludCBwcmlvcml0eSwgY29uc3QgY2hhciAqbWVz
-c2FnZSwgLi4uKTsKIGJvb2wgY2hpbGRfY29weSAoSEFORExFLCBib29sLCAu
-Li4pOwogCi1pbnQgc3ltbGlua193b3JrZXIgKGNvbnN0IGNoYXIgKiwgY29u
-c3QgY2hhciAqLCBib29sLCBib29sKQoraW50IHN5bWxpbmtfd29ya2VyIChj
-b25zdCBjaGFyICosIGNvbnN0IGNoYXIgKiwgYm9vbCwgYm9vbCwgYm9vbCkK
-ICAgX19hdHRyaWJ1dGVfXyAoKHJlZ3Bhcm0gKDMpKSk7CiAKIGNsYXNzIHBh
-dGhfY29udjsK
-
---0015174484307edc1604b33ed9ca--
+Andy
