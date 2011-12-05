@@ -1,22 +1,22 @@
-Return-Path: <cygwin-patches-return-7554-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 18191 invoked by alias); 5 Dec 2011 10:20:31 -0000
-Received: (qmail 18131 invoked by uid 22791); 5 Dec 2011 10:20:11 -0000
+Return-Path: <cygwin-patches-return-7555-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 32423 invoked by alias); 5 Dec 2011 19:17:31 -0000
+Received: (qmail 32409 invoked by uid 22791); 5 Dec 2011 19:17:31 -0000
+X-SWARE-Spam-Status: No, hits=-0.8 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Mon, 05 Dec 2011 10:19:59 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id A22EE2C01DE; Mon,  5 Dec 2011 11:19:56 +0100 (CET)
-Date: Mon, 05 Dec 2011 10:20:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: Add support for creating native windows symlinks
-Message-ID: <20111205101956.GB13067@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <CAL-4N9uVjoqNTXPQGvsjnT+q=KJx9_QNzT-m8U_K=46+zOyheQ@mail.gmail.com> <CAHWeT-a0uH9_qvE9jPWVq7GJ_g2gm8_-JDeQRZ2Nhp3C5iSpAA@mail.gmail.com> <CAL-4N9tUqVa1PTp+nD3+ff5qJsJJX6A5U95nPeRsvF_zABsSAA@mail.gmail.com>
+Received: from mail-ey0-f171.google.com (HELO mail-ey0-f171.google.com) (209.85.215.171)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 05 Dec 2011 19:17:18 +0000
+Received: by eaad12 with SMTP id d12so5373655eaa.2        for <cygwin-patches@cygwin.com>; Mon, 05 Dec 2011 11:17:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAL-4N9tUqVa1PTp+nD3+ff5qJsJJX6A5U95nPeRsvF_zABsSAA@mail.gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Received: by 10.227.208.71 with SMTP id gb7mr9065265wbb.7.1323112636872; Mon, 05 Dec 2011 11:17:16 -0800 (PST)
+Received: by 10.227.57.82 with HTTP; Mon, 5 Dec 2011 11:17:16 -0800 (PST)
+In-Reply-To: <20111205101715.GA13067@calimero.vinschen.de>
+References: <CAL-4N9uVjoqNTXPQGvsjnT+q=KJx9_QNzT-m8U_K=46+zOyheQ@mail.gmail.com>	<20111205101715.GA13067@calimero.vinschen.de>
+Date: Mon, 05 Dec 2011 19:17:00 -0000
+Message-ID: <CAL-4N9sx=asy0r3fcD65=WfvW0VHByv-Hn0CAJgaAFK3C8Vw_Q@mail.gmail.com>
+Subject: Re: Add support for creating native windows symlinks
+From: Russell Davis <russell.davis@gmail.com>
+To: cygwin-patches@cygwin.com
+Content-Type: text/plain; charset=ISO-8859-1
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,34 +26,35 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q4/txt/msg00044.txt.bz2
+X-SW-Source: 2011-q4/txt/msg00045.txt.bz2
 
-On Dec  4 13:07, Russell Davis wrote:
-> Hi Andy, thanks for the response.
-> 
-> > - Native links can't point to special Cygwin paths such as /proc and
-> > /dev, although I guess that could be fudged.
-> 
-> They can, they just won't work when non-cygwin apps try to use them
-> (perhaps what you're eluding to with the fudging). This is no worse
-> than the status quo with cygwin's non-native symlinks -- non-cygwin
-> apps can't follow those either. Verified as working with the original
-> patch.
-> 
-> > - If the meaning of the POSIX path changes due to Cygwin mount point
-> > changes, native symlinks won't reflect that and point to the wrong
-> > thing.
-> 
-> Good point, but surely this must already be the case with
-> shortcut-style symlinks (via CYGWIN=winsymlinks) as well?
+> See also http://sourceware.org/ml/cygwin/2009-10/msg00756.html
 
-No.  The Cygwin shortcut-style symlinks contain the POSIX path as well
-and Cygwin only utilizes the POSIX path.  See symlink_info::check_shortcut.
+Quoting from that link:
+
+- Due to the way they are used in the Win32 API, there's no way to
+  use them with POSIX paths *and* Win32 paths for interoperability.
+  So why bother?
+
+Yeah, this is rather unfortunate. I agree, since we can't store both
+the Win32 AND the POSIX path, it's not possible for native symlinks to
+function correctly both inside and outside of cygwin for all possible
+cases. But the point I've been making is this -- if we can make them
+work within cygwin for 100% of cases, and outside of cygwin for 90% of
+cases, what's the problem? It's still better than the existing cygwin
+symlinks which work 100% within cygwin and 0% outside of cygwin.
+
+If the "works within cygwin for 100% of cases" is in question, let's
+discuss that. (Any path that might be problematic as a Win32 path can
+just be stored as a POSIX path, and would fall into the bucket of
+"works inside cygwin but not outside").
 
 
-Corinna
+> There's also a problem with your patch.
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+Thanks, I figured it would need some clean up and polish. I wanted to
+get it out there as a starting point.
+
+
+Thanks,
+Russell
