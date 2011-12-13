@@ -1,22 +1,22 @@
-Return-Path: <cygwin-patches-return-7563-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 30468 invoked by alias); 13 Dec 2011 10:19:06 -0000
-Received: (qmail 30457 invoked by uid 22791); 13 Dec 2011 10:19:06 -0000
-X-SWARE-Spam-Status: No, hits=-0.8 required=5.0	tests=BAYES_40,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW
+Return-Path: <cygwin-patches-return-7564-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 16266 invoked by alias); 13 Dec 2011 11:40:44 -0000
+Received: (qmail 16205 invoked by uid 22791); 13 Dec 2011 11:40:24 -0000
 X-Spam-Check-By: sourceware.org
-Received: from mail-fx0-f43.google.com (HELO mail-fx0-f43.google.com) (209.85.161.43)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 13 Dec 2011 10:18:40 +0000
-Received: by faap21 with SMTP id p21so21788faa.2        for <cygwin-patches@cygwin.com>; Tue, 13 Dec 2011 02:18:39 -0800 (PST)
-MIME-Version: 1.0
-Received: by 10.180.94.71 with SMTP id da7mr25612306wib.29.1323771519454; Tue, 13 Dec 2011 02:18:39 -0800 (PST)
-Received: by 10.216.168.3 with HTTP; Tue, 13 Dec 2011 02:18:39 -0800 (PST)
-In-Reply-To: <20111114114047.GH15154@calimero.vinschen.de>
-References: <CALqHt2A7o1oDwxooQwAskeviUqFYGbb3KKCPeczSkvppy1wOsw@mail.gmail.com>	<CALqHt2BecaAQ6VrRFLEPgZSOu8C+E8qgAmG1SXDYVonkfwGyWA@mail.gmail.com>	<20111114114047.GH15154@calimero.vinschen.de>
-Date: Tue, 13 Dec 2011 10:19:00 -0000
-Message-ID: <CALqHt2DQLihe4MERHWHW4iN0G6mYw1L2tO10GTmgUm=sTgcyuw@mail.gmail.com>
-Subject: Re: Newlib's implementation of isalnum() is causing compiler warnings
-From: Rafal Zwierz <rzwierz@googlemail.com>
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Tue, 13 Dec 2011 11:40:08 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 719EB2C01F7; Tue, 13 Dec 2011 12:40:05 +0100 (CET)
+Date: Tue, 13 Dec 2011 11:40:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Content-Type: text/plain; charset=ISO-8859-1
-X-IsSubscribed: yes
+Subject: Re: [patch,1.7.10] clock_setres returns zero
+Message-ID: <20111213114005.GI6320@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <4EE686D5.3080905@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <4EE686D5.3080905@gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,10 +26,41 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q4/txt/msg00053.txt.bz2
+X-SW-Source: 2011-q4/txt/msg00054.txt.bz2
 
-Hi Corinna,
-Sorry for not replying sooner and thanks so much for the
-explanation.It does make perfect sense. So I shall not be submitting
-my patch.
-Thanks,Rafal
+On Dec 12 22:57, Dave Korn wrote:
+>   This happens because on my PC, QueryPerformanceFrequency returns 2511600000,
+> so the following code in times.cc#hires_ns::prime()
+
+Wow.  I can reproduce this on my 2K3R2 64 bit system on which
+QueryPerformanceFrequency returns 2601000000.
+
+> 	* times.cc (hires_ns::resolution): Don't return less than 1.
+
+> Index: winsup/cygwin/times.cc
+> ===================================================================
+> RCS file: /cvs/src/src/winsup/cygwin/times.cc,v
+> retrieving revision 1.112
+> diff -p -u -r1.112 times.cc
+> --- winsup/cygwin/times.cc	3 Dec 2011 21:43:27 -0000	1.112
+> +++ winsup/cygwin/times.cc	12 Dec 2011 08:23:20 -0000
+> @@ -718,7 +718,7 @@ hires_ns::resolution ()
+>        return (long long) -1;
+>      }
+>  
+> -  return (LONGLONG) freq;
+> +  return (freq <= 1.0) ? 1ll : (LONGLONG) freq;
+>  }
+>  
+>  UINT
+
+
+Thanks, applied.
+
+
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          cygwin AT cygwin DOT com
+Red Hat
