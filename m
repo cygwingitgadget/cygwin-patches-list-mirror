@@ -1,22 +1,22 @@
-Return-Path: <cygwin-patches-return-7569-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 27986 invoked by alias); 19 Dec 2011 20:18:07 -0000
-Received: (qmail 27963 invoked by uid 22791); 19 Dec 2011 20:18:04 -0000
-X-SWARE-Spam-Status: No, hits=1.4 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM
+Return-Path: <cygwin-patches-return-7570-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 14743 invoked by alias); 20 Dec 2011 15:34:48 -0000
+Received: (qmail 5354 invoked by uid 22791); 20 Dec 2011 15:34:22 -0000
 X-Spam-Check-By: sourceware.org
-Received: from mail-ww0-f45.google.com (HELO mail-ww0-f45.google.com) (74.125.82.45)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 19 Dec 2011 20:17:52 +0000
-Received: by wgbds13 with SMTP id ds13so9236954wgb.2        for <cygwin-patches@cygwin.com>; Mon, 19 Dec 2011 12:17:50 -0800 (PST)
-MIME-Version: 1.0
-Received: by 10.216.133.106 with SMTP id p84mr7685750wei.5.1324325870079; Mon, 19 Dec 2011 12:17:50 -0800 (PST)
-Received: by 10.227.165.4 with HTTP; Mon, 19 Dec 2011 12:17:50 -0800 (PST)
-In-Reply-To: <4EEF914C.9090707@dancol.org>
-References: <CAL-4N9uVjoqNTXPQGvsjnT+q=KJx9_QNzT-m8U_K=46+zOyheQ@mail.gmail.com>	<20111205101715.GA13067@calimero.vinschen.de>	<CAL-4N9sx=asy0r3fcD65=WfvW0VHByv-Hn0CAJgaAFK3C8Vw_Q@mail.gmail.com>	<CAL-4N9v8QU-mZfE-4gtpjtybD8A1BYt8QJNGAHOOHv25fkF0Mg@mail.gmail.com>	<20111219155948.GA7148@calimero.vinschen.de>	<CAL-4N9tALgoad1K+BKH3UoC4_viooeyt9KNHAxm1kwHWw8KcEw@mail.gmail.com>	<4EEF914C.9090707@dancol.org>
-Date: Mon, 19 Dec 2011 20:18:00 -0000
-Message-ID: <CAL-4N9sK1Nqz0xTOgRWhyaB0a3dozmA5PQMtdbiUpJM-1=EmzA@mail.gmail.com>
-Subject: Re: Add support for creating native windows symlinks
-From: Russell Davis <russell.davis@gmail.com>
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Tue, 20 Dec 2011 15:34:07 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id EA0962C01DE; Tue, 20 Dec 2011 16:34:04 +0100 (CET)
+Date: Tue, 20 Dec 2011 15:34:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Content-Type: text/plain; charset=ISO-8859-1
-X-IsSubscribed: yes
+Subject: Re: Add support for creating native windows symlinks
+Message-ID: <20111220153404.GF23547@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <CAL-4N9uVjoqNTXPQGvsjnT+q=KJx9_QNzT-m8U_K=46+zOyheQ@mail.gmail.com> <20111205101715.GA13067@calimero.vinschen.de> <CAL-4N9sx=asy0r3fcD65=WfvW0VHByv-Hn0CAJgaAFK3C8Vw_Q@mail.gmail.com> <CAL-4N9v8QU-mZfE-4gtpjtybD8A1BYt8QJNGAHOOHv25fkF0Mg@mail.gmail.com> <20111219155948.GA7148@calimero.vinschen.de> <CAL-4N9tALgoad1K+BKH3UoC4_viooeyt9KNHAxm1kwHWw8KcEw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAL-4N9tALgoad1K+BKH3UoC4_viooeyt9KNHAxm1kwHWw8KcEw@mail.gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,10 +26,57 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2011-q4/txt/msg00059.txt.bz2
+X-SW-Source: 2011-q4/txt/msg00060.txt.bz2
 
-> That's only true until the mount table changes.
+On Dec 19 11:31, Russell Davis wrote:
+> > I don't think it's the right approach to let Cygwin create symlinks
+> > which are only partially usable in the POSIX environment...
+> 
+> Huh? I think you're not fully understanding my suggested approach. As
+> I pointed out in my previous message, it should be 100%, fully usable
+> in the POSIX environment. Again: any path that might be problematic as
+> a Win32 path can just be stored as a POSIX path, and would fall into
+> the bucket of "works inside cygwin but not outside".
 
-Can you elaborate on that? If I create a symlink pointing to /mnt/foo
-(and store the actual POSIX path /mnt/foo in the symlink), and the
-mount table changes, what's the problem?
+How are you going to check the difference?
+
+Btw., you can write the Win32 and the POSIX path into the reparse point
+since the reparse data buffer contains two strings, the so called
+SubstituteName and the so called PrintName.  SubstituteName is the
+native NT path which is used internally to resolve the path, the
+PrintName is used by CMD or Explorer for printing purposes.  If you put
+the POSIX path into PrintName, CMD shows the POSIX path and Explorer
+shows an empty string as target location.  Of course you can't do that
+using the CreateSymbolicLink call.
+
+However, how do you make sure that the file vs directory flag is set
+correctly, given that the file or directory doesn't have to exist at the
+time the symlink gets created?  Neither CMD nor Explorer handle this
+situation gracefully.
+
+How do you handle the fact that remote symlinks only work if certain
+settings are made (fsutil)?  And how do you handle the situation that
+native symlinks don't work on pre-Vista machines, which also makes them
+unsuitable for remote shares?  Some symlinks on a share are created this
+way and some symlinks are created that way and depending on the machine
+from where you try to access them they are usable or not.
+
+As I said, I experimented a lot with native symlinks in the past and one
+way or the other they don't quite work as expected.  I'm not overly keen
+to support writing them.  The hassle with the required
+SE_CREATE_SYMBOLIC_LINK_NAME privilege, the extra hassle that they don't
+work on remote drives without explicitely enabling them via fsutil, the
+fact that remote pre-Vista machines don't get them transparently
+translated at all, the nonsense with the file/directory flag...  I'm
+quite content to read them in Cygwin on a local drive but otherwise
+leave them alone.  for those who really want them there are tools out
+there to create them, but in these cases the tool provider has to take
+the support burden.
+
+
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          cygwin AT cygwin DOT com
+Red Hat
