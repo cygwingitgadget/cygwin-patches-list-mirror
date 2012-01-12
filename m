@@ -1,27 +1,19 @@
-Return-Path: <cygwin-patches-return-7586-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 31177 invoked by alias); 2 Jan 2012 18:12:02 -0000
-Received: (qmail 31161 invoked by uid 22791); 2 Jan 2012 18:12:00 -0000
-X-SWARE-Spam-Status: No, hits=-1.9 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE
+Return-Path: <cygwin-patches-return-7587-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 22922 invoked by alias); 12 Jan 2012 11:29:01 -0000
+Received: (qmail 22908 invoked by uid 22791); 12 Jan 2012 11:29:00 -0000
+X-SWARE-Spam-Status: No, hits=-2.5 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW
 X-Spam-Check-By: sourceware.org
-Received: from mho-02-ewr.mailhop.org (HELO mho-02-ewr.mailhop.org) (204.13.248.72)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 02 Jan 2012 18:11:44 +0000
-Received: from pool-173-76-50-112.bstnma.fios.verizon.net ([173.76.50.112] helo=cgf.cx)	by mho-02-ewr.mailhop.org with esmtpa (Exim 4.72)	(envelope-from <cgf@cgf.cx>)	id 1RhmMJ-0008YV-Pk	for cygwin-patches@cygwin.com; Mon, 02 Jan 2012 18:11:43 +0000
-Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id 2A0E513C022	for <cygwin-patches@cygwin.com>; Mon,  2 Jan 2012 13:11:43 -0500 (EST)
-X-Mail-Handler: MailHop Outbound by DynDNS
-X-Report-Abuse-To: abuse@dyndns.com (see http://www.dyndns.com/services/mailhop/outbound_abuse.html for abuse reporting information)
-X-MHO-User: U2FsdGVkX180knSf72F2k4kCfsvr6U7v
-Date: Mon, 02 Jan 2012 18:12:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Add pthread_sigqueue(3)
-Message-ID: <20120102181143.GC9433@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1325444340.6724.15.camel@YAAKOV04> <20120102175952.GB9433@ednor.casa.cgf.cx> <4F01F2D1.6000501@dancol.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4F01F2D1.6000501@dancol.org>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+Received: from mail-qy0-f171.google.com (HELO mail-qy0-f171.google.com) (209.85.216.171)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 12 Jan 2012 11:28:47 +0000
+Received: by qcsc20 with SMTP id c20so1023320qcs.2        for <cygwin-patches@cygwin.com>; Thu, 12 Jan 2012 03:28:46 -0800 (PST)
+Received: by 10.229.136.77 with SMTP id q13mr1107940qct.154.1326367726876;        Thu, 12 Jan 2012 03:28:46 -0800 (PST)
+Received: from [192.168.0.100] (S0106000cf16f58b1.wp.shawcable.net. [24.79.200.150])        by mx.google.com with ESMTPS id dh10sm9477615qab.19.2012.01.12.03.28.43        (version=SSLv3 cipher=OTHER);        Thu, 12 Jan 2012 03:28:44 -0800 (PST)
+Message-ID: <1326367724.4864.1.camel@YAAKOV04>
+Subject: [PATCH] doc: tgmath.h
+From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
+To: cygwin-patches <cygwin-patches@cygwin.com>
+Date: Thu, 12 Jan 2012 11:29:00 -0000
+Content-Type: multipart/mixed; boundary="=-JdBUW0Gl7Epwsn+hi/Te"
+Mime-Version: 1.0
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -31,17 +23,47 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2012-q1/txt/msg00009.txt.bz2
+X-SW-Source: 2012-q1/txt/msg00010.txt.bz2
 
-On Mon, Jan 02, 2012 at 10:09:21AM -0800, Daniel Colascione wrote:
->On 1/2/12 9:59 AM, Christopher Faylor wrote:
->> On Sun, Jan 01, 2012 at 12:59:00PM -0600, Yaakov (Cygwin/X) wrote:
->> I guess this can go in since I already "implemented" sigqueue but
->> SI_QUEUE isn't actually fully functional.  Cygwin doesn't queue signals
->> and I don't believe it handles the sigval union correctly.
->
->By the way: have you had a chance to track down the signal-related
->crash bug at http://sourceware.org/ml/cygwin/2010-04/msg00989.html ? I
->can still reproduce it.
 
-This is not a bug-reporting mailing list.
+--=-JdBUW0Gl7Epwsn+hi/Te
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
+Content-length: 64
+
+New header just committed to newlib.  Patch attached.
+
+
+Yaakov
+
+
+--=-JdBUW0Gl7Epwsn+hi/Te
+Content-Disposition: attachment; filename="doc-tgmath.patch"
+Content-Type: text/x-patch; name="doc-tgmath.patch"; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Content-length: 721
+
+2012-01-??  Yaakov Selkowitz  <yselkowitz@...>
+
+	* new-features.sgml (ov-new1.7.10): Document tgmath.h.
+
+Index: new-features.sgml
+===================================================================
+RCS file: /cvs/src/src/winsup/doc/new-features.sgml,v
+retrieving revision 1.97
+diff -u -p -r1.97 new-features.sgml
+--- new-features.sgml	6 Jan 2012 07:13:11 -0000	1.97
++++ new-features.sgml	12 Jan 2012 11:25:14 -0000
+@@ -72,6 +72,10 @@ Also, perror and strerror_r no longer cl
+ </para></listitem>
+ 
+ <listitem><para>
++C99 &gt;tgmath.h&lt; type-generic macros.
++</para></listitem>
++
++<listitem><para>
+ /proc/loadavg now shows the number of currently running processes and the
+ total number of processes.
+ </para></listitem>
+
+--=-JdBUW0Gl7Epwsn+hi/Te--
