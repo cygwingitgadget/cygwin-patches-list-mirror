@@ -1,22 +1,27 @@
-Return-Path: <cygwin-patches-return-7605-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 22009 invoked by alias); 24 Feb 2012 16:56:39 -0000
-Received: (qmail 21996 invoked by uid 22791); 24 Feb 2012 16:56:37 -0000
-X-SWARE-Spam-Status: No, hits=-6.7 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_HI,SPF_HELO_PASS,T_RP_MATCHES_RCVD
+Return-Path: <cygwin-patches-return-7606-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 9509 invoked by alias); 24 Feb 2012 20:31:29 -0000
+Received: (qmail 9499 invoked by uid 22791); 24 Feb 2012 20:31:29 -0000
+X-SWARE-Spam-Status: No, hits=-1.8 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE
 X-Spam-Check-By: sourceware.org
-Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 24 Feb 2012 16:56:24 +0000
-Received: from int-mx12.intmail.prod.int.phx2.redhat.com (int-mx12.intmail.prod.int.phx2.redhat.com [10.5.11.25])	by mx1.redhat.com (8.14.4/8.14.4) with ESMTP id q1OGuN1H014012	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=OK)	for <cygwin-patches@cygwin.com>; Fri, 24 Feb 2012 11:56:23 -0500
-Received: from [127.0.0.1] (ovpn01.gateway.prod.ext.phx2.redhat.com [10.5.9.1])	by int-mx12.intmail.prod.int.phx2.redhat.com (8.14.4/8.14.4) with ESMTP id q1OGuMCh024446	for <cygwin-patches@cygwin.com>; Fri, 24 Feb 2012 11:56:23 -0500
-Message-ID: <4F47C136.20805@redhat.com>
-Date: Fri, 24 Feb 2012 16:56:00 -0000
-From: Pedro Alves <palves@redhat.com>
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20120131 Thunderbird/10.0
-MIME-Version: 1.0
+Received: from mho-02-ewr.mailhop.org (HELO mho-02-ewr.mailhop.org) (204.13.248.72)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 24 Feb 2012 20:31:13 +0000
+Received: from pool-173-76-50-112.bstnma.fios.verizon.net ([173.76.50.112] helo=cgf.cx)	by mho-02-ewr.mailhop.org with esmtpa (Exim 4.72)	(envelope-from <cgf@cgf.cx>)	id 1S11nM-000Oa0-Ki	for cygwin-patches@cygwin.com; Fri, 24 Feb 2012 20:31:12 +0000
+Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id DE33313C002	for <cygwin-patches@cygwin.com>; Fri, 24 Feb 2012 15:31:11 -0500 (EST)
+X-Mail-Handler: MailHop Outbound by DynDNS
+X-Report-Abuse-To: abuse@dyndns.com (see http://www.dyndns.com/services/mailhop/outbound_abuse.html for abuse reporting information)
+X-MHO-User: U2FsdGVkX1+2Q+aVzQ1IirncAEXvTxRc
+Date: Fri, 24 Feb 2012 20:31:00 -0000
+From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Add pthread_getname_np, pthread_setname_np
-References: <1330054695.6828.15.camel@YAAKOV04> <20120224093809.GA20683@calimero.vinschen.de> <1330081241.6260.3.camel@YAAKOV04> <20120224121808.GG17797@calimero.vinschen.de>
-In-Reply-To: <20120224121808.GG17797@calimero.vinschen.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] Add pldd(1)
+Message-ID: <20120224203111.GB19740@ednor.casa.cgf.cx>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <1330072720.7808.10.camel@YAAKOV04> <20120224094707.GB20683@calimero.vinschen.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20120224094707.GB20683@calimero.vinschen.de>
+User-Agent: Mutt/1.5.20 (2009-06-14)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,18 +31,19 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2012-q1/txt/msg00028.txt.bz2
+X-SW-Source: 2012-q1/txt/msg00029.txt.bz2
 
-Just FYI,
+On Fri, Feb 24, 2012 at 10:47:07AM +0100, Corinna Vinschen wrote:
+>On Feb 24 02:38, Yaakov (Cygwin/X) wrote:
+>> The pldd(1) command apparently originates from Solaris and was added to
+>> glibc-2.15[1].  Patches and new file attached.
+>
+>Looks good, works fine.  Please apply.
 
-Windows' way to have the program affect thread names in the
-debugger is with SetThreadName, which throws a magic exception
-which the debugger can catch.  GDB doesn't know about this though.
+It's not entirely fine.  Minor nits:
 
- http://msdn.microsoft.com/en-us/library/xcb2z8hs.aspx
+- The comment says "pldd.cc" but it's pldd.c.
 
-Just for completeness...  I don't know if there's a native
-method that's closer to pthread_setname_np's semantics.
+- There was no ChangeLog entry announcing its checkin.
 
--- 
-Pedro Alves
+cgf
