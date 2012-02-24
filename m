@@ -1,22 +1,22 @@
-Return-Path: <cygwin-patches-return-7604-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 16913 invoked by alias); 24 Feb 2012 12:18:49 -0000
-Received: (qmail 16864 invoked by uid 22791); 24 Feb 2012 12:18:24 -0000
+Return-Path: <cygwin-patches-return-7605-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 22009 invoked by alias); 24 Feb 2012 16:56:39 -0000
+Received: (qmail 21996 invoked by uid 22791); 24 Feb 2012 16:56:37 -0000
+X-SWARE-Spam-Status: No, hits=-6.7 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_HI,SPF_HELO_PASS,T_RP_MATCHES_RCVD
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Fri, 24 Feb 2012 12:18:11 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 837152C006D; Fri, 24 Feb 2012 13:18:08 +0100 (CET)
-Date: Fri, 24 Feb 2012 12:18:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 24 Feb 2012 16:56:24 +0000
+Received: from int-mx12.intmail.prod.int.phx2.redhat.com (int-mx12.intmail.prod.int.phx2.redhat.com [10.5.11.25])	by mx1.redhat.com (8.14.4/8.14.4) with ESMTP id q1OGuN1H014012	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=OK)	for <cygwin-patches@cygwin.com>; Fri, 24 Feb 2012 11:56:23 -0500
+Received: from [127.0.0.1] (ovpn01.gateway.prod.ext.phx2.redhat.com [10.5.9.1])	by int-mx12.intmail.prod.int.phx2.redhat.com (8.14.4/8.14.4) with ESMTP id q1OGuMCh024446	for <cygwin-patches@cygwin.com>; Fri, 24 Feb 2012 11:56:23 -0500
+Message-ID: <4F47C136.20805@redhat.com>
+Date: Fri, 24 Feb 2012 16:56:00 -0000
+From: Pedro Alves <palves@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20120131 Thunderbird/10.0
+MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] Add pthread_getname_np, pthread_setname_np
-Message-ID: <20120224121808.GG17797@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1330054695.6828.15.camel@YAAKOV04> <20120224093809.GA20683@calimero.vinschen.de> <1330081241.6260.3.camel@YAAKOV04>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1330081241.6260.3.camel@YAAKOV04>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+References: <1330054695.6828.15.camel@YAAKOV04> <20120224093809.GA20683@calimero.vinschen.de> <1330081241.6260.3.camel@YAAKOV04> <20120224121808.GG17797@calimero.vinschen.de>
+In-Reply-To: <20120224121808.GG17797@calimero.vinschen.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,42 +26,18 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2012-q1/txt/msg00027.txt.bz2
+X-SW-Source: 2012-q1/txt/msg00028.txt.bz2
 
-On Feb 24 05:00, Yaakov (Cygwin/X) wrote:
-> On Fri, 2012-02-24 at 10:38 +0100, Corinna Vinschen wrote:
-> > On Feb 23 21:38, Yaakov (Cygwin/X) wrote:
-> > > This patchset adds pthread_getname_np and pthread_setname_np.  These
-> > > were added to glibc in 2.12[1] and are also present in some form on
-> > > NetBSD and several UNIXes.  IIUC recent versions of GDB can benefit from
-> > > this support.
-> > 
-> > Thanks for your patch, but I don't think it's the whole thing.
-> > 
-> > Consider, if you implement pthread_[gs]etname_np as you did, then you
-> > have pthread names which are only available to the process in which
-> > the threads are running.
-> 
-> My implementation is based on NetBSD's[1].  So what purpose do these
-> functions serve then on that it and the UNIXes?  (Serious question.)
+Just FYI,
 
-See the source of the pthread_setname_np function.  There's a call to
-the kernel:
+Windows' way to have the program affect thread names in the
+debugger is with SetThreadName, which throws a magic exception
+which the debugger can catch.  GDB doesn't know about this though.
 
-  thread->pt_name = cp;
-  (void)_lwp_setname(thread->pt_lid, cp);
+ http://msdn.microsoft.com/en-us/library/xcb2z8hs.aspx
 
-_lwp_setname ultimately calls the kernel function sys__lwp_setname in
-http://cvsweb.netbsd.org/bsdweb.cgi/src/sys/kern/sys_lwp.c?rev=1.53
-So the kernel knows the name and the sys__lwp_getname entry point
-can be used to fetch the name of a thread in another process.  How
-exactly this is fetched by which BSD tool, I don't know, but it's
-all in the sources :)
-
-
-Corinna
+Just for completeness...  I don't know if there's a native
+method that's closer to pthread_setname_np's semantics.
 
 -- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+Pedro Alves
