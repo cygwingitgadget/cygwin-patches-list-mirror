@@ -1,27 +1,21 @@
-Return-Path: <cygwin-patches-return-7612-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 14600 invoked by alias); 1 Mar 2012 06:01:43 -0000
-Received: (qmail 14320 invoked by uid 22791); 1 Mar 2012 06:01:42 -0000
-X-SWARE-Spam-Status: No, hits=-1.8 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE
+Return-Path: <cygwin-patches-return-7613-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 8289 invoked by alias); 6 Mar 2012 17:06:39 -0000
+Received: (qmail 8267 invoked by uid 22791); 6 Mar 2012 17:06:37 -0000
+X-SWARE-Spam-Status: No, hits=3.5 required=5.0	tests=AWL,BAYES_05,T_RP_MATCHES_RCVD
 X-Spam-Check-By: sourceware.org
-Received: from mho-02-ewr.mailhop.org (HELO mho-02-ewr.mailhop.org) (204.13.248.72)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 01 Mar 2012 06:01:27 +0000
-Received: from pool-173-76-50-248.bstnma.fios.verizon.net ([173.76.50.248] helo=cgf.cx)	by mho-02-ewr.mailhop.org with esmtpa (Exim 4.72)	(envelope-from <cgf@cgf.cx>)	id 1S2z4w-000LIO-IT	for cygwin-patches@cygwin.com; Thu, 01 Mar 2012 06:01:26 +0000
-Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id 1BCAC13C0CD	for <cygwin-patches@cygwin.com>; Thu,  1 Mar 2012 01:01:26 -0500 (EST)
-X-Mail-Handler: MailHop Outbound by DynDNS
-X-Report-Abuse-To: abuse@dyndns.com (see http://www.dyndns.com/services/mailhop/outbound_abuse.html for abuse reporting information)
-X-MHO-User: U2FsdGVkX1/vK9xPeymrfhVHTmEBDcum
-Date: Thu, 01 Mar 2012 06:01:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] doc: update tcl/tk FAQ
-Message-ID: <20120301060126.GA21611@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <70952A932255A2489522275A628B97C3129F4A01@xmb-sjc-233.amer.cisco.com> <1330563447.7632.19.camel@YAAKOV04> <20120301011504.GA19191@ednor.casa.cgf.cx> <1330581398.7632.35.camel@YAAKOV04>
+Received: from mms2.broadcom.com (HELO mms2.broadcom.com) (216.31.210.18)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 06 Mar 2012 17:06:25 +0000
+Received: from [10.16.192.224] by mms2.broadcom.com with ESMTP (Broadcom SMTP Relay (Email Firewall v6.5)); Tue, 06 Mar 2012 09:15:48 -0800
+X-Server-Uuid: 72204117-5C29-4314-8910-60DB108979CB
+Received: from SJEXCHCAS01.corp.ad.broadcom.com (10.16.192.31) by SJEXCHHUB01.corp.ad.broadcom.com (10.16.192.224) with Microsoft SMTP Server (TLS) id 8.2.247.2; Tue, 6 Mar 2012 09:06:10 -0800
+Received: from SJEXCHMB05.corp.ad.broadcom.com ( [fe80::4ccf:d24d:fe6c:9594]) by sjexchcas01.corp.ad.broadcom.com ( [::1]) with mapi id 14.01.0355.002; Tue, 6 Mar 2012 09:06:10 -0800
+From: "Piotr Foltyn" <pfoltyn@broadcom.com>
+To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: Changing MAXPATHLEN in glob.cc back to 16384
+Date: Tue, 06 Mar 2012 17:06:00 -0000
+Message-ID: <49D44181BE9446429E0DA767E6813C54F320@SJEXCHMB05.corp.ad.broadcom.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1330581398.7632.35.camel@YAAKOV04>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+Content-Type: multipart/mixed; boundary=_002_49D44181BE9446429E0DA767E6813C54F320SJEXCHMB05corpadbro_
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -31,31 +25,50 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2012-q1/txt/msg00035.txt.bz2
+X-SW-Source: 2012-q1/txt/msg00036.txt.bz2
 
-On Wed, Feb 29, 2012 at 11:56:38PM -0600, Yaakov (Cygwin/X) wrote:
->On Wed, 2012-02-29 at 20:15 -0500, Christopher Faylor wrote:
->> On Wed, Feb 29, 2012 at 06:57:27PM -0600, Yaakov (Cygwin/X) wrote:
->> >Using X requires user intervention to start an X server first.  No
->> >amount of automatic dependencies will change this, and therefore I don't
->> >expect that the number of questions would change one iota.
->> 
->> I agree 100% but this now qualifies as a FAQ so maybe we should add an
->> entry about tcl/tk.
->
->Patch attached.
 
->2012-02-??  Yaakov Selkowitz  <yselkowitz@...>
->
->	* faq-programming.xml (faq.programming.make-execvp): Remove obsolete
->	information about Tcl/Tk.
->	(faq.programming.dll-relocatable): Ditto.
->	* faq-using.xml (faq.using.tcl-tk): Rewrite to reflect switch to
->	X11 Tcl/Tk.
+--_002_49D44181BE9446429E0DA767E6813C54F320SJEXCHMB05corpadbro_
+Content-Type: text/plain;
+ charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
+Content-length: 298
 
-Thanks very much for this, Yaakov.  I appreciate that you removed the obsolete
-stuff as well as adding new wording.
+Hi,
 
-Please apply.
+Revision 1.7 of src/winsup/cygwin/glob.cc reduced maximum allowed path leng=
+th from 16384 to 4096 characters. This is unfortunate because some paths us=
+ed in my build system can reach 6k characters in length. Attached patch rei=
+nstates 16384 characters limit.
 
-cgf
+--=20
+Regards,
+Piotr Foltyn
+
+
+--_002_49D44181BE9446429E0DA767E6813C54F320SJEXCHMB05corpadbro_
+Content-Type: application/octet-stream;
+ name=maxpathlen.patch
+Content-Description: maxpathlen.patch
+Content-Disposition: attachment;
+ filename=maxpathlen.patch;
+ size=537;
+ creation-date="Tue, 06 Mar 2012 16:22:44 GMT";
+ modification-date="Tue, 06 Mar 2012 16:22:47 GMT"
+Content-Transfer-Encoding: base64
+Content-length: 728
+
+SW5kZXg6IGN5Z3dpbi9nbG9iLmNjDQo9PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+DQpSQ1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vZ2xvYi5j
+Yyx2DQpyZXRyaWV2aW5nIHJldmlzaW9uIDEuNw0KZGlmZiAtdSAtcCAtcjEu
+NyBnbG9iLmNjDQotLS0gY3lnd2luL2dsb2IuY2MJMTMgRmViIDIwMTIgMTM6
+MTI6MzcgLTAwMDAJMS43DQorKysgY3lnd2luL2dsb2IuY2MJNiBNYXIgMjAx
+MiAxNjoyMDoyMCAtMDAwMA0KQEAgLTExMSw2ICsxMTEsOSBAQCBfX0ZCU0RJ
+RCgiJEZyZWVCU0Q6IHNyYy9saWIvbGliYy9nZW4vZ2xvDQogI2RlZmluZSBD
+Y2hhcihjKQkoaWdub3JlX2Nhc2Vfd2l0aF9nbG9iID8gdG93bG93ZXIgKGMp
+IDogKGMpKQ0KICNlbmRpZg0KIA0KKyN1bmRlZiBNQVhQQVRITEVODQorI2Rl
+ZmluZSBNQVhQQVRITEVOIDE2Mzg0DQorDQogI2RlZmluZQlET0xMQVIJCSck
+Jw0KICNkZWZpbmUJRE9UCQknLicNCiAjZGVmaW5lCUVPUwkJJ1wwJw0K
+
+--_002_49D44181BE9446429E0DA767E6813C54F320SJEXCHMB05corpadbro_--
