@@ -1,18 +1,22 @@
-Return-Path: <cygwin-patches-return-7636-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 22610 invoked by alias); 3 Apr 2012 19:42:32 -0000
-Received: (qmail 22600 invoked by uid 22791); 3 Apr 2012 19:42:31 -0000
-X-SWARE-Spam-Status: No, hits=-2.5 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,RCVD_IN_HOSTKARMA_YE,SPF_HELO_PASS,TW_CP,TW_RX
+Return-Path: <cygwin-patches-return-7637-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 27143 invoked by alias); 3 Apr 2012 19:52:23 -0000
+Received: (qmail 27132 invoked by uid 22791); 3 Apr 2012 19:52:21 -0000
+X-SWARE-Spam-Status: No, hits=-2.8 required=5.0	tests=AWL,BAYES_00,KHOP_THREADED,RCVD_IN_DNSWL_NONE,RCVD_IN_HOSTKARMA_YE,SARE_SUB_NEED_REPLY,SPF_HELO_PASS
 X-Spam-Check-By: sourceware.org
-Received: from moutng.kundenserver.de (HELO moutng.kundenserver.de) (212.227.17.9)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 03 Apr 2012 19:42:18 +0000
-Received: from [127.0.0.1] (dslb-088-073-037-163.pools.arcor-ip.net [88.73.37.163])	by mrelayeu.kundenserver.de (node=mreu2) with ESMTP (Nemesis)	id 0Lxbep-1SGcdv0PIx-0179q5; Tue, 03 Apr 2012 21:42:16 +0200
-Message-ID: <4F7B5292.5030905@towo.net>
-Date: Tue, 03 Apr 2012 19:42:00 -0000
+Received: from moutng.kundenserver.de (HELO moutng.kundenserver.de) (212.227.17.9)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 03 Apr 2012 19:52:08 +0000
+Received: from [127.0.0.1] (dslb-088-073-037-163.pools.arcor-ip.net [88.73.37.163])	by mrelayeu.kundenserver.de (node=mreu4) with ESMTP (Nemesis)	id 0MRvbR-1RmG593azh-00TWSc; Tue, 03 Apr 2012 21:52:07 +0200
+Message-ID: <4F7B54E1.9070105@towo.net>
+Date: Tue, 03 Apr 2012 19:52:00 -0000
 From: Thomas Wolff <towo@towo.net>
 User-Agent: Mozilla/5.0 (Windows NT 5.1; rv:11.0) Gecko/20120327 Thunderbird/11.0.1
 MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Mouse reporting modes 1006 and 1015 for extended coordinates
-Content-Type: multipart/mixed; boundary="------------060101050200040404030409"
+Subject: Re: console: new mouse modes, request/response attempt
+References: <4F79F407.9000700@towo.net> <20120402185035.GA9912@ednor.casa.cgf.cx> <4F7A02F9.8000300@towo.net> <20120402204044.GA13667@ednor.casa.cgf.cx>
+In-Reply-To: <20120402204044.GA13667@ednor.casa.cgf.cx>
+X-TagToolbar-Keys: D20120403215201428
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
 X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -23,203 +27,82 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2012-q2/txt/msg00005.txt.bz2
+X-SW-Source: 2012-q2/txt/msg00006.txt.bz2
 
-This is a multi-part message in MIME format.
---------------060101050200040404030409
-Content-Type: text/plain; charset=ISO-8859-15; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-length: 271
-
-This patch implements mouse modes 1006 and 1015 for the cygwin console 
-(no experimental add-ons this time :) ).
-They enable unlimited mouse coordinate reporting like recent xterm, 
-mintty, urxvt. If someone is interested, I could also implement mouse 
-mode 1005.
+Am 02.04.2012 22:40, schrieb Christopher Faylor:
+> On Mon, Apr 02, 2012 at 09:50:17PM +0200, Thomas Wolff wrote:
+>> Am 02.04.2012 20:50, schrieb Christopher Faylor:
+>>> On Mon, Apr 02, 2012 at 08:46:31PM +0200, Thomas Wolff wrote:
+>>>> ...
+>>>> * semi-fix for missing terminal status responses
+>>>> The fix tries to detect the proper fhandler for CONIO, which is then
+>>>> used to queue the response.
+>>>> Problem 1: I am not sure whether this detection is proper in all cases,
+>>>> what e.g. if /dev/tty is reopened etc. I don't know where else a
+>>>> relation between the handles for CONIN and CONOUT might be established.
+>>>> Problem 2: While the response reaches the application with this patch,
+>>>> only the first byte is read right-away. Further bytes are delayed until
+>>>> other input is becoming present (typing a key). This may (or may not) be
+>>>> related to other issues with select(), so maybe it's worth analyzing it.
+>>>>
+>>>> Thomas
+>>>> diff -rup sav/fhandler.h ./fhandler.h
+>>>> --- sav/fhandler.h	2012-04-01 19:46:04.000000000 +0200
+>>>> +++ ./fhandler.h	2012-04-02 15:47:22.385727000 +0200
+>>>> @@ -1282,8 +1282,11 @@ class dev_console
+>>>>
+>>>>     bool insert_mode;
+>>>>     int use_mouse;
+>>>> +  bool ext_mouse_mode6;
+>>>> +  bool ext_mouse_mode15;
+>>>>     bool use_focus;
+>>>>     bool raw_win32_keyboard_mode;
+>>>> +  fhandler_console * fh_tty;
+>>>>
+>>>>     inline UINT get_console_cp ();
+>>>>     DWORD con_to_str (char *d, int dlen, WCHAR w);
+>>>> diff -rup sav/fhandler_console.cc ./fhandler_console.cc
+>>>> --- sav/fhandler_console.cc	2012-04-02 00:28:55.000000000 +0200
+>>>> +++ ./fhandler_console.cc	2012-04-02 18:02:26.004016200 +0200
+>>>> @@ -139,6 +139,8 @@ fhandler_console::set_unit ()
+>>>>     if (shared_console_info)
+>>>>       {
+>>>>         fh_devices this_unit = dev ();
+>>>> +      if (this_unit == FH_TTY)
+>>>> +	dev_state.fh_tty = this;
+>>> You *definitely* just can't squirrel away a pointer to a random fhandler
+>>> here.
+>> ...
+> `this' is a pointer to a fhandler.  You can't just store it in a static
+> location and use it whenever you want later.  You have no idea how long
+> this fhandler will be around.  What happens if it's destroyed?
+Yes, that's why I mentioned problem 1 above. The patch is experimental, 
+and it revealed that even if the missing relation could be properly 
+established, there's still the other problem... (see below).
+>>> Do we really care about console mode that much now that mintty is the
+>>> default?
+>> Maybe not, but the fact that it works partially but subsequent
+>> characters are postponed resembles the other problem that I have just reported
+>> tocygwin@cygwin.com, which makes me wonder whether there is one common problem.
+>>
+>>
+>> Also when I originally tweaked the mouse code, I couldn't completely
+>> understand the code in select.cc (only got it to work by pattern
+>> matching code...). I did notice, however, that select and read were
+>> inconsistent in the sense that an application having called select()
+>> with a positive response may not be able to get a byte with a subsequent
+>> read(), because criteria were re-evaluated and could have different
+>> results (esp. in border cases). I did fix it by strictly applying the
+>> same guard routine for both cases, but only for the mouse code branch.
+> If you have an example of actual failing code then please post it.
+My point is: The function that doesn't work here, 
+puts_readahead/put_readahead,
+is also called in fhandler_pty_master::accept_input () (fhandler_tty.cc)
+and in fhandler_termios::line_edit () (fhandler_termios.cc),
+and I remember pipe and/or pty problems being discussed recently.
+Also there is the "input delay issue" in mintty/xterm I described (and 
+by the way, I forgot to mention it does not happen anymore in the 
+terminal after rlogin to another system) and somehow I suspect they 
+might have a common cause, or similar causes.
+------
 Thomas
-
---------------060101050200040404030409
-Content-Type: text/plain; charset=windows-1252;
- name="mouse-modes-6-16.changelog"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="mouse-modes-6-16.changelog"
-Content-length: 498
-
-2012-04-03  Thomas Wolff  <towo@towo.net>
-
-	* fhandler.h (class dev_console): Two flags for extended mouse modes.
-	* fhandler_console.cc (fhandler_console::read): Implemented 
-	extended mouse modes 1015 (urxvt, mintty, xterm) and 1006 (xterm).
-	Not implemented extended mouse mode 1005 (xterm, mintty).
-	Supporting mouse coordinates greater than 222 (each axis).
-	Also: two { wrap formatting consistency fixes.
-	(fhandler_console::char_command) Initialization of enhanced 
-	mouse reporting modes.
-
-
---------------060101050200040404030409
-Content-Type: text/plain; charset=windows-1252;
- name="mouse-modes-6-16.patch"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="mouse-modes-6-16.patch"
-Content-length: 4760
-
-diff -rup sav/fhandler.h ./fhandler.h
---- sav/fhandler.h	2012-04-01 19:46:04.000000000 +0200
-+++ ./fhandler.h	2012-04-03 15:52:07.893561600 +0200
-@@ -1282,6 +1282,8 @@ class dev_console
- 
-   bool insert_mode;
-   int use_mouse;
-+  bool ext_mouse_mode6;
-+  bool ext_mouse_mode15;
-   bool use_focus;
-   bool raw_win32_keyboard_mode;
- 
-diff -rup sav/fhandler_console.cc ./fhandler_console.cc
---- sav/fhandler_console.cc	2012-04-02 00:28:55.000000000 +0200
-+++ ./fhandler_console.cc	2012-04-03 15:56:13.993152400 +0200
-@@ -452,12 +452,13 @@ fhandler_console::read (void *pv, size_t
- 	    {
- 	      char c = dev_state.backspace_keycode;
- 	      nread = 0;
--	      if (control_key_state & ALT_PRESSED) {
--		if (dev_state.metabit)
--		  c |= 0x80;
--		else
--		  tmp[nread++] = '\e';
--	      }
-+	      if (control_key_state & ALT_PRESSED)
-+		{
-+		  if (dev_state.metabit)
-+		    c |= 0x80;
-+		  else
-+		    tmp[nread++] = '\e';
-+		}
- 	      tmp[nread++] = c;
- 	      tmp[nread] = 0;
- 	      toadd = tmp;
-@@ -550,6 +551,7 @@ fhandler_console::read (void *pv, size_t
- 		   events at the same time. */
- 		int b = 0;
- 		char sz[32];
-+		char mode6_term = 'M';
- 
- 		if (mouse_event.dwEventFlags == MOUSE_WHEELED)
- 		  {
-@@ -573,7 +575,7 @@ fhandler_console::read (void *pv, size_t
- 		      {
- 			b = dev_state.last_button_code;
- 		      }
--		    else if (mouse_event.dwButtonState < dev_state.dwLastButtonState)
-+		    else if (mouse_event.dwButtonState < dev_state.dwLastButtonState && !dev_state.ext_mouse_mode6)
- 		      {
- 			b = 3;
- 			strcpy (sz, "btn up");
-@@ -594,6 +596,10 @@ fhandler_console::read (void *pv, size_t
- 			strcpy (sz, "btn3 down");
- 		      }
- 
-+		    if (dev_state.ext_mouse_mode6)	/* distinguish release */
-+		      if (mouse_event.dwButtonState < dev_state.dwLastButtonState)
-+		        mode6_term = 'm';
-+
- 		    dev_state.last_button_code = b;
- 
- 		    if (mouse_event.dwEventFlags == MOUSE_MOVED)
-@@ -625,25 +631,46 @@ fhandler_console::read (void *pv, size_t
- 		b |= dev_state.nModifiers;
- 
- 		/* We can now create the code. */
--		sprintf (tmp, "\033[M%c%c%c", b + ' ', dev_state.dwMousePosition.X + ' ' + 1, dev_state.dwMousePosition.Y + ' ' + 1);
-+		if (dev_state.ext_mouse_mode6)
-+		  {
-+		    sprintf (tmp, "\033[<%d;%d;%d%c", b, dev_state.dwMousePosition.X + 1, dev_state.dwMousePosition.Y + 1, mode6_term);
-+		    nread = strlen (tmp);
-+		  }
-+		else if (dev_state.ext_mouse_mode15)
-+		  {
-+		    sprintf (tmp, "\033[%d;%d;%dM", b + 32, dev_state.dwMousePosition.X + 1, dev_state.dwMousePosition.Y + 1);
-+		    nread = strlen (tmp);
-+		  }
-+		/* else if (dev_state.ext_mouse_mode5) not implemented */
-+		else
-+		  {
-+		    unsigned int xcode = dev_state.dwMousePosition.X + ' ' + 1;
-+		    unsigned int ycode = dev_state.dwMousePosition.Y + ' ' + 1;
-+		    if (xcode >= 256)
-+		      xcode = 0;
-+		    if (ycode >= 256)
-+		      ycode = 0;
-+		    sprintf (tmp, "\033[M%c%c%c", b + ' ', xcode, ycode);
-+		    nread = 6;	/* tmp may contain NUL bytes */
-+		  }
- 		syscall_printf ("mouse: %s at (%d,%d)", sz, dev_state.dwMousePosition.X, dev_state.dwMousePosition.Y);
- 
- 		toadd = tmp;
--		nread = 6;
- 	      }
- 	  }
- 	  break;
- 
- 	case FOCUS_EVENT:
--	  if (dev_state.use_focus) {
--	    if (input_rec.Event.FocusEvent.bSetFocus)
--	      sprintf (tmp, "\033[I");
--	    else
--	      sprintf (tmp, "\033[O");
-+	  if (dev_state.use_focus)
-+	    {
-+	      if (input_rec.Event.FocusEvent.bSetFocus)
-+	        sprintf (tmp, "\033[I");
-+	      else
-+	        sprintf (tmp, "\033[O");
- 
--	    toadd = tmp;
--	    nread = 3;
--	  }
-+	      toadd = tmp;
-+	      nread = 3;
-+	    }
- 	  break;
- 
- 	case WINDOW_BUFFER_SIZE_EVENT:
-@@ -1516,22 +1543,30 @@ fhandler_console::char_command (char c)
- 
- 	case 1000: /* Mouse tracking */
- 	  dev_state.use_mouse = (c == 'h') ? 1 : 0;
--	  syscall_printf ("mouse support set to mode %d", dev_state.use_mouse);
- 	  break;
- 
- 	case 1002: /* Mouse button event tracking */
- 	  dev_state.use_mouse = (c == 'h') ? 2 : 0;
--	  syscall_printf ("mouse support set to mode %d", dev_state.use_mouse);
- 	  break;
- 
- 	case 1003: /* Mouse any event tracking */
- 	  dev_state.use_mouse = (c == 'h') ? 3 : 0;
--	  syscall_printf ("mouse support set to mode %d", dev_state.use_mouse);
- 	  break;
- 
- 	case 1004: /* Focus in/out event reporting */
- 	  dev_state.use_focus = (c == 'h') ? true : false;
--	  syscall_printf ("focus reporting set to %d", dev_state.use_focus);
-+	  break;
-+
-+	case 1005: /* Extended mouse mode */
-+	  syscall_printf ("ignored h/l command for extended mouse mode");
-+	  break;
-+
-+	case 1006: /* SGR extended mouse mode */
-+	  dev_state.ext_mouse_mode6 = c == 'h';
-+	  break;
-+
-+	case 1015: /* Urxvt extended mouse mode */
-+	  dev_state.ext_mouse_mode15 = c == 'h';
- 	  break;
- 
- 	case 2000: /* Raw keyboard mode */
-
---------------060101050200040404030409--
