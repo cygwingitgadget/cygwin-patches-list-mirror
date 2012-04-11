@@ -1,22 +1,21 @@
-Return-Path: <cygwin-patches-return-7637-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 27143 invoked by alias); 3 Apr 2012 19:52:23 -0000
-Received: (qmail 27132 invoked by uid 22791); 3 Apr 2012 19:52:21 -0000
-X-SWARE-Spam-Status: No, hits=-2.8 required=5.0	tests=AWL,BAYES_00,KHOP_THREADED,RCVD_IN_DNSWL_NONE,RCVD_IN_HOSTKARMA_YE,SARE_SUB_NEED_REPLY,SPF_HELO_PASS
+Return-Path: <cygwin-patches-return-7638-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 14898 invoked by alias); 11 Apr 2012 18:53:10 -0000
+Received: (qmail 14666 invoked by uid 22791); 11 Apr 2012 18:53:07 -0000
+X-SWARE-Spam-Status: No, hits=-2.6 required=5.0	tests=AWL,BAYES_00,KHOP_THREADED,RCVD_IN_DNSWL_NONE,RCVD_IN_HOSTKARMA_NO,T_RP_MATCHES_RCVD,UNPARSEABLE_RELAY
 X-Spam-Check-By: sourceware.org
-Received: from moutng.kundenserver.de (HELO moutng.kundenserver.de) (212.227.17.9)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 03 Apr 2012 19:52:08 +0000
-Received: from [127.0.0.1] (dslb-088-073-037-163.pools.arcor-ip.net [88.73.37.163])	by mrelayeu.kundenserver.de (node=mreu4) with ESMTP (Nemesis)	id 0MRvbR-1RmG593azh-00TWSc; Tue, 03 Apr 2012 21:52:07 +0200
-Message-ID: <4F7B54E1.9070105@towo.net>
-Date: Tue, 03 Apr 2012 19:52:00 -0000
-From: Thomas Wolff <towo@towo.net>
-User-Agent: Mozilla/5.0 (Windows NT 5.1; rv:11.0) Gecko/20120327 Thunderbird/11.0.1
+Received: from mailout06.t-online.de (HELO mailout06.t-online.de) (194.25.134.19)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 11 Apr 2012 18:52:46 +0000
+Received: from fwd21.aul.t-online.de (fwd21.aul.t-online.de )	by mailout06.t-online.de with smtp 	id 1SI2ep-0004b6-SE; Wed, 11 Apr 2012 20:52:43 +0200
+Received: from [192.168.2.108] (SUO4YEZArhQBonx7U3+J1bavTnrUzLwdKegv3QR0zpTN8wQIANWMShIL-h4BQBOwpm@[79.224.118.109]) by fwd21.t-online.de	with esmtp id 1SI2ek-0ye6l60; Wed, 11 Apr 2012 20:52:38 +0200
+Message-ID: <4F85D2F4.8090204@t-online.de>
+Date: Wed, 11 Apr 2012 18:53:00 -0000
+From: Christian Franke <Christian.Franke@t-online.de>
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:10.0.2) Gecko/20120216 Firefox/10.0.2 SeaMonkey/2.7.2
 MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
-Subject: Re: console: new mouse modes, request/response attempt
-References: <4F79F407.9000700@towo.net> <20120402185035.GA9912@ednor.casa.cgf.cx> <4F7A02F9.8000300@towo.net> <20120402204044.GA13667@ednor.casa.cgf.cx>
-In-Reply-To: <20120402204044.GA13667@ednor.casa.cgf.cx>
-X-TagToolbar-Keys: D20120403215201428
-Content-Type: text/plain; charset=ISO-8859-1; format=flowed
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] Setting TZ may break time() in non-Cygwin programs
+References: <4F4FD8C6.5000807@t-online.de> <20120302091317.GD14404@calimero.vinschen.de> <4F513D11.2080203@t-online.de> <20120304115232.GC18852@calimero.vinschen.de> <4F53B791.2090709@t-online.de> <20120304204938.GL18852@calimero.vinschen.de>
+In-Reply-To: <20120304204938.GL18852@calimero.vinschen.de>
+Content-Type: multipart/mixed; boundary="------------080604070604050805090900"
 X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -27,82 +26,90 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2012-q2/txt/msg00006.txt.bz2
+X-SW-Source: 2012-q2/txt/msg00007.txt.bz2
 
-Am 02.04.2012 22:40, schrieb Christopher Faylor:
-> On Mon, Apr 02, 2012 at 09:50:17PM +0200, Thomas Wolff wrote:
->> Am 02.04.2012 20:50, schrieb Christopher Faylor:
->>> On Mon, Apr 02, 2012 at 08:46:31PM +0200, Thomas Wolff wrote:
->>>> ...
->>>> * semi-fix for missing terminal status responses
->>>> The fix tries to detect the proper fhandler for CONIO, which is then
->>>> used to queue the response.
->>>> Problem 1: I am not sure whether this detection is proper in all cases,
->>>> what e.g. if /dev/tty is reopened etc. I don't know where else a
->>>> relation between the handles for CONIN and CONOUT might be established.
->>>> Problem 2: While the response reaches the application with this patch,
->>>> only the first byte is read right-away. Further bytes are delayed until
->>>> other input is becoming present (typing a key). This may (or may not) be
->>>> related to other issues with select(), so maybe it's worth analyzing it.
+This is a multi-part message in MIME format.
+--------------080604070604050805090900
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-length: 1145
+
+On Mar 4, Corinna Vinschen wrote:
+> On Mar  4 19:42, Christian Franke wrote:
+>> Corinna Vinschen wrote:
+>>> On Mar  2 22:35, Christian Franke wrote:
+>>>> Corinna Vinschen wrote:
+>>>>> But, as usual, PTC.
+>>>> OK, ...
 >>>>
->>>> Thomas
->>>> diff -rup sav/fhandler.h ./fhandler.h
->>>> --- sav/fhandler.h	2012-04-01 19:46:04.000000000 +0200
->>>> +++ ./fhandler.h	2012-04-02 15:47:22.385727000 +0200
->>>> @@ -1282,8 +1282,11 @@ class dev_console
->>>>
->>>>     bool insert_mode;
->>>>     int use_mouse;
->>>> +  bool ext_mouse_mode6;
->>>> +  bool ext_mouse_mode15;
->>>>     bool use_focus;
->>>>     bool raw_win32_keyboard_mode;
->>>> +  fhandler_console * fh_tty;
->>>>
->>>>     inline UINT get_console_cp ();
->>>>     DWORD con_to_str (char *d, int dlen, WCHAR w);
->>>> diff -rup sav/fhandler_console.cc ./fhandler_console.cc
->>>> --- sav/fhandler_console.cc	2012-04-02 00:28:55.000000000 +0200
->>>> +++ ./fhandler_console.cc	2012-04-02 18:02:26.004016200 +0200
->>>> @@ -139,6 +139,8 @@ fhandler_console::set_unit ()
->>>>     if (shared_console_info)
->>>>       {
->>>>         fh_devices this_unit = dev ();
->>>> +      if (this_unit == FH_TTY)
->>>> +	dev_state.fh_tty = this;
->>> You *definitely* just can't squirrel away a pointer to a random fhandler
->>> here.
->> ...
-> `this' is a pointer to a fhandler.  You can't just store it in a static
-> location and use it whenever you want later.  You have no idea how long
-> this fhandler will be around.  What happens if it's destroyed?
-Yes, that's why I mentioned problem 1 above. The patch is experimental, 
-and it revealed that even if the missing relation could be properly 
-established, there's still the other problem... (see below).
->>> Do we really care about console mode that much now that mintty is the
->>> default?
->> Maybe not, but the fact that it works partially but subsequent
->> characters are postponed resembles the other problem that I have just reported
->> tocygwin@cygwin.com, which makes me wonder whether there is one common problem.
+>>>>> Simple: Unset TZ for Win32 programs run from Cygwin.
+>>>>>
+>>>>> More flexible: Set (unset) TZ=CYGWIN_WINENV_TZ if this variable is
+>>>>> set (to empty). Otherwise keep TZ as is.
+>>>>>
+>>>> would a patch for any of the above have a chance to get accepted?
+>>> If it's not getting too complicated, yes.  However, the second idea
+>>> I don't understand.  Can you explain this differently?
+>>>
+>> Let another variable change the value passed to Windows environment:
 >>
+>> $ printenv TZ
+>> Europe/Berlin
 >>
->> Also when I originally tweaked the mouse code, I couldn't completely
->> understand the code in select.cc (only got it to work by pattern
->> matching code...). I did notice, however, that select and read were
->> inconsistent in the sense that an application having called select()
->> with a positive response may not be able to get a byte with a subsequent
->> read(), because criteria were re-evaluated and could have different
->> results (esp. in border cases). I did fix it by strictly applying the
->> same guard routine for both cases, but only for the mouse code branch.
-> If you have an example of actual failing code then please post it.
-My point is: The function that doesn't work here, 
-puts_readahead/put_readahead,
-is also called in fhandler_pty_master::accept_input () (fhandler_tty.cc)
-and in fhandler_termios::line_edit () (fhandler_termios.cc),
-and I remember pipe and/or pty problems being discussed recently.
-Also there is the "input delay issue" in mintty/xterm I described (and 
-by the way, I forgot to mention it does not happen anymore in the 
-terminal after rlogin to another system) and somehow I suspect they 
-might have a common cause, or similar causes.
-------
-Thomas
+>> $ cmd /c echo %TZ%
+>> Europe/Berlin
+>>
+>> $ export CYGWIN_WINENV_TZ=CET-1CEST
+>>
+>> $ printenv TZ
+>> Europe/Berlin
+>>
+>> $ cmd /c echo %TZ%
+>> CET-1CEST
+>>
+>> $ export CYGWIN_WINENV_TZ=
+>>
+>> $ cmd /c echo %TZ%
+>> %TZ% (which means TZ is not set)
+> Hmm.  I think just unsetting TZ should be sufficient.  MSVCRT uses the
+> current timezone as default anyway, doesn't it?
+>
+>
+
+Yes. Patch is attached.
+
+Christian
+
+
+--------------080604070604050805090900
+Content-Type: text/x-diff;
+ name="no-win32-tz.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="no-win32-tz.patch"
+Content-length: 823
+
+2012-04-11  Christian Franke  <franke@computer.org>
+
+	* environ.cc (build_env): Don't pass POSIX TZ variable to Win32.
+	TZ may result in incorrect time zone conversions from MSVCRT time
+	functions.
+
+diff --git a/winsup/cygwin/environ.cc b/winsup/cygwin/environ.cc
+index 33289d2..01ef234 100644
+--- a/winsup/cygwin/environ.cc
++++ b/winsup/cygwin/environ.cc
+@@ -1074,6 +1074,11 @@ build_env (const char * const *envp, PWCHAR &envblock, int &envc,
+ 	  if (len == 1 || !*rest)
+ 	    continue;
+ 
++	  /* Don't pass POSIX TZ variable to Win32.  TZ may result in
++	     incorrect time zone conversions from MSVCRT time functions.  */
++	  if (len == 3 && (*srcp)[0] == 'T' && (*srcp)[1] == 'Z')
++	    continue;
++
+ 	  /* See if this entry requires posix->win32 conversion. */
+ 	  conv = getwinenv (*srcp, rest, &temp);
+ 	  if (conv)
+
+--------------080604070604050805090900--
