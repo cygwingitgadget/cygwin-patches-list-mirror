@@ -1,27 +1,19 @@
-Return-Path: <cygwin-patches-return-7642-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 27569 invoked by alias); 17 Apr 2012 20:42:54 -0000
-Received: (qmail 27445 invoked by uid 22791); 17 Apr 2012 20:42:52 -0000
-X-SWARE-Spam-Status: No, hits=-1.8 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,RCVD_IN_HOSTKARMA_YE
+Return-Path: <cygwin-patches-return-7643-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 3203 invoked by alias); 22 Apr 2012 19:08:20 -0000
+Received: (qmail 3184 invoked by uid 22791); 22 Apr 2012 19:08:18 -0000
+X-SWARE-Spam-Status: No, hits=-2.4 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,RCVD_IN_HOSTKARMA_YE,SPF_HELO_PASS,TW_CP,TW_RX
 X-Spam-Check-By: sourceware.org
-Received: from mho-02-ewr.mailhop.org (HELO mho-02-ewr.mailhop.org) (204.13.248.72)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 17 Apr 2012 20:42:38 +0000
-Received: from pool-98-110-186-28.bstnma.fios.verizon.net ([98.110.186.28] helo=cgf.cx)	by mho-02-ewr.mailhop.org with esmtpa (Exim 4.72)	(envelope-from <cgf@cgf.cx>)	id 1SKFET-00077l-SA	for cygwin-patches@cygwin.com; Tue, 17 Apr 2012 20:42:37 +0000
-Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id 6C2EE13C076	for <cygwin-patches@cygwin.com>; Tue, 17 Apr 2012 16:42:37 -0400 (EDT)
-X-Mail-Handler: MailHop Outbound by DynDNS
-X-Report-Abuse-To: abuse@dyndns.com (see http://www.dyndns.com/services/mailhop/outbound_abuse.html for abuse reporting information)
-X-MHO-User: U2FsdGVkX19zZk8NqCp/8ZSS8f07osFT
-Date: Tue, 17 Apr 2012 20:42:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Setting TZ may break time() in non-Cygwin programs
-Message-ID: <20120417204237.GA18917@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4F4FD8C6.5000807@t-online.de> <20120302091317.GD14404@calimero.vinschen.de> <4F513D11.2080203@t-online.de> <20120304115232.GC18852@calimero.vinschen.de> <4F53B791.2090709@t-online.de> <20120304204938.GL18852@calimero.vinschen.de> <4F85D2F4.8090204@t-online.de> <20120417070615.GA22155@calimero.vinschen.de> <20120417141947.GB15491@ednor.casa.cgf.cx> <4F8DD47E.30907@t-online.de>
+Received: from moutng.kundenserver.de (HELO moutng.kundenserver.de) (212.227.126.186)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sun, 22 Apr 2012 19:07:57 +0000
+Received: from [127.0.0.1] (dslb-088-073-036-239.pools.arcor-ip.net [88.73.36.239])	by mrelayeu.kundenserver.de (node=mreu3) with ESMTP (Nemesis)	id 0M1dC2-1S7GD149Fa-00tkzj; Sun, 22 Apr 2012 21:07:56 +0200
+Message-ID: <4F945706.3050808@towo.net>
+Date: Sun, 22 Apr 2012 19:08:00 -0000
+From: Thomas Wolff <towo@towo.net>
+User-Agent: Mozilla/5.0 (Windows NT 5.1; rv:11.0) Gecko/20120327 Thunderbird/11.0.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4F8DD47E.30907@t-online.de>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] Extended mouse coordinates
+Content-Type: multipart/mixed; boundary="------------070005070407050407070008"
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -31,37 +23,211 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2012-q2/txt/msg00011.txt.bz2
+X-SW-Source: 2012-q2/txt/msg00012.txt.bz2
 
-On Tue, Apr 17, 2012 at 10:37:18PM +0200, Christian Franke wrote:
->Christopher Faylor wrote:
->> On Tue, Apr 17, 2012 at 09:06:15AM +0200, Corinna Vinschen wrote:
->>> On Apr 11 20:52, Christian Franke wrote:
->>>> Yes. Patch is attached.
->>>>
->>>> Christian
->>>>
->>> Thanks for the patch.  I'm just wondering if we shouldn't generalize
->>> this right from the start by keeping an array of variables to skip
->>> when starting native apps and a function to handle this, along the
->>> lines of the getwinenv function and the conv_envvars array.
->>> It might only contain TZ now, but there's always a chance we suddenly
->>> stumble over a similar problem, isn't it?
->> I really hate having Cygwin be "smart" like this.  It seems like it's
->> asking for a follow-on "How do I set TZ for my Windoze program???"
->> email, followed by a "We need a CYGWIN environment variable option!"
->>
->> What's the problem with just unsetting TZ again?  Yes, I know you
->> have to remember to do it but does this affect enough programs that
->> we need to add even more head standing code in Cygwin to accommodate
->> it.
->
->It affects all C/C++ programs which use time() and friends from any 
->version of MSVCRT as DLL or static library.
+This is a multi-part message in MIME format.
+--------------070005070407050407070008
+Content-Type: text/plain; charset=ISO-8859-15; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-length: 482
 
-I understand that it affects programs which use time() but the Cygwin
-mailing list isn't filled with complaints about TZ being wrong for
-Windows programs.  And, if we always unset it that means that these
-time() using programs can never ever use the TZ environment variable.
+This patch replaces my previous proposal 
+(http://cygwin.com/ml/cygwin-patches/2012-q2/msg00005.html) with two 
+modifications:
 
-cgf
+  * Fixed a bug that suppressed mouse reporting at large coordinates (in
+    all modes actually:-\ )
+  * Added mouse mode 1005 (total of 3 three new modes, so all reporting
+    modes run by current terminal emulators would be implemented)
+
+I would appreciate the patch to be applied this time, planned to be my 
+last mouse patch :)
+
+Kind regards,
+Thomas
+
+--------------070005070407050407070008
+Content-Type: text/plain; charset=windows-1252;
+ name="mouse-modes-6-16.changelog"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="mouse-modes-6-16.changelog"
+Content-length: 498
+
+2012-04-03  Thomas Wolff  <towo@towo.net>
+
+	* fhandler.h (class dev_console): Two flags for extended mouse modes.
+	* fhandler_console.cc (fhandler_console::read): Implemented 
+	extended mouse modes 1015 (urxvt, mintty, xterm) and 1006 (xterm).
+	Not implemented extended mouse mode 1005 (xterm, mintty).
+	Supporting mouse coordinates greater than 222 (each axis).
+	Also: two { wrap formatting consistency fixes.
+	(fhandler_console::char_command) Initialization of enhanced 
+	mouse reporting modes.
+
+
+--------------070005070407050407070008
+Content-Type: text/plain; charset=windows-1252;
+ name="mouse-modes-6-16.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="mouse-modes-6-16.patch"
+Content-length: 4760
+
+diff -rup sav/fhandler.h ./fhandler.h
+--- sav/fhandler.h	2012-04-01 19:46:04.000000000 +0200
++++ ./fhandler.h	2012-04-03 15:52:07.893561600 +0200
+@@ -1282,6 +1282,8 @@ class dev_console
+ 
+   bool insert_mode;
+   int use_mouse;
++  bool ext_mouse_mode6;
++  bool ext_mouse_mode15;
+   bool use_focus;
+   bool raw_win32_keyboard_mode;
+ 
+diff -rup sav/fhandler_console.cc ./fhandler_console.cc
+--- sav/fhandler_console.cc	2012-04-02 00:28:55.000000000 +0200
++++ ./fhandler_console.cc	2012-04-03 15:56:13.993152400 +0200
+@@ -452,12 +452,13 @@ fhandler_console::read (void *pv, size_t
+ 	    {
+ 	      char c = dev_state.backspace_keycode;
+ 	      nread = 0;
+-	      if (control_key_state & ALT_PRESSED) {
+-		if (dev_state.metabit)
+-		  c |= 0x80;
+-		else
+-		  tmp[nread++] = '\e';
+-	      }
++	      if (control_key_state & ALT_PRESSED)
++		{
++		  if (dev_state.metabit)
++		    c |= 0x80;
++		  else
++		    tmp[nread++] = '\e';
++		}
+ 	      tmp[nread++] = c;
+ 	      tmp[nread] = 0;
+ 	      toadd = tmp;
+@@ -550,6 +551,7 @@ fhandler_console::read (void *pv, size_t
+ 		   events at the same time. */
+ 		int b = 0;
+ 		char sz[32];
++		char mode6_term = 'M';
+ 
+ 		if (mouse_event.dwEventFlags == MOUSE_WHEELED)
+ 		  {
+@@ -573,7 +575,7 @@ fhandler_console::read (void *pv, size_t
+ 		      {
+ 			b = dev_state.last_button_code;
+ 		      }
+-		    else if (mouse_event.dwButtonState < dev_state.dwLastButtonState)
++		    else if (mouse_event.dwButtonState < dev_state.dwLastButtonState && !dev_state.ext_mouse_mode6)
+ 		      {
+ 			b = 3;
+ 			strcpy (sz, "btn up");
+@@ -594,6 +596,10 @@ fhandler_console::read (void *pv, size_t
+ 			strcpy (sz, "btn3 down");
+ 		      }
+ 
++		    if (dev_state.ext_mouse_mode6)	/* distinguish release */
++		      if (mouse_event.dwButtonState < dev_state.dwLastButtonState)
++		        mode6_term = 'm';
++
+ 		    dev_state.last_button_code = b;
+ 
+ 		    if (mouse_event.dwEventFlags == MOUSE_MOVED)
+@@ -625,25 +631,46 @@ fhandler_console::read (void *pv, size_t
+ 		b |= dev_state.nModifiers;
+ 
+ 		/* We can now create the code. */
+-		sprintf (tmp, "\033[M%c%c%c", b + ' ', dev_state.dwMousePosition.X + ' ' + 1, dev_state.dwMousePosition.Y + ' ' + 1);
++		if (dev_state.ext_mouse_mode6)
++		  {
++		    sprintf (tmp, "\033[<%d;%d;%d%c", b, dev_state.dwMousePosition.X + 1, dev_state.dwMousePosition.Y + 1, mode6_term);
++		    nread = strlen (tmp);
++		  }
++		else if (dev_state.ext_mouse_mode15)
++		  {
++		    sprintf (tmp, "\033[%d;%d;%dM", b + 32, dev_state.dwMousePosition.X + 1, dev_state.dwMousePosition.Y + 1);
++		    nread = strlen (tmp);
++		  }
++		/* else if (dev_state.ext_mouse_mode5) not implemented */
++		else
++		  {
++		    unsigned int xcode = dev_state.dwMousePosition.X + ' ' + 1;
++		    unsigned int ycode = dev_state.dwMousePosition.Y + ' ' + 1;
++		    if (xcode >= 256)
++		      xcode = 0;
++		    if (ycode >= 256)
++		      ycode = 0;
++		    sprintf (tmp, "\033[M%c%c%c", b + ' ', xcode, ycode);
++		    nread = 6;	/* tmp may contain NUL bytes */
++		  }
+ 		syscall_printf ("mouse: %s at (%d,%d)", sz, dev_state.dwMousePosition.X, dev_state.dwMousePosition.Y);
+ 
+ 		toadd = tmp;
+-		nread = 6;
+ 	      }
+ 	  }
+ 	  break;
+ 
+ 	case FOCUS_EVENT:
+-	  if (dev_state.use_focus) {
+-	    if (input_rec.Event.FocusEvent.bSetFocus)
+-	      sprintf (tmp, "\033[I");
+-	    else
+-	      sprintf (tmp, "\033[O");
++	  if (dev_state.use_focus)
++	    {
++	      if (input_rec.Event.FocusEvent.bSetFocus)
++	        sprintf (tmp, "\033[I");
++	      else
++	        sprintf (tmp, "\033[O");
+ 
+-	    toadd = tmp;
+-	    nread = 3;
+-	  }
++	      toadd = tmp;
++	      nread = 3;
++	    }
+ 	  break;
+ 
+ 	case WINDOW_BUFFER_SIZE_EVENT:
+@@ -1516,22 +1543,30 @@ fhandler_console::char_command (char c)
+ 
+ 	case 1000: /* Mouse tracking */
+ 	  dev_state.use_mouse = (c == 'h') ? 1 : 0;
+-	  syscall_printf ("mouse support set to mode %d", dev_state.use_mouse);
+ 	  break;
+ 
+ 	case 1002: /* Mouse button event tracking */
+ 	  dev_state.use_mouse = (c == 'h') ? 2 : 0;
+-	  syscall_printf ("mouse support set to mode %d", dev_state.use_mouse);
+ 	  break;
+ 
+ 	case 1003: /* Mouse any event tracking */
+ 	  dev_state.use_mouse = (c == 'h') ? 3 : 0;
+-	  syscall_printf ("mouse support set to mode %d", dev_state.use_mouse);
+ 	  break;
+ 
+ 	case 1004: /* Focus in/out event reporting */
+ 	  dev_state.use_focus = (c == 'h') ? true : false;
+-	  syscall_printf ("focus reporting set to %d", dev_state.use_focus);
++	  break;
++
++	case 1005: /* Extended mouse mode */
++	  syscall_printf ("ignored h/l command for extended mouse mode");
++	  break;
++
++	case 1006: /* SGR extended mouse mode */
++	  dev_state.ext_mouse_mode6 = c == 'h';
++	  break;
++
++	case 1015: /* Urxvt extended mouse mode */
++	  dev_state.ext_mouse_mode15 = c == 'h';
+ 	  break;
+ 
+ 	case 2000: /* Raw keyboard mode */
+
+--------------070005070407050407070008--
