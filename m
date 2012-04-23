@@ -1,19 +1,22 @@
-Return-Path: <cygwin-patches-return-7643-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 3203 invoked by alias); 22 Apr 2012 19:08:20 -0000
-Received: (qmail 3184 invoked by uid 22791); 22 Apr 2012 19:08:18 -0000
-X-SWARE-Spam-Status: No, hits=-2.4 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,RCVD_IN_HOSTKARMA_YE,SPF_HELO_PASS,TW_CP,TW_RX
+Return-Path: <cygwin-patches-return-7644-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 7614 invoked by alias); 23 Apr 2012 19:35:33 -0000
+Received: (qmail 7564 invoked by uid 22791); 23 Apr 2012 19:35:32 -0000
+X-SWARE-Spam-Status: No, hits=-5.1 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,KHOP_RCVD_TRUST,KHOP_THREADED,RCVD_IN_DNSWL_LOW,RCVD_IN_HOSTKARMA_YE
 X-Spam-Check-By: sourceware.org
-Received: from moutng.kundenserver.de (HELO moutng.kundenserver.de) (212.227.126.186)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sun, 22 Apr 2012 19:07:57 +0000
-Received: from [127.0.0.1] (dslb-088-073-036-239.pools.arcor-ip.net [88.73.36.239])	by mrelayeu.kundenserver.de (node=mreu3) with ESMTP (Nemesis)	id 0M1dC2-1S7GD149Fa-00tkzj; Sun, 22 Apr 2012 21:07:56 +0200
-Message-ID: <4F945706.3050808@towo.net>
-Date: Sun, 22 Apr 2012 19:08:00 -0000
-From: Thomas Wolff <towo@towo.net>
-User-Agent: Mozilla/5.0 (Windows NT 5.1; rv:11.0) Gecko/20120327 Thunderbird/11.0.1
+Received: from mail-iy0-f171.google.com (HELO mail-iy0-f171.google.com) (209.85.210.171)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 23 Apr 2012 19:35:19 +0000
+Received: by iadj38 with SMTP id j38so20099651iad.2        for <cygwin-patches@cygwin.com>; Mon, 23 Apr 2012 12:35:18 -0700 (PDT)
+Received: by 10.50.153.134 with SMTP id vg6mr7603007igb.38.1335209718530;        Mon, 23 Apr 2012 12:35:18 -0700 (PDT)
+Received: from [192.168.0.100] (S0106000cf16f58b1.wp.shawcable.net. [24.79.200.150])        by mx.google.com with ESMTPS id re5sm12398383igb.0.2012.04.23.12.35.16        (version=TLSv1/SSLv3 cipher=OTHER);        Mon, 23 Apr 2012 12:35:17 -0700 (PDT)
+Message-ID: <4F95AEF4.7040407@users.sourceforge.net>
+Date: Mon, 23 Apr 2012 19:35:00 -0000
+From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:11.0) Gecko/20120327 Thunderbird/11.0.1
 MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Extended mouse coordinates
-Content-Type: multipart/mixed; boundary="------------070005070407050407070008"
-X-IsSubscribed: yes
+Subject: Re: Building for nocygwin
+References: <6BFA9AF2C7556E42AFF3F187ECAB07B802F9CFD0@bespdc01.mediaxim.local> <CA+sc5m=cKU5DaZFeJuEas-nfXD9uAsxq4V_9hcoUAM77u3OKNA@mail.gmail.com> <6BFA9AF2C7556E42AFF3F187ECAB07B802F9CFEF@bespdc01.mediaxim.local> <CA+sc5m=mC16bBFTBpPACoewcxKWt4KSsH22mUiVu0BrYCVObyQ@mail.gmail.com> <6BFA9AF2C7556E42AFF3F187ECAB07B802F9D004@bespdc01.mediaxim.local> <20120423140440.GG7097@calimero.vinschen.de> <6BFA9AF2C7556E42AFF3F187ECAB07B802F9D01E@bespdc01.mediaxim.local> <20120423153719.GB1133@ednor.casa.cgf.cx>
+In-Reply-To: <20120423153719.GB1133@ednor.casa.cgf.cx>
+Content-Type: multipart/mixed; boundary="------------050209080107040509000800"
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -23,211 +26,120 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2012-q2/txt/msg00012.txt.bz2
+X-SW-Source: 2012-q2/txt/msg00013.txt.bz2
 
 This is a multi-part message in MIME format.
---------------070005070407050407070008
-Content-Type: text/plain; charset=ISO-8859-15; format=flowed
+--------------050209080107040509000800
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
 Content-Transfer-Encoding: 7bit
-Content-length: 482
+Content-length: 472
 
-This patch replaces my previous proposal 
-(http://cygwin.com/ml/cygwin-patches/2012-q2/msg00005.html) with two 
-modifications:
+On 2012-04-23 10:37, Christopher Faylor wrote:
+> On Mon, Apr 23, 2012 at 04:52:54PM +0200, Michel Bardiaux wrote:
+>> I *get* that. My problem was, the web is so cluttered with pages mentioning
+>> the no-cygwin thing (including the cygwin FAQ!) that finding a good howto is
+>> nearly impossible.
+>>
+>> Is there a deep reason not to amend the FAQ?
+>
+> No, there is no reason not to change the FAQ.
+>
+> Could someone provide some appropriate words?
 
-  * Fixed a bug that suppressed mouse reporting at large coordinates (in
-    all modes actually:-\ )
-  * Added mouse mode 1005 (total of 3 three new modes, so all reporting
-    modes run by current terminal emulators would be implemented)
+Patch attached.
 
-I would appreciate the patch to be applied this time, planned to be my 
-last mouse patch :)
 
-Kind regards,
-Thomas
+Yaakov
 
---------------070005070407050407070008
-Content-Type: text/plain; charset=windows-1252;
- name="mouse-modes-6-16.changelog"
-Content-Transfer-Encoding: 7bit
+--------------050209080107040509000800
+Content-Type: application/x-itunes-itlp;
+ name="doc-no-cygwin.patch"
+Content-Transfer-Encoding: base64
 Content-Disposition: attachment;
- filename="mouse-modes-6-16.changelog"
-Content-length: 498
+ filename="doc-no-cygwin.patch"
+Content-length: 4954
 
-2012-04-03  Thomas Wolff  <towo@towo.net>
+MjAxMi0wNC0yMyAgWWFha292IFNlbGtvd2l0eiAgPHlzZWxrb3dpdHpALi4u
+PgoKCSogZmFxLXByb2dyYW1taW5nLnhtbCAoZmFxLnByb2dyYW1taW5nLm9i
+amVjdGl2ZS1jKTogVXBkYXRlIGZvciBnY2M0LgoJKGZhcS5wcm9ncmFtbWlu
+Zy53aW4zMi1hcGkpOiAtbXdpbmRvd3MgZG9lcyBpbmNsdWRlIC1sY29tZGxn
+MzIuCgkoZmFxLnByb2dyYW1taW5nLndpbjMyLW5vLWN5Z3dpbik6IFVwZGF0
+ZSBmb3IgcmVtb3ZhbCBvZiAtbW5vLWN5Z3dpbi4KCSogb3ZlcnZpZXcyLnNn
+bWwgKG92LWV4LXdpbik6IERpdHRvLgoKSW5kZXg6IGZhcS1wcm9ncmFtbWlu
+Zy54bWwKPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpSQ1MgZmlsZTogL2N2cy9z
+cmMvc3JjL3dpbnN1cC9kb2MvZmFxLXByb2dyYW1taW5nLnhtbCx2CnJldHJp
+ZXZpbmcgcmV2aXNpb24gMS4xOApkaWZmIC11IC1wIC1yMS4xOCBmYXEtcHJv
+Z3JhbW1pbmcueG1sCi0tLSBmYXEtcHJvZ3JhbW1pbmcueG1sCTEgTWFyIDIw
+MTIgMDc6MzU6MDIgLTAwMDAJMS4xOAorKysgZmFxLXByb2dyYW1taW5nLnht
+bAkyMyBBcHIgMjAxMiAxOToyOToyMCAtMDAwMApAQCAtNjIsMTAgKzYyLDkg
+QEAgd291bGQgYmUgZGlmZmljdWx0LgogPHF1ZXN0aW9uPjxwYXJhPldoZXJl
+IGlzIE9iamVjdGl2ZSBDPzwvcGFyYT48L3F1ZXN0aW9uPgogPGFuc3dlcj4K
+IAotPHBhcmE+T2JqZWN0aXZlIEMgaGFzbid0IGJlZW4gZGlzdHJpYnV0ZWQg
+d2l0aCB0aGUgQ3lnd2luIHZlcnNpb24gb2YgZ2NjCi1mb3IgYSBsb25nIHRp
+bWUuICBGb3Igc2V2ZXJhbCByZWFzb24gQ3lnd2luIHdhcyBzdHVjayB3aXRo
+IGdjYyB2ZXJzaW9uIDMuNC40LgotRm9ydHVuYXRlbHkgdGhlIGxhdGVzdCBn
+Y2MgbWFpbnRhaW5lciBpcyBxdWl0ZSBidXN5IHRvIGNyZWF0ZSBhIHdvcmtp
+bmcKLWdjYyA0LnggcmVsZWFzZSB3aGljaCBhbHNvIGNvbWVzIHdpdGggYW4g
+T2JqZWN0aXZlIEMgcGFja2FnZS4KKzxwYXJhPlN1cHBvcnQgZm9yIGNvbXBp
+bGluZyBPYmplY3RpdmUgQyBpcyBhdmFpbGFibGUgaW4gdGhlIDxsaXRlcmFs
+PmdjYzQtb2JqYzwvbGl0ZXJhbD4KK3BhY2thZ2U7IHJlc3VsdGluZyBiaW5h
+cmllcyB3aWxsIGRlcGVuZCBvbiB0aGUgPGxpdGVyYWw+bGlib2JqYzI8L2xp
+dGVyYWw+CitwYWNrYWdlIGF0IHJ1bnRpbWUuCiA8L3BhcmE+CiA8L2Fuc3dl
+cj48L3FhbmRhZW50cnk+CiAKQEAgLTE3Nyw3ICsxNzYsNyBAQCB3aXRoIGdk
+aTMyIGxpa2UgdGhpczoKIDxwYXJhPlRoZSByZWd1bGFyIHNldHVwIGFsbG93
+cyB5b3UgdG8gdXNlIHRoZSBvcHRpb24gLW13aW5kb3dzIG9uIHRoZQogY29t
+bWFuZCBsaW5lIHRvIGluY2x1ZGUgYSBzZXQgb2YgdGhlIGJhc2ljIGxpYnJh
+cmllcyAoYW5kIGFsc28KIG1ha2UgeW91ciBwcm9ncmFtIGEgR1VJIHByb2dy
+YW0gaW5zdGVhZCBvZiBhIGNvbnNvbGUgcHJvZ3JhbSksCi1pbmNsdWRpbmcg
+dXNlcjMyLCBnZGkzMiBhbmQsIElJUkMsIGNvbWRsZzMyLgoraW5jbHVkaW5n
+IHVzZXIzMiwgZ2RpMzIgYW5kIGNvbWRsZzMyLgogPC9wYXJhPgogPHBhcmE+
+SXQgaXMgYSBnb29kIGlkZWEgdG8gcHV0IGltcG9ydCBsaWJyYXJpZXMgbGFz
+dCBvbiB5b3VyIGxpbmsgbGluZSwKIG9yIGF0IGxlYXN0IGFmdGVyIGFsbCB0
+aGUgb2JqZWN0IGZpbGVzIGFuZCBzdGF0aWMgbGlicmFyaWVzIHRoYXQgcmVm
+ZXJlbmNlIHRoZW0uCkBAIC0xOTQsMTEgKzE5MywxMCBAQCBhcyB3ZWxsIGFz
+IHRoZSBVc2VyJ3MgR3VpZGUgc2VjdGlvbgogPHF1ZXN0aW9uPjxwYXJhPkhv
+dyBkbyBJIGNvbXBpbGUgYSBXaW4zMiBleGVjdXRhYmxlIHRoYXQgZG9lc24n
+dCB1c2UgQ3lnd2luPzwvcGFyYT48L3F1ZXN0aW9uPgogPGFuc3dlcj4KIAot
+PHBhcmE+PGVtcGhhc2lzIHJvbGU9J2JvbGQnPihQbGVhc2Ugbm90ZTogVGhp
+cyBzZWN0aW9uIGhhcyBub3QgeWV0IGJlZW4gdXBkYXRlZCBmb3IgdGhlIGxh
+dGVzdCBuZXQgcmVsZWFzZS4pPC9lbXBoYXNpcz4KLTwvcGFyYT4KLTxwYXJh
+PlRoZSAtbW5vLWN5Z3dpbiBmbGFnIHRvIGdjYyBtYWtlcyBnY2MgbGluayBh
+Z2FpbnN0IHN0YW5kYXJkIE1pY3Jvc29mdAotRExMcyBpbnN0ZWFkIG9mIEN5
+Z3dpbi4gIFRoaXMgaXMgZGVzaXJhYmxlIGZvciBuYXRpdmUgV2luZG93cyBw
+cm9ncmFtcwotdGhhdCBkb24ndCBuZWVkIGEgVU5JWCBlbXVsYXRpb24gbGF5
+ZXIuCis8cGFyYT5UaGUgY29wbWlsZXJzIHByb3ZpZGVkIGJ5IHRoZSA8bGl0
+ZXJhbD5taW5ndy1nY2M8L2xpdGVyYWw+LAorPGxpdGVyYWw+bWluZ3c2NC1p
+Njg2LWdjYzwvbGl0ZXJhbD4sIGFuZCA8bGl0ZXJhbD5taW5ndzY0LXg4Nl82
+NC1nY2M8L2xpdGVyYWw+CitwYWNrYWdlcyBsaW5rIGFnYWluc3Qgc3RhbmRh
+cmQgTWljcm9zb2Z0IERMTHMgaW5zdGVhZCBvZiBDeWd3aW4uIFRoaXMgaXMK
+K2Rlc2lyYWJsZSBmb3IgbmF0aXZlIFdpbmRvd3MgcHJvZ3JhbXMgdGhhdCBk
+b24ndCBuZWVkIGEgVU5JWCBlbXVsYXRpb24gbGF5ZXIuCiA8L3BhcmE+CiA8
+cGFyYT5UaGlzIGlzIG5vdCB0byBiZSBjb25mdXNlZCB3aXRoICdNaW5HVycg
+KE1pbmltYWxpc3QgR05VIGZvciBXaW5kb3dzKSwKIHdoaWNoIGlzIGEgY29t
+cGxldGVseSBzZXBhcmF0ZSBlZmZvcnQuICBUaGF0IHByb2plY3QncyBob21l
+IHBhZ2UgaXMKSW5kZXg6IG92ZXJ2aWV3Mi5zZ21sCj09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT0KUkNTIGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvZG9jL292
+ZXJ2aWV3Mi5zZ21sLHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjIyCmRpZmYg
+LXUgLXAgLXIxLjIyIG92ZXJ2aWV3Mi5zZ21sCi0tLSBvdmVydmlldzIuc2dt
+bAkzMCBNYXIgMjAxMiAxMTozMDoxMyAtMDAwMAkxLjIyCisrKyBvdmVydmll
+dzIuc2dtbAkyMyBBcHIgMjAxMiAxOToyOToyMSAtMDAwMApAQCAtMzUsOSAr
+MzUsMTAgQEAgdGhlIDxsaXRlcmFsPi91c3Ivc2hhcmUvZG9jL0N5Z3dpbi88
+L2xpdAogPHBhcmE+CiBEZXZlbG9wZXJzIGNvbWluZyBmcm9tIGEgV2luZG93
+cyBiYWNrZ3JvdW5kIHdpbGwgYmUgYWJsZSB0byB3cml0ZSAKIGNvbnNvbGUg
+b3IgR1VJIGV4ZWN1dGFibGVzIHRoYXQgcmVseSBvbiB0aGUgTWljcm9zb2Z0
+IFdpbjMyIEFQSSBpbnN0ZWFkCi1vZiBDeWd3aW4gdXNpbmcgdGhlIC1tbm8t
+Y3lnd2luIG9wdGlvbiB0byBHQ0MuICBUaGUgPGNvbW1hbmQ+LXNoYXJlZDwv
+Y29tbWFuZD4KLW9wdGlvbiBhbGxvd3MgdG8gd3JpdGUgV2luZG93cyBEeW5h
+bWljYWxseSBMaW5rZWQgTGlicmFyaWVzIChETExzKS4gIFRoZQotcmVzb3Vy
+Y2UgY29tcGlsZXIgPGNvbW1hbmQ+d2luZHJlczwvY29tbWFuZD4gaXMgYWxz
+byBwcm92aWRlZC4KK29mIEN5Z3dpbiB1c2luZyB0aGUgbWluZ3czMiBvciBt
+aW5ndzY0IGNyb3NzLWNvbXBpbGVyIHRvb2xjaGFpbnMuICBUaGUKKzxjb21t
+YW5kPi1zaGFyZWQ8L2NvbW1hbmQ+IG9wdGlvbiB0byBHQ0MgYWxsb3dzIHRv
+IHdyaXRlIFdpbmRvd3MgRHluYW1pY2FsbHkKK0xpbmtlZCBMaWJyYXJpZXMg
+KERMTHMpLiAgVGhlIHJlc291cmNlIGNvbXBpbGVyIDxjb21tYW5kPndpbmRy
+ZXM8L2NvbW1hbmQ+CitpcyBhbHNvIHByb3ZpZGVkLgogPC9wYXJhPgogPC9z
+ZWN0MT4KIAo=
 
-	* fhandler.h (class dev_console): Two flags for extended mouse modes.
-	* fhandler_console.cc (fhandler_console::read): Implemented 
-	extended mouse modes 1015 (urxvt, mintty, xterm) and 1006 (xterm).
-	Not implemented extended mouse mode 1005 (xterm, mintty).
-	Supporting mouse coordinates greater than 222 (each axis).
-	Also: two { wrap formatting consistency fixes.
-	(fhandler_console::char_command) Initialization of enhanced 
-	mouse reporting modes.
-
-
---------------070005070407050407070008
-Content-Type: text/plain; charset=windows-1252;
- name="mouse-modes-6-16.patch"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="mouse-modes-6-16.patch"
-Content-length: 4760
-
-diff -rup sav/fhandler.h ./fhandler.h
---- sav/fhandler.h	2012-04-01 19:46:04.000000000 +0200
-+++ ./fhandler.h	2012-04-03 15:52:07.893561600 +0200
-@@ -1282,6 +1282,8 @@ class dev_console
- 
-   bool insert_mode;
-   int use_mouse;
-+  bool ext_mouse_mode6;
-+  bool ext_mouse_mode15;
-   bool use_focus;
-   bool raw_win32_keyboard_mode;
- 
-diff -rup sav/fhandler_console.cc ./fhandler_console.cc
---- sav/fhandler_console.cc	2012-04-02 00:28:55.000000000 +0200
-+++ ./fhandler_console.cc	2012-04-03 15:56:13.993152400 +0200
-@@ -452,12 +452,13 @@ fhandler_console::read (void *pv, size_t
- 	    {
- 	      char c = dev_state.backspace_keycode;
- 	      nread = 0;
--	      if (control_key_state & ALT_PRESSED) {
--		if (dev_state.metabit)
--		  c |= 0x80;
--		else
--		  tmp[nread++] = '\e';
--	      }
-+	      if (control_key_state & ALT_PRESSED)
-+		{
-+		  if (dev_state.metabit)
-+		    c |= 0x80;
-+		  else
-+		    tmp[nread++] = '\e';
-+		}
- 	      tmp[nread++] = c;
- 	      tmp[nread] = 0;
- 	      toadd = tmp;
-@@ -550,6 +551,7 @@ fhandler_console::read (void *pv, size_t
- 		   events at the same time. */
- 		int b = 0;
- 		char sz[32];
-+		char mode6_term = 'M';
- 
- 		if (mouse_event.dwEventFlags == MOUSE_WHEELED)
- 		  {
-@@ -573,7 +575,7 @@ fhandler_console::read (void *pv, size_t
- 		      {
- 			b = dev_state.last_button_code;
- 		      }
--		    else if (mouse_event.dwButtonState < dev_state.dwLastButtonState)
-+		    else if (mouse_event.dwButtonState < dev_state.dwLastButtonState && !dev_state.ext_mouse_mode6)
- 		      {
- 			b = 3;
- 			strcpy (sz, "btn up");
-@@ -594,6 +596,10 @@ fhandler_console::read (void *pv, size_t
- 			strcpy (sz, "btn3 down");
- 		      }
- 
-+		    if (dev_state.ext_mouse_mode6)	/* distinguish release */
-+		      if (mouse_event.dwButtonState < dev_state.dwLastButtonState)
-+		        mode6_term = 'm';
-+
- 		    dev_state.last_button_code = b;
- 
- 		    if (mouse_event.dwEventFlags == MOUSE_MOVED)
-@@ -625,25 +631,46 @@ fhandler_console::read (void *pv, size_t
- 		b |= dev_state.nModifiers;
- 
- 		/* We can now create the code. */
--		sprintf (tmp, "\033[M%c%c%c", b + ' ', dev_state.dwMousePosition.X + ' ' + 1, dev_state.dwMousePosition.Y + ' ' + 1);
-+		if (dev_state.ext_mouse_mode6)
-+		  {
-+		    sprintf (tmp, "\033[<%d;%d;%d%c", b, dev_state.dwMousePosition.X + 1, dev_state.dwMousePosition.Y + 1, mode6_term);
-+		    nread = strlen (tmp);
-+		  }
-+		else if (dev_state.ext_mouse_mode15)
-+		  {
-+		    sprintf (tmp, "\033[%d;%d;%dM", b + 32, dev_state.dwMousePosition.X + 1, dev_state.dwMousePosition.Y + 1);
-+		    nread = strlen (tmp);
-+		  }
-+		/* else if (dev_state.ext_mouse_mode5) not implemented */
-+		else
-+		  {
-+		    unsigned int xcode = dev_state.dwMousePosition.X + ' ' + 1;
-+		    unsigned int ycode = dev_state.dwMousePosition.Y + ' ' + 1;
-+		    if (xcode >= 256)
-+		      xcode = 0;
-+		    if (ycode >= 256)
-+		      ycode = 0;
-+		    sprintf (tmp, "\033[M%c%c%c", b + ' ', xcode, ycode);
-+		    nread = 6;	/* tmp may contain NUL bytes */
-+		  }
- 		syscall_printf ("mouse: %s at (%d,%d)", sz, dev_state.dwMousePosition.X, dev_state.dwMousePosition.Y);
- 
- 		toadd = tmp;
--		nread = 6;
- 	      }
- 	  }
- 	  break;
- 
- 	case FOCUS_EVENT:
--	  if (dev_state.use_focus) {
--	    if (input_rec.Event.FocusEvent.bSetFocus)
--	      sprintf (tmp, "\033[I");
--	    else
--	      sprintf (tmp, "\033[O");
-+	  if (dev_state.use_focus)
-+	    {
-+	      if (input_rec.Event.FocusEvent.bSetFocus)
-+	        sprintf (tmp, "\033[I");
-+	      else
-+	        sprintf (tmp, "\033[O");
- 
--	    toadd = tmp;
--	    nread = 3;
--	  }
-+	      toadd = tmp;
-+	      nread = 3;
-+	    }
- 	  break;
- 
- 	case WINDOW_BUFFER_SIZE_EVENT:
-@@ -1516,22 +1543,30 @@ fhandler_console::char_command (char c)
- 
- 	case 1000: /* Mouse tracking */
- 	  dev_state.use_mouse = (c == 'h') ? 1 : 0;
--	  syscall_printf ("mouse support set to mode %d", dev_state.use_mouse);
- 	  break;
- 
- 	case 1002: /* Mouse button event tracking */
- 	  dev_state.use_mouse = (c == 'h') ? 2 : 0;
--	  syscall_printf ("mouse support set to mode %d", dev_state.use_mouse);
- 	  break;
- 
- 	case 1003: /* Mouse any event tracking */
- 	  dev_state.use_mouse = (c == 'h') ? 3 : 0;
--	  syscall_printf ("mouse support set to mode %d", dev_state.use_mouse);
- 	  break;
- 
- 	case 1004: /* Focus in/out event reporting */
- 	  dev_state.use_focus = (c == 'h') ? true : false;
--	  syscall_printf ("focus reporting set to %d", dev_state.use_focus);
-+	  break;
-+
-+	case 1005: /* Extended mouse mode */
-+	  syscall_printf ("ignored h/l command for extended mouse mode");
-+	  break;
-+
-+	case 1006: /* SGR extended mouse mode */
-+	  dev_state.ext_mouse_mode6 = c == 'h';
-+	  break;
-+
-+	case 1015: /* Urxvt extended mouse mode */
-+	  dev_state.ext_mouse_mode15 = c == 'h';
- 	  break;
- 
- 	case 2000: /* Raw keyboard mode */
-
---------------070005070407050407070008--
+--------------050209080107040509000800--
