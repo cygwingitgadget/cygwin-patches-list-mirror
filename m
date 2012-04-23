@@ -1,27 +1,21 @@
-Return-Path: <cygwin-patches-return-7646-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 26634 invoked by alias); 23 Apr 2012 20:06:48 -0000
-Received: (qmail 26622 invoked by uid 22791); 23 Apr 2012 20:06:47 -0000
-X-SWARE-Spam-Status: No, hits=-1.7 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,RCVD_IN_HOSTKARMA_YE
+Return-Path: <cygwin-patches-return-7647-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 15757 invoked by alias); 23 Apr 2012 22:17:31 -0000
+Received: (qmail 15742 invoked by uid 22791); 23 Apr 2012 22:17:30 -0000
+X-SWARE-Spam-Status: No, hits=-4.4 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,KHOP_RCVD_TRUST,RCVD_IN_DNSWL_LOW,RCVD_IN_HOSTKARMA_YE
 X-Spam-Check-By: sourceware.org
-Received: from mho-01-ewr.mailhop.org (HELO mho-01-ewr.mailhop.org) (204.13.248.71)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 23 Apr 2012 20:06:32 +0000
-Received: from pool-98-110-183-154.bstnma.fios.verizon.net ([98.110.183.154] helo=cgf.cx)	by mho-01-ewr.mailhop.org with esmtpa (Exim 4.72)	(envelope-from <cgf@cgf.cx>)	id 1SMPWp-000Bmr-Qc	for cygwin-patches@cygwin.com; Mon, 23 Apr 2012 20:06:31 +0000
-Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id 1825013C076	for <cygwin-patches@cygwin.com>; Mon, 23 Apr 2012 16:06:31 -0400 (EDT)
-X-Mail-Handler: MailHop Outbound by DynDNS
-X-Report-Abuse-To: abuse@dyndns.com (see http://www.dyndns.com/services/mailhop/outbound_abuse.html for abuse reporting information)
-X-MHO-User: U2FsdGVkX1+MnzYDaklsyoBaf5WOmXxo
-Date: Mon, 23 Apr 2012 20:06:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: Building for nocygwin
-Message-ID: <20120423200631.GC4504@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <6BFA9AF2C7556E42AFF3F187ECAB07B802F9CFD0@bespdc01.mediaxim.local> <CA+sc5m=cKU5DaZFeJuEas-nfXD9uAsxq4V_9hcoUAM77u3OKNA@mail.gmail.com> <6BFA9AF2C7556E42AFF3F187ECAB07B802F9CFEF@bespdc01.mediaxim.local> <CA+sc5m=mC16bBFTBpPACoewcxKWt4KSsH22mUiVu0BrYCVObyQ@mail.gmail.com> <6BFA9AF2C7556E42AFF3F187ECAB07B802F9D004@bespdc01.mediaxim.local> <20120423140440.GG7097@calimero.vinschen.de> <6BFA9AF2C7556E42AFF3F187ECAB07B802F9D01E@bespdc01.mediaxim.local> <20120423153719.GB1133@ednor.casa.cgf.cx> <4F95AEF4.7040407@users.sourceforge.net>
+Received: from mail-iy0-f171.google.com (HELO mail-iy0-f171.google.com) (209.85.210.171)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 23 Apr 2012 22:17:10 +0000
+Received: by iadj38 with SMTP id j38so62147iad.2        for <cygwin-patches@cygwin.com>; Mon, 23 Apr 2012 15:17:10 -0700 (PDT)
+Received: by 10.50.220.129 with SMTP id pw1mr7958217igc.29.1335219430211;        Mon, 23 Apr 2012 15:17:10 -0700 (PDT)
+Received: from [192.168.0.100] (S0106000cf16f58b1.wp.shawcable.net. [24.79.200.150])        by mx.google.com with ESMTPS id en3sm28764487igc.2.2012.04.23.15.17.08        (version=TLSv1/SSLv3 cipher=OTHER);        Mon, 23 Apr 2012 15:17:09 -0700 (PDT)
+Message-ID: <4F95D4E6.8010907@users.sourceforge.net>
+Date: Mon, 23 Apr 2012 22:17:00 -0000
+From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:11.0) Gecko/20120327 Thunderbird/11.0.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4F95AEF4.7040407@users.sourceforge.net>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+To: cygwin-patches@cygwin.com
+Subject: Regenerate configures
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -31,27 +25,11 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2012-q2/txt/msg00015.txt.bz2
+X-SW-Source: 2012-q2/txt/msg00016.txt.bz2
 
-On Mon, Apr 23, 2012 at 02:35:16PM -0500, Yaakov (Cygwin/X) wrote:
->On 2012-04-23 10:37, Christopher Faylor wrote:
->> On Mon, Apr 23, 2012 at 04:52:54PM +0200, Michel Bardiaux wrote:
->>> I *get* that. My problem was, the web is so cluttered with pages mentioning
->>> the no-cygwin thing (including the cygwin FAQ!) that finding a good howto is
->>> nearly impossible.
->>>
->>> Is there a deep reason not to amend the FAQ?
->>
->> No, there is no reason not to change the FAQ.
->>
->> Could someone provide some appropriate words?
->
->Patch attached.
+cygwin/doc/configure and cygwin/testsuite/configure are now the only 
+configure scripts in the winsup tree which were generated with 
+autoconf-2.5x.  Any objections to regenerating them with 2.68?
 
-Thanks very much.  Please check in (with typo correction mentioned in
-followon mail).
 
-I suspect that we'll probably need to flesh this out over time but at
-least we aren't suggesting the use of a deprecated compiler option now.
-
-cgf
+Yaakov
