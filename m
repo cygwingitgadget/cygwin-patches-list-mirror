@@ -1,22 +1,19 @@
-Return-Path: <cygwin-patches-return-7660-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 30009 invoked by alias); 4 May 2012 05:49:46 -0000
-Received: (qmail 29997 invoked by uid 22791); 4 May 2012 05:49:45 -0000
-X-SWARE-Spam-Status: No, hits=-2.8 required=5.0	tests=BAYES_00,KHOP_RCVD_UNTRUST,KHOP_THREADED,RCVD_IN_DNSWL_LOW,SPF_NEUTRAL,T_RP_MATCHES_RCVD
+Return-Path: <cygwin-patches-return-7661-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 2154 invoked by alias); 9 May 2012 08:18:50 -0000
+Received: (qmail 2110 invoked by uid 22791); 9 May 2012 08:18:43 -0000
+X-SWARE-Spam-Status: No, hits=-4.4 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,KHOP_RCVD_TRUST,RCVD_IN_DNSWL_LOW,RCVD_IN_HOSTKARMA_YE,TW_CP
 X-Spam-Check-By: sourceware.org
-Received: from bureau83.ns.utoronto.ca (HELO bureau83.ns.utoronto.ca) (128.100.132.183)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 04 May 2012 05:49:32 +0000
-Received: from [192.168.2.111] (66.219.228.149.provo.dynamic.broadweavenetworks.net [66.219.228.149])	(authenticated bits=0)	by bureau83.ns.utoronto.ca (8.13.8/8.13.8) with ESMTP id q445nRoA031135	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO)	for <cygwin-patches@cygwin.com>; Fri, 4 May 2012 01:49:30 -0400
-Message-ID: <4FA36DE9.6090404@cs.utoronto.ca>
-Date: Fri, 04 May 2012 05:49:00 -0000
-From: Ryan Johnson <ryan.johnson@cs.utoronto.ca>
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:12.0) Gecko/20120428 Thunderbird/12.0.1
-MIME-Version: 1.0
+Received: from mail-yx0-f171.google.com (HELO mail-yx0-f171.google.com) (209.85.213.171)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 09 May 2012 08:18:29 +0000
+Received: by yenq11 with SMTP id q11so2965yen.2        for <cygwin-patches@cygwin.com>; Wed, 09 May 2012 01:18:29 -0700 (PDT)
+Received: by 10.50.77.136 with SMTP id s8mr12657323igw.56.1336551508603;        Wed, 09 May 2012 01:18:28 -0700 (PDT)
+Received: from [192.168.0.100] (S0106000cf16f58b1.wp.shawcable.net. [24.79.200.150])        by mx.google.com with ESMTPS id em4sm10437757igc.16.2012.05.09.01.18.27        (version=SSLv3 cipher=OTHER);        Wed, 09 May 2012 01:18:28 -0700 (PDT)
+Message-ID: <1336551515.8880.4.camel@YAAKOV04>
+Subject: [PATCH] Export memrchr
+From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
 To: cygwin-patches@cygwin.com
-Subject: Re: elf.h incomplete
-References: <4FA281E3.4020008@samsung.com> <CA+sc5mnHw0CuSzaPiAV4ALQVEKs6_Nc20JrEvu-r121nZU3REg@mail.gmail.com> <4FA2870D.1030604@samsung.com> <4FA28961.2010407@cs.utoronto.ca> <4FA28F35.6060000@samsung.com> <4FA29070.1060300@gmail.com> <20120503152458.GB22355@ednor.casa.cgf.cx> <4FA300AB.3080306@users.sourceforge.net> <20120504054649.GA30831@ednor.casa.cgf.cx>
-In-Reply-To: <20120504054649.GA30831@ednor.casa.cgf.cx>
-Content-Type: text/plain; charset=ISO-8859-1; format=flowed
-Content-Transfer-Encoding: 7bit
-X-IsSubscribed: yes
+Date: Wed, 09 May 2012 08:18:00 -0000
+Content-Type: multipart/mixed; boundary="=-5cwZUxMEO38DiYR5Hd9i"
+Mime-Version: 1.0
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,24 +23,113 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2012-q2/txt/msg00029.txt.bz2
+X-SW-Source: 2012-q2/txt/msg00030.txt.bz2
 
-On 03/05/2012 11:46 PM, Christopher Faylor wrote:
-> On Thu, May 03, 2012 at 05:03:23PM -0500, Yaakov (Cygwin/X) wrote:
->> On 2012-05-03 10:24, Christopher Faylor wrote:
->>> Right.  I've noticed the incompleteness of elf.h from time to time too but
->>> extending it would be tedious since you can't just cut/paste from a GPLv*
->>> file.  Maybe one of the BSDs has something more complete these days?  We
->>> could use one of those.
->> This patch is a direct copy from FreeBSD HEAD.  I have NOT tested it,
->> though.
-> I think this really needs to be tested against something that uses it.
->
-> Anyone have an application that could exercise this?
-Linux kernel build's "modpost" utility that started off this whole 
-discussion? I'm not going to be able to test it any time soon, myself, tho.
 
-Also, libelf might use it, since it supplies its own values only if it 
-can't find them in system headers, IIRC.
+--=-5cwZUxMEO38DiYR5Hd9i
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Content-length: 94
 
-Ryan
+Here are the patches for exporting memrchr, once my patches to newlib
+are accepted.
+
+
+Yaakov
+
+
+--=-5cwZUxMEO38DiYR5Hd9i
+Content-Disposition: attachment; filename="cygwin-memrchr.patch"
+Content-Type: text/x-patch; name="cygwin-memrchr.patch"; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Content-length: 1926
+
+2012-05-09  Yaakov Selkowitz  <yselkowitz@...>
+
+	* cygwin.din (memrchr): Export.
+	* posix.sgml (std-gnu): Add memrchr.
+	* include/cygwin/version.h (CYGWIN_VERSION_API_MINOR): Bump.
+
+Index: cygwin.din
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/cygwin.din,v
+retrieving revision 1.254
+diff -u -p -r1.254 cygwin.din
+--- cygwin.din	22 Feb 2012 01:58:24 -0000	1.254
++++ cygwin.din	9 May 2012 08:11:16 -0000
+@@ -1062,6 +1062,7 @@ memmove NOSIGFE
+ _memmove = memmove NOSIGFE
+ mempcpy NOSIGFE
+ __mempcpy = mempcpy NOSIGFE
++memrchr NOSIGFE
+ memset NOSIGFE
+ _memset = memset NOSIGFE
+ mkdir SIGFE
+Index: posix.sgml
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/posix.sgml,v
+retrieving revision 1.77
+diff -u -p -r1.77 posix.sgml
+--- posix.sgml	30 Mar 2012 11:29:56 -0000	1.77
++++ posix.sgml	9 May 2012 08:11:16 -0000
+@@ -1126,6 +1126,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008)
+     lsetxattr
+     memmem
+     mempcpy
++    memrchr
+     mkostemp
+     mkostemps
+     pipe2
+Index: include/cygwin/version.h
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/include/cygwin/version.h,v
+retrieving revision 1.368
+diff -u -p -r1.368 version.h
+--- include/cygwin/version.h	24 Apr 2012 16:05:20 -0000	1.368
++++ include/cygwin/version.h	9 May 2012 08:11:17 -0000
+@@ -429,12 +429,13 @@ details. */
+       258: Export get_current_dir_name.
+       259: Export pthread_sigqueue.
+       260: Export scandirat.
++      261: Export memrchr.
+      */
+ 
+      /* Note that we forgot to bump the api for ualarm, strtoll, strtoull */
+ 
+ #define CYGWIN_VERSION_API_MAJOR 0
+-#define CYGWIN_VERSION_API_MINOR 260
++#define CYGWIN_VERSION_API_MINOR 261
+ 
+      /* There is also a compatibity version number associated with the
+ 	shared memory regions.  It is incremented when incompatible
+
+--=-5cwZUxMEO38DiYR5Hd9i
+Content-Disposition: attachment; filename="doc-memrchr.patch"
+Content-Type: text/x-patch; name="doc-memrchr.patch"; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Content-length: 639
+
+2012-05-09  Yaakov Selkowitz  <yselkowitz@...>
+
+	* new-features.sgml (ov-new1.7.15): Document memrchr.
+
+Index: new-features.sgml
+===================================================================
+RCS file: /cvs/src/src/winsup/doc/new-features.sgml,v
+retrieving revision 1.116
+diff -u -p -r1.116 new-features.sgml
+--- new-features.sgml	9 May 2012 07:32:48 -0000	1.116
++++ new-features.sgml	9 May 2012 08:15:17 -0000
+@@ -7,6 +7,10 @@
+ CYGWIN=pipe_byte option now forces the opening of pipes in byte mode rather than message mode.
+ </para></listitem>
+ 
++<listitem><para>
++New API: memrchr.
++</para></listitem>
++
+ </itemizedlist>
+ 
+ </sect2>
+
+--=-5cwZUxMEO38DiYR5Hd9i--
