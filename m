@@ -1,20 +1,22 @@
-Return-Path: <cygwin-patches-return-7665-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 27973 invoked by alias); 5 Jun 2012 05:09:05 -0000
-Received: (qmail 27955 invoked by uid 22791); 5 Jun 2012 05:09:04 -0000
-X-SWARE-Spam-Status: No, hits=-4.4 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,KHOP_RCVD_TRUST,RCVD_IN_DNSWL_LOW,RCVD_IN_HOSTKARMA_YE,TW_TM
+Return-Path: <cygwin-patches-return-7666-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 31486 invoked by alias); 5 Jun 2012 05:20:09 -0000
+Received: (qmail 31473 invoked by uid 22791); 5 Jun 2012 05:20:07 -0000
+X-SWARE-Spam-Status: No, hits=-5.2 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,KHOP_RCVD_TRUST,KHOP_THREADED,RCVD_IN_DNSWL_LOW,RCVD_IN_HOSTKARMA_YE,TW_TM
 X-Spam-Check-By: sourceware.org
-Received: from mail-gg0-f171.google.com (HELO mail-gg0-f171.google.com) (209.85.161.171)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 05 Jun 2012 05:08:47 +0000
-Received: by ggmi1 with SMTP id i1so3831836ggm.2        for <cygwin-patches@cygwin.com>; Mon, 04 Jun 2012 22:08:46 -0700 (PDT)
-Received: by 10.50.203.39 with SMTP id kn7mr679223igc.53.1338872926022;        Mon, 04 Jun 2012 22:08:46 -0700 (PDT)
-Received: from [192.168.0.100] (S0106000cf16f58b1.wp.shawcable.net. [24.79.200.150])        by mx.google.com with ESMTPS id k6sm822893igw.14.2012.06.04.22.08.44        (version=TLSv1/SSLv3 cipher=OTHER);        Mon, 04 Jun 2012 22:08:45 -0700 (PDT)
-Message-ID: <4FCD945D.8070209@users.sourceforge.net>
-Date: Tue, 05 Jun 2012 05:09:00 -0000
+Received: from mail-gh0-f171.google.com (HELO mail-gh0-f171.google.com) (209.85.160.171)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 05 Jun 2012 05:19:53 +0000
+Received: by ghy10 with SMTP id 10so4029632ghy.2        for <cygwin-patches@cygwin.com>; Mon, 04 Jun 2012 22:19:52 -0700 (PDT)
+Received: by 10.50.185.163 with SMTP id fd3mr780360igc.22.1338873592175;        Mon, 04 Jun 2012 22:19:52 -0700 (PDT)
+Received: from [192.168.0.100] (S0106000cf16f58b1.wp.shawcable.net. [24.79.200.150])        by mx.google.com with ESMTPS id pp4sm874569igb.5.2012.06.04.22.19.50        (version=TLSv1/SSLv3 cipher=OTHER);        Mon, 04 Jun 2012 22:19:51 -0700 (PDT)
+Message-ID: <4FCD96F7.4040402@users.sourceforge.net>
+Date: Tue, 05 Jun 2012 05:20:00 -0000
 From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
 User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:12.0) Gecko/20120428 Thunderbird/12.0.1
 MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Add getmntent_r
-Content-Type: multipart/mixed; boundary="------------000807080101010106080201"
+Subject: Re: [PATCH] Add getmntent_r
+References: <4FCD945D.8070209@users.sourceforge.net>
+In-Reply-To: <4FCD945D.8070209@users.sourceforge.net>
+Content-Type: multipart/mixed; boundary="------------040705010202050307000305"
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -24,153 +26,80 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2012-q2/txt/msg00034.txt.bz2
+X-SW-Source: 2012-q2/txt/msg00035.txt.bz2
 
 This is a multi-part message in MIME format.
---------------000807080101010106080201
+--------------040705010202050307000305
 Content-Type: text/plain; charset=ISO-8859-1; format=flowed
 Content-Transfer-Encoding: 7bit
-Content-length: 278
+Content-length: 336
 
-This patch set implements getmntent_r, a GNU extension:
+On 2012-06-05 00:08, Yaakov (Cygwin/X) wrote:
+> This patch set implements getmntent_r, a GNU extension:
+>
+> http://man7.org/linux/man-pages/man3/getmntent.3.html
+>
+> libvirt needs this[1], as I just (re)discovered. Patches for
+> winsup/cygwin and winsup/doc attached.
 
-http://man7.org/linux/man-pages/man3/getmntent.3.html
-
-libvirt needs this[1], as I just (re)discovered.  Patches for 
-winsup/cygwin and winsup/doc attached.
+And here is the code I used to test on Cygwin and Linux.
 
 
 Yaakov
 
-[1] http://cygwin.com/ml/cygwin/2010-04/msg00885.html
 
---------------000807080101010106080201
-Content-Type: application/x-itunes-itlp;
- name="cygwin-getmntent_r.patch"
-Content-Transfer-Encoding: base64
+--------------040705010202050307000305
+Content-Type: text/plain; charset=windows-1252;
+ name="mntent-test.c"
+Content-Transfer-Encoding: 7bit
 Content-Disposition: attachment;
- filename="cygwin-getmntent_r.patch"
-Content-length: 5966
+ filename="mntent-test.c"
+Content-length: 1286
 
-MjAxMi0wNi0wNCAgWWFha292IFNlbGtvd2l0eiAgPHlzZWxrb3dpdHpALi4u
-PgoKCSogY3lnd2luLmRpbiAoZ2V0bW50ZW50X3IpOiBFeHBvcnQuCgkqIG1v
-dW50LmNjIChnZXRtbnRlbnRfcik6IE5ldyBmdW5jdGlvbi4KCSogcG9zaXgu
-c2dtbCAoc3RkLWdudSk6IEFkZCBnZXRtbnRlbnRfci4KCSogaW5jbHVkZS9t
-bnRlbnQuaCAoZ2V0bW50ZW50X3IpOiBEZWNsYXJlLgoJKiBpbmNsdWRlL2N5
-Z3dpbi92ZXJzaW9uLmggKENZR1dJTl9WRVJTSU9OX0FQSV9NSU5PUik6IEJ1
-bXAuCgpJbmRleDogbW91bnQuY2MKPT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQpS
-Q1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4vbW91bnQuY2Ms
-dgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuOTAKZGlmZiAtdSAtcCAtcjEuOTAg
-bW91bnQuY2MKLS0tIG1vdW50LmNjCTMgSnVuIDIwMTIgMTY6NDY6NTMgLTAw
-MDAJMS45MAorKysgbW91bnQuY2MJNSBKdW4gMjAxMiAwMzozODo0NSAtMDAw
-MApAQCAtMTkwMCw2ICsxOTAwLDM1IEBAIGdldG1udGVudCAoRklMRSAqKQog
-ICByZXR1cm4gbW91bnRfdGFibGUtPmdldG1udGVudCAoX215X3Rscy5sb2Nh
-bHMuaXRlcmF0aW9uKyspOwogfQogCitleHRlcm4gIkMiIHN0cnVjdCBtbnRl
-bnQgKgorZ2V0bW50ZW50X3IgKEZJTEUgKiwgc3RydWN0IG1udGVudCAqbW50
-YnVmLCBjaGFyICpidWYsIGludCBidWZsZW4pCit7CisgIHN0cnVjdCBtbnRl
-bnQgKm1udCA9IG1vdW50X3RhYmxlLT5nZXRtbnRlbnQgKF9teV90bHMubG9j
-YWxzLml0ZXJhdGlvbisrKTsKKyAgY2hhciAqdG1wYnVmOworICBpbnQgbGVu
-ID0gMCwgbWF4bGVuOworCisgIGlmICghbW50KQorICAgIHsKKyAgICAgIG1u
-dGJ1ZiA9IE5VTEw7CisgICAgICByZXR1cm4gTlVMTDsKKyAgICB9CisKKyAg
-bWF4bGVuID0gc3RybGVuIChtbnQtPm1udF9mc25hbWUpICsgc3RybGVuICht
-bnQtPm1udF9kaXIpCisgICAgICAgICAgICsgc3RybGVuIChtbnQtPm1udF90
-eXBlKSArIHN0cmxlbiAobW50LT5tbnRfb3B0cykgKyAzMDsKKyAgdG1wYnVm
-ID0gKGNoYXIgKikgYWxsb2NhIChtYXhsZW4pOworICBtZW1zZXQgKHRtcGJ1
-ZiwgJ1wwJywgbWF4bGVuKTsKKworICBsZW4gKz0gX19zbWFsbF9zcHJpbnRm
-ICh0bXBidWYsICIlcyIsIG1udC0+bW50X2ZzbmFtZSkgKyAxOworICBsZW4g
-Kz0gX19zbWFsbF9zcHJpbnRmICh0bXBidWYgKyBsZW4sICIlcyIsIG1udC0+
-bW50X2RpcikgKyAxOworICBsZW4gKz0gX19zbWFsbF9zcHJpbnRmICh0bXBi
-dWYgKyBsZW4sICIlcyIsIG1udC0+bW50X3R5cGUpICsgMTsKKyAgbGVuICs9
-IF9fc21hbGxfc3ByaW50ZiAodG1wYnVmICsgbGVuLCAiJXMiLCBtbnQtPm1u
-dF9vcHRzKSArIDE7CisgIGxlbiArPSBfX3NtYWxsX3NwcmludGYgKHRtcGJ1
-ZiArIGxlbiwgIiVkICVkIiwgbW50LT5tbnRfZnJlcSwgbW50LT5tbnRfcGFz
-c25vKTsKKworICBtZW1jcHkgKGJ1ZiwgdG1wYnVmLCBidWZsZW4pOworICBt
-ZW1jcHkgKG1udGJ1ZiwgbW50LCBzaXplb2YgKHN0cnVjdCBtbnRlbnQpKTsK
-KyAgcmV0dXJuIG1udDsKK30KKwogZXh0ZXJuICJDIiBpbnQKIGVuZG1udGVu
-dCAoRklMRSAqKQogewpJbmRleDogcG9zaXguc2dtbAo9PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL2N5Z3dp
-bi9wb3NpeC5zZ21sLHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjc4CmRpZmYg
-LXUgLXAgLXIxLjc4IHBvc2l4LnNnbWwKLS0tIHBvc2l4LnNnbWwJMTAgTWF5
-IDIwMTIgMDg6MzU6MjIgLTAwMDAJMS43OAorKysgcG9zaXguc2dtbAk1IEp1
-biAyMDEyIDAzOjM4OjQ1IC0wMDAwCkBAIC0xMTE1LDYgKzExMTUsNyBAQCBh
-bHNvIElFRUUgU3RkIDEwMDMuMS0yMDA4IChQT1NJWC4xLTIwMDgpCiAgICAg
-Z2V0X3BoeXNfcGFnZXMKICAgICBnZXRfbnByb2NzCiAgICAgZ2V0X25wcm9j
-c19jb25mCisgICAgZ2V0bW50ZW50X3IKICAgICBnZXRvcHRfbG9uZwogICAg
-IGdldG9wdF9sb25nX29ubHkKICAgICBnZXRwdApJbmRleDogY3lnd2luLmRp
-bgo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBmaWxlOiAvY3ZzL3NyYy9z
-cmMvd2luc3VwL2N5Z3dpbi9jeWd3aW4uZGluLHYKcmV0cmlldmluZyByZXZp
-c2lvbiAxLjI1NQpkaWZmIC11IC1wIC1yMS4yNTUgY3lnd2luLmRpbgotLS0g
-Y3lnd2luLmRpbgkxMCBNYXkgMjAxMiAwODozNToyMiAtMDAwMAkxLjI1NQor
-KysgY3lnd2luLmRpbgk1IEp1biAyMDEyIDAzOjM4OjQ1IC0wMDAwCkBAIC03
-MzgsNiArNzM4LDcgQEAgX2dldGxvZ2luID0gZ2V0bG9naW4gTk9TSUdGRQog
-Z2V0bG9naW5fciBOT1NJR0ZFCiBnZXRtbnRlbnQgU0lHRkUKIF9nZXRtbnRl
-bnQgPSBnZXRtbnRlbnQgU0lHRkUKK2dldG1udGVudF9yIFNJR0ZFCiBnZXRt
-b2RlIFNJR0ZFCiBfZ2V0bW9kZSA9IGdldG1vZGUgU0lHRkUKIGdldG5hbWVp
-bmZvID0gY3lnd2luX2dldG5hbWVpbmZvIFNJR0ZFCkluZGV4OiBpbmNsdWRl
-L21udGVudC5oCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KUkNTIGZpbGU6IC9j
-dnMvc3JjL3NyYy93aW5zdXAvY3lnd2luL2luY2x1ZGUvbW50ZW50Lmgsdgpy
-ZXRyaWV2aW5nIHJldmlzaW9uIDEuNgpkaWZmIC11IC1wIC1yMS42IG1udGVu
-dC5oCi0tLSBpbmNsdWRlL21udGVudC5oCTIgRmViIDIwMTAgMTE6MTc6NTQg
-LTAwMDAJMS42CisrKyBpbmNsdWRlL21udGVudC5oCTUgSnVuIDIwMTIgMDM6
-Mzg6NDUgLTAwMDAKQEAgLTMxLDYgKzMxLDcgQEAgc3RydWN0IG1udGVudAog
-I2luY2x1ZGUgPHN0ZGlvLmg+CiBGSUxFICpzZXRtbnRlbnQgKGNvbnN0IGNo
-YXIgKl9fZmlsZXAsIGNvbnN0IGNoYXIgKl9fdHlwZSk7CiBzdHJ1Y3QgbW50
-ZW50ICpnZXRtbnRlbnQgKEZJTEUgKl9fZmlsZXApOworc3RydWN0IG1udGVu
-dCAqZ2V0bW50ZW50X3IgKEZJTEUgKiwgc3RydWN0IG1udGVudCAqLCBjaGFy
-ICosIGludCk7CiBpbnQgZW5kbW50ZW50IChGSUxFICpfX2ZpbGVwKTsKICNl
-bmRpZgogCkluZGV4OiBpbmNsdWRlL2N5Z3dpbi92ZXJzaW9uLmgKPT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1
-cC9jeWd3aW4vaW5jbHVkZS9jeWd3aW4vdmVyc2lvbi5oLHYKcmV0cmlldmlu
-ZyByZXZpc2lvbiAxLjM3MApkaWZmIC11IC1wIC1yMS4zNzAgdmVyc2lvbi5o
-Ci0tLSBpbmNsdWRlL2N5Z3dpbi92ZXJzaW9uLmgJMTAgTWF5IDIwMTIgMDg6
-MzU6MjIgLTAwMDAJMS4zNzAKKysrIGluY2x1ZGUvY3lnd2luL3ZlcnNpb24u
-aAk1IEp1biAyMDEyIDAzOjM4OjQ1IC0wMDAwCkBAIC00MzAsMTIgKzQzMCwx
-MyBAQCBkZXRhaWxzLiAqLwogICAgICAgMjU5OiBFeHBvcnQgcHRocmVhZF9z
-aWdxdWV1ZS4KICAgICAgIDI2MDogRXhwb3J0IHNjYW5kaXJhdC4KICAgICAg
-IDI2MTogRXhwb3J0IG1lbXJjaHIuCisgICAgICAyNjI6IEV4cG9ydCBnZXRt
-bnRlbnRfci4KICAgICAgKi8KIAogICAgICAvKiBOb3RlIHRoYXQgd2UgZm9y
-Z290IHRvIGJ1bXAgdGhlIGFwaSBmb3IgdWFsYXJtLCBzdHJ0b2xsLCBzdHJ0
-b3VsbCAqLwogCiAjZGVmaW5lIENZR1dJTl9WRVJTSU9OX0FQSV9NQUpPUiAw
-Ci0jZGVmaW5lIENZR1dJTl9WRVJTSU9OX0FQSV9NSU5PUiAyNjEKKyNkZWZp
-bmUgQ1lHV0lOX1ZFUlNJT05fQVBJX01JTk9SIDI2MgogCiAgICAgIC8qIFRo
-ZXJlIGlzIGFsc28gYSBjb21wYXRpYml0eSB2ZXJzaW9uIG51bWJlciBhc3Nv
-Y2lhdGVkIHdpdGggdGhlCiAJc2hhcmVkIG1lbW9yeSByZWdpb25zLiAgSXQg
-aXMgaW5jcmVtZW50ZWQgd2hlbiBpbmNvbXBhdGlibGUKSW5kZXg6IHJlbGVh
-c2UvMS43LjE2Cj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KUkNTIGZpbGU6IC9j
-dnMvc3JjL3NyYy93aW5zdXAvY3lnd2luL3JlbGVhc2UvMS43LjE2LHYKcmV0
-cmlldmluZyByZXZpc2lvbiAxLjgKZGlmZiAtdSAtcCAtcjEuOCAxLjcuMTYK
-LS0tIHJlbGVhc2UvMS43LjE2CTMgSnVuIDIwMTIgMTY6NDc6NTcgLTAwMDAJ
-MS44CisrKyByZWxlYXNlLzEuNy4xNgk1IEp1biAyMDEyIDAzOjM4OjQ1IC0w
-MDAwCkBAIC0xLDcgKzEsNyBAQAogV2hhdCdzIG5ldzoKIC0tLS0tLS0tLS0t
-CiAKLS0gTmV3IEFQSTogbWVtcmNoci4KKy0gTmV3IEFQSTogZ2V0bW50ZW50
-X3IsIG1lbXJjaHIuCiAKIC0gU3VwcG9ydCBSZUZTLgogCg==
+#ifdef CCOD
+#pragma CCOD:script no
+#endif
 
---------------000807080101010106080201
-Content-Type: application/x-itunes-itlp;
- name="doc-getmntent_r.patch"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename="doc-getmntent_r.patch"
-Content-length: 785
+#include <mntent.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
-MjAxMi0wNi0wNCAgWWFha292IFNlbGtvd2l0eiAgPHlzZWxrb3dpdHpALi4u
-PgoKCSogbmV3LWZlYXR1cmVzLnNnbWwgKG92LW5ldzEuNy4xNik6IERvY3Vt
-ZW50IGdldG1udGVudF9yLgoKSW5kZXg6IG5ldy1mZWF0dXJlcy5zZ21sCj09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT0KUkNTIGZpbGU6IC9jdnMvc3JjL3NyYy93
-aW5zdXAvZG9jL25ldy1mZWF0dXJlcy5zZ21sLHYKcmV0cmlldmluZyByZXZp
-c2lvbiAxLjExOApkaWZmIC11IC1wIC1yMS4xMTggbmV3LWZlYXR1cmVzLnNn
-bWwKLS0tIG5ldy1mZWF0dXJlcy5zZ21sCTMgSnVuIDIwMTIgMTY6NTM6MDMg
-LTAwMDAJMS4xMTgKKysrIG5ldy1mZWF0dXJlcy5zZ21sCTUgSnVuIDIwMTIg
-MDQ6Mjg6MDQgLTAwMDAKQEAgLTUsNyArNSw3IEBACiA8aXRlbWl6ZWRsaXN0
-IG1hcms9ImJ1bGxldCI+CiAKIDxsaXN0aXRlbT48cGFyYT4KLU5ldyBBUEk6
-IG1lbXJjaHIuCitOZXcgQVBJOiBnZXRtbnRlbnRfciwgbWVtcmNoci4KIDwv
-cGFyYT48L2xpc3RpdGVtPgogCiA8bGlzdGl0ZW0+PHBhcmE+Cg==
+#ifdef __CYGWIN__
+#include <dlfcn.h>
+#include <cygwin/version.h>
+#endif
 
---------------000807080101010106080201--
+int
+main(void)
+{
+#if defined(__CYGWIN__) && CYGWIN_VERSION_API_MINOR < 262
+  void *libc = dlopen ("cygwin1.dll", 0);
+  struct mntent *(*getmntent_r) (FILE *, struct mntent *, char *, int)
+    = dlsym (libc, "getmntent_r");
+#endif
+
+  FILE *mtab = setmntent (_PATH_MOUNTED, "r");
+  int buflen = 256;
+  char *buf = (char *) malloc (buflen);
+  struct mntent mntent, *mntret;
+  int i, len;
+
+  while (((mntret = getmntent_r (mtab, &mntent, buf, buflen)) != NULL))
+    {
+      len = 0;
+      for (i = 0; i < 6; i++)
+        len += printf ("%s ", buf + len);
+      printf ("\n");
+      /* check that these are identical with the above */
+      printf ("%s %s %s %s %d %d\n", mntent.mnt_fsname, mntent.mnt_dir,
+                                     mntent.mnt_type, mntent.mnt_opts,
+                                     mntent.mnt_freq, mntent.mnt_passno);
+      printf ("%s %s %s %s %d %d\n", mntret->mnt_fsname, mntret->mnt_dir,
+                                     mntret->mnt_type, mntret->mnt_opts,
+                                     mntret->mnt_freq, mntret->mnt_passno);
+    }
+  return 0;
+}
+
+--------------040705010202050307000305--
