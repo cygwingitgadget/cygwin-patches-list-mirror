@@ -1,22 +1,22 @@
-Return-Path: <cygwin-patches-return-7674-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 23792 invoked by alias); 6 Jun 2012 07:33:49 -0000
-Received: (qmail 23746 invoked by uid 22791); 6 Jun 2012 07:33:27 -0000
+Return-Path: <cygwin-patches-return-7675-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 26083 invoked by alias); 10 Jun 2012 18:19:33 -0000
+Received: (qmail 26073 invoked by uid 22791); 10 Jun 2012 18:19:32 -0000
+X-SWARE-Spam-Status: No, hits=-5.2 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,KHOP_RCVD_TRUST,KHOP_THREADED,RCVD_IN_DNSWL_LOW,RCVD_IN_HOSTKARMA_YE
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Wed, 06 Jun 2012 07:33:10 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id B34C42C007D; Wed,  6 Jun 2012 09:33:05 +0200 (CEST)
-Date: Wed, 06 Jun 2012 07:33:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Add getmntent_r
-Message-ID: <20120606073305.GA18246@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4FCD945D.8070209@users.sourceforge.net> <20120605124209.GB23381@calimero.vinschen.de> <4FCEC079.2090802@users.sourceforge.net>
+Received: from mail-vb0-f43.google.com (HELO mail-vb0-f43.google.com) (209.85.212.43)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sun, 10 Jun 2012 18:19:05 +0000
+Received: by vbbfq11 with SMTP id fq11so1946571vbb.2        for <cygwin-patches@cygwin.com>; Sun, 10 Jun 2012 11:19:05 -0700 (PDT)
+Received: by 10.220.9.10 with SMTP id j10mr11126363vcj.7.1339352344903;        Sun, 10 Jun 2012 11:19:04 -0700 (PDT)
+Received: from [192.168.0.100] (S0106000cf16f58b1.wp.shawcable.net. [24.79.200.150])        by mx.google.com with ESMTPS id c17sm17536319vdj.11.2012.06.10.11.19.03        (version=TLSv1/SSLv3 cipher=OTHER);        Sun, 10 Jun 2012 11:19:04 -0700 (PDT)
+Message-ID: <4FD4E519.7000508@users.sourceforge.net>
+Date: Sun, 10 Jun 2012 18:19:00 -0000
+From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:12.0) Gecko/20120428 Thunderbird/12.0.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <4FCEC079.2090802@users.sourceforge.net>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+To: cygwin-patches@cygwin.com
+Subject: Re: elf.h incomplete
+References: <4FA281E3.4020008@samsung.com> <CA+sc5mnHw0CuSzaPiAV4ALQVEKs6_Nc20JrEvu-r121nZU3REg@mail.gmail.com> <4FA2870D.1030604@samsung.com> <4FA28961.2010407@cs.utoronto.ca> <4FA28F35.6060000@samsung.com> <4FA29070.1060300@gmail.com> <20120503152458.GB22355@ednor.casa.cgf.cx> <4FA300AB.3080306@users.sourceforge.net> <4FCED256.7030305@users.sourceforge.net> <20120606035249.GA22752@ednor.casa.cgf.cx>
+In-Reply-To: <20120606035249.GA22752@ednor.casa.cgf.cx>
+Content-Type: multipart/mixed; boundary="------------040809010501080005070800"
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,105 +26,58 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2012-q2/txt/msg00043.txt.bz2
+X-SW-Source: 2012-q2/txt/msg00044.txt.bz2
 
-On Jun  5 21:29, Yaakov (Cygwin/X) wrote:
-> On 2012-06-05 07:42, Corinna Vinschen wrote:
-> >>+extern "C" struct mntent *
-> >>+getmntent_r (FILE *, struct mntent *mntbuf, char *buf, int buflen)
-> >>+{
-> >>+  struct mntent *mnt = mount_table->getmntent (_my_tls.locals.iteration++);
-> >>+  char *tmpbuf;
-> >>+  int len = 0, maxlen;
-> >>+
-> >>+  if (!mnt)
-> >>+    {
-> >>+      mntbuf = NULL;
-> >
-> >This doesn't make sense since mntbuf is a local varibale.  Changing
-> >its value won't be propagated by the calling function anyway.
-> 
-> Further testing of glibc shows that buf and mntbuf are indeed left
-> untouched when returning NULL.
+This is a multi-part message in MIME format.
+--------------040809010501080005070800
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-length: 428
 
-Erm... I'm not talking about glibc vs. your code.  Mntbuf is a simple
-call-by-value variable.  Changes to this variable in the called function
-are *never* propagated back to the parent function.
+On 2012-06-05 22:52, Christopher Faylor wrote:
+> Sounds like it is good enough to check in.  We can tweak it as needed.
 
-> >>+  maxlen = strlen (mnt->mnt_fsname) + strlen (mnt->mnt_dir)
-> >>+           + strlen (mnt->mnt_type) + strlen (mnt->mnt_opts) + 30;
-> >>+  tmpbuf = (char *) alloca (maxlen);
-> >>+  memset (tmpbuf, '\0', maxlen);
-> >>+
-> >>+  len += __small_sprintf (tmpbuf, "%s", mnt->mnt_fsname) + 1;
-> >>+  len += __small_sprintf (tmpbuf + len, "%s", mnt->mnt_dir) + 1;
-> >>+  len += __small_sprintf (tmpbuf + len, "%s", mnt->mnt_type) + 1;
-> >>+  len += __small_sprintf (tmpbuf + len, "%s", mnt->mnt_opts) + 1;
-> >
-> >This you can have simpler.
-> >
-> >>+  len += __small_sprintf (tmpbuf + len, "%d %d", mnt->mnt_freq, mnt->mnt_passno);
-> >
-> >and this I don't grok at all.  Why don't you just copy over the
-> >numbers from mnt to mntbuf?
-> 
-> The string returned into buf is in the following format:
-> 
-> mnt_fsname\0mnt_dir\0mnt_type\0mnt_opts\0mnt_freq" "mnt_passno\0
-
-Yes, but this is not something inherent to the functionality of
-getmntent_r, it's just residue from the way getmntent_r works.  It reads
-a line from /etc/fstab or /etc/mtab into the buffer via fgets:
-
-  mnt_fsname\tmnt_dir\tmnt_type\tmnt_opts\tmnt_freq\n
-
-and then creates the content of mntbuf from there, replacing the \t with
-\0 as it goes along.  So it starts with mnt_opts and mnt_freq strings in
-buf, but only to sscanf them into their respective mntbuf->mnt_opts and
-mntbuf->mnt_freq members.
-
-In case of Cygwin this is not needed since we don't read from the file
-but from the internal datastructure.  There's no reason to create
-garbage in buf just because this is by chance the layout the buffer gets
-when operating under Linux.
-
-The *important* thing is that buf contains the strings the members of
-mntbuf points to.  And that's where your code fails, including the
-revised version.
-
-Here you copy the strings over from tmpbuf to buf:
-
-  memcpy (buf, tmpbuf, buflen);
-
-And here you copy over mnt to mntbuf:
-
-  memcpy (mntbuf, mnt, sizeof (struct mntent));
-
-So where do the pointers in mntbuf point to now?  Do they point into
-buf as they should, or do they point into Cygwin's internal mntent
-entry?  Change your testcase code like this:
-
-  /* check that these are identical with the above */
-  [...]
-  /* check they really point into buf */
-  if (mntent.mnt_fsname < buf || mntent.mnt_fsname >= buf + buflen)
-    fprintf (stderr, "mntent.mnt_fsname does not point into buf!\n");
-  [...analog for mnt_dir, mnt_type, mnt_opts...]
-
-> glibc makes no attempt to verify buf or mntbuf; if either of them
-> are not initialized or too small, you're in "undefined behaviour"
-> territory (aka SEGV :-).
-
-You're basically right.  But it won't SEGV if buf is too small.  Glibc
-handles a small buffer gracefully.  It will set all members in mntbuf
-which are not backed by space in buf to an empty string, and it sets
-mnt_opts and/or mnt_freq to 0 if their string representation didn't fit
-into buf when reading from the file.
+That didn't take long. :-)  I had been testing with 3.3.7; the attached 
+additional defines are needed for building the 3.4.y kernels.  These 
+defines are from LLVM (llvm/Support/ELF.h), which is under NCSA (variant 
+of 3-clause BSD).  (Many more defines are available there as well, if 
+needed.)
 
 
-Corinna
+Yaakov
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+
+--------------040809010501080005070800
+Content-Type: application/x-itunes-itlp;
+ name="elf-h-linux34.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="elf-h-linux34.patch"
+Content-length: 1444
+
+MjAxMi0wNi0xMCAgWWFha292IFNlbGtvd2l0eiAgPHlzZWxrb3dpdHpALi4u
+PgoKCSogaW5jbHVkZS9zeXMvZWxmX2NvbW1vbi5oIChSXzM4Nl8xNik6IERl
+ZmluZS4KCShSXzM4Nl9QQzE2KTogRGVmaW5lLgoJKFJfMzg2XzgpOiBEZWZp
+bmUuCgkoUl8zODZfUEM4KTogRGVmaW5lLgoKSW5kZXg6IGluY2x1ZGUvc3lz
+L2VsZl9jb21tb24uaAo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09ClJDUyBmaWxl
+OiAvY3ZzL3NyYy9zcmMvd2luc3VwL2N5Z3dpbi9pbmNsdWRlL3N5cy9lbGZf
+Y29tbW9uLmgsdgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuMwpkaWZmIC11IC1w
+IC1yMS4zIGVsZl9jb21tb24uaAotLS0gaW5jbHVkZS9zeXMvZWxmX2NvbW1v
+bi5oCTYgSnVuIDIwMTIgMDQ6NDU6NDggLTAwMDAJMS4zCisrKyBpbmNsdWRl
+L3N5cy9lbGZfY29tbW9uLmgJMTAgSnVuIDIwMTIgMTg6MTA6NTAgLTAwMDAK
+QEAgLTYwMyw2ICs2MDMsMTAgQEAgdHlwZWRlZiBzdHJ1Y3QgewogI2RlZmlu
+ZQlSXzM4Nl9UTFNfTEUJCTE3CS8qIE5lZ2F0aXZlIG9mZnNldCByZWxhdGl2
+ZSB0byBzdGF0aWMgVExTICovCiAjZGVmaW5lCVJfMzg2X1RMU19HRAkJMTgJ
+LyogMzIgYml0IG9mZnNldCB0byBHT1QgKGluZGV4LG9mZikgcGFpciAqLwog
+I2RlZmluZQlSXzM4Nl9UTFNfTERNCQkxOQkvKiAzMiBiaXQgb2Zmc2V0IHRv
+IEdPVCAoaW5kZXgsemVybykgcGFpciAqLworI2RlZmluZQlSXzM4Nl8xNgkJ
+MjAKKyNkZWZpbmUJUl8zODZfUEMxNgkJMjEKKyNkZWZpbmUJUl8zODZfOAkJ
+CTIyCisjZGVmaW5lCVJfMzg2X1BDOAkJMjMKICNkZWZpbmUJUl8zODZfVExT
+X0dEXzMyCQkyNAkvKiAzMiBiaXQgb2Zmc2V0IHRvIEdPVCAoaW5kZXgsb2Zm
+KSBwYWlyICovCiAjZGVmaW5lCVJfMzg2X1RMU19HRF9QVVNICTI1CS8qIHB1
+c2hsIGluc3RydWN0aW9uIGZvciBTdW4gQUJJIEdEIHNlcXVlbmNlICovCiAj
+ZGVmaW5lCVJfMzg2X1RMU19HRF9DQUxMCTI2CS8qIGNhbGwgaW5zdHJ1Y3Rp
+b24gZm9yIFN1biBBQkkgR0Qgc2VxdWVuY2UgKi8K
+
+--------------040809010501080005070800--
