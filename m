@@ -1,27 +1,20 @@
-Return-Path: <cygwin-patches-return-7676-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 28438 invoked by alias); 10 Jun 2012 18:25:15 -0000
-Received: (qmail 28428 invoked by uid 22791); 10 Jun 2012 18:25:14 -0000
-X-SWARE-Spam-Status: No, hits=-1.7 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,RCVD_IN_HOSTKARMA_YE
+Return-Path: <cygwin-patches-return-7677-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 18102 invoked by alias); 11 Jun 2012 20:58:54 -0000
+Received: (qmail 18090 invoked by uid 22791); 11 Jun 2012 20:58:53 -0000
+X-SWARE-Spam-Status: No, hits=-4.5 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,KHOP_RCVD_TRUST,RCVD_IN_DNSWL_LOW,RCVD_IN_HOSTKARMA_YE
 X-Spam-Check-By: sourceware.org
-Received: from mho-01-ewr.mailhop.org (HELO mho-01-ewr.mailhop.org) (204.13.248.71)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sun, 10 Jun 2012 18:25:02 +0000
-Received: from pool-98-110-186-36.bstnma.fios.verizon.net ([98.110.186.36] helo=cgf.cx)	by mho-01-ewr.mailhop.org with esmtpa (Exim 4.72)	(envelope-from <cgf@cgf.cx>)	id 1Sdmov-000ITW-B1	for cygwin-patches@cygwin.com; Sun, 10 Jun 2012 18:25:01 +0000
-Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id 2A9FC13C0C1	for <cygwin-patches@cygwin.com>; Sun, 10 Jun 2012 14:25:01 -0400 (EDT)
-X-Mail-Handler: MailHop Outbound by DynDNS
-X-Report-Abuse-To: abuse@dyndns.com (see http://www.dyndns.com/services/mailhop/outbound_abuse.html for abuse reporting information)
-X-MHO-User: U2FsdGVkX18KgNmjkta91WZxaN9OxiI4
-Date: Sun, 10 Jun 2012 18:25:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: elf.h incomplete
-Message-ID: <20120610182501.GA32575@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <CA+sc5mnHw0CuSzaPiAV4ALQVEKs6_Nc20JrEvu-r121nZU3REg@mail.gmail.com> <4FA2870D.1030604@samsung.com> <4FA28961.2010407@cs.utoronto.ca> <4FA28F35.6060000@samsung.com> <4FA29070.1060300@gmail.com> <20120503152458.GB22355@ednor.casa.cgf.cx> <4FA300AB.3080306@users.sourceforge.net> <4FCED256.7030305@users.sourceforge.net> <20120606035249.GA22752@ednor.casa.cgf.cx> <4FD4E519.7000508@users.sourceforge.net>
+Received: from mail-vb0-f43.google.com (HELO mail-vb0-f43.google.com) (209.85.212.43)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 11 Jun 2012 20:58:40 +0000
+Received: by vbbfq11 with SMTP id fq11so2681868vbb.2        for <cygwin-patches@cygwin.com>; Mon, 11 Jun 2012 13:58:39 -0700 (PDT)
+Received: by 10.52.19.232 with SMTP id i8mr11250065vde.38.1339448319559;        Mon, 11 Jun 2012 13:58:39 -0700 (PDT)
+Received: from [192.168.0.100] (S0106000cf16f58b1.wp.shawcable.net. [24.79.200.150])        by mx.google.com with ESMTPS id g10sm21746135vdk.2.2012.06.11.13.58.38        (version=TLSv1/SSLv3 cipher=OTHER);        Mon, 11 Jun 2012 13:58:38 -0700 (PDT)
+Message-ID: <4FD65BFC.1060900@users.sourceforge.net>
+Date: Mon, 11 Jun 2012 20:58:00 -0000
+From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:12.0) Gecko/20120428 Thunderbird/12.0.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4FD4E519.7000508@users.sourceforge.net>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] regex: fix for kernel cross-compile
+Content-Type: multipart/mixed; boundary="------------070909020108070705050906"
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -31,18 +24,54 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2012-q2/txt/msg00045.txt.bz2
+X-SW-Source: 2012-q2/txt/msg00046.txt.bz2
 
-On Sun, Jun 10, 2012 at 01:19:05PM -0500, Yaakov (Cygwin/X) wrote:
->On 2012-06-05 22:52, Christopher Faylor wrote:
->> Sounds like it is good enough to check in.  We can tweak it as needed.
->
->That didn't take long. :-)  I had been testing with 3.3.7; the attached 
->additional defines are needed for building the 3.4.y kernels.  These 
->defines are from LLVM (llvm/Support/ELF.h), which is under NCSA (variant 
->of 3-clause BSD).  (Many more defines are available there as well, if 
->needed.)
+This is a multi-part message in MIME format.
+--------------070909020108070705050906
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-length: 500
 
-Looks good.  Please check in.
+The attached patch fixes the issue I reported previously:
 
-cgf
+http://cygwin.com/ml/cygwin/2012-06/msg00161.html
+
+According to POSIX[1], a '|' following '(' produces undefined results. 
+However, glibc and PCRE both allow the regex in question, so there is 
+basis for omitting this error.  I believe this is the last issue which 
+needs to be fixed within Cygwin to allow cross-compiling the Linux kernel.
+
+
+Yaakov
+
+[1] 
+http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap09.html#tag_09_04_03
+
+--------------070909020108070705050906
+Content-Type: application/x-itunes-itlp;
+ name="regex-kernel-relocs.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="regex-kernel-relocs.patch"
+Content-length: 1078
+
+MjAxMi0wNi0xMSAgWWFha292IFNlbGtvd2l0eiAgPHlzZWxrb3dpdHpALi4u
+PgoKCSogcmVnZXgvcmVnY29tcC5jIChwX2VyZSk6IEFsbG93IHZlcnRpY2Fs
+LWxpbmUgZm9sbG93aW5nCglsZWZ0LXBhcmVudGhlc2lzIGluIEVSRSwgYXMg
+aW4gZ2xpYmMuCgpJbmRleDogcmVnZXgvcmVnY29tcC5jCj09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT0KUkNTIGZpbGU6IC9jdnMvc3JjL3NyYy93aW5zdXAvY3ln
+d2luL3JlZ2V4L3JlZ2NvbXAuYyx2CnJldHJpZXZpbmcgcmV2aXNpb24gMS4x
+MwpkaWZmIC11IC1wIC1yMS4xMyByZWdjb21wLmMKLS0tIHJlZ2V4L3JlZ2Nv
+bXAuYwkxMyBGZWIgMjAxMiAxMzoxMjozNyAtMDAwMAkxLjEzCisrKyByZWdl
+eC9yZWdjb21wLmMJMTEgSnVuIDIwMTIgMjA6NDE6MTUgLTAwMDAKQEAgLTMy
+NCw3ICszMjQsMTAgQEAgcF9lcmUoc3RydWN0IHBhcnNlICpwLAogCQljb25j
+ID0gSEVSRSgpOwogCQl3aGlsZSAoTU9SRSgpICYmIChjID0gUEVFSygpKSAh
+PSAnfCcgJiYgYyAhPSBzdG9wKQogCQkJcF9lcmVfZXhwKHApOworI2lmbmRl
+ZiBfX0NZR1dJTl9fCisJCS8qIHVuZGVmaW5lZCBiZWhhdmlvdXIgYWNjb3Jk
+aW5nIHRvIFBPU0lYOyBhbGxvd2VkIGJ5IGdsaWJjICovCiAJCSh2b2lkKVJF
+UVVJUkUoSEVSRSgpICE9IGNvbmMsIFJFR19FTVBUWSk7CS8qIHJlcXVpcmUg
+bm9uZW1wdHkgKi8KKyNlbmRpZgogCiAJCWlmICghRUFUKCd8JykpCiAJCQli
+cmVhazsJCS8qIE5PVEUgQlJFQUsgT1VUICovCg==
+
+--------------070909020108070705050906--
