@@ -1,22 +1,23 @@
-Return-Path: <cygwin-patches-return-7684-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 15249 invoked by alias); 19 Jul 2012 08:50:40 -0000
-Received: (qmail 15204 invoked by uid 22791); 19 Jul 2012 08:50:21 -0000
+Return-Path: <cygwin-patches-return-7685-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 30652 invoked by alias); 23 Jul 2012 21:24:37 -0000
+Received: (qmail 30628 invoked by uid 22791); 23 Jul 2012 21:24:37 -0000
+X-SWARE-Spam-Status: No, hits=-2.0 required=5.0	tests=AWL,BAYES_40,KHOP_THREADED,T_RP_MATCHES_RCVD
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Thu, 19 Jul 2012 08:50:07 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id DCF5F2C0074; Thu, 19 Jul 2012 10:50:04 +0200 (CEST)
-Date: Thu, 19 Jul 2012 08:50:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Add getmntent_r
-Message-ID: <20120719085004.GZ31055@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4FCD945D.8070209@users.sourceforge.net> <20120605124209.GB23381@calimero.vinschen.de> <4FCEC079.2090802@users.sourceforge.net> <20120606073305.GA18246@calimero.vinschen.de> <50068E29.6060302@users.sourceforge.net> <20120718111729.GI31055@calimero.vinschen.de> <50071B5D.3070600@users.sourceforge.net>
+Received: from etr-usa.com (HELO etr-usa.com) (130.94.180.135)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 23 Jul 2012 21:24:24 +0000
+Received: (qmail 3069 invoked by uid 13447); 23 Jul 2012 21:24:23 -0000
+Received: from unknown (HELO [172.20.0.42]) ([71.210.200.213])          (envelope-sender <warren@etr-usa.com>)          by 130.94.180.135 (qmail-ldap-1.03) with SMTP          for <cygwin-patches@cygwin.com>; 23 Jul 2012 21:24:23 -0000
+Message-ID: <500DC106.9090709@etr-usa.com>
+Date: Mon, 23 Jul 2012 21:24:00 -0000
+From: Warren Young <warren@etr-usa.com>
+User-Agent: Mozilla/5.0 (Windows NT 6.0; WOW64; rv:13.0) Gecko/20120614 Thunderbird/13.0.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <50071B5D.3070600@users.sourceforge.net>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+To: Cygwin Patches <cygwin-patches@cygwin.com>
+Subject: Re: *Very* outdated FAQ entry
+References: <20120717190842.GF31055@calimero.vinschen.de> <500603C6.1000708@users.sourceforge.net>
+In-Reply-To: <500603C6.1000708@users.sourceforge.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,36 +27,18 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2012-q3/txt/msg00005.txt.bz2
+X-SW-Source: 2012-q3/txt/msg00006.txt.bz2
 
-On Jul 18 15:23, Yaakov (Cygwin/X) wrote:
-> On 2012-07-18 06:17, Corinna Vinschen wrote:
-> >On Jul 18 05:21, Yaakov (Cygwin/X) wrote:
-> >>On 2012-06-06 02:33, Corinna Vinschen wrote:
-> >>>In case of Cygwin this is not needed since we don't read from the file
-> >>>but from the internal datastructure.  There's no reason to create
-> >>>garbage in buf just because this is by chance the layout the buffer gets
-> >>>when operating under Linux.
-> >>>
-> >>>The *important* thing is that buf contains the strings the members of
-> >>>mntbuf points to.
-> >>
-> >>OK, revised patch attached.
-> >
-> >Thanks.  Applied with a tweak:  It's really not necessary at all to
-> >create strings for mnt_freq and mnt_passno in buf.  Just copy them
-> >over from mnt to mntbuf and be done with it.
-> 
-> In that case, we don't need opts_len, and AFAICS it will introduce a
-> warning with GCC 4.6 [-Wunused-but-set-variable].  OK to remove?
+On 7/17/2012 6:31 PM, Yaakov (Cygwin/X) wrote:
+> On 2012-07-17 14:08, Corinna Vinschen wrote:
+>>
+>> does anybody have a good idea how to rewrite the FAQ entry
+>
+> How about the attached?
 
-Sure!
+Impressive.  It's a piece of work only someone who had been through the 
+battles could have written.
 
-
-Thanks,
-Corinna
-
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+I would have reversed the order of the GUI toolkits, though, from newest 
+to oldest.  Someone skimming the FAQ item is more likely interested in 
+Qt than Xaw.
