@@ -1,27 +1,21 @@
-Return-Path: <cygwin-patches-return-7690-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 18413 invoked by alias); 31 Jul 2012 21:27:36 -0000
-Received: (qmail 18403 invoked by uid 22791); 31 Jul 2012 21:27:35 -0000
-X-SWARE-Spam-Status: No, hits=-1.9 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,RCVD_IN_HOSTKARMA_YE
+Return-Path: <cygwin-patches-return-7691-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 4897 invoked by alias); 3 Aug 2012 09:09:40 -0000
+Received: (qmail 4883 invoked by uid 22791); 3 Aug 2012 09:09:38 -0000
+X-SWARE-Spam-Status: No, hits=-1.6 required=5.0	tests=AWL,BAYES_00,T_RP_MATCHES_RCVD
 X-Spam-Check-By: sourceware.org
-Received: from mho-01-ewr.mailhop.org (HELO mho-01-ewr.mailhop.org) (204.13.248.71)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 31 Jul 2012 21:27:20 +0000
-Received: from pool-173-76-45-230.bstnma.fios.verizon.net ([173.76.45.230] helo=cgf.cx)	by mho-01-ewr.mailhop.org with esmtpa (Exim 4.72)	(envelope-from <cgf@cgf.cx>)	id 1SwJyJ-000JYR-Vr	for cygwin-patches@cygwin.com; Tue, 31 Jul 2012 21:27:20 +0000
-Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id 3BCB5429680	for <cygwin-patches@cygwin.com>; Tue, 31 Jul 2012 17:27:19 -0400 (EDT)
-X-Mail-Handler: Dyn Standard SMTP by Dyn
-X-Report-Abuse-To: abuse@dyndns.com (see http://www.dyndns.com/services/sendlabs/outbound_abuse.html for abuse reporting information)
-X-MHO-User: U2FsdGVkX1+J0/oSWBvpsnmnotIis2L7
-Date: Tue, 31 Jul 2012 21:27:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: rebaseall info out of date
-Message-ID: <20120731212719.GA27642@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <5018478E.5080308@etr-usa.com>
+Received: from enfirhets1.metaswitch.com (HELO ENFIRHETS1.metaswitch.com) (192.91.191.166)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 03 Aug 2012 09:09:25 +0000
+Received: from ENFICSCAS1.datcon.co.uk (172.18.4.13) by ENFIRHETS1.metaswitch.com (172.18.209.22) with Microsoft SMTP Server (TLS) id 14.2.298.4; Fri, 3 Aug 2012 10:08:31 +0100
+Received: from ENFIRHMBX1.datcon.co.uk ([fe80::b06d:4d13:5f63:3715]) by ENFICSCAS1.datcon.co.uk ([::1]) with mapi id 14.02.0298.004; Fri, 3 Aug 2012 10:09:23 +0100
+From: Adam Dinwoodie <Adam.Dinwoodie@metaswitch.com>
+To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: [PATCH] Make `makewhatis` FAQ entry explicitly refer to `whatis`
+Date: Fri, 03 Aug 2012 09:09:00 -0000
+Deferred-Delivery: Fri, 3 Aug 2012 09:07:00 +0000
+Message-ID: <CE9C056E12502146A72FD81290379E9A4365635D@ENFIRHMBX1.datcon.co.uk>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5018478E.5080308@etr-usa.com>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -31,38 +25,46 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2012-q3/txt/msg00011.txt.bz2
+X-SW-Source: 2012-q3/txt/msg00012.txt.bz2
 
-On Tue, Jul 31, 2012 at 03:01:02PM -0600, Warren Young wrote:
->This paragraph in the rebase package README:
->
->> Note that rebaseall is only a stop-gap measure.  Eventually the rebase
->> functionality will be added to Cygwin's setup.exe, so that rebasing will
->> happen automatically.
->
->...should be rewritten.  I propose: "You should not need to run 
->rebaseall by hand.  setup.exe has done so automatically at the end of 
->each installation since Mumble 2012."  (May?  April?)
->
->A similar thing is going on in FAQ item 4.44.  I think that FAQ item 
->should be split in two, with all the rebasing related stuff answering a 
->new FAQ item, "Why does Cygwin need rebasing?", refocused on talking 
->about what setup.exe/rebaseall now does automatically and why.  FAQ item 
->4.44 will then talk about the remaining reasons fork() can fail, and 
->their possible fixes.
->
->And while I'm proposing work for other people :) is there a better 
->reason program usage info is in the README instead of man pages, besides 
->lack of time or interest?  In trying to answer the question "Why do we 
->need rebasing?" for myself, I first tried "man rebase".  (Yes, I did 
->eventually answer the question to my satisfaction.)
+All,
 
-That might be an interesting question to ask in the Cygwin mailing list.
-We don't deal with rebase packaging here.
+Minor FAQ patch below to make it explicit that `makewhatis` is used for
+`whatis` as well as `man -k` and `apropos`. Inspired by someone [apparently
+being confused][0] on Stack Overflow (yes, they were almost certainly being
+lazy, but I figure being more explicit will do no harm).
 
-Since none of the rest of this message contains an actual patch it is
-also off-topic.  If you'd like to provide a patch for the FAQ then we'd
-gratefully accept it.  Otherwise, please take "it would be nice" musings
-to the main list.
+[0]: http://stackoverflow.com/questions/11774230/unix-cygwin-whatis-returns=
+-all-commands-as-nothing-appropriate/11782300#comment15656666_11782300
 
-cgf
+I'm hoping this doesn't count as "significant" with regard to copyright
+assignment. I'd really rather not have to deal with that tedium.
+
+This is my first submitted patch; I *think* I've got everything right, but
+apologies if not.
+
+2012-08-03  Adam Dinwoodie  <Adam.Dinwoodie@...>
+
+	* faq-using.xml (faq.using.man): Make relevance to whatis explicit.
+
+Index: faq-using.xml
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+RCS file: /cvs/src/src/winsup/doc/faq-using.xml,v
+retrieving revision 1.45
+diff -u -p -r1.45 faq-using.xml
+--- faq-using.xml       23 Apr 2012 22:10:37 -0000      1.45
++++ faq-using.xml       3 Aug 2012 08:55:03 -0000
+@@ -238,7 +238,8 @@ related messages.
+ </answer></qandaentry>
+
+ <qandaentry id=3D"faq.using.man">
+-<question><para>Why doesn't man -k (or apropos) work?</para></question>
++<question><para>Why doesn't <literal>man -k</literal>, <literal>apropos<li=
+teral>
++or <literal>whatis</literal> work?</para></question>
+ <answer>
+
+ <para>Before you can use <literal>man -k</literal> or <literal>apropos</li=
+teral>, you
