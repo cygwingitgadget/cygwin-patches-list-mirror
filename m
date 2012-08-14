@@ -1,22 +1,18 @@
-Return-Path: <cygwin-patches-return-7693-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 18750 invoked by alias); 3 Aug 2012 10:48:30 -0000
-Received: (qmail 18737 invoked by uid 22791); 3 Aug 2012 10:48:30 -0000
-X-SWARE-Spam-Status: No, hits=-2.3 required=5.0	tests=AWL,BAYES_00,KHOP_THREADED,T_RP_MATCHES_RCVD
+Return-Path: <cygwin-patches-return-7694-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 3486 invoked by alias); 14 Aug 2012 20:56:49 -0000
+Received: (qmail 3476 invoked by uid 22791); 14 Aug 2012 20:56:48 -0000
+X-SWARE-Spam-Status: No, hits=-2.6 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,RCVD_IN_HOSTKARMA_YE,SPF_HELO_PASS,TW_CP,TW_YG
 X-Spam-Check-By: sourceware.org
-Received: from enfirhets1.metaswitch.com (HELO ENFIRHETS1.metaswitch.com) (192.91.191.166)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 03 Aug 2012 10:48:18 +0000
-Received: from ENFICSMBX1.datcon.co.uk (172.18.10.94) by ENFIRHETS1.metaswitch.com (172.18.209.22) with Microsoft SMTP Server (TLS) id 14.2.298.4; Fri, 3 Aug 2012 11:47:24 +0100
-Received: from ENFIRHMBX1.datcon.co.uk ([fe80::b06d:4d13:5f63:3715]) by ENFICSMBX1.datcon.co.uk ([fe80::d5d5:c683:a3be:3a19%18]) with mapi id 14.02.0298.004; Fri, 3 Aug 2012 11:48:16 +0100
-From: Adam Dinwoodie <Adam.Dinwoodie@metaswitch.com>
-To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: RE: [PATCH] Make `makewhatis` FAQ entry explicitly refer to `whatis`
-Date: Fri, 03 Aug 2012 10:48:00 -0000
-Deferred-Delivery: Fri, 3 Aug 2012 10:46:00 +0000
-Message-ID: <CE9C056E12502146A72FD81290379E9A43656641@ENFIRHMBX1.datcon.co.uk>
-References: <CE9C056E12502146A72FD81290379E9A4365635D@ENFIRHMBX1.datcon.co.uk> <20120803103948.GA29616@calimero.vinschen.de>
-In-Reply-To: <20120803103948.GA29616@calimero.vinschen.de>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Received: from moutng.kundenserver.de (HELO moutng.kundenserver.de) (212.227.126.187)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 14 Aug 2012 20:56:32 +0000
+Received: from [127.0.0.1] (dslb-088-073-028-074.pools.arcor-ip.net [88.73.28.74])	by mrelayeu.kundenserver.de (node=mrbap1) with ESMTP (Nemesis)	id 0MQ7pz-1T5Ucv2Qa3-004wKA; Tue, 14 Aug 2012 22:56:30 +0200
+Message-ID: <502ABB77.2080502@towo.net>
+Date: Tue, 14 Aug 2012 20:56:00 -0000
+From: Thomas Wolff <towo@towo.net>
+User-Agent: Mozilla/5.0 (Windows NT 5.1; rv:13.0) Gecko/20120614 Thunderbird/13.0.1
 MIME-Version: 1.0
+To: cygwin-patches@cygwin.com
+Subject: /dev/clipboard pasting with small read() buffer
+Content-Type: multipart/mixed; boundary="------------020008020604080803060403"
 X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -27,10 +23,119 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2012-q3/txt/msg00014.txt.bz2
+X-SW-Source: 2012-q3/txt/msg00015.txt.bz2
 
-Q29yaW5uYSBWaW5zY2hlbiB3cm90ZToNCj5Zb3UgZGlkbid0IHJ1biBtYWtl
-IHRvIGNoZWNrIGlmIGl0J3Mgd29ya2luZywgZGlkIHlvdT8gIFRoZQ0KPjxs
-aXRlcmFsPmFwcm9wb3M8bGl0ZXJhbD4gZXhwcmVzc2lvbiBpcyBtaXNzaW5n
-IGEgc2xhc2guDQoNCkQnb2guIEdlbnVpbmVseSBkaWRuJ3Qgb2NjdXIgdG8g
-bWUgdG8gdHJ5IHRvIGNvbXBpbGUgdGhlIFhNTC4NCg0KVGhhbmsgeW91IQ0K
+This is a multi-part message in MIME format.
+--------------020008020604080803060403
+Content-Type: text/plain; charset=ISO-8859-15; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-length: 1
+
+
+
+--------------020008020604080803060403
+Content-Type: text/plain; charset=windows-1252;
+ name="clipboard-small-buffer.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="clipboard-small-buffer.patch"
+Content-length: 2511
+
+--- sav/fhandler_clipboard.cc	2012-07-08 02:36:47.000000000 +0200
++++ ./fhandler_clipboard.cc	2012-08-14 18:25:14.903255600 +0200
+@@ -222,6 +222,7 @@ fhandler_dev_clipboard::read (void *ptr,
+   UINT formatlist[2];
+   int format;
+   LPVOID cb_data;
++  int rach;
+ 
+   if (!OpenClipboard (NULL))
+     {
+@@ -243,12 +244,18 @@ fhandler_dev_clipboard::read (void *ptr,
+       cygcb_t *clipbuf = (cygcb_t *) cb_data;
+ 
+       if (pos < clipbuf->len)
+-      	{
++	{
+ 	  ret = ((len > (clipbuf->len - pos)) ? (clipbuf->len - pos) : len);
+ 	  memcpy (ptr, clipbuf->data + pos , ret);
+ 	  pos += ret;
+ 	}
+     }
++  else if ((rach = get_readahead ()) >= 0)
++    {
++      /* Deliver from read-ahead buffer. */
++      * (char *) ptr = rach;
++      ret = 1;
++    }
+   else
+     {
+       wchar_t *buf = (wchar_t *) cb_data;
+@@ -256,25 +263,46 @@ fhandler_dev_clipboard::read (void *ptr,
+       size_t glen = GlobalSize (hglb) / sizeof (WCHAR) - 1;
+       if (pos < glen)
+ 	{
++	  /* If caller's buffer is too small to hold at least one 
++	     max-size character, redirect algorithm to local 
++	     read-ahead buffer, finally fill class read-ahead buffer 
++	     with result and feed caller from there. */
++	  char * _ptr = (char *) ptr;
++	  size_t _len = len;
++	  char cprabuf [8 + 1];	/* need this length for surrogates */
++	  if (len < 8)
++	    {
++	      _ptr = cprabuf;
++	      _len = 8;
++	    }
++
+ 	  /* Comparing apples and oranges here, but the below loop could become
+ 	     extremly slow otherwise.  We rather return a few bytes less than
+ 	     possible instead of being even more slow than usual... */
+-	  if (glen > pos + len)
+-	    glen = pos + len;
++	  if (glen > pos + _len)
++	    glen = pos + _len;
+ 	  /* This loop is necessary because the number of bytes returned by
+ 	     sys_wcstombs does not indicate the number of wide chars used for
+ 	     it, so we could potentially drop wide chars. */
+ 	  while ((ret = sys_wcstombs (NULL, 0, buf + pos, glen - pos))
+ 		  != (size_t) -1
+-		 && ret > len)
++		 && ret > _len)
+ 	     --glen;
+ 	  if (ret == (size_t) -1)
+ 	    ret = 0;
+ 	  else
+ 	    {
+-	      ret = sys_wcstombs ((char *) ptr, (size_t) -1,
++	      ret = sys_wcstombs ((char *) _ptr, (size_t) -1,
+ 				  buf + pos, glen - pos);
+ 	      pos = glen;
++	      /* If using read-ahead buffer, copy to class read-ahead buffer
++	         and deliver first byte. */
++	      if (_ptr == cprabuf)
++		{
++		  puts_readahead (cprabuf, ret);
++		  * (char *) ptr = get_readahead ();
++		  ret = 1;
++		}
+ 	    }
+ 	}
+     }
+
+--------------020008020604080803060403
+Content-Type: text/plain; charset=windows-1252;
+ name="clipboard-small-buffer.changelog"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="clipboard-small-buffer.changelog"
+Content-length: 214
+
+2012-08-14  Thomas Wolff  <towo@towo.net>
+
+	* fhandler_clipboard.cc (fhandler_dev_clipboard::read): Use 
+	read-ahead buffer for reading Windows clipboard if caller's 
+	buffer is too small for complete characters.
+
+
+--------------020008020604080803060403--
