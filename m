@@ -1,20 +1,22 @@
-Return-Path: <cygwin-patches-return-7711-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 6374 invoked by alias); 26 Aug 2012 01:57:50 -0000
-Received: (qmail 6156 invoked by uid 22791); 26 Aug 2012 01:57:49 -0000
-X-SWARE-Spam-Status: No, hits=-3.0 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,KHOP_RCVD_TRUST,RCVD_IN_DNSWL_LOW,RCVD_IN_HOSTKARMA_YE,TW_CP
+Return-Path: <cygwin-patches-return-7712-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 10422 invoked by alias); 2 Sep 2012 10:27:56 -0000
+Received: (qmail 10344 invoked by uid 22791); 2 Sep 2012 10:27:34 -0000
 X-Spam-Check-By: sourceware.org
-Received: from mail-pb0-f43.google.com (HELO mail-pb0-f43.google.com) (209.85.160.43)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sun, 26 Aug 2012 01:57:36 +0000
-Received: by pbbrq2 with SMTP id rq2so4950268pbb.2        for <cygwin-patches@cygwin.com>; Sat, 25 Aug 2012 18:57:36 -0700 (PDT)
-Received: by 10.66.86.166 with SMTP id q6mr20465465paz.83.1345946256063;        Sat, 25 Aug 2012 18:57:36 -0700 (PDT)
-Received: from [192.168.1.2] ([119.201.52.168])        by mx.google.com with ESMTPS id jz10sm2424958pbc.8.2012.08.25.18.57.34        (version=SSLv3 cipher=OTHER);        Sat, 25 Aug 2012 18:57:35 -0700 (PDT)
-Message-ID: <503982F3.9010004@gmail.com>
-Date: Sun, 26 Aug 2012 01:57:00 -0000
-From: Jin-woo Ye <jojelino@gmail.com>
-User-Agent: Mozilla/5.0 (Windows NT 5.2; rv:17.0) Gecko/17.0 Thunderbird/17.0a1
-MIME-Version: 1.0
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Sun, 02 Sep 2012 10:27:21 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 6FEBD2C00CA; Sun,  2 Sep 2012 12:27:18 +0200 (CEST)
+Date: Sun, 02 Sep 2012 10:27:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] suggestion for faster pseudo-reloc.
-Content-Type: multipart/mixed; boundary="------------070905030609010100000606"
+Subject: Re: [PATCH] suggestion for faster pseudo-reloc.
+Message-ID: <20120902102718.GC13401@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <503982F3.9010004@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <503982F3.9010004@gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -24,167 +26,32 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2012-q3/txt/msg00032.txt.bz2
+X-SW-Source: 2012-q3/txt/msg00033.txt.bz2
 
-This is a multi-part message in MIME format.
---------------070905030609010100000606
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-length: 321
+Hi Jin-woo,
 
-This patch fixes the problem making pseudo-reloc too slow when there is 
-many pseudo-reloc entries in rdata section by deciding when not to call 
-Virtual{Query,Protect} to save overhead.
-I tested this patch and time taken for pseudo-reloc reduced 1800ms to 
-16ms for 3682 entries.
-Please review this patch.
+On Aug 26 10:59, Jin-woo Ye wrote:
+> This patch fixes the problem making pseudo-reloc too slow when there
+> is many pseudo-reloc entries in rdata section by deciding when not
+> to call Virtual{Query,Protect} to save overhead.
+> I tested this patch and time taken for pseudo-reloc reduced 1800ms
+> to 16ms for 3682 entries.
+> Please review this patch.
+
+Done.  The idea is good, but I wasn't quite happy with your code.  It's
+hard to read and it's more complicated than necessary.  For instance,
+you only handle one page at a time, but your code keeps an array for two
+page information entries around for no good reason.
+
+I checked in a simplified version of your patch.  Please have a look.
+Since the code in question is in the public domain, it doesn't require
+a Cygwin copyright assignment.
+
+
+Thanks,
+Corinna
+
 -- 
-Regards.
-
-
---------------070905030609010100000606
-Content-Type: text/plain; charset=x-windows-949;
- name="pseudo-reloc.diff"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename="pseudo-reloc.diff"
-Content-length: 8296
-
-MjAxMi0wOC0yNiAgPGpvamVsaW5vQGdtYWlsLmNvbT4KCgkqIHBzZXVkby1y
-ZWxvYy5jYyAoYXV0b19wcm90ZWN0X2Zvcik6IERlZmluZS4KCShfX3dyaXRl
-X21lbW9yeSk6IFVzZSBhdXRvX3Byb3RlY3RfZm9yLCBhZGQgdmVyYm9zZSBt
-ZXNzYWdlIGRpc3BsYXlpbmcgdGhlIG51bWJlciBvZiBpdGVtcy4KCShfcGVp
-Mzg2X3J1bnRpbWVfcmVsb2NhdG9yKTpBZGQgdmVyYm9zZSBtZXNzYWdlIGRp
-c3BsYXlpbmcgdGltZSB0YWtlbiBmb3IgcHNldWRvLXJlbG9jLgpJbmRleDog
-d2luc3VwL2N5Z3dpbi9wc2V1ZG8tcmVsb2MuY2MKPT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3aW4v
-cHNldWRvLXJlbG9jLmNjLHYKcmV0cmlldmluZyByZXZpc2lvbiAxLjEwCmRp
-ZmYgLXUgLXAgLXIxLjEwIHBzZXVkby1yZWxvYy5jYwotLS0gd2luc3VwL2N5
-Z3dpbi9wc2V1ZG8tcmVsb2MuY2MJMTYgQXVnIDIwMTIgMjM6MzQ6NDQgLTAw
-MDAJMS4xMAorKysgd2luc3VwL2N5Z3dpbi9wc2V1ZG8tcmVsb2MuY2MJMjYg
-QXVnIDIwMTIgMDE6NDc6MTMgLTAwMDAKQEAgLTEyNSw3ICsxMjUsNzggQEAg
-X19yZXBvcnRfZXJyb3IgKGNvbnN0IGNoYXIgKm1zZywgLi4uKQogICBhYm9y
-dCAoKTsKICNlbmRpZgogfQotCisvKioKKyAqIFRoaXMgZnVuY3Rpb24gYXV0
-b21hdGljYWxseSBzZXRzIGFkZHIgYXMgUEFHRV9FWEVDVVRFX1JFQURXUklU
-RQorICogYnkgZGVjaWRpbmcgd2hldGhlciBWaXJ0dWFsUXVlcnkgZm9yIHRo
-ZSBhZGRyIGlzIGFjdHVhbGx5IG5lZWRlZC4KKyAqIGFuZCBpdCBhc3N1bWVz
-IHRoYXQgaXQgaXMgY2FsbGVkIGluIExkcnBDYWxsSW5pdFJvdXRpbmUuCisg
-KiBoZW5jZSBub3QgdGhyZWFkIHNhZmUuCisgKi8KK3N0YXRpYyB2b2lkCith
-dXRvX3Byb3RlY3RfZm9yKHZvaWQqIGFkZHIpCit7CisgIHN0YXRpYyBNRU1P
-UllfQkFTSUNfSU5GT1JNQVRJT04gY1syXTsKKyAgc3RhdGljIGludCBjdXJy
-ZW50ID0gMDsKKyAgc3RhdGljIGludCBzdGF0ZSA9IDA7CisgIHN0YXRpYyBE
-V09SRCBvbGRwcm90OworICBpZiAoYWRkciA9PSAwKQorICAgIHN0YXRlID0g
-MjsKKyAgaWYgKHN0YXRlID09IDApCisgICAgeworICAgICAgc3RhdGUgPSAx
-OworI2lmIDAKKyAgICAgIGRlYnVnX3ByaW50ZigibWFyayBhcyBpbml0aWFs
-ICVwIiwgYWRkcik7CisjZW5kaWYKKyAgICAgIGxvb3A6CisgICAgICAgIHsK
-KyAgICAgICAgICBNRU1PUllfQkFTSUNfSU5GT1JNQVRJT04gKiBjb25zdCBi
-ID0gJmNbY3VycmVudF07CisgICAgICAgICAgaWYgKCFWaXJ0dWFsUXVlcnko
-YWRkciwgYiwgc2l6ZW9mKE1FTU9SWV9CQVNJQ19JTkZPUk1BVElPTikpKQor
-ICAgICAgICAgICAgeworICAgICAgICAgICAgICBfX3JlcG9ydF9lcnJvcigi
-ICBWaXJ0dWFsUXVlcnkgZmFpbGVkIGZvciAlZCBieXRlcyBhdCBhZGRyZXNz
-ICVwIiwKKyAgICAgICAgICAgICAgICAgIChpbnQpIHNpemVvZihNRU1PUllf
-QkFTSUNfSU5GT1JNQVRJT04pLCBhZGRyKTsKKyAgICAgICAgICAgIH0KKyAg
-ICAgICAgICAvKiBUZW1wb3JhcmlseSBhbGxvdyB3cml0ZSBhY2Nlc3MgdG8g
-cmVhZC1vbmx5IHByb3RlY3RlZCBtZW1vcnkuICAqLworICAgICAgICAgIGlm
-IChiLT5Qcm90ZWN0ICE9IFBBR0VfRVhFQ1VURV9SRUFEV1JJVEUKKyAgICAg
-ICAgICAgICAgJiYgYi0+UHJvdGVjdCAhPSBQQUdFX1JFQURXUklURSkKKyAg
-ICAgICAgICAgIFZpcnR1YWxQcm90ZWN0KGItPkJhc2VBZGRyZXNzLCBiLT5S
-ZWdpb25TaXplLAorICAgICAgICAgICAgICAgIFBBR0VfRVhFQ1VURV9SRUFE
-V1JJVEUsICZvbGRwcm90KTsKKyAgICAgICAgfQorICAgIH0KKyAgZWxzZSBp
-ZiAoc3RhdGUgPT0gMSkKKyAgICB7CisgICAgICBNRU1PUllfQkFTSUNfSU5G
-T1JNQVRJT04gKiBjb25zdCBiID0gJmNbY3VycmVudF07CisgICAgICB2b2lk
-KiBwdHIgPSAoKHZvaWQqKSAoKHB0cmRpZmZfdCkgYi0+QmFzZUFkZHJlc3MK
-KyAgICAgICAgICArIChwdHJkaWZmX3QpIGItPlJlZ2lvblNpemUpKTsKKyNp
-ZiAwCisgICAgICBkZWJ1Z19wcmludGYoInJlbG9jIGJhc2UgJXAgYm91bmQg
-JXAiLCBiLT5CYXNlQWRkcmVzcyxwdHIpOworI2VuZGlmCisgICAgICBpZiAo
-KGFkZHIgPj0gYi0+QmFzZUFkZHJlc3MpICYmIGFkZHIgPCBwdHIpCisgICAg
-ICAgIHsKKyNpZiAwCisgICAgICAgICAgZGVidWdfcHJpbnRmKCJtYXJrIGFz
-IG9sZCAlcCIsIGFkZHIpOworI2VuZGlmCisgICAgICAgIH0KKyAgICAgIGVs
-c2UKKyAgICAgICAgeworI2lmIDAKKyAgICAgICAgICBkZWJ1Z19wcmludGYo
-Im1hcmsgYXMgbmV3ICVwIiwgYWRkcik7CisjZW5kaWYKKyAgICAgICAgICAv
-KiBSZXN0b3JlIG9yaWdpbmFsIHByb3RlY3Rpb24uICovCisgICAgICAgICAg
-aWYgKGItPlByb3RlY3QgIT0gUEFHRV9FWEVDVVRFX1JFQURXUklURQorICAg
-ICAgICAgICAgICAmJiBiLT5Qcm90ZWN0ICE9IFBBR0VfUkVBRFdSSVRFKQor
-ICAgICAgICAgICAgVmlydHVhbFByb3RlY3QoYi0+QmFzZUFkZHJlc3MsIGIt
-PlJlZ2lvblNpemUsIG9sZHByb3QsICZvbGRwcm90KTsKKyAgICAgICAgICBj
-dXJyZW50ID0gKGN1cnJlbnQgKyAxKSAlIDI7CisgICAgICAgICAgZ290byBs
-b29wOworICAgICAgICB9CisgICAgfQorICBlbHNlIGlmIChzdGF0ZSA9PSAy
-KQorICAgIHsKKyAgICAgIE1FTU9SWV9CQVNJQ19JTkZPUk1BVElPTiAqIGNv
-bnN0IGIgPSAmY1tjdXJyZW50XTsKKyAgICAgIGlmIChiLT5Qcm90ZWN0ICE9
-IFBBR0VfRVhFQ1VURV9SRUFEV1JJVEUgJiYgYi0+UHJvdGVjdCAhPSBQQUdF
-X1JFQURXUklURSkKKyAgICAgICAgVmlydHVhbFByb3RlY3QoYi0+QmFzZUFk
-ZHJlc3MsIGItPlJlZ2lvblNpemUsIG9sZHByb3QsICZvbGRwcm90KTsKKyAg
-ICAgIGN1cnJlbnQgPSAwOworICAgICAgc3RhdGUgPSAwOworICAgIH0KK30K
-IC8qIFRoaXMgZnVuY3Rpb24gdGVtcG9yYXJpbHkgbWFya3MgdGhlIHBhZ2Ug
-Y29udGFpbmluZyBhZGRyCiAgKiB3cml0YWJsZSwgYmVmb3JlIGNvcHlpbmcg
-bGVuIGJ5dGVzIGZyb20gKnNyYyB0byAqYWRkciwgYW5kCiAgKiB0aGVuIHJl
-c3RvcmVzIHRoZSBvcmlnaW5hbCBwcm90ZWN0aW9uIHNldHRpbmdzIHRvIHRo
-ZSBwYWdlLgpAQCAtMTQyLDI3ICsyMTMsMTQgQEAgX19yZXBvcnRfZXJyb3Ig
-KGNvbnN0IGNoYXIgKm1zZywgLi4uKQogc3RhdGljIHZvaWQKIF9fd3JpdGVf
-bWVtb3J5ICh2b2lkICphZGRyLCBjb25zdCB2b2lkICpzcmMsIHNpemVfdCBs
-ZW4pCiB7Ci0gIE1FTU9SWV9CQVNJQ19JTkZPUk1BVElPTiBiOwotICBEV09S
-RCBvbGRwcm90OwotCiAgIGlmICghbGVuKQogICAgIHJldHVybjsKLQotICBp
-ZiAoIVZpcnR1YWxRdWVyeSAoYWRkciwgJmIsIHNpemVvZiAoYikpKQotICAg
-IHsKLSAgICAgIF9fcmVwb3J0X2Vycm9yICgiICBWaXJ0dWFsUXVlcnkgZmFp
-bGVkIGZvciAlZCBieXRlcyBhdCBhZGRyZXNzICVwIiwKLQkJICAgICAgKGlu
-dCkgc2l6ZW9mIChiKSwgYWRkcik7Ci0gICAgfQotCi0gIC8qIFRlbXBvcmFy
-aWx5IGFsbG93IHdyaXRlIGFjY2VzcyB0byByZWFkLW9ubHkgcHJvdGVjdGVk
-IG1lbW9yeS4gICovCi0gIGlmIChiLlByb3RlY3QgIT0gUEFHRV9FWEVDVVRF
-X1JFQURXUklURSAmJiBiLlByb3RlY3QgIT0gUEFHRV9SRUFEV1JJVEUpCi0g
-ICAgVmlydHVhbFByb3RlY3QgKGIuQmFzZUFkZHJlc3MsIGIuUmVnaW9uU2l6
-ZSwgUEFHRV9FWEVDVVRFX1JFQURXUklURSwKLQkJICAmb2xkcHJvdCk7Cisg
-IC8qCisgICAqIEhvcGVmdWxseSBpdCB3b3VsZCBlbGltaW5hdGUgdW5uZWNl
-c3NhcnkgY2FsbCB0byBWaXJ0dWFse1F1ZXJ5LFByb3RlY3R9LgorICAgKi8K
-KyAgYXV0b19wcm90ZWN0X2ZvcihhZGRyKTsKICAgLyogd3JpdGUgdGhlIGRh
-dGEuICovCiAgIG1lbWNweSAoYWRkciwgc3JjLCBsZW4pOwotICAvKiBSZXN0
-b3JlIG9yaWdpbmFsIHByb3RlY3Rpb24uICovCi0gIGlmIChiLlByb3RlY3Qg
-IT0gUEFHRV9FWEVDVVRFX1JFQURXUklURSAmJiBiLlByb3RlY3QgIT0gUEFH
-RV9SRUFEV1JJVEUpCi0gICAgVmlydHVhbFByb3RlY3QgKGIuQmFzZUFkZHJl
-c3MsIGIuUmVnaW9uU2l6ZSwgb2xkcHJvdCwgJm9sZHByb3QpOwogfQogCiAj
-ZGVmaW5lIFJQX1ZFUlNJT05fVjEgMApAQCAtMjIyLDggKzI4MCwxMCBAQCBk
-b19wc2V1ZG9fcmVsb2MgKHZvaWQgKiBzdGFydCwgdm9pZCAqIGVuCiAgICAg
-ICAvKioqKioqKioqKioqKioqKioqKioqKioqKgogICAgICAgICogSGFuZGxl
-IHYxIHJlbG9jYXRpb25zICoKICAgICAgICAqKioqKioqKioqKioqKioqKioq
-KioqKioqLwotICAgICAgcnVudGltZV9wc2V1ZG9fcmVsb2NfaXRlbV92MSAq
-IG87Ci0gICAgICBmb3IgKG8gPSAocnVudGltZV9wc2V1ZG9fcmVsb2NfaXRl
-bV92MSAqKSB2Ml9oZHI7CisgICAgICBydW50aW1lX3BzZXVkb19yZWxvY19p
-dGVtX3YxICogbz0ocnVudGltZV9wc2V1ZG9fcmVsb2NfaXRlbV92MSopdjJf
-aGRyOworICAgICAgZGVidWdfcHJpbnRmKCJJdGVyYXRpbmcgdGhyb3VnaCAl
-ZCBpdGVtcyIsCisgICAgICAgICgocHRyZGlmZl90KWVuZC0ocHRyZGlmZl90
-KW8pL3NpemVvZihydW50aW1lX3BzZXVkb19yZWxvY19pdGVtX3YxKSk7Cisg
-ICAgICBmb3IgKDsKIAkgICBvIDwgKHJ1bnRpbWVfcHNldWRvX3JlbG9jX2l0
-ZW1fdjEgKillbmQ7CiAJICAgbysrKQogCXsKQEAgLTIzMiw2ICsyOTIsMTAg
-QEAgZG9fcHNldWRvX3JlbG9jICh2b2lkICogc3RhcnQsIHZvaWQgKiBlbgog
-CSAgbmV3dmFsID0gKCooKERXT1JEKikgcmVsb2NfdGFyZ2V0KSkgKyBvLT5h
-ZGRlbmQ7CiAJICBfX3dyaXRlX21lbW9yeSAoKHZvaWQgKikgcmVsb2NfdGFy
-Z2V0LCAmbmV3dmFsLCBzaXplb2YgKERXT1JEKSk7CiAJfQorICAgICAgLyoK
-KyAgICAgICAqIEluaXRpYWxpemUgdmFyaWFibGVzIGluIGZ1bmN0aW9uIGZv
-ciBsYXR0ZXIgdXNlLgorICAgICAgICovCisgICAgICBhdXRvX3Byb3RlY3Rf
-Zm9yKDApOwogICAgICAgcmV0dXJuOwogICAgIH0KIApAQCAtMjUxLDcgKzMx
-NSw4IEBAIGRvX3BzZXVkb19yZWxvYyAodm9pZCAqIHN0YXJ0LCB2b2lkICog
-ZW4KIAogICAvKiBXYWxrIG92ZXIgaGVhZGVyLiAqLwogICByID0gKHJ1bnRp
-bWVfcHNldWRvX3JlbG9jX2l0ZW1fdjIgKikgJnYyX2hkclsxXTsKLQorICBk
-ZWJ1Z19wcmludGYoIkl0ZXJhdGluZyB0aHJvdWdoICVkIGl0ZW1zIiwKKyAg
-ICAoKHB0cmRpZmZfdCllbmQtKHB0cmRpZmZfdClyKS9zaXplb2YocnVudGlt
-ZV9wc2V1ZG9fcmVsb2NfaXRlbV92MikpOwogICBmb3IgKDsgciA8IChydW50
-aW1lX3BzZXVkb19yZWxvY19pdGVtX3YyICopIGVuZDsgcisrKQogICAgIHsK
-ICAgICAgIC8qIGxvY2F0aW9uIHdoZXJlIG5ldyBhZGRyZXNzIHdpbGwgYmUg
-d3JpdHRlbiAqLwpAQCAtMzIyLDcgKzM4NywxMSBAQCBkb19wc2V1ZG9fcmVs
-b2MgKHZvaWQgKiBzdGFydCwgdm9pZCAqIGVuCiAJICBicmVhazsKICNlbmRp
-ZgogCX0KLSAgICAgfQorICB9CisgIC8qCisgICAqIEluaXRpYWxpemUgdmFy
-aWFibGVzIGluIGZ1bmN0aW9uIGZvciBsYXR0ZXIgdXNlLgorICAgKi8KKyAg
-YXV0b19wcm90ZWN0X2ZvcigwKTsKIH0KIAogI2lmZGVmIF9fQ1lHV0lOX18K
-QEAgLTMzMCw3ICszOTksMTIgQEAgZXh0ZXJuICJDIiB2b2lkCiBfcGVpMzg2
-X3J1bnRpbWVfcmVsb2NhdG9yIChwZXJfcHJvY2VzcyAqdSkKIHsKICAgaWYg
-KHUgJiYgQ1lHV0lOX1ZFUlNJT05fVVNFX1BTRVVET19SRUxPQ19JTl9ETEwg
-KHUpKQotICAgIGRvX3BzZXVkb19yZWxvYyAodS0+cHNldWRvX3JlbG9jX3N0
-YXJ0LCB1LT5wc2V1ZG9fcmVsb2NfZW5kLCB1LT5pbWFnZV9iYXNlKTsKKyAg
-ICB7CisgICAgICBEV09SRCB0aWNrID0gR2V0VGlja0NvdW50KCk7CisgICAg
-ICBkb19wc2V1ZG9fcmVsb2ModS0+cHNldWRvX3JlbG9jX3N0YXJ0LCB1LT5w
-c2V1ZG9fcmVsb2NfZW5kLCB1LT5pbWFnZV9iYXNlKTsKKyAgICAgIGRlYnVn
-X3ByaW50ZigiSE1PRFVMRSAlcCBkaWQgcHNldWRvLXJlbG9jYXRpb24gaW4g
-JURtcyIsCisgICAgICAgICAgdS0+aW1hZ2VfYmFzZSwgR2V0VGlja0NvdW50
-KCktdGljayk7CisgICAgfQogfQogI2Vsc2UKIGV4dGVybiAiQyIgdm9pZAo=
-
---------------070905030609010100000606--
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Project Co-Leader          cygwin AT cygwin DOT com
+Red Hat
