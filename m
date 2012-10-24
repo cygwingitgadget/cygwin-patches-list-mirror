@@ -1,22 +1,20 @@
-Return-Path: <cygwin-patches-return-7753-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 9534 invoked by alias); 24 Oct 2012 10:26:20 -0000
-Received: (qmail 9521 invoked by uid 22791); 24 Oct 2012 10:26:18 -0000
-X-SWARE-Spam-Status: No, hits=-5.5 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,KHOP_RCVD_TRUST,KHOP_THREADED,RCVD_IN_DNSWL_LOW,RCVD_IN_HOSTKARMA_YE
+Return-Path: <cygwin-patches-return-7754-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 14036 invoked by alias); 24 Oct 2012 12:25:49 -0000
+Received: (qmail 13919 invoked by uid 22791); 24 Oct 2012 12:25:30 -0000
 X-Spam-Check-By: sourceware.org
-Received: from mail-ie0-f171.google.com (HELO mail-ie0-f171.google.com) (209.85.223.171)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 24 Oct 2012 10:26:13 +0000
-Received: by mail-ie0-f171.google.com with SMTP id s9so409737iec.2        for <cygwin-patches@cygwin.com>; Wed, 24 Oct 2012 03:26:12 -0700 (PDT)
-Received: by 10.50.190.137 with SMTP id gq9mr1960514igc.27.1351074372671;        Wed, 24 Oct 2012 03:26:12 -0700 (PDT)
-Received: from [192.168.0.100] (S0106000cf16f58b1.wp.shawcable.net. [24.79.200.150])        by mx.google.com with ESMTPS id a10sm1690043igd.1.2012.10.24.03.26.11        (version=TLSv1/SSLv3 cipher=OTHER);        Wed, 24 Oct 2012 03:26:11 -0700 (PDT)
-Message-ID: <1351074380.1244.94.camel@YAAKOV04>
-Subject: Re: [patch]: Decouple cygwin building from in-tree mingw/w32api building
-From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
-To: cygwin-patches <cygwin-patches@cygwin.com>
-Date: Wed, 24 Oct 2012 10:26:00 -0000
-In-Reply-To: <20121024100140.GA31527@calimero.vinschen.de>
-References: <20121017193258.GA15271@ednor.casa.cgf.cx>	 <1350545597.3492.59.camel@YAAKOV04>	 <20121018083419.GC6221@calimero.vinschen.de>	 <1350580828.3492.73.camel@YAAKOV04>	 <20121019092135.GA22432@calimero.vinschen.de>	 <1350664438.3492.114.camel@YAAKOV04> <1350855543.1244.64.camel@YAAKOV04>	 <20121022122344.GC2469@calimero.vinschen.de>	 <1351071053.1244.89.camel@YAAKOV04>	 <20121024095054.GB28666@calimero.vinschen.de>	 <20121024100140.GA31527@calimero.vinschen.de>
-Content-Type: text/plain; charset="UTF-8"
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Wed, 24 Oct 2012 12:25:20 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 5CBF62C00AF; Wed, 24 Oct 2012 14:25:17 +0200 (CEST)
+Date: Wed, 24 Oct 2012 12:25:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: [Fwd: Re: Fwd: Re: [patch]: Decouple cygwin building from in-tree mingw/w32api building]
+Message-ID: <20121024122517.GA2121@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,20 +24,29 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2012-q4/txt/msg00030.txt.bz2
+X-SW-Source: 2012-q4/txt/msg00031.txt.bz2
 
-On Wed, 2012-10-24 at 12:01 +0200, Corinna Vinschen wrote:
-> > Checking in toplevel patches requires global checkin rights.  I can
-> > apply the toplevel patch when you applied the rest.  Other than that,
-> > toplevel patches also have to be kept aligned with the gcc repo.  I'll
-> > make sure to inform the gcc guys.
+FYI.
+
+----- Forwarded message from Earnie Boyd <...> -----
+
+> Date: Wed, 24 Oct 2012 07:15:52 -0400
+> From: Earnie Boyd <...>
+> To: Keith Marshall <...>, Christopher Faylor
+> 	<...>, cygwin-patches@cygwin.com, Corinna Vinschen
+> 	<...>
+> Subject: Re: Fwd: Re: [patch]: Decouple cygwin building from in-tree
+> 	mingw/w32api building
 > 
-> Oh btw., if that wasn't clear:  Please apply all but toplevel.
+> On Wed, Oct 24, 2012 at 3:49 AM, Corinna Vinschen wrote:
+> >
+> > Just to be sure:  Does that mean we can simply remove the mingw and
+> > w32api dirs in the sourceware repo any time?
+> 
+> Yes.
+> 
+> -- 
+> Earnie
+> -- https://sites.google.com/site/earnieboyd
 
-Done.  While you're at it, perhaps you could bump this patch as well:
-
-http://gcc.gnu.org/ml/gcc-patches/2011-07/msg01578.html
-
-
-Yaakov
-
+----- End forwarded message -----
