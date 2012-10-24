@@ -1,22 +1,20 @@
-Return-Path: <cygwin-patches-return-7748-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 7926 invoked by alias); 24 Oct 2012 07:49:52 -0000
-Received: (qmail 7850 invoked by uid 22791); 24 Oct 2012 07:49:37 -0000
+Return-Path: <cygwin-patches-return-7749-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 23377 invoked by alias); 24 Oct 2012 09:17:05 -0000
+Received: (qmail 23367 invoked by uid 22791); 24 Oct 2012 09:17:04 -0000
+X-SWARE-Spam-Status: No, hits=-3.5 required=5.0	tests=AWL,BAYES_00,DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,KHOP_RCVD_TRUST,NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_LOW,RCVD_IN_HOSTKARMA_YE,TW_JN,TW_OV
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Wed, 24 Oct 2012 07:49:33 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id EC7F12C00AF; Wed, 24 Oct 2012 09:49:30 +0200 (CEST)
-Date: Wed, 24 Oct 2012 07:49:00 -0000
-From: Corinna Vinschen <corinna@vinschen.de>
-To: Earnie Boyd <earnie@users.sourceforge.net>,	Keith Marshall <keith.d.marshall@ntlworld.com>
-Cc: Christopher Faylor <me@cgf.cx>, cygwin-patches@cygwin.com
-Subject: Re: Fwd: Re: [patch]: Decouple cygwin building from in-tree mingw/w32api building
-Message-ID: <20121024074930.GA28885@calimero.vinschen.de>
-Mail-Followup-To: Earnie Boyd <earnie@users.sourceforge.net>,	Keith Marshall <keith.d.marshall@ntlworld.com>,	Christopher Faylor <me@cgf.cx>, cygwin-patches@cygwin.com
-References: <508700E3.7000609@users.sourceforge.net> <50870302.5060303@ntlworld.com> <20121023214806.GA2095@ednor.casa.cgf.cx>
+Received: from mail-wg0-f45.google.com (HELO mail-wg0-f45.google.com) (74.125.82.45)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 24 Oct 2012 09:17:00 +0000
+Received: by mail-wg0-f45.google.com with SMTP id dq12so182171wgb.2        for <cygwin-patches@cygwin.com>; Wed, 24 Oct 2012 02:16:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20121023214806.GA2095@ednor.casa.cgf.cx>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Received: by 10.216.45.144 with SMTP id p16mr9377899web.170.1351070218738; Wed, 24 Oct 2012 02:16:58 -0700 (PDT)
+Received: by 10.216.24.147 with HTTP; Wed, 24 Oct 2012 02:16:58 -0700 (PDT)
+Date: Wed, 24 Oct 2012 09:17:00 -0000
+Message-ID: <CAEwic4ZiqULxgATmLT02tvyGM+c=0AOdtvGePggJrWh4dUqEYw@mail.gmail.com>
+Subject: [patch cygwin]: Replace inline-assembler in string.h by C implementation
+From: Kai Tietz <ktietz70@googlemail.com>
+To: cygwin-patches@cygwin.com
+Cc: Corinna Vinschen <corinna@vinschen.de>
+Content-Type: text/plain; charset=ISO-8859-1
 X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
@@ -27,56 +25,147 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2012-q4/txt/msg00025.txt.bz2
+X-SW-Source: 2012-q4/txt/msg00026.txt.bz2
 
-On Oct 23 17:48, Christopher Faylor wrote:
-> On Tue, Oct 23, 2012 at 09:50:10PM +0100, Keith Marshall wrote:
-> >And just like Earnie's, the response he requested from me also bounced.
-> >Forwarded copy below:
-> 
-> >-------- Original Message --------
-> >Subject: Re: [patch]: Decouple cygwin building from in-tree mingw/w32api 
-> >building
-> >Date: Tue, 23 Oct 2012 21:41:07 +0100
-> >From: Keith Marshall <...>
-> >Organization: MinGW Project
-> >To: Earnie Boyd <...>
-> >CC: cygwin-patches<...>
-> >
-> >On 22/10/12 12:14, Earnie Boyd wrote:
-> >> On Mon, Oct 22, 2012 at 12:09 AM, Christopher Faylor wrote:
-> >>>Earnie, we seem to be transitioning from the need to have a
-> >>>mingw/w32api in the source tree.  What do you think about removing
-> >>>these directories from the depot and moving repo to sourceforge, or
-> >>>some other place?
-> >>
-> >>In anticipation of this event I've already copied the source.  I would
-> >>like to leave the code in winsup until the end of the year if that
-> >>timeline is fine with Keith.
-> >
-> >Fine by me; I also have my Mercurial clones of both repositories, from
-> >the time when we abandoned them in favour of our own git repository on
-> >SourceForge.
-> >
-> >>>You've got a home for as long as you like on sourceware.org but I was
-> >>>thinking that it might be advantageous for mingw to move anyway.
-> >>
-> >>Thanks and we agree that the move is advantageous.
-> >>
-> >>>If it helps, I can provide tar copies of the directories from
-> >>>sourceware.
-> >>
-> >>I don't think I need them; Keith what do you think?
-> >
-> >We've moved on, anyway; any such copies would surely be obsolete.
-> 
-> I think it's pretty clear that we didn't know you had moved on.  The
-> last update to w32api was on 2012-08-10 and mingw was on 2012-08-06.
-> 
-> A heads up would have been appreciated.
+Hello,
 
-Just to be sure:  Does that mean we can simply remove the mingw and
-w32api dirs in the sourceware repo any time?
+this patch replaces the inline-assember used in string.h by C implementation.
+There are three reasons why I want to suggest this.  First, the C-code might
+be optimized further by fixed (constant) arguments.  Secondly, it is
+architecture
+independent and so we just need to maintain on code-path.  And as
+third point, by
+inspecting generated assembly code produced by compiler out of C code
+vs. inline-assembler
+it shows that compiler produces better code.  It handles
+jump-threading better, and also
+improves average executed instructions.
 
+ChangeLog
 
-Corinna
+2012-10-24  Kai Tietz
+
+	* string.h (strechr): Replace assembler by
+	C code.
+	(ascii_strcasematch): Likewise.
+	(ascii_strncasematch): Likwise.
+
+Ok for apply?
+
+Regards,
+Kai
+
+Index: string.h
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/string.h,v
+retrieving revision 1.14
+diff -p -u -r1.14 string.h
+--- string.h	19 Jan 2011 09:41:54 -0000	1.14
++++ string.h	24 Oct 2012 09:10:27 -0000
+@@ -22,20 +22,9 @@ extern "C" {
+ static inline __stdcall char *
+ strechr (const char *s, int c)
+ {
+-  register char * res;
+-  __asm__ __volatile__ ("\
+-	movb	%%al,%%ah\n\
+-1:	movb	(%1),%%al\n\
+-	cmpb	%%ah,%%al\n\
+-	je	2f\n\
+-	incl	%1\n\
+-	testb	%%al,%%al\n\
+-	jne	1b\n\
+-	decl	%1\n\
+-2:	movl	%1,%0\n\
+-	":"=a" (res), "=r" (s)
+-	:"0" (c), "1" (s));
+-  return res;
++  while (*s != (char) c && *s != 0)
++    ++s;
++  return (char *) s;
+ }
+
+ #ifdef __INSIDE_CYGWIN__
+@@ -45,57 +34,38 @@ extern const char isalpha_array[];
+ static inline int
+ ascii_strcasematch (const char *cs, const char *ct)
+ {
+-  register int __res;
+-  int d0, d1;
+-  __asm__ ("\
+-	.global	_isalpha_array			\n\
+-	cld					\n\
+-	andl	$0xff,%%eax			\n\
+-1:	lodsb					\n\
+-	scasb					\n\
+-	je	2f				\n\
+-	xorb	_isalpha_array(%%eax),%%al	\n\
+-	cmpb	-1(%%edi),%%al			\n\
+-	jne	3f				\n\
+-2:	testb	%%al,%%al			\n\
+-	jnz	1b				\n\
+-	movl	$1,%%eax			\n\
+-	jmp	4f				\n\
+-3:	xor	%0,%0				\n\
+-4:"
+-	:"=a" (__res), "=&S" (d0), "=&D" (d1)
+-		     : "1" (cs),   "2" (ct));
++  register const unsigned char *us, *ut;
+
+-  return __res;
++  us = (const unsigned char *) cs;
++  ut = (const unsigned char *) ct;
++
++  while (us[0] == ut[0] || (us[0] ^ isalpha_array[us[0]]) == ut[0])
++    {
++      if (us[0] == 0)
++	return 1;
++      ++us, ++ut;
++    }
++  return 0;
+ }
+
+ static inline int
+ ascii_strncasematch (const char *cs, const char *ct, size_t n)
+ {
+-  register int __res;
+-  int d0, d1, d2;
+-  __asm__ ("\
+-	.global	_isalpha_array;			\n\
+-	cld					\n\
+-	andl	$0xff,%%eax			\n\
+-1:	decl	%3				\n\
+-	js	3f				\n\
+-	lodsb					\n\
+-	scasb					\n\
+-	je	2f				\n\
+-	xorb	_isalpha_array(%%eax),%%al	\n\
+-	cmpb	-1(%%edi),%%al			\n\
+-	jne	4f				\n\
+-2:	testb	%%al,%%al			\n\
+-	jnz	1b				\n\
+-3:	movl	$1,%%eax			\n\
+-	jmp	5f				\n\
+-4:	xor	%0,%0				\n\
+-5:"
+-	:"=a" (__res), "=&S" (d0), "=&D" (d1), "=&c" (d2)
+-		       :"1" (cs),  "2" (ct), "3" (n));
++  register const unsigned char *us, *ut;
+
+-  return __res;
++  if (!n)
++   return 1;
++  us = (const unsigned char *) cs;
++  ut = (const unsigned char *) ct;
++
++  while (us[0] == ut[0] || (us[0] ^ isalpha_array[us[0]]) == ut[0])
++    {
++      --n;
++      if (!n || us[0] == 0)
++        return 1;
++      ++us, ++ut;
++    }
++  return 0;
+ }
+
+ #undef strcasecmp
