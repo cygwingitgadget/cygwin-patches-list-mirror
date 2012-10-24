@@ -1,23 +1,22 @@
-Return-Path: <cygwin-patches-return-7755-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 15570 invoked by alias); 24 Oct 2012 12:27:36 -0000
-Received: (qmail 15536 invoked by uid 22791); 24 Oct 2012 12:27:23 -0000
+Return-Path: <cygwin-patches-return-7756-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 6314 invoked by alias); 24 Oct 2012 13:23:56 -0000
+Received: (qmail 6288 invoked by uid 22791); 24 Oct 2012 13:23:38 -0000
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Wed, 24 Oct 2012 12:27:18 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id E16212C00AF; Wed, 24 Oct 2012 14:27:15 +0200 (CEST)
-Date: Wed, 24 Oct 2012 12:27:00 -0000
-From: Corinna Vinschen <corinna@vinschen.de>
-To: Earnie Boyd <earnie@users.sourceforge.net>
-Cc: Keith Marshall <keith.d.marshall@ntlworld.com>,	Christopher Faylor <me@cgf.cx>, cygwin-patches@cygwin.com
-Subject: Re: Fwd: Re: [patch]: Decouple cygwin building from in-tree mingw/w32api building
-Message-ID: <20121024122715.GB2121@calimero.vinschen.de>
-Mail-Followup-To: Earnie Boyd <earnie@users.sourceforge.net>,	Keith Marshall <keith.d.marshall@ntlworld.com>,	Christopher Faylor <me@cgf.cx>, cygwin-patches@cygwin.com
-References: <508700E3.7000609@users.sourceforge.net> <50870302.5060303@ntlworld.com> <20121023214806.GA2095@ednor.casa.cgf.cx> <20121024074930.GA28885@calimero.vinschen.de> <CA+sc5mnhypmap7jeoGrfH_BxMHDV0Y_KJEpAYK62jnwD+fbXqQ@mail.gmail.com>
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Wed, 24 Oct 2012 13:23:33 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id AC5282C00AF; Wed, 24 Oct 2012 15:23:30 +0200 (CEST)
+Date: Wed, 24 Oct 2012 13:23:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: [patch]: Decouple cygwin building from in-tree mingw/w32api building
+Message-ID: <20121024132330.GB31527@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20121018083419.GC6221@calimero.vinschen.de> <1350580828.3492.73.camel@YAAKOV04> <20121019092135.GA22432@calimero.vinschen.de> <1350664438.3492.114.camel@YAAKOV04> <1350855543.1244.64.camel@YAAKOV04> <20121022122344.GC2469@calimero.vinschen.de> <1351071053.1244.89.camel@YAAKOV04> <20121024095054.GB28666@calimero.vinschen.de> <20121024100140.GA31527@calimero.vinschen.de> <1351074380.1244.94.camel@YAAKOV04>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CA+sc5mnhypmap7jeoGrfH_BxMHDV0Y_KJEpAYK62jnwD+fbXqQ@mail.gmail.com>
+In-Reply-To: <1351074380.1244.94.camel@YAAKOV04>
 User-Agent: Mutt/1.5.21 (2010-09-15)
-X-IsSubscribed: yes
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -27,17 +26,23 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2012-q4/txt/msg00032.txt.bz2
+X-SW-Source: 2012-q4/txt/msg00033.txt.bz2
 
-On Oct 24 07:15, Earnie Boyd wrote:
-> On Wed, Oct 24, 2012 at 3:49 AM, Corinna Vinschen wrote:
-> >
-> > Just to be sure:  Does that mean we can simply remove the mingw and
-> > w32api dirs in the sourceware repo any time?
+On Oct 24 05:26, Yaakov (Cygwin/X) wrote:
+> On Wed, 2012-10-24 at 12:01 +0200, Corinna Vinschen wrote:
+> > > Checking in toplevel patches requires global checkin rights.  I can
+> > > apply the toplevel patch when you applied the rest.  Other than that,
+> > > toplevel patches also have to be kept aligned with the gcc repo.  I'll
+> > > make sure to inform the gcc guys.
+> > 
+> > Oh btw., if that wasn't clear:  Please apply all but toplevel.
 > 
-> Yes.
+> Done.  While you're at it, perhaps you could bump this patch as well:
+> 
+> http://gcc.gnu.org/ml/gcc-patches/2011-07/msg01578.html
 
-Ok, thank you!
+I'd hazard the guess that a ping in the context of the thread would
+make more sense...
 
 
 Corinna
