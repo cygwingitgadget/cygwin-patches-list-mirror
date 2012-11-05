@@ -1,27 +1,19 @@
-Return-Path: <cygwin-patches-return-7767-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 26741 invoked by alias); 27 Oct 2012 04:47:41 -0000
-Received: (qmail 26721 invoked by uid 22791); 27 Oct 2012 04:47:40 -0000
-X-SWARE-Spam-Status: No, hits=-1.9 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,RCVD_IN_HOSTKARMA_YE
+Return-Path: <cygwin-patches-return-7768-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 32748 invoked by alias); 5 Nov 2012 02:41:55 -0000
+Received: (qmail 32636 invoked by uid 22791); 5 Nov 2012 02:41:53 -0000
+X-SWARE-Spam-Status: No, hits=-4.7 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,KHOP_RCVD_TRUST,RCVD_IN_DNSWL_LOW,RCVD_IN_HOSTKARMA_YE
 X-Spam-Check-By: sourceware.org
-Received: from mho-03-ewr.mailhop.org (HELO mho-01-ewr.mailhop.org) (204.13.248.66)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Sat, 27 Oct 2012 04:47:31 +0000
-Received: from pool-173-76-43-156.bstnma.fios.verizon.net ([173.76.43.156] helo=cgf.cx)	by mho-01-ewr.mailhop.org with esmtpa (Exim 4.72)	(envelope-from <cgf@cgf.cx>)	id 1TRyJ0-0003Gc-QK	for cygwin-patches@cygwin.com; Sat, 27 Oct 2012 04:47:30 +0000
-Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id 2A5CA13C0C7	for <cygwin-patches@cygwin.com>; Sat, 27 Oct 2012 00:47:30 -0400 (EDT)
-X-Mail-Handler: Dyn Standard SMTP by Dyn
-X-Report-Abuse-To: abuse@dyndns.com (see http://www.dyndns.com/services/sendlabs/outbound_abuse.html for abuse reporting information)
-X-MHO-User: U2FsdGVkX1/RGbjgc+vbppQTc6l4O0pc
-Date: Sat, 27 Oct 2012 04:47:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [patch cygwin]: Rename strechr to strchrnul
-Message-ID: <20121027044730.GD27148@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <CAEwic4Yw5AQVMk_wCyru5oZw7z-ghowc1Yu_mj_Z9Z5rmuHPqg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEwic4Yw5AQVMk_wCyru5oZw7z-ghowc1Yu_mj_Z9Z5rmuHPqg@mail.gmail.com>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+Received: from mail-ie0-f171.google.com (HELO mail-ie0-f171.google.com) (209.85.223.171)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Mon, 05 Nov 2012 02:41:47 +0000
+Received: by mail-ie0-f171.google.com with SMTP id s9so7800069iec.2        for <cygwin-patches@cygwin.com>; Sun, 04 Nov 2012 18:41:47 -0800 (PST)
+Received: by 10.50.46.199 with SMTP id x7mr8252650igm.19.1352083306964;        Sun, 04 Nov 2012 18:41:46 -0800 (PST)
+Received: from [192.168.0.100] (S0106000cf16f58b1.wp.shawcable.net. [24.79.200.150])        by mx.google.com with ESMTPS id gs6sm5220171igc.11.2012.11.04.18.41.45        (version=TLSv1/SSLv3 cipher=OTHER);        Sun, 04 Nov 2012 18:41:46 -0800 (PST)
+Message-ID: <1352083306.8040.10.camel@YAAKOV04>
+Subject: [PATCH] additional sys/termios.h defines
+From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
+To: cygwin-patches <cygwin-patches@cygwin.com>
+Date: Mon, 05 Nov 2012 02:41:00 -0000
+Content-Type: multipart/mixed; boundary="=-75rIbK+WlwhUiFb/ZEcp"
+Mime-Version: 1.0
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -31,26 +23,71 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2012-q4/txt/msg00044.txt.bz2
+X-SW-Source: 2012-q4/txt/msg00045.txt.bz2
 
-On Fri, Oct 26, 2012 at 10:13:07PM +0200, Kai Tietz wrote:
->Hello,
->
->this patch replaces strechr by strchrnul symbol-name.  The strchrnul
->name is that one also present in new-libc for this function behavior.
->ChangeLog
->
->2012-10-26  Kai Tietz
->
->	* dcrt0.cc (quoted): Renamed strechr to strchrnul.
->	* environ.cc (environ_init): Likewise.
->	* sec_acl.cc (aclfromtext32): Likewise.
->	* sec_auth.cc (extract_nt_dom_user): Likewise.
->	* uinfo.cc (pwdgrp::next_str): Likewise.
->	* string.h (strechr): Likewise.
->
->Ok for apply?
 
-Yes.  Thanks.
+--=-75rIbK+WlwhUiFb/ZEcp
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Content-length: 110
 
-cgf
+The attached patch adds a few defines to <sys/termios.h> to make it
+compatible with Linux and *BSD.
+
+
+Yaakov
+
+
+--=-75rIbK+WlwhUiFb/ZEcp
+Content-Disposition: attachment; filename="ttydefaults.patch"
+Content-Type: text/x-patch; name="ttydefaults.patch"; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Content-length: 1500
+
+2012-11-04  Yaakov Selkowitz  <yselkowitz@...>
+
+	* include/sys/termios.h (CBRK): Define as alias of CEOL.
+	(CREPRINT): Define as alias of CRPRNT.
+	(CDISCARD): Define as alias of CFLUSH.
+	(TTYDEF_*): Define.
+
+Index: include/sys/termios.h
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/include/sys/termios.h,v
+retrieving revision 1.22
+diff -u -p -r1.22 termios.h
+--- include/sys/termios.h	28 Feb 2012 14:03:03 -0000	1.22
++++ include/sys/termios.h	5 Nov 2012 02:35:34 -0000
+@@ -85,6 +85,7 @@ POSIX commands */
+ #define CEOT	CTRL('D')
+ #define CEOL	0
+ #define CEOL2	0
++#define CBRK	CEOL
+ #define CEOF	CTRL('D')
+ #define CSTART	CTRL('Q')
+ #define CSTOP	CTRL('S')
+@@ -93,7 +94,9 @@ POSIX commands */
+ #define CSUSP	CTRL('Z')
+ #define CDSUSP	CTRL('Y')
+ #define CRPRNT	CTRL('R')
++#define CREPRINT	CRPRNT
+ #define CFLUSH	CTRL('O')
++#define CDISCARD	CFLUSH
+ #define CWERASE	CTRL('W')
+ #define CLNEXT	CTRL('V')
+ 
+@@ -241,6 +244,12 @@ POSIX commands */
+    `struct termios'.  If VAL is _POSIX_VDISABLE, no character can match it.  */
+ #define CCEQ(val, c)	((c) == (val) && (val) != _POSIX_VDISABLE)
+ 
++#define TTYDEF_IFLAG	(BRKINT	| ICRNL	| IMAXBEL | IXON | IXANY)
++#define TTYDEF_OFLAG	(OPOST | ONLCR)
++#define TTYDEF_LFLAG	(ICANON | ISIG | IEXTEN | ECHO | ECHOE | ECHOKE | ECHOCTL)
++#define TTYDEF_CFLAG	(CREAD | CS8 | HUPCL)
++#define TTYDEF_SPEED	(B9600)
++
+ typedef unsigned char cc_t;
+ typedef unsigned int  tcflag_t;
+ typedef unsigned int  speed_t;
+
+--=-75rIbK+WlwhUiFb/ZEcp--
