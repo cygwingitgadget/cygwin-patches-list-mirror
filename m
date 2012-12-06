@@ -1,27 +1,19 @@
-Return-Path: <cygwin-patches-return-7786-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 2272 invoked by alias); 21 Nov 2012 15:22:01 -0000
-Received: (qmail 2260 invoked by uid 22791); 21 Nov 2012 15:21:56 -0000
-X-SWARE-Spam-Status: No, hits=-1.9 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,RCVD_IN_HOSTKARMA_YE
+Return-Path: <cygwin-patches-return-7787-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 28437 invoked by alias); 6 Dec 2012 05:20:36 -0000
+Received: (qmail 28426 invoked by uid 22791); 6 Dec 2012 05:20:32 -0000
+X-SWARE-Spam-Status: No, hits=-4.7 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,KHOP_RCVD_TRUST,RCVD_IN_DNSWL_LOW,RCVD_IN_HOSTKARMA_YE
 X-Spam-Check-By: sourceware.org
-Received: from mho-03-ewr.mailhop.org (HELO mho-01-ewr.mailhop.org) (204.13.248.66)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 21 Nov 2012 15:21:49 +0000
-Received: from pool-173-76-51-117.bstnma.fios.verizon.net ([173.76.51.117] helo=cgf.cx)	by mho-01-ewr.mailhop.org with esmtpa (Exim 4.72)	(envelope-from <cgf@cgf.cx>)	id 1TbC7W-000Ebz-OX	for cygwin-patches@cygwin.com; Wed, 21 Nov 2012 15:21:46 +0000
-Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id CE96E13C076	for <cygwin-patches@cygwin.com>; Wed, 21 Nov 2012 10:21:45 -0500 (EST)
-X-Mail-Handler: Dyn Standard SMTP by Dyn
-X-Report-Abuse-To: abuse@dyndns.com (see http://www.dyndns.com/services/sendlabs/outbound_abuse.html for abuse reporting information)
-X-MHO-User: U2FsdGVkX1/l4P66XnPhg6a9TkS96Ljj
-Date: Wed, 21 Nov 2012 15:22:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] add cfsetspeed
-Message-ID: <20121121152145.GB14791@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1353495243.5592.25.camel@YAAKOV04>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1353495243.5592.25.camel@YAAKOV04>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+Received: from mail-ia0-f179.google.com (HELO mail-ia0-f179.google.com) (209.85.210.179)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 06 Dec 2012 05:20:26 +0000
+Received: by mail-ia0-f179.google.com with SMTP id o25so4386749iad.10        for <cygwin-patches@cygwin.com>; Wed, 05 Dec 2012 21:20:25 -0800 (PST)
+Received: by 10.50.40.138 with SMTP id x10mr4635121igk.41.1354771225721;        Wed, 05 Dec 2012 21:20:25 -0800 (PST)
+Received: from [192.168.0.100] (S0106000cf16f58b1.wp.shawcable.net. [24.79.200.150])        by mx.google.com with ESMTPS id gz10sm6342768igc.9.2012.12.05.21.20.24        (version=TLSv1/SSLv3 cipher=OTHER);        Wed, 05 Dec 2012 21:20:24 -0800 (PST)
+Message-ID: <1354771229.6160.2.camel@YAAKOV04>
+Subject: [PATCH] waitpid(2) WAIT_* macros
+From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
+To: cygwin-patches <cygwin-patches@cygwin.com>
+Date: Thu, 06 Dec 2012 05:20:00 -0000
+Content-Type: multipart/mixed; boundary="=-fOI3HAu0HCAgQBSyS/fQ"
+Mime-Version: 1.0
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -31,32 +23,50 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2012-q4/txt/msg00063.txt.bz2
+X-SW-Source: 2012-q4/txt/msg00064.txt.bz2
 
-On Wed, Nov 21, 2012 at 04:54:03AM -0600, Yaakov (Cygwin/X) wrote:
->This patchset adds cfsetspeed(3), a BSD extension also available in
->glibc:
->
->http://man7.org/linux/man-pages/man3/termios.3.html
->
->Per the description, cfsetspeed() is the equivalent of cfsetospeed() and
->cfsetispeed() with the same baud rate.  Patch for winsup/cygwin
->attached.
->
->
->Yaakov
->
 
->2012-11-21  Yaakov Selkowitz  <yselkowitz@...>
->
->	* termios.cc (cfsetspeed): New function.
->	* cygwin.din (cfsetspeed): Export.
->	* posix.sgml (std-bsd): Add cfsetspeed.
->	* include/sys/termios.h (cfsetspeed): Declare.
->	* include/cygwin/version.h (CYGWIN_VERSION_API_MINOR): Bump.
+--=-fOI3HAu0HCAgQBSyS/fQ
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Content-length: 232
 
-Looks good.  Please check in.
+WAIT_ANY and WAIT_MYPGRP are defined by glibc[1] as symbolic constants
+for special values in the first argument to waitpid(2).  Patch attached.
 
-Thanks.
 
-cgf
+Yaakov
+
+[1]
+http://www.gnu.org/software/libc/manual/html_node/Process-Completion.html
+
+--=-fOI3HAu0HCAgQBSyS/fQ
+Content-Disposition: attachment; filename="wait-macros.patch"
+Content-Type: text/x-patch; name="wait-macros.patch"; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Content-length: 634
+
+2012-12-05  Yaakov Selkowitz  <yselkowitz@...>
+
+	* include/cygwin/wait.h (WAIT_ANY): Define.
+	(WAIT_MYPGRP): Define.
+
+Index: include/cygwin/wait.h
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/include/cygwin/wait.h,v
+retrieving revision 1.3
+diff -u -p -r1.3 wait.h
+--- include/cygwin/wait.h	6 Oct 2011 16:02:35 -0000	1.3
++++ include/cygwin/wait.h	6 Dec 2012 05:15:03 -0000
+@@ -11,6 +11,9 @@ details. */
+ #ifndef _CYGWIN_WAIT_H
+ #define _CYGWIN_WAIT_H
+ 
++#define WAIT_ANY	(pid_t)-1
++#define WAIT_MYPGRP	(pid_t)0
++
+ #define WNOHANG 1
+ #define WUNTRACED 2
+ #define WCONTINUED 8
+
+--=-fOI3HAu0HCAgQBSyS/fQ--
