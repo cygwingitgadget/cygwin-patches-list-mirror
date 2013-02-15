@@ -1,22 +1,19 @@
-Return-Path: <cygwin-patches-return-7795-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 2614 invoked by alias); 12 Jan 2013 19:26:58 -0000
-Received: (qmail 2162 invoked by uid 22791); 12 Jan 2013 19:26:38 -0000
+Return-Path: <cygwin-patches-return-7796-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 29507 invoked by alias); 15 Feb 2013 02:10:09 -0000
+Received: (qmail 29484 invoked by uid 22791); 15 Feb 2013 02:10:06 -0000
+X-SWARE-Spam-Status: No, hits=-4.6 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,KHOP_RCVD_TRUST,KHOP_SPAMHAUS_DROP,RCVD_IN_DNSWL_LOW,RCVD_IN_HOSTKARMA_YE
 X-Spam-Check-By: sourceware.org
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Sat, 12 Jan 2013 19:26:32 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 510ED520666; Sat, 12 Jan 2013 20:26:29 +0100 (CET)
-Date: Sat, 12 Jan 2013 19:26:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Received: from mail-ie0-f179.google.com (HELO mail-ie0-f179.google.com) (209.85.223.179)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 15 Feb 2013 02:09:59 +0000
+Received: by mail-ie0-f179.google.com with SMTP id k11so4134076iea.38        for <cygwin-patches@cygwin.com>; Thu, 14 Feb 2013 18:09:58 -0800 (PST)
+X-Received: by 10.50.33.203 with SMTP id t11mr560698igi.97.1360894198399;        Thu, 14 Feb 2013 18:09:58 -0800 (PST)
+Received: from YAAKOV04 (S0106000cf16f58b1.wp.shawcable.net. [24.79.200.150])        by mx.google.com with ESMTPS id fa6sm2301845igb.2.2013.02.14.18.09.56        (version=SSLv3 cipher=RC4-SHA bits=128/128);        Thu, 14 Feb 2013 18:09:57 -0800 (PST)
+Date: Fri, 15 Feb 2013 02:10:00 -0000
+From: Yaakov (Cygwin/X) <yselkowitz@users.sourceforge.net>
 To: cygwin-patches@cygwin.com
-Subject: Re: Console modes: cursor style
-Message-ID: <20130112192629.GB4877@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <50EFCE3C.8030607@towo.net> <20130111110534.GD17162@calimero.vinschen.de> <50F00AFA.2000307@towo.net> <20130111133451.GH17162@calimero.vinschen.de> <50F195D9.7030904@towo.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <50F195D9.7030904@towo.net>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Subject: [PATCH 64bit] lsaauth: skip 32bit DLL on 64bit target
+Message-ID: <20130214200956.35632ae0@YAAKOV04>
+Mime-Version: 1.0
+Content-Type: multipart/mixed; boundary="MP_/QcyfU5RTgsfE4eTeoHfEnub"
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -26,38 +23,53 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2013-q1/txt/msg00006.txt.bz2
-
-On Jan 12 17:56, Thomas Wolff wrote:
-> Am 11.01.2013 14:34, schrieb Corinna Vinschen:
-> >On Jan 11 13:52, Thomas Wolff wrote:
-> >>On 11.01.2013 12:05, Corinna Vinschen wrote:
-> >>>On Jan 11 09:33, Thomas Wolff wrote:
-> >>>>The attached patch adds two escape control sequences to the Cygwin Console:
-> >>>>
-> >>>>  * Show/Hide Cursor (DECTCEM)
-> >>>>  * Set cursor style (DECSCUSR): block vs. underline cursor, or
-> >>>>    arbitrary size (as an extension, using values > 4)
-> >>>>
-> >>>>Thomas
-> >>>>
-> >>>>2013-01-13  Thomas Wolff  <...>
-> >>>>
-> >>>>	* fhandler.h (class dev_console): Flag for expanded control sequence.
-> >>>>	* fhandler_console.cc (char_command): Supporting cursor style modes.
-> >>>Patch applied.  Can you provide a patch for the docs, too, please?
-> >>Sure, but: where are the docs to be patched? Any package to be installed?
-> >Cygwin CVS, file winsup/doc/new-features.sgml
-> Patch attached.
-
-Applied.
+X-SW-Source: 2013-q1/txt/msg00007.txt.bz2
 
 
-Thanks,
-Corinna
+--MP_/QcyfU5RTgsfE4eTeoHfEnub
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Content-length: 0
 
 
--- 
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Project Co-Leader          cygwin AT cygwin DOT com
-Red Hat
+--MP_/QcyfU5RTgsfE4eTeoHfEnub
+Content-Type: text/x-patch
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename=lsaauth-64bit.patch
+Content-length: 1020
+
+2013-02-14  Yaakov Selkowitz  <yselkowitz@...>
+
+	* Makefile.in: Do not build or install 32bit DLL for 64bit target.
+
+Index: Makefile.in
+===================================================================
+RCS file: /cvs/src/src/winsup/lsaauth/Makefile.in,v
+retrieving revision 1.6.2.2
+diff -u -p -r1.6.2.2 Makefile.in
+--- Makefile.in	23 Nov 2012 15:14:39 -0000	1.6.2.2
++++ Makefile.in	15 Feb 2013 01:15:48 -0000
+@@ -46,9 +46,11 @@ WIN32_LDFLAGS	:= $(CFLAGS) -nostdlib -Wl
+ # not recognized by LSA.
+ LIBS		:= -ladvapi32 -lkernel32 -lntdll
+ 
++ifneq ($(target_alias),x86_64-pc-cygwin)
+ DLL32	:=	cyglsa.dll
+ DEF32	:=	cyglsa.def
+ OBJ32	:=	cyglsa.o
++endif
+ 
+ DLL64	:=	cyglsa64.dll
+ DEF64	:=	cyglsa64.def
+@@ -84,6 +86,8 @@ clean:
+ 
+ install: all
+ 	/bin/mkdir -p $(DESTDIR)$(bindir)
++ifneq ($(target_alias),x86_64-pc-cygwin)
+ 	$(INSTALL_PROGRAM) $(DLL32) $(DESTDIR)$(bindir)/$(DLL32)
++endif
+ 	$(INSTALL_PROGRAM) $(DLL64) $(DESTDIR)$(bindir)/$(DLL64)
+ 	$(INSTALL_PROGRAM) $(srcdir)/cyglsa-config $(DESTDIR)$(bindir)/cyglsa-config
+
+--MP_/QcyfU5RTgsfE4eTeoHfEnub--
