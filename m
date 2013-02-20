@@ -1,27 +1,19 @@
-Return-Path: <cygwin-patches-return-7813-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 13322 invoked by alias); 19 Feb 2013 00:39:56 -0000
-Received: (qmail 13223 invoked by uid 22791); 19 Feb 2013 00:39:55 -0000
-X-SWARE-Spam-Status: No, hits=-1.7 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,RCVD_IN_HOSTKARMA_YE,SARE_SUB_OBFU_Q1
+Return-Path: <cygwin-patches-return-7814-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 17072 invoked by alias); 20 Feb 2013 09:33:31 -0000
+Received: (qmail 17036 invoked by uid 22791); 20 Feb 2013 09:33:29 -0000
+X-SWARE-Spam-Status: No, hits=-3.7 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,KHOP_RCVD_TRUST,RCVD_IN_DNSWL_LOW,RCVD_IN_HOSTKARMA_YE
 X-Spam-Check-By: sourceware.org
-Received: from mho-03-ewr.mailhop.org (HELO mho-01-ewr.mailhop.org) (204.13.248.66)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Tue, 19 Feb 2013 00:39:46 +0000
-Received: from pool-173-76-49-193.bstnma.fios.verizon.net ([173.76.49.193] helo=cgf.cx)	by mho-01-ewr.mailhop.org with esmtpa (Exim 4.72)	(envelope-from <cgf@cgf.cx>)	id 1U7bFJ-0001fg-9t	for cygwin-patches@cygwin.com; Tue, 19 Feb 2013 00:39:45 +0000
-Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id 6F3128804BC	for <cygwin-patches@cygwin.com>; Mon, 18 Feb 2013 19:39:44 -0500 (EST)
-X-Mail-Handler: Dyn Standard SMTP by Dyn
-X-Report-Abuse-To: abuse@dyndns.com (see http://www.dyndns.com/services/sendlabs/outbound_abuse.html for abuse reporting information)
-X-MHO-User: U2FsdGVkX19GITuLWxZros97Nu4uwSHT
-Date: Tue, 19 Feb 2013 00:39:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: Qsort defects (in C-library)
-Message-ID: <20130219003944.GC2682@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1361206282.74694.YahooMailNeo@web141004.mail.bf1.yahoo.com> <20130218210511.GA30648@calimero.vinschen.de>
+Received: from mail-la0-f41.google.com (HELO mail-la0-f41.google.com) (209.85.215.41)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Wed, 20 Feb 2013 09:33:21 +0000
+Received: by mail-la0-f41.google.com with SMTP id fo12so7523400lab.14        for <cygwin-patches@cygwin.com>; Wed, 20 Feb 2013 01:33:19 -0800 (PST)
+X-Received: by 10.152.131.67 with SMTP id ok3mr16998383lab.20.1361352799699; Wed, 20 Feb 2013 01:33:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20130218210511.GA30648@calimero.vinschen.de>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+Received: by 10.114.96.131 with HTTP; Wed, 20 Feb 2013 01:32:59 -0800 (PST)
+From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
+Date: Wed, 20 Feb 2013 09:33:00 -0000
+Message-ID: <CAGvSfezH1=HKNrjzOnRF28riHhfnX8GwYkBHy9SDDK+0_fpK9Q@mail.gmail.com>
+Subject: [PATCH 64bit] ssize_t
+To: cygwin-patches@cygwin.com
+Content-Type: multipart/mixed; boundary=f46d04343d3c0a438704d624a6ec
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -31,21 +23,92 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2013-q1/txt/msg00024.txt.bz2
+X-SW-Source: 2013-q1/txt/msg00025.txt.bz2
 
-On Mon, Feb 18, 2013 at 10:05:11PM +0100, Corinna Vinschen wrote:
->On Feb 18 08:51, Dennis de Champeaux wrote:
->> 
->> 
->> // I hope this is the proper mailing list
->
->Unfortunately it's not.  Qsort is not implemented in Cygwin itself, but
->rather in newlib, the underlying C lib.  The right mailing list is
->newlib AT sourceware DOT org.
->It's also kind of good style not to send the entire code, but rather a
->context diff relative to current CVS.  For anonymous CVS access, see the
->"Download" link at http://sourceware.org/newlib/
 
-i.e., "a patch" like the name cygwin-patches implies.
+--f46d04343d3c0a438704d624a6ec
+Content-Type: text/plain; charset=ISO-8859-1
+Content-length: 82
 
-cgf
+Here is the patch for cygwin necessary for my newly-posted newlib patch.
+
+
+Yaakov
+
+--f46d04343d3c0a438704d624a6ec
+Content-Type: application/octet-stream; name="cygwin-64bit-ssize_t.patch"
+Content-Disposition: attachment; filename="cygwin-64bit-ssize_t.patch"
+Content-Transfer-Encoding: base64
+X-Attachment-Id: f_hdeaahhq0
+Content-length: 4104
+
+MjAxMy0wMi0yMCAgWWFha292IFNlbGtvd2l0eiAgPHlzZWxrb3dpdHpALi4u
+PgoKCSogY3lnc2VydmVyX2lwYyAoY2xhc3MgaXBjX3JldHZhbCk6IEFkZCBz
+c2l6ZV90IG1lbWJlciB0byBhbm9ueW1vdXMKCXVuaW9uLgoJKGlwY19yZXR2
+YWw6Om9wZXJhdG9yID0pOiBBZGQgc3NpemVfdCB2YXJpYW50IGZvciB4ODZf
+NjQuCgkqIGZoYW5kbGVyX2Zsb3BweS5jYyAoZmhhbmRsZXJfZGV2X2Zsb3Bw
+eTo6cmF3X3dyaXRlKTogQ2hhbmdlIHJldHVybgoJdHlwZSB0byBzc2l6ZV90
+IHRvIG1hdGNoIGZoYW5kbGVyLmguCgkqIGZoYW5kbGVyX3NvY2tldC5jYyAo
+ZmhhbmRsZXJfc29ja2V0OjpyZWFkdik6IERpdHRvLgoJKGZoYW5kbGVyX3Nv
+Y2tldDo6d3JpdGUpOiBEaXR0by4KCShmaGFuZGxlcl9zb2NrZXQ6OndyaXRl
+dik6IERpdHRvLgoJKGZoYW5kbGVyX3NvY2tldDo6c2VuZG1zZyk6IERpdHRv
+LgoKSW5kZXg6IGN5Z3NlcnZlcl9pcGMuaAo9PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09ClJDUyBmaWxlOiAvY3ZzL3NyYy9zcmMvd2luc3VwL2N5Z3dpbi9jeWdz
+ZXJ2ZXJfaXBjLmgsdgpyZXRyaWV2aW5nIHJldmlzaW9uIDEuMTEuMi42CmRp
+ZmYgLXUgLXAgLXIxLjExLjIuNiBjeWdzZXJ2ZXJfaXBjLmgKLS0tIGN5Z3Nl
+cnZlcl9pcGMuaAk5IEZlYiAyMDEzIDExOjEwOjE1IC0wMDAwCTEuMTEuMi42
+CisrKyBjeWdzZXJ2ZXJfaXBjLmgJMjAgRmViIDIwMTMgMDk6MjY6NTUgLTAw
+MDAKQEAgLTYyLDYgKzYyLDcgQEAgY2xhc3MgaXBjX3JldHZhbCB7CiBwcml2
+YXRlOgogICB1bmlvbiB7CiAgICAgaW50IGk7CisgICAgc3NpemVfdCBzc3o7
+CiAgICAgc2l6ZV90IHN6OwogICAgIHZtX29mZnNldF90IG9mZjsKICAgICB2
+bV9vYmplY3RfdCBvYmo7CkBAIC03Nyw2ICs3OCwxMCBAQCBwdWJsaWM6CiAg
+IC8qIE9uIHg4Nl82NDogc2l6ZV90ID09IHZtX29mZnNldF90ID09IHVuc2ln
+bmVkIGxvbmcgKi8KICAgb3BlcmF0b3Igc2l6ZV90ICgpIGNvbnN0IHsgcmV0
+dXJuIHN6OyB9CiAgIHNpemVfdCBvcGVyYXRvciA9IChzaXplX3QgbnN6KSB7
+IHJldHVybiBzeiA9IG5zejsgfQorI2Vsc2UKKyAgLyogT24gaTY4Njogc3Np
+emVfdCA9PSBsb25nID09IGludCAqLworICBvcGVyYXRvciBzc2l6ZV90ICgp
+IGNvbnN0IHsgcmV0dXJuIHNzejsgfQorICBzc2l6ZV90IG9wZXJhdG9yID0g
+KHNzaXplX3QgbnNzeikgeyByZXR1cm4gc3N6ID0gbnNzejsgfQogI2VuZGlm
+CiAKICAgb3BlcmF0b3Igdm1fb2Zmc2V0X3QgKCkgY29uc3QgeyByZXR1cm4g
+b2ZmOyB9CkluZGV4OiBmaGFuZGxlcl9mbG9wcHkuY2MKPT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PQpSQ1MgZmlsZTogL2N2cy9zcmMvc3JjL3dpbnN1cC9jeWd3
+aW4vZmhhbmRsZXJfZmxvcHB5LmNjLHYKcmV0cmlldmluZyByZXZpc2lvbiAx
+LjYyLjIuNQpkaWZmIC11IC1wIC1yMS42Mi4yLjUgZmhhbmRsZXJfZmxvcHB5
+LmNjCi0tLSBmaGFuZGxlcl9mbG9wcHkuY2MJMTIgRmViIDIwMTMgMTE6MjQ6
+MzUgLTAwMDAJMS42Mi4yLjUKKysrIGZoYW5kbGVyX2Zsb3BweS5jYwkyMCBG
+ZWIgMjAxMyAwOToyNjo1NSAtMDAwMApAQCAtNTU5LDcgKzU1OSw3IEBAIGVy
+cjoKICAgdWxlbiA9IChzaXplX3QpIC0xOwogfQogCi1pbnQgX19zdGRjYWxs
+Citzc2l6ZV90IF9fc3RkY2FsbAogZmhhbmRsZXJfZGV2X2Zsb3BweTo6cmF3
+X3dyaXRlIChjb25zdCB2b2lkICpwdHIsIHNpemVfdCBsZW4pCiB7CiAgIERX
+T1JEIGJ5dGVzX3dyaXR0ZW4gPSAwOwpJbmRleDogZmhhbmRsZXJfc29ja2V0
+LmNjCj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT0KUkNTIGZpbGU6IC9jdnMvc3Jj
+L3NyYy93aW5zdXAvY3lnd2luL2ZoYW5kbGVyX3NvY2tldC5jYyx2CnJldHJp
+ZXZpbmcgcmV2aXNpb24gMS4yOTEuMi4xMgpkaWZmIC11IC1wIC1yMS4yOTEu
+Mi4xMiBmaGFuZGxlcl9zb2NrZXQuY2MKLS0tIGZoYW5kbGVyX3NvY2tldC5j
+Ywk1IEZlYiAyMDEzIDE1OjMwOjEyIC0wMDAwCTEuMjkxLjIuMTIKKysrIGZo
+YW5kbGVyX3NvY2tldC5jYwkyMCBGZWIgMjAxMyAwOToyNjo1NSAtMDAwMApA
+QCAtMTQ4OCw3ICsxNDg4LDcgQEAgZmhhbmRsZXJfc29ja2V0OjpyZWFkICh2
+b2lkICppbl9wdHIsIHNpegogICBsZW4gPSByZWN2X2ludGVybmFsICgmd3Nh
+bXNnLCBmYWxzZSk7CiB9CiAKLWludAorc3NpemVfdAogZmhhbmRsZXJfc29j
+a2V0OjpyZWFkdiAoY29uc3Qgc3RydWN0IGlvdmVjICpjb25zdCBpb3YsIGNv
+bnN0IGludCBpb3ZjbnQsCiAJCQlzc2l6ZV90IHRvdCkKIHsKQEAgLTE2NjEs
+NyArMTY2MSw3IEBAIGZoYW5kbGVyX3NvY2tldDo6c2VuZF9pbnRlcm5hbCAo
+c3RydWN0IF8KICAgcmV0dXJuIHJlczsKIH0KIAotaW50Citzc2l6ZV90CiBm
+aGFuZGxlcl9zb2NrZXQ6OndyaXRlIChjb25zdCB2b2lkICppbl9wdHIsIHNp
+emVfdCBsZW4pCiB7CiAgIGNoYXIgKnB0ciA9IChjaGFyICopIGluX3B0cjsK
+QEAgLTE2ODcsNyArMTY4Nyw3IEBAIGZoYW5kbGVyX3NvY2tldDo6d3JpdGUg
+KGNvbnN0IHZvaWQgKmluX3AKICAgcmV0dXJuIHNlbmRfaW50ZXJuYWwgKCZ3
+c2Ftc2csIDApOwogfQogCi1pbnQKK3NzaXplX3QKIGZoYW5kbGVyX3NvY2tl
+dDo6d3JpdGV2IChjb25zdCBzdHJ1Y3QgaW92ZWMgKmNvbnN0IGlvdiwgY29u
+c3QgaW50IGlvdmNudCwKIAkJCSBzc2l6ZV90IHRvdCkKIHsKQEAgLTE3NDAs
+NyArMTc0MCw3IEBAIGZoYW5kbGVyX3NvY2tldDo6c2VuZHRvIChjb25zdCB2
+b2lkICppbl8KICAgcmV0dXJuIHNlbmRfaW50ZXJuYWwgKCZ3c2Ftc2csIGZs
+YWdzKTsKIH0KIAotaW50Citzc2l6ZV90CiBmaGFuZGxlcl9zb2NrZXQ6OnNl
+bmRtc2cgKGNvbnN0IHN0cnVjdCBtc2doZHIgKm1zZywgaW50IGZsYWdzKQog
+ewogICAvKiBUT0RPOiBEZXNjcmlwdG9yIHBhc3Npbmcgb24gQUZfTE9DQUwg
+c29ja2V0cy4gKi8K
+
+--f46d04343d3c0a438704d624a6ec--
