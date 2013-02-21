@@ -1,27 +1,19 @@
-Return-Path: <cygwin-patches-return-7823-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 12680 invoked by alias); 21 Feb 2013 03:09:11 -0000
-Received: (qmail 12669 invoked by uid 22791); 21 Feb 2013 03:09:10 -0000
-X-SWARE-Spam-Status: No, hits=-1.8 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,RCVD_IN_HOSTKARMA_YE
+Return-Path: <cygwin-patches-return-7824-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 29560 invoked by alias); 21 Feb 2013 05:15:59 -0000
+Received: (qmail 29540 invoked by uid 22791); 21 Feb 2013 05:15:56 -0000
+X-SWARE-Spam-Status: No, hits=-4.6 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,KHOP_RCVD_TRUST,KHOP_SPAMHAUS_DROP,RCVD_IN_DNSWL_LOW,RCVD_IN_HOSTKARMA_YE
 X-Spam-Check-By: sourceware.org
-Received: from mho-04-ewr.mailhop.org (HELO mho-02-ewr.mailhop.org) (204.13.248.74)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 21 Feb 2013 03:09:03 +0000
-Received: from pool-173-76-49-193.bstnma.fios.verizon.net ([173.76.49.193] helo=cgf.cx)	by mho-02-ewr.mailhop.org with esmtpa (Exim 4.72)	(envelope-from <cgf@cgf.cx>)	id 1U8MWs-0000IX-IS	for cygwin-patches@cygwin.com; Thu, 21 Feb 2013 03:09:02 +0000
-Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id 7B5708804BF	for <cygwin-patches@cygwin.com>; Wed, 20 Feb 2013 22:09:01 -0500 (EST)
-X-Mail-Handler: Dyn Standard SMTP by Dyn
-X-Report-Abuse-To: abuse@dyndns.com (see http://www.dyndns.com/services/sendlabs/outbound_abuse.html for abuse reporting information)
-X-MHO-User: U2FsdGVkX18A5ObDTH/nySOAWbSIQJKz
-Date: Thu, 21 Feb 2013 03:09:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
+Received: from mail-ia0-f170.google.com (HELO mail-ia0-f170.google.com) (209.85.210.170)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 21 Feb 2013 05:15:51 +0000
+Received: by mail-ia0-f170.google.com with SMTP id k20so8032967iak.29        for <cygwin-patches@cygwin.com>; Wed, 20 Feb 2013 21:15:50 -0800 (PST)
+X-Received: by 10.42.180.65 with SMTP id bt1mr10307458icb.41.1361423750679;        Wed, 20 Feb 2013 21:15:50 -0800 (PST)
+Received: from YAAKOV04 (S0106000cf16f58b1.wp.shawcable.net. [24.79.200.150])        by mx.google.com with ESMTPS id ee5sm9736563igc.0.2013.02.20.21.15.49        (version=SSLv3 cipher=RC4-SHA bits=128/128);        Wed, 20 Feb 2013 21:15:50 -0800 (PST)
+Date: Thu, 21 Feb 2013 05:15:00 -0000
+From: Yaakov (Cygwin/X) <yselkowitz@users.sourceforge.net>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Missing dllimport's in <error.h>
-Message-ID: <20130221030901.GC2786@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20130220203828.5216c525@YAAKOV04>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20130220203828.5216c525@YAAKOV04>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+Subject: [PATCH 64bit] lsaauth: skip 32bit DLL on 64bit target, part 2
+Message-ID: <20130220231548.700127f9@YAAKOV04>
+Mime-Version: 1.0
+Content-Type: multipart/mixed; boundary="MP_/zyFcsvaBlQzsrF6QaiIzQaX"
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -31,21 +23,73 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2013-q1/txt/msg00034.txt.bz2
+X-SW-Source: 2013-q1/txt/msg00035.txt.bz2
 
-On Wed, Feb 20, 2013 at 08:38:28PM -0600, Yaakov wrote:
->The attached patch for HEAD is required for compiling code which uses
-><error.h> and -Wl,--disable-auto-import.
->
->
->Yaakov
 
->2013-02-20  Yaakov Selkowitz  <yselkowitz@...>
->
->	* include/error.h (error_message_count): Declare as dllimport.
->	(error_one_per_line): Ditto.
->	(error_print_progname): Ditto.
+--MP_/zyFcsvaBlQzsrF6QaiIzQaX
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Content-length: 190
 
-Looks right.  Please check in.
+The attached patch is a follow-up to my previous lsaauth patch. FWIW,
+it worked as intended only because the toplevel Makefile provided
+target_alias; this fixes make in the subdir.
 
-cgf
+
+Yaakov
+
+--MP_/zyFcsvaBlQzsrF6QaiIzQaX
+Content-Type: text/x-patch
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename=lsaauth-64bit-part2.patch
+Content-length: 1543
+
+2013-02-21  Yaakov Selkowitz  <yselkowitz@...>
+
+	* Makefile.in (target_alias): Define for previous commit.
+	* configure.in: Skip check for i686-w64-mingw32-g++ on x86_64.
+
+Index: Makefile.in
+===================================================================
+RCS file: /cvs/src/src/winsup/lsaauth/Makefile.in,v
+retrieving revision 1.6.2.3
+diff -u -p -r1.6.2.3 Makefile.in
+--- Makefile.in	15 Feb 2013 10:42:16 -0000	1.6.2.3
++++ Makefile.in	21 Feb 2013 03:55:54 -0000
+@@ -28,6 +28,7 @@ INSTALL_DATA    := @INSTALL_DATA@
+ 
+ CC              := @CC@
+ CC_FOR_TARGET   := $(CC)
++target_alias    := @target_alias@
+ 
+ MINGW32_CC	:= @MINGW32_CC@
+ MINGW64_CC	:= @MINGW64_CC@
+Index: configure.ac
+===================================================================
+RCS file: /cvs/src/src/winsup/lsaauth/configure.ac,v
+retrieving revision 1.1.2.1
+diff -u -p -r1.1.2.1 configure.ac
+--- configure.ac	27 Nov 2012 08:56:07 -0000	1.1.2.1
++++ configure.ac	21 Feb 2013 03:55:54 -0000
+@@ -25,10 +25,14 @@ AC_CANONICAL_SYSTEM
+ 
+ LIB_AC_PROG_CC
+ 
+-AC_CHECK_PROGS(MINGW32_CC, i686-w64-mingw32-gcc)
+-AC_CHECK_PROGS(MINGW64_CC, x86_64-w64-mingw32-gcc)
++case "$target_cpu" in
++i?86)
++  AC_CHECK_PROGS(MINGW32_CC, i686-w64-mingw32-gcc)
++  test -z "$MINGW32_CC" && AC_MSG_ERROR([no acceptable mingw32 cc found in \$PATH])
++  ;;
++esac
+ 
+-test -z "$MINGW32_CC" && AC_MSG_ERROR([no acceptable mingw32 cc found in \$PATH])
++AC_CHECK_PROGS(MINGW64_CC, x86_64-w64-mingw32-gcc)
+ test -z "$MINGW64_CC" && AC_MSG_ERROR([no acceptable mingw64 cc found in \$PATH])
+ 
+ AC_ARG_PROGRAM
+
+
+--MP_/zyFcsvaBlQzsrF6QaiIzQaX--
