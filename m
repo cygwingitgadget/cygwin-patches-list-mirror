@@ -1,27 +1,19 @@
-Return-Path: <cygwin-patches-return-7821-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 21699 invoked by alias); 21 Feb 2013 01:15:22 -0000
-Received: (qmail 21687 invoked by uid 22791); 21 Feb 2013 01:15:22 -0000
-X-SWARE-Spam-Status: No, hits=-1.8 required=5.0	tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,RCVD_IN_HOSTKARMA_YE
+Return-Path: <cygwin-patches-return-7822-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 7637 invoked by alias); 21 Feb 2013 02:38:55 -0000
+Received: (qmail 7429 invoked by uid 22791); 21 Feb 2013 02:38:53 -0000
+X-SWARE-Spam-Status: No, hits=-4.6 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,KHOP_RCVD_TRUST,KHOP_SPAMHAUS_DROP,RCVD_IN_DNSWL_LOW,RCVD_IN_HOSTKARMA_YE
 X-Spam-Check-By: sourceware.org
-Received: from mho-04-ewr.mailhop.org (HELO mho-02-ewr.mailhop.org) (204.13.248.74)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 21 Feb 2013 01:15:17 +0000
-Received: from pool-173-76-49-193.bstnma.fios.verizon.net ([173.76.49.193] helo=cgf.cx)	by mho-02-ewr.mailhop.org with esmtpa (Exim 4.72)	(envelope-from <cgf@cgf.cx>)	id 1U8Kkm-000LpN-T4	for cygwin-patches@cygwin.com; Thu, 21 Feb 2013 01:15:16 +0000
-Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id B8C2D8804BF	for <cygwin-patches@cygwin.com>; Wed, 20 Feb 2013 20:15:16 -0500 (EST)
-X-Mail-Handler: Dyn Standard SMTP by Dyn
-X-Report-Abuse-To: abuse@dyndns.com (see http://www.dyndns.com/services/sendlabs/outbound_abuse.html for abuse reporting information)
-X-MHO-User: U2FsdGVkX186XnXbVWzZKaFWsvf+eJfs
-Date: Thu, 21 Feb 2013 01:15:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
+Received: from mail-ie0-f172.google.com (HELO mail-ie0-f172.google.com) (209.85.223.172)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Thu, 21 Feb 2013 02:38:48 +0000
+Received: by mail-ie0-f172.google.com with SMTP id c10so10680518ieb.17        for <cygwin-patches@cygwin.com>; Wed, 20 Feb 2013 18:38:47 -0800 (PST)
+X-Received: by 10.50.163.37 with SMTP id yf5mr11212331igb.102.1361414327662;        Wed, 20 Feb 2013 18:38:47 -0800 (PST)
+Received: from YAAKOV04 (S0106000cf16f58b1.wp.shawcable.net. [24.79.200.150])        by mx.google.com with ESMTPS id wo8sm17892192igb.6.2013.02.20.18.38.44        (version=SSLv3 cipher=RC4-SHA bits=128/128);        Wed, 20 Feb 2013 18:38:47 -0800 (PST)
+Date: Thu, 21 Feb 2013 02:38:00 -0000
+From: Yaakov (Cygwin/X) <yselkowitz@users.sourceforge.net>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] utils: force static linkage
-Message-ID: <20130221011516.GB2786@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20130220153103.48a3a6d5@YAAKOV04>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20130220153103.48a3a6d5@YAAKOV04>
-User-Agent: Mutt/1.5.20 (2009-06-14)
+Subject: [PATCH] Missing dllimport's in <error.h>
+Message-ID: <20130220203828.5216c525@YAAKOV04>
+Mime-Version: 1.0
+Content-Type: multipart/mixed; boundary="MP_/a0w1n/yXsFlnU8Y7Jzrd=+J"
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -31,33 +23,55 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2013-q1/txt/msg00032.txt.bz2
+X-SW-Source: 2013-q1/txt/msg00033.txt.bz2
 
-On Wed, Feb 20, 2013 at 03:31:03PM -0600, Yaakov wrote:
->Last time I checked, we were linking all utils statically, so this
->caught me by surprise:
->
->$ /bin/ldd dumper.exe 
->	ntdll.dll => /cygdrive/c/Windows/SysWOW64/ntdll.dll (0x77d70000)
->	kernel32.dll => /cygdrive/c/Windows/syswow64/kernel32.dll (0x75a50000)
->	KERNELBASE.dll => /cygdrive/c/Windows/syswow64/KERNELBASE.dll (0x76ef0000)
->	cygwin1.dll => /usr/bin/cygwin1.dll (0x61000000)
->	cygintl-8.dll => /usr/bin/cygintl-8.dll (0x49bd0000)
->	cygiconv-2.dll => /usr/bin/cygiconv-2.dll (0x6bfb0000)
->	??? => ??? (0x550000)
->
->The -static flag implies -static-libgcc (see gcc -dumpspecs) and affects
->all other libraries (including libstdc++).  Patch for HEAD attached.
->
->
->Yaakov
 
->2013-02-20  Yaakov Selkowitz  <yselkowitz@...>
->
->	* Makefile.in (CYGWIN_LDFLAGS): Replace -static-lib* with -static.
->	(MINGW_LDFLAGS): Ditto.
->	(ZLIB): Simplify accordingly.
+--MP_/a0w1n/yXsFlnU8Y7Jzrd=+J
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Content-length: 120
 
-Please check in.
+The attached patch for HEAD is required for compiling code which uses
+<error.h> and -Wl,--disable-auto-import.
 
-cgf
+
+Yaakov
+
+--MP_/a0w1n/yXsFlnU8Y7Jzrd=+J
+Content-Type: text/x-patch
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename=cygwin-error-dllimport.patch
+Content-length: 993
+
+2013-02-20  Yaakov Selkowitz  <yselkowitz@...>
+
+	* include/error.h (error_message_count): Declare as dllimport.
+	(error_one_per_line): Ditto.
+	(error_print_progname): Ditto.
+
+Index: include/error.h
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/include/error.h,v
+retrieving revision 1.1
+diff -u -p -r1.1 error.h
+--- include/error.h	18 May 2011 01:25:41 -0000	1.1
++++ include/error.h	21 Feb 2013 02:33:32 -0000
+@@ -19,9 +19,15 @@ extern "C"
+ void error (int, int, const char *, ...);
+ void error_at_line (int, int, const char *, unsigned int, const char *, ...);
+ 
++#ifdef  __INSIDE_CYGWIN__
+ extern unsigned int error_message_count;
+ extern int error_one_per_line;
+ extern void (*error_print_progname) (void);
++#else
++extern __declspec(dllimport) unsigned int error_message_count;
++extern __declspec(dllimport) int error_one_per_line;
++extern __declspec(dllimport) void (*error_print_progname) (void);
++#endif
+ 
+ #ifdef __cplusplus
+ }
+
+--MP_/a0w1n/yXsFlnU8Y7Jzrd=+J--
