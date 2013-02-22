@@ -1,21 +1,22 @@
-Return-Path: <cygwin-patches-return-7832-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 13605 invoked by alias); 22 Feb 2013 09:40:55 -0000
-Received: (qmail 13593 invoked by uid 22791); 22 Feb 2013 09:40:53 -0000
-X-SWARE-Spam-Status: No, hits=-5.3 required=5.0	tests=AWL,BAYES_00,DKIM_SIGNED,DKIM_VALID,FREEMAIL_FROM,KHOP_RCVD_TRUST,KHOP_SPAMHAUS_DROP,KHOP_THREADED,RCVD_IN_DNSWL_LOW,RCVD_IN_HOSTKARMA_YE,TW_SF,TW_TM,TW_VP
+Return-Path: <cygwin-patches-return-7833-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 16691 invoked by alias); 22 Feb 2013 09:51:57 -0000
+Received: (qmail 16655 invoked by uid 22791); 22 Feb 2013 09:51:36 -0000
 X-Spam-Check-By: sourceware.org
-Received: from mail-ie0-f173.google.com (HELO mail-ie0-f173.google.com) (209.85.223.173)    by sourceware.org (qpsmtpd/0.43rc1) with ESMTP; Fri, 22 Feb 2013 09:40:48 +0000
-Received: by mail-ie0-f173.google.com with SMTP id 9so470791iec.32        for <cygwin-patches@cygwin.com>; Fri, 22 Feb 2013 01:40:48 -0800 (PST)
-X-Received: by 10.50.88.226 with SMTP id bj2mr562833igb.105.1361526048229;        Fri, 22 Feb 2013 01:40:48 -0800 (PST)
-Received: from YAAKOV04 (S0106000cf16f58b1.wp.shawcable.net. [24.79.200.150])        by mx.google.com with ESMTPS id ip8sm1517215igc.4.2013.02.22.01.40.46        (version=SSLv3 cipher=RC4-SHA bits=128/128);        Fri, 22 Feb 2013 01:40:47 -0800 (PST)
-Date: Fri, 22 Feb 2013 09:40:00 -0000
-From: Yaakov (Cygwin/X) <yselkowitz@users.sourceforge.net>
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234)    by sourceware.org (qpsmtpd/0.83/v0.83-20-g38e4449) with ESMTP; Fri, 22 Feb 2013 09:51:31 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 06BB252030D; Fri, 22 Feb 2013 10:51:29 +0100 (CET)
+Date: Fri, 22 Feb 2013 09:51:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH 64bit] Export <io.h> symbols with underscore
-Message-ID: <20130222034047.778e1e12@YAAKOV04>
-In-Reply-To: <20130222084951.GJ28458@calimero.vinschen.de>
-References: <20130220151600.5983c15a@YAAKOV04>	<20130221011432.GA2786@ednor.casa.cgf.cx>	<20130221111545.GA24054@calimero.vinschen.de>	<20130221194236.GA1163@ednor.casa.cgf.cx>	<20130222001848.7049805a@YAAKOV04>	<20130222065110.GA7834@ednor.casa.cgf.cx>	<20130222080025.GI28458@calimero.vinschen.de>	<20130222084951.GJ28458@calimero.vinschen.de>
-Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="MP_/aTyCaPN=jZ1jQMO7l_xK74l"
+Message-ID: <20130222095128.GF21700@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20130220151600.5983c15a@YAAKOV04> <20130221011432.GA2786@ednor.casa.cgf.cx> <20130221111545.GA24054@calimero.vinschen.de> <20130221194236.GA1163@ednor.casa.cgf.cx> <20130222001848.7049805a@YAAKOV04> <20130222065110.GA7834@ednor.casa.cgf.cx> <20130222080025.GI28458@calimero.vinschen.de> <20130222084951.GJ28458@calimero.vinschen.de> <20130222034047.778e1e12@YAAKOV04>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20130222034047.778e1e12@YAAKOV04>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -25,70 +26,66 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-X-SW-Source: 2013-q1/txt/msg00043.txt.bz2
+X-SW-Source: 2013-q1/txt/msg00044.txt.bz2
 
-
---MP_/aTyCaPN=jZ1jQMO7l_xK74l
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-Content-length: 839
-
-On Fri, 22 Feb 2013 09:49:51 +0100, Corinna Vinschen wrote:
-> > access should go, no doubt about it.
+On Feb 22 03:40, Yaakov wrote:
+> On Fri, 22 Feb 2013 09:49:51 +0100, Corinna Vinschen wrote:
+> > > access should go, no doubt about it.
+> > > 
+> > > For get_osfhandle and setmode I would prefer maintaining backward
+> > > compatibility with existing applications.  Both variations, with and
+> > > without underscore are definitely in use.
+> > > 
+> > > What about exporting the underscored variants only, but define the
+> > > non-underscored ones:
+> > > 
+> > >   extern long _get_osfhandle(int);
+> > >   #define get_osfhandle(i) _get_osfhandle(i)
+> > > 
+> > >   extern int _setmode (int __fd, int __mode);
+> > >   #define setmode(f,m) _setmode((f),(m))
 > > 
-> > For get_osfhandle and setmode I would prefer maintaining backward
-> > compatibility with existing applications.  Both variations, with and
-> > without underscore are definitely in use.
-> > 
-> > What about exporting the underscored variants only, but define the
-> > non-underscored ones:
-> > 
-> >   extern long _get_osfhandle(int);
-> >   #define get_osfhandle(i) _get_osfhandle(i)
-> > 
-> >   extern int _setmode (int __fd, int __mode);
-> >   #define setmode(f,m) _setmode((f),(m))
+> > Just to be clear:  On 32 bit we should keep the exported symbols, too.
+> > On 64 bit we can drop the non-underscored ones (which just requires
+> > to rebuild gawk for me) and only keep the defines for backward
+> > compatibility.
 > 
-> Just to be clear:  On 32 bit we should keep the exported symbols, too.
-> On 64 bit we can drop the non-underscored ones (which just requires
-> to rebuild gawk for me) and only keep the defines for backward
-> compatibility.
+> Like this?
 
-Like this?
+Almost.  The _setmode needs a tweak, too.  I also think it makes
+sense to rename the functions inside of syscalls.cc:
 
-
-Yaakov
-
---MP_/aTyCaPN=jZ1jQMO7l_xK74l
-Content-Type: text/x-patch
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment; filename=cygwin-io_h-symbols.patch
-Content-length: 2255
-
-2013-02-22  Yaakov Selkowitz <yselkowitz@...>
-	    Corinna Vinschen <corinna@...>
-
-	* cygwin64.din (_get_osfhandle): Rename from get_osfhandle.
-	(_setmode): Rename from setmode.
-	* include/io.h: Ditto. Define unprefixed names with preprocessor
-	macros for backwards source compatibility.
-	(access): Remove.
-	* syscalls.cc (get_osfhandle): Undefine compatibility macro.
-
+Index: cygwin.din
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/cygwin.din,v
+retrieving revision 1.256.2.1
+diff -u -p -r1.256.2.1 cygwin.din
+--- cygwin.din	22 Nov 2012 11:05:50 -0000	1.256.2.1
++++ cygwin.din	22 Feb 2013 09:49:26 -0000
+@@ -678,8 +678,8 @@ get_avphys_pages SIGFE
+ get_current_dir_name SIGFE
+ get_nprocs SIGFE
+ get_nprocs_conf SIGFE
+-get_osfhandle SIGFE
+-_get_osfhandle = get_osfhandle SIGFE
++_get_osfhandle SIGFE
++get_osfhandle = _get_osfhandle SIGFE
+ get_phys_pages SIGFE
+ getaddrinfo = cygwin_getaddrinfo SIGFE
+ getc SIGFE
 Index: cygwin64.din
 ===================================================================
 RCS file: /cvs/src/src/winsup/cygwin/Attic/cygwin64.din,v
 retrieving revision 1.1.2.7
 diff -u -p -r1.1.2.7 cygwin64.din
 --- cygwin64.din	15 Feb 2013 13:36:36 -0000	1.1.2.7
-+++ cygwin64.din	22 Feb 2013 09:26:46 -0000
++++ cygwin64.din	22 Feb 2013 09:49:26 -0000
 @@ -437,7 +437,7 @@ get_avphys_pages SIGFE
  get_current_dir_name SIGFE
  get_nprocs SIGFE
  get_nprocs_conf SIGFE
 -get_osfhandle SIGFE
-+_get_osfhandle = get_osfhandle SIGFE
++_get_osfhandle SIGFE
  get_phys_pages SIGFE
  getaddrinfo = cygwin_getaddrinfo SIGFE
  getc SIGFE
@@ -107,23 +104,41 @@ RCS file: /cvs/src/src/winsup/cygwin/syscalls.cc,v
 retrieving revision 1.638.2.10
 diff -u -p -r1.638.2.10 syscalls.cc
 --- syscalls.cc	9 Feb 2013 20:38:03 -0000	1.638.2.10
-+++ syscalls.cc	22 Feb 2013 09:26:46 -0000
-@@ -2891,6 +2891,8 @@ truncate (const char *pathname, _off_t l
- }
++++ syscalls.cc	22 Feb 2013 09:49:29 -0000
+@@ -2754,7 +2754,7 @@ getmode (int fd)
+    previous mode.  */
+ 
+ extern "C" int
+-setmode (int fd, int mode)
++_setmode (int fd, int mode)
+ {
+   cygheap_fdget cfd (fd);
+   if (cfd < 0)
+@@ -2792,7 +2792,7 @@ setmode (int fd, int mode)
+ extern "C" int
+ cygwin_setmode (int fd, int mode)
+ {
+-  int res = setmode (fd, mode);
++  int res = _setmode (fd, mode);
+   if (res != -1)
+     {
+       _my_tls.locals.setmode_file = fd;
+@@ -2892,7 +2892,7 @@ truncate (const char *pathname, _off_t l
  #endif
  
-+#undef get_osfhandle
-+
  extern "C" long
- get_osfhandle (int fd)
+-get_osfhandle (int fd)
++_get_osfhandle (int fd)
  {
+   long res;
+ 
 Index: include/io.h
 ===================================================================
 RCS file: /cvs/src/src/winsup/cygwin/include/io.h,v
 retrieving revision 1.3
 diff -u -p -r1.3 io.h
 --- include/io.h	17 Sep 2001 21:29:19 -0000	1.3
-+++ include/io.h	22 Feb 2013 09:26:46 -0000
++++ include/io.h	22 Feb 2013 09:49:29 -0000
 @@ -18,9 +18,10 @@ extern "C" {
  /*
   * Function to return a Win32 HANDLE from a fd.
@@ -132,11 +147,17 @@ diff -u -p -r1.3 io.h
 -extern int setmode (int __fd, int __mode);
 -int access(const char *__path, int __amode);
 +extern long _get_osfhandle(int);
-+#define get_osfhandle(i) _get_osfhandle(i);
++#define get_osfhandle(i) _get_osfhandle(i)
 +extern int _setmode (int __fd, int __mode);
 +#define setmode(f,m) _setmode((f),(m))
  
  #ifdef __cplusplus
  };
 
---MP_/aTyCaPN=jZ1jQMO7l_xK74l--
+
+Corinna
+
+-- 
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
