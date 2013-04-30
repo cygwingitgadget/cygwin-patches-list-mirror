@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-7871-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 32575 invoked by alias); 30 Apr 2013 20:27:41 -0000
+Return-Path: <cygwin-patches-return-7872-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 1695 invoked by alias); 30 Apr 2013 21:54:04 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,86 +9,76 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 32562 invoked by uid 89); 30 Apr 2013 20:27:40 -0000
-X-Spam-SWARE-Status: No, score=-1.0 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,RCVD_IN_HOSTKARMA_YE autolearn=ham version=3.3.1
-Received: from mho-03-ewr.mailhop.org (HELO mho-01-ewr.mailhop.org) (204.13.248.66)    by sourceware.org (qpsmtpd/0.84/v0.84-167-ge50287c) with ESMTP; Tue, 30 Apr 2013 20:27:39 +0000
-Received: from pool-173-76-41-247.bstnma.fios.verizon.net ([173.76.41.247] helo=cgf.cx)	by mho-01-ewr.mailhop.org with esmtpa (Exim 4.72)	(envelope-from <cgf@cgf.cx>)	id 1UXH9G-000Byq-6V	for cygwin-patches@cygwin.com; Tue, 30 Apr 2013 20:27:38 +0000
-Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id 817D860117	for <cygwin-patches@cygwin.com>; Tue, 30 Apr 2013 16:27:37 -0400 (EDT)
-X-Mail-Handler: Dyn Standard SMTP by Dyn
-X-Report-Abuse-To: abuse@dyndns.com (see http://www.dyndns.com/services/sendlabs/outbound_abuse.html for abuse reporting information)
-X-MHO-User: U2FsdGVkX19WlLGM2CMUNOi9xXOJiTv7
-Date: Tue, 30 Apr 2013 20:27:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
+Received: (qmail 1682 invoked by uid 89); 30 Apr 2013 21:54:04 -0000
+X-Spam-SWARE-Status: No, score=-4.9 required=5.0 tests=AWL,BAYES_00,KHOP_THREADED,RP_MATCHES_RCVD autolearn=ham version=3.3.1
+Received: from etr-usa.com (HELO etr-usa.com) (130.94.180.135)    by sourceware.org (qpsmtpd/0.84/v0.84-167-ge50287c) with ESMTP; Tue, 30 Apr 2013 21:54:03 +0000
+Received: (qmail 23344 invoked by uid 13447); 30 Apr 2013 21:54:01 -0000
+Received: from unknown (HELO [172.20.0.42]) ([107.4.26.51])          (envelope-sender <warren@etr-usa.com>)          by 130.94.180.135 (qmail-ldap-1.03) with SMTP          for <cygwin-patches@cygwin.com>; 30 Apr 2013 21:54:01 -0000
+Message-ID: <51803D76.5010302@etr-usa.com>
+Date: Tue, 30 Apr 2013 21:54:00 -0000
+From: Warren Young <warren@etr-usa.com>
+User-Agent: Mozilla/5.0 (Windows NT 6.2; WOW64; rv:17.0) Gecko/20130328 Thunderbird/17.0.5
+MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] DocBook XML toolchain modernization
-Message-ID: <20130430202737.GA1858@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20130424172039.GA27256@calimero.vinschen.de> <51782505.5020502@etr-usa.com> <20130424185210.GE26397@calimero.vinschen.de> <51783EBC.30409@etr-usa.com> <20130425084305.GA29270@calimero.vinschen.de> <517F15AF.5080307@etr-usa.com> <20130430184703.GB6865@ednor.casa.cgf.cx> <51801469.9070606@etr-usa.com> <20130430190706.GC6865@ednor.casa.cgf.cx> <51802510.5000803@etr-usa.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <51802510.5000803@etr-usa.com>
-User-Agent: Mutt/1.5.20 (2009-06-14)
-X-SW-Source: 2013-q2/txt/msg00009.txt.bz2
+References: <20130424172039.GA27256@calimero.vinschen.de> <51782505.5020502@etr-usa.com> <20130424185210.GE26397@calimero.vinschen.de> <51783EBC.30409@etr-usa.com> <20130425084305.GA29270@calimero.vinschen.de> <517F15AF.5080307@etr-usa.com> <20130430184703.GB6865@ednor.casa.cgf.cx> <51801469.9070606@etr-usa.com> <20130430190706.GC6865@ednor.casa.cgf.cx> <51802510.5000803@etr-usa.com> <20130430202737.GA1858@ednor.casa.cgf.cx>
+In-Reply-To: <20130430202737.GA1858@ednor.casa.cgf.cx>
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2013-q2/txt/msg00010.txt.bz2
 
-On Tue, Apr 30, 2013 at 02:09:52PM -0600, Warren Young wrote:
->On 4/30/2013 13:07, Christopher Faylor wrote:
->> On Tue, Apr 30, 2013 at 12:58:49PM -0600, Warren Young wrote:
->>
->>> Do you mean for me to check these changes in when I get my sourceware
->>> account?
->>
->> Yes, with the implied assumption that you won't be breaking anything.
+On 4/30/2013 14:27, Christopher Faylor wrote:
+> On Tue, Apr 30, 2013 at 02:09:52PM -0600, Warren Young wrote:
+>>   Embedding <html> within <html> is eeevil.
 >
->Of course.
+> faq.html is a pretty simple file and it seems to work.  Are there any
+> non-religious advantages to doing this?
+
+Conceivably browsers could stop tolerating it.
+
+Given how tolerant browsers still are, that eventuality might seem 
+unlikely, but such shifts have happened.
+
+In the early web, this was considered acceptable HTML:
+
+     <a name="foo">
+     <h1>Foobie</h1>
+
+In older browsers, this wouldn't do anything more than let you reference 
+#foo within the document.
+
+Today's browsers, though, see an open <a> tag and treat the entire rest 
+of the page as one big hyperlink.  You can get weird effects, like 
+paragraphs of text highlighting with the "clicked link" color when you 
+click on such a page.  To fix it, you must close the tag, so:
+
+    <a name="foo"/>
+    <h1>Foobie</h1>
+
+That, or change from named anchors to fragment identifiers:
+
+     <h1 id="foo">Foobie</h1>
+
+But I won't insist that you accept the new output. :)
+
+>> - Any comments about the other items in my FUTURE WORK section?
+>> Unconditional green light, or do you want to approve them one by one?
 >
->Some questions from the original post:
->
->- When a change is checked in to the docs, does it immediately propagate 
->to the public web site, or is there a manual publication process?  I 
->mean, if the build is technically broken for a few seconds while I check 
->in a batch of changes, does it immediately break cygwin.com?  If so, 
->that would require that I check in only self-contained change sets even 
->if it means long CVS log messages.
+> You have the right to change anything in the doc directory.  Anything
+> outside of that will require approval.
 
-No, it has to be published but you now have that ability.  The CVS path
-is:  :ext:sourceware.org:/cvs/cygwin .
+The final removal of doctool requires replacing the DOCTOOL/SGML 
+comments in winsup/cygwin/{path,pinfo}.cc with Doxygen comments, and 
+folding most of the contents of winsup/cygwin/*.sgml into Doxygen 
+comments within the relevant source files.
 
->- Am I right that we no longer need the second FAQ output format?
+I haven't deeply looked into this.  The only thing that looks at all 
+tricky is posix.sgml, which might have to be artificially converted to a 
+posix-api.h file just to fit within the Doxygen world.
 
-I think the single page form is the only thing required now.
+All of this affects how cygwin-api.pdf and the HTML equivalents get 
+built.  My changes so far don't affect these at all.
 
->- http://cygwin.com/faq.html appears to be assembled from a site-wide 
->style/navigation file and winsup/doc/faq/faq.html.  Is that right, and 
->if so, do you mind if I add a target to the Makefile that gets you a 
->secondary variant of faq.html containing just the <body> tag's contents? 
->  Embedding <html> within <html> is eeevil.
-
-faq.html is a pretty simple file and it seems to work.  Are there any
-non-religious advantages to doing this?
-
->- Do you want me to do the proposed doctool to Doxygen conversion, so we 
->can get rid of doctool?
-
-This was something that Corinna wanted so I can't comment but since she
-asked you to be the maintainer, I'd say that whatever you want is
-acceptable as long as we still have a readable FAQ.
-
->- If I get rid of doctool, do you agree that we no longer need Autoconf 
->for the docs?
->
->- Is someone using the @srcdir@ feature of the current doc build system 
->to build outside the source tree?
-
-We always build everything in Cygwin outside of the source tree so I'd
-rather keep autoconf around.  In theory you should be able to just type
-"make doc" from wherever you're building cygwin and it should just work.
-
->- Any comments about the other items in my FUTURE WORK section? 
->Unconditional green light, or do you want to approve them one by one?
-
-You have the right to change anything in the doc directory.  Anything
-outside of that will require approval.
-
-cgf
+I assume you've come across Doxygen before in your travels.  I find its 
+output far more useful for API references than DocBook.  And, Doxygen is 
+in Cygwin, under someone else's maintenance now.
