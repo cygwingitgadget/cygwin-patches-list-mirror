@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-7902-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 8379 invoked by alias); 25 Sep 2013 14:46:47 -0000
+Return-Path: <cygwin-patches-return-7903-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 6242 invoked by alias); 25 Sep 2013 23:26:29 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,50 +9,136 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 8367 invoked by uid 89); 25 Sep 2013 14:46:46 -0000
-Received: from mho-03-ewr.mailhop.org (HELO mho-01-ewr.mailhop.org) (204.13.248.66) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-SHA encrypted) ESMTPS; Wed, 25 Sep 2013 14:46:46 +0000
+Received: (qmail 6226 invoked by uid 89); 25 Sep 2013 23:26:29 -0000
+Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 25 Sep 2013 23:26:29 +0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: Yes, score=5.2 required=5.0 tests=AWL,BAYES_00,FSL_HELO_NON_FQDN_1,HELO_LOCALHOST,RCVD_IN_PBL,RCVD_IN_RP_RNBL,RCVD_IN_SORBS_DUL,RP_MATCHES_RCVD autolearn=no version=3.3.2
-X-HELO: mho-01-ewr.mailhop.org
-Received: from pool-98-110-183-21.bstnma.fios.verizon.net ([98.110.183.21] helo=cgf.cx)	by mho-01-ewr.mailhop.org with esmtpa (Exim 4.72)	(envelope-from <cgf@cgf.cx>)	id 1VOqMW-0002mS-94	for cygwin-patches@cygwin.com; Wed, 25 Sep 2013 14:46:44 +0000
-Received: from localhost (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id 7A429600F3	for <cygwin-patches@cygwin.com>; Wed, 25 Sep 2013 10:46:43 -0400 (EDT)
-X-Mail-Handler: Dyn Standard SMTP by Dyn
-X-Report-Abuse-To: abuse@dyndns.com (see http://www.dyndns.com/services/sendlabs/outbound_abuse.html for abuse reporting information)
-X-MHO-User: U2FsdGVkX1/wwjpNwZo9+seU/QQGOg0P
-Date: Wed, 25 Sep 2013 14:46:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: Fix sem_getvalue
-Message-ID: <20130925144643.GA3361@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <52389689.1030801@emsys.de> <5242BDCD.6090003@emsys.de>
+X-Spam-SWARE-Status: No, score=-0.7 required=5.0 tests=AWL,BAYES_00,RP_MATCHES_RCVD,SPAM_SUBJECT autolearn=no version=3.3.2
+X-HELO: mx1.redhat.com
+Received: from int-mx11.intmail.prod.int.phx2.redhat.com (int-mx11.intmail.prod.int.phx2.redhat.com [10.5.11.24])	by mx1.redhat.com (8.14.4/8.14.4) with ESMTP id r8PNQQrU020703	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=OK)	for <cygwin-patches@cygwin.com>; Wed, 25 Sep 2013 19:26:26 -0400
+Received: from [10.3.113.164] (ovpn-113-164.phx2.redhat.com [10.3.113.164])	by int-mx11.intmail.prod.int.phx2.redhat.com (8.14.4/8.14.4) with ESMTP id r8PNQPLo006665	for <cygwin-patches@cygwin.com>; Wed, 25 Sep 2013 19:26:26 -0400
+Message-ID: <52437121.1070507@redhat.com>
+Date: Wed, 25 Sep 2013 23:26:00 -0000
+From: Eric Blake <eblake@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:17.0) Gecko/20130805 Thunderbird/17.0.8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5242BDCD.6090003@emsys.de>
-User-Agent: Mutt/1.5.20 (2009-06-14)
-X-SW-Source: 2013-q3/txt/msg00009.txt.bz2
+To: cygwin-patches@cygwin.com
+Subject: fix off-by-one in dup2
+OpenPGP: url=http://people.redhat.com/eblake/eblake.gpg
+Content-Type: multipart/signed; micalg=pgp-sha256; protocol="application/pgp-signature"; boundary="oSJlRaGVc8KdwdI5AJM9kl14RFhK4MLJD"
+X-IsSubscribed: yes
+X-SW-Source: 2013-q3/txt/msg00010.txt.bz2
 
-On Wed, Sep 25, 2013 at 12:41:17PM +0200, Paul Kunysch wrote:
->> That looks like a reasonable fix.  Did you trace through all of the
->> callers of semaphore::_getvalue to make sure that some of them aren't
->> relying on the old behavior?
->
->I did not look for other callers.
->
->I just wrote a very simple test for sem_getvalue() and copied different 
->cygwin1.dll versions to my test-application.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--oSJlRaGVc8KdwdI5AJM9kl14RFhK4MLJD
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+Content-length: 3040
 
-I was being too vague here.  You made what looks like a reasonable
-change but it is to a low-level function which is called by more than
-one place.  I was hoping that, since you wanted to see this fixed, you
-might also be willing to make sure that your change doesn't break
-anything else.  But, I didn't say that so, my bad.
+Solves the segfault here: http://cygwin.com/ml/cygwin/2013-09/msg00397.html
+but does not address the fact that we are still screwy with regards to
+rlimit.
 
-I've checked in a modified version of your patch along with a ChangeLog.
+=3D=3D=3D=3D=3D=3D
+Ultimately, based on my understanding of POSIX and glibc, my goal is to
+have a number of changes (this patch only scratches the surface; there's
+more to go):
 
-Thanks.
+dtable.h tracks soft and hard limits, inherited over fork and preserved
+across exec
 
-cgf
+hard limit starts at OPEN_MAX_MAX and can only be reduced
+soft limit starts at hard limit, and can be reduced to _POSIX_OPEN_MAX (8)
+dtable.size starts at MAX(32, fork/exec size)
+
+getdtablesize() and sysconf(_SC_OPEN_MAX) always returns the soft limit,
+as in glibc and permitted by POSIX (_SC_OPEN_MAX is the only sysconf
+variable that can be runtime dynamic)
+
+dtable.size is decoupled from soft limit, and is guaranteed to be <=3D
+hard limit.  It can grow up to current soft limit; but soft limit can
+later be reduced lower than dtable.size (glibc does this); on fork and
+exec, we are careful to still allow fds beyond the current soft limit.
+
+getrlimit(RLIMIT_NOFILE, &r) =3D> returns soft and hard limits from dtable
+rather than hard limit as a constant and soft limit as current dtable.size
+
+setrlimit(RLIMIT_NOFILE, &r) =3D> cannot set hard limit to unlimited; soft
+limit of unlimited is translated to current hard limit; hard limit
+cannot be increased (EPERM) or reduced below dtable.size (EINVAL); soft
+limit can be reduced arbitrarily (including below OPEN_MAX of 256)
+
+setdtablesize() =3D> guarantees that dtable.size is at least that large
+(must be <=3D soft limit), but does not lower dtable.size or change limits
+=3D=3D=3D=3D=3D
+
+2013-09-25  Eric Blake  <eblake@redhat.com>
+
+	dup2: fix off-by-one crash
+	* dtable.cc (dup3): Fix off-by-one.
+	(find_unused_handle): Reduce time spent expanding during dup.
+	* syscalls.cc (setdtablesize): Report error on invalid value.
+
+diff --git i/winsup/cygwin/dtable.cc w/winsup/cygwin/dtable.cc
+index 2501a26..c2982a8 100644
+--- i/winsup/cygwin/dtable.cc
++++ w/winsup/cygwin/dtable.cc
+@@ -233,7 +233,7 @@ dtable::find_unused_handle (int start)
+ 	if (fds[i] =3D=3D NULL)
+ 	  return i;
+     }
+-  while (extend (NOFILE_INCR));
++  while (extend (MAX (NOFILE_INCR, start - size)));
+   return -1;
+ }
+
+@@ -754,7 +754,7 @@ dtable::dup3 (int oldfd, int newfd, int flags)
+
+   if (!not_open (newfd))
+     close (newfd);
+-  else if ((size_t) newfd > size
++  else if ((size_t) newfd >=3D size
+ 	   && find_unused_handle (newfd) < 0)
+     /* couldn't extend fdtab */
+     {
+diff --git i/winsup/cygwin/syscalls.cc w/winsup/cygwin/syscalls.cc
+index e1886e6..8c1c70a 100644
+--- i/winsup/cygwin/syscalls.cc
++++ w/winsup/cygwin/syscalls.cc
+@@ -2578,6 +2578,9 @@ system (const char *cmdstring)
+ extern "C" int
+ setdtablesize (int size)
+ {
++  if (size < 0)
++    return -1;
++
+   if (size <=3D (int)cygheap->fdtab.size || cygheap->fdtab.extend (size -
+cygheap->fdtab.size))
+     return 0;
+
+--=20
+Eric Blake   eblake redhat com    +1-919-301-3266
+Libvirt virtualization library http://libvirt.org
+
+
+--oSJlRaGVc8KdwdI5AJM9kl14RFhK4MLJD
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+Content-length: 621
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.14 (GNU/Linux)
+Comment: Public key at http://people.redhat.com/eblake/eblake.gpg
+Comment: Using GnuPG with Thunderbird - http://www.enigmail.net/
+
+iQEcBAEBCAAGBQJSQ3EhAAoJEKeha0olJ0NqkkgH/34mzNfnTCsDuZhY1vsSbi90
+q/fHG/UcaVPo+vQ8Ex1yy1uTqbml2jAU17yK9b1Fg2BYT+xpdlrnvCFed//csXiA
+lxKCGRjuIFnYDG9Hm7JoeJqfYuE9BZZNki7dXG8fGUccnyXaXfGQB8qZ2ThnDshp
+wkiyqBO/xap/Xq88m4l+9piFQ+Ju7mIfvfjSc2msBVtZh9IP1GKTY33Ixfcd+ioW
+U1imIG24LY7HnlQYK65MdvId27i/KhArcBB747eEf+TnfruKbqjvMvVUg4cXoqiM
+G79KZrcHF0mPqDvLUr+GdQaoq86nugPi9x4O2g+je++49Wf5pFaiXT1U3rWviR0=
+=l95y
+-----END PGP SIGNATURE-----
+
+--oSJlRaGVc8KdwdI5AJM9kl14RFhK4MLJD--
