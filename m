@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-7906-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 17750 invoked by alias); 15 Oct 2013 22:34:39 -0000
+Return-Path: <cygwin-patches-return-7907-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 2934 invoked by alias); 16 Oct 2013 07:40:45 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,45 +9,40 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 17739 invoked by uid 89); 15 Oct 2013 22:34:38 -0000
+Received: (qmail 2923 invoked by uid 89); 16 Oct 2013 07:40:44 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=0.8 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.2
-X-HELO: mho-01-ewr.mailhop.org
-Received: from mho-03-ewr.mailhop.org (HELO mho-01-ewr.mailhop.org) (204.13.248.66) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-SHA encrypted) ESMTPS; Tue, 15 Oct 2013 22:34:37 +0000
-Received: from pool-98-110-183-69.bstnma.fios.verizon.net ([98.110.183.69] helo=cgf.cx)	by mho-01-ewr.mailhop.org with esmtpa (Exim 4.72)	(envelope-from <cgf@cgf.cx>)	id 1VWDCF-000FcP-Gd	for cygwin-patches@cygwin.com; Tue, 15 Oct 2013 22:34:35 +0000
-Received: from cgf.cx (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id EBF7860114	for <cygwin-patches@cygwin.com>; Tue, 15 Oct 2013 18:34:33 -0400 (EDT)
-X-Mail-Handler: Dyn Standard SMTP by Dyn
-X-Report-Abuse-To: abuse@dyndns.com (see http://www.dyndns.com/services/sendlabs/outbound_abuse.html for abuse reporting information)
-X-MHO-User: U2FsdGVkX19YnXHI+lEyA8lazWaTs1vz
-Date: Tue, 15 Oct 2013 22:34:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
+X-Spam-SWARE-Status: No, score=-2.6 required=5.0 tests=AWL,BAYES_00,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_PASS autolearn=ham version=3.3.2
+X-HELO: mail-pd0-f170.google.com
+Received: from mail-pd0-f170.google.com (HELO mail-pd0-f170.google.com) (209.85.192.170) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES128-SHA encrypted) ESMTPS; Wed, 16 Oct 2013 07:40:43 +0000
+Received: by mail-pd0-f170.google.com with SMTP id x10so500376pdj.15        for <cygwin-patches@cygwin.com>; Wed, 16 Oct 2013 00:40:40 -0700 (PDT)
+X-Received: by 10.68.244.37 with SMTP id xd5mr1429110pbc.47.1381909240677;        Wed, 16 Oct 2013 00:40:40 -0700 (PDT)
+Received: from [192.168.0.101] (S0106000cf16f58b1.wp.shawcable.net. [24.79.212.134])        by mx.google.com with ESMTPSA id wp8sm89318309pbc.26.1969.12.31.16.00.00        (version=TLSv1 cipher=ECDHE-RSA-RC4-SHA bits=128/128);        Wed, 16 Oct 2013 00:40:39 -0700 (PDT)
+Message-ID: <525E42FA.7040206@users.sourceforge.net>
+Date: Wed, 16 Oct 2013 07:40:00 -0000
+From: "Yaakov (Cygwin/X)" <yselkowitz@users.sourceforge.net>
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko/20100101 Thunderbird/24.0.1
+MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
 Subject: Re: fix off-by-one in dup2
-Message-ID: <20131015223433.GA7490@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <52437121.1070507@redhat.com> <20131015140652.GA2098@ednor.casa.cgf.cx> <525DA954.2040700@users.sourceforge.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <525DA954.2040700@users.sourceforge.net>
-User-Agent: Mutt/1.5.20 (2009-06-14)
-X-SW-Source: 2013-q4/txt/msg00002.txt.bz2
+References: <52437121.1070507@redhat.com> <20131015140652.GA2098@ednor.casa.cgf.cx> <525DA954.2040700@users.sourceforge.net> <20131015223433.GA7490@ednor.casa.cgf.cx>
+In-Reply-To: <20131015223433.GA7490@ednor.casa.cgf.cx>
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2013-q4/txt/msg00003.txt.bz2
 
-On Tue, Oct 15, 2013 at 03:45:08PM -0500, Yaakov (Cygwin/X) wrote:
->On 2013-10-15 09:06, Christopher Faylor wrote:
->> On Wed, Sep 25, 2013 at 05:26:25PM -0600, Eric Blake wrote:
->>> Solves the segfault here: http://cygwin.com/ml/cygwin/2013-09/msg00397.html
->>> but does not address the fact that we are still screwy with regards to
->>> rlimit.
+On 2013-10-15 17:34, Christopher Faylor wrote:
+> On Tue, Oct 15, 2013 at 03:45:08PM -0500, Yaakov (Cygwin/X) wrote:
+>> On 2013-10-15 09:06, Christopher Faylor wrote:
+>>> Sorry for the delay in responding.  I was investigating if setdtablesize
+>>> should set an errno on error but it is difficult to say if it should
+>>> since it seems not to be a POSIX or Linux.
 >>
->> Sorry for the delay in responding.  I was investigating if setdtablesize
->> should set an errno on error but it is difficult to say if it should
->> since it seems not to be a POSIX or Linux.
+>> Did you see <http://man7.org/linux/man-pages/man2/getdtablesize.2.html>?
 >
->Did you see <http://man7.org/linux/man-pages/man2/getdtablesize.2.html>?
+> How does that help with setdtablesize?
 
-How does that help with setdtablesize?
+Never mind, it seems I misread your message.
 
-cgf
+
+Yaakov
