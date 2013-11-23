@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-7910-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 27568 invoked by alias); 13 Nov 2013 15:18:28 -0000
+Return-Path: <cygwin-patches-return-7911-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 28595 invoked by alias); 23 Nov 2013 13:19:38 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,78 +9,75 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 27503 invoked by uid 89); 13 Nov 2013 15:18:28 -0000
+Received: (qmail 28558 invoked by uid 89); 23 Nov 2013 13:19:37 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=1.2 required=5.0 tests=AWL,BAYES_50,RDNS_NONE autolearn=no version=3.3.2
-X-HELO: calimero.vinschen.de
-Received: from Unknown (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 13 Nov 2013 15:18:26 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id B25051A0BE3; Wed, 13 Nov 2013 16:18:17 +0100 (CET)
-Date: Wed, 13 Nov 2013 15:18:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Prototype initstate() etc. if _XOPEN_SOURCE is defined appropriately
-Message-ID: <20131113151817.GA5883@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <52838E8C.5060708@dronecode.org.uk>
+X-Spam-SWARE-Status: No, score=-4.0 required=5.0 tests=AWL,BAYES_00,RDNS_NONE,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=no version=3.3.2
+X-HELO: mx1.redhat.com
+Received: from Unknown (HELO mx1.redhat.com) (209.132.183.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sat, 23 Nov 2013 13:19:36 +0000
+Received: from int-mx02.intmail.prod.int.phx2.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])	by mx1.redhat.com (8.14.4/8.14.4) with ESMTP id rANDJTVo026698	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=OK)	for <cygwin-patches@cygwin.com>; Sat, 23 Nov 2013 08:19:29 -0500
+Received: from [10.3.113.132] (ovpn-113-132.phx2.redhat.com [10.3.113.132])	by int-mx02.intmail.prod.int.phx2.redhat.com (8.13.8/8.13.8) with ESMTP id rANDJSfn020625	for <cygwin-patches@cygwin.com>; Sat, 23 Nov 2013 08:19:28 -0500
+Message-ID: <5290AB60.7010401@redhat.com>
+Date: Sat, 23 Nov 2013 13:19:00 -0000
+From: Eric Blake <eblake@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:24.0) Gecko/20100101 Thunderbird/24.1.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;	protocol="application/pgp-signature"; boundary="XsQoSWH+UP9D9v3l"
-Content-Disposition: inline
-In-Reply-To: <52838E8C.5060708@dronecode.org.uk>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-SW-Source: 2013-q4/txt/msg00006.txt.bz2
+To: cygwin-patches@cygwin.com
+Subject: Re: fix off-by-one in dup2
+References: <52437121.1070507@redhat.com> <20131015140652.GA2098@ednor.casa.cgf.cx>
+In-Reply-To: <20131015140652.GA2098@ednor.casa.cgf.cx>
+OpenPGP: url=http://people.redhat.com/eblake/eblake.gpg
+Content-Type: multipart/signed; micalg=pgp-sha256; protocol="application/pgp-signature"; boundary="Pg5jS43vC05BGNFWhhMl3skt6g0xHwnL0"
+X-IsSubscribed: yes
+X-SW-Source: 2013-q4/txt/msg00007.txt.bz2
 
-
---XsQoSWH+UP9D9v3l
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--Pg5jS43vC05BGNFWhhMl3skt6g0xHwnL0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-Content-length: 612
+Content-length: 871
 
-On Nov 13 14:37, Jon TURNEY wrote:
+On 10/15/2013 08:06 AM, Christopher Faylor wrote:
+> On Wed, Sep 25, 2013 at 05:26:25PM -0600, Eric Blake wrote:
+>> Solves the segfault here: http://cygwin.com/ml/cygwin/2013-09/msg00397.h=
+tml
+>> but does not address the fact that we are still screwy with regards to
+>> rlimit.
 >=20
-> Not sure if this is wanted, but mesa likes to compile with '-std=3Dc99
-> D_XOPEN_SOURCE=3D500', which leads to exciting crashes on x86_64 because
-> initstate() is not prototyped.
+> Corinna reminded me about this.
 >=20
-> 2013-11-13  Jon TURNEY  <...>
->=20
-> 	* include/cygwin/stdlib.h(initstate, random, setstate, srandom) :
-> 	Prototype if not __STRICT_ANSI__ or _XOPEN_SOURCE is defined appropriate=
-ly.
+> Sorry for the delay in responding.  I was investigating if setdtablesize
+> should set an errno on error but it is difficult to say if it should
+> since it seems not to be a POSIX or Linux.  So, I guess we can just say
+> that it should set EINVAL.  Would you mind making that minor change and
+> checking this in?
 
-Looks good to me.  Please apply.
-
-
-Thanks,
-Corinna
+Yikes, I still haven't done this (and was reminded by today's
+announcement to test snapshots).  I'll try to get to it pronto.
 
 --=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
+Eric Blake   eblake redhat com    +1-919-301-3266
+Libvirt virtualization library http://libvirt.org
 
---XsQoSWH+UP9D9v3l
-Content-Type: application/pgp-signature
-Content-length: 836
+
+--Pg5jS43vC05BGNFWhhMl3skt6g0xHwnL0
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+Content-length: 621
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.15 (GNU/Linux)
+Comment: Public key at http://people.redhat.com/eblake/eblake.gpg
+Comment: Using GnuPG with Thunderbird - http://www.enigmail.net/
 
-iQIcBAEBAgAGBQJSg5g5AAoJEPU2Bp2uRE+gE8UP/0euUzXWWj3Afo0N8Ng8sEdU
-4vNGwR7nDy+ZAfYEJbIVWkfwHY8upS3NtuqklKqAyYEsAKuwvM8PXHyC8kUM++yQ
-eCmKglg6IDdNRmyWdDH6YFKqlH8N3cXf5ISh7r+qb3kft/IE12xdtp71NrMXWxKW
-5emGJ78JcudgkssYSN01OF3yT8+PfgkwsI08xAjHku66lKTOkqYVJc3/j/NwLNmK
-Epbu00Y47FWFAh5nZSDd63rvVQ61EgpJasH6MLRNwAhry3vkDJtHKj7czmtuWZBG
-OOrRqiFj9etAqoG6ijUHLm4/U3Nj4sy1ocnY6awufd/s/nLh1e+LRrABzggmyIW4
-bxwrbvaBolll5MHggyGhXmm9aKBqggjYY5XuyXr0wHl4prZlyygFGP4pzRA/ev+1
-AgBwhhyTPqqnfqj5yAtCygzl3Oy2SjXeZ8kVzxUHBQ+NWrzD+vd7v21AL2AoIDvc
-2HUpj7G+/UQCmjsIxJYnZz4MzImIIze9pOztM9akl+QJn8C8qduBxATksKtamw4P
-LtjS9411qo6t5UB1LLsM+1hl+fL44OX8yr5fvkb2FoyTX7rAxpDexo8MJhtVv+NW
-F2UOgAj+8rJCM7sEGDlS5XGV7uNzz31j8Wdx0iMj+xzAvt33glkiXDQpDFNht9tE
-XKSzXyQ4wzGtkGxEhEl2
-=KiBX
+iQEcBAEBCAAGBQJSkKtgAAoJEKeha0olJ0NqJZMIAIJsPuGBb4gJZCNyWopQLcTB
+6BF8jZi75mfqGZZCk7ZFLrSPog0T5HRHMNeH/5VRKJ9SR2qN+lkTqqATEp9oDQnY
+iMlR0Zyla8dBjSepFClc4265A+norss1P5nvEraG0NevM2bmCbCB3Tl/upSysAX+
+5EHcOQaj3I6zQCHxqW573C5OV4t97BVVcpz9zZ9I10L32g2CbFa9eJEYkcEWWsie
+05PfPmRXyRoA6CeU8fXNP7lnGb0rsfsNHek9+Konh5JKjExXbIWs9Kxx661xght2
+O50GfFxO8uhd4ayFskwq7ML3bZSwIkDQnRaPYMDAdEmrX+LrkJu1vWX3TgfzQN8=
+=f10d
 -----END PGP SIGNATURE-----
 
---XsQoSWH+UP9D9v3l--
+--Pg5jS43vC05BGNFWhhMl3skt6g0xHwnL0--
