@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-7911-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 28595 invoked by alias); 23 Nov 2013 13:19:38 -0000
+Return-Path: <cygwin-patches-return-7912-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 22932 invoked by alias); 4 Dec 2013 09:32:49 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,75 +9,122 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 28558 invoked by uid 89); 23 Nov 2013 13:19:37 -0000
+Received: (qmail 22916 invoked by uid 89); 4 Dec 2013 09:32:48 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-4.0 required=5.0 tests=AWL,BAYES_00,RDNS_NONE,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=no version=3.3.2
-X-HELO: mx1.redhat.com
-Received: from Unknown (HELO mx1.redhat.com) (209.132.183.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sat, 23 Nov 2013 13:19:36 +0000
-Received: from int-mx02.intmail.prod.int.phx2.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])	by mx1.redhat.com (8.14.4/8.14.4) with ESMTP id rANDJTVo026698	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=OK)	for <cygwin-patches@cygwin.com>; Sat, 23 Nov 2013 08:19:29 -0500
-Received: from [10.3.113.132] (ovpn-113-132.phx2.redhat.com [10.3.113.132])	by int-mx02.intmail.prod.int.phx2.redhat.com (8.13.8/8.13.8) with ESMTP id rANDJSfn020625	for <cygwin-patches@cygwin.com>; Sat, 23 Nov 2013 08:19:28 -0500
-Message-ID: <5290AB60.7010401@redhat.com>
-Date: Sat, 23 Nov 2013 13:19:00 -0000
-From: Eric Blake <eblake@redhat.com>
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:24.0) Gecko/20100101 Thunderbird/24.1.0
-MIME-Version: 1.0
+X-Spam-SWARE-Status: No, score=1.5 required=5.0 tests=AWL,BAYES_50,RDNS_NONE,URIBL_BLOCKED autolearn=no version=3.3.2
+X-HELO: calimero.vinschen.de
+Received: from Unknown (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 04 Dec 2013 09:32:46 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 41EEC1A0677; Wed,  4 Dec 2013 10:32:38 +0100 (CET)
+Date: Wed, 04 Dec 2013 09:32:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: fix off-by-one in dup2
-References: <52437121.1070507@redhat.com> <20131015140652.GA2098@ednor.casa.cgf.cx>
-In-Reply-To: <20131015140652.GA2098@ednor.casa.cgf.cx>
-OpenPGP: url=http://people.redhat.com/eblake/eblake.gpg
-Content-Type: multipart/signed; micalg=pgp-sha256; protocol="application/pgp-signature"; boundary="Pg5jS43vC05BGNFWhhMl3skt6g0xHwnL0"
-X-IsSubscribed: yes
-X-SW-Source: 2013-q4/txt/msg00007.txt.bz2
+Message-ID: <20131204093238.GA28314@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <52437121.1070507@redhat.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;	protocol="application/pgp-signature"; boundary="Nq2Wo0NMKNjxTN9z"
+Content-Disposition: inline
+In-Reply-To: <52437121.1070507@redhat.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-SW-Source: 2013-q4/txt/msg00008.txt.bz2
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---Pg5jS43vC05BGNFWhhMl3skt6g0xHwnL0
-Content-Type: text/plain; charset=UTF-8
+
+--Nq2Wo0NMKNjxTN9z
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-length: 871
+Content-length: 2038
 
-On 10/15/2013 08:06 AM, Christopher Faylor wrote:
-> On Wed, Sep 25, 2013 at 05:26:25PM -0600, Eric Blake wrote:
->> Solves the segfault here: http://cygwin.com/ml/cygwin/2013-09/msg00397.h=
-tml
->> but does not address the fact that we are still screwy with regards to
->> rlimit.
->=20
-> Corinna reminded me about this.
->=20
-> Sorry for the delay in responding.  I was investigating if setdtablesize
-> should set an errno on error but it is difficult to say if it should
-> since it seems not to be a POSIX or Linux.  So, I guess we can just say
-> that it should set EINVAL.  Would you mind making that minor change and
-> checking this in?
+Hi guys,
 
-Yikes, I still haven't done this (and was reminded by today's
-announcement to test snapshots).  I'll try to get to it pronto.
+
+I'm not quite sure yet *why* this happens, but this change in
+dtable::find_unused_handle...
+
+On Sep 25 17:26, Eric Blake wrote:
+> [...]
+> diff --git i/winsup/cygwin/dtable.cc w/winsup/cygwin/dtable.cc
+> index 2501a26..c2982a8 100644
+> --- i/winsup/cygwin/dtable.cc
+> +++ w/winsup/cygwin/dtable.cc
+> @@ -233,7 +233,7 @@ dtable::find_unused_handle (int start)
+>  	if (fds[i] =3D=3D NULL)
+>  	  return i;
+>      }
+> -  while (extend (NOFILE_INCR));
+> +  while (extend (MAX (NOFILE_INCR, start - size)));
+>    return -1;
+>  }
+
+...introduced the problem reported in
+http://cygwin.com/ml/cygwin/2013-12/msg00072.html
+
+The problem is still present in the current sources.
+
+If I apply this change...
+
+Index: dtable.cc
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+RCS file: /cvs/src/src/winsup/cygwin/dtable.cc,v
+retrieving revision 1.275
+diff -u -p -r1.275 dtable.cc
+--- dtable.cc	1 Dec 2013 19:17:56 -0000	1.275
++++ dtable.cc	4 Dec 2013 09:26:01 -0000
+@@ -223,7 +223,8 @@ dtable::delete_archetype (fhandler_base=20
+ int
+ dtable::find_unused_handle (size_t start)
+ {
+-  size_t extendby =3D (start >=3D size) ? 1 + start - size : NOFILE_INCR;
++  //size_t extendby =3D (start >=3D size) ? 1 + start - size : NOFILE_INCR;
++  size_t extendby =3D NOFILE_INCR;
+=20
+   /* This do loop should only ever execute twice. */
+   int res =3D -1;
+
+
+..., which essentially reverts the original change from Eric, the
+problem is fixed.
+
+Off the top of my head I don't understand why Eric's as well as cgf's
+solution (which are not equivalent) both introduce this problem, but
+always using NOFILE_INCR works, so I publish it here for discussion.
+
+I'm off for a doc appointment now, maybe I have some clue while sitting
+in the anteroom.
+
+
+Corinna
 
 --=20
-Eric Blake   eblake redhat com    +1-919-301-3266
-Libvirt virtualization library http://libvirt.org
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
 
-
---Pg5jS43vC05BGNFWhhMl3skt6g0xHwnL0
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-Content-length: 621
+--Nq2Wo0NMKNjxTN9z
+Content-Type: application/pgp-signature
+Content-length: 836
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.15 (GNU/Linux)
-Comment: Public key at http://people.redhat.com/eblake/eblake.gpg
-Comment: Using GnuPG with Thunderbird - http://www.enigmail.net/
 
-iQEcBAEBCAAGBQJSkKtgAAoJEKeha0olJ0NqJZMIAIJsPuGBb4gJZCNyWopQLcTB
-6BF8jZi75mfqGZZCk7ZFLrSPog0T5HRHMNeH/5VRKJ9SR2qN+lkTqqATEp9oDQnY
-iMlR0Zyla8dBjSepFClc4265A+norss1P5nvEraG0NevM2bmCbCB3Tl/upSysAX+
-5EHcOQaj3I6zQCHxqW573C5OV4t97BVVcpz9zZ9I10L32g2CbFa9eJEYkcEWWsie
-05PfPmRXyRoA6CeU8fXNP7lnGb0rsfsNHek9+Konh5JKjExXbIWs9Kxx661xght2
-O50GfFxO8uhd4ayFskwq7ML3bZSwIkDQnRaPYMDAdEmrX+LrkJu1vWX3TgfzQN8=
-=f10d
+iQIcBAEBAgAGBQJSnva2AAoJEPU2Bp2uRE+gVGUP/iusJg4NdmM7NtW7QFWced4/
+sQaPGdVwdIN15/C0qikIT26fkhMpzUYPs8kx4ZHR9T7ZSwuFXD5f3mEk+viGikR9
+/r2Ml4X62cjUQ7fHlU+EfywrSE5D3wU1YOu4qcmFF4vkml6I1B5X9MUvA5dtzaBb
+T4sKtUWjwRqe+TDFdxzjT2HeyuhbQvQeOBipHvvTIcggju9bp8JTaBWggO06Nnu/
+OeSMyDrH37URHuKPt+AqfE3tl8mWD/8S+Y0PNoqPcpYpcQtofTWat4yeZR27ayH7
+JK6JyAOaof7obYfdPNBN3MznZ+O7oqwU56QLf20luo8Ri1gidJ19/yNqLF9NAnaV
+XRNhGGYCnolu58qOkBY6sEgnCUlRZ99EYlrwlQ3oZjB2rB5/bC1I4dL9VCWaKboL
+IDXqSiWa9xXrABvtcSLY66l0Nes62NbL45B3rAQy7nQc8/p5I5RPUun4hXsNJSST
+aF12a0yhxXJOwMiTAYoosVC0N5RNERCh1IlVipjNcTe2Uu0BAXPCWUGGmShLUeQc
+FW9gCUsex8Km7tKmBz6sqTNxICRQzQLuj+DYeqPQjfAte/AOf+1+QfJrgNczU5PA
+xlBnpNrVBzJwezh6I69zbyqTNuYWsX8zVPVW1GhJQIuEEBK8AarvPW/ccCIaYlCy
+D/erMMhQwaAC6FnRCkhG
+=WPiJ
 -----END PGP SIGNATURE-----
 
---Pg5jS43vC05BGNFWhhMl3skt6g0xHwnL0--
+--Nq2Wo0NMKNjxTN9z--
