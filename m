@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-7918-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 29693 invoked by alias); 4 Dec 2013 19:44:51 -0000
+Return-Path: <cygwin-patches-return-7919-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 29937 invoked by alias); 5 Dec 2013 13:45:32 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,109 +9,101 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 29653 invoked by uid 89); 4 Dec 2013 19:44:50 -0000
+Received: (qmail 29924 invoked by uid 89); 5 Dec 2013 13:45:31 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=1.5 required=5.0 tests=AWL,BAYES_50,RDNS_NONE autolearn=no version=3.3.2
-X-HELO: calimero.vinschen.de
-Received: from Unknown (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 04 Dec 2013 19:44:49 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 3D58F1A0685; Wed,  4 Dec 2013 20:44:41 +0100 (CET)
-Date: Wed, 04 Dec 2013 19:44:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=1.2 required=5.0 tests=AWL,BAYES_50,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.2
+X-HELO: mx1.redhat.com
+Received: from Unknown (HELO mx1.redhat.com) (209.132.183.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 05 Dec 2013 13:45:30 +0000
+Received: from int-mx10.intmail.prod.int.phx2.redhat.com (int-mx10.intmail.prod.int.phx2.redhat.com [10.5.11.23])	by mx1.redhat.com (8.14.4/8.14.4) with ESMTP id rB5DjNUB010996	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=OK)	for <cygwin-patches@cygwin.com>; Thu, 5 Dec 2013 08:45:23 -0500
+Received: from [10.3.113.22] (ovpn-113-22.phx2.redhat.com [10.3.113.22])	by int-mx10.intmail.prod.int.phx2.redhat.com (8.14.4/8.14.4) with ESMTP id rB5DjMWG007950	for <cygwin-patches@cygwin.com>; Thu, 5 Dec 2013 08:45:23 -0500
+Message-ID: <52A08372.7080402@redhat.com>
+Date: Thu, 05 Dec 2013 13:45:00 -0000
+From: Eric Blake <eblake@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:24.0) Gecko/20100101 Thunderbird/24.1.0
+MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
 Subject: Re: fix off-by-one in dup2
-Message-ID: <20131204194441.GB16301@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
 References: <52437121.1070507@redhat.com> <20131204093238.GA28314@calimero.vinschen.de> <20131204113626.GB29444@calimero.vinschen.de> <20131204120408.GC29444@calimero.vinschen.de> <20131204170028.GA2590@ednor.casa.cgf.cx> <20131204172324.GA13448@calimero.vinschen.de> <20131204175108.GB2590@ednor.casa.cgf.cx>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;	protocol="application/pgp-signature"; boundary="DBIVS5p969aUjpLe"
-Content-Disposition: inline
 In-Reply-To: <20131204175108.GB2590@ednor.casa.cgf.cx>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-SW-Source: 2013-q4/txt/msg00014.txt.bz2
+OpenPGP: url=http://people.redhat.com/eblake/eblake.gpg
+Content-Type: multipart/signed; micalg=pgp-sha256; protocol="application/pgp-signature"; boundary="Qgj0LIL5ip7KE8OhfepmXcqs0u1a4nF8O"
+X-IsSubscribed: yes
+X-SW-Source: 2013-q4/txt/msg00015.txt.bz2
 
-
---DBIVS5p969aUjpLe
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--Qgj0LIL5ip7KE8OhfepmXcqs0u1a4nF8O
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-Content-length: 1964
+Content-length: 2074
 
-On Dec  4 12:51, Christopher Faylor wrote:
-> On Wed, Dec 04, 2013 at 06:23:24PM +0100, Corinna Vinschen wrote:
-> >On Dec  4 12:00, Christopher Faylor wrote:
-> >> On Wed, Dec 04, 2013 at 01:04:08PM +0100, Corinna Vinschen wrote:
-> >> >On Dec  4 12:36, Corinna Vinschen wrote:
-> >> >> On Dec  4 10:32, Corinna Vinschen wrote:
-> >> >> > Hi guys,
-> >> >> > [...etc...]
-> >> >> > The problem is still present in the current sources.
-> >> >> > [...]
-> >> >
-> >> >Ouch, ouch, ouch!  I tested the wrong DLL.  Actually current CVS fixes
-> >> >this problem.  Duh.  Sorry for the confusion.
-> >> >
-> >> >One question, though.  Assuming start is =3D=3D size, then the curren=
-t code
-> >> >in CVS extends the fd table by only 1.  If that happens often, the
-> >> >current code would have to call ccalloc/memcpy/cfree a lot.  Wouldn't
-> >> >it in fact be better to extend always by at least NOFILE_INCR, and to
-> >> >extend by (1 + start - size) only if start is > size + NOFILE_INCR?
-> >> >Something like
-> >> >
-> >> >  size_t extendby =3D (start >=3D size + NOFILE_INCR) ? 1 + start - s=
-ize : NOFILE_INCR;
-> >> >
-> >> >?
-> >> >
-> >> >Sorry again.  Fortunately it's my WJM week...
-> >>=20
-> >> I don't think it is a common occurrence for start >=3D size.  It is
-> >> usually done when something like bash dup2's stdin/stdout/stderr to a
-> >> high fd.  Howeer, I'll check in something which guarantees that there =
-is
-> >> always a NOFILE_INCR entries free after start.
-> >
-> >That might be helpful.  Tcsh, for instance, always dup's it's std
-> >descriptors to the new fds 15-19.  If it does so in this order, it would
-> >have to call extend 5 times.
+On 12/04/2013 10:51 AM, Christopher Faylor wrote:
+
+>>>> One question, though.  Assuming start is =3D=3D size, then the current=
+ code
+>>>> in CVS extends the fd table by only 1.  If that happens often, the
+>>>> current code would have to call ccalloc/memcpy/cfree a lot.  Wouldn't
+>>>> it in fact be better to extend always by at least NOFILE_INCR, and to
+>>>> extend by (1 + start - size) only if start is > size + NOFILE_INCR?
+>>>> Something like
+>>>>
+>>>>  size_t extendby =3D (start >=3D size + NOFILE_INCR) ? 1 + start - siz=
+e : NOFILE_INCR;
+>>>>
+
+Always increasing by a minimum of NOFILE_INCR is wrong in one case - we
+should never increase beyond OPEN_MAX_MAX (currently 3200).  dup2(0,
+3199) should succeed (unless it fails with EMFILE due to rlimit, but we
+already know that our handling of setrlimit(RLIMIT_NOFILE) is still a
+bit awkward); but dup2(0, 3200) must always fail with EBADF.  I think
+the code in CVS is still wrong: we want to increase to the larger of the
+value specified by the user or NOFILE_INCR to minimize repeated calloc,
+but we also need to cap the increase to be at most OPEN_MAX_MAX
+descriptors, to avoid having a table larger than what the rest of our
+code base will support.
+
+Not having NOFILE_INCR free slots after a user allocation is not fatal;
+it means that the first allocation to a large number will not have tail
+padding, but the next allocation to fd+1 will allocate NOFILE_INCR slots
+rather than just one.  My original idea of MAX(NOFILE_INCR, start -
+size) expresses that.
+
+>>
+>> That might be helpful.  Tcsh, for instance, always dup's it's std
+>> descriptors to the new fds 15-19.  If it does so in this order, it would
+>> have to call extend 5 times.
 >=20
 > dtable.h:#define NOFILE_INCR    32
 >=20
 > It shouldn't extend in that scenario.  The table starts with 32
 > elements.
 
-Right.  I just thought it's a good example.
-
-
-Corinna
+Rather, the table starts with 256 elements; which is why dup2 wouldn't
+crash until dup'ing to 256 or greater before I started touching this.
 
 --=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
+Eric Blake   eblake redhat com    +1-919-301-3266
+Libvirt virtualization library http://libvirt.org
 
---DBIVS5p969aUjpLe
-Content-Type: application/pgp-signature
-Content-length: 836
+
+--Qgj0LIL5ip7KE8OhfepmXcqs0u1a4nF8O
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+Content-length: 621
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.15 (GNU/Linux)
+Comment: Public key at http://people.redhat.com/eblake/eblake.gpg
+Comment: Using GnuPG with Thunderbird - http://www.enigmail.net/
 
-iQIcBAEBAgAGBQJSn4YpAAoJEPU2Bp2uRE+gl2oP/0DJ9T2k2/W99cYx8hYKd5ma
-GB2EEvLeIC8ShjyrR+vVMlbuh8R02dcw9yBal4RT39QV6QD58F2qLJyMrYqoDlUt
-RAU4RaNW2ttFqXHLJT44aKN7N1eeKPv7D1i76vvl911vqJQo+d+G0ng1mKgkGAKn
-I8Q9XS9b3Ig8jTjswWK3+3dh+P7zTA0yAugefSsL8Cix/T6nN1GeBAqKUQVIsRxf
-DyqlTZbplrdkP4kca5UTN7E6sJTjpHsnZ1pdA8FMLuPES3n/gZ7b7o89HZXHZLVd
-UTPDK2dn5CxrRdVGPlqKmQY5KWDnTcVALjcgU9NzPWmbdDlajZQZqQ9f/Epab+tI
-xA79pRV1CMZpZPgoE7xZ/IoN4ZiNX7hoIEzlp49bT1MBTrlcB7ByAX+f37V0+aaC
-J9e31IktlnyWslsjHVIeeYGlAzF1eCXTT3gVOXzhCmkgwzji9+tUtftRxYL5JGKZ
-xVLzESpyCD9g3mxwrQ9muj5/bqTofRAzIRxpCvcu2ZDZIcLHEwGM08JcisAOaAai
-3amUvsMfr3YcKvlr8Jx5KgZTew/k7nvrMmZUdilVCmZQhTfdgLfNuHu3u797By9r
-G3RrlXUNFHI7IQ3bqHWI9z1vbifnWVSdRjcb4Sr/m/fk6bxI8s0SKGZ5Q4Od+YEP
-GY4/vFjOsx+YNoxaMHK7
-=qOXw
+iQEcBAEBCAAGBQJSoINyAAoJEKeha0olJ0NqELQH/jrzathPeDVGjQpAUizxIOZD
+gfRCM6YWIrxiJEaa/TNmyw5p3omt29OGb0e9OIknJxvmJm0R0Sc5ZLpMk5e/sb/5
+oat4AGln/vmqZOhDyf6bAOMtujc63wOfRR9bhNVLiq3MxpUEgnDBqFM4BSeGYa56
+Gxe48cM9DiApRUGKo3VDvXQEk/WHDripJyeeqDz8zPsAIYuiFrynbdzo957jusqe
+h4DdhxGuMtyHKUHn2RLkn9maIG9FEeVgqCFhQD47P4AfyNVCBt7PIu19rUWf/BQ8
+NJuE8U8+CL5YYeFa+m4+0hfjMLive4cTmbww/mzjvngfluxsCqN48fmtqM0qw4g=
+=7Edl
 -----END PGP SIGNATURE-----
 
---DBIVS5p969aUjpLe--
+--Qgj0LIL5ip7KE8OhfepmXcqs0u1a4nF8O--
