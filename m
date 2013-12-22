@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-7920-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 1045 invoked by alias); 5 Dec 2013 19:56:06 -0000
+Return-Path: <cygwin-patches-return-7921-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 17324 invoked by alias); 22 Dec 2013 00:39:31 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,94 +9,69 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 985 invoked by uid 89); 5 Dec 2013 19:56:05 -0000
+Received: (qmail 17311 invoked by uid 89); 22 Dec 2013 00:39:30 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-0.5 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.2
-X-HELO: mho-02-ewr.mailhop.org
-Received: from Unknown (HELO mho-02-ewr.mailhop.org) (204.13.248.72) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-SHA encrypted) ESMTPS; Thu, 05 Dec 2013 19:56:04 +0000
-Received: from pool-71-126-240-25.bstnma.fios.verizon.net ([71.126.240.25] helo=cgf.cx)	by mho-02-ewr.mailhop.org with esmtpa (Exim 4.72)	(envelope-from <cgf@cgf.cx>)	id 1Vof1g-000Je1-4q	for cygwin-patches@cygwin.com; Thu, 05 Dec 2013 19:55:56 +0000
-Received: from cgf.cx (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with ESMTP id 5C2F06011D	for <cygwin-patches@cygwin.com>; Thu,  5 Dec 2013 14:55:55 -0500 (EST)
-X-Mail-Handler: Dyn Standard SMTP by Dyn
-X-Report-Abuse-To: abuse@dyndns.com (see http://www.dyndns.com/services/sendlabs/outbound_abuse.html for abuse reporting information)
-X-MHO-User: U2FsdGVkX19bX0XIgsMknZtMXDXQEkFA
-Date: Thu, 05 Dec 2013 19:56:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: fix off-by-one in dup2
-Message-ID: <20131205195555.GA4938@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <52437121.1070507@redhat.com> <20131204093238.GA28314@calimero.vinschen.de> <20131204113626.GB29444@calimero.vinschen.de> <20131204120408.GC29444@calimero.vinschen.de> <20131204170028.GA2590@ednor.casa.cgf.cx> <20131204172324.GA13448@calimero.vinschen.de> <20131204175108.GB2590@ednor.casa.cgf.cx> <52A08372.7080402@redhat.com>
+X-Spam-SWARE-Status: No, score=-1.3 required=5.0 tests=AWL,BAYES_05,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.2
+X-HELO: mail-wg0-f41.google.com
+Received: from mail-wg0-f41.google.com (HELO mail-wg0-f41.google.com) (74.125.82.41) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES128-SHA encrypted) ESMTPS; Sun, 22 Dec 2013 00:39:30 +0000
+Received: by mail-wg0-f41.google.com with SMTP id y10so8145331wgg.0        for <cygwin-patches@cygwin.com>; Sat, 21 Dec 2013 16:39:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <52A08372.7080402@redhat.com>
-User-Agent: Mutt/1.5.20 (2009-06-14)
-X-SW-Source: 2013-q4/txt/msg00016.txt.bz2
+X-Received: by 10.194.48.74 with SMTP id j10mr5739504wjn.41.1387672767368; Sat, 21 Dec 2013 16:39:27 -0800 (PST)
+Received: by 10.227.143.73 with HTTP; Sat, 21 Dec 2013 16:39:27 -0800 (PST)
+Date: Sun, 22 Dec 2013 00:39:00 -0000
+Message-ID: <CAOYw7dvX5CUc_zKyy4R8CxEe2=3fqCFUCpAnAvHZOzRU5o9Bdg@mail.gmail.com>
+Subject: [PATCH] Fix some debug string format specifiers.
+From: Ray Donnelly <mingw.android@gmail.com>
+To: cygwin-patches@cygwin.com
+Content-Type: multipart/mixed; boundary=047d7ba975c85e202b04ee14be54
+X-IsSubscribed: yes
+X-SW-Source: 2013-q4/txt/msg00017.txt.bz2
 
-On Thu, Dec 05, 2013 at 06:45:22AM -0700, Eric Blake wrote:
->On 12/04/2013 10:51 AM, Christopher Faylor wrote:
->
->>>>> One question, though.  Assuming start is == size, then the current code
->>>>> in CVS extends the fd table by only 1.  If that happens often, the
->>>>> current code would have to call ccalloc/memcpy/cfree a lot.  Wouldn't
->>>>> it in fact be better to extend always by at least NOFILE_INCR, and to
->>>>> extend by (1 + start - size) only if start is > size + NOFILE_INCR?
->>>>> Something like
->>>>>
->>>>>  size_t extendby = (start >= size + NOFILE_INCR) ? 1 + start - size : NOFILE_INCR;
->>>>>
->
->Always increasing by a minimum of NOFILE_INCR is wrong in one case - we
->should never increase beyond OPEN_MAX_MAX (currently 3200).  dup2(0,
->3199) should succeed (unless it fails with EMFILE due to rlimit, but we
->already know that our handling of setrlimit(RLIMIT_NOFILE) is still a
->bit awkward); but dup2(0, 3200) must always fail with EBADF.  I think
->the code in CVS is still wrong: we want to increase to the larger of the
->value specified by the user or NOFILE_INCR to minimize repeated calloc,
->but we also need to cap the increase to be at most OPEN_MAX_MAX
->descriptors, to avoid having a table larger than what the rest of our
->code base will support.
 
-I made some more changes to CVS.  Incidentally did you catch the fact
-that you broke how this worked in 1.7.26?  You were taking a MAX of a
-signed and unsigned quantity so the signed quantity was promoted to a
-huge positive number.
+--047d7ba975c85e202b04ee14be54
+Content-Type: text/plain; charset=ISO-8859-1
+Content-length: 63
 
->Not having NOFILE_INCR free slots after a user allocation is not fatal;
+I hope patches generated with git are OK?
 
-No one implied it was.
+Best regards,
 
->it means that the first allocation to a large number will not have tail
->padding, but the next allocation to fd+1 will allocate NOFILE_INCR slots
->rather than just one.  My original idea of MAX(NOFILE_INCR, start -
->size) expresses that.
+Ray.
 
-That wasn't Corinna's concern.  My replacement code would have called
-calloc for every one of:
+--047d7ba975c85e202b04ee14be54
+Content-Type: application/octet-stream; 
+	name="0001-winsup-cygwin-gmon.c-_mcleanup-Fix-some-debug-string.patch"
+Content-Disposition: attachment; 
+	filename="0001-winsup-cygwin-gmon.c-_mcleanup-Fix-some-debug-string.patch"
+Content-Transfer-Encoding: base64
+X-Attachment-Id: f_hphkhwry0
+Content-length: 1469
 
-dup2(0, 32);
-dup2(1, 33);
-dup2(2, 34);
+RnJvbSBkNWUwNmM0MGJhMzBkM2Y4ZWJiZGNiOTlhODI3OWQwYzM4ZGI0NTZh
+IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBSYXkgRG9ubmVsbHkg
+PG1pbmd3LmFuZHJvaWRAZ21haWwuY29tPgpEYXRlOiBUaHUsIDE5IERlYyAy
+MDEzIDE5OjAxOjUzICswMDAwClN1YmplY3Q6IFtQQVRDSCAxLzNdICogd2lu
+c3VwL2N5Z3dpbi9nbW9uLmMgKF9tY2xlYW51cCk6IEZpeCBzb21lIGRlYnVn
+IHN0cmluZwogZm9ybWF0IHNwZWNpZmllcnMKCi0tLQogd2luc3VwL2N5Z3dp
+bi9nbW9uLmMgfCA0ICsrLS0KIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlv
+bnMoKyksIDIgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvd2luc3VwL2N5
+Z3dpbi9nbW9uLmMgYi93aW5zdXAvY3lnd2luL2dtb24uYwppbmRleCA5NmIx
+MTg5Li4xNmYxMDM0IDEwMDY0NAotLS0gYS93aW5zdXAvY3lnd2luL2dtb24u
+YworKysgYi93aW5zdXAvY3lnd2luL2dtb24uYwpAQCAtMjMzLDcgKzIzMyw3
+IEBAIF9tY2xlYW51cCh2b2lkKQogCQlwZXJyb3IoIm1jb3VudDogZ21vbi5s
+b2ciKTsKIAkJcmV0dXJuOwogCX0KLQlsZW4gPSBzcHJpbnRmKGRidWYsICJb
+bWNsZWFudXAxXSBrY291bnQgMHgleCBzc2l6ICVkXG4iLAorCWxlbiA9IHNw
+cmludGYoZGJ1ZiwgIlttY2xlYW51cDFdIGtjb3VudCAweCVwIHNzaXogJXpk
+XG4iLAogCSAgICBwLT5rY291bnQsIHAtPmtjb3VudHNpemUpOwogCXdyaXRl
+KGxvZywgZGJ1ZiwgbGVuKTsKICNlbmRpZgpAQCAtMjU2LDcgKzI1Niw3IEBA
+IF9tY2xlYW51cCh2b2lkKQogCQkgICAgIHRvaW5kZXggPSBwLT50b3NbdG9p
+bmRleF0ubGluaykgewogI2lmZGVmIERFQlVHCiAJCQlsZW4gPSBzcHJpbnRm
+KGRidWYsCi0JCQkiW21jbGVhbnVwMl0gZnJvbXBjIDB4JXggc2VsZnBjIDB4
+JXggY291bnQgJWRcbiIgLAorCQkJIlttY2xlYW51cDJdIGZyb21wYyAweCV6
+ZCBzZWxmcGMgMHglemQgY291bnQgJXpkXG4iICwKIAkJCQlmcm9tcGMsIHAt
+PnRvc1t0b2luZGV4XS5zZWxmcGMsCiAJCQkJcC0+dG9zW3RvaW5kZXhdLmNv
+dW50KTsKIAkJCXdyaXRlKGxvZywgZGJ1ZiwgbGVuKTsKLS0gCjEuOC41LjIK
+Cg==
 
-Obviously there are different ways to avoid this and I chose to extend
-the table after the "start" location.
-
->>> That might be helpful.  Tcsh, for instance, always dup's it's std
->>> descriptors to the new fds 15-19.  If it does so in this order, it would
->>> have to call extend 5 times.
->> 
->> dtable.h:#define NOFILE_INCR    32
->> 
->> It shouldn't extend in that scenario.  The table starts with 32
->> elements.
->
->Rather, the table starts with 256 elements; which is why dup2 wouldn't
->crash until dup'ing to 256 or greater before I started touching this.
-
-The table is initialized in dtable_init() with 32 elements.  When it
-enters main, it is still 32 elements, at least according to
-cygheap->fdtab.size.  I just checked this with gdb.
-
-cgf
+--047d7ba975c85e202b04ee14be54--
