@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-7922-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 17946 invoked by alias); 22 Dec 2013 00:40:25 -0000
+Return-Path: <cygwin-patches-return-7923-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 10329 invoked by alias); 22 Dec 2013 01:03:14 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,59 +9,64 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 17933 invoked by uid 89); 22 Dec 2013 00:40:24 -0000
+Received: (qmail 10316 invoked by uid 89); 22 Dec 2013 01:03:13 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
 X-Spam-SWARE-Status: No, score=-2.0 required=5.0 tests=AWL,BAYES_00,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.2
-X-HELO: mail-we0-f182.google.com
-Received: from mail-we0-f182.google.com (HELO mail-we0-f182.google.com) (74.125.82.182) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES128-SHA encrypted) ESMTPS; Sun, 22 Dec 2013 00:40:23 +0000
-Received: by mail-we0-f182.google.com with SMTP id q59so3882534wes.27        for <cygwin-patches@cygwin.com>; Sat, 21 Dec 2013 16:40:21 -0800 (PST)
+X-HELO: mail-we0-f173.google.com
+Received: from mail-we0-f173.google.com (HELO mail-we0-f173.google.com) (74.125.82.173) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES128-SHA encrypted) ESMTPS; Sun, 22 Dec 2013 01:03:13 +0000
+Received: by mail-we0-f173.google.com with SMTP id u57so3814902wes.18        for <cygwin-patches@cygwin.com>; Sat, 21 Dec 2013 17:03:09 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 10.180.85.202 with SMTP id j10mr13237136wiz.35.1387672821061; Sat, 21 Dec 2013 16:40:21 -0800 (PST)
-Received: by 10.227.143.73 with HTTP; Sat, 21 Dec 2013 16:40:20 -0800 (PST)
-Date: Sun, 22 Dec 2013 00:40:00 -0000
-Message-ID: <CAOYw7dvP64FFXUJS60ixUqj2jr01Dzf3YrchyR79m7AQEb8TKA@mail.gmail.com>
-Subject: [PATCH] Fix potentially uninitialized variable p
+X-Received: by 10.194.89.233 with SMTP id br9mr12964477wjb.15.1387674189788; Sat, 21 Dec 2013 17:03:09 -0800 (PST)
+Received: by 10.227.143.73 with HTTP; Sat, 21 Dec 2013 17:03:09 -0800 (PST)
+Date: Sun, 22 Dec 2013 01:03:00 -0000
+Message-ID: <CAOYw7duMgGSfpxa4OtOPRhY5Mw6q=__shhJxELZ53Ez9_WETRQ@mail.gmail.com>
+Subject: [PATCH] Reattach trailing dirsep on existing directories too.
 From: Ray Donnelly <mingw.android@gmail.com>
 To: cygwin-patches@cygwin.com
-Content-Type: multipart/mixed; boundary=f46d04428ebe90745904ee14c174
+Content-Type: multipart/mixed; boundary=089e0102fb5c25fad304ee151398
 X-IsSubscribed: yes
-X-SW-Source: 2013-q4/txt/msg00018.txt.bz2
+X-SW-Source: 2013-q4/txt/msg00019.txt.bz2
 
 
---f46d04428ebe90745904ee14c174
+--089e0102fb5c25fad304ee151398
 Content-Type: text/plain; charset=ISO-8859-1
-Content-length: 1
+Content-length: 93
 
+I hope this is OK and I've done it in the best place. Please advise if
+it needs any changes.
 
-
---f46d04428ebe90745904ee14c174
+--089e0102fb5c25fad304ee151398
 Content-Type: application/octet-stream; 
-	name="0002-winsup-cygwin-strace.cc-strace-vsprntf-Fix-potential.patch"
+	name="0003-winsup-cygwin-path.cc-path_conv-check-Reattach-trail.patch"
 Content-Disposition: attachment; 
-	filename="0002-winsup-cygwin-strace.cc-strace-vsprntf-Fix-potential.patch"
+	filename="0003-winsup-cygwin-path.cc-path_conv-check-Reattach-trail.patch"
 Content-Transfer-Encoding: base64
-X-Attachment-Id: f_hphkk98t0
-Content-length: 1131
+X-Attachment-Id: f_hphldnc60
+Content-length: 1351
 
-RnJvbSBmZDc4ZDlmNjg3NmMzYTk2YTM1ZGUwZTE5ZjBmMGVhYThiNmY5OWQ1
+RnJvbSA4ZDMwZDQ3YWU2YmNhNmI4YWI0ZGE2ZGY2MjYxNmFiOTUyMWE0OGQx
 IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBSYXkgRG9ubmVsbHkg
 PG1pbmd3LmFuZHJvaWRAZ21haWwuY29tPgpEYXRlOiBUaHUsIDE5IERlYyAy
-MDEzIDE5OjAzOjIzICswMDAwClN1YmplY3Q6IFtQQVRDSCAyLzNdICogd2lu
-c3VwL2N5Z3dpbi9zdHJhY2UuY2MgKHN0cmFjZTo6dnNwcm50Zik6IEZpeAog
-cG90ZW50aWFsbHkgdW5pbml0aWFsaXplZCB2YXJpYWJsZSBwCgotLS0KIHdp
-bnN1cC9jeWd3aW4vc3RyYWNlLmNjIHwgMiArLQogMSBmaWxlIGNoYW5nZWQs
-IDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCgpkaWZmIC0tZ2l0IGEv
-d2luc3VwL2N5Z3dpbi9zdHJhY2UuY2MgYi93aW5zdXAvY3lnd2luL3N0cmFj
-ZS5jYwppbmRleCAzYzczYTcxLi5mNTE1NjZmIDEwMDY0NAotLS0gYS93aW5z
-dXAvY3lnd2luL3N0cmFjZS5jYworKysgYi93aW5zdXAvY3lnd2luL3N0cmFj
-ZS5jYwpAQCAtMTU2LDcgKzE1Niw3IEBAIHN0cmFjZTo6dnNwcm50ZiAoY2hh
-ciAqYnVmLCBjb25zdCBjaGFyICpmdW5jLCBjb25zdCBjaGFyICppbmZtdCwg
-dmFfbGlzdCBhcCkKICAgICAgIGVsc2UgaWYgKF9fcHJvZ25hbWUpCiAJc3lz
-X21ic3Rvd2NzKHBuID0gcHJvZ25hbWUsIE5UX01BWF9QQVRILCBfX3Byb2du
-YW1lKTsKIAotICAgICAgUFdDSEFSIHA7CisgICAgICBQV0NIQVIgcCA9IE5V
-TEw7CiAgICAgICBpZiAoIXBuKQogCUdldE1vZHVsZUZpbGVOYW1lVyAoTlVM
-TCwgcG4gPSBwcm9nbmFtZSwgc2l6ZW9mIChwcm9nbmFtZSkpOwogICAgICAg
-aWYgKCFwbikKLS0gCjEuOC41LjIKCg==
+MDEzIDE5OjA0OjE1ICswMDAwClN1YmplY3Q6IFtQQVRDSCAzLzNdICogd2lu
+c3VwL2N5Z3dpbi9wYXRoLmNjIChwYXRoX2NvbnY6OmNoZWNrKTogUmVhdHRh
+Y2gKIHRyYWlsaW5nIGRpcnNlcCBvbiBleGlzdGluZyBkaXJlY3RvcmllcyB0
+b28gKHByZXZpb3VzbHkgdGhpcyB3b3VsZCBvbmx5CiBoYXBwZW4gdG8gbm9u
+LWV4aXN0aW5nIG9uZXMpLgoKLS0tCiB3aW5zdXAvY3lnd2luL3BhdGguY2Mg
+fCAyICstCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVs
+ZXRpb24oLSkKCmRpZmYgLS1naXQgYS93aW5zdXAvY3lnd2luL3BhdGguY2Mg
+Yi93aW5zdXAvY3lnd2luL3BhdGguY2MKaW5kZXggMDQ3ODEwZi4uMjRlMmMw
+MSAxMDA2NDQKLS0tIGEvd2luc3VwL2N5Z3dpbi9wYXRoLmNjCisrKyBiL3dp
+bnN1cC9jeWd3aW4vcGF0aC5jYwpAQCAtMTA3NSw3ICsxMDc1LDcgQEAgb3V0
+OgogICAgIH0KICAgZWxzZSBpZiAoIW5lZWRfZGlyZWN0b3J5IHx8IGVycm9y
+KQogICAgIC8qIG5vdGhpbmcgdG8gZG8gKi87Ci0gIGVsc2UgaWYgKGZpbGVh
+dHRyID09IElOVkFMSURfRklMRV9BVFRSSUJVVEVTKQorICBlbHNlIGlmIChm
+aWxlYXR0ciA9PSBJTlZBTElEX0ZJTEVfQVRUUklCVVRFUyB8fCAoKGZpbGVh
+dHRyICYgRklMRV9BVFRSSUJVVEVfRElSRUNUT1JZKSAmJiAhY29tcG9uZW50
+KSkKICAgICBzdHJjYXQgKG1vZGlmaWFibGVfcGF0aCAoKSwgIlxcIik7IC8q
+IFJlYXR0YWNoIHRyYWlsaW5nIGRpcnNlcCBpbiBuYXRpdmUgcGF0aC4gKi8K
+ICAgZWxzZSBpZiAoZmlsZWF0dHIgJiBGSUxFX0FUVFJJQlVURV9ESVJFQ1RP
+UlkpCiAgICAgcGF0aF9mbGFncyAmPSB+UEFUSF9TWU1MSU5LOwotLSAKMS44
+LjUuMgoK
 
---f46d04428ebe90745904ee14c174--
+--089e0102fb5c25fad304ee151398--
