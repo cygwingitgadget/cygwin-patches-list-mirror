@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-7943-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 18345 invoked by alias); 8 Jan 2014 18:18:47 -0000
+Return-Path: <cygwin-patches-return-7944-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 7482 invoked by alias); 20 Jan 2014 06:03:02 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,47 +9,78 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 18329 invoked by uid 89); 8 Jan 2014 18:18:46 -0000
+Received: (qmail 7439 invoked by uid 89); 20 Jan 2014 06:03:01 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-1.7 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.2
-X-HELO: mho-02-ewr.mailhop.org
-Received: from mho-02-ewr.mailhop.org (HELO mho-02-ewr.mailhop.org) (204.13.248.72) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-SHA encrypted) ESMTPS; Wed, 08 Jan 2014 18:18:45 +0000
-Received: from pool-108-49-99-58.bstnma.fios.verizon.net ([108.49.99.58] helo=cgf.cx)	by mho-02-ewr.mailhop.org with esmtpa (Exim 4.72)	(envelope-from <cgf-use-the-mailinglist-please@cygwin.com>)	id 1W0xiF-000G7r-UY	for cygwin-patches@cygwin.com; Wed, 08 Jan 2014 18:18:43 +0000
-Received: from ednor (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with SMTP id CC0B7600D3	for <cygwin-patches@cygwin.com>; Wed,  8 Jan 2014 13:18:40 -0500 (EST)
-Received: by ednor (sSMTP sendmail emulation); Wed, 08 Jan 2014 13:18:40 -0500
-X-Mail-Handler: Dyn Standard SMTP by Dyn
-X-Report-Abuse-To: abuse@dyndns.com (see http://www.dyndns.com/services/sendlabs/outbound_abuse.html for abuse reporting information)
-X-MHO-User: U2FsdGVkX19D5RHatGOW/wXxbL9DWQbc
-Date: Wed, 08 Jan 2014 18:18:00 -0000
-From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: Patch to optionally disable overlapped pipes
-Message-ID: <20140108181840.GA6704@ednor.casa.cgf.cx>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <037b01cf00fc$11014c10$3303e430$@motionview3d.com> <20131225041237.GA6930@ednor.casa.cgf.cx> <07dc01cf0c9b$93dea560$bb9bf020$@motionview3d.com>
+X-Spam-SWARE-Status: No, score=-2.6 required=5.0 tests=AWL,BAYES_00,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.2
+X-HELO: mail-lb0-f177.google.com
+Received: from mail-lb0-f177.google.com (HELO mail-lb0-f177.google.com) (209.85.217.177) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES128-SHA encrypted) ESMTPS; Mon, 20 Jan 2014 06:03:00 +0000
+Received: by mail-lb0-f177.google.com with SMTP id z5so4453283lbh.8        for <cygwin-patches@cygwin.com>; Sun, 19 Jan 2014 22:02:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <07dc01cf0c9b$93dea560$bb9bf020$@motionview3d.com>
-User-Agent: Mutt/1.5.20 (2009-06-14)
-X-SW-Source: 2014-q1/txt/msg00016.txt.bz2
+X-Received: by 10.152.44.225 with SMTP id h1mr10810102lam.22.1390197776950; Sun, 19 Jan 2014 22:02:56 -0800 (PST)
+Received: by 10.112.43.43 with HTTP; Sun, 19 Jan 2014 22:02:56 -0800 (PST)
+Date: Mon, 20 Jan 2014 06:03:00 -0000
+Message-ID: <CABDpyCh3VMDmd4Rb64Fz-cb2HzUwtZ0cY9T3xWUC8_O-eqKO6Q@mail.gmail.com>
+Subject: [PATCH] Fix parameter passing containing quote/equal to Windows batch command
+From: Daniel Dai <daijyc@gmail.com>
+To: cygwin-patches@cygwin.com
+Content-Type: text/plain; charset=ISO-8859-1
+X-IsSubscribed: yes
+X-SW-Source: 2014-q1/txt/msg00017.txt.bz2
 
-On Wed, Jan 08, 2014 at 06:00:54PM -0000, James Johnston wrote:
->The function I modified is fhandler_pipe::create(fhandler_pipe**, unsigned,
->int).  This function is a thin wrapper around a more specific
->fhandler_pipe::create(LPSECURITY_ATTRIBUTES, PHANDLE, PHANDLE, DWORD, const
->char*, DWORD open_mode) with default values for some of the parameters for
->that more specific function, and it passes FILE_FLAG_OVERLAPPED by default.
->My change involved optionally removing FILE_FLAG_OVERLAPPED from the
->default.
->
->Critically, my change does NOT affect any code that uses the
->fhandler_pipe::create overload that takes 6 parameters.
+We notice one issue when running a Windows batch command inside
+cygwin. Here is one example.
 
-I'm the author of the code and I'm familiar with the implications of what
-you did.  You modified the way pipes are commonly created.  I'm not
-comfortable supporting code which has that option.
+Simple batch file:
+a.bat:
+echo %1
 
-cgf
+Run it under cygwin:
+./a.bat a=b
+a
+
+./a.bat "a=b"
+a
+
+If we pass additional \"
+./a.bat "\"a=b\""
+"\"a
+
+There seems no way to pass a=b into bat.
+
+Attach quote.patch contains a fix. It does two things:
+1. If the parameter contains a equal sign, automatically add quote
+(similar to space, tab, new line, quote cygwin already do)
+2. If the parameter is already quoted, don't quote again
+
+Patch:
+Index: cygwin/winf.cc
+==============================
+=====================================
+RCS file: /cvs/src/src/winsup/cygwin/winf.cc,v
+retrieving revision 1.10
+diff -u -p -r1.10 winf.cc
+--- cygwin/winf.cc      19 Jun 2013 16:00:43 -0000      1.10
++++ cygwin/winf.cc      20 Jan 2014 00:50:15 -0000
+@@ -72,11 +72,16 @@ linebuf::fromargv (av& newargv, const ch
+     {
+       char *p = NULL;
+       const char *a;
++      boolean enclosed_with_quote = false;
+
+       a = i ? newargv[i] : (char *) real_path;
+       int len = strlen (a);
+-      if (len != 0 && !strpbrk (a, " \t\n\r\""))
+-       add (a, len);
++      if (len != 0 && a[0] == '\"' && a[len-1] == '\"') {
++        enclosed_with_quote = true;
++      }
++      if (enclosed_with_quote || (len != 0 && !strpbrk (a, " \t\n\r\"="))) {
++        add (a, len);
++      }
+       else
+        {
+          add ("\"", 1);
+
+Thanks,
+Daniel
