@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-7948-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 19006 invoked by alias); 21 Jan 2014 20:58:06 -0000
+Return-Path: <cygwin-patches-return-7949-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 32661 invoked by alias); 22 Jan 2014 01:15:14 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,142 +9,89 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 18992 invoked by uid 89); 21 Jan 2014 20:58:05 -0000
+Received: (qmail 32648 invoked by uid 89); 22 Jan 2014 01:15:14 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-2.6 required=5.0 tests=AWL,BAYES_00,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.2
-X-HELO: mail-lb0-f182.google.com
-Received: from mail-lb0-f182.google.com (HELO mail-lb0-f182.google.com) (209.85.217.182) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES128-SHA encrypted) ESMTPS; Tue, 21 Jan 2014 20:58:04 +0000
-Received: by mail-lb0-f182.google.com with SMTP id w7so5945512lbi.13        for <cygwin-patches@cygwin.com>; Tue, 21 Jan 2014 12:58:01 -0800 (PST)
+X-Spam-SWARE-Status: No, score=-0.5 required=5.0 tests=AWL,BAYES_00,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.2
+X-HELO: mail-qc0-f181.google.com
+Received: from mail-qc0-f181.google.com (HELO mail-qc0-f181.google.com) (209.85.216.181) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES128-SHA encrypted) ESMTPS; Wed, 22 Jan 2014 01:15:13 +0000
+Received: by mail-qc0-f181.google.com with SMTP id e9so7904051qcy.40        for <cygwin-patches@cygwin.com>; Tue, 21 Jan 2014 17:15:11 -0800 (PST)
+X-Received: by 10.224.26.15 with SMTP id b15mr42122826qac.46.1390353311047;        Tue, 21 Jan 2014 17:15:11 -0800 (PST)
+Received: from [192.168.1.85] (99-94-174-195.lightspeed.gnbonc.sbcglobal.net. [99.94.174.195])        by mx.google.com with ESMTPSA id o75sm3917183qgd.11.2014.01.21.17.15.09        for <cygwin-patches@cygwin.com>        (version=TLSv1 cipher=ECDHE-RSA-RC4-SHA bits=128/128);        Tue, 21 Jan 2014 17:15:10 -0800 (PST)
+Message-ID: <52DF1B9F.5070002@gmail.com>
+Date: Wed, 22 Jan 2014 01:15:00 -0000
+From: Max Polk <maxpolk@gmail.com>
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko/20100101 Thunderbird/24.2.0
 MIME-Version: 1.0
-X-Received: by 10.152.8.47 with SMTP id o15mr3526640laa.20.1390337881147; Tue, 21 Jan 2014 12:58:01 -0800 (PST)
-Received: by 10.112.167.35 with HTTP; Tue, 21 Jan 2014 12:58:01 -0800 (PST)
-In-Reply-To: <CAKw7uVh_=cs56dT7njMqpLAePyEMpbQQ6Fw1bmenQ-5t-QeK5w@mail.gmail.com>
-References: <CABDpyCh3VMDmd4Rb64Fz-cb2HzUwtZ0cY9T3xWUC8_O-eqKO6Q@mail.gmail.com>	<52DDBFBE.2010800@gmail.com>	<CAKw7uVh_=cs56dT7njMqpLAePyEMpbQQ6Fw1bmenQ-5t-QeK5w@mail.gmail.com>
-Date: Tue, 21 Jan 2014 20:58:00 -0000
-Message-ID: <CABDpyCgQN2p9xA3kKT45jNGFxp8Q=nGNHb4ycG5WuGJeAdaB2A@mail.gmail.com>
-Subject: Re: [PATCH] Fix parameter passing containing quote/equal to Windows batch command
-From: Daniel Dai <daijyc@gmail.com>
 To: cygwin-patches@cygwin.com
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH] Fix parameter passing containing quote/equal to Windows batch command
+References: <CABDpyCh3VMDmd4Rb64Fz-cb2HzUwtZ0cY9T3xWUC8_O-eqKO6Q@mail.gmail.com>	<52DDBFBE.2010800@gmail.com> <CABDpyChNbxjLZdHZBY_Fbq01pQM8wM5Cgmm4DcZiu7xOp=bu7Q@mail.gmail.com>
+In-Reply-To: <CABDpyChNbxjLZdHZBY_Fbq01pQM8wM5Cgmm4DcZiu7xOp=bu7Q@mail.gmail.com>
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
 X-IsSubscribed: yes
-X-SW-Source: 2014-q1/txt/msg00021.txt.bz2
+X-SW-Source: 2014-q1/txt/msg00022.txt.bz2
 
-Thanks V=E1clav!
-
-You are right, I tried on exe file, things works fine on exe, but not
-bat file. Seems some cleanup is done before we running into main
-function of exe.
-
-So how do we want to fix bat? The rules in my patch seems apply even for ex=
-e:
-1. if parameter is already quoted, don't quote again
-2. if parameter contains equal, quote it
-
-It probably duplicate some logic with exe bootstrap code, but I don't
-see any harm.
-
-Another way to fix is to apply the rule only we see a bat file. That
-should solve my problem as well.
-
-Thanks,
-Daniel
-
-
-
-
-
-On Tue, Jan 21, 2014 at 4:31 AM, V=E1clav Zeman <vhaisman@gmail.com> wrote:
-> On 21 January 2014 01:30, Max Polk wrote:
->> On 1/20/2014 1:02 AM, Daniel Dai wrote:
->>>
->>> We notice one issue when running a Windows batch command inside
->>> cygwin. Here is one example.
->>>
->>> Simple batch file:
->>> a.bat:
->>> echo %1
->>>
->>> Run it under cygwin:
->>> ./a.bat a=3Db
->>> a
->>>
->>> ./a.bat "a=3Db"
->>> a
->>>
->>> If we pass additional \"
->>> ./a.bat "\"a=3Db\""
->>> "\"a
->>>
->>> There seems no way to pass a=3Db into bat.
->>
->>
->> This is how batch files work, and likely not a problem with Cygwin:
->> http://support.microsoft.com/kb/35938
->> Excerpt: "it is not possible to include an equal sign as an argument to a
->> batch file"
->>
->> Be careful to note that cmd.exe and .bat files naturally split a=3Db int=
-o two
->> arguments and strip out the equals sign:
->>
->> (Run from cmd.exe)
->> C:\>Argecho.bat a=3Db
->> FIRST a
->> SECOND b
->> THIRD
->>
->> I did notice that adding double quotes (in cmd.exe) will make will it ar=
-rive
->> as one argument, and note that the double quotes are still there:
->>
->> (Run from cmd.exe)
->> C:\>Argecho.bat "a=3Db"
->> FIRST "a=3Db"
->> SECOND
->> THIRD
->>
->> There is a problem getting Cygwin the above test case, however.
->>
->> The test script was:
->> C:\>type Argecho.bat
->> @echo off
->> echo FIRST %1
->> echo SECOND %2
->> echo THIRD %3
->>
->> When run from Cygwin bash, and you force the double quotes by surrounding
->> double quotes "a=3Db" with single quotes '"a=3Db"', you seem to get too =
-*many*
->> quotes in the batch file:
->>
->> (Run from bash, the batch file behaves correctly as if run from cmd.exe)
->> $ Argecho.bat a=3Db
->> FIRST a
->> SECOND b
->> THIRD
->>
->> (Run from bash, same as above since bash removes the double quotes prior=
- to
->> passing to program):
->> $ Argecho.bat "a=3Db"
->> FIRST a
->> SECOND b
->> THIRD
->>
->> (Run from bash, this is what is surprising double surrounded with single)
->> $ Argecho.bat '"a=3Db"'
->> FIRST "\"a
->> SECOND b\""
->> THIRD
->>
->> It seems that only the final test case above doesn't behave as expected.
+On 1/21/2014 4:27 AM, Daniel Dai wrote:
+> Max,
+> Thanks for your reply.
 >
-> Beware! The way CMD.exe handles command line and parameters is
-> different/incompatible from the way C (MSVCRT) application handles
-> them. Do not confuse the two. You cannot prove/show anything about how
-> C application handles arguments by using CMD.exe as a show case.
+> Yes, the double quote issue can be reproducible from command line, but
+> not the equal sign.
 >
-> --
-> VZ
+> Let's demonstrate the equal sign issue with a C program:
+>
+> #include "unistd.h"
+>
+> int main(int argc, char** argv) {
+>      execl("a.bat", "a.bat", "a=b");
+>      return 0;
+> }
+>
+> The intention of the program is to pass "a=b" as a single argument.
+> However, compile and run it under cygwin, I get:
+> $ cc -o myprog myprog.c
+> $ ./myprog
+> a
+>
+> I run the program with Visual Studio, I get "a=b".
+>
+> The way Windows/Unix handles parameter containing equal sign is
+> different. IMHO, Cygwin should be the place to fill this semantic gap.
+
+In Visual Studio, you don't get "a=b", you get the same results, a and b 
+are separate arguments.
+
+(Run from cmd.exe window)
+C:\path>BatchTest.exe
+
+C:\path>FIRST a
+SECOND b
+THIRD
+
+(Run from bash.exe)
+$ BatchTest.exe
+$ FIRST a
+SECOND b
+THIRD
+
+Source code to Visual Studio project:
+
+#include "stdafx.h"
+#include <process.h>
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+     _execl ("Argecho.bat", "Argecho.bat", "a=b", NULL);
+}
+
+Script for Argecho.bat:
+
+@echo off
+echo FIRST %1
+echo SECOND %2
+echo THIRD %3
+
+Cygwin looks consistent with both Visual Studio compiled app calling a 
+batch file and the command line calling the batch file.  It looks the 
+same both ways.
