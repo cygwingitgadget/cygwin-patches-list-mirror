@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-7955-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 30149 invoked by alias); 29 Jan 2014 16:46:15 -0000
+Return-Path: <cygwin-patches-return-7956-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 18690 invoked by alias); 29 Jan 2014 18:55:37 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,77 +9,39 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 30133 invoked by uid 89); 29 Jan 2014 16:46:14 -0000
+Received: (qmail 18678 invoked by uid 89); 29 Jan 2014 18:55:36 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-2.0 required=5.0 tests=AWL,BAYES_00,SPF_PASS autolearn=ham version=3.3.2
-X-HELO: northrend.tastycake.net
-Received: from northrend.tastycake.net (HELO northrend.tastycake.net) (212.13.201.165) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES128-SHA encrypted) ESMTPS; Wed, 29 Jan 2014 16:46:13 +0000
-Received: from adam by northrend.tastycake.net with local (Exim 4.80)	(envelope-from <adam@dinwoodie.org>)	id 1W8YHB-00043J-Vb	for cygwin-patches@cygwin.com; Wed, 29 Jan 2014 16:46:10 +0000
-Date: Wed, 29 Jan 2014 16:46:00 -0000
-From: Adam Dinwoodie <adam@dinwoodie.org>
+X-Spam-SWARE-Status: No, score=-1.9 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.2
+X-HELO: mho-01-ewr.mailhop.org
+Received: from mho-03-ewr.mailhop.org (HELO mho-01-ewr.mailhop.org) (204.13.248.66) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-SHA encrypted) ESMTPS; Wed, 29 Jan 2014 18:55:36 +0000
+Received: from pool-173-76-44-31.bstnma.fios.verizon.net ([173.76.44.31] helo=cgf.cx)	by mho-01-ewr.mailhop.org with esmtpa (Exim 4.72)	(envelope-from <cgf-use-the-mailinglist-please@cygwin.com>)	id 1W8aIQ-000CDj-3H	for cygwin-patches@cygwin.com; Wed, 29 Jan 2014 18:55:34 +0000
+Received: from ednor (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with SMTP id 3E1E360108	for <cygwin-patches@cygwin.com>; Wed, 29 Jan 2014 13:55:31 -0500 (EST)
+Received: by ednor (sSMTP sendmail emulation); Wed, 29 Jan 2014 13:55:31 -0500
+X-Mail-Handler: Dyn Standard SMTP by Dyn
+X-Report-Abuse-To: abuse@dyndns.com (see http://www.dyndns.com/services/sendlabs/outbound_abuse.html for abuse reporting information)
+X-MHO-User: U2FsdGVkX19v6i58BdcXCBSPx9uc+0pN
+Date: Wed, 29 Jan 2014 18:55:00 -0000
+From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Snapshot install instructions use bz2, not xz
-Message-ID: <20140129164607.GA14239@tastycake.net>
+Subject: Re: [PATCH] Snapshot install instructions use bz2, not xz
+Message-ID: <20140129185531.GA2303@ednor.casa.cgf.cx>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20140129164607.GA14239@tastycake.net>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="PNTmBPCT7hxwcZjr"
-Content-Disposition: inline
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-IsSubscribed: yes
-X-SW-Source: 2014-q1/txt/msg00028.txt.bz2
-
-
---PNTmBPCT7hxwcZjr
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-length: 450
+In-Reply-To: <20140129164607.GA14239@tastycake.net>
+User-Agent: Mutt/1.5.20 (2009-06-14)
+X-SW-Source: 2014-q1/txt/msg00029.txt.bz2
 
-All,
+On Wed, Jan 29, 2014 at 04:46:09PM +0000, Adam Dinwoodie wrote:
+>I've attached a minor correction to the FAQ entry on installing
+>snapshots, to note that snapshots are now .xz archives, rather than
+>.bz2.
 
-I've attached a minor correction to the FAQ entry on installing
-snapshots, to note that snapshots are now .xz archives, rather than
-.bz2.
+Thanks for the heads up.  I've made some more general wording changes
+in faq-setup.xml.
 
-I've not been able to build this: the docs build requires "fop", which
-isn't available in the main Cygwin repositories, and I don't
-particularly want to set up this machine to start pulling packages from
-Cygwin Ports.
-
-2014-01-29  Adam Dinwoodie
-
-	* faq-setup.xml (faq.setup.snapshots): Use .xz not .bz2.
-
---PNTmBPCT7hxwcZjr
-Content-Type: text/x-diff; charset=us-ascii
-Content-Disposition: attachment; filename="faq-patch.diff"
-Content-length: 1396
-
-Index: doc/faq-setup.xml
-===================================================================
-RCS file: /cvs/src/src/winsup/doc/faq-setup.xml,v
-retrieving revision 1.32
-diff -u -p -r1.32 faq-setup.xml
---- doc/faq-setup.xml	12 Nov 2013 22:21:32 -0000	1.32
-+++ doc/faq-setup.xml	29 Jan 2014 15:36:23 -0000
-@@ -539,7 +539,7 @@ bugfix that you need to try, and you are
- problems, or at the request of a Cygwin developer.
- </para>
- <para>You should generally install the full
--<literal>cygwin-inst-YYYYMMDD.tar.bz2</literal> update, rather than just the DLL,
-+<literal>cygwin-inst-YYYYMMDD.tar.xz</literal> update, rather than just the DLL,
- otherwise some components may be out of sync.
- </para>
- <para>You cannot use Cygwin Setup to install a snapshot.
-@@ -561,8 +561,8 @@ you are only installing the DLL snapshot
- a <literal>bash</literal> shell (it should be the only running Cygwin process) and issue
- the following commands:
- <screen>
--	/bin/tar -C/ -jxvf /posix/path/to/cygwin-inst-YYYYMMDD.tar.bz2 --exclude=usr/bin/cygwin1.dll
--	/bin/tar -C/tmp -jxvf /posix/path/to/cygwin-inst-YYYYMMDD.tar.bz2 usr/bin/cygwin1.dll
-+	/bin/tar -C/ -Jxvf /posix/path/to/cygwin-inst-YYYYMMDD.tar.xz --exclude=usr/bin/cygwin1.dll
-+	/bin/tar -C/tmp -Jxvf /posix/path/to/cygwin-inst-YYYYMMDD.tar.xz usr/bin/cygwin1.dll
- </screen>
- </para>
- <para>Exit the bash shell, and use Explorer or the Windows command shell to
-
---PNTmBPCT7hxwcZjr--
+cgf
