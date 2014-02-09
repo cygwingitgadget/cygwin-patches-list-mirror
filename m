@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-7968-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 9072 invoked by alias); 9 Feb 2014 12:37:00 -0000
+Return-Path: <cygwin-patches-return-7969-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 728 invoked by alias); 9 Feb 2014 20:33:15 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,40 +9,63 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 9053 invoked by uid 89); 9 Feb 2014 12:36:58 -0000
+Received: (qmail 692 invoked by uid 89); 9 Feb 2014 20:33:14 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
 X-Spam-SWARE-Status: No, score=-1.2 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.2
-X-HELO: smtpout06.bt.lon5.cpcloud.co.uk
-Received: from smtpout06.bt.lon5.cpcloud.co.uk (HELO smtpout06.bt.lon5.cpcloud.co.uk) (65.20.0.126) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 09 Feb 2014 12:36:58 +0000
-X-CTCH-RefID: str=0001.0A090208.52F77667.0115,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
-X-Junkmail-Premium-Raw: score=7/97,refid=2.7.2:2014.2.8.223914:17:7.944,ip=,rules=__MOZILLA_MSGID, __HAS_MSGID, __SANE_MSGID, __HAS_FROM, __USER_AGENT, __MOZILLA_USER_AGENT, __MIME_VERSION, __TO_MALFORMED_2, __BOUNCE_CHALLENGE_SUBJ, __BOUNCE_NDR_SUBJ_EXEMPT, __SUBJ_ALPHA_END, __IN_REP_TO, __CT, __CT_TEXT_PLAIN, __CTE, __ANY_URI, __URI_NO_MAILTO, __CP_URI_IN_BODY, __SUBJ_ALPHA_NEGATE, __FORWARDED_MSG, BODY_SIZE_700_799, BODYTEXTP_SIZE_3000_LESS, __MIME_TEXT_ONLY, __URI_NS, HTML_00_01, HTML_00_10, BODY_SIZE_5000_LESS, BODY_SIZE_1000_LESS, BODY_SIZE_2000_LESS, BODY_SIZE_7000_LESS
-X-CTCH-Spam: Unknown
-Received: from [192.168.1.72] (86.174.32.243) by smtpout06.bt.lon5.cpcloud.co.uk (8.6.100.99.10223) (authenticated as jonturney@btinternet.com)        id 52F0E43800508603 for cygwin-patches@cygwin.com; Sun, 9 Feb 2014 12:36:55 +0000
-Message-ID: <52F77673.4090907@dronecode.org.uk>
-Date: Sun, 09 Feb 2014 12:37:00 -0000
-From: Jon TURNEY <jon.turney@dronecode.org.uk>
-User-Agent: Mozilla/5.0 (Windows NT 5.1; rv:24.0) Gecko/20100101 Thunderbird/24.3.0
+X-HELO: mho-02-ewr.mailhop.org
+Received: from mho-02-ewr.mailhop.org (HELO mho-02-ewr.mailhop.org) (204.13.248.72) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-SHA encrypted) ESMTPS; Sun, 09 Feb 2014 20:33:13 +0000
+Received: from pool-71-126-240-215.bstnma.fios.verizon.net ([71.126.240.215] helo=cgf.cx)	by mho-02-ewr.mailhop.org with esmtpa (Exim 4.72)	(envelope-from <cgf-use-the-mailinglist-please@cygwin.com>)	id 1WCb3u-000KDX-Lh	for cygwin-patches@cygwin.com; Sun, 09 Feb 2014 20:33:11 +0000
+Received: from ednor (ednor.casa.cgf.cx [192.168.187.5])	by cgf.cx (Postfix) with SMTP id BD8C060112	for <cygwin-patches@cygwin.com>; Sun,  9 Feb 2014 15:33:08 -0500 (EST)
+Received: by ednor (sSMTP sendmail emulation); Sun, 09 Feb 2014 15:33:08 -0500
+X-Mail-Handler: Dyn Standard SMTP by Dyn
+X-Report-Abuse-To: abuse@dyndns.com (see http://www.dyndns.com/services/sendlabs/outbound_abuse.html for abuse reporting information)
+X-MHO-User: U2FsdGVkX196y0k1D3HpNuzKzUH53OUU
+Date: Sun, 09 Feb 2014 20:33:00 -0000
+From: Christopher Faylor <cgf-use-the-mailinglist-please@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Expand $CYGWIN error_start processing
+Message-ID: <20140209203308.GA5453@ednor.casa.cgf.cx>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <1391905541-986-1-git-send-email-mingw.android@gmail.com>
 MIME-Version: 1.0
-To: cygwin-patches <cygwin-patches@cygwin.com>
-Subject: Re: [PATCH] Add minidump write utility
-References: <52F50B71.8030608@dronecode.org.uk> <52F51450.7010601@dancol.org>
-In-Reply-To: <52F51450.7010601@dancol.org>
-Content-Type: text/plain; charset=windows-1252
-Content-Transfer-Encoding: 7bit
-X-SW-Source: 2014-q1/txt/msg00041.txt.bz2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1391905541-986-1-git-send-email-mingw.android@gmail.com>
+User-Agent: Mutt/1.5.20 (2009-06-14)
+X-SW-Source: 2014-q1/txt/msg00042.txt.bz2
 
-On 07/02/2014 17:13, Daniel Colascione wrote:
-> May I recommend setting MiniDumpWithHandleData | MiniDumpWithFullMemoryInfo |
-> MiniDumpWithThreadInfo | MiniDumpWithFullAuxiliaryState |
-> MiniDumpIgnoreInaccessibleMemory | MiniDumpWithTokenInformation |
-> MiniDumpWithModuleHeaders | MiniDumpWithIndirectlyReferencedMemory by default?
+On Sun, Feb 09, 2014 at 12:25:40AM +0000, Ray Donnelly wrote:
+>I want to use QtCreator as my debugger but the hardcoded
+>nature of error_start makes that impossible.
+>
+>This change allows a formatted commandline to be used where
+>'|' is used to represent spaces and <program-name> and
+><process-id> are special tokens.
+>
+>In my case, I set my CYGWIN env. var to
+>error_start:C:/Qt/bin/qtcreator.exe|-debug|<process-id>
+>
+>.. note, QtCreator doesn't work if passed the program name
+>and must be invoked with the -debug option.
+>
+>Ray Donnelly (1):
+>  * winsup/cygwin/exceptions.cc: Expand $CYGWIN error_start          
+>    processing so that custom commandlines can be passed to          
+>    the debugger program using '|' as an argument delimiter          
+>    and <program-name> and <process-id> as special tokens.
+>
+> winsup/cygwin/exceptions.cc | 50 +++++++++++++++++++++++++++++++++++++++++----
+> 1 file changed, 46 insertions(+), 4 deletions(-)
 
-This seems sensible, but I can't see a clear statement that it's safe to
-assume that MiniDumpWriteDump() ignores dump type flags it doesn't understand,
-so it might be necessary to check the version of dbghelp.dll as well.
+Thanks for the patch but adding a new argument delimiter or way to quote
+is not something that I'm too keen on.
 
-Originally, I was thinking of adding some named dump levels, like those
-described at [1], but that hasn't happened yet.
+I have just added, in CVS, the ability to do this:
 
-[1] http://www.debuginfo.com/articles/effminidumps2.html#strategies
+set CYGWIN=error_start="blah whatever \"more stuff'" and more"
+
+(The above is CMD quoting style of course)
+
+cgf
