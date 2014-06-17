@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-7998-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 28103 invoked by alias); 16 Jun 2014 09:12:59 -0000
+Return-Path: <cygwin-patches-return-7999-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 17288 invoked by alias); 17 Jun 2014 08:47:11 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,68 +9,53 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 28087 invoked by uid 89); 16 Jun 2014 09:12:58 -0000
+Received: (qmail 17276 invoked by uid 89); 17 Jun 2014 08:47:11 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
 X-Spam-SWARE-Status: No, score=-5.9 required=5.0 tests=AWL,BAYES_00 autolearn=ham version=3.3.2
 X-HELO: calimero.vinschen.de
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 16 Jun 2014 09:12:57 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 441408E05FF; Mon, 16 Jun 2014 11:12:54 +0200 (CEST)
-Date: Mon, 16 Jun 2014 09:12:00 -0000
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 17 Jun 2014 08:47:10 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 125918E05FF; Tue, 17 Jun 2014 10:47:08 +0200 (CEST)
+Date: Tue, 17 Jun 2014 08:47:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: typo correction in grp.cc
-Message-ID: <20140616091254.GA16684@calimero.vinschen.de>
+Subject: Re: [PATCH] cygwin_rexec() returns pointer to deallocated memory
+Message-ID: <20140617084708.GA31704@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1EB3586B-FB0E-4DA3-8790-9964C54B0D81@Denis-Excoffier.org>
+References: <53811668.5010208@tiscali.co.uk> <5382E760.7@lysator.liu.se> <538312E4.1040201@tiscali.co.uk> <5383434B.8070508@lysator.liu.se> <53835D4E.9040603@tiscali.co.uk> <20140526163505.GA7018@ednor.casa.cgf.cx> <5383A667.9070407@lysator.liu.se> <20140526214049.GB4754@ednor.casa.cgf.cx> <20140526214610.GA6786@ednor.casa.cgf.cx> <20140526235408.GA2716@ednor.casa.cgf.cx>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;	protocol="application/pgp-signature"; boundary="Kj7319i9nmIyA2yE"
+Content-Type: multipart/signed; micalg=pgp-sha1;	protocol="application/pgp-signature"; boundary="VbJkn9YxBvnuCH5J"
 Content-Disposition: inline
-In-Reply-To: <1EB3586B-FB0E-4DA3-8790-9964C54B0D81@Denis-Excoffier.org>
+In-Reply-To: <20140526235408.GA2716@ednor.casa.cgf.cx>
 User-Agent: Mutt/1.5.23 (2014-03-12)
-X-SW-Source: 2014-q2/txt/msg00021.txt.bz2
+X-SW-Source: 2014-q2/txt/msg00022.txt.bz2
 
 
---Kj7319i9nmIyA2yE
+--VbJkn9YxBvnuCH5J
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-length: 1081
+Content-length: 839
 
-On Jun  6 19:08, Denis Excoffier wrote:
-> Hello,
+On May 26 19:54, Christopher Faylor wrote:
+> On Mon, May 26, 2014 at 05:46:10PM -0400, Christopher Faylor wrote:
+> >Btw, the latest version of freebsd can't have this particular problem
+> >since ahostbuf is now gone.  We probably should pull in the latest versi=
+on
+> >into Cygwin's tree.
 >=20
-> The following patch (or equivalent) is needed in order for /usr/bin/id to=
- return the full set of groups
-> in case the user given as argument belongs to more than 10 groups:
->=20
-> diff -uNr cygwin-snapshot-20140523-1.original/winsup/cygwin/grp.cc cygwin=
--snapshot-20140523-1.patched/winsup/cygwin/grp.cc
-> --- cygwin-snapshot-20140523-1.original/winsup/cygwin/grp.cc	2014-05-23 1=
-2:31:13.000000000 +0200
-> +++ cygwin-snapshot-20140523-1.patched/winsup/cygwin/grp.cc	2014-05-26 15=
-:08:37.542897300 +0200
-> @@ -656,11 +656,11 @@
->  	  groups[cnt] =3D grp->gr_gid;
->  	++cnt;
->        }
-> -  *ngroups =3D cnt;
->    if (cnt > *ngroups)
->      ret =3D -1;
->    else
->      ret =3D cnt;
-> +  *ngroups =3D cnt;
->=20=20
->    syscall_printf ( "%d =3D getgrouplist(%s, %u, %p, %d)",
->  		  ret, user, gid, groups, *ngroups);
->=20
->=20
-> Please apply.
+> ...and that's apparently because Corinna added the code in question...
 
-Done.  Thanks a lot.
+...and I can't remember why I added the buffer at all.  It looks like I
+was trying to workaround a problem with the lifetime of the hp buffer
+content.  The ahostbuf buffer is in there since I pulled the code in
+from FreeBSD in 2006 so I had ... some ... reason.  Which eludes me.
+
+I applied David's patch.
 
 
+Thanks,
 Corinna
 
 --=20
@@ -78,26 +63,26 @@ Corinna Vinschen                  Please, send mails regarding Cygwin to
 Cygwin Maintainer                 cygwin AT cygwin DOT com
 Red Hat
 
---Kj7319i9nmIyA2yE
+--VbJkn9YxBvnuCH5J
 Content-Type: application/pgp-signature
 Content-length: 819
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1
 
-iQIcBAEBAgAGBQJTnrUWAAoJEPU2Bp2uRE+g7QcP/2NlIB1yVVtaAGyyu169gpeE
-cHCth4OA/t09+R9gFbRVwPjhl8zaFGn+DPutj2o6+o5/hd45s64Vq821FGRxprea
-BgoFHbuPC/SHqjJCJDT5fVKex4ni5HD94jt6yP4zLJqNybhuoTQuqXwjUys0M6IG
-59oERTR4N8bcykfkodz2zIiqudYHyIk8MhoukBCTn1ZHzV0ktQHAxAZew8i5ad1D
-P0n6lrPB+NBBfVhw7gwQ28LekMPW9VsuzpAAly5MbVtNYuTXORyg2OzvURJcbtS+
-xeKhWH00ssUALQoIO4WtlDip0LSIs+3chSsQF4RqtUMjcKU2Oka5BDVo05HP8hQ1
-Z82DYHiGWQyhnVv4POfd6c/rjpLLDk4+hcO/gcdXhm1BbLoCcuMGe89vorEaIcTS
-RS8tfDARpHx3vh/jlFUlubWvXhE5saHWFt1C9jLQ55xcHmPwpoHPEhSd0ZKi/rsK
-b+pn1d12y8HvGx8TFe4kg5cPTYWQSCo3+Srvk3utNdkorTeBo9PFUP3OMlxJWG1w
-l33nx9aqX2qB2a7Kn7nxNW4j/c7LbiMkSyY9qPDQX2G9gJ32RLg4E5l+Soe8Sc+m
-WTIS2/SX/8BdIMXNDARd+zbwIVU1h0D/UKCtu5iah9dmFz0D9EyZ4AmdPHLOO74v
-ZQEMQnmWBsky1QmzhTsq
-=R6V5
+iQIcBAEBAgAGBQJToACLAAoJEPU2Bp2uRE+gNL0P/2wxcEIt8sk/HOoRHPpiddM7
+9u5z4LVHd2mot8e3WZfhRhYDC7yONCPNr8ZkQLvKP0UTaefdPd2vnoJUYnrR2oRl
+59ftI73ao8wofgygRjzbrISk/h4b6kVXat6n0LuOvfmntX4QePIxflyIDlVmKGsx
+nvKcNE8xDGObUY5JwOGMsTQBuTJTOZneLn2eYl+3GTtTwJaeIPYcPL2EVkr90nct
+Qgp1fe/cTYPbvKs56ZYpyAy/ircVfotgWBKJ7A1DSrZTUfEMoPNJont8b3qKIk2a
+eGy9lIZv0M6VzpFx/jx/trttIDCCQPC/mfkTIm2LLseGX276edELq3V41TJO753O
+ZGiS+DvO1L3vC6yhdjbfzqmp+v73goKaSNAnLqVnapgm/ZbLdJ2a3KSFDNYTSbzb
+bV8p6CK27jUwNtbmtJEreSh2joQaYotUMAW+bm34UVQjXMIma4+8k1/XX/bpfy1T
+bFisM+RgzQetvrjlWddQJhMbQARHiZN2hmsvjXbQk1nE8Uc5UeTJEG2iUawtjz1N
+HGlVrkfRQQr8e4F/REaNEW5pf7gCcEBOejvy5hh38rfHvq6cWrYNOy8o/0NyhxWU
+M65atqBDHqSiUzIOVK8A6HcZ+qzIC9jX0dZZP9AEKxUwW2Pui+UuPJuB5159/Opo
+3PMoyG3fs6sNwrRR/UfQ
+=/10U
 -----END PGP SIGNATURE-----
 
---Kj7319i9nmIyA2yE--
+--VbJkn9YxBvnuCH5J--
