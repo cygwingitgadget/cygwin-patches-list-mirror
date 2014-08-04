@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8011-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 4514 invoked by alias); 4 Aug 2014 09:14:54 -0000
+Return-Path: <cygwin-patches-return-8012-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 4741 invoked by alias); 4 Aug 2014 19:28:32 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,97 +9,95 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 4498 invoked by uid 89); 4 Aug 2014 09:14:53 -0000
+Received: (qmail 4729 invoked by uid 89); 4 Aug 2014 19:28:31 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-5.9 required=5.0 tests=AWL,BAYES_00 autolearn=ham version=3.3.2
-X-HELO: calimero.vinschen.de
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 04 Aug 2014 09:14:42 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id ED25D8E0773; Mon,  4 Aug 2014 11:14:39 +0200 (CEST)
-Date: Mon, 04 Aug 2014 09:14:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-2.3 required=5.0 tests=AWL,BAYES_00,RP_MATCHES_RCVD,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.2
+X-HELO: mx1.redhat.com
+Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-GCM-SHA384 encrypted) ESMTPS; Mon, 04 Aug 2014 19:28:30 +0000
+Received: from int-mx14.intmail.prod.int.phx2.redhat.com (int-mx14.intmail.prod.int.phx2.redhat.com [10.5.11.27])	by mx1.redhat.com (8.14.4/8.14.4) with ESMTP id s74JSSSx022879	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)	for <cygwin-patches@cygwin.com>; Mon, 4 Aug 2014 15:28:28 -0400
+Received: from [10.3.113.131] (ovpn-113-131.phx2.redhat.com [10.3.113.131])	by int-mx14.intmail.prod.int.phx2.redhat.com (8.14.4/8.14.4) with ESMTP id s74JSS3G019620	for <cygwin-patches@cygwin.com>; Mon, 4 Aug 2014 15:28:28 -0400
+Message-ID: <53DFDEDC.1000305@redhat.com>
+Date: Mon, 04 Aug 2014 19:28:00 -0000
+From: Eric Blake <eblake@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:24.0) Gecko/20100101 Thunderbird/24.7.0
+MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
 Subject: Re: docs: improve package maintainer instructions
-Message-ID: <20140804091439.GE2578@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <53DCE738.3090406@redhat.com> <1407117639.2942.3.camel@yselkowitz.redhat.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;	protocol="application/pgp-signature"; boundary="8vCeF2GUdMpe9ZbK"
-Content-Disposition: inline
-In-Reply-To: <1407117639.2942.3.camel@yselkowitz.redhat.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-SW-Source: 2014-q3/txt/msg00006.txt.bz2
+References: <53DCE738.3090406@redhat.com> <1407117639.2942.3.camel@yselkowitz.redhat.com> <20140804091439.GE2578@calimero.vinschen.de>
+In-Reply-To: <20140804091439.GE2578@calimero.vinschen.de>
+OpenPGP: url=http://people.redhat.com/eblake/eblake.gpg
+Content-Type: multipart/signed; micalg=pgp-sha256; protocol="application/pgp-signature"; boundary="NTFWN9suMWaLfphPaX6MvfHlBND9BP9nS"
+X-IsSubscribed: yes
+X-SW-Source: 2014-q3/txt/msg00007.txt.bz2
 
-
---8vCeF2GUdMpe9ZbK
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--NTFWN9suMWaLfphPaX6MvfHlBND9BP9nS
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-Content-length: 1535
+Content-length: 1639
 
-On Aug  3 21:00, Yaakov Selkowitz wrote:
-> On Sat, 2014-08-02 at 07:27 -0600, Eric Blake wrote:
-> > I noticed that the main link on the cygwin.com left navbar
-> > (https://cygwin.com/setup.html#submitting) has outdated instructions;
-> > rather than duplicate things, I'd rather have a link to the more
-> > up-to-date page
-> > (https://sourceware.org/cygwin-apps/package-upload.html).  Okay to push?
+On 08/04/2014 03:14 AM, Corinna Vinschen wrote:
+
+> I'm fine with the changes, barring Yaakov's nits.
+
+I fixed those.
+
 >=20
-> A few minor nits:
->=20
-> > +  would be 4.5.13-1, etc). Some packages also use a YYMMDD format for
->                                                        ^^^^^^
-> YYYYMMDD
->=20
->=20
-> > -boffo-1.0-1.tar.bz2  boffo-1.0-1-src.tar.bz2  setup.hint
-> > +boffo-1.0-1.tar.xz  boffo-1.0-1-src.tar.z  setup.hint
->                                       ^^^^^^
-> .tar.xz
->=20
-> Corinna will have to give the final ack.
+> However, while we're at it shouldn't we change from "cygport is the
+> accepted way to make Cygwin packages" to "cygport is the required way to
+> make new Cygwin packages and the (strongly) recommended way for package
+> updates"?  I for one think it's time to switch to a single packaging
+> method.  After all, you don't have rpm packages in Debian or apt
+> packages in Fedora.  This will also greatly simplify to set up an
+> automated build system for Cygwin packages at one point.
 
-I'm fine with the changes, barring Yaakov's nits.
+Agreed; so here's what I added in before pushing my patch:
 
-However, while we're at it shouldn't we change from "cygport is the
-accepted way to make Cygwin packages" to "cygport is the required way to
-make new Cygwin packages and the (strongly) recommended way for package
-updates"?  I for one think it's time to switch to a single packaging
-method.  After all, you don't have rpm packages in Debian or apt
-packages in Fedora.  This will also greatly simplify to set up an
-automated build system for Cygwin packages at one point.
+@@ -283,9 +288,12 @@ etc...
+   <li>Ensure that your package handles being installed on binary and
+text mounts correctly. </li>
+ </ul>
 
-(yada, yada, git package DB, yada yada)
+-<p>While you could make a package satisfying these requirements by
+hand, the
+-accepted way to make Cygwin packages is using the cygport tool, which
+-automatically handles most of the above issues for you.</p>
++<p>While older packages exist which satisfy these requirements by hand, the
++only accepted way to make a new Cygwin package is using the cygport
+tool, which
++automatically handles most of the above issues for you.  It is also
++strongly recommended to convert existing packages to cygport when
++updating them; ask on the <tt>cygwin-apps</tt> list if you need help
++converting an existing package to use cygport.</p>
+
+ <h2><a id=3D"making_srcpackage" name=3D"making_srcpackage">Making a package
+with cygport</a></h2>
 
 
-Corinna
 
 --=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
+Eric Blake   eblake redhat com    +1-919-301-3266
+Libvirt virtualization library http://libvirt.org
 
---8vCeF2GUdMpe9ZbK
-Content-Type: application/pgp-signature
-Content-length: 819
+
+--NTFWN9suMWaLfphPaX6MvfHlBND9BP9nS
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+Content-length: 539
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1
+Comment: Public key at http://people.redhat.com/eblake/eblake.gpg
 
-iQIcBAEBAgAGBQJT307/AAoJEPU2Bp2uRE+gi8QQAINyz2gmA+mvw9eX40yvfqGR
-dhCzmwTcTeWDEc8DY5XWmWIcrn4xM7JjGekFxY4euy2infhXF5/IowfTK/9JAvJz
-XfF6clW2tgXKuBxLZsFLV16T3eJnDDZqlwTTL5TQ/3gcVsmapF5dvyf48tLCLMSh
-ruAFYNCHNLqGlhRluvttu6Dr0+IJLSY//tf7DToMEK9CUV47M12BgCBLat6rJnAC
-aRUeUSDQy781hDfXVPHP63+tTE8vatFeUCCHm7pIWsW+VyueFvlr/uQqCuMCsywD
-2V+nkm5hlmOvR2uB/GRzZ5038+DA5rJmCEU7p6iObRFrvJ/nii2Gt1eq1Va52RYh
-zSdaUtvtgk1fFV5DlAePJsRIf5wDKx/uly8r/XFeTef44cVwhT9SI33kkGhCxQZd
-uduSMCqglndr6GppmlnlPXOTfREBzoNII1HHROgoya0MnQozR7l9SSRt8PduWqnn
-2RTalpSY+oq2zMmbkpBjkOXBdstIn6GZtznjYLPowwG4zCB3081fSFP9CcBrIyI5
-uWMF6K+CgZLgbmwz+i6GxOvLja1ItXuDySJX6lsaQiRfq4PNlfMyAs2P1KiXcEyr
-2jjYuxLd3mn4IEFCjxa/vssX7MVfycF9BgwrHy6cdL500rOjwITDmO+uuYO/+Aof
-8kNz9nFx7zDSJ6WqjGZ0
-=CvDe
+iQEcBAEBCAAGBQJT397cAAoJEKeha0olJ0Nq1nwH/if2BeNpXjc68fwBX+oS4f1H
+0eDsmM683/NVbPLJ33x42C+q2/SRqaR2yQ5kFflWc2HYHD3z4HHuU2VF6ehr52cx
+mB1ttkcs//bVlvSwIJovRUe5kFYaQy9Yd57Mn7PWe1se5SAAvODLEwEPXC2FhqES
+WlDtfwRi/zEO4DxkqLUPr8HBEnKv5tZAtJrAenboB8DPwJNFb4AJFAi2Ec57D8b8
+EIpnWYxJjcFn+K9y4+/5JTQ4et3NgastQ7HTsjfJPQzec5pz16N7ktqFxGEIdMRr
+FyJ4QNtnWsZR1DMrQyLfRB5+t2ll5xvimXMCNQuA31q+LXvGWFxpgka30PS2f8o=
+=szVX
 -----END PGP SIGNATURE-----
 
---8vCeF2GUdMpe9ZbK--
+--NTFWN9suMWaLfphPaX6MvfHlBND9BP9nS--
