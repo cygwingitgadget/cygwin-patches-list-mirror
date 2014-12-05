@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8038-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 1864 invoked by alias); 28 Nov 2014 20:13:05 -0000
+Return-Path: <cygwin-patches-return-8039-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 12675 invoked by alias); 5 Dec 2014 03:08:49 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,75 +9,152 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 1852 invoked by uid 89); 28 Nov 2014 20:13:04 -0000
+Received: (qmail 12656 invoked by uid 89); 5 Dec 2014 03:08:47 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-5.9 required=5.0 tests=AWL,BAYES_00 autolearn=ham version=3.3.2
-X-HELO: calimero.vinschen.de
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 28 Nov 2014 20:13:03 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id CE55F8E1439; Fri, 28 Nov 2014 21:13:00 +0100 (CET)
-Date: Fri, 28 Nov 2014 20:13:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] build PDFs with xmlto (was: Instability with signals and threads)
-Message-ID: <20141128201300.GP3810@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <alpine.DEB.2.02.1411202055420.8559@artax.karlin.mff.cuni.cz> <alpine.DEB.2.02.1411211451420.108656@artax.karlin.mff.cuni.cz> <20141121144333.GA6633@calimero.vinschen.de> <546F5F37.9010509@gmail.com> <20141121160608.GF3810@calimero.vinschen.de> <546F9B5E.80707@cygwin.com> <20141121203628.GA17637@calimero.vinschen.de> <5478C44E.5040903@cygwin.com>
+X-Spam-SWARE-Status: No, score=-1.6 required=5.0 tests=AWL,BAYES_00,SPF_HELO_PASS autolearn=ham version=3.3.2
+X-HELO: mx1.redhat.com
+Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-GCM-SHA384 encrypted) ESMTPS; Fri, 05 Dec 2014 03:08:45 +0000
+Received: from int-mx11.intmail.prod.int.phx2.redhat.com (int-mx11.intmail.prod.int.phx2.redhat.com [10.5.11.24])	by mx1.redhat.com (8.14.4/8.14.4) with ESMTP id sB538hJB022781	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL)	for <cygwin-patches@cygwin.com>; Thu, 4 Dec 2014 22:08:43 -0500
+Received: from [10.10.116.25] ([10.10.116.25])	by int-mx11.intmail.prod.int.phx2.redhat.com (8.14.4/8.14.4) with ESMTP id sB538fpg008564	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES128-SHA bits=128 verify=NO)	for <cygwin-patches@cygwin.com>; Thu, 4 Dec 2014 22:08:42 -0500
+Message-ID: <548121B7.2010803@cygwin.com>
+Date: Fri, 05 Dec 2014 03:08:00 -0000
+From: Yaakov Selkowitz <yselkowitz@cygwin.com>
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:24.0) Gecko/20100101 Thunderbird/24.6.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;	protocol="application/pgp-signature"; boundary="dsOl/BEZn+65LpCE"
-Content-Disposition: inline
-In-Reply-To: <5478C44E.5040903@cygwin.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-SW-Source: 2014-q4/txt/msg00017.txt.bz2
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] qsort_r (pending newlib patch)
+Content-Type: multipart/mixed; boundary="------------070807090801010704010100"
+X-IsSubscribed: yes
+X-SW-Source: 2014-q4/txt/msg00018.txt.bz2
 
+This is a multi-part message in MIME format.
+--------------070807090801010704010100
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-length: 21
 
---dsOl/BEZn+65LpCE
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 475
+Attached.
 
-On Nov 28 12:51, Yaakov Selkowitz wrote:
-> 2014-11-28  Yaakov Selkowitz  <yselkowitz@...>
->=20
-> 	* Makefile.in (XSLTPROC): Remove.
-> 	(cygwin-ug-net/cygwin-ug-net.pdf): Build with xmlto pdf.
-> 	(cygwin-api/cygwin-api.pdf): Ditto.
-> 	(faq/faq.html): Fix extraneous anchor removal.
+--
+Yaakov
 
-Looks good.  Please apply.
+--------------070807090801010704010100
+Content-Type: text/plain; charset=windows-1252;
+ name="winsup-qsort_r.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="winsup-qsort_r.patch"
+Content-length: 3521
 
+2014-12-04  Yaakov Selkowitz  <yselkowitz@...>
 
-Thanks,
-Corinna
+	doc/
+	* new-features.xml (ov-new1.7.34): Document qsort_r and __bsd_qsort_r.
+	* posix.xml (std-bsd): Add qsort_r.
+	(std-gnu): Ditto.
+	(std-notes): Add section for qsort_r.
 
+	cygwin/
+	* common.din (__bsd_qsort_r): Add.
+	(qsort_r): Add.
+	* include/cygwin/version.h (CYGWIN_VERSION_API_MINOR): Bump.
 
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
+Index: doc/new-features.xml
+===================================================================
+RCS file: /cvs/src/src/winsup/doc/new-features.xml,v
+retrieving revision 1.36
+diff -u -p -r1.36 new-features.xml
+--- doc/new-features.xml	13 Nov 2014 13:10:26 -0000	1.36
++++ doc/new-features.xml	5 Dec 2014 01:22:25 -0000
+@@ -36,6 +36,10 @@ are supposed to work.  Finally implement
+ getfacl(1)/setfacl(1) accordingly.
+ </para></listitem>
+ 
++<listitem><para>
++New APIs: qsort_r, __bsd_qsort_r.
++</para></listitem>
++
+ </itemizedlist>
+ 
+ </sect2>
+Index: doc/posix.xml
+===================================================================
+RCS file: /cvs/src/src/winsup/doc/posix.xml,v
+retrieving revision 1.3
+diff -u -p -r1.3 posix.xml
+--- doc/posix.xml	22 Oct 2014 19:29:33 -0000	1.3
++++ doc/posix.xml	5 Dec 2014 01:22:26 -0000
+@@ -1047,6 +1047,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008)
+     madvise
+     mkstemps
+     openpty
++    qsort_r			(see chapter "Implementation Notes")
+     rcmd
+     rcmd_af
+     reallocf
+@@ -1175,6 +1176,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008)
+     pthread_getattr_np
+     pthread_sigqueue
+     ptsname_r
++    qsort_r			(see chapter "Implementation Notes")
+     quotactl
+     rawmemchr
+     removexattr
+@@ -1568,6 +1570,9 @@ available when cygserver is running.</pa
+ what works on Windows:  Windows only supports user block quotas on NTFS, no
+ group quotas, no inode quotas, no time constraints.</para>
+ 
++<para><function>qsort_r</function> is available in both BSD and GNU flavors,
++depending on whether _BSD_SOURCE or _GNU_SOURCE is defined when compiling.</para>
++
+ </sect1>
+ 
+ </chapter>
+Index: cygwin/common.din
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/common.din,v
+retrieving revision 1.13
+diff -u -p -r1.13 common.din
+--- cygwin/common.din	29 Oct 2014 09:56:18 -0000	1.13
++++ cygwin/common.din	5 Dec 2014 01:22:26 -0000
+@@ -41,6 +41,7 @@ __assert_func NOSIGFE
+ __assertfail NOSIGFE
+ __b64_ntop NOSIGFE
+ __b64_pton NOSIGFE
++__bsd_qsort_r NOSIGFE
+ __cxa_atexit = cygwin__cxa_atexit SIGFE
+ __cxa_finalize SIGFE
+ __dn_comp SIGFE
+@@ -920,6 +921,7 @@ putwc SIGFE
+ putwchar SIGFE
+ pwrite SIGFE
+ qsort NOSIGFE
++qsort_r NOSIGFE
+ quotactl SIGFE
+ raise SIGFE
+ rand NOSIGFE
+Index: cygwin/include/cygwin/version.h
+===================================================================
+RCS file: /cvs/src/src/winsup/cygwin/include/cygwin/version.h,v
+retrieving revision 1.413
+diff -u -p -r1.413 version.h
+--- cygwin/include/cygwin/version.h	13 Nov 2014 13:10:25 -0000	1.413
++++ cygwin/include/cygwin/version.h	5 Dec 2014 01:22:27 -0000
+@@ -457,12 +457,13 @@ details. */
+       279: Export stime.
+       280: Static atexit in libcygwin.a, CW_FIXED_ATEXIT.
+       281: Add CW_GETNSS_PWD_SRC, CW_GETNSS_GRP_SRC.
++      282: Export __bsd_qsort_r, qsort_r.
+      */
+ 
+      /* Note that we forgot to bump the api for ualarm, strtoll, strtoull */
+ 
+ #define CYGWIN_VERSION_API_MAJOR 0
+-#define CYGWIN_VERSION_API_MINOR 281
++#define CYGWIN_VERSION_API_MINOR 282
+ 
+      /* There is also a compatibity version number associated with the
+ 	shared memory regions.  It is incremented when incompatible
 
---dsOl/BEZn+65LpCE
-Content-Type: application/pgp-signature
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
-
-iQIcBAEBAgAGBQJUeNdMAAoJEPU2Bp2uRE+gQWIP/jPE97Nw/wIofJuXliyt5UKZ
-amZ1wI/jvHyLtf5ok+iSfn95LOJ1CcAgvDTmvX1AdvuBYoxnanGh5kW/VGJqsfkE
-xfi0uhnFOD5J18EN2Ne9LqRCiCVwNrkG1dm/4vucLilw1rzxgQVgyOOzWJPeCCYV
-p2lwSw2s32opfnQJGwl8e9d6L8Bk/S6HWu9tPILBgbTPiWfGlChNv7ncpC9puSjj
-L52TBL5DQs9mozhP1jtE2n0XLg0DEVsXlmpG5WypTOF5KG8tsZUTYzoDKR5kxppP
-X98D6mIml/lxU7ogr2ZK4LInHsA3XCT7DdPl0FEZwYJ1B8116wFov/TtZ/NLKyHM
-m6fL3xpgHdaIXkXH+RmDl8g1IrtEARgvG3ciWZoT3BgYghtcyAzPakBTKxAzTA+1
-ib9x/uaa4ILNmIWKSSymlUb9dyr3DIYmzkYoAxTxW3WcN3PEVGRXeWHrsIUTICUG
-Otu5DMAon4YfXfw65EDV7xIRemSOwl/wONIQb4g1ByXjEbbV1UD/NCvTpiBsV6dG
-njmsi0Id5/Fw1yA/tqt1Ofwyzo8lZiAXztOLcLIVcSm2biKSLADPg12+us6SiutN
-pS8iufgPFA8cN/F+Nf6hkQtt0hp7ajPSxnNvQ90Ha78ALEv8Ey1oRF4LCqQsw8X4
-huFKvsFMQHDfVy0WQD63
-=eQ2S
------END PGP SIGNATURE-----
-
---dsOl/BEZn+65LpCE--
+--------------070807090801010704010100--
