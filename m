@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8044-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 9901 invoked by alias); 18 Dec 2014 17:24:30 -0000
+Return-Path: <cygwin-patches-return-8045-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 26743 invoked by alias); 16 Jan 2015 14:24:10 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,78 +9,127 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 9846 invoked by uid 89); 18 Dec 2014 17:24:26 -0000
+Received: (qmail 26727 invoked by uid 89); 16 Jan 2015 14:24:08 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-5.9 required=5.0 tests=AWL,BAYES_00 autolearn=ham version=3.3.2
-X-HELO: calimero.vinschen.de
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 18 Dec 2014 17:24:24 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 3B7428E12DF; Thu, 18 Dec 2014 18:24:22 +0100 (CET)
-Date: Thu, 18 Dec 2014 17:24:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] spelling fix for struct passwd
-Message-ID: <20141218172422.GG10824@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <54930D04.6030608@cygwin.com>
+X-Spam-SWARE-Status: No, score=-2.2 required=5.0 tests=AWL,BAYES_00,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.2
+X-HELO: mail-we0-f181.google.com
+Received: from mail-we0-f181.google.com (HELO mail-we0-f181.google.com) (74.125.82.181) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES128-SHA encrypted) ESMTPS; Fri, 16 Jan 2015 14:24:05 +0000
+Received: by mail-we0-f181.google.com with SMTP id q58so20534623wes.12        for <cygwin-patches@cygwin.com>; Fri, 16 Jan 2015 06:24:02 -0800 (PST)
+X-Received: by 10.180.126.99 with SMTP id mx3mr6852496wib.66.1421418242255;        Fri, 16 Jan 2015 06:24:02 -0800 (PST)
+Received: from [192.168.67.57] (host217-40-61-57.in-addr.btopenworld.com. [217.40.61.57])        by mx.google.com with ESMTPSA id cg8sm6290598wjc.1.2015.01.16.06.24.00        for <cygwin-patches@cygwin.com>        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);        Fri, 16 Jan 2015 06:24:01 -0800 (PST)
+Message-ID: <54B91EFD.80302@gmail.com>
+Date: Fri, 16 Jan 2015 14:24:00 -0000
+From: Marco Atzeri <marco.atzeri@gmail.com>
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:31.0) Gecko/20100101 Thunderbird/31.4.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;	protocol="application/pgp-signature"; boundary="LGr9gtkSK9ARF7Ax"
-Content-Disposition: inline
-In-Reply-To: <54930D04.6030608@cygwin.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-SW-Source: 2014-q4/txt/msg00023.txt.bz2
+To: cygwin-patches@cygwin.com
+Subject: Re: tracing malloc/free call
+References: <54B6EE1F.60705@gmail.com> <20150115093451.GB10242@calimero.vinschen.de>
+In-Reply-To: <20150115093451.GB10242@calimero.vinschen.de>
+Content-Type: multipart/mixed; boundary="------------040806030705020609010706"
+X-IsSubscribed: yes
+X-SW-Source: 2015-q1/txt/msg00000.txt.bz2
+
+This is a multi-part message in MIME format.
+--------------040806030705020609010706
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-length: 1199
+
+On 1/15/2015 10:34 AM, Corinna Vinschen wrote:
+> Hi Marco,
+>
+> On Jan 14 23:30, Marco Atzeri wrote:
+>> Debugging a program I am trying to catch where this call is happening
+>>
+>> 17 1499678 [main] ncview 1484 free: (0x6000D7961), called by 0x180115A0B
+>>
+>> unfortunately the 0x180115A0B address is not real caller address
+>
+> No, the return address is the address of the _sigbe function defined in
+> the gendef script...
+>
+[cut]
+>
+> Bottom line, you should be able to fetch the original return address by
+> printing the value at
+>
+>    *(void*)_my_tls->stackptr
+>
+> which points to the uppermost entry on the stack.
+
+Hi Corinna,
+
+in reality I found it is "*(_my_tls.stackptr-1)"
+
+-  malloc_printf ("(%p), called by %p", p, __builtin_return_address (0));
++  malloc_printf ("(%p), called by %p", p, *(_my_tls.stackptr-1));
+
+Attached patch that allows tracking of original caller,
+for the 4 memory allocation calls.
+
+Tested on 64 bit.
+
+  $ grep 0x6000D6AA1 ncview.strace4
+    20 1605112 [main] ncview 4408 free: (0x6000D6AA1), called by 0x10040E744
 
 
---LGr9gtkSK9ARF7Ax
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 521
-
-On Dec 18 11:21, Yaakov Selkowitz wrote:
-> This field is spelled pw_passwd on Linux, and I haven't found a different
-> spelling on other platforms (it is not mandated by POSIX). Patch attached.
->=20
-> --
-> Yaakov
->=20
-
-> 2014-12-18  Yaakov Selkowitz  <yselkowitz@...>
->=20
-> 	* ntsec.xml (ntsec-logonuser): Fix spelling of pw_passwd field.
-
-Thanks, please apply.
+  $ addr2line.exe -a 0x10040E744 -e /usr/bin/ncview.exe
+0x000000010040e744
+/usr/src/debug/ncview-2.1.4-2/src/file_netcdf.c:271
 
 
-Corinna
+Regards
+Marco
 
 
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
 
---LGr9gtkSK9ARF7Ax
-Content-Type: application/pgp-signature
-Content-length: 819
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
 
-iQIcBAEBAgAGBQJUkw3GAAoJEPU2Bp2uRE+gVWYQAJL3ImQI6CFr920T3a5CmzBO
-aKh4ZGcg2KqGoFUmCdvyJ4IzqiakSNk4zJwfesNqP19BPul6jKybp5zhtArt/f0h
-MjpYeGR+qZrLj79L+G613ZnlBCQCW/eRzTfltXY1PL1YjEtxVCCa83aymC6V5/Sv
-PY6lv3RTb8Z1ETnnjY8l/tJQbMfEuGbA8D7TRx2GQ2awfYxuXjTu1KkFyfCeTZGa
-b0YbFN0I37yKCROkljBWKUOGSV/XBik4tWDnWYKV3yyrJBQ5c5qt/XcOJp67frs5
-chUaGSfDV/zE2L4nHPZPpXTChRN0IK3SXuhIubyn4qKYjzy4vJzcuDqbA436phaC
-KAAXyCLcigY6UHZ9boawAFqQ+YcfmdaxCvum/pAqRQNEXdE2wTYOAF5wtA4E1UuZ
-sWsi4X5XqJ0ThoDtOm0CDmeB7K8winACi80rJtyhpq8HmCXhAV/113mPQvGre7Sw
-OMammCMwkcs5q4tkhbmHmifFF9UWD/8jICifiGrz+kZl8L6fORDhI0hjiZXiB0yM
-AaZT6GH2V5JJyWAvlDk74TviLHc9UnsRPpD/iuSZNoOYxBnd8sdwVScX+OAPADPs
-HC905W4aDLlhYrYj7yNJ+NUKaretgfnLtfaUHM0czC1IdoAPieCLvO48+GxlLQ0a
-ViCYOzTsdnnOwjFt7tSi
-=hWGQ
------END PGP SIGNATURE-----
 
---LGr9gtkSK9ARF7Ax--
+
+
+--------------040806030705020609010706
+Content-Type: text/plain; charset=windows-1252;
+ name="malloc_wrapper.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="malloc_wrapper.patch"
+Content-length: 1965
+
+LS0tIHNyY19uZXcvd2luc3VwL2N5Z3dpbi9tYWxsb2Nfd3JhcHBlci5jYwky
+MDE0LTA2LTI2IDIzOjUyOjQ2LjUzNzg0NzQwMCArMDIwMAorKysgc3JjL3dp
+bnN1cC9jeWd3aW4vbWFsbG9jX3dyYXBwZXIuY2MJMjAxNS0wMS0xNiAxNDo0
+MToxNS43NjYzODQ2MDAgKzAxMDAKQEAgLTE3LDYgKzE3LDcgQEAKICNpbmNs
+dWRlICJkdGFibGUuaCIKICNpbmNsdWRlICJwZXJwcm9jZXNzLmgiCiAjaW5j
+bHVkZSAibWlzY2Z1bmNzLmgiCisjaW5jbHVkZSAiY3lndGxzLmgiCiAjaW5j
+bHVkZSAiY3lnbWFsbG9jLmgiCiAjaWZuZGVmIE1BTExPQ19ERUJVRwogI2lu
+Y2x1ZGUgPG1hbGxvYy5oPgpAQCAtMzgsNyArMzksNyBAQAogZXh0ZXJuICJD
+IiB2b2lkCiBmcmVlICh2b2lkICpwKQogewotICBtYWxsb2NfcHJpbnRmICgi
+KCVwKSwgY2FsbGVkIGJ5ICVwIiwgcCwgX19idWlsdGluX3JldHVybl9hZGRy
+ZXNzICgwKSk7CisgIG1hbGxvY19wcmludGYgKCIoJXApLCBjYWxsZWQgYnkg
+JXAiLCBwLCAqKF9teV90bHMuc3RhY2twdHItMSkpOwogICBpZiAoIXVzZV9p
+bnRlcm5hbCkKICAgICB1c2VyX2RhdGEtPmZyZWUgKHApOwogICBlbHNlCkBA
+IC02MSw3ICs2Miw3IEBACiAgICAgICByZXMgPSBkbG1hbGxvYyAoc2l6ZSk7
+CiAgICAgICBfX21hbGxvY191bmxvY2sgKCk7CiAgICAgfQotICBtYWxsb2Nf
+cHJpbnRmICgiKCVsZCkgPSAlcCwgY2FsbGVkIGJ5ICVwIiwgc2l6ZSwgcmVz
+LCBfX2J1aWx0aW5fcmV0dXJuX2FkZHJlc3MgKDApKTsKKyAgbWFsbG9jX3By
+aW50ZiAoIiglbGQpID0gJXAsIGNhbGxlZCBieSAlcCIsIHNpemUsIHJlcywg
+KihfbXlfdGxzLnN0YWNrcHRyLTEpKTsKICAgcmV0dXJuIHJlczsKIH0KIApA
+QCAtNzcsNyArNzgsNyBAQAogICAgICAgcmVzID0gZGxyZWFsbG9jIChwLCBz
+aXplKTsKICAgICAgIF9fbWFsbG9jX3VubG9jayAoKTsKICAgICB9Ci0gIG1h
+bGxvY19wcmludGYgKCIoJXAsICVsZCkgPSAlcCwgY2FsbGVkIGJ5ICVwIiwg
+cCwgc2l6ZSwgcmVzLCBfX2J1aWx0aW5fcmV0dXJuX2FkZHJlc3MgKDApKTsK
+KyAgbWFsbG9jX3ByaW50ZiAoIiglcCwgJWxkKSA9ICVwLCBjYWxsZWQgYnkg
+JXAiLCBwLCBzaXplLCByZXMsICooX215X3Rscy5zdGFja3B0ci0xKSk7CiAg
+IHJldHVybiByZXM7CiB9CiAKQEAgLTEwNCw3ICsxMDUsNyBAQAogICAgICAg
+cmVzID0gZGxjYWxsb2MgKG5tZW1iLCBzaXplKTsKICAgICAgIF9fbWFsbG9j
+X3VubG9jayAoKTsKICAgICB9Ci0gIG1hbGxvY19wcmludGYgKCIoJWxkLCAl
+bGQpID0gJXAsIGNhbGxlZCBieSAlcCIsIG5tZW1iLCBzaXplLCByZXMsIF9f
+YnVpbHRpbl9yZXR1cm5fYWRkcmVzcyAoMCkpOworICBtYWxsb2NfcHJpbnRm
+ICgiKCVsZCwgJWxkKSA9ICVwLCBjYWxsZWQgYnkgJXAiLCBubWVtYiwgc2l6
+ZSwgcmVzLCAqKF9teV90bHMuc3RhY2twdHItMSkpOwogICByZXR1cm4gcmVz
+OwogfQogCg==
+
+--------------040806030705020609010706--
