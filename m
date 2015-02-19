@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8059-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 4394 invoked by alias); 19 Feb 2015 13:23:44 -0000
+Return-Path: <cygwin-patches-return-8060-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 22387 invoked by alias); 19 Feb 2015 13:29:58 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,44 +9,39 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 3613 invoked by uid 89); 19 Feb 2015 13:23:43 -0000
+Received: (qmail 22340 invoked by uid 89); 19 Feb 2015 13:29:57 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
 X-Spam-SWARE-Status: No, score=-5.9 required=5.0 tests=AWL,BAYES_00 autolearn=ham version=3.3.2
 X-HELO: calimero.vinschen.de
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 19 Feb 2015 13:23:42 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 19421A80BED; Thu, 19 Feb 2015 14:23:40 +0100 (CET)
-Date: Thu, 19 Feb 2015 13:23:00 -0000
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 19 Feb 2015 13:29:56 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 24E89A80BED; Thu, 19 Feb 2015 14:29:54 +0100 (CET)
+Date: Thu, 19 Feb 2015 13:29:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Prototype initstate() etc. if _XOPEN_SOURCE is defined appropriately
-Message-ID: <20150219132340.GH26084@calimero.vinschen.de>
+Subject: Re: [PATCH] Compile sigfe.s with CFLAGS
+Message-ID: <20150219132954.GI26084@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <52838E8C.5060708@dronecode.org.uk> <54E5DE55.90603@dronecode.org.uk>
+References: <54E5E36E.7060407@dronecode.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;	protocol="application/pgp-signature"; boundary="JkW1gnuWHDypiMFO"
+Content-Type: multipart/signed; micalg=pgp-sha1;	protocol="application/pgp-signature"; boundary="rCwQ2Y43eQY6RBgR"
 Content-Disposition: inline
-In-Reply-To: <54E5DE55.90603@dronecode.org.uk>
+In-Reply-To: <54E5E36E.7060407@dronecode.org.uk>
 User-Agent: Mutt/1.5.23 (2014-03-12)
-X-SW-Source: 2015-q1/txt/msg00014.txt.bz2
+X-SW-Source: 2015-q1/txt/msg00015.txt.bz2
 
 
---JkW1gnuWHDypiMFO
+--rCwQ2Y43eQY6RBgR
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-length: 451
+Content-length: 255
 
-Hi Jon,
+On Feb 19 13:21, Jon TURNEY wrote:
+> 	* Makefile.in (sigfe.o): Use CFLAGS.
 
-On Feb 19 13:00, Jon TURNEY wrote:
-> 	* include/cygwin/stdlib.h (initstate, random, setstate, srandom):
-> 	Check if __XSI_VISIBLE is set by sys/cdefs.h, rather than testing
-> 	for _XOPEN_SOURCE directly, to work correctly when _GNU_SOURCE is
-> 	set.
-
-Looks good, please apply.
+Please apply.
 
 
 Thanks,
@@ -57,26 +52,26 @@ Corinna Vinschen                  Please, send mails regarding Cygwin to
 Cygwin Maintainer                 cygwin AT cygwin DOT com
 Red Hat
 
---JkW1gnuWHDypiMFO
+--rCwQ2Y43eQY6RBgR
 Content-Type: application/pgp-signature
 Content-length: 819
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v2
 
-iQIcBAEBAgAGBQJU5ePcAAoJEPU2Bp2uRE+gRIMP/j8EPkQ1VqJIzjk2FLhtue5L
-ATsNeXE3r8qcl1jhj0IgHVsiusfabwr3flqc3fAtc9ElstaE6LfgiuaB9jMOHhWd
-/HLUehUeBXAIdz7P7UAp/0brvKnkW8JuUTCpcvEVIUJ+fT1e9pIJepV/c+aJrONG
-mHxEAuXv6sBagjOHZmK6aoatBduEWiKzDwwg/iSWN1k/x2RxaZFueGjF43eOlvpf
-bjLwOdryQceFt5rDT0rpZrIw7/A3hI6Gu7kC9QJ4j2XXa1qlu6JfzWQzmv3jNTLM
-3oC/WpHZ25/1nj7Y16/BYUa2RT0U/8ejWFTX2cXljk55E8PlPxVfigHBr07/Od1T
-hXPS+QpnyXb3oIh7XnzmM1aAJWJI79rj4gQBp8BtHhcOoL0lvSyzHL8cHsBFdUdW
-4EpuNy6yv0w7XBxhrBdUM/QB02F511ok0AY8/5vAqVDIsWMOG8PTvpAZAoxhzuPy
-ZEdTZRuVVUDs2wMIV9JArvCW4J3FgZv2ZuTiiXxbkODrlI50v/u+7PGOQAMqj7PU
-d5G/plM2qRJZ+p8x494Qb9w4ujO58vvg1WzTmfIklKlv1f/We8KbRnCebXTkOgMt
-xM122CgXO0Yp8asJXKV72smJBWwPrG+m3Pz4Dvk2E0hDAUiVKmVbEdE2lECVmG3N
-hcX9JJHJ/HhBBJyz/9a7
-=N0iZ
+iQIcBAEBAgAGBQJU5eVSAAoJEPU2Bp2uRE+gKXkP/iwZxtHYEvj1JZHm35Uun0CW
+crAZ/38Vjip80ChMJtVdAmD+A4TvXbvrNj3AN2E6snhOJ3SW7Pi6zq9BCfnUfa31
+ju+ZDierCIFj3/sLdB8QSxi4dBgafdCwRAsriGSmcysWzNfyGIsnBKoTAVvwCmCK
+0eEQyzfybTmbOaZjtM4Xvhwk0+iVFTn9P03HsD4gzWOuvS5+nPDi3MVzchpC6Lf0
+6duwS9JOuP9+U0jC+UgyEj9mSQgM7HYr91aZ8dPBd5AKcYxeRlwHVvnsL0DDHH2b
+0RFi9YaO+Vh65OxeTHqZrsSePEU8r1mbK/zvFDQsjyquEA9kAbsU0VpKClX2gAI5
++Kg+2n/2yP0hYvyb/1O9bO3vYqktJAWc+EEKfHTkZk3x4A4vxuuCF47SgWcY1jfv
+CzsQIwBTxB9V9xabJfPfdwSmCY/Z1GRO07k7J3uRQU+6Mucu802H8iygi0SCQ0hu
+djcn5FFr5yfvJPcuKTXK8MPiGmmmKwkq9MJ/HxellB/KGh8KvNRpMYlQ0go2eC81
+m29Rz26jkIAdyaLdAj+hfnwOdEdfb/EuaD3N8xM4c7YiCOc8+mKJv4RQ6Slc4d3k
+6hemEwvFdbKhq1NWgKowj/qNmEs1r0BQlH2FS+mQjlUlxXvkntXF9/BmqeUTtLtY
+59f3CBH045QDqFFZg9tb
+=l6PS
 -----END PGP SIGNATURE-----
 
---JkW1gnuWHDypiMFO--
+--rCwQ2Y43eQY6RBgR--
