@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8072-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 46843 invoked by alias); 13 Mar 2015 14:26:06 -0000
+Return-Path: <cygwin-patches-return-8073-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 12618 invoked by alias); 13 Mar 2015 15:19:36 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,61 +9,77 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 46829 invoked by uid 89); 13 Mar 2015 14:26:05 -0000
+Received: (qmail 12601 invoked by uid 89); 13 Mar 2015 15:19:36 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-2.1 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.2
-X-HELO: rgout0405.bt.lon5.cpcloud.co.uk
-Received: from rgout0405.bt.lon5.cpcloud.co.uk (HELO rgout0405.bt.lon5.cpcloud.co.uk) (65.20.0.218) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 13 Mar 2015 14:26:03 +0000
-X-OWM-Source-IP: 31.51.206.246(GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-CTCH-RefID: str=0001.0A090204.5502F378.01A9,ss=1,re=0.001,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
-X-Junkmail-Premium-Raw: score=27/50,refid=2.7.2:2015.3.12.95719:17:27.888,ip=31.51.206.246,rules=__HAS_FROM, __TO_MALFORMED_2, __TO_NO_NAME, __SUBJ_ALPHA_END, __HAS_MSGID, __SANE_MSGID, __HAS_X_MAILER, __ANY_URI, __URI_NO_WWW, __URI_NO_PATH, BODYTEXTP_SIZE_3000_LESS, BODY_SIZE_1000_1099, __MIME_TEXT_ONLY, RDNS_GENERIC_POOLED, __URI_NS, SXL_IP_DYNAMIC[246.206.51.31.fur], HTML_00_01, HTML_00_10, BODY_SIZE_5000_LESS, RDNS_SUSP_GENERIC, RDNS_SUSP, BODY_SIZE_2000_LESS, BODY_SIZE_7000_LESS
-X-CTCH-Spam: Unknown
-Received: from localhost.localdomain (31.51.206.246) by rgout04.bt.lon5.cpcloud.co.uk (8.6.122.06) (authenticated as jonturney@btinternet.com)        id 5500B5D60034E7E5; Fri, 13 Mar 2015 14:25:47 +0000
-From: Jon TURNEY <jon.turney@dronecode.org.uk>
+X-Spam-SWARE-Status: No, score=-5.9 required=5.0 tests=AWL,BAYES_00 autolearn=ham version=3.3.2
+X-HELO: calimero.vinschen.de
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 13 Mar 2015 15:19:35 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 4F427A8096D; Fri, 13 Mar 2015 16:19:33 +0100 (CET)
+Date: Fri, 13 Mar 2015 15:19:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Cc: Jon TURNEY <jon.turney@dronecode.org.uk>
-Subject: [PATCH] Fix winsup/doc to install into prefix
-Date: Fri, 13 Mar 2015 14:26:00 -0000
-Message-Id: <1426256744-4184-1-git-send-email-jon.turney@dronecode.org.uk>
-X-SW-Source: 2015-q1/txt/msg00027.txt.bz2
+Subject: Re: [PATCH] Fix winsup/doc to install into prefix
+Message-ID: <20150313151933.GA20769@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <1426256744-4184-1-git-send-email-jon.turney@dronecode.org.uk>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;	protocol="application/pgp-signature"; boundary="YZ5djTAD1cGYuMQK"
+Content-Disposition: inline
+In-Reply-To: <1426256744-4184-1-git-send-email-jon.turney@dronecode.org.uk>
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-SW-Source: 2015-q1/txt/msg00028.txt.bz2
 
-By default, docdir and htmldir are defined in terms of prefix, so make sure to
-define it, so their values are prefix-relative.
 
-Without this, 'make install' installs the documentation into /share/doc/ unless
-configured otherwise.
+--YZ5djTAD1cGYuMQK
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 501
 
-	* Makefile.in (prefix): Define.
----
- winsup/doc/ChangeLog   | 4 ++++
- winsup/doc/Makefile.in | 1 +
- 2 files changed, 5 insertions(+)
+On Mar 13 14:25, Jon TURNEY wrote:
+> By default, docdir and htmldir are defined in terms of prefix, so make su=
+re to
+> define it, so their values are prefix-relative.
+>=20
+> Without this, 'make install' installs the documentation into /share/doc/ =
+unless
+> configured otherwise.
+>=20
+> 	* Makefile.in (prefix): Define.
 
-diff --git a/winsup/doc/ChangeLog b/winsup/doc/ChangeLog
-index aefb41e..814e651 100644
---- a/winsup/doc/ChangeLog
-+++ b/winsup/doc/ChangeLog
-@@ -1,3 +1,7 @@
-+2015-03-13  Jon TURNEY  <jon.turney@dronecode.org.uk>
-+
-+	* Makefile.in (prefix): Define.
-+
- 2015-03-12  Corinna Vinschen  <corinna@vinschen.de>
- 
- 	* ntsec.xml (ntsec-mapping-nsswitch-desc): Fix typo.
-diff --git a/winsup/doc/Makefile.in b/winsup/doc/Makefile.in
-index 55fd850..5b2f0ed 100644
---- a/winsup/doc/Makefile.in
-+++ b/winsup/doc/Makefile.in
-@@ -12,6 +12,7 @@ SHELL = @SHELL@
- srcdir = @srcdir@
- VPATH = @srcdir@
- 
-+prefix:=@prefix@
- datarootdir:=@datarootdir@
- docdir = @docdir@
- htmldir = @htmldir@
--- 
-2.1.4
+Please apply.
+
+
+Thanks,
+Corinna
+
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
+
+--YZ5djTAD1cGYuMQK
+Content-Type: application/pgp-signature
+Content-length: 819
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iQIcBAEBAgAGBQJVAwAFAAoJEPU2Bp2uRE+gUGkP/0ryFboPj6ydQMynnwprBQ7a
+Q3ooJDS9a9qRoFtdfkdO+YRzXWqVfwYC+7nNK6r+DBUEV+RRD4eXNFv2tBfeiNPX
+o0NsoCd9yzOWmUd8MXtjztkeF9P6JDlyWvGDuLc5GzHcuTiH64natBFe0aprO5/P
+SOr6h3kvbwf/WfpsMIifNnHvEGZ/Lc4OKFcONKWYZ49QCn5H2h0DQE3Wk/wukbaK
+do82m85P/jmow+wvp7szlqMvPFNBElXAO/MyQu6CPkWoFs6S5J5hm3W0xykvcPnv
+GiQJjyml09sMDmE8bMuQ5mYggRlTz3sGGS6R/po5NSizv8TdQDQ6Fnr7YrFyNdy+
+at/p5nlYmHVk2TA1QSEcjF7qET2AYpxYgdacM57H5l9F71dPNVWFvf9XVNHXJmIK
+Ff/TA9tXvN6HkeV8YSHHuUIfypfc5yDJWgHLEYn5ZupCuoyn/YnJQbkh9NoImmP9
+eq0+Mp4a6DCnyb2ZVvDEkQzIUowaRMLPYwCRESIzVlg5AxzGd6DsZTrkbcNxjZNA
+72ojONOqTp1W4nIntjdozp6FiGy4B/heR33Mc04POAeY6dU/E5rDDp07bF28qKL9
+JrMzJ5oSYAyA7gv/bIVxYgXIIScaGEvcwbrqXhHcTGcp9qO4OLXgJfyfS24xeJv7
+v1fZJP49mHSyqa+ssJGx
+=fNuE
+-----END PGP SIGNATURE-----
+
+--YZ5djTAD1cGYuMQK--
