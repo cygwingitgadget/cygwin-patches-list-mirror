@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8075-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 95837 invoked by alias); 25 Mar 2015 15:04:36 -0000
+Return-Path: <cygwin-patches-return-8076-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 91998 invoked by alias); 26 Mar 2015 05:25:14 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,73 +9,124 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 95769 invoked by uid 89); 25 Mar 2015 15:04:35 -0000
+Received: (qmail 91987 invoked by uid 89); 26 Mar 2015 05:25:13 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-5.9 required=5.0 tests=AWL,BAYES_00 autolearn=ham version=3.3.2
-X-HELO: calimero.vinschen.de
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 25 Mar 2015 15:04:30 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 314B0A8092F; Wed, 25 Mar 2015 16:04:28 +0100 (CET)
-Date: Wed, 25 Mar 2015 15:04:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-0.3 required=5.0 tests=AWL,BAYES_00,SPF_HELO_PASS,T_RP_MATCHES_RCVD autolearn=ham version=3.3.2
+X-HELO: mx1.redhat.com
+Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-GCM-SHA384 encrypted) ESMTPS; Thu, 26 Mar 2015 05:25:12 +0000
+Received: from int-mx09.intmail.prod.int.phx2.redhat.com (int-mx09.intmail.prod.int.phx2.redhat.com [10.5.11.22])	by mx1.redhat.com (8.14.4/8.14.4) with ESMTP id t2Q5PAXG007892	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL)	for <cygwin-patches@cygwin.com>; Thu, 26 Mar 2015 01:25:10 -0400
+Received: from localhost.localdomain ([10.10.116.17])	by int-mx09.intmail.prod.int.phx2.redhat.com (8.14.4/8.14.4) with ESMTP id t2Q5P83s005899	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO)	for <cygwin-patches@cygwin.com>; Thu, 26 Mar 2015 01:25:10 -0400
+From: Yaakov Selkowitz <yselkowi@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: TIOCPKT mode of PTY is broken if ONLCR bit is cleared.
-Message-ID: <20150325150428.GD3017@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20150228143653.ab0a6bf854db294105e1d5f3@nifty.ne.jp> <20150228135947.GZ11124@calimero.vinschen.de> <20150302210508.1be5c1ed4753508431842913@nifty.ne.jp> <20150318145854.GC2368@calimero.vinschen.de> <20150319074942.6c18c8fe0199037f028687dd@nifty.ne.jp> <20150319083451.GA8398@calimero.vinschen.de> <20150320191232.GJ2368@calimero.vinschen.de> <20150321104031.9dc198eb8aa4e7652e0a7a51@nifty.ne.jp> <20150323100823.GE3017@calimero.vinschen.de> <20150325204238.fb2ca1b538c35be7cc636d00@nifty.ne.jp>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;	protocol="application/pgp-signature"; boundary="Ng9nCnWcMXS7n1y7"
-Content-Disposition: inline
-In-Reply-To: <20150325204238.fb2ca1b538c35be7cc636d00@nifty.ne.jp>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-SW-Source: 2015-q1/txt/msg00030.txt.bz2
+Subject: [PATCH] cygwin: add GNU basename(3)
+Date: Thu, 26 Mar 2015 05:25:00 -0000
+Message-Id: <1427347509-7940-1-git-send-email-yselkowi@redhat.com>
+X-SW-Source: 2015-q1/txt/msg00031.txt.bz2
 
+winsup/cygwin/
+* common.din (__gnu_basename): Export.
+* path.cc (__gnu_basename): New function.
 
---Ng9nCnWcMXS7n1y7
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 443
+winsup/doc/
+* posix.xml (std-gnu): Add basename.
+(std-notes): Add note about two forms of basename.
+---
+This depends on the newlib patch currently under discussion.
 
-On Mar 25 20:42, Takashi Yano wrote:
-> Dear cygwin developers,
->=20
-> Regarding this (http://cygwin.com/ml/cygwin/2015-02/msg00929.html)
-> problem, I made a patch attached.
+ winsup/cygwin/common.din |  1 +
+ winsup/cygwin/path.cc    | 28 ++++++++++++++++++++++++++++
+ winsup/doc/posix.xml     |  6 +++++-
+ 3 files changed, 34 insertions(+), 1 deletion(-)
 
-Patch applied, thank you.  Btw., there's a Freenode IRC channel
-#cygwin-developers.  Feel free to join.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---Ng9nCnWcMXS7n1y7
-Content-Type: application/pgp-signature
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBAgAGBQJVEs58AAoJEPU2Bp2uRE+gyukP/R++l0dMtrlUAV3GloN4UkiT
-4LhC/wX8EJWAHyp0kBakgAqYI3XZ6QF8SZLO438VUW4zSomSiut3KDVtHljHSAR7
-iDFsx2fVIn1X++KcdlARSiAHaiNHJhpTNpZaaeCIU67ZqE2PtlLsDPLsaAOpefDE
-Fl8uueEYNkQpuvUTkGn2kRWIFX3RB0pyf+KyCPKoqOwi80id0JcahPi5suEWC8NB
-3lkM/dhOm6wkPSdSoelpz1cjgRWVZcUIPSK19vUKKoID+1Q70l1VrYfcD0Z1quni
-9BQI8ux99CbgEZYKvl0JDkBGn699vGMxqIzFnoVeDFx0/xRF6gNVMgREY/gfBmhN
-zjY7W6tRaVyGAiuU5BsKFojMDKCwBvXwMydNUzmbW8OlbBL3LvJMWdqTHeE8EfVv
-OQ+ID/ykExUsqpkfWxrmtGGrJPKqK8n2DaaeHgxBFIFNs/H6GaXwuXrYNlxD5vZ2
-s2sPoNEAxR1bRoty6Jx1P/9fdbOvkTevJrnqJvSG9XY9QJE6VX/lbs+n6heFhVQ9
-YFY/887HkYPfJ0/JZIAajVO6zKKnrUU3AgvUneN8bFch5bCRaubBjFmQpRPOAWcV
-5jniE3OeDH9ZHvGIiRr7QOzM37WiwE68diL9ITkFncfWzmKGaZDiaRzZGn2MKt0E
-co8If+3UQ6/xe8WhnSDD
-=srDq
------END PGP SIGNATURE-----
-
---Ng9nCnWcMXS7n1y7--
+diff --git a/winsup/cygwin/common.din b/winsup/cygwin/common.din
+index 42098ff..f14b331 100644
+--- a/winsup/cygwin/common.din
++++ b/winsup/cygwin/common.din
+@@ -61,6 +61,7 @@ __fsetlocking SIGFE
+ __fwritable NOSIGFE
+ __fwriting NOSIGFE
+ __getreent NOSIGFE
++__gnu_basename NOSIGFE
+ __infinity NOSIGFE
+ __isinfd NOSIGFE
+ __isinff NOSIGFE
+diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
+index 47c687f..b05333f 100644
+--- a/winsup/cygwin/path.cc
++++ b/winsup/cygwin/path.cc
+@@ -48,6 +48,7 @@
+      c: means c:\.
+   */
+ 
++#define _BASENAME_DEFINED
+ #include "winsup.h"
+ #include "miscfuncs.h"
+ #include <ctype.h>
+@@ -4767,6 +4768,33 @@ basename (char *path)
+   return path;
+ }
+ 
++/* The differences with the POSIX version above:
++   - declared in <string.h> (instead of <libgen.h>);
++   - the argument is never modified, and therefore is marked const;
++   - the empty string is returned if path is an empty string, "/", or ends
++     with a trailing slash. */
++extern "C" char *
++__gnu_basename (const char *path)
++{
++  static char buf[1];
++  char *c, *d, *bs = (char *)path;
++
++  if (!path || !*path)
++    return strcpy (buf, "");
++  if (isalpha (path[0]) && path[1] == ':')
++    bs += 2;
++  else if (strspn (path, "/\\") > 1)
++    ++bs;
++  c = strrchr (bs, '/');
++  if ((d = strrchr (c ?: bs, '\\')) > c)
++    c = d;
++  if (c)
++    return c + 1;
++  else if (!bs[0])
++    return strcpy (buf, "");
++  return (char *)path;
++}
++
+ /* No need to be reentrant or thread-safe according to SUSv3.
+    / and \\ are treated equally.  Leading drive specifiers and
+    leading double (back)slashes are kept intact as far as it
+diff --git a/winsup/doc/posix.xml b/winsup/doc/posix.xml
+index 5df808b..95bc400 100644
+--- a/winsup/doc/posix.xml
++++ b/winsup/doc/posix.xml
+@@ -50,7 +50,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
+     atoi
+     atol
+     atoll
+-    basename
++    basename			(see chapter "Implementation Notes")
+     bind
+     bsearch
+     btowc
+@@ -1139,6 +1139,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
+     asnprintf
+     asprintf
+     asprintf_r
++    basename			(see chapter "Implementation Notes")
+     canonicalize_file_name
+     dremf
+     dup3
+@@ -1603,6 +1604,9 @@ group quotas, no inode quotas, no time constraints.</para>
+ <para><function>qsort_r</function> is available in both BSD and GNU flavors,
+ depending on whether _BSD_SOURCE or _GNU_SOURCE is defined when compiling.</para>
+ 
++<para><function>basename</function> is available in both POSIX and GNU flavors,
++depending on whether libgen.h is included or not.</para>
++
+ </sect1>
+ 
+ </chapter>
+-- 
+2.1.4
