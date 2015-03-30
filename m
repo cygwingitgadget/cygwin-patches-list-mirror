@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8079-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 20523 invoked by alias); 30 Mar 2015 10:45:11 -0000
+Return-Path: <cygwin-patches-return-8082-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 52533 invoked by alias); 30 Mar 2015 17:33:17 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,75 +9,152 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 20510 invoked by uid 89); 30 Mar 2015 10:45:10 -0000
+Received: (qmail 52481 invoked by uid 89); 30 Mar 2015 17:33:16 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-5.9 required=5.0 tests=AWL,BAYES_00 autolearn=ham version=3.3.2
-X-HELO: calimero.vinschen.de
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 30 Mar 2015 10:45:09 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 3AB8DA80982; Mon, 30 Mar 2015 12:45:07 +0200 (CEST)
-Date: Mon, 30 Mar 2015 10:45:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-2.0 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.2
+X-HELO: rgout01.bt.lon5.cpcloud.co.uk
+Received: from rgout01.bt.lon5.cpcloud.co.uk (HELO rgout01.bt.lon5.cpcloud.co.uk) (65.20.0.178) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 30 Mar 2015 17:33:13 +0000
+X-OWM-Source-IP: 31.51.205.126(GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-CTCH-RefID: str=0001.0A090201.551988D8.0166,ss=1,re=0.001,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
+X-Junkmail-Premium-Raw: score=27/50,refid=2.7.2:2015.3.24.102118:17:27.888,ip=31.51.205.126,rules=__HAS_FROM, __TO_MALFORMED_2, __TO_NO_NAME, __SUBJ_ALPHA_END, __HAS_MSGID, __SANE_MSGID, __HAS_X_MAILER, __IN_REP_TO, __REFERENCES, __ANY_URI, __URI_NO_WWW, __URI_NO_PATH, __CANPHARM_COPYRIGHT, BODY_SIZE_4000_4999, __MIME_TEXT_ONLY, RDNS_GENERIC_POOLED, __URI_NS, SXL_IP_DYNAMIC[126.205.51.31.fur], HTML_00_01, HTML_00_10, BODY_SIZE_5000_LESS, RDNS_SUSP_GENERIC, RDNS_SUSP, BODY_SIZE_7000_LESS, REFERENCES
+X-CTCH-Spam: Unknown
+Received: from localhost.localdomain (31.51.205.126) by rgout01.bt.lon5.cpcloud.co.uk (8.6.122.06) (authenticated as jonturney@btinternet.com)        id 5508763C01A1D859; Mon, 30 Mar 2015 18:33:12 +0100
+From: Jon TURNEY <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] cygwin: add GNU basename(3)
-Message-ID: <20150330104507.GI29875@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1427347509-7940-1-git-send-email-yselkowi@redhat.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;	protocol="application/pgp-signature"; boundary="6WlEvdN9Dv0WHSBl"
-Content-Disposition: inline
-In-Reply-To: <1427347509-7940-1-git-send-email-yselkowi@redhat.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-SW-Source: 2015-q1/txt/msg00034.txt.bz2
+Cc: Jon TURNEY <jon.turney@dronecode.org.uk>
+Subject: [PATCH 2/2] Make CONTEXT available to signal handlers
+Date: Mon, 30 Mar 2015 17:33:00 -0000
+Message-Id: <1427736757-13884-3-git-send-email-jon.turney@dronecode.org.uk>
+In-Reply-To: <1427736757-13884-1-git-send-email-jon.turney@dronecode.org.uk>
+References: <20150330102129.GH29875@calimero.vinschen.de> <1427736757-13884-1-git-send-email-jon.turney@dronecode.org.uk>
+X-SW-Source: 2015-q1/txt/msg00037.txt.bz2
 
+Add ucontext.h header, defining ucontext_t and mcontext_t types.
 
---6WlEvdN9Dv0WHSBl
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 480
+Provide sigaction sighandlers with a ucontext_t parameter containing a
+mcontext_t with exception context information, if available.
 
-On Mar 26 00:25, Yaakov Selkowitz wrote:
-> winsup/cygwin/
-> * common.din (__gnu_basename): Export.
-> * path.cc (__gnu_basename): New function.
->=20
-> winsup/doc/
-> * posix.xml (std-gnu): Add basename.
-> (std-notes): Add note about two forms of basename.
+	* include/sys/ucontext.h : New header.
+	* include/ucontext.h : Ditto.
+	* exceptions.cc (call_signal_handler): Provide ucontext_t
+	parameter to signal handler function, if available.
+---
+ winsup/cygwin/ChangeLog              |  7 +++++++
+ winsup/cygwin/exceptions.cc          | 13 +++++++++++--
+ winsup/cygwin/include/sys/ucontext.h | 22 ++++++++++++++++++++++
+ winsup/cygwin/include/ucontext.h     | 16 ++++++++++++++++
+ 4 files changed, 56 insertions(+), 2 deletions(-)
+ create mode 100644 winsup/cygwin/include/sys/ucontext.h
+ create mode 100644 winsup/cygwin/include/ucontext.h
 
-Patch is ok.  Please apply after applying the newlib patch.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---6WlEvdN9Dv0WHSBl
-Content-Type: application/pgp-signature
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBAgAGBQJVGSkzAAoJEPU2Bp2uRE+gK0sQAKNcshQmwFykRsdZjTdI8YdV
-0QIZYZDFDt9l3IaMlGZo9Ooi9dhl0XvGox2zCnaxWWDfbBmwXxdeajtQ1gFuP3NU
-Y56td5cviAGAEDz3q81jyiK0L+Vd8Tr0yvPKJSIFckGA/iPn8Je893ADqAqPtjSh
-jBeu2s1Sq36OCeC1mbuy5zfHh4LM9jg9siAlLqLk3R4lQj1WOyhu5CcSw9BO51/j
-JgQUR7VZcCCXgSF7gO+gjp1DsC58XS7RXgjFtfldnRbzIch9Yd+98GtOr+FCkhJi
-NDL+hMXzE+nnHKdn+hsSOs0jpVlR+u8QquFV1Lj1jS+huceKTCsRkF75SYQgc8UB
-lNckUYHUYGnPikkgvAULHhtEpfo7QGDW0Syb9CXwpjHXHdGQJAJ32q3Zz+tVUnCB
-s2yCo6OH+pNQ2R1MjJt9ymfgm24IHduWnD2CB3w/MTy2qUfRh7FYjyHkNKOMMvEJ
-kCvHn8ZbTmYk+8s/IRdJVjztmeX51MifJcV5PYqpHxLKRlMqdAksTnhFuy+sdPYe
-UUnkLOx+KWKGR/eGouHRT8YO4Ghzq7IbqPksJaaN80CPp50HxO+Cxjxm01lvH21M
-Ne4zLtNIDfUhHmX6l4PfYxIvRRNGpS9W9t5ywlRg7KoH8IEtIeI5hoLzj/u6BkpD
-FQJJLNHdkoTjRQMuD54M
-=5tF8
------END PGP SIGNATURE-----
-
---6WlEvdN9Dv0WHSBl--
+diff --git a/winsup/cygwin/ChangeLog b/winsup/cygwin/ChangeLog
+index cfc29a8..8da5fa2 100644
+--- a/winsup/cygwin/ChangeLog
++++ b/winsup/cygwin/ChangeLog
+@@ -1,5 +1,12 @@
+ 2015-03-30  Jon TURNEY  <jon.turney@dronecode.org.uk>
+ 
++	* include/sys/ucontext.h : New header.
++	* include/ucontext.h : Ditto.
++	* exceptions.cc (call_signal_handler): Provide ucontext_t
++	parameter to signal handler function, if available.
++
++2015-03-30  Jon TURNEY  <jon.turney@dronecode.org.uk>
++
+ 	* include/cygwin/signal.h : Rename struct ucontext to struct mcontext.
+ 	Remove unused member oldmask and simplify __COPY_CONTEXT_SIZE.
+ 
+diff --git a/winsup/cygwin/exceptions.cc b/winsup/cygwin/exceptions.cc
+index af53457..80899d1 100644
+--- a/winsup/cygwin/exceptions.cc
++++ b/winsup/cygwin/exceptions.cc
+@@ -16,6 +16,7 @@ details. */
+ #include <stdlib.h>
+ #include <syslog.h>
+ #include <wchar.h>
++#include <ucontext.h>
+ 
+ #include "cygtls.h"
+ #include "pinfo.h"
+@@ -1487,8 +1488,17 @@ _cygtls::call_signal_handler ()
+       /* Save information locally on stack to pass to handler. */
+       int thissig = sig;
+       siginfo_t thissi = infodata;
++      ucontext_t *thiscontext = NULL;
+       void (*thisfunc) (int, siginfo_t *, void *) = func;
+ 
++      ucontext_t context;
++      memset(&context, 0, sizeof(ucontext_t)); /* no ucontext_t information provided yet */
++      if (thissi.si_cyg)
++        {
++          memcpy(&context.uc_mcontext, ((cygwin_exception *)thissi.si_cyg)->context(), sizeof(CONTEXT));
++          thiscontext = &context;
++        }
++
+       sigset_t this_oldmask = set_process_mask_delta ();
+       int this_errno = saved_errno;
+       reset_signal_arrived ();
+@@ -1496,8 +1506,7 @@ _cygtls::call_signal_handler ()
+       sig = 0;		/* Flag that we can accept another signal */
+       unlock ();	/* unlock signal stack */
+ 
+-      /* no ucontext_t information provided yet, so third arg is NULL */
+-      thisfunc (thissig, &thissi, NULL);
++      thisfunc (thissig, &thissi, thiscontext);
+       incyg = true;
+ 
+       set_signal_mask (_my_tls.sigmask, this_oldmask);
+diff --git a/winsup/cygwin/include/sys/ucontext.h b/winsup/cygwin/include/sys/ucontext.h
+new file mode 100644
+index 0000000..df9b32b
+--- /dev/null
++++ b/winsup/cygwin/include/sys/ucontext.h
+@@ -0,0 +1,22 @@
++/* ucontext.h
++
++   Copyright 2015 Red Hat, Inc.
++
++This file is part of Cygwin.
++
++This software is a copyrighted work licensed under the terms of the
++Cygwin license.  Please consult the file "CYGWIN_LICENSE" for
++details. */
++
++#ifndef _SYS_UCONTEXT_H_
++#define _SYS_UCONTEXT_H_
++
++#include <signal.h>
++
++typedef struct mcontext mcontext_t;
++
++typedef struct ucontext {
++	mcontext_t	uc_mcontext;
++} ucontext_t;
++
++#endif /* !_SYS_UCONTEXT_H_ */
+diff --git a/winsup/cygwin/include/ucontext.h b/winsup/cygwin/include/ucontext.h
+new file mode 100644
+index 0000000..4240597
+--- /dev/null
++++ b/winsup/cygwin/include/ucontext.h
+@@ -0,0 +1,16 @@
++/* ucontext.h
++
++   Copyright 2015 Red Hat, Inc.
++
++This file is part of Cygwin.
++
++This software is a copyrighted work licensed under the terms of the
++Cygwin license.  Please consult the file "CYGWIN_LICENSE" for
++details. */
++
++#ifndef _UCONTEXT_H
++#define _UCONTEXT_H
++
++#include <sys/ucontext.h>
++
++#endif /* _UCONTEXT_H */
+-- 
+2.1.4
