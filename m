@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8090-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 58181 invoked by alias); 31 Mar 2015 17:50:45 -0000
+Return-Path: <cygwin-patches-return-8091-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 90669 invoked by alias); 31 Mar 2015 18:24:05 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,56 +9,97 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 58170 invoked by uid 89); 31 Mar 2015 17:50:44 -0000
+Received: (qmail 90649 invoked by uid 89); 31 Mar 2015 18:24:04 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-2.0 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.2
-X-HELO: rgout0203.bt.lon5.cpcloud.co.uk
-Received: from rgout0203.bt.lon5.cpcloud.co.uk (HELO rgout0203.bt.lon5.cpcloud.co.uk) (65.20.0.202) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 31 Mar 2015 17:50:43 +0000
-X-OWM-Source-IP: 31.51.205.126(GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-CTCH-RefID: str=0001.0A090204.551ADE70.02EB,ss=1,re=0.001,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
-X-Junkmail-Premium-Raw: score=27/50,refid=2.7.2:2015.3.23.150922:17:27.888,ip=31.51.205.126,rules=__HAS_FROM, __TO_MALFORMED_2, __TO_NO_NAME, __HAS_MSGID, __SANE_MSGID, __HAS_X_MAILER, __ANY_URI, __URI_NO_WWW, __URI_NO_PATH, BODYTEXTP_SIZE_3000_LESS, BODY_SIZE_1000_1099, __MIME_TEXT_ONLY, RDNS_GENERIC_POOLED, __URI_NS, SXL_IP_DYNAMIC[126.205.51.31.fur], HTML_00_01, HTML_00_10, BODY_SIZE_5000_LESS, RDNS_SUSP_GENERIC, RDNS_SUSP, BODY_SIZE_2000_LESS, BODY_SIZE_7000_LESS
-X-CTCH-Spam: Unknown
-Received: from localhost.localdomain (31.51.205.126) by rgout02.bt.lon5.cpcloud.co.uk (8.6.122.06) (authenticated as jonturney@btinternet.com)        id 550C0835016AC51D; Tue, 31 Mar 2015 18:50:40 +0100
-From: Jon TURNEY <jon.turney@dronecode.org.uk>
-To: cygwin-patches@cygwin.com
-Cc: Jon TURNEY <jon.turney@dronecode.org.uk>
-Subject: [PATCH] Fix documentation of cygwin_internal()'s return type.
-Date: Tue, 31 Mar 2015 17:50:00 -0000
-Message-Id: <1427824229-13744-1-git-send-email-jon.turney@dronecode.org.uk>
-X-SW-Source: 2015-q1/txt/msg00045.txt.bz2
+X-Spam-SWARE-Status: Yes, score=5.4 required=5.0 tests=AWL,BAYES_00,FREEMAIL_FROM,KAM_FROM_URIBL_PCCC,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=no version=3.3.2
+X-HELO: mail-la0-f51.google.com
+Received: from mail-la0-f51.google.com (HELO mail-la0-f51.google.com) (209.85.215.51) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES128-GCM-SHA256 encrypted) ESMTPS; Tue, 31 Mar 2015 18:24:03 +0000
+Received: by lahf3 with SMTP id f3so18862412lah.2        for <cygwin-patches@cygwin.com>; Tue, 31 Mar 2015 11:23:59 -0700 (PDT)
+X-Received: by 10.152.43.229 with SMTP id z5mr31656136lal.48.1427826239462; Tue, 31 Mar 2015 11:23:59 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 10.112.128.195 with HTTP; Tue, 31 Mar 2015 11:23:19 -0700 (PDT)
+From: Renato Silva <br.renatosilva@gmail.com>
+Date: Tue, 31 Mar 2015 18:24:00 -0000
+Message-ID: <CANRwAThfiScOKXc2fOQKOcPLNnJYLSSzQoL5T0oP=eAAC8S+8g@mail.gmail.com>
+Subject: Fix error mapping in gethostname
+To: Cygwin Patches <cygwin-patches@cygwin.com>
+Content-Type: text/plain; charset=ISO-8859-1
+X-IsSubscribed: yes
+X-SW-Source: 2015-q1/txt/msg00046.txt.bz2
 
-	* misc-funcs.xml (cygwin_internal): Correct return type.
+The gethostname function has a problem where a small buffer size will
+not produce an accurate errno. This is because the Windows error is
+not being appropriately mapped. This causes programs such as hostname
+from coreutils to fail because they are not informed about the long
+name.
+
+Changelog entry:
+2015-03-31  Renato Silva  <br.renatosilva@gmail.com>
+    * net.cc: Fix buffer size error handling in cygwin_gethostname.
+
+-----
+
+/* Test case */
+
+#include <errno.h>
+#include <stdio.h>
+#include <windows.h>
+
+int main(int argc, char **argv) {
+
+    if (argc < 2) {
+        printf("Please provide a buffer length.\n");
+        return 1;
+    }
+    DWORD HOSTNAME_LENGTH = atoi(argv[1]);
+    char hostname[HOSTNAME_LENGTH];
+    char error_message[256];
+    int return_value;
+
+    printf("gethostname %s\n", gethostname(hostname, HOSTNAME_LENGTH)?
+"failed" : "succeeded");
+    if (errno) printf("error is %d, %s\n\n", errno, strerror(errno));
+          else printf("hostname is %s\n\n", hostname);
+
+    printf("GetComputerNameEx %s\n", (return_value =
+GetComputerNameEx(ComputerNameDnsFullyQualified, hostname,
+&HOSTNAME_LENGTH))? "succeeded": "failed");
+    FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, NULL, GetLastError(),
+MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), error_message, 256, NULL);
+    if (!return_value) printf("error is %d, %s\n", GetLastError(),
+error_message);
+                  else printf("hostname is %s\n", hostname);
+}
+
+-----
+
+From d691d4b2ac75f00a752c5dc86ab63a4ba425beda Mon Sep 17 00:00:00 2001
+From: Renato Silva <br.renatosilva@gmail.com>
+Date: Mon, 30 Mar 2015 20:20:49 -0300
+Subject: [PATCH] Fix buffer size error handling in gethostname.
+
+GetComputerNameEx sets a generic ERROR_MORE_DATA when buffer is too small. This
+is now more accurately mapped into ENAMETOOLONG instead of the generic EPERM.
 ---
- winsup/doc/ChangeLog      | 4 ++++
- winsup/doc/misc-funcs.xml | 2 +-
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ winsup/cygwin/net.cc | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/winsup/doc/ChangeLog b/winsup/doc/ChangeLog
-index 814e651..b04210f 100644
---- a/winsup/doc/ChangeLog
-+++ b/winsup/doc/ChangeLog
-@@ -1,3 +1,7 @@
-+2015-03-31  Jon TURNEY  <jon.turney@dronecode.org.uk>
-+
-+	* misc-funcs.xml (cygwin_internal): Correct return type.
-+
- 2015-03-13  Jon TURNEY  <jon.turney@dronecode.org.uk>
- 
- 	* Makefile.in (prefix): Define.
-diff --git a/winsup/doc/misc-funcs.xml b/winsup/doc/misc-funcs.xml
-index 06776d9..b164341 100644
---- a/winsup/doc/misc-funcs.xml
-+++ b/winsup/doc/misc-funcs.xml
-@@ -34,7 +34,7 @@ much.</para>
- <title>cygwin_internal</title>
- 
- <funcsynopsis><funcprototype>
--<funcdef>extern "C" DWORD
-+<funcdef>extern "C" uintptr_t
- <function>cygwin_internal</function></funcdef>
- <paramdef>cygwin_getinfo_types <parameter>t</parameter></paramdef>
- <paramdef><parameter>...</parameter></paramdef>
+diff --git a/winsup/cygwin/net.cc b/winsup/cygwin/net.cc
+index f9b317c..02fa142 100644
+--- a/winsup/cygwin/net.cc
++++ b/winsup/cygwin/net.cc
+@@ -1076,7 +1076,10 @@ cygwin_gethostname (char *name, size_t len)
+       if (!GetComputerNameExA (ComputerNameDnsFullyQualified, name,
+                    &local_len))
+         {
+-          set_winsock_errno ();
++          if (GetLastError () == ERROR_MORE_DATA)
++            set_errno (ENAMETOOLONG);
++          else
++            set_winsock_errno ();
+           __leave;
+         }
+     }
 -- 
-2.1.4
+2.3.4
