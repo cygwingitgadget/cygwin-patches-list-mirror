@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8094-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 59164 invoked by alias); 31 Mar 2015 19:02:21 -0000
+Return-Path: <cygwin-patches-return-8095-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 64136 invoked by alias); 31 Mar 2015 19:03:38 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,48 +9,69 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 59150 invoked by uid 89); 31 Mar 2015 19:02:21 -0000
+Received: (qmail 64126 invoked by uid 89); 31 Mar 2015 19:03:38 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
 X-Spam-SWARE-Status: No, score=-5.9 required=5.0 tests=AWL,BAYES_00 autolearn=ham version=3.3.2
 X-HELO: calimero.vinschen.de
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 31 Mar 2015 19:02:20 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id F3999A80A3F; Tue, 31 Mar 2015 21:02:17 +0200 (CEST)
-Date: Tue, 31 Mar 2015 19:02:00 -0000
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 31 Mar 2015 19:03:37 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 10FBCA80A3F; Tue, 31 Mar 2015 21:03:35 +0200 (CEST)
+Date: Tue, 31 Mar 2015 19:03:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 0/3] Make detailled exception information available to signal handlers
-Message-ID: <20150331190217.GC15852@calimero.vinschen.de>
+Subject: Re: [PATCH 1/2] Rename struct ucontext to struct mcontext
+Message-ID: <20150331190335.GD15852@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1427824014-19504-1-git-send-email-jon.turney@dronecode.org.uk>
+References: <20150330102129.GH29875@calimero.vinschen.de> <1427736757-13884-1-git-send-email-jon.turney@dronecode.org.uk> <1427736757-13884-2-git-send-email-jon.turney@dronecode.org.uk> <20150330184735.GA12442@calimero.vinschen.de> <551ADDF6.1060608@dronecode.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;	protocol="application/pgp-signature"; boundary="Sr1nOIr3CvdE5hEN"
+Content-Type: multipart/signed; micalg=pgp-sha1;	protocol="application/pgp-signature"; boundary="yudcn1FV7Hsu/q59"
 Content-Disposition: inline
-In-Reply-To: <1427824014-19504-1-git-send-email-jon.turney@dronecode.org.uk>
+In-Reply-To: <551ADDF6.1060608@dronecode.org.uk>
 User-Agent: Mutt/1.5.23 (2014-03-12)
-X-SW-Source: 2015-q1/txt/msg00049.txt.bz2
+X-SW-Source: 2015-q1/txt/msg00050.txt.bz2
 
 
---Sr1nOIr3CvdE5hEN
+--yudcn1FV7Hsu/q59
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-length: 640
+Content-length: 1143
 
-On Mar 31 18:46, Jon TURNEY wrote:
-> Thanks for your help so far.  Here's another attempt at this.
+On Mar 31 18:48, Jon TURNEY wrote:
+> On 30/03/2015 19:47, Corinna Vinschen wrote:
+> >Just for the records what we talked about on IRC:
+> >
+> >On Mar 30 18:32, Jon TURNEY wrote:
+> >>@@ -45,7 +49,7 @@ struct _fpstate
+> >>    __uint32_t padding[24];
+> >>  };
+> >>
+> >>-struct ucontext
+> >>+struct mcontext
+> >
+> >__mcontext so as not to pollute the namespace.
+> >
+> >>    __uint64_t etr;
+> >>    __uint64_t efr;
+> >>    __uint8_t _internal;
+> >>-  __uint64_t oldmask;
+> >>  };
+> >
+> >Remove _internal, keep oldmask.  As a result, __mcontext is still
+> >basically equivalent to Linux' mcontext_t.  __mcontext can be
+> >taken from _my_tls.oldmask.
 >=20
-> Questions:
+> Thanks for your help with this.
 >=20
-> The ContextFlags member of the CONTEXT type is named cr2 in struct __mcon=
-text. I=20
-> don't understand how that can be right.
+> You'll have to help me understand what the difference in meaning between
+> ucontext_t.uc_sigmask and ucontext_t.uc_mcontext.oldmask is.
+>=20
+> In the context of _cygtls::call_signal_handler() is _my_tls.oldmask corre=
+ct
+> and not this_oldmask?
 
-It isn't.  Please rename cr2 to ctx_flags and add a uint64_t resp.
-uint32_t value called "cr2" as last member after "oldmask" to struct
-__mcontext.  We're discussing filling cr2 later, it's certainly not
-a pressing issue.
+Yes, this_oldmask should be the right one.
 
 
 Thanks,
@@ -61,26 +82,26 @@ Corinna Vinschen                  Please, send mails regarding Cygwin to
 Cygwin Maintainer                 cygwin AT cygwin DOT com
 Red Hat
 
---Sr1nOIr3CvdE5hEN
+--yudcn1FV7Hsu/q59
 Content-Type: application/pgp-signature
 Content-length: 819
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v2
 
-iQIcBAEBAgAGBQJVGu85AAoJEPU2Bp2uRE+g8HgP/jgmK2iHXTeFKQyeXuyvZ5iA
-fIta0CnozmHavCoGCWZZ+FzZHEMj0OmOhOOI7EaKafIOkFYU9P+m3zNdQRym+zyk
-d1Vd9FPoJCmO/k/xdvSmyptT/DbSjrOIpl1O7X3s+XJDLt7bkzlGn0GKMmeRBHB4
-mz/hOnHXiTnNZqiIInJLcETWpfN8cyMm0QdvcHLXX58fWJ7cmDyuGhPTO5rjmcM8
-yVZbh3JLmS/WWKjXPviT8w2mj2ZiIB+E3wJh0eW92++RGw68IiFDLR//YONaCgR2
-M+zxwWixefXNQPHEVWYSM4SMP8ItHcD+lksIV3sTg47GpnbNrg2hl9DdnFrkuIs3
-GmozxtkZeJ2jOD5quwmhQwa984VUUjaEYLYTbn8HszBLUbvZDa22yccsNuUs1/Zm
-uWKM8HxyAfcLqNVE4sG0NYcBTjmDoPgjNyzfm/gZpLjc9/ODplTA12U8DxwL9qEC
-7zg5ac5+hXL4KT12l6jbhbxx4pFLzLS2uDv9CkHX2MWICgSXITj0SNneUkWOLm5p
-zo09Q6KNe62UdxRbRXiJ2JmR7w9fZrS4EIZOFp0GZEFLLvQLe7COkYzlL0RmPr5e
-BcS/jKgYD7ZUkYEdeB6qKVuCTOpNUHm6voiUz7+57mHpMYEMmefayzhnjGqxMd9O
-uu8CrIM0mSIZUd84o7eS
-=Ai+M
+iQIcBAEBAgAGBQJVGu+GAAoJEPU2Bp2uRE+gIfIQAJGxMQA5tEU/1dDAnf28AwnE
+6ICY45kOtuez67GKykIhNKhtau1rpqR/wA/B71g4z7/iyzjH015pAKC79X4skn87
+EFXec5RxrLE7HPRAGwimA9aQtEiZPE2vAbxiuHmAaSdf+ICWfVlBfSbrrBSIZqBw
+vhZ8VISFJ/VX5A/n1uIuxMMMbMcG+uaB7YsTaV5Ax8cPNL20gutAse1WF4dThLNR
+WR+8XFX5AEQhi7yMVq3xnXuIIx9bhVAAySPQOZkYP4+1hneLWnsDCReSV7gMQcMd
+10eRkPxw6Fk5WXl2eaSsyPjbuPaoX7wjfFk8ehRcZDJae9zO4mZH9V69U23n7hm6
+vDSxpXMEdt73btAg1pW77oBpgYY9bHsHPYYAqCPqUH2Cfv8JYNGUiIC/gFBVSE5L
+7N3kdJ+SBB2lvmlwZBTtUjA+DnlfVOmjTCVyx0gnbjA0sXF2zfC2sgbFEb89v8+C
+WNU6VBZr9o07ZEvF+XfImmXR160ExeZ294iaM02HqVTiTY4evsKGTL4+ByIvImd3
+GTqaTagvXS1efDMnmXmtBXe9yUvazKsv/u5rPF/lOxiwqzA8S+HbQgaj1LdiZhr0
+vLy+YIxNtZ+bKeQxyweex6Szm8u08ouisjWzUjcFlnFs9Bne7RyVbcT4LopfKgr8
+WPJJO3LoMEVR3+o5tPvE
+=kG6t
 -----END PGP SIGNATURE-----
 
---Sr1nOIr3CvdE5hEN--
+--yudcn1FV7Hsu/q59--
