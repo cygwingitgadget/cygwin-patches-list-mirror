@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8091-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 90669 invoked by alias); 31 Mar 2015 18:24:05 -0000
+Return-Path: <cygwin-patches-return-8092-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 125438 invoked by alias); 31 Mar 2015 18:37:02 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,97 +9,72 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 90649 invoked by uid 89); 31 Mar 2015 18:24:04 -0000
+Received: (qmail 125423 invoked by uid 89); 31 Mar 2015 18:37:01 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: Yes, score=5.4 required=5.0 tests=AWL,BAYES_00,FREEMAIL_FROM,KAM_FROM_URIBL_PCCC,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=no version=3.3.2
-X-HELO: mail-la0-f51.google.com
-Received: from mail-la0-f51.google.com (HELO mail-la0-f51.google.com) (209.85.215.51) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES128-GCM-SHA256 encrypted) ESMTPS; Tue, 31 Mar 2015 18:24:03 +0000
-Received: by lahf3 with SMTP id f3so18862412lah.2        for <cygwin-patches@cygwin.com>; Tue, 31 Mar 2015 11:23:59 -0700 (PDT)
-X-Received: by 10.152.43.229 with SMTP id z5mr31656136lal.48.1427826239462; Tue, 31 Mar 2015 11:23:59 -0700 (PDT)
+X-Spam-SWARE-Status: No, score=-5.9 required=5.0 tests=AWL,BAYES_00 autolearn=ham version=3.3.2
+X-HELO: calimero.vinschen.de
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 31 Mar 2015 18:37:01 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id AFEB7A80A3F; Tue, 31 Mar 2015 20:36:58 +0200 (CEST)
+Date: Tue, 31 Mar 2015 18:37:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH 1/3] Rename struct ucontext to struct __mcontext
+Message-ID: <20150331183658.GA15852@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <1427824014-19504-1-git-send-email-jon.turney@dronecode.org.uk> <1427824014-19504-2-git-send-email-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
-Received: by 10.112.128.195 with HTTP; Tue, 31 Mar 2015 11:23:19 -0700 (PDT)
-From: Renato Silva <br.renatosilva@gmail.com>
-Date: Tue, 31 Mar 2015 18:24:00 -0000
-Message-ID: <CANRwAThfiScOKXc2fOQKOcPLNnJYLSSzQoL5T0oP=eAAC8S+8g@mail.gmail.com>
-Subject: Fix error mapping in gethostname
-To: Cygwin Patches <cygwin-patches@cygwin.com>
-Content-Type: text/plain; charset=ISO-8859-1
-X-IsSubscribed: yes
-X-SW-Source: 2015-q1/txt/msg00046.txt.bz2
+Content-Type: multipart/signed; micalg=pgp-sha1;	protocol="application/pgp-signature"; boundary="FL5UXtIhxfXey3p5"
+Content-Disposition: inline
+In-Reply-To: <1427824014-19504-2-git-send-email-jon.turney@dronecode.org.uk>
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-SW-Source: 2015-q1/txt/msg00047.txt.bz2
 
-The gethostname function has a problem where a small buffer size will
-not produce an accurate errno. This is because the Windows error is
-not being appropriately mapped. This causes programs such as hostname
-from coreutils to fail because they are not informed about the long
-name.
 
-Changelog entry:
-2015-03-31  Renato Silva  <br.renatosilva@gmail.com>
-    * net.cc: Fix buffer size error handling in cygwin_gethostname.
+--FL5UXtIhxfXey3p5
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 504
 
------
+On Mar 31 18:46, Jon TURNEY wrote:
+> 	* include/cygwin/signal.h : Rename struct ucontext to struct
+> 	__mcontext.  Remove unused member _internal.  Fix differences from
+> 	the Win32 API CONTEXT type.
 
-/* Test case */
+Patch is ok, except for the __COPY_CONTEXT_SIZE part.  This requires
+a change to stay backward compatible which I apply after your patch.
 
-#include <errno.h>
-#include <stdio.h>
-#include <windows.h>
 
-int main(int argc, char **argv) {
+Thanks,
+Corinna
 
-    if (argc < 2) {
-        printf("Please provide a buffer length.\n");
-        return 1;
-    }
-    DWORD HOSTNAME_LENGTH = atoi(argv[1]);
-    char hostname[HOSTNAME_LENGTH];
-    char error_message[256];
-    int return_value;
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
 
-    printf("gethostname %s\n", gethostname(hostname, HOSTNAME_LENGTH)?
-"failed" : "succeeded");
-    if (errno) printf("error is %d, %s\n\n", errno, strerror(errno));
-          else printf("hostname is %s\n\n", hostname);
+--FL5UXtIhxfXey3p5
+Content-Type: application/pgp-signature
+Content-length: 819
 
-    printf("GetComputerNameEx %s\n", (return_value =
-GetComputerNameEx(ComputerNameDnsFullyQualified, hostname,
-&HOSTNAME_LENGTH))? "succeeded": "failed");
-    FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, NULL, GetLastError(),
-MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), error_message, 256, NULL);
-    if (!return_value) printf("error is %d, %s\n", GetLastError(),
-error_message);
-                  else printf("hostname is %s\n", hostname);
-}
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
 
------
+iQIcBAEBAgAGBQJVGulKAAoJEPU2Bp2uRE+gBr0P/R0xEcrCIte2/LfY8AUz4dBl
++NLZxsHSh0unkKoft8LK0nBTwmuXKDOcrSHUKuq/d+pAUFlrCn5qfA3QaVQMsxbD
+NpaQ/x4DsVVnEMJTRaFBMdhiJmL5o9FBtmubp3Y8fnbcnpfOGL6rAzpo7spFMacF
+PagjzxqJ5N+WinLBIfZtvTpQJyYMXcuPOC/KIyR6+bM9QrvVSR/iM5vN3v/V6hnE
+X044q1S/MWuOVwXaGxGpYwifrSqRUzekv7ZLMUEtotVkndg7U1tH4L1RW+RkmQ7e
+HNCbOSQFaglrYFa91LazTg5YBCQ1MoVjNQOWjVOrrlAYZCo06yP7swEBghC/AkXk
+iQRJOgcRcuh4ZzYbjP9yyUuJ5hvt1i8H4Hwht1a9FTYr5st492Y9+fn9NE+psqoL
+uzhnXkE8+1foFY7KPNmnlLhyVNELgpXKgdymhj7+hheKwQpHLxfwXf+w8u/LlPoW
+u/HkMR5nCJ3EUQxWq19S6uGIK9DpKW0vJMrdC35+kri+/8YP1bCOmOw7wYHEp3ql
+sv623QbLZybnis8QmhlCx0Ik7o9TKfM5xYutH9XVYdXxgP+tVnwxTlxOhKtt3c+w
+Fl3ToK74+wxEuj99JRHAXJUFxEYxKcm+PuV1zUz+wXvAvr5OQuMMSq2rfu3vYdn1
+r0h9SE6p6ZS4J8QnPgrt
+=5J1B
+-----END PGP SIGNATURE-----
 
-From d691d4b2ac75f00a752c5dc86ab63a4ba425beda Mon Sep 17 00:00:00 2001
-From: Renato Silva <br.renatosilva@gmail.com>
-Date: Mon, 30 Mar 2015 20:20:49 -0300
-Subject: [PATCH] Fix buffer size error handling in gethostname.
-
-GetComputerNameEx sets a generic ERROR_MORE_DATA when buffer is too small. This
-is now more accurately mapped into ENAMETOOLONG instead of the generic EPERM.
----
- winsup/cygwin/net.cc | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/winsup/cygwin/net.cc b/winsup/cygwin/net.cc
-index f9b317c..02fa142 100644
---- a/winsup/cygwin/net.cc
-+++ b/winsup/cygwin/net.cc
-@@ -1076,7 +1076,10 @@ cygwin_gethostname (char *name, size_t len)
-       if (!GetComputerNameExA (ComputerNameDnsFullyQualified, name,
-                    &local_len))
-         {
--          set_winsock_errno ();
-+          if (GetLastError () == ERROR_MORE_DATA)
-+            set_errno (ENAMETOOLONG);
-+          else
-+            set_winsock_errno ();
-           __leave;
-         }
-     }
--- 
-2.3.4
+--FL5UXtIhxfXey3p5--
