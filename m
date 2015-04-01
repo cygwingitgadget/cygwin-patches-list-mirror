@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8098-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 63770 invoked by alias); 31 Mar 2015 19:20:02 -0000
+Return-Path: <cygwin-patches-return-8100-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 46684 invoked by alias); 1 Apr 2015 13:20:01 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,77 +9,140 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 63754 invoked by uid 89); 31 Mar 2015 19:20:01 -0000
+Received: (qmail 46562 invoked by uid 89); 1 Apr 2015 13:20:01 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-5.9 required=5.0 tests=AWL,BAYES_00 autolearn=ham version=3.3.2
-X-HELO: calimero.vinschen.de
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 31 Mar 2015 19:20:00 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 3B63DA80A3F; Tue, 31 Mar 2015 21:19:58 +0200 (CEST)
-Date: Tue, 31 Mar 2015 19:20:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-2.0 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.2
+X-HELO: rgout01.bt.lon5.cpcloud.co.uk
+Received: from rgout01.bt.lon5.cpcloud.co.uk (HELO rgout01.bt.lon5.cpcloud.co.uk) (65.20.0.178) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 01 Apr 2015 13:20:00 +0000
+X-OWM-Source-IP: 31.51.205.126(GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-CTCH-RefID: str=0001.0A090204.551BF07E.007B,ss=1,re=0.001,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
+X-Junkmail-Premium-Raw: score=27/50,refid=2.7.2:2015.3.24.102118:17:27.888,ip=31.51.205.126,rules=__HAS_FROM, __TO_MALFORMED_2, __TO_NO_NAME, __HAS_MSGID, __SANE_MSGID, __HAS_X_MAILER, __IN_REP_TO, __REFERENCES, __ANY_URI, __FRAUD_BODY_WEBMAIL, __URI_NO_WWW, __URI_NO_PATH, BODY_SIZE_3000_3999, __MIME_TEXT_ONLY, RDNS_GENERIC_POOLED, __URI_NS, SXL_IP_DYNAMIC[126.205.51.31.fur], HTML_00_01, HTML_00_10, BODY_SIZE_5000_LESS, RDNS_SUSP_GENERIC, RDNS_SUSP, __FRAUD_WEBMAIL, BODY_SIZE_7000_LESS, REFERENCES
+X-CTCH-Spam: Unknown
+Received: from localhost.localdomain (31.51.205.126) by rgout01.bt.lon5.cpcloud.co.uk (8.6.122.06) (authenticated as jonturney@btinternet.com)        id 5508763C01DD9FB0; Wed, 1 Apr 2015 14:19:58 +0100
+From: Jon TURNEY <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
-Subject: Re: Fix error mapping in gethostname
-Message-ID: <20150331191958.GG15852@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <CANRwAThfiScOKXc2fOQKOcPLNnJYLSSzQoL5T0oP=eAAC8S+8g@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;	protocol="application/pgp-signature"; boundary="kadn00tgSopKmJ1H"
-Content-Disposition: inline
-In-Reply-To: <CANRwAThfiScOKXc2fOQKOcPLNnJYLSSzQoL5T0oP=eAAC8S+8g@mail.gmail.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-SW-Source: 2015-q1/txt/msg00053.txt.bz2
+Cc: Jon TURNEY <jon.turney@dronecode.org.uk>
+Subject: [PATCH 1/3] Rename struct ucontext to struct __mcontext
+Date: Wed, 01 Apr 2015 13:20:00 -0000
+Message-Id: <1427894373-2576-2-git-send-email-jon.turney@dronecode.org.uk>
+In-Reply-To: <1427894373-2576-1-git-send-email-jon.turney@dronecode.org.uk>
+References: <1427894373-2576-1-git-send-email-jon.turney@dronecode.org.uk>
+X-SW-Source: 2015-q2/txt/msg00003.txt.bz2
 
+	* include/cygwin/signal.h : Rename struct ucontext to struct
+	__mcontext.  Fix layout differences from the Win32 API CONTEXT
+	type.  Remove unused member _internal.  Rename member which
+	corresponds to ContextFlags.  Add cr2 member.
 
---kadn00tgSopKmJ1H
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 644
+Signed-off-by: Jon TURNEY <jon.turney@dronecode.org.uk>
+---
+ winsup/cygwin/ChangeLog               |  7 +++++++
+ winsup/cygwin/include/cygwin/signal.h | 28 +++++++++++++++++++---------
+ 2 files changed, 26 insertions(+), 9 deletions(-)
 
-On Mar 31 15:23, Renato Silva wrote:
-> The gethostname function has a problem where a small buffer size will
-> not produce an accurate errno. This is because the Windows error is
-> not being appropriately mapped. This causes programs such as hostname
-> from coreutils to fail because they are not informed about the long
-> name.
->=20
-> Changelog entry:
-> 2015-03-31  Renato Silva
->     * net.cc: Fix buffer size error handling in cygwin_gethostname.
-
-Good catch.  Patch applied.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---kadn00tgSopKmJ1H
-Content-Type: application/pgp-signature
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBAgAGBQJVGvNeAAoJEPU2Bp2uRE+g1DcP/2xxFlkhP7Vfc2HegFYlKUwD
-2tVdS3EVOBgljUyfO6Zty5ABMfFqktK+xKuHsKMXU+0/6L+eOBPMeyRtgBf0+PhM
-U/Rgi5RY+aclaCZhDkhGxPkmBYCo+tocyYOEqO3ZW6QT0K7RJiPEoEXFwpr6M5SV
-WYnEMXBB8wChl5mOSkpyM3sJHvgjFeyyzcPTAbcd+JlwQZd7pGH2gI4KbZ54gFOV
-U3/1iUITvmJ1/37UVcHnrnq0GcvLIh92xJAbr0Z6ySY7GHrJ5DFvGpAIp187na+c
-rC9QBBk11rjvvMhqs+r+xlsOP4JGWWKjjDOgQb0WdmUKUt7PnqqD318W31VIyJVx
-DKk1JwpsK0HvlnkRTP+ficuRKbXZbOSUtHv6p+n8OS7pd/JkTrIL+Fgp3E5EMBH0
-wFIvKKBfG1xtA3vEsLXRFnuXBa4p+QGp7QiQ1oiJJ1UAuogEbHCEFC4v2zhM4ifb
-XuizqHqezuw69jo+Xxnv9La3nRxysTI4UoFAOAaFkN2EU09cEImRZ6eQYRsz+iDC
-JwH3BHK7slUkcDJlIyFSVvGZI0tOTWsndUTjboCEDFH6+YjqRgVQ2aQK1epsei7W
-+JxohSEaWNgX9ELkg+Wfo48Z6ApHkbXyRDv3+oGDTI/FLh9GgmsAJ9DzYlK6SRYr
-09ZRPULbndTiRfEh8wfO
-=bhuF
------END PGP SIGNATURE-----
-
---kadn00tgSopKmJ1H--
+diff --git a/winsup/cygwin/ChangeLog b/winsup/cygwin/ChangeLog
+index 0d07bb1..be612d5 100644
+--- a/winsup/cygwin/ChangeLog
++++ b/winsup/cygwin/ChangeLog
+@@ -1,3 +1,10 @@
++2015-04-01  Jon TURNEY  <jon.turney@dronecode.org.uk>
++
++	* include/cygwin/signal.h : Rename struct ucontext to struct
++	__mcontext.  Fix layout differences from the Win32 API CONTEXT
++	type.  Remove unused member _internal.  Rename member which
++	corresponds to ContextFlags.  Add cr2 member.
++
+ 2015-03-31  Renato Silva  <br.renatosilva@gmail.com>
+ 
+ 	* net.cc (cygwin_gethostname): Fix buffer size error handling.
+diff --git a/winsup/cygwin/include/cygwin/signal.h b/winsup/cygwin/include/cygwin/signal.h
+index 58bbff0..04e65aa 100644
+--- a/winsup/cygwin/include/cygwin/signal.h
++++ b/winsup/cygwin/include/cygwin/signal.h
+@@ -18,6 +18,10 @@
+ extern "C" {
+ #endif
+ 
++/*
++  Define a struct __mcontext, which should be identical in layout to the Win32
++  API type CONTEXT with the addition of oldmask and cr2 fields at the end.
++*/
+ #ifdef __x86_64__
+ 
+ struct _uc_fpxreg {
+@@ -45,7 +49,7 @@ struct _fpstate
+   __uint32_t padding[24];
+ };
+ 
+-struct ucontext
++struct __mcontext
+ {
+   __uint64_t p1home;
+   __uint64_t p2home;
+@@ -53,7 +57,7 @@ struct ucontext
+   __uint64_t p4home;
+   __uint64_t p5home;
+   __uint64_t p6home;
+-  __uint32_t cr2;
++  __uint32_t ctxflags;
+   __uint32_t mxcsr;
+   __uint16_t cs;
+   __uint16_t ds;
+@@ -86,14 +90,15 @@ struct ucontext
+   __uint64_t r15;
+   __uint64_t rip;
+   struct _fpstate fpregs;
++  __uint64_t vregs[52];
+   __uint64_t vcx;
+   __uint64_t dbc;
+   __uint64_t btr;
+   __uint64_t bfr;
+   __uint64_t etr;
+   __uint64_t efr;
+-  __uint8_t _internal;
+   __uint64_t oldmask;
++  __uint64_t cr2;
+ };
+ 
+ #else /* !x86_64 */
+@@ -117,9 +122,9 @@ struct _fpstate
+   __uint32_t nxst;
+ };
+ 
+-struct ucontext
++struct __mcontext
+ {
+-  __uint32_t cr2;
++  __uint32_t ctxflags;
+   __uint32_t dr0;
+   __uint32_t dr1;
+   __uint32_t dr2;
+@@ -143,15 +148,20 @@ struct ucontext
+   __uint32_t eflags;
+   __uint32_t esp;
+   __uint32_t ss;
+-  __uint8_t _internal;
++  __uint32_t reserved[128];
+   __uint32_t oldmask;
++  __uint32_t cr2;
+ };
+ 
+ #endif /* !x86_64 */
+ 
+-/* Needed for GDB.   It only compiles in the context copy code if this
+-   macro s defined. */
+-#define __COPY_CONTEXT_SIZE ((size_t) (uintptr_t) &((struct ucontext *) 0)->_internal)
++/* Needed for GDB.  It only compiles in the context copy code if this macro is
++   defined.  This is not sizeof(CONTEXT) due to historical accidents. */
++#ifdef __x86_64__
++#define __COPY_CONTEXT_SIZE 816
++#else
++#define __COPY_CONTEXT_SIZE 204
++#endif
+ 
+ typedef union sigval
+ {
+-- 
+2.1.4
