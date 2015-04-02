@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8108-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 86966 invoked by alias); 2 Apr 2015 16:25:02 -0000
+Return-Path: <cygwin-patches-return-8109-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 32877 invoked by alias); 2 Apr 2015 17:01:47 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,90 +9,85 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 86580 invoked by uid 89); 2 Apr 2015 16:25:00 -0000
+Received: (qmail 32866 invoked by uid 89); 2 Apr 2015 17:01:47 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-1.5 required=5.0 tests=AWL,BAYES_00,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE autolearn=no version=3.3.2
-X-HELO: rgout06.bt.lon5.cpcloud.co.uk
-Received: from rgout06.bt.lon5.cpcloud.co.uk (HELO rgout06.bt.lon5.cpcloud.co.uk) (65.20.0.183) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 02 Apr 2015 16:24:59 +0000
-X-OWM-Source-IP: 31.51.205.126(GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-CTCH-RefID: str=0001.0A090203.551D6D59.0049,ss=1,re=0.001,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
-X-Junkmail-Premium-Raw: score=27/50,refid=2.7.2:2015.3.30.162421:17:27.888,ip=31.51.205.126,rules=__HAS_FROM, __TO_MALFORMED_2, __TO_NO_NAME, __SUBJ_ALPHA_END, __HAS_MSGID, __SANE_MSGID, __HAS_X_MAILER, __ANY_URI, __URI_NO_WWW, __URI_NO_PATH, BODYTEXTP_SIZE_3000_LESS, BODY_SIZE_2000_2999, __MIME_TEXT_ONLY, RDNS_GENERIC_POOLED, __URI_NS, SXL_IP_DYNAMIC[126.205.51.31.fur], HTML_00_01, HTML_00_10, BODY_SIZE_5000_LESS, RDNS_SUSP_GENERIC, RDNS_SUSP, BODY_SIZE_7000_LESS
-X-CTCH-Spam: Unknown
-Received: from localhost.localdomain (31.51.205.126) by rgout06.bt.lon5.cpcloud.co.uk (8.6.122.06) (authenticated as jonturney@btinternet.com)        id 5515161400C84636; Thu, 2 Apr 2015 17:24:57 +0100
-From: Jon TURNEY <jon.turney@dronecode.org.uk>
+X-Spam-SWARE-Status: No, score=-5.4 required=5.0 tests=AWL,BAYES_00,KAM_LAZY_DOMAIN_SECURITY autolearn=no version=3.3.2
+X-HELO: calimero.vinschen.de
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 02 Apr 2015 17:01:42 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id BDF66A8096D; Thu,  2 Apr 2015 19:01:39 +0200 (CEST)
+Date: Thu, 02 Apr 2015 17:01:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Cc: Jon TURNEY <jon.turney@dronecode.org.uk>
-Subject: [PATCH] Try to make sure struct _mcontext is 16-byte aligned
-Date: Thu, 02 Apr 2015 16:25:00 -0000
-Message-Id: <1427991886-6156-1-git-send-email-jon.turney@dronecode.org.uk>
-X-SW-Source: 2015-q2/txt/msg00009.txt.bz2
+Subject: Re: [PATCH] Try to make sure struct _mcontext is 16-byte aligned
+Message-ID: <20150402170139.GL13285@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <1427991886-6156-1-git-send-email-jon.turney@dronecode.org.uk>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;	protocol="application/pgp-signature"; boundary="nivyF5ZmfdQ/+RfC"
+Content-Disposition: inline
+In-Reply-To: <1427991886-6156-1-git-send-email-jon.turney@dronecode.org.uk>
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-SW-Source: 2015-q2/txt/msg00010.txt.bz2
 
-On x86_64, RtlCaptureContext() uses fxsave to save FPU/MMX/SSE state.
 
-fxsave requires that the destination address is 16-byte aligned, or it will
-fault.
+--nivyF5ZmfdQ/+RfC
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 776
 
-CONTEXT is already annotated __attribute__ ((aligned (16))), do the same with
-struct _mcontext.
+On Apr  2 17:24, Jon TURNEY wrote:
+> On x86_64, RtlCaptureContext() uses fxsave to save FPU/MMX/SSE state.
+>=20
+> fxsave requires that the destination address is 16-byte aligned, or it wi=
+ll
+> fault.
+>=20
+> CONTEXT is already annotated __attribute__ ((aligned (16))), do the same =
+with
+> struct _mcontext.
+>=20
+> Rearrange ucontext_t so that it's struct _mcontext element is also correc=
+tly
+> aligned.
+>=20
+> 	* include/cygwin/signal.h (struct __mcontext): 16-byte align.
+> 	* include/sys/ucontext.h (ucontext_t): Ditto.
 
-Rearrange ucontext_t so that it's struct _mcontext element is also correctly
-aligned.
+The __attribute__ should follow the "struct" keyword.  With this
+change, ok to apply.
 
-	* include/cygwin/signal.h (struct __mcontext): 16-byte align.
-	* include/sys/ucontext.h (ucontext_t): Ditto.
 
-Signed-off-by: Jon TURNEY <jon.turney@dronecode.org.uk>
----
- winsup/cygwin/ChangeLog               | 5 +++++
- winsup/cygwin/include/cygwin/signal.h | 2 +-
- winsup/cygwin/include/sys/ucontext.h  | 4 ++--
- 3 files changed, 8 insertions(+), 3 deletions(-)
+Thanks,
+Corinna
 
-diff --git a/winsup/cygwin/ChangeLog b/winsup/cygwin/ChangeLog
-index 9871b96..3b0e111 100644
---- a/winsup/cygwin/ChangeLog
-+++ b/winsup/cygwin/ChangeLog
-@@ -1,3 +1,8 @@
-+2015-04-02  Jon TURNEY  <jon.turney@dronecode.org.uk>
-+
-+	* include/cygwin/signal.h (struct __mcontext): 16-byte align.
-+	* include/sys/ucontext.h (ucontext_t): Ditto.
-+
- 2015-04-02  Corinna Vinschen  <corinna@vinschen.de>
- 
- 	* sec_acl.cc (CYG_ACE_ISBITS_TO_WIN): Fix typo.
-diff --git a/winsup/cygwin/include/cygwin/signal.h b/winsup/cygwin/include/cygwin/signal.h
-index 04e65aa..f2a6fa3 100644
---- a/winsup/cygwin/include/cygwin/signal.h
-+++ b/winsup/cygwin/include/cygwin/signal.h
-@@ -49,7 +49,7 @@ struct _fpstate
-   __uint32_t padding[24];
- };
- 
--struct __mcontext
-+ __attribute__ ((aligned (16))) struct __mcontext
- {
-   __uint64_t p1home;
-   __uint64_t p2home;
-diff --git a/winsup/cygwin/include/sys/ucontext.h b/winsup/cygwin/include/sys/ucontext.h
-index 9362d90..859eb29 100644
---- a/winsup/cygwin/include/sys/ucontext.h
-+++ b/winsup/cygwin/include/sys/ucontext.h
-@@ -15,11 +15,11 @@ details. */
- 
- typedef struct __mcontext mcontext_t;
- 
--typedef struct __ucontext {
-+typedef  __attribute__ ((aligned (16))) struct __ucontext {
-+	mcontext_t	uc_mcontext;
- 	struct __ucontext *uc_link;
- 	sigset_t	uc_sigmask;
- 	stack_t	uc_stack;
--	mcontext_t	uc_mcontext;
- 	unsigned long int	uc_flags;
- } ucontext_t;
- 
--- 
-2.1.4
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
+
+--nivyF5ZmfdQ/+RfC
+Content-Type: application/pgp-signature
+Content-length: 819
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iQIcBAEBAgAGBQJVHXXzAAoJEPU2Bp2uRE+gi/IP/1oBaD0ptqVD56jQLE+G3uaj
+i9Y1oAQ2+UUt6U8x60ltL0oDJpRwaa1JONRkyH4Vk1vEdP3NrNiejv0nGSvcR0Qd
+kXmhrJT7guhrG8M7CkCGz1XFRjoIUVHW0FNIV4zpxDOMgOBfSsdf7+gdnw+sLqYI
+x+3DwM9m8I9n/Wrx7JYixbROQ2zWnLIA3OeEEL+jmiJ0JBDFZwUsK1AkagabQRIH
+5V4JruRvHRj+qLv0spz8aOvjsjZPLW6mvbIjJJEYJhy2DkczdDrYecJV5CYD6h+Q
+ty1DdPcM6x8kRpw14sEEQdpysS2+q3vVhCoJRsaDw6Bd2n2as8EM+naDDuKmYgtL
+xbrQHrwpe3O+CH9B/adHhm0ZDw92dlsR3V3wo3cSAdt6VW+HwZHlTYALqbTQayoY
+X+1icgntaPpP7IN9lRR4dv0KCREjQPqwF+BA9oQ4cS/MdexrVCN8UHAE3hWadF4B
+3C97ai/F5OQEuqLT8VQlPN0edibTHZIxerrBclX+c5BB3PHLnpPhil4DUBxZYd8o
+hfAMp8xjqGlM8sqrNme6riGa25LNfa8K2W7p+6DeuhJkw9vWXHBMetQiV3h70vBv
+IxWzaaX1E76wiSJYp52Y1SmSStbm+P5T8ccx51rO5cD3DOpVCDZfbpotZ/7nfaFu
+XooLet9M8/u5sbgei/W9
+=2itU
+-----END PGP SIGNATURE-----
+
+--nivyF5ZmfdQ/+RfC--
