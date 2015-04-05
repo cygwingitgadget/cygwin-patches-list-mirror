@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8120-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 31826 invoked by alias); 4 Apr 2015 16:07:47 -0000
+Return-Path: <cygwin-patches-return-8121-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 71495 invoked by alias); 5 Apr 2015 16:58:45 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,80 +9,152 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 31798 invoked by uid 89); 4 Apr 2015 16:07:46 -0000
+Received: (qmail 71480 invoked by uid 89); 5 Apr 2015 16:58:44 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
 X-Spam-SWARE-Status: No, score=-2.3 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_LOW autolearn=ham version=3.3.2
 X-HELO: out4-smtp.messagingengine.com
-Received: from out4-smtp.messagingengine.com (HELO out4-smtp.messagingengine.com) (66.111.4.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-GCM-SHA384 encrypted) ESMTPS; Sat, 04 Apr 2015 16:07:45 +0000
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])	by mailout.nyi.internal (Postfix) with ESMTP id A174B204D7	for <cygwin-patches@cygwin.com>; Sat,  4 Apr 2015 12:07:40 -0400 (EDT)
-Received: from frontend1 ([10.202.2.160])  by compute6.internal (MEProxy); Sat, 04 Apr 2015 12:07:44 -0400
-Received: from [192.168.1.102] (unknown [31.51.205.126])	by mail.messagingengine.com (Postfix) with ESMTPA id DBF5FC00013	for <cygwin-patches@cygwin.com>; Sat,  4 Apr 2015 12:07:43 -0400 (EDT)
-Message-ID: <55200C4C.1010909@dronecode.org.uk>
-Date: Sat, 04 Apr 2015 16:07:00 -0000
+Received: from out4-smtp.messagingengine.com (HELO out4-smtp.messagingengine.com) (66.111.4.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-GCM-SHA384 encrypted) ESMTPS; Sun, 05 Apr 2015 16:58:42 +0000
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])	by mailout.nyi.internal (Postfix) with ESMTP id A709E20473	for <cygwin-patches@cygwin.com>; Sun,  5 Apr 2015 12:58:35 -0400 (EDT)
+Received: from frontend1 ([10.202.2.160])  by compute3.internal (MEProxy); Sun, 05 Apr 2015 12:58:39 -0400
+Received: from [192.168.1.102] (unknown [31.51.205.126])	by mail.messagingengine.com (Postfix) with ESMTPA id DCF2AC0001A	for <cygwin-patches@cygwin.com>; Sun,  5 Apr 2015 12:58:38 -0400 (EDT)
+Message-ID: <552169BB.4050507@dronecode.org.uk>
+Date: Sun, 05 Apr 2015 16:58:00 -0000
 From: Jon TURNEY <jon.turney@dronecode.org.uk>
 User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:31.0) Gecko/20100101 Thunderbird/31.6.0
 MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Only construct ucontext for SA_SIGINFO signal handlers
-References: <1428003041-14404-1-git-send-email-jon.turney@dronecode.org.uk> <20150403111806.GO13285@calimero.vinschen.de> <20150403121707.GT13285@calimero.vinschen.de> <551E8CBB.4020306@dronecode.org.uk> <20150403140807.GV13285@calimero.vinschen.de>
-In-Reply-To: <20150403140807.GV13285@calimero.vinschen.de>
+Subject: Re: [PATCH 2/3] Provide ucontext to signal handlers
+References: <1427894373-2576-1-git-send-email-jon.turney@dronecode.org.uk> <1427894373-2576-3-git-send-email-jon.turney@dronecode.org.uk> <20150401142219.GY13285@calimero.vinschen.de> <551F0FA2.2020304@dronecode.org.uk> <20150404084014.GW13285@calimero.vinschen.de> <55200BFB.4070303@dronecode.org.uk>
+In-Reply-To: <55200BFB.4070303@dronecode.org.uk>
+Content-Type: multipart/mixed; boundary="------------050309020007060804060506"
+X-SW-Source: 2015-q2/txt/msg00022.txt.bz2
+
+This is a multi-part message in MIME format.
+--------------050309020007060804060506
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-SW-Source: 2015-q2/txt/msg00021.txt.bz2
+Content-length: 379
 
-On 03/04/2015 15:08, Corinna Vinschen wrote:
-> On Apr  3 13:51, Jon TURNEY wrote:
->> On 03/04/2015 13:17, Corinna Vinschen wrote:
->>> On Apr  3 13:18, Corinna Vinschen wrote:
->>>> On Apr  2 20:30, Jon TURNEY wrote:
->>>>
->>>>>         sigset_t this_oldmask = set_process_mask_delta ();
->>>>> -      thiscontext.uc_sigmask = this_oldmask;
->>>>> +      context.uc_sigmask = this_oldmask;
->>>>           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->>>>
->>>> This call to set_process_mask_delta() should occur before constructing
->>>> the context, so that filling in uc_sigmask can be moved into the above
->>>> `'if' branch.
+On 04/04/2015 17:06, Jon TURNEY wrote:
+> On 04/04/2015 09:40, Corinna Vinschen wrote:
+>> So, what if we drop all the -fomit-frame-pointer from Makefile.in and
+>> add an
 >>
->> Ok, I will move it.
+>>    exceptions_CFLAGS:=-fno-omit-frame-pointer
 >>
->>>> On second thought, isn't this slightly wrong anyway?  Shouldn't that be
->>>>
->>>>           context.uc_sigmask = _my_tls.sigmask;
->>>> 	 context.uc_mcontext.oldmask = this_oldmask;
->>
->> As I wrote elsewhere:  You'll have to help me understand what the difference
->> in meaning between ucontext_t.uc_sigmask and ucontext_t.uc_mcontext.oldmask
->> is.
->>
->> I don't see how the value of _my_tls.sigmask has any meaning at that point
->> in the code.
+>> Does that help?
 >
-> Ok, I had a look into the Linux source and searched the web, and here's
-> the problem.
->
-> One is that sigset_t on Linux is not just a 32 or 64 bit bitmask anymore,
-> but an array of ulong's used as a rather big sigmask.
->
-> OTOH, mcontext_t::oldmask is only the size of "unsigned long".  In fact,
-> as it turns out by inspecting the Linux kernel, oldmask is nothing else
-> than the first bits of uc_sigmask which fit into an unsigned long.  And
-> in the net I found that oldmask is just the old representation of
-> sigset_t, before the Linux kernel allowed more signals than fit into
-> a bitmask of unsigned long size.  In fact, it's only for backward compat,
-> but unused these days.
->
-> Given that, setting context.uc_sigmask to this_oldmask is apparently
-> the right thing to do.  For emulating backward compat (which we don't
-> need, but it also doesn't hurt), we could set oldmask to the same
-> value:
->
->    context.uc_sigmask = context.uc_mcontext.oldmask = this_oldmask;
->
+> Yes, that seems to do the trick.  Patch attached.
 
-Thank you very much for researching this.  I tried but wasn't able to 
-discover anything much.
+Aargh.  Some of these things are not like the others.  Let's try that 
+again...
 
-What you suggest seems right, so I'll make an updated patch including that.
+
+--------------050309020007060804060506
+Content-Type: text/plain; charset=windows-1252;
+ name="0001-Compile-exceptions.cc-with-fno-omit-frame-pointer-on.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename*0="0001-Compile-exceptions.cc-with-fno-omit-frame-pointer-on.pa";
+ filename*1="tch"
+Content-length: 5852
+
+RnJvbSAyYmQ3MTA1YzI0NGU0OGM3Njc0NjY2NTk4NWE3MzE0YTNhMmFmZjgz
+IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBKb24gVFVSTkVZIDxq
+b24udHVybmV5QGRyb25lY29kZS5vcmcudWs+CkRhdGU6IFNhdCwgNCBBcHIg
+MjAxNSAyMzozMTowMyArMDEwMApTdWJqZWN0OiBbUEFUQ0hdIENvbXBpbGUg
+ZXhjZXB0aW9ucy5jYyB3aXRoIC1mbm8tb21pdC1mcmFtZS1wb2ludGVyIG9u
+IHg4NgoKU2VsZWN0aXZlbHkgdXNpbmcgLWZvbWl0LWZyYW1lLXBvaW50ZXIg
+d2hlbiAtTyBpcyB1c2VkIGRvZXNuJ3QgbWFrZSBzZW5zZQphbnltb3JlLCBh
+cHBhcmVudGx5IHNpbmNlIGdjYyA0LjYsIC1PIGltcGxpZXMgLWZvbWl0LWZy
+YW1lLXBvaW50ZXIuCgpleGNlcHRpb25zLmNjIG11c3QgYmUgY29tcGlsZWQg
+d2l0aCAtZm5vLW9taXQtZnJhbWUtcG9pbnRlciBvbiB4ODYsIGFzIGl0IHVz
+ZXMKUnRsQ2FwdHVyZUNvbnRleHQsIHdoaWNoIHJlcXVpcmVzIGEgZnJhbWUg
+cG9pbnRlci4KCgkqIE1ha2VmaWxlLmluIDogUmVtb3ZlIHNldHRpbmcgLWZv
+bWl0LWZyYW1lLXBvaW50ZXIgZm9yIGNvbXBpbGluZwoJdmFyaW91cyBmaWxl
+cywgaXQgaXMgYWxyZWFkeSB0aGUgZGVmYXVsdC4gIFNldAoJLWZuby1vbWl0
+LWZyYW1lLXBvaW50ZXIgZm9yIGV4Y2VwdGlvbnMuY2Mgb24geDg2LgoKU2ln
+bmVkLW9mZi1ieTogSm9uIFRVUk5FWSA8am9uLnR1cm5leUBkcm9uZWNvZGUu
+b3JnLnVrPgotLS0KIHdpbnN1cC9jeWd3aW4vQ2hhbmdlTG9nICAgfCAgNiAr
+KysrKwogd2luc3VwL2N5Z3dpbi9NYWtlZmlsZS5pbiB8IDU5ICsrKysrKy0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiAyIGZp
+bGVzIGNoYW5nZWQsIDEzIGluc2VydGlvbnMoKyksIDUyIGRlbGV0aW9ucygt
+KQoKZGlmZiAtLWdpdCBhL3dpbnN1cC9jeWd3aW4vQ2hhbmdlTG9nIGIvd2lu
+c3VwL2N5Z3dpbi9DaGFuZ2VMb2cKaW5kZXggNWFkYTM1ZC4uYThmNGUwMCAx
+MDA2NDQKLS0tIGEvd2luc3VwL2N5Z3dpbi9DaGFuZ2VMb2cKKysrIGIvd2lu
+c3VwL2N5Z3dpbi9DaGFuZ2VMb2cKQEAgLTEsMyArMSw5IEBACisyMDE1LTA0
+LTA0ICBKb24gVFVSTkVZICA8am9uLnR1cm5leUBkcm9uZWNvZGUub3JnLnVr
+PgorCisJKiBNYWtlZmlsZS5pbiA6IFJlbW92ZSBzZXR0aW5nIC1mb21pdC1m
+cmFtZS1wb2ludGVyIGZvciBjb21waWxpbmcKKwl2YXJpb3VzIGZpbGVzLCBp
+dCBpcyBhbHJlYWR5IHRoZSBkZWZhdWx0LiAgU2V0CisJLWZuby1vbWl0LWZy
+YW1lLXBvaW50ZXIgZm9yIGV4Y2VwdGlvbnMuY2Mgb24geDg2LgorCiAyMDE1
+LTA0LTAzICBUYWthc2hpIFlhbm8gIDx0YWthc2hpLnlhbm9AbmlmdHkubmUu
+anA+CiAKIAkqIGZoYW5kbGVyX3R0eS5jYyAoZmhhbmRsZXJfcHR5X3NsYXZl
+OjpyZWFkKTogQ2hhbmdlIGNhbGN1bGF0aW9uIG9mCmRpZmYgLS1naXQgYS93
+aW5zdXAvY3lnd2luL01ha2VmaWxlLmluIGIvd2luc3VwL2N5Z3dpbi9NYWtl
+ZmlsZS5pbgppbmRleCA5YjgyZjBhLi5kODI3NzU0IDEwMDY0NAotLS0gYS93
+aW5zdXAvY3lnd2luL01ha2VmaWxlLmluCisrKyBiL3dpbnN1cC9jeWd3aW4v
+TWFrZWZpbGUuaW4KQEAgLTQ0OSw1OSArNDQ5LDE0IEBAIElOU1RPQkpTOj1h
+dXRvbW9kZS5vIGJpbm1vZGUubyB0ZXh0bW9kZS5vIHRleHRyZWFkbW9kZS5v
+CiBUQVJHRVRfTElCUzo9JChMSUJfTkFNRSkgJChDWUdXSU5fU1RBUlQpICQo
+R01PTl9TVEFSVCkgJChMSUJHTU9OX0EpICQoU1VCTElCUykgJChJTlNUT0JK
+UykgJChFWFRSQUxJQlMpCiAKIGlmbmVxICIke2ZpbHRlciAtTyUsJChDRkxB
+R1MpfSIgIiIKLWN5Z2hlYXBfQ0ZMQUdTOj0tZm9taXQtZnJhbWUtcG9pbnRl
+cgotY3lndGhyZWFkX0NGTEFHUzo9LWZvbWl0LWZyYW1lLXBvaW50ZXIKLWN5
+Z3Rsc19DRkxBR1M6PS1mb21pdC1mcmFtZS1wb2ludGVyCi1jeWd3YWl0X0NG
+TEFHUz0tZm9taXQtZnJhbWUtcG9pbnRlcgotZGVscXVldWVfQ0ZMQUdTOj0t
+Zm9taXQtZnJhbWUtcG9pbnRlcgotZGV2aWNlc19DRkxBR1M6PS1mb21pdC1m
+cmFtZS1wb2ludGVyCi1kaXJfQ0ZMQUdTOj0tZm9taXQtZnJhbWUtcG9pbnRl
+cgotZGxmY25fQ0ZMQUdTOj0tZm9taXQtZnJhbWUtcG9pbnRlcgotZGxsX2lu
+aXRfQ0ZMQUdTOj0tZm9taXQtZnJhbWUtcG9pbnRlcgotZHRhYmxlX0NGTEFH
+Uzo9LWZvbWl0LWZyYW1lLXBvaW50ZXIgLWZjaGVjay1uZXcKLWZjbnRsX0NG
+TEFHUzo9LWZvbWl0LWZyYW1lLXBvaW50ZXIKLWZlbnZfQ0ZMQUdTOj0tZm9t
+aXQtZnJhbWUtcG9pbnRlcgotZmhhbmRsZXJfQ0ZMQUdTOj0tZm9taXQtZnJh
+bWUtcG9pbnRlcgotZmhhbmRsZXJfY2xpcGJvYXJkX0NGTEFHUzo9LWZvbWl0
+LWZyYW1lLXBvaW50ZXIKLWZoYW5kbGVyX2NvbnNvbGVfQ0ZMQUdTOj0tZm9t
+aXQtZnJhbWUtcG9pbnRlcgotZmhhbmRsZXJfZGlza19maWxlX0NGTEFHUzo9
+LWZvbWl0LWZyYW1lLXBvaW50ZXIKLWZoYW5kbGVyX2RzcF9DRkxBR1M6PS1m
+b21pdC1mcmFtZS1wb2ludGVyCi1maGFuZGxlcl9mbG9wcHlfQ0ZMQUdTOj0t
+Zm9taXQtZnJhbWUtcG9pbnRlcgotZmhhbmRsZXJfbmV0ZHJpdmVfQ0ZMQUdT
+Oj0tZm9taXQtZnJhbWUtcG9pbnRlcgotZmhhbmRsZXJfcHJvY19DRkxBR1M6
+PS1mb21pdC1mcmFtZS1wb2ludGVyCi1maGFuZGxlcl9wcm9jZXNzX0NGTEFH
+Uzo9LWZvbWl0LWZyYW1lLXBvaW50ZXIKLWZoYW5kbGVyX3JhbmRvbV9DRkxB
+R1M6PS1mb21pdC1mcmFtZS1wb2ludGVyCi1maGFuZGxlcl9yYXdfQ0ZMQUdT
+Oj0tZm9taXQtZnJhbWUtcG9pbnRlcgotZmhhbmRsZXJfcmVnaXN0cnlfQ0ZM
+QUdTOj0tZm9taXQtZnJhbWUtcG9pbnRlcgotZmhhbmRsZXJfc2VyaWFsX0NG
+TEFHUzo9LWZvbWl0LWZyYW1lLXBvaW50ZXIKLWZoYW5kbGVyX3NvY2tldF9D
+RkxBR1M6PS1mb21pdC1mcmFtZS1wb2ludGVyCi1maGFuZGxlcl9zeXNsb2df
+Q0ZMQUdTOj0tZm9taXQtZnJhbWUtcG9pbnRlcgotZmhhbmRsZXJfdGFwZV9D
+RkxBR1M6PS1mb21pdC1mcmFtZS1wb2ludGVyCi1maGFuZGxlcl90ZXJtaW9z
+X0NGTEFHUzo9LWZvbWl0LWZyYW1lLXBvaW50ZXIKLWZoYW5kbGVyX3R0eV9D
+RkxBR1M6PS1mb21pdC1mcmFtZS1wb2ludGVyCi1maGFuZGxlcl92aXJ0dWFs
+X0NGTEFHUzo9LWZvbWl0LWZyYW1lLXBvaW50ZXIKLWZoYW5kbGVyX3dpbmRv
+d3NfQ0ZMQUdTOj0tZm9taXQtZnJhbWUtcG9pbnRlcgotZmhhbmRsZXJfemVy
+b19DRkxBR1M6PS1mb21pdC1mcmFtZS1wb2ludGVyCi1mbG9ja19DRkxBR1M6
+PS1mb21pdC1mcmFtZS1wb2ludGVyCi1ncnBfQ0ZMQUdTOj0tZm9taXQtZnJh
+bWUtcG9pbnRlcgotbGlic3RkY3h4X3dyYXBwZXJfQ0ZMQUdTOj0tZm9taXQt
+ZnJhbWUtcG9pbnRlcgorZHRhYmxlX0NGTEFHUzo9LWZjaGVjay1uZXcKIGxv
+Y2FsdGltZV9DRkxBR1M6PS1md3JhcHYKLW1hbGxvY19DRkxBR1M6PS1mb21p
+dC1mcmFtZS1wb2ludGVyIC1PMwotbWFsbG9jX3dyYXBwZXJfQ0ZMQUdTOj0t
+Zm9taXQtZnJhbWUtcG9pbnRlcgotbWlzY2Z1bmNzX0NGTEFHUzo9LWZvbWl0
+LWZyYW1lLXBvaW50ZXIKLW5ldF9DRkxBR1M6PS1mb21pdC1mcmFtZS1wb2lu
+dGVyCi1wYXNzd2RfQ0ZMQUdTOj0tZm9taXQtZnJhbWUtcG9pbnRlcgotcGF0
+aF9DRkxBR1M9LWZvbWl0LWZyYW1lLXBvaW50ZXIKLXJlZ2NvbXBfQ0ZMQUdT
+PS1mb21pdC1mcmFtZS1wb2ludGVyCi1yZWdlcnJvcl9DRkxBR1M9LWZvbWl0
+LWZyYW1lLXBvaW50ZXIKLXJlZ2V4ZWNfQ0ZMQUdTPS1mb21pdC1mcmFtZS1w
+b2ludGVyCi1yZWdmcmVlX0NGTEFHUz0tZm9taXQtZnJhbWUtcG9pbnRlcgot
+c2hhcmVkX0NGTEFHUzo9LWZvbWl0LWZyYW1lLXBvaW50ZXIKLXN5bmNfQ0ZM
+QUdTOj0tZm9taXQtZnJhbWUtcG9pbnRlciAtTzMKLXNtYWxscHJpbnRfQ0ZM
+QUdTOj0tZm9taXQtZnJhbWUtcG9pbnRlcgotc3lzY2FsbHNfQ0ZMQUdTOj0t
+Zm9taXQtZnJhbWUtcG9pbnRlcgotc3lzY29uZl9DRkxBR1M6PS1mb21pdC1m
+cmFtZS1wb2ludGVyCi11aW5mb19DRkxBR1M6PS1mb21pdC1mcmFtZS1wb2lu
+dGVyCittYWxsb2NfQ0ZMQUdTOj0tTzMKK3N5bmNfQ0ZMQUdTOj0tTzMKK2lm
+ZXEgKCQodGFyZ2V0X2NwdSksaTY4NikKKyMgb24geDg2LCBleGNlcHRpb25z
+LmNjIG11c3QgYmUgY29tcGlsZWQgd2l0aCBhIGZyYW1lLXBvaW50ZXIgYXMg
+aXQgdXNlcyBSdGxDYXB0dXJlQ29udGV4dCgpCitleGNlcHRpb25zX0NGTEFH
+Uzo9LWZuby1vbWl0LWZyYW1lLXBvaW50ZXIKK2VuZGlmCiBlbmRpZgogCiBm
+aGFuZGxlcl9wcm9jX0NGTEFHUys9LURVU0VSTkFNRT0iXCIkKFVTRVIpXCIi
+IC1ESE9TVE5BTUU9IlwiJChIT1NUTkFNRSlcIiIKLS0gCjIuMS40Cgo=
+
+--------------050309020007060804060506--
