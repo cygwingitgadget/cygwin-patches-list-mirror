@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8121-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 71495 invoked by alias); 5 Apr 2015 16:58:45 -0000
+Return-Path: <cygwin-patches-return-8122-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 101393 invoked by alias); 7 Apr 2015 10:17:13 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,152 +9,80 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 71480 invoked by uid 89); 5 Apr 2015 16:58:44 -0000
+Received: (qmail 101377 invoked by uid 89); 7 Apr 2015 10:17:12 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-2.3 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_LOW autolearn=ham version=3.3.2
-X-HELO: out4-smtp.messagingengine.com
-Received: from out4-smtp.messagingengine.com (HELO out4-smtp.messagingengine.com) (66.111.4.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-GCM-SHA384 encrypted) ESMTPS; Sun, 05 Apr 2015 16:58:42 +0000
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])	by mailout.nyi.internal (Postfix) with ESMTP id A709E20473	for <cygwin-patches@cygwin.com>; Sun,  5 Apr 2015 12:58:35 -0400 (EDT)
-Received: from frontend1 ([10.202.2.160])  by compute3.internal (MEProxy); Sun, 05 Apr 2015 12:58:39 -0400
-Received: from [192.168.1.102] (unknown [31.51.205.126])	by mail.messagingengine.com (Postfix) with ESMTPA id DCF2AC0001A	for <cygwin-patches@cygwin.com>; Sun,  5 Apr 2015 12:58:38 -0400 (EDT)
-Message-ID: <552169BB.4050507@dronecode.org.uk>
-Date: Sun, 05 Apr 2015 16:58:00 -0000
-From: Jon TURNEY <jon.turney@dronecode.org.uk>
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:31.0) Gecko/20100101 Thunderbird/31.6.0
-MIME-Version: 1.0
+X-Spam-SWARE-Status: No, score=-5.4 required=5.0 tests=AWL,BAYES_00,KAM_LAZY_DOMAIN_SECURITY autolearn=no version=3.3.2
+X-HELO: calimero.vinschen.de
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 07 Apr 2015 10:17:11 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 3A22DA80A4C; Tue,  7 Apr 2015 12:17:09 +0200 (CEST)
+Date: Tue, 07 Apr 2015 10:17:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH 2/3] Provide ucontext to signal handlers
-References: <1427894373-2576-1-git-send-email-jon.turney@dronecode.org.uk> <1427894373-2576-3-git-send-email-jon.turney@dronecode.org.uk> <20150401142219.GY13285@calimero.vinschen.de> <551F0FA2.2020304@dronecode.org.uk> <20150404084014.GW13285@calimero.vinschen.de> <55200BFB.4070303@dronecode.org.uk>
-In-Reply-To: <55200BFB.4070303@dronecode.org.uk>
-Content-Type: multipart/mixed; boundary="------------050309020007060804060506"
-X-SW-Source: 2015-q2/txt/msg00022.txt.bz2
-
-This is a multi-part message in MIME format.
---------------050309020007060804060506
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-length: 379
-
-On 04/04/2015 17:06, Jon TURNEY wrote:
-> On 04/04/2015 09:40, Corinna Vinschen wrote:
->> So, what if we drop all the -fomit-frame-pointer from Makefile.in and
->> add an
->>
->>    exceptions_CFLAGS:=-fno-omit-frame-pointer
->>
->> Does that help?
->
-> Yes, that seems to do the trick.  Patch attached.
-
-Aargh.  Some of these things are not like the others.  Let's try that 
-again...
+Message-ID: <20150407101709.GA31073@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <1427894373-2576-1-git-send-email-jon.turney@dronecode.org.uk> <1427894373-2576-3-git-send-email-jon.turney@dronecode.org.uk> <20150401142219.GY13285@calimero.vinschen.de> <551F0FA2.2020304@dronecode.org.uk> <20150404084014.GW13285@calimero.vinschen.de> <55200BFB.4070303@dronecode.org.uk> <552169BB.4050507@dronecode.org.uk>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha1;	protocol="application/pgp-signature"; boundary="BOKacYhQ+x31HxR3"
+Content-Disposition: inline
+In-Reply-To: <552169BB.4050507@dronecode.org.uk>
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-SW-Source: 2015-q2/txt/msg00023.txt.bz2
 
 
---------------050309020007060804060506
-Content-Type: text/plain; charset=windows-1252;
- name="0001-Compile-exceptions.cc-with-fno-omit-frame-pointer-on.patch"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename*0="0001-Compile-exceptions.cc-with-fno-omit-frame-pointer-on.pa";
- filename*1="tch"
-Content-length: 5852
+--BOKacYhQ+x31HxR3
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 611
 
-RnJvbSAyYmQ3MTA1YzI0NGU0OGM3Njc0NjY2NTk4NWE3MzE0YTNhMmFmZjgz
-IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBKb24gVFVSTkVZIDxq
-b24udHVybmV5QGRyb25lY29kZS5vcmcudWs+CkRhdGU6IFNhdCwgNCBBcHIg
-MjAxNSAyMzozMTowMyArMDEwMApTdWJqZWN0OiBbUEFUQ0hdIENvbXBpbGUg
-ZXhjZXB0aW9ucy5jYyB3aXRoIC1mbm8tb21pdC1mcmFtZS1wb2ludGVyIG9u
-IHg4NgoKU2VsZWN0aXZlbHkgdXNpbmcgLWZvbWl0LWZyYW1lLXBvaW50ZXIg
-d2hlbiAtTyBpcyB1c2VkIGRvZXNuJ3QgbWFrZSBzZW5zZQphbnltb3JlLCBh
-cHBhcmVudGx5IHNpbmNlIGdjYyA0LjYsIC1PIGltcGxpZXMgLWZvbWl0LWZy
-YW1lLXBvaW50ZXIuCgpleGNlcHRpb25zLmNjIG11c3QgYmUgY29tcGlsZWQg
-d2l0aCAtZm5vLW9taXQtZnJhbWUtcG9pbnRlciBvbiB4ODYsIGFzIGl0IHVz
-ZXMKUnRsQ2FwdHVyZUNvbnRleHQsIHdoaWNoIHJlcXVpcmVzIGEgZnJhbWUg
-cG9pbnRlci4KCgkqIE1ha2VmaWxlLmluIDogUmVtb3ZlIHNldHRpbmcgLWZv
-bWl0LWZyYW1lLXBvaW50ZXIgZm9yIGNvbXBpbGluZwoJdmFyaW91cyBmaWxl
-cywgaXQgaXMgYWxyZWFkeSB0aGUgZGVmYXVsdC4gIFNldAoJLWZuby1vbWl0
-LWZyYW1lLXBvaW50ZXIgZm9yIGV4Y2VwdGlvbnMuY2Mgb24geDg2LgoKU2ln
-bmVkLW9mZi1ieTogSm9uIFRVUk5FWSA8am9uLnR1cm5leUBkcm9uZWNvZGUu
-b3JnLnVrPgotLS0KIHdpbnN1cC9jeWd3aW4vQ2hhbmdlTG9nICAgfCAgNiAr
-KysrKwogd2luc3VwL2N5Z3dpbi9NYWtlZmlsZS5pbiB8IDU5ICsrKysrKy0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCiAyIGZp
-bGVzIGNoYW5nZWQsIDEzIGluc2VydGlvbnMoKyksIDUyIGRlbGV0aW9ucygt
-KQoKZGlmZiAtLWdpdCBhL3dpbnN1cC9jeWd3aW4vQ2hhbmdlTG9nIGIvd2lu
-c3VwL2N5Z3dpbi9DaGFuZ2VMb2cKaW5kZXggNWFkYTM1ZC4uYThmNGUwMCAx
-MDA2NDQKLS0tIGEvd2luc3VwL2N5Z3dpbi9DaGFuZ2VMb2cKKysrIGIvd2lu
-c3VwL2N5Z3dpbi9DaGFuZ2VMb2cKQEAgLTEsMyArMSw5IEBACisyMDE1LTA0
-LTA0ICBKb24gVFVSTkVZICA8am9uLnR1cm5leUBkcm9uZWNvZGUub3JnLnVr
-PgorCisJKiBNYWtlZmlsZS5pbiA6IFJlbW92ZSBzZXR0aW5nIC1mb21pdC1m
-cmFtZS1wb2ludGVyIGZvciBjb21waWxpbmcKKwl2YXJpb3VzIGZpbGVzLCBp
-dCBpcyBhbHJlYWR5IHRoZSBkZWZhdWx0LiAgU2V0CisJLWZuby1vbWl0LWZy
-YW1lLXBvaW50ZXIgZm9yIGV4Y2VwdGlvbnMuY2Mgb24geDg2LgorCiAyMDE1
-LTA0LTAzICBUYWthc2hpIFlhbm8gIDx0YWthc2hpLnlhbm9AbmlmdHkubmUu
-anA+CiAKIAkqIGZoYW5kbGVyX3R0eS5jYyAoZmhhbmRsZXJfcHR5X3NsYXZl
-OjpyZWFkKTogQ2hhbmdlIGNhbGN1bGF0aW9uIG9mCmRpZmYgLS1naXQgYS93
-aW5zdXAvY3lnd2luL01ha2VmaWxlLmluIGIvd2luc3VwL2N5Z3dpbi9NYWtl
-ZmlsZS5pbgppbmRleCA5YjgyZjBhLi5kODI3NzU0IDEwMDY0NAotLS0gYS93
-aW5zdXAvY3lnd2luL01ha2VmaWxlLmluCisrKyBiL3dpbnN1cC9jeWd3aW4v
-TWFrZWZpbGUuaW4KQEAgLTQ0OSw1OSArNDQ5LDE0IEBAIElOU1RPQkpTOj1h
-dXRvbW9kZS5vIGJpbm1vZGUubyB0ZXh0bW9kZS5vIHRleHRyZWFkbW9kZS5v
-CiBUQVJHRVRfTElCUzo9JChMSUJfTkFNRSkgJChDWUdXSU5fU1RBUlQpICQo
-R01PTl9TVEFSVCkgJChMSUJHTU9OX0EpICQoU1VCTElCUykgJChJTlNUT0JK
-UykgJChFWFRSQUxJQlMpCiAKIGlmbmVxICIke2ZpbHRlciAtTyUsJChDRkxB
-R1MpfSIgIiIKLWN5Z2hlYXBfQ0ZMQUdTOj0tZm9taXQtZnJhbWUtcG9pbnRl
-cgotY3lndGhyZWFkX0NGTEFHUzo9LWZvbWl0LWZyYW1lLXBvaW50ZXIKLWN5
-Z3Rsc19DRkxBR1M6PS1mb21pdC1mcmFtZS1wb2ludGVyCi1jeWd3YWl0X0NG
-TEFHUz0tZm9taXQtZnJhbWUtcG9pbnRlcgotZGVscXVldWVfQ0ZMQUdTOj0t
-Zm9taXQtZnJhbWUtcG9pbnRlcgotZGV2aWNlc19DRkxBR1M6PS1mb21pdC1m
-cmFtZS1wb2ludGVyCi1kaXJfQ0ZMQUdTOj0tZm9taXQtZnJhbWUtcG9pbnRl
-cgotZGxmY25fQ0ZMQUdTOj0tZm9taXQtZnJhbWUtcG9pbnRlcgotZGxsX2lu
-aXRfQ0ZMQUdTOj0tZm9taXQtZnJhbWUtcG9pbnRlcgotZHRhYmxlX0NGTEFH
-Uzo9LWZvbWl0LWZyYW1lLXBvaW50ZXIgLWZjaGVjay1uZXcKLWZjbnRsX0NG
-TEFHUzo9LWZvbWl0LWZyYW1lLXBvaW50ZXIKLWZlbnZfQ0ZMQUdTOj0tZm9t
-aXQtZnJhbWUtcG9pbnRlcgotZmhhbmRsZXJfQ0ZMQUdTOj0tZm9taXQtZnJh
-bWUtcG9pbnRlcgotZmhhbmRsZXJfY2xpcGJvYXJkX0NGTEFHUzo9LWZvbWl0
-LWZyYW1lLXBvaW50ZXIKLWZoYW5kbGVyX2NvbnNvbGVfQ0ZMQUdTOj0tZm9t
-aXQtZnJhbWUtcG9pbnRlcgotZmhhbmRsZXJfZGlza19maWxlX0NGTEFHUzo9
-LWZvbWl0LWZyYW1lLXBvaW50ZXIKLWZoYW5kbGVyX2RzcF9DRkxBR1M6PS1m
-b21pdC1mcmFtZS1wb2ludGVyCi1maGFuZGxlcl9mbG9wcHlfQ0ZMQUdTOj0t
-Zm9taXQtZnJhbWUtcG9pbnRlcgotZmhhbmRsZXJfbmV0ZHJpdmVfQ0ZMQUdT
-Oj0tZm9taXQtZnJhbWUtcG9pbnRlcgotZmhhbmRsZXJfcHJvY19DRkxBR1M6
-PS1mb21pdC1mcmFtZS1wb2ludGVyCi1maGFuZGxlcl9wcm9jZXNzX0NGTEFH
-Uzo9LWZvbWl0LWZyYW1lLXBvaW50ZXIKLWZoYW5kbGVyX3JhbmRvbV9DRkxB
-R1M6PS1mb21pdC1mcmFtZS1wb2ludGVyCi1maGFuZGxlcl9yYXdfQ0ZMQUdT
-Oj0tZm9taXQtZnJhbWUtcG9pbnRlcgotZmhhbmRsZXJfcmVnaXN0cnlfQ0ZM
-QUdTOj0tZm9taXQtZnJhbWUtcG9pbnRlcgotZmhhbmRsZXJfc2VyaWFsX0NG
-TEFHUzo9LWZvbWl0LWZyYW1lLXBvaW50ZXIKLWZoYW5kbGVyX3NvY2tldF9D
-RkxBR1M6PS1mb21pdC1mcmFtZS1wb2ludGVyCi1maGFuZGxlcl9zeXNsb2df
-Q0ZMQUdTOj0tZm9taXQtZnJhbWUtcG9pbnRlcgotZmhhbmRsZXJfdGFwZV9D
-RkxBR1M6PS1mb21pdC1mcmFtZS1wb2ludGVyCi1maGFuZGxlcl90ZXJtaW9z
-X0NGTEFHUzo9LWZvbWl0LWZyYW1lLXBvaW50ZXIKLWZoYW5kbGVyX3R0eV9D
-RkxBR1M6PS1mb21pdC1mcmFtZS1wb2ludGVyCi1maGFuZGxlcl92aXJ0dWFs
-X0NGTEFHUzo9LWZvbWl0LWZyYW1lLXBvaW50ZXIKLWZoYW5kbGVyX3dpbmRv
-d3NfQ0ZMQUdTOj0tZm9taXQtZnJhbWUtcG9pbnRlcgotZmhhbmRsZXJfemVy
-b19DRkxBR1M6PS1mb21pdC1mcmFtZS1wb2ludGVyCi1mbG9ja19DRkxBR1M6
-PS1mb21pdC1mcmFtZS1wb2ludGVyCi1ncnBfQ0ZMQUdTOj0tZm9taXQtZnJh
-bWUtcG9pbnRlcgotbGlic3RkY3h4X3dyYXBwZXJfQ0ZMQUdTOj0tZm9taXQt
-ZnJhbWUtcG9pbnRlcgorZHRhYmxlX0NGTEFHUzo9LWZjaGVjay1uZXcKIGxv
-Y2FsdGltZV9DRkxBR1M6PS1md3JhcHYKLW1hbGxvY19DRkxBR1M6PS1mb21p
-dC1mcmFtZS1wb2ludGVyIC1PMwotbWFsbG9jX3dyYXBwZXJfQ0ZMQUdTOj0t
-Zm9taXQtZnJhbWUtcG9pbnRlcgotbWlzY2Z1bmNzX0NGTEFHUzo9LWZvbWl0
-LWZyYW1lLXBvaW50ZXIKLW5ldF9DRkxBR1M6PS1mb21pdC1mcmFtZS1wb2lu
-dGVyCi1wYXNzd2RfQ0ZMQUdTOj0tZm9taXQtZnJhbWUtcG9pbnRlcgotcGF0
-aF9DRkxBR1M9LWZvbWl0LWZyYW1lLXBvaW50ZXIKLXJlZ2NvbXBfQ0ZMQUdT
-PS1mb21pdC1mcmFtZS1wb2ludGVyCi1yZWdlcnJvcl9DRkxBR1M9LWZvbWl0
-LWZyYW1lLXBvaW50ZXIKLXJlZ2V4ZWNfQ0ZMQUdTPS1mb21pdC1mcmFtZS1w
-b2ludGVyCi1yZWdmcmVlX0NGTEFHUz0tZm9taXQtZnJhbWUtcG9pbnRlcgot
-c2hhcmVkX0NGTEFHUzo9LWZvbWl0LWZyYW1lLXBvaW50ZXIKLXN5bmNfQ0ZM
-QUdTOj0tZm9taXQtZnJhbWUtcG9pbnRlciAtTzMKLXNtYWxscHJpbnRfQ0ZM
-QUdTOj0tZm9taXQtZnJhbWUtcG9pbnRlcgotc3lzY2FsbHNfQ0ZMQUdTOj0t
-Zm9taXQtZnJhbWUtcG9pbnRlcgotc3lzY29uZl9DRkxBR1M6PS1mb21pdC1m
-cmFtZS1wb2ludGVyCi11aW5mb19DRkxBR1M6PS1mb21pdC1mcmFtZS1wb2lu
-dGVyCittYWxsb2NfQ0ZMQUdTOj0tTzMKK3N5bmNfQ0ZMQUdTOj0tTzMKK2lm
-ZXEgKCQodGFyZ2V0X2NwdSksaTY4NikKKyMgb24geDg2LCBleGNlcHRpb25z
-LmNjIG11c3QgYmUgY29tcGlsZWQgd2l0aCBhIGZyYW1lLXBvaW50ZXIgYXMg
-aXQgdXNlcyBSdGxDYXB0dXJlQ29udGV4dCgpCitleGNlcHRpb25zX0NGTEFH
-Uzo9LWZuby1vbWl0LWZyYW1lLXBvaW50ZXIKK2VuZGlmCiBlbmRpZgogCiBm
-aGFuZGxlcl9wcm9jX0NGTEFHUys9LURVU0VSTkFNRT0iXCIkKFVTRVIpXCIi
-IC1ESE9TVE5BTUU9IlwiJChIT1NUTkFNRSlcIiIKLS0gCjIuMS40Cgo=
+On Apr  5 17:58, Jon TURNEY wrote:
+> On 04/04/2015 17:06, Jon TURNEY wrote:
+> >On 04/04/2015 09:40, Corinna Vinschen wrote:
+> >>So, what if we drop all the -fomit-frame-pointer from Makefile.in and
+> >>add an
+> >>
+> >>   exceptions_CFLAGS:=3D-fno-omit-frame-pointer
+> >>
+> >>Does that help?
+> >
+> >Yes, that seems to do the trick.  Patch attached.
+>=20
+> Aargh.  Some of these things are not like the others.  Let's try that
+> again...
 
---------------050309020007060804060506--
+Thanks, applied.
+
+
+Corinna
+
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
+
+--BOKacYhQ+x31HxR3
+Content-Type: application/pgp-signature
+Content-length: 819
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iQIcBAEBAgAGBQJVI66lAAoJEPU2Bp2uRE+gR9EP/1F3c9EwtBnezdIFkHmmiw8w
+kPyFbo6xBdHH8m5JkxxolrVzJLskkSjRpTd3ihtI9ig/M4RuegfP2EsFVBF++np2
+8OaMQWHCY9GcxkGMOIqZsa7+Edn6uyHVG9Mjwz9BBJUBgrtaAH6Pfj1SM2X6R+nY
+s0vstfaCTPKmq58bDHVQzvPHdcRRmM2eebt7ti0igrovh2rJHhSL/z2V0ShEY5nr
+F/NSwpLevGgeQZzKbEm6NdcPAiifgebqkozsAB9TUUN2K7WcHNfU1tTWpaxTdPUs
+PpLUfQr3awz5XAsHi+8/dnTnGD4jPkJU9o+5hMREZNP2gKrsZwbGD5enRPo9seWh
+b7KGDFcwWFtEIYC8ArYhog520nw2ecFmLkE+EPhB7n79HzScWYkswRVcOVuQG3LV
+EHAF8bgD8yy5IK0dw/gZP0Lg5dodvyIZfN8ZSZ3FNwH8Guu2Ji4SYGJzGq6mj38B
+vBH1/jX3y/dEU8XMojfvyjjHXYEKJdN6oEsuxH0ZCAj5aoJIqQrsFNaldZcqYuHm
+PUgj8Y2pVbCSujEBWNmKI8LcJul+FaMKL9uu0pg3jxsIluMVnMxzm3Pw70PY5ARy
+H9ZPXWdjYne6GLZo+qgVy8LYlQz4qSuOuCfnrcfOUMyVER/dk+5BsnVfObDOKwbR
+FSbRj8eifaA5Zw8Tau83
+=KHv4
+-----END PGP SIGNATURE-----
+
+--BOKacYhQ+x31HxR3--
