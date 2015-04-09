@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8122-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 101393 invoked by alias); 7 Apr 2015 10:17:13 -0000
+Return-Path: <cygwin-patches-return-8124-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 130925 invoked by alias); 9 Apr 2015 13:13:42 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,80 +9,55 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 101377 invoked by uid 89); 7 Apr 2015 10:17:12 -0000
+Received: (qmail 130857 invoked by uid 89); 9 Apr 2015 13:13:41 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-5.4 required=5.0 tests=AWL,BAYES_00,KAM_LAZY_DOMAIN_SECURITY autolearn=no version=3.3.2
-X-HELO: calimero.vinschen.de
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 07 Apr 2015 10:17:11 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 3A22DA80A4C; Tue,  7 Apr 2015 12:17:09 +0200 (CEST)
-Date: Tue, 07 Apr 2015 10:17:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-1.2 required=5.0 tests=AWL,BAYES_00,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE autolearn=no version=3.3.2
+X-HELO: rgout0305.bt.lon5.cpcloud.co.uk
+Received: from rgout0305.bt.lon5.cpcloud.co.uk (HELO rgout0305.bt.lon5.cpcloud.co.uk) (65.20.0.211) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 09 Apr 2015 13:13:40 +0000
+X-OWM-Source-IP: 86.179.113.1(GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-CTCH-RefID: str=0001.0A090203.55267B03.00CB,ss=1,re=0.001,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
+X-Junkmail-Premium-Raw: score=27/50,refid=2.7.2:2015.4.6.93621:17:27.888,ip=86.179.113.1,rules=__HAS_FROM, __TO_MALFORMED_2, __TO_NO_NAME, __HAS_MSGID, __SANE_MSGID, __HAS_X_MAILER, __IN_REP_TO, __REFERENCES, __ANY_URI, __URI_NO_WWW, __URI_NO_PATH, BODY_SIZE_1300_1399, BODYTEXTP_SIZE_3000_LESS, __MIME_TEXT_ONLY, RDNS_GENERIC_POOLED, __URI_NS, SXL_IP_DYNAMIC[1.113.179.86.fur], HTML_00_01, HTML_00_10, BODY_SIZE_5000_LESS, RDNS_SUSP_GENERIC, RDNS_SUSP, BODY_SIZE_2000_LESS, BODY_SIZE_7000_LESS, REFERENCES
+X-CTCH-Spam: Unknown
+Received: from localhost.localdomain (86.179.113.1) by rgout03.bt.lon5.cpcloud.co.uk (8.6.122.06) (authenticated as jonturney@btinternet.com)        id 551D2F0E00BD6649; Thu, 9 Apr 2015 14:13:39 +0100
+From: Jon TURNEY <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 2/3] Provide ucontext to signal handlers
-Message-ID: <20150407101709.GA31073@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1427894373-2576-1-git-send-email-jon.turney@dronecode.org.uk> <1427894373-2576-3-git-send-email-jon.turney@dronecode.org.uk> <20150401142219.GY13285@calimero.vinschen.de> <551F0FA2.2020304@dronecode.org.uk> <20150404084014.GW13285@calimero.vinschen.de> <55200BFB.4070303@dronecode.org.uk> <552169BB.4050507@dronecode.org.uk>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;	protocol="application/pgp-signature"; boundary="BOKacYhQ+x31HxR3"
-Content-Disposition: inline
-In-Reply-To: <552169BB.4050507@dronecode.org.uk>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-SW-Source: 2015-q2/txt/msg00023.txt.bz2
+Cc: Jon TURNEY <jon.turney@dronecode.org.uk>
+Subject: [PATCH 1/3] Initialize context before RtlContextCapture
+Date: Thu, 09 Apr 2015 13:13:00 -0000
+Message-Id: <1428585205-14420-2-git-send-email-jon.turney@dronecode.org.uk>
+In-Reply-To: <1428585205-14420-1-git-send-email-jon.turney@dronecode.org.uk>
+References: <1428585205-14420-1-git-send-email-jon.turney@dronecode.org.uk>
+X-SW-Source: 2015-q2/txt/msg00025.txt.bz2
 
+	* exceptions.cc (call_signal_handler): Zero initialize context and set
+	context flags, as RlCaptureContext doesn't.
 
---BOKacYhQ+x31HxR3
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 611
+Signed-off-by: Jon TURNEY <jon.turney@dronecode.org.uk>
+---
+ winsup/cygwin/ChangeLog     | 5 +++++
+ winsup/cygwin/exceptions.cc | 8 ++++++--
+ 2 files changed, 11 insertions(+), 2 deletions(-)
 
-On Apr  5 17:58, Jon TURNEY wrote:
-> On 04/04/2015 17:06, Jon TURNEY wrote:
-> >On 04/04/2015 09:40, Corinna Vinschen wrote:
-> >>So, what if we drop all the -fomit-frame-pointer from Makefile.in and
-> >>add an
-> >>
-> >>   exceptions_CFLAGS:=3D-fno-omit-frame-pointer
-> >>
-> >>Does that help?
-> >
-> >Yes, that seems to do the trick.  Patch attached.
->=20
-> Aargh.  Some of these things are not like the others.  Let's try that
-> again...
-
-Thanks, applied.
-
-
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---BOKacYhQ+x31HxR3
-Content-Type: application/pgp-signature
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBAgAGBQJVI66lAAoJEPU2Bp2uRE+gR9EP/1F3c9EwtBnezdIFkHmmiw8w
-kPyFbo6xBdHH8m5JkxxolrVzJLskkSjRpTd3ihtI9ig/M4RuegfP2EsFVBF++np2
-8OaMQWHCY9GcxkGMOIqZsa7+Edn6uyHVG9Mjwz9BBJUBgrtaAH6Pfj1SM2X6R+nY
-s0vstfaCTPKmq58bDHVQzvPHdcRRmM2eebt7ti0igrovh2rJHhSL/z2V0ShEY5nr
-F/NSwpLevGgeQZzKbEm6NdcPAiifgebqkozsAB9TUUN2K7WcHNfU1tTWpaxTdPUs
-PpLUfQr3awz5XAsHi+8/dnTnGD4jPkJU9o+5hMREZNP2gKrsZwbGD5enRPo9seWh
-b7KGDFcwWFtEIYC8ArYhog520nw2ecFmLkE+EPhB7n79HzScWYkswRVcOVuQG3LV
-EHAF8bgD8yy5IK0dw/gZP0Lg5dodvyIZfN8ZSZ3FNwH8Guu2Ji4SYGJzGq6mj38B
-vBH1/jX3y/dEU8XMojfvyjjHXYEKJdN6oEsuxH0ZCAj5aoJIqQrsFNaldZcqYuHm
-PUgj8Y2pVbCSujEBWNmKI8LcJul+FaMKL9uu0pg3jxsIluMVnMxzm3Pw70PY5ARy
-H9ZPXWdjYne6GLZo+qgVy8LYlQz4qSuOuCfnrcfOUMyVER/dk+5BsnVfObDOKwbR
-FSbRj8eifaA5Zw8Tau83
-=KHv4
------END PGP SIGNATURE-----
-
---BOKacYhQ+x31HxR3--
+diff --git a/winsup/cygwin/exceptions.cc b/winsup/cygwin/exceptions.cc
+index 0d1f36d..9d50c1e 100644
+--- a/winsup/cygwin/exceptions.cc
++++ b/winsup/cygwin/exceptions.cc
+@@ -1496,8 +1496,12 @@ _cygtls::call_signal_handler ()
+       if (thissi.si_cyg)
+         memcpy (&thiscontext.uc_mcontext, ((cygwin_exception *)thissi.si_cyg)->context(), sizeof(CONTEXT));
+       else
+-        RtlCaptureContext ((CONTEXT *)&thiscontext.uc_mcontext);
+-        /* FIXME: Really this should be the context which the signal interrupted? */
++        {
++          /* FIXME: Really this should be the context which the signal interrupted? */
++          memset(&thiscontext.uc_mcontext, 0, sizeof(struct __mcontext));
++          thiscontext.uc_mcontext.ctxflags = CONTEXT_FULL;
++          RtlCaptureContext ((CONTEXT *)&thiscontext.uc_mcontext);
++        }
+ 
+       /* FIXME: If/when sigaltstack is implemented, this will need to do
+          something more complicated */
+-- 
+2.1.4
