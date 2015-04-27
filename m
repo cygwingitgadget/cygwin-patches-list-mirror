@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8133-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 26107 invoked by alias); 23 Apr 2015 15:32:31 -0000
+Return-Path: <cygwin-patches-return-8134-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 51993 invoked by alias); 27 Apr 2015 08:46:33 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,90 +9,39 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 26091 invoked by uid 89); 23 Apr 2015 15:32:30 -0000
+Received: (qmail 51979 invoked by uid 89); 27 Apr 2015 08:46:32 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-5.4 required=5.0 tests=AWL,BAYES_00,KAM_LAZY_DOMAIN_SECURITY autolearn=no version=3.3.2
-X-HELO: calimero.vinschen.de
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 23 Apr 2015 15:32:29 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 03CFBA80973; Thu, 23 Apr 2015 17:32:27 +0200 (CEST)
-Date: Thu, 23 Apr 2015 15:32:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-2.4 required=5.0 tests=BAYES_00,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.2
+X-HELO: mail-qk0-f181.google.com
+Received: from mail-qk0-f181.google.com (HELO mail-qk0-f181.google.com) (209.85.220.181) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES128-GCM-SHA256 encrypted) ESMTPS; Mon, 27 Apr 2015 08:46:31 +0000
+Received: by qkgx75 with SMTP id x75so58640973qkg.1        for <cygwin-patches@cygwin.com>; Mon, 27 Apr 2015 01:46:29 -0700 (PDT)
+X-Received: by 10.55.23.16 with SMTP id i16mr11197184qkh.14.1430124389320;        Mon, 27 Apr 2015 01:46:29 -0700 (PDT)
+Received: from executor.depaulo.org (pool-96-245-198-248.phlapa.fios.verizon.net. [96.245.198.248])        by mx.google.com with ESMTPSA id n83sm11176232qkh.31.2015.04.27.01.46.28        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);        Mon, 27 Apr 2015 01:46:28 -0700 (PDT)
+From: Mike DePaulo <mikedep333@gmail.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 2/3] Provide ucontext to signal handlers
-Message-ID: <20150423153226.GM3657@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1427894373-2576-1-git-send-email-jon.turney@dronecode.org.uk> <1427894373-2576-3-git-send-email-jon.turney@dronecode.org.uk> <20150401142219.GY13285@calimero.vinschen.de> <551C2CB7.4@dronecode.org.uk> <5538F94A.3080402@dronecode.org.uk>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;	protocol="application/pgp-signature"; boundary="Fc4/uDQsB6b9dq2q"
-Content-Disposition: inline
-In-Reply-To: <5538F94A.3080402@dronecode.org.uk>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-SW-Source: 2015-q2/txt/msg00034.txt.bz2
+Cc: Mike DePaulo <mikedep333@gmail.com>
+Subject: [PATCH] cygserver.xml: Add new section. How to install Cygserver.
+Date: Mon, 27 Apr 2015 08:46:00 -0000
+Message-Id: <1430124378-16484-1-git-send-email-mikedep333@gmail.com>
+X-IsSubscribed: yes
+X-SW-Source: 2015-q2/txt/msg00035.txt.bz2
+
+I recently wasted time at work because I did not know how to install Cygserver.
+It looks like other people had this problem too:
+http://superuser.com/questions/738105/how-to-install-cygserver
+
+So I wrote a patch for the documentation, which people are likely to find via
+Google/DDG.
+
+Also, this is my 1st time using git-send-email.
 
 
---Fc4/uDQsB6b9dq2q
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1112
+Mike DePaulo (1):
+  * cygserver.xml: Add new section. How to install Cygserver.
 
-Hi Jon,
+ winsup/doc/cygserver.xml | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-On Apr 23 14:53, Jon TURNEY wrote:
-> On 01/04/2015 18:36, Jon TURNEY wrote:
-> >On 01/04/2015 15:22, Corinna Vinschen wrote:
-> >>It would be better to call RtlCaptureContext
-> >>before calling call_signal_handler.  But this requires a change in how
-> >>call_signal_handler is called.
-> >>
-> >>We should discuss this at one point, I think.
->=20
-> I noticed that we already prepare a context for continuing after the sign=
-al
-> for the debugger, so perhaps this is not quite as complex as I thought and
-> something like the attached is needed.
-
-signal_debugger() is (basically) called for all signals, but in case
-there's no GDB attached, only signals for which a signal handler
-function is called need the context.  Isn't it a bit heavyweight to
-suspend and capture the context for all signals then, perhaps?
-
-> It's very hard to reason about if this is doing the right thing when the
-> signal is delivered across threads, though.
-
-Indeed.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---Fc4/uDQsB6b9dq2q
-Content-Type: application/pgp-signature
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBAgAGBQJVORCKAAoJEPU2Bp2uRE+gGMEQAIBlCN0QAJzAEd74GJPIzQr1
-mV7P+pWwXh8nNXFqgr3DmcZQdSME+lDXoqEcJl0h36z8BHDDN4mGNhM3JnELx0Sl
-zSrSN4IO8VBQ4gvudnQ8yNAdoHQWPrlSrRCD3v8fkrfI7J29Xj0HWZGoMnDr6IvL
-41tAAcBynSdVnTl4BVEFT52T7ojqCa2gyirVTAm6pVM4rka+6j0dgoKOzz2x+Aaf
-mTHBYwWqXqY8OxNd1qCC4LSjB8/KEvOSnyV1UXYDMX4o1+F8XRZijWwI/GyTsEwm
-wLeUYuiweuNWPaMwrzDXJEgeW9cN93nIOGNNdfBx+eXQoen2xxg2i8GfiTBfBJqx
-6QpSzjiJBNNmvULVt5eO88DqYg2pvDd5BfNvhq2nbU+mKE30y7IBVMPDdW/DrJto
-jFvn0v8TrRAjFFg8/OrT3NmyslXVlGP92FtSg4Z0PiEVNDuKLfUdK3/b4u5O3UYF
-RMJzVxj3jndd0xfGJWMvWPmu5m2khhLtjN1ue/+It6uw9tJ8twVHQ4KVLsRb6kf4
-4AyBsUxL/KfBlxndQrNIKoUOBcKcsUam8psRA6n93BfJRiESLOihCGqDK4lbq2YG
-ruMVJnEejLHahP9XSmeH+1iFyq3RqgDmUR0MKHpuu29l3nrx7Al+AoswVamannhy
-ojAPZWD79ASTFizP1LRA
-=DsrP
------END PGP SIGNATURE-----
-
---Fc4/uDQsB6b9dq2q--
+-- 
+2.1.4
