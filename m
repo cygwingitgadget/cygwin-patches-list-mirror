@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8136-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 29619 invoked by alias); 27 Apr 2015 09:33:24 -0000
+Return-Path: <cygwin-patches-return-8137-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 116038 invoked by alias); 29 Apr 2015 16:22:42 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,99 +9,65 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 29502 invoked by uid 89); 27 Apr 2015 09:33:23 -0000
+Received: (qmail 116025 invoked by uid 89); 29 Apr 2015 16:22:42 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-5.4 required=5.0 tests=AWL,BAYES_00,KAM_LAZY_DOMAIN_SECURITY autolearn=no version=3.3.2
-X-HELO: calimero.vinschen.de
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 27 Apr 2015 09:33:22 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 2EAF2A80970; Mon, 27 Apr 2015 11:33:20 +0200 (CEST)
-Date: Mon, 27 Apr 2015 09:33:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-0.2 required=5.0 tests=AWL,BAYES_00,SPF_HELO_PASS,SPF_PASS,T_RP_MATCHES_RCVD autolearn=ham version=3.3.2
+X-HELO: mx1.redhat.com
+Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-GCM-SHA384 encrypted) ESMTPS; Wed, 29 Apr 2015 16:22:41 +0000
+Received: from int-mx10.intmail.prod.int.phx2.redhat.com (int-mx10.intmail.prod.int.phx2.redhat.com [10.5.11.23])	by mx1.redhat.com (8.14.4/8.14.4) with ESMTP id t3TGMdxc029372	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL)	for <cygwin-patches@cygwin.com>; Wed, 29 Apr 2015 12:22:40 -0400
+Received: from localhost.localdomain ([10.10.116.23])	by int-mx10.intmail.prod.int.phx2.redhat.com (8.14.4/8.14.4) with ESMTP id t3TGMYIH028083	(version=TLSv1/SSLv3 cipher=AES256-SHA256 bits=256 verify=NO)	for <cygwin-patches@cygwin.com>; Wed, 29 Apr 2015 12:22:38 -0400
+From: Yaakov Selkowitz <yselkowi@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] * cygserver.xml: Add new section. How to install Cygserver.
-Message-ID: <20150427093320.GT3657@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1430124378-16484-1-git-send-email-mikedep333@gmail.com> <1430124378-16484-2-git-send-email-mikedep333@gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;	protocol="application/pgp-signature"; boundary="t1cwe7X0UXDc61Gr"
-Content-Disposition: inline
-In-Reply-To: <1430124378-16484-2-git-send-email-mikedep333@gmail.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-SW-Source: 2015-q2/txt/msg00037.txt.bz2
+Subject: [PATCH] Fix more typos in ntsec.xml
+Date: Wed, 29 Apr 2015 16:22:00 -0000
+Message-Id: <1430324556-12152-1-git-send-email-yselkowi@redhat.com>
+X-SW-Source: 2015-q2/txt/msg00038.txt.bz2
 
+Signed-off-by: Yaakov Selkowitz <yselkowi@redhat.com>
+---
+ winsup/doc/ntsec.xml | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---t1cwe7X0UXDc61Gr
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1030
-
-On Apr 27 04:46, Mike DePaulo wrote:
-> ---
->  winsup/doc/cygserver.xml | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
->=20
-> diff --git a/winsup/doc/cygserver.xml b/winsup/doc/cygserver.xml
-> index 6a4ec4e..2367a60 100644
-> --- a/winsup/doc/cygserver.xml
-> +++ b/winsup/doc/cygserver.xml
-> @@ -179,6 +179,19 @@
->=20=20
->  </sect2>
->=20=20
-> +<sect2 id=3D"install-cygserver"><title>How to install Cygserver</title>
-> +
-> +<para>
-> +  Cygserver is part of the base <emphasis role=3D'bold'>cygwin</emphasis=
-> package.
-> +  Therefore, whenever Cygwin is installed, so is Cygserver.
-> +</para>
-> +<para>
-> +  You may want to install Cygserver as a service. See
-> +  <xref linkend=3D"start-cygserver"></xref>.
-> +</para>
-> +
-> +</sect2>
-> +
->  <sect2 id=3D"start-cygserver"><title>How to start Cygserver</title>
->=20=20
->  <para>
-> --=20
-> 2.1.4
-
-Patch applied.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---t1cwe7X0UXDc61Gr
-Content-Type: application/pgp-signature
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBAgAGBQJVPgJgAAoJEPU2Bp2uRE+gTfEP/RuXacbTKKEkY9NGtVljLiaV
-ZJS6HJ41dbuS2HpmUhTjBDIXGYBoqHWMEpgCPjFOWNg+SqF9TgA++7Pigi4CcnvR
-nfLYC8bf7yYFDj45pmH6ohuTN3lpItSAusK3w+UQkncACKuSWF5XRMGa9ml6kdq8
-rVhkFKdBpfaBt0RvT4h/YpFt4ph2rUnXBkxxu1cQr5FViNGDKKFM0Xa/L9kVsgOh
-5/KEEBiv8W8IIFcT1O+ULQVVGUZ9LuLsBUumV7+/DAky9mlYUwJjx9NDUqH16Sm/
-nITlErFFCBn91CUHeGoWb0w34vQ/jG0wag/3r0cUmKZDiXJtrH+b/8w9PLnlIXc5
-jwDf9VLoIrmu1w8bUwpgwCkHnr4xRDNLcRzmaGDxCkxly1kU34O0q8h2tqI3oknM
-Ds15t/7p5eUNKX8PKtRYnU7DxDHwilDxFrVJjo3+YMhEGMvEa36xLqCQzd9r1+EH
-98/EF1d34oPlmF+/7SRKBPJaOyVmnyCpjVax1vnKfrqjod37D5TFIEPzFi32vUsz
-aEvJ6kkNw30XcE5lpg6YseFi9N30UZsICUDBiLMK4lUSIDTxf8f8O9J7noD8AjNb
-bws1Knt8U2bbI3uOQR9MkZn7Cu+yqi7APpl7fe8QFXahxKbmKPHj0v00CJN+Jinb
-p5MgVvyihFHaMRo0HO1M
-=l5uc
------END PGP SIGNATURE-----
-
---t1cwe7X0UXDc61Gr--
+diff --git a/winsup/doc/ntsec.xml b/winsup/doc/ntsec.xml
+index b731cd0..d982867 100644
+--- a/winsup/doc/ntsec.xml
++++ b/winsup/doc/ntsec.xml
+@@ -863,7 +863,7 @@ the old information.
+ <para>
+ So, what settings can we perform with <filename>/etc/nsswitch.conf</filename>?
+ Let's start with an example <filename>/etc/nsswitch.conf</filename> file
+-file set up to all default values:
++set up to all default values:
+ </para>
+ 
+ <screen>
+@@ -1749,7 +1749,7 @@ The <literal>unix</literal> schema utilizes the
+ <literal>posixAccount</literal> attribute extension.  This is one of two
+ schema extensions which are connected to AD accounts, available by default
+ starting with Windows Server 2003 R2.  They are usually
+-<literal>not set</literal>, unless used by the Active Directory
++<emphasis role='bold'>not set</emphasis>, unless used by the Active Directory
+ <literal>Server for NIS</literal> feature (deprecated since Server 2012 R2).
+ 
+ Two schemata are interesting for Cygwin, <literal>posixAccount</literal>,
+@@ -2031,7 +2031,7 @@ by child processes.
+ 
+ <para>
+ A fully set up Samba file server with domain integration is running winbindd to
+-map Window SIDs to artificially created UNIX uids and gids, and this mapping is
++map Windows SIDs to artificially created UNIX uids and gids, and this mapping is
+ transparent within the domain, so Cygwin doesn't have to do anything special.
+ </para>
+ 
+@@ -2134,7 +2134,7 @@ met.  Later ACEs are not taken into account.</para></listitem>
+ 
+ <listitem><para>All access denied ACEs <emphasis
+ role='bold'>should</emphasis> precede any access allowed ACE.  ACLs
+-following this rule are called "canonical"</para></listitem>
++following this rule are called "canonical".</para></listitem>
+ </itemizedlist>
+ 
+ <para>Note that the last rule is a preference or a definition of
+-- 
+2.1.4
