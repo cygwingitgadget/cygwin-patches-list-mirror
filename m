@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8143-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 108881 invoked by alias); 4 Jun 2015 19:55:57 -0000
+Return-Path: <cygwin-patches-return-8144-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 126178 invoked by alias); 8 Jun 2015 11:30:43 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,75 +9,75 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 108856 invoked by uid 89); 4 Jun 2015 19:55:55 -0000
+Received: (qmail 126161 invoked by uid 89); 8 Jun 2015 11:30:42 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=0.1 required=5.0 tests=AWL,BAYES_50,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE autolearn=no version=3.3.2
-X-HELO: rgout0506.bt.lon5.cpcloud.co.uk
-Received: from rgout0506.bt.lon5.cpcloud.co.uk (HELO rgout0506.bt.lon5.cpcloud.co.uk) (65.20.0.227) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 04 Jun 2015 19:55:54 +0000
-X-OWM-Source-IP: 31.51.205.195(GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-CTCH-RefID: str=0001.0A090203.5570AD47.0036,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
-X-Junkmail-Premium-Raw: score=27/50,refid=2.7.2:2015.6.4.142115:17:27.888,ip=31.51.205.195,rules=__HAS_FROM, __TO_MALFORMED_2, __TO_NO_NAME, __SUBJ_ALPHA_END, __HAS_MSGID, __SANE_MSGID, __HAS_X_MAILER, __ANY_URI, __URI_NO_WWW, __URI_NO_PATH, BODY_SIZE_1900_1999, BODYTEXTP_SIZE_3000_LESS, __MIME_TEXT_ONLY, RDNS_GENERIC_POOLED, __URI_NS, SXL_IP_DYNAMIC[195.205.51.31.fur], HTML_00_01, HTML_00_10, BODY_SIZE_5000_LESS, RDNS_SUSP_GENERIC, BODY_SIZE_2000_LESS, RDNS_SUSP, BODY_SIZE_7000_LESS
-X-CTCH-Spam: Unknown
-Received: from localhost.localdomain (31.51.205.195) by rgout05.bt.lon5.cpcloud.co.uk (8.6.122.06) (authenticated as jonturney@btinternet.com)        id 55702DEA001E1DFF; Thu, 4 Jun 2015 20:55:43 +0100
-From: Jon TURNEY <jon.turney@dronecode.org.uk>
+X-Spam-SWARE-Status: No, score=-4.5 required=5.0 tests=AWL,BAYES_20,KAM_LAZY_DOMAIN_SECURITY autolearn=no version=3.3.2
+X-HELO: calimero.vinschen.de
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 08 Jun 2015 11:30:42 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 820F0A807C8; Mon,  8 Jun 2015 13:30:39 +0200 (CEST)
+Date: Mon, 08 Jun 2015 11:30:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Cc: Jon TURNEY <jon.turney@dronecode.org.uk>
-Subject: [PATCH] winsup/doc: Remove ancient unused Makefile rules to make documentation tarball
-Date: Thu, 04 Jun 2015 19:55:00 -0000
-Message-Id: <1433447744-17688-1-git-send-email-jon.turney@dronecode.org.uk>
-X-SW-Source: 2015-q2/txt/msg00044.txt.bz2
+Subject: Re: [PATCH] winsup/doc: Remove ancient unused Makefile rules to make documentation tarball
+Message-ID: <20150608113039.GA3396@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <1433447744-17688-1-git-send-email-jon.turney@dronecode.org.uk>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="cWoXeonUoKmBZSoM"
+Content-Disposition: inline
+In-Reply-To: <1433447744-17688-1-git-send-email-jon.turney@dronecode.org.uk>
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-SW-Source: 2015-q2/txt/msg00045.txt.bz2
 
-This used to be used by cygwin-doc to make a tarball which would be used with a
-ssh script to run docbook tools on a linux host since they weren't available on
-Cygwin or something crazy like that...
 
-2015-06-04  Jon Turney  <jon.turney@dronecode.org.uk>
+--cWoXeonUoKmBZSoM
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 465
 
-	* Makefile.in: Remove ancient unused rules to make a documentation
-	tarball.
+On Jun  4 20:55, Jon TURNEY wrote:
+> This used to be used by cygwin-doc to make a tarball which would be used =
+with a
+> ssh script to run docbook tools on a linux host since they weren't availa=
+ble on
+> Cygwin or something crazy like that...
+>=20
+> 2015-06-04  Jon Turney  <...>
 
-Signed-off-by: Jon TURNEY <jon.turney@dronecode.org.uk>
----
- winsup/doc/ChangeLog   |  5 +++++
- winsup/doc/Makefile.in | 11 -----------
- 2 files changed, 5 insertions(+), 11 deletions(-)
+Ok, please apply.
 
-diff --git a/winsup/doc/ChangeLog b/winsup/doc/ChangeLog
-index 0c961fa..05d78a8 100644
---- a/winsup/doc/ChangeLog
-+++ b/winsup/doc/ChangeLog
-@@ -1,3 +1,8 @@
-+2015-06-04  Jon Turney  <jon.turney@dronecode.org.uk>
-+
-+	* Makefile.in: Remove ancient unused rules to make a documentation
-+	tarball.
-+
- 2015-06-01  Jon Turney  <jon.turney@dronecode.org.uk>
- 
- 	* ov-ex-unix.xml: Remove unhelpful mention of and inaccurate size
-diff --git a/winsup/doc/Makefile.in b/winsup/doc/Makefile.in
-index 8bf86f7..396d9bc 100644
---- a/winsup/doc/Makefile.in
-+++ b/winsup/doc/Makefile.in
-@@ -92,17 +92,6 @@ faq/faq.html : $(FAQ_SOURCES)
- 	-$(XMLTO) html -o faq -m $(srcdir)/cygwin.xsl $(srcdir)/faq.xml
- 	-sed -i 's;<a name="id[mp][0-9]*"></a>;;g' faq/faq.html
- 
--TBFILES = cygwin-ug-net.dvi cygwin-ug-net.rtf cygwin-ug-net.ps \
--	  cygwin-ug-net.pdf cygwin-ug-net.xml \
--	  cygwin-api.dvi cygwin-api.rtf cygwin-api.ps \
--	  cygwin-api.pdf cygwin-api.xml
--TBDIRS = cygwin-ug-net cygwin-api
--TBDEPS = cygwin-ug-net/cygwin-ug-net.html cygwin-api/cygwin-api.html
--
--tarball : cygwin-docs.tar.bz2
--cygwin-docs.tar.bz2 : $(TBFILES) $(TBDEPS)
--	find $(TBFILES) $(TBDIRS) \! -type d | sort | tar -T - -cf -  | bzip2 > cygwin-docs.tar.bz2
--
- Makefile.dep: cygwin-ug-net.xml cygwin-api.xml
- 	cd $(srcdir) && ./xidepend $^ > "${CURDIR}/$@"
- 
--- 
-2.1.4
+
+Thanks,
+Corinna
+
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
+
+--cWoXeonUoKmBZSoM
+Content-Type: application/pgp-signature
+Content-length: 819
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iQIcBAEBCAAGBQJVdXzfAAoJEPU2Bp2uRE+gdesP/ji3M9+2qxM4VqOiqB2zz5gZ
+BwsKH+UL1wenTKQRDw0lmbXQ7d0jzkLGU0Y95tCTl+xO98Km1yx5VgFrb4prXZiF
+1BuVIdIdjyZ9NQQPuM4QO+S5UvAe4qli7+rD8DJFYNIeFBM/A3xOLkOEjgxB9XlW
+feSfvj7fmB5qVp5ElfqelKLeF0BMMv1eHeP/+ULrOFWWn1QFdty2B9qoUG2NbtyR
+nTF7/xomzU64h0BrexUsqWjV46n1NHXYBBBr85akguaGQi/RPV+LJfbgdrfFrCEV
+eS5ypYJp1KxU1skmt7kyA+5T6yAA3bn8yoUTjlMGaNAXa9QJJfBKs/GhcrlQX2Iw
+kBRobjlDstKvbDQusP8Rvr7iekgrpYXl9Uj1K4AAXlPInSvUqNvh3pOJanm1qzx7
+par3eGNxzd4D6tJIzuamWTc+g4YtNEu9H/CyYNI6dArF+egJ+0PZjQ6WSufv+LOz
+dr+PazEt+Ah0DSA9BcLhKJadOwc4kA1IjcqgYVHrSLfFygDW1cs7KiMZNW9V6pNY
+HghRE3sz+zG4uC2EQ/QCru24ZsQQbgV//UxQ4a08PI53AFaQ4sak12ug8HjCuZ2c
+4S1NdX74oYovPcxdMZj+krdWKHncmb6tG0j4MiAZt2Grf403kYeAOANC+BjSDzep
+IdL0cZCNnSVqBGo4kkQh
+=pPve
+-----END PGP SIGNATURE-----
+
+--cWoXeonUoKmBZSoM--
