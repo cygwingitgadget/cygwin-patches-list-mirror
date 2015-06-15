@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8164-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 81697 invoked by alias); 15 Jun 2015 17:05:44 -0000
+Return-Path: <cygwin-patches-return-8165-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 95882 invoked by alias); 15 Jun 2015 17:11:51 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,49 +9,52 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 80963 invoked by uid 89); 15 Jun 2015 17:05:43 -0000
+Received: (qmail 95872 invoked by uid 89); 15 Jun 2015 17:11:51 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
 X-Spam-SWARE-Status: No, score=-5.4 required=5.0 tests=AWL,BAYES_00,KAM_LAZY_DOMAIN_SECURITY autolearn=no version=3.3.2
 X-HELO: calimero.vinschen.de
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 15 Jun 2015 17:05:43 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id EAEF3A807CE; Mon, 15 Jun 2015 19:05:40 +0200 (CEST)
-Date: Mon, 15 Jun 2015 17:05:00 -0000
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 15 Jun 2015 17:11:50 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id EFB39A807CE; Mon, 15 Jun 2015 19:11:47 +0200 (CEST)
+Date: Mon, 15 Jun 2015 17:11:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 4/8] winsup/doc: Use fo.xsl to customize PDF generation from DocBook XML
-Message-ID: <20150615170540.GD26901@calimero.vinschen.de>
+Subject: Re: [PATCH 5/8] winsup/doc: Convert utils.xml to using refentry
+Message-ID: <20150615171147.GE26901@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1434371793-3980-1-git-send-email-jon.turney@dronecode.org.uk> <1434371793-3980-5-git-send-email-jon.turney@dronecode.org.uk>
+References: <1434371793-3980-1-git-send-email-jon.turney@dronecode.org.uk> <1434371793-3980-6-git-send-email-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="6Nae48J/T25AfBN4"
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="J4XPiPrVK1ev6Sgr"
 Content-Disposition: inline
-In-Reply-To: <1434371793-3980-5-git-send-email-jon.turney@dronecode.org.uk>
+In-Reply-To: <1434371793-3980-6-git-send-email-jon.turney@dronecode.org.uk>
 User-Agent: Mutt/1.5.23 (2014-03-12)
-X-SW-Source: 2015-q2/txt/msg00065.txt.bz2
+X-SW-Source: 2015-q2/txt/msg00066.txt.bz2
 
 
---6Nae48J/T25AfBN4
+--J4XPiPrVK1ev6Sgr
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-length: 485
+Content-length: 655
 
 On Jun 15 13:36, Jon TURNEY wrote:
-> fo.xsl doesn't seem to be used since c2f50c40 switched back from xsltproc=
- to
-> xmlto
+> Convert utils.xml from using a sect2 to using a refentry for each utility
+> program.
 >=20
-> 2015-06-12  Jon Turney  <...>
->=20
-> 	* Makefile.in (cygwin-ug-net/cygwin-ug-net.pdf)
-> 	(cygwin-api/cygwin-api.pdf): Use fo.xsl to customized DocBook
-> 	XML->PDF conversion.
+> Unfortunately, using refentry seems to tickle a bug in dblatex when gener=
+ating
+> pdf, which appears to not escape \ properly in the latex for refentry, so=
+ use
+> fop instead.
 
-Please apply.
+Uhm... wasn't Yaakov's patch from 2014-11-28 explicitely meant to drop
+the requirement to use fop andd thus java?
 
-Thanks,
+Is there really no other way to handle that, rather than reverting to
+fop?
+
+
 Corinna
 
 --=20
@@ -59,26 +62,26 @@ Corinna Vinschen                  Please, send mails regarding Cygwin to
 Cygwin Maintainer                 cygwin AT cygwin DOT com
 Red Hat
 
---6Nae48J/T25AfBN4
+--J4XPiPrVK1ev6Sgr
 Content-Type: application/pgp-signature
 Content-length: 819
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v2
 
-iQIcBAEBCAAGBQJVfwXkAAoJEPU2Bp2uRE+gWBEQAKR8C1imJ92uLHvSrzhJ9MRZ
-aktCXFmZLuwF14pF9w/YoO3e4S34sdgx/Mmsyfg5a5C4DmdjNCeDabIZvBL12dBj
-NteNL6AsAMFaxsl4N31otIFeKkDu26aJ4q+vOu2PzZa46Uj386cNtfP2H+kAzQ3U
-AyNu8AUGnDRqEojbjRw8MbkD1NQb5AfZm+1j8MZmxwTpWZ0/CWsaqaRF6crMvSpI
-kTFVcFT69fSXAMN8CCtAVzU9eTRPWT8fhud22g0Hl9H/p9LLxZyrrSt8m7rE/Zjj
-vGJhgmCUlkgpuKU4HXYTFQ3e0XBSLVxlMCclo5thoKoSgKI2hZs1ZEUBhWKy1ov1
-LYT73TZERisCzEQ7vXbnrncsIUcRdvxhuVq2U9K8UGNqHdIHmWi1hQec3ETUqbnB
-22x3Ff3aa1FGZMiK8inont6zr5YdmY/NxFEDH+/9k4kkBAx0ZRDon8P4a9Hlwq5I
-IuV22ZMtr8If03qLmpq7oOlLx+ixSIrr4Arz75738pX+cPkmB1RMs4mzXA3PsGug
-Kxwx2rU6zMnyJUotVpcPc7u0m6mGpw4G45T3NgLetgXyHZRrC+Ao2hr12O6/cO7M
-BSl21tkYeKZ9ADG0OfSuNAEdvholg6fCK0ZDQBUKEmnWi7J9sCamDzpM4Ng9s6/H
-DArbDS7qrXqBaAHU4CL2
-=uHpY
+iQIcBAEBCAAGBQJVfwdTAAoJEPU2Bp2uRE+g60AP/ihrMwW4tmP+K28BSSk+RheK
+9TDEgSacliWteULBK9J+Ort7G5UmrieaJIOnPuSjek4kv2TJUSwrN1e4fsROzph6
+x49FLP1xYdDxdO9TOEb41uS5yu8Nd6oujW2czP2P3yoe8oyeWeWaPVXWhZbufz/Y
+91CAe/7iGXV6N5D6dox2j+JSoPY73Tusu/rZyXwZvYogjfSaMwO4A7rsPpqe+Ydo
+ctWyKlxHAKrhxAgL4IHLXRD7iKwvXp+ZskjRwzZH+YHWGpK4WX/kTtlvLUHDNX3c
+c6RrR/hyRItKs9HBhpmsIKH9lMh8JtM3xUKCROwiIRMc2asn6f/FtIOZq59S0lMY
++QiszNVp5S5FAcZBI/y7uESB3Q4PRvau0noxfIwyDXHFpIThbMu2XFOXXNoU9TuE
+pg5WpM9H7el7OgjI+TCI4Yddl27qKUB/rd8Nbhhwh1T3+YhTTqye9IPq4ffxL0yp
+ObbvT0v/IB/QKXJ3kZI/sUHq9rCYgYiO2tki9Wehda4LEQYm90jAby6ZOL+BDHst
+At3ZLsxMiXVYuop1vewa8JDTebmdFQWMQ2pg09MoMEEAjSakOIOm8lWPh1ISbL+X
+YFiFPKpuuIsAGxHIeH6fvx/2AKKB9uWIWFpHrCb1v+uazO9XOKmIMFiN3dwu89c/
+ZQTyLPAAy7lTpfJrqhti
+=RKQK
 -----END PGP SIGNATURE-----
 
---6Nae48J/T25AfBN4--
+--J4XPiPrVK1ev6Sgr--
