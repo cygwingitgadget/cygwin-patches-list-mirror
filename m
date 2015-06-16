@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8175-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 65081 invoked by alias); 16 Jun 2015 16:27:49 -0000
+Return-Path: <cygwin-patches-return-8176-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 8511 invoked by alias); 16 Jun 2015 17:33:51 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,64 +9,65 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 65069 invoked by uid 89); 16 Jun 2015 16:27:49 -0000
+Received: (qmail 8494 invoked by uid 89); 16 Jun 2015 17:33:50 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=0.2 required=5.0 tests=AWL,BAYES_20,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_DNSWL_NONE,RP_MATCHES_RCVD autolearn=no version=3.3.2
-X-HELO: mailout12.t-online.de
-Received: from mailout12.t-online.de (HELO mailout12.t-online.de) (194.25.134.22) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-GCM-SHA384 encrypted) ESMTPS; Tue, 16 Jun 2015 16:27:47 +0000
-Received: from fwd32.aul.t-online.de (fwd32.aul.t-online.de [172.20.26.144])	by mailout12.t-online.de (Postfix) with SMTP id E48E610438C	for <cygwin-patches@cygwin.com>; Tue, 16 Jun 2015 18:27:43 +0200 (CEST)
-Received: from [192.168.2.103] (T5I4poZOQhPWlXxTGvkxWv8ItAyxc2jCbMRyUrbMZzL7wPV6vfEmnjHngt6+Xy2wTr@[84.180.90.102]) by fwd32.t-online.de	with (TLSv1.2:ECDHE-RSA-AES256-SHA encrypted)	esmtp id 1Z4tiA-4Vr70S0; Tue, 16 Jun 2015 18:27:42 +0200
-Message-ID: <55804E7D.3060504@t-online.de>
-Date: Tue, 16 Jun 2015 16:27:00 -0000
-From: Christian Franke <Christian.Franke@t-online.de>
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:36.0) Gecko/20100101 Firefox/36.0 SeaMonkey/2.33.1
+X-Spam-SWARE-Status: No, score=-1.9 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_LOW autolearn=ham version=3.3.2
+X-HELO: out5-smtp.messagingengine.com
+Received: from out5-smtp.messagingengine.com (HELO out5-smtp.messagingengine.com) (66.111.4.29) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-GCM-SHA384 encrypted) ESMTPS; Tue, 16 Jun 2015 17:33:49 +0000
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])	by mailout.nyi.internal (Postfix) with ESMTP id 8AE8120BC3	for <cygwin-patches@cygwin.com>; Tue, 16 Jun 2015 13:33:47 -0400 (EDT)
+Received: from frontend2 ([10.202.2.161])  by compute3.internal (MEProxy); Tue, 16 Jun 2015 13:33:47 -0400
+Received: from [192.168.1.102] (unknown [86.141.128.210])	by mail.messagingengine.com (Postfix) with ESMTPA id 285D76801B4	for <cygwin-patches@cygwin.com>; Tue, 16 Jun 2015 13:33:47 -0400 (EDT)
+Message-ID: <55805DF6.5040004@dronecode.org.uk>
+Date: Tue, 16 Jun 2015 17:33:00 -0000
+From: Jon TURNEY <jon.turney@dronecode.org.uk>
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:31.0) Gecko/20100101 Thunderbird/31.7.0
 MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Hide sethostname() in unistd.h
-Content-Type: multipart/mixed; boundary="------------060301020600010204070407"
-X-IsSubscribed: yes
-X-SW-Source: 2015-q2/txt/msg00076.txt.bz2
-
-This is a multi-part message in MIME format.
---------------060301020600010204070407
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH 5/8] winsup/doc: Convert utils.xml to using refentry
+References: <1434371793-3980-1-git-send-email-jon.turney@dronecode.org.uk> <1434371793-3980-6-git-send-email-jon.turney@dronecode.org.uk> <20150615171147.GE26901@calimero.vinschen.de> <557FEC25.8030303@dronecode.org.uk> <20150616094501.GC31537@calimero.vinschen.de> <558003FD.8060208@dronecode.org.uk> <20150616124934.GD31537@calimero.vinschen.de>
+In-Reply-To: <20150616124934.GD31537@calimero.vinschen.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Content-length: 214
+X-SW-Source: 2015-q2/txt/msg00077.txt.bz2
 
-Found during an experimental build of busybox:
+On 16/06/2015 13:49, Corinna Vinschen wrote:
+> On Jun 16 12:09, Jon TURNEY wrote:
+>> On 16/06/2015 10:45, Corinna Vinschen wrote:
+>>> On Jun 16 10:28, Jon TURNEY wrote:
+>>>> On 15/06/2015 18:11, Corinna Vinschen wrote:
+>>>>> On Jun 15 13:36, Jon TURNEY wrote:
+>>>>>> Convert utils.xml from using a sect2 to using a refentry for each utility
+>>>>>> program.
+>>>>>>
+>>>>>> Unfortunately, using refentry seems to tickle a bug in dblatex when generating
+>>>>>> pdf, which appears to not escape \ properly in the latex for refentry, so use
+>>>>>> fop instead.
+>>>>>
+>>>>> Uhm... wasn't Yaakov's patch from 2014-11-28 explicitely meant to drop
+>>>>> the requirement to use fop andd thus java?
+>>>>>
+>>>>> Is there really no other way to handle that, rather than reverting to
+>>>>> fop?
+>>>>
+>>>> Now I try again --with-dblatex, it works fine, so that part of the patch can
+>>>> be removed.
+>>>>
+>>>> I can only guess I must have had some other markup error causing me
+>>>> problems, which has since been fixed.
+>>>
+>>> I'm relieved :}
+>>
+>> Approved with that change?
+>
+> Yep, thanks.
 
-The sethostname() prototype in /usr/include/sys/unistd.h is enabled also 
-on Cygwin.
-It should be disabled because Cygwin does not provide this function.
+Done.
 
-Christian
+Note that the next time you build documentation for the website, you 
+might need to take some special steps to add new .html files.
 
+and next time you build a package you might need to take some special 
+steps to exclude /usr/share/man/
 
---------------060301020600010204070407
-Content-Type: text/x-patch;
- name="unistd-sethostname.patch"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="unistd-sethostname.patch"
-Content-length: 750
-
-2015-06-16  Christian Franke  <franke@computer.org>
-
-	* libc/include/sys/unistd.h (sethostname): Hide prototype on Cygwin.
-
-diff --git a/newlib/libc/include/sys/unistd.h b/newlib/libc/include/sys/unistd.h
-index eb26921..6131b5c 100644
---- a/newlib/libc/include/sys/unistd.h
-+++ b/newlib/libc/include/sys/unistd.h
-@@ -169,7 +169,7 @@ int     _EXFUN(setgid, (gid_t __gid ));
- #if defined(__CYGWIN__)
- int	_EXFUN(setgroups, (int ngroups, const gid_t *grouplist ));
- #endif
--#if __BSD_VISIBLE || (defined(_XOPEN_SOURCE) && __XSI_VISIBLE < 500)
-+#if !defined(__CYGWIN__) && (__BSD_VISIBLE || (defined(_XOPEN_SOURCE) && __XSI_VISIBLE < 500))
- int	_EXFUN(sethostname, (const char *, size_t));
- #endif
- int     _EXFUN(setpgid, (pid_t __pid, pid_t __pgid ));
-
---------------060301020600010204070407--
+Please let me know if there are any problems with these changes.
