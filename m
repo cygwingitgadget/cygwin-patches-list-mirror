@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8168-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 96001 invoked by alias); 15 Jun 2015 18:12:11 -0000
+Return-Path: <cygwin-patches-return-8169-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 16377 invoked by alias); 16 Jun 2015 09:22:10 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,80 +9,37 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 95973 invoked by uid 89); 15 Jun 2015 18:12:10 -0000
+Received: (qmail 16365 invoked by uid 89); 16 Jun 2015 09:22:09 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-5.4 required=5.0 tests=AWL,BAYES_00,KAM_LAZY_DOMAIN_SECURITY autolearn=no version=3.3.2
-X-HELO: calimero.vinschen.de
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 15 Jun 2015 18:12:09 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id CA819A807CE; Mon, 15 Jun 2015 20:12:06 +0200 (CEST)
-Date: Mon, 15 Jun 2015 18:12:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 7/8] winsup/doc: Make and install manpages for utils
-Message-ID: <20150615181206.GH26901@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1434371793-3980-1-git-send-email-jon.turney@dronecode.org.uk> <1434371793-3980-8-git-send-email-jon.turney@dronecode.org.uk>
+X-Spam-SWARE-Status: No, score=-1.8 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_LOW autolearn=ham version=3.3.2
+X-HELO: out5-smtp.messagingengine.com
+Received: from out5-smtp.messagingengine.com (HELO out5-smtp.messagingengine.com) (66.111.4.29) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-GCM-SHA384 encrypted) ESMTPS; Tue, 16 Jun 2015 09:22:08 +0000
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])	by mailout.nyi.internal (Postfix) with ESMTP id 920C420D3F	for <cygwin-patches@cygwin.com>; Tue, 16 Jun 2015 05:22:06 -0400 (EDT)
+Received: from frontend2 ([10.202.2.161])  by compute5.internal (MEProxy); Tue, 16 Jun 2015 05:22:06 -0400
+Received: from [192.168.1.102] (unknown [86.141.128.210])	by mail.messagingengine.com (Postfix) with ESMTPA id 2D81368009D	for <cygwin-patches@cygwin.com>; Tue, 16 Jun 2015 05:22:06 -0400 (EDT)
+Message-ID: <557FEAB9.5040404@dronecode.org.uk>
+Date: Tue, 16 Jun 2015 09:22:00 -0000
+From: Jon TURNEY <jon.turney@dronecode.org.uk>
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:31.0) Gecko/20100101 Thunderbird/31.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="v2Uk6McLiE8OV1El"
-Content-Disposition: inline
-In-Reply-To: <1434371793-3980-8-git-send-email-jon.turney@dronecode.org.uk>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-SW-Source: 2015-q2/txt/msg00069.txt.bz2
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH 3/8] winsup/doc: Some preparatory XML fixes
+References: <1434371793-3980-1-git-send-email-jon.turney@dronecode.org.uk> <1434371793-3980-4-git-send-email-jon.turney@dronecode.org.uk> <20150615170445.GC26901@calimero.vinschen.de>
+In-Reply-To: <20150615170445.GC26901@calimero.vinschen.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2015-q2/txt/msg00070.txt.bz2
 
+On 15/06/2015 18:04, Corinna Vinschen wrote:
+> On Jun 15 13:36, Jon TURNEY wrote:
+>> Remove the inconsistent .exe suffix in strace and umount usage lines.
+>>
+>> Consistently refer to cross-references outside utils.xml as being in the Cygwin
+>> User's Guide.  This helps to generate sensible looking references in generated
+>> manpages.
+>
+> ... but it generates a bit of clutter in the HTML user guide itself.
+> Any chance to add those *only* to the man pages?
 
---v2Uk6McLiE8OV1El
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 668
-
-On Jun 15 13:36, Jon TURNEY wrote:
-> Use 'xmlto man' to make manpages for utils
-> (docbook2x-man could also be used, but since we already use xmlto...)
->=20
-> This will generate multiple .1 files as an output, but we don't know what=
- they
-> will be called, so use a timestamp file for build avoidance when the
-> dependencies haven't changed.
->=20
-> 2015-06-12  Jon Turney  <...>
->=20
-> 	* Makefile.in (install-man, utils2man.stamp): Add rules to build
-> 	and install manpages for utils.
-
-Please apply.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---v2Uk6McLiE8OV1El
-Content-Type: application/pgp-signature
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJVfxV2AAoJEPU2Bp2uRE+gtr4P/1NoWDFV3W07yr7Bm0omGVgc
-jsC2MQ2CBXmDuJJAM+XKSu7a6aa3B9yFxB9GcQpdfqox5UGahX3hhFj/liynf9o7
-dEiWreL5Gg2MiuXgv6Tjs9zESIk1TyiUl2LaB6mlX6AeWjppczukM0ltQ//SF9/f
-uxz5mMbcgO9nbXeQwFGthgNYcoOINN42uBNF2X9UVY36y0GZ+2MUdiMD/CuX0STp
-vHXOCxqPccz38zhwqWOWq3moV+gz5+f2R7aiMHHFakZhCScKe44jX59wvsyUUpCC
-zIKWgEqUZwV+bsofL9p9SI2diFTG6kRRhyeboxzVRXfCtMdZebbgDCpaQ0ucjlXx
-gDLI2tarjhhegwWHu+a6ZkCQtf4fkckVX/WQqilBTYrMldJuGdDOLivTTM/IJwIT
-GhCVqS/IvTU0wWkzAYiOfewnr1Mj6WQG+PdkCasnaZR7fik5zUyLOWn64e2w7A/2
-pUhdCK580Iw1ikM2OlfmBie1gUtE71PDHQvOE7KwfS0ONaGPbZKZFTuLoxhUxeS+
-wT8ipxBN7fIrvOU8VM20/wmgQPikf35rq2IY11HkTUGgGDHr2r+7UtiGDzzNPZR+
-hk3ASM+MQ0jh42/t31ANWvhc1EtocLodMhpXvpymry7Ga6U5JuAfjnx+Ep5I+Av7
-LVHj35WC836E0BaHMypY
-=Wd+a
------END PGP SIGNATURE-----
-
---v2Uk6McLiE8OV1El--
+Ok, I'll look into how to do that.
