@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8195-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 114111 invoked by alias); 18 Jun 2015 08:26:42 -0000
+Return-Path: <cygwin-patches-return-8196-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 59702 invoked by alias); 18 Jun 2015 10:46:22 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,93 +9,108 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 114094 invoked by uid 89); 18 Jun 2015 08:26:42 -0000
+Received: (qmail 59687 invoked by uid 89); 18 Jun 2015 10:46:21 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-4.5 required=5.0 tests=AWL,BAYES_20,KAM_LAZY_DOMAIN_SECURITY autolearn=no version=3.3.2
-X-HELO: calimero.vinschen.de
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 18 Jun 2015 08:26:40 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 72FBDA8084B; Thu, 18 Jun 2015 10:26:38 +0200 (CEST)
-Date: Thu, 18 Jun 2015 08:26:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Hide sethostname() in unistd.h
-Message-ID: <20150618082638.GQ31537@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <55804E7D.3060504@t-online.de> <20150616174551.GF31537@calimero.vinschen.de> <558107F2.3030809@t-online.de> <20150617084626.GI31537@calimero.vinschen.de> <5581D7C4.1000207@t-online.de> <1434574654.11212.4.camel@cygwin.com> <5581E384.9030608@redhat.com>
+X-Spam-SWARE-Status: No, score=-1.7 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_LOW autolearn=ham version=3.3.2
+X-HELO: out5-smtp.messagingengine.com
+Received: from out5-smtp.messagingengine.com (HELO out5-smtp.messagingengine.com) (66.111.4.29) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-GCM-SHA384 encrypted) ESMTPS; Thu, 18 Jun 2015 10:46:18 +0000
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])	by mailout.nyi.internal (Postfix) with ESMTP id DF9CD20469	for <cygwin-patches@cygwin.com>; Thu, 18 Jun 2015 06:46:15 -0400 (EDT)
+Received: from frontend2 ([10.202.2.161])  by compute2.internal (MEProxy); Thu, 18 Jun 2015 06:46:15 -0400
+Received: from [192.168.1.102] (unknown [86.141.128.210])	by mail.messagingengine.com (Postfix) with ESMTPA id 793E768015D	for <cygwin-patches@cygwin.com>; Thu, 18 Jun 2015 06:46:15 -0400 (EDT)
+Message-ID: <5582A170.9010305@dronecode.org.uk>
+Date: Thu, 18 Jun 2015 10:46:00 -0000
+From: Jon TURNEY <jon.turney@dronecode.org.uk>
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:31.0) Gecko/20100101 Thunderbird/31.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="8JAmzYDSl0Sjbh5d"
-Content-Disposition: inline
-In-Reply-To: <5581E384.9030608@redhat.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-SW-Source: 2015-q2/txt/msg00096.txt.bz2
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH 0/5] Generate cygwin-api manpages
+References: <1434544626-2516-1-git-send-email-jon.turney@dronecode.org.uk> <20150617134936.GK31537@calimero.vinschen.de> <5581994C.6070107@dronecode.org.uk> <20150617162753.GN31537@calimero.vinschen.de>
+In-Reply-To: <20150617162753.GN31537@calimero.vinschen.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2015-q2/txt/msg00097.txt.bz2
 
+On 17/06/2015 17:27, Corinna Vinschen wrote:
+> On Jun 17 16:59, Jon TURNEY wrote:
+>> On 17/06/2015 14:49, Corinna Vinschen wrote:
+>>> On Jun 17 13:37, Jon TURNEY wrote:
+>>>> This patch set changes the DocBook source XML for the Cygwin API reference to
+>>>> use refentry elements, and also generates man pages from that.
+>>>>
+>>>> Again, note that after this, the chunked html now has a page for each function,
+>>>> rather than one containing all functions.
+>>>
+>>> Patchset approved, basically, except...
+>>>
+>>> The next cygwin.cygport file will explicitly exclude the man pages
+>>> section 1.  But it won't exclude section 3, and I'm rather not hot
+>>> on excluding each newly generated API file explicitly.
+>>
+>> Yes, I hadn't noticed that regex.3 manpage, which makes things a bit of a
+>> pain.
+>>
+>> But maybe you write in cygwin_devel_CONTENTS something like
+>> "--exclude=usr/share/man/ usr/share/man/man3/regex.3.gz
+>> usr/share/man/man7/regex.7.gz" ?
+>
+> exclude?  This would require to move both files to cygwin-doc
+> as you outlined below.  It would essentially remove all man pages
+> from the cygwin core packages and then we exclude usr/share/man,
+> as you outlined below as well.
 
---8JAmzYDSl0Sjbh5d
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1603
+Hmm?  I thought perhaps this would exclude everything under 
+usr/share/man, then include regex.3 and regex.7
 
-On Jun 17 15:15, Eric Blake wrote:
-> On 06/17/2015 02:57 PM, Yaakov Selkowitz wrote:
-> > On Wed, 2015-06-17 at 22:25 +0200, Christian Franke wrote:
-> >> Busybox does not use autoconf or similar. It requires manual platform=
-=20
-> >> specific configuration which does not yet support a missing=20
-> >> sethostname(). After adding HAVE_SETHOSTNAME manually and some other=20
-> >> minor additions, busybox (which many commands enabled) compiles and=20
-> >> works reasonably.
-> >> Would ITP make sense ?
-> >=20
-> > TBH I'm not sure.  Presuming you're discussing the single-executable
-> > build (so as not to clobber coreutils etc.), there is still the question
-> > of (not) matching the heavily-patched coreutils wrt .exe handling etc.
-> > What do you think the use case would be?
->=20
-> Portability testing is one thing - I often compare how
-> bash/dash/zsh/mksh handle a shell construct, and adding busybox sh into
-> the mix adds another perspective.  But yeah, I don't see busybox
-> becoming the default source of these apps, so much as an alternative
-> implementation.
+But I don't think tar processes it's options left-to-right like that, so 
+never mind.
 
-If it's called "busybox" and the package doesn't try to create shortcuts
-/bin/sh -> /bin/busybox, etc, I don't see a problem to ITP it.
+>>> Do you have an idea how far away we are from including the cygwin-doc
+>>> package into the cygwin package set?  I'm not planning a new release
+>>> very soon, so we can coordinate that without pressure.
+>>
+>> After this patch set, the remaining things are:
+>>
+>> * newlib libc and libm .info documentation
+>>
+>> I think this just needs 'make info' adding to the .cygport, as newlib
+>> doesn't build this on 'make all'
+>
+>    libc.info and libm.info are built by default, but they are not
+>    installed with `make install'
 
-If those symlinks are required for busybox to work, they should be
-encapsulated in their own subdir, something like /usr/libexec/busybox
-or so.  Users just need to set $PATH correctly then.  Or maybe that
-could be done by busybox as well.
+That seems a little odd.
 
+>> * intro.1 and intro.3 man pages for Cygwin, handwritten
+>>
+>> If these are worth keeping, this is straightforward
+>>
+>> * Cygwin User's Guide and API reference texinfo, generated from the DocBook
+>> XML
+>>
+>> as is this
+>
+>    Isn't the HTML documentation sufficient?  I'm not opposed to
+>    keeping the texinfo's, just wondering.
 
-Corinna
+It's there currently and it's really not much work to keep it.
 
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
+>> * man pages for newlib functions
+>>
+>> But this is a substantial piece of work.  Currently, I'm not even sure how
+>> this can be done in an upstreamable way.
+>>
+>> I am experimenting with building an alternative to the makedoc tool, which
+>> generates DocBook XML rather than .texinfo, which can then be processed into
+>> manpages and other formats, but this is far from complete.
+>>
+>>
+>> If the suggestion above doesn't work, I guess possible approaches to
+>> coordination are:
+>>
+>> * Move regex.[37] from cygwin-devel to cygwin-doc, and exclude
+>> /usr/share/man
+>
+> ... this sounds good to me.
 
---8JAmzYDSl0Sjbh5d
-Content-Type: application/pgp-signature
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJVgoC+AAoJEPU2Bp2uRE+gDpAP/jXMrOK2ijA6yYOj96fDEn5L
-+Tq1zHvAlL+4zFoy61mfWA8YPNazN9TteJ/TyZX4z8zuigZATLqMXA1iGnyD+tVm
-Hl3G/hTXsqR4IxjNpU1QKS+Q8XI3e2emF/3p8sU+cElmcqOmKmXzMHK0jf1Ts5YC
-Tw/YRp5gFVT4+SS3dN6TXD3Ym+DLdfQSTr1jn4RDfFczVM9DPTPynR/iJEoMxZIS
-65x1Le2tc/k3TjSpLvGiLyKhkKq6cvJmFujm0o2Psnoe93rMr4gZvnSJeyiMF1Ba
-MIB89+WI0bD8dciCnZLUiYumGTDYvmtlP2tlmHfEjfcx1PUTCu+09fBdfnwgdryq
-dl1z74cDeNX3HHi6ObrkRC4AE8CHcN3N7BWad3FQNGx9P68UE/2i1NLUPxmBFraX
-nT/ZrAjJ71wo68jt4+qcwPatTFA+u6T28r2EMoz9QlbPCRcafrpGM/zib4vh3Pxy
-5eAzhXfTd7DqPBlHoUAQY9ri/ZaZA9gXlyvCWaVeG+tmX8R6U0uF6GmWB9Z+xDAE
-4x6o0CfNQpv4Amc4UcPxwVpznKlJ8195OfN/K/XuF9D87+gANbdyF+ip5Da6cCkG
-RyJCmJR5j7Z3xvhu6c2zsQhZcx6tZDudHsfq02kfoWKTMgG5PzppoW/WWPpGXeB6
-5jVV40Mi0OEFiXHOBr/i
-=OllR
------END PGP SIGNATURE-----
-
---8JAmzYDSl0Sjbh5d--
+Let's do things that way, then.
