@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8215-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 47720 invoked by alias); 22 Jun 2015 18:37:19 -0000
+Return-Path: <cygwin-patches-return-8216-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 55818 invoked by alias); 22 Jun 2015 18:40:40 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,57 +9,102 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 47705 invoked by uid 89); 22 Jun 2015 18:37:18 -0000
+Received: (qmail 55803 invoked by uid 89); 22 Jun 2015 18:40:39 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-4.7 required=5.0 tests=AWL,BAYES_05,KAM_LAZY_DOMAIN_SECURITY autolearn=no version=3.3.2
+X-Spam-SWARE-Status: No, score=-5.4 required=5.0 tests=AWL,BAYES_00,KAM_LAZY_DOMAIN_SECURITY autolearn=no version=3.3.2
 X-HELO: calimero.vinschen.de
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 22 Jun 2015 18:37:18 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id D038CA8094D; Mon, 22 Jun 2015 20:37:15 +0200 (CEST)
-Date: Mon, 22 Jun 2015 18:37:00 -0000
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 22 Jun 2015 18:40:38 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 23C09A8094D; Mon, 22 Jun 2015 20:40:36 +0200 (CEST)
+Date: Mon, 22 Jun 2015 18:40:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 2/5] winsup/doc: Add intro man pages from cygwin-doc
-Message-ID: <20150622183715.GM28301@calimero.vinschen.de>
+Subject: Re: [PATCH 1/5] winsup/doc: Create info pages from cygwin documentation
+Message-ID: <20150622184036.GN28301@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <55884387.90405@dronecode.org.uk> <1434995222-7256-1-git-send-email-jon.turney@dronecode.org.uk>
+References: <1434983976-3612-1-git-send-email-jon.turney@dronecode.org.uk> <1434983976-3612-2-git-send-email-jon.turney@dronecode.org.uk> <20150622145553.GH28301@calimero.vinschen.de> <558842B7.3080207@dronecode.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="4eRLI4hEmsdu6Npr"
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="6cMF9JLEeZkfJjkP"
 Content-Disposition: inline
-In-Reply-To: <1434995222-7256-1-git-send-email-jon.turney@dronecode.org.uk>
+In-Reply-To: <558842B7.3080207@dronecode.org.uk>
 User-Agent: Mutt/1.5.23 (2014-03-12)
-X-SW-Source: 2015-q2/txt/msg00116.txt.bz2
+X-SW-Source: 2015-q2/txt/msg00117.txt.bz2
 
 
---4eRLI4hEmsdu6Npr
+--6cMF9JLEeZkfJjkP
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-length: 657
+Content-length: 2682
 
-On Jun 22 18:47, Jon TURNEY wrote:
-> v2:
-> intro.1 and cygwin.1 are identical. Make cygwin.1 a link to intro.1
-> Update dates in static man pages
+On Jun 22 18:15, Jon TURNEY wrote:
+> On 22/06/2015 15:55, Corinna Vinschen wrote:
+> >On Jun 22 15:39, Jon TURNEY wrote:
+> >>v2:
+> >>Updated to use docbook2x-texi not docbook2texi, since source is now doc=
+book XML.
+> >>Tweak DocBook XML so info directory entry has a description.
+> >>
+> >>v3:
+> >>Use a custom charmap to handle &reg;
+> >>
+> >>v4:
+> >>Proper build avoidance
+> >>texinfo node references may not contain ':', so provide alternate text =
+for a few
+> >>xref targets
+> >>
+> >>2015-06-22  Jon Turney  <jon.turney@dronecode.org.uk>
+> >>
+> >>	* Makefile.in (install-info, cygwin-ug-net.info)
+> >>	(cygwin-api.info): Add.
+> >>	* cygwin-ug-net.xml: Add texinfo-node.
+> >>	* cygwin-api.xml: Ditto.
+> >
+> >This is fine.
+> >
+> >>	* ntsec.xml (db_home): Add texinfo-node for titles containing a
+> >>	':' which are the targets of an xref.
+> >
+> >This... not so much.  Let's simply remove the colons instead:
+> >
+> >-<sect4 id=3D"ntsec-mapping-nsswitch-home"><title id=3D"ntsec-mapping-ns=
+switch-home.title">The <literal>db_home:</literal> setting</title>
+> >+<sect4 id=3D"ntsec-mapping-nsswitch-home"><title id=3D"ntsec-mapping-ns=
+switch-home.title">The <literal>db_home</literal> setting</title>
+> >[...]
 >=20
-> v3:
-> Use doclifter to convert intro.[13] to DocBook XML
-> Clean up markup and fix a couple of spelling mistakes.
-> Build and install manpages from XML
+> I did consider this, but to be consistent it would needs to be removed fr=
+om
+> all section titles:
 >=20
-> v4:
-> Update to refer to GPLv3+, SUSv4
->=20
-> 2015-06-22  Jon Turney  <jon.turney@dronecode.org.uk>
->=20
-> 	* Makefile.in (intro2man.stamp): Add.
-> 	* intro.xml: New file.
+> ><sect4 id=3D"ntsec-mapping-nsswitch-pwdgrp"><title id=3D"ntsec-mapping-n=
+sswitch-pwdgrp.title">The <literal>passwd:</literal> and <literal>group:</l=
+iteral> settings</title>
+> ><sect4 id=3D"ntsec-mapping-nsswitch-enum"><title id=3D"ntsec-mapping-nss=
+witch-enum.title">The <literal>db_enum:</literal> setting</title>
+> ><sect4 id=3D"ntsec-mapping-nsswitch-home"><title id=3D"ntsec-mapping-nss=
+witch-home.title">The <literal>db_home:</literal> setting</title>
+> ><sect4 id=3D"ntsec-mapping-nsswitch-shell"><title id=3D"ntsec-mapping-ns=
+switch-shell.title">The <literal>db_shell:</literal> setting</title>
+> ><sect4 id=3D"ntsec-mapping-nsswitch-gecos"><title id=3D"ntsec-mapping-ns=
+switch-gecos.title">The <literal>db_gecos:</literal> setting</title>
 
-GTG :)
+I missed something, apparently.  From where are these three referenced,
+but not the others?
+
+> Even then, it's not consistent with the text, which always treats : as pa=
+rt
+> of the keyword.
+
+Yeah.  I'm not overly happy with this myself.  I didn't know how better
+I could make clear that the colon is part of the keyword.
+
+So, ok.  Please apply.  Maybe it makes sense to add texinfo-nodes for
+the others in the list above as well?  Just in case?
 
 
-Thanks,
 Corinna
 
 --=20
@@ -67,26 +112,26 @@ Corinna Vinschen                  Please, send mails regarding Cygwin to
 Cygwin Maintainer                 cygwin AT cygwin DOT com
 Red Hat
 
---4eRLI4hEmsdu6Npr
+--6cMF9JLEeZkfJjkP
 Content-Type: application/pgp-signature
 Content-length: 819
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v2
 
-iQIcBAEBCAAGBQJViFXbAAoJEPU2Bp2uRE+g8A8P/jIAVzTY47PBtvzJiKIHlxAl
-kdkpXZ9C4FkQmjFVQ15M2Cm12QDLismlMMVtlheamtYXJP4qjTPcmyjSek7NpjJl
-3+Ok+tgAW0kSoBH/7wj9G1ThRIA/r2a4m3ma0steXo4X5+te5v0UVi9XJuIgXtnB
-IsxjsoCekKGPUj6koMtD5AODdI2jvm1TnDWHPF5pcOGQ5hbGwwPAl1fzXinbTQV0
-frryZMb9e8h/yo7+1g7uxnL54HKeLJ2srGHcgjsw6ysPXzNttJEpASmF6QU+5hjK
-rxvehebKf49y5fJYHGdSHtc7dm/pWOvQGHi21oX8a+nHkHohMtPCmFY2632LBvyV
-wjf1kaMFqEtc8jaNpAacCbTlJvVNPugOkoE7CDHUKhctd/oeuB7hbunSBh2U1T/J
-AZPYSPT/86P6hrHZ0ThJYxpIAMVmDV5XzXM8sfW1kGQO7I4f4FgPUdnUlFZhYF1F
-Mvkz7ivNj4K3VEtRaQklWkqqte+PB4c2Xat+QxdYd/hdQQmgjok4CB7rOQe19G2G
-jRm/+3pNTecdwGRkuvuRMvBo2WozuINGl0PcY470LcpMoZ+aO/3smsdacLSirFFa
-QLYwuLHe1jBRXUWeAxkwTtwcDN3cMjFh8iUh9UEx/pSLvBKbjsVkd52jOnxHit5L
-y5SOYUFyT43S0DRXFLhO
-=JR4a
+iQIcBAEBCAAGBQJViFakAAoJEPU2Bp2uRE+gRQEP/2cYGpKgJ1bLSpOwMwaVQebK
+ehGai15zKMZgx3xpRevXBHNZX/kExYHFvRQobiaGgrJZZtwr2IZy+Y/q1cdb6rwp
+HdO1tuhB4N+BwMCV1oJzZzeuL/LEvYm0J63T8HHahGZqwCTdW8AMnBVUHM7XM7pa
+cdgO2zPd6zI1bgx6kmpAsKd5Io2jb688xHZGmmbhMBZNci538UfcZc4TzBrnKFt3
+DG8S4KdqTBRniRolUPi2Kju3OnqYSR8YHXkJI9fA+0llE2TkdldO60MrGG0Snrh1
+cbWt5f7hJE6aBm51zpZ6BNZ0hlRejtwu81nAuViHx99QRc3Gi0Odj9/iN+7jBNM8
+kbWB0EP0d3G28A7F60NK5FMD9QDYPlB3n9FYnrL1I8YHT+8i8A2x+q0WaIdL6oG3
+jgKp88IufZZ2HEj4R0iufBFDH43x8u4d4phO1mvGHSY/6kb5AchNHGW1xV8kpZ9n
+vSOFebUU0mrxgTHMCAR3uO/4dGI4NSPv3GKnrlHKpOJGv29EKoiPzwmwgChKtSUf
+e1l/Fs97Fs+2EgFePXqy4EE+2h3aHNAS5miS65N1lX21cG/I+3a8vEA00x8r9Kpi
+yRTQdLW0CQx1pVcZuQSTBy/qQqcnGPm6jGbiivJm4m2AdJEWzakjHSyXWP2AcHwS
+LJCwKg3uIthHCalKWZ6x
+=6ouZ
 -----END PGP SIGNATURE-----
 
---4eRLI4hEmsdu6Npr--
+--6cMF9JLEeZkfJjkP--
