@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8210-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 53266 invoked by alias); 22 Jun 2015 15:16:31 -0000
+Return-Path: <cygwin-patches-return-8211-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 53854 invoked by alias); 22 Jun 2015 15:17:05 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,42 +9,47 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 53246 invoked by uid 89); 22 Jun 2015 15:16:30 -0000
+Received: (qmail 53843 invoked by uid 89); 22 Jun 2015 15:17:05 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
 X-Spam-SWARE-Status: No, score=-5.4 required=5.0 tests=AWL,BAYES_00,KAM_LAZY_DOMAIN_SECURITY autolearn=no version=3.3.2
 X-HELO: calimero.vinschen.de
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 22 Jun 2015 15:16:29 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 20E76A8094D; Mon, 22 Jun 2015 17:16:27 +0200 (CEST)
-Date: Mon, 22 Jun 2015 15:16:00 -0000
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 22 Jun 2015 15:17:04 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 1F7AAA8094D; Mon, 22 Jun 2015 17:17:02 +0200 (CEST)
+Date: Mon, 22 Jun 2015 15:17:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 4/5] winsup/doc: Use xidepend to generate the source list for FAQ targets as well
-Message-ID: <20150622151627.GK28301@calimero.vinschen.de>
+Subject: Re: [PATCH 5/5] winsup/doc: Update ancient README about building documentation
+Message-ID: <20150622151702.GL28301@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1434983976-3612-1-git-send-email-jon.turney@dronecode.org.uk> <1434983976-3612-5-git-send-email-jon.turney@dronecode.org.uk>
+References: <1434983976-3612-1-git-send-email-jon.turney@dronecode.org.uk> <1434983976-3612-6-git-send-email-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="19uQFt6ulqmgNgg1"
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="4VrXvz3cwkc87Wze"
 Content-Disposition: inline
-In-Reply-To: <1434983976-3612-5-git-send-email-jon.turney@dronecode.org.uk>
+In-Reply-To: <1434983976-3612-6-git-send-email-jon.turney@dronecode.org.uk>
 User-Agent: Mutt/1.5.23 (2014-03-12)
-X-SW-Source: 2015-q2/txt/msg00111.txt.bz2
+X-SW-Source: 2015-q2/txt/msg00112.txt.bz2
 
 
---19uQFt6ulqmgNgg1
+--4VrXvz3cwkc87Wze
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-length: 333
+Content-length: 489
 
 On Jun 22 15:39, Jon TURNEY wrote:
+> Update list of pre-requisites, everything else is obsolete.
+>=20
+> Future work: Ensure that the list of pre-requisites in FAQ 6.21 "How do I=
+ build
+> Cygwin" remains synchronized with this list.
+>=20
 > 2015-06-22  Jon Turney  <jon.turney@dronecode.org.uk>
 >=20
-> 	* Makefile.in (FAQ_SOURCES): Remove and generate with xidepend.
+> 	* README: Update.
 
 Ok.
-
 
 Thanks,
 Corinna
@@ -54,26 +59,26 @@ Corinna Vinschen                  Please, send mails regarding Cygwin to
 Cygwin Maintainer                 cygwin AT cygwin DOT com
 Red Hat
 
---19uQFt6ulqmgNgg1
+--4VrXvz3cwkc87Wze
 Content-Type: application/pgp-signature
 Content-length: 819
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v2
 
-iQIcBAEBCAAGBQJViCbLAAoJEPU2Bp2uRE+gcDsP/1joGAn7MiB30Uxq8rM1xz8F
-IzYZiyoabbtp1DgqsBkRwowThcqXrdnRndEnfjPrCL9NBjfLe2+5bIO2FqYkfoXv
-I2Y9pS+BBcsFVGKlIlwnJWAJcPMosI2t57hNJkaqFeirMGqZptLepzxSGofnvydk
-6LX+Xc4KXSiq8VG9aTMfYpXv5TPERp/oaBE6yZzOZ43towjRUAbIF+3zyPuIDeIz
-XAIH+KZJQOZbY3lLj2WoP/HBmxgxFeZ0gfErCEf6HRi52TfcRFbvtdP3ahPpl9As
-unDEcfKQ+TM/IT5j9aCksrtU4bhOgyccsG1Bs8cNEYwaLjZR/PsLNPXic9fIJru9
-S91cgCADr3haFqBSTfGO5Cjb0emgFm3R51NOEYKSMe3zD7I9BiYUdwQGoUcWdigP
-CNLxZtpk90ccK0gyhjVlH32WOALPkBgRCdR1gqXgMVQmE4D4wxUO8ufKEXkkaw0X
-Ewbz/VMM8OAmlpEJ8QT8QV7xjOchlwJM/0OL/hfiS2son3mrm4hjtiwkTMkk+F2A
-VzBTu4ONtc6Ag6gOAyK60h1ornCaEHuIu4V66Nl/CFlT0zaZ1xx3mDx4Q6St/5xn
-RN6r5l3yT15kjvtN+frRcOU3SNK7NC3UfPpS9dDzmps6ZH4s8ODe40BnGa7GQUXu
-E0JWKbMxaq9/60zPJqE3
-=2pQd
+iQIcBAEBCAAGBQJViCbuAAoJEPU2Bp2uRE+gqxQP/2QAYhxO6ocnuuy5i+IxBHr6
+s/ovIjjL+lYS6dC1BQSypuEpWywXmdiFeAny9KKBs1pycuZzp1uXGc1R1LhCswPd
+nbb4rvNO97Pa3sKJXlCpcdum+0R1ke3Cgo8WaDs03Gb11f8dVvTEzgyKog+WdfPG
+L4jnovv+ZPySC5tK8iEAQZHw5socfIJfNKeNwuAPDyQ9qQ3Vkayua32H/l3qiQEj
+02sCmDtVaPXWaPuH6+dbqmMognk2NI1mLO/Kw7dHSkgXDuArjcUNB1cg2beRzZWF
+tM8tXxgoPCJiJe0zqL4aYwNBIAW3iThjJPgsszbm2YgEzBrTfKOoF+BqqCjmp2Jq
+kMDl8Mvf6TmxkIOigF58HGU/lH+35NHewRfx30gKVc4eVszBXjtsPMzi8t/uRo04
+gZaF9lK4gV97TGqzCc/RhLyvRs9vZZDMTxeplWo6kFarnDRV85cl8JMA7uYTB8+/
+S6LzE/qyHVwS9E0dMIrfhBaedYoitk01lyD9i6aWBgkXKH0r92ctTN+Me9ahh/mZ
+ucWkvGxi5XdWfAaUaErBHbjZ3yPaT1ucDIsA3r8cxia5xxue+RMaRzrLCJOuBFm7
++OMlT+nB4AbOWheiWz4rU+CZOPXtvCZEcrYWvHiS4zTE3u9J8aWuzJMoP9YeayOS
+Xvee4QLLfQdQnJJUp/Aa
+=CvO6
 -----END PGP SIGNATURE-----
 
---19uQFt6ulqmgNgg1--
+--4VrXvz3cwkc87Wze--
