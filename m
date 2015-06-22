@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8211-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 53854 invoked by alias); 22 Jun 2015 15:17:05 -0000
+Return-Path: <cygwin-patches-return-8212-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 77733 invoked by alias); 22 Jun 2015 17:15:49 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,76 +9,68 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 53843 invoked by uid 89); 22 Jun 2015 15:17:05 -0000
+Received: (qmail 77723 invoked by uid 89); 22 Jun 2015 17:15:48 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-5.4 required=5.0 tests=AWL,BAYES_00,KAM_LAZY_DOMAIN_SECURITY autolearn=no version=3.3.2
-X-HELO: calimero.vinschen.de
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 22 Jun 2015 15:17:04 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 1F7AAA8094D; Mon, 22 Jun 2015 17:17:02 +0200 (CEST)
-Date: Mon, 22 Jun 2015 15:17:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-1.6 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_LOW autolearn=ham version=3.3.2
+X-HELO: out5-smtp.messagingengine.com
+Received: from out5-smtp.messagingengine.com (HELO out5-smtp.messagingengine.com) (66.111.4.29) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-GCM-SHA384 encrypted) ESMTPS; Mon, 22 Jun 2015 17:15:47 +0000
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])	by mailout.nyi.internal (Postfix) with ESMTP id 9E6F120FEF	for <cygwin-patches@cygwin.com>; Mon, 22 Jun 2015 13:15:44 -0400 (EDT)
+Received: from frontend1 ([10.202.2.160])  by compute1.internal (MEProxy); Mon, 22 Jun 2015 13:15:44 -0400
+Received: from [192.168.1.102] (unknown [86.141.128.210])	by mail.messagingengine.com (Postfix) with ESMTPA id 4137CC00288	for <cygwin-patches@cygwin.com>; Mon, 22 Jun 2015 13:15:44 -0400 (EDT)
+Subject: Re: [PATCH 1/5] winsup/doc: Create info pages from cygwin documentation
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 5/5] winsup/doc: Update ancient README about building documentation
-Message-ID: <20150622151702.GL28301@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1434983976-3612-1-git-send-email-jon.turney@dronecode.org.uk> <1434983976-3612-6-git-send-email-jon.turney@dronecode.org.uk>
+References: <1434983976-3612-1-git-send-email-jon.turney@dronecode.org.uk> <1434983976-3612-2-git-send-email-jon.turney@dronecode.org.uk> <20150622145553.GH28301@calimero.vinschen.de>
+From: Jon TURNEY <jon.turney@dronecode.org.uk>
+Message-ID: <558842B7.3080207@dronecode.org.uk>
+Date: Mon, 22 Jun 2015 17:15:00 -0000
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:38.0) Gecko/20100101 Thunderbird/38.0.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="4VrXvz3cwkc87Wze"
-Content-Disposition: inline
-In-Reply-To: <1434983976-3612-6-git-send-email-jon.turney@dronecode.org.uk>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-SW-Source: 2015-q2/txt/msg00112.txt.bz2
+In-Reply-To: <20150622145553.GH28301@calimero.vinschen.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2015-q2/txt/msg00113.txt.bz2
 
+On 22/06/2015 15:55, Corinna Vinschen wrote:
+> On Jun 22 15:39, Jon TURNEY wrote:
+>> v2:
+>> Updated to use docbook2x-texi not docbook2texi, since source is now docbook XML.
+>> Tweak DocBook XML so info directory entry has a description.
+>>
+>> v3:
+>> Use a custom charmap to handle &reg;
+>>
+>> v4:
+>> Proper build avoidance
+>> texinfo node references may not contain ':', so provide alternate text for a few
+>> xref targets
+>>
+>> 2015-06-22  Jon Turney  <jon.turney@dronecode.org.uk>
+>>
+>> 	* Makefile.in (install-info, cygwin-ug-net.info)
+>> 	(cygwin-api.info): Add.
+>> 	* cygwin-ug-net.xml: Add texinfo-node.
+>> 	* cygwin-api.xml: Ditto.
+>
+> This is fine.
+>
+>> 	* ntsec.xml (db_home): Add texinfo-node for titles containing a
+>> 	':' which are the targets of an xref.
+>
+> This... not so much.  Let's simply remove the colons instead:
+>
+> -<sect4 id="ntsec-mapping-nsswitch-home"><title id="ntsec-mapping-nsswitch-home.title">The <literal>db_home:</literal> setting</title>
+> +<sect4 id="ntsec-mapping-nsswitch-home"><title id="ntsec-mapping-nsswitch-home.title">The <literal>db_home</literal> setting</title>
+> [...]
 
---4VrXvz3cwkc87Wze
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 489
+I did consider this, but to be consistent it would needs to be removed 
+from all section titles:
 
-On Jun 22 15:39, Jon TURNEY wrote:
-> Update list of pre-requisites, everything else is obsolete.
->=20
-> Future work: Ensure that the list of pre-requisites in FAQ 6.21 "How do I=
- build
-> Cygwin" remains synchronized with this list.
->=20
-> 2015-06-22  Jon Turney  <jon.turney@dronecode.org.uk>
->=20
-> 	* README: Update.
+> <sect4 id="ntsec-mapping-nsswitch-pwdgrp"><title id="ntsec-mapping-nsswitch-pwdgrp.title">The <literal>passwd:</literal> and <literal>group:</literal> settings</title>
+> <sect4 id="ntsec-mapping-nsswitch-enum"><title id="ntsec-mapping-nsswitch-enum.title">The <literal>db_enum:</literal> setting</title>
+> <sect4 id="ntsec-mapping-nsswitch-home"><title id="ntsec-mapping-nsswitch-home.title">The <literal>db_home:</literal> setting</title>
+> <sect4 id="ntsec-mapping-nsswitch-shell"><title id="ntsec-mapping-nsswitch-shell.title">The <literal>db_shell:</literal> setting</title>
+> <sect4 id="ntsec-mapping-nsswitch-gecos"><title id="ntsec-mapping-nsswitch-gecos.title">The <literal>db_gecos:</literal> setting</title>
 
-Ok.
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---4VrXvz3cwkc87Wze
-Content-Type: application/pgp-signature
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJViCbuAAoJEPU2Bp2uRE+gqxQP/2QAYhxO6ocnuuy5i+IxBHr6
-s/ovIjjL+lYS6dC1BQSypuEpWywXmdiFeAny9KKBs1pycuZzp1uXGc1R1LhCswPd
-nbb4rvNO97Pa3sKJXlCpcdum+0R1ke3Cgo8WaDs03Gb11f8dVvTEzgyKog+WdfPG
-L4jnovv+ZPySC5tK8iEAQZHw5socfIJfNKeNwuAPDyQ9qQ3Vkayua32H/l3qiQEj
-02sCmDtVaPXWaPuH6+dbqmMognk2NI1mLO/Kw7dHSkgXDuArjcUNB1cg2beRzZWF
-tM8tXxgoPCJiJe0zqL4aYwNBIAW3iThjJPgsszbm2YgEzBrTfKOoF+BqqCjmp2Jq
-kMDl8Mvf6TmxkIOigF58HGU/lH+35NHewRfx30gKVc4eVszBXjtsPMzi8t/uRo04
-gZaF9lK4gV97TGqzCc/RhLyvRs9vZZDMTxeplWo6kFarnDRV85cl8JMA7uYTB8+/
-S6LzE/qyHVwS9E0dMIrfhBaedYoitk01lyD9i6aWBgkXKH0r92ctTN+Me9ahh/mZ
-ucWkvGxi5XdWfAaUaErBHbjZ3yPaT1ucDIsA3r8cxia5xxue+RMaRzrLCJOuBFm7
-+OMlT+nB4AbOWheiWz4rU+CZOPXtvCZEcrYWvHiS4zTE3u9J8aWuzJMoP9YeayOS
-Xvee4QLLfQdQnJJUp/Aa
-=CvO6
------END PGP SIGNATURE-----
-
---4VrXvz3cwkc87Wze--
+Even then, it's not consistent with the text, which always treats : as 
+part of the keyword.
