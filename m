@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8221-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 100161 invoked by alias); 1 Jul 2015 12:27:25 -0000
+Return-Path: <cygwin-patches-return-8222-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 42282 invoked by alias); 5 Jul 2015 18:12:13 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,131 +9,145 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 100127 invoked by uid 89); 1 Jul 2015 12:27:24 -0000
+Received: (qmail 42271 invoked by uid 89); 5 Jul 2015 18:12:12 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-5.4 required=5.0 tests=AWL,BAYES_00,KAM_LAZY_DOMAIN_SECURITY autolearn=no version=3.3.2
-X-HELO: calimero.vinschen.de
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 01 Jul 2015 12:27:20 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id AB6D7A80922; Wed,  1 Jul 2015 14:27:17 +0200 (CEST)
-Date: Wed, 01 Jul 2015 12:27:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=2.1 required=5.0 tests=AWL,BAYES_50,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE,URIBL_BLACK autolearn=no version=3.3.2
+X-HELO: rgout01.bt.lon5.cpcloud.co.uk
+Received: from rgout01.bt.lon5.cpcloud.co.uk (HELO rgout01.bt.lon5.cpcloud.co.uk) (65.20.0.178) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 05 Jul 2015 18:12:10 +0000
+X-OWM-Source-IP: 86.179.113.166(GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-CTCH-RefID: str=0001.0A090204.55997377.0096,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
+X-Junkmail-Premium-Raw: score=27/50,refid=2.7.2:2015.7.5.161516:17:27.888,ip=86.179.113.166,rules=__HAS_FROM, __TO_MALFORMED_2, __TO_NO_NAME, __HAS_MSGID, __SANE_MSGID, __HAS_X_MAILER, __ANY_URI, __URI_NO_WWW, __URI_NO_PATH, __STOCK_PHRASE_7, BODY_SIZE_3000_3999, __MIME_TEXT_ONLY, RDNS_GENERIC_POOLED, __URI_NS, SXL_IP_DYNAMIC[166.113.179.86.fur], HTML_00_01, HTML_00_10, BODY_SIZE_5000_LESS, RDNS_SUSP_GENERIC, RDNS_SUSP, BODY_SIZE_7000_LESS, NO_URI_HTTPS
+X-CTCH-Spam: Unknown
+Received: from localhost.localdomain (86.179.113.166) by rgout01.bt.lon5.cpcloud.co.uk (8.6.122.06) (authenticated as jonturney@btinternet.com)        id 558FEB1500CEFC5D; Sun, 5 Jul 2015 19:12:07 +0100
+From: Jon TURNEY <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
-Cc: Jeffrey Walton <noloader@gmail.com>
-Subject: Re: Using g++ and -m32 option on x86_64 broken
-Message-ID: <20150701122717.GK2918@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com,	Jeffrey Walton <noloader@gmail.com>
-References: <CAH8yC8mUrhuR2vPhqSSLKmrA82nW3JhvcRnFVO1nFccy337y_g@mail.gmail.com> <20150701082901.GA7902@calimero.vinschen.de> <CAH8yC8mAb_zt9GdyJz=F2wK4fcUsY38Gj4wExxDO2h28TuP5dg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="GvznHscUikHnwW2p"
-Content-Disposition: inline
-In-Reply-To: <CAH8yC8mAb_zt9GdyJz=F2wK4fcUsY38Gj4wExxDO2h28TuP5dg@mail.gmail.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-SW-Source: 2015-q3/txt/msg00003.txt.bz2
+Cc: Jon TURNEY <jon.turney@dronecode.org.uk>
+Subject: [PATCH] winsup/doc: Add a configure test to find docbook2xtexi
+Date: Sun, 05 Jul 2015 18:12:00 -0000
+Message-Id: <1436119898-2752-1-git-send-email-jon.turney@dronecode.org.uk>
+X-SW-Source: 2015-q3/txt/msg00004.txt.bz2
 
+Fedora installs docbook2texi under the name db2x_docbook2texi
+Other distros and Cygwin install docbook2texi under the name docbook2x-texi
 
---GvznHscUikHnwW2p
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 2753
+Add a configure test to find either.
 
-On Jul  1 06:59, Jeffrey Walton wrote:
-> On Wed, Jul 1, 2015 at 4:29 AM, Corinna Vinschen
-> <corinna-cygwin@cygwin.com> wrote:
-> > Hi Jeffrey,
-> >
-> > On Jun 30 21:38, Jeffrey Walton wrote:
-> >> Cygwin's GCC responds to the -m32 option, but it causes a compile erro=
-r:
-> >>
-> >>    expected unqualified-id before =E2=80=98__int128=E2=80=99
-> >>        inline __int128
-> >>
-> >> If the project does not support the -m32 option, then it should be
-> >> removes so that using it causes a compile error.
-> >>
-> >> Below is the changed needed to get through the compile with -m32:
-> >>
-> >> $ diff /usr/lib/gcc/x86_64-pc-cygwin/4.9.2/include/c++/x86_64-pc-cygwi=
-n/bits/c++config.h
-> >> /usr/lib/gcc/x86_64-pc-cygwin/4.9.2/include/c++/x86_64-pc-cygwin/bits/=
-c++config.h.bu
-> >> 1306,1308c1306
-> >> < #ifndef __CYGWIN32__      /* -m32 used on x86_64 */
-> >> < # define _GLIBCXX_USE_INT128 1
-> >> < #endif
-> >> ---
-> >> > #define _GLIBCXX_USE_INT128 1
-> >>
-> >> ************
-> >
-> > Wrong mailing list.  cygwin-patches is for patches to the Cygwin
-> > sources, not patches to arbitrary packages in the Cygwin distro.
-> > See https://cygwin.com/lists.html
->=20
-> Yes, you got a patch.
+2015-07-05  Jon Turney  <jon.turney@dronecode.org.uk>
 
-Again, cygwin-patches is for patches to the cygwin DLL, not for GCC
-patches.  I'm politely telling you that you're sending your report to
-the wrong address so please send you request where it belongs.
+	* configure.ac: Add check for DOCBOOK2XTEXI
+	* configure: Regenerate.
+	* Makefile.in (DOCBOOK2XTEXI): Use.
 
-> > If you want to reach out to Cygwin package maintainers [GCC maintainer
-> > BCCed], use the cygwin AT cygwin DOT com mailing list.  If you want to
-> > report the bug to the GCC folks, see https://gcc.gnu.org/bugs/
->=20
-> No, I used Cygwin's package, and that makes it Cygwin's problem.
+Signed-off-by: Jon TURNEY <jon.turney@dronecode.org.uk>
+---
+ winsup/doc/ChangeLog    |  6 ++++++
+ winsup/doc/Makefile.in  |  2 +-
+ winsup/doc/configure    | 44 ++++++++++++++++++++++++++++++++++++++++++++
+ winsup/doc/configure.ac |  1 +
+ 4 files changed, 52 insertions(+), 1 deletion(-)
 
-Even then, this doesnt make it an issue for the cygwin-patches ML.
-
-> >> And this project really needs a bug tracker...
-> >
-> > As for -m32, it's not supported for a reason.
->=20
-> No, GCC responds to it. If you don't support it, then take it out and
-> produce a compile error.
-
-You seem to misunderstand how this works.  The package maintainers of
-the various Cygwin packages are not subscribed to cygwin-patches.  This
-mailing list servers only the purpose to send patches for the Cygwin DLL
-and accompanying tools, as outlined on https://cygwin.com/lists.html.
-So, if you want to reach out to the Cygwin GCC maintainer, please send
-your request to the cygwin AT cygwin DOT com mailing list, as outlined
-on https://cygwin.com/lists.html.  Insisting on using the wrong mailing
-list will not really help to move your complaint forward in the long
-run.
-
-So, please don't follow up on cygwin-patches, it's the wrong addressee.
-
-
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---GvznHscUikHnwW2p
-Content-Type: application/pgp-signature
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJVk9ylAAoJEPU2Bp2uRE+gLcMP/ixt/dBzWkWamAxZf2xKSoth
-DHdOop9KiHA77YmeN0NzOOJ75gvISPQLfptKyoxADjFzlXjDQ0R01aQYCPdMZeIu
-TI2QPypKue4ZbhBsdfu4IkVRaGykiPh1uHgkF6cBoH4GMHHzYpa+uN9gzFsoAgrE
-szvA1u1YVh1wfSsWL/TLPp/g0JycZxI9/wlpHdG5BdzxcDg3OY0+1exuc1hk/KjJ
-eY8RJmU+mM3V9UcoieK+OdUBBOeQto/MwFf3IQ8dQpASjH4gQFGHyJmCNxvjfOMm
-uVR0R8CvCCqA4ursjnofbWCQPu7VNGvp2Xx2EvBQ+X01IuPTzxVCBxJYsZ4MpLum
-H5wQ0qUmKMb0PZXlRUodGHnsH3yH06thkVKqNvd8QomTPB6cv5sDgskPVqNiPBrl
-dZozxntCUL5Iq7X+JdL0tz+kDOgu1lfHNiKfXY0gWWTxfqIt+GMjb/72LkSyut8N
-h79Lyyif/JlZdkcbiisZCtrxZ1SsQerr56czaoi4o/64/ec8KAQCb1CPh8ILvGHl
-JYMuCG/4wyU+JPN0Aj3v0wkbdOfcE/dA9zfDLhRQE0wagQiaugt6HPhAYG99kUgR
-eYm6QFtKCkOMeFy7bL321Ue0AaugDDqo5l3ORBDP/2d71u2HsKP9vzAlYZxvBR/m
-FoIg0rFxM7N7gqf18udL
-=rEwM
------END PGP SIGNATURE-----
-
---GvznHscUikHnwW2p--
+diff --git a/winsup/doc/ChangeLog b/winsup/doc/ChangeLog
+index 841bbe2..b452fa9 100644
+--- a/winsup/doc/ChangeLog
++++ b/winsup/doc/ChangeLog
+@@ -1,3 +1,9 @@
++2015-07-05  Jon Turney  <jon.turney@dronecode.org.uk>
++
++	* configure.ac: Add check for DOCBOOK2XTEXI
++	* configure: Regenerate.
++	* Makefile.in (DOCBOOK2XTEXI): Use.
++
+ 2015-06-22  Jon Turney  <jon.turney@dronecode.org.uk>
+ 
+ 	* README: Update.
+diff --git a/winsup/doc/Makefile.in b/winsup/doc/Makefile.in
+index 7cdc72c..cfe206d 100644
+--- a/winsup/doc/Makefile.in
++++ b/winsup/doc/Makefile.in
+@@ -30,7 +30,7 @@ CC:=@CC@
+ CC_FOR_TARGET:=@CC@
+ 
+ XMLTO:=xmlto --skip-validation --with-dblatex
+-DOCBOOK2XTEXI:=docbook2x-texi --xinclude --info --utf8trans-map=charmap
++DOCBOOK2XTEXI:=@DOCBOOK2XTEXI@ --xinclude --info --utf8trans-map=charmap
+ 
+ include $(srcdir)/../Makefile.common
+ -include Makefile.dep
+diff --git a/winsup/doc/configure b/winsup/doc/configure
+index a484c8d..6e053bd 100755
+--- a/winsup/doc/configure
++++ b/winsup/doc/configure
+@@ -608,6 +608,7 @@ build_os
+ build_vendor
+ build_cpu
+ build
++DOCBOOK2XTEXI
+ INSTALL_DATA
+ INSTALL_SCRIPT
+ INSTALL_PROGRAM
+@@ -1874,6 +1875,49 @@ test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL}'
+ 
+ test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
+ 
++for ac_prog in docbook2x-texi db2x_docbook2texi
++do
++  # Extract the first word of "$ac_prog", so it can be a program name with args.
++set dummy $ac_prog; ac_word=$2
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
++$as_echo_n "checking for $ac_word... " >&6; }
++if ${ac_cv_prog_DOCBOOK2XTEXI+:} false; then :
++  $as_echo_n "(cached) " >&6
++else
++  if test -n "$DOCBOOK2XTEXI"; then
++  ac_cv_prog_DOCBOOK2XTEXI="$DOCBOOK2XTEXI" # Let the user override the test.
++else
++as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
++for as_dir in $PATH
++do
++  IFS=$as_save_IFS
++  test -z "$as_dir" && as_dir=.
++    for ac_exec_ext in '' $ac_executable_extensions; do
++  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
++    ac_cv_prog_DOCBOOK2XTEXI="$ac_prog"
++    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
++    break 2
++  fi
++done
++  done
++IFS=$as_save_IFS
++
++fi
++fi
++DOCBOOK2XTEXI=$ac_cv_prog_DOCBOOK2XTEXI
++if test -n "$DOCBOOK2XTEXI"; then
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $DOCBOOK2XTEXI" >&5
++$as_echo "$DOCBOOK2XTEXI" >&6; }
++else
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
++$as_echo "no" >&6; }
++fi
++
++
++  test -n "$DOCBOOK2XTEXI" && break
++done
++test -n "$DOCBOOK2XTEXI" || DOCBOOK2XTEXI="true"
++
+ 
+ # Make sure we can run config.sub.
+ $SHELL "$ac_aux_dir/config.sub" sun4 >/dev/null 2>&1 ||
+diff --git a/winsup/doc/configure.ac b/winsup/doc/configure.ac
+index 30439b8..b461750 100644
+--- a/winsup/doc/configure.ac
++++ b/winsup/doc/configure.ac
+@@ -16,6 +16,7 @@ AC_CONFIG_SRCDIR(cygwin-api.xml)
+ AC_CONFIG_AUX_DIR(../..)
+ 
+ AC_PROG_INSTALL
++AC_CHECK_PROGS([DOCBOOK2XTEXI], [docbook2x-texi db2x_docbook2texi], [true])
+ AC_NO_EXECUTABLES
+ AC_CANONICAL_SYSTEM
+ 
+-- 
+2.4.5
