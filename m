@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8227-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 70557 invoked by alias); 27 Jul 2015 07:50:58 -0000
+Return-Path: <cygwin-patches-return-8228-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 109975 invoked by alias); 29 Jul 2015 14:10:37 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,194 +9,101 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 70523 invoked by uid 89); 27 Jul 2015 07:50:57 -0000
+Received: (qmail 109963 invoked by uid 89); 29 Jul 2015 14:10:36 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-4.5 required=5.0 tests=AWL,BAYES_20,KAM_LAZY_DOMAIN_SECURITY autolearn=no version=3.3.2
-X-Spam-User: qpsmtpd, 2 recipients
-X-HELO: calimero.vinschen.de
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 27 Jul 2015 07:50:56 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 8D501A8084F; Mon, 27 Jul 2015 09:50:53 +0200 (CEST)
-Date: Mon, 27 Jul 2015 07:50:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-developers@cygwin.com
-Cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] winsup/cygwin: Protect fork() against dll- and exe-updates.
-Message-ID: <20150727075053.GD7535@calimero.vinschen.de>
-Reply-To: cygwin-developers@cygwin.com
-Mail-Followup-To: cygwin-developers@cygwin.com, cygwin-patches@cygwin.com
-References: <55B25D13.8040007@ssi-schaefer.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="1SQmhf2mF2YjsYvc"
-Content-Disposition: inline
-In-Reply-To: <55B25D13.8040007@ssi-schaefer.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-SW-Source: 2015-q3/txt/msg00009.txt.bz2
-
-
---1SQmhf2mF2YjsYvc
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-Spam-SWARE-Status: No, score=-0.7 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_LOW,RP_MATCHES_RCVD,SPF_PASS autolearn=ham version=3.3.2
+X-HELO: mgate3.illumina.com
+Received: from mgate3.illumina.com (HELO mgate3.illumina.com) (46.17.164.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-SHA encrypted) ESMTPS; Wed, 29 Jul 2015 14:10:34 +0000
+X-ASG-Debug-ID: 1438179020-05f25675af2ff390003-QFy3Zk
+Received: from UKCH-PRD-EXCA01.illumina.com (ukch-prd-exca01.illumina.com [10.46.32.80]) by mgate3.illumina.com with ESMTP id PwMuoZ1Tl2aZ2UUz (version=TLSv1 cipher=AES128-SHA bits=128 verify=NO) for <cygwin-patches@cygwin.com>; Wed, 29 Jul 2015 07:10:29 -0700 (PDT)
+X-Barracuda-Envelope-From: RPetrovski@illumina.com
+X-ASG-Whitelist: Client
+Received: from UKCH-PRD-EXMB01.illumina.com ([::1]) by UKCH-PRD-EXCA01.illumina.com ([10.46.32.80]) with mapi id 14.03.0195.001; Wed, 29 Jul 2015 15:10:26 +0100
+From: "Petrovski, Roman" <RPetrovski@illumina.com>
+To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: RtlFillMemory fails on block sizes over 0x7fffffff
+X-ASG-Orig-Subj: RtlFillMemory fails on block sizes over 0x7fffffff
+Date: Wed, 29 Jul 2015 14:10:00 -0000
+Message-ID: <3BD89E0BA5F96349B765DE1100906A6D016FC0267F@UKCH-PRD-EXMB01.illumina.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-Content-length: 5552
+MIME-Version: 1.0
+X-Barracuda-Connect: ukch-prd-exca01.illumina.com[10.46.32.80]
+X-Barracuda-Start-Time: 1438179027
+X-Barracuda-Encrypted: AES128-SHA
+X-Barracuda-URL: http://10.46.33.14:8000/cgi-mod/mark.cgi
+X-Barracuda-BRTS-Status: 1
+X-IsSubscribed: yes
+X-SW-Source: 2015-q3/txt/msg00010.txt.bz2
 
-Hi Michael,
+Hi, just ran into a problem which boils down to the following at least with=
+ Windows 7:
 
-On Jul 24 17:43, Michael Haubenwallner wrote:
-> Hi!
->=20
-> When starting to port Gentoo Prefix to Cygwin, the first real problem
-> discovered is that fork() does use the original executable's location
-> to Create the child's Process, probably finding linked dlls that just
-> have emerged in the current directory (sth. like /my/prefix/usr/bin),
-> causing "Loaded different DLL with same basename in forked child" errors.
+char *p =3D (char*)malloc(0x80000000UL);	//works fine, allocates memory as =
+requested
+memset(p, 0, 0x80000000UL);			//Watch process segfault.
 
-Unfortunately there's some red tape to get over with, first.  We need a
-copyright assignment from you before we can go much further.  See
-https://cygwin.com/contrib.html, "Before you get started".  Please fill
-out the standard assignment form and send the signed PDF to the address
-given therein.
+The RtlFillMemory either crashes or underfills the buffer depending on the =
+size given.
+Looks like internally it treats size as a signed 4-byte integer.
 
-> Diving into the details, I'm coming up with (a patch-draft based on) the
-> idea to create hardlinks for the binaries-in-use into some cygwin-specific
-> directory, like \proc\<ntpid>\object\ ('ve seen this name on AIX),
-> and use these hardlinks instead to create the new child's process.
->=20
-> Thoughts so far?
+Please apply the patch below or implement an alternative.
 
-Well, yes.  Off the top of my head a couple of potential problems come
-to mind:
+Roman.
 
-- /proc is already available as virtual filesystem as on Linux.  Reusing
-  it for some purposes is ok, but in this case we're talking about a
-  real directory of the same name, which then would be hidden beneath
-  the virtual one.  Is that deliberate?  The directory wouldn't be
-  accessible from Cygwin applications while native Windows apps would
-  see the dir.  I think hidden is bad.  Something like this should take
-  place in a visible cache dir.  /var/cache or /var/spool come to mind.
 
-  Also, using the Windows PID as dir name seems a bit weird, given that
-  the virtual /proc obviously uses the Cygwin PID.  This sounds like a
-  source for confusion.
 
-- What about running Cygwin on filesystems not supporting hardlinks,
-  like FAT?
+=46rom 60ed745b75d16755769653f19882335ef69960dd Mon Sep 17 00:00:00 2001
+From: Roman Petrovski <rpetrovski@illumina.com>
+Date: Wed, 29 Jul 2015 06:45:45 -0700
+Subject: [PATCH] RtlFillMemory fails on block sizes over 0x7fffffff
 
-- There's a meme along the lines of "Why is Cygwin soooo Slow!!!1!!11".
+---
+ winsup/cygwin/miscfuncs.cc | 22 ++++++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
 
-  The most important factor for this slowness is the way fork() has to
-  be emulated.  The method you're proposing would add to the overhead by
-  having to create hardlinks on fork and deleting them again at exit or
-  execve time.
+diff --git a/winsup/cygwin/miscfuncs.cc b/winsup/cygwin/miscfuncs.cc
+index 4a7a1b8..7308498 100644
+--- a/winsup/cygwin/miscfuncs.cc
++++ b/winsup/cygwin/miscfuncs.cc
+@@ -904,17 +904,35 @@ err:
+ extern "C" void NTAPI RtlFillMemory (PVOID, SIZE_T, BYTE);
+ extern "C" void NTAPI RtlCopyMemory (PVOID, const VOID *, SIZE_T);
 
-  Did you run tests to find out the cost of this additional overhead?
++
++static const size_t RTL_MAX_SIZE =3D 0x7fffffff;
+ extern "C" void *
+ memset (void *s, int c, size_t n)
+ {
+-  RtlFillMemory (s, n, c);
++  char *p =3D (char*)s;
++  while (n)
++  {
++    size_t size =3D min(RTL_MAX_SIZE, n);
++    RtlFillMemory (p, size, c);
++    p +=3D size;
++    n -=3D size;
++  }
+   return s;
+ }
 
-> For now, when <cygroot>\proc\ directory does exist, the patch (roughly) d=
-oes:
->=20
-> For /bin/bash.exe, cygwin1.dll creates these hardlinks at process startup:
->   \proc\<ntpid>\object\bash.exe         -> /bin/bash.exe
->   \proc\<ntpid>\object\bash.exe.local      (empty file for dll redirectio=
-n)
->   \proc\<ntpid>\object\cygwin1.dll      -> /bin/cygwin1.dll
->   \proc\<ntpid>\object\cygreadline7.dll -> /bin/cygreadline7.dll
->=20
-> And frok::parent then does:
->=20
->   CreateProcess("\proc\<ntpid>\object\bash.exe", "/bin/bash.exe", ...)
->=20
-> Resulting in another \proc\<ntpid>\object\ directory with same hardlinks.
->=20
-> While attached patch does work so far already, there's a few issues:
->=20
-> *) dll-redirection for LoadLibrary using "app.exe.local" file does operat=
-e on
->    the dll's basename only, breaking perl's Hash::Util and List::Util at =
-least.
->    So creating hardlinks for dynamically loaded dlls is disabled for now.
->    Eventually, manifests and/or app.exe.config could help here, but I'm s=
-till
->    failing to really grok them...
-
-Hmm.  The DLLs are loaded dynamically anyway, so they will be loaded
-dynamically in the child as well in dll_list::load_after_fork_impl.  Why
-not simply hardlinking them using a unique filename (e.g. using the
-inode number), storing the unique number or name in the dll struct and
-then calling LoadLibrary on this name?
-
-> *) Who can clean up \proc\<ntpid>\ directory after power-loss or similar?
->    For now, if stale \proc\<ntpid>\ is found, it is removed beforehand.
->    But when this was from a different user, cleanup will fail. However,
->    using \proc\S-<current-user-id>\<ntpid>\ instead could help here...
-
-Yes, that seems necessary.  The requirement to remove a complete
-directory on process startup is a lot of effort, though.  I'm feeling a
-sweat attack coming...
-
-> *) Is it really necessary to create these hardlinks in the real filesyste=
-m?
->    I could imagine to create them directly in $Recycle.bin instead, or so=
-me
->    (other) memory-only thing...
-
-Uh, well, they are hardlinks after all.  They must be created on the
-same filesystem.
-
-> Thoughts welcome!
-
-In general I like the basic idea behind this.  But given the overhead it
-adds to the already slow fork, I'm rather reluctant.  I'm sure this
-needs at least a lot more discussion (for which the cygwin-developers
-mailing list, redirected to, would be better suited).  For instance:
-
-- What if a EXE/DLL is replace more than once during the lifetime of
-  a process?
-
-- What about reducing the overhead by implementing some kind of generic
-  exe/dll cache used by all processes?  It would reduce the requirement
-  to cleanup, reduce the footprint of the cache, speed up subsequent
-  forks.
-
-- Given that the /bin directory alone can be easily 0.5 Gigs and more,
-  the cache(s) can take as much memory.  This really asks for some
-  cleanup mechanism.
-
-- The heretical question of course:  Is the underlying problem really
-  worth the additional overhead?  The patch is pretty intrusive.
-  Is there a simpler way to achieve the same or, at least, a similar
-  result?
-
-> Thank you!
-> /haubi/
-
-Thank you,
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---1SQmhf2mF2YjsYvc
-Content-Type: application/pgp-signature
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJVteLdAAoJEPU2Bp2uRE+g33kP/iwdBTGPUi0RijJ1cQtzOWpr
-3kL7rloNhSPQzwKjk3u0XNa/lRbXUGxx/DmATkpXSzNswXk30CLibS2h6C91UHxJ
-Fri4M/f7Vc18+DPrMe2PmTk+5Y+QD16fJiJqWW3wBBueWJ19CjZhs63vC/JZc3Qb
-16oMAqpnWf9CLS+f5T2QcZUip9vma/E+dmTDDgTlFPsKdbEcdZHr4ciYZ7Hst2nd
-icUI2q7HCNgO3RmMbbJ1HPyIZDExeYopMBa6pF38fG48rxn52hU1Vv5gtckxwHYr
-iTt+YUqr8NR4vVumeFmZzDWoxL3CnGkSxF0aXj4b0rFQQYBjjFWKJkh80Qx5GSm1
-YzirgK0uWkhgBCV9VqFN1XSWligAC+pMDdCYz9FHpG2ux17YUdmyG6SJbFdm12IF
-9pFEIPf6C6QALJ2wXQ6fL4aYM8QOYOU/MCGpdsvwgD/UfepY3TOeKhjfpEcrDJvQ
-o9z64zpJ6QKKqWMqCYMuPggmyVGh64U7d67UQ0Nk8w8LH6Z6BVTSlIKRhWkPbxTL
-aKzN9+ipQ4VGPc5ZITGv5CGVJgry+XuR9LOww0ybKBLPmqunxVK+MbH3qeBeVWdC
-S6crdJKdBeCaoD/CQHKVuj0PUs0h0+FYXF4LgO9hhbx6/Iz8lWSm/gP2wOCDXfQ+
-TRLBIRtZPGQ31HmH3Bhr
-=p3TC
------END PGP SIGNATURE-----
-
---1SQmhf2mF2YjsYvc--
+ extern "C" void *
+ memcpy(void *__restrict dest, const void *__restrict src, size_t n)
+ {
+-  RtlCopyMemory (dest, src, n);
++  char *d =3D (char*)dest;
++  char *s =3D (char*)src;
++  while (n)
++  {
++    size_t size =3D min(RTL_MAX_SIZE, n);
++    RtlCopyMemory (d, s, n);
++    d +=3D size;
++    s +=3D size;
++    n -=3D size;
++  }
+   return dest;
+ }
+ #endif
+--
+2.4.5
