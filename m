@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8230-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 91164 invoked by alias); 29 Jul 2015 16:28:40 -0000
+Return-Path: <cygwin-patches-return-8231-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 18053 invoked by alias); 29 Jul 2015 20:21:24 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,96 +9,85 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 91147 invoked by uid 89); 29 Jul 2015 16:28:39 -0000
+Received: (qmail 18021 invoked by uid 89); 29 Jul 2015 20:21:23 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-1.4 required=5.0 tests=AWL,BAYES_00,MIME_BASE64_BLANKS,RCVD_IN_DNSWL_LOW,RP_MATCHES_RCVD,SPF_PASS autolearn=ham version=3.3.2
-X-HELO: mgate3.illumina.com
-Received: from mgate3.illumina.com (HELO mgate3.illumina.com) (46.17.164.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-SHA encrypted) ESMTPS; Wed, 29 Jul 2015 16:28:39 +0000
-X-ASG-Debug-ID: 1438187305-05f25675ae300ba0001-QFy3Zk
-Received: from UKCH-PRD-EXCA01.illumina.com (ukch-prd-exca01.illumina.com [10.46.32.80]) by mgate3.illumina.com with ESMTP id NZtzHnlsjbGE0tFr (version=TLSv1 cipher=AES128-SHA bits=128 verify=NO) for <cygwin-patches@cygwin.com>; Wed, 29 Jul 2015 09:28:25 -0700 (PDT)
-X-Barracuda-Envelope-From: RPetrovski@illumina.com
-X-ASG-Whitelist: Client
-Received: from UKCH-PRD-EXMB01.illumina.com ([::1]) by UKCH-PRD-EXCA01.illumina.com ([10.46.32.80]) with mapi id 14.03.0195.001; Wed, 29 Jul 2015 17:28:25 +0100
-From: "Petrovski, Roman" <RPetrovski@illumina.com>
-To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: RE: RtlFillMemory fails on block sizes over 0x7fffffff
-X-ASG-Orig-Subj: RE: RtlFillMemory fails on block sizes over 0x7fffffff
-Date: Wed, 29 Jul 2015 16:28:00 -0000
-Message-ID: <3BD89E0BA5F96349B765DE1100906A6D016FC0276D@UKCH-PRD-EXMB01.illumina.com>
-References: <3BD89E0BA5F96349B765DE1100906A6D016FC0267F@UKCH-PRD-EXMB01.illumina.com> <20150729162135.GA20388@calimero.vinschen.de>
-In-Reply-To: <20150729162135.GA20388@calimero.vinschen.de>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+X-Spam-SWARE-Status: No, score=-5.4 required=5.0 tests=AWL,BAYES_00,KAM_LAZY_DOMAIN_SECURITY autolearn=no version=3.3.2
+X-HELO: calimero.vinschen.de
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 29 Jul 2015 20:21:22 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 16790A80907; Wed, 29 Jul 2015 22:21:20 +0200 (CEST)
+Date: Wed, 29 Jul 2015 20:21:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: RtlFillMemory fails on block sizes over 0x7fffffff
+Message-ID: <20150729202120.GA7164@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <3BD89E0BA5F96349B765DE1100906A6D016FC0267F@UKCH-PRD-EXMB01.illumina.com> <20150729162135.GA20388@calimero.vinschen.de> <3BD89E0BA5F96349B765DE1100906A6D016FC0276D@UKCH-PRD-EXMB01.illumina.com>
 MIME-Version: 1.0
-X-Barracuda-Connect: ukch-prd-exca01.illumina.com[10.46.32.80]
-X-Barracuda-Start-Time: 1438187305
-X-Barracuda-Encrypted: AES128-SHA
-X-Barracuda-URL: http://10.46.33.14:8000/cgi-mod/mark.cgi
-X-Barracuda-BRTS-Status: 1
-X-IsSubscribed: yes
-X-SW-Source: 2015-q3/txt/msg00012.txt.bz2
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="jI8keyz6grp/JLjh"
+Content-Disposition: inline
+In-Reply-To: <3BD89E0BA5F96349B765DE1100906A6D016FC0276D@UKCH-PRD-EXMB01.illumina.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-SW-Source: 2015-q3/txt/msg00013.txt.bz2
 
-U3VyZSwgaW4gY2FzZSB5b3UgZGVjaWRlIHRvIGdvIHdpdGggdGhlIHBhdGNo
-IG1lYW53aGlsZSwgcGxlYXNlIHVzZSB0aGUgb25lIGF0dGFjaGVkIHRvIHRo
-aXMgZW1haWwuIFRoZSBvcmlnaW5hbCB3cm9uZ2x5IHVzZXMgbiBpbnN0ZWFk
-IG9mIHNpemUgZm9yIGNvcHlpbmcgdGhlIG1lbW9yeS4NCg0KQXMgdGhpcyBp
-cyBmYWlybHkgY3JpdGljYWwgaXNzdWUsIGRvIHlvdSBrbm93IHdoZW4gdXNl
-cnMgc2hvdWxkIGV4cGVjdCBhICBmaXggdG8gYmVjb21lIGF2YWlsYWJsZSBp
-biB0aGUgYmluYXJ5IHJlbGVhc2U/DQoNClJvbWFuLg0KDQoNCkZyb20gM2Jh
-MmUyZmVhZjc4NWMyMTNkMmYzZGIxNmVmYWI3NGUyNTM0N2I0MyBNb24gU2Vw
-IDE3IDAwOjAwOjAwIDIwMDENCkZyb206IFJvbWFuIFBldHJvdnNraSA8cnBl
-dHJvdnNraUBpbGx1bWluYS5jb20+DQpEYXRlOiBXZWQsIDI5IEp1bCAyMDE1
-IDA5OjIwOjE5IC0wNzAwDQpTdWJqZWN0OiBbUEFUQ0hdIFJ0bEZpbGxNZW1v
-cnkgZmFpbHMgb24gYmxvY2sgc2l6ZXMgb3ZlciAweDdmZmZmZmZmDQoNCi0t
-LQ0KIHdpbnN1cC9jeWd3aW4vbWlzY2Z1bmNzLmNjIHwgMjIgKysrKysrKysr
-KysrKysrKysrKystLQ0KIDEgZmlsZSBjaGFuZ2VkLCAyMCBpbnNlcnRpb25z
-KCspLCAyIGRlbGV0aW9ucygtKQ0KDQpkaWZmIC0tZ2l0IGEvd2luc3VwL2N5
-Z3dpbi9taXNjZnVuY3MuY2MgYi93aW5zdXAvY3lnd2luL21pc2NmdW5jcy5j
-Yw0KaW5kZXggNGE3YTFiOC4uMmMzOGRlMyAxMDA2NDQNCi0tLSBhL3dpbnN1
-cC9jeWd3aW4vbWlzY2Z1bmNzLmNjDQorKysgYi93aW5zdXAvY3lnd2luL21p
-c2NmdW5jcy5jYw0KQEAgLTkwNCwxNyArOTA0LDM1IEBAIGVycjoNCiBleHRl
-cm4gIkMiIHZvaWQgTlRBUEkgUnRsRmlsbE1lbW9yeSAoUFZPSUQsIFNJWkVf
-VCwgQllURSk7DQogZXh0ZXJuICJDIiB2b2lkIE5UQVBJIFJ0bENvcHlNZW1v
-cnkgKFBWT0lELCBjb25zdCBWT0lEICosIFNJWkVfVCk7DQoNCisNCitzdGF0
-aWMgY29uc3Qgc2l6ZV90IFJUTF9NQVhfU0laRSA9IDB4N2ZmZmZmZmY7DQog
-ZXh0ZXJuICJDIiB2b2lkICoNCiBtZW1zZXQgKHZvaWQgKnMsIGludCBjLCBz
-aXplX3QgbikNCiB7DQotICBSdGxGaWxsTWVtb3J5IChzLCBuLCBjKTsNCisg
-IGNoYXIgKnAgPSAoY2hhciopczsNCisgIHdoaWxlIChuKQ0KKyAgew0KKyAg
-ICBzaXplX3Qgc2l6ZSA9IG1pbihSVExfTUFYX1NJWkUsIG4pOw0KKyAgICBS
-dGxGaWxsTWVtb3J5IChwLCBzaXplLCBjKTsNCisgICAgcCArPSBzaXplOw0K
-KyAgICBuIC09IHNpemU7DQorICB9DQogICByZXR1cm4gczsNCiB9DQoNCiBl
-eHRlcm4gIkMiIHZvaWQgKg0KIG1lbWNweSh2b2lkICpfX3Jlc3RyaWN0IGRl
-c3QsIGNvbnN0IHZvaWQgKl9fcmVzdHJpY3Qgc3JjLCBzaXplX3QgbikNCiB7
-DQotICBSdGxDb3B5TWVtb3J5IChkZXN0LCBzcmMsIG4pOw0KKyAgY2hhciAq
-ZCA9IChjaGFyKilkZXN0Ow0KKyAgY2hhciAqcyA9IChjaGFyKilzcmM7DQor
-ICB3aGlsZSAobikNCisgIHsNCisgICAgc2l6ZV90IHNpemUgPSBtaW4oUlRM
-X01BWF9TSVpFLCBuKTsNCisgICAgUnRsQ29weU1lbW9yeSAoZCwgcywgc2l6
-ZSk7DQorICAgIGQgKz0gc2l6ZTsNCisgICAgcyArPSBzaXplOw0KKyAgICBu
-IC09IHNpemU7DQorICB9DQogICByZXR1cm4gZGVzdDsNCiB9DQogI2VuZGlm
-DQotLQ0KMi40LjUNCg0KDQotLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0K
-RnJvbTogY3lnd2luLXBhdGNoZXMtb3duZXJAY3lnd2luLmNvbSBbbWFpbHRv
-OmN5Z3dpbi1wYXRjaGVzLW93bmVyQGN5Z3dpbi5jb21dIE9uIEJlaGFsZiBP
-ZiBDb3Jpbm5hIFZpbnNjaGVuDQpTZW50OiAyOSBKdWx5IDIwMTUgMTc6MjIN
-ClRvOiBjeWd3aW4tcGF0Y2hlc0BjeWd3aW4uY29tDQpTdWJqZWN0OiBSZTog
-UnRsRmlsbE1lbW9yeSBmYWlscyBvbiBibG9jayBzaXplcyBvdmVyIDB4N2Zm
-ZmZmZmYNCg0KT24gSnVsIDI5IDE0OjExLCBQZXRyb3Zza2ksIFJvbWFuIHdy
-b3RlOg0KPiBIaSwganVzdCByYW4gaW50byBhIHByb2JsZW0gd2hpY2ggYm9p
-bHMgZG93biB0byB0aGUgZm9sbG93aW5nIGF0IGxlYXN0IHdpdGggV2luZG93
-cyA3Og0KPiANCj4gY2hhciAqcCA9IChjaGFyKiltYWxsb2MoMHg4MDAwMDAw
-MFVMKTsJLy93b3JrcyBmaW5lLCBhbGxvY2F0ZXMgbWVtb3J5IGFzIHJlcXVl
-c3RlZA0KPiBtZW1zZXQocCwgMCwgMHg4MDAwMDAwMFVMKTsJCQkvL1dhdGNo
-IHByb2Nlc3Mgc2VnZmF1bHQuDQo+IA0KPiBUaGUgUnRsRmlsbE1lbW9yeSBl
-aXRoZXIgY3Jhc2hlcyBvciB1bmRlcmZpbGxzIHRoZSBidWZmZXIgZGVwZW5k
-aW5nIG9uIHRoZSBzaXplIGdpdmVuLg0KPiBMb29rcyBsaWtlIGludGVybmFs
-bHkgaXQgdHJlYXRzIHNpemUgYXMgYSBzaWduZWQgNC1ieXRlIGludGVnZXIu
-DQo+IA0KPiBQbGVhc2UgYXBwbHkgdGhlIHBhdGNoIGJlbG93IG9yIGltcGxl
-bWVudCBhbiBhbHRlcm5hdGl2ZS4NCg0KVGhhbmtzIGZvciB0aGUgcGF0Y2gs
-IGJ1dCBJJ2xsIHJhdGhlciBiZSBsb29raW5nIGludG8gYW4gYXNzZW1ibGVy
-IGFsdGVybmF0aXZlLiAgSSdtIHBsYW5uaW5nIHRvIHB1bGwgaW4gdGhlIE5l
-dEJTRCBpbXBsZW1lbnRhdGlvbiwgd2l0aCB0aGUgdHdlYWtzIHJlcXVpcmVk
-IGZvciBNUyBBQkkuDQoNCg0KVGhhbmtzLA0KQ29yaW5uYQ0KDQotLSANCkNv
-cmlubmEgVmluc2NoZW4gICAgICAgICAgICAgICAgICBQbGVhc2UsIHNlbmQg
-bWFpbHMgcmVnYXJkaW5nIEN5Z3dpbiB0bw0KQ3lnd2luIE1haW50YWluZXIg
-ICAgICAgICAgICAgICAgIGN5Z3dpbiBBVCBjeWd3aW4gRE9UIGNvbQ0KUmVk
-IEhhdA0K
+
+--jI8keyz6grp/JLjh
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 949
+
+On Jul 29 16:29, Petrovski, Roman wrote:
+> Sure, in case you decide to go with the patch meanwhile, please use
+> the one attached to this email. The original wrongly uses n instead of
+> size for copying the memory.
+
+I applied a patch which changes memset, memmove, memcpy, wmemset, wmemmove=
+=20
+and wmemcpy to assembler code based on the NetBSD implementation.
+
+>=20
+> As this is fairly critical issue, do you know when users should expect
+> a  fix to become available in the binary release?
+
+Hmm, it wasn't that critical for the last couple of years... ;)
+
+Either way, I'm just creating a 2.2.0-0.5 test release which I'll upload
+and announce in a couple of minutes.  Please give it a try.
+
+Since I'm AFK for the rest of the week, the official 2.2.0-1 release
+will occur next week.
+
+
+Thanks,
+Corinna
+
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
+
+--jI8keyz6grp/JLjh
+Content-Type: application/pgp-signature
+Content-length: 819
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iQIcBAEBCAAGBQJVuTXAAAoJEPU2Bp2uRE+gJcQP/juC5IzHpcntHobgxwB2cyzr
+/QKYZMWuapulnQM2HFtB1HLYcWp+oiDaIP0nGdk5dG1lNuh8qI2obyCRyHoH4KdW
+KByuAOHlmEO33ZjXa9sXsGRGmtncEn29V+Y+/q7VHCEFc3birDqyaOKrToxmJWMM
+VwI5NQxSloSbjEEuxHamf9SYT76Gi0khfgxa3c0Y/3bjtrbX+2tUe/DJUomB3o+n
+EweB1OsqIXXYtj5AQOb5EA/klJmh4RRP5qAqGKLusi0V+R4euTuV44O0BKSVhvnP
+txpJwrUgJEO9Beg7wj/wfP7x/Z+EtFQ2vAHFMxYV9M/Z9LDHA3i15n0Z6Tp6S50x
+h6IwHgixCP0OPamSwVJoOJ1PdZpNmQYewcRfJIJiIQsTzdOWwv+8TOGJv0tGcAij
+vfboRb+kiI0dpWJ4gQ9aCrZmUVkDUaOJGtEQLJTHeK7lkGF8vuL46eGiT2KMon1d
+lbyhPdx/SP3xBtDsCQBoHRGOpzwo53fWCVZccjpohk9qxVyW8QBfWhPloDOcDea2
+HsnV+7LAspBRNxGD/7byFT121GCowlnB8iqvuicXn7x/w9ITYM88SoGGOV79aWuZ
+/clGMOo8GOlVEn1bTx7t2QCVqPenYExNnv9iYevCs+QdeILpp3eT8zrzzzwt2pH5
+t4DlIuU2lXdWYe7moMXd
+=+OJU
+-----END PGP SIGNATURE-----
+
+--jI8keyz6grp/JLjh--
