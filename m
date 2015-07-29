@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8229-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 68507 invoked by alias); 29 Jul 2015 16:21:47 -0000
+Return-Path: <cygwin-patches-return-8230-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 91164 invoked by alias); 29 Jul 2015 16:28:40 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,82 +9,96 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 68324 invoked by uid 89); 29 Jul 2015 16:21:46 -0000
+Received: (qmail 91147 invoked by uid 89); 29 Jul 2015 16:28:39 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-5.4 required=5.0 tests=AWL,BAYES_00,KAM_LAZY_DOMAIN_SECURITY autolearn=no version=3.3.2
-X-HELO: calimero.vinschen.de
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 29 Jul 2015 16:21:38 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id BFDC2A80907; Wed, 29 Jul 2015 18:21:35 +0200 (CEST)
-Date: Wed, 29 Jul 2015 16:21:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: RtlFillMemory fails on block sizes over 0x7fffffff
-Message-ID: <20150729162135.GA20388@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <3BD89E0BA5F96349B765DE1100906A6D016FC0267F@UKCH-PRD-EXMB01.illumina.com>
+X-Spam-SWARE-Status: No, score=-1.4 required=5.0 tests=AWL,BAYES_00,MIME_BASE64_BLANKS,RCVD_IN_DNSWL_LOW,RP_MATCHES_RCVD,SPF_PASS autolearn=ham version=3.3.2
+X-HELO: mgate3.illumina.com
+Received: from mgate3.illumina.com (HELO mgate3.illumina.com) (46.17.164.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-SHA encrypted) ESMTPS; Wed, 29 Jul 2015 16:28:39 +0000
+X-ASG-Debug-ID: 1438187305-05f25675ae300ba0001-QFy3Zk
+Received: from UKCH-PRD-EXCA01.illumina.com (ukch-prd-exca01.illumina.com [10.46.32.80]) by mgate3.illumina.com with ESMTP id NZtzHnlsjbGE0tFr (version=TLSv1 cipher=AES128-SHA bits=128 verify=NO) for <cygwin-patches@cygwin.com>; Wed, 29 Jul 2015 09:28:25 -0700 (PDT)
+X-Barracuda-Envelope-From: RPetrovski@illumina.com
+X-ASG-Whitelist: Client
+Received: from UKCH-PRD-EXMB01.illumina.com ([::1]) by UKCH-PRD-EXCA01.illumina.com ([10.46.32.80]) with mapi id 14.03.0195.001; Wed, 29 Jul 2015 17:28:25 +0100
+From: "Petrovski, Roman" <RPetrovski@illumina.com>
+To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: RE: RtlFillMemory fails on block sizes over 0x7fffffff
+X-ASG-Orig-Subj: RE: RtlFillMemory fails on block sizes over 0x7fffffff
+Date: Wed, 29 Jul 2015 16:28:00 -0000
+Message-ID: <3BD89E0BA5F96349B765DE1100906A6D016FC0276D@UKCH-PRD-EXMB01.illumina.com>
+References: <3BD89E0BA5F96349B765DE1100906A6D016FC0267F@UKCH-PRD-EXMB01.illumina.com> <20150729162135.GA20388@calimero.vinschen.de>
+In-Reply-To: <20150729162135.GA20388@calimero.vinschen.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="82I3+IH0IqGh5yIs"
-Content-Disposition: inline
-In-Reply-To: <3BD89E0BA5F96349B765DE1100906A6D016FC0267F@UKCH-PRD-EXMB01.illumina.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-SW-Source: 2015-q3/txt/msg00011.txt.bz2
+X-Barracuda-Connect: ukch-prd-exca01.illumina.com[10.46.32.80]
+X-Barracuda-Start-Time: 1438187305
+X-Barracuda-Encrypted: AES128-SHA
+X-Barracuda-URL: http://10.46.33.14:8000/cgi-mod/mark.cgi
+X-Barracuda-BRTS-Status: 1
+X-IsSubscribed: yes
+X-SW-Source: 2015-q3/txt/msg00012.txt.bz2
 
-
---82I3+IH0IqGh5yIs
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 847
-
-On Jul 29 14:11, Petrovski, Roman wrote:
-> Hi, just ran into a problem which boils down to the following at least wi=
-th Windows 7:
->=20
-> char *p =3D (char*)malloc(0x80000000UL);	//works fine, allocates memory a=
-s requested
-> memset(p, 0, 0x80000000UL);			//Watch process segfault.
->=20
-> The RtlFillMemory either crashes or underfills the buffer depending on th=
-e size given.
-> Looks like internally it treats size as a signed 4-byte integer.
->=20
-> Please apply the patch below or implement an alternative.
-
-Thanks for the patch, but I'll rather be looking into an assembler
-alternative.  I'm planning to pull in the NetBSD implementation, with
-the tweaks required for MS ABI.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---82I3+IH0IqGh5yIs
-Content-Type: application/pgp-signature
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJVuP2PAAoJEPU2Bp2uRE+gN+gQAJMNFUwf4s/aWBWkkCxv1xdV
-eKE+r3DC6VW2FHd4Z5FXWcyALAKPBjwxuPjczOvXOZU9TYry85eSmz7h/mrqPiul
-LHpzTVjdoOeWxjWRKGQz/bG119Iyyjm1UPJBLaiBtc1iWecmKQRN9iifjQURTYma
-MjN2GZ7KFLJCNNOiSeLpT1kfAXreBzk22Pc2HoELSAuuBN4VzLEcpEnIvQGHTkIo
-uHJCnr6hHsrAN9bKa7EukW1qteATD2G5foh5KGX0nWWusYv7zXXdaC2Azce+2dCN
-wxR3d7FNWrXl0uPF73qkD7Ux2Q+iXNz1BWq29qcrg88mRr/wH4MIzDdZa/K2NtdW
-V2S8JEl3YdSo5oTGfZHbutlbKGmxzWUeOwZcvrr84XeUclg8U0Wk+2EzePFwjM4K
-C+fcfsv2d8JzCASLNdOv5ODkbkUHe9ufC7/Pg8ZKyVr4cEXlC7RNcee4SJ2C+69n
-xu6NEu2Np9hm3h6pMrc2TxeIMvvWt2PU3RJr3ThoqiBKGhRD5cCgzEjsn5HljOsA
-+TpwQ1dCPA4GYs7vF8U6++a/7wkLDoH7TUt7UHHfU6S0FXKh+UK96NF3P5gOtNyZ
-X958/WeDshTlDOTdmc/Nd+dvJJSXiZPOxbw56euvH2NNem2MDuonkwXO73+7dcbi
-UHy73ILhb+6UbFolY4BI
-=EhVk
------END PGP SIGNATURE-----
-
---82I3+IH0IqGh5yIs--
+U3VyZSwgaW4gY2FzZSB5b3UgZGVjaWRlIHRvIGdvIHdpdGggdGhlIHBhdGNo
+IG1lYW53aGlsZSwgcGxlYXNlIHVzZSB0aGUgb25lIGF0dGFjaGVkIHRvIHRo
+aXMgZW1haWwuIFRoZSBvcmlnaW5hbCB3cm9uZ2x5IHVzZXMgbiBpbnN0ZWFk
+IG9mIHNpemUgZm9yIGNvcHlpbmcgdGhlIG1lbW9yeS4NCg0KQXMgdGhpcyBp
+cyBmYWlybHkgY3JpdGljYWwgaXNzdWUsIGRvIHlvdSBrbm93IHdoZW4gdXNl
+cnMgc2hvdWxkIGV4cGVjdCBhICBmaXggdG8gYmVjb21lIGF2YWlsYWJsZSBp
+biB0aGUgYmluYXJ5IHJlbGVhc2U/DQoNClJvbWFuLg0KDQoNCkZyb20gM2Jh
+MmUyZmVhZjc4NWMyMTNkMmYzZGIxNmVmYWI3NGUyNTM0N2I0MyBNb24gU2Vw
+IDE3IDAwOjAwOjAwIDIwMDENCkZyb206IFJvbWFuIFBldHJvdnNraSA8cnBl
+dHJvdnNraUBpbGx1bWluYS5jb20+DQpEYXRlOiBXZWQsIDI5IEp1bCAyMDE1
+IDA5OjIwOjE5IC0wNzAwDQpTdWJqZWN0OiBbUEFUQ0hdIFJ0bEZpbGxNZW1v
+cnkgZmFpbHMgb24gYmxvY2sgc2l6ZXMgb3ZlciAweDdmZmZmZmZmDQoNCi0t
+LQ0KIHdpbnN1cC9jeWd3aW4vbWlzY2Z1bmNzLmNjIHwgMjIgKysrKysrKysr
+KysrKysrKysrKystLQ0KIDEgZmlsZSBjaGFuZ2VkLCAyMCBpbnNlcnRpb25z
+KCspLCAyIGRlbGV0aW9ucygtKQ0KDQpkaWZmIC0tZ2l0IGEvd2luc3VwL2N5
+Z3dpbi9taXNjZnVuY3MuY2MgYi93aW5zdXAvY3lnd2luL21pc2NmdW5jcy5j
+Yw0KaW5kZXggNGE3YTFiOC4uMmMzOGRlMyAxMDA2NDQNCi0tLSBhL3dpbnN1
+cC9jeWd3aW4vbWlzY2Z1bmNzLmNjDQorKysgYi93aW5zdXAvY3lnd2luL21p
+c2NmdW5jcy5jYw0KQEAgLTkwNCwxNyArOTA0LDM1IEBAIGVycjoNCiBleHRl
+cm4gIkMiIHZvaWQgTlRBUEkgUnRsRmlsbE1lbW9yeSAoUFZPSUQsIFNJWkVf
+VCwgQllURSk7DQogZXh0ZXJuICJDIiB2b2lkIE5UQVBJIFJ0bENvcHlNZW1v
+cnkgKFBWT0lELCBjb25zdCBWT0lEICosIFNJWkVfVCk7DQoNCisNCitzdGF0
+aWMgY29uc3Qgc2l6ZV90IFJUTF9NQVhfU0laRSA9IDB4N2ZmZmZmZmY7DQog
+ZXh0ZXJuICJDIiB2b2lkICoNCiBtZW1zZXQgKHZvaWQgKnMsIGludCBjLCBz
+aXplX3QgbikNCiB7DQotICBSdGxGaWxsTWVtb3J5IChzLCBuLCBjKTsNCisg
+IGNoYXIgKnAgPSAoY2hhciopczsNCisgIHdoaWxlIChuKQ0KKyAgew0KKyAg
+ICBzaXplX3Qgc2l6ZSA9IG1pbihSVExfTUFYX1NJWkUsIG4pOw0KKyAgICBS
+dGxGaWxsTWVtb3J5IChwLCBzaXplLCBjKTsNCisgICAgcCArPSBzaXplOw0K
+KyAgICBuIC09IHNpemU7DQorICB9DQogICByZXR1cm4gczsNCiB9DQoNCiBl
+eHRlcm4gIkMiIHZvaWQgKg0KIG1lbWNweSh2b2lkICpfX3Jlc3RyaWN0IGRl
+c3QsIGNvbnN0IHZvaWQgKl9fcmVzdHJpY3Qgc3JjLCBzaXplX3QgbikNCiB7
+DQotICBSdGxDb3B5TWVtb3J5IChkZXN0LCBzcmMsIG4pOw0KKyAgY2hhciAq
+ZCA9IChjaGFyKilkZXN0Ow0KKyAgY2hhciAqcyA9IChjaGFyKilzcmM7DQor
+ICB3aGlsZSAobikNCisgIHsNCisgICAgc2l6ZV90IHNpemUgPSBtaW4oUlRM
+X01BWF9TSVpFLCBuKTsNCisgICAgUnRsQ29weU1lbW9yeSAoZCwgcywgc2l6
+ZSk7DQorICAgIGQgKz0gc2l6ZTsNCisgICAgcyArPSBzaXplOw0KKyAgICBu
+IC09IHNpemU7DQorICB9DQogICByZXR1cm4gZGVzdDsNCiB9DQogI2VuZGlm
+DQotLQ0KMi40LjUNCg0KDQotLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0K
+RnJvbTogY3lnd2luLXBhdGNoZXMtb3duZXJAY3lnd2luLmNvbSBbbWFpbHRv
+OmN5Z3dpbi1wYXRjaGVzLW93bmVyQGN5Z3dpbi5jb21dIE9uIEJlaGFsZiBP
+ZiBDb3Jpbm5hIFZpbnNjaGVuDQpTZW50OiAyOSBKdWx5IDIwMTUgMTc6MjIN
+ClRvOiBjeWd3aW4tcGF0Y2hlc0BjeWd3aW4uY29tDQpTdWJqZWN0OiBSZTog
+UnRsRmlsbE1lbW9yeSBmYWlscyBvbiBibG9jayBzaXplcyBvdmVyIDB4N2Zm
+ZmZmZmYNCg0KT24gSnVsIDI5IDE0OjExLCBQZXRyb3Zza2ksIFJvbWFuIHdy
+b3RlOg0KPiBIaSwganVzdCByYW4gaW50byBhIHByb2JsZW0gd2hpY2ggYm9p
+bHMgZG93biB0byB0aGUgZm9sbG93aW5nIGF0IGxlYXN0IHdpdGggV2luZG93
+cyA3Og0KPiANCj4gY2hhciAqcCA9IChjaGFyKiltYWxsb2MoMHg4MDAwMDAw
+MFVMKTsJLy93b3JrcyBmaW5lLCBhbGxvY2F0ZXMgbWVtb3J5IGFzIHJlcXVl
+c3RlZA0KPiBtZW1zZXQocCwgMCwgMHg4MDAwMDAwMFVMKTsJCQkvL1dhdGNo
+IHByb2Nlc3Mgc2VnZmF1bHQuDQo+IA0KPiBUaGUgUnRsRmlsbE1lbW9yeSBl
+aXRoZXIgY3Jhc2hlcyBvciB1bmRlcmZpbGxzIHRoZSBidWZmZXIgZGVwZW5k
+aW5nIG9uIHRoZSBzaXplIGdpdmVuLg0KPiBMb29rcyBsaWtlIGludGVybmFs
+bHkgaXQgdHJlYXRzIHNpemUgYXMgYSBzaWduZWQgNC1ieXRlIGludGVnZXIu
+DQo+IA0KPiBQbGVhc2UgYXBwbHkgdGhlIHBhdGNoIGJlbG93IG9yIGltcGxl
+bWVudCBhbiBhbHRlcm5hdGl2ZS4NCg0KVGhhbmtzIGZvciB0aGUgcGF0Y2gs
+IGJ1dCBJJ2xsIHJhdGhlciBiZSBsb29raW5nIGludG8gYW4gYXNzZW1ibGVy
+IGFsdGVybmF0aXZlLiAgSSdtIHBsYW5uaW5nIHRvIHB1bGwgaW4gdGhlIE5l
+dEJTRCBpbXBsZW1lbnRhdGlvbiwgd2l0aCB0aGUgdHdlYWtzIHJlcXVpcmVk
+IGZvciBNUyBBQkkuDQoNCg0KVGhhbmtzLA0KQ29yaW5uYQ0KDQotLSANCkNv
+cmlubmEgVmluc2NoZW4gICAgICAgICAgICAgICAgICBQbGVhc2UsIHNlbmQg
+bWFpbHMgcmVnYXJkaW5nIEN5Z3dpbiB0bw0KQ3lnd2luIE1haW50YWluZXIg
+ICAgICAgICAgICAgICAgIGN5Z3dpbiBBVCBjeWd3aW4gRE9UIGNvbQ0KUmVk
+IEhhdA0K
