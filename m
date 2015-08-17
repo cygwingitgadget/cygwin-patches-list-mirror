@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8233-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 26163 invoked by alias); 5 Aug 2015 07:30:26 -0000
+Return-Path: <cygwin-patches-return-8234-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 53773 invoked by alias); 17 Aug 2015 07:42:04 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,75 +9,50 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 26140 invoked by uid 89); 5 Aug 2015 07:30:25 -0000
+Received: (qmail 53762 invoked by uid 89); 17 Aug 2015 07:42:03 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-4.5 required=5.0 tests=AWL,BAYES_20,KAM_LAZY_DOMAIN_SECURITY autolearn=no version=3.3.2
-X-HELO: calimero.vinschen.de
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 05 Aug 2015 07:30:24 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 02D5BA80547; Wed,  5 Aug 2015 09:30:21 +0200 (CEST)
-Date: Wed, 05 Aug 2015 07:30:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Improve FAQ answer on debugging Cygwin
-Message-ID: <20150805073021.GO17917@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1438691794-7396-1-git-send-email-jon.turney@dronecode.org.uk>
+X-Spam-SWARE-Status: No, score=-2.0 required=5.0 tests=AWL,BAYES_00,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.2
+X-HELO: mail-wi0-f175.google.com
+Received: from mail-wi0-f175.google.com (HELO mail-wi0-f175.google.com) (209.85.212.175) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES128-GCM-SHA256 encrypted) ESMTPS; Mon, 17 Aug 2015 07:42:02 +0000
+Received: by wicne3 with SMTP id ne3so63498887wic.0        for <cygwin-patches@cygwin.com>; Mon, 17 Aug 2015 00:41:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="reI/iBAAp9kzkmX4"
-Content-Disposition: inline
-In-Reply-To: <1438691794-7396-1-git-send-email-jon.turney@dronecode.org.uk>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-SW-Source: 2015-q3/txt/msg00015.txt.bz2
+X-Received: by 10.180.85.194 with SMTP id j2mr31094469wiz.11.1439797319583; Mon, 17 Aug 2015 00:41:59 -0700 (PDT)
+Received: by 10.28.51.80 with HTTP; Mon, 17 Aug 2015 00:41:59 -0700 (PDT)
+Date: Mon, 17 Aug 2015 07:42:00 -0000
+Message-ID: <CAGHpTBLBua-DJQ1tBapYd_6ypdWGMW+ehAq4r7k_TA44Tn_Oxg@mail.gmail.com>
+Subject: [PATCH] mkglobals: Fix EOL detection
+From: Orgad Shaneh <orgads@gmail.com>
+To: cygwin-patches@cygwin.com
+Content-Type: text/plain; charset=UTF-8
+X-IsSubscribed: yes
+X-SW-Source: 2015-q3/txt/msg00016.txt.bz2
 
+When globals.cc has CRLF line endings, winsup.h is not removed, and
+compilation fails for duplicate definitions.
+---
+ winsup/cygwin/mkglobals_h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---reI/iBAAp9kzkmX4
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 463
-
-On Aug  4 13:36, Jon TURNEY wrote:
-> Improve FAQ answer on debugging Cygwin to mention the cygwin-debuginfo pa=
-ckage
-> and the gdb command 'set cygwin-exceptions oon'.
->=20
-> 2015-08-03  Jon Turney  <...>
->=20
-> 	* faq-programming.xml: Improve debugging-cygwin answer.
-
-Looks good.  Please apply.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---reI/iBAAp9kzkmX4
-Content-Type: application/pgp-signature
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJVwbuNAAoJEPU2Bp2uRE+gSkMP/jBDZm/LuFBc+zeKExdO3Ej1
-351k1OPfaN7e3OfcnilICzsPikFP6vS22ZcDFSLvIhYKsElt37glX8OxwVyeByH/
-bfx7hiB/ysz/liPPDRxKdqnmWSM7dXE6NnZ8iUNwQvWLvwqpcWj5/DhbqkTLNj8j
-EZilQQ2IrQVWtTAA8Ft60NZKGXiXxZg5IzQUPOhMc/dUXPL+YKMgDi9g6xv4ih1l
-vl36KvJOXZefZuiRIwavBBjDyxgNGQb4BJ0xqUYModtMxtbnfGgKsVKwaakOLbF4
-lnsVNSpyF8pblxo/dbNMJ76XfsfD0jTnyCNNv65H+8r9QJe+vfuJHdH0h3SuHhz8
-3vZ0JeFZc0iX4/8CeWhSHAC/09TIlsMcy0ZAzLfrlPk+f8K3Iy819y7tx/O9v1CP
-USDAprpR8K2VyPqKHb54dKrGiX6+PbgK1SDNTSlA4moJDog+Me8ODlDVo6PvaFtO
-SFDS4WGWcc4EFKx9mhQmQLiqgoKQJM87tFkJUudqdkYTjt33X90ahPmILuU2A9Ka
-nkTy9kEm02liyIE5tV3xEc3EcO2G9DVbHN82iTrvvTQ/nxtGuV4iTuxt6GJCvs+u
-BVxWTgrN6MFOwdl74Vl+BkSG6iv53j1UQ0hL8wYeHn4fP3DZJRv0DAHs95FDS/al
-gUpcpSroQG8B0R3R3hAt
-=Qand
------END PGP SIGNATURE-----
-
---reI/iBAAp9kzkmX4--
+diff --git a/winsup/cygwin/mkglobals_h b/winsup/cygwin/mkglobals_h
+index ea4a582..2d185f2 100755
+--- a/winsup/cygwin/mkglobals_h
++++ b/winsup/cygwin/mkglobals_h
+@@ -1,6 +1,7 @@
+ #!/usr/bin/perl
+ my @argv = @ARGV;
+ $_ = join('', <>);
++s/\s+\n/\n/sog;
+ s/\n[^\n]*!globals.h[^\n]*\n/\n/sog;
+ s%/\*.*?\*/%%sog;
+ s/(enum\s.*?{.*?})/munge($1)/soge;
+@@ -12,7 +13,6 @@ s/^\n+//sog;
+ s/#include "winsup\.h"\n//so;
+ s/-NL-/\n/sog;
+ s/-EQ-/=/sog;
+-s/\s+\n/\n/sog;
+ s/\n{2,}/\n/sog;
+ print <<PRELUDE,$_;
+ /* $target - Autogenerated from @argv.  Look there for comments. */
+--
+2.4.6.windows.1
