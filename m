@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8241-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 63656 invoked by alias); 18 Aug 2015 18:16:25 -0000
+Return-Path: <cygwin-patches-return-8242-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 126989 invoked by alias); 16 Sep 2015 07:35:46 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,112 +9,137 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 63646 invoked by uid 89); 18 Aug 2015 18:16:25 -0000
+Received: (qmail 126976 invoked by uid 89); 16 Sep 2015 07:35:45 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-4.1 required=5.0 tests=AWL,BAYES_50,KAM_LAZY_DOMAIN_SECURITY autolearn=no version=3.3.2
-X-HELO: calimero.vinschen.de
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 18 Aug 2015 18:16:23 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 52291A8096A; Tue, 18 Aug 2015 20:16:21 +0200 (CEST)
-Date: Tue, 18 Aug 2015 18:16:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Add Lavasoft Web Companion to BLODA list.
-Message-ID: <20150818181621.GP17917@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1439915118-5692-1-git-send-email-jon.turney@dronecode.org.uk>
+X-Spam-SWARE-Status: No, score=-0.6 required=5.0 tests=AWL,BAYES_20,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.2
+X-HELO: mout.gmx.net
+Received: from mout.gmx.net (HELO mout.gmx.net) (212.227.17.21) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-GCM-SHA384 encrypted) ESMTPS; Wed, 16 Sep 2015 07:35:43 +0000
+Received: from dscho.org ([87.106.4.80]) by mail.gmx.com (mrgmx103) with ESMTPSA (Nemesis) id 0MarAM-1ZIvPK2HGs-00KM2s for <cygwin-patches@cygwin.com>; Wed, 16 Sep 2015 09:35:40 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="2nTeH+t2PBomgucg"
-Content-Disposition: inline
-In-Reply-To: <1439915118-5692-1-git-send-email-jon.turney@dronecode.org.uk>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-SW-Source: 2015-q3/txt/msg00023.txt.bz2
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Date: Wed, 16 Sep 2015 07:35:00 -0000
+From: Johannes Schindelin <johannes.schindelin@gmx.de>
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] Introduce the 'usertemp' filesystem type
+X-Sender: johannes.schindelin@gmx.de
+User-Agent: Roundcube Webmail/1.1.2
+Message-ID: <0MIuft-1ZZdDB2IaP-002Y2r@mail.gmx.com>
+X-UI-Out-Filterresults: notjunk:1;V01:K0:IGSLnFRbWzg=:d7jXjek0JN6zBHLFAKmDso jOoXj8oflSuj2h4dNRAaheys3vXU9WqeFTspy7XTObPpq1sqqZph4DV3GP6QmN/IZsgKw4gyt zpVtzpkFXyaQNPGuZmNvkeFYU179qNufK6THBtjZk9hqDPvZfFmu3ijZazCV69G2fR5ypfXlG sf2GrpfWxxZv+xv9JwPrbAiHwRk5ZtWnArNlO2vkrZRHlvgFsrL5OLk+8cRcRlPhuqQF5kmB9 EMX7PBXj6ioqhDSHoINyLU8TRtRiZgkc89EDfGJOUfp8hMj26LLTk/pcPBUPt5QzGmb2CutO4 xZkZKj2f+apeQynpYjqHnX72nWz9tHuSkbepmT0cjynQ0ltGZoVX0GmSb/qqP8b5EGbMEam/3 DgjtNo6tQY+TtOsqfGKlNVk1M7WMwjJGCDzkAngVQc8ZfUw2dmuuChfM+6hkSbjXhfmR0yldG Rc1+mGwFssHYr4QId5JjAPhIL0E9BpcZlVBM7B4earsknc1aMZqA1UqrDyA2UGKHwgO0Tagui xsRx2Eo9ILVfC5I5+Vbnjq/uRGWN6IDjlnTkN27LWNJ2hk4NIkQ51GjQ8bjnpvXNmwC6tNP3o xTVOC9xG+LKFNEA6AtN+StlKxu+kcOhmL7zZsiltGIhIhRIZhd5S3ABdw3OQEDbyHKb94EndI GG8g+HN8QCGgzMBPfzH+haDU4mwIPb1cIvzhBT7CAfIoFMOE8tofz8HAOiJ3Pz0ZhJdAH7+ei Qgt9pZjjaRXi9SPlIPSx2qLxWPxn8RCNXQ5+Wg==
+X-IsSubscribed: yes
+X-SW-Source: 2015-q3/txt/msg00024.txt.bz2
 
+	* mount.cc (mount_info::from_fstab_line): support mounting the
+	current user's temp folder as /tmp/. This is particularly
+	useful a feature when Cygwin's own files are write-protected.
 
---2nTeH+t2PBomgucg
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1843
+	* pathnames.xml: document the new usertemp file system type
 
-On Aug 18 17:25, Jon TURNEY wrote:
-> 2015-08-18  Jon Turney  <jon.turney@dronecode.org.uk>
->=20
-> 	* faq-using.xml (faq.using.bloda): Add Lavasoft Web Companion to
-> 	BLODA list.
->=20
-> Signed-off-by: Jon TURNEY <jon.turney@dronecode.org.uk>
-> ---
->  winsup/doc/ChangeLog     | 5 +++++
->  winsup/doc/faq-using.xml | 1 +
->  2 files changed, 6 insertions(+)
->=20
-> diff --git a/winsup/doc/ChangeLog b/winsup/doc/ChangeLog
-> index 9cff0e4..02061ff 100644
-> --- a/winsup/doc/ChangeLog
-> +++ b/winsup/doc/ChangeLog
-> @@ -1,3 +1,8 @@
-> +2015-08-18  Jon Turney  <jon.turney@dronecode.org.uk>
-> +
-> +	* faq-using.xml (faq.using.bloda): Add Lavasoft Web Companion to
-> +	BLODA list.
-> +
->  2015-08-03  Jon Turney  <jon.turney@dronecode.org.uk>
->=20=20
->  	* faq-programming.xml: Improve debugging-cygwin answer.
-> diff --git a/winsup/doc/faq-using.xml b/winsup/doc/faq-using.xml
-> index 372888f..87ec112 100644
-> --- a/winsup/doc/faq-using.xml
-> +++ b/winsup/doc/faq-using.xml
-> @@ -1274,6 +1274,7 @@ behaviour which affect the operation of other progr=
-ams, such as Cygwin.
->  <listitem><para>Credant Guardian Shield</para></listitem>
->  <listitem><para>AVAST (disable FILESYSTEM and BEHAVIOR realtime shields)=
-</para></listitem>
->  <listitem><para>Citrix Metaframe Presentation Server/XenApp (see <ulink =
-url=3D"http://support.citrix.com/article/CTX107825">Citrix Support page</ul=
-ink>)</para></listitem>
-> +<listitem><para>Lavasoft Web Companion</para></listitem>
->  </itemizedlist></para>
->  <para>Sometimes these problems can be worked around, by temporarily or p=
-artially
->  disabling the offending software.  For instance, it may be possible to d=
-isable
-> --=20
-> 2.4.5
+Detailed explanation:
 
-ACK
+In the context of Windows, there is a per-user directory for temporary
+files, by default specified via the environment variable %TEMP%. Let's
+allow to use that directory for our /tmp/ directory.
 
+With this patch, we introduce the special filesystem type "usertemp":
+By specifying
 
-Thanks,
-Corinna
+	none /tmp usertemp binary,posix=0 0 0
 
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
+in /etc/fstab, the /tmp/ directory gets auto-mounted to the directory
+specified by the %TEMP% variable.
 
---2nTeH+t2PBomgucg
-Content-Type: application/pgp-signature
-Content-length: 819
+This feature comes handy in particularly in scenarios where the
+administrator might want to write-protect the entire Cygwin directory
+yet still needs to allow users to write into the /tmp/ directory.
+This is the case in the context of Git for Windows, where the
+Cygwin (MSys2) root directory lives inside C:\Program Files and hence
+/tmp/ would not be writable otherwise.
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
+Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
+---
+ winsup/cygwin/mount.cc   | 17 +++++++++++++++++
+ winsup/doc/pathnames.xml | 24 +++++++++++++++++++++---
+ 2 files changed, 38 insertions(+), 3 deletions(-)
 
-iQIcBAEBCAAGBQJV03Z1AAoJEPU2Bp2uRE+g050P/iFH97w/L2jjLHvv3N0vo2+0
-d7oQq4+okgQB4I68nKdxB3xX3B1HcqA4OcS/8zeyFvQKe99YFBSJimJ9PMSrgztf
-BacMe9Umwna/xs/0NjOGzkswbhYCOb1SyEAwIQgT4IYVxbghqYaEgpq1qVotceU0
-pHgwX5KDYceuthpkkjt5+G0dHVIeSimPEuOinMXq4wE4mUXKSeHYulkqk4giDNdE
-3w8BungpzoQVzB6GLXQFIYh956Dc64Pd8/tyJADn6vDS1RK33Wq5snj2/9EoSsrh
-WQWnjkV/63+XjfAuOvHCe31icUEZp1wXf5VEB9BcaCLNEyeN5u25x8uHp79tpTkq
-kgrfdZX0kRW0yz2q3Olu7qZS2sEULcpBHGwly7za5KbzwZ7DMLXp8OiqGIJ9/tCK
-ImjZKV47NEb/mVe0iY3HfFLn3SYjvKfxp/bXgwhpTF+L96S+qf17Xx3EyEzOTLb+
-+JyxJ7mlqZ5FIvp2xgbcqv8mZOpkOZ65gspvSeQBEU4BjyMaJoL0yGkXKvI2wpO0
-mp/F7XKVWMOv1dagblJhM+++ggX9TcEJ38kTFwHUzKOlhIiNGztiTbNhzEI1udK2
-LNL9rvtNGWVC2hUYlD7RHLDckWhGETaq7kAZ1/yr5FbfYPs6XbAoJaV4CvYZ/mPz
-i+odzIz95bH9YTKlC1M2
-=mCYH
------END PGP SIGNATURE-----
+diff --git a/winsup/cygwin/mount.cc b/winsup/cygwin/mount.cc
+index 6cf3ddf..0b3dbdc 100644
+--- a/winsup/cygwin/mount.cc
++++ b/winsup/cygwin/mount.cc
+@@ -1139,6 +1139,8 @@ mount_info::from_fstab_line (char *line, bool user)
+   unsigned mount_flags = MOUNT_SYSTEM | MOUNT_BINARY;
+   if (!strcmp (fs_type, "cygdrive"))
+     mount_flags |= MOUNT_NOPOSIX;
++  if (!strcmp (fs_type, "usertemp"))
++    mount_flags |= MOUNT_IMMUTABLE;
+   if (!fstab_read_flags (&c, mount_flags, false))
+     return true;
+   if (mount_flags & MOUNT_BIND)
+@@ -1163,6 +1165,21 @@ mount_info::from_fstab_line (char *line, bool user)
+       slashify (posix_path, cygdrive, 1);
+       cygdrive_len = strlen (cygdrive);
+     }
++  else if (!strcmp (fs_type, "usertemp"))
++    {
++      WCHAR tmp[MAX_PATH];
++
++      if (GetEnvironmentVariableW (L"TEMP", tmp, sizeof(tmp)) && *tmp)
++	{
++          DWORD len;
++          char mb_tmp[len = sys_wcstombs (NULL, 0, tmp)];
++          sys_wcstombs (mb_tmp, len, tmp);
++
++	  int res = mount_table->add_item (mb_tmp, posix_path, mount_flags);
++	  if (res && get_errno () == EMFILE)
++	    return false;
++	}
++    }
+   else
+     {
+       int res = mount_table->add_item (native_path, posix_path, mount_flags);
+diff --git a/winsup/doc/pathnames.xml b/winsup/doc/pathnames.xml
+index cdbf9fa..166c504 100644
+--- a/winsup/doc/pathnames.xml
++++ b/winsup/doc/pathnames.xml
+@@ -74,9 +74,10 @@ doesn't matter if you write <literal>FAT</literal> into this field even if
+ the filesystem is NTFS.  Cygwin figures out the filesystem type and its
+ capabilities by itself.</para>
+ 
+-<para>The only exception is the file system type cygdrive.  This type is
+-used to set the cygdrive prefix.  For a description of the cygdrive prefix
+-see <xref linkend="cygdrive"></xref></para>
++<para>The only two exceptions are the file system types cygdrive and usertemp.
++The cygdrive type is used to set the cygdrive prefix.  For a description of
++the cygdrive prefix see <xref linkend="cygdrive"></xref>, for a description of
++the usertemp file system type see <xref linkend="usertemp"></xref></para>
+ 
+ <para>The fourth field describes the mount options associated
+ with the filesystem.  It is formatted as a comma separated list of
+@@ -354,6 +355,23 @@ independently from the current cygdrive prefix:</para>
+ 
+ </sect2>
+ 
++<sect2 id="usertemp"><title>The usertemp file system type</title>
++
++<para>On Windows, the environment variable <literal>TEMP</literal> specifies
++the location of the temp folder.  It serves the same purpose as the /tmp/
++directory in Unix systems.  In contrast to /tmp/, it is by default a
++different folder for every Windows.  By using the special purpose usertemp
++file system, that temp folder can be mapped to /tmp/.  This is particularly
++useful in setups where the administrator wants to write-protect the entire
++Cygwin directory.  The usertemp file system can be configured in /etc/fstab
++like this:</para>
++
++<screen>
++  none /tmp usertemp binary,posix=0 0 0
++</screen>
++
++</sect2>
++
+ <sect2 id="pathnames-symlinks"><title>Symbolic links</title>
+ 
+ <para>Symbolic links are not present and supported on Windows until Windows
+-- 
+2.5.2.windows.2
 
---2nTeH+t2PBomgucg--
