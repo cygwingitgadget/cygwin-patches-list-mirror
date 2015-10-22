@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8256-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 81011 invoked by alias); 21 Oct 2015 18:48:05 -0000
+Return-Path: <cygwin-patches-return-8257-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 18345 invoked by alias); 22 Oct 2015 12:45:51 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,87 +9,77 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 81000 invoked by uid 89); 21 Oct 2015 18:48:04 -0000
+Received: (qmail 18329 invoked by uid 89); 22 Oct 2015 12:45:50 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
 X-Spam-SWARE-Status: No, score=-5.4 required=5.0 tests=AWL,BAYES_00,KAM_LAZY_DOMAIN_SECURITY autolearn=no version=3.3.2
 X-HELO: calimero.vinschen.de
-Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 21 Oct 2015 18:48:03 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 269E6A803D5; Wed, 21 Oct 2015 20:48:01 +0200 (CEST)
-Date: Wed, 21 Oct 2015 18:48:00 -0000
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 22 Oct 2015 12:45:49 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 1BA6DA807C8; Thu, 22 Oct 2015 14:45:47 +0200 (CEST)
+Date: Thu, 22 Oct 2015 12:45:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Add ability to use NTFS native directory symlinks without admin rights on XP and later
-Message-ID: <20151021184801.GG17374@calimero.vinschen.de>
+Subject: Re: [PATCH] Introduce the 'usertemp' filesystem type
+Message-ID: <20151022124547.GA5319@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <766021443021831@web4g.yandex.ru>
+References: <0MIuft-1ZZdDB2IaP-002Y2r@mail.gmx.com> <20151020093741.GA17374@calimero.vinschen.de> <alpine.DEB.1.00.1510201251140.31610@s15462909.onlinehome-server.info> <20151021182346.GE17374@calimero.vinschen.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="Fnm8lRGFTVS/3GuM"
-Content-Disposition: inline
-In-Reply-To: <766021443021831@web4g.yandex.ru>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-SW-Source: 2015-q4/txt/msg00009.txt.bz2
-
-
---Fnm8lRGFTVS/3GuM
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1167
+In-Reply-To: <20151021182346.GE17374@calimero.vinschen.de>
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-SW-Source: 2015-q4/txt/msg00010.txt.bz2
 
-Hi Evgeny,
+On Oct 21 20:23, Corinna Vinschen wrote:
+> On Oct 20 13:47, Johannes Schindelin wrote:
+> > On Tue, 20 Oct 2015, Corinna Vinschen wrote:
+> > > On Sep 16 09:35, Johannes Schindelin wrote:
+> > [...]
+> > > > +          char mb_tmp[len = sys_wcstombs (NULL, 0, tmp)];
+> > > 
+> > > - len = sys_wcstombs() + 1
+> > 
+> > Whoops. I always get that wrong.
+> > 
+> > But... actually... Did you know that `sys_wcstombs()` returns something
+> > different than advertised? The documentation says:
+> > 
+> > 	- dst == NULL; len is ignored, the return value is the number
+> > 	  of bytes required for the string without the trailing NUL, just
+> > 	  like the return value of the wcstombs function.
+> > 
+> > But when I call
+> > 
+> > 	small_printf("len of 1: %d\n", sys_wcstombs(NULL, 0, L"1"));
+> > 
+> > it prints "len of 1: 2", i.e. the number of bytes requires for the string
+> > *with* the trailing NUL, disagreeing with the comment in strfuncs.cc.
+> 
+> Drat.  You're right.  As usual I wonder why nobody ever noticed this.
+> As soon as the nwc parameter is larger than the number of non-0 wchars
+> in the source string, sys_cp_wcstombs returns the length including the
+> trailing NUL.
+> 
+> And looking through the Cygwin sources the usage is rather erratic,
+> sometimes with, sometimes without + 1 :(
+> 
+> > How do you want to proceed from here? Should I fix sys_wcstombs() when the
+> > fourth parameter is -1? Or is this not a fix, but I would rather break
+> > things?
+> 
+> No, this needs fixing, but it also would break things.  I have to take
+> a stab at fixing this throughout Cygwin first.
 
-Preliminaries: we need a copyright assignment from you before being able
-to include your patches.  Please see https://cygwin.com/assign.txt.
-
-On Sep 23 18:23, Evgeny Grin wrote:
-> This patch will add ability to create directory junction which are
-> supported from Windows 2000 and not require any special rights (unlike
-> file/directory symbolic links).
-> New three modes for symbolic links creation added: "safenative",
-> "safenativestrict" and "safenativeonly". First two allow fallback to
-> "native" and "nativesctrict",
-
-I'm not opposed to add functionality to create directory junctions
-as symlinks, but I am opposed to adding lots of even more confusing
-settings to the CYGWIN=3Dwinsymlinks option.
-
-I'm ok to fallback from native symlink to dir junction in both
-winsymlinks:native and nativestrict modes.  We could even always use dir
-junctions for dirs in the first place and only try to create a symlink
-if that fails.  The difference is negligible from a user perspective
-anyway.
+I just pushed a patch to the git repo supposed to fix sys_cp_wcstombs
+return value inconsistency.  It should now always return the length of
+the string without the trailing NUL.  Please give it a try.
 
 
 Thanks,
 Corinna
 
---=20
+-- 
 Corinna Vinschen                  Please, send mails regarding Cygwin to
 Cygwin Maintainer                 cygwin AT cygwin DOT com
 Red Hat
-
---Fnm8lRGFTVS/3GuM
-Content-Type: application/pgp-signature
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJWJ93hAAoJEPU2Bp2uRE+gkk8P/3NCc740gWAcU8h4+iPhomcz
-Q/fhNtP/g3Il8X8qm3VMM2ahgisVkzjT/kuSCT4LGAUs0ICS0/bkjaz5nfZm+EVB
-KLpfsH19FNz/ikj5Hyu8bYO/YLmbpnkJSgesevmKezyAhH/oAspkP2KgGof6kQqJ
-Vqrnmds9imxrc/oCBoJxwthuigLChb8QwVxYpKpvqjISmdMppSATxO95dXH02Vz7
-lTS9XRvyyAE2B42qO682b0NazKREQ3lF7+dP+a1Wlgi8kTX5fTkFEyaCoGKoPj0p
-QKQrk8A0RkBgBtRh5Mx41++Yh056JoNmWOs/BPVECjiuU3mtVNp/gOQ0HhWDWVPL
-NrC9yUxP9wwo2fGaP/yVyYFaqvDjsToUBciENJFfvC6bTc+KXloCwuSsU/A1WbKE
-75fN8ZlD+7OOg/bPNR9s2LgJSzhVcBBAzqteAu3wZ+HVrMD/DeYC3XYSK5JV3fIP
-VN5D7bRWiPXYlb4hUzD0QLDMFtJScpOPoAsvYKE02XVq9lPHCPbR4uEraMCf12DR
-QiMLCwUQKe/uaGGRwjMZaeQx2etEmvbmooTDg8f9xZ1CBg3nu5WV5+sBA4zK2AsL
-9qcEygnh2wq/glxgi5HcA55VyeSScVGGGEpYGxbRRfNRKF/H3JCUQbpHuG/9Efux
-I2Ho+c6wxrrxCrzqAg3b
-=smYZ
------END PGP SIGNATURE-----
-
---Fnm8lRGFTVS/3GuM--
