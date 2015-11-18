@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8270-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 39814 invoked by alias); 17 Nov 2015 18:29:03 -0000
+Return-Path: <cygwin-patches-return-8271-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 106912 invoked by alias); 18 Nov 2015 09:44:50 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,133 +9,86 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 39800 invoked by uid 89); 17 Nov 2015 18:29:02 -0000
+Received: (qmail 106900 invoked by uid 89); 18 Nov 2015 09:44:49 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=0.0 required=5.0 tests=AWL,BAYES_00,RP_MATCHES_RCVD,SPF_HELO_PASS autolearn=ham version=3.3.2
-X-HELO: mx1.redhat.com
-Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-GCM-SHA384 encrypted) ESMTPS; Tue, 17 Nov 2015 18:29:01 +0000
-Received: from int-mx14.intmail.prod.int.phx2.redhat.com (int-mx14.intmail.prod.int.phx2.redhat.com [10.5.11.27])	by mx1.redhat.com (Postfix) with ESMTPS id 7BC1B91C15	for <cygwin-patches@cygwin.com>; Tue, 17 Nov 2015 18:29:00 +0000 (UTC)
-Received: from localhost.localdomain (ovpn-116-28.rdu2.redhat.com [10.10.116.28])	by int-mx14.intmail.prod.int.phx2.redhat.com (8.14.4/8.14.4) with ESMTP id tAHISw44004524	(version=TLSv1/SSLv3 cipher=AES256-SHA256 bits=256 verify=NO)	for <cygwin-patches@cygwin.com>; Tue, 17 Nov 2015 13:28:59 -0500
-From: Yaakov Selkowitz <yselkowi@redhat.com>
+X-Spam-SWARE-Status: No, score=-5.4 required=5.0 tests=AWL,BAYES_00,KAM_LAZY_DOMAIN_SECURITY autolearn=no version=3.3.2
+X-HELO: calimero.vinschen.de
+Received: from aquarius.hirmke.de (HELO calimero.vinschen.de) (217.91.18.234) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 18 Nov 2015 09:44:49 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id CB5BFA806A4; Wed, 18 Nov 2015 10:44:46 +0100 (CET)
+Date: Wed, 18 Nov 2015 09:44:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] cygwin: export rpmatch(3)
-Date: Tue, 17 Nov 2015 18:29:00 -0000
-Message-Id: <1447784925-9024-1-git-send-email-yselkowi@redhat.com>
-X-SW-Source: 2015-q4/txt/msg00023.txt.bz2
+Subject: Re: [PATCH] cygwin: export rpmatch(3)
+Message-ID: <20151118094446.GR6402@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <1447784925-9024-1-git-send-email-yselkowi@redhat.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="UTZ8bGhNySVQ9LYl"
+Content-Disposition: inline
+In-Reply-To: <1447784925-9024-1-git-send-email-yselkowi@redhat.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-SW-Source: 2015-q4/txt/msg00024.txt.bz2
 
-winsup/cygwin/
-* common.din (rpmatch): Export.
-* include/cygwin/version.h (CYGWIN_VERSION_API_MINOR): Bump.
 
-winsup/doc/
-* new-features.xml (ov-new2.4): New section. Document rpmatch.
-* posix.xml (std-bsd): Add rpmatch.
+--UTZ8bGhNySVQ9LYl
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 942
 
-Signed-off-by: Yaakov Selkowitz <yselkowi@redhat.com>
----
-This depends on the newlib patch sent to their list.
+On Nov 17 12:28, Yaakov Selkowitz wrote:
+> winsup/cygwin/
+> * common.din (rpmatch): Export.
+> * include/cygwin/version.h (CYGWIN_VERSION_API_MINOR): Bump.
+>=20
+> winsup/doc/
+> * new-features.xml (ov-new2.4): New section. Document rpmatch.
+> * posix.xml (std-bsd): Add rpmatch.
+>=20
+> Signed-off-by: Yaakov Selkowitz <yselkowi@redhat.com>
+> ---
+> This depends on the newlib patch sent to their list.
+>=20
+>  winsup/cygwin/ChangeLog                |  5 +++++
+>  winsup/cygwin/common.din               |  1 +
+>  winsup/cygwin/include/cygwin/version.h |  3 ++-
+>  winsup/doc/ChangeLog                   |  5 +++++
+>  winsup/doc/new-features.xml            | 12 ++++++++++++
+>  winsup/doc/posix.xml                   |  1 +
+>  6 files changed, 26 insertions(+), 1 deletion(-)
 
- winsup/cygwin/ChangeLog                |  5 +++++
- winsup/cygwin/common.din               |  1 +
- winsup/cygwin/include/cygwin/version.h |  3 ++-
- winsup/doc/ChangeLog                   |  5 +++++
- winsup/doc/new-features.xml            | 12 ++++++++++++
- winsup/doc/posix.xml                   |  1 +
- 6 files changed, 26 insertions(+), 1 deletion(-)
+ACK, thanks.
 
-diff --git a/winsup/cygwin/ChangeLog b/winsup/cygwin/ChangeLog
-index bdaab40..1bab25c 100644
---- a/winsup/cygwin/ChangeLog
-+++ b/winsup/cygwin/ChangeLog
-@@ -1,3 +1,8 @@
-+2015-11-17  Yaakov Selkowitz  <yselkowi@redhat.com>
-+
-+	* common.din (rpmatch): Export.
-+	* include/cygwin/version.h (CYGWIN_VERSION_API_MINOR): Bump.
-+
- 2015-11-12  Corinna Vinschen  <corinna@vinschen.de>
- 
- 	* flock.cc (lockf_t::create_lock_obj): Correctly recreate lock object
-diff --git a/winsup/cygwin/common.din b/winsup/cygwin/common.din
-index 5d22e97..0b0e196 100644
---- a/winsup/cygwin/common.din
-+++ b/winsup/cygwin/common.din
-@@ -1017,6 +1017,7 @@ rindex NOSIGFE
- rmdir SIGFE
- round NOSIGFE
- roundf NOSIGFE
-+rpmatch SIGFE
- rresvport = cygwin_rresvport SIGFE
- rresvport_af = cygwin_rresvport_af SIGFE
- ruserok SIGFE
-diff --git a/winsup/cygwin/include/cygwin/version.h b/winsup/cygwin/include/cygwin/version.h
-index af5afd5..2edd7d7 100644
---- a/winsup/cygwin/include/cygwin/version.h
-+++ b/winsup/cygwin/include/cygwin/version.h
-@@ -473,13 +473,14 @@ details. */
-       289: Export sigsetjmp, siglongjmp.
-       290: Add sysconf cache handling.
-       291: Export aligned_alloc, at_quick_exit, quick_exit.
-+      292: Export rpmatch.
-      */
- 
-      /* Note that we forgot to bump the api for ualarm, strtoll, strtoull,
- 	sigaltstack, sethostname. */
- 
- #define CYGWIN_VERSION_API_MAJOR 0
--#define CYGWIN_VERSION_API_MINOR 291
-+#define CYGWIN_VERSION_API_MINOR 292
- 
-      /* There is also a compatibity version number associated with the
- 	shared memory regions.  It is incremented when incompatible
-diff --git a/winsup/doc/ChangeLog b/winsup/doc/ChangeLog
-index 14dd387..df8c641 100644
---- a/winsup/doc/ChangeLog
-+++ b/winsup/doc/ChangeLog
-@@ -1,3 +1,8 @@
-+2015-11-17  Yaakov Selkowitz  <yselkowi@redhat.com>
-+
-+	* new-features.xml (ov-new2.4): New section. Document rpmatch.
-+	* posix.xml (std-bsd): Add rpmatch.
-+
- 2015-11-02  Corinna Vinschen  <corinna@vinschen.de>
- 
- 	* new-features.xml (ov-new2.3): Document Parallels Desktop FS support.
-diff --git a/winsup/doc/new-features.xml b/winsup/doc/new-features.xml
-index 88eb25c..e054a8e 100644
---- a/winsup/doc/new-features.xml
-+++ b/winsup/doc/new-features.xml
-@@ -4,6 +4,18 @@
- 
- <sect1 id="ov-new"><title>What's new and what changed in Cygwin</title>
- 
-+<sect2 id="ov-new2.4"><title>What's new and what changed in 2.4</title>
-+
-+<itemizedlist mark="bullet">
-+
-+<listitem><para>
-+New API: rpmatch.
-+</para></listitem>
-+
-+</itemizedlist>
-+
-+</sect2>
-+
- <sect2 id="ov-new2.3"><title>What's new and what changed in 2.3</title>
- 
- <itemizedlist mark="bullet">
-diff --git a/winsup/doc/posix.xml b/winsup/doc/posix.xml
-index dc6c148..7b6efba 100644
---- a/winsup/doc/posix.xml
-+++ b/winsup/doc/posix.xml
-@@ -1086,6 +1086,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
-     res_send
-     revoke
-     rexec
-+    rpmatch
-     rresvport
-     rresvport_af
-     ruserok
--- 
-2.5.3
+
+Corinna
+
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
+
+--UTZ8bGhNySVQ9LYl
+Content-Type: application/pgp-signature
+Content-length: 819
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iQIcBAEBCAAGBQJWTEiOAAoJEPU2Bp2uRE+g8ckQAIEAGx8L2EMqHCuEkGOrt9jo
+9r+mESUeIvUmFdN2MPWxGIsLJ0h2jSj13bcICOzsmIViGCNlvvtK0lwDI38U0K7q
+zTQwxOZgs3MI8YWW1aYjUHsj/JoMvE+ApCn3WFisU8XqM/XgW+pFhM9x6WzV4KRS
+PaS/zAZAi9p9QFi7y4SGMKyoHRks2GoBhs0rogx4fgBJQm0opeCTAMDzt+K6rwXw
+NONX7R5LWUewP9tyBZYODETjmQ1Z9pHMxf/3DrjtmSOkC3hkcSQs46PxkujkKnOJ
+lKuZLI2h7ifIQ64eKrhM6OZfeKREUlHlxsnNgzeNs9TkYH6nW7MB3d5+wRPjUAxZ
+Git0FwWGW8Rc1ree2l6Bicl5nYsEjAFPuFSo/6401aRj45g7bPExcKtcEatKb98+
+ckf0BtnIIBJmbCpFI8C/POROKFWud5rXDnuVL2n4XLvWp4mjXdYrdA2AuFlgmtlJ
+AOGcCjXeK6+qmnAwNMLUiGqK0yZV5DEDbxWO6UShHaYsCGxoaEjlsuW608jeTD70
+ZqfXmHduwgyHxeVwP+PXVOx4vHNdNG3OuAxID4Bkxxx6gZBWSaFxjW+7jxt7D20R
+51SdGCsMYU6J6+QkZ19298IoQuwIgajMdGZzz+jI97Haqv//Q/msy8QqS5JLK/xn
+tnRb3alT5+aZ1hB9FnT4
+=KIDU
+-----END PGP SIGNATURE-----
+
+--UTZ8bGhNySVQ9LYl--
