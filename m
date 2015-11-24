@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8274-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 106545 invoked by alias); 24 Nov 2015 22:29:43 -0000
+Return-Path: <cygwin-patches-return-8275-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 9634 invoked by alias); 24 Nov 2015 22:59:09 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,66 +9,64 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 106528 invoked by uid 89); 24 Nov 2015 22:29:42 -0000
+Received: (qmail 9601 invoked by uid 89); 24 Nov 2015 22:59:08 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-1.6 required=5.0 tests=AWL,BAYES_05,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.2
-X-HELO: mail-wm0-f47.google.com
-Received: from mail-wm0-f47.google.com (HELO mail-wm0-f47.google.com) (74.125.82.47) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES128-GCM-SHA256 encrypted) ESMTPS; Tue, 24 Nov 2015 22:29:40 +0000
-Received: by wmww144 with SMTP id w144so157848678wmw.1        for <cygwin-patches@cygwin.com>; Tue, 24 Nov 2015 14:29:37 -0800 (PST)
-X-Received: by 10.194.63.142 with SMTP id g14mr38698028wjs.161.1448404177342;        Tue, 24 Nov 2015 14:29:37 -0800 (PST)
-Received: from [192.168.168.1] ([193.165.236.27])        by smtp.gmail.com with ESMTPSA id da10sm20187766wjb.22.2015.11.24.14.29.36        for <cygwin-patches@cygwin.com>        (version=TLSv1/SSLv3 cipher=OTHER);        Tue, 24 Nov 2015 14:29:36 -0800 (PST)
+X-Spam-SWARE-Status: No, score=-2.2 required=5.0 tests=AWL,BAYES_00,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.2
+X-HELO: mail-wm0-f41.google.com
+Received: from mail-wm0-f41.google.com (HELO mail-wm0-f41.google.com) (74.125.82.41) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES128-GCM-SHA256 encrypted) ESMTPS; Tue, 24 Nov 2015 22:59:06 +0000
+Received: by wmuu63 with SMTP id u63so116355152wmu.0        for <cygwin-patches@cygwin.com>; Tue, 24 Nov 2015 14:59:03 -0800 (PST)
+X-Received: by 10.28.130.7 with SMTP id e7mr844264wmd.68.1448405943812;        Tue, 24 Nov 2015 14:59:03 -0800 (PST)
+Received: from [192.168.168.1] ([193.165.236.27])        by smtp.gmail.com with ESMTPSA id vu4sm20329211wjc.2.2015.11.24.14.59.02        for <cygwin-patches@cygwin.com>        (version=TLSv1/SSLv3 cipher=OTHER);        Tue, 24 Nov 2015 14:59:02 -0800 (PST)
 From: David Macek <david.macek.0@gmail.com>
-Subject: [PATCH] Add Forefront TMG to the BLODA
+Subject: [PATCH] Add a section describing peculiarities of how Cygwin creates NTFS symlinks
+References: <20151118200719.GW6402@calimero.vinschen.de>
 To: cygwin-patches@cygwin.com
 X-Enigmail-Draft-Status: N1110
-Message-ID: <5654E4CE.4020105@gmail.com>
-Date: Tue, 24 Nov 2015 22:29:00 -0000
+Message-ID: <5654EBB5.7070100@gmail.com>
+Date: Tue, 24 Nov 2015 22:59:00 -0000
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101 Thunderbird/38.3.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256; boundary="------------ms000904040902090701010402"
+In-Reply-To: <20151118200719.GW6402@calimero.vinschen.de>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256; boundary="------------ms010903070206090305060606"
 X-IsSubscribed: yes
-X-SW-Source: 2015-q4/txt/msg00027.txt.bz2
+X-SW-Source: 2015-q4/txt/msg00028.txt.bz2
 
 This is a cryptographically signed message in MIME format.
 
---------------ms000904040902090701010402
+--------------ms010903070206090305060606
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Content-length: 1377
+Content-length: 1116
 
-A user of MSYS2 had non-deterministic segfaults when running simple command=
- from bash started from cmd. We've isolated the cause to `C:\Program Files =
-(x86)\Forefront TMG Client\FwcWsp64.dll`. See <http://sourceforge.net/p/msy=
-s2/tickets/212/> for a little more information.
+First take on how to describe dereferencing of Cygwin-only symlinks path co=
+mponents when creating NTFS symlinks.
 
-It seems enough to include the software in BLODA, but if not, sorry for the=
- unsolicited patch and let's discuss.
+Note that I haven't tried building the documentation, so I don't know if th=
+e added paragraph breaks anything. Hopefully not.
 
-	* faq-using.xml: Add Forefront TMG to the BLODA
+	* pathnames.xml: Add a section describing peculiarities
+	of how Cygwin creates NTFS symlinks
 
 ---
- winsup/doc/faq-using.xml | 1 +
- 1 file changed, 1 insertion(+)
+ winsup/doc/pathnames.xml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/winsup/doc/faq-using.xml b/winsup/doc/faq-using.xml
-index 4cfc822..35370f6 100644
---- a/winsup/doc/faq-using.xml
-+++ b/winsup/doc/faq-using.xml
-@@ -1317,6 +1317,7 @@ behaviour which affect the operation of other program=
-s, such as Cygwin.
- <listitem><para>AVAST (disable FILESYSTEM and BEHAVIOR realtime shields)</=
-para></listitem>
- <listitem><para>Citrix Metaframe Presentation Server/XenApp (see <ulink ur=
-l=3D"http://support.citrix.com/article/CTX107825">Citrix Support page</ulin=
-k>)</para></listitem>
- <listitem><para>Lavasoft Web Companion</para></listitem>
-+<listitem><para>Forefront TMG</para></listitem>
- </itemizedlist></para>
- <para>Sometimes these problems can be worked around, by temporarily or par=
-tially
- disabling the offending software.  For instance, it may be possible to dis=
-able
+diff --git a/winsup/doc/pathnames.xml b/winsup/doc/pathnames.xml
+index cdbf9fa..9077303 100644
+--- a/winsup/doc/pathnames.xml
++++ b/winsup/doc/pathnames.xml
+@@ -407,6 +407,9 @@ these two settings, see <xref linkend=3D"using-cygwinen=
+v"></xref>.
+ On AFS, native symlinks are the only supported type of symlink due to
+ AFS lacking support for DOS attributes.  This is independent from the
+ <literal>winsymlinks</literal> setting.</para>
++<para>Creation of native symlinks follows special rules to ensure the links
++are usable outside of Cygwin. This includes dereferencing any Cygwin-only
++symlinks that lie in the target path.</para>
+ </listitem>
+=20
+ <listitem>
 --=20
 2.6.2.windows.1
 
@@ -76,7 +74,7 @@ able
 David Macek
 
 
---------------ms000904040902090701010402
+--------------ms010903070206090305060606
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -160,8 +158,8 @@ Q29tIEx0ZC4xKzApBgNVBAsTIlNlY3VyZSBEaWdpdGFsIENlcnRpZmljYXRl
 IFNpZ25pbmcxODA2BgNVBAMTL1N0YXJ0Q29tIENsYXNzIDEgUHJpbWFyeSBJ
 bnRlcm1lZGlhdGUgQ2xpZW50IENBAgMMb3owDQYJYIZIAWUDBAIBBQCgggIp
 MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTE1
-MTEyNDIyMjkzNFowLwYJKoZIhvcNAQkEMSIEIMzeHxHT9hbiC2WTg024fQdI
-GHKH9QLTeisqSwl07uu4MGwGCSqGSIb3DQEJDzFfMF0wCwYJYIZIAWUDBAEq
+MTEyNDIyNTkwMVowLwYJKoZIhvcNAQkEMSIEIB2u/duXfZalTWWHNzhSladR
+SkuBGgQ8yOTtva8uD37KMGwGCSqGSIb3DQEJDzFfMF0wCwYJYIZIAWUDBAEq
 MAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzAOBggqhkiG9w0DAgICAIAwDQYI
 KoZIhvcNAwICAUAwBwYFKw4DAgcwDQYIKoZIhvcNAwICASgwgaUGCSsGAQQB
 gjcQBDGBlzCBlDCBjDELMAkGA1UEBhMCSUwxFjAUBgNVBAoTDVN0YXJ0Q29t
@@ -171,12 +169,12 @@ cm1lZGlhdGUgQ2xpZW50IENBAgMMb3owgacGCyqGSIb3DQEJEAILMYGXoIGU
 MIGMMQswCQYDVQQGEwJJTDEWMBQGA1UEChMNU3RhcnRDb20gTHRkLjErMCkG
 A1UECxMiU2VjdXJlIERpZ2l0YWwgQ2VydGlmaWNhdGUgU2lnbmluZzE4MDYG
 A1UEAxMvU3RhcnRDb20gQ2xhc3MgMSBQcmltYXJ5IEludGVybWVkaWF0ZSBD
-bGllbnQgQ0ECAwxvejANBgkqhkiG9w0BAQEFAASCAQBsKM0Rf9bul9hUjde0
-60B85w7kW3QBJt/F8fS8sX+gH5ih+tosq/lXLDHS+zSIzVILHtnbqZjafZ05
-kDUTON+DiZYFVPp5/aTzp1jGk/3zyIHd37MFGC07L8b9K3KB2LbvHoAwAq7D
-KpMp6pbSYfnNs3BOCgyv6+pSYxzLmZVgRO1kW0kQeiTla528I2ntiqNZrpOS
-L+bVUDJrLa2dlQkdTJcEP6no519ojY9wXpGztbGMHh5Zqmq0N1nKvAJUfwq1
-1GirdIOVOZcZX7mCxRHE1r/amkV3sFnoofjm4099remtkIBgNMXRMWlhvVQU
-AtTvyjk/y69a8IM1K93BaizGAAAAAAAA
+bGllbnQgQ0ECAwxvejANBgkqhkiG9w0BAQEFAASCAQBxCeLD1qkOatENqMwf
+ej1n2pfGKZ6qiT4PmplqF7ne4MB+89vBBQTtU2RvGmipcpbqLZ+oYCQQCxjn
+CnM3GRtTWHhFzG8IFEKphjjXpeN4t/uBZSfnNJf9D08nnED6E2H+Eg9JVeWg
+YQvg2tyUh+vz6R22V+Ar8pc2uzgj/D4GWeR5D+s60W+Q8PJP9yezAInFjFV2
+vwik8rBxxLqaOTDum3Giv9IKorgSVmB5WdpNyhHe7OLp4p6DX8QKTV2G9ZCT
+0YD9J+NK1C5e9S/IPt7GjezSZqGGXS5XPjsclgntDesppqWRXnEelqyWreOv
+URC1TDghD5IcL0fvFMh10LkeAAAAAAAA
 
---------------ms000904040902090701010402--
+--------------ms010903070206090305060606--
