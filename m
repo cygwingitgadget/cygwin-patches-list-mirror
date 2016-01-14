@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8293-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 21647 invoked by alias); 17 Dec 2015 21:02:39 -0000
+Return-Path: <cygwin-patches-return-8294-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 75469 invoked by alias); 14 Jan 2016 18:05:49 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,110 +9,63 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 21635 invoked by uid 89); 17 Dec 2015 21:02:38 -0000
+Received: (qmail 75457 invoked by uid 89); 14 Jan 2016 18:05:48 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-100.3 required=5.0 tests=AWL,BAYES_00,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_PBL,RDNS_DYNAMIC,SCAM_SUBJECT,USER_IN_WHITELIST autolearn=no version=3.3.2 spammy=435, H*r:188.192.47, Hx-spam-relays-external:sk:ipbcc02, H*r:sk:ipbcc02
-X-HELO: calimero.vinschen.de
-Received: from ipbcc02fe8.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.47.232) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 17 Dec 2015 21:02:37 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 49D7BA8062D; Thu, 17 Dec 2015 22:02:35 +0100 (CET)
-Date: Thu, 17 Dec 2015 21:02:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-0.2 required=5.0 tests=AWL,BAYES_50,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW autolearn=no version=3.3.2 spammy=purely, jon.turney@dronecode.org.uk, jonturneydronecodeorguk, Guide
+X-HELO: rgout0304.bt.lon5.cpcloud.co.uk
+Received: from rgout0304.bt.lon5.cpcloud.co.uk (HELO rgout0304.bt.lon5.cpcloud.co.uk) (65.20.0.210) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 14 Jan 2016 18:05:47 +0000
+X-OWM-Source-IP: 86.141.131.231 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-CTCH-RefID: str=0001.0A090204.5697E378.009E,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
+X-Junkmail-Premium-Raw: score=27/50,refid=2.7.2:2016.1.13.105717:17:27.888,ip=86.141.131.231,rules=__HAS_FROM, __TO_MALFORMED_2, __TO_NO_NAME, __SUBJ_ALPHA_END, __HAS_MSGID, __SANE_MSGID, __HAS_X_MAILER, __HAS_HTML, HTML_NO_HTTP, BODY_SIZE_1500_1599, BODYTEXTP_SIZE_3000_LESS, __MIME_TEXT_ONLY, RDNS_GENERIC_POOLED, SXL_IP_DYNAMIC[231.131.141.86.fur], BODY_SIZE_5000_LESS, RDNS_SUSP_GENERIC, BODY_SIZE_2000_LESS, RDNS_SUSP, BODY_SIZE_7000_LESS, NO_URI_FOUND, NO_URI_HTTPS, NO_CTA_URI_FOUND
+X-CTCH-Spam: Unknown
+Received: from localhost.localdomain (86.141.131.231) by rgout03.bt.lon5.cpcloud.co.uk (8.6.122.06) (authenticated as jonturney@btinternet.com)        id 568E39A300D9A49D; Thu, 14 Jan 2016 18:05:44 +0000
+From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2 2/2] Respect `db_home` setting even for the SYSTEM account
-Message-ID: <20151217210235.GD3507@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <0Lg1Tn-1YnzUw0ScN-00pcgi@mail.gmx.com> <cover.1450375424.git.johannes.schindelin@gmx.de> <90c5b45fbe7c26e85e65d69d999b4118a2a89c5a.1450375424.git.johannes.schindelin@gmx.de> <20151217204929.GB3507@calimero.vinschen.de>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="u+FGODhbLwgAeSOU"
-Content-Disposition: inline
-In-Reply-To: <20151217204929.GB3507@calimero.vinschen.de>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-SW-Source: 2015-q4/txt/msg00046.txt.bz2
+Cc: Jon Turney <jon.turney@dronecode.org.uk>
+Subject: [PATCH] Update FAQ question and answer about gdb and signals
+Date: Thu, 14 Jan 2016 18:05:00 -0000
+Message-Id: <1452794719-6124-1-git-send-email-jon.turney@dronecode.org.uk>
+X-SW-Source: 2016-q1/txt/msg00000.txt.bz2
 
+Signed-off-by: Jon Turney <jon.turney@dronecode.org.uk>
+---
+ winsup/doc/faq-programming.xml | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
 
---u+FGODhbLwgAeSOU
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 2298
-
-On Dec 17 21:49, Corinna Vinschen wrote:
-> On Dec 17 19:05, Johannes Schindelin wrote:
-> > We should not blindly set the home directory of the SYSTEM account to
-> > /home/SYSTEM, especially not when that value disagrees with what is
-> > configured via the `db_home` line in the `/etc/nsswitch.conf` file.
-> >=20
-> > This fixes https://github.com/git-for-windows/git/issues/435
-> >=20
-> > Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
-> > ---
-> >  winsup/cygwin/uinfo.cc | 6 +++++-
-> >  1 file changed, 5 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/winsup/cygwin/uinfo.cc b/winsup/cygwin/uinfo.cc
-> > index a5d6270..8c51b82 100644
-> > --- a/winsup/cygwin/uinfo.cc
-> > +++ b/winsup/cygwin/uinfo.cc
-> > @@ -2129,7 +2129,11 @@ pwdgrp::fetch_account_from_windows (fetch_user_a=
-rg_t &arg, cyg_ldap *pldap)
-> >  	 it to a well-known group here. */
-> >        if (acc_type =3D=3D SidTypeUser
-> >  	  && (sid_sub_auth_count (sid) <=3D 3 || sid_id_auth (sid) =3D=3D 11))
-> > -	acc_type =3D SidTypeWellKnownGroup;
-> > +	{
-> > +	  acc_type =3D SidTypeWellKnownGroup;
-> > +	  home =3D cygheap->pg.get_home (pldap, sid, dom, domain, name,
-> > +				       fully_qualified_name);
->=20
-> Uhm, that's a bit over the top, isn't it?  It will affect all S-1-5-X
-> accounts as well as the S-1-5-11 Windows account SIDs.  Is that really
-
-s/S-1-5-11/S-1-11/, sorry.
-
-> what you want?
->=20
-> Using pldap here may SEGV in cygheap_pwdgrp::get_home, btw, because
-> it may be NULL.  cygheap_pwdgrp::get_home doesn't check pldap for
-> validity, it expects a valid pointer.  You could either use cldap, or
-> cygheap_pwdgrp::get_home would have to check pldap before using it.
->=20
-> However, either way there's another problem: Independently of the
-> configured db_home schemes, you don't want to ask the DC for info on
-> these builtin accounts.  The better approach might be to call the
-> PUSER_INFO_3 variant of cygheap_pwdgrp::get_home with a NULL ui
-> pointer and just check for ui in the NSS_SCHEME_DESC case.  The other
-> called functions fetch_windows_home and fetch_from_path both can
-> live with both pointers, pldap and ui being NULL.
-
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---u+FGODhbLwgAeSOU
-Content-Type: application/pgp-signature
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJWcyLrAAoJEPU2Bp2uRE+gs5wP+QHkL3MEb6/KAXOIW3bNg4Y9
-kZngxq8KoxyO2gddxKxWMnZlewauzn/Oicxtx2A4ddodanEjaUGdM+CBElqwz3fL
-GMnzb5htIeGxSG7vgYmPN5PrIG5ZKQFAO0Sgcxsomj5a64yzzr5auldD+7uYPm1t
-coAXxm5FwLeBzzOq5TIyUZR74XI2/GZx9A8Vphin7HTIN8MV892c9ZYI0H2wee/B
-Gy9hue0XPR7n5Csupx93hFimDL7F6Z821pIxpnxTpBZh8riNCgM2dpBT+IFwR9T5
-QU4TR51peysSbAd9PJ86fOTWWOrHJwwsqsyizdpDFE46lkvKCZLbYxebCVaoFzra
-jGuu77LYvUYSCuGDhJt0ROSvQQqMycH10oGgpOehmDzc9tgKxmUxtfJLdQnT8VCy
-eVRMbGZBsIrrUXsXz/r67Tg/Kphvw8ClwhBJ/26Ln1BIUttlx8bKNVYNJvDvWP6f
-d3RY5i+LPljFJvy3leW421j6vhZTXGF/d/dPy4FZF/XwyoGRJlJTCI7ycq0WDXew
-xQz1odpZksog/6DvfTnEbmQdMUzlHLdo1t1GF8BuzhZ3O+Rz3YdG2tOtjS4ptN4h
-oj2CAwhnfF9IrT1nPlgTZ/RFGeyZjIW/loEn2mayz2DEpIqK+45Fb45A4w48mjE2
-qc0nvhqG6UmkQ5/DJbFH
-=mum1
------END PGP SIGNATURE-----
-
---u+FGODhbLwgAeSOU--
+diff --git a/winsup/doc/faq-programming.xml b/winsup/doc/faq-programming.xml
+index af6102a..7f1ffd9 100644
+--- a/winsup/doc/faq-programming.xml
++++ b/winsup/doc/faq-programming.xml
+@@ -859,15 +859,22 @@ on using <literal>strace</literal>, see the Cygwin User's Guide.
+ </answer></qandaentry>
+ 
+ <qandaentry id="faq.programming.gdb-signals">
+-<question><para>Why doesn't gdb handle signals?</para></question>
++<question><para>How does gdb handle signals?</para></question>
+ <answer>
+ 
+-<para>Unfortunately, there is only minimal signal handling support in gdb
+-currently.  Signal handling only works with Windows-type signals.
+-SIGINT may work, SIGFPE may work, SIGSEGV definitely does.  You cannot
+-'stop', 'print' or 'nopass' signals like SIGUSR1 or SIGHUP to the
+-process being debugged.
++<para>
++gdb maps known Windows exceptions to signals such as SIGSEGV, SIGFPE, SIGTRAP,
++SIGINT and SIGILL.  Other Windows exceptions are passed on to the handler (if
++any), and reported as an unknown signal if an unhandled (second chance)
++exception occurs.
+ </para>
++
++<para>
++There is also an experimental feature to notify gdb of purely Cygwin signals
++like SIGABRT, SIGHUP or SIGUSR1.  This currently has some known problems, for
++example, single-stepping from these signals may not work as expected.
++</para>
++
+ </answer></qandaentry>
+ 
+ <qandaentry id="faq.programming.linker">
+-- 
+2.6.2
