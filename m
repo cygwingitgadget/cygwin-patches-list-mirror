@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8306-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 19942 invoked by alias); 12 Feb 2016 17:27:27 -0000
+Return-Path: <cygwin-patches-return-8307-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 110471 invoked by alias); 12 Feb 2016 17:46:52 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,97 +9,83 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 19925 invoked by uid 89); 12 Feb 2016 17:27:26 -0000
+Received: (qmail 110452 invoked by uid 89); 12 Feb 2016 17:46:51 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-2.0 required=5.0 tests=BAYES_00,RP_MATCHES_RCVD,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=8087, 808,7, HTo:U*cygwin-patches, H*Ad:U*cygwin-patches
-X-HELO: mx1.redhat.com
-Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-GCM-SHA384 encrypted) ESMTPS; Fri, 12 Feb 2016 17:27:25 +0000
-Received: from int-mx10.intmail.prod.int.phx2.redhat.com (int-mx10.intmail.prod.int.phx2.redhat.com [10.5.11.23])	by mx1.redhat.com (Postfix) with ESMTPS id 8023A804E4	for <cygwin-patches@cygwin.com>; Fri, 12 Feb 2016 17:27:24 +0000 (UTC)
-Received: from localhost.localdomain (ovpn-116-17.rdu2.redhat.com [10.10.116.17])	by int-mx10.intmail.prod.int.phx2.redhat.com (8.14.4/8.14.4) with ESMTP id u1CHRMeH013978	(version=TLSv1/SSLv3 cipher=AES256-SHA256 bits=256 verify=NO)	for <cygwin-patches@cygwin.com>; Fri, 12 Feb 2016 12:27:23 -0500
-From: Yaakov Selkowitz <yselkowi@redhat.com>
+X-Spam-SWARE-Status: No, score=-96.6 required=5.0 tests=BAYES_00,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_PBL,RDNS_DYNAMIC,USER_IN_WHITELIST autolearn=no version=3.3.2 spammy=H*F:U*corinna-cygwin, HTo:U*cygwin-patches, H*Ad:U*cygwin-patches, H*R:D*cygwin.com
+X-HELO: calimero.vinschen.de
+Received: from ipbcc0d020.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.208.32) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 12 Feb 2016 17:46:50 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 7A9ABA80595; Fri, 12 Feb 2016 18:46:48 +0100 (CET)
+Date: Fri, 12 Feb 2016 17:46:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v2] cygwin: fix errors with GCC 5
-Date: Fri, 12 Feb 2016 17:27:00 -0000
-Message-Id: <1455298020-14696-1-git-send-email-yselkowi@redhat.com>
-In-Reply-To: <20160212093124.GB19968@calimero.vinschen.de>
-References: <20160212093124.GB19968@calimero.vinschen.de>
-X-SW-Source: 2016-q1/txt/msg00012.txt.bz2
+Subject: Re: [PATCH v2] cygwin: fix errors with GCC 5
+Message-ID: <20160212174648.GB19978@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20160212093124.GB19968@calimero.vinschen.de> <1455298020-14696-1-git-send-email-yselkowi@redhat.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="WYTEVAkct0FjGQmd"
+Content-Disposition: inline
+In-Reply-To: <1455298020-14696-1-git-send-email-yselkowi@redhat.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-SW-Source: 2016-q1/txt/msg00013.txt.bz2
 
-GCC 5 switched from C89 to C11 by default. This implies a change from
-GNU to C99 inline by default, which have very different meanings of
-extern inline vs. static inline:
 
-https://gcc.gnu.org/onlinedocs/gcc/Inline.html
+--WYTEVAkct0FjGQmd
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 824
 
-Marking these as gnu_inline retains the previous behaviour.
+On Feb 12 11:27, Yaakov Selkowitz wrote:
+> GCC 5 switched from C89 to C11 by default. This implies a change from
+> GNU to C99 inline by default, which have very different meanings of
+> extern inline vs. static inline:
+>=20
+> https://gcc.gnu.org/onlinedocs/gcc/Inline.html
+>=20
+> Marking these as gnu_inline retains the previous behaviour.
+>=20
+> 	winsup/cygwin/
+> 	* exceptions.cc (exception::handle): Change debugging to int to fix
+> 	an always-true boolean comparison warning.
+> 	* include/cygwin/config.h (__getreent): Mark gnu_inline.
+> 	* winbase.h (ilockcmpexch, ilockcmpexch64): Ditto.
+>=20
+> Signed-off-by: Yaakov Selkowitz <yselkowi@redhat.com>
 
-	winsup/cygwin/
-	* exceptions.cc (exception::handle): Change debugging to int to fix
-	an always-true boolean comparison warning.
-	* include/cygwin/config.h (__getreent): Mark gnu_inline.
-	* winbase.h (ilockcmpexch, ilockcmpexch64): Ditto.
+ACK
 
-Signed-off-by: Yaakov Selkowitz <yselkowi@redhat.com>
----
- winsup/cygwin/exceptions.cc           | 4 ++--
- winsup/cygwin/include/cygwin/config.h | 1 +
- winsup/cygwin/winbase.h               | 2 ++
- 3 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/winsup/cygwin/exceptions.cc b/winsup/cygwin/exceptions.cc
-index c3a45d2..1627d43 100644
---- a/winsup/cygwin/exceptions.cc
-+++ b/winsup/cygwin/exceptions.cc
-@@ -637,7 +637,7 @@ EXCEPTION_DISPOSITION
- exception::handle (EXCEPTION_RECORD *e, exception_list *frame, CONTEXT *in,
- 		   PDISPATCHER_CONTEXT dispatch)
- {
--  static bool NO_COPY debugging;
-+  static int NO_COPY debugging = 0;
-   _cygtls& me = _my_tls;
- 
- #ifndef __x86_64__
-@@ -808,7 +808,7 @@ exception::handle (EXCEPTION_RECORD *e, exception_list *frame, CONTEXT *in,
-     rtl_unwind (frame, e);
-   else
-     {
--      debugging = true;
-+      debugging = 1;
-       return ExceptionContinueExecution;
-     }
- 
-diff --git a/winsup/cygwin/include/cygwin/config.h b/winsup/cygwin/include/cygwin/config.h
-index 58cff05..204826d 100644
---- a/winsup/cygwin/include/cygwin/config.h
-+++ b/winsup/cygwin/include/cygwin/config.h
-@@ -43,6 +43,7 @@ extern "C" {
- #else
- #include "../tlsoffsets.h"
- #endif
-+__attribute__((gnu_inline))
- extern inline struct _reent *__getreent (void)
- {
-   register char *ret;
-diff --git a/winsup/cygwin/winbase.h b/winsup/cygwin/winbase.h
-index 666f74a..1e825e4 100644
---- a/winsup/cygwin/winbase.h
-+++ b/winsup/cygwin/winbase.h
-@@ -11,6 +11,7 @@ details. */
- #ifndef _WINBASE2_H
- #define _WINBASE2_H
- 
-+__attribute__((gnu_inline))
- extern __inline__ LONG
- ilockcmpexch (volatile LONG *t, LONG v, LONG c)
- {
-@@ -30,6 +31,7 @@ ilockcmpexch (volatile LONG *t, LONG v, LONG c)
- #undef InterlockedCompareExchangePointer
- 
- #ifdef __x86_64__
-+__attribute__((gnu_inline))
- extern __inline__ LONGLONG
- ilockcmpexch64 (volatile LONGLONG *t, LONGLONG v, LONGLONG c)
- {
--- 
-2.7.0
+Thanks,
+Corinna
+
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
+
+--WYTEVAkct0FjGQmd
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 819
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iQIcBAEBCAAGBQJWvhqIAAoJEPU2Bp2uRE+gVMMQAKZatOy+1AnyL9OwucU69jog
+pLNhS09hAvAb5XNzE+FFqcQJzDJnIre3UkAloNYJb5flGW3Rp0rP8O9vDFTD74pF
+TsJk2egotwWJu7LuDba9PkEG7aM5mst6WI+PPoa2zDkzCTsUCDkHNtK/smDvoeDc
+0zxXDcMD76lMkxBlNjyySlMrKIKSqi7+2phFrLu1qjFnc3Seiib2KcMrhYxFYd4q
+l6imibVJaXgOyxM0w8pXtech9PVhLiZy4BlPHDWX5c2mDm4DWPBwIaoMhxBdtt0C
+8Fgxr8vySZUY5+gT2mW8Id2/FZp3Gv7NQLZ2uDw8eJRxORaX+U8jn1y9IYXBhdnH
+LWg/mu2c5Aex7WAL8NhIfY9jlT9hY+/39Cqrl4QhgAsnx4e6xmClexjObYQN7bAH
+6+kU6t9zz7jTq6JMKuI0CxzBsEy3Z/g35IiwwYf544jzYk81ZApQbnXZvPU0+Msd
+lSSaCGJVL9hSpEQAw0u8aUzzmhE2ZIGyIGPlgzJBsVzW7AQ0tzlgeuTZvQ6R1DPm
+fuOvN58pXhiOvSQeQORN3T3YlHi7XQhxScQ1gAWFa3bL4tL3YlJFTi1nlXwGJXtJ
+fNTwHi3QpjTpQ82XTKEwIPpq/Ovg9gCxUzXE1i4P4SuFDQilYJRs6os+C7l8X1Z7
+4NhbxIOCloGz48G5RfT9
+=kS7n
+-----END PGP SIGNATURE-----
+
+--WYTEVAkct0FjGQmd--
