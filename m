@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8297-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 25854 invoked by alias); 11 Feb 2016 13:57:50 -0000
+Return-Path: <cygwin-patches-return-8298-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 38138 invoked by alias); 12 Feb 2016 02:27:24 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,85 +9,81 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 25843 invoked by uid 89); 11 Feb 2016 13:57:49 -0000
+Received: (qmail 38105 invoked by uid 89); 12 Feb 2016 02:27:23 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-96.6 required=5.0 tests=BAYES_00,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_PBL,RDNS_DYNAMIC,USER_IN_WHITELIST autolearn=no version=3.3.2 spammy=neat, glance, unhappy, H*F:U*corinna-cygwin
-X-HELO: calimero.vinschen.de
-Received: from ipbcc0d020.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.208.32) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 11 Feb 2016 13:57:49 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id BF5AFA80591; Thu, 11 Feb 2016 14:57:46 +0100 (CET)
-Date: Thu, 11 Feb 2016 13:57:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-2.1 required=5.0 tests=BAYES_00,RP_MATCHES_RCVD,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=43,6, Hx-languages-length:2014, san, 500000
+X-HELO: mx1.redhat.com
+Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-GCM-SHA384 encrypted) ESMTPS; Fri, 12 Feb 2016 02:27:21 +0000
+Received: from int-mx10.intmail.prod.int.phx2.redhat.com (int-mx10.intmail.prod.int.phx2.redhat.com [10.5.11.23])	by mx1.redhat.com (Postfix) with ESMTPS id C764FAA7	for <cygwin-patches@cygwin.com>; Fri, 12 Feb 2016 02:27:20 +0000 (UTC)
+Received: from localhost.localdomain (ovpn-116-17.rdu2.redhat.com [10.10.116.17])	by int-mx10.intmail.prod.int.phx2.redhat.com (8.14.4/8.14.4) with ESMTP id u1C2RJpx020536	(version=TLSv1/SSLv3 cipher=AES256-SHA256 bits=256 verify=NO)	for <cygwin-patches@cygwin.com>; Thu, 11 Feb 2016 21:27:20 -0500
+From: Yaakov Selkowitz <yselkowi@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH][RFC] POSIX barrier implementation, take 1
-Message-ID: <20160211135746.GA28321@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <CAKw7uVj5h7TkuN7F5xVEx+C1YAWGqvxZNH=osQ3AG3KsyutXQA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="u3/rZRmxL6MmkK24"
-Content-Disposition: inline
-In-Reply-To: <CAKw7uVj5h7TkuN7F5xVEx+C1YAWGqvxZNH=osQ3AG3KsyutXQA@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-SW-Source: 2016-q1/txt/msg00003.txt.bz2
+Subject: [PATCH] cygwin: fix errors with GCC 5
+Date: Fri, 12 Feb 2016 02:27:00 -0000
+Message-Id: <1455244017-11296-1-git-send-email-yselkowi@redhat.com>
+X-SW-Source: 2016-q1/txt/msg00004.txt.bz2
 
+GCC 5 switched from C89 to C11 by default, which implies a change from
+GNU to C99 inline.
 
---u3/rZRmxL6MmkK24
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 886
+	winsup/cygwin/
+	* exceptions.cc (exception::handle): Fix always-true boolean
+	comparison warning.
+	* include/cygwin/config.h (__getreent): Mark gnu_inline.
+	* winbase.h (ilockcmpexch, ilockcmpexch64): Ditto.
 
-Hi V=C3=A1clav,
+Signed-off-by: Yaakov Selkowitz <yselkowi@redhat.com>
+---
+ winsup/cygwin/exceptions.cc           | 2 +-
+ winsup/cygwin/include/cygwin/config.h | 1 +
+ winsup/cygwin/winbase.h               | 2 ++
+ 3 files changed, 4 insertions(+), 1 deletion(-)
 
-On Feb 11 14:30, V=C3=A1clav Haisman wrote:
-> Hi.
->=20
-> I am attaching a patch that adds (or tries to) POSIX barriers
-> implementation into Cygwin. I have compiled it but not actually tested
-> it, yet. I am dumping it here just in case I get run over by a bus on
-> my way home. :)
-
-Uh oh, please don't do that.
-
-I took a quick glance and your code looks pretty well.  Your
-introduction of LIKELY/UNLIKELY is a neat step as well.  Shouldn't that
-go into some generic header rather than just into thread.cc so we can
-use it more librally throughout?
-
-Btw., I wouldn't be unhappy if you'd have a more stern look into the
-pthread implementation apart from barriers.  There are probably more
-shortcomings...
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---u3/rZRmxL6MmkK24
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJWvJNaAAoJEPU2Bp2uRE+gMDIP/iw13qoDcAp7FQwrrFpA5oJy
-HYQaHD5YcOSeRBRUy/zD0V7Hbdlr473/fieUeWwv2LE0tFX6Z6cJCyCHm+krNhaY
-FCzp7jbvftZ1+751noPWHPhQnI4rJlDA75kKAgUWkUOQt153l4q4trE5yPS72cCU
-y7UfGEAMN0KJXP85GkazYxd4YsuoaM8hahWnx6HWurYWOvQ2Nho1dlLvHTcisyff
-cZlc5MO+cNCJt8ZbhrXw7pghdjM1SwIOSbXHwytfoaBEf6zgJnm97OX4uv/vD4fk
-JvcCnCm4A9Cgyd3TyqXiwtdQxfU0AmZoQ4mL99CzrdK7X42aL1nPMIlJ+mVjWjXv
-UrTmq8CAckeCQ91obcZRfZ7RLpGP9tn99E9yy66l8uiSaeOuhaXRBs/raQcjzxQG
-qQa4wcgdgb20T73HSYER34/+GvCL4/dkFCxol6IzXZEFBcWH8Hh3Lzc3brEC4xbq
-g14aBS47OVhrC7vcd6JL8pbe+oeHH2XxvbSvKgoYdDoYS3usYFSZ6J4iiec+zIoi
-WRrA9taZhPLBlQZUcABifQRmsQAyP9JAK960+zbalfTrXaIvxs9KxfPgkt4IbVf5
-F19oC1tYJbO0ewzA9ONBas8f8MlrSyNtkfxb71TcjvbESK/q/jHsY1XpkZalv3k3
-76170bVgukRNcfGV6WxL
-=noR3
------END PGP SIGNATURE-----
-
---u3/rZRmxL6MmkK24--
+diff --git a/winsup/cygwin/exceptions.cc b/winsup/cygwin/exceptions.cc
+index c3a45d2..a50973b 100644
+--- a/winsup/cygwin/exceptions.cc
++++ b/winsup/cygwin/exceptions.cc
+@@ -645,7 +645,7 @@ exception::handle (EXCEPTION_RECORD *e, exception_list *frame, CONTEXT *in,
+     me.andreas->leave ();	/* Return from a "san" caught fault */
+ #endif
+ 
+-  if (debugging && ++debugging < 500000)
++  if (debugging && ++debugging)
+     {
+       SetThreadPriority (hMainThread, THREAD_PRIORITY_NORMAL);
+       return ExceptionContinueExecution;
+diff --git a/winsup/cygwin/include/cygwin/config.h b/winsup/cygwin/include/cygwin/config.h
+index 58cff05..204826d 100644
+--- a/winsup/cygwin/include/cygwin/config.h
++++ b/winsup/cygwin/include/cygwin/config.h
+@@ -43,6 +43,7 @@ extern "C" {
+ #else
+ #include "../tlsoffsets.h"
+ #endif
++__attribute__((gnu_inline))
+ extern inline struct _reent *__getreent (void)
+ {
+   register char *ret;
+diff --git a/winsup/cygwin/winbase.h b/winsup/cygwin/winbase.h
+index 666f74a..1e825e4 100644
+--- a/winsup/cygwin/winbase.h
++++ b/winsup/cygwin/winbase.h
+@@ -11,6 +11,7 @@ details. */
+ #ifndef _WINBASE2_H
+ #define _WINBASE2_H
+ 
++__attribute__((gnu_inline))
+ extern __inline__ LONG
+ ilockcmpexch (volatile LONG *t, LONG v, LONG c)
+ {
+@@ -30,6 +31,7 @@ ilockcmpexch (volatile LONG *t, LONG v, LONG c)
+ #undef InterlockedCompareExchangePointer
+ 
+ #ifdef __x86_64__
++__attribute__((gnu_inline))
+ extern __inline__ LONGLONG
+ ilockcmpexch64 (volatile LONGLONG *t, LONGLONG v, LONGLONG c)
+ {
+-- 
+2.7.0
