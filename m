@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8303-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 3602 invoked by alias); 12 Feb 2016 14:25:44 -0000
+Return-Path: <cygwin-patches-return-8304-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 52180 invoked by alias); 12 Feb 2016 16:53:31 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,121 +9,38 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 3574 invoked by uid 89); 12 Feb 2016 14:25:40 -0000
+Received: (qmail 52143 invoked by uid 89); 12 Feb 2016 16:53:30 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-96.6 required=5.0 tests=BAYES_00,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_PBL,RDNS_DYNAMIC,USER_IN_WHITELIST autolearn=no version=3.3.2 spammy=Hx-languages-length:1918, H*F:U*corinna-cygwin, HTo:U*cygwin-patches, H*Ad:U*cygwin-patches
-X-HELO: calimero.vinschen.de
-Received: from ipbcc0d020.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.208.32) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 12 Feb 2016 14:25:39 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 74818A80595; Fri, 12 Feb 2016 15:25:37 +0100 (CET)
-Date: Fri, 12 Feb 2016 14:25:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KAM_LAZY_DOMAIN_SECURITY,SPF_HELO_PASS autolearn=no version=3.3.2 spammy=H*M:cygwin, Hx-languages-length:409, HTo:U*cygwin-patches
+X-HELO: mx1.redhat.com
+Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-GCM-SHA384 encrypted) ESMTPS; Fri, 12 Feb 2016 16:53:29 +0000
+Received: from int-mx10.intmail.prod.int.phx2.redhat.com (int-mx10.intmail.prod.int.phx2.redhat.com [10.5.11.23])	by mx1.redhat.com (Postfix) with ESMTPS id 6639432D3C7	for <cygwin-patches@cygwin.com>; Fri, 12 Feb 2016 16:53:28 +0000 (UTC)
+Received: from [10.10.116.17] (ovpn-116-17.rdu2.redhat.com [10.10.116.17])	by int-mx10.intmail.prod.int.phx2.redhat.com (8.14.4/8.14.4) with ESMTP id u1CGrRF6022299	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO)	for <cygwin-patches@cygwin.com>; Fri, 12 Feb 2016 11:53:28 -0500
+Subject: Re: [PATCH] cygwin: update child info magic
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] POSIX barrier implementation, take 2
-Message-ID: <20160212142537.GD3415@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <56BDB206.9090101@gmail.com>
+References: <1455244717-12688-1-git-send-email-yselkowi@redhat.com> <20160212093359.GC19968@calimero.vinschen.de>
+From: Yaakov Selkowitz <yselkowitz@cygwin.com>
+Message-ID: <56BE0DFC.7000702@cygwin.com>
+Date: Fri, 12 Feb 2016 16:53:00 -0000
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Thunderbird/38.5.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="WChQLJJJfbwij+9x"
-Content-Disposition: inline
-In-Reply-To: <56BDB206.9090101@gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-SW-Source: 2016-q1/txt/msg00009.txt.bz2
+In-Reply-To: <20160212093359.GC19968@calimero.vinschen.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
+X-SW-Source: 2016-q1/txt/msg00010.txt.bz2
 
+On 2016-02-12 03:33, Corinna Vinschen wrote:
+> On Feb 11 20:38, Yaakov Selkowitz wrote:
+>> 	winsup/cygwin/
+>> 	* child_info.h (CURR_CHILD_INFO_MAGIC): Update.
+>
+> This needs an explanation.  CHILD_INFO_MAGIC is still 0x30ea98f6U
+> for me.
 
---WChQLJJJfbwij+9x
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1948
+Hmmm, in that case it's either one of the patches I just sent or it's 
+gcc-5.  How would either of those affect this?
 
-Hi V=C3=A1clav,
-
-
-the patch looks pretty good, I have just a few (minor) nits:
-
-On Feb 12 11:20, V=C3=A1clav Haisman wrote:
-> diff --git a/newlib/libc/include/sys/types.h b/newlib/libc/include/sys/ty=
-pes.h
-> index 5dd6c75..bfe93fa 100644
-> --- a/newlib/libc/include/sys/types.h
-> +++ b/newlib/libc/include/sys/types.h
-> @@ -431,6 +431,7 @@ typedef struct {
->=20=20
->  /* POSIX Barrier Types */
->=20=20
-> +#if !defined(__CYGWIN__)
->  #if defined(_POSIX_BARRIERS)
->  typedef __uint32_t pthread_barrier_t;        /* POSIX Barrier Object */
->  typedef struct {
-> @@ -440,6 +441,7 @@ typedef struct {
->  #endif
->  } pthread_barrierattr_t;
->  #endif /* defined(_POSIX_BARRIERS) */
-> +#endif /* __CYGWIN__ */
-
-Instead of adding YA `if !CYGWIN', I think it might be prudent to
-just move the `if !CYGWIN' up from the following _POSIX_SPIN_LOCKS
-block.
-
-> diff --git a/winsup/cygwin/common.din b/winsup/cygwin/common.din
-> index d7f4d24..18e010a 100644
-> --- a/winsup/cygwin/common.din
-> +++ b/winsup/cygwin/common.din
-> @@ -882,6 +882,13 @@ pthread_condattr_getpshared SIGFE
->  pthread_condattr_init SIGFE
->  pthread_condattr_setclock SIGFE
->  pthread_condattr_setpshared SIGFE
-> +pthread_barrierattr_init SIGFE
-> +pthread_barrierattr_setpshared SIGFE
-> +pthread_barrierattr_getpshared SIGFE
-> +pthread_barrierattr_destroy SIGFE
-> +pthread_barrier_init SIGFE
-> +pthread_barrier_destroy SIGFE
-> +pthread_barrier_wait SIGFE
->  pthread_continue SIGFE
->  pthread_create SIGFE
->  pthread_detach SIGFE
-
-These should be added in alphabetic order.
-
-> +#define LIKELY(X) __builtin_expect (!!(X), 1)
-> +#define UNLIKELY(X) __builtin_expect (!!(X), 0)
-
-May I suggest to use lowercase "likely/unlikely" just as in the Linux
-kernel and to move the definitions into a header like winsup.h or
-miscfuncs.h?
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---WChQLJJJfbwij+9x
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJWvethAAoJEPU2Bp2uRE+g8ywP/2PS6LAm+hky/w/4sYlGuVUT
-mEfdjvEvYAJkrlPwgIA+q/jCYp2pIwIUgCxT2EnypkJgboTO4XXLx+XhdLO29suQ
-snL0egfuXCPnWqUJyWHecVRUPdjZgsqDhzu1IyvzleW3jqtKay6lut3/AmAGL9g5
-/B/sa/969FHxPP2DPwhpCExIWF/fIIb7rqDF4ZHVoOeVrTOQjovQ6thjHJdL4ZYv
-5Z2RZ4g0PQZjFDeBzgx9MFK/y7+TkVO9A/pgHruhHJTPE0yePR/6oPfXkgqe/PnF
-wri4HeSVT1wUmrXjarPOt03VJFho3KHOa3017jXPP5wKMcxbUoIyUlAvgGUNk4LB
-Bk4D3e54nFtpS/uMu5YMj0CG0uYAoY8twCPpc/bd1IV1t5BNSgV3JWkYrcy9jPIG
-n5CQUozg6CtGV0VqwKGGxwShlhjuIYDhbk6a6H9POaB/Cei0VDSUkJz3IroxpmAe
-92maM5Q4uhQijFmo+6/6tyEM29speZDewWZECK0jb2NVpl/g9lBApNZPcGGBvn9G
-17FaocVlvzbk8PrdXUw85Ijaw5XeaEBFrI8Z3k1szGGkQ+pz81X2ogH0EamgB/Cl
-qz0O3TviOdVrIz5Bq5FYeTK2vzQ/yJDVaKvNdinvxHMEDaP5eqGa4NERiwJSwqub
-vc6whmFxr4aNEH25BtZn
-=rLd2
------END PGP SIGNATURE-----
-
---WChQLJJJfbwij+9x--
+-- 
+Yaakov
