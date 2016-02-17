@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8322-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 12322 invoked by alias); 17 Feb 2016 10:42:46 -0000
+Return-Path: <cygwin-patches-return-8323-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 71614 invoked by alias); 17 Feb 2016 22:30:53 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,173 +9,331 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 12305 invoked by uid 89); 17 Feb 2016 10:42:46 -0000
+Received: (qmail 71593 invoked by uid 89); 17 Feb 2016 22:30:52 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-96.6 required=5.0 tests=BAYES_00,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_PBL,RDNS_DYNAMIC,USER_IN_WHITELIST autolearn=no version=3.3.2 spammy=behavioral, 1526, 496, XXX
-X-HELO: calimero.vinschen.de
-Received: from ipbcc0d020.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.208.32) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 17 Feb 2016 10:42:44 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id EB559A805A7; Wed, 17 Feb 2016 11:42:41 +0100 (CET)
-Date: Wed, 17 Feb 2016 10:42:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: gprof profiling of multi-threaded Cygwin programs
-Message-ID: <20160217104241.GA31536@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <56C404FF.502@maxrnd.com>
+X-Spam-SWARE-Status: No, score=-0.9 required=5.0 tests=AWL,BAYES_20,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_PASS autolearn=ham version=3.3.2 spammy=immune, Eliminate, 489, Shift
+X-HELO: mail-yw0-f177.google.com
+Received: from mail-yw0-f177.google.com (HELO mail-yw0-f177.google.com) (209.85.161.177) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES128-GCM-SHA256 encrypted) ESMTPS; Wed, 17 Feb 2016 22:30:45 +0000
+Received: by mail-yw0-f177.google.com with SMTP id g127so25775098ywf.2        for <cygwin-patches@cygwin.com>; Wed, 17 Feb 2016 14:30:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20130820;        h=x-gm-message-state:mime-version:date:message-id:subject:from:to         :content-type;        bh=mGMTFw7tf0+9JFpMc1Y9vOVld+YvPvTZnKRQsDxnKoA=;        b=kjXB+5dMGmqVtzAcWvtEfjHGz7nvtuNFgcZGEXpgvIr0CTwqGDNUizcP1dQwthIvDy         OYoYmQ5JNwK8eLK4SZIMK7XyfOBWnu12udaJPlG2w0dtdLwXSGvdhmwCbTgI4xsFNO0u         h5MuQSWLooKv+N3VkQu2bByoHVumP5FWFi0Gzqk7TFDmV4fcbsfahLqs8aHIw12o1zKX         1ogAMaOO5gWQX1/Cewh5numC+g4smDP9u++pu7JjI/POQTvj5ahh66FqcYtdHXqYRifq         6aJ54NYMdJfPBf8KA0b+to5PbcSNOWgov9fxcsN0/DfYYMWH0RHJ43W55aNQUOJJMCLp         +etA==
+X-Gm-Message-State: AG10YOSEii+xsJuXrBM+uNS3j8SjLRPCRVhjJN8X89S8vf96ciq4L0R40qKQQf1RN9M+ZxNN02nccTXM5PjYYw==
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="YiEDa0DAkWCtVeE4"
-Content-Disposition: inline
-In-Reply-To: <56C404FF.502@maxrnd.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-SW-Source: 2016-q1/txt/msg00028.txt.bz2
+X-Received: by 10.13.212.204 with SMTP id w195mr2585864ywd.225.1455748243918; Wed, 17 Feb 2016 14:30:43 -0800 (PST)
+Received: by 10.129.58.11 with HTTP; Wed, 17 Feb 2016 14:30:43 -0800 (PST)
+Date: Wed, 17 Feb 2016 22:30:00 -0000
+Message-ID: <CAJCedbic4p63tyo1f1TH=h8Ds+0rVGcxrvXuEsb7iRqpM773SA@mail.gmail.com>
+Subject: [PATCH] Multiple timer issues
+From: =?UTF-8?Q?Ir=C3=A1nyossy_Knoblauch_Art=C3=BAr?= <ikartur@gmail.com>
+To: cygwin-patches@cygwin.com
+Content-Type: multipart/mixed; boundary=001a114fbd38f66dac052bfecc68
+X-IsSubscribed: yes
+X-SW-Source: 2016-q1/txt/msg00029.txt.bz2
 
 
---YiEDa0DAkWCtVeE4
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+--001a114fbd38f66dac052bfecc68
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-Content-length: 3527
+Content-length: 1134
 
-Hi Mark,
+Dear Cygwin Maintainers,
 
+First of all, thank you for your work, I really enjoy using this software!
 
-thanks for the patch.  Generally the patch is fine, I have just a few
-nits.
+However, I have noticed that adjusting the system time can cause some
+programs to misbehave. I have found bugs in the POSIX timer
+implementation and a bug in the select() function's timeout handling.
 
-On Feb 16 21:28, Mark Geisert wrote:
-> I've attached a patch set modifying Cygwin's profiling support to sample =
-PC
-> values of all an application's threads, not just the main thread.  There =
-is
-> no change to how profiling is requested: just compile and link the app wi=
-th
-> "-pg" as usual.  The profiling info is dumped into file gmon.out as usual.
->=20
-> There is a behavioral change that ought to be documented somewhere:  If a
-
-If it ought to be documented, what about providing the doc patch, too?
-Any chance you could come up with a short section about profiling in the
-context of winsup/doc/programming.xml?  Otherwise there's basically only
-the description of the ssp tool in winsup/doc/utils.xml yet, which is a
-bit ... disappointing.
-
-> diff --git a/winsup/cygwin/common.din b/winsup/cygwin/common.din
-> index 9584d09..243fd01 100644
-> --- a/winsup/cygwin/common.din
-> +++ b/winsup/cygwin/common.din
-> @@ -269,6 +269,7 @@ ctime SIGFE
->  ctime_r SIGFE
->  cuserid NOSIGFE
->  cwait SIGFE
-> +cygheap_profthr_all NOSIGFE
-
-I would like to avoid exporting new cygwin-internal symbols.  Could you
-please wrap the new functionality in a call to cygwin_internal?  Just
-add a new CW_xxx symbol to include/sys/cygwin.h and use that from
-profthr_func.
-
-> +extern "C" void
-> +cygheap_profthr_all (void (*profthr_byhandle) (HANDLE))
-> +{
-> +  int ix =3D -1;
-> +  while (++ix < (int) nthreads)
-
-Why the cast?  Why not stick to the type of nthreads, e.g.
-
-     for (uint32_t ix =3D 0; ix < nthreads; ++ix)
-
-> +    {
-> +      _cygtls *tls =3D cygheap->threadlist[ix].thread;
-> +      if (tls->tid)
-> +	profthr_byhandle (tls->tid->win32_obj_id);
-> +    }
-> +}
-> @@ -49,6 +50,7 @@ static char rcsid[] =3D "$OpenBSD: gmon.c,v 1.8 1997/07=
-/23 21:11:27 kstailey Exp $
->=20=20
->  /* XXX needed? */
->  //extern char *minbrk __asm ("minbrk");
-> +extern int _setmode(int, int);
->=20=20
->  #ifdef _WIN64
->  #define MINUS_ONE_P (-1LL)
-> @@ -152,6 +154,7 @@ void
->  _mcleanup(void)
->  {
->  	static char gmon_out[] =3D "gmon.out";
-> +	static char gmon_template[] =3D "gmon.outXXXXXX";
->  	int fd;
->  	int hz;
->  	int fromindex;
-> @@ -222,7 +225,14 @@ _mcleanup(void)
->  	proffile =3D gmon_out;
->  #endif
->=20=20
-> -	fd =3D open(proffile , O_CREAT|O_TRUNC|O_WRONLY|O_BINARY, 0666);
-> +	fd =3D open(proffile, O_CREAT|O_EXCL|O_TRUNC|O_WRONLY|O_BINARY, 0666);
-> +	if (fd < 0 && errno =3D=3D EEXIST) {
-> +		fd =3D mkstemp(gmon_template);
-> +		if (fd >=3D 0) {
-> +			_setmode(fd, O_BINARY);
-
-You don't have to call _setmode here.  Files created with mkstemp are
-O_BINARY anyway.  And if you don't trust it, use mkostemp with an
-explicit O_BINARY flag.
-
->  static void CALLBACK
->  profthr_func (LPVOID arg)
->  {
->    struct profinfo *p =3D (struct profinfo *) arg;
-> -  size_t pc, idx;
->=20=20
->    for (;;)
->      {
-> -      pc =3D (size_t) get_thrpc (p->targthr);
-> -      if (pc >=3D p->lowpc && pc < p->highpc)
-> -	{
-> -	  idx =3D PROFIDX (pc, p->lowpc, p->scale);
-> -	  p->counter[idx]++;
-> -	}
-> +      // record profiling sample for main thread
-> +      profthr_byhandle (p->targthr);
-> +
-> +      // record profiling samples for other pthreads, if any
-> +      cygheap_profthr_all (profthr_byhandle);
-
-As outlined above, please call `cygwin_internal (CW_foo, profthr_byhandle)'
-from here.
+Please find the proposed patches attached.
 
 
-Thanks,
-Corinna
+Regarding POSIX timers:
 
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
+I have also created a small test application (see timer_test.c and the
+Makefile) to demonstrate the issue. Please try to run it on both Linux
+and Cygwin!
 
---YiEDa0DAkWCtVeE4
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
+The test tries to set the system time back and forth to see the effect
+on different kinds of timers. Please note, that for setting the system
+time, the test has to be run with the necessary administrative rights
+provided.
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
 
-iQIcBAEBCAAGBQJWxE6hAAoJEPU2Bp2uRE+gxtAP/1I2R8nSqN23DbHqoNqhZYq3
-QYSPCFp69Asnz3KFZkr/6XZMRoUB71iNgX6DplMs+/a0wZ3SFhUmNIKMNd7KfWvf
-LDeEaqd0cmbtSzBnVNrKhY1L0EpQOEM3HvU+qx05h4iJt4xVzb7QH9PVFLV+4XqB
-rb/dRC4N3rVWcDkopWWLn0UClB1CKaEqNp3kH8ZUTLVJw/oi11ydCFAQ/2fmJ3eh
-aPas7vvS7PusrFu4hYRmXc47OIm35y4rc1BRU4MGZQwCSplcPqBuTWhwOcsjOTzu
-s6BYYw+omkY0A2kshF6COvM6ydqUCmB0RctWPlRc7OaVMF4JEtnpIs5mBZ1F+VKT
-tNoVNdvhB5kqMHPb4FRr+wBa4p+qwNb9ny0wg4QFem+FWCrbN6rjcmXRCXkHiXDe
-daGnsAoA4kXCKma4x97rcl1xAfCKmW589NueQFzssb7pX7P9LL4iVUVYBmwlAXWo
-7na4LXOOC6PQMHy0YhkYBwVvrc8P5lYNTxvgUg0cHuWysbVNNOtTH/xSyDPmtAo4
-m3fGrhm8aMgQvePhKPa028C88TGz/TaZQ7ueGGUeVpwLkrZRJoMOQqYEUxgaY/md
-Wq0l2qlUADFd0zLwgMpH/EVUPH01jMDUIqNOF90ULqpY4D3YUX/NzAvM8VplTzBB
-6JM0LDTzbVA2M9I1Xta4
-=yMCU
------END PGP SIGNATURE-----
+Regarding select():
 
---YiEDa0DAkWCtVeE4--
+The timeout shall be immune to adjustments to the system clock in all
+cases; so the 'gtod' clock shouldn't be used, because it is not
+monotonic.
+
+
+I have tried to keep the changes as minimal as possible.
+I hope that signing a legal agreement is not necessary, since these
+are just bugfixes; if you think otherwise, please let me know.
+
+Best Regards,
+Art=C3=BAr
+
+--001a114fbd38f66dac052bfecc68
+Content-Type: text/x-patch; charset=US-ASCII; name="0001-POSIX-timer-fixes.patch"
+Content-Disposition: attachment; filename="0001-POSIX-timer-fixes.patch"
+Content-Transfer-Encoding: base64
+X-Attachment-Id: f_ikrej0230
+Content-length: 5169
+
+RnJvbSA0ZTU2NTVhM2Q0MzgxNjQzZWRlM2RkYzc1OGJmYTA1YTRmMWQ0MGYw
+IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQpGcm9tOiA9P1VURi04P3E/SXI9
+QzM9QTFueW9zc3k9MjBLbm9ibGF1Y2g9MjBBcnQ9QzM9QkFyPz0KIDxpa2Fy
+dHVyQGdtYWlsLmNvbT4KRGF0ZTogTW9uLCAxNSBGZWIgMjAxNiAyMjoyNDoz
+NiArMDEwMApTdWJqZWN0OiBbUEFUQ0ggMS8zXSBQT1NJWCB0aW1lciBmaXhl
+cwoKICogTWFrZSByZWxhdGl2ZSB0aW1lcnMgaW1tdW5lIHRvIHN5c3RlbSBj
+bG9jayBjaGFuZ2VzCiAqIEFkZCBDTE9DS19NT05PVE9OSUMgc3VwcG9ydAoK
+QWNjb3JkaW5nIHRvIHRoZSBMaW51eCBQcm9ncmFtbWVyJ3MgTWFudWFsICht
+YW4gcGFnZSBvZiB0aW1lcl9zZXR0aW1lKToKCiJJZiB0aGUgdmFsdWUgb2Yg
+dGhlIENMT0NLX1JFQUxUSU1FIGNsb2NrIGlzIGFkanVzdGVkIHdoaWxlIGFu
+IGFic29sdXRlCnRpbWVyIGJhc2VkIG9uIHRoYXQgY2xvY2sgaXMgYXJtZWQs
+IHRoZW4gdGhlIGV4cGlyYXRpb24gb2YgdGhlIHRpbWVyCndpbGwgYmUgYXBw
+cm9wcmlhdGVseSBhZGp1c3RlZC4gQWRqdXN0bWVudHMgdG8gdGhlIENMT0NL
+X1JFQUxUSU1FIGNsb2NrCmhhdmUgbm8gZWZmZWN0IG9uIHJlbGF0aXZlIHRp
+bWVycyBiYXNlZCBvbiB0aGF0IGNsb2NrLiIKCk9ubHkgdGltZXJzIGJhc2Vk
+IG9uIENMT0NLX1JFQUxUSU1FIGNyZWF0ZWQgd2l0aCB0aGUgVElNRVJfQUJT
+VElNRSBmbGFnCnNoYWxsIGJlIHN5bmNocm9uaXplZCB0byB0aGUgc3lzdGVt
+IGNsb2NrLgpPdGhlciB0aW1lcnMgbXVzdCBiZSBpbW11bmUgdG8gc3lzdGVt
+IGNsb2NrIGFkanVzdG1lbnRzLgotLS0KIHdpbnN1cC9jeWd3aW4vaGlyZXMu
+aCAgfCAgNCArKystCiB3aW5zdXAvY3lnd2luL3RpbWVyLmNjIHwgMjYgKysr
+KysrKysrKysrKysrKysrKysrKy0tLS0KIDIgZmlsZXMgY2hhbmdlZCwgMjUg
+aW5zZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS93
+aW5zdXAvY3lnd2luL2hpcmVzLmggYi93aW5zdXAvY3lnd2luL2hpcmVzLmgK
+aW5kZXggMjNiMjM5MS4uMzhhMWU5ZSAxMDA2NDQKLS0tIGEvd2luc3VwL2N5
+Z3dpbi9oaXJlcy5oCisrKyBiL3dpbnN1cC9jeWd3aW4vaGlyZXMuaApAQCAt
+NDgsOCArNDgsOSBAQCBjbGFzcyBoaXJlc19ucyA6IHB1YmxpYyBoaXJlc19i
+YXNlCiAgIGRvdWJsZSBmcmVxOwogICB2b2lkIHByaW1lICgpOwogIHB1Ymxp
+YzoKLSAgTE9OR0xPTkcgbnNlY3MgKGJvb2wgbW9ub3RvbmljID0gZmFsc2Up
+OworICBMT05HTE9ORyBuc2VjcyAoYm9vbCBtb25vdG9uaWMgPSB0cnVlKTsK
+ICAgTE9OR0xPTkcgdXNlY3MgKCkge3JldHVybiBuc2VjcyAoKSAvIDEwMDBM
+TDt9CisgIExPTkdMT05HIG1zZWNzICgpIHtyZXR1cm4gbnNlY3MgKCkgLyAx
+MDAwMDAwTEw7fQogICBMT05HTE9ORyByZXNvbHV0aW9uKCk7CiB9OwogCkBA
+IC02Miw1ICs2Myw2IEBAIGNsYXNzIGhpcmVzX21zIDogcHVibGljIGhpcmVz
+X2Jhc2UKICAgVUlOVCByZXNvbHV0aW9uICgpOwogfTsKIAorZXh0ZXJuIGhp
+cmVzX25zIG50b2Q7CiBleHRlcm4gaGlyZXNfbXMgZ3RvZDsKICNlbmRpZiAv
+Kl9fSElSRVNfSF9fKi8KZGlmZiAtLWdpdCBhL3dpbnN1cC9jeWd3aW4vdGlt
+ZXIuY2MgYi93aW5zdXAvY3lnd2luL3RpbWVyLmNjCmluZGV4IGJmYTE0OTUu
+LmRmYmQyZWMgMTAwNjQ0Ci0tLSBhL3dpbnN1cC9jeWd3aW4vdGltZXIuY2MK
+KysrIGIvd2luc3VwL2N5Z3dpbi90aW1lci5jYwpAQCAtMjgsNiArMjgsOCBA
+QCBzdHJ1Y3QgdGltZXJfdHJhY2tlcgogICBIQU5ETEUgc3luY3RocmVhZDsK
+ICAgbG9uZyBsb25nIGludGVydmFsX3VzOwogICBsb25nIGxvbmcgc2xlZXB0
+b191czsKKyAgYm9vbCBpc19tb25vdG9uaWM7CisgIGxvbmcgbG9uZyB1c2Vj
+cygpOwogICBib29sIGNhbmNlbCAoKTsKICAgc3RydWN0IHRpbWVyX3RyYWNr
+ZXIgKm5leHQ7CiAgIGludCBzZXR0aW1lIChpbnQsIGNvbnN0IGl0aW1lcnNw
+ZWMgKiwgaXRpbWVyc3BlYyAqKTsKQEAgLTU5LDYgKzYxLDE1IEBAIGxvY2tf
+dGltZXJfdHJhY2tlcjo6fmxvY2tfdGltZXJfdHJhY2tlciAoKQogICBwcm90
+ZWN0LnJlbGVhc2UgKCk7CiB9CiAKK2lubGluZSBsb25nIGxvbmcKK3RpbWVy
+X3RyYWNrZXI6OnVzZWNzKCkKK3sKKyAgaWYgKGlzX21vbm90b25pYykKKyAg
+ICByZXR1cm4gbnRvZC51c2VjcygpOworICBlbHNlCisgICAgcmV0dXJuIGd0
+b2QudXNlY3MoKTsKK30KKwogYm9vbAogdGltZXJfdHJhY2tlcjo6Y2FuY2Vs
+ICgpCiB7CkBAIC05OSw2ICsxMTAsNyBAQCB0aW1lcl90cmFja2VyOjp0aW1l
+cl90cmFja2VyIChjbG9ja2lkX3QgYywgY29uc3Qgc2lnZXZlbnQgKmUpCiAg
+IGNsb2NrX2lkID0gYzsKICAgbWFnaWMgPSBUVF9NQUdJQzsKICAgaGNhbmNl
+bCA9IE5VTEw7CisgIGlzX21vbm90b25pYyA9IHRydWU7CiAgIGlmICh0aGlz
+ICE9ICZ0dHN0YXJ0KQogICAgIHsKICAgICAgIGxvY2tfdGltZXJfdHJhY2tl
+ciBoZXJlOwpAQCAtMTI4LDcgKzE0MCw3IEBAIHRpbWVyX3RocmVhZCAoVk9J
+RCAqeCkKICAgICAgIExPTkcgc2xlZXBfbXM7CiAgICAgICAvKiBBY2NvdW50
+IGZvciBkZWxheXMgaW4gc3RhcnRpbmcgdGhyZWFkCiAJYW5kIHNlbmRpbmcg
+dGhlIHNpZ25hbCAqLwotICAgICAgbm93ID0gZ3RvZC51c2VjcyAoKTsKKyAg
+ICAgIG5vdyA9IHR0LT51c2VjcyAoKTsKICAgICAgIHNsZWVwX3VzID0gc2xl
+ZXB0b191cyAtIG5vdzsKICAgICAgIGlmIChzbGVlcF91cyA+IDApCiAJewpA
+QCAtMjMyLDcgKzI0NCwxMyBAQCB0aW1lcl90cmFja2VyOjpzZXR0aW1lIChp
+bnQgaW5fZmxhZ3MsIGNvbnN0IGl0aW1lcnNwZWMgKnZhbHVlLCBpdGltZXJz
+cGVjICpvdmFsdQogICAgICAgaWYgKGl0X2JhZCAodmFsdWUtPml0X3ZhbHVl
+KSB8fCBpdF9iYWQgKHZhbHVlLT5pdF9pbnRlcnZhbCkpCiAJX19sZWF2ZTsK
+IAotICAgICAgbG9uZyBsb25nIG5vdyA9IGluX2ZsYWdzICYgVElNRVJfQUJT
+VElNRSA/IDAgOiBndG9kLnVzZWNzICgpOworICAgICAgaWYgKChpbl9mbGFn
+cyAmIFRJTUVSX0FCU1RJTUUpICYmIChjbG9ja19pZCA9PSBDTE9DS19SRUFM
+VElNRSkpCisgICAgICAgIGlzX21vbm90b25pYyA9IGZhbHNlOworICAgICAg
+ZWxzZQorICAgICAgICBpc19tb25vdG9uaWMgPSB0cnVlOworCisKKyAgICAg
+IGxvbmcgbG9uZyBub3cgPSBpbl9mbGFncyAmIFRJTUVSX0FCU1RJTUUgPyAw
+IDogdXNlY3MgKCk7CiAKICAgICAgIGxvY2tfdGltZXJfdHJhY2tlciBoZXJl
+OwogICAgICAgY2FuY2VsICgpOwpAQCAtMjcyLDcgKzI5MCw3IEBAIHRpbWVy
+X3RyYWNrZXI6OmdldHRpbWUgKGl0aW1lcnNwZWMgKm92YWx1ZSkKICAgZWxz
+ZQogICAgIHsKICAgICAgIG92YWx1ZS0+aXRfaW50ZXJ2YWwgPSBpdF9pbnRl
+cnZhbDsKLSAgICAgIGxvbmcgbG9uZyBub3cgPSBndG9kLnVzZWNzICgpOwor
+ICAgICAgbG9uZyBsb25nIG5vdyA9IHVzZWNzICgpOwogICAgICAgbG9uZyBs
+b25nIGxlZnRfdXMgPSBzbGVlcHRvX3VzIC0gbm93OwogICAgICAgaWYgKGxl
+ZnRfdXMgPCAwKQogICAgICAgIGxlZnRfdXMgPSAwOwpAQCAtMzE3LDcgKzMz
+NSw3IEBAIHRpbWVyX2NyZWF0ZSAoY2xvY2tpZF90IGNsb2NrX2lkLCBzdHJ1
+Y3Qgc2lnZXZlbnQgKl9fcmVzdHJpY3QgZXZwLAogCSAgcmV0dXJuIC0xOwog
+CX0KIAotICAgICAgaWYgKGNsb2NrX2lkICE9IENMT0NLX1JFQUxUSU1FKQor
+ICAgICAgaWYgKGNsb2NrX2lkICE9IENMT0NLX1JFQUxUSU1FICYmIGNsb2Nr
+X2lkICE9IENMT0NLX01PTk9UT05JQykKIAl7CiAJICBzZXRfZXJybm8gKEVJ
+TlZBTCk7CiAJICByZXR1cm4gLTE7Ci0tIAoxLjkuMQoK
+
+--001a114fbd38f66dac052bfecc68
+Content-Type: text/x-patch; charset=US-ASCII; 
+	name="0002-Make-select-immune-to-system-clock-adjustments.patch"
+Content-Disposition: attachment; 
+	filename="0002-Make-select-immune-to-system-clock-adjustments.patch"
+Content-Transfer-Encoding: base64
+X-Attachment-Id: f_ikrej05l1
+Content-length: 1595
+
+RnJvbSA5OGNlNzg0NjBiZGI5YjgxMzEzZDMzNDJjNzRmMjQ0ODQzNzMwMzRj
+IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQpGcm9tOiA9P1VURi04P3E/SXI9
+QzM9QTFueW9zc3k9MjBLbm9ibGF1Y2g9MjBBcnQ9QzM9QkFyPz0KIDxpa2Fy
+dHVyQGdtYWlsLmNvbT4KRGF0ZTogTW9uLCAxNSBGZWIgMjAxNiAyMjo1NTow
+NiArMDEwMApTdWJqZWN0OiBbUEFUQ0ggMi8zXSBNYWtlIHNlbGVjdCgpIGlt
+bXVuZSB0byBzeXN0ZW0gY2xvY2sgYWRqdXN0bWVudHMKCi0tLQogd2luc3Vw
+L2N5Z3dpbi9zZWxlY3QuY2MgfCA0ICsrLS0KIDEgZmlsZSBjaGFuZ2VkLCAy
+IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEv
+d2luc3VwL2N5Z3dpbi9zZWxlY3QuY2MgYi93aW5zdXAvY3lnd2luL3NlbGVj
+dC5jYwppbmRleCBlMWQ0OGEzLi41ZWIzNDE3IDEwMDY0NAotLS0gYS93aW5z
+dXAvY3lnd2luL3NlbGVjdC5jYworKysgYi93aW5zdXAvY3lnd2luL3NlbGVj
+dC5jYwpAQCAtMTMzLDcgKzEzMyw3IEBAIHNlbGVjdCAoaW50IG1heGZkcywg
+ZmRfc2V0ICpyZWFkZmRzLCBmZF9zZXQgKndyaXRlZmRzLCBmZF9zZXQgKmV4
+Y2VwdGZkcywKICAgaW50IHJldCA9IDA7CiAKICAgLyogUmVjb3JkIHRoZSBj
+dXJyZW50IHRpbWUgZm9yIGxhdGVyIHVzZS4gKi8KLSAgTE9OR0xPTkcgc3Rh
+cnRfdGltZSA9IGd0b2QubXNlY3MgKCk7CisgIExPTkdMT05HIHN0YXJ0X3Rp
+bWUgPSBudG9kLm1zZWNzICgpOwogCiAgIHNlbGVjdF9zdHVmZiBzZWw7CiAg
+IHNlbC5yZXR1cm5fb25fc2lnbmFsID0gMDsKQEAgLTIxMiw3ICsyMTIsNyBA
+QCBzZWxlY3QgKGludCBtYXhmZHMsIGZkX3NldCAqcmVhZGZkcywgZmRfc2V0
+ICp3cml0ZWZkcywgZmRfc2V0ICpleGNlcHRmZHMsCiAgICAgICBpZiAod2Fp
+dF9zdGF0ZSA9PSBzZWxlY3Rfc3R1ZmY6OnNlbGVjdF9sb29wICYmIG1zICE9
+IElORklOSVRFKQogCXsKIAkgIHNlbGVjdF9wcmludGYgKCJyZWNhbGN1bGF0
+aW5nIG1zIik7Ci0JICBMT05HTE9ORyBub3cgPSBndG9kLm1zZWNzICgpOwor
+CSAgTE9OR0xPTkcgbm93ID0gbnRvZC5tc2VjcyAoKTsKIAkgIGlmIChub3cg
+PiAoc3RhcnRfdGltZSArIG1zKSkKIAkgICAgewogCSAgICAgIHNlbGVjdF9w
+cmludGYgKCJ0aW1lZCBvdXQgYWZ0ZXIgdmVyaWZpY2F0aW9uIik7Ci0tIAox
+LjkuMQoK
+
+--001a114fbd38f66dac052bfecc68
+Content-Type: text/x-patch; charset=US-ASCII; name="0003-Eliminate-dead-code.patch"
+Content-Disposition: attachment; filename="0003-Eliminate-dead-code.patch"
+Content-Transfer-Encoding: base64
+X-Attachment-Id: f_ikrej0642
+Content-length: 2896
+
+RnJvbSBiZGY5ZjUyZDRjNTZhOWI3YzNkYjQ2ZjJhMTM0YjU0Yzc1NzAxMzA4
+IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQpGcm9tOiA9P1VURi04P3E/SXI9
+QzM9QTFueW9zc3k9MjBLbm9ibGF1Y2g9MjBBcnQ9QzM9QkFyPz0KIDxpa2Fy
+dHVyQGdtYWlsLmNvbT4KRGF0ZTogTW9uLCAxNSBGZWIgMjAxNiAyMzowMDoy
+OCArMDEwMApTdWJqZWN0OiBbUEFUQ0ggMy8zXSBFbGltaW5hdGUgZGVhZCBj
+b2RlCgotLS0KIHdpbnN1cC9jeWd3aW4vaGlyZXMuaCAgfCAgMyArLS0KIHdp
+bnN1cC9jeWd3aW4vdGltZXMuY2MgfCAxOCArKystLS0tLS0tLS0tLS0tLS0K
+IDIgZmlsZXMgY2hhbmdlZCwgNCBpbnNlcnRpb25zKCspLCAxNyBkZWxldGlv
+bnMoLSkKCmRpZmYgLS1naXQgYS93aW5zdXAvY3lnd2luL2hpcmVzLmggYi93
+aW5zdXAvY3lnd2luL2hpcmVzLmgKaW5kZXggMzhhMWU5ZS4uODMxMWFkMSAx
+MDA2NDQKLS0tIGEvd2luc3VwL2N5Z3dpbi9oaXJlcy5oCisrKyBiL3dpbnN1
+cC9jeWd3aW4vaGlyZXMuaApAQCAtNDQsMTEgKzQ0LDEwIEBAIGNsYXNzIGhp
+cmVzX2Jhc2UKIAogY2xhc3MgaGlyZXNfbnMgOiBwdWJsaWMgaGlyZXNfYmFz
+ZQogewotICBMQVJHRV9JTlRFR0VSIHByaW1lZF9wYzsKICAgZG91YmxlIGZy
+ZXE7CiAgIHZvaWQgcHJpbWUgKCk7CiAgcHVibGljOgotICBMT05HTE9ORyBu
+c2VjcyAoYm9vbCBtb25vdG9uaWMgPSB0cnVlKTsKKyAgTE9OR0xPTkcgbnNl
+Y3MgKCk7CiAgIExPTkdMT05HIHVzZWNzICgpIHtyZXR1cm4gbnNlY3MgKCkg
+LyAxMDAwTEw7fQogICBMT05HTE9ORyBtc2VjcyAoKSB7cmV0dXJuIG5zZWNz
+ICgpIC8gMTAwMDAwMExMO30KICAgTE9OR0xPTkcgcmVzb2x1dGlvbigpOwpk
+aWZmIC0tZ2l0IGEvd2luc3VwL2N5Z3dpbi90aW1lcy5jYyBiL3dpbnN1cC9j
+eWd3aW4vdGltZXMuY2MKaW5kZXggZjAzNTliZi4uY2I0OThkNyAxMDA2NDQK
+LS0tIGEvd2luc3VwL2N5Z3dpbi90aW1lcy5jYworKysgYi93aW5zdXAvY3ln
+d2luL3RpbWVzLmNjCkBAIC00ODMsMjMgKzQ4MywxMiBAQCBoaXJlc19uczo6
+cHJpbWUgKCkKICAgICAgIHJldHVybjsKICAgICB9CiAKLSAgaW50IHByaW9y
+aXR5ID0gR2V0VGhyZWFkUHJpb3JpdHkgKEdldEN1cnJlbnRUaHJlYWQgKCkp
+OwotCi0gIFNldFRocmVhZFByaW9yaXR5IChHZXRDdXJyZW50VGhyZWFkICgp
+LCBUSFJFQURfUFJJT1JJVFlfVElNRV9DUklUSUNBTCk7Ci0gIGlmICghUXVl
+cnlQZXJmb3JtYW5jZUNvdW50ZXIgKCZwcmltZWRfcGMpKQotICAgIHsKLSAg
+ICAgIFNldFRocmVhZFByaW9yaXR5IChHZXRDdXJyZW50VGhyZWFkICgpLCBw
+cmlvcml0eSk7Ci0gICAgICBpbml0ZWQgPSAtMTsKLSAgICAgIHJldHVybjsK
+LSAgICB9Ci0KICAgZnJlcSA9IChkb3VibGUpICgoZG91YmxlKSAxMDAwMDAw
+MDAwLiAvIChkb3VibGUpIGlmcmVxLlF1YWRQYXJ0KTsKICAgaW5pdGVkID0g
+dHJ1ZTsKLSAgU2V0VGhyZWFkUHJpb3JpdHkgKEdldEN1cnJlbnRUaHJlYWQg
+KCksIHByaW9yaXR5KTsKIH0KIAogTE9OR0xPTkcKLWhpcmVzX25zOjpuc2Vj
+cyAoYm9vbCBtb25vdG9uaWMpCitoaXJlc19uczo6bnNlY3MgKCkKIHsKICAg
+aWYgKCFpbml0ZWQpCiAgICAgcHJpbWUgKCk7CkBAIC01MTcsOCArNTA2LDcg
+QEAgaGlyZXNfbnM6Om5zZWNzIChib29sIG1vbm90b25pYykKICAgICB9CiAK
+ICAgLy8gRklYTUU6IFVzZSByb3VuZCgpIGhlcmU/Ci0gIG5vdy5RdWFkUGFy
+dCA9IChMT05HTE9ORykgKGZyZXEgKiAoZG91YmxlKQotCQkgKG5vdy5RdWFk
+UGFydCAtIChtb25vdG9uaWMgPyAwTEwgOiBwcmltZWRfcGMuUXVhZFBhcnQp
+KSk7CisgIG5vdy5RdWFkUGFydCA9IChMT05HTE9ORykgKGZyZXEgKiAoZG91
+YmxlKShub3cuUXVhZFBhcnQpKTsKICAgcmV0dXJuIG5vdy5RdWFkUGFydDsK
+IH0KIApAQCAtNjA1LDcgKzU5Myw3IEBAIGNsb2NrX2dldHRpbWUgKGNsb2Nr
+aWRfdCBjbGtfaWQsIHN0cnVjdCB0aW1lc3BlYyAqdHApCiAKICAgICAgIGNh
+c2UgQ0xPQ0tfTU9OT1RPTklDOgogCXsKLQkgIExPTkdMT05HIG5vdyA9IG50
+b2QubnNlY3MgKHRydWUpOworCSAgTE9OR0xPTkcgbm93ID0gbnRvZC5uc2Vj
+cyAoKTsKIAkgIGlmIChub3cgPT0gKExPTkdMT05HKSAtMSkKIAkgICAgcmV0
+dXJuIC0xOwogCi0tIAoxLjkuMQoK
+
+--001a114fbd38f66dac052bfecc68
+Content-Type: application/octet-stream; name=Makefile
+Content-Disposition: attachment; filename=Makefile
+Content-Transfer-Encoding: base64
+X-Attachment-Id: f_ikrej06l3
+Content-length: 171
+
+YWxsOiB0aW1lcl90ZXN0CgkKdGltZXJfdGVzdDogdGltZXJfdGVzdC5jCgln
+Y2MgLXN0ZD1nbnU5OSAtZyAtV2FsbCB0aW1lcl90ZXN0LmMgLWxydCAtbyB0
+aW1lcl90ZXN0CgpjbGVhbjoKCXJtIC1mIHRpbWVyX3Rlc3QK
+
+--001a114fbd38f66dac052bfecc68
+Content-Type: text/x-csrc; charset=US-ASCII; name="timer_test.c"
+Content-Disposition: attachment; filename="timer_test.c"
+Content-Transfer-Encoding: base64
+X-Attachment-Id: f_ikrej0714
+Content-length: 3514
+
+I2luY2x1ZGUgPHN0ZGxpYi5oPgojaW5jbHVkZSA8c3RkaW8uaD4KI2luY2x1
+ZGUgPHRpbWUuaD4KI2luY2x1ZGUgPHNpZ25hbC5oPgojaW5jbHVkZSA8c3Ry
+aW5nLmg+CiNpbmNsdWRlIDx1bmlzdGQuaD4KCnN0cnVjdCB0ZXN0X2Nhc2Ug
+ewoKCWNsb2NraWRfdCBjbG9jazsKCXRpbWVyX3QgdGltZXJfaWQ7CglpbnQg
+ZmxhZ3M7CglzdHJ1Y3QgaXRpbWVyc3BlYyBlbmQ7CglpbnQgZXJyb3I7Cglp
+bnQgcmVzdWx0X21zOwoKCS8vIGlzIHRoZSByZXN1bHQgc2hhbGwgYmUgYWx0
+ZXJlZCBieSBzZXR0aW5nIHRoZSBzeXN0ZW0gY2xvY2s/CglpbnQgaXNfYWx0
+ZXJlZDsKCn07CgpzdGF0aWMgc3RydWN0IHRlc3RfY2FzZSB0ZXN0c1tdID0g
+ewoJeyAuY2xvY2sgPSBDTE9DS19SRUFMVElNRSwgLmZsYWdzID0gVElNRVJf
+QUJTVElNRSwgLmlzX2FsdGVyZWQgPSAxIH0sCgl7IC5jbG9jayA9IENMT0NL
+X01PTk9UT05JQywgLmZsYWdzID0gVElNRVJfQUJTVElNRX0sCgl7IC5jbG9j
+ayA9IENMT0NLX1JFQUxUSU1FfSwKCXsgLmNsb2NrID0gQ0xPQ0tfTU9OT1RP
+TklDfQp9OwoKc3RhdGljIGNvbnN0IGludCBudW1fdGVzdHMgPSBzaXplb2Yo
+dGVzdHMpL3NpemVvZih0ZXN0c1swXSk7Cgp2b2lkIHNoaWZ0X3RpbWUoaW50
+IHQpCnsKCWludCBlcnJvciA9IDA7CgoJc3RydWN0IHRpbWVzcGVjIHRwOwoJ
+ZXJyb3IgfD0gY2xvY2tfZ2V0dGltZShDTE9DS19SRUFMVElNRSwgJnRwKTsK
+CWlmICghZXJyb3IpIHsKCQl0cC50dl9zZWMgKz0gdDsKCQllcnJvciB8PSBj
+bG9ja19zZXR0aW1lKENMT0NLX1JFQUxUSU1FLCAmdHApOwoJfQoJaWYgKGVy
+cm9yKSB7CgkJcHJpbnRmKCJDb3VsZG4ndCBzZXQgdGhlIHN5c3RlbSBjbG9j
+ay5cbiIKCQkgICAgICAgIihQbGVhc2UgdHJ5IGFnYWluIHdpdGggdGhlIG5l
+Y2Vzc2FyeSBhZG1pbmlzdHJhdGl2ZSByaWdodHMuKVxuIik7CgkJZXhpdCgx
+KTsKCX0KfQoKaW50IG1haW4oKQp7CgoJLy8gQWx0ZXIgdGhlIHN5c3RlbSBj
+bG9jawoJLy8gKHdpbGwgYmUgc2V0IGJhY2sgdG8gdGhlIGNvcnJlY3QgdmFs
+dWUgbGF0ZXIpCglzaGlmdF90aW1lKC0yKTsKCQoJLy8gU2V0dXAKCWZvcihp
+bnQgaT0wOyBpIDwgbnVtX3Rlc3RzOyArK2kpIHsKCgkJc3RydWN0IHNpZ2V2
+ZW50IGV2dCA9IHsgLnNpZ2V2X25vdGlmeSA9IFNJR0VWX05PTkUgfTsKCQkK
+CQl0ZXN0c1tpXS5lcnJvciB8PSB0aW1lcl9jcmVhdGUodGVzdHNbaV0uY2xv
+Y2ssICZldnQsICZ0ZXN0c1tpXS50aW1lcl9pZCk7CgoJCWlmICh0ZXN0c1tp
+XS5mbGFncyAmIFRJTUVSX0FCU1RJTUUpIHsKCQkJdGVzdHNbaV0uZXJyb3Ig
+fD0gY2xvY2tfZ2V0dGltZSh0ZXN0c1tpXS5jbG9jaywgJnRlc3RzW2ldLmVu
+ZC5pdF92YWx1ZSk7CgkJfQoKCQl0ZXN0c1tpXS5lbmQuaXRfdmFsdWUudHZf
+c2VjICs9IDU7CgkJdGVzdHNbaV0uZXJyb3IgfD0gdGltZXJfc2V0dGltZSh0
+ZXN0c1tpXS50aW1lcl9pZCwgdGVzdHNbaV0uZmxhZ3MsICZ0ZXN0c1tpXS5l
+bmQsIE5VTEwpOwoJfQoKCXNsZWVwKDEpOwoKCS8vIFNoaWZ0IHRpbWUgZm9y
+d2FyZAoJLy8gKGNvcnJlY3RpbmcgdGhlIHN5c3RlbSB0aW1lIGFzIGEgcmVz
+dWx0KQoJc2hpZnRfdGltZSgyKTsKCgkvLyBnZXQgcmVtYWluaW5nIHRpbWVz
+Cglmb3IoaW50IGk9MDsgaSA8IG51bV90ZXN0czsgKytpKSB7CgkJc3RydWN0
+IGl0aW1lcnNwZWMgcmVtYWluaW5nOwoJCXRlc3RzW2ldLmVycm9yIHw9IHRp
+bWVyX2dldHRpbWUodGVzdHNbaV0udGltZXJfaWQsICZyZW1haW5pbmcpOwoJ
+CXRlc3RzW2ldLnJlc3VsdF9tcyA9IHJlbWFpbmluZy5pdF92YWx1ZS50dl9z
+ZWMqMTAwMDsKCQl0ZXN0c1tpXS5yZXN1bHRfbXMgKz0gKHJlbWFpbmluZy5p
+dF92YWx1ZS50dl9uc2VjKzUwMCoxMDAwKS8oMTAwMCoxMDAwKTsKCX0KCgkv
+LyBSZXBvcnQgcmVzdWx0cwoJaW50IG92ZXJhbGxfb2sgPSAxOwoJZm9yKGlu
+dCBpPTA7IGkgPCBudW1fdGVzdHM7ICsraSkgewoJCWlmICh0ZXN0c1tpXS5j
+bG9jayA9PSBDTE9DS19SRUFMVElNRSkgeyBwcmludGYoIkNMT0NLX1JFQUxU
+SU1FLCAgIik7IH0KCQlpZiAodGVzdHNbaV0uY2xvY2sgPT0gQ0xPQ0tfTU9O
+T1RPTklDKSB7IHByaW50ZigiQ0xPQ0tfTU9OT1RPTklDLCAiKTsgfQoJCWlm
+ICh0ZXN0c1tpXS5mbGFncyAmIFRJTUVSX0FCU1RJTUUpIHsKCQkJcHJpbnRm
+KCJhYnNvbHV0ZTogIik7CgkJfQoJCWVsc2UgewoJCQlwcmludGYoInJlbGF0
+aXZlOiAiKTsKCQl9CgkJaWYgKHRlc3RzW2ldLmVycm9yKSB7CgkJCW92ZXJh
+bGxfb2sgPSAwOwoJCQlwdXRzKCJFUlJPUiIpOwoJCQljb250aW51ZTsKCQl9
+CgkJcHJpbnRmKCIlZCBtcywgIiwgdGVzdHNbaV0ucmVzdWx0X21zKTsKCgkJ
+aW50IGV4cGVjdGVkX21zID0gdGVzdHNbaV0uaXNfYWx0ZXJlZCA/IDIwMDAg
+OiA0MDAwOwoJCWlmIChhYnModGVzdHNbaV0ucmVzdWx0X21zIC0gZXhwZWN0
+ZWRfbXMpIDwgNTAwKSB7CgkJCXB1dHMoIk9LIik7CgkJfQoJCWVsc2UgewoJ
+CQlwdXRzKCJGYWlsZWQiKTsKCQkJb3ZlcmFsbF9vayA9IDA7CgkJfQoJfQoK
+CXByaW50ZigiXG5SZXN1bHQ6ICVzXG4iLCBvdmVyYWxsX29rID8gIk9LIiA6
+ICJGYWlsZWQiKTsKCXJldHVybiAwOwp9Cg==
+
+--001a114fbd38f66dac052bfecc68--
