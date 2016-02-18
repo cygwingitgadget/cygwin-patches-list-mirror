@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8334-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 40064 invoked by alias); 18 Feb 2016 12:44:04 -0000
+Return-Path: <cygwin-patches-return-8335-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 72470 invoked by alias); 18 Feb 2016 16:53:44 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,44 +9,82 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 40054 invoked by uid 89); 18 Feb 2016 12:44:03 -0000
+Received: (qmail 72456 invoked by uid 89); 18 Feb 2016 16:53:43 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-1.9 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_LOW autolearn=ham version=3.3.2 spammy=HTo:U*cygwin-patches, Hx-spam-relays-external:ESMTPA
-X-HELO: out3-smtp.messagingengine.com
-Received: from out3-smtp.messagingengine.com (HELO out3-smtp.messagingengine.com) (66.111.4.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-GCM-SHA384 encrypted) ESMTPS; Thu, 18 Feb 2016 12:44:02 +0000
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])	by mailout.nyi.internal (Postfix) with ESMTP id 2FA5D208D1	for <cygwin-patches@cygwin.com>; Thu, 18 Feb 2016 07:44:00 -0500 (EST)
-Received: from frontend1 ([10.202.2.160])  by compute6.internal (MEProxy); Thu, 18 Feb 2016 07:44:00 -0500
-Received: from [192.168.1.102] (host86-141-131-217.range86-141.btcentralplus.com [86.141.131.217])	by mail.messagingengine.com (Postfix) with ESMTPA id B8150C0001A;	Thu, 18 Feb 2016 07:43:59 -0500 (EST)
-Subject: Re: gprof profiling of multi-threaded Cygwin programs
-To: Cygwin Patches <cygwin-patches@cygwin.com>
-References: <56C404FF.502@maxrnd.com> <56C5A401.8060604@dronecode.org.uk> <Pine.BSF.4.63.1602180309170.49755@m0.truegem.net>
-From: Jon Turney <jon.turney@dronecode.org.uk>
-Cc: Mark Geisert <mark@maxrnd.com>
-Message-ID: <56C5BC87.7070705@dronecode.org.uk>
-Date: Thu, 18 Feb 2016 12:44:00 -0000
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:38.0) Gecko/20100101 Thunderbird/38.6.0
-MIME-Version: 1.0
-In-Reply-To: <Pine.BSF.4.63.1602180309170.49755@m0.truegem.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-SW-Source: 2016-q1/txt/msg00040.txt.bz2
+X-Spam-SWARE-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RP_MATCHES_RCVD,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=294, closedir, 293, Hx-languages-length:1827
+X-HELO: mx1.redhat.com
+Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-GCM-SHA384 encrypted) ESMTPS; Thu, 18 Feb 2016 16:53:43 +0000
+Received: from int-mx13.intmail.prod.int.phx2.redhat.com (int-mx13.intmail.prod.int.phx2.redhat.com [10.5.11.26])	by mx1.redhat.com (Postfix) with ESMTPS id 3D4FF70D74	for <cygwin-patches@cygwin.com>; Thu, 18 Feb 2016 16:53:42 +0000 (UTC)
+Received: from localhost.localdomain (ovpn-116-17.rdu2.redhat.com [10.10.116.17])	by int-mx13.intmail.prod.int.phx2.redhat.com (8.14.4/8.14.4) with ESMTP id u1IGreKa030643	(version=TLSv1/SSLv3 cipher=AES256-SHA256 bits=256 verify=NO)	for <cygwin-patches@cygwin.com>; Thu, 18 Feb 2016 11:53:41 -0500
+From: Yaakov Selkowitz <yselkowi@redhat.com>
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] cygwin: Export clog10, clog10f
+Date: Thu, 18 Feb 2016 16:53:00 -0000
+Message-Id: <1455814413-6864-1-git-send-email-yselkowi@redhat.com>
+In-Reply-To: <1455814389-12684-1-git-send-email-yselkowi@redhat.com>
+References: <1455814389-12684-1-git-send-email-yselkowi@redhat.com>
+X-SW-Source: 2016-q1/txt/msg00041.txt.bz2
 
-On 18/02/2016 11:29, Mark Geisert wrote:
->> A brief search tells me that apparently glibc supports the
->> (undocumented) GMON_OUT_PREFIX env var which enables a similar behaviour.
->
-> Ah, I did not know about that.  It would be easy to implement.
->
-> So I'm leaning towards choosing file name as GMON_OUT_PREFIX.exename.pid
-> with GMON_OUT_PREFIX defaulting to "gmon.out" if unspecified.
+	winsup/cygwin/
+	* common.din: Add clog10, clog10f.
+	* include/cygwin/version.h (CYGWIN_VERSION_API_MINOR): Bump.
 
-I think if you are going to implement GMON_OUT_PREFIX, you should make 
-the behaviour the same as glibc.
+	winsup/doc/
+	* posix.xml (std-gnu): Add clog10, clog10f.
 
-> Do you think the expanded name should be used in all cases, or only when
-> there's a gmon.out already present?
+Signed-off-by: Yaakov Selkowitz <yselkowi@redhat.com>
+---
+ winsup/cygwin/common.din               | 2 ++
+ winsup/cygwin/include/cygwin/version.h | 3 ++-
+ winsup/doc/posix.xml                   | 2 ++
+ 3 files changed, 6 insertions(+), 1 deletion(-)
 
-I don't think you should be checking for an existing gmon.out file.  In 
-the simple case where the program doesn't fork, it's expected that 
-gmon.out will get overwritten.
+diff --git a/winsup/cygwin/common.din b/winsup/cygwin/common.din
+index 9584d09..c39d265 100644
+--- a/winsup/cygwin/common.din
++++ b/winsup/cygwin/common.din
+@@ -232,6 +232,8 @@ clock_nanosleep SIGFE
+ clock_setres SIGFE
+ clock_settime SIGFE
+ clog NOSIGFE
++clog10 NOSIGFE
++clog10f NOSIGFE
+ clogf NOSIGFE
+ close SIGFE
+ closedir SIGFE
+diff --git a/winsup/cygwin/include/cygwin/version.h b/winsup/cygwin/include/cygwin/version.h
+index 067a5f1..be85ce1 100644
+--- a/winsup/cygwin/include/cygwin/version.h
++++ b/winsup/cygwin/include/cygwin/version.h
+@@ -475,13 +475,14 @@ details. */
+       291: Export aligned_alloc, at_quick_exit, quick_exit.
+       292: Export rpmatch.
+       293: Convert utmpname/utmpxname to int.
++      294: Export clog10, clog10f.
+      */
+ 
+      /* Note that we forgot to bump the api for ualarm, strtoll, strtoull,
+ 	sigaltstack, sethostname. */
+ 
+ #define CYGWIN_VERSION_API_MAJOR 0
+-#define CYGWIN_VERSION_API_MINOR 293
++#define CYGWIN_VERSION_API_MINOR 294
+ 
+      /* There is also a compatibity version number associated with the
+ 	shared memory regions.  It is incremented when incompatible
+diff --git a/winsup/doc/posix.xml b/winsup/doc/posix.xml
+index 51a1df7..f065714 100644
+--- a/winsup/doc/posix.xml
++++ b/winsup/doc/posix.xml
+@@ -1151,6 +1151,8 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
+     asprintf_r
+     basename			(see chapter "Implementation Notes")
+     canonicalize_file_name
++    clog10
++    clog10f
+     dremf
+     dup3
+     envz_add
+-- 
+2.7.0
