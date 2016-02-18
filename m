@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8333-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 47282 invoked by alias); 18 Feb 2016 11:30:57 -0000
+Return-Path: <cygwin-patches-return-8332-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 45236 invoked by alias); 18 Feb 2016 11:30:17 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,75 +9,66 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 47232 invoked by uid 89); 18 Feb 2016 11:30:56 -0000
+Received: (qmail 45098 invoked by uid 89); 18 Feb 2016 11:30:14 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-94.7 required=5.0 tests=BAYES_20,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_PBL,RDNS_DYNAMIC,USER_IN_WHITELIST autolearn=no version=3.3.2 spammy=lightly, H*R:U*cygwin-patches, H*F:U*corinna-cygwin, ssp
-X-HELO: calimero.vinschen.de
-Received: from ipbcc0d020.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.208.32) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 18 Feb 2016 11:30:56 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id E621EA803FA; Thu, 18 Feb 2016 12:30:53 +0100 (CET)
+X-Spam-SWARE-Status: No, score=-0.2 required=5.0 tests=AWL,BAYES_00,KAM_LAZY_DOMAIN_SECURITY autolearn=no version=3.3.2 spammy=H*r:8.12.11, Hx-languages-length:1963, exits, H*Ad:U*cygwin-patches
+X-HELO: m0.truegem.net
+Received: from m0.truegem.net (HELO m0.truegem.net) (69.55.228.47) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-SHA encrypted) ESMTPS; Thu, 18 Feb 2016 11:30:12 +0000
+Received: from localhost (mark@localhost)	by m0.truegem.net (8.12.11/8.12.11) with ESMTP id u1IBTuuR059967;	Thu, 18 Feb 2016 03:29:56 -0800 (PST)	(envelope-from mark@maxrnd.com)
 Date: Thu, 18 Feb 2016 11:30:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] ssp: Fixes for 64-bit
-Message-ID: <20160218113053.GF8575@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1455792655-5424-1-git-send-email-jon.turney@dronecode.org.uk>
+From: Mark Geisert <mark@maxrnd.com>
+To: Jon Turney <jon.turney@dronecode.org.uk>
+cc: Cygwin Patches <cygwin-patches@cygwin.com>
+Subject: Re: gprof profiling of multi-threaded Cygwin programs
+In-Reply-To: <56C5A401.8060604@dronecode.org.uk>
+Message-ID: <Pine.BSF.4.63.1602180309170.49755@m0.truegem.net>
+References: <56C404FF.502@maxrnd.com> <56C5A401.8060604@dronecode.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="JcvBIhDvR6w3jUPA"
-Content-Disposition: inline
-In-Reply-To: <1455792655-5424-1-git-send-email-jon.turney@dronecode.org.uk>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-SW-Source: 2016-q1/txt/msg00039.txt.bz2
+Content-Type: TEXT/PLAIN; charset=US-ASCII; format=flowed
+X-IsSubscribed: yes
+X-SW-Source: 2016-q1/txt/msg00038.txt.bz2
 
+On Thu, 18 Feb 2016, Jon Turney wrote:
+> Thanks for this.
+>
+> On 17/02/2016 05:28, Mark Geisert wrote:
+>> There is a behavioral change that ought to be documented somewhere:  If
+>> a gmon.out file exists when a profiled application exits, the app will
+>> now dump its profiling info into another file gmon.outXXXXXX where
+>> mkstemp() replaces the Xs with random alphanumerics.  I added this
+>> functionality to allow a profiled program to fork() yet retain profiling
+>> info for both parent and child.  The old behavior was to simply
+>> overwrite any existing gmon.out file.
+>
+> Did you consider making the filename deterministic (e.g. based on pid or 
+> such) rather than random?
 
---JcvBIhDvR6w3jUPA
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 497
+Yes, I considered using pid and/or exename to avoid collisions.  There was 
+an issue with Cygwin long ago about pids being reused too quickly 
+(actually Windows reusing pids too quickly) but that's been cured?
 
-On Feb 18 10:50, Jon Turney wrote:
-> Fix various 32/64-bit portability issues in ssp, the single-step profiler=
-, and
-> also build it for 64-bit.
->=20
-> This didn't turn out to actually be very useful for what I wanted to use =
-it for,
-> so it's only been lightly tested.
+Maybe something like what's used to name core files on Linux would be 
+preferable to using mkstemp().  IIRC that's core.exename.pid.
 
-Even so, better than today.  Feel free to apply the patch.
+> With a random filename, if you have a process which forks more than once, 
+> working out which gmon.out* file corresponds to which process could be 
+> tricky.
 
+Acknowledged.  Even with pids it may not be easy.. the files are created 
+and written to at process exit so one is always going to be a bit lost 
+working out which file belongs to which process.  But the pid values are 
+certainly easier to type than six random alphanumerics :).
 
-Thanks,
-Corinna
+> A brief search tells me that apparently glibc supports the (undocumented) 
+> GMON_OUT_PREFIX env var which enables a similar behaviour.
 
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
+Ah, I did not know about that.  It would be easy to implement.
 
---JcvBIhDvR6w3jUPA
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
+So I'm leaning towards choosing file name as GMON_OUT_PREFIX.exename.pid 
+with GMON_OUT_PREFIX defaulting to "gmon.out" if unspecified.
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
+Do you think the expanded name should be used in all cases, or only when 
+there's a gmon.out already present?
 
-iQIcBAEBCAAGBQJWxattAAoJEPU2Bp2uRE+gH7QP/jzTfccj7YpcUGjQxwwu8gIm
-mbSfYdrFA93KTEEcBaKxT3fuPGIUxhWSBCAYLLJWx0VWM27yuDedpJ7wKetxaC1e
-SjofW//ef+LXnEnJSGMK6cUoybwcGmSisM3Ckg8aJqjGidG4pfIs4oVyVonIrCeJ
-B/St9m+3zA9dB3pY0CkrA88XMem857EJwi6fSX+Oib0GKsaA8F19Zxt1jJj0CgjP
-xnk7I4y9ofT+DNlC9a881h6ZYKaJs0GmKZBjRxkN54RKjqpGlvXBjkDb8dbc1zGs
-Smvxzdh37Vnpxf1UwSrci5kzarbFYL3hRbkRnIsQhVxn2xduNEuzdWccWmHVnimZ
-AhUIf4WRujzHVXxHNg1KcZdsaMaZ7ACJWcMonNsGyy3TrgYOxcEIEiE15FqG5lCi
-HuTPrcEXof3BhDak7VYFRkL8V0rSMqgDTB9oAyx7ASXkhqtJHKdP8guh5fCu2KVI
-CkX2MPvEqhYQMKjN0ftuQvOrLf094giYp2ZaglWCnmCG7Z+poDV+vaD0viRs2k5A
-To2kyF4Nbo0RX8ZNudj7aQGlIoGGDIBpgFr+Us5bUxpOFWzHzk3Z5ZCgjWmvf5KR
-e1ZjBciwHix1Y6/2LxZMpgL3UED1Qjlvt41b9r4Ov41KOt+ZWqdi1yiXud1irK0x
-5qrFLZhaFjRJx5wfNI/A
-=/kV7
------END PGP SIGNATURE-----
-
---JcvBIhDvR6w3jUPA--
+..mark
