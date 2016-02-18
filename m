@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8327-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 14418 invoked by alias); 18 Feb 2016 10:51:31 -0000
+Return-Path: <cygwin-patches-return-8329-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 77545 invoked by alias); 18 Feb 2016 10:59:25 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,76 +9,47 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 12544 invoked by uid 89); 18 Feb 2016 10:51:30 -0000
+Received: (qmail 77533 invoked by uid 89); 18 Feb 2016 10:59:24 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-96.6 required=5.0 tests=BAYES_00,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_PBL,RDNS_DYNAMIC,USER_IN_WHITELIST autolearn=no version=3.3.2 spammy=H*R:U*cygwin-patches, H*F:U*corinna-cygwin, HX-Envelope-From:sk:corinna, HTo:U*cygwin-patches
-X-HELO: calimero.vinschen.de
-Received: from ipbcc0d020.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.208.32) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 18 Feb 2016 10:51:30 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id E75AFA803FA; Thu, 18 Feb 2016 11:51:27 +0100 (CET)
-Date: Thu, 18 Feb 2016 10:51:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] cygwin: accept SIGIOT as alias of SIGABRT
-Message-ID: <20160218105127.GC8575@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1455772898-11800-1-git-send-email-yselkowi@redhat.com>
+X-Spam-SWARE-Status: No, score=-1.9 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_LOW autolearn=ham version=3.3.2 spammy=behavioral, replaces, exits, HTo:U*cygwin-patches
+X-HELO: out3-smtp.messagingengine.com
+Received: from out3-smtp.messagingengine.com (HELO out3-smtp.messagingengine.com) (66.111.4.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-GCM-SHA384 encrypted) ESMTPS; Thu, 18 Feb 2016 10:59:23 +0000
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])	by mailout.nyi.internal (Postfix) with ESMTP id D44B7208E3	for <cygwin-patches@cygwin.com>; Thu, 18 Feb 2016 05:59:21 -0500 (EST)
+Received: from frontend2 ([10.202.2.161])  by compute1.internal (MEProxy); Thu, 18 Feb 2016 05:59:21 -0500
+Received: from [192.168.1.102] (host86-141-131-217.range86-141.btcentralplus.com [86.141.131.217])	by mail.messagingengine.com (Postfix) with ESMTPA id 5F52D68009A;	Thu, 18 Feb 2016 05:59:21 -0500 (EST)
+Subject: Re: gprof profiling of multi-threaded Cygwin programs
+To: Cygwin Patches <cygwin-patches@cygwin.com>
+References: <56C404FF.502@maxrnd.com>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+Cc: Mark Geisert <mark@maxrnd.com>
+Message-ID: <56C5A401.8060604@dronecode.org.uk>
+Date: Thu, 18 Feb 2016 10:59:00 -0000
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:38.0) Gecko/20100101 Thunderbird/38.6.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="XWOWbaMNXpFDWE00"
-Content-Disposition: inline
-In-Reply-To: <1455772898-11800-1-git-send-email-yselkowi@redhat.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-SW-Source: 2016-q1/txt/msg00033.txt.bz2
+In-Reply-To: <56C404FF.502@maxrnd.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2016-q1/txt/msg00035.txt.bz2
 
 
---XWOWbaMNXpFDWE00
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 479
+Thanks for this.
 
-On Feb 17 23:21, Yaakov Selkowitz wrote:
-> 	winsup/cygwin/
-> 	* include/cygwin/signal.h (SIGIOT): Define SIGIOT in terms of SIGABRT.
-> 	* strsig.cc (struct sigdesc): Ditto.
->=20
-> 	winsup/doc/
-> 	* utils.xml (kill): Document SIGIOT.
->=20
-> Signed-off-by: Yaakov Selkowitz <yselkowi@redhat.com>
+On 17/02/2016 05:28, Mark Geisert wrote:
+> There is a behavioral change that ought to be documented somewhere:  If
+> a gmon.out file exists when a profiled application exits, the app will
+> now dump its profiling info into another file gmon.outXXXXXX where
+> mkstemp() replaces the Xs with random alphanumerics.  I added this
+> functionality to allow a profiled program to fork() yet retain profiling
+> info for both parent and child.  The old behavior was to simply
+> overwrite any existing gmon.out file.
 
-ACK, please apply.
+Did you consider making the filename deterministic (e.g. based on pid or 
+such) rather than random?
 
+With a random filename, if you have a process which forks more than 
+once, working out which gmon.out* file corresponds to which process 
+could be tricky.
 
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---XWOWbaMNXpFDWE00
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJWxaIvAAoJEPU2Bp2uRE+gUu0P/RD9GzDPybRihrwIqtLl99Yr
-ZfwAmqGFsHfkt/27vqLJw0pSIfc8dQWdLo0ZxOjS02UsD5dBOiWz9GJFlskH3ohT
-lA3AXzJuGvif09LyW0HrKPDgBNy+vaHMUPxnu+UdMY/TLMvw4TMA3j7ObMd47gHO
-dqV337T3mLSObK0GT7Wp/56/qI50TlPekW/4MRKfhv/V5p8/3eM0Rof0mIY7IUEj
-XiXv8kM5kEKRzKvmtuYg2RpdLsBVkuHbNKOmatLHfC9c7/AaHEe+up+wkMHK1MJT
-7/JLTV76+pFlmMFTcNKxii+pcsRARLv0d5dLQAdQb0xIFbleSGHpLr7SsNl5/Ono
-Ma/u+fHAFEhtWy6bXP9qpTIGy++nru4jFR2/9Pu9EocA1YJWaGWRFYzIs0zuzL+K
-4R1vgs4l66YavHil/en73voe77kzQw4P8im60kNDZ6r1jMBXZ7Xeir+yGsGzoSA5
-epTOoFKTiSDVOLWiU9hRvprNeQ/DEy52NYyjWTnH8y6J8s/0Nj3H5/D1xA7QUY/Y
-A0q7gdfcPubgbsYpU3fjr/aHj9+8Sz08jepQTp8Z1evaAwK4dw37BzZXTsDNxp2H
-ADTI32QhBRDG5Zm9uxzYFIEDAgQWZdPYr1lKWB7UtbVoDWFG5yyzF/kmojJPZwuK
-HWaDUYYz9/AM+2wolMBL
-=6DtV
------END PGP SIGNATURE-----
-
---XWOWbaMNXpFDWE00--
+A brief search tells me that apparently glibc supports the 
+(undocumented) GMON_OUT_PREFIX env var which enables a similar behaviour.
