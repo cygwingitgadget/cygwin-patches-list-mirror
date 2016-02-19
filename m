@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8341-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 107192 invoked by alias); 19 Feb 2016 09:02:25 -0000
+Return-Path: <cygwin-patches-return-8342-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 30623 invoked by alias); 19 Feb 2016 10:46:45 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,75 +9,133 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 107169 invoked by uid 89); 19 Feb 2016 09:02:23 -0000
+Received: (qmail 30527 invoked by uid 89); 19 Feb 2016 10:46:45 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-2.6 required=5.0 tests=BAYES_00,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.2 spammy=Hx-languages-length:1706, D*glup.org, interval, doctor
-X-HELO: mail-wm0-f49.google.com
-Received: from mail-wm0-f49.google.com (HELO mail-wm0-f49.google.com) (74.125.82.49) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES128-GCM-SHA256 encrypted) ESMTPS; Fri, 19 Feb 2016 09:02:20 +0000
-Received: by mail-wm0-f49.google.com with SMTP id g62so65735719wme.1        for <cygwin-patches@cygwin.com>; Fri, 19 Feb 2016 01:02:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20130820;        h=x-gm-message-state:date:from:to:message-id:in-reply-to:references         :subject:mime-version:content-transfer-encoding;        bh=9St7c5CI5/Oxm7Am3IFyOHXDHCAKGzG/1DSDDjtolBs=;        b=TF4EKQkjvG4w27I3LEwMyJ51xfNG0GUG9QIYj/iojDk5M2N3STIzK6hDUWKLIR9kdZ         0Cv1gtTJpgIXrjTQM/7y7gQ2HPhtmr6aX/UeWHui2vvGziCIR8Wdsi4oxhF3FIj9aqCQ         fT9kW2Dg8wy5w9MfhCz2QqVi0k3Q/vuxEMtqgEY7EkXTq3p+Cho9UEHOJe/ljpHslUrp         qe3r29xYpCiqMmPC7uNR1/FrQrlLqsPvzsUJ1lZuVQQha7YZSxb/RWhLrIcWNSyHTbH2         CAaHTv/RLjZmOF7vZwQcU9Pu3Aq/MxJuEe/MrDd+k8qsYkMXSizGksrteKq05WM51Ax7         aRlg==
-X-Gm-Message-State: AG10YOQ9aGT9DZVjB0lrAX+kE4BdQ3pVIK5rG64zVt1kOlPNgM+B4ojkug/C/8/C4pB5pA==
-X-Received: by 10.28.2.68 with SMTP id 65mr7531609wmc.85.1455872537545;        Fri, 19 Feb 2016 01:02:17 -0800 (PST)
-Received: from 6472AC56.mobile.pool.telekom.hu (254C081B.nat.pool.telekom.hu. [37.76.8.27])        by smtp.gmail.com with ESMTPSA id a128sm6667140wmh.6.2016.02.19.01.02.14        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);        Fri, 19 Feb 2016 01:02:17 -0800 (PST)
-Date: Fri, 19 Feb 2016 09:02:00 -0000
-From: ikartur@gmail.com
-To: cygwin-patches@cygwin.com,john hood <cgull@glup.org>
-Message-ID: <a250a707-bf78-473b-a5a3-69b066ef9c6f.maildroid@localhost>
-In-Reply-To: <56C67173.3030508@glup.org>
-References: <CAJCedbifwNgza6nUfSX6QH8ovnEy85bRJ=vH8SGuA_hNYdW5bw@mail.gmail.com> <56C67173.3030508@glup.org>
-Subject: Re: [PATCH] Multiple timer issues + new [PATCH]
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-IsSubscribed: yes
-X-SW-Source: 2016-q1/txt/msg00047.txt.bz2
-
-Hi,
-
-On Feb 19, 2016 2:35 AM, "john hood" <cgull@glup.org> wrote:
-
-> There's some information on the web discussing issues with
-> QueryPerformanceCounter()
-
-QueryPerformanceCounter() is the officially recommended method for time int=
-erval measurements:
-
-https://blogs.msdn.microsoft.com/oldnewthing/20140822-01/?p=3D163/
-
-https://msdn.microsoft.com/en-us/library/windows/desktop/dn553408(v=3Dvs.85=
-).aspx
-
-Best Regards,
-Art=C3=BAr
-
------Original Message-----
-From: john hood <cgull@glup.org>
+X-Spam-SWARE-Status: No, score=-96.6 required=5.0 tests=BAYES_00,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_PBL,RDNS_DYNAMIC,USER_IN_WHITELIST autolearn=no version=3.3.2 spammy=HX-Envelope-From:sk:corinna, H*R:U*cygwin-patches, H*F:U*corinna-cygwin, flu
+X-HELO: calimero.vinschen.de
+Received: from ipbcc0d020.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.208.32) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 19 Feb 2016 10:46:44 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 18BE8A80306; Fri, 19 Feb 2016 11:46:41 +0100 (CET)
+Date: Fri, 19 Feb 2016 10:46:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Sent: Fri, 19 Feb 2016 2:35
-Subject: Re: [PATCH] Multiple timer issues + new [PATCH]
+Subject: Re: Cygwin select() issues and improvements
+Message-ID: <20160219104641.GA5574@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <56C03624.1030703@glup.org> <20160215125703.GE8374@calimero.vinschen.de> <56C66DDE.9070509@glup.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="EVF5PPMfhYS0aIcm"
+Content-Disposition: inline
+In-Reply-To: <56C66DDE.9070509@glup.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-SW-Source: 2016-q1/txt/msg00048.txt.bz2
 
-On 2/18/16 6:39 PM, Ir=C3=A1nyossy Knoblauch Art=C3=BAr wrote:
-> The ntod timer (type hires_ns), however, is getting its time value
-> from QueryPerformanceCounter(), which, according to the MSDN
-> documentation, will provide a "time stamp that can be used for
-> time-interval measurements" -- that is just what the doctor ordered.
-> :-)
 
-I have some interest in this because my work on select() may interact
-with what you're doing here.
+--EVF5PPMfhYS0aIcm
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 3400
 
-There's some information on the web discussing issues with
-QueryPerformanceCounter(), for example
-<http://www.virtualdub.org/blog/pivot/entry.php?id=3D106>.  This is mostly
-an issue with CPUs available in the (I think) 2003-2006 time frame, such
-as early AMD Athlons and early Intel Core iNNN and iNNNN CPUs.  Earlier
-CPUs didn't have both changeable clock rates and RDTSC, and later CPUs
-had RDTSC but the clock rate is constant for RDTSC.  It's also possible
-that only some versions of Windows have issues in this area, maybe later
-versions of Windows avoid this problem.  Does your code work properly in
-this case?
+On Feb 18 20:20, john hood wrote:
+> On 2/15/16 7:57 AM, Corinna Vinschen wrote:
+> > On Feb 14 03:09, john hood wrote:
+> >> Various issues with Cygwin's select() annoyed me, and I've spent some
+> >> time gnawing on them.
+> > One of them is that they are not trivial enough to be acceptable without
+> > copyright assignment (except patch 3, but see below).  Please have a
+> > look at https://cygwin.com/contrib.html, the "Before you get started"
+> > section.  There's a link to an "assign.txt" file with instructions.
+> >=20
+> > The other one is just this:  Can you please describe each change in the
+> > accompanying patch comment so that it's accessible from the git log?
+>=20
+> Sorry for the slow response here.  I have a bad cold and I'm not getting
+> to things quickly.
 
-regards,
+I know what you mean.  I'm still coughing badly from the flu I catched
+lately.
 
-  --jh
+> Microsoft official documentation:
+>=20
+> <https://msdn.microsoft.com/en-us/library/windows/desktop/ms687069%28v=3D=
+vs.85%29.aspx#waitfunctionsandtime-outintervals>
+>=20
+> <https://msdn.microsoft.com/en-us/library/windows/hardware/jj602805%28v=
+=3Dvs.85%29.aspx>
+>=20
+> Try running my socket-t program in
+> <https://github.com/cgull/cygwin-timeouts> as 'socket-t 10000'; it will
+> report the actual time waited.  On Windows 10, you will see lots of
+> variation in timeouts, with some of them shorter than the requested
+> time.  My ancient Vista laptop has much less variation and is never
+> shorter.  Win7 is similar.
+
+In the second link it sounds like a change in W8 might causing this.
+
+> The thing that I think should happen there is that fhandlers'
+> select_{read,write,except}() functions should go away, and an fhandler
+> should only have a poll() function that indicates what's available, and
+> a get_waitable_object() function, that gives sel.wait() something to
+> sleep on.  The select_{read,write,except}() functions, and the
+> always_ready state variables, partially implement both of these pieces
+> of functionality, and really complicate the implementation for select().
+>=20
+> I'm not sure I'll ever get to it, these Cygwin issues are very much a
+> side project for me.
+
+That's ok, but the idea is nice.  It would be cool if we could improve
+select.  From my POV it has at least three downsides.  It's pretty slow,
+the code is complicated, and it's badly commented.  Also, IIRC, the number
+of descriptors is restricted to 63 due to WFMO restricted to this number
+of handles.  This is not a restriction for sockets since sockets are
+using threads per each 63 objects, but the other objects are not doing
+that.  So, yeah, there's a lot to improve on select alone.
+
+> The last patch in my series reverts from the documented
+> CreateWaitableTimer() interfaces to the ancient, undocumented
+> NTCreateTimer() interfaces only for consistency with the rest of the
+> Cygwin codebase, which only uses NTCreateTimer().  The documented
+> interfaces are all present in XP.  The undocumented interfaces have all
+> the functionality this code needs.
+
+Using NtCreateTimer is perfectly fine and I think the API is cleaner
+than the CreateWaitableTimer API.
+
+> I'm on #cygwin and #cygwin-dev, ask questions there if you want.
+
+Not ATM, but feel free to contact me on the dev channel.
+
+
+Thanks,
+Corinna
+
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
+
+--EVF5PPMfhYS0aIcm
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 819
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iQIcBAEBCAAGBQJWxvKQAAoJEPU2Bp2uRE+gx44P/0zi/vVc5i4xF2EOMt2bpNz2
+UvpJvP7IndwHTBlerSKsxsYWDt8Y6l+rqT/BTehItUsP3/04X+Gh1RDBAtWpC+s7
+phFyMiYN4vaQ+PHja2cxFO7xEUEbcBg//dP3C6v0BWNWJmYoovotZ5QmncP2ld1w
+OSNOlG8WQR37x3eWGRutw3Q0xlqudd018LHIiq3tu0kAD9p5Tod0cH44AYy/oMoO
+t72UUv0Ho08UbBAc3914v6wvC9sacl3rIpj3ltGm+tJAHKI1vYW14UKkNOhtdSYn
+FyZQ3V1EPhsULtpszXfPvWPmUA/ev1uRlkTTYcLcTEZH8lU/AR+BsS31OayZUCl4
+rnuhO1TLenYmoacqQ6Ai0Kt1SvycDR1L3/E2HhIU7L8LVpHw33WXgnODRvr4U9AT
+cax4yZfuVvKadB/UWBFBuRdds6FVtlfT0io75jerI69hQSMOJLry6TiHzS9N7D5+
+rcfrzC/kEV2fV5f5cDHiQhzkg9UI8W89Hg8bb1ZauJ4zzo7RhQEWwyXcoELLErTh
+AdBTeZ6PPsE1cFqP1d8HRFsTF5S3wRuijlKghB6mjk6Dxp7xqdXO5UfOm5ceCiKI
+svc7vtH4UEEUS1hYRABmkSL5nECIyCZpZ+1U5rA/aDMJolwj9vDbMycxgqh2bZhs
+r4TsjAhvOpq0dvJYd1xZ
+=/5FA
+-----END PGP SIGNATURE-----
+
+--EVF5PPMfhYS0aIcm--
