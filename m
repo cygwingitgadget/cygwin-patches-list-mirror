@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8342-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 30623 invoked by alias); 19 Feb 2016 10:46:45 -0000
+Return-Path: <cygwin-patches-return-8343-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 32135 invoked by alias); 19 Feb 2016 10:47:14 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,106 +9,56 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 30527 invoked by uid 89); 19 Feb 2016 10:46:45 -0000
+Received: (qmail 32119 invoked by uid 89); 19 Feb 2016 10:47:13 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-96.6 required=5.0 tests=BAYES_00,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_PBL,RDNS_DYNAMIC,USER_IN_WHITELIST autolearn=no version=3.3.2 spammy=HX-Envelope-From:sk:corinna, H*R:U*cygwin-patches, H*F:U*corinna-cygwin, flu
+X-Spam-SWARE-Status: No, score=-96.6 required=5.0 tests=BAYES_00,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_PBL,RDNS_DYNAMIC,USER_IN_WHITELIST autolearn=no version=3.3.2 spammy=HX-Envelope-From:sk:corinna, H*R:U*cygwin-patches, H*F:U*corinna-cygwin, completing
 X-HELO: calimero.vinschen.de
-Received: from ipbcc0d020.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.208.32) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 19 Feb 2016 10:46:44 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 18BE8A80306; Fri, 19 Feb 2016 11:46:41 +0100 (CET)
-Date: Fri, 19 Feb 2016 10:46:00 -0000
+Received: from ipbcc0d020.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.208.32) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 19 Feb 2016 10:47:12 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id BB0B1A80306; Fri, 19 Feb 2016 11:47:10 +0100 (CET)
+Date: Fri, 19 Feb 2016 10:47:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: Cygwin select() issues and improvements
-Message-ID: <20160219104641.GA5574@calimero.vinschen.de>
+Subject: Re: gprof profiling of multi-threaded Cygwin programs
+Message-ID: <20160219104710.GB5574@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <56C03624.1030703@glup.org> <20160215125703.GE8374@calimero.vinschen.de> <56C66DDE.9070509@glup.org>
+References: <56C404FF.502@maxrnd.com> <20160217104241.GA31536@calimero.vinschen.de> <Pine.BSF.4.63.1602172218120.19332@m0.truegem.net> <20160218104125.GB8575@calimero.vinschen.de> <Pine.BSF.4.63.1602181654480.11717@m0.truegem.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="EVF5PPMfhYS0aIcm"
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="61jdw2sOBCFtR2d/"
 Content-Disposition: inline
-In-Reply-To: <56C66DDE.9070509@glup.org>
+In-Reply-To: <Pine.BSF.4.63.1602181654480.11717@m0.truegem.net>
 User-Agent: Mutt/1.5.24 (2015-08-30)
-X-SW-Source: 2016-q1/txt/msg00048.txt.bz2
+X-SW-Source: 2016-q1/txt/msg00049.txt.bz2
 
 
---EVF5PPMfhYS0aIcm
+--61jdw2sOBCFtR2d/
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-length: 3400
+Content-length: 1008
 
-On Feb 18 20:20, john hood wrote:
-> On 2/15/16 7:57 AM, Corinna Vinschen wrote:
-> > On Feb 14 03:09, john hood wrote:
-> >> Various issues with Cygwin's select() annoyed me, and I've spent some
-> >> time gnawing on them.
-> > One of them is that they are not trivial enough to be acceptable without
-> > copyright assignment (except patch 3, but see below).  Please have a
-> > look at https://cygwin.com/contrib.html, the "Before you get started"
-> > section.  There's a link to an "assign.txt" file with instructions.
-> >=20
-> > The other one is just this:  Can you please describe each change in the
-> > accompanying patch comment so that it's accessible from the git log?
+On Feb 18 16:57, Mark Geisert wrote:
+> On Thu, 18 Feb 2016, Corinna Vinschen wrote:
+> >On Feb 17 22:35, Mark Geisert wrote:
+> >>I do see that a case could be made for general profiling documentation =
+in
+> >>winsup/doc/programming.xml but that's more than I want to take on at the
+> >>moment.
+> >
+> >It doesn't have to be part of the source patch.  It would just be nice
+> >if you could write a few words about profiling.  I'm *not* asking for
+> >a complete gprof doc or somehting like that, it's safe to assume that
+> >the users of the tool know how to read man or info pages.  Therefore,
+> >something short like gcc.xml or gdb.xml would be totally sufficient.
+> >Even shorter than those.  Just a few words about profiling in general,
+> >and an example would be cool.
 >=20
-> Sorry for the slow response here.  I have a bad cold and I'm not getting
-> to things quickly.
+> Ah, OK.  That I can/will do after completing the source patch.
 
-I know what you mean.  I'm still coughing badly from the flu I catched
-lately.
-
-> Microsoft official documentation:
->=20
-> <https://msdn.microsoft.com/en-us/library/windows/desktop/ms687069%28v=3D=
-vs.85%29.aspx#waitfunctionsandtime-outintervals>
->=20
-> <https://msdn.microsoft.com/en-us/library/windows/hardware/jj602805%28v=
-=3Dvs.85%29.aspx>
->=20
-> Try running my socket-t program in
-> <https://github.com/cgull/cygwin-timeouts> as 'socket-t 10000'; it will
-> report the actual time waited.  On Windows 10, you will see lots of
-> variation in timeouts, with some of them shorter than the requested
-> time.  My ancient Vista laptop has much less variation and is never
-> shorter.  Win7 is similar.
-
-In the second link it sounds like a change in W8 might causing this.
-
-> The thing that I think should happen there is that fhandlers'
-> select_{read,write,except}() functions should go away, and an fhandler
-> should only have a poll() function that indicates what's available, and
-> a get_waitable_object() function, that gives sel.wait() something to
-> sleep on.  The select_{read,write,except}() functions, and the
-> always_ready state variables, partially implement both of these pieces
-> of functionality, and really complicate the implementation for select().
->=20
-> I'm not sure I'll ever get to it, these Cygwin issues are very much a
-> side project for me.
-
-That's ok, but the idea is nice.  It would be cool if we could improve
-select.  From my POV it has at least three downsides.  It's pretty slow,
-the code is complicated, and it's badly commented.  Also, IIRC, the number
-of descriptors is restricted to 63 due to WFMO restricted to this number
-of handles.  This is not a restriction for sockets since sockets are
-using threads per each 63 objects, but the other objects are not doing
-that.  So, yeah, there's a lot to improve on select alone.
-
-> The last patch in my series reverts from the documented
-> CreateWaitableTimer() interfaces to the ancient, undocumented
-> NTCreateTimer() interfaces only for consistency with the rest of the
-> Cygwin codebase, which only uses NTCreateTimer().  The documented
-> interfaces are all present in XP.  The undocumented interfaces have all
-> the functionality this code needs.
-
-Using NtCreateTimer is perfectly fine and I think the API is cleaner
-than the CreateWaitableTimer API.
-
-> I'm on #cygwin and #cygwin-dev, ask questions there if you want.
-
-Not ATM, but feel free to contact me on the dev channel.
+Thank you!
 
 
-Thanks,
 Corinna
 
 --=20
@@ -116,26 +66,26 @@ Corinna Vinschen                  Please, send mails regarding Cygwin to
 Cygwin Maintainer                 cygwin AT cygwin DOT com
 Red Hat
 
---EVF5PPMfhYS0aIcm
+--61jdw2sOBCFtR2d/
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-length: 819
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v2
 
-iQIcBAEBCAAGBQJWxvKQAAoJEPU2Bp2uRE+gx44P/0zi/vVc5i4xF2EOMt2bpNz2
-UvpJvP7IndwHTBlerSKsxsYWDt8Y6l+rqT/BTehItUsP3/04X+Gh1RDBAtWpC+s7
-phFyMiYN4vaQ+PHja2cxFO7xEUEbcBg//dP3C6v0BWNWJmYoovotZ5QmncP2ld1w
-OSNOlG8WQR37x3eWGRutw3Q0xlqudd018LHIiq3tu0kAD9p5Tod0cH44AYy/oMoO
-t72UUv0Ho08UbBAc3914v6wvC9sacl3rIpj3ltGm+tJAHKI1vYW14UKkNOhtdSYn
-FyZQ3V1EPhsULtpszXfPvWPmUA/ev1uRlkTTYcLcTEZH8lU/AR+BsS31OayZUCl4
-rnuhO1TLenYmoacqQ6Ai0Kt1SvycDR1L3/E2HhIU7L8LVpHw33WXgnODRvr4U9AT
-cax4yZfuVvKadB/UWBFBuRdds6FVtlfT0io75jerI69hQSMOJLry6TiHzS9N7D5+
-rcfrzC/kEV2fV5f5cDHiQhzkg9UI8W89Hg8bb1ZauJ4zzo7RhQEWwyXcoELLErTh
-AdBTeZ6PPsE1cFqP1d8HRFsTF5S3wRuijlKghB6mjk6Dxp7xqdXO5UfOm5ceCiKI
-svc7vtH4UEEUS1hYRABmkSL5nECIyCZpZ+1U5rA/aDMJolwj9vDbMycxgqh2bZhs
-r4TsjAhvOpq0dvJYd1xZ
-=/5FA
+iQIcBAEBCAAGBQJWxvKuAAoJEPU2Bp2uRE+gRRkQAIoBosHS13cao5LphRdhTwbK
+L3r5dv29fuUYG7x6MnT2eTWydtwmPEdPlAsUvwZ2gevBPnk+FEKR1QxAG8A6GU5x
+YI8esCyjus3sXt/YeG8MCkSdIc4LtQcHIHsaE7cfSmbS0IqjBLLhmexiJvK7TPPD
+rew3mnLZAvK7mI03s/ZbOYsPgeU5hW9v8h1kb6Af49DkpuSVSn7wf70XZZkmWCQg
+WOoXDb+6gOKGPIjcZZLuHEn+ZhUQj/aRRf8SLijpllgySPgBrQ37jwY5hOL3cIaz
+NHjii7PiF3doSznO1UAFQFR2k5paoDlaTp1zdLzYqQ1oSp/S/qls0uHJFgFSBxwP
+7vRdDAwBb5WJWpXjDb77Lyp1OgLwXGeFHuuq/qT+B0fNpSfmWDRjwNGlsQiz2EFg
+2OndRGQOLlvzuQgtc3luJ2AgaGoB1Q93XW6f70T7v+C1AAA/YdXjN0432QmZRWKa
+cwdoweEusISrsGzfuvA99yHU1B8zhWzzG7Cv4u+WQicUP0itJ53Xb4ZsKwsCzKnj
+7W+d8yj0qnd9QNUHWKObTLbGlBr6hEebTuB096Ik6Ov80/azpmr8LNkDmNOoTTmC
+SxBSEbGaKZ7yhhF7tpBMkX435/ty4/WCwP/+8wGwsYuw/TVOLiwDxaWnPEBCXuCu
+zSe1AKMhrzT0M1jZ7i7w
+=T9xJ
 -----END PGP SIGNATURE-----
 
---EVF5PPMfhYS0aIcm--
+--61jdw2sOBCFtR2d/--
