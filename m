@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8347-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 41175 invoked by alias); 22 Feb 2016 10:12:32 -0000
+Return-Path: <cygwin-patches-return-8348-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 99151 invoked by alias); 22 Feb 2016 11:44:53 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,47 +9,79 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 41162 invoked by uid 89); 22 Feb 2016 10:12:31 -0000
+Received: (qmail 99102 invoked by uid 89); 22 Feb 2016 11:44:50 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-94.7 required=5.0 tests=BAYES_40,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_PBL,RDNS_DYNAMIC,USER_IN_WHITELIST autolearn=no version=3.3.2 spammy=caution, file's, Hx-languages-length:1602, 100000
-X-HELO: calimero.vinschen.de
-Received: from ipbcc0d020.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.208.32) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 22 Feb 2016 10:12:26 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 9B1DDA8035E; Mon, 22 Feb 2016 11:12:24 +0100 (CET)
-Date: Mon, 22 Feb 2016 10:12:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
+X-Spam-SWARE-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW autolearn=ham version=3.3.2 spammy=undocumented, file's, Hx-languages-length:2811, HTo:U*cygwin-patches
+X-HELO: out4-smtp.messagingengine.com
+Received: from out4-smtp.messagingengine.com (HELO out4-smtp.messagingengine.com) (66.111.4.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-GCM-SHA384 encrypted) ESMTPS; Mon, 22 Feb 2016 11:44:49 +0000
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])	by mailout.nyi.internal (Postfix) with ESMTP id 065FE20AD8	for <cygwin-patches@cygwin.com>; Mon, 22 Feb 2016 06:44:47 -0500 (EST)
+Received: from frontend2 ([10.202.2.161])  by compute5.internal (MEProxy); Mon, 22 Feb 2016 06:44:47 -0500
+Received: from [192.168.1.102] (host86-184-210-93.range86-184.btcentralplus.com [86.184.210.93])	by mail.messagingengine.com (Postfix) with ESMTPA id 84C556800F3;	Mon, 22 Feb 2016 06:44:46 -0500 (EST)
 Subject: Re: [PATCH] gprof profiling of multi-threaded Cygwin programs, ver 2
-Message-ID: <20160222101224.GA29199@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
 References: <56C820D8.4010203@maxrnd.com>
+Cc: Mark Geisert <mark@maxrnd.com>
+To: Cygwin Patches <cygwin-patches@cygwin.com>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+Message-ID: <56CAF4A3.5060806@dronecode.org.uk>
+Date: Mon, 22 Feb 2016 11:44:00 -0000
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:38.0) Gecko/20100101 Thunderbird/38.6.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="vtzGhvizbBRQ85DL"
-Content-Disposition: inline
 In-Reply-To: <56C820D8.4010203@maxrnd.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-SW-Source: 2016-q1/txt/msg00053.txt.bz2
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2016-q1/txt/msg00054.txt.bz2
 
+Thanks for this.  A few comments inline.
 
---vtzGhvizbBRQ85DL
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1618
+On 20/02/2016 08:16, Mark Geisert wrote:
+> diff --git a/winsup/cygwin/cygheap.cc b/winsup/cygwin/cygheap.cc
+> index 6493485..4932cf0 100644
+> --- a/winsup/cygwin/cygheap.cc
+> +++ b/winsup/cygwin/cygheap.cc
+> @@ -744,3 +744,15 @@ init_cygheap::find_tls (int sig, bool& issig_wait)
+>       WaitForSingleObject (t->mutex, INFINITE);
+>     return t;
+>   }
+> +
+> +/* Called from profil.c to sample all non-main thread PC values for profiling */
+> +extern "C" void
+> +cygheap_profthr_all (void (*profthr_byhandle) (HANDLE))
+> +{
+> +  for (uint32_t ix = 0; ix < nthreads; ix++)
+> +    {
+> +      _cygtls *tls = cygheap->threadlist[ix].thread;
+> +      if (tls->tid)
+> +	profthr_byhandle (tls->tid->win32_obj_id);
+> +    }
+> +}
 
-Hi Mark,
+There doesn't seem to be anything specific to profiling about this, so 
+it could be written in a more generic way, as "call a callback function 
+for each thread".
 
-On Feb 20 00:16, Mark Geisert wrote:
-> Version 2 incorporating review comments of version 1.
+> diff --git a/winsup/cygwin/external.cc b/winsup/cygwin/external.cc
+> index e379df1..02335eb 100644
+> --- a/winsup/cygwin/external.cc
+> +++ b/winsup/cygwin/external.cc
+> @@ -702,6 +702,17 @@ cygwin_internal (cygwin_getinfo_types t, ...)
+>   	}
+>   	break;
+>
+> +      case CW_CYGHEAP_PROFTHR_ALL:
+> +	{
+> +	  typedef void (*func_t) (HANDLE);
+> +	  extern void cygheap_profthr_all (func_t);
+> +
+> +	  func_t profthr_byhandle = va_arg(arg, func_t);
+> +	  cygheap_profthr_all (profthr_byhandle);
+> +	  res = 0;
+> +	}
+> +	break;
+> +
 
-I'm afraid we need a v3, two points.
-
-One is, for completeness it would be nice if you could add a
-description to the git comment along the lines of your original
-comment so we have a description in the log.
-
-The other point is:
+Is this exposed via cygwin_internal() operation just for testing 
+purposes?  Or is there some other use envisioned?
 
 > +	/* We copy an undocumented glibc feature: customizing the profiler's
 > +	   output file name somewhat, depending on the env var GMON_OUT_PREFIX.
@@ -61,52 +93,32 @@ The other point is:
 > +	   if GMON_OUT_PREFIX is specified but contains no characters, the
 > +	   file's name is computed as "gmon.out.$pid".  Cygwin-specific.
 > +	*/
-> +	if ((prefix =3D getenv("GMON_OUT_PREFIX")) !=3D NULL) {
-> +		char *buf;
-> +		long divisor =3D 100000;	// the power of 10 bigger than PID_MAX
-> +		pid_t pid =3D getpid();
-> +		size_t len =3D strlen(prefix);
+> +	if ((prefix = getenv("GMON_OUT_PREFIX")) != NULL) {
+
+setup-env.xml might be an appropriate place to mention this environment 
+variable.
+
+>   static void CALLBACK
+>   profthr_func (LPVOID arg)
+>   {
+>     struct profinfo *p = (struct profinfo *) arg;
+> -  size_t pc, idx;
+>
+>     for (;;)
+>       {
+> -      pc = (size_t) get_thrpc (p->targthr);
+> -      if (pc >= p->lowpc && pc < p->highpc)
+> -	{
+> -	  idx = PROFIDX (pc, p->lowpc, p->scale);
+> -	  p->counter[idx]++;
+> -	}
+> +      // record profiling sample for main thread
+> +      profthr_byhandle (p->targthr);
 > +
-> +		if (len =3D=3D 0)
-> +			len =3D strlen(prefix =3D filename);
-> +		buf =3D alloca(len + 8);	// allows for '.', 5-digit pid, NUL, +1
+> +      // record profiling samples for other pthreads, if any
+> +      cygwin_internal (CW_CYGHEAP_PROFTHR_ALL, profthr_byhandle);
+> +
 
-I've seen 6 digit PIDs.  In fact, we're not that tight on space here
-so we should err on the side of caution and leave room for the entire
-possible size of a Windows PID.  That's a LONG, 32 bit, 10 decimal
-digits.
-
-Other than that, the patch looks good to me.
+Hmm.. so why isn't this written as cygheap_profthr_all (profthr_byhandle) ?
 
 
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---vtzGhvizbBRQ85DL
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJWyt8IAAoJEPU2Bp2uRE+g2pMP/RBUlqsRQCLUP0vtgZzVw7h9
-DAQdyNuu4hI9c9wGeRuuSzMzQypftMvXWvk06nmrHHsUNsvjQWvIzhUkTKcLn2W4
-8Y+gX2cyHnKd25GbSr8xIjhNxQtIbsMDtjlpxuccyxtEXn2Z78AoY9L1ImGx5TUD
-AuO2k1y+IT0mQ/vmIqepr4oM3oDNezgSKvAE2lLhHJFMF/OXGbFjKwGnCe9Xck4r
-jZW4ObS9HF4ay29ugPfonettWa5CGhzfBgqz5OL9v2MHipcjOVpdy5kKDhcqi6LB
-tbNNIvtCcTdr+2BId/snpgguO2JHKIHAsfeO0CX4M3rwR54pNh9Y0iSPoUWbFHnQ
-sysE4mHGjjFuG2Nj/yWSOnYjIUBfDaZJaZOOCH6OrsvmOwcqiipLBUc+qyr9gcOx
-7sKA/EBvT+bioRh8nDw93Gd4oRCKOlri3ix9Yu2D1kbFVoiubEsg2kPfScdq+8eA
-YkbRM+sptSxeHhm3dkC9+xEihCL6ooE1yTJ6C24hnMxwgOEWl1fodPIu1qLe3Dwl
-oXcNNra0p4ta+YmstxWjC6nP3M9e8P3Zru4joqqNPKhK70k0XL0DH+AIMw9iRavo
-ZVeSJUrWBOfw5FZbSRFjuhwj/+XlBKDQubHrO/ZPy1PsIsEw8QKfIz9S1W0lJC74
-1gChYApQkyR7qNkSqFza
-=q4vn
------END PGP SIGNATURE-----
-
---vtzGhvizbBRQ85DL--
