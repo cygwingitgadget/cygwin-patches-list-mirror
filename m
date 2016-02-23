@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8353-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 2443 invoked by alias); 23 Feb 2016 06:58:36 -0000
+Return-Path: <cygwin-patches-return-8354-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 68311 invoked by alias); 23 Feb 2016 07:36:52 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,51 +9,63 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 2428 invoked by uid 89); 23 Feb 2016 06:58:35 -0000
+Received: (qmail 68297 invoked by uid 89); 23 Feb 2016 07:36:52 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=0.5 required=5.0 tests=AWL,BAYES_20,KAM_LAZY_DOMAIN_SECURITY autolearn=no version=3.3.2 spammy=caution, PID, H*r:8.12.11, 100000
+X-Spam-SWARE-Status: No, score=-0.4 required=5.0 tests=AWL,BAYES_00,KAM_LAZY_DOMAIN_SECURITY autolearn=no version=3.3.2 spammy=UD:cygwin1.dll, cygwin1.dll, cygwin1dll, H*r:8.12.11
 X-HELO: m0.truegem.net
-Received: from m0.truegem.net (HELO m0.truegem.net) (69.55.228.47) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-SHA encrypted) ESMTPS; Tue, 23 Feb 2016 06:58:33 +0000
-Received: from localhost (mark@localhost)	by m0.truegem.net (8.12.11/8.12.11) with ESMTP id u1N6wDaC094775	for <cygwin-patches@cygwin.com>; Mon, 22 Feb 2016 22:58:13 -0800 (PST)	(envelope-from mark@maxrnd.com)
-Date: Tue, 23 Feb 2016 06:58:00 -0000
+Received: from m0.truegem.net (HELO m0.truegem.net) (69.55.228.47) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-SHA encrypted) ESMTPS; Tue, 23 Feb 2016 07:36:51 +0000
+Received: from localhost (mark@localhost)	by m0.truegem.net (8.12.11/8.12.11) with ESMTP id u1N7aV7S010747;	Mon, 22 Feb 2016 23:36:31 -0800 (PST)	(envelope-from mark@maxrnd.com)
+Date: Tue, 23 Feb 2016 07:36:00 -0000
 From: Mark Geisert <mark@maxrnd.com>
-To: cygwin-patches@cygwin.com
+To: Jon Turney <jon.turney@dronecode.org.uk>
+cc: Cygwin Patches <cygwin-patches@cygwin.com>
 Subject: Re: [PATCH] gprof profiling of multi-threaded Cygwin programs, ver 2
-In-Reply-To: <20160222101224.GA29199@calimero.vinschen.de>
-Message-ID: <Pine.BSF.4.63.1602222243530.88046@m0.truegem.net>
-References: <56C820D8.4010203@maxrnd.com> <20160222101224.GA29199@calimero.vinschen.de>
+In-Reply-To: <56CAF4A3.5060806@dronecode.org.uk>
+Message-ID: <Pine.BSF.4.63.1602222322100.88046@m0.truegem.net>
+References: <56C820D8.4010203@maxrnd.com> <56CAF4A3.5060806@dronecode.org.uk>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII; format=flowed
 X-IsSubscribed: yes
-X-SW-Source: 2016-q1/txt/msg00059.txt.bz2
+X-SW-Source: 2016-q1/txt/msg00060.txt.bz2
 
-On Mon, 22 Feb 2016, Corinna Vinschen wrote:
-> One is, for completeness it would be nice if you could add a
-> description to the git comment along the lines of your original
-> comment so we have a description in the log.
+Hi Jon,
 
-Sorry, can't parse this; git newbie here.  Did you mean the 'git commit' 
-I'm doing to my private repository and the message associated with the 
-commit?  And by "original comment" do you mean what I called the change 
-log in the text of my v2 email we're discussing (i.e., not the patch 
-attachment but the email body)?
-
-> The other point is:
->> +		long divisor = 100000;	// the power of 10 bigger than PID_MAX
+On Mon, 22 Feb 2016, Jon Turney wrote:
+> Thanks for this.  A few comments inline.
 >
-> I've seen 6 digit PIDs.  In fact, we're not that tight on space here
-> so we should err on the side of caution and leave room for the entire
-> possible size of a Windows PID.  That's a LONG, 32 bit, 10 decimal
-> digits.
+> On 20/02/2016 08:16, Mark Geisert wrote:
+>> +/* Called from profil.c to sample all non-main thread PC values for 
+>> profiling */
+>> +extern "C" void
+>> +cygheap_profthr_all (void (*profthr_byhandle) (HANDLE))
+>> +{
+>> +  for (uint32_t ix = 0; ix < nthreads; ix++)
+>> +    {
+>> +      _cygtls *tls = cygheap->threadlist[ix].thread;
+>> +      if (tls->tid)
+>> +	profthr_byhandle (tls->tid->win32_obj_id);
+>> +    }
+>> +}
+>
+> There doesn't seem to be anything specific to profiling about this, so it 
+> could be written in a more generic way, as "call a callback function for each 
+> thread".
 
-Yikes.  I'd seen large 5-digit pids but could not find a definitive symbol 
-defining Windows' maximum pid value.  So I will change divisor's init 
-value to 1000*1000*1000 which will allow the conversion loop to support 
-10-digit pids.
+I saw your later conversation with Corinna on the list re why 
+cygwin_internal() is involved now.  (I too had stumbled over the 
+cygwin1.dll/libgmon.a gap when I started this work.)  Given the necessity 
+of the separation, does it still make sense to write a generic per-thread 
+callback mechanism and then make use of it for this patch, or is that 
+overkill?  I can't tell.
 
-> Other than that, the patch looks good to me.
+>> +	if ((prefix = getenv("GMON_OUT_PREFIX")) != NULL) {
+>
+> setup-env.xml might be an appropriate place to mention this environment 
+> variable.
 
-Great!  I'll follow up with Jon separately (to the list) on his comments.
+I am now writing a gprof.xml that will be tied into the existing 
+programming.xml.  I plan to document GMON_OUT_PREFIX in gprof.xml.  Do you 
+think that's sufficient?
 
 ..mark
