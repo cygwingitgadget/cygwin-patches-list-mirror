@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8367-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 115581 invoked by alias); 29 Feb 2016 13:45:12 -0000
+Return-Path: <cygwin-patches-return-8368-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 115638 invoked by alias); 29 Feb 2016 15:41:30 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,100 +9,86 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 115568 invoked by uid 89); 29 Feb 2016 13:45:11 -0000
+Received: (qmail 115616 invoked by uid 89); 29 Feb 2016 15:41:29 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-94.7 required=5.0 tests=BAYES_20,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_PBL,RDNS_DYNAMIC,USER_IN_WHITELIST autolearn=no version=3.3.2 spammy=12,7, searches, cxx, 2.7.0
-X-HELO: calimero.vinschen.de
-Received: from ipbcc0d020.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.208.32) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 29 Feb 2016 13:45:06 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 3089FA8040B; Mon, 29 Feb 2016 14:45:04 +0100 (CET)
-Date: Mon, 29 Feb 2016 13:45:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
+X-Spam-SWARE-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RP_MATCHES_RCVD,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=12,7, searches, cxx, lc_all
+X-HELO: mx1.redhat.com
+Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-GCM-SHA384 encrypted) ESMTPS; Mon, 29 Feb 2016 15:41:28 +0000
+Received: from int-mx09.intmail.prod.int.phx2.redhat.com (int-mx09.intmail.prod.int.phx2.redhat.com [10.5.11.22])	by mx1.redhat.com (Postfix) with ESMTPS id 656D664369	for <cygwin-patches@cygwin.com>; Mon, 29 Feb 2016 15:41:27 +0000 (UTC)
+Received: from [10.3.113.120] (ovpn-113-120.phx2.redhat.com [10.3.113.120])	by int-mx09.intmail.prod.int.phx2.redhat.com (8.14.4/8.14.4) with ESMTP id u1TFfQda024787	for <cygwin-patches@cygwin.com>; Mon, 29 Feb 2016 10:41:27 -0500
 Subject: Re: [PATCH] ccwrap: fix build with non-english locale set
-Message-ID: <20160229134504.GF3525@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <56D3EF72.20504@patrick-bendorf.de> <20160229103339.GB3525@calimero.vinschen.de> <b818ad6d60ddfd3557c3d9e21efc6344@patrick-bendorf.de> <56D43D9B.5020602@dronecode.org.uk> <20160229125813.GE3525@calimero.vinschen.de> <3ecc67c4a2351cf32f28927eea91fc01@patrick-bendorf.de> <56D448D1.2040700@patrick-bendorf.de>
+To: cygwin-patches@cygwin.com
+References: <56D3EF72.20504@patrick-bendorf.de> <20160229103339.GB3525@calimero.vinschen.de> <b818ad6d60ddfd3557c3d9e21efc6344@patrick-bendorf.de> <56D43D9B.5020602@dronecode.org.uk> <20160229125813.GE3525@calimero.vinschen.de> <3ecc67c4a2351cf32f28927eea91fc01@patrick-bendorf.de>
+From: Eric Blake <eblake@redhat.com>
+Openpgp: url=http://people.redhat.com/eblake/eblake.gpg
+Message-ID: <56D466A6.1000003@redhat.com>
+Date: Mon, 29 Feb 2016 15:41:00 -0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101 Thunderbird/38.6.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="wTWi5aaYRw9ix9vO"
-Content-Disposition: inline
-In-Reply-To: <56D448D1.2040700@patrick-bendorf.de>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-SW-Source: 2016-q1/txt/msg00073.txt.bz2
+In-Reply-To: <3ecc67c4a2351cf32f28927eea91fc01@patrick-bendorf.de>
+Content-Type: multipart/signed; micalg=pgp-sha256; protocol="application/pgp-signature"; boundary="iNDXmi9Ivscsk7hR5FgrDabNxDuvDaLEJ"
+X-IsSubscribed: yes
+X-SW-Source: 2016-q1/txt/msg00074.txt.bz2
 
-
---wTWi5aaYRw9ix9vO
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--iNDXmi9Ivscsk7hR5FgrDabNxDuvDaLEJ
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-length: 1099
+Content-length: 1108
 
-On Feb 29 14:34, Patrick Bendorf wrote:
-> sorry, now it's based on current git head. and hopefully without formatti=
-ng
-> issues.
+On 02/29/2016 06:19 AM, patrick bendorf wrote:
+> after some discussion on irc and the list i'm resubmitting a simpler
+> version of the patch.
+> setting the locale on cygwin to 'C.UTF-8' is not needed, so i'm always
+> setting it to 'C' which is sufficient for the build process and the most
+> simple fix.
 >=20
 > /winsup/
 > * ccwrap: change locale to 'C' as ccwrap searches for literal strings
 > "search starts here" and "End of search list" which may be localized.
->=20
 > ---
->  winsup/ccwrap | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
+>  winsup/ccwrap | 1 +
+>  1 file changed, 1 insertion(+)
 >=20
 > diff --git a/winsup/ccwrap b/winsup/ccwrap
-> index 2f1fd3a..0c6a170 100755
+> index 7580e7a..0c6a170 100755
 > --- a/winsup/ccwrap
 > +++ b/winsup/ccwrap
-> @@ -12,11 +12,7 @@ if ($ARGV[0] ne '++') {
+> @@ -12,6 +12,7 @@ if ($ARGV[0] ne '++') {
 >      $cxx =3D 1;
 >  }
 >  die "$0: $ccorcxx environment variable does not exist\n" unless exists
 > $ENV{$ccorcxx};
-> -if (`uname -o` =3D~ /cygwin/i) {
-> -    $ENV{'LANG'} =3D 'C.UTF-8';
-> -} else {
-> -    $ENV{'LANG'} =3D 'C';
-> -}
 > +$ENV{'LANG'} =3D 'C';
->  my @compiler =3D split ' ', $ENV{$ccorcxx};
->  if ("@ARGV" !~ / -nostdinc/o) {
->      my $fd;
-> --
-> 2.7.0
 
-Patch applied.
-
-
-Thanks,
-Corinna
+This won't work if I have LC_ALL set in my environment.  If you want to
+force the locale, you want to set LC_ALL (highest priority), not LANG
+(lowest priority).
 
 --=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
+Eric Blake   eblake redhat com    +1-919-301-3266
+Libvirt virtualization library http://libvirt.org
 
---wTWi5aaYRw9ix9vO
+
+--iNDXmi9Ivscsk7hR5FgrDabNxDuvDaLEJ
 Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+Content-length: 604
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v2
+Comment: Public key at http://people.redhat.com/eblake/eblake.gpg
+Comment: Using GnuPG with Thunderbird - http://www.enigmail.net/
 
-iQIcBAEBCAAGBQJW1EtfAAoJEPU2Bp2uRE+gRoEP/RyFSHvcjpdvEW7Y9nVToHg1
-Xh7jFHN++fk+aaUiKtwQhDHz93UeHiC0FrWiAhVn6XZKWLWUiEXUEAbAwtiSHgk9
-qmxEUO4ZovhnawQp6y7hqgdsIopIjGj51NWLL3gYY7JwbaDzc+I80iQ7ew/CIdi4
-UyW4vXiZstgn9mCnb01mrDKtNsxJhTCNwbsV8t9p4rDk+r2c1wnxlqxc/Y/hLJPj
-XED9zuKfMkMYVW71RFYq06fAt9871JQAacC5Lv+LENJmWwQwDkHpMxMh9+OURDF/
-uQCbaX7tKwx5rBy36Az9Xh/CDVuWwqrwBBSrKMsG/2wP7wcjoD3Z/WwYo/HqgpXC
-iFYKIA2Bdy001ROGuEz7OCj2l4pKXZb/P91Yh8wJIy0EI+XBRF94VLnTD6/vKKZ+
-c/3YUAGDYuVfyuyxHIYyg1i4Mig07usL6Fj0oNB6SMKATUl/HsiNna8UY81nQm4c
-D0xGTfiX3TbTRWWJ0rWAzuMDlgnIkITLUhu7uzy3CVoS6JdkXNdKCoIpY1STT/FT
-elX4TjOaRraWwZmvm45RVXkehLuIeDYDvogY45YNh0nT22Eg4/K+r5TR7KdNvW1+
-Jaj/QUaLfukvN75BlHIeDvl3Fc99xgcxyDlvUb9kgRFMWKoMZiX2QeUID/wCCoYr
-QqyCsfDC1vJxmrfbuBOM
-=GVSX
+iQEcBAEBCAAGBQJW1GamAAoJEKeha0olJ0NqQUQH/163QKLa79LlRoeRj+AhSnU9
+5LR84Mm1yGIOv/p8wQD+KZuhU+COYo7gMLY0RaOeEeeh0NW608OWSUn0rzLT6uNc
+2vlYhNQprgi0tRFULnteqbxg1dPJ0L+x+odneZu0yenOmWgU474Yw4oQSK4on3PC
+44K8SOguAtQfVVju0DgTKMw7hjqFWAiLzuoP+VT/zz5cpCtv8EoAYMLXuthJ1sjh
+5AEU+JMTYmc9fwykPfxkjnDlyzlhSgAEYrYs5ORHhbnC8CCLnOn0HRQOXmH5RZ7v
+653tIsaU4D0687k/+t6jAHS0RFpx20MxU5ZAKd3RGNZHYB8czxoZghODN2oXSX8=
+=ASfl
 -----END PGP SIGNATURE-----
 
---wTWi5aaYRw9ix9vO--
+--iNDXmi9Ivscsk7hR5FgrDabNxDuvDaLEJ--
