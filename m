@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8403-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 31799 invoked by alias); 15 Mar 2016 10:04:55 -0000
+Return-Path: <cygwin-patches-return-8404-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 97482 invoked by alias); 15 Mar 2016 10:55:53 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,86 +9,142 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 31786 invoked by uid 89); 15 Mar 2016 10:04:53 -0000
+Received: (qmail 97441 invoked by uid 89); 15 Mar 2016 10:55:52 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-96.6 required=5.0 tests=BAYES_00,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_PBL,RDNS_DYNAMIC,USER_IN_WHITELIST autolearn=no version=3.3.2 spammy=HX-Envelope-From:sk:corinna, ACK, H*R:U*cygwin-patches, H*R:D*cygwin.com
-X-HELO: calimero.vinschen.de
-Received: from ipbcc0d020.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.208.32) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 15 Mar 2016 10:04:52 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 6E774A80527; Tue, 15 Mar 2016 11:04:50 +0100 (CET)
-Date: Tue, 15 Mar 2016 10:04:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: define byteswap.h inlines as macros
-Message-ID: <20160315100450.GA3650@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1458011636-8548-1-git-send-email-yselkowi@redhat.com> <20160315090349.GA7819@calimero.vinschen.de> <56E7D285.7090800@cygwin.com> <20160315092214.GA24361@calimero.vinschen.de> <56E7D8D5.1080205@cygwin.com>
+X-Spam-SWARE-Status: No, score=-2.6 required=5.0 tests=BAYES_00,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.2 spammy=HTo:U*cygwin-patches, H*Ad:U*cygwin-patches
+X-HELO: mail-lb0-f171.google.com
+Received: from mail-lb0-f171.google.com (HELO mail-lb0-f171.google.com) (209.85.217.171) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES128-GCM-SHA256 encrypted) ESMTPS; Tue, 15 Mar 2016 10:55:50 +0000
+Received: by mail-lb0-f171.google.com with SMTP id bc4so17160328lbc.2        for <cygwin-patches@cygwin.com>; Tue, 15 Mar 2016 03:55:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20130820;        h=x-gm-message-state:mime-version:in-reply-to:references:date         :message-id:subject:from:to;        bh=iL6tWBdsLlZoyieAH4ffYql76oprApcPnCkZKK8uzdk=;        b=WlOqAtTRRUz3KHM2gyUXf3/huhcUZbchPh0DHmcC2HeKhLJ9RQDCbYm/TlYnEnmjqq         QgAofaSSCW3/FDrHKfrNInKJwzv3QzqcuDc5huG4/yTiAQ67iM8wKi2gElHPTMkDLgkJ         DunvZB0YEag5Dl4bfXuDK9ZtCNLXdMhhZo3sz8qf6iB1XfH1ZZwfVmuxEwfoD9QaxGZ6         v8ufAI4VAcqQNjYUwSsTfuHWjefl7b58HjFzuVizfg1FboQiLLJplGk8NPJJNQd+3NGd         Xw70I9+hQ6EoTOLG+/A5NRWLO1zhyySUEZf9oDk0N9AnDu6mKeqxJexMps6k0Lp9a7l0         WMxA==
+X-Gm-Message-State: AD7BkJIXFelg7q4TxZYrMIjlqjjwLYXodxP449HOosAzWxO03pZhGYKUv5Xtdi4JwzeKp9YCY8/HyZnvbjUl/g==
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="pWyiEgJYm5f9v55/"
-Content-Disposition: inline
-In-Reply-To: <56E7D8D5.1080205@cygwin.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-SW-Source: 2016-q1/txt/msg00109.txt.bz2
+X-Received: by 10.25.35.87 with SMTP id j84mr9840127lfj.119.1458039346826; Tue, 15 Mar 2016 03:55:46 -0700 (PDT)
+Received: by 10.25.205.82 with HTTP; Tue, 15 Mar 2016 03:55:46 -0700 (PDT)
+In-Reply-To: <1458011636-8548-1-git-send-email-yselkowi@redhat.com>
+References: <1458011636-8548-1-git-send-email-yselkowi@redhat.com>
+Date: Tue, 15 Mar 2016 10:55:00 -0000
+Message-ID: <CAKw7uVg7QZyVJCO0miU1HXwn6PF-8yxSwzMn7s_t6CkUb2ts5w@mail.gmail.com>
+Subject: Re: [PATCH] Cygwin: define byteswap.h inlines as macros
+From: =?UTF-8?Q?V=C3=A1clav_Haisman?= <vhaisman@gmail.com>
+To: cygwin-patches@cygwin.com
+Content-Type: text/plain; charset=UTF-8
+X-IsSubscribed: yes
+X-SW-Source: 2016-q1/txt/msg00110.txt.bz2
+
+On 15 March 2016 at 04:13, Yaakov Selkowitz <yselkowi@redhat.com> wrote:
+> The bswap_* "functions" are macros in glibc, so they may be tested for
+> by the preprocessor (e.g. #ifdef bswap_16).
+>
+> Signed-off-by: Yaakov Selkowitz <yselkowi@redhat.com>
+> ---
+>  winsup/cygwin/include/byteswap.h | 14 +++++++++-----
+>  1 file changed, 9 insertions(+), 5 deletions(-)
+>
+> diff --git a/winsup/cygwin/include/byteswap.h b/winsup/cygwin/include/byteswap.h
+> index cd5a726..9f73c5a 100644
+> --- a/winsup/cygwin/include/byteswap.h
+> +++ b/winsup/cygwin/include/byteswap.h
+> @@ -16,23 +16,27 @@ extern "C" {
+>  #endif
+>
+>  static __inline unsigned short
+> -bswap_16 (unsigned short __x)
+> +__bswap_16 (unsigned short __x)
+>  {
+>    return (__x >> 8) | (__x << 8);
+>  }
+>
+>  static __inline unsigned int
+> -bswap_32 (unsigned int __x)
+> +__bswap_32 (unsigned int __x)
+>  {
+> -  return (bswap_16 (__x & 0xffff) << 16) | (bswap_16 (__x >> 16));
+> +  return (__bswap_16 (__x & 0xffff) << 16) | (__bswap_16 (__x >> 16));
+>  }
+>
+>  static __inline unsigned long long
+> -bswap_64 (unsigned long long __x)
+> +__bswap_64 (unsigned long long __x)
+>  {
+> -  return (((unsigned long long) bswap_32 (__x & 0xffffffffull)) << 32) | (bswap_32 (__x >> 32));
+> +  return (((unsigned long long) __bswap_32 (__x & 0xffffffffull)) << 32) | (__bswap_32 (__x >> 32));
+>  }
+>
+> +#define bswap_16(x) __bswap_16(x)
+> +#define bswap_32(x) __bswap_32(x)
+> +#define bswap_64(x) __bswap_64(x)
+> +
+>  #ifdef __cplusplus
+>  }
+>  #endif
+> --
+> 2.7.0
+>
+
+Would it not be better to leave the original functions as they were
+and simply use these defines?
+
+#define bswap_16 bswap_16
+#define bswap_32 bswap_32
+#define bswap_64 bswap_64
+
+I believe this is valid C and C++. Untested.
+
+-- 
+VH
+
+On 15 March 2016 at 04:13, Yaakov Selkowitz <yselkowi@redhat.com> wrote:
+> The bswap_* "functions" are macros in glibc, so they may be tested for
+> by the preprocessor (e.g. #ifdef bswap_16).
+>
+> Signed-off-by: Yaakov Selkowitz <yselkowi@redhat.com>
+> ---
+>  winsup/cygwin/include/byteswap.h | 14 +++++++++-----
+>  1 file changed, 9 insertions(+), 5 deletions(-)
+>
+> diff --git a/winsup/cygwin/include/byteswap.h b/winsup/cygwin/include/byteswap.h
+> index cd5a726..9f73c5a 100644
+> --- a/winsup/cygwin/include/byteswap.h
+> +++ b/winsup/cygwin/include/byteswap.h
+> @@ -16,23 +16,27 @@ extern "C" {
+>  #endif
+>
+>  static __inline unsigned short
+> -bswap_16 (unsigned short __x)
+> +__bswap_16 (unsigned short __x)
+>  {
+>    return (__x >> 8) | (__x << 8);
+>  }
+>
+>  static __inline unsigned int
+> -bswap_32 (unsigned int __x)
+> +__bswap_32 (unsigned int __x)
+>  {
+> -  return (bswap_16 (__x & 0xffff) << 16) | (bswap_16 (__x >> 16));
+> +  return (__bswap_16 (__x & 0xffff) << 16) | (__bswap_16 (__x >> 16));
+>  }
+>
+>  static __inline unsigned long long
+> -bswap_64 (unsigned long long __x)
+> +__bswap_64 (unsigned long long __x)
+>  {
+> -  return (((unsigned long long) bswap_32 (__x & 0xffffffffull)) << 32) | (bswap_32 (__x >> 32));
+> +  return (((unsigned long long) __bswap_32 (__x & 0xffffffffull)) << 32) | (__bswap_32 (__x >> 32));
+>  }
+>
+> +#define bswap_16(x) __bswap_16(x)
+> +#define bswap_32(x) __bswap_32(x)
+> +#define bswap_64(x) __bswap_64(x)
+> +
+>  #ifdef __cplusplus
+>  }
+>  #endif
+> --
+> 2.7.0
+>
 
 
---pWyiEgJYm5f9v55/
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1041
 
-On Mar 15 04:41, Yaakov Selkowitz wrote:
-> On 2016-03-15 04:22, Corinna Vinschen wrote:
-> >On Mar 15 04:14, Yaakov Selkowitz wrote:
-> >>On 2016-03-15 04:03, Corinna Vinschen wrote:
-> >>>On Mar 14 22:13, Yaakov Selkowitz wrote:
-> >>>>The bswap_* "functions" are macros in glibc, so they may be tested for
-> >>>>by the preprocessor (e.g. #ifdef bswap_16).
-> >>>ACK.
-> >>>
-> >>>While we're at it, what about converting the types to implicit types
-> >>>(__uint16_t, __uint32_t, __uint64_t).
-> >>
-> >>glibc uses short/int/long long for these, so I think we should leave th=
-em.
-> >
-> >bits/byteswap.h uses __uint64_t, but you're right for the smaller types.
->=20
-> I was looking at a cross-glibc, so that must be a recent change (unless
-> you're not looking at x86_64).
-
-F23 x86_64, but never mind, it's just a style issue.  Personally I'd
-prefer the explicitly sized types for clearness.
-
-
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---pWyiEgJYm5f9v55/
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJW595CAAoJEPU2Bp2uRE+gE3wP/1UYS3+sby7It8YHkSFBtXtG
-kaWtzxf+307/KjbGFCjAzdrM5nlIs5dv7Xg9n3Q1OwDtlKGgAO7VmG1ZYAsW7Tst
-MEQSm1O5mo1b2+5TjnQZVqwFgzOocsikyDHj71POW1WwO90BogltgLu8wNwlh+Po
-EMmZxm0KcthgG+AN7oRbs0Z6EOUuiiRM3RzlQ4STAf6JanvYeU6R/zKHtLWZ/u3l
-ABCGgAhtRI2K8cg8rG9lnJMN3Je75xiIEAfUJpiiQaIvkMFrUw3RN7m1/hydfe3h
-G/8qKCZvCw+FoL7lyHV5Q9lKKded0JAVxXAiSGS5GKNkSjcsQbp3Pa8TPDltrOvA
-569IALmiIVLPhCxN1qkkGi49EmLUQtgP5FloOBCXjEIPIQJZ+qa1y0XOwg6XY3PE
-gS+HaKGUiwC1H3du7eA6WBuVzPO4I/eePwpgNtq2+MYn32YnMIQpl1mcK9rPwwC5
-NLd19LI0UCMWfUcgojHv2ymNGzqza9LkpZxrblf0AmvEGQ6UKtPaMJWb+kpnyYTB
-UDnsZsSZMlZZkIJZ+Wxe/2etm1c5Xoj2aEW1WoHJLrUeellZxFsIGc+M88gez5ZA
-My2C/c/GVF+//FjY3QrofoWqIBaQqhxWJCrOBA/RgsgajbnEk5FVfDuiOiU2jdm6
-9IsD8QOwqvIFIGWkkncP
-=rT9I
------END PGP SIGNATURE-----
-
---pWyiEgJYm5f9v55/--
+-- 
+VH
