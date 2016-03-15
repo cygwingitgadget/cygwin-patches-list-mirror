@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8405-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 81252 invoked by alias); 15 Mar 2016 11:46:23 -0000
+Return-Path: <cygwin-patches-return-8406-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 102102 invoked by alias); 15 Mar 2016 13:13:32 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,130 +9,108 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 81211 invoked by uid 89); 15 Mar 2016 11:46:22 -0000
+Received: (qmail 102090 invoked by uid 89); 15 Mar 2016 13:13:32 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-96.6 required=5.0 tests=BAYES_00,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_PBL,RDNS_DYNAMIC,USER_IN_WHITELIST autolearn=no version=3.3.2 spammy=HX-Envelope-From:sk:corinna, H*R:U*cygwin-patches, H*R:D*cygwin.com, HTo:U*cygwin-patches
-X-HELO: calimero.vinschen.de
-Received: from ipbcc0d020.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.208.32) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 15 Mar 2016 11:46:19 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 18027A803FC; Tue, 15 Mar 2016 12:46:17 +0100 (CET)
-Date: Tue, 15 Mar 2016 11:46:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=0.3 required=5.0 tests=AWL,BAYES_50,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW autolearn=no version=3.3.2 spammy=Hey, HX-CTCH-RefID:0.000,recu, consistently, ssp
+X-HELO: rgout0601.bt.lon5.cpcloud.co.uk
+Received: from rgout0601.bt.lon5.cpcloud.co.uk (HELO rgout0601.bt.lon5.cpcloud.co.uk) (65.20.0.128) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 15 Mar 2016 13:13:22 +0000
+X-OWM-Source-IP: 86.179.112.186 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-CTCH-RefID: str=0001.0A090204.56E80A6E.0009,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
+X-Junkmail-Premium-Raw: score=27/50,refid=2.7.2:2016.3.15.94816:17:27.888,ip=86.179.112.186,rules=__HAS_FROM, __TO_MALFORMED_2, __TO_NO_NAME, __SUBJ_ALPHA_END, __HAS_MSGID, __SANE_MSGID, __HAS_X_MAILER, __ANY_URI, __URI_NO_WWW, BODYTEXTP_SIZE_3000_LESS, BODY_SIZE_2000_2999, __MIME_TEXT_ONLY, RDNS_GENERIC_POOLED, __URI_NS, SXL_IP_DYNAMIC[186.112.179.86.fur], HTML_00_01, HTML_00_10, BODY_SIZE_5000_LESS, RDNS_SUSP_GENERIC, RDNS_SUSP, BODY_SIZE_7000_LESS, NO_URI_HTTPS
+X-CTCH-Spam: Unknown
+Received: from localhost.localdomain (86.179.112.186) by rgout06.bt.lon5.cpcloud.co.uk (8.6.122.06) (authenticated as jonturney@btinternet.com)        id 56E19ECD008A006C; Tue, 15 Mar 2016 13:13:33 +0000
+From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: define byteswap.h inlines as macros
-Message-ID: <20160315114617.GC7819@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1458011636-8548-1-git-send-email-yselkowi@redhat.com> <CAKw7uVg7QZyVJCO0miU1HXwn6PF-8yxSwzMn7s_t6CkUb2ts5w@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="eHhjakXzOLJAF9wJ"
-Content-Disposition: inline
-In-Reply-To: <CAKw7uVg7QZyVJCO0miU1HXwn6PF-8yxSwzMn7s_t6CkUb2ts5w@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-SW-Source: 2016-q1/txt/msg00111.txt.bz2
+Cc: Jon Turney <jon.turney@dronecode.org.uk>
+Subject: [PATCH] Attempt to fix Coverity issues in ssp
+Date: Tue, 15 Mar 2016 13:13:00 -0000
+Message-Id: <1458047571-10808-1-git-send-email-jon.turney@dronecode.org.uk>
+X-SW-Source: 2016-q1/txt/msg00112.txt.bz2
 
+	* ssp.c (lookup_thread_id): Consistently check if tix is a null
+	pointer.
+	(run_program): Annotate that STATUS_BREAKPOINT falls-through to
+	STATUS_SINGLE_STEP case.
+	(main): Guard against high_pc-low_pc overflow and malloc failure.
 
---eHhjakXzOLJAF9wJ
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 2265
+Signed-off-by: Jon Turney <jon.turney@dronecode.org.uk>
+---
+ winsup/utils/ssp.c | 23 +++++++++++++++++------
+ 1 file changed, 17 insertions(+), 6 deletions(-)
 
-On Mar 15 11:55, V=C3=A1clav Haisman wrote:
-> On 15 March 2016 at 04:13, Yaakov Selkowitz <yselkowi@redhat.com> wrote:
-> > The bswap_* "functions" are macros in glibc, so they may be tested for
-> > by the preprocessor (e.g. #ifdef bswap_16).
-> >
-> > Signed-off-by: Yaakov Selkowitz <yselkowi@redhat.com>
-> > ---
-> >  winsup/cygwin/include/byteswap.h | 14 +++++++++-----
-> >  1 file changed, 9 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/winsup/cygwin/include/byteswap.h b/winsup/cygwin/include/b=
-yteswap.h
-> > index cd5a726..9f73c5a 100644
-> > --- a/winsup/cygwin/include/byteswap.h
-> > +++ b/winsup/cygwin/include/byteswap.h
-> > @@ -16,23 +16,27 @@ extern "C" {
-> >  #endif
-> >
-> >  static __inline unsigned short
-> > -bswap_16 (unsigned short __x)
-> > +__bswap_16 (unsigned short __x)
-> >  {
-> >    return (__x >> 8) | (__x << 8);
-> >  }
-> >
-> >  static __inline unsigned int
-> > -bswap_32 (unsigned int __x)
-> > +__bswap_32 (unsigned int __x)
-> >  {
-> > -  return (bswap_16 (__x & 0xffff) << 16) | (bswap_16 (__x >> 16));
-> > +  return (__bswap_16 (__x & 0xffff) << 16) | (__bswap_16 (__x >> 16));
-> >  }
-> >
-> >  static __inline unsigned long long
-> > -bswap_64 (unsigned long long __x)
-> > +__bswap_64 (unsigned long long __x)
-> >  {
-> > -  return (((unsigned long long) bswap_32 (__x & 0xffffffffull)) << 32)=
- | (bswap_32 (__x >> 32));
-> > +  return (((unsigned long long) __bswap_32 (__x & 0xffffffffull)) << 3=
-2) | (__bswap_32 (__x >> 32));
-> >  }
-> >
-> > +#define bswap_16(x) __bswap_16(x)
-> > +#define bswap_32(x) __bswap_32(x)
-> > +#define bswap_64(x) __bswap_64(x)
-> > +
-> >  #ifdef __cplusplus
-> >  }
-> >  #endif
-> > --
-> > 2.7.0
-> >
->=20
-> Would it not be better to leave the original functions as they were
-> and simply use these defines?
->=20
-> #define bswap_16 bswap_16
-> #define bswap_32 bswap_32
-> #define bswap_64 bswap_64
->=20
-> I believe this is valid C and C++. Untested.
-
-Yes, that would work.  Glibc defines the inlined functions with leading
-underscores as well, though.  Maybe we should do the same because some
-strange application wants to use the underscored versions?
-
-
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---eHhjakXzOLJAF9wJ
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJW5/YIAAoJEPU2Bp2uRE+gucAP/jFXzZtOpABXklFB/75jTs3w
-NlPkEw9fv0+HFLisgrAwJdS7E5ZpjEN3Cpz3kDviKXIb0VR4KIrbYJ2f28G3jJop
-35zwORtYoV9pMNJuCPdV5InRUB7bUQxT04fHb/AViNvPc+PbTqZq+b4kZ2J5IYz1
-AfeCPgPHGjirN8HWjkgdfmPuITyONYx9s0w2j5CJeklcdK0Z7vPMXvxxb3HqQ+fg
-rS+kw++jp33PEp2KlxKeFfXBekj2PKNB/o0VYLm4jKrPT+BBHV9lVQrd0heKIem8
-qbuBPL0hxEL/NtXN8oYrNsfLC5tvwme8TXfcOuq+mpszwuBbew2znWMZWzpd7IRj
-ks4hXgs0wq2CxlOFr5JUH24woKBOabPlvLLQ/lHooGMBni6FEDzeany9Ch1KtaHi
-7MUFAC1+d0xjx5jhEvJq1STn07WG8+xCq10ePUOL5RpX1dkIE4WE7hshLIngxdpu
-jrKiX/EsP2TzzjH1gxV5yFTngxHn5739nhKhqoJNRDNI6eIJCDjt97KNf5q675JF
-qOU/aKJohK1HOaC9e6P7AMN9gu0xw6y4xttgntLjh18KozRICXEzDd0rD4vBEqxi
-ZvQgSgju3oys26now3c4Sdri0oFc94PFoAdIqWiZcUsWVQRTeCRxVNp9eUHkhgcb
-rtpoVKLH++Ea7ae/saAt
-=RGzl
------END PGP SIGNATURE-----
-
---eHhjakXzOLJAF9wJ--
+diff --git a/winsup/utils/ssp.c b/winsup/utils/ssp.c
+index c9165f3..0bca544 100644
+--- a/winsup/utils/ssp.c
++++ b/winsup/utils/ssp.c
+@@ -182,7 +182,10 @@ static HANDLE
+ lookup_thread_id (DWORD threadId, int *tix)
+ {
+   int i;
+-  *tix = 0;
++
++  if (tix)
++    *tix = 0;
++
+   for (i=0; i<num_active_threads; i++)
+     if (active_thread_ids[i] == threadId)
+       {
+@@ -463,6 +466,7 @@ run_program (char *cmdline)
+ 		      thread_return_address[tix] = rv;
+ 		}
+ 	      set_step_threads (event.dwThreadId, stepping_enabled);
++	      /* fall-through */
+ 	    case STATUS_SINGLE_STEP:
+ 	      opcode_count++;
+ 	      pc = (CONTEXT_REG)event.u.Exception.ExceptionRecord.ExceptionAddress;
+@@ -854,6 +858,7 @@ main (int argc, char **argv)
+   int c, i;
+   int total_pcount = 0, total_scount = 0;
+   FILE *gmon;
++  ssize_t range;
+ 
+   setbuf (stdout, 0);
+ 
+@@ -906,14 +911,20 @@ main (int argc, char **argv)
+   sscanf (argv[optind++], ADDR_SSCANF_FMT, &low_pc);
+   sscanf (argv[optind++], ADDR_SSCANF_FMT, &high_pc);
+ 
+-  if (low_pc > high_pc-8)
++  range = high_pc - low_pc;
++  if (range <= 0)
+     {
+       fprintf (stderr, "Hey, low_pc must be lower than high_pc\n");
+       exit (1);
+     }
+ 
+-  hits = (HISTCOUNTER *)malloc (high_pc-low_pc+4);
+-  memset (hits, 0, high_pc-low_pc+4);
++  hits = (HISTCOUNTER *)malloc (range+4);
++  if (!hits)
++    {
++      fprintf (stderr, "Ouch, malloc failed\n");
++      exit (1);
++    }
++  memset (hits, 0, range+4);
+ 
+   fprintf (stderr, "prun: [" CONTEXT_REG_FMT "," CONTEXT_REG_FMT "] Running '%s'\n",
+ 	  low_pc, high_pc, argv[optind]);
+@@ -922,13 +933,13 @@ main (int argc, char **argv)
+ 
+   hdr.lpc = low_pc;
+   hdr.hpc = high_pc;
+-  hdr.ncnt = high_pc-low_pc + sizeof (hdr);
++  hdr.ncnt = range + sizeof (hdr);
+   hdr.version = GMONVERSION;
+   hdr.profrate = 100;
+ 
+   gmon = fopen ("gmon.out", "wb");
+   fwrite (&hdr, 1, sizeof (hdr), gmon);
+-  fwrite (hits, 1, high_pc-low_pc, gmon);
++  fwrite (hits, 1, range, gmon);
+   write_call_edges (gmon);
+   fclose (gmon);
+ 
+-- 
+2.7.0
