@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8414-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 1286 invoked by alias); 17 Mar 2016 07:59:57 -0000
+Return-Path: <cygwin-patches-return-8415-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 78550 invoked by alias); 17 Mar 2016 09:29:08 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,102 +9,53 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 1249 invoked by uid 89); 17 Mar 2016 07:59:57 -0000
+Received: (qmail 78195 invoked by uid 89); 17 Mar 2016 09:29:07 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-87.4 required=5.0 tests=BAYES_50,GARBLED_SUBJECT,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_PBL,RDNS_DYNAMIC,USER_IN_WHITELIST autolearn=no version=3.3.2 spammy=schrieb, separated, Wolff, wolff
-X-HELO: calimero.vinschen.de
-Received: from ipbcc0d020.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.208.32) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 17 Mar 2016 07:59:55 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id AE0FBA806B3; Thu, 17 Mar 2016 08:59:53 +0100 (CET)
-Date: Thu, 17 Mar 2016 07:59:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,SPF_PASS,TVD_RCVD_IP autolearn=ham version=3.3.2 spammy=intermediate, HTo:U*cygwin-patches
+X-HELO: glup.org
+Received: from 216-15-121-172.c3-0.smr-ubr2.sbo-smr.ma.static.cable.rcn.com (HELO glup.org) (216.15.121.172) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-SHA encrypted) ESMTPS; Thu, 17 Mar 2016 09:29:04 +0000
+Received: from [IPv6:2001:4830:1141:1:15:ab25:382e:7608] (unknown [IPv6:2001:4830:1141:1:15:ab25:382e:7608])	by glup.org (Postfix) with ESMTPSA id BD9D7854C4;	Thu, 17 Mar 2016 05:29:01 -0400 (EDT)
+Authentication-Results: glup.org; dmarc=none header.from=glup.org
+Subject: Re: [PATCH] Re: Cygwin select() issues and improvements
 To: cygwin-patches@cygwin.com
-Subject: Re: Console requested =?utf-8?Q?reports_?= =?utf-8?B?4oCT?= Re: [ANNOUNCEMENT] TEST RELEASE: Cygwin 2.5.0-0.6
-Message-ID: <20160317075953.GB14874@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <announce.20160312232737.GA25791@calimero.vinschen.de> <56E80B4B.5040106@towo.net> <20160315134655.GC4177@calimero.vinschen.de> <56E88137.9020307@towo.net> <20160316092816.GB28452@calimero.vinschen.de> <56E9D974.4030804@towo.net>
+References: <56C03624.1030703@glup.org> <20160215125703.GE8374@calimero.vinschen.de> <56C66DDE.9070509@glup.org> <20160219104641.GA5574@calimero.vinschen.de> <20160304085843.GB8296@calimero.vinschen.de> <56E5DD8D.7060302@glup.org> <20160314101257.GE3567@calimero.vinschen.de>
+From: John Hood <cgull@glup.org>
+Message-ID: <56EA78DC.3040201@glup.org>
+Date: Thu, 17 Mar 2016 09:29:00 -0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101 Thunderbird/38.5.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="A6N2fC+uXW/VQSAv"
-Content-Disposition: inline
-In-Reply-To: <56E9D974.4030804@towo.net>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-SW-Source: 2016-q1/txt/msg00120.txt.bz2
+In-Reply-To: <20160314101257.GE3567@calimero.vinschen.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2016-q1/txt/msg00121.txt.bz2
 
+On 3/14/2016 6:12 AM, Corinna Vinschen wrote:
+> Hi John,
+>
+> On Mar 13 17:37, john hood wrote:
+>> On 3/4/16 3:58 AM, Corinna Vinschen wrote:
+>>> John,
+>>>
+>>>
+>>> Ping?  I'd be interested to get your patches into Cygwin.  select
+>>> really needs some kicking :)
+>> Sorry to be so slow responding.  Here's a rebased, squashed,
+>> changelog-ified patch,
+> Thank you.  Uhm... I just don't understand why you squashed them into a
+> single big patch.  Multiple independent smaller patches are better to
+> handle, especially when looking for potential bugs later.
+>
+> Would you mind terribly to split them again?
+i just looked at this, but I'm going to leave the patch as a single 
+patch.  The patches in the original series are not completely 
+independent of each other, it has a bug or two in the middle, and also 
+some reversed edits.  The endpoint is known tested and working, but some 
+of the intermediate commits aren't that well tested.  It *is* too big as 
+a single commit-- but I think that's better than the original patch 
+series from my development work, which I never intended to submit as-is 
+anyway.
 
---A6N2fC+uXW/VQSAv
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1868
+Regards,
 
-On Mar 16 23:08, Thomas Wolff wrote:
-> Am 16.03.2016 um 10:28 schrieb Corinna Vinschen:
-> >On Mar 15 22:40, Thomas Wolff wrote:
-> >>Hi Corinna,
-> >>here is my updated patch.
-> >>>Changelog (old format):
-> >>>Just drop this line from the comment, please.  If you send the mail
-> >>>via git format-patch/git send-email I can simply apply it with git am
-> >>>including the entire text in the git log.
-> >>I hope the comment format is OK now, I cannot currently use git format-=
-patch
-> >>due to missing setup.
-> >>
-> >>Make requested console reports work, cf https://cygwin.com/ml/cygwin-pa=
-tches/2012-q3/msg00019.html
-> >>
-> >>This enables the following ESC sequences:
-> >>ESC[c sends primary device attributes
-> >>ESC[>c sends secondary device attributes
-> >>ESC[6n sends cursor position report
-> >>
-> >>     * fhandler.h (class dev_console): Add console read-ahead buffer.
-> >>     (class fhandler_console): Add peek function for it (for select).
-> >>     * fhandler_console.cc (fhandler_console::setup): Init buffer.
-> >>     (fhandler_console::read): Check console read-aheader buffer.
-> >>     (fhandler_console::char_command): Put responses to terminal
-> >>     requests (device status and cursor position reports) into
-> >>     common console buffer (shared between CONOUT/CONIN)
-> >>     instead of fhandler buffer (separated).
-> >>     * select.cc (peek_console): Check console read-ahead buffer.
-> >Patch applied.  Do you have a short text for the release message?
-> - Enabled console reports requested by escape sequences:
->   Requesting primary and secondary device attributes,
->   requesting cursor position report;
->   see https://cygwin.com/ml/cygwin-patches/2012-q3/msg00019.html
-
-Added.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---A6N2fC+uXW/VQSAv
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJW6mP5AAoJEPU2Bp2uRE+gYLIP/jSXGPnkH+rLpQR2S6TorNrU
-wOxxSNtYQnMuJF1f10USiGQ+bfQr1E67HBYwKva7Tq/mJuW9sYpg4p5QyUUMBvFV
-4Ha0wAqr5KSC9bl89DKiSgHGPB2UFGTBzvDwJKg4nfwwavEcM+Zyll5yYRiuNrrF
-1jH1rbmLQ98X1nRg+MaLmml1MujtVWGcWQwCOQoN6BmeBldOu2trDK+rtlrzR2MW
-ND4RQrRZQ2AoCqJTYnVyCq5UZKYk4Sdqbj/+27h/DjAZ8PLvf7Ac4RL37F/KtsPV
-bcDS8rhoYozWFmsRBlMk0uyzSQHk4yr6E9+o1GWgX1PB2mQZb/H+diF/kS3CmqUt
-T+t4jX65M3oc6f/fqjSwf/fjIIlTdueF51PWw2t9VMgrRcOBd8yGp+IjQwezQYNd
-IT5Y/V0wKgUBFg/1WV+2KEg7m2pXwi5SXJ2rmbpNw3Jhuw1JX+jsuLTiRmo/T9xR
-ljWF3+NI3Zq1GVxPDlmQ80MwZ+vHPT0JQsfd7JdS9ZFsMZv+A/Qje3cc77fxda0V
-DVm2R/cMUvCKXUrFCKbGrn3BVgEka1tYArejoZghW18UhthQ9XgBxT+MJWPUbxZt
-rog+BakBtYF0q49IyAopgLpGvC88TkpFA8UQr9ZyIjVBg3d9xsQVZ0HIbG0K5vPJ
-0xC/phbSyJ9xILakhCAo
-=TbVI
------END PGP SIGNATURE-----
-
---A6N2fC+uXW/VQSAv--
+   --jh
