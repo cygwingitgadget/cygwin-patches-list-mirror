@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8416-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 67345 invoked by alias); 17 Mar 2016 16:37:19 -0000
+Return-Path: <cygwin-patches-return-8421-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 63440 invoked by alias); 19 Mar 2016 17:46:19 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,90 +9,52 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 66736 invoked by uid 89); 17 Mar 2016 16:37:18 -0000
+Received: (qmail 63249 invoked by uid 89); 19 Mar 2016 17:46:18 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RP_MATCHES_RCVD,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=Hx-languages-length:1637, friend, HTo:U*cygwin-patches, perfect
-X-HELO: mx1.redhat.com
-Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-GCM-SHA384 encrypted) ESMTPS; Thu, 17 Mar 2016 16:37:08 +0000
-Received: from int-mx13.intmail.prod.int.phx2.redhat.com (int-mx13.intmail.prod.int.phx2.redhat.com [10.5.11.26])	by mx1.redhat.com (Postfix) with ESMTPS id 47784711F7	for <cygwin-patches@cygwin.com>; Thu, 17 Mar 2016 16:37:07 +0000 (UTC)
-Received: from [10.3.113.69] (ovpn-113-69.phx2.redhat.com [10.3.113.69])	by int-mx13.intmail.prod.int.phx2.redhat.com (8.14.4/8.14.4) with ESMTP id u2HGb6rB009540	for <cygwin-patches@cygwin.com>; Thu, 17 Mar 2016 12:37:07 -0400
-Subject: Re: [PATCH] Re: Cygwin select() issues and improvements
+X-Spam-SWARE-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.2 spammy=HTo:U*cygwin-patches
+X-HELO: mail-qk0-f194.google.com
+Received: from mail-qk0-f194.google.com (HELO mail-qk0-f194.google.com) (209.85.220.194) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES128-GCM-SHA256 encrypted) ESMTPS; Sat, 19 Mar 2016 17:46:17 +0000
+Received: by mail-qk0-f194.google.com with SMTP id s5so4937718qkd.2        for <cygwin-patches@cygwin.com>; Sat, 19 Mar 2016 10:46:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20130820;        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to         :references;        bh=3HtdfIiQ8JGNNXXi8I9pmOFK6zFqDwPloGXBDNOoCaE=;        b=bRKgz8lrAKfvN02rwn/3tIEWh/eHJS8T1mT+w7u4IzW7QSSQXtCXzKZ+xZdLwCZEZ1         xW7X5J3zRQGmsqxA7aKlX6j941Hso2haN9zoelHm6GZeB9iMm2O/JtSd+22MWUDNmT2b         4wD9WlQ92/3vlB+rJ+HZiiqgAD1HDRWPxDeYTjmBKh3k5RO6sfgukuZGDTka0qJ5roGb         6dmVl3YwRfRkD5G30jqOa6ftYKpjneTZyZVZIP2f2iL4riMXMluCzfyDKiVSkyc7n+Vo         C4LLwPFWzPT+bPI7niKBuozmw5r2gD/IY/xqclR7abkdEL8U2yZugHmOrOZQ0ESmSdSE         5AsQ==
+X-Gm-Message-State: AD7BkJKCY2GpKs6XwWMT3/Lm/DEaRM32y3aLUC+zAuxv+uOOnRtWnM7CHqeGdf4tmCp/lA==
+X-Received: by 10.55.71.195 with SMTP id u186mr30569866qka.38.1458409575168;        Sat, 19 Mar 2016 10:46:15 -0700 (PDT)
+Received: from bronx.local.pefoley.com (foleype-1-pt.tunnel.tserv13.ash1.ipv6.he.net. [2001:470:7:ee7::2])        by smtp.gmail.com with ESMTPSA id 78sm8582720qgt.1.2016.03.19.10.46.14        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);        Sat, 19 Mar 2016 10:46:14 -0700 (PDT)
+From: Peter Foley <pefoley2@pefoley.com>
 To: cygwin-patches@cygwin.com
-References: <56C03624.1030703@glup.org> <20160215125703.GE8374@calimero.vinschen.de> <56C66DDE.9070509@glup.org> <20160219104641.GA5574@calimero.vinschen.de> <20160304085843.GB8296@calimero.vinschen.de> <56E5DD8D.7060302@glup.org> <20160314101257.GE3567@calimero.vinschen.de> <56EA78DC.3040201@glup.org>
-From: Eric Blake <eblake@redhat.com>
-Openpgp: url=http://people.redhat.com/eblake/eblake.gpg
-Message-ID: <56EADD32.4010802@redhat.com>
-Date: Thu, 17 Mar 2016 16:37:00 -0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101 Thunderbird/38.6.0
-MIME-Version: 1.0
-In-Reply-To: <56EA78DC.3040201@glup.org>
-Content-Type: multipart/signed; micalg=pgp-sha256; protocol="application/pgp-signature"; boundary="vUVWKAUnDKOcktkXpsFGxqotJA7XDF4Mb"
+Cc: Peter Foley <pefoley2@pefoley.com>
+Subject: [PATCH 05/11] A pointer to a pointer is nonnull.
+Date: Sat, 19 Mar 2016 17:46:00 -0000
+Message-Id: <1458409557-13156-5-git-send-email-pefoley2@pefoley.com>
+In-Reply-To: <1458409557-13156-1-git-send-email-pefoley2@pefoley.com>
+References: <1458409557-13156-1-git-send-email-pefoley2@pefoley.com>
 X-IsSubscribed: yes
-X-SW-Source: 2016-q1/txt/msg00122.txt.bz2
+X-SW-Source: 2016-q1/txt/msg00124.txt.bz2
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---vUVWKAUnDKOcktkXpsFGxqotJA7XDF4Mb
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1598
+GCC 6.0+ can assert that this argument is nonnull.
+Remove the unnecessary check to fix a warning.
 
-On 03/17/2016 03:29 AM, John Hood wrote:
-> On 3/14/2016 6:12 AM, Corinna Vinschen wrote:
->> Hi John,
->>
->> On Mar 13 17:37, john hood wrote:
->>> On 3/4/16 3:58 AM, Corinna Vinschen wrote:
->>>> John,
->>>>
->>>>
->>>> Ping?  I'd be interested to get your patches into Cygwin.  select
->>>> really needs some kicking :)
->>> Sorry to be so slow responding.  Here's a rebased, squashed,
->>> changelog-ified patch,
->> Thank you.  Uhm... I just don't understand why you squashed them into a
->> single big patch.  Multiple independent smaller patches are better to
->> handle, especially when looking for potential bugs later.
->>
->> Would you mind terribly to split them again?
-> i just looked at this, but I'm going to leave the patch as a single
-> patch.  The patches in the original series are not completely
-> independent of each other, it has a bug or two in the middle, and also
-> some reversed edits.  The endpoint is known tested and working, but some
-> of the intermediate commits aren't that well tested.  It *is* too big as
-> a single commit-- but I think that's better than the original patch
-> series from my development work, which I never intended to submit as-is
-> anyway.
+winsup/cygwin/ChangeLog
+malloc_wrapper.cc (posix_memalign): Remove always true nonnull check.
 
-But that's where 'git rebase' is your friend. Just because your original
-series wasn't perfect doesn't mean you can avoid cleaning things up and
-posting an improved version.  The goal of patch submissions is to make
-the reviewer's job easier, even if it makes it longer for you to post
-the perfect patch series.
+Signed-off-by: Peter Foley <pefoley2@pefoley.com>
+---
+ winsup/cygwin/malloc_wrapper.cc | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---=20
-Eric Blake   eblake redhat com    +1-919-301-3266
-Libvirt virtualization library http://libvirt.org
-
-
---vUVWKAUnDKOcktkXpsFGxqotJA7XDF4Mb
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-Content-length: 604
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-Comment: Public key at http://people.redhat.com/eblake/eblake.gpg
-Comment: Using GnuPG with Thunderbird - http://www.enigmail.net/
-
-iQEcBAEBCAAGBQJW6t0yAAoJEKeha0olJ0Nq8xgIAJa6nbrSva6tfIkLZa9sR9eR
-ewsMaxIjhOq9jJaddBPzFncMhNvBCn+s23v+Akn98aUM5a3q0Ee3RIVTYXKvmTLG
-9gEK0HmTMjRTkGp6WKmOWdUtKhmF1Kopva8wtz7iBQFhrlijTVlFp4moUgJFHGVx
-t4Z89twL81/xirpG6gRMterbNpHM4E2co6zXXS7LbF2L+Kcaxu1Blm33ufBN2SmP
-DlD2yAiorr3ZljHQjBema35V4xXsuVniXB7hma3/ic/IecX1aGwBvCMJBnUGhK+k
-WiOw/g9tlLb05l0TUWBBKWpmtwug8NmFUDqJq06qqDY0NDDBF1zUsTJAP9Rc1eY=
-=dgjn
------END PGP SIGNATURE-----
-
---vUVWKAUnDKOcktkXpsFGxqotJA7XDF4Mb--
+diff --git a/winsup/cygwin/malloc_wrapper.cc b/winsup/cygwin/malloc_wrapper.cc
+index 43b8144..0db5de8 100644
+--- a/winsup/cygwin/malloc_wrapper.cc
++++ b/winsup/cygwin/malloc_wrapper.cc
+@@ -126,8 +126,7 @@ posix_memalign (void **memptr, size_t alignment, size_t bytes)
+   __malloc_unlock ();
+   if (!res)
+     return ENOMEM;
+-  if (memptr)
+-    *memptr = res;
++  *memptr = res;
+   return 0;
+ }
+ 
+-- 
+2.7.4
