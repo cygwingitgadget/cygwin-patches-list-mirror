@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8433-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 124097 invoked by alias); 20 Mar 2016 11:03:23 -0000
+Return-Path: <cygwin-patches-return-8434-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 64711 invoked by alias); 20 Mar 2016 11:16:11 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,58 +9,47 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 124078 invoked by uid 89); 20 Mar 2016 11:03:22 -0000
+Received: (qmail 64697 invoked by uid 89); 20 Mar 2016 11:16:11 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-6.6 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_PBL,RDNS_DYNAMIC autolearn=ham version=3.3.2 spammy=H*R:D*cygwin.com, HTo:U*cygwin-patches, H*Ad:U*cygwin-patches
+X-Spam-SWARE-Status: No, score=-6.6 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_PBL,RDNS_DYNAMIC autolearn=ham version=3.3.2 spammy=earth, Hx-languages-length:588, H*R:D*cygwin.com, HTo:U*cygwin-patches
 X-HELO: calimero.vinschen.de
-Received: from ipbcc0d020.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.208.32) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 20 Mar 2016 11:03:21 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 0D984A805AC; Sun, 20 Mar 2016 12:03:19 +0100 (CET)
-Date: Sun, 20 Mar 2016 11:03:00 -0000
+Received: from ipbcc0d020.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.208.32) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 20 Mar 2016 11:16:00 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id D555EA805AC; Sun, 20 Mar 2016 12:15:58 +0100 (CET)
+Date: Sun, 20 Mar 2016 11:16:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 04/11] Remove misleading indentation
-Message-ID: <20160320110319.GF25241@calimero.vinschen.de>
+Subject: Re: [PATCH 05/11] A pointer to a pointer is nonnull.
+Message-ID: <20160320111558.GG25241@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1458409557-13156-1-git-send-email-pefoley2@pefoley.com> <1458409557-13156-4-git-send-email-pefoley2@pefoley.com>
+References: <1458409557-13156-1-git-send-email-pefoley2@pefoley.com> <1458409557-13156-5-git-send-email-pefoley2@pefoley.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="XStn23h1fwudRqtG"
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="3607uds81ZQvwCD0"
 Content-Disposition: inline
-In-Reply-To: <1458409557-13156-4-git-send-email-pefoley2@pefoley.com>
+In-Reply-To: <1458409557-13156-5-git-send-email-pefoley2@pefoley.com>
 User-Agent: Mutt/1.5.24 (2015-08-30)
-X-SW-Source: 2016-q1/txt/msg00139.txt.bz2
+X-SW-Source: 2016-q1/txt/msg00140.txt.bz2
 
 
---XStn23h1fwudRqtG
+--3607uds81ZQvwCD0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-length: 953
+Content-length: 578
 
 On Mar 19 13:45, Peter Foley wrote:
-> GCC 6.0+ warns on misleading indentation, so fix it.
+> GCC 6.0+ can assert that this argument is nonnull.
+> Remove the unnecessary check to fix a warning.
 >=20
-> winsup/cygserver/ChangeLog
-> * sysv_msg.cc (msgsnd): Fix misleading indentation.
-> * sysv_msg.cc (msgrcv): Ditto.
-> * sysv_sem.cc (semop): Ditto.
-> winsup/cygwing/ChangeLog
-> * syscalls.cc (getpriority): Fix misleading indentation.
+> winsup/cygwin/ChangeLog
+> malloc_wrapper.cc (posix_memalign): Remove always true nonnull check.
 
-I only applied the hunk affecting syscalls.cc for now.
-
-The patches to sysv_msg.cc and sysv_sem.cc are not quite right, IMHO.
-The GCC warning is rather a problem here.  The indentation is correct
-in terms of the original code.  The only reason it's treated as incorrect
-is the special handling added in the #ifdef __CYGWIN__ block.  Changing
-the indentation just to satisfy the special Cygwin case is not the way
-to go.
-
-Ohter than that, partially applied.
+Eh, what?!?  How on earth can gcc assert memptr is always non-NULL?
+An application can call posix_memalign(NULL, 4096, 4096) just fine,
+can't it?  If so, *memptr =3D res crashes.
 
 
-Thanks,
 Corinna
 
 --=20
@@ -68,26 +57,26 @@ Corinna Vinschen                  Please, send mails regarding Cygwin to
 Cygwin Maintainer                 cygwin AT cygwin DOT com
 Red Hat
 
---XStn23h1fwudRqtG
+--3607uds81ZQvwCD0
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-length: 819
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v2
 
-iQIcBAEBCAAGBQJW7oN2AAoJEPU2Bp2uRE+g0m8P/AlJ8KsIy+5XnYkg60Z148Ay
-or4ACGe5R3W8/lQy//+LDxJFMaMM9CXJ9JscooNQsKLuSPBC4zdyyByQOic2j1kS
-rxn2wECElj9WSU6i+nPvSJ70QzqX4ZfMBmH/MNmi32Ruh6UirH9EOHSPRR95MrXX
-rQyl8U7HHIRXkqAZa9N2DbbThYI934jMJwlzmsk2XRFyLAReA0JquQrBGa/CeYg0
-igtCmKiy/ZqA2TDfA9U/QwZS1g5nGXIm3/kSfe/Emr2xUF1EjXdHKwonxqnWaY7b
-zE5vXm2+beG0e/kbmXNPYbUgdKKO0lXG91cD3hqENwj6yj2VEceJ1zzcxIEH9GSW
-6FVPIsJuTYEqM4Kd+ac8mGnu96ZLCrdsZQKRNyXKz7Mq1KvVi71J2rCvFCKgYHhk
-JvDxzGZOgmeWPjFjVQmyzxJSf8LpEs7/cmv3SROq+ZPMgEDq6QekGUtiiFf+JKwn
-4ZWsrTiHjPua0pUh1iBOhUI+jbePV9azBTzNSLSHR+VllIvFaI6tdKkA0CenVaL1
-sSdOeOMn3hsIrNm1IDPw8wuWuAFuFidDURVfl8JPmjKvxpIov4GxFUM1Ralu0wyh
-I1+88gNxIlOM3beg1CdqPKpLSZQTiKoeumoYexAZzceHTcnqRq8UYEIWfYoVUkEF
-21QhKUSIEUb1OMJrJcRf
-=7sxT
+iQIcBAEBCAAGBQJW7oZuAAoJEPU2Bp2uRE+gIxsQAJNJtqq36bDZWMRJ/zFHtwM3
+sdr2aAXPTiEDr+qeOWOJS+4oixK2ef488ikxU5hl0QCt+tIBrsgcbStYV6Kl3EfI
+Cp/LZA3D/A6m9A6/Aw8jnJjzxhpDrwJpnVh+ZDZhH5XgwnWy0Rrp81oHjMhbRl2/
+RyQ1Jz7dIwWQoPT6vebQt14d8r5j4E9K4SkA/t8WNWlB6eDdo9TctagUpfjN3jBx
+/gdA4dTgmJ6sF2xke4IyjhFVXMfPptLfWQIGH56ddNlgAIJ3wH6QITjH670ncjG9
++4yrR0p/GJtRuzUMK8/R2IXP/RYyF5IrjveyEeJWxmYjByKZdcnrLhI1H6QzTzD0
+uAxX+uuf5sRhzVDWsPulhWx3GugU2P8CavahTJKGcX/rpgrGLRYZJMATiluLEsvi
+YVqwryPZmD20b3DMBoQaRAI3P1H5R+edOeU0r5gc3Nr80fbkTj0yw+CEYmS0bdby
+yEGrZee+aMtfyAv504uBBz0DeYkePKI56BMqiclWY43GQc5f/DbrAZcHIicAVMTh
+g4LlCOWoPIxdE23szmkXhlraeB24ahVjT8XBpaV5v33tNB7y1WYHsUyUHVEd9mrM
+Ppo7kxBvFqak8JC/1n6k2Dg6+Eex+xsXvo40dn6qPT5vN8ReN06PT0uzAcF385P0
+tgwMSA94DgxbbxU2e0zX
+=XALd
 -----END PGP SIGNATURE-----
 
---XStn23h1fwudRqtG--
+--3607uds81ZQvwCD0--
