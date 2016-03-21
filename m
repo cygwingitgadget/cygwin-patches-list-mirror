@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8475-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 46094 invoked by alias); 21 Mar 2016 20:19:35 -0000
+Return-Path: <cygwin-patches-return-8476-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 94033 invoked by alias); 21 Mar 2016 20:32:39 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,41 +9,83 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 46027 invoked by uid 89); 21 Mar 2016 20:19:34 -0000
+Received: (qmail 94022 invoked by uid 89); 21 Mar 2016 20:32:39 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.2 spammy=desktop, HTo:U*cygwin-patches, H*Ad:U*cygwin-patches
-X-HELO: mail-ob0-f195.google.com
-Received: from mail-ob0-f195.google.com (HELO mail-ob0-f195.google.com) (209.85.214.195) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES128-GCM-SHA256 encrypted) ESMTPS; Mon, 21 Mar 2016 20:19:32 +0000
-Received: by mail-ob0-f195.google.com with SMTP id e7so15778217obv.2        for <cygwin-patches@cygwin.com>; Mon, 21 Mar 2016 13:19:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20130820;        h=x-gm-message-state:mime-version:in-reply-to:references:from:date         :message-id:subject:to;        bh=/dXxqhDRBwI17Ohy0VbbHRzwjB8lRJM2xgKEYGtAdpw=;        b=K3EsM+zISPtFHzL4kHa0JYWO3Y0zLh9VqIPs1w6BCXGYU2JfkSvoYRhCWwxNOcghL7         E9yyCt3YqFf/NHccNi+fC183fKAddUTz5P7f+mkYTV5N+imqy76qgL1rQZPngGjV98PM         1LUfLnZ4/kbWMBQUpVk1+/Yw8L8vAYS9Gm3PSEW0CSxdVvJSmW7upAqXPed8wJF7ZcDA         nEbVCO0y2yddWXwnXHNrxR74okZuILDsi1D7aOUSz+ToZ9wrNAEkvUnbUXPL0zqlr6kS         WJY1Zm7kepVxuCh1S1wd2d3LfyR2zvJUO60xNGMzJ4N0FcNb5GIAdDF5MctMF3FoE4vY         Sx8w==
-X-Gm-Message-State: AD7BkJIVXbzNZKX8lQX9WXrVxwAg+70/Gh3d0Q42QcqU/Hk/0G8zPucJBAed0Q0bWlYkqkZSd3MArAhuyUUJ5A==
-X-Received: by 10.182.58.5 with SMTP id m5mr20091229obq.26.1458591570525; Mon, 21 Mar 2016 13:19:30 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 10.76.86.194 with HTTP; Mon, 21 Mar 2016 13:19:10 -0700 (PDT)
-In-Reply-To: <20160321195244.GJ14892@calimero.vinschen.de>
-References: <1458580546-14484-1-git-send-email-pefoley2@pefoley.com> <1458580546-14484-2-git-send-email-pefoley2@pefoley.com> <20160321192450.GD14892@calimero.vinschen.de> <CAOFdcFP=cJyuiB=dPEqa2XpFV5jmVoepwr0CQ1=2R0j9bA-CHA@mail.gmail.com> <20160321195244.GJ14892@calimero.vinschen.de>
-From: Peter Foley <pefoley2@pefoley.com>
-Date: Mon, 21 Mar 2016 20:19:00 -0000
-Message-ID: <CAOFdcFMbLNOXCNcMYexqqUWa5GS4CyiSgrcjPHuUr7dnnR_ifg@mail.gmail.com>
-Subject: Re: [PATCH 2/5] Link against libdnsapi to avoid undefined reference
+X-Spam-SWARE-Status: No, score=-6.6 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_PBL,RDNS_DYNAMIC autolearn=ham version=3.3.2 spammy=Hx-languages-length:1067, handful, H*R:D*cygwin.com, HTo:U*cygwin-patches
+X-HELO: calimero.vinschen.de
+Received: from ipbcc0d020.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.208.32) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 21 Mar 2016 20:32:38 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id BD0A8A803F7; Mon, 21 Mar 2016 21:32:35 +0100 (CET)
+Date: Mon, 21 Mar 2016 20:32:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Content-Type: text/plain; charset=UTF-8
-X-IsSubscribed: yes
-X-SW-Source: 2016-q1/txt/msg00181.txt.bz2
+Subject: Re: [PATCH 5/5] Add with-only-headers
+Message-ID: <20160321203235.GM14892@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <1458580546-14484-1-git-send-email-pefoley2@pefoley.com> <1458580546-14484-5-git-send-email-pefoley2@pefoley.com> <20160321194758.GH14892@calimero.vinschen.de> <CAOFdcFMC60YLscHWDzsRz3q9cF1-KAc-d=CPhS5W_LeFRb83tg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="/jvaajy/zP2g41+Q"
+Content-Disposition: inline
+In-Reply-To: <CAOFdcFMC60YLscHWDzsRz3q9cF1-KAc-d=CPhS5W_LeFRb83tg@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-SW-Source: 2016-q1/txt/msg00182.txt.bz2
 
-On Mon, Mar 21, 2016 at 3:52 PM, Corinna Vinschen
-<corinna-cygwin@cygwin.com> wrote:
-> While you're at it, ideally we make ourselves independent of the MingW
-> header version and use DnsFree directly, replacing DnsRecordListFree
-> in autoload.cc and libc/minires-os-if.c, no?
 
-Hmm, it isn't immediately obvious as to the meaning of the 2nd (n)
-parameter to LoadDLLfunc()
-How would I go about finding the correct value for the DnsFree function?
-Function documentation is at
-https://msdn.microsoft.com/en-us/library/windows/desktop/ms682011(v=vs.85).aspx
+--/jvaajy/zP2g41+Q
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 1073
 
-Thanks,
+On Mar 21 15:59, Peter Foley wrote:
+> On Mon, Mar 21, 2016 at 3:47 PM, Corinna Vinschen
+> <corinna-cygwin@cygwin.com> wrote:
+> > On Mar 21 13:15, Peter Foley wrote:
+> >> When cross-compiling a toolchan targeting cygwin, building cygwin1.dll
+> >> requires libstdc++v3 to be built.
+> >
+> > Building cygwin1.dll doesn't require libstdc++-v3.  The Cygwin DLL is
+> > never linked against it and never will be.  Only building the utils dir
+> > requires libstdc++ and that would be fixed by not builing utils as in
+> > your other patch, wouldn't it?
+>=20
+> Sorry for being unclear.
+> Building cygwin1.dll requires the *headers* from libstdc++-v3.
 
-Peter
+Still hmm at this point.  AFAICS we only need the handful of definitions
+for new and delete operators, nothing else.  Is there perhaps a way to
+define this stuff by ourselves to avoid any requirement for libstdc++
+headers for building the DLL?  Or is that just not feasible?
+
+
+Corinna
+
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
+
+--/jvaajy/zP2g41+Q
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 819
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iQIcBAEBCAAGBQJW8FpjAAoJEPU2Bp2uRE+gsTAP/1deJUeoZlYZe3LmVN7zcdxo
+i5qYafRxhuGPempzSyW++jYZ0ZR5DQBypbuiKpLgin/6dM3w6RaNvau33TGRTO9h
+23641gQd4hUJqqMaTcqroCYzdNIUbqwh2FAxa/+KCHPqmi2o1w/y6zGHy16qb4bX
+K7Sk00yxIE+gUPZaisGfRcFl7Rj+mKgxj+Eyxay/ipRrYljESRPoWVRtTs2v99BF
+EcGvuYU01jPRcdvfgqPrNMaGl58QsKgXlZkHghPDfyJdcNLAIcqlO20TVMCny2Nn
+Jy2Xr0Fe+0QnqjOZMxB/Q7Y8IJ2xvC05e1fBp7RCKs8Jkg/7WF4hbYMdq4xlwYIo
+w8sx7/qeYtSGT6kfNU+alEdjZW55immfoDzSTfMoEYtreIkdLTen6tSL00fZ1Eat
+s54lU7fBQhUeq7CavB6Ui7bqYSzkSeAHPJO6uNv+zVM+bxIhrTbJnL2C1IvJnHND
+Jkzlf5DNje9T5Si6HDTGUjbnKUvARAAoG68AH//dBHMDtXe78eN8tQ9f9+YdU3jg
+kRNaGi/XGMKJD5JJ7KNqxz9DGA2/em1vMj5+JZfAHGJzhPpvgmq78nQDjJYzT41R
+kjoaUuoWrquR4Q94Lmgm/k10QMZZmgew/B6hs+F7Ty7PdIBp1ZIXfG4dawOvhpaX
+XwvYW/pYrT8NoZ/du3Sv
+=tWN6
+-----END PGP SIGNATURE-----
+
+--/jvaajy/zP2g41+Q--
