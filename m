@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8447-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 87746 invoked by alias); 21 Mar 2016 16:38:09 -0000
+Return-Path: <cygwin-patches-return-8448-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 106838 invoked by alias); 21 Mar 2016 16:44:06 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,48 +9,38 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 87735 invoked by uid 89); 21 Mar 2016 16:38:08 -0000
+Received: (qmail 106820 invoked by uid 89); 21 Mar 2016 16:44:05 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RP_MATCHES_RCVD,SPF_PASS autolearn=ham version=3.3.2 spammy=Hx-languages-length:846, questionable, business, H*F:D*se
-X-HELO: mail.lysator.liu.se
-Received: from mail.lysator.liu.se (HELO mail.lysator.liu.se) (130.236.254.3) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-GCM-SHA384 encrypted) ESMTPS; Mon, 21 Mar 2016 16:37:58 +0000
-Received: from mail.lysator.liu.se (localhost [127.0.0.1])	by mail.lysator.liu.se (Postfix) with ESMTP id 78D5140014	for <cygwin-patches@cygwin.com>; Mon, 21 Mar 2016 17:37:54 +0100 (CET)
-Received: from [192.168.0.96] (217-210-101-82-no95.business.telia.com [217.210.101.82])	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))	(No client certificate requested)	by mail.lysator.liu.se (Postfix) with ESMTPSA id 3030840013	for <cygwin-patches@cygwin.com>; Mon, 21 Mar 2016 17:37:54 +0100 (CET)
-Message-ID: <56F02361.50905@lysator.liu.se>
-Date: Mon, 21 Mar 2016 16:38:00 -0000
-From: Peter Rosin <peda@lysator.liu.se>
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:31.0) Gecko/20100101 Thunderbird/31.3.0
+X-Spam-SWARE-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.2 spammy=HTo:U*cygwin-patches, H*Ad:U*cygwin-patches
+X-HELO: mail-oi0-f45.google.com
+Received: from mail-oi0-f45.google.com (HELO mail-oi0-f45.google.com) (209.85.218.45) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES128-GCM-SHA256 encrypted) ESMTPS; Mon, 21 Mar 2016 16:43:55 +0000
+Received: by mail-oi0-f45.google.com with SMTP id l76so55952401oig.1        for <cygwin-patches@cygwin.com>; Mon, 21 Mar 2016 09:43:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20130820;        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;        bh=6cvbO7M5JqaFAxtwH8rA7AP2ACzlFfPYOFzSqDnyWjA=;        b=aOyNhdegUsIiamKoL6b75zd+j8WZTFjxqwwk33/GZzhcSmqfaxJJa+hh09qflItxUv         4EyecmjFBBg8fqyYUhXlbkBfVDUg5Qf+8XSnmm+/4Wsy3LjMTACuKSv0SD2e+Z7WtOak         nPTr7e7q4gHGq+H+QORswm9y6maewoeBGTr1hcZtZsqqLKKOTZ6YU5lzjzTzGBPN5SuA         e+Eg3fAYzsUo+9jF322KFgev6NH1whOSTeL3FFsDEloPhzTAyNqC60usYcndSeAWlCB+         tpu1j81Fgr9qUIA2sAguTNrljYYf0NDUoVefonSxHt+VCbfSZflWRy+O1bZgL77gXR69         RCkA==
+X-Gm-Message-State: AD7BkJKlcgR7thYHAwnfOW3+hVexQ+02wCwsrimwL0U27UDLPU7M+1etsOphxy86RH6JkuuJdxysgvz1Q/zGew==
+X-Received: by 10.157.20.161 with SMTP id d30mr1402115ote.165.1458578633679; Mon, 21 Mar 2016 09:43:53 -0700 (PDT)
 MIME-Version: 1.0
+Received: by 10.76.86.194 with HTTP; Mon, 21 Mar 2016 09:43:34 -0700 (PDT)
+From: Peter Foley <pefoley2@pefoley.com>
+Date: Mon, 21 Mar 2016 16:44:00 -0000
+Message-ID: <CAOFdcFNPgJrf3KcNaOvmoT+Aj3Gp46w=ob=okPT0vwJ4TvMTCg@mail.gmail.com>
+Subject: Update toplevel files from gcc
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 05/11] A pointer to a pointer is nonnull.
-References: <1458409557-13156-1-git-send-email-pefoley2@pefoley.com> <1458409557-13156-5-git-send-email-pefoley2@pefoley.com> <20160320111558.GG25241@calimero.vinschen.de>
-In-Reply-To: <20160320111558.GG25241@calimero.vinschen.de>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
 X-IsSubscribed: yes
-X-SW-Source: 2016-q1/txt/msg00153.txt.bz2
+X-SW-Source: 2016-q1/txt/msg00154.txt.bz2
 
-On 2016-03-20 12:15, Corinna Vinschen wrote:
-> On Mar 19 13:45, Peter Foley wrote:
->> GCC 6.0+ can assert that this argument is nonnull.
->> Remove the unnecessary check to fix a warning.
->>
->> winsup/cygwin/ChangeLog
->> malloc_wrapper.cc (posix_memalign): Remove always true nonnull check.
-> 
-> Eh, what?!?  How on earth can gcc assert memptr is always non-NULL?
-> An application can call posix_memalign(NULL, 4096, 4096) just fine,
-> can't it?  If so, *memptr = res crashes.
+When building a cross compiler targeting cygwin, the target objcopy
+binary wasn't properly picked up.
+It appears that a fix for this has been commited to the gcc tree
+https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=fc740d700395d97b6719e8a0e64f75d01ab0d8fd
 
-I think that passing NULL qualifies as undefined, in which case the
-crash is ok, no?
+A patch to copy the updated Makefile.def, Makefile.tpl and
+configure.ac from gcc and regenerate Makefile.in and configure is
+1.4M, so too large to send to the mailing list.
 
-I'm sure it will misbehave if you pass (void **)1 too. So, some might
-argue that the business of special-casing NULL here is questionable.
+Would it be possible for someone to sync the latest toplevel files from gcc?
 
-Or is there some reason to protect the posix_memalign users from
-themselves?
+Thanks,
 
-Cheers,
-Peter
+Peter Foley
