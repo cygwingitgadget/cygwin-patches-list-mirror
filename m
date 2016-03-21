@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8469-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 59975 invoked by alias); 21 Mar 2016 19:58:49 -0000
+Return-Path: <cygwin-patches-return-8470-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 61313 invoked by alias); 21 Mar 2016 19:59:49 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,81 +9,52 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 59946 invoked by uid 89); 21 Mar 2016 19:58:48 -0000
+Received: (qmail 61303 invoked by uid 89); 21 Mar 2016 19:59:49 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-6.6 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_PBL,RDNS_DYNAMIC autolearn=ham version=3.3.2 spammy=H*R:D*cygwin.com, HTo:U*cygwin-patches, H*Ad:U*cygwin-patches, person
-X-HELO: calimero.vinschen.de
-Received: from ipbcc0d020.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.208.32) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 21 Mar 2016 19:58:47 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 2B164A803F7; Mon, 21 Mar 2016 20:58:45 +0100 (CET)
-Date: Mon, 21 Mar 2016 19:58:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 4/5] Don't build utils/lsaauth when cross compiling.
-Message-ID: <20160321195845.GL14892@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1458580546-14484-1-git-send-email-pefoley2@pefoley.com> <1458580546-14484-4-git-send-email-pefoley2@pefoley.com> <20160321193052.GG14892@calimero.vinschen.de> <CAOFdcFM-9XOAEPhSWbED_eiECu-UeWW2FBkg-u8jo40+0FwAjA@mail.gmail.com>
+X-Spam-SWARE-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.2 spammy=sk:configu, HTo:U*cygwin-patches, H*Ad:U*cygwin-patches
+X-HELO: mail-ob0-f193.google.com
+Received: from mail-ob0-f193.google.com (HELO mail-ob0-f193.google.com) (209.85.214.193) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES128-GCM-SHA256 encrypted) ESMTPS; Mon, 21 Mar 2016 19:59:47 +0000
+Received: by mail-ob0-f193.google.com with SMTP id e7so15736568obv.2        for <cygwin-patches@cygwin.com>; Mon, 21 Mar 2016 12:59:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20130820;        h=x-gm-message-state:mime-version:in-reply-to:references:from:date         :message-id:subject:to;        bh=IRkoag1HRlYTuS+s73HcPmqql7V6YQBEO8ls7e4klq0=;        b=Q66CwMzAPJno/wNfjp8vXzR0E8pkKSoQiQhznx3eY7hXKpYJRa0trkmWzX5rF0zFxh         rM+w27M7HEzLNGavUpREyfx8zINqkpOR/We/GaQx2DBw5VAUzLMFGwer+FqZopSpmiwe         EH93mjoFyGuB7qaQAYg8zI/U2sMKoYTdrcmAUXw05GaQBBpRCnoUzFxQcQuipuf0omIX         6uE//z7CAb8tMSjEtVhUHZoaIZ4YxII4kwU4QmTAU4TK7RvHJEF9lV0q0N29v9MeX2lb         ffISNK/GypknRqevjr7psRJd/E7xQVJWXb5bVIkBmLvNcQaxGGE/UPt23gm/bMbqcCnN         Ca3w==
+X-Gm-Message-State: AD7BkJLc+J9oRdFUbeQRzAEXIikhDPiknKY4kCBhcoLeYf5HcYEELW15DyNangVKAn4jOQT1v5ALCrG+fOkHzQ==
+X-Received: by 10.60.178.202 with SMTP id da10mr18148419oec.11.1458590386049; Mon, 21 Mar 2016 12:59:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="w2xx78T4DcG3O+DJ"
-Content-Disposition: inline
-In-Reply-To: <CAOFdcFM-9XOAEPhSWbED_eiECu-UeWW2FBkg-u8jo40+0FwAjA@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-SW-Source: 2016-q1/txt/msg00175.txt.bz2
+Received: by 10.76.86.194 with HTTP; Mon, 21 Mar 2016 12:59:26 -0700 (PDT)
+In-Reply-To: <20160321194758.GH14892@calimero.vinschen.de>
+References: <1458580546-14484-1-git-send-email-pefoley2@pefoley.com> <1458580546-14484-5-git-send-email-pefoley2@pefoley.com> <20160321194758.GH14892@calimero.vinschen.de>
+From: Peter Foley <pefoley2@pefoley.com>
+Date: Mon, 21 Mar 2016 19:59:00 -0000
+Message-ID: <CAOFdcFMC60YLscHWDzsRz3q9cF1-KAc-d=CPhS5W_LeFRb83tg@mail.gmail.com>
+Subject: Re: [PATCH 5/5] Add with-only-headers
+To: cygwin-patches@cygwin.com
+Content-Type: text/plain; charset=UTF-8
+X-IsSubscribed: yes
+X-SW-Source: 2016-q1/txt/msg00176.txt.bz2
 
+On Mon, Mar 21, 2016 at 3:47 PM, Corinna Vinschen
+<corinna-cygwin@cygwin.com> wrote:
+> On Mar 21 13:15, Peter Foley wrote:
+>> When cross-compiling a toolchan targeting cygwin, building cygwin1.dll
+>> requires libstdc++v3 to be built.
+>
+> Building cygwin1.dll doesn't require libstdc++-v3.  The Cygwin DLL is
+> never linked against it and never will be.  Only building the utils dir
+> requires libstdc++ and that would be fixed by not builing utils as in
+> your other patch, wouldn't it?
 
---w2xx78T4DcG3O+DJ
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1035
+Sorry for being unclear.
+Building cygwin1.dll requires the *headers* from libstdc++-v3.
+To run configure-target-libstdc++-v3 (which generates necessary headers
+and is a prereq for install-target-libstdc++-v3 which installs those headers),
+libgcc must be able to compile. For libgcc to compile, the cygwin headers
+must be available.
 
-On Mar 21 15:52, Peter Foley wrote:
-> On Mon, Mar 21, 2016 at 3:30 PM, Corinna Vinschen
-> <corinna-cygwin@cygwin.com> wrote:
-> > I'm not sure this is the right thing to do.  I'm cross compiling
-> > Cygwin all the time, and I certainly need the mingw compiler to
-> > build the utils and lsaauth dir.  In what case do you not need them,
-> > and shouldn't that bordercase(?) be handled by some configure option?
->=20
-> The effect of this change is to not compile anything under the utils
-> or lsaauth directories when cross compiling.
+To summarize, configure-target-libstdc++-v3 depends on all-target-libgcc.
+And all-target-libgcc requires the headers from cygwin to be installed.
 
-Again, I'm cross compiling all the time since I build Cygwin on Linux
-for development and package building, and I'm certianly not the only
-person doing that.  This is the default case.  Not building utils and
-lsaauth is the exception.  Therefore this scenario should be handled
-explicitely by a configure flag, not the other way around.
-
+Hopefully that makes more sense.
 
 Thanks,
-Corinna
 
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---w2xx78T4DcG3O+DJ
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJW8FJ0AAoJEPU2Bp2uRE+gI2IP/1vXU624lPSkrPg0eBB0y/VN
-oDI6QuQWOSHEE9+fhpBsU3RmSf7lQ5VFk2RMyVpAqGX2y06N8VRh2oTyXuKqHHvE
-QIMWcnjSrVyNSAS/E74AHwCzccBKdq2eI2asHGtku1mKfFHq1mjf1xR7i2m/UDCd
-ir15U9uL0RTiNLYmgq3AwO2eG5d88JmrG6n2buAJr7HwXXco4Jxn01kT8Qc9nu8G
-eGg78wwt8kHHPSusFvjpsXclTIG6pkrS2lhaSo3yDXBgiVE6SH5tvw04YruuxLG/
-2U1KmAD+lzMzND0GGdSJjMt6mdkB2dJcIIHCr9Lrz3zGxCYKed5Zhf/WLA/XM1oi
-yXIUXX8x45bciY1OJtJ2pzXoIq1RRakBGKZzDGioYQrhznBjXijohX0c7WirRU1P
-J0poBlZsAMUuopo9H3fEYESjy/8VC7KxGKi+8YvQzQ1wJokrU5BxQKayrl7VR1sK
-q0AMuonuWRTGGGL1KmHdgMm+/yyxrSFHgACvUzu+e4dI4hXcghVtDyEh2k3HPGGw
-OK/tGuhZ48EoiH6AugrOZ8ZBj/yawtZ4ffb+BmTP4Y87P1go3bZNkm8aXfwT0UM/
-cUg12HH5yyPypkkYIygNpBcgdaNEOGJLOgooksZtqbTpsNgUYZv9xlNsO+cL/J4i
-Gs7p7ieKioo+JRa0FrUe
-=AvAx
------END PGP SIGNATURE-----
-
---w2xx78T4DcG3O+DJ--
+Peter
