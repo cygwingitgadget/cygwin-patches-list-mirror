@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8463-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 44473 invoked by alias); 21 Mar 2016 19:46:21 -0000
+Return-Path: <cygwin-patches-return-8464-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 46020 invoked by alias); 21 Mar 2016 19:48:02 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,50 +9,72 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 44450 invoked by uid 89); 21 Mar 2016 19:46:19 -0000
+Received: (qmail 45928 invoked by uid 89); 21 Mar 2016 19:48:01 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.2 spammy=untill, HTo:U*cygwin-patches, H*Ad:U*cygwin-patches
-X-HELO: mail-oi0-f67.google.com
-Received: from mail-oi0-f67.google.com (HELO mail-oi0-f67.google.com) (209.85.218.67) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES128-GCM-SHA256 encrypted) ESMTPS; Mon, 21 Mar 2016 19:46:18 +0000
-Received: by mail-oi0-f67.google.com with SMTP id j206so6587099oig.1        for <cygwin-patches@cygwin.com>; Mon, 21 Mar 2016 12:46:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20130820;        h=x-gm-message-state:mime-version:in-reply-to:references:from:date         :message-id:subject:to;        bh=tcoYODnFG8miouqdyO0q1t3RtvuxNlB8XMqFBO4poFs=;        b=JV/t8Z6aQ8JinjMMLuNV6nwie+Y2odMcNuhvAut0y1fZr+HE1FPLlW4BQiWqW/06YK         R4fnSmG2BFkEmHO8ro6QkfYkrCOw9gp0rDApu+74+4/gYEKrGIUh/CcfFKXGn8GHgBzA         R+xXA7OcSC8sX3qVdD0m+ujrrt27QI7KNsA9DaRyuwTXKW1DExICo5oEkhxrkLHLLQsf         oxTnJ4KJvWcQYbUS1EIsmyhldq5xG/qyrbx7fQviU83YeFodXPm1quX0S5bGNy3JYH91         DMwULpjazhTaUCHrpshambf11/ABrf17SntMV9MyC84bGzja1Q+02DTFdJYEAagrg/+J         6aNw==
-X-Gm-Message-State: AD7BkJKzTlfl1aQyc3h0Y/7RorppRbwri89fUO9EN1BkaKfy3MBL8B0VhVBzhOFYS1mwXJPJXnk/DZxtHrGjAw==
-X-Received: by 10.202.88.130 with SMTP id m124mr17789597oib.52.1458589576242; Mon, 21 Mar 2016 12:46:16 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 10.76.86.194 with HTTP; Mon, 21 Mar 2016 12:45:56 -0700 (PDT)
-In-Reply-To: <20160321192450.GD14892@calimero.vinschen.de>
-References: <1458580546-14484-1-git-send-email-pefoley2@pefoley.com> <1458580546-14484-2-git-send-email-pefoley2@pefoley.com> <20160321192450.GD14892@calimero.vinschen.de>
-From: Peter Foley <pefoley2@pefoley.com>
-Date: Mon, 21 Mar 2016 19:46:00 -0000
-Message-ID: <CAOFdcFP=cJyuiB=dPEqa2XpFV5jmVoepwr0CQ1=2R0j9bA-CHA@mail.gmail.com>
-Subject: Re: [PATCH 2/5] Link against libdnsapi to avoid undefined reference
+X-Spam-SWARE-Status: No, score=-6.6 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_PBL,RDNS_DYNAMIC autolearn=ham version=3.3.2 spammy=Hx-languages-length:546, H*R:D*cygwin.com, HTo:U*cygwin-patches, H*Ad:U*cygwin-patches
+X-HELO: calimero.vinschen.de
+Received: from ipbcc0d020.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.208.32) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 21 Mar 2016 19:48:00 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id A987BA803F7; Mon, 21 Mar 2016 20:47:58 +0100 (CET)
+Date: Mon, 21 Mar 2016 19:48:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Content-Type: text/plain; charset=UTF-8
-X-IsSubscribed: yes
-X-SW-Source: 2016-q1/txt/msg00169.txt.bz2
+Subject: Re: [PATCH 5/5] Add with-only-headers
+Message-ID: <20160321194758.GH14892@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <1458580546-14484-1-git-send-email-pefoley2@pefoley.com> <1458580546-14484-5-git-send-email-pefoley2@pefoley.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="vtJ+CqYNzKB4ukR4"
+Content-Disposition: inline
+In-Reply-To: <1458580546-14484-5-git-send-email-pefoley2@pefoley.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-SW-Source: 2016-q1/txt/msg00170.txt.bz2
 
-On Mon, Mar 21, 2016 at 3:24 PM, Corinna Vinschen
-<corinna-cygwin@cygwin.com> wrote:
-> On Mar 21 13:15, Peter Foley wrote:
->> /home/peter/cross/src/cygwin/winsup/cygwin/libc/minires-os-if.c:289:
->> undefined reference to `DnsFree'
->>
->> winsup/cygwin/ChangeLog
->> Makefile.in: Add libdnsapi to DLL_IMPORTS
->
-> Apart from the fact that this is wrong and DnsFree should be added to
-> autoload.cc instead, what exactly is that patch fixing?  DnsFree isn't
-> used anywhere in Cygwin.
 
-This fixes the above link error when building cygwin0.dll as part of a
-cross toolchain.
+--vtJ+CqYNzKB4ukR4
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 546
 
-The issue appears to be caused by this change in the mingw headers.
-It probably won't show up for anybody not building against the latest
-git version of mingw untill the next release.
-https://github.com/mirror/mingw-w64/commit/38410a
+On Mar 21 13:15, Peter Foley wrote:
+> When cross-compiling a toolchan targeting cygwin, building cygwin1.dll
+> requires libstdc++v3 to be built.
 
-I assume this function should still be added to autoload.cc, rather
-then modifying DLL_IMPORTS.
-I'll take a look at that.
+Building cygwin1.dll doesn't require libstdc++-v3.  The Cygwin DLL is
+never linked against it and never will be.  Only building the utils dir
+requires libstdc++ and that would be fixed by not builing utils as in
+your other patch, wouldn't it?
+
+
+Corinna
+
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
+
+--vtJ+CqYNzKB4ukR4
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 819
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iQIcBAEBCAAGBQJW8E/uAAoJEPU2Bp2uRE+g9mYP/1aVVnnzZwB17H/ApD6a+9b0
+7E313RHkz9lWjToTlOz7BsUHQFDr0mX42C5CnfzFhfkARs3X2Qxzht46nLrZCaKK
+ccmDjdiSaJcnWUl5Nh0ws6a8G6jN9+LM5VZhwnEK7V5Kr3SZOwpyQSYhGWXnGOrQ
+mqq6c7hEqG/o78KDMl3tCA6GS41EDv9+5za0oU7arliW1kzJZC9dAIG6GA8t2jB/
+OkhlFpl0Z3aK70Q0VFz4HORevQClZl0+JFgD94/0PjP9e8F7ZriWW5TK68rWA05+
+THu99PCrm/DXlBod7aEhjv3J68+P9RBgIytsACx8WinSqL4j4I1SMuM4zen+1lCb
+iWGH7OymFRMLErR+NJYaVQRLTrCSyw8Mo6t1ruaZvKNoDjKH0RHM3zZ5znQqf/Y+
+Wx0vMj0+fnrNk4l0HP5CaiRVsnBawQqcMLvk/qYGGfVM8Bt0sbm+bJ3/YxEZMwap
+NhwfKBuJ3roblwp7bV/wnnhjzwUKce9/0WjhjO6lxGV10cL1I9AZAr1spd/uTUeg
+KMHmhIw4yW7OzyYphTZEmf7V3Gcd0ewGFWxOz5uCLJHjGhmSfu780capA710TDn+
+moUo/2Okdn3I5m7lmbY+yhJYMK/EHjd8JmhTqtkQCUdTf+oqxKSCEWLiZxxe/EcD
+ouYySmZaBKz2Guv32uyq
+=7pgd
+-----END PGP SIGNATURE-----
+
+--vtJ+CqYNzKB4ukR4--
