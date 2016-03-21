@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8477-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 97037 invoked by alias); 21 Mar 2016 20:34:42 -0000
+Return-Path: <cygwin-patches-return-8478-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 101397 invoked by alias); 21 Mar 2016 20:35:30 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,81 +9,38 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 97022 invoked by uid 89); 21 Mar 2016 20:34:41 -0000
+Received: (qmail 101381 invoked by uid 89); 21 Mar 2016 20:35:29 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-6.6 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_PBL,RDNS_DYNAMIC autolearn=ham version=3.3.2 spammy=H*R:D*cygwin.com, HTo:U*cygwin-patches, H*Ad:U*cygwin-patches
-X-HELO: calimero.vinschen.de
-Received: from ipbcc0d020.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.208.32) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 21 Mar 2016 20:34:39 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 340A5A803F7; Mon, 21 Mar 2016 21:34:37 +0100 (CET)
-Date: Mon, 21 Mar 2016 20:34:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 2/5] Link against libdnsapi to avoid undefined reference
-Message-ID: <20160321203437.GN14892@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1458580546-14484-1-git-send-email-pefoley2@pefoley.com> <1458580546-14484-2-git-send-email-pefoley2@pefoley.com> <20160321192450.GD14892@calimero.vinschen.de> <CAOFdcFP=cJyuiB=dPEqa2XpFV5jmVoepwr0CQ1=2R0j9bA-CHA@mail.gmail.com> <20160321195244.GJ14892@calimero.vinschen.de> <CAOFdcFMbLNOXCNcMYexqqUWa5GS4CyiSgrcjPHuUr7dnnR_ifg@mail.gmail.com>
+X-Spam-SWARE-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.2 spammy=HTo:U*cygwin-patches, H*Ad:U*cygwin-patches
+X-HELO: mail-ob0-f193.google.com
+Received: from mail-ob0-f193.google.com (HELO mail-ob0-f193.google.com) (209.85.214.193) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES128-GCM-SHA256 encrypted) ESMTPS; Mon, 21 Mar 2016 20:35:23 +0000
+Received: by mail-ob0-f193.google.com with SMTP id e7so15811651obv.2        for <cygwin-patches@cygwin.com>; Mon, 21 Mar 2016 13:35:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20130820;        h=x-gm-message-state:mime-version:in-reply-to:references:from:date         :message-id:subject:to;        bh=47unqszqwHlRZpGyye1wBh9H6maEqw6cL0pCmQAMXzQ=;        b=PxQljyGlbZwF20SEw0X8Nrc7KnWyr6CE14iyEQboVyz8nWZyhKxDHCpxvKXrcbxCEG         0xGZr+qqfQsSY4UF+8pZLrPMGMvv3lMe/cu9my5GlaPGHUFfW1XUCSEFEfxrj3e+xJ/b         7KqkVOyildLGanD9sBz8VoBG1kGtOnJf84gkkoYjeXPUkGHb7OK0uM0vQ9KjFH3By/o1         LrY+SzHKcEPi2wH8Z/K23jMZNkEa4sFJFCJmhCiQ4M5qxiiAYtvf06VnnvVg0lyt0zjk         6f67ZJocbiaZE2P9Mm/6vIhzbKEA1kZ2Uwj0LPQNzVoTJpjQXBarmQpUHkkyq40JxDAD         G4NA==
+X-Gm-Message-State: AD7BkJIyxjSioPfcQE5DWdAjHI7VDj12i2qltdrI9L1hsywVf8b0wSGblSh3Gq9LGHaLhuMRWKcXeIanNW9uiQ==
+X-Received: by 10.60.178.202 with SMTP id da10mr18242108oec.11.1458592521555; Mon, 21 Mar 2016 13:35:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="XBg9NAhDNArbJUtw"
-Content-Disposition: inline
-In-Reply-To: <CAOFdcFMbLNOXCNcMYexqqUWa5GS4CyiSgrcjPHuUr7dnnR_ifg@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-SW-Source: 2016-q1/txt/msg00183.txt.bz2
+Received: by 10.76.86.194 with HTTP; Mon, 21 Mar 2016 13:35:01 -0700 (PDT)
+In-Reply-To: <20160321203235.GM14892@calimero.vinschen.de>
+References: <1458580546-14484-1-git-send-email-pefoley2@pefoley.com> <1458580546-14484-5-git-send-email-pefoley2@pefoley.com> <20160321194758.GH14892@calimero.vinschen.de> <CAOFdcFMC60YLscHWDzsRz3q9cF1-KAc-d=CPhS5W_LeFRb83tg@mail.gmail.com> <20160321203235.GM14892@calimero.vinschen.de>
+From: Peter Foley <pefoley2@pefoley.com>
+Date: Mon, 21 Mar 2016 20:35:00 -0000
+Message-ID: <CAOFdcFMxqgni3-Xx_ajL2-8EpzWkzgaXh=6Dd5iHgGLnneJWVQ@mail.gmail.com>
+Subject: Re: [PATCH 5/5] Add with-only-headers
+To: cygwin-patches@cygwin.com
+Content-Type: text/plain; charset=UTF-8
+X-IsSubscribed: yes
+X-SW-Source: 2016-q1/txt/msg00184.txt.bz2
 
+On Mon, Mar 21, 2016 at 4:32 PM, Corinna Vinschen
+<corinna-cygwin@cygwin.com> wrote:
+> Still hmm at this point.  AFAICS we only need the handful of definitions
+> for new and delete operators, nothing else.  Is there perhaps a way to
+> define this stuff by ourselves to avoid any requirement for libstdc++
+> headers for building the DLL?  Or is that just not feasible?
 
---XBg9NAhDNArbJUtw
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 904
-
-On Mar 21 16:19, Peter Foley wrote:
-> On Mon, Mar 21, 2016 at 3:52 PM, Corinna Vinschen
-> <corinna-cygwin@cygwin.com> wrote:
-> > While you're at it, ideally we make ourselves independent of the MingW
-> > header version and use DnsFree directly, replacing DnsRecordListFree
-> > in autoload.cc and libc/minires-os-if.c, no?
->=20
-> Hmm, it isn't immediately obvious as to the meaning of the 2nd (n)
-> parameter to LoadDLLfunc()
-> How would I go about finding the correct value for the DnsFree function?
-> Function documentation is at
-> https://msdn.microsoft.com/en-us/library/windows/desktop/ms682011(v=3Dvs.=
-85).aspx
-
-Number of arguments multiplied by 4.  That's just for the 32 bit
-WINAPI.  LoadDLLfunc (DnsFree, 8, dnsapi) should do it.
-
+Dunno, I'll look into this a bit more.
 
 Thanks,
-Corinna
 
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---XBg9NAhDNArbJUtw
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJW8FrdAAoJEPU2Bp2uRE+gxsQP/1MQiXv4InbaY8kBoZplbt8h
-N5npd5eZPtC4/naCXg62TO6pPOtHwynD/OJbvQeZIasGPSiqc+b4csDnret9bGUK
-5yM50+5Xp6YTuSNi+eW3k5SYL6i4QNQA1vULQIprwz9L2Agn42qbphdcsTIItzqT
-UwDTjzDhBJuN+Atsi51dGY7gSAH/3iYYAY8VdktahQi1EBw0VDu8rsgQHwCfD4qb
-jc1w9A5GrCfYtQxSwsyknmoy4nmkTm6OhJQ4G2B7/EpK20ZAx9SGdFtGHbILtm+8
-yWG6IUa13nECDQdxJFvyzF6JGJLn4wK5gU/+yTMMcKwyhzGoAFMzxRyH0sF7Syv5
-fv5p+4Ttkl1qMOCJJBrpTpx0p4+o0JG45P49Xow/eIzb57gckj4etAiP++LwNwIV
-9h8iesA1fZc+oE4h8V1NJjMu5a9HNEfN9cUCPJaMvNDIbFQuDOLmRm8tafK2Pm0w
-GPLFKidyrXEZhfwcCNS6eqbnTNFF8kJM5TZmX1h+BXf1QmW7PHXGw4iVMpuy9pMA
-QF5IQKQm3ELCef52uHK3BMzJ7QS33KzC1ZGF92/fg2ZeCx6CI36rSOfUuZJTs4Ww
-gco1vLUxghC/ToerYl507bSQVNN+1EUyajcGzBHLFbyyA/4ZP5GVs6kgQkLFeU12
-FBe+hog5Osn83gSG2sPK
-=yzqX
------END PGP SIGNATURE-----
-
---XBg9NAhDNArbJUtw--
+Peter
