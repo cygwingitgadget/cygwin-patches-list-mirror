@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8467-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 62480 invoked by alias); 21 Mar 2016 19:52:48 -0000
+Return-Path: <cygwin-patches-return-8466-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 61803 invoked by alias); 21 Mar 2016 19:52:33 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,94 +9,47 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 62450 invoked by uid 89); 21 Mar 2016 19:52:47 -0000
+Received: (qmail 61793 invoked by uid 89); 21 Mar 2016 19:52:32 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-6.6 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_PBL,RDNS_DYNAMIC autolearn=ham version=3.3.2 spammy=Hx-languages-length:1390, H*R:D*cygwin.com, HTo:U*cygwin-patches, H*Ad:U*cygwin-patches
-X-HELO: calimero.vinschen.de
-Received: from ipbcc0d020.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.208.32) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 21 Mar 2016 19:52:46 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id B8813A803F7; Mon, 21 Mar 2016 20:52:44 +0100 (CET)
-Date: Mon, 21 Mar 2016 19:52:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 2/5] Link against libdnsapi to avoid undefined reference
-Message-ID: <20160321195244.GJ14892@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1458580546-14484-1-git-send-email-pefoley2@pefoley.com> <1458580546-14484-2-git-send-email-pefoley2@pefoley.com> <20160321192450.GD14892@calimero.vinschen.de> <CAOFdcFP=cJyuiB=dPEqa2XpFV5jmVoepwr0CQ1=2R0j9bA-CHA@mail.gmail.com>
+X-Spam-SWARE-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.2 spammy=HTo:U*cygwin-patches, H*Ad:U*cygwin-patches
+X-HELO: mail-ob0-f193.google.com
+Received: from mail-ob0-f193.google.com (HELO mail-ob0-f193.google.com) (209.85.214.193) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES128-GCM-SHA256 encrypted) ESMTPS; Mon, 21 Mar 2016 19:52:31 +0000
+Received: by mail-ob0-f193.google.com with SMTP id cf7so15651487obc.3        for <cygwin-patches@cygwin.com>; Mon, 21 Mar 2016 12:52:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20130820;        h=x-gm-message-state:mime-version:in-reply-to:references:from:date         :message-id:subject:to;        bh=YWjk9SUHMxNjs1cgESNtpv8l0eqK5AwDL0gllnQwvHo=;        b=cpa2MQm6PuoSQLbHFRsYLvBteVHUlBHW1OR348Ku6IJ/vvPFWzw5Pq+xHJmZtLI1/P         IyrRxyf4sGrslIunfw3qnEOWHqT0be0f4kPFJ3bpl8z3fS5ee4btkhnUMYNf1X85fx8k         XBlBdiRT19BFVC07JPlKCHOs8U29g8hrVsQeb10HDm94FLEzw2s2UQdApHhurloHGdOd         w/N8ElsQoUYHnBjWEbimJ9Yw9vzu4vLljcxEciiioc0e9Dpt+V7Uyelmc/hjBAXlF4mv         MiRrytogM7uC7/CPQvH0tJxQg+mQR6k4vpx+1YxQC9lHC9jGowp9nBUpwE/ZcnIDj6J6         ACpQ==
+X-Gm-Message-State: AD7BkJLaCntNJQL3skCbEvrYeljZJkpx2thL+noIszkHbXYRs4zy03SjeTJsi9c0lgdj6PI9bckgtErgVIUW6Q==
+X-Received: by 10.182.86.33 with SMTP id m1mr18539959obz.48.1458589949057; Mon, 21 Mar 2016 12:52:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="07FIeBX8hApXX6Bi"
-Content-Disposition: inline
-In-Reply-To: <CAOFdcFP=cJyuiB=dPEqa2XpFV5jmVoepwr0CQ1=2R0j9bA-CHA@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-SW-Source: 2016-q1/txt/msg00173.txt.bz2
+Received: by 10.76.86.194 with HTTP; Mon, 21 Mar 2016 12:52:09 -0700 (PDT)
+In-Reply-To: <20160321193052.GG14892@calimero.vinschen.de>
+References: <1458580546-14484-1-git-send-email-pefoley2@pefoley.com> <1458580546-14484-4-git-send-email-pefoley2@pefoley.com> <20160321193052.GG14892@calimero.vinschen.de>
+From: Peter Foley <pefoley2@pefoley.com>
+Date: Mon, 21 Mar 2016 19:52:00 -0000
+Message-ID: <CAOFdcFM-9XOAEPhSWbED_eiECu-UeWW2FBkg-u8jo40+0FwAjA@mail.gmail.com>
+Subject: Re: [PATCH 4/5] Don't build utils/lsaauth when cross compiling.
+To: cygwin-patches@cygwin.com
+Content-Type: text/plain; charset=UTF-8
+X-IsSubscribed: yes
+X-SW-Source: 2016-q1/txt/msg00172.txt.bz2
 
+On Mon, Mar 21, 2016 at 3:30 PM, Corinna Vinschen
+<corinna-cygwin@cygwin.com> wrote:
+> I'm not sure this is the right thing to do.  I'm cross compiling
+> Cygwin all the time, and I certainly need the mingw compiler to
+> build the utils and lsaauth dir.  In what case do you not need them,
+> and shouldn't that bordercase(?) be handled by some configure option?
 
---07FIeBX8hApXX6Bi
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1368
-
-On Mar 21 15:45, Peter Foley wrote:
-> On Mon, Mar 21, 2016 at 3:24 PM, Corinna Vinschen
-> <corinna-cygwin@cygwin.com> wrote:
-> > On Mar 21 13:15, Peter Foley wrote:
-> >> /home/peter/cross/src/cygwin/winsup/cygwin/libc/minires-os-if.c:289:
-> >> undefined reference to `DnsFree'
-> >>
-> >> winsup/cygwin/ChangeLog
-> >> Makefile.in: Add libdnsapi to DLL_IMPORTS
-> >
-> > Apart from the fact that this is wrong and DnsFree should be added to
-> > autoload.cc instead, what exactly is that patch fixing?  DnsFree isn't
-> > used anywhere in Cygwin.
->=20
-> This fixes the above link error when building cygwin0.dll as part of a
-> cross toolchain.
->=20
-> The issue appears to be caused by this change in the mingw headers.
-> It probably won't show up for anybody not building against the latest
-> git version of mingw untill the next release.
-> https://github.com/mirror/mingw-w64/commit/38410a
->=20
-> I assume this function should still be added to autoload.cc, rather
-> then modifying DLL_IMPORTS.
-> I'll take a look at that.
-
-While you're at it, ideally we make ourselves independent of the MingW
-header version and use DnsFree directly, replacing DnsRecordListFree
-in autoload.cc and libc/minires-os-if.c, no?
-
+The effect of this change is to not compile anything under the utils
+or lsaauth directories when cross compiling.
+The idea is that the code under these directories is unnecessary for a
+cross toolchain, so if we only build those dirs
+when compiling natively, then a mingw toolchain is no longer a
+pre-requisite for building a cross Cygwin toolchain.
+If there is an instance where you're building a cross toolchain, but
+still want the utils, it might make sense to add a
+flag, rather then checking $cross_compiling, but I can't think of one
+off the top of my head.
 
 Thanks,
-Corinna
 
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---07FIeBX8hApXX6Bi
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJW8FEMAAoJEPU2Bp2uRE+gORYQAJux/VMZBRd4L0P45NJzkO1K
-juF48ZOt/+7M6AW+MZdn5n6zqmjGJn7uIk8JqK90OvtqvPFXTguW3oiSl5Zof9Vl
-JDVkoSA0WSKms7a6wx5DosotstLRRLLpRGwSQt483F6Vv1/iohZq6GK7QBPX5EG8
-or3TyXC+5VhhBWMLqB1rdW3nDYvWfHk5qyxjDFuCuKXVbNcs4Vci1LWbIDBOZdth
-QCOHFHa5A1sRblEI9cOwEC7s574PNTPgdgROOrLOfeQI8BDL6lOKzUauzFur9/TQ
-cSQz0C8XHMwoBEKw9/snj1Q7SVoPcr3rg4iWuo2eUpk0iGlGmUGfWinh2WJN+kOc
-a1aVGx8W17Uye9csJ4vGAZh1m7uO7Cc65ABgGd+LokCNU5JOLsG5TzAYNUM8ERv/
-TjsC4N1g+XAL7x4jvvM1uTQ+BWYvcX7kBCzAjNUp6QLmmhlL4fLa3AqlH0CRktSJ
-f2t915pVbIFIXjOgY5H2NDyM7uWXY3Pala5kuaKOBM3D1njEBbE9PgBOc+qlCfPF
-kmCgRCXWrsREMQU8sORNDw3P5UNcTbpQLZqmd1fT1U2K8XNF3RcykxDUIEBQdA6I
-1Mca0AhGx/yyrB8UgWFJG56/JMeFJ4KHwa4bbmWUA69szKilkJPWaY8apv1rLPHJ
-0JEzQWQVxdIHp8/HXcWx
-=y4pY
------END PGP SIGNATURE-----
-
---07FIeBX8hApXX6Bi--
+Peter
