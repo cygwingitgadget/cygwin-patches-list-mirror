@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8488-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 102512 invoked by alias); 23 Mar 2016 10:46:03 -0000
+Return-Path: <cygwin-patches-return-8489-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 37485 invoked by alias); 23 Mar 2016 11:07:49 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,75 +9,59 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 102489 invoked by uid 89); 23 Mar 2016 10:46:02 -0000
+Received: (qmail 37423 invoked by uid 89); 23 Mar 2016 11:07:46 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-6.6 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_PBL,RDNS_DYNAMIC autolearn=ham version=3.3.2 spammy=H*R:D*cygwin.com, HTo:U*cygwin-patches, H*Ad:U*cygwin-patches, our
+X-Spam-SWARE-Status: No, score=-6.6 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_PBL,RDNS_DYNAMIC autolearn=ham version=3.3.2 spammy=Hx-languages-length:1166, H*R:D*cygwin.com, HTo:U*cygwin-patches, H*Ad:U*cygwin-patches
 X-HELO: calimero.vinschen.de
-Received: from ipbcc0d020.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.208.32) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 23 Mar 2016 10:45:52 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 91C3EA80643; Wed, 23 Mar 2016 11:45:50 +0100 (CET)
-Date: Wed, 23 Mar 2016 10:46:00 -0000
+Received: from ipbcc0d020.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.208.32) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 23 Mar 2016 11:07:35 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 5C6A9A80643; Wed, 23 Mar 2016 12:07:33 +0100 (CET)
+Date: Wed, 23 Mar 2016 11:07:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2 1/5] Add nonnull annotation to posix_memalign.
-Message-ID: <20160323104550.GR14892@calimero.vinschen.de>
+Subject: Re: [PATCH 09/11] Add c++14 sized deallocation operator
+Message-ID: <20160323110733.GS14892@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1458409557-13156-1-git-send-email-pefoley2@pefoley.com> <1458409557-13156-5-git-send-email-pefoley2@pefoley.com> <20160320111558.GG25241@calimero.vinschen.de> <CAOFdcFPxwdnyjbtAm5FVD6d4DhZB9Cm80kPzzNVaCPKfN9yX9Q@mail.gmail.com> <1458580546-14484-1-git-send-email-pefoley2@pefoley.com> <56F0A52D.5070303@cygwin.com>
+References: <1458409557-13156-1-git-send-email-pefoley2@pefoley.com> <1458409557-13156-9-git-send-email-pefoley2@pefoley.com> <20160320112837.GO25241@calimero.vinschen.de> <CAOFdcFPP79BaO=KTpF5oB3ewdYCh6GmfaxoJr03kKY7dSOjrKw@mail.gmail.com> <20160321171314.GA14892@calimero.vinschen.de> <CAOFdcFM1D17HSiLdeNv=S6zim6wOcqY41Ud-iTtiDLrN_YRYOg@mail.gmail.com> <20160321180903.GB14892@calimero.vinschen.de> <CAOFdcFN4wkv40M-BJPhhHwjaDxh7YD7iXDhLaUcnW6qw=pwnYg@mail.gmail.com> <20160321195524.GK14892@calimero.vinschen.de> <CAOFdcFOSdpT3Bi=dne+8MQc82Oyio5atpeDF-W7yUMn-mhR3ew@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="3XZQkxCYp0f/VEFS"
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="/KohU7xR/z4Rz7fl"
 Content-Disposition: inline
-In-Reply-To: <56F0A52D.5070303@cygwin.com>
+In-Reply-To: <CAOFdcFOSdpT3Bi=dne+8MQc82Oyio5atpeDF-W7yUMn-mhR3ew@mail.gmail.com>
 User-Agent: Mutt/1.5.24 (2015-08-30)
-X-SW-Source: 2016-q1/txt/msg00194.txt.bz2
+X-SW-Source: 2016-q1/txt/msg00195.txt.bz2
 
 
---3XZQkxCYp0f/VEFS
+--/KohU7xR/z4Rz7fl
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-length: 1551
+Content-length: 1156
 
-On Mar 21 20:51, Yaakov Selkowitz wrote:
-> On 2016-03-21 12:15, Peter Foley wrote:
-> >GCC 6.0+ asserts that the memptr argument to the builtin function
-> >posix_memalign is nonnull.
-> >Add the necessary annotation to the prototype and
-> >remove the now unnecessary check to fix a warning.
-> >
-> >newlib/Changelog
-> >newlib/libc/include/stdlib.h: Annotate arg to posix_memalign as
-> >non-null.
-> >
-> >winsup/cygwin/ChangeLog
-> >malloc_wrapper.cc (posix_memalign): Remove always true nonnull check.
-> >
-> >Signed-off-by: Peter Foley <pefoley2@pefoley.com>
-> >---
-> >  newlib/libc/include/stdlib.h    | 2 +-
-> >  winsup/cygwin/malloc_wrapper.cc | 3 +--
-> >  2 files changed, 2 insertions(+), 3 deletions(-)
-> >
-> >diff --git a/newlib/libc/include/stdlib.h b/newlib/libc/include/stdlib.h
-> >index f4b2626..7d4ae76 100644
-> >--- a/newlib/libc/include/stdlib.h
-> >+++ b/newlib/libc/include/stdlib.h
-> >@@ -253,7 +253,7 @@ int	_EXFUN(_unsetenv_r,(struct _reent *, const char =
-*__string));
-> >
-> >  #ifdef __rtems__
-> >  #if __POSIX_VISIBLE >=3D 200112
-> >-int _EXFUN(posix_memalign,(void **, size_t, size_t));
-> >+int _EXFUN(__nonnull (1) posix_memalign,(void **, size_t, size_t));
-> >  #endif
-> >  #endif
+On Mar 21 16:03, Peter Foley wrote:
+> On Mon, Mar 21, 2016 at 3:55 PM, Corinna Vinschen
+> <corinna-cygwin@cygwin.com> wrote:
+> > But using -std=3D when building Cygwin wouldn't change the fact that we
+> > might need this delete anyway for applications built with -std=3Dc++14
+> > or do I miss something?
 >=20
-> Note the ifdef __rtems__ there; we have our own posix_memalign declaration
-> in winsup/cygwin/include/cygwin/stdlib.h.  Perhaps these should be merged?
+> This patch is specifically for building cygwin1.dll
+> I haven't tested building programs with -std=3Dc++14, but that should
+> not be affected at all by this patch.
+> I believe the only reason this issue occurs at all is that cygwin1.dll
+> explicitly does not link with libstdc++.
 
-Definitely.  Thanks for catching.
+I applied the original patch and added a diagnostic pragma to disable
+the warning for now.
+
+We definitely have keep in mind that we might have to export this
+function at one point for C++14 applications playing dirty tricks.
+I seriously wonder if we shoudn't do this proactively.  Again, see
+https://cygwin.com/ml/cygwin-patches/2009-q3/msg00010.html for the
+reasdon to export the functions at all.
 
 
+Thanks,
 Corinna
 
 --=20
@@ -85,26 +69,26 @@ Corinna Vinschen                  Please, send mails regarding Cygwin to
 Cygwin Maintainer                 cygwin AT cygwin DOT com
 Red Hat
 
---3XZQkxCYp0f/VEFS
+--/KohU7xR/z4Rz7fl
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-length: 819
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v2
 
-iQIcBAEBCAAGBQJW8nPeAAoJEPU2Bp2uRE+g7WoQAIKBHIGg0gHKV2an748Xx7UU
-XgoBykVnt2fo88IXWht6bA0dfTnsENt/br4I08FFUbn4mEqpbTVbR5TMMSt+4rCq
-ey/bpYnyxP80ZFGTclkqGCC4wokFw/wcFe1BrXf4PQbGr/0TltKo1uA6RjOLCbOo
-sQ3KQ5CjfKBOu/GMAL1u6MLPzx6UR+m8qLvM6B50MzL4jDc/XvS7r7UeJXU+TJzj
-Z3n/Y5GyRu4G/U8yLpmY7iiYy2yetdD9tokcDvep5kfPolX8pBNMbproJimrWaZB
-j8x0aomH7BF9E9X0OBpqLUUfGowFHO9cVTdC6sx3/2xWzFdYTjF/7ElnNlL0Taw9
-gUafViuxGFubjuO/b48LT1IROvIEz2H+c4/6lZ1eA28C3wQZGzp0xicAm+dijYwC
-e82q6AP58CvUUyGhUzoaymwsxciTvWYUjoZc551vMbup8XU431YOU/ieoxdBA8Fj
-j+pyGKUN/Ws8qKolsLZymc9atnipVux3LQ4xTrQr3m3z2q+GXXfQYNRagpdytZMi
-pGCkSjmU+wHvQDUwHEbyLOBMu+7WpgdIpHqr+K/2/ib0HHNGRtdM940ymYfmnoiK
-Fzfg7igu7K97DKb+IFEQyOIz3opi8Qs6OY93eYrG2rzYdSRhlCcqbWjYxe87gXNl
-anmUmPgXTAVlJhibRazl
-=/hrq
+iQIcBAEBCAAGBQJW8nj1AAoJEPU2Bp2uRE+gIm8P/1qNfwT5UWK5f/kR0yI5Gohs
+TK3ZmAikTbzBPVpXxN2WQ9Hwn9hkGPz7wp1euL47xi8CSxjNMj8z57jC1v3jpUU6
+21ewUxi78u9JVAY+ICsEg892Ryv860ctYXo3K6BuDAm1k1YmRA0dAi8/Ink6awIx
+f1wI9GIXYHzK0wbfsgK7QB2Jxsx1VgSQ6qPZn/gOeMqpcf78bhLuRSRSFNLNUPUa
+itzO4CpP/lDa7cM7Fl57VKJBNtglor1kV7CNa0D5xLAmgIAXRv6pH4yVzsVhRk6m
+2k94t5AXqCGKRPQqf7vWsOVQBSuTMSyd5NjHbe3nVDtvs51eCT+Pb2fQVFtnun8B
+i48J9IN0gUrurw3Q83AcuzvLkpHwGeeLU4V41bGcl4Jm8RqFxhuyjvTzWzOFHgt5
+9U1pk0LLvSiltrFzc43lCxq1jnHixWHEscMWMQNykxSRN14yIUfFrNPhVw4MAE9j
+fwmxEq05O6MY8qePzVcAWzBcD5Im/tjWQ0BGAzE4KNs+8LO6LKusC+Rb2S/Pbgx+
+leLn8oonvpy7w2Y28GPj2Aoq+06HL7o104MZr4DRU/O9AlOs8YjuV6Ajg5aVdhAC
+M3JpxoTHKC7J8rKZuurdNrljmP5V3gjp8h5NmzjhWapaD8XOrxUGRIDkQXozpNAx
+o7FGpGaOVMNxOgXKOyHt
+=0YJU
 -----END PGP SIGNATURE-----
 
---3XZQkxCYp0f/VEFS--
+--/KohU7xR/z4Rz7fl--
