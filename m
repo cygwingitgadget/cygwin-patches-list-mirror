@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8520-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 113252 invoked by alias); 31 Mar 2016 16:34:06 -0000
+Return-Path: <cygwin-patches-return-8523-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 1527 invoked by alias); 31 Mar 2016 18:04:46 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,241 +9,280 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 113236 invoked by uid 89); 31 Mar 2016 16:34:05 -0000
+Received: (qmail 1423 invoked by uid 89); 31 Mar 2016 18:04:45 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.2 spammy=target_cpu, 1094, circular, HTo:U*cygwin-patches
-X-HELO: mail-qg0-f46.google.com
-Received: from mail-qg0-f46.google.com (HELO mail-qg0-f46.google.com) (209.85.192.46) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES128-GCM-SHA256 encrypted) ESMTPS; Thu, 31 Mar 2016 16:33:55 +0000
-Received: by mail-qg0-f46.google.com with SMTP id w104so63840512qge.3        for <cygwin-patches@cygwin.com>; Thu, 31 Mar 2016 09:33:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20130820;        h=x-gm-message-state:from:to:cc:subject:date:message-id;        bh=DvYv1DETmtm9sVXB4b/MQmPM3JdrTyJu2XnR1rLJPLc=;        b=RKZnQhp0O5gDjTwsvDvTmM6BXHVzh3bfB5UxJii/w+4pF4BgI8/OTeTtq39XpgEoMI         6F1zvJRJzZZhRPdPS/OthsDbaJ2R2Ss9Xm1kgHb9Wkl78FoZ2hFVynWkj0LoJT2zWWTW         ykRNZjjTl8GkfZ37w/GEY4Uh1fIoaOcUyciMEXKplnlSBZ5HG0abwrxx2cpRpRl83iov         Nc6dAFS9q4CQi4lnTxuftjV69G7K5hnIuKlGH58VKTDS++ejCu5S3vywBfgR6u0SsUgJ         qu3dsuOgwD0cMXXn8TcoVwKw0pNqE0JTXioqcmwVeHyO/E/Fb33jck2EcSQZ4kzL/gvB         97qA==
-X-Gm-Message-State: AD7BkJID0Hxv0BK3bdMMo9xBjwHFpwQmkjUEW4MQvpQa+ltYA8IQ8B9KMxRhkxd80M3slw==
-X-Received: by 10.141.6.9 with SMTP id i9mr18341434qhd.21.1459442033364;        Thu, 31 Mar 2016 09:33:53 -0700 (PDT)
-Received: from bronx.local.pefoley.com (foleype-1-pt.tunnel.tserv13.ash1.ipv6.he.net. [2001:470:7:ee7::2])        by smtp.gmail.com with ESMTPSA id x136sm4265931qka.0.2016.03.31.09.33.52        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);        Thu, 31 Mar 2016 09:33:52 -0700 (PDT)
+X-Spam-SWARE-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.2 spammy=887
+X-HELO: mail-qg0-f50.google.com
+Received: from mail-qg0-f50.google.com (HELO mail-qg0-f50.google.com) (209.85.192.50) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES128-GCM-SHA256 encrypted) ESMTPS; Thu, 31 Mar 2016 18:04:26 +0000
+Received: by mail-qg0-f50.google.com with SMTP id n34so64146860qge.1        for <cygwin-patches@cygwin.com>; Thu, 31 Mar 2016 11:04:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20130820;        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to         :references;        bh=FVjoaO86a/NmmMEjTFeSguCwVRhovWha2e4zTM9G0cw=;        b=k7MgFLU6+H4PS3r/fD9nTYy7Vyxavfz/R8vh9MXP79Q4nxLLtTG5vdZK9/lKsjjJ3k         U2ycX/b3/a5yqnNtzLIWre83AAO9IICAeWj16Ftx05ISW8pybfPykmkb9v+E4sN19p7i         pJbpHB/+rXKsEZ9CN9l4PYnoIT1InJvZoGpvqd26EjgJub3/T0lYRzNSkFJlA/sOZXqa         NIRvnnGyeGVPovXXnk6d2XgCUX4e6MPWiKQA/8kfO7sYOnjxZyEU4lkHfdz1PLQIplWd         F+g4nN9QsVh0ThdRbm5MTb+aMPIpe8l3L5be7wDFg9kT1Cce9NitcQFnsf9MGKQrNJk/         /eaQ==
+X-Gm-Message-State: AD7BkJLXxhZohJFi55QiYH1zkvfHZOlx4q106hWN7inp3BOzZUhTGG4n5oDZuUcbhwIWCg==
+X-Received: by 10.140.83.212 with SMTP id j78mr18577660qgd.83.1459447464261;        Thu, 31 Mar 2016 11:04:24 -0700 (PDT)
+Received: from bronx.local.pefoley.com (foleype-1-pt.tunnel.tserv13.ash1.ipv6.he.net. [2001:470:7:ee7::2])        by smtp.gmail.com with ESMTPSA id 94sm4421831qgj.10.2016.03.31.11.04.23        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);        Thu, 31 Mar 2016 11:04:23 -0700 (PDT)
 From: Peter Foley <pefoley2@pefoley.com>
 To: cygwin-patches@cygwin.com
 Cc: Peter Foley <pefoley2@pefoley.com>
-Subject: [PATCH] Add without-library-checks
-Date: Thu, 31 Mar 2016 16:34:00 -0000
-Message-Id: <1459442026-4544-1-git-send-email-pefoley2@pefoley.com>
+Subject: [PATCH 3/4] Remove remnants of never-defined MALLOC_DEBUG and NEWVFORK
+Date: Thu, 31 Mar 2016 18:04:00 -0000
+Message-Id: <1459447458-6547-3-git-send-email-pefoley2@pefoley.com>
+In-Reply-To: <1459447458-6547-1-git-send-email-pefoley2@pefoley.com>
+References: <1459447458-6547-1-git-send-email-pefoley2@pefoley.com>
 X-IsSubscribed: yes
-X-SW-Source: 2016-q1/txt/msg00226.txt.bz2
+X-SW-Source: 2016-q1/txt/msg00229.txt.bz2
 
-When cross-compiling a toolchan targeting cygwin, building cygwin1.dll
-requires libgcc.
-However, building libgcc requires the cygwin headers to be
-installed.
-Configuring cygwin requries the mingw-crt libraries, which require the
-cygwin headers to be installed.
-Work around this circular dependency by adding a
---without-library-checks configure option to skip cygwin's configure checks
-for valid mingw-crt libraries.
-Since the mingw-crt libraries only require the cygwin headers to be
-installed, this allows us to successfully configure cygwin so that we
-can only install the headers without trying to build any
-libraries.
+MALLOC_DEBUG and NEWVFORK haven't been defined since 2008 (46162537516c5e5fbb).
+Remove all references to tem.
 
-winsup/ChangeLog
-configure.ac: add without-library-checks option
-configure: regenerate
-winsup/cygserver/ChangeLog
-configure.ac: don't check AC_WINDOWS_LIBS when using without-library-checks
-configure: regenerate
-winsup/cygwin/ChangeLog
-configure.ac: don't check AC_WINDOWS_LIBS when using without-library-checks
-configure: regenerate
+winsup/cygwin/ChangeLog:
+acconfig.h: delete
+dcrt0.cc (dll_crt0_1): remove NEWVFORK code.
+dcrt0.cc (do_exit): ditto.
+debug.h: ditto.
+dtable.h: ditto.
+winsup.h: ditto.
+globals.cc: ditto.
+malloc_wrapper.cc: ditto.
+malloc_wrapper.cc (malloc_init): ditto.
+spawn.cc (spawnve): ditto.
+syscalls.cc (setsid): ditto.
 
 Signed-off-by: Peter Foley <pefoley2@pefoley.com>
 ---
- winsup/configure              | 14 ++++++++++++++
- winsup/configure.ac           |  5 ++++-
- winsup/cygserver/configure    |  2 ++
- winsup/cygserver/configure.ac |  9 ++++++---
- winsup/cygwin/configure       |  2 ++
- winsup/cygwin/configure.ac    | 11 +++++++----
- 6 files changed, 35 insertions(+), 8 deletions(-)
+ winsup/cygwin/acconfig.h        |  5 -----
+ winsup/cygwin/config.h.in       |  5 -----
+ winsup/cygwin/dcrt0.cc          | 14 --------------
+ winsup/cygwin/debug.h           |  9 ---------
+ winsup/cygwin/dtable.h          |  6 ------
+ winsup/cygwin/globals.cc        |  3 ---
+ winsup/cygwin/malloc_wrapper.cc |  4 ----
+ winsup/cygwin/spawn.cc          | 18 ------------------
+ winsup/cygwin/syscalls.cc       | 15 ---------------
+ winsup/cygwin/winsup.h          |  2 --
+ 10 files changed, 81 deletions(-)
+ delete mode 100644 winsup/cygwin/acconfig.h
 
-diff --git a/winsup/configure b/winsup/configure
-index 541c81b..5abf793 100755
---- a/winsup/configure
-+++ b/winsup/configure
-@@ -666,6 +666,7 @@ ac_subst_files=''
- ac_user_opts='
- enable_option_checking
- with_mingw_progs
-+with_library_checks
- with_windows_headers
- with_windows_libs
- '
-@@ -1297,6 +1298,9 @@ Optional Packages:
-   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-   --without-mingw-progs   do not build programs using the mingw toolchain
-                           (useful for cross-compiling)
-+  --without-library-checks
-+                          do not check for valid w32api libraries (useful for
-+                          bootstraping a cross-compiler)
-   --with-windows-headers=DIR
-                           specify where the windows includes are located
-   --with-windows-libs=DIR specify where the windows libraries are located
-@@ -3370,6 +3374,14 @@ else
- fi
+diff --git a/winsup/cygwin/acconfig.h b/winsup/cygwin/acconfig.h
+deleted file mode 100644
+index ffe9f81..0000000
+--- a/winsup/cygwin/acconfig.h
++++ /dev/null
+@@ -1,5 +0,0 @@
+-/* Define if MALLOC_DEBUGGING support is requested.  */
+-#undef MALLOC_DEBUG
+-
+-/* Define if using new vfork functionality. */
+-#undef NEWVFORK
+diff --git a/winsup/cygwin/config.h.in b/winsup/cygwin/config.h.in
+index 32f191a..5ddff24 100644
+--- a/winsup/cygwin/config.h.in
++++ b/winsup/cygwin/config.h.in
+@@ -1,9 +1,4 @@
+ /* config.h.in.  Generated from configure.ac by autoheader.  */
+-/* Define if MALLOC_DEBUGGING support is requested.  */
+-#undef MALLOC_DEBUG
+-
+-/* Define if using new vfork functionality. */
+-#undef NEWVFORK
  
+ /* Define if DEBUGGING support is requested. */
+ #undef DEBUGGING
+diff --git a/winsup/cygwin/dcrt0.cc b/winsup/cygwin/dcrt0.cc
+index 94f7bf8..aaa8c44 100644
+--- a/winsup/cygwin/dcrt0.cc
++++ b/winsup/cygwin/dcrt0.cc
+@@ -902,11 +902,6 @@ dll_crt0_1 (void *)
+      Need to do this before any helper threads start. */
+   debug_init ();
  
-+# Check whether --with-library_checks was given.
-+if test "${with_library_checks+set}" = set; then :
-+  withval=$with_library_checks;
-+else
-+  with_library_checks=yes
-+fi
-+
-+
+-#ifdef NEWVFORK
+-  cygheap->fdtab.vfork_child_fixup ();
+-  main_vfork = vfork_storage.create ();
+-#endif
+-
+   cygbench ("pre-forkee");
+   if (in_forkee)
+     {
+@@ -1197,15 +1192,6 @@ do_exit (int status)
+ {
+   syscall_printf ("do_exit (%d), exit_state %d", status, exit_state);
  
+-#ifdef NEWVFORK
+-  vfork_save *vf = vfork_storage.val ();
+-  if (vf != NULL && vf->pid < 0)
+-    {
+-      exit_state = ES_NOT_EXITING;
+-      vf->restore_exit (status);
+-    }
+-#endif
+-
+   lock_process until_exit (true);
  
- # Check whether --with-windows-headers was given.
-@@ -3379,6 +3391,7 @@ if test "${with_windows_headers+set}" = set; then :
- fi
+   if (exit_state < ES_EVENTS_TERMINATE)
+diff --git a/winsup/cygwin/debug.h b/winsup/cygwin/debug.h
+index 627c77e..602ab93 100644
+--- a/winsup/cygwin/debug.h
++++ b/winsup/cygwin/debug.h
+@@ -7,16 +7,7 @@ This software is a copyrighted work licensed under the terms of the
+ Cygwin license.  Please consult the file "CYGWIN_LICENSE" for
+ details. */
  
+-#ifndef MALLOC_DEBUG
+ #define MALLOC_CHECK do {} while (0)
+-#else
+-#include <stdlib.h>
+-#include <malloc.h>
+-#define MALLOC_CHECK ({\
+-  debug_printf ("checking malloc pool");\
+-  mallinfo ();\
+-})
+-#endif
  
-+if test "x$with_library_checks" != "xno"; then
+ #if !defined(_DEBUG_H_)
+ #define _DEBUG_H_
+diff --git a/winsup/cygwin/dtable.h b/winsup/cygwin/dtable.h
+index 34e975b..fb44c95 100644
+--- a/winsup/cygwin/dtable.h
++++ b/winsup/cygwin/dtable.h
+@@ -25,9 +25,6 @@ class suffix_info;
+ class dtable
+ {
+   fhandler_base **fds;
+-#ifdef NEWVFORK
+-  fhandler_base **fds_on_hold;
+-#endif
+   fhandler_base **archetypes;
+   unsigned narchetypes;
+   unsigned farchetype;
+@@ -77,9 +74,6 @@ public:
+   void stdio_init ();
+   void get_debugger_info ();
+   void set_file_pointers_for_exec ();
+-#ifdef NEWVFORK
+-  bool in_vfork_cleanup () {return fds_on_hold == fds;}
+-#endif
+   fhandler_base *find_archetype (device& dev);
+   fhandler_base **add_archetype ();
+   void delete_archetype (fhandler_base *);
+diff --git a/winsup/cygwin/globals.cc b/winsup/cygwin/globals.cc
+index 990158e..7dfe74d 100644
+--- a/winsup/cygwin/globals.cc
++++ b/winsup/cygwin/globals.cc
+@@ -88,9 +88,6 @@ int NO_COPY __isthreaded = 0;
+ int __argc_safe;
+ int __argc;
+ char **__argv;
+-#ifdef NEWVFORK
+-vfork_save NO_COPY *main_vfork;
+-#endif
  
+ _cygtls NO_COPY *_main_tls /* !globals.h */;
  
- # Check whether --with-windows-libs was given.
-@@ -3397,6 +3410,7 @@ fi
+diff --git a/winsup/cygwin/malloc_wrapper.cc b/winsup/cygwin/malloc_wrapper.cc
+index 0db5de8..8098952 100644
+--- a/winsup/cygwin/malloc_wrapper.cc
++++ b/winsup/cygwin/malloc_wrapper.cc
+@@ -18,9 +18,7 @@ details. */
+ #include "perprocess.h"
+ #include "miscfuncs.h"
+ #include "cygmalloc.h"
+-#ifndef MALLOC_DEBUG
+ #include <malloc.h>
+-#endif
+ extern "C" struct mallinfo dlmallinfo ();
  
+ /* we provide these stubs to call into a user's
+@@ -281,7 +279,6 @@ malloc_init ()
+ {
+   mallock.init ("mallock");
  
+-#ifndef MALLOC_DEBUG
+   /* Check if malloc is provided by application. If so, redirect all
+      calls to malloc/free/realloc to application provided. This may
+      happen if some other dll calls cygwin's malloc, but main code provides
+@@ -296,7 +293,6 @@ malloc_init ()
+       malloc_printf ("using %s malloc", use_internal ? "internal" : "external");
+       internal_malloc_determined = true;
+     }
+-#endif
+ }
  
-+fi
+ extern "C" void
+diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
+index a2111c2..9871bb5 100644
+--- a/winsup/cygwin/spawn.cc
++++ b/winsup/cygwin/spawn.cc
+@@ -882,14 +882,6 @@ spawnve (int mode, const char *path, const char *const *argv,
+   static char *const empty_env[] = { NULL };
  
- ac_ext=cpp
- ac_cpp='$CXXCPP $CPPFLAGS'
-diff --git a/winsup/configure.ac b/winsup/configure.ac
-index b04f044..3c27674 100644
---- a/winsup/configure.ac
-+++ b/winsup/configure.ac
-@@ -26,9 +26,12 @@ AC_PROG_CXX
- AC_PROG_CPP
- AC_LANG(C)
- AC_ARG_WITH([mingw-progs],[AS_HELP_STRING([--without-mingw-progs],[do not build programs using the mingw toolchain (useful for cross-compiling)])],[],[with_mingw_progs=yes])
-+AC_ARG_WITH([library_checks],[AS_HELP_STRING([--without-library-checks],[do not check for valid w32api libraries (useful for bootstraping a cross-compiler)])],[],[with_library_checks=yes])
+   int ret;
+-#ifdef NEWVFORK
+-  vfork_save *vf = vfork_storage.val ();
+-
+-  if (vf != NULL && (vf->pid < 0) && mode == _P_OVERLAY)
+-    mode = _P_NOWAIT;
+-  else
+-    vf = NULL;
+-#endif
  
- AC_WINDOWS_HEADERS
--AC_WINDOWS_LIBS
-+if test "x$with_library_checks" != "xno"; then
-+    AC_WINDOWS_LIBS
-+fi
+   syscall_printf ("spawnve (%s, %s, %p)", path, argv[0], envp);
  
- AC_LANG(C++)
+@@ -910,16 +902,6 @@ spawnve (int mode, const char *path, const char *const *argv,
+     case _P_DETACH:
+     case _P_SYSTEM:
+       ret = ch_spawn.worker (path, argv, envp, mode);
+-#ifdef NEWVFORK
+-      if (vf)
+-	{
+-	  if (ret > 0)
+-	    {
+-	      debug_printf ("longjmping due to vfork");
+-	      vf->restore_pid (ret);
+-	    }
+-	}
+-#endif
+       break;
+     default:
+       set_errno (EINVAL);
+diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
+index 15fb8ce..5d881f5 100644
+--- a/winsup/cygwin/syscalls.cc
++++ b/winsup/cygwin/syscalls.cc
+@@ -1129,21 +1129,6 @@ getppid ()
+ extern "C" pid_t
+ setsid (void)
+ {
+-#ifdef NEWVFORK
+-  vfork_save *vf = vfork_storage.val ();
+-  /* This is a horrible, horrible kludge */
+-  if (vf && vf->pid < 0)
+-    {
+-      pid_t pid = fork ();
+-      if (pid > 0)
+-	{
+-	  syscall_printf ("longjmping due to vfork");
+-	  vf->restore_pid (pid);
+-	}
+-      /* assuming that fork was successful */
+-    }
+-#endif
+-
+   if (myself->pgid == myself->pid)
+     syscall_printf ("hmm.  pgid %d pid %d", myself->pgid, myself->pid);
+   else
+diff --git a/winsup/cygwin/winsup.h b/winsup/cygwin/winsup.h
+index d7f7350..9b12267 100644
+--- a/winsup/cygwin/winsup.h
++++ b/winsup/cygwin/winsup.h
+@@ -88,9 +88,7 @@ extern const unsigned char case_folded_lower[];
+ extern const unsigned char case_folded_upper[];
+ #define cyg_toupper(c) ((char) case_folded_upper[(unsigned char)(c)])
  
-diff --git a/winsup/cygserver/configure b/winsup/cygserver/configure
-index 37caf57..c2112ed 100755
---- a/winsup/cygserver/configure
-+++ b/winsup/cygserver/configure
-@@ -3381,6 +3381,7 @@ if test "${with_windows_headers+set}" = set; then :
- fi
+-#ifndef MALLOC_DEBUG
+ #define cfree newlib_cfree_dont_use
+-#endif
  
- 
-+if test "x$with_library_checks" != "xno"; then
- 
- 
- # Check whether --with-windows-libs was given.
-@@ -3399,6 +3400,7 @@ fi
- 
- 
- 
-+fi
- 
- ac_ext=cpp
- ac_cpp='$CXXCPP $CPPFLAGS'
-diff --git a/winsup/cygserver/configure.ac b/winsup/cygserver/configure.ac
-index 5d1464b..3c96a57 100644
---- a/winsup/cygserver/configure.ac
-+++ b/winsup/cygserver/configure.ac
-@@ -9,7 +9,7 @@ dnl details.
- dnl
- dnl Process this file with autoconf to produce a configure script.
- 
--AC_PREREQ(2.59)
-+AC_PREREQ([2.59])
- AC_INIT([Cygwin Cygserver],[0],[cygwin@cygwin.com],[cygwin],[https://cygwin.com])
- AC_CONFIG_SRCDIR(cygserver.cc)
- AC_CONFIG_AUX_DIR(..)
-@@ -26,7 +26,9 @@ AC_PROG_CPP
- AC_LANG(C)
- 
- AC_WINDOWS_HEADERS
--AC_WINDOWS_LIBS
-+if test "x$with_library_checks" != "xno"; then
-+  AC_WINDOWS_LIBS
-+fi
- 
- AC_LANG(C++)
- 
-@@ -65,4 +67,5 @@ esac
- ])
- 
- AC_CONFIGURE_ARGS
--AC_OUTPUT(Makefile)
-+AC_CONFIG_FILES([Makefile])
-+AC_OUTPUT
-diff --git a/winsup/cygwin/configure b/winsup/cygwin/configure
-index aa26015..8e69354 100755
---- a/winsup/cygwin/configure
-+++ b/winsup/cygwin/configure
-@@ -3392,6 +3392,7 @@ if test "${with_windows_headers+set}" = set; then :
- fi
- 
- 
-+if test "x$with_library_checks" != "xno"; then
- 
- 
- # Check whether --with-windows-libs was given.
-@@ -3410,6 +3411,7 @@ fi
- 
- 
- 
-+fi
- 
- ac_ext=cpp
- ac_cpp='$CXXCPP $CPPFLAGS'
-diff --git a/winsup/cygwin/configure.ac b/winsup/cygwin/configure.ac
-index fe8e038..efef76f 100644
---- a/winsup/cygwin/configure.ac
-+++ b/winsup/cygwin/configure.ac
-@@ -10,7 +10,7 @@ dnl details.
- dnl
- dnl Process this file with autoconf to produce a configure script.
- 
--AC_PREREQ(2.59)
-+AC_PREREQ([2.59])
- AC_INIT([Cygwin DLL],[0],[cygwin@cygwin.com],[cygwin],[https://cygwin.com])
- AC_CONFIG_SRCDIR(Makefile.in)
- AC_CONFIG_HEADER(config.h)
-@@ -28,7 +28,9 @@ AC_PROG_CPP
- AC_LANG(C)
- 
- AC_WINDOWS_HEADERS
--AC_WINDOWS_LIBS
-+if test "x$with_library_checks" != "xno"; then
-+  AC_WINDOWS_LIBS
-+fi
- 
- AC_LANG(C++)
- 
-@@ -99,7 +101,7 @@ case "$target_cpu" in
- 		DIN_FILE="x86_64.din"
- 		TLSOFFSETS_H="tlsoffsets64.h"
- 		;;
--   *)		AC_MSG_ERROR(Invalid target processor \"$target_cpu\") ;;
-+   *)		AC_MSG_ERROR([Invalid target processor "$target_cpu"]) ;;
- esac
- 
- AC_CONFIGURE_ARGS
-@@ -109,4 +111,5 @@ AC_SUBST(DLL_ENTRY)
- AC_SUBST(DEF_DLL_ENTRY)
- AC_SUBST(DIN_FILE)
- AC_SUBST(TLSOFFSETS_H)
--AC_OUTPUT(Makefile)
-+AC_CONFIG_FILES([Makefile])
-+AC_OUTPUT
+ /* Used as type by sys_wcstombs_alloc and sys_mbstowcs_alloc.  For a
+    description see there. */
 -- 
 2.8.0
