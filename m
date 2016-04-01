@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8529-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 130847 invoked by alias); 1 Apr 2016 12:27:55 -0000
+Return-Path: <cygwin-patches-return-8530-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 2314 invoked by alias); 1 Apr 2016 13:13:02 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,82 +9,47 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 129939 invoked by uid 89); 1 Apr 2016 12:27:54 -0000
+Received: (qmail 2293 invoked by uid 89); 1 Apr 2016 13:13:02 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-96.6 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_PBL,RDNS_DYNAMIC autolearn=ham version=3.3.2 spammy=letter, HTo:U*cygwin-patches, H*Ad:U*cygwin-patches, H*R:D*cygwin.com
-X-HELO: calimero.vinschen.de
-Received: from ipbcc0d020.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.208.32) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 01 Apr 2016 12:27:44 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 707A5A8060E; Fri,  1 Apr 2016 14:27:42 +0200 (CEST)
-Date: Fri, 01 Apr 2016 12:27:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KAM_LAZY_DOMAIN_SECURITY,SPF_HELO_PASS autolearn=no version=3.3.2 spammy=H*Ad:U*yselkowitz, H*M:cygwin, H*F:U*yselkowitz, H*MI:sk:2016040
+X-HELO: mx1.redhat.com
+Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-GCM-SHA384 encrypted) ESMTPS; Fri, 01 Apr 2016 13:12:54 +0000
+Received: from int-mx10.intmail.prod.int.phx2.redhat.com (int-mx10.intmail.prod.int.phx2.redhat.com [10.5.11.23])	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))	(No client certificate requested)	by mx1.redhat.com (Postfix) with ESMTPS id 7088480510	for <cygwin-patches@cygwin.com>; Fri,  1 Apr 2016 13:12:53 +0000 (UTC)
+Received: from [10.10.116.17] (ovpn-116-17.rdu2.redhat.com [10.10.116.17])	by int-mx10.intmail.prod.int.phx2.redhat.com (8.14.4/8.14.4) with ESMTP id u31DCpBe007995	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO)	for <cygwin-patches@cygwin.com>; Fri, 1 Apr 2016 09:12:53 -0400
+Subject: Re: [PATCH v2] Refactor to avoid nonnull checks on "this" pointer.
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 1/4] Remove leftover cruft from config.h.in
-Message-ID: <20160401122742.GE16660@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1459447458-6547-1-git-send-email-pefoley2@pefoley.com>
+References: <1459441102-19941-1-git-send-email-pefoley2@pefoley.com> <20160401121318.GA16660@calimero.vinschen.de>
+From: Yaakov Selkowitz <yselkowitz@cygwin.com>
+Message-ID: <56FE73D7.8030306@cygwin.com>
+Date: Fri, 01 Apr 2016 13:13:00 -0000
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:38.0) Gecko/20100101 Thunderbird/38.6.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="CGDBiGfvSTbxKZlW"
-Content-Disposition: inline
-In-Reply-To: <1459447458-6547-1-git-send-email-pefoley2@pefoley.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-SW-Source: 2016-q2/txt/msg00004.txt.bz2
+In-Reply-To: <20160401121318.GA16660@calimero.vinschen.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
+X-SW-Source: 2016-q2/txt/msg00005.txt.bz2
 
+On 2016-04-01 07:13, Corinna Vinschen wrote:
+> On Mar 31 12:18, Peter Foley wrote:
+>> G++ 6.0 asserts that the "this" pointer is non-null for member functions.
+>> Refactor methods that check if this is non-null to be static where
+>> necessary, and remove the check where it is unnecessary.
+>
+> No, sorry, but now.  Converting all affected functions to static
+> functions just because this might be null is much too intrusive for my
+> taste.  *If* that's really a problem going forward, I'd rather see the
+> pointer test moved into the caller.  But don't waste your time on a
+> patch yet.
+>
+> Let's please take a step back and look at what happens.  So, here's the
+> question:  What error message does G++ 6 generate in case of an `if
+> (this)' test in a member function, and why on earth should it care and
+> do that?
 
---CGDBiGfvSTbxKZlW
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 773
+See https://gcc.gnu.org/gcc-6/porting_to.html, section named 
+"Optimizations remove null pointer checks for this".
 
-On Mar 31 14:04, Peter Foley wrote:
-> HAVE_BUILTIN_MEMTEST and AC_ALLOCA were removed in 4bd8eb7d1b.
-> Cleanup leftover references.
-
-> Use the 3-arg form of AC_DEFINE.
-
-> MALLOC_DEBUG and NEWVFORK haven't been defined since 2008
-> (46162537516c5e5fbb).  Remove all references to tem.
-
-> Don't use obsolete LIB_AC_PROG_CC.
-> Run autoupdate.
-
-All patches applied.  Given that patch 3 made MALLOC_CHECK obsolete,
-I removed the definition and all calls in an extra patch.
-
-Btw., if it's not asked too much I'd be glad if a patch series like this
-comes with a cover letter (e.g. git format-patch --cover-letter).
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---CGDBiGfvSTbxKZlW
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJW/mk+AAoJEPU2Bp2uRE+g9AkP/1r1np3GZM+lAKBKCicTZ5Ji
-kFSC63XPkOKge1FgC53mPWZhEzJUlkVfrKexGUs80wocRUP/0vAv77Sx0o7jONni
-EJ1eiyHaugKR/n/QwXFJKoSuxppMoPMuhkcckXJP0ivayVYDYVQDf9tG/zRBji7Z
-B2nKkKiyUeji8tgp7EnOLsGmAewJ6oza1Y6MFR0+a1ahjlVECxaCbXkJkeCEOuoV
-eDjRmQjQuWGxifDeW/6GsnMqPQwiMcpAlXBYGwgzJ27HETCgzVQplLlBDi0zM7Qq
-NiG03R1DcUhompBH3YM6hUqH+HYMBUAC7H4cEmxzxKIfzq4iIdII4Ptz5CuaJCvz
-uspGyWqc9IKfG//ruvYsvMiYSeCYEBuC47p6KGhQR3GOXCC7YBT3thUELG1q1QR1
-T7ZOgkH7zFCd2419hLYbiOEgdISf5NMlohsVXgrdcCRSW72rj5eeAGUyGmAPiSnw
-qZsZ+s8DChHQ1Pm1jxduqsVKHOEJwOjubvBJJLm+VN3YFexiZgR1oFUQpEHmy3pe
-K0JLkwp4jXop8MOD8D2XNmE7SqiTjWFaDDfAXxzF9orzMIDB99e1a8XJcPBQU0o1
-bjzJ6h308nizC9FzhVctJbl+n8n60OFN/TvaluFX3aXG9HQjeomx7rNMo6lyORgD
-7/kNQzy35druINEc8hkv
-=N7qT
------END PGP SIGNATURE-----
-
---CGDBiGfvSTbxKZlW--
+-- 
+Yaakov
