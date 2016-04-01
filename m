@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8533-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 75034 invoked by alias); 1 Apr 2016 13:34:32 -0000
+Return-Path: <cygwin-patches-return-8534-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 91675 invoked by alias); 1 Apr 2016 15:09:22 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,38 +9,90 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 75006 invoked by uid 89); 1 Apr 2016 13:34:31 -0000
+Received: (qmail 91648 invoked by uid 89); 1 Apr 2016 15:09:21 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.2 spammy=yselkowitzcygwincom, U*yselkowitz, yselkowitz@cygwin.com, sk:yselkow
-X-HELO: mail-oi0-f48.google.com
-Received: from mail-oi0-f48.google.com (HELO mail-oi0-f48.google.com) (209.85.218.48) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES128-GCM-SHA256 encrypted) ESMTPS; Fri, 01 Apr 2016 13:34:21 +0000
-Received: by mail-oi0-f48.google.com with SMTP id r187so105198506oih.3        for <cygwin-patches@cygwin.com>; Fri, 01 Apr 2016 06:34:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20130820;        h=x-gm-message-state:mime-version:in-reply-to:references:from:date         :message-id:subject:to;        bh=VNymPgDUqeuaCs1XfplqHZzOoV5K1dTFteO+aPHyFa4=;        b=eqOkx2YwGjakVgRy1BS1xUtN6bsdmwKYj405Tw8uA/TQVS94VI7b4KuU/+GJwaJst7         7x4PqqWyHvsSRQM/E9WRx2LWzqDfPNFn80xhlM9icYfHGrdQEuftbKhk9GyxQT/yX2Gy         pED/nhwXdmigUidpusf6gtxoyFE+p16nHq0yoybteUX4fWeQElxTLcx7KIJ6c20RLi5e         Rg4SUnI5Hgpt1E+P2r9abyrpppqB7qeCF7XlMu7N47kr2TYNOOhsL1F+jGZRWJ8up4t0         O0xJPtJ10toHZWOLAA0AyqMNujstZjZUr2gp2ydydFaEFY7chQFpJqbAqMWy8NmY0Lgf         3/wg==
-X-Gm-Message-State: AD7BkJK4Eya3vXxf+aJ0XHGtMe5KA1T99t+NWTf6ksbf7z2iyVwR1C/Vw1ZVc3PEId/rSFlLRbYSybnrALLydQ==
-X-Received: by 10.157.13.20 with SMTP id 20mr2858612oti.35.1459517659594; Fri, 01 Apr 2016 06:34:19 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 10.76.157.136 with HTTP; Fri, 1 Apr 2016 06:34:00 -0700 (PDT)
-In-Reply-To: <56FE73D7.8030306@cygwin.com>
-References: <1459441102-19941-1-git-send-email-pefoley2@pefoley.com> <20160401121318.GA16660@calimero.vinschen.de> <56FE73D7.8030306@cygwin.com>
-From: Peter Foley <pefoley2@pefoley.com>
-Date: Fri, 01 Apr 2016 13:34:00 -0000
-Message-ID: <CAOFdcFN0+eH76u6A0Z=gsyE8iEtzQFUTjyheQYzRk5Hfst_s=Q@mail.gmail.com>
-Subject: Re: [PATCH v2] Refactor to avoid nonnull checks on "this" pointer.
+X-Spam-SWARE-Status: No, score=-96.6 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_PBL,RDNS_DYNAMIC autolearn=ham version=3.3.2 spammy=Hx-languages-length:1255, earth, HTo:U*cygwin-patches, H*Ad:U*cygwin-patches
+X-HELO: calimero.vinschen.de
+Received: from ipbcc0d020.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.208.32) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 01 Apr 2016 15:09:11 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 0CC48A8060E; Fri,  1 Apr 2016 17:09:09 +0200 (CEST)
+Date: Fri, 01 Apr 2016 15:09:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Content-Type: text/plain; charset=UTF-8
-X-IsSubscribed: yes
-X-SW-Source: 2016-q2/txt/msg00008.txt.bz2
+Subject: Re: [PATCH v2] Refactor to avoid nonnull checks on "this" pointer.
+Message-ID: <20160401150909.GF16660@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <1459441102-19941-1-git-send-email-pefoley2@pefoley.com> <20160401121318.GA16660@calimero.vinschen.de> <56FE73D7.8030306@cygwin.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="FeAIMMcddNRN4P4/"
+Content-Disposition: inline
+In-Reply-To: <56FE73D7.8030306@cygwin.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-SW-Source: 2016-q2/txt/msg00009.txt.bz2
 
-On Fri, Apr 1, 2016 at 9:12 AM, Yaakov Selkowitz <yselkowitz@cygwin.com> wrote:
-> See https://gcc.gnu.org/gcc-6/porting_to.html, section named "Optimizations
+
+--FeAIMMcddNRN4P4/
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 1239
+
+On Apr  1 08:12, Yaakov Selkowitz wrote:
+> On 2016-04-01 07:13, Corinna Vinschen wrote:
+> >On Mar 31 12:18, Peter Foley wrote:
+> >>G++ 6.0 asserts that the "this" pointer is non-null for member function=
+s.
+> >>Refactor methods that check if this is non-null to be static where
+> >>necessary, and remove the check where it is unnecessary.
+> >
+> >No, sorry, but now.  Converting all affected functions to static
+> >functions just because this might be null is much too intrusive for my
+> >taste.  *If* that's really a problem going forward, I'd rather see the
+> >pointer test moved into the caller.  But don't waste your time on a
+> >patch yet.
+> >
+> >Let's please take a step back and look at what happens.  So, here's the
+> >question:  What error message does G++ 6 generate in case of an `if
+> >(this)' test in a member function, and why on earth should it care and
+> >do that?
+>=20
+> See https://gcc.gnu.org/gcc-6/porting_to.html, section named "Optimizatio=
+ns
 > remove null pointer checks for this".
 
-If there's an better way to do this, I'm all ears.
-However, it seems to come down to either making these methods static
-or passing -fno-delete-null-pointer-checks unconditionally once gcc
-6.0 becomes stable.
+Oh well.  I kind of start to miss the K&R times...
 
-Thanks,
+Just kidding.  I think.
 
-Peter
+
+Corinna
+
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
+
+--FeAIMMcddNRN4P4/
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 819
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iQIcBAEBCAAGBQJW/o8UAAoJEPU2Bp2uRE+gJ6EP/0AUEFY77c3dBTkJhakXMMMy
+4xqVVmCtJQJcOteiX0oRbiHPMDETrUMdwrVqpzLrXzAalXDsAq71aoU7CWf7Mu6x
+4tQ3cdA0JF2KOiWe4nGtTCl6y6f0nZN6srTCs5C352NPiFgOLYNXogmARfU3vWYo
+x4sdnxBxcngvM/NV+YlTE9xghtx4B2bSyOg55eODnFxa8p5I6tACrj7B6Dsu97sN
+oCxuis8m6Zq+KMQWl7r3AoCWdoxMRV7qzHpIQqrs8nQczGYs1BixAXQfA2BHWlEk
+S1xW6q5lYb4SLUx5t+Cy8obvt4e+W1NlY3HjQADAv91Xt3re2vv5IUSenhP9vRJQ
+/8sjkFNu5fVHZAJjgzVoj1xAq9lTrQEEhpX9LW6KDa2YlAM43FWHhgqP/v13tUcH
+KfTD7xBXLYuZrrEWh1IEyQitkpeaHDIghRSZgUPW6FFdPldWnxca79J8a6wa1WIs
+5IOqjxu/GVkw0iCkV2Z76cNF03qB+q6h3gkxKsLCq0YWBaPC5FLni0SFEkpbX6aV
+1zWXPpMucgp4YviL6kGsvCZyUikOfPzk5lzaD+KWUiFvdJnp/ygpK4hNLendt8WT
+kD4UrXWbYhhjOsOMeJsOwV9vxtm3o3/vbQuskYeOXWaSXDQS/Prf6wmrRrfHrXvB
+f9iw/o+6A49XlBgkuI4T
+=eFC7
+-----END PGP SIGNATURE-----
+
+--FeAIMMcddNRN4P4/--
