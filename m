@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8556-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 56543 invoked by alias); 5 Apr 2016 18:47:03 -0000
+Return-Path: <cygwin-patches-return-8557-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 40713 invoked by alias); 6 Apr 2016 12:23:02 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,113 +9,42 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 56523 invoked by uid 89); 5 Apr 2016 18:47:02 -0000
+Received: (qmail 40694 invoked by uid 89); 6 Apr 2016 12:23:01 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-96.6 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_PBL,RDNS_DYNAMIC autolearn=ham version=3.3.2 spammy=D*towo.net, towotowonet, towo@towo.net, U*towo
-X-HELO: calimero.vinschen.de
-Received: from ipbcc0d020.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.208.32) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 05 Apr 2016 18:46:51 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id DAE5BA8097D; Tue,  5 Apr 2016 20:46:49 +0200 (CEST)
-Date: Tue, 05 Apr 2016 18:47:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
+X-Spam-SWARE-Status: No, score=-2.6 required=5.0 tests=BAYES_00,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.2 spammy=HX-Envelope-From:sk:Johanne, H*Ad:U*cygwin-patches
+X-HELO: mout.gmx.net
+Received: from mout.gmx.net (HELO mout.gmx.net) (212.227.17.20) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES256-GCM-SHA384 encrypted) ESMTPS; Wed, 06 Apr 2016 12:23:00 +0000
+Received: from virtualbox ([37.24.143.127]) by mail.gmx.com (mrgmx101) with ESMTPSA (Nemesis) id 0M4CB5-1bfC1624Nn-00rqZD; Wed, 06 Apr 2016 14:22:55 +0200
+Date: Wed, 06 Apr 2016 12:23:00 -0000
+From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+To: Thomas Wolff <towo@towo.net>
+cc: cygwin-patches@cygwin.com
 Subject: Re: Fwd: Re: [PATCH] Be truthful about reporting whether readahead is available
-Message-ID: <20160405184649.GA4442@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <4b19a1f32862208db6121371bd7ef395f6699535.1459846294.git.johannes.schindelin@gmx.de> <20160405135549.GE26281@calimero.vinschen.de> <748397985.175721.a41cd152-02d9-4741-9845-0d01439e7852.open-xchange@email.1und1.de> <5703ECD7.1080502@towo.net>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="4Ckj6UjgE2iN1+kY"
-Content-Disposition: inline
 In-Reply-To: <5703ECD7.1080502@towo.net>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-SW-Source: 2016-q2/txt/msg00031.txt.bz2
+Message-ID: <alpine.DEB.2.20.1604061422140.3371@virtualbox>
+References: <4b19a1f32862208db6121371bd7ef395f6699535.1459846294.git.johannes.schindelin@gmx.de> <20160405135549.GE26281@calimero.vinschen.de> <748397985.175721.a41cd152-02d9-4741-9845-0d01439e7852.open-xchange@email.1und1.de> <5703ECD7.1080502@towo.net>
+User-Agent: Alpine 2.20 (DEB 67 2015-01-07)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-UI-Out-Filterresults: notjunk:1;V01:K0:OrUifCy/jKs=:faJAtgoLIyntbKtmeWz7Wl yWC+MaN6tLROjULbASbZRdhR45MK3V0/Ka/Du2lIciBSpmjz3NpU1q4cWJ8GpZKAMJ6MA3ZYI q7VFjkHMeGhMuKeLRVO2KClzsXZLf9KSGvwSKq3XQMOyGlrSe/s19ey6A1RWNVNFRdokNSR9i PYvzD/LLcYGsSQQkl0ZJ5kKcLrCKgXJHhWFJKl5QxJpC3zBchA6KTw6N0RovWNe/elRNyTnZx s1pJtPeC5aZFbqNngmHCziYwoHA6reybCIAaW581a7YaZ+jgzIB2pYUfNOBlBtd57TnRf0Mi4 JYbdzuhR/sjNYwS71LF+Zj2PIxvqCqeuZ3dwEch8n2PzPnL1onGPjtEks3Xx1iwWzCccqftsa tmIc2kduWJLvwZmZtAPI6apA08aDCnHQl0BB+N0AmhvzP5P+X1+8XkLg7QQopeHVJLFWxEGTa Bi7o0vnrPx7t0/f3EDimJ06Xdjj28CV+UVxMr5gQY7UbtEmuzO+rYSRRyeL04wb4bLAxJHRyC f7veZDbh1UeEULC3I1aSZYhPmptlcg5OKxB4lDRXWNZUdt0fwKaXh1FxXVJF4lX0cvKZmnDJe 8rUytwDAE/8DBrMOv+33GYrztukB9t4And7c/WYIz2g9Jhrll6SfEbIYmWZBtUMy9ljMSJ1FA uL4oOcbwTrhsB+sSci33Tv5LsWbSrFOxbSckdhzKQSPiMKk2DbSdx3zaNykfqbCShTsIVpYbr lZ0whxngPSPrSnoVJsvwRchLCorEOoW6I9Ww8bwOszsVUdcG6o6hvZ2WdUFZR+NGv/XyGlVir ZAkjQwS
+X-IsSubscribed: yes
+X-SW-Source: 2016-q2/txt/msg00032.txt.bz2
 
+Hi Thomas,
 
---4Ckj6UjgE2iN1+kY
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1881
+On Tue, 5 Apr 2016, Thomas Wolff wrote:
 
-On Apr  5 18:50, Thomas Wolff wrote:
->=20
-> >>Von: Corinna Vinschen <corinna-cygwin@cygwin.com>
-> >>An: cygwin-patches@cygwin.com
-> >>Cc: Thomas Wolff <towo@towo.net>
-> >>Datum: 5. April 2016 um 15:55
-> >>Betreff: Re: [PATCH] Be truthful about reporting whether readahead is
-> >>available
-> >>
-> >>Thomas?
-> >>
-> >>Any input?
-> >>
+> > > Betreff: Re: [PATCH] Be truthful about reporting whether readahead is
+> > > available
+> > >
+> > > Thomas?
+> > >
+> > > Any input?
+> > >
 > Yes, let's fix the patch so. Sorry for the flaw.
 
-No worries.
+No big deal, thanks for the ACK!
 
-> Thomas
->=20
-> >>
-> >>On Apr 5 10:52, Johannes Schindelin wrote:
-> >>
-> >>>In 7346568 (Make requested console reports work, 2016-03-16), code was
-> >>>introduced to report the current cursor position. It works by using a
-> >>>pointer that either points to the next byte in the readahead buffer, or
-> >>>to a NUL byte if the buffer is depleted, or the pointer is NULL.
-> >>>
-> >>>These conditions are heeded in the fhandler_console::read() method, but
-> >>>the condition that the pointer can point at the end of the readahead
-> >>>buffer was not handled properly in the get_cons_readahead_valid()
-> >>>method.
-> >>>
-> >>>This poses a problem e.g. in Git for Windows (which uses a slightly
-> >>>modified MSYS2 runtime which is in turn a slightly modified Cygwin
-> >>>runtime) when vim queries the cursor position and immediately goes on =
-to
-> >>>read console input, erroneously thinking that the readahead buffer is
-> >>>valid when it is already depleted instead. This condition results in an
-> >>>apparent freeze that can be helped only by pressing keys repeatedly.
-> >>>
-> >>>The full Git for Windows bug report is here:
-> >>>
-> >>>https://github.com/git-for-windows/git/issues/711
-> >>>
-> >>>Let's just teach the get_cons_readahead_valid() method to handle a
-> >>>depleted readahead buffer correctly.
-
-Patch applied.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---4Ckj6UjgE2iN1+kY
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJXBAgZAAoJEPU2Bp2uRE+gtJEQAJq2XyY5jNMqMuIdxzTQ9ifM
-R/V0sQeiQqwyugqKuunau2nsHFlA2b4IOHq0DNYui1cv2iv8sKJI3CiwAA1uiBdr
-q7zW8PFBNUsSZdkXFJvJD3KuFyv1V13oP6LABSTVMlBbunXiBRGvhfF0UObaDcHt
-MTKamxo8g9Cgs64BtIQfzrRlfQA46yDqnYgtUOaomHJpOJygVIsf1epXSlLyr2GX
-IPbjKqGx2YA5sT2RQYYQZyufFe9nEf58qai73D3ruNGzLXo6Nvk4B6e0BCOa3lxV
-N2gBFq+9fEwPJzoRLgmCRXSxVtRx86H4/WvwN3Myek751ST+b+M0D0ez0/F9eCD5
-a4o8KrntkFLb+VRt7OQTA0sAzCkVwZLRycn9f9gdbjBT8nUKA9kbui7tQvW9Guk4
-JZa8QD7t+taJ3BrmZeJo3UCr+/WPkNoPKs09mD9VadychvC80/3z84bR7bV1EWqv
-dttbuf0wlZjfKuWMQxKbM1qUAySOs+oqE3nRy49l4KeU9NZNkkcaWkdBfl1vX0f7
-wKtFzDwbdO3DT/0v/Sj4HVXues2r+aBd/s/E6uRB6niO0FGBL2iegiwOR3ZmNcXU
-txQq3xfiJIx4SLdBg1J3lzA2rew5IrJYKwQVUuvo6m8FshSs215hfyuP5gsrmNVN
-mCvO5P69QtGuof4mE8r9
-=bcQm
------END PGP SIGNATURE-----
-
---4Ckj6UjgE2iN1+kY--
+Ciao,
+Johannes
