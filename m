@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8568-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 104988 invoked by alias); 3 Jun 2016 09:15:43 -0000
+Return-Path: <cygwin-patches-return-8569-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 44982 invoked by alias); 5 Jun 2016 17:15:17 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,90 +9,98 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 104977 invoked by uid 89); 3 Jun 2016 09:15:42 -0000
+Received: (qmail 44972 invoked by uid 89); 5 Jun 2016 17:15:16 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-96.2 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_PBL,RCVD_IN_SORBS_DUL,RDNS_DYNAMIC autolearn=ham version=3.3.2 spammy=HTo:U*cygwin-patches, H*Ad:U*cygwin-patches
-X-HELO: calimero.vinschen.de
-Received: from ipbcc0227e.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.34.126) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 03 Jun 2016 09:15:38 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 28585A80977; Fri,  3 Jun 2016 11:15:36 +0200 (CEST)
-Date: Fri, 03 Jun 2016 09:15:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] cygwin: include sys/types.h in sys/xattr.h
-Message-ID: <20160603091536.GB28306@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20160603083932.17328-1-yselkowi@redhat.com>
+X-Spam-SWARE-Status: No, score=-2.8 required=5.0 tests=AWL,BAYES_00,RP_MATCHES_RCVD,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.2 spammy=D*cornell.edu, U*kbrown, kbrowncornelledu, sk:kbrown
+X-HELO: limerock01.mail.cornell.edu
+Received: from limerock01.mail.cornell.edu (HELO limerock01.mail.cornell.edu) (128.84.13.241) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 05 Jun 2016 17:15:06 +0000
+X-CornellRouted: This message has been Routed already.
+Received: from authusersmtp.mail.cornell.edu (granite4.serverfarm.cornell.edu [10.16.197.9])	by limerock01.mail.cornell.edu (8.14.4/8.14.4_cu) with ESMTP id u55HF3gM025531	for <cygwin-patches@cygwin.com>; Sun, 5 Jun 2016 13:15:04 -0400
+Received: from [192.168.1.3] (mta-68-175-148-36.twcny.rr.com [68.175.148.36] (may be forged))	(authenticated bits=0)	by authusersmtp.mail.cornell.edu (8.14.4/8.12.10) with ESMTP id u55HF2tt001941	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES128-SHA bits=128 verify=NOT)	for <cygwin-patches@cygwin.com>; Sun, 5 Jun 2016 13:15:03 -0400
+To: cygwin-patches <cygwin-patches@cygwin.com>
+From: Ken Brown <kbrown@cornell.edu>
+Subject: Fix 'make distclean'
+Message-ID: <393c4fcd-4eeb-84cf-e330-e4c1ecfc3a9d@cornell.edu>
+Date: Sun, 05 Jun 2016 17:15:00 -0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101 Thunderbird/45.1.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="sdtB3X0nJg68CQEu"
-Content-Disposition: inline
-In-Reply-To: <20160603083932.17328-1-yselkowi@redhat.com>
-User-Agent: Mutt/1.6.1 (2016-04-27)
-X-SW-Source: 2016-q2/txt/msg00043.txt.bz2
+Content-Type: multipart/mixed; boundary="------------EE9D5C5E5A9E25E14B1A88D9"
+X-PMX-Cornell-Gauge: Gauge=XXXXX
+X-IsSubscribed: yes
+X-SW-Source: 2016-q2/txt/msg00044.txt.bz2
 
+This is a multi-part message in MIME format.
+--------------EE9D5C5E5A9E25E14B1A88D9
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-length: 360
 
---sdtB3X0nJg68CQEu
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 913
+Sometimes when a build of Cygwin fails, there will be a message 
+suggesting running 'make distclean'.  But this fails to clean the 
+winsup/cygwin subdirectory, and the build still fails.
 
-On Jun  3 03:39, Yaakov Selkowitz wrote:
-> Using libattr's <xattr/xattr.h> requires consumers to explicitly include
-> <sys/types.h> first, but glibc's header in sys/ already contains the incl=
-ude.
->=20
-> Signed-off-by: Yaakov Selkowitz <yselkowi@redhat.com>
-> ---
->  winsup/cygwin/include/sys/xattr.h | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/winsup/cygwin/include/sys/xattr.h b/winsup/cygwin/include/sy=
-s/xattr.h
-> index 1f32392..902bb86 100644
-> --- a/winsup/cygwin/include/sys/xattr.h
-> +++ b/winsup/cygwin/include/sys/xattr.h
-> @@ -13,6 +13,7 @@ details. */
->  #ifndef _SYS_XATTR_H
->  #define _SYS_XATTR_H
->=20=20
-> +#include <sys/types.h>
->  #include <attr/xattr.h>
->=20=20
->  #endif /* _SYS_XATTR_H */
+On the other hand, 'make clean' in winsup/cygwin removes two source 
+files, which have to be restored before one can rebuild.
 
-ACK, please apply.
+The attached patch fixes both problems.
 
+Ken
 
-Thanks,
-Corinna
+--------------EE9D5C5E5A9E25E14B1A88D9
+Content-Type: text/plain; charset=UTF-8;
+ name="0001-Allow-make-distclean-to-clean-winsup-cygwin.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="0001-Allow-make-distclean-to-clean-winsup-cygwin.patch"
+Content-length: 2831
 
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
+RnJvbSA3MWMxNmVjYzMxMjZhNDFhZTQxY2JmMzU0NDI4YzY0MjgyOTUyOTUx
+IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBLZW4gQnJvd24gPGti
+cm93bkBjb3JuZWxsLmVkdT4KRGF0ZTogU3VuLCA1IEp1biAyMDE2IDEyOjU4
+OjIyIC0wNDAwClN1YmplY3Q6IFtQQVRDSF0gQWxsb3cgJ21ha2UgZGlzdGNs
+ZWFuJyB0byBjbGVhbiB3aW5zdXAvY3lnd2luCk1JTUUtVmVyc2lvbjogMS4w
+CkNvbnRlbnQtVHlwZTogdGV4dC9wbGFpbjsgY2hhcnNldD1VVEYtOApDb250
+ZW50LVRyYW5zZmVyLUVuY29kaW5nOiA4Yml0CgpCdXQgZG9u4oCZdCBsZXQg
+aXQgcmVtb3ZlIHNvdXJjZSBmaWxlcy4KLS0tCiB3aW5zdXAvTWFrZWZpbGUu
+aW4gICAgICAgIHwgNCArKy0tCiB3aW5zdXAvY3lnd2luL01ha2VmaWxlLmlu
+IHwgNyArKysrLS0tCiAyIGZpbGVzIGNoYW5nZWQsIDYgaW5zZXJ0aW9ucygr
+KSwgNSBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS93aW5zdXAvTWFrZWZp
+bGUuaW4gYi93aW5zdXAvTWFrZWZpbGUuaW4KaW5kZXggMWZkZjkzYS4uOWVj
+YTgwNiAxMDA2NDQKLS0tIGEvd2luc3VwL01ha2VmaWxlLmluCisrKyBiL3dp
+bnN1cC9NYWtlZmlsZS5pbgpAQCAtNDgsNyArNDgsNyBAQCBDTEVBTl9TVUJE
+SVJTPSR7cGF0c3Vic3QgJSxjbGVhbl8lLCQoU1VCRElSUyl9CiAKIElOU1RB
+TExfTElDRU5TRTo9QElOU1RBTExfTElDRU5TRUAKIAotLlBIT05ZOiBhbGwg
+aW5zdGFsbCBjbGVhbiBhbGwtaW5mbyBpbmZvIGluc3RhbGwtaW5mbyBpbnN0
+YWxsLWxpY2Vuc2UgY2hlY2sgXAorLlBIT05ZOiBhbGwgaW5zdGFsbCBjbGVh
+biBkaXN0Y2xlYW4gYWxsLWluZm8gaW5mbyBpbnN0YWxsLWluZm8gaW5zdGFs
+bC1saWNlbnNlIGNoZWNrIFwKIAkkKFNVQkRJUlMpICQoSU5TVEFMTF9TVUJE
+SVJTKSAkKENMRUFOX1NVQkRJUlMpCiAKIC5TVUZGSVhFUzoKQEAgLTcxLDcg
+KzcxLDcgQEAgaW5zdGFsbC1saWNlbnNlOiBDWUdXSU5fTElDRU5TRSBDT1BZ
+SU5HCiAKIGluc3RhbGw6IE1ha2VmaWxlICQoSU5TVEFMTF9MSUNFTlNFKSAk
+KElOU1RBTExfU1VCRElSUykKIAotY2xlYW46ICQoQ0xFQU5fU1VCRElSUykK
+K2NsZWFuIGRpc3RjbGVhbjogJChDTEVBTl9TVUJESVJTKQogCiBhbGwtaW5m
+bzoKIApkaWZmIC0tZ2l0IGEvd2luc3VwL2N5Z3dpbi9NYWtlZmlsZS5pbiBi
+L3dpbnN1cC9jeWd3aW4vTWFrZWZpbGUuaW4KaW5kZXggNDM5MTliZC4uYTU0
+ODM2OCAxMDA2NDQKLS0tIGEvd2luc3VwL2N5Z3dpbi9NYWtlZmlsZS5pbgor
+KysgYi93aW5zdXAvY3lnd2luL01ha2VmaWxlLmluCkBAIC02NTMsMTQgKzY1
+MywxNSBAQCB1bmluc3RhbGwtbWFuOgogCSAgICBybSAtZiAkKERFU1RESVIp
+JChtYW5kaXIpL21hbjcvYGJhc2VuYW1lICQkaWAgOyBcCiAJZG9uZQogCi1j
+bGVhbjoKLQktcm0gLWYgKi5vICouZGxsICouZGJnICouYSAqLmV4cCBqdW5r
+ICouYmFzZSB2ZXJzaW9uLmNjICouZXhlICouZCAqc3RhbXAqICpfbWFnaWMu
+aCBzaWdmZS5zIGN5Z3dpbi5kZWYgZ2xvYmFscy5oICQoc3JjZGlyKS8kKFRM
+U09GRlNFVFNfSCkgJChzcmNkaXIpL2RldmljZXMuY2MKK2NsZWFuIGRpc3Rj
+bGVhbiByZWFsY2xlYW46CisJLXJtIC1mICoubyAqLmRsbCAqLmRiZyAqLmEg
+Ki5leHAganVuayAqLmJhc2UgdmVyc2lvbi5jYyAqLmV4ZSAqLmQgKnN0YW1w
+KiAqX21hZ2ljLmggc2lnZmUucyBjeWd3aW4uZGVmIGdsb2JhbHMuaAogCS1A
+JChNQUtFKSAtQyAke2N5Z3NlcnZlcl9ibGRkaXJ9IGxpYmNsZWFuCiAKLW1h
+aW50YWluZXItY2xlYW4gcmVhbGNsZWFuOiBjbGVhbgorbWFpbnRhaW5lci1j
+bGVhbjogY2xlYW4KIAlAZWNobyAiVGhpcyBjb21tYW5kIGlzIGludGVuZGVk
+IGZvciBtYWludGFpbmVycyB0byB1c2U7IgogCUBlY2hvICJpdCBkZWxldGVz
+IGZpbGVzIHRoYXQgbWF5IHJlcXVpcmUgc3BlY2lhbCB0b29scyB0byByZWJ1
+aWxkLiIKIAktcm0gLWZyIGNvbmZpZ3VyZQorCS1ybSAtZiAgJChzcmNkaXIp
+LyQoVExTT0ZGU0VUU19IKSAkKHNyY2RpcikvZGV2aWNlcy5jYwogCiAjIFJ1
+bGUgdG8gYnVpbGQgTERTQ1JJUFQKICQoTERTQ1JJUFQpOiAkKExEU0NSSVBU
+KS5pbgotLSAKMi44LjMKCg==
 
---sdtB3X0nJg68CQEu
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJXUUq3AAoJEPU2Bp2uRE+g/QsQAJtMBB5Xgv8apKwql1Yrr5Fi
-9q1LLaMhjlQBlnrNiJ2I8mZoy4nV/lpa5evVp/arEi/ZxMFctTrVJyLlBusmebDS
-lQcizU0UVsbSD8KGZuDZa4dy1XWGrTKRoiyYiIhDFeRZ/7Ypxd6s7sH6smf00VA4
-Vtf6hXw+A6hEjHmbRrDsflU9BKDYJB5NfbjAqing+Cda6goAWp0AeCxvUsBnOqcT
-64eODZSyjr8gARrmYyJ9qo7/nkk0AYldc2gwi3dutusbqFDyor6Q3sXWh7I/9ILc
-j9llkAC2+W+TzPa2XwdsU43Ezs/eXmcceEjrPTz3ssRCTyL0iEzDRbTh6OhpozdF
-qUpFauZklL00ikfn4mUsJ+jyzI8/Q7fr4xk0cjN5+w7xz69lDY6FqioLEUkyBzkq
-n+1w3CAbR9BjfbDT5oL7ATBytkBzPh8nyxL8e0JJ4SgccQQ++uVMJZS3rYD1zlJS
-pEkoXrOVYAG9xtLCb/5TsKDjXUeiCdM7UAPtfB/HMINpfMSA32Bk3cUCSHuVwJxo
-aL8b44uIGDq35fR6w1OrS1gmCQ1FcegUeqZIe9BqfUbeRn2jULavzBfD4xv4H6Qq
-VTjx8a4N67sj+9lTRTkp7Pw1Gc96TfykaKKgMbUO+l7oruSxeB5IPyMMwPKJg+rK
-7onZCyg1TJlI9FWfLj3W
-=0nyG
------END PGP SIGNATURE-----
-
---sdtB3X0nJg68CQEu--
+--------------EE9D5C5E5A9E25E14B1A88D9--
