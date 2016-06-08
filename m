@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8570-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 80782 invoked by alias); 6 Jun 2016 09:54:06 -0000
+Return-Path: <cygwin-patches-return-8571-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 109008 invoked by alias); 8 Jun 2016 21:19:08 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,80 +9,93 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 80771 invoked by uid 89); 6 Jun 2016 09:54:05 -0000
+Received: (qmail 108994 invoked by uid 89); 8 Jun 2016 21:19:07 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-96.3 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_PBL,RCVD_IN_SORBS_DUL,RDNS_DYNAMIC autolearn=ham version=3.3.2 spammy=Hx-languages-length:783, HTo:U*cygwin-patches, H*Ad:U*cygwin-patches
-X-HELO: calimero.vinschen.de
-Received: from ipbcc0227e.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.34.126) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 06 Jun 2016 09:54:04 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id DE8F4A80396; Mon,  6 Jun 2016 11:54:01 +0200 (CEST)
-Date: Mon, 06 Jun 2016 09:54:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: Fix 'make distclean'
-Message-ID: <20160606095401.GA30439@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <393c4fcd-4eeb-84cf-e330-e4c1ecfc3a9d@cornell.edu>
+X-Spam-SWARE-Status: No, score=-2.5 required=5.0 tests=AWL,BAYES_00,RP_MATCHES_RCVD,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.2 spammy=__len, Hx-languages-length:1669, HTo:U*cygwin-patches
+X-HELO: limerock01.mail.cornell.edu
+Received: from limerock01.mail.cornell.edu (HELO limerock01.mail.cornell.edu) (128.84.13.241) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 08 Jun 2016 21:18:57 +0000
+X-CornellRouted: This message has been Routed already.
+Received: from authusersmtp.mail.cornell.edu (granite3.serverfarm.cornell.edu [10.16.197.8])	by limerock01.mail.cornell.edu (8.14.4/8.14.4_cu) with ESMTP id u58LIsVK007324	for <cygwin-patches@cygwin.com>; Wed, 8 Jun 2016 17:18:55 -0400
+Received: from [10.128.133.220] (dhcp-gs-1500.eduroam.cornell.edu [10.128.133.220])	(authenticated bits=0)	by authusersmtp.mail.cornell.edu (8.14.4/8.12.10) with ESMTP id u58LIrWr018978	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES128-SHA bits=128 verify=NOT)	for <cygwin-patches@cygwin.com>; Wed, 8 Jun 2016 17:18:54 -0400
+To: cygwin-patches <cygwin-patches@cygwin.com>
+From: Ken Brown <kbrown@cornell.edu>
+Subject: Declaration of crypt
+Message-ID: <b1986513-81eb-39a0-959f-ba9f98521e03@cornell.edu>
+Date: Wed, 08 Jun 2016 21:19:00 -0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101 Thunderbird/45.1.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="azLHFNyN32YCQGCU"
-Content-Disposition: inline
-In-Reply-To: <393c4fcd-4eeb-84cf-e330-e4c1ecfc3a9d@cornell.edu>
-User-Agent: Mutt/1.6.1 (2016-04-27)
-X-SW-Source: 2016-q2/txt/msg00045.txt.bz2
+Content-Type: multipart/mixed; boundary="------------F20DEA140B4CBF98BB84D3C9"
+X-PMX-Cornell-Gauge: Gauge=X
+X-IsSubscribed: yes
+X-SW-Source: 2016-q2/txt/msg00046.txt.bz2
 
-
---azLHFNyN32YCQGCU
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 803
-
-On Jun  5 13:15, Ken Brown wrote:
-> Sometimes when a build of Cygwin fails, there will be a message suggesting
-> running 'make distclean'.  But this fails to clean the winsup/cygwin
-> subdirectory, and the build still fails.
->=20
-> On the other hand, 'make clean' in winsup/cygwin removes two source files,
-> which have to be restored before one can rebuild.
->=20
-> The attached patch fixes both problems.
-
-Applied with a minor change (adding "*clean" targets to .PHONY).
-
-I also added a patch which removes the tlsoffsets file if regenerating
-it failed.  This fixes an annoying build problem if gentls_offsets fails
-to compile cygtls.h.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---azLHFNyN32YCQGCU
-Content-Type: application/pgp-signature; name="signature.asc"
+This is a multi-part message in MIME format.
+--------------F20DEA140B4CBF98BB84D3C9
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Content-length: 819
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
+According to Posix, including <unistd.h> should bring in the declaration 
+of crypt.  The glibc and FreeBSD headers are consistent with this, but 
+Cygwin's aren't.
 
-iQIcBAEBCAAGBQJXVUg5AAoJEPU2Bp2uRE+gHJkQAIZ/n2al3OTWZYwoKf0JkVAH
-RsmcxzspATjZ9GS+kLUqSgvdl3weprQ8w8U5RmVdnXMJKHSekEykdYytiVp3wr5g
-2/Jj6v98/2fQuz5N+kzOV18dynTCXrHRyvpDMpMKFRkOkI5SQ8/cIxRO0c9LV4Hf
-puPv7OyNAyfBkgNJopvOGzIY9iqaRrcmbuENJMU3GTAQnoaydc4CNM38y0sVaO5c
-d5RNoHUcIiZEYdUgMSTv9JuACCFC/FmC19LAEvF1FjZzaUCaZx9qzGrbn75qFvIW
-jaz5l3a417FFDXx9gVogtHQDq9Beq138R3qTZ5fyuwvcTIkc9cCNeqWJZz+aooHL
-inDLIASnXCy65GneYU4vOKuiIUTj2QeizJ/Es7Ra9h7v7nYlyg6fcKRMhqQxYgAt
-zZ1kWXYqPIHofaGkN48l9UyQSSKOnaW5NgTk8dFBIr2lBUuZt6KSPOpWdv/5FAto
-ieiIdG4twogeJD4SX/5iI4ckdCLhbEBTx+u3lDfDt49/r9C2y/GJCCEoag6MM942
-VarB3O2bzYHYlevo9509avQ1Nzxzn8Ob3vecRNys5Iv9FTYHMbrxOTxnn/8F/p/D
-tUYfPBvWT2Rx3hH9ZjGbaojiwBGTepLOn+LLgRXGL3Q3Pex1BOucu0f74sCtyamU
-da+C+CDydSRqKO+9ZW+O
-=YBkw
------END PGP SIGNATURE-----
+$ cat test.c
+#include <unistd.h>
 
---azLHFNyN32YCQGCU--
+int
+main (void)
+{
+   const char *key = NULL;
+   const char *salt = NULL;
+   crypt (key, salt);
+}
+
+$ gcc -c test.c
+test.c: In function âmainâ:
+test.c:8:3: warning: implicit declaration of function âcryptâ 
+[-Wimplicit-function-declaration]
+    crypt (key, salt);
+    ^
+
+The attached patch is one way to fix this.  It means that cygwin-devel 
+would have to require libcrypt-devel.
+
+I'm not sure if I used the right feature-test macro in the patch.  It's 
+marked XSI by Posix, but using __XSI_VISIBLE didn't work.
+
+Ken
+
+P.S. Is cygwin-patches OK for this sort of thing, or should I have sent 
+it to the newlib list?
+
+--------------F20DEA140B4CBF98BB84D3C9
+Content-Type: text/plain; charset=UTF-8;
+ name="0001-Make-unistd.h-declare-crypt.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="0001-Make-unistd.h-declare-crypt.patch"
+Content-length: 1180
+
+RnJvbSA5MWVkNzgxNmU3NzFhNzgxNzA1NTVkYjI0NmUwZTM1ZGM2ZDJjYTNl
+IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBLZW4gQnJvd24gPGti
+cm93bkBjb3JuZWxsLmVkdT4KRGF0ZTogV2VkLCA4IEp1biAyMDE2IDE3OjA0
+OjA2IC0wNDAwClN1YmplY3Q6IFtQQVRDSF0gTWFrZSA8dW5pc3RkLmg+IGRl
+Y2xhcmUgY3J5cHQKClRoaXMgaXMgbWFuZGF0ZWQgYnkgUG9zaXggYW5kIGlz
+IGRvbmUgYnkgdGhlIGdsaWJjIGFuZCBGcmVlQlNEIGhlYWRlcnMuCi0tLQog
+bmV3bGliL2xpYmMvaW5jbHVkZS9zeXMvdW5pc3RkLmggfCAzICsrKwogMSBm
+aWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKQoKZGlmZiAtLWdpdCBhL25l
+d2xpYi9saWJjL2luY2x1ZGUvc3lzL3VuaXN0ZC5oIGIvbmV3bGliL2xpYmMv
+aW5jbHVkZS9zeXMvdW5pc3RkLmgKaW5kZXggZWYwMDU3NS4uZWJhZTVkOCAx
+MDA2NDQKLS0tIGEvbmV3bGliL2xpYmMvaW5jbHVkZS9zeXMvdW5pc3RkLmgK
+KysrIGIvbmV3bGliL2xpYmMvaW5jbHVkZS9zeXMvdW5pc3RkLmgKQEAgLTMx
+LDYgKzMxLDkgQEAgaW50ICAgICBfRVhGVU4oY2xvc2UsIChpbnQgX19maWxk
+ZXMgKSk7CiAjaWYgX19QT1NJWF9WSVNJQkxFID49IDE5OTIwOQogc2l6ZV90
+CV9FWEZVTihjb25mc3RyLCAoaW50IF9fbmFtZSwgY2hhciAqX19idWYsIHNp
+emVfdCBfX2xlbikpOwogI2VuZGlmCisjaWYgX19CU0RfVklTSUJMRSAmJiBk
+ZWZpbmVkKF9fQ1lHV0lOX18pCisjaW5jbHVkZSA8Y3J5cHQuaD4KKyNlbmRp
+ZgogI2lmIF9fWFNJX1ZJU0lCTEUgJiYgX19YU0lfVklTSUJMRSA8IDcwMAog
+Y2hhciAqICBfRVhGVU4oY3Rlcm1pZCwgKGNoYXIgKl9fcyApKTsKICNlbmRp
+ZgotLSAKMi44LjMKCg==
+
+--------------F20DEA140B4CBF98BB84D3C9--
