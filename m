@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8577-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 61637 invoked by alias); 9 Jun 2016 15:06:01 -0000
+Return-Path: <cygwin-patches-return-8578-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 80660 invoked by alias); 15 Jun 2016 10:06:20 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,89 +9,138 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 61608 invoked by uid 89); 9 Jun 2016 15:06:00 -0000
+Received: (qmail 80642 invoked by uid 89); 15 Jun 2016 10:06:19 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-96.3 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_PBL,RCVD_IN_SORBS_DUL,RDNS_DYNAMIC autolearn=ham version=3.3.2 spammy=Hx-languages-length:1168, HTo:U*cygwin-patches, H*Ad:U*cygwin-patches, our
-X-HELO: calimero.vinschen.de
-Received: from ipbcc0227e.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.34.126) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 09 Jun 2016 15:05:59 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 50793A803D5; Thu,  9 Jun 2016 17:05:57 +0200 (CEST)
-Date: Thu, 09 Jun 2016 15:06:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-1.5 required=5.0 tests=AWL,BAYES_05,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,SPF_PASS,UPPERCASE_50_75 autolearn=ham version=3.3.2 spammy=marcoatzerigmailcom, marco.atzeri@gmail.com, Button, sk:marco.a
+X-HELO: mail-wm0-f47.google.com
+Received: from mail-wm0-f47.google.com (HELO mail-wm0-f47.google.com) (74.125.82.47) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES128-GCM-SHA256 encrypted) ESMTPS; Wed, 15 Jun 2016 10:06:09 +0000
+Received: by mail-wm0-f47.google.com with SMTP id m124so28301233wme.1        for <cygwin-patches@cygwin.com>; Wed, 15 Jun 2016 03:06:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20130820;        h=x-gm-message-state:to:from:subject:message-id:date:user-agent         :mime-version;        bh=ryV11+3ptd+B6ZbzTM3UkygCimXzjIjm1ygWK26EiY0=;        b=DPg/zsofQHnFObamFlchwIndJIQcDKuk3hFZO2n4vJH/5BigDhHMZ3n1ckbkWhMgSM         qWBDa2XL81Ipaa8+bFACiYQci79m5HnT23l88toN65apkr7hJYYaKuRpa8yk7SCan525         e8GT7cYduRDoRDXEta02riBiP0oP/aqXsZYDZxezBBQsJ2NL3Ko71vDuZX+o6ZhqJ18+         5pKn5t9NnWhaek65B1OtlJRQY0q3qrN/6R3SHdRV9TjMYPLSQdLxqzcMkx0GMH9KvfOS         1gAflFWPRnsiQsUXgIlawOcEcXVyCpzv4Et+Iz6ZEEbZx+sQyaUry4OvXV5SdhY32day         +tvg==
+X-Gm-Message-State: ALyK8tJ3oc7J4suCAlA2jGJ0RuAK01qLAcXkTVzCoET4ZDlRefszVqgDRulW8G1OUdahdg==
+X-Received: by 10.194.9.38 with SMTP id w6mr10266263wja.62.1465985165762;        Wed, 15 Jun 2016 03:06:05 -0700 (PDT)
+Received: from [172.21.188.226] ([62.154.173.198])        by smtp.googlemail.com with ESMTPSA id bc9sm14309971wjc.45.2016.06.15.03.06.04        for <cygwin-patches@cygwin.com>        (version=TLSv1/SSLv3 cipher=OTHER);        Wed, 15 Jun 2016 03:06:04 -0700 (PDT)
 To: cygwin-patches@cygwin.com
-Subject: Re: Declaration of crypt
-Message-ID: <20160609150557.GA10546@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <b1986513-81eb-39a0-959f-ba9f98521e03@cornell.edu> <20160609090004.GK30368@calimero.vinschen.de> <0479db42-e977-24ae-fc35-407c5067d256@cornell.edu> <20160609123245.GL30368@calimero.vinschen.de> <4a4c8f09-9488-bb0c-7d7b-d2cb21435c2f@cornell.edu>
+From: Marco Atzeri <marco.atzeri@gmail.com>
+Subject: [setup] move view from left to right
+Message-ID: <ea3fb37b-8c1f-38be-a52f-3e2dae74d14c@gmail.com>
+Date: Wed, 15 Jun 2016 10:06:00 -0000
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101 Thunderbird/45.1.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="liOOAslEiF7prFVr"
-Content-Disposition: inline
-In-Reply-To: <4a4c8f09-9488-bb0c-7d7b-d2cb21435c2f@cornell.edu>
-User-Agent: Mutt/1.6.1 (2016-04-27)
-X-SW-Source: 2016-q2/txt/msg00052.txt.bz2
+Content-Type: multipart/mixed; boundary="------------B59CED4A588A167A3BC6F4D6"
+X-IsSubscribed: yes
+X-SW-Source: 2016-q2/txt/msg00053.txt.bz2
+
+This is a multi-part message in MIME format.
+--------------B59CED4A588A167A3BC6F4D6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-length: 303
+
+I always found counter intuitive to have the view button filter on
+the right.
+
+I was also thinking to replace the 3 button choice with
+2 sets:
+
+keep vs update
+exp vs current
+
+but the update logic on
+
+  ChooserPage::keepClicked()
+  ChooserPage::changeTrust(trusts aTrust)
+
+it is not really immediate.
 
 
---liOOAslEiF7prFVr
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1193
-
-On Jun  9 10:07, Ken Brown wrote:
-> On 6/9/2016 8:32 AM, Corinna Vinschen wrote:
-> > Can you please define crypt, encrypt and setkey explicitely in unistd.h
-> > per POSIX, rather than including crypt.h?  This would not only be target
-> > independent, it would also be more correct.  As a side effect I will
-> > have to come up with a new version of the crypt package, because our
-> > crypt.h is using a wrong prototypes for setkey (const is missing).
->=20
-> setkey is supposed to be in stdlib.h rather than unistd.h, so I've done
-> that.
->=20
-> One minor question about encrypt: The Posix prototype has 'char block[64]'
-> as the first argument, but Cygwin's crypt.h simply has 'char *block'.
-> FreeBSD and glibc also use 'char *block', so I did the same. Or would you
-> rather follow Posix here?
-
-As Eric outlined it's the same anyway so let's just stick to char*.
-
-> > Thanks a lot and sorry again,
->=20
-> No problem.  Revised patch attached.
-
-Applied, thank you.  I also uploaded a matching new crypt package
-(version 1.4-1).
 
 
-Thanks,
-Corinna
+--------------B59CED4A588A167A3BC6F4D6
+Content-Type: text/plain; charset=UTF-8;
+ name="0001-Moved-view-from-right-to-left.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="0001-Moved-view-from-right-to-left.patch"
+Content-length: 4734
 
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
+RnJvbSAzNTQ1ZTljNzY1YTA2OWMzMTRhY2RiZGUyNGEwZTVlY2NmODQ1OGRk
+IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBNYXJjbyBBdHplcmkg
+PG1hcmNvLmF0emVyaUBnbWFpbC5jb20+CkRhdGU6IFN1biwgMTIgSnVuIDIw
+MTYgMTc6NDU6MTYgKzAyMDAKU3ViamVjdDogW1BBVENIXSBNb3ZlZCB2aWV3
+IGZyb20gcmlnaHQgdG8gbGVmdAoKLS0tCiBjaG9vc2UuY2MgfCAgNCArKy0t
+CiByZXMucmMgICAgfCAxOSArKysrKysrKysrLS0tLS0tLS0tCiAyIGZpbGVz
+IGNoYW5nZWQsIDEyIGluc2VydGlvbnMoKyksIDExIGRlbGV0aW9ucygtKQoK
+ZGlmZiAtLWdpdCBhL2Nob29zZS5jYyBiL2Nob29zZS5jYwppbmRleCBiMGU1
+NTM4Li40MmQ4Yjc0IDEwMDY0NAotLS0gYS9jaG9vc2UuY2MKKysrIGIvY2hv
+b3NlLmNjCkBAIC04Myw5ICs4Myw5IEBAIHN0YXRpYyBDb250cm9sQWRqdXN0
+ZXI6OkNvbnRyb2xJbmZvIENob29zZXJDb250cm9sc0luZm9bXSA9IHsKICAg
+e0lEQ19DSE9PU0VfS0VFUCwgCQlDUF9SSUdIVCwgICBDUF9UT1B9LAogICB7
+SURDX0NIT09TRV9DVVJSLCAJCUNQX1JJR0hULCAgIENQX1RPUH0sCiAgIHtJ
+RENfQ0hPT1NFX0VYUCwgCQlDUF9SSUdIVCwgICBDUF9UT1B9LAotICB7SURD
+X0NIT09TRV9WSUVXLCAJCUNQX1JJR0hULCAgIENQX1RPUH0sCisgIHtJRENf
+Q0hPT1NFX1ZJRVcsIAkJQ1BfTEVGVCwgICAgQ1BfVE9QfSwKICAge0lEQ19M
+SVNUVklFV19QT1MsIAkJQ1BfUklHSFQsICAgQ1BfVE9QfSwKLSAge0lEQ19D
+SE9PU0VfVklFV0NBUFRJT04sCUNQX1JJR0hULCAgIENQX1RPUH0sCisgIHtJ
+RENfQ0hPT1NFX1ZJRVdDQVBUSU9OLAlDUF9MRUZULCAgICBDUF9UT1B9LAog
+ICB7SURDX0NIT09TRV9MSVNULAkJQ1BfU1RSRVRDSCwgQ1BfU1RSRVRDSH0s
+CiAgIHtJRENfQ0hPT1NFX0hJREUsICAgICAgICAgICAgIENQX0xFRlQsICAg
+IENQX0JPVFRPTX0sCiAgIHswLCBDUF9MRUZULCBDUF9UT1B9CmRpZmYgLS1n
+aXQgYS9yZXMucmMgYi9yZXMucmMKaW5kZXggNDcyNjg3ZC4uZDEyOTA2MyAx
+MDA2NDQKLS0tIGEvcmVzLnJjCisrKyBiL3Jlcy5yYwpAQCAtMzEyLDE2ICsz
+MTIsMTYgQEAgRU5ECiAjZGVmaW5lIFNFVFVQX0tQQ0VfVwkJKDMwKQogCiAv
+LyBSaWdodC1hbGlnbmVkIGNvbnRyb2xzLgotI2RlZmluZSBTRVRVUF9WSUVX
+Q0FQX1cJCSg0MCkKLSNkZWZpbmUgU0VUVVBfVklFV0NBUF9YCQkoU0VUVVBf
+U1RBTkRBUkRfRElBTE9HX1cgLSBTRVRVUF9WSUVXQ0FQX1cgLSA3KQotI2Rl
+ZmluZSBTRVRVUF9WSUVXX1cJCSgyNikKLSNkZWZpbmUgU0VUVVBfVklFV19Y
+CQkoU0VUVVBfVklFV0NBUF9YIC0gU0VUVVBfVklFV19XIC0gNSkKLSNkZWZp
+bmUgU0VUVVBfRVhQX1gJCShTRVRVUF9WSUVXX1ggLSBTRVRVUF9LUENFX1cg
+LSA1KQorI2RlZmluZSBTRVRVUF9FWFBfWAkJKFNFVFVQX1NUQU5EQVJEX0RJ
+QUxPR19XIC0gU0VUVVBfS1BDRV9XIC0gNykKICNkZWZpbmUgU0VUVVBfQ1VS
+Ul9YCQkoU0VUVVBfRVhQX1ggLSBTRVRVUF9LUENFX1cgLSA1KQogI2RlZmlu
+ZSBTRVRVUF9LRUVQX1gJCShTRVRVUF9DVVJSX1ggLSBTRVRVUF9LUENFX1cg
+LSA1KQogCiAvLyBMZWZ0LWFsaWduZWQgY29udHJvbHMuCi0jZGVmaW5lIFNF
+VFVQX1NFQVJDSF9YCQkoMCkKKyNkZWZpbmUgU0VUVVBfVklFV0NBUF9YCQko
+MCkKKyNkZWZpbmUgU0VUVVBfVklFV0NBUF9XCQkoNDApCisjZGVmaW5lIFNF
+VFVQX1ZJRVdfWAkJKFNFVFVQX1ZJRVdDQVBfWCArIFNFVFVQX1ZJRVdDQVBf
+VyArNSkKKyNkZWZpbmUgU0VUVVBfVklFV19XCQkoMjYpCisjZGVmaW5lIFNF
+VFVQX1NFQVJDSF9YCQkoU0VUVVBfVklFV19YICsgU0VUVVBfVklFV19XICsg
+NSkKICNkZWZpbmUgU0VUVVBfU0VBUkNIX1cJCSgzMikKICNkZWZpbmUgU0VU
+VVBfU0VBUkNIVEVYVF9YCShTRVRVUF9TRUFSQ0hfWCArIFNFVFVQX1NFQVJD
+SF9XICsgMikKICNkZWZpbmUgU0VUVVBfU0VBUkNIVEVYVF9XCSg2MCkKQEAg
+LTMzNCw2ICszMzQsMTAgQEAgU1RZTEUgRFNfTU9EQUxGUkFNRSB8IERTXzNE
+TE9PSyB8IFdTX0NISUxEIHwgV1NfVklTSUJMRSB8IFdTX0NBUFRJT04gfAog
+Q0FQVElPTiAiQ3lnd2luIFNldHVwIC0gU2VsZWN0IFBhY2thZ2VzIgogRk9O
+VCA4LCAiTVMgU2hlbGwgRGxnIgogQkVHSU4KKyAgICBSVEVYVCAgICAgICAg
+ICAgIiIsIElEQ19DSE9PU0VfVklFV0NBUFRJT04sIFNFVFVQX1ZJRVdDQVBf
+WCwgMzMsCisgICAgICAgICAgICAgICAgICAgIFNFVFVQX1ZJRVdDQVBfVywg
+MTAKKyAgICBQVVNIQlVUVE9OICAgICAgIiZWaWV3IiwgSURDX0NIT09TRV9W
+SUVXLCBTRVRVUF9WSUVXX1gsIDMwLCBTRVRVUF9WSUVXX1csCisgICAgICAg
+ICAgICAgICAgICAgIDE0LCBXU19FWF9SSUdIVAogICAgIFJURVhUICAgICAg
+ICAgICAiJlNlYXJjaCIsIElEQ19TVEFUSUMsIFNFVFVQX1NFQVJDSF9YLCAz
+MCwgU0VUVVBfU0VBUkNIX1csCiAgICAgICAgICAgICAgICAgICAgIDEyLCBT
+U19DRU5URVJJTUFHRSwgV1NfRVhfUklHSFQKICAgICBFRElUVEVYVCAgICAg
+ICAgSURDX0NIT09TRV9TRUFSQ0hfRURJVCwgU0VUVVBfU0VBUkNIVEVYVF9Y
+LCAzMCwKQEAgLTM0Niw4ICszNTAsNiBAQCBCRUdJTgogICAgICAgICAgICAg
+ICAgICAgICBTRVRVUF9DVVJSX1gsIDMwLCBTRVRVUF9LUENFX1csIDE0CiAg
+ICAgQ09OVFJPTCAgICAgICAgICJFJnhwIiwgSURDX0NIT09TRV9FWFAsICJC
+dXR0b24iLCBCU19BVVRPUkFESU9CVVRUT04sCiAgICAgICAgICAgICAgICAg
+ICAgIFNFVFVQX0VYUF9YLCAzMCwgU0VUVVBfS1BDRV9XLCAxNAotICAgIFBV
+U0hCVVRUT04gICAgICAiJlZpZXciLCBJRENfQ0hPT1NFX1ZJRVcsIFNFVFVQ
+X1ZJRVdfWCwgMzAsIFNFVFVQX1ZJRVdfVywKLSAgICAgICAgICAgICAgICAg
+ICAgMTQsIFdTX0dST1VQCiAgICAgQ09OVFJPTCAgICAgICAgICIiLCBJRENf
+SEVBRFNFUEFSQVRPUiwgIlN0YXRpYyIsIFNTX0JMQUNLRlJBTUUgfCBTU19T
+VU5LRU4sCiAgICAgICAgICAgICAgICAgICAgIDAsIDI4LCBTRVRVUF9TVEFO
+REFSRF9ESUFMT0dfVywgMQogICAgIENPTlRST0wgICAgICAgICAiIiwgSURD
+X0xJU1RWSUVXX1BPUywgIlN0YXRpYyIsIFNTX0JMQUNLRlJBTUUgfCBOT1Qg
+CkBAIC0zNTksNyArMzYxLDYgQEAgQkVHSU4KICAgICAgICAgICAgICAgICAg
+ICAgSURDX0NIT09TRV9JTlNUX1RFWFQsIDIxLCA5LCAyMzksIDE2LCBOT1Qg
+V1NfR1JPVVAKICAgICBMVEVYVCAgICAgICAgICAgIlNlbGVjdCBQYWNrYWdl
+cyIsIElEQ19TVEFUSUNfSEVBREVSX1RJVExFLCA3LCAwLCAyNTgsIDgsCiAg
+ICAgICAgICAgICAgICAgICAgIE5PVCBXU19HUk9VUAotICAgIExURVhUICAg
+ICAgICAgICAiIiwgSURDX0NIT09TRV9WSUVXQ0FQVElPTiwgU0VUVVBfVklF
+V0NBUF9YLCAzMywgU0VUVVBfVklFV0NBUF9XLCAxMAogRU5ECiAKIElERF9Q
+UkVSRVEgRElBTE9HIERJU0NBUkRBQkxFICAwLCAwLCBTRVRVUF9TVEFOREFS
+RF9ESUFMT0dfRElNUwotLSAKMi44LjMKCg==
 
---liOOAslEiF7prFVr
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJXWYXVAAoJEPU2Bp2uRE+gfScP/iB2BAZyYA35p1OE6mLjzaxs
-uNS3FJrsB6htp+gGi3vGcy+4JGYYNrDBKOYn3Jctr+XzSdhyMERlF0sEoGV1WjsU
-SBpjtJ4PBtzv8kDnBuWOrqgRanhMzSzUgDQhkW2D721u4JhKUMjfP2UbsgIEYF7G
-X5RHmQZHOGKryvPL3iMQZ7o5tzxhJGoBhnMwchXPwK3O6BGVM+mRVt9CPucIRg+2
-dexgGKwbGdSr1lunlx2D6/OWYvFPYnYM7ZAuEWF4iYW3RACvuBcpd2lV/A4A4Nzw
-uVkNB6I/6Pir0otIJA2puvdu+YcKt0RkLgg2XDhJG4zHK8aJn/ISrF6wCJO32TfZ
-SIYxLfU+JI1FY7zSx2a+WZlCJAKO9rQaIDFeKjh+7q/7GFN9bvDqnQNTt99suhM7
-ad/euEFeqW6kIYh1XO1RgGsB2P7fJN8kKfnJjWkkPy7uqapnf8Eta7kd9Yl7JqnS
-nf1I/BwIPRmDLT5uoUpPx0mKb3Gr8/HEGIPt9Oio3Z/rS8+hqva1gXkCUSHd6fAg
-+WaowOQ4SoQxmlo2zVulWSQWMOcLedwRaVMmOJ3QimuDQuoc1lQZyU/jKuR6bFYf
-CQNUWMz1oQbPqco/zUaF4PScPWv6+49zgA3DPpFFMgp9r3j2ixuYZo6ibqn+tmvG
-b5SLzafDkPSseUNG7w29
-=5VQK
------END PGP SIGNATURE-----
-
---liOOAslEiF7prFVr--
+--------------B59CED4A588A167A3BC6F4D6--
