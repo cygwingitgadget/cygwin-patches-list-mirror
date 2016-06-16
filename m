@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8584-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 129357 invoked by alias); 16 Jun 2016 12:07:26 -0000
+Return-Path: <cygwin-patches-return-8585-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 74560 invoked by alias); 16 Jun 2016 12:32:26 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,88 +9,215 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 129337 invoked by uid 89); 16 Jun 2016 12:07:26 -0000
+Received: (qmail 74541 invoked by uid 89); 16 Jun 2016 12:32:25 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-96.3 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_PBL,RCVD_IN_SORBS_DUL,RDNS_DYNAMIC autolearn=ham version=3.3.2 spammy=View, HTo:U*cygwin-patches, H*Ad:U*cygwin-patches, arrange
-X-HELO: calimero.vinschen.de
-Received: from ipbcc0227e.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.34.126) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 16 Jun 2016 12:07:15 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 4CA72A80461; Thu, 16 Jun 2016 14:07:12 +0200 (CEST)
-Date: Thu, 16 Jun 2016 12:07:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
+X-Spam-SWARE-Status: No, score=-2.0 required=5.0 tests=AWL,BAYES_00,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,SPF_PASS,UPPERCASE_50_75 autolearn=ham version=3.3.2 spammy=marcoatzerigmailcom, marco.atzeri@gmail.com
+X-HELO: mail-wm0-f45.google.com
+Received: from mail-wm0-f45.google.com (HELO mail-wm0-f45.google.com) (74.125.82.45) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES128-GCM-SHA256 encrypted) ESMTPS; Thu, 16 Jun 2016 12:32:15 +0000
+Received: by mail-wm0-f45.google.com with SMTP id a66so55829387wme.0        for <cygwin-patches@cygwin.com>; Thu, 16 Jun 2016 05:32:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20130820;        h=x-gm-message-state:subject:to:references:from:message-id:date         :user-agent:mime-version:in-reply-to;        bh=gUH5657tri33QivtpRBiIXKFCMZ74+R5ExVSgI3J4EY=;        b=eH4ymovBBl1MmKL/KZkh60N1LOmc+4MMDUBWZYUA0JHQNIK0TD0mmsIHIMHLWMIXVU         fICyXXA8NWv+70GS3ajq2J4hZ7eP09Tqx2V/0t7gOoIk2+wn/Z6xgM2iEOLhJzrEyVHc         SBxxeDbDmMdNh15QwwXoh6/5tbtclTVylQNxm0J45xjBp/ROlttCelmp0UThideUBWqT         +XvNtqlpoMUEJxcw7oM05m65bvx9GEueddMS3ZeCiig6awPVUhpvSBpM7ZKJCQtyRtTa         oWQlS3SjSHZFN1qjy4gelTlNpPm7KA9Fcu6jBSb7z7cY3c/iExCQxYFLc0N+VJNNdOeZ         Fozw==
+X-Gm-Message-State: ALyK8tJy4LiH3aBKULUzzM4nmAMD+5RLrp6k+ZL+PuszYftHoWFzxVRuyQVkXT01/K9MIQ==
+X-Received: by 10.28.105.216 with SMTP id z85mr4856487wmh.75.1466080331892;        Thu, 16 Jun 2016 05:32:11 -0700 (PDT)
+Received: from [172.21.188.226] ([62.154.173.198])        by smtp.googlemail.com with ESMTPSA id kp9sm43428793wjb.28.2016.06.16.05.32.10        for <cygwin-patches@cygwin.com>        (version=TLSv1/SSLv3 cipher=OTHER);        Thu, 16 Jun 2016 05:32:10 -0700 (PDT)
 Subject: Re: [setup] move view from left to right
-Message-ID: <20160616120712.GA8546@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <ea3fb37b-8c1f-38be-a52f-3e2dae74d14c@gmail.com> <20160615124947.GE27295@calimero.vinschen.de> <c0854c9c-3b17-4570-733d-fc325b27d1f9@gmail.com> <f1540797-04ba-316b-487e-daaeb85b3381@gmail.com> <20160615153936.GF27295@calimero.vinschen.de> <6e6c7336-45c1-bc47-5470-c48810376e64@gmail.com>
+To: cygwin-patches@cygwin.com
+References: <ea3fb37b-8c1f-38be-a52f-3e2dae74d14c@gmail.com> <20160615124947.GE27295@calimero.vinschen.de> <c0854c9c-3b17-4570-733d-fc325b27d1f9@gmail.com> <f1540797-04ba-316b-487e-daaeb85b3381@gmail.com> <20160615153936.GF27295@calimero.vinschen.de> <6e6c7336-45c1-bc47-5470-c48810376e64@gmail.com> <20160616120712.GA8546@calimero.vinschen.de>
+From: Marco Atzeri <marco.atzeri@gmail.com>
+Message-ID: <f47c6201-decd-7833-ca12-a3f2e4f20d5e@gmail.com>
+Date: Thu, 16 Jun 2016 12:32:00 -0000
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101 Thunderbird/45.1.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="M9NhX3UHpAaciwkO"
-Content-Disposition: inline
-In-Reply-To: <6e6c7336-45c1-bc47-5470-c48810376e64@gmail.com>
-User-Agent: Mutt/1.6.1 (2016-04-27)
-X-SW-Source: 2016-q2/txt/msg00059.txt.bz2
+In-Reply-To: <20160616120712.GA8546@calimero.vinschen.de>
+Content-Type: multipart/mixed; boundary="------------3FC8760E588F3E1C0727992F"
+X-IsSubscribed: yes
+X-SW-Source: 2016-q2/txt/msg00060.txt.bz2
 
+This is a multi-part message in MIME format.
+--------------3FC8760E588F3E1C0727992F
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-length: 761
 
---M9NhX3UHpAaciwkO
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 845
+On 16/06/2016 14:07, Corinna Vinschen wrote:
+> On Jun 16 13:13, Marco Atzeri wrote:
+>> On 15/06/2016 17:39, Corinna Vinschen wrote:
+>>> On Jun 15 16:52, Marco Atzeri wrote:
+>>>> On 15/06/2016 16:37, Marco Atzeri wrote:
+>>>>> On 15/06/2016 14:49, Corinna Vinschen wrote:
+>>
+>>> What about this:
+>>>
+>>> - Arrange the "View" button with the left side of the package table.
+>>>
+>>> - Arrange the accompanying text right of the button.
+>>>
+>>> - Move "Search [...] Clear" to the center?
+>>>
+>>> - If you don't mind the extra work, align the y-pos and height of the
+>>>   search stuff to the other elements in the row?
+>>>
+>>
+>> http://matzeri.altervista.org/works/setup/Round2/
+>>
+>> let me know
+>
+> looks great!
+>
+>
+> Thanks,
+> Corinna
+>
 
-On Jun 16 13:13, Marco Atzeri wrote:
-> On 15/06/2016 17:39, Corinna Vinschen wrote:
-> > On Jun 15 16:52, Marco Atzeri wrote:
-> > > On 15/06/2016 16:37, Marco Atzeri wrote:
-> > > > On 15/06/2016 14:49, Corinna Vinschen wrote:
->=20
-> > What about this:
-> >=20
-> > - Arrange the "View" button with the left side of the package table.
-> >=20
-> > - Arrange the accompanying text right of the button.
-> >=20
-> > - Move "Search [...] Clear" to the center?
-> >=20
-> > - If you don't mind the extra work, align the y-pos and height of the
-> >   search stuff to the other elements in the row?
-> >=20
->=20
-> http://matzeri.altervista.org/works/setup/Round2/
->=20
-> let me know
+attached the two patches
 
-looks great!
+--------------3FC8760E588F3E1C0727992F
+Content-Type: text/plain; charset=UTF-8;
+ name="0001-Moved-view-from-right-to-left.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="0001-Moved-view-from-right-to-left.patch"
+Content-length: 4738
 
+RnJvbSAzNTQ1ZTljNzY1YTA2OWMzMTRhY2RiZGUyNGEwZTVlY2NmODQ1OGRk
+IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBNYXJjbyBBdHplcmkg
+PG1hcmNvLmF0emVyaUBnbWFpbC5jb20+CkRhdGU6IFN1biwgMTIgSnVuIDIw
+MTYgMTc6NDU6MTYgKzAyMDAKU3ViamVjdDogW1BBVENIIDEvMl0gTW92ZWQg
+dmlldyBmcm9tIHJpZ2h0IHRvIGxlZnQKCi0tLQogY2hvb3NlLmNjIHwgIDQg
+KystLQogcmVzLnJjICAgIHwgMTkgKysrKysrKysrKy0tLS0tLS0tLQogMiBm
+aWxlcyBjaGFuZ2VkLCAxMiBpbnNlcnRpb25zKCspLCAxMSBkZWxldGlvbnMo
+LSkKCmRpZmYgLS1naXQgYS9jaG9vc2UuY2MgYi9jaG9vc2UuY2MKaW5kZXgg
+YjBlNTUzOC4uNDJkOGI3NCAxMDA2NDQKLS0tIGEvY2hvb3NlLmNjCisrKyBi
+L2Nob29zZS5jYwpAQCAtODMsOSArODMsOSBAQCBzdGF0aWMgQ29udHJvbEFk
+anVzdGVyOjpDb250cm9sSW5mbyBDaG9vc2VyQ29udHJvbHNJbmZvW10gPSB7
+CiAgIHtJRENfQ0hPT1NFX0tFRVAsIAkJQ1BfUklHSFQsICAgQ1BfVE9QfSwK
+ICAge0lEQ19DSE9PU0VfQ1VSUiwgCQlDUF9SSUdIVCwgICBDUF9UT1B9LAog
+ICB7SURDX0NIT09TRV9FWFAsIAkJQ1BfUklHSFQsICAgQ1BfVE9QfSwKLSAg
+e0lEQ19DSE9PU0VfVklFVywgCQlDUF9SSUdIVCwgICBDUF9UT1B9LAorICB7
+SURDX0NIT09TRV9WSUVXLCAJCUNQX0xFRlQsICAgIENQX1RPUH0sCiAgIHtJ
+RENfTElTVFZJRVdfUE9TLCAJCUNQX1JJR0hULCAgIENQX1RPUH0sCi0gIHtJ
+RENfQ0hPT1NFX1ZJRVdDQVBUSU9OLAlDUF9SSUdIVCwgICBDUF9UT1B9LAor
+ICB7SURDX0NIT09TRV9WSUVXQ0FQVElPTiwJQ1BfTEVGVCwgICAgQ1BfVE9Q
+fSwKICAge0lEQ19DSE9PU0VfTElTVCwJCUNQX1NUUkVUQ0gsIENQX1NUUkVU
+Q0h9LAogICB7SURDX0NIT09TRV9ISURFLCAgICAgICAgICAgICBDUF9MRUZU
+LCAgICBDUF9CT1RUT019LAogICB7MCwgQ1BfTEVGVCwgQ1BfVE9QfQpkaWZm
+IC0tZ2l0IGEvcmVzLnJjIGIvcmVzLnJjCmluZGV4IDQ3MjY4N2QuLmQxMjkw
+NjMgMTAwNjQ0Ci0tLSBhL3Jlcy5yYworKysgYi9yZXMucmMKQEAgLTMxMiwx
+NiArMzEyLDE2IEBAIEVORAogI2RlZmluZSBTRVRVUF9LUENFX1cJCSgzMCkK
+IAogLy8gUmlnaHQtYWxpZ25lZCBjb250cm9scy4KLSNkZWZpbmUgU0VUVVBf
+VklFV0NBUF9XCQkoNDApCi0jZGVmaW5lIFNFVFVQX1ZJRVdDQVBfWAkJKFNF
+VFVQX1NUQU5EQVJEX0RJQUxPR19XIC0gU0VUVVBfVklFV0NBUF9XIC0gNykK
+LSNkZWZpbmUgU0VUVVBfVklFV19XCQkoMjYpCi0jZGVmaW5lIFNFVFVQX1ZJ
+RVdfWAkJKFNFVFVQX1ZJRVdDQVBfWCAtIFNFVFVQX1ZJRVdfVyAtIDUpCi0j
+ZGVmaW5lIFNFVFVQX0VYUF9YCQkoU0VUVVBfVklFV19YIC0gU0VUVVBfS1BD
+RV9XIC0gNSkKKyNkZWZpbmUgU0VUVVBfRVhQX1gJCShTRVRVUF9TVEFOREFS
+RF9ESUFMT0dfVyAtIFNFVFVQX0tQQ0VfVyAtIDcpCiAjZGVmaW5lIFNFVFVQ
+X0NVUlJfWAkJKFNFVFVQX0VYUF9YIC0gU0VUVVBfS1BDRV9XIC0gNSkKICNk
+ZWZpbmUgU0VUVVBfS0VFUF9YCQkoU0VUVVBfQ1VSUl9YIC0gU0VUVVBfS1BD
+RV9XIC0gNSkKIAogLy8gTGVmdC1hbGlnbmVkIGNvbnRyb2xzLgotI2RlZmlu
+ZSBTRVRVUF9TRUFSQ0hfWAkJKDApCisjZGVmaW5lIFNFVFVQX1ZJRVdDQVBf
+WAkJKDApCisjZGVmaW5lIFNFVFVQX1ZJRVdDQVBfVwkJKDQwKQorI2RlZmlu
+ZSBTRVRVUF9WSUVXX1gJCShTRVRVUF9WSUVXQ0FQX1ggKyBTRVRVUF9WSUVX
+Q0FQX1cgKzUpCisjZGVmaW5lIFNFVFVQX1ZJRVdfVwkJKDI2KQorI2RlZmlu
+ZSBTRVRVUF9TRUFSQ0hfWAkJKFNFVFVQX1ZJRVdfWCArIFNFVFVQX1ZJRVdf
+VyArIDUpCiAjZGVmaW5lIFNFVFVQX1NFQVJDSF9XCQkoMzIpCiAjZGVmaW5l
+IFNFVFVQX1NFQVJDSFRFWFRfWAkoU0VUVVBfU0VBUkNIX1ggKyBTRVRVUF9T
+RUFSQ0hfVyArIDIpCiAjZGVmaW5lIFNFVFVQX1NFQVJDSFRFWFRfVwkoNjAp
+CkBAIC0zMzQsNiArMzM0LDEwIEBAIFNUWUxFIERTX01PREFMRlJBTUUgfCBE
+U18zRExPT0sgfCBXU19DSElMRCB8IFdTX1ZJU0lCTEUgfCBXU19DQVBUSU9O
+IHwKIENBUFRJT04gIkN5Z3dpbiBTZXR1cCAtIFNlbGVjdCBQYWNrYWdlcyIK
+IEZPTlQgOCwgIk1TIFNoZWxsIERsZyIKIEJFR0lOCisgICAgUlRFWFQgICAg
+ICAgICAgICIiLCBJRENfQ0hPT1NFX1ZJRVdDQVBUSU9OLCBTRVRVUF9WSUVX
+Q0FQX1gsIDMzLAorICAgICAgICAgICAgICAgICAgICBTRVRVUF9WSUVXQ0FQ
+X1csIDEwCisgICAgUFVTSEJVVFRPTiAgICAgICImVmlldyIsIElEQ19DSE9P
+U0VfVklFVywgU0VUVVBfVklFV19YLCAzMCwgU0VUVVBfVklFV19XLAorICAg
+ICAgICAgICAgICAgICAgICAxNCwgV1NfRVhfUklHSFQKICAgICBSVEVYVCAg
+ICAgICAgICAgIiZTZWFyY2giLCBJRENfU1RBVElDLCBTRVRVUF9TRUFSQ0hf
+WCwgMzAsIFNFVFVQX1NFQVJDSF9XLAogICAgICAgICAgICAgICAgICAgICAx
+MiwgU1NfQ0VOVEVSSU1BR0UsIFdTX0VYX1JJR0hUCiAgICAgRURJVFRFWFQg
+ICAgICAgIElEQ19DSE9PU0VfU0VBUkNIX0VESVQsIFNFVFVQX1NFQVJDSFRF
+WFRfWCwgMzAsCkBAIC0zNDYsOCArMzUwLDYgQEAgQkVHSU4KICAgICAgICAg
+ICAgICAgICAgICAgU0VUVVBfQ1VSUl9YLCAzMCwgU0VUVVBfS1BDRV9XLCAx
+NAogICAgIENPTlRST0wgICAgICAgICAiRSZ4cCIsIElEQ19DSE9PU0VfRVhQ
+LCAiQnV0dG9uIiwgQlNfQVVUT1JBRElPQlVUVE9OLAogICAgICAgICAgICAg
+ICAgICAgICBTRVRVUF9FWFBfWCwgMzAsIFNFVFVQX0tQQ0VfVywgMTQKLSAg
+ICBQVVNIQlVUVE9OICAgICAgIiZWaWV3IiwgSURDX0NIT09TRV9WSUVXLCBT
+RVRVUF9WSUVXX1gsIDMwLCBTRVRVUF9WSUVXX1csCi0gICAgICAgICAgICAg
+ICAgICAgIDE0LCBXU19HUk9VUAogICAgIENPTlRST0wgICAgICAgICAiIiwg
+SURDX0hFQURTRVBBUkFUT1IsICJTdGF0aWMiLCBTU19CTEFDS0ZSQU1FIHwg
+U1NfU1VOS0VOLAogICAgICAgICAgICAgICAgICAgICAwLCAyOCwgU0VUVVBf
+U1RBTkRBUkRfRElBTE9HX1csIDEKICAgICBDT05UUk9MICAgICAgICAgIiIs
+IElEQ19MSVNUVklFV19QT1MsICJTdGF0aWMiLCBTU19CTEFDS0ZSQU1FIHwg
+Tk9UIApAQCAtMzU5LDcgKzM2MSw2IEBAIEJFR0lOCiAgICAgICAgICAgICAg
+ICAgICAgIElEQ19DSE9PU0VfSU5TVF9URVhULCAyMSwgOSwgMjM5LCAxNiwg
+Tk9UIFdTX0dST1VQCiAgICAgTFRFWFQgICAgICAgICAgICJTZWxlY3QgUGFj
+a2FnZXMiLCBJRENfU1RBVElDX0hFQURFUl9USVRMRSwgNywgMCwgMjU4LCA4
+LAogICAgICAgICAgICAgICAgICAgICBOT1QgV1NfR1JPVVAKLSAgICBMVEVY
+VCAgICAgICAgICAgIiIsIElEQ19DSE9PU0VfVklFV0NBUFRJT04sIFNFVFVQ
+X1ZJRVdDQVBfWCwgMzMsIFNFVFVQX1ZJRVdDQVBfVywgMTAKIEVORAogCiBJ
+RERfUFJFUkVRIERJQUxPRyBESVNDQVJEQUJMRSAgMCwgMCwgU0VUVVBfU1RB
+TkRBUkRfRElBTE9HX0RJTVMKLS0gCjIuOC4zCgo=
 
-Thanks,
-Corinna
+--------------3FC8760E588F3E1C0727992F
+Content-Type: text/plain; charset=UTF-8;
+ name="0002-reformatted-view-with-alignment.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="0002-reformatted-view-with-alignment.patch"
+Content-length: 3177
 
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
+RnJvbSBkNWZhNjMzZmVlOGEyYmIwYmYwYzIyNWNmODFjYjc0ZDQ1OGUxODA0
+IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBNYXJjbyBBdHplcmkg
+PG1hcmNvLmF0emVyaUBnbWFpbC5jb20+CkRhdGU6IFRodSwgMTYgSnVuIDIw
+MTYgMTQ6Mjk6MDggKzAyMDAKU3ViamVjdDogW1BBVENIIDIvMl0gcmVmb3Jt
+YXR0ZWQgdmlldyB3aXRoIGFsaWdubWVudAoKLS0tCiByZXMucmMgfCAyMCAr
+KysrKysrKysrLS0tLS0tLS0tLQogMSBmaWxlIGNoYW5nZWQsIDEwIGluc2Vy
+dGlvbnMoKyksIDEwIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL3Jlcy5y
+YyBiL3Jlcy5yYwppbmRleCBkMTI5MDYzLi5mMWNmNDA2IDEwMDY0NAotLS0g
+YS9yZXMucmMKKysrIGIvcmVzLnJjCkBAIC0zMTcsMTEgKzMxNywxMSBAQCBF
+TkQKICNkZWZpbmUgU0VUVVBfS0VFUF9YCQkoU0VUVVBfQ1VSUl9YIC0gU0VU
+VVBfS1BDRV9XIC0gNSkKIAogLy8gTGVmdC1hbGlnbmVkIGNvbnRyb2xzLgot
+I2RlZmluZSBTRVRVUF9WSUVXQ0FQX1gJCSgwKQotI2RlZmluZSBTRVRVUF9W
+SUVXQ0FQX1cJCSg0MCkKLSNkZWZpbmUgU0VUVVBfVklFV19YCQkoU0VUVVBf
+VklFV0NBUF9YICsgU0VUVVBfVklFV0NBUF9XICs1KQorI2RlZmluZSBTRVRV
+UF9WSUVXX1gJCSg3KQogI2RlZmluZSBTRVRVUF9WSUVXX1cJCSgyNikKLSNk
+ZWZpbmUgU0VUVVBfU0VBUkNIX1gJCShTRVRVUF9WSUVXX1ggKyBTRVRVUF9W
+SUVXX1cgKyA1KQorI2RlZmluZSBTRVRVUF9WSUVXQ0FQX1gJCShTRVRVUF9W
+SUVXX1ggKyBTRVRVUF9WSUVXX1cgKzUpCisjZGVmaW5lIFNFVFVQX1ZJRVdD
+QVBfVwkJKDQwKQorI2RlZmluZSBTRVRVUF9TRUFSQ0hfWAkJKFNFVFVQX1ZJ
+RVdDQVBfWCArIFNFVFVQX1ZJRVdDQVBfVyArIDgwKQogI2RlZmluZSBTRVRV
+UF9TRUFSQ0hfVwkJKDMyKQogI2RlZmluZSBTRVRVUF9TRUFSQ0hURVhUX1gJ
+KFNFVFVQX1NFQVJDSF9YICsgU0VUVVBfU0VBUkNIX1cgKyAyKQogI2RlZmlu
+ZSBTRVRVUF9TRUFSQ0hURVhUX1cJKDYwKQpAQCAtMzM0LDE2ICszMzQsMTYg
+QEAgU1RZTEUgRFNfTU9EQUxGUkFNRSB8IERTXzNETE9PSyB8IFdTX0NISUxE
+IHwgV1NfVklTSUJMRSB8IFdTX0NBUFRJT04gfAogQ0FQVElPTiAiQ3lnd2lu
+IFNldHVwIC0gU2VsZWN0IFBhY2thZ2VzIgogRk9OVCA4LCAiTVMgU2hlbGwg
+RGxnIgogQkVHSU4KLSAgICBSVEVYVCAgICAgICAgICAgIiIsIElEQ19DSE9P
+U0VfVklFV0NBUFRJT04sIFNFVFVQX1ZJRVdDQVBfWCwgMzMsCi0gICAgICAg
+ICAgICAgICAgICAgIFNFVFVQX1ZJRVdDQVBfVywgMTAKICAgICBQVVNIQlVU
+VE9OICAgICAgIiZWaWV3IiwgSURDX0NIT09TRV9WSUVXLCBTRVRVUF9WSUVX
+X1gsIDMwLCBTRVRVUF9WSUVXX1csCiAgICAgICAgICAgICAgICAgICAgIDE0
+LCBXU19FWF9SSUdIVAotICAgIFJURVhUICAgICAgICAgICAiJlNlYXJjaCIs
+IElEQ19TVEFUSUMsIFNFVFVQX1NFQVJDSF9YLCAzMCwgU0VUVVBfU0VBUkNI
+X1csCi0gICAgICAgICAgICAgICAgICAgIDEyLCBTU19DRU5URVJJTUFHRSwg
+V1NfRVhfUklHSFQKKyAgICBMVEVYVCAgICAgICAgICAgIiIsIElEQ19DSE9P
+U0VfVklFV0NBUFRJT04sIFNFVFVQX1ZJRVdDQVBfWCwgMzMsCisgICAgICAg
+ICAgICAgICAgICAgIFNFVFVQX1ZJRVdDQVBfVywgMTAKKyAgICBSVEVYVCAg
+ICAgICAgICAgIiZTZWFyY2giLCBJRENfU1RBVElDLCBTRVRVUF9TRUFSQ0hf
+WCwgMzMsIFNFVFVQX1NFQVJDSF9XLAorICAgICAgICAgICAgICAgICAgICAx
+MCwgU1NfQ0VOVEVSSU1BR0UsIFdTX0VYX1JJR0hUCiAgICAgRURJVFRFWFQg
+ICAgICAgIElEQ19DSE9PU0VfU0VBUkNIX0VESVQsIFNFVFVQX1NFQVJDSFRF
+WFRfWCwgMzAsCi0gICAgICAgICAgICAgICAgICAgIFNFVFVQX1NFQVJDSFRF
+WFRfVywgMTIKKyAgICAgICAgICAgICAgICAgICAgU0VUVVBfU0VBUkNIVEVY
+VF9XLCAxNAogICAgIFBVU0hCVVRUT04gICAgICAiJkNsZWFyIiwgSURDX0NI
+T09TRV9DTEVBUl9TRUFSQ0gsIFNFVFVQX0NMRUFSX1gsIDMwLAotICAgICAg
+ICAgICAgICAgICAgICBTRVRVUF9DTEVBUl9XLCAxMgorICAgICAgICAgICAg
+ICAgICAgICBTRVRVUF9DTEVBUl9XLCAxNAogICAgIENPTlRST0wgICAgICAg
+ICAiJktlZXAiLCBJRENfQ0hPT1NFX0tFRVAsICJCdXR0b24iLCBCU19BVVRP
+UkFESU9CVVRUT04KICAgICAgICAgICAgICAgICAgICAgfCBXU19HUk9VUCB8
+IFdTX1RBQlNUT1AsIFNFVFVQX0tFRVBfWCwgMzAsIFNFVFVQX0tQQ0VfVywg
+MTQKICAgICBDT05UUk9MICAgICAgICAgIiZDdXJyIiwgSURDX0NIT09TRV9D
+VVJSLCAiQnV0dG9uIiwgQlNfQVVUT1JBRElPQlVUVE9OLAotLSAKMi44LjMK
+Cg==
 
---M9NhX3UHpAaciwkO
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJXYpZwAAoJEPU2Bp2uRE+g1U8P/jSDQLv9RivKBYd60yahwIpv
-OOpN3cDFvdXaD6uDQsnxiofcIOirwbArLMFoG9vOrwscOPq6DXF/g5UIK07oTSuS
-KLEzN9r8gEzz6FhltljolmKijHcWjgoEGDQVQYudITuK/q7x4fMilx406rVyDW1G
-+KJhvG4CbcsiR6GBpGIHHPuw3cOmUyIiJHBpNe+MDBIsB+KWOAhpLTG3hQmXmwf0
-LaSbtZeQLZarpJCrwggs/Kc7b4ZQSGFkNLDrl9d0cCff02VxYWe6FXrdlz/bvtqM
-XcPmRANOiMNP6/MMfpBvLnY3Uonp0unTrEIbW6R/kAIEzbhCaA6lENIDzlcjB+CC
-mob6/nDdb3anJjFVOBGqaT9NZr25rUHLgg1iM11eX/umKb8ojMtfHe0b5DS+/eJu
-T+S1wFADKceW+ZY+4Cpy9XO7KVjALmX/MEez2uPm0eulIXsVqRYiue6M2eVWWz6F
-0ZQGiYz4remeQzDYRJYgDDO4Vv+qNY9NdIk9HGegf61vKyvYKt7J1kTwQzR/7Gfa
-GrzQpW7H3VyYGWZib2uAML06MqcazdC2c79EDXam6Q+6x3pv7s3VsjFj+EnDDKyo
-a+3BELXkKObix6IByajU5fAJkGfpCdCyRVSTcJ5abVVbi+UYHI8K2yCx7B5oB6qk
-6pEZkYjI7HUpPLi+g4Na
-=Mpmj
------END PGP SIGNATURE-----
-
---M9NhX3UHpAaciwkO--
+--------------3FC8760E588F3E1C0727992F--
