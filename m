@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8595-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 24145 invoked by alias); 5 Jul 2016 10:08:36 -0000
+Return-Path: <cygwin-patches-return-8596-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 123072 invoked by alias); 5 Jul 2016 14:14:07 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,48 +9,75 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 24108 invoked by uid 89); 5 Jul 2016 10:08:35 -0000
+Received: (qmail 123056 invoked by uid 89); 5 Jul 2016 14:14:07 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-0.1 required=5.0 tests=AWL,BAYES_50,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW autolearn=no version=3.3.2 spammy=HX-CTCH-RefID:sk:0001.0A, HX-CTCH-RefID:1,fgs, HX-CTCH-RefID:str, HX-CTCH-RefID:0.000,reip
-X-HELO: rgout0401.bt.lon5.cpcloud.co.uk
-Received: from rgout0401.bt.lon5.cpcloud.co.uk (HELO rgout0401.bt.lon5.cpcloud.co.uk) (65.20.0.214) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 05 Jul 2016 10:08:22 +0000
-X-OWM-Source-IP: 86.179.112.53 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-CTCH-RefID: str=0001.0A090206.577B8711.0065,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
-X-Junkmail-Premium-Raw: score=27/50,refid=2.7.2:2016.7.4.165416:17:27.888,ip=86.179.112.53,rules=__HAS_FROM, __TO_MALFORMED_2, __TO_NO_NAME, __HAS_CC_HDR, __SUBJ_ALPHA_END, __HAS_MSGID, __SANE_MSGID, __HAS_X_MAILER, __IN_REP_TO, __REFERENCES, __ANY_URI, __URI_NO_WWW, BODYTEXTP_SIZE_3000_LESS, BODY_SIZE_900_999, __MIME_TEXT_ONLY, RDNS_GENERIC_POOLED, __URI_NS, SXL_IP_DYNAMIC[53.112.179.86.fur], HTML_00_01, HTML_00_10, BODY_SIZE_5000_LESS, RDNS_SUSP_GENERIC, BODY_SIZE_1000_LESS, BODY_SIZE_2000_LESS, MULTIPLE_RCPTS_RND, RDNS_SUSP, IN_REP_TO, REFERENCES, BODY_SIZE_7000_LESS, NO_URI_HTTPS, MSG_THREAD, LEGITIMATE_NEGATE
-X-CTCH-Spam: Unknown
-Received: from localhost.localdomain (86.179.112.53) by rgout04.bt.lon5.cpcloud.co.uk (8.6.122.06) (authenticated as jonturney@btinternet.com)        id 57764D230097E8D7; Tue, 5 Jul 2016 11:08:17 +0100
-From: Jon Turney <jon.turney@dronecode.org.uk>
+X-Spam-SWARE-Status: No, score=-94.3 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_BRBL_LASTEXT,RCVD_IN_PBL,RCVD_IN_SORBS_DUL,RDNS_DYNAMIC autolearn=ham version=3.3.2 spammy=para, HTo:U*cygwin-patches, H*Ad:U*cygwin-patches
+X-HELO: calimero.vinschen.de
+Received: from ipbcc0190b.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.25.11) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 05 Jul 2016 14:14:06 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id B2625A809F3; Tue,  5 Jul 2016 16:14:03 +0200 (CEST)
+Date: Tue, 05 Jul 2016 14:14:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH 2/3] Use <filename> tag, not <pathname> tag
-Date: Tue, 05 Jul 2016 10:08:00 -0000
-Message-Id: <20160705100752.6684-3-jon.turney@dronecode.org.uk>
-In-Reply-To: <20160705100752.6684-1-jon.turney@dronecode.org.uk>
+Subject: Re: [PATCH 0/3] Small documentation fixes
+Message-ID: <20160705141403.GF13445@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20160705100752.6684-1-jon.turney@dronecode.org.uk>
-X-SW-Source: 2016-q3/txt/msg00003.txt.bz2
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="8X7/QrJGcKSMr1RN"
+Content-Disposition: inline
+In-Reply-To: <20160705100752.6684-1-jon.turney@dronecode.org.uk>
+User-Agent: Mutt/1.6.1 (2016-04-27)
+X-SW-Source: 2016-q3/txt/msg00004.txt.bz2
 
-Fix an instance of the invalid <pathname> tag in Cygwin utils documentation,
-by using the valid <filename> tag instead.
 
-Signed-off-by: Jon Turney <jon.turney@dronecode.org.uk>
----
- winsup/doc/utils.xml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--8X7/QrJGcKSMr1RN
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 526
 
-diff --git a/winsup/doc/utils.xml b/winsup/doc/utils.xml
-index 4853d92..12949c5 100644
---- a/winsup/doc/utils.xml
-+++ b/winsup/doc/utils.xml
-@@ -335,7 +335,7 @@ Other options:
-     However, the cygdrive prefix can be changed by the user, so symbolic links
-     created using the cygdrive prefix are not foolproof.  With
-     <literal>-U</literal> cygpath will generate such paths prepended by the
--    virtual <pathname>/proc/cygdrive</pathname> symbolic link, which will
-+    virtual <filename>/proc/cygdrive</filename> symbolic link, which will
-     never change, so the created path is safe against changing the cygdrive
-     prefix.</para>
- 
--- 
-2.8.3
+On Jul  5 11:07, Jon Turney wrote:
+> Jon Turney (3):
+>   Use <example> tag at same level as <para>, not inside it
+>   Use <filename> tag, not <pathname> tag
+>   Improve description of Cygwin ldd utility
+>=20
+>  winsup/doc/utils.xml | 43 ++++++++++++++++++++++++++++++++-----------
+>  1 file changed, 32 insertions(+), 11 deletions(-)
+
+Looks good, please apply.
+
+
+Thanks,
+Corinna
+
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
+
+--8X7/QrJGcKSMr1RN
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 819
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iQIcBAEBCAAGBQJXe8CrAAoJEPU2Bp2uRE+g9ycP/jaYXkbgs9cTYH2hH+IGFUtO
+8muzo4/6n/+uxZs4mw4Jg6HKwr82JZ/5T8IG4PuOfEqWKbmyqpngkHX45QMomknt
+L/xev4StiSkYm8/spZGtGLjBtmEZabJB3xLJolRt1/yzAxuCI1g1aCi82Ts9PrrQ
+viONdenzS40w3An7pdbL0+0amMTOzwsl5HXXfQElI5whRG/wFnS/tTDltn55KCbb
+0+cRP7yMP5oAnNCB6ip1IlE7VWC11hP4CNe2/Ir9LCe6q1AiGSGWHwAt7MmFeQUQ
+6mik2YROf07jOqbLI6pDR/698poZ/OQem82yNDKNdlYMlPz433pNhVXPN5Zb7cxg
+dDg2CIINZCaddTc2zGsfF6m4exkiq8ReyVrBhrbbh7OkQUvtKQVq4zjsbOMAANjY
+azvaiEe/xYLeinoCeF3rs/itWSX/PpPgwD/mELvbfJmX/E0roqZdkt+qOTMC5jbv
+SVuX2Pj7CUXo62WHxSzdFrVOOYlos/Dj0uE35Rc3371GNbFBCMpDpfpRnHhCNMBc
+JEiYMLk3cCnRGAId0f0DJGlByPeUeIp9yDJKPTL18bYQWmcEuB+T1Tus7L1bJ2Gl
+JZ5LynUIYel56F81jRPZepcFaPmeFf6EVCI0YLpQWmy13a23QAlmcTcehVYDLJh2
+Y+TRFwAYiTEcxAKDp1Rd
+=/tJB
+-----END PGP SIGNATURE-----
+
+--8X7/QrJGcKSMr1RN--
