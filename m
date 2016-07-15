@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8602-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 2284 invoked by alias); 14 Jul 2016 18:50:17 -0000
+Return-Path: <cygwin-patches-return-8603-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 88705 invoked by alias); 15 Jul 2016 20:05:23 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,91 +9,53 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 2171 invoked by uid 89); 14 Jul 2016 18:50:17 -0000
+Received: (qmail 88691 invoked by uid 89); 15 Jul 2016 20:05:22 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-94.8 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_BRBL_LASTEXT,RCVD_IN_PBL,RCVD_IN_SORBS_DUL,RDNS_DYNAMIC autolearn=ham version=3.3.2 spammy=HTo:U*cygwin-patches, H*Ad:U*cygwin-patches, our
-X-HELO: calimero.vinschen.de
-Received: from ipbcc0190b.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.25.11) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 14 Jul 2016 18:50:15 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 001E1A80405; Thu, 14 Jul 2016 20:50:12 +0200 (CEST)
-Date: Thu, 14 Jul 2016 18:50:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Fix 32-bit SSIZE_MAX
-Message-ID: <20160714185012.GA24631@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1468443748-25335-1-git-send-email-eblake@redhat.com> <20160714150944.GB21341@calimero.vinschen.de> <5787DC61.5040109@redhat.com>
+X-Spam-SWARE-Status: No, score=-2.6 required=5.0 tests=BAYES_00,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.2 spammy=Hx-languages-length:770, states, HTo:U*cygwin-patches, H*Ad:U*cygwin-patches
+X-HELO: mail-wm0-f67.google.com
+Received: from mail-wm0-f67.google.com (HELO mail-wm0-f67.google.com) (74.125.82.67) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with (AES128-GCM-SHA256 encrypted) ESMTPS; Fri, 15 Jul 2016 20:05:12 +0000
+Received: by mail-wm0-f67.google.com with SMTP id i5so3482460wmg.2        for <cygwin-patches@cygwin.com>; Fri, 15 Jul 2016 13:05:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20130820;        h=x-gm-message-state:mime-version:in-reply-to:references:from:date         :message-id:subject:to;        bh=XlT7+PHfK0QNsOZPUw/2tLcDFZpQpvFG1aqJEhVMcD4=;        b=Nxaw+yduHdz1086Inou3nrqkM6IJaah56VW1Pr63NNkz208becPY4ECEKB/JF2ilj/         ZPOK60jdmmOICCQtQTMhZ2wanhL3YUYPhJH2tjdQWLXcr+EUH5WLOQl0XP1gdoVy3LFp         lZ6kLLgMRSpHnAA6KcHqaSbc98n5h42AflrxJtpYZcWRKsNriKH5T8VAqKm5s2+pkn3V         TRhOIH46FbRn4QOuBzWsq2kxKG4wYnuYGb9DLkqotabfYPFftUqU9fOvntlJfyfSE/j0         8rhp/mab7vJDgipMkqpoviXawbuSKwM3KGEok6NIct6DZ2zha5oYnoXx2MCY7srr15hM         McJw==
+X-Gm-Message-State: ALyK8tKCE+X16Ex//L9k+ShTDRamSOmFnbNjwIXHr0ifFQ7x02250J0kqpixIwuxsLZkZdZ8cntBdj/JtuQqQw==
+X-Received: by 10.28.182.136 with SMTP id g130mr23497806wmf.21.1468613109200; Fri, 15 Jul 2016 13:05:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="RnlQjJ0d97Da+TV1"
-Content-Disposition: inline
-In-Reply-To: <5787DC61.5040109@redhat.com>
-User-Agent: Mutt/1.6.1 (2016-04-27)
-X-SW-Source: 2016-q3/txt/msg00010.txt.bz2
+Received: by 10.194.112.10 with HTTP; Fri, 15 Jul 2016 13:05:08 -0700 (PDT)
+In-Reply-To: <20160714171215.GA19533@calimero.vinschen.de>
+References: <CAOYw7dtjewWMjXR2iO5454smDBxDKkLP9HirZzT4hPqMzZdpeQ@mail.gmail.com> <20160714171215.GA19533@calimero.vinschen.de>
+From: Ray Donnelly <mingw.android@gmail.com>
+Date: Fri, 15 Jul 2016 20:05:00 -0000
+Message-ID: <CAOYw7dtnK29GbYGoT_THS6_CXTfGUSRNQH_p2WPySrKccKRFhg@mail.gmail.com>
+Subject: Re: [PATCH 01/01] machine/_types.h: __blkcnt_t should be signed
+To: cygwin-patches@cygwin.com
+Content-Type: text/plain; charset=UTF-8
+X-IsSubscribed: yes
+X-SW-Source: 2016-q3/txt/msg00011.txt.bz2
 
+On Thu, Jul 14, 2016 at 6:12 PM, Corinna Vinschen
+<corinna-cygwin@cygwin.com> wrote:
+> On Jul 14 16:37, Ray Donnelly wrote:
+>> Hi,
+>>
+>> Please review and consider applying the attached patch. The commit message is:
+>>
+>> [1] states: "blkcnt_t and off_t shall be signed integer types."
+>> This causes pacman to fail when the size requirement
+>> of the net update operation is negative, instead it
+>> calculated a huge positive number.
+>>
+>> [1] http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/sys_types.h.html
+>
+> Patch applied.
+>
+>
+> Thanks,
+> Corinna
+>
 
---RnlQjJ0d97Da+TV1
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1395
+Many thanks Corinna.
 
-On Jul 14 12:39, Eric Blake wrote:
-> On 07/14/2016 09:09 AM, Corinna Vinschen wrote:
-> > On Jul 13 15:02, Eric Blake wrote:
-> >> POSIX requires that SSIZE_MAX have the same type as ssize_t, but
-> >> on 32-bit, we were defining it as a long even though ssize_t
-> >> resolves to an int.  It also requires that SSIZE_MAX be usable
-> >> via preprocessor #if, so we can't cheat and use a cast.
-> >>
-> >> If this were newlib, I'd have had to hack _intsup.h to probe the
-> >> qualities of size_t (via gcc's __SIZE_TYPE__), similar to how we
-> >> already probe the qualities of int8_t and friends, then cross our
-> >> fingers that ssize_t happens to have the same rank (most systems
-> >> do, but POSIX permits a system where they differ such as size_t
-> >> being long while ssize_t is int).  Unfortunately gcc gives us
-> >> neither __SSIZE_TYPE__ nor __SSIZE_MAX__.  On the other hand, our
-> >> limits.h is specific to cygwin, we can just shortcut to the
-> >> correct results rather than being generic to all possible ABI.
-> >>
-> >> Signed-off-by: Eric Blake <eblake@redhat.com>
-> >> ---
-> >>  winsup/cygwin/include/limits.h | 10 +++++++++-
->=20
-> > Looks good, please apply.
->=20
-> And I remembered to update the release notes, too.
-
-Thumbs up.
-
-
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---RnlQjJ0d97Da+TV1
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJXh97kAAoJEPU2Bp2uRE+gOPIP/3fyyFtdy2c7/ABV7F58dj9/
-pwC6wnSqqQHV9LFtv5JwKEJlskZxaDHpNknEI/JoPCX7FIoQkE4hxTRVB1r31Yuw
-TnNJtW25CvTQiCZ8LPURebwbF9ciB4VLhFPnmq0ywL3ChFnsOu5jwffwnyMzE48g
-H57nP/HtdRkilXG8CW4zaSYkmmj+xchHB0EeCy0UV/FvznVdzuRdAQdxO1cifUdq
-Kq/TLPG6JxdNsLfc7Sh2U+e1q0yOMBfHxBqkSAVOM3KPo3wh6B7qRcJSbypeuwjK
-m7+U6StC6/+pp/jSFs1mU7o1z/xXNDOC49Wi5/frCIGTY576X+aeHzCGtjmI7Zzs
-zweYyUXOOfnvd9Af1L+LG8ffbeoJmWOQU48ryzwMN82goBP0N3I/WKzUeHb0qJfF
-6Dy9+2/6ab67J1T7I1FR/Hgn8qhBsxpbf/LN9bo89I2QpkTmjwH1k54a+m0o/eaf
-6583XB35tttwfhYuUXw1ChAklNfPJ1avNQKksFqswg9slzCZ4QjEa6Cnhg9nXFNB
-5Yq3CGClik0l5Op2/P/F5gsjnpbTN4UTLDIvXZNR16P4IVWqZU2QsJLQVv5q++bR
-GGDm8AXDHQu6MtB8U5Jg0C5E26JHMWFu8v4tUDFATasSAmIrKq7gjdPb1svHeEEP
-1asTAgUhycPiXg+WBnO6
-=qJ+p
------END PGP SIGNATURE-----
-
---RnlQjJ0d97Da+TV1--
+> --
+> Corinna Vinschen                  Please, send mails regarding Cygwin to
+> Cygwin Maintainer                 cygwin AT cygwin DOT com
+> Red Hat
