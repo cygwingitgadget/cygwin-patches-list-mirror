@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8607-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 130788 invoked by alias); 28 Jul 2016 19:21:13 -0000
+Return-Path: <cygwin-patches-return-8608-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 81968 invoked by alias); 28 Jul 2016 19:35:11 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,181 +9,254 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 130770 invoked by uid 89); 28 Jul 2016 19:21:13 -0000
+Received: (qmail 81954 invoked by uid 89); 28 Jul 2016 19:35:10 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-94.9 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_BRBL_LASTEXT,RCVD_IN_PBL,RCVD_IN_SORBS_DUL,RDNS_DYNAMIC autolearn=ham version=3.3.2 spammy=cp, yuk, UD:glibc.git, glibc.git
+X-Spam-SWARE-Status: No, score=-94.9 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_BRBL_LASTEXT,RCVD_IN_PBL,RCVD_IN_SORBS_DUL,RDNS_DYNAMIC autolearn=ham version=3.3.2 spammy=Wire, UD:lock, CALLBACK, sk:jontur
 X-HELO: calimero.vinschen.de
-Received: from ipbcc0190b.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.25.11) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 28 Jul 2016 19:21:02 +0000
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 8D364A80EF9; Thu, 28 Jul 2016 21:21:00 +0200 (CEST)
-Date: Thu, 28 Jul 2016 19:21:00 -0000
+Received: from ipbcc0190b.dynamic.kabel-deutschland.de (HELO calimero.vinschen.de) (188.192.25.11) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 28 Jul 2016 19:35:00 +0000
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 37C89A80EF9; Thu, 28 Jul 2016 21:34:58 +0200 (CEST)
+Date: Thu, 28 Jul 2016 19:35:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 1/2] Add pthread_getname_np and pthread_setname_np
-Message-ID: <20160728192100.GA26311@calimero.vinschen.de>
+Subject: Re: [PATCH 2/2] Send thread names to debugger
+Message-ID: <20160728193458.GB26311@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20160728114341.1728-1-jon.turney@dronecode.org.uk> <20160728114341.1728-2-jon.turney@dronecode.org.uk>
+References: <20160728114341.1728-1-jon.turney@dronecode.org.uk> <20160728114341.1728-3-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="AhhlLboLdkugWU4S"
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="2B/JsCI69OhZNC5r"
 Content-Disposition: inline
-In-Reply-To: <20160728114341.1728-2-jon.turney@dronecode.org.uk>
+In-Reply-To: <20160728114341.1728-3-jon.turney@dronecode.org.uk>
 User-Agent: Mutt/1.6.2 (2016-07-01)
-X-SW-Source: 2016-q3/txt/msg00015.txt.bz2
+X-SW-Source: 2016-q3/txt/msg00016.txt.bz2
 
 
---AhhlLboLdkugWU4S
+--2B/JsCI69OhZNC5r
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-length: 4352
-
-Hi Jon,
+Content-length: 7293
 
 On Jul 28 12:43, Jon Turney wrote:
-> This patch adds pthread_getname_np and pthread_setname_np.
->=20
-> These were added to glibc in 2.12[1] and are also present in some form on
-> NetBSD and several UNIXes.
->=20
-> The code is based on NetBSD's implementation with changes to better match
-> Linux behaviour.
->=20
-> Implementation quirks:
->=20
-> * pthread_setname_np with a NULL pointer segfaults (as linux)
->=20
-> * pthread_setname_np accepts names longer than 16 characters (linux retur=
-ns
-> ERANGE)
+> GDB with the patch from [1] can report and use these names.
 
-Given the behaviour of pthread_getname_np we should do the same, I think.
+This is still WIP, right?
 
-> * pthread_getname_np with a NULL pointer returns EFAULT (as linux)
+> Add utility function SetThreadName(), which sends a thread name to the
+> debugger.
 >=20
-> * pthread_getname_np with a buffer length of less than 16 returns ERANGE =
-(as
-> linux)
+> Wire this up to set the default thread name for main thread and newly
+> created pthreads.
 >=20
-> * pthread_getname_np truncates the thread name to fit the buffer length.
-> This guarantees success even when the default thread name is longer than =
-16
-> characters, but means there is no way to discover the actual length of the
-> thread name. (Linux always truncates the thread name to 16 characters)
+> Wire this up in pthread_setname_np() for user thread names.
 >=20
-> * Changing program_invocation_short_name changes the default thread name.
+> Wire this up in cygthread::create() for helper thread names.  Also wire it
+> up for helper threads which are created directly with CreateThread.
 >=20
-> I'll leave it up to you to decide any of these matter.
+> TODO: Make SetThreadName() available to libgmon.a so the profiling thread
+> created by that can be named as well.
 >=20
-> This is implemented via class pthread_attr to make it easier to add
-> pthread_attr_[gs]etname_np (present in NetBSD and some UNIXes) should it
-> ever be added to Linux (or we decide we want it anyway).
+> Note that there can still be anonymous threads, created by the kernel or
+> injected DLLs.
+>=20
+> [1] https://sourceware.org/ml/gdb-patches/2016-07/msg00307.html
+>=20
+> Signed-off-by: Jon Turney <jon.turney@dronecode.org.uk>
+> ---
+>  winsup/cygwin/cygthread.cc  |  2 ++
+>  winsup/cygwin/dcrt0.cc      |  1 +
+>  winsup/cygwin/exceptions.cc |  2 +-
+>  winsup/cygwin/miscfuncs.cc  | 28 ++++++++++++++++++++++++++++
+>  winsup/cygwin/miscfuncs.h   |  2 ++
+>  winsup/cygwin/net.cc        |  2 ++
+>  winsup/cygwin/profil.c      |  2 ++
+>  winsup/cygwin/thread.cc     |  5 +++++
+>  8 files changed, 43 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/winsup/cygwin/cygthread.cc b/winsup/cygwin/cygthread.cc
+> index b9d706b..2f7f2a1 100644
+> --- a/winsup/cygwin/cygthread.cc
+> +++ b/winsup/cygwin/cygthread.cc
+> @@ -213,6 +213,8 @@ cygthread::create ()
+>  			    this, 0, &id);
+>        if (!htobe)
+>  	api_fatal ("CreateThread failed for %s - %p<%y>, %E", __name, h, id);
+> +      else
+> +	SetThreadName(GetThreadId(htobe), __name);
+                    ^^^         ^^^
+                   space?      space?
 
-Good thinking.
+Just wondering: Wouldn't it make sense to rename the internal threads
+so they either always start with "cyg_" or with double underscore or
+something like that to mark them as internal?  E.g.
 
-> [1] https://sourceware.org/git/?p=3Dglibc.git;a=3Dblob;f=3DNEWS;h=3Dd55a8=
-44d4ec06d164cb786c6c9f403a9672a674d;hb=3De28c88707ef0529593fccedf1a94c3fce3=
-df0ef3
->=20
-> diff --git a/winsup/cygwin/include/cygwin/version.h b/winsup/cygwin/inclu=
-de/cygwin/version.h
-> index 1f5bf72..d403f0e 100644
-> --- a/winsup/cygwin/include/cygwin/version.h
-> +++ b/winsup/cygwin/include/cygwin/version.h
-> @@ -454,12 +454,13 @@ details. */
->         nexttowardf, nexttowardl, pow10l, powl, remainderl, remquol, roun=
-dl,
->         scalbl, scalblnl, scalbnl, sincosl, sinhl, sinl, tanhl, tanl,
->         tgammal, truncl.
-> +  298: Export pthread_getname_np, pthread_setname_np.
+  new cygthread (wait_sig, cygself, "cyg_wait_sig");
 
-Yuk!  This collides with my changes in topic/locales.  Oh well, nothing
-we can do about it...
+>        thread_printf ("created name '%s', thread %p, id %y", __name, h, i=
+d);
+>  #ifdef DEBUGGING
+>        terminated =3D false;
+> diff --git a/winsup/cygwin/dcrt0.cc b/winsup/cygwin/dcrt0.cc
+> index 2328411..de581c1 100644
+> --- a/winsup/cygwin/dcrt0.cc
+> +++ b/winsup/cygwin/dcrt0.cc
+> @@ -964,6 +964,7 @@ dll_crt0_1 (void *)
+>        if (cp > __progname && ascii_strcasematch (cp, ".exe"))
+>  	*cp =3D '\0';
+>      }
+> +  SetThreadName(GetCurrentThreadId(), program_invocation_short_name);
+                 ^^^                ^^^
+                space?             space?
 
-> --- a/winsup/cygwin/thread.cc
-> +++ b/winsup/cygwin/thread.cc
-> @@ -1099,7 +1099,7 @@ pthread::resume ()
->  pthread_attr::pthread_attr ():verifyable_object (PTHREAD_ATTR_MAGIC),
->  joinable (PTHREAD_CREATE_JOINABLE), contentionscope (PTHREAD_SCOPE_PROCE=
-SS),
->  inheritsched (PTHREAD_INHERIT_SCHED), stackaddr (NULL), stacksize (0),
-> -guardsize (wincap.def_guard_page_size ())
-> +guardsize (wincap.def_guard_page_size ()), name (NULL)
+>=20=20
+>    (void) xdr_set_vprintf (&cygxdr_vwarnx);
+>    cygwin_finished_initializing =3D true;
+> diff --git a/winsup/cygwin/exceptions.cc b/winsup/cygwin/exceptions.cc
+> index d65f56e..1d028a7 100644
+> --- a/winsup/cygwin/exceptions.cc
+> +++ b/winsup/cygwin/exceptions.cc
+> @@ -1288,7 +1288,7 @@ DWORD WINAPI
+>  dumpstack_overflow_wrapper (PVOID arg)
 >  {
->    schedparam.sched_priority =3D 0;
->  }
-> @@ -2569,6 +2569,65 @@ pthread_getattr_np (pthread_t thread, pthread_attr=
-_t *attr)
+>    cygwin_exception *exc =3D (cygwin_exception *) arg;
+> -
+> +  SetThreadName(GetCurrentThreadId(), "dumpstack_overflow");
+                 ^^^                ^^^
+                space?             space?
+
+>    exc->dumpstack ();
 >    return 0;
 >  }
->=20=20
-> +#define NAMELEN 16
+> diff --git a/winsup/cygwin/miscfuncs.cc b/winsup/cygwin/miscfuncs.cc
+> index d0e4bf7..353633b 100644
+> --- a/winsup/cygwin/miscfuncs.cc
+> +++ b/winsup/cygwin/miscfuncs.cc
+> @@ -1110,3 +1110,31 @@ wmemcpy:								\n\
+>  	.seh_endproc							\n\
+>  ");
+>  #endif
 > +
-> +extern "C" int
-> +pthread_getname_np (pthread_t thread, char *buf, size_t buflen)
+> +//
+> +// Signal the thread name to any attached debugger
+> +//
+> +// (See "How to: Set a Thread Name in Native Code"
+> +// https://msdn.microsoft.com/en-us/library/xcb2z8hs.aspx)
+> +//
+
+/* */, please
+
+> +
+> +#define MS_VC_EXCEPTION 0x406D1388
+> +
+> +void
+> +SetThreadName(DWORD dwThreadID, const char* threadName)
 > +{
-> +  char *name;
+> +  if (!IsDebuggerPresent ())
+> +    return;
 > +
-> +  if (!pthread::is_good_object (&thread))
-> +    return ESRCH;
-> +
-> +  if (!thread->attr.name)
-> +    name =3D program_invocation_short_name;
-> +  else
-> +    name =3D thread->attr.name;
-> +
-> +  // Return ERANGE if the provided buffer is less than NAMELEN.  Truncat=
-e and
-> +  // zero-terminate the name to fit in buf.  This means we always return
-> +  // something if the buffer is NAMELEN or larger, but there is no way t=
-o tell
-> +  // if we have the whole name.
-
-Please use C-style /* */ bracketing for multiline comments.
-
-> +  if (buflen < NAMELEN)
-> +    return ERANGE;
-> +
-> +  int ret =3D 0;
-> +  __try
+> +  ULONG_PTR info[] =3D
 > +    {
-> +      strlcpy (buf, name, buflen);
-> +    }
-> +  __except (NO_ERROR)
-> +    {
-> +      ret =3D EFAULT;
-> +    }
-> +  __endtry
+> +      0x1000,                /* type, must be 0x1000 */
+> +      (ULONG_PTR)threadName, /* pointer to threadname */
+                  ^^^
+                 space?
+
+> +      dwThreadID,            /* thread ID (+ flags on x86_64) */
+> +#ifdef __X86__
+> +      0,                     /* flags, must be zero */
+> +#endif
+> +    };
 > +
-> +  return ret;
+> +  RaiseException (MS_VC_EXCEPTION, 0, sizeof(info)/sizeof(ULONG_PTR), (U=
+LONG_PTR *) &info);
+                                              ^^^          ^^^
+                                             space?       space?
+
 > +}
-> +
-> +#undef NAMELEN
-> +
-> +extern "C" int
-> +pthread_setname_np (pthread_t thread, const char *name)
-> +{
-> +  char *oldname, *cp;
-> +
-> +  if (!pthread::is_good_object (&thread))
-> +    return ESRCH;
-> +
-> +  cp =3D strdup(name);
-               ^^^
-              space?
+> diff --git a/winsup/cygwin/miscfuncs.h b/winsup/cygwin/miscfuncs.h
+> index a885dcf..5390dd1 100644
+> --- a/winsup/cygwin/miscfuncs.h
+> +++ b/winsup/cygwin/miscfuncs.h
+> @@ -85,4 +85,6 @@ extern "C" HANDLE WINAPI CygwinCreateThread (LPTHREAD_S=
+TART_ROUTINE thread_func,
+>  					     DWORD creation_flags,
+>  					     LPDWORD thread_id);
+>=20=20
+> +void SetThreadName(DWORD dwThreadID, const char* threadName);
+                    ^^^
+                   space?
 
-> +  if (!cp)
-> +    return ENOMEM;
 > +
-> +  oldname =3D thread->attr.name;
-> +  thread->attr.name =3D cp;
+>  #endif /*_MISCFUNCS_H*/
+> diff --git a/winsup/cygwin/net.cc b/winsup/cygwin/net.cc
+> index 52b3d98..94ae604 100644
+> --- a/winsup/cygwin/net.cc
+> +++ b/winsup/cygwin/net.cc
+> @@ -1776,6 +1776,8 @@ call_gaa (LPVOID param)
+>    gaa_wa *p =3D (gaa_wa *) param;
+>    PIP_ADAPTER_ADDRESSES pa0 =3D NULL;
+>=20=20
+> +  SetThreadName(GetCurrentThreadId(), "call_gaa");
+                 ^^^                ^^^
+                space?             space?
+
+
+
 > +
-> +  if (oldname)
-> +    free(oldname);
+>    if (!p->pa_ret)
+>      return GetAdaptersAddresses (p->family, GAA_FLAG_INCLUDE_PREFIX
+>  					    | GAA_FLAG_INCLUDE_ALL_INTERFACES,
+> diff --git a/winsup/cygwin/profil.c b/winsup/cygwin/profil.c
+> index be59b49..4b2e873 100644
+> --- a/winsup/cygwin/profil.c
+> +++ b/winsup/cygwin/profil.c
+> @@ -91,6 +91,8 @@ static void CALLBACK
+>  profthr_func (LPVOID arg)
+>  {
+>    struct profinfo *p =3D (struct profinfo *) arg;
+> +  // XXX: can't use SetThreadName() here as it's part of the cygwin DLL
+> +  // SetThreadName(GetCurrentThreadId(), "prof");
+                    ^^^                ^^^
+                   space?             space?
+
+Since it's such a short function, why not just add a copy to profile.c
+or just perform the RaiseException directly?
+
+>=20=20
+>    for (;;)
+>      {
+> diff --git a/winsup/cygwin/thread.cc b/winsup/cygwin/thread.cc
+> index e41e0c1..7f60db7 100644
+> --- a/winsup/cygwin/thread.cc
+> +++ b/winsup/cygwin/thread.cc
+> @@ -1985,6 +1985,9 @@ pthread::thread_init_wrapper (void *arg)
+>    _my_tls.sigmask =3D thread->parent_sigmask;
+>    thread->set_tls_self_pointer ();
+>=20=20
+> +  // Give thread default name
+> +  SetThreadName(GetCurrentThreadId(), program_invocation_short_name);
+                 ^^^                ^^^
+                space?             space?
+
+> +
+>    thread->mutex.lock ();
+>=20=20
+>    // if thread is detached force cleanup on exit
+> @@ -2622,6 +2625,8 @@ pthread_setname_np (pthread_t thread, const char *n=
+ame)
+>    oldname =3D thread->attr.name;
+>    thread->attr.name =3D cp;
+>=20=20
+> +  SetThreadName(GetThreadId(thread->win32_obj_id), thread->attr.name);
+                 ^^^                ^^^
+                space?             space?
+
+> +
+>    if (oldname)
+>      free(oldname);
           ^^^
          space?
-
-Looks good, otherwise.
 
 
 Thanks,
@@ -194,26 +267,26 @@ Corinna Vinschen                  Please, send mails regarding Cygwin to
 Cygwin Maintainer                 cygwin AT cygwin DOT com
 Red Hat
 
---AhhlLboLdkugWU4S
+--2B/JsCI69OhZNC5r
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-length: 819
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v2
 
-iQIcBAEBCAAGBQJXmlscAAoJEPU2Bp2uRE+gYf0P/jdBoPOSm65FEhXO+dbyYWa0
-7Gctvpjt61BBJ0RFtxP4rMJFNKQUPfTe+qM3GKL8IXMcz5OkpF2Zlmy+gRZAnka0
-xXoZc9Cu94GqRNGSzaFQhpXbOCxDNodN7YX6dWuR5zkDr0ZbPweB8G0L0XunlJ+O
-aS4vc5Q3UsJEAyM9kBvom3JQ9aQcj4+rXGQWo1bxYPp9qId/Xcx96Y4wy4yj27IM
-YjyZ043f2E3xoYbk6J3OPmy6Wdchh6vRJ868nLO4GfUTZdXZEP4+cEEeloyHRJL+
-99bAFEryn6D4Mbp2WQC89NUxWv7k7Nvby790vDi0lmL2NeEi8zC9tG2RBOchGSCq
-v5uBe2vQb+FqB3WALSwTsnkijHzGDNBc+s42Mdbt57dRASCGy4kliRiHe2F4IR95
-OzP2vGSNpNvYiRaGjdWn9hhHUJiiVOXjP6wijCuRg0wnYnPRCM/GJLZiO5xWqz04
-glopfUC/NIN4ReqcXQ/esbXUKDPhE8dhohRu+LBXfUG0o0bnX7yWrTfnc8TDsmy2
-mX7tb/grhaNws5B4lmYsw8Q/tMddoItJAJ0xPJbjcpFccSMj33r2jo+ukSakIlL8
-CWqPMysORxuk0LSpmIZFxp3w3EB9X0MGkCnKoJv2mWOyinmqA6xBInWA/Wc3zD/A
-W/7UIl9K9uj44LGEA+lY
-=qssU
+iQIcBAEBCAAGBQJXml5iAAoJEPU2Bp2uRE+g+KQP/1MfMKJsNdm3RXrmnMECPNMl
+RAgaA/nmYBQDu/Uj6CNHUuE0WyuY839aGzj6s6mbhtsPNqf4FCtMoVnvmXfxDv3Y
+J1gACioBiPMP9SA5KxowxIaeLgbiq1ggGzibmVIeUOQaY/uCzeuWpsGGO7Qm1fAO
+nilcEHQw2hLy8YcWYhsvQ+fA3/6MeRIaFXh2PAWaxHlPFY662z6BFtzc60PC6Mmv
+VycKR1OEjruhBvZCvQ13TEqOnofE6VOuAIXGcZ0vKFttU74Jbmt7cmhXNRCfF+jm
+5pSgIpZEZYD+OjYMlrualzd8cPqyGQJp0ExyiAW5T1HCoHDviDcGb3bqa55WBzq4
+v3NDuJQs9Yo90eBq9Vh+E5LeU2GvtXmEgBThSmpq78ko3K9uHiUN9pqUogFQ3wtR
+1Fert6P8W4Fser5h3SAD5AVtpPBVzjqyy8qtKQ3l3QJU236Vy5N1lbPadfPmHSQ6
+/rhJe7vbwrrQuBLqLD3rTQFH8Ie56xRy9RM1XD3YVyFAwWxM/zmI4EXktY4cVRth
+u1i30cWgHjcbGtmiI6iJlM4QsrR/oz+6ouj8M/dQcMQmWmZ7TnXaT/7OmpuQje4W
+1LuSNY0BbnHrHFczJVSNDx82wTlFWOCY3tS++h6TMgAztKOfbubd4Q6AfOcEBJrc
+Yq3xXooVWvoZvuCmmg9Y
+=YHKy
 -----END PGP SIGNATURE-----
 
---AhhlLboLdkugWU4S--
+--2B/JsCI69OhZNC5r--
