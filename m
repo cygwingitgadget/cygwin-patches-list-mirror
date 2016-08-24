@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8617-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 111803 invoked by alias); 23 Aug 2016 18:30:40 -0000
+Return-Path: <cygwin-patches-return-8618-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 16853 invoked by alias); 24 Aug 2016 18:20:29 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,75 +9,51 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 111782 invoked by uid 89); 23 Aug 2016 18:30:39 -0000
+Received: (qmail 16811 invoked by uid 89); 24 Aug 2016 18:20:28 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-101.4 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=HTo:U*cygwin-patches, H*Ad:U*cygwin-patches, promised
-X-HELO: drew.franken.de
-Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 23 Aug 2016 18:30:29 +0000
-Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id 08CA4721E281A	for <cygwin-patches@cygwin.com>; Tue, 23 Aug 2016 20:30:26 +0200 (CEST)
-Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id 6188A5E0419	for <cygwin-patches@cygwin.com>; Tue, 23 Aug 2016 20:30:25 +0200 (CEST)
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 54777A80604; Tue, 23 Aug 2016 20:30:25 +0200 (CEST)
-Date: Tue, 23 Aug 2016 18:30:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=1.5 required=5.0 tests=AWL,BAYES_50,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE autolearn=no version=3.3.2 spammy=dying, Hx-spam-relays-external:CriticalPath, H*RU:CriticalPath, HCc:D*uk
+X-HELO: rgout0403.bt.lon5.cpcloud.co.uk
+Received: from rgout0403.bt.lon5.cpcloud.co.uk (HELO rgout0403.bt.lon5.cpcloud.co.uk) (65.20.0.216) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 24 Aug 2016 18:20:18 +0000
+X-OWM-Source-IP: 31.51.206.108 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-Junkmail-Premium-Raw: score=7/50,refid=2.7.2:2016.8.24.171817:17:7.944,ip=31.51.206.108,rules=__HAS_FROM, __TO_MALFORMED_2, __TO_NO_NAME, __HAS_CC_HDR, __CC_NAME, __CC_NAME_DIFF_FROM_ACC, __SUBJ_ALPHA_END, __HAS_MSGID, __SANE_MSGID, __HAS_X_MAILER, __IN_REP_TO, __REFERENCES, __FROM_DOMAIN_IN_ANY_CC1, __ANY_URI, __URI_NO_WWW, BODYTEXTP_SIZE_3000_LESS, BODY_SIZE_900_999, __MIME_TEXT_ONLY, RDNS_GENERIC_POOLED, HTML_00_01, HTML_00_10, BODY_SIZE_5000_LESS, RDNS_SUSP_GENERIC, BODY_SIZE_1000_LESS, BODY_SIZE_2000_LESS, __FROM_DOMAIN_IN_RCPT, RDNS_SUSP, IN_REP_TO, REFERENCES, BODY_SIZE_7000_LESS, NO_URI_HTTPS, MSG_THREAD, __CC_REAL_NAMES, MULTIPLE_REAL_RCPTS, LEGITIMATE_SIGNS, LEGITIMATE_NEGATE
+Received: from localhost.localdomain (31.51.206.108) by rgout04.bt.lon5.cpcloud.co.uk (8.6.122.06) (authenticated as jonturney@btinternet.com)        id 57BDD4BF0002994D; Wed, 24 Aug 2016 19:19:17 +0100
+From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
-Subject: Re: Documentation patch: Clarify Cygwin's support for Win32 paths
-Message-ID: <20160823183025.GC2261@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <c49add49-d7e4-fa04-74f3-596919303ee0@cornell.edu>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="mxv5cy4qt+RJ9ypb"
-Content-Disposition: inline
-In-Reply-To: <c49add49-d7e4-fa04-74f3-596919303ee0@cornell.edu>
-User-Agent: Mutt/1.6.2 (2016-07-01)
-X-SW-Source: 2016-q3/txt/msg00025.txt.bz2
+Cc: Jon Turney <jon.turney@dronecode.org.uk>
+Subject: [PATCH] Fix SetThreadName with current gdb
+Date: Wed, 24 Aug 2016 18:20:00 -0000
+Message-Id: <20160824181857.16904-1-jon.turney@dronecode.org.uk>
+In-Reply-To: <20160822180848.351616-3-jon.turney@dronecode.org.uk>
+References: <20160822180848.351616-3-jon.turney@dronecode.org.uk>
+X-SW-Source: 2016-q3/txt/msg00026.txt.bz2
 
+Wrap SetThreadName()'s call to RaiseException() in __try/__except/__endtry,
+so that if the attached debugger doesn't know about MS_VC_EXCEPTION (e.g.
+current gdb and probably strace as well) and continues exception processing,
+we ignore it, rather than dying due an unhandled exception.
 
---mxv5cy4qt+RJ9ypb
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 328
+Signed-off-by: Jon Turney <jon.turney@dronecode.org.uk>
+---
+ winsup/cygwin/miscfuncs.cc | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-On Aug 23 13:30, Ken Brown wrote:
-> The attached patch is the one promised in
->=20
->   https://www.cygwin.com/ml/cygwin/2016-08/msg00431.html
->=20
-> Ken
-
-Applied.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---mxv5cy4qt+RJ9ypb
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJXvJZBAAoJEPU2Bp2uRE+gnOcP/iX7U35frLVqiDXyiSKTntoN
-5KA7H1a8nOxeCcDmDmD/QEorfq58kkYaBpOQQoPEYxQfIX8Qcc/TLsc8V5L74SYw
-OF9JWUPDFpnME5K/tcX3PL90qVjMMJGoEkrHcM19Ya/QTQwyYRcsDvWvuG44XYfG
-4aBHRQewhQwtypLj0haeKsqHaIxAlAWPYTnvfo/KkIWi0RvRvLROvKIBEGwAm+Bs
-KGFF6YwdAIEx+7DVfCfl7iDsizACVLYkfgVauXlPK8boUbHaFkLm6TO/uH54i7ss
-99QAPjMiwLmN/lyCF6+7s50/7/G+j/s7WtzvKOanny8NoovULEZakAhBOV0Im2Oo
-WAgDFEisbKXoM2gmZ5sw8OndlWHIrnO6Li93PHFQOwlgFlF5vEikAJ1zxxGIjlyX
-3G3KwhbvY1gT6zQeemDpDdiX0YpMOQ2Jw3u8keFjOaBh/bdy6MinemRAzENGXzUJ
-M11XLcdx7DPx/1WsDlQQQA0oYcvW/bXH/5WALyuI5PXnN12Nid+Xh57yAuIXAk1+
-WW7SOCpLz19jsziRXpH/f+7uOYQew5zzn1lBzXkwWxgBsySKTmlCrxyzPDGad0l6
-ip9wfX2yv0FmWWqZ1oNTb7DtpunHGzuK76uQu87dvx2ETaPKaweljwMTDAG3UHdb
-eix519URBvvjnZfl+kgN
-=CxM+
------END PGP SIGNATURE-----
-
---mxv5cy4qt+RJ9ypb--
+diff --git a/winsup/cygwin/miscfuncs.cc b/winsup/cygwin/miscfuncs.cc
+index 5a63b26..7a79359 100644
+--- a/winsup/cygwin/miscfuncs.cc
++++ b/winsup/cygwin/miscfuncs.cc
+@@ -1134,5 +1134,10 @@ SetThreadName(DWORD dwThreadID, const char* threadName)
+ #endif
+     };
+ 
+-  RaiseException (MS_VC_EXCEPTION, 0, sizeof (info)/sizeof (ULONG_PTR), (ULONG_PTR *) &info);
++  __try {
++    RaiseException (MS_VC_EXCEPTION, 0, sizeof (info)/sizeof (ULONG_PTR), (ULONG_PTR *) &info);
++  }
++  __except (NO_ERROR) {
++  }
++  __endtry
+ }
+-- 
+2.8.3
