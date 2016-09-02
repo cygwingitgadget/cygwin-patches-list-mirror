@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8629-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 51382 invoked by alias); 1 Sep 2016 14:05:51 -0000
+Return-Path: <cygwin-patches-return-8630-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 74205 invoked by alias); 2 Sep 2016 08:06:12 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,100 +9,85 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 51362 invoked by uid 89); 1 Sep 2016 14:05:50 -0000
+Received: (qmail 74186 invoked by uid 89); 2 Sep 2016 08:06:11 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-101.5 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
-X-HELO: drew.franken.de
-Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 01 Sep 2016 14:05:40 +0000
-Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id 2E3BA721E280D	for <cygwin-patches@cygwin.com>; Thu,  1 Sep 2016 16:05:27 +0200 (CEST)
-Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id A02835E051D	for <cygwin-patches@cygwin.com>; Thu,  1 Sep 2016 16:05:26 +0200 (CEST)
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 9EDBDA804AE; Thu,  1 Sep 2016 16:05:26 +0200 (CEST)
-Date: Thu, 01 Sep 2016 14:05:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-1.8 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,SPF_PASS autolearn=ham version=3.3.2 spammy=maxlen, 201609, HTo:U*cygwin-patches, H*MI:sk:2016090
+X-HELO: smtp.salomon.at
+Received: from smtp.salomon.at (HELO smtp.salomon.at) (193.186.16.13) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 02 Sep 2016 08:06:01 +0000
+Received: from samail03.wamas.com ([172.28.33.235] helo=mailhost.salomon.at)	by smtp.salomon.at with esmtps (UNKNOWN:DHE-RSA-AES256-SHA:256)	(Exim 4.80.1)	(envelope-from <michael.haubenwallner@ssi-schaefer.com>)	id 1bfjU2-0004Zv-Rv	for cygwin-patches@cygwin.com; Fri, 02 Sep 2016 10:05:58 +0200
+Received: from s01en24.wamas.com ([172.28.41.34])	by mailhost.salomon.at with esmtp (Exim 4.77)	(envelope-from <michael.haubenwallner@ssi-schaefer.com>)	id 1bfjTy-0003TK-Ef	for cygwin-patches@cygwin.com; Fri, 02 Sep 2016 10:05:50 +0200
+Subject: Re: [PATCH 1/4] dlopen: switch to new pathfinder class
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 4/4] dlopen: on unspecified lib dir search exe dir
-Message-ID: <20160901140526.GF1128@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1472666829-32223-1-git-send-email-michael.haubenwallner@ssi-schaefer.com> <1472666829-32223-5-git-send-email-michael.haubenwallner@ssi-schaefer.com>
+References: <1472666829-32223-1-git-send-email-michael.haubenwallner@ssi-schaefer.com> <1472666829-32223-2-git-send-email-michael.haubenwallner@ssi-schaefer.com> <20160831191231.GA649@calimero.vinschen.de> <09d08bc9-d430-f6e8-8076-e9f9ad992fd9@ssi-schaefer.com> <20160901140327.GD1128@calimero.vinschen.de>
+From: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
+Message-ID: <3cd7bff6-2e56-addd-d9ca-88e203dfb337@ssi-schaefer.com>
+Date: Fri, 02 Sep 2016 08:06:00 -0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101 Thunderbird/45.1.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="Wb5NtZlyOqqy58h0"
-Content-Disposition: inline
-In-Reply-To: <1472666829-32223-5-git-send-email-michael.haubenwallner@ssi-schaefer.com>
-User-Agent: Mutt/1.6.2 (2016-07-01)
-X-SW-Source: 2016-q3/txt/msg00037.txt.bz2
-
-
---Wb5NtZlyOqqy58h0
+In-Reply-To: <20160901140327.GD1128@calimero.vinschen.de>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1454
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2016-q3/txt/msg00038.txt.bz2
 
-On Aug 31 20:07, Michael Haubenwallner wrote:
-> Applications installed to some prefix like /opt/application do expect
-> dlopen("libAPP.so") to load "/opt/application/bin/cygAPP.dll", which
-> is similar to "/opt/application/lib/libAPP.so" on Linux.
->=20
-> See also https://cygwin.com/ml/cygwin-developers/2016-08/msg00020.html
->=20
-> * dlfcn.cc (dlopen): For dlopen("N"), search directory where the
-> application executable is in.
-> ---
->  winsup/cygwin/dlfcn.cc | 6 ++++++
->  1 file changed, 6 insertions(+)
->=20
-> diff --git a/winsup/cygwin/dlfcn.cc b/winsup/cygwin/dlfcn.cc
-> index f8b8743..974092e 100644
-> --- a/winsup/cygwin/dlfcn.cc
-> +++ b/winsup/cygwin/dlfcn.cc
-> @@ -232,6 +232,12 @@ dlopen (const char *name, int flags)
->  	     not use the LD_LIBRARY_PATH environment variable. */
->  	  finder.add_envsearchpath ("LD_LIBRARY_PATH");
->=20=20
-> +	  /* Search the current executable's directory like
-> +	     the Windows loader does for linked dlls. */
-> +	  int exedirlen =3D get_exedir (cpath, wpath);
-> +	  if (exedirlen)
-> +	    finder.add_searchdir (cpath, exedirlen);
-> +
->  	  /* Finally we better have some fallback. */
->  	  finder.add_searchdir ("/usr/bin", 8);
->  	  finder.add_searchdir ("/usr/lib", 8);
-> --=20
-> 2.7.3
+On 09/01/2016 04:03 PM, Corinna Vinschen wrote:
+> On Sep  1 13:05, Michael Haubenwallner wrote:
+>> On 08/31/2016 09:12 PM, Corinna Vinschen wrote:
+>>> On Aug 31 20:07, Michael Haubenwallner wrote:
+>>>> Instead of find_exec, without changing behaviour use new pathfinder
+>>>> class with new allocator_interface around tmp_pathbuf and new vstrlist
+>>>> class.
+>>>> * pathfinder.h (pathfinder): New file.
+>>>> * vstrlist.h (allocator_interface, allocated_type, vstrlist): New file.
+>>>> * dlfcn.cc (dlopen): Avoid redundant GetModuleHandleExW with RTLD_NOLOAD
+>>>> and RTLD_NODELETE.  Switch to new pathfinder class, using
+>>>> (tmp_pathbuf_allocator): New class.
+>>>> (get_full_path_of_dll): Drop.
+>>>> [...]
+>>>
+>>> Just one nit here:
+>>>
+>>>> +/* Dumb allocator using memory from tmp_pathbuf.w_get ().
+>>>> +
+>>>> +   Does not reuse free'd memory areas.  Instead, memory
+>>>> +   is released when the tmp_pathbuf goes out of scope.
+>>>> +
+>>>> +   ATTENTION: Requesting memory from an instance of tmp_pathbuf breaks
+>>>> +   when another instance on a newer stack frame has provided memory. */
+>>>> +class tmp_pathbuf_allocator
+>>>> +  : public allocator_interface
+>>>
+>>> You didn't reply to
+>>> https://cygwin.com/ml/cygwin-developers/2016-08/msg00013.html
+>>> So, again, why didn't you simply integrate a tmp_pathbuf member into the
+>>> pathfinder class, rather than having to create some additional allocator
+>>> class?  I'm probably not the most diligent C++ hacker, but to me this
+>>> additional allocator is a bit confusing.
+>>
+>> Sorry, seems I've failed to fully grasp your concerns firsthand in
+>> https://cygwin.com/ml/cygwin-developers/2016-08/msg00016.html
+>> Second try to answer:
+>> https://cygwin.com/ml/cygwin-developers/2016-09/msg00000.html
+> 
+> Ok, I see what you mean, but it doesn't make me really happy.
+> 
+> I'm willing to take it for now but I'd rather see basenames being a
+> member of pathfinder right from the start, so you just instantiate
+> finder and call methods on it.
 
-Still not quite sure if that's the right thing to do...
+The idea to build the basenames list before constructing pathfinder
+is that members of the searchdirs list reserve space for the maxlen
+of basenames:  This implies that the basenames list must not change
+after the first searchdir was registered.
 
+To make sure this doesn't happen I prefer to not provide such an API
+at all, rather than to check within some pathfinder::add_basename ()
+method and abort if there is some searchdir registered already.
 
-Corinna
+> Given that basenames is a member,
+> you can do the allocator stuff completely inside the pathfinder class.
 
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
+Moving the allocator into pathfinder would work then, but still the
+tmp_pathbuf instance to use has to be provided as reference.
 
---Wb5NtZlyOqqy58h0
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJXyDWmAAoJEPU2Bp2uRE+gKccP/12mLeXW/if0yAktpH7T2IHY
-RocYENqky9jNagUw7XXD9E9+5savDmPyfwR9wLAI9GwpIK8tYqqJCjF2QUNWCD50
-c0+x1Byz/6BR0370ORPnhieeLw0ADF0yNGbuYoDuG75SAOqyXZXyfN9IIJ/Op+iQ
-/8Zq5cB+z4vt16wFpW2/xQDbrMDg+7tIGg747tfgXffXL0WJ1KFMgNETgJ33anyL
-2DEbCHxtulBfERoXBNg86mNm+RFLPBCUXunW++oqIadQBjQI7yYwr9nV5DO6NfY4
-WXxy71TnWEN3IHP6Ij9u4Frpf40vbAJjo00E4isHRAU44kJoaexqLgQpsaYF29eT
-tK1EAjErA8OzbOvWpmO+TTtzwRSG3EdYZrv22Z3g6jieYoKxfHIk1mU2SUJJQ2D8
-qs9npZSy5Xkg5PslyIPSCj8oqQVX06ageDlvgf5XPJQP5f3Isp7poogouZRNQEsY
-Kn5peawVGBCfaN1XK3YyYbfDdkg8npX3OKY3w+sZRxpIPxT4ea6eR1SByxduVtu7
-jmMtYC7XqFMeWValgNOZUywshSyzCy8j7SRwlldI1O4nuOnTNkdrODmgzLATm1+Y
-k+zF/QipVOolust2yGM/YG2Odpbm2rojSzGB8CLubMmvZXMfi69TqmPgP59kNFIL
-siof11yyxZ4th7InFDQt
-=bJnV
------END PGP SIGNATURE-----
-
---Wb5NtZlyOqqy58h0--
+/haubi/
