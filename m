@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8631-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 61038 invoked by alias); 2 Sep 2016 08:46:16 -0000
+Return-Path: <cygwin-patches-return-8632-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 79876 invoked by alias); 2 Sep 2016 08:52:29 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,210 +9,147 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 61020 invoked by uid 89); 2 Sep 2016 08:46:15 -0000
+Received: (qmail 79864 invoked by uid 89); 2 Sep 2016 08:52:28 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-1.8 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,SPF_PASS autolearn=ham version=3.3.2 spammy=strrchr
-X-HELO: smtp.salomon.at
-Received: from smtp.salomon.at (HELO smtp.salomon.at) (193.186.16.13) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 02 Sep 2016 08:46:05 +0000
-Received: from samail03.wamas.com ([172.28.33.235] helo=mailhost.salomon.at)	by smtp.salomon.at with esmtps (UNKNOWN:DHE-RSA-AES256-SHA:256)	(Exim 4.80.1)	(envelope-from <michael.haubenwallner@ssi-schaefer.com>)	id 1bfk6r-0005Tm-9w	for cygwin-patches@cygwin.com; Fri, 02 Sep 2016 10:46:03 +0200
-Received: from s01en24.wamas.com ([172.28.41.34])	by mailhost.salomon.at with esmtp (Exim 4.77)	(envelope-from <michael.haubenwallner@ssi-schaefer.com>)	id 1bfk6q-0003iq-Us	for cygwin-patches@cygwin.com; Fri, 02 Sep 2016 10:46:00 +0200
-Subject: Re: [PATCH 3/4] dlopen: on x/lib search x/bin if exe is in x/bin
+X-Spam-SWARE-Status: No, score=-101.6 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=Hx-languages-length:3437, 201609, H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
+X-HELO: drew.franken.de
+Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 02 Sep 2016 08:52:18 +0000
+Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id 3A751721E280D	for <cygwin-patches@cygwin.com>; Fri,  2 Sep 2016 10:52:14 +0200 (CEST)
+Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id 85CE25E0264	for <cygwin-patches@cygwin.com>; Fri,  2 Sep 2016 10:52:13 +0200 (CEST)
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 75F09A8059C; Fri,  2 Sep 2016 10:52:13 +0200 (CEST)
+Date: Fri, 02 Sep 2016 08:52:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-References: <1472666829-32223-1-git-send-email-michael.haubenwallner@ssi-schaefer.com> <1472666829-32223-4-git-send-email-michael.haubenwallner@ssi-schaefer.com> <20160901133255.GC1128@calimero.vinschen.de>
-From: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
-Message-ID: <21ed8215-f321-ed7f-e06a-fa6f36900d65@ssi-schaefer.com>
-Date: Fri, 02 Sep 2016 08:46:00 -0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101 Thunderbird/45.1.1
+Subject: Re: [PATCH 1/4] dlopen: switch to new pathfinder class
+Message-ID: <20160902085213.GA7709@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <1472666829-32223-1-git-send-email-michael.haubenwallner@ssi-schaefer.com> <1472666829-32223-2-git-send-email-michael.haubenwallner@ssi-schaefer.com> <20160831191231.GA649@calimero.vinschen.de> <09d08bc9-d430-f6e8-8076-e9f9ad992fd9@ssi-schaefer.com> <20160901140327.GD1128@calimero.vinschen.de> <3cd7bff6-2e56-addd-d9ca-88e203dfb337@ssi-schaefer.com>
 MIME-Version: 1.0
-In-Reply-To: <20160901133255.GC1128@calimero.vinschen.de>
-Content-Type: multipart/mixed; boundary="------------8E55DC0701C54CA09D4AD3BB"
-X-SW-Source: 2016-q3/txt/msg00039.txt.bz2
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="7AUc2qLy4jB3hD7Z"
+Content-Disposition: inline
+In-Reply-To: <3cd7bff6-2e56-addd-d9ca-88e203dfb337@ssi-schaefer.com>
+User-Agent: Mutt/1.7.0 (2016-08-17)
+X-SW-Source: 2016-q3/txt/msg00040.txt.bz2
 
-This is a multi-part message in MIME format.
---------------8E55DC0701C54CA09D4AD3BB
+
+--7AUc2qLy4jB3hD7Z
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-length: 3098
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 3464
 
-Hi Corinna,
+On Sep  2 10:05, Michael Haubenwallner wrote:
+> On 09/01/2016 04:03 PM, Corinna Vinschen wrote:
+> > On Sep  1 13:05, Michael Haubenwallner wrote:
+> >> On 08/31/2016 09:12 PM, Corinna Vinschen wrote:
+> >>> On Aug 31 20:07, Michael Haubenwallner wrote:
+> >>>> Instead of find_exec, without changing behaviour use new pathfinder
+> >>>> class with new allocator_interface around tmp_pathbuf and new vstrli=
+st
+> >>>> class.
+> >>>> * pathfinder.h (pathfinder): New file.
+> >>>> * vstrlist.h (allocator_interface, allocated_type, vstrlist): New fi=
+le.
+> >>>> * dlfcn.cc (dlopen): Avoid redundant GetModuleHandleExW with RTLD_NO=
+LOAD
+> >>>> and RTLD_NODELETE.  Switch to new pathfinder class, using
+> >>>> (tmp_pathbuf_allocator): New class.
+> >>>> (get_full_path_of_dll): Drop.
+> >>>> [...]
+> >>>
+> >>> Just one nit here:
+> >>>
+> >>>> +/* Dumb allocator using memory from tmp_pathbuf.w_get ().
+> >>>> +
+> >>>> +   Does not reuse free'd memory areas.  Instead, memory
+> >>>> +   is released when the tmp_pathbuf goes out of scope.
+> >>>> +
+> >>>> +   ATTENTION: Requesting memory from an instance of tmp_pathbuf bre=
+aks
+> >>>> +   when another instance on a newer stack frame has provided memory=
+. */
+> >>>> +class tmp_pathbuf_allocator
+> >>>> +  : public allocator_interface
+> >>>
+> >>> You didn't reply to
+> >>> https://cygwin.com/ml/cygwin-developers/2016-08/msg00013.html
+> >>> So, again, why didn't you simply integrate a tmp_pathbuf member into =
+the
+> >>> pathfinder class, rather than having to create some additional alloca=
+tor
+> >>> class?  I'm probably not the most diligent C++ hacker, but to me this
+> >>> additional allocator is a bit confusing.
+> >>
+> >> Sorry, seems I've failed to fully grasp your concerns firsthand in
+> >> https://cygwin.com/ml/cygwin-developers/2016-08/msg00016.html
+> >> Second try to answer:
+> >> https://cygwin.com/ml/cygwin-developers/2016-09/msg00000.html
+> >=20
+> > Ok, I see what you mean, but it doesn't make me really happy.
+> >=20
+> > I'm willing to take it for now but I'd rather see basenames being a
+> > member of pathfinder right from the start, so you just instantiate
+> > finder and call methods on it.
+>=20
+> The idea to build the basenames list before constructing pathfinder
+> is that members of the searchdirs list reserve space for the maxlen
+> of basenames:  This implies that the basenames list must not change
+> after the first searchdir was registered.
+>=20
+> To make sure this doesn't happen I prefer to not provide such an API
+> at all, rather than to check within some pathfinder::add_basename ()
+> method and abort if there is some searchdir registered already.
 
-On 09/01/2016 03:32 PM, Corinna Vinschen wrote:
-> On Aug 31 20:07, Michael Haubenwallner wrote:
->> citing https://cygwin.com/ml/cygwin-developers/2016-08/msg00020.html
->>> Consider the file /usr/bin/cygz.dll:
->>> - dlopen (libz.so)            success
->>> - dlopen (/usr/bin/libz.so)   success
->>> - dlopen (/usr/lib/libz.so)   fails
->>
->> * dlfcn.c (dlopen): For dlopen("x/lib/N"), when the application
->> executable is in "x/bin/", search for "x/bin/N" before "x/lib/N".
->> ---
->>  winsup/cygwin/dlfcn.cc | 36 +++++++++++++++++++++++++++++++++++-
->>  1 file changed, 35 insertions(+), 1 deletion(-)
->>
->> diff --git a/winsup/cygwin/dlfcn.cc b/winsup/cygwin/dlfcn.cc
->> index e592512..f8b8743 100644
->> --- a/winsup/cygwin/dlfcn.cc
->> +++ b/winsup/cygwin/dlfcn.cc
->> @@ -153,6 +153,25 @@ collect_basenames (pathfinder::basenamelist & basenames,
->>    basenames.appendv (basename, baselen, ext, extlen, NULL);
->>  }
->>  
->> +/* Identify dir of current executable into exedirbuf using wpathbuf buffer.
->> +   Return length of exedirbuf on success, or zero on error. */
->> +static int
->> +get_exedir (char * exedirbuf, wchar_t * wpathbuf)
->> +{
->> +  /* Unless we have a special cygwin loader, there is no such thing like
->> +     DT_RUNPATH on Windows we can use to search for dlls, except for the
->> +     directory of the main executable. */
->> +  GetModuleFileNameW (NULL, wpathbuf, NT_MAX_PATH);
->> +  wchar_t * lastwsep = wcsrchr (wpathbuf, L'\\');
->> +  if (!lastwsep)
->> +    return 0;
->> +  *lastwsep = L'\0';
->> +  *exedirbuf = '\0';
->> +  if (cygwin_conv_path (CCP_WIN_W_TO_POSIX, wpathbuf, exedirbuf, NT_MAX_PATH))
->> +    return 0;
->> +  return strlen (exedirbuf);
->> +}
-> 
-> You could just use the global variable program_invocation_name.  If in
-> doubt, use the Windows path global_progname and convert it to full POSIX
-> via cygwin_conv_path.
+Yes, that sounds good.
 
-Patch updated, using global_progname now.
+> > Given that basenames is a member,
+> > you can do the allocator stuff completely inside the pathfinder class.
+>=20
+> Moving the allocator into pathfinder would work then, but still the
+> tmp_pathbuf instance to use has to be provided as reference.
 
->>  extern "C" void *
->>  dlopen (const char *name, int flags)
->>  {
->> @@ -184,13 +203,28 @@ dlopen (const char *name, int flags)
->>        /* handle for the named library */
->>        path_conv real_filename;
->>        wchar_t *wpath = tp.w_get ();
->> +      char *cpath = tp.c_get ();
->>  
->>        pathfinder finder (allocator, basenames); /* eats basenames */
->>  
->>        if (have_dir)
->>  	{
->> +	  int dirlen = basename - 1 - name;
->> +
->> +	  /* if the specified dir is x/lib, and the current executable
->> +	     dir is x/bin, do the /lib -> /bin mapping, which is the
->> +	     same actually as adding the executable dir */
->> +	  if (dirlen >= 4 && !strncmp (name + dirlen - 4, "/lib", 4))
->> +	    {
->> +	      int exedirlen = get_exedir (cpath, wpath);
->> +	      if (exedirlen == dirlen &&
->> +		  !strncmp (cpath, name, dirlen - 4) &&
->> +		  !strcmp (cpath + dirlen - 4, "/bin"))
->> +		finder.add_searchdir (cpath, exedirlen);
->> +	    }
->> +
->>  	  /* search the specified dir */
->> -	  finder.add_searchdir (name, basename - 1 - name);
->> +	  finder.add_searchdir (name, dirlen);
->>  	}
->>        else
->>  	{
->> -- 
->> 2.7.3
-> 
-> Rest looks ok.
+Hmm, considering that a function calling your pathfinder *might*
+need a tmp_pathbuf for its own dubious purposes, this makes sense.
+That could be easily handled via the constructor I think:
 
-Thanks!
-/haubi/
+  tmp_pathbuf tp;
+  pathfinder finder (tp);
+
+Still, since I said I'm willing to take this code as is, do you want me
+to apply it this way for now or do you want to come up with the proposed
+changes first?
 
 
---------------8E55DC0701C54CA09D4AD3BB
-Content-Type: text/x-patch;
- name="0003-dlopen-on-x-lib-search-x-bin-if-exe-is-in-x-bin.patch"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename*0="0003-dlopen-on-x-lib-search-x-bin-if-exe-is-in-x-bin.patch"
-Content-length: 2693
+Thanks,
+Corinna
 
-From 01da8b76ec3a02137d1a3464a413512d953eaea7 Mon Sep 17 00:00:00 2001
-From: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
-Date: Wed, 31 Aug 2016 18:05:11 +0200
-Subject: [PATCH 3/4] dlopen: on x/lib search x/bin if exe is in x/bin
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
 
-citing https://cygwin.com/ml/cygwin-developers/2016-08/msg00020.html
-> Consider the file /usr/bin/cygz.dll:
-> - dlopen (libz.so)            success
-> - dlopen (/usr/bin/libz.so)   success
-> - dlopen (/usr/lib/libz.so)   fails
+--7AUc2qLy4jB3hD7Z
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 819
 
-* dlfcn.c (dlopen): For dlopen("x/lib/N"), when the application
-executable is in "x/bin/", search for "x/bin/N" before "x/lib/N".
----
- winsup/cygwin/dlfcn.cc | 36 +++++++++++++++++++++++++++++++++++-
- 1 file changed, 35 insertions(+), 1 deletion(-)
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
 
-diff --git a/winsup/cygwin/dlfcn.cc b/winsup/cygwin/dlfcn.cc
-index e592512..3b07208 100644
---- a/winsup/cygwin/dlfcn.cc
-+++ b/winsup/cygwin/dlfcn.cc
-@@ -153,6 +153,25 @@ collect_basenames (pathfinder::basenamelist & basenames,
-   basenames.appendv (basename, baselen, ext, extlen, NULL);
- }
- 
-+/* Identify dir of current executable into exedirbuf using wpathbuf buffer.
-+   Return length of exedirbuf on success, or zero on error. */
-+static int
-+get_exedir (char * exedirbuf)
-+{
-+  /* Unless we have a special cygwin loader, there is no such thing like
-+     DT_RUNPATH on Windows we can use to search for dlls, except for the
-+     directory of the main executable. */
-+  *exedirbuf = '\0';
-+  if (cygwin_conv_path (CCP_WIN_W_TO_POSIX,
-+			global_progname, exedirbuf, NT_MAX_PATH))
-+    return 0;
-+  char * lastsep = strrchr (exedirbuf, '/');
-+  if (!lastsep)
-+    return 0;
-+  *lastsep = 0;
-+  return lastsep - exedirbuf;
-+}
-+
- extern "C" void *
- dlopen (const char *name, int flags)
- {
-@@ -184,13 +203,28 @@ dlopen (const char *name, int flags)
-       /* handle for the named library */
-       path_conv real_filename;
-       wchar_t *wpath = tp.w_get ();
-+      char *cpath = tp.c_get ();
- 
-       pathfinder finder (allocator, basenames); /* eats basenames */
- 
-       if (have_dir)
- 	{
-+	  int dirlen = basename - 1 - name;
-+
-+	  /* if the specified dir is x/lib, and the current executable
-+	     dir is x/bin, do the /lib -> /bin mapping, which is the
-+	     same actually as adding the executable dir */
-+	  if (dirlen >= 4 && !strncmp (name + dirlen - 4, "/lib", 4))
-+	    {
-+	      int exedirlen = get_exedir (cpath);
-+	      if (exedirlen == dirlen &&
-+		  !strncmp (cpath, name, dirlen - 4) &&
-+		  !strcmp (cpath + dirlen - 4, "/bin"))
-+		finder.add_searchdir (cpath, exedirlen);
-+	    }
-+
- 	  /* search the specified dir */
--	  finder.add_searchdir (name, basename - 1 - name);
-+	  finder.add_searchdir (name, dirlen);
- 	}
-       else
- 	{
--- 
-2.8.3
+iQIcBAEBCAAGBQJXyT29AAoJEPU2Bp2uRE+gTb4P/RFLjbevi17g0sNlGG8/Fnvz
+f6o4VTUSHr5CLF8rmZIBL8FzCp9FrvmUequVDySrpcrwhJsbFT6evJ2cQnbf2w/S
+ahTkq5hqoxw3V/QoOGwMj2oKlPSrSYGSiyTUagWYHH8+IL/gjxR1zxMo2NONexFp
+12XGlBZBPOOwzAOfHBuACa2elxYNZS2jqWj71SFyl3ZRMStLxrVlYzhtPECTC+I2
+/tQnOWP393AHD1QDdbi5lSDP8czxDZIbSfpv2zfpiP/faQPed5HIIwB+Bdqmvogk
+InK55s/cMVjBcD7DeyjEuxI/RNE+oqgmXgmVcmDFjKQ5ZZOotifNW3t6xxUlCc5I
+APC1PYuHz9WP1YMqFShNtS0Ef1pyzDMGedkd9mqq5hSs2Q60ejp448gMpJhULJGs
+dI2IFnyhwEvKoBFCwBLs9Wl1kiWZfNla8j5Id2zDNZFr7Fw2w/4fQKobfZHIu8nM
+D+sxHd1ShDmytPMgpJKOFbf9dx6O20jI6651mikAGfUVYDKSeyXKTSbQH/fh+GNw
++6ygV6L7oa0c14CGsMpKUGWHAQKfRntMwoqOAQ9EMfZP3SNslFjoysFqJrpUCB5W
+3wDflCodBGvNvwsZ5B/mOd3FyauQ/dSveEXBmNx0IajOdUFjmkzivvuo9FmhLULM
+wTFpiTg8vzdULEiw/2F3
+=rEf/
+-----END PGP SIGNATURE-----
 
-
---------------8E55DC0701C54CA09D4AD3BB--
+--7AUc2qLy4jB3hD7Z--
