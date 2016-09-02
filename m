@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8633-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 98081 invoked by alias); 2 Sep 2016 09:03:10 -0000
+Return-Path: <cygwin-patches-return-8634-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 31799 invoked by alias); 2 Sep 2016 10:23:09 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,87 +9,128 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 98047 invoked by uid 89); 2 Sep 2016 09:03:06 -0000
+Received: (qmail 31787 invoked by uid 89); 2 Sep 2016 10:23:08 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-101.6 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=pathname, H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
-X-HELO: drew.franken.de
-Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 02 Sep 2016 09:03:05 +0000
-Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id DB111721E280D	for <cygwin-patches@cygwin.com>; Fri,  2 Sep 2016 11:03:02 +0200 (CEST)
-Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id 3A6E85E07DB	for <cygwin-patches@cygwin.com>; Fri,  2 Sep 2016 11:03:02 +0200 (CEST)
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 2BAEEA8059C; Fri,  2 Sep 2016 11:03:02 +0200 (CEST)
-Date: Fri, 02 Sep 2016 09:03:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-1.8 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,SPF_PASS autolearn=ham version=3.3.2 spammy=mechanisms, createprocess, CreateProcess, HTo:U*cygwin-patches
+X-HELO: smtp.salomon.at
+Received: from smtp.salomon.at (HELO smtp.salomon.at) (193.186.16.13) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 02 Sep 2016 10:22:58 +0000
+Received: from samail03.wamas.com ([172.28.33.235] helo=mailhost.salomon.at)	by smtp.salomon.at with esmtps (UNKNOWN:DHE-RSA-AES256-SHA:256)	(Exim 4.80.1)	(envelope-from <michael.haubenwallner@ssi-schaefer.com>)	id 1bflcd-0001l2-87	for cygwin-patches@cygwin.com; Fri, 02 Sep 2016 12:22:55 +0200
+Received: from s01en24.wamas.com ([172.28.41.34])	by mailhost.salomon.at with esmtp (Exim 4.77)	(envelope-from <michael.haubenwallner@ssi-schaefer.com>)	id 1bflcc-0004bO-KJ	for cygwin-patches@cygwin.com; Fri, 02 Sep 2016 12:22:54 +0200
+Subject: Re: [PATCH 4/4] dlopen: on unspecified lib dir search exe dir
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 3/4] dlopen: on x/lib search x/bin if exe is in x/bin
-Message-ID: <20160902090302.GB7709@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1472666829-32223-1-git-send-email-michael.haubenwallner@ssi-schaefer.com> <1472666829-32223-4-git-send-email-michael.haubenwallner@ssi-schaefer.com> <20160901133255.GC1128@calimero.vinschen.de> <21ed8215-f321-ed7f-e06a-fa6f36900d65@ssi-schaefer.com>
+References: <1472666829-32223-1-git-send-email-michael.haubenwallner@ssi-schaefer.com> <1472666829-32223-5-git-send-email-michael.haubenwallner@ssi-schaefer.com> <20160901140526.GF1128@calimero.vinschen.de>
+From: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
+Message-ID: <12c1f823-1f30-18b7-ccd2-e944817391fb@ssi-schaefer.com>
+Date: Fri, 02 Sep 2016 10:23:00 -0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101 Thunderbird/45.1.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="xgyAXRrhYN0wYx8y"
-Content-Disposition: inline
-In-Reply-To: <21ed8215-f321-ed7f-e06a-fa6f36900d65@ssi-schaefer.com>
-User-Agent: Mutt/1.7.0 (2016-08-17)
-X-SW-Source: 2016-q3/txt/msg00041.txt.bz2
+In-Reply-To: <20160901140526.GF1128@calimero.vinschen.de>
+Content-Type: multipart/mixed; boundary="------------EDAF4238918F8AE7BAEA747F"
+X-SW-Source: 2016-q3/txt/msg00042.txt.bz2
 
-
---xgyAXRrhYN0wYx8y
+This is a multi-part message in MIME format.
+--------------EDAF4238918F8AE7BAEA747F
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 986
+Content-Transfer-Encoding: 7bit
+Content-length: 1876
 
-On Sep  2 10:46, Michael Haubenwallner wrote:
-> Hi Corinna,
->=20
-> On 09/01/2016 03:32 PM, Corinna Vinschen wrote:
-> > You could just use the global variable program_invocation_name.  If in
-> > doubt, use the Windows path global_progname and convert it to full POSIX
-> > via cygwin_conv_path.
->=20
-> Patch updated, using global_progname now.
+Hi Corinna,
 
-Looks good and you're right to do it this way since I just noticed
-that program_invocation_name may return a relative pathname.
+On 09/01/2016 04:05 PM, Corinna Vinschen wrote:
+> On Aug 31 20:07, Michael Haubenwallner wrote:
+>> Applications installed to some prefix like /opt/application do expect
+>> dlopen("libAPP.so") to load "/opt/application/bin/cygAPP.dll", which
+>> is similar to "/opt/application/lib/libAPP.so" on Linux.
+>>
+>> See also https://cygwin.com/ml/cygwin-developers/2016-08/msg00020.html
+>>
+>> * dlfcn.cc (dlopen): For dlopen("N"), search directory where the
+>> application executable is in.
+>> ---
+>>  winsup/cygwin/dlfcn.cc | 6 ++++++
+>>  1 file changed, 6 insertions(+)
+>>
+>> diff --git a/winsup/cygwin/dlfcn.cc b/winsup/cygwin/dlfcn.cc
+>> index f8b8743..974092e 100644
+>> --- a/winsup/cygwin/dlfcn.cc
+>> +++ b/winsup/cygwin/dlfcn.cc
+>> @@ -232,6 +232,12 @@ dlopen (const char *name, int flags)
+>>  	     not use the LD_LIBRARY_PATH environment variable. */
+>>  	  finder.add_envsearchpath ("LD_LIBRARY_PATH");
+>>  
+>> +	  /* Search the current executable's directory like
+>> +	     the Windows loader does for linked dlls. */
+>> +	  int exedirlen = get_exedir (cpath, wpath);
+>> +	  if (exedirlen)
+>> +	    finder.add_searchdir (cpath, exedirlen);
+>> +
+>>  	  /* Finally we better have some fallback. */
+>>  	  finder.add_searchdir ("/usr/bin", 8);
+>>  	  finder.add_searchdir ("/usr/lib", 8);
+>> -- 
+>> 2.7.3
+> 
+> Still not quite sure if that's the right thing to do...
 
-Btw., in other calls which require the full POSIX path we use
-mount_table->conv_to_posix_path instead of cygwin_conv_path (see
-e. g. fillout_pinfo()).  It's a bit faster.  Maybe something for a=20
-followup patch.
+Hmm... dlopen ought to be an API to the "runtime loader",
+and as such it ought to use the same search algorithm as
+exec (=CreateProcess) when searching for the linked dlls.
 
-Note for some later improvement:  I really wonder why we don't store
-the absolute POSIX path of the current executable globally yet...
+So as far as I understand: The Windows loader uses the main
+executable's directory as kinda "embedded runpath" for process
+startup, and dlopen is not the right place to change this - even
+if LoadLibrary provides such mechanisms (Set/AddDllDirectory).
+
+btw: Patch 4 updated to follow the update of patch 3.
+
+Thanks!
+/haubi/
+
+--------------EDAF4238918F8AE7BAEA747F
+Content-Type: text/x-patch;
+ name="0004-dlopen-on-unspecified-lib-dir-search-exe-dir.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="0004-dlopen-on-unspecified-lib-dir-search-exe-dir.patch"
+Content-length: 1359
+
+From a94e55a6ba366e960533c610464043afa0e8bff0 Mon Sep 17 00:00:00 2001
+From: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
+Date: Wed, 31 Aug 2016 18:25:13 +0200
+Subject: [PATCH 4/4] dlopen: on unspecified lib dir search exe dir
+
+Applications installed to some prefix like /opt/application do expect
+dlopen("libAPP.so") to load "/opt/application/bin/cygAPP.dll", which
+is similar to "/opt/application/lib/libAPP.so" on Linux.
+
+See also https://cygwin.com/ml/cygwin-developers/2016-08/msg00020.html
+
+* dlfcn.cc (dlopen): For dlopen("N"), search directory where the
+application executable is in.
+---
+ winsup/cygwin/dlfcn.cc | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/winsup/cygwin/dlfcn.cc b/winsup/cygwin/dlfcn.cc
+index 3b07208..c5839a7 100644
+--- a/winsup/cygwin/dlfcn.cc
++++ b/winsup/cygwin/dlfcn.cc
+@@ -232,6 +232,12 @@ dlopen (const char *name, int flags)
+ 	     not use the LD_LIBRARY_PATH environment variable. */
+ 	  finder.add_envsearchpath ("LD_LIBRARY_PATH");
+ 
++	  /* Search the current executable's directory like
++	     the Windows loader does for linked dlls. */
++	  int exedirlen = get_exedir (cpath);
++	  if (exedirlen)
++	    finder.add_searchdir (cpath, exedirlen);
++
+ 	  /* Finally we better have some fallback. */
+ 	  finder.add_searchdir ("/usr/bin", 8);
+ 	  finder.add_searchdir ("/usr/lib", 8);
+-- 
+2.8.3
 
 
-Thanks,
-Cornina
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---xgyAXRrhYN0wYx8y
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJXyUBFAAoJEPU2Bp2uRE+gAgYP/1RTWLaeJdp+EnvuWGBC0byr
-GP9QX+QJ2Q/IGcw8qj0oKer6cYPHqlAVZYCCWyTQHKJgeR1/Q14V8n+HRMhAUq6N
-EznPjhHG2QxguCWx7ZDah9k4goSVBNhx4YGfQnFj1UKBb02ugynPE4cRJK/FyF7j
-uxTeIf0GKeGOsMtu/3g90YD62i+GQ/s2PT+D5yY8qKYN9I4t8ixrJy30bkHYlyzd
-1kfeyezcInvRuRosinmJhFj9BxbNRnlCGFcWBIKtQd6CDICs+xzuoi3AKlfVzPSn
-TDcJYGaP/4rewH76PBYdtmQpjncPSmwuFNCCgAdIMv7asjRltqnwAozWGUW5eIWM
-jf/onrYJ0/uXdtfeT9B3+m47ruAaAHZazEiuZD4dOpDKOJA3NPM8xT/OH8jac9ex
-t4VQLYFEgQMLyV9EunzL3fTaPT15KAl1RUkOYFwl4HvPtzVH0BurxJeNcTHE90XI
-DkTnrcy2yxnpXbx3xAOY7uIGdKcGNpTJQIaTP4WAwd9cKC4VrZmhiprjs3+/ZIxH
-teMLM+l0LHufL31LrMoAPETlYIANCBFLtNPaiyDjUf+23xmhzRthci/8XJk7YBj0
-77ngJHo+yUM87OOZUxRz4qevP/4x6sGjZy0pmgZ5MAwpWHrmKbiI9+z6XY6Z7CI7
-Q6uNQX++dqmchda33ewj
-=2wA0
------END PGP SIGNATURE-----
-
---xgyAXRrhYN0wYx8y--
+--------------EDAF4238918F8AE7BAEA747F--
