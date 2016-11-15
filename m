@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8644-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 24050 invoked by alias); 15 Nov 2016 13:51:30 -0000
+Return-Path: <cygwin-patches-return-8645-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 6419 invoked by alias); 15 Nov 2016 14:59:10 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,75 +9,84 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 24034 invoked by uid 89); 15 Nov 2016 13:51:29 -0000
+Received: (qmail 6359 invoked by uid 89); 15 Nov 2016 14:59:05 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-1.3 required=5.0 tests=AWL,BAYES_00,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_SPAM,SPF_PASS autolearn=no version=3.3.2 spammy=mailerdaemon, H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
-X-HELO: mail-wm0-f47.google.com
-Received: from mail-wm0-f47.google.com (HELO mail-wm0-f47.google.com) (74.125.82.47) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 15 Nov 2016 13:51:19 +0000
-Received: by mail-wm0-f47.google.com with SMTP id g23so168435040wme.1        for <cygwin-patches@cygwin.com>; Tue, 15 Nov 2016 05:51:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20130820;        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;        bh=ch1k6W6ZaZLqdx7x6Lvnnaitd86B3L2a6DzVLX9t5tc=;        b=Yk/S6tllr3URQwnsjAPRBIs7hDzB2hMsgm9GOXYalOmq9cBbznzA1osjHGeUxb7tBC         fTziRtMK/q9aahX7McrrGTR0fND6URTPvLaKSB5ok0Q+OGK4cMGFm5yILUwSd/2XgQOh         vdaFA642pUQ2zIkU7FH4gKO9Rj33tKhuDvrCeK0cc3NmPCfLYDsDWQnKrQzKtM1+E5xR         A1Skkf9N0oJF+vRVbx1rmUCbyGbfHUAfhOqlZkT0tlV8RwWzrJ52xmiy5mSeejMRZW5C         1UtGIAF5eor7NQSrDATCoeGYj9ur1sjDZXKtpNOuuyjol+GXgTCTO6+Hs/6ReMDgc2zq         bhOQ==
-X-Gm-Message-State: ABUngvcT39Vn0yRXX3gdo0Xj3acvcP/H2zKvXoNi9O5MdIbILPO2i2y6LewCcbFZETJd2zExRv+dDumguyl7/A==
-X-Received: by 10.28.175.195 with SMTP id y186mr4204600wme.68.1479217877488; Tue, 15 Nov 2016 05:51:17 -0800 (PST)
-MIME-Version: 1.0
-Received: by 10.80.151.145 with HTTP; Tue, 15 Nov 2016 05:51:16 -0800 (PST)
-From: Erik Bray <erik.m.bray@gmail.com>
-Date: Tue, 15 Nov 2016 13:51:00 -0000
-Message-ID: <CAOTD34ZMkY=Sfp6-8AFDg_Q=7NZB2oS+=QthfWauoboP6=szfg@mail.gmail.com>
-Subject: Return the correct value for sysconf(_SC_PAGESIZE)
+X-Spam-SWARE-Status: No, score=-101.5 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=H*F:U*corinna-cygwin, bray, deliberate, H*Ad:U*cygwin-patches
+X-HELO: drew.franken.de
+Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 15 Nov 2016 14:58:55 +0000
+Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id 9F1A5721E281A	for <cygwin-patches@cygwin.com>; Tue, 15 Nov 2016 15:58:50 +0100 (CET)
+Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id E806F5E008B	for <cygwin-patches@cygwin.com>; Tue, 15 Nov 2016 15:58:49 +0100 (CET)
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id DCCECA80567; Tue, 15 Nov 2016 15:58:49 +0100 (CET)
+Date: Tue, 15 Nov 2016 14:59:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Content-Type: multipart/mixed; boundary=001a1144356623067805415740c2
-X-IsSubscribed: yes
-X-SW-Source: 2016-q4/txt/msg00002.txt.bz2
+Subject: Re: Return the correct value for sysconf(_SC_PAGESIZE)
+Message-ID: <20161115145849.GA25086@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <CAOTD34ZMkY=Sfp6-8AFDg_Q=7NZB2oS+=QthfWauoboP6=szfg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="GvXjxJ+pjyke8COw"
+Content-Disposition: inline
+In-Reply-To: <CAOTD34ZMkY=Sfp6-8AFDg_Q=7NZB2oS+=QthfWauoboP6=szfg@mail.gmail.com>
+User-Agent: Mutt/1.7.1 (2016-10-04)
+X-SW-Source: 2016-q4/txt/msg00003.txt.bz2
 
 
---001a1144356623067805415740c2
-Content-Type: text/plain; charset=UTF-8
-Content-length: 586
+--GvXjxJ+pjyke8COw
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 1007
 
-Greetings,
+On Nov 15 14:51, Erik Bray wrote:
+> Greetings,
+>=20
+> Currently sysconf(_SC_PAGESIZE) returns the value of
+> wincap.allocation_granularity()--a change I *think* had to have been
+> made by mistake in
+> https://cygwin.com/git/gitweb.cgi?p=3Dnewlib-cygwin.git;a=3Dcommit;f=3Dwi=
+nsup/cygwin/sysconf.cc;h=3D177dc6c7f6d0608ef6540fd997d9b444e324cae2
+>=20
+> There's no obvious reason, anyways, that this value should be returned
+> and not the actual page size.
 
-Currently sysconf(_SC_PAGESIZE) returns the value of
-wincap.allocation_granularity()--a change I *think* had to have been
-made by mistake in
-https://cygwin.com/git/gitweb.cgi?p=newlib-cygwin.git;a=commit;f=winsup/cygwin/sysconf.cc;h=177dc6c7f6d0608ef6540fd997d9b444e324cae2
+That's no accident, but a deliberate decision.  Originally we used the
+page size at this point, but that's long ago.  This has been discussed
+on the cygwin-developers mailing list years ago.  The problem is the
+POSIX assumption that the allocation granularity equals the page size.
+The only working solution which does not break assumptions is to return
+the allocation granularity as page size.
 
-There's no obvious reason, anyways, that this value should be returned
-and not the actual page size.
 
-Thanks,
+Corinna
 
-Erik
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
 
-(P.S. Took me about a half-dozen tries to get a message through to
-this ML due to a very picky mailer-daemon--I think it doesn't like
-gmail aliases--hopefully this does the
-trick :)
+--GvXjxJ+pjyke8COw
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 819
 
---001a1144356623067805415740c2
-Content-Type: application/octet-stream; 
-	name="0001-Return-wincap.page_size-for-sysconf-_SC_PAGESIZE-not.patch"
-Content-Disposition: attachment; 
-	filename="0001-Return-wincap.page_size-for-sysconf-_SC_PAGESIZE-not.patch"
-Content-Transfer-Encoding: base64
-X-Attachment-Id: f_ivjk4dop0
-Content-length: 928
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
 
-RnJvbSAyYjlkNmU4OWRmYmI0ZmNlNWZmMzYwYWMxMTM3MmM3OGYxNGM5MDNk
-IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQpGcm9tOiAiRXJpayBNLiBCcmF5
-IiA8ZXJpay5icmF5QGxyaS5mcj4KRGF0ZTogVHVlLCAxNSBOb3YgMjAxNiAx
-MzoyODoxOSArMDEwMApTdWJqZWN0OiBbUEFUQ0hdIFJldHVybiB3aW5jYXAu
-cGFnZV9zaXplKCkgZm9yIHN5c2NvbmYoX1NDX1BBR0VTSVpFKSwgbm90CiB3
-aW5jYXAuYWxsb2NhdGlvbl9ncmFudWxhcml0eSgpCgotLS0KIHdpbnN1cC9j
-eWd3aW4vc3lzY29uZi5jYyB8IDIgKy0KIDEgZmlsZSBjaGFuZ2VkLCAxIGlu
-c2VydGlvbigrKSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL3dpbnN1
-cC9jeWd3aW4vc3lzY29uZi5jYyBiL3dpbnN1cC9jeWd3aW4vc3lzY29uZi5j
-YwppbmRleCBhMjRhOTg1Li5hZjBhZTJlIDEwMDY0NAotLS0gYS93aW5zdXAv
-Y3lnd2luL3N5c2NvbmYuY2MKKysrIGIvd2luc3VwL2N5Z3dpbi9zeXNjb25m
-LmNjCkBAIC0zMiw3ICszMiw3IEBAIGdldF9vcGVuX21heCAoaW50IGluKQog
-c3RhdGljIGxvbmcKIGdldF9wYWdlX3NpemUgKGludCBpbikKIHsKLSAgcmV0
-dXJuIHdpbmNhcC5hbGxvY2F0aW9uX2dyYW51bGFyaXR5ICgpOworICByZXR1
-cm4gd2luY2FwLnBhZ2Vfc2l6ZSAoKTsKIH0KIAogc3RhdGljIGJvb2wKLS0g
-CjIuOC4zCgo=
+iQIcBAEBCAAGBQJYKyKpAAoJEPU2Bp2uRE+gbGkP/RRnMkIWHL6KQUTnKYhabugr
+21kBQTiJQ8XIIZukGvBMQIZK4EJbcXHi0Tz85Eq1DcjbCngopXtw9gEDtlugElrh
+enr8Y7ZMkQvd98Oc4x7Pp03KFZALdWRVifXKMCB0QlHNovYPRrfuWW3AzqF21TV4
+e6ymf2NvstVlcpTHUeYd+tWonh3XZvBOUkMrHOXTeyMoldiiiYmNk7uvTZ60H+yQ
+8ba/6Ji0wc/uPtBzgvXjpH53ffWkLUaOP0sgy1+9s5KkPR+S2w5nmNcPijVJtUkg
+msgmBVun5h2+0WjGGGF9GF4GRsgYf5b+f4v7lVStSnnUl/r5/WN+SeKAKUrKNs0X
+nwfzdepIfRwicJorzdmTwI/iJYP53TPDu9Q9HGs7ihUcEB1laS10Vt4HDAU3qzPn
+KgQxI1L54xzD4ki/msKCpCrvqVEottg+c5buRwTy0C1DvkiLRtxyiOp7vmt1GenN
+wkMO7YmKCeiv2rtrqmUTGUyPmWzXnEyDtdR6lEkDOGf+1B/tgFJBs6GN2ZDUlVAm
+4eptAkOCrf1UEO2pA1PkzqJxm5zT35tbWhMnwcCIsjwsmZGxM8akHDD6ZEJmMx93
+hWq4+fuhV13/w2BVfB97U3ZR+344+Bat9QxJyaQV/G9hO+dZ1mcQ9Ra5LqZtZ+o2
+l4kmoxlXP9OKlHyjXE9r
+=AKB+
+-----END PGP SIGNATURE-----
 
---001a1144356623067805415740c2--
+--GvXjxJ+pjyke8COw--
