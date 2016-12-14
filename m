@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8656-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 128259 invoked by alias); 14 Dec 2016 18:02:33 -0000
+Return-Path: <cygwin-patches-return-8657-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 103465 invoked by alias); 14 Dec 2016 22:07:12 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,126 +9,83 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 128248 invoked by uid 89); 14 Dec 2016 18:02:32 -0000
+Received: (qmail 103443 invoked by uid 89); 14 Dec 2016 22:07:11 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=0.8 required=5.0 tests=AWL,BAYES_40,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE autolearn=no version=3.3.2 spammy=D*dronecode.org.uk, sk:jontur, U*jon.turney, sk:jon.tur
-X-HELO: rgout0806.bt.lon5.cpcloud.co.uk
-Received: from rgout0806.bt.lon5.cpcloud.co.uk (HELO rgout0806.bt.lon5.cpcloud.co.uk) (65.20.0.153) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 14 Dec 2016 18:02:22 +0000
-X-OWM-Source-IP: 86.179.112.226 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-Junkmail-Premium-Raw: score=7/50,refid=2.7.2:2016.12.14.174520:17:7.944,ip=,rules=__HAS_FROM, __TO_MALFORMED_2, __TO_NO_NAME, __HAS_CC_HDR, __CC_NAME, __CC_NAME_DIFF_FROM_ACC, __SUBJ_ALPHA_END, __HAS_MSGID, __SANE_MSGID, __HAS_X_MAILER, __FROM_DOMAIN_IN_ANY_CC1, URI_ENDS_IN_PHP, __ANY_URI, __HTTPS_URI, __URI_WITH_PATH, URI_ENDS_IN_HTML, __CP_URI_IN_BODY, __MULTIPLE_URI_TEXT, __URI_IN_BODY, BODY_SIZE_5000_5999, __MIME_TEXT_P1, __MIME_TEXT_ONLY, __URI_NS, HTML_00_01, HTML_00_10, __FROM_DOMAIN_IN_RCPT, __MIME_TEXT_P, BODY_SIZE_7000_LESS, __CC_REAL_NAMES, MULTIPLE_REAL_RCPTS, LEGITIMATE_SIGNS, LEGITIMATE_NEGATE
-Received: from localhost.localdomain (86.179.112.226) by rgout08.bt.lon5.cpcloud.co.uk (9.0.019.13-1) (authenticated as jonturney@btinternet.com)        id 584830E300993B36; Wed, 14 Dec 2016 18:02:19 +0000
-From: Jon Turney <jon.turney@dronecode.org.uk>
+X-Spam-SWARE-Status: No, score=-101.6 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=Turney, turney, Hx-languages-length:758, H*Ad:U*cygwin-patches
+X-HELO: drew.franken.de
+Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 14 Dec 2016 22:07:01 +0000
+Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id 088ED721E2830	for <cygwin-patches@cygwin.com>; Wed, 14 Dec 2016 23:06:58 +0100 (CET)
+Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id 4E3A05E0489	for <cygwin-patches@cygwin.com>; Wed, 14 Dec 2016 23:06:57 +0100 (CET)
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 3085BA80C98; Wed, 14 Dec 2016 23:06:57 +0100 (CET)
+Date: Wed, 14 Dec 2016 22:07:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH] Fix some broken links in Cygwin FAQ
-Date: Wed, 14 Dec 2016 18:02:00 -0000
-Message-Id: <20161214180208.34760-1-jon.turney@dronecode.org.uk>
-X-SW-Source: 2016-q4/txt/msg00014.txt.bz2
+Subject: Re: [PATCH] Fix some broken links in Cygwin FAQ
+Message-ID: <20161214220657.GD5890@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20161214180208.34760-1-jon.turney@dronecode.org.uk>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="98e8jtXdkpgskNou"
+Content-Disposition: inline
+In-Reply-To: <20161214180208.34760-1-jon.turney@dronecode.org.uk>
+User-Agent: Mutt/1.7.1 (2016-10-04)
+X-SW-Source: 2016-q4/txt/msg00015.txt.bz2
 
-GNU no longer encourages the use of documentation mirrors, to avoid
-referring to obsolete documentation.  Also www.fsf.org/manual/ is
-just a redirect to www.fsf.org/manual
 
-Links to using-utils.html #fragments are no longer correct as each utility
-is now a separate page, since 646745cb.
+--98e8jtXdkpgskNou
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 754
 
-indiana.edu seems to have moved XLiveCD information, without a redirect.
+On Dec 14 18:02, Jon Turney wrote:
+> GNU no longer encourages the use of documentation mirrors, to avoid
+> referring to obsolete documentation.  Also www.fsf.org/manual/ is
+> just a redirect to www.fsf.org/manual
 
-Linking to clean_setup.pl on cygwin.com doesn't work, as direct downloads
-aren't allowed, so instead state where it can be found on a mirror.
+:)
 
-Signed-off-by: Jon Turney <jon.turney@dronecode.org.uk>
----
- winsup/doc/faq-resources.xml | 4 +---
- winsup/doc/faq-setup.xml     | 8 ++++----
- winsup/doc/faq-using.xml     | 2 +-
- winsup/doc/faq-what.xml      | 4 +---
- 4 files changed, 7 insertions(+), 11 deletions(-)
+> Links to using-utils.html #fragments are no longer correct as each utility
+> is now a separate page, since 646745cb.
+>=20
+> indiana.edu seems to have moved XLiveCD information, without a redirect.
+>=20
+> Linking to clean_setup.pl on cygwin.com doesn't work, as direct downloads
+> aren't allowed, so instead state where it can be found on a mirror.
 
-diff --git a/winsup/doc/faq-resources.xml b/winsup/doc/faq-resources.xml
-index c797127..35cb689 100644
---- a/winsup/doc/faq-resources.xml
-+++ b/winsup/doc/faq-resources.xml
-@@ -34,9 +34,7 @@ and an API Reference at
- <ulink url="https://cygwin.com/cygwin-api/cygwin-api.html"/>.
- </para>
- <para>You can find documentation for the individual GNU tools at
--<ulink url="http://www.fsf.org/manual/"/>.  (You should read GNU manuals from
--a local mirror, check
--<ulink url="http://www.fsf.org/server/list-mirrors.html"/> for a list of them.)
-+<ulink url="http://www.gnu.org/manual/"/>.
- </para>
- </answer></qandaentry>
- 
-diff --git a/winsup/doc/faq-setup.xml b/winsup/doc/faq-setup.xml
-index a790974..0fc2635 100644
---- a/winsup/doc/faq-setup.xml
-+++ b/winsup/doc/faq-setup.xml
-@@ -333,7 +333,7 @@ you will have to select it explicitly.  See
- <ulink url="https://cygwin.com/packages/"/> for a searchable list of available
- packages, or use <literal>cygcheck -p </literal> as described in the Cygwin
- User's Guide at
--<ulink url="https://cygwin.com/cygwin-ug-net/using-utils.html#cygcheck"/>.
-+<ulink url="https://cygwin.com/cygwin-ug-net/cygcheck.html"/>.
- </para>
- <para>If you want to build programs, of course you'll need <literal>gcc</literal>,
- <literal>binutils</literal>, <literal>make</literal> and probably other packages from the
-@@ -415,7 +415,7 @@ looking names, being encoded with their URLs
- <para>Of course, you can keep them around in case you want to reinstall a
- package. If you want to clean out only the outdated packages, Michael Chase
- has written a script called <literal>clean_setup.pl</literal>, available
--at <ulink url="ftp://cygwin.com/pub/cygwin/unsupported/clean_setup.pl" />.
-+at <filename>unsupported/clean_setup.pl</filename> in a Cygwin mirror.
- </para>
- </answer></qandaentry>
- 
-@@ -576,7 +576,7 @@ installed are <literal>sshd</literal>, <literal>cron</literal>,
- that might be running in the background.  Exit the command prompt and ensure
- that no Cygwin processes remain.  Note: If you want to save your mount points for a later 
- reinstall, first save the output of <literal>mount -m</literal> as described at 
--<ulink url="https://cygwin.com/cygwin-ug-net/using-utils.html#mount"/>.
-+<ulink url="https://cygwin.com/cygwin-ug-net/mount.html"/>.
- </para>
- </listitem>
- <listitem><para>If you installed <literal>cyglsa.dll</literal> by running the
-@@ -704,7 +704,7 @@ the Cygwin Setup homepage at
- <answer>
- 
- <para>While some users have successfully done this, for example Indiana
--University's XLiveCD <ulink url="http://xlivecd.indiana.edu/"/>, there is no
-+University's XLiveCD <ulink url="http://racinfo.indiana.edu/research/xlivecd.php"/>, there is no
- easy way to do it. Full instructions for constructing a portable Cygwin
- on CD by hand can be found on the mailing list at
- <ulink url="https://www.cygwin.com/ml/cygwin/2003-07/msg01117.html"/>
-diff --git a/winsup/doc/faq-using.xml b/winsup/doc/faq-using.xml
-index 415b8a5..deb7c7e 100644
---- a/winsup/doc/faq-using.xml
-+++ b/winsup/doc/faq-using.xml
-@@ -1160,7 +1160,7 @@ domains. For example, you might want to use the <computeroutput>Domain
- Users</computeroutput> group instead.</para>
- 
- <para>For more information on <command>setfacl</command>, see
--<ulink url="https://cygwin.com/cygwin-ug-net/using-utils.html#setfacl"/></para>
-+<ulink url="https://cygwin.com/cygwin-ug-net/setfacl.html"/></para>
- </answer></qandaentry>
- 
- <qandaentry id="faq.using.same-with-rhosts">
-diff --git a/winsup/doc/faq-what.xml b/winsup/doc/faq-what.xml
-index e71cada..ce34830 100644
---- a/winsup/doc/faq-what.xml
-+++ b/winsup/doc/faq-what.xml
-@@ -56,9 +56,7 @@ Guide, an API Reference, mailing lists and archives.
- <para>You can find documentation for the individual GNU tools typically
- as man pages or info pages as part of the Cygwin net distribution.
- Additionally you can get the latest docs at
--<ulink url="http://www.gnu.org/manual/"/>.  (You should read GNU manuals from a
--local mirror.  Check <ulink url="http://www.gnu.org/server/list-mirrors.html"/>
--for a list of them.)
-+<ulink url="http://www.gnu.org/manual"/>.
- </para>
- </answer></qandaentry>
- 
--- 
-2.8.3
+Ack.  Please apply.
+
+
+Thanks,
+Corinna
+
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
+
+--98e8jtXdkpgskNou
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 819
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iQIcBAEBCAAGBQJYUcKAAAoJEPU2Bp2uRE+gnoQQAJA6qRH874On2athO4tEKYSx
+vEpX49/z1zN8vxeaVU75xGVUzD4o0wFJvv2Ilu3WVM/iOmDHhkjWkOsuzfJRj4dC
+Q4NIOT7wdg6xsnAdLptEsLw78eZBIStnMvES+kQbe+7WqnaRZIiUOphYf3so4TJF
+JcEerSPt2JJb4dGfmmSsH1kSYa8IDmaRDwlW6BCAvBt9ssI0N9Hbp2fpB/qKrsbo
+M25sB8nFsqzokjcI6lBd+Xse9CHCUOw0p9+X70ZT/B4ak6hp4nv9kcwqVm6jJ1Vt
+nbzuphhS7RL6Mn+5WxotjNpNqa1jTAEL8XA/M8oBmeAWU2pAg8hD858t+Gn/P/Ji
+VTGGiXc2FSVR93DkqHlniS78YGJomPA+kjEeS2NnuSzHuvDpuIXzVuhK2o0H6f8R
+kKYC5JCfw23VSNxeCoA9BCBYG9ZeSb0tOxwKZ6FgE0HYZr4fyKfZCuwQZYIQdjcM
+Ww0GrMaBrRF0Hb8cpyq4PKWE3aYW5b5D6+CvLaxxx9wLNe0ZeEr0MyVZY8upD2AZ
+BOn5uIhKPV0qNSauMWKxxqm9clhohPiJ70Kqtv7SzBvVyQ5G5nyuy0TTaWkDZuR3
+Zvay3WX4KWyZQ+i+yU3oj+8Tzb3/HGq4cMPWPEmhbGkR4T2d8Md2eTzltJp1Pcrf
+kxrYeunErgcrbdk7d+fy
+=25+/
+-----END PGP SIGNATURE-----
+
+--98e8jtXdkpgskNou--
