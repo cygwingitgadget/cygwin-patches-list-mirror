@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8678-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 16746 invoked by alias); 10 Jan 2017 15:03:41 -0000
+Return-Path: <cygwin-patches-return-8679-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 62144 invoked by alias); 10 Jan 2017 15:41:45 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,79 +9,109 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 16669 invoked by uid 89); 10 Jan 2017 15:03:41 -0000
+Received: (qmail 62114 invoked by uid 89); 10 Jan 2017 15:41:41 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-1.4 required=5.0 tests=AWL,BAYES_00,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_SPAM,SPF_PASS autolearn=no version=3.3.2 spammy=Hx-languages-length:1731, H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
-X-HELO: mail-wm0-f67.google.com
-Received: from mail-wm0-f67.google.com (HELO mail-wm0-f67.google.com) (74.125.82.67) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 10 Jan 2017 15:03:30 +0000
-Received: by mail-wm0-f67.google.com with SMTP id l2so30441619wml.2        for <cygwin-patches@cygwin.com>; Tue, 10 Jan 2017 07:03:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20161025;        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to         :references;        bh=3fhSjOVZBQNA9GbVhXqq5EOqhvCHbPlGfqFhpifPvcw=;        b=H7mXT/lcCLUk8OMihJOUCSNbOQXn9L6ZHKJ6SmTtE89TSQDpX/OyEw2v+Htwqju2Am         TLzPE9RdekqxzXoVAW6Qgv2r2GnJrXphHbvyahZwI8EbZWPaK+4H/KD+oxTwFKc2Rs6c         S89TGmd48nyJZ5IKDECTWDsCAkuOMODY/meQItlNmQ1efCbI5fpm8g0JTJXn9m6sMJ6t         Qfg+N4HFIv4TY0zHyPkJFOayVgA8qG+FSlO5z7brTil8UTC8gx99i+yOHag2EtkI7zHp         2qkwuYIeBzcblMopC5BhfkaCgsarB67x4iim3hcajtIASudjhlmqp/GzTZWHfrgih40W         2mbg==
-X-Gm-Message-State: AIkVDXJC6XcSvPV/HhOmRGIcnhNkyfqOzwzpRShLqaA7waAvpIdUfO1bGTIszKELy5Hg1A==
-X-Received: by 10.28.216.65 with SMTP id p62mr222755wmg.92.1484060608599;        Tue, 10 Jan 2017 07:03:28 -0800 (PST)
-Received: from localhost.localdomain (lri30-45.lri.fr. [129.175.30.45])        by smtp.gmail.com with ESMTPSA id jm6sm3701841wjb.27.2017.01.10.07.03.27        for <cygwin-patches@cygwin.com>        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);        Tue, 10 Jan 2017 07:03:28 -0800 (PST)
-From: Erik Bray <erik.m.bray@gmail.com>
+X-Spam-SWARE-Status: No, score=-101.6 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=Hx-languages-length:1551, H*Ad:U*cygwin-patches, HTo:U*cygwin-patches, H*F:D*cygwin.com
+X-HELO: drew.franken.de
+Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 10 Jan 2017 15:41:30 +0000
+Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id 09E2B721E280D	for <cygwin-patches@cygwin.com>; Tue, 10 Jan 2017 16:41:25 +0100 (CET)
+Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id 934455E0500	for <cygwin-patches@cygwin.com>; Tue, 10 Jan 2017 16:41:23 +0100 (CET)
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 71743A8041E; Tue, 10 Jan 2017 16:41:23 +0100 (CET)
+Date: Tue, 10 Jan 2017 15:41:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH 3/3] Add a /proc/<pid>/environ proc file handler, analogous to /proc/<pid>/cmdline.
-Date: Tue, 10 Jan 2017 15:03:00 -0000
-Message-Id: <20170110150310.79112-4-erik.m.bray@gmail.com>
-In-Reply-To: <20170110150310.79112-2-erik.m.bray@gmail.com>
-References: <20170110150310.79112-2-erik.m.bray@gmail.com>
-X-IsSubscribed: yes
-X-SW-Source: 2017-q1/txt/msg00019.txt.bz2
+Subject: Re: [PATCH 0/3] Updated patches for /proc/<pid>/environ
+Message-ID: <20170110154123.GA24502@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20170110150209.87028-1-erik.m.bray@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="3V7upXqbjpZ4EhLz"
+Content-Disposition: inline
+In-Reply-To: <20170110150209.87028-1-erik.m.bray@gmail.com>
+User-Agent: Mutt/1.7.1 (2016-10-04)
+X-SW-Source: 2017-q1/txt/msg00020.txt.bz2
 
-From: Erik M. Bray <erik.bray@lri.fr>
 
----
- winsup/cygwin/fhandler_process.cc | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+--3V7upXqbjpZ4EhLz
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 1790
 
-diff --git a/winsup/cygwin/fhandler_process.cc b/winsup/cygwin/fhandler_process.cc
-index 5f530a2..bbb44fa 100644
---- a/winsup/cygwin/fhandler_process.cc
-+++ b/winsup/cygwin/fhandler_process.cc
-@@ -49,6 +49,7 @@ static off_t format_process_ctty (void *, char *&);
- static off_t format_process_fd (void *, char *&);
- static off_t format_process_mounts (void *, char *&);
- static off_t format_process_mountinfo (void *, char *&);
-+static off_t format_process_environ (void *, char *&);
- 
- static const virt_tab_t process_tab[] =
- {
-@@ -57,6 +58,7 @@ static const virt_tab_t process_tab[] =
-   { _VN ("cmdline"),    FH_PROCESS,   virt_file,      format_process_cmdline },
-   { _VN ("ctty"),       FH_PROCESS,   virt_file,      format_process_ctty },
-   { _VN ("cwd"),        FH_PROCESS,   virt_symlink,   format_process_cwd },
-+  { _VN ("environ"),    FH_PROCESS,   virt_file,      format_process_environ },
-   { _VN ("exe"),        FH_PROCESS,   virt_symlink,   format_process_exename },
-   { _VN ("exename"),    FH_PROCESS,   virt_file,      format_process_exename },
-   { _VN ("fd"),         FH_PROCESSFD, virt_directory, format_process_fd },
-@@ -570,6 +572,26 @@ format_process_winexename (void *data, char *&destbuf)
-   return len;
- }
- 
-+static off_t
-+format_process_environ (void *data, char *&destbuf)
-+{
-+  _pinfo *p = (_pinfo *) data;
-+  size_t fs;
-+
-+  if (destbuf)
-+    {
-+      cfree (destbuf);
-+      destbuf = NULL;
-+    }
-+  destbuf = p->environ (fs);
-+  if (!destbuf || !*destbuf)
-+    {
-+      destbuf = cstrdup ("<defunct>");
-+      fs = strlen (destbuf) + 1;
-+    }
-+  return fs;
-+}
-+
- struct heap_info
- {
-   struct heap
--- 
-2.8.3
+On Jan 10 16:02, Erik Bray wrote:
+> From: "Erik M. Bray" <erik.bray@lri.fr>
+>=20
+> Updated versions of the patch set originally submitted at
+> https://cygwin.com/ml/cygwin-patches/2017-q1/msg00000.html
+>=20
+> I think all the indentation/whitespace/braces are cleaned up and consiste=
+nt.
+>=20
+> I've also made sure that /proc/self/environ works now.
+>=20
+> All new code in these patches is licensed under the 2-clause BSD:
+> [...]
+
+You don't have to repeat that for any later patch you'd like to propose,
+I added you to the CONTRIBUTORS file now.  Thank you!
+
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+>=20
+> Erik M. Bray (3):
+>   Move the core environment parsing of environ_init into a new
+>     win32env_to_cygenv function.
+>   Add a _pinfo.environ() method analogous to _pinfo.cmdline(), and
+>     others.
+>   Add a /proc/<pid>/environ proc file handler, analogous to
+>     /proc/<pid>/cmdline.
+>=20
+>  winsup/cygwin/environ.cc          | 84 +++++++++++++++++++++++----------=
+------
+>  winsup/cygwin/environ.h           |  2 +
+>  winsup/cygwin/fhandler_process.cc | 22 ++++++++++
+>  winsup/cygwin/pinfo.cc            | 83 +++++++++++++++++++++++++++++++++=
+++++-
+>  winsup/cygwin/pinfo.h             |  4 +-
+>  5 files changed, 157 insertions(+), 38 deletions(-)
+
+Patchset applied.  The formatting in pinfo.cc was still not entirely
+correct, but I tweaked it manually.  Please have a look into commit
+171046d.
+
+
+Thanks a lot!
+Corinna
+
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
+
+--3V7upXqbjpZ4EhLz
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 819
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iQIcBAEBCAAGBQJYdQCjAAoJEPU2Bp2uRE+gBakP/3ZrOLkjgV4G/j7KHSiGqKfS
+peo/NpEuu7/pBzrSeKISuunJQJqeUkKANJPf2J6gHRhykak2QYMmCLSeNA1Hc1M2
+zU739SJ2K5nYvZYZJvdjhXmMPqPdOhi+YHCtb5k75m3DQs81yAyiDKjQn0H38/98
+KnLAUAa0nFpZRfg16ODKtOHgp8Hk3rnszLD3qVufpTJXeUTXHmgejpajV7GN00zD
+nmPX3pHT9yRhM0ruXSGLmFEeeSKJLUrK3HgbvNJ4y6d2Wlg7YGcHLEiR7iRvqS5u
+JsBYzMCDyGEsW+Y4v/PtxzYq1Qb+RRCf1mN+iM1tIRCYD5sQlqvXR9oHeH8/rnZ1
+AazdGqoMuKDV40scEDIMwSzlSbOm9DyYfliP6gstnYy3Al9braW2v61a1vQMd6bA
+91LezeJf96EM6OAkQYB+OQnsXtShdkcGGjD20VhGPqYBxIcWT8qY8Rz24kI0KQNy
+KlIuYOrPNxwcPyiK3rkYWUIWYY6cfgCmr8SAbxsWGjxPFoO+Lfis9CWa6o8yafxt
+6vm5nKAuUO+P3T0ROQM2P8DZjrqRlHcgqKwYnNcWTosIOoWo4dW3tXzbuRajms9o
+Iqy3wscllf4VDvv+EVpGA+vg2JCZA0bgiEUNLbMwN45RBKRKK/vXL4dyLAOe9HEy
+HvRQJoM17dBFKV4kn93U
+=x7oA
+-----END PGP SIGNATURE-----
+
+--3V7upXqbjpZ4EhLz--
