@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8681-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 28641 invoked by alias); 11 Jan 2017 13:21:47 -0000
+Return-Path: <cygwin-patches-return-8682-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 38955 invoked by alias); 11 Jan 2017 16:03:11 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,64 +9,80 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 28610 invoked by uid 89); 11 Jan 2017 13:21:46 -0000
+Received: (qmail 38943 invoked by uid 89); 11 Jan 2017 16:03:10 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-2.1 required=5.0 tests=BAYES_00,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_SORBS_SPAM,SPF_PASS autolearn=ham version=3.3.2 spammy=HX-Provags-ID:V03, H*r:Nemesis, signed-off-by, signedoffby
-X-HELO: mout.gmx.net
-Received: from mout.gmx.net (HELO mout.gmx.net) (212.227.15.18) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 11 Jan 2017 13:21:35 +0000
-Received: from virtualbox ([213.133.108.164]) by mail.gmx.com (mrgmx002 [212.227.17.190]) with ESMTPSA (Nemesis) id 0MKZLb-1cPvvn1L31-001wbg for <cygwin-patches@cygwin.com>; Wed, 11 Jan 2017 14:21:32 +0100
-Date: Wed, 11 Jan 2017 13:21:00 -0000
-From: Johannes Schindelin <johannes.schindelin@gmx.de>
+X-Spam-SWARE-Status: No, score=-101.6 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=H*Ad:U*cygwin-patches, HTo:U*cygwin-patches, H*F:D*cygwin.com
+X-HELO: drew.franken.de
+Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 11 Jan 2017 16:03:08 +0000
+Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id 90931721E281A	for <cygwin-patches@cygwin.com>; Wed, 11 Jan 2017 17:03:04 +0100 (CET)
+Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id 240D45E089D	for <cygwin-patches@cygwin.com>; Wed, 11 Jan 2017 17:03:03 +0100 (CET)
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 111E5A80405; Wed, 11 Jan 2017 17:03:03 +0100 (CET)
+Date: Wed, 11 Jan 2017 16:03:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] FAST_CWD: adjust the initial search scope
-Message-ID: <5b4e3785c193feb56fa31eef637db2641e69eefd.1484140876.git.johannes.schindelin@gmx.de>
-User-Agent: Alpine 2.20 (DEB 67 2015-01-07)
+Subject: Re: [PATCH] FAST_CWD: adjust the initial search scope
+Message-ID: <20170111160303.GA23119@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <5b4e3785c193feb56fa31eef637db2641e69eefd.1484140876.git.johannes.schindelin@gmx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-UI-Out-Filterresults: notjunk:1;V01:K0:V9vJLSIkx88=:mkxLzxQrkijVO+rK1IWWaD zw4wQSUwTMnd4ahayLAGqSvRN85qFYAdI6Q65c7o5FLBBRzA8L5w1O9BzPlNO25ks41PX0l40 Qww/QWpK+w5lkm+LPT8324WBSa7zfiE7ADRo0JY73zooJVelDP0+AQBuTrixEKk3GFM1PDhwy z1JmYIQLHNnHB4rSoje06Z+7mqKRzEgzSKmBDvPQc3utwcDyyxjl+2UrdwRmQI4NIaWcSO7wr YiOk1VBAaSX6KVYxJSl+8N8A0fSo+4HtsZsg+rr5VBa6nFyQh7thKmsmFCFAGrq7GAZK9BaDV BRhr+87LdRSxfshvIKOjNMmU83gXM4GU3cBUDDDwpSfjeXJHtMrSLpDRru3rrUwlXbydZY1ne 79hhF/GJJF6imHxbOM4ZKgBixKtZh1HXGTkdrdfzS5InOvDZDOBIElFJHaNRDJ9NYi9wIKp5o 3mgkmNlZnNcdgUYElnKWHwwn/Ogbbu2/F+dri1UucwV2JerJTukUBqheqbifYtPtmSZ1nY5BB Z0iBCxC8LolqS4z5n/54iVNV0paqC2VuzGICSHJJQgkjnXzHDDL5ldkHLxA/A2+Aer8Jf78u9 vO5v3EhzVIuRXfvrGQC8gyCxABIqwxvE06VIwi8GEYIdtP49Hbgz42v7piR2FN+rkl0X1yfsw vjubdAIeaJACV98p2IwolO71VafknjNIItEYSHFGtxHkVZBSwluPbHX8q0CpLrxfBSO9TkwrI AF3UtZR4Xl5SHq2WFy6iHaWeUA4rLd3oqOcun7baRtrcsGG1sF2ITY5y6COBv6hA2S/bPHwHb 0uSBv5f3kVFfrmwFcKFOk3tC0127w==
-X-IsSubscribed: yes
-X-SW-Source: 2017-q1/txt/msg00022.txt.bz2
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="ZPt4rx8FFjLCG7dd"
+Content-Disposition: inline
+In-Reply-To: <5b4e3785c193feb56fa31eef637db2641e69eefd.1484140876.git.johannes.schindelin@gmx.de>
+User-Agent: Mutt/1.7.1 (2016-10-04)
+X-SW-Source: 2017-q1/txt/msg00023.txt.bz2
 
-A *very* recent Windows build adds more code to the preamble of
-RtlGetCurrentDirectory_U() so that the previous heuristic failed to find
-the call to the locking routine.
 
-This only affects the 64-bit version of ntdll, where the 0xe8 byte is
-now found at offset 40, not the 32-bit version. However, let's just
-double the area we search for said byte for good measure.
+--ZPt4rx8FFjLCG7dd
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 716
 
-Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
----
-Published-As: https://github.com/dscho/msys2-runtime/releases/tag/fast-cwd-v1
-Fetch-It-Via: git fetch https://github.com/dscho/msys2-runtime fast-cwd-v1
+Hi Johannes,
 
- winsup/cygwin/path.cc | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Jan 11 14:21, Johannes Schindelin wrote:
+> A *very* recent Windows build adds more code to the preamble of
+> RtlGetCurrentDirectory_U() so that the previous heuristic failed to find
+> the call to the locking routine.
+>=20
+> This only affects the 64-bit version of ntdll, where the 0xe8 byte is
+> now found at offset 40, not the 32-bit version. However, let's just
+> double the area we search for said byte for good measure.
 
-diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
-index c3b304ab5..ee7636dbf 100644
---- a/winsup/cygwin/path.cc
-+++ b/winsup/cygwin/path.cc
-@@ -4034,7 +4034,7 @@ find_fast_cwd_pointer ()
-   if (!get_dir || !ent_crit)
-     return NULL;
-   /* Search first relative call instruction in RtlGetCurrentDirectory_U. */
--  const uint8_t *rcall = (const uint8_t *) memchr (get_dir, 0xe8, 40);
-+  const uint8_t *rcall = (const uint8_t *) memchr (get_dir, 0xe8, 80);
-   if (!rcall)
-     return NULL;
-   /* Fetch offset from instruction and compute address of called function.
-@@ -4133,7 +4133,7 @@ find_fast_cwd_pointer ()
-   if (!get_dir || !ent_crit)
-     return NULL;
-   /* Search first relative call instruction in RtlGetCurrentDirectory_U. */
--  const uint8_t *rcall = (const uint8_t *) memchr (get_dir, 0xe8, 32);
-+  const uint8_t *rcall = (const uint8_t *) memchr (get_dir, 0xe8, 64);
-   if (!rcall)
-     return NULL;
-   /* Fetch offset from instruction and compute address of called function.
+any chance to convince the powers that be to open up access to this
+datastructures without such hacky means?
 
-base-commit: e0477b4a0ba2b842d4f81350f7fa9a03b1f3d27b
--- 
-2.11.0.310.g4ee6bc8b50
+
+Thanks,
+Corinna
+
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
+
+--ZPt4rx8FFjLCG7dd
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 819
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iQIcBAEBCAAGBQJYdlc2AAoJEPU2Bp2uRE+gNjsP/3xljO701Agyrij98m5LfgjN
+JXjIumpB1blgS29Fj6G1siSC9uE7eih6hmfXZKcuEiXdgR41zPWxTUGs7aQ2zshQ
+N/xutRcoc/6foIPjz+n3lOgBJjRkXgte8g4Bhj0JfHopiEYaoM6HD5lY45vFupbb
+6KFqrOiIpx1ZgTb6Gau69g1jk8PLKowZ0CF6236VE+MTTzTW37w9svqJIabw0Ne+
+zzVNNFamu0rx7XVPzl2T2CogQuz6nz5Lys+eo/yr+VIQRViH4tHp+2SE2NdexTnR
+l/F5StFmc9tBx+ltImFRuqRspH1pp3E91us4DqHpbHZKMZWAuCJx408yMomOrhYY
+OlMwL3ZVwW5AeI3y0k2C6jT6JAGMyqJoAP4ySwU10LnGWhRx1c8RiZUzlARrfkEc
+wNei0GBObdrY+J83bP78M2KXqFsoKm17ysaW8PZ22VFO/JjuHsgfevapwf4M1tOb
+GQhxLjz89JjxuYL6n9Auan8QpvC8FT9lszCdYkzn2jAxAL8uielCxV/C9XuHdeTP
+ZSJPyUt+4i3qhw6ZkrWN5o4ss2Vl1vVI9mT1H/lMme0HZHoI1HTPHVrb1HrV6Ivu
+qSEkhuwS62X/CAvWN4J6cfXuHbMEWR1OsZaWTR7ECJIZ0CxCLUlnafuaMILSUo4S
+/3tNiGQ7ToFTkzqBUnzn
+=sD+F
+-----END PGP SIGNATURE-----
+
+--ZPt4rx8FFjLCG7dd--
