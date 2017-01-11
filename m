@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8680-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 36934 invoked by alias); 10 Jan 2017 16:54:59 -0000
+Return-Path: <cygwin-patches-return-8681-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 28641 invoked by alias); 11 Jan 2017 13:21:47 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,76 +9,64 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 36350 invoked by uid 89); 10 Jan 2017 16:54:58 -0000
+Received: (qmail 28610 invoked by uid 89); 11 Jan 2017 13:21:46 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-0.4 required=5.0 tests=AWL,BAYES_00,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_PASS,URIBL_BLACK autolearn=no version=3.3.2 spammy=H*Ad:U*cygwin-patches, HTo:U*cygwin-patches, you!
-X-HELO: mail-ua0-f193.google.com
-Received: from mail-ua0-f193.google.com (HELO mail-ua0-f193.google.com) (209.85.217.193) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 10 Jan 2017 16:54:48 +0000
-Received: by mail-ua0-f193.google.com with SMTP id i68so53086293uad.1        for <cygwin-patches@cygwin.com>; Tue, 10 Jan 2017 08:54:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20161025;        h=x-gm-message-state:mime-version:in-reply-to:references:from:date         :message-id:subject:to;        bh=kS9rIn8E7S+RIqIR52hrwbT7c21rivqKSdh/v78Z9LY=;        b=Mhn2ntn4o+I5Nj/I0ZgfkBn6l/0ovaVx0gfjSLGS8O43j5lOu7vlFssSa6kCOjSRwC         4qF02qstWLXxk5PApsgTU+W9iun53W9xF3obuWnktQ4D/cc4SIVEESb1Wq4B4mxnJLys         xZRdYUwZZeerCfm5GDrsz5ASpH4ADwFAz+wwGwdBRqKuUN1BmujafRKsRJmcx1NxZLON         /9GkGVgdONWmS9oaFHVFh+tniTb/p3xt9WUL//uG78fhpsNDkvcP7wkn2HUpwwm1cd95         +y4g5SLwpGd616iJ2En1fWFr9A/6TQhS6PM+7wfUmnEWuUDAWRWdbgEuUwgyDN56rIPQ         rhJA==
-X-Gm-Message-State: AIkVDXLy0w3NvSB+Rpm59+uZAp2afm+hRIYBY/hriijB4W/epm/DSiYIq3b1o3oQ2t9mnV27LdRqixWFmrwuyQ==
-X-Received: by 10.159.32.195 with SMTP id 61mr2090199uaa.147.1484067286234; Tue, 10 Jan 2017 08:54:46 -0800 (PST)
-MIME-Version: 1.0
-Received: by 10.103.133.147 with HTTP; Tue, 10 Jan 2017 08:54:45 -0800 (PST)
-In-Reply-To: <20170110154123.GA24502@calimero.vinschen.de>
-References: <20170110150209.87028-1-erik.m.bray@gmail.com> <20170110154123.GA24502@calimero.vinschen.de>
-From: Erik Bray <erik.m.bray@gmail.com>
-Date: Tue, 10 Jan 2017 16:54:00 -0000
-Message-ID: <CAOTD34aRithGYc4rgnG60Ndvy7fqc0RbroqWoDgi1ZziNcpEkg@mail.gmail.com>
-Subject: Re: [PATCH 0/3] Updated patches for /proc/<pid>/environ
+X-Spam-SWARE-Status: No, score=-2.1 required=5.0 tests=BAYES_00,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,RCVD_IN_SORBS_SPAM,SPF_PASS autolearn=ham version=3.3.2 spammy=HX-Provags-ID:V03, H*r:Nemesis, signed-off-by, signedoffby
+X-HELO: mout.gmx.net
+Received: from mout.gmx.net (HELO mout.gmx.net) (212.227.15.18) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 11 Jan 2017 13:21:35 +0000
+Received: from virtualbox ([213.133.108.164]) by mail.gmx.com (mrgmx002 [212.227.17.190]) with ESMTPSA (Nemesis) id 0MKZLb-1cPvvn1L31-001wbg for <cygwin-patches@cygwin.com>; Wed, 11 Jan 2017 14:21:32 +0100
+Date: Wed, 11 Jan 2017 13:21:00 -0000
+From: Johannes Schindelin <johannes.schindelin@gmx.de>
 To: cygwin-patches@cygwin.com
-Content-Type: text/plain; charset=UTF-8
+Subject: [PATCH] FAST_CWD: adjust the initial search scope
+Message-ID: <5b4e3785c193feb56fa31eef637db2641e69eefd.1484140876.git.johannes.schindelin@gmx.de>
+User-Agent: Alpine 2.20 (DEB 67 2015-01-07)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-UI-Out-Filterresults: notjunk:1;V01:K0:V9vJLSIkx88=:mkxLzxQrkijVO+rK1IWWaD zw4wQSUwTMnd4ahayLAGqSvRN85qFYAdI6Q65c7o5FLBBRzA8L5w1O9BzPlNO25ks41PX0l40 Qww/QWpK+w5lkm+LPT8324WBSa7zfiE7ADRo0JY73zooJVelDP0+AQBuTrixEKk3GFM1PDhwy z1JmYIQLHNnHB4rSoje06Z+7mqKRzEgzSKmBDvPQc3utwcDyyxjl+2UrdwRmQI4NIaWcSO7wr YiOk1VBAaSX6KVYxJSl+8N8A0fSo+4HtsZsg+rr5VBa6nFyQh7thKmsmFCFAGrq7GAZK9BaDV BRhr+87LdRSxfshvIKOjNMmU83gXM4GU3cBUDDDwpSfjeXJHtMrSLpDRru3rrUwlXbydZY1ne 79hhF/GJJF6imHxbOM4ZKgBixKtZh1HXGTkdrdfzS5InOvDZDOBIElFJHaNRDJ9NYi9wIKp5o 3mgkmNlZnNcdgUYElnKWHwwn/Ogbbu2/F+dri1UucwV2JerJTukUBqheqbifYtPtmSZ1nY5BB Z0iBCxC8LolqS4z5n/54iVNV0paqC2VuzGICSHJJQgkjnXzHDDL5ldkHLxA/A2+Aer8Jf78u9 vO5v3EhzVIuRXfvrGQC8gyCxABIqwxvE06VIwi8GEYIdtP49Hbgz42v7piR2FN+rkl0X1yfsw vjubdAIeaJACV98p2IwolO71VafknjNIItEYSHFGtxHkVZBSwluPbHX8q0CpLrxfBSO9TkwrI AF3UtZR4Xl5SHq2WFy6iHaWeUA4rLd3oqOcun7baRtrcsGG1sF2ITY5y6COBv6hA2S/bPHwHb 0uSBv5f3kVFfrmwFcKFOk3tC0127w==
 X-IsSubscribed: yes
-X-SW-Source: 2017-q1/txt/msg00021.txt.bz2
+X-SW-Source: 2017-q1/txt/msg00022.txt.bz2
 
-On Tue, Jan 10, 2017 at 4:41 PM, Corinna Vinschen
-<corinna-cygwin@cygwin.com> wrote:
-> On Jan 10 16:02, Erik Bray wrote:
->> From: "Erik M. Bray" <erik.bray@lri.fr>
->>
->> Updated versions of the patch set originally submitted at
->> https://cygwin.com/ml/cygwin-patches/2017-q1/msg00000.html
->>
->> I think all the indentation/whitespace/braces are cleaned up and consistent.
->>
->> I've also made sure that /proc/self/environ works now.
->>
->> All new code in these patches is licensed under the 2-clause BSD:
->> [...]
->
-> You don't have to repeat that for any later patch you'd like to propose,
-> I added you to the CONTRIBUTORS file now.  Thank you!
+A *very* recent Windows build adds more code to the preamble of
+RtlGetCurrentDirectory_U() so that the previous heuristic failed to find
+the call to the locking routine.
 
-Great!
+This only affects the 64-bit version of ntdll, where the 0xe8 byte is
+now found at offset 40, not the 32-bit version. However, let's just
+double the area we search for said byte for good measure.
 
->> ===============================================================================
->>
->> Erik M. Bray (3):
->>   Move the core environment parsing of environ_init into a new
->>     win32env_to_cygenv function.
->>   Add a _pinfo.environ() method analogous to _pinfo.cmdline(), and
->>     others.
->>   Add a /proc/<pid>/environ proc file handler, analogous to
->>     /proc/<pid>/cmdline.
->>
->>  winsup/cygwin/environ.cc          | 84 +++++++++++++++++++++++----------------
->>  winsup/cygwin/environ.h           |  2 +
->>  winsup/cygwin/fhandler_process.cc | 22 ++++++++++
->>  winsup/cygwin/pinfo.cc            | 83 +++++++++++++++++++++++++++++++++++++-
->>  winsup/cygwin/pinfo.h             |  4 +-
->>  5 files changed, 157 insertions(+), 38 deletions(-)
->
-> Patchset applied.  The formatting in pinfo.cc was still not entirely
-> correct, but I tweaked it manually.  Please have a look into commit
-> 171046d.
+Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
+---
+Published-As: https://github.com/dscho/msys2-runtime/releases/tag/fast-cwd-v1
+Fetch-It-Via: git fetch https://github.com/dscho/msys2-runtime fast-cwd-v1
 
-Ah, I see now.  I think what happened is that in my vim it *does* look
-properly aligned, but I haven't changed my settings the way you
-suggested yet.  Part of the problem is still the mixing of tabs and
-spaces (even within that function), and I have ts=4, sw=4 so to me it
-looked aligned.
+ winsup/cygwin/path.cc | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thanks for fixing it, and for accepting the patches!
+diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
+index c3b304ab5..ee7636dbf 100644
+--- a/winsup/cygwin/path.cc
++++ b/winsup/cygwin/path.cc
+@@ -4034,7 +4034,7 @@ find_fast_cwd_pointer ()
+   if (!get_dir || !ent_crit)
+     return NULL;
+   /* Search first relative call instruction in RtlGetCurrentDirectory_U. */
+-  const uint8_t *rcall = (const uint8_t *) memchr (get_dir, 0xe8, 40);
++  const uint8_t *rcall = (const uint8_t *) memchr (get_dir, 0xe8, 80);
+   if (!rcall)
+     return NULL;
+   /* Fetch offset from instruction and compute address of called function.
+@@ -4133,7 +4133,7 @@ find_fast_cwd_pointer ()
+   if (!get_dir || !ent_crit)
+     return NULL;
+   /* Search first relative call instruction in RtlGetCurrentDirectory_U. */
+-  const uint8_t *rcall = (const uint8_t *) memchr (get_dir, 0xe8, 32);
++  const uint8_t *rcall = (const uint8_t *) memchr (get_dir, 0xe8, 64);
+   if (!rcall)
+     return NULL;
+   /* Fetch offset from instruction and compute address of called function.
 
-Erik
+base-commit: e0477b4a0ba2b842d4f81350f7fa9a03b1f3d27b
+-- 
+2.11.0.310.g4ee6bc8b50
