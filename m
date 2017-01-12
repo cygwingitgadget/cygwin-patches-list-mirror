@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8684-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 51318 invoked by alias); 12 Jan 2017 00:38:26 -0000
+Return-Path: <cygwin-patches-return-8685-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 123443 invoked by alias); 12 Jan 2017 08:24:49 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,211 +9,86 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 51030 invoked by uid 89); 12 Jan 2017 00:38:25 -0000
+Received: (qmail 123336 invoked by uid 89); 12 Jan 2017 08:24:29 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-0.5 required=5.0 tests=AWL,BAYES_00,FREEMAIL_FROM,KAM_ASCII_DIVIDERS,RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_SPAM,SPF_PASS autolearn=no version=3.3.2 spammy=ate, 1.50, kbyte, coincidence
-X-HELO: mail-qt0-f169.google.com
-Received: from mail-qt0-f169.google.com (HELO mail-qt0-f169.google.com) (209.85.216.169) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 12 Jan 2017 00:38:15 +0000
-Received: by mail-qt0-f169.google.com with SMTP id v23so4364591qtb.0        for <cygwin-patches@cygwin.com>; Wed, 11 Jan 2017 16:38:15 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20161025;        h=x-gm-message-state:mime-version:in-reply-to:references:from:date         :message-id:subject:to;        bh=xOz2eBlcL/8LaNo/eMhxWzcinXjDXDrfzL9GG9LLnMc=;        b=k8gocaBmiYuKuKSasQ0PgeenqdwdRBhs8shNq8fz1nT51gcCoBtbJUb4mMY5UFCRTS         NxUAEpenFfFV9d8v5OANJ5W3n4pxCwVqx0Kje4YBXFkixStTS5FvX+1VJF35xc7vfVnl         9hjMV32sOyB9XEfQnNNvHTANSIXx0XLEbzuVrAWSppxW5zsofE76AnTxfuqPYJey2RV+         FyVYmAn6dU6LqFFLciVvSwkGZcBZ/tz3hsgyd1gQhxduH4PSIW3qoVyZSgw9wJ0XvV2p         quRp6cL9f7lWGroVQXE0oGm16G8TMmP4En3TYRjwx1Yfq9lf2zPsS1ErVqDtIZ25ZL7U         lYXw==
-X-Gm-Message-State: AIkVDXLCj4paiBVKUhcJvxC3DYjQA0teZ+/gGjClhE+pvLKPRV9ayqDCOm/07Qd1bpnfwLynelAn9aPEFIarVw==
-X-Received: by 10.237.42.108 with SMTP id k41mr9988227qtf.81.1484181493239; Wed, 11 Jan 2017 16:38:13 -0800 (PST)
-MIME-Version: 1.0
-Received: by 10.12.165.38 with HTTP; Wed, 11 Jan 2017 16:38:12 -0800 (PST)
-In-Reply-To: <CAO1c0ATh9aD-zbHcpna76EXr-Lavrbk5rnnnJC+bAtehe2xXHQ@mail.gmail.com>
-References: <CAO1c0ATh9aD-zbHcpna76EXr-Lavrbk5rnnnJC+bAtehe2xXHQ@mail.gmail.com>
-From: Daniel Havey <dhavey@gmail.com>
-Date: Thu, 12 Jan 2017 00:38:00 -0000
-Message-ID: <CAO1c0ARd7smeWLDpqHVyBSvcAZMSAKA4uDc3e2nKHpT73PiWBQ@mail.gmail.com>
-Subject: Re: Limited Internet speeds caused by inappropriate socket buffering in function fdsock (winsup/net.cc)
+X-Spam-SWARE-Status: No, score=-101.6 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=H*Ad:U*cygwin-patches, HTo:U*cygwin-patches, H*F:D*cygwin.com
+X-HELO: drew.franken.de
+Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 12 Jan 2017 08:24:27 +0000
+Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id 598C7721E281A	for <cygwin-patches@cygwin.com>; Thu, 12 Jan 2017 09:24:24 +0100 (CET)
+Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id AFCB75E027F	for <cygwin-patches@cygwin.com>; Thu, 12 Jan 2017 09:24:23 +0100 (CET)
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 92DF8A804D6; Thu, 12 Jan 2017 09:24:23 +0100 (CET)
+Date: Thu, 12 Jan 2017 08:24:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Content-Type: text/plain; charset=UTF-8
-X-IsSubscribed: yes
-X-SW-Source: 2017-q1/txt/msg00025.txt.bz2
-
-Hi Corinna,
-I can see your email on the archive, but, I never received it in my
-gmail account (not even in a spam folder).  I think the Internet ate
-your message.
-
-Yes Windows :).  I'm the Program Manager for Windows 10 transports and
-IP.  Anything in layers 4 or 3.  We can help you with network stack in
-the current release of Windows 10.  Downlevel is more difficult.  I'm
-not sure about the answer to your question on the size of wmem.  I
-don't think that there is a static value that will work in all cases
-since Windows TCP will send 1 BDP worth of data per RTT.  If the BDP
-is large then the static value could easily be too small and if the
-BDP is small then the static value could easily be too large.  It will
-take some digging to figure out what the best practice is.  I will do
-some digging and let you know the results.
-
-In the mean time I will apply your recommendations to my patch and repost it.
-
-thanxs ;^)
-...Daniel
+Subject: Re: [PATCH] FAST_CWD: adjust the initial search scope
+Message-ID: <20170112082423.GB23119@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <5b4e3785c193feb56fa31eef637db2641e69eefd.1484140876.git.johannes.schindelin@gmx.de> <20170111160303.GA23119@calimero.vinschen.de> <alpine.DEB.2.20.1701112048200.3469@virtualbox>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="uQr8t48UFsdbeI+V"
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.20.1701112048200.3469@virtualbox>
+User-Agent: Mutt/1.7.1 (2016-10-04)
+X-SW-Source: 2017-q1/txt/msg00026.txt.bz2
 
 
+--uQr8t48UFsdbeI+V
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 901
+
+On Jan 11 20:48, Johannes Schindelin wrote:
+> Hi Corinna,
+>=20
+> On Wed, 11 Jan 2017, Corinna Vinschen wrote:
+>=20
+> > On Jan 11 14:21, Johannes Schindelin wrote:
+> > > A *very* recent Windows build adds more code to the preamble of
+> > > RtlGetCurrentDirectory_U() so that the previous heuristic failed to
+> > > find the call to the locking routine.
+> > >=20
+> > > This only affects the 64-bit version of ntdll, where the 0xe8 byte is
+> > > now found at offset 40, not the 32-bit version. However, let's just
+> > > double the area we search for said byte for good measure.
+> >=20
+> > any chance to convince the powers that be to open up access to this
+> > datastructures without such hacky means?
+>=20
+> I try my best.
+
+Thanks!  Patch pushed.
 
 
+Corinna
 
-On Mon, Jan 9, 2017 at 3:49 PM, Daniel Havey <dhavey@gmail.com> wrote:
-> At Windows we love what you are doing with Cygwin.  However, we have
-> been getting reports from our hardware vendors that iperf is slow on
-> Windows.  Iperf is of course compiled against the cygwin1.dll and we
-> believe we have traced the problem down to the function fdsock in
-> net.cc.  SO_RCVBUF and SO_SNDBUF are being manually set.  The comments
-> indicate that the idea was to increase the buffer size, but, this code
-> must have been written long ago because Windows has used autotuning
-> for a very long time now.  Please do not manually set SO_RCVBUF or
-> SO_SNDBUF as this will limit your internet speed.
->
-> I am providing a patch, an STC and my cygcheck -svr output.  Hope we
-> can fix this.  Please let me know if I can help further.
->
-> Simple Test Case:
-> I have a script that pings 4 times and then iperfs for 10 seconds to
-> debit.k-net.fr
->
->
-> With patch
-> $ bash buffer_test.sh 178.250.209.22
-> usage: bash buffer_test.sh <iperf server name>
->
-> Pinging 178.250.209.22 with 32 bytes of data:
-> Reply from 178.250.209.22: bytes=32 time=167ms TTL=34
-> Reply from 178.250.209.22: bytes=32 time=173ms TTL=34
-> Reply from 178.250.209.22: bytes=32 time=173ms TTL=34
-> Reply from 178.250.209.22: bytes=32 time=169ms TTL=34
->
-> Ping statistics for 178.250.209.22:
->     Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
-> Approximate round trip times in milli-seconds:
->     Minimum = 167ms, Maximum = 173ms, Average = 170ms
-> ------------------------------------------------------------
-> Client connecting to 178.250.209.22, TCP port 5001
-> TCP window size: 64.0 KByte (default)
-> ------------------------------------------------------------
-> [  3] local 10.137.196.108 port 58512 connected with 178.250.209.22 port 5001
-> [ ID] Interval       Transfer     Bandwidth
-> [  3]  0.0- 1.0 sec   768 KBytes  6.29 Mbits/sec
-> [  3]  1.0- 2.0 sec  9.25 MBytes  77.6 Mbits/sec
-> [  3]  2.0- 3.0 sec  18.0 MBytes   151 Mbits/sec
-> [  3]  3.0- 4.0 sec  18.0 MBytes   151 Mbits/sec
-> [  3]  4.0- 5.0 sec  18.0 MBytes   151 Mbits/sec
-> [  3]  5.0- 6.0 sec  18.0 MBytes   151 Mbits/sec
-> [  3]  6.0- 7.0 sec  18.0 MBytes   151 Mbits/sec
-> [  3]  7.0- 8.0 sec  18.0 MBytes   151 Mbits/sec
-> [  3]  8.0- 9.0 sec  18.0 MBytes   151 Mbits/sec
-> [  3]  9.0-10.0 sec  18.0 MBytes   151 Mbits/sec
-> [  3]  0.0-10.0 sec   154 MBytes   129 Mbits/sec
->
->
-> Without patch:
-> dahavey@DMH-DESKTOP ~
-> $ bash buffer_test.sh 178.250.209.22
->
-> Pinging 178.250.209.22 with 32 bytes of data:
-> Reply from 178.250.209.22: bytes=32 time=168ms TTL=34
-> Reply from 178.250.209.22: bytes=32 time=167ms TTL=34
-> Reply from 178.250.209.22: bytes=32 time=170ms TTL=34
-> Reply from 178.250.209.22: bytes=32 time=169ms TTL=34
->
-> Ping statistics for 178.250.209.22:
->     Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
-> Approximate round trip times in milli-seconds:
->     Minimum = 167ms, Maximum = 170ms, Average = 168ms
-> ------------------------------------------------------------
-> Client connecting to 178.250.209.22, TCP port 5001
-> TCP window size:  208 KByte (default)
-> ------------------------------------------------------------
-> [  3] local 10.137.196.108 port 58443 connected with 178.250.209.22 port 5001
-> [ ID] Interval       Transfer     Bandwidth
-> [  3]  0.0- 1.0 sec   512 KBytes  4.19 Mbits/sec
-> [  3]  1.0- 2.0 sec  1.50 MBytes  12.6 Mbits/sec
-> [  3]  2.0- 3.0 sec  1.50 MBytes  12.6 Mbits/sec
-> [  3]  3.0- 4.0 sec  1.50 MBytes  12.6 Mbits/sec
-> [  3]  4.0- 5.0 sec  1.50 MBytes  12.6 Mbits/sec
-> [  3]  5.0- 6.0 sec  1.50 MBytes  12.6 Mbits/sec
-> [  3]  6.0- 7.0 sec  1.50 MBytes  12.6 Mbits/sec
-> [  3]  7.0- 8.0 sec  1.50 MBytes  12.6 Mbits/sec
-> [  3]  8.0- 9.0 sec  1.50 MBytes  12.6 Mbits/sec
-> [  3]  9.0-10.0 sec  1.50 MBytes  12.6 Mbits/sec
-> [  3]  0.0-10.1 sec  14.1 MBytes  11.7 Mbits/sec
->
->
-> The output shows that the RTT from my machine to the iperf server is
-> similar in both cases (about 170ms) however with the patch the
-> throughput averages 129 Mbps while without the patch the throughput
-> only averages 11.7 Mbps.  If we calculate the maximum throughput using
-> Bandwidth = Queue/RTT we get (212992 * 8)/0.170 = 10.0231 Mbps.  This
-> is just about what iperf is showing us without the patch since the
-> buffer size is set to 212992 I believe that the buffer size is
-> limiting the throughput.  With the patch we have no buffer limitation
-> (autotuning) and can develop the full potential bandwidth on the link.
->
-> If you want to duplicate the STC you will have to find an iperf server
-> (I found an extreme case) that has a large enough RTT distance from
-> you and try a few times.  I get varying results depending on Internet
-> traffic but without the patch never exceed the limit caused by the
-> buffering.
->
-> Here is the patch:
-> --- net.cc_orig 2017-01-09 09:37:54.301210600 -0800
-> +++ net.cc 2017-01-09 14:15:57.998895500 -0800
-> @@ -517,7 +517,7 @@
->  bool
->  fdsock (cygheap_fdmanip& fd, const device *dev, SOCKET soc)
->  {
-> -  int size;
-> +//  int size;
->
->    fd = build_fh_dev (*dev);
->    if (!fd.isopen ())
-> @@ -584,6 +584,7 @@
->    fd->set_flags (O_RDWR | O_BINARY);
->    debug_printf ("fd %d, name '%s', soc %p", (int) fd, dev->name (), soc);
->
-> +
->    /* Raise default buffer sizes (instead of WinSock default 8K).
->
->       64K appear to have the best size/performance ratio for a default
-> @@ -608,6 +609,8 @@
->       of 1k, but since 64k breaks WSADuplicateSocket we use 63Kb.
->
->       (*) Maximum normal TCP window size.  Coincidence?  */
-> +
-> +
->  #ifdef __x86_64__
->    ((fhandler_socket *) fd)->rmem () = 212992;
->    ((fhandler_socket *) fd)->wmem () = 212992;
-> @@ -615,6 +618,14 @@
->    ((fhandler_socket *) fd)->rmem () = 64512;
->    ((fhandler_socket *) fd)->wmem () = 64512;
->  #endif
-> +
-> +/*   Please don't do this.  Windows doesn't have a default buffer of
-> 8K it uses autotuning.
-> +     The thing about network buffers is they have to be chosen
-> dynamically.  Both Windows
-> +     and Linux do this.  However, this code sets the SO_SNDBUF and
-> SO_RCVBUF size statically.
-> +     This will limit Internet speeds and cause bufferbloat.  Let the
-> OS dynamically choose
-> +     the SO_SNDBUF and SO_RCVBUF sizes.
-> +
-> +
->    if (::setsockopt (soc, SOL_SOCKET, SO_RCVBUF,
->      (char *) &((fhandler_socket *) fd)->rmem (), sizeof (int)))
->      {
-> @@ -632,7 +643,9 @@
->   (char *) &((fhandler_socket *) fd)->wmem (),
->   (size = sizeof (int), &size)))
->   system_printf ("getsockopt(SO_SNDBUF) failed, %u", WSAGetLastError ());
-> -    }
-> +    } */
-> +
-> +
->
->    /* A unique ID is necessary to recognize fhandler entries which are
->       duplicated by dup(2) or fork(2).  This is used in BSD flock calls
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
+
+--uQr8t48UFsdbeI+V
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 819
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iQIcBAEBCAAGBQJYdz03AAoJEPU2Bp2uRE+g06oP/2jmDTQCFyFfQJsNdLxKXlUH
+7YA/14tCyFhJu1sKk+astomQJEzMiGTO136lhUjjA9ddd7FBHGSGL2ofuGYafTny
+i8g612w28oKEoK7IrbRbpx0nvDASpDVn2IVnrEtKPNmU1FtT43dnK8AZ6CmU02s8
+AVaLH0pPH7l+yRTvLfrHIuUc68zWR4v/MioESXBXvzTm5vAxEOGlzsA76wIqdG18
+IyPAT4xTZPBpI3MM6pqrgtrf1M8Cc6f1oef98EQEN+3yVlgTlF48NGCioEyvBQaH
+ulxgvvC7Hgg0dmgkNuqFcW5J+/TPaQaHA/bGS5alTI0sa5VspDvhS8ALDPJRN5+6
+LWIEoXZVf//dxTthb4g3HL9h+TLV6qLt9rYctdOfniN7McvHjtgLz0ST+rTs4/aT
+SLzxgeF2W7gy7xwIL4REf1anEi9VxwxzJhIrnp8sqe+IOsupzY5u3uxySzYi6K2b
+RcMvX2WzztDDmVCgyemcVsqnqC8XI8G7/cf5OyT5TxfQ3DlT0wyINA0kXOTJNS21
+SbOnhqWxwSe7IjyBPPf/MyDW6ymJ6oRZlyU7TRMnHgqC8lQc0BJwryn1kwT5cOVO
+/eIF0NLsUyIumOvx6cFuV/SFtUOdqS1tB3XGDmfAQVrutnvOvMr1oMUOKMLOEsSW
+WTAm91Wm0cbAjFt2E1OV
+=zcQu
+-----END PGP SIGNATURE-----
+
+--uQr8t48UFsdbeI+V--
