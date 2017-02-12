@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8693-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 26528 invoked by alias); 10 Feb 2017 14:09:00 -0000
+Return-Path: <cygwin-patches-return-8694-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 80134 invoked by alias); 12 Feb 2017 11:37:11 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,115 +9,85 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 26475 invoked by uid 89); 10 Feb 2017 14:08:59 -0000
+Received: (qmail 80116 invoked by uid 89); 12 Feb 2017 11:37:10 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=0.6 required=5.0 tests=AWL,BAYES_50,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.2 spammy=nominated, cygwindevelopers, cygwin-developers, intact
-X-HELO: smtp.salomon.at
-Received: from smtp.salomon.at (HELO smtp.salomon.at) (193.186.16.13) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 10 Feb 2017 14:08:49 +0000
-Received: from samail03.wamas.com ([172.28.33.235] helo=mailhost.salomon.at)	by smtp.salomon.at with esmtps (UNKNOWN:DHE-RSA-AES256-SHA:256)	(Exim 4.80.1)	(envelope-from <michael.haubenwallner@ssi-schaefer.com>)	id 1ccBsT-0001RN-34; Fri, 10 Feb 2017 15:08:45 +0100
-Received: from [172.28.41.34]	by mailhost.salomon.at with esmtp (Exim 4.77)	(envelope-from <michael.haubenwallner@ssi-schaefer.com>)	id 1ccBsS-0002qy-Uw; Fri, 10 Feb 2017 15:08:45 +0100
+X-Spam-SWARE-Status: No, score=-101.6 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
+X-HELO: drew.franken.de
+Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 12 Feb 2017 11:37:09 +0000
+Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id 559CC721E281A	for <cygwin-patches@cygwin.com>; Sun, 12 Feb 2017 12:37:06 +0100 (CET)
+Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id AF9E65E0210	for <cygwin-patches@cygwin.com>; Sun, 12 Feb 2017 12:37:05 +0100 (CET)
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 8D271A80CD3; Sun, 12 Feb 2017 12:37:05 +0100 (CET)
+Date: Sun, 12 Feb 2017 11:37:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-From: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
-Subject: (fixup) [PATCH] forkables: use dynloaded dll's IndexNumber as dirname
-Message-ID: <9f8649cf-0293-cce7-f4a1-84433d62152d@ssi-schaefer.com>
-Date: Fri, 10 Feb 2017 14:09:00 -0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101 Thunderbird/45.6.0
+Subject: Re: (fixup) [PATCH] forkables: use dynloaded dll's IndexNumber as dirname
+Message-ID: <20170212113705.GH11666@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <9f8649cf-0293-cce7-f4a1-84433d62152d@ssi-schaefer.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="------------01F25606868A128F76EE3104"
-X-SW-Source: 2017-q1/txt/msg00034.txt.bz2
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="4f28nU6agdXSinmL"
+Content-Disposition: inline
+In-Reply-To: <9f8649cf-0293-cce7-f4a1-84433d62152d@ssi-schaefer.com>
+User-Agent: Mutt/1.7.1 (2016-10-04)
+X-SW-Source: 2017-q1/txt/msg00035.txt.bz2
 
-This is a multi-part message in MIME format.
---------------01F25606868A128F76EE3104
+
+--4f28nU6agdXSinmL
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-length: 552
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 834
 
-Hi Corinna,
+On Feb 10 15:08, Michael Haubenwallner wrote:
+> Hi Corinna,
+>=20
+> as realized during write of tl;dr draft for the topic/forkables branch,
+> >=20
+> > <damn-wrong reason=3D"original directory may not exist any more">
+> >  * The temporary subdirectory name for a dynamically loaded dll is form=
+ed
+> >    using the original directory's NTFS-IndexNumber.
+> > </damn-wrong>
+> > https://cygwin.com/ml/cygwin-developers/2017-01/msg00000.html
+>=20
+> here's the patch, intended as fixup for
+> >
+> > [PATCH 3/6] forkables: Create forkable hardlinks, yet unused.
+> > https://cygwin.com/ml/cygwin-developers/2016-12/msg00006.html
 
-as realized during write of tl;dr draft for the topic/forkables branch,
-> 
-> <damn-wrong reason="original directory may not exist any more">
->  * The temporary subdirectory name for a dynamically loaded dll is formed
->    using the original directory's NTFS-IndexNumber.
-> </damn-wrong>
-> https://cygwin.com/ml/cygwin-developers/2017-01/msg00000.html
-
-here's the patch, intended as fixup for
->
-> [PATCH 3/6] forkables: Create forkable hardlinks, yet unused.
-> https://cygwin.com/ml/cygwin-developers/2016-12/msg00006.html
-
-Thanks!
-/haubi/
-
---------------01F25606868A128F76EE3104
-Content-Type: text/x-patch;
- name="0001-forkables-use-dynloaded-dll-s-IndexNumber-as-dirname.patch"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename*0="0001-forkables-use-dynloaded-dll-s-IndexNumber-as-dirname.pa";
- filename*1="tch"
-Content-length: 2059
-
-From 66bc7176ad9a786651c306e27ce354438db5d4af Mon Sep 17 00:00:00 2001
-From: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
-Date: Thu, 12 Jan 2017 10:03:52 +0100
-Subject: [PATCH] forkables: use dynloaded dll's IndexNumber as dirname
-
----
- winsup/cygwin/forkable.cc | 33 ++++++++-------------------------
- 1 file changed, 8 insertions(+), 25 deletions(-)
-
-diff --git a/winsup/cygwin/forkable.cc b/winsup/cygwin/forkable.cc
-index c92a44f..6c78d75 100644
---- a/winsup/cygwin/forkable.cc
-+++ b/winsup/cygwin/forkable.cc
-@@ -409,34 +409,17 @@ dll::nominate_forkable (PCWCHAR dirx_name)
-   if (!*forkable_ntname)
-     return; /* denominate */
- 
--  if (type < DLL_LOAD)
--    wcpcpy (next, modname);
--  else
-+  if (type == DLL_LOAD)
-     {
--      /* Avoid lots of extra directories for loaded dll's:
--       * mangle full path into one single directory name,
--       * just keep original filename intact. The original
--       * filename is necessary to serve as linked
--       * dependencies of dynamically loaded dlls. */
--      PWCHAR lastpathsep = wcsrchr (ntname, L'\\');
--      if (!lastpathsep)
--        {
--	  forkable_ntname = NULL;
--	  return;
--	}
--      *lastpathsep = L'\0';
--      HANDLE fh = dll_list::ntopenfile (ntname, NULL, FILE_DIRECTORY_FILE);
--      *lastpathsep = L'\\';
--
--      FILE_INTERNAL_INFORMATION fii = { 0 };
--      if (fh != INVALID_HANDLE_VALUE)
--	{
--	  dll_list::read_fii (fh, &fii);
--	  NtClose (fh);
--	}
-+      /* Multiple dynamically loaded dlls can have identical basenames
-+       * when loaded from different directories.  But still the original
-+       * basename may serve as linked dependency for another dynamically
-+       * loaded dll.  So we have to create a separate directory for the
-+       * dynamically loaded dll - using the dll's IndexNumber as name. */
-       next += format_IndexNumber (next, -1, &fii.IndexNumber);
--      wcpcpy (next, lastpathsep);
-+      next = wcpcpy (next, L"\\");
-     }
-+  wcpcpy (next, modname);
- }
- 
- /* Create the nominated hardlink for one indivitual dll,
--- 
-2.8.3
+Applied to the (rebased) topic/forkables branch.
 
 
---------------01F25606868A128F76EE3104--
+Thanks,
+Corinna
+
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
+
+--4f28nU6agdXSinmL
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 819
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iQIcBAEBCAAGBQJYoEjhAAoJEPU2Bp2uRE+gecEP/2rSQnNrXTrsmELDrX2orZGY
+qWpJLWKTR0pszfzvb8RT8OEYU/yetxIZbFNGzFhrhDQEepJPc0egkGe0zArgrQh9
+zA5n0UTpfBJDDmM+gBYAQYYV8PgskffXkjB3MSCkI2/5JtOjBFSNjJMhJTLAMplk
+B9ug0Hg0RYLF/e12NKT4ZDVBaehWa4SR41/mIUcJu+g+cxUBVu27MGr681WZO9V1
+8vwQXl1NIpVegdXHsNGMeEi09PLLcc3ZrWwK74ScgnudLbKUUvK+SZgXN+8kp31s
+9+nKEwW8TrOKOdGJJFr5/HmyBrcdgWDgqNTjc6YqCnioxJpQ231ODipef4dlqTlh
+QW9szzm/2KeHzeK3SaB1K9x3ZJCHcUPojQa1Jxs/eg/n2jFv/9qpqBlIAf55CGd9
+o3aD6VIYObImo9C4NNDQBtNuQpzDMl376uVRBUfRzh56rU3Mc43+DFkR1TMrVYxi
+KtnzmJKG8S1iN5MxVCR6gictJxjQRA3yCvTsHhVL29AXXS9QB4lCS8mWgv+K76Jh
+3+gb6bPBttiofSn2MEULmAcEvO7SH1gviL9Vl+t1nPKp8JPiag5wJhBKoGNMEpix
+wd3nlOVkoev2HXWbxmk55tCn/nSqH3MO8MYDTzycLguaQbtz62DXV7ZC4upuXHuM
+k2e9VRCTyyjTKTbj9+Yr
+=9diX
+-----END PGP SIGNATURE-----
+
+--4f28nU6agdXSinmL--
