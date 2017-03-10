@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8711-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 76581 invoked by alias); 10 Mar 2017 10:33:10 -0000
+Return-Path: <cygwin-patches-return-8712-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 3689 invoked by alias); 10 Mar 2017 20:24:23 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,133 +9,83 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 76550 invoked by uid 89); 10 Mar 2017 10:33:08 -0000
+Received: (qmail 3562 invoked by uid 89); 10 Mar 2017 20:24:16 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-24.5 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.2 spammy=subsequently, owning, 4237, concurrency
-X-HELO: smtp.salomon.at
-Received: from smtp.salomon.at (HELO smtp.salomon.at) (193.186.16.13) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 10 Mar 2017 10:33:05 +0000
-Received: from samail03.wamas.com ([172.28.33.235] helo=mailhost.salomon.at)	by smtp.salomon.at with esmtps (UNKNOWN:DHE-RSA-AES256-SHA:256)	(Exim 4.80.1)	(envelope-from <michael.haubenwallner@ssi-schaefer.com>)	id 1cmHr4-00041D-9F; Fri, 10 Mar 2017 11:33:03 +0100
-Received: from s01en24.wamas.com ([172.28.41.101] helo=s01en24)	by mailhost.salomon.at with smtp (Exim 4.77)	(envelope-from <michael.haubenwallner@ssi-schaefer.com>)	id 1cmHr3-00072I-5w; Fri, 10 Mar 2017 11:33:02 +0100
-Received: by s01en24 (sSMTP sendmail emulation); Fri, 10 Mar 2017 11:33:01 +0100
-From: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
+X-Spam-SWARE-Status: No, score=-101.7 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=H*Ad:U*cygwin-patches, HTo:U*cygwin-patches, planning
+X-HELO: drew.franken.de
+Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 10 Mar 2017 20:24:15 +0000
+Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id C4B67721E281C	for <cygwin-patches@cygwin.com>; Fri, 10 Mar 2017 21:24:13 +0100 (CET)
+Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id 3772E5E019B	for <cygwin-patches@cygwin.com>; Fri, 10 Mar 2017 21:24:13 +0100 (CET)
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 1D937A80388; Fri, 10 Mar 2017 21:24:13 +0100 (CET)
+Date: Fri, 10 Mar 2017 20:24:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Cc: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
-Subject: [PATCH] forkables: hardlink without WRITE_ATTRIBUTES first
-Date: Fri, 10 Mar 2017 10:33:00 -0000
-Message-Id: <20170310103254.5513-1-michael.haubenwallner@ssi-schaefer.com>
-X-SW-Source: 2017-q1/txt/msg00052.txt.bz2
+Subject: Re: [PATCH] forkables: hardlink without WRITE_ATTRIBUTES first
+Message-ID: <20170310202413.GA22238@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20170310103254.5513-1-michael.haubenwallner@ssi-schaefer.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="NzB8fVQJ5HfG6fxh"
+Content-Disposition: inline
+In-Reply-To: <20170310103254.5513-1-michael.haubenwallner@ssi-schaefer.com>
+User-Agent: Mutt/1.7.1 (2016-10-04)
+X-SW-Source: 2017-q1/txt/msg00053.txt.bz2
 
-When the current process has renamed (to bin) a readonly dll, we get
-STATUS_TRANSACTION_NOT_ACTIVE for unknown reason when subsequently
-creating the forkable hardlink. A workaround is to open the original
-file with FILE_WRITE_ATTRIBUTES access, but that fails with permission
-denied for users not owning the original file.
 
-* forkable.cc (dll::create_forkable): Retry hardlink creation using the
-original file's handle opened with FILE_WRITE_ATTRIBUTES access when the
-first attempt fails with STATUS_TRANSACTION_NOT_ACTIVE.
----
- winsup/cygwin/forkable.cc | 72 +++++++++++++++++++++++++++++++----------------
- 1 file changed, 48 insertions(+), 24 deletions(-)
+--NzB8fVQJ5HfG6fxh
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 1026
 
-diff --git a/winsup/cygwin/forkable.cc b/winsup/cygwin/forkable.cc
-index 2cb5e73..ec51ebf 100644
---- a/winsup/cygwin/forkable.cc
-+++ b/winsup/cygwin/forkable.cc
-@@ -423,7 +423,14 @@ dll::nominate_forkable (PCWCHAR dirx_name)
- }
- 
- /* Create the nominated hardlink for one indivitual dll,
--   inside another subdirectory when dynamically loaded. */
-+   inside another subdirectory when dynamically loaded.
-+
-+   We've not found a performant way yet to protect fork against
-+   updates to main executables and/or dlls that do not reside on
-+   the same NTFS filesystem as the <cygroot>/var/run/cygfork/
-+   directory.  But as long as the main executable can be hardlinked,
-+   dll redirection works for any other hardlink-able dll, while
-+   non-hardlink-able dlls are used from their original location. */
- bool
- dll::create_forkable ()
- {
-@@ -465,14 +472,6 @@ dll::create_forkable ()
-   if (devhandle == INVALID_HANDLE_VALUE)
-     return false; /* impossible */
- 
--  HANDLE fh = dll_list::ntopenfile ((PCWCHAR)&fii.IndexNumber, NULL,
--				    FILE_OPEN_BY_FILE_ID,
--				    FILE_WRITE_ATTRIBUTES,
--				    devhandle);
--  NtClose (devhandle);
--  if (fh == INVALID_HANDLE_VALUE)
--    return false; /* impossible */
--
-   int ntlen = wcslen (ntname);
-   int bufsize = sizeof (FILE_LINK_INFORMATION) + ntlen * sizeof (*ntname);
-   PFILE_LINK_INFORMATION pfli = (PFILE_LINK_INFORMATION) alloca (bufsize);
-@@ -483,22 +482,47 @@ dll::create_forkable ()
-   pfli->ReplaceIfExists = FALSE; /* allow concurrency */
-   pfli->RootDirectory = NULL;
- 
--  IO_STATUS_BLOCK iosb;
--  NTSTATUS status = NtSetInformationFile (fh, &iosb, pfli, bufsize,
--					  FileLinkInformation);
--  NtClose (fh);
--  debug_printf ("%y = NtSetInformationFile (%p, FileLink %W, iosb.Status %y)",
--		status, fh, pfli->FileName, iosb.Status);
--  if (NT_SUCCESS (status) || status == STATUS_OBJECT_NAME_COLLISION)
--    /* We've not found a performant way yet to protect fork against updates
--       to main executables and/or dlls that do not reside on the same NTFS
--       filesystem as the <cygroot>/var/run/cygfork/ directory.
--       But as long as the main executable can be hardlinked, dll redirection
--       works for any other hardlink-able dll, while non-hardlink-able dlls
--       are used from their original location. */
--    return true;
-+  /* When we get STATUS_TRANSACTION_NOT_ACTIVE from hardlink creation,
-+     the current process has renamed the file while it had the readonly
-+     attribute.  The rename() function uses a transaction for combined
-+     writeable+rename action if possible to provide atomicity.
-+     Although the transaction is closed afterwards, creating a hardlink
-+     for this file requires the FILE_WRITE_ATTRIBUTES access, for unknown
-+     reason.  On the other hand, always requesting FILE_WRITE_ATTRIBUTES
-+     would fail for users that do not own the original file. */
-+  bool ret = false;
-+  int access = 0; /* first attempt */
-+  while (true)
-+    {
-+      HANDLE fh = dll_list::ntopenfile ((PCWCHAR)&fii.IndexNumber, NULL,
-+					FILE_OPEN_BY_FILE_ID,
-+					access,
-+					devhandle);
-+      if (fh == INVALID_HANDLE_VALUE)
-+	break; /* impossible */
-+
-+      IO_STATUS_BLOCK iosb;
-+      NTSTATUS status = NtSetInformationFile (fh, &iosb, pfli, bufsize,
-+					      FileLinkInformation);
-+      NtClose (fh);
-+      debug_printf ("%y = NtSetInformationFile (%p, FileLink %W, iosb.Status %y)",
-+		    status, fh, pfli->FileName, iosb.Status);
-+      if (NT_SUCCESS (status) || status == STATUS_OBJECT_NAME_COLLISION)
-+	{
-+	  ret = true;
-+	  break;
-+	}
-+
-+      if (status != STATUS_TRANSACTION_NOT_ACTIVE ||
-+	  access == FILE_WRITE_ATTRIBUTES)
-+	break;
-+
-+      access = FILE_WRITE_ATTRIBUTES; /* second attempt */
-+    }
-+
-+  NtClose (devhandle);
- 
--  return false;
-+  return ret;
- }
- 
- /* return the number of characters necessary to store one forkable name */
--- 
-2.10.2
+On Mar 10 11:32, Michael Haubenwallner wrote:
+> When the current process has renamed (to bin) a readonly dll, we get
+> STATUS_TRANSACTION_NOT_ACTIVE for unknown reason when subsequently
+> creating the forkable hardlink. A workaround is to open the original
+> file with FILE_WRITE_ATTRIBUTES access, but that fails with permission
+> denied for users not owning the original file.
+>=20
+> * forkable.cc (dll::create_forkable): Retry hardlink creation using the
+> original file's handle opened with FILE_WRITE_ATTRIBUTES access when the
+> first attempt fails with STATUS_TRANSACTION_NOT_ACTIVE.
+
+Patch applied to topic/forkables (which I rebased so pull -f).
+
+I'm planning to make a 2.8.0 release and then pull over the forkables
+stuff to master for the next release.  Maybe we should bump the DLL
+version to 3.0 then.  It's a pretty big functionality extension...
+
+
+Thanks,
+Corinna
+
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
+
+--NzB8fVQJ5HfG6fxh
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 819
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iQIcBAEBCAAGBQJYwwtsAAoJEPU2Bp2uRE+gRtsP/0ZsqPmc/lPbTbfWkUkwKoOv
+FvAS5moRAPEq1k5mbH3DHGuu+eRTHiCWPBuMoib9IBs+dq+5l/7mzK54/AG4hKCu
+G/dt4eYbL1aNebXL8CDMWvXnySEiNoh+3LlaG09GWEoQTnDk9obhWVaA0BW3aGwl
+rXnYv0QXfIrbVuWTyTkqWpq8aPBclJlLECoTotG7zAL1D8OCm7ExZCwlS+CzyOcK
+ua+w2t1NH4TfMubwxRt1C8hlepmt71dYr9XqfF7JrB5VtD2+T1j3r7JjlM6KbjNp
+oeTiPcmoOb7Iyr16BaYW7Mnr/GxamdQYcEchfhf6+E784WdpKYwH7iuaGA/7VQcS
+u5sp9vpL0BPpr3QOWwsEtFr8Ri7Rb4a7UP3lZYQg2h42w9rbkbLN4l3gqoaKXq9i
+FCNrvracI5FZyPi6/MnYNhJk9BihvPZjaifuev/Dl+AobnJgJZKDnq8R0uS9D6rL
+ZGFlbL4mqiG9ZF1i3H3QAZNbW8QVdromYmc3c+YJoQR2fyJZVhkQ3xqbBymhWAO4
+HToU0cy/TuAHiNFfGNiN6S89TwWAhfEtVRNyEoLAsko4nABtaFCbWOjbMYBD+KOC
+6A6vpM54h6K9cuo2+nz4h3NYvxfFD1MDg1m8elGjhDvtTg7zqYYmsxc9G6PXgftT
+j+fgyf4dML6xSUJZjnEI
+=ZRXz
+-----END PGP SIGNATURE-----
+
+--NzB8fVQJ5HfG6fxh--
