@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8710-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 99468 invoked by alias); 8 Mar 2017 16:04:07 -0000
+Return-Path: <cygwin-patches-return-8711-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 76581 invoked by alias); 10 Mar 2017 10:33:10 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,90 +9,133 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 99447 invoked by uid 89); 8 Mar 2017 16:04:05 -0000
+Received: (qmail 76550 invoked by uid 89); 10 Mar 2017 10:33:08 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-110.6 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=Hx-languages-length:952, D*org.uk, H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
-X-HELO: drew.franken.de
-Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 08 Mar 2017 16:04:03 +0000
-Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id 672A0721E280C	for <cygwin-patches@cygwin.com>; Wed,  8 Mar 2017 17:04:00 +0100 (CET)
-Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id C8A685E04C1	for <cygwin-patches@cygwin.com>; Wed,  8 Mar 2017 17:03:59 +0100 (CET)
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id AC590A804A7; Wed,  8 Mar 2017 17:03:59 +0100 (CET)
-Date: Wed, 08 Mar 2017 16:04:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-24.5 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.2 spammy=subsequently, owning, 4237, concurrency
+X-HELO: smtp.salomon.at
+Received: from smtp.salomon.at (HELO smtp.salomon.at) (193.186.16.13) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 10 Mar 2017 10:33:05 +0000
+Received: from samail03.wamas.com ([172.28.33.235] helo=mailhost.salomon.at)	by smtp.salomon.at with esmtps (UNKNOWN:DHE-RSA-AES256-SHA:256)	(Exim 4.80.1)	(envelope-from <michael.haubenwallner@ssi-schaefer.com>)	id 1cmHr4-00041D-9F; Fri, 10 Mar 2017 11:33:03 +0100
+Received: from s01en24.wamas.com ([172.28.41.101] helo=s01en24)	by mailhost.salomon.at with smtp (Exim 4.77)	(envelope-from <michael.haubenwallner@ssi-schaefer.com>)	id 1cmHr3-00072I-5w; Fri, 10 Mar 2017 11:33:02 +0100
+Received: by s01en24 (sSMTP sendmail emulation); Fri, 10 Mar 2017 11:33:01 +0100
+From: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Implement dladdr() (partially)
-Message-ID: <20170308160359.GB17544@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20170308142442.44824-1-jon.turney@dronecode.org.uk>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="/04w6evG8XlLl3ft"
-Content-Disposition: inline
-In-Reply-To: <20170308142442.44824-1-jon.turney@dronecode.org.uk>
-User-Agent: Mutt/1.7.1 (2016-10-04)
-X-SW-Source: 2017-q1/txt/msg00051.txt.bz2
+Cc: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
+Subject: [PATCH] forkables: hardlink without WRITE_ATTRIBUTES first
+Date: Fri, 10 Mar 2017 10:33:00 -0000
+Message-Id: <20170310103254.5513-1-michael.haubenwallner@ssi-schaefer.com>
+X-SW-Source: 2017-q1/txt/msg00052.txt.bz2
 
+When the current process has renamed (to bin) a readonly dll, we get
+STATUS_TRANSACTION_NOT_ACTIVE for unknown reason when subsequently
+creating the forkable hardlink. A workaround is to open the original
+file with FILE_WRITE_ATTRIBUTES access, but that fails with permission
+denied for users not owning the original file.
 
---/04w6evG8XlLl3ft
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1006
+* forkable.cc (dll::create_forkable): Retry hardlink creation using the
+original file's handle opened with FILE_WRITE_ATTRIBUTES access when the
+first attempt fails with STATUS_TRANSACTION_NOT_ACTIVE.
+---
+ winsup/cygwin/forkable.cc | 72 +++++++++++++++++++++++++++++++----------------
+ 1 file changed, 48 insertions(+), 24 deletions(-)
 
-On Mar  8 14:24, Jon Turney wrote:
-> Note that this always returns with dli_sname and dli_saddr set to NULL,
-> indicating no symbol matching addr could be found.
->=20
-> Signed-off-by: Jon Turney <jon.turney@dronecode.org.uk>
-> ---
->=20
-> Notes:
->     Mesa 17.1 will want to use dladdr() in order to use the mtime of a lo=
-adable
->     module to control the validity of a cache, and this implementation su=
-ffices
->     for that purpose (not that this caching is implemented for llvmpipe a=
-t the
->     moment)
->=20
->  winsup/cygwin/common.din      |  1 +
->  winsup/cygwin/dlfcn.cc        | 34 ++++++++++++++++++++++++++++++++++
->  winsup/cygwin/include/dlfcn.h | 18 ++++++++++++++++++
->  winsup/doc/posix.xml          |  4 ++++
->  4 files changed, 57 insertions(+)
-
-Thwe API minor version bump is missing.  With this addition, please apply.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---/04w6evG8XlLl3ft
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJYwCtvAAoJEPU2Bp2uRE+gusgP/A1KMkoCTDHSBMWw/ie2tE63
-dP6TbpgSywzjOmSHljxNA6jpDeCwxXqcs2513FvuboZVk7oPxRuzrxtS2GvDbObz
-3q9MhIj1xRoWxC8CahFs4zsEPKwUfjm4XiCJvXJyj3i+CUTuyb8gv/EMZQl3k91K
-d5IFXpdbj5hb88fnXp7rrQnJQkRHliD53njeqtdnmuRUfjYa5gfvYcUJUKXznzEH
-/YPQNE0SVl32ZS7ruwi51lXnIory515jIRthfTTInNAtlpnDoxr2hU37ucKGg5c+
-aLL9rvt5xn81+/1vGVFxJxxdyFBVuZ3s3ad6vlRAnDwM/47kzQ2vObQFCZvnHhMr
-ul6i8XLaN9Ex2kfCCBPQEWLUMublEeTog50zedd/oQZBBdj3+HZf+Ysp3ltdoyJb
-/NTm4JQTg4UBZxCZkql3y/ng3LcMZxArA8sfWnV5ZV+g5yoqvyO6XLGzL+MTsPWw
-dswWQ9yYRiIdhvauFJuXt5gznwQ97KH3qVybwpKqZWyrS0YIF4Nay5LYybdtZvbK
-KQLd4RNR+CVYp/60z8EyzJA3fqGn7qJhZ+oTWyFDV29yAt9OoGAPciaqfxIftmqR
-457NHvoO7zpXRp/YtwnzH1I64GQxyyaudnGXHFhIJNxDBNl2PWTN1SHM2dSDEMbE
-+UPa9Ok7FQ3tSQwrkRBW
-=Gspk
------END PGP SIGNATURE-----
-
---/04w6evG8XlLl3ft--
+diff --git a/winsup/cygwin/forkable.cc b/winsup/cygwin/forkable.cc
+index 2cb5e73..ec51ebf 100644
+--- a/winsup/cygwin/forkable.cc
++++ b/winsup/cygwin/forkable.cc
+@@ -423,7 +423,14 @@ dll::nominate_forkable (PCWCHAR dirx_name)
+ }
+ 
+ /* Create the nominated hardlink for one indivitual dll,
+-   inside another subdirectory when dynamically loaded. */
++   inside another subdirectory when dynamically loaded.
++
++   We've not found a performant way yet to protect fork against
++   updates to main executables and/or dlls that do not reside on
++   the same NTFS filesystem as the <cygroot>/var/run/cygfork/
++   directory.  But as long as the main executable can be hardlinked,
++   dll redirection works for any other hardlink-able dll, while
++   non-hardlink-able dlls are used from their original location. */
+ bool
+ dll::create_forkable ()
+ {
+@@ -465,14 +472,6 @@ dll::create_forkable ()
+   if (devhandle == INVALID_HANDLE_VALUE)
+     return false; /* impossible */
+ 
+-  HANDLE fh = dll_list::ntopenfile ((PCWCHAR)&fii.IndexNumber, NULL,
+-				    FILE_OPEN_BY_FILE_ID,
+-				    FILE_WRITE_ATTRIBUTES,
+-				    devhandle);
+-  NtClose (devhandle);
+-  if (fh == INVALID_HANDLE_VALUE)
+-    return false; /* impossible */
+-
+   int ntlen = wcslen (ntname);
+   int bufsize = sizeof (FILE_LINK_INFORMATION) + ntlen * sizeof (*ntname);
+   PFILE_LINK_INFORMATION pfli = (PFILE_LINK_INFORMATION) alloca (bufsize);
+@@ -483,22 +482,47 @@ dll::create_forkable ()
+   pfli->ReplaceIfExists = FALSE; /* allow concurrency */
+   pfli->RootDirectory = NULL;
+ 
+-  IO_STATUS_BLOCK iosb;
+-  NTSTATUS status = NtSetInformationFile (fh, &iosb, pfli, bufsize,
+-					  FileLinkInformation);
+-  NtClose (fh);
+-  debug_printf ("%y = NtSetInformationFile (%p, FileLink %W, iosb.Status %y)",
+-		status, fh, pfli->FileName, iosb.Status);
+-  if (NT_SUCCESS (status) || status == STATUS_OBJECT_NAME_COLLISION)
+-    /* We've not found a performant way yet to protect fork against updates
+-       to main executables and/or dlls that do not reside on the same NTFS
+-       filesystem as the <cygroot>/var/run/cygfork/ directory.
+-       But as long as the main executable can be hardlinked, dll redirection
+-       works for any other hardlink-able dll, while non-hardlink-able dlls
+-       are used from their original location. */
+-    return true;
++  /* When we get STATUS_TRANSACTION_NOT_ACTIVE from hardlink creation,
++     the current process has renamed the file while it had the readonly
++     attribute.  The rename() function uses a transaction for combined
++     writeable+rename action if possible to provide atomicity.
++     Although the transaction is closed afterwards, creating a hardlink
++     for this file requires the FILE_WRITE_ATTRIBUTES access, for unknown
++     reason.  On the other hand, always requesting FILE_WRITE_ATTRIBUTES
++     would fail for users that do not own the original file. */
++  bool ret = false;
++  int access = 0; /* first attempt */
++  while (true)
++    {
++      HANDLE fh = dll_list::ntopenfile ((PCWCHAR)&fii.IndexNumber, NULL,
++					FILE_OPEN_BY_FILE_ID,
++					access,
++					devhandle);
++      if (fh == INVALID_HANDLE_VALUE)
++	break; /* impossible */
++
++      IO_STATUS_BLOCK iosb;
++      NTSTATUS status = NtSetInformationFile (fh, &iosb, pfli, bufsize,
++					      FileLinkInformation);
++      NtClose (fh);
++      debug_printf ("%y = NtSetInformationFile (%p, FileLink %W, iosb.Status %y)",
++		    status, fh, pfli->FileName, iosb.Status);
++      if (NT_SUCCESS (status) || status == STATUS_OBJECT_NAME_COLLISION)
++	{
++	  ret = true;
++	  break;
++	}
++
++      if (status != STATUS_TRANSACTION_NOT_ACTIVE ||
++	  access == FILE_WRITE_ATTRIBUTES)
++	break;
++
++      access = FILE_WRITE_ATTRIBUTES; /* second attempt */
++    }
++
++  NtClose (devhandle);
+ 
+-  return false;
++  return ret;
+ }
+ 
+ /* return the number of characters necessary to store one forkable name */
+-- 
+2.10.2
