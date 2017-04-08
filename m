@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8733-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 121675 invoked by alias); 6 Apr 2017 16:18:20 -0000
+Return-Path: <cygwin-patches-return-8734-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 38597 invoked by alias); 8 Apr 2017 12:55:54 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,88 +9,62 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 121662 invoked by uid 89); 6 Apr 2017 16:18:19 -0000
+Received: (qmail 38486 invoked by uid 89); 8 Apr 2017 12:55:53 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-101.8 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=Hx-languages-length:867, H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
-X-HELO: drew.franken.de
-Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 06 Apr 2017 16:18:17 +0000
-Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id 6E2C3721E281A	for <cygwin-patches@cygwin.com>; Thu,  6 Apr 2017 18:18:13 +0200 (CEST)
-Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id 547565E04D6	for <cygwin-patches@cygwin.com>; Thu,  6 Apr 2017 18:18:12 +0200 (CEST)
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 35FFAA80BBF; Thu,  6 Apr 2017 18:18:12 +0200 (CEST)
-Date: Thu, 06 Apr 2017 16:18:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-23.9 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.2 spammy=Hx-languages-length:1333, HTo:U*cygwin-patches
+X-HELO: rgout0707.bt.lon5.cpcloud.co.uk
+Received: from rgout0707.bt.lon5.cpcloud.co.uk (HELO rgout0707.bt.lon5.cpcloud.co.uk) (65.20.0.147) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sat, 08 Apr 2017 12:55:51 +0000
+X-OWM-Source-IP: 86.179.113.198 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-Junkmail-Premium-Raw: score=7/50,refid=2.7.2:2017.4.8.123315:17:7.944,ip=,rules=__HAS_FROM, __TO_MALFORMED_2, __TO_NO_NAME, __HAS_CC_HDR, __CC_NAME, __CC_NAME_DIFF_FROM_ACC, __HAS_MSGID, __SANE_MSGID, __HAS_X_MAILER, __FROM_DOMAIN_IN_ANY_CC1, __ANY_URI, __URI_NO_WWW, __STOCK_PHRASE_7, __NO_HTML_TAG_RAW, BODY_SIZE_1300_1399, BODYTEXTP_SIZE_3000_LESS, __MIME_TEXT_P1, __MIME_TEXT_ONLY, __URI_NS, HTML_00_01, HTML_00_10, BODY_SIZE_5000_LESS, __FROM_DOMAIN_IN_RCPT, __CC_REAL_NAMES, MULTIPLE_REAL_RCPTS, LEGITIMATE_SIGNS, BODY_SIZE_2000_LESS, __MIME_TEXT_P, NO_URI_HTTPS, BODY_SIZE_7000_LESS
+Received: from localhost.localdomain (86.179.113.198) by rgout07.bt.lon5.cpcloud.co.uk (9.0.019.13-1) (authenticated as jonturney@btinternet.com)        id 58BFF27E0354377A; Sat, 8 Apr 2017 13:55:51 +0100
+From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
-Subject: Re: Remove "function" from line to avoid dash objecting to this bash-ism
-Message-ID: <20170406161812.GA1554@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <Pine.BSF.4.63.1704052252100.72447@m0.truegem.net>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="82I3+IH0IqGh5yIs"
-Content-Disposition: inline
-In-Reply-To: <Pine.BSF.4.63.1704052252100.72447@m0.truegem.net>
-User-Agent: Mutt/1.8.0 (2017-02-23)
-X-SW-Source: 2017-q2/txt/msg00004.txt.bz2
+Cc: Jon Turney <jon.turney@dronecode.org.uk>
+Subject: [PATCH] Avoid decimal point localization in /proc/loadavg
+Date: Sat, 08 Apr 2017 12:55:00 -0000
+Message-Id: <20170408125537.15728-1-jon.turney@dronecode.org.uk>
+X-SW-Source: 2017-q2/txt/msg00005.txt.bz2
 
+Explicitly format the contents of /proc/loadavg to avoid the decimal point
+getting localized according to LC_NUMERIC. Using anything other than '.'
+breaks top.
 
---82I3+IH0IqGh5yIs
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 848
+Signed-off-by: Jon Turney <jon.turney@dronecode.org.uk>
+---
+ winsup/cygwin/fhandler_proc.cc | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-On Apr  5 23:00, Mark Geisert wrote:
-> I've been home-building the last few versions of Cygwin DLL on Windows wh=
-ere
-> I routinely have dash set as my non-interactive shell.  The only issue I =
-run
-> into is this one occurrence of the 'function' keyword in
-> winsup/cygwin/mkvers.sh.  This patch gets rid of the keyword.
->=20
-> FWIW using dash instead of bash has the build running 5%-10% faster.
-> Cheers,
->=20
-> ..mark
->=20
-> > From fb9db7a75c7e391f451cb1df3c1e8463ef4c7bf3 Mon Sep 17 00:00:00 2001
-> From: Mark Geisert <mark@maxrnd.com>
-> Date: Wed, 5 Apr 2017 22:20:09 -0700
-> Subject: [PATCH] Remove "function" from line to avoid dash objecting to t=
-his
-> bash-ism.
-
-Applied.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---82I3+IH0IqGh5yIs
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJY5mpEAAoJEPU2Bp2uRE+gr0MP/2gjIH5lWI6g6aQntnKINHTA
-RPjUOIndLKm6BimkDNp9o87eCQdCfKKXq5K3YKh22OSJP5twmw1Q2bcXD9HMCKgI
-QdfyLBARsqt56GjKLroDWUa1EqOJylCdof6rpUGJO6yuVwLg8238k7j8tNi/bwvO
-IEEzjTi0EI7rmXa8A0PwnbW0TBglkJSqJFhkJZf7MlSOhReRGKZFgtTtnvCnBNQs
-o3PvjzM/5dNa9UD539AwIPUe8NupnWGC/rHBJqvAjw8Snp5tF5cR4ucoqhXGJlyF
-rPqCIriBkwab+vXbpRFSyKHQ0QRNEqpqIt6TH4jEqlZjny/YlHqUiKhjafDyc+1z
-muRUSVWwLJok2mO6XYM/EcU06qQOdRcildL3JSMVMxTP4p5UDz415LzSr2CS5or6
-As3Dduz/QYLFBxilnTgumxSO3WhzZwJt4WugvNfyb810xViHqSr22Um76MWjZy0w
-/59seyhctntyPlEMFhTi/DKcrUfwnVFlIknpfNy+FQzNP1T+7RNUxHFJOusgbdUD
-5Gkj2oEOUyb+qcYS/32g1CGHGykSwwLNl5wvqWoMxQXWdBrOsCnD/ZrSdPGz/wlM
-Q9CSH9v4fdKY1631P5QzR+2tLOX98Vo05mMmHVCF8sDVtsF6K6VgHSYtgGLBuNL1
-glFjvDDEbVp5S6JbqxJW
-=YwW6
------END PGP SIGNATURE-----
-
---82I3+IH0IqGh5yIs--
+diff --git a/winsup/cygwin/fhandler_proc.cc b/winsup/cygwin/fhandler_proc.cc
+index a7e816f..ad367e4 100644
+--- a/winsup/cygwin/fhandler_proc.cc
++++ b/winsup/cygwin/fhandler_proc.cc
+@@ -30,6 +30,7 @@ details. */
+ #include <wctype.h>
+ #include "cpuid.h"
+ #include "mount.h"
++#include <math.h>
+ 
+ #define _COMPILING_NEWLIB
+ #include <dirent.h>
+@@ -432,10 +433,14 @@ format_proc_loadavg (void *, char *&destbuf)
+   double loadavg[3] = { 0.0, 0.0, 0.0 };
+   getloadavg (loadavg, 3);
+ 
++#define HUNDRETHS(l) (int)((l - floor(l))*100)
++
+   destbuf = (char *) crealloc_abort (destbuf, 48);
+-  return sprintf (destbuf, "%.2f %.2f %.2f %u/%u\n",
+-		  loadavg[0], loadavg[1], loadavg[2], running,
+-		  (unsigned int)pids.npids);
++  return __small_sprintf (destbuf, "%u.%02u %u.%02u %u.%02u %u/%u\n",
++			  (int)loadavg[0], HUNDRETHS(loadavg[0]),
++			  (int)loadavg[1], HUNDRETHS(loadavg[1]),
++			  (int)loadavg[2], HUNDRETHS(loadavg[2]),
++			  running, (unsigned int)pids.npids);
+ }
+ 
+ static off_t
+-- 
+2.8.3
