@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8734-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 38597 invoked by alias); 8 Apr 2017 12:55:54 -0000
+Return-Path: <cygwin-patches-return-8735-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 109824 invoked by alias); 8 Apr 2017 16:18:41 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,62 +9,38 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 38486 invoked by uid 89); 8 Apr 2017 12:55:53 -0000
+Received: (qmail 109804 invoked by uid 89); 8 Apr 2017 16:18:40 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-23.9 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.2 spammy=Hx-languages-length:1333, HTo:U*cygwin-patches
-X-HELO: rgout0707.bt.lon5.cpcloud.co.uk
-Received: from rgout0707.bt.lon5.cpcloud.co.uk (HELO rgout0707.bt.lon5.cpcloud.co.uk) (65.20.0.147) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sat, 08 Apr 2017 12:55:51 +0000
-X-OWM-Source-IP: 86.179.113.198 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-Junkmail-Premium-Raw: score=7/50,refid=2.7.2:2017.4.8.123315:17:7.944,ip=,rules=__HAS_FROM, __TO_MALFORMED_2, __TO_NO_NAME, __HAS_CC_HDR, __CC_NAME, __CC_NAME_DIFF_FROM_ACC, __HAS_MSGID, __SANE_MSGID, __HAS_X_MAILER, __FROM_DOMAIN_IN_ANY_CC1, __ANY_URI, __URI_NO_WWW, __STOCK_PHRASE_7, __NO_HTML_TAG_RAW, BODY_SIZE_1300_1399, BODYTEXTP_SIZE_3000_LESS, __MIME_TEXT_P1, __MIME_TEXT_ONLY, __URI_NS, HTML_00_01, HTML_00_10, BODY_SIZE_5000_LESS, __FROM_DOMAIN_IN_RCPT, __CC_REAL_NAMES, MULTIPLE_REAL_RCPTS, LEGITIMATE_SIGNS, BODY_SIZE_2000_LESS, __MIME_TEXT_P, NO_URI_HTTPS, BODY_SIZE_7000_LESS
-Received: from localhost.localdomain (86.179.113.198) by rgout07.bt.lon5.cpcloud.co.uk (9.0.019.13-1) (authenticated as jonturney@btinternet.com)        id 58BFF27E0354377A; Sat, 8 Apr 2017 13:55:51 +0100
-From: Jon Turney <jon.turney@dronecode.org.uk>
+X-Spam-SWARE-Status: No, score=-1.4 required=5.0 tests=AWL,BAYES_00,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_SPAM,SPF_PASS autolearn=no version=3.3.2 spammy=Hx-languages-length:346, HTo:U*cygwin-patches
+X-HELO: mail-io0-f172.google.com
+Received: from mail-io0-f172.google.com (HELO mail-io0-f172.google.com) (209.85.223.172) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sat, 08 Apr 2017 16:18:39 +0000
+Received: by mail-io0-f172.google.com with SMTP id b140so64710202iof.1        for <cygwin-patches@cygwin.com>; Sat, 08 Apr 2017 09:18:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20161025;        h=x-gm-message-state:subject:to:references:from:message-id:date         :user-agent:mime-version:in-reply-to:content-transfer-encoding;        bh=DQpeq19Urh2l+5wjQ/I79E2Q0qqxtDqBJthhWM4kmGU=;        b=dIzWPxMBN8XKK/BuS8FRhJEECWasNBAmwDU1kS6zLmuHLW7/cRwvkY5VjT30AC2wea         tDy39+YhcPQdYnWHpCOytaiKMywsvRup96XvgE7KWLdknK+/33Kl5MpWzIzvmfG5Kb30         Hv6LtXpBVsk6olJWhkkT6wOifnzhLIeTSP95kX1sF0qux81c8M9mPW3FFnvZW2sUVs2M         2nOOm0n/1mvt5SspqoeY3RejXvoZYN7LQZzIGrTKllk4jMbBxt58ueEWh9EmjB+OkGNl         y6wGxLfL2YewqU2DvUmd+v7P7RXSs15cP+IdKzQY14sfMBU2z4g5mzgklqOxqrRWQEaU         gInQ==
+X-Gm-Message-State: AN3rC/5fcGCGG89b07o63jXyS+eD4KnHhUdxHRc98NlD70orHa0GjCptoplEpiQfC3xehg==
+X-Received: by 10.107.6.6 with SMTP id 6mr6105747iog.78.1491668319043;        Sat, 08 Apr 2017 09:18:39 -0700 (PDT)
+Received: from [192.168.0.6] (d27-96-48-76.nap.wideopenwest.com. [96.27.76.48])        by smtp.gmail.com with ESMTPSA id y203sm3978384iod.11.2017.04.08.09.18.38        for <cygwin-patches@cygwin.com>        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);        Sat, 08 Apr 2017 09:18:38 -0700 (PDT)
+Subject: Re: [PATCH] Avoid decimal point localization in /proc/loadavg
 To: cygwin-patches@cygwin.com
-Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH] Avoid decimal point localization in /proc/loadavg
-Date: Sat, 08 Apr 2017 12:55:00 -0000
-Message-Id: <20170408125537.15728-1-jon.turney@dronecode.org.uk>
-X-SW-Source: 2017-q2/txt/msg00005.txt.bz2
+References: <20170408125537.15728-1-jon.turney@dronecode.org.uk>
+From: cyg Simple <cygsimple@gmail.com>
+Message-ID: <8a034d22-0b06-c2e0-34ed-fa607ec90257@gmail.com>
+Date: Sat, 08 Apr 2017 16:18:00 -0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101 Thunderbird/45.8.0
+MIME-Version: 1.0
+In-Reply-To: <20170408125537.15728-1-jon.turney@dronecode.org.uk>
+Content-Type: text/plain; charset=windows-1252
+Content-Transfer-Encoding: 8bit
+X-IsSubscribed: yes
+X-SW-Source: 2017-q2/txt/msg00006.txt.bz2
 
-Explicitly format the contents of /proc/loadavg to avoid the decimal point
-getting localized according to LC_NUMERIC. Using anything other than '.'
-breaks top.
+On 4/8/2017 8:55 AM, Jon Turney wrote:
+> Explicitly format the contents of /proc/loadavg to avoid the decimal point
+> getting localized according to LC_NUMERIC. Using anything other than '.'
+> breaks top.
+> 
 
-Signed-off-by: Jon Turney <jon.turney@dronecode.org.uk>
----
- winsup/cygwin/fhandler_proc.cc | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+Would it be more prudent to update top to be locale aware?
 
-diff --git a/winsup/cygwin/fhandler_proc.cc b/winsup/cygwin/fhandler_proc.cc
-index a7e816f..ad367e4 100644
---- a/winsup/cygwin/fhandler_proc.cc
-+++ b/winsup/cygwin/fhandler_proc.cc
-@@ -30,6 +30,7 @@ details. */
- #include <wctype.h>
- #include "cpuid.h"
- #include "mount.h"
-+#include <math.h>
- 
- #define _COMPILING_NEWLIB
- #include <dirent.h>
-@@ -432,10 +433,14 @@ format_proc_loadavg (void *, char *&destbuf)
-   double loadavg[3] = { 0.0, 0.0, 0.0 };
-   getloadavg (loadavg, 3);
- 
-+#define HUNDRETHS(l) (int)((l - floor(l))*100)
-+
-   destbuf = (char *) crealloc_abort (destbuf, 48);
--  return sprintf (destbuf, "%.2f %.2f %.2f %u/%u\n",
--		  loadavg[0], loadavg[1], loadavg[2], running,
--		  (unsigned int)pids.npids);
-+  return __small_sprintf (destbuf, "%u.%02u %u.%02u %u.%02u %u/%u\n",
-+			  (int)loadavg[0], HUNDRETHS(loadavg[0]),
-+			  (int)loadavg[1], HUNDRETHS(loadavg[1]),
-+			  (int)loadavg[2], HUNDRETHS(loadavg[2]),
-+			  running, (unsigned int)pids.npids);
- }
- 
- static off_t
 -- 
-2.8.3
+cyg Simple
