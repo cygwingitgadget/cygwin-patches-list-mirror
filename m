@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8749-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 51399 invoked by alias); 20 Apr 2017 08:45:47 -0000
+Return-Path: <cygwin-patches-return-8750-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 68804 invoked by alias); 20 Apr 2017 14:29:07 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,79 +9,91 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 51385 invoked by uid 89); 20 Apr 2017 08:45:47 -0000
+Received: (qmail 68774 invoked by uid 89); 20 Apr 2017 14:29:06 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-98.3 required=5.0 tests=AWL,BAYES_00,CYGWIN_OWNER_BODY,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=bounced, H*Ad:U*cygwin-patches, HTo:U*cygwin-patches, respond
-X-HELO: drew.franken.de
-Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 20 Apr 2017 08:45:45 +0000
-Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id 5D07D721E281E	for <cygwin-patches@cygwin.com>; Thu, 20 Apr 2017 10:45:43 +0200 (CEST)
-Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id 885385E049A	for <cygwin-patches@cygwin.com>; Thu, 20 Apr 2017 10:45:42 +0200 (CEST)
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 64C13A80C17; Thu, 20 Apr 2017 10:45:42 +0200 (CEST)
-Date: Thu, 20 Apr 2017 08:45:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-24.0 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.2 spammy=volunteers, archives, HX-Junkmail-Premium-Raw:sk:2017.4., Intent
+X-HELO: rgout01.bt.lon5.cpcloud.co.uk
+Received: from rgout0107.bt.lon5.cpcloud.co.uk (HELO rgout01.bt.lon5.cpcloud.co.uk) (65.20.0.127) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 20 Apr 2017 14:29:04 +0000
+X-OWM-Source-IP: 86.141.129.28 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-Junkmail-Premium-Raw: score=8/50,refid=2.7.2:2017.4.19.110016:17:8.707,ip=,rules=NO_URI_FOUND, NO_CTA_URI_FOUND, NO_MESSAGE_ID, NO_URI_HTTPS, TO_MALFORMED
+Received: from localhost.localdomain (86.141.129.28) by rgout01.bt.lon5.cpcloud.co.uk (9.0.019.13-1) (authenticated as jonturney@btinternet.com)        id 58F62BE30049DD01; Thu, 20 Apr 2017 15:29:03 +0100
+From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2] strace: Fix "over-optimization" flaw in strace.
-Message-ID: <20170420084542.GA16686@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20170418100400.GA29220@calimero.vinschen.de> <20170419160602.3952-1-daniel.santos@pobox.com> <20170419184813.GH30642@calimero.vinschen.de> <c124d390-11ce-7951-2f73-8a8ad21408da@pobox.com> <cbc8f410-dc59-8427-f221-ab43fb8ff0ca@pobox.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="x+6KMIRAuhnl3hBn"
-Content-Disposition: inline
-In-Reply-To: <cbc8f410-dc59-8427-f221-ab43fb8ff0ca@pobox.com>
-User-Agent: Mutt/1.8.0 (2017-02-23)
-X-SW-Source: 2017-q2/txt/msg00020.txt.bz2
+Cc: Jon Turney <jon.turney@dronecode.org.uk>
+Subject: [PATCH] Update URLs for Cygwin packaging information
+Date: Thu, 20 Apr 2017 14:29:00 -0000
+Message-Id: <20170420142831.329304-1-jon.turney@dronecode.org.uk>
+X-SW-Source: 2017-q2/txt/msg00021.txt.bz2
 
+Also:
+Remove obsolete reference to g-b-s
+Remove mention of ancient pre-invisiconsole behaviour of setup scripts
 
---x+6KMIRAuhnl3hBn
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 692
+Signed-off-by: Jon Turney <jon.turney@dronecode.org.uk>
+---
+ winsup/doc/faq-programming.xml | 11 ++++-------
+ winsup/doc/faq-using.xml       |  2 +-
+ winsup/doc/setup-net.xml       |  6 +-----
+ 3 files changed, 6 insertions(+), 13 deletions(-)
 
-On Apr 19 17:24, Daniel Santos wrote:
-> On 04/19/2017 05:10 PM, Daniel Santos wrote:
-> > Thanks. I hope this message goes through. Earlier when I tried to
-> > respond with both you and cygwin-patches in the To: header it bounced. I
-> > emailed cygwin-owner@cygwin.com about this, is that the right address
-> > for mailing list problems?
->=20
-> Actually, any email I send with corinna-cygwin@cygwin.com in the To header
-> is bounced.
-
-Yes, it's a write-only mail address.  Please send stuff only to the
-respective mailing list.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---x+6KMIRAuhnl3hBn
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJY+HU2AAoJEPU2Bp2uRE+gKukP/0e11YY7yo6RoLOma75eEMqO
-gVtmXgiFx9eBmSTzFHoqo/O+l3P7cJZNNTMSKciLxSrWgMJuabP6okKkbg0CEsff
-BnrgTuZqOdeSEc9/GmBGYjz3ipBKw1C/VrDfrgRetsFJ9D/nd+iCPcgu0nThujDk
-wxsa+pz3ugqlbSXMLTzHFBoB0sMgHUzUo+D9OSH2rphRj401NIE+Q/A5yZXuQLMD
-DXEIzezTKnL81emokEwLf8+pWGLHcyFOOB8I8zahKKxtrf0xWKNWt/2WIJudPOsq
-KRbxDBxemwAj7K9sYrVv1z5Jr/q3RcFNHsC363+Y+ISdyye9YTzasJqAQs2oXO5d
-M7lLhHBRTMaU5lxpnu41mjOHnz/G1IILZi0dXtBSmu64Doies8JzI0GiPIyYZdqG
-32n4q/E3g9jf5SFEwFiTqbPqV81ZC3GoRvxYj3/Tkqf4vOCpixEzWkd/QZlHupgg
-rrry1EpEdzr41j6GosSa4akD3+yuz1MU3Jsw4WMY6VJYtkKB+J3uwPh0RgXu6ws7
-hF2VyUnBYjknJvxScgFJg8EASYFmYQgo8E3TiKQgVRNVxX429Qd4/rCUfcWMAQwQ
-tNx7MaFIuKe2OrWpNS6GSn8E8pFfCC3dwjJ24HWCvhCLGwdH90yibdkQBp3BkApM
-/3Pe/C+ynAON3dVvmx81
-=p84g
------END PGP SIGNATURE-----
-
---x+6KMIRAuhnl3hBn--
+diff --git a/winsup/doc/faq-programming.xml b/winsup/doc/faq-programming.xml
+index 5234414..c0ddd79 100644
+--- a/winsup/doc/faq-programming.xml
++++ b/winsup/doc/faq-programming.xml
+@@ -15,18 +15,15 @@ volunteers to prepare and maintain packages, because the priority of the
+ Cygwin Team is Cygwin itself.
+ </para>
+ <para>The Cygwin Package Contributor's Guide at
+-<ulink url="https://cygwin.com/setup.html"/> details everything you need to know
+-about being a package maintainer. The quickest way to get started is to
+-read the <emphasis>Initial packaging procedure, script-based</emphasis> section on
+-that page.  The <literal>generic-build-script</literal> found there works well for
+-most packages. 
++<ulink url="https://cygwin.com/packages.html"/> details everything you need to know
++about Cygwin packaging.
+ </para>
+ <para>For questions about package maintenance, use the cygwin-apps mailing
+ list (start at <ulink url="https://cygwin.com/lists.html"/>) <emphasis>after</emphasis>
+ searching and browsing the cygwin-apps list archives, of course.  Be
+ sure to look at the <emphasis>Submitting a package</emphasis> checklist at
+-<ulink url="https://cygwin.com/setup.html"/> before sending an ITP (Intent To
+-Package) email to cygwin-apps.
++<ulink url="https://cygwin.com/packaging-contributors-guide.html#submitting"/>
++before sending an ITP (Intent To Package) email to cygwin-apps.
+ </para>
+ <para>You should also announce your intentions to the general cygwin list, in
+ case others were thinking the same thing.
+diff --git a/winsup/doc/faq-using.xml b/winsup/doc/faq-using.xml
+index bb26b83..c62e039 100644
+--- a/winsup/doc/faq-using.xml
++++ b/winsup/doc/faq-using.xml
+@@ -610,7 +610,7 @@ installed distribution.
+ <para>Probably because there is nobody willing or able to maintain it.  It
+ takes time, and the priority for the Cygwin Team is the Cygwin package.
+ The rest is a volunteer effort.  Want to contribute?  See
+-<ulink url="https://cygwin.com/setup.html"/>.
++<ulink url="https://cygwin.com/packaging.html"/>.
+ </para>
+ </answer></qandaentry>
+ 
+diff --git a/winsup/doc/setup-net.xml b/winsup/doc/setup-net.xml
+index c66fe1f..211bbed 100644
+--- a/winsup/doc/setup-net.xml
++++ b/winsup/doc/setup-net.xml
+@@ -254,11 +254,7 @@ in <filename>/etc/passwd</filename>.
+ <sect2 id="setup-postinstall"><title>Post-Install Scripts</title>
+ <para>
+ Last of all, <command>setup.exe</command> will run any post-install
+-scripts to finish correctly setting up installed packages. Since each
+-script is run separately, several windows may pop up. If you are 
+-interested in what is being done, see the Cygwin Package Contributor's
+-Guide at <ulink 
+-url="https://cygwin.com/setup.html"/>
++scripts to finish correctly setting up installed packages.
+ When the last post-install script is completed, <command>setup.exe</command> 
+ will display a box announcing the completion. A few packages, such as
+ the OpenSSH server, require some manual site-specific configuration. 
+-- 
+2.8.3
