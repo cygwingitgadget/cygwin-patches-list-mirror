@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8754-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 96734 invoked by alias); 22 Apr 2017 12:29:23 -0000
+Return-Path: <cygwin-patches-return-8755-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 14938 invoked by alias); 22 Apr 2017 12:51:06 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,107 +9,128 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 96714 invoked by uid 89); 22 Apr 2017 12:29:22 -0000
+Received: (qmail 14918 invoked by uid 89); 22 Apr 2017 12:51:05 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-106.4 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_1,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=rights, business, advised, reserved
-X-HELO: drew.franken.de
-Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sat, 22 Apr 2017 12:29:20 +0000
-Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id B9F78721E280D	for <cygwin-patches@cygwin.com>; Sat, 22 Apr 2017 14:29:18 +0200 (CEST)
-Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id 1CDDE5E01E3	for <cygwin-patches@cygwin.com>; Sat, 22 Apr 2017 14:29:18 +0200 (CEST)
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 003C1A80C20; Sat, 22 Apr 2017 14:29:17 +0200 (CEST)
-Date: Sat, 22 Apr 2017 12:29:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-23.4 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE,RP_MATCHES_RCVD autolearn=ham version=3.3.2 spammy=H*MI:online, H*F:D*t-online.de, rw-r, H*M:online
+X-HELO: mailout11.t-online.de
+Received: from mailout11.t-online.de (HELO mailout11.t-online.de) (194.25.134.85) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sat, 22 Apr 2017 12:51:04 +0000
+Received: from fwd28.aul.t-online.de (fwd28.aul.t-online.de [172.20.26.133])	by mailout11.t-online.de (Postfix) with SMTP id 8FC4D426FFB5	for <cygwin-patches@cygwin.com>; Sat, 22 Apr 2017 14:51:03 +0200 (CEST)
+Received: from [192.168.2.101] (rwWkj-ZAgh5qes6fBCrotyxCIPTZEhXbhI00mU+bUOU0fwCG1gM8qI-OJVDh-5eZGX@[79.224.126.58]) by fwd28.t-online.de	with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)	esmtp id 1d1uV8-1oRcwq0; Sat, 22 Apr 2017 14:50:58 +0200
+From: Christian Franke <Christian.Franke@t-online.de>
+Subject: [PATCH] Fix stat.st_blocks for files compressed with CompactOS method
 To: cygwin-patches@cygwin.com
-Subject: Re: cygwin-doc html/ missing docbook.css and index dups cygwin-{api,ug-net}
-Message-ID: <20170422122917.GB26402@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <970c5445-007e-1817-3006-973e8e26b77a@SystematicSw.ab.ca> <20170419105814.GB19304@calimero.vinschen.de> <4d562b86-271a-9774-efd5-f1d1eecb1b93@SystematicSw.ab.ca> <0cb50b7b-1fc8-0af0-973a-205356825076@dronecode.org.uk> <dab8f805-5790-839f-25df-4b0574dd3ec8@SystematicSw.ab.ca> <20170422085909.GA31226@calimero.vinschen.de> <4b57d3a5-34bd-95f4-9a5c-a9ccebe10628@SystematicSw.ab.ca>
+Message-ID: <81896c1a-a5c8-1f96-c478-5e24f7c1eb56@t-online.de>
+Date: Sat, 22 Apr 2017 12:51:00 -0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0 SeaMonkey/2.49
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="cWoXeonUoKmBZSoM"
-Content-Disposition: inline
-In-Reply-To: <4b57d3a5-34bd-95f4-9a5c-a9ccebe10628@SystematicSw.ab.ca>
-User-Agent: Mutt/1.8.0 (2017-02-23)
-X-SW-Source: 2017-q2/txt/msg00025.txt.bz2
+Content-Type: multipart/mixed; boundary="------------344EAD49CB8EEB872F260558"
+X-IsSubscribed: yes
+X-SW-Source: 2017-q2/txt/msg00026.txt.bz2
+
+This is a multi-part message in MIME format.
+--------------344EAD49CB8EEB872F260558
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-length: 1174
+
+Cygwin 2.8.0 returns stat.st_blocks = 0 if a file is compressed with 
+CompactOS method (at least on Win10 1607):
+
+Testcase:
+
+$ ls -ls file
+280 -rw-r--r-- 1 ... ... 285363 Apr 22 13:52 file
+
+$ compact /c file
+...
+$ ls -ls file
+56 -rw-r--r-- 1 ... ... 285363 Apr 22 13:52 file
+
+$ compact /u file
+...
+$ compact /c /exe file
+...
+$ ls -ls file
+0 -rw-r--r-- 1 ... ... 285363 Apr 22 13:52 file
+
+This is because StandardInformation.AllocationSize is always 0 for 
+theses files. CompressedFileSize returns the correct value.
+
+This is likely related to the interesting method how these files are 
+encoded in the MFT:
+The default $DATA stream is a sparse stream with original size but no 
+allocated blocks.
+An alternate $DATA stream WofCompressedData contains the compressed data.
+An additional $REPARSE_POINT possibly marks this file a special and lets 
+accesses fail on older Windows releases (and on Linux, most current 
+forensic tools, ...).
+
+With the attached patch, stat.st_blocks work as expected:
+
+$ ls -ls file
+48 -rw-r--r-- 1 ... ... 285363 Apr 22 13:52 file
+
+The only drawback is an unnecessary FileCompressionInformation query for 
+sparse files with no blocks.
+
+Christian
 
 
---cWoXeonUoKmBZSoM
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 2150
+--------------344EAD49CB8EEB872F260558
+Content-Type: text/plain; charset=UTF-8;
+ name="cygwin-2.8-fix-st_blocks-for-compact-os.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="cygwin-2.8-fix-st_blocks-for-compact-os.patch"
+Content-length: 2855
 
-On Apr 22 03:30, Brian Inglis wrote:
-> On 2017-04-22 02:59, Corinna Vinschen wrote:
-> > But this is going to become part of the Cygwin repo (the cygwin-docs=20
-> > package is created from there), so I need a BSD copyright waiver
-> > from you. See https://cygwin.com/contrib.html and the CONTRIBUTORS
-> > file in the Cygwin repo:
-> > https://cygwin.com/git/?p=3Dnewlib-cygwin.git;f=3Dwinsup/CONTRIBUTORS;h=
-b=3DHEAD
->=20
-> All my previous and subsequent contributions to Cygwin and related projec=
-ts=20
-> are provided subject to the the 2-clause BSD licence as below:
->=20
-> Copyright (c) <YEAR>, <OWNER>
-> All rights reserved.
->=20
-> Redistribution and use in source and binary forms, with or without
-> modification, are permitted provided that the following conditions are
-> met:
->=20
-> 1. Redistributions of source code must retain the above copyright
->    notice, this list of conditions and the following disclaimer.
->=20
-> 2. Redistributions in binary form must reproduce the above copyright
->    notice, this list of conditions and the following disclaimer in the
->    documentation and/or other materials provided with the distribution.
->=20
-> THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS I=
-S"
-> AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-> IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-> ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
-> LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-> CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-> SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-> INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-> CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE
-> ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-> POSSIBILITY OF SUCH DAMAGE.
+QWx3YXlzIHJldHJpZXZlIEZpbGVDb21wcmVzc2lvbkluZm9ybWF0aW9uIGZv
+ciBub24tZW1wdHkKZmlsZXMgaWYgRmlsZVN0YW5kYXJkSW5mb3JtYXRpb24g
+cmV0dXJucyAwIGFsbG9jYXRlZCBibG9ja3MuClRoaXMgZml4ZXMgc3RhdC5z
+dF9ibG9ja3MgZm9yIGZpbGVzIGNvbXByZXNzZWQgd2l0aCBDb21wYWN0T1Mg
+bWV0aG9kLgoKU2lnbmVkLW9mZi1ieTogQ2hyaXN0aWFuIEZyYW5rZSA8ZnJh
+bmtlQGNvbXB1dGVyLm9yZz4KLS0tCiB3aW5zdXAvY3lnd2luL2ZoYW5kbGVy
+X2Rpc2tfZmlsZS5jYyB8IDE3ICsrKysrKysrKysrKy0tLS0tCiAxIGZpbGUg
+Y2hhbmdlZCwgMTIgaW5zZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMoLSkKCmRp
+ZmYgLS1naXQgYS93aW5zdXAvY3lnd2luL2ZoYW5kbGVyX2Rpc2tfZmlsZS5j
+YyBiL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXJfZGlza19maWxlLmNjCmluZGV4
+IGZjYmUxNWMuLmJmNWY5ODggMTAwNjQ0Ci0tLSBhL3dpbnN1cC9jeWd3aW4v
+ZmhhbmRsZXJfZGlza19maWxlLmNjCisrKyBiL3dpbnN1cC9jeWd3aW4vZmhh
+bmRsZXJfZGlza19maWxlLmNjCkBAIC00NjMsMTggKzQ2MywyNSBAQCBmaGFu
+ZGxlcl9iYXNlOjpmc3RhdF9oZWxwZXIgKHN0cnVjdCBzdGF0ICpidWYpCiAK
+ICAgYnVmLT5zdF9ibGtzaXplID0gUFJFRkVSUkVEX0lPX0JMS1NJWkU7CiAK
+LSAgaWYgKHBmYWktPlN0YW5kYXJkSW5mb3JtYXRpb24uQWxsb2NhdGlvblNp
+emUuUXVhZFBhcnQgPj0gMExMKQorICBpZiAoYnVmLT5zdF9zaXplID09IDAK
+KyAgICAgICYmIHBmYWktPlN0YW5kYXJkSW5mb3JtYXRpb24uQWxsb2NhdGlv
+blNpemUuUXVhZFBhcnQgPT0gMExMKQorICAgIC8qIEZpbGUgaXMgZW1wdHkg
+YW5kIG5vIGJsb2NrcyBhcmUgcHJlYWxsb2NhdGVkLiAqLworICAgIGJ1Zi0+
+c3RfYmxvY2tzID0gMDsKKyAgZWxzZSBpZiAocGZhaS0+U3RhbmRhcmRJbmZv
+cm1hdGlvbi5BbGxvY2F0aW9uU2l6ZS5RdWFkUGFydCA+IDBMTCkKICAgICAv
+KiBBIHN1Y2Nlc3NmdWwgTnRRdWVyeUluZm9ybWF0aW9uRmlsZSByZXR1cm5z
+IHRoZSBhbGxvY2F0aW9uIHNpemUKLSAgICAgICBjb3JyZWN0bHkgZm9yIGNv
+bXByZXNzZWQgYW5kIHNwYXJzZSBmaWxlcyBhcyB3ZWxsLiAqLworICAgICAg
+IGNvcnJlY3RseSBmb3IgY29tcHJlc3NlZCBhbmQgc3BhcnNlIGZpbGVzIGFz
+IHdlbGwuCisgICAgICAgQWxsb2NhdGlvbiBzaXplIDAgaXMgaWdub3JlZCBo
+ZXJlIGJlY2F1c2UgKGF0IGxlYXN0KSBXaW5kb3dzIDEwCisgICAgICAgMTYw
+NyBhbHdheXMgcmV0dXJucyAwIGZvciBDb21wYWN0T1MgY29tcHJlc3NlZCBm
+aWxlcy4gKi8KICAgICBidWYtPnN0X2Jsb2NrcyA9IChwZmFpLT5TdGFuZGFy
+ZEluZm9ybWF0aW9uLkFsbG9jYXRpb25TaXplLlF1YWRQYXJ0CiAJCSAgICAg
+ICsgU19CTEtTSVpFIC0gMSkgLyBTX0JMS1NJWkU7Ci0gIGVsc2UgaWYgKDo6
+aGFzX2F0dHJpYnV0ZSAoYXR0cmlidXRlcywgRklMRV9BVFRSSUJVVEVfQ09N
+UFJFU1NFRAotCQkJCQl8IEZJTEVfQVRUUklCVVRFX1NQQVJTRV9GSUxFKQor
+ICBlbHNlIGlmICgocGZhaS0+U3RhbmRhcmRJbmZvcm1hdGlvbi5BbGxvY2F0
+aW9uU2l6ZS5RdWFkUGFydCA9PSAwTEwKKwkgICAgfHwgOjpoYXNfYXR0cmli
+dXRlIChhdHRyaWJ1dGVzLCBGSUxFX0FUVFJJQlVURV9DT01QUkVTU0VECisJ
+CQkJCSAgfCBGSUxFX0FUVFJJQlVURV9TUEFSU0VfRklMRSkpCiAJICAgJiYg
+aCAmJiAhaXNfZnNfc3BlY2lhbCAoKQogCSAgICYmICFOdFF1ZXJ5SW5mb3Jt
+YXRpb25GaWxlIChoLCAmc3QsIChQVk9JRCkgJmZjaSwgc2l6ZW9mIGZjaSwK
+IAkJCQkgICAgICAgRmlsZUNvbXByZXNzaW9uSW5mb3JtYXRpb24pKQogICAg
+IC8qIE90aGVyd2lzZSB3ZSByZXF1ZXN0IHRoZSBhY3R1YWwgYW1vdW50IG9m
+IGJ5dGVzIGFsbG9jYXRlZCBmb3IKLSAgICAgICBjb21wcmVzc2VkIGFuZCBz
+cGFyc2VkIGZpbGVzLiAqLworICAgICAgIGNvbXByZXNzZWQsIHNwYXJzZWQg
+YW5kIENvbXBhY3RPUyBmaWxlcy4gKi8KICAgICBidWYtPnN0X2Jsb2NrcyA9
+IChmY2kuQ29tcHJlc3NlZEZpbGVTaXplLlF1YWRQYXJ0ICsgU19CTEtTSVpF
+IC0gMSkKIAkJICAgICAvIFNfQkxLU0laRTsKICAgZWxzZQo=
 
-Thanks.  I applied your patch with a matching Makefile change.
-
-
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---cWoXeonUoKmBZSoM
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJY+0ydAAoJEPU2Bp2uRE+gDjUQAJgpvWGeYl6jFs266BPACHOG
-DG5SMeZ2JcIRyk3V1yuD0Mvr0UgtOBvGHP8ObSCQMCCxdUNPzHtt1LI/u/ufietm
-r7Hgw0c+PSj4/s60B2KZ3ztwrpNzDt5aZ+yuJwjSuKQEC6NsdJUqSYSLS/zBwIOc
-Qm90Pbu5QFJt364jT3nWPKvD9VymxhnDTQ+ix25XFUwJWGf+8pYgIg9w/SiioX/l
-WmJk4KMV7iebTkAX5yOxDZwdtVN9sYqC4dJW2Sz39ZtqnUKxqzzDSISacYqBdXAj
-LaHi/JohfkbOw4mmYXfpTwjFyoc8JXbSb1RbZMcY8LVSoW7dz0S+6WWmpaB7BfFO
-3sjp/+UM0G7K4sgi9Dp+dS9x72pRllYfX6/aXxEZ3cJbRoljRP6rFwmIU06pDJRy
-pfs1TdEfe6HzGRpyA16nhmDNvJYKtgEBjJMuSRLWxUO2cV2YsTj6wTxhhOG10nfW
-SSv0dbg88NCQRKpVCFmCldXeY1eW4KE5PBCs5vLthtrymdVbNi4C+3TElzua5u/p
-o9QOMJPc9SCIjZaWNJazUqfyPTHFPV4QGAFfpkTbwdlzizGdcpGlgtnbly/QI37u
-Rnc1wrjO4z0pvV01i7uXQ3kF+azzQkpRl4rLad9L6/PxIleCbnggUKbYB7O+XS7W
-JOyV26Q3RY7ihuj2IyQc
-=79Og
------END PGP SIGNATURE-----
-
---cWoXeonUoKmBZSoM--
+--------------344EAD49CB8EEB872F260558--
