@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8765-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 126607 invoked by alias); 25 Apr 2017 12:28:50 -0000
+Return-Path: <cygwin-patches-return-8766-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 102422 invoked by alias); 11 May 2017 14:05:58 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,107 +9,43 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 126588 invoked by uid 89); 25 Apr 2017 12:28:50 -0000
+Received: (qmail 102386 invoked by uid 89); 11 May 2017 14:05:57 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-101.9 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=connector, HTo:U*cygwin-patches
-X-HELO: drew.franken.de
-Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 25 Apr 2017 12:28:48 +0000
-Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id 29778721E281A;	Tue, 25 Apr 2017 14:28:48 +0200 (CEST)
-Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id 975845E0463;	Tue, 25 Apr 2017 14:28:47 +0200 (CEST)
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 955F1A80410; Tue, 25 Apr 2017 14:28:47 +0200 (CEST)
-Date: Tue, 25 Apr 2017 12:28:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-1.4 required=5.0 tests=BAYES_00,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_SPAM,SPF_PASS autolearn=no version=3.3.2 spammy=transmitted, bray, H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
+X-HELO: mail-wm0-f44.google.com
+Received: from mail-wm0-f44.google.com (HELO mail-wm0-f44.google.com) (74.125.82.44) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 11 May 2017 14:05:55 +0000
+Received: by mail-wm0-f44.google.com with SMTP id u65so3270503wmu.1        for <cygwin-patches@cygwin.com>; Thu, 11 May 2017 07:05:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20161025;        h=x-gm-message-state:from:to:subject:date:message-id;        bh=VJCi+Z64mc1nP+ureaE6w/UMYcWYjLlMa/Y6K8CLOnY=;        b=iUUcvTTMhVVZVRfLazuFWLo0vpMG+Fak45G+TRIdMLbtOtejxDyHz3wqJIKTfYlXkp         BbpWd6dUbCncE3Wkae0VktGnS+trP3KI0V1LB+rTMDqF3MFlrNmzwn94QM8CgETOzbf0         FroUlk/VnmKgH3KpslPE2oW2zaKvxEf/H67IgFKGUSbtUXSoKBOPjpJmG0xTVM3dwUNr         nbyWRUIltC7U2k0Dq/+PBy6+k8LDqVFMvPTVgPd+tq1bGbFRgUfwRdVH8+TZ0y0GkdYQ         aeOQWL4LpEW8eeKUu7FDNIW6cRIucQ5abtrh5UEkBJiaV0Nu+nOg+nO0oMrFMulzsDTD         TlWQ==
+X-Gm-Message-State: AODbwcCMo3IcY70v5z/jQ7VY8ubi0lMkcm9/Dgt3/kRNXA+L7hyp+tuK	h491ZD5sxTyFS2eVSq4=
+X-Received: by 10.28.62.81 with SMTP id l78mr4869701wma.105.1494511556194;        Thu, 11 May 2017 07:05:56 -0700 (PDT)
+Received: from localhost.localdomain (vbo91-1-82-238-216-179.fbx.proxad.net. [82.238.216.179])        by smtp.gmail.com with ESMTPSA id k18sm305636wre.9.2017.05.11.07.05.54        for <cygwin-patches@cygwin.com>        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);        Thu, 11 May 2017 07:05:55 -0700 (PDT)
+From: "Erik M. Bray" <erik.m.bray@gmail.com>
 To: cygwin-patches@cygwin.com
-Cc: Daniel Santos <daniel.santos@pobox.com>
-Subject: Re: [PATCH] Possibly correct fix to strace phantom process entry
-Message-ID: <20170425122847.GB12712@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com,	Daniel Santos <daniel.santos@pobox.com>
-References: <20170424093754.536-1-daniel.santos@pobox.com> <20170424121922.GA5622@calimero.vinschen.de> <20170424153854.GA21872@calimero.vinschen.de> <9c820100-2ca5-6716-9ee4-7803fdd82a52@pobox.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="DKU6Jbt7q3WqK7+M"
-Content-Disposition: inline
-In-Reply-To: <9c820100-2ca5-6716-9ee4-7803fdd82a52@pobox.com>
-User-Agent: Mutt/1.8.0 (2017-02-23)
-X-SW-Source: 2017-q2/txt/msg00036.txt.bz2
+Subject: [PATCH] Fix bug with blocking send interrupted by a signal
+Date: Thu, 11 May 2017 14:05:00 -0000
+Message-Id: <20170511140534.26860-1-erik.m.bray@gmail.com>
+X-IsSubscribed: yes
+X-SW-Source: 2017-q2/txt/msg00037.txt.bz2
 
+The following patch fixes an issue I found via the Python test suite--when a
+large send() on a socket has to be chunked, if part of the data has already
+been transmitted, a signal will not cause the send() to be interrupted even
+if SA_RESTART is not set.
 
---DKU6Jbt7q3WqK7+M
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1783
+For the sake of consistency with Linux's behavior (which recv() already has)
+send() should return successfully in this case.  On the other hand, if
+SA_RESTART is set, send() will continue to block with this patch.  The only
+issue here was that while fhandler_socket::wait_for_events can set a socket
+error (particularly WSAEINTR) when an interrupted has been handled, that error
+was not being checked.
 
-On Apr 24 19:00, Daniel Santos wrote:
-> On 04/24/2017 10:38 AM, Corinna Vinschen wrote:
->=20
-> > I'm going with my patch for now.  Mainly because I added some debug
-> > output to see if we need the Sleep loop at all.  Right now I don't see
-> > any situation which would qualify for this.
-> >=20
-> >=20
-> > Thanks,
-> > Corinna
->=20
-> Thanks for your help on this Corinna!
->=20
-> I'm inclined to agree about the sleep loop.  I have concerns about leaving
-> these odd "ghost" process entries in and I have concerns about whacking t=
-hem
-> for all dynamic loads of cygwin1.dll. :)  The only cleaner solution that I
-> can think of us to set an environment variable (or value in CYGWIN) to te=
-ll
-> cygwin1.dll not to call pinfo::thisproc() in
-> child_info_spawn::handle_spawn() -- that still feels like a bandaid.  (I
-> suppose there's also using LoadLibraryEx and if there's some parameter we
-> can pass to the DLL from there.)
->=20
-> Incidentally, when I debug strace with gdb the problem does away. Thus, I=
-'ve
-> been debugging this by littering the code with OutputDebugStringA()s,
-> sometimes adding some Sleep delays, recompiling, exiting, restarting sshd,
-> etc.  Is there an easier way to debug stuff like this?
->=20
-> Either way, I want to better understand how all of the cases of how
-> cygwin1.dll is loaded and processes are inited.  Searching the code, I see
-> that cygcheck also uses LoadLibrary, as well as cygwin::connector::connec=
-tor
-> (const char *dll) (although I can't tell what that is for).
->=20
-> I have to run, so I'll get back to this later.
+Erik M. Bray (1):
+  Ensure that a blocking send() on a socket returns (with success) if a
+    signal is handled mid-transition and SA_RESTART is not set.
 
-I'm looking forward to any improvement in this area.
+ winsup/cygwin/fhandler_socket.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-Thanks,
-Cornna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---DKU6Jbt7q3WqK7+M
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJY/0D/AAoJEPU2Bp2uRE+gn+UP/iOdBrKsEjb9g/7k8BDzAnfG
-U/62rjYdFZ8Neu/2X3FrM33QN8FsfO8DXYmecVticMVud2eancQsaW/5zYv32fY/
-emRvU51693MnVrxeoSwlmln5HYi8n3rHEnUKSsnj3logIvGKGr5pTpLYcnbx1Nz/
-zleHMFQ7Tjgsr570tKtUuF9fFPKScAJGxu5raqVb5mYiOavwp+rQ+VC4PQ1fsMnz
-tKerN2Df7Prt5cXdBK8ML7Hvkxa05R/O65UB6cesz4s9a8cIbhQtqkz8GhaIM2yo
-w7HUkL9/c5+YXUXmPmgtGqOGuOTlIqzV//N1flWDi7Mu1x3GjCHpbss6cX91rTo/
-rP9NbLH69DhyvjJdA3Kr3hoRRoSs1GhRNrnXLpyPk2Rb9Jt57osBF9Eh/QblUDWc
-k0qiHrzlEgBg4WohkBWSFXOA3yuEGgKxZiSaeH9nubfMl7EKaIgcuvj24j2Kd8Fx
-iijOu8qMBDkUnMglxwnPNZh0H8SptbcpvQ9iLJwOcg3123jDSbN0NzZo/StMUwtq
-4n0ZVij/FUvdLysbLJWXsgLkVW3nLbGYkw4Vuv+WKBbIN+kygpU73NyVYNSO6c/7
-uVjRC1lIv5QjJjs/cgPdTpMDzi5Ya4aHLObE0ieqceygMK/G6vmP5s2pMXoKRerf
-j8fjjnYZ70SCWHW+tToz
-=4D2m
------END PGP SIGNATURE-----
-
---DKU6Jbt7q3WqK7+M--
+-- 
+2.8.3
