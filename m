@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8767-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 102442 invoked by alias); 11 May 2017 14:05:59 -0000
+Return-Path: <cygwin-patches-return-8768-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 58041 invoked by alias); 13 May 2017 04:26:48 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,43 +9,42 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 102420 invoked by uid 89); 11 May 2017 14:05:57 -0000
+Received: (qmail 57205 invoked by uid 89); 13 May 2017 04:25:40 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-23.9 required=5.0 tests=AWL,BAYES_00,FREEMAIL_FROM,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_SPAM,SPF_PASS autolearn=ham version=3.3.2 spammy=H*MI:sk:2017051, H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
-X-HELO: mail-wm0-f45.google.com
-Received: from mail-wm0-f45.google.com (HELO mail-wm0-f45.google.com) (74.125.82.45) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 11 May 2017 14:05:56 +0000
-Received: by mail-wm0-f45.google.com with SMTP id b84so42623902wmh.0        for <cygwin-patches@cygwin.com>; Thu, 11 May 2017 07:05:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20161025;        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to         :references;        bh=wOcSC/AC4/H9kNfokt3qMI+G7bNWtFrjZ3fsA3UonmA=;        b=bZw9b9ZaFvM/N2U3xzupujZ2+ouT9DVihT8ZcTysaVGHvcJWtSyE3fROItDer3FnRh         pulnWv4NbrVpyY1BYXSgflJ20la0e+xYUeL9+dVHx+7nk4HYGcpCuYyjv2G7QCDo+qO2         nUrLDfljroIH+6KwRK3BYA4B0IwqkaSpPbz1CYWDGUcJ5WVRFcTUsQewUFMWC5gWtSvI         Rn85j2tO/gVMZ5vT5rilOYdRC7Qb7mbWTi18lmfVvEc68Fa4aCGQU7HkQEXK11VHgmtl         tezLTwp9YwT5gh3UEuTg66yC6FXrSeF/yCnl2D9STum8FxAmBVI+RAI9xL2/xflcb83z         BRBA==
-X-Gm-Message-State: AODbwcBuFimmkIYD3ULKucjbg3Gxi/VPE1NezjyR/dP+A8UsPdVfjIQm	lZhEFd9qFiX/L59xalE=
-X-Received: by 10.28.29.17 with SMTP id d17mr1164126wmd.90.1494511557262;        Thu, 11 May 2017 07:05:57 -0700 (PDT)
-Received: from localhost.localdomain (vbo91-1-82-238-216-179.fbx.proxad.net. [82.238.216.179])        by smtp.gmail.com with ESMTPSA id k18sm305636wre.9.2017.05.11.07.05.56        for <cygwin-patches@cygwin.com>        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);        Thu, 11 May 2017 07:05:56 -0700 (PDT)
-From: "Erik M. Bray" <erik.m.bray@gmail.com>
+X-Spam-SWARE-Status: No, score=1.0 required=5.0 tests=AWL,BAYES_50,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW autolearn=no version=3.3.2 spammy=andrey, Repin, repin, Andrey
+X-HELO: smtp-out-so.shaw.ca
+Received: from smtp-out-so.shaw.ca (HELO smtp-out-so.shaw.ca) (64.59.136.137) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sat, 13 May 2017 04:25:21 +0000
+Received: from [192.168.1.100] ([174.0.238.184])	by shaw.ca with SMTP	id 9OcHdikbTyd2D9OcIdEByK; Fri, 12 May 2017 22:25:18 -0600
+X-Authority-Analysis: v=2.2 cv=F5wnTupN c=1 sm=1 tr=0 a=WqCeCkldcEjBO3QZneQsCg==:117 a=WqCeCkldcEjBO3QZneQsCg==:17 a=IkcTkHD0fZMA:10 a=w_pzkKWiAAAA:8 a=GeDdQGIk3sC7dlQFBMAA:9 a=QEXdDO2ut3YA:10 a=nQ-Hu-D2FK4A:10 a=YcSCMB9dSN0A:10 a=l4lHiSdNQNsA:10 a=sRI3_1zDfAgwuvI8zelB:22
+From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
+Subject: Re: [PATCH] Avoid decimal point localization in /proc/loadavg
+References: <20170408125537.15728-1-jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Ensure that a blocking send() on a socket returns (with success) if a signal is handled mid-transition and SA_RESTART is not set.
-Date: Thu, 11 May 2017 14:05:00 -0000
-Message-Id: <20170511140534.26860-2-erik.m.bray@gmail.com>
-In-Reply-To: <20170511140534.26860-1-erik.m.bray@gmail.com>
-References: <20170511140534.26860-1-erik.m.bray@gmail.com>
-X-IsSubscribed: yes
-X-SW-Source: 2017-q2/txt/msg00038.txt.bz2
+In-Reply-To: <20170408125537.15728-1-jon.turney@dronecode.org.uk>
+Reply-To: Brian.Inglis@SystematicSw.ab.ca
+Message-ID: <ba5b7dfb-686b-7791-b6a6-17eb91527359@SystematicSw.ab.ca>
+Date: Sat, 13 May 2017 04:26:00 -0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101 Thunderbird/45.8.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfH7Mlb3kx38ZK6FPZuqHRZn5wvzLQ43BLDWKgVE5or8+vYyfvabCUHdfibNUCjk5XmJE96V+ZE767cEyoFqZNQhRZPM91ojJTkW4wypS53+Zgoz3LssZ xxYRiya+Pwe+P7rEwTr6nywEz/SvnmtGAiZMklaYBS7yCvy7kqyfBogBMKdTaI3i+yWAUP60fOSwLxmPJD46efBsMfjXsebKuAY=
+X-SW-Source: 2017-q2/txt/msg00039.txt.bz2
 
----
- winsup/cygwin/fhandler_socket.cc | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Also affects uptime - and anything else using /proc/loadavg
 
-diff --git a/winsup/cygwin/fhandler_socket.cc b/winsup/cygwin/fhandler_socket.cc
-index f3d1d69..c7ed681 100644
---- a/winsup/cygwin/fhandler_socket.cc
-+++ b/winsup/cygwin/fhandler_socket.cc
-@@ -1851,7 +1851,7 @@ fhandler_socket::send_internal (struct _WSAMSG *wsamsg, int flags)
- 	  if (get_socket_type () != SOCK_STREAM || ret < out_len)
- 	    break;
- 	}
--      else if (is_nonblocking () || err != WSAEWOULDBLOCK)
-+      else if (is_nonblocking () || WSAGetLastError() != WSAEWOULDBLOCK)
- 	break;
-     }
- 
+https://cygwin.com/ml/cygwin/2017-05/msg00190.html
+
+Subject: $ uptime: bad data in /proc/loadavg
+On 2017-05-12 20:44, Andrey Repin wrote:
+> Greetings, All!
+> Just a few days ago it worked, but now
+> $ uptime
+> bad data in /proc/loadavg
+> $ cat /proc/loadavg
+> 0,00 0,00 0,00 1/3
+> It reporting approx the same from under elevated shell.
+
 -- 
-2.8.3
+Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
