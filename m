@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8771-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 117391 invoked by alias); 8 Jun 2017 12:48:58 -0000
+Return-Path: <cygwin-patches-return-8772-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 32407 invoked by alias); 8 Jun 2017 12:56:28 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,88 +9,50 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 108802 invoked by uid 89); 8 Jun 2017 12:48:55 -0000
+Received: (qmail 31621 invoked by uid 89); 8 Jun 2017 12:56:27 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-26.6 required=5.0 tests=BAYES_00,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE,SPF_PASS autolearn=ham version=3.3.2 spammy=Antivirus, H*UA:6.3, H*u:6.3, crashes
-X-HELO: mail-wm0-f52.google.com
-Received: from mail-wm0-f52.google.com (HELO mail-wm0-f52.google.com) (74.125.82.52) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 08 Jun 2017 12:48:53 +0000
-Received: by mail-wm0-f52.google.com with SMTP id 7so137216668wmo.1        for <cygwin-patches@cygwin.com>; Thu, 08 Jun 2017 05:48:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20161025;        h=x-gm-message-state:from:subject:to:message-id:date:user-agent         :mime-version;        bh=bYQBdL4KZVurqmFane4u1chD8xUATpD8radjUzxtXrc=;        b=ZtN+pXKHh7/w7Cdv2hAELz49I3on5ue/zwg1L7o5CIFhIYEftqP+kSPpZ+kkYWta8r         e+J8y3V6bWbJdGIKuaYYd7s9detbqckgHKiAqrEN401nhfNrFsyp60hH/gpXqXBV9vaS         lOdS3qw5fQrHnrmfakiQqrIIe1LPGyzp6h5uYN7F87+UhGMGQNQj3LjdimjS9EnWhUUS         4dT1rmCchAYqb9aOfz0W2qglRDEoItIXtebSwcVHvKAJKPUsO/ECfD3adD/yv+EpFGBx         ONBi3Ol6VouGUXENNI34dUKo9hnGwsVEemPOjwBetVUDQ9yToIn30yB4r/fcjCTapigx         dUcg==
-X-Gm-Message-State: AODbwcCDXZS4Y8SPAQHwCQlWqxAN8Y2UpT52wsn90T2K97d+FE45+y20	ZQioR2fZ9yK+0Gojc7s=
-X-Received: by 10.28.88.3 with SMTP id m3mr3515891wmb.28.1496926135570;        Thu, 08 Jun 2017 05:48:55 -0700 (PDT)
-Received: from [192.168.1.202] ([164.215.120.147])        by smtp.gmail.com with ESMTPSA id k19sm7787140wmg.9.2017.06.08.05.48.54        for <cygwin-patches@cygwin.com>        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);        Thu, 08 Jun 2017 05:48:54 -0700 (PDT)
+X-Spam-SWARE-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_PASS autolearn=no version=3.3.2 spammy=H*c:application, H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
+X-HELO: mail-wr0-f182.google.com
+Received: from mail-wr0-f182.google.com (HELO mail-wr0-f182.google.com) (209.85.128.182) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 08 Jun 2017 12:56:26 +0000
+Received: by mail-wr0-f182.google.com with SMTP id q97so18223592wrb.2        for <cygwin-patches@cygwin.com>; Thu, 08 Jun 2017 05:56:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20161025;        h=x-gm-message-state:subject:from:to:references:message-id:date         :user-agent:mime-version:in-reply-to;        bh=iPqbkMAuWFqavAZHQr7R67S/N8fUVI7/g8WXlyBueZo=;        b=l6GSui8zS60kd+upF4f/GKnTpSiuvZZ1pPbjGtXWAUozGwjYm9tgVX52PLvLdGOqTe         QfmIRkhXfEkMbh/LArRiNM6lgRQ4yQjNzv5ytI8Cr+N0A2JloE+3O+6bfyeDITtJP5Ed         NT07zcct8QMBnLdQSW+biOUgB0YlKDbQ/TDDLBEnIIjYYI63egXwaTrDTJOir33onQ9G         m4BlJOvKX6vKia1dIL1Gl2UBWZWL6X65BcTiYI1IFkCXCTJM+UfnH/GsAsYEeH9nk74n         LohhxVaQkWeh6G+Tg8BzyFhzBKpd/pBoOz5GRubBO3TLHT3RoU65YqI6w7kYw3EpWb6S         PkZA==
+X-Gm-Message-State: AODbwcCBp7tIsWntGxpX22ie84sbGomHO75yPa8b5uacgMdzyBmwilrt	CsDVdtH0OGH5l46RDQI=
+X-Received: by 10.223.152.18 with SMTP id v18mr28385380wrb.8.1496926588503;        Thu, 08 Jun 2017 05:56:28 -0700 (PDT)
+Received: from [192.168.1.202] ([164.215.120.147])        by smtp.gmail.com with ESMTPSA id t195sm5669824wmt.27.2017.06.08.05.56.27        for <cygwin-patches@cygwin.com>        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);        Thu, 08 Jun 2017 05:56:27 -0700 (PDT)
+Subject: Re: [PATCH] Add COMODO Internet Security and ConEmu to BLODA
 From: David Macek <david.macek.0@gmail.com>
-Subject: [PATCH] Add COMODO Internet Security and ConEmu to BLODA
 To: cygwin-patches@cygwin.com
-Message-ID: <d8218978-47ae-411f-9134-fce3dfae21e1@gmail.com>
-Date: Thu, 08 Jun 2017 12:48:00 -0000
+References: <d8218978-47ae-411f-9134-fce3dfae21e1@gmail.com>
+Message-ID: <dd142baf-0442-45b6-700c-6d97e33364d9@gmail.com>
+Date: Thu, 08 Jun 2017 12:56:00 -0000
 User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:52.0) Gecko/20100101 Thunderbird/52.1.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256; boundary="------------ms050101000500030704050608"
+In-Reply-To: <d8218978-47ae-411f-9134-fce3dfae21e1@gmail.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256; boundary="------------ms040309040105030706090009"
 X-IsSubscribed: yes
-X-SW-Source: 2017-q2/txt/msg00042.txt.bz2
+X-SW-Source: 2017-q2/txt/msg00043.txt.bz2
 
 This is a cryptographically signed message in MIME format.
 
---------------ms050101000500030704050608
+--------------ms040309040105030706090009
 Content-Type: text/plain; charset=utf-8
 Content-Language: cs
 Content-Transfer-Encoding: quoted-printable
-Content-length: 2143
+Content-length: 242
 
-ConEmu: There has been at least one report of it causing crashes <https://g=
-ithub.com/Maximus5/ConEmu/issues/1158>
+On 8. 6. 2017 14:48, David Macek wrote:
+> COMODO Internet Security: Causing GPG failures <https://github.com/msys2/=
+msys2/issues/38>
 
-COMODO Internet Security: Causing GPG failures <https://github.com/msys2/ms=
-ys2/issues/38>
-
----
- winsup/doc/faq-using.xml | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/winsup/doc/faq-using.xml b/winsup/doc/faq-using.xml
-index c62e03996..b6b152e4e 100644
---- a/winsup/doc/faq-using.xml
-+++ b/winsup/doc/faq-using.xml
-@@ -1273,6 +1273,8 @@ behaviour which affect the operation of other program=
-s, such as Cygwin.
- <listitem><para>Bufferzone from Trustware</para></listitem>
- <listitem><para>ByteMobile laptop optimization client</para></listitem>
- <listitem><para>COMODO Firewall Pro</para></listitem>
-+<listitem><para>COMODO Internet Security</para></listitem>
-+<listitem><para>ConEmu (try disabling "Inject ConEmuHk" or see <ulink url=
-=3D"https://conemu.github.io/en/ConEmuHk.html#Third_party_problems">ConEmuH=
-k documentation</ulink>)</para></listitem>
- <listitem><para>Citrix Metaframe Presentation Server/XenApp (see <ulink ur=
-l=3D"http://support.citrix.com/article/CTX107825">Citrix Support page</ulin=
-k>)</para></listitem>
- <listitem><para>Credant Guardian Shield</para></listitem>
- <listitem><para>Earthlink Total-Access</para></listitem>
-@@ -1298,7 +1300,7 @@ behaviour which affect the operation of other program=
-s, such as Cygwin.
- <listitem><para>Webroot Spy Sweeper with Antivirus</para></listitem>
- <listitem><para>Windows Defender </para></listitem>
- <listitem><para>Windows LiveOneCare</para></listitem>
--<listitem><para>IBM Security Trusteer Rapport (see <ulink url=3D"http://ww=
-w-03.ibm.com/software/products/en/trusteer-rapport">its home page</ulink></=
-para></listitem>
-+<listitem><para>IBM Security Trusteer Rapport (see <ulink url=3D"http://ww=
-w-03.ibm.com/software/products/en/trusteer-rapport">its home page</ulink>)<=
-/para></listitem>
- </itemizedlist></para>
- <para>Sometimes these problems can be worked around, by temporarily or par=
-tially
- disabling the offending software.  For instance, it may be possible to dis=
-able
---=20
-2.13.0.windows.1
+I wonder if it makes sense to include GPG failures as a known symptom of do=
+dgy apps.
 
 --=20
 David Macek
 
 
---------------ms050101000500030704050608
+--------------ms040309040105030706090009
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -160,9 +122,9 @@ cmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAYBgNVBAoT
 EUNPTU9ETyBDQSBMaW1pdGVkMUEwPwYDVQQDEzhDT01PRE8gU0hBLTI1NiBD
 bGllbnQgQXV0aGVudGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAO41
 mVHykW27As5LWJAadekwDQYJYIZIAWUDBAIBBQCgggJjMBgGCSqGSIb3DQEJ
-AzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTE3MDYwODEyNDg1M1ow
-LwYJKoZIhvcNAQkEMSIEIM8NiTarr22jaX0F1pJbLtdcmK8nG/0RtfamaETI
-u3PHMGwGCSqGSIb3DQEJDzFfMF0wCwYJYIZIAWUDBAEqMAsGCWCGSAFlAwQB
+AzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTE3MDYwODEyNTYyNlow
+LwYJKoZIhvcNAQkEMSIEIKf3tMlCnz+0uGSg75lasTBpkMyGATc9Z4a26N6U
+fnFiMGwGCSqGSIb3DQEJDzFfMF0wCwYJYIZIAWUDBAEqMAsGCWCGSAFlAwQB
 AjAKBggqhkiG9w0DBzAOBggqhkiG9w0DAgICAIAwDQYIKoZIhvcNAwICAUAw
 BwYFKw4DAgcwDQYIKoZIhvcNAwICASgwgcIGCSsGAQQBgjcQBDGBtDCBsTCB
 mzELMAkGA1UEBhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQ
@@ -173,12 +135,12 @@ KoZIhvcNAQkQAgsxgbSggbEwgZsxCzAJBgNVBAYTAkdCMRswGQYDVQQIExJH
 cmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGjAYBgNVBAoT
 EUNPTU9ETyBDQSBMaW1pdGVkMUEwPwYDVQQDEzhDT01PRE8gU0hBLTI1NiBD
 bGllbnQgQXV0aGVudGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAO41
-mVHykW27As5LWJAadekwDQYJKoZIhvcNAQEBBQAEggEArHAXCG4rUVa+lxCL
-tal0Ylun2WIKBkLxbT8kL5WW3EujL/dJm/PJdnm/0IxFkuHo5+gS+oQ1FIRr
-hTYIEC2aIUCmeQeDiYY195TMFgoyvVGNW8aEIYy2it22gFzQR+wub6mswSZa
-v0XDTmgo9JyAkU4dhuMuM6aI4OeGIF7tjHCVDegVY0TlXNMOX5Urgr/X+j6r
-nXlQ3HCfIO16JToxfCEiO+sJRGgy0SZMBoJ3xwXz+nBzYH9Ear1hRQBKI5nl
-gP2ybYytmIweFqNl+zJuKFAiye7xX0KCv6ZDinnoa8bbqmchWcnoxbANhvC2
-zkXGw2o06sUXU6Mv42QRB/+UGAAAAAAAAA==
+mVHykW27As5LWJAadekwDQYJKoZIhvcNAQEBBQAEggEAQGbFz8p+zdRDTpmJ
+RGi3K5YYgk/qW8qf1B2wz1jfwLdBBNqidOE8936N7uCmj7IMwl8jtEt9Tlk8
+cpNNyzrFqJWMS8W5bIoJBPKzhD+CLlXJ+ofuWY5/lG90D+SsgZfDrn/V2N7m
+Dwx1yX0tXmpyterVrsWL3h2b2Z0u6K6/kNBu8jtyNDQ4FRIVuVe73IGm9CLF
+ssZs9DZOEeT4091ZrEFgmI4sT+jyxYDJCURQRiUIapeNdVIpwrKAfPOGacL2
+65Dr4LxFCQKyVdw3lth37wQ2s6jv98pbxat3znXBNhkPC+nNSvpZgtx7nuts
+/a8T3ngiESLsrx6Jbvx9ySKgFwAAAAAAAA==
 
---------------ms050101000500030704050608--
+--------------ms040309040105030706090009--
