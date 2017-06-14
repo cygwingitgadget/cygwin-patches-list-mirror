@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8782-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 27107 invoked by alias); 14 Jun 2017 10:35:46 -0000
+Return-Path: <cygwin-patches-return-8783-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 44865 invoked by alias); 14 Jun 2017 15:45:46 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,82 +9,154 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 27093 invoked by uid 89); 14 Jun 2017 10:35:45 -0000
+Received: (qmail 35123 invoked by uid 89); 14 Jun 2017 15:45:33 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-101.9 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=H*c:application, H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
-X-HELO: drew.franken.de
-Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 14 Jun 2017 10:35:44 +0000
-Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id 4EB4D721E281A	for <cygwin-patches@cygwin.com>; Wed, 14 Jun 2017 12:35:46 +0200 (CEST)
-Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id 84E525E0402	for <cygwin-patches@cygwin.com>; Wed, 14 Jun 2017 12:35:45 +0200 (CEST)
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 69008A80706; Wed, 14 Jun 2017 12:35:45 +0200 (CEST)
-Date: Wed, 14 Jun 2017 10:35:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-26.9 required=5.0 tests=BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,SPF_HELO_PASS,T_RP_MATCHES_RCVD autolearn=ham version=3.3.2 spammy=
+X-HELO: mx1.redhat.com
+Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 14 Jun 2017 15:45:18 +0000
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))	(No client certificate requested)	by mx1.redhat.com (Postfix) with ESMTPS id 129543345A4;	Wed, 14 Jun 2017 15:45:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mx1.redhat.com 129543345A4
+Authentication-Results: ext-mx05.extmail.prod.ext.phx2.redhat.com; dmarc=none (p=none dis=none) header.from=redhat.com
+Authentication-Results: ext-mx05.extmail.prod.ext.phx2.redhat.com; spf=pass smtp.mailfrom=yselkowi@redhat.com
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.redhat.com 129543345A4
+Received: from localhost.localdomain (ovpn-120-133.rdu2.redhat.com [10.10.120.133])	by smtp.corp.redhat.com (Postfix) with ESMTPS id 6B2CB8ED34;	Wed, 14 Jun 2017 15:45:14 +0000 (UTC)
+From: Yaakov Selkowitz <yselkowi@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] readdir() with mount point dentry, return mount point INO
-Message-ID: <20170614103545.GB14171@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <59402B22.4060001@pismotec.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="oC1+HKm2/end4ao3"
-Content-Disposition: inline
-In-Reply-To: <59402B22.4060001@pismotec.com>
-User-Agent: Mutt/1.8.0 (2017-02-23)
-X-SW-Source: 2017-q2/txt/msg00053.txt.bz2
+Cc: newlib@sourceware.org
+Subject: [PATCH] Export XSI sigpause
+Date: Wed, 14 Jun 2017 15:45:00 -0000
+Message-Id: <20170614154501.2508-1-yselkowi@redhat.com>
+X-SW-Source: 2017-q2/txt/msg00054.txt.bz2
 
+There are two common sigpause variants, both of which take an int argument.
+If you request _XOPEN_SOURCE or _GNU_SOURCE, you get the System V version,
+which removes the given signal from the process's signal mask; otherwise
+you get the BSD version, which sets the process's signal mask to the given
+value.
 
---oC1+HKm2/end4ao3
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 813
+Signed-off-by: Yaakov Selkowitz <yselkowi@redhat.com>
+---
+ newlib/libc/include/sys/signal.h       | 14 +++++++++++++-
+ winsup/cygwin/common.din               |  1 +
+ winsup/cygwin/include/cygwin/version.h |  3 ++-
+ winsup/cygwin/signal.cc                | 12 ++++++++++++
+ winsup/doc/posix.xml                   | 10 ++++++++--
+ 5 files changed, 36 insertions(+), 4 deletions(-)
 
-On Jun 13 11:12, Joe Lowe wrote:
->=20
-> This patch fixes a minor compatibility issue w/ cygwin mount point handli=
-ng
-> in readdir(), compared to equivalent behavior of Linux and MacOS.
-> dentry.d_ino should indicate the INO of the mount point itself, not the
-> target volume root folder.
->=20
-> Changed return type from readdir_check_reparse_point to uint8_t, to avoid
-> unnecessarily being implicitly cast to and from a signed int.
->=20=09
-> Renamed a related local variable "attr" to "oattr" that was eclipsing a
-> member variable with the same name.
-
-Pushed.  Can you please send patches in `git format-patch' format?  Those
-are nicer to apply.
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---oC1+HKm2/end4ao3
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJZQRGBAAoJEPU2Bp2uRE+gM/YP/208U28wVVEGHf1Yuk0qYaYS
-hTwg6FAR4uf2Cr5iyRcbupUattc1WM+7dnfZyPxf1B+Vr13h4CE4r2vNbQ4CrxOk
-V0M5V5ngMoJwfdmGkJJiR6Bb4UbAliNi3RtkP5oT7xSCVbFhf1uA3UMSZ61sTOPU
-p4FbnTnl6R9pIlCIlTYziEKWb9vCoTo00bW8z9TNcBl07Dk1CcfNjKlcEumirzi8
-hjR1I8PYeaVfzKW/k6pPnw/uXtuNtAWqLF+iQcaeNUVgYi93dHyaa8y9o9Vwr5To
-05QwzKLE3dkabF7LDGc7JM4BNWSYBGdY9aKnsAz459SAR3dxKm35Gh6bax/HOdny
-lQvPZVPxtQBRSV7TcocdGYVXWAAsUBKm9cqs5C2Yi+JH7YNxxLkLrI8Hzx4514hL
-GmYwvDs6I2APsLRPbNhtwh/dioG0NvW2QthMfu1yIk1/Ghp0TSAq6hJxHzln8+Em
-Hfk57/D3kZ0ME0se35BUFuGyqGoVH36jO/9Kbs/x2KmYIr7KChuO/etcIslcyv8c
-afETHrStP48rDSDmN4HwE4Ppq0a3ZI0zbnaRlkO14+frvfgp8DcpmB2oHN7ZswIF
-TEyaPyKWZ/PChH/0j/kucox5bO9FtGOLpDNgO943ePO6dRjIqYYFNVfQpPgiFDE2
-/t220ld+0vpitOGrTY3p
-=7mj1
------END PGP SIGNATURE-----
-
---oC1+HKm2/end4ao3--
+diff --git a/newlib/libc/include/sys/signal.h b/newlib/libc/include/sys/signal.h
+index a56f18a1b..da064cd5f 100644
+--- a/newlib/libc/include/sys/signal.h
++++ b/newlib/libc/include/sys/signal.h
+@@ -200,7 +200,19 @@ int _EXFUN(sigwait, (const sigset_t *set, int *sig));
+ #endif /* !__CYGWIN__ && !__rtems__ */
+ #endif /* __POSIX_VISIBLE */
+ 
+-#if __BSD_VISIBLE
++/* There are two common sigpause variants, both of which take an int argument.
++   If you request _XOPEN_SOURCE or _GNU_SOURCE, you get the System V version,
++   which removes the given signal from the process's signal mask; otherwise
++   you get the BSD version, which sets the process's signal mask to the given
++   value. */
++#if __XSI_VISIBLE && !defined(__INSIDE_CYGWIN__)
++# ifdef __GNUC__
++int _EXFUN(sigpause, (int)) __asm__ (__ASMNAME ("__xpg_sigpause"));
++# else
++int _EXFUN(__xpg_sigpause, (int));
++#  define sigpause __xpg_sigpause
++# endif
++#elif __BSD_VISIBLE
+ int _EXFUN(sigpause, (int));
+ #endif
+ 
+diff --git a/winsup/cygwin/common.din b/winsup/cygwin/common.din
+index 6620700c2..75fe05c1f 100644
+--- a/winsup/cygwin/common.din
++++ b/winsup/cygwin/common.din
+@@ -102,6 +102,7 @@ __wrap__ZdlPv NOSIGFE               # void operator delete(void *p) throw()
+ __wrap__ZdlPvRKSt9nothrow_t NOSIGFE # void operator delete(void *p, const std::nothrow_t &nt) throw()
+ __xdrrec_getrec SIGFE
+ __xdrrec_setnonblock SIGFE
++__xpg_sigpause SIGFE
+ __xpg_strerror_r SIGFE
+ _exit SIGFE
+ _feinitialise NOSIGFE
+diff --git a/winsup/cygwin/include/cygwin/version.h b/winsup/cygwin/include/cygwin/version.h
+index 7baca6158..c0254a8e0 100644
+--- a/winsup/cygwin/include/cygwin/version.h
++++ b/winsup/cygwin/include/cygwin/version.h
+@@ -475,12 +475,13 @@ details. */
+   308: Export dladdr.
+   309: Export getloadavg.
+   310: Export reallocarray.
++  311: Export __xpg_sigpause.
+ 
+   Note that we forgot to bump the api for ualarm, strtoll, strtoull,
+   sigaltstack, sethostname. */
+ 
+ #define CYGWIN_VERSION_API_MAJOR 0
+-#define CYGWIN_VERSION_API_MINOR 310
++#define CYGWIN_VERSION_API_MINOR 311
+ 
+ /* There is also a compatibity version number associated with the shared memory
+    regions.  It is incremented when incompatible changes are made to the shared
+diff --git a/winsup/cygwin/signal.cc b/winsup/cygwin/signal.cc
+index f371a231b..fbd2b241e 100644
+--- a/winsup/cygwin/signal.cc
++++ b/winsup/cygwin/signal.cc
+@@ -524,6 +524,18 @@ sigpause (int signal_mask)
+ }
+ 
+ extern "C" int
++__xpg_sigpause (int sig)
++{
++  int res;
++  sigset_t signal_mask;
++  sigprocmask (0, NULL, &signal_mask);
++  sigdelset (&signal_mask, sig);
++  res = handle_sigsuspend (signal_mask);
++  syscall_printf ("%R = __xpg_sigpause(%y)", res, sig);
++  return res;
++}
++
++extern "C" int
+ pause (void)
+ {
+   int res = handle_sigsuspend (_my_tls.sigmask);
+diff --git a/winsup/doc/posix.xml b/winsup/doc/posix.xml
+index 5c9f65637..ced7e383d 100644
+--- a/winsup/doc/posix.xml
++++ b/winsup/doc/posix.xml
+@@ -877,7 +877,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
+     signal
+     signbit			(see chapter "Implementation Notes")
+     signgam
+-    sigpause
++    sigpause			(see chapter "Implementation Notes")
+     sigpending
+     sigprocmask
+     sigqueue
+@@ -925,7 +925,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
+     strdup
+     strerror
+     strerror_l
+-    strerror_r
++    strerror_r			(see chapter "Implementation Notes")
+     strfmon
+     strfmon_l
+     strftime
+@@ -1668,6 +1668,12 @@ depending on whether _BSD_SOURCE or _GNU_SOURCE is defined when compiling.</para
+ <para><function>basename</function> is available in both POSIX and GNU flavors,
+ depending on whether libgen.h is included or not.</para>
+ 
++<para><function>sigpause</function> is available in both BSD and SysV/XSI
++flavors, depending on whether _XOPEN_SOURCE is defined when compiling.</para>
++
++<para><function>strerror_r</function> is available in both POSIX and GNU
++flavors, depending on whether _GNU_SOURCE is defined when compiling.</para>
++
+ <para><function>dladdr</function> always sets the Dl_info members dli_sname and
+ dli_saddr to NULL, indicating no symbol matching addr could be found.</para>
+ 
+-- 
+2.12.3
