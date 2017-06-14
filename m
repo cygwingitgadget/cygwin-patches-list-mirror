@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8780-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 71778 invoked by alias); 13 Jun 2017 20:01:18 -0000
+Return-Path: <cygwin-patches-return-8781-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 63763 invoked by alias); 14 Jun 2017 08:51:13 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,114 +9,76 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 71454 invoked by uid 89); 13 Jun 2017 20:01:18 -0000
+Received: (qmail 63748 invoked by uid 89); 14 Jun 2017 08:51:12 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-25.9 required=5.0 tests=BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,KAM_LAZY_DOMAIN_SECURITY,SPF_HELO_PASS,T_RP_MATCHES_RCVD autolearn=ham version=3.3.2 spammy=H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
-X-HELO: mx1.redhat.com
-Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 13 Jun 2017 20:01:16 +0000
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))	(No client certificate requested)	by mx1.redhat.com (Postfix) with ESMTPS id 77AAB3DE3C	for <cygwin-patches@cygwin.com>; Tue, 13 Jun 2017 20:01:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mx1.redhat.com 77AAB3DE3C
-Authentication-Results: ext-mx05.extmail.prod.ext.phx2.redhat.com; dmarc=none (p=none dis=none) header.from=redhat.com
-Authentication-Results: ext-mx05.extmail.prod.ext.phx2.redhat.com; spf=pass smtp.mailfrom=yselkowi@redhat.com
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.redhat.com 77AAB3DE3C
-Received: from localhost.localdomain (ovpn-120-23.rdu2.redhat.com [10.10.120.23])	by smtp.corp.redhat.com (Postfix) with ESMTPS id 195566046E	for <cygwin-patches@cygwin.com>; Tue, 13 Jun 2017 20:01:18 +0000 (UTC)
-From: Yaakov Selkowitz <yselkowi@redhat.com>
+X-Spam-SWARE-Status: No, score=-106.4 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=H*c:application, H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
+X-HELO: drew.franken.de
+Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 14 Jun 2017 08:51:10 +0000
+Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id 952D1721E281A	for <cygwin-patches@cygwin.com>; Wed, 14 Jun 2017 10:51:10 +0200 (CEST)
+Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id C78895E0359	for <cygwin-patches@cygwin.com>; Wed, 14 Jun 2017 10:51:09 +0200 (CEST)
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id AB2B1A80706; Wed, 14 Jun 2017 10:51:09 +0200 (CEST)
+Date: Wed, 14 Jun 2017 08:51:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Feature test macros overhaul: Cygwin signal.h
-Date: Tue, 13 Jun 2017 20:01:00 -0000
-Message-Id: <20170613200108.10620-1-yselkowi@redhat.com>
-X-SW-Source: 2017-q2/txt/msg00051.txt.bz2
+Subject: Re: [PATCH] Feature test macros overhaul: Cygwin signal.h
+Message-ID: <20170614085109.GA14171@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20170613200108.10620-1-yselkowi@redhat.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="TB36FDmn/VVEgNH/"
+Content-Disposition: inline
+In-Reply-To: <20170613200108.10620-1-yselkowi@redhat.com>
+User-Agent: Mutt/1.8.0 (2017-02-23)
+X-SW-Source: 2017-q2/txt/msg00052.txt.bz2
 
-This should match newlib's <sys/signal.h>.
 
-Signed-off-by: Yaakov Selkowitz <yselkowi@redhat.com>
----
- winsup/cygwin/include/cygwin/signal.h | 26 +++++++++++++++++++++++++-
- 1 file changed, 25 insertions(+), 1 deletion(-)
+--TB36FDmn/VVEgNH/
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 447
 
-diff --git a/winsup/cygwin/include/cygwin/signal.h b/winsup/cygwin/include/cygwin/signal.h
-index f30499505..700d45c13 100644
---- a/winsup/cygwin/include/cygwin/signal.h
-+++ b/winsup/cygwin/include/cygwin/signal.h
-@@ -190,6 +190,8 @@ struct _sigcommune
-   };
- };
- 
-+#if __POSIX_VISIBLE >= 199309
-+
- #define __SI_PAD_SIZE 32
- #ifdef __INSIDE_CYGWIN__
- # ifndef max
-@@ -251,6 +253,8 @@ typedef struct
- } siginfo_t;
- #pragma pack(pop)
- 
-+#endif /* __POSIX_VISIBLE >= 199309 */
-+
- enum
- {
-   SI_USER = 0,				/* sent by kill, raise, pthread_kill */
-@@ -314,6 +318,8 @@ enum
- 
- typedef void (*_sig_func_ptr)(int);
- 
-+#if __POSIX_VISIBLE
-+
- struct sigaction
- {
-   __extension__ union
-@@ -344,11 +350,17 @@ struct sigaction
-    Do not use.  */
- #define _SA_INTERNAL_MASK 0xf000	/* bits in this range are internal */
- 
-+#endif /* __POSIX_VISIBLE */
-+
-+#if __BSD_VISIBLE || __XSI_VISIBLE >= 4 || __POSIX_VISIBLE >= 200809
-+
- #undef	MINSIGSTKSZ
- #define	MINSIGSTKSZ	 8192
- #undef	SIGSTKSZ
- #define	SIGSTKSZ	32768
- 
-+#endif /* __BSD_VISIBLE || __XSI_VISIBLE >= 4 || __POSIX_VISIBLE >= 200809 */
-+
- #define	SIGHUP	1	/* hangup */
- #define	SIGINT	2	/* interrupt */
- #define	SIGQUIT	3	/* quit */
-@@ -397,20 +409,32 @@ struct sigaction
- 
- #define SIG_HOLD ((_sig_func_ptr)2)	/* Signal in signal mask */
- 
-+#if __POSIX_VISIBLE >= 200809
- void psiginfo (const siginfo_t *, const char *);
-+#endif
-+#if __POSIX_VISIBLE
- int sigwait (const sigset_t *, int *);
-+#endif
-+#if __POSIX_VISIBLE >= 199309
- int sigwaitinfo (const sigset_t *, siginfo_t *);
-+#endif
-+#if __XSI_VISIBLE >= 4
- int sighold (int);
- int sigignore (int);
- int sigrelse (int);
- _sig_func_ptr sigset (int, _sig_func_ptr);
-+#endif
- 
-+#if __POSIX_VISIBLE >= 199309
- int sigqueue(pid_t, int, const union sigval);
-+#endif
-+#if __BSD_VISIBLE || __XSI_VISIBLE >= 4 || __POSIX_VISIBLE >= 200809
- int siginterrupt (int, int);
-+#endif
- #ifdef __INSIDE_CYGWIN__
- extern const char *sys_sigabbrev[];
- extern const char *sys_siglist[];
--#else
-+#elif __BSD_VISIBLE
- extern const char __declspec(dllimport) *sys_sigabbrev[];
- extern const char __declspec(dllimport) *sys_siglist[];
- #endif
--- 
-2.12.3
+On Jun 13 15:01, Yaakov Selkowitz wrote:
+> This should match newlib's <sys/signal.h>.
+>=20
+> Signed-off-by: Yaakov Selkowitz <yselkowi@redhat.com>
+> ---
+>  winsup/cygwin/include/cygwin/signal.h | 26 +++++++++++++++++++++++++-
+>  1 file changed, 25 insertions(+), 1 deletion(-)
+
+ACK
+
+
+Thanks,
+Corinna
+
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
+
+--TB36FDmn/VVEgNH/
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 819
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iQIcBAEBCAAGBQJZQPj9AAoJEPU2Bp2uRE+g43oP/3ysmjnqQQUJG+Lj2itUpM1w
+jogVQBf43N4XLHlKSASj3IFYQ1CAXzydOMn4c4jvfmRbmS/bwA465+He/ScNxXpO
+wVMXvqURl8E2kLLgeWOZdTbbMLOpzSpamskNYG+Me4xPezQKjSIM1hzu+7W6dqQf
+AEtRnffCcz+6CascoHIf//f3ZiqU7oLo4ZW6tjIuf961rgpS1cfKhYbm2JGNfOBb
+WVnyoiiFTyY7JRYmDEZKBuMDHAtTtLmEU6mIJz63+N+HsXtokx43snwgA70lrl5F
+MLxI20QYmjy91aiTAQQ303GSoRCldKwfCd1pw3qV2hPhV8+H1S42AdIbtYmcKFJY
+3gmBDCLflOp6gOKNq5de1W/XcrC++gXWUDIq4Tfav1IHuXVj56Vqrpa1KkEbFCLA
+CNmCfKtJkEw2oDt9UvKY/6TVo5C8730o5yxSPIdOJ9rH5HHupW3ubUEFIbznSSsd
+GiQ213h4NBy9yfWpUIvdXTGfYy52pbYf92vLavXiTPtNNVk+Mx0od2hUVzzv+Bun
+L4bDtnwxbNqiXZsmkGUZoRlO0khpdGj5jMEgk8Ihq4ZV0iYeF0YsWzCoJd5hP08C
+VlRDLSFhD/+eTqN9oOpEWjzFeFsfgznsJfTRvfiEwbFpFksJ5r4/f8Z9Fn0DojOn
+73H9Z+3poF51LMi7CpYX
+=tFIT
+-----END PGP SIGNATURE-----
+
+--TB36FDmn/VVEgNH/--
