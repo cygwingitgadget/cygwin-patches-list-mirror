@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8787-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 54625 invoked by alias); 15 Jun 2017 13:31:01 -0000
+Return-Path: <cygwin-patches-return-8788-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 2075 invoked by alias); 19 Jun 2017 10:55:52 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,74 +9,80 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 54373 invoked by uid 89); 15 Jun 2017 13:30:29 -0000
+Received: (qmail 130764 invoked by uid 89); 19 Jun 2017 10:55:50 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-24.3 required=5.0 tests=AWL,BAYES_00,FREEMAIL_FROM,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE,SPF_PASS autolearn=ham version=3.3.2 spammy=17697, H*Ad:U*cygwin-patches, HTo:U*cygwin-patches, sum
-X-HELO: mail-wr0-f196.google.com
-Received: from mail-wr0-f196.google.com (HELO mail-wr0-f196.google.com) (209.85.128.196) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 15 Jun 2017 13:30:27 +0000
-Received: by mail-wr0-f196.google.com with SMTP id x23so3746415wrb.0        for <cygwin-patches@cygwin.com>; Thu, 15 Jun 2017 06:30:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20161025;        h=x-gm-message-state:from:to:subject:date:message-id;        bh=h5asnl457xeEino7rEZLvQtHbpHMUGzCRp01lbXiY4s=;        b=X/D6zOrWKZho9GQM/risBNakNBjezMGs4hA+PpMQV3knmgJgOA7sXtvCg1DOeYe7Qm         ZxWrbF7vFSLkHQ61AoTnsWYROaUJBDWhPdaaRsFraJgizJogdV3hqBOkXd9w/c1Uh7fm         6S8sUQTDzbjJodKOT8sCDnyCLBMoJ9L1M8/w5WcsfexZ/ttPytVUdIu0iCaP6q19pj51         Briu7PTrYGxr02iu2mopZaQ2LiHPWggxztf7+Xi3YL9eg9Nct8RAbmRnNPwHUTnHWUA1         iSCxZJnjUZTsmCIVcyxJikRBwmBvmFFjFd1B3t5G2bpkt/nhPuLFa0SgLgCyE3htCptL         5rVA==
-X-Gm-Message-State: AKS2vOxGlUBW9Tf9ssuR+5p3WmT1dkPXhWuhfboG7riIr3Ig5EZGS5+N	BWASUoL3vMzfo0TC+fc=
-X-Received: by 10.28.92.13 with SMTP id q13mr3711214wmb.20.1497533422901;        Thu, 15 Jun 2017 06:30:22 -0700 (PDT)
-Received: from localhost.localdomain (lri30-45.lri.fr. [129.175.30.45])        by smtp.gmail.com with ESMTPSA id e131sm96259wmd.28.2017.06.15.06.30.22        for <cygwin-patches@cygwin.com>        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);        Thu, 15 Jun 2017 06:30:22 -0700 (PDT)
-From: "Erik M. Bray" <erik.m.bray@gmail.com>
+X-Spam-SWARE-Status: No, score=-106.4 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=erik, H*c:application, H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
+X-HELO: drew.franken.de
+Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 19 Jun 2017 10:55:48 +0000
+Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id D3600721E281A	for <cygwin-patches@cygwin.com>; Mon, 19 Jun 2017 12:55:48 +0200 (CEST)
+Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id 001935E01FB	for <cygwin-patches@cygwin.com>; Mon, 19 Jun 2017 12:55:47 +0200 (CEST)
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id D8011A80648; Mon, 19 Jun 2017 12:55:47 +0200 (CEST)
+Date: Mon, 19 Jun 2017 10:55:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Ensure that send() interrupted by a signal returns sucessfully
-Date: Thu, 15 Jun 2017 13:31:00 -0000
-Message-Id: <20170615133008.19708-1-erik.m.bray@gmail.com>
-X-IsSubscribed: yes
-X-SW-Source: 2017-q2/txt/msg00058.txt.bz2
+Subject: Re: [PATCH] Ensure that send() interrupted by a signal returns sucessfully
+Message-ID: <20170619105547.GB26654@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20170615133008.19708-1-erik.m.bray@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="CUfgB8w4ZwR/yMy5"
+Content-Disposition: inline
+In-Reply-To: <20170615133008.19708-1-erik.m.bray@gmail.com>
+User-Agent: Mutt/1.8.0 (2017-02-23)
+X-SW-Source: 2017-q2/txt/msg00059.txt.bz2
 
-When SA_RESTART is not set on a socket, a blocking send() that is
-interrupted mid-transition by a signal should return success (and
-report just how many bytes were actually transmitted).
 
-The err variable used here was not always guaranteed to be set
-correctly in the loop, so better to just remove it and call
-WSAGetLastError() explicitly.
----
- winsup/cygwin/fhandler_socket.cc | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+--CUfgB8w4ZwR/yMy5
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 674
 
-diff --git a/winsup/cygwin/fhandler_socket.cc b/winsup/cygwin/fhandler_socket.cc
-index f3d1d69..7a6dbdc 100644
---- a/winsup/cygwin/fhandler_socket.cc
-+++ b/winsup/cygwin/fhandler_socket.cc
-@@ -1769,7 +1769,7 @@ inline ssize_t
- fhandler_socket::send_internal (struct _WSAMSG *wsamsg, int flags)
- {
-   ssize_t res = 0;
--  DWORD ret = 0, err = 0, sum = 0;
-+  DWORD ret = 0, sum = 0;
-   WSABUF out_buf[wsamsg->dwBufferCount];
-   bool use_sendmsg = false;
-   DWORD wait_flags = flags & MSG_DONTWAIT;
-@@ -1830,14 +1830,14 @@ fhandler_socket::send_internal (struct _WSAMSG *wsamsg, int flags)
- 	    res = WSASendTo (get_socket (), wsamsg->lpBuffers,
- 			     wsamsg->dwBufferCount, &ret, flags,
- 			     wsamsg->name, wsamsg->namelen, NULL, NULL);
--	  if (res && (err = WSAGetLastError ()) == WSAEWOULDBLOCK)
-+	  if (res && (WSAGetLastError () == WSAEWOULDBLOCK))
- 	    {
- 	      LOCK_EVENTS;
- 	      wsock_events->events &= ~FD_WRITE;
- 	      UNLOCK_EVENTS;
- 	    }
- 	}
--      while (res && err == WSAEWOULDBLOCK
-+      while (res && (WSAGetLastError () == WSAEWOULDBLOCK)
- 	     && !(res = wait_for_events (FD_WRITE | FD_CLOSE, wait_flags)));
- 
-       if (!res)
-@@ -1851,7 +1851,7 @@ fhandler_socket::send_internal (struct _WSAMSG *wsamsg, int flags)
- 	  if (get_socket_type () != SOCK_STREAM || ret < out_len)
- 	    break;
- 	}
--      else if (is_nonblocking () || err != WSAEWOULDBLOCK)
-+      else if (is_nonblocking () || WSAGetLastError() != WSAEWOULDBLOCK)
- 	break;
-     }
- 
--- 
-2.8.3
+On Jun 15 15:30, Erik M. Bray wrote:
+> When SA_RESTART is not set on a socket, a blocking send() that is
+> interrupted mid-transition by a signal should return success (and
+> report just how many bytes were actually transmitted).
+>=20
+> The err variable used here was not always guaranteed to be set
+> correctly in the loop, so better to just remove it and call
+> WSAGetLastError() explicitly.
+> ---
+>  winsup/cygwin/fhandler_socket.cc | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+
+Pushed.
+
+
+Thanks,
+Corinna
+
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
+
+--CUfgB8w4ZwR/yMy5
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 819
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iQIcBAEBCAAGBQJZR62zAAoJEPU2Bp2uRE+g7QUP/35NEXBq7V3IIEZUQsVOTxwf
+C5juM0NbalgCHpfNOW5Z7RmaXcCeqQyUCKgLG7EUKIu9CRPmJPfP4x2H8Y5l5n0r
+kADdKbZuf76CFYWHEReFRA77Xx+gxkEqLCpB/736RzZxiNMbT4nKQIhRF0PyLpiC
+jXTTIuARdDZKbQlwZxvyOAByUJWgIZ8Fx8IQCM5TKUNsZfojuSX9QhmLsKLZQax8
+W/8XWWGUareJF+FWDUhVWXxuMIu0b66kltg+Mh+RghQiJq4uYFeFJa3th7t9eFAl
+t7hjsFrHw87Ny83qMx10ddBG+mhSXtObn3OixR1LWMtv+PtYtga6gBs2sqgD1uLI
+LK4KPdG22VuKLSKlQ8kyUwRt3rQnu9QMX9MjplxvDHYD+LZ8R4q1Ig63VDsrDOMQ
+VvXkDy9IoNoXNIV4cBauJ39sK8HIpEBtglijm9Gzh1OlOaGC3Gp4Pi40QKDrzfE+
+6iuwMfRQk0R//8E5xytDgYEuX408zOOcsz9AEYF8Uf3+/O8gojBlvImr+f0VrFCz
+ucTn3tSJkDdn1i44Vlf42+k5TInJtHPfuY5pOI7Nodizv+cOFuUC+zSnXh6dq7xu
+No0/C0J1R6p+iuCVmThahgaspj7mC/tV3ZO64vo/fFvXjW1wFMsNm1oV1GY/oXuy
+km4Lgo71Nq0ckIV4MuHs
+=2ZAf
+-----END PGP SIGNATURE-----
+
+--CUfgB8w4ZwR/yMy5--
