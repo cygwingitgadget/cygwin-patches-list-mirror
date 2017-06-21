@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8791-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 63312 invoked by alias); 20 Jun 2017 08:17:39 -0000
+Return-Path: <cygwin-patches-return-8792-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 117106 invoked by alias); 21 Jun 2017 17:54:14 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,116 +9,113 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 63278 invoked by uid 89); 20 Jun 2017 08:17:37 -0000
+Received: (qmail 117088 invoked by uid 89); 21 Jun 2017 17:54:12 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-101.9 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=H*c:application, H*Ad:U*cygwin-patches, HTo:U*cygwin-patches, among
-X-HELO: drew.franken.de
-Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 20 Jun 2017 08:17:33 +0000
-Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id 62625721E282F	for <cygwin-patches@cygwin.com>; Tue, 20 Jun 2017 10:17:29 +0200 (CEST)
-Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id BB4715E03D0	for <cygwin-patches@cygwin.com>; Tue, 20 Jun 2017 10:17:28 +0200 (CEST)
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id A2701A80648; Tue, 20 Jun 2017 10:17:28 +0200 (CEST)
-Date: Tue, 20 Jun 2017 08:17:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-2.5 required=5.0 tests=AWL,BAYES_00,SPF_PASS autolearn=ham version=3.3.2 spammy=watching, ume, H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
+X-HELO: mail.pismotechnic.com
+Received: from mail.pismotechnic.com (HELO mail.pismotechnic.com) (162.218.67.164) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 21 Jun 2017 17:54:11 +0000
+Received: from [10.2.1.30] (unknown [73.240.197.175])	by mail.pismotechnic.com (Postfix) with ESMTPSA id 36BDD160DFC	for <cygwin-patches@cygwin.com>; Wed, 21 Jun 2017 10:54:09 -0700 (PDT)
+Message-ID: <594AB2BB.3060307@pismotec.com>
+Date: Wed, 21 Jun 2017 17:54:00 -0000
+From: Joe Lowe <joe@pismotec.com>
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:25.9) Gecko/20160412 FossaMail/25.2.1
+MIME-Version: 1.0
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] Compatibility improvement to reparse point handling, v3
-Message-ID: <20170620081728.GB8342@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <594199C4.9080804@pismotec.com> <20170619114532.GC26654@calimero.vinschen.de> <59481C4D.5030206@pismotec.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="/WwmFnJnmDyWGHa4"
-Content-Disposition: inline
-In-Reply-To: <59481C4D.5030206@pismotec.com>
-User-Agent: Mutt/1.8.0 (2017-02-23)
-X-SW-Source: 2017-q2/txt/msg00062.txt.bz2
+References: <594199C4.9080804@pismotec.com> <20170619114532.GC26654@calimero.vinschen.de> <59481C4D.5030206@pismotec.com> <20170620081728.GB8342@calimero.vinschen.de>
+In-Reply-To: <20170620081728.GB8342@calimero.vinschen.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
+X-SW-Source: 2017-q2/txt/msg00063.txt.bz2
 
 
---/WwmFnJnmDyWGHa4
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 2359
 
-On Jun 19 11:47, Joe Lowe wrote:
->=20
-> On 2017-06-19 04:45, Corinna Vinschen wrote:> Hi Joe,
-> >=20
-> > As discussed in the previous iteration of this patch, this change
-> > results in nuking DT_UNKNOWN for reparse points we don't handle.  Still,
-> > IMHO, if we have reparse points we know nothing about, they should stay
-> > DT_UNKNOWN.
-> >=20
-> > Why is changing them to DT_DIR/DT_REG a good idea?  Please convince me.
->=20
-> As coded, the patch makes the dentry.d_type field consistent with
-> S_ISREG and S_ISDIR on the results of lstat-ing the same name. This
-> seems correct to me, from the standpoint of avoiding compatibility
-> issues with any *nix application code that may look at the d_type
-> value and make some inference from it. I do not know of any specific
-> application examples where this is actually a problem.
->=20
-> My concern with DT_UNKNOWN for unknown reparse tags: it indicates
-> to cygwin applications and developers that reparse tags are an
-> extended file system node type enumeration. In general this is
-> incorrect. Reparse tags are a type of extended attribute that can be
-> attached to any regular NTFS file or directory. Reparse tags do not
-> necessarily do anything to prevent normal access to the
-> file/directory.
+On 2017-06-20 01:17, Corinna Vinschen wrote:
+> Actually, DT_UNKNOWN indicates nothing.  The sole purpose of this
+> value is to tell the application that the information is not readily
+> available without having to perform costly operations, which often
 
-Actually, DT_UNKNOWN indicates nothing.  The sole purpose of this
-value is to tell the application that the information is not readily
-available without having to perform costly operations, which often
-is the case for remote filesystems.  From the Linux man page:
+OK.
 
-  DT_UNKNOWN  The file type could not be determined.
+> I pushed your patch, plus a follow-up patch to handle remote reparse
+> points correctly, as outlined in my previous reply.
 
-  Currently, only some filesystems (among them: Btrfs, ext2, ext3,
-  and ext4) have full support  for  returning  the  file  type  in
-  d_type.   All  applications  must  properly  handle  a return of
-  DT_UNKNOWN.
+Thanks, and for catching the isremote() fix.
 
-> If you like, I will redo the patch to return dentry.d_type of
-> DT_UNKNOWN for files/directories with unknown reparse tags.
-> Let me know.
+I adhoc tested against a variety of symlink and mountpoint reparse
+points. I dont see any issues, and changes are working as expected.
+I will keep watching the dev and patch mail lists for a while, but if
+some issues pop-up then feel free to contact me directly.
 
-No, it's ok.  Let's go with this as you wrote it.
-
-I pushed your patch, plus a follow-up patch to handle remote reparse
-points correctly, as outlined in my previous reply.
-
-I uploaded new developer snapshots to https://cygwin.com/snapshots/
-Please give them a try.
+Joe L.
 
 
-Thanks,
-Corinna
+Some test results.
+Previous cygwin.
 
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
+joe@dev /cygdrive/c/Volumes
+$ ls -ladsh *
+0 lrwxrwxrwx  1 joe None 51 Jun 21 09:58 file_device_symlink.txt -> /cygdrive/c/Device/HarddiskVolume13/folder/file.txt
+0 lrwxrwxrwx  1 joe None 27 Jun 21 09:58 file_drive_symlink.txt -> /cygdrive/g/folder/file.txt
+0 lrwxrwxrwx  1 joe None 69 Jun 21 09:58 file_guid_symlink.txt -> /cygdrive/c/ume{0fe73790-e32c-11e6-827a-bc5ff473f2ab}/folder/file.txt
+0 lrwxrwxrwx  1 joe None 15 Jun 21 09:58 file_relative_symlink.txt -> folder/file.txt
+0 drwxrwx---+ 1 joe None  0 Jun 21 09:55 folder
+0 lrwxrwxrwx  1 joe None 42 Jun 21 09:58 folder_device_mountpoint -> /cygdrive/c/Device/HarddiskVolume13/folder
+0 lrwxrwxrwx  1 joe None 42 Jun 21 09:58 folder_device_symlink -> /cygdrive/c/Device/HarddiskVolume13/folder
+0 lrwxrwxrwx  1 joe None 18 Jun 21 09:58 folder_drive_mountpoint -> /cygdrive/g/folder
+0 lrwxrwxrwx  1 joe None 18 Jun 21 09:58 folder_drive_symlink -> /cygdrive/g/folder
+0 drwxr-xr-x  1 joe None  0 Jun 21 09:55 folder_guid_mountpoint
+0 lrwxrwxrwx  1 joe None 60 Jun 21 09:58 folder_guid_symlink -> /cygdrive/c/ume{0fe73790-e32c-11e6-827a-bc5ff473f2ab}/folder
+0 lrwxrwxrwx  1 joe None  6 Jun 21 09:58 folder_relative_symlink -> folder
+0 lrwxrwxrwx  1 joe None 36 Jun 21 09:58 volume_device_mountpoint -> /cygdrive/c/Device/HarddiskVolume13/
+0 lrwxrwxrwx  1 joe None 36 Jun 21 09:58 volume_device_symlink -> /cygdrive/c/Device/HarddiskVolume13/
+0 lrwxrwxrwx  1 joe None 11 Jun 21 09:58 volume_drive_mountpoint -> /cygdrive/g
+0 lrwxrwxrwx  1 joe None 11 Jun 21 09:58 volume_drive_symlink -> /cygdrive/g
+0 drwxr-xr-x  1 joe None  0 Dec 31  1979 volume_guid_mountpoint
+0 lrwxrwxrwx  1 joe None 54 Jun 21 09:58 volume_guid_symlink -> /cygdrive/c/ume{0fe73790-e32c-11e6-827a-bc5ff473f2ab}/
 
---/WwmFnJnmDyWGHa4
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
+joe@dev /cygdrive/c/Volumes
+$ grep -r hello .
+./folder/file.txt:hello
+./folder_guid_mountpoint/file.txt:hello
+./volume_guid_mountpoint/folder/file.txt:hello
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
 
-iQIcBAEBCAAGBQJZSNoYAAoJEPU2Bp2uRE+g44AP/RCYf+XlcIruW7BxZBBFDzJ6
-JuPE4gWiuKAhVC2CFCodkdtKugx6HTJK1TNfAkvI/cRyA/8Z0ZLeFwLW+WO4RfXZ
-ncA45WPdHuD7bEWUDrVVw+JrdN9o7zzyKylXo0TsZM0OE+pc2dCPU/AEf2PAy29r
-10bVV3WqQFMUZn4cgWgsjDTqXZj8Vlfx4BXD9bGw3yf65uwyyQ/avU3fgL61GYRT
-IyK995udrQsLTEjdkJv8VzYnNAmK6mdEU/wNaHzaBER/Z3vagkOCntes4Uohf4RK
-kVSb2FB+tKA/X/cBpud1yKWJhxFpvoviUNsy236J9PBM8O9/RbVYgDITpalOJ+2O
-ADESHQU2IgdeVJIsMDPnUEyNNBrg3dtP1uJKjc7J65H56nITes2L/ifSUvtCMpdD
-LHGW+c6K4fPl/wBKnuAmj4seD9vTe6KsNyxNp1SPbNBKdH5tah5D/NBl0bNGhOBT
-OLdXoKNu9tjLaiR3Cj9Zh/wLTK1HEy7UbMF6bMBYCsDjY+6N5OupOEUlKJq9gL4q
-VPvtGroR7wVPbWjY22OynlnM5tic+ZKEBHOw/t7R8XtFDm+C3podDQ6Vv/5g3YMg
-JOA8x3SnvWh8SogChUXU5/Iswn3/gTCDZQaexZngXLAiXn5dNK/qtrBvska2gT0b
-+G0khVtIMITp6CaOKj46
-=b6us
------END PGP SIGNATURE-----
+Updated cygwin.
 
---/WwmFnJnmDyWGHa4--
+joe@dev /cygdrive/c/Volumes
+$ ls -ladsh *
+4.0K -rw-r--r--  1 joe None  7 Jun 21 09:58 file_device_symlink.txt
+   0 lrwxrwxrwx  1 joe None 27 Jun 21 09:58 file_drive_symlink.txt -> /cygdrive/g/folder/file.txt
+4.0K -rw-r--r--  1 joe None  7 Jun 21 09:58 file_guid_symlink.txt
+   0 lrwxrwxrwx  1 joe None 15 Jun 21 09:58 file_relative_symlink.txt -> folder/file.txt
+   0 drwxrwx---+ 1 joe None  0 Jun 21 09:55 folder
+   0 drwxr-xr-x  1 joe None  0 Jun 21 09:55 folder_device_mountpoint
+   0 drwxr-xr-x  1 joe None  0 Jun 21 09:55 folder_device_symlink
+   0 lrwxrwxrwx  1 joe None 18 Jun 21 09:58 folder_drive_mountpoint -> /cygdrive/g/folder
+   0 lrwxrwxrwx  1 joe None 18 Jun 21 09:58 folder_drive_symlink -> /cygdrive/g/folder
+   0 drwxr-xr-x  1 joe None  0 Jun 21 09:55 folder_guid_mountpoint
+   0 drwxr-xr-x  1 joe None  0 Jun 21 09:55 folder_guid_symlink
+   0 lrwxrwxrwx  1 joe None  6 Jun 21 09:58 folder_relative_symlink -> folder
+   0 drwxr-xr-x  1 joe None  0 Dec 31  1979 volume_device_mountpoint
+   0 drwxr-xr-x  1 joe None  0 Dec 31  1979 volume_device_symlink
+   0 lrwxrwxrwx  1 joe None 11 Jun 21 09:58 volume_drive_mountpoint -> /cygdrive/g
+   0 lrwxrwxrwx  1 joe None 11 Jun 21 09:58 volume_drive_symlink -> /cygdrive/g
+   0 drwxr-xr-x  1 joe None  0 Dec 31  1979 volume_guid_mountpoint
+   0 drwxr-xr-x  1 joe None  0 Dec 31  1979 volume_guid_symlink
+
+joe@dev /cygdrive/c/Volumes
+$ grep -r hello .
+./file_device_symlink.txt:hello
+./file_guid_symlink.txt:hello
+./folder/file.txt:hello
+./folder_device_mountpoint/file.txt:hello
+./folder_device_symlink/file.txt:hello
+./folder_guid_mountpoint/file.txt:hello
+./folder_guid_symlink/file.txt:hello
+./volume_device_mountpoint/folder/file.txt:hello
+./volume_device_symlink/folder/file.txt:hello
+./volume_guid_mountpoint/folder/file.txt:hello
+./volume_guid_symlink/folder/file.txt:hello
