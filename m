@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8793-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 89870 invoked by alias); 21 Jun 2017 18:36:05 -0000
+Return-Path: <cygwin-patches-return-8794-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 25436 invoked by alias); 21 Jun 2017 18:37:01 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,52 +9,116 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 86222 invoked by uid 89); 21 Jun 2017 18:36:02 -0000
+Received: (qmail 23242 invoked by uid 89); 21 Jun 2017 18:36:59 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-22.3 required=5.0 tests=AWL,BAYES_40,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.2 spammy=authorization, organisation, Settings, HX-Junkmail-Premium-Raw:__HAS_X_MAILER
-X-HELO: rgout04.bt.lon5.cpcloud.co.uk
-Received: from rgout04.bt.lon5.cpcloud.co.uk (HELO rgout04.bt.lon5.cpcloud.co.uk) (65.20.0.181) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 21 Jun 2017 18:36:01 +0000
+X-Spam-SWARE-Status: No, score=-24.2 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.2 spammy=para, agent, administrator, HTo:U*cygwin-patches
+X-HELO: rgout0805.bt.lon5.cpcloud.co.uk
+Received: from rgout0805.bt.lon5.cpcloud.co.uk (HELO rgout0805.bt.lon5.cpcloud.co.uk) (65.20.0.152) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 21 Jun 2017 18:36:58 +0000
 X-OWM-Source-IP: 86.158.32.120 (GB)
 X-OWM-Env-Sender: jonturney@btinternet.com
-X-Junkmail-Premium-Raw: score=7/50,refid=2.7.2:2017.6.21.180916:17:7.944,ip=,rules=__HAS_FROM, __TO_MALFORMED_2, __TO_NO_NAME, __HAS_CC_HDR, __CC_NAME, __CC_NAME_DIFF_FROM_ACC, __SUBJ_ALPHA_END, __HAS_MSGID, __SANE_MSGID, __HAS_X_MAILER, __FROM_DOMAIN_IN_ANY_CC1, __PHISH_SPEAR_PASSWORD_1, __HAS_HTML, HTML_NO_HTTP, BODY_SIZE_1300_1399, BODYTEXTP_SIZE_3000_LESS, __MIME_TEXT_P1, __MIME_TEXT_ONLY, BODY_SIZE_5000_LESS, __FROM_DOMAIN_IN_RCPT, __CC_REAL_NAMES, MULTIPLE_REAL_RCPTS, LEGITIMATE_SIGNS, NO_URI_FOUND, NO_CTA_URI_FOUND, BODY_SIZE_2000_LESS, __MIME_TEXT_P, NO_URI_HTTPS, BODY_SIZE_7000_LESS
-Received: from localhost.localdomain (86.158.32.120) by rgout04.bt.lon5.cpcloud.co.uk (9.0.019.13-1) (authenticated as jonturney@btinternet.com)        id 58482DA2149E3DB7; Wed, 21 Jun 2017 19:35:58 +0100
+X-Junkmail-Premium-Raw: score=8/50,refid=2.7.2:2017.6.8.141815:17:8.707,ip=,rules=NO_URI_FOUND, NO_CTA_URI_FOUND, NO_MESSAGE_ID, NO_URI_HTTPS, TO_MALFORMED
+Received: from localhost.localdomain (86.158.32.120) by rgout08.bt.lon5.cpcloud.co.uk (9.0.019.13-1) (authenticated as jonturney@btinternet.com)        id 58BFF0800B82F0EB; Wed, 21 Jun 2017 19:36:55 +0100
 From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
 Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH] Update documentation of cygwin setup proxy configuration details
-Date: Wed, 21 Jun 2017 18:36:00 -0000
-Message-Id: <20170621183545.211512-1-jon.turney@dronecode.org.uk>
-X-SW-Source: 2017-q2/txt/msg00064.txt.bz2
+Subject: [PATCH] Update and sort list of cygwin setup command line options.
+Date: Wed, 21 Jun 2017 18:37:00 -0000
+Message-Id: <20170621183626.209840-1-jon.turney@dronecode.org.uk>
+X-SW-Source: 2017-q2/txt/msg00065.txt.bz2
 
 Signed-off-by: Jon Turney <jon.turney@dronecode.org.uk>
 ---
- winsup/doc/setup-net.xml | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
+ winsup/doc/faq-setup.xml | 62 +++++++++++++++++++++++++++++-------------------
+ 1 file changed, 38 insertions(+), 24 deletions(-)
 
-diff --git a/winsup/doc/setup-net.xml b/winsup/doc/setup-net.xml
-index 211bbed69..82b1e0dc9 100644
---- a/winsup/doc/setup-net.xml
-+++ b/winsup/doc/setup-net.xml
-@@ -132,14 +132,11 @@ or in case you need to reinstall a package.
+diff --git a/winsup/doc/faq-setup.xml b/winsup/doc/faq-setup.xml
+index 0fc263571..3917f2d30 100644
+--- a/winsup/doc/faq-setup.xml
++++ b/winsup/doc/faq-setup.xml
+@@ -53,45 +53,59 @@ For other options, search the mailing lists with terms such as
+ <question><para>Does Setup accept command-line arguments?</para></question>
+ <answer>
  
- <sect2 id="setup-connection"><title>Connection Method</title>
- <para>
--The <literal>Direct Connection</literal> method of downloading will 
--directly download the packages, while the IE5 method will leverage your 
--IE5 cache for performance. If your organisation uses a proxy server or
--auto-configuration scripts, the IE5 method also uses these settings.
--If you have a proxy server, you can manually type it into 
--the <literal>Use Proxy</literal> section. Unfortunately, 
--<command>setup.exe</command> does not currently support password
--authorization for proxy servers.
-+The <literal>Direct Connection</literal> method of downloading will
-+directly connect.  If your system is configured to use a proxy server or
-+auto-configuration scripts, the <literal>Use System Proxy Settings</literal>
-+method uses those settings.  Alternatively, you can manually enter proxy
-+settings into the <literal>Use HTTP/FTP Proxy</literal> section.
- </para>
- </sect2>
+-<para>Yes, the full listing is written to the <literal>setup.log</literal> file 
+-when you run <literal>setup-x86.exe --help</literal> or
+-<literal>setup-x86_64.exe --help</literal>. The current options are:
++<para>Yes, run <literal>setup-x86.exe --help</literal> or
++<literal>setup-x86_64.exe --help</literal> for a list.
++</para>
++
+ <screen>
+-Command Line Options:
++    --allow-unsupported-windows    Allow old, unsupported Windows versions
++ -a --arch                         architecture to install (x86_64 or x86)
++ -C --categories                   Specify entire categories to install
++ -o --delete-orphans               remove orphaned packages
++ -A --disable-buggy-antivirus      Disable known or suspected buggy anti virus
++                                   software packages during execution.
+  -D --download                     Download from internet
++ -f --force-current                select the current version for all packages
++ -h --help                         print help
++ -I --include-source               Automatically include source download
++ -i --ini-basename                 Use a different basename, e.g. "foo",
++                                   instead of "setup"
++ -U --keep-untrusted-keys          Use untrusted keys and retain all
+  -L --local-install                Install from local directory
+- -s --site                         Download site
+- -O --only-site                    Ignore all sites except for -s
+- -R --root                         Root installation directory
+- -x --remove-packages              Specify packages to uninstall
+- -c --remove-categories            Specify categories to uninstall
+- -P --packages                     Specify packages to install
+- -C --categories                   Specify entire categories to install
+- -p --proxy                        HTTP/FTP proxy (host:port)
+- -a --arch                         architecture to install (x86_64 or x86)
+- -q --quiet-mode                   Unattended setup mode
+- -M --package-manager              Semi-attended chooser-only mode
++ -l --local-package-dir            Local package directory
++ -m --mirror-mode                  Skip availability check when installing from
++                                   local directory (requires local directory to
++                                   be clean mirror!)
+  -B --no-admin                     Do not check for and enforce running as
+                                    Administrator
+- -h --help                         print help
+- -l --local-package-dir            Local package directory
++ -d --no-desktop                   Disable creation of desktop shortcut
+  -r --no-replaceonreboot           Disable replacing in-use files on next
+                                    reboot.
+- -X --no-verify                    Don't verify setup.ini signatures
+  -n --no-shortcuts                 Disable creation of desktop and start menu
+                                    shortcuts
+  -N --no-startmenu                 Disable creation of start menu shortcut
+- -d --no-desktop                   Disable creation of desktop shortcut
++ -X --no-verify                    Don't verify setup.ini signatures
++ -O --only-site                    Ignore all sites except for -s
++ -M --package-manager              Semi-attended chooser-only mode
++ -P --packages                     Specify packages to install
++ -p --proxy                        HTTP/FTP proxy (host:port)
++ -Y --prune-install                prune the installation to only the requested
++                                   packages
+  -K --pubkey                       URL of extra public key file (gpg format)
++ -q --quiet-mode                   Unattended setup mode
++ -c --remove-categories            Specify categories to uninstall
++ -x --remove-packages              Specify packages to uninstall
++ -R --root                         Root installation directory
+  -S --sexpr-pubkey                 Extra public key in s-expr format
++ -s --site                         Download site
+  -u --untrusted-keys               Use untrusted keys from last-extrakeys
+- -U --keep-untrusted-keys          Use untrusted keys and retain all
+  -g --upgrade-also                 also upgrade installed packages
+- -o --delete-orphans               remove orphaned packages
+- -A --disable-buggy-antivirus      Disable known or suspected buggy anti virus
+-                                   software packages during execution.
++    --user-agent                   User agent string for HTTP requests
++ -v --verbose                      Verbose output
++ -W --wait                         When elevating, wait for elevated child
++                                   process
+ </screen>
+-</para>
++
+ </answer></qandaentry>
  
+ <qandaentry id="faq.setup.noroot">
 -- 
 2.12.3
