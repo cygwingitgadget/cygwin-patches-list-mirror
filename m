@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8804-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 44898 invoked by alias); 10 Jul 2017 07:50:44 -0000
+Return-Path: <cygwin-patches-return-8805-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 12288 invoked by alias); 24 Jul 2017 04:10:54 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,115 +9,83 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 43673 invoked by uid 89); 10 Jul 2017 07:50:43 -0000
+Received: (qmail 73848 invoked by uid 89); 24 Jul 2017 04:07:15 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-124.4 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=H*c:application, H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
-X-HELO: drew.franken.de
-Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 10 Jul 2017 07:50:41 +0000
-Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id A48C8721E280D	for <cygwin-patches@cygwin.com>; Mon, 10 Jul 2017 09:50:37 +0200 (CEST)
-Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id D16625E0409	for <cygwin-patches@cygwin.com>; Mon, 10 Jul 2017 09:50:36 +0200 (CEST)
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id BA835A80522; Mon, 10 Jul 2017 09:50:36 +0200 (CEST)
-Date: Mon, 10 Jul 2017 07:50:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-24.3 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW autolearn=ham version=3.3.2 spammy=H*Ad:D*ca, H*r:ip*192.168.1.100, H*RU:!192.168.1.100!, Hx-spam-relays-external:!192.168.1.100!
+X-HELO: smtp-out-no.shaw.ca
+Received: from smtp-out-no.shaw.ca (HELO smtp-out-no.shaw.ca) (64.59.134.12) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 24 Jul 2017 04:07:13 +0000
+Received: from [192.168.1.100] ([24.64.240.204])	by shaw.ca with SMTP	id ZUeEdYNrhI8mCZUeFdjYUC; Sun, 23 Jul 2017 22:07:12 -0600
+X-Authority-Analysis: v=2.2 cv=HahkdmM8 c=1 sm=1 tr=0 a=MVEHjbUiAHxQW0jfcDq5EA==:117 a=MVEHjbUiAHxQW0jfcDq5EA==:17 a=r77TgQKjGQsHNAKrUKIA:9 a=Up6tEhC2y6cmVspmuR4A:9 a=QEXdDO2ut3YA:10 a=tOlO8ef7fwwkDf0Z4y0A:9 a=CdiWusdWvyIA:10
+Reply-To: Brian.Inglis@SystematicSw.ab.ca
+Subject: Re: Cygwin strptime() is missing "%s" which strftime() has
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: fix guard on struct siginfo_t
-Message-ID: <20170710075036.GB30071@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20170707223811.229596-1-yselkowi@redhat.com>
+References: <BY1PR09MB0343663DE41D927E67CF0CCEA5BB0@BY1PR09MB0343.namprd09.prod.outlook.com>
+From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
+Message-ID: <acc19ec5-055b-1bd4-997d-a247755163bf@SystematicSw.ab.ca>
+Date: Mon, 24 Jul 2017 04:10:00 -0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Thunderbird/52.2.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="jho1yZJdad60DJr+"
-Content-Disposition: inline
-In-Reply-To: <20170707223811.229596-1-yselkowi@redhat.com>
-User-Agent: Mutt/1.8.0 (2017-02-23)
-X-SW-Source: 2017-q3/txt/msg00006.txt.bz2
+In-Reply-To: <BY1PR09MB0343663DE41D927E67CF0CCEA5BB0@BY1PR09MB0343.namprd09.prod.outlook.com>
+Content-Type: multipart/mixed; boundary="------------7A56D5B5DA3497A139629A78"
+X-CMAE-Envelope: MS4wfBRPJzZKfq2KNLeQv7MaSQGjMhEUyhuNVmZDLdwMh41y4t3XlmNfC69Q1WIeHKaJHZiVzzoB97YUIcBXfW17xa1+I+1rFTL/pHWuVqfEQdyaHsrSUbha lZ86zueKdZ7OsLz6zRoG6Tx/t29IlfUzWi2ccXBAJ1NATe0+iCHrKUHD859TmOveW1SpJu4d1dto/Izp8icVdcqBVOjTAV1+nOw=
+X-SW-Source: 2017-q3/txt/msg00007.txt.bz2
 
-
---jho1yZJdad60DJr+
+This is a multi-part message in MIME format.
+--------------7A56D5B5DA3497A139629A78
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1417
+Content-Transfer-Encoding: 7bit
+Content-length: 910
 
-On Jul  7 17:38, Yaakov Selkowitz wrote:
-> Add line breaks to make it clearer that the struct packing applies to more
-> than one struct.
->=20
-> Signed-off-by: Yaakov Selkowitz <yselkowi@redhat.com>
-> ---
-> We probably should consider a 2.8.2 sooner rather than later.
->=20
->  winsup/cygwin/include/cygwin/signal.h | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->=20
-> diff --git a/winsup/cygwin/include/cygwin/signal.h b/winsup/cygwin/includ=
-e/cygwin/signal.h
-> index e73874c62..af0833688 100644
-> --- a/winsup/cygwin/include/cygwin/signal.h
-> +++ b/winsup/cygwin/include/cygwin/signal.h
-> @@ -175,7 +175,10 @@ typedef struct sigevent
->    pthread_attr_t *sigev_notify_attributes; /* notification attributes */
->  } sigevent_t;
->=20=20
-> +#if __POSIX_VISIBLE >=3D 199309
-> +
->  #pragma pack(push,4)
-> +
->  struct _sigcommune
->  {
->    __uint32_t _si_code;
-> @@ -190,8 +193,6 @@ struct _sigcommune
->    };
->  };
->=20=20
-> -#if __POSIX_VISIBLE >=3D 199309
-> -
->  #define __SI_PAD_SIZE 32
->  #ifdef __INSIDE_CYGWIN__
->  # ifndef max
-> @@ -251,6 +252,7 @@ typedef struct
->  #endif /*__INSIDE_CYGWIN__*/
->    };
->  } siginfo_t;
-> +
->  #pragma pack(pop)
->=20=20
->  #endif /* __POSIX_VISIBLE >=3D 199309 */
-> --=20
-> 2.12.3
+On 2017-07-23 20:09, Lavrentiev, Anton (NIH/NLM/NCBI) [C] wrote:
+>> But that's just scanning a decimal integer to time_t.
+> 
+> It's not a question of whether I can or can't convert a string into an integer, rather it's a question about portability of code that uses %s for both functions and expects it to work unchanged in the Cygwin environment.  Also, strptime() was designed to be a reversal to strftime() (from the man-pages: the  strptime() function is the converse function to strftime(3)) so both are supposed to "understand" the same basic set of formats.  Because of Cygwin's strptime() missing "%s", the following also does not work even from command line:
+> 
+> $ date +"%s" | strptime "%s"
 
-ACK, please push.
+Attached diff for proposed strptime %s and %F support.
+Let me know if you would prefer a different approach before I submit a git
+format-patch.
 
+-- 
+Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
 
-Thanks,
-Corinna
+--------------7A56D5B5DA3497A139629A78
+Content-Type: text/plain; charset=UTF-8;
+ name="0001-add-strptime-%s-%F.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="0001-add-strptime-%s-%F.patch"
+Content-length: 1700
 
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
+ZGlmZiAtLWdpdCBhL25ld2xpYi9saWJjL3RpbWUvc3RycHRpbWUuYyBiL25l
+d2xpYi9saWJjL3RpbWUvc3RycHRpbWUuYwppbmRleCBjMDg2MWViODcuLmIz
+NTJiY2JhYiAxMDA2NDQKLS0tIGEvbmV3bGliL2xpYmMvdGltZS9zdHJwdGlt
+ZS5jCisrKyBiL25ld2xpYi9saWJjL3RpbWUvc3RycHRpbWUuYwpAQCAtMzgs
+NiArMzgsNyBAQAogI2luY2x1ZGUgPHN0cmluZ3MuaD4KICNpbmNsdWRlIDxj
+dHlwZS5oPgogI2luY2x1ZGUgPHN0ZGxpYi5oPgorI2luY2x1ZGUgPGludHR5
+cGVzLmg+CiAjaW5jbHVkZSAiLi4vbG9jYWxlL3NldGxvY2FsZS5oIgogCiAj
+ZGVmaW5lIF9jdGxvYyh4KSAoX0N1cnJlbnRUaW1lTG9jYWxlLT54KQpAQCAt
+MjMwLDYgKzIzMSwxMyBAQCBzdHJwdGltZV9sIChjb25zdCBjaGFyICpidWYs
+IGNvbnN0IGNoYXIgKmZvcm1hdCwgc3RydWN0IHRtICp0aW1lcHRyLAogCQli
+dWYgPSBzOwogCQl5bWQgfD0gU0VUX01EQVk7CiAJCWJyZWFrOworCSAgICBj
+YXNlICdGJyA6CQkvKiAlWS0lbS0lZCAqLworCQlzID0gc3RycHRpbWVfbCAo
+YnVmLCAiJVktJW0tJWQiLCB0aW1lcHRyLCBsb2NhbGUpOworCQlpZiAocyA9
+PSBOVUxMKQorCQkgICAgcmV0dXJuIE5VTEw7CisJCWJ1ZiA9IHM7CisJCXlt
+ZCB8PSBTRVRfWU1EOworCQlicmVhazsKIAkgICAgY2FzZSAnSCcgOgogCSAg
+ICBjYXNlICdrJyA6CiAJCXJldCA9IHN0cnRvbF9sIChidWYsICZzLCAxMCwg
+bG9jYWxlKTsKQEAgLTMwMCw2ICszMDgsMjEgQEAgc3RycHRpbWVfbCAoY29u
+c3QgY2hhciAqYnVmLCBjb25zdCBjaGFyICpmb3JtYXQsIHN0cnVjdCB0bSAq
+dGltZXB0ciwKIAkJICAgIHJldHVybiBOVUxMOwogCQlidWYgPSBzOwogCQli
+cmVhazsKKwkgICAgY2FzZSAncycgOiB7CisJCSAgICBpbnRtYXhfdCBzZWM7
+CisJCSAgICB0aW1lX3QgdDsKKworCQkgICAgc2VjID0gc3RydG9pbWF4IChi
+dWYsICZzLCAxMCk7CisJCSAgICB0ID0gKHRpbWVfdClzZWM7CisJCSAgICBp
+ZiAocyA9PSBidWYKKwkJCXx8IChpbnRtYXhfdCl0ICE9IHNlYworCQkJfHwg
+bG9jYWx0aW1lX3IgKCZ0LCB0aW1lcHRyKSAhPSB0aW1lcHRyKQorCQkJcmV0
+dXJuIE5VTEw7CisJCSAgICA7CisJCSAgICBidWYgPSBzOworCQkgICAgeW1k
+IHw9IFNFVF9ZREFZIHwgU0VUX1dEQVkgfCBTRVRfWU1EOworCQkgICAgYnJl
+YWs7CisJCX0KIAkgICAgY2FzZSAnUycgOgogCQlyZXQgPSBzdHJ0b2xfbCAo
+YnVmLCAmcywgMTAsIGxvY2FsZSk7CiAJCWlmIChzID09IGJ1ZikK
 
---jho1yZJdad60DJr+
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJZYzHMAAoJEPU2Bp2uRE+gtQMP/ii/XsO+03naWwJIvEfJUgxO
-qmCLSxnI8kMxeeRIpKRGz8SdEfKuypgDa6FyljG9YJbdYNQhlz37xNrhIm8alOg1
-txyqWfSmGZN0bA109EjQJvSKHywk1ddE17TolP6XuYqj0/7fGyTTkA0/woUbGZ/3
-b16d1Li7lwxvHQWw1aNJW7MahtT9xPSPBETlC+QaQpxouWQvP3qpmd7VxOeqFG/i
-jfvKRG5I6k5br9vZyQwEhTBammdSb+DEAfW3arz13RdV/yrSeY3QlSMlczC3/mVa
-MgnKArDf3Gar8aEwesCynPDDC1DRQf1mPRw4AwO2GeU/Q9qQI3eYb+2Yvv4KVjfA
-Ug+tLP779CEIav0TC56QBlDYa6PkPlTOxerwXERk8XuZMSE32VAm9SkHizGPK9//
-UWRtW9XIH4yAhvHQncUyPnBHVw6NoZ456S4O/dlMvhpYbJlm4fW4asbSHLCgcH/J
-holr3C6JwtdVRqu/gg3t0wp1zVxJqqju3Z1DLsOUOntSG3g2OVhVo0hTRWF+oh9v
-9s2+tiiworGI3Nz0SzcNe5AiVmekfPelCiZCTPqGmgGfplD6jcK4i7MGDpfX68Vu
-2bKXP4LWd9EhN+vk/YjP3nRiprZ5MOVEIFRE1tnmzq7f4oqWXMuOt3IGpDI/kXgF
-Fofk1sK3wNF6a4IVj3ZI
-=xcHw
------END PGP SIGNATURE-----
-
---jho1yZJdad60DJr+--
+--------------7A56D5B5DA3497A139629A78--
