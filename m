@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8805-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 12288 invoked by alias); 24 Jul 2017 04:10:54 -0000
+Return-Path: <cygwin-patches-return-8806-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 12804 invoked by alias); 24 Jul 2017 04:10:55 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,12 +9,12 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 73848 invoked by uid 89); 24 Jul 2017 04:07:15 -0000
+Received: (qmail 36957 invoked by uid 89); 24 Jul 2017 04:09:15 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-24.3 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW autolearn=ham version=3.3.2 spammy=H*Ad:D*ca, H*r:ip*192.168.1.100, H*RU:!192.168.1.100!, Hx-spam-relays-external:!192.168.1.100!
+X-Spam-SWARE-Status: No, score=-24.3 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW autolearn=unavailable version=3.3.2 spammy=HTo:U*cygwin-patches
 X-HELO: smtp-out-no.shaw.ca
-Received: from smtp-out-no.shaw.ca (HELO smtp-out-no.shaw.ca) (64.59.134.12) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 24 Jul 2017 04:07:13 +0000
+Received: from smtp-out-no.shaw.ca (HELO smtp-out-no.shaw.ca) (64.59.134.9) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 24 Jul 2017 04:09:14 +0000
 Received: from [192.168.1.100] ([24.64.240.204])	by shaw.ca with SMTP	id ZUeEdYNrhI8mCZUeFdjYUC; Sun, 23 Jul 2017 22:07:12 -0600
 X-Authority-Analysis: v=2.2 cv=HahkdmM8 c=1 sm=1 tr=0 a=MVEHjbUiAHxQW0jfcDq5EA==:117 a=MVEHjbUiAHxQW0jfcDq5EA==:17 a=r77TgQKjGQsHNAKrUKIA:9 a=Up6tEhC2y6cmVspmuR4A:9 a=QEXdDO2ut3YA:10 a=tOlO8ef7fwwkDf0Z4y0A:9 a=CdiWusdWvyIA:10
 Reply-To: Brian.Inglis@SystematicSw.ab.ca
@@ -23,13 +23,14 @@ To: cygwin-patches@cygwin.com
 References: <BY1PR09MB0343663DE41D927E67CF0CCEA5BB0@BY1PR09MB0343.namprd09.prod.outlook.com>
 From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
 Message-ID: <acc19ec5-055b-1bd4-997d-a247755163bf@SystematicSw.ab.ca>
-Date: Mon, 24 Jul 2017 04:10:00 -0000
+Date: Mon, 24 Jul 2017 09:31:00 -0000
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Thunderbird/52.2.1
 MIME-Version: 1.0
 In-Reply-To: <BY1PR09MB0343663DE41D927E67CF0CCEA5BB0@BY1PR09MB0343.namprd09.prod.outlook.com>
 Content-Type: multipart/mixed; boundary="------------7A56D5B5DA3497A139629A78"
 X-CMAE-Envelope: MS4wfBRPJzZKfq2KNLeQv7MaSQGjMhEUyhuNVmZDLdwMh41y4t3XlmNfC69Q1WIeHKaJHZiVzzoB97YUIcBXfW17xa1+I+1rFTL/pHWuVqfEQdyaHsrSUbha lZ86zueKdZ7OsLz6zRoG6Tx/t29IlfUzWi2ccXBAJ1NATe0+iCHrKUHD859TmOveW1SpJu4d1dto/Izp8icVdcqBVOjTAV1+nOw=
-X-SW-Source: 2017-q3/txt/msg00007.txt.bz2
+X-SW-Source: 2017-q3/txt/msg00008.txt.bz2
+Message-ID: <20170724093100.KJTDwOIOAJ4El0KBwN0V0IkKXblQcX0PU4fTilrH3XY@z>
 
 This is a multi-part message in MIME format.
 --------------7A56D5B5DA3497A139629A78
