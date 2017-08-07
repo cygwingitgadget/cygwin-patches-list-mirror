@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8814-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 27741 invoked by alias); 6 Aug 2017 13:57:58 -0000
+Return-Path: <cygwin-patches-return-8815-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 49226 invoked by alias); 6 Aug 2017 21:46:44 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,70 +9,78 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 27656 invoked by uid 89); 6 Aug 2017 13:57:54 -0000
+Received: (qmail 48654 invoked by uid 89); 6 Aug 2017 21:46:43 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-11.2 required=5.0 tests=AWL,BAYES_00,FREEMAIL_FROM,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_LOW,RP_MATCHES_RCVD,SPF_PASS autolearn=ham version=3.3.2 spammy=winsup, Hx-languages-length:1791, H*F:D*web.de, HX-Priority:Normal
-X-HELO: mout.web.de
-Received: from mout.web.de (HELO mout.web.de) (212.227.17.11) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 06 Aug 2017 13:57:52 +0000
-Received: from [10.224.6.252] ([185.80.169.68]) by smtp.web.de (mrweb102 [213.165.67.124]) with ESMTPSA (Nemesis) id 0M6mPA-1dQHeK37mm-00wXPf for <cygwin-patches@cygwin.com>; Sun, 06 Aug 2017 15:57:48 +0200
-Date: Mon, 07 Aug 2017 09:31:00 -0000
-From: Simon <HeinisMail@web.de>
-Message-ID: <35088024.20170806155704@web.de>
-To: cygwin-patches@cygwin.com
-Subject: rmdir: improvement for emptiness check
+X-Spam-SWARE-Status: No, score=-24.4 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RP_MATCHES_RCVD,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.2 spammy=HTo:U*cygwin-patches
+X-HELO: limerock04.mail.cornell.edu
+Received: from limerock04.mail.cornell.edu (HELO limerock04.mail.cornell.edu) (128.84.13.244) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 06 Aug 2017 21:46:42 +0000
+X-CornellRouted: This message has been Routed already.
+Received: from authusersmtp.mail.cornell.edu (granite4.serverfarm.cornell.edu [10.16.197.9])	by limerock04.mail.cornell.edu (8.14.4/8.14.4_cu) with ESMTP id v76Lkeal032031	for <cygwin-patches@cygwin.com>; Sun, 6 Aug 2017 17:46:40 -0400
+Received: from [192.168.0.15] (mta-68-175-129-7.twcny.rr.com [68.175.129.7] (may be forged))	(authenticated bits=0)	by authusersmtp.mail.cornell.edu (8.14.4/8.12.10) with ESMTP id v76LkcgX031167	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES128-SHA bits=128 verify=NOT)	for <cygwin-patches@cygwin.com>; Sun, 6 Aug 2017 17:46:39 -0400
+To: cygwin-patches <cygwin-patches@cygwin.com>
+From: Ken Brown <kbrown@cornell.edu>
+Subject: Define sigsetjmp/siglongjmp only if __POSIX_VISIBLE
+Message-ID: <def00c5d-15d9-237e-8579-371eebdfc5fe@cornell.edu>
+Date: Mon, 07 Aug 2017 09:36:00 -0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Thunderbird/52.2.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-UI-Out-Filterresults: notjunk:1;V01:K0:cgQP9H2a8lM=:su+H+j0sq5Xfarx+VqwTjb 1OPbnLPR5wWtN2sKLXa3bzvlRTRCzvALSiY/OzlDOQAGGuvYlU00eZg8PCJwGoRArxT+JL79f VVIdKr9ZPw+/xgeMBpz26pf1NN5MdxSkD4OoZ4DbhaSkpJnFbGWon93G3UBYpfIGaX+cC7zy4 9TcIFxOvIGvJNp0GM4j//UoTeiwomF13kBzqo53ArHnis/vyo51V9DrAQb/vUBh67NcBOgx8u DOmp3Yq8MPdvg+dWkWc5fmUNv7v63Hj+2W2KMDReqPkRrAfaVi9IJLQjPnhjYrGm+lrVVtXkI vWFgdKE4Y5XLOe2S/ml67A78a3iyWI6ZVmXXn+mEIxV/siefFEXw8uz22+05TFyiccpxKVHOy 7jcwSzy/jpXNBgxx33rE5F+m6sXcXTbTf6EX865ugyNdnEmNbX39pr33sdQH8UtKl6emPSlmL aURU/jc7jqY92ygsenv8NRJ28IHmpcqgQcT0BwMqQxXnvNA2002t5S++JoFoaJmh29bVztpao Njaxj20V0WNOd93rIqXqkgc1Cw/7xyS/E3hfI2gNDFHsh/2MK9aFtU8YDxKZcqK7Xb7MPmj+K Vhc1+IbDsXBIZykZAullceuNildthUAd9xA+LHSnLDK/QshPih1ivXP3pCzbG6Og77O7HY5kz qDMm8AZtd71+VTlmy7XXygNdww2f3aBwnLtd4AmE8GCsCgUxTnQ3J3XwK/3GQ0pofKxxYzv+o 2+kK+JuH5NGmkNp30FFQAcjCUgpOaoO7J48K2Y84RoZp2UfDKeHqkS4b0+Ub6AHAgYY8Vwv8p vxq+c0B6Rb2n8vhSMvfKf3K1jCGooSyGxP91WxEs4dvamXgoYM=
+Content-Type: multipart/mixed; boundary="------------2EA3451E27F539436BE7EBC7"
+X-PMX-Cornell-Gauge: Gauge=XXXXX
+X-PMX-CORNELL-AUTH-RESULTS: dkim-out=none;
 X-IsSubscribed: yes
-X-SW-Source: 2017-q3/txt/msg00016.txt.bz2
+X-SW-Source: 2017-q3/txt/msg00017.txt.bz2
 
-Dear list,
+This is a multi-part message in MIME format.
+--------------2EA3451E27F539436BE7EBC7
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-length: 272
 
-when deleting a directory, cygwin checks if the directory is empty.
-When doing so, it skipped every second file found in that directory
-(note the repetition of the line "pfni = ...NextEntryOffset"). This is
-a problem when, e.g., there are two files in that directory and the
-first one is in a PENDING_DELETE state. The second one will not be
-tested, so the directory is considered empty.
+The attached patch fixes the issue reported here:
 
-This is not an urgent patch, but fixing this should lower the
-probability of an accidentally, temporarily "deleted" directory (i.e.
-1. think it is empty; 2. move to recycle bin; 3. check again; 4.
-notice the error and move back to its old location).
+   https://cygwin.com/ml/cygwin/2017-08/msg00060.html
 
-NB.: The whole move-to-bin strategy is broken and maybe even
-unfounded. I don't know why cygwin is trying to move an empty
-directory to a recycle.bin folder. The inherent race condition seems
-avoidable to me. Is there a discussion regarding that behaviour?
+I'm not sure if I was correct in including RTEMS or if this should have 
+been Cygwin only.  If the former, I probably should have sent this to 
+the Newlib list.
 
-Simon
+Ken
 
---- a/winsup/cygwin/syscalls.cc 2017-07-19 10:42:02.000000000 +0200
-+++ b/winsup/cygwin/syscalls.cc 2017-08-06 14:41:48.000000000 +0200
-@@ -586,14 +586,14 @@
-     {
-       while (pfni->NextEntryOffset)
-        {
-+         pfni = (PFILE_NAMES_INFORMATION) ((caddr_t) pfni + pfni->NextEntryOffset);
-+         /* skipping first two entries: "." and ".." */
-          if (++cnt > 2)
-            {
-              UNICODE_STRING fname;
-              OBJECT_ATTRIBUTES attr;
-              FILE_BASIC_INFORMATION fbi;
+--------------2EA3451E27F539436BE7EBC7
+Content-Type: text/plain; charset=UTF-8;
+ name="0001-Define-sigsetjmp-siglongjmp-only-if-__POSIX_VISIBLE.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename*0="0001-Define-sigsetjmp-siglongjmp-only-if-__POSIX_VISIBLE.pat";
+ filename*1="ch"
+Content-length: 1570
 
--             pfni = (PFILE_NAMES_INFORMATION)
--                    ((caddr_t) pfni + pfni->NextEntryOffset);
-              RtlInitCountedUnicodeString(&fname, pfni->FileName,
-                                          pfni->FileNameLength);
-              InitializeObjectAttributes (&attr, &fname, 0, dir, NULL);
-@@ -627,7 +627,6 @@
-                  return STATUS_DIRECTORY_NOT_EMPTY;
-                }
-            }
--         pfni = (PFILE_NAMES_INFORMATION) ((caddr_t) pfni + pfni->NextEntryOffset);
-        }
-     }
-   while (NT_SUCCESS (NtQueryDirectoryFile (dir, NULL, NULL, 0, &io, pfni,
+RnJvbSA0NTA2MDMwN2IxZThlMDZhNTIyY2Q5NWU5NTY3MTU1ZTk4ZGRhODMy
+IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBLZW4gQnJvd24gPGti
+cm93bkBjb3JuZWxsLmVkdT4KRGF0ZTogU3VuLCA2IEF1ZyAyMDE3IDE3OjQw
+OjQzIC0wNDAwClN1YmplY3Q6IFtQQVRDSF0gRGVmaW5lIHNpZ3NldGptcC9z
+aWdsb25nam1wIG9ubHkgaWYgX19QT1NJWF9WSVNJQkxFCgotLS0KIG5ld2xp
+Yi9saWJjL2luY2x1ZGUvbWFjaGluZS9zZXRqbXAuaCB8IDYgKysrKy0tCiAx
+IGZpbGUgY2hhbmdlZCwgNCBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygt
+KQoKZGlmZiAtLWdpdCBhL25ld2xpYi9saWJjL2luY2x1ZGUvbWFjaGluZS9z
+ZXRqbXAuaCBiL25ld2xpYi9saWJjL2luY2x1ZGUvbWFjaGluZS9zZXRqbXAu
+aAppbmRleCAyYjRkZDhiOTEuLmZjNTYzOWYzZCAxMDA2NDQKLS0tIGEvbmV3
+bGliL2xpYmMvaW5jbHVkZS9tYWNoaW5lL3NldGptcC5oCisrKyBiL25ld2xp
+Yi9saWJjL2luY2x1ZGUvbWFjaGluZS9zZXRqbXAuaApAQCAtMzY4LDcgKzM2
+OCw3IEBAIHR5cGVkZWYJaW50IGptcF9idWZbX0pCTEVOXTsKIAogX0VORF9T
+VERfQwogCi0jaWYgZGVmaW5lZChfX0NZR1dJTl9fKSB8fCBkZWZpbmVkKF9f
+cnRlbXNfXykKKyNpZiAoZGVmaW5lZChfX0NZR1dJTl9fKSB8fCBkZWZpbmVk
+KF9fcnRlbXNfXykpICYmIF9fUE9TSVhfVklTSUJMRQogI2luY2x1ZGUgPHNp
+Z25hbC5oPgogCiAjaWZkZWYgX19jcGx1c3BsdXMKQEAgLTM3Niw2ICszNzYs
+OCBAQCBleHRlcm4gIkMiIHsKICNlbmRpZgogCiAvKiBQT1NJWCBzaWdzZXRq
+bXAvc2lnbG9uZ2ptcCBtYWNyb3MgKi8KKworCiAjaWZkZWYgX0pCVFlQRQog
+dHlwZWRlZiBfSkJUWVBFIHNpZ2ptcF9idWZbX0pCTEVOKzErKChzaXplb2Yg
+KF9KQlRZUEUpICsgc2l6ZW9mIChzaWdzZXRfdCkgLSAxKQogCQkJCSAgICAg
+L3NpemVvZiAoX0pCVFlQRSkpXTsKQEAgLTQ1MCw0ICs0NTIsNCBAQCBleHRl
+cm4gaW50IF9zZXRqbXAgKGptcF9idWYpOwogI2lmZGVmIF9fY3BsdXNwbHVz
+CiB9CiAjZW5kaWYKLSNlbmRpZiAvKiBfX0NZR1dJTl9fIG9yIF9fcnRlbXNf
+XyAqLworI2VuZGlmIC8qIChfX0NZR1dJTl9fIG9yIF9fcnRlbXNfXykgYW5k
+IF9fUE9TSVhfVklTSUJMRSAqLwotLSAKMi4xMy4yCgo=
+
+--------------2EA3451E27F539436BE7EBC7--
