@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8813-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 121699 invoked by alias); 2 Aug 2017 08:12:43 -0000
+Return-Path: <cygwin-patches-return-8814-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 27741 invoked by alias); 6 Aug 2017 13:57:58 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,72 +9,70 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 119808 invoked by uid 89); 2 Aug 2017 08:12:42 -0000
+Received: (qmail 27656 invoked by uid 89); 6 Aug 2017 13:57:54 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-101.9 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=H*Ad:U*cygwin-patches, HTo:U*cygwin-patches, H*c:application
-X-HELO: drew.franken.de
-Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 02 Aug 2017 08:12:41 +0000
-Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id E972B71E3F90A;	Wed,  2 Aug 2017 10:12:38 +0200 (CEST)
-Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id 4E6565E01D9;	Wed,  2 Aug 2017 10:12:38 +0200 (CEST)
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 316C0A8079A; Wed,  2 Aug 2017 10:12:38 +0200 (CEST)
-Date: Sun, 06 Aug 2017 22:26:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: newlib@sourceware.org, cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Add elf.h to newlib
-Message-ID: <20170802081238.GG25551@calimero.vinschen.de>
-Reply-To: newlib@sourceware.org, cygwin-patches@cygwin.com
-Mail-Followup-To: newlib@sourceware.org, cygwin-patches@cygwin.com
-References: <20170802062108.20220-1-yselkowi@redhat.com>
+X-Spam-SWARE-Status: No, score=-11.2 required=5.0 tests=AWL,BAYES_00,FREEMAIL_FROM,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_LOW,RP_MATCHES_RCVD,SPF_PASS autolearn=ham version=3.3.2 spammy=winsup, Hx-languages-length:1791, H*F:D*web.de, HX-Priority:Normal
+X-HELO: mout.web.de
+Received: from mout.web.de (HELO mout.web.de) (212.227.17.11) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 06 Aug 2017 13:57:52 +0000
+Received: from [10.224.6.252] ([185.80.169.68]) by smtp.web.de (mrweb102 [213.165.67.124]) with ESMTPSA (Nemesis) id 0M6mPA-1dQHeK37mm-00wXPf for <cygwin-patches@cygwin.com>; Sun, 06 Aug 2017 15:57:48 +0200
+Date: Mon, 07 Aug 2017 09:31:00 -0000
+From: Simon <HeinisMail@web.de>
+Message-ID: <35088024.20170806155704@web.de>
+To: cygwin-patches@cygwin.com
+Subject: rmdir: improvement for emptiness check
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="bKyqfOwhbdpXa4YI"
-Content-Disposition: inline
-In-Reply-To: <20170802062108.20220-1-yselkowi@redhat.com>
-User-Agent: Mutt/1.8.3 (2017-05-23)
-X-SW-Source: 2017-q3/txt/msg00015.txt.bz2
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-UI-Out-Filterresults: notjunk:1;V01:K0:cgQP9H2a8lM=:su+H+j0sq5Xfarx+VqwTjb 1OPbnLPR5wWtN2sKLXa3bzvlRTRCzvALSiY/OzlDOQAGGuvYlU00eZg8PCJwGoRArxT+JL79f VVIdKr9ZPw+/xgeMBpz26pf1NN5MdxSkD4OoZ4DbhaSkpJnFbGWon93G3UBYpfIGaX+cC7zy4 9TcIFxOvIGvJNp0GM4j//UoTeiwomF13kBzqo53ArHnis/vyo51V9DrAQb/vUBh67NcBOgx8u DOmp3Yq8MPdvg+dWkWc5fmUNv7v63Hj+2W2KMDReqPkRrAfaVi9IJLQjPnhjYrGm+lrVVtXkI vWFgdKE4Y5XLOe2S/ml67A78a3iyWI6ZVmXXn+mEIxV/siefFEXw8uz22+05TFyiccpxKVHOy 7jcwSzy/jpXNBgxx33rE5F+m6sXcXTbTf6EX865ugyNdnEmNbX39pr33sdQH8UtKl6emPSlmL aURU/jc7jqY92ygsenv8NRJ28IHmpcqgQcT0BwMqQxXnvNA2002t5S++JoFoaJmh29bVztpao Njaxj20V0WNOd93rIqXqkgc1Cw/7xyS/E3hfI2gNDFHsh/2MK9aFtU8YDxKZcqK7Xb7MPmj+K Vhc1+IbDsXBIZykZAullceuNildthUAd9xA+LHSnLDK/QshPih1ivXP3pCzbG6Og77O7HY5kz qDMm8AZtd71+VTlmy7XXygNdww2f3aBwnLtd4AmE8GCsCgUxTnQ3J3XwK/3GQ0pofKxxYzv+o 2+kK+JuH5NGmkNp30FFQAcjCUgpOaoO7J48K2Y84RoZp2UfDKeHqkS4b0+Ub6AHAgYY8Vwv8p vxq+c0B6Rb2n8vhSMvfKf3K1jCGooSyGxP91WxEs4dvamXgoYM=
+X-IsSubscribed: yes
+X-SW-Source: 2017-q3/txt/msg00016.txt.bz2
 
+Dear list,
 
---bKyqfOwhbdpXa4YI
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 352
+when deleting a directory, cygwin checks if the directory is empty.
+When doing so, it skipped every second file found in that directory
+(note the repetition of the line "pfni = ...NextEntryOffset"). This is
+a problem when, e.g., there are two files in that directory and the
+first one is in a PENDING_DELETE state. The second one will not be
+tested, so the directory is considered empty.
 
-On Aug  2 01:21, Yaakov Selkowitz wrote:
-> This is copied from musl (MIT license).  This is newer and more thorough
-> than that of FreeBSD currently shipped only on Cygwin.
+This is not an urgent patch, but fixing this should lower the
+probability of an accidentally, temporarily "deleted" directory (i.e.
+1. think it is empty; 2. move to recycle bin; 3. check again; 4.
+notice the error and move back to its old location).
 
-Please push.
+NB.: The whole move-to-bin strategy is broken and maybe even
+unfounded. I don't know why cygwin is trying to move an empty
+directory to a recycle.bin folder. The inherent race condition seems
+avoidable to me. Is there a discussion regarding that behaviour?
 
+Simon
 
-Thanks,
-Corinna
+--- a/winsup/cygwin/syscalls.cc 2017-07-19 10:42:02.000000000 +0200
++++ b/winsup/cygwin/syscalls.cc 2017-08-06 14:41:48.000000000 +0200
+@@ -586,14 +586,14 @@
+     {
+       while (pfni->NextEntryOffset)
+        {
++         pfni = (PFILE_NAMES_INFORMATION) ((caddr_t) pfni + pfni->NextEntryOffset);
++         /* skipping first two entries: "." and ".." */
+          if (++cnt > 2)
+            {
+              UNICODE_STRING fname;
+              OBJECT_ATTRIBUTES attr;
+              FILE_BASIC_INFORMATION fbi;
 
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---bKyqfOwhbdpXa4YI
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJZgYl2AAoJEPU2Bp2uRE+g6MgP/ieD+3krlyCsVqnNW7snr7C7
-0V3+EB7PnFlbuk39Q28g9ZwSStSYv0sGljfniG6It7gSzlsqrptx+p9DDbcvH6QS
-fpoZgAlItR7vzzPLc5cVUHROHEd511MTXWw8Pny9sza/WkGQ7IR9n9PabEOz5QuY
-rA6GKJsHQmrZsf2wkzpU3U6+rEhyO8iLUY9NPh9nlbifgeg+U/4FXYpdOrLiKXTt
-MG+D+cBVFf4MZQRAcXCaNolMm4cOSU+k2SdYYQqFIJ0JcvJuhw+NhVjvv7xrEwC/
-di2bx4tD+zco3VYg5tFsSfl2XET5lszaXAf/SnVIXzadSOZZ1zi5XEpYsL8UxX2I
-MA73WAhUGOwIwKzAcQHP7lVju41Mc745irKz5oEkItFkV25e169luLfnpxscDxPE
-qo6qkVuyy8rmsytqYn7pG1r4puPzfD1CNEilWHyFH/9MO+TwmphxreVv41CxYROG
-Py7Cq3pZ4mQqMPalu9IX+UHzuaf+6jxGss4u3C2j5bR7r+eborIXo+dwczoDAGKN
-be/j3sYBtGziiyuieXj1GWCn/UKoS1zkPy9BMCr0CiwIEN44k5jjvg61c2x7K+V2
-famsT4ScfOaPrtaXgv505vUx1gGuAAFOLFH7zK/vmVm6YoQtOJP2M2HvtYvZH8zA
-vZ7bPLteQM7xOdve+cf/
-=2zwc
------END PGP SIGNATURE-----
-
---bKyqfOwhbdpXa4YI--
+-             pfni = (PFILE_NAMES_INFORMATION)
+-                    ((caddr_t) pfni + pfni->NextEntryOffset);
+              RtlInitCountedUnicodeString(&fname, pfni->FileName,
+                                          pfni->FileNameLength);
+              InitializeObjectAttributes (&attr, &fname, 0, dir, NULL);
+@@ -627,7 +627,6 @@
+                  return STATUS_DIRECTORY_NOT_EMPTY;
+                }
+            }
+-         pfni = (PFILE_NAMES_INFORMATION) ((caddr_t) pfni + pfni->NextEntryOffset);
+        }
+     }
+   while (NT_SUCCESS (NtQueryDirectoryFile (dir, NULL, NULL, 0, &io, pfni,
