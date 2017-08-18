@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8819-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 28508 invoked by alias); 17 Aug 2017 01:41:27 -0000
+Return-Path: <cygwin-patches-return-8820-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 60002 invoked by alias); 18 Aug 2017 13:21:19 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,91 +9,217 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 22134 invoked by uid 89); 17 Aug 2017 01:41:22 -0000
+Received: (qmail 59372 invoked by uid 89); 18 Aug 2017 13:21:17 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-25.9 required=5.0 tests=BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,KAM_LAZY_DOMAIN_SECURITY,RP_MATCHES_RCVD,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
-X-HELO: mx1.redhat.com
-Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 17 Aug 2017 01:41:21 +0000
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))	(No client certificate requested)	by mx1.redhat.com (Postfix) with ESMTPS id 50E2276B24	for <cygwin-patches@cygwin.com>; Thu, 17 Aug 2017 01:41:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mx1.redhat.com 50E2276B24
-Authentication-Results: ext-mx01.extmail.prod.ext.phx2.redhat.com; dmarc=none (p=none dis=none) header.from=redhat.com
-Authentication-Results: ext-mx01.extmail.prod.ext.phx2.redhat.com; spf=fail smtp.mailfrom=eblake@redhat.com
-Received: from red.redhat.com (ovpn-120-34.rdu2.redhat.com [10.10.120.34])	by smtp.corp.redhat.com (Postfix) with ESMTP id EBC2168D77	for <cygwin-patches@cygwin.com>; Thu, 17 Aug 2017 01:41:19 +0000 (UTC)
-From: Eric Blake <eblake@redhat.com>
+X-Spam-SWARE-Status: No, score=-25.6 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RP_MATCHES_RCVD,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.2 spammy=2141, Opening, sk:cygwin_, transaction
+X-HELO: limerock01.mail.cornell.edu
+Received: from limerock01.mail.cornell.edu (HELO limerock01.mail.cornell.edu) (128.84.13.241) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 18 Aug 2017 13:21:14 +0000
+X-CornellRouted: This message has been Routed already.
+Received: from authusersmtp.mail.cornell.edu (granite4.serverfarm.cornell.edu [10.16.197.9])	by limerock01.mail.cornell.edu (8.14.4/8.14.4_cu) with ESMTP id v7IDLC1k020744	for <cygwin-patches@cygwin.com>; Fri, 18 Aug 2017 09:21:12 -0400
+Received: from [192.168.0.4] (mta-68-175-129-7.twcny.rr.com [68.175.129.7] (may be forged))	(authenticated bits=0)	by authusersmtp.mail.cornell.edu (8.14.4/8.12.10) with ESMTP id v7IDLAM6010743	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES128-SHA bits=128 verify=NOT)	for <cygwin-patches@cygwin.com>; Fri, 18 Aug 2017 09:21:11 -0400
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] headers: avoid bareword attributes
-Date: Fri, 18 Aug 2017 14:56:00 -0000
-Message-Id: <20170817014119.8792-1-eblake@redhat.com>
+From: Ken Brown <kbrown@cornell.edu>
+Subject: renameat2
+Message-ID: <992f81ea-736b-ebe3-2177-153b4d2e1852@cornell.edu>
+Date: Fri, 18 Aug 2017 15:16:00 -0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Thunderbird/52.2.1
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="------------3C6EBE71EB1FAAD0CA7B64C2"
+X-PMX-Cornell-Gauge: Gauge=XXXXXX
+X-PMX-CORNELL-AUTH-RESULTS: dkim-out=none;
 X-IsSubscribed: yes
-X-SW-Source: 2017-q3/txt/msg00021.txt.bz2
+X-SW-Source: 2017-q3/txt/msg00022.txt.bz2
 
-Always use the __-decorated form of an attribute name in public
-headers, as the bareword form is in the user's namespace, and we
-don't want compilation to break just because the user defines the
-bareword to mean something else.
+This is a multi-part message in MIME format.
+--------------3C6EBE71EB1FAAD0CA7B64C2
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-length: 1444
 
-Signed-off-by: Eric Blake <eblake@redhat.com>
----
- winsup/cygwin/include/cygwin/config.h | 2 +-
- winsup/cygwin/include/cygwin/signal.h | 2 +-
- winsup/cygwin/include/pthread.h       | 4 ++--
- winsup/cygwin/include/sys/ucontext.h  | 2 +-
- 4 files changed, 5 insertions(+), 5 deletions(-)
+Linux has a system call 'renameat2' which is like renameat but has an extra 'flags' argument.  In particular, one can pass the RENAME_NOREPLACE flag to cause the rename to fail with EEXIST if the target of the rename exists.  See
 
-diff --git a/winsup/cygwin/include/cygwin/config.h b/winsup/cygwin/include/cygwin/config.h
-index dad6a350b..aede45f77 100644
---- a/winsup/cygwin/include/cygwin/config.h
-+++ b/winsup/cygwin/include/cygwin/config.h
-@@ -41,7 +41,7 @@ extern "C" {
- #else
- #include "../tlsoffsets.h"
- #endif
--__attribute__((gnu_inline))
-+__attribute__((__gnu_inline__))
- extern inline struct _reent *__getreent (void)
- {
-   register char *ret;
-diff --git a/winsup/cygwin/include/cygwin/signal.h b/winsup/cygwin/include/cygwin/signal.h
-index a8c852ddb..630afc817 100644
---- a/winsup/cygwin/include/cygwin/signal.h
-+++ b/winsup/cygwin/include/cygwin/signal.h
-@@ -46,7 +46,7 @@ struct _fpstate
-   __uint32_t padding[24];
- };
+  http://man7.org/linux/man-pages/man2/rename.2.html
 
--struct __attribute__ ((aligned (16))) __mcontext
-+struct __attribute__ ((__aligned__ (16))) __mcontext
- {
-   __uint64_t p1home;
-   __uint64_t p2home;
-diff --git a/winsup/cygwin/include/pthread.h b/winsup/cygwin/include/pthread.h
-index 9e8eb6f2b..6d3bfd0eb 100644
---- a/winsup/cygwin/include/pthread.h
-+++ b/winsup/cygwin/include/pthread.h
-@@ -223,8 +223,8 @@ void pthread_testcancel (void);
+macOS has a similar functionality, provided by the function 'renameatx_np' with the flag RENAME_EXCL.
 
- #if __GNU_VISIBLE
- int pthread_getattr_np (pthread_t, pthread_attr_t *);
--int pthread_getname_np (pthread_t, char *, size_t) __attribute__((nonnull(2)));
--int pthread_setname_np (pthread_t, const char *) __attribute__((nonnull(2)));
-+int pthread_getname_np (pthread_t, char *, size_t) __attribute__((__nonnull__(2)));
-+int pthread_setname_np (pthread_t, const char *) __attribute__((__nonnull__(2)));
- int pthread_sigqueue (pthread_t *, int, const union sigval);
- int pthread_yield (void);
- #endif
-diff --git a/winsup/cygwin/include/sys/ucontext.h b/winsup/cygwin/include/sys/ucontext.h
-index 8795476fc..58dc3874a 100644
---- a/winsup/cygwin/include/sys/ucontext.h
-+++ b/winsup/cygwin/include/sys/ucontext.h
-@@ -13,7 +13,7 @@ details. */
+There's also a recently introduced Gnulib module 'renameat2', but it requires two system calls on Cygwin (one to test existence and the second to do the rename), so that there is a race condition.  On Linux and macOS it uses renameat2 and renameatx_np to avoid the race.
 
- typedef struct __mcontext mcontext_t;
+The attached patch implements renameat2 on Cygwin (but only supporting the RENAME_NOREPLACE flag).  I've written it so that a rename that just changes case on a case-insensitive file system succeeds.
 
--typedef __attribute__ ((aligned (16))) struct __ucontext {
-+typedef __attribute__ ((__aligned__ (16))) struct __ucontext {
- 	mcontext_t	uc_mcontext;
- 	struct __ucontext *uc_link;
- 	sigset_t	uc_sigmask;
--- 
-2.13.5
+If the patch is accepted, I'll submit a second patch that documents the new function.
+
+Here's a simple test program:
+
+$ cat rename_noreplace.c
+#include <fcntl.h>
+#include <stdio.h>
+#include <cygwin/fs.h>
+
+int
+main ()
+{
+  int res = renameat2 (AT_FDCWD, "foo", AT_FDCWD, "bar", RENAME_NOREPLACE);
+  if (res < 0)
+    perror ("renameat2");
+}
+
+$ gcc -o rename_noreplace rename_noreplace.c
+
+$ touch foo bar
+
+$ ./rename_noreplace.exe
+renameat2: File exists
+
+$ ls foo bar
+bar  foo
+
+$ rm bar
+
+$ ./rename_noreplace.exe
+
+$ ls foo bar
+ls: cannot access 'foo': No such file or directory
+bar
+
+Ken
+
+--------------3C6EBE71EB1FAAD0CA7B64C2
+Content-Type: text/plain; charset=UTF-8;
+ name="0001-cygwin-Implement-renameat2.patch"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="0001-cygwin-Implement-renameat2.patch"
+Content-length: 7821
+
+RnJvbSAyM2VkYjI1YzljMGI2YTIxYWVmYjEwMzcyZGI5NDU4MDdiMmI4ZTNm
+IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBLZW4gQnJvd24gPGti
+cm93bkBjb3JuZWxsLmVkdT4KRGF0ZTogVGh1LCAxNyBBdWcgMjAxNyAwOTox
+MjoxNSAtMDQwMApTdWJqZWN0OiBbUEFUQ0hdIGN5Z3dpbjogSW1wbGVtZW50
+IHJlbmFtZWF0MgoKRGVmaW5lIHRoZSBSRU5BTUVfKiBmbGFncyBpbiA8Y3ln
+d2luL2ZzLmg+IGFzIGRlZmluZWQgb24gTGludXggaW4KPGxpbnV4L2ZzLmg+
+LCBidXQgc3VwcG9ydCBvbmx5IFJFTkFNRV9OT1JFUExBQ0UuCi0tLQogbmV3
+bGliL2xpYmMvaW5jbHVkZS9zdGRpby5oICAgICAgICAgICAgfCAgMyArKysK
+IHdpbnN1cC9jeWd3aW4vY29tbW9uLmRpbiAgICAgICAgICAgICAgIHwgIDEg
+Kwogd2luc3VwL2N5Z3dpbi9pbmNsdWRlL2N5Z3dpbi9mcy5oICAgICAgfCAg
+NSArKysrKwogd2luc3VwL2N5Z3dpbi9pbmNsdWRlL2N5Z3dpbi92ZXJzaW9u
+LmggfCAgNCArKystCiB3aW5zdXAvY3lnd2luL3N5c2NhbGxzLmNjICAgICAg
+ICAgICAgICB8IDQxICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrLS0t
+LS0KIDUgZmlsZXMgY2hhbmdlZCwgNDggaW5zZXJ0aW9ucygrKSwgNiBkZWxl
+dGlvbnMoLSkKCmRpZmYgLS1naXQgYS9uZXdsaWIvbGliYy9pbmNsdWRlL3N0
+ZGlvLmggYi9uZXdsaWIvbGliYy9pbmNsdWRlL3N0ZGlvLmgKaW5kZXggNWQ4
+Y2IxMDkyLi4zMzFhMWNmMDcgMTAwNjQ0Ci0tLSBhL25ld2xpYi9saWJjL2lu
+Y2x1ZGUvc3RkaW8uaAorKysgYi9uZXdsaWIvbGliYy9pbmNsdWRlL3N0ZGlv
+LmgKQEAgLTM4NCw2ICszODQsOSBAQCBpbnQJX0VYRlVOKHZkcHJpbnRmLCAo
+aW50LCBjb25zdCBjaGFyICpfX3Jlc3RyaWN0LCBfX1ZBTElTVCkKICNlbmRp
+ZgogI2lmIF9fQVRGSUxFX1ZJU0lCTEUKIGludAlfRVhGVU4ocmVuYW1lYXQs
+IChpbnQsIGNvbnN0IGNoYXIgKiwgaW50LCBjb25zdCBjaGFyICopKTsKKyMg
+aWZkZWYgX19DWUdXSU5fXworaW50CV9FWEZVTihyZW5hbWVhdDIsIChpbnQs
+IGNvbnN0IGNoYXIgKiwgaW50LCBjb25zdCBjaGFyICosIHVuc2lnbmVkIGlu
+dCkpOworIyBlbmRpZgogI2VuZGlmCiAKIC8qCmRpZmYgLS1naXQgYS93aW5z
+dXAvY3lnd2luL2NvbW1vbi5kaW4gYi93aW5zdXAvY3lnd2luL2NvbW1vbi5k
+aW4KaW5kZXggOGRhNDMyYjhhLi5jYTZmZjNjZjkgMTAwNjQ0Ci0tLSBhL3dp
+bnN1cC9jeWd3aW4vY29tbW9uLmRpbgorKysgYi93aW5zdXAvY3lnd2luL2Nv
+bW1vbi5kaW4KQEAgLTExNjgsNiArMTE2OCw3IEBAIHJlbXF1b2YgTk9TSUdG
+RQogcmVtcXVvbCBOT1NJR0ZFCiByZW5hbWUgU0lHRkUKIHJlbmFtZWF0IFNJ
+R0ZFCityZW5hbWVhdDIgU0lHRkUKIHJlc19jbG9zZSA9IF9fcmVzX2Nsb3Nl
+IFNJR0ZFCiByZXNfaW5pdCA9IF9fcmVzX2luaXQgU0lHRkUKIHJlc19ta3F1
+ZXJ5ID0gX19yZXNfbWtxdWVyeSBTSUdGRQpkaWZmIC0tZ2l0IGEvd2luc3Vw
+L2N5Z3dpbi9pbmNsdWRlL2N5Z3dpbi9mcy5oIGIvd2luc3VwL2N5Z3dpbi9p
+bmNsdWRlL2N5Z3dpbi9mcy5oCmluZGV4IGY2MDZmZmMzOS4uMTQ0NTQzNzZm
+IDEwMDY0NAotLS0gYS93aW5zdXAvY3lnd2luL2luY2x1ZGUvY3lnd2luL2Zz
+LmgKKysrIGIvd2luc3VwL2N5Z3dpbi9pbmNsdWRlL2N5Z3dpbi9mcy5oCkBA
+IC0xOSw0ICsxOSw5IEBAIGRldGFpbHMuICovCiAjZGVmaW5lIEJMS1BCU1pH
+RVQgICAweDAwMDAxMjdiCiAjZGVmaW5lIEJMS0dFVFNJWkU2NCAweDAwMDQx
+MjY4CiAKKy8qIEZsYWdzIGZvciByZW5hbWVhdDIsIGZyb20gL3Vzci9pbmNs
+dWRlL2xpbnV4L2ZzLmguICovCisjZGVmaW5lIFJFTkFNRV9OT1JFUExBQ0Ug
+KDEgPDwgMCkKKyNkZWZpbmUgUkVOQU1FX0VYQ0hBTkdFICAoMSA8PCAxKQor
+I2RlZmluZSBSRU5BTUVfV0hJVEVPVVQgICgxIDw8IDIpCisKICNlbmRpZgpk
+aWZmIC0tZ2l0IGEvd2luc3VwL2N5Z3dpbi9pbmNsdWRlL2N5Z3dpbi92ZXJz
+aW9uLmggYi93aW5zdXAvY3lnd2luL2luY2x1ZGUvY3lnd2luL3ZlcnNpb24u
+aAppbmRleCBlZmQ0YWMwMTcuLjc2NDBhYmZhZCAxMDA2NDQKLS0tIGEvd2lu
+c3VwL2N5Z3dpbi9pbmNsdWRlL2N5Z3dpbi92ZXJzaW9uLmgKKysrIGIvd2lu
+c3VwL2N5Z3dpbi9pbmNsdWRlL2N5Z3dpbi92ZXJzaW9uLmgKQEAgLTQ4MSwx
+MiArNDgxLDE0IEBAIGRldGFpbHMuICovCiAgIDMxNDogRXhwb3J0IGV4cGxp
+Y2l0X2J6ZXJvLgogICAzMTU6IEV4cG9ydCBwdGhyZWFkX211dGV4X3RpbWVk
+bG9jay4KICAgMzE2OiBFeHBvcnQgcHRocmVhZF9yd2xvY2tfdGltZWRyZGxv
+Y2ssIHB0aHJlYWRfcndsb2NrX3RpbWVkd3Jsb2NrLgorICAzMTc6IEV4cG9y
+dCByZW5hbWVhdDIuICBBZGQgUkVOQU1FX05PUkVQTEFDRSwgUkVOQU1FX0VY
+Q0hBTkdFLAorICAgICAgIFJFTkFNRV9XSElURU9VVC4KIAogICBOb3RlIHRo
+YXQgd2UgZm9yZ290IHRvIGJ1bXAgdGhlIGFwaSBmb3IgdWFsYXJtLCBzdHJ0
+b2xsLCBzdHJ0b3VsbCwKICAgc2lnYWx0c3RhY2ssIHNldGhvc3RuYW1lLiAq
+LwogCiAjZGVmaW5lIENZR1dJTl9WRVJTSU9OX0FQSV9NQUpPUiAwCi0jZGVm
+aW5lIENZR1dJTl9WRVJTSU9OX0FQSV9NSU5PUiAzMTYKKyNkZWZpbmUgQ1lH
+V0lOX1ZFUlNJT05fQVBJX01JTk9SIDMxNwogCiAvKiBUaGVyZSBpcyBhbHNv
+IGEgY29tcGF0aWJpdHkgdmVyc2lvbiBudW1iZXIgYXNzb2NpYXRlZCB3aXRo
+IHRoZSBzaGFyZWQgbWVtb3J5CiAgICByZWdpb25zLiAgSXQgaXMgaW5jcmVt
+ZW50ZWQgd2hlbiBpbmNvbXBhdGlibGUgY2hhbmdlcyBhcmUgbWFkZSB0byB0
+aGUgc2hhcmVkCmRpZmYgLS1naXQgYS93aW5zdXAvY3lnd2luL3N5c2NhbGxz
+LmNjIGIvd2luc3VwL2N5Z3dpbi9zeXNjYWxscy5jYwppbmRleCA4ODU5MzE2
+MzIuLmQ3NTZmNWYzNSAxMDA2NDQKLS0tIGEvd2luc3VwL2N5Z3dpbi9zeXNj
+YWxscy5jYworKysgYi93aW5zdXAvY3lnd2luL3N5c2NhbGxzLmNjCkBAIC02
+MCw2ICs2MCw3IEBAIGRldGFpbHMuICovCiAjaW5jbHVkZSAidGxzX3BidWYu
+aCIKICNpbmNsdWRlICJzeW5jLmgiCiAjaW5jbHVkZSAiY2hpbGRfaW5mby5o
+IgorI2luY2x1ZGUgPGN5Z3dpbi9mcy5oPiAgLyogbmVlZGVkIGZvciBSRU5B
+TUVfTk9SRVBMQUNFICovCiAKICN1bmRlZiBfY2xvc2UKICN1bmRlZiBfbHNl
+ZWsKQEAgLTIwNDgsOCArMjA0OSwxMiBAQCBudF9wYXRoX2hhc19leGVjdXRh
+YmxlX3N1ZmZpeCAoUFVOSUNPREVfU1RSSU5HIHVwYXRoKQogICByZXR1cm4g
+ZmFsc2U7CiB9CiAKLWV4dGVybiAiQyIgaW50Ci1yZW5hbWUgKGNvbnN0IGNo
+YXIgKm9sZHBhdGgsIGNvbnN0IGNoYXIgKm5ld3BhdGgpCisvKiBJZiBuZXdw
+YXRoIG5hbWVzIGFuIGV4aXN0aW5nIGZpbGUgYW5kIHRoZSBSRU5BTUVfTk9S
+RVBMQUNFIGZsYWcgaXMKKyAgIHNwZWNpZmllZCwgZmFpbCB3aXRoIEVFWElT
+VC4gIEV4Y2VwdGlvbjogRG9uJ3QgZmFpbCBpZiB0aGUgcHVycG9zZQorICAg
+b2YgdGhlIHJlbmFtZSBpcyBqdXN0IHRvIGNoYW5nZSB0aGUgY2FzZSBvZiBv
+bGRwYXRoIG9uIGEKKyAgIGNhc2UtaW5zZW5zaXRpdmUgZmlsZSBzeXN0ZW0u
+ICovCitzdGF0aWMgaW50CityZW5hbWUyIChjb25zdCBjaGFyICpvbGRwYXRo
+LCBjb25zdCBjaGFyICpuZXdwYXRoLCB1bnNpZ25lZCBpbnQgZmxhZ3MpCiB7
+CiAgIHRtcF9wYXRoYnVmIHRwOwogICBpbnQgcmVzID0gLTE7CkBAIC0yMDY4
+LDYgKzIwNzMsMTIgQEAgcmVuYW1lIChjb25zdCBjaGFyICpvbGRwYXRoLCBj
+b25zdCBjaGFyICpuZXdwYXRoKQogCiAgIF9fdHJ5CiAgICAgeworICAgICAg
+aWYgKGZsYWdzICYgflJFTkFNRV9OT1JFUExBQ0UpCisJLyogUkVOQU1FX05P
+UkVQTEFDRSBpcyB0aGUgb25seSBmbGFnIGN1cnJlbnRseSBzdXBwb3J0ZWQu
+ICovCisJeworCSAgc2V0X2Vycm5vIChFTk9UU1VQKTsKKwkgIF9fbGVhdmU7
+CisJfQogICAgICAgaWYgKCEqb2xkcGF0aCB8fCAhKm5ld3BhdGgpCiAJewog
+CSAgLyogUmVqZWN0IHJlbmFtZSgiIiwieCIpLCByZW5hbWUoIngiLCIiKS4g
+ICovCkBAIC0yMzM3LDYgKzIzNDgsMTMgQEAgcmVuYW1lIChjb25zdCBjaGFy
+ICpvbGRwYXRoLCBjb25zdCBjaGFyICpuZXdwYXRoKQogCSAgX19sZWF2ZTsK
+IAl9CiAKKyAgICAgIC8qIFNob3VsZCB3ZSByZXBsYWNlIGFuIGV4aXN0aW5n
+IGZpbGU/ICovCisgICAgICBpZiAoKHJlbW92ZXBjIHx8IGRzdHBjLT5leGlz
+dHMgKCkpICYmIChmbGFncyAmIFJFTkFNRV9OT1JFUExBQ0UpKQorCXsKKwkg
+IHNldF9lcnJubyAoRUVYSVNUKTsKKwkgIF9fbGVhdmU7CisJfQorCiAgICAg
+ICAvKiBPcGVuaW5nIHRoZSBmaWxlIG11c3QgYmUgcGFydCBvZiB0aGUgdHJh
+bnNhY3Rpb24uICBJdCdzIG5vdCBzdWZmaWNpZW50CiAJIHRvIGNhbGwgb25s
+eSBOdFNldEluZm9ybWF0aW9uRmlsZSB1bmRlciB0aGUgdHJhbnNhY3Rpb24u
+ICBUaGVyZWZvcmUgd2UKIAkgaGF2ZSB0byBzdGFydCB0aGUgdHJhbnNhY3Rp
+b24gaGVyZSwgaWYgbmVjZXNzYXJ5LiAqLwpAQCAtMjU3OCw2ICsyNTk2LDEy
+IEBAIHJlbmFtZSAoY29uc3QgY2hhciAqb2xkcGF0aCwgY29uc3QgY2hhciAq
+bmV3cGF0aCkKICAgcmV0dXJuIHJlczsKIH0KIAorZXh0ZXJuICJDIiBpbnQK
+K3JlbmFtZSAoY29uc3QgY2hhciAqb2xkcGF0aCwgY29uc3QgY2hhciAqbmV3
+cGF0aCkKK3sKKyAgcmV0dXJuIHJlbmFtZTIgKG9sZHBhdGgsIG5ld3BhdGgs
+IDApOworfQorCiBleHRlcm4gIkMiIGludAogc3lzdGVtIChjb25zdCBjaGFy
+ICpjbWRzdHJpbmcpCiB7CkBAIC00NzE5LDggKzQ3NDMsOCBAQCByZWFkbGlu
+a2F0IChpbnQgZGlyZmQsIGNvbnN0IGNoYXIgKl9fcmVzdHJpY3QgcGF0aG5h
+bWUsIGNoYXIgKl9fcmVzdHJpY3QgYnVmLAogfQogCiBleHRlcm4gIkMiIGlu
+dAotcmVuYW1lYXQgKGludCBvbGRkaXJmZCwgY29uc3QgY2hhciAqb2xkcGF0
+aG5hbWUsCi0JICBpbnQgbmV3ZGlyZmQsIGNvbnN0IGNoYXIgKm5ld3BhdGhu
+YW1lKQorcmVuYW1lYXQyIChpbnQgb2xkZGlyZmQsIGNvbnN0IGNoYXIgKm9s
+ZHBhdGhuYW1lLAorCSAgIGludCBuZXdkaXJmZCwgY29uc3QgY2hhciAqbmV3
+cGF0aG5hbWUsIHVuc2lnbmVkIGludCBmbGFncykKIHsKICAgdG1wX3BhdGhi
+dWYgdHA7CiAgIF9fdHJ5CkBAIC00NzMxLDEzICs0NzU1LDIwIEBAIHJlbmFt
+ZWF0IChpbnQgb2xkZGlyZmQsIGNvbnN0IGNoYXIgKm9sZHBhdGhuYW1lLAog
+ICAgICAgY2hhciAqbmV3cGF0aCA9IHRwLmNfZ2V0ICgpOwogICAgICAgaWYg
+KGdlbl9mdWxsX3BhdGhfYXQgKG5ld3BhdGgsIG5ld2RpcmZkLCBuZXdwYXRo
+bmFtZSkpCiAJX19sZWF2ZTsKLSAgICAgIHJldHVybiByZW5hbWUgKG9sZHBh
+dGgsIG5ld3BhdGgpOworICAgICAgcmV0dXJuIHJlbmFtZTIgKG9sZHBhdGgs
+IG5ld3BhdGgsIGZsYWdzKTsKICAgICB9CiAgIF9fZXhjZXB0IChFRkFVTFQp
+IHt9CiAgIF9fZW5kdHJ5CiAgIHJldHVybiAtMTsKIH0KIAorZXh0ZXJuICJD
+IiBpbnQKK3JlbmFtZWF0IChpbnQgb2xkZGlyZmQsIGNvbnN0IGNoYXIgKm9s
+ZHBhdGhuYW1lLAorCSAgaW50IG5ld2RpcmZkLCBjb25zdCBjaGFyICpuZXdw
+YXRobmFtZSkKK3sKKyAgcmV0dXJuIHJlbmFtZWF0MiAob2xkZGlyZmQsIG9s
+ZHBhdGhuYW1lLCBuZXdkaXJmZCwgbmV3cGF0aG5hbWUsIDApOworfQorCiBl
+eHRlcm4gIkMiIGludAogc2NhbmRpcmF0IChpbnQgZGlyZmQsIGNvbnN0IGNo
+YXIgKnBhdGhuYW1lLCBzdHJ1Y3QgZGlyZW50ICoqKm5hbWVsaXN0LAogCSAg
+IGludCAoKnNlbGVjdCkgKGNvbnN0IHN0cnVjdCBkaXJlbnQgKiksCi0tIAoy
+LjE0LjEKCg==
+
+--------------3C6EBE71EB1FAAD0CA7B64C2--
