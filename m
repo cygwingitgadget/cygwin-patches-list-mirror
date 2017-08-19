@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8822-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 38765 invoked by alias); 18 Aug 2017 14:56:15 -0000
+Return-Path: <cygwin-patches-return-8823-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 16605 invoked by alias); 18 Aug 2017 15:16:06 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,183 +9,180 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 36276 invoked by uid 89); 18 Aug 2017 14:56:14 -0000
+Received: (qmail 2886 invoked by uid 89); 18 Aug 2017 15:15:44 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-25.8 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RP_MATCHES_RCVD,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.2 spammy=
-X-HELO: limerock04.mail.cornell.edu
-Received: from limerock04.mail.cornell.edu (HELO limerock04.mail.cornell.edu) (128.84.13.244) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 18 Aug 2017 14:56:10 +0000
-X-CornellRouted: This message has been Routed already.
-Received: from authusersmtp.mail.cornell.edu (granite3.serverfarm.cornell.edu [10.16.197.8])	by limerock04.mail.cornell.edu (8.14.4/8.14.4_cu) with ESMTP id v7IEu8eq024940	for <cygwin-patches@cygwin.com>; Fri, 18 Aug 2017 10:56:08 -0400
-Received: from [192.168.0.4] (mta-68-175-129-7.twcny.rr.com [68.175.129.7] (may be forged))	(authenticated bits=0)	by authusersmtp.mail.cornell.edu (8.14.4/8.12.10) with ESMTP id v7IEu68U014535	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES128-SHA bits=128 verify=NOT)	for <cygwin-patches@cygwin.com>; Fri, 18 Aug 2017 10:56:07 -0400
-Subject: Re: renameat2
+X-Spam-SWARE-Status: No, score=-124.4 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=Hx-languages-length:3885, neat
+X-HELO: drew.franken.de
+Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 18 Aug 2017 15:15:41 +0000
+Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id 8AB8871B09F0E	for <cygwin-patches@cygwin.com>; Fri, 18 Aug 2017 17:15:26 +0200 (CEST)
+Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id 8A0AA5E01D3	for <cygwin-patches@cygwin.com>; Fri, 18 Aug 2017 17:15:25 +0200 (CEST)
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 66E93A80990; Fri, 18 Aug 2017 17:15:25 +0200 (CEST)
+Date: Sat, 19 Aug 2017 14:29:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-References: <992f81ea-736b-ebe3-2177-153b4d2e1852@cornell.edu> <7394aca1-ce7d-2a35-7d79-905da33cc100@redhat.com>
-From: Ken Brown <kbrown@cornell.edu>
-Message-ID: <00e1ca14-56a1-ff9c-7b83-489a583dad7a@cornell.edu>
-Date: Sat, 19 Aug 2017 09:57:00 -0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Thunderbird/52.3.0
+Subject: Re: renameat2
+Message-ID: <20170818151525.GA6314@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <992f81ea-736b-ebe3-2177-153b4d2e1852@cornell.edu>
 MIME-Version: 1.0
-In-Reply-To: <7394aca1-ce7d-2a35-7d79-905da33cc100@redhat.com>
-Content-Type: multipart/mixed; boundary="------------AC04E851B17DBFDD3964D7FB"
-X-PMX-Cornell-Gauge: Gauge=XXXXX
-X-PMX-CORNELL-AUTH-RESULTS: dkim-out=none;
-X-IsSubscribed: yes
-X-SW-Source: 2017-q3/txt/msg00024.txt.bz2
-
-This is a multi-part message in MIME format.
---------------AC04E851B17DBFDD3964D7FB
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-length: 400
-
-On 8/18/2017 10:33 AM, Eric Blake wrote:
-> Please only define RENAME_NOREPLACE for now; that way, software can
-> probe what is defined to know what will work (defining a flag that will
-> always be an error is not as useful as leaving it undefined - and while
-> we may add RENAME_EXCHANGE support, I don't see how we can ever do
-> RENAME_WHITEOUT).
-
-Thanks for the feedback.  Revised patch attached.
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="TB36FDmn/VVEgNH/"
+Content-Disposition: inline
+In-Reply-To: <992f81ea-736b-ebe3-2177-153b4d2e1852@cornell.edu>
+User-Agent: Mutt/1.8.3 (2017-05-23)
+X-SW-Source: 2017-q3/txt/msg00025.txt.bz2
 
 
---------------AC04E851B17DBFDD3964D7FB
-Content-Type: text/plain; charset=UTF-8;
- name="0001-cygwin-Implement-renameat2.patch"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename="0001-cygwin-Implement-renameat2.patch"
-Content-length: 7890
+--TB36FDmn/VVEgNH/
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 4046
 
-RnJvbSAxMzZiMGRmZDUzZTE0NzAwMmUxMzQwNDg2NThkMjBmNDUyNDAyYzlm
-IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBLZW4gQnJvd24gPGti
-cm93bkBjb3JuZWxsLmVkdT4KRGF0ZTogVGh1LCAxNyBBdWcgMjAxNyAwOTox
-MjoxNSAtMDQwMApTdWJqZWN0OiBbUEFUQ0hdIGN5Z3dpbjogSW1wbGVtZW50
-IHJlbmFtZWF0MgoKRGVmaW5lIHRoZSBSRU5BTUVfTk9SRVBMQUNFIGZsYWcg
-aW4gPGN5Z3dpbi9mcy5oPiBhcyBkZWZpbmVkIG9uIExpbnV4CmluIDxsaW51
-eC9mcy5oPi4gIFRoZSBvdGhlciBSRU5BTUVfKiBmbGFncyBkZWZpbmVkIG9u
-IExpbnV4IGFyZSBub3QKc3VwcG9ydGVkLgotLS0KIG5ld2xpYi9saWJjL2lu
-Y2x1ZGUvc3RkaW8uaCAgICAgICAgICAgIHwgIDMgKysrCiB3aW5zdXAvY3ln
-d2luL2NvbW1vbi5kaW4gICAgICAgICAgICAgICB8ICAxICsKIHdpbnN1cC9j
-eWd3aW4vaW5jbHVkZS9jeWd3aW4vZnMuaCAgICAgIHwgIDYgKysrKysKIHdp
-bnN1cC9jeWd3aW4vaW5jbHVkZS9jeWd3aW4vdmVyc2lvbi5oIHwgIDMgKyst
-CiB3aW5zdXAvY3lnd2luL3N5c2NhbGxzLmNjICAgICAgICAgICAgICB8IDQx
-ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrLS0tLS0KIDUgZmlsZXMg
-Y2hhbmdlZCwgNDggaW5zZXJ0aW9ucygrKSwgNiBkZWxldGlvbnMoLSkKCmRp
-ZmYgLS1naXQgYS9uZXdsaWIvbGliYy9pbmNsdWRlL3N0ZGlvLmggYi9uZXds
-aWIvbGliYy9pbmNsdWRlL3N0ZGlvLmgKaW5kZXggNWQ4Y2IxMDkyLi4zMzFh
-MWNmMDcgMTAwNjQ0Ci0tLSBhL25ld2xpYi9saWJjL2luY2x1ZGUvc3RkaW8u
-aAorKysgYi9uZXdsaWIvbGliYy9pbmNsdWRlL3N0ZGlvLmgKQEAgLTM4NCw2
-ICszODQsOSBAQCBpbnQJX0VYRlVOKHZkcHJpbnRmLCAoaW50LCBjb25zdCBj
-aGFyICpfX3Jlc3RyaWN0LCBfX1ZBTElTVCkKICNlbmRpZgogI2lmIF9fQVRG
-SUxFX1ZJU0lCTEUKIGludAlfRVhGVU4ocmVuYW1lYXQsIChpbnQsIGNvbnN0
-IGNoYXIgKiwgaW50LCBjb25zdCBjaGFyICopKTsKKyMgaWZkZWYgX19DWUdX
-SU5fXworaW50CV9FWEZVTihyZW5hbWVhdDIsIChpbnQsIGNvbnN0IGNoYXIg
-KiwgaW50LCBjb25zdCBjaGFyICosIHVuc2lnbmVkIGludCkpOworIyBlbmRp
-ZgogI2VuZGlmCiAKIC8qCmRpZmYgLS1naXQgYS93aW5zdXAvY3lnd2luL2Nv
-bW1vbi5kaW4gYi93aW5zdXAvY3lnd2luL2NvbW1vbi5kaW4KaW5kZXggOGRh
-NDMyYjhhLi5jYTZmZjNjZjkgMTAwNjQ0Ci0tLSBhL3dpbnN1cC9jeWd3aW4v
-Y29tbW9uLmRpbgorKysgYi93aW5zdXAvY3lnd2luL2NvbW1vbi5kaW4KQEAg
-LTExNjgsNiArMTE2OCw3IEBAIHJlbXF1b2YgTk9TSUdGRQogcmVtcXVvbCBO
-T1NJR0ZFCiByZW5hbWUgU0lHRkUKIHJlbmFtZWF0IFNJR0ZFCityZW5hbWVh
-dDIgU0lHRkUKIHJlc19jbG9zZSA9IF9fcmVzX2Nsb3NlIFNJR0ZFCiByZXNf
-aW5pdCA9IF9fcmVzX2luaXQgU0lHRkUKIHJlc19ta3F1ZXJ5ID0gX19yZXNf
-bWtxdWVyeSBTSUdGRQpkaWZmIC0tZ2l0IGEvd2luc3VwL2N5Z3dpbi9pbmNs
-dWRlL2N5Z3dpbi9mcy5oIGIvd2luc3VwL2N5Z3dpbi9pbmNsdWRlL2N5Z3dp
-bi9mcy5oCmluZGV4IGY2MDZmZmMzOS4uNDhiMGNjYTQ1IDEwMDY0NAotLS0g
-YS93aW5zdXAvY3lnd2luL2luY2x1ZGUvY3lnd2luL2ZzLmgKKysrIGIvd2lu
-c3VwL2N5Z3dpbi9pbmNsdWRlL2N5Z3dpbi9mcy5oCkBAIC0xOSw0ICsxOSwx
-MCBAQCBkZXRhaWxzLiAqLwogI2RlZmluZSBCTEtQQlNaR0VUICAgMHgwMDAw
-MTI3YgogI2RlZmluZSBCTEtHRVRTSVpFNjQgMHgwMDA0MTI2OAogCisvKiBG
-bGFncyBmb3IgcmVuYW1lYXQyLCBmcm9tIC91c3IvaW5jbHVkZS9saW51eC9m
-cy5oLiAgRm9yIG5vdyB3ZQorICAgc3VwcG9ydCBvbmx5IFJFTkFNRV9OT1JF
-UExBQ0UuICovCisjZGVmaW5lIFJFTkFNRV9OT1JFUExBQ0UgKDEgPDwgMCkK
-Ky8qICNkZWZpbmUgUkVOQU1FX0VYQ0hBTkdFICAoMSA8PCAxKSAqLworLyog
-I2RlZmluZSBSRU5BTUVfV0hJVEVPVVQgICgxIDw8IDIpICovCisKICNlbmRp
-ZgpkaWZmIC0tZ2l0IGEvd2luc3VwL2N5Z3dpbi9pbmNsdWRlL2N5Z3dpbi92
-ZXJzaW9uLmggYi93aW5zdXAvY3lnd2luL2luY2x1ZGUvY3lnd2luL3ZlcnNp
-b24uaAppbmRleCBlZmQ0YWMwMTcuLjAzODRmNzdkYSAxMDA2NDQKLS0tIGEv
-d2luc3VwL2N5Z3dpbi9pbmNsdWRlL2N5Z3dpbi92ZXJzaW9uLmgKKysrIGIv
-d2luc3VwL2N5Z3dpbi9pbmNsdWRlL2N5Z3dpbi92ZXJzaW9uLmgKQEAgLTQ4
-MSwxMiArNDgxLDEzIEBAIGRldGFpbHMuICovCiAgIDMxNDogRXhwb3J0IGV4
-cGxpY2l0X2J6ZXJvLgogICAzMTU6IEV4cG9ydCBwdGhyZWFkX211dGV4X3Rp
-bWVkbG9jay4KICAgMzE2OiBFeHBvcnQgcHRocmVhZF9yd2xvY2tfdGltZWRy
-ZGxvY2ssIHB0aHJlYWRfcndsb2NrX3RpbWVkd3Jsb2NrLgorICAzMTc6IEV4
-cG9ydCByZW5hbWVhdDIuICBBZGQgUkVOQU1FX05PUkVQTEFDRS4KIAogICBO
-b3RlIHRoYXQgd2UgZm9yZ290IHRvIGJ1bXAgdGhlIGFwaSBmb3IgdWFsYXJt
-LCBzdHJ0b2xsLCBzdHJ0b3VsbCwKICAgc2lnYWx0c3RhY2ssIHNldGhvc3Ru
-YW1lLiAqLwogCiAjZGVmaW5lIENZR1dJTl9WRVJTSU9OX0FQSV9NQUpPUiAw
-Ci0jZGVmaW5lIENZR1dJTl9WRVJTSU9OX0FQSV9NSU5PUiAzMTYKKyNkZWZp
-bmUgQ1lHV0lOX1ZFUlNJT05fQVBJX01JTk9SIDMxNwogCiAvKiBUaGVyZSBp
-cyBhbHNvIGEgY29tcGF0aWJpdHkgdmVyc2lvbiBudW1iZXIgYXNzb2NpYXRl
-ZCB3aXRoIHRoZSBzaGFyZWQgbWVtb3J5CiAgICByZWdpb25zLiAgSXQgaXMg
-aW5jcmVtZW50ZWQgd2hlbiBpbmNvbXBhdGlibGUgY2hhbmdlcyBhcmUgbWFk
-ZSB0byB0aGUgc2hhcmVkCmRpZmYgLS1naXQgYS93aW5zdXAvY3lnd2luL3N5
-c2NhbGxzLmNjIGIvd2luc3VwL2N5Z3dpbi9zeXNjYWxscy5jYwppbmRleCA4
-ODU5MzE2MzIuLmQ3NTZmNWYzNSAxMDA2NDQKLS0tIGEvd2luc3VwL2N5Z3dp
-bi9zeXNjYWxscy5jYworKysgYi93aW5zdXAvY3lnd2luL3N5c2NhbGxzLmNj
-CkBAIC02MCw2ICs2MCw3IEBAIGRldGFpbHMuICovCiAjaW5jbHVkZSAidGxz
-X3BidWYuaCIKICNpbmNsdWRlICJzeW5jLmgiCiAjaW5jbHVkZSAiY2hpbGRf
-aW5mby5oIgorI2luY2x1ZGUgPGN5Z3dpbi9mcy5oPiAgLyogbmVlZGVkIGZv
-ciBSRU5BTUVfTk9SRVBMQUNFICovCiAKICN1bmRlZiBfY2xvc2UKICN1bmRl
-ZiBfbHNlZWsKQEAgLTIwNDgsOCArMjA0OSwxMiBAQCBudF9wYXRoX2hhc19l
-eGVjdXRhYmxlX3N1ZmZpeCAoUFVOSUNPREVfU1RSSU5HIHVwYXRoKQogICBy
-ZXR1cm4gZmFsc2U7CiB9CiAKLWV4dGVybiAiQyIgaW50Ci1yZW5hbWUgKGNv
-bnN0IGNoYXIgKm9sZHBhdGgsIGNvbnN0IGNoYXIgKm5ld3BhdGgpCisvKiBJ
-ZiBuZXdwYXRoIG5hbWVzIGFuIGV4aXN0aW5nIGZpbGUgYW5kIHRoZSBSRU5B
-TUVfTk9SRVBMQUNFIGZsYWcgaXMKKyAgIHNwZWNpZmllZCwgZmFpbCB3aXRo
-IEVFWElTVC4gIEV4Y2VwdGlvbjogRG9uJ3QgZmFpbCBpZiB0aGUgcHVycG9z
-ZQorICAgb2YgdGhlIHJlbmFtZSBpcyBqdXN0IHRvIGNoYW5nZSB0aGUgY2Fz
-ZSBvZiBvbGRwYXRoIG9uIGEKKyAgIGNhc2UtaW5zZW5zaXRpdmUgZmlsZSBz
-eXN0ZW0uICovCitzdGF0aWMgaW50CityZW5hbWUyIChjb25zdCBjaGFyICpv
-bGRwYXRoLCBjb25zdCBjaGFyICpuZXdwYXRoLCB1bnNpZ25lZCBpbnQgZmxh
-Z3MpCiB7CiAgIHRtcF9wYXRoYnVmIHRwOwogICBpbnQgcmVzID0gLTE7CkBA
-IC0yMDY4LDYgKzIwNzMsMTIgQEAgcmVuYW1lIChjb25zdCBjaGFyICpvbGRw
-YXRoLCBjb25zdCBjaGFyICpuZXdwYXRoKQogCiAgIF9fdHJ5CiAgICAgewor
-ICAgICAgaWYgKGZsYWdzICYgflJFTkFNRV9OT1JFUExBQ0UpCisJLyogUkVO
-QU1FX05PUkVQTEFDRSBpcyB0aGUgb25seSBmbGFnIGN1cnJlbnRseSBzdXBw
-b3J0ZWQuICovCisJeworCSAgc2V0X2Vycm5vIChFTk9UU1VQKTsKKwkgIF9f
-bGVhdmU7CisJfQogICAgICAgaWYgKCEqb2xkcGF0aCB8fCAhKm5ld3BhdGgp
-CiAJewogCSAgLyogUmVqZWN0IHJlbmFtZSgiIiwieCIpLCByZW5hbWUoIngi
-LCIiKS4gICovCkBAIC0yMzM3LDYgKzIzNDgsMTMgQEAgcmVuYW1lIChjb25z
-dCBjaGFyICpvbGRwYXRoLCBjb25zdCBjaGFyICpuZXdwYXRoKQogCSAgX19s
-ZWF2ZTsKIAl9CiAKKyAgICAgIC8qIFNob3VsZCB3ZSByZXBsYWNlIGFuIGV4
-aXN0aW5nIGZpbGU/ICovCisgICAgICBpZiAoKHJlbW92ZXBjIHx8IGRzdHBj
-LT5leGlzdHMgKCkpICYmIChmbGFncyAmIFJFTkFNRV9OT1JFUExBQ0UpKQor
-CXsKKwkgIHNldF9lcnJubyAoRUVYSVNUKTsKKwkgIF9fbGVhdmU7CisJfQor
-CiAgICAgICAvKiBPcGVuaW5nIHRoZSBmaWxlIG11c3QgYmUgcGFydCBvZiB0
-aGUgdHJhbnNhY3Rpb24uICBJdCdzIG5vdCBzdWZmaWNpZW50CiAJIHRvIGNh
-bGwgb25seSBOdFNldEluZm9ybWF0aW9uRmlsZSB1bmRlciB0aGUgdHJhbnNh
-Y3Rpb24uICBUaGVyZWZvcmUgd2UKIAkgaGF2ZSB0byBzdGFydCB0aGUgdHJh
-bnNhY3Rpb24gaGVyZSwgaWYgbmVjZXNzYXJ5LiAqLwpAQCAtMjU3OCw2ICsy
-NTk2LDEyIEBAIHJlbmFtZSAoY29uc3QgY2hhciAqb2xkcGF0aCwgY29uc3Qg
-Y2hhciAqbmV3cGF0aCkKICAgcmV0dXJuIHJlczsKIH0KIAorZXh0ZXJuICJD
-IiBpbnQKK3JlbmFtZSAoY29uc3QgY2hhciAqb2xkcGF0aCwgY29uc3QgY2hh
-ciAqbmV3cGF0aCkKK3sKKyAgcmV0dXJuIHJlbmFtZTIgKG9sZHBhdGgsIG5l
-d3BhdGgsIDApOworfQorCiBleHRlcm4gIkMiIGludAogc3lzdGVtIChjb25z
-dCBjaGFyICpjbWRzdHJpbmcpCiB7CkBAIC00NzE5LDggKzQ3NDMsOCBAQCBy
-ZWFkbGlua2F0IChpbnQgZGlyZmQsIGNvbnN0IGNoYXIgKl9fcmVzdHJpY3Qg
-cGF0aG5hbWUsIGNoYXIgKl9fcmVzdHJpY3QgYnVmLAogfQogCiBleHRlcm4g
-IkMiIGludAotcmVuYW1lYXQgKGludCBvbGRkaXJmZCwgY29uc3QgY2hhciAq
-b2xkcGF0aG5hbWUsCi0JICBpbnQgbmV3ZGlyZmQsIGNvbnN0IGNoYXIgKm5l
-d3BhdGhuYW1lKQorcmVuYW1lYXQyIChpbnQgb2xkZGlyZmQsIGNvbnN0IGNo
-YXIgKm9sZHBhdGhuYW1lLAorCSAgIGludCBuZXdkaXJmZCwgY29uc3QgY2hh
-ciAqbmV3cGF0aG5hbWUsIHVuc2lnbmVkIGludCBmbGFncykKIHsKICAgdG1w
-X3BhdGhidWYgdHA7CiAgIF9fdHJ5CkBAIC00NzMxLDEzICs0NzU1LDIwIEBA
-IHJlbmFtZWF0IChpbnQgb2xkZGlyZmQsIGNvbnN0IGNoYXIgKm9sZHBhdGhu
-YW1lLAogICAgICAgY2hhciAqbmV3cGF0aCA9IHRwLmNfZ2V0ICgpOwogICAg
-ICAgaWYgKGdlbl9mdWxsX3BhdGhfYXQgKG5ld3BhdGgsIG5ld2RpcmZkLCBu
-ZXdwYXRobmFtZSkpCiAJX19sZWF2ZTsKLSAgICAgIHJldHVybiByZW5hbWUg
-KG9sZHBhdGgsIG5ld3BhdGgpOworICAgICAgcmV0dXJuIHJlbmFtZTIgKG9s
-ZHBhdGgsIG5ld3BhdGgsIGZsYWdzKTsKICAgICB9CiAgIF9fZXhjZXB0IChF
-RkFVTFQpIHt9CiAgIF9fZW5kdHJ5CiAgIHJldHVybiAtMTsKIH0KIAorZXh0
-ZXJuICJDIiBpbnQKK3JlbmFtZWF0IChpbnQgb2xkZGlyZmQsIGNvbnN0IGNo
-YXIgKm9sZHBhdGhuYW1lLAorCSAgaW50IG5ld2RpcmZkLCBjb25zdCBjaGFy
-ICpuZXdwYXRobmFtZSkKK3sKKyAgcmV0dXJuIHJlbmFtZWF0MiAob2xkZGly
-ZmQsIG9sZHBhdGhuYW1lLCBuZXdkaXJmZCwgbmV3cGF0aG5hbWUsIDApOwor
-fQorCiBleHRlcm4gIkMiIGludAogc2NhbmRpcmF0IChpbnQgZGlyZmQsIGNv
-bnN0IGNoYXIgKnBhdGhuYW1lLCBzdHJ1Y3QgZGlyZW50ICoqKm5hbWVsaXN0
-LAogCSAgIGludCAoKnNlbGVjdCkgKGNvbnN0IHN0cnVjdCBkaXJlbnQgKiks
-Ci0tIAoyLjE0LjEKCg==
+Hi Ken,
 
---------------AC04E851B17DBFDD3964D7FB--
+On Aug 18 09:21, Ken Brown wrote:
+> Linux has a system call 'renameat2' which is like renameat but has an
+> extra 'flags' argument.  In particular, one can pass the
+> RENAME_NOREPLACE flag to cause the rename to fail with EEXIST if the
+> target of the rename exists.  See
+>=20
+>  http://man7.org/linux/man-pages/man2/rename.2.html
+>=20
+> macOS has a similar functionality, provided by the function
+> 'renameatx_np' with the flag RENAME_EXCL.
+>=20
+> There's also a recently introduced Gnulib module 'renameat2', but it
+> requires two system calls on Cygwin (one to test existence and the
+> second to do the rename), so that there is a race condition.  On Linux
+> and macOS it uses renameat2 and renameatx_np to avoid the race.
+>=20
+> The attached patch implements renameat2 on Cygwin (but only supporting
+> the RENAME_NOREPLACE flag).  I've written it so that a rename that
+> just changes case on a case-insensitive file system succeeds.
+>=20
+> If the patch is accepted, I'll submit a second patch that documents
+> the new function.
+
+Neat stuff, but there are a few points for discussion, see below.
+
+> --- a/winsup/cygwin/include/cygwin/fs.h
+> +++ b/winsup/cygwin/include/cygwin/fs.h
+> @@ -19,4 +19,9 @@ details. */
+>  #define BLKPBSZGET   0x0000127b
+>  #define BLKGETSIZE64 0x00041268
+>=20=20
+> +/* Flags for renameat2, from /usr/include/linux/fs.h. */
+> +#define RENAME_NOREPLACE (1 << 0)
+> +#define RENAME_EXCHANGE  (1 << 1)
+> +#define RENAME_WHITEOUT  (1 << 2)
+
+Given that there's no standard for this call (yet), do we really want to
+expose flag values we don't support?  I would opt for only RENAME_NOREPLACE
+for now and skip the others.
+
+> +
+>  #endif
+> diff --git a/winsup/cygwin/include/cygwin/version.h b/winsup/cygwin/inclu=
+de/cygwin/version.h
+> index efd4ac017..7640abfad 100644
+> --- a/winsup/cygwin/include/cygwin/version.h
+> +++ b/winsup/cygwin/include/cygwin/version.h
+> @@ -481,12 +481,14 @@ details. */
+>    314: Export explicit_bzero.
+>    315: Export pthread_mutex_timedlock.
+>    316: Export pthread_rwlock_timedrdlock, pthread_rwlock_timedwrlock.
+> +  317: Export renameat2.  Add RENAME_NOREPLACE, RENAME_EXCHANGE,
+> +       RENAME_WHITEOUT.
+
+You can drop the flag values here.  renameat2 is sufficient.
+
+> +rename2 (const char *oldpath, const char *newpath, unsigned int flags)
+>  {
+>    tmp_pathbuf tp;
+>    int res =3D -1;
+> @@ -2068,6 +2073,12 @@ rename (const char *oldpath, const char *newpath)
+>=20=20
+>    __try
+>      {
+> +      if (flags & ~RENAME_NOREPLACE)
+> +	/* RENAME_NOREPLACE is the only flag currently supported. */
+> +	{
+> +	  set_errno (ENOTSUP);
+
+That should ideally be EINVAL.  Unsupported bit values in a flag argument?
+EINVAL, please.
+
+> +	  __leave;
+> +	}
+>        if (!*oldpath || !*newpath)
+>  	{
+>  	  /* Reject rename("","x"), rename("x","").  */
+> @@ -2337,6 +2348,13 @@ rename (const char *oldpath, const char *newpath)
+>  	  __leave;
+>  	}
+>=20=20
+> +      /* Should we replace an existing file? */
+> +      if ((removepc || dstpc->exists ()) && (flags & RENAME_NOREPLACE))
+> +	{
+> +	  set_errno (EEXIST);
+> +	  __leave;
+> +	}
+> +
+
+Do we really need this test here?  If you check at this point and then
+go ahead preparing the actual rename operation, you have the atomicity
+problem again which renameat2 is trying to solve.
+
+But there's light.  NtSetInformationFile(FileRenameInformation) already
+supports RENAME_NOREPLACE :)
+
+Have a look at line 2494 (prior to your patch):
+
+    pfri->ReplaceIfExists =3D TRUE;
+
+if you replace this with something like
+
+    pfri->ReplaceIfExists =3D !(flags & RENAME_NOREPLACE);
+
+it should give us the atomic behaviour of renameat2 on Linux.
+
+Another upside is, the status code returned is STATUS_OBJECT_NAME_COLLISION,
+which translates to Win32 error ERROR_ALREADY_EXISTS, which in turn is
+already converted to EEXIST by Cygwin, so there's nothing more to do :)
+
+What do you think?
+
+
+Thanks,
+Corinna
+
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
+
+--TB36FDmn/VVEgNH/
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 819
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iQIcBAEBCAAGBQJZlwSNAAoJEPU2Bp2uRE+gz4cQAJB24xUgoBNby7UV0/OhNkYd
+XVbhhoNfku1wvciDsxZYuQ3cIat7NtDtZLiX7PAEHAtbMkbQJ+KN2WlGr6AHLb5J
+/WVsObupFuEN8Qdc1G73Q5THvHXXtqEGW6aSA30vAl6xv4mWPRKES80GaSQd0Hru
+2zgL54q12NswrQXx44WUlRuLzzFJbW9YswsQ86fCpx7zIzfuH36Wya3VTWRHuPHL
+Y+Nlh4A6fFF8sUzpunvmC8Kn0xRbX/hmIwuYl+iB+gj7JMUR4ujpZYWe42oIIoaV
+HVE/G9mNqnw2qo9BV5M6XXZjftiR1ieTOt67GcSfmn+fYMhkvuHTxmKPsthON0W0
+Q/k+Nf29OO7waRmCXUBU5cOJ2gq8+Sgsn3yZCvO4ErwdF4nVh6ARuDLwD4Iu4YC4
+0eOcYtd71ttKJ8zJ3LdMIr+5enjcMVLpIFD41EKrdHQFSbeJJGRZM9s7eDcmkum/
+nIblCsIu4LC+H9c3iejBqAL+/LLuJsD5FCVfkJSQ5wzOlE1bl9Deda7NjzDbxjgg
+D0ZiYv6Pd2epViAF9sOvxkDfeYL1WQlSgGKUdWgO/CEymEFtpANx7Cygmu818TQ0
+k6u2OHpTFX9kMK6/nkqcLOTfQx5RrKbQoci6GxbDW5dNSONCwA/zqNepGmqlp1DG
+Hpm6qCzEkktSofZ0snu3
+=i6oU
+-----END PGP SIGNATURE-----
+
+--TB36FDmn/VVEgNH/--
