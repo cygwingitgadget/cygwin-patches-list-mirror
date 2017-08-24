@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8834-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 11492 invoked by alias); 23 Aug 2017 19:25:29 -0000
+Return-Path: <cygwin-patches-return-8835-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 40732 invoked by alias); 24 Aug 2017 09:27:55 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,77 +9,134 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 10595 invoked by uid 89); 23 Aug 2017 19:25:28 -0000
+Received: (qmail 32391 invoked by uid 89); 24 Aug 2017 09:25:42 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-1.9 required=5.0 tests=AWL,BAYES_00,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW autolearn=no version=3.3.2 spammy=HTo:U*cygwin-patches
-X-HELO: smtp-out-so.shaw.ca
-Received: from smtp-out-so.shaw.ca (HELO smtp-out-so.shaw.ca) (64.59.136.137) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 23 Aug 2017 19:25:27 +0000
-Received: from [192.168.1.100] ([24.64.240.204])	by shaw.ca with SMTP	id kbHId38eDDJTWkbHJdn2EA; Wed, 23 Aug 2017 13:25:25 -0600
-X-Authority-Analysis: v=2.2 cv=B4DJ6KlM c=1 sm=1 tr=0 a=MVEHjbUiAHxQW0jfcDq5EA==:117 a=MVEHjbUiAHxQW0jfcDq5EA==:17 a=IkcTkHD0fZMA:10 a=o2A5A5UTUE4NVVSS9SoA:9 a=QEXdDO2ut3YA:10
-Reply-To: Brian.Inglis@SystematicSw.ab.ca
-Subject: Re: winsup/cygwin/libc/strptime.cc(__strptime) strptime %F issue
+X-Spam-SWARE-Status: No, score=-124.4 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=Hx-languages-length:1989, Attached, H*R:D*cygwin.com, H*Ad:U*cygwin-patches
+X-HELO: drew.franken.de
+Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 24 Aug 2017 09:25:40 +0000
+Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id B866E71E3F8C0	for <cygwin-patches@cygwin.com>; Thu, 24 Aug 2017 11:25:36 +0200 (CEST)
+Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id 18C4E5E01D4	for <cygwin-patches@cygwin.com>; Thu, 24 Aug 2017 11:25:36 +0200 (CEST)
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id ED13FA804A5; Thu, 24 Aug 2017 11:25:35 +0200 (CEST)
+Date: Thu, 24 Aug 2017 16:52:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] winsup/cygwin/libc/strptime.cc(__strptime) add strptime %s
+Message-ID: <20170824092535.GH7469@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
 References: <BY1PR09MB0343663DE41D927E67CF0CCEA5BB0@BY1PR09MB0343.namprd09.prod.outlook.com> <acc19ec5-055b-1bd4-997d-a247755163bf@SystematicSw.ab.ca> <92da937f-f770-f29c-651e-000f92cbf358@SystematicSw.ab.ca>
-From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
-Message-ID: <f0595b42-8982-f192-9f60-f559d4de3879@SystematicSw.ab.ca>
-Date: Thu, 24 Aug 2017 09:40:00 -0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Thunderbird/52.3.0
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="ylS2wUBXLOxYXZFQ"
+Content-Disposition: inline
 In-Reply-To: <92da937f-f770-f29c-651e-000f92cbf358@SystematicSw.ab.ca>
+User-Agent: Mutt/1.8.3 (2017-05-23)
+X-SW-Source: 2017-q3/txt/msg00037.txt.bz2
+
+
+--ylS2wUBXLOxYXZFQ
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfAG+EwtMmeGyvNTFkQ3W74eZ6Wiuw0K5RPFmkganVO6QjQQbSwP311b/xGuuRFSFliSFBoUGEW3VsV0nmfUzi3kV64YnL0gF8f1ajrDs3AC7l2BxV+2m XfFif9Zq8kAVqPhU43uxoXroKYCWA33KAUuLfRlTyAh/CtEixOPJzpunprAqckJ0HyAfXMlgJYCrmepZd0U3im//jt8QPC8fFzY=
-X-IsSubscribed: yes
-X-SW-Source: 2017-q3/txt/msg00036.txt.bz2
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 2040
 
-On 2017-08-23 12:51, Brian Inglis wrote:
-> On 2017-07-23 22:07, Brian Inglis wrote:
->> On 2017-07-23 20:09, Lavrentiev, Anton (NIH/NLM/NCBI) [C] wrote:
->>>> But that's just scanning a decimal integer to time_t.
->>> It's not a question of whether I can or can't convert a string into an 
->>> integer, rather it's a question about portability of code that uses %s
->>> for both functions and expects it to work unchanged in the Cygwin
->>> environment.
->>> Also, strptime() was designed to be a reversal to strftime() (from the 
->>> man-pages: the strptime() function is the converse function to
->>> strftime(3)) so both are supposed to "understand" the same basic set of
->>> formats. Because of Cygwin's strptime() missing "%s", the following also
->>> does not work even from command line:
->>> $ date +"%s" | strptime "%s"
-> Testing revealed a separate issue with %F format which I will follow up on in
-> a different thread.
-Actually same thread, different subject.
+On Aug 23 12:51, Brian Inglis wrote:
+> Attached patch to support %s in Cygwin winsup libc strptime.cc __strptime=
+().
+>=20
+> This also enables support for %s in dateutils package strptime(1).
+>=20
+> In case the issue comes up, if the user wants to support %s as in date(1)=
+ with a
+> preceding @ flag, they just have to include that verbatim before the form=
+at as
+> in "@%s".
+>=20
+> Testing revealed a separate issue with %F format which I will follow up o=
+n in a
+> different thread.
+>=20
+> Similar patch coming for newlib.
+>=20
+> --=20
+> Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
 
-Cygwin strptime(3) (also strptime(1)) fails with default width, without an
-explicit width, because of the test in the following code:
+> From 11f950597e7f66132a2ce6c8120f7199ba02316f Mon Sep 17 00:00:00 2001
+> From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+> Date: Tue, 22 Aug 2017 15:10:27 -0600
+> Subject: [PATCH] winsup/cygwin/libc/strptime.cc(__strptime) add strptime =
+%s
+>=20
+> ---
+>  winsup/cygwin/libc/strptime.cc | 23 +++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
+>=20
+> diff --git a/winsup/cygwin/libc/strptime.cc b/winsup/cygwin/libc/strptime=
+.cc
+> index 62dca6e5e..a7fef4985 100644
+> --- a/winsup/cygwin/libc/strptime.cc
+> +++ b/winsup/cygwin/libc/strptime.cc
+> @@ -573,6 +573,29 @@ literal:
+>  			bp =3D conv_num(bp, &tm->tm_sec, 0, 61, ALT_DIGITS);
+>  			continue;
+>=20=20
+> +		case 's' :	/* The seconds since Unix epoch - GNU extension */
+> +		    {
+> +			long long sec;
+> +			time_t t;
+> +			int errno_save;
+> +			char *end;
+> +
+> +			LEGAL_ALT(0);
+> +			errno_save =3D errno;
 
-case 'F':	/* The date as "%Y-%m-%d". */
-	{
-	  LEGAL_ALT(0);
-	  ymd |= SET_YMD;
-	  char *tmp = __strptime ((const char *) bp, "%Y-%m-%d",
-				  tm, era_info, alt_digits,
-				  locale);
-	  if (tmp && (uint) (tmp - (char *) bp) > width)
-	    return NULL;
-	  bp = (const unsigned char *) tmp;
-	  continue;
-	}
+Funny enough, in other places in Cygwin we call this temp variable
+"save_errno" :)
 
-as default width is zero so test fails and returns NULL.
 
-Simple patch for this as with the other cases supporting width is to change the
-test to:
+Alternatively, since you're in C++ code, you can use the save_errno
+class, like this:
 
-	  if (tmp && width && (uint) (tmp - (char *) bp) > width)
+  {
+    save_errno save;
 
-but this does not properly support [+0] flags or width in the format as
-specified by glibc (latest POSIX punts on %F) for compatibility with strftime(),
-affecting only the %Y format, supplying %[+0]<w-6>F, to support signed and zero
-filled fixed and variable length year fields in %F format.
+    [do your thing]
+  }
 
-So do you want compatible support or just the quick fix?
+The destructor of save_errno will restore errno.
 
--- 
-Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
+Since the code as such is fine, it's your choice if you want to stick
+to it or use one of the above.  Just give the word.
+
+
+Thanks,
+Corinna
+
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
+
+--ylS2wUBXLOxYXZFQ
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 819
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iQIcBAEBCAAGBQJZnpuPAAoJEPU2Bp2uRE+gOikP/1ghfgEksCm7iQDL4WEuOxzb
+HF3ZDSZns8b/Tfvb25ZHiXqHQL/nz5Y+1Y+VpNipWBgWL743GrBDdWCSbBSbXrXy
+2tnYbPy7zehgTWwnkAlGKIy47JrnaHHtBihE71J+aDuW8UBRN+pGnkmQ4JGXt8Dz
+tN3Mm/qqi8zFzv5ilV/9RKlDGGvgpAI/vtAwHTVS/rYcsP5AQLXJxi0JmJz1medm
+jamUcrEsU7JowekHMOIs/KbPkNHdKK2Ybmuh5pzs6ODxK98GYZK/qIwKlLBtSj09
+UdBtpWzvi8OYq9aq/IexwbXuSOtXl+rR6JRXLjXWC6vCmOPqn0qVkp0xj6xhkksi
+9jFPib8qxXewCub1JIdVNj4n/j3x/30vytfcwfdlzCEngZvdzfxwYhIpwkdCJVWj
+agb/+2CE/HKt4S4Q2Q0BQL6UCCvb4R1xXeSUXKe6xVjMSTOZRVVw4McMZgH2ijZA
+igv1g/jlej0f3ITqCMtWM9htWH49oEn2hWDKSRIkUVZzCM4F+kanUjBJBMECS7MF
+OVDYzV4HW/4aHppp8cTNUDa3eeA7sUcMThOevUq0uCbsUgMVadZEERAvcG4LmWiV
+5Ky0B0P/c8K1YXKpU4XNWlm18U61fM5Xv/0BurNPEdD1U64N2fX5qaHTG2kqRjhc
+KdvsUJk+Mxp5UGMpvFrd
+=a+LR
+-----END PGP SIGNATURE-----
+
+--ylS2wUBXLOxYXZFQ--
