@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8858-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 12843 invoked by alias); 17 Sep 2017 02:04:53 -0000
+Return-Path: <cygwin-patches-return-8856-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 11913 invoked by alias); 17 Sep 2017 02:04:44 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,125 +9,162 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 11620 invoked by uid 89); 17 Sep 2017 02:04:41 -0000
+Received: (qmail 10566 invoked by uid 89); 17 Sep 2017 02:04:33 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-25.5 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RP_MATCHES_RCVD,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.2 spammy=process_state, signal.cc, pid_execed, signalcc
-X-HELO: limerock03.mail.cornell.edu
-Received: from limerock03.mail.cornell.edu (HELO limerock03.mail.cornell.edu) (128.84.13.243) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 17 Sep 2017 02:04:39 +0000
+X-Spam-SWARE-Status: No, score=-25.1 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RP_MATCHES_RCVD,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.2 spammy=winsup, audio_in, buf_info, dev_
+X-HELO: limerock01.mail.cornell.edu
+Received: from limerock01.mail.cornell.edu (HELO limerock01.mail.cornell.edu) (128.84.13.241) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 17 Sep 2017 02:04:32 +0000
 X-CornellRouted: This message has been Routed already.
-Received: from authusersmtp.mail.cornell.edu (granite4.serverfarm.cornell.edu [10.16.197.9])	by limerock03.mail.cornell.edu (8.14.4/8.14.4_cu) with ESMTP id v8H24bEp002460;	Sat, 16 Sep 2017 22:04:37 -0400
-Received: from nothing.nyroc.rr.com (mta-68-175-129-7.twcny.rr.com [68.175.129.7] (may be forged))	(authenticated bits=0)	by authusersmtp.mail.cornell.edu (8.14.4/8.12.10) with ESMTP id v8H24LfO025218	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=NOT);	Sat, 16 Sep 2017 22:04:36 -0400
+Received: from authusersmtp.mail.cornell.edu (granite4.serverfarm.cornell.edu [10.16.197.9])	by limerock01.mail.cornell.edu (8.14.4/8.14.4_cu) with ESMTP id v8H24Uaq024095;	Sat, 16 Sep 2017 22:04:30 -0400
+Received: from nothing.nyroc.rr.com (mta-68-175-129-7.twcny.rr.com [68.175.129.7] (may be forged))	(authenticated bits=0)	by authusersmtp.mail.cornell.edu (8.14.4/8.12.10) with ESMTP id v8H24LfE025218	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=NOT);	Sat, 16 Sep 2017 22:04:29 -0400
 From: Ken Brown <kbrown@cornell.edu>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH 11/12] cygwin: Remove comparison of 'this' to NULL in _pinfo::exists
+Subject: [PATCH 01/12] cygwin: Remove comparisons of 'this' to 'NULL' in fhandler_dsp.cc
 Date: Sun, 17 Sep 2017 02:05:00 -0000
-Message-Id: <20170917020420.10488-11-kbrown@cornell.edu>
-In-Reply-To: <20170917020420.10488-1-kbrown@cornell.edu>
-References: <20170917020420.10488-1-kbrown@cornell.edu>
+Message-Id: <20170917020420.10488-1-kbrown@cornell.edu>
 X-PMX-Cornell-Gauge: Gauge=XXXXX
 X-PMX-CORNELL-AUTH-RESULTS: dkim-out=none;
 X-IsSubscribed: yes
-X-SW-Source: 2017-q3/txt/msg00059.txt.bz2
+X-SW-Source: 2017-q3/txt/msg00061.txt.bz2
 
 Fix all callers.
 ---
- winsup/cygwin/fhandler_termios.cc |  2 +-
- winsup/cygwin/pinfo.cc            |  2 +-
- winsup/cygwin/signal.cc           |  2 +-
- winsup/cygwin/sigproc.cc          |  5 +++--
- winsup/cygwin/times.cc            | 10 +++++++---
- 5 files changed, 13 insertions(+), 8 deletions(-)
+ winsup/cygwin/fhandler_dsp.cc | 55 +++++++++++++++++++++++++++++++------------
+ 1 file changed, 40 insertions(+), 15 deletions(-)
 
-diff --git a/winsup/cygwin/fhandler_termios.cc b/winsup/cygwin/fhandler_termios.cc
-index 19fcfc9cd..4ce53433a 100644
---- a/winsup/cygwin/fhandler_termios.cc
-+++ b/winsup/cygwin/fhandler_termios.cc
-@@ -131,7 +131,7 @@ tty_min::kill_pgrp (int sig)
-   for (unsigned i = 0; i < pids.npids; i++)
-     {
-       _pinfo *p = pids[i];
--      if (!p->exists () || p->ctty != ntty || p->pgid != pgid)
-+      if (!p || !p->exists () || p->ctty != ntty || p->pgid != pgid)
- 	continue;
-       if (p == myself)
- 	killself = sig != __SIGSETPGRP && !exit_state;
-diff --git a/winsup/cygwin/pinfo.cc b/winsup/cygwin/pinfo.cc
-index 7193f6884..e4eef8b3c 100644
---- a/winsup/cygwin/pinfo.cc
-+++ b/winsup/cygwin/pinfo.cc
-@@ -529,7 +529,7 @@ _pinfo::set_ctty (fhandler_termios *fh, int flags)
- bool __reg1
- _pinfo::exists ()
+diff --git a/winsup/cygwin/fhandler_dsp.cc b/winsup/cygwin/fhandler_dsp.cc
+index 5ae3309f8..b5c685bf8 100644
+--- a/winsup/cygwin/fhandler_dsp.cc
++++ b/winsup/cygwin/fhandler_dsp.cc
+@@ -63,7 +63,7 @@ class fhandler_dev_dsp::Audio
+   void convert_S16LE_S16BE (unsigned char *buffer, int size_bytes);
+   void fillFormat (WAVEFORMATEX * format,
+ 		   int rate, int bits, int channels);
+-  unsigned blockSize (int rate, int bits, int channels);
++  static unsigned blockSize (int rate, int bits, int channels);
+   void (fhandler_dev_dsp::Audio::*convert_)
+     (unsigned char *buffer, int size_bytes);
+ 
+@@ -115,6 +115,7 @@ class fhandler_dev_dsp::Audio_out: public Audio
+   void stop (bool immediately = false);
+   int write (const char *pSampleData, int nBytes);
+   void buf_info (audio_buf_info *p, int rate, int bits, int channels);
++  static void default_buf_info (audio_buf_info *p, int rate, int bits, int channels);
+   void callback_sampledone (WAVEHDR *pHdr);
+   bool parsewav (const char *&pData, int &nBytes,
+ 		 int rate, int bits, int channels);
+@@ -149,6 +150,7 @@ public:
+   void stop ();
+   bool read (char *pSampleData, int &nBytes);
+   void buf_info (audio_buf_info *p, int rate, int bits, int channels);
++  static void default_buf_info (audio_buf_info *p, int rate, int bits, int channels);
+   void callback_blockfull (WAVEHDR *pHdr);
+ 
+ private:
+@@ -499,11 +501,11 @@ void
+ fhandler_dev_dsp::Audio_out::buf_info (audio_buf_info *p,
+ 				       int rate, int bits, int channels)
  {
--  return this && process_state && !(process_state & (PID_EXITED | PID_REAPED | PID_EXECED));
-+  return process_state && !(process_state & (PID_EXITED | PID_REAPED | PID_EXECED));
- }
- 
- bool
-diff --git a/winsup/cygwin/signal.cc b/winsup/cygwin/signal.cc
-index 016fce1de..69c5e2aad 100644
---- a/winsup/cygwin/signal.cc
-+++ b/winsup/cygwin/signal.cc
-@@ -332,7 +332,7 @@ kill_pgrp (pid_t pid, siginfo_t& si)
+-  p->fragstotal = MAX_BLOCKS;
+-  if (this && dev_)
++  if (dev_)
      {
-       _pinfo *p = pids[i];
- 
--      if (!p->exists ())
-+      if (!p || !p->exists ())
- 	continue;
- 
-       /* Is it a process we want to kill?  */
-diff --git a/winsup/cygwin/sigproc.cc b/winsup/cygwin/sigproc.cc
-index 36fc64903..92fa5ea3d 100644
---- a/winsup/cygwin/sigproc.cc
-+++ b/winsup/cygwin/sigproc.cc
-@@ -152,7 +152,8 @@ proc_can_be_signalled (_pinfo *p)
- bool __reg1
- pid_exists (pid_t pid)
- {
--  return pinfo (pid)->exists ();
-+  pinfo p (pid);
-+  return p && p->exists ();
- }
- 
- /* Return true if this is one of our children, false otherwise.  */
-@@ -1135,7 +1136,7 @@ remove_proc (int ci)
-       if (_my_tls._ctinfo != procs[ci].wait_thread)
- 	procs[ci].wait_thread->terminate_thread ();
+       /* If the device is running we use the internal values,
+ 	 possibly set from the wave file. */
++      p->fragstotal = MAX_BLOCKS;
+       p->fragsize = blockSize (freq_, bits_, channels_);
+       p->fragments = Qisr2app_->query ();
+       if (pHdr_ != NULL)
+@@ -514,10 +516,17 @@ fhandler_dev_dsp::Audio_out::buf_info (audio_buf_info *p,
      }
--  else if (procs[ci]->exists ())
-+  else if (procs[ci] && procs[ci]->exists ())
-     return true;
- 
-   sigproc_printf ("removing procs[%d], pid %d, nprocs %d", ci, procs[ci]->pid,
-diff --git a/winsup/cygwin/times.cc b/winsup/cygwin/times.cc
-index fb480513f..5da0bbc7a 100644
---- a/winsup/cygwin/times.cc
-+++ b/winsup/cygwin/times.cc
-@@ -522,7 +522,7 @@ clock_gettime (clockid_t clk_id, struct timespec *tp)
- 	pid = getpid ();
- 
-       pinfo p (pid);
--      if (!p->exists ())
-+      if (!p || !p->exists ())
- 	{
- 	  set_errno (EINVAL);
- 	  return -1;
-@@ -746,8 +746,12 @@ clock_setres (clockid_t clk_id, struct timespec *tp)
- extern "C" int
- clock_getcpuclockid (pid_t pid, clockid_t *clk_id)
- {
--  if (pid != 0 && !pinfo (pid)->exists ())
--    return (ESRCH);
-+  if (pid != 0)
-+    {
-+      pinfo p (pid);
-+      if (!p || !p->exists ())
-+	return (ESRCH);
+   else
+     {
++      default_buf_info(p, rate, bits, channels);
 +    }
-   *clk_id = (clockid_t) PID_TO_CLOCKID (pid);
-   return 0;
++}
++
++void fhandler_dev_dsp::Audio_out::default_buf_info (audio_buf_info *p,
++                                                int rate, int bits, int channels)
++{
++      p->fragstotal = MAX_BLOCKS;
+       p->fragsize = blockSize (rate, bits, channels);
+       p->fragments = MAX_BLOCKS;
+       p->bytes = p->fragsize * p->fragments;
+-    }
  }
+ 
+ /* This is called on an interupt so use locking.. Note Qisr2app_
+@@ -951,14 +960,23 @@ fhandler_dev_dsp::Audio_in::waitfordata ()
+   return true;
+ }
+ 
++void fhandler_dev_dsp::Audio_in::default_buf_info (audio_buf_info *p,
++                                                int rate, int bits, int channels)
++{
++  p->fragstotal = MAX_BLOCKS;
++  p->fragsize = blockSize (rate, bits, channels);
++  p->fragments = 0;
++  p->bytes = 0;
++}
++
+ void
+ fhandler_dev_dsp::Audio_in::buf_info (audio_buf_info *p,
+ 				      int rate, int bits, int channels)
+ {
+-  p->fragstotal = MAX_BLOCKS;
+-  p->fragsize = blockSize (rate, bits, channels);
+-  if (this && dev_)
++  if (dev_)
+     {
++      p->fragstotal = MAX_BLOCKS;
++      p->fragsize = blockSize (rate, bits, channels);
+       p->fragments = Qisr2app_->query ();
+       if (pHdr_ != NULL)
+ 	p->bytes = pHdr_->dwBytesRecorded - bufferIndex_
+@@ -968,8 +986,7 @@ fhandler_dev_dsp::Audio_in::buf_info (audio_buf_info *p,
+     }
+   else
+     {
+-      p->fragments = 0;
+-      p->bytes = 0;
++      default_buf_info(p, rate, bits, channels);
+     }
+ }
+ 
+@@ -1343,9 +1360,13 @@ fhandler_dev_dsp::_ioctl (unsigned int cmd, void *buf)
+ 	    return -1;
+ 	  }
+ 	audio_buf_info *p = (audio_buf_info *) buf;
+-	audio_out_->buf_info (p, audiofreq_, audiobits_, audiochannels_);
+-	debug_printf ("buf=%p frags=%d fragsize=%d bytes=%d",
+-		      buf, p->fragments, p->fragsize, p->bytes);
++        if (audio_out_) {
++            audio_out_->buf_info (p, audiofreq_, audiobits_, audiochannels_);
++        } else {
++            Audio_out::default_buf_info(p, audiofreq_, audiobits_, audiochannels_);
++        }
++        debug_printf ("buf=%p frags=%d fragsize=%d bytes=%d",
++                      buf, p->fragments, p->fragsize, p->bytes);
+ 	return 0;
+       }
+ 
+@@ -1357,9 +1378,13 @@ fhandler_dev_dsp::_ioctl (unsigned int cmd, void *buf)
+ 	    return -1;
+ 	  }
+ 	audio_buf_info *p = (audio_buf_info *) buf;
+-	audio_in_->buf_info (p, audiofreq_, audiobits_, audiochannels_);
+-	debug_printf ("buf=%p frags=%d fragsize=%d bytes=%d",
+-		      buf, p->fragments, p->fragsize, p->bytes);
++        if (audio_in_) {
++            audio_in_->buf_info (p, audiofreq_, audiobits_, audiochannels_);
++        } else {
++            Audio_in::default_buf_info(p, audiofreq_, audiobits_, audiochannels_);
++        }
++        debug_printf ("buf=%p frags=%d fragsize=%d bytes=%d",
++                      buf, p->fragments, p->fragsize, p->bytes);
+ 	return 0;
+       }
+ 
 -- 
 2.14.1
