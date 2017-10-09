@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8865-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 15272 invoked by alias); 17 Sep 2017 02:05:20 -0000
+Return-Path: <cygwin-patches-return-8870-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 19641 invoked by alias); 9 Oct 2017 10:11:55 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,58 +9,77 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 10916 invoked by uid 89); 17 Sep 2017 02:04:37 -0000
+Received: (qmail 19602 invoked by uid 89); 9 Oct 2017 10:11:54 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-25.3 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RP_MATCHES_RCVD,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.2 spammy=Hx-languages-length:956, H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
-X-HELO: limerock04.mail.cornell.edu
-Received: from limerock04.mail.cornell.edu (HELO limerock04.mail.cornell.edu) (128.84.13.244) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 17 Sep 2017 02:04:35 +0000
-X-CornellRouted: This message has been Routed already.
-Received: from authusersmtp.mail.cornell.edu (granite4.serverfarm.cornell.edu [10.16.197.9])	by limerock04.mail.cornell.edu (8.14.4/8.14.4_cu) with ESMTP id v8H24Wr4018425;	Sat, 16 Sep 2017 22:04:32 -0400
-Received: from nothing.nyroc.rr.com (mta-68-175-129-7.twcny.rr.com [68.175.129.7] (may be forged))	(authenticated bits=0)	by authusersmtp.mail.cornell.edu (8.14.4/8.12.10) with ESMTP id v8H24LfH025218	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=NOT);	Sat, 16 Sep 2017 22:04:31 -0400
-From: Ken Brown <kbrown@cornell.edu>
+X-Spam-SWARE-Status: No, score=-104.7 required=5.0 tests=AWL,BAYES_20,GIT_PATCH_2,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=H*c:application, mails, Ken, Hx-languages-length:476
+X-HELO: drew.franken.de
+Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 09 Oct 2017 10:11:52 +0000
+Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id B72E5721BBD2E	for <cygwin-patches@cygwin.com>; Mon,  9 Oct 2017 12:11:48 +0200 (CEST)
+Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id DF2815E01D9	for <cygwin-patches@cygwin.com>; Mon,  9 Oct 2017 12:11:47 +0200 (CEST)
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id CA171A80666; Mon,  9 Oct 2017 12:11:47 +0200 (CEST)
+Date: Mon, 09 Oct 2017 10:11:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH 04/12] cygwin: Remove comparison of 'this' to 'NULL' in _pinfo::cwd
-Date: Wed, 27 Sep 2017 01:36:00 -0000
-Message-Id: <20170917020420.10488-4-kbrown@cornell.edu>
-In-Reply-To: <20170917020420.10488-1-kbrown@cornell.edu>
+Subject: Re: [PATCH 01/12] cygwin: Remove comparisons of 'this' to 'NULL' in fhandler_dsp.cc
+Message-ID: <20171009101147.GB3542@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20170917020420.10488-1-kbrown@cornell.edu>
-X-PMX-Cornell-Gauge: Gauge=XXXXX
-X-PMX-CORNELL-AUTH-RESULTS: dkim-out=none;
-X-IsSubscribed: yes
-X-SW-Source: 2017-q3/txt/msg00067.txt.bz2
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="rwEMma7ioTxnRzrJ"
+Content-Disposition: inline
+In-Reply-To: <20170917020420.10488-1-kbrown@cornell.edu>
+User-Agent: Mutt/1.9.1 (2017-09-22)
+X-SW-Source: 2017-q4/txt/msg00000.txt.bz2
 
-Fix all callers.
----
- winsup/cygwin/fhandler_process.cc | 2 +-
- winsup/cygwin/pinfo.cc            | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/winsup/cygwin/fhandler_process.cc b/winsup/cygwin/fhandler_process.cc
-index 08cc7ea92..453e79b16 100644
---- a/winsup/cygwin/fhandler_process.cc
-+++ b/winsup/cygwin/fhandler_process.cc
-@@ -498,7 +498,7 @@ format_process_cwd (void *data, char *&destbuf)
-       cfree (destbuf);
-       destbuf = NULL;
-     }
--  destbuf = p->cwd (fs);
-+  destbuf = p ? p->cwd (fs) : NULL;
-   if (!destbuf || !*destbuf)
-     {
-       destbuf = cstrdup ("<defunct>");
-diff --git a/winsup/cygwin/pinfo.cc b/winsup/cygwin/pinfo.cc
-index 9fe1b3a88..c28158168 100644
---- a/winsup/cygwin/pinfo.cc
-+++ b/winsup/cygwin/pinfo.cc
-@@ -930,7 +930,7 @@ char *
- _pinfo::cwd (size_t& n)
- {
-   char *s = NULL;
--  if (!this || !pid)
-+  if (!pid)
-     return NULL;
-   if (ISSTATE (this, PID_NOTCYGWIN))
-     {
--- 
-2.14.1
+--rwEMma7ioTxnRzrJ
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 433
+
+Hi Ken,
+
+On Sep 16 22:04, Ken Brown wrote:
+> Fix all callers.
+> ---
+>  winsup/cygwin/fhandler_dsp.cc | 55 +++++++++++++++++++++++++++++++------=
+------
+>  1 file changed, 40 insertions(+), 15 deletions(-)
+
+Excellent, thanks for your hard work on this!  Series pushed.
+
+
+Thanks,
+Corinna
+
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
+
+--rwEMma7ioTxnRzrJ
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 819
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iQIcBAEBCAAGBQJZ20tjAAoJEPU2Bp2uRE+gDLIP/A+LB/MiLViK0KEToBtkLkLq
+zs+xDnj1gW0fIRIedXWEJb6CcLBNM10vDcWLgwplMPbhQVHT1J51hJQvPPkG2fA0
+kKa/X+G12B/2uQOy1cSYwNOXWyvpVRzoCV6GbzWbj3xX+gHgz1nT7MTWoOCvWmZB
+Zkk93xbq/fhZWwLN8NJQArwOSMI2QOFibTtfhdgezLJ4AkHUiv8a/F+Y/ruN/c1+
+cIRrML7cabhMQ55AmpS4fveCYRtogYZlzEKypQViaSiRnwN4W6bXaQbljLK0cFUO
+cHEc69O0p+pb79Fvcs5+eBGOjOITGNF5/gEeaoDqeOjJ3dv4Mmncckj7cqB7av52
+RzMK/SApM/Gvw/65Y6xlEufAN2xOi9Y4ntym4jL+FGvEh6fhx6Z0nNE48Hej/Xg7
+Vde6bEmVYxD0pgd7FJauwC8B0D4DBIycS16UoW4YeStscQpsoIQTSX8Ztw9STqxL
+3KWrAsDa0j9uMVkvIXLDFoQclAEGvpvjNA/YiXGLPT6tpMRqSWMU0MOEOzpWPPpx
+GY47Qk/3yZ81SDERX1zawlwOA3fgBhMGtywoCV8Vjl5hmPB5y/LImbunSy1Dhx3U
+z/lPRH8mrrcznuV+Ktk48jJqgeO3zpV70C5sAKRC2t1APjI+FxB6h516LV9kQMaQ
+qtQ88nloi3eywtIzFKz+
+=aic3
+-----END PGP SIGNATURE-----
+
+--rwEMma7ioTxnRzrJ--
