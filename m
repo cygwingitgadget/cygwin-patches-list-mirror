@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8880-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 100744 invoked by alias); 10 Oct 2017 14:02:56 -0000
+Return-Path: <cygwin-patches-return-8881-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 1846 invoked by alias); 10 Oct 2017 14:28:38 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,87 +9,71 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 100728 invoked by uid 89); 10 Oct 2017 14:02:55 -0000
+Received: (qmail 425 invoked by uid 89); 10 Oct 2017 14:28:37 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-101.9 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=Hx-languages-length:869, H*R:D*cygwin.com, H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
-X-HELO: drew.franken.de
-Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 10 Oct 2017 14:02:47 +0000
-Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id B9D1E7193905C	for <cygwin-patches@cygwin.com>; Tue, 10 Oct 2017 16:02:44 +0200 (CEST)
-Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id 09CAF5E038D	for <cygwin-patches@cygwin.com>; Tue, 10 Oct 2017 16:02:44 +0200 (CEST)
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id E8035A80C9D; Tue, 10 Oct 2017 16:02:43 +0200 (CEST)
-Date: Tue, 10 Oct 2017 14:02:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
+X-Spam-SWARE-Status: No, score=-24.8 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RP_MATCHES_RCVD,SPF_PASS autolearn=ham version=3.3.2 spammy=coffee, Hx-languages-length:1764, reserved, HTo:U*cygwin-patches
+X-HELO: atfriesa01.ssi-schaefer.com
+Received: from atfriesa01.ssi-schaefer.com (HELO atfriesa01.ssi-schaefer.com) (193.186.16.100) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 10 Oct 2017 14:28:36 +0000
+X-IPAS-Result: =?us-ascii?q?A2G/AgCs2NxZ/+shHKxbGwEBAQMBAQEJAQEBhD+BFYN6nAm?= =?us-ascii?q?YQQobgROEDQKFEBQBAgEBAQEBAQEDgRCEB1s8AQUjZgsYAgImAgJXEwgBAbJRg?= =?us-ascii?q?ieLIwEBAQcCJoEOgh+FaIJ+hVCCR4JhBYoMiSCOEIIuhTCPe4hxhy6RegGDZoE?= =?us-ascii?q?5NoEweIV4HIFpdIpAAQEB?=
+Received: from samail03.wamas.com (HELO mailhost.salomon.at) ([172.28.33.235])  by atfriesa01.ssi-schaefer.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Oct 2017 16:28:10 +0200
+Received: from [172.28.41.101]	by mailhost.salomon.at with esmtp (Exim 4.77)	(envelope-from <michael.haubenwallner@ssi-schaefer.com>)	id 1e1vVx-0006d1-Dd; Tue, 10 Oct 2017 16:28:09 +0200
 Subject: Re: [PATCH] cygwin: fix potential buffer overflow in fork
-Message-ID: <20171010140243.GE30630@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
+To: cygwin-patches@cygwin.com
 References: <1b4e1413-fa59-a954-f839-507abce7df11@ssi-schaefer.com> <20171010114832.GB30630@calimero.vinschen.de> <e6eb270a-1819-007c-d98e-c4f79177b3f7@ssi-schaefer.com> <20171010124436.GD30630@calimero.vinschen.de>
+From: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
+Message-ID: <393b2fb1-e100-acfb-a0e6-2834c7a15298@ssi-schaefer.com>
+Date: Tue, 10 Oct 2017 14:28:00 -0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101 Thunderbird/52.3.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="ffoCPvUAPMgSXi6H"
-Content-Disposition: inline
 In-Reply-To: <20171010124436.GD30630@calimero.vinschen.de>
-User-Agent: Mutt/1.9.1 (2017-09-22)
-X-SW-Source: 2017-q4/txt/msg00010.txt.bz2
-
-
---ffoCPvUAPMgSXi6H
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 854
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2017-q4/txt/msg00011.txt.bz2
 
-On Oct 10 14:44, Corinna Vinschen wrote:
+On 10/10/2017 02:44 PM, Corinna Vinschen wrote:
 > On Oct 10 14:26, Michael Haubenwallner wrote:
-> > But wait, what's the difference between syscall_printf and system_print=
-f?
->=20
-> Prefixing with timestamps and stuff.
+>> On 10/10/2017 01:48 PM, Corinna Vinschen wrote:
+>>> Hi Michael,
+>>>
+>>> On Oct  9 18:58, Michael Haubenwallner wrote:
+>>>> When fork fails, we can use "%s" now with system_sprintf for the errmsg
+>>>> rather than a (potentially too small) buffer for the format string.
+>>>
+>>> How could buf be too small?
+>>
+>> See below.
+>>
+>> Actually I've found this by searching for suspect char array definitions
+>> while hunting the "uninitialized variable for RtlLookupFunctionEntry" bug.
+>>
+>>>> * fork.cc (fork): Use "%s" with system_printf now.
+>>>> ---
+>>>>  winsup/cygwin/fork.cc | 9 ++-------
+>>>>  1 file changed, 2 insertions(+), 7 deletions(-)
+>>>>
+>>>> diff --git a/winsup/cygwin/fork.cc b/winsup/cygwin/fork.cc
+>>>> index 73a72f530..bcbef12d8 100644
+>>>> --- a/winsup/cygwin/fork.cc
+>>>> +++ b/winsup/cygwin/fork.cc
+>>>> @@ -618,13 +618,8 @@ fork ()
+>>>>        if (!grouped.errmsg)
+>>>>  	syscall_printf ("fork failed - child pid %d, errno %d", grouped.child_pid, grouped.this_errno);
+>>>>        else
+>>>> -	{
+>>>> -	  char buf[strlen (grouped.errmsg) + sizeof ("child %d - , errno 4294967295  ")];
+>>
+>> Usually child_pid is longer than the 2 characters counted by "%d", but
+>> errno usually is shorther than the 10 characters counted by "4294967295",
+>> and there is another 2 reserved characters counted by trailing "  ".
+>>
+>> In practice the buffer unlikely will be too small, so this is merely cosmetics.
+> 
+> But buf is just the format string.  It won't get manipulated by
+> system_printf.  Which means the 4294967295 is nonsense, too, a %d
+> would have been sufficient.
 
-No, wait.  I mixed that up with small_printf.  syscall_printf is printed
-in an strace only, while system_printf is printed on the console, too.
+Indeed! (out of coffee exception)
 
-I'm not sure what the intention here is, except to distinguish the cases
-where frok::error() isn't called when failing, two cases with error()
-only called in an `#ifdef DEBUGGING'.
-
-[...time passes...]
-
-Ah, I understand the first case in frok::parent, just not the second one.
-But, anyway, let's stick to it.
-
-Patch pushed as is.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---ffoCPvUAPMgSXi6H
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJZ3NMDAAoJEPU2Bp2uRE+gTg4P/10SNuXT2bV/5cClG/jAm3Gi
-6nZly5dXF+7cNOayh40hC4QwuTCkby4FgUNn93OsYiktoVaj64XFQbjFTnaAUb9R
-X431Qt4NBpNXUzcqxHEilBmST/D4+SgLLkB+v9KwlvxScvB2f03qgNcVNyarXYmw
-Yqr+LfcihD7PV2ZqYdAdNF7CbSaJ+s3nOUtm2fvnzhDv64+XrboK8uRD35tPqDhV
-AMhYCMkrLklJNBcHD+NG1sdfXJXYeWPQcm9xsXSp2IyimoqBdRCNEBFUAo+WmEDi
-mltx7pdi5aI6M+bN0A2j1DboIwqVMXFl9ZGrrh9nhmsozKVafgzhfTMcWpVKBIWs
-oJFiofPoWn77wn4rYU2G8f5acUfDxF/cSrr+5AV+gxo5CGMvTn5Ta3rGpwEEfSJR
-PV9YjxNwaOghcByw0fdQkIWrEatGIGqf6a6vGORhp3rgb4Po+tyNsWIBudUA/9Dk
-yrbrSw3gKR49I82lvUvjNjS0UN60NUM+vPBxgcLn8zTJgth9HrGydOJ1nWZUyBvL
-afKqXUVe+cVnW2VUmyMTthAyODIs24b+CLYVl+AXxBm2VadL01et9k+LoBy+VovQ
-FJaFcZGtPmoQEDZhu09A8psI4vDgmiIPwdWhQ1BsnHU6NumZYk8hW1m9dWx6JDKK
-ijF43vvVJRQFcBU1YGNJ
-=JhkV
------END PGP SIGNATURE-----
-
---ffoCPvUAPMgSXi6H--
+Thanks!
+/haubi/
