@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8885-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 24549 invoked by alias); 25 Oct 2017 13:40:26 -0000
+Return-Path: <cygwin-patches-return-8886-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 78399 invoked by alias); 25 Oct 2017 14:19:49 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,114 +9,122 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 24505 invoked by uid 89); 25 Oct 2017 13:40:25 -0000
+Received: (qmail 78386 invoked by uid 89); 25 Oct 2017 14:19:48 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-25.7 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RP_MATCHES_RCVD,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.2 spammy=D*cornell.edu, sk:kbrown, Anyway, HTo:U*cygwin-patches
-X-HELO: limerock01.mail.cornell.edu
-Received: from limerock01.mail.cornell.edu (HELO limerock01.mail.cornell.edu) (128.84.13.241) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 25 Oct 2017 13:40:24 +0000
-X-CornellRouted: This message has been Routed already.
-Received: from authusersmtp.mail.cornell.edu (granite3.serverfarm.cornell.edu [10.16.197.8])	by limerock01.mail.cornell.edu (8.14.4/8.14.4_cu) with ESMTP id v9PDeLlL001952	for <cygwin-patches@cygwin.com>; Wed, 25 Oct 2017 09:40:22 -0400
-Received: from [10.13.22.3] (50-192-26-108-static.hfc.comcastbusiness.net [50.192.26.108])	(authenticated bits=0)	by authusersmtp.mail.cornell.edu (8.14.4/8.12.10) with ESMTP id v9PDeKXq003259	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES128-SHA bits=128 verify=NOT)	for <cygwin-patches@cygwin.com>; Wed, 25 Oct 2017 09:40:21 -0400
-Subject: Re: [PATCH] cygcheck: Fix parsing of file names containing colons
+X-Spam-SWARE-Status: No, score=-123.1 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_BRBL_LASTEXT,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=Stick, H*R:D*cygwin.com, H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
+X-HELO: drew.franken.de
+Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 25 Oct 2017 14:19:45 +0000
+Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id 56BEC709D6C80	for <cygwin-patches@cygwin.com>; Wed, 25 Oct 2017 16:19:41 +0200 (CEST)
+Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id B102B5E01D5	for <cygwin-patches@cygwin.com>; Wed, 25 Oct 2017 16:19:40 +0200 (CEST)
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 9D36AA818DE; Wed, 25 Oct 2017 16:19:40 +0200 (CEST)
+Date: Wed, 25 Oct 2017 14:19:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-References: <20171025112316.13004-1-kbrown@cornell.edu> <20171025121138.GF22429@calimero.vinschen.de> <20171025121912.GG22429@calimero.vinschen.de>
-From: Ken Brown <kbrown@cornell.edu>
-Message-ID: <b995c1b4-81cc-8d6b-91da-a44018393499@cornell.edu>
-Date: Wed, 25 Oct 2017 13:40:00 -0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Thunderbird/52.4.0
+Subject: Re: [PATCH] cygcheck: Fix parsing of file names containing colons
+Message-ID: <20171025141940.GH22429@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20171025112316.13004-1-kbrown@cornell.edu> <20171025121138.GF22429@calimero.vinschen.de> <20171025121912.GG22429@calimero.vinschen.de> <b995c1b4-81cc-8d6b-91da-a44018393499@cornell.edu>
 MIME-Version: 1.0
-In-Reply-To: <20171025121912.GG22429@calimero.vinschen.de>
-Content-Type: multipart/mixed; boundary="------------F82434C40DFFCFBD98717DE0"
-X-PMX-Cornell-Gauge: Gauge=X
-X-PMX-CORNELL-AUTH-RESULTS: dkim-out=none;
-X-IsSubscribed: yes
-X-SW-Source: 2017-q4/txt/msg00015.txt.bz2
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="6e7ZaeXHKrTJCxdu"
+Content-Disposition: inline
+In-Reply-To: <b995c1b4-81cc-8d6b-91da-a44018393499@cornell.edu>
+User-Agent: Mutt/1.9.1 (2017-09-22)
+X-SW-Source: 2017-q4/txt/msg00016.txt.bz2
 
-This is a multi-part message in MIME format.
---------------F82434C40DFFCFBD98717DE0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-length: 1568
 
-On 10/25/2017 8:19 AM, Corinna Vinschen wrote:
-> On Oct 25 14:11, Corinna Vinschen wrote:
->> Hi Ken,
->>
->> On Oct 25 07:23, Ken Brown wrote:
->>> Up to now the function winsup/utils/dump_setup.cc:base skips past
->>> colons when parsing file names.  As a result, a line like
->>>
->>>    foo foo-1:2.3-4.tar.bz2 1
->>>
->>> in /etc/setup/installed.db would cause 'cygcheck -cd foo' to report 4
->>> as the installed version of foo insted of 1:2.3-4.  This is not an
->>> issue now, but it will become an issue when version numbers are
->>> allowed to contain epochs.
->>> ---
->>>   winsup/utils/dump_setup.cc | 2 +-
->>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/winsup/utils/dump_setup.cc b/winsup/utils/dump_setup.cc
->>> index 320d69fab..3922b18f8 100644
->>> --- a/winsup/utils/dump_setup.cc
->>> +++ b/winsup/utils/dump_setup.cc
->>> @@ -56,7 +56,7 @@ base (const char *s)
->>>     const char *rv = s;
->>>     while (*s)
->>>       {
->>> -      if ((*s == '/' || *s == ':' || *s == '\\') && s[1])
->>> +      if ((*s == '/' || *s == '\\') && s[1])
->>
->> I think this is a simplified way to test for the colon in paths like
->> C:/foo/bar.  Nothing else makes sense in this context.
->>
->> I'm not sure how much we care, but maybe we shoulkd fix the test to
->> ignore the colon only if it's the second character in the incoming
->> string?
-> 
-> Not "ignore", but "use as a delimiter" only as 2nd char in the input.
+--6e7ZaeXHKrTJCxdu
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 2396
 
-I'm not sure the distinction matters in this case, since the function is 
-just trying to get the base name.  Anyway, how's the attached?
+On Oct 25 09:38, Ken Brown wrote:
+> On 10/25/2017 8:19 AM, Corinna Vinschen wrote:
+> > On Oct 25 14:11, Corinna Vinschen wrote:
+> > > Hi Ken,
+> > >=20
+> > > On Oct 25 07:23, Ken Brown wrote:
+> > > > Up to now the function winsup/utils/dump_setup.cc:base skips past
+> > > > colons when parsing file names.  As a result, a line like
+> > > >=20
+> > > >    foo foo-1:2.3-4.tar.bz2 1
+> > > >=20
+> > > > in /etc/setup/installed.db would cause 'cygcheck -cd foo' to report=
+ 4
+> > > > as the installed version of foo insted of 1:2.3-4.  This is not an
+> > > > issue now, but it will become an issue when version numbers are
+> > > > allowed to contain epochs.
+> > > > ---
+> > > >   winsup/utils/dump_setup.cc | 2 +-
+> > > >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > > >=20
+> > > > diff --git a/winsup/utils/dump_setup.cc b/winsup/utils/dump_setup.cc
+> > > > index 320d69fab..3922b18f8 100644
+> > > > --- a/winsup/utils/dump_setup.cc
+> > > > +++ b/winsup/utils/dump_setup.cc
+> > > > @@ -56,7 +56,7 @@ base (const char *s)
+> > > >     const char *rv =3D s;
+> > > >     while (*s)
+> > > >       {
+> > > > -      if ((*s =3D=3D '/' || *s =3D=3D ':' || *s =3D=3D '\\') && s[=
+1])
+> > > > +      if ((*s =3D=3D '/' || *s =3D=3D '\\') && s[1])
+> > >=20
+> > > I think this is a simplified way to test for the colon in paths like
+> > > C:/foo/bar.  Nothing else makes sense in this context.
+> > >=20
+> > > I'm not sure how much we care, but maybe we shoulkd fix the test to
+> > > ignore the colon only if it's the second character in the incoming
+> > > string?
+> >=20
+> > Not "ignore", but "use as a delimiter" only as 2nd char in the input.
+>=20
+> I'm not sure the distinction matters in this case, since the function is
+> just trying to get the base name.  Anyway, how's the attached?
 
-Ken
+Fine, thanks.
 
---------------F82434C40DFFCFBD98717DE0
-Content-Type: text/plain; charset=UTF-8;
- name="0001-cygcheck-Fix-parsing-of-file-names-containing-colons.patch"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment;
- filename*0="0001-cygcheck-Fix-parsing-of-file-names-containing-colons.pa";
- filename*1="tch"
-Content-length: 1591
+But now that you mention it... why does parse_filename() call base() at
+all?  The filenames in installed.db are just basenames anyway.  Does
+that cover an older DB format we don't support anymore, perhaps?
 
-RnJvbSAxMzU0ZTY3ZTEyODE5NTE5ZjlhNTQ0MGYxMmVmODkzZTRlMGJmN2E1
-IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBLZW4gQnJvd24gPGti
-cm93bkBjb3JuZWxsLmVkdT4KRGF0ZTogVHVlLCAyNCBPY3QgMjAxNyAxODoy
-MTo1MyAtMDQwMApTdWJqZWN0OiBbUEFUQ0hdIGN5Z2NoZWNrOiBGaXggcGFy
-c2luZyBvZiBmaWxlIG5hbWVzIGNvbnRhaW5pbmcgY29sb25zCgpVcCB0byBu
-b3cgdGhlIGZ1bmN0aW9uIHdpbnN1cC91dGlscy9kdW1wX3NldHVwLmNjOmJh
-c2Ugc2tpcHMgcGFzdApjb2xvbnMgd2hlbiBwYXJzaW5nIGZpbGUgbmFtZXMu
-ICBBcyBhIHJlc3VsdCwgYSBsaW5lIGxpa2UKCiAgZm9vIGZvby0xOjIuMy00
-LnRhci5iejIgMQoKaW4gL2V0Yy9zZXR1cC9pbnN0YWxsZWQuZGIgd291bGQg
-Y2F1c2UgJ2N5Z2NoZWNrIC1jZCBmb28nIHRvIHJlcG9ydCA0CmFzIHRoZSBp
-bnN0YWxsZWQgdmVyc2lvbiBvZiBmb28gaW5zdGVkIG9mIDE6Mi4zLTQuICBU
-aGlzIGlzIG5vdCBhbgppc3N1ZSBub3csIGJ1dCBpdCB3aWxsIGJlY29tZSBh
-biBpc3N1ZSB3aGVuIHZlcnNpb24gbnVtYmVycyBhcmUKYWxsb3dlZCB0byBj
-b250YWluIGVwb2Nocy4KLS0tCiB3aW5zdXAvdXRpbHMvZHVtcF9zZXR1cC5j
-YyB8IDQgKysrLQogMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwg
-MSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL3dpbnN1cC91dGlscy9kdW1w
-X3NldHVwLmNjIGIvd2luc3VwL3V0aWxzL2R1bXBfc2V0dXAuY2MKaW5kZXgg
-MzIwZDY5ZmFiLi5kMDU4MTcyMzkgMTAwNjQ0Ci0tLSBhL3dpbnN1cC91dGls
-cy9kdW1wX3NldHVwLmNjCisrKyBiL3dpbnN1cC91dGlscy9kdW1wX3NldHVw
-LmNjCkBAIC01MywxMCArNTMsMTIgQEAgYmFzZSAoY29uc3QgY2hhciAqcykK
-IHsKICAgaWYgKCFzKQogICAgIHJldHVybiAwOworICBpZiAoaXNhbHBoYSAo
-KnMpICYmIHNbMV0gPT0gJzonKQorICAgIHMgKz0gMjsKICAgY29uc3QgY2hh
-ciAqcnYgPSBzOwogICB3aGlsZSAoKnMpCiAgICAgewotICAgICAgaWYgKCgq
-cyA9PSAnLycgfHwgKnMgPT0gJzonIHx8ICpzID09ICdcXCcpICYmIHNbMV0p
-CisgICAgICBpZiAoKCpzID09ICcvJyB8fCAqcyA9PSAnXFwnKSAmJiBzWzFd
-KQogCXJ2ID0gcyArIDE7CiAgICAgICBzKys7CiAgICAgfQotLSAKMi4xNC4y
-Cgo=
+I just wonder now if we should simply remove base() and the call to it.
 
---------------F82434C40DFFCFBD98717DE0--
+Either way, you're right, the colon check is just useless, so your first
+patch was entirely sufficient.
+
+What do you think?  Stick to your patch or remove base()?
+
+
+Corinna
+
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
+
+--6e7ZaeXHKrTJCxdu
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 819
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iQIcBAEBCAAGBQJZ8J18AAoJEPU2Bp2uRE+gIqkQAKan8sZqpVASSw7nbraU7ZOR
+teyJ1qOaIxmu4FDzS/ZRjXLtilpbmQg/iGWG2KaRuX+2NiHOyizyvcYMZsWiNM8L
+4+3oitJWWwOf6ePoGN0X3LD6xmV4Lt3UbVzgI6ekcQsf2duBbvDO5mndzWk5iqoh
+REmtmiX2qGhTavASH8Teo4rJns2G9lLqjHEOHMIssbCSfFA9d175YkKk/teaDnmz
+9iXQ85k0t0lG1jMpkmBj93UYV00hAfz4pXI2OsDhMKYzpWtB5EgqSpg88fJsvNW2
+Ev2JE5QjuYTNkIyAheDyjOp/fm5e+yW/x6Epg0gcX+XnbIH0IMamzbrCo/YpJQfS
+DQ/i3U+jygz1rlQev0bQjJUYkYP3rbsMt880Qnz7/ECPAR8OtSp5WEs669sNW5/2
+tocTnVjbGqV6B3inkgT3DM6s5wdiWTnbFYThCfYqKiDbw/vDKq7IBKdrLLdDYHXQ
+sp8DgltOdscLbZmELscN/J87P2As40zocRgZKJM0HEWLb1SUWVHsKlrCDuce3YAE
+/ZIxC1Im4Ym8fwtsOmF+XplTFPNElVSdt0z67kMBwHkqY5n7RimIPli9C3ldcTGB
+9vDNKJTjkacWfNlcSqjzFkXku7dAj43QKAseHYpHbrhglx7LVCbYvTJwwU8B1Yvh
+L/fodiDGEr2f4eadDCLY
+=oiB5
+-----END PGP SIGNATURE-----
+
+--6e7ZaeXHKrTJCxdu--
