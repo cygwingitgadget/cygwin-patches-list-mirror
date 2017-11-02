@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8888-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 70786 invoked by alias); 25 Oct 2017 15:03:50 -0000
+Return-Path: <cygwin-patches-return-8889-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 55711 invoked by alias); 2 Nov 2017 13:26:42 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,140 +9,116 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 70776 invoked by uid 89); 25 Oct 2017 15:03:50 -0000
+Received: (qmail 55698 invoked by uid 89); 2 Nov 2017 13:26:42 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-123.1 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_BRBL_LASTEXT,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=H*R:D*cygwin.com, H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
-X-HELO: drew.franken.de
-Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 25 Oct 2017 15:03:48 +0000
-Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id E91DE721BBD2E	for <cygwin-patches@cygwin.com>; Wed, 25 Oct 2017 17:03:40 +0200 (CEST)
-Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id 3354B5E049B	for <cygwin-patches@cygwin.com>; Wed, 25 Oct 2017 17:03:40 +0200 (CEST)
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 2512BA818DE; Wed, 25 Oct 2017 17:03:40 +0200 (CEST)
-Date: Wed, 25 Oct 2017 15:03:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-24.6 required=5.0 tests=AWL,BAYES_00,FREEMAIL_FROM,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE,SPF_PASS autolearn=ham version=3.3.2 spammy=H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
+X-HELO: mail-wm0-f50.google.com
+Received: from mail-wm0-f50.google.com (HELO mail-wm0-f50.google.com) (74.125.82.50) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 02 Nov 2017 13:26:40 +0000
+Received: by mail-wm0-f50.google.com with SMTP id p75so11099543wmg.3        for <cygwin-patches@cygwin.com>; Thu, 02 Nov 2017 06:26:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20161025;        h=x-gm-message-state:from:to:subject:date:message-id;        bh=niMYu3NRzIS0aI+T427QhEUzYpkfFf/RpZpit41GbO8=;        b=mAqxTn/LuYsE9L6D34Ifx9biXNKayWVvlsUw7RVpRzvFJhrsXSchZ859GkL4DlXHIy         G3UBMkgBsTjKZ1VJkZ4Qtib2cM9a2VE7ssNqBcusbVV/H6ZluHWQTAJLWlMQdHRVwFrp         Uhw9cwCV4yjO2iB8Ca9vE/zqYBsCsk85Vh66ThvSb4VFQ/n6hHN3Ib8r4QpoBWnDECTn         3sD3c/7ebiUntjTdMEzbxVt+/5En/BMagaCK1jsSBMnt4VjELEPln37FU6+lb8XFkByu         vebCgVsRlM4lAiYaJNh0lEwyFstAc6xwyHzLxa37oh0QJKPJyg+PdDMy8Bgu/jlPvPdg         ozVQ==
+X-Gm-Message-State: AMCzsaVeAdsLtmQwMgwD+1Y4/1CGU8LgSvOGh3zxsATiBHRsa2+MDNsV	IeVJbwLBPb9RpY6YZzEVCR6i53Cg
+X-Google-Smtp-Source: ABhQp+S5jZk57iZbzTsGC+sHj2U+S597oRg8a/5bu3ptUT/yWFcYiWk3xz+UezSRNlMcwlkpPBFrDw==
+X-Received: by 10.28.37.195 with SMTP id l186mr1801297wml.144.1509629198013;        Thu, 02 Nov 2017 06:26:38 -0700 (PDT)
+Received: from localhost.localdomain (lri30-45.lri.fr. [129.175.30.45])        by smtp.gmail.com with ESMTPSA id v8sm2394995wrg.80.2017.11.02.06.26.36        for <cygwin-patches@cygwin.com>        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);        Thu, 02 Nov 2017 06:26:37 -0700 (PDT)
+From: "Erik M. Bray" <erik.m.bray@gmail.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] cygcheck: Fix parsing of file names containing colons
-Message-ID: <20171025150340.GI22429@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20171025112316.13004-1-kbrown@cornell.edu> <20171025121138.GF22429@calimero.vinschen.de> <20171025121912.GG22429@calimero.vinschen.de> <b995c1b4-81cc-8d6b-91da-a44018393499@cornell.edu> <20171025141940.GH22429@calimero.vinschen.de> <c6e21bcd-b058-1c74-6732-a62ab0b7530f@cornell.edu>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="924gEkU1VlJlwnwX"
-Content-Disposition: inline
-In-Reply-To: <c6e21bcd-b058-1c74-6732-a62ab0b7530f@cornell.edu>
-User-Agent: Mutt/1.9.1 (2017-09-22)
-X-SW-Source: 2017-q4/txt/msg00018.txt.bz2
+Subject: [PATCH] posix_fadvise() *returns* error codes but does not set errno
+Date: Thu, 02 Nov 2017 13:26:00 -0000
+Message-Id: <20171102132622.5756-1-erik.m.bray@gmail.com>
+X-IsSubscribed: yes
+X-SW-Source: 2017-q4/txt/msg00019.txt.bz2
 
+Also updates the fhandler_*::fadvise implementations to adhere to the same
+semantics.
+---
+ winsup/cygwin/fhandler.cc           |  3 +--
+ winsup/cygwin/fhandler_disk_file.cc | 16 ++++++----------
+ winsup/cygwin/pipe.cc               |  3 +--
+ winsup/cygwin/syscalls.cc           |  2 +-
+ 4 files changed, 9 insertions(+), 15 deletions(-)
 
---924gEkU1VlJlwnwX
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 3034
-
-On Oct 25 10:56, Ken Brown wrote:
-> On 10/25/2017 10:19 AM, Corinna Vinschen wrote:
-> > On Oct 25 09:38, Ken Brown wrote:
-> > > On 10/25/2017 8:19 AM, Corinna Vinschen wrote:
-> > > > On Oct 25 14:11, Corinna Vinschen wrote:
-> > > > > Hi Ken,
-> > > > >=20
-> > > > > On Oct 25 07:23, Ken Brown wrote:
-> > > > > > Up to now the function winsup/utils/dump_setup.cc:base skips pa=
-st
-> > > > > > colons when parsing file names.  As a result, a line like
-> > > > > >=20
-> > > > > >     foo foo-1:2.3-4.tar.bz2 1
-> > > > > >=20
-> > > > > > in /etc/setup/installed.db would cause 'cygcheck -cd foo' to re=
-port 4
-> > > > > > as the installed version of foo insted of 1:2.3-4.  This is not=
- an
-> > > > > > issue now, but it will become an issue when version numbers are
-> > > > > > allowed to contain epochs.
-> > > > > > ---
-> > > > > >    winsup/utils/dump_setup.cc | 2 +-
-> > > > > >    1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > > >=20
-> > > > > > diff --git a/winsup/utils/dump_setup.cc b/winsup/utils/dump_set=
-up.cc
-> > > > > > index 320d69fab..3922b18f8 100644
-> > > > > > --- a/winsup/utils/dump_setup.cc
-> > > > > > +++ b/winsup/utils/dump_setup.cc
-> > > > > > @@ -56,7 +56,7 @@ base (const char *s)
-> > > > > >      const char *rv =3D s;
-> > > > > >      while (*s)
-> > > > > >        {
-> > > > > > -      if ((*s =3D=3D '/' || *s =3D=3D ':' || *s =3D=3D '\\') &=
-& s[1])
-> > > > > > +      if ((*s =3D=3D '/' || *s =3D=3D '\\') && s[1])
-> > > > >=20
-> > > > > I think this is a simplified way to test for the colon in paths l=
-ike
-> > > > > C:/foo/bar.  Nothing else makes sense in this context.
-> > > > >=20
-> > > > > I'm not sure how much we care, but maybe we shoulkd fix the test =
-to
-> > > > > ignore the colon only if it's the second character in the incoming
-> > > > > string?
-> > > >=20
-> > > > Not "ignore", but "use as a delimiter" only as 2nd char in the inpu=
-t.
-> > >=20
-> > > I'm not sure the distinction matters in this case, since the function=
- is
-> > > just trying to get the base name.  Anyway, how's the attached?
-> >=20
-> > Fine, thanks.
-> >=20
-> > But now that you mention it... why does parse_filename() call base() at
-> > all?  The filenames in installed.db are just basenames anyway.  Does
-> > that cover an older DB format we don't support anymore, perhaps?
->=20
-> It looks like parse_filename is more-or-less copied from the function with
-> the same name in the setup sources (in filemanip.cc).  In that case there
-> might be a good reason to call base; I'll have to look more closely.
->=20
-> > I just wonder now if we should simply remove base() and the call to it.
-> >=20
-> > Either way, you're right, the colon check is just useless, so your first
-> > patch was entirely sufficient.
-> >=20
-> > What do you think?  Stick to your patch or remove base()?
->=20
-> I vote for removing base.  The attached patch does this.
-
-Pushed.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---924gEkU1VlJlwnwX
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJZ8KfLAAoJEPU2Bp2uRE+gRAcP+wezu6zKKbZkoKxXJLljjjON
-pUlKl9XtQgWZE/tnA1rdy+afXNwVOYv7VWwGCcIecbULU99ikodWwWPU/0ZmKbh8
-pja4smR8BZ+fdMXCJpTB1F6kvruHKLwdD252CzibiwFtB8JB9b21lynLAB+sAsy5
-mvyUhaQ5ffja7zF/IUwbEtSI2H8JJ5G27TdqvOGWiHv/panfo1xXsBB+ijyCWQOW
-3TJAsTsVRHGk1uC2+0AbOfupmvvxfKLSLadqkP/xIlvlx3lDU1fRutKHfA83vSLK
-6BgjvOQF7WRRm9bSM5hhc3sX1Cgtyu7OqbdF+xx5br+9RewhCldblIMzKB88WiQH
-yL75pOtwXI9nkOpduzCBY5RFs5Qd7B0pvNtzYRt4By14lbyxlOjXS/gin3cicK5R
-LYZbQLf9adnSKB7FKxmSf2jQzxZSe3Z4lkteBkgMxVz1y0of7mngJqvLbKHHOW/X
-CWjtokFtorzMZLPFCHPs6ID58Hpx/Lr6l5kDDCIVKRnltOF+fHagx+8Ljaxo+EKm
-x6fin3EMSTIs3x8eCG8hxMFQoNI5eMSRoOYBvBN1ZnWyA1X0jv9JvVtzZ21R/2+c
-8qbEHtM3wXZKmO3SroCFHVLNT+YwrjCbDoZKldgX6DEw9UZSpWJHJI+7HelHTXsq
-/QkszIu5KsrWEFB2QrrL
-=JTc+
------END PGP SIGNATURE-----
-
---924gEkU1VlJlwnwX--
+diff --git a/winsup/cygwin/fhandler.cc b/winsup/cygwin/fhandler.cc
+index d719b7c..858c1fd 100644
+--- a/winsup/cygwin/fhandler.cc
++++ b/winsup/cygwin/fhandler.cc
+@@ -1764,8 +1764,7 @@ fhandler_base::fsetxattr (const char *name, const void *value, size_t size,
+ int
+ fhandler_base::fadvise (off_t offset, off_t length, int advice)
+ {
+-  set_errno (EINVAL);
+-  return -1;
++  return EINVAL;
+ }
+ 
+ int
+diff --git a/winsup/cygwin/fhandler_disk_file.cc b/winsup/cygwin/fhandler_disk_file.cc
+index 2144a4c..f46e355 100644
+--- a/winsup/cygwin/fhandler_disk_file.cc
++++ b/winsup/cygwin/fhandler_disk_file.cc
+@@ -1076,8 +1076,7 @@ fhandler_disk_file::fadvise (off_t offset, off_t length, int advice)
+ {
+   if (advice < POSIX_FADV_NORMAL || advice > POSIX_FADV_NOREUSE)
+     {
+-      set_errno (EINVAL);
+-      return -1;
++      return EINVAL;
+     }
+ 
+   /* Windows only supports advice flags for the whole file.  We're using
+@@ -1097,21 +1096,18 @@ fhandler_disk_file::fadvise (off_t offset, off_t length, int advice)
+   NTSTATUS status = NtQueryInformationFile (get_handle (), &io,
+ 					    &fmi, sizeof fmi,
+ 					    FileModeInformation);
+-  if (!NT_SUCCESS (status))
+-    __seterrno_from_nt_status (status);
+-  else
++  if (NT_SUCCESS (status))
+     {
+       fmi.Mode &= ~FILE_SEQUENTIAL_ONLY;
+       if (advice == POSIX_FADV_SEQUENTIAL)
+-	fmi.Mode |= FILE_SEQUENTIAL_ONLY;
++        fmi.Mode |= FILE_SEQUENTIAL_ONLY;
+       status = NtSetInformationFile (get_handle (), &io, &fmi, sizeof fmi,
+-				     FileModeInformation);
++                                     FileModeInformation);
+       if (NT_SUCCESS (status))
+-	return 0;
+-      __seterrno_from_nt_status (status);
++	    return 0;
+     }
+ 
+-  return -1;
++  return geterrno_from_nt_status (status);
+ }
+ 
+ int
+diff --git a/winsup/cygwin/pipe.cc b/winsup/cygwin/pipe.cc
+index 79b7966..8738d34 100644
+--- a/winsup/cygwin/pipe.cc
++++ b/winsup/cygwin/pipe.cc
+@@ -165,8 +165,7 @@ fhandler_pipe::lseek (off_t offset, int whence)
+ int
+ fhandler_pipe::fadvise (off_t offset, off_t length, int advice)
+ {
+-  set_errno (ESPIPE);
+-  return -1;
++  return ESPIPE;
+ }
+ 
+ int
+diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
+index caa3a77..d0d735b 100644
+--- a/winsup/cygwin/syscalls.cc
++++ b/winsup/cygwin/syscalls.cc
+@@ -2937,7 +2937,7 @@ posix_fadvise (int fd, off_t offset, off_t len, int advice)
+   if (cfd >= 0)
+     res = cfd->fadvise (offset, len, advice);
+   else
+-    set_errno (EBADF);
++    res = EBADF;
+   syscall_printf ("%R = posix_fadvice(%d, %D, %D, %d)",
+ 		  res, fd, offset, len, advice);
+   return res;
+-- 
+2.8.3
