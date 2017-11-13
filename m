@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8920-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 127528 invoked by alias); 13 Nov 2017 12:05:23 -0000
+Return-Path: <cygwin-patches-return-8921-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 72590 invoked by alias); 13 Nov 2017 17:12:09 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,138 +9,164 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 127507 invoked by uid 89); 13 Nov 2017 12:05:22 -0000
+Received: (qmail 72512 invoked by uid 89); 13 Nov 2017 17:12:08 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-103.0 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=facts, H*R:D*cygwin.com, contacting, company
-X-HELO: drew.franken.de
-Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 13 Nov 2017 12:05:15 +0000
-Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id 53DB7721E281C	for <cygwin-patches@cygwin.com>; Mon, 13 Nov 2017 13:05:10 +0100 (CET)
-Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id 9A0695E0152	for <cygwin-patches@cygwin.com>; Mon, 13 Nov 2017 13:05:09 +0100 (CET)
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 84A51A8096A; Mon, 13 Nov 2017 13:05:09 +0100 (CET)
-Date: Mon, 13 Nov 2017 12:05:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-24.4 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW autolearn=ham version=3.3.2 spammy=purchased, posters, contacting, company
+X-HELO: smtp-out-so.shaw.ca
+Received: from smtp-out-so.shaw.ca (HELO smtp-out-so.shaw.ca) (64.59.136.137) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 13 Nov 2017 17:12:06 +0000
+Received: from [192.168.1.100] ([24.64.240.204])	by shaw.ca with SMTP	id EIHDeakFx8LPZEIHEeH7hd; Mon, 13 Nov 2017 10:12:04 -0700
+X-Authority-Analysis: v=2.2 cv=e552ceh/ c=1 sm=1 tr=0 a=MVEHjbUiAHxQW0jfcDq5EA==:117 a=MVEHjbUiAHxQW0jfcDq5EA==:17 a=r77TgQKjGQsHNAKrUKIA:9 a=w_pzkKWiAAAA:8 a=PyCQZI5k9LDBfCNsxusA:9 a=pILNOxqGKmIA:10 a=buB1NfXUTBUA:10 a=VnWPfBnTf8Msjs2NYZUA:9 a=7Zwj6sZBwVKJAoWSPKxL6X1jA+E=:19 a=QEXdDO2ut3YA:10 a=uvLZkzHzGa8A:10 a=rFA1MAFG28cA:10 a=CdiWusdWvyIA:10 a=sRI3_1zDfAgwuvI8zelB:22
+Reply-To: Brian.Inglis@SystematicSw.ab.ca
+Subject: Re: [PATCH] Add FAQ How do I fix find_fast_cwd warnings?
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Add FAQ 4.46. How do I fix find_fast_cwd warnings?
-Message-ID: <20171113120509.GA3881@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <ac78412d-748f-ed22-473e-9d101f7bde2f@SystematicSw.ab.ca> <0cf17d74-23a4-f08d-fd67-afed0bd3be9d@cornell.edu> <e4e9d518-3a00-6d60-f653-7162711e9672@SystematicSw.ab.ca> <8be9463b-1349-c309-afe1-828712489f74@cornell.edu> <cb561bef-71bc-4261-a5ba-7a5164d10400@SystematicSw.ab.ca>
+References: <ac78412d-748f-ed22-473e-9d101f7bde2f@SystematicSw.ab.ca> <0cf17d74-23a4-f08d-fd67-afed0bd3be9d@cornell.edu> <e4e9d518-3a00-6d60-f653-7162711e9672@SystematicSw.ab.ca> <8be9463b-1349-c309-afe1-828712489f74@cornell.edu> <cb561bef-71bc-4261-a5ba-7a5164d10400@SystematicSw.ab.ca> <20171113120509.GA3881@calimero.vinschen.de>
+From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
+Message-ID: <50152c8a-8086-57c5-0b4e-603a771ed7b8@SystematicSw.ab.ca>
+Date: Mon, 13 Nov 2017 17:12:00 -0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Thunderbird/52.4.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="vtzGhvizbBRQ85DL"
-Content-Disposition: inline
-In-Reply-To: <cb561bef-71bc-4261-a5ba-7a5164d10400@SystematicSw.ab.ca>
-User-Agent: Mutt/1.9.1 (2017-09-22)
-X-SW-Source: 2017-q4/txt/msg00050.txt.bz2
+In-Reply-To: <20171113120509.GA3881@calimero.vinschen.de>
+Content-Type: multipart/mixed; boundary="------------EA88BB95476406C9D5CDBD4B"
+X-CMAE-Envelope: MS4wfDUtxyp/bbAHJ04eRijX5bkqX9n6S9E1y4r9KevbVV33eBWTT4hUYOx8deywUvt3Z1Bw0fYMl8HJDmKcO5veSv3N96uUWgPxZ/pdiTO/PbMlsEcn3F4f /tb3DadQ+4p3gjLHDYydSako5iIuT6yQApijM+CYS75sxNrGd5WLroCgw0C3u2LBQLPsRSdgrXz1aNvB4lxwQY0XQ0OgnWAeMQY=
+X-IsSubscribed: yes
+X-SW-Source: 2017-q4/txt/msg00051.txt.bz2
 
+This is a multi-part message in MIME format.
+--------------EA88BB95476406C9D5CDBD4B
+Content-Type: text/plain; charset=windows-1252
+Content-Transfer-Encoding: 8bit
+Content-length: 3031
 
---vtzGhvizbBRQ85DL
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 2958
+On 2017-11-13 05:05, Corinna Vinschen wrote:
+> On Nov 13 00:04, Brian Inglis wrote:
+>> On 2017-11-12 16:02, Ken Brown wrote:
+>>> On 11/12/2017 4:27 PM, Brian Inglis wrote:
+>>>> +    <para>Some ancient Cygwin releases asked users to report problems that were
+>>>> +      difficult to diagnose to the mailing list with the message:</para>
+>>>> +
+>>>> +    <screen>find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer. Please
+>>>> report
+>>>> +    this problem to the public mailing listcygwin@cygwin.com</screen>
+>>>> +
+>>>> +    <para>These problems were fixed long ago in updated Cygwin releases.</para>
+>>>
+>>> The wording of the warning message was changed 3 years ago, in commit 0793492. 
+>>> I'm not sure that qualifies as ancient.  I also don't think it's accurate to
+>>> refer to the problem as "difficult to diagnose" or to say that the problems
+>>> "were fixed long ago".
+>>
+>> The original message was added in 2011 - 1.7.10 maybe earlier - NT4 support was
+>> dropped around then - pretty ancient in Cygwin terms of how many Windows
+>> releases have had support dropped since then!
+>>
+>>> The issue (Corinna will correct me if I'm wrong) is simply that new releases of
+>>> Windows sometimes require changes in how Cygwin finds the fast_cwd pointer.  So
+>>> users of old versions of Cygwin on new versions of Windows might have problems,
+>>> and this can certainly happen again in the future.  But the FAQ doesn't need to
+>>> go into that.  Why not just say what the warning currently says (see
+>>> path.cc:find_fast_cwd()):
+>>>
+>>> "This typically occurs if you're using an older Cygwin version on a newer
+>>> Windows.  Please update to the latest available Cygwin version from
+>>> https://cygwin.com/.  If the problem persists, please see
+>>> https://cygwin.com/problems.html."
+>>>
+>>> You can also add your sentence about contacting the vendor who provided the old
+>>> Cygwin release.
+>>
+>> We are trying in the FAQ entry to persuade an annoyed user that it may be in
+>> their best interest to do some remediation, rather than just complain in an
+>> email to an org they think is a company (cygwin.com) they have never heard of,
+>> who they expect from their application message to take care of their problem
+>> with no other effort on their part, and who they can blame if nothing happens.
+>>
+>> Assuming they find the FAQ entry, emphatic language may persuade them to do
+>> something more than the message says they should do.
+> 
+> Nevertheless, Ken has a point.
+> 
+> s/ancient/older and the text should really explain the "older Cygwin on
+> newer Windows" problem without necessarily going into too much detail.
+> "The problem has been fixed" just doesn't fit the facts.
 
-On Nov 13 00:04, Brian Inglis wrote:
-> On 2017-11-12 16:02, Ken Brown wrote:
-> > On 11/12/2017 4:27 PM, Brian Inglis wrote:
-> >> +=C2=A0=C2=A0=C2=A0 <para>Some ancient Cygwin releases asked users to =
-report problems that were
-> >> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 difficult to diagnose to the mailing l=
-ist with the message:</para>
-> >> +
-> >> +=C2=A0=C2=A0=C2=A0 <screen>find_fast_cwd: WARNING: Couldn't compute F=
-AST_CWD pointer. Please
-> >> report
-> >> +=C2=A0=C2=A0=C2=A0 this problem to the public mailing listcygwin@cygw=
-in.com</screen>
-> >> +
-> >> +=C2=A0=C2=A0=C2=A0 <para>These problems were fixed long ago in update=
-d Cygwin releases.</para>
-> >=20
-> > The wording of the warning message was changed 3 years ago, in commit 0=
-793492.=C2=A0
-> > I'm not sure that qualifies as ancient.=C2=A0 I also don't think it's a=
-ccurate to
-> > refer to the problem as "difficult to diagnose" or to say that the prob=
-lems
-> > "were fixed long ago".
->=20
-> The original message was added in 2011 - 1.7.10 maybe earlier - NT4 suppo=
-rt was
-> dropped around then - pretty ancient in Cygwin terms of how many Windows
-> releases have had support dropped since then!
->=20
-> > The issue (Corinna will correct me if I'm wrong) is simply that new rel=
-eases of
-> > Windows sometimes require changes in how Cygwin finds the fast_cwd poin=
-ter.=C2=A0 So
-> > users of old versions of Cygwin on new versions of Windows might have p=
-roblems,
-> > and this can certainly happen again in the future.=C2=A0 But the FAQ do=
-esn't need to
-> > go into that.=C2=A0 Why not just say what the warning currently says (s=
-ee
-> > path.cc:find_fast_cwd()):
-> >=20
-> > "This typically occurs if you're using an older Cygwin version on a new=
-er
-> > Windows.=C2=A0 Please update to the latest available Cygwin version from
-> > https://cygwin.com/.=C2=A0 If the problem persists, please see
-> > https://cygwin.com/problems.html."
-> >=20
-> > You can also add your sentence about contacting the vendor who provided=
- the old
-> > Cygwin release.
->=20
-> We are trying in the FAQ entry to persuade an annoyed user that it may be=
- in
-> their best interest to do some remediation, rather than just complain in =
-an
-> email to an org they think is a company (cygwin.com) they have never hear=
-d of,
-> who they expect from their application message to take care of their prob=
-lem
-> with no other effort on their part, and who they can blame if nothing hap=
-pens.
->=20
-> Assuming they find the FAQ entry, emphatic language may persuade them to =
-do
-> something more than the message says they should do.
+I guess I may have been a little enthusiastic to get something out there we
+could refer to in future - and reduce the annoyance level for both posters and
+subscribers - attaching a hopefully more accurate diff for comment, also
+addressing some of the other points I suggested.
 
-Nevertheless, Ken has a point.
+-- 
+Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
 
-s/ancient/older and the text should really explain the "older Cygwin on
-newer Windows" problem without necessarily going into too much detail.
-"The problem has been fixed" just doesn't fit the facts.
+--------------EA88BB95476406C9D5CDBD4B
+Content-Type: text/plain; charset=UTF-8;
+ name="0001-add-FAQ-How-do-I-fix-find_fast_cwd-warnings.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename*0="0001-add-FAQ-How-do-I-fix-find_fast_cwd-warnings.patch"
+Content-length: 3386
 
+diff --git a/winsup/doc/faq-using.xml b/winsup/doc/faq-using.xml
+index b6b152e4e..4ac26cc84 100644
+--- a/winsup/doc/faq-using.xml
++++ b/winsup/doc/faq-using.xml
+@@ -1419,4 +1419,57 @@ such as virtual memory paging and file caching.</para>
+   difficult to make <literal>fork()</literal> work reliably.</para>
+ </answer>
+ </qandaentry>
++
++<qandaentry id='faq.using.fixing-find_fast_cwd-warnings'>
++  <question><para>How do I fix <literal>find_fast_cwd</literal> warnings?</para></question>
++  <answer>
++    <para>Older Cygwin releases asked users to report problems to the mailing
++	list with the message:</para>
++
++    <screen>find_fast_cwd: WARNING: Couldn't compute FAST_CWD pointer. Please report
++	this problem to the public mailing list cygwin@cygwin.com</screen>
++
++    <para>Recent Cygwin releases changed this to the message:</para>
++
++    <screen>This typically occurs if you're using an older Cygwin version on a newer Windows.
++	Please update to the latest available Cygwin version from https://cygwin.com/.
++	If the problem persists, please see https://cygwin.com/problems.html."</screen>
++
++    <para>This happens when the Cygwin release you installed can not find out
++	how to get your current directory from the Windows release you are
++	using.</para>
++    <para>Unfortunately some projects and products still distribute older
++	Cygwin releases, which do not support newer Windows releases, rather
++	than having their product install the current Cygwin release over the
++	Internet.
++	They also provide no information about keeping Cygwin up to date with
++	upgrades and fixes.</para>
++    <para>The fix is simply downloading and running Cygwin Setup, using the
++	instructions at: 
++	<ulink url="https://cygwin.com/cygwin-ug-net/setup-net.html">
++	    Setting Up Cygwin - Internet Setup</ulink>.</para>
++    <para>When running Setup, you should not change most of the values
++	presented, just select the <strong>Next</strong> button in most cases,
++	as you already have a Cygwin release installed and only want to upgrade
++	your current installation.  You should make your own selection if the
++	internet connection to your system requires a proxy, and you have to
++	pick an up to date Cygwin download (mirror) site, preferably the site
++	nearest to your system for faster downloads, as shown with more details on 
++	<ulink url="https://cygwin.com/mirrors.html">
++	    Mirror Sites</ulink>.</para>
++    <para>Cygwin Setup will download and apply updates to all packages required
++	for Cygwin itself and installed applications.
++	Any problems with applying updates or the application after updates should be
++	reported to the project or product vendor for follow up action.</para>
++    <para>As Cygwin is a volunteer project, and we can not provide support for
++	older releases installed by projects or products, but would like to be
++	able to follow up to reduce these issues, it would be helpful if you
++	would send us a quick
++	<ulink url="mailto:cygwin@cygwin.com&subject=Source%20of%20application%20providing%20Cygwin%20warning%20about%20FAST_CWD">
++	    email</ulink> to let us know about the source of the application
++	which installed the older Cygwin release: whether it was purchased from
++	a vendor or a project downloaded from the Internet, any related web
++	pages, or other details you may have readily available.</para>
++  </answer>
++</qandaentry>
+ </qandadiv>
 
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---vtzGhvizbBRQ85DL
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJaCYp1AAoJEPU2Bp2uRE+g7PUP/3Xu/wEGTLreCLv5Pod+uwAQ
-WsywuymdleLQd8nTfvGe4IonuHKpIIKGUn0PCVK4owAVAS0JGjkdluCEe4Ap+RIR
-xcZV9nWBvgtwNTD2URPHQE6mOwm6zirOC/YKbdE330/YbXS3b6cdnvr9zO6GQH+p
-yyveND1jfUSd7XRfsKpsTdq/ClNodQ6G47FR29t0UUT5s6F7wCaCt1DAAUcons5b
-m8c3/8MGpJI4vqamk7eR/yV3swBEpxGoyWIknEJcrV45EkQnQLzud/lJ5+5pnnZf
-GqOdQXMChJSxjrF3j1CHFfrp2Hj7ReQrMC1VmjTZh5ALw3ZYrDhf1SUPHr5I4wDp
-/RjBzbzmGkyx98Tu/swVUlKNcj6O9mRt5Zx56fO3MxjJARATHNlv0GtHPQd7EE2d
-/mbfddeleSEGHqZcjvoDgBe7FAyosPmJlxQI5fw4YAjQ/O/ojErS+XS6yi9G0SVm
-8iRCTA65y96cKzvqsXc3TPabcTZ98daOUxwUDiZglrNqtUG62lTH9DSFoJvhNwCm
-vZeb0eoZN+B3Qg8PdlysG+qCBGnOQ+bXbCegFoWwtvm9I/gqdWnLJ4mzJz6oAoGu
-5NPXrZXl7QeKe90bMAHQ7sXytqVTpIPHtnsbRmvFX26zerfv3eeRn8ziiYpzgjCd
-Vy13mDk2+iSGNT9a0kUH
-=6DYn
------END PGP SIGNATURE-----
-
---vtzGhvizbBRQ85DL--
+--------------EA88BB95476406C9D5CDBD4B--
