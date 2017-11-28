@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8930-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 113155 invoked by alias); 15 Nov 2017 20:06:49 -0000
+Return-Path: <cygwin-patches-return-8931-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 47075 invoked by alias); 28 Nov 2017 04:11:07 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,47 +9,173 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 113144 invoked by uid 89); 15 Nov 2017 20:06:49 -0000
+Received: (qmail 46113 invoked by uid 89); 28 Nov 2017 04:11:06 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-1.7 required=5.0 tests=AWL,BAYES_00,KAM_LAZY_DOMAIN_SECURITY,KB_WAM_FROM_NAME_SINGLEWORD,RCVD_IN_DNSWL_LOW autolearn=no version=3.3.2 spammy=clicking, Star, Award, award
-X-HELO: smtp-out-no.shaw.ca
-Received: from smtp-out-no.shaw.ca (HELO smtp-out-no.shaw.ca) (64.59.134.12) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 15 Nov 2017 20:06:47 +0000
-Received: from [192.168.1.100] ([24.64.240.204])	by shaw.ca with SMTP	id F3xMe1wRyzNiNF3xNeiQZb; Wed, 15 Nov 2017 13:06:46 -0700
-X-Authority-Analysis: v=2.2 cv=I+4VfJog c=1 sm=1 tr=0 a=MVEHjbUiAHxQW0jfcDq5EA==:117 a=MVEHjbUiAHxQW0jfcDq5EA==:17 a=N659UExz7-8A:10 a=7vT8eNxyAAAA:8 a=VPHyAMdOIYxyBTMCxIMA:9 a=pILNOxqGKmIA:10 a=Mzmg39azMnTNyelF985k:22
-Reply-To: Brian.Inglis@SystematicSw.ab.ca
-Subject: Re: [PATCH] Add FAQ How do I fix find_fast_cwd warnings?
+X-Spam-SWARE-Status: No, score=-26.2 required=5.0 tests=BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,KAM_NUMSUBJECT,KB_WAM_FROM_NAME_SINGLEWORD,SPF_HELO_PASS,T_RP_MATCHES_RCVD autolearn=ham version=3.3.2 spammy=Selkowitz, selkowitz, sk:yselkow, H*Ad:U*cygwin-patches
+X-HELO: mx1.redhat.com
+Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 28 Nov 2017 04:11:05 +0000
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))	(No client certificate requested)	by mx1.redhat.com (Postfix) with ESMTPS id 430D4883C0	for <cygwin-patches@cygwin.com>; Tue, 28 Nov 2017 04:11:04 +0000 (UTC)
+Received: from localhost.localdomain (ovpn-120-142.rdu2.redhat.com [10.10.120.142])	by smtp.corp.redhat.com (Postfix) with ESMTPS id CC1A960600	for <cygwin-patches@cygwin.com>; Tue, 28 Nov 2017 04:11:03 +0000 (UTC)
+From: Yaakov Selkowitz <yselkowi@redhat.com>
 To: cygwin-patches@cygwin.com
-References: <e4e9d518-3a00-6d60-f653-7162711e9672@SystematicSw.ab.ca> <8be9463b-1349-c309-afe1-828712489f74@cornell.edu> <cb561bef-71bc-4261-a5ba-7a5164d10400@SystematicSw.ab.ca> <20171113120509.GA3881@calimero.vinschen.de> <50152c8a-8086-57c5-0b4e-603a771ed7b8@SystematicSw.ab.ca> <3a0ad9a8-0cb7-00ca-e698-dca59bc600e4@SystematicSw.ab.ca> <20171114092902.GF6054@calimero.vinschen.de> <d9422d11-f5f0-4f8e-9e56-04efd40cec4b@SystematicSw.ab.ca> <20171114212618.GA14730@calimero.vinschen.de> <5252eda6-e26d-d5a1-5d51-2a4c1441fbe7@SystematicSw.ab.ca> <20171115132107.GC1058@calimero.vinschen.de> <d511f675-59ad-61fe-7b3a-b3561a87f12b@SystematicSw.ab.ca> <5ca5f797-e10a-3238-d7ff-ea74f70bd9b7@gmail.com>
-From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
-Message-ID: <edacfbd4-2125-2a78-18e3-c7fb1ae14fce@SystematicSw.ab.ca>
-Date: Wed, 15 Nov 2017 20:06:00 -0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Thunderbird/52.4.0
-MIME-Version: 1.0
-In-Reply-To: <5ca5f797-e10a-3238-d7ff-ea74f70bd9b7@gmail.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfB0vJl8xwUDSjxxge9Y8MZMAPT76db/InKq/S2JPWPMEc2v+4a3f6Q4JHeIw52VolOAqoCQKKfBrdgCUD291LYtOjuxrRSzPP5kFVkMv+KSKupgfEI8c tCneuR36jB3ZVZcKkMgii4HvamHjJIp/haLjz6J5SnPrmgAFht/2KQUFL6Plf/3TYztfs2U4xZYu0ksCWY0E1xNe7m/F3mQmzso=
-X-IsSubscribed: yes
-X-SW-Source: 2017-q4/txt/msg00060.txt.bz2
+Subject: [PATCH] Feature test macros overhaul: Cygwin limits.h, part 2
+Date: Tue, 28 Nov 2017 04:11:00 -0000
+Message-Id: <20171128041053.3888-1-yselkowi@redhat.com>
+In-Reply-To: <13d8d4b7-8d73-44f7-5768-a26da81f966f@redhat.com>
+References: <13d8d4b7-8d73-44f7-5768-a26da81f966f@redhat.com>
+X-SW-Source: 2017-q4/txt/msg00061.txt.bz2
 
-On 2017-11-15 12:46, cyg Simple wrote:
-> On 11/15/2017 11:09 AM, Brian Inglis wrote:
->> On 2017-11-15 06:21, Corinna Vinschen wrote:
->>> On Nov 14 23:01, Brian Inglis wrote:
->>>> >From 61fe6f174a840cffdac4ae8772e1a10a68e80beb Mon Sep 17 00:00:00 2001
->>>> From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
->>>> Date: Tue, 14 Nov 2017 22:57:02 -0700
->>>> Subject: [PATCH] add FAQ How do I fix find_fast_cwd warnings
->>> Pushed.
->>> Thanks,
->>> Corinna
->> Cheers!
-> Thanks for seeing this through Brian.  Gold Star Award in my view.
+http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/limits.h.html
+https://sourceware.org/ml/newlib/2017/msg01133.html
 
-Thanks but let's wait to see if anyone ever reads this FAQ entry, once it
-appears on the site, without posting to the list or us replying with a link, and
-goes so far as clicking the email link to let us know what they installed!
+Signed-off-by: Yaakov Selkowitz <yselkowi@redhat.com>
+---
+ winsup/cygwin/include/limits.h | 30 ++++++++++++++++++++++++++++--
+ 1 file changed, 28 insertions(+), 2 deletions(-)
 
+diff --git a/winsup/cygwin/include/limits.h b/winsup/cygwin/include/limits.h
+index cf3c8d04d..fe1b8b493 100644
+--- a/winsup/cygwin/include/limits.h
++++ b/winsup/cygwin/include/limits.h
+@@ -24,6 +24,7 @@ details. */
+ #undef CHAR_BIT
+ #define CHAR_BIT __CHAR_BIT__
+ 
++#if __XSI_VISIBLE || __POSIX_VISIBLE >= 200809
+ /* Number of bits in a `long'.  */
+ #undef LONG_BIT
+ #define LONG_BIT (__SIZEOF_LONG__ * __CHAR_BIT__)
+@@ -31,6 +32,7 @@ details. */
+ /* Number of bits in a `int'.  */
+ #undef WORD_BIT
+ #define WORD_BIT (__SIZEOF_INT__ * __CHAR_BIT__)
++#endif /* __XSI_VISIBLE || __POSIX_VISIBLE >= 200809 */
+ 
+ /* Maximum length of a multibyte character.  */
+ #ifndef MB_LEN_MAX
+@@ -118,6 +120,7 @@ details. */
+ #define ULONG_LONG_MAX (LONG_LONG_MAX * 2ULL + 1)
+ #endif
+ 
++#if __ISO_C_VISIBLE >= 1999
+ /* Minimum and maximum values a `signed long long int' can hold.  */
+ #undef LLONG_MIN
+ #define LLONG_MIN (-LLONG_MAX-1)
+@@ -127,6 +130,7 @@ details. */
+ /* Maximum value an `unsigned long long int' can hold.  (Minimum is 0).  */
+ #undef ULLONG_MAX
+ #define ULLONG_MAX (LLONG_MAX * 2ULL + 1)
++#endif /* __ISO_C_VISIBLE >= 1999 */
+ 
+ /* Maximum size of ssize_t. Sadly, gcc doesn't give us __SSIZE_MAX__
+    the way it does for __SIZE_MAX__.  On the other hand, we happen to
+@@ -171,9 +175,11 @@ details. */
+ #undef ARG_MAX
+ #define ARG_MAX 32000
+ 
++#if __XSI_VISIBLE || __POSIX_VISIBLE >= 200809
+ /* Maximum number of functions that may be registered with atexit(). */
+ #undef ATEXIT_MAX
+ #define ATEXIT_MAX 32
++#endif
+ 
+ /* Maximum number of simultaneous processes per real user ID. */
+ #undef CHILD_MAX
+@@ -187,9 +193,11 @@ details. */
+ #undef HOST_NAME_MAX
+ #define HOST_NAME_MAX 255
+ 
++#if __XSI_VISIBLE
+ /* Maximum number of iovcnt in a writev (an arbitrary number) */
+ #undef IOV_MAX
+ #define IOV_MAX 1024
++#endif
+ 
+ /* Maximum number of characters in a login name. */
+ #undef LOGIN_NAME_MAX
+@@ -212,9 +220,11 @@ details. */
+ 
+ /* Size in bytes of a page. */
+ #undef PAGESIZE
+-#undef PAGE_SIZE
+ #define PAGESIZE 65536
++#if __XSI_VISIBLE
++#undef PAGE_SIZE
+ #define PAGE_SIZE PAGESIZE
++#endif
+ 
+ /* Maximum number of attempts made to destroy a thread's thread-specific
+    data values on thread exit. */
+@@ -381,6 +391,7 @@ details. */
+ 
+ /* Runtime Increasable Values */
+ 
++#if __POSIX_VISIBLE >= 2
+ /* Maximum obase values allowed by the bc utility. */
+ #undef BC_BASE_MAX
+ #define BC_BASE_MAX 99
+@@ -428,6 +439,7 @@ details. */
+    using the interval notation \{m,n\} */
+ #undef RE_DUP_MAX
+ #define RE_DUP_MAX 255
++#endif /* __POSIX_VISIBLE >= 2 */
+ 
+ 
+ /* POSIX values */
+@@ -435,6 +447,7 @@ details. */
+ /* They represent the minimum values that POSIX systems must support.
+    POSIX-conforming apps must not require larger values. */
+ 
++#if __POSIX_VISIBLE
+ /* Maximum Values */
+ 
+ #define _POSIX_CLOCKRES_MIN                 20000000
+@@ -478,7 +491,9 @@ details. */
+ #define _POSIX_TRACE_USER_EVENT_MAX               32
+ #define _POSIX_TTY_NAME_MAX	                   9
+ #define _POSIX_TZNAME_MAX                          6
++#endif /* __POSIX_VISIBLE */
+ 
++#if __POSIX_VISIBLE >= 2
+ #define _POSIX2_BC_BASE_MAX	                  99
+ #define _POSIX2_BC_DIM_MAX	                2048
+ #define _POSIX2_BC_SCALE_MAX	                  99
+@@ -487,23 +502,34 @@ details. */
+ #define _POSIX2_EXPR_NEST_MAX	                  32
+ #define _POSIX2_LINE_MAX	                2048
+ #define _POSIX2_RE_DUP_MAX	                 255
++#endif /* __POSIX_VISIBLE >= 2 */
+ 
++#if __XSI_VISIBLE
+ #define _XOPEN_IOV_MAX                            16
+ #define _XOPEN_NAME_MAX                          255
+ #define _XOPEN_PATH_MAX                         1024
++#endif
+ 
+ /* Other Invariant Values */
+ 
+ #define NL_ARGMAX                                  9
++#if __XSI_VISIBLE
+ #define NL_LANGMAX                                14
++#endif
++#if __XSI_VISIBLE || __POSIX_VISIBLE >= 200809
+ #define NL_MSGMAX                              32767
+-#define NL_NMAX                              INT_MAX
+ #define NL_SETMAX                                255
+ #define NL_TEXTMAX                  _POSIX2_LINE_MAX
++#endif
++#if __POSIX_VISIBLE < 200809
++#define NL_NMAX                              INT_MAX
++#endif
+ 
++#if __XSI_VISIBLE
+ /* Default process priority. */
+ #undef NZERO
+ #define NZERO			                  20
++#endif
+ 
+ #endif /* _MACH_MACHLIMITS_H_ */
+ #endif /* _LIMITS_H___ */
 -- 
-Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
+2.15.0
