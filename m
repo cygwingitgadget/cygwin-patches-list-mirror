@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8939-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 51707 invoked by alias); 28 Nov 2017 10:54:37 -0000
+Return-Path: <cygwin-patches-return-8940-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 26037 invoked by alias); 29 Nov 2017 10:26:07 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,109 +9,145 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 51693 invoked by uid 89); 28 Nov 2017 10:54:36 -0000
+Received: (qmail 25860 invoked by uid 89); 29 Nov 2017 10:25:54 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-124.4 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,KB_WAM_FROM_NAME_SINGLEWORD,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
-X-HELO: drew.franken.de
-Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 28 Nov 2017 10:54:34 +0000
-Received: from aqua.hirmke.de (business-24-134-7-25.pool2.vodafone-ip.de [24.134.7.25])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id 6B371721E281E	for <cygwin-patches@cygwin.com>; Tue, 28 Nov 2017 11:54:31 +0100 (CET)
-Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id 76FE15E020F	for <cygwin-patches@cygwin.com>; Tue, 28 Nov 2017 11:54:28 +0100 (CET)
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id EDE1EA8072C; Tue, 28 Nov 2017 11:54:30 +0100 (CET)
-Date: Tue, 28 Nov 2017 10:54:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-18.6 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,KAM_LAZY_DOMAIN_SECURITY,KB_WAM_FROM_NAME_SINGLEWORD autolearn=ham version=3.3.2 spammy=Waiting, H*u:6.1, H*UA:6.1
+X-HELO: m0.truegem.net
+Received: from m0.truegem.net (HELO m0.truegem.net) (69.55.228.47) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 29 Nov 2017 10:25:50 +0000
+Received: (from daemon@localhost)	by m0.truegem.net (8.12.11/8.12.11) id vATAPnff070123	for <cygwin-patches@cygwin.com>; Wed, 29 Nov 2017 02:25:49 -0800 (PST)	(envelope-from mark@maxrnd.com)
+Received: from 76-217-5-154.lightspeed.irvnca.sbcglobal.net(76.217.5.154), claiming to be "[192.168.1.100]" via SMTP by m0.truegem.net, id smtpdP5mLHi; Wed Nov 29 02:25:41 2017
+Subject: Re: [PATCH] Initialize IO_STATUS_BLOCK for pread, pwrite
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] cygwin: define _POSIX_TIMEOUTS
-Message-ID: <20171128105430.GR547@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20171128101032.16540-1-yselkowi@redhat.com>
+References: <20171128075357.224-1-mark@maxrnd.com> <79e8acbf-bb27-7b68-eddc-c89d6567927f@maxrnd.com> <20171128093240.GO547@calimero.vinschen.de> <42633315-b082-232c-e310-31e05306d06f@maxrnd.com> <20171128105334.GQ547@calimero.vinschen.de>
+From: Mark Geisert <mark@maxrnd.com>
+Message-ID: <e7c6061c-be0e-5c36-b135-5796f9cd5da0@maxrnd.com>
+Date: Wed, 29 Nov 2017 10:26:00 -0000
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:49.0) Gecko/20100101 Firefox/49.0 SeaMonkey/2.46
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="Wb5NtZlyOqqy58h0"
-Content-Disposition: inline
-In-Reply-To: <20171128101032.16540-1-yselkowi@redhat.com>
-User-Agent: Mutt/1.9.1 (2017-09-22)
-X-SW-Source: 2017-q4/txt/msg00069.txt.bz2
+In-Reply-To: <20171128105334.GQ547@calimero.vinschen.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
+X-SW-Source: 2017-q4/txt/msg00070.txt.bz2
 
+Corinna Vinschen wrote:
+> On Nov 28 02:28, Mark Geisert wrote:
+>> Corinna Vinschen wrote:
+>>> On Nov 28 00:03, Mark Geisert wrote:
+>>>> Mark Geisert wrote:
+>>>>> ---
+>>>>>  winsup/cygwin/fhandler_disk_file.cc | 4 ++--
+>>>>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>>
+>>>>> diff --git a/winsup/cygwin/fhandler_disk_file.cc b/winsup/cygwin/fhandler_disk_file.cc
+>>>>> index 5dfcae4d9..2ead9948c 100644
+>>>> [...]
+>>>>
+>>>> Oops, I neglected to include an explanatory comment. Issuing simultaneous
+>>>> pwrite(s) on one file descriptor from multiple threads, as one might do in a
+>>>> forthcoming POSIX aio implementation, sometimes results in garbage status in
+>>>> the IO_STATUS_BLOCK on return from NtWriteFile(). Zeroing beforehand made
+>>>> the issue go away.
+>>>>
+>>>> This is mildly concerning to me because there are many other uses of
+>>>> IO_STATUS_BLOCK in the Cygwin DLL that haven't seemed to have needed
+>>>> initialization.
+>>>>
+>>>> Puzzledly,
+>>>
+>>> Ok, let's start with, why did you tweak pread if you only observed
+>>> a problem in pwrite?
+>>
+>> Optimism? :-)  No, you're correct; I was getting ahead of myself.
+>>
+>>>                       In terms of pread, we already have a very recent
+>>> patch series:
+>>>
+>>> https://sourceware.org/git/?p=newlib-cygwin.git;a=commitdiff;h=46702f92ea49
+>>> https://sourceware.org/git/?p=newlib-cygwin.git;a=commitdiff;h=c983aa48798d
+>>> https://sourceware.org/git/?p=newlib-cygwin.git;a=commitdiff;h=181fe5d2edac
+>>>
+>>> In this case it turned out that the problem was related to hitting EOF.
+>>> I wonder if we hit a similar problem here.
+>>>
+>>> Two points:
+>>>
+>>> - Did you check the status code returned by NtWriteFile?  Not all non-0
+>>>   status codes fail the !NT_SUCCESS (status) test.
+>>
+>> I did check the status code but don't recall what it was.  The symptom I was
+>> seeing was outlandish io.Information values being returned by pwrite().  Far
+>> larger than the number requested in the call to pwrite() and NtWriteFile().
+>
+> That doesn't mean it has been returned by NtWriteFile.  Random values
+> suggest NtWriteFile didn *set* a value in the first place, so what
+> you see is the random value from the stack position io is in.  And
+> that in turn suggests the status code should indicate why io wasn't
+> written by NtWriteFile.  If you're playing with async IO, is it possible
+> the status code indicates something like STATUS_TIMEOUT or STATUS_PENDING,
+> both of which are treated as NT_SUCCESS?
+>
+>>> - Do you have a simple, self-contained testcase?
+>>
+>> That would be difficult.  I can supply an strace excerpt just showing the
+>> region of these simultaneous pwrite() calls, without this patch.  If it's
+>> too large I'll put it somewhere and post a link (but I don't think it will
+>> be).
+>
+> Alternatively, what you should do is adding debug_printf statements
+> before and after NtWriteFile, kind of like this...
 
---Wb5NtZlyOqqy58h0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1905
+I added the printf()s and, what do you know, it shows all the NtWriteFile()s
+are returning STATUS_PENDING.  On return some of the IO_STATUS_BLOCKS have the
+correct byte count but most of them have the same trash as before the call.
 
-On Nov 28 04:10, Yaakov Selkowitz wrote:
-> Since commit 8128f5482f2b1889e2336488e9d45a33c9972d11, we have all the
-> non-tracing functions listed in posixoptions(7).  The tracing functions
-> are gated by their own option, and are obsolecent anyway.
->=20
-> Signed-off-by: Yaakov Selkowitz <yselkowi@redhat.com>
-> ---
->  newlib/libc/include/sys/features.h | 2 +-
->  winsup/cygwin/sysconf.cc           | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/newlib/libc/include/sys/features.h b/newlib/libc/include/sys=
-/features.h
-> index 084bf2183..2900b332f 100644
-> --- a/newlib/libc/include/sys/features.h
-> +++ b/newlib/libc/include/sys/features.h
-> @@ -464,7 +464,7 @@ extern "C" {
->  #define _POSIX_THREAD_SAFE_FUNCTIONS		200809L
->  /* #define _POSIX_THREAD_SPORADIC_SERVER	    -1 */
->  #define _POSIX_THREADS				200809L
-> -/* #define _POSIX_TIMEOUTS			    -1 */
-> +#define _POSIX_TIMEOUTS				200809L
->  #define _POSIX_TIMERS				200809L
->  /* #define _POSIX_TRACE				    -1 */
->  /* #define _POSIX_TRACE_EVENT_FILTER		    -1 */
-> diff --git a/winsup/cygwin/sysconf.cc b/winsup/cygwin/sysconf.cc
-> index a24a98501..ecd9aeb93 100644
-> --- a/winsup/cygwin/sysconf.cc
-> +++ b/winsup/cygwin/sysconf.cc
-> @@ -588,7 +588,7 @@ static struct
->    {cons, {c:SYMLOOP_MAX}},		/*  79, _SC_SYMLOOP_MAX */
->    {cons, {c:_POSIX_THREAD_CPUTIME}},	/*  80, _SC_THREAD_CPUTIME */
->    {cons, {c:-1L}},			/*  81, _SC_THREAD_SPORADIC_SERVER */
-> -  {cons, {c:-1L}},			/*  82, _SC_TIMEOUTS */
-> +  {cons, {c:_POSIX_TIMEOUTS}},		/*  82, _SC_TIMEOUTS */
->    {cons, {c:-1L}},			/*  83, _SC_TRACE */
->    {cons, {c:-1L}},			/*  84, _SC_TRACE_EVENT_FILTER */
->    {nsup, {c:0}},			/*  85, _SC_TRACE_EVENT_NAME_MAX */
-> --=20
-> 2.15.0
+This is 8 threads each pwriting a 16MB chunk to different addresses in a new
+128MB file.  4 threads pwriting 32MB chunks showed correct pwrite() results.
 
-ACK
+Does this mean pwrite() should be waiting for the status to change from
+STATUS_PENDING to something else before returning?
 
+..mark
 
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---Wb5NtZlyOqqy58h0
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJaHUBmAAoJEPU2Bp2uRE+g5Z8P/AmjakAW6g3NonjyxeCvrwqs
-heber7HSCoYBofZzpI+EMl8vnLrdHevy4nqeha37tnUTNgV/1rcoboPC51sgpYeG
-d/BWyGp+/6XULmJKhai/hhkM2pwXP9Khl0BjFrUj/ffOBG/nEkGPgUiCBZQmBuPf
-yExMRdiqA9OBpGvR1r1ouPvHT3c/hlnSdNXwJFr3YUo3HE54OL2qeHAfVyaTpk6h
-wO3VC5z+8zStCtFce2iMRzS1GDZ34rIXTQpwtBUUWIHJ+MG/D6wATzEjQiqVDzTn
-m0d0RnZupmCYZt8tcVBnmdbH775jvDc7nDuya+I2YhjBWcbU/PGM37ZDuW/tv9JC
-Nq4OL6EQEPexAhs50Fz7WB+7dG7TGf0LN67mXJkoISNK/gCzyGrmNpzduGEwifgS
-R0pgqm8R5jA4xzhfh5XQiYL1lEIhDgCaEJGuo0+CMEKQlbd595rnfL7FbnwF3k8F
-GzPHXeRz+/5koOs8UUwVvW5eMd1jvRPmYoD8B7f/LpEKBfMqSwdgHsd/uWSBK3pK
-H4mhLGboteV65LL+MfZSlEFQIcqKEuGFKmFmiLs5xGXQDdof0UHEItoZ6gV8GZbD
-i3sC2Nq3PBKo6/MFyiQdw6tDESAlAnW3VPpwX5MjUu17P3Xcv0azJ9VGsHsb8vzZ
-CdYpaWqZVP8tHvnA5ECp
-=xMy5
------END PGP SIGNATURE-----
-
---Wb5NtZlyOqqy58h0--
+18221 1193697 [aio6] heapxfer 3024 fhandler_disk_file::prw_open: 0x0 = NtOpenFile (0x1C4, 0x1B6, 
+\??\C:\cygwin64\tmp\heapfile, io, 0x7, 0x0)
+    53 1193750 [aio6] heapxfer 3024 fhandler_disk_file::pwrite: Before NtWF, io 0x3033207265667870
+    60 1193810 [aio3] heapxfer 3024 fhandler_disk_file::pwrite: Before NtWF, io 0x5D336F69615B2038
+    68 1193878 [aio2] heapxfer 3024 fhandler_disk_file::pwrite: Before NtWF, io 0x5D326F69615B2033
+    70 1193948 [aio8] heapxfer 3024 fhandler_disk_file::pwrite: Before NtWF, io 0x3033207265667870
+    40 1193988 [aio5] heapxfer 3024 fhandler_disk_file::pwrite: Before NtWF, io 0x3033207265667870
+    33 1194021 [aio4] heapxfer 3024 fhandler_disk_file::pwrite: Before NtWF, io 0x3033207265667870
+    29 1194050 [aio1] heapxfer 3024 fhandler_disk_file::pwrite: Before NtWF, io 0x5D316F69615B2036
+  5652 1199702 [aio6] heapxfer 3024 fhandler_disk_file::pwrite: After NtWF, io 0x1000000, status 0x103
+    74 1199776 [aio6] heapxfer 3024 pwrite: 16777216 = pwrite(3, 0x6FFF7FF0000, 16777216, 0)
+    29 1199805 [aio6] heapxfer 3024 getpid: 3024 = getpid()
+    24 1199829 [aio6] heapxfer 3024 sig_send: sendsig 0x80, pid 3024, signal 23, its_me 1
+    32 1199861 [aio6] heapxfer 3024 sig_send: wakeup 0x1C8
+    30 1199891 [aio6] heapxfer 3024 sig_send: Waiting for pack.wakeup 0x1C8
+   239 1200130 [aio2] heapxfer 3024 fhandler_disk_file::pwrite: After NtWF, io 0x5D326F69615B2033, status 0x103
+   307 1200437 [aio2] heapxfer 3024 pwrite: 1633361971 = pwrite(3, 0x6FFFAFF0000, 16777216, 50331648)
+   179 1200616 [sig] heapxfer 3024 sigpacket::process: signal 23 processing
+    27 1200643 [aio5] heapxfer 3024 fhandler_disk_file::pwrite: After NtWF, io 0x3033207265667870, status 0x103
+    26 1200669 [aio5] heapxfer 3024 pwrite: 1701214320 = pwrite(3, 0x6FFFCFF0000, 16777216, 83886080)
+    23 1200692 [aio5] heapxfer 3024 getpid: 3024 = getpid()
+    24 1200716 [aio5] heapxfer 3024 sig_send: sendsig 0x80, pid 3024, signal 23, its_me 1
+    28 1200744 [aio5] heapxfer 3024 sig_send: wakeup 0x1CC
+    26 1200770 [aio5] heapxfer 3024 sig_send: Waiting for pack.wakeup 0x1CC
+    22 1200792 [aio4] heapxfer 3024 fhandler_disk_file::pwrite: After NtWF, io 0x3033207265667870, status 0x103
+    21 1200813 [aio4] heapxfer 3024 pwrite: 1701214320 = pwrite(3, 0x6FFFDFF0000, 16777216, 100663296)
+    21 1200834 [aio4] heapxfer 3024 getpid: 3024 = getpid()
+    19 1200853 [aio4] heapxfer 3024 sig_send: sendsig 0x80, pid 3024, signal 23, its_me 1
+    19 1200872 [sig] heapxfer 3024 init_cygheap::find_tls: sig 23
+    23 1200895 [sig] heapxfer 3024 sigpacket::process: using tls 0xFFFFCE00
+    19 1200914 [aio4] heapxfer 3024 sig_send: wakeup 0x1D0
+    22 1200936 [aio4] heapxfer 3024 sig_send: Waiting for pack.wakeup 0x1D0
+    25 1200961 [aio2] heapxfer 3024 getpid: 3024 = getpid()
+    20 1200981 [aio2] heapxfer 3024 sig_send: sendsig 0x80, pid 3024, signal 23, its_me 1
+    24 1201005 [aio1] heapxfer 3024 fhandler_disk_file::pwrite: After NtWF, io 0x5D316F69615B2036, status 0x103
+    21 1201026 [aio1] heapxfer 3024 pwrite: 1633361974 = pwrite(3, 0x6FFFEFF0000, 16777216, 117440512)
+    22 1201048 [aio1] heapxfer 3024 getpid: 3024 = getpid()
+    21 1201069 [aio1] heapxfer 3024 sig_send: sendsig 0x80, pid 3024, signal 23, its_me 1
+    22 1201091 [aio3] heapxfer 3024 fhandler_disk_file::pwrite: After NtWF, io 0x5D336F69615B2038, status 0x103
+    22 1201113 [aio3] heapxfer 3024 pwrite: 1633361976 = pwrite(3, 0x6FFF9FF0000, 16777216, 33554432)
+    47 1201160 [aio8] heapxfer 3024 fhandler_disk_file::pwrite: After NtWF, io 0x3033207265667870, status 0x103
