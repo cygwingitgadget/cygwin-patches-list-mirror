@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8948-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 22389 invoked by alias); 29 Nov 2017 20:40:45 -0000
+Return-Path: <cygwin-patches-return-8949-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 79737 invoked by alias); 30 Nov 2017 01:49:11 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,131 +9,74 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 21748 invoked by uid 89); 29 Nov 2017 20:40:44 -0000
+Received: (qmail 79667 invoked by uid 89); 30 Nov 2017 01:49:09 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-124.3 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,KB_WAM_FROM_NAME_SINGLEWORD,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=letter
-X-HELO: drew.franken.de
-Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 29 Nov 2017 20:40:43 +0000
-Received: from aqua.hirmke.de (business-24-134-7-25.pool2.vodafone-ip.de [24.134.7.25])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id 95D3A721E2825	for <cygwin-patches@cygwin.com>; Wed, 29 Nov 2017 21:40:39 +0100 (CET)
-Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id 6D2B65E020F	for <cygwin-patches@cygwin.com>; Wed, 29 Nov 2017 21:40:36 +0100 (CET)
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id D10F7A8072C; Wed, 29 Nov 2017 21:40:38 +0100 (CET)
-Date: Wed, 29 Nov 2017 20:40:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-26.7 required=5.0 tests=BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,KB_WAM_FROM_NAME_SINGLEWORD,SPF_HELO_PASS,T_RP_MATCHES_RCVD autolearn=ham version=3.3.2 spammy=para, H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
+X-HELO: mx1.redhat.com
+Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 30 Nov 2017 01:49:08 +0000
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))	(No client certificate requested)	by mx1.redhat.com (Postfix) with ESMTPS id 95605C05679B	for <cygwin-patches@cygwin.com>; Thu, 30 Nov 2017 01:49:07 +0000 (UTC)
+Received: from localhost.localdomain (ovpn-116-45.phx2.redhat.com [10.3.116.45])	by smtp.corp.redhat.com (Postfix) with ESMTPS id 55677600D5	for <cygwin-patches@cygwin.com>; Thu, 30 Nov 2017 01:49:07 +0000 (UTC)
+From: Yaakov Selkowitz <yselkowi@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 1/2] cygwin: add Object Size Checking to sys/poll.h
-Message-ID: <20171129204038.GA3725@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20171129174527.10536-1-yselkowi@redhat.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="6c2NcOVqGQ03X4Wi"
-Content-Disposition: inline
-In-Reply-To: <20171129174527.10536-1-yselkowi@redhat.com>
-User-Agent: Mutt/1.9.1 (2017-09-22)
-X-SW-Source: 2017-q4/txt/msg00078.txt.bz2
+Subject: [PATCH] cygwin: export wmempcpy
+Date: Thu, 30 Nov 2017 01:49:00 -0000
+Message-Id: <20171130014857.4668-1-yselkowi@redhat.com>
+In-Reply-To: <20171130014829.19408-1-yselkowi@redhat.com>
+References: <20171130014829.19408-1-yselkowi@redhat.com>
+X-SW-Source: 2017-q4/txt/msg00079.txt.bz2
 
+Signed-off-by: Yaakov Selkowitz <yselkowi@redhat.com>
+---
+Obviously this depends on the newlib implementation patch.
 
---6c2NcOVqGQ03X4Wi
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1965
+ winsup/cygwin/common.din               | 1 +
+ winsup/cygwin/include/cygwin/version.h | 3 ++-
+ winsup/doc/posix.xml                   | 1 +
+ 3 files changed, 4 insertions(+), 1 deletion(-)
 
-On Nov 29 11:45, Yaakov Selkowitz wrote:
-> Signed-off-by: Yaakov Selkowitz <yselkowi@redhat.com>
-> ---
->  winsup/cygwin/include/ssp/poll.h | 26 ++++++++++++++++++++++++++
->  winsup/cygwin/include/sys/poll.h |  4 ++++
->  2 files changed, 30 insertions(+)
->  create mode 100644 winsup/cygwin/include/ssp/poll.h
->=20
-> diff --git a/winsup/cygwin/include/ssp/poll.h b/winsup/cygwin/include/ssp=
-/poll.h
-> new file mode 100644
-> index 000000000..831e626d6
-> --- /dev/null
-> +++ b/winsup/cygwin/include/ssp/poll.h
-> @@ -0,0 +1,26 @@
-> +#ifndef _SSP_POLL_H_
-> +#define _SSP_POLL_H_
-> +
-> +#include <ssp/ssp.h>
-> +
-> +#if __SSP_FORTIFY_LEVEL > 0
-> +__BEGIN_DECLS
-> +
-> +__ssp_decl(int, poll, (struct pollfd *__fds, nfds_t __nfds, int __timeou=
-t))
-> +{
-> +  __ssp_check (__fds, __nfds * sizeof(*__fds), __ssp_bos);
-> +  return __ssp_real_poll (__fds, __nfds, __timeout);
-> +}
-> +
-> +#if __GNU_VISIBLE
-> +__ssp_decl(int, ppoll, (struct pollfd *__fds, nfds_t __nfds, const struc=
-t timespec *__timeout_ts, const sigset_t *__sigmask))
-> +{
-> +  __ssp_check (__fds, __nfds * sizeof(*__fds), __ssp_bos);
-> +  return __ssp_real_ppoll (__fds, __nfds, __timeout_ts, __sigmask);
-> +}
-> +#endif
-> +
-> +__END_DECLS
-> +
-> +#endif /* __SSP_FORTIFY_LEVEL > 0 */
-> +#endif /* _SSP_POLL_H_ */
-> diff --git a/winsup/cygwin/include/sys/poll.h b/winsup/cygwin/include/sys=
-/poll.h
-> index 0da4c3f03..65822edb3 100644
-> --- a/winsup/cygwin/include/sys/poll.h
-> +++ b/winsup/cygwin/include/sys/poll.h
-> @@ -47,4 +47,8 @@ extern int ppoll __P ((struct pollfd *fds, nfds_t nfds,
->=20=20
->  __END_DECLS
->=20=20
-> +#if __SSP_FORTIFY_LEVEL > 0
-> +#include <ssp/poll.h>
-> +#endif
-> +
->  #endif /* _SYS_POLL_H */
-> --=20
-> 2.15.0
-
-ACK to both patches.
-
-For patch series, please add a cover letter, it's not too much effort
-and clearer.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---6c2NcOVqGQ03X4Wi
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJaHxtGAAoJEPU2Bp2uRE+g6dsP/izY01p8tT5Ypuk/OaH5gwNq
-U4892I2kyy9yZv1jlGDCpJAGWj2QdmA8aM5gyamSTjun+IpE8pQKUab9iNsq+ePp
-vrHAhqZyiHhLhMWlsnt0MoZ/DDrosmffZwSt+7g9OSaKB6W3fdH+L1ITYDqCuQ50
-t9/ersP3Y66T15uQLnNqAyeLJYmmmcTkYHW2CrWOKdtktv3Dwd93KUtpFcMQwCvn
-k+kADMMrUh/YJW/QWPUNDqVms332X5ffeLgmBG8adrsqmnSw2Q7BhQWJ+6cdruoI
-nKag4EmqbhQmsdisNHkhKYDotAcZio95sUq73XhXusBO3c1Vc2p1Pkx+C0CV5ulY
-Xfby5+H6oRJXDn+311CG0Z7tbiUju917F+coE5j6lWu1IDOH+8pvm/fxbOJoBlHy
-Lwqm+C2fqIKgU+J2a8B+boqkludSy+Q8Z4f0/beK7g3t9ey5xuLIB/RQyPeCxcUH
-5wpsOxHKHDF7Zqain1swcZnNmG+pfVQFK3AAOnLDgU+CGoHLmJPgRe0ExTMLsEU0
-oyY8EkOEc7A5709qnMWGHDwQ8jtVYGUQiQ1Y53hmRNDEwQWNLKH+iLn01ijF+Bap
-SxAVz3JYtXRWk88vd+xqYciFrz9/CsS+slGjMUikGGa3ZnEyFo8gaLmvf37k0zDp
-lBIB6n6lkWbyCoST8aME
-=RoTy
------END PGP SIGNATURE-----
-
---6c2NcOVqGQ03X4Wi--
+diff --git a/winsup/cygwin/common.din b/winsup/cygwin/common.din
+index a482cf2b7..14b9c2c18 100644
+--- a/winsup/cygwin/common.din
++++ b/winsup/cygwin/common.din
+@@ -1609,6 +1609,7 @@ wmemchr NOSIGFE
+ wmemcmp NOSIGFE
+ wmemcpy NOSIGFE
+ wmemmove NOSIGFE
++wmempcpy NOSIGFE
+ wmemset NOSIGFE
+ wordexp NOSIGFE
+ wordfree NOSIGFE
+diff --git a/winsup/cygwin/include/cygwin/version.h b/winsup/cygwin/include/cygwin/version.h
+index d8bb3ee44..7510f42b0 100644
+--- a/winsup/cygwin/include/cygwin/version.h
++++ b/winsup/cygwin/include/cygwin/version.h
+@@ -489,12 +489,13 @@ details. */
+        __stack_chk_fail, __stack_chk_guard, __stpcpy_chk, __stpncpy_chk,
+        __strcat_chk, __strcpy_chk, __strncat_chk, __strncpy_chk,
+        __vsnprintf_chk, __vsprintf_chk.
++  321: Export wmempcpy.
+ 
+   Note that we forgot to bump the api for ualarm, strtoll, strtoull,
+   sigaltstack, sethostname. */
+ 
+ #define CYGWIN_VERSION_API_MAJOR 0
+-#define CYGWIN_VERSION_API_MINOR 320
++#define CYGWIN_VERSION_API_MINOR 321
+ 
+ /* There is also a compatibity version number associated with the shared memory
+    regions.  It is incremented when incompatible changes are made to the shared
+diff --git a/winsup/doc/posix.xml b/winsup/doc/posix.xml
+index c99e003ba..ab574300f 100644
+--- a/winsup/doc/posix.xml
++++ b/winsup/doc/posix.xml
+@@ -1396,6 +1396,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
+     wcstoll_l
+     wcstoul_l
+     wcstoull_l
++    wmempcpy
+ </screen>
+ 
+ </sect1>
+-- 
+2.15.0
