@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8960-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 17974 invoked by alias); 7 Dec 2017 12:16:59 -0000
+Return-Path: <cygwin-patches-return-8961-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 44758 invoked by alias); 7 Dec 2017 14:53:31 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,79 +9,74 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 17964 invoked by uid 89); 7 Dec 2017 12:16:58 -0000
+Received: (qmail 44744 invoked by uid 89); 7 Dec 2017 14:53:31 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-24.1 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.2 spammy=emphasis, para, HTo:U*cygwin-patches
-X-HELO: rgout0806.bt.lon5.cpcloud.co.uk
-Received: from rgout0806.bt.lon5.cpcloud.co.uk (HELO rgout0806.bt.lon5.cpcloud.co.uk) (65.20.0.153) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 07 Dec 2017 12:16:48 +0000
-X-OWM-Source-IP: 86.179.113.49 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-Junkmail-Premium-Raw: score=7/50,refid=2.7.2:2017.12.7.115716:17:7.944,ip=,rules=__HAS_FROM, __TO_MALFORMED_2, __TO_NO_NAME, __HAS_CC_HDR, __CC_NAME, __CC_NAME_DIFF_FROM_ACC, __HAS_MSGID, __SANE_MSGID, __HAS_X_MAILER, __FROM_DOMAIN_IN_ANY_CC1, __ANY_URI, __HTTPS_URI, __URI_WITH_PATH, URI_ENDS_IN_HTML, __URI_NO_WWW, __CP_URI_IN_BODY, __URI_IN_BODY, __URI_NOT_IMG, BODYTEXTP_SIZE_3000_LESS, BODY_SIZE_2000_2999, __MIME_TEXT_P1, __MIME_TEXT_ONLY, __URI_NS, HTML_00_01, HTML_00_10, BODY_SIZE_5000_LESS, __FROM_DOMAIN_IN_RCPT, __CC_REAL_NAMES, MULTIPLE_REAL_RCPTS, LEGITIMATE_SIGNS, __SINGLE_URI_TEXT, SINGLE_URI_IN_BODY, __MIME_TEXT_P, BODY_SIZE_7000_LESS, URI_WITH_PATH_ONLY
-Received: from localhost.localdomain (86.179.113.49) by rgout08.bt.lon5.cpcloud.co.uk (9.0.019.13-1) (authenticated as jonturney@btinternet.com)        id 5A1377BF018EC9E8; Thu, 7 Dec 2017 12:16:45 +0000
-From: Jon Turney <jon.turney@dronecode.org.uk>
+X-Spam-SWARE-Status: No, score=-104.7 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_BRBL_LASTEXT,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=H*R:U*cygwin-patches, H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
+X-HELO: drew.franken.de
+Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 07 Dec 2017 14:53:28 +0000
+Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id 9C4C5721E281E	for <cygwin-patches@cygwin.com>; Thu,  7 Dec 2017 15:53:25 +0100 (CET)
+Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id E43B85E0153	for <cygwin-patches@cygwin.com>; Thu,  7 Dec 2017 15:53:24 +0100 (CET)
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 0F61EA806C6; Thu,  7 Dec 2017 15:53:25 +0100 (CET)
+Date: Thu, 07 Dec 2017 14:53:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH] cygwin: Improve discussion of linker library ordering in faq-programming
-Date: Thu, 07 Dec 2017 12:16:00 -0000
-Message-Id: <20171207121634.13836-1-jon.turney@dronecode.org.uk>
-X-SW-Source: 2017-q4/txt/msg00090.txt.bz2
+Subject: Re: [PATCH] cygwin: Improve discussion of linker library ordering in faq-programming
+Message-ID: <20171207145325.GA10123@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20171207121634.13836-1-jon.turney@dronecode.org.uk>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="OXfL5xGRrasGEqWY"
+Content-Disposition: inline
+In-Reply-To: <20171207121634.13836-1-jon.turney@dronecode.org.uk>
+User-Agent: Mutt/1.9.1 (2017-09-22)
+X-SW-Source: 2017-q4/txt/msg00091.txt.bz2
 
-Signed-off-by: Jon Turney <jon.turney@dronecode.org.uk>
----
- winsup/doc/faq-programming.xml | 37 ++++++++++++++++++++++++++++++++++++-
- 1 file changed, 36 insertions(+), 1 deletion(-)
 
-diff --git a/winsup/doc/faq-programming.xml b/winsup/doc/faq-programming.xml
-index c0ddd7902..65bfed97e 100644
---- a/winsup/doc/faq-programming.xml
-+++ b/winsup/doc/faq-programming.xml
-@@ -876,10 +876,45 @@ example, single-stepping from these signals may not work as expected.
- <para>A common error is to put the library on the command line before
- the thing that needs things from it.
- </para>
-+
- <para>This is wrong <literal>gcc -lstdc++ hello.cc</literal>.
- This is right <literal>gcc hello.cc -lstdc++</literal>.
- </para>
--</answer></qandaentry>
-+
-+<para>
-+  The first command above (usually) works on Linux, because:
-+  <itemizedlist mark="bullet">
-+    <listitem>A DT_NEEDED tag for libstdc++ is added when the library name is seen.</listitem>
-+    <listitem>The executable has unresolved symbols, which can be found in libstdc++.</listitem>
-+    <listitem>When executed, the ELF loader resolves those symbols.</listitem>
-+  </itemizedlist>
-+</para>
-+
-+<para>
-+  Note that this won't work if the linker flags <literal>--as-needed</literal>
-+  or <literal>--no-undefined</literal> are used, or if the library being linked
-+  with is a static library.
-+</para>
-+
-+<para>
-+  PE/COFF executables work very differently, and the dynamic library which
-+  provides a symbol must be fully resolved <emphasis>at link time</emphasis>
-+  (so the library which provides a symbol must follow a reference to it).
-+</para>
-+
-+<para>
-+  See point 3 in <xref linkend="faq.programming.unix-gui"></xref> for more
-+  discussion of how this affects plugins.
-+</para>
-+
-+<para>
-+  This also has consequences for how weak symbols are resolved. See <ulink
-+  url="https://cygwin.com/ml/cygwin/2010-04/msg00281.html"></ulink> for more
-+  discussion of that.
-+</para>
-+
-+</answer>
-+</qandaentry>
- 
- <qandaentry id="faq.programming.stat64">
- <question><para>Why do I get an error using <literal>struct stat64</literal>?</para></question>
--- 
-2.15.1
+--OXfL5xGRrasGEqWY
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 412
+
+On Dec  7 12:16, Jon Turney wrote:
+> Signed-off-by: Jon Turney <jon.turney@dronecode.org.uk>
+> ---
+>  winsup/doc/faq-programming.xml | 37 ++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 36 insertions(+), 1 deletion(-)
+
+Sounds good.  ACK.
+
+
+Thanks,
+Corinna
+
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
+
+--OXfL5xGRrasGEqWY
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 819
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v2
+
+iQIcBAEBCAAGBQJaKVXkAAoJEPU2Bp2uRE+go1MQAJbkpFNlngtwKwcp26RRWABQ
+WnZSMHpdWMKDaRSag1GJP9eHZ1bkMnG3yyb7NMPTkbWMDMDBwozBt+a/a7r7jPwM
+c3P3tYUIgwgFZXXb7Dr3vRrDgmzFYEwzEikf73lD3w8egpzkXrwvGDwLttoXdwh7
+4fjpwPbgqQRAmur0C6zbiS1BICDgJYyloYCZ0hUzPhn5kPnGaa69SIF7iydx5KIp
+5u4gjc3Nw+yR0p0AHtTZnjqeSsnuGCDszchCMK9JWzxADjxWRmZTIvBizD+lUitu
+CCrJeki7JIPElILd8LwHOHhQprIgh+W5ulj18CpyjsQe8FPHHVsu3WLNrWjPwV3r
+C9zWjByB4XeVmQ/fH/dyIg7W2x4p8e45l8tHvTxSBFtPOWoKkh3nSAZvjzcBQNm3
+q2Xak5ewQ6VE0yg0mjZT7sC7T23+4h1+XmvPELZYP/pBdnyn1OtBjHQZ+YfG9K3J
+2pOq+H7nqCtlhZ/ruM5CME+FOZOrl3AlkqjUUtCkHmYBuRJXrnVMoIUT8MVtoGmG
+hRM8KIqkTXl2dBvKePeh1Vnlg+9yZrxrQx9hjGbUQBZwcU6cOc4Nqn/BNeQiZ0h4
+OXJumBQLnHkOISmjh5wjJgK20Yd1BVYh94jd/dVDM8GYZGOoth+TqzalxF0vom8W
+189Z8vDIDmYQ4nxLE7ev
+=GlUY
+-----END PGP SIGNATURE-----
+
+--OXfL5xGRrasGEqWY--
