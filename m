@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8965-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 75356 invoked by alias); 11 Dec 2017 08:37:38 -0000
+Return-Path: <cygwin-patches-return-8966-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 61580 invoked by alias); 11 Dec 2017 09:24:56 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,84 +9,67 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 75334 invoked by uid 89); 11 Dec 2017 08:37:33 -0000
+Received: (qmail 61387 invoked by uid 89); 11 Dec 2017 09:24:56 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-100.2 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_BRBL_LASTEXT,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=Hx-languages-length:839, H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
-X-HELO: drew.franken.de
-Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 11 Dec 2017 08:37:31 +0000
-Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id E143D721E280D	for <cygwin-patches@cygwin.com>; Mon, 11 Dec 2017 09:37:27 +0100 (CET)
-Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id 9159B5E0380	for <cygwin-patches@cygwin.com>; Mon, 11 Dec 2017 09:37:27 +0100 (CET)
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id C13EDA8185A; Mon, 11 Dec 2017 09:37:27 +0100 (CET)
-Date: Mon, 11 Dec 2017 08:37:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-0.8 required=5.0 tests=AWL,BAYES_00,KAM_LAZY_DOMAIN_SECURITY autolearn=no version=3.3.2 spammy=withdrawn, Hx-languages-length:2090, H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
+X-HELO: m0.truegem.net
+Received: from m0.truegem.net (HELO m0.truegem.net) (69.55.228.47) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 11 Dec 2017 09:24:53 +0000
+Received: from localhost (mark@localhost)	by m0.truegem.net (8.12.11/8.12.11) with ESMTP id vBB9OpVm068214	for <cygwin-patches@cygwin.com>; Mon, 11 Dec 2017 01:24:51 -0800 (PST)	(envelope-from mark@maxrnd.com)
+Date: Mon, 11 Dec 2017 09:24:00 -0000
+From: Mark Geisert <mark@maxrnd.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH setup v4 6/6] Display area and location of official mirrors
-Message-ID: <20171211083727.GA617@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20171210174930.9960-1-kbrown@cornell.edu> <20171210174930.9960-7-kbrown@cornell.edu> <ff235587-4c67-14f1-5395-fbe36388575a@SystematicSw.ab.ca> <a8e545d2-bb4b-885b-c39c-7a7cc96a7990@cornell.edu> <12db3e6b-cb75-4949-9d8e-ae6bb5d254fa@SystematicSw.ab.ca>
+Subject: Re: [PATCH] Initialize IO_STATUS_BLOCK for pread, pwrite
+In-Reply-To: <Pine.BSF.4.63.1712011340460.18120@m0.truegem.net>
+Message-ID: <Pine.BSF.4.63.1712110114220.66725@m0.truegem.net>
+References: <20171128075357.224-1-mark@maxrnd.com> <79e8acbf-bb27-7b68-eddc-c89d6567927f@maxrnd.com> <20171128093240.GO547@calimero.vinschen.de> <42633315-b082-232c-e310-31e05306d06f@maxrnd.com> <20171128105334.GQ547@calimero.vinschen.de> <20171130103440. <Pine.BSF.4.63.1712011340460.18120@m0.truegem.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="OXfL5xGRrasGEqWY"
-Content-Disposition: inline
-In-Reply-To: <12db3e6b-cb75-4949-9d8e-ae6bb5d254fa@SystematicSw.ab.ca>
-User-Agent: Mutt/1.9.1 (2017-09-22)
-X-SW-Source: 2017-q4/txt/msg00095.txt.bz2
+Content-Type: TEXT/PLAIN; charset=US-ASCII; format=flowed
+X-IsSubscribed: yes
+X-SW-Source: 2017-q4/txt/msg00096.txt.bz2
 
+Just closing out this email thread...
 
---OXfL5xGRrasGEqWY
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 821
+On Fri, 1 Dec 2017, Mark Geisert wrote:
+> On Fri, 1 Dec 2017, Corinna Vinschen wrote:
+>> On Dec  1 10:30, Corinna Vinschen wrote:
+>>> On Dec  1 00:44, Mark Geisert wrote:
+>>>> And then pwrite() creates its own handle (or reuses one (!)) to avoid
+>>>> messing up the seek pointer of the fd passed in.
+>>> 
+>>> Wait.  Not "re-use", but "re-open".  If you're more familiar with POSIX
+>>> terms, this is along the lines of the fdopen(3) call, just on the NT
+>>> API level.  There's an equivalent Win32 function since Windows 2003
+>>> called ReOpenFile.
+>>> 
+>>> In terms of pread/pwrite, the new handle shares the same settings with
+>>> the original handle.  However, if you use cygwin_attach_handle_to_fd,
+>>> there's a chance information got lost.  Nobody actually uses this call ;)
+>>> 
+>>> In terms of FILE_SYNCHRONOUS_IO_NONALERT, this is stored in
+>>> fhandler_base::options, utilizing the get_options/set_options methods.
+>>> I have a hunch that cygwin_attach_handle_to_fd fails to call set_options,
+>>> thus options is 0 when you call pwrite, thus the new handle is opened
+>>> without FILE_SYNCHRONOUS_IO_NONALERT and all the other option flags
+>>> we use by default.
+>> 
+>> It's more than a hunch.  Of course the info gets lost since
+>> none of the functions called by cygwin_attach_handle_to_fd calls
+>> NtQueryInformationFile(FileModeInformation) to fetch the options.
+>
+> Bang.  There it is.  Let me fix the offending program to just use 
+> Cygwin-supplied handles and make sure this bug of mine is squashed.  I'll 
+> report back but it might be a few days.
 
-On Dec 10 22:06, Brian Inglis wrote:
-> On 2017-12-10 11:50, Ken Brown wrote:
-> > On 12/10/2017 1:40 PM, Brian Inglis wrote:
-> >> On 2017-12-10 10:49, Ken Brown wrote:
-> >>> Mirrors from mirrors.lst have area and location info, which we now
-> >>> display and add to the sort key.
-> >> You didn't increase the list box width - are the hosts visible without=
- scrolling?
-> >=20
-> > No, that was an oversight.=C2=A0 I'll fix that locally and use it in fu=
-ture versions
-> > (or in the commit, if this version is accepted).
->=20
-> You could cherry pick my patch against res.rc as a start to tweak your la=
-youts
-> and tests.
+Yes, this bug of mine that I was blaming pwrite() internals for, 
+doesn't occur when using Cygwin-supplied file descriptors with Cygwin i/o 
+calls.  Who new?
 
-Doesn't this thread belong to cygwin-apps?
+Sorry for the noise, but at least what I learned from this discussion is 
+very helpful in figuring out what makes sense for a future async i/o 
+facility in Cygwin.
 
+I have some further comments but I'll take them to cygwin-developers.
+This IO_STATUS_BLOCK patch is withdrawn ;-) .
 
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---OXfL5xGRrasGEqWY
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 819
-
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v2
-
-iQIcBAEBCAAGBQJaLkPHAAoJEPU2Bp2uRE+g7ZYP/1tUXyn8cmqS74jR3cdUkGsL
-wRIG/nnmq4ctyagYfoVR8DpB5DQJFfwjhyEQOSqHwG758ZoFMByYfHoBfUQkYsDx
-IoxE0o2SgKH04NwO5bCSGruqWz/K3Y6jwPWD39bhXlvGC7GfEgdAjde9qGo171ld
-k1h7qXR3NYFCW1KvfXVuZPsEMNB2cfww8DmgWrXxKAybBWFGNjV/846JEgG+aKQN
-E7uELEdjMHQovJS3fbTkJaSJ31tICw71GI7MVQ/nIbBwi29O4kdXG0dlE2x+Z3W8
-8ILiLWss5xaeXmisSh1CSaYGi9hzlztF2JUmqNJNWhK6I1MjfFPECZLQKPwxsvHs
-JdoYQAg/ILHa+ZSdnWmqX86MVub6e7SqTtCrUuzmiOXg3wZFFj+ugC37yJQovvUp
-XcmEFd3sSqi82MMENa5ZFVRnE5Btk9G5Us5Qb/U0aTZpUc+dSWTvuCgBdBf1WvWA
-dMyGNj9o+hV24+1BRkIqON9hPTqAoHjtHEme/HgocqqAwCqD0xhrbxPHHc4uDRQA
-pIB1mTpYE/xqsl7Z9EDWAryWu0Kvreqxq8IQl4R8GRQJJMuKVBXtbRNEx6G4GNEH
-LHrr9ir9hiEMv06LgtaPtndrChF8lyZl9bOVK5wUFZ0//HLqkUuB9St7IwqDziez
-ds5fTmNAxOso6GgokBjR
-=jODz
------END PGP SIGNATURE-----
-
---OXfL5xGRrasGEqWY--
+..mark
