@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8969-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 66491 invoked by alias); 15 Dec 2017 01:06:21 -0000
+Return-Path: <cygwin-patches-return-8970-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 75920 invoked by alias); 15 Dec 2017 01:09:45 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,170 +9,52 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 66481 invoked by uid 89); 15 Dec 2017 01:06:20 -0000
+Received: (qmail 75908 invoked by uid 89); 15 Dec 2017 01:09:44 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-23.3 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,KAM_LAZY_DOMAIN_SECURITY autolearn=ham version=3.3.2 spammy=
+X-Spam-SWARE-Status: No, score=-23.3 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,KAM_LAZY_DOMAIN_SECURITY autolearn=ham version=3.3.2 spammy=eyes, H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
 X-HELO: m0.truegem.net
-Received: from m0.truegem.net (HELO m0.truegem.net) (69.55.228.47) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 15 Dec 2017 01:06:18 +0000
-Received: (from daemon@localhost)	by m0.truegem.net (8.12.11/8.12.11) id vBF16H1S037958;	Thu, 14 Dec 2017 17:06:17 -0800 (PST)	(envelope-from mark@maxrnd.com)
-Received: from 76-217-5-154.lightspeed.irvnca.sbcglobal.net(76.217.5.154), claiming to be "localhost.localdomain" via SMTP by m0.truegem.net, id smtpdhzDwVw; Thu Dec 14 17:06:10 2017
+Received: from m0.truegem.net (HELO m0.truegem.net) (69.55.228.47) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 15 Dec 2017 01:09:43 +0000
+Received: from localhost (mark@localhost)	by m0.truegem.net (8.12.11/8.12.11) with ESMTP id vBF19gVT038423	for <cygwin-patches@cygwin.com>; Thu, 14 Dec 2017 17:09:42 -0800 (PST)	(envelope-from mark@maxrnd.com)
+Date: Fri, 15 Dec 2017 01:09:00 -0000
 From: Mark Geisert <mark@maxrnd.com>
 To: cygwin-patches@cygwin.com
-Cc: Mark Geisert <mark@maxrnd.com>
-Subject: [PATCH] Implement sigtimedwait (revised)
-Date: Fri, 15 Dec 2017 01:06:00 -0000
-Message-Id: <20171215010555.2500-1-mark@maxrnd.com>
+Subject: Re: [PATCH] Implement sigtimedwait
+In-Reply-To: <20171214130348.GA24531@calimero.vinschen.de>
+Message-ID: <Pine.BSF.4.63.1712141707080.37987@m0.truegem.net>
+References: <20171214065430.4500-1-mark@maxrnd.com> <20171214130348.GA24531@calimero.vinschen.de>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII; format=flowed
 X-IsSubscribed: yes
-X-SW-Source: 2017-q4/txt/msg00099.txt.bz2
+X-SW-Source: 2017-q4/txt/msg00100.txt.bz2
 
-Abstract out common code from sigwait/sigwaitinfo/sigtimedwait to implement the latter.
----
- winsup/cygwin/common.din               |  1 +
- winsup/cygwin/include/cygwin/version.h |  3 ++-
- winsup/cygwin/signal.cc                | 36 ++++++++++++++++++++++++++++++++--
- winsup/cygwin/thread.cc                |  2 +-
- winsup/doc/posix.xml                   |  2 +-
- 5 files changed, 39 insertions(+), 5 deletions(-)
+On Thu, 14 Dec 2017, Corinna Vinschen wrote:
+> Hi Mark,
+>
+> Thanks for sigtimedwait!  Two questions:
+>
+> On Dec 13 22:54, Mark Geisert wrote:
+>> diff --git a/winsup/cygwin/signal.cc b/winsup/cygwin/signal.cc
+>> index 69c5e2aad..0599d8a3e 100644
+>> --- a/winsup/cygwin/signal.cc
+>> +++ b/winsup/cygwin/signal.cc
+>> [...]
+>> +	}
+>> +      cwaittime.QuadPart = (LONGLONG) timeout->tv_sec * NSPERSEC
+>> +                          + ((LONGLONG) timeout->tv_nsec + 99LL) / 100LL;
+>> +    }
+>> +
+>> +  return sigwait_common (set, info, timeout ? &cwaittime : cw_infinite);
+>
+> Would you mind to change the name of cwaittime to waittime throughout?
+> The leading "cw" actually puzzeled me for a while since I misinterpreted
+> it as one of the cw_* constants.  No idea if it's just my bad eyes, but
+> dropping the leading c might raise readability a bit.
 
-diff --git a/winsup/cygwin/common.din b/winsup/cygwin/common.din
-index 14b9c2c18..91f2915bf 100644
---- a/winsup/cygwin/common.din
-+++ b/winsup/cygwin/common.din
-@@ -1326,6 +1326,7 @@ sigrelse SIGFE
- sigset SIGFE
- sigsetjmp NOSIGFE
- sigsuspend SIGFE
-+sigtimedwait SIGFE
- sigwait SIGFE
- sigwaitinfo SIGFE
- sin NOSIGFE
-diff --git a/winsup/cygwin/include/cygwin/version.h b/winsup/cygwin/include/cygwin/version.h
-index 0fee73c1d..aa7c14ec3 100644
---- a/winsup/cygwin/include/cygwin/version.h
-+++ b/winsup/cygwin/include/cygwin/version.h
-@@ -492,12 +492,13 @@ details. */
-   321: Export wmempcpy.
-   322: [w]scanf %m modifier.
-   323: scanf %l[ conversion.
-+  324: Export sigtimedwait.
- 
-   Note that we forgot to bump the api for ualarm, strtoll, strtoull,
-   sigaltstack, sethostname. */
- 
- #define CYGWIN_VERSION_API_MAJOR 0
--#define CYGWIN_VERSION_API_MINOR 323
-+#define CYGWIN_VERSION_API_MINOR 324
- 
- /* There is also a compatibity version number associated with the shared memory
-    regions.  It is incremented when incompatible changes are made to the shared
-diff --git a/winsup/cygwin/signal.cc b/winsup/cygwin/signal.cc
-index 69c5e2aad..16210b571 100644
---- a/winsup/cygwin/signal.cc
-+++ b/winsup/cygwin/signal.cc
-@@ -575,6 +575,29 @@ siginterrupt (int sig, int flag)
-   return res;
- }
- 
-+static int sigwait_common (const sigset_t *, siginfo_t *, PLARGE_INTEGER);
-+
-+extern "C" int
-+sigtimedwait (const sigset_t *set, siginfo_t *info, const timespec *timeout)
-+{
-+  LARGE_INTEGER waittime;
-+
-+  if (timeout)
-+    {
-+      if (timeout->tv_sec < 0
-+	    || timeout->tv_nsec < 0 || timeout->tv_nsec > (NSPERSEC * 100LL))
-+	{
-+	  set_errno (EINVAL);
-+	  return -1;
-+	}
-+      /* convert timespec to 100ns units */
-+      waittime.QuadPart = (LONGLONG) timeout->tv_sec * NSPERSEC
-+                          + ((LONGLONG) timeout->tv_nsec + 99LL) / 100LL;
-+    }
-+
-+  return sigwait_common (set, info, timeout ? &waittime : cw_infinite);
-+}
-+
- extern "C" int
- sigwait (const sigset_t *set, int *sig_ptr)
- {
-@@ -582,7 +605,7 @@ sigwait (const sigset_t *set, int *sig_ptr)
- 
-   do
-     {
--      sig = sigwaitinfo (set, NULL);
-+      sig = sigwait_common (set, NULL, cw_infinite);
-     }
-   while (sig == -1 && get_errno () == EINTR);
-   if (sig > 0)
-@@ -592,6 +615,12 @@ sigwait (const sigset_t *set, int *sig_ptr)
- 
- extern "C" int
- sigwaitinfo (const sigset_t *set, siginfo_t *info)
-+{
-+  return sigwait_common (set, info, cw_infinite);
-+}
-+
-+static int
-+sigwait_common (const sigset_t *set, siginfo_t *info, PLARGE_INTEGER waittime)
- {
-   int res = -1;
- 
-@@ -602,7 +631,7 @@ sigwaitinfo (const sigset_t *set, siginfo_t *info)
-       set_signal_mask (_my_tls.sigwait_mask, *set);
-       sig_dispatch_pending (true);
- 
--      switch (cygwait (NULL, cw_infinite, cw_sig_eintr | cw_cancel | cw_cancel_self))
-+      switch (cygwait (NULL, waittime, cw_sig_eintr | cw_cancel | cw_cancel_self))
- 	{
- 	case WAIT_SIGNALED:
- 	  if (!sigismember (set, _my_tls.infodata.si_signo))
-@@ -619,6 +648,9 @@ sigwaitinfo (const sigset_t *set, siginfo_t *info)
- 	      _my_tls.unlock ();
- 	    }
- 	  break;
-+	case WAIT_TIMEOUT:
-+	  set_errno (EAGAIN);
-+	  break;
- 	default:
- 	  __seterrno ();
- 	  break;
-diff --git a/winsup/cygwin/thread.cc b/winsup/cygwin/thread.cc
-index b9b2c7aaa..f3c709a15 100644
---- a/winsup/cygwin/thread.cc
-+++ b/winsup/cygwin/thread.cc
-@@ -708,7 +708,7 @@ pthread::cancel ()
-     * sendto ()
-     * sigpause ()
-     * sigsuspend ()
--    o sigtimedwait ()
-+    * sigtimedwait ()
-     * sigwait ()
-     * sigwaitinfo ()
-     * sleep ()
-diff --git a/winsup/doc/posix.xml b/winsup/doc/posix.xml
-index ab574300f..2664159e1 100644
---- a/winsup/doc/posix.xml
-+++ b/winsup/doc/posix.xml
-@@ -888,6 +888,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
-     sigset
-     sigsetjmp
-     sigsuspend
-+    sigtimedwait
-     sigwait
-     sigwaitinfo
-     sin
-@@ -1582,7 +1583,6 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
-     pthread_mutex_consistent
-     putmsg
-     setnetent
--    sigtimedwait
-     timer_getoverrun
-     ulimit
-     waitid
--- 
-2.15.1
+I don't mind.  What I was attempting to communicate with "cwaittime" was a 
+wait time in "cygwait units" of 100ns.  But I wasn't happy with it either.
+
+Revised patch correcting both points is on its way.
+Thanks much,
+
+..mark
