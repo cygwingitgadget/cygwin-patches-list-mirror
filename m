@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8990-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 62921 invoked by alias); 22 Dec 2017 18:36:13 -0000
+Return-Path: <cygwin-patches-return-8991-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 115446 invoked by alias); 22 Dec 2017 19:24:00 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,88 +9,73 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 62460 invoked by uid 89); 22 Dec 2017 18:36:12 -0000
+Received: (qmail 115435 invoked by uid 89); 22 Dec 2017 19:23:59 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-24.4 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW autolearn=ham version=3.3.2 spammy=quietly, PDF, HTo:U*cygwin-patches, site
-X-HELO: smtp-out-so.shaw.ca
-Received: from smtp-out-so.shaw.ca (HELO smtp-out-so.shaw.ca) (64.59.136.139) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 22 Dec 2017 18:36:11 +0000
-Received: from Brian.Inglis@Shaw.ca ([24.64.240.204])	by shaw.ca with ESMTP	id SSAyeA8MbS7BpSSAzewX3z; Fri, 22 Dec 2017 11:36:10 -0700
-X-Authority-Analysis: v=2.2 cv=NKylwwyg c=1 sm=1 tr=0 a=MVEHjbUiAHxQW0jfcDq5EA==:117 a=MVEHjbUiAHxQW0jfcDq5EA==:17 a=BqgCfznX7MUA:10 a=mqKMIRuuQLcA:10 a=w_pzkKWiAAAA:8 a=ukVAaEYBDQYfxMrOdhsA:9 a=sRI3_1zDfAgwuvI8zelB:22
-From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+X-Spam-SWARE-Status: No, score=-104.9 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_BRBL_LASTEXT,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=H*Ad:U*cygwin-patches, HTo:U*cygwin-patches, site
+X-HELO: drew.franken.de
+Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 22 Dec 2017 19:23:58 +0000
+Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id 5944A721E281C	for <cygwin-patches@cygwin.com>; Fri, 22 Dec 2017 20:23:55 +0100 (CET)
+Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id 045D45E008B	for <cygwin-patches@cygwin.com>; Fri, 22 Dec 2017 20:23:55 +0100 (CET)
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id EAE41A802EA; Fri, 22 Dec 2017 20:23:54 +0100 (CET)
+Date: Fri, 22 Dec 2017 19:24:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Cc: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
-Subject: [PATCH 2/2] cleanup winsup/doc/etc.{postinstall,preremove}.cygwin-doc.sh quote test variables, correct utility paths, define site in preremove
-Date: Fri, 22 Dec 2017 18:36:00 -0000
-Message-Id: <20171222183556.4268-1-Brian.Inglis@SystematicSW.ab.ca>
-In-Reply-To: <20171220230153.8512-1-Brian.Inglis@SystematicSW.ab.ca>
-References: <20171220230153.8512-1-Brian.Inglis@SystematicSW.ab.ca>
-X-CMAE-Envelope: MS4wfPI75lMzWfP4QkMnhz9Y/t0i6AisF9ONZKBEUgEpRn4pVCDMfEJ+p48jGhuS0Phto8+JOab4n3bDSHXBObYXQx9JceFb6ovGbzmN6SB9p6gf9vLNl9kX 0nKTIbauEpLjkWMoSUuV3MSjVHo6qNw/0Mgu93BplAF1CbGRDQA3bJJDCR0udP2ivAo2juzAZJ4B4PulwFQmJkl2jCN8U/6DWSmU35Jqw8q0ma7vquqZ6PaU GRPmxOmtCqiEf//SDddBow==
-X-IsSubscribed: yes
-X-SW-Source: 2017-q4/txt/msg00120.txt.bz2
+Subject: Re: [PATCH 2/2] cleanup winsup/doc/etc.{postinstall,preremove}.cygwin-doc.sh quote test variables, correct utility paths, define site in preremove
+Message-ID: <20171222192354.GC4063@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20171220230153.8512-1-Brian.Inglis@SystematicSW.ab.ca> <20171222183556.4268-1-Brian.Inglis@SystematicSW.ab.ca>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="qtZFehHsKgwS5rPz"
+Content-Disposition: inline
+In-Reply-To: <20171222183556.4268-1-Brian.Inglis@SystematicSW.ab.ca>
+User-Agent: Mutt/1.9.1 (2017-09-22)
+X-SW-Source: 2017-q4/txt/msg00121.txt.bz2
 
----
- winsup/doc/etc.postinstall.cygwin-doc.sh | 10 +++++-----
- winsup/doc/etc.preremove.cygwin-doc.sh   |  5 +++--
- 2 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/winsup/doc/etc.postinstall.cygwin-doc.sh b/winsup/doc/etc.postinstall.cygwin-doc.sh
-index 935bd94e1..de7d9e0c3 100755
---- a/winsup/doc/etc.postinstall.cygwin-doc.sh
-+++ b/winsup/doc/etc.postinstall.cygwin-doc.sh
-@@ -10,9 +10,9 @@
- 
- doc=/usr/share/doc/cygwin-doc
- site=https://cygwin.com
--cygp=/bin/cygpath
--mks=/bin/mkshortcut
--launch=/bin/cygstart
-+cygp=/usr/bin/cygpath
-+mks=/usr/bin/mkshortcut
-+launch=/usr/bin/cygstart
- 
- html=$doc/html
- 
-@@ -29,7 +29,7 @@ done
- # check for programs
- for p in $cygp $mks $launch
- do
--	if [ ! -x $p ]
-+	if [ ! -x "$p" ]
- 	then
- 		echo "Can't find program '$p'"
- 		exit 2
-@@ -52,7 +52,7 @@ fi
- # create User Guide and API PDF and HTML shortcuts
- while read target name desc
- do
--	[ -r $target ] && $mks $CYGWINFORALL -P -n "Cygwin/$name" -d "$desc" -- $target
-+	[ -r "$target" ] && $mks $CYGWINFORALL -P -n "Cygwin/$name" -d "$desc" -- $target
- done <<EOF
- $doc/cygwin-ug-net.pdf		User\ Guide\ \(PDF\)  Cygwin\ User\ Guide\ PDF
- $html/cygwin-ug-net/index.html	User\ Guide\ \(HTML\) Cygwin\ User\ Guide\ HTML
-diff --git a/winsup/doc/etc.preremove.cygwin-doc.sh b/winsup/doc/etc.preremove.cygwin-doc.sh
-index 09e0c9efc..5e47eb579 100755
---- a/winsup/doc/etc.preremove.cygwin-doc.sh
-+++ b/winsup/doc/etc.preremove.cygwin-doc.sh
-@@ -9,7 +9,8 @@
- # exits quietly if directory does not exist as presumably no shortcuts desired
- 
- doc=/usr/share/doc/cygwin-doc
--cygp=/bin/cygpath
-+site=https://cygwin.com
-+cygp=/usr/bin/cygpath
- rm=/bin/rm
- 
- html=$doc/html
-@@ -17,7 +18,7 @@ html=$doc/html
- # check for programs
- for p in $cygp $rm
- do
--	if [ ! -x $p ]
-+	if [ ! -x "$p" ]
- 	then
- 		echo "Can't find program '$p'"
- 		exit 2
--- 
-2.15.1
+--qtZFehHsKgwS5rPz
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 384
+
+On Dec 22 11:35, Brian Inglis wrote:
+> ---
+>  winsup/doc/etc.postinstall.cygwin-doc.sh | 10 +++++-----
+>  winsup/doc/etc.preremove.cygwin-doc.sh   |  5 +++--
+>  2 files changed, 8 insertions(+), 7 deletions(-)
+
+Pushed.
+
+
+Thanks,
+Corinna
+
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
+
+--qtZFehHsKgwS5rPz
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 833
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAlo9W8oACgkQ9TYGna5E
+T6A40g//QXIDPur2xA340dWxe4fSzMt7maR0gh3gclTSG9fQTs80D/tA+cgfSok1
+x0U7ccCEpFy8wRMT3G1PAuTZZF5OhxH07oX+0/LYJV0jFZPSYuKcrj47mrIQI/re
+0Pc2I8A6Dc2ChmKaiAr6oWW3dVNeHt6TwtLHcsNwqTlGxKCL9NmOqtVy9fNKraWf
+YBPvXsxVmN3zD9Ns8Xc5SSZDsHp12tm4387acqg5bTyDy0HmmT1d2XuTLrps6inu
+Yhke/yeIfioDBkSmlWRRdTaIMR2mFEk5loIjzlhXmnzwIkEnDzpKI+dpKjEUJ3FI
+aYNh7rSVKbGT4LiaZd445Imdp34KQPTqrc6RLTl5YEwALFwiPHEPHQiV6TeR2Vzc
+bor6VsWveTz53S/s/CfdQhxct4vGpUxZhWCucC1XQ3NvQBTlvQ2ErcEGdPbDH59Q
+9n/nBxhfAw23JpgwnV+Np+QgLTMRy/UGe97Ft6cHRShIBoCg280x9FmF55z/nrGU
+CNX7ScS5//4NSZmdaGV7SazdAlCoIxk0r6S6qNcu8JO+z2IuwM5S8iT7cP7asvi8
+1mHaGWm2LYUagJ+JY+tqKv+U6LSBaDIsduJXGsPr5hoLVygzKARgSN9v/FYj95m4
+iWwt6swS55Fsi8Bu6tNo0voJ0liww0MT/pYMj8ZEeb8szYSegX0=
+=ftSb
+-----END PGP SIGNATURE-----
+
+--qtZFehHsKgwS5rPz--
