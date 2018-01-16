@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8995-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 39067 invoked by alias); 16 Jan 2018 09:32:24 -0000
+Return-Path: <cygwin-patches-return-8996-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 31972 invoked by alias); 16 Jan 2018 15:03:47 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,104 +9,94 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 37935 invoked by uid 89); 16 Jan 2018 09:30:23 -0000
+Received: (qmail 31951 invoked by uid 89); 16 Jan 2018 15:03:46 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-124.2 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
-X-HELO: drew.franken.de
-Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 16 Jan 2018 09:30:12 +0000
-Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id CD8A272106C16	for <cygwin-patches@cygwin.com>; Tue, 16 Jan 2018 10:30:04 +0100 (CET)
-Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id 880145E00DF	for <cygwin-patches@cygwin.com>; Tue, 16 Jan 2018 10:30:04 +0100 (CET)
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 72361A807E5; Tue, 16 Jan 2018 10:30:04 +0100 (CET)
-Date: Tue, 16 Jan 2018 09:32:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-25.9 required=5.0 tests=BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,KAM_LAZY_DOMAIN_SECURITY,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=HTo:U*cygwin-patches
+X-HELO: mx1.redhat.com
+Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 16 Jan 2018 15:03:45 +0000
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))	(No client certificate requested)	by mx1.redhat.com (Postfix) with ESMTPS id D6AD9776C0	for <cygwin-patches@cygwin.com>; Tue, 16 Jan 2018 15:03:43 +0000 (UTC)
+Received: from [10.10.120.72] (ovpn-120-72.rdu2.redhat.com [10.10.120.72])	by smtp.corp.redhat.com (Postfix) with ESMTPS id 16CA35C3FA	for <cygwin-patches@cygwin.com>; Tue, 16 Jan 2018 15:03:41 +0000 (UTC)
+Subject: Re: [PATCH] cygwin: add LFS_CFLAGS etc. to confstr/getconf
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] cygwin: make sys/socket.h completely visible from netinet/in.h
-Message-ID: <20180116093004.GC3009@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20180116032447.14572-1-yselkowi@redhat.com>
+References: <20180116031900.18732-1-yselkowi@redhat.com> <20180116092749.GB3009@calimero.vinschen.de>
+From: Yaakov Selkowitz <yselkowitz@cygwin.com>
+Message-ID: <9637bdd8-e68f-613b-8074-e711a62447ce@cygwin.com>
+Date: Tue, 16 Jan 2018 15:03:00 -0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Thunderbird/52.5.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="ZwgA9U+XZDXt4+m+"
-Content-Disposition: inline
-In-Reply-To: <20180116032447.14572-1-yselkowi@redhat.com>
-User-Agent: Mutt/1.9.1 (2017-09-22)
-X-SW-Source: 2018-q1/txt/msg00003.txt.bz2
+In-Reply-To: <20180116092749.GB3009@calimero.vinschen.de>
+Content-Type: multipart/signed; micalg=pgp-sha1; protocol="application/pgp-signature"; boundary="1pOFTBLWNOucTbMtmIzKr4EMHsVIyOSrf"
+X-IsSubscribed: yes
+X-SW-Source: 2018-q1/txt/msg00004.txt.bz2
+
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--1pOFTBLWNOucTbMtmIzKr4EMHsVIyOSrf
+Content-Type: multipart/mixed; boundary="pOkggriFoqBPvUKGMx3BCP8SanWTbOrW8";
+ protected-headers="v1"
+From: Yaakov Selkowitz <yselkowitz@cygwin.com>
+To: cygwin-patches@cygwin.com
+Message-ID: <9637bdd8-e68f-613b-8074-e711a62447ce@cygwin.com>
+Subject: Re: [PATCH] cygwin: add LFS_CFLAGS etc. to confstr/getconf
+References: <20180116031900.18732-1-yselkowi@redhat.com>
+ <20180116092749.GB3009@calimero.vinschen.de>
+In-Reply-To: <20180116092749.GB3009@calimero.vinschen.de>
 
 
---ZwgA9U+XZDXt4+m+
+--pOkggriFoqBPvUKGMx3BCP8SanWTbOrW8
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Language: en-CA
 Content-Transfer-Encoding: quoted-printable
-Content-length: 1545
+Content-length: 1252
 
-On Jan 15 21:24, Yaakov Selkowitz wrote:
-> While POSIX mandates that certain socket types shall be defined by the
-> inclusing of <netinet/in.h>, it also says that this header may also make
-> visible all <sys/socket.h> symbols.  Glibc does this, and without out it,
-> some packages end up requiring an additional #include <sys/socket.h>.
+On 2018-01-16 03:27, Corinna Vinschen wrote:
+> On Jan 15 21:19, Yaakov Selkowitz wrote:
+>> These are used, for instance, when cross-compiling the Linux kernel.
+>>
+>> Signed-off-by: Yaakov Selkowitz <yselkowi@redhat.com>
+>> ---
+>>  newlib/libc/include/sys/unistd.h | 4 ++++
+>>  winsup/cygwin/sysconf.cc         | 6 +++++-
+>>  winsup/utils/getconf.c           | 4 ++++
+>>  3 files changed, 13 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/newlib/libc/include/sys/unistd.h b/newlib/libc/include/sys/=
+unistd.h
+>> index f216fb95c..5386bd49d 100644
+>> --- a/newlib/libc/include/sys/unistd.h
+>> +++ b/newlib/libc/include/sys/unistd.h
+>> @@ -582,6 +582,10 @@ int	unlinkat (int, const char *, int);
+>>  #define _CS_POSIX_V7_THREADS_LDFLAGS          19
+>>  #define _CS_V7_ENV                            20
+>>  #define _CS_V6_ENV                            _CS_V7_ENV
+>> +#define _CS_LFS_CFLAGS                        21
+>> +#define _CS_LFS_LDFLAGS                       22
+>> +#define _CS_LFS_LIBS                          23
+>> +#define _CS_LFS_LINTFLAGS                     24
 >=20
-> Signed-off-by: Yaakov Selkowitz <yselkowi@redhat.com>
-> ---
->  winsup/cygwin/include/cygwin/in.h  | 2 +-
->  winsup/cygwin/include/sys/socket.h | 1 -
->  2 files changed, 1 insertion(+), 2 deletions(-)
->=20
-> diff --git a/winsup/cygwin/include/cygwin/in.h b/winsup/cygwin/include/cy=
-gwin/in.h
-> index 9d7331d30..42b776653 100644
-> --- a/winsup/cygwin/include/cygwin/in.h
-> +++ b/winsup/cygwin/include/cygwin/in.h
-> @@ -18,7 +18,7 @@
->  #ifndef _CYGWIN_IN_H
->  #define _CYGWIN_IN_H
->=20=20
-> -#include <cygwin/socket.h>
-> +#include <sys/socket.h>
->=20=20
->  #ifndef _IN_ADDR_T_DECLARED
->  typedef	__uint32_t	in_addr_t;
-> diff --git a/winsup/cygwin/include/sys/socket.h b/winsup/cygwin/include/s=
-ys/socket.h
-> index 9e897a9ff..e6b92eef8 100644
-> --- a/winsup/cygwin/include/sys/socket.h
-> +++ b/winsup/cygwin/include/sys/socket.h
-> @@ -11,7 +11,6 @@ details. */
->=20=20
->  #include <features.h>
->  #include <cygwin/socket.h>
-> -#include <sys/time.h>
+> Basically ok, but while at it, wouldn't it make sense to add the LFS64
+> macros too?
 
-You don't explain the incentive behind removing sys/time.h.  Sure this
-doesn't break anything?
-
-
-Corinna
+No, because we do not provide off64_t or the *64 function declarations.
 
 --=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
+Yaakov
 
---ZwgA9U+XZDXt4+m+
+
+--pOkggriFoqBPvUKGMx3BCP8SanWTbOrW8--
+
+--1pOFTBLWNOucTbMtmIzKr4EMHsVIyOSrf
 Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+Content-length: 228
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAlpdxhwACgkQ9TYGna5E
-T6Bv7Q//SaWjhc162BH5oH0GlKY/uYTg0zYLBoVDvDLyvZ1rydcpu3QEfEYBaFm+
-vDTdFjG25sYLA+P1zQPj1EvBulhbjrXQnaYr0R2+5QEaBLL1yZdw12bQYar1JTWW
-SHyoKiZzEOL2BJHr1TbsL4XKw5WlGyGiGEEm3a4T1W6f3fOxeD5+CAqZbgx8BRBe
-WBfd8ElExkqET89rV9GuI8czrVo4+FaCkpoq3/2Qit7pPqS34dHu8VxDSf/2FavW
-1y3+uLPhFAwAGe30hHUy3loIZ+J2ZOtZgCoqRlJPrjrpj+7yjnzgLNi/X7ILFo2P
-5dSC5D4ERvKhm7wvKhkvhnhuZ9nluEHzq9nbhUUhPfRk7sTqBHtGfXNX24X5Ed/u
-8I2b+3+qL72cG35jtA0wugkbOA0n60aZvKbGSfSTZiHT39lFXAdimoI2sQomqfOz
-r8rV5BkfIP7PQX9UexZuAfysSjeC+Kb3MCLFQeOVnZsACw0czJttWB6/PcXcRtV1
-Lyr5yWvScMFwkCIcuyaaA8gwVnPsGHwjfM2cDz24Q+pw1l8XltEuMshzocVcQ56d
-/g9auZdLiong7mx6irYHacSSg0iNM92u6lu0MTAZYO3KuMtFxzHQJyHuWpgHeZAo
-J9tPvEW2mrtmBSvTfT8tzk9STiIhdjcj9Lgmj/nEAX/ZmUB8Mkc=
-=tohj
+iHQEARECADQWIQRFYAu5jKh4qpenARn/IK+aZu4flAUCWl4USBYceXNlbGtvd2l0
+ekBjeWd3aW4uY29tAAoJEP8gr5pm7h+U4LYAnjZySZ5n/6cSaNqL5OTKsQ1/c9QL
+AJ43nDWp0coTf5GkTWSefMmLQAaGpg==
+=ukyd
 -----END PGP SIGNATURE-----
 
---ZwgA9U+XZDXt4+m+--
+--1pOFTBLWNOucTbMtmIzKr4EMHsVIyOSrf--
