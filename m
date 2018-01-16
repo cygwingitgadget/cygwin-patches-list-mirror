@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8991-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 115446 invoked by alias); 22 Dec 2017 19:24:00 -0000
+Return-Path: <cygwin-patches-return-8992-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 111843 invoked by alias); 16 Jan 2018 03:19:19 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,73 +9,79 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 115435 invoked by uid 89); 22 Dec 2017 19:23:59 -0000
+Received: (qmail 111404 invoked by uid 89); 16 Jan 2018 03:19:18 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-104.9 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_BRBL_LASTEXT,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=H*Ad:U*cygwin-patches, HTo:U*cygwin-patches, site
-X-HELO: drew.franken.de
-Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 22 Dec 2017 19:23:58 +0000
-Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id 5944A721E281C	for <cygwin-patches@cygwin.com>; Fri, 22 Dec 2017 20:23:55 +0100 (CET)
-Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id 045D45E008B	for <cygwin-patches@cygwin.com>; Fri, 22 Dec 2017 20:23:55 +0100 (CET)
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id EAE41A802EA; Fri, 22 Dec 2017 20:23:54 +0100 (CET)
-Date: Fri, 22 Dec 2017 19:24:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-26.9 required=5.0 tests=BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,SPF_HELO_PASS,T_RP_MATCHES_RCVD autolearn=ham version=3.3.2 spammy=sk:yselkow, H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
+X-HELO: mx1.redhat.com
+Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 16 Jan 2018 03:19:17 +0000
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))	(No client certificate requested)	by mx1.redhat.com (Postfix) with ESMTPS id 10AF7356C6	for <cygwin-patches@cygwin.com>; Tue, 16 Jan 2018 03:19:16 +0000 (UTC)
+Received: from localhost.localdomain (ovpn-120-72.rdu2.redhat.com [10.10.120.72])	by smtp.corp.redhat.com (Postfix) with ESMTPS id 8F2DA6B281	for <cygwin-patches@cygwin.com>; Tue, 16 Jan 2018 03:19:15 +0000 (UTC)
+From: Yaakov Selkowitz <yselkowi@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 2/2] cleanup winsup/doc/etc.{postinstall,preremove}.cygwin-doc.sh quote test variables, correct utility paths, define site in preremove
-Message-ID: <20171222192354.GC4063@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20171220230153.8512-1-Brian.Inglis@SystematicSW.ab.ca> <20171222183556.4268-1-Brian.Inglis@SystematicSW.ab.ca>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="qtZFehHsKgwS5rPz"
-Content-Disposition: inline
-In-Reply-To: <20171222183556.4268-1-Brian.Inglis@SystematicSW.ab.ca>
-User-Agent: Mutt/1.9.1 (2017-09-22)
-X-SW-Source: 2017-q4/txt/msg00121.txt.bz2
+Subject: [PATCH] cygwin: add LFS_CFLAGS etc. to confstr/getconf
+Date: Tue, 16 Jan 2018 03:19:00 -0000
+Message-Id: <20180116031900.18732-1-yselkowi@redhat.com>
+X-SW-Source: 2018-q1/txt/msg00000.txt.bz2
 
+These are used, for instance, when cross-compiling the Linux kernel.
 
---qtZFehHsKgwS5rPz
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 384
+Signed-off-by: Yaakov Selkowitz <yselkowi@redhat.com>
+---
+ newlib/libc/include/sys/unistd.h | 4 ++++
+ winsup/cygwin/sysconf.cc         | 6 +++++-
+ winsup/utils/getconf.c           | 4 ++++
+ 3 files changed, 13 insertions(+), 1 deletion(-)
 
-On Dec 22 11:35, Brian Inglis wrote:
-> ---
->  winsup/doc/etc.postinstall.cygwin-doc.sh | 10 +++++-----
->  winsup/doc/etc.preremove.cygwin-doc.sh   |  5 +++--
->  2 files changed, 8 insertions(+), 7 deletions(-)
-
-Pushed.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---qtZFehHsKgwS5rPz
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAlo9W8oACgkQ9TYGna5E
-T6A40g//QXIDPur2xA340dWxe4fSzMt7maR0gh3gclTSG9fQTs80D/tA+cgfSok1
-x0U7ccCEpFy8wRMT3G1PAuTZZF5OhxH07oX+0/LYJV0jFZPSYuKcrj47mrIQI/re
-0Pc2I8A6Dc2ChmKaiAr6oWW3dVNeHt6TwtLHcsNwqTlGxKCL9NmOqtVy9fNKraWf
-YBPvXsxVmN3zD9Ns8Xc5SSZDsHp12tm4387acqg5bTyDy0HmmT1d2XuTLrps6inu
-Yhke/yeIfioDBkSmlWRRdTaIMR2mFEk5loIjzlhXmnzwIkEnDzpKI+dpKjEUJ3FI
-aYNh7rSVKbGT4LiaZd445Imdp34KQPTqrc6RLTl5YEwALFwiPHEPHQiV6TeR2Vzc
-bor6VsWveTz53S/s/CfdQhxct4vGpUxZhWCucC1XQ3NvQBTlvQ2ErcEGdPbDH59Q
-9n/nBxhfAw23JpgwnV+Np+QgLTMRy/UGe97Ft6cHRShIBoCg280x9FmF55z/nrGU
-CNX7ScS5//4NSZmdaGV7SazdAlCoIxk0r6S6qNcu8JO+z2IuwM5S8iT7cP7asvi8
-1mHaGWm2LYUagJ+JY+tqKv+U6LSBaDIsduJXGsPr5hoLVygzKARgSN9v/FYj95m4
-iWwt6swS55Fsi8Bu6tNo0voJ0liww0MT/pYMj8ZEeb8szYSegX0=
-=ftSb
------END PGP SIGNATURE-----
-
---qtZFehHsKgwS5rPz--
+diff --git a/newlib/libc/include/sys/unistd.h b/newlib/libc/include/sys/unistd.h
+index f216fb95c..5386bd49d 100644
+--- a/newlib/libc/include/sys/unistd.h
++++ b/newlib/libc/include/sys/unistd.h
+@@ -582,6 +582,10 @@ int	unlinkat (int, const char *, int);
+ #define _CS_POSIX_V7_THREADS_LDFLAGS          19
+ #define _CS_V7_ENV                            20
+ #define _CS_V6_ENV                            _CS_V7_ENV
++#define _CS_LFS_CFLAGS                        21
++#define _CS_LFS_LDFLAGS                       22
++#define _CS_LFS_LIBS                          23
++#define _CS_LFS_LINTFLAGS                     24
+ #endif
+ 
+ #ifdef __cplusplus
+diff --git a/winsup/cygwin/sysconf.cc b/winsup/cygwin/sysconf.cc
+index ecd9aeb93..9563b889a 100644
+--- a/winsup/cygwin/sysconf.cc
++++ b/winsup/cygwin/sysconf.cc
+@@ -719,10 +719,14 @@ static struct
+   {ls ("")},				/* _CS_POSIX_V7_THREADS_CFLAGS */
+   {ls ("")},				/* _CS_POSIX_V7_THREADS_LDFLAGS */
+   {ls ("POSIXLY_CORRECT=1")},		/* _CS_V7_ENV */
++  {ls ("")},				/* _CS_LFS_CFLAGS */
++  {ls ("")},				/* _CS_LFS_LDFLAGS */
++  {ls ("")},				/* _CS_LFS_LIBS */
++  {ls ("")},				/* _CS_LFS_LINTFLAGS */
+ };
+ 
+ #define CS_MIN _CS_PATH
+-#define CS_MAX _CS_V7_ENV
++#define CS_MAX _CS_LFS_LINTFLAGS
+ 
+ extern "C" size_t
+ confstr (int in, char *buf, size_t len)
+diff --git a/winsup/utils/getconf.c b/winsup/utils/getconf.c
+index 256bddb1a..5ac84abd2 100644
+--- a/winsup/utils/getconf.c
++++ b/winsup/utils/getconf.c
+@@ -97,6 +97,10 @@ static const struct conf_variable conf_table[] =
+   { "XBS5_WIDTH_RESTRICTED_ENVS",	CONFSTR,	_CS_XBS5_WIDTH_RESTRICTED_ENVS	},
+   { "V7_ENV",				CONFSTR,	_CS_V7_ENV	},
+   { "V6_ENV",				CONFSTR,	_CS_V6_ENV	},
++  { "LFS_CFLAGS",			CONFSTR,	_CS_LFS_CFLAGS	},
++  { "LFS_LDFLAGS",			CONFSTR,	_CS_LFS_LDFLAGS	},
++  { "LFS_LIBS",				CONFSTR,	_CS_LFS_LIBS	},
++  { "LFS_LINTFLAGS",			CONFSTR,	_CS_LFS_LINTFLAGS	},
+ 
+   /* Symbolic constants from <limits.h> */
+   { "_POSIX_AIO_LISTIO_MAX",		CONSTANT,	_POSIX_AIO_LISTIO_MAX	},
+-- 
+2.15.1
