@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-8999-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 31847 invoked by alias); 17 Jan 2018 09:13:25 -0000
+Return-Path: <cygwin-patches-return-9000-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 98883 invoked by alias); 19 Jan 2018 05:42:50 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,79 +9,59 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 31834 invoked by uid 89); 17 Jan 2018 09:13:25 -0000
+Received: (qmail 98854 invoked by uid 89); 19 Jan 2018 05:42:49 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-110.8 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
-X-HELO: drew.franken.de
-Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 17 Jan 2018 09:13:22 +0000
-Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id 81B58721E282E	for <cygwin-patches@cygwin.com>; Wed, 17 Jan 2018 10:13:18 +0100 (CET)
-Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id 1B0FC5E0362	for <cygwin-patches@cygwin.com>; Wed, 17 Jan 2018 10:13:18 +0100 (CET)
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 0C100A8095C; Wed, 17 Jan 2018 10:13:18 +0100 (CET)
-Date: Wed, 17 Jan 2018 09:13:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-6.9 required=5.0 tests=BAYES_00,GIT_PATCH_3,SPF_HELO_PASS,T_RP_MATCHES_RCVD autolearn=ham version=3.3.2 spammy=H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
+X-HELO: mx1.redhat.com
+Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 19 Jan 2018 05:42:48 +0000
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))	(No client certificate requested)	by mx1.redhat.com (Postfix) with ESMTPS id 54955356F4	for <cygwin-patches@cygwin.com>; Fri, 19 Jan 2018 05:42:47 +0000 (UTC)
+Received: from localhost.localdomain (ovpn-120-72.rdu2.redhat.com [10.10.120.72])	by smtp.corp.redhat.com (Postfix) with ESMTPS id D88D860A9D	for <cygwin-patches@cygwin.com>; Fri, 19 Jan 2018 05:42:46 +0000 (UTC)
+From: Yaakov Selkowitz <yselkowi@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] cygwin: add asm/bitsperlong.h, dummy asm/posix_types.h headers
-Message-ID: <20180117091318.GC18814@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20180117090521.11992-1-yselkowi@redhat.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="GID0FwUMdk1T2AWN"
-Content-Disposition: inline
-In-Reply-To: <20180117090521.11992-1-yselkowi@redhat.com>
-User-Agent: Mutt/1.9.1 (2017-09-22)
-X-SW-Source: 2018-q1/txt/msg00007.txt.bz2
+Subject: [PATCH 0/2] catgets APIs, gencat tool
+Date: Fri, 19 Jan 2018 05:42:00 -0000
+Message-Id: <20180119054236.22748-1-yselkowi@redhat.com>
+X-SW-Source: 2018-q1/txt/msg00008.txt.bz2
 
+This adds FreeBSD-derived implementations to replace the glibc-derived
+standalone implementation shipped in the catgets package. An integrated
+implementation avoids the need to remember to install libcatgets-devel and
+modify the build to link with -lcatgets.
 
---GID0FwUMdk1T2AWN
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 688
+The easiest way to test this is:
 
-On Jan 17 03:05, Yaakov Selkowitz wrote:
-> These changes are necessary for cross-compiling the Linux kernel.
->=20
-> Signed-off-by: Yaakov Selkowitz <yselkowi@redhat.com>
-> ---
->  winsup/cygwin/include/asm/bitsperlong.h | 18 ++++++++++++++++++
->  winsup/cygwin/include/asm/posix_types.h | 14 ++++++++++++++
->  winsup/cygwin/include/asm/types.h       |  2 ++
->  3 files changed, 34 insertions(+)
->  create mode 100644 winsup/cygwin/include/asm/bitsperlong.h
->  create mode 100644 winsup/cygwin/include/asm/posix_types.h
+1) Uninstall catgets and libcatgets-devel.
+2) Install Cygwin rebuilt with this patch, particularly the DLL, nl_types.h,
+libcygwin.a, and gencat.exe
+3) Rebuild tcsh.  The following should be seen during configure:
 
-ACK
+checking for gencat... /usr/bin/gencat
+[snip]
+checking for library containing catgets... none required
 
+And the resulting binary should show catclose/catgets/catopen imports from
+cygwin1.dll, not cyggetcats1.dll.
+4) Install this tcsh, then run an invalid command, e.g.:
 
-Thanks,
-Corinna
+$ LANG=fr_FR tcsh  -c '()'
+Commande nulle incorrecte.
 
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
+Yaakov Selkowitz (2):
+  cygwin: add catopen, catgets, catclose
+  cygwin: add gencat tool
 
---GID0FwUMdk1T2AWN
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
+ winsup/cygwin/Makefile.in              |   1 +
+ winsup/cygwin/common.din               |   3 +
+ winsup/cygwin/include/cygwin/version.h |   3 +-
+ winsup/cygwin/include/nl_types.h       |  94 +++++
+ winsup/cygwin/libc/msgcat.c            | 478 ++++++++++++++++++++++
+ winsup/utils/Makefile.in               |   2 +-
+ winsup/utils/gencat.c                  | 696 +++++++++++++++++++++++++++++++++
+ 7 files changed, 1275 insertions(+), 2 deletions(-)
+ create mode 100644 winsup/cygwin/include/nl_types.h
+ create mode 100644 winsup/cygwin/libc/msgcat.c
+ create mode 100644 winsup/utils/gencat.c
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAlpfE60ACgkQ9TYGna5E
-T6B3IQ//dZd2sAe2zmj1BPqnMjEY2ugS65P2NK6AJijZn0aZH15/VvOlDOuf9NIM
-2/UzuY4gzYdYwpNvrIj06u7fsFF1OPJPNa+4lXlOlqy0/UFvElWxnkTOigYTEm9Z
-zHKjWnOPWfno+zEuWy0Ore1NH+X5MUbShRmmfm0msKHW06dQqSrCV2aRo/wwU5GY
-35fLOmsIxq3hBNhpJN1zOOlUsgPPKPw6Jn4HuWAQhiLmWhrp9dOBDgNPSzJXRFsT
-gTboYi9YrDrdz6vKuTaT9hwgeHb+mzH1n3ywKiQWW9Twq4b69zGgv0EC7flX2ndW
-6PgB6itmCZaUhVGH9q+8Mhb4Whya4NHymzjEu58KX/VZvJKFp/1CDRFOewRQ+Ylf
-ZGpTgXasDoJ7c/q+GbdS6ocQlUNGSuv/fO+ZIX2Vz7OhwMthF1KEO4FOyes593ZF
-tSZ2bthOxN4nkoQQIzE7XNtschOJK9pJJNYeECWqwyYOrcRW5JXvlqYnKr8rj3+m
-Lo7oOCilXYH6f5V3nPMGFFjDPallCr9/drLSjudx5umW0YtjC5U3NqvBrmaGVUaa
-RglJW8ubQKFgAZiRvYikt7i4vx+g2EYpShHDUU2Y7mR73SyF4VeyGspOd2VL2BMp
-mIDFiI11utVLyoUFdKK83izuz+UggjRuH8zFzN0884BL+Yz0reU=
-=CBnQ
------END PGP SIGNATURE-----
-
---GID0FwUMdk1T2AWN--
+-- 
+2.15.1
