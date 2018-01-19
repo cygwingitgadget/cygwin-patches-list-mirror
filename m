@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9006-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 49906 invoked by alias); 19 Jan 2018 06:02:06 -0000
+Return-Path: <cygwin-patches-return-9007-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 50104 invoked by alias); 19 Jan 2018 06:38:15 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,746 +9,128 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 49888 invoked by uid 89); 19 Jan 2018 06:02:05 -0000
+Received: (qmail 50084 invoked by uid 89); 19 Jan 2018 06:38:11 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-23.9 required=5.0 tests=BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,KAM_LAZY_DOMAIN_SECURITY,LIKELY_SPAM_BODY,SPF_HELO_PASS,T_RP_MATCHES_RCVD autolearn=ham version=3.3.2 spammy=
+X-Spam-SWARE-Status: No, score=-26.4 required=5.0 tests=BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,KAM_NUMSUBJECT,SPF_HELO_PASS,T_RP_MATCHES_RCVD autolearn=ham version=3.3.2 spammy=2.10.0, Improved, para
 X-HELO: mx1.redhat.com
-Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 19 Jan 2018 06:02:00 +0000
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))	(No client certificate requested)	by mx1.redhat.com (Postfix) with ESMTPS id CB32F99D57	for <cygwin-patches@cygwin.com>; Fri, 19 Jan 2018 06:01:59 +0000 (UTC)
-Received: from localhost.localdomain (ovpn-120-72.rdu2.redhat.com [10.10.120.72])	by smtp.corp.redhat.com (Postfix) with ESMTPS id 0FB7A60A9D	for <cygwin-patches@cygwin.com>; Fri, 19 Jan 2018 06:01:58 +0000 (UTC)
+Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 19 Jan 2018 06:38:10 +0000
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))	(No client certificate requested)	by mx1.redhat.com (Postfix) with ESMTPS id 340251112	for <cygwin-patches@cygwin.com>; Fri, 19 Jan 2018 06:38:09 +0000 (UTC)
+Received: from localhost.localdomain (ovpn-120-72.rdu2.redhat.com [10.10.120.72])	by smtp.corp.redhat.com (Postfix) with ESMTPS id BA97A60C8A	for <cygwin-patches@cygwin.com>; Fri, 19 Jan 2018 06:38:08 +0000 (UTC)
 From: Yaakov Selkowitz <yselkowi@redhat.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v2 3/3] cygwin: add gencat tool
-Date: Fri, 19 Jan 2018 06:02:00 -0000
-Message-Id: <20180119060151.10748-1-yselkowi@redhat.com>
+Subject: [PATCH v2 4/4] cygwin: update docs for 2.10.0
+Date: Fri, 19 Jan 2018 06:38:00 -0000
+Message-Id: <20180119063759.2464-1-yselkowi@redhat.com>
 In-Reply-To: <20180119055837.13016-1-yselkowi@redhat.com>
 References: <20180119055837.13016-1-yselkowi@redhat.com>
-X-SW-Source: 2018-q1/txt/msg00014.txt.bz2
-
-This is needed for compiling catalog files used in catgets(3) calls.
+X-SW-Source: 2018-q1/txt/msg00015.txt.bz2
 
 Signed-off-by: Yaakov Selkowitz <yselkowi@redhat.com>
 ---
- winsup/utils/Makefile.in |   2 +-
- winsup/utils/gencat.c    | 696 +++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 697 insertions(+), 1 deletion(-)
- create mode 100644 winsup/utils/gencat.c
+ winsup/cygwin/release/2.10.0 | 27 +++++++++++++++++++++++++++
+ winsup/doc/new-features.xml  | 27 ++++++++++++++++++++++++++-
+ winsup/doc/posix.xml         |  6 +++---
+ 3 files changed, 56 insertions(+), 4 deletions(-)
 
-diff --git a/winsup/utils/Makefile.in b/winsup/utils/Makefile.in
-index 0ad73fb76..be525d07f 100644
---- a/winsup/utils/Makefile.in
-+++ b/winsup/utils/Makefile.in
-@@ -54,7 +54,7 @@ MINGW_CXX      := @MINGW_CXX@
+diff --git a/winsup/cygwin/release/2.10.0 b/winsup/cygwin/release/2.10.0
+index 0c6b406a1..01953119a 100644
+--- a/winsup/cygwin/release/2.10.0
++++ b/winsup/cygwin/release/2.10.0
+@@ -7,12 +7,39 @@ What's new:
  
- # List all binaries to be linked in Cygwin mode.  Each binary on this list
- # must have a corresponding .o of the same name.
--CYGWIN_BINS := ${addsuffix .exe,cygpath getconf getfacl ldd locale kill minidumper mkgroup \
-+CYGWIN_BINS := ${addsuffix .exe,cygpath gencat getconf getfacl ldd locale kill minidumper mkgroup \
-         mkpasswd mount passwd pldd ps regtool setfacl setmetamode ssp tzset umount}
+ - scanf now handles the %l[ conversion.
  
- # List all binaries to be linked in MinGW mode.  Each binary on this list
-diff --git a/winsup/utils/gencat.c b/winsup/utils/gencat.c
-new file mode 100644
-index 000000000..323914ece
---- /dev/null
-+++ b/winsup/utils/gencat.c
-@@ -0,0 +1,696 @@
-+/* ex:ts=4
-+ */
-+
-+/*	$NetBSD: gencat.c,v 1.18 2003/10/27 00:12:43 lukem Exp $	*/
-+
-+/*-
-+ * SPDX-License-Identifier: BSD-2-Clause-NetBSD AND MIT
-+ *
-+ * Copyright (c) 1996 The NetBSD Foundation, Inc.
-+ * All rights reserved.
-+ *
-+ * This code is derived from software contributed to The NetBSD Foundation
-+ * by J.T. Conklin.
-+ *
-+ * Redistribution and use in source and binary forms, with or without
-+ * modification, are permitted provided that the following conditions
-+ * are met:
-+ * 1. Redistributions of source code must retain the above copyright
-+ *    notice, this list of conditions and the following disclaimer.
-+ * 2. Redistributions in binary form must reproduce the above copyright
-+ *    notice, this list of conditions and the following disclaimer in the
-+ *    documentation and/or other materials provided with the distribution.
-+ *
-+ * THIS SOFTWARE IS PROVIDED BY THE NETBSD FOUNDATION, INC. AND CONTRIBUTORS
-+ * ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
-+ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-+ * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR CONTRIBUTORS 
-+ * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-+ * POSSIBILITY OF SUCH DAMAGE.
-+ */
-+
-+/***********************************************************
-+Copyright 1990, by Alfalfa Software Incorporated, Cambridge, Massachusetts.
-+
-+                        All Rights Reserved
-+
-+Permission to use, copy, modify, and distribute this software and its
-+documentation for any purpose and without fee is hereby granted,
-+provided that the above copyright notice appear in all copies and that
-+both that copyright notice and this permission notice appear in
-+supporting documentation, and that Alfalfa's name not be used in
-+advertising or publicity pertaining to distribution of the software
-+without specific, written prior permission.
-+
-+ALPHALPHA DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING
-+ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL
-+ALPHALPHA BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR
-+ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
-+WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,
-+ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS
-+SOFTWARE.
-+
-+If you make any modifications, bugfixes or other changes to this software
-+we'd appreciate it if you could send a copy to us so we can keep things
-+up-to-date.  Many thanks.
-+				Kee Hinckley
-+				Alfalfa Software, Inc.
-+				267 Allston St., #3
-+				Cambridge, MA 02139  USA
-+				nazgul@alfalfa.com
-+
-+******************************************************************/
-+
-+#include <sys/cdefs.h>
-+__FBSDID("$FreeBSD$");
-+
-+#define _NLS_PRIVATE
-+
-+#include <sys/types.h>
-+#include <sys/queue.h>
-+
-+#include <arpa/inet.h>		/* for htonl() */
-+
-+#include <ctype.h>
-+#include <err.h>
-+#include <fcntl.h>
-+#include <limits.h>
-+#include <nl_types.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+
-+struct _msgT {
-+	long    msgId;
-+	char   *str;
-+	LIST_ENTRY(_msgT) entries;
-+};
-+
-+struct _setT {
-+	long    setId;
-+	LIST_HEAD(msghead, _msgT) msghead;
-+	LIST_ENTRY(_setT) entries;
-+};
-+
-+static LIST_HEAD(sethead, _setT) sethead;
-+static struct _setT *curSet;
-+
-+static char *curline = NULL;
-+static long lineno = 0;
-+
-+static	char   *cskip(char *);
-+static	void	error(const char *);
-+static	char   *get_line(int);
-+static	char   *getmsg(int, char *, char);
-+static	void	warning(const char *, const char *);
-+static	char   *wskip(char *);
-+static	char   *xstrdup(const char *);
-+static	void   *xmalloc(size_t);
-+static	void   *xrealloc(void *, size_t);
-+
-+void	MCParse(int);
-+void	MCReadCat(int);
-+void	MCWriteCat(int);
-+void	MCDelMsg(int);
-+void	MCAddMsg(int, const char *);
-+void	MCAddSet(int);
-+void	MCDelSet(int);
-+void	usage(void);
-+int	main(int, char **);
-+
-+void
-+usage(void)
-+{
-+	fprintf(stderr, "usage: %s catfile msgfile ...\n", getprogname());
-+	exit(1);
-+}
-+
-+int
-+main(int argc, char **argv)
-+{
-+	int     ofd, ifd;
-+	char	*catfile = NULL;
-+	int     c;
-+
-+#define DEPRECATEDMSG	1
-+
-+#ifdef DEPRECATEDMSG
-+	while ((c = getopt(argc, argv, "new")) != -1) {
-+#else
-+	while ((c = getopt(argc, argv, "")) != -1) {
-+#endif
-+		switch (c) {
-+#ifdef DEPRECATEDMSG
-+		case 'n':
-+			fprintf(stderr, "WARNING: Usage of \"-new\" argument is deprecated.\n");
-+		case 'e':
-+		case 'w':
-+			break;
-+#endif
-+		case '?':
-+		default:
-+			usage();
-+			/* NOTREACHED */
-+		}
-+	}
-+	argc -= optind;
-+	argv += optind;
-+
-+	if (argc < 2) {
-+		usage();
-+		/* NOTREACHED */
-+	}
-+	catfile = *argv++;
-+
-+	for (; *argv; argv++) {
-+		if ((ifd = open(*argv, O_RDONLY)) < 0)
-+			err(1, "Unable to read %s", *argv);
-+		MCParse(ifd);
-+		close(ifd);
-+	}
-+
-+	if ((ofd = open(catfile, O_WRONLY | O_TRUNC | O_CREAT, 0666)) < 0)
-+		err(1, "Unable to create a new %s", catfile);
-+	MCWriteCat(ofd);
-+	exit(0);
-+}
-+
-+static void
-+warning(const char *cptr, const char *msg)
-+{
-+	fprintf(stderr, "%s: %s on line %ld\n", getprogname(), msg, lineno);
-+	fprintf(stderr, "%s\n", curline);
-+	if (cptr) {
-+		char   *tptr;
-+		for (tptr = curline; tptr < cptr; ++tptr)
-+			putc(' ', stderr);
-+		fprintf(stderr, "^\n");
-+	}
-+}
-+
-+#define	CORRUPT()	{ error("corrupt message catalog"); }
-+#define	NOMEM()		{ error("out of memory"); }
-+
-+static void
-+error(const char *msg)
-+{
-+	warning(NULL, msg);
-+	exit(1);
-+}
-+
-+static void *
-+xmalloc(size_t len)
-+{
-+	void   *p;
-+
-+	if ((p = malloc(len)) == NULL)
-+		NOMEM();
-+	return (p);
-+}
-+
-+static void *
-+xrealloc(void *ptr, size_t size)
-+{
-+	if ((ptr = realloc(ptr, size)) == NULL)
-+		NOMEM();
-+	return (ptr);
-+}
-+
-+static char *
-+xstrdup(const char *str)
-+{
-+	char *nstr;
-+
-+	if ((nstr = strdup(str)) == NULL)
-+		NOMEM();
-+	return (nstr);
-+}
-+
-+static char *
-+get_line(int fd)
-+{
-+	static long curlen = BUFSIZ;
-+	static char buf[BUFSIZ], *bptr = buf, *bend = buf;
-+	char   *cptr, *cend;
-+	long    buflen;
-+
-+	if (!curline) {
-+		curline = xmalloc(curlen);
-+	}
-+	++lineno;
-+
-+	cptr = curline;
-+	cend = curline + curlen;
-+	for (;;) {
-+		for (; bptr < bend && cptr < cend; ++cptr, ++bptr) {
-+			if (*bptr == '\n') {
-+				*cptr = '\0';
-+				++bptr;
-+				return (curline);
-+			} else
-+				*cptr = *bptr;
-+		}
-+		if (cptr == cend) {
-+			cptr = curline = xrealloc(curline, curlen *= 2);
-+			cend = curline + curlen;
-+		}
-+		if (bptr == bend) {
-+			buflen = read(fd, buf, BUFSIZ);
-+			if (buflen <= 0) {
-+				if (cptr > curline) {
-+					*cptr = '\0';
-+					return (curline);
-+				}
-+				return (NULL);
-+			}
-+			bend = buf + buflen;
-+			bptr = buf;
-+		}
-+	}
-+}
-+
-+static char *
-+wskip(char *cptr)
-+{
-+	if (!*cptr || !isspace((unsigned char) *cptr)) {
-+		warning(cptr, "expected a space");
-+		return (cptr);
-+	}
-+	while (*cptr && isspace((unsigned char) *cptr))
-+		++cptr;
-+	return (cptr);
-+}
-+
-+static char *
-+cskip(char *cptr)
-+{
-+	if (!*cptr || isspace((unsigned char) *cptr)) {
-+		warning(cptr, "wasn't expecting a space");
-+		return (cptr);
-+	}
-+	while (*cptr && !isspace((unsigned char) *cptr))
-+		++cptr;
-+	return (cptr);
-+}
-+
-+static char *
-+getmsg(int fd, char *cptr, char quote)
-+{
-+	static char *msg = NULL;
-+	static long msglen = 0;
-+	long    clen, i;
-+	char   *tptr;
-+
-+	if (quote && *cptr == quote) {
-+		++cptr;
-+	} 
-+
-+	clen = strlen(cptr) + 1;
-+	if (clen > msglen) {
-+		if (msglen)
-+			msg = xrealloc(msg, clen);
-+		else
-+			msg = xmalloc(clen);
-+		msglen = clen;
-+	}
-+	tptr = msg;
-+
-+	while (*cptr) {
-+		if (quote && *cptr == quote) {
-+			char   *tmp;
-+			tmp = cptr + 1;
-+			if (*tmp && (!isspace((unsigned char) *tmp) || *wskip(tmp))) {
-+				warning(cptr, "unexpected quote character, ignoring");
-+				*tptr++ = *cptr++;
-+			} else {
-+				*cptr = '\0';
-+			}
-+		} else
-+			if (*cptr == '\\') {
-+				++cptr;
-+				switch (*cptr) {
-+				case '\0':
-+					cptr = get_line(fd);
-+					if (!cptr)
-+						error("premature end of file");
-+					msglen += strlen(cptr);
-+					i = tptr - msg;
-+					msg = xrealloc(msg, msglen);
-+					tptr = msg + i;
-+					break;
-+
-+		#define	CASEOF(CS, CH)		\
-+			case CS:		\
-+				*tptr++ = CH;	\
-+				++cptr;		\
-+				break;		\
-+
-+				CASEOF('n', '\n');
-+				CASEOF('t', '\t');
-+				CASEOF('v', '\v');
-+				CASEOF('b', '\b');
-+				CASEOF('r', '\r');
-+				CASEOF('f', '\f');
-+				CASEOF('"', '"');
-+				CASEOF('\\', '\\');
-+
-+				default:
-+					if (quote && *cptr == quote) {
-+						*tptr++ = *cptr++;
-+					} else if (isdigit((unsigned char) *cptr)) {
-+						*tptr = 0;
-+						for (i = 0; i < 3; ++i) {
-+							if (!isdigit((unsigned char) *cptr))
-+								break;
-+							if (*cptr > '7')
-+								warning(cptr, "octal number greater than 7?!");
-+							*tptr *= 8;
-+							*tptr += (*cptr - '0');
-+							++cptr;
-+						}
-+					} else {
-+						warning(cptr, "unrecognized escape sequence");
-+					}
-+					break;
-+				}
-+			} else {
-+				*tptr++ = *cptr++;
-+			}
-+	}
-+	*tptr = '\0';
-+	return (msg);
-+}
-+
-+void
-+MCParse(int fd)
-+{
-+	char   *cptr, *str;
-+	int     setid, msgid = 0;
-+	char    quote = 0;
-+
-+	/* XXX: init sethead? */
-+
-+	while ((cptr = get_line(fd))) {
-+		if (*cptr == '$') {
-+			++cptr;
-+			if (strncmp(cptr, "set", 3) == 0) {
-+				cptr += 3;
-+				cptr = wskip(cptr);
-+				setid = atoi(cptr);
-+				MCAddSet(setid);
-+				msgid = 0;
-+			} else if (strncmp(cptr, "delset", 6) == 0) {
-+				cptr += 6;
-+				cptr = wskip(cptr);
-+				setid = atoi(cptr);
-+				MCDelSet(setid);
-+			} else if (strncmp(cptr, "quote", 5) == 0) {
-+				cptr += 5;
-+				if (!*cptr)
-+					quote = 0;
-+				else {
-+					cptr = wskip(cptr);
-+					if (!*cptr)
-+						quote = 0;
-+					else
-+						quote = *cptr;
-+				}
-+			} else if (isspace((unsigned char) *cptr)) {
-+				;
-+			} else {
-+				if (*cptr) {
-+					cptr = wskip(cptr);
-+					if (*cptr)
-+						warning(cptr, "unrecognized line");
-+				}
-+			}
-+		} else {
-+			/*
-+			 * First check for (and eat) empty lines....
-+			 */
-+			if (!*cptr)
-+				continue;
-+			/*
-+			 * We have a digit? Start of a message. Else,
-+			 * syntax error.
-+			 */
-+			if (isdigit((unsigned char) *cptr)) {
-+				msgid = atoi(cptr);
-+				cptr = cskip(cptr);
-+				cptr = wskip(cptr);
-+				/* if (*cptr) ++cptr; */
-+			} else {
-+				warning(cptr, "neither blank line nor start of a message id");
-+				continue;
-+			}
-+			/*
-+			 * If we have a message ID, but no message,
-+			 * then this means "delete this message id
-+			 * from the catalog".
-+			 */
-+			if (!*cptr) {
-+				MCDelMsg(msgid);
-+			} else {
-+				str = getmsg(fd, cptr, quote);
-+				MCAddMsg(msgid, str);
-+			}
-+		}
-+	}
-+}
-+
-+/*
-+ * Write message catalog.
-+ *
-+ * The message catalog is first converted from its internal to its
-+ * external representation in a chunk of memory allocated for this
-+ * purpose.  Then the completed catalog is written.  This approach
-+ * avoids additional housekeeping variables and/or a lot of seeks
-+ * that would otherwise be required.
-+ */
-+void
-+MCWriteCat(int fd)
-+{
-+	int     nsets;		/* number of sets */
-+	int     nmsgs;		/* number of msgs */
-+	int     string_size;	/* total size of string pool */
-+	int     msgcat_size;	/* total size of message catalog */
-+	void   *msgcat;		/* message catalog data */
-+	struct _nls_cat_hdr *cat_hdr;
-+	struct _nls_set_hdr *set_hdr;
-+	struct _nls_msg_hdr *msg_hdr;
-+	char   *strings;
-+	struct _setT *set;
-+	struct _msgT *msg;
-+	int     msg_index;
-+	int     msg_offset;
-+
-+	/* determine number of sets, number of messages, and size of the
-+	 * string pool */
-+	nsets = 0;
-+	nmsgs = 0;
-+	string_size = 0;
-+
-+	for (set = sethead.lh_first; set != NULL;
-+	    set = set->entries.le_next) {
-+		nsets++;
-+
-+		for (msg = set->msghead.lh_first; msg != NULL;
-+		    msg = msg->entries.le_next) {
-+			nmsgs++;
-+			string_size += strlen(msg->str) + 1;
-+		}
-+	}
-+
-+#ifdef DEBUG
-+	printf("number of sets: %d\n", nsets);
-+	printf("number of msgs: %d\n", nmsgs);
-+	printf("string pool size: %d\n", string_size);
-+#endif
-+
-+	/* determine size and then allocate buffer for constructing external
-+	 * message catalog representation */
-+	msgcat_size = sizeof(struct _nls_cat_hdr)
-+	    + (nsets * sizeof(struct _nls_set_hdr))
-+	    + (nmsgs * sizeof(struct _nls_msg_hdr))
-+	    + string_size;
-+
-+	msgcat = xmalloc(msgcat_size);
-+	memset(msgcat, '\0', msgcat_size);
-+
-+	/* fill in msg catalog header */
-+	cat_hdr = (struct _nls_cat_hdr *) msgcat;
-+	cat_hdr->__magic = htonl(_NLS_MAGIC);
-+	cat_hdr->__nsets = htonl(nsets);
-+	cat_hdr->__mem = htonl(msgcat_size - sizeof(struct _nls_cat_hdr));
-+	cat_hdr->__msg_hdr_offset =
-+	    htonl(nsets * sizeof(struct _nls_set_hdr));
-+	cat_hdr->__msg_txt_offset =
-+	    htonl(nsets * sizeof(struct _nls_set_hdr) +
-+	    nmsgs * sizeof(struct _nls_msg_hdr));
-+
-+	/* compute offsets for set & msg header tables and string pool */
-+	set_hdr = (struct _nls_set_hdr *)(void *)((char *)msgcat +
-+	    sizeof(struct _nls_cat_hdr));
-+	msg_hdr = (struct _nls_msg_hdr *)(void *)((char *)msgcat +
-+	    sizeof(struct _nls_cat_hdr) +
-+	    nsets * sizeof(struct _nls_set_hdr));
-+	strings = (char *) msgcat +
-+	    sizeof(struct _nls_cat_hdr) +
-+	    nsets * sizeof(struct _nls_set_hdr) +
-+	    nmsgs * sizeof(struct _nls_msg_hdr);
-+
-+	msg_index = 0;
-+	msg_offset = 0;
-+	for (set = sethead.lh_first; set != NULL;
-+	    set = set->entries.le_next) {
-+
-+		nmsgs = 0;
-+		for (msg = set->msghead.lh_first; msg != NULL;
-+		    msg = msg->entries.le_next) {
-+			int     msg_len = strlen(msg->str) + 1;
-+
-+			msg_hdr->__msgno = htonl(msg->msgId);
-+			msg_hdr->__msglen = htonl(msg_len);
-+			msg_hdr->__offset = htonl(msg_offset);
-+
-+			memcpy(strings, msg->str, msg_len);
-+			strings += msg_len;
-+			msg_offset += msg_len;
-+
-+			nmsgs++;
-+			msg_hdr++;
-+		}
-+
-+		set_hdr->__setno = htonl(set->setId);
-+		set_hdr->__nmsgs = htonl(nmsgs);
-+		set_hdr->__index = htonl(msg_index);
-+		msg_index += nmsgs;
-+		set_hdr++;
-+	}
-+
-+	/* write out catalog.  XXX: should this be done in small chunks? */
-+	write(fd, msgcat, msgcat_size);
-+}
-+
-+void
-+MCAddSet(int setId)
-+{
-+	struct _setT *p, *q;
-+
-+	if (setId <= 0) {
-+		error("setId's must be greater than zero");
-+		/* NOTREACHED */
-+	}
-+	if (setId > NL_SETMAX) {
-+		error("setId exceeds limit");
-+		/* NOTREACHED */
-+	}
-+
-+	p = sethead.lh_first;
-+	q = NULL;
-+	for (; p != NULL && p->setId < setId; q = p, p = p->entries.le_next);
-+
-+	if (p && p->setId == setId) {
-+		;
-+	} else {
-+		p = xmalloc(sizeof(struct _setT));
-+		memset(p, '\0', sizeof(struct _setT));
-+		LIST_INIT(&p->msghead);
-+
-+		p->setId = setId;
-+
-+		if (q == NULL) {
-+			LIST_INSERT_HEAD(&sethead, p, entries);
-+		} else {
-+			LIST_INSERT_AFTER(q, p, entries);
-+		}
-+	}
-+
-+	curSet = p;
-+}
-+
-+void
-+MCAddMsg(int msgId, const char *str)
-+{
-+	struct _msgT *p, *q;
-+
-+	if (!curSet)
-+		error("can't specify a message when no set exists");
-+
-+	if (msgId <= 0) {
-+		error("msgId's must be greater than zero");
-+		/* NOTREACHED */
-+	}
-+	if (msgId > NL_MSGMAX) {
-+		error("msgID exceeds limit");
-+		/* NOTREACHED */
-+	}
-+
-+	p = curSet->msghead.lh_first;
-+	q = NULL;
-+	for (; p != NULL && p->msgId < msgId; q = p, p = p->entries.le_next);
-+
-+	if (p && p->msgId == msgId) {
-+		free(p->str);
-+	} else {
-+		p = xmalloc(sizeof(struct _msgT));
-+		memset(p, '\0', sizeof(struct _msgT));
-+
-+		if (q == NULL) {
-+			LIST_INSERT_HEAD(&curSet->msghead, p, entries);
-+		} else {
-+			LIST_INSERT_AFTER(q, p, entries);
-+		}
-+	}
-+
-+	p->msgId = msgId;
-+	p->str = xstrdup(str);
-+}
-+
-+void
-+MCDelSet(int setId)
-+{
-+	struct _setT *set;
-+	struct _msgT *msg;
-+
-+	set = sethead.lh_first;
-+	for (; set != NULL && set->setId < setId; set = set->entries.le_next);
-+
-+	if (set && set->setId == setId) {
-+
-+		msg = set->msghead.lh_first;
-+		while (msg) {
-+			free(msg->str);
-+			LIST_REMOVE(msg, entries);
-+		}
-+
-+		LIST_REMOVE(set, entries);
-+		return;
-+	}
-+	warning(NULL, "specified set doesn't exist");
-+}
-+
-+void
-+MCDelMsg(int msgId)
-+{
-+	struct _msgT *msg;
-+
-+	if (!curSet)
-+		error("you can't delete a message before defining the set");
-+
-+	msg = curSet->msghead.lh_first;
-+	for (; msg != NULL && msg->msgId < msgId; msg = msg->entries.le_next);
-+
-+	if (msg && msg->msgId == msgId) {
-+		free(msg->str);
-+		LIST_REMOVE(msg, entries);
-+		return;
-+	}
-+	warning(NULL, "specified msg doesn't exist");
-+}
++- Improved hostprogs compatibility for cross-compiling the Linux kernel.
++New headers: <asm/bitsperlong.h>, <asm/posix_types.h>.
++
++- Built-in implementation of Stack Smashing Protection compiler feature.
++New APIs: __stack_chk_fail, __stack_chk_guard.
++
++- Built-in implementation of _FORTIFY_SOURCE guards for functions in 
++<stdio.h>, <stdlib.h>, <string.h>, <strings.h>, <unistd.h>, <wchar.h>,
++<sys/poll.h>, and <sys/socket.h>.
++New APIs:  __chk_fail, __gets_chk, __memcpy_chk, __memmove_chk, __mempcpy_chk,
++__memset_chk, __snprintf_chk, __sprintf_chk, __stpcpy_chk, __stpncpy_chk,
++__strcat_chk, __strcpy_chk, __strncat_chk, __strncpy_chk, __vsnprintf_chk,
++__vsprintf_chk.
++
++- Built-in implementation of POSIX.1-2001 message catalog support.
++New APIs: catclose, catgets, catopen.  New tool: gencat.
++
+ - New APIs: sigtimedwait, wmempcpy.
+ 
+ 
+ What changed:
+ -------------
+ 
++- Standard headers no longer use macros to support K&R C.
++
++- confstr(3) and getconf(1) accept LFS_CFLAGS, LFS_LDFLAGS, etc.
++
++- The __always_inline and __nonnull macros in <sys/cdefs.h> are now
++compatible with glibc.
++
++- Feature Test Macros improvements in <fcntl.h>, <limits.h>, <netdb.h>,
++<strings.h>, and <unistd.h>.
++
+ 
+ Bug Fixes
+ ---------
+diff --git a/winsup/doc/new-features.xml b/winsup/doc/new-features.xml
+index b3d258862..55e45ceee 100644
+--- a/winsup/doc/new-features.xml
++++ b/winsup/doc/new-features.xml
+@@ -17,7 +17,32 @@ scanf/wscanf now handle the POSIX %m modifier.
+ </para></listitem>
+ 
+ <listitem><para>
+-- scanf now handles the %l[ conversion.
++scanf now handles the %l[ conversion.
++</para></listitem>
++
++<listitem><para>
++Improved hostprogs compatibility for cross-compiling the Linux kernel.
++New headers: &lt;asm/bitsperlong.h&gt;, &lt;asm/posix_types.h&gt;.
++</para></listitem>
++
++<listitem><para>
++Built-in implementation of Stack Smashing Protection compiler feature.
++New APIs: __stack_chk_fail, __stack_chk_guard.
++</para></listitem>
++
++<listitem><para>
++Built-in implementation of _FORTIFY_SOURCE guards for functions in 
++&lt;stdio.h&gt;, &lt;stdlib.h&gt;, &lt;string.h&gt;, &lt;strings.h&gt;,
++&lt;unistd.h&gt;, &lt;wchar.h&gt;, &lt;sys/poll.h&gt;, and &lt;sys/socket.h&gt;.
++New APIs:  __chk_fail, __gets_chk, __memcpy_chk, __memmove_chk, __mempcpy_chk,
++__memset_chk, __snprintf_chk, __sprintf_chk, __stpcpy_chk, __stpncpy_chk,
++__strcat_chk, __strcpy_chk, __strncat_chk, __strncpy_chk, __vsnprintf_chk,
++__vsprintf_chk.
++</para></listitem>
++
++<listitem><para>
++Built-in implementation of POSIX.1-2001 message catalog support.
++New APIs: catclose, catgets, catopen.  New tool: gencat.
+ </para></listitem>
+ 
+ <listitem><para>
+diff --git a/winsup/doc/posix.xml b/winsup/doc/posix.xml
+index 2664159e1..8b4bab1b0 100644
+--- a/winsup/doc/posix.xml
++++ b/winsup/doc/posix.xml
+@@ -86,9 +86,9 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
+     catanhf
+     catanhl
+     catanl
+-    catclose 			(available in external "catgets" library)
+-    catgets  			(available in external "catgets" library)
+-    catopen  			(available in external "catgets" library)
++    catclose
++    catgets
++    catopen
+     cbrt
+     cbrtf
+     cbrtl
 -- 
 2.15.1
