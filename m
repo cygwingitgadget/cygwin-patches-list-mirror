@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9017-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 32635 invoked by alias); 23 Jan 2018 05:20:37 -0000
+Return-Path: <cygwin-patches-return-9018-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 33309 invoked by alias); 23 Jan 2018 05:21:35 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,22 +9,26 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 32621 invoked by uid 89); 23 Jan 2018 05:20:37 -0000
+Received: (qmail 33292 invoked by uid 89); 23 Jan 2018 05:21:34 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-23.4 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,KAM_LAZY_DOMAIN_SECURITY autolearn=ham version=3.3.2 spammy=acquired, osi, H*r:8.12.11, HTo:U*cygwin-patches
+X-Spam-SWARE-Status: No, score=-23.4 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,KAM_LAZY_DOMAIN_SECURITY autolearn=ham version=3.3.2 spammy=
 X-HELO: m0.truegem.net
-Received: from m0.truegem.net (HELO m0.truegem.net) (69.55.228.47) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 23 Jan 2018 05:20:33 +0000
-Received: (from daemon@localhost)	by m0.truegem.net (8.12.11/8.12.11) id w0N5KWCb058566;	Mon, 22 Jan 2018 21:20:32 -0800 (PST)	(envelope-from mark@maxrnd.com)
-Received: from 76-217-5-154.lightspeed.irvnca.sbcglobal.net(76.217.5.154), claiming to be "localhost.localdomain" via SMTP by m0.truegem.net, id smtpdx7Dqto; Mon Jan 22 21:20:30 2018
+Received: from m0.truegem.net (HELO m0.truegem.net) (69.55.228.47) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 23 Jan 2018 05:21:33 +0000
+Received: (from daemon@localhost)	by m0.truegem.net (8.12.11/8.12.11) id w0N5LWJp058934;	Mon, 22 Jan 2018 21:21:32 -0800 (PST)	(envelope-from mark@maxrnd.com)
+Received: from 76-217-5-154.lightspeed.irvnca.sbcglobal.net(76.217.5.154), claiming to be "localhost.localdomain" via SMTP by m0.truegem.net, id smtpdr4LO9Z; Mon Jan 22 21:21:25 2018
 From: Mark Geisert <mark@maxrnd.com>
 To: cygwin-patches@cygwin.com
 Cc: Mark Geisert <mark@maxrnd.com>
-Subject: [PATCH] Define internal function mythreadname() This new function returns the name of the calling thread; works for both cygthreads and pthreads. All calls to cygthread::name(/*void*/) replaced by calls to mythreadname(/*void*/).
-Date: Tue, 23 Jan 2018 05:20:00 -0000
-Message-Id: <20180123052009.3932-1-mark@maxrnd.com>
+Subject: [PATCH] Define internal function mythreadname()
+Date: Tue, 23 Jan 2018 05:21:00 -0000
+Message-Id: <20180123052112.6568-1-mark@maxrnd.com>
 X-IsSubscribed: yes
-X-SW-Source: 2018-q1/txt/msg00025.txt.bz2
+X-SW-Source: 2018-q1/txt/msg00026.txt.bz2
+
+ This new function returns the name of the calling thread; works for both
+ cygthreads and pthreads. All calls to cygthread::name(/*void*/) replaced by
+ calls to mythreadname(/*void*/).
 
 ---
  winsup/cygwin/exceptions.cc   |  4 ++--
