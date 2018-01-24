@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9020-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 83326 invoked by alias); 24 Jan 2018 08:34:48 -0000
+Return-Path: <cygwin-patches-return-9021-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 77849 invoked by alias); 24 Jan 2018 10:02:14 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,121 +9,72 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 83313 invoked by uid 89); 24 Jan 2018 08:34:48 -0000
+Received: (qmail 77710 invoked by uid 89); 24 Jan 2018 10:02:03 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-23.4 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,KAM_LAZY_DOMAIN_SECURITY autolearn=ham version=3.3.2 spammy=
-X-HELO: m0.truegem.net
-Received: from m0.truegem.net (HELO m0.truegem.net) (69.55.228.47) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 24 Jan 2018 08:34:45 +0000
-Received: (from daemon@localhost)	by m0.truegem.net (8.12.11/8.12.11) id w0O8YhUD070718;	Wed, 24 Jan 2018 00:34:43 -0800 (PST)	(envelope-from mark@maxrnd.com)
-Received: from 76-217-5-154.lightspeed.irvnca.sbcglobal.net(76.217.5.154), claiming to be "localhost.localdomain" via SMTP by m0.truegem.net, id smtpd5b4z2m; Wed Jan 24 00:34:37 2018
-From: Mark Geisert <mark@maxrnd.com>
+X-Spam-SWARE-Status: No, score=-101.9 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
+X-HELO: drew.franken.de
+Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 24 Jan 2018 10:02:00 +0000
+Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id D347A721E281E	for <cygwin-patches@cygwin.com>; Wed, 24 Jan 2018 11:01:56 +0100 (CET)
+Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id C35E75E0378	for <cygwin-patches@cygwin.com>; Wed, 24 Jan 2018 11:01:55 +0100 (CET)
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id ADFDDA80549; Wed, 24 Jan 2018 11:01:55 +0100 (CET)
+Date: Wed, 24 Jan 2018 10:02:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Cc: Mark Geisert <mark@maxrnd.com>
-Subject: [PATCH] Define internal function mythreadname() -- revised
-Date: Wed, 24 Jan 2018 08:34:00 -0000
-Message-Id: <20180124083423.6432-1-mark@maxrnd.com>
-X-IsSubscribed: yes
-X-SW-Source: 2018-q1/txt/msg00028.txt.bz2
+Subject: Re: [PATCH] Define internal function mythreadname() -- revised
+Message-ID: <20180124100155.GC1571@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20180124083423.6432-1-mark@maxrnd.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="azLHFNyN32YCQGCU"
+Content-Disposition: inline
+In-Reply-To: <20180124083423.6432-1-mark@maxrnd.com>
+User-Agent: Mutt/1.9.1 (2017-09-22)
+X-SW-Source: 2018-q1/txt/msg00029.txt.bz2
 
- This new function returns the name of the calling thread; works for both
- cygthreads and pthreads.  All calls to cygthread::name(/*void*/) replaced
- by calls to mythreadname(/*void*/).
 
----
- winsup/cygwin/exceptions.cc   |  4 ++--
- winsup/cygwin/fhandler_tty.cc |  2 +-
- winsup/cygwin/strace.cc       |  2 +-
- winsup/cygwin/thread.cc       | 14 ++++++++++++++
- winsup/cygwin/thread.h        |  3 +++
- 5 files changed, 21 insertions(+), 4 deletions(-)
+--azLHFNyN32YCQGCU
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 403
 
-diff --git a/winsup/cygwin/exceptions.cc b/winsup/cygwin/exceptions.cc
-index 47782e45b..f659540cb 100644
---- a/winsup/cygwin/exceptions.cc
-+++ b/winsup/cygwin/exceptions.cc
-@@ -200,7 +200,7 @@ cygwin_exception::dump_exception ()
-   small_printf ("r14=%016X r15=%016X\r\n", ctx->R14, ctx->R15);
-   small_printf ("rbp=%016X rsp=%016X\r\n", ctx->Rbp, ctx->Rsp);
-   small_printf ("program=%W, pid %u, thread %s\r\n",
--		myself->progname, myself->pid, cygthread::name ());
-+		myself->progname, myself->pid, mythreadname ());
- #else
-   if (exception_name)
-     small_printf ("Exception: %s at eip=%08x\r\n", exception_name, ctx->Eip);
-@@ -210,7 +210,7 @@ cygwin_exception::dump_exception ()
- 		ctx->Eax, ctx->Ebx, ctx->Ecx, ctx->Edx, ctx->Esi, ctx->Edi);
-   small_printf ("ebp=%08x esp=%08x program=%W, pid %u, thread %s\r\n",
- 		ctx->Ebp, ctx->Esp, myself->progname, myself->pid,
--		cygthread::name ());
-+		mythreadname ());
- #endif
-   small_printf ("cs=%04x ds=%04x es=%04x fs=%04x gs=%04x ss=%04x\r\n",
- 		ctx->SegCs, ctx->SegDs, ctx->SegEs, ctx->SegFs,
-diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index 1505b8c2b..0b8185d90 100644
---- a/winsup/cygwin/fhandler_tty.cc
-+++ b/winsup/cygwin/fhandler_tty.cc
-@@ -106,7 +106,7 @@ fhandler_pty_common::__acquire_output_mutex (const char *fn, int ln,
- #else
-       ostack[osi].fn = fn;
-       ostack[osi].ln = ln;
--      ostack[osi].tname = cygthread::name ();
-+      ostack[osi].tname = mythreadname ();
-       termios_printf ("acquired for %s:%d, osi %d", fn, ln, osi);
-       osi++;
- #endif
-diff --git a/winsup/cygwin/strace.cc b/winsup/cygwin/strace.cc
-index 1e7ab047d..b95b436aa 100644
---- a/winsup/cygwin/strace.cc
-+++ b/winsup/cygwin/strace.cc
-@@ -138,7 +138,7 @@ strace::vsprntf (char *buf, const char *func, const char *infmt, va_list ap)
-   char fmt[80];
-   static NO_COPY bool nonewline = false;
-   DWORD err = GetLastError ();
--  const char *tn = cygthread::name ();
-+  const char *tn = mythreadname ();
- 
-   int microsec = microseconds ();
-   lmicrosec = microsec;
-diff --git a/winsup/cygwin/thread.cc b/winsup/cygwin/thread.cc
-index f3c709a15..913f7b655 100644
---- a/winsup/cygwin/thread.cc
-+++ b/winsup/cygwin/thread.cc
-@@ -2682,6 +2682,20 @@ pthread_setname_np (pthread_t thread, const char *name)
-   return 0;
- }
- 
-+/* Returns running thread's name; works for both cygthreads and pthreads */
-+char *
-+mythreadname (void)
-+{
-+  char *result = (char *) cygthread::name ();
-+
-+  if (result == _my_tls.locals.unknown_thread_name)
-+    {
-+      result[0] = '\0';
-+      pthread_getname_np (pthread_self (), result, (size_t) THRNAMELEN);
-+    }
-+
-+  return result;
-+}
- #undef THRNAMELEN
- 
- /* provided for source level compatability.
-diff --git a/winsup/cygwin/thread.h b/winsup/cygwin/thread.h
-index 12a9ef26d..9f5e19bda 100644
---- a/winsup/cygwin/thread.h
-+++ b/winsup/cygwin/thread.h
-@@ -17,6 +17,9 @@ details. */
- /* resource.cc */
- extern size_t get_rlimit_stack (void);
- 
-+/* thread.cc */
-+char *mythreadname (void);
-+
- #include <pthread.h>
- #include <limits.h>
- #include "security.h"
--- 
-2.15.1
+On Jan 24 00:34, Mark Geisert wrote:
+>  This new function returns the name of the calling thread; works for both
+>  cygthreads and pthreads.  All calls to cygthread::name(/*void*/) replaced
+>  by calls to mythreadname(/*void*/).
+
+Pushed.
+
+
+Thanks,
+Corinna
+
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
+
+--azLHFNyN32YCQGCU
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 833
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAlpoWZMACgkQ9TYGna5E
+T6CO4g/9GLt891oDVI714Y56lnMtj2SLoexqY+1L30szhYITOtSj8SDiPN+DMvpl
+rNBw8zxgd8EruP2Mx2ZMMl0HT3s/ah9SBjSaCjPfoAgiJmPH7/5MLVUskMWc5nwA
+qB8kKotZYJqcz2Qo53+l7LCCJG3615boOpQmMx9qTaIqY9nJAFD7Hew9yVvhbmqS
+uAXJUO4AZ0nS9Rf+6WgeDLSg3HqOQEQ0QxcOY1jCxiMWa06PDyfXK+MyKKaf3PPT
+aA7BQZJMjoztuUZ/RXIJcDpfSvSjs+3NjLZ55UNyl6XMs25/yIFRiyrmM0Enu/Bm
+C+eOPtypP7EcjpLBI79S4el+RSavjOtEVllwA8aUdH4ukZwZ4Az5Fc7so5SYDLfe
+LeTeEbdaRrTslv8f0K7FtNwN1bjbl355ka0p5AfsqAiMKbfrpSiROPKmUaeO+fvb
+n0G8oTSnLFpKeKTTD6EmIElCW2NKkc3SjoObDgc1S6PPOWb9liO7/1AU0ByY2OPE
+UscZ/QgwunVdPxt3WdlCvMARfkiozNYohjWDc3uS9AuHDeUtKpRJ4cYiFf9bdiy7
+GymcQjesrEHn/GY+SLp056ena4BRx/C1gaMoqplmz8/PiUVFYrR9aQM7TB0wemHM
+mCvGEclA6f70pRaXVqKuPzltbYsGF4mmQ5PoqhKdOj9kfSZrLQ4=
+=eM6/
+-----END PGP SIGNATURE-----
+
+--azLHFNyN32YCQGCU--
