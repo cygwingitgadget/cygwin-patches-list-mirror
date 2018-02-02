@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9021-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 77849 invoked by alias); 24 Jan 2018 10:02:14 -0000
+Return-Path: <cygwin-patches-return-9022-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 32118 invoked by alias); 2 Feb 2018 22:10:25 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,72 +9,72 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 77710 invoked by uid 89); 24 Jan 2018 10:02:03 -0000
+Received: (qmail 32106 invoked by uid 89); 2 Feb 2018 22:10:24 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-101.9 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
-X-HELO: drew.franken.de
-Received: from mail-n.franken.de (HELO drew.franken.de) (193.175.24.27) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 24 Jan 2018 10:02:00 +0000
-Received: from aqua.hirmke.de (aquarius.franken.de [193.175.24.89])	(Authenticated sender: aquarius)	by mail-n.franken.de (Postfix) with ESMTPSA id D347A721E281E	for <cygwin-patches@cygwin.com>; Wed, 24 Jan 2018 11:01:56 +0100 (CET)
-Received: from calimero.vinschen.de (calimero.vinschen.de [192.168.129.6])	by aqua.hirmke.de (Postfix) with ESMTP id C35E75E0378	for <cygwin-patches@cygwin.com>; Wed, 24 Jan 2018 11:01:55 +0100 (CET)
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id ADFDDA80549; Wed, 24 Jan 2018 11:01:55 +0100 (CET)
-Date: Wed, 24 Jan 2018 10:02:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KAM_LAZY_DOMAIN_SECURITY,SPF_HELO_PASS autolearn=no version=3.3.2 spammy=H*Ad:U*yselkowitz, HTo:U*cygwin-patches
+X-HELO: mx1.redhat.com
+Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 02 Feb 2018 22:10:24 +0000
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))	(No client certificate requested)	by mx1.redhat.com (Postfix) with ESMTPS id EF053356CB	for <cygwin-patches@cygwin.com>; Fri,  2 Feb 2018 22:10:22 +0000 (UTC)
+Received: from [10.10.120.142] (ovpn-120-142.rdu2.redhat.com [10.10.120.142])	by smtp.corp.redhat.com (Postfix) with ESMTPS id 9885B5C25F	for <cygwin-patches@cygwin.com>; Fri,  2 Feb 2018 22:10:22 +0000 (UTC)
+Subject: Re: [PATCH v2 0/3] catgets APIs, gencat tool
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Define internal function mythreadname() -- revised
-Message-ID: <20180124100155.GC1571@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20180124083423.6432-1-mark@maxrnd.com>
+References: <20180119055837.13016-1-yselkowi@redhat.com> <20180119190449.GM18814@calimero.vinschen.de> <e4c12b5b-64bc-678a-5c97-f56208422986@cygwin.com>
+From: Yaakov Selkowitz <yselkowitz@cygwin.com>
+Message-ID: <acea1de8-1006-eb85-e2ae-972f7e09ce22@cygwin.com>
+Date: Fri, 02 Feb 2018 22:10:00 -0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Thunderbird/52.5.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="azLHFNyN32YCQGCU"
-Content-Disposition: inline
-In-Reply-To: <20180124083423.6432-1-mark@maxrnd.com>
-User-Agent: Mutt/1.9.1 (2017-09-22)
-X-SW-Source: 2018-q1/txt/msg00029.txt.bz2
+In-Reply-To: <e4c12b5b-64bc-678a-5c97-f56208422986@cygwin.com>
+Content-Type: multipart/signed; micalg=pgp-sha1; protocol="application/pgp-signature"; boundary="bNfOL3IL6EpoRpS2F0hefPokcoMO7TalX"
+X-IsSubscribed: yes
+X-SW-Source: 2018-q1/txt/msg00030.txt.bz2
+
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--bNfOL3IL6EpoRpS2F0hefPokcoMO7TalX
+Content-Type: multipart/mixed; boundary="aujOKHD0wNzLFXJUeCrrP537IV6c1zm6C";
+ protected-headers="v1"
+From: Yaakov Selkowitz <yselkowitz@cygwin.com>
+To: cygwin-patches@cygwin.com
+Message-ID: <acea1de8-1006-eb85-e2ae-972f7e09ce22@cygwin.com>
+Subject: Re: [PATCH v2 0/3] catgets APIs, gencat tool
+References: <20180119055837.13016-1-yselkowi@redhat.com>
+ <20180119190449.GM18814@calimero.vinschen.de>
+ <e4c12b5b-64bc-678a-5c97-f56208422986@cygwin.com>
+In-Reply-To: <e4c12b5b-64bc-678a-5c97-f56208422986@cygwin.com>
 
 
---azLHFNyN32YCQGCU
+--aujOKHD0wNzLFXJUeCrrP537IV6c1zm6C
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Language: en-CA
 Content-Transfer-Encoding: quoted-printable
-Content-length: 403
+Content-length: 185
 
-On Jan 24 00:34, Mark Geisert wrote:
->  This new function returns the name of the calling thread; works for both
->  cygthreads and pthreads.  All calls to cygthread::name(/*void*/) replaced
->  by calls to mythreadname(/*void*/).
-
-Pushed.
-
-
-Thanks,
-Corinna
+On 2018-01-19 13:26, Yaakov Selkowitz wrote:
+> On 2018-01-19 13:04, Corinna Vinschen wrote:
+>> Are you going to provide a catgets deprecation package?
+>=20
+> Yes.
+ Done.
 
 --=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
+Yaakov
 
---azLHFNyN32YCQGCU
+
+--aujOKHD0wNzLFXJUeCrrP537IV6c1zm6C--
+
+--bNfOL3IL6EpoRpS2F0hefPokcoMO7TalX
 Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+Content-length: 228
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAlpoWZMACgkQ9TYGna5E
-T6CO4g/9GLt891oDVI714Y56lnMtj2SLoexqY+1L30szhYITOtSj8SDiPN+DMvpl
-rNBw8zxgd8EruP2Mx2ZMMl0HT3s/ah9SBjSaCjPfoAgiJmPH7/5MLVUskMWc5nwA
-qB8kKotZYJqcz2Qo53+l7LCCJG3615boOpQmMx9qTaIqY9nJAFD7Hew9yVvhbmqS
-uAXJUO4AZ0nS9Rf+6WgeDLSg3HqOQEQ0QxcOY1jCxiMWa06PDyfXK+MyKKaf3PPT
-aA7BQZJMjoztuUZ/RXIJcDpfSvSjs+3NjLZ55UNyl6XMs25/yIFRiyrmM0Enu/Bm
-C+eOPtypP7EcjpLBI79S4el+RSavjOtEVllwA8aUdH4ukZwZ4Az5Fc7so5SYDLfe
-LeTeEbdaRrTslv8f0K7FtNwN1bjbl355ka0p5AfsqAiMKbfrpSiROPKmUaeO+fvb
-n0G8oTSnLFpKeKTTD6EmIElCW2NKkc3SjoObDgc1S6PPOWb9liO7/1AU0ByY2OPE
-UscZ/QgwunVdPxt3WdlCvMARfkiozNYohjWDc3uS9AuHDeUtKpRJ4cYiFf9bdiy7
-GymcQjesrEHn/GY+SLp056ena4BRx/C1gaMoqplmz8/PiUVFYrR9aQM7TB0wemHM
-mCvGEclA6f70pRaXVqKuPzltbYsGF4mmQ5PoqhKdOj9kfSZrLQ4=
-=eM6/
+iHQEARECADQWIQRFYAu5jKh4qpenARn/IK+aZu4flAUCWnThzRYceXNlbGtvd2l0
+ekBjeWd3aW4uY29tAAoJEP8gr5pm7h+UTjIAniMf5Zisq6iyKkEIAJQ9meCXgNfZ
+AJ9MpK1fpcs9vDwZKFYCv8XiswzChg==
+=eGzV
 -----END PGP SIGNATURE-----
 
---azLHFNyN32YCQGCU--
+--bNfOL3IL6EpoRpS2F0hefPokcoMO7TalX--
