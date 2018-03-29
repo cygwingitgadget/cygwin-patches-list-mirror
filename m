@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9039-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 31003 invoked by alias); 8 Mar 2018 07:56:43 -0000
+Return-Path: <cygwin-patches-return-9040-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 73746 invoked by alias); 29 Mar 2018 05:31:23 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,131 +9,172 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 30989 invoked by uid 89); 8 Mar 2018 07:56:43 -0000
+Received: (qmail 72837 invoked by uid 89); 29 Mar 2018 05:31:23 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-113.5 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.2 spammy=para, H*Ad:U*cygwin-patches
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.134) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 08 Mar 2018 07:56:41 +0000
-Received: from calimero.vinschen.de ([217.91.18.234]) by mrelayeu.kundenserver.de (mreue005 [212.227.15.167]) with ESMTPA (Nemesis) id 0LkUcJ-1eNWnt3ffH-00cS5x for <cygwin-patches@cygwin.com>; Thu, 08 Mar 2018 08:56:38 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 14713A80994; Thu,  8 Mar 2018 08:56:38 +0100 (CET)
-Date: Thu, 08 Mar 2018 07:56:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-23.0 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,KAM_LAZY_DOMAIN_SECURITY,KAM_NUMSUBJECT autolearn=ham version=3.3.2 spammy=listen, bump, UD:xml, Volume
+X-HELO: m0.truegem.net
+Received: from m0.truegem.net (HELO m0.truegem.net) (69.55.228.47) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 29 Mar 2018 05:31:19 +0000
+Received: (from daemon@localhost)	by m0.truegem.net (8.12.11/8.12.11) id w2T5VHoj090412;	Wed, 28 Mar 2018 22:31:17 -0700 (PDT)	(envelope-from mark@maxrnd.com)
+Received: from 76-217-5-154.lightspeed.irvnca.sbcglobal.net(76.217.5.154), claiming to be "localhost.localdomain" via SMTP by m0.truegem.net, id smtpdI5XClB; Wed Mar 28 21:31:09 2018
+From: Mark Geisert <mark@maxrnd.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] describe new locale modifier @cjkwide for user guide
-Message-ID: <20180308075638.GD32523@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <b02fed2c-095c-e689-d7df-e9802b75b1fa@towo.net>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="O5XBE6gyVG5Rl6Rj"
-Content-Disposition: inline
-In-Reply-To: <b02fed2c-095c-e689-d7df-e9802b75b1fa@towo.net>
-User-Agent: Mutt/1.9.2 (2017-12-15)
-X-UI-Out-Filterresults: notjunk:1;V01:K0:TFTvaFPAE68=:yYnrZsrOzM3V6RDhVha79t q0cE3LbUsu3c1YePWFPiaLEyWC+6Y+YTNzsg39mQmgduXJ1oOUxfEQYvnxT+BzG6BwXnSwfej z8zllHS3UUOaNqBXUFFWtbDmqn05yzEv6Ukia0eARIPsL+cPJZBnNQ2fHrotQB2lAC29bEHcO 0qqGGPdO313tp0ipjnkglXk/usPSjJVDAQWlpPoUQKTIparmbOS9pEqLkvKmzhN9pXVAoQNvE C5zArLZfYszbyHtuEcARNa3ITFo0xhFLGZt1YTWrJV9P034+ZGbyIyMHgbGhsKLEdK8Iqqy1B qY3yrIFvqsyePzIUoSrhuWosI7RhupLc2vqkzpxuYcNVJ0sZW/Khsa90vegJ6j32p8RxdMGPw /QU+hTj6qIDRuw+u0btAhuZK6v5PbZPqA2CVnzs6cIamfcd812tO7VLXp4JHLU/imn+w848BP o8aUciiDVnoVJGp0jIRcgluLnSBGtTzoZtA2plMILAiLkSPNsQ1R0UMnxFmNwR7mlo52dV0J4 yuvZ8wRoHJDGdD7medFcmLmLRvso8eutKblWpDFdUQ2bqK8bjjjG0km4t76jvRjXpRZlPGDpT kOBx6pEe3KWBwWOt8A7LqI8SNIxZOxOuYtfvjk/ADkV9OhiWN5sQJ9TnshXkWeH/1EX1yypMx 3BVFRiH7CUHGVDrykoMd9TFKmMnTn4hFaCYSgEher8JBtEd0jHq4XmMHSQ9J/yFNL/vb66v+t YQw0XthA/yz/cjqRBnULLqZLhr48ZOgPHvv2Ng==
-X-SW-Source: 2018-q1/txt/msg00047.txt.bz2
+Cc: Mark Geisert <mark@maxrnd.com>
+Subject: [PATCH] Posix asynchronous I/O support, part 1
+Date: Thu, 29 Mar 2018 05:31:00 -0000
+Message-Id: <20180329053050.6696-1-mark@maxrnd.com>
+X-IsSubscribed: yes
+X-SW-Source: 2018-q1/txt/msg00048.txt.bz2
 
+---
+ winsup/cygwin/Makefile.in              |  1 +
+ winsup/cygwin/common.din               |  8 ++++++++
+ winsup/cygwin/include/cygwin/version.h |  4 +++-
+ winsup/cygwin/include/limits.h         | 12 ++++++------
+ winsup/doc/posix.xml                   | 16 ++++++++--------
+ 5 files changed, 26 insertions(+), 15 deletions(-)
 
---O5XBE6gyVG5Rl6Rj
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 2770
-
-On Mar  8 00:30, Thomas Wolff wrote:
-> From 725e49a16c7867512635e6ade0f1ff1e01f8e7c5 Mon Sep 17 00:00:00 2001
-> From: Thomas Wolff <towo@towo.net>
-> Date: Thu, 8 Mar 2018 00:29:25 +0100
-> Subject: [PATCH] describe new locale modifier @cjkwide for user guide
->=20
-> ---
->  winsup/doc/setup-locale.xml | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
->=20
-> diff --git a/winsup/doc/setup-locale.xml b/winsup/doc/setup-locale.xml
-> index 29502a2..249c125 100644
-> --- a/winsup/doc/setup-locale.xml
-> +++ b/winsup/doc/setup-locale.xml
-> @@ -166,6 +166,19 @@ can be used to force wcwidth/wcswidth to return 1 fo=
-r the ambiguous width
->  characters.
->  </para></listitem>
->=20=20
-> +<listitem><para>
-> +For the same class of "CJK Ambiguous Width" characters, it may be=20
-> +desirable to handle them as double-width even when a non-CJK language=20
-> +setting is selected.  This supports e.g. certain graphic symbols used=20
-> +by "Powerline" and provided by "Powerline fonts".  Some terminals have=20
-> +options to enforce this width handling (xterm -cjk_width,=20
-> +mintty -o Charwidth=3Dambig-wide, putty configuration) but that alone=20
-> +makes character rendering and locale information inconsistent for those=
-=20
-> +characters.  The locale modifier "@cjkwide" supports consistent locale=20
-> +response with this option; it forces wcwidth/wcswidth to return 2 for th=
-e=20
-> +ambiguous width characters.
-> +</para></listitem>
-> +
->  </itemizedlist>
->=20=20
->  </sect2>
-> --=20
-> 2.16.2
-
-The patch introduces lots of whitespace errors.  Check for yourself.
-Remove the patch from your repo and reapply it, e.g., assuming this
-patch is HEAD:
-
-  $ git reset --hard HEAD~1
-  $ git am 0001-describe-new-locale-modifier-cjkwide-for-user-guide.patch
-  Applying: describe new locale modifier @cjkwide for user guide
-  .git/rebase-apply/patch:14: trailing whitespace.
-  For the same class of "CJK Ambiguous Width" characters, it may be
-  .git/rebase-apply/patch:15: trailing whitespace.
-  desirable to handle them as double-width even when a non-CJK language
-  .git/rebase-apply/patch:16: trailing whitespace.
-  setting is selected.  This supports e.g. certain graphic symbols used
-  .git/rebase-apply/patch:17: trailing whitespace.
-  by "Powerline" and provided by "Powerline fonts".  Some terminals have
-  .git/rebase-apply/patch:18: trailing whitespace.
-  options to enforce this width handling (xterm -cjk_width,
-  warning: squelched 4 whitespace errors
-  warning: 9 lines add whitespace errors.
-  $ git show
-
-I fixed this locally before pushing, so this is just a friendly hint for
-next time.
-
-Pushed.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---O5XBE6gyVG5Rl6Rj
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAlqg7LUACgkQ9TYGna5E
-T6Crrw/+N61WCXJx20PHFlk2mm9X0u8CMqHQLHvaYe440AVePa/HrEM0o8Bx21U8
-ygrKDRgAppDhPzrM5o5kNl4CNGtldZyUQjYfScZ3ouTHJN9lH/AvMCD0qc309HQg
-P8ONdKpo2biNuByaUciYfL6kfPmGdrSROTq7GlZBNxKupSX74eMbb6Qy09mTYKHN
-59fzBahyHyML2bKXN+5w+xZVkqmmaY20FcIfOCL6S1MHhXv3I/BNGgQlBVntYKUW
-mYihsP7EWQikzG43mJ3M9xw3qQ7mAWssgXtnC7zMwjFZImgidwDNarLuoltuLXQy
-NoFLmHnEfzz0PfqYFq5SY/DBL1SkE+4y0mJ8jM7b6iV6jOPv1oboTVRQCIfhP/A6
-ALu2G25M4y3MKgAZKgnLuVIoFGYWrqTpiGuGWt6p1oIzUYnDvmDL6mTEqgSf6kHf
-K8KyPc30dv1Bj7S5kWoCNfrGP0kae8WhFohnouKombKp2kSYf6fal4Z5TWzSHB7f
-lbUjBFfdAqYMowqRkg1+4JXWyn6Avr/0k9iARlzhoesZRccPlhg/YPQibRD1p/sw
-hEFkeSmveJjfxseTo4v4bmflsgGb37ggEprLOBQ/gRTHcSfZaTgvq3k6cnV5Puob
-emH985y0Lq6cPHwZ3pOr1Zsoj96Za3seimkrITQ+5HXkyOnrDec=
-=/PGy
------END PGP SIGNATURE-----
-
---O5XBE6gyVG5Rl6Rj--
+diff --git a/winsup/cygwin/Makefile.in b/winsup/cygwin/Makefile.in
+index 32f8025cc..966460da8 100644
+--- a/winsup/cygwin/Makefile.in
++++ b/winsup/cygwin/Makefile.in
+@@ -249,6 +249,7 @@ MATH_OFILES:= \
+ 
+ DLL_OFILES:= \
+ 	advapi32.o \
++	aio.o \
+ 	arc4random_stir.o \
+ 	assert.o \
+ 	autoload.o \
+diff --git a/winsup/cygwin/common.din b/winsup/cygwin/common.din
+index 6e8bf9185..77cf669f7 100644
+--- a/winsup/cygwin/common.din
++++ b/winsup/cygwin/common.din
+@@ -193,6 +193,13 @@ acosh NOSIGFE
+ acoshf NOSIGFE
+ acoshl NOSIGFE
+ acosl NOSIGFE
++aio_cancel SIGFE
++aio_error SIGFE
++aio_fsync SIGFE
++aio_read SIGFE
++aio_return SIGFE
++aio_suspend SIGFE
++aio_write SIGFE
+ alarm SIGFE
+ aligned_alloc SIGFE
+ alphasort NOSIGFE
+@@ -840,6 +847,7 @@ lgammal_r NOSIGFE
+ lgetxattr SIGFE
+ link SIGFE
+ linkat SIGFE
++lio_listio SIGFE
+ listen = cygwin_listen SIGFE
+ listxattr SIGFE
+ llabs NOSIGFE
+diff --git a/winsup/cygwin/include/cygwin/version.h b/winsup/cygwin/include/cygwin/version.h
+index f08707eea..b46297a66 100644
+--- a/winsup/cygwin/include/cygwin/version.h
++++ b/winsup/cygwin/include/cygwin/version.h
+@@ -494,12 +494,14 @@ details. */
+   323: scanf %l[ conversion.
+   324: Export sigtimedwait.
+   325: Export catclose, catgets, catopen.
++  326: Export aio_cancel, aio_error, aio_fsync, aio_read, aio_return,
++       aio_suspend, aio_write, lio_listio.
+ 
+   Note that we forgot to bump the api for ualarm, strtoll, strtoull,
+   sigaltstack, sethostname. */
+ 
+ #define CYGWIN_VERSION_API_MAJOR 0
+-#define CYGWIN_VERSION_API_MINOR 325
++#define CYGWIN_VERSION_API_MINOR 326
+ 
+ /* There is also a compatibity version number associated with the shared memory
+    regions.  It is incremented when incompatible changes are made to the shared
+diff --git a/winsup/cygwin/include/limits.h b/winsup/cygwin/include/limits.h
+index fe1b8b493..b52ca11f2 100644
+--- a/winsup/cygwin/include/limits.h
++++ b/winsup/cygwin/include/limits.h
+@@ -147,7 +147,7 @@ details. */
+ 
+ /* Runtime Invariant Values */
+ 
+-/* Please note that symbolic names shall be ommited, on specific
++/* Please note that symbolic names shall be omitted, on specific
+    implementations where the corresponding value is equal to or greater
+    than the stated minimum, but is unspecified.  This indetermination
+    might depend on the amount of available memory space on a specific
+@@ -155,17 +155,17 @@ details. */
+    a specific instance shall be provided by the sysconf() function. */
+ 
+ /* Maximum number of I/O operations in a single list I/O call supported by
+-   the implementation.  Not yet implemented. */
+-#undef AIO_LISTIO_MAX
++   the implementation. */
++#define AIO_LISTIO_MAX 32
+ /* #define AIO_LISTIO_MAX >= _POSIX_AIO_LISTIO_MAX */
+ 
+ /* Maximum number of outstanding asynchronous I/O operations supported by
+-   the implementation.  Not yet implemented. */
+-#undef AIO_MAX
++   the implementation. */
++#define AIO_MAX 8
+ /*  #define AIO_MAX >= _POSIX_AIO_MAX */
+ 
+ /* The maximum amount by which a process can decrease its asynchronous I/O
+-   priority level from its own scheduling priority. */
++   priority level from its own scheduling priority. Not yet implemented. */
+ #undef AIO_PRIO_DELTA_MAX
+ /* #define AIO_PRIO_DELTA_MAX >= 0 */
+ 
+diff --git a/winsup/doc/posix.xml b/winsup/doc/posix.xml
+index 8b4bab1b0..18f143945 100644
+--- a/winsup/doc/posix.xml
++++ b/winsup/doc/posix.xml
+@@ -32,6 +32,13 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
+     acoshf
+     acoshl
+     acosl
++    aio_cancel
++    aio_error
++    aio_fsync
++    aio_read
++    aio_return
++    aio_suspend
++    aio_write
+     alarm
+     alphasort
+     asctime
+@@ -491,6 +498,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
+     lgammal
+     link
+     linkat
++    lio_listio
+     listen
+     llabs
+     lldiv
+@@ -1553,13 +1561,6 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
+ <sect1 id="std-notimpl"><title>NOT implemented system interfaces from the Single Unix Specification, Volume 4:</title>
+ 
+ <screen>
+-    aio_cancel
+-    aio_error
+-    aio_fsync
+-    aio_read
+-    aio_return
+-    aio_suspend
+-    aio_write
+     endnetent
+     fattach
+     fmtmsg
+@@ -1572,7 +1573,6 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
+     getnetent
+     getpmsg
+     isastream
+-    lio_listio
+     mlockall
+     munlockall
+     posix_mem_offset
+-- 
+2.16.2
