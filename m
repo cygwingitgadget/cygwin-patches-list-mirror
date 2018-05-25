@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9058-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 44048 invoked by alias); 15 May 2018 06:23:57 -0000
+Return-Path: <cygwin-patches-return-9059-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 63430 invoked by alias); 25 May 2018 16:43:44 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,119 +9,95 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 43636 invoked by uid 89); 15 May 2018 06:23:57 -0000
+Received: (qmail 63415 invoked by uid 89); 25 May 2018 16:43:43 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-0.9 required=5.0 tests=AWL,BAYES_00,KAM_LAZY_DOMAIN_SECURITY autolearn=no version=3.3.2 spammy=actions, mere, Actions, cygwins
-X-HELO: m0.truegem.net
-Received: from m0.truegem.net (HELO m0.truegem.net) (69.55.228.47) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 15 May 2018 06:23:54 +0000
-Received: from localhost (mark@localhost)	by m0.truegem.net (8.12.11/8.12.11) with ESMTP id w4F6NqUi056662	for <cygwin-patches@cygwin.com>; Mon, 14 May 2018 23:23:52 -0700 (PDT)	(envelope-from mark@maxrnd.com)
-Date: Tue, 15 May 2018 06:23:00 -0000
-From: Mark Geisert <mark@maxrnd.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2 1/3] Posix asynchronous I/O support: aio files
-In-Reply-To: <5037e322-3ad0-d963-d8db-9dae22e20633@SystematicSw.ab.ca>
-Message-ID: <Pine.BSF.4.63.1805142318390.55746@m0.truegem.net>
-References: <20180419080402.10932-1-mark@maxrnd.com> <20180419080402.10932-2-mark@maxrnd.com> <20180419133851.GP15911@calimero.vinschen.de> <Pine.BSF.4.63.1805020106340.6018@m0.truegem.net> <5037e322-3ad0-d963-d8db-9dae22e20633@SystematicSw.ab.ca>
+X-Spam-SWARE-Status: No, score=-2.9 required=5.0 tests=AWL,BAYES_00,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_PASS autolearn=ham version=3.3.2 spammy=H*r:sk:b130-v6, H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
+X-HELO: mail-oi0-f42.google.com
+Received: from mail-oi0-f42.google.com (HELO mail-oi0-f42.google.com) (209.85.218.42) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 25 May 2018 16:43:42 +0000
+Received: by mail-oi0-f42.google.com with SMTP id b130-v6so5085355oif.12        for <cygwin-patches@cygwin.com>; Fri, 25 May 2018 09:43:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20161025;        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;        bh=5Vmlcg7gtWdgN6ZA/bOErEzOc8BKn5hc6nNg99++Gmo=;        b=Ffjxri893PhLRTCCv6kuJQrs7wbNi5d1QdIfEGdZ9KgalXTkjRjEgIJ1bt8HRZ30tk         qFKzaQKKG4KM3v9mowhPM/eSjIkoaPPbnTnq755y3Ri3ZUYWitLEViA3uz/MGn8uiwdn         +5R2bPOcY0H7EiSZqb1UnN5jj2mKJ+f7dJdZuDwzlzIhmzIY2IwJp3iJg0kX0RrY6vhO         9jAOTKo76CPBHE8+5nmq52u1e15SjGDersItcx5UlScySec5rUDacZau0lKF5W8EToQ6         mun+LhgrJojcNaEJukypM/rpH9f6OxAQp3hlE9G3cYCRDgJc4cBmjuMObJOfvw7J7XcQ         nLTg==
+X-Gm-Message-State: ALKqPweNhUolKxsiOt9jcYC1WNOgGIGd72Y/Eg+nl0TNUI6X4OVJyuTn	WhK1rEnLdEZ2Y6PGpKvgPQXmBK2NYyg+azg/fgiy/A==
+X-Google-Smtp-Source: ADUXVKKJ8Z3i/SySF6QaH8smovP+a00AmsLVK7ghMuDKaLjKAphp9hBDBVbjqdHugxYqrv9dOrp1K+5tGOR/AT9acCs=
+X-Received: by 2002:aca:281a:: with SMTP id 26-v6mr1653909oix.37.1527266620519; Fri, 25 May 2018 09:43:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="0-1257701235-1526365432=:55746"
+Received: by 2002:a9d:110d:0:0:0:0:0 with HTTP; Fri, 25 May 2018 09:43:40 -0700 (PDT)
+From: Sergejs Lukanihins <slukanihin@gmail.com>
+Date: Fri, 25 May 2018 16:43:00 -0000
+Message-ID: <CAA9Bwxb2bzBMha_QYRQkVx0pSpY989P7DNM8hikPFeezpn796Q@mail.gmail.com>
+Subject: [PATCH] Cygwin: Fixing the math behind rounding down ch.stacklimit to page size
+To: cygwin-patches@cygwin.com
+Content-Type: multipart/mixed; boundary="00000000000064e202056d0a78f6"
 X-IsSubscribed: yes
-X-SW-Source: 2018-q2/txt/msg00015.txt.bz2
+X-SW-Source: 2018-q2/txt/msg00016.txt.bz2
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
 
---0-1257701235-1526365432=:55746
-Content-Type: TEXT/PLAIN; charset=utf-8; format=flowed
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-Content-length: 3851
+--00000000000064e202056d0a78f6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Content-length: 1112
 
-On Wed, 2 May 2018, Brian Inglis wrote:
-> On 2018-05-02 02:21, Mark Geisert wrote:
->> I found a discrepancy in the Cygwin source tree and would like input on =
-how to
->> resolve it...
->> On Thu, 19 Apr 2018, Corinna Vinschen wrote:
->>>> +static void
->>>> +aionotify (struct aiocb *aio)
->>>> +{
->>>> +=C2=A0 /* if signal notification wanted, send AIO-complete signal */
->>>> +=C2=A0 //XXX Is sigqueue() the best way to send signo+value within sa=
-me process?
->>>> +=C2=A0 if (aio->aio_sigevent.sigev_notify =3D=3D SIGEV_SIGNAL)
->>>> +=C2=A0=C2=A0=C2=A0 sigqueue (mypid,
->>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 aio->aio_sigevent.sigev_signo,
->>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 aio->aio_sigevent.sigev_value);
->>> Given you have direct access to pinfo, you can just as well call
->>> sig_send (myself, ...). This also drop the requirement to know your pid.
->> While making the change from sigqueue() to sig_send() I was researching
->> siginfo_t, and I found that the values for element si_code in Cygwin's
->> /usr/include/sys/signal.h...
->> /* Signal Actions, P1003.1b-1993, p. 64 */
->> /* si_code values, p. 66 */
->> #define SI_USER=C2=A0=C2=A0=C2=A0 1=C2=A0 /* Sent by a user. kill(), abo=
-rt(), etc */
->> #define SI_QUEUE=C2=A0=C2=A0 2=C2=A0 /* Sent by sigqueue() */
->> #define SI_TIMER=C2=A0=C2=A0 3=C2=A0 /* Sent by expiration of a timer_se=
-ttime() timer */
->> #define SI_ASYNCIO 4=C2=A0 /* Indicates completion of asycnhronous IO */
->> #define SI_MESGQ=C2=A0=C2=A0 5=C2=A0 /* Indicates arrival of a message a=
-t an empty queue */
->> ...are inconsistent with the enum values in internal file
->> winsup/cygwin/include/cygwin/signal.h...
->> enum
->> {
->> =C2=A0 SI_USER =3D 0,=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /*=
- sent by kill, raise, pthread_kill */
->> =C2=A0 SI_ASYNCIO =3D 2,=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* sent by AIO co=
-mpletion (currently unimplemented) */
->> =C2=A0 SI_MESGQ,=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 /* sent by real time mesq state change
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 (currently unimplemented) */
->> =C2=A0 SI_TIMER,=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 /* sent by timer expiration */
->> =C2=A0 SI_QUEUE,=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 /* sent by sigqueue */
->> =C2=A0 SI_KERNEL,=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 /* sent by system */
->>
->> =C2=A0 ILL_ILLOPC,=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- /* illegal opcode */
->> =C2=A0 ILL_ILLOPN,=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- /* illegal operand */
->> =C2=A0 [...]
->> };
->> I figure it's the /usr/include/sys/signal.h defines that should be chang=
-ed,
->> given that Posix doesn't specify values but only the names of the values=
-.=C2=A0 And
->> the winsup* enum values are the ones used internally so should likely no=
-t be
->> changed.
->> Does this sound like the right way to go?
->
-> The other values appear to be used by non-Cygwin newlib implementations
-> bracketed by:
->
-> 	#if defined(__CYGWIN__)
-> 	#include <cygwin/signal.h>
-> 	#else
-> ... 100+ lines
-> 	#endif /* defined(__CYGWIN__) */
->
-> and, if that was required, should be changed via the newlib list.
+Hello,
 
-Finally got this question popped to the top of my stack.  Thanks Brian.
+Looks like ch.stacklimit wasn't being page-aligned correctly in
+fork.cc; you need to subtract 1 from page_size to do it correctly (see
+the attached patch).
 
-It's all good as-is.  I had previously not thought to consider the myriad=20
-nestings and cross-definitions accomplished by macros.  Props to those on=20
-the team who keep all this stuff straight.  No mere mortals they.
+As a result, this was causing stack-overflow exceptions whenever the
+stack needed to grow beyond the stacklimit value. When the stack grows
+beyond stacklimit value, Windows uses ntdll!_chkstk() function to
+check the stack and map in additional stack pages. However, it expects
+stacklimit to be page aligned, and the function does not work
+correctly if it is not (it triggers STATUS_STACK_OVERFLOW, even if
+there is enough stack space).
 
-..mark=
+Normally, this was not causing any issues, as the stack never really
+needs to grow, but it was causing issues when AV software was being
+injected into the process (specifically, HitmanPro.Alert being
+injected into git=E2=80=99s sh.exe process). Due to function hooks, it lead=
+ to
+a bigger callstack, and more stack space being required. Making the
+change specified in the patch actually resolves the issue.
 
---0-1257701235-1526365432=:55746--
+I am providing my patches to the Cygwin sources under the 2-clause BSD lice=
+nse.
+
+Regards,
+
+Sergejs
+
+--00000000000064e202056d0a78f6
+Content-Type: application/octet-stream; 
+	name="0001-Cygwin-Fixing-the-math-behind-rounding-down-ch.stack.patch"
+Content-Disposition: attachment; 
+	filename="0001-Cygwin-Fixing-the-math-behind-rounding-down-ch.stack.patch"
+Content-Transfer-Encoding: base64
+X-Attachment-Id: f_jhm73h4j0
+Content-length: 1416
+
+RnJvbSBkMTJjYTMwYWIzMzBiNzk3NGM1YTZlMzY3MjY5ZDJmYzM3MWIxYzk1
+IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBTZXJnZWpzIEx1a2Fu
+aWhpbnMgPHNsdWthbmloaW5AZ21haWwuY29tPgpEYXRlOiBGcmksIDI1IE1h
+eSAyMDE4IDE3OjI3OjIxICswMTAwClN1YmplY3Q6IFtQQVRDSF0gQ3lnd2lu
+OiBGaXhpbmcgdGhlIG1hdGggYmVoaW5kIHJvdW5kaW5nIGRvd24gY2guc3Rh
+Y2tsaW1pdCB0bwogcGFnZSBzaXplLgoKLS0tCiB3aW5zdXAvY3lnd2luL2Zv
+cmsuY2MgfCAyICstCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyks
+IDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS93aW5zdXAvY3lnd2luL2Zv
+cmsuY2MgYi93aW5zdXAvY3lnd2luL2ZvcmsuY2MKaW5kZXggYmNiZWYxMmQ4
+Li5jNmZlZjY3NTUgMTAwNjQ0Ci0tLSBhL3dpbnN1cC9jeWd3aW4vZm9yay5j
+YworKysgYi93aW5zdXAvY3lnd2luL2ZvcmsuY2MKQEAgLTMxNiw3ICszMTYs
+NyBAQCBmcm9rOjpwYXJlbnQgKHZvbGF0aWxlIGNoYXIgKiB2b2xhdGlsZSBz
+dGFja19oZXJlKQogCSBvbiB3aGV0aGVyIHdlJ3JlIHJ1bm5pbmcgb24gYSBw
+dGhyZWFkIG9yIG5vdC4gIElmIHB0aHJlYWQsIHdlIGZldGNoCiAJIHRoZSBn
+dWFyZHBhZ2Ugc2l6ZSBmcm9tIHRoZSBwdGhyZWFkIGF0dHJpYnMsIG90aGVy
+d2lzZSB3ZSB1c2UgdGhlCiAJIHN5c3RlbSBkZWZhdWx0LiAqLwotICAgICAg
+Y2guc3RhY2tsaW1pdCA9ICh2b2lkICopICgodWludHB0cl90KSBzdGFja19o
+ZXJlICYgfndpbmNhcC5wYWdlX3NpemUgKCkpOworICAgICAgY2guc3RhY2ts
+aW1pdCA9ICh2b2lkICopICgodWludHB0cl90KSBzdGFja19oZXJlICYgfih3
+aW5jYXAucGFnZV9zaXplICgpIC0gMSkpOwogICAgICAgY2guZ3VhcmRzaXpl
+ID0gKCZfbXlfdGxzICE9IF9tYWluX3RscyAmJiBfbXlfdGxzLnRpZCkKIAkJ
+ICAgICA/IF9teV90bHMudGlkLT5hdHRyLmd1YXJkc2l6ZQogCQkgICAgIDog
+d2luY2FwLmRlZl9ndWFyZF9wYWdlX3NpemUgKCk7Ci0tIAoyLjE3LjAud2lu
+ZG93cy4xCgo=
+
+--00000000000064e202056d0a78f6--
