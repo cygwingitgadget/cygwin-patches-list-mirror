@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9083-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 40225 invoked by alias); 5 Jun 2018 13:35:15 -0000
+Return-Path: <cygwin-patches-return-9085-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 92327 invoked by alias); 6 Jun 2018 15:46:15 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,78 +9,56 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 39224 invoked by uid 89); 5 Jun 2018 13:35:14 -0000
+Received: (qmail 92250 invoked by uid 89); 6 Jun 2018 15:46:14 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-2.3 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,SPF_PASS autolearn=ham version=3.3.2 spammy=H*r:4.77, Manager, H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
-X-HELO: atfriesa01.ssi-schaefer.com
-Received: from atfriesa01.ssi-schaefer.com (HELO atfriesa01.ssi-schaefer.com) (193.186.16.100) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 05 Jun 2018 13:35:13 +0000
-X-IPAS-Result: =?us-ascii?q?A2HkAQA5kRZb/+shHKxVBAMaAQEBAQECAQEBAQgBAQEBiUS?= =?us-ascii?q?WQSmWQwuEbAKCQjcVAQIBAQEBAQECAgKBEIUrAQUjZgsYAgImAgJJAQ0TCAEBg?= =?us-ascii?q?x6pEYIchFiDaIFogQuJSoEPJIJohGA0JgWCNIJUAowujEAHAoFnjHaHeoUmkR+?= =?us-ascii?q?BV4F1cIMUgh8XjhmNaCmCHgEB?=
-Received: from samail03.wamas.com (HELO mailhost.salomon.at) ([172.28.33.235])  by atfriesa01.ssi-schaefer.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Jun 2018 15:34:54 +0200
-Received: from [172.28.42.244]	by mailhost.salomon.at with esmtp (Exim 4.77)	(envelope-from <michael.haubenwallner@ssi-schaefer.com>)	id 1fQC6w-0001AW-07; Tue, 05 Jun 2018 15:34:54 +0200
-Subject: Re: [PATCH RFC] fork: remove cygpid.N sharedmem on fork failure
-From: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
+X-Spam-SWARE-Status: No, score=-26.1 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.2 spammy=H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
+X-HELO: limerock03.mail.cornell.edu
+Received: from limerock03.mail.cornell.edu (HELO limerock03.mail.cornell.edu) (128.84.13.243) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 06 Jun 2018 15:46:12 +0000
+X-CornellRouted: This message has been Routed already.
+Received: from authusersmtp.mail.cornell.edu (granite4.serverfarm.cornell.edu [10.16.197.9])	by limerock03.mail.cornell.edu (8.14.4/8.14.4_cu) with ESMTP id w56FkAjY000701;	Wed, 6 Jun 2018 11:46:10 -0400
+Received: from nothing.nyroc.rr.com (mta-68-175-129-7.twcny.rr.com [68.175.129.7] (may be forged))	(authenticated bits=0)	by authusersmtp.mail.cornell.edu (8.14.4/8.12.10) with ESMTP id w56Fjxgf006086	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-SHA bits=256 verify=NOT);	Wed, 6 Jun 2018 11:46:09 -0400
+From: Ken Brown <kbrown@cornell.edu>
 To: cygwin-patches@cygwin.com
-References: <f45c9bb0-eb52-803f-ee42-1fc52725f3b1@ssi-schaefer.com>
-Message-ID: <418776af-0c7f-af74-6a4f-67e504c7f857@ssi-schaefer.com>
-Date: Tue, 05 Jun 2018 13:35:00 -0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101 Thunderbird/52.8.0
-MIME-Version: 1.0
-In-Reply-To: <f45c9bb0-eb52-803f-ee42-1fc52725f3b1@ssi-schaefer.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-SW-Source: 2018-q2/txt/msg00040.txt.bz2
+Subject: [PATCH v2 4/6] Cygwin: Remove workaround in environ.cc
+Date: Wed, 06 Jun 2018 15:46:00 -0000
+Message-Id: <20180606154559.6828-5-kbrown@cornell.edu>
+In-Reply-To: <20180606154559.6828-1-kbrown@cornell.edu>
+References: <20180606154559.6828-1-kbrown@cornell.edu>
+X-PMX-Cornell-Gauge: Gauge=XXXXX
+X-PMX-CORNELL-AUTH-RESULTS: dkim-out=none;
+X-IsSubscribed: yes
+X-SW-Source: 2018-q2/txt/msg00042.txt.bz2
 
+Commit ebd645e on 2001-10-03 made environ.cc:_addenv() add unneeded
+space at the end of the environment block to "work around problems
+with some buggy applications."  This clutters the code and is
+presumably no longer needed.
+---
+ winsup/cygwin/environ.cc | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-On 06/05/2018 03:05 PM, Michael Haubenwallner wrote:
-> Hi,
-> 
-> I'm using attached patch for a while now, and orphan cygpid.N shared memory
-> instances are gone for otherwise completely unknown windows process ids.
-> 
-> However, I do see defunct processes now which's PPID does not exist (any more),
-> causing the same trouble because their windows process handle is closed but
-> their cygpid.N shmem handle is not.
-> 
-> For example, there is no PID 1768 anywhere, although it is the parent of both
-> the <defunct> processes:
-> $ ps -e
->       PID    PPID    PGID     WINPID   TTY         UID    STIME COMMAND
->      2416       1    1496       2416  ?         197610   May 25 /usr/bin/python2.7
->       560       1     560        560  ?         197613   May 25 /usr/bin/cygrunsrv
->      2348       1    2348       2348  ?         197612   May 25 /usr/bin/cygrunsrv
->      1132       1    1132       1132  ?         197612   May 16 /usr/bin/cygrunsrv
->       440    2028     440        740  pty0      197609   May 29 /tools/haubi/gentoo/test/usr/bin/bash
->      3664    1768    3612       3664  ?         197610 12:25:01 /usr/bin/python2.7 <defunct>
->      2852    2704    2852       2364  ?         197612   May 25 /usr/sbin/sshd
->      2268     560    2268       2128  ?         197613   May 25 /usr/libexec/sendmail
->      2968    1768    3612       1500  ?         197610 12:25:01 /usr/bin/tail <defunct>
-> S    2832     512    2832       2312  pty0      197609 10:57:51 /usr/bin/vim
->      2028    2852    2028       2000  pty0      197609   May 25 /usr/bin/bash
->      1164    1132    1164       1256  ?         197612   May 16 /usr/sbin/cron
->       512     440     512       1544  pty0      197609   May 29 /tools/haubi/gentoo/test/usr/bin/bash
->      3264     512    3264       1488  pty0      197609 12:43:35 /usr/bin/ps
->      2704    2348    2704       2856  ?         197612   May 25 /usr/sbin/sshd
-> 
-> That missing 1768 process for sure was started as (grand) children of 2416.
-> 
-> Problem is again that another fork'ed child processes with PID 1768, 2968, 3612
-> and probably others fail to initialize.
-> 
-> But I have no idea whether attached patch is causing or uncovering this issue...
-> 
-> Any idea?
-
-In the Windows Task Manager Details I can see these 4 processes:
-
-PID   Name    Status     Description
-1988  sh.exe  Suspended  sh.exe
-2968  sh.exe  Suspended  sh.exe
-3612  sh.exe  Suspended  sh.exe
-3640  sh.exe  Suspended  sh.exe
-
-But removing them from within the Task Manager does not change above ps output.
-Interesting enough, leaving PID 440 and 512 seemed to release the defunct processes.
-
+diff --git a/winsup/cygwin/environ.cc b/winsup/cygwin/environ.cc
+index bbe539816..67ead1dde 100644
+--- a/winsup/cygwin/environ.cc
++++ b/winsup/cygwin/environ.cc
+@@ -592,13 +592,11 @@ _addenv (const char *name, const char *value, int overwrite)
+     {				/* Create new slot. */
+       int sz = envsize (cur_environ ());
+ 
+-      /* If sz == 0, we need two new slots, one for the terminating NULL.
+-	 But we add two slots in all cases, as has been done since
+-	 2001-10-03 (commit ebd645e) to "work around problems with
+-	 some buggy applications." */
+-      int allocsz = (sz + 2) * sizeof (char *);
++      /* If sz == 0, we need two new slots, one for the terminating NULL. */
++      int newsz = sz == 0 ? 2 : sz + 1;
++      int allocsz = newsz * sizeof (char *);
+ 
+-      offset = sz == 0 ? 0 : sz - 1;
++      offset = newsz - 2;
+ 
+       /* Allocate space for additional element. */
+       if (cur_environ () == lastenviron)
 -- 
-/haubi/
+2.17.0
