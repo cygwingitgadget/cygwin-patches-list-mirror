@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9092-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 30103 invoked by alias); 7 Jun 2018 08:20:00 -0000
+Return-Path: <cygwin-patches-return-9093-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 10518 invoked by alias); 7 Jun 2018 09:00:45 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,101 +9,82 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 30064 invoked by uid 89); 7 Jun 2018 08:20:00 -0000
+Received: (qmail 10183 invoked by uid 89); 7 Jun 2018 09:00:25 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-101.9 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.2 spammy=2128, Hx-languages-length:2143, H*Ad:U*cygwin-patches, HTo:U*cygwin-patches
+X-Spam-SWARE-Status: No, score=-110.8 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.2 spammy=Hx-languages-length:1693, developer
 X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.17.24) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 07 Jun 2018 08:19:58 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue104 [212.227.15.183]) with ESMTPSA (Nemesis) id 0McWDw-1fiN240uQK-00Hdxa for <cygwin-patches@cygwin.com>; Thu, 07 Jun 2018 10:19:56 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id B5140A804D2; Thu,  7 Jun 2018 10:19:55 +0200 (CEST)
-Date: Thu, 07 Jun 2018 08:20:00 -0000
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.130) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 07 Jun 2018 09:00:23 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue005 [212.227.15.167]) with ESMTPSA (Nemesis) id 0LehC6-1g3iR93ZgU-00qSbJ for <cygwin-patches@cygwin.com>; Thu, 07 Jun 2018 11:00:05 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 91BB2A804D8; Thu,  7 Jun 2018 11:00:04 +0200 (CEST)
+Date: Thu, 07 Jun 2018 09:00:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH RFC] fork: remove cygpid.N sharedmem on fork failure
-Message-ID: <20180607081955.GB30775@calimero.vinschen.de>
+Subject: Re: [PATCH v2 0/6] Implement clearenv
+Message-ID: <20180607090004.GC30775@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <f45c9bb0-eb52-803f-ee42-1fc52725f3b1@ssi-schaefer.com>
+References: <20180606154559.6828-1-kbrown@cornell.edu> <20180607081544.GA30775@calimero.vinschen.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="2B/JsCI69OhZNC5r"
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="OBd5C1Lgu00Gd/Tn"
 Content-Disposition: inline
-In-Reply-To: <f45c9bb0-eb52-803f-ee42-1fc52725f3b1@ssi-schaefer.com>
+In-Reply-To: <20180607081544.GA30775@calimero.vinschen.de>
 User-Agent: Mutt/1.9.2 (2017-12-15)
-X-SW-Source: 2018-q2/txt/msg00049.txt.bz2
+X-SW-Source: 2018-q2/txt/msg00050.txt.bz2
 
 
---2B/JsCI69OhZNC5r
+--OBd5C1Lgu00Gd/Tn
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-length: 2631
+Content-length: 1857
 
-On Jun  5 15:05, Michael Haubenwallner wrote:
-> Hi,
+On Jun  7 10:15, Corinna Vinschen wrote:
+> On Jun  6 11:45, Ken Brown wrote:
+> > This is a followup to https://cygwin.com/ml/cygwin/2018-05/msg00334.htm=
+l.
+> >=20
+> > In this patch series I attempt to implement the glibc extension
+> > clearenv(). I also implement glibc's notion of environ=3D=3DNULL being
+> > shorthand for an empty environment.
+> >=20
+> > v2: In patch 2 I've tried harder to fix all the cases in which
+> > environ=3D=3DNULL could be a problem.  I did this by grepping the sourc=
+es
+> > for 'cur_environ' and '__cygwin_environ', but it's still possible that
+> > I missed something.
+> >=20
+> > I've also incorporated the changes suggested by Corinna and Yaakov.
+> >=20
+> > Ken Brown (6):
+> >   Cygwin: Clarify some code in environ.cc
+> >   Cygwin: Allow the environment pointer to be NULL
+> >   Cygwin: Implement the GNU extension clearenv
+> >   Cygwin: Remove workaround in environ.cc
+> >   Cygwin: Document clearenv and bump API minor
+> >   Bump Cygwin DLL version to 2.11.0
+> >=20
+> >  winsup/cygwin/common.din                 |  1 +
+> >  winsup/cygwin/environ.cc                 | 56 +++++++++++++++++++-----
+> >  winsup/cygwin/include/cygwin/stdlib.h    |  3 ++
+> >  winsup/cygwin/include/cygwin/version.h   |  7 +--
+> >  winsup/cygwin/pinfo.cc                   |  7 +--
+> >  winsup/cygwin/release/{2.10.1 =3D> 2.11.0} |  1 +
+> >  winsup/doc/new-features.xml              | 20 +++++++++
+> >  winsup/doc/posix.xml                     |  1 +
+> >  8 files changed, 80 insertions(+), 16 deletions(-)
+> >  rename winsup/cygwin/release/{2.10.1 =3D> 2.11.0} (97%)
+> >=20
+> > --=20
+> > 2.17.0
 >=20
-> I'm using attached patch for a while now, and orphan cygpid.N shared memo=
-ry
-> instances are gone for otherwise completely unknown windows process ids.
+> Good job.  Pushed.
 >=20
-> However, I do see defunct processes now which's PPID does not exist (any =
-more),
-> causing the same trouble because their windows process handle is closed b=
-ut
-> their cygpid.N shmem handle is not.
 >=20
-> For example, there is no PID 1768 anywhere, although it is the parent of =
-both
-> the <defunct> processes:
-> $ ps -e
->       PID    PPID    PGID     WINPID   TTY         UID    STIME COMMAND
->      2416       1    1496       2416  ?         197610   May 25 /usr/bin/=
-python2.7
->       560       1     560        560  ?         197613   May 25 /usr/bin/=
-cygrunsrv
->      2348       1    2348       2348  ?         197612   May 25 /usr/bin/=
-cygrunsrv
->      1132       1    1132       1132  ?         197612   May 16 /usr/bin/=
-cygrunsrv
->       440    2028     440        740  pty0      197609   May 29 /tools/ha=
-ubi/gentoo/test/usr/bin/bash
->      3664    1768    3612       3664  ?         197610 12:25:01 /usr/bin/=
-python2.7 <defunct>
->      2852    2704    2852       2364  ?         197612   May 25 /usr/sbin=
-/sshd
->      2268     560    2268       2128  ?         197613   May 25 /usr/libe=
-xec/sendmail
->      2968    1768    3612       1500  ?         197610 12:25:01 /usr/bin/=
-tail <defunct>
-> S    2832     512    2832       2312  pty0      197609 10:57:51 /usr/bin/=
-vim
->      2028    2852    2028       2000  pty0      197609   May 25 /usr/bin/=
-bash
->      1164    1132    1164       1256  ?         197612   May 16 /usr/sbin=
-/cron
->       512     440     512       1544  pty0      197609   May 29 /tools/ha=
-ubi/gentoo/test/usr/bin/bash
->      3264     512    3264       1488  pty0      197609 12:43:35 /usr/bin/=
-ps
->      2704    2348    2704       2856  ?         197612   May 25 /usr/sbin=
-/sshd
->=20
-> That missing 1768 process for sure was started as (grand) children of 241=
-6.
->=20
-> Problem is again that another fork'ed child processes with PID 1768, 2968=
-, 3612
-> and probably others fail to initialize.
->=20
-> But I have no idea whether attached patch is causing or uncovering this i=
-ssue...
->=20
-> Any idea?
+> Thanks,
+> Corinna
 
-Not really.  Processes are kept around after exec to keep the PID
-blocked.  Perhaps your patch is breaking an assumption there.
-I wonder why you have a problem with failing forks in the first
-place...?
+I created new developer snapshots.
 
 
 Corinna
@@ -113,25 +94,25 @@ Corinna Vinschen                  Please, send mails regarding Cygwin to
 Cygwin Maintainer                 cygwin AT cygwin DOT com
 Red Hat
 
---2B/JsCI69OhZNC5r
+--OBd5C1Lgu00Gd/Tn
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-length: 833
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAlsY6qsACgkQ9TYGna5E
-T6DvTQ//ZgH4MGjzux5+rjjGCuky7XbXg36hi7LJrP5EPy4cKMCEZpD4PTcIOwff
-Q4bKduNCUGxGQC/lpt2z3glx7qjm53TKGYVxM8eQhhXXb4aqjcIP1ilKIc30dNqk
-kLeiCnI/3/VLJ7pCjJOEkm1hJ+3yQJRVKGp03LVLCRy9NY1JHPfWRbXrKtS7ug49
-0Hu4bVbA1G9KYaDH2jgEnHkmpc2palvMtFUNHHdhQYXv9ECQ6IfDzr2+eEXsqmu2
-b5mFYrw6DaBruJXcl1IpbfvFDJoLofnm1jk3lAoSPmxnHJSPHDpTLLJy09NVky18
-HTHFH5rQ8rvWouQDH+7CXbS39fQIoM2ksjD/aq0U1NbxjOoUC0coF9cP/h3hv/Z0
-HmRO6PF1gqCzpmvA/SWtQJkwKfokRssonC0ivokbHAGU61jwV1wRr8tU9n48P5m5
-KR0EVVPbZ74g+7VS/HQVa7eP+wL9y5Nrl29BpKyARRJqdT6BId5/z/QTIIbMdrnm
-35G3zLQsSU7ho/eLNw9d/m/A7ToPiScRUXP0GvYb+lbtJbZ3tvxHlaDwsrJMxe/K
-CV3HL9dXQDXEqut9UWdEYSJT5mglJddbZd31S4An8QCZVxz+dTFzRxqY+BT/GfYH
-EDkD1k0pxhpaUApH46lx3EAW6iD6uVXP1BMio5LiMwiDCccJJ0I=
-=fGtD
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAlsY9BQACgkQ9TYGna5E
+T6AcdQ/7BWAB3cIn5+iccxVOxYss69nlmpYVUQObzvkhU173xcSaBsS0yvIkPuIX
+Rnwc56ONJfDrezDJREFb2rOMhocYqOGHa6k7Rrh71KSqfqLyGl8c+LhG46Ds4JvE
+pKm4xed/LJzCYDCcP+KaWo5Zpzgh9EWr6ET7FYIVwcxnxNNTg7LMQ8pAWmzuc1TW
+DZuH6GP5h5toOVKQ0neYlYuHotNoKQHSD0HoGHKqtPKUgbqJa81taKRytJanE+my
+agUOgnagFSfwE97qQHYx5EGUB+8dBL/oBWytoclC+fIuf3/RIo2g3yJ2XObPUahC
+HqTflRHYwe1fvLryG3WcJWAixOvWm4/nbmW4C1b7+Jl5u/Lspqr0ItPWYXabsHXV
+SdptFs7uiarkqE1dR6MtkPBNrzLtwyJtMQGR7Sm8gYlE7DQb9b/5Yu3864cfIuw4
+ikm2UVRYby1ui6KhpvZ0+nUXO1I14L3Uslkn8NWokPuR8BjqIWwVMOx0STpPsIFD
+XUVN7F4HRhWlEKNWfu9WyfifadSli2grELA+i6DYowhLJz/TmTn8+9PSHhoWbO/w
+kF9Yr91/72Erg5e1FQaoB6cX05SUketPLZfjDaD9UkE655YY3vksCG25vBBZr60+
+4TMEkfSYCsMEz35Uu///Yabx4wg3Zwd79NKlW1fxuwU2sX6yDm4=
+=VyO+
 -----END PGP SIGNATURE-----
 
---2B/JsCI69OhZNC5r--
+--OBd5C1Lgu00Gd/Tn--
