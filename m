@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9100-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 22769 invoked by alias); 22 Jun 2018 10:16:23 -0000
+Return-Path: <cygwin-patches-return-9101-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 35422 invoked by alias); 22 Jun 2018 10:25:30 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,44 +9,82 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 22634 invoked by uid 89); 22 Jun 2018 10:16:22 -0000
+Received: (qmail 35335 invoked by uid 89); 22 Jun 2018 10:25:26 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-101.6 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.2 spammy=
+X-Spam-SWARE-Status: No, score=-101.6 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.2 spammy=corner, retry
 X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.134) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 22 Jun 2018 10:16:21 +0000
-Received: from calimero.vinschen.de ([217.91.18.234]) by mrelayeu.kundenserver.de (mreue006 [212.227.15.167]) with ESMTPSA (Nemesis) id 0MZbAH-1fknhH3eeL-00LCvR for <cygwin-patches@cygwin.com>; Fri, 22 Jun 2018 12:16:18 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 571FEA807E2; Fri, 22 Jun 2018 12:16:18 +0200 (CEST)
-Date: Fri, 22 Jun 2018 10:16:00 -0000
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.187) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 22 Jun 2018 10:25:24 +0000
+Received: from calimero.vinschen.de ([217.91.18.234]) by mrelayeu.kundenserver.de (mreue003 [212.227.15.167]) with ESMTPSA (Nemesis) id 0LjOHr-1g2seH45Et-00dazz for <cygwin-patches@cygwin.com>; Fri, 22 Jun 2018 12:25:11 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 52DC4A807E2; Fri, 22 Jun 2018 12:25:10 +0200 (CEST)
+Date: Fri, 22 Jun 2018 10:25:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH cygwin] Re: Problems of AF_INET domain socket regarding out-of-band data.
-Message-ID: <20180622101618.GN11110@calimero.vinschen.de>
+Subject: Re: [PATCH RFC] fork: remove cygpid.N sharedmem on fork failure
+Message-ID: <20180622102510.GO11110@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20180613224858.7822b08abb75d76b72920095@nifty.ne.jp> <20180620221812.2e10f95ef5501758493560a2@nifty.ne.jp> <20180621071954.GA28504@calimero.vinschen.de> <20180621235728.928a7b97ec8e7bfea5960a47@nifty.ne.jp> <20180622000518.2034f98a440dccfacf4aab14@nifty.ne.jp> <20180622091017.2b88c7ba7327552005dc3d8d@nifty.ne.jp>
+References: <f45c9bb0-eb52-803f-ee42-1fc52725f3b1@ssi-schaefer.com> <20180607081955.GB30775@calimero.vinschen.de> <913f9a8e-16ef-0384-6a42-d2884efa4b32@ssi-schaefer.com> <20180621072756.GF11110@calimero.vinschen.de> <197571b7-9448-4a6c-0dc7-4b2407b7f19e@ssi-schaefer.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="ZG5hGh9V5E9QzVHS"
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="lHuqAdgBYNjQz/wy"
 Content-Disposition: inline
-In-Reply-To: <20180622091017.2b88c7ba7327552005dc3d8d@nifty.ne.jp>
+In-Reply-To: <197571b7-9448-4a6c-0dc7-4b2407b7f19e@ssi-schaefer.com>
 User-Agent: Mutt/1.9.2 (2017-12-15)
-X-SW-Source: 2018-q2/txt/msg00057.txt.bz2
+X-SW-Source: 2018-q2/txt/msg00058.txt.bz2
 
 
---ZG5hGh9V5E9QzVHS
+--lHuqAdgBYNjQz/wy
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-length: 368
+Content-length: 2059
 
-On Jun 22 09:10, Takashi Yano wrote:
-> On Fri, 22 Jun 2018 00:05:18 +0900
-> Takashi Yano wrote:
-> > Sorry, again. Fix a typo in commit message.
+On Jun 22 11:04, Michael Haubenwallner wrote:
+> On 06/21/2018 09:27 AM, Corinna Vinschen wrote:
+> > On Jun 20 17:47, Michael Haubenwallner wrote:
+> >> On 06/07/2018 10:19 AM, Corinna Vinschen wrote:
+> >>> On Jun  5 15:05, Michael Haubenwallner wrote:
+> >>>> Hi,
+> >>>>
+> >>>> I'm using attached patch for a while now, and orphan cygpid.N shared=
+ memory
+> >>>> instances are gone for otherwise completely unknown windows process =
+ids.
 >=20
-> Fix a typo in commit message again....
+> >>
+> >> Without this patch, for the first-try child process which the
+> >> cygwin1.dll fails to initialize for because of wrong dll loaded,
+> >> the process handle is released but the cygpid.N shmem handle is not.
+> >>
+> >> Then, another completely independent process may get the same
+> >> windows process id again, and cygwin1.dll fails to initialize
+> >> because of the existing but orphaned cygpid.N shmem handle.
+> >=20
+> > This problem appear to be a non-problem in the normal code path.
+>=20
+> Well, the underlying OS may temporarily be low on resources,
+> and the parent process may retry to fork by itself...
+>=20
+> Currently, when the child process can be created but not initialized
+> by cygwin1.dll for whatever reason, the process handle is closed, but
+> (as far as I have understood) the shmem handle actually is lost, and
+> the orphaned shmem entry exists until the parent process terminates.
 
-Pushed.  Thank you.
+Actually I'm not sure about this discrepancy but I guess the shmem
+was a tolerable loss at this point.
+
+> > In case of restarting the 2nd-try child, wouldn't it make sense to reuse
+> > the shmem area instead of breaking it down?
+>=20
+> The 2nd-try child usually does get another windows pid, and we would have
+> to *rename* the shmem: *before* closing the 1st-try windows process handl=
+e.
+
+You just can reuse it in the corner case where the pid is the same.
+
+> And when neither child can be initialized for low resource reasons?
+
+Fork simply fails?
 
 
 Corinna
@@ -56,25 +94,25 @@ Corinna Vinschen                  Please, send mails regarding Cygwin to
 Cygwin Maintainer                 cygwin AT cygwin DOT com
 Red Hat
 
---ZG5hGh9V5E9QzVHS
+--lHuqAdgBYNjQz/wy
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-length: 833
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAlsszHIACgkQ9TYGna5E
-T6Czng/8DJIYkJtDlR+px6v1UbFhzFFKUrKNvyoAAyVZqekzl1fCOC5c1s/ufd93
-d8LvKAi4+Y0l2aPtswigqREWuwofUkEGsVptGknSy7cgZxZ96qrOm1zy6S4B/3n6
-9wpDDHkR4zTJ1tEAN7Iv+KyU+LpBczyMHPKGjR169tSq+N5HGfro66mt6hnd6UtN
-o8zw1GPvZ4i9Ot9uEk0FFD8jqNCoY0e3eoTvPZ83bxz/ay4gJjca3t6WvxJx82HQ
-xL8LDQTYxNCb1sCYdAs4IBQgulpc+lG4NFtptHNakSiOKw4iUBiEnhCrZHtphv+5
-6FXtD97sebVOVZRVmhwXjPYptCUAcIFWcT4FaT/Tx/ORPz3GDOoDS+JDaQdC9tQC
-nIgiwdWx2vip2mQckHFzQDjyepMht2sO/lTyMlGEkC4fp+17UUc3vawDorAIyE8i
-eJXuXDfGe2OELHsu9e4pFzdzJpJXzJSInRD9MTKDmc4Bl9qE81QzpMQmtqoZHVXv
-FJs+BeLZoKIdQ9xo7SWbSQuujPXbQGpB3hK+T78f+mnrFgl2z/mIn+EVy5cojkJB
-m1y8o9dDo1v8tJK8aj6HV1+D2G3OJ7hwV7PAwz9GQdzerzEigtQldyELHyq0q08i
-Xoo9I89UA4hrnn/rbEx9gXL2T7Hn7YXzUHmtQxt9btw0jKJMTGY=
-=iOnE
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAlsszoYACgkQ9TYGna5E
+T6CMtg//TgBb9mij9KUDjg7j28hne/Ss+4YzjKZon7By4d5j1nJ7V8brexahOQBu
+KxiIRL2xHq4ZUPTi0PDTiOHF6b8UBcnmYPJtdZuln/pSTcVmDx+RhNWmeUweNRbV
+7EjYgyBLBEZi+VhYhx1vMB8GUcSdA/AzsZv3EpbG6XVwB/vh1Lg4d05VYU8T2IH0
+gK8aam/6dfZoih+I7hjAVSskLzeuJraKw3rKmtyS6MvWqth0EgxylG5mVYwDXoRf
+ndBUiWKDedfyhZOrwk3UdIGtsCOuFElnbNWeMfhjz7JHK8NdYylsG30pjKFENcRI
+VljRLikIM/DR2ugEKp1ZQ2VFB9dTqyKWELWGmbToXI3w0W4pLaj/7ftGZ14ZwZPP
+5G8VuThwRw7bGw81oNaPLRgX1wZ+y7AjUHIONWA4D5Zt1RenK96xMEoV4fe0fj+L
+EMKmHI1NrqJ4LU2dzUPLzs1neD//7dD5goKIY7ulP3g0sXZTTsvhGM1jSjUI7DOq
+TD5SFiX7W3BsGSxNaIlxPDj64Npg9zjlYpbHjhPJYXrBQeBsPikwijnn8+VwqvHL
+ffdHolRyFR4qAPRyvSX0A22e9AoExkP2BxN9Zy5IMVkXZLMCtuH1Lec88vLNGXtX
+5rfE850LGIzZaJIJ6qRz6spyHX4ffxHigd6ABBg4KUS0lGzIBys=
+=zBh/
 -----END PGP SIGNATURE-----
 
---ZG5hGh9V5E9QzVHS--
+--lHuqAdgBYNjQz/wy--
