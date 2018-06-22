@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9099-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 94069 invoked by alias); 22 Jun 2018 09:04:57 -0000
+Return-Path: <cygwin-patches-return-9100-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 22769 invoked by alias); 22 Jun 2018 10:16:23 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,62 +9,72 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 94057 invoked by uid 89); 22 Jun 2018 09:04:56 -0000
+Received: (qmail 22634 invoked by uid 89); 22 Jun 2018 10:16:22 -0000
 Authentication-Results: sourceware.org; auth=none
 X-Virus-Found: No
-X-Spam-SWARE-Status: No, score=-2.3 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,SPF_PASS autolearn=ham version=3.3.2 spammy=understood, temporarily, H*RU:sk:michael, H*r:sk:michael
-X-HELO: atfriesa01.ssi-schaefer.com
-Received: from atfriesa01.ssi-schaefer.com (HELO atfriesa01.ssi-schaefer.com) (193.186.16.100) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 22 Jun 2018 09:04:55 +0000
-X-IPAS-Result: =?us-ascii?q?A2HFAgDduixb/+shHKxcGwEBAgMBAQoBAYlMlh8IIpZ5C4R?= =?us-ascii?q?sAoMfOBQBAgEBAQEBAQICAoERhSoBAQEBAgEjWwsLGAICJgICVxMIAQGDIYF4q?= =?us-ascii?q?3KCHIRbg2mBBYELiVyBNgyCXIVHgjSCVQKZJgcCgWuNH4gMhTuRYIFYgXRwgzi?= =?us-ascii?q?CIBeOGY5RKoIeAQE?=
-Received: from samail03.wamas.com (HELO mailhost.salomon.at) ([172.28.33.235])  by atfriesa01.ssi-schaefer.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 Jun 2018 11:04:53 +0200
-Received: from [172.28.42.244]	by mailhost.salomon.at with esmtp (Exim 4.77)	(envelope-from <michael.haubenwallner@ssi-schaefer.com>)	id 1fWHzv-00089U-Us; Fri, 22 Jun 2018 11:04:51 +0200
-Subject: Re: [PATCH RFC] fork: remove cygpid.N sharedmem on fork failure
+X-Spam-SWARE-Status: No, score=-101.6 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.2 spammy=
+X-HELO: mout.kundenserver.de
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.134) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 22 Jun 2018 10:16:21 +0000
+Received: from calimero.vinschen.de ([217.91.18.234]) by mrelayeu.kundenserver.de (mreue006 [212.227.15.167]) with ESMTPSA (Nemesis) id 0MZbAH-1fknhH3eeL-00LCvR for <cygwin-patches@cygwin.com>; Fri, 22 Jun 2018 12:16:18 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 571FEA807E2; Fri, 22 Jun 2018 12:16:18 +0200 (CEST)
+Date: Fri, 22 Jun 2018 10:16:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-References: <f45c9bb0-eb52-803f-ee42-1fc52725f3b1@ssi-schaefer.com> <20180607081955.GB30775@calimero.vinschen.de> <913f9a8e-16ef-0384-6a42-d2884efa4b32@ssi-schaefer.com> <20180621072756.GF11110@calimero.vinschen.de>
-From: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
-Message-ID: <197571b7-9448-4a6c-0dc7-4b2407b7f19e@ssi-schaefer.com>
-Date: Fri, 22 Jun 2018 09:04:00 -0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101 Thunderbird/52.8.0
+Subject: Re: [PATCH cygwin] Re: Problems of AF_INET domain socket regarding out-of-band data.
+Message-ID: <20180622101618.GN11110@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20180613224858.7822b08abb75d76b72920095@nifty.ne.jp> <20180620221812.2e10f95ef5501758493560a2@nifty.ne.jp> <20180621071954.GA28504@calimero.vinschen.de> <20180621235728.928a7b97ec8e7bfea5960a47@nifty.ne.jp> <20180622000518.2034f98a440dccfacf4aab14@nifty.ne.jp> <20180622091017.2b88c7ba7327552005dc3d8d@nifty.ne.jp>
 MIME-Version: 1.0
-In-Reply-To: <20180621072756.GF11110@calimero.vinschen.de>
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="ZG5hGh9V5E9QzVHS"
+Content-Disposition: inline
+In-Reply-To: <20180622091017.2b88c7ba7327552005dc3d8d@nifty.ne.jp>
+User-Agent: Mutt/1.9.2 (2017-12-15)
+X-SW-Source: 2018-q2/txt/msg00057.txt.bz2
+
+
+--ZG5hGh9V5E9QzVHS
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-SW-Source: 2018-q2/txt/msg00056.txt.bz2
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 368
 
-On 06/21/2018 09:27 AM, Corinna Vinschen wrote:
-> On Jun 20 17:47, Michael Haubenwallner wrote:
->> On 06/07/2018 10:19 AM, Corinna Vinschen wrote:
->>> On Jun  5 15:05, Michael Haubenwallner wrote:
->>>> Hi,
->>>>
->>>> I'm using attached patch for a while now, and orphan cygpid.N shared memory
->>>> instances are gone for otherwise completely unknown windows process ids.
+On Jun 22 09:10, Takashi Yano wrote:
+> On Fri, 22 Jun 2018 00:05:18 +0900
+> Takashi Yano wrote:
+> > Sorry, again. Fix a typo in commit message.
+>=20
+> Fix a typo in commit message again....
 
->>
->> Without this patch, for the first-try child process which the
->> cygwin1.dll fails to initialize for because of wrong dll loaded,
->> the process handle is released but the cygpid.N shmem handle is not.
->>
->> Then, another completely independent process may get the same
->> windows process id again, and cygwin1.dll fails to initialize
->> because of the existing but orphaned cygpid.N shmem handle.
-> 
-> This problem appear to be a non-problem in the normal code path.
+Pushed.  Thank you.
 
-Well, the underlying OS may temporarily be low on resources,
-and the parent process may retry to fork by itself...
 
-Currently, when the child process can be created but not initialized
-by cygwin1.dll for whatever reason, the process handle is closed, but
-(as far as I have understood) the shmem handle actually is lost, and
-the orphaned shmem entry exists until the parent process terminates.
+Corinna
 
-> In case of restarting the 2nd-try child, wouldn't it make sense to reuse
-> the shmem area instead of breaking it down?
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
 
-The 2nd-try child usually does get another windows pid, and we would have
-to *rename* the shmem: *before* closing the 1st-try windows process handle.
+--ZG5hGh9V5E9QzVHS
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 833
 
-And when neither child can be initialized for low resource reasons?
+-----BEGIN PGP SIGNATURE-----
 
-/haubi/
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAlsszHIACgkQ9TYGna5E
+T6Czng/8DJIYkJtDlR+px6v1UbFhzFFKUrKNvyoAAyVZqekzl1fCOC5c1s/ufd93
+d8LvKAi4+Y0l2aPtswigqREWuwofUkEGsVptGknSy7cgZxZ96qrOm1zy6S4B/3n6
+9wpDDHkR4zTJ1tEAN7Iv+KyU+LpBczyMHPKGjR169tSq+N5HGfro66mt6hnd6UtN
+o8zw1GPvZ4i9Ot9uEk0FFD8jqNCoY0e3eoTvPZ83bxz/ay4gJjca3t6WvxJx82HQ
+xL8LDQTYxNCb1sCYdAs4IBQgulpc+lG4NFtptHNakSiOKw4iUBiEnhCrZHtphv+5
+6FXtD97sebVOVZRVmhwXjPYptCUAcIFWcT4FaT/Tx/ORPz3GDOoDS+JDaQdC9tQC
+nIgiwdWx2vip2mQckHFzQDjyepMht2sO/lTyMlGEkC4fp+17UUc3vawDorAIyE8i
+eJXuXDfGe2OELHsu9e4pFzdzJpJXzJSInRD9MTKDmc4Bl9qE81QzpMQmtqoZHVXv
+FJs+BeLZoKIdQ9xo7SWbSQuujPXbQGpB3hK+T78f+mnrFgl2z/mIn+EVy5cojkJB
+m1y8o9dDo1v8tJK8aj6HV1+D2G3OJ7hwV7PAwz9GQdzerzEigtQldyELHyq0q08i
+Xoo9I89UA4hrnn/rbEx9gXL2T7Hn7YXzUHmtQxt9btw0jKJMTGY=
+=iOnE
+-----END PGP SIGNATURE-----
+
+--ZG5hGh9V5E9QzVHS--
