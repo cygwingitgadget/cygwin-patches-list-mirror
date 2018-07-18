@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9127-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 47567 invoked by alias); 18 Jul 2018 07:33:51 -0000
+Return-Path: <cygwin-patches-return-9128-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 90541 invoked by alias); 18 Jul 2018 11:25:26 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,90 +9,89 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 47543 invoked by uid 89); 18 Jul 2018 07:33:50 -0000
+Received: (qmail 89996 invoked by uid 89); 18 Jul 2018 11:24:55 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-1.1 required=5.0 tests=AWL,BAYES_00,KAM_LAZY_DOMAIN_SECURITY autolearn=no version=3.3.2 spammy=dig, Hx-languages-length:2124
-X-HELO: m0.truegem.net
-Received: from m0.truegem.net (HELO m0.truegem.net) (69.55.228.47) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 18 Jul 2018 07:33:47 +0000
-Received: (from daemon@localhost)	by m0.truegem.net (8.12.11/8.12.11) id w6I7XkFt003669	for <cygwin-patches@cygwin.com>; Wed, 18 Jul 2018 00:33:46 -0700 (PDT)	(envelope-from mark@maxrnd.com)
-Received: from 76-217-5-154.lightspeed.irvnca.sbcglobal.net(76.217.5.154), claiming to be "[192.168.1.100]" via SMTP by m0.truegem.net, id smtpdzRy1CR; Wed Jul 18 00:33:39 2018
-Subject: Re: [PATCH v3 1/3] POSIX Asynchronous I/O support: aio files
+X-Spam-SWARE-Status: No, score=-101.5 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.2 spammy=Hx-languages-length:1062, professional
+X-HELO: mout.kundenserver.de
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.134) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 18 Jul 2018 11:24:53 +0000
+Received: from calimero.vinschen.de ([217.91.18.234]) by mrelayeu.kundenserver.de (mreue003 [212.227.15.167]) with ESMTPSA (Nemesis) id 0LwmRY-1g8Xun18vI-016QyK for <cygwin-patches@cygwin.com>; Wed, 18 Jul 2018 13:24:45 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id AC418A80579; Wed, 18 Jul 2018 13:24:44 +0200 (CEST)
+Date: Wed, 18 Jul 2018 11:25:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-References: <20180715082025.4920-1-mark@maxrnd.com> <20180715082025.4920-2-mark@maxrnd.com> <20180717145146.GA23667@calimero.vinschen.de> <20180717155122.GF27673@calimero.vinschen.de>
-From: Mark Geisert <mark@maxrnd.com>
-Message-ID: <eb9734df-74e8-8245-5763-a5a262cb594d@maxrnd.com>
-Date: Wed, 18 Jul 2018 07:33:00 -0000
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:49.0) Gecko/20100101 Firefox/49.0 SeaMonkey/2.46
+Subject: Re: [PATCH v3 1/3] POSIX Asynchronous I/O support: aio files
+Message-ID: <20180718112444.GG27673@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20180715082025.4920-1-mark@maxrnd.com> <20180715082025.4920-2-mark@maxrnd.com> <20180716142128.GZ27673@calimero.vinschen.de> <2f78f69e-079d-36d5-15f0-61f1bfc8a9b7@maxrnd.com>
 MIME-Version: 1.0
-In-Reply-To: <20180717155122.GF27673@calimero.vinschen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-IsSubscribed: yes
-X-SW-Source: 2018-q3/txt/msg00022.txt.bz2
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="Vo2ArcSjcOqS/fzO"
+Content-Disposition: inline
+In-Reply-To: <2f78f69e-079d-36d5-15f0-61f1bfc8a9b7@maxrnd.com>
+User-Agent: Mutt/1.9.2 (2017-12-15)
+X-SW-Source: 2018-q3/txt/msg00023.txt.bz2
 
-Corinna Vinschen wrote:
-> Mark,
->
-> I think there's a bug in sigtimedwait.  I just found the problem while
-> looking into this aio_suspend stuff:
->
-> On Jul 17 16:51, Corinna Vinschen wrote:
->>> +  res = sigtimedwait (&sigmask, &si, to);
->
-> You're giving the timeout value verbatim to sigtimedwait().
->
-> Let's have a look into sigtimedwait, per your original patch, commit
-> 24ff42d79aab:
->
-> +  if (timeout)
-> +    {
-> +      if (timeout->tv_sec < 0
-> +           || timeout->tv_nsec < 0 || timeout->tv_nsec > (NSPERSEC * 100LL))
-> +       {
-> +         set_errno (EINVAL);
-> +         return -1;
-> +       }
->
-> So we're enforcing a positive timeout value.
->
-> +      /* convert timespec to 100ns units */
-> +      waittime.QuadPart = (LONGLONG) timeout->tv_sec * NSPERSEC
-> +                          + ((LONGLONG) timeout->tv_nsec + 99LL) / 100LL;
-> +    }
->
-> ...which is converted to a likewise positive 100ns interval ...
->
-> +  return sigwait_common (set, info, timeout ? &waittime : cw_infinite);
->
-> ...given to sigwait_common, which in turn calls
->
->   cygwait (NULL, waittime, [flags])
->
-> cygwait uses this waittime value verbatim in a call to
->
->   NtSetTimer (_my_tls.locals.cw_timer, timeout, [...]);
->
-> So NtSetTimer is called with a *positive* waittime value, right?
->
-> A positive value given to NtSetTimer is evaluated as a timestamp,
-> *not* as a time interval.  Look at the lpDueTime description of
-> SetWaitableTimerEx.  That's the WIN32 API function exposing the
-> NtSetTimer function:
-> https://docs.microsoft.com/en-us/windows/desktop/api/synchapi/nf-synchapi-setwaitabletimerex
->
-> However, the POSIX description of sigtimedwait indicates that the
-> timespec value is evaluated as a time interval, which is a relative
-> time:
->
-> http://pubs.opengroup.org/onlinepubs/9699919799/functions/sigtimedwait.html
->
-> So bottom line is, shouldn't timeout be converted to a negative waittime
-> value in sigtimedwait?
 
-Yes, you are correct.  I did not dig deeply enough into cygwait to notice my error.
+--Vo2ArcSjcOqS/fzO
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 1080
 
-Is it OK for me to fix this as part of the AIO patch set or should it be 
-separate?  Either way is fine with me.
-Thanks again,
+On Jul 17 22:26, Mark Geisert wrote:
+> Corinna Vinschen wrote:
+> > I like the name, but what's the background for naming a thread like thi=
+s?
+> > Just curious.  A bit of comment might help to keep it in mind, too :)
+>=20
+> I've now added commentary above the pthread_create() call.  It reads:
+>   /* A "vaquita" thread is a temporary pthread created to deliver a signa=
+l to
+>    * the application.  We don't wait around for the thread to return from=
+ the
+>    * app.  There's some symbolism here of sending a little creature off t=
+o tell
+>    * the app something important.  If all the vaquitas end up wiped out i=
+n the
+>    * wild, a distinct near-term possibility, at least this code remembers=
+ them.
+>    */
+>=20
+> If all this vaquita stuff is deemed too precious for industrial-grade
+> software I can recast this code in more professional terms and wouldn't m=
+ind
+> doing it.
 
-..mark
+Nope, keep it.  It's nice.
+
+
+Thanks,
+Corinna
+
+--=20
+Corinna Vinschen                  Please, send mails regarding Cygwin to
+Cygwin Maintainer                 cygwin AT cygwin DOT com
+Red Hat
+
+--Vo2ArcSjcOqS/fzO
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 833
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAltPI3wACgkQ9TYGna5E
+T6BcFA//ZLIWmVDkvYQvEZDJlu1U686I/7QrDQ3Sj30iMyd38ab5Hbfbm2/Cg81J
+YQy+uUB40spaUnOup/hNSqVW/EjYFUGZB4gcBdjGzu+7oMsjkm2/qri+/AM0XvdB
+Cihucj+vMsruMS60gvK8o5mF1HaC1pt8YpE3db9YPzvz6d5qhx1DsfscYzVdKoEN
+peAgHKYNcKUOWOA5I43UcokBvSyyCIvA4tKrDDwFmhLRq1UKdh6NT+kXNk4tetAc
+CiSt16KYR0kurTp4IbZfjqT4DsIvvqRQEU7jDjETcBGC5RRPPSnAtHmY6oevfCZw
+COthX34Xt1kGwqTNJER4t4DMjcjR2mMOXm1TuG12wvd+Zre3IXsw1lFVbdzmq0I4
+xbC/baRXBPYd/A0ATdR18JyyTYsFfxUfyhQSanOSjB7u3hAx+ZP7a3bteRoJtGlC
+F6dNQd4fxmAo7j90bmU8KreLCzKPfoDq2HYtdOPN1aMNS/vIQ4kH2aN2oLcSrNnq
+a8ocYX+DbJvXkAbJ4OGl0xLAbDOPC5mTBzbC+X4yzBg+ORcTm8eT63IZMfwd53+t
+RnXQNpH4ZI8JNNc23os8dZ7u8wlo3gP0py/iqC0PF2utG6ki/RzlWuLteJtSzKp/
+EIwO1srUyVvyKADwmaoaB/IZN8LTVBJJJ3cz46TYR1lkNEXwPqg=
+=xMMe
+-----END PGP SIGNATURE-----
+
+--Vo2ArcSjcOqS/fzO--
