@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9156-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 120294 invoked by alias); 2 Aug 2018 15:05:57 -0000
+Return-Path: <cygwin-patches-return-9157-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 18824 invoked by alias); 2 Aug 2018 23:45:53 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,20 +9,22 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 120270 invoked by uid 89); 2 Aug 2018 15:05:56 -0000
+Received: (qmail 18684 invoked by uid 89); 2 Aug 2018 23:45:40 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-25.0 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.2 spammy=Hx-spam-relays-external:ESMTPA
-X-HELO: lb2-smtp-cloud8.xs4all.net
-Received: from lb2-smtp-cloud8.xs4all.net (HELO lb2-smtp-cloud8.xs4all.net) (194.109.24.25) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 02 Aug 2018 15:05:55 +0000
-Received: from frodo.localdomain ([83.162.234.136])	by smtp-cloud8.xs4all.net with ESMTPA	id lFAmfA1K1oj71lFAnfidAz; Thu, 02 Aug 2018 17:05:53 +0200
+X-Spam-SWARE-Status: No, score=-25.0 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.2 spammy=Hx-languages-length:1516, Hx-spam-relays-external:ESMTPA
+X-HELO: lb1-smtp-cloud8.xs4all.net
+Received: from lb1-smtp-cloud8.xs4all.net (HELO lb1-smtp-cloud8.xs4all.net) (194.109.24.21) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 02 Aug 2018 23:45:38 +0000
+Received: from frodo.localdomain ([83.162.234.136])	by smtp-cloud8.xs4all.net with ESMTPA	id lNHdfByVjoj71lNHefjKKk; Fri, 03 Aug 2018 01:45:30 +0200
 From: "J.H. van de Water" <houder@xs4all.nl>
 To: cygwin-patches@cygwin.com
 Cc: "J.H. van de Water" <houder@xs4all.nl>
-Subject: [PATCH] fegetenv() in winsup/cygwin/fenv.cc
-Date: Thu, 02 Aug 2018 15:05:00 -0000
-Message-Id: <1533222343-5823-1-git-send-email-houder@xs4all.nl>
+Subject: [PATCH] Cygwin: fegetenv() in winsup/cygwin/fenv.cc should not disable exceptions!
+Date: Thu, 02 Aug 2018 23:45:00 -0000
+Message-Id: <1533253512-1717-1-git-send-email-houder@xs4all.nl>
 X-IsSubscribed: yes
-X-SW-Source: 2018-q3/txt/msg00051.txt.bz2
+X-SW-Source: 2018-q3/txt/msg00052.txt.bz2
+
+fegetenv() in winsup/cygwin/fenv.cc
 
 fnstenv MUST be followed by fldenv in fegetenv(), as the former disables all
 exceptions in the x87 FPU, which is not appropriate here (fegetenv() ).
