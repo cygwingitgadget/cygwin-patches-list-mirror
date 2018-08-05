@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9167-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 130123 invoked by alias); 4 Aug 2018 20:37:24 -0000
+Return-Path: <cygwin-patches-return-9168-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 72982 invoked by alias); 5 Aug 2018 06:26:32 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,77 +9,111 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 130107 invoked by uid 89); 4 Aug 2018 20:37:24 -0000
+Received: (qmail 72967 invoked by uid 89); 5 Aug 2018 06:26:31 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-23.7 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,KAM_LAZY_DOMAIN_SECURITY autolearn=ham version=3.3.2 spammy=H*u:6.1, Hx-languages-length:1312
-X-HELO: m0.truegem.net
-Received: from m0.truegem.net (HELO m0.truegem.net) (69.55.228.47) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sat, 04 Aug 2018 20:37:22 +0000
-Received: (from daemon@localhost)	by m0.truegem.net (8.12.11/8.12.11) id w74KbK1J081506	for <cygwin-patches@cygwin.com>; Sat, 4 Aug 2018 13:37:20 -0700 (PDT)	(envelope-from mark@maxrnd.com)
-Received: from 76-217-5-154.lightspeed.irvnca.sbcglobal.net(76.217.5.154), claiming to be "[192.168.1.100]" via SMTP by m0.truegem.net, id smtpdTotwRJ; Sat Aug  4 13:37:16 2018
-Subject: Re: [PATCH] Fix return value on aio_read/write success
-To: cygwin-patches@cygwin.com
-References: <20180804084426.4128-1-mark@maxrnd.com> <20180804202329.GA4180@calimero.vinschen.de>
-From: Mark Geisert <mark@maxrnd.com>
-Message-ID: <7c052d97-0c7b-b3bb-f9e3-07f32912871d@maxrnd.com>
-Date: Sat, 04 Aug 2018 20:37:00 -0000
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:49.0) Gecko/20100101 Firefox/49.0 SeaMonkey/2.46
+X-Spam-SWARE-Status: No, score=-1.9 required=5.0 tests=AWL,BAYES_00,NORMAL_HTTP_TO_IP,RCVD_IN_DNSWL_NONE,SPF_PASS autolearn=ham version=3.3.2 spammy=04, H*u:Webmail, H*UA:Webmail, instruct
+X-HELO: lb1-smtp-cloud9.xs4all.net
+Received: from lb1-smtp-cloud9.xs4all.net (HELO lb1-smtp-cloud9.xs4all.net) (194.109.24.22) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 05 Aug 2018 06:26:29 +0000
+Received: from webmail.xs4all.nl ([IPv6:2001:888:0:22:194:109:20:200])	by smtp-cloud9.xs4all.net with ESMTPA	id mCUifyoZ5EJtcmCUifyd2R; Sun, 05 Aug 2018 08:26:27 +0200
+Received: from a83-162-234-136.adsl.xs4all.nl ([83.162.234.136]) by webmail.xs4all.nl with HTTP (HTTP/1.1 POST); Sun, 05 Aug 2018 08:26:24 +0200
 MIME-Version: 1.0
-In-Reply-To: <20180804202329.GA4180@calimero.vinschen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII; format=flowed
 Content-Transfer-Encoding: 7bit
+Date: Sun, 05 Aug 2018 06:26:00 -0000
+From: Houder <houder@xs4all.nl>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Cygwin: fegetenv() in winsup/cygwin/fenv.cc should not disable exceptions!
+In-Reply-To: <9d3b0bda096f6b7dbf5d7dd07eeb05e6@xs4all.nl>
+References: <1533253512-1717-1-git-send-email-houder@xs4all.nl> <20180803073647.GA6347@calimero.vinschen.de> <213765cb4acd51f933201d759e2752a7@xs4all.nl> <20180803103917.GC6347@calimero.vinschen.de> <9d3b0bda096f6b7dbf5d7dd07eeb05e6@xs4all.nl>
+Message-ID: <c95b506fcb9ff2662009f849849c8791@xs4all.nl>
+X-Sender: houder@xs4all.nl
+User-Agent: XS4ALL Webmail
 X-IsSubscribed: yes
-X-SW-Source: 2018-q3/txt/msg00062.txt.bz2
+X-SW-Source: 2018-q3/txt/msg00063.txt.bz2
 
-Corinna Vinschen wrote:
-> On Aug  4 01:44, Mark Geisert wrote:
->> Oops. Something that iozone testing had found but I regarded as an
->> iozone bug.  Re-reading the man pages set me straight.
->> ---
->>  winsup/cygwin/aio.cc | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/winsup/cygwin/aio.cc b/winsup/cygwin/aio.cc
->> index fe63dec04..571a9621b 100644
->> --- a/winsup/cygwin/aio.cc
->> +++ b/winsup/cygwin/aio.cc
->> @@ -712,7 +712,7 @@ aio_read (struct aiocb *aio)
->>        ; /* I think this is not possible */
->>      }
->>
->> -  return res;
->> +  return res < 0 ? res : 0; /* Return 0 on success, not byte count */
->
-> The comment only makes sense in comparison to the former code.
-> I'd reduce this to just "Return 0 on success".
+On 2018-08-03 14:00, Houder wrote:
+> On 2018-08-03 12:39, Corinna Vinschen wrote:
+>> On Aug  3 11:27, Houder wrote:
+>>> On 2018-08-03 09:36, Corinna Vinschen wrote:
+> [snip]
+> 
+>>> > In terms of x86_64, do we have to change the fenv stuff completely
+>>> > to use only SSE opcodes?  Does that make sense at all?
+>>> 
+>>> Ho! I have to disappoint you here! I am not an expert at all.
+>> 
+>> Thanks all the same for your detailed description.  A quick search in
+>> glibc shows that x86_64 FP exceptions in fact work somewhat different 
+>> in
+>> that it additionally reads and writes from the SSE control register,
+>> e.g. sysdeps/x86_64/fpu/fesetenv.c:
+>> 
+>>     __asm__ ("fnstenv %0\n"
+>>            "stmxcsr %1" : "=m" (*&temp), "=m" (*&temp.__mxcsr));
+>>     [...]
+>>       __asm__ ("fldenv %0\n"
+>>            "ldmxcsr %1" : : "m" (temp), "m" (temp.__mxcsr));
+> 
+> ? ... uhm, this also happens in Korn's implementation (Cygwin). Only
+> Dave Korn verifies if SSE is present (does the machine have SSE?).
+> 
+> Both implementations both manage SSE and x87 FPU simultaneously.
+> 
+> For instance fetestexcept(), i.e. show me the status flags, return
+> 
+>     status flag in SSE | status flag in x87 FPU
+> (bit-wise "OR" of both "status registers")
+> 
+> Both Korn and Jaeger try to hide that there are in fact two devices
+> that do "floating-point".
+> 
+> Can gcc generate code for both devices at the same time? Possibly!
+> 
+> Did it in case of my _tiny_ STC? ("double d = 1.0; long l = d + 0.4")
+> 
+> No (as far as I tell).
+> 
+> On Linux and Cygwin 64-bits, the SSE was used. On WoW the x87 FPU was
+> used.
+> 
+> As far as I tell, it is neither the machine nor "fenv" that devices
+> to switch from x87 FPU to SSE ...
+> 
+> Why gcc prefers x87 FPU in case of WoW, I cannot tell (Yes, I a bit
+> outspoken here; though that is my hypothesis).
 
-OKWD (Okay, will do).
+As a last note on this topic:
 
->
->>  }
->>
->>  ssize_t
->> @@ -902,7 +902,7 @@ aio_write (struct aiocb *aio)
->>        ; /* I think this is not possible */
->>      }
->>
->> -  return res;
->> +  return res < 0 ? res : 0; /* Return 0 on success, not byte count */
->
-> Ditto.
+My hypothesis was correct.
 
-Yup.
+By default gcc "uses" the x87 FPU on WoW (32-bits) and SSE on x86_64.
 
->
->>  }
->>
->>  int
->> --
->> 2.17.0
->
-> While we're at it, I just found that asyncread/asyncwrite return int.
-> Shouldn't they return ssize_t?  That's 32 vs. 64 bit on x86_64.
+It is NOT even possible to force gcc to use SSE on WoW (32-bits):
 
-Oops++.  Yes, of course.  Will do.  Saw no compiler warning for this.
-Thanks,
+@@ gcc -Wall -mfpmath=sse -o STC-FENV STC-FENV.c
+cc1: warning: SSE instruction set disabled, using 387 arithmetics
 
-..mark
+It is however possible to instruct gcc to use the x87 FPU on x86_64,
+... resulting in an exception where one is not expected (on x86_64):
+
+64-@@ gcc -Wall -mfpmath=387 -o stc-last stc-last.c
+64-@@ ./stc-last
+INITIALIZING !!!!!
+Initializing fe_dfl_env
+Initializing fe_nomask_env
+         Exception created! <==== exceptions STILL DISabled
+obj->_fpu._fpu_cw    = ffff037f
+obj->_fpu._fpu_sw    = ffff0004 <=== "zero-divide" flag set!
+obj->_fpu._fpu_tagw  = ffffffff
+obj->_fpu._fpu_ipoff = 40186f
+obj->_fpu._fpu_ipsel = 0  obj->_fpu._fpu_opcde = 0
+obj->_fpu._fpu_dpoff = ffffcc10
+obj->_fpu._fpu_dpsel = ffff0000
+obj->_sse_mxcsr      = 1f80
+         Exceptions ENABLED!
+Floating point exception (core dumped) <=== Whao!
+
+(when SSE is used, an exception is not triggered in this case)
+
+Regards,
+Henri
