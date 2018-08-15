@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9176-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 120857 invoked by alias); 15 Aug 2018 14:59:51 -0000
+Return-Path: <cygwin-patches-return-9177-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 125433 invoked by alias); 15 Aug 2018 15:01:53 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,113 +9,80 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 120847 invoked by uid 89); 15 Aug 2018 14:59:50 -0000
+Received: (qmail 125344 invoked by uid 89); 15 Aug 2018 15:01:52 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-101.3 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.2 spammy=
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (217.72.192.75) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 15 Aug 2018 14:59:49 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue105 [212.227.15.183]) with ESMTPSA (Nemesis) id 0LmLB4-1gPpzM3nJy-00ZvDH for <cygwin-patches@cygwin.com>; Wed, 15 Aug 2018 16:59:46 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 437F5A805A5; Wed, 15 Aug 2018 16:59:46 +0200 (CEST)
-Date: Wed, 15 Aug 2018 14:59:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-1.9 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,SPF_PASS autolearn=ham version=3.3.2 spammy=
+X-HELO: lb3-smtp-cloud9.xs4all.net
+Received: from lb3-smtp-cloud9.xs4all.net (HELO lb3-smtp-cloud9.xs4all.net) (194.109.24.30) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 15 Aug 2018 15:01:45 +0000
+Received: from webmail.xs4all.nl ([IPv6:2001:888:0:22:194:109:20:205])	by smtp-cloud9.xs4all.net with ESMTPA	id pxItfmVP6EJtcpxItfVH1q; Wed, 15 Aug 2018 17:01:43 +0200
+Received: from a83-162-234-136.adsl.xs4all.nl ([83.162.234.136]) by webmail.xs4all.nl with HTTP (HTTP/1.1 POST); Wed, 15 Aug 2018 17:01:43 +0200
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+Content-Transfer-Encoding: 7bit
+Date: Wed, 15 Aug 2018 15:01:00 -0000
+From: Houder <houder@xs4all.nl>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH 1/1] Keep the denormal-operand exception masked; modify FE_ALL_EXCEPT accordingly.
-Message-ID: <20180815145946.GK3747@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1534330763-2755-1-git-send-email-houder@xs4all.nl> <20180815145449.GJ3747@calimero.vinschen.de>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="MHoG8na4IvP3G3ze"
-Content-Disposition: inline
 In-Reply-To: <20180815145449.GJ3747@calimero.vinschen.de>
-User-Agent: Mutt/1.9.2 (2017-12-15)
-X-SW-Source: 2018-q3/txt/msg00071.txt.bz2
+References: <1534330763-2755-1-git-send-email-houder@xs4all.nl> <20180815145449.GJ3747@calimero.vinschen.de>
+Message-ID: <f0f0756f46ab11e243b9f17e069a2788@xs4all.nl>
+X-Sender: houder@xs4all.nl
+User-Agent: XS4ALL Webmail
+X-IsSubscribed: yes
+X-SW-Source: 2018-q3/txt/msg00072.txt.bz2
 
-
---MHoG8na4IvP3G3ze
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 2140
-
-On Aug 15 16:54, Corinna Vinschen wrote:
+On 2018-08-15 16:54, Corinna Vinschen wrote:
 > On Aug 15 12:59, J.H. van de Water wrote:
-> > By excluding the denormal-operand exception from FE_ALL_EXCEPT, it will=
- not
-> > be possible anymore to UNmask this exception by means of the API define=
-d by
-> > /usr/include/fenv.h
-> >=20
-> > Note: terminology has changed since IEEE Std 854-1987; denormalized num=
-bers
-> > are called subnormal numbers nowadays.
-> >=20
-> > This modification has basically been motivated by the fact that it is a=
-lso
-> > not possible on Linux to manipulate the denormal-operand exception by m=
-eans
-> > of the interface as defined by /usr/include/fenv.h. This has been the s=
-tate
-> > of affairs on Linux since 2001 (Andreas Jaeger).
-> >=20
-> > The exceptions required by the standard (IEEE Std 754), in case they ca=
-n be
-> > supported by the implementation, are:
-> > FE_INEXACT, FE_UNDERFLOW, FE_OVERFLOW, FE_DIVBYZERO and FE_INVALID.
-> >=20
-> > Although it is allowed to define additional exceptions, there is no rea=
-son
-> > to support the "denormal-operand exception" in this case (fenv.h), beca=
-use
-> > the subnormal numbers can be handled almost as fast the normalized numb=
-ers
-> > by the hardware of the x86/x86_64 architecture. Said differently, a rea=
-son
-> > to trap on the input of subnormal numbers does not exist. At least that=
- is
-> > what William Kahan and others at Intel asserted around 2000.
-> > (that is William Kahan of the K-C-S draft, the precursor to the standar=
-d)
-> >=20
-> > This commit modifies winsup/cygwin/include/fenv.h as follows:
-> >  - redefines FE_ALL_EXCEPT from 0x3f to 0x3d
-> >  - removes the definition for FE_DENORMAL
-> >  - introduces __FE_DENORM (0x2) (enum in Linux also uses __FE_DENORM)
-> >  - introduces FE_ALL_EXCEPT_X86 (0x3f), i.e. ALL x86/x86_64 FP exceptio=
-ns
->=20
+>> By excluding the denormal-operand exception from FE_ALL_EXCEPT, it 
+>> will not
+>> be possible anymore to UNmask this exception by means of the API 
+>> defined by
+>> /usr/include/fenv.h
+>> 
+>> Note: terminology has changed since IEEE Std 854-1987; denormalized 
+>> numbers
+>> are called subnormal numbers nowadays.
+>> 
+>> This modification has basically been motivated by the fact that it is 
+>> also
+>> not possible on Linux to manipulate the denormal-operand exception by 
+>> means
+>> of the interface as defined by /usr/include/fenv.h. This has been the 
+>> state
+>> of affairs on Linux since 2001 (Andreas Jaeger).
+>> 
+>> The exceptions required by the standard (IEEE Std 754), in case they 
+>> can be
+>> supported by the implementation, are:
+>> FE_INEXACT, FE_UNDERFLOW, FE_OVERFLOW, FE_DIVBYZERO and FE_INVALID.
+>> 
+>> Although it is allowed to define additional exceptions, there is no 
+>> reason
+>> to support the "denormal-operand exception" in this case (fenv.h), 
+>> because
+>> the subnormal numbers can be handled almost as fast the normalized 
+>> numbers
+>> by the hardware of the x86/x86_64 architecture. Said differently, a 
+>> reason
+>> to trap on the input of subnormal numbers does not exist. At least 
+>> that is
+>> what William Kahan and others at Intel asserted around 2000.
+>> (that is William Kahan of the K-C-S draft, the precursor to the 
+>> standard)
+>> 
+>> This commit modifies winsup/cygwin/include/fenv.h as follows:
+>>  - redefines FE_ALL_EXCEPT from 0x3f to 0x3d
+>>  - removes the definition for FE_DENORMAL
+>>  - introduces __FE_DENORM (0x2) (enum in Linux also uses __FE_DENORM)
+>>  - introduces FE_ALL_EXCEPT_X86 (0x3f), i.e. ALL x86/x86_64 FP 
+>> exceptions
+> 
 > Shouldn't FE_ALL_EXCEPT_X86 be defined locally in fenv.cc only?
 > I don't see that Linux exports that definition.
 
-Never mind, I just realize it's underscored so it's internal anyway.
+Ah, Sorry. Do I have to resubmit my patch? Or is it easy enough for you 
+to
+make this modification?
 
-
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---MHoG8na4IvP3G3ze
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAlt0P+IACgkQ9TYGna5E
-T6Ag1hAAijop8BU6tgqNRhk3LlH9LwL1/+so0oLRZ8H1P1rHg82ptSnmBgkPps3K
-i8GRDrQtbuIk5tLYKU3AE421Pw6Fo4kb6i6e0LYvrRmMJDad67UL40yiwT2awyHY
-XMAXwUJIYbCxIGTUtsiAktd29EJjFTsWt6o5saETOdA8I0JacH0KO4tjUObgXY28
-awTpy6w/h7fYXXoOs8cWgnE0udE+xqDOD7n2bBmo1MG5VXf20QbT9cQt5naegKlH
-usxmUEW7lgcgyrXVlFnBTM7m7OlYdD3cm6u2lAdEBhbMQIwuc8oTwuRixT5H7VSx
-W57IVnoGH6wRQwV7lSAw1m/yqtQgWyHB7GD73jSoIsDeG8pr7SInnJTXZH5+OSQY
-wFQvLIqM+pOXXHC/pzVxlLbCb2P0gMVJwWo7z3XVJoK5Vic/tVMI2Z6JohuCwr4a
-UFhHvevT2zZp1PESpsi3KCRYs/eLw1TENXwZ0jXPA6wuWs+Sbqm7j8/X2+iYCigQ
-/inJseCJH0FPBDHNnSzrbr1tfz60jTNCQ2COCFce1MrePDJsja+ilbG81Z8eVhhZ
-jsvCERqI0PqpLNC1PRG75fECvk3lz8eml5KemZHNqTnK61hBRePSnUtnGsgrpuyQ
-Iplkyzr5ghEV7alTF/mNkyzCuVIPEPvbtCaitaXftgin84HbR5Y=
-=KNss
------END PGP SIGNATURE-----
-
---MHoG8na4IvP3G3ze--
+Regards,
+Henri
