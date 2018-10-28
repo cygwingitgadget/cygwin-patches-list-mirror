@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9183-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 85140 invoked by alias); 17 Aug 2018 09:39:23 -0000
+Return-Path: <cygwin-patches-return-9184-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 113178 invoked by alias); 28 Oct 2018 19:23:14 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,73 +9,68 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 84223 invoked by uid 89); 17 Aug 2018 09:39:22 -0000
+Received: (qmail 113166 invoked by uid 89); 28 Oct 2018 19:23:13 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-110.2 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.2 spammy=mails
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (217.72.192.74) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 17 Aug 2018 09:39:21 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue102 [212.227.15.183]) with ESMTPSA (Nemesis) id 0M7sZ6-1g3iCN0Wsy-00vOmi for <cygwin-patches@cygwin.com>; Fri, 17 Aug 2018 11:39:19 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 811E1A81F25; Fri, 17 Aug 2018 11:39:18 +0200 (CEST)
-Date: Fri, 17 Aug 2018 09:39:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_PASS autolearn=ham version=3.3.2 spammy=pipe, processes, require, cloned
+X-HELO: mail-qk1-f194.google.com
+Received: from mail-qk1-f194.google.com (HELO mail-qk1-f194.google.com) (209.85.222.194) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 28 Oct 2018 19:23:11 +0000
+Received: by mail-qk1-f194.google.com with SMTP id e4so3677217qkh.6        for <cygwin-patches@cygwin.com>; Sun, 28 Oct 2018 12:23:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=gmail.com; s=20161025;        h=from:to:cc:subject:date:message-id:mime-version         :content-transfer-encoding;        bh=MjY7/zGmTaLLEMGQEBSm7dsVEozDwJZeyin6O4HrM78=;        b=kLhj20X7617jPZbOtFubleeNj6OKwCmPFYJwZ2AuNKnLtexd9YzMq4CEejEVtQ1KuG         jubGykyqSyDO/GBIFqdmZayEkgOmV95NZ9aF80insdL3L4230n3ThQOQqFNboOe47p3A         XCexl1kyItAjtAU+a5QWYWhKroEPXXVLJ27H54hpM3i7DnJuqFvaL2llH8awOPzCCVCP         HZ1TMSplR99TnzLkjXGQzcITjoaNuJDPDUVip1Q1XDSL6zxO/GSsIvSQvPpX+ZDrjpO+         LYtOG0lFQLhL0hclFGCHNy72eqKWF3mu2PlGIqKEfFIIp/h8aCRTEWdxnv8Iv6dwPi7i         V+Xg==
+Return-Path: <corngood@gmail.com>
+Received: from localhost.localdomain ([134.41.199.109])        by smtp.gmail.com with ESMTPSA id c21-v6sm9485363qtn.82.2018.10.28.12.23.09        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);        Sun, 28 Oct 2018 12:23:09 -0700 (PDT)
+From: David McFarland <corngood@gmail.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] setfacl: Rename the option --file to --set-file, as on Linux
-Message-ID: <20180817093918.GP3747@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20180816185528.11200-1-kbrown@cornell.edu>
+Cc: David McFarland <corngood@gmail.com>
+Subject: [PATCH 0/1] Fix deadlocks related to child processes
+Date: Sun, 28 Oct 2018 19:23:00 -0000
+Message-Id: <20181028192244.4750-1-corngood@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="ZOBTspFzEMOlPevk"
-Content-Disposition: inline
-In-Reply-To: <20180816185528.11200-1-kbrown@cornell.edu>
-User-Agent: Mutt/1.9.2 (2017-12-15)
-X-SW-Source: 2018-q3/txt/msg00078.txt.bz2
+Content-Transfer-Encoding: 8bit
+X-SW-Source: 2018-q4/txt/msg00000.txt.bz2
+
+For a long time I've been struggling with intermittent deadlocks and
+segfaults in emacs, seemingly related to invoking child processes.  I
+recently found a reliable way to reproduce one such deadlock:
+
+- install clean cygwin with: emacs-w32, clang
+- install flycheck from elpa
+- grab some non trivial C header e.g.:
+  $ cp /usr/include/stdio.h test.h
+- $ emacs -q test.h
+- start flycheck:
+  (progn (package-initialize)
+         (require 'flycheck)
+         (flycheck-mode))
+- add a character to the start of the first line
+- wait for flygheck to complete
+- repeat the last two steps until a deadlock occurs
+
+Breaking in gdb showed the main thread in `cygheap_protect.acquire ()`,
+from either _cfree or _cmalloc.  The thread holding the mutex was always
+"flasio", and it would either be continually segfaulting or looping in
+_cfree.
+
+I added some debug prints to cygheap and determined that it flasio was
+double-freeing an atomic_write_buf.  I added some more prints and found
+that it was two different fhandler objects freeing the same buffer.
+
+I then found that `fhandler_base_overlapped::copyto` would clear the
+buffer pointer after the copy, but none of the derived classes (pipe,
+fifo) did.
+
+Attached is a patch which clears the buffer pointers when copying pipes
+and fifos.
+
+It would probably be safer to move the buffer clear to a `operator=`,
+but I wanted to keep the patch as simple as possible and avoid
+refactoring.
 
 
---ZOBTspFzEMOlPevk
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 511
+David McFarland (1):
+  Cygwin: Fix cygheap corruption caused by cloned atomic buffer
 
-On Aug 16 14:55, Ken Brown wrote:
-> Retain --file as an undocumented option for backwards compatibility.
-> ---
->  winsup/cygwin/release/2.11.0 | 2 ++
->  winsup/doc/new-features.xml  | 4 ++++
->  winsup/doc/utils.xml         | 4 ++--
->  winsup/utils/setfacl.c       | 5 +++--
->  4 files changed, 11 insertions(+), 4 deletions(-)
+ winsup/cygwin/fhandler.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Perfect, thanks!  Pushed.
-
-
-Corinna
-
---=20
-Corinna Vinschen                  Please, send mails regarding Cygwin to
-Cygwin Maintainer                 cygwin AT cygwin DOT com
-Red Hat
-
---ZOBTspFzEMOlPevk
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAlt2l8YACgkQ9TYGna5E
-T6C42hAAmMYsrUgXJarsRY/+ehXl22mwT+gZTnyFV9XTI2sl/vKFculOyeToDlFx
-XxpJxg+nUldpCfNKvGTSK5732zscBOXfRzr+I+8AqSPMAM+vcvlkDciXzl4cG6Q0
-vUeeDqUk4eCa7cr3WjwofBkD6ctomrRjEkfJCnuoqTlbqZFsW974ejYPJ90SvHDr
-qI8V1CCpzr5497Wokb2UrF42ooz2XAvwBkpU8d9TriGql3w1gaXGZsxZ8eebcqmb
-a5rPSC2dng1RldVuKkNFAJ2wWPN/6T5epu/E7dedcCB6TyP3ql3S4CutKlc+9RcE
-x0PESO0QCowwYFCHQlapzl8ZjTY3ckXipmKPFHhNuSvhaWikl5hdGSv+yGXF84WX
-xM4/cL222j056ywAHQ8ZZx03q8s/hjl3qzRM1avY3XUW1AnB/74Skk3oz/TR7bau
-rcnEygNHhLh33xfKk60UIoRcvun27xnWdTXPbsTFqttpy2xTAAdL8Sk/wxjgQ4nJ
-ZoN0C//dqcwmzBIPXkMuXSMasiU2MFjls9+TXrCsFREseNtSc+Iy2jJ/fXVJ/y+n
-6oSlyL2lnaxCJ6IIuBlfojwaHJLricRxijOqE2eOBaOI1WMN+CZVtVxJnUIad6rE
-zjy/5RJ1pRoFZs5kvnHkMICW3NBsZxGGtx4D2W923y2FkVYyl0U=
-=GEDC
------END PGP SIGNATURE-----
-
---ZOBTspFzEMOlPevk--
+-- 
+2.19.1
