@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9198-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 33837 invoked by alias); 19 Feb 2019 11:59:16 -0000
+Return-Path: <cygwin-patches-return-9199-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 53793 invoked by alias); 19 Feb 2019 16:58:09 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,122 +9,99 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 33801 invoked by uid 89); 19 Feb 2019 11:59:15 -0000
+Received: (qmail 53693 invoked by uid 89); 19 Feb 2019 16:58:08 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-105.9 required=5.0 tests=BAYES_00,GIT_PATCH_2,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.2 spammy=H*F:D*cygwin.com, our
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (217.72.192.75) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 19 Feb 2019 11:59:14 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id 1MeTHG-1hWDgR2Lwq-00aW1g for <cygwin-patches@cygwin.com>; Tue, 19 Feb 2019 12:59:11 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id A4754A80857; Tue, 19 Feb 2019 12:59:10 +0100 (CET)
-Date: Tue, 19 Feb 2019 11:59:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
+X-Spam-SWARE-Status: No, score=-5.9 required=5.0 tests=BAYES_00,GIT_PATCH_2,KAM_LAZY_DOMAIN_SECURITY,SPF_HELO_PASS autolearn=ham version=3.3.2 spammy=senior, Senior
+X-HELO: mx1.redhat.com
+Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 19 Feb 2019 16:58:06 +0000
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))	(No client certificate requested)	by mx1.redhat.com (Postfix) with ESMTPS id 9E11725EEA	for <cygwin-patches@cygwin.com>; Tue, 19 Feb 2019 16:58:05 +0000 (UTC)
+Received: from ovpn-116-11.phx2.redhat.com (ovpn-116-11.phx2.redhat.com [10.3.116.11])	by smtp.corp.redhat.com (Postfix) with ESMTPS id 22C22101962A	for <cygwin-patches@cygwin.com>; Tue, 19 Feb 2019 16:58:04 +0000 (UTC)
+Message-ID: <a31c3d43c9866900e7938015e2fed2c93712348e.camel@redhat.com>
 Subject: Re: [PATCH] Cygwin: add secure_getenv
-Message-ID: <20190219115910.GM4256@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20190219050950.19116-1-yselkowi@redhat.com> <20190219114330.GK4256@calimero.vinschen.de>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="qpqR4wE1CEr+Roqx"
-Content-Disposition: inline
-In-Reply-To: <20190219114330.GK4256@calimero.vinschen.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SW-Source: 2019-q1/txt/msg00008.txt.bz2
+From: Yaakov Selkowitz <yselkowi@redhat.com>
+To: cygwin-patches@cygwin.com
+Date: Tue, 19 Feb 2019 16:58:00 -0000
+In-Reply-To: <20190219115910.GM4256@calimero.vinschen.de>
+References: <20190219050950.19116-1-yselkowi@redhat.com>	 <20190219114330.GK4256@calimero.vinschen.de>	 <20190219115910.GM4256@calimero.vinschen.de>
+Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2019-q1/txt/msg00009.txt.bz2
 
+On Tue, 2019-02-19 at 12:59 +0100, Corinna Vinschen wrote:
+> On Feb 19 12:43, Corinna Vinschen wrote:
+> > On Feb 18 23:09, Yaakov Selkowitz wrote:
+> > > Signed-off-by: Yaakov Selkowitz <yselkowi@redhat.com>
+> > > ---
+> > > This is being used more frequently.  Since we don't have Linux capabilities,
+> > > setuid/setgid is the only condition we have to check.
+> > 
+> > I'm not sure this is right.  The Linux man page claims
+> > 
+> > "Secure execution is required if one of the following conditions was
+> >  true when the program run by the calling process was loaded: [...]"
+> > 
+> > Do we ever have this situation?  We don't have any capability to make
+> > real and effective user ID different at process startup.  But from that
+> > description it seems secure_getenv does not trigger secure mode if the
+> > process calls seteuid() or setreuid() later in the process.
+> > 
+> > I ran this STC as root under Linux:
+> > 
+> > # cat > sec-getenv-test.c <<EOF
+> > #define _GNU_SOURCE
+> > #include <stdio.h>
+> > #include <stdlib.h>
+> > #include <errno.h>
+> > #include <string.h>
+> > #include <sys/types.h>
+> > #include <unistd.h>
+> > 
+> > int main ()
+> > {
+> >   char *env;
+> > 
+> >   env = secure_getenv ("HOME");
+> >   printf ("vor seteuid: HOME=%p <%s>\n", env, env ?: "");
+> >   if (seteuid (74) < 0)
+> >     printf ("seteuid: %d <%s>\n", errno, strerror (errno));
+> >   else
+> >     {
+> >       env = secure_getenv ("HOME");
+> >       printf ("nach seteuid: HOME=%p <%s>\n", env, env ?: "");
+> >     }
+> >   return 0;
+> > }
+> > EOF
+> > # gcc -g -o sec-getenv-test sec-getenv-test.c
+> > # ./sec-getenv-test
+> > vor seteuid: HOME=0x7fff17a04ea2 </root>
+> > nach seteuid: HOME=0x7fff17a04ea2 </root>
+> 
+> I also tried to run secure_getenv after fork, like this:
+> 
+>   seteuid()
+>   if (fork () == 0)
+>     env = secure_getenv ("HOME");
+> 
+> but it still returns a valid value.
+> 
+> So I wonder if secure_getenv isn't just a synonym for getenv
+> in our case.
 
---qpqR4wE1CEr+Roqx
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1864
+Or could it be the STC?  glibc's test is a bit more complicated:
 
-On Feb 19 12:43, Corinna Vinschen wrote:
-> On Feb 18 23:09, Yaakov Selkowitz wrote:
-> > Signed-off-by: Yaakov Selkowitz <yselkowi@redhat.com>
-> > ---
-> > This is being used more frequently.  Since we don't have Linux capabili=
-ties,
-> > setuid/setgid is the only condition we have to check.
->=20
-> I'm not sure this is right.  The Linux man page claims
->=20
-> "Secure execution is required if one of the following conditions was
->  true when the program run by the calling process was loaded: [...]"
->=20
-> Do we ever have this situation?  We don't have any capability to make
-> real and effective user ID different at process startup.  But from that
-> description it seems secure_getenv does not trigger secure mode if the
-> process calls seteuid() or setreuid() later in the process.
->=20
-> I ran this STC as root under Linux:
->=20
-> # cat > sec-getenv-test.c <<EOF
-> #define _GNU_SOURCE
-> #include <stdio.h>
-> #include <stdlib.h>
-> #include <errno.h>
-> #include <string.h>
-> #include <sys/types.h>
-> #include <unistd.h>
->=20
-> int main ()
-> {
->   char *env;
->=20
->   env =3D secure_getenv ("HOME");
->   printf ("vor seteuid: HOME=3D%p <%s>\n", env, env ?: "");
->   if (seteuid (74) < 0)
->     printf ("seteuid: %d <%s>\n", errno, strerror (errno));
->   else
->     {
->       env =3D secure_getenv ("HOME");
->       printf ("nach seteuid: HOME=3D%p <%s>\n", env, env ?: "");
->     }
->   return 0;
-> }
-> EOF
-> # gcc -g -o sec-getenv-test sec-getenv-test.c
-> # ./sec-getenv-test
-> vor seteuid: HOME=3D0x7fff17a04ea2 </root>
-> nach seteuid: HOME=3D0x7fff17a04ea2 </root>
+https://sourceware.org/git/?p=glibc.git;a=blob;f=stdlib/tst-secure-getenv.c;hb=HEAD
 
-I also tried to run secure_getenv after fork, like this:
+And, looking now, FWIW gnulib's implementation is practically similar:
 
-  seteuid()
-  if (fork () =3D=3D 0)
-    env =3D secure_getenv ("HOME");
+https://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=blob;f=lib/secure_getenv.c;hb=HEAD
 
-but it still returns a valid value.
+So if there is something wrong with the patch, then AFAIK gnulib is
+wrong too.  Eric?
 
-So I wonder if secure_getenv isn't just a synonym for getenv
-in our case.
+-- 
+Yaakov Selkowitz
+Senior Software Engineer - Platform Enablement
+Red Hat, Inc.
 
-
-Corinna
-
---=20
-Corinna Vinschen
-Cygwin Maintainer
-
---qpqR4wE1CEr+Roqx
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAlxr744ACgkQ9TYGna5E
-T6BeiQ/9E8d1OPv1YYmHdb2HxvXXLk6d6vtk8jwPAqMhaF18LKGzKNjwgSh/FzwT
-KYl989K2Ls9ZwfRlHj+VlV20y8r9xftWvWjIN7lmVwrkJGa6hJ1SEI/SYgWRcrJ9
-h9yPRu4r7bwuqQmV6/8D5WUJDarnzmkvvOuo9pFYqYRA8W6s2Hiamh03l7aPU6nj
-O/SkAJEvMTYi152Z2D2lcfrlFd7PX0e5SVUB0cIHi4aUULxdZwrQ2tjpL5TnCYHH
-Oc/9Gb+yFwD8qW5sD7DdN92lrZYS7Itfl3bB0trhQTcrP2vKXPeaLnC2mcVwmUQO
-wwk5AJQHvBU3sBAfdRdEte0KfyzbGx5hc2IySoB5FyKKpedNeLEwEuWhXyA0kesd
-Yy8ueB9XIFhSXdT5E07YLqc62xChJB8H26Yz8pGxOzSK2iOVeTK8393EwK0/mN6O
-tHWzvmeoqpfj7IEgQGEQ72EksrZoy8YkStDulsd7OL5DV73jEBb6kUMI0BhaMuod
-Qqt7gbHijRfO0WmAzf6UFH0ysSmhRb+xmiA8sw1F4XkFDyyI14bDQA2QlFzKp+e+
-lE9/d+UsxLGOUosI0XjalsNjbxz8Cy8Ino0UTXZn8MUbMADQbdtk444XrZWY6+S7
-TI7MjL0oyVD9WoQPMNfF7u5UH9TKNtKNcv2mVLxaAXTtXhgVI7M=
-=zDYr
------END PGP SIGNATURE-----
-
---qpqR4wE1CEr+Roqx--
