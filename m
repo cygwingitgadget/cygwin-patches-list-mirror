@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9203-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 55245 invoked by alias); 19 Feb 2019 17:41:54 -0000
+Return-Path: <cygwin-patches-return-9204-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 112423 invoked by alias); 22 Mar 2019 19:30:48 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,92 +9,79 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 55219 invoked by uid 89); 19 Feb 2019 17:41:53 -0000
+Received: (qmail 112394 invoked by uid 89); 22 Mar 2019 19:30:47 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-100.9 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,KAM_LAZY_DOMAIN_SECURITY,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.2 spammy=H*F:D*cygwin.com
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.133) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 19 Feb 2019 17:41:51 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id 1Mzi3l-1hIbxl3akr-00viUI for <cygwin-patches@cygwin.com>; Tue, 19 Feb 2019 18:41:48 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 0D751A803E7; Tue, 19 Feb 2019 18:41:48 +0100 (CET)
-Date: Tue, 19 Feb 2019 17:41:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: add secure_getenv
-Message-ID: <20190219174147.GP4256@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20190219050950.19116-1-yselkowi@redhat.com> <20190219114330.GK4256@calimero.vinschen.de> <20190219115910.GM4256@calimero.vinschen.de> <a31c3d43c9866900e7938015e2fed2c93712348e.camel@redhat.com> <b434e09b-94a5-c7af-db2f-3a9d2dfe991f@redhat.com> <20190219172128.GO4256@calimero.vinschen.de> <20cd56a5-ed2f-27a6-5101-958e44353430@redhat.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="l4IMblsHEWQg+b+m"
-Content-Disposition: inline
-In-Reply-To: <20cd56a5-ed2f-27a6-5101-958e44353430@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SW-Source: 2019-q1/txt/msg00013.txt.bz2
-
-
---l4IMblsHEWQg+b+m
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-Spam-SWARE-Status: No, score=-4.4 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=HTo:U*cygwin-patches, H*Ad:U*cygwin-patches, H*MI:edu, detection
+X-HELO: NAM01-BY2-obe.outbound.protection.outlook.com
+Received: from mail-eopbgr810099.outbound.protection.outlook.com (HELO NAM01-BY2-obe.outbound.protection.outlook.com) (40.107.81.99) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 22 Mar 2019 19:30:45 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector1; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=O+UU7teXWbO+AL+ffffMCoF5ectyxX6syoHH8CqxlVU=; b=rUmwU7J7P5iaN9ccdm9hWvw2kBHjYHGp+hbyMddAgjXJZKck3kq2Fb7+2gKy2tGA96M2TchUVMNnude3BeixtfTYYX5vnZtl+ZkgPDUOrI4s6/QHuYtIShr+odGx9lP/rZBbQAxkP85rJZTK0oq0JkiWAdjrFHStMvCAEx1pMGg=
+Received: from DM6PR04MB5211.namprd04.prod.outlook.com (20.178.24.208) by DM6PR04MB5243.namprd04.prod.outlook.com (20.178.25.32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.1730.15; Fri, 22 Mar 2019 19:30:36 +0000
+Received: from DM6PR04MB5211.namprd04.prod.outlook.com ([fe80::14fd:138e:c16b:52d]) by DM6PR04MB5211.namprd04.prod.outlook.com ([fe80::14fd:138e:c16b:52d%4]) with mapi id 15.20.1709.017; Fri, 22 Mar 2019 19:30:36 +0000
+From: Ken Brown <kbrown@cornell.edu>
+To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: [PATCH fifo 0/8] Allow a FIFO to have multiple writers
+Date: Fri, 22 Mar 2019 19:30:00 -0000
+Message-ID: <20190322193020.565-1-kbrown@cornell.edu>
+authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
+x-ms-exchange-purlcount: 2
+received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
-Content-length: 1046
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-IsSubscribed: yes
+X-SW-Source: 2019-q1/txt/msg00014.txt.bz2
 
-On Feb 19 11:27, Eric Blake wrote:
-> On 2/19/19 11:21 AM, Corinna Vinschen wrote:
->=20
-> >> That said, while it is ideal to avoid squashing to NULL in situations
-> >> that are not security boundaries (as with your STC displaying HOME even
-> >> after seteuid() on Linux), I'm also okay if we filter too aggressively
-> >> (the way gnulib's fallback implementation does when neither
-> >> __secure_getenv() nor issetugid() available).
-> >=20
-> > In fact, gnulib's implementation would chose the
-> >=20
-> >    if (issetugid ())
-> >      return NULL;
-> >    return getenv (name);
-> >=20
-> > branch on Cygwin right now, just as on BSDs.  If that's the right thing
-> > to do for BSD, it's not... *really* wrong for Cygwin either, regardless
-> > what Linux is doing.
-> >=20
-> > That in turn means Yaakov's patch is perfeclty fine since it's equivale=
-nt
-> > to the above gnulib code.
-> >=20
-> > Agreed?
->=20
-> Yes.
+Currently a FIFO can have only one writer.  A second attempt to open
+the FIFO for writing blocks while fhandler_fifo::open waits for the
+read_ready event to be signalled.
 
-Fine, thanks.  Patch is ok to push, Yaakov, just add release msg
-changes, too.
+This patch series tries to fix the problem by having the reader open
+multiple instances of the Windows named pipe underlying the FIFO.
+When the FIFO is opened for reading, a 'listen_client' thread is
+created that listens for clients (writers) to connect to the pipe.  It
+creates new pipe instances as needed.
 
+fhandler_fifo::raw_read loops through the connected writers, checking
+for input.
 
-Thanks,
-Corinna
+I've tested it by running the fifo client and server programs from
+Chapter 44 of the book "The Linux Programming Interface: Linux and
+UNIX System Programming Handbook" by Michael Kerrisk.  (See
+https://cygwin.com/ml/cygwin/2015-03/msg00047.html for simplified
+versions of these programs.)  These work as on Linux.
+
+I've also tried the test given in
+http://www.cygwin.org/ml/cygwin/2015-12/msg00311.html.  It works as on
+Linux also.
+
+TODO:
+
+ - Try to get the code to work for duplexers (FIFOs opened for reading
+   and writing).  I haven't thought about this at all yet.
+
+ - Think about what it would take to allow multiple readers.  I'm not
+   very optimistic about this, but my impression is that the
+   multiple-writer case is more important in practice.
+
+Ken
+
+Ken Brown (8):
+  Cygwin: FIFO: stop using overlapped I/O
+  Cygwin: FIFO: allow multiple writers
+  Cygwin: FIFO: add a spinlock
+  Cygwin: FIFO: improve EOF detection
+  Cygwin: FIFO: update clone and dup
+  Cygwin: FIFO: update fixup_after_fork
+  Cygwin: FIFO: update set_close_on_exec
+  Cygwin: FIFO: update select
+
+ winsup/cygwin/fhandler.h       |  58 ++-
+ winsup/cygwin/fhandler_fifo.cc | 732 +++++++++++++++++++++++++++------
+ winsup/cygwin/select.cc        | 161 +++++++-
+ winsup/cygwin/select.h         |   7 +
+ 4 files changed, 819 insertions(+), 139 deletions(-)
 
 --=20
-Corinna Vinschen
-Cygwin Maintainer
-
---l4IMblsHEWQg+b+m
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAlxsP9sACgkQ9TYGna5E
-T6B6wRAAg1nRHkE9zYIQ2R0ulXyjjSdHvbJqF3lZHxdoTx5OyQqRk3cKBfShmXTG
-BTYCFCT4G9S+rm+Xrz/nVhj6vFyYcXV5yLA5lNjqAmsHxIkelB2BKSUjZREiRv5E
-LsLhXUmpIyZHAZVaFRa+5oTnaHmbgH0AMw8jfqSSWGEqGmewcZciZ6r74H5x5/OX
-ymYjOoRIr+vtMiqGGyWRnlXTj2ZonwveamX2sM2YJSBnulfSLnFzlGkRMX4Mjxl4
-5napB7g4EmQP/k5DYa8IoRlFz2LIOpOqWOvmDcAryN6fWIq0LBIrroRejKO5ULrs
-CCQ7wlKYg08eQxKzjVNxLtjTLRUYf8DBeFZWV1OdhUcyZHjU0NlK7P19w6NQNi/q
-ZkAs7KlwbnOc4G3IzVuTIM1B2z1Y9qGhoixW/SDETp3KmtzIo2rFHhAGq59RqhqA
-V1WjWFYlZvR/xnSryP5L4RDi1l/W/k5hqQ1fjNxDKvMikR6JXumB8fQym6t1MUmw
-NfF9+NuUIxZbG1rAGW8em8Fb0aNKLrHtfGz4Z/4t7vIMFLKgW0XiR6OkvjGkhdZ9
-o7UOr47ui3kSjdd0uWhp6wv4vdEG4ktZHl6h8S2TDTdLBWWk8WXP2RsVQKaaoBoT
-Lflk7dGuIKLpsfV8RYgplPZdWSyXFlRFPI7qO6mYtBKN1c5Gwfo=
-=Slbf
------END PGP SIGNATURE-----
-
---l4IMblsHEWQg+b+m--
+2.17.0
