@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9237-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 117596 invoked by alias); 26 Mar 2019 17:24:59 -0000
+Return-Path: <cygwin-patches-return-9238-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 21145 invoked by alias); 26 Mar 2019 18:25:45 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,129 +9,153 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 117585 invoked by uid 89); 26 Mar 2019 17:24:58 -0000
+Received: (qmail 21126 invoked by uid 89); 26 Mar 2019 18:25:44 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-6.9 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=terminal, H*c:HHH
-X-HELO: NAM03-BY2-obe.outbound.protection.outlook.com
-Received: from mail-eopbgr780104.outbound.protection.outlook.com (HELO NAM03-BY2-obe.outbound.protection.outlook.com) (40.107.78.104) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 26 Mar 2019 17:24:55 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector1; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=RhUW/pgY/DpxwpI8sRMtW4fQix+tAYFaxXE5vvLYnYc=; b=HZ0jUX7mABcY2BKBAz0XoRFfzAHB3HipzQsKRs8YKYYuYGhOTHKPzAyB/uR1thi+fXMGaZkbMW9gTWwx9YCgj4GluqD6+pvH3gq3ag7O+RGTxhFhnYsoPz6YthS21Q8UCG563yIVOtpN7DzsrfAFdR9b2HF4Zy9/oiff93SNZp4=
-Received: from DM6PR04MB5211.namprd04.prod.outlook.com (20.178.24.208) by DM6PR04MB5371.namprd04.prod.outlook.com (20.178.26.220) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.1730.15; Tue, 26 Mar 2019 17:24:53 +0000
-Received: from DM6PR04MB5211.namprd04.prod.outlook.com ([fe80::14fd:138e:c16b:52d]) by DM6PR04MB5211.namprd04.prod.outlook.com ([fe80::14fd:138e:c16b:52d%4]) with mapi id 15.20.1730.019; Tue, 26 Mar 2019 17:24:53 +0000
-From: Ken Brown <kbrown@cornell.edu>
-To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: Re: [PATCH fifo 0/2] Add support for duplex FIFOs
-Date: Tue, 26 Mar 2019 17:24:00 -0000
-Message-ID: <1fc7ff06-38cf-6c89-03f4-e741f871b936@cornell.edu>
-References: <20190325230556.2219-1-kbrown@cornell.edu> <20190326083620.GI3471@calimero.vinschen.de>
-In-Reply-To: <20190326083620.GI3471@calimero.vinschen.de>
-user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101 Thunderbird/60.6.1
-authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
-received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-Content-Type: multipart/mixed;	boundary="_003_1fc7ff0638cf6c8903f4e741f871b936cornelledu_"
+X-Spam-SWARE-Status: No, score=-115.7 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*F:D*cygwin.com
+X-HELO: mout.kundenserver.de
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (217.72.192.73) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 26 Mar 2019 18:25:42 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id 1N7Qp1-1guriY0kgP-017nTm; Tue, 26 Mar 2019 19:25:39 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 4A5B0A8054E; Tue, 26 Mar 2019 19:25:38 +0100 (CET)
+Date: Tue, 26 Mar 2019 18:25:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
+Cc: cygwin-patches@cygwin.com, cygwin@cygwin.com
+Subject: Re: [PATCH RFC] fork: reduce chances for "address space is already occupied" errors
+Message-ID: <20190326182538.GA4096@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>,	cygwin-patches@cygwin.com, cygwin@cygwin.com
+References: <8c77b589-fcae-fd0d-f5c5-c2520cfebbfa@ssi-schaefer.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-IsSubscribed: yes
-X-SW-Source: 2019-q1/txt/msg00047.txt.bz2
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="ikeVEW9yuYc//A+q"
+Content-Disposition: inline
+In-Reply-To: <8c77b589-fcae-fd0d-f5c5-c2520cfebbfa@ssi-schaefer.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
+X-SW-Source: 2019-q1/txt/msg00048.txt.bz2
 
 
---_003_1fc7ff0638cf6c8903f4e741f871b936cornelledu_
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <F436E2B8F24E1D4C9CF61E26153D0522@namprd04.prod.outlook.com>
-Content-Transfer-Encoding: base64
-Content-length: 1436
+--ikeVEW9yuYc//A+q
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 3029
 
-SGkgQ29yaW5uYSwNCg0KT24gMy8yNi8yMDE5IDQ6MzYgQU0sIENvcmlubmEg
-Vmluc2NoZW4gd3JvdGU6DQo+IEhpIEtlbiwNCj4gDQo+IE9uIE1hciAyNSAy
-MzowNiwgS2VuIEJyb3duIHdyb3RlOg0KPj4gVGhlIHNlY29uZCBwYXRjaCBp
-biB0aGlzIHNlcmllcyBlbmFibGVzIG9wZW5pbmcgYSBGSUZPIHdpdGggT19S
-RFdSDQo+PiBhY2Nlc3MuICBUaGUgdW5kZXJseWluZyBXaW5kb3dzIG5hbWVk
-IHBpcGUgaXMgY3JldGVkIHdpdGggZHVwbGV4DQo+PiBhY2Nlc3MsIGFuZCBp
-dHMgaGFuZGxlIGlzIG1hZGUgdGhlIEkvTyBoYW5kbGUgb2YgdGhlIGZpcnN0
-IGNsaWVudC4NCj4+DQo+PiBXaGlsZSB0ZXN0aW5nIHRoaXMsIEkgaGFkIHNv
-bWUgbXlzdGVyaW91cyBjcmFzaGVzLCB3aGljaCBhcmUgZml4ZWQgYnkNCj4+
-IHRoZSBmaXJzdCBwYXRjaC4NCj4gDQo+IEkgcmViYXNlZCB0aGUgdG9waWMv
-ZmlmbyBicmFuY2ggb24gdG9wIG9mIG1hc3RlciBhbmQgZm9yY2UtcHVzaGVk
-IHdpdGgNCj4geW91ciBwYXRjaGVzLiAgTWFrZSBzdXJlIHRvIHJlc2V0IHlv
-dXIgd29ya2luZyB0cmVlIHRvIG9yaWdpbi90b3BpYy9maWZvDQo+IGFuZCBh
-ZGQgYW55IGZ1cnRoZXIgcGF0Y2hlcyBvbiB0b3AuDQoNCkknbSBjb21mb3J0
-YWJsZSBub3cgd2l0aCBtZXJnaW5nIHRvcGljL2ZpZm8gaW50byBtYXN0ZXIu
-ICBJJ3ZlIHRlc3RlZCB0aGUgbmV3IA0Kc2VsZWN0IGFuZCBmb3JrIGNvZGUg
-WypdLCBhbmQgdGhleSBzZWVtIHRvIHdvcmsgYXMgZXhwZWN0ZWQuICBUaGF0
-IHdhcyB0aGUgbGFzdCANCnRoaW5nIGhvbGRpbmcgbWUgdXAuDQoNCkFzIHNv
-b24gYXMgdGhlIG1lcmdlIGlzIGRvbmUsIEknbGwgc2VuZCBhIHBhdGNoIHdp
-dGggcmVsZWFzZSBub3Rlcy4NCg0KS2VuDQoNClsqXSBGb3IgdGhlIHJlY29y
-ZCwgSSdtIGF0dGFjaGluZyB0aGUgdHdvIHRlc3QgcHJvZ3JhbXMgSSB1c2Vk
-LiAgSW4gZWFjaCBjYXNlIEkgDQpyYW4gdGhlIHByb2dyYW0gaW4gb25lIHRl
-cm1pbmFsIGFuZCB0eXBlZCAiZWNobyBibGFoID4gL3RtcC9teWZpZm8iIGlu
-IGEgc2Vjb25kIA0KdGVybWluYWwuDQo=
+Hi Michael,
 
---_003_1fc7ff0638cf6c8903f4e741f871b936cornelledu_
-Content-Type: text/plain; name="fifo_fork_test.c"
-Content-Description: fifo_fork_test.c
-Content-Disposition: attachment; filename="fifo_fork_test.c"; size=1016;
-	creation-date="Tue, 26 Mar 2019 17:24:53 GMT";
-	modification-date="Tue, 26 Mar 2019 17:24:53 GMT"
-Content-ID: <04A3EC7969DDDE4A811573E8A769E5FC@namprd04.prod.outlook.com>
-Content-Transfer-Encoding: base64
-Content-length: 1379
 
-I2luY2x1ZGUgPHN0ZGlvLmg+CiNpbmNsdWRlIDx1bmlzdGQuaD4KI2luY2x1
-ZGUgPHN0ZGxpYi5oPgojaW5jbHVkZSA8c3lzL3N0YXQuaD4KI2luY2x1ZGUg
-PGZjbnRsLmg+CiNpbmNsdWRlIDxlcnJuby5oPgojaW5jbHVkZSA8c3lzL3dh
-aXQuaD4KCmludAptYWluICgpCnsKICBpbnQgZmQ7CiAgc3NpemVfdCBuYnl0
-ZXM7CiAgY2hhciBidWZbNV07CgogIGlmIChta2ZpZm8gKCIvdG1wL215Zmlm
-byIsIFNfSVJVU1IgfCBTX0lXVVNSIHwgU19JV0dSUCkgPCAwCiAgICAgICYm
-IGVycm5vICE9IEVFWElTVCkKICAgIHsKICAgICAgcGVycm9yICgibWtmaWZv
-Iik7CiAgICAgIGV4aXQgKC0xKTsKICAgIH0KCiAgaWYgKChmZCA9IG9wZW4g
-KCIvdG1wL215ZmlmbyIsIE9fUkRXUikpIDwgMCkKICAgIHsKICAgICAgcGVy
-cm9yICgib3BlbiIpOwogICAgICBleGl0ICgtMSk7CiAgICB9CgogIHN3aXRj
-aCAoZm9yayAoKSkKICAgIHsKICAgIGNhc2UgLTE6CiAgICAgIHBlcnJvciAo
-ImZvcmsiKTsKICAgICAgZXhpdCAoLTEpOwogICAgY2FzZSAwOgkJCS8qIENo
-aWxkLiAqLwogICAgICBuYnl0ZXMgPSByZWFkIChmZCwgYnVmLCA0KTsKICAg
-ICAgaWYgKG5ieXRlcyAhPSA0KQoJewoJICBwZXJyb3IgKCJyZWFkIik7Cgkg
-IGV4aXQgKC0xKTsKCX0KICAgICAgYnVmWzRdID0gJ1wwJzsKICAgICAgcHJp
-bnRmICgiY2hpbGQgcmVhZCAlZCBieXRlczogJXNcbiIsIG5ieXRlcywgYnVm
-KTsKICAgICAgaWYgKGNsb3NlIChmZCkgPCAwKQoJewoJICBwZXJyb3IgKCJj
-aGlsZCBjbG9zZSIpOwoJICBleGl0ICgtMSk7Cgl9CiAgICAgIGV4aXQgKDAp
-OwogICAgZGVmYXVsdDoJCQkvKiBQYXJlbnQuICovCiAgICAgIGlmIChjbG9z
-ZSAoZmQpIDwgMCkKCXsKCSAgcGVycm9yICgicGFyZW50IGNsb3NlIik7Cgkg
-IGV4aXQgKC0xKTsKCX0KICAgICAgcHJpbnRmICgicGFyZW50IHdhaXRpbmcg
-Zm9yIGNoaWxkIHRvIHJlYWRcbiIpOwogICAgICB3YWl0IChOVUxMKTsKICAg
-ICAgYnJlYWs7CiAgICB9Cn0KCiAgICAgIAo=
+Redirected to cygwin-patches...
 
---_003_1fc7ff0638cf6c8903f4e741f871b936cornelledu_
-Content-Type: text/plain; name="fifo_select_test.c"
-Content-Description: fifo_select_test.c
-Content-Disposition: attachment; filename="fifo_select_test.c"; size=1005;
-	creation-date="Tue, 26 Mar 2019 17:24:53 GMT";
-	modification-date="Tue, 26 Mar 2019 17:24:53 GMT"
-Content-ID: <7A4B2E00E8A0E047ACAC3FC2CFA2434A@namprd04.prod.outlook.com>
-Content-Transfer-Encoding: base64
-Content-length: 1363
 
-I2luY2x1ZGUgPHN0ZGlvLmg+CiNpbmNsdWRlIDx1bmlzdGQuaD4KI2luY2x1
-ZGUgPHN0ZGxpYi5oPgojaW5jbHVkZSA8c3lzL3NlbGVjdC5oPgojaW5jbHVk
-ZSA8c3lzL3N0YXQuaD4KI2luY2x1ZGUgPGZjbnRsLmg+CiNpbmNsdWRlIDxl
-cnJuby5oPgoKaW50Cm1haW4gKCkKewogIGludCBmZCwgbmZkczsKICBmZF9z
-ZXQgcmVhZGZkczsKICBzc2l6ZV90IG5ieXRlczsKICBjaGFyIGJ1Zls1XTsK
-CiAgaWYgKG1rZmlmbyAoIi90bXAvbXlmaWZvIiwgU19JUlVTUiB8IFNfSVdV
-U1IgfCBTX0lXR1JQKSA8IDAKICAgICAgJiYgZXJybm8gIT0gRUVYSVNUKQog
-ICAgewogICAgICBwZXJyb3IgKCJta2ZpZm8iKTsKICAgICAgZXhpdCAoLTEp
-OwogICAgfQoKICBpZiAoKGZkID0gb3BlbiAoIi90bXAvbXlmaWZvIiwgT19S
-RE9OTFkpKSA8IDApCiAgICB7CiAgICAgIHBlcnJvciAoIm9wZW4iKTsKICAg
-ICAgZXhpdCAoLTEpOwogICAgfQoKICBGRF9aRVJPICgmcmVhZGZkcyk7CiAg
-RkRfU0VUIChmZCwgJnJlYWRmZHMpOwoKICBpZiAoKG5mZHMgPSBzZWxlY3Qg
-KGZkICsgMSwgJnJlYWRmZHMsIE5VTEwsIE5VTEwsIE5VTEwpKSA8IDApCiAg
-ICB7CiAgICAgIHBlcnJvciAoInNlbGVjdCIpOwogICAgICBleGl0ICgtMSk7
-CiAgICB9CgogIGlmIChGRF9JU1NFVCAoZmQsICZyZWFkZmRzKSkKICAgIHBy
-aW50ZiAoIi90bXAvbXlmaWZvIGlzIHJlYWR5IGZvciByZWFkaW5nXG4iKTsK
-ICBlbHNlCiAgICBwcmludGYgKCJzb21ldGhpbmcncyB3cm9uZ1xuIik7CiAg
-bmJ5dGVzID0gcmVhZCAoZmQsIGJ1ZiwgNCk7CiAgaWYgKG5ieXRlcyAhPSA0
-KQogICAgewogICAgICBwZXJyb3IgKCJyZWFkIik7CiAgICAgIGV4aXQgKC0x
-KTsKICAgIH0KICBidWZbNF0gPSAnXDAnOwogIHByaW50ZiAoInJlYWQgJWQg
-Ynl0ZXM6ICVzXG4iLCBuYnl0ZXMsIGJ1Zik7CiAgaWYgKGNsb3NlIChmZCkg
-PCAwKQogICAgewogICAgICBwZXJyb3IgKCJjbG9zZSIpOwogICAgICBleGl0
-ICgtMSk7CiAgICB9Cn0K
+On Mar 26 18:10, Michael Haubenwallner wrote:
+> Hi Corinna,
+>=20
+> as I do still encounter fork errors (address space needed by <dll> is
+> already occupied) with dynamically loaded dlls (but unrelated to
+> replaced dlls), one of them repeating even upon multiple retries,
 
---_003_1fc7ff0638cf6c8903f4e741f871b936cornelledu_--
+Why didn't rebase fix that?
+
+>  I'm
+> coming up with attached patch.
+>=20
+> What do you think about it?
+
+I'm not opposed to this patch but I don't quite follow the description.
+threadinterface->Init only creates three event objects.  From what I can
+tell, Events are stored in Paged and Nonpaged Pools, so they don't
+affect the processes VM.  What am I missing?
+
+
+Thanks,
+Corinna
+
+
+>=20
+> Thanks!
+> /haubi/
+
+> >From dfc28bcbb7ed55fe33ddb8d15e761b4d5b4815f8 Mon Sep 17 00:00:00 2001
+> From: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
+> Date: Tue, 26 Mar 2019 17:38:36 +0100
+> Subject: [PATCH] Cygwin: fork: reserve dynloaded dll areas earlier
+>=20
+> In dll_crt0_0, both threadinterface->Init and sigproc_init allocate
+> windows object handles using unpredictable memory regions, which may
+> collide with dynamically loaded dlls when they were relocated.
+> ---
+>  winsup/cygwin/dcrt0.cc | 6 ++++++
+>  winsup/cygwin/fork.cc  | 6 ------
+>  2 files changed, 6 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/winsup/cygwin/dcrt0.cc b/winsup/cygwin/dcrt0.cc
+> index 11edcdf0d..fb726a739 100644
+> --- a/winsup/cygwin/dcrt0.cc
+> +++ b/winsup/cygwin/dcrt0.cc
+> @@ -632,6 +632,12 @@ child_info_fork::handle_fork ()
+>=20=20
+>    if (fixup_mmaps_after_fork (parent))
+>      api_fatal ("recreate_mmaps_after_fork_failed");
+> +
+> +  /* We need to occupy the address space for dynamically loaded dlls
+> +     before we allocate any dynamic object, or we may end up with
+> +     error "address space needed by <dll> is already occupied"
+> +     for no good reason (seen with some relocated dll). */
+> +  dlls.reserve_space ();
+>  }
+>=20=20
+>  bool
+> diff --git a/winsup/cygwin/fork.cc b/winsup/cygwin/fork.cc
+> index 74ee9acf4..7e1c08990 100644
+> --- a/winsup/cygwin/fork.cc
+> +++ b/winsup/cygwin/fork.cc
+> @@ -136,12 +136,6 @@ frok::child (volatile char * volatile here)
+>  {
+>    HANDLE& hParent =3D ch.parent;
+>=20=20
+> -  /* NOTE: Logically this belongs in dll_list::load_after_fork, but by
+> -     doing it here, before the first sync_with_parent, we can exploit
+> -     the existing retry mechanism in hopes of getting a more favorable
+> -     address space layout next time. */
+> -  dlls.reserve_space ();
+> -
+>    sync_with_parent ("after longjmp", true);
+>    debug_printf ("child is running.  pid %d, ppid %d, stack here %p",
+>  		myself->pid, myself->ppid, __builtin_frame_address (0));
+> --=20
+> 2.17.0
+>=20
+>=20
+
+>=20
+> --
+> Problem reports:       http://cygwin.com/problems.html
+> FAQ:                   http://cygwin.com/faq/
+> Documentation:         http://cygwin.com/docs.html
+> Unsubscribe info:      http://cygwin.com/ml/#unsubscribe-simple
+
+
+--=20
+Corinna Vinschen
+Cygwin Maintainer
+
+--ikeVEW9yuYc//A+q
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 833
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAlyabqIACgkQ9TYGna5E
+T6Ao5g/+JCxDqQZXB1ljI6WAbJZVGH6whlxQSMgWpPSlavTxLFGCGtB3QtTB8bpO
+xx5iKV6sD3Lv8BxiBz1OeQvi3j/EnoVykhVbIrCxv9rpbtxr6ncKu3D1kDjVyIBh
+4mMSQON9PDOucmdKlpoEh3GiZNkfX6W2jQCqdv01nF1jfrxscN7opRQhnFdnW6nt
+LP4Pzj/mSKZQpyBpJ0b1WeIYPW5OXppy1U6JhfF9RJxrLD3GN8HVW7ZNPiseK5Z3
+HnRfgBbh9FcEdPLyq/17ymhw3HbdynfCGmTuYeGXXNftDsOkyK6p94G+d7xjIOz/
+7wdttdNg926v4aMbJ9mN7qtyIyY1cLBxtPayCthMAE6uP4X6HALyl9E0PFnmn7pO
+/7Qc3Hx0BqFxdtpuqWkICxlL/Kn/ADfj+kn8NARMUaeBgyGTlsgrAiTA3zT9UVJV
+TV2QxtnJUCTs3plFQj+NYbM1qftiaQXVNA2hUzSaGfj7XpG1ExaO2ZgM4IM9fUlb
+dW8F7GMqpjelm1xjgKK3PDtlKYdncTpO71pMiNJF2ckCd4EQvQ29j02zwwm7z2cV
+TUVXqdvOV1hcSvxiNbtnmlk6RxtLN0T0p3vM3cgY/tzWehsiK7VnvChj23JdcNf5
+4VFjkMvPSD677m9xXUOY4Otb+XPAsROdWOVoCtAfHekMdGkN5KU=
+=U6n8
+-----END PGP SIGNATURE-----
+
+--ikeVEW9yuYc//A+q--
