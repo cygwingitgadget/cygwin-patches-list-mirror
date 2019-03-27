@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9245-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 14475 invoked by alias); 27 Mar 2019 16:14:05 -0000
+Return-Path: <cygwin-patches-return-9246-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 93542 invoked by alias); 27 Mar 2019 18:10:23 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,91 +9,78 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 14465 invoked by uid 89); 27 Mar 2019 16:14:04 -0000
+Received: (qmail 93533 invoked by uid 89); 27 Mar 2019 18:10:23 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-104.3 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=water, van, UD:H, Water
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (217.72.192.74) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 27 Mar 2019 16:14:03 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id 1MBltK-1hGrES3dAy-00C6F9 for <cygwin-patches@cygwin.com>; Wed, 27 Mar 2019 17:14:00 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 44325A8054D; Wed, 27 Mar 2019 17:14:00 +0100 (CET)
-Date: Wed, 27 Mar 2019 16:14:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 1/1] Cygwin: fix: seteuid32() must return EPERM if privileges are not held.
-Message-ID: <20190327161400.GI4096@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <1553702463-1680-1-git-send-email-houder@xs4all.nl>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="Bqc0IY4JZZt50bUr"
-Content-Disposition: inline
-In-Reply-To: <1553702463-1680-1-git-send-email-houder@xs4all.nl>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-SW-Source: 2019-q1/txt/msg00055.txt.bz2
-
-
---Bqc0IY4JZZt50bUr
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-Spam-SWARE-Status: No, score=-13.8 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=para
+X-HELO: NAM01-BN3-obe.outbound.protection.outlook.com
+Received: from mail-eopbgr740123.outbound.protection.outlook.com (HELO NAM01-BN3-obe.outbound.protection.outlook.com) (40.107.74.123) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 27 Mar 2019 18:10:21 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector1; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=Q4W65tgBUr834i2E1Vlz7MpNEs1R6/xeoCGWAJCtmZM=; b=o29e+5AKNGaV0EqMuFdbgwsLgUg1A5r8bbQVXMu6oOdNg9O5n/SOGOXBP2LVBQ5t0Eb6M84qGNqEgqc9YZtVxcWc/fMxIInU8/ZmxDPMG4u22r+ZLeqKYUEYoMgRe1QVKU9PchvlAqQBKn2d5fGV8DOi3f0p6H2Xa6aHMCQmkVw=
+Received: from DM6PR04MB5211.namprd04.prod.outlook.com (20.178.24.208) by DM6PR04MB4620.namprd04.prod.outlook.com (20.176.105.209) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.1750.15; Wed, 27 Mar 2019 18:10:19 +0000
+Received: from DM6PR04MB5211.namprd04.prod.outlook.com ([fe80::14fd:138e:c16b:52d]) by DM6PR04MB5211.namprd04.prod.outlook.com ([fe80::14fd:138e:c16b:52d%4]) with mapi id 15.20.1730.019; Wed, 27 Mar 2019 18:10:19 +0000
+From: Ken Brown <kbrown@cornell.edu>
+To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: [PATCH] Cygwin: document the recent FIFO changes
+Date: Wed, 27 Mar 2019 18:10:00 -0000
+Message-ID: <20190327180959.59644-1-kbrown@cornell.edu>
+authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
+x-ms-exchange-purlcount: 2
+received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
-Content-length: 1470
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-IsSubscribed: yes
+X-SW-Source: 2019-q1/txt/msg00056.txt.bz2
 
-On Mar 27 17:01, J.H. van de Water wrote:
-> Starting w/ the intro of S4U, seteuid32() calls lsaprivkeyauth(), then
-> s4uauth(). s4uauth calls LsaRegisterLogonProcess().
-> LsaRegisterLogonProcess fails w/ STATUS_PORT_CONNECTION_REFUSED, if the
-> proper privileges are not held.
-> Because of RtlNtStatusToDosError(), this status would be mapped to
-> ERROR_ACCESS_DENIED, which in turn would map to EACCES. Therefore it is
-> useless to add this status to errmap[] (errno.cc), as s4auauth() should
-> return EPERM as errno here (i.e. if process is not privileged).
->=20
-> Hence the kludge.
->=20
-> Before the intro of S4U, seteuid32() called lsaprivkeyauth(), then
-> lsaauth(), then create_token(). Before the intro of Vista, the latter
-> would have called NtCreateToken().
-> NtCreateToken() would have failed w/ STATUS_PRIVILEGE_NOT_HELD for a
-> process w/o the proper privileges. In that case, calling seteuid32()
-> would have returned EPERM (as required).
->=20
-> Since the intro of Vista, and if the process had been started from an
-> UNelevated shell, create_token() does NOT reach NtCreateToken()!
-> As create_token() failed to properly set errno in that case, calling
-> seteuid32() would return errno as set by lsaauth(), i.e. EACCES, not
-> in agreement w/ Posix (a bug which was present for years).
-> (lsaauth() called LsaRegisterLogonProcess() which would fail)
-> ---
+---
+ winsup/cygwin/release/3.1.0 | 14 ++++++++++++++
+ winsup/doc/new-features.xml | 12 ++++++++++++
+ 2 files changed, 26 insertions(+)
+ create mode 100644 winsup/cygwin/release/3.1.0
 
-Pushed with a minor style tweak.
-
-
-Thanks a lot,
-Corinna
-
+diff --git a/winsup/cygwin/release/3.1.0 b/winsup/cygwin/release/3.1.0
+new file mode 100644
+index 000000000..1f017bfd1
+--- /dev/null
++++ b/winsup/cygwin/release/3.1.0
+@@ -0,0 +1,14 @@
++What's new:
++-----------
++
++
++What changed:
++-------------
++
++- FIFOs can now be opened multiple times for writing.
++  Addresses: https://cygwin.com/ml/cygwin/2015-03/msg00047.html
++             https://cygwin.com/ml/cygwin/2015-12/msg00311.html
++
++
++Bug Fixes
++---------
+diff --git a/winsup/doc/new-features.xml b/winsup/doc/new-features.xml
+index e14fbb1e8..c87601e9d 100644
+--- a/winsup/doc/new-features.xml
++++ b/winsup/doc/new-features.xml
+@@ -4,6 +4,18 @@
+=20
+ <sect1 id=3D"ov-new"><title>What's new and what changed in Cygwin</title>
+=20
++<sect2 id=3D"ov-new3.1"><title>What's new and what changed in 3.1</title>
++
++<itemizedlist mark=3D"bullet">
++
++<listitem><para>
++FIFOs can now be opened multiple times for writing.
++</para></listitem>
++
++</itemizedlist>
++
++</sect2>
++
+ <sect2 id=3D"ov-new3.0"><title>What's new and what changed in 3.0</title>
+=20
+ <itemizedlist mark=3D"bullet">
 --=20
-Corinna Vinschen
-Cygwin Maintainer
-
---Bqc0IY4JZZt50bUr
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAlyboUgACgkQ9TYGna5E
-T6Db0A//X7ZGbH2/JeZGu9Q5Ov2+kJDbYXF7TZQjxXMKhzsx6L5ZmdDX+82nfvQV
-/JA5eby9GQBYBd53Ck/c6icy4BNaqMlIPChHRzyXTogx7i91bMPXvl07H3rGfAQl
-qrP9DF1iqOQWpsjBwCMjlWf/nkOhki8Ukcbec8GE7M9CiwilIeGCWH3/A0DsukEO
-d4zFS3IhlwPBSXx/CwJPamm/DDnqYOojWg0Dx/4OMY3Ydw+ogCXo5eU7WQYs0Kpo
-7YOtMXSxtI3l2UXS51MZWrz7rIxDasveCSae/UmL8FmsAgJIksDxyd47ev0giWUX
-c1kUbTwaEhTD8zuUVCE1032UQ9RqPHqZdsFOXY6EUy4+LxRVc8XaFcWbsGO1N3IP
-mpzrsYe+3B65c1GIgRn/7Sif0F5TgSRr9wwwcDIDi4R2Ec8/UEBkjku4wavAIHMu
-ADIme+uJPjeSmaHsjHlvqVI02a7a/PGbBaceDQNh64GTYxJp1Vathg803ULn7aOR
-ktQVV/xxEYpuR/GNh49xPntZ+JLbTxKOZ7NP1INVT3zC00d0XPyIqvaQSCpW1VA+
-nGqbcsDYwnhPCLeBqbKcMcVi87tNmP/ju4CMhWOXsgjZqSeayu4K2SqBiFEoEsDb
-xAuHjKzIihxmutC1WWvhIR3+hSBbxXGUuk56h1VA2JeHqIqy5tk=
-=JWn4
------END PGP SIGNATURE-----
-
---Bqc0IY4JZZt50bUr--
+2.17.0
