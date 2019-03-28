@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9253-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 84827 invoked by alias); 28 Mar 2019 09:17:11 -0000
+Return-Path: <cygwin-patches-return-9254-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 98281 invoked by alias); 28 Mar 2019 09:58:23 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,107 +9,77 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 84813 invoked by uid 89); 28 Mar 2019 09:17:10 -0000
+Received: (qmail 98021 invoked by uid 89); 28 Mar 2019 09:58:23 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-5.3 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,SPF_PASS autolearn=ham version=3.3.1 spammy=adress, adapt
-X-HELO: atfriesa01.ssi-schaefer.com
-Received: from atfriesa01.ssi-schaefer.com (HELO atfriesa01.ssi-schaefer.com) (193.186.16.100) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 28 Mar 2019 09:17:09 +0000
-Received: from samail03.wamas.com (HELO mailhost.salomon.at) ([172.28.33.235])  by atfriesa01.ssi-schaefer.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 28 Mar 2019 10:17:06 +0100
-Received: from [172.28.42.244]	by mailhost.salomon.at with esmtp (Exim 4.77)	(envelope-from <michael.haubenwallner@ssi-schaefer.com>)	id 1h9R9l-0002Az-ED; Thu, 28 Mar 2019 10:17:05 +0100
-Subject: Re: [PATCH RFC] fork: reduce chances for "address space is already occupied" errors
-From: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
+X-Spam-SWARE-Status: No, score=-105.0 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*F:D*cygwin.com
+X-HELO: mout.kundenserver.de
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (217.72.192.73) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 28 Mar 2019 09:58:21 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id 1M5gAG-1h3MzA3Tys-007HkI for <cygwin-patches@cygwin.com>; Thu, 28 Mar 2019 10:58:18 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 38EA9A8057D; Thu, 28 Mar 2019 10:58:18 +0100 (CET)
+Date: Thu, 28 Mar 2019 09:58:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-References: <8c77b589-fcae-fd0d-f5c5-c2520cfebbfa@ssi-schaefer.com> <20190326182538.GA4096@calimero.vinschen.de> <20190326182824.GB4096@calimero.vinschen.de> <c52ec077-d1e6-f61a-df9c-fe9ede1ba1ff@ssi-schaefer.com> <20190327091640.GE4096@calimero.vinschen.de> <b22069db-a300-56f7-33dd-30a1adbc0c93@ssi-schaefer.com>
-Openpgp: preference=signencrypt
-Message-ID: <678d8ec4-f6c2-1538-aafd-dbb9cfc5dea5@ssi-schaefer.com>
-Date: Thu, 28 Mar 2019 09:17:00 -0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Thunderbird/60.6.1
+Subject: Re: [PATCH RFC] fork: reduce chances for "address space is already occupied" errors
+Message-ID: <20190328095818.GP4096@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <8c77b589-fcae-fd0d-f5c5-c2520cfebbfa@ssi-schaefer.com> <20190326182538.GA4096@calimero.vinschen.de> <20190326182824.GB4096@calimero.vinschen.de> <c52ec077-d1e6-f61a-df9c-fe9ede1ba1ff@ssi-schaefer.com> <20190327091640.GE4096@calimero.vinschen.de> <b22069db-a300-56f7-33dd-30a1adbc0c93@ssi-schaefer.com> <678d8ec4-f6c2-1538-aafd-dbb9cfc5dea5@ssi-schaefer.com>
 MIME-Version: 1.0
-In-Reply-To: <b22069db-a300-56f7-33dd-30a1adbc0c93@ssi-schaefer.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="E6lVPAHcXg6biC3t"
+Content-Disposition: inline
+In-Reply-To: <678d8ec4-f6c2-1538-aafd-dbb9cfc5dea5@ssi-schaefer.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
+X-SW-Source: 2019-q1/txt/msg00064.txt.bz2
+
+
+--E6lVPAHcXg6biC3t
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-SW-Source: 2019-q1/txt/msg00063.txt.bz2
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 770
+
+On Mar 28 10:17, Michael Haubenwallner wrote:
+> As it is not some other dll being loaded at the colliding adress: any
+> idea how to find out _what_ is allocated there (in the forked child),
+> to find out whether we can reserve these areas even more early?
+
+I'm not sure what addresses you're talking about ATM.  The addresses in
+the 0x4:00000000 - 0x6:00000000 range?  These are the interesting ones.
+The relocation to some random low address should only occur if there's
+a collision in this range.
+
+I'm not quite sure how to find out what happens, unless you stop the
+process in reserve_space and inspect the memory layout with sysinternal's
+vmmap tool:
+
+https://docs.microsoft.com/en-us/sysinternals/downloads/vmmap
 
 
-On 3/28/19 9:34 AM, Michael Haubenwallner wrote:
-> On 3/27/19 10:16 AM, Corinna Vinschen wrote:
->> On Mar 27 09:26, Michael Haubenwallner wrote:
->>> On 3/26/19 7:28 PM, Corinna Vinschen wrote:
->>>> On Mar 26 19:25, Corinna Vinschen wrote:
->>>>> On Mar 26 18:10, Michael Haubenwallner wrote:
->>>>>> Hi Corinna,
+Corinna
 
->>
->>>> Btw., is that 32 or 64 bit?  Both?
->>>
->>> I'm on 64bit only, can't say for 32bit.  And while in theory possible,
->>> I'm not after supporting 32bit Cygwin in Gento Prefix at all...
->>
->> If so, then I'm really curious how many DLLs are affected and why this
->> occurs on 64 bit.
->>
->> As you know, 64 bit has a defined memory layout.  Binutils ld is
->> supposed to base the DLLs to a pseudo-random address in the area between
->> 0x4:00000000 and 0x6:00000000.  This area is occupied by un-rebased DLLs
->> only.  8 Gigs is a *lot* of space for DLLs.
->>
->> That also means that the DLLs should not at all collide with windows
->> objects (typically reserved in the lesser 2 Gigs area), unless they
->> collide with themselves.  At least that's the idea.
->>
->> Can you check what addresses the freshly built DLLs are based on by LD?
->> Is there a chance that the algorithm used in LD is too dumb?
-> 
-> I've also added system_printf to dll_list::reserve_space() when a dynloaded
-> dll was relocated, and each new address was below 0x0:01000000. The attached
-> output also contains the preferred address, above 0x4:00000000 each.
-> 
->>
->> Or, hmm.  Is there a chance that newer Windows loads dynamically loaded
->> DLLs whereever it likes, ignoring the base address, ASLR-like, even
->> if the DLL is marked as non-ASLR-aware?  But then again, we should have
->> a lot more complaints on the list...
-> 
-> I've done this test on Windows Server 2012R2, but the problem exists on
-> 2016 and 2019 as well (I'm not testing with other Windows versions).
-> 
->>>>>>  I'm
->>>>>> coming up with attached patch.
->>>>>>
->>>>>> What do you think about it?
->>>>>
->>>>> I'm not opposed to this patch but I don't quite follow the description.
->>>>> threadinterface->Init only creates three event objects.  From what I can
->>>>> tell, Events are stored in Paged and Nonpaged Pools, so they don't
->>>>> affect the processes VM.  What am I missing?
->>>
->>> Honestly, I'm not completely sure whether this patch really does help:
->>> Beyond the Events, there also is CreateNamedPipe and CreateFile used
->>> in fhandler_pipe::create via sigproc_init, and these causing the address
->>> conflicts with some dll actually is nothing more than a wild guess:
->>> While their returned handles are below the conflicting dll address,
->>> who can tell what these API calls do allocate internally?
->>
->> The handles are not addresses.  If the sigproc_init stuff collides,
->> I only see two chances for that, the process-local read/write buffers
->> of the signal pipe, and the stack of the read_sig thread.
->>
->> If this patch helps your situation, we can pull it in and test it,
->> but I think your situation asks for more debugging along the lines
->> of the DLL rebasing above.
-> 
-> With this patch collisions seem gone, yet the relocations do happen.
+--=20
+Corinna Vinschen
+Cygwin Maintainer
 
-Ehm... collisions still do happen, but less often at least,
-so this patch does help in my situation.
+--E6lVPAHcXg6biC3t
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 833
 
-As it is not some other dll being loaded at the colliding adress: any
-idea how to find out _what_ is allocated there (in the forked child),
-to find out whether we can reserve these areas even more early?
+-----BEGIN PGP SIGNATURE-----
 
-What if we adapt the initial dlopen call to disallow relocation into
-such low address space?
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAlycmroACgkQ9TYGna5E
+T6BYUw/7B3ecxFywNr87yCYIuF986ST8L4G/ay3iC6BF7w3y2RX6tUyxxtCQWEcV
+0XFfwGFI8s2dzYdtn4kJmN8eyBohdmh5Gthp7Oz0btljOoOeAuvG2Q7DH7xy3wLK
+UWdMc3IFqcC0CIUHr7+51c2LWsYigaY59/jKE1Iauc1SyOECSXJR7lYkACv2mx4J
+4dJStnwLbPvwf7YVtHe1XNkWhGPOKxHRlUs9JkcWb+hkCjRmg6rJdF4gNgatMXiP
+tRT4qMVsP7kP6KsBhk/3D6cBM4NBIO9p3fGH9bkhR3vEfibRPwLHej4NrdeFZNFi
+oVhb4rSFyj8SUAxfvafsZ5qGIsEou9vy8teQyd8fU5j4dJTz8WIXKNoL4Eo51UmP
+rSEFWqiXxinNFBi7MG423STExXBZ1MdM8cQqhouZlPaanM86PqQ61ubIDL/NtQGY
+GLOV05ev+TeAPBIpSEV+7Ga7CJTe0qyMG6T8NXFnjVC0+I+fguLHJIIECt6sfnjm
+LvwxcPBbfRhR+4uaZB0rIAzjQtQhU8kBkBZ9pPA92WDolWu7GZnbHdHpFXRlSxR/
++6bpYI/L4kPkzWhyEhgOO2kLBqTA5HE/Q/kqZyhQ6o97gQTHYl6tvfORwjncEOW2
+2kA8AdwH87uTNTSvVxjmqudyM+W8jtUVUK3vLa9fSes0N8FLfjc=
+=dFfZ
+-----END PGP SIGNATURE-----
 
-Beyond that, I'm going to learn about rebase --oblivious, thanks Achim!
-
-/haubi/
+--E6lVPAHcXg6biC3t--
