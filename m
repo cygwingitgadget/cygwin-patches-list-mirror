@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9273-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 18060 invoked by alias); 29 Mar 2019 20:11:21 -0000
+Return-Path: <cygwin-patches-return-9274-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 68882 invoked by alias); 29 Mar 2019 20:23:42 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,66 +9,41 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 18048 invoked by uid 89); 29 Mar 2019 20:11:20 -0000
+Received: (qmail 68873 invoked by uid 89); 29 Mar 2019 20:23:42 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-2.3 required=5.0 tests=AWL,BAYES_00,SPF_PASS autolearn=ham version=3.3.1 spammy=explains, hundred, somewhere
-X-HELO: mx009.vodafonemail.xion.oxcs.net
-Received: from mx009.vodafonemail.xion.oxcs.net (HELO mx009.vodafonemail.xion.oxcs.net) (153.92.174.39) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 29 Mar 2019 20:11:18 +0000
-Received: from vsmx002.vodafonemail.xion.oxcs.net (unknown [192.168.75.192])	by mta-6-out.mta.xion.oxcs.net (Postfix) with ESMTP id 425FFD9B2B2	for <cygwin-patches@cygwin.com>; Fri, 29 Mar 2019 20:11:15 +0000 (UTC)
-Received: from Gertrud (unknown [87.185.211.111])	by mta-6-out.mta.xion.oxcs.net (Postfix) with ESMTPA id 129F5199C19	for <cygwin-patches@cygwin.com>; Fri, 29 Mar 2019 20:11:12 +0000 (UTC)
+X-Spam-SWARE-Status: No, score=-2.6 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.1 spammy=explain
+X-HELO: vsmx009.vodafonemail.xion.oxcs.net
+Received: from vsmx009.vodafonemail.xion.oxcs.net (HELO vsmx009.vodafonemail.xion.oxcs.net) (153.92.174.87) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 29 Mar 2019 20:23:40 +0000
+Received: from vsmx001.vodafonemail.xion.oxcs.net (unknown [192.168.75.191])	by mta-5-out.mta.xion.oxcs.net (Postfix) with ESMTP id B1462C053C	for <cygwin-patches@cygwin.com>; Fri, 29 Mar 2019 20:23:38 +0000 (UTC)
+Received: from Gertrud (unknown [87.185.211.111])	by mta-5-out.mta.xion.oxcs.net (Postfix) with ESMTPA id 87223300539	for <cygwin-patches@cygwin.com>; Fri, 29 Mar 2019 20:23:36 +0000 (UTC)
 From: Achim Gratz <Stromeko@nexgo.de>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH fifo 0/2] Add support for duplex FIFOs
-References: <20190325230556.2219-1-kbrown@cornell.edu>	<20190326083620.GI3471@calimero.vinschen.de>	<1fc7ff06-38cf-6c89-03f4-e741f871b936@cornell.edu>	<20190326190136.GC4096@calimero.vinschen.de>	<20190327133059.GG4096@calimero.vinschen.de>	<87k1gi3mle.fsf@Rainer.invalid>	<20190328201317.GZ4096@calimero.vinschen.de>	<d4cb62f1-5754-aff2-c23d-7ce65f5a5726@cornell.edu>	<87o95u5eu0.fsf@Rainer.invalid>	<f8b66caf-7673-f92b-ed2e-127b387f1f09@cornell.edu>
-Date: Fri, 29 Mar 2019 20:11:00 -0000
-In-Reply-To: <f8b66caf-7673-f92b-ed2e-127b387f1f09@cornell.edu> (Ken Brown's	message of "Fri, 29 Mar 2019 18:05:18 +0000")
-Message-ID: <87tvfljvaa.fsf@Rainer.invalid>
+Subject: Re: [PATCH RFC] fork: reduce chances for "address space is already occupied" errors
+References: <8c77b589-fcae-fd0d-f5c5-c2520cfebbfa@ssi-schaefer.com>	<20190326182538.GA4096@calimero.vinschen.de>	<20190326182824.GB4096@calimero.vinschen.de>	<c52ec077-d1e6-f61a-df9c-fe9ede1ba1ff@ssi-schaefer.com>	<87y350ytpb.fsf@Rainer.invalid>	<9c38ac1d-4dea-12d4-a63b-6e8ec59b3ae8@ssi-schaefer.com>	<0f0d7cd6-e770-fc32-f28f-817b700e4d87@SystematicSw.ab.ca>	<f5ab5a82-8d26-4898-7ea4-ecef5c377299@ssi-schaefer.com>	<abf543bb-e8df-9eeb-5ae8-63e5d59cca9a@SystematicSw.ab.ca>	<87sgv65eyc.fsf@Rainer.invalid>	<5fa27e1c-a790-f03d-b4b3-1985f26df128@SystematicSw.ab.ca>
+Date: Fri, 29 Mar 2019 20:23:00 -0000
+In-Reply-To: <5fa27e1c-a790-f03d-b4b3-1985f26df128@SystematicSw.ab.ca> (Brian	Inglis's message of "Fri, 29 Mar 2019 08:42:32 -0600")
+Message-ID: <87pnq9jupk.fsf@Rainer.invalid>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
-X-SW-Source: 2019-q1/txt/msg00083.txt.bz2
+X-SW-Source: 2019-q1/txt/msg00084.txt.bz2
 
-Ken Brown writes:
-> I found a bug in my fhandler_fifo::raw_write code that could explain the 
-> problem.  The call to NtWriteFile in that function always returns immediately 
-> because the Windows named pipe underlying the FIFO is non-blocking.  If it can't 
-> write because the pipe buffer is full, raw_write returns -1 with error EAGAIN. 
-> That's wrong if the FIFO was opened in blocking mode.
+Brian Inglis writes:
+> Achim, thanks for the clarifications; could you please comment on the suggested
+> approach for handling local production dlls and exes, or explain the best
+> approach for migrating from test to prod and handling rebase on target systems?
 
-Sounds like a clue or at least it doesn#t contradict what I'm seeing.  I
-have no idea if that explains all the problems I'm seeing, I'll describe
-them in more detail below.
-
-> I'll have to think about how to best handle this.  I think I might be able to 
-> imitate what's done in fhandler_socket_unix::sendmsg in the topic/af_unix branch.
-
-OK, a bit more info: The whole thing runs from a perl script (actually a
-module) that opens pipes to gnuplot and ghostscript.  This code is
-_really_ old and has seen a lot of Cygwin releases, so it has options to
-either use temporary files, named pipes aka FIFO or direct pipes.  Using
-temporary files serializes the execution and using a pipe chain is
-_really_ slow (like a hundred times, which is mostly tied up in system
-for a reason that I don't understand), so using FIFO is the default.
-Your new FIFO code increases the system time by about a factor of 10 in
-my tests, btw.
-
-The error with the FIFO to gnuplot is that some data that was written
-into the FIFO already doesn't show up at the reader end, but later data
-written into it does.  Here somewhere around a few kiB go missing and
-gnuplot runs into a syntax error when it happens.
-
-If I run gnuplot through a plain pipe to skip that error, but keep
-ghostscript on FIFO, then it _almost_ works correctly.  Except that once
-gnuplot has finished writing to the FIFO I need to write the bookmarks
-dictionary before closing the output file and that write again
-overwrites data that should already have been present at the other side.
-I've played a bit with putting in flushes and sleeps and there's between
-one to three pages at the end of the document that go missing, so again
-a handful of KiB.
-
-So either of these two errors indiqcates problems with synchronizing the
-reader/writer side, which makes some of the written data disappear on
-the receiving end of the FIFO.
+I'm not quite sure what you want to know.  As I said before oblivious
+rebase was invented for running tests that use freshly built DLL (I
+usually package them before running the tests, so the package will have
+the un-rebased DLL from before the test was run).  For this it suffices
+to simply feed in all new DLL names to rebase.  If you were to build in
+stages and/or combine different builds then you'd somehow have to
+remember the DLL from each stage or build, or just collect all the DLL
+names again each time you change something.  The important thing is that
+each oblivious rebase needs to get the list of _all_ DLL that need to
+get rebased, since the database only knows about the host system
+(i.e. you can't rebase incrementally with --oblivious).
 
 
 Regards,
@@ -76,5 +51,5 @@ Achim.
 -- 
 +<[Q+ Matrix-12 WAVE#46+305 Neuron microQkb Andromeda XTk Blofeld]>+
 
-Factory and User Sound Singles for Waldorf Q+, Q and microQ:
-http://Synth.Stromeko.net/Downloads.html#WaldorfSounds
+SD adaptation for Waldorf rackAttack V1.04R1:
+http://Synth.Stromeko.net/Downloads.html#WaldorfSDada
