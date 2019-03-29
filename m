@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9268-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 8765 invoked by alias); 28 Mar 2019 22:56:30 -0000
+Return-Path: <cygwin-patches-return-9269-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 20163 invoked by alias); 29 Mar 2019 07:16:12 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,84 +9,64 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 8748 invoked by uid 89); 28 Mar 2019 22:56:30 -0000
+Received: (qmail 19996 invoked by uid 89); 29 Mar 2019 07:15:57 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-3.6 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_LOW autolearn=ham version=3.3.1 spammy=
-X-HELO: smtp-out-so.shaw.ca
-Received: from smtp-out-so.shaw.ca (HELO smtp-out-so.shaw.ca) (64.59.136.139) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 28 Mar 2019 22:56:28 +0000
-Received: from [192.168.1.114] ([24.64.172.44])	by shaw.ca with ESMTP	id 9dwfh3Hk7o7SQ9dwghdWOo; Thu, 28 Mar 2019 16:56:27 -0600
-Reply-To: Brian.Inglis@SystematicSw.ab.ca
-Subject: Re: [PATCH RFC] fork: reduce chances for "address space is already occupied" errors
+X-Spam-SWARE-Status: No, score=-2.6 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.1 spammy=
+X-HELO: vsmx012.vodafonemail.xion.oxcs.net
+Received: from vsmx012.vodafonemail.xion.oxcs.net (HELO vsmx012.vodafonemail.xion.oxcs.net) (153.92.174.90) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 29 Mar 2019 07:15:38 +0000
+Received: from vsmx004.vodafonemail.xion.oxcs.net (unknown [192.168.75.198])	by mta-8-out.mta.xion.oxcs.net (Postfix) with ESMTP id DA774F34C5F	for <cygwin-patches@cygwin.com>; Fri, 29 Mar 2019 07:15:31 +0000 (UTC)
+Received: from Rainer.invalid (unknown [87.185.211.111])	by mta-8-out.mta.xion.oxcs.net (Postfix) with ESMTPA id A6F3319AD95	for <cygwin-patches@cygwin.com>; Fri, 29 Mar 2019 07:15:29 +0000 (UTC)
+From: Achim Gratz <Stromeko@nexgo.de>
 To: cygwin-patches@cygwin.com
-References: <8c77b589-fcae-fd0d-f5c5-c2520cfebbfa@ssi-schaefer.com> <20190326182538.GA4096@calimero.vinschen.de> <20190326182824.GB4096@calimero.vinschen.de> <c52ec077-d1e6-f61a-df9c-fe9ede1ba1ff@ssi-schaefer.com> <87y350ytpb.fsf@Rainer.invalid> <9c38ac1d-4dea-12d4-a63b-6e8ec59b3ae8@ssi-schaefer.com> <0f0d7cd6-e770-fc32-f28f-817b700e4d87@SystematicSw.ab.ca> <f5ab5a82-8d26-4898-7ea4-ecef5c377299@ssi-schaefer.com>
-From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
-Openpgp: preference=signencrypt
-Message-ID: <abf543bb-e8df-9eeb-5ae8-63e5d59cca9a@SystematicSw.ab.ca>
-Date: Thu, 28 Mar 2019 22:56:00 -0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101 Thunderbird/60.6.1
+Subject: Re: [PATCH RFC] fork: reduce chances for "address space is already occupied" errors
+References: <8c77b589-fcae-fd0d-f5c5-c2520cfebbfa@ssi-schaefer.com>	<20190326182538.GA4096@calimero.vinschen.de>	<20190326182824.GB4096@calimero.vinschen.de>	<c52ec077-d1e6-f61a-df9c-fe9ede1ba1ff@ssi-schaefer.com>	<87y350ytpb.fsf@Rainer.invalid>	<9c38ac1d-4dea-12d4-a63b-6e8ec59b3ae8@ssi-schaefer.com>	<0f0d7cd6-e770-fc32-f28f-817b700e4d87@SystematicSw.ab.ca>	<f5ab5a82-8d26-4898-7ea4-ecef5c377299@ssi-schaefer.com>	<abf543bb-e8df-9eeb-5ae8-63e5d59cca9a@SystematicSw.ab.ca>
+Date: Fri, 29 Mar 2019 07:16:00 -0000
+In-Reply-To: <abf543bb-e8df-9eeb-5ae8-63e5d59cca9a@SystematicSw.ab.ca> (Brian	Inglis's message of "Thu, 28 Mar 2019 16:56:25 -0600")
+Message-ID: <87sgv65eyc.fsf@Rainer.invalid>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <f5ab5a82-8d26-4898-7ea4-ecef5c377299@ssi-schaefer.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-IsSubscribed: yes
-X-SW-Source: 2019-q1/txt/msg00078.txt.bz2
+Content-Type: text/plain
+X-SW-Source: 2019-q1/txt/msg00079.txt.bz2
 
-On 2019-03-28 10:48, Michael Haubenwallner wrote:
-> On 3/28/19 4:19 PM, Brian Inglis wrote:
->> On 2019-03-28 08:59, Michael Haubenwallner wrote:
->>> On 3/27/19 8:59 PM, Achim Gratz wrote:
->>>> Michael Haubenwallner writes:
->>>>> As far as I understand, rebasing is about touching already installed
->>>>> dlls as well, which would require to restart all Cygwin processes.
->>>>> As the problem is about some dll built during a larger build job,
->>>>> this is not something that feels useful to me.
->>>>
->>>> That's exactly why I introduced the "--oblivious" option several years
->>>> ago.  It'll let you rebase a set of DLL while benefitting from the
->>>> rebase database, but not recording them there, so if you later install
->>>> them properly there will be no collision.  I needed this for testing
->>>> newly compiled Perl XS modules, but you seem to have a similar use case.
->>>
->>> What I can see so far is that right now there is only one single rebase
->>> database, in /etc/rebase.db.<arch>.
->>>
->>> However, my 'installed' dlls are not put into /bin, but into the so called
->>> Gentoo "Prefix", e.g. /home/haubi/test-20190327/gentoo-prefix/usr/bin for
->>> example.  Remember that there can be multiple independent instances of Gentoo
->>> Prefix, so recording them all into the host /etc/rebase.db is not an option.
->>>
->>> Hence there should be a rebase database per Gentoo Prefix instance, like
->>> /home/haubi/test-20190327/gentoo-prefix/etc/rebase.db.<arch>, to record
->>> my 'installed' dlls, while still loading the /etc/rebase.db.<arch> to avoid
->>> conflicts with cygwin provided dlls.
->>>
->>> And how would one explicitly remove specific entries from the rebase database
->>> when dlls get uninstalled (by either package remove or package upgrade)?
->>
->> Using rebase -O, --oblivious with -T, --filelist local-test-rebase-db gives you
->> your own local test rebase db - just add all your test dlls into it (sort -u to
->> eliminate dups).
-> Sounds interesting... but something I must be doing wrong here:
-> $ rebase --oblivious --filelist=my-dlls.txt local-test-rebase-db
-> local-test-rebase-db: skipped because nonexistent.
-> $ touch local-test-rebase-db
-> $ rebase --oblivious --filelist=my-dlls.txt local-test-rebase-db
-> local-test-rebase-db: skipped because not rebaseable
-> $ cp /etc/rebase.db.x86_64 local-test-rebase-db
-> $ rebase --oblivious --filelist=my-dlls.txt local-test-rebase-db
-> local-test-rebase-db: skipped because not rebaseable
-> It doesn't want to create or update the local-test-rebase-db file...
+Brian Inglis writes:
+> File list my-dlls.txt is your local test rebase db listing all your
+> test dlls.
 
-File list my-dlls.txt is your local test rebase db listing all your test dlls.
-If you are packaging your own exes and dlls with your own local Cygwin distro,
-you should point to your local utility directory with a path in a file under
-/var/lib/rebase/user.d/$USER for each Cygwin userid on each system, or perhaps
-you might also need to add your own production exes and dlls into
-/var/cache/rebase/rebase_user and /var/cache/rebase/rebase_user_exe: see
-/usr/share/doc/Cygwin/_autorebase.README.
+I think Michael got confused by your usage of "db" here.  This is in
+fact just a listing of all the DLL to operate on, not the rebase
+database (which won't be changed at all by an oblivious rebase, only
+read in order to not collide the new rebase with the already existing
+ones).
 
+> If you are packaging your own exes and dlls with your own local Cygwin distro,
+> you should point to your local utility directory with a path in a file under
+> /var/lib/rebase/user.d/$USER for each Cygwin userid on each system, or perhaps
+> you might also need to add your own production exes and dlls into
+> /var/cache/rebase/rebase_user and /var/cache/rebase/rebase_user_exe: see
+> /usr/share/doc/Cygwin/_autorebase.README.
+
+What Michael is using is a fairly complex build system that would indeed
+benefit from a layered rebase database, i.e. the one for the base system
+providing the substrate for the build system and then at leat on other
+one that collects the information from inside the build system (maybe
+even a third layer for tests).  How to deal with the complexities of
+when you want to push information down to a previous layer would likely
+be a main point of contention, so you'd probably best skip it in the
+beginning.
+
+SHTDI, PTC, etc.pp.
+
+With the current rebase, you'll have to use "--oblivious" (which, again,
+doesn't remember any data for the newly rebased objects) and those
+non-existing upper layers will have to be provided by side-channel
+information that the build system has to collect and maintain itself,
+then feed to the rebase command.
+
+
+Regards,
+Achim.
 -- 
-Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
++<[Q+ Matrix-12 WAVE#46+305 Neuron microQkb Andromeda XTk Blofeld]>+
 
-This email may be disturbing to some readers as it contains
-too much technical detail. Reader discretion is advised.q
+Factory and User Sound Singles for Waldorf rackAttack:
+http://Synth.Stromeko.net/Downloads.html#WaldorfSounds
