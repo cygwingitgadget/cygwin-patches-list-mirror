@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9270-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 22443 invoked by alias); 29 Mar 2019 07:18:06 -0000
+Return-Path: <cygwin-patches-return-9271-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 35657 invoked by alias); 29 Mar 2019 14:42:37 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,43 +9,69 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 22430 invoked by uid 89); 29 Mar 2019 07:18:05 -0000
+Received: (qmail 35646 invoked by uid 89); 29 Mar 2019 14:42:37 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-2.3 required=5.0 tests=AWL,BAYES_00,SPF_PASS autolearn=ham version=3.3.1 spammy=race, HX-Languages-Length:857
-X-HELO: mx009.vodafonemail.xion.oxcs.net
-Received: from mx009.vodafonemail.xion.oxcs.net (HELO mx009.vodafonemail.xion.oxcs.net) (153.92.174.39) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 29 Mar 2019 07:18:04 +0000
-Received: from vsmx002.vodafonemail.xion.oxcs.net (unknown [192.168.75.192])	by mta-6-out.mta.xion.oxcs.net (Postfix) with ESMTP id 8F9EED9B31D	for <cygwin-patches@cygwin.com>; Fri, 29 Mar 2019 07:18:02 +0000 (UTC)
-Received: from Rainer.invalid (unknown [87.185.211.111])	by mta-6-out.mta.xion.oxcs.net (Postfix) with ESMTPA id 61CE2199C28	for <cygwin-patches@cygwin.com>; Fri, 29 Mar 2019 07:18:00 +0000 (UTC)
-From: Achim Gratz <Stromeko@nexgo.de>
+X-Spam-SWARE-Status: No, score=-3.6 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_LOW autolearn=ham version=3.3.1 spammy=
+X-HELO: smtp-out-so.shaw.ca
+Received: from smtp-out-so.shaw.ca (HELO smtp-out-so.shaw.ca) (64.59.136.138) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 29 Mar 2019 14:42:35 +0000
+Received: from [192.168.1.114] ([24.64.172.44])	by shaw.ca with ESMTP	id 9siGhu2kSGusj9siHhEY5P; Fri, 29 Mar 2019 08:42:33 -0600
+Reply-To: Brian.Inglis@SystematicSw.ab.ca
+Subject: Re: [PATCH RFC] fork: reduce chances for "address space is already occupied" errors
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH fifo 0/2] Add support for duplex FIFOs
-References: <20190325230556.2219-1-kbrown@cornell.edu>	<20190326083620.GI3471@calimero.vinschen.de>	<1fc7ff06-38cf-6c89-03f4-e741f871b936@cornell.edu>	<20190326190136.GC4096@calimero.vinschen.de>	<20190327133059.GG4096@calimero.vinschen.de>	<87k1gi3mle.fsf@Rainer.invalid>	<20190328201317.GZ4096@calimero.vinschen.de>	<d4cb62f1-5754-aff2-c23d-7ce65f5a5726@cornell.edu>
-Date: Fri, 29 Mar 2019 07:18:00 -0000
-In-Reply-To: <d4cb62f1-5754-aff2-c23d-7ce65f5a5726@cornell.edu> (Ken Brown's	message of "Thu, 28 Mar 2019 22:54:22 +0000")
-Message-ID: <87o95u5eu0.fsf@Rainer.invalid>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+References: <8c77b589-fcae-fd0d-f5c5-c2520cfebbfa@ssi-schaefer.com> <20190326182538.GA4096@calimero.vinschen.de> <20190326182824.GB4096@calimero.vinschen.de> <c52ec077-d1e6-f61a-df9c-fe9ede1ba1ff@ssi-schaefer.com> <87y350ytpb.fsf@Rainer.invalid> <9c38ac1d-4dea-12d4-a63b-6e8ec59b3ae8@ssi-schaefer.com> <0f0d7cd6-e770-fc32-f28f-817b700e4d87@SystematicSw.ab.ca> <f5ab5a82-8d26-4898-7ea4-ecef5c377299@ssi-schaefer.com> <abf543bb-e8df-9eeb-5ae8-63e5d59cca9a@SystematicSw.ab.ca> <87sgv65eyc.fsf@Rainer.invalid>
+From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
+Openpgp: preference=signencrypt
+Message-ID: <5fa27e1c-a790-f03d-b4b3-1985f26df128@SystematicSw.ab.ca>
+Date: Fri, 29 Mar 2019 14:42:00 -0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101 Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-SW-Source: 2019-q1/txt/msg00080.txt.bz2
+In-Reply-To: <87sgv65eyc.fsf@Rainer.invalid>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
+X-SW-Source: 2019-q1/txt/msg00081.txt.bz2
 
-Ken Brown writes:
->> I'm pretty sure Ken would be happy about an STC.
->
-> Yes, please.  Barring that, is there any chance I could see the relevant code, 
-> or at least enough of it so that I can see how FIFOs are being used?
+On 2019-03-29 01:15, Achim Gratz wrote:
+> Brian Inglis writes:
+>> File list my-dlls.txt is your local test rebase db listing all your
+>> test dlls.
+> 
+> I think Michael got confused by your usage of "db" here.  This is in
+> fact just a listing of all the DLL to operate on, not the rebase
+> database (which won't be changed at all by an oblivious rebase, only
+> read in order to not collide the new rebase with the already existing
+> ones).
+> 
+>> If you are packaging your own exes and dlls with your own local Cygwin distro,
+>> you should point to your local utility directory with a path in a file under
+>> /var/lib/rebase/user.d/$USER for each Cygwin userid on each system, or perhaps
+>> you might also need to add your own production exes and dlls into
+>> /var/cache/rebase/rebase_user and /var/cache/rebase/rebase_user_exe: see
+>> /usr/share/doc/Cygwin/_autorebase.README.
+> 
+> What Michael is using is a fairly complex build system that would indeed
+> benefit from a layered rebase database, i.e. the one for the base system
+> providing the substrate for the build system and then at leat on other
+> one that collects the information from inside the build system (maybe
+> even a third layer for tests).  How to deal with the complexities of
+> when you want to push information down to a previous layer would likely
+> be a main point of contention, so you'd probably best skip it in the
+> beginning.
+> 
+> SHTDI, PTC, etc.pp.
+> 
+> With the current rebase, you'll have to use "--oblivious" (which, again,
+> doesn't remember any data for the newly rebased objects) and those
+> non-existing upper layers will have to be provided by side-channel
+> information that the build system has to collect and maintain itself,
+> then feed to the rebase command.
 
-Well, I'm trying -- but got nothing so far.  As the individual FIFO seem
-to work and the error happens pretty early, I think it has something to
-do with either switching between different FIFO (which the original code
-does) or some race between fill and drain, possibly around a buffer
-boundary (in my limited testing it always seemed to happen in the same
-place for the same data).
+Achim, thanks for the clarifications; could you please comment on the suggested
+approach for handling local production dlls and exes, or explain the best
+approach for migrating from test to prod and handling rebase on target systems?
 
-
-Regards,
-Achim.
 -- 
-+<[Q+ Matrix-12 WAVE#46+305 Neuron microQkb Andromeda XTk Blofeld]>+
+Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
 
-Factory and User Sound Singles for Waldorf rackAttack:
-http://Synth.Stromeko.net/Downloads.html#WaldorfSounds
+This email may be disturbing to some readers as it contains
+too much technical detail. Reader discretion is advised.
