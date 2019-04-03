@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9304-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 9540 invoked by alias); 3 Apr 2019 12:39:38 -0000
+Return-Path: <cygwin-patches-return-9306-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 77571 invoked by alias); 3 Apr 2019 16:26:46 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,62 +9,66 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 9530 invoked by uid 89); 3 Apr 2019 12:39:38 -0000
+Received: (qmail 77450 invoked by uid 89); 3 Apr 2019 16:26:46 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-1.9 required=5.0 tests=BAYES_00,MIME_BASE64_BLANKS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=hundred
-X-HELO: NAM02-SN1-obe.outbound.protection.outlook.com
-Received: from mail-eopbgr770128.outbound.protection.outlook.com (HELO NAM02-SN1-obe.outbound.protection.outlook.com) (40.107.77.128) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 03 Apr 2019 12:39:36 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector1; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=MwRTx76uBYUA4iaAKI98UzYy486y+Gu5/pYGwn/skS4=; b=lnv5Qka4Q66j663kJNb/FumX8TRJgU8kKl6iFcjFJ/auaqoQxUs9U/IzW8a0h2S1Ct5TwA/N4IifxlCE5+uOBPT/ZSASRGnuxK5W3ZqQIsFIvMWqNpfs/Db6GzG7lDVDQ33I1cDMnCQ2L0qIqGiDhF5OOtizRC+VJd7IPvdmGrY=
-Received: from DM6PR04MB5211.namprd04.prod.outlook.com (20.178.24.208) by DM6PR04MB4089.namprd04.prod.outlook.com (20.176.87.154) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.1750.16; Wed, 3 Apr 2019 12:39:34 +0000
-Received: from DM6PR04MB5211.namprd04.prod.outlook.com ([fe80::21bb:c809:f459:845c]) by DM6PR04MB5211.namprd04.prod.outlook.com ([fe80::21bb:c809:f459:845c%2]) with mapi id 15.20.1750.017; Wed, 3 Apr 2019 12:39:34 +0000
-From: Ken Brown <kbrown@cornell.edu>
-To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: Re: [PATCH fifo 0/2] Add support for duplex FIFOs
-Date: Wed, 03 Apr 2019 12:39:00 -0000
-Message-ID: <6123dba2-d6d0-f4fe-275f-f63fd3f01994@cornell.edu>
-References: <20190325230556.2219-1-kbrown@cornell.edu> <20190326083620.GI3471@calimero.vinschen.de> <1fc7ff06-38cf-6c89-03f4-e741f871b936@cornell.edu> <20190326190136.GC4096@calimero.vinschen.de> <20190327133059.GG4096@calimero.vinschen.de> <87k1gi3mle.fsf@Rainer.invalid> <20190328201317.GZ4096@calimero.vinschen.de> <d4cb62f1-5754-aff2-c23d-7ce65f5a5726@cornell.edu> <87o95u5eu0.fsf@Rainer.invalid> <f8b66caf-7673-f92b-ed2e-127b387f1f09@cornell.edu> <87tvfljvaa.fsf@Rainer.invalid> <87a7h7mfo8.fsf@Rainer.invalid>
-In-Reply-To: <87a7h7mfo8.fsf@Rainer.invalid>
-user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101 Thunderbird/60.6.1
-authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
-received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <1956BED21EDD224881327931C4DA8FCC@namprd04.prod.outlook.com>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-Spam-SWARE-Status: No, score=-17.6 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=
+X-HELO: conuserg-03.nifty.com
+Received: from conuserg-03.nifty.com (HELO conuserg-03.nifty.com) (210.131.2.70) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 03 Apr 2019 16:26:45 +0000
+Received: from localhost.localdomain (ntsitm424054.sitm.nt.ngn.ppp.infoweb.ne.jp [219.97.74.54]) (authenticated)	by conuserg-03.nifty.com with ESMTP id x33GPxpp019653;	Thu, 4 Apr 2019 01:26:19 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-03.nifty.com x33GPxpp019653
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1554308779;	bh=nitYjKWzSwRiKxLbuNiu9eUIbwiPLtkJO+w2cZSTb8s=;	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;	b=Iy6aoQllCUs/KTZeJMwqOpKz/QKBNY5Ze7KtPvx/H3Y14aGZJ7J859CA6mH2qbXsZ	 FSjL5thzg7VRR01SAHhEmvMJs1MoJgfQjEZMdahPYY3a+i26C1UJu5m3izy1SqHoZN	 wWk1W3JBZj/SISGNSp//AJlUO/U0eCtLFF0vAKbLdjSjvqu0YSpf+cpzD4zamtuCub	 kGmTim2TgO6O7ULQ77bDGEaUeCd1i64Ynehthkoy5u32NuJTMXqQ8QrecTD+y2ouy4	 dXLx3MnQ+2zXS15qzJ0GroMcrv6JXZOYqFiOvoNmDdPCpxAC4/aFwtiyjJWSVLlzhb	 OKmfclGmdH0qw==
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH 1/1] Cygwin: console: fix key input for native console application
+Date: Wed, 03 Apr 2019 16:26:00 -0000
+Message-Id: <20190403162531.2837-2-takashi.yano@nifty.ne.jp>
+In-Reply-To: <20190403162531.2837-1-takashi.yano@nifty.ne.jp>
+References: <20190403072758.GR3337@calimero.vinschen.de> <20190403162531.2837-1-takashi.yano@nifty.ne.jp>
 X-IsSubscribed: yes
-X-SW-Source: 2019-q2/txt/msg00011.txt.bz2
+X-SW-Source: 2019-q2/txt/msg00013.txt.bz2
 
-T24gNC8zLzIwMTkgODozMyBBTSwgQWNoaW0gR3JhdHogd3JvdGU6DQo+IEFj
-aGltIEdyYXR6IHdyaXRlczoNCj4+IE9LLCBhIGJpdCBtb3JlIGluZm86IFRo
-ZSB3aG9sZSB0aGluZyBydW5zIGZyb20gYSBwZXJsIHNjcmlwdCAoYWN0dWFs
-bHkgYQ0KPj4gbW9kdWxlKSB0aGF0IG9wZW5zIHBpcGVzIHRvIGdudXBsb3Qg
-YW5kIGdob3N0c2NyaXB0LiAgVGhpcyBjb2RlIGlzDQo+PiBfcmVhbGx5XyBv
-bGQgYW5kIGhhcyBzZWVuIGEgbG90IG9mIEN5Z3dpbiByZWxlYXNlcywgc28g
-aXQgaGFzIG9wdGlvbnMgdG8NCj4+IGVpdGhlciB1c2UgdGVtcG9yYXJ5IGZp
-bGVzLCBuYW1lZCBwaXBlcyBha2EgRklGTyBvciBkaXJlY3QgcGlwZXMuICBV
-c2luZw0KPj4gdGVtcG9yYXJ5IGZpbGVzIHNlcmlhbGl6ZXMgdGhlIGV4ZWN1
-dGlvbiBhbmQgdXNpbmcgYSBwaXBlIGNoYWluIGlzDQo+PiBfcmVhbGx5XyBz
-bG93IChsaWtlIGEgaHVuZHJlZCB0aW1lcywgd2hpY2ggaXMgbW9zdGx5IHRp
-ZWQgdXAgaW4gc3lzdGVtDQo+PiBmb3IgYSByZWFzb24gdGhhdCBJIGRvbid0
-IHVuZGVyc3RhbmQpLCBzbyB1c2luZyBGSUZPIGlzIHRoZSBkZWZhdWx0Lg0K
-Pj4gWW91ciBuZXcgRklGTyBjb2RlIGluY3JlYXNlcyB0aGUgc3lzdGVtIHRp
-bWUgYnkgYWJvdXQgYSBmYWN0b3Igb2YgMTAgaW4NCj4+IG15IHRlc3RzLCBi
-dHcuDQo+IA0KPiBTbyBJJ3ZlIGZpbmFsw7ZseSBnb3QgYXJvdW5kIHRvIGZp
-eGluZyB0aGUgcGlwZSBwZXJmb3JtYW5jZSBwcm9ibGVtIGJ5DQo+IGZvb2xp
-bmcgdGhlIHByb2dyYW1zIGludm9sdmVkIHRvIHRoaW5rIHRoZXkgYXJlIHVz
-aW5nIGZpbGVzOiBoYXZlIHRoZW0NCj4gcmVhZGluZyBmcm9tIC9wcm9jL3Nl
-bGYvZmQvMCBhbmQgd3JpdGluZyB0byAvcHJvYy9zZWxmL2ZkLzEgZ2l2ZXMg
-bWUgdGhlDQo+IHNhbWUgcGVyZm9ybWFuY2UgYXMgdXNpbmcgYSBuYW1lZCBG
-SUZPLg0KPiANCj4gSW5jaWRlbnRhbGx5LCB0aGF0IHdvcmthcm91bmQgc3Rp
-bGwgd29ya3Mgd2hlbiBJIHN3aXRjaCB0byB0aGUgMjAxOTA0MDINCj4gc25h
-cHNob3QsIHdoaWxlIG5hbWVkIEZJRk8gZmFpbHMgYXMgd2l0aCB0aGUgb2xk
-ZXIgc25hcHNob3QgKGFzDQo+IGV4cGVjdGVkKSwgc28gdGhhdCBzZWVtcyB0
-byB0YWtlIGEgZGlmZmVyZW50IGNvZGUgcGF0aC4gIE1heWJlIHRoYXQNCj4g
-aGVscHMgaW4gZmluZGluZyB0aGUgcHJvYmxlbT8NCg0KVGhhbmtzLg0KDQpJ
-biB0aGUgbWVhbnRpbWUsIEkndmUgZml4ZWQgdGhlIHJhd193cml0ZSBidWcg
-dGhhdCBJIG1lbnRpb25lZCBpbiBhbiBlYXJsaWVyIA0KcG9zdCwgYWxvbmcg
-d2l0aCBzb21lIG90aGVyIGJ1Z3MgSSBmb3VuZC4gIEkgd2FudCB0byBkbyBh
-IGxpdHRsZSBtb3JlIHRlc3RpbmcgDQpiZWZvcmUgSSBzZW5kIHRoZSBwYXRj
-aGVzLg0KDQpLZW4NCg==
+- After 24 bit color support patch, arrow keys and function keys
+  do not work properly in native console applications if they
+  are started in cygwin console. This patch fixes this issue.
+---
+ winsup/cygwin/fhandler_console.cc | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
+index d2e3184a6..335467b0b 100644
+--- a/winsup/cygwin/fhandler_console.cc
++++ b/winsup/cygwin/fhandler_console.cc
+@@ -455,6 +455,15 @@ sig_exit:
+ fhandler_console::input_states
+ fhandler_console::process_input_message (void)
+ {
++  if (wincap.has_con_24bit_colors ())
++    {
++      DWORD dwMode;
++      /* Enable xterm compatible mode in input */
++      GetConsoleMode (get_handle (), &dwMode);
++      dwMode |= ENABLE_VIRTUAL_TERMINAL_INPUT;
++      SetConsoleMode (get_handle (), dwMode);
++    }
++
+   char tmp[60];
+ 
+   if (!shared_console_info)
+@@ -2894,6 +2903,14 @@ fhandler_console::fixup_after_fork_exec (bool execing)
+ {
+   set_unit ();
+   setup_io_mutex ();
++  if (wincap.has_con_24bit_colors ())
++    {
++      DWORD dwMode;
++      /* Disable xterm compatible mode in input */
++      GetConsoleMode (get_handle (), &dwMode);
++      dwMode &= ~ENABLE_VIRTUAL_TERMINAL_INPUT;
++      SetConsoleMode (get_handle (), dwMode);
++    }
+ }
+ 
+ // #define WINSTA_ACCESS (WINSTA_READATTRIBUTES | STANDARD_RIGHTS_READ | STANDARD_RIGHTS_WRITE | WINSTA_CREATEDESKTOP | WINSTA_EXITWINDOWS)
+-- 
+2.17.0
