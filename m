@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9302-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 101362 invoked by alias); 3 Apr 2019 12:28:47 -0000
+Return-Path: <cygwin-patches-return-9303-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 3171 invoked by alias); 3 Apr 2019 12:33:51 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,92 +9,52 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 101353 invoked by uid 89); 3 Apr 2019 12:28:46 -0000
+Received: (qmail 3162 invoked by uid 89); 3 Apr 2019 12:33:50 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-2.6 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.1 spammy=gap, learn
-X-HELO: vsmx012.vodafonemail.xion.oxcs.net
-Received: from vsmx012.vodafonemail.xion.oxcs.net (HELO vsmx012.vodafonemail.xion.oxcs.net) (153.92.174.90) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 03 Apr 2019 12:28:44 +0000
-Received: from vsmx004.vodafonemail.xion.oxcs.net (unknown [192.168.75.198])	by mta-8-out.mta.xion.oxcs.net (Postfix) with ESMTP id D7E32F34E49	for <cygwin-patches@cygwin.com>; Wed,  3 Apr 2019 12:28:41 +0000 (UTC)
-Received: from Rainer.invalid (unknown [87.185.211.111])	by mta-8-out.mta.xion.oxcs.net (Postfix) with ESMTPA id A041719AD9F	for <cygwin-patches@cygwin.com>; Wed,  3 Apr 2019 12:28:39 +0000 (UTC)
+X-Spam-SWARE-Status: No, score=-2.3 required=5.0 tests=AWL,BAYES_00,SPF_PASS autolearn=ham version=3.3.1 spammy=aka, hundred
+X-HELO: mx009.vodafonemail.xion.oxcs.net
+Received: from mx009.vodafonemail.xion.oxcs.net (HELO mx009.vodafonemail.xion.oxcs.net) (153.92.174.39) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 03 Apr 2019 12:33:49 +0000
+Received: from vsmx002.vodafonemail.xion.oxcs.net (unknown [192.168.75.192])	by mta-6-out.mta.xion.oxcs.net (Postfix) with ESMTP id 9959CD9B021	for <cygwin-patches@cygwin.com>; Wed,  3 Apr 2019 12:33:47 +0000 (UTC)
+Received: from Rainer.invalid (unknown [87.185.211.111])	by mta-6-out.mta.xion.oxcs.net (Postfix) with ESMTPA id 72651199C48	for <cygwin-patches@cygwin.com>; Wed,  3 Apr 2019 12:33:45 +0000 (UTC)
 From: Achim Gratz <Stromeko@nexgo.de>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH RFC] fork: reduce chances for "address space is already occupied" errors
-References: <8c77b589-fcae-fd0d-f5c5-c2520cfebbfa@ssi-schaefer.com>	<20190326182538.GA4096@calimero.vinschen.de>	<20190326182824.GB4096@calimero.vinschen.de>	<c52ec077-d1e6-f61a-df9c-fe9ede1ba1ff@ssi-schaefer.com>	<87y350ytpb.fsf@Rainer.invalid>	<9c38ac1d-4dea-12d4-a63b-6e8ec59b3ae8@ssi-schaefer.com>	<0f0d7cd6-e770-fc32-f28f-817b700e4d87@SystematicSw.ab.ca>	<f5ab5a82-8d26-4898-7ea4-ecef5c377299@ssi-schaefer.com>	<abf543bb-e8df-9eeb-5ae8-63e5d59cca9a@SystematicSw.ab.ca>	<87sgv65eyc.fsf@Rainer.invalid>	<5fa27e1c-a790-f03d-b4b3-1985f26df128@SystematicSw.ab.ca>	<87pnq9jupk.fsf@Rainer.invalid>	<a83dedc6-ea5b-5fc9-4bbc-f06a9cf19472@SystematicSw.ab.ca>	<878sww93g9.fsf@Rainer.invalid>	<97aec921-d9b1-3b0e-de7a-d492832ba481@SystematicSw.ab.ca>	<236d3269-1b0b-9da0-9816-ed84e489f73e@ssi-schaefer.com>
-Date: Wed, 03 Apr 2019 12:28:00 -0000
-In-Reply-To: <236d3269-1b0b-9da0-9816-ed84e489f73e@ssi-schaefer.com> (Michael	Haubenwallner's message of "Wed, 3 Apr 2019 12:38:31 +0200")
-Message-ID: <87ef6jmfwv.fsf@Rainer.invalid>
+Subject: Re: [PATCH fifo 0/2] Add support for duplex FIFOs
+References: <20190325230556.2219-1-kbrown@cornell.edu>	<20190326083620.GI3471@calimero.vinschen.de>	<1fc7ff06-38cf-6c89-03f4-e741f871b936@cornell.edu>	<20190326190136.GC4096@calimero.vinschen.de>	<20190327133059.GG4096@calimero.vinschen.de>	<87k1gi3mle.fsf@Rainer.invalid>	<20190328201317.GZ4096@calimero.vinschen.de>	<d4cb62f1-5754-aff2-c23d-7ce65f5a5726@cornell.edu>	<87o95u5eu0.fsf@Rainer.invalid>	<f8b66caf-7673-f92b-ed2e-127b387f1f09@cornell.edu>	<87tvfljvaa.fsf@Rainer.invalid>
+Date: Wed, 03 Apr 2019 12:33:00 -0000
+In-Reply-To: <87tvfljvaa.fsf@Rainer.invalid> (Achim Gratz's message of "Fri,	29 Mar 2019 21:11:09 +0100")
+Message-ID: <87a7h7mfo8.fsf@Rainer.invalid>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-SW-Source: 2019-q2/txt/msg00009.txt.bz2
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-SW-Source: 2019-q2/txt/msg00010.txt.bz2
 
-Michael Haubenwallner writes:
-> Before I really can tell what I need regarding the rebase, I need to learn what
-> exactly is recorded into the rebase database, and probably how the recorded data
-> does influence the rebase procedure right now.
+Achim Gratz writes:
+> OK, a bit more info: The whole thing runs from a perl script (actually a
+> module) that opens pipes to gnuplot and ghostscript.  This code is
+> _really_ old and has seen a lot of Cygwin releases, so it has options to
+> either use temporary files, named pipes aka FIFO or direct pipes.  Using
+> temporary files serializes the execution and using a pipe chain is
+> _really_ slow (like a hundred times, which is mostly tied up in system
+> for a reason that I don't understand), so using FIFO is the default.
+> Your new FIFO code increases the system time by about a factor of 10 in
+> my tests, btw.
 
-Just where the DLL resides in the filesystem, what address it has been
-rebased to and what size it occupies.  If you rebase a new DLL with the
-database, it will give you the first gap in the address space that this
-new DLL fits into for doing the rebase and record that into the
-database.  With the --oblivious option, it keeps the database file
-untouched, so the information about the newly rebased DLL gets lost
-whenh the program exits.  That's why you need to do all oblivious
-rebasing in a single invocation.
+So I've final=C3=B6ly got around to fixing the pipe performance problem by
+fooling the programs involved to think they are using files: have them
+reading from /proc/self/fd/0 and writing to /proc/self/fd/1 gives me the
+same performance as using a named FIFO.
 
-> My thoughts so far for what I probably need:
->
-> * First, rebase new dlls before being installed into the target file system
-> directory with respect to currently installed dlls (the --oblivious
-> option),
-
-You always rebase after the install so that the path information is
-correct.  Pre-rebasing is useless.
-
-> * Second, register new dlls just installed into the target file system
-> directory into the rebase database without performing a rebase, and
-
-No, rebasing the installed DLL already does that.
-
-> * Third, unregister dlls being removed from the rebase database.
-
-Rebase already removes any entries that are no longer accessible from
-the database.
-
-> Also, it may make sense to allow for reusing the base address of an installed
-> dll by it's update replacement - while the old version dll still is in use and
-> the new version dll is in some temporary staging directory.
-
-Rebase already re-uses the base-address if the path for the new DLL is
-the same and it still fits into the gap.  In general, however, that
-won't work when the size of any DLL changes.  You can ask for more
-guardband around each entry, but that doesn't actually solve the problem
-as it's only useful for the initial (full) rebase.
-
-> As there may be multiple instances of Gentoo Prefix within one single operating
-> system instance, it does not make sense to record the dll's base addresses into
-> the rebase database of the underlying Cygwin instance in /etc, but still the
-> base addresses already recorded there should be respected when rebasing dlls
-> for within a particular Gentoo Prefix instance.
-
-If you can limit the address space that's used by the Cygwin base
-system, I'd just give your Gentoo prefix installation its own address
-space and rebase it independently from the base system.  That probably
-requires some fooling around with the (currently hardcoded) rebase
-database files, but should otherwise just work.
-
-> Furthermore, with so called "Stacked Prefix", it is possible to have a second
-> level of Gentoo Prefix, so what I'm after is some option to tell the rebase
-> utility which database to record dll base addresses into, and which multiple(!)
-> databases take into account while performing a rebase.
-
-I don't think you'll want to do that.
+Incidentally, that workaround still works when I switch to the 20190402
+snapshot, while named FIFO fails as with the older snapshot (as
+expected), so that seems to take a different code path.  Maybe that
+helps in finding the problem?
 
 
 Regards,
 Achim.
--- 
+--=20
 +<[Q+ Matrix-12 WAVE#46+305 Neuron microQkb Andromeda XTk Blofeld]>+
 
-Wavetables for the Waldorf Blofeld:
-http://Synth.Stromeko.net/Downloads.html#BlofeldUserWavetables
+SD adaptation for Waldorf microQ V2.22R2:
+http://Synth.Stromeko.net/Downloads.html#WaldorfSDada
