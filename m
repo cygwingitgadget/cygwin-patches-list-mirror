@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9307-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 10243 invoked by alias); 3 Apr 2019 16:46:57 -0000
+Return-Path: <cygwin-patches-return-9308-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 48652 invoked by alias); 5 Apr 2019 16:48:23 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,113 +9,65 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 10233 invoked by uid 89); 3 Apr 2019 16:46:57 -0000
+Received: (qmail 48606 invoked by uid 89); 5 Apr 2019 16:48:17 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-114.3 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=HX-Languages-Length:1635, H*F:D*cygwin.com
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.17.24) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 03 Apr 2019 16:46:56 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id 1N9d4t-1gogKO3sg9-015WmB for <cygwin-patches@cygwin.com>; Wed, 03 Apr 2019 18:46:53 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 072E1A8034C; Wed,  3 Apr 2019 18:46:53 +0200 (CEST)
-Date: Wed, 03 Apr 2019 16:46:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 1/1] Cygwin: console: fix key input for native console application
-Message-ID: <20190403164652.GA21669@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20190403072758.GR3337@calimero.vinschen.de> <20190403162531.2837-1-takashi.yano@nifty.ne.jp> <20190403162531.2837-2-takashi.yano@nifty.ne.jp>
+X-Spam-SWARE-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_PASS autolearn=ham version=3.3.1 spammy=headache, occupied, chances, HX-Languages-Length:2050
+X-HELO: mail-io1-f67.google.com
+Received: from mail-io1-f67.google.com (HELO mail-io1-f67.google.com) (209.85.166.67) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 05 Apr 2019 16:48:16 +0000
+Received: by mail-io1-f67.google.com with SMTP id v4so5552533ioj.5        for <cygwin-patches@cygwin.com>; Fri, 05 Apr 2019 09:48:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=gmail.com; s=20161025;        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;        bh=L4rJESQ+rWeSaz49g32g4P3L2yLpsJQFfevCbM1fC3g=;        b=BQJWEQsXlfi1OxxHkCjDH87S5WvWocxG7MpSGmVuerKt6l/F7MxWUbhFjkS+qWttKW         HfdWp3qHENIzW9k6yXaURuRQpgl0opCMyp8VSmeyK/Ue3DlNgh40ECsqBib66viNIPB8         56NT/2s62LOTznY7NIDAvyecO8FFcru5tg+NHmbwxEccGZGTueLAP8dDKR4LqQ7PZobH         62hKqygPhsMBusAVUnGfXuMWEMk6/4e75akkKQOMv1RYsvWbC0JSAVSJQVTglNSxXsi5         uz9odDc9KLpdLpxmzrYXjApgeJIIyuPP7L6kcQ9tdcbk036uBHRzUA5wCTHJsaj3I2T4         gVqg==
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="r5Pyd7+fXNt84Ff3"
-Content-Disposition: inline
-In-Reply-To: <20190403162531.2837-2-takashi.yano@nifty.ne.jp>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-SW-Source: 2019-q2/txt/msg00014.txt.bz2
+References: <8c77b589-fcae-fd0d-f5c5-c2520cfebbfa@ssi-schaefer.com> <20190326182538.GA4096@calimero.vinschen.de> <20190326182824.GB4096@calimero.vinschen.de> <c52ec077-d1e6-f61a-df9c-fe9ede1ba1ff@ssi-schaefer.com> <20190327091640.GE4096@calimero.vinschen.de> <b22069db-a300-56f7-33dd-30a1adbc0c93@ssi-schaefer.com> <20190328091507.GM4096@calimero.vinschen.de> <89dc8dca-c97b-ef79-6b90-bebb1b73c388@ssi-schaefer.com> <87o95u3n2p.fsf@Rainer.invalid>
+In-Reply-To: <87o95u3n2p.fsf@Rainer.invalid>
+From: "E. Madison Bray" <erik.m.bray@gmail.com>
+Date: Fri, 05 Apr 2019 16:48:00 -0000
+Message-ID: <CAOTD34b9nGSzitUeV244vWQzzeSrVNKUNVFEiW6p6TQKDQi=CA@mail.gmail.com>
+Subject: Re: [PATCH RFC] fork: reduce chances for "address space is already occupied" errors
+To: cygwin-patches@cygwin.com
+Content-Type: text/plain; charset="UTF-8"
+X-IsSubscribed: yes
+X-SW-Source: 2019-q2/txt/msg00015.txt.bz2
 
+On Thu, Mar 28, 2019 at 6:50 PM Achim Gratz wrote:
+>
+> Michael Haubenwallner writes:
+> > It will not help for conflicts between dlls within a single package while this
+> > package is built.  I'm thinking of python modules built within the python package
+> > itself, where the just built modules are used within the very build process.  Not
+> > sure if packages using local modules during build also do use fork then, though.
+>
+> It does help, that's the whole point.  But you will have to rebase all
+> the in-processing DLL together, as the database will only have
+> information on the installed DLL.  So if you build in stages, you'll
+> need to do something like incremental autorebase does and collect all
+> DLL into some file that you can then feed to
+>
+> rebase -sOT dlls_to_rebase
+>
+> That is slightly less convenient than using the database in persistent
+> mode, but it is much less of a headache when you want to throw things
+> away and start over since you don't need to worry about cruft in the
+> database file.
 
---r5Pyd7+fXNt84Ff3
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1677
+That is essentially what I do for incremental builds; I keep
+re-running rebase between stages with roughly those same flags and
+this works.
 
-On Apr  4 01:25, Takashi Yano wrote:
-> - After 24 bit color support patch, arrow keys and function keys
->   do not work properly in native console applications if they
->   are started in cygwin console. This patch fixes this issue.
-> ---
->  winsup/cygwin/fhandler_console.cc | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
->=20
-> diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_c=
-onsole.cc
-> index d2e3184a6..335467b0b 100644
-> --- a/winsup/cygwin/fhandler_console.cc
-> +++ b/winsup/cygwin/fhandler_console.cc
-> @@ -455,6 +455,15 @@ sig_exit:
->  fhandler_console::input_states
->  fhandler_console::process_input_message (void)
->  {
-> +  if (wincap.has_con_24bit_colors ())
-> +    {
-> +      DWORD dwMode;
-> +      /* Enable xterm compatible mode in input */
-> +      GetConsoleMode (get_handle (), &dwMode);
-> +      dwMode |=3D ENABLE_VIRTUAL_TERMINAL_INPUT;
-> +      SetConsoleMode (get_handle (), dwMode);
-> +    }
-> +
->    char tmp[60];
->=20=20
->    if (!shared_console_info)
-> @@ -2894,6 +2903,14 @@ fhandler_console::fixup_after_fork_exec (bool exec=
-ing)
->  {
->    set_unit ();
->    setup_io_mutex ();
-> +  if (wincap.has_con_24bit_colors ())
-> +    {
-> +      DWORD dwMode;
-> +      /* Disable xterm compatible mode in input */
-> +      GetConsoleMode (get_handle (), &dwMode);
-> +      dwMode &=3D ~ENABLE_VIRTUAL_TERMINAL_INPUT;
-> +      SetConsoleMode (get_handle (), dwMode);
-> +    }
->  }
->=20=20
->  // #define WINSTA_ACCESS (WINSTA_READATTRIBUTES | STANDARD_RIGHTS_READ |=
- STANDARD_RIGHTS_WRITE | WINSTA_CREATEDESKTOP | WINSTA_EXITWINDOWS)
-> --=20
-> 2.17.0
+However, I can see how this could be inconvenient for some Python
+builds where you might have something within the setup.py script
+(which, when building Python extension modules, is still usually used)
+like (in pseudo-code):
 
-Pushed.
+    run_build_ext_command()
+    import just_built_module
+    # Use just_built_module to generate some files
+    run_install_command()
 
+all within the same process.  One could work around this by modifying
+the setup.py to call `rebase` as a subprocess and that should work,
+but it would suck to have to make such extra considerations just for
+Cygwin, much less get some upstream project to accept that.
 
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen
-Cygwin Maintainer
-
---r5Pyd7+fXNt84Ff3
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAlyk43wACgkQ9TYGna5E
-T6AlKBAAh8Upq0pAFDOHcXRZaASy0ZbzMFQ2eEYbLp29zXqymgAvRtmIu8ev1sDW
-K6KnH1yJpJi5h9n+1wS0h6ADU0VoGnDmAbAYtHMXQP1+WXN5xApTq2enXJgCYOVG
-Qlw4DhAV1JKBrTEznsnXu/U1L2AQSzMccJAeemIL29PpvyP/7z/0YYewAWAoV67w
-FJZW1Bdab/pZTcvRdGyJWswx9cDkJHxLzPPKlGQlBCj7Eny4UHYFSsfnbeBjgmvd
-VJvJfmJs6FHVqylb4N2thMWYtKth09hBhvMyP1l6J4EmSxVBC8XUqlfTRliSdLjN
-3NbFOCAT80qJprrVxFj6I2SrGBq74Nh00qLlLGGWnJqPLeSxmiU5xeeTxIo7ombD
-F3LbDs0uUIaUVS2vdSBvejhcF/NkfJY66rM0EtfLpIg4uA8rFyGrorVg2EJZbh+v
-AT8NZYeYDw036kAGDeZSj62qZP2yshdqs9E8NmOKhZRoNJiFP0z0tZUrjNPQqAGq
-14i7CJm1XoJh1CrVefvfvi2ZfDKOxHnq+y2ciMSfxj29zEEsvoY/rnwLk1sKpzoQ
-XZpEEAS9G3wL+q6/tdy7lOdmD7BXKrjICEfDYNvFzMlmbwjNk5O7rsTDc03YAARq
-DKGconGmsoc5/ivxDggXPU6XISxuhkhwwsN3eyVKazL5eXqia4w=
-=+ZB0
------END PGP SIGNATURE-----
-
---r5Pyd7+fXNt84Ff3--
+I don't know if what I described is at all similar to Michael's case,
+and I've never run into a problem with this myself (even building
+Numpy or SciPy).  But I could see it happening somehow...
