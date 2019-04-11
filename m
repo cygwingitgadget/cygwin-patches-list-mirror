@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9323-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 25167 invoked by alias); 10 Apr 2019 20:50:28 -0000
+Return-Path: <cygwin-patches-return-9324-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 56870 invoked by alias); 11 Apr 2019 04:06:36 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,80 +9,118 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 25157 invoked by uid 89); 10 Apr 2019 20:50:28 -0000
+Received: (qmail 56860 invoked by uid 89); 11 Apr 2019 04:06:35 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-110.2 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*F:D*cygwin.com
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.131) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 10 Apr 2019 20:50:26 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id 1M2gt5-1hAkbn1Zy3-004Aeg for <cygwin-patches@cygwin.com>; Wed, 10 Apr 2019 22:50:24 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id BE7B1A8044F; Wed, 10 Apr 2019 22:50:23 +0200 (CEST)
-Date: Wed, 10 Apr 2019 20:50:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-15.5 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3 autolearn=ham version=3.3.1 spammy=H*Ad:U*mark
+X-HELO: m0.truegem.net
+Received: from m0.truegem.net (HELO m0.truegem.net) (69.55.228.47) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 11 Apr 2019 04:06:33 +0000
+Received: (from daemon@localhost)	by m0.truegem.net (8.12.11/8.12.11) id x3B46Wqv082913;	Wed, 10 Apr 2019 21:06:32 -0700 (PDT)	(envelope-from mark@maxrnd.com)
+Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67), claiming to be "localhost.localdomain" via SMTP by m0.truegem.net, id smtpdWdk5vF; Wed Apr 10 21:06:25 2019
+From: Mark Geisert <mark@maxrnd.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Improve error handling in /proc/[pid]/ virtual files.
-Message-ID: <20190410205023.GM4248@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20190410150522.22920-1-erik.m.bray@gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="I3tAPq1Rm2pUxvsp"
-Content-Disposition: inline
-In-Reply-To: <20190410150522.22920-1-erik.m.bray@gmail.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-SW-Source: 2019-q2/txt/msg00030.txt.bz2
+Cc: Mark Geisert <mark@maxrnd.com>
+Subject: [PATCH] Implement sched_[gs]etaffinity()
+Date: Thu, 11 Apr 2019 04:06:00 -0000
+Message-Id: <20190411040601.1222-1-mark@maxrnd.com>
+X-IsSubscribed: yes
+X-SW-Source: 2019-q2/txt/msg00031.txt.bz2
 
+---
+ newlib/libc/include/sched.h |  4 +++
+ winsup/cygwin/sched.cc      | 68 +++++++++++++++++++++++++++++++++++++
+ 2 files changed, 72 insertions(+)
 
---I3tAPq1Rm2pUxvsp
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 821
-
-On Apr 10 17:05, Erik M. Bray wrote:
-> * Changes error handling to allow /proc/[pid]/ virtual files to be
->   empty in some cases (in this case the file's formatter should return
->   -1 upon error, not 0).
->=20
-> * Better error handling of /proc/[pid]/stat for zombie processes:
->   previously trying to open this file on zombie processes resulted
->   in an EINVAL being returned by open().  Now the file can be read,
->   and fields that can no longer be read are just zeroed.
->=20
-> * Similarly for /proc/[pid]/statm for zombie processes.
->=20
-> * Similarly for /proc/[pid]/maps for zombie processes (in this case the
->   file can be read but is zero-length, which is consistent with observed
->   behavior on Linux.
-
-Pushed.  New snapshots building right now.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen
-Cygwin Maintainer
-
---I3tAPq1Rm2pUxvsp
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAlyuVw8ACgkQ9TYGna5E
-T6AEcg/9EEe5v0sg0d2kvQqfHSCOddHNhWJUU8+IuehTNRe24GbXUKF+9NUNVhBU
-unEbRlnHxaOi8D5kJoVT6YEMDTPgZqwsvgzNuJGt5Zna59QchesDst+/ywWxJ0/c
-s8cq7WER3PonOKfH7fKPWT2bmWh87iYrPG5eDdPWPDs1ZEb90MLpfQcNyqUHGV0f
-PHntfYIefWvfVj4SsRWxSBZrRbegIpJhbZ4ZMOIiv/UPrudA/ZpX6UJynZFp2Hz7
-XrnjqjvdpstkUIFO0fUQneH2zp6DIQJ4UmviDscTAEKh/Ams4Ve3scPB+x3wPcpb
-rex7uKFoVPnHy8yTx/IP86INaiR66hM0Cy3kKiQzZtPnuaTq2jAvcBSmZhYq2oFp
-B2eTwg95eiQfuzQdBzoPb2zAJYzl9YLfS0WmSmF4UenqU1BcgRqDWm3mBTIm4SBM
-w6oqGBmUtdaZbBjHrKvUxKLIDBUu6yQ525N9TAzYua57K/Z7YSxmsfBpSDChcjhE
-5tyxEyPs65UAsqlDj4Y3AqZVXuXAh9I2W7iy5RnCkv94KFfC64wYJw6XpfXWSmjF
-NpkRIlbtCFe9MQ6DvhWI8XT67Dow7fTFqxTyOxIkJowD1ZCLb5sKMFIRYheDXsIU
-Rm2qeHwQzGvbn+Su3wBzJMcxy++oss8bC+i3I1PMs2A5ymCoXDk=
-=Emfp
------END PGP SIGNATURE-----
-
---I3tAPq1Rm2pUxvsp--
+diff --git a/newlib/libc/include/sched.h b/newlib/libc/include/sched.h
+index 1016235bb..e3a5b97e5 100644
+--- a/newlib/libc/include/sched.h
++++ b/newlib/libc/include/sched.h
+@@ -92,6 +92,10 @@ int sched_yield( void );
+ 
+ #if __GNU_VISIBLE
+ int sched_getcpu(void);
++
++typedef uint64_t cpu_set_t; /* ...until cpuset(7) exists */
++int sched_getaffinity(pid_t, size_t, cpu_set_t *);
++int sched_setaffinity(pid_t, size_t, const cpu_set_t *);
+ #endif
+ 
+ #ifdef __cplusplus
+diff --git a/winsup/cygwin/sched.cc b/winsup/cygwin/sched.cc
+index 10168e641..496e08857 100644
+--- a/winsup/cygwin/sched.cc
++++ b/winsup/cygwin/sched.cc
+@@ -424,4 +424,72 @@ sched_getcpu ()
+   return pnum.Group * __get_cpus_per_group () + pnum.Number;
+ }
+ 
++int
++sched_getaffinity (pid_t pid, size_t cpusetsize, cpu_set_t *mask)
++{
++  int status = 0;
++  HANDLE process = pid ? OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, pid)
++                       : GetCurrentProcess ();
++  if (process)
++    {
++      DWORD_PTR process_affinity; /* 4 (8) bytes on 32- (64-) bit Windows */
++      DWORD_PTR system_affinity;  /* ditto */
++
++      if (!GetProcessAffinityMask (process,&process_affinity, &system_affinity))
++	{
++	  status = geterrno_from_win_error (GetLastError (), EPERM);
++	  goto done;
++	}
++      memset (mask, 0, cpusetsize);
++      memcpy (mask, &process_affinity,
++	      min(cpusetsize, sizeof (process_affinity)));
++    }
++  else
++    status = ESRCH;
++
++done:
++  if (process && (process != GetCurrentProcess ()))
++    CloseHandle (process);
++
++  if (status)
++    {
++      set_errno (status);
++      status = -1;
++    }
++  return status;
++}
++
++int
++sched_setaffinity (pid_t pid, size_t cpusetsize, const cpu_set_t *mask)
++{
++  int status = 0;
++  HANDLE process = pid ? OpenProcess (PROCESS_SET_INFORMATION, FALSE, pid)
++                       : GetCurrentProcess ();
++  if (process)
++    {
++      DWORD_PTR process_affinity = 0; /* 4 (8) bytes on 32- (64-) bit Windows */
++
++      memcpy (&process_affinity, mask,
++	      min(cpusetsize, sizeof (process_affinity)));
++      if (!SetProcessAffinityMask (process, process_affinity))
++	{
++	  status = geterrno_from_win_error (GetLastError (), EPERM);
++	  goto done;
++	}
++    }
++  else
++    status = ESRCH;
++
++done:
++  if (process && (process != GetCurrentProcess ()))
++    CloseHandle (process);
++
++  if (status)
++    {
++      set_errno (status);
++      status = -1;
++    }
++  return status;
++}
++
+ } /* extern C */
+-- 
+2.17.0
