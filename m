@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9329-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 64313 invoked by alias); 12 Apr 2019 13:52:26 -0000
+Return-Path: <cygwin-patches-return-9330-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 99678 invoked by alias); 12 Apr 2019 17:40:38 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,175 +9,130 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 64291 invoked by uid 89); 12 Apr 2019 13:52:25 -0000
+Received: (qmail 99665 invoked by uid 89); 12 Apr 2019 17:40:37 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-19.1 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE,SPF_PASS autolearn=ham version=3.3.1 spammy=thoroughly, eliminated
-X-HELO: atfriesa01.ssi-schaefer.com
-Received: from atfriesa01.ssi-schaefer.com (HELO atfriesa01.ssi-schaefer.com) (193.186.16.100) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 12 Apr 2019 13:52:22 +0000
-Received: from samail03.wamas.com (HELO mailhost.salomon.at) ([172.28.33.235])  by atfriesa01.ssi-schaefer.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Apr 2019 15:52:20 +0200
-Received: from fril0049.wamas.com ([172.28.42.244])	by mailhost.salomon.at with esmtp (Exim 4.77)	(envelope-from <michael.haubenwallner@ssi-schaefer.com>)	id 1hEwbL-00057r-IU; Fri, 12 Apr 2019 15:52:19 +0200
-From: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
-Subject: [rebase PATCH] Introduce --no-rebase flag
-To: cygwin-patches@cygwin.com
-Cc: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
-Openpgp: preference=signencrypt
-Message-ID: <990610f4-8ba8-92a1-0ece-5b22c275945a@ssi-schaefer.com>
-Date: Fri, 12 Apr 2019 13:52:00 -0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Thunderbird/60.6.1
+X-Spam-SWARE-Status: No, score=-105.6 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=intercepted, 1.1, H*F:D*cygwin.com
+X-HELO: mout.kundenserver.de
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.17.10) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 12 Apr 2019 17:40:36 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id 1M5x9B-1hDdW71vwp-007YeX; Fri, 12 Apr 2019 19:40:32 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id A9EC0A806DE; Fri, 12 Apr 2019 19:40:31 +0200 (CEST)
+Date: Fri, 12 Apr 2019 17:40:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
+Cc: cygwin-patches@cygwin.com
+Subject: Re: [PATCH RFC] fork: reduce chances for "address space is already occupied" errors
+Message-ID: <20190412174031.GC4248@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>,	cygwin-patches@cygwin.com
+References: <b22069db-a300-56f7-33dd-30a1adbc0c93@ssi-schaefer.com> <678d8ec4-f6c2-1538-aafd-dbb9cfc5dea5@ssi-schaefer.com> <20190328095818.GP4096@calimero.vinschen.de> <fd7b9ab3-ca07-0c80-04da-4f6b2f20d49e@ssi-schaefer.com> <20190328203056.GB4096@calimero.vinschen.de> <fe627231-6717-c702-b97b-d66cdc9409a3@ssi-schaefer.com> <20190401145658.GA6331@calimero.vinschen.de> <20190401155636.GN3337@calimero.vinschen.de> <837bc171-eb6f-681e-5167-103f5e9e8523@ssi-schaefer.com> <20190403122216.GX3337@calimero.vinschen.de>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="asNXdz5DenlsLVVk"
+Content-Disposition: inline
+In-Reply-To: <20190403122216.GX3337@calimero.vinschen.de>
+User-Agent: Mutt/1.11.3 (2019-02-01)
+X-SW-Source: 2019-q2/txt/msg00037.txt.bz2
+
+
+--asNXdz5DenlsLVVk
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-SW-Source: 2019-q2/txt/msg00036.txt.bz2
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 2519
 
-The --no-rebase flag is to update the database for new files, without
-performing a rebase.  The file names provided should have been rebased
-using the --oblivious flag just before.
----
- rebase.c | 48 +++++++++++++++++++++++++++++++++++-------------
- 1 file changed, 35 insertions(+), 13 deletions(-)
+Hi Michael,
 
-diff --git a/rebase.c b/rebase.c
-index 56537d6..6347c6c 100644
---- a/rebase.c
-+++ b/rebase.c
-@@ -69,9 +69,10 @@ WORD machine = IMAGE_FILE_MACHINE_I386;
- ULONG64 image_base = 0;
- ULONG64 low_addr;
- BOOL down_flag = FALSE;
--BOOL image_info_flag = FALSE;
-+BOOL image_info_flag = FALSE; /* implies --no-rebase, but without --database */
- BOOL image_storage_flag = FALSE;
- BOOL image_oblivious_flag = FALSE;
-+BOOL perform_rebase_flag = TRUE;
- BOOL force_rebase_flag = FALSE;
- ULONG offset = 0;
- int args_index = 0;
-@@ -533,9 +534,9 @@ load_image_info ()
-       {
- 	img_info_list[i].name = NULL;
- 	/* Ensure that existing database entries are not touched when
--	 *  --oblivious is active, even if they are out-of sync with
--	 *  reality. */
--	if (image_oblivious_flag)
-+	 *  --oblivious or --no-rebase is active, even if they are
-+	 *  out-of sync with reality. */
-+	if (image_oblivious_flag || !perform_rebase_flag)
- 	  img_info_list[i].flag.cannot_rebase = 2;
-       }
-   /* Eventually read the strings. */
-@@ -584,8 +585,8 @@ load_image_info ()
- static BOOL
- set_cannot_rebase (img_info_t *img)
- {
--  /* While --oblivious is active, cannot_rebase is set to 2 on loading
--   * the database entries */
-+  /* While --oblivious or --no-rebase is active, cannot_rebase
-+   * is set to 2 on loading the database entries */
-   if (img->flag.cannot_rebase <= 1 )
-     {
-       int fd = open (img->name, O_WRONLY);
-@@ -878,7 +879,7 @@ collect_image_info (const char *pathname)
- 
-   /* Skip if not rebaseable, but only if we're collecting for rebasing,
-      not if we're collecting for printing only. */
--  if (!image_info_flag && !is_rebaseable (pathname))
-+  if (perform_rebase_flag && !is_rebaseable (pathname))
-     {
-       if (!quiet)
- 	fprintf (stderr, "%s: skipped because not rebaseable\n", pathname);
-@@ -928,8 +929,16 @@ collect_image_info (const char *pathname)
-     }
-   img_info_list[img_info_size].slot_size
-     = roundup2 (img_info_list[img_info_size].size, ALLOCATION_SLOT);
--  img_info_list[img_info_size].flag.needs_rebasing = 1;
--  img_info_list[img_info_size].flag.cannot_rebase = 0;
-+  if (perform_rebase_flag)
-+    {
-+      img_info_list[img_info_size].flag.needs_rebasing = 1;
-+      img_info_list[img_info_size].flag.cannot_rebase = 0;
-+    }
-+  else
-+    {
-+      img_info_list[img_info_size].flag.needs_rebasing = 0;
-+      img_info_list[img_info_size].flag.cannot_rebase = 2;
-+    }
-   /* This back and forth from POSIX to Win32 is a way to get a full path
-      more thoroughly.  For instance, the difference between /bin and
-      /usr/bin will be eliminated. */
-@@ -970,7 +979,9 @@ collect_image_info (const char *pathname)
-   }
- #endif
-   if (verbose)
--    fprintf (stderr, "rebasing %s because filename given on command line\n", img_info_list[img_info_size].name);
-+    fprintf (stderr, "%s %s because filename given on command line\n",
-+	     perform_rebase_flag ? "rebasing" : "considering",
-+	     img_info_list[img_info_size].name);
-   ++img_info_size;
-   return TRUE;
- }
-@@ -1173,6 +1184,7 @@ static struct option long_options[] = {
-   {"offset",	required_argument, NULL, 'o'},
-   {"oblivious",	no_argument,	   NULL, 'O'},
-   {"quiet",	no_argument,	   NULL, 'q'},
-+  {"no-rebase",	no_argument,	   NULL, 'R'},
-   {"database",	no_argument,	   NULL, 's'},
-   {"touch",	no_argument,	   NULL, 't'},
-   {"filelist",	required_argument, NULL, 'T'},
-@@ -1182,7 +1194,7 @@ static struct option long_options[] = {
-   {NULL,	no_argument,	   NULL,  0 }
- };
- 
--static const char *short_options = "48b:dhino:OqstT:vV";
-+static const char *short_options = "48b:dhino:OqRstT:vV";
- 
- void
- parse_args (int argc, char *argv[])
-@@ -1212,6 +1224,7 @@ parse_args (int argc, char *argv[])
- 	  break;
- 	case 'i':
- 	  image_info_flag = TRUE;
-+	  perform_rebase_flag = FALSE;
- 	  break;
- 	case 'o':
- 	  offset = string_to_ulonglong (optarg);
-@@ -1220,6 +1233,10 @@ parse_args (int argc, char *argv[])
- 	case 'q':
- 	  quiet = TRUE;
- 	  break;
-+	case 'R':
-+	  perform_rebase_flag = FALSE;
-+	  image_storage_flag = TRUE;
-+	  break;
- 	case 'O':
- 	  image_oblivious_flag = TRUE;
- 	  /* -O implies -s, which in turn implies -d, so intentionally
-@@ -1264,8 +1281,8 @@ parse_args (int argc, char *argv[])
- 	}
-     }
- 
--  if ((image_base == 0 && !image_info_flag && !image_storage_flag)
--      || (image_base && image_info_flag))
-+  if ((image_base == 0 && perform_rebase_flag && !image_storage_flag)
-+      || (force_rebase_flag && !perform_rebase_flag))
-     {
-       usage ();
-       exit (1);
-@@ -1399,11 +1416,16 @@ Rebase PE files, usually DLLs, to a specified address or address range.\n\
-   -O, --oblivious         Do not change any files already in the database\n\
-                           and do not record any changes to the database.\n\
-                           (Implies -s).\n\
-+  -R, --no-rebase         Do not perform any rebase, update the database only.\n\
-+                          Implies -s, incompatible with -b and -o.\n\
-+                          The files listed should have been rebased just before\n\
-+                          using the -O flag (maybe in some staging directory).\n\
-   -i, --info              Rather then rebasing, just print the current base\n\
-                           address and size of the files.  With -s, use the\n\
-                           database.  The files are ordered by base address.\n\
-                           A '*' at the end of the line is printed if a\n\
-                           collisions with an adjacent file is detected.\n\
-+                          Incompatible with -b and -o.\n\
- \n\
-   One of the options -b, -s or -i is mandatory.  If no rebase database exists\n\
-   yet, -b is required together with -s.\n\
--- 
-2.19.2
+On Apr  3 14:22, Corinna Vinschen wrote:
+> On Apr  3 11:18, Michael Haubenwallner wrote:
+> > On 4/1/19 5:56 PM, Corinna Vinschen wrote:
+> > > On Apr  1 16:56, Corinna Vinschen wrote:
+> > >> On Apr  1 16:28, Michael Haubenwallner wrote:
+> > >>> On 3/28/19 9:30 PM, Corinna Vinschen wrote:
+> > >>>> can you please collect the base addresses of all DLLs generated du=
+ring
+> > >>>> the build, plus their size and make a sorted list?  It would be
+> > >>>> interesting to know if the hash algorithm in ld is actually as bad
+> > >>>> as I conjecture.
+> > >>>
+> > >>> Please find attached the output of rebase -i for the dlls after boo=
+tstrap
+> > >>> on Cygwin 3.0.4, each built with ld from binutils-2.31.1.
+> > >=20
+> > > Oh, wait.  That's not what I was looking for.  The addresses are ok, =
+but
+> > > the paths *must* be the ones at the time the DLLs have been created,
+> > > because that's what ld uses when creating the image base addresses.  =
+The
+> > > addresses combined with the installation paths don't make sense anymo=
+re.
+> >=20
+> > So I have intercepted the ld.exe to show 'rebase -i' on any just create=
+d dll,
+> > tell about the exact -o argument to ld, and the current directory.
+> >=20
+> > This is with binutils-2.31.1
+> >=20
+> > Anything else needed?
+>=20
+> No, that should be sufficient, thanks for collecting this!
+
+Nick Clifton, one of the binutils maintainers, made the following
+suggestion in PM:
+
+Allow the ld flag --enable-auto-image-base to take a filename as
+argument.
+
+The idea: The file is used by ld to generate the start address
+for the next built DLL.  Mechanism:
+
+1.1. If ld links a DLL and if the file given to --enable-auto-image-base
+     doesn't exist, ld will give the DLL the start address of the
+     auto image base range.
+
+1.2: Next time, if ld links a DLL and if the file given to
+     --enable-auto-image-base exists, it will use the address in that
+     file as the start address for th just built DLL.
+
+2. It will store that address, plus the size of the DLL, rounded up to
+   64K, in that file.
+
+3. If the auto image base range is at an end, ld will wrap back to
+   the start address of the auto image base range.
+
+TBD: A way to enable this feature without having to change all
+     packages' build systems.
+
+That way you could build hundreds of DLLs in a project and use them
+immediately without having to rebase.
+
+This is just in a discussion state, nothing has happend yet, but
+what do you think in general?
+
+
+Corinna
+
+--=20
+Corinna Vinschen
+Cygwin Maintainer
+
+--asNXdz5DenlsLVVk
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 833
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAlywzY8ACgkQ9TYGna5E
+T6BWYA//aWMCKtzK9xC19bJxoOpCgOXo2EjD/OwgwFkaAEU3xOgQeLhFbb5b0FWC
+z7TYIBYjEoSKJKjsTqUhHTno1KY9wVpYGOpDH4ZLV1I1c3pCB9rAzNQeE/0w+u4c
+PM9nkIM4AG05NnqMYN4GAFKq9adN7zBkbjYD4Rq9Bb6wUMsOe2JPbnPWyPFtbK9A
+Fx+lcnYd1pWKKBlqRGHgavgI5wpNDdDXSeZDB28kOTwP/B6NBw6vXFyMFew2B4tP
+0r0DClros2N5QulocdK6iNJ+AU3ympBO0sO83Bk7zCBbFraJB5//HTyxWuregl90
+G0HeXRTSu+CxpnNm3Lkmv7Mkz6YjDn3yXqd7+V+gb30dKeRLnWzOy+wVAmO84ooL
+tld3rdVsAjKxszPwGSS73pKLGRfPglRp6q582wfEis5N3to5PqeDjoC99ZUb3jQb
+aigmom0JrukYxx+seWOSlX8rfKmWaNvHh3tDfKqVtiyKsgbsVnHoiw4wWhj3nEUx
+JlYmowEOhui7jlVd+/viDNWLGsnGoVu6jlKm2Yh3Rya9vYtcNvCYy/aMf6T+D+u5
+zi+y/slcDOkmhyDP+LwYj1kDNGvRUNBb18l+xNNwyfQ4iU4Pqg2ul0WTZP94iFPW
+7gfduFzFambbAOBzYK8HpqmH8JVaIg4Z+1wlNCNbcATcB+kSE9w=
+=dBA0
+-----END PGP SIGNATURE-----
+
+--asNXdz5DenlsLVVk--
