@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9326-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 54009 invoked by alias); 12 Apr 2019 07:55:23 -0000
+Return-Path: <cygwin-patches-return-9327-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 23326 invoked by alias); 12 Apr 2019 13:31:55 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,109 +9,142 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 53714 invoked by uid 89); 12 Apr 2019 07:55:22 -0000
+Received: (qmail 23054 invoked by uid 89); 12 Apr 2019 13:31:54 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-118.0 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*F:D*cygwin.com
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.130) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 12 Apr 2019 07:55:21 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id 1MnFps-1gY7oQ3RDg-00jF1U for <cygwin-patches@cygwin.com>; Fri, 12 Apr 2019 09:55:18 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 39BDDA806D6; Fri, 12 Apr 2019 09:55:18 +0200 (CEST)
-Date: Fri, 12 Apr 2019 07:55:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-18.5 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE,SPF_PASS autolearn=ham version=3.3.1 spammy=H*r:4.77, dll, H*RU:sk:michael, H*r:sk:michael
+X-HELO: atfriesa01.ssi-schaefer.com
+Received: from atfriesa01.ssi-schaefer.com (HELO atfriesa01.ssi-schaefer.com) (193.186.16.100) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 12 Apr 2019 13:31:44 +0000
+Received: from samail03.wamas.com (HELO mailhost.salomon.at) ([172.28.33.235])  by atfriesa01.ssi-schaefer.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Apr 2019 15:31:41 +0200
+Received: from fril0049.wamas.com ([172.28.42.244])	by mailhost.salomon.at with esmtp (Exim 4.77)	(envelope-from <michael.haubenwallner@ssi-schaefer.com>)	id 1hEwHM-0004w4-8Y; Fri, 12 Apr 2019 15:31:40 +0200
+From: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
+Subject: [PATCH] Cygwin: fork: remember child as late as possible
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Implement sched_[gs]etaffinity()
-Message-ID: <20190412075518.GU4248@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20190411040601.1222-1-mark@maxrnd.com>
+Cc: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
+Openpgp: preference=signencrypt
+Message-ID: <2cc9ac65-ff3c-f88e-e8d3-13105115bdcf@ssi-schaefer.com>
+Date: Fri, 12 Apr 2019 13:31:00 -0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="++alDQ2ROsODg1x+"
-Content-Disposition: inline
-In-Reply-To: <20190411040601.1222-1-mark@maxrnd.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-SW-Source: 2019-q2/txt/msg00033.txt.bz2
-
-
---++alDQ2ROsODg1x+
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1598
+Content-Transfer-Encoding: 7bit
+X-SW-Source: 2019-q2/txt/msg00034.txt.bz2
 
-On Apr 10 21:06, Mark Geisert wrote:
-> ---
->  newlib/libc/include/sched.h |  4 +++
->  winsup/cygwin/sched.cc      | 68 +++++++++++++++++++++++++++++++++++++
->  2 files changed, 72 insertions(+)
->=20
-> diff --git a/newlib/libc/include/sched.h b/newlib/libc/include/sched.h
-> index 1016235bb..e3a5b97e5 100644
-> --- a/newlib/libc/include/sched.h
-> +++ b/newlib/libc/include/sched.h
-> @@ -92,6 +92,10 @@ int sched_yield( void );
->=20=20
->  #if __GNU_VISIBLE
->  int sched_getcpu(void);
-> +
-> +typedef uint64_t cpu_set_t; /* ...until cpuset(7) exists */
-> +int sched_getaffinity(pid_t, size_t, cpu_set_t *);
-> +int sched_setaffinity(pid_t, size_t, const cpu_set_t *);
->  #endif
->=20=20
->  #ifdef __cplusplus
-> diff --git a/winsup/cygwin/sched.cc b/winsup/cygwin/sched.cc
-> index 10168e641..496e08857 100644
-> --- a/winsup/cygwin/sched.cc
-> +++ b/winsup/cygwin/sched.cc
-> @@ -424,4 +424,72 @@ sched_getcpu ()
->    return pnum.Group * __get_cpus_per_group () + pnum.Number;
->  }
->=20=20
-> +int
-> +sched_getaffinity (pid_t pid, size_t cpusetsize, cpu_set_t *mask)
-> +{
-> +  int status =3D 0;
-> +  HANDLE process =3D pid ? OpenProcess(PROCESS_QUERY_INFORMATION, FALSE,=
- pid)
-> +                       : GetCurrentProcess ();
+Otherwise, when the child does fail to reload dlls and terminates, we
+produce a SIGCHILD signal, even if we did not succeed in starting up the
+child process at all.  Also, we would need to reap that child somewhere.
+---
+ winsup/cygwin/fork.cc | 71 ++++++++++++++++++++++++-------------------
+ 1 file changed, 40 insertions(+), 31 deletions(-)
 
-This needs to grab the pinfo(pid) aund use p->dwProcessId, as you
-noted on cygwin-developers already.
-
-Two more notes:
-
-- You could use GetCurrentProcess() in case of pid =3D=3D myself->pid, too.
-
-- PROCESS_QUERY_LIMITED_INFORMATION should be sufficent per MSDN.
-  PROCESS_QUERY_INFORMATION was required pre-Vista only.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen
-Cygwin Maintainer
-
---++alDQ2ROsODg1x+
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAlywRGYACgkQ9TYGna5E
-T6B0FxAApYGgh2AYVHQyXkOpJpKaxg4QW+Rkdz5ArhTi2v5lIb3YbQ083U1Jfq7g
-+0/40E4eRhuvrl642am1Gpknx5sGNTnUE0/RDYKZpE1vPgo1+5Du2gsXhaXvqeVu
-CtoXUCukDbzYdm2ObuFc3GBsjec/hMZK7OwWL7wL4LOPJhXok42pk/UK4tKGzpiz
-LiTNk01nta9TnpPHizB5b/giDdCDdF45qkQAUiiVlxwLbvEON0tC6iC0sApxUxY5
-ueDSQU+CDcLMc9GE2tuM7PD/n8ubj+f8jwu9ceZN9LLbX+J6KIDHL1hWOtyRSq0/
-FYzhdaICSyi5rGQjFxc+60BBptTpp93UdyEMvsl0sBzTwdSPWUsX8+1GktFcD8Yc
-UWbe9V1OdWZWtduLZFXFt/L96CL9cr/v3f+e8xtry2GuvUI0VC414XdRjOtf/yra
-Wh1Bitv4DZPA90v+PCYAE8jqwGD10N/460MP5/dq7WS5qDyQMpQ7wnuIUWJ6BXUl
-QIVQzeJ6zQltMdWaHYW4JqtEzdq6+iUxPHztcdkZ7CkNrhT9LfhhKS9OH3K4GL83
-WLhocvZyP08QvPLbPVsLZFHV+SQ1fwm/e1SvhWDgEjP+YmoX5kgTcJuc6OC4sDNd
-yhgsCuejVEycFwbZ6vxi9q/hfN+dGv/S9RZqWmdr2/MGLjbcylQ=
-=MOU9
------END PGP SIGNATURE-----
-
---++alDQ2ROsODg1x+--
+diff --git a/winsup/cygwin/fork.cc b/winsup/cygwin/fork.cc
+index 74ee9acf4..a5b45f851 100644
+--- a/winsup/cygwin/fork.cc
++++ b/winsup/cygwin/fork.cc
+@@ -186,14 +186,14 @@ frok::child (volatile char * volatile here)
+ 
+   cygheap->fdtab.fixup_after_fork (hParent);
+ 
+-  /* If we haven't dynamically loaded any dlls, just signal the parent.
+-     Otherwise, tell the parent that we've loaded all the dlls
+-     and wait for the parent to fill in the loaded dlls' data/bss. */
+-  if (!load_dlls)
+-    sync_with_parent ("performed fork fixup", false);
+-  else
++  /* If we have dynamically loaded some dlls, we need anoter stop to
++     wait for the parent to fill in the loaded dll's data/bss. */
++  if (load_dlls)
+     sync_with_parent ("loaded dlls", true);
+ 
++  /* Signal the parent. */
++  sync_with_parent ("performed fork fixup", false);
++
+   init_console_handler (myself->ctty > 0);
+   ForceCloseHandle1 (fork_info->forker_finished, forker_finished);
+ 
+@@ -420,20 +420,6 @@ frok::parent (volatile char * volatile stack_here)
+   child.hProcess = hchild;
+   ch.postfork (child);
+ 
+-  /* Hopefully, this will succeed.  The alternative to doing things this
+-     way is to reserve space prior to calling CreateProcess and then fill
+-     it in afterwards.  This requires more bookkeeping than I like, though,
+-     so we'll just do it the easy way.  So, terminate any child process if
+-     we can't actually record the pid in the internal table. */
+-  if (!child.remember (false))
+-    {
+-      this_errno = EAGAIN;
+-#ifdef DEBUGGING0
+-      error ("child remember failed");
+-#endif
+-      goto cleanup;
+-    }
+-
+   /* CHILD IS STOPPED */
+   debug_printf ("child is alive (but stopped)");
+ 
+@@ -483,20 +469,20 @@ frok::parent (volatile char * volatile stack_here)
+ 	}
+     }
+ 
+-  /* Start thread, and then wait for it to reload dlls.  */
+-  resume_child (forker_finished);
+-  if (!ch.sync (child->pid, hchild, FORK_WAIT_TIMEOUT))
+-    {
+-      this_errno = EAGAIN;
+-      error ("died waiting for dll loading");
+-      goto cleanup;
+-    }
+-
+   /* If DLLs were loaded in the parent, then the child has reloaded all
+      of them and is now waiting to have all of the individual data and
+      bss sections filled in. */
+   if (load_dlls)
+     {
++      /* Start the child up, and then wait for it to reload dlls.  */
++      resume_child (forker_finished);
++      if (!ch.sync (child->pid, hchild, FORK_WAIT_TIMEOUT))
++	{
++	  this_errno = EAGAIN;
++	  error ("died waiting for dll loading");
++	  goto cleanup;
++	}
++
+       /* CHILD IS STOPPED */
+       /* write memory of reloaded dlls */
+       for (dll *d = dlls.istart (DLL_LOAD); d; d = dlls.inext ())
+@@ -514,8 +500,31 @@ frok::parent (volatile char * volatile stack_here)
+ 	      goto cleanup;
+ 	    }
+ 	}
+-      /* Start the child up again. */
+-      resume_child (forker_finished);
++    }
++
++  /* Hopefully, this will succeed.  The alternative to doing things this
++     way is to reserve space prior to calling CreateProcess and then fill
++     it in afterwards.  This requires more bookkeeping than I like, though,
++     so we'll just do it the easy way.  So, terminate any child process if
++     we can't actually record the pid in the internal table.
++     Note: child.remember () needs the subsequent WFMO in ch.sync (),
++     to perform the asynchronous start of the controlling threads. */
++  if (!child.remember (false))
++    {
++      this_errno = EAGAIN;
++#ifdef DEBUGGING0
++      error ("child remember failed");
++#endif
++      goto cleanup;
++    }
++
++  /* Start the child up, finally. */
++  resume_child (forker_finished);
++  if (!ch.sync (child->pid, hchild, FORK_WAIT_TIMEOUT))
++    {
++      this_errno = EAGAIN;
++      error ("died waiting for dll loading");
++      goto cleanup;
+     }
+ 
+   ForceCloseHandle (forker_finished);
+-- 
+2.19.2
