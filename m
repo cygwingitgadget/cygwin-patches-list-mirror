@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9327-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 23326 invoked by alias); 12 Apr 2019 13:31:55 -0000
+Return-Path: <cygwin-patches-return-9328-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 44471 invoked by alias); 12 Apr 2019 13:33:10 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,142 +9,84 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 23054 invoked by uid 89); 12 Apr 2019 13:31:54 -0000
+Received: (qmail 44457 invoked by uid 89); 12 Apr 2019 13:33:10 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-18.5 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE,SPF_PASS autolearn=ham version=3.3.1 spammy=H*r:4.77, dll, H*RU:sk:michael, H*r:sk:michael
+X-Spam-SWARE-Status: No, score=-18.8 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE,SPF_PASS autolearn=ham version=3.3.1 spammy=forking, HX-Languages-Length:2175
 X-HELO: atfriesa01.ssi-schaefer.com
-Received: from atfriesa01.ssi-schaefer.com (HELO atfriesa01.ssi-schaefer.com) (193.186.16.100) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 12 Apr 2019 13:31:44 +0000
-Received: from samail03.wamas.com (HELO mailhost.salomon.at) ([172.28.33.235])  by atfriesa01.ssi-schaefer.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Apr 2019 15:31:41 +0200
-Received: from fril0049.wamas.com ([172.28.42.244])	by mailhost.salomon.at with esmtp (Exim 4.77)	(envelope-from <michael.haubenwallner@ssi-schaefer.com>)	id 1hEwHM-0004w4-8Y; Fri, 12 Apr 2019 15:31:40 +0200
+Received: from atfriesa01.ssi-schaefer.com (HELO atfriesa01.ssi-schaefer.com) (193.186.16.100) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 12 Apr 2019 13:32:59 +0000
+Received: from samail03.wamas.com (HELO mailhost.salomon.at) ([172.28.33.235])  by atfriesa01.ssi-schaefer.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Apr 2019 15:32:58 +0200
+Received: from fril0049.wamas.com ([172.28.42.244])	by mailhost.salomon.at with esmtp (Exim 4.77)	(envelope-from <michael.haubenwallner@ssi-schaefer.com>)	id 1hEwIb-0004wP-5I; Fri, 12 Apr 2019 15:32:57 +0200
 From: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
-Subject: [PATCH] Cygwin: fork: remember child as late as possible
+Subject: [PATCH] Cygwin: use win pid+threadid for forkables dirname
 To: cygwin-patches@cygwin.com
 Cc: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
 Openpgp: preference=signencrypt
-Message-ID: <2cc9ac65-ff3c-f88e-e8d3-13105115bdcf@ssi-schaefer.com>
-Date: Fri, 12 Apr 2019 13:31:00 -0000
+Message-ID: <869d6cb0-9c14-d1f6-fdf2-f87ff815029b@ssi-schaefer.com>
+Date: Fri, 12 Apr 2019 13:33:00 -0000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Thunderbird/60.6.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
-X-SW-Source: 2019-q2/txt/msg00034.txt.bz2
+X-SW-Source: 2019-q2/txt/msg00035.txt.bz2
 
-Otherwise, when the child does fail to reload dlls and terminates, we
-produce a SIGCHILD signal, even if we did not succeed in starting up the
-child process at all.  Also, we would need to reap that child somewhere.
+Rather than newest last write time of all dlls loaded, use the forking
+process' windows pid and windows thread id as directory name to create
+the forkable hardlinks into.  While this may create hardlinks more
+often, it does avoid conflicts between dlls not having the newest last
+write time.
 ---
- winsup/cygwin/fork.cc | 71 ++++++++++++++++++++++++-------------------
- 1 file changed, 40 insertions(+), 31 deletions(-)
+ winsup/cygwin/forkable.cc | 26 +++++++-------------------
+ 1 file changed, 7 insertions(+), 19 deletions(-)
 
-diff --git a/winsup/cygwin/fork.cc b/winsup/cygwin/fork.cc
-index 74ee9acf4..a5b45f851 100644
---- a/winsup/cygwin/fork.cc
-+++ b/winsup/cygwin/fork.cc
-@@ -186,14 +186,14 @@ frok::child (volatile char * volatile here)
+diff --git a/winsup/cygwin/forkable.cc b/winsup/cygwin/forkable.cc
+index d1b0f5723..4580610b1 100644
+--- a/winsup/cygwin/forkable.cc
++++ b/winsup/cygwin/forkable.cc
+@@ -340,30 +340,18 @@ exename (PWCHAR buf, ssize_t bufsize)
+   return format_IndexNumber (buf, bufsize, &d->fii.IndexNumber);
+ }
  
-   cygheap->fdtab.fixup_after_fork (hParent);
+-/* Into buf if not NULL, write the newest dll's LastWriteTime.
++/* Into buf if not NULL, write the current Windows Thread Identifier.
+    Return the number of characters (that would be) written. */
+ static int
+-lwtimename (PWCHAR buf, ssize_t bufsize)
++winthrname (PWCHAR buf, ssize_t bufsize)
+ {
+   if (!buf)
+-    return sizeof (LARGE_INTEGER) * 2;
+-  if (bufsize >= 0 && bufsize <= (int)sizeof (LARGE_INTEGER) * 2)
++    return sizeof (DWORD) * 4;
++  if (bufsize >= 0 && bufsize <= (int)sizeof (DWORD) * 4)
+     return 0;
  
--  /* If we haven't dynamically loaded any dlls, just signal the parent.
--     Otherwise, tell the parent that we've loaded all the dlls
--     and wait for the parent to fill in the loaded dlls' data/bss. */
--  if (!load_dlls)
--    sync_with_parent ("performed fork fixup", false);
--  else
-+  /* If we have dynamically loaded some dlls, we need anoter stop to
-+     wait for the parent to fill in the loaded dll's data/bss. */
-+  if (load_dlls)
-     sync_with_parent ("loaded dlls", true);
- 
-+  /* Signal the parent. */
-+  sync_with_parent ("performed fork fixup", false);
-+
-   init_console_handler (myself->ctty > 0);
-   ForceCloseHandle1 (fork_info->forker_finished, forker_finished);
- 
-@@ -420,20 +420,6 @@ frok::parent (volatile char * volatile stack_here)
-   child.hProcess = hchild;
-   ch.postfork (child);
- 
--  /* Hopefully, this will succeed.  The alternative to doing things this
--     way is to reserve space prior to calling CreateProcess and then fill
--     it in afterwards.  This requires more bookkeeping than I like, though,
--     so we'll just do it the easy way.  So, terminate any child process if
--     we can't actually record the pid in the internal table. */
--  if (!child.remember (false))
+-  LARGE_INTEGER newest = { 0 };
+-  /* Need by-handle-file-information for _all_ loaded dlls,
+-     as most recent ctime forms the hardlinks directory. */
+-  dll *d = &dlls.start;
+-  while ((d = d->next))
 -    {
--      this_errno = EAGAIN;
--#ifdef DEBUGGING0
--      error ("child remember failed");
--#endif
--      goto cleanup;
+-      /* LastWriteTime more properly tells the last file-content modification
+-	 time, because a newly created hardlink may have a different
+-	 CreationTime compared to the original file. */
+-      if (d->fbi.LastWriteTime.QuadPart > newest.QuadPart)
+-	newest = d->fbi.LastWriteTime;
 -    }
 -
-   /* CHILD IS STOPPED */
-   debug_printf ("child is alive (but stopped)");
+-  return __small_swprintf (buf, L"%016X", newest);
++  return __small_swprintf (buf, L"%08X%08X",
++			   GetCurrentProcessId(), GetCurrentThreadId());
+ }
  
-@@ -483,20 +469,20 @@ frok::parent (volatile char * volatile stack_here)
- 	}
-     }
+ struct namepart {
+@@ -382,7 +370,7 @@ forkable_nameparts[] = {
+   { L"<sid>",         sidname,          true,  true,  },
+   { L"<exe>",         exename,          false, false, },
+   { MUTEXSEP,            NULL,          false, false, },
+-  { L"<ctime>",    lwtimename,          true,  true,  },
++  { L"<winthr>",   winthrname,          true,  true,  },
  
--  /* Start thread, and then wait for it to reload dlls.  */
--  resume_child (forker_finished);
--  if (!ch.sync (child->pid, hchild, FORK_WAIT_TIMEOUT))
--    {
--      this_errno = EAGAIN;
--      error ("died waiting for dll loading");
--      goto cleanup;
--    }
--
-   /* If DLLs were loaded in the parent, then the child has reloaded all
-      of them and is now waiting to have all of the individual data and
-      bss sections filled in. */
-   if (load_dlls)
-     {
-+      /* Start the child up, and then wait for it to reload dlls.  */
-+      resume_child (forker_finished);
-+      if (!ch.sync (child->pid, hchild, FORK_WAIT_TIMEOUT))
-+	{
-+	  this_errno = EAGAIN;
-+	  error ("died waiting for dll loading");
-+	  goto cleanup;
-+	}
-+
-       /* CHILD IS STOPPED */
-       /* write memory of reloaded dlls */
-       for (dll *d = dlls.istart (DLL_LOAD); d; d = dlls.inext ())
-@@ -514,8 +500,31 @@ frok::parent (volatile char * volatile stack_here)
- 	      goto cleanup;
- 	    }
- 	}
--      /* Start the child up again. */
--      resume_child (forker_finished);
-+    }
-+
-+  /* Hopefully, this will succeed.  The alternative to doing things this
-+     way is to reserve space prior to calling CreateProcess and then fill
-+     it in afterwards.  This requires more bookkeeping than I like, though,
-+     so we'll just do it the easy way.  So, terminate any child process if
-+     we can't actually record the pid in the internal table.
-+     Note: child.remember () needs the subsequent WFMO in ch.sync (),
-+     to perform the asynchronous start of the controlling threads. */
-+  if (!child.remember (false))
-+    {
-+      this_errno = EAGAIN;
-+#ifdef DEBUGGING0
-+      error ("child remember failed");
-+#endif
-+      goto cleanup;
-+    }
-+
-+  /* Start the child up, finally. */
-+  resume_child (forker_finished);
-+  if (!ch.sync (child->pid, hchild, FORK_WAIT_TIMEOUT))
-+    {
-+      this_errno = EAGAIN;
-+      error ("died waiting for dll loading");
-+      goto cleanup;
-     }
- 
-   ForceCloseHandle (forker_finished);
+   { NULL, NULL },
+ };
 -- 
 2.19.2
