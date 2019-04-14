@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9339-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 128955 invoked by alias); 14 Apr 2019 19:16:01 -0000
+Return-Path: <cygwin-patches-return-9340-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 129268 invoked by alias); 14 Apr 2019 19:16:03 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,19 +9,19 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 128885 invoked by uid 89); 14 Apr 2019 19:16:01 -0000
+Received: (qmail 129219 invoked by uid 89); 14 Apr 2019 19:16:03 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-14.8 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,MIME_BASE64_BLANKS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=retry
+X-Spam-SWARE-Status: No, score=-16.5 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,MIME_BASE64_BLANKS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=Client
 X-HELO: NAM05-DM3-obe.outbound.protection.outlook.com
-Received: from mail-eopbgr730131.outbound.protection.outlook.com (HELO NAM05-DM3-obe.outbound.protection.outlook.com) (40.107.73.131) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 14 Apr 2019 19:16:00 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector1; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=E7J2A205l+lCL0VloPcMixnHnry7z4QkfIQ3VLa5ILE=; b=a9LA7qAG9SQ+vSmwmvW3XHaOq5qeDOZK/YHq+VUMZLsj5r/CXyUqaUNYbMgrTnc8wurDPOKBKSk8918oM4CbfaJVdpYfnavahLy17TicRIk/FPAkcDWaAs8EqukUc/+LBZNSektZKDQ5yLvWzHLNQCLJeeELBLpQm3/q4m82soU=
-Received: from DM6PR04MB5211.namprd04.prod.outlook.com (20.178.24.208) by DM6PR04MB3963.namprd04.prod.outlook.com (20.176.87.20) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.1792.19; Sun, 14 Apr 2019 19:15:56 +0000
-Received: from DM6PR04MB5211.namprd04.prod.outlook.com ([fe80::21bb:c809:f459:845c]) by DM6PR04MB5211.namprd04.prod.outlook.com ([fe80::21bb:c809:f459:845c%2]) with mapi id 15.20.1792.018; Sun, 14 Apr 2019 19:15:56 +0000
+Received: from mail-eopbgr730131.outbound.protection.outlook.com (HELO NAM05-DM3-obe.outbound.protection.outlook.com) (40.107.73.131) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 14 Apr 2019 19:16:01 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector1; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=ZHRKwplQ29CuI6r533giua1GzivhkCTaFI9GnzPfjsY=; b=InUDg0PAlQhTMptR2yJleFzX+rLB/sdql9CLTH1uT1bdJEv15x9wRLXIn2NgKUfBwZTj7f/8CWmVNnpLdVJ6og3yX/wl7Z9XBK6JEREDzfzNvkrsz2b8LpxW38HGe166DCF2H3ifCnXRIfTm6Z73ZjkqKYxUubM7Be/Y5yUa+q4=
+Received: from DM6PR04MB5211.namprd04.prod.outlook.com (20.178.24.208) by DM6PR04MB3963.namprd04.prod.outlook.com (20.176.87.20) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.1792.19; Sun, 14 Apr 2019 19:15:57 +0000
+Received: from DM6PR04MB5211.namprd04.prod.outlook.com ([fe80::21bb:c809:f459:845c]) by DM6PR04MB5211.namprd04.prod.outlook.com ([fe80::21bb:c809:f459:845c%2]) with mapi id 15.20.1792.018; Sun, 14 Apr 2019 19:15:57 +0000
 From: Ken Brown <kbrown@cornell.edu>
 To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: [PATCH 02/14] Cygwin: FIFO: hit_eof: add a call to fifo_client_lock
+Subject: [PATCH 03/14] Cygwin: FIFO: remember the type of the fhandler
 Date: Sun, 14 Apr 2019 19:16:00 -0000
-Message-ID: <20190414191543.3218-3-kbrown@cornell.edu>
+Message-ID: <20190414191543.3218-4-kbrown@cornell.edu>
 References: <20190414191543.3218-1-kbrown@cornell.edu>
 In-Reply-To: <20190414191543.3218-1-kbrown@cornell.edu>
 authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
@@ -32,29 +32,68 @@ Content-Transfer-Encoding: base64
 MIME-Version: 1.0
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
 X-IsSubscribed: yes
-X-SW-Source: 2019-q2/txt/msg00046.txt.bz2
+X-SW-Source: 2019-q2/txt/msg00047.txt.bz2
 
-VGhlIHNlY29uZCBjaGVjayBvZiBuY29ubmVjdGVkIG5lZWRzIHRvIGJlIHBy
-b3RlY3RlZCBieSBhIGxvY2sgYXMgd2VsbA0KYXMgdGhlIGZpcnN0Lg0KLS0t
-DQogd2luc3VwL2N5Z3dpbi9maGFuZGxlcl9maWZvLmNjIHwgMjEgKysrKysr
-KysrKysrKy0tLS0tLS0tDQogMSBmaWxlIGNoYW5nZWQsIDEzIGluc2VydGlv
-bnMoKyksIDggZGVsZXRpb25zKC0pDQoNCmRpZmYgLS1naXQgYS93aW5zdXAv
-Y3lnd2luL2ZoYW5kbGVyX2ZpZm8uY2MgYi93aW5zdXAvY3lnd2luL2ZoYW5k
-bGVyX2ZpZm8uY2MNCmluZGV4IDkwMTY5NjQ0NC4uNzA1NTFlYmFjIDEwMDY0
-NA0KLS0tIGEvd2luc3VwL2N5Z3dpbi9maGFuZGxlcl9maWZvLmNjDQorKysg
-Yi93aW5zdXAvY3lnd2luL2ZoYW5kbGVyX2ZpZm8uY2MNCkBAIC03MDUsMTUg
-KzcwNSwyMCBAQCBmaGFuZGxlcl9maWZvOjpyYXdfd3JpdGUgKGNvbnN0IHZv
-aWQgKnB0ciwgc2l6ZV90IGxlbikNCiBib29sDQogZmhhbmRsZXJfZmlmbzo6
-aGl0X2VvZiAoKQ0KIHsNCi0gIGZpZm9fY2xpZW50X2xvY2sgKCk7DQotICBi
-b29sIGVvZiA9IChuY29ubmVjdGVkID09IDApOw0KLSAgZmlmb19jbGllbnRf
-dW5sb2NrICgpOw0KLSAgaWYgKGVvZikNCi0gICAgew0KLSAgICAgIC8qIEdp
-dmUgdGhlIGxpc3Rlbl9jbGllbnQgdGhyZWFkIHRpbWUgdG8gY2F0Y2ggdXAs
-IHRoZW4gcmVjaGVjay4gKi8NCi0gICAgICBTbGVlcCAoMSk7DQorICBib29s
-IGVvZjsNCisgIGJvb2wgcmV0cnkgPSB0cnVlOw0KKw0KK3JldHJ5Og0KKyAg
-ICAgIGZpZm9fY2xpZW50X2xvY2sgKCk7DQogICAgICAgZW9mID0gKG5jb25u
-ZWN0ZWQgPT0gMCk7DQotICAgIH0NCisgICAgICBmaWZvX2NsaWVudF91bmxv
-Y2sgKCk7DQorICAgICAgaWYgKGVvZiAmJiByZXRyeSkNCisJew0KKwkgIHJl
-dHJ5ID0gZmFsc2U7DQorCSAgLyogR2l2ZSB0aGUgbGlzdGVuX2NsaWVudCB0
-aHJlYWQgdGltZSB0byBjYXRjaCB1cC4gKi8NCisJICBTbGVlcCAoMSk7DQor
-CSAgZ290byByZXRyeTsNCisJfQ0KICAgcmV0dXJuIGVvZjsNCiB9DQogDQot
-LSANCjIuMTcuMA0KDQo=
+QWRkIGRhdGEgbWVtYmVycyAncmVhZGVyJywgJ3dyaXRlcicsIGFuZCAnZHVw
+bGV4ZXInIHRvIHRoZQ0KZmhhbmRsZXJfZmlmbyBjbGFzcy4gIFNldCB0aGVt
+IGluIGZoYW5kbGVyX2ZpZm86Om9wZW4uICAoJ2R1cGxleGVyJw0KcmVwbGFj
+ZXMgdGhlIHByZXZpb3VzICdfZHVwbGV4ZXInLikNCg0KVGhpcyB3aWxsIGJl
+IHVzZWZ1bCBpbiBsYXRlciBjb21taXRzLg0KLS0tDQogd2luc3VwL2N5Z3dp
+bi9maGFuZGxlci5oICAgICAgIHwgIDIgKy0NCiB3aW5zdXAvY3lnd2luL2Zo
+YW5kbGVyX2ZpZm8uY2MgfCAxNCArKysrLS0tLS0tLS0tLQ0KIDIgZmlsZXMg
+Y2hhbmdlZCwgNSBpbnNlcnRpb25zKCspLCAxMSBkZWxldGlvbnMoLSkNCg0K
+ZGlmZiAtLWdpdCBhL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXIuaCBiL3dpbnN1
+cC9jeWd3aW4vZmhhbmRsZXIuaA0KaW5kZXggMjg5OGRiNGRmLi41OWQ5ZGFk
+MTYgMTAwNjQ0DQotLS0gYS93aW5zdXAvY3lnd2luL2ZoYW5kbGVyLmgNCisr
+KyBiL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXIuaA0KQEAgLTEyNzIsNyArMTI3
+Miw3IEBAIGNsYXNzIGZoYW5kbGVyX2ZpZm86IHB1YmxpYyBmaGFuZGxlcl9i
+YXNlDQogICBmaWZvX2NsaWVudF9oYW5kbGVyIGZjX2hhbmRsZXJbTUFYX0NM
+SUVOVFNdOw0KICAgaW50IG5oYW5kbGVycywgbmNvbm5lY3RlZDsNCiAgIGFm
+X3VuaXhfc3BpbmxvY2tfdCBfZmlmb19jbGllbnRfbG9jazsNCi0gIGJvb2wg
+X2R1cGxleGVyOw0KKyAgYm9vbCByZWFkZXIsIHdyaXRlciwgZHVwbGV4ZXI7
+DQogICBib29sIF9fcmVnMiB3YWl0IChIQU5ETEUpOw0KICAgTlRTVEFUVVMg
+bnBmc19oYW5kbGUgKEhBTkRMRSAmKTsNCiAgIEhBTkRMRSBjcmVhdGVfcGlw
+ZV9pbnN0YW5jZSAoYm9vbCk7DQpkaWZmIC0tZ2l0IGEvd2luc3VwL2N5Z3dp
+bi9maGFuZGxlcl9maWZvLmNjIGIvd2luc3VwL2N5Z3dpbi9maGFuZGxlcl9m
+aWZvLmNjDQppbmRleCA3MDU1MWViYWMuLjI1OGMzY2Y4YSAxMDA2NDQNCi0t
+LSBhL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXJfZmlmby5jYw0KKysrIGIvd2lu
+c3VwL2N5Z3dpbi9maGFuZGxlcl9maWZvLmNjDQpAQCAtMzMsNyArMzMsNyBA
+QCBTVEFUVVNfUElQRV9FTVBUWSBzaW1wbHkgbWVhbnMgdGhlcmUncyBubyBk
+YXRhIHRvIGJlIHJlYWQuICovDQogZmhhbmRsZXJfZmlmbzo6ZmhhbmRsZXJf
+ZmlmbyAoKToNCiAgIGZoYW5kbGVyX2Jhc2UgKCksIHJlYWRfcmVhZHkgKE5V
+TEwpLCB3cml0ZV9yZWFkeSAoTlVMTCksDQogICBsaXN0ZW5fY2xpZW50X3Ro
+ciAoTlVMTCksIGxjdF90ZXJtaW5hdGlvbl9ldnQgKE5VTEwpLCBuaGFuZGxl
+cnMgKDApLA0KLSAgbmNvbm5lY3RlZCAoMCksIF9kdXBsZXhlciAoZmFsc2Up
+DQorICBuY29ubmVjdGVkICgwKSwgcmVhZGVyIChmYWxzZSksIHdyaXRlciAo
+ZmFsc2UpLCBkdXBsZXhlciAoZmFsc2UpDQogew0KICAgcGlwZV9uYW1lX2J1
+ZlswXSA9IEwnXDAnOw0KICAgbmVlZF9mb3JrX2ZpeHVwICh0cnVlKTsNCkBA
+IC0yMjQsNyArMjI0LDcgQEAgZmhhbmRsZXJfZmlmbzo6Y3JlYXRlX3BpcGVf
+aW5zdGFuY2UgKGJvb2wgZmlyc3QpDQogICAgIH0NCiAgIGFjY2VzcyA9IEdF
+TkVSSUNfUkVBRCB8IEZJTEVfUkVBRF9BVFRSSUJVVEVTIHwgRklMRV9XUklU
+RV9BVFRSSUJVVEVTDQogICAgIHwgU1lOQ0hST05JWkU7DQotICBpZiAoZmly
+c3QgJiYgX2R1cGxleGVyKQ0KKyAgaWYgKGZpcnN0ICYmIGR1cGxleGVyKQ0K
+ICAgICBhY2Nlc3MgfD0gR0VORVJJQ19XUklURTsNCiAgIHNoYXJpbmcgPSBG
+SUxFX1NIQVJFX1JFQUQgfCBGSUxFX1NIQVJFX1dSSVRFOw0KICAgaGF0dHIg
+PSBPQkpfSU5IRVJJVDsNCkBAIC00MjEsMjUgKzQyMSwxOSBAQCBmaGFuZGxl
+cl9maWZvOjpvcGVuIChpbnQgZmxhZ3MsIG1vZGVfdCkNCiAgICBlcnJvcl9l
+cnJub19zZXQsDQogICAgZXJyb3Jfc2V0X2Vycm5vDQogICB9IHJlczsNCi0g
+IGJvb2wgcmVhZGVyLCB3cml0ZXIsIGR1cGxleGVyOw0KIA0KICAgLyogRGV0
+ZXJtaW5lIHdoYXQgd2UncmUgZG9pbmcgd2l0aCB0aGlzIGZoYW5kbGVyOiBy
+ZWFkaW5nLCB3cml0aW5nLCBib3RoICovDQogICBzd2l0Y2ggKGZsYWdzICYg
+T19BQ0NNT0RFKQ0KICAgICB7DQogICAgIGNhc2UgT19SRE9OTFk6DQogICAg
+ICAgcmVhZGVyID0gdHJ1ZTsNCi0gICAgICB3cml0ZXIgPSBmYWxzZTsNCi0g
+ICAgICBkdXBsZXhlciA9IGZhbHNlOw0KICAgICAgIGJyZWFrOw0KICAgICBj
+YXNlIE9fV1JPTkxZOg0KICAgICAgIHdyaXRlciA9IHRydWU7DQotICAgICAg
+cmVhZGVyID0gZmFsc2U7DQotICAgICAgZHVwbGV4ZXIgPSBmYWxzZTsNCiAg
+ICAgICBicmVhazsNCiAgICAgY2FzZSBPX1JEV1I6DQogICAgICAgcmVhZGVy
+ID0gdHJ1ZTsNCi0gICAgICB3cml0ZXIgPSBmYWxzZTsNCi0gICAgICBkdXBs
+ZXhlciA9IF9kdXBsZXhlciA9IHRydWU7DQorICAgICAgZHVwbGV4ZXIgPSB0
+cnVlOw0KICAgICAgIGJyZWFrOw0KICAgICBkZWZhdWx0Og0KICAgICAgIHNl
+dF9lcnJubyAoRUlOVkFMKTsNCkBAIC03NjksNyArNzYzLDcgQEAgZmhhbmRs
+ZXJfZmlmbzo6cmF3X3JlYWQgKHZvaWQgKmluX3B0ciwgc2l6ZV90JiBsZW4p
+DQogCQkgIGZpZm9fY2xpZW50X3VubG9jayAoKTsNCiAJCSAgZ290byBlcnJv
+dXQ7DQogCQl9DQotCSAgICBlbHNlIGlmIChucmVhZCA9PSAwICYmICghX2R1
+cGxleGVyIHx8IGkgPiAwKSkNCisJICAgIGVsc2UgaWYgKG5yZWFkID09IDAg
+JiYgKCFkdXBsZXhlciB8fCBpID4gMCkpDQogCSAgICAgIC8qIENsaWVudCBo
+YXMgZGlzY29ubmVjdGVkLiAqLw0KIAkgICAgICB7DQogCQlmY19oYW5kbGVy
+W2ldLnN0YXRlID0gZmNfaW52YWxpZDsNCi0tIA0KMi4xNy4wDQoNCg==
