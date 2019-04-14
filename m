@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9337-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 86476 invoked by alias); 13 Apr 2019 08:20:30 -0000
+Return-Path: <cygwin-patches-return-9338-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 128646 invoked by alias); 14 Apr 2019 19:15:59 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,98 +9,49 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 85923 invoked by uid 89); 13 Apr 2019 08:20:29 -0000
+Received: (qmail 128636 invoked by uid 89); 14 Apr 2019 19:15:59 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-104.7 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*F:D*cygwin.com, plug
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.187) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sat, 13 Apr 2019 08:20:28 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id 1Ml3ym-1gaPyQ0dP2-00lRXA for <cygwin-patches@cygwin.com>; Sat, 13 Apr 2019 10:20:26 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 379B8A8041F; Sat, 13 Apr 2019 10:20:25 +0200 (CEST)
-Date: Sat, 13 Apr 2019 08:20:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH RFC] fork: reduce chances for "address space is already occupied" errors
-Message-ID: <20190413082025.GG4248@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20190328095818.GP4096@calimero.vinschen.de> <fd7b9ab3-ca07-0c80-04da-4f6b2f20d49e@ssi-schaefer.com> <20190328203056.GB4096@calimero.vinschen.de> <fe627231-6717-c702-b97b-d66cdc9409a3@ssi-schaefer.com> <20190401145658.GA6331@calimero.vinschen.de> <20190401155636.GN3337@calimero.vinschen.de> <837bc171-eb6f-681e-5167-103f5e9e8523@ssi-schaefer.com> <20190403122216.GX3337@calimero.vinschen.de> <20190412174031.GC4248@calimero.vinschen.de> <877ebyxs8i.fsf@Rainer.invalid>
+X-Spam-SWARE-Status: No, score=-4.3 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,MIME_BASE64_BLANKS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=retry
+X-HELO: NAM05-DM3-obe.outbound.protection.outlook.com
+Received: from mail-eopbgr730131.outbound.protection.outlook.com (HELO NAM05-DM3-obe.outbound.protection.outlook.com) (40.107.73.131) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 14 Apr 2019 19:15:58 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector1; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=wHVtfNt/EeuZmPNyywgVwmnAmrACngzoprTmgKBa3+w=; b=FJ8F2yCOt4eBRqm+03lmcbOPY0ZfRQ/PrZuKTCNvjmcE1/UdIuN9BS2exR2nOg3C67v5ijlEWMkytPUe7At9IeLiopHntnKZSt1YC2hONEvG4y14YnTxtJ49xWPHc//OfFnQx5gZU3iw/MicDm5lt7hRXNU6VUYTDXixNm0+gg0=
+Received: from DM6PR04MB5211.namprd04.prod.outlook.com (20.178.24.208) by DM6PR04MB3963.namprd04.prod.outlook.com (20.176.87.20) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.1792.19; Sun, 14 Apr 2019 19:15:55 +0000
+Received: from DM6PR04MB5211.namprd04.prod.outlook.com ([fe80::21bb:c809:f459:845c]) by DM6PR04MB5211.namprd04.prod.outlook.com ([fe80::21bb:c809:f459:845c%2]) with mapi id 15.20.1792.018; Sun, 14 Apr 2019 19:15:55 +0000
+From: Ken Brown <kbrown@cornell.edu>
+To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: [PATCH 00/14] FIFO bug fixes and code simplifications
+Date: Sun, 14 Apr 2019 19:15:00 -0000
+Message-ID: <20190414191543.3218-1-kbrown@cornell.edu>
+authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
+received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="TSQPSNmi3T91JED+"
-Content-Disposition: inline
-In-Reply-To: <877ebyxs8i.fsf@Rainer.invalid>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-SW-Source: 2019-q2/txt/msg00044.txt.bz2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-IsSubscribed: yes
+X-SW-Source: 2019-q2/txt/msg00045.txt.bz2
 
-
---TSQPSNmi3T91JED+
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1587
-
-On Apr 13 09:46, Achim Gratz wrote:
-> Corinna Vinschen writes:
-> > Nick Clifton, one of the binutils maintainers, made the following
-> > suggestion in PM:
-> >
-> > Allow the ld flag --enable-auto-image-base to take a filename as
-> > argument.
-> >
-> > The idea: The file is used by ld to generate the start address
-> > for the next built DLL.  Mechanism:
-> >
-> > 1.1. If ld links a DLL and if the file given to --enable-auto-image-base
-> >      doesn't exist, ld will give the DLL the start address of the
-> >      auto image base range.
-> >
-> > 1.2: Next time, if ld links a DLL and if the file given to
-> >      --enable-auto-image-base exists, it will use the address in that
-> >      file as the start address for th just built DLL.
-> >
-> > 2. It will store that address, plus the size of the DLL, rounded up to
-> >    64K, in that file.
-> >
-> > 3. If the auto image base range is at an end, ld will wrap back to
-> >    the start address of the auto image base range.
->=20
-> Sounds OK if the goal is just to avoid collisions, but it would really
-> be nicer if there was some way to plug this together with the rebase
-> database from the start.
-
-No, that's contrary to the idea.  The solution should be self-sufficient
-within binutils.  We don't want to add any reliance to external tools.
-
-The linker uses a DLL address space which does not collide with rebased
-DLLs in 64 bit, so this only occurs during developement, and none of the
-built DLLs can collide with system DLLs.  I do not much care for 32 bit,
-it's a lost case anyway.
-
-
-Corinna
-
---=20
-Corinna Vinschen
-Cygwin Maintainer
-
---TSQPSNmi3T91JED+
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAlyxm8kACgkQ9TYGna5E
-T6AO0A//a7DwQS6bRpCzP+/hyg/vJ3veNypW0pXBSQ7gz3BE99L7PGqRzT5IWUFf
-DoUs5/4Ppun92BcOtvL1Nbs2/fRZydmqCEWTfH+nQ7et+TbxwqT+vfWxy72r/tNa
-2QrOKG6L7tFyu8kI8QBRZXMZVvR6tgNah3/z3Dcc/jPmDBnTN1848X3vO3yUiAg1
-mpnWWc4QlmtFGfDUqnk1/J7GjdnigBh0DviF32DCJnl+RDVUinqUHf2eSKTJFBVA
-JUGuyIFntd+2etxQddLRYfi5Xt0sGQ2cJSAdUAU1b4NhhTCHOTgIb1phkZ58Lw5y
-X5VeIVArJWDyhl6rAH3NckkIckzPvg0YdSj2KA9/CEH1nqjj4ilGLppM4/D8D1Ad
-0Ui3STN7JLjcLj3otmQ2YM55z87CiUmJUgzAwjWAoJ3p1XCjAkoyJzM8sbHdM9vd
-vi4c0TKgoYv0NZqbYGgDxHKPmxxC4wWlFd1Y+8cDiZzKcJXiDvbSY4aPc/Gaw02e
-sbcDvoAua06VmeNdA5KqL4jXZMtLAXlGyNdlhaKYqDCXtOjJ/JT1Oe1Z95Ba6oTb
-3jxEY+l481BryOk/u9Qn7pKXZOOHa8AH4wrbgjsRawtVbRm4KlOIPDOelvZEmBoq
-Ob+C4VbBW7ptyAlSpqiPZKdWs97gK/v9GcY3As8HafXnnlM7XVE=
-=seRJ
------END PGP SIGNATURE-----
-
---TSQPSNmi3T91JED+--
+S2VuIEJyb3duICgxNCk6DQogIEN5Z3dpbjogRklGTzogcmVuYW1lIGNsaWVu
+dFtdIHRvIGZjX2hhbmRsZXJbXQ0KICBDeWd3aW46IEZJRk86IGhpdF9lb2Y6
+IGFkZCBhIGNhbGwgdG8gZmlmb19jbGllbnRfbG9jaw0KICBDeWd3aW46IEZJ
+Rk86IHJlbWVtYmVyIHRoZSB0eXBlIG9mIHRoZSBmaGFuZGxlcg0KICBDeWd3
+aW46IEZJRk86IGZpeCBhIHRoaW5rbyBpbiBsaXN0ZW5fY2xpZW50X3RocmVh
+ZA0KICBDeWd3aW46IEZJRk86IGZpeCB0aGUgZXJyb3IgY2hlY2tpbmcgaW4g
+cmF3X3JlYWQNCiAgQ3lnd2luOiBjaGVjayBmb3IgU1RBVFVTX1BFTkRJTkcg
+aW4gZmhhbmRsZXJfYmFzZTo6cmF3X3JlYWQNCiAgQ3lnd2luOiBGSUZPOiBj
+b2RlIHNpbXBsaWZpY2F0aW9uOiBkb24ndCBvdmVybG9hZCBnZXRfaGFuZGxl
+DQogIEN5Z3dpbjogRklGTzogZml4IGZpZm9fY2xpZW50X2hhbmRsZXI6OmNs
+b3NlDQogIEN5Z3dpbjogRklGTzogZml4IHRoZSB1c2Ugb2YgdGhlIHJlYWRf
+cmVhZHkgZXZlbnQNCiAgQ3lnd2luOiBGSUZPOiB1c2UgYSByZXRyeSBsb29w
+IHdoZW4gb3BlbmluZyBhIHdyaXRlcg0KICBDeWd3aW46IEZJRk86IGZpeCBj
+bG9uZQ0KICBDeWd3aW46IEZJRk86IHN0YXJ0IHRoZSBsaXN0ZW5fY2xpZW50
+IHRocmVhZCB3aGVuIGR1cGluZyBhIHJlYWRlcg0KICBDeWd3aW46IEZJRk86
+IGltcHJvdmUgcmF3X3dyaXRlDQogIEN5Z3dpbjogRklGTzogZml4IGFuZCBz
+aW1wbGlmeSBsaXN0ZW5fY2xpZW50X3RocmVhZA0KDQogd2luc3VwL2N5Z3dp
+bi9maGFuZGxlci5jYyAgICAgIHwgIDE0ICstDQogd2luc3VwL2N5Z3dpbi9m
+aGFuZGxlci5oICAgICAgIHwgIDQzICstLQ0KIHdpbnN1cC9jeWd3aW4vZmhh
+bmRsZXJfZmlmby5jYyB8IDU4MCArKysrKysrKysrKysrKysrKy0tLS0tLS0t
+LS0tLS0tLS0NCiB3aW5zdXAvY3lnd2luL3NlbGVjdC5jYyAgICAgICAgfCAg
+IDQgKy0NCiA0IGZpbGVzIGNoYW5nZWQsIDM0MiBpbnNlcnRpb25zKCspLCAy
+OTkgZGVsZXRpb25zKC0pDQoNCi0tIA0KMi4xNy4wDQoNCg==
