@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9354-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 83810 invoked by alias); 15 Apr 2019 15:44:04 -0000
+Return-Path: <cygwin-patches-return-9355-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 48243 invoked by alias); 16 Apr 2019 11:22:48 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,154 +9,92 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 83795 invoked by uid 89); 15 Apr 2019 15:44:02 -0000
+Received: (qmail 48231 invoked by uid 89); 16 Apr 2019 11:22:48 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-22.2 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,MIME_BASE64_BLANKS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,UNSUBSCRIBE_BODY autolearn=ham version=3.3.1 spammy=
-X-HELO: NAM03-DM3-obe.outbound.protection.outlook.com
-Received: from mail-eopbgr800119.outbound.protection.outlook.com (HELO NAM03-DM3-obe.outbound.protection.outlook.com) (40.107.80.119) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 15 Apr 2019 15:44:00 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector1; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=4sKa2VfCGD7u5MRDuzG2gjdIEOePdDwdC7Kn36RF2jk=; b=mfhaffa86YGL+cxNAZV8lVSj8Yigu0gCdAP8n3MHtth7MvogRTFJy15yVzNkVpJe7IU/gqtnuUGOKjHNhpH4K9+a5rqzRkrfxknfPMAOg6hM/htO7yqALDJ5V5XjYdRvJMMmzozk34Any2FkCd80hgAesNcp585x+t7MzLznGeo=
-Received: from DM6PR04MB5211.namprd04.prod.outlook.com (20.178.24.208) by DM6PR04MB4844.namprd04.prod.outlook.com (20.176.107.225) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.1792.17; Mon, 15 Apr 2019 15:43:57 +0000
-Received: from DM6PR04MB5211.namprd04.prod.outlook.com ([fe80::21bb:c809:f459:845c]) by DM6PR04MB5211.namprd04.prod.outlook.com ([fe80::21bb:c809:f459:845c%2]) with mapi id 15.20.1792.018; Mon, 15 Apr 2019 15:43:57 +0000
-From: Ken Brown <kbrown@cornell.edu>
-To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: [PATCH v2 13/14] Cygwin: FIFO: improve raw_write
-Date: Mon, 15 Apr 2019 15:44:00 -0000
-Message-ID: <20190415154346.54238-1-kbrown@cornell.edu>
-authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
-received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+X-Spam-SWARE-Status: No, score=-107.4 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*F:D*cygwin.com, retry
+X-HELO: mout.kundenserver.de
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.130) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 16 Apr 2019 11:22:47 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id 1MwQGj-1gxJmj1MA9-00sMpQ for <cygwin-patches@cygwin.com>; Tue, 16 Apr 2019 13:22:44 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 914CDA80586; Tue, 16 Apr 2019 13:22:43 +0200 (CEST)
+Date: Tue, 16 Apr 2019 11:22:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Sender: cygwin-developers-owner@cygwin.com
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH 00/14] FIFO bug fixes and code simplifications
+Message-ID: <20190416112243.GR3599@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20190414191543.3218-1-kbrown@cornell.edu>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-IsSubscribed: yes
-X-SW-Source: 2019-q2/txt/msg00061.txt.bz2
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="ELVYuRnMxQ5nnKRy"
+Content-Disposition: inline
+In-Reply-To: <20190414191543.3218-1-kbrown@cornell.edu>
+User-Agent: Mutt/1.11.3 (2019-02-01)
+X-SW-Source: 2019-q2/txt/msg00062.txt.bz2
 
-RG9uJ3Qgc2V0IHRoZSB3cml0ZSBlbmQgb2YgdGhlIHBpcGUgdG8gbm9uLWJs
-b2NraW5nIG1vZGUgaWYgdGhlIEZJRk8NCmlzIG9wZW5lZCBpbiBibG9ja2lu
-ZyBtb2RlLg0KDQpJbiBmaGFuZGxlcl9maWZvOjpyYXdfd3JpdGUgaW4gYmxv
-Y2tpbmcgbW9kZSwgd2FpdCBmb3IgdGhlIHdyaXRlIHRvDQpjb21wbGV0ZSBy
-YXRoZXIgdGhhbiByZXR1cm5pbmcgLTEgd2l0aCBFQUdBSU4uDQoNCklmIHRo
-ZSBhbW91bnQgdG8gd3JpdGUgaXMgbGFyZ2UsIHdyaXRlIGluIHNtYWxsZXIg
-Y2h1bmtzIChvZiBzaXplDQpkZXRlcm1pbmVkIGJ5IGEgbmV3IGRhdGEgbWVt
-YmVyIG1heF9hdG9taWNfd3JpdGUpLCBhcyBpbg0KZmhhbmRsZXJfYmFzZV9v
-dmVybGFwcGVkLg0KDQpGb3IgY29udmVuaWVuY2UsIGFkZCB0d28gbmV3IE5U
-U1RBVFVTIGNvZGVzLCBTVEFUVVNfVEhSRUFEX1NJR05BTEVEDQphbmQgU1RB
-VFVTX1RIUkVBRF9DQU5DRUxFRCwgdG8gbnRkbGwuaC4NCi0tLQ0KIHdpbnN1
-cC9jeWd3aW4vZmhhbmRsZXIuaCAgICAgICB8ICAxICsNCiB3aW5zdXAvY3ln
-d2luL2ZoYW5kbGVyX2ZpZm8uY2MgfCA5NSArKysrKysrKysrKysrKysrKysr
-KysrKysrKystLS0tLS0tDQogd2luc3VwL2N5Z3dpbi9udGRsbC5oICAgICAg
-ICAgIHwgIDQgKy0NCiAzIGZpbGVzIGNoYW5nZWQsIDgwIGluc2VydGlvbnMo
-KyksIDIwIGRlbGV0aW9ucygtKQ0KDQpkaWZmIC0tZ2l0IGEvd2luc3VwL2N5
-Z3dpbi9maGFuZGxlci5oIGIvd2luc3VwL2N5Z3dpbi9maGFuZGxlci5oDQpp
-bmRleCBhZWEwMmMyYjMuLmZkMjA1YTZkYiAxMDA2NDQNCi0tLSBhL3dpbnN1
-cC9jeWd3aW4vZmhhbmRsZXIuaA0KKysrIGIvd2luc3VwL2N5Z3dpbi9maGFu
-ZGxlci5oDQpAQCAtMTI3Myw2ICsxMjczLDcgQEAgY2xhc3MgZmhhbmRsZXJf
-ZmlmbzogcHVibGljIGZoYW5kbGVyX2Jhc2UNCiAgIGludCBuaGFuZGxlcnMs
-IG5jb25uZWN0ZWQ7DQogICBhZl91bml4X3NwaW5sb2NrX3QgX2ZpZm9fY2xp
-ZW50X2xvY2s7DQogICBib29sIHJlYWRlciwgd3JpdGVyLCBkdXBsZXhlcjsN
-CisgIHNpemVfdCBtYXhfYXRvbWljX3dyaXRlOw0KICAgYm9vbCBfX3JlZzIg
-d2FpdCAoSEFORExFKTsNCiAgIE5UU1RBVFVTIG5wZnNfaGFuZGxlIChIQU5E
-TEUgJik7DQogICBIQU5ETEUgY3JlYXRlX3BpcGVfaW5zdGFuY2UgKGJvb2wp
-Ow0KZGlmZiAtLWdpdCBhL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXJfZmlmby5j
-YyBiL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXJfZmlmby5jYw0KaW5kZXggZmU0
-YzY3YmRmLi5kMmY4Yjk5YmMgMTAwNjQ0DQotLS0gYS93aW5zdXAvY3lnd2lu
-L2ZoYW5kbGVyX2ZpZm8uY2MNCisrKyBiL3dpbnN1cC9jeWd3aW4vZmhhbmRs
-ZXJfZmlmby5jYw0KQEAgLTM5LDcgKzM5LDggQEAgU1RBVFVTX1BJUEVfRU1Q
-VFkgc2ltcGx5IG1lYW5zIHRoZXJlJ3Mgbm8gZGF0YSB0byBiZSByZWFkLiAq
-Lw0KIGZoYW5kbGVyX2ZpZm86OmZoYW5kbGVyX2ZpZm8gKCk6DQogICBmaGFu
-ZGxlcl9iYXNlICgpLCByZWFkX3JlYWR5IChOVUxMKSwgd3JpdGVfcmVhZHkg
-KE5VTEwpLA0KICAgbGlzdGVuX2NsaWVudF90aHIgKE5VTEwpLCBsY3RfdGVy
-bWluYXRpb25fZXZ0IChOVUxMKSwgbmhhbmRsZXJzICgwKSwNCi0gIG5jb25u
-ZWN0ZWQgKDApLCByZWFkZXIgKGZhbHNlKSwgd3JpdGVyIChmYWxzZSksIGR1
-cGxleGVyIChmYWxzZSkNCisgIG5jb25uZWN0ZWQgKDApLCByZWFkZXIgKGZh
-bHNlKSwgd3JpdGVyIChmYWxzZSksIGR1cGxleGVyIChmYWxzZSksDQorICBt
-YXhfYXRvbWljX3dyaXRlIChERUZBVUxUX1BJUEVCVUZTSVpFKQ0KIHsNCiAg
-IHBpcGVfbmFtZV9idWZbMF0gPSBMJ1wwJzsNCiAgIG5lZWRfZm9ya19maXh1
-cCAodHJ1ZSk7DQpAQCAtNTU5LDcgKzU2MCw3IEBAIGZoYW5kbGVyX2ZpZm86
-Om9wZW4gKGludCBmbGFncywgbW9kZV90KQ0KIAkgIE5UU1RBVFVTIHN0YXR1
-cyA9IG9wZW5fcGlwZSAoKTsNCiAJICBpZiAoTlRfU1VDQ0VTUyAoc3RhdHVz
-KSkNCiAJICAgIHsNCi0JICAgICAgc2V0X3BpcGVfbm9uX2Jsb2NraW5nIChn
-ZXRfaGFuZGxlICgpLCB0cnVlKTsNCisJICAgICAgc2V0X3BpcGVfbm9uX2Js
-b2NraW5nIChnZXRfaGFuZGxlICgpLCBmbGFncyAmIE9fTk9OQkxPQ0spOw0K
-IAkgICAgICBpZiAoIWFybSAod3JpdGVfcmVhZHkpKQ0KIAkJcmVzID0gZXJy
-b3Jfc2V0X2Vycm5vOw0KIAkgICAgICBlbHNlDQpAQCAtNjYxLDI4ICs2NjIs
-ODQgQEAgc3NpemVfdCBfX3JlZzMNCiBmaGFuZGxlcl9maWZvOjpyYXdfd3Jp
-dGUgKGNvbnN0IHZvaWQgKnB0ciwgc2l6ZV90IGxlbikNCiB7DQogICBzc2l6
-ZV90IHJldCA9IC0xOw0KLSAgTlRTVEFUVVMgc3RhdHVzOw0KKyAgc2l6ZV90
-IG5ieXRlcyA9IDAsIGNodW5rOw0KKyAgTlRTVEFUVVMgc3RhdHVzID0gU1RB
-VFVTX1NVQ0NFU1M7DQogICBJT19TVEFUVVNfQkxPQ0sgaW87DQorICBIQU5E
-TEUgZXZ0ID0gTlVMTDsNCiANCi0gIHN0YXR1cyA9IE50V3JpdGVGaWxlIChn
-ZXRfaGFuZGxlICgpLCBOVUxMLCBOVUxMLCBOVUxMLCAmaW8sDQotCQkJKFBW
-T0lEKSBwdHIsIGxlbiwgTlVMTCwgTlVMTCk7DQotICBpZiAoTlRfU1VDQ0VT
-UyAoc3RhdHVzKSkNCisgIGlmIChsZW4gPD0gbWF4X2F0b21pY193cml0ZSkN
-CisgICAgY2h1bmsgPSBsZW47DQorICBlbHNlIGlmIChpc19ub25ibG9ja2lu
-ZyAoKSkNCisgICAgY2h1bmsgPSBsZW4gPSBtYXhfYXRvbWljX3dyaXRlOw0K
-KyAgZWxzZQ0KKyAgICBjaHVuayA9IG1heF9hdG9taWNfd3JpdGU7DQorDQor
-ICAvKiBDcmVhdGUgYSB3YWl0IGV2ZW50IGlmIHRoZSBGSUZPIGlzIGluIGJs
-b2NraW5nIG1vZGUuICovDQorICBpZiAoIWlzX25vbmJsb2NraW5nICgpICYm
-ICEoZXZ0ID0gQ3JlYXRlRXZlbnQgKE5VTEwsIGZhbHNlLCBmYWxzZSwgTlVM
-TCkpKQ0KKyAgICByZXR1cm4gLTE7DQorDQorICAvKiBXcml0ZSBpbiBjaHVu
-a3MsIGFjY3VtdWxhdGluZyBhIHRvdGFsLiAgSWYgdGhlcmUncyBhbiBlcnJv
-ciwganVzdA0KKyAgICAgcmV0dXJuIHRoZSBhY2N1bXVsYXRlZCB0b3RhbCB1
-bmxlc3MgdGhlIGZpcnN0IHdyaXRlIGZhaWxzLCBpbg0KKyAgICAgd2hpY2gg
-Y2FzZSByZXR1cm4gLTEuICovDQorICB3aGlsZSAobmJ5dGVzIDwgbGVuKQ0K
-ICAgICB7DQotICAgICAgLyogTnRXcml0ZUZpbGUgcmV0dXJucyBzdWNjZXNz
-IHdpdGggIyBvZiBieXRlcyB3cml0dGVuID09IDAgaW4NCi0JIGNhc2Ugd3Jp
-dGluZyBvbiBhIG5vbi1ibG9ja2luZyBwaXBlIGZhaWxzIGlmIHRoZSBwaXBl
-IGJ1ZmZlcg0KLQkgaXMgZnVsbC4gKi8NCi0gICAgICBpZiAoaW8uSW5mb3Jt
-YXRpb24gPT0gMCkNCi0Jc2V0X2Vycm5vIChFQUdBSU4pOw0KKyAgICAgIFVM
-T05HX1BUUiBuYnl0ZXNfbm93ID0gMDsNCisgICAgICBzaXplX3QgbGVmdCA9
-IGxlbiAtIG5ieXRlczsNCisgICAgICBzaXplX3QgbGVuMTsNCisgICAgICBp
-ZiAobGVmdCA+IGNodW5rKQ0KKwlsZW4xID0gY2h1bms7DQogICAgICAgZWxz
-ZQ0KLQlyZXQgPSBpby5JbmZvcm1hdGlvbjsNCi0gICAgfQ0KLSAgZWxzZSBp
-ZiAoU1RBVFVTX1BJUEVfSVNfQ0xPU0VEIChzdGF0dXMpKQ0KLSAgICB7DQot
-ICAgICAgc2V0X2Vycm5vIChFUElQRSk7DQotICAgICAgcmFpc2UgKFNJR1BJ
-UEUpOw0KKwlsZW4xID0gbGVmdDsNCisgICAgICBuYnl0ZXNfbm93ID0gMDsN
-CisgICAgICBzdGF0dXMgPSBOdFdyaXRlRmlsZSAoZ2V0X2hhbmRsZSAoKSwg
-ZXZ0LCBOVUxMLCBOVUxMLCAmaW8sDQorCQkJICAgIChQVk9JRCkgcHRyLCBs
-ZW4xLCBOVUxMLCBOVUxMKTsNCisgICAgICBpZiAoZXZ0ICYmIHN0YXR1cyA9
-PSBTVEFUVVNfUEVORElORykNCisJew0KKwkgIERXT1JEIHdhaXRyZXQgPSBj
-eWd3YWl0IChldnQsIGN3X2luZmluaXRlLCBjd19jYW5jZWwgfCBjd19zaWdf
-ZWludHIpOw0KKwkgIHN3aXRjaCAod2FpdHJldCkNCisJICAgIHsNCisJICAg
-IGNhc2UgV0FJVF9PQkpFQ1RfMDoNCisJICAgICAgc3RhdHVzID0gaW8uU3Rh
-dHVzOw0KKwkgICAgICBicmVhazsNCisJICAgIGNhc2UgV0FJVF9TSUdOQUxF
-RDoNCisJICAgICAgc3RhdHVzID0gU1RBVFVTX1RIUkVBRF9TSUdOQUxFRDsN
-CisJICAgICAgYnJlYWs7DQorCSAgICBjYXNlIFdBSVRfQ0FOQ0VMRUQ6DQor
-CSAgICAgIHN0YXR1cyA9IFNUQVRVU19USFJFQURfQ0FOQ0VMRUQ7DQorCSAg
-ICAgIGJyZWFrOw0KKwkgICAgZGVmYXVsdDoNCisJICAgICAgYnJlYWs7DQor
-CSAgICB9DQorCX0NCisgICAgICBpZiAoTlRfU1VDQ0VTUyAoc3RhdHVzKSkN
-CisJew0KKwkgIG5ieXRlc19ub3cgPSBpby5JbmZvcm1hdGlvbjsNCisJICAv
-KiBOdFdyaXRlRmlsZSByZXR1cm5zIHN1Y2Nlc3Mgd2l0aCAjIG9mIGJ5dGVz
-IHdyaXR0ZW4gPT0gMA0KKwkgICAgIGlmIHdyaXRpbmcgb24gYSBub24tYmxv
-Y2tpbmcgcGlwZSBmYWlscyBiZWNhdXNlIHRoZSBwaXBlDQorCSAgICAgYnVm
-ZmVyIGRvZXNuJ3QgaGF2ZSBzdWZmaWNpZW50IHNwYWNlLiAqLw0KKwkgIGlm
-IChuYnl0ZXNfbm93ID09IDApDQorCSAgICBzZXRfZXJybm8gKEVBR0FJTik7
-DQorCSAgcHRyID0gKChjaGFyICopIHB0cikgKyBjaHVuazsNCisJICBuYnl0
-ZXMgKz0gbmJ5dGVzX25vdzsNCisJfQ0KKyAgICAgIGVsc2UgaWYgKFNUQVRV
-U19QSVBFX0lTX0NMT1NFRCAoc3RhdHVzKSkNCisJew0KKwkgIHNldF9lcnJu
-byAoRVBJUEUpOw0KKwkgIHJhaXNlIChTSUdQSVBFKTsNCisJfQ0KKyAgICAg
-IGVsc2UNCisJX19zZXRlcnJub19mcm9tX250X3N0YXR1cyAoc3RhdHVzKTsN
-CisgICAgICBpZiAobmJ5dGVzX25vdyA9PSAwKQ0KKwlsZW4gPSAwOwkJLyog
-VGVybWluYXRlIGxvb3AuICovDQorICAgICAgaWYgKG5ieXRlcyA+IDApDQor
-CXJldCA9IG5ieXRlczsNCiAgICAgfQ0KLSAgZWxzZQ0KLSAgICBfX3NldGVy
-cm5vX2Zyb21fbnRfc3RhdHVzIChzdGF0dXMpOw0KKyAgaWYgKGV2dCkNCisg
-ICAgQ2xvc2VIYW5kbGUgKGV2dCk7DQorICBpZiAoc3RhdHVzID09IFNUQVRV
-U19USFJFQURfU0lHTkFMRUQgJiYgIV9teV90bHMuY2FsbF9zaWduYWxfaGFu
-ZGxlciAoKSkNCisgICAgc2V0X2Vycm5vIChFSU5UUik7DQorICBlbHNlIGlm
-IChzdGF0dXMgPT0gU1RBVFVTX1RIUkVBRF9DQU5DRUxFRCkNCisgICAgcHRo
-cmVhZDo6c3RhdGljX2NhbmNlbF9zZWxmICgpOw0KICAgcmV0dXJuIHJldDsN
-CiB9DQogDQpkaWZmIC0tZ2l0IGEvd2luc3VwL2N5Z3dpbi9udGRsbC5oIGIv
-d2luc3VwL2N5Z3dpbi9udGRsbC5oDQppbmRleCBiNDFiOTliNGIuLmUxOWNj
-OGFiNSAxMDA2NDQNCi0tLSBhL3dpbnN1cC9jeWd3aW4vbnRkbGwuaA0KKysr
-IGIvd2luc3VwL2N5Z3dpbi9udGRsbC5oDQpAQCAtMTUsNyArMTUsOSBAQA0K
-IGV4dGVybiBHVUlEIF9fY3lnd2luX3NvY2tldF9ndWlkOw0KICNkZWZpbmUg
-Q1lHV0lOX1NPQ0tFVF9HVUlEICgmX19jeWd3aW5fc29ja2V0X2d1aWQpDQog
-DQotLyogY3VzdG9tIHN0YXR1cyBjb2RlOiAqLw0KKy8qIEN1c3RvbSBDeWd3
-aW4tb25seSBzdGF0dXMgY29kZXMuICovDQorI2RlZmluZSBTVEFUVVNfVEhS
-RUFEX1NJR05BTEVECSgoTlRTVEFUVVMpMHhlMDAwMDAwMSkNCisjZGVmaW5l
-IFNUQVRVU19USFJFQURfQ0FOQ0VMRUQJKChOVFNUQVRVUykweGUwMDAwMDAy
-KQ0KICNkZWZpbmUgU1RBVFVTX0lMTEVHQUxfRExMX1BTRVVET19SRUxPQ0FU
-SU9OICgoTlRTVEFUVVMpIDB4ZTAwMDAyNjkpDQogDQogLyogU2ltcGxpZnkg
-Y2hlY2tpbmcgZm9yIGEgdHJhbnNhY3Rpb25hbCBlcnJvciBjb2RlLiAqLw0K
-LS0gDQoyLjE3LjANCg0K
+
+--ELVYuRnMxQ5nnKRy
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 1219
+
+On Apr 14 19:15, Ken Brown wrote:
+> Ken Brown (14):
+>   Cygwin: FIFO: rename client[] to fc_handler[]
+>   Cygwin: FIFO: hit_eof: add a call to fifo_client_lock
+>   Cygwin: FIFO: remember the type of the fhandler
+>   Cygwin: FIFO: fix a thinko in listen_client_thread
+>   Cygwin: FIFO: fix the error checking in raw_read
+>   Cygwin: check for STATUS_PENDING in fhandler_base::raw_read
+>   Cygwin: FIFO: code simplification: don't overload get_handle
+>   Cygwin: FIFO: fix fifo_client_handler::close
+>   Cygwin: FIFO: fix the use of the read_ready event
+>   Cygwin: FIFO: use a retry loop when opening a writer
+>   Cygwin: FIFO: fix clone
+>   Cygwin: FIFO: start the listen_client thread when duping a reader
+>   Cygwin: FIFO: improve raw_write
+>   Cygwin: FIFO: fix and simplify listen_client_thread
+>=20
+>  winsup/cygwin/fhandler.cc      |  14 +-
+>  winsup/cygwin/fhandler.h       |  43 +--
+>  winsup/cygwin/fhandler_fifo.cc | 580 +++++++++++++++++----------------
+>  winsup/cygwin/select.cc        |   4 +-
+>  4 files changed, 342 insertions(+), 299 deletions(-)
+>=20
+> --=20
+> 2.17.0
+>=20
+
+Pushed with v2 of patch 13.  Developer snaps should be up shortly.
+
+
+Thanks,
+Corinna
+
+--=20
+Corinna Vinschen
+Cygwin Maintainer
+
+--ELVYuRnMxQ5nnKRy
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 833
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAly1uwMACgkQ9TYGna5E
+T6DTfhAApmDK5W5DrIu/OAsqldZ7qYEF1inILtAIASGJlcYa428XNFA7tExZfRrs
+/NOom6Ke6dnVJb76PpfnHlmVHgIDTbAnQNn7Iq2BiOPzc2C/B99GtWntaHpMzYK8
+AQvWwnaCP5mbJiPOOXLTDBs2q0fKHNKR6GXD1xzVFMiRwjrxjC2irjGmTlx8CtFh
+Am8ln5tzyiK0+2/nFw222bgdxzmVgvVEUKXnKD9JE5LFS4BhbT1Ki8tkVxqevQGO
+jX12UOKK3xX9m5FbxbneCyYhmcI4uYHa5HAn0N/VqrSvznvZh5LRGANoAZKR/cVW
+gfe07QEjZ5ZMq2dyUV5P5Hq67dUO2BAkw8c9dvxe31a1SFjWkDXQx+fxL36WhlR3
+dWmIh0gafQbzH7Idy6n6dERIXd+d7nMEdpAJpO0kazMwQv9Ya2TetFRAvvIYDoiU
+ORc3chlVoEBv7IAGekmJp085MSkXyKI3MgYMF7dGKW+0fPPFmpUc91XXVEzd0oPv
+Y4FetN+IVsfwzAm+32A2OKtVsO0CswRNOok11yrjqaOYMQS6k68RKLKmvtBt6knn
+RSRnTr10BKFPZhtxbISHWi1LvYADsiHPQaxK7zh+olB5Kpr/kJCLKWeYLHgBcjt1
+CF2Suu1vNetGTNHWZ8mv/B7iJQcgSg2bw8wJn5sVswVvB26Gb84=
+=8z+r
+-----END PGP SIGNATURE-----
+
+--ELVYuRnMxQ5nnKRy--
