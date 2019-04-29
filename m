@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9382-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 71901 invoked by alias); 26 Apr 2019 08:23:21 -0000
+Return-Path: <cygwin-patches-return-9383-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 28558 invoked by alias); 29 Apr 2019 05:38:37 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,118 +9,388 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 71887 invoked by uid 89); 26 Apr 2019 08:23:20 -0000
+Received: (qmail 28549 invoked by uid 89); 29 Apr 2019 05:38:37 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-103.3 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=hoods, maintainers, H*R:U*cygwin-patches, H*F:D*cygwin.com
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.130) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 26 Apr 2019 08:23:19 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id 1Md6dH-1gkK4V46AV-00aAy1 for <cygwin-patches@cygwin.com>; Fri, 26 Apr 2019 10:23:17 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 354E8A80776; Fri, 26 Apr 2019 10:23:16 +0200 (CEST)
-Date: Fri, 26 Apr 2019 08:23:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-16.2 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3 autolearn=ham version=3.3.1 spammy=measure, assemble, newlib, Non
+X-HELO: m0.truegem.net
+Received: from m0.truegem.net (HELO m0.truegem.net) (69.55.228.47) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 29 Apr 2019 05:38:35 +0000
+Received: (from daemon@localhost)	by m0.truegem.net (8.12.11/8.12.11) id x3T5cXw5005675;	Sun, 28 Apr 2019 22:38:33 -0700 (PDT)	(envelope-from mark@maxrnd.com)
+Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67), claiming to be "localhost.localdomain" via SMTP by m0.truegem.net, id smtpdZMQzfT; Sun Apr 28 22:38:25 2019
+From: Mark Geisert <mark@maxrnd.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH RFC] fork: reduce chances for "address space is already occupied" errors
-Message-ID: <20190426082316.GC13355@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20190328095818.GP4096@calimero.vinschen.de> <fd7b9ab3-ca07-0c80-04da-4f6b2f20d49e@ssi-schaefer.com> <20190328203056.GB4096@calimero.vinschen.de> <fe627231-6717-c702-b97b-d66cdc9409a3@ssi-schaefer.com> <20190401145658.GA6331@calimero.vinschen.de> <20190401155636.GN3337@calimero.vinschen.de> <837bc171-eb6f-681e-5167-103f5e9e8523@ssi-schaefer.com> <20190403122216.GX3337@calimero.vinschen.de> <20190412174031.GC4248@calimero.vinschen.de> <96a07e1e-8fe3-8264-7c26-ba09acf8bad3@ssi-schaefer.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="wRRV7LY7NUeQGEoC"
-Content-Disposition: inline
-In-Reply-To: <96a07e1e-8fe3-8264-7c26-ba09acf8bad3@ssi-schaefer.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-SW-Source: 2019-q2/txt/msg00089.txt.bz2
+Cc: Mark Geisert <mark@maxrnd.com>
+Subject: [PATCH v2] Cygwin: Implement sched_[gs]etaffinity()
+Date: Mon, 29 Apr 2019 05:38:00 -0000
+Message-Id: <20190429053809.1095-1-mark@maxrnd.com>
+X-IsSubscribed: yes
+X-SW-Source: 2019-q2/txt/msg00090.txt.bz2
 
+There are a couple of multi-group affinity operations that cannot be done
+without heroic measures.  Those are marked with XXX in the code.  Further
+discussion would be helpful to me.
 
---wRRV7LY7NUeQGEoC
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 2482
+---
+ newlib/libc/include/sched.h     |  13 ++
+ winsup/cygwin/common.din        |   4 +
+ winsup/cygwin/include/pthread.h |   2 +
+ winsup/cygwin/sched.cc          | 237 ++++++++++++++++++++++++++++++++
+ winsup/cygwin/thread.cc         |  19 +++
+ 5 files changed, 275 insertions(+)
 
-On Apr 24 17:09, Michael Haubenwallner wrote:
-> On 4/12/19 7:40 PM, Corinna Vinschen wrote:
-> > Hi Michael,
->=20
-> > Nick Clifton, one of the binutils maintainers, made the following
-> > suggestion in PM:
-> >=20
-> > Allow the ld flag --enable-auto-image-base to take a filename as
-> > argument.>=20
-> > The idea: The file is used by ld to generate the start address
-> > for the next built DLL.  Mechanism:
-> >=20
-> > 1.1. If ld links a DLL and if the file given to --enable-auto-image-base
-> >      doesn't exist, ld will give the DLL the start address of the
-> >      auto image base range.
-> >=20
-> > 1.2: Next time, if ld links a DLL and if the file given to
-> >      --enable-auto-image-base exists, it will use the address in that
-> >      file as the start address for th just built DLL.
-> >=20
-> > 2. It will store that address, plus the size of the DLL, rounded up to
-> >    64K, in that file.
->=20
-> The rounding up is fine to get some alignment for the base address itself,
-> but it feels irrelevant if it was for "finding the next base" only.
-
-Well,DLLs always start at a 64K boundary, so it makes sesne to round
-immediately.
-
-> > 3. If the auto image base range is at an end, ld will wrap back to
-> >    the start address of the auto image base range.>=20
-> > TBD: A way to enable this feature without having to change all
-> >      packages' build systems.
->=20
-> As the --enable-auto-image-base flag does not name any method for finding
-> the image base beyond "automatic", IMHO using some predefined control file
-> under the hoods should be fine.
-
-The current preliminary solution is to check if a file
-~/.ld-pe-auto-image-base exists.  If it doesn't, ld uses the usual
-hashing to compute the base address.  If the file exists and is empty,
-the base address range start address is used (i.e. 0x4:00000000),
-otherwise the address is taken from the file and the next free address
-after that is written back to the file.
-
-The problem is that auto-image-basing occurs *so* early in ld,
-that the size of the built DLL isn't known when writing the file back.
-To do this right there needs to be a bigger change to ld, the current
-infrastructure around image basing doesn't allow to call saving the file
-content deferred.
-
-So ATM, ld just adds ~38 Megs to the current DLL address, which is
-1 Meg more than the largest Cygwin DLL on my system.
-
-There's already a bit more in terms of settings, but that's still
-in the works.
-
-
-Corinna
-
---=20
-Corinna Vinschen
-Cygwin Maintainer
-
---wRRV7LY7NUeQGEoC
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAlzCv/QACgkQ9TYGna5E
-T6BEQA/+O4FosrOgqlRYkN8UZ9Jgd3JAygAK94AIm+XNHTmfkhAiTBOmhamvvxjQ
-UdqhU8mPK+d0k0dX+kdWdBbcYh4z5B91eYSRVv103j/nKqEKH31e4dJY+VmC1ScQ
-Xylah8JQYUDJXOi7/TS8AMOtMK7nMTUT4keXKBpZW7Bj5rwpPuGCLvoR8O+IcQnd
-0kAUHbebfHauI3bic9e7O5KGb/Z92EZ+M1nHPY5/jee1F62BV2QwbqxKHKdsi9dV
-n6JQVdYz2mCnCfJF3N2RWgjHLuxZWDGr0WA/onFFJEjaBug6ol3xoiQC/sa4Z6Ym
-1cp7S6wZ9UhUAD6Tyi5nzschok6BYJmvvh0ieijb8aLkhNNZxaW8/8+aQoU+OwAJ
-4DpoM/e1/Y5ISwA+1OMpwwHptKZXnGusVFvxJbzQMO0Bw7xeCEZPxpbwxvr1DnCk
-Q9KsIHRKtt8jR8Q1n+GXnLJgzmjbtvl5Ij+YdjU2l0yisj7mwpSuKJDen3r9ai1R
-Qc/mAW/ymTkhwv4CBXUECqoyoEgp51Cfqst5sh4y/zkLr9qgiBd1qEdwjXGZy4Fo
-Pfa7cKa7g/+u+ovfVYmU+ztOu50iJKJqPESWJGeCrt6DOQwYk1BShZZ5gEGZbMMa
-mYV99Xve+2fRUgj7u9mdnyOB1Jex2TpXos+d6HxpegZuzNKoR/8=
-=7isd
------END PGP SIGNATURE-----
-
---wRRV7LY7NUeQGEoC--
+diff --git a/newlib/libc/include/sched.h b/newlib/libc/include/sched.h
+index 1016235bb..a4d3fea6a 100644
+--- a/newlib/libc/include/sched.h
++++ b/newlib/libc/include/sched.h
+@@ -92,6 +92,19 @@ int sched_yield( void );
+ 
+ #if __GNU_VISIBLE
+ int sched_getcpu(void);
++
++#ifdef __CYGWIN__
++/* Affinity-related definitions, here until numerous enough to separate out */
++typedef uint64_t cpu_set_t;
++#define CPU_SETSIZE 1024
++#define CPU_GROUPSIZE 64
++#define CPU_GROUPMAX (CPU_SETSIZE / CPU_GROUPSIZE)
++
++int sched_getaffinity (pid_t, size_t, cpu_set_t *);
++int sched_get_thread_affinity (void *, size_t, cpu_set_t *);
++int sched_setaffinity (pid_t, size_t, const cpu_set_t *);
++int sched_set_thread_affinity (void *, size_t, const cpu_set_t *);
++#endif
+ #endif
+ 
+ #ifdef __cplusplus
+diff --git a/winsup/cygwin/common.din b/winsup/cygwin/common.din
+index 68b95d470..81292ab7b 100644
+--- a/winsup/cygwin/common.din
++++ b/winsup/cygwin/common.din
+@@ -1084,6 +1084,7 @@ pthread_create SIGFE
+ pthread_detach SIGFE
+ pthread_equal SIGFE
+ pthread_exit SIGFE
++pthread_getaffinity_np SIGFE
+ pthread_getattr_np SIGFE
+ pthread_getconcurrency SIGFE
+ pthread_getcpuclockid SIGFE
+@@ -1128,6 +1129,7 @@ pthread_rwlockattr_getpshared SIGFE
+ pthread_rwlockattr_init SIGFE
+ pthread_rwlockattr_setpshared SIGFE
+ pthread_self SIGFE
++pthread_setaffinity_np SIGFE
+ pthread_setcancelstate SIGFE
+ pthread_setcanceltype SIGFE
+ pthread_setconcurrency SIGFE
+@@ -1248,10 +1250,12 @@ scandirat SIGFE
+ scanf SIGFE
+ sched_get_priority_max SIGFE
+ sched_get_priority_min SIGFE
++sched_getaffinity SIGFE
+ sched_getcpu SIGFE
+ sched_getparam SIGFE
+ sched_getscheduler NOSIGFE
+ sched_rr_get_interval SIGFE
++sched_setaffinity SIGFE
+ sched_setparam SIGFE
+ sched_setscheduler SIGFE
+ sched_yield SIGFE
+diff --git a/winsup/cygwin/include/pthread.h b/winsup/cygwin/include/pthread.h
+index 2ccf1cf8b..4ef3aeab7 100644
+--- a/winsup/cygwin/include/pthread.h
++++ b/winsup/cygwin/include/pthread.h
+@@ -226,8 +226,10 @@ void pthread_testcancel (void);
+ /* Non posix calls */
+ 
+ #if __GNU_VISIBLE
++int pthread_getaffinity_np (pthread_t, size_t, cpu_set_t *);
+ int pthread_getattr_np (pthread_t, pthread_attr_t *);
+ int pthread_getname_np (pthread_t, char *, size_t) __attribute__((__nonnull__(2)));
++int pthread_setaffinity_np (pthread_t, size_t, const cpu_set_t *);
+ int pthread_setname_np (pthread_t, const char *) __attribute__((__nonnull__(2)));
+ int pthread_sigqueue (pthread_t *, int, const union sigval);
+ int pthread_timedjoin_np (pthread_t, void **, const struct timespec *);
+diff --git a/winsup/cygwin/sched.cc b/winsup/cygwin/sched.cc
+index 10168e641..2d527da69 100644
+--- a/winsup/cygwin/sched.cc
++++ b/winsup/cygwin/sched.cc
+@@ -424,4 +424,241 @@ sched_getcpu ()
+   return pnum.Group * __get_cpus_per_group () + pnum.Number;
+ }
+ 
++/* figure out which processor group the set bits indicate; can only be one */
++static int
++whichgroup (size_t sizeof_set, const cpu_set_t *set)
++{
++  //XXX code assumes __get_cpus_per_group() is fixed at 64
++  int res = -1;
++
++  for (unsigned int i = 0; i < sizeof_set / sizeof (cpu_set_t); ++i)
++    if (set[i])
++      {
++	if (res >= 0)
++	  return -1; // error return if more than one group indicated
++	else
++	  res = (int) i; // remember first group found
++      }
++
++  return res;
++}
++
++int
++sched_get_thread_affinity (HANDLE thread, size_t sizeof_set, cpu_set_t *set)
++{
++  int status = 0;
++
++  //XXX code assumes __get_cpus_per_group() is fixed at 64
++  if (thread)
++    {
++      memset (set, 0, sizeof_set);
++      if (wincap.has_processor_groups ())
++	{
++	  GROUP_AFFINITY ga;
++
++	  if (!GetThreadGroupAffinity (thread, &ga))
++	    {
++	      status = geterrno_from_win_error (GetLastError (), EPERM);
++	      goto done;
++	    }
++	  set[ga.Group] = ga.Mask;
++	}
++      else
++	{
++	  // There is no GetThreadAffinityMask() function, so simulate one by
++	  // iterating through CPUs trying to set affinity, which returns the
++	  // previous affinity.  On success, restore original affinity.
++	  // This strategy is due to Damon on StackOverflow.
++	  KAFFINITY cpumask = 1;
++	  KAFFINITY oldmask = 0;
++
++	  // Iterate through CPUs until success setting thread affinity to it
++	  while (cpumask)
++	    {
++	      oldmask = SetThreadAffinityMask (thread, cpumask);
++	      if (oldmask)
++		{ // that one worked, so restore original mask
++		  SetThreadAffinityMask (thread, oldmask);
++		  set[0] = oldmask;
++		  goto done;
++		}
++	      if (GetLastError () != ERROR_INVALID_PARAMETER)
++		{ // that one failed in an unexpected way
++		  status = geterrno_from_win_error (GetLastError (), EPERM);
++		  goto done;
++		}
++	      cpumask <<= 1;
++	    }
++	  status = ENOSYS; //XXX strategy failed.. figure out a new one
++	}
++    }
++  else
++    status = ESRCH;
++
++done:
++  return status;
++}
++
++int
++sched_getaffinity (pid_t pid, size_t sizeof_set, cpu_set_t *set)
++{
++  HANDLE process = 0;
++  int status = 0;
++
++  //XXX code assumes __get_cpus_per_group() is fixed at 64
++  pinfo p (pid ? pid : getpid ());
++  if (p)
++    {
++      process = pid && pid != myself->pid ?
++                OpenProcess (PROCESS_QUERY_LIMITED_INFORMATION, FALSE,
++                             p->dwProcessId) : GetCurrentProcess ();
++      KAFFINITY procmask;
++      KAFFINITY sysmask;
++
++      if (!GetProcessAffinityMask (process, &procmask, &sysmask))
++        {
++oops:
++          status = geterrno_from_win_error (GetLastError (), EPERM);
++          goto done;
++        }
++      memset (set, 0, sizeof_set);
++      if (wincap.has_processor_groups ())
++        {
++          USHORT groupcount = CPU_GROUPMAX;
++          USHORT grouparray[CPU_GROUPMAX];
++
++          if (!GetProcessGroupAffinity (process, &groupcount, grouparray))
++            goto oops;
++          if (groupcount == 1)
++	    set[grouparray[0]] = procmask;
++	  else
++            status = ENOSYS;//XXX multi-group code TBD...
++	    // There is no way to assemble the complete process affinity mask
++	    // without querying at least one thread per group in grouparray,
++	    // and we don't know which group a thread is in without querying
++	    // it, so must query all threads.  I'd call that a heroic measure.
++        }
++      else
++        set[0] = procmask;
++    }
++  else
++    status = ESRCH;
++
++done:
++  if (process && process != GetCurrentProcess ())
++    CloseHandle (process);
++
++  return status;
++}
++
++int
++sched_set_thread_affinity (HANDLE thread, size_t sizeof_set, const cpu_set_t *set)
++{
++  int group = whichgroup (sizeof_set, set);
++  int status = 0;
++
++  //XXX code assumes __get_cpus_per_group() is fixed at 64
++  if (thread)
++    {
++      if (wincap.has_processor_groups ())
++	{
++	  GROUP_AFFINITY ga;
++
++	  if (group < 0)
++	    {
++	      status = EINVAL;
++	      goto done;
++	    }
++	  memset (&ga, 0, sizeof (ga));
++	  ga.Mask = set[group];
++	  ga.Group = group;
++	  if (!SetThreadGroupAffinity (thread, &ga, NULL))
++	    {
++	      status = geterrno_from_win_error (GetLastError (), EPERM);
++	      goto done;
++	    }
++	}
++      else
++	{
++	  if (group != 0)
++	    {
++	      status = EINVAL;
++	      goto done;
++	    }
++	  if (!SetThreadAffinityMask (thread, set[0]))
++	    {
++	      status = geterrno_from_win_error (GetLastError (), EPERM);
++	      goto done;
++	    }
++	}
++    }
++  else
++    status = ESRCH;
++
++done:
++  return status;
++}
++
++int
++sched_setaffinity (pid_t pid, size_t sizeof_set, const cpu_set_t *set)
++{
++  int group = whichgroup (sizeof_set, set);
++  HANDLE process = 0;
++  int status = 0;
++
++  //XXX code assumes __get_cpus_per_group() is fixed at 64
++  pinfo p (pid ? pid : getpid ());
++  if (p)
++    {
++      process = pid && pid != myself->pid ?
++		OpenProcess (PROCESS_SET_INFORMATION, FALSE,
++			     p->dwProcessId) : GetCurrentProcess ();
++      if (wincap.has_processor_groups ())
++	{
++	  USHORT groupcount = CPU_GROUPMAX;
++	  USHORT grouparray[CPU_GROUPMAX];
++
++	  if (!GetProcessGroupAffinity (process, &groupcount, grouparray))
++	    {
++	      status = geterrno_from_win_error (GetLastError (), EPERM);
++	      goto done;
++	    }
++	  if (group < 0)
++	    {
++	      status = EINVAL;
++	      goto done;
++	    }
++	  if (groupcount == 1 && grouparray[0] == group)
++	    {
++	      if (!SetProcessAffinityMask (process, set[group]))
++		status = geterrno_from_win_error (GetLastError (), EPERM);
++	      goto done;
++	    }
++	  status = ENOSYS; //XXX can't do it without heroic measures
++	  goto done;
++	}
++      else
++	{
++	  if (group != 0)
++	    {
++	      status = EINVAL;
++	      goto done;
++	    }
++	  if (!SetProcessAffinityMask (process, set[0]))
++	    {
++	      status = geterrno_from_win_error (GetLastError (), EPERM);
++	      goto done;
++	    }
++	}
++    }
++  else
++    status = ESRCH;
++
++done:
++  if (process && process != GetCurrentProcess ())
++    CloseHandle (process);
++
++  return status;
++}
++
+ } /* extern C */
+diff --git a/winsup/cygwin/thread.cc b/winsup/cygwin/thread.cc
+index f353dd497..43a6c88b3 100644
+--- a/winsup/cygwin/thread.cc
++++ b/winsup/cygwin/thread.cc
+@@ -23,6 +23,7 @@ details. */
+ #include "winsup.h"
+ #include "miscfuncs.h"
+ #include "path.h"
++#include <sched.h>
+ #include <stdlib.h>
+ #include "sigproc.h"
+ #include "fhandler.h"
+@@ -2606,6 +2607,24 @@ pthread_timedjoin_np (pthread_t thread, void **return_val,
+   return pthread::join (&thread, (void **) return_val, &timeout);
+ }
+ 
++extern "C" int
++pthread_getaffinity_np (pthread_t thread, size_t sizeof_set, cpu_set_t *set)
++{
++  if (!pthread::is_good_object (&thread))
++    return ESRCH;
++
++  return sched_get_thread_affinity (thread->win32_obj_id, sizeof_set, set);
++}
++
++extern "C" int
++pthread_setaffinity_np (pthread_t thread, size_t sizeof_set, const cpu_set_t *set)
++{
++  if (!pthread::is_good_object (&thread))
++    return ESRCH;
++
++  return sched_set_thread_affinity (thread->win32_obj_id, sizeof_set, set);
++}
++
+ extern "C" int
+ pthread_getattr_np (pthread_t thread, pthread_attr_t *attr)
+ {
+-- 
+2.17.0
