@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9388-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 51363 invoked by alias); 29 Apr 2019 18:42:56 -0000
+Return-Path: <cygwin-patches-return-9389-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 8448 invoked by alias); 29 Apr 2019 19:06:19 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,60 +9,108 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 51351 invoked by uid 89); 29 Apr 2019 18:42:56 -0000
+Received: (qmail 8438 invoked by uid 89); 29 Apr 2019 19:06:19 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-1.9 required=5.0 tests=BAYES_00,MIME_BASE64_BLANKS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=H*f:sk:6fbdf20, H*i:sk:6fbdf20, Looking, third
-X-HELO: NAM05-BY2-obe.outbound.protection.outlook.com
-Received: from mail-eopbgr710120.outbound.protection.outlook.com (HELO NAM05-BY2-obe.outbound.protection.outlook.com) (40.107.71.120) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 29 Apr 2019 18:42:54 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector1; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=QoJ7nmrh8xHG4rS8Iy22YLjXSV98PfsiVzEcYqUOV7M=; b=MkpdZLXaFLrdJ5rAbrqsASkc5CBB2PGpT7KP1Q36dblVImlE4qo+RokFW+sAACaN2rtMFcGtAiRtuxu/an3AqHigfUsMTiHa40ssqkfzWm2HsNYaoanXhOTCik9kOsmdPCWi7QboFqaLwZLI9D5fDe3iwUz7U1TNydC9il6W9zw=
-Received: from DM6PR04MB5211.namprd04.prod.outlook.com (20.178.24.208) by DM6PR04MB4891.namprd04.prod.outlook.com (20.176.109.76) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.1835.14; Mon, 29 Apr 2019 18:42:52 +0000
-Received: from DM6PR04MB5211.namprd04.prod.outlook.com ([fe80::21bb:c809:f459:845c]) by DM6PR04MB5211.namprd04.prod.outlook.com ([fe80::21bb:c809:f459:845c%2]) with mapi id 15.20.1835.010; Mon, 29 Apr 2019 18:42:52 +0000
-From: Ken Brown <kbrown@cornell.edu>
-To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+X-Spam-SWARE-Status: No, score=-103.8 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=listening, pipes, H*f:sk:93c33c8, H*i:sk:93c33c8
+X-HELO: mout.kundenserver.de
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.131) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 29 Apr 2019 19:06:18 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id 1N7Qgn-1giWsc0CaL-017pVS for <cygwin-patches@cygwin.com>; Mon, 29 Apr 2019 21:06:15 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 7125DA80784; Mon, 29 Apr 2019 21:06:14 +0200 (CEST)
+Date: Mon, 29 Apr 2019 19:06:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH fifo 0/2] Add support for duplex FIFOs
-Date: Mon, 29 Apr 2019 18:42:00 -0000
-Message-ID: <93c33c8d-e303-9a06-f5da-4e6d8b7f195c@cornell.edu>
-References: <20190325230556.2219-1-kbrown@cornell.edu> <6fbdf204-4be5-24b8-1df3-aa5d6589619b@cornell.edu>
-In-Reply-To: <6fbdf204-4be5-24b8-1df3-aa5d6589619b@cornell.edu>
-user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101 Thunderbird/60.6.1
-authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
-x-ms-oob-tlc-oobclassifiers: OLM:4714;
-received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <6E128A5FD3216647A23C7F3262BA5C8D@namprd04.prod.outlook.com>
-Content-Transfer-Encoding: base64
+Message-ID: <20190429190614.GL3383@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20190325230556.2219-1-kbrown@cornell.edu> <6fbdf204-4be5-24b8-1df3-aa5d6589619b@cornell.edu> <93c33c8d-e303-9a06-f5da-4e6d8b7f195c@cornell.edu>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-IsSubscribed: yes
-X-SW-Source: 2019-q2/txt/msg00095.txt.bz2
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="NklN7DEeGtkPCoo3"
+Content-Disposition: inline
+In-Reply-To: <93c33c8d-e303-9a06-f5da-4e6d8b7f195c@cornell.edu>
+User-Agent: Mutt/1.11.3 (2019-02-01)
+X-SW-Source: 2019-q2/txt/msg00096.txt.bz2
 
-T24gNC8yOS8yMDE5IDI6MjkgUE0sIEtlbiBCcm93biB3cm90ZToNCj4gT24g
-My8yNS8yMDE5IDc6MDYgUE0sIEtlbiBCcm93biB3cm90ZToNCj4+IFRoZSBz
-ZWNvbmQgcGF0Y2ggaW4gdGhpcyBzZXJpZXMgZW5hYmxlcyBvcGVuaW5nIGEg
-RklGTyB3aXRoIE9fUkRXUg0KPj4gYWNjZXNzLiAgVGhlIHVuZGVybHlpbmcg
-V2luZG93cyBuYW1lZCBwaXBlIGlzIGNyZWF0ZWQgd2l0aCBkdXBsZXgNCj4+
-IGFjY2VzcywgYW5kIGl0cyBoYW5kbGUgaXMgbWFkZSB0aGUgSS9PIGhhbmRs
-ZSBvZiB0aGUgZmlyc3QgY2xpZW50Lg0KPj4NCj4+IEkgdGVzdGVkIHRoZSBw
-YXRjaCBpbiB0d28gd2F5cy4NCj4+DQo+PiBGaXJzdCwNCj4gDQo+IFsuLi5d
-DQo+IA0KPj4gVGhlIHNlY29uZCB0ZXN0IHdhcyB0aGUgZm9sbG93aW5nIHNl
-cXVlbmNlIG9mIGNvbW1hbmRzIGluIGEgYmFzaA0KPj4gc2hlbGw6DQo+Pg0K
-Pj4gJCBta2ZpZm8gZm9vDQo+Pg0KPj4gJCBleGVjIDc8PmZvbw0KPj4NCj4+
-ICQgZWNobyBibGFoID4gZm9vDQo+Pg0KPj4gJCByZWFkIGJhciA8JjcNCj4+
-DQo+PiAkIGVjaG8gJGJhcg0KPj4gYmxhaA0KPiANCj4gSSBqdXN0IHJlYWxp
-emVkIHRoYXQgdGhpcyBkb2Vzbid0IHRlc3QgKndyaXRpbmcqIHRvIHRoZSBm
-ZCBvZiBhIEZJRk8gb3BlbmVkIHdpdGgNCj4gT19SRFdSLiAgSWYgSSBjaGFu
-Z2UgdGhlIHRoaXJkIGNvbW1hbmQgdG8gImVjaG8gYmxhaCA+JjciLCBpdCBk
-b2VzIHRlc3QgdGhpcywNCj4gYW5kIHRoZSB3cml0ZSBmYWlscyB3aXRoIEVD
-T01NLiAgSXQgdHVybnMgb3V0IHRoYXQgdGhlIGNhbGwgdG8gTnRXcml0ZUZp
-bGUgaW4NCj4gZmhhbmRsZXJfZmlmbzo6cmF3X3dyaXRlIGZhaWxzIHdpdGgg
-U1RBVFVTX1BJUEVfTElTVEVOSU5HLg0KPiANCj4gQ29yaW5uYSwgSSdsbCB0
-cnkgdG8gZGVidWcgdGhpcywgYnV0IHNpbmNlIEkga25vdyB5b3UncmUgYWJv
-dXQgdG8gYmUgQUZLIGZvciBhDQo+IG1vbnRoLCBJIHRob3VnaHQgSSdkIGNo
-ZWNrIHRvIHNlZSBpZiB5b3UgaGF2ZSBhbnkgaWRlYSB3aHkgdGhpcyB3b3Vs
-ZCBoYXBwZW4uDQoNCkFjdHVhbGx5LCB0aGUgYW5zd2VyIG1pZ2h0IGJlIG9i
-dmlvdXMuICBMb29raW5nIGF0IE1TRE4sIGl0IG5vdyBzZWVtcyBjbGVhciB0
-byANCm1lIHRoYXQgeW91IGNhbid0IGRvIEkvTyBvbiB0aGUgc2VydmVyIHNp
-ZGUgb2YgYSBwaXBlIHVudGlsIHRoZSBwaXBlIGNvbm5lY3RzIHRvIA0KYSBj
-bGllbnQuICBTbyBJJ2xsIGhhdmUgdG8gcmV0aGluayBob3cgdG8gZGVhbCB3
-aXRoIHRoZSBPX1JEV1IgY2FzZS4NCg0KS2VuDQo=
+
+--NklN7DEeGtkPCoo3
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 1686
+
+On Apr 29 18:42, Ken Brown wrote:
+> On 4/29/2019 2:29 PM, Ken Brown wrote:
+> > On 3/25/2019 7:06 PM, Ken Brown wrote:
+> >> The second patch in this series enables opening a FIFO with O_RDWR
+> >> access.  The underlying Windows named pipe is created with duplex
+> >> access, and its handle is made the I/O handle of the first client.
+> >>
+> >> I tested the patch in two ways.
+> >>
+> >> First,
+> >=20
+> > [...]
+> >=20
+> >> The second test was the following sequence of commands in a bash
+> >> shell:
+> >>
+> >> $ mkfifo foo
+> >>
+> >> $ exec 7<>foo
+> >>
+> >> $ echo blah > foo
+> >>
+> >> $ read bar <&7
+> >>
+> >> $ echo $bar
+> >> blah
+> >=20
+> > I just realized that this doesn't test *writing* to the fd of a FIFO
+> > opened with O_RDWR.  If I change the third command to "echo blah
+> > >&7", it does test this, and the write fails with ECOMM.  It turns
+> > >out that the call to NtWriteFile in fhandler_fifo::raw_write fails
+> > >with STATUS_PIPE_LISTENING.
+> >=20
+> > Corinna, I'll try to debug this, but since I know you're about to be
+> > AFK for a month, I thought I'd check to see if you have any idea why
+> > this would happen.
+>=20
+> Actually, the answer might be obvious.  Looking at MSDN, it now seems
+> clear to me that you can't do I/O on the server side of a pipe until
+> the pipe connects to a client.  So I'll have to rethink how to deal
+> with the O_RDWR case.
+
+Sorry being late, but yeah, STATUS_PIPE_LISTENING means no client is
+connected.  This is one of the more ugly implementation details of
+Windows pipes.  There just isn't a generic buffer which can be filled
+even if no one is listening yet on the other side :-P
+
+
+Corinna
+
+--=20
+Corinna Vinschen
+Cygwin Maintainer
+
+--NklN7DEeGtkPCoo3
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 833
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAlzHSyYACgkQ9TYGna5E
+T6CKGxAAli2Mn/d4L1NSIw0rOeYJa9s+t2uVGTfFteyh7+loWN+6aZTTrOinG4S1
+QqkAKDMc0+VrhlxHJVtADuN2LFHY4dhmM+vPMBW6s4XiLXEjhDQboSFIRzYIyXRd
+HuuiSa2yNoYBMGgtf6PxsZ1SIESj0+yWUru9isz0A4C3lXAcYpftfHUN9KewB/50
+GlDaqTvLuXtPzuhGwBcY9VxsqFoZmsZcVRqU7r8I1ZRfZYhjblRsiRv4wWye0IHV
+wqGnSt3mjhWPr31MjJ4/w32vCIErAU4WumGEd6F1NZCz+2DuVqocynxbSao1QM0M
+V0c5U8zUU6hy5Wn9NxBmqZSmAF2fGv+ogPaC6XiK1oThJRzXQGlbVGft3y6SQiFl
+dGX0QgWkLUY28KUp6vl7UbZPLWv2vcubKQUeZIS1zOOJ/NM31nOz1xNj38xeK7Ow
+7ciP/YC/xRx7nBVJJ0Pln/aB+45aXoA+8kcPCa6VvKyBNi1PUDp4JvANdozhZemh
+Sk91WbNqZk7ov1v7neUTf+UkRCbj9AVUQrEvevZ2PE2TEmzS3AQRdwjV8JgtR7Zp
+4DYGbuubZ0uWvQEDBXtVZS+HRGQA9adsF6rhReCUcww0u5nvOqw+Kw89lKREVbY5
+FBPou5nBMDfsWS4e6mBnxEaSbuZt7sH4EocpHUsjeeV1cyNTduM=
+=iOBZ
+-----END PGP SIGNATURE-----
+
+--NklN7DEeGtkPCoo3--
