@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9402-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 77580 invoked by alias); 4 May 2019 14:34:03 -0000
+Return-Path: <cygwin-patches-return-9403-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 58300 invoked by alias); 5 May 2019 14:16:08 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,51 +9,92 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 77571 invoked by uid 89); 4 May 2019 14:34:02 -0000
+Received: (qmail 58290 invoked by uid 89); 5 May 2019 14:16:07 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-3.3 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_LOW autolearn=ham version=3.3.1 spammy=English, acknowledge, quoted, WAS
-X-HELO: smtp-out-so.shaw.ca
-Received: from smtp-out-so.shaw.ca (HELO smtp-out-so.shaw.ca) (64.59.136.137) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sat, 04 May 2019 14:34:01 +0000
-Received: from [192.168.1.114] ([24.64.172.44])	by shaw.ca with ESMTP	id MvjihpOA7o7SQMvjjhv5ZW; Sat, 04 May 2019 08:33:59 -0600
-Reply-To: Brian.Inglis@SystematicSw.ab.ca
-Subject: Re: [rebase PATCH] Introduce --recognize flag (WAS: Introduce --no-rebase flag)
-To: cygwin-patches@cygwin.com
-References: <20190412180302.GF4248@calimero.vinschen.de> <319c9949-6e00-2c18-f1d0-a88a7f02fdab@ssi-schaefer.com>
-From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
-Openpgp: preference=signencrypt
-Message-ID: <ae7bce9f-b1d6-440b-f6d6-fdca1040d56f@SystematicSw.ab.ca>
-Date: Sat, 04 May 2019 14:34:00 -0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101 Thunderbird/60.6.1
+X-Spam-SWARE-Status: No, score=-26.9 required=5.0 tests=BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=H*Ad:U*cygwin-patches, 1197, H*r:15.20.1856.10, HX-Languages-Length:1904
+X-HELO: NAM01-BN3-obe.outbound.protection.outlook.com
+Received: from mail-eopbgr740091.outbound.protection.outlook.com (HELO NAM01-BN3-obe.outbound.protection.outlook.com) (40.107.74.91) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 05 May 2019 14:16:05 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector1; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=BfLoSEiKI3ei/UzhYKMMmtnwrHsFyccB6IdfILA3Hpk=; b=lSFLLFbq67Zjj/BCKri/FPnvLe8oms5BvdYJP4r/votLDMHSbaqaqfq7VOQR9VZ0ebuxbXeYgePr87kZPRrwCX29coZVGh6eYuwsJn3NWicQyDcT/SYpAKDAx5/ytiMQ31qWFtLsG2vOlmXl6lZtDL1PVjLrilmfAK1jKNPEUiw=
+Received: from DM6PR04MB5211.namprd04.prod.outlook.com (20.178.24.208) by DM6PR04MB4537.namprd04.prod.outlook.com (20.176.105.146) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.1856.10; Sun, 5 May 2019 14:16:03 +0000
+Received: from DM6PR04MB5211.namprd04.prod.outlook.com ([fe80::8cd4:1148:6365:acf2]) by DM6PR04MB5211.namprd04.prod.outlook.com ([fe80::8cd4:1148:6365:acf2%4]) with mapi id 15.20.1856.012; Sun, 5 May 2019 14:16:03 +0000
+From: Ken Brown <kbrown@cornell.edu>
+To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: Re: [PATCH] Cygwin: dll_list: drop unused read_fbi method
+Date: Sun, 05 May 2019 14:16:00 -0000
+Message-ID: <8b51859f-998a-e5c1-c3e3-91cf5bc1d82f@cornell.edu>
+References: <20190430163813.GU3383@calimero.vinschen.de> <94255e80-7793-00a3-d879-b2adf46bc9a6@ssi-schaefer.com>
+In-Reply-To: <94255e80-7793-00a3-d879-b2adf46bc9a6@ssi-schaefer.com>
+user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101 Thunderbird/60.6.1
+authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
+x-ms-oob-tlc-oobclassifiers: OLM:4941;
+received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+Content-Type: text/plain; charset="iso-8859-15"
+Content-ID: <6ADA610BC58C37499E37327D9636F7FC@namprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-In-Reply-To: <319c9949-6e00-2c18-f1d0-a88a7f02fdab@ssi-schaefer.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
 X-IsSubscribed: yes
-X-SW-Source: 2019-q2/txt/msg00109.txt.bz2
+X-SW-Source: 2019-q2/txt/msg00110.txt.bz2
 
-On 2019-05-03 09:32, Michael Haubenwallner wrote:
-> On 4/12/19 8:03 PM, Corinna Vinschen wrote:
->> On Apr 12 15:52, Michael Haubenwallner wrote:
->>> The --no-rebase flag is to update the database for new files, without
->> Wouldn't something like --merge-files be more descriptive?
-> What about --recognize ?
+On 5/2/2019 4:05 AM, Michael Haubenwallner wrote:
+> ---
+>   winsup/cygwin/dll_init.h  |  1 -
+>   winsup/cygwin/forkable.cc | 23 -----------------------
+>   2 files changed, 24 deletions(-)
+>=20
+> diff --git a/winsup/cygwin/dll_init.h b/winsup/cygwin/dll_init.h
+> index e4fbde867..3c274cf35 100644
+> --- a/winsup/cygwin/dll_init.h
+> +++ b/winsup/cygwin/dll_init.h
+> @@ -119,7 +119,6 @@ public:
+>   			    ULONG openopts =3D 0, ACCESS_MASK access =3D 0,
+>   			    HANDLE rootDir =3D NULL);
+>     static bool read_fii (HANDLE fh, PFILE_INTERNAL_INFORMATION pfii);
+> -  static bool read_fbi (HANDLE fh, PFILE_BASIC_INFORMATION pfbi);
+>     static PWCHAR form_ntname (PWCHAR ntbuf, size_t bufsize, PCWCHAR name=
+);
+>     static PWCHAR form_shortname (PWCHAR shortbuf, size_t bufsize, PCWCHA=
+R name);
+>     static PWCHAR nt_max_path_buf ()
+> diff --git a/winsup/cygwin/forkable.cc b/winsup/cygwin/forkable.cc
+> index e78784c2f..1dcafe5e1 100644
+> --- a/winsup/cygwin/forkable.cc
+> +++ b/winsup/cygwin/forkable.cc
+> @@ -268,29 +268,6 @@ dll_list::read_fii (HANDLE fh, PFILE_INTERNAL_INFORM=
+ATION pfii)
+>     return true;
+>   }
+>=20=20=20
+> -bool
+> -dll_list::read_fbi (HANDLE fh, PFILE_BASIC_INFORMATION pfbi)
+> -{
+> -  pfbi->FileAttributes =3D INVALID_FILE_ATTRIBUTES;
+> -  pfbi->LastWriteTime.QuadPart =3D -1LL;
+> -
+> -  NTSTATUS status;
+> -  IO_STATUS_BLOCK iosb;
+> -  status =3D NtQueryInformationFile (fh, &iosb,
+> -				   pfbi, sizeof (*pfbi),
+> -				   FileBasicInformation);
+> -  if (!NT_SUCCESS (status))
+> -    {
+> -      system_printf ("WARNING: %y =3D NtQueryInformationFile (%p,"
+> -		     " BasicInfo, io.Status %y)",
+> -		     status, fh, iosb.Status);
+> -      pfbi->FileAttributes =3D INVALID_FILE_ATTRIBUTES;
+> -      pfbi->LastWriteTime.QuadPart =3D -1LL;
+> -      return false;
+> -    }
+> -  return true;
+> -}
+> -
+>   /* Into buf if not NULL, write the IndexNumber in pli.
+>      Return the number of characters (that would be) written. */
+>   static int
+>=20
 
-"The --recognize flag is to update the database for new files, without
-performing a rebase.  The file names provided should have been rebased
-using the --oblivious flag just before."
+Pushed.
 
-Recognize does not mean record or update in English but see, identify, or
-acknowledge.
-
-Your earlier suggestion of --record, the verb used in the comment quoted above
---update, or CV's suggestion --merge-files would make sense and be more
-descriptive.
-I use such brief comments or descriptions as a guide to pick the most obvious
-names for functions, options, etc: if the comment or description then reads as
-if redundant, the choice is good.
-
--- 
-Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
-
-This email may be disturbing to some readers as it contains
-too much technical detail. Reader discretion is advised.
+Thanks,
+Ken
