@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9406-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 107942 invoked by alias); 9 May 2019 18:57:41 -0000
+Return-Path: <cygwin-patches-return-9407-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 3263 invoked by alias); 13 May 2019 14:37:22 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,49 +9,71 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 107932 invoked by uid 89); 9 May 2019 18:57:41 -0000
+Received: (qmail 3250 invoked by uid 89); 13 May 2019 14:37:21 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-1.9 required=5.0 tests=BAYES_00,MIME_BASE64_BLANKS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=listening, H*Ad:U*cygwin-patches
-X-HELO: NAM01-BN3-obe.outbound.protection.outlook.com
-Received: from mail-eopbgr740107.outbound.protection.outlook.com (HELO NAM01-BN3-obe.outbound.protection.outlook.com) (40.107.74.107) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 09 May 2019 18:57:39 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector1; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=2rHOCBYhYTfKmv4g92FLXAdkY7a7uZeSuz5LRE4ze90=; b=DbQhQQ8L00vKGSF9sB7GGqEcJFmxA0SmHfJ9Pe/m8w18W5J6+WR0vOc+czz2Vo+acayQvEN3K7PEYUc7Vx4BeXCOBZcZ2bBNL9yHUP0+TqQtjln9gRRYcgfF7UjIoUNGReKCg9aHEN9LwYTnal6pZcaz5jhOvDM+TM/aPashIKw=
-Received: from BYAPR04MB5207.namprd04.prod.outlook.com (20.178.48.80) by BYAPR04MB6215.namprd04.prod.outlook.com (20.178.234.78) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.1856.11; Thu, 9 May 2019 18:57:37 +0000
-Received: from BYAPR04MB5207.namprd04.prod.outlook.com ([fe80::20a4:a681:4d9b:f6be]) by BYAPR04MB5207.namprd04.prod.outlook.com ([fe80::20a4:a681:4d9b:f6be%6]) with mapi id 15.20.1856.012; Thu, 9 May 2019 18:57:37 +0000
-From: Ken Brown <kbrown@cornell.edu>
-To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: Re: [PATCH fifo 0/2] Add support for duplex FIFOs
-Date: Thu, 09 May 2019 18:57:00 -0000
-Message-ID: <0125b01f-8304-0f25-34ae-4f96ec46ba85@cornell.edu>
-References: <20190325230556.2219-1-kbrown@cornell.edu> <6fbdf204-4be5-24b8-1df3-aa5d6589619b@cornell.edu> <93c33c8d-e303-9a06-f5da-4e6d8b7f195c@cornell.edu> <20190429190614.GL3383@calimero.vinschen.de>
-In-Reply-To: <20190429190614.GL3383@calimero.vinschen.de>
-user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101 Thunderbird/60.6.1
-authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
-x-ms-oob-tlc-oobclassifiers: OLM:5797;
-received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <2BFB08EB8109934A92C3926AB29F0B95@namprd04.prod.outlook.com>
-Content-Transfer-Encoding: base64
+X-Spam-SWARE-Status: No, score=-19.6 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE,SPF_PASS autolearn=ham version=3.3.1 spammy=
+X-HELO: atfriesa01.ssi-schaefer.com
+Received: from atfriesa01.ssi-schaefer.com (HELO atfriesa01.ssi-schaefer.com) (193.186.16.100) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 13 May 2019 14:37:19 +0000
+Received: from samail03.wamas.com (HELO mailhost.salomon.at) ([172.28.33.235])  by atfriesa01.ssi-schaefer.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 May 2019 16:36:24 +0200
+Received: from [172.28.42.244]	by mailhost.salomon.at with esmtp (Exim 4.77)	(envelope-from <michael.haubenwallner@ssi-schaefer.com>)	id 1hQC3z-0007OI-Tk; Mon, 13 May 2019 16:36:23 +0200
+From: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
+Subject: [PATCH] Cygwin: dll_list: no recursive use of nt_max_path_buf
+To: cygwin-patches@cygwin.com
+Cc: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
+Openpgp: preference=signencrypt
+Message-ID: <e41869fa-977e-4b5e-c749-f3c4ba314c29@ssi-schaefer.com>
+Date: Mon, 13 May 2019 14:37:00 -0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Thunderbird/60.6.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
 X-IsSubscribed: yes
-X-SW-Source: 2019-q2/txt/msg00113.txt.bz2
+X-SW-Source: 2019-q2/txt/msg00114.txt.bz2
 
-T24gNC8yOS8yMDE5IDM6MDYgUE0sIENvcmlubmEgVmluc2NoZW4gd3JvdGU6
-DQo+IE9uIEFwciAyOSAxODo0MiwgS2VuIEJyb3duIHdyb3RlOg0KPj4gQWN0
-dWFsbHksIHRoZSBhbnN3ZXIgbWlnaHQgYmUgb2J2aW91cy4gIExvb2tpbmcg
-YXQgTVNETiwgaXQgbm93IHNlZW1zDQo+PiBjbGVhciB0byBtZSB0aGF0IHlv
-dSBjYW4ndCBkbyBJL08gb24gdGhlIHNlcnZlciBzaWRlIG9mIGEgcGlwZSB1
-bnRpbA0KPj4gdGhlIHBpcGUgY29ubmVjdHMgdG8gYSBjbGllbnQuICBTbyBJ
-J2xsIGhhdmUgdG8gcmV0aGluayBob3cgdG8gZGVhbA0KPj4gd2l0aCB0aGUg
-T19SRFdSIGNhc2UuDQo+IA0KPiBTb3JyeSBiZWluZyBsYXRlLCBidXQgeWVh
-aCwgU1RBVFVTX1BJUEVfTElTVEVOSU5HIG1lYW5zIG5vIGNsaWVudCBpcw0K
-PiBjb25uZWN0ZWQuICBUaGlzIGlzIG9uZSBvZiB0aGUgbW9yZSB1Z2x5IGlt
-cGxlbWVudGF0aW9uIGRldGFpbHMgb2YNCj4gV2luZG93cyBwaXBlcy4gIFRo
-ZXJlIGp1c3QgaXNuJ3QgYSBnZW5lcmljIGJ1ZmZlciB3aGljaCBjYW4gYmUg
-ZmlsbGVkDQo+IGV2ZW4gaWYgbm8gb25lIGlzIGxpc3RlbmluZyB5ZXQgb24g
-dGhlIG90aGVyIHNpZGUgOi1QDQoNClRoaXMgc2hvdWxkIGJlIGZpeGVkIG5v
-dywgYWxvbmcgd2l0aCBhbm90aGVyIHNlcmlvdXMgYnVnIHRoYXQgd2FzIGV4
-cG9zZWQgYWZ0ZXIgDQpJIGZpeGVkIHRoaXMgb25lLiAgKEkgaGFkIHNvbWUg
-Zm9yay9leGVjIHRlc3RzIHRoYXQgd2VyZSBzdWNjZWVkaW5nIGJ5IGFjY2lk
-ZW50IA0KYmVjYXVzZSBvZiB0aGUgZHVwbGV4IGJ1Zy4pDQoNCktlbg0K
+Querying the ntlength and existence of the /var/run/cygfork directory in
+the very first Cygwin process should not use nt_max_path_buf, as that
+one is used by dll_list::alloc already.
+---
+ winsup/cygwin/forkable.cc | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/winsup/cygwin/forkable.cc b/winsup/cygwin/forkable.cc
+index 4fbc2abb3..350a95c3e 100644
+--- a/winsup/cygwin/forkable.cc
++++ b/winsup/cygwin/forkable.cc
+@@ -472,17 +472,21 @@ dll_list::forkable_ntnamesize (dll_type type, PCWCHAR fullntname, PCWCHAR modnam
+   if (cygwin_shared->forkable_hardlink_support == 0) /* Unknown */
+     {
+       /* check existence of forkables dir */
+-      PWCHAR pbuf = nt_max_path_buf ();
++      /* nt_max_path_buf () is already used in dll_list::alloc.
++         But as this is run in the very first cygwin process only,
++	 using some heap is not a performance issue here. */
++      PWCHAR pbuf = (PWCHAR) cmalloc_abort (HEAP_BUF,
++					    NT_MAX_PATH * sizeof (WCHAR));
++      PWCHAR pnext = pbuf;
+       for (namepart const *part = forkable_nameparts; part->text; ++part)
+ 	{
+ 	  if (part->textfunc)
+-	    pbuf += part->textfunc (pbuf, -1);
++	    pnext += part->textfunc (pnext, -1);
+ 	  else
+-	    pbuf += __small_swprintf (pbuf, L"%W", part->text);
++	    pnext += __small_swprintf (pnext, L"%W", part->text);
+ 	  if (part->mutex_from_dir)
+ 	    break; /* up to first mutex-naming dir */
+ 	}
+-      pbuf = nt_max_path_buf ();
+ 
+       UNICODE_STRING fn;
+       RtlInitUnicodeString (&fn, pbuf);
+@@ -504,6 +508,7 @@ dll_list::forkable_ntnamesize (dll_type type, PCWCHAR fullntname, PCWCHAR modnam
+ 	  cygwin_shared->forkable_hardlink_support = -1; /* No */
+ 	  debug_printf ("disabled, missing or not on NTFS %W", fn.Buffer);
+ 	}
++      cfree (pbuf);
+     }
+ 
+   if (!forkables_supported ())
+-- 
+2.19.2
