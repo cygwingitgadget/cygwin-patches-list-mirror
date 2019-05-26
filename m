@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9408-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 73758 invoked by alias); 23 May 2019 17:05:45 -0000
+Return-Path: <cygwin-patches-return-9409-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 121438 invoked by alias); 26 May 2019 06:49:44 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,74 +9,48 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 73749 invoked by uid 89); 23 May 2019 17:05:45 -0000
+Received: (qmail 121424 invoked by uid 89); 26 May 2019 06:49:43 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-12.1 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,SPF_HELO_PASS autolearn=ham version=3.3.1 spammy=HX-Languages-Length:1148, H*Ad:U*cygwin-patches
-X-HELO: mx1.redhat.com
-Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 23 May 2019 17:05:44 +0000
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))	(No client certificate requested)	by mx1.redhat.com (Postfix) with ESMTPS id 38001916C0	for <cygwin-patches@cygwin.com>; Thu, 23 May 2019 17:05:43 +0000 (UTC)
-Received: from localhost.localdomain (ovpn-125-139.rdu2.redhat.com [10.10.125.139])	by smtp.corp.redhat.com (Postfix) with ESMTPS id CEF5760BF3	for <cygwin-patches@cygwin.com>; Thu, 23 May 2019 17:05:42 +0000 (UTC)
-From: Yaakov Selkowitz <yselkowi@redhat.com>
+X-Spam-SWARE-Status: No, score=-3.1 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_LOW autolearn=ham version=3.3.1 spammy=Reader, H*F:D*ca, HX-Languages-Length:633
+X-HELO: smtp-out-no.shaw.ca
+Received: from smtp-out-no.shaw.ca (HELO smtp-out-no.shaw.ca) (64.59.134.9) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 26 May 2019 06:49:42 +0000
+Received: from [192.168.1.114] ([24.64.172.44])	by shaw.ca with ESMTP	id UmyRh1E8kldkPUmySh6SC6; Sun, 26 May 2019 00:49:41 -0600
+Reply-To: Brian.Inglis@SystematicSw.ab.ca
+Subject: Re: [PATCH] cygcheck: expand common_apps list
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] cygcheck: expand common_apps list
-Date: Thu, 23 May 2019 17:05:00 -0000
-Message-Id: <20190523170532.64113-1-yselkowi@redhat.com>
-X-SW-Source: 2019-q2/txt/msg00115.txt.bz2
+References: <20190523170532.64113-1-yselkowi@redhat.com>
+From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
+Openpgp: preference=signencrypt
+Message-ID: <d5c6bf3c-b429-689e-2909-01c5680e12ac@SystematicSw.ab.ca>
+Date: Sun, 26 May 2019 06:49:00 -0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101 Thunderbird/60.7.0
+MIME-Version: 1.0
+In-Reply-To: <20190523170532.64113-1-yselkowi@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
+X-SW-Source: 2019-q2/txt/msg00116.txt.bz2
 
-An increasing number of tools are being included in Windows which have the
-same names as those included in Cygwin packages.  Indicating which one is
-first in PATH can be helpful in diagnosing behavioural discrepencies
-between them.
+To a degree, depends on installed Cygwin packages and Windows features, but I
+also have in both Cygwin /{,{,usr/}s}bin and /Windows/{,System32{,/OpenSSH}/:
 
-Also, fix the alphabetization of ssh.
----
- winsup/utils/cygcheck.cc | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+        {"certutil", 0},
+        {"comp", 0},
+        {"ftp", 0},
+        {"scp", 0},
+        {"sftp", 0},
+        {"sftp-server", 0},
+        {"shutdown", 0},
+        {"ssh-add", 0},
+        {"ssh-agent", 0},
+        {"sshd", 0},
+        {"ssh-keygen", 0},
+        {"ssh-keyscan", 0},
 
-diff --git a/winsup/utils/cygcheck.cc b/winsup/utils/cygcheck.cc
-index d5972c0cf..0432f4a4d 100644
---- a/winsup/utils/cygcheck.cc
-+++ b/winsup/utils/cygcheck.cc
-@@ -99,28 +99,39 @@ static common_apps[] = {
-   {"awk", 0},
-   {"bash", 0},
-   {"cat", 0},
-+  {"clinfo", 0},
-+  {"convert", 0},
-   {"cp", 0},
-   {"cpp", 1},
-   {"crontab", 0},
-+  {"curl", 0},
-+  {"expand", 0},
-   {"find", 0},
-   {"gcc", 0},
-   {"gdb", 0},
-   {"grep", 0},
-+  {"hostname", 0},
-   {"kill", 0},
-+  {"klist", 0},
-   {"ld", 0},
-   {"ls", 0},
-   {"make", 0},
-   {"mv", 0},
-+  {"nslookup", 0},
-   {"patch", 0},
-   {"perl", 0},
-+  {"replace", 0},
-   {"rm", 0},
-   {"sed", 0},
--  {"ssh", 0},
-   {"sh", 0},
-+  {"sort", 0},
-+  {"ssh", 0},
-   {"tar", 0},
-   {"test", 0},
-+  {"timeout", 0},
-   {"vi", 0},
-   {"vim", 0},
-+  {"whoami", 0},
-   {0, 0}
- };
- 
+from ls *.exe | sort in each set of dirs then join both.
+
 -- 
-2.17.0
+Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
+
+This email may be disturbing to some readers as it contains
+too much technical detail. Reader discretion is advised.
