@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9414-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 48930 invoked by alias); 26 May 2019 15:10:50 -0000
+Return-Path: <cygwin-patches-return-9417-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 128272 invoked by alias); 27 May 2019 04:50:15 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,201 +9,49 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 48869 invoked by uid 89); 26 May 2019 15:10:49 -0000
+Received: (qmail 128259 invoked by uid 89); 27 May 2019 04:50:15 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-24.4 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,MIME_BASE64_BLANKS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=busy, 5306
-X-HELO: NAM05-DM3-obe.outbound.protection.outlook.com
-Received: from mail-eopbgr730108.outbound.protection.outlook.com (HELO NAM05-DM3-obe.outbound.protection.outlook.com) (40.107.73.108) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 26 May 2019 15:10:46 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=etoA666srUf3ZKbqTMV5cO+3WcWELzWMfsAgluhjYus=; b=B2skdhLZAfuCeVPxI8vmUuIottVcwI5jubodnh7tCuLG2zCx88XcGQezHNWyXaYrAowfA23DAUDNPLOgD/oi7NtxCwTiF5vCNiOy6Ltm6+OYHO+QbJnscs37gq6jn2vFJLraw66STndB6Vk9xLb3fQ7dujWmoe1NHFrPOv901IE=
-Received: from DM6PR04MB5211.namprd04.prod.outlook.com (20.178.24.208) by DM6PR04MB4777.namprd04.prod.outlook.com (20.176.107.206) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.1922.15; Sun, 26 May 2019 15:10:38 +0000
-Received: from DM6PR04MB5211.namprd04.prod.outlook.com ([fe80::510a:3a42:f346:a4d8]) by DM6PR04MB5211.namprd04.prod.outlook.com ([fe80::510a:3a42:f346:a4d8%7]) with mapi id 15.20.1922.021; Sun, 26 May 2019 15:10:38 +0000
-From: Ken Brown <kbrown@cornell.edu>
-To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: [PATCH draft 4/6] Cygwin: fhandler_pipe: fix permission problem
-Date: Sun, 26 May 2019 15:10:00 -0000
-Message-ID: <20190526151019.2187-5-kbrown@cornell.edu>
-References: <20190526151019.2187-1-kbrown@cornell.edu>
-In-Reply-To: <20190526151019.2187-1-kbrown@cornell.edu>
-authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+X-Spam-SWARE-Status: No, score=-1.8 required=5.0 tests=AWL,BAYES_00,SPF_HELO_PASS autolearn=ham version=3.3.1 spammy=H*f:sk:d5c6bf3, H*i:sk:d5c6bf3, H*F:D*cygwin.com
+X-HELO: mx1.redhat.com
+Received: from mx1.redhat.com (HELO mx1.redhat.com) (209.132.183.28) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 27 May 2019 04:50:14 +0000
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))	(No client certificate requested)	by mx1.redhat.com (Postfix) with ESMTPS id D2C0EA96F1	for <cygwin-patches@cygwin.com>; Mon, 27 May 2019 04:50:09 +0000 (UTC)
+Received: from ovpn-120-227.rdu2.redhat.com (ovpn-120-227.rdu2.redhat.com [10.10.120.227])	by smtp.corp.redhat.com (Postfix) with ESMTPS id 56F8268702	for <cygwin-patches@cygwin.com>; Mon, 27 May 2019 04:50:07 +0000 (UTC)
+Message-ID: <b61928129326ea776c98684346790458791dfbb4.camel@cygwin.com>
+Subject: Re: [PATCH] cygcheck: expand common_apps list
+From: Yaakov Selkowitz <yselkowitz@cygwin.com>
+To: cygwin-patches@cygwin.com
+Date: Mon, 27 May 2019 04:50:00 -0000
+In-Reply-To: <d5c6bf3c-b429-689e-2909-01c5680e12ac@SystematicSw.ab.ca>
+References: <20190523170532.64113-1-yselkowi@redhat.com>	 <d5c6bf3c-b429-689e-2909-01c5680e12ac@SystematicSw.ab.ca>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5 (3.30.5-1.fc29)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ksb2@cornell.edu
+Content-Transfer-Encoding: 7bit
 X-IsSubscribed: yes
-X-SW-Source: 2019-q2/txt/msg00121.txt.bz2
+X-SW-Source: 2019-q2/txt/msg00124.txt.bz2
 
-VGhlIHJlYWQgaGFuZGxlcyBvZiBwaXBlcyBjcmVhdGVkIGJ5IENyZWF0ZU5h
-bWVkUGlwZSBkb24ndCBoYXZlDQpGSUxFX1dSSVRFX0FUVFJJQlVURVMgYWNj
-ZXNzIHVubGVzcyB0aGUgcGlwZSBpcyBjcmVhdGVkIHdpdGgNClBJUEVfQUND
-RVNTX0RVUExFWC4gIFRoaXMgY2F1c2VzIHNldF9waXBlX25vbl9ibG9ja2lu
-ZyB0byBmYWlsIG9uIHN1Y2gNCmhhbmRsZXMuICBUbyBmaXggdGhpcywgYWRk
-IGEgaGVscGVyIGZ1bmN0aW9uIG50X2NyZWF0ZSwgd2hpY2ggdXNlcw0KTnRD
-cmVhdGVOYW1lZFBpcGVGaWxlIGluc3RlYWQgb2YgQ3JlYXRlTmFtZWRQaXBl
-IGFuZCBnaXZlcyB1cyBtb3JlDQpmbGV4aWJpbGl0eSBpbiBzZXR0aW5nIGFj
-Y2VzcyByaWdodHMuDQoNClVzZSB0aGlzIGhlbHBlciBmdW5jdGlvbiBpbiB0
-aGUgdmVyc2lvbiBvZiBmaGFuZGxlcl9waXBlOjpjcmVhdGUgdGhhdA0KdW5k
-ZXJsaWVzIHRoZSBwaXBlIGFuZCBwaXBlMiBzeXN0ZW0gY2FsbHMuDQoNCkZv
-ciBjb252ZW5pZW5jZSwgYWxzbyBhZGQgYSBzdGF0aWMgbWVtYmVyIGZ1bmN0
-aW9uDQpmaGFuZGxlcl9waXBlOjpucGZzX2hhbmRsZSBpZGVudGljYWwgdG8g
-dGhvc2UgdXNlZCBieSBmaGFuZGxlcl9maWZvDQphbmQgZmhhbmRsZXJfc29j
-a2V0X3VuaXguDQotLS0NCiB3aW5zdXAvY3lnd2luL2ZoYW5kbGVyLmggICAg
-ICAgfCAgIDEgKw0KIHdpbnN1cC9jeWd3aW4vZmhhbmRsZXJfcGlwZS5jYyB8
-IDE4MSArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKy0NCiAyIGZp
-bGVzIGNoYW5nZWQsIDE4MSBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0p
-DQoNCmRpZmYgLS1naXQgYS93aW5zdXAvY3lnd2luL2ZoYW5kbGVyLmggYi93
-aW5zdXAvY3lnd2luL2ZoYW5kbGVyLmgNCmluZGV4IDVhZTI2MmM1Yy4uN2Fh
-MDFkMTAxIDEwMDY0NA0KLS0tIGEvd2luc3VwL2N5Z3dpbi9maGFuZGxlci5o
-DQorKysgYi93aW5zdXAvY3lnd2luL2ZoYW5kbGVyLmgNCkBAIC0xMjE2LDYg
-KzEyMTYsNyBAQCBwdWJsaWM6DQogICBpbnQgX19yZWczIGZhZHZpc2UgKG9m
-Zl90LCBvZmZfdCwgaW50KTsNCiAgIGludCBfX3JlZzMgZnRydW5jYXRlIChv
-ZmZfdCwgYm9vbCk7DQogICBpbnQgaW5pdCAoSEFORExFLCBEV09SRCwgbW9k
-ZV90LCBpbnQ2NF90KTsNCisgIHN0YXRpYyBOVFNUQVRVUyBucGZzX2hhbmRs
-ZSAoSEFORExFICYpOw0KICAgc3RhdGljIGludCBjcmVhdGUgKGZoYW5kbGVy
-X3BpcGUgKlsyXSwgdW5zaWduZWQsIGludCk7DQogICBzdGF0aWMgRFdPUkQg
-Y3JlYXRlIChMUFNFQ1VSSVRZX0FUVFJJQlVURVMsIEhBTkRMRSAqLCBIQU5E
-TEUgKiwgRFdPUkQsDQogCQkgICAgICAgY29uc3QgY2hhciAqLCBEV09SRCwg
-aW50NjRfdCAqdW5pcXVlX2lkID0gTlVMTCk7DQpkaWZmIC0tZ2l0IGEvd2lu
-c3VwL2N5Z3dpbi9maGFuZGxlcl9waXBlLmNjIGIvd2luc3VwL2N5Z3dpbi9m
-aGFuZGxlcl9waXBlLmNjDQppbmRleCBmODE1OTk5MmMuLmQ1NmVhNGM4OCAx
-MDA2NDQNCi0tLSBhL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXJfcGlwZS5jYw0K
-KysrIGIvd2luc3VwL2N5Z3dpbi9maGFuZGxlcl9waXBlLmNjDQpAQCAtNTMw
-LDYgKzUzMCwyNCBAQCBmaGFuZGxlcl9waXBlOjpjcmVhdGUgKExQU0VDVVJJ
-VFlfQVRUUklCVVRFUyBzYV9wdHIsIFBIQU5ETEUgciwgUEhBTkRMRSB3LA0K
-ICAgcmV0dXJuIDA7DQogfQ0KIA0KKy8qIFRoZSBuZXh0IHZlcnNpb24gb2Yg
-ZmhhbmRsZXJfcGlwZTo6Y3JlYXRlIHVzZWQgdG8gY2FsbCB0aGUgcHJldmlv
-dXMNCisgICB2ZXJzaW9uLiAgQnV0IHRoZSByZWFkIGhhbmRsZSBjcmVhdGVk
-IGJ5IHRoZSBsYXR0ZXIgZG9lc24ndCBoYXZlDQorICAgRklMRV9XUklURV9B
-VFRSSUJVVEVTIGFjY2VzcyB1bmxlc3MgdGhlIHBpcGUgaXMgY3JlYXRlZCB3
-aXRoDQorICAgUElQRV9BQ0NFU1NfRFVQTEVYLCBhbmQgaXQgZG9lc24ndCBz
-ZWVtIHBvc3NpYmxlIHRvIGFkZCB0aGF0IGFjY2Vzcw0KKyAgIHJpZ2h0LiAg
-VGhpcyBjYXVzZXMgc2V0X3BpcGVfbm9uX2Jsb2NraW5nIHRvIGZhaWwuDQor
-DQorICAgVG8gZml4IHRoaXMgd2Ugd2lsbCBkZWZpbmUgYSBoZWxwZXIgZnVu
-Y3Rpb24gJ250X2NyZWF0ZScgdGhhdCBpcw0KKyAgIHNpbWlsYXIgdG8gdGhl
-IGFib3ZlIGZoYW5kbGVyX3BpcGU6OmNyZWF0ZSBidXQgdXNlcw0KKyAgIE50
-Q3JlYXRlTmFtZWRQaXBlRmlsZSBpbnN0ZWFkIG9mIENyZWF0ZU5hbWVkUGlw
-ZTsgdGhpcyBnaXZlcyBtb3JlDQorICAgZmxleGliaWxpdHkgaW4gc2V0dGlu
-ZyB0aGUgYWNjZXNzIHJpZ2h0cy4gIFdlIHdpbGwgdXNlIHRoaXMgaGVscGVy
-DQorICAgZnVuY3Rpb24gaW4gdGhlIHZlcnNpb24gb2YgZmhhbmRsZXJfcGlw
-ZTo6Y3JlYXRlIGJlbG93LCB3aGljaA0KKyAgIHN1ZmZpY2VzIGZvciBhbGwg
-b2Ygb3VyIHVzZXMgb2Ygc2V0X3BpcGVfbm9uX2Jsb2NraW5nLiAgRm9yDQor
-ICAgc2ltcGxpY2l0eSwgbnRfY3JlYXRlIHdpbGwgb21pdCB0aGUgJ29wZW5f
-bW9kZScgYW5kICduYW1lJw0KKyAgIHBhcmFtZXRlcnMsIHdoaWNoIGFyZW4n
-dCBuZWVkZWQgZm9yIG91ciBwdXJwb3Nlcy4gICovDQorDQorc3RhdGljIGlu
-dCBudF9jcmVhdGUgKExQU0VDVVJJVFlfQVRUUklCVVRFUywgUEhBTkRMRSwg
-UEhBTkRMRSwgRFdPUkQsDQorCQkgICAgICBpbnQ2NF90ICopOw0KKw0KIGlu
-dA0KIGZoYW5kbGVyX3BpcGU6OmNyZWF0ZSAoZmhhbmRsZXJfcGlwZSAqZmhz
-WzJdLCB1bnNpZ25lZCBwc2l6ZSwgaW50IG1vZGUpDQogew0KQEAgLTUzOCw3
-ICs1NTYsNyBAQCBmaGFuZGxlcl9waXBlOjpjcmVhdGUgKGZoYW5kbGVyX3Bp
-cGUgKmZoc1syXSwgdW5zaWduZWQgcHNpemUsIGludCBtb2RlKQ0KICAgaW50
-IHJlcyA9IC0xOw0KICAgaW50NjRfdCB1bmlxdWVfaWQ7DQogDQotICBpbnQg
-cmV0ID0gY3JlYXRlIChzYSwgJnIsICZ3LCBwc2l6ZSwgTlVMTCwgMCwgJnVu
-aXF1ZV9pZCk7DQorICBpbnQgcmV0ID0gbnRfY3JlYXRlIChzYSwgJnIsICZ3
-LCBwc2l6ZSwgJnVuaXF1ZV9pZCk7DQogICBpZiAocmV0KQ0KICAgICBfX3Nl
-dGVycm5vX2Zyb21fd2luX2Vycm9yIChyZXQpOw0KICAgZWxzZSBpZiAoKGZo
-c1swXSA9IChmaGFuZGxlcl9waXBlICopIGJ1aWxkX2ZoX2RldiAoKnBpcGVy
-X2RldikpID09IE5VTEwpDQpAQCAtNTY1LDYgKzU4MywxNjcgQEAgZmhhbmRs
-ZXJfcGlwZTo6Y3JlYXRlIChmaGFuZGxlcl9waXBlICpmaHNbMl0sIHVuc2ln
-bmVkIHBzaXplLCBpbnQgbW9kZSkNCiAgIHJldHVybiByZXM7DQogfQ0KIA0K
-K05UU1RBVFVTDQorZmhhbmRsZXJfcGlwZTo6bnBmc19oYW5kbGUgKEhBTkRM
-RSAmbnBoKQ0KK3sNCisgIHN0YXRpYyBOT19DT1BZIFNSV0xPQ0sgbnBmc19s
-b2NrOw0KKyAgc3RhdGljIE5PX0NPUFkgSEFORExFIG5wZnNfZGlyaDsNCisN
-CisgIE5UU1RBVFVTIHN0YXR1cyA9IFNUQVRVU19TVUNDRVNTOw0KKyAgT0JK
-RUNUX0FUVFJJQlVURVMgYXR0cjsNCisgIElPX1NUQVRVU19CTE9DSyBpbzsN
-CisNCisgIC8qIExvY2tsZXNzIGFmdGVyIGZpcnN0IGNhbGwuICovDQorICBp
-ZiAobnBmc19kaXJoKQ0KKyAgICB7DQorICAgICAgbnBoID0gbnBmc19kaXJo
-Ow0KKyAgICAgIHJldHVybiBTVEFUVVNfU1VDQ0VTUzsNCisgICAgfQ0KKyAg
-QWNxdWlyZVNSV0xvY2tFeGNsdXNpdmUgKCZucGZzX2xvY2spOw0KKyAgaWYg
-KCFucGZzX2RpcmgpDQorICAgIHsNCisgICAgICBJbml0aWFsaXplT2JqZWN0
-QXR0cmlidXRlcyAoJmF0dHIsICZyb191X25wZnMsIDAsIE5VTEwsIE5VTEwp
-Ow0KKyAgICAgIHN0YXR1cyA9IE50T3BlbkZpbGUgKCZucGZzX2RpcmgsIEZJ
-TEVfUkVBRF9BVFRSSUJVVEVTIHwgU1lOQ0hST05JWkUsDQorCQkJICAgJmF0
-dHIsICZpbywgRklMRV9TSEFSRV9SRUFEIHwgRklMRV9TSEFSRV9XUklURSwN
-CisJCQkgICAwKTsNCisgICAgfQ0KKyAgUmVsZWFzZVNSV0xvY2tFeGNsdXNp
-dmUgKCZucGZzX2xvY2spOw0KKyAgaWYgKE5UX1NVQ0NFU1MgKHN0YXR1cykp
-DQorICAgIG5waCA9IG5wZnNfZGlyaDsNCisgIHJldHVybiBzdGF0dXM7DQor
-fQ0KKw0KK3N0YXRpYyBpbnQNCitudF9jcmVhdGUgKExQU0VDVVJJVFlfQVRU
-UklCVVRFUyBzYV9wdHIsIFBIQU5ETEUgciwgUEhBTkRMRSB3LA0KKwkJRFdP
-UkQgcHNpemUsIGludDY0X3QgKnVuaXF1ZV9pZCkNCit7DQorICBOVFNUQVRV
-UyBzdGF0dXM7DQorICBIQU5ETEUgbnBmc2g7DQorICBBQ0NFU1NfTUFTSyBh
-Y2Nlc3M7DQorICBPQkpFQ1RfQVRUUklCVVRFUyBhdHRyOw0KKyAgSU9fU1RB
-VFVTX0JMT0NLIGlvOw0KKyAgTEFSR0VfSU5URUdFUiB0aW1lb3V0Ow0KKw0K
-KyAgLyogRGVmYXVsdCB0byBlcnJvci4gKi8NCisgIGlmIChyKQ0KKyAgICAq
-ciA9IE5VTEw7DQorICBpZiAodykNCisgICAgKncgPSBOVUxMOw0KKw0KKyAg
-c3RhdHVzID0gZmhhbmRsZXJfcGlwZTo6bnBmc19oYW5kbGUgKG5wZnNoKTsN
-CisgIGlmICghTlRfU1VDQ0VTUyAoc3RhdHVzKSkNCisgICAgew0KKyAgICAg
-IF9fc2V0ZXJybm9fZnJvbV9udF9zdGF0dXMgKHN0YXR1cyk7DQorICAgICAg
-cmV0dXJuIEdldExhc3RFcnJvciAoKTsNCisgICAgfQ0KKw0KKyAgLyogRW5z
-dXJlIHRoYXQgdGhlcmUgaXMgZW5vdWdoIHBpcGUgYnVmZmVyIHNwYWNlIGZv
-ciBhdG9taWMgd3JpdGVzLiAgKi8NCisgIGlmICghcHNpemUpDQorICAgIHBz
-aXplID0gREVGQVVMVF9QSVBFQlVGU0laRTsNCisNCisgIFVOSUNPREVfU1RS
-SU5HIHBpcGVuYW1lOw0KKyAgV0NIQVIgcGlwZW5hbWVfYnVmW01BWF9QQVRI
-XTsNCisgIHNpemVfdCBsZW4gPSBfX3NtYWxsX3N3cHJpbnRmIChwaXBlbmFt
-ZV9idWYsIEwiJVMtJXUtIiwNCisJCQkJICZjeWdoZWFwLT5pbnN0YWxsYXRp
-b25fa2V5LA0KKwkJCQkgR2V0Q3VycmVudFByb2Nlc3NJZCAoKSk7DQorDQor
-ICBhY2Nlc3MgPSBHRU5FUklDX1JFQUQgfCBGSUxFX1dSSVRFX0FUVFJJQlVU
-RVM7DQorDQorICBVTE9ORyBwaXBlX3R5cGUgPSBwaXBlX2J5dGUgPyBGSUxF
-X1BJUEVfQllURV9TVFJFQU1fVFlQRQ0KKyAgICA6IEZJTEVfUElQRV9NRVNT
-QUdFX1RZUEU7DQorDQorICAvKiBSZXRyeSBOdENyZWF0ZU5hbWVkUGlwZUZp
-bGUgYXMgbG9uZyBhcyB0aGUgcGlwZSBuYW1lIGlzIGluIHVzZS4NCisgICAg
-IFJldHJ5aW5nIHdpbGwgcHJvYmFibHkgbmV2ZXIgYmUgbmVjZXNzYXJ5LCBi
-dXQgd2Ugd2FudA0KKyAgICAgdG8gYmUgYXMgcm9idXN0IGFzIHBvc3NpYmxl
-LiAgKi8NCisgIERXT1JEIGVyciA9IDA7DQorICB3aGlsZSAociAmJiAhKnIp
-DQorICAgIHsNCisgICAgICBzdGF0aWMgdm9sYXRpbGUgVUxPTkcgcGlwZV91
-bmlxdWVfaWQ7DQorICAgICAgTE9ORyBpZCA9IEludGVybG9ja2VkSW5jcmVt
-ZW50ICgoTE9ORyAqKSAmcGlwZV91bmlxdWVfaWQpOw0KKyAgICAgIF9fc21h
-bGxfc3dwcmludGYgKHBpcGVuYW1lX2J1ZiArIGxlbiwgTCJwaXBlLSVwIiwg
-aWQpOw0KKyAgICAgIGlmICh1bmlxdWVfaWQpDQorCSp1bmlxdWVfaWQgPSAo
-KGludDY0X3QpIGlkIDw8IDMyIHwgR2V0Q3VycmVudFByb2Nlc3NJZCAoKSk7
-DQorDQorICAgICAgZGVidWdfcHJpbnRmICgibmFtZSAlUywgc2l6ZSAldSwg
-bW9kZSAlcyIsIHBpcGVuYW1lX2J1ZiwgcHNpemUsDQorCQkgICAgKHBpcGVf
-dHlwZSAmIEZJTEVfUElQRV9NRVNTQUdFX1RZUEUpDQorCQkgICAgPyAiUElQ
-RV9UWVBFX01FU1NBR0UiIDogIlBJUEVfVFlQRV9CWVRFIik7DQorDQorICAg
-ICAgUnRsSW5pdFVuaWNvZGVTdHJpbmcgKCZwaXBlbmFtZSwgcGlwZW5hbWVf
-YnVmKTsNCisNCisgICAgICBJbml0aWFsaXplT2JqZWN0QXR0cmlidXRlcyAo
-JmF0dHIsICZwaXBlbmFtZSwNCisJCQkJICBzYV9wdHItPmJJbmhlcml0SGFu
-ZGxlID8gT0JKX0lOSEVSSVQgOiAwLA0KKwkJCQkgIG5wZnNoLCBzYV9wdHIt
-PmxwU2VjdXJpdHlEZXNjcmlwdG9yKTsNCisNCisgICAgICB0aW1lb3V0LlF1
-YWRQYXJ0ID0gLTUwMDAwMDsNCisgICAgICBzdGF0dXMgPSBOdENyZWF0ZU5h
-bWVkUGlwZUZpbGUgKHIsIGFjY2VzcywgJmF0dHIsICZpbywgRklMRV9TSEFS
-RV9SRUFEIHwgRklMRV9TSEFSRV9XUklURSwNCisJCQkJICAgICAgRklMRV9D
-UkVBVEUsIDAsIHBpcGVfdHlwZSwNCisJCQkJICAgICAgRklMRV9QSVBFX0JZ
-VEVfU1RSRUFNX01PREUsDQorCQkJCSAgICAgIDAsIDEsIHBzaXplLCBwc2l6
-ZSwgJnRpbWVvdXQpOw0KKw0KKyAgICAgIGlmIChOVF9TVUNDRVNTIChzdGF0
-dXMpKQ0KKwl7DQorCSAgZGVidWdfcHJpbnRmICgicGlwZSByZWFkIGhhbmRs
-ZSAlcCIsICpyKTsNCisJICBlcnIgPSAwOw0KKwkgIGJyZWFrOw0KKwl9DQor
-DQorICAgICAgc3dpdGNoIChzdGF0dXMpDQorCXsNCisJY2FzZSBTVEFUVVNf
-UElQRV9CVVNZOg0KKwljYXNlIFNUQVRVU19JTlNUQU5DRV9OT1RfQVZBSUxB
-QkxFOg0KKwljYXNlIFNUQVRVU19QSVBFX05PVF9BVkFJTEFCTEU6DQorCSAg
-LyogVGhlIHBpcGUgaXMgYWxyZWFkeSBvcGVuIHdpdGggY29tcGF0aWJsZSBw
-YXJhbWV0ZXJzLg0KKwkgICAgIFBpY2sgYSBuZXcgbmFtZSBhbmQgcmV0cnku
-ICAqLw0KKwkgIGRlYnVnX3ByaW50ZiAoInBpcGUgYnVzeSwgcmV0cnlpbmci
-KTsNCisJICAqciA9IE5VTEw7DQorCSAgYnJlYWs7DQorCWNhc2UgU1RBVFVT
-X0FDQ0VTU19ERU5JRUQ6DQorCSAgLyogVGhlIHBpcGUgaXMgYWxyZWFkeSBv
-cGVuIHdpdGggaW5jb21wYXRpYmxlIHBhcmFtZXRlcnMuDQorCSAgICAgUGlj
-ayBhIG5ldyBuYW1lIGFuZCByZXRyeS4gICovDQorCSAgZGVidWdfcHJpbnRm
-ICgicGlwZSBhY2Nlc3MgZGVuaWVkLCByZXRyeWluZyIpOw0KKwkgICpyID0g
-TlVMTDsNCisJICBicmVhazsNCisJZGVmYXVsdDoNCisJICB7DQorCSAgICBf
-X3NldGVycm5vX2Zyb21fbnRfc3RhdHVzIChzdGF0dXMpOw0KKwkgICAgZXJy
-ID0gR2V0TGFzdEVycm9yICgpOw0KKwkgICAgZGVidWdfcHJpbnRmICgiZmFp
-bGVkLCAlRSIpOw0KKwkgICAgKnIgPSBJTlZBTElEX0hBTkRMRV9WQUxVRTsN
-CisJICB9DQorCX0NCisgICAgfQ0KKw0KKyAgaWYgKGVycikNCisgICAgew0K
-KyAgICAgICpyID0gTlVMTDsNCisgICAgICByZXR1cm4gZXJyOw0KKyAgICB9
-DQorDQorICBpZiAoIXcpDQorICAgIGRlYnVnX3ByaW50ZiAoInBpcGUgd3Jp
-dGUgaGFuZGxlIE5VTEwiKTsNCisgIGVsc2UNCisgICAgew0KKyAgICAgIGRl
-YnVnX3ByaW50ZiAoIk50T3BlbkZpbGU6IG5hbWUgJVMiLCBwaXBlbmFtZV9i
-dWYpOw0KKw0KKyAgICAgIGFjY2VzcyA9IEdFTkVSSUNfV1JJVEUgfCBGSUxF
-X1JFQURfQVRUUklCVVRFUzsNCisgICAgICBzdGF0dXMgPSBOdE9wZW5GaWxl
-ICh3LCBhY2Nlc3MsICZhdHRyLCAmaW8sIDAsIDApOw0KKyAgICAgIGlmICgh
-TlRfU1VDQ0VTUyAoc3RhdHVzKSkNCisJew0KKwkgIERXT1JEIGVyciA9IEdl
-dExhc3RFcnJvciAoKTsNCisJICBkZWJ1Z19wcmludGYgKCJOdE9wZW5GaWxl
-IGZhaWxlZCwgciAlcCwgJUUiLCByKTsNCisJICBpZiAocikNCisJICAgIENs
-b3NlSGFuZGxlICgqcik7DQorCSAgKncgPSBOVUxMOw0KKwkgIHJldHVybiBl
-cnI7DQorCX0NCisNCisgICAgICBkZWJ1Z19wcmludGYgKCJwaXBlIHdyaXRl
-IGhhbmRsZSAlcCIsICp3KTsNCisgICAgfQ0KKw0KKyAgLyogU3VjY2Vzcy4g
-Ki8NCisgIHJldHVybiAwOw0KK30NCisNCiBpbnQNCiBmaGFuZGxlcl9waXBl
-Ojppb2N0bCAodW5zaWduZWQgaW50IGNtZCwgdm9pZCAqcCkNCiB7DQotLSAN
-CjIuMTcuMA0KDQo=
+On Sun, 2019-05-26 at 00:49 -0600, Brian Inglis wrote:
+> To a degree, depends on installed Cygwin packages and Windows features, but I
+> also have in both Cygwin /{,{,usr/}s}bin and /Windows/{,System32{,/OpenSSH}/:
+> 
+>         {"certutil", 0},
+>         {"comp", 0},
+>         {"ftp", 0},
+>         {"scp", 0},
+>         {"sftp", 0},
+>         {"sftp-server", 0},
+>         {"shutdown", 0},
+>         {"ssh-add", 0},
+>         {"ssh-agent", 0},
+>         {"sshd", 0},
+>         {"ssh-keygen", 0},
+>         {"ssh-keyscan", 0},
+> 
+> from ls *.exe | sort in each set of dirs then join both.
+
+I don't have /Windows/OpenSSH on my system.  Is it added to PATH when
+present?
+
+--
+Yaakov
+
