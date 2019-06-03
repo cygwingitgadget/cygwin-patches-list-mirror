@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9418-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 109245 invoked by alias); 30 May 2019 12:56:14 -0000
+Return-Path: <cygwin-patches-return-9419-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 81365 invoked by alias); 3 Jun 2019 16:30:47 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,62 +9,98 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 109229 invoked by uid 89); 30 May 2019 12:56:14 -0000
+Received: (qmail 81354 invoked by uid 89); 3 Jun 2019 16:30:47 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-12.8 required=5.0 tests=AWL,BAYES_00,MIME_BASE64_BLANKS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=Ken, j13, prime, handbook
-X-HELO: NAM01-SN1-obe.outbound.protection.outlook.com
-Received: from mail-eopbgr820098.outbound.protection.outlook.com (HELO NAM01-SN1-obe.outbound.protection.outlook.com) (40.107.82.98) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 30 May 2019 12:56:13 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=gFJiNTkOT+0dChmO0i0+V594vU+7gaTKAPNlRiFNdns=; b=K/muGsUQatobe0iFyvHqjJbqTLpWc65QQaf1pDOvSUs5gSK3asRANqOpQ8IzYy6z55qX6MVLNCaboJEpFRBODpFo1iqJK+OCpPK3fUmznRJr28CdWZrDIlfi46GL2+O8DmDkFjdrmP6pJvUNNOXJJ5j3EKKeKvgx1Mat5DRp45M=
-Received: from DM6PR04MB5211.namprd04.prod.outlook.com (20.178.24.208) by DM6PR04MB4460.namprd04.prod.outlook.com (20.176.104.205) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.1943.17; Thu, 30 May 2019 12:56:11 +0000
-Received: from DM6PR04MB5211.namprd04.prod.outlook.com ([fe80::510a:3a42:f346:a4d8]) by DM6PR04MB5211.namprd04.prod.outlook.com ([fe80::510a:3a42:f346:a4d8%7]) with mapi id 15.20.1922.024; Thu, 30 May 2019 12:56:11 +0000
-From: Ken Brown <kbrown@cornell.edu>
-To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: Re: [PATCH draft 0/6] Remove the fhandler_base_overlapped class
-Date: Thu, 30 May 2019 12:56:00 -0000
-Message-ID: <826b6cd3-2fbc-0d8c-b665-2c9a797a18f3@cornell.edu>
-References: <20190526151019.2187-1-kbrown@cornell.edu>
-In-Reply-To: <20190526151019.2187-1-kbrown@cornell.edu>
-user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101 Thunderbird/60.7.0
-authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <970C11C29181E042BFCD339ABC8EFF43@namprd04.prod.outlook.com>
-Content-Transfer-Encoding: base64
+X-Spam-SWARE-Status: No, score=-101.9 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=English, acknowledge, HX-Languages-Length:1394, HTo:U*cygwin-patches
+X-HELO: mout.kundenserver.de
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.17.10) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 03 Jun 2019 16:30:45 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id 1MKKhF-1hHXGH3cml-00LjqR for <cygwin-patches@cygwin.com>; Mon, 03 Jun 2019 18:30:42 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id EDD08A80653; Mon,  3 Jun 2019 18:30:41 +0200 (CEST)
+Date: Mon, 03 Jun 2019 16:30:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: [rebase PATCH] Introduce --merge-files (-M) flag (WAS: Introduce --no-rebase flag)
+Message-ID: <20190603163041.GH3437@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20190412180302.GF4248@calimero.vinschen.de> <319c9949-6e00-2c18-f1d0-a88a7f02fdab@ssi-schaefer.com> <ae7bce9f-b1d6-440b-f6d6-fdca1040d56f@SystematicSw.ab.ca> <6d8331f7-d3f5-53e6-5e55-863f8eb01693@ssi-schaefer.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ksb2@cornell.edu
-X-IsSubscribed: yes
-X-SW-Source: 2019-q2/txt/msg00125.txt.bz2
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="L+ofChggJdETEG3Y"
+Content-Disposition: inline
+In-Reply-To: <6d8331f7-d3f5-53e6-5e55-863f8eb01693@ssi-schaefer.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
+X-SW-Source: 2019-q2/txt/msg00126.txt.bz2
 
-T24gNS8yNi8yMDE5IDExOjEwIEFNLCBLZW4gQnJvd24gd3JvdGU6DQo+IGZo
-YW5kbGVyX3BpcGUgaXMgY3VycmVudGx5IHRoZSBvbmx5IGNsYXNzIGRlcml2
-ZWQgZnJvbQ0KPiBmaGFuZGxlcl9iYXNlX292ZXJsYXBwZWQuICBUaGlzIHBh
-dGNoIHNlcmllcyByZXdyaXRlcyBwYXJ0cyBvZg0KPiBmaGFuZGxlcl9waXBl
-IHNvIHRoYXQgaXQgY2FuIGJlIGRlcml2ZWQgZnJvbSBmaGFuZGxlcl9iYXNl
-IGluc3RlYWQuDQo+IFdlIGNhbiB0aGVuIHNpbXBsaWZ5IHRoZSBjb2RlIGJ5
-IHJlbW92aW5nIGZoYW5kbGVyX2Jhc2Vfb3ZlcmxhcHBlZC4NCj4gDQo+IElu
-IHBhcnRpY3VsYXIsIHRoaXMgZ2V0cyByaWQgb2YgdGhlIHBlY3VsaWFyIHNp
-dHVhdGlvbiBpbiB3aGljaCBhDQo+IG5vbi1ibG9ja2luZyB3cml0ZSBjYW4g
-cmV0dXJuIHdpdGggSS9PIHBlbmRpbmcsIGxlYWRpbmcgdG8gdGhlDQo+IHVn
-bGluZXNzIGluIGZoYW5kbGVyX2Jhc2Vfb3ZlcmxhcHBlZDo6Y2xvc2UuDQo+
-IA0KPiBJJ3ZlIG1hcmtlZCB0aGVzZSBwYXRjaGVzIGFzIGRyYWZ0cyBiZWNh
-dXNlIEkndmUgdW5kb3VidGVkbHkNCj4gb3Zlcmxvb2tlZCBzb21lIHRoaW5n
-cy4gIEFsc28sIEkgaGF2ZW4ndCBzeXN0ZW1hdGljYWxseSBkb25lIGFueQ0K
-PiByZWdyZXNzaW9uIHRlc3RzLiAgSSBoYXZlLCBob3dldmVyLCBydW4gYWxs
-IHRoZSBzYW1wbGUgcGlwZSBwcm9ncmFtcw0KPiBpbiBLZXJyaXNrJ3MgYm9v
-ayAiVGhlIExpbnV4IFByb2dyYW1taW5nIEludGVyZmFjZTogTGludXggYW5k
-IFVOSVgNCj4gU3lzdGVtIFByb2dyYW1taW5nIEhhbmRib29rIi4gIEkndmUg
-YWxzbyBydW4gZW1hY3MtWDExLCBnZGIsIGdpdCwNCj4gbWFrZSwgZXRjLiwg
-c28gZmFyIHdpdGhvdXQgcHJvYmxlbXMuDQoNClRoaXMgaXNuJ3QgcmVhZHkg
-Zm9yIHByaW1lIHRpbWUgeWV0LiAgSSd2ZSBydW4gaW50byBvY2Nhc2lvbmFs
-IGVycm9ycyBsaWtlIHRoaXMgDQp3aGVuIGRvaW5nIGEgcGFyYWxsZWwgYnVp
-bGQgb2YgZW1hY3MgKC1qMTMgaW4gdGhpcyBjYXNlKToNCg0KbWFrZTogSU5U
-RVJOQUw6IEV4aXRpbmcgd2l0aCAxNCBqb2JzZXJ2ZXIgdG9rZW5zIGF2YWls
-YWJsZTsgc2hvdWxkIGJlIDEzIQ0KDQpUaGlzIHdvdWxkIHNlZW0gdG8gaW5k
-aWNhdGUgcHJvYmxlbXMgd2l0aCBtYWtlJ3Mgam9ic2VydmVyIHBpcGUuICBJ
-J3ZlIGFscmVhZHkgDQpmb3VuZCB0d28gYnVncyBpbiBwYXRjaCA0LCBidXQg
-SSdtIHN0aWxsIHNlZWluZyB0aGlzIGVycm9yIG9uY2UgaW4gYSB3aGlsZS4N
-Cg0KSSdsbCBzZW5kIGEgdjIgaWYvd2hlbiBJIGZpbmQgdGhlIHByb2JsZW0u
-DQoNCktlbg0K
+
+--L+ofChggJdETEG3Y
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 1340
+
+On May  6 10:31, Michael Haubenwallner wrote:
+>=20
+> On 5/4/19 4:33 PM, Brian Inglis wrote:
+> > On 2019-05-03 09:32, Michael Haubenwallner wrote:
+> >> On 4/12/19 8:03 PM, Corinna Vinschen wrote:
+> >>> On Apr 12 15:52, Michael Haubenwallner wrote:
+> >>>> The --no-rebase flag is to update the database for new files, without
+> >>> Wouldn't something like --merge-files be more descriptive?
+> >> What about --recognize ?
+> >=20
+> > "The --recognize flag is to update the database for new files, without
+> > performing a rebase.  The file names provided should have been rebased
+> > using the --oblivious flag just before."
+> >=20
+> > Recognize does not mean record or update in English but see, identify, =
+or
+> > acknowledge.
+> >=20
+> > Your earlier suggestion of --record, the verb used in the comment quote=
+d above
+> > --update, or CV's suggestion --merge-files would make sense and be more
+> > descriptive.
+>=20
+> On a first thought, "merge files" does have a different meaning in the Ge=
+ntoo
+> context already, as in "merge files from staging directory into the live =
+file
+> system".
+> However, on a second thought, "rebase --merge-files" is performed afterwa=
+rds,
+> but still part of that "merge files" phase, so the name does actually fit.
+>=20
+> Patch updated.
+
+Pushed.
+
+
+Thanks,
+Corinna
+
+--=20
+Corinna Vinschen
+Cygwin Maintainer
+
+--L+ofChggJdETEG3Y
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 833
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAlz1SzEACgkQ9TYGna5E
+T6D5XQ//bMjmh4KX3+5xhU9YcFCP0XV0rxH94ixeLIVpMqF46r2yg1iXJnsifNPO
+cLoWn0tJo8WCDb82cyARYSrdP7LvvXJWvnotnD7PVO3zN4lA93FnU5BaCgurcVv4
+i98BXEqd5voXs45twoL7NLBBnmkdHUVanwWFBUnfGXFU7QXQtY8X7ZI3zQCdW1DT
+DESOMPksuPqHWnKkZHuQk1PGVmGiZSPWCbyfrqsrqna6aKlSna77RUuqMfdLef32
+dKo6ujYUL3GxNI8yH19l0/gIBqdnEewUWlQW2l0F/u8SVLB52bHN7MHaOTMqf9Nw
+k0tIzjR1N+Oo8D9CYjudJjOhAYvxMf7tM6NBoQJ0x1yt5h8naioZHTADSBSXr97d
+BCVuYMbt9TiIhokmgpP9FdoBBgF6DxdNlc6Mavnz1pxUHzr1AKt7zJ4mC6NQNtaa
+iJDoMcNRMG+tPHVitei+uhBe08UylYh3XEm3RAdG9BXW1DVm8cl/KX6Uxr+LxPFL
+D5MYURDDqV15gu2G6/suXzIlbQ8ZzYSAF9MCxZNsFklc5Ckz9JqKRZpQ0UxkZpYC
+wB2GsXlYOo1+iMOCqvhYEO9ozrqQFA72Y5ADM1gPb/YW4zNWKvE9TPuJG4ellPVg
+L7Sg1I4yqdNPAUzy//eT4rRQVPSP4ZQBhskyuQNqAusbHe5dMQQ=
+=NI1V
+-----END PGP SIGNATURE-----
+
+--L+ofChggJdETEG3Y--
