@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9448-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 67911 invoked by alias); 8 Jun 2019 12:20:47 -0000
+Return-Path: <cygwin-patches-return-9449-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 105953 invoked by alias); 11 Jun 2019 08:48:26 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,100 +9,129 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 67306 invoked by uid 89); 8 Jun 2019 12:20:47 -0000
+Received: (qmail 105882 invoked by uid 89); 11 Jun 2019 08:48:21 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-8.8 required=5.0 tests=AWL,BAYES_00,MIME_BASE64_BLANKS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,UNSUBSCRIBE_BODY autolearn=no version=3.3.1 spammy=Ken, sk:michael, hour, H*f:sk:d3a6fca
-X-HELO: NAM01-BN3-obe.outbound.protection.outlook.com
-Received: from mail-eopbgr740131.outbound.protection.outlook.com (HELO NAM01-BN3-obe.outbound.protection.outlook.com) (40.107.74.131) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sat, 08 Jun 2019 12:20:44 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=enpD6k0nsrlMts1iT/SdowsozholGedjMZz034hHVE4=; b=LL3RAz1gKvgzgD07aW5T8+CgJfobTI2LNil5ciPDN3Lbah847p0fwRQzG978vIoLFYA2J0xXfqMafBMhB22ZI4uttO0Dicudeyfmbf9xg5t3DVXygscu1lB3lKVrrwZLCWkjyeTL7XvVxzP173UjUCJZuYegNYf7goQImRqIt10=
-Received: from DM6PR04MB5211.namprd04.prod.outlook.com (20.178.24.208) by DM6PR04MB4106.namprd04.prod.outlook.com (20.176.87.159) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.1965.14; Sat, 8 Jun 2019 12:20:42 +0000
-Received: from DM6PR04MB5211.namprd04.prod.outlook.com ([fe80::510a:3a42:f346:a4d8]) by DM6PR04MB5211.namprd04.prod.outlook.com ([fe80::510a:3a42:f346:a4d8%7]) with mapi id 15.20.1965.011; Sat, 8 Jun 2019 12:20:42 +0000
-From: Ken Brown <kbrown@cornell.edu>
-To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-CC: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
+X-Spam-SWARE-Status: No, score=-101.7 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE,UNSUBSCRIBE_BODY autolearn=ham version=3.3.1 spammy=cleaning, Ken, drawing, pipe
+X-HELO: mout.kundenserver.de
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.187) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 11 Jun 2019 08:48:19 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id 1Mgebs-1gts6y2DEK-00h2pC; Tue, 11 Jun 2019 10:48:12 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 67544A8071D; Tue, 11 Jun 2019 10:48:11 +0200 (CEST)
+Date: Tue, 11 Jun 2019 08:48:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: cygwin-patches@cygwin.com, Ken Brown <kbrown@cornell.edu>
+Cc: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
 Subject: Re: [PATCH draft 0/6] Remove the fhandler_base_overlapped class
-Date: Sat, 08 Jun 2019 12:20:00 -0000
-Message-ID: <798cfd05-a12d-4f42-0a8a-f74750e78547@cornell.edu>
-References: <20190526151019.2187-1-kbrown@cornell.edu> <826b6cd3-2fbc-0d8c-b665-2c9a797a18f3@cornell.edu> <20190603163519.GJ3437@calimero.vinschen.de> <dac74739-7b66-56cb-ca8a-acbca7877eba@cornell.edu> <874l51p7rt.fsf@Rainer.invalid> <d3a6fcad-69c3-e6e6-07fa-3311ec833c69@cornell.edu> <b5a2e878-0282-d94e-92de-c4605dea4000@cornell.edu>
-In-Reply-To: <b5a2e878-0282-d94e-92de-c4605dea4000@cornell.edu>
-user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101 Thunderbird/60.7.0
-authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <411BB983FEC43549B472CF1799BBCD75@namprd04.prod.outlook.com>
-Content-Transfer-Encoding: base64
+Message-ID: <20190611084811.GB3520@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com, Ken Brown <kbrown@cornell.edu>,	Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
+References: <20190526151019.2187-1-kbrown@cornell.edu> <826b6cd3-2fbc-0d8c-b665-2c9a797a18f3@cornell.edu> <20190603163519.GJ3437@calimero.vinschen.de> <dac74739-7b66-56cb-ca8a-acbca7877eba@cornell.edu> <874l51p7rt.fsf@Rainer.invalid> <d3a6fcad-69c3-e6e6-07fa-3311ec833c69@cornell.edu> <b5a2e878-0282-d94e-92de-c4605dea4000@cornell.edu> <798cfd05-a12d-4f42-0a8a-f74750e78547@cornell.edu>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ksb2@cornell.edu
-X-IsSubscribed: yes
-X-SW-Source: 2019-q2/txt/msg00155.txt.bz2
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="3MwIy2ne0vdjdPXF"
+Content-Disposition: inline
+In-Reply-To: <798cfd05-a12d-4f42-0a8a-f74750e78547@cornell.edu>
+User-Agent: Mutt/1.11.3 (2019-02-01)
+X-SW-Source: 2019-q2/txt/msg00156.txt.bz2
 
-T24gNi83LzIwMTkgNTo0MyBQTSwgS2VuIEJyb3duIHdyb3RlOg0KPiBPbiA2
-LzcvMjAxOSAzOjEzIFBNLCBLZW4gQnJvd24gd3JvdGU6DQo+PiBPbiA2Lzcv
-MjAxOSAyOjMxIFBNLCBBY2hpbSBHcmF0eiB3cm90ZToNCj4+PiBLZW4gQnJv
-d24gd3JpdGVzOg0KPj4+PiBJIHRoaW5rIEkndmUgZm91bmQgdGhlIHByb2Js
-ZW0uICBJIHdhcyBtaXNoYW5kbGluZyBzaWduYWxzIHRoYXQgYXJyaXZlZCBk
-dXJpbmcgYQ0KPj4+PiByZWFkLiAgQnV0IGFmdGVyIEkgZml4IHRoYXQsIHRo
-ZXJlJ3Mgc3RpbGwgb25lIG5hZ2dpbmcgaXNzdWUgaW52b2x2aW5nIHRpbWVy
-ZmQNCj4+Pj4gY29kZS4gIEknbGwgd3JpdGUgdG8gdGhlIG1haW4gbGlzdCB3
-aXRoIGRldGFpbHMuICBJICp0aGluayogaXQncyBhIHRpbWVyZmQgYnVnLA0K
-Pj4+PiBidXQgaXQncyBwdXp6bGluZyB0aGF0IEkgb25seSBzZWUgaXQgd2hl
-biB0ZXN0aW5nIG15IG5ldyBwaXBlIGltcGxlbWVudGF0aW9uLg0KPj4+DQo+
-Pj4gQW55dGhpbmcgdHJpZ2dlcmluZyBhIHJhY2Ugb3IgZGVhZGxvY2sgd2ls
-bCBkZXBlbmQgb24gc28gbWFueSBvdGhlcg0KPj4+IHRoaW5ncyB0aGF0IGl0
-IHJlYWxseSBpcyBubyBzdXJwcmlzZSB0byBzZWUgc2VlbWluZ2x5IHVucmVs
-YXRlZCBjaGFuZ2VzDQo+Pj4gbWFraW5nIHRoZSBidWcgYXBwZWFyIG9yIGRp
-c2FwcGVhci4gIFRoZXJlIGFyZSBjZXJ0YWlubHkgcmFjZXMgbGVmdCBpbg0K
-Pj4+IEN5Z3dpbiwgSSBzZWUgdGhlbSBmcm9tIHRpbWUgdG8gdGltZSBpbiB2
-YXJpb3VzIFBlcmwgbW9kdWxlcywganVzdCBuZXZlcg0KPj4+IHJlcHJvZHVj
-aWJsZSBlbm91Z2ggdG8gZ2l2ZSBhbnlvbmUgYW4gaWRlYSBvZiB3aGVyZSB0
-byBsb29rLg0KPj4NCj4+IFRoYXQgbWFrZXMgc2Vuc2UuDQo+Pg0KPj4gSW4g
-dGhlIG1lYW50aW1lLCBJJ3ZlIGFscmVhZHkgZGlzY292ZXJlZCBhbm90aGVy
-IHByb2JsZW0sIHdpdGhpbiBhbiBob3VyIG9mDQo+PiBwb3N0aW5nIG15IGNs
-YWltIHRoYXQgZXZlcnl0aGluZyB3YXMgd29ya2luZyBmaW5lOiBJZiBJIHN0
-YXJ0IGVtYWNzLVgxMSB3aXRoDQo+PiBjeWdzZXJ2ZXIgcnVubmluZywgSSBj
-YW4ndCBmb3JrIGFueSBzdWJwcm9jZXNzZXMgd2l0aGluIGVtYWNzLiAgSSBn
-ZXQNCj4+DQo+PiAwIFttYWluXSBlbWFjcyAyNjg5IGRvZm9yazogY2hpbGQg
-MjY5MyAtIGRpZWQgd2FpdGluZyBmb3IgZGxsIGxvYWRpbmcsIGVycm5vIDEx
-DQo+Pg0KPj4gQmFjayB0byB0aGUgZHJhd2luZyBib2FyZC4uLi4gIEkndmUg
-bmV2ZXIgbG9va2VkIGF0IHRoZSBjeWdzZXJ2ZXIgY29kZSwgYnV0DQo+PiBt
-YXliZSBpdCB3aWxsIHR1cm4gb3V0IHRvIGJlIHNvbWV0aGluZyBlYXN5Lg0K
-PiANCj4gR29vZCBuZXdzIChmb3IgbWUpOiBUaGlzIGlzbid0IHJlbGF0ZWQg
-dG8gbXkgcGlwZSBjb2RlLiAgVGhlIHNhbWUgcHJvYmxlbSBvY2N1cnMNCj4g
-aWYgSSBidWlsZCB0aGUgbWFzdGVyIGJyYW5jaC4gIEknbGwgYmlzZWN0IHdo
-ZW4gSSBnZXQgYSBjaGFuY2UgKHByb2JhYmx5DQo+IHRvbW9ycm93KS4gIElu
-IHRoZSBtZWFudGltZSwgYWxsIEkgY2FuIHNheSBpcyB0aGF0IHN0cmFjZSBz
-aG93cyBhDQo+IFNUQVRVU19BQ0NFU1NfVklPTEFUSU9OIGF0IHNobS5jYzox
-MjUuDQoNCkEgYmlzZWN0aW9uIHNob3dzIHRoYXQgdGhlIHByb2JsZW0gc3Rh
-cnRzIHdpdGggdGhlIGZvbGxvd2luZyBjb21taXQ6DQoNCmNvbW1pdCBmMDNl
-YThlMWM1N2JkNWNlYTgzZjZjZDQ3ZmEwMjg3MGJkZmViMWM1DQpBdXRob3I6
-IE1pY2hhZWwgSGF1YmVud2FsbG5lciA8bWljaGFlbC5oYXViZW53YWxsbmVy
-QHNzaS1zY2hhZWZlci5jb20+DQpEYXRlOiAgIFRodSBNYXkgMiAxMjoxMjo0
-NCAyMDE5ICswMjAwDQoNCiAgICAgQ3lnd2luOiBmb3JrOiBSZW1lbWJlciBj
-aGlsZCBub3QgYmVmb3JlIHN1Y2Nlc3MuDQoNCiAgICAgRG8gbm90IHJlbWVt
-YmVyIHRoZSBjaGlsZCBiZWZvcmUgaXQgd2FzIHN1Y2Nlc3NmdWxseSBpbml0
-aWFsaXplZCwgb3Igd2UNCiAgICAgd291bGQgbmVlZCBtb3JlIHNvcGhpc3Rp
-Y2F0ZWQgY2xlYW51cCBvbiBjaGlsZCBpbml0aWFsaXphdGlvbiBmYWlsdXJl
-LA0KICAgICBsaWtlIGNsZWFuaW5nIHVwIHRoZSBwcm9jZXNzIHRhYmxlIGFu
-ZCBzdXBwcmVzc2luZyBTSUdDSElMRCBkZWxpdmVyeQ0KICAgICB3aXRoIG11
-bHRpcGxlIHRocmVhZHMgKCJ3YWl0cHJvYyIpIGludm9sdmVkLiAgQ29tcGFy
-ZWQgdG8gdGhhdCwgdGhlDQogICAgIHBvdGVudGlhbCBzbG93ZG93biBkdWUg
-dG8gYW4gZXh0cmEgeWllbGQgKCkgY2FsbCBzaG91bGQgYmUgbmVnbGlnaWJs
-ZS4NCg0KSSBoYXZlbid0IHRyaWVkIHRvIG1ha2UgYW4gU1RDLCBidXQgaGVy
-ZSdzIHdoYXQgSSBkbyB0byByZXByb2R1Y2UgdGhlIHByb2JsZW06DQoNCjEu
-IFN0YXJ0IGN5Z3NlcnZlci4NCg0KMi4gU3RhcnQgdGhlIFggc2VydmVyIChl
-LmcuLCBieSB1c2luZyB0aGUgU3RhcnQgTWVudSBzaG9ydGN1dCBjcmVhdGVk
-IGJ5IHRoZSANCnhpbml0IHBvc3RpbnN0YWxsIHNjcmlwdCkuDQoNCjMuIFN0
-YXJ0IGFuIHh0ZXJtLg0KDQo0LiBSdW4gJ2VtYWNzLVgxMSAtUScgaW4gdGhl
-IHh0ZXJtIHdpbmRvdy4NCg0KNS4gRG8gYW55dGhpbmcgdGhhdCBjYXVzZXMg
-ZW1hY3MgdG8gdHJ5IHRvIGZvcmsgKGUuZy4sICdDLXggZCcgdG8gbGlzdCB0
-aGUgDQpjdXJyZW50IGRpcmVjdG9yeSkuDQoNClRoZXJlIHdpbGwgYmUgYSBs
-b25nIGRlbGF5IHdoaWxlIGVtYWNzIHRyaWVzIHRvIGZvcmssIGZvbGxvd2Vk
-IGV2ZW50dWFsbHkgYnkgYW4gDQplcnJvciBtZXNzYWdlLg0KDQpzdHJhY2Ug
-YW5kIGFkZHIybGluZSBzaG93IHRoYXQgdGhlcmUncyBhIGNyYXNoIGF0IHNo
-bS5jYzoxMjUuDQoNCkkgaG9wZSB0aGlzIGlzIGVub3VnaCBpbmZvcm1hdGlv
-biBmb3Igc29tZW9uZSB0byB0cmFjayBkb3duIHRoZSBwcm9ibGVtLiAgSWYg
-DQpub3QsIEkgY291bGQgcHJvYmFibHkgbWFrZSBhbiBTVEMgdGhhdCBkb2Vz
-bid0IGludm9sdmUgZW1hY3MuDQoNCktlbg0K
+
+--3MwIy2ne0vdjdPXF
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 2589
+
+Hi Ken,
+
+On Jun  8 12:20, Ken Brown wrote:
+> On 6/7/2019 5:43 PM, Ken Brown wrote:
+> > On 6/7/2019 3:13 PM, Ken Brown wrote:
+> >> On 6/7/2019 2:31 PM, Achim Gratz wrote:
+> >>> Ken Brown writes:
+> >>>> I think I've found the problem.  I was mishandling signals that arri=
+ved during a
+> >>>> read.  But after I fix that, there's still one nagging issue involvi=
+ng timerfd
+> >>>> code.  I'll write to the main list with details.  I *think* it's a t=
+imerfd bug,
+> >>>> but it's puzzling that I only see it when testing my new pipe implem=
+entation.
+> >>>
+> >>> Anything triggering a race or deadlock will depend on so many other
+> >>> things that it really is no surprise to see seemingly unrelated chang=
+es
+> >>> making the bug appear or disappear.  There are certainly races left in
+> >>> Cygwin, I see them from time to time in various Perl modules, just ne=
+ver
+> >>> reproducible enough to give anyone an idea of where to look.
+> >>
+> >> That makes sense.
+> >>
+> >> In the meantime, I've already discovered another problem, within an ho=
+ur of
+> >> posting my claim that everything was working fine: If I start emacs-X1=
+1 with
+> >> cygserver running, I can't fork any subprocesses within emacs.  I get
+> >>
+> >> 0 [main] emacs 2689 dofork: child 2693 - died waiting for dll loading,=
+ errno 11
+> >>
+> >> Back to the drawing board....  I've never looked at the cygserver code=
+, but
+> >> maybe it will turn out to be something easy.
+> >=20
+> > Good news (for me): This isn't related to my pipe code.  The same probl=
+em occurs
+> > if I build the master branch.  I'll bisect when I get a chance (probably
+> > tomorrow).  In the meantime, all I can say is that strace shows a
+> > STATUS_ACCESS_VIOLATION at shm.cc:125.
+>=20
+> A bisection shows that the problem starts with the following commit:
+
+Thanks for bisecting!
+
+> commit f03ea8e1c57bd5cea83f6cd47fa02870bdfeb1c5
+> Author: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
+> Date:   Thu May 2 12:12:44 2019 +0200
+>=20
+>      Cygwin: fork: Remember child not before success.
+>=20
+>      Do not remember the child before it was successfully initialized, or=
+ we
+>      would need more sophisticated cleanup on child initialization failur=
+e,
+>      like cleaning up the process table and suppressing SIGCHILD delivery
+>      with multiple threads ("waitproc") involved.  Compared to that, the
+>      potential slowdown due to an extra yield () call should be negligibl=
+e.
+
+Please revert the patch for the time being.  Michael, this needs some
+more work, apparently.
+
+
+Corinna
+
+--=20
+Corinna Vinschen
+Cygwin Maintainer
+
+--3MwIy2ne0vdjdPXF
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 833
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAlz/assACgkQ9TYGna5E
+T6CqEQ/+PFc4SbvGNKLP3p+4Uc8AXUZYOWAkUYnpoYms5wnoAC23GYHYwwMGNnhm
+vLv7+dL+20uPctjyajMR2EUeN4evAQ3PeFkMJ6Am0CoTHdJ7s1AND1i9k20PyGDe
+hgynAvWuLPy0q5dRX0kwP4DzKdYsFj/neL201aLO5RIz5I2527LGhVYrjYefY6nc
+PO3T+/QOA4ho9bZ2oW7FeCA/LpVZ5szizODSdmcTUHnu2E5RX07Io1PaAzwHXSM8
+9hq/Wp1NzIHvmdeXkmy0CVOZoKmfOUrvhTDDH1j/f6FyB9hGq8+F0HuOhfismZta
+/XV+N2im9AzSiu1etA8pNIiOYCPjH7THk67yMN9B72MsJvltdgafLDgwkeWGLa/o
+CVQ1HFo+dlE4gljFZkIqoIJoj3P+rlf2WYgnLiplEVJ8UQdLtZN7TRdQE+3YGuaf
+vX1zjPk44YMhIZofckego14ed2/M1Yr9xkTWp/EYv/C9/nJ3gKA4XH5BbYphdkVY
+XoBBz87+/K62XgjMo28+sXXv6UEK7SBJExcYB5nnkNY9BqKfpu0ECpeuLHYY7jup
+e9/Ngc7regZMoqSbxTk1NuEdJvyalCeLeASs7F9pUxtjJDmbSvX7M/R4JJEKqZBD
+30O4HXVPsU44nsusLh5ZEsGCI1VmLbSupdivUII0TYwr4uG7I5Y=
+=5xIQ
+-----END PGP SIGNATURE-----
+
+--3MwIy2ne0vdjdPXF--
