@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9451-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 125010 invoked by alias); 11 Jun 2019 22:37:37 -0000
+Return-Path: <cygwin-patches-return-9452-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 103078 invoked by alias); 23 Jun 2019 21:51:41 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,99 +9,615 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 125001 invoked by uid 89); 11 Jun 2019 22:37:36 -0000
+Received: (qmail 103067 invoked by uid 89); 23 Jun 2019 21:51:41 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-7.4 required=5.0 tests=AWL,BAYES_00,MIME_BASE64_BLANKS,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,UNSUBSCRIBE_BODY autolearn=no version=3.3.1 spammy=UD:msg00110.html, H*i:sk:70112bc, msg00110.html, HX-Languages-Length:2889
-X-HELO: NAM01-BN3-obe.outbound.protection.outlook.com
-Received: from mail-eopbgr740095.outbound.protection.outlook.com (HELO NAM01-BN3-obe.outbound.protection.outlook.com) (40.107.74.95) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 11 Jun 2019 22:37:34 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=MJuv69kdNbBypFIjIZZ7Re27fsEq6rMro80FZ14P9FI=; b=aXIbKpx/GoalUDj2Svhns+QRQIl1uvDeooNzijBou4f2i8FDPXJPnzjKrKGCuoAkTmO1tYWwwcoR63TuDScp4E10dy5fTwoNkPlDoqRkNGvi2h0zeM9VGM9qByvzOnQHU4SwjzkcQwToq0XxPmolcJr+7bIyknrn2hgeDzEpdi4=
-Received: from DM6PR04MB5211.namprd04.prod.outlook.com (20.178.24.208) by DM6PR04MB5897.namprd04.prod.outlook.com (20.179.48.96) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.1965.15; Tue, 11 Jun 2019 22:37:31 +0000
-Received: from DM6PR04MB5211.namprd04.prod.outlook.com ([fe80::510a:3a42:f346:a4d8]) by DM6PR04MB5211.namprd04.prod.outlook.com ([fe80::510a:3a42:f346:a4d8%7]) with mapi id 15.20.1965.017; Tue, 11 Jun 2019 22:37:31 +0000
-From: Ken Brown <kbrown@cornell.edu>
-To: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>,	"cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: Re: [PATCH draft 0/6] Remove the fhandler_base_overlapped class
-Date: Tue, 11 Jun 2019 22:37:00 -0000
-Message-ID: <04085a74-c0ec-6a4e-ff8e-f6fef2698105@cornell.edu>
-References: <20190526151019.2187-1-kbrown@cornell.edu> <826b6cd3-2fbc-0d8c-b665-2c9a797a18f3@cornell.edu> <20190603163519.GJ3437@calimero.vinschen.de> <dac74739-7b66-56cb-ca8a-acbca7877eba@cornell.edu> <874l51p7rt.fsf@Rainer.invalid> <d3a6fcad-69c3-e6e6-07fa-3311ec833c69@cornell.edu> <b5a2e878-0282-d94e-92de-c4605dea4000@cornell.edu> <798cfd05-a12d-4f42-0a8a-f74750e78547@cornell.edu> <20190611084811.GB3520@calimero.vinschen.de> <70112bc2-54e0-7925-1bea-ccb3476dbcb9@ssi-schaefer.com>
-In-Reply-To: <70112bc2-54e0-7925-1bea-ccb3476dbcb9@ssi-schaefer.com>
-user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101 Thunderbird/60.7.0
-authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
-x-ms-exchange-purlcount: 1
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <C8CE461BB63BF249AAA68029DAF24E8C@namprd04.prod.outlook.com>
-Content-Transfer-Encoding: base64
+X-Spam-SWARE-Status: No, score=-17.2 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3 autolearn=ham version=3.3.1 spammy=1205, fake, numerous, H*Ad:U*mark
+X-HELO: m0.truegem.net
+Received: from m0.truegem.net (HELO m0.truegem.net) (69.55.228.47) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 23 Jun 2019 21:51:36 +0000
+Received: (from daemon@localhost)	by m0.truegem.net (8.12.11/8.12.11) id x5NLpZHI047662;	Sun, 23 Jun 2019 14:51:35 -0700 (PDT)	(envelope-from mark@maxrnd.com)
+Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67), claiming to be "localhost.localdomain" via SMTP by m0.truegem.net, id smtpdU4X7sx; Sun Jun 23 14:51:33 2019
+From: Mark Geisert <mark@maxrnd.com>
+To: cygwin-patches@cygwin.com
+Cc: Mark Geisert <mark@maxrnd.com>
+Subject: [PATCH v3] Cygwin: Implement sched_[gs]etaffinity()
+Date: Sun, 23 Jun 2019 21:51:00 -0000
+Message-Id: <20190623215106.4847-1-mark@maxrnd.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ksb2@cornell.edu
+Content-Transfer-Encoding: 8bit
 X-IsSubscribed: yes
-X-SW-Source: 2019-q2/txt/msg00158.txt.bz2
+X-SW-Source: 2019-q2/txt/msg00159.txt.bz2
 
-T24gNi8xMS8yMDE5IDEyOjQyIFBNLCBNaWNoYWVsIEhhdWJlbndhbGxuZXIg
-d3JvdGU6DQo+IA0KPiANCj4gT24gNi8xMS8xOSAxMDo0OCBBTSwgQ29yaW5u
-YSBWaW5zY2hlbiB3cm90ZToNCj4+IEhpIEtlbiwNCj4+DQo+PiBPbiBKdW4g
-IDggMTI6MjAsIEtlbiBCcm93biB3cm90ZToNCj4+PiBPbiA2LzcvMjAxOSA1
-OjQzIFBNLCBLZW4gQnJvd24gd3JvdGU6DQo+Pj4+IE9uIDYvNy8yMDE5IDM6
-MTMgUE0sIEtlbiBCcm93biB3cm90ZToNCj4+Pj4+IE9uIDYvNy8yMDE5IDI6
-MzEgUE0sIEFjaGltIEdyYXR6IHdyb3RlOg0KPj4+Pj4+IEtlbiBCcm93biB3
-cml0ZXM6DQo+Pj4+Pj4+IEkgdGhpbmsgSSd2ZSBmb3VuZCB0aGUgcHJvYmxl
-bS4gIEkgd2FzIG1pc2hhbmRsaW5nIHNpZ25hbHMgdGhhdCBhcnJpdmVkIGR1
-cmluZyBhDQo+Pj4+Pj4+IHJlYWQuICBCdXQgYWZ0ZXIgSSBmaXggdGhhdCwg
-dGhlcmUncyBzdGlsbCBvbmUgbmFnZ2luZyBpc3N1ZSBpbnZvbHZpbmcgdGlt
-ZXJmZA0KPj4+Pj4+PiBjb2RlLiAgSSdsbCB3cml0ZSB0byB0aGUgbWFpbiBs
-aXN0IHdpdGggZGV0YWlscy4gIEkgKnRoaW5rKiBpdCdzIGEgdGltZXJmZCBi
-dWcsDQo+Pj4+Pj4+IGJ1dCBpdCdzIHB1enpsaW5nIHRoYXQgSSBvbmx5IHNl
-ZSBpdCB3aGVuIHRlc3RpbmcgbXkgbmV3IHBpcGUgaW1wbGVtZW50YXRpb24u
-DQo+Pj4+Pj4NCj4+Pj4+PiBBbnl0aGluZyB0cmlnZ2VyaW5nIGEgcmFjZSBv
-ciBkZWFkbG9jayB3aWxsIGRlcGVuZCBvbiBzbyBtYW55IG90aGVyDQo+Pj4+
-Pj4gdGhpbmdzIHRoYXQgaXQgcmVhbGx5IGlzIG5vIHN1cnByaXNlIHRvIHNl
-ZSBzZWVtaW5nbHkgdW5yZWxhdGVkIGNoYW5nZXMNCj4+Pj4+PiBtYWtpbmcg
-dGhlIGJ1ZyBhcHBlYXIgb3IgZGlzYXBwZWFyLiAgVGhlcmUgYXJlIGNlcnRh
-aW5seSByYWNlcyBsZWZ0IGluDQo+Pj4+Pj4gQ3lnd2luLCBJIHNlZSB0aGVt
-IGZyb20gdGltZSB0byB0aW1lIGluIHZhcmlvdXMgUGVybCBtb2R1bGVzLCBq
-dXN0IG5ldmVyDQo+Pj4+Pj4gcmVwcm9kdWNpYmxlIGVub3VnaCB0byBnaXZl
-IGFueW9uZSBhbiBpZGVhIG9mIHdoZXJlIHRvIGxvb2suDQo+Pj4+Pg0KPj4+
-Pj4gVGhhdCBtYWtlcyBzZW5zZS4NCj4+Pj4+DQo+Pj4+PiBJbiB0aGUgbWVh
-bnRpbWUsIEkndmUgYWxyZWFkeSBkaXNjb3ZlcmVkIGFub3RoZXIgcHJvYmxl
-bSwgd2l0aGluIGFuIGhvdXIgb2YNCj4+Pj4+IHBvc3RpbmcgbXkgY2xhaW0g
-dGhhdCBldmVyeXRoaW5nIHdhcyB3b3JraW5nIGZpbmU6IElmIEkgc3RhcnQg
-ZW1hY3MtWDExIHdpdGgNCj4+Pj4+IGN5Z3NlcnZlciBydW5uaW5nLCBJIGNh
-bid0IGZvcmsgYW55IHN1YnByb2Nlc3NlcyB3aXRoaW4gZW1hY3MuICBJIGdl
-dA0KPj4+Pj4NCj4+Pj4+IDAgW21haW5dIGVtYWNzIDI2ODkgZG9mb3JrOiBj
-aGlsZCAyNjkzIC0gZGllZCB3YWl0aW5nIGZvciBkbGwgbG9hZGluZywgZXJy
-bm8gMTENCj4+Pj4+DQo+Pj4+PiBCYWNrIHRvIHRoZSBkcmF3aW5nIGJvYXJk
-Li4uLiAgSSd2ZSBuZXZlciBsb29rZWQgYXQgdGhlIGN5Z3NlcnZlciBjb2Rl
-LCBidXQNCj4+Pj4+IG1heWJlIGl0IHdpbGwgdHVybiBvdXQgdG8gYmUgc29t
-ZXRoaW5nIGVhc3kuDQo+Pj4+DQo+Pj4+IEdvb2QgbmV3cyAoZm9yIG1lKTog
-VGhpcyBpc24ndCByZWxhdGVkIHRvIG15IHBpcGUgY29kZS4gIFRoZSBzYW1l
-IHByb2JsZW0gb2NjdXJzDQo+Pj4+IGlmIEkgYnVpbGQgdGhlIG1hc3RlciBi
-cmFuY2guICBJJ2xsIGJpc2VjdCB3aGVuIEkgZ2V0IGEgY2hhbmNlIChwcm9i
-YWJseQ0KPj4+PiB0b21vcnJvdykuICBJbiB0aGUgbWVhbnRpbWUsIGFsbCBJ
-IGNhbiBzYXkgaXMgdGhhdCBzdHJhY2Ugc2hvd3MgYQ0KPj4+PiBTVEFUVVNf
-QUNDRVNTX1ZJT0xBVElPTiBhdCBzaG0uY2M6MTI1Lg0KPj4+DQo+Pj4gQSBi
-aXNlY3Rpb24gc2hvd3MgdGhhdCB0aGUgcHJvYmxlbSBzdGFydHMgd2l0aCB0
-aGUgZm9sbG93aW5nIGNvbW1pdDoNCj4+DQo+PiBUaGFua3MgZm9yIGJpc2Vj
-dGluZyENCj4+DQo+Pj4gY29tbWl0IGYwM2VhOGUxYzU3YmQ1Y2VhODNmNmNk
-NDdmYTAyODcwYmRmZWIxYzUNCj4+PiBBdXRob3I6IE1pY2hhZWwgSGF1YmVu
-d2FsbG5lciA8bWljaGFlbC5oYXViZW53YWxsbmVyQHNzaS1zY2hhZWZlci5j
-b20+DQo+Pj4gRGF0ZTogICBUaHUgTWF5IDIgMTI6MTI6NDQgMjAxOSArMDIw
-MA0KPj4+DQo+Pj4gICAgICAgQ3lnd2luOiBmb3JrOiBSZW1lbWJlciBjaGls
-ZCBub3QgYmVmb3JlIHN1Y2Nlc3MuDQo+Pj4NCj4+PiAgICAgICBEbyBub3Qg
-cmVtZW1iZXIgdGhlIGNoaWxkIGJlZm9yZSBpdCB3YXMgc3VjY2Vzc2Z1bGx5
-IGluaXRpYWxpemVkLCBvciB3ZQ0KPj4+ICAgICAgIHdvdWxkIG5lZWQgbW9y
-ZSBzb3BoaXN0aWNhdGVkIGNsZWFudXAgb24gY2hpbGQgaW5pdGlhbGl6YXRp
-b24gZmFpbHVyZSwNCj4+PiAgICAgICBsaWtlIGNsZWFuaW5nIHVwIHRoZSBw
-cm9jZXNzIHRhYmxlIGFuZCBzdXBwcmVzc2luZyBTSUdDSElMRCBkZWxpdmVy
-eQ0KPj4+ICAgICAgIHdpdGggbXVsdGlwbGUgdGhyZWFkcyAoIndhaXRwcm9j
-IikgaW52b2x2ZWQuICBDb21wYXJlZCB0byB0aGF0LCB0aGUNCj4+PiAgICAg
-ICBwb3RlbnRpYWwgc2xvd2Rvd24gZHVlIHRvIGFuIGV4dHJhIHlpZWxkICgp
-IGNhbGwgc2hvdWxkIGJlIG5lZ2xpZ2libGUuDQo+Pg0KPj4gUGxlYXNlIHJl
-dmVydCB0aGUgcGF0Y2ggZm9yIHRoZSB0aW1lIGJlaW5nLiAgTWljaGFlbCwg
-dGhpcyBuZWVkcyBzb21lDQo+PiBtb3JlIHdvcmssIGFwcGFyZW50bHkuDQo+
-IA0KPiBCZWNhdXNlIG9mIGh0dHBzOi8vY3lnd2luLmNvbS9tbC9jeWd3aW4v
-MjAxOS0wNi9tc2cwMDExMC5odG1sOg0KPiBJcyB0aGVyZSBzdGlsbCBzb21l
-IHByb2JsZW0gcmVsYXRlZCB0byB0aGF0IGNvbW1pdCBJIG5lZWQgdG8gZmln
-dXJlIG91dD8NCg0KWWVzLiAgVGhhdCB3YXMgYW4gdW5yZWxhdGVkIGlzc3Vl
-IEFGQUlLLg0KDQpLZW4NCg==
+This patch set implements the Linux syscalls sched_getaffinity,
+sched_setaffinity, pthread_getaffinity_np, and pthread_setaffinity_np.
+Linux has a straightforward view of the cpu sets used in affinity masks.
+They are simply long (1024-bit) bit masks.  This code emulates that view
+while internally dealing with Windows' distribution of available CPUs among
+processor groups.
+---
+ newlib/libc/include/sched.h            |  23 ++
+ winsup/cygwin/common.din               |   4 +
+ winsup/cygwin/include/cygwin/version.h |   4 +-
+ winsup/cygwin/include/pthread.h        |   2 +
+ winsup/cygwin/miscfuncs.cc             |  20 +-
+ winsup/cygwin/miscfuncs.h              |   1 +
+ winsup/cygwin/release/3.1.0            |   3 +
+ winsup/cygwin/sched.cc                 | 308 +++++++++++++++++++++++++
+ winsup/cygwin/thread.cc                |  19 ++
+ winsup/doc/new-features.xml            |   6 +
+ winsup/doc/posix.xml                   |   4 +
+ 11 files changed, 389 insertions(+), 5 deletions(-)
+
+diff --git a/newlib/libc/include/sched.h b/newlib/libc/include/sched.h
+index 1016235bb..fc44209d6 100644
+--- a/newlib/libc/include/sched.h
++++ b/newlib/libc/include/sched.h
+@@ -92,6 +92,29 @@ int sched_yield( void );
+ 
+ #if __GNU_VISIBLE
+ int sched_getcpu(void);
++
++/* Affinity-related definitions, here until numerous enough to separate out */
++#ifdef __x86_64__
++typedef uint64_t __cpu_mask;
++#else
++typedef uint32_t __cpu_mask;
++#endif
++#define __CPU_SETSIZE 1024  // maximum number of logical processors tracked
++#define __NCPUBITS (8 * sizeof (__cpu_mask))  // max size of processor group
++#define __CPU_GROUPMAX (__CPU_SETSIZE / __NCPUBITS)  // maximum group number
++
++#define __CPUELT(cpu)	((cpu) / __NCPUBITS)
++#define __CPUMASK(cpu)	((__cpu_mask) 1 << ((cpu) % __NCPUBITS))
++
++typedef struct
++{
++  __cpu_mask __bits[__CPU_GROUPMAX];
++} cpu_set_t;
++
++int sched_getaffinity (pid_t, size_t, cpu_set_t *);
++int sched_get_thread_affinity (void *, size_t, cpu_set_t *);
++int sched_setaffinity (pid_t, size_t, const cpu_set_t *);
++int sched_set_thread_affinity (void *, size_t, const cpu_set_t *);
+ #endif
+ 
+ #ifdef __cplusplus
+diff --git a/winsup/cygwin/common.din b/winsup/cygwin/common.din
+index 68b95d470..81292ab7b 100644
+--- a/winsup/cygwin/common.din
++++ b/winsup/cygwin/common.din
+@@ -1084,6 +1084,7 @@ pthread_create SIGFE
+ pthread_detach SIGFE
+ pthread_equal SIGFE
+ pthread_exit SIGFE
++pthread_getaffinity_np SIGFE
+ pthread_getattr_np SIGFE
+ pthread_getconcurrency SIGFE
+ pthread_getcpuclockid SIGFE
+@@ -1128,6 +1129,7 @@ pthread_rwlockattr_getpshared SIGFE
+ pthread_rwlockattr_init SIGFE
+ pthread_rwlockattr_setpshared SIGFE
+ pthread_self SIGFE
++pthread_setaffinity_np SIGFE
+ pthread_setcancelstate SIGFE
+ pthread_setcanceltype SIGFE
+ pthread_setconcurrency SIGFE
+@@ -1248,10 +1250,12 @@ scandirat SIGFE
+ scanf SIGFE
+ sched_get_priority_max SIGFE
+ sched_get_priority_min SIGFE
++sched_getaffinity SIGFE
+ sched_getcpu SIGFE
+ sched_getparam SIGFE
+ sched_getscheduler NOSIGFE
+ sched_rr_get_interval SIGFE
++sched_setaffinity SIGFE
+ sched_setparam SIGFE
+ sched_setscheduler SIGFE
+ sched_yield SIGFE
+diff --git a/winsup/cygwin/include/cygwin/version.h b/winsup/cygwin/include/cygwin/version.h
+index bb4ffe771..b70b9e281 100644
+--- a/winsup/cygwin/include/cygwin/version.h
++++ b/winsup/cygwin/include/cygwin/version.h
+@@ -509,12 +509,14 @@ details. */
+   336: New Cygwin PID algorithm (yeah, not really an API change)
+   337: MOUNT_BINARY -> MOUNT_TEXT
+   338: Export secure_getenv.
++  339: Export sched_getaffinity, sched_setaffinity, pthread_getaffinity_np,
++       pthread_setaffinity_np.
+ 
+   Note that we forgot to bump the api for ualarm, strtoll, strtoull,
+   sigaltstack, sethostname. */
+ 
+ #define CYGWIN_VERSION_API_MAJOR 0
+-#define CYGWIN_VERSION_API_MINOR 338
++#define CYGWIN_VERSION_API_MINOR 339
+ 
+ /* There is also a compatibity version number associated with the shared memory
+    regions.  It is incremented when incompatible changes are made to the shared
+diff --git a/winsup/cygwin/include/pthread.h b/winsup/cygwin/include/pthread.h
+index 2ccf1cf8b..4ef3aeab7 100644
+--- a/winsup/cygwin/include/pthread.h
++++ b/winsup/cygwin/include/pthread.h
+@@ -226,8 +226,10 @@ void pthread_testcancel (void);
+ /* Non posix calls */
+ 
+ #if __GNU_VISIBLE
++int pthread_getaffinity_np (pthread_t, size_t, cpu_set_t *);
+ int pthread_getattr_np (pthread_t, pthread_attr_t *);
+ int pthread_getname_np (pthread_t, char *, size_t) __attribute__((__nonnull__(2)));
++int pthread_setaffinity_np (pthread_t, size_t, const cpu_set_t *);
+ int pthread_setname_np (pthread_t, const char *) __attribute__((__nonnull__(2)));
+ int pthread_sigqueue (pthread_t *, int, const union sigval);
+ int pthread_timedjoin_np (pthread_t, void **, const struct timespec *);
+diff --git a/winsup/cygwin/miscfuncs.cc b/winsup/cygwin/miscfuncs.cc
+index b5dfffc7d..e02bc9c1f 100644
+--- a/winsup/cygwin/miscfuncs.cc
++++ b/winsup/cygwin/miscfuncs.cc
+@@ -963,17 +963,19 @@ SetThreadName(DWORD dwThreadID, const char* threadName)
+ 
+ #define add_size(p,s) ((p) = ((__typeof__(p))((PBYTE)(p)+(s))))
+ 
++static WORD num_cpu_per_group = 0;
++static WORD group_count = 0;
++
+ WORD
+ __get_cpus_per_group (void)
+ {
+-  static WORD num_cpu_per_group = 0;
+-
+   tmp_pathbuf tp;
+ 
+   if (num_cpu_per_group)
+     return num_cpu_per_group;
+ 
+   num_cpu_per_group = 64;
++  group_count = 1;
+ 
+   PSYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX lpi =
+             (PSYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX) tp.c_get ();
+@@ -1005,10 +1007,20 @@ __get_cpus_per_group (void)
+ 	   actually available CPUs.  The ActiveProcessorCount is correct
+ 	   though.  So we just use ActiveProcessorCount for now, hoping for
+ 	   the best. */
+-        num_cpu_per_group
+-                = plpi->Group.GroupInfo[0].ActiveProcessorCount;
++        num_cpu_per_group = plpi->Group.GroupInfo[0].ActiveProcessorCount;
++
++	/* Follow that lead to get the group count. */
++	group_count = plpi->Group.ActiveGroupCount;
+         break;
+       }
+ 
+   return num_cpu_per_group;
+ }
++
++WORD
++__get_group_count (void)
++{
++  if (group_count == 0)
++    (void) __get_cpus_per_group (); // caller should have called this first
++  return group_count;
++}
+diff --git a/winsup/cygwin/miscfuncs.h b/winsup/cygwin/miscfuncs.h
+index b983e6d81..d1e519fa6 100644
+--- a/winsup/cygwin/miscfuncs.h
++++ b/winsup/cygwin/miscfuncs.h
+@@ -120,5 +120,6 @@ extern "C" HANDLE WINAPI CygwinCreateThread (LPTHREAD_START_ROUTINE thread_func,
+ void SetThreadName (DWORD dwThreadID, const char* threadName);
+ 
+ WORD __get_cpus_per_group (void);
++WORD __get_group_count (void);
+ 
+ #endif /*_MISCFUNCS_H*/
+diff --git a/winsup/cygwin/release/3.1.0 b/winsup/cygwin/release/3.1.0
+index bdbbf092d..a2bdc8f3c 100644
+--- a/winsup/cygwin/release/3.1.0
++++ b/winsup/cygwin/release/3.1.0
+@@ -5,6 +5,9 @@ What's new:
+   1703 or later.  Add fake 24 bit color support for legacy console,
+   which uses the nearest color from 16 system colors.
+ 
++- New APIs: sched_getaffinity, sched_setaffinity, pthread_getaffinity_np,
++  pthread_setaffinity_np.
++
+ 
+ What changed:
+ -------------
+diff --git a/winsup/cygwin/sched.cc b/winsup/cygwin/sched.cc
+index 10168e641..a0a2d6250 100644
+--- a/winsup/cygwin/sched.cc
++++ b/winsup/cygwin/sched.cc
+@@ -424,4 +424,312 @@ sched_getcpu ()
+   return pnum.Group * __get_cpus_per_group () + pnum.Number;
+ }
+ 
++/* construct an affinity mask with just the 'count' lower-order bits set */
++static __cpu_mask
++groupmask (int count)
++{
++  if (count >= (int) (NBBY * sizeof (__cpu_mask)))
++    return ~(__cpu_mask) 0;
++  else
++    return ((__cpu_mask) 1 << count) - 1;
++}
++
++/* return the affinity mask of the indicated group from the given cpu set */
++static __cpu_mask
++getgroup (size_t sizeof_set, const cpu_set_t *set, int groupnum)
++{
++  int groupsize = __get_cpus_per_group ();
++  int bitindex = groupnum * groupsize;
++
++  int setsize = NBBY * sizeof_set; // bit size of whole cpu set
++  if (bitindex + groupsize > setsize)
++    return (__cpu_mask) 0;
++
++  int wordsize = NBBY * sizeof (cpu_set_t);
++  int wordindex = bitindex / wordsize;
++
++  __cpu_mask result = set->__bits[wordindex];
++  int offset = bitindex % wordsize;
++  if (offset)
++    {
++      result >>= offset;
++      offset = wordsize - offset;
++    }
++  else
++    offset = wordsize;
++
++  if (offset < groupsize)
++    result |= (set->__bits[wordindex + 1] << offset);
++  if (groupsize < wordsize)
++    result &= groupmask (groupsize);
++
++  return result;
++}
++
++/* set the given affinity mask for indicated group within the given cpu set */
++static __cpu_mask
++setgroup (size_t sizeof_set, cpu_set_t *set, int groupnum, __cpu_mask aff)
++{
++  int groupsize = __get_cpus_per_group ();
++  int bitindex = groupnum * groupsize;
++
++  int setsize = NBBY * sizeof_set; // bit size of whole cpu set
++  if (bitindex + groupsize > setsize)
++    return (__cpu_mask) 0;
++
++  int wordsize = NBBY * sizeof (cpu_set_t);
++  int wordindex = bitindex / wordsize;
++  int offset = bitindex % wordsize;
++  __cpu_mask mask = groupmask (groupsize);
++  aff &= mask;
++
++  set->__bits[wordindex] &= ~(mask << offset);
++  set->__bits[wordindex] |= aff << offset;
++
++  if ((bitindex + groupsize - 1) / wordsize != wordindex)
++    {
++      offset = wordsize - offset;
++      set->__bits[wordindex + 1] &= ~(mask >> offset);
++      set->__bits[wordindex + 1] |= aff >> offset;
++    }
++
++  return aff;
++}
++
++/* figure out which processor group the set bits indicate; can only be one */
++static int
++whichgroup (size_t sizeof_set, const cpu_set_t *set)
++{
++  int res = -1;
++  int maxgroup = min (__get_group_count (),
++                      (NBBY * sizeof_set) / __get_cpus_per_group ());
++
++  for (int i = 0; i < maxgroup; ++i)
++    if (getgroup (sizeof_set, set, i))
++      {
++	if (res >= 0)
++	  return -1; // error return if more than one group indicated
++	else
++	  res = i; // remember first group found
++      }
++
++  return res;
++}
++
++int
++sched_get_thread_affinity (HANDLE thread, size_t sizeof_set, cpu_set_t *set)
++{
++  int status = 0;
++
++  if (thread)
++    {
++      memset (set, 0, sizeof_set);
++      if (wincap.has_processor_groups () && __get_group_count () > 1)
++	{
++	  GROUP_AFFINITY ga;
++
++	  if (!GetThreadGroupAffinity (thread, &ga))
++	    {
++	      status = geterrno_from_win_error (GetLastError (), EPERM);
++	      goto done;
++	    }
++	  setgroup (sizeof_set, set, ga.Group, ga.Mask);
++	}
++      else
++	{
++	  THREAD_BASIC_INFORMATION tbi;
++
++	  status = NtQueryInformationThread (thread, ThreadBasicInformation,
++					     &tbi, sizeof (tbi), NULL);
++	  if (NT_SUCCESS (status))
++	    setgroup (sizeof_set, set, 0, tbi.AffinityMask);
++	  else
++	    status = geterrno_from_nt_status (status);
++	}
++    }
++  else
++    status = ESRCH;
++
++done:
++  return status;
++}
++
++int
++sched_getaffinity (pid_t pid, size_t sizeof_set, cpu_set_t *set)
++{
++  HANDLE process = 0;
++  int status = 0;
++
++  pinfo p (pid ? pid : getpid ());
++  if (p)
++    {
++      process = pid && pid != myself->pid ?
++                OpenProcess (PROCESS_QUERY_LIMITED_INFORMATION, FALSE,
++                             p->dwProcessId) : GetCurrentProcess ();
++      KAFFINITY procmask;
++      KAFFINITY sysmask;
++
++      if (!GetProcessAffinityMask (process, &procmask, &sysmask))
++        {
++          status = geterrno_from_win_error (GetLastError (), EPERM);
++          goto done;
++        }
++      memset (set, 0, sizeof_set);
++      if (wincap.has_processor_groups () && __get_group_count () > 1)
++        {
++          USHORT groupcount = __CPU_GROUPMAX;
++          USHORT grouparray[__CPU_GROUPMAX];
++
++          if (!GetProcessGroupAffinity (process, &groupcount, grouparray))
++            {
++	      status = geterrno_from_win_error (GetLastError (), EPERM);
++	      goto done;
++	    }
++
++	  KAFFINITY miscmask = groupmask (__get_cpus_per_group ());
++	  for (int i = 0; i < groupcount; i++)
++	    setgroup (sizeof_set, set, grouparray[i], miscmask);
++        }
++      else
++        setgroup (sizeof_set, set, 0, procmask);
++    }
++  else
++    status = ESRCH;
++
++done:
++  if (process && process != GetCurrentProcess ())
++    CloseHandle (process);
++
++  if (status)
++    {
++      set_errno (status);
++      status = -1;
++    }
++  else
++    {
++      /* Emulate documented Linux kernel behavior on successful return */
++      status = wincap.cpu_count ();
++    }
++  return status;
++}
++
++int
++sched_set_thread_affinity (HANDLE thread, size_t sizeof_set, const cpu_set_t *set)
++{
++  int group = whichgroup (sizeof_set, set);
++  int status = 0;
++
++  if (thread)
++    {
++      if (wincap.has_processor_groups () && __get_group_count () > 1)
++	{
++	  GROUP_AFFINITY ga;
++
++	  if (group < 0)
++	    {
++	      status = EINVAL;
++	      goto done;
++	    }
++	  memset (&ga, 0, sizeof (ga));
++	  ga.Mask = getgroup (sizeof_set, set, group);
++	  ga.Group = group;
++	  if (!SetThreadGroupAffinity (thread, &ga, NULL))
++	    {
++	      status = geterrno_from_win_error (GetLastError (), EPERM);
++	      goto done;
++	    }
++	}
++      else
++	{
++	  if (group != 0)
++	    {
++	      status = EINVAL;
++	      goto done;
++	    }
++	  if (!SetThreadAffinityMask (thread, getgroup (sizeof_set, set, 0)))
++	    {
++	      status = geterrno_from_win_error (GetLastError (), EPERM);
++	      goto done;
++	    }
++	}
++    }
++  else
++    status = ESRCH;
++
++done:
++  return status;
++}
++
++int
++sched_setaffinity (pid_t pid, size_t sizeof_set, const cpu_set_t *set)
++{
++  int group = whichgroup (sizeof_set, set);
++  HANDLE process = 0;
++  int status = 0;
++
++  pinfo p (pid ? pid : getpid ());
++  if (p)
++    {
++      process = pid && pid != myself->pid ?
++		OpenProcess (PROCESS_SET_INFORMATION, FALSE,
++			     p->dwProcessId) : GetCurrentProcess ();
++      if (wincap.has_processor_groups () && __get_group_count () > 1)
++	{
++	  USHORT groupcount = __CPU_GROUPMAX;
++	  USHORT grouparray[__CPU_GROUPMAX];
++
++	  if (!GetProcessGroupAffinity (process, &groupcount, grouparray))
++	    {
++	      status = geterrno_from_win_error (GetLastError (), EPERM);
++	      goto done;
++	    }
++	  if (group < 0)
++	    {
++	      status = EINVAL;
++	      goto done;
++	    }
++	  if (groupcount == 1 && grouparray[0] == group)
++	    {
++	      if (!SetProcessAffinityMask (process, getgroup (sizeof_set, set, group)))
++		status = geterrno_from_win_error (GetLastError (), EPERM);
++	      goto done;
++	    }
++
++	  /* If we get here, the user is trying to add the process to another
++             group or move it from current group to another group.  These ops
++             are not allowed by Windows.  One has to move one or more of the
++             process' threads to the new group(s) one by one.  Here, we bail.
++          */
++	  status = EINVAL;
++	  goto done;
++	}
++      else
++	{
++	  if (group != 0)
++	    {
++	      status = EINVAL;
++	      goto done;
++	    }
++	  if (!SetProcessAffinityMask (process, getgroup (sizeof_set, set, 0)))
++	    {
++	      status = geterrno_from_win_error (GetLastError (), EPERM);
++	      goto done;
++	    }
++	}
++    }
++  else
++    status = ESRCH;
++
++done:
++  if (process && process != GetCurrentProcess ())
++    CloseHandle (process);
++
++  if (status)
++    {
++      set_errno (status);
++      status = -1;
++    }
++  return status;
++}
++
+ } /* extern C */
+diff --git a/winsup/cygwin/thread.cc b/winsup/cygwin/thread.cc
+index f353dd497..43a6c88b3 100644
+--- a/winsup/cygwin/thread.cc
++++ b/winsup/cygwin/thread.cc
+@@ -23,6 +23,7 @@ details. */
+ #include "winsup.h"
+ #include "miscfuncs.h"
+ #include "path.h"
++#include <sched.h>
+ #include <stdlib.h>
+ #include "sigproc.h"
+ #include "fhandler.h"
+@@ -2606,6 +2607,24 @@ pthread_timedjoin_np (pthread_t thread, void **return_val,
+   return pthread::join (&thread, (void **) return_val, &timeout);
+ }
+ 
++extern "C" int
++pthread_getaffinity_np (pthread_t thread, size_t sizeof_set, cpu_set_t *set)
++{
++  if (!pthread::is_good_object (&thread))
++    return ESRCH;
++
++  return sched_get_thread_affinity (thread->win32_obj_id, sizeof_set, set);
++}
++
++extern "C" int
++pthread_setaffinity_np (pthread_t thread, size_t sizeof_set, const cpu_set_t *set)
++{
++  if (!pthread::is_good_object (&thread))
++    return ESRCH;
++
++  return sched_set_thread_affinity (thread->win32_obj_id, sizeof_set, set);
++}
++
+ extern "C" int
+ pthread_getattr_np (pthread_t thread, pthread_attr_t *attr)
+ {
+diff --git a/winsup/doc/new-features.xml b/winsup/doc/new-features.xml
+index 49aa5da74..43ca11fef 100644
+--- a/winsup/doc/new-features.xml
++++ b/winsup/doc/new-features.xml
+@@ -29,6 +29,12 @@ If a SA_SIGINFO signal handler changes the ucontext_t pointed to by the
+ third parameter, follow it after returning from the handler.
+ </para></listitem>
+ 
++<listitem><para>
++Support for getting and setting process and thread affinities.  New APIs:
++sched_getaffinity, sched_setaffinity, pthread_getaffinity_np,
++pthread_setaffinity_np.
++</para></listitem>
++
+ </itemizedlist>
+ 
+ </sect2>
+diff --git a/winsup/doc/posix.xml b/winsup/doc/posix.xml
+index d49cf5591..8e88245ac 100644
+--- a/winsup/doc/posix.xml
++++ b/winsup/doc/posix.xml
+@@ -1359,8 +1359,10 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
+     pow10f
+     pow10l
+     ppoll
++    pthread_getaffinity_np
+     pthread_getattr_np
+     pthread_getname_np
++    pthread_setaffinity_np
+     pthread_setname_np
+     pthread_sigqueue
+     pthread_timedjoin_np
+@@ -1374,7 +1376,9 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
+     rawmemchr
+     removexattr
+     scandirat
++    sched_getaffinity
+     sched_getcpu
++    sched_setaffinity
+     secure_getenv
+     setxattr
+     signalfd
+-- 
+2.21.0
