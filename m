@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9453-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 10630 invoked by alias); 24 Jun 2019 07:23:48 -0000
+Return-Path: <cygwin-patches-return-9454-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 20348 invoked by alias); 24 Jun 2019 20:19:25 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,88 +9,51 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 10621 invoked by uid 89); 24 Jun 2019 07:23:47 -0000
+Received: (qmail 20338 invoked by uid 89); 24 Jun 2019 20:19:25 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-107.4 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*F:U*corinna-cygwin, H*F:D*cygwin.com
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (217.72.192.74) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 24 Jun 2019 07:23:46 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id 1MGR3r-1hnEMf04wX-00Gptu for <cygwin-patches@cygwin.com>; Mon, 24 Jun 2019 09:23:44 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 8750EA8073B; Mon, 24 Jun 2019 09:23:43 +0200 (CEST)
-Date: Mon, 24 Jun 2019 07:23:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v3] Cygwin: Implement sched_[gs]etaffinity()
-Message-ID: <20190624072343.GA5738@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20190623215106.4847-1-mark@maxrnd.com>
+X-Spam-SWARE-Status: No, score=-20.3 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=timer, HX-Languages-Length:932
+X-HELO: NAM01-SN1-obe.outbound.protection.outlook.com
+Received: from mail-eopbgr820124.outbound.protection.outlook.com (HELO NAM01-SN1-obe.outbound.protection.outlook.com) (40.107.82.124) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 24 Jun 2019 20:19:23 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=xWL5C6sy14FRy1R+03gGDjVUAxA0e1VpYDqY9zL567s=; b=DoPDIdimDwwjkCD/Nec1sKs+oV31UOuc1SACoMzIVK7QONRaLlPLCrJC3klRxV8V8/cA0aQyKqhv+Mg5dbDLrKbHvfiQA5Vpe0hNYMj3jVjSza1mt1hfh8JOFNUc2CQWper48MVTdtvBa47Ndfw9JLp6UlY06VXh9oLF7cghsAw=
+Received: from CY1PR04MB2300.namprd04.prod.outlook.com (10.167.10.148) by CY1PR04MB2139.namprd04.prod.outlook.com (10.167.8.155) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2008.16; Mon, 24 Jun 2019 20:19:21 +0000
+Received: from CY1PR04MB2300.namprd04.prod.outlook.com ([fe80::e43c:48bc:36fd:1f40]) by CY1PR04MB2300.namprd04.prod.outlook.com ([fe80::e43c:48bc:36fd:1f40%3]) with mapi id 15.20.2008.014; Mon, 24 Jun 2019 20:19:21 +0000
+From: Ken Brown <kbrown@cornell.edu>
+To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: [PATCH] Cygwin: timerfd: avoid a deadlock
+Date: Mon, 24 Jun 2019 20:19:00 -0000
+Message-ID: <20190624201852.26148-1-kbrown@cornell.edu>
+authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
+x-ms-exchange-purlcount: 1
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="BXVAT5kNtrzKuDFl"
-Content-Disposition: inline
-In-Reply-To: <20190623215106.4847-1-mark@maxrnd.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-SW-Source: 2019-q2/txt/msg00160.txt.bz2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ksb2@cornell.edu
+X-IsSubscribed: yes
+X-SW-Source: 2019-q2/txt/msg00161.txt.bz2
 
-
---BXVAT5kNtrzKuDFl
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1168
-
-Hi Mark,
-
-On Jun 23 14:51, Mark Geisert wrote:
-> This patch set implements the Linux syscalls sched_getaffinity,
-> sched_setaffinity, pthread_getaffinity_np, and pthread_setaffinity_np.
-> Linux has a straightforward view of the cpu sets used in affinity masks.
-> They are simply long (1024-bit) bit masks.  This code emulates that view
-> while internally dealing with Windows' distribution of available CPUs amo=
-ng
-> processor groups.
-> ---
->  newlib/libc/include/sched.h            |  23 ++
->  winsup/cygwin/common.din               |   4 +
->  winsup/cygwin/include/cygwin/version.h |   4 +-
->  winsup/cygwin/include/pthread.h        |   2 +
->  winsup/cygwin/miscfuncs.cc             |  20 +-
->  winsup/cygwin/miscfuncs.h              |   1 +
->  winsup/cygwin/release/3.1.0            |   3 +
->  winsup/cygwin/sched.cc                 | 308 +++++++++++++++++++++++++
->  winsup/cygwin/thread.cc                |  19 ++
->  winsup/doc/new-features.xml            |   6 +
->  winsup/doc/posix.xml                   |   4 +
->  11 files changed, 389 insertions(+), 5 deletions(-)
-
-This looks great!  I pushed it.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen
-Cygwin Maintainer
-
---BXVAT5kNtrzKuDFl
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl0Qen8ACgkQ9TYGna5E
-T6Bw3Q//U1++u5W/Q2pZofntXWjRNeN8GlsUHXb5a5eKC+AMPy7hg4ckazJYdsJG
-shi20xlQQTCwjhof0/zfeHKo7tHMuhKs2961mFEkKqHQaQymh3MaZjQmQMXdwGZS
-RBKST2KPqxKGEYyqKXp1fFPt3CNx/a0DgMXIJ2IgKuvmEB2IkJZzfnJ2RTA+mDdW
-rDQdWEcvCkMUG+oydodIsn3P6wy5l2+e9AIxhOH06ldYN5hCC12vrh6Nt6tcFhQ9
-/x1rz5tnabL4g/eiZyEAwAGbn3ERVtPSP5V2it4UriOvKy9NcBxVXkz6b+/6fXQu
-RtLeesHBicMTn9hWXxFTdRYwh/+V6PU/N6g+fvES+y5oXw6wYomQ2s5iS4OErzgV
-0XcH0JeXTrbjb8EmrcY9jD84W9L01ikARnDkNEJDfCiRJGa5meCg6sZY/b6xTu+w
-H5i0+zQECycsKGshhY2DbbcHAPYyMEAtKJT5l1HorJYkkuWUwjgelqKuSHBlv6Lo
-yK4Tnuu1EDGSNniLREm0roFdcc7A7gQA9OLJJ0rcw05MVjQRD5/W2Avdf/X8fDQZ
-MPLYNmclJVW7+CL5wWlbn9Syu3q6IGmiGULo+hiFdI8cuVCPig/NQsVUFvI8l2lJ
-ZVCgc8u6lziJlVfVL4onScm0zoXUw536Q65D3VdRxuY1Y0CQnQ0=
-=mRKz
------END PGP SIGNATURE-----
-
---BXVAT5kNtrzKuDFl--
+SWYgYSB0aW1lciBleHBpcmVzIHdoaWxlIHRoZSB0aW1lcmZkIHRocmVhZCBp
+cyBpbiBpdHMgaW5uZXIgbG9vcCwNCmNoZWNrIGZvciB0aGUgdGhyZWFkIGNh
+bmNlbGxhdGlvbiBldmVudCBiZWZvcmUgdHJ5aW5nIHRvIGVudGVyDQphX2Ny
+aXRpY2FsX3NlY3Rpb24uICBJdCdzIHBvc3NpYmxlIHRoYXQgdGltZXJmZF90
+cmFja2VyOjpkdG9yIGhhcw0KZW50ZXJlZCBpdHMgY3JpdGljYWwgc2VjdGlv
+biBhbmQgaXMgdHJ5aW5nIHRvIGNhbmNlbCB0aGUgdGhyZWFkLiAgU2VlDQpo
+dHRwOi8vd3d3LmN5Z3dpbi5vcmcvbWwvY3lnd2luLzIwMTktMDYvbXNnMDAw
+OTYuaHRtbC4NCi0tLQ0KIHdpbnN1cC9jeWd3aW4vdGltZXJmZC5jYyB8IDUg
+KysrKysNCiAxIGZpbGUgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspDQoNCmRp
+ZmYgLS1naXQgYS93aW5zdXAvY3lnd2luL3RpbWVyZmQuY2MgYi93aW5zdXAv
+Y3lnd2luL3RpbWVyZmQuY2MNCmluZGV4IDhlNGM5NGU2Ni4uZTgyNjFlZjJl
+IDEwMDY0NA0KLS0tIGEvd2luc3VwL2N5Z3dpbi90aW1lcmZkLmNjDQorKysg
+Yi93aW5zdXAvY3lnd2luL3RpbWVyZmQuY2MNCkBAIC0xMzcsNiArMTM3LDEx
+IEBAIHRpbWVyZmRfdHJhY2tlcjo6dGhyZWFkX2Z1bmMgKCkNCiAJICAgICAg
+Y29udGludWU7DQogCSAgICB9DQogDQorCSAgLyogQXZvaWQgYSBkZWFkbG9j
+ayBpZiBkdG9yIGhhcyBqdXN0IGVudGVyZWQgaXRzIGNyaXRpY2FsDQorCSAg
+ICAgc2VjdGlvbiBhbmQgaXMgdHJ5aW5nIHRvIGNhbmNlbCB0aGUgdGhyZWFk
+LiAqLw0KKwkgIGlmIChJc0V2ZW50U2lnbmFsbGVkIChjYW5jZWxfZXZ0KSkN
+CisJICAgIGdvdG8gY2FuY2VsZWQ7DQorDQogCSAgaWYgKCFlbnRlcl9jcml0
+aWNhbF9zZWN0aW9uICgpKQ0KIAkgICAgY29udGludWU7DQogCSAgLyogTWFr
+ZSBzdXJlIHdlIGhhdmVuJ3QgYmVlbiBhYmFuZG9uZWQgYW5kL29yIGRpc2Fy
+bWVkDQotLSANCjIuMjEuMA0KDQo=
