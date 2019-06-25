@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9462-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 16602 invoked by alias); 25 Jun 2019 11:40:09 -0000
+Return-Path: <cygwin-patches-return-9463-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 67483 invoked by alias); 25 Jun 2019 13:25:00 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,135 +9,71 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 16292 invoked by uid 89); 25 Jun 2019 11:40:09 -0000
+Received: (qmail 67461 invoked by uid 89); 25 Jun 2019 13:24:58 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-116.3 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,KAM_SHORT,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*F:D*cygwin.com
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (217.72.192.73) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 25 Jun 2019 11:40:07 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id 1MsIbU-1iYNvb0NQY-00tkfK for <cygwin-patches@cygwin.com>; Tue, 25 Jun 2019 13:40:05 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 427AEA807D0; Tue, 25 Jun 2019 13:40:04 +0200 (CEST)
-Date: Tue, 25 Jun 2019 11:40:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: Fix return value of sched_getaffinity
-Message-ID: <20190625114004.GI5738@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20190625052523.1927-1-mark@maxrnd.com> <20190625073133.GE5738@calimero.vinschen.de> <2cf19e65-3248-b25a-7983-e73094482285@maxrnd.com>
+X-Spam-SWARE-Status: No, score=-20.3 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=
+X-HELO: NAM04-SN1-obe.outbound.protection.outlook.com
+Received: from mail-eopbgr700107.outbound.protection.outlook.com (HELO NAM04-SN1-obe.outbound.protection.outlook.com) (40.107.70.107) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 25 Jun 2019 13:24:56 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=testarcselector01; d=microsoft.com; cv=none; b=FihZCfem8Bnc23KOzc+xs7aJc246tkeB5lybzc6tratax1CiNkNfAsPYS5Ub/QKp+AV2A5QOWMWxdJPKWlo4JsIyKkyAM0w8g7p2VyKxXsf6nkJY9HWNodfE/m185Kf6QBXpcmiBMb9kabi+N9WLet9mQeNr8Vw7RhUeWTQSWpo=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; s=testarcselector01; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=p35NZfUhmfkwSlowDB5XhAzUKmVjTHd4vw38uGmtC/E=; b=iTjtFihJsJaLtaDGqfs9mA8/oCteEfT8HvKbgwknyeHLjPS72UDriaTpoYXqfhhaXarsayN8T7Q0Q2vd64L53rwxUSLR60XjG10T8TFlWE4WNr5siVLlZCXuj+FIEbsvBlAn3dvy+vzmLhXqPOBUF1cy7KCm/aCKXRUOg4VNoi8=
+ARC-Authentication-Results: i=1; test.office365.com 1;spf=none;dmarc=none;dkim=none;arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=p35NZfUhmfkwSlowDB5XhAzUKmVjTHd4vw38uGmtC/E=; b=PdH5AnLijFke0dUiIfPr2WBJnkCn+0x68hK6HpFdIGL0kR82i3c5Tdfr05JIOjW7x2UB8REtXWJPF10BGYwq8LBFsVup/ZmfeFyHvfBjiEet/y4GURN/2Qcz7uuj6V7+irkWHg0W9C+3/iZwI0g64FDKKetu9Dd8Pw5wFs38w/Q=
+Received: from CY1PR04MB2300.namprd04.prod.outlook.com (10.167.10.148) by CY1PR04MB2346.namprd04.prod.outlook.com (10.167.9.24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2008.16; Tue, 25 Jun 2019 13:24:52 +0000
+Received: from CY1PR04MB2300.namprd04.prod.outlook.com ([fe80::e43c:48bc:36fd:1f40]) by CY1PR04MB2300.namprd04.prod.outlook.com ([fe80::e43c:48bc:36fd:1f40%3]) with mapi id 15.20.2008.017; Tue, 25 Jun 2019 13:24:52 +0000
+From: Ken Brown <kbrown@cornell.edu>
+To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: Re: [PATCH] Cygwin: timerfd: avoid a deadlock
+Date: Tue, 25 Jun 2019 13:25:00 -0000
+Message-ID: <190a9c87-a3bd-aeff-37c3-da5a7fe32279@cornell.edu>
+References: <20190624201852.26148-1-kbrown@cornell.edu> <20190625074348.GF5738@calimero.vinschen.de>
+In-Reply-To: <20190625074348.GF5738@calimero.vinschen.de>
+user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101 Thunderbird/60.7.2
+authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
+x-ms-exchange-purlcount: 1
+x-ms-oob-tlc-oobclassifiers: OLM:5236;
+received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <515BAD7F5CE45149BF13E88C7CCA5877@namprd04.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="gdTfX7fkYsEEjebm"
-Content-Disposition: inline
-In-Reply-To: <2cf19e65-3248-b25a-7983-e73094482285@maxrnd.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-SW-Source: 2019-q2/txt/msg00169.txt.bz2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ksb2@cornell.edu
+X-IsSubscribed: yes
+X-SW-Source: 2019-q2/txt/msg00170.txt.bz2
 
-
---gdTfX7fkYsEEjebm
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 3055
-
-On Jun 25 01:17, Mark Geisert wrote:
-> Corinna Vinschen wrote:
-> > Hi Mark,
-> >=20
-> > On Jun 24 22:25, Mark Geisert wrote:
-> > > Return what the documentation says, instead of a misreading of it.
-> > > ---
-> > >   winsup/cygwin/sched.cc | 2 +-
-> > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > >=20
-> > > diff --git a/winsup/cygwin/sched.cc b/winsup/cygwin/sched.cc
-> > > index e7b44d319..8f24bf80d 100644
-> > > --- a/winsup/cygwin/sched.cc
-> > > +++ b/winsup/cygwin/sched.cc
-> > > @@ -608,7 +608,7 @@ done:
-> > >     else
-> > >       {
-> > >         /* Emulate documented Linux kernel behavior on successful ret=
-urn */
-> > > -      status =3D wincap.cpu_count ();
-> > > +      status =3D sizeof (cpu_set_t);
-> >=20
-> > Wait... what docs are you referring to?  The Linux man page in Fedora 29
-> > says
-> >=20
-> >   On success, sched_setaffinity() and sched_getaffinity() return  0.   =
-On
-> >   error, -1 is returned, and errno is set appropriately.
->=20
-> I've been using http://man7.org/linux/man-pages/man2/sched_setaffinity.2.=
-html
-> which has the text you quoted under the RETURN VALUE heading, but has the
-> following further down the page under the heading "C library/kernel
-> differences":
-> |        This manual page describes the glibc interface for the CPU affin=
-ity
-> |        calls.  The actual system call interface is slightly different, =
-with
-> |        the mask being typed as unsigned long *, reflecting the fact tha=
-t the
-> |        underlying implementation of CPU sets is a simple bit mask.
-> |
-> |        On success, the raw sched_getaffinity() system call returns the
-> |        number of bytes placed copied into the mask buffer; this will be=
- the
-> |        minimum of cpusetsize and the size (in bytes) of the cpumask_t d=
-ata
-> |        type that is used internally by the kernel to represent the CPU =
-set
-> |        bit mask.
->=20
-> I see now that that 2nd paragraph has actually been updated since I print=
-ed
-> it out in April so I'll need to update the patch yet again.
->=20
-> The taskset(1) utility in util-linux actually depends on the kernel return
-> value that glibc doesn't return.  On Cygwin there is only one "syscall"
-> interface so I have to have sched_getaffinity() return a nonzero value on
-> success like the Linux kernel does.
-
-That's very unfortunate.  Keep in mind that applications usually link
-against the C lib, so the expectation of developers is usually that the
-API follows the C lib definitions.  The kernel API should only be
-considered if there's no equivalent/documented C lib API.  And even
-then, the call is typically just a SYSCALL wrapper, something we don't
-support at all.
-
-The API of sched_getaffinity should definitely follow glibc.  If you
-need the kernel API as well, create another function like, say,
-__sched_getaffinity_raw() (leading underscores) and export this as well.
-You can simply add a cpp macro in your application to support this.
-Make sure to document the differences in the source, lest we forget.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen
-Cygwin Maintainer
-
---gdTfX7fkYsEEjebm
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl0SCBQACgkQ9TYGna5E
-T6Blyw/7ByFPtYKxyENKjpWL9vrT3tNB+dW8rCcQWybiQxyeqqn82gHs35/vkjrE
-jBy1kw+QMxaHsfC6oinwZftJ608b8jG8fpE7dEPqKd2sFFg0odx2GpiUXHlFZqKC
-+JQhepc2lr1VC960C62evk/9d1d0NTDn5ydOF7MNCO0XOeh9fIVQUsS9gxz4JOp6
-HyiXmtPHtMStNKQlHahqj443Zrzs6hLnKCgX+WdJzvQZDAPcsQA8LLWfeHPPTcze
-8GTWq6xZSy6eE8muPTrxaPqAF0wTTi5y6bNE7wIdfl/dwOeO47BASXVX02ufvjAC
-4cgJm5f0ihgq1vzwTf/iDsYgDe1gZwAWlQOBraHgQVmMd5hGZ/+/9lsTF1GtgUxp
-5oxhX3IPARNvxkzbL4x4lbrZ91miI7PNErA8r1pUWAHYFW0dRXtcw9Sy+4OVzBc/
-7O9VX6AOSq6YmjJSPyP1tcdyE1A4H4GoYBoAxX4Pmu4gusHV16AI15LDKV5qCZqy
-kmDDq8oGSx98sUSFYOOKQhswfI2bGP7M9zcdUbw61zVq1RX6TWzCK/SnZavhynra
-/5q8r3qEK8J1fXPGpH2qo4cX66INa1k/8KI1PsgFZ94ALr8vpLnQt0buAd71EWWQ
-K6agRtsvsc63DmlARNozqbQ2TCI9YEN9xwW4RYm1auCtd9rnPBM=
-=2pUG
------END PGP SIGNATURE-----
-
---gdTfX7fkYsEEjebm--
+T24gNi8yNS8yMDE5IDM6NDMgQU0sIENvcmlubmEgVmluc2NoZW4gd3JvdGU6
+DQo+IEhpIEtlbiwNCj4gDQo+IE9uIEp1biAyNCAyMDoxOSwgS2VuIEJyb3du
+IHdyb3RlOg0KPj4gSWYgYSB0aW1lciBleHBpcmVzIHdoaWxlIHRoZSB0aW1l
+cmZkIHRocmVhZCBpcyBpbiBpdHMgaW5uZXIgbG9vcCwNCj4+IGNoZWNrIGZv
+ciB0aGUgdGhyZWFkIGNhbmNlbGxhdGlvbiBldmVudCBiZWZvcmUgdHJ5aW5n
+IHRvIGVudGVyDQo+PiBhX2NyaXRpY2FsX3NlY3Rpb24uICBJdCdzIHBvc3Np
+YmxlIHRoYXQgdGltZXJmZF90cmFja2VyOjpkdG9yIGhhcw0KPj4gZW50ZXJl
+ZCBpdHMgY3JpdGljYWwgc2VjdGlvbiBhbmQgaXMgdHJ5aW5nIHRvIGNhbmNl
+bCB0aGUgdGhyZWFkLiAgU2VlDQo+PiBodHRwOi8vd3d3LmN5Z3dpbi5vcmcv
+bWwvY3lnd2luLzIwMTktMDYvbXNnMDAwOTYuaHRtbC4NCj4+IC0tLQ0KPj4g
+ICB3aW5zdXAvY3lnd2luL3RpbWVyZmQuY2MgfCA1ICsrKysrDQo+PiAgIDEg
+ZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKykNCj4+DQo+PiBkaWZmIC0t
+Z2l0IGEvd2luc3VwL2N5Z3dpbi90aW1lcmZkLmNjIGIvd2luc3VwL2N5Z3dp
+bi90aW1lcmZkLmNjDQo+PiBpbmRleCA4ZTRjOTRlNjYuLmU4MjYxZWYyZSAx
+MDA2NDQNCj4+IC0tLSBhL3dpbnN1cC9jeWd3aW4vdGltZXJmZC5jYw0KPj4g
+KysrIGIvd2luc3VwL2N5Z3dpbi90aW1lcmZkLmNjDQo+PiBAQCAtMTM3LDYg
+KzEzNywxMSBAQCB0aW1lcmZkX3RyYWNrZXI6OnRocmVhZF9mdW5jICgpDQo+
+PiAgIAkgICAgICBjb250aW51ZTsNCj4+ICAgCSAgICB9DQo+PiAgIA0KPj4g
+KwkgIC8qIEF2b2lkIGEgZGVhZGxvY2sgaWYgZHRvciBoYXMganVzdCBlbnRl
+cmVkIGl0cyBjcml0aWNhbA0KPj4gKwkgICAgIHNlY3Rpb24gYW5kIGlzIHRy
+eWluZyB0byBjYW5jZWwgdGhlIHRocmVhZC4gKi8NCj4+ICsJICBpZiAoSXNF
+dmVudFNpZ25hbGxlZCAoY2FuY2VsX2V2dCkpDQo+PiArCSAgICBnb3RvIGNh
+bmNlbGVkOw0KPiANCj4gVGhpcyBsb29rcyBzdGlsbCByYWN5LCB3aGF0IGlm
+IGNhbmNlbF9ldnQgaXMgc2V0IGp1c3QgYmV0d2VlbiB0aGUNCj4gSXNFdmVu
+dFNpZ25hbGxlZCgpIGFuZCBlbnRlcl9jcml0aWNhbF9zZWN0aW9uKCkgY2Fs
+bHM/DQo+IA0KPiBIbW0uDQo+IA0KPiBXaGF0IGlmIHdlIHJlZGVmaW5lIGVu
+dGVyX2NyaXRpY2FsX3NlY3Rpb24oKSB0byByZXR1cm4gdGhyZWUNCj4gc3Rh
+dGVzLiAgSXQgY2FsbHMgV0ZNTyBvbiBjYW5jZWxfZXZ0IGFuZCBfYWNjZXNz
+X210eCwgaW4gdGhpcyBvcmRlciwNCj4gc28gdGhhdCBhIGNhbmNlbCBldmVu
+dCBpcyBob25vcmVkLiAgT3IgbWF5YmUgaW50cm9kdWNlIGFub3RoZXINCj4g
+ZnVuY3Rpb24gbGlrZSBlbnRlcl9jcml0aWNhbF9zZWN0aW9uX2NhbmNlbGFi
+bGUoKSB3aGljaCBpcyBvbmx5DQo+IGNhbGxlZCBpbiB0aGlzIHNpbmdsZSBp
+bnN0YW5jZSBpbiB0aW1lcmZkX3RyYWNrZXI6OnRocmVhZF9mdW5jPw0KDQpZ
+ZXMsIHRoYXQncyBtdWNoIGJldHRlci4gIEknbGwgc2VuZCB2MiBzaG9ydGx5
+LCBhZnRlciBzb21lIHRlc3RpbmcuDQoNCktlbg0K
