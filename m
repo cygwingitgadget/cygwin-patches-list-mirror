@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9457-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 46575 invoked by alias); 25 Jun 2019 07:31:37 -0000
+Return-Path: <cygwin-patches-return-9458-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 120303 invoked by alias); 25 Jun 2019 07:43:53 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,71 +9,70 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 46563 invoked by uid 89); 25 Jun 2019 07:31:37 -0000
+Received: (qmail 120294 invoked by uid 89); 25 Jun 2019 07:43:53 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-115.1 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*F:D*cygwin.com
+X-Spam-SWARE-Status: No, score=-115.5 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*F:D*cygwin.com, states
 X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.17.10) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 25 Jun 2019 07:31:36 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id 1MsI0K-1iZ0ZT39Rq-00tkhA for <cygwin-patches@cygwin.com>; Tue, 25 Jun 2019 09:31:33 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 23553A807B0; Tue, 25 Jun 2019 09:31:33 +0200 (CEST)
-Date: Tue, 25 Jun 2019 07:31:00 -0000
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.187) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 25 Jun 2019 07:43:51 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id 1MXGes-1i5USJ1M4s-00Ym1Y for <cygwin-patches@cygwin.com>; Tue, 25 Jun 2019 09:43:49 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id AD8F1A807B0; Tue, 25 Jun 2019 09:43:48 +0200 (CEST)
+Date: Tue, 25 Jun 2019 07:43:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: Fix return value of sched_getaffinity
-Message-ID: <20190625073133.GE5738@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: timerfd: avoid a deadlock
+Message-ID: <20190625074348.GF5738@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20190625052523.1927-1-mark@maxrnd.com>
+References: <20190624201852.26148-1-kbrown@cornell.edu>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="O3RTKUHj+75w1tg5"
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="u65IjBhB3TIa72Vp"
 Content-Disposition: inline
-In-Reply-To: <20190625052523.1927-1-mark@maxrnd.com>
+In-Reply-To: <20190624201852.26148-1-kbrown@cornell.edu>
 User-Agent: Mutt/1.11.3 (2019-02-01)
-X-SW-Source: 2019-q2/txt/msg00164.txt.bz2
+X-SW-Source: 2019-q2/txt/msg00165.txt.bz2
 
 
---O3RTKUHj+75w1tg5
+--u65IjBhB3TIa72Vp
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-length: 1146
+Content-length: 1413
 
-Hi Mark,
+Hi Ken,
 
-On Jun 24 22:25, Mark Geisert wrote:
-> Return what the documentation says, instead of a misreading of it.
+On Jun 24 20:19, Ken Brown wrote:
+> If a timer expires while the timerfd thread is in its inner loop,
+> check for the thread cancellation event before trying to enter
+> a_critical_section.  It's possible that timerfd_tracker::dtor has
+> entered its critical section and is trying to cancel the thread.  See
+> http://www.cygwin.org/ml/cygwin/2019-06/msg00096.html.
 > ---
->  winsup/cygwin/sched.cc | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  winsup/cygwin/timerfd.cc | 5 +++++
+>  1 file changed, 5 insertions(+)
 >=20
-> diff --git a/winsup/cygwin/sched.cc b/winsup/cygwin/sched.cc
-> index e7b44d319..8f24bf80d 100644
-> --- a/winsup/cygwin/sched.cc
-> +++ b/winsup/cygwin/sched.cc
-> @@ -608,7 +608,7 @@ done:
->    else
->      {
->        /* Emulate documented Linux kernel behavior on successful return */
-> -      status =3D wincap.cpu_count ();
-> +      status =3D sizeof (cpu_set_t);
+> diff --git a/winsup/cygwin/timerfd.cc b/winsup/cygwin/timerfd.cc
+> index 8e4c94e66..e8261ef2e 100644
+> --- a/winsup/cygwin/timerfd.cc
+> +++ b/winsup/cygwin/timerfd.cc
+> @@ -137,6 +137,11 @@ timerfd_tracker::thread_func ()
+>  	      continue;
+>  	    }
+>=20=20
+> +	  /* Avoid a deadlock if dtor has just entered its critical
+> +	     section and is trying to cancel the thread. */
+> +	  if (IsEventSignalled (cancel_evt))
+> +	    goto canceled;
 
-Wait... what docs are you referring to?  The Linux man page in Fedora 29
-says
+This looks still racy, what if cancel_evt is set just between the
+IsEventSignalled() and enter_critical_section() calls?
 
- On success, sched_setaffinity() and sched_getaffinity() return  0.   On
- error, -1 is returned, and errno is set appropriately.
+Hmm.
 
-Also, while at it, would you mind to rearrange the code a bit at this
-point?  I think it's a bit puzzeling that status indicates an error code
-as well as the non-errno return code from this function.  Kind of like
-this:
-
-  if (status)
-    {
-      set_errno (status)
-      return -1;
-    }
-  return 0;
+What if we redefine enter_critical_section() to return three
+states.  It calls WFMO on cancel_evt and _access_mtx, in this order,
+so that a cancel event is honored.  Or maybe introduce another
+function like enter_critical_section_cancelable() which is only
+called in this single instance in timerfd_tracker::thread_func?
 
 
 Thanks,
@@ -83,25 +82,25 @@ Corinna
 Corinna Vinschen
 Cygwin Maintainer
 
---O3RTKUHj+75w1tg5
+--u65IjBhB3TIa72Vp
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-length: 833
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl0RzdQACgkQ9TYGna5E
-T6A4Ug/+PPG5HMCFL/itEQ9SgP8l2mXKb9dZLEK4poEdoh7J8uXtX0k8T77KIs3l
-uKi3XsWtbND+Oax92jXnZkDy6YfXF7kKTXw0mrwfC4HwzE0UDJ9p+Ccoa+IlZIb2
-16fsSiYocp4DZeQgNdK1JV87qcr5heCcXpwWwCFdtGHj/YfSSbuv6mx9UoSWKzG8
-VfiI9I3FZeO/HdOgbaYJUHarnWnt6BsXhXjLBYIjk8g6GRKY4bzBKWywvSupVm0T
-muHymzhV5xpaazXOUaP21jFeTWFAxeAujwOWJpWFW5LDtXLpQZtTVv/CWJ/+fBTU
-Z0MPuE3lXfb8JVQ/YjqJnhtaX9Jrn5D29cPtpclUu827DDBvpZUxlfdH+X0GJecj
-i4kXwD4E7tDnSFw+itH+JMruW/XifXt4rGYV7+bxRjEA/TidDFdoc3na3KS94AtO
-CGLoh4Ww60WxirjmRe6COh9xD5hurN5GJzR4dD9FS3/nMGVSIPtauMuQFoQda8yw
-4DUrHtoUfW5nL3H/w2JEuA+dSeeY/QkeYr7KJoe1ePZGPHjOmW8XqdiUagkmrby9
-vxY0aCnfc3b63B0HUcTMtAyn668383g7u+hJhIbXag2bCzbHgWCJ3jHtWNNLYM60
-2l42y1Fha7ojY3YZT3YFWJedxt/8+1tUlwtU/nyXuPEXaOSPQsU=
-=tY6P
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl0R0LQACgkQ9TYGna5E
+T6CnWRAAh00d9WeD5bMv+a2iVriruxwoBXlcGj9lH635IYBONjecx3vbgIXSF4R4
+srg6YNRmA/B8cwQPBSEh5zSestd8cKpT/Q0X2cDl83O1XWU7gopisMb/0WSFDj8v
+BzAmcY+dMU/A2zp075RdaxSUU7TSYOhiS+cH/RF/blLvq/wlteEYfK54u8pPoC4r
+fAPxZH1RkJXVSDTvum7/Y0Zbr3SylIrKo93WjHqPTgm2Bz3UZVzKUJRVTDAMG1BL
+1tTDMhxe7qJ6NtyqSCHALR/zSNj3MLoJYEUII4GWL5OWxLGNVt0Es66g30L09oqZ
+dm05f6DVT2X84dXIxZLM9j+Ukf67f2StmxR5E6qr90JfukOxk55X5zDDcir5QHbK
+e5cHakU6JwG4pgC1jjHVddClCXZ5j6Fk1VpwyOo1tk9su6yNzhNFWgAxcenaPpES
+1is6llIsukBK094Is3FLObsRq0aDL/gkUyGScoqJk/oxaqE8tsefYXhBdmQOmRmM
+NU3c32FcQYFYpAUBe8CZFPs3SYc4zyqng/iWSgXDy2AJuK5AF1/k/mWKZ2aG0kUC
+oqHvb0HKEtFz69zCX4v+6N9AUIbw/zy/I86RLGVwt7Bv7gQ0mmAOPxh2PtTveEjB
+0OxQiJ2JA9YjU5wGwLRtXFiZUBLoVHgWAPq7ZzFJ4oZ+YnifOd8=
+=KYxU
 -----END PGP SIGNATURE-----
 
---O3RTKUHj+75w1tg5--
+--u65IjBhB3TIa72Vp--
