@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9460-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 108766 invoked by alias); 25 Jun 2019 08:17:25 -0000
+Return-Path: <cygwin-patches-return-9461-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 122857 invoked by alias); 25 Jun 2019 11:27:09 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,88 +9,104 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 108643 invoked by uid 89); 25 Jun 2019 08:17:25 -0000
+Received: (qmail 122847 invoked by uid 89); 25 Jun 2019 11:27:08 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-18.6 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,KAM_SHORT autolearn=ham version=3.3.1 spammy=H*u:6.1, H*UA:6.1
-X-HELO: m0.truegem.net
-Received: from m0.truegem.net (HELO m0.truegem.net) (69.55.228.47) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 25 Jun 2019 08:17:24 +0000
-Received: (from daemon@localhost)	by m0.truegem.net (8.12.11/8.12.11) id x5P8HMKg030043	for <cygwin-patches@cygwin.com>; Tue, 25 Jun 2019 01:17:22 -0700 (PDT)	(envelope-from mark@maxrnd.com)
-Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67), claiming to be "[192.168.1.100]" via SMTP by m0.truegem.net, id smtpdxtOw7v; Tue Jun 25 01:17:15 2019
-Subject: Re: [PATCH] Cygwin: Fix return value of sched_getaffinity
+X-Spam-SWARE-Status: No, score=-115.9 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=careful!, H*F:D*cygwin.com
+X-HELO: mout.kundenserver.de
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.135) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 25 Jun 2019 11:27:07 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id 1MysiI-1iRo9N2rKs-00vz5x for <cygwin-patches@cygwin.com>; Tue, 25 Jun 2019 13:27:03 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 0C6B6A8076E; Tue, 25 Jun 2019 13:27:03 +0200 (CEST)
+Date: Tue, 25 Jun 2019 11:27:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-References: <20190625052523.1927-1-mark@maxrnd.com> <20190625073133.GE5738@calimero.vinschen.de>
-From: Mark Geisert <mark@maxrnd.com>
-Message-ID: <2cf19e65-3248-b25a-7983-e73094482285@maxrnd.com>
-Date: Tue, 25 Jun 2019 08:17:00 -0000
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0 SeaMonkey/2.49.4
+Subject: Re: [PATCH] Cygwin: Build cygwin-console-helper with correct compiler
+Message-ID: <20190625112703.GH5738@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20190625075441.1209-1-mark@maxrnd.com>
 MIME-Version: 1.0
-In-Reply-To: <20190625073133.GE5738@calimero.vinschen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-IsSubscribed: yes
-X-SW-Source: 2019-q2/txt/msg00167.txt.bz2
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="dFWYt1i2NyOo1oI9"
+Content-Disposition: inline
+In-Reply-To: <20190625075441.1209-1-mark@maxrnd.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
+X-SW-Source: 2019-q2/txt/msg00168.txt.bz2
 
-Corinna Vinschen wrote:
-> Hi Mark,
-> 
-> On Jun 24 22:25, Mark Geisert wrote:
->> Return what the documentation says, instead of a misreading of it.
->> ---
->>   winsup/cygwin/sched.cc | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/winsup/cygwin/sched.cc b/winsup/cygwin/sched.cc
->> index e7b44d319..8f24bf80d 100644
->> --- a/winsup/cygwin/sched.cc
->> +++ b/winsup/cygwin/sched.cc
->> @@ -608,7 +608,7 @@ done:
->>     else
->>       {
->>         /* Emulate documented Linux kernel behavior on successful return */
->> -      status = wincap.cpu_count ();
->> +      status = sizeof (cpu_set_t);
-> 
-> Wait... what docs are you referring to?  The Linux man page in Fedora 29
-> says
-> 
->   On success, sched_setaffinity() and sched_getaffinity() return  0.   On
->   error, -1 is returned, and errno is set appropriately.
 
-I've been using http://man7.org/linux/man-pages/man2/sched_setaffinity.2.html
-which has the text you quoted under the RETURN VALUE heading, but has the 
-following further down the page under the heading "C library/kernel differences":
-|        This manual page describes the glibc interface for the CPU affinity
-|        calls.  The actual system call interface is slightly different, with
-|        the mask being typed as unsigned long *, reflecting the fact that the
-|        underlying implementation of CPU sets is a simple bit mask.
-|
-|        On success, the raw sched_getaffinity() system call returns the
-|        number of bytes placed copied into the mask buffer; this will be the
-|        minimum of cpusetsize and the size (in bytes) of the cpumask_t data
-|        type that is used internally by the kernel to represent the CPU set
-|        bit mask.
+--dFWYt1i2NyOo1oI9
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 1682
 
-I see now that that 2nd paragraph has actually been updated since I printed it 
-out in April so I'll need to update the patch yet again.
+On Jun 25 00:54, Mark Geisert wrote:
+> ---
+>  winsup/utils/Makefile.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/winsup/utils/Makefile.in b/winsup/utils/Makefile.in
+> index b64f457e7..cebf39572 100644
+> --- a/winsup/utils/Makefile.in
+> +++ b/winsup/utils/Makefile.in
+> @@ -64,7 +64,7 @@ MINGW_BINS :=3D ${addsuffix .exe,cygcheck cygwin-consol=
+e-helper ldh strace}
+>  # List all objects to be compiled in MinGW mode.  Any object not on this
+>  # list will will be compiled in Cygwin mode implicitly, so there is no
+>  # need for a CYGWIN_OBJS.
+> -MINGW_OBJS :=3D bloda.o cygcheck.o dump_setup.o ldh.o path.o strace.o
+> +MINGW_OBJS :=3D bloda.o cygcheck.o cygwin-console-helper.o dump_setup.o =
+ldh.o path.o strace.o
+>  MINGW_LDFLAGS:=3D-static
+>=20=20
+>  CYGCHECK_OBJS:=3Dcygcheck.o bloda.o path.o dump_setup.o
+> --=20
+> 2.21.0
 
-The taskset(1) utility in util-linux actually depends on the kernel return value 
-that glibc doesn't return.  On Cygwin there is only one "syscall" interface so I 
-have to have sched_getaffinity() return a nonzero value on success like the 
-Linux kernel does.
+Careful!  This leads to a warning when building on 64 bit:
 
-> Also, while at it, would you mind to rearrange the code a bit at this
-> point?  I think it's a bit puzzeling that status indicates an error code
-> as well as the non-errno return code from this function.  Kind of like
-> this:
-> 
->    if (status)
->      {
->        set_errno (status)
->        return -1;
->      }
->    return 0;
+  cygwin-console-helper.cc: In function 'int main(int, char**)':
+  cygwin-console-helper.cc:8:48: warning: cast to pointer from integer of d=
+ifferent size [-Wint-to-pointer-cast]
+   HANDLE h =3D (HANDLE) strtoul (argv[1], &end, 0);
+                                                ^
+  cygwin-console-helper.cc:10:41: warning: cast to pointer from integer of =
+different size [-Wint-to-pointer-cast]
+   h =3D (HANDLE) strtoul (argv[2], &end, 0);
+                                         ^
 
-Sure, no problem.  If you're OK with my rationale above I'll submit a revised 
-patch with this adjustment included.
+Note that strtoul returns an unsigned long.  Mingw compiles
+for native Windows, which is LLP64 rather than LP64:
 
-..mark
+  mingw:sizeof(long) =3D=3D 4
+  cygwin:sizeof(long) =3D=3D 8
+
+This needs fixing as well (use strtoull).
+
+
+Corinna
+
+--=20
+Corinna Vinschen
+Cygwin Maintainer
+
+--dFWYt1i2NyOo1oI9
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 833
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl0SBQYACgkQ9TYGna5E
+T6Av7Q/9HC+3HUYVoepPpdSxOicAJMR+0YUoXK4MHH3pCcPM2ixC3oZzQPs1Sgv3
+tThw8XFy7NrBccxE0G+2zJeeg7KmOxLTmab659dd9BmKVAvBrj0i+tNItjX0hKc4
+Mf0/3OOSR+SjXeW61fKLuH1+J0YjSxI4+mhMQY82hM6iHWLyktJkQWtPMzTtJK1X
+Gay7+Ag0dfKSvSHmnZT48mLSDKvQAP1wV/5sVIm4OdE4zlBHiaeAOtpq5AxZoDjx
+pTsR5zIjLaRsD0KuUMif0yv+YDhzhGLWvZAv2zekI9iiWUpO+A1uiyLkG6bj5EoZ
+PQHWAnabL9W7MPdAdAMxS3WpWy0ccJD5pkWMmM+9kSXqzrhMvB+sYu2s0riRKx76
+P7vMqQ2ehZ/JxDKqRPe4tYbEH+v1wP5f0zStOyvOyxTilIbTVBam0k+nGppg3fxY
+tAgKlnPVLCjokACWPM5g1RDY1g+HJgJrMR2b+Bg9axN8LNxs7iZTt3pE70bXceJN
+CCJUVZ7OQLmTO3AXB5q+/F7wooxuzbIFlWyW+rgV8Zecr2oULXmK4/v6wbnXQ95m
+C5+bHSsvNfyC8LMh20rSef8yUk48blp6zBzjIB4QFX04drd7hTHDAC/aMeB6+31z
+DW+uTZfyEvo1DHHM7isko3mb6Mc4AAP1G7O4h/SQ9FCQ3kFlYZs=
+=A9nD
+-----END PGP SIGNATURE-----
+
+--dFWYt1i2NyOo1oI9--
