@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9473-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 75949 invoked by alias); 27 Jun 2019 05:48:04 -0000
+Return-Path: <cygwin-patches-return-9474-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 70360 invoked by alias); 27 Jun 2019 07:11:01 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,110 +9,67 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 75930 invoked by uid 89); 27 Jun 2019 05:48:04 -0000
+Received: (qmail 70352 invoked by uid 89); 27 Jun 2019 07:11:01 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-20.2 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3 autolearn=ham version=3.3.1 spammy=
-X-HELO: m0.truegem.net
-Received: from m0.truegem.net (HELO m0.truegem.net) (69.55.228.47) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 27 Jun 2019 05:48:02 +0000
-Received: (from daemon@localhost)	by m0.truegem.net (8.12.11/8.12.11) id x5R5m1Ds064113	for <cygwin-patches@cygwin.com>; Wed, 26 Jun 2019 22:48:01 -0700 (PDT)	(envelope-from mark@maxrnd.com)
-Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67), claiming to be "[192.168.1.100]" via SMTP by m0.truegem.net, id smtpdwp92cU; Wed Jun 26 22:47:58 2019
-Subject: Re: [PATCH] Cygwin: Build cygwin-console-helper with correct compiler
+X-Spam-SWARE-Status: No, score=-104.8 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=HX-Languages-Length:292, H*F:D*cygwin.com, honor
+X-HELO: mout.kundenserver.de
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.131) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 27 Jun 2019 07:11:00 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id 1MD9Kj-1hpR7A3AP3-0097R9 for <cygwin-patches@cygwin.com>; Thu, 27 Jun 2019 09:10:57 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 4DA5FA807A4; Thu, 27 Jun 2019 09:10:57 +0200 (CEST)
+Date: Thu, 27 Jun 2019 07:11:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-References: <20190625075441.1209-1-mark@maxrnd.com> <20190625112703.GH5738@calimero.vinschen.de> <e820c2e7-074c-f285-ec37-22ef18f12ff4@maxrnd.com> <20190626092744.GT5738@calimero.vinschen.de>
-From: Mark Geisert <mark@maxrnd.com>
-Message-ID: <af4045a2-0722-bfe8-8683-3cfbcea00b77@maxrnd.com>
-Date: Thu, 27 Jun 2019 05:48:00 -0000
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0 SeaMonkey/2.49.4
+Subject: Re: [PATCH] Cygwin: honor the O_PATH flag when opening a FIFO
+Message-ID: <20190627071057.GA5738@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20190627011018.35924-1-kbrown@cornell.edu>
 MIME-Version: 1.0
-In-Reply-To: <20190626092744.GT5738@calimero.vinschen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-IsSubscribed: yes
-X-SW-Source: 2019-q2/txt/msg00180.txt.bz2
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="Lh1tzOZp3jg2TtWy"
+Content-Disposition: inline
+In-Reply-To: <20190627011018.35924-1-kbrown@cornell.edu>
+User-Agent: Mutt/1.11.3 (2019-02-01)
+X-SW-Source: 2019-q2/txt/msg00181.txt.bz2
 
-Corinna Vinschen wrote:
-> On Jun 26 01:48, Mark Geisert wrote:
->> Corinna Vinschen wrote:
->>> On Jun 25 00:54, Mark Geisert wrote:
->>>> ---
->>>>    winsup/utils/Makefile.in | 2 +-
->>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/winsup/utils/Makefile.in b/winsup/utils/Makefile.in
->>>> index b64f457e7..cebf39572 100644
->>>> --- a/winsup/utils/Makefile.in
->>>> +++ b/winsup/utils/Makefile.in
->>>> @@ -64,7 +64,7 @@ MINGW_BINS := ${addsuffix .exe,cygcheck cygwin-console-helper ldh strace}
->>>>    # List all objects to be compiled in MinGW mode.  Any object not on this
->>>>    # list will will be compiled in Cygwin mode implicitly, so there is no
->>>>    # need for a CYGWIN_OBJS.
->>>> -MINGW_OBJS := bloda.o cygcheck.o dump_setup.o ldh.o path.o strace.o
->>>> +MINGW_OBJS := bloda.o cygcheck.o cygwin-console-helper.o dump_setup.o ldh.o path.o strace.o
->>>>    MINGW_LDFLAGS:=-static
->>>>    CYGCHECK_OBJS:=cygcheck.o bloda.o path.o dump_setup.o
->>>> -- 
->>>> 2.21.0
->>>
->>> Careful!  This leads to a warning when building on 64 bit:
->>>
->>>     cygwin-console-helper.cc: In function 'int main(int, char**)':
->>>     cygwin-console-helper.cc:8:48: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
->>>      HANDLE h = (HANDLE) strtoul (argv[1], &end, 0);
->>>                                                   ^
->>>     cygwin-console-helper.cc:10:41: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
->>>      h = (HANDLE) strtoul (argv[2], &end, 0);
->>>                                            ^
->>>
->>> Note that strtoul returns an unsigned long.  Mingw compiles
->>> for native Windows, which is LLP64 rather than LP64:
->>>
->>>     mingw:sizeof(long) == 4
->>>     cygwin:sizeof(long) == 8
->>>
->>> This needs fixing as well (use strtoull).
->>
->> I appreciate the comments.  These warnings have "always" been present.
 
-I have to amend my statement.  Warnings during whole-tree builds in general have 
-"always" been present but I cannot be 100% sure this particular warning was 
-present.  I looked through my most recent make log and there are only compiler 
-warnings in newlib, not in winsup.  Sorry for my confusion.
+--Lh1tzOZp3jg2TtWy
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 234
 
-> I don't see any warning in terms of building cygwin-console-helper in
-> the current state.  However, it suddenly occured to me that, even without
-> a warning, this was always wrong.  The compiler generates code for 8 byte
-> long and the linker links against libs expecting 4 byte longs.
-> 
-> The fact that this works is ... not exactly magic, but first, the
-> arguments and return values are in registers anyway, and second, HANDLEs
-> are only using the lower 4 bytes even though they are 8 bytes in size.
-> 
->> I didn't make clear the reason for this one-line patch to Makefile.in: A
->> 'make -j 6' over the Cygwin source tree would sometimes fail because the
->> link step for cygwin-console-helper uses a different gcc than the compile
->> step did in parallel builds.
-> 
-> Huh, really?  I'm building with make -j42 on a 32 core machine, but I
-> never saw this problem.
+On Jun 27 01:10, Ken Brown wrote:
+> Previously fhandler_fifo::open would treat the FIFO as a reader and
+> would block, waiting for a writer.
 
-Well that's a very good counterexample.  I attributed it to parallel make steps 
-but it was rare even with that condition.  When the build failed it was because 
-linking with cygwin-console-helper.o was provoking an error something like "file 
-format not recognized".  Which now appears to me to possibly be a 32/64 issue of 
-mismatched tools.
+Yup, thanks for catching.  Please push.
 
-Let's drop this report for now and I'll be sure to report more accurately if it 
-happens again.
 
->>    Can you accept this patch as-is for what it
->> does for builds?
-> 
-> Yes, we can do that, but it might be a good idea to order the patches
-> so that the *first* patch fixes the actual problem in cygwin-console-helper
-> and the *second* patch fixes the Makefile.  Consider this patch approved,
-> I just wait for the other one, ok?
+Corinna
 
-I've now submitted a patch for the actual problem separately.  Thanks for 
-patiently helping me help where I can.
+--=20
+Corinna Vinschen
+Cygwin Maintainer
 
-..mark
+--Lh1tzOZp3jg2TtWy
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 833
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl0UbAEACgkQ9TYGna5E
+T6BU+w//XYJ+j17x0Nenpv0INPdpc/8AfSw7mR4C/LKDunE4d/Sdd3MBM30CRcb2
+IUOTV6br47LrGX3tmjQLFVD7dyvnXI85Ol4W10YxJ/De9FD5+fMWdpf4Mj7Y/XqT
+4mR0z6Qa3gjQoFz4r9MLugSXBeDUwwolke/WxzrKaJBMGv2myC5l9bXcSHmT8EiJ
+cS0iK7bAFW0tuN8EC3et2FUlES7fp9rT5Kn+mNp5BwRhhVDMDZToxa4A9o6tkhBV
+VzQtGigB/cuj6UptQbCMsBJ4RGpg9mtYg7Rg+FM2jcThKtlPDlvOKV+05fmj96MQ
+AXn3UCqKfIEOGuq0d/XWFSSxVnaIxj7+r4ki/+US3oP3Z/KFoG2o0S8qO5KhBr1v
+2tzC1UtGWoaxmJiPcs7A9oXviD8EBLCEvxoUS0b44jZnqMSWbDV6Vb7dpCMriBCR
+qj452McLByjojcYK7TirDWGCpgdqXNtzjtqqaHC6qf+V+t6PEl2ynRcT29Kppa+C
+lN+qbImw0OmLdbqgrPEbs5fpKNlVqMFzYbRRWhkAufwrWSVyzXaNeBp197/i1lw9
+XALMvncRqYolrD7DRhlUFw4cx5z0sy0dM40bY8IX2qI0HYbMh1CTF53YxXKV+M0j
+Eugi4rVO+Zp0XJy3bcTz6BLKrXCxxl1m4OR7jHL7kMmq+aO9Hh4=
+=cGhd
+-----END PGP SIGNATURE-----
+
+--Lh1tzOZp3jg2TtWy--
