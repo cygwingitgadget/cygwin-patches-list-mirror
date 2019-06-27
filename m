@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9470-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 19867 invoked by alias); 26 Jun 2019 09:45:37 -0000
+Return-Path: <cygwin-patches-return-9471-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 1165 invoked by alias); 27 Jun 2019 01:10:43 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,132 +9,63 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 19752 invoked by uid 89); 26 Jun 2019 09:45:29 -0000
+Received: (qmail 1152 invoked by uid 89); 27 Jun 2019 01:10:42 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-19.6 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3 autolearn=ham version=3.3.1 spammy=
-X-HELO: m0.truegem.net
-Received: from m0.truegem.net (HELO m0.truegem.net) (69.55.228.47) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 26 Jun 2019 09:45:18 +0000
-Received: (from daemon@localhost)	by m0.truegem.net (8.12.11/8.12.11) id x5Q9jHxu017928;	Wed, 26 Jun 2019 02:45:17 -0700 (PDT)	(envelope-from mark@maxrnd.com)
-Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67), claiming to be "localhost.localdomain" via SMTP by m0.truegem.net, id smtpd1JvFdx; Wed Jun 26 02:45:08 2019
-From: Mark Geisert <mark@maxrnd.com>
-To: cygwin-patches@cygwin.com
-Cc: Mark Geisert <mark@maxrnd.com>
-Subject: [PATCH v3] Cygwin: Fix return value of sched_getaffinity
-Date: Wed, 26 Jun 2019 09:45:00 -0000
-Message-Id: <20190626094456.57224-1-mark@maxrnd.com>
-In-Reply-To: <20190626091641.GS5738@calimero.vinschen.de>
-References: <20190626091641.GS5738@calimero.vinschen.de>
+X-Spam-SWARE-Status: No, score=-20.4 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=cygwindevelopers, cygwin-developers
+X-HELO: NAM02-BL2-obe.outbound.protection.outlook.com
+Received: from mail-eopbgr750108.outbound.protection.outlook.com (HELO NAM02-BL2-obe.outbound.protection.outlook.com) (40.107.75.108) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 27 Jun 2019 01:10:41 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=2JIrjVy6l/hW6O8KvMkmLWUQJD7rprYZQILx2HBL5qk=; b=DQ5uABlKWDuFDa3As9lrBYtbLsktFb7lJTOEGLaE2KigZQMZpYo4hhgNGP9m9hRLLVnoerc90ZqUDIdUnHd2g2XBP+zrLHF32PG+A2sBf+A/9f1wiX4GLspShoyFIouRZSe2SvFzQl/RcpQaaKjgP6rEOJNGB/HEfjYKbkcpHr8=
+Received: from CY1PR04MB2300.namprd04.prod.outlook.com (10.167.10.148) by CY1PR04MB2172.namprd04.prod.outlook.com (10.167.8.26) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2008.18; Thu, 27 Jun 2019 01:10:38 +0000
+Received: from CY1PR04MB2300.namprd04.prod.outlook.com ([fe80::e43c:48bc:36fd:1f40]) by CY1PR04MB2300.namprd04.prod.outlook.com ([fe80::e43c:48bc:36fd:1f40%3]) with mapi id 15.20.2008.017; Thu, 27 Jun 2019 01:10:38 +0000
+From: Ken Brown <kbrown@cornell.edu>
+To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: [PATCH] Cygwin: honor the O_PATH flag when opening a FIFO
+Date: Thu, 27 Jun 2019 01:10:00 -0000
+Message-ID: <20190627011018.35924-1-kbrown@cornell.edu>
+authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
+x-ms-exchange-purlcount: 1
+x-ms-oob-tlc-oobclassifiers: OLM:4502;
+received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ksb2@cornell.edu
 X-IsSubscribed: yes
-X-SW-Source: 2019-q2/txt/msg00177.txt.bz2
+X-SW-Source: 2019-q2/txt/msg00178.txt.bz2
 
-Have sched_getaffinity() interface like glibc's, and provide an
-undocumented internal interface __sched_getaffinity_sys() like the Linux
-kernel's sched_getaffinity() for benefit of taskset(1).
-
----
- newlib/libc/include/sched.h            |  3 +++
- winsup/cygwin/common.din               |  1 +
- winsup/cygwin/include/cygwin/version.h |  2 +-
- winsup/cygwin/sched.cc                 | 29 +++++++++++++++++---------
- 4 files changed, 24 insertions(+), 11 deletions(-)
-
-diff --git a/newlib/libc/include/sched.h b/newlib/libc/include/sched.h
-index fc44209d6..b6425320e 100644
---- a/newlib/libc/include/sched.h
-+++ b/newlib/libc/include/sched.h
-@@ -116,6 +116,9 @@ int sched_get_thread_affinity (void *, size_t, cpu_set_t *);
- int sched_setaffinity (pid_t, size_t, const cpu_set_t *);
- int sched_set_thread_affinity (void *, size_t, const cpu_set_t *);
- #endif
-+#ifdef __CYGWIN__
-+int __sched_getaffinity_sys (pid_t, size_t, cpu_set_t *);
-+#endif
- 
- #ifdef __cplusplus
- }
-diff --git a/winsup/cygwin/common.din b/winsup/cygwin/common.din
-index 81292ab7b..9cb67992b 100644
---- a/winsup/cygwin/common.din
-+++ b/winsup/cygwin/common.din
-@@ -98,6 +98,7 @@ __res_querydomain SIGFE
- __res_search SIGFE
- __res_send SIGFE
- __res_state SIGFE
-+__sched_getaffinity_sys SIGFE
- __signbitd NOSIGFE
- __signbitf NOSIGFE
- __signgam NOSIGFE
-diff --git a/winsup/cygwin/include/cygwin/version.h b/winsup/cygwin/include/cygwin/version.h
-index b70b9e281..f47055d84 100644
---- a/winsup/cygwin/include/cygwin/version.h
-+++ b/winsup/cygwin/include/cygwin/version.h
-@@ -510,7 +510,7 @@ details. */
-   337: MOUNT_BINARY -> MOUNT_TEXT
-   338: Export secure_getenv.
-   339: Export sched_getaffinity, sched_setaffinity, pthread_getaffinity_np,
--       pthread_setaffinity_np.
-+       pthread_setaffinity_np, __sched_getaffinity_sys.
- 
-   Note that we forgot to bump the api for ualarm, strtoll, strtoull,
-   sigaltstack, sethostname. */
-diff --git a/winsup/cygwin/sched.cc b/winsup/cygwin/sched.cc
-index e7b44d319..fdb8ba738 100644
---- a/winsup/cygwin/sched.cc
-+++ b/winsup/cygwin/sched.cc
-@@ -555,8 +555,9 @@ done:
- }
- 
- int
--sched_getaffinity (pid_t pid, size_t sizeof_set, cpu_set_t *set)
-+__sched_getaffinity_sys (pid_t pid, size_t sizeof_set, cpu_set_t *set)
- {
-+  /* Emulate Linux raw sched_getaffinity syscall for benefit of taskset(1) */
-   HANDLE process = 0;
-   int status = 0;
- 
-@@ -603,14 +604,21 @@ done:
-   if (status)
-     {
-       set_errno (status);
--      status = -1;
--    }
--  else
--    {
--      /* Emulate documented Linux kernel behavior on successful return */
--      status = wincap.cpu_count ();
-+      return -1;
-     }
--  return status;
-+
-+  /* On successful return, we would ordinarily return 0, but instead we
-+     emulate the behavior of the raw sched_getaffinity syscall on Linux. */
-+  return min (sizeof_set, sizeof (cpu_set_t));
-+}
-+
-+int
-+sched_getaffinity (pid_t pid, size_t sizeof_set, cpu_set_t *set)
-+{
-+  /* Emulate the Linux glibc interface of sched_getaffinity() by calling
-+     the raw syscall emulation and mapping positive results to 0. */
-+  int status = __sched_getaffinity_sys (pid, sizeof_set, set);
-+  return status > 0 ? 0 : status;
- }
- 
- int
-@@ -727,9 +735,10 @@ done:
-   if (status)
-     {
-       set_errno (status);
--      status = -1;
-+      return -1;
-     }
--  return status;
-+
-+  return 0;
- }
- 
- } /* extern C */
--- 
-2.21.0
+UHJldmlvdXNseSBmaGFuZGxlcl9maWZvOjpvcGVuIHdvdWxkIHRyZWF0IHRo
+ZSBGSUZPIGFzIGEgcmVhZGVyIGFuZA0Kd291bGQgYmxvY2ssIHdhaXRpbmcg
+Zm9yIGEgd3JpdGVyLg0KLS0tDQogd2luc3VwL2N5Z3dpbi9maGFuZGxlcl9m
+aWZvLmNjIHwgMTEgKysrKysrKysrKy0NCiB3aW5zdXAvY3lnd2luL3JlbGVh
+c2UvMy4wLjggICAgfCAxMyArKysrKysrKysrKysrDQogMiBmaWxlcyBjaGFu
+Z2VkLCAyMyBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQogY3JlYXRl
+IG1vZGUgMTAwNjQ0IHdpbnN1cC9jeWd3aW4vcmVsZWFzZS8zLjAuOA0KDQpk
+aWZmIC0tZ2l0IGEvd2luc3VwL2N5Z3dpbi9maGFuZGxlcl9maWZvLmNjIGIv
+d2luc3VwL2N5Z3dpbi9maGFuZGxlcl9maWZvLmNjDQppbmRleCA1NzMzZWM3
+NzguLjkxMTIzMTRmZSAxMDA2NDQNCi0tLSBhL3dpbnN1cC9jeWd3aW4vZmhh
+bmRsZXJfZmlmby5jYw0KKysrIGIvd2luc3VwL2N5Z3dpbi9maGFuZGxlcl9m
+aWZvLmNjDQpAQCAtODUsMTEgKzg1LDIwIEBAIGZoYW5kbGVyX2ZpZm86Om9w
+ZW4gKGludCBmbGFncywgbW9kZV90KQ0KICAgYm9vbCByZWFkZXIsIHdyaXRl
+ciwgZHVwbGV4ZXI7DQogICBEV09SRCBvcGVuX21vZGUgPSBGSUxFX0ZMQUdf
+T1ZFUkxBUFBFRDsNCiANCisgIGlmIChmbGFncyAmIE9fUEFUSCkNCisgICAg
+ew0KKyAgICAgIHF1ZXJ5X29wZW4gKHF1ZXJ5X3JlYWRfYXR0cmlidXRlcyk7
+DQorICAgICAgbm9oYW5kbGUgKHRydWUpOw0KKyAgICB9DQorDQogICAvKiBE
+ZXRlcm1pbmUgd2hhdCB3ZSdyZSBkb2luZyB3aXRoIHRoaXMgZmhhbmRsZXI6
+IHJlYWRpbmcsIHdyaXRpbmcsIGJvdGggKi8NCiAgIHN3aXRjaCAoZmxhZ3Mg
+JiBPX0FDQ01PREUpDQogICAgIHsNCiAgICAgY2FzZSBPX1JET05MWToNCi0g
+ICAgICByZWFkZXIgPSB0cnVlOw0KKyAgICAgIGlmIChxdWVyeV9vcGVuICgp
+KQ0KKwlyZWFkZXIgPSBmYWxzZTsNCisgICAgICBlbHNlDQorCXJlYWRlciA9
+IHRydWU7DQogICAgICAgd3JpdGVyID0gZmFsc2U7DQogICAgICAgZHVwbGV4
+ZXIgPSBmYWxzZTsNCiAgICAgICBicmVhazsNCmRpZmYgLS1naXQgYS93aW5z
+dXAvY3lnd2luL3JlbGVhc2UvMy4wLjggYi93aW5zdXAvY3lnd2luL3JlbGVh
+c2UvMy4wLjgNCm5ldyBmaWxlIG1vZGUgMTAwNjQ0DQppbmRleCAwMDAwMDAw
+MDAuLmUzNzM0YzliNw0KLS0tIC9kZXYvbnVsbA0KKysrIGIvd2luc3VwL2N5
+Z3dpbi9yZWxlYXNlLzMuMC44DQpAQCAtMCwwICsxLDEzIEBADQorV2hhdCdz
+IG5ldzoNCistLS0tLS0tLS0tLQ0KKw0KKw0KK1doYXQgY2hhbmdlZDoNCist
+LS0tLS0tLS0tLS0tDQorDQorDQorQnVnIEZpeGVzDQorLS0tLS0tLS0tDQor
+DQorLSBGaXggYSBoYW5nIHdoZW4gb3BlbmluZyBhIEZJRk8gd2l0aCBPX1BB
+VEguDQorICBBZGRyZXNzZXM6IGh0dHBzOi8vY3lnd2luLmNvbS9tbC9jeWd3
+aW4tZGV2ZWxvcGVycy8yMDE5LTA2L21zZzAwMDAxLmh0bWwNCi0tIA0KMi4y
+MS4wDQoNCg==
