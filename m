@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9486-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 105245 invoked by alias); 16 Jul 2019 17:34:34 -0000
+Return-Path: <cygwin-patches-return-9487-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 105525 invoked by alias); 16 Jul 2019 17:34:36 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,26 +9,26 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 105145 invoked by uid 89); 16 Jul 2019 17:34:34 -0000
+Received: (qmail 105449 invoked by uid 89); 16 Jul 2019 17:34:35 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-20.8 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=california, California, 1990, HX-Languages-Length:765
+X-Spam-SWARE-Status: No, score=-21.0 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=
 X-HELO: NAM01-SN1-obe.outbound.protection.outlook.com
-Received: from mail-eopbgr820093.outbound.protection.outlook.com (HELO NAM01-SN1-obe.outbound.protection.outlook.com) (40.107.82.93) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 16 Jul 2019 17:34:32 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none; b=Ly9o2Y6LvJWOq/BlinHpc7mo+sAmEBfnRdiPBYdXs37khen/zpf+tGDzd0dHeghP/Zsh4DqOv4XFKfeNKDp2EWuNYampjX4j/kggFsCfkZLYnrDAp7ui0fhwvUtU7fqe0NvtMgZ/hSTB1u8ca9O7Uh9k3IUncA4f7ZDhPSPwOyhnwbrlVdjH5UPgwlWwGo/3QDlzxkWbc4Pb7sGitEbVdrI7f2XCc6QRNfRigaMXm036FSfHc5Y7eAk3AiinnKioYpdUAicRqyEAOuZTZeDmbS4PSWm6UV1lOxW3TtdVLiJz7ccTI40yzW8z9LIkdiov4UIKeS+luq2GGBIQafHPJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=vuc6mTdX+7HqmHjxsxcuuyG33amUBN1v0Ct1C9PciSc=; b=JitWPxKYF+b3SH+/xlRckPljG2hzI6dURnDaWacXOvpMOXKPUoATuIBMIkGI8YF9oLyZaaVKaWBzcpqSuSVBQ94Mbzxv99eRh2p4Eyue8K0Oh0dzUPNVSDIhuOF4upM5Fb6LNDuoVaxey5HPuMQaJsc4Z9oVz/fvRtV2dFzRV+QkB+3HhbYq6/DaqQDkSIEwxGvQaby96ota8ZbsPnXG4+CtuDbrQlTiwzh06VRtdJG38jvy8Gn+WWK55mxFnQsdh8VlhHG3BHckLy0PEvjL4LP8Jg7PMXCtvG8fGFep4tF9x1LkiiKq0kPHHUbowvJMjw0xd45yoEbnhXjlT4fDSQ==
+Received: from mail-eopbgr820093.outbound.protection.outlook.com (HELO NAM01-SN1-obe.outbound.protection.outlook.com) (40.107.82.93) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 16 Jul 2019 17:34:34 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none; b=C4QLNFKyB5H+pvFLCpo0RE31KeufgvN10Oqq0IXsmlpYlsQd22bR40FVnODi7tGns0OQeA0qxYiDInRngU6TxoLRfob1bkpy015M5rKHbZQdcbw4oJku4nMvnb9bCelr40FaG85T62DaSdGfRhcuRys9jha18Wa4P2RgjXAlTYEdvQ7F5L6dGuzulp12TyAJC2wVairRN2Ex18rG6ZyFg39Dk98nasaQiNxEODmvG5vBgaEJqmMbDAFMgwsuzBdcdKAH9MPRmIeYLF+cZ3MIdrevZK26pSIOXIOslLdk/BNtQsVu3aZI9KidxbdwPvk6I5uBVAVRZqUiBdRGpJyB8Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=WZFbmhwtQpfVfv8l7tJYoPthFkq8bpSZMgBg+aaZB4Y=; b=EfbKehW2IsHQd+vDNxYSL5arHIdGj1B0m5tGwjAIMOjRKmceBynHSpExhbPRsV2CvMdBnm+lyBIBE8HhY+SgqeR0KGcow4lXSlKTcRCwz1wROehQc6R8+n0288vwGcBtu6LieaHORHGBjL+RutzgF4BNUv0zug/avbbyMew+o4F67ipxexMeuMcnCluwHhuBtJjGB020SwuonPMcjItH5GI6Pk+8/yS5lYU+ukv2HTxNORocHAlQL7RPg0Ss2uxTJ0e9YCN17cXmXo+4F3v9gYv593zB/xl36MewHjdHiYtxeoSVW9PIn+otLDS1WiGId8lXnDsrBp6yRhCg5JGeLw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass smtp.mailfrom=cornell.edu;dmarc=pass action=none header.from=cornell.edu;dkim=pass header.d=cornell.edu;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=vuc6mTdX+7HqmHjxsxcuuyG33amUBN1v0Ct1C9PciSc=; b=UplFrV7XIbQUYlan5XJKcT/AU/AUL0L8/+q5GimjSmR6xJmepT6Fs93IugI4WGMdRjQ6vCZfN2qKsYDG5/b6YlNlwjtk+JQ2VsYtJuxXayCNb42n1NZhpej1RstROBwtX9RnzFMXsLb6QBAmHEknIWZHqQUxktUu/CyMoIezdOA=
-Received: from CY1PR04MB2300.namprd04.prod.outlook.com (10.167.10.148) by CY1PR04MB2234.namprd04.prod.outlook.com (10.167.16.18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2073.14; Tue, 16 Jul 2019 17:34:27 +0000
-Received: from CY1PR04MB2300.namprd04.prod.outlook.com ([fe80::b0bd:c5ef:93b1:2bc8]) by CY1PR04MB2300.namprd04.prod.outlook.com ([fe80::b0bd:c5ef:93b1:2bc8%8]) with mapi id 15.20.2073.012; Tue, 16 Jul 2019 17:34:27 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=WZFbmhwtQpfVfv8l7tJYoPthFkq8bpSZMgBg+aaZB4Y=; b=RPUX8tFEhuINvPt8WnBoHo1MTmooKBF7ZnEG/ECojMr2EqxubWWsswOz8d+Un2nvUqlgX9B9ukZPVCPdtlSPm1DYnaMSsGjRimNo6WyiYc2Dd/7qShew7vsrKOTwVaz3Jv6Q1dKrYO7gBeRemKoggYL2y8MRxNloIHAQFY0CvtA=
+Received: from CY1PR04MB2300.namprd04.prod.outlook.com (10.167.10.148) by CY1PR04MB2234.namprd04.prod.outlook.com (10.167.16.18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2073.14; Tue, 16 Jul 2019 17:34:28 +0000
+Received: from CY1PR04MB2300.namprd04.prod.outlook.com ([fe80::b0bd:c5ef:93b1:2bc8]) by CY1PR04MB2300.namprd04.prod.outlook.com ([fe80::b0bd:c5ef:93b1:2bc8%8]) with mapi id 15.20.2073.012; Tue, 16 Jul 2019 17:34:28 +0000
 From: Ken Brown <kbrown@cornell.edu>
 To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: [PATCH 4/5] Cygwin: fix GCC 8.3 'asm volatile' errors
+Subject: [PATCH 5/5] Cygwin: fix GCC 8.3 'local external declaration' errors
 Date: Tue, 16 Jul 2019 17:34:00 -0000
-Message-ID: <20190716173407.17040-5-kbrown@cornell.edu>
+Message-ID: <20190716173407.17040-6-kbrown@cornell.edu>
 References: <20190716173407.17040-1-kbrown@cornell.edu>
 In-Reply-To: <20190716173407.17040-1-kbrown@cornell.edu>
 authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
-x-ms-oob-tlc-oobclassifiers: OLM:3826;
+x-ms-oob-tlc-oobclassifiers: OLM:331;
 received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 Content-Type: text/plain; charset="iso-8859-1"
@@ -37,34 +37,32 @@ MIME-Version: 1.0
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
 X-MS-Exchange-CrossTenant-userprincipalname: ksb2@cornell.edu
 X-IsSubscribed: yes
-X-SW-Source: 2019-q3/txt/msg00006.txt.bz2
+X-SW-Source: 2019-q3/txt/msg00007.txt.bz2
 
-Remove 'volatile'.
+Move external declarations out of function definition.
 ---
- winsup/cygwin/miscfuncs.cc | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ winsup/cygserver/bsd_mutex.cc | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/winsup/cygwin/miscfuncs.cc b/winsup/cygwin/miscfuncs.cc
-index e02bc9c1f..0bbf4975d 100644
---- a/winsup/cygwin/miscfuncs.cc
-+++ b/winsup/cygwin/miscfuncs.cc
-@@ -724,7 +724,7 @@ err:
-    See FreeBSD src/lib/libc/amd64/string/memset.S
-    and FreeBSD src/lib/libc/amd64/string/bcopy.S */
+diff --git a/winsup/cygserver/bsd_mutex.cc b/winsup/cygserver/bsd_mutex.cc
+index 52531bc72..13c5f90e8 100644
+--- a/winsup/cygserver/bsd_mutex.cc
++++ b/winsup/cygserver/bsd_mutex.cc
+@@ -275,13 +275,12 @@ public:
+ };
 =20
--asm volatile ("								\n\
-+asm ("								\n\
- /*									\n\
-  * Written by J.T. Conklin <jtc@NetBSD.org>.				\n\
-  * Public domain.							\n\
-@@ -791,7 +791,7 @@ L1:     rep								\n\
- 	.seh_endproc							\n\
- ");
+ static msleep_sync_array *msleep_sync;
++extern struct msginfo msginfo;
++extern struct seminfo seminfo;
 =20
--asm volatile ("								\n\
-+asm ("								\n\
- /*-									\n\
-  * Copyright (c) 1990 The Regents of the University of California.	\n\
-  * All rights reserved.							\n\
+ void
+ msleep_init (void)
+ {
+-  extern struct msginfo msginfo;
+-  extern struct seminfo seminfo;
+-
+   msleep_glob_evt =3D CreateEvent (NULL, TRUE, FALSE, NULL);
+   if (!msleep_glob_evt)
+     panic ("CreateEvent in msleep_init failed: %u", GetLastError ());
 --=20
 2.21.0
