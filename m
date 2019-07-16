@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9481-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 7308 invoked by alias); 1 Jul 2019 08:55:43 -0000
+Return-Path: <cygwin-patches-return-9482-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 104049 invoked by alias); 16 Jul 2019 17:34:27 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,101 +9,57 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 7299 invoked by uid 89); 1 Jul 2019 08:55:42 -0000
+Received: (qmail 104038 invoked by uid 89); 16 Jul 2019 17:34:26 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-20.4 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3 autolearn=ham version=3.3.1 spammy=H*MI:sk:2019070, apps, goals, H*i:sk:2019070
-X-HELO: m0.truegem.net
-Received: from m0.truegem.net (HELO m0.truegem.net) (69.55.228.47) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 01 Jul 2019 08:55:39 +0000
-Received: (from daemon@localhost)	by m0.truegem.net (8.12.11/8.12.11) id x618tccf024961	for <cygwin-patches@cygwin.com>; Mon, 1 Jul 2019 01:55:38 -0700 (PDT)	(envelope-from mark@maxrnd.com)
-Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67), claiming to be "[192.168.1.100]" via SMTP by m0.truegem.net, id smtpdJaPDTi; Mon Jul  1 01:55:29 2019
-Subject: Re: [PATCH] Cygwin: Implement CPU_SET(3) macros
-To: cygwin-patches@cygwin.com
-References: <20190630225904.812-1-mark@maxrnd.com> <20190701073342.GI5738@calimero.vinschen.de>
-From: Mark Geisert <mark@maxrnd.com>
-Message-ID: <b84163da-9b09-94bd-3043-7d47a1fffefb@maxrnd.com>
-Date: Mon, 01 Jul 2019 08:55:00 -0000
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0 SeaMonkey/2.49.4
+X-Spam-SWARE-Status: No, score=-10.2 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,KAM_NUMSUBJECT,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=H*MI:edu, H*Ad:U*cygwin-patches
+X-HELO: NAM01-SN1-obe.outbound.protection.outlook.com
+Received: from mail-eopbgr820093.outbound.protection.outlook.com (HELO NAM01-SN1-obe.outbound.protection.outlook.com) (40.107.82.93) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 16 Jul 2019 17:34:24 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none; b=lE8+xbEpW3Zgu5K6JgFnuN9gzf2PHpaCastCiz11hDWlRRVvrnhzKPxM7VsAwPzdZqu+NX+0UkT9YKxNjX9zkjKvcoRdm0MjJ3aOyTTAWeJM64GyWEbQvJMWTgoMgx2G67EXDd8d7Zf0JorQY9UhLm0WOByY+bEjKXJebSfTvIjCBl2KymDnXV1DWuxg5RHXjuwYlHat9wl0vI0tan3qh24S9Jg/PNh5z3VD7Pf+wIg4d6PTfsbn6nSFUS5xm3vx4e/b91BSfZYp+ZPpiBeY+AhVhiA5ErMvqfOie5tAJdjDuvXr1E/tUhsNVQIkl3gFf5qb3LNBPzHhbMLpnWdu+A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=00cRmaj9EvvC+rnvq2GZ1N0+JQM30n+e6Dnrre5COVE=; b=Q8hpq1fBBaVdOR+vFApowiiZwf0ZFmWUDp4a57aSQvFjykD7+aTSlkV//2wzLSBT72whEdf5GrdcrLMvFV91uxZxczVadB2EjT3sgNMeG0fDS8qkyWhLMlad5iQ3y/AeRpxilosjE6vFZMUYDPFwrxPSxDs8usA7GLixefGNb53/0JzOq9513kBouR3ZG+ovuMaYLBBiIUMxvWBTBL4pUYeJVC2sr+Ni2zdzRfMTic/aC2fOEj3pBfbKnKBO8lCKo+0sIXNKFKNUfU/Qa1m0A6pgcurQbu+ar5lug4jIUbOw5Q5ULXkmJsF7JXuJIznJLe4nu1P2lncAB3z4kth65g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass smtp.mailfrom=cornell.edu;dmarc=pass action=none header.from=cornell.edu;dkim=pass header.d=cornell.edu;arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=00cRmaj9EvvC+rnvq2GZ1N0+JQM30n+e6Dnrre5COVE=; b=QKUgBvzk6s01UOhV8aXiK9D1No0XzYQeQO1mzkxsQcF/dHdYHGSNaNCJhanknIg421xfqYxuFD686uFb04h49odkiEqCPHDCau9T5fW8UcBFP9jNgUGJK6bZ8Ed5Bgveat3oloZrwXXx6yXZ9C/Ts/48iRZXNUDeiJyE2o+zjGc=
+Received: from CY1PR04MB2300.namprd04.prod.outlook.com (10.167.10.148) by CY1PR04MB2234.namprd04.prod.outlook.com (10.167.16.18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2073.14; Tue, 16 Jul 2019 17:34:22 +0000
+Received: from CY1PR04MB2300.namprd04.prod.outlook.com ([fe80::b0bd:c5ef:93b1:2bc8]) by CY1PR04MB2300.namprd04.prod.outlook.com ([fe80::b0bd:c5ef:93b1:2bc8%8]) with mapi id 15.20.2073.012; Tue, 16 Jul 2019 17:34:22 +0000
+From: Ken Brown <kbrown@cornell.edu>
+To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: [PATCH 0/5] Port to GCC 8.3
+Date: Tue, 16 Jul 2019 17:34:00 -0000
+Message-ID: <20190716173407.17040-1-kbrown@cornell.edu>
+authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
+received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-In-Reply-To: <20190701073342.GI5738@calimero.vinschen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ksb2@cornell.edu
 X-IsSubscribed: yes
-X-SW-Source: 2019-q3/txt/msg00001.txt.bz2
+X-SW-Source: 2019-q3/txt/msg00002.txt.bz2
 
-Corinna Vinschen wrote:
-> Hi Mark,
-> 
-> On Jun 30 15:59, Mark Geisert wrote:
->> This patch supplies an implementation of the CPU_SET(3) processor
->> affinity macros as documented on the relevant Linux man page.
->> ---
->>   winsup/cygwin/include/sys/cpuset.h | 62 +++++++++++++++++++++++++++---
->>   winsup/cygwin/sched.cc             |  8 ++--
->>   2 files changed, 60 insertions(+), 10 deletions(-)
->>
->> diff --git a/winsup/cygwin/include/sys/cpuset.h b/winsup/cygwin/include/sys/cpuset.h
->> index 4857b879d..9c8417b73 100644
->> --- a/winsup/cygwin/include/sys/cpuset.h
->> +++ b/winsup/cygwin/include/sys/cpuset.h
->> @@ -14,20 +14,70 @@ extern "C" {
->>   #endif
->>   
->>   typedef __SIZE_TYPE__ __cpu_mask;
->> -#define __CPU_SETSIZE 1024  // maximum number of logical processors tracked
->> -#define __NCPUBITS (8 * sizeof (__cpu_mask))  // max size of processor group
->> -#define __CPU_GROUPMAX (__CPU_SETSIZE / __NCPUBITS)  // maximum group number
->> +#define CPU_SETSIZE  1024  // maximum number of logical processors tracked
->> +#define NCPUBITS     (8 * sizeof (__cpu_mask))  // max size of processor group
->> +#define CPU_GROUPMAX (CPU_SETSIZE / NCPUBITS)  // maximum group number
->>   
->> -#define __CPUELT(cpu)   ((cpu) / __NCPUBITS)
->> -#define __CPUMASK(cpu)  ((__cpu_mask) 1 << ((cpu) % __NCPUBITS))
->> +#define CPU_WORD(cpu) ((cpu) / NCPUBITS)
->> +#define CPU_MASK(cpu) ((__cpu_mask) 1 << ((cpu) % NCPUBITS))
-> 
-> I wouldn't do that.  Three problems:
-> 
-> - The non-underscored definitions should only be exposed #if __GNU_VISIBLE
->    because otherwise they clutter the application namespace.
+This patch series tries to fix all the warnings (which are treated as
+errors) when building Cygwin with GCC 8.3.  I'm not confident that
+I've chosen the best way to fix each warning.  All I can say is that
+the build now succeeds.
 
-Ah, I didn't consider that.  Will wrap appropriately.
+Ken Brown (5):
+  Cygwin: avoid GCC 8.3 errors with -Werror=3Dclass-memaccess
+  Cygwin: avoid GCC 8.3 errors with -Werror=3Dstringop-truncation
+  Cygwin: suppress GCC 8.3 errors with -Warray-bounds
+  Cygwin: fix GCC 8.3 'asm volatile' errors
+  Cygwin: fix GCC 8.3 'local external declaration errors'
 
-> - CPU_WORD and CPU_MASK don't exist at all in glibc, so I don't see
->    why you rename __CPUELT and __CPUMASK at all.
+ winsup/cygserver/bsd_mutex.cc    | 5 ++---
+ winsup/cygwin/environ.cc         | 2 +-
+ winsup/cygwin/flock.cc           | 2 +-
+ winsup/cygwin/include/sys/utmp.h | 6 +++---
+ winsup/cygwin/miscfuncs.cc       | 4 ++--
+ winsup/cygwin/path.cc            | 4 ++--
+ winsup/cygwin/path.h             | 2 +-
+ winsup/cygwin/pinfo.cc           | 4 ++--
+ winsup/cygwin/uname.cc           | 2 +-
+ winsup/utils/dumper.cc           | 2 ++
+ 10 files changed, 17 insertions(+), 16 deletions(-)
 
-Conflicting goals and I made a wrong choice.  I thought leading underscores 
-meant "implementation details" and so should not be directly used by apps.  And 
-I was trying to distinguish this implementation from glibc's per Eric's comment 
-on the newlib list.  I figured these two macros would be useful to app coders so 
-renamed them to indicate they can use them.
-
-And then I found taskset uses one or more of the underscored ones... So I'll 
-revert this bit.
-
-> - CPU_GROUPMAX does not exist in glibc either. As a non-standard
->    macro it should be kept underscored.
-
-Not in glibc because it's a Windows-related construct.  Will keep underscored.
-
-> Keep (and use) the underscored variations throughout, and only expose
-> the non-underscored macro set #if __GNU_VISIBLE.
-
-Got it.  Thanks!
-
-> There's also the request from Sebastian on the newlib list to
-> consolidate the cpuset stuff from RTEMS and Cygwin into a single
-> definition.  It's not exactly straightforward given the different
-> definition of cpuset_t from FreeBSD, but it's probably not very
-> complicated either.  Maybe something for after your vaca?
-
-Yes, later if at all :-).  I looked at the FreeBSD 11.0 man page for CPUSET(9), 
-as they call it, from
-https://www.freebsd.org/cgi/man.cgi?query=cpuset&sektion=9&apropos=0&manpath=FreeBSD+11.0-RELEASE+and+Ports
-and see that there's some family resemblance but many differences.  I'll have to 
-look at RTEMS' again to see how they combined FreeBSD and Linux variants.
-
-I've also found that taskset isn't working properly on my build system with the 
-new CPU_SET code, though my other testcases are.  So even as submitted, and 
-fixed per your comments here, there's a bit more to be done.
-
-..mark
+--=20
+2.21.0
