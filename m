@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9492-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 5195 invoked by alias); 19 Jul 2019 08:28:50 -0000
+Return-Path: <cygwin-patches-return-9493-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 12002 invoked by alias); 19 Jul 2019 18:27:31 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,85 +9,97 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 5178 invoked by uid 89); 19 Jul 2019 08:28:49 -0000
+Received: (qmail 11993 invoked by uid 89); 19 Jul 2019 18:27:31 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-104.7 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=editorial, H*F:D*cygwin.com
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.187) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 19 Jul 2019 08:28:48 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id 1MOQu6-1i5L2R46gw-00Pu1x for <cygwin-patches@cygwin.com>; Fri, 19 Jul 2019 10:28:46 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 76858A80382; Fri, 19 Jul 2019 10:28:45 +0200 (CEST)
-Date: Fri, 19 Jul 2019 08:28:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: make path_conv::isdevice() return false on socket files
-Message-ID: <20190719082845.GO3772@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20190718200026.1377-1-kbrown@cornell.edu>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="Mjqg7Yu+0hL22rav"
-Content-Disposition: inline
-In-Reply-To: <20190718200026.1377-1-kbrown@cornell.edu>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-SW-Source: 2019-q3/txt/msg00012.txt.bz2
-
-
---Mjqg7Yu+0hL22rav
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-Spam-SWARE-Status: No, score=-18.8 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,KAM_NUMSUBJECT,RCVD_IN_DNSWL_NONE,SEM_URI,SEM_URIRED,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=HX-Languages-Length:1902
+X-HELO: NAM05-BY2-obe.outbound.protection.outlook.com
+Received: from mail-eopbgr710118.outbound.protection.outlook.com (HELO NAM05-BY2-obe.outbound.protection.outlook.com) (40.107.71.118) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 19 Jul 2019 18:27:29 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none; b=mQ5+dPsmLLadSKJnaOVEbRZGhTTyjIIArz0Mzcu/lAJvHN2R+0lJEOOW+Nj5AGt7Qp+S4SEuz50y59Q9mNk4Oknpmai3rn0hW+f++ebuCE2zcKy0dG7e/Egp6pBvz4nwkg3taLolmHn0P/Ox9KmbvTbu5TMY6FQKlLU6DPjhs8Ipd/WXwqfNMHaAX5S4UUgqV/sGAcsALs4i/XKg4w/lT2J1M57IJgT3V0TPLkxvdIKCn1lUZHXMVQrWilEogoZ+5XhM7DKxjqlh+JMxF7G6GeUAxoWso6BaDaxcXm6DSVBDUhyHdgNsTmJRleZwl2tKlEL+NSCIXPyul0T80FHnFg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=gW0AfCRsSeCLZ1M4nYhdheXsHqoEAUG0O54qJmO0+G0=; b=DZDs2KQWFihSUsdjbv9fOJFaLeXDmiODriq7fkdMrs2DapWmztc2ep5zP/3SkcCYxDlM2PTdkHyDjgYaqV+b6S0NGiEIbBAWnERZ5xTet94jD0Qafvm+ZIR0Z7+s/HQi9c1jhE82Byi4MIjycAsYAKcvseRZzWkT6Q2uqA7Ol5C60zRDE1xNMplau7wba60NDHoW7CNJCzdbqyTSlSXvjsAjeGSQamZ2y8wRSLLDBePds6WzShF00eN4KrTZDhzCooAN7Q1Oadn6TKoRnkBoVMvtJVisxyUfH4X+IUIpTHETe2yYLewVirbDVR7RTPSoktyTnj2EnNUi3xW+xCAPLQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass smtp.mailfrom=cornell.edu;dmarc=pass action=none header.from=cornell.edu;dkim=pass header.d=cornell.edu;arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=gW0AfCRsSeCLZ1M4nYhdheXsHqoEAUG0O54qJmO0+G0=; b=TqIuRleVBcjX3uSNm15CxfVgx3m2MUz4svt9oV6zflz7e8cEK7LgLJE/aYXjoobDAD10oTNLqd38zC31tp42JXTjgRw94YFVclVmg86Mc6+3XinueDtYbx5W9Fg0IOQB7I7GZiwLj3gb5TXYNaa52o/pgwdP6LnPtB/4XGicIm8=
+Received: from CY1PR04MB2300.namprd04.prod.outlook.com (10.167.10.148) by CY1SPR00MB264.namprd04.prod.outlook.com (10.167.9.148) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2094.14; Fri, 19 Jul 2019 18:27:27 +0000
+Received: from CY1PR04MB2300.namprd04.prod.outlook.com ([fe80::b0bd:c5ef:93b1:2bc8]) by CY1PR04MB2300.namprd04.prod.outlook.com ([fe80::b0bd:c5ef:93b1:2bc8%8]) with mapi id 15.20.2094.011; Fri, 19 Jul 2019 18:27:27 +0000
+From: Ken Brown <kbrown@cornell.edu>
+To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: [PATCH] Cygwin: unbreak the build with GCC 7
+Date: Fri, 19 Jul 2019 18:27:00 -0000
+Message-ID: <20190719182710.34746-1-kbrown@cornell.edu>
+authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
+x-ms-oob-tlc-oobclassifiers: OLM:6108;
+received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
-Content-length: 1041
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ksb2@cornell.edu
+X-IsSubscribed: yes
+X-SW-Source: 2019-q3/txt/msg00013.txt.bz2
 
-Hi Ken,
+The recent port to GCC 8 used the 'nonstring' attribute, which is
+unknown to GCC 7.  Define and use an 'ATTRIBUTE_NONSTRING' macro
+instead.
+---
+ winsup/cygwin/include/sys/utmp.h | 11 ++++++++---
+ winsup/cygwin/uname.cc           |  8 +++++++-
+ 2 files changed, 15 insertions(+), 4 deletions(-)
 
-On Jul 18 20:02, Ken Brown wrote:
-> As a result, socket files are no longer treated as lnk special files.
-> This prevents rename() from adding ".lnk" when renaming a socket file.
->=20
-> Remove a redundant !pc.issocket() from fhandler_disk_file::link().
-
-I see what you're doing here, but it's totally non-obvious from the
-commit message why this fixes the problem and doesn't introduce weird
-side-effects.  Changing isdevice() also changes the definition of
-is_auto_device(), which is used in symlink_worker().=20=20
-
-To ease the pain during later bisecting session, it would be kind to
-explain detailed why the problem occurs and why your patch is the right
-thing to do.
-
-An editorial note: While looking into your patch it occured to me that
-it would be about time to go over all the is***device() methods and
-clean up the mess.  E.g., is_fs_device() is used by is_lnk_special()
-only, is_auto_device() doesn't have much meaning, some funcs have
-underscores, some don't.
-
-
-Thanks,
-Corinna
-
+diff --git a/winsup/cygwin/include/sys/utmp.h b/winsup/cygwin/include/sys/u=
+tmp.h
+index acf804ad0..443c44252 100644
+--- a/winsup/cygwin/include/sys/utmp.h
++++ b/winsup/cygwin/include/sys/utmp.h
+@@ -19,16 +19,21 @@ extern "C" {
+ #define ut_name		ut_user
+ #endif
+=20
++#if __GNUC__ >=3D 8
++#define ATTRIBUTE_NONSTRING __attribute__ ((nonstring))
++#else
++#define ATTRIBUTE_NONSTRING
++#endif
+=20
+ struct utmp
+ {
+  short	ut_type;
+  pid_t	ut_pid;
+- char	ut_line[UT_LINESIZE] __attribute__ ((nonstring));
++ char	ut_line[UT_LINESIZE] ATTRIBUTE_NONSTRING;
+  char  ut_id[UT_IDLEN];
+  time_t ut_time;
+- char	ut_user[UT_NAMESIZE] __attribute__ ((nonstring));
+- char	ut_host[UT_HOSTSIZE] __attribute__ ((nonstring));
++ char	ut_user[UT_NAMESIZE] ATTRIBUTE_NONSTRING;
++ char	ut_host[UT_HOSTSIZE] ATTRIBUTE_NONSTRING;
+  long	ut_addr;
+ };
+=20
+diff --git a/winsup/cygwin/uname.cc b/winsup/cygwin/uname.cc
+index e323335b4..350216681 100644
+--- a/winsup/cygwin/uname.cc
++++ b/winsup/cygwin/uname.cc
+@@ -17,6 +17,12 @@ details. */
+ extern "C" int cygwin_gethostname (char *__name, size_t __len);
+ extern "C" int getdomainname (char *__name, size_t __len);
+=20
++#if __GNUC__ >=3D 8
++#define ATTRIBUTE_NONSTRING __attribute__ ((nonstring))
++#else
++#define ATTRIBUTE_NONSTRING
++#endif
++
+ /* uname: POSIX 4.4.1.1 */
+=20
+ /* New entrypoint for applications since API 335 */
+@@ -25,7 +31,7 @@ uname_x (struct utsname *name)
+ {
+   __try
+     {
+-      char buf[NI_MAXHOST + 1] __attribute__ ((nonstring));
++      char buf[NI_MAXHOST + 1] ATTRIBUTE_NONSTRING;
+       char *snp =3D strstr (cygwin_version.dll_build_date, "SNP");
+=20
+       memset (name, 0, sizeof (*name));
 --=20
-Corinna Vinschen
-Cygwin Maintainer
-
---Mjqg7Yu+0hL22rav
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl0xfz0ACgkQ9TYGna5E
-T6CRhhAAl+kMW4JmIgV+Jmo7WA0kZqQK017CLy6bEuzVJ7Ok/SO4zF7xJXPyvS5G
-sHYxcm8RgjnR7iimbh4GNKmA3gds0FvJcAnN+AAsNhXHpjzhRLjNBgxm4WTsq+dL
-5iFy/ICfy3QiyLxogImpVpE86mV3p3PnNs7yKNuRvXQylJ7O2GyN+nzGh+SOxYKK
-If2QW6Rn9uqNmgagPvyHVujmMpidjyT6ZsdFkgiFSB1sxoApz+ph8mNKqABb5emd
-UXvECTZI0SiK1+lO8tokmrJ84TDL6Bzeu9FBCl9T8nN6uQJ//zHrO/qgzC5tsgOl
-5Z9ugu860CG2GWm2dAwcBm9yVPpLl+Xusi8KSMDU9Oou7IN77+ofSezGL7QrRCuz
-47+NuyWJNuAIrevxeFNYu9bGUgCZKoxeik75R8WMWQ8tHfkiDoj+JHqjQD4+VKq3
-SghA1DQAEaKF4lVG+imdr6r6kEzX1J3k2qqvgUhG6z5aUyIWLli/urxwPijdsNvp
-AWT60eaUokcvtlWtVdaURt1EEYgLMhL9NYMSss+QAfHLhwkebC7Y9VqKvmshW4cZ
-svcUqgU2zg+sJZVK6HrUM3QPVHUepmknIlsVlykdePsCNKX79CbDC2zrMIanSgl6
-p3x2aV+r5/W40GIihUg9RRVaxhH4blkR34szUuBJO61uQLhE99s=
-=yl3V
------END PGP SIGNATURE-----
-
---Mjqg7Yu+0hL22rav--
+2.21.0
