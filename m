@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9502-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 47176 invoked by alias); 21 Jul 2019 01:58:24 -0000
+Return-Path: <cygwin-patches-return-9503-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 34449 invoked by alias); 21 Jul 2019 07:15:39 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,49 +9,55 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 47157 invoked by uid 89); 21 Jul 2019 01:58:24 -0000
+Received: (qmail 34406 invoked by uid 89); 21 Jul 2019 07:15:33 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-19.0 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE,SEM_URI,SEM_URIRED,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=hang, cygwindevelopers, cygwin-developers, cygwincom
-X-HELO: NAM04-CO1-obe.outbound.protection.outlook.com
-Received: from mail-eopbgr690091.outbound.protection.outlook.com (HELO NAM04-CO1-obe.outbound.protection.outlook.com) (40.107.69.91) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 21 Jul 2019 01:58:22 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none; b=T5x9Fqtv51aTBOdDsiYZ49+u2GM+qbwTJV9M93mtyZ+AeXq+xlnRjcKmovOxL+bzosfgTyctNE656DsGGLbsQPqsDn1E+Az9n86QNnQ+34cftdZAq9mEzQiNjsqtA5jSbLt4vhY0gWj6jpC0S7W9jY5y9et+lfU0DTWMckdC35AosrnIo+wtlIpG3wC2izOLyue6GjA5t/N4zrpz9P7YA6QqzjrzAs0QRpqJYSyrwXVnjAd9925xq/KtWACnLoidLleFMRJo4uRSvJgw8tPh8hntTuk1ik8bl5pauHI19f6Q3K0L20fjPxwlKNDzaqbzaSm/QVKZNA+Hl9GcpxDfUg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=aluts8/GXQr7DW/i6bppu34b/NLl7PzmKxqbjsYtym8=; b=Yamst5cBLF4xaBzgbnsptEhj7mhVePeQxd/68FPdshZTht8FygVXd/gksmSAQcPpYpc9+7V3iRFzBBGNysWW9h66ijjHgbMo5mR1pRe+qj+u0krp6CNyLMUJ4kWjWqQ4tyyPDvJPNipG5jbk89T/ScXiXmSsAW6lLId6b7zCp5wIpJSBveCvdDQ9DlT3KuWUxUf6DlrFFrY31IdQMirRX7AD9UwGJm2S+FzvuPp2UEBg61hQb2MflyLQG8X8TgXaDZsuWQtHq2wuLC+Uc7Beod+ZA7VuqUvD8jGOprtdE7ROlHuQoXsvM99ecLwEUxAdNd1DO+/XRg1jsNcoQsCfjg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass smtp.mailfrom=cornell.edu;dmarc=pass action=none header.from=cornell.edu;dkim=pass header.d=cornell.edu;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=aluts8/GXQr7DW/i6bppu34b/NLl7PzmKxqbjsYtym8=; b=Pq8tYk9xNTaOan5s3UrHg79k3dj/f2IknVL7H9EDv8N3I0ABHa4j+psyoHQCo2dX7j4FJxQcN6Dk+2FQh0u+ddOgkJMMWXrcLWwhVGdOsoSPCqveUgarmgG1D7ZAw4mn5IzkbTeQluYPDV0qres6lgLACmU9Gm15xUwlgzjTAbs=
-Received: from CY1PR04MB2300.namprd04.prod.outlook.com (10.167.10.148) by CY1PR04MB2250.namprd04.prod.outlook.com (10.167.8.150) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2094.14; Sun, 21 Jul 2019 01:58:19 +0000
-Received: from CY1PR04MB2300.namprd04.prod.outlook.com ([fe80::b0bd:c5ef:93b1:2bc8]) by CY1PR04MB2300.namprd04.prod.outlook.com ([fe80::b0bd:c5ef:93b1:2bc8%8]) with mapi id 15.20.2094.013; Sun, 21 Jul 2019 01:58:19 +0000
-From: Ken Brown <kbrown@cornell.edu>
-To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: [PATCH] Cygwin: document the last bug fix
-Date: Sun, 21 Jul 2019 01:58:00 -0000
-Message-ID: <20190721015803.2971-1-kbrown@cornell.edu>
-authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
-x-ms-exchange-purlcount: 2
-x-ms-oob-tlc-oobclassifiers: OLM:586;
-received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+X-Spam-SWARE-Status: No, score=-2.5 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=Ken, H*f:sk:8dce094, H*f:sk:e97cff2, H*i:sk:e97cff2
+X-HELO: smtp-out-no.shaw.ca
+Received: from smtp-out-no.shaw.ca (HELO smtp-out-no.shaw.ca) (64.59.134.9) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 21 Jul 2019 07:15:24 +0000
+Received: from [192.168.1.114] ([24.64.172.44])	by shaw.ca with ESMTP	id p63whohmIsAGkp63xhy54E; Sun, 21 Jul 2019 01:15:17 -0600
+Reply-To: Brian.Inglis@SystematicSw.ab.ca
+Subject: Re: [PATCH] Cygwin: make path_conv::isdevice() return false on socket files
+To: cygwin-patches@cygwin.com
+References: <20190718200026.1377-1-kbrown@cornell.edu> <20190719082845.GO3772@calimero.vinschen.de> <8dce0946-6f7e-a3f4-62b1-98cdbbe277ef@cornell.edu> <e97cff22-2083-b5ec-1dac-31a34b0c86c3@cornell.edu>
+From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
+Openpgp: preference=signencrypt
+Message-ID: <619bf054-ae39-75af-eb12-e9b3b6115555@SystematicSw.ab.ca>
+Date: Sun, 21 Jul 2019 07:15:00 -0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101 Thunderbird/60.8.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ksb2@cornell.edu
+In-Reply-To: <e97cff22-2083-b5ec-1dac-31a34b0c86c3@cornell.edu>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
 X-IsSubscribed: yes
-X-SW-Source: 2019-q3/txt/msg00022.txt.bz2
+X-SW-Source: 2019-q3/txt/msg00023.txt.bz2
 
----
- winsup/cygwin/release/3.0.8 | 3 +++
- 1 file changed, 3 insertions(+)
+On 2019-07-20 19:46, Ken Brown wrote:
+> On 7/20/2019 6:53 PM, Ken Brown wrote:
+>> On 7/19/2019 4:28 AM, Corinna Vinschen wrote:
+>>> I see what you're doing here, but it's totally non-obvious from the 
+>>> commit message why this fixes the problem and doesn't introduce weird 
+>>> side-effects.
+>> Thanks.  I was pretty careless with this patch.
+>> There's a new patch series on the way that (I hope) does it right.
+>>> An editorial note: While looking into your patch it occured to me that
+>>> it would be about time to go over all the is***device() methods and
+>>> clean up the mess.  E.g., is_fs_device() is used by is_lnk_special()
+>>> only, is_auto_device() doesn't have much meaning,
+>> I've removed is_fs_device() and is_auto_device()
+>>> some funcs have underscores, some don't.
+>> The convention seems to be that is<something> uses underscores if and only if
+>> "something" is a single word.
+>                ^
+>               not
+>> The only exception I saw is isctty_capable.
+>> I didn't bother changing this, but I could if you want me to.
 
-diff --git a/winsup/cygwin/release/3.0.8 b/winsup/cygwin/release/3.0.8
-index e3734c9b7..11d11db6f 100644
---- a/winsup/cygwin/release/3.0.8
-+++ b/winsup/cygwin/release/3.0.8
-@@ -11,3 +11,6 @@ Bug Fixes
-=20
- - Fix a hang when opening a FIFO with O_PATH.
-   Addresses: https://cygwin.com/ml/cygwin-developers/2019-06/msg00001.html
-+
-+- Don't append ".lnk" when renaming a socket file.
-+  Addresses: https://cygwin.com/ml/cygwin/2019-07/msg00139.html
---=20
-2.21.0
+Anything beginning is or to followed by a lower case letter may be used by the
+(library) implementation and may be considered reserved: best to interpose an
+underscore as systems with better language support inc. BSDs are adding classes.
+
+-- 
+Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
+
+This email may be disturbing to some readers as it contains
+too much technical detail. Reader discretion is advised.
