@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9500-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 18932 invoked by alias); 21 Jul 2019 01:53:09 -0000
+Return-Path: <cygwin-patches-return-9502-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 47176 invoked by alias); 21 Jul 2019 01:58:24 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,26 +9,25 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 18842 invoked by uid 89); 21 Jul 2019 01:53:09 -0000
+Received: (qmail 47157 invoked by uid 89); 21 Jul 2019 01:58:24 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-18.8 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE,SEM_URI,SEM_URIRED,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=
+X-Spam-SWARE-Status: No, score=-19.0 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE,SEM_URI,SEM_URIRED,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=hang, cygwindevelopers, cygwin-developers, cygwincom
 X-HELO: NAM04-CO1-obe.outbound.protection.outlook.com
-Received: from mail-eopbgr690126.outbound.protection.outlook.com (HELO NAM04-CO1-obe.outbound.protection.outlook.com) (40.107.69.126) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 21 Jul 2019 01:53:07 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none; b=DI3LGmz+l+l9o87agasdNke8tqk3P0wcBRoksZz7qPTBegnnNK/v4nsdXRgTDYV60alSg2J4dAdRQQQxKbsNva6aKdRKei6bpHyRwry5f7HZBxgI3XtW/b3SvgWCFT3lR0ocRX96Vm5y4YgV4dWfPdXzUKbOxINkjjrcvrBUB2Ef04fCjfy7QJcuqehvAij1HlKlMzfLtzV8D0rpERjG9IYnqg8nncs0FEdBMsMEVHCZ1cwurz6Sjtd+MmAq+ssTmKyVBzjHeJKqahha6PjqcC/Q/S55yXWe+fqwJhW5f446udo/FHOoumYjzFQOcvCzFGrHn3hHd6EZ6FTSIK9Mjw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=eTlt80V4/2c0I8goV+neZwfvOY3HEW7NQKCJ+7AG/mM=; b=RlW4DjBbQJ6blopWh0+Myjo1UUcZyQPcf+pzQ+VMmJJ1Zo21mPKG/sXy/ww37X/CmjH+XHbuYuvnqkHd5cM2aWU3Zv5uGIoazM4+k+XtFmcwFHLxX6TV3VJR3+MchHEePwF9qU8aCgWc5recTS2x3BV2Q++jg7vEZ12J8ABtBeINuRFydsu+SVDgktAN3zwf7H+zyL2kcSSAt+zijm6bKHJECQbjARX7cEU0udAEdd9reAdaGDAVBm7bbDSdzvZTqf9WJ/GZmP2OVKAT0/mtQTK3QGIM9WmsCRoRZdQlRaJgXhC2AGT3NXi6aZwvrcIQrlDCHqijaCeDs01fGXIbjw==
+Received: from mail-eopbgr690091.outbound.protection.outlook.com (HELO NAM04-CO1-obe.outbound.protection.outlook.com) (40.107.69.91) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 21 Jul 2019 01:58:22 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none; b=T5x9Fqtv51aTBOdDsiYZ49+u2GM+qbwTJV9M93mtyZ+AeXq+xlnRjcKmovOxL+bzosfgTyctNE656DsGGLbsQPqsDn1E+Az9n86QNnQ+34cftdZAq9mEzQiNjsqtA5jSbLt4vhY0gWj6jpC0S7W9jY5y9et+lfU0DTWMckdC35AosrnIo+wtlIpG3wC2izOLyue6GjA5t/N4zrpz9P7YA6QqzjrzAs0QRpqJYSyrwXVnjAd9925xq/KtWACnLoidLleFMRJo4uRSvJgw8tPh8hntTuk1ik8bl5pauHI19f6Q3K0L20fjPxwlKNDzaqbzaSm/QVKZNA+Hl9GcpxDfUg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=aluts8/GXQr7DW/i6bppu34b/NLl7PzmKxqbjsYtym8=; b=Yamst5cBLF4xaBzgbnsptEhj7mhVePeQxd/68FPdshZTht8FygVXd/gksmSAQcPpYpc9+7V3iRFzBBGNysWW9h66ijjHgbMo5mR1pRe+qj+u0krp6CNyLMUJ4kWjWqQ4tyyPDvJPNipG5jbk89T/ScXiXmSsAW6lLId6b7zCp5wIpJSBveCvdDQ9DlT3KuWUxUf6DlrFFrY31IdQMirRX7AD9UwGJm2S+FzvuPp2UEBg61hQb2MflyLQG8X8TgXaDZsuWQtHq2wuLC+Uc7Beod+ZA7VuqUvD8jGOprtdE7ROlHuQoXsvM99ecLwEUxAdNd1DO+/XRg1jsNcoQsCfjg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass smtp.mailfrom=cornell.edu;dmarc=pass action=none header.from=cornell.edu;dkim=pass header.d=cornell.edu;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=eTlt80V4/2c0I8goV+neZwfvOY3HEW7NQKCJ+7AG/mM=; b=KMt6dIhxPPTn2a2Em7x9UyxZqGMd17WS7V2NDczBH2kuFM7ORDPI7GOIt8QFBUnfYVtW93VGvQwsNLgnmptlIhl++ggptHFF3pdE4/tphYCnFh71Gav2sUll2hsRDLlmYnQIopkWQsMmBx+g1PRRhtBqIAZANhgYSytlbvhMDtQ=
-Received: from CY1PR04MB2300.namprd04.prod.outlook.com (10.167.10.148) by CY1PR04MB2250.namprd04.prod.outlook.com (10.167.8.150) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2094.14; Sun, 21 Jul 2019 01:53:03 +0000
-Received: from CY1PR04MB2300.namprd04.prod.outlook.com ([fe80::b0bd:c5ef:93b1:2bc8]) by CY1PR04MB2300.namprd04.prod.outlook.com ([fe80::b0bd:c5ef:93b1:2bc8%8]) with mapi id 15.20.2094.013; Sun, 21 Jul 2019 01:53:03 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=aluts8/GXQr7DW/i6bppu34b/NLl7PzmKxqbjsYtym8=; b=Pq8tYk9xNTaOan5s3UrHg79k3dj/f2IknVL7H9EDv8N3I0ABHa4j+psyoHQCo2dX7j4FJxQcN6Dk+2FQh0u+ddOgkJMMWXrcLWwhVGdOsoSPCqveUgarmgG1D7ZAw4mn5IzkbTeQluYPDV0qres6lgLACmU9Gm15xUwlgzjTAbs=
+Received: from CY1PR04MB2300.namprd04.prod.outlook.com (10.167.10.148) by CY1PR04MB2250.namprd04.prod.outlook.com (10.167.8.150) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2094.14; Sun, 21 Jul 2019 01:58:19 +0000
+Received: from CY1PR04MB2300.namprd04.prod.outlook.com ([fe80::b0bd:c5ef:93b1:2bc8]) by CY1PR04MB2300.namprd04.prod.outlook.com ([fe80::b0bd:c5ef:93b1:2bc8%8]) with mapi id 15.20.2094.013; Sun, 21 Jul 2019 01:58:19 +0000
 From: Ken Brown <kbrown@cornell.edu>
 To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: [PATCH 4/4] Cygwin: socket files are not lnk special files
-Date: Sun, 21 Jul 2019 01:53:00 -0000
-Message-ID: <20190721015238.2127-5-kbrown@cornell.edu>
-References: <20190721015238.2127-1-kbrown@cornell.edu>
-In-Reply-To: <20190721015238.2127-1-kbrown@cornell.edu>
+Subject: [PATCH] Cygwin: document the last bug fix
+Date: Sun, 21 Jul 2019 01:58:00 -0000
+Message-ID: <20190721015803.2971-1-kbrown@cornell.edu>
 authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
-x-ms-oob-tlc-oobclassifiers: OLM:6790;
+x-ms-exchange-purlcount: 2
+x-ms-oob-tlc-oobclassifiers: OLM:586;
 received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 Content-Type: text/plain; charset="iso-8859-1"
@@ -37,55 +36,22 @@ MIME-Version: 1.0
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
 X-MS-Exchange-CrossTenant-userprincipalname: ksb2@cornell.edu
 X-IsSubscribed: yes
-X-SW-Source: 2019-q3/txt/msg00019.txt.bz2
+X-SW-Source: 2019-q3/txt/msg00022.txt.bz2
 
-Change path_conv::is_lnk_special() so that it returns false on socket
-files.
-
-is_lnk_special() is called by rename2() in order to deal with special
-files (FIFOs and symlinks, for example) whose Win32 names usually have
-a ".lnk" suffix.  Socket files do not fall into this category, and
-this change prevents ".lnk" from being appended erroneously when such
-files are renamed.
-
-Remove a now redundant !pc.issocket() from fhandler_disk_file::link().
 ---
- winsup/cygwin/fhandler_disk_file.cc | 4 ++--
- winsup/cygwin/path.h                | 4 +++-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ winsup/cygwin/release/3.0.8 | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/winsup/cygwin/fhandler_disk_file.cc b/winsup/cygwin/fhandler_d=
-isk_file.cc
-index 193192762..fe4ee6971 100644
---- a/winsup/cygwin/fhandler_disk_file.cc
-+++ b/winsup/cygwin/fhandler_disk_file.cc
-@@ -1190,10 +1190,10 @@ fhandler_disk_file::link (const char *newpath)
-   char new_buf[nlen + 5];
-   if (!newpc.error)
-     {
--      /* If the original file is a lnk special file (except for sockets),
-+      /* If the original file is a lnk special file,
- 	 and if the original file has a .lnk suffix, add one to the hardlink
- 	 as well. */
--      if (pc.is_lnk_special () && !pc.issocket ()
-+      if (pc.is_lnk_special ()
- 	  && RtlEqualUnicodePathSuffix (pc.get_nt_native_path (),
- 					&ro_u_lnk, TRUE))
- 	{
-diff --git a/winsup/cygwin/path.h b/winsup/cygwin/path.h
-index 2fd9133c4..65cfa7e7c 100644
---- a/winsup/cygwin/path.h
-+++ b/winsup/cygwin/path.h
-@@ -184,7 +184,9 @@ class path_conv
-   int isspecial () const {return dev.not_device (FH_FS);}
-   int iscygdrive () const {return dev.is_device (FH_CYGDRIVE);}
-   int is_fs_special () const {return dev.is_fs_special ();}
--  int is_lnk_special () const {return (isdevice () && is_fs_special ())
+diff --git a/winsup/cygwin/release/3.0.8 b/winsup/cygwin/release/3.0.8
+index e3734c9b7..11d11db6f 100644
+--- a/winsup/cygwin/release/3.0.8
++++ b/winsup/cygwin/release/3.0.8
+@@ -11,3 +11,6 @@ Bug Fixes
+=20
+ - Fix a hang when opening a FIFO with O_PATH.
+   Addresses: https://cygwin.com/ml/cygwin-developers/2019-06/msg00001.html
 +
-+  int is_lnk_special () const {return (isdevice () && is_fs_special ()
-+				       && !issocket ())
-       || isfifo () || is_lnk_symlink ();}
- #ifdef __WITH_AF_UNIX
-   int issocket () const {return dev.is_device (FH_LOCAL)
++- Don't append ".lnk" when renaming a socket file.
++  Addresses: https://cygwin.com/ml/cygwin/2019-07/msg00139.html
 --=20
 2.21.0
