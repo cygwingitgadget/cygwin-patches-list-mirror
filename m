@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9520-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 128812 invoked by alias); 24 Jul 2019 16:25:35 -0000
+Return-Path: <cygwin-patches-return-9521-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 40911 invoked by alias); 24 Jul 2019 16:54:59 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,37 +9,38 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 128802 invoked by uid 89); 24 Jul 2019 16:25:34 -0000
+Received: (qmail 40692 invoked by uid 89); 24 Jul 2019 16:54:59 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-120.7 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*MI:cygwin, HContent-Transfer-Encoding:8bit
+X-Spam-SWARE-Status: No, score=-122.7 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=aforementioned, HX-Languages-Length:2280
 X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.133) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 24 Jul 2019 16:25:33 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id 1MK3BO-1i7RUZ1eZy-00LUIy; Wed, 24 Jul 2019 18:25:25 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id D6789A80871; Wed, 24 Jul 2019 18:25:24 +0200 (CEST)
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.17.24) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 24 Jul 2019 16:54:58 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id 1Mwfeu-1ib1Gc1b5O-00yBKJ; Wed, 24 Jul 2019 18:54:48 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 50A40A804E4; Wed, 24 Jul 2019 18:54:47 +0200 (CEST)
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
 Cc: Ken Brown <kbrown@cornell.edu>,	Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH] Cygwin: Fix the address of myself
-Date: Wed, 24 Jul 2019 16:25:00 -0000
-Message-Id: <20190724162524.5604-1-corinna-cygwin@cygwin.com>
+Subject: [PATCH v2] Cygwin: Fix the address of myself
+Date: Wed, 24 Jul 2019 16:54:00 -0000
+Message-Id: <20190724165447.28339-1-corinna-cygwin@cygwin.com>
+In-Reply-To: <20190724162524.5604-1-corinna-cygwin@cygwin.com>
+References: <20190724162524.5604-1-corinna-cygwin@cygwin.com>
 Reply-To: cygwin-patches@cygwin.com
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SW-Source: 2019-q3/txt/msg00040.txt.bz2
+X-SW-Source: 2019-q3/txt/msg00041.txt.bz2
 
 From: Corinna Vinschen <corinna@vinschen.de>
+
+v2: rephrase commit message
 
 Introducing an independent Cygwin PID introduced a regression:
 
 The expectation is that the myself pinfo pointer always points to a
 specific address right in front of the loaded Cygwin DLL.
 
-However, commit b5e1003722cb14235c4f166be72c09acdffc62ea "Cygwin:
-processes: use dedicated Cygwin PID rather than Windows PID" and commit
-88605243a19bbc2b6b9be36b99f513140b972e38 "Cygwin: fix child getting
-another pid after spawnve" broke this.  To get myself at the right
-address requires to call init with h0 set to INVALID_HANDLE_VALUE or an
-existing address:
+However, the independent Cygwin PID changes broke this.  To create
+myself at the right address requires to call init with h0 set to
+INVALID_HANDLE_VALUE or an existing address:
 
 void
 pinfo::init (pid_t n, DWORD flag, HANDLE h0)
@@ -54,13 +55,16 @@ pinfo::init (pid_t n, DWORD flag, HANDLE h0)
         h0 = NULL;
     }
 
-That was not the case anymore after the above commits.  This patch makes
-sure to set the handle to INVALID_HANDLE_VALUE again when creating a new
-process, so init knows that myself has to be created in the right spot.
+The aforementioned commits changed that so h0 was always NULL, this way
+creating myself at an arbitrary address.
 
-While at it, fix a potential uninitialized handle value in
-child_info_spawn::handle_spawn.
+This patch makes sure to set the handle to INVALID_HANDLE_VALUE again
+when creating a new process, so init knows that myself has to be created
+in the right spot.  While at it, fix a potential uninitialized handle
+value in child_info_spawn::handle_spawn.
 
+Fixes: b5e1003722cb ("Cygwin: processes: use dedicated Cygwin PID rather than Windows PID")
+Fixes: 88605243a19b ("Cygwin: fix child getting another pid after spawnve")
 Signed-off-by: Corinna Vinschen <corinna@vinschen.de>
 ---
  winsup/cygwin/dcrt0.cc | 2 +-
