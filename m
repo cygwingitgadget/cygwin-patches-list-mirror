@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9517-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 110607 invoked by alias); 24 Jul 2019 15:14:56 -0000
+Return-Path: <cygwin-patches-return-9518-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 50797 invoked by alias); 24 Jul 2019 15:35:00 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,126 +9,59 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 110593 invoked by uid 89); 24 Jul 2019 15:14:56 -0000
+Received: (qmail 50788 invoked by uid 89); 24 Jul 2019 15:35:00 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-101.9 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*f:sk:03431b8, H*i:sk:03431b8
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.187) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 24 Jul 2019 15:14:55 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id 1MvJs9-1ihRYz3KV7-00rJGN for <cygwin-patches@cygwin.com>; Wed, 24 Jul 2019 17:14:52 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 4F53DA80871; Wed, 24 Jul 2019 17:14:52 +0200 (CEST)
-Date: Wed, 24 Jul 2019 15:14:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 1/1] Cygwin: don't allow getpgrp() to fail
-Message-ID: <20190724151452.GX21169@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20190723161100.1045-1-kbrown@cornell.edu> <20190723161100.1045-2-kbrown@cornell.edu> <20190723165458.GM21169@calimero.vinschen.de> <59c6529d-b411-fcf5-fa82-8a681d5b6378@dronecode.org.uk> <20190723191648.GP21169@calimero.vinschen.de> <03431b8b-22aa-d288-aa11-87a9feedfb44@cornell.edu>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="yypaS3FvPkEUiGyo"
-Content-Disposition: inline
-In-Reply-To: <03431b8b-22aa-d288-aa11-87a9feedfb44@cornell.edu>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-SW-Source: 2019-q3/txt/msg00037.txt.bz2
-
-
---yypaS3FvPkEUiGyo
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-Spam-SWARE-Status: No, score=-23.4 required=5.0 tests=BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE,SEM_URI,SEM_URIRED,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=Hx-clientproxiedby:2603, msg00166.html, Hx-clientproxiedby:404, UD:msg00166.html
+X-HELO: NAM05-DM3-obe.outbound.protection.outlook.com
+Received: from mail-eopbgr730107.outbound.protection.outlook.com (HELO NAM05-DM3-obe.outbound.protection.outlook.com) (40.107.73.107) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 24 Jul 2019 15:34:58 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none; b=c1Dpd6QI3+v5r0sOL6F/FIbxF9F6WKoKgujwZJsxczZx40U0AKqTV1KLRgVYMSUrR1tRAe5rVmCRi8dIm7aNG3J514Pn98idqO1F3E0+Q9HtBqcoRNUBo7laQNZGMcVfcm2aeDnRCpQelRbBmgEygkBQYvuTMjNNAG9Jv2wOwUcixDeIqHkMJGVuZQ9YNoKHVp2UrGalFSS9YlhjmxA+ax46eKEW1+O1eb4wAEUb3QIoUqrAHAezHNM/UYQAKzSi+CINxCFQb5nIC6iNOO07VYqwKJ+z7bBbwbSR4LQjYP670ywFIPqk6tN7rHF5g+wQbdppICQ/sXLVkqTj7stJRg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=pTGsK9ol2WW1aPD7SstNvMOOstHHU53J5eU2jCQ/6RE=; b=UNqnfgYUXIKyHfm42gjLK7mV4m+l8rPc52ZXmyc2Wsoz36VE8tH+u90sRrAijdBFRGUGGvek30mfGKwg+FB2FBYUSiaYUueVj1TrurzQJX9yf7K1V3NZSs3o+P9RGHfWiOJhm9J5UFeA/Mel6j1BjxC9dmRtPviE7kOEq+On535ERoXejoelsn5S0C6Ozo0TaAE3UnPqANKPEQY1XjBAGGLuahC1F6Uf9dW+ASfhmia2heyWPpzN06aiieJemThazTfQVHdb21s+QuPEWMWqRWKSI/69WuKz9rGwJcIKc2qplY/UEII8e5xpqgpDLoqmDBuu8WyjovAVj2Rwxq3+2A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass smtp.mailfrom=cornell.edu;dmarc=pass action=none header.from=cornell.edu;dkim=pass header.d=cornell.edu;arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=pTGsK9ol2WW1aPD7SstNvMOOstHHU53J5eU2jCQ/6RE=; b=HQ8FGkxvwh8RWdPsNTkEnRVlSu9YPc7loRwvJ3uVHB2fNNmUdhoKc7GeNiI1MHDtexp7+DLa5Y+oRtvj9OIYITrSBnoCVskqknAIh6IDbFMEV2SoDst2Q8EF2ReZkte/kBbW1yxtfN4uvTTJ5ZLjFc6xgkF/hi+AntbAm/ZgkHQ=
+Received: from CY1PR04MB2300.namprd04.prod.outlook.com (10.167.10.148) by CY1PR04MB2252.namprd04.prod.outlook.com (10.167.10.14) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2094.12; Wed, 24 Jul 2019 15:34:55 +0000
+Received: from CY1PR04MB2300.namprd04.prod.outlook.com ([fe80::b0bd:c5ef:93b1:2bc8]) by CY1PR04MB2300.namprd04.prod.outlook.com ([fe80::b0bd:c5ef:93b1:2bc8%8]) with mapi id 15.20.2094.017; Wed, 24 Jul 2019 15:34:55 +0000
+From: Ken Brown <kbrown@cornell.edu>
+To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: [PATCH] Cygwin: fhandler_termios::tcsetpgrp: check that argument is non-negative
+Date: Wed, 24 Jul 2019 15:35:00 -0000
+Message-ID: <20190724153438.1240-1-kbrown@cornell.edu>
+authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
+x-ms-exchange-purlcount: 1
+x-ms-oob-tlc-oobclassifiers: OLM:3383;
+received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
-Content-length: 2274
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ksb2@cornell.edu
+X-IsSubscribed: yes
+X-SW-Source: 2019-q3/txt/msg00038.txt.bz2
 
-On Jul 24 15:04, Ken Brown wrote:
-> On 7/23/2019 3:16 PM, Corinna Vinschen wrote:
-> > On Jul 23 19:07, Jon Turney wrote:
-> >> On 23/07/2019 17:54, Corinna Vinschen wrote:
-> >>> Hi Ken,
-> >>>
-> >>> On Jul 23 16:12, Ken Brown wrote:
-> >>>> According to POSIX, "The getpgrp() function shall always be successf=
-ul
-> >>>> and no return value is reserved to indicate an error."  Cygwin's
-> >>>> getpgrp() is defined in terms of getpgid(), which is allowed to fail.
-> >>>
-> >>> But it shouldn't fail for the current process.  Why should pinfo::init
-> >>> fail for myself if it begins like this?
-> >>>
-> >>>     if (myself && n =3D=3D myself->pid)
-> >>>       {
-> >>>         procinfo =3D myself;
-> >>>         destroy =3D 0;
-> >>>         return;
-> >>>       }
-> >>>
-> >>> I fear this patch would only cover up the problem still persisting
-> >>> under the hood.
-> >>
-> >> I agree.
-> >>
-> >> There is presumably a class of programs which require getpgrp() to ret=
-urn
-> >> the correct value for correct operation, which cannot be 0 (since that
-> >> cannot be a pid).
-> >=20
-> > However, did we ever see this problem outside of GDB?
->=20
-> I think I've found the problem, as I just reported on the main cygwin lis=
-t.  And=20
-> I agree that my patch was misguided.
->=20
-> But I still think getpgrp() should be changed, perhaps by having it just =
-return=20
-> myself->pgid as you suggested earlier.  There's no point in having getpgr=
-p()=20
-> call getpgid(), which does error checking, when POSIX specifically says "=
-no=20
-> return value [of getpgrp()] is reserved to indicate an error".  POSIX-com=
-patible=20
-> applications should call getpgid(0) instead of getpgrp() if they want to =
-do=20
-> error checking.
->=20
-> I'll send a couple of patches, one for this issue and one for the tcsetpg=
-rp()=20
-> problem, so that we can discuss it further.
->=20
-> Ken
+Return -1 with EINVAL if pgid < 0.  This fixes the gdb problem
+reported here:
 
-I have a very puzzeling result debugging this.  I just outlined this to
-Jon on the #cygwin-developers Freenode IRC channel.  Hopefully your
-patch to tcsetpgrp clears this up.
+  https://cygwin.com/ml/cygwin/2019-07/msg00166.html
+---
+ winsup/cygwin/fhandler_termios.cc | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-I also found a problem in pinfo::this_proc / pinfo_init while debugging
-the above.  I'll post the patch to this list since I would very much
-like that you and/or Jon take a close look.
-
-
-Thanks,
-Corinna
-
+diff --git a/winsup/cygwin/fhandler_termios.cc b/winsup/cygwin/fhandler_ter=
+mios.cc
+index 4ce53433a..5b0ba5603 100644
+--- a/winsup/cygwin/fhandler_termios.cc
++++ b/winsup/cygwin/fhandler_termios.cc
+@@ -69,6 +69,11 @@ fhandler_termios::tcsetpgrp (const pid_t pgid)
+       set_errno (EPERM);
+       return -1;
+     }
++  else if (pgid < 0)
++    {
++      set_errno (EINVAL);
++      return -1;
++    }
+   int res;
+   while (1)
+     {
 --=20
-Corinna Vinschen
-Cygwin Maintainer
-
---yypaS3FvPkEUiGyo
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl04dewACgkQ9TYGna5E
-T6DIYw/+K1UptwzW626fyuOMVYG6lrfNXkW/qGgE1VtPCqxJAi1zp5V8fV82BI7n
-e+CGHij5xcl9aYGJkSk3hjQRfLlBe1G2VluP5pkc18x7fooBY51vW6SefMmbV4jw
-Y1eeUdex3lvvHA71Icp7JkvHFmVD++6uhkAcETOBNvxW00YqDtveW9GP6Ku57JrP
-gkbiGdmYUDQMihK1MbO/KX5mJYmZ4PiLcKZh05zV/jMzTBVakuy1882o6KzMQhJq
-FqelfnFeTpdD8QKBXE3wYkat9iTY2EuQUN8P3phLDseRHuSWuhTDIUs2wlrXKdI5
-3J+Ch4R4ri/ZVnUp8Q+/ksCVE7WbAZoMJUHyP5T/L/RnHRTiimYE/u6hjQK5SJ94
-h6UnJNN4zpzUqYPy20lMX147c3XGgNHBojwYruTdCc14R686jk1WoNNPXg8bMEo7
-k1k9CZJwk9WLh9hZIid71AdxKpvYwO9kXCeqogiECOGIL/mje3e0i1MPYOk2KqoW
-LdSGVJRuKrueQtQ5b/Rtw06pzmBuPa7ep/nWuPneYbVsRbi4nx+7LDR7ouAoT7cM
-B4MmyofoR9Nph6Wm5z+OiKdctQfkY6buLwEaLOPVvAteQzKOJGGd1GLLZwR51gCx
-KPEnj0JpCnO7RWk1Qkjwi4lZdgp1wwSsTGW2cqkm0Ti5XJRp3d8=
-=X749
------END PGP SIGNATURE-----
-
---yypaS3FvPkEUiGyo--
+2.21.0
