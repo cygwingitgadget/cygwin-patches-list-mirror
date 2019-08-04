@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9542-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 70138 invoked by alias); 1 Aug 2019 09:29:32 -0000
+Return-Path: <cygwin-patches-return-9543-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 69909 invoked by alias); 4 Aug 2019 22:46:09 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,61 +9,118 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 69785 invoked by uid 89); 1 Aug 2019 09:29:31 -0000
+Received: (qmail 69888 invoked by uid 89); 4 Aug 2019 22:46:08 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-5.7 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,SPF_PASS autolearn=ham version=3.3.1 spammy=UD:cygwin.com, cygwincom, cygwin.com, retry
-X-HELO: atfriesa01.ssi-schaefer.com
-Received: from atfriesa01.ssi-schaefer.com (HELO atfriesa01.ssi-schaefer.com) (193.186.16.100) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 01 Aug 2019 09:29:29 +0000
-Received: from samail03.wamas.com (HELO mailhost.salomon.at) ([172.28.33.235])  by atfriesa01.ssi-schaefer.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Aug 2019 11:28:45 +0200
-Received: from fril0049.wamas.com ([172.28.42.244])	by mailhost.salomon.at with esmtp (Exim 4.77)	(envelope-from <michael.haubenwallner@ssi-schaefer.com>)	id 1ht7O8-0006VK-OM; Thu, 01 Aug 2019 11:28:44 +0200
-Subject: Re: [PATCH v2 0/2] silent fork retry with shm (broke emacs-X11)
+X-Spam-SWARE-Status: No, score=-20.4 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3 autolearn=ham version=3.3.1 spammy=tot, supplies, operate, HContent-Transfer-Encoding:8bit
+X-HELO: m0.truegem.net
+Received: from m0.truegem.net (HELO m0.truegem.net) (69.55.228.47) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 04 Aug 2019 22:46:05 +0000
+Received: (from daemon@localhost)	by m0.truegem.net (8.12.11/8.12.11) id x74Mk4r5080184;	Sun, 4 Aug 2019 15:46:04 -0700 (PDT)	(envelope-from mark@maxrnd.com)
+Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67), claiming to be "localhost.localdomain" via SMTP by m0.truegem.net, id smtpd7Csz0D; Sun Aug  4 15:45:58 2019
+From: Mark Geisert <mark@maxrnd.com>
 To: cygwin-patches@cygwin.com
-References: <20190730160754.GZ11632@calimero.vinschen.de> <20190731103531.559-1-michael.haubenwallner@ssi-schaefer.com> <20190731165913.GB11632@calimero.vinschen.de> <72d7798e-de3c-4e21-33bf-074e06e3e11d@cornell.edu>
-From: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
-Openpgp: preference=signencrypt
-Message-ID: <600ae389-cdf7-b3f6-f7f1-2bdff2ef221c@ssi-schaefer.com>
-Date: Thu, 01 Aug 2019 09:29:00 -0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Thunderbird/60.8.0
+Cc: Mark Geisert <mark@maxrnd.com>
+Subject: [PATCH v2] Cygwin: Implement CPU_SET(3) macros
+Date: Sun, 04 Aug 2019 22:46:00 -0000
+Message-Id: <20190804224546.59957-1-mark@maxrnd.com>
+In-Reply-To: <20190730121212.GV11632@calimero.vinschen.de>
+References: <20190730121212.GV11632@calimero.vinschen.de>
 MIME-Version: 1.0
-In-Reply-To: <72d7798e-de3c-4e21-33bf-074e06e3e11d@cornell.edu>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-SW-Source: 2019-q3/txt/msg00062.txt.bz2
+Content-Transfer-Encoding: 8bit
+X-IsSubscribed: yes
+X-SW-Source: 2019-q3/txt/msg00063.txt.bz2
 
-On 7/31/19 7:25 PM, Ken Brown wrote:
-> On 7/31/2019 12:59 PM, Corinna Vinschen wrote:
->> On Jul 31 12:35, Michael Haubenwallner wrote:
->>> On 7/30/19 6:07 PM, Corinna Vinschen wrote:
->>>> On Jul 30 17:22, Michael Haubenwallner wrote:
->>>>> Hi,
->>>>>
->>>>> following up
->>>>> https://cygwin.com/ml/cygwin-patches/2019-q2/msg00155.html
->>>>>
->>>>> It turns out that fixup_shms_after_fork does require the child pinfo to
->>>>> be "remember"ed, while the fork retry to be silent on failure requires
->>>>> the child to not be "attach"ed yet.
->>>>>
->>>>> As current pinfo.remember performs both "remember" and "attach" at once,
->>>>> the first patch does introduce pinfo.remember_without_attach, to not
->>>>> change current behaviour of pinfo.remember and keep patches small.
->>>>>
->>>>> However, my first thought was to clean up pinfo API a little and have
->>>>> remember not do both "remember+attach" at once, but introduce some new
->>>>> remember_and_attach method instead.  But then, when 'bool detach' is
->>>>> true, the "_and_attach" does feel wrong.
->>>>
->>>> I'd prefer to drop the reattach call from remember, calling both of them
->>>> where appropriate.
->>>>
->>>
->>> Fine with me, even if that looks a little more complicated for spawn.
->>
->> Pushed, with just a small formatting tweak.
-> 
-> I can confirm that this fixes the problem I reported in 
-> https://cygwin.com/ml/cygwin-patches/2019-q2/msg00155.html.
-> 
+This patch supplies an implementation of the CPU_SET(3) processor
+affinity macros as documented on the relevant Linux man page.
 
-Corinna, Ken: Thanks a lot!
-/haubi/
+There is a different implementation of cpusets under libc/sys/RTEMS that
+has FreeBSD compatibility and is built on top of FreeBSD bitsets.  This
+implementation can be combined with that one if necessary in the future.
+
+---
+ winsup/cygwin/include/sys/cpuset.h | 64 +++++++++++++++++++++++++++++-
+ 1 file changed, 62 insertions(+), 2 deletions(-)
+
+diff --git a/winsup/cygwin/include/sys/cpuset.h b/winsup/cygwin/include/sys/cpuset.h
+index 4857b879d..2056f6af7 100644
+--- a/winsup/cygwin/include/sys/cpuset.h
++++ b/winsup/cygwin/include/sys/cpuset.h
+@@ -18,8 +18,8 @@ typedef __SIZE_TYPE__ __cpu_mask;
+ #define __NCPUBITS (8 * sizeof (__cpu_mask))  // max size of processor group
+ #define __CPU_GROUPMAX (__CPU_SETSIZE / __NCPUBITS)  // maximum group number
+ 
+-#define __CPUELT(cpu)   ((cpu) / __NCPUBITS)
+-#define __CPUMASK(cpu)  ((__cpu_mask) 1 << ((cpu) % __NCPUBITS))
++#define __CPUELT(cpu)  ((cpu) / __NCPUBITS)
++#define __CPUMASK(cpu) ((__cpu_mask) 1 << ((cpu) % __NCPUBITS))
+ 
+ typedef struct
+ {
+@@ -28,6 +28,66 @@ typedef struct
+ 
+ int __sched_getaffinity_sys (pid_t, size_t, cpu_set_t *);
+ 
++/* These macros alloc or free dynamically-sized cpu sets of size 'num' cpus.
++   Allocations are padded such that full-word operations can be done easily. */
++#define CPU_ALLOC_SIZE(num) ((num+__NCPUBITS-1) / __NCPUBITS) * sizeof (__cpu_mask)
++#define CPU_ALLOC(num)      __builtin_malloc (CPU_ALLOC_SIZE(num))
++#define CPU_FREE(set)       __builtin_free (set)
++
++/* These _S macros operate on dynamically-sized cpu sets of size 'siz' bytes */
++#define CPU_ZERO_S(siz, set)    __builtin_memset (set, 0, siz)
++
++#define CPU_SET_S(cpu,siz,set) \
++	if (cpu < 8 * siz) \
++	  (set)->__bits[__CPUELT(cpu)] |= __CPUMASK(cpu);
++
++#define CPU_CLR_S(cpu,siz,set) \
++	if (cpu < 8 * siz) \
++	  (set)->__bits[__CPUELT(cpu)] &= ~(__CPUMASK(cpu));
++
++#define CPU_ISSET_S(cpu,siz,set) \
++      ({int res = 0; \
++	if (cpu < 8 * siz) \
++	  res = !!((set)->__bits[__CPUELT(cpu)] & __CPUMASK(cpu)); \
++	res;})
++
++#define CPU_COUNT_S(siz, set) \
++      ({int tot = 0;\
++	for (int i = 0; i < siz / sizeof (__cpu_mask); i++) \
++	  tot += __builtin_popcountl ((set)->__bits[i]); \
++	tot;})
++
++#define CPU_AND_S(siz, dst, src1, src2) \
++	for (int i = 0; i < siz / sizeof (__cpu_mask); i++) \
++	  (dst)->__bits[i] = (src1)->__bits[i] & (src2)->__bits[i];
++
++#define CPU_OR_S(siz, dst, src1, src2) \
++	for (int i = 0; i < siz / sizeof (__cpu_mask); i++) \
++	  (dst)->__bits[i] = (src1)->__bits[i] | (src2)->__bits[i];
++
++#define CPU_XOR_S(siz, dst, src1, src2) \
++	for (int i = 0; i < siz / sizeof (__cpu_mask); i++) \
++	  (dst)->__bits[i] = (src1)->__bits[i] ^ (src2)->__bits[i];
++
++#define CPU_EQUAL_S(siz, src1, src2) \
++      ({int res = 1; \
++	for (int i = 0; res && i < siz / sizeof (__cpu_mask); i++) \
++	  res &= (src1)->__bits[i] == (src2)->__bits[i]; \
++	res;})
++
++/* These macros operate on fixed-size cpu sets of size __CPU_SETSIZE cpus */
++#define CPU_ZERO(set)             CPU_ZERO_S(sizeof (cpu_set_t), set)
++
++#define CPU_SET(cpu, set)         CPU_SET_S(cpu, sizeof (cpu_set_t), set)
++#define CPU_CLR(cpu, set)         CPU_CLR_S(cpu, sizeof (cpu_set_t), set)
++#define CPU_ISSET(cpu, set)       CPU_ISSET_S(cpu, sizeof (cpu_set_t), set)
++
++#define CPU_COUNT(set)            CPU_COUNT_S(sizeof (cpu_set_t), set)
++#define CPU_AND(dst, src1, src2)  CPU_AND_S(sizeof (cpu_set_t), dst, src1, src2)
++#define CPU_OR(dst, src1, src2)   CPU_OR_S(sizeof (cpu_set_t), dst, src1, src2)
++#define CPU_XOR(dst, src1, src2)  CPU_XOR_S(sizeof (cpu_set_t), dst, src1, src2)
++#define CPU_EQUAL(src1, src2)     CPU_EQUAL_S(sizeof (cpu_set_t), src1, src2)
++
+ #ifdef __cplusplus
+ }
+ #endif
+-- 
+2.21.0
