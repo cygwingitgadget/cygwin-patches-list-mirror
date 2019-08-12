@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9556-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 100167 invoked by alias); 8 Aug 2019 16:27:13 -0000
+Return-Path: <cygwin-patches-return-9558-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 51362 invoked by alias); 12 Aug 2019 13:46:40 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,85 +9,51 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 100149 invoked by uid 89); 8 Aug 2019 16:27:13 -0000
+Received: (qmail 51322 invoked by uid 89); 12 Aug 2019 13:46:37 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-103.1 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=HX-Languages-Length:803, PS, P.S, UD:P.S
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.17.13) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 08 Aug 2019 16:27:12 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id 1MGyl3-1i9q153XFb-00E5h2; Thu, 08 Aug 2019 18:27:04 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id EE39CA80718; Thu,  8 Aug 2019 18:27:03 +0200 (CEST)
-Date: Thu, 08 Aug 2019 16:27:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: Ken Brown <kbrown@cornell.edu>
-Cc: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>,	Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
-Subject: Re: [PATCH] Cygwin: shmat: use mmap allocator strategy on 64 bit
-Message-ID: <20190808162703.GP11632@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: Ken Brown <kbrown@cornell.edu>,	"cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>,	Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
-References: <20190808085527.29002-1-corinna-cygwin@cygwin.com> <b5b5bbaf-2bbe-b500-5c4b-9afca3eaf093@cornell.edu>
+X-Spam-SWARE-Status: No, score=-21.0 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=HX-Languages-Length:839, HContent-Transfer-Encoding:8bit, H*F:D*jp
+X-HELO: conuserg-03.nifty.com
+Received: from conuserg-03.nifty.com (HELO conuserg-03.nifty.com) (210.131.2.70) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 12 Aug 2019 13:46:36 +0000
+Received: from localhost.localdomain (ntsitm268057.sitm.nt.ngn.ppp.infoweb.ne.jp [125.1.110.57]) (authenticated)	by conuserg-03.nifty.com with ESMTP id x7CDkP1O012869;	Mon, 12 Aug 2019 22:46:32 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-03.nifty.com x7CDkP1O012869
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1565617592;	bh=K5Rm5HfKpTfpHh92LuJjq+TYM6S4oqJgLnXwVQ8Y2XI=;	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;	b=cvX7dltEl9qLChSUPwjM3m/27XT4GDrD0ttTt22xl194nOxySI20UJf5ZlsXUqTy/	 oVh0lPwY7qgzAyxvYViz7VMyWR8WqJl6cHqmt3Knm6guxDTmG/hUDdGUisyI04R+Yj	 yfW3oKSThjyx5Jp+CFKZ9ZJPVifXtBqnY7suhtNElf/92ukXA6rbjWodwqM1NTCyBt	 YU+atDy/l0xkrI39Xn8L+OOXnmXJrnKgryi/SNcjstk1xDE870/iO9peK214SJovt1	 K074B3AuJFcumw7fw7vRjP3bFAqjQdYPcbLhmVnirW7HiEHHhih5yXqq+dA4yWNME+	 sneqt6rbQAU7A==
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH 1/1] Cygwin: console: Fix deadlock at calling fork().
+Date: Mon, 12 Aug 2019 13:46:00 -0000
+Message-Id: <20190812134623.2102-2-takashi.yano@nifty.ne.jp>
+In-Reply-To: <20190812134623.2102-1-takashi.yano@nifty.ne.jp>
+References: <20190812134623.2102-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="xwCJTF497Cudft2o"
-Content-Disposition: inline
-In-Reply-To: <b5b5bbaf-2bbe-b500-5c4b-9afca3eaf093@cornell.edu>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-SW-Source: 2019-q3/txt/msg00076.txt.bz2
+Content-Transfer-Encoding: 8bit
+X-IsSubscribed: yes
+X-SW-Source: 2019-q3/txt/msg00078.txt.bz2
 
+- Calling fork() on console occasionally falls into deadlock. The reason
+  is not clear, however, this patch fixes this problem anyway.
+---
+ winsup/cygwin/fhandler_console.cc | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
---xwCJTF497Cudft2o
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 761
-
-On Aug  8 16:06, Ken Brown wrote:
-> On 8/8/2019 4:55 AM, corinna-cygwin@cygwin.com wrote:
-> > From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-> >=20
-> > This avoids collisions of shmat maps with Windows own datastructures
-> > when allocating top-down.
-> >=20
-> > This patch moves the mmap_allocator class definition into its
-> > own files and just uses it from mmap and shmat.
->=20
-> This makes sense to me, and it fixes the hexchat fork problem.  Thanks!
->=20
-> Ken
-
-Thanks, Ken & Michael!
-
-> P.S. I got a whitespace warning from git when I applied the patch.  There=
-'s a=20
-> blank line at the end of mmap_alloc.cc.
-
-Thanks, I dropped the empty line and fixed an unintended reordering in
-mmap_alloc.cc.
-
-
-Corinna
-
---=20
-Corinna Vinschen
-Cygwin Maintainer
-
---xwCJTF497Cudft2o
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl1MTVcACgkQ9TYGna5E
-T6C2hg//WkLdwqneAIMi0GMvFkzmj0H04nGdXXu13iq8la+TA+1DH9CxzQxhjeRM
-qU1mhMx02TXonmTteKOWWKrAXz1JFIJPW+akXGxBmULCd0Sdxm6pcqwYlr9ho7mU
-XUpSbWKJNIAtUkSdCy0BvIOTw45Oi+l5dV12KMvUviIg6uRyjwsfn8GdVuWx+Flt
-iNnYE+mdC9FhVRph8tInl9qIgq6pOHlRrQcDLxs53Rxtk8RLjjTGCaZox0xtSt03
-L/lKp8lwAg893N5YvosevwUl+deT3BqgHMwxeWQnbSmeRkiH1Wb4Zaq+Cr9jilbP
-PTQydpervhxbSHvK/pis7FK+AW/XY2kWnIRAPWzoTIZztj7VLyV4hPe8/NVDbTFh
-1P+57se4f+yuFvfzptQQ6Z2PN/QKKTK/tiQvZdpCT2YwDxk7NvoeptpyE6LbktAw
-6GRfIjN454rusoRGnkXNRS9o4wxHTNCpSjj4bP3BwBlFQdt8Eek6on3UkX9nZaUJ
-aMncNDnoutlqZ36FbRddsJAP9KnAisSONW4vIDnVNz4z9zp9/lnTPUVWa3gFBVFY
-Bs2FIRI6yj077FdbTtNHBESSUs2MSSRkhAqoiKDBz57zj1OO/UEyIf8ZGYSOwQbc
-vfJJY5fHW31xGoGiXnz4Y7MWXoEt5I37+naRH+CNsM+ZgqngvHg=
-=e+y+
------END PGP SIGNATURE-----
-
---xwCJTF497Cudft2o--
+diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
+index 3d26a0b90..4afb7efb7 100644
+--- a/winsup/cygwin/fhandler_console.cc
++++ b/winsup/cygwin/fhandler_console.cc
+@@ -168,8 +168,12 @@ fhandler_console::set_unit ()
+       if (created)
+ 	con.owner = getpid ();
+     }
+-  if (!created && shared_console_info && kill (con.owner, 0) == -1)
+-    con.owner = getpid ();
++  if (!created && shared_console_info)
++    {
++      pinfo p (con.owner);
++      if (!p)
++	con.owner = getpid ();
++    }
+ 
+   dev ().parse (devset);
+   if (devset != FH_ERROR)
+-- 
+2.21.0
