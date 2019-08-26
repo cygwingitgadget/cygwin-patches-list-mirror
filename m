@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9574-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 81179 invoked by alias); 15 Aug 2019 08:09:37 -0000
+Return-Path: <cygwin-patches-return-9575-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 43252 invoked by alias); 26 Aug 2019 17:43:51 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,75 +9,67 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 81169 invoked by uid 89); 15 Aug 2019 08:09:37 -0000
+Received: (qmail 42986 invoked by uid 89); 26 Aug 2019 17:43:51 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-106.3 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=HTo:U*mark, H*c:HHH
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (217.72.192.75) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 15 Aug 2019 08:09:36 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id 1MjSDU-1ij6Du1fnm-00kv2S; Thu, 15 Aug 2019 10:08:36 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 06E0DA807B3; Thu, 15 Aug 2019 10:08:33 +0200 (CEST)
-Date: Thu, 15 Aug 2019 08:09:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: Mark Geisert <mark@maxrnd.com>
-Cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: ldd: Try harder to get dll names
-Message-ID: <20190815080832.GJ11632@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: Mark Geisert <mark@maxrnd.com>, cygwin-patches@cygwin.com
-References: <20190815055943.31661-1-mark@maxrnd.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="DrGmS0+Jkf65/BeF"
-Content-Disposition: inline
-In-Reply-To: <20190815055943.31661-1-mark@maxrnd.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-SW-Source: 2019-q3/txt/msg00094.txt.bz2
-
-
---DrGmS0+Jkf65/BeF
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-Spam-SWARE-Status: No, score=-14.4 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=psd
+X-HELO: NAM04-BN3-obe.outbound.protection.outlook.com
+Received: from mail-eopbgr680102.outbound.protection.outlook.com (HELO NAM04-BN3-obe.outbound.protection.outlook.com) (40.107.68.102) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 26 Aug 2019 17:43:49 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none; b=PxrUmPleiEiplja0Iptjz1gfzwIs6C6ekjtJFz+5UR2b6HYnAMqK1rwhLX6nYQ4jzrQLf/P0MMAERIvI6r/ItMss3pd4X/GkmEgH/eEKzUSJFQS1rTj/VAwka+kE+JZswLFJHqIGEE6u2Dmjge1SbyQ8z9GKROBIA0pW5WBYl4cMXw6aVRdkRGWVeS6EC8eMpC0rSoLcmmw+lJ5fKftKRjg4dHBYrZO+IP3osNv7LnjVf/9w1I7F/mjmHSYyEpM8Sb6f/L+ennuBnpH3mMkJVXudenz5OKQ6VnblPnNt73TyfZho7CQ9kQSXcJOVYhehrUYp9Weti227kgexT3qduQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=Rou1K0IOmeZE4hElYHqXzoRst8gpPo04YRGeHpAOVBE=; b=NYwfPPPi5QJmg8Zw14ZUjY1twquytfFkEb14waBxM6XVmO77tFq6dLKdTZWCgvVcM6QTGKuOrlKcDS0yCli7Qae7QG0extiRiedCS3k50nM0gxo/FGwxDpCGh83bkf7givOYprTtKtfQqa0h6of8aCy7qbV1MMcEkkuHHqmlDcx7hFBjYjCZUw8XljZiTpn8OM12vPR/4ePp8GGVJIYYOBVbvIPwWyOqflpe9XhTwy9lu6tA//T7cuT4kgXkKuiNr6JpmvbHfoNqZ1xRKUsUgzelr4JSGikqvdMd6WstuknIO6i4JA/k5QDUeyR12oT5gPL33CyOcvqmFuwQtv+fJw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu; dkim=pass header.d=cornell.edu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=Rou1K0IOmeZE4hElYHqXzoRst8gpPo04YRGeHpAOVBE=; b=GMBs8ncChp46DC801+QOwOxy9EriHqHGDJ/OzQHTkTiw7//CW8m2TqbXn4d5zGOlkvO0BedBV0ZbgyVaedc7LxFANCzVNLhLraCN1B2sbBScJchmp5gZ9+/vIWxWW/AqB+4nAnHbV+wWouV5B81vZV3VP3mSz6dFRnrhrGiYkpw=
+Received: from DM6PR04MB5738.namprd04.prod.outlook.com (20.179.51.81) by DM6PR04MB4028.namprd04.prod.outlook.com (20.176.87.28) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2178.16; Mon, 26 Aug 2019 17:43:46 +0000
+Received: from DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::998b:a76c:fc2b:1473]) by DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::998b:a76c:fc2b:1473%4]) with mapi id 15.20.2199.021; Mon, 26 Aug 2019 17:43:46 +0000
+From: Ken Brown <kbrown@cornell.edu>
+To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: [PATCH] Cygwin: get_posix_access: avoid negative subscript
+Date: Mon, 26 Aug 2019 17:43:00 -0000
+Message-ID: <20190826174324.46043-1-kbrown@cornell.edu>
+authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
+x-ms-oob-tlc-oobclassifiers: OLM:457;
+received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
-Content-length: 515
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 1+URRHSty1m/iFRjtZQgjPyY2mZa7IhZ7uBomVCFFB2vElZ+xEGxOTiLH1JBMXBOl/mIfgyYwFfl2AP6AgilhQ==
+X-IsSubscribed: yes
+X-SW-Source: 2019-q3/txt/msg00095.txt.bz2
 
-On Aug 14 22:59, Mark Geisert wrote:
-> Borrow a trick from strace to lessen occurrences of "??? =3D> ???" in ldd
-> output.  Specifically, if the module name isn't found in the usual place
-> in the mapped image, use the file handle we have to look up the name.
->=20
-> ---
->  winsup/utils/Makefile.in |  2 +-
->  winsup/utils/ldd.cc      | 44 +++++++++++++++++++++++++++++++++++++++-
->  2 files changed, 44 insertions(+), 2 deletions(-)
+Don't refer to lacl[pos] unless we know that pos >=3D 0.
+---
+ winsup/cygwin/sec_acl.cc | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Great idea, pushed.
-
-
-Thanks,
-Corinna
-
+diff --git a/winsup/cygwin/sec_acl.cc b/winsup/cygwin/sec_acl.cc
+index 933bfa69d..67749d7b1 100644
+--- a/winsup/cygwin/sec_acl.cc
++++ b/winsup/cygwin/sec_acl.cc
+@@ -807,9 +807,9 @@ get_posix_access (PSECURITY_DESCRIPTOR psd,
+ 			  lacl[pos].a_id =3D ACL_UNDEFINED_ID;
+ 			  lacl[pos].a_perm =3D CYG_ACE_MASK_TO_POSIX (ace->Mask);
+ 			  aclsid[pos] =3D well_known_null_sid;
++			  has_class_perm =3D true;
++			  class_perm =3D lacl[pos].a_perm;
+ 			}
+-		      has_class_perm =3D true;
+-		      class_perm =3D lacl[pos].a_perm;
+ 		    }
+ 		  if (ace->Header.AceFlags & SUB_CONTAINERS_AND_OBJECTS_INHERIT)
+ 		    {
+@@ -820,9 +820,9 @@ get_posix_access (PSECURITY_DESCRIPTOR psd,
+ 			  lacl[pos].a_id =3D ACL_UNDEFINED_ID;
+ 			  lacl[pos].a_perm =3D CYG_ACE_MASK_TO_POSIX (ace->Mask);
+ 			  aclsid[pos] =3D well_known_null_sid;
++			  has_def_class_perm =3D true;
++			  def_class_perm =3D lacl[pos].a_perm;
+ 			}
+-		      has_def_class_perm =3D true;
+-		      def_class_perm =3D lacl[pos].a_perm;
+ 		    }
+ 		}
+ 	    }
 --=20
-Corinna Vinschen
-Cygwin Maintainer
-
---DrGmS0+Jkf65/BeF
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl1VEwAACgkQ9TYGna5E
-T6BR/g/8CpXR/KTwIHytZUH/qWK4Fugs+tDUkUZGzgS4TY2H4jMQV87YK3WD+oiV
-y0Quin8w5RQHSlUSKtvipONIoxgmFCYXQOPbh5u5GAkDq/T5cQn0Mi5hAnugtjsm
-vOW5RkuSgkRdukMyw6vkcVZsRsM9Yy7HQ3Zm/H56uXlhq6r8BgfR77jpL4VerDv4
-/JdV68hPinp73XPG9wLGiK5vFINmV5BRG4BIB8Zt5jQJ7/vexunWxRjP66w3q9Wc
-9f2uPtf8/qhtulm8xh1L+mFTM+YYOtxvbVZflfDAvZUG9Q9F7WhDepC6i38qKvu4
-USEE1RkLG9cAVzEHU8e0YXMf07sw1ng8eplzfnFnlx2rLFv6AALwC+aAcrE+g84b
-BfvwFfChSp28LpWZ50MvgevlBliuC44Dc/5MLfgOqYDWo1AcubNVOljhLgK2St5T
-7PFCzCOyoWB3blZvPMI5zvvZ6vt6RSz84Ck79aMtEu1vHa14WKe/myZ5GFs6NKbA
-hAhj16waxAE1PviFRdBUsV3Usow8GNePJoMjo814JsF7StxlP3dX9szXdoouocKb
-QLhlbzSdrexPENYtLt9QCvYyQCC4FKIN3FETTinCR8tbFu4MsoKbM3F+L1RPimpJ
-R8dp5J6HgAaKO8f0vwlVXV8+NP2wW3JnQ3Uu+dt93nMO8hCy0rg=
-=squJ
------END PGP SIGNATURE-----
-
---DrGmS0+Jkf65/BeF--
+2.21.0
