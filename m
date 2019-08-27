@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9576-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 70262 invoked by alias); 27 Aug 2019 08:14:01 -0000
+Return-Path: <cygwin-patches-return-9577-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 43480 invoked by alias); 27 Aug 2019 20:00:21 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,111 +9,59 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 70253 invoked by uid 89); 27 Aug 2019 08:14:01 -0000
+Received: (qmail 43434 invoked by uid 89); 27 Aug 2019 20:00:19 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-114.2 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*F:D*cygwin.com, H*R:D*cygwin.com
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.187) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 27 Aug 2019 08:14:00 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id 1MLz3R-1hl8Jo1Ew5-00HyIM for <cygwin-patches@cygwin.com>; Tue, 27 Aug 2019 10:13:57 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 6D3D4A805E2; Tue, 27 Aug 2019 10:13:55 +0200 (CEST)
-Date: Tue, 27 Aug 2019 08:14:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
+X-Spam-SWARE-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=H*c:Windows-1252
+X-HELO: NAM01-BN3-obe.outbound.protection.outlook.com
+Received: from mail-eopbgr740107.outbound.protection.outlook.com (HELO NAM01-BN3-obe.outbound.protection.outlook.com) (40.107.74.107) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 27 Aug 2019 20:00:17 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none; b=UdyVbIsd51T50Xi43ZREgmpIRw+R7V/rq6lJfuS5Smja4wWKVf4oU76165kw69QLFbKUMFVcJcs6e3S51s143EhX13t3YVQt4HdM/TpzS4HDNnb3C4Ev+x01qXFcIYxrhOA4OAerYzkZ1RWTnpBk21F5bz2AVj44SlNjq2Br3GhF3j4jNJcjH3ubSwMOZ5+OQVSu6fr+lCrimg7bWumticLDLQCqZ4/SkngOQvbmf7p6zIAWjc93akNl5y2HuEiBEjSHqtinmEyuVe6Cmsb+jPyUBwJwETsbpgAHbfDxPFViQNLE3SAaE/6eNUD7+HwpMORiegVcJcjXEqvMIU0GNA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=8zSkEmaGb3iJWOiBr3YGc1cro3TNnJFOUPfcGUDiGS4=; b=MUXXcOmMJua0nw7Vgqqh66LH3jpRZtlu+5KERP0CQGrMRCdta941vn88zWQqelpKCFSqcKPAk9nKYn/FyWPDgVsZbSHgG0zaUpCcJrwpPeGcDhqJdY+umuXAHy+HEbGQBtJzX2D1toQsA1tn9mQQWRZ1i/gkilbKNC9gUTephECKzcbd0DqiCIrxs+yQCypdi9Z1bZUn95CfrYZNAVTFARnLCp3/SNO+o07nl6xym1fqgY6CPX9a9XSfwW1WATSdNGV4LzMxc6L4UikZ5/XjQFsPK4ZkTm7Wrx6rHW/nUN4bFBByN1qopmeub3ZC9qTqz7IbBo4D0kXYQbe6HqNFlA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu; dkim=pass header.d=cornell.edu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=8zSkEmaGb3iJWOiBr3YGc1cro3TNnJFOUPfcGUDiGS4=; b=FH9pOBQQUYIgEqkWkCjp0liaLR7l9ZOtajCgWclm8QH3tMTNJ1Mi9XGdRB5fIo33vEU2Iw2V/GvDb7ReVh+a8ShWLZWAzihTFghQFy0aEaFn/iEcGMNg9des5l9c0/GukDozjVIj4mHZdXl8MSXyzGi1Y+QymqKX+f9k3I7PWIo=
+Received: from DM6PR04MB5738.namprd04.prod.outlook.com (20.179.51.81) by DM6PR04MB5052.namprd04.prod.outlook.com (20.176.111.145) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2199.20; Tue, 27 Aug 2019 20:00:13 +0000
+Received: from DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::998b:a76c:fc2b:1473]) by DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::998b:a76c:fc2b:1473%4]) with mapi id 15.20.2199.021; Tue, 27 Aug 2019 20:00:13 +0000
+From: Ken Brown <kbrown@cornell.edu>
+To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
 Subject: Re: [PATCH] Cygwin: get_posix_access: avoid negative subscript
-Message-ID: <20190827081355.GS11632@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20190826174324.46043-1-kbrown@cornell.edu>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="Av0MaMCQQeg4b3so"
-Content-Disposition: inline
-In-Reply-To: <20190826174324.46043-1-kbrown@cornell.edu>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-SW-Source: 2019-q3/txt/msg00096.txt.bz2
-
-
---Av0MaMCQQeg4b3so
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Date: Tue, 27 Aug 2019 20:00:00 -0000
+Message-ID: <3020fe3e-1f5f-f53a-88c2-3d929e7f95d5@cornell.edu>
+References: <20190826174324.46043-1-kbrown@cornell.edu> <20190827081355.GS11632@calimero.vinschen.de>
+In-Reply-To: <20190827081355.GS11632@calimero.vinschen.de>
+user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101 Thunderbird/60.8.0
+authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="Windows-1252"
+Content-ID: <EC2ED62EE8DB7A4A8AEC62806E60416B@namprd04.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
-Content-length: 1715
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 7/sYZ77YolFWg3uqQYXmEQBfQ+DgIb3PsjEMAGmFzYMOD1bp0Er10uVHFm2NJo9fovGm0Mzi33EoMt8dyOdNOA==
+X-IsSubscribed: yes
+X-SW-Source: 2019-q3/txt/msg00097.txt.bz2
 
-Hi Ken,
-
-On Aug 26 17:43, Ken Brown wrote:
-> Don't refer to lacl[pos] unless we know that pos >=3D 0.
-
-I'm not sure this is entirely right.  Moving the assignment to
-class_perm/def_class_perm into the previous if makes sense, but the
-bools has_class_perm and has_def_class_perm should be set no matter
-what, to indicate that class perms had been specified.
-
-Either way, does this solve a real-world problem?  If so, a pointer
-or a short description would be nice.
-
-
-Thanks,
-Corinna
-
-
-> ---
->  winsup/cygwin/sec_acl.cc | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+On 8/27/2019 4:13 AM, Corinna Vinschen wrote:
+> On Aug 26 17:43, Ken Brown wrote:
+>> Don't refer to lacl[pos] unless we know that pos >=3D 0.
 >=20
-> diff --git a/winsup/cygwin/sec_acl.cc b/winsup/cygwin/sec_acl.cc
-> index 933bfa69d..67749d7b1 100644
-> --- a/winsup/cygwin/sec_acl.cc
-> +++ b/winsup/cygwin/sec_acl.cc
-> @@ -807,9 +807,9 @@ get_posix_access (PSECURITY_DESCRIPTOR psd,
->  			  lacl[pos].a_id =3D ACL_UNDEFINED_ID;
->  			  lacl[pos].a_perm =3D CYG_ACE_MASK_TO_POSIX (ace->Mask);
->  			  aclsid[pos] =3D well_known_null_sid;
-> +			  has_class_perm =3D true;
-> +			  class_perm =3D lacl[pos].a_perm;
->  			}
-> -		      has_class_perm =3D true;
-> -		      class_perm =3D lacl[pos].a_perm;
->  		    }
->  		  if (ace->Header.AceFlags & SUB_CONTAINERS_AND_OBJECTS_INHERIT)
->  		    {
-> @@ -820,9 +820,9 @@ get_posix_access (PSECURITY_DESCRIPTOR psd,
->  			  lacl[pos].a_id =3D ACL_UNDEFINED_ID;
->  			  lacl[pos].a_perm =3D CYG_ACE_MASK_TO_POSIX (ace->Mask);
->  			  aclsid[pos] =3D well_known_null_sid;
-> +			  has_def_class_perm =3D true;
-> +			  def_class_perm =3D lacl[pos].a_perm;
->  			}
-> -		      has_def_class_perm =3D true;
-> -		      def_class_perm =3D lacl[pos].a_perm;
->  		    }
->  		}
->  	    }
-> --=20
-> 2.21.0
+> I'm not sure this is entirely right.  Moving the assignment to
+> class_perm/def_class_perm into the previous if makes sense, but the
+> bools has_class_perm and has_def_class_perm should be set no matter
+> what, to indicate that class perms had been specified.
 
---=20
-Corinna Vinschen
-Cygwin Maintainer
+I don't think has_class_perm should be set if class_perm isn't set; that wo=
+uld=20
+cause a problem at sec_acl.cc:1169.  For has_def_class_perm it doesn't seem=
+ to=20
+matter.  Unless I'm missing something, has_def_class_perm is not used when=
+=20
+new_style is true.
 
---Av0MaMCQQeg4b3so
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
+> Either way, does this solve a real-world problem?  If so, a pointer
+> or a short description would be nice.
 
------BEGIN PGP SIGNATURE-----
+No, I just happened to notice it while studying the ACL code.
 
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl1k5kMACgkQ9TYGna5E
-T6B3jQ//S/nqs3am0E2SV1bXZKQQjGhE8WnQ5QWXFhxHuKZCUZ8sOVemhvBS1VPy
-SHE+Lqb/4DoXu4AiQPmMNk+WjGetLaqMy3neDDIL10XNl3xg3xJskoTkld+oomEb
-omkRcAKk5NyUX1VPM1OPBTr7fgFANrzxp9ef+HeqEVkjhoGaQ4azBEgIZd7JuItN
-PUaos2BIYKw/lgUKEPTzV0UaOWN9xT7Qndg0e4IzOhmlzWFFNOvVl3CzeEbuerDo
-nfL1MrrkeztyuT30Q8cdY5nUF9tlk3LLsAbH7AEfsJufW6o91uazU2LKWGz2XDq5
-q+UoXNpQarNSVkFv+2JpuKnouuw5eGHith7WA9UGUFtEa7pqobI6C9T22GX5zAOW
-EbAQ7V7dhsl5AV9RfawpzWSWgLcVzdYC//4yBtYP3GTUULsUKmOOTdT5h3KmLMoG
-RcQM45BE7MlwMlaE9i5dBDqU9CQq6u3lD+m+vjiJkm7u0BfZrkeGDInbaYjgxyLD
-ak++n6XxWr0Ojqz6vjSZh16OXJ/HChULFhm+fxhZCblGxU14LgG9xCnXCpoiTPDN
-tKMKWqUNhu/X/LspkcPUu8c9zPzqSzyTC80MaynWIPnPerrmNIy63fc2wtc4DKmO
-vi1Tne94AFSBxf5hNFnKeyeIEeoSoYcDO/ec0VbdoUkMfuTYQR8=
-=ff1m
------END PGP SIGNATURE-----
-
---Av0MaMCQQeg4b3so--
+Ken
