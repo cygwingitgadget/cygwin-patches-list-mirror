@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9620-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 72537 invoked by alias); 4 Sep 2019 13:48:36 -0000
+Return-Path: <cygwin-patches-return-9621-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 77548 invoked by alias); 4 Sep 2019 13:55:08 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,65 +9,93 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 72423 invoked by uid 89); 4 Sep 2019 13:48:27 -0000
+Received: (qmail 77532 invoked by uid 89); 4 Sep 2019 13:55:08 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-19.2 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=HContent-Transfer-Encoding:8bit
-X-HELO: conuserg-01.nifty.com
-Received: from conuserg-01.nifty.com (HELO conuserg-01.nifty.com) (210.131.2.68) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 04 Sep 2019 13:48:25 +0000
-Received: from localhost.localdomain (ntsitm268057.sitm.nt.ngn.ppp.infoweb.ne.jp [125.1.110.57]) (authenticated)	by conuserg-01.nifty.com with ESMTP id x84DlhCJ015236;	Wed, 4 Sep 2019 22:47:50 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-01.nifty.com x84DlhCJ015236
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1567604871;	bh=Cp70ckbpED7B+M8VZo3CQ8/IatIuDnKJnMKr0qtuKzM=;	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;	b=msGqxgdBR5JCLX9040W0ZYuThzEPgS8TxEW/nUwc8cLNlC++rdYW+xKQ6hjY2tNBa	 IQaN2M/D0PrqDgX+1EkRBUYs2g3AIoCcA0310OxiX3yva/Ae06ZSL2/W4oNXJMIUaR	 gwQGC6RrJtzPn7kFo6MjP+ho+B3fDeG5X4rXYtU/Twokz36tz5pb8X5y7PfF8lKhww	 IgzSvXN80rTc7d7Jje4DVGg9jWp8ZiG/jlSTAhhNs9yLEamEKRWD6d+aGwJ7nmMEWB	 hQwxZt02JllS9UPInhL4h005RgX17QPrWtqNjX+Tni80W8huOnodjcA8lUEx3YHkHv	 wU1MrzTdFKURQ==
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+X-Spam-SWARE-Status: No, score=-103.8 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=HX-Languages-Length:1213, screen
+X-HELO: mout.kundenserver.de
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.17.10) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 04 Sep 2019 13:55:06 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id 1Mgf4k-1ifhZj2s7Y-00h40M for <cygwin-patches@cygwin.com>; Wed, 04 Sep 2019 15:55:03 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 3287DA80659; Wed,  4 Sep 2019 15:55:03 +0200 (CEST)
+Date: Wed, 04 Sep 2019 13:55:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH v2 1/1] Cygwin: pty: Add a workaround for ^C handling.
-Date: Wed, 04 Sep 2019 13:48:00 -0000
-Message-Id: <20190904134742.1799-2-takashi.yano@nifty.ne.jp>
-In-Reply-To: <20190904134742.1799-1-takashi.yano@nifty.ne.jp>
-References: <20190904134742.1799-1-takashi.yano@nifty.ne.jp>
+Subject: Re: [PATCH 2/2] Cygwin: pty: Disable clear screen on new pty if TERM=dumb or emacs*.
+Message-ID: <20190904135503.GS4164@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20190904014618.1372-1-takashi.yano@nifty.ne.jp> <20190904014618.1372-3-takashi.yano@nifty.ne.jp> <20190904104738.GP4164@calimero.vinschen.de> <20190904214953.50fc84221ea7508475c80859@nifty.ne.jp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-IsSubscribed: yes
-X-SW-Source: 2019-q3/txt/msg00140.txt.bz2
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="Mh8CTEa8Ax54aLHp"
+Content-Disposition: inline
+In-Reply-To: <20190904214953.50fc84221ea7508475c80859@nifty.ne.jp>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-SW-Source: 2019-q3/txt/msg00141.txt.bz2
 
-- Pseudo console support introduced by commit
-  169d65a5774acc76ce3f3feeedcbae7405aa9b57 sometimes cause random
-  crash or freeze by pressing ^C while cygwin and non-cygwin
-  processes are executed simultaneously in the same pty. This
-  patch is a workaround for this issue.
----
- winsup/cygwin/fork.cc  | 1 -
- winsup/cygwin/spawn.cc | 6 ++++++
- 2 files changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/winsup/cygwin/fork.cc b/winsup/cygwin/fork.cc
-index a3a7e7505..0a929dffd 100644
---- a/winsup/cygwin/fork.cc
-+++ b/winsup/cygwin/fork.cc
-@@ -213,7 +213,6 @@ frok::child (volatile char * volatile here)
-      - terminate the current fork call even if the child is initialized. */
-   sync_with_parent ("performed fork fixups and dynamic dll loading", true);
- 
--  init_console_handler (myself->ctty > 0);
-   ForceCloseHandle1 (fork_info->forker_finished, forker_finished);
- 
-   pthread::atforkchild ();
-diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
-index 4bb28c47b..15cba3610 100644
---- a/winsup/cygwin/spawn.cc
-+++ b/winsup/cygwin/spawn.cc
-@@ -635,6 +635,12 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
-       if (ptys)
- 	ptys->fixup_after_attach (!iscygwin ());
- 
-+      if (!iscygwin ())
-+	{
-+	  init_console_handler (myself->ctty > 0);
-+	  myself->ctty = 0;
-+	}
-+
-     loop:
-       /* When ruid != euid we create the new process under the current original
- 	 account and impersonate in child, this way maintaining the different
--- 
-2.21.0
+--Mh8CTEa8Ax54aLHp
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 1208
+
+On Sep  4 21:49, Takashi Yano wrote:
+> On Wed, 4 Sep 2019 12:47:38 +0200
+> Corinna Vinschen wrote:
+> > Why do you check the TERMs again here?  After all, need_clear_screen
+> > is only true if one of these terms are used.
+>=20
+> Because, emacs seems to set environment TERM after fixup_after_exec()
+> is called. At the first check, TERM has the value of the terminal
+> in which emacs is executed. The first check is just in case.
+
+I still don't get it.
+
+The code in fixup_after_attach() is the only code snippet setting
+need_clear_screen =3D true.  And that code also requires term !=3D "dump" &&
+term =3D=3D "*emacs*" to set need_clear_screen.
+
+The code in reset_switch_to_pcon() requires that the need_clear_screen
+flag is true regardless of checking TERM.  So this code depends on the
+successful TERM check from fixup_after_attach anyway.
+
+What am I missing?
+
+While at it, in fixup_after_attach():
+
++             if (get_ttyp ()->num_pcon_attached_slaves =3D=3D 0 &&
++                 term && strcmp (term, "dumb") &&
++          	  term && !strstr (term, "emacs") &&
++                 !ALWAYS_USE_PCON)
+
+You're checking term for !=3D NULL twice.
+
+
+Thanks,
+Corinna
+
+--=20
+Corinna Vinschen
+Cygwin Maintainer
+
+--Mh8CTEa8Ax54aLHp
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 833
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl1vwjcACgkQ9TYGna5E
+T6D9OQ/6ArSCblZnlhLJGL4yuWN/46JOf7Xob6GJktjaxgHN/hbtya/R+YinYtBi
+L1b6HzDVI+oQSUT+Sr2E4/efn9zwRGCT5mOyOq//9ny5Y9qP5pphXUZdjSXvDF38
+qxfIJWMBGHwkTqrRPBReLjCH0J7KTueZlBxtMebsFLcXqoFiKDrduHmOGsv6JnnP
+NC/BuB3K2OxteVaLOqxMXD2IlJOh3JUMCG7VRnCppuVcpIoWFBFqXFCCOQTgJ0/7
++ohplcEshNpHWAFpHUJ3sHObdLot1G6BMo2btjQL0tqbYGdOFL0pHW2dihWGuaeN
+/RWn0uRehmxyNdMbl2D3pbl4/ynJgohbAox0p6Q4D2qjX8AyswkMmIl+GiJERSPG
+rqJVDeLDSWZwyTvNA3wdBqoCP0S0fDFEe9SwXJQ3yRPJYgNaufw5EVDf1un32+D3
+m9pFfGSLHIYGNhxiTXT0brzNWFArk0l2cdtEfARknFi9bQ6pKO2HUNMi1S4r3lT4
+pMWHDv/mtehnifL/uXyaHKNC+J+ykCcrAoTMIxD3ImuxOrWwZGTav3+9DMCfVHTP
+SS/C0xRNGCHGrrZGQfOUry6Ay3g9ZaaKKuQ5mq4unOlpK2h/TZphhgL1cnNgidHA
+3G55MAdOdgvZgGd9xC6wWWTlLAjQGTMNDpDvzZFwFwAWW/HXNiY=
+=skQf
+-----END PGP SIGNATURE-----
+
+--Mh8CTEa8Ax54aLHp--
