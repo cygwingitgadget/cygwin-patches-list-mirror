@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9621-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 77548 invoked by alias); 4 Sep 2019 13:55:08 -0000
+Return-Path: <cygwin-patches-return-9622-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 70828 invoked by alias); 4 Sep 2019 14:00:39 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,65 +9,52 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 77532 invoked by uid 89); 4 Sep 2019 13:55:08 -0000
+Received: (qmail 70803 invoked by uid 89); 4 Sep 2019 14:00:39 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-103.8 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=HX-Languages-Length:1213, screen
+X-Spam-SWARE-Status: No, score=-106.3 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=
 X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.17.10) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 04 Sep 2019 13:55:06 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id 1Mgf4k-1ifhZj2s7Y-00h40M for <cygwin-patches@cygwin.com>; Wed, 04 Sep 2019 15:55:03 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 3287DA80659; Wed,  4 Sep 2019 15:55:03 +0200 (CEST)
-Date: Wed, 04 Sep 2019 13:55:00 -0000
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.131) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 04 Sep 2019 14:00:38 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id 1MLzWL-1hnZLO1ei1-00Hv43 for <cygwin-patches@cygwin.com>; Wed, 04 Sep 2019 16:00:35 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id E0220A80659; Wed,  4 Sep 2019 16:00:34 +0200 (CEST)
+Date: Wed, 04 Sep 2019 14:00:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 2/2] Cygwin: pty: Disable clear screen on new pty if TERM=dumb or emacs*.
-Message-ID: <20190904135503.GS4164@calimero.vinschen.de>
+Subject: Re: [PATCH v2 1/1] Cygwin: pty: Limit API hook to the program linked with the APIs.
+Message-ID: <20190904140034.GT4164@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20190904014618.1372-1-takashi.yano@nifty.ne.jp> <20190904014618.1372-3-takashi.yano@nifty.ne.jp> <20190904104738.GP4164@calimero.vinschen.de> <20190904214953.50fc84221ea7508475c80859@nifty.ne.jp>
+References: <20190904134651.1750-1-takashi.yano@nifty.ne.jp> <20190904134651.1750-2-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="Mh8CTEa8Ax54aLHp"
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="Kuk/n493crKO4rgR"
 Content-Disposition: inline
-In-Reply-To: <20190904214953.50fc84221ea7508475c80859@nifty.ne.jp>
+In-Reply-To: <20190904134651.1750-2-takashi.yano@nifty.ne.jp>
 User-Agent: Mutt/1.12.1 (2019-06-15)
-X-SW-Source: 2019-q3/txt/msg00141.txt.bz2
+X-SW-Source: 2019-q3/txt/msg00142.txt.bz2
 
 
---Mh8CTEa8Ax54aLHp
+--Kuk/n493crKO4rgR
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-length: 1208
+Content-length: 872
 
-On Sep  4 21:49, Takashi Yano wrote:
-> On Wed, 4 Sep 2019 12:47:38 +0200
-> Corinna Vinschen wrote:
-> > Why do you check the TERMs again here?  After all, need_clear_screen
-> > is only true if one of these terms are used.
->=20
-> Because, emacs seems to set environment TERM after fixup_after_exec()
-> is called. At the first check, TERM has the value of the terminal
-> in which emacs is executed. The first check is just in case.
+On Sep  4 22:46, Takashi Yano wrote:
+> - API hook used for pseudo console support causes slow down.
+>   This patch limits API hook to only program which is linked
+>   with the corresponding APIs. Normal cygwin program is not
+>   linked with such APIs (such as WriteFile, etc...) directly,
+>   therefore, no slow down occurs. However, console access by
+>   cygwin.dll itself cannot switch the r/w pipe to pseudo console
+>   side. Therefore, the code to switch it forcely to pseudo
+>   console side is added to smallprint.cc and strace.cc.
+> ---
+>  winsup/cygwin/fhandler_tty.cc | 106 +++++++++++++++++++---------------
+>  winsup/cygwin/smallprint.cc   |   2 +
+>  winsup/cygwin/strace.cc       |  26 +--------
+>  winsup/cygwin/winsup.h        |   3 +
+>  4 files changed, 66 insertions(+), 71 deletions(-)
 
-I still don't get it.
-
-The code in fixup_after_attach() is the only code snippet setting
-need_clear_screen =3D true.  And that code also requires term !=3D "dump" &&
-term =3D=3D "*emacs*" to set need_clear_screen.
-
-The code in reset_switch_to_pcon() requires that the need_clear_screen
-flag is true regardless of checking TERM.  So this code depends on the
-successful TERM check from fixup_after_attach anyway.
-
-What am I missing?
-
-While at it, in fixup_after_attach():
-
-+             if (get_ttyp ()->num_pcon_attached_slaves =3D=3D 0 &&
-+                 term && strcmp (term, "dumb") &&
-+          	  term && !strstr (term, "emacs") &&
-+                 !ALWAYS_USE_PCON)
-
-You're checking term for !=3D NULL twice.
+Pushed.
 
 
 Thanks,
@@ -77,25 +64,25 @@ Corinna
 Corinna Vinschen
 Cygwin Maintainer
 
---Mh8CTEa8Ax54aLHp
+--Kuk/n493crKO4rgR
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-length: 833
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl1vwjcACgkQ9TYGna5E
-T6D9OQ/6ArSCblZnlhLJGL4yuWN/46JOf7Xob6GJktjaxgHN/hbtya/R+YinYtBi
-L1b6HzDVI+oQSUT+Sr2E4/efn9zwRGCT5mOyOq//9ny5Y9qP5pphXUZdjSXvDF38
-qxfIJWMBGHwkTqrRPBReLjCH0J7KTueZlBxtMebsFLcXqoFiKDrduHmOGsv6JnnP
-NC/BuB3K2OxteVaLOqxMXD2IlJOh3JUMCG7VRnCppuVcpIoWFBFqXFCCOQTgJ0/7
-+ohplcEshNpHWAFpHUJ3sHObdLot1G6BMo2btjQL0tqbYGdOFL0pHW2dihWGuaeN
-/RWn0uRehmxyNdMbl2D3pbl4/ynJgohbAox0p6Q4D2qjX8AyswkMmIl+GiJERSPG
-rqJVDeLDSWZwyTvNA3wdBqoCP0S0fDFEe9SwXJQ3yRPJYgNaufw5EVDf1un32+D3
-m9pFfGSLHIYGNhxiTXT0brzNWFArk0l2cdtEfARknFi9bQ6pKO2HUNMi1S4r3lT4
-pMWHDv/mtehnifL/uXyaHKNC+J+ykCcrAoTMIxD3ImuxOrWwZGTav3+9DMCfVHTP
-SS/C0xRNGCHGrrZGQfOUry6Ay3g9ZaaKKuQ5mq4unOlpK2h/TZphhgL1cnNgidHA
-3G55MAdOdgvZgGd9xC6wWWTlLAjQGTMNDpDvzZFwFwAWW/HXNiY=
-=skQf
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl1vw4IACgkQ9TYGna5E
+T6AiCQ/9E/16meJjo3SFpwXzs2jlDKkVJlm0NI8KsQrwRC9Own9v/sr+wC0/dzF5
+ebPtlzHGVmKMTRpMulPl+lHVFj7E/NJ9Ym0+MRj3hcasjk4gJa78nAgyHZ2kkXs3
+E9/Q/H3EcLMFI0vmVbmxic+N79dFdGiXd32Mqhuz6mnmFoOCxeZii659HiCVZW4i
+6hzWoVdAGi0bJSqwZEysnDe9M9pxuwClalNA8geOAI34OE6jT2gXNH6VBvnD8toR
+wKZZK4UX96nL5eI4q1NBJ+8ItMcBefjdzaqnln0rqo9pUFgjJL4yQl4iVCzpy549
+XKKco2VF+baicKz8+9Aua1w7q+JRozi9a/v4DVZp5aJeChqFIXcCdAs8/upFlILO
+MXPI6OoH+/4vhXq2At2lRGl9iC56lyzoThyJ1icxUGxZf5xvRI00KQhD2/fuYwtH
+HCFkS/fg8aXh1L55qZvphIvniyXrwmcOXezKQ7xSIqmjrWcvxV+E+ZRIEZYphGrZ
+Q3HqqmZ7/FteAg1f1GGrMwpsywDjD5EN1b75em5nNChy9F+zn9GJGcpLag5q5P/5
+/Z+iVgyL+YotvECSNZEYqXbZgO5vBJt2jEkQoMxC2v99gd/+cWMw0jhsvmeK+ilx
+nW5e1UG1ZJx49DNnkj0Ipd/6lfRkbh1eYhHkM0eXXuxuoXALs8Y=
+=xEDW
 -----END PGP SIGNATURE-----
 
---Mh8CTEa8Ax54aLHp--
+--Kuk/n493crKO4rgR--
