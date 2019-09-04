@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9626-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 98565 invoked by alias); 4 Sep 2019 15:19:10 -0000
+Return-Path: <cygwin-patches-return-9627-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 97402 invoked by alias); 4 Sep 2019 15:35:29 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,94 +9,37 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 98424 invoked by uid 89); 4 Sep 2019 15:19:10 -0000
+Received: (qmail 97393 invoked by uid 89); 4 Sep 2019 15:35:29 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-103.8 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*f:sk:544d0b3, H*i:sk:544d0b3, screen
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.134) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 04 Sep 2019 15:19:08 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id 1MGxYh-1i0KG91Bjf-00E9Mx for <cygwin-patches@cygwin.com>; Wed, 04 Sep 2019 17:19:06 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 75557A80659; Wed,  4 Sep 2019 17:19:05 +0200 (CEST)
-Date: Wed, 04 Sep 2019 15:19:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-6.7 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=HX-Languages-Length:568, convinced, screen
+X-HELO: conssluserg-03.nifty.com
+Received: from conssluserg-03.nifty.com (HELO conssluserg-03.nifty.com) (210.131.2.82) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 04 Sep 2019 15:35:27 +0000
+Received: from Express5800-S70 (ntsitm268057.sitm.nt.ngn.ppp.infoweb.ne.jp [125.1.110.57]) (authenticated)	by conssluserg-03.nifty.com with ESMTP id x84FZG9T026045	for <cygwin-patches@cygwin.com>; Thu, 5 Sep 2019 00:35:17 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com x84FZG9T026045
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1567611317;	bh=YBDhs/b+ABQfJMl8oq/nH5+/zAk1RPwCHJ6MlMfl6CQ=;	h=Date:From:To:Subject:In-Reply-To:References:From;	b=kkDgyZf//Ea1Llq6HayBO6UwAoOso5tUXn9oKyluZvh1gcmwxDvMot9ZCDCtL1YBU	 bbKgqp3wzuhjHKIjd7YQ7S+KS0Of+9gQIhraukZACbhqyw2xbxYYPwQ/bsB7Q6U8m4	 uEU8ZDv3hWcYAGjoDgAeYHdJsjPflxrLAIwya63V5/CTH/NbOs2EOMoIudh+N6K1f2	 csSEOF688WT4H1MtCwxVPzRG+ObhxKNRY+M1wRQ+snGKXLItgqaMIdYwxJKqW8p1Jg	 AXWxu8K5q69XHxrebppj4Yad6iLznwS6dpEY6YvO51NiTu3aKlbwEx+4NZxTv0Ea3i	 nXJp1gm6jhztw==
+Date: Wed, 04 Sep 2019 15:35:00 -0000
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH 2/2] Cygwin: pty: Disable clear screen on new pty if TERM=dumb or emacs*.
-Message-ID: <20190904151905.GZ4164@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20190904014618.1372-1-takashi.yano@nifty.ne.jp> <20190904014618.1372-3-takashi.yano@nifty.ne.jp> <20190904104738.GP4164@calimero.vinschen.de> <20190904214953.50fc84221ea7508475c80859@nifty.ne.jp> <20190904135503.GS4164@calimero.vinschen.de> <20190904234222.4c8bfbb31d9a899eb2670082@nifty.ne.jp> <544d0b3f-0623-f2d6-8e35-b21140ea323a@cornell.edu>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="HzaOE8X7KzPzAQEl"
-Content-Disposition: inline
-In-Reply-To: <544d0b3f-0623-f2d6-8e35-b21140ea323a@cornell.edu>
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-SW-Source: 2019-q3/txt/msg00146.txt.bz2
+Message-Id: <20190905003527.6a18f2e9c782dfa4efea5c2f@nifty.ne.jp>
+In-Reply-To: <20190904151905.GZ4164@calimero.vinschen.de>
+References: <20190904014618.1372-1-takashi.yano@nifty.ne.jp>	<20190904014618.1372-3-takashi.yano@nifty.ne.jp>	<20190904104738.GP4164@calimero.vinschen.de>	<20190904214953.50fc84221ea7508475c80859@nifty.ne.jp>	<20190904135503.GS4164@calimero.vinschen.de>	<20190904234222.4c8bfbb31d9a899eb2670082@nifty.ne.jp>	<544d0b3f-0623-f2d6-8e35-b21140ea323a@cornell.edu>	<20190904151905.GZ4164@calimero.vinschen.de>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
+X-SW-Source: 2019-q3/txt/msg00147.txt.bz2
 
+On Wed, 4 Sep 2019 17:19:05 +0200
+Corinna Vinschen wrote:
+> > But the first check (the one in fixup_after_attach()) could be dropped, couldn't it?
+> 
+> IIUC the second test first checks for need_clear_screen but then the
+> TERM might have changed in the meantime which in turn requires to change
+> the behaviour again.  But yeah, this sound like the first patch is not
+> actually required at all.
 
---HzaOE8X7KzPzAQEl
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1360
+I was convinced. I will revise the patch.
 
-On Sep  4 15:11, Ken Brown wrote:
-> On 9/4/2019 10:42 AM, Takashi Yano wrote:
-> > On Wed, 4 Sep 2019 15:55:03 +0200
-> > Corinna Vinschen wrote:
-> >> The code in fixup_after_attach() is the only code snippet setting
-> >> need_clear_screen =3D true.  And that code also requires term !=3D "du=
-mp" &&
-> >> term =3D=3D "*emacs*" to set need_clear_screen.
-> >=20
-> > term !=3D "*emacs*"
-> >=20
-> >> The code in reset_switch_to_pcon() requires that the need_clear_screen
-> >> flag is true regardless of checking TERM.  So this code depends on the
-> >> successful TERM check from fixup_after_attach anyway.
-> >>
-> >> What am I missing?
-> >=20
-> > Two checking results may not be the same. Indeed, emacs changes
-> > TERM between two checks.
-> >=20
-> > fixup_after_attach() is called from fixup_after_exec(),
-> > which is called before executing the program code.
-> > reset_switch_to_pcon () is mainly called from PTY slave I/O functions.
-> > This is usually from the program code.
->=20
-> But the first check (the one in fixup_after_attach()) could be dropped, c=
-ouldn't it?
-
-IIUC the second test first checks for need_clear_screen but then the
-TERM might have changed in the meantime which in turn requires to change
-the behaviour again.  But yeah, this sound like the first patch is not
-actually required at all.
-
-
-Corinna
-
---=20
-Corinna Vinschen
-Cygwin Maintainer
-
---HzaOE8X7KzPzAQEl
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl1v1ekACgkQ9TYGna5E
-T6BI9A//bhGFE3fnxpEqEBXkvFy0T5pmGBaThBVJlpWiCt1v6wSVantszS7sz33q
-2ShcWbXXu6/RUPGj1N8jjVOqekJw3HHkZUw5DXJona+k26NBs0wMMH93+yBZigw/
-HhnhSDKH0i8bJ22915YHqMIeZsWWRZwdLCALuu1zvKo1+1hAEdg39zlRObdjBS6g
-LbEhUsvVKAzF9pZwfX6KVu6tnRDeP6rvC85m2zN2KCk0BfKtz7apWxFNNj7YGqGw
-XE9VZjb1QvRLaCGbcfsxobLelqKZa0VYHBImjUwru/LDeNKKhEgi0D+Igr6Kvudn
-Bvi8z+bjRxXwvLvxrOf8XrTb79R3V33Z9vav+tYDwQvZxuZnHaIIyHnVQmLr0Fxi
-wPvm88snTyx/v2mdAZStRn9VaEV+IRKcXIXE1iCfYgjZRaC15t56CL4Hcz8PBfoz
-53nti4p/5125hU2XrApTlWVzmuE/hYKSReIpGjISo2WkjsXpDQ91F99mDHU/VtFG
-clFlyPypECZARcO6IwMBbtNgGkV9pfS40sBfO7jqOxR5nKs+caMndBL0ivktRj+L
-QSp8OkunwI44D5b7mbBnQt3SY+iTegydJObKMYmLrOZplrxWT7rKAqs2oBZx2hwb
-Pgvjo/etWC84zFtDm0THDxjjoRQtGcNYRlHZzCpJEArBA/EU1zo=
-=eRzy
------END PGP SIGNATURE-----
-
---HzaOE8X7KzPzAQEl--
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
