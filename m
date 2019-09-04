@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9623-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 89289 invoked by alias); 4 Sep 2019 14:04:31 -0000
+Return-Path: <cygwin-patches-return-9624-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 112271 invoked by alias); 4 Sep 2019 14:42:29 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,84 +9,67 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 89280 invoked by uid 89); 4 Sep 2019 14:04:31 -0000
+Received: (qmail 112262 invoked by uid 89); 4 Sep 2019 14:42:29 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-106.2 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_SBL autolearn=ham version=3.3.1 spammy=
-X-HELO: mout-xforward.kundenserver.de
-Received: from mout-xforward.kundenserver.de (HELO mout-xforward.kundenserver.de) (82.165.159.39) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 04 Sep 2019 14:04:30 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id 1MGi6m-1i0cLB1y9S-00Dqkn for <cygwin-patches@cygwin.com>; Wed, 04 Sep 2019 16:04:27 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id EABA5A8035C; Wed,  4 Sep 2019 16:04:26 +0200 (CEST)
-Date: Wed, 04 Sep 2019 14:04:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-6.8 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=my, screen
+X-HELO: conssluserg-05.nifty.com
+Received: from conssluserg-05.nifty.com (HELO conssluserg-05.nifty.com) (210.131.2.90) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 04 Sep 2019 14:42:27 +0000
+Received: from Express5800-S70 (ntsitm268057.sitm.nt.ngn.ppp.infoweb.ne.jp [125.1.110.57]) (authenticated)	by conssluserg-05.nifty.com with ESMTP id x84EgC6N025211	for <cygwin-patches@cygwin.com>; Wed, 4 Sep 2019 23:42:12 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com x84EgC6N025211
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1567608132;	bh=8puDhVBbDgYtyaE0PlXFP2G7fKOdipAsVjABJWZBu8k=;	h=Date:From:To:Subject:In-Reply-To:References:From;	b=KucKJ6DSw6nvLoNc82YWj2WIk6jQM09tFQPTPoDUtQAbOG4khZd/Hti8WYm92Wbqk	 UHU8JkkUlqPD4dJ5HBwkVuG0vxPIgf6PSwc8GrdeTllSyjOcEpKmuatwWHsA3AGr/b	 yoxjCksCaDEE14ilrkwMltowy4P8IFvQF8AULoJGtye10ADcNuRgYonWUqxOeU6spN	 O+CNnUtl7S4U9Ygc+Ou/S60T6uN63T/ZsGQPM1QC8uXI5/epmF6WqHbT7lJKUHPkoE	 7hCiyRpenIwo1LI92JGuutzkDDk5gCrrOgWBhbTc79SjLg3S7d9pvDnZxed6NJbbE0	 iiya1Pufaz63g==
+Date: Wed, 04 Sep 2019 14:42:00 -0000
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2 0/1] Cygwin: pty: Add a workaround for ^C handling.
-Message-ID: <20190904140426.GU4164@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20190904134742.1799-1-takashi.yano@nifty.ne.jp>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="ShzQXCswyqjgWi6k"
-Content-Disposition: inline
-In-Reply-To: <20190904134742.1799-1-takashi.yano@nifty.ne.jp>
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-SW-Source: 2019-q3/txt/msg00143.txt.bz2
+Subject: Re: [PATCH 2/2] Cygwin: pty: Disable clear screen on new pty if TERM=dumb or emacs*.
+Message-Id: <20190904234222.4c8bfbb31d9a899eb2670082@nifty.ne.jp>
+In-Reply-To: <20190904135503.GS4164@calimero.vinschen.de>
+References: <20190904014618.1372-1-takashi.yano@nifty.ne.jp>	<20190904014618.1372-3-takashi.yano@nifty.ne.jp>	<20190904104738.GP4164@calimero.vinschen.de>	<20190904214953.50fc84221ea7508475c80859@nifty.ne.jp>	<20190904135503.GS4164@calimero.vinschen.de>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
+X-SW-Source: 2019-q3/txt/msg00144.txt.bz2
+
+On Wed, 4 Sep 2019 15:55:03 +0200
+Corinna Vinschen wrote:
+> The code in fixup_after_attach() is the only code snippet setting
+> need_clear_screen = true.  And that code also requires term != "dump" &&
+> term == "*emacs*" to set need_clear_screen.
+
+term != "*emacs*"
+
+> The code in reset_switch_to_pcon() requires that the need_clear_screen
+> flag is true regardless of checking TERM.  So this code depends on the
+> successful TERM check from fixup_after_attach anyway.
+> 
+> What am I missing?
+
+Two checking results may not be the same. Indeed, emacs changes
+TERM between two checks.
+
+fixup_after_attach() is called from fixup_after_exec(),
+which is called before executing the program code.
+reset_switch_to_pcon () is mainly called from PTY slave I/O functions.
+This is usually from the program code.
+
+The behaviour of the patch is as follows.
+
+First check : True  True  False False
+Second check: True  False True  False
+Clear screen: Yes   No    No   No
+
+# True: neither dumb nor emacs*
+#  False: either dumb or emacs*
 
 
---ShzQXCswyqjgWi6k
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 676
+> +             if (get_ttyp ()->num_pcon_attached_slaves == 0 &&
+> +                 term && strcmp (term, "dumb") &&
+> +          	  term && !strstr (term, "emacs") &&
+> +                 !ALWAYS_USE_PCON)
+> 
+> You're checking term for != NULL twice.
 
-On Sep  4 22:47, Takashi Yano wrote:
-> - Pseudo console support introduced by commit
->   169d65a5774acc76ce3f3feeedcbae7405aa9b57 sometimes cause random
->   crash or freeze by pressing ^C while cygwin and non-cygwin
->   processes are executed simultaneously in the same pty. This
->   patch is a workaround for this issue.
->=20
-> v2:
-> Make the behaviour of pty and console identical.
->=20
-> Takashi Yano (1):
->   Cygwin: pty: Add a workaround for ^C handling.
->=20
->  winsup/cygwin/fork.cc  | 1 -
->  winsup/cygwin/spawn.cc | 6 ++++++
->  2 files changed, 6 insertions(+), 1 deletion(-)
->=20
-> --=20
-> 2.21.0
+Oh my!
 
-Pushed.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen
-Cygwin Maintainer
-
---ShzQXCswyqjgWi6k
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl1vxGoACgkQ9TYGna5E
-T6DVbA//YUiRnNmsE/TqrT44YVMHTzBQgZOAJLmv+eMAn1w1K3V574DT7QAb3cqX
-cHjifrtyqVGVGlGf/epL37AMOUIv6qfkuF3gjLf3BhgmAmjdJn/vKrE130oYXwPF
-viqpL0Qdtubi8ek1DDWzA3cVRa7kPyrAuBAXDdLSDCyDyKViJHSBLl/m/oz++3+4
-ZgiG9aPRZ6UkYi3VdhAtqket87zJbwedPXrfa71zkISVPHzWCoDo5jQDWFH0Fyy1
-LhklWiPpilj7+5KnBPPALDCeklaeOCQYUuzY/ItfYMnlrNgoG6nWqiXFtsWpIZCK
-j92JpQ1qtK5DEJcRunDGWp+Ug+w9qxkNs33FBt1B1OQ3bn6LTt2WWdKrnFwQq2mG
-10BKlA/ugiuC1Zh0VVXMyiig9fK0Nora+G49lxxgsBgDeRqeapjXtJlYJIuBZz2j
-toOPZIFW2mtmUTeJQLGpJnQ4RotrAJa76c7S2Bp9vhGFXhFRPhqg1sa85It1hdYH
-uFjDjvQLbGG0mQC/0gBsS1WNfr9efQvIfPOlpCSwxDprUXB0vclZ9GxMFGFI4ybZ
-jmoBtztQKs1Au7BrujO2Kb0FYvQ3V1oKmVwv0ysiRGF5asMjoIcoEe3pHughYibn
-eg9Xh2Kdhjv+ArJP5iMEsicC0jzRMBJHscxQT14MeXhFxZ63YRc=
-=najU
------END PGP SIGNATURE-----
-
---ShzQXCswyqjgWi6k--
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
