@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9614-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 128568 invoked by alias); 4 Sep 2019 13:30:56 -0000
+Return-Path: <cygwin-patches-return-9615-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 130146 invoked by alias); 4 Sep 2019 13:33:30 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,67 +9,88 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 128558 invoked by uid 89); 4 Sep 2019 13:30:56 -0000
+Received: (qmail 130137 invoked by uid 89); 4 Sep 2019 13:33:30 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-19.0 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=
-X-HELO: conssluserg-03.nifty.com
-Received: from conssluserg-03.nifty.com (HELO conssluserg-03.nifty.com) (210.131.2.82) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 04 Sep 2019 13:30:54 +0000
-Received: from Express5800-S70 (ntsitm268057.sitm.nt.ngn.ppp.infoweb.ne.jp [125.1.110.57]) (authenticated)	by conssluserg-03.nifty.com with ESMTP id x84DUj4s024983	for <cygwin-patches@cygwin.com>; Wed, 4 Sep 2019 22:30:45 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com x84DUj4s024983
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1567603845;	bh=ORirxc3K/iyZxkUKayvv7St6Uii1/EKllhFe0rsSjkg=;	h=Date:From:To:Subject:In-Reply-To:References:From;	b=V3nYCuTBt7xgqkjhn5n3SkOV4ZQGEHy0Givk9kFz2DEmdCSYwpgS9HAUWw9Ym4u/S	 QXnQafGiGCN6E5HYxiDwp0nz/SHjNpHsQzrj9ZTd5wxHdqJXiXqdOUQXJJg+7A+iWW	 q69T4nwtB9uqHHV3efPP991wqRBVZEaZnHldBApmu/luAlK24P4TY59ZtVaoflw85I	 q6t/mKaz0pstLvclaaojoKjQGIIunNqdCyo41ekgb1UcTbx4oHYCMzkDaQTLWlPcVF	 PBo9VAfSCkK0iCgH9peKFhV4DJ6g1qI8C0plI+yhsJMbjgkk75+OW7VF1h7ZLcdaQ/	 x53crhy0DjLYQ==
-Date: Wed, 04 Sep 2019 13:30:00 -0000
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+X-Spam-SWARE-Status: No, score=-103.7 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=
+X-HELO: mout.kundenserver.de
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.17.10) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 04 Sep 2019 13:33:29 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id 1MnagF-1iULtj1mGD-00jXwj for <cygwin-patches@cygwin.com>; Wed, 04 Sep 2019 15:33:26 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id B6D89A80659; Wed,  4 Sep 2019 15:33:25 +0200 (CEST)
+Date: Wed, 04 Sep 2019 13:33:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 1/2] Cygwin: pty: Add a workaround for ^C handling.
-Message-Id: <20190904223054.e3debe5ca201ee5bb94f1203@nifty.ne.jp>
-In-Reply-To: <20190904104222.GO4164@calimero.vinschen.de>
-References: <20190904014618.1372-1-takashi.yano@nifty.ne.jp>	<20190904014618.1372-2-takashi.yano@nifty.ne.jp>	<20190904104222.GO4164@calimero.vinschen.de>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-IsSubscribed: yes
-X-SW-Source: 2019-q3/txt/msg00134.txt.bz2
-
-On Wed, 4 Sep 2019 12:42:22 +0200
-Corinna Vinschen wrote:
-> If this workaround works, what about making it the standard behaviour,
-> rather than pseudo-console only?  Would there be a downside?
-
-I am not sure why, but console does not have this issue.
-However, I do not notice any downside.
-
-If making it standard, the patch will be very simple as follows.
+Subject: Re: [PATCH 4/4] Cygwin: pty: Limit API hook to the program linked with the APIs.
+Message-ID: <20190904133325.GQ4164@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20190904014426.1284-1-takashi.yano@nifty.ne.jp> <20190904014426.1284-5-takashi.yano@nifty.ne.jp> <20190904100351.GM4164@calimero.vinschen.de> <20190904213914.ce7cf3703871189e9613c7d1@nifty.ne.jp>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="yLaBmHMi4cq+C/u4"
+Content-Disposition: inline
+In-Reply-To: <20190904213914.ce7cf3703871189e9613c7d1@nifty.ne.jp>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-SW-Source: 2019-q3/txt/msg00135.txt.bz2
 
 
-diff --git a/winsup/cygwin/fork.cc b/winsup/cygwin/fork.cc
-index a3a7e7505..0a929dffd 100644
---- a/winsup/cygwin/fork.cc
-+++ b/winsup/cygwin/fork.cc
-@@ -213,7 +213,6 @@ frok::child (volatile char * volatile here)
-      - terminate the current fork call even if the child is initialized. */
-   sync_with_parent ("performed fork fixups and dynamic dll loading", true);
+--yLaBmHMi4cq+C/u4
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 903
 
--  init_console_handler (myself->ctty > 0);
-   ForceCloseHandle1 (fork_info->forker_finished, forker_finished);
+Hi Takashi,
 
-   pthread::atforkchild ();
-diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
-index 4bb28c47b..15cba3610 100644
---- a/winsup/cygwin/spawn.cc
-+++ b/winsup/cygwin/spawn.cc
-@@ -635,6 +635,12 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
-       if (ptys)
-        ptys->fixup_after_attach (!iscygwin ());
+On Sep  4 21:39, Takashi Yano wrote:
+> Hi Corinna,
+>=20
+> On Wed, 4 Sep 2019 12:03:51 +0200
+> Corinna Vinschen wrote:
+> > I'll push the other 3 patches from this series.  For this patch,
+> > I wonder why you create set_ishybrid_and_switch_to_pcon while
+> > at the same time define a macro CHK_CONSOLE_ACCESS with identical
+> > functionality.
+>=20
+> Yah, indeed!
+>=20
+> > Suggestion: Only define set_ishybrid_and_switch_to_pcon() as
+> > inline function (probably in winsup.h) and use only this througout.
+>=20
+> This function uses static variable isHybrid (sorry camelback again)
+> and static function set_switch_to_pcon() defined in fhandler_tty.cc.
+>=20
+> To make it inline, a lot of changes will be necessary. How about
+> non-inline function?
 
-+      if (!iscygwin ())
-+       {
-+         init_console_handler (myself->ctty > 0);
-+         myself->ctty = 0;
-+       }
-+
-     loop:
-       /* When ruid != euid we create the new process under the current original
-         account and impersonate in child, this way maintaining the different
+That will add extra function calls, but, yeah, sure.  We can streamline
+this later.
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+
+Thanks,
+Corinna
+
+--=20
+Corinna Vinschen
+Cygwin Maintainer
+
+--yLaBmHMi4cq+C/u4
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 833
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl1vvSUACgkQ9TYGna5E
+T6Bc9g/9GS6t0KmksW6bwonQz6B6ELm+r2GKf36cNu2lgyR1n+wFKXEcA8+2hvS0
+6aXUa04lVyzwFN74uI/IpKcDcuwZ2YssgoX1v39MY9PHiFVZspJNj7UbgwPrkqH7
+Ug6HRrMh5IKPhX3p98c2g9mRgpo1JezEBgD5LKvTbWUtibRC3oX+mddC5YWIW69C
+aPv8Q4dkrCzsyPy9AleQ4fKnZpkT9t3AxsuJH3gWkhj2FgiGKWRV+vzvAptIXgWq
+ohzv990Ugm8ZlyV2/PlD78MfUbkbdswkrakl7Pq9AEf3rjHHNYjvDVGyqPZ2uKn5
+5r+yywFB7vtH2mUKXCmupovJVT7X2Flsnkuir8cJe9fVTlmW6lkFuNu1jaUZXGsQ
+HXvdKQo2SJK30APv7UYfvntYek4KC95+IOF0MJkMd8BEI0btSzA0mc3oxU9q6HBY
+Cfnlg4at6OIflvluJI1rbWzNGaYgefyaS6INKkY2oW5aqxXs7qPO6FDTMLAOHIwR
+au5VSSDblsc92anPIB8BlGUfOGOe/cBHBB+WxoJr7Mb8AGH8PkjcVmmXsSSesc1Q
+/3oVcaKjpD7FYnaUODA6nC+fAxiJWI4EBxx9sLfOTNOHN4BZsu2rWHhKpHNZFxEv
+ud5I/sz7KtLiPH/kPGRGWKDhixLCysQdCsKUUFMVwQl8MBwQJmk=
+=beWR
+-----END PGP SIGNATURE-----
+
+--yLaBmHMi4cq+C/u4--
