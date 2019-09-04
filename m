@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9593-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 17427 invoked by alias); 3 Sep 2019 09:16:43 -0000
+Return-Path: <cygwin-patches-return-9594-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 64988 invoked by alias); 4 Sep 2019 01:44:57 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,175 +9,61 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 17418 invoked by uid 89); 3 Sep 2019 09:16:43 -0000
+Received: (qmail 64858 invoked by uid 89); 4 Sep 2019 01:44:57 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-103.2 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=category
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (217.72.192.74) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 03 Sep 2019 09:16:41 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id 1MGQf5-1hxcfD33cL-00GpYa for <cygwin-patches@cygwin.com>; Tue, 03 Sep 2019 11:16:38 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 216A2A8064B; Tue,  3 Sep 2019 11:16:38 +0200 (CEST)
-Date: Tue, 03 Sep 2019 09:16:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-10.9 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=Therefore, Speed, H*r:authenticated, HX-Spam-Relays-External:Sendmail
+X-HELO: conuserg-05.nifty.com
+Received: from conuserg-05.nifty.com (HELO conuserg-05.nifty.com) (210.131.2.72) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 04 Sep 2019 01:44:55 +0000
+Received: from localhost.localdomain (ntsitm268057.sitm.nt.ngn.ppp.infoweb.ne.jp [125.1.110.57]) (authenticated)	by conuserg-05.nifty.com with ESMTP id x841iibB012450;	Wed, 4 Sep 2019 10:44:51 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-05.nifty.com x841iibB012450
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1567561491;	bh=9CWzmxOQVttS/1kq2/jDefqCQkFO+YDsCbfLTpRNZ4k=;	h=From:To:Cc:Subject:Date:From;	b=lC4Adry8cMPtz4U3bPWdiKzcpE8rxAvLdA2m0SVobM3OJe1Hy110Do5rfxiAferdh	 SPxCfcU9iKu1P0QuRt4bGF1Ax9gyF0WJ4MQiqTmEJLg/hz61Ubefv7KqMzVJTHjHL7	 UtrX11SQuGMw0i+3bMI5tEvC+58jFkCeNfJ0XpmcntnmlNhL2Q98KjF8sT7WRZbqmd	 iKZhThttbsLXRbCdN9RZqp+3C4hktkPV2QTwPED1+irMf5H9uZhqFLKzONdIw0TyBb	 t2/wS9ETxCjY/C4iyJmXq3B0447U1/JxMWIfB5e2ipYreSsEOiGC31JbeijHUK5sT7	 vL7IvnB/HsL7A==
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v4 1/1] Cygwin: pty: Fix state management for pseudo console support.
-Message-ID: <20190903091638.GH4164@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20190901221156.1367-1-takashi.yano@nifty.ne.jp> <20190901221156.1367-2-takashi.yano@nifty.ne.jp> <20190902143716.GF4164@calimero.vinschen.de> <20190903120530.f7b31bfa6feb2118762891a2@nifty.ne.jp>
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH 0/4] Some fixes for PTY with pseudo console support (1)
+Date: Wed, 04 Sep 2019 01:44:00 -0000
+Message-Id: <20190904014426.1284-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="A9z/3b/E4MkkD+7G"
-Content-Disposition: inline
-In-Reply-To: <20190903120530.f7b31bfa6feb2118762891a2@nifty.ne.jp>
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-SW-Source: 2019-q3/txt/msg00113.txt.bz2
+Content-Transfer-Encoding: 8bit
+X-IsSubscribed: yes
+X-SW-Source: 2019-q3/txt/msg00114.txt.bz2
 
+[PATCH 1/4] Cygwin: pty: Code cleanup
+- Cleanup the code which is commented out by #if 0 regarding pseudo
+  console.
+- Remove #if 1 for experimental code which seems to be stable.
 
---A9z/3b/E4MkkD+7G
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 4282
+[PATCH 2/4] Cygwin: pty: Speed up a little hooked Win32 API for pseudo console.
+- Some Win32 APIs are hooked in pty code for pseudo console support.
+  This causes slow down. This patch improves speed a little.
 
-Hi Takashi,
+[PATCH 3/4] Cygwin: pty: Move function hook_api() into hookapi.cc.
+- PTY uses Win32 API hook for pseudo console suppot. The function
+  hook_api() is used for this purpose and defined in fhandler_tty.cc
+  previously. This patch moves it into hookapi.cc.
 
-On Sep  3 12:05, Takashi Yano wrote:
-> > > -      Sleep (60); /* Wait for pty_master_fwd_thread() */
-> > > +      Sleep (20); /* Wait for pty_master_fwd_thread() */
-> >=20
-> > Isn't that a separate issue as well?  A separate patch may be in order
-> > here, kind of like "Cygwin: pseudo console: reduce time sleeping ..."
-> > with a short description why that makes sense?
->=20
-> Actually it is not. The wait time became able to be reduced by
-> redesigning switching of r/w pipes which managed via variable
-> switch_to_pcon. So I think this should be included in this patch.=20
+[PATCH 4/4] Cygwin: pty: Limit API hook to the program linked with the APIs.
+- API hook used for pseudo console support causes slow down.
+  This patch limits API hook to only program which is linked
+  with the corresponding APIs. Normal cygwin program is not
+  linked with such APIs (such as WriteFile, etc...) directly,
+  therefore, no slow down occurs. However, console access by
+  cygwin.dll itself cannot switch the r/w pipe to pseudo console
+  side. Therefore, the code to switch it forcely to pseudo
+  console side is added to smallprint.cc and strace.cc.
 
-Ok.
+Takashi Yano (4):
+  Cygwin: pty: Code cleanup
+  Cygwin: pty: Speed up a little hooked Win32 API for pseudo console.
+  Cygwin: pty: Move function hook_api() into hookapi.cc.
+  Cygwin: pty: Limit API hook to the program linked with the APIs.
 
-> > However, I have a few questions in terms of the code in general, namely
-> > in terms of
-> >=20
-> >   ALWAYS_USE_PCON
-> >   USE_API_HOOK
-> >   USE_OWN_NLS_FUNC
-> >=20
-> > Can you describe again why you introduced these macros?
->=20
-> These are defined for debugging purpose.
->=20
-> If ALWAYS_USE_PCON is defined to true, pseudo console pipe is used for
-> all process including pure cygwin process. Usually, this should be false
-> so that the cygwin process use named pipe as previous.
->=20
-> USE_API_HOOK is for enabling/disabling the API hook to detect direct
-> console access in cygwin process. This should be true so that the
-> r/w pipe switching is set to pseudo console side for the cygwin
-> process which directly access console.
->=20
-> As for USE_OWN_NLS_FUNC, I have not decided yet which codes should be
-> used. If USE_OWN_NLS_FUNC is false, setlocale (LC_CTYPE, "") is
-> called therefore it may affect to some programs wihch do not call
-> setlocale().
->=20
-> > In terms of USE_API_HOOK:
-> >=20
-> > - Shouldn't the hook_api function be moved to hookapi.cc?
->=20
-> I will move it into hookapi.cc, and post it as a separate patch.
->=20
-> > - Do we really want to hook every invocation of WriteFile/ReadFile?
-> >   Doesn't that potentially slow down an exec'ed process a lot?
-> >   We're still not using the NT functions throughout outside of the
-> >   console/tty code.
->=20
-> I measured the time for calling WriteFile() 1000000 times writing
-> 1 byte to a disk file for each call.
+ winsup/cygwin/fhandler_tty.cc | 136 +++++++++++-----------------------
+ winsup/cygwin/hookapi.cc      |  34 +++++++++
+ winsup/cygwin/smallprint.cc   |   5 ++
+ winsup/cygwin/strace.cc       |  29 ++------
+ winsup/cygwin/winsup.h        |   1 +
+ 5 files changed, 89 insertions(+), 116 deletions(-)
 
-Files are not affected in Cygwin, fortunately.  They use
-NtReadFile/NtWriteFile, not ReadFile/WriteFile.  However, other
-stuff is still affected...
-
-> Not hooked:
-> Total: 4.558321 seconsd
->=20
-> Hooked:
-> Total: 6.522692 seconsd
->=20
-> Hooking causes slow down indeed. It seems that GetConsoleMode()
-> is slow. So I have added the check for GetFileType() before
-> GetConsoleMode() and made check in two stages.
->=20
-> Hooked (new):
-> Total: 5.217996 seconsd
->=20
-> This results in speed up a little. I will post another patch for this.
-
-This is a slowdown of about 15%.  That's quite a lot.  Can't you just
-check the incoming handle against the interesting handles somehow?
-If there's no other way around it, we should at least make sure (in a
-separate patch) that Cygwin calls NtReadFile/NtWriteFile throughout,
-except in tty and console code.
-
-> > In terms of USE_OWN_NLS_FUNC:
-> >=20
-> > - Why do we need this function at all?  Can't this be handled by
-> >   __loadlocale instead?  If not, what is __loadlocale missing to make
-> >   this work without duplicating the function?
->=20
-> Calling __loadlocale() here causes execution error.
->=20
-> mintty:
->       0 [main] tcsh 1901 sig_send: error sending signal 6, pid 1901, pipe=
- handle 0x0, nb 0, packsize 164, Win32 error 6
->=20
-> script:
-> Script started, file is typescript
-> script: failed to execute /bin/tcsh: Bad address
-> Script done, file is typescript
->=20
-> I could not find out the reason. Some kind of initialization which
-> is needed by __loadlocale() may not be done yet. So I copied
-> only necessary part from __loadlocale() and nl_langinfo().
->=20
-> Simply,
->  path_conv a ("/usr/share/locale/locale.alias");
-> also causes errors on starting mintty.
->=20
-> Ideally, the cause of the error should be found out, I suppose.
-
-Indeed.  We can keep the code in for now, but the end result should
-call a tweaked version of __loadlocale instead.  As long as the=20
-tweak only requires a single extra argument, or if the category or
-new_locale argument can be used as indicator to trigger the required
-special behavour, we should have no problem to get that into newlib.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen
-Cygwin Maintainer
-
---A9z/3b/E4MkkD+7G
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl1uL3UACgkQ9TYGna5E
-T6A1kg/9FI/r01KoHqdJfR2AVqgAcMk9BT2tYPt1hhMe7gpWyH+HOSfjWKpEXRrP
-llsTLOJf3sSBaTEQAxbGjTu3luIUihzFA9BDPauYQWgHqjqHhfzk7HIb8DrzGNud
-QY4w6mMtQ28MA2qnIIPHGQ5x988702Nr6dEya1qtmFl8ZVj3ZKhK7PqdLLM77p/Q
-xoEy5yXEXiggPUCNqRuy4JneGHKgAq/GX6ffAyvN7C8goyKhxfkywCHlww+F4iwU
-8MPfiPExLUWJBlerrbMhdLqaFOFvNVBbcFgxLSF11s234agaWYp1LD02zO9dItps
-1020CWPuWMaVuIPv7abUW/+R+dUMK7jgkSjdLS7l8D/njTpVnlNgpqvxtJJSMFbp
-7e53r/JEo4GPgI0icoliwEi3o/zyL+3A1vqC4MI9z5sSnMIiyDnPsUtKcOzEhHyV
-8n18wVkKMiUlpRwu/aAjY871fF9+fdaq3wBDhre2faERo5e81gUYayaucKVr6f/h
-+vgYUMTOzIhVBHqwOsyu5d25pD0+SjMJUV7lSmwLdcXNDUnB4A2SMLHMnn1kAowC
-nJabI1elTeMgFz4XTVf3V7mDhG5qHn1nAtTWC7eEB+tqnN62UD4ofRX6014p+2o2
-o+YQdC72wZodU1IuzCljZP46zbdjzGM5EbrzAlyMhfeAS8n3LXI=
-=PJw/
------END PGP SIGNATURE-----
-
---A9z/3b/E4MkkD+7G--
+-- 
+2.21.0
