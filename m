@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9611-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 86052 invoked by alias); 4 Sep 2019 10:47:46 -0000
+Return-Path: <cygwin-patches-return-9612-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 5032 invoked by alias); 4 Sep 2019 12:39:21 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,89 +9,46 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 86043 invoked by uid 89); 4 Sep 2019 10:47:45 -0000
+Received: (qmail 5019 invoked by uid 89); 4 Sep 2019 12:39:20 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-115.9 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=screen
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.134) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 04 Sep 2019 10:47:42 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id 1N5max-1iFavg27KN-017B5h for <cygwin-patches@cygwin.com>; Wed, 04 Sep 2019 12:47:39 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id E7651A80659; Wed,  4 Sep 2019 12:47:38 +0200 (CEST)
-Date: Wed, 04 Sep 2019 10:47:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-6.7 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=
+X-HELO: conssluserg-03.nifty.com
+Received: from conssluserg-03.nifty.com (HELO conssluserg-03.nifty.com) (210.131.2.82) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 04 Sep 2019 12:39:18 +0000
+Received: from Express5800-S70 (ntsitm268057.sitm.nt.ngn.ppp.infoweb.ne.jp [125.1.110.57]) (authenticated)	by conssluserg-03.nifty.com with ESMTP id x84Cd54T027584	for <cygwin-patches@cygwin.com>; Wed, 4 Sep 2019 21:39:05 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com x84Cd54T027584
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1567600745;	bh=yNz/50UNFE8UKt75KjPzYcu629+cTb/pWmIPpgcbcyg=;	h=Date:From:To:Subject:In-Reply-To:References:From;	b=zf043Rl+54ZaDIh+7avzuB1nPg++wZTWyT+GTL06+cB1vlE3OLSfixAnRCofTOmLI	 qlXUTTbam+8C+iMKGg4MuUF/n97RVDJelpqn4aHnjilXY/NGhfrAVe8dTh8lnIHExh	 FfehB30v/UiWrxdrrnhsWA0tOSpMWBq3bIVVVMEaOI5ww+nHLyu7GA0NH2UmY1mE7V	 uUkm4p1bRiLNGY4qaE4BWojhSfag3khddw8NMuHr6bSXeFkyfddjj86mhT7IHHdn2A	 8s5MtU05D1IAdTV4OrmgnzlP2NxJjDGRvA6wLbKN1Le4J0geKksL0wIFKS21tvDo8Y	 ZuMn7v3scU6OQ==
+Date: Wed, 04 Sep 2019 12:39:00 -0000
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 2/2] Cygwin: pty: Disable clear screen on new pty if TERM=dumb or emacs*.
-Message-ID: <20190904104738.GP4164@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20190904014618.1372-1-takashi.yano@nifty.ne.jp> <20190904014618.1372-3-takashi.yano@nifty.ne.jp>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="qYrsQHciA3Wqs7Iv"
-Content-Disposition: inline
-In-Reply-To: <20190904014618.1372-3-takashi.yano@nifty.ne.jp>
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-SW-Source: 2019-q3/txt/msg00131.txt.bz2
+Subject: Re: [PATCH 4/4] Cygwin: pty: Limit API hook to the program linked with the APIs.
+Message-Id: <20190904213914.ce7cf3703871189e9613c7d1@nifty.ne.jp>
+In-Reply-To: <20190904100351.GM4164@calimero.vinschen.de>
+References: <20190904014426.1284-1-takashi.yano@nifty.ne.jp>	<20190904014426.1284-5-takashi.yano@nifty.ne.jp>	<20190904100351.GM4164@calimero.vinschen.de>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
+X-SW-Source: 2019-q3/txt/msg00132.txt.bz2
 
+Hi Corinna,
 
---qYrsQHciA3Wqs7Iv
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1142
+On Wed, 4 Sep 2019 12:03:51 +0200
+Corinna Vinschen wrote:
+> I'll push the other 3 patches from this series.  For this patch,
+> I wonder why you create set_ishybrid_and_switch_to_pcon while
+> at the same time define a macro CHK_CONSOLE_ACCESS with identical
+> functionality.
 
-On Sep  4 10:46, Takashi Yano wrote:
-> - Pseudo console support introduced by commit
->   169d65a5774acc76ce3f3feeedcbae7405aa9b57 shows garbage ^[[H^[[J in
->   some of emacs screens. These screens do not handle ANSI escape
->   sequences. Therefore, clear screen is disabled on these screens.
-> ---
->  winsup/cygwin/fhandler_tty.cc | 26 +++++++++++++++++++-------
->  winsup/cygwin/tty.cc          |  1 +
->  winsup/cygwin/tty.h           |  1 +
->  3 files changed, 21 insertions(+), 7 deletions(-)
->=20
-> diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-> index 283558985..a74c3eecf 100644
-> --- a/winsup/cygwin/fhandler_tty.cc
-> +++ b/winsup/cygwin/fhandler_tty.cc
-> @@ -972,6 +972,19 @@ skip_console_setting:
->  void
->  fhandler_pty_slave::reset_switch_to_pcon (void)
->  {
-> +  if (get_ttyp ()->need_clear_screen)
-> +    {
-> +      const char *term =3D getenv ("TERM");
-> +      if (term && strcmp (term, "dumb") && !strstr (term, "emacs"))
+Yah, indeed!
 
-Why do you check the TERMs again here?  After all, need_clear_screen
-is only true if one of these terms are used.
+> Suggestion: Only define set_ishybrid_and_switch_to_pcon() as
+> inline function (probably in winsup.h) and use only this througout.
 
+This function uses static variable isHybrid (sorry camelback again)
+and static function set_switch_to_pcon() defined in fhandler_tty.cc.
 
-Thanks,
-Corinna
+To make it inline, a lot of changes will be necessary. How about
+non-inline function?
 
---=20
-Corinna Vinschen
-Cygwin Maintainer
-
---qYrsQHciA3Wqs7Iv
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl1vlkoACgkQ9TYGna5E
-T6A1ZxAAkiIy2sfgBIuDT5qUEAXzwfzdgSEI6ndSE3052Auj8zV5dGEmCIUdrb5H
-PFot6OWTPn3A+jV0QDsYKxkS/+1s35jEABpKU706RvGyl0qjUgc0u0uy6hiY4ARP
-1ky4hZVpyLCyGcY7eY5FIa9KVoM1VlNUnRn1fDjpb4hd+LV5H0LI3sT1dckFeqKO
-P+3DoO/caF52pOfpXFgYWkLK5X3g6Wc5pJm2cZ7ISZus6EcP7zS+JWszD0RnqaEP
-McywhN+AiIzWXL4P4bjHyV/bYmps4No15aSJpJIDDLHWc0+AsJpLE2aJT72Ajr1r
-m/e+CoAV7TJ/zvg49smH85FokZ91I4orsr0nwyIHR3Z8ZJnumusM1PLsxynS0jTQ
-NIQBpYqUcIggzJvVdaOaj88NhfgomEhVZ78MDovVtrkwNih1b47QSRyY+3UQ/uCF
-iRsQkqTEADNMpY5QY/y6NO3nEedCIQFyZwOHrlHz5kDBOa9k2eppFMlqR9B0vqAz
-JU8qvs+42phMUt/FBFxi1E/BeRuntRmNsZ4p8MXufXxpmSp+6Dhnu2m6/+jIQHCL
-5nE4diNEiWg3W95CVewCaQZFiNPkWCoC9ynjJCpNigLk8EQZbqlSdM4N+1h1AjZO
-YsI6Jz6jOIVSWQD66HEzmOeHAJ+Fd9qTVxQel4Ymx1MT8olu6Ws=
-=PWiI
------END PGP SIGNATURE-----
-
---qYrsQHciA3Wqs7Iv--
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
