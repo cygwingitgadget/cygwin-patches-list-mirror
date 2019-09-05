@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9628-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 49707 invoked by alias); 4 Sep 2019 17:22:48 -0000
+Return-Path: <cygwin-patches-return-9630-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 80165 invoked by alias); 5 Sep 2019 00:25:14 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,58 +9,100 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 49697 invoked by uid 89); 4 Sep 2019 17:22:48 -0000
+Received: (qmail 79776 invoked by uid 89); 5 Sep 2019 00:24:59 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-4.9 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=screen
-X-HELO: smtp-out-no.shaw.ca
-Received: from smtp-out-no.shaw.ca (HELO smtp-out-no.shaw.ca) (64.59.134.12) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 04 Sep 2019 17:22:47 +0000
-Received: from [192.168.1.114] ([24.64.172.44])	by shaw.ca with ESMTP	id 5YzTi0Qe4UIS25YzUiHtpm; Wed, 04 Sep 2019 11:22:45 -0600
-Reply-To: Brian.Inglis@SystematicSw.ab.ca
-Subject: Re: [PATCH 2/2] Cygwin: pty: Disable clear screen on new pty if TERM=dumb or emacs*.
+X-Spam-SWARE-Status: No, score=-19.2 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=screen
+X-HELO: conuserg-06.nifty.com
+Received: from conuserg-06.nifty.com (HELO conuserg-06.nifty.com) (210.131.2.73) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 05 Sep 2019 00:24:55 +0000
+Received: from localhost.localdomain (ntsitm268057.sitm.nt.ngn.ppp.infoweb.ne.jp [125.1.110.57]) (authenticated)	by conuserg-06.nifty.com with ESMTP id x850OYlM003102;	Thu, 5 Sep 2019 09:24:46 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-06.nifty.com x850OYlM003102
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1567643087;	bh=Y+5uAVrUkYr0kKKFEaBGlysgu62coabxnbQ8BnK4p4k=;	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;	b=sf0UvfsMo++lnb96CE3Ndx83SwgQg5pmhNuF/u13qwbHxj+VIhc4skUNLmyVQGn7l	 8Yc+U8+bb2vxfT82Zi5ZlQSDub28DBOaNOl1FxtfwzEhPR0M41tzhmocIUGgNIy4iF	 O6gSs3iF/xeTaw2+HN/leSkcU6/MM+IHtHd4OCHhL2irJs9Pcuast3rGd2rT0b53XP	 dMpgLwjvpJgOvt6y7DTmetYrna5RK4PGe2srIO/4A9p2rtQatL95q5zg73AmBXHPTl	 zMhuB+Dgj5vgD04K7iyhq9+RYI0prjuY11YlGjLFimFT0OKfDE1SJ6QnI3rEQsnpv5	 um2zPMdVS4o0Q==
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-References: <20190904014618.1372-1-takashi.yano@nifty.ne.jp> <20190904014618.1372-3-takashi.yano@nifty.ne.jp> <e8c3b43a-7988-bb2c-a52b-dc792677dd96@SystematicSw.ab.ca> <20190904123431.59ac7a667f91e3cb65f2a9a9@nifty.ne.jp> <20190904124551.c1aa5b7a15689d384d95356a@nifty.ne.jp>
-From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
-Openpgp: preference=signencrypt
-Message-ID: <73eb5cad-600d-8191-0d8b-241b3e47bd56@SystematicSw.ab.ca>
-Date: Wed, 04 Sep 2019 17:22:00 -0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101 Thunderbird/60.8.0
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH v2 1/1] Cygwin: pty: Disable clear screen on new pty if TERM=dumb or emacs*.
+Date: Thu, 05 Sep 2019 00:25:00 -0000
+Message-Id: <20190905002426.362-2-takashi.yano@nifty.ne.jp>
+In-Reply-To: <20190905002426.362-1-takashi.yano@nifty.ne.jp>
+References: <20190905002426.362-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-In-Reply-To: <20190904124551.c1aa5b7a15689d384d95356a@nifty.ne.jp>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-IsSubscribed: yes
-X-SW-Source: 2019-q3/txt/msg00148.txt.bz2
+X-SW-Source: 2019-q3/txt/msg00150.txt.bz2
 
-On 2019-09-03 21:45, Takashi Yano wrote:
-> On Wed, 4 Sep 2019 12:34:31 +0900
-> Takashi Yano wrote:
->> Attached is the raw output from pseudo console when the screen shows
->> the simple text below.
->>
->> ---- from here ----
->> [yano@Express5800-S70 ~]$ cmd
->> Microsoft Windows [Version 10.0.18362.329]
->> (c) 2019 Microsoft Corporation. All rights reserved.
->>
->> C:\cygwin\home\yano>exit
->> [yano@Express5800-S70 ~]$ exit
->> exit
->> ---- to here ----
->>
->> You will noticed that the screen is cleared if you execute
->> cat pcon-output.log
->> in a terminal which support ANSI escape sequences.
-> 
-> This pcon-output.log was recorded in screen of 80x24 size.
-> Please try above in 80x24 terminal.
+- Pseudo console support introduced by commit
+  169d65a5774acc76ce3f3feeedcbae7405aa9b57 shows garbage ^[[H^[[J in
+  some of emacs screens. These screens do not handle ANSI escape
+  sequences. Therefore, clear screen is disabled on these screens.
+---
+ winsup/cygwin/fhandler_tty.cc | 19 ++++++++++++++-----
+ winsup/cygwin/tty.cc          |  1 +
+ winsup/cygwin/tty.h           |  1 +
+ 3 files changed, 16 insertions(+), 5 deletions(-)
 
-That output seems to be generated by a shell or program running in the pty.
-If the recipient can not handle escape sequences, then the shell or program in
-the pty should be configured by setting e.g. TERM=dumb when launching the
-terminal, or in the shell environment.
-
+diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+index fadff59a3..a6844832b 100644
+--- a/winsup/cygwin/fhandler_tty.cc
++++ b/winsup/cygwin/fhandler_tty.cc
+@@ -962,6 +962,19 @@ skip_console_setting:
+ void
+ fhandler_pty_slave::reset_switch_to_pcon (void)
+ {
++  if (get_ttyp ()->need_clear_screen)
++    {
++      const char *term = getenv ("TERM");
++      if (term && strcmp (term, "dumb") && !strstr (term, "emacs"))
++	{
++	  /* FIXME: Clearing sequence may not be "^[[H^[[J"
++	     depending on the terminal type. */
++	  DWORD n;
++	  WriteFile (get_output_handle_cyg (), "\033[H\033[J", 6, &n, NULL);
++	}
++      get_ttyp ()->need_clear_screen = false;
++    }
++
+   if (ALWAYS_USE_PCON)
+     return;
+   if (isHybrid)
+@@ -2798,14 +2811,10 @@ fhandler_pty_slave::fixup_after_attach (bool native_maybe)
+ 	      /* Clear screen to synchronize pseudo console screen buffer
+ 		 with real terminal. This is necessary because pseudo
+ 		 console screen buffer is empty at start. */
+-	      /* FIXME: Clearing sequence may not be "^[[H^[[J"
+-		 depending on the terminal type. */
+-	      DWORD n;
+ 	      if (get_ttyp ()->num_pcon_attached_slaves == 0
+ 		  && !ALWAYS_USE_PCON)
+ 		/* Assume this is the first process using this pty slave. */
+-		WriteFile (get_output_handle_cyg (),
+-			   "\033[H\033[J", 6, &n, NULL);
++		get_ttyp ()->need_clear_screen = true;
+ 
+ 	      get_ttyp ()->num_pcon_attached_slaves ++;
+ 	    }
+diff --git a/winsup/cygwin/tty.cc b/winsup/cygwin/tty.cc
+index 9244267c0..c94aee3ba 100644
+--- a/winsup/cygwin/tty.cc
++++ b/winsup/cygwin/tty.cc
+@@ -243,6 +243,7 @@ tty::init ()
+   pcon_pid = 0;
+   num_pcon_attached_slaves = 0;
+   TermCodePage = 20127; /* ASCII */
++  need_clear_screen = false;
+ }
+ 
+ HANDLE
+diff --git a/winsup/cygwin/tty.h b/winsup/cygwin/tty.h
+index d59b2027d..c2b0490d0 100644
+--- a/winsup/cygwin/tty.h
++++ b/winsup/cygwin/tty.h
+@@ -104,6 +104,7 @@ private:
+   pid_t pcon_pid;
+   int num_pcon_attached_slaves;
+   UINT TermCodePage;
++  bool need_clear_screen;
+ 
+ public:
+   HANDLE from_master () const { return _from_master; }
 -- 
-Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
-
-This email may be disturbing to some readers as it contains
-too much technical detail. Reader discretion is advised.
+2.21.0
