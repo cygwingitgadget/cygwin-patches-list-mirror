@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9629-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 80154 invoked by alias); 5 Sep 2019 00:25:13 -0000
+Return-Path: <cygwin-patches-return-9631-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 101537 invoked by alias); 5 Sep 2019 01:13:46 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,40 +9,124 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 79775 invoked by uid 89); 5 Sep 2019 00:24:59 -0000
+Received: (qmail 101524 invoked by uid 89); 5 Sep 2019 01:13:45 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-9.3 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=screen, HContent-Transfer-Encoding:8bit
-X-HELO: conuserg-06.nifty.com
-Received: from conuserg-06.nifty.com (HELO conuserg-06.nifty.com) (210.131.2.73) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 05 Sep 2019 00:24:55 +0000
-Received: from localhost.localdomain (ntsitm268057.sitm.nt.ngn.ppp.infoweb.ne.jp [125.1.110.57]) (authenticated)	by conuserg-06.nifty.com with ESMTP id x850OYlK003102;	Thu, 5 Sep 2019 09:24:42 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-06.nifty.com x850OYlK003102
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1567643082;	bh=sYMFUtGeH3cTOc6WwYVHMxPQgtNiEXWUAmwoI8CN20E=;	h=From:To:Cc:Subject:Date:From;	b=hDXZFWFsuQpB4sBQCi+7LUCC4a9b6VTYDW15/9SoeEc6oomSi6b8XB642dc36Q8wS	 lN8obSz2YfAL/Kdkjh0PLJNWniNVshHQUXedzWgEbJMqSGTmSlnL9MDc5l+Tr7grqN	 9Q6jGsibjaHnSskqHQhdkWCl2uZ9lOW9KzqRtE/4xCU3cfcGtqx4wWjKxa8DHEbY3w	 vcExM+KsgNZ+ufJJQp9sFOyvm7FZgbRe96+qdBsNUmC+N3SM6qORSzYRj1I/DoJ/8o	 SnebgSmV0Nuqpz0YijbcAobLe+ub+FuaiAWLhSCWar1resHSkti19AgknIuwevsvh2	 LZi2qp0b1LTjw==
+X-Spam-SWARE-Status: No, score=-6.8 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=21h, H*f:sk:73eb5ca, H*i:sk:73eb5ca, screen
+X-HELO: conssluserg-06.nifty.com
+Received: from conssluserg-06.nifty.com (HELO conssluserg-06.nifty.com) (210.131.2.91) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 05 Sep 2019 01:13:43 +0000
+Received: from Express5800-S70 (ntsitm268057.sitm.nt.ngn.ppp.infoweb.ne.jp [125.1.110.57]) (authenticated)	by conssluserg-06.nifty.com with ESMTP id x851DV8W031216;	Thu, 5 Sep 2019 10:13:31 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com x851DV8W031216
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1567646011;	bh=ZozmQlxbruCh8BdfLmkCODQmWIW7QljDujBKlk7YFJE=;	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;	b=nvL456YKDGJrzYnefbc+Sxb/A5h7uUEwYUn9oA9R2kkyU7ldfpKs+qg3gs7p5EftI	 uWyhd6/AdG6VrlsVpOus8dZCoCzl4TUQT/JOoTZSsdNa5T3xUooidCxYP7IBoY4rui	 XD93oNDDOOjv8GoAbU944IwSJKo0kZHaKzvDbr/YNFHbOG84AxdLYM/Vw8cd3v/jl1	 XX1uaDCbIO6ZryjCgFgZzy9n9/s/htKuDMi1RwLJtIHVx1I4vqEmFA6BkRaJWkQqTH	 qjuChlrkwL+XYpYt0H/aRNrHhk7lBFoViv/QJh1HNSgOqdgtbTeMfKoUDQ7Wt3JUsr	 UHoXZGY0DHzlQ==
+Date: Thu, 05 Sep 2019 01:13:00 -0000
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH v2 0/1] Disable clear screen on new pty if TERM=dumb or emacs*.
-Date: Thu, 05 Sep 2019 00:25:00 -0000
-Message-Id: <20190905002426.362-1-takashi.yano@nifty.ne.jp>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Cc: Brian.Inglis@SystematicSw.ab.ca
+Subject: Re: [PATCH 2/2] Cygwin: pty: Disable clear screen on new pty if TERM=dumb or emacs*.
+Message-Id: <20190905101333.c5cc6920cc3f67d7c625df31@nifty.ne.jp>
+In-Reply-To: <73eb5cad-600d-8191-0d8b-241b3e47bd56@SystematicSw.ab.ca>
+References: <20190904014618.1372-1-takashi.yano@nifty.ne.jp>	<20190904014618.1372-3-takashi.yano@nifty.ne.jp>	<e8c3b43a-7988-bb2c-a52b-dc792677dd96@SystematicSw.ab.ca>	<20190904123431.59ac7a667f91e3cb65f2a9a9@nifty.ne.jp>	<20190904124551.c1aa5b7a15689d384d95356a@nifty.ne.jp>	<73eb5cad-600d-8191-0d8b-241b3e47bd56@SystematicSw.ab.ca>
+Mime-Version: 1.0
+Content-Type: multipart/mixed; boundary="Multipart=_Thu__5_Sep_2019_10_13_33_+0900_GaF9+rkw=WmYXKZU"
 X-IsSubscribed: yes
-X-SW-Source: 2019-q3/txt/msg00149.txt.bz2
+X-SW-Source: 2019-q3/txt/msg00151.txt.bz2
 
-- Pseudo console support introduced by commit
-  169d65a5774acc76ce3f3feeedcbae7405aa9b57 shows garbage ^[[H^[[J in
-  some of emacs screens. These screens do not handle ANSI escape
-  sequences. Therefore, clear screen is disabled on these screens.
+This is a multi-part message in MIME format.
 
-v2:
-Remove check for TERM in fixup_after_attach().
+--Multipart=_Thu__5_Sep_2019_10_13_33_+0900_GaF9+rkw=WmYXKZU
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Content-length: 1356
 
-Takashi Yano (1):
-  Cygwin: pty: Disable clear screen on new pty if TERM=dumb or emacs*.
+On Wed, 4 Sep 2019 11:22:42 -0600
+Brian Inglis wrote:
+> That output seems to be generated by a shell or program running in the pty.
+> If the recipient can not handle escape sequences, then the shell or program in
+> the pty should be configured by setting e.g. TERM=dumb when launching the
+> terminal, or in the shell environment.
 
- winsup/cygwin/fhandler_tty.cc | 19 ++++++++++++++-----
- winsup/cygwin/tty.cc          |  1 +
- winsup/cygwin/tty.h           |  1 +
- 3 files changed, 16 insertions(+), 5 deletions(-)
+No. Output is almost same even if setting TERM=dumb.
+See attached log.
+
+Consider what should be the output of pseudo console if console
+application like below is executed.
+
+#include <windows.h>
+
+int main()
+{
+    HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD p = {20, 10};
+    DWORD n;
+    SetConsoleCursorPosition(h, p);
+    SetConsoleTextAttribute(h, FOREGROUND_RED);
+    WriteConsole(h, "R", 1, &n, 0);
+    SetConsoleTextAttribute(h, FOREGROUND_GREEN);
+    WriteConsole(h, "G", 1, &n, 0);
+    SetConsoleTextAttribute(h, FOREGROUND_BLUE);
+    WriteConsole(h, "B", 1, &n, 0);
+    SetConsoleTextAttribute(h, FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE);
+    WriteConsole(h, "W", 1, &n, 0);
+    WriteConsole(h, "\r\n", 2, &n, 0);
+    return 0;
+}
+
+Setting cursor posision and text color cannot be realized
+without ANSI escape sequences.
+
+Indeed, the output of the pseudo console by the program above is:
+^[[?25l^[[11;21H^[[?25h^[[?25l^[[31mR^[[32mG^[[34mB^[[mW^M
+^[[?25h
 
 -- 
-2.21.0
+Takashi Yano <takashi.yano@nifty.ne.jp>
+
+--Multipart=_Thu__5_Sep_2019_10_13_33_+0900_GaF9+rkw=WmYXKZU
+Content-Type: application/octet-stream;
+ name="pcon-output-dumb.log"
+Content-Disposition: attachment;
+ filename="pcon-output-dumb.log"
+Content-Transfer-Encoding: base64
+Content-length: 2384
+
+G1s/MjVsG1s4MFgbWzgwQw0KG1s4MFgbWzgwQw0KG1s4MFgbWzgwQw0KG1s4
+MFgbWzgwQw0KG1s4MFgbWzgwQw0KG1s4MFgbWzgwQw0KG1s4MFgbWzgwQw0K
+G1s4MFgbWzgwQw0KG1s4MFgbWzgwQw0KG1s4MFgbWzgwQw0KG1s4MFgbWzgw
+Qw0KG1s4MFgbWzgwQw0KG1s4MFgbWzgwQw0KG1s4MFgbWzgwQw0KG1s4MFgb
+WzgwQw0KG1s4MFgbWzgwQw0KG1s4MFgbWzgwQw0KG1s4MFgbWzgwQw0KG1s4
+MFgbWzgwQw0KG1s4MFgbWzgwQw0KG1s4MFgbWzgwQw0KG1s4MFgbWzgwQw0K
+G1s4MFgbWzgwQw0KG1s4MFgbWzgwQxtbSBtbPzI1aBtbPzI1bFt5YW5vQEV4
+cHJlc3M1ODAwLVM3MCB+XSQbWzU1WBtbNTVDDQobWzgwWBtbODBDDQobWzgw
+WBtbODBDDQobWzgwWBtbODBDDQobWzgwWBtbODBDDQobWzgwWBtbODBDDQob
+WzgwWBtbODBDDQobWzgwWBtbODBDDQobWzgwWBtbODBDDQobWzgwWBtbODBD
+DQobWzgwWBtbODBDDQobWzgwWBtbODBDDQobWzgwWBtbODBDDQobWzgwWBtb
+ODBDDQobWzgwWBtbODBDDQobWzgwWBtbODBDDQobWzgwWBtbODBDDQobWzgw
+WBtbODBDDQobWzgwWBtbODBDDQobWzgwWBtbODBDDQobWzgwWBtbODBDDQob
+WzgwWBtbODBDDQobWzgwWBtbODBDDQobWzgwWBtbODBDG1sxOzI3SBtbPzI1
+aGVjaG8gJFRFUk0bWz8yNWwNChtbPzI1aBtbPzI1bBtbSFt5YW5vQEV4cHJl
+c3M1ODAwLVM3MCB+XSQgZWNobyAkVEVSTRtbNDRYG1s0NEMNCmR1bWIbWzc2
+WBtbNzZDDQpbeWFub0BFeHByZXNzNTgwMC1TNzAgfl0kG1s1NVgbWzU1Qw0K
+G1s4MFgbWzgwQw0KG1s4MFgbWzgwQw0KG1s4MFgbWzgwQw0KG1s4MFgbWzgw
+Qw0KG1s4MFgbWzgwQw0KG1s4MFgbWzgwQw0KG1s4MFgbWzgwQw0KG1s4MFgb
+WzgwQw0KG1s4MFgbWzgwQw0KG1s4MFgbWzgwQw0KG1s4MFgbWzgwQw0KG1s4
+MFgbWzgwQw0KG1s4MFgbWzgwQw0KG1s4MFgbWzgwQw0KG1s4MFgbWzgwQw0K
+G1s4MFgbWzgwQw0KG1s4MFgbWzgwQw0KG1s4MFgbWzgwQw0KG1s4MFgbWzgw
+Qw0KG1s4MFgbWzgwQw0KG1s4MFgbWzgwQxtbMzsyN0gbWz8yNWhjbWQbWz8y
+NWwNChtbPzI1aBtbPzI1bBtbSFt5YW5vQEV4cHJlc3M1ODAwLVM3MCB+XSQg
+ZWNobyAkVEVSTRtbNDRYG1s0NEMNCmR1bWIbWzc2WBtbNzZDDQpbeWFub0BF
+eHByZXNzNTgwMC1TNzAgfl0kIGNtZBtbNTFYG1s1MUMNChtbODBYG1s4MEMN
+ChtbODBYG1s4MEMNChtbODBYG1s4MEMNChtbODBYG1s4MEMNChtbODBYG1s4
+MEMNChtbODBYG1s4MEMNChtbODBYG1s4MEMNChtbODBYG1s4MEMNChtbODBY
+G1s4MEMNChtbODBYG1s4MEMNChtbODBYG1s4MEMNChtbODBYG1s4MEMNChtb
+ODBYG1s4MEMNChtbODBYG1s4MEMNChtbODBYG1s4MEMNChtbODBYG1s4MEMN
+ChtbODBYG1s4MEMNChtbODBYG1s4MEMNChtbODBYG1s4MEMNChtbODBYG1s4
+MEMNChtbODBYG1s4MEMbWzQ7MUgbWz8yNWgbWz8yNWxNaWNyb3NvZnQgV2lu
+ZG93cyBbVmVyc2lvbiAxMC4wLjE4MzYyLjMyOV0bWzEwWBtbMTBDDQooYykg
+MjAxOSBNaWNyb3NvZnQgQ29ycG9yYXRpb24uIEFsbCByaWdodHMgcmVzZXJ2
+ZWQuDQobWzUyWBtbNTJDDQpDOlxjeWd3aW5caG9tZVx5YW5vPhtbMzJYG1sz
+MkMbWzc7MjFIG1s/MjVoZXhpdBtbPzI1bA0KG1s/MjVoG1s/MjVsW3lhbm9A
+RXhwcmVzczU4MDAtUzcwIH5dJCAbWz8yNWhlG1s/MjVsG1s/MjVoeBtbPzI1
+bBtbPzI1aGkbWz8yNWwbWz8yNWh0G1s/MjVsG1s/MjVoG1s/MjVsDQobWz8y
+NWgbWz8yNWxbeWFub0BFeHByZXNzNTgwMC1TNzAgfl0kIGV4aXQNChtbPzI1
+aAo=
+
+--Multipart=_Thu__5_Sep_2019_10_13_33_+0900_GaF9+rkw=WmYXKZU--
