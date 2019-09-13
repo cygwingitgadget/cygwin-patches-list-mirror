@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9669-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 81521 invoked by alias); 13 Sep 2019 19:34:55 -0000
+Return-Path: <cygwin-patches-return-9667-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 80447 invoked by alias); 13 Sep 2019 19:34:17 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,34 +9,43 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 81511 invoked by uid 89); 13 Sep 2019 19:34:54 -0000
+Received: (qmail 80436 invoked by uid 89); 13 Sep 2019 19:34:17 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-9.5 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=HContent-Transfer-Encoding:8bit
-X-HELO: conuserg-05.nifty.com
-Received: from conuserg-05.nifty.com (HELO conuserg-05.nifty.com) (210.131.2.72) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 13 Sep 2019 19:34:53 +0000
-Received: from localhost.localdomain (ntsitm283243.sitm.nt.ngn.ppp.infoweb.ne.jp [125.1.151.243]) (authenticated)	by conuserg-05.nifty.com with ESMTP id x8DJYjl1018527;	Sat, 14 Sep 2019 04:34:50 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-05.nifty.com x8DJYjl1018527
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1568403290;	bh=VaXqNOy8Cyr7Ii9wp4r5B0cjtvgVuEMd546luZ1Y/hg=;	h=From:To:Cc:Subject:Date:From;	b=L9zeNH7y2DDSdmsdvWkt4nGw3ZU7c94X4zZdrwqRQqwPUy+b08m7bp+K5Xr0Vl+3O	 NDDz2dR5hjpXmtsiGtelCS6jD1Ai6oP5VnGlac/SUDtKsSsAU2LZsLhweB7W4FTXx7	 cUsNiVtYFu2D9XRWCTM+y9ICWPU1B/72bVWjz7RrcQRP9ctojXSfrmHEnuWtO1W5FR	 6fzQH5q+E6vJDKBN0ZhHpU3vmXdOVxfUp+IBF+HTb0p3+UO6921g85eBv6C3mK5Vie	 hQFLx69JxOt/yhumiqEa/9mBal74nnUdgLI7GfdYaS6LJV8kuI4kh0R4BhEpT83eGa	 ojDNLjYjgKAEQ==
+X-Spam-SWARE-Status: No, score=-9.5 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=UD:jp, HX-Languages-Length:798, H*F:D*ne.jp, device
+X-HELO: conuserg-04.nifty.com
+Received: from conuserg-04.nifty.com (HELO conuserg-04.nifty.com) (210.131.2.71) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 13 Sep 2019 19:34:15 +0000
+Received: from localhost.localdomain (ntsitm283243.sitm.nt.ngn.ppp.infoweb.ne.jp [125.1.151.243]) (authenticated)	by conuserg-04.nifty.com with ESMTP id x8DJY1PW005787;	Sat, 14 Sep 2019 04:34:06 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-04.nifty.com x8DJY1PW005787
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1568403246;	bh=Szutu7EhZHjS0mLpfNq06y7HhOFyZH543D1BgEt29/U=;	h=From:To:Cc:Subject:Date:From;	b=evk0QHm+RFdPI9IZfGBP3ASli2DOSXQUDCxmBE6YslSIQQNSh6pZKqS6oTP+F94q8	 LC1UA6W+sqkFMsjpzQ18gn0qTPJXRayxePlO8t49mTtezgIv9q/jqgnAfNob7Gkhox	 pKrEyFB8MdiaC5VpBXSslNc2E8lH0IbozvgaJ3eIDrO4z4U94a5bquUXPNDptY6qsS	 hu6NXnlWJRHXaUe73e0xWIfH1fITuJXhTzSimIQhUgH+OUToI0ARVKy0vERU7fHSGZ	 IQvk2Dae81Fw4romi6AfjngLz8XKvBLPCagJFDnl+zH5VWYG2xGYIsljTL9bCvyqFD	 AfuywxXCmDwrA==
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH 0/1] Cygwin: console: Fix read() in non-canonical mode.
+Subject: [PATCH 0/1] Cygwin: pty: Switch input and output pipes individually.
 Date: Fri, 13 Sep 2019 19:34:00 -0000
-Message-Id: <20190913193439.1566-1-takashi.yano@nifty.ne.jp>
+Message-Id: <20190913193356.1517-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-IsSubscribed: yes
-X-SW-Source: 2019-q3/txt/msg00189.txt.bz2
+X-SW-Source: 2019-q3/txt/msg00187.txt.bz2
 
-- In non-canonical mode, cygwin console returned only one character
-  even if several keys are typed before read() called. This patch
-  fixes this behaviour.
+- Previously, input and output pipes were switched together between
+  the traditional pty and the pseudo console. However, for example,
+  if stdin is redirected to another device, it is better to leave
+  input pipe traditional pty side even for non-cygwin program. This
+  patch realizes such behaviour.
 
 Takashi Yano (1):
-  Cygwin: console: Fix read() in non-canonical mode.
+  Cygwin: pty: Switch input and output pipes individually.
 
- winsup/cygwin/fhandler_console.cc | 606 ++++++++++++++++--------------
- 1 file changed, 315 insertions(+), 291 deletions(-)
+ winsup/cygwin/dtable.cc           |   6 +-
+ winsup/cygwin/fhandler.h          |   9 +-
+ winsup/cygwin/fhandler_console.cc |   7 +-
+ winsup/cygwin/fhandler_tty.cc     | 256 ++++++++++++++++++++----------
+ winsup/cygwin/select.cc           |   4 +-
+ winsup/cygwin/spawn.cc            |  44 +++--
+ winsup/cygwin/tty.cc              |   5 +-
+ winsup/cygwin/tty.h               |   5 +-
+ 8 files changed, 209 insertions(+), 127 deletions(-)
 
 -- 
 2.21.0
