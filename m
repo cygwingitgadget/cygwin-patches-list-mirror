@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9674-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 48134 invoked by alias); 14 Sep 2019 04:58:32 -0000
+Return-Path: <cygwin-patches-return-9675-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 68499 invoked by alias); 14 Sep 2019 13:11:00 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,54 +9,70 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 48125 invoked by uid 89); 14 Sep 2019 04:58:31 -0000
+Received: (qmail 68490 invoked by uid 89); 14 Sep 2019 13:11:00 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-20.1 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3 autolearn=ham version=3.3.1 spammy=HContent-Transfer-Encoding:8bit
-X-HELO: m0.truegem.net
-Received: from m0.truegem.net (HELO m0.truegem.net) (69.55.228.47) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sat, 14 Sep 2019 04:58:28 +0000
-Received: (from daemon@localhost)	by m0.truegem.net (8.12.11/8.12.11) id x8E4wQXW068256;	Fri, 13 Sep 2019 21:58:26 -0700 (PDT)	(envelope-from mark@maxrnd.com)
-Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67), claiming to be "localhost.localdomain" via SMTP by m0.truegem.net, id smtpdBRnYYs; Fri Sep 13 21:58:16 2019
-From: Mark Geisert <mark@maxrnd.com>
-To: cygwin-patches@cygwin.com
-Cc: Mark Geisert <mark@maxrnd.com>
-Subject: [PATCH] Cygwin: fix CPU_SET macro visibility
-Date: Sat, 14 Sep 2019 04:58:00 -0000
-Message-Id: <20190914045802.693-1-mark@maxrnd.com>
-In-Reply-To: <855a9543-6908-42f0-576a-0f161777f715@ssi-schaefer.com>
-References: <855a9543-6908-42f0-576a-0f161777f715@ssi-schaefer.com>
+X-Spam-SWARE-Status: No, score=-4.4 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=H*i:sk:2019090, cygwin-patches, cygwinpatches
+X-HELO: NAM03-DM3-obe.outbound.protection.outlook.com
+Received: from mail-eopbgr800125.outbound.protection.outlook.com (HELO NAM03-DM3-obe.outbound.protection.outlook.com) (40.107.80.125) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sat, 14 Sep 2019 13:10:58 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none; b=Famh0WpxToZc9Y8XD+mu03wOC9Vr+oy5QIvJc9S/mLHG/+pEGwmowMRLnslq929wwKHJteTaBI757y0p1v1AZD2yTm7+QrJeiy1V7/ifygWClYJ44zjD4onEWN2a2sJUUpC91nSSnO/YGTisTZp//mC+Nrb3duX5wLJmH2FAQJ2BAhqBFGEXpFKzWgiWR0LmZjBWbFFa9E2Kok2VnvTZgS20GtHb/IJjq76rFZMHmBqRjKrtHGtJuaw8yRrHRcQ+k3ieV3to3esBdZNHLT/XojlWR5cnGL9/KfpsiuCjT4QyCAtxreHhw+d0uURWXABO5py/ynFaU5m65IY++6my1A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=I108q9tyoY0ZpiEHPIZR2fwvqGstS4SFRNpmnfHSABc=; b=WxkrYfVAas3tcAXLRtMSPDkUb8Nv1V5/nlYFskJrvUPgOnqWnQRppDHcuZhgdKvKkQwOJ4oqrOqI5OPCybwORdCIgiodZi8qVInbHPCuE/pmy7Yo+C8kERmE0mqdMh04s5lZhY1txRB6XwnRDIq0Ykhv34q2TNddF41Agi576HYCwuJ409Cd+6mJHQt4/XtIMl4hLWcctOuajh5QDSmIboj7mfu9GUU1XleUYHxD8EgKFpHPRtVor5nzR6H29t3ph0ly6vZbLVkFfN3jjoIh+UeHLm9e4CNU97p2pZzzswLQKmV42S2CPC4IMqRodkkfdjoG0PzuJ/1aXBf0w+kFWQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu; dkim=pass header.d=cornell.edu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=I108q9tyoY0ZpiEHPIZR2fwvqGstS4SFRNpmnfHSABc=; b=exDhoeSCGcS//fSaBmZuf1HWlH2J3ImN8pZH3yWl+O7EjYg2Q/OZIpBhoFzzh9KBqf0SI3JiQAANKUj4lEvbZk6JZyp9NwdfMt1ze0Rxg5l3e8qLhSNX+dACSu6xzPX8KxqkIGxvpnkRxDol5CzyXgd0QLbOFl1mA8DUxvg96gM=
+Received: from DM6PR04MB5738.namprd04.prod.outlook.com (20.179.51.81) by DM6PR04MB5385.namprd04.prod.outlook.com (20.178.27.22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2263.21; Sat, 14 Sep 2019 13:10:51 +0000
+Received: from DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::998b:a76c:fc2b:1473]) by DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::998b:a76c:fc2b:1473%4]) with mapi id 15.20.2263.023; Sat, 14 Sep 2019 13:10:51 +0000
+From: Ken Brown <kbrown@cornell.edu>
+To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: Re: [PATCH v5 0/1] Cygwin: pty: Fix the behaviour of Ctrl-C in the pseudo console mode.
+Date: Sat, 14 Sep 2019 13:11:00 -0000
+Message-ID: <349fb4ea-9e1b-3dc7-4167-0ba77a73b8ec@cornell.edu>
+References: <20190908125835.5184-1-takashi.yano@nifty.ne.jp>
+In-Reply-To: <20190908125835.5184-1-takashi.yano@nifty.ne.jp>
+user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101 Thunderbird/60.9.0
+authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
+x-ms-exchange-purlcount: 1
+x-ms-oob-tlc-oobclassifiers: OLM:5797;
+received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="Windows-1252"
+Content-ID: <1DE90D2A6079AF43B355BAAA64D8355C@namprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: qBt1SC7XYTns77PM17ef6hW64iUpGnkAjyi2/ClKrDlywJVdzjhfBJ0CytOYpijs56g+Kw3DNyBmPgZvgl4UOQ==
 X-IsSubscribed: yes
-X-SW-Source: 2019-q3/txt/msg00194.txt.bz2
+X-SW-Source: 2019-q3/txt/msg00195.txt.bz2
 
-The CPU_SET macros defined in Cygwin's include/sys/cpuset.h must not
-be visible in an application's namespace unless _GNU_SOURCE has been
-#defined.  Internally this means wrapping them in #if __GNU_VISIBLE.
+On 9/8/2019 8:58 AM, Takashi Yano wrote:
+> - When the I/O pipe is switched to the pseudo console side, the
+>    behaviour of Ctrl-C was unstable. This rarely happens, however,
+>    for example, shell sometimes crashes by Ctrl-C in that situation.
+>    Furthermore, Ctrl-C was ignored if output of non-cygwin program
+>    is redirected to pipe. This patch fixes these issues.
+>=20
+> v5:
+> Add a workaround for piped non-cygwin program.
+>=20
+> v4:
+> Fix the problem 1 and 2 reported in
+> https://cygwin.com/ml/cygwin-patches/2019-q3/msg00175.html
+>=20
+> v3:
+> Fix mistake in v2.
+>=20
+> v2:
+> Remove the code which accidentally clears ENABLE_ECHO_INPUT flag.
+>=20
+>=20
+> Takashi Yano (1):
+>    Cygwin: pty: Fix the behaviour of Ctrl-C in the pseudo console mode.
+>=20
+>   winsup/cygwin/fhandler.h      |  4 ----
+>   winsup/cygwin/fhandler_tty.cc | 44 +++++++++++++++++++++++++----------
+>   winsup/cygwin/select.cc       |  2 +-
+>   winsup/cygwin/spawn.cc        | 42 ++++++++++++++-------------------
+>   4 files changed, 50 insertions(+), 42 deletions(-)
 
----
- winsup/cygwin/include/sys/cpuset.h | 3 +++
- 1 file changed, 3 insertions(+)
+Pushed.  Thanks.
 
-diff --git a/winsup/cygwin/include/sys/cpuset.h b/winsup/cygwin/include/sys/cpuset.h
-index 2056f6af7..1adf48d54 100644
---- a/winsup/cygwin/include/sys/cpuset.h
-+++ b/winsup/cygwin/include/sys/cpuset.h
-@@ -26,6 +26,7 @@ typedef struct
-   __cpu_mask __bits[__CPU_GROUPMAX];
- } cpu_set_t;
- 
-+#if __GNU_VISIBLE
- int __sched_getaffinity_sys (pid_t, size_t, cpu_set_t *);
- 
- /* These macros alloc or free dynamically-sized cpu sets of size 'num' cpus.
-@@ -88,6 +89,8 @@ int __sched_getaffinity_sys (pid_t, size_t, cpu_set_t *);
- #define CPU_XOR(dst, src1, src2)  CPU_XOR_S(sizeof (cpu_set_t), dst, src1, src2)
- #define CPU_EQUAL(src1, src2)     CPU_EQUAL_S(sizeof (cpu_set_t), src1, src2)
- 
-+#endif /* __GNU_VISIBLE */
-+
- #ifdef __cplusplus
- }
- #endif
--- 
-2.21.0
+Ken
