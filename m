@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9679-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 2038 invoked by alias); 15 Sep 2019 04:06:20 -0000
+Return-Path: <cygwin-patches-return-9681-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 2101 invoked by alias); 15 Sep 2019 04:06:20 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,46 +9,51 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 1913 invoked by uid 89); 15 Sep 2019 04:06:18 -0000
+Received: (qmail 1914 invoked by uid 89); 15 Sep 2019 04:06:18 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-19.6 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=UD:jp, 8578, HContent-Transfer-Encoding:8bit
+X-Spam-SWARE-Status: No, score=-9.7 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=UD:jp, screen, HContent-Transfer-Encoding:8bit
 X-HELO: conuserg-01.nifty.com
 Received: from conuserg-01.nifty.com (HELO conuserg-01.nifty.com) (210.131.2.68) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 15 Sep 2019 04:06:16 +0000
-Received: from localhost.localdomain (ntsitm283243.sitm.nt.ngn.ppp.infoweb.ne.jp [125.1.151.243]) (authenticated)	by conuserg-01.nifty.com with ESMTP id x8F45sLp026084;	Sun, 15 Sep 2019 13:06:02 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-01.nifty.com x8F45sLp026084
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1568520362;	bh=ITVe9frNbJWxLfOAl0x00EXD9mThI6ywxLivahg8I1U=;	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;	b=vRZ4UeI8Q9wv7P7kPobJtncn3ieAzUWevw7MSsl8xhqowdfj31HIEnWINyqyORNX5	 6ZFlUW5lCLuhjguzvwLH4eVNmNgs84cFV14+QZc5XpgQ/npnie1PoKQVjNS/uGujLs	 ++VTaM1BChnD1BMqCzXHh5xFwqUCUb9gz5kedPQyaqo5XvuLasaVu++gCHjfcIEhu9	 ghixqwtyUoGzUcLH6WJrTBhZ8eM+nGY+b8asE5qZ8/C4MwYzIz5cJr98z8xUlLo3pR	 T2RiX3AnVNhnN4zmK68osxDKm8LjerHq0tbB9OAyQebG9tPJ8zi9Le1o4/5XQYn57H	 iO8Lm2QxwDaCg==
+Received: from localhost.localdomain (ntsitm283243.sitm.nt.ngn.ppp.infoweb.ne.jp [125.1.151.243]) (authenticated)	by conuserg-01.nifty.com with ESMTP id x8F45sLn026084;	Sun, 15 Sep 2019 13:05:59 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-01.nifty.com x8F45sLn026084
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1568520359;	bh=Py3lgof0sPSodB977iTzpJPLpyfj6W/YRqX31hLZ1VE=;	h=From:To:Cc:Subject:Date:From;	b=hswZhNDjEUo5gZ/3es77J5KY8pL25oi01rc3ATtD2GKRdqOLJe17G5OfI4Y8aWc0E	 I1SJRZP3HbeCHJjfPTKKul3wAyRFmSdfK8VWABQYJ5eNXnR7qJO8Mc9ssYw/z8vlp0	 jsTWcZcURcQW+USBWnBDn88s+ChdTKc+tGN6GRjlLXy/AAnth5rPded8XIqAKHcTJS	 7AyDd3R/YoPZuSH1sjKO81DgLieJFKv5uwd7/ojlbXVjG6ltGP0zGq6Tn38qCoXXtp	 zSdQZC1piTMNtEm3nOHTZ25M7WojK5RRlclgmc/n5X1Fs98+KIJTpj8+8hLqB7sja7	 5PsXtRctR21GQ==
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH 1/3] Cygwin: pty: Fix bad file descriptor error in some environment.
+Subject: [PATCH 0/3] Some fixes for PTY with pseudo console support (3)
 Date: Sun, 15 Sep 2019 04:06:00 -0000
-Message-Id: <20190915040553.849-2-takashi.yano@nifty.ne.jp>
-In-Reply-To: <20190915040553.849-1-takashi.yano@nifty.ne.jp>
-References: <20190915040553.849-1-takashi.yano@nifty.ne.jp>
+Message-Id: <20190915040553.849-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-IsSubscribed: yes
-X-SW-Source: 2019-q3/txt/msg00199.txt.bz2
+X-SW-Source: 2019-q3/txt/msg00200.txt.bz2
 
-- The bad file descriptor problem reported in:
-  https://cygwin.com/ml/cygwin-patches/2019-q3/msg00104.html
-  was recurring. Fixed again.
----
- winsup/cygwin/fhandler_tty.cc | 2 --
- 1 file changed, 2 deletions(-)
+[PATCH 1/3] Fix bad file descriptor error in some environment.
+The bad file descriptor problem reported in:
+https://cygwin.com/ml/cygwin-patches/2019-q3/msg00104.html
+was recurring. Fixed again.
 
-diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index 9aa832641..1b1d54447 100644
---- a/winsup/cygwin/fhandler_tty.cc
-+++ b/winsup/cygwin/fhandler_tty.cc
-@@ -857,8 +857,6 @@ fhandler_pty_slave::open (int flags, mode_t)
-       pcon_attached_to = get_minor ();
-       init_console_handler (true);
-     }
--  else if (pcon_attached_to < 0)
--    fhandler_console::need_invisible ();
- 
-   set_open_status ();
-   return 1;
+[PATCH 2/3] Use system NLS function instead of PTY's own one.
+Since calling system __loadlocale() caused execution error,
+PTY used its own NLS function. The cause of the error has been
+found, the corresponding code has been rewritten using system
+function.
+
+[PATCH 3/3] Change the timing of clearing screen.
+The code which clears screen is moved from reset_switch_to_pcon()
+to fixup_after_exec() because it seems not too early even at this
+timing.
+
+Takashi Yano (3):
+  Cygwin: pty: Fix bad file descriptor error in some environment.
+  Cygwin: pty: Use system NLS function instead of PTY's own one.
+  Cygwin: pty: Change the timing of clearing screen.
+
+ winsup/cygwin/fhandler.h      |   1 +
+ winsup/cygwin/fhandler_tty.cc | 527 ++++++++--------------------------
+ winsup/cygwin/tty.cc          |   2 +-
+ winsup/cygwin/tty.h           |   2 +-
+ 4 files changed, 120 insertions(+), 412 deletions(-)
+
 -- 
 2.21.0
