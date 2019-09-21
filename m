@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9713-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 117406 invoked by alias); 20 Sep 2019 22:05:20 -0000
+Return-Path: <cygwin-patches-return-9714-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 118344 invoked by alias); 21 Sep 2019 17:34:11 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,63 +9,103 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 117395 invoked by uid 89); 20 Sep 2019 22:05:20 -0000
+Received: (qmail 118335 invoked by uid 89); 21 Sep 2019 17:34:11 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-3.6 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=seven, HX-Languages-Length:914
+X-Spam-SWARE-Status: No, score=-26.9 required=5.0 tests=BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=remained, hasn't, hasnt
 X-HELO: NAM03-CO1-obe.outbound.protection.outlook.com
-Received: from mail-eopbgr790101.outbound.protection.outlook.com (HELO NAM03-CO1-obe.outbound.protection.outlook.com) (40.107.79.101) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 20 Sep 2019 22:05:18 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none; b=hbs6UOrSAyV2BlTzl4Y8EaciMhL956nKY8B8j5YT9RELnULcfSeBbf43ZqFo4eMgpnQv3y4/aon8gIIqFQIv1Vgq/FH4GHMyu9YcPS2dn2Er8gdSvQGlh+p4Jjhbw55voLEGP3C4QYHmrB83IfELkP4wOvO3JLRrr3n7W7Xe0O192UHwkBqglHJk2SJhcPrZkanj9D3DmNSooZH7F2RPQTMVyS+hb3HW2rm5VTsU3Aco77fpGKxKpUMoLilINPa+9UzaVZNEBQGZ8qmpkXJvf2pvWR8HUYbTS6jGDDARvDtWC39dj3Ykhka6NmT4u88GMeeGvgNkwky1q+2QKWQjAQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=oMQDf4fPYvxv7ZGfUBzX+9H9OQP0tvaSEEJfYIuKyY8=; b=b3W0YguV9DRVCKGTC3guJeIJso5F+iIDM4p9e4Ziv5GckA1/LOFdfgIqSYuxep3lU77utsPLtkaIY8iH1s3u1+LVHRwfNPmJmbXlKfLcpLZHH5/Qk44lTXl+tTQMpUq3D4tpP0HV00CneLF6km1IHOWaTSu3NDdh8lIpTG9dlgR0FL8Cs1Y4oI/Wf6ScAmMVlI3ybIgLEsysm9yPlXWVWcfoqobO0d9m4NHdcj36T27lzeay7e2taTsUbYjXfh7fgDvbUXX/nha7lWLG+pcyn4VE6rvTOSo10S0Lyoc1UayygrbdhuxkG+LjMlIzBycXwi3wUNrdANOsOuRTQ+tINw==
+Received: from mail-eopbgr790119.outbound.protection.outlook.com (HELO NAM03-CO1-obe.outbound.protection.outlook.com) (40.107.79.119) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sat, 21 Sep 2019 17:34:09 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none; b=QLgGqzwsUIvAvBzHr8CgZqIampKQzDrCBbSVh52AU0yoiLDyH1EqSpvxWktXpzvyCTUKzYrGLzUBXl2HFdJyO14pqkbtpclGheU+3d7wzMiqK5dWelSSJWKE04Bl2HSZdGOkT20fzp98khw8ScWDiRIkaK7UJ8Myu+NOSFrQvlc2pCXXnMxEuVaOdXdNWPDpDEfLsGGvNopIh/fkVMOMGLJCQ04w6ktnuY1h5jnPl66wIRAJHIiddEhH4wbHiUXeqTHzuG2VpM/I+fjsfGN91FeljcV7JIkZjeRL1tMFcCypLz57HiLoRlJxSM111tuYGk9GBIgo34yKaT92uL5cfA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=bStCGnXXWQ4niALyDkpih4EPo1WXnUy6xSYskEpeCEQ=; b=ObBd/zrl/NWGYOtWQ0hxzlG/ciwIcwMi/JWanH6EolQ1Ir1t6sbnsmUgHWag1vaiTjFQ2Q5xQa4AQcvcu3w3oCM6YiThjDN5DjgzC+/kfR02ktexWPLikyBaqTgZpKxVflIGqbni3kmg3YXRWKMDU1TfmEczRHCHQqJj1dwnyQlq64792n15kXEXAR7U/recx4kV/KFcaRcZQ+iODtaYiNnnjPneSawaTwKTOqMpKilO4J9ePYCEmA6UZ/c7PM44M/+iTgT6ZzhK+lncdj7NwkpwHyVTgCCxLJ1djcZKAe3nXr0VIr1uA+INC3at8YqIICn2dPgtrlIWnAVGzagUrA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu; dkim=pass header.d=cornell.edu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=oMQDf4fPYvxv7ZGfUBzX+9H9OQP0tvaSEEJfYIuKyY8=; b=XcMkTT1j6jQwVM10UzqGVPXCDX9u0/haL/D/VNfcum1t5uSqWSacw2uVVAjwlql+bZTYbyjwuJ1d77Se8WEubeNsP/HkMEhjbXpLjUzR9b9PBu+A2hcvgqguIxEkRpmQgo5D09haM90kERxkHaBSgaRed3mrbLL+hL2SpAiGvaY=
-Received: from DM6PR04MB5738.namprd04.prod.outlook.com (20.179.51.81) by DM6PR04MB4891.namprd04.prod.outlook.com (20.176.109.76) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2263.21; Fri, 20 Sep 2019 22:05:16 +0000
-Received: from DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::998b:a76c:fc2b:1473]) by DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::998b:a76c:fc2b:1473%4]) with mapi id 15.20.2263.023; Fri, 20 Sep 2019 22:05:16 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=bStCGnXXWQ4niALyDkpih4EPo1WXnUy6xSYskEpeCEQ=; b=GDrfv0LDEYixw6hel8rzfkhIcf6OHUh4TO4LjP+VssCrV522NYxGn0hZyPVM4BCLUol7QCFoP+1ZptueFdEb9wkMJyIZFSf3B7UT0Uzrc3Yb8OorSH4LAHHatC+S56845M5PA6ykJ0BAMvPJMWOamwXJoQFpuxplVv3swzo6PDk=
+Received: from DM6PR04MB5738.namprd04.prod.outlook.com (20.179.51.81) by DM6PR04MB5836.namprd04.prod.outlook.com (20.179.50.32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2284.25; Sat, 21 Sep 2019 17:34:05 +0000
+Received: from DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::998b:a76c:fc2b:1473]) by DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::998b:a76c:fc2b:1473%4]) with mapi id 15.20.2263.023; Sat, 21 Sep 2019 17:34:05 +0000
 From: Ken Brown <kbrown@cornell.edu>
 To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: Re: [ANNOUNCEMENT] cygwin 3.1.0-0.5 (TEST)
-Date: Fri, 20 Sep 2019 22:05:00 -0000
-Message-ID: <b4bc7a67-87ab-7876-8b8c-69a1b75e3a85@cornell.edu>
-References: <announce.20190915144631.711-1-kbrown@cornell.edu> <20190918234043.5dcf3104ec188bb6f3c81218@nifty.ne.jp>
-In-Reply-To: <20190918234043.5dcf3104ec188bb6f3c81218@nifty.ne.jp>
-user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101 Thunderbird/60.9.0
+Subject: [PATCH] Cygwin: remove old cruft from path_conv::check
+Date: Sat, 21 Sep 2019 17:34:00 -0000
+Message-ID: <20190921173347.1527-1-kbrown@cornell.edu>
 authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
-x-ms-oob-tlc-oobclassifiers: OLM:972;
+x-ms-exchange-purlcount: 1
+x-ms-oob-tlc-oobclassifiers: OLM:2512;
 received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="Windows-1252"
-Content-ID: <EF7E353C001AD04DA24ED527F32F7481@namprd04.prod.outlook.com>
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: mixAgnYMEVcrjkIqzAoPifIXWfNnIox+ZJoyl3+1OHTs5PU+nihPoklP+FN3L+vFEdtPQbMu6x6EEqmOY5+Lig==
+X-MS-Exchange-CrossTenant-userprincipalname: 0iC7WTcmNQiP553G6TZkspkFLLkVTR208KmHcnxtuCXReqLe39bLkm1wcJgKAeLnizWC7Hv7IALuyaMPEN/tVg==
 X-IsSubscribed: yes
-X-SW-Source: 2019-q3/txt/msg00233.txt.bz2
+X-SW-Source: 2019-q3/txt/msg00234.txt.bz2
 
-[Redirecting to cygwin-pathces.]
+Prior to commit b0717aae, path_conv::check had the following code:
 
-On 9/18/2019 10:40 AM, Takashi Yano wrote:
-> Hi Ken,
->=20
-> I have just posted seven patches against git head (cygwin 3.1.0-0.5).
->=20
-> [PATCH] Cygwin: console: Revive Win7 compatibility.
-> [PATCH 1/5] Cygwin: pty: Avoid potential segfault in PTY code when ppid =
-=3D 1.
-> [PATCH 2/5] Cygwin: pty: Make GDB work again on pty.
-> [PATCH 3/5] Cygwin: pty: Unify the charset conversion codes into a functi=
-on.
-> [PATCH 4/5] Cygwin: pty: Add charset conversion for console apps in legac=
-y PTY.
-> [PATCH 5/5] Cygwin: pty: Add missing guard when PTY is in the legacy mode.
-> [PATCH] Cygwin: console: Make console input work in GDB and strace.
+      if (strncmp (path, "\\\\.\\", 4))
+        {
+          /* Windows ignores trailing dots and spaces in the last path
+             component, and ignores exactly one trailing dot in inner
+             path components. */
+          char *tail =3D NULL;
+          [...]
+          if (!tail || tail =3D=3D path)
+            /* nothing */;
+          else if (tail[-1] !=3D '\\')
+            {
+              *tail =3D '\0';
+          [...]
+        }
 
-I think I've pushed all your patches now.
+Commit b0717aae0 intended to disable this code, but it inadvertently
+disabled only part of it.  In particular, the declaration of the local
+tail variable was in the disabled code, but the following remained:
 
-> I am sorry to submit patches in a short time since last test release.
+          if (!tail || tail =3D=3D path)
+            /* nothing */;
+          else if (tail[-1] !=3D '\\')
+            {
+              *tail =3D '\0';
+          [...]
+        }
 
-No problem.
+[A later commit removed the disabled code.]
 
-I'll make a new test release this weekend, or whenever you think it's time.
+The tail variable here points into a string different from path,
+causing that string to be truncated under some circumstances.  See
 
-Ken
+  https://cygwin.com/ml/cygwin/2019-09/msg00001.html
+
+for more details.
+
+This commit fixes the problem by removing the leftover code
+that was intended to be removed in b0717aae.
+---
+ winsup/cygwin/path.cc | 13 -------------
+ 1 file changed, 13 deletions(-)
+
+diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
+index c13701aa0..2fbacd881 100644
+--- a/winsup/cygwin/path.cc
++++ b/winsup/cygwin/path.cc
+@@ -1168,19 +1168,6 @@ path_conv::check (const char *src, unsigned opt,
+=20
+       if (dev.isfs ())
+ 	{
+-	  if (strncmp (path, "\\\\.\\", 4))
+-	    {
+-	      if (!tail || tail =3D=3D path)
+-		/* nothing */;
+-	      else if (tail[-1] !=3D '\\')
+-		*tail =3D '\0';
+-	      else
+-		{
+-		  error =3D ENOENT;
+-		  return;
+-		}
+-	    }
+-
+ 	  /* If FS hasn't been checked already in symlink_info::check,
+ 	     do so now. */
+ 	  if (fs.inited ()|| fs.update (get_nt_native_path (), NULL))
+--=20
+2.21.0
