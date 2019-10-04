@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9732-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 84746 invoked by alias); 4 Oct 2019 20:18:55 -0000
+Return-Path: <cygwin-patches-return-9733-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 31127 invoked by alias); 4 Oct 2019 20:40:02 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,914 +9,807 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 84729 invoked by uid 89); 4 Oct 2019 20:18:54 -0000
+Received: (qmail 31103 invoked by uid 89); 4 Oct 2019 20:40:01 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-14.2 required=5.0 tests=AWL,BAYES_00,DATE_IN_PAST_06_12,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=timer, tech, voltage, gran
+X-Spam-SWARE-Status: No, score=-7.5 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=tip, wsl, Family, WSL
 X-HELO: smtp-out-no.shaw.ca
-Received: from smtp-out-no.shaw.ca (HELO smtp-out-no.shaw.ca) (64.59.134.13) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 04 Oct 2019 20:18:50 +0000
-Received: from Brian.Inglis@Shaw.ca ([24.64.172.44])	by shaw.ca with ESMTP	id GU2HixkIisAGkGU2IiqCnN; Fri, 04 Oct 2019 14:18:47 -0600
-From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+Received: from smtp-out-no.shaw.ca (HELO smtp-out-no.shaw.ca) (64.59.134.9) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 04 Oct 2019 20:39:57 +0000
+Received: from [192.168.1.114] ([24.64.172.44])	by shaw.ca with ESMTP	id GUMkixts4sAGkGUMliqHsI; Fri, 04 Oct 2019 14:39:56 -0600
+Reply-To: Brian.Inglis@SystematicSw.ab.ca
+Subject: Re: [PATCH] fhandler_proc.cc(format_proc_cpuinfo): fix issues, add fields, flags
 To: Cygwin Patches <cygwin-patches@cygwin.com>
-Cc: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
-Subject: [PATCH] fhandler_proc.cc(format_proc_cpuinfo): fix issues, add fields, flags
-Date: Fri, 04 Oct 2019 20:18:00 -0000
-Message-Id: <20191004104457.33757-1-Brian.Inglis@SystematicSW.ab.ca>
+References: <20191004104457.33757-1-Brian.Inglis@SystematicSW.ab.ca>
+From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
+Openpgp: preference=signencrypt
+Message-ID: <5b5874ac-4d98-1415-90fe-66e5fb79b398@SystematicSw.ab.ca>
+Date: Fri, 04 Oct 2019 20:40:00 -0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101 Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191004104457.33757-1-Brian.Inglis@SystematicSW.ab.ca>
+Content-Type: multipart/mixed; boundary="------------48911958CD71832F1C9C8405"
 X-IsSubscribed: yes
-X-SW-Source: 2019-q4/txt/msg00003.txt.bz2
+X-SW-Source: 2019-q4/txt/msg00004.txt.bz2
 
-fix cache size return code handling and make AMD/Intel code common; 
-fix cpuid level count as number of non-zero leafs excluding sub-leafs; 
-fix AMD physical cores count to be documented nc + 1; 
-round cpu MHz to correct Windows and match Linux cpuinfo; 
-add microcode from Windows registry Update Revision REG_BINARY; 
-add bogomips which has been cpu MHz*2 since Pentium MMX; 
-handle as common former Intel only feature flags also supported on AMD; 
-add 88 feature flags inc. AVX512 extensions, AES, SHA with 20 cpuid calls; 
-commented out flags are mostly used but not currently reported in cpuinfo 
-but some may not currently be used by Linux
+This is a multi-part message in MIME format.
+--------------48911958CD71832F1C9C8405
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-length: 599
 
----
- winsup/cygwin/fhandler_proc.cc | 735 +++++++++++++++++++--------------
- 1 file changed, 434 insertions(+), 301 deletions(-)
-
-diff --git a/winsup/cygwin/fhandler_proc.cc b/winsup/cygwin/fhandler_proc.cc
-index 48476beb8..6bfc4fd93 100644
---- a/winsup/cygwin/fhandler_proc.cc
-+++ b/winsup/cygwin/fhandler_proc.cc
-@@ -609,6 +609,8 @@ format_proc_stat (void *, char *&destbuf)
- }
- 
- #define print(x) { bufptr = stpcpy (bufptr, (x)); }
-+/* feature test bit position (0-32) and conditional print */
-+#define ftcprint(feat,bitno,msg) if ((feat) & (1 << (bitno))) { print (" " msg); }
- 
- static inline uint32_t
- get_msb (uint32_t in)
-@@ -686,15 +688,34 @@ format_proc_cpuinfo (void *, char *&destbuf)
- 	 to be rescheduled */
-       yield ();
- 
--      DWORD cpu_mhz = 0;
--      RTL_QUERY_REGISTRY_TABLE tab[2] = {
-+      DWORD cpu_mhz;
-+      DWORD bogomips;
-+      long long microcode = 0xffffffff;	/* at least 8 bytes for AMD */
-+      union {
-+	  LONG len;
-+	  char uc_microcode[16];
-+      } uc;
-+
-+      cpu_mhz = 0;
-+      bogomips = 0;
-+      microcode = 0;
-+      memset(&uc, 0, sizeof(uc.uc_microcode));
-+      uc.len = -16;	/* max length of microcode buffer */
-+
-+      RTL_QUERY_REGISTRY_TABLE tab[3] = {
- 	{ NULL, RTL_QUERY_REGISTRY_DIRECT | RTL_QUERY_REGISTRY_NOSTRING,
- 	  L"~Mhz", &cpu_mhz, REG_NONE, NULL, 0 },
-+	{ NULL, RTL_QUERY_REGISTRY_DIRECT | RTL_QUERY_REGISTRY_NOSTRING,
-+	  L"Update Revision", &uc, REG_NONE, NULL, 0 },
- 	{ NULL, 0, NULL, NULL, 0, NULL, 0 }
-       };
- 
-       RtlQueryRegistryValues (RTL_REGISTRY_ABSOLUTE, cpu_key, tab,
- 			      NULL, NULL);
-+      cpu_mhz = ((cpu_mhz - 1)/10 + 1)*10;	/* round up a digit */
-+      bogomips = cpu_mhz*2;	/* bogomips is double cpu MHz since MMX */
-+      memcpy(&microcode, &uc, sizeof(microcode));
-+
-       bufptr += __small_sprintf (bufptr, "processor\t: %d\n", cpu_number);
-       uint32_t maxf, vendor_id[4], unused;
- 
-@@ -720,9 +741,9 @@ format_proc_cpuinfo (void *, char *&destbuf)
- 	       stepping		= cpuid_sig   & 0x0000000f,
- 	       apic_id		= (extra_info & 0xff000000) >> 24;
-       if (family == 15)
--	family += (cpuid_sig >> 20) & 0xff;
-+	family += (cpuid_sig >> 20) & 0xff;	/* ext family + family */
-       if (family >= 6)
--	model += ((cpuid_sig >> 16) & 0x0f) << 4;
-+	model |= ((cpuid_sig >> 16) & 0x0f) << 4; /* ext model<<4 | model */
- 
-       uint32_t maxe = 0;
-       cpuid (&maxe, &unused, &unused, &unused, 0x80000000);
-@@ -744,6 +765,8 @@ format_proc_cpuinfo (void *, char *&destbuf)
-       int cache_size = -1,
- 	  clflush = 64,
- 	  cache_alignment = 64;
-+      long (*get_cpu_cache) (int, uint32_t) = NULL;
-+      uint32_t max;
-       if (features1 & (1 << 19)) /* CLFSH */
- 	clflush = ((extra_info >> 8) & 0xff) << 3;
-       if (is_intel && family == 15)
-@@ -751,56 +774,47 @@ format_proc_cpuinfo (void *, char *&destbuf)
-       if (is_intel)
- 	{
- 	  extern long get_cpu_cache_intel (int sysc, uint32_t maxf);
--	  long cs;
--
--	  cs = get_cpu_cache_intel (_SC_LEVEL3_CACHE_SIZE, maxf);
--	  if (cs == -1)
--	    cs = get_cpu_cache_intel (_SC_LEVEL2_CACHE_SIZE, maxf);
--	  if (cs == -1)
--	    {
--	      cs = get_cpu_cache_intel (_SC_LEVEL1_ICACHE_SIZE, maxf);
--	      if (cs != -1)
--		cache_size = cs;
--	      cs = get_cpu_cache_intel (_SC_LEVEL1_DCACHE_SIZE, maxf);
--	      if (cs != -1)
--		cache_size += cs;
--	    }
--	  else
--	    cache_size = cs;
--	  if (cache_size != -1)
--	    cache_size >>= 10;
-+	  get_cpu_cache = get_cpu_cache_intel;
-+	  max = maxf;	/* Intel uses normal cpuid levels */
- 	}
-       else if (is_amd)
--	{
-+        {
- 	  extern long get_cpu_cache_amd (int sysc, uint32_t maxe);
-+	  get_cpu_cache = get_cpu_cache_amd;
-+	  max = maxe;	/* AMD uses extended cpuid levels */
-+	}
-+      if (get_cpu_cache)
-+	{
- 	  long cs;
- 
--	  cs = get_cpu_cache_amd (_SC_LEVEL3_CACHE_SIZE, maxe);
--	  if (cs == -1)
--	    cs = get_cpu_cache_amd (_SC_LEVEL2_CACHE_SIZE, maxe);
--	  if (cs == -1)
-+	  cs = get_cpu_cache (_SC_LEVEL3_CACHE_SIZE, max);
-+	  if (cs <= 0)
-+	    cs = get_cpu_cache (_SC_LEVEL2_CACHE_SIZE, max);
-+	  if (cs <= 0)
- 	    {
--	      cs = get_cpu_cache_amd (_SC_LEVEL1_ICACHE_SIZE, maxe);
--	      if (cs != -1)
-+	      cs = get_cpu_cache (_SC_LEVEL1_ICACHE_SIZE, max);
-+	      if (cs > 0)
- 		cache_size = cs;
--	      cs = get_cpu_cache_amd (_SC_LEVEL1_DCACHE_SIZE, maxe);
--	      if (cs != -1)
-+	      cs = get_cpu_cache (_SC_LEVEL1_DCACHE_SIZE, max);
-+	      if (cs > 0)
- 		cache_size += cs;
- 	    }
- 	  else
- 	    cache_size = cs;
--	  if (cache_size != -1)
-+	  if (cache_size > 0)
- 	    cache_size >>= 10;
- 	}
-       bufptr += __small_sprintf (bufptr, "cpu family\t: %d\n"
- 					 "model\t\t: %d\n"
- 					 "model name\t: %s\n"
- 					 "stepping\t: %d\n"
-+					 "microcode\t: 0x%x\n"
- 					 "cpu MHz\t\t: %d.000\n",
- 				 family,
- 				 model,
- 				 in_buf.s + strspn (in_buf.s, " 	"),
- 				 stepping,
-+				 microcode,
- 				 cpu_mhz);
- 
-       if (cache_size >= 0)
-@@ -894,11 +908,11 @@ format_proc_cpuinfo (void *, char *&destbuf)
- 
- 		  cpuid (&unused, &unused, &core_info, &unused, 0x80000008);
- 		  cpuid (&unused, &cus, &unused, &unused, 0x8000001e);
--		  siblings = (core_info & 0xff) + 1;
-+		  siblings = (core_info & 0xff) + 1;	/* physical cores */
-+		  cpu_cores = siblings;			/* physical cores */
- 		  logical_bits = (core_info >> 12) & 0xf;
- 		  cus = ((cus >> 8) & 0x3) + 1;
- 		  ht_bits = mask_bits (cus);
--		  cpu_cores = siblings >> ht_bits;
- 		}
- 	      else if (maxe >= 0x80000008)
- 		{
-@@ -936,291 +950,414 @@ format_proc_cpuinfo (void *, char *&destbuf)
- 
- 	}
- 
-+      /* level is number of non-zero leafs exc. sub-leafs */
-+      int level = maxf + 1 + (maxe & 0x7fffffff) + 1;
-+
-+      for (uint32_t l = maxe; 0x80000001 < l; --l) {
-+	  uint32_t a, b, c, d;
-+	  cpuid (&a, &b, &c, &d, l);
-+	  if (!(a | b | c | d))	--level;
-+      }
-+
-+      for (uint32_t l = maxf; 1 < l; --l) {
-+	  uint32_t a, b, c, d;
-+	  cpuid (&a, &b, &c, &d, l);
-+	  if (!(a | b | c | d))	--level;
-+      }
-+
-       bufptr += __small_sprintf (bufptr, "fpu\t\t: %s\n"
- 					 "fpu_exception\t: %s\n"
- 					 "cpuid level\t: %d\n"
- 					 "wp\t\t: yes\n",
- 				 (features1 & (1 << 0)) ? "yes" : "no",
- 				 (features1 & (1 << 0)) ? "yes" : "no",
--				 maxf);
-+				 level);
-       print ("flags\t\t:");
--      if (features1 & (1 << 0))
--	print (" fpu");
--      if (features1 & (1 << 1))
--	print (" vme");
--      if (features1 & (1 << 2))
--	print (" de");
--      if (features1 & (1 << 3))
--	print (" pse");
--      if (features1 & (1 << 4))
--	print (" tsc");
--      if (features1 & (1 << 5))
--	print (" msr");
--      if (features1 & (1 << 6))
--	print (" pae");
--      if (features1 & (1 << 7))
--	print (" mce");
--      if (features1 & (1 << 8))
--	print (" cx8");
--      if (features1 & (1 << 9))
--	print (" apic");
--      if (features1 & (1 << 11))
--	print (" sep");
--      if (features1 & (1 << 12))
--	print (" mtrr");
--      if (features1 & (1 << 13))
--	print (" pge");
--      if (features1 & (1 << 14))
--	print (" mca");
--      if (features1 & (1 << 15))
--	print (" cmov");
--      if (features1 & (1 << 16))
--	print (" pat");
--      if (features1 & (1 << 17))
--	print (" pse36");
--      if (features1 & (1 << 18))
--	print (" pn");
--      if (features1 & (1 << 19))
--	print (" clflush");
--      if (is_intel && features1 & (1 << 21))
--	print (" dts");
--      if (is_intel && features1 & (1 << 22))
--	print (" acpi");
--      if (features1 & (1 << 23))
--	print (" mmx");
--      if (features1 & (1 << 24))
--	print (" fxsr");
--      if (features1 & (1 << 25))
--	print (" sse");
--      if (features1 & (1 << 26))
--	print (" sse2");
--      if (is_intel && (features1 & (1 << 27)))
--	print (" ss");
--      if (features1 & (1 << 28))
--	print (" ht");
--      if (is_intel)
--	{
--	  if (features1 & (1 << 29))
--	    print (" tm");
--	  if (features1 & (1 << 30))
--	    print (" ia64");
--	  if (features1 & (1 << 31))
--	    print (" pbe");
--	}
--
-+      /* cpuid 0x00000001 edx */
-+      ftcprint (features1,  0, "fpu");	/* x87 floating point */
-+      ftcprint (features1,  1, "vme");  /* VM enhancements */
-+      ftcprint (features1,  2, "de");   /* debugging extensions */
-+      ftcprint (features1,  3, "pse");  /* page size extensions */
-+      ftcprint (features1,  4, "tsc");  /* rdtsc/p */
-+      ftcprint (features1,  5, "msr");  /* rd/wrmsr */
-+      ftcprint (features1,  6, "pae");  /* phy addr extensions */
-+      ftcprint (features1,  7, "mce");  /* Machine check exception */
-+      ftcprint (features1,  8, "cx8");  /* cmpxchg8b */
-+      ftcprint (features1,  9, "apic"); /* APIC enabled */
-+      ftcprint (features1, 11, "sep");  /* sysenter/sysexit */
-+      ftcprint (features1, 12, "mtrr"); /* memory type range registers */
-+      ftcprint (features1, 13, "pge");  /* page global extension */
-+      ftcprint (features1, 14, "mca");  /* machine check architecture */
-+      ftcprint (features1, 15, "cmov"); /* conditional move */
-+      ftcprint (features1, 16, "pat");  /* page attribute table */
-+      ftcprint (features1, 17, "pse36");/* 36 bit page size extensions */
-+      ftcprint (features1, 18, "pn");   /* processor serial number */
-+      ftcprint (features1, 19, "clflush"); /* clflush instruction */
-+      ftcprint (features1, 21, "dts");  /* debug store */
-+      ftcprint (features1, 22, "acpi"); /* ACPI via MSR */
-+      ftcprint (features1, 23, "mmx");  /* multimedia extensions */
-+      ftcprint (features1, 24, "fxsr"); /* fxsave/fxrstor */
-+      ftcprint (features1, 25, "sse");  /* xmm */
-+      ftcprint (features1, 26, "sse2"); /* xmm2 */
-+      ftcprint (features1, 27, "ss");   /* CPU self snoop */
-+      ftcprint (features1, 28, "ht");   /* hyper threading */
-+      ftcprint (features1, 29, "tm");   /* acc automatic clock control */
-+      ftcprint (features1, 30, "ia64"); /* IA 64 processor */
-+      ftcprint (features1, 31, "pbe");  /* pending break enable */
-+
-+      /* AMD cpuid 0x80000001 edx */
-       if (is_amd && maxe >= 0x80000001)
- 	{
- 	  cpuid (&unused, &unused, &unused, &features1, 0x80000001);
- 
--	  if (features1 & (1 << 11))
--	    print (" syscall");
--	  if (features1 & (1 << 19)) /* Huh?  Not in AMD64 specs. */
--	    print (" mp");
--	  if (features1 & (1 << 20))
--	    print (" nx");
--	  if (features1 & (1 << 22))
--	    print (" mmxext");
--	  if (features1 & (1 << 25))
--	    print (" fxsr_opt");
--	  if (features1 & (1 << 26))
--	    print (" pdpe1gb");
--	  if (features1 & (1 << 27))
--	    print (" rdtscp");
--	  if (features1 & (1 << 29))
--	    print (" lm");
--	  if (features1 & (1 << 30)) /* 31th bit is on. */
--	    print (" 3dnowext");
--	  if (features1 & (1 << 31)) /* 32th bit (highest) is on. */
--	    print (" 3dnow");
-+	  ftcprint (features1, 11, "syscall");	/* syscall/sysret */
-+	  ftcprint (features1, 19, "mp");       /* MP capable */
-+	  ftcprint (features1, 20, "nx");       /* no-execute protection */
-+	  ftcprint (features1, 22, "mmxext");   /* MMX extensions */
-+	  ftcprint (features1, 25, "fxsr_opt"); /* fxsave/fxrstor optims */
-+	  ftcprint (features1, 26, "pdpe1gb");  /* GB large pages */
-+	  ftcprint (features1, 27, "rdtscp");   /* rdtscp */
-+	  ftcprint (features1, 29, "lm");       /* long mode (x86 64) */
-+	  ftcprint (features1, 30, "3dnowext"); /* 3DNow extensions */
-+	  ftcprint (features1, 31, "3dnow");    /* 3DNow */
- 	}
--
--      if (features2 & (1 << 0))
--	print (" pni");
--      if (is_intel)
-+      /* AMD cpuid 0x80000007 edx */
-+      if (is_amd && maxe >= 0x80000007)
- 	{
--	  if (features2 & (1 << 2))
--	    print (" dtes64");
--	  if (features2 & (1 << 3))
--	    print (" monitor");
--	  if (features2 & (1 << 4))
--	    print (" ds_cpl");
--	  if (features2 & (1 << 5))
--	    print (" vmx");
--	  if (features2 & (1 << 6))
--	    print (" smx");
--	  if (features2 & (1 << 7))
--	    print (" est");
--	  if (features2 & (1 << 8))
--	    print (" tm2");
--	  if (features2 & (1 << 9))
--	    print (" ssse3");
--	  if (features2 & (1 << 10))
--	    print (" cid");
--	  if (features2 & (1 << 12))
--	    print (" fma");
-+	  cpuid (&unused, &unused, &unused, &features1, 0x80000007);
-+
-+	  ftcprint (features1,  8, "constant_tsc");	/* TSC constant rate */
-+	  ftcprint (features1,  8, "nonstop_tsc");	/* nonstop C states */
- 	}
--      if (features2 & (1 << 13))
--	print (" cx16");
--      if (is_intel)
-+      /* cpuid 0x00000006 ecx */
-+      if (maxf >= 0x06)
- 	{
--	  if (features2 & (1 << 14))
--	    print (" xtpr");
--	  if (features2 & (1 << 15))
--	    print (" pdcm");
--	  if (features2 & (1 << 18))
--	    print (" dca");
--	  if (features2 & (1 << 19))
--	    print (" sse4_1");
--	  if (features2 & (1 << 20))
--	    print (" sse4_2");
--	  if (features2 & (1 << 21))
--	    print (" x2apic");
--	  if (features2 & (1 << 22))
--	    print (" movbe");
--	  if (features2 & (1 << 23))
--	    print (" popcnt");
--	  if (features2 & (1 << 25))
--	    print (" aes");
--	  if (features2 & (1 << 26))
--	    print (" xsave");
--	  if (features2 & (1 << 27))
--	    print (" osxsave");
--	  if (features2 & (1 << 28))
--	    print (" avx");
--	  if (features2 & (1 << 29))
--	    print (" f16c");
--	  if (features2 & (1 << 30))
--	    print (" rdrand");
--	  if (features2 & (1 << 31))
--	    print (" hypervisor");
-+	  cpuid (&unused, &unused, &features1, &unused, 0x06);
-+
-+	  ftcprint (features1,  0, "aperfmperf");   /* P state hw coord fb */
- 	}
- 
-+      /* cpuid 0x00000001 ecx */
-+      ftcprint (features2,  0, "pni");	    /* xmm3 sse3 */
-+      ftcprint (features2,  1, "pclmuldq"); /* pclmulqdq instruction */
-+      ftcprint (features2,  2, "dtes64");   /* 64-bit debug store */
-+      ftcprint (features2,  3, "monitor");  /* monitor/mwait support */
-+      ftcprint (features2,  4, "ds_cpl");   /* CPL-qual debug store */
-+      ftcprint (features2,  5, "vmx");      /* hardware virtualization */
-+      ftcprint (features2,  6, "smx");      /* safer mode extensions */
-+      ftcprint (features2,  7, "est");      /* enhanced speedstep */
-+      ftcprint (features2,  8, "tm2");      /* thermal monitor 2 */
-+      ftcprint (features2,  9, "ssse3");    /* supplemental sse3 */
-+      ftcprint (features2, 10, "cid");      /* context id */
-+      ftcprint (features2, 11, "sdbg");     /* silicon debug */
-+      ftcprint (features2, 12, "fma");      /* fused multiply add */
-+      ftcprint (features2, 13, "cx16");     /* cmpxchg16b instruction */
-+      ftcprint (features2, 14, "xtpr");     /* send task priority messages */
-+      ftcprint (features2, 15, "pdcm");     /* perf/debug capabilities MSR */
-+      ftcprint (features2, 17, "pcid");     /* process context identifiers */
-+      ftcprint (features2, 18, "dca");      /* direct cache access */
-+      ftcprint (features2, 19, "sse4_1");   /* xmm 4_1 sse 4.1 */
-+      ftcprint (features2, 20, "sse4_2");   /* xmm 4_2 sse 4.2 */
-+      ftcprint (features2, 21, "x2apic");   /* x2 APIC */
-+      ftcprint (features2, 22, "movbe");    /* movbe instruction */
-+      ftcprint (features2, 23, "popcnt");   /* popcnt instruction */
-+      ftcprint (features2, 24, "tsc_deadline_timer"); /* TSC deadline timer */
-+      ftcprint (features2, 25, "aes");	    /* AES instructions */
-+      ftcprint (features2, 26, "xsave");    /* xsave/xrstor/xsetbv/xgetbv */
-+/*    ftcprint (features2, 27, "osxsave"); */ /* not output on Linux */
-+      ftcprint (features2, 28, "avx");	    /* advanced vector extensions */
-+      ftcprint (features2, 29, "f16c");     /* 16 bit FP conversions */
-+      ftcprint (features2, 30, "rdrand");   /* RNG rdrand instruction */
-+      ftcprint (features2, 31, "hypervisor"); /* hypervisor guest */
-+
-+      /* cpuid 0x80000001 ecx */
-       if (maxe >= 0x80000001)
- 	{
- 	  cpuid (&unused, &unused, &features1, &unused, 0x80000001);
- 
--	  if (features1 & (1 << 0))
--	    print (" lahf_lm");
--	  if (features1 & (1 << 1))
--	    print (" cmp_legacy");
-+	  ftcprint (features1,  0, "lahf_lm");		/* l/sahf long mode */
-+	  ftcprint (features1,  1, "cmp_legacy");       /* HT not valid */
- 	  if (is_amd)
- 	    {
--	      if (features1 & (1 << 2))
--		print (" svm");
--	      if (features1 & (1 << 3))
--		print (" extapic");
--	      if (features1 & (1 << 4))
--		print (" cr8_legacy");
--	      if (features1 & (1 << 5))
--		print (" abm");
--	      if (features1 & (1 << 6))
--		print (" sse4a");
--	      if (features1 & (1 << 7))
--		print (" misalignsse");
--	      if (features1 & (1 << 8))
--		print (" 3dnowprefetch");
--	      if (features1 & (1 << 9))
--		print (" osvw");
-+	      ftcprint (features1,  2, "svm");          /* secure VM */
-+	      ftcprint (features1,  3, "extapic");      /* ext APIC space */
-+	      ftcprint (features1,  4, "cr8_legacy");   /* CR8 32 bit mode */
-+	      ftcprint (features1,  5, "abm");          /* adv bit manip lzcnt */
-+	      ftcprint (features1,  6, "sse4a");        /* sse 4a */
-+	      ftcprint (features1,  7, "misalignsse");  /* misaligned SSE ok */
-+	      ftcprint (features1,  8, "3dnowprefetch"); /* 3DNow prefetch */
-+	      ftcprint (features1,  9, "osvw");         /* OS vis workaround */
- 	    }
--	  if (features1 & (1 << 10))
--	    print (" ibs");
-+	  ftcprint (features1, 10, "ibs");	/* instr based sampling */
- 	  if (is_amd)
- 	    {
--	      if (features1 & (1 << 11))
--		print (" sse5");
--	      if (features1 & (1 << 12))
--		print (" skinit");
--	      if (features1 & (1 << 13))
--		print (" wdt");
--	      if (features1 & (1 << 15))
--		print (" lwp");
--	      if (features1 & (1 << 16))
--		print (" fma4");
--	      if (features1 & (1 << 17))
--		print (" tce");
--	      if (features1 & (1 << 19))
--		print (" nodeid_msr");
--	      if (features1 & (1 << 21))
--		print (" tbm");
--	      if (features1 & (1 << 22))
--		print (" topoext");
--	      if (features1 & (1 << 23))
--		print (" perfctr_core");
--	      if (features1 & (1 << 24))
--		print (" perfctr_nb");
--	      if (features1 & (1 << 28))
--		print (" perfctr_l2");
-+	      ftcprint (features1, 11, "xop");		/* sse 5 extended AVX */
-+	      ftcprint (features1, 12, "skinit");       /* skinit/stgi */
-+	      ftcprint (features1, 13, "wdt");          /* watchdog timer */
-+	      ftcprint (features1, 15, "lwp");          /* light weight prof */
-+	      ftcprint (features1, 16, "fma4");         /* 4 operand MAC */
-+	      ftcprint (features1, 17, "tce");          /* translat cache ext */
-+	      ftcprint (features1, 19, "nodeid_msr");   /* nodeid MSR */
-+	      ftcprint (features1, 21, "tbm");          /* trailing bit manip */
-+	      ftcprint (features1, 22, "topoext");      /* topology ext */
-+	      ftcprint (features1, 23, "perfctr_core"); /* core perf ctr ext */
-+	      ftcprint (features1, 24, "perfctr_nb");   /* NB perf ctr ext */
-+	      ftcprint (features1, 26, "bpext");        /* data brkpt ext */
-+	      ftcprint (features1, 27, "ptsc");         /* perf timestamp ctr */
-+	      ftcprint (features1, 28, "perfctr_llc");  /* ll cache perf ctr */
-+	      ftcprint (features1, 29, "mwaitx");       /* monitor/mwaitx ext */
- 	    }
- 	}
--      if (is_intel) /* features scattered in various CPUID levels. */
-+
-+      /* random feature flags */
-+      /* cpuid 0x80000007 edx */
-+      if (maxf >= 0x07)
- 	{
--	  cpuid (&features1, &unused, &features2, &unused, 0x06);
-+	  cpuid (&unused, &unused, &unused, &features1, 0x80000007);
-+
-+	  ftcprint (features1,  9, "cpb");	/* core performance boost */
-+	}
-+      /* cpuid 0x00000006 ecx */
-+      if (maxf >= 0x06)
-+	{
-+	  cpuid (&unused, &unused, &features1, &unused, 0x06);
-+
-+	  ftcprint (features1,  3, "epb");	/* energy perf bias */
-+	}
-+      /* cpuid 0x00000010 ebx */
-+      if (maxf >= 0x10)
-+	{
-+	  cpuid (&unused, &features1, &unused, &unused, 0x10);
- 
--	  if (features1 & (1 << 1))
--	    print (" ida");
--	  if (features1 & (1 << 2))
--	    print (" arat");
--	  if (features2 & (1 << 3))
--	    print (" epb");
--
--	  cpuid (&features2, &unused, &unused, &unused, 0x0d, 1);
--	  if (features2 & (1 << 0))
--	    print (" xsaveopt");
--
--	  if (features1 & (1 << 4))
--	    print (" pln");
--	  if (features1 & (1 << 6))
--	    print (" pts");
--	  if (features1 & (1 << 0))
--	    print (" dtherm");
-+	  ftcprint (features1,  1, "cat_l3");	/* cache alloc tech l3 */
-+	  ftcprint (features1,  2, "cat_l2");	/* cache alloc tech l2 */
-+
-+	  /* cpuid 0x00000010:1 ecx */
-+	  cpuid (&unused, &unused, &features1, &unused, 0x10, 1);
-+
-+	  ftcprint (features1,  2, "cdp_l3");	/* code data prior l3 */
-+	}
-+      /* cpuid 0x80000007 edx */
-+      if (maxe >= 0x80000007)
-+	{
-+	  cpuid (&unused, &unused, &unused, &features1, 0x80000007);
-+
-+	  ftcprint (features1,  7, "hw_pstate");	/* hw P state */
-+	  ftcprint (features1, 11, "proc_feedback"); /* proc feedback interf */
-+	}
-+      /* cpuid 0x8000001f eax */
-+      if (maxe >= 0x8000001f)
-+	{
-+	  cpuid (&features1, &unused, &unused, &unused, 0x8000001f);
-+
-+	  ftcprint (features1,  0, "sme");	/* secure memory encryption */
-+	}
-+      /* cpuid 0x00000010:2 ecx */
-+      if (maxf >= 0x10)
-+	{
-+	  cpuid (&unused, &unused, &features1, &unused, 0x10, 2);
-+
-+	  ftcprint (features1,  2, "cdp_l2");	/* code data prior l2 */
-+
-+	  /* cpuid 0x00000010 ebx */
-+	  cpuid (&unused, &features1, &unused, &unused, 0x10);
-+
-+	  ftcprint (features1,  3, "mba");	/* memory bandwidth alloc */
-+	}
-+      /* cpuid 0x80000008 ebx */
-+      if (maxe >= 0x80000008)
-+	{
-+	  cpuid (&unused, &features1, &unused, &unused, 0x80000008);
-+
-+	  ftcprint (features1,  6, "mba");	/* memory bandwidth alloc */
- 	}
--      if (is_intel) /* Extended feature flags */
-+      /* cpuid 0x8000001f eax */
-+      if (maxe >= 0x8000001f)
-+	{
-+	  cpuid (&features1, &unused, &unused, &unused, 0x8000001f);
-+
-+	  ftcprint (features1,  1, "sev");	/* secure encrypted virt */
-+	}
-+
-+      /* cpuid 0x00000007 ebx */
-+      if (maxf >= 0x07)
- 	{
- 	  cpuid (&unused, &features1, &unused, &unused, 0x07, 0);
- 
--	  if (features1 & (1 << 0))
--	    print (" fsgsbase");
--	  if (features1 & (1 << 1))
--	    print (" tsc_adjust");
--	  if (features1 & (1 << 3))
--	    print (" bmi1");
--	  if (features1 & (1 << 4))
--	    print (" hle");
--	  if (features1 & (1 << 5))
--	    print (" avx2");
--	  if (features1 & (1 << 7))
--	    print (" smep");
--	  if (features1 & (1 << 8))
--	    print (" bmi2");
--	  if (features1 & (1 << 9))
--	    print (" erms");
--	  if (features1 & (1 << 10))
--	    print (" invpcid");
--	  if (features1 & (1 << 11))
--	    print (" rtm");
--	  if (features1 & (1 << 14))
--	    print (" mpx");
--	  if (features1 & (1 << 16))
--	    print (" avx512f");
--	  if (features1 & (1 << 18))
--	    print (" rdseed");
--	  if (features1 & (1 << 19))
--	    print (" adx");
--	  if (features1 & (1 << 20))
--	    print (" smap");
--	  if (features1 & (1 << 23))
--	    print (" clflushopt");
--	  if (features1 & (1 << 26))
--	    print (" avx512pf");
--	  if (features1 & (1 << 27))
--	    print (" avx512er");
--	  if (features1 & (1 << 28))
--	    print (" avx512cd");
-+	  ftcprint (features1,  0, "fsgsbase");	    /* rd/wr fs/gs base */
-+	  ftcprint (features1,  1, "tsc_adjust");   /* TSC adjustment MSR 0x3B */
-+	  ftcprint (features1,  3, "bmi1");         /* bit manip ext group 1 */
-+	  ftcprint (features1,  4, "hle");          /* hardware lock elision */
-+	  ftcprint (features1,  5, "avx2");         /* AVX ext instructions */
-+/*	  ftcprint (features1,  6, "fpdx"); */      /* FP data ptr upd on exc */
-+	  ftcprint (features1,  7, "smep");         /* super mode exec prot */
-+	  ftcprint (features1,  8, "bmi2");         /* bit manip ext group 2 */
-+	  ftcprint (features1,  9, "erms");         /* enh rep movsb/stosb */
-+	  ftcprint (features1, 10, "invpcid");      /* inv proc context id */
-+	  ftcprint (features1, 11, "rtm");          /* restricted txnal mem */
-+	  ftcprint (features1, 12, "cqm");          /* cache QoS monitoring */
-+/*	  ftcprint (features1, 13, "fpcsdsz"); */   /* zero FP cs/ds */
-+	  ftcprint (features1, 14, "mpx");          /* mem prot ext */
-+	  ftcprint (features1, 15, "rdt_a");        /* rsrc dir tech alloc */
-+	  ftcprint (features1, 16, "avx512f");      /* vec foundation */
-+	  ftcprint (features1, 17, "avx512dq");     /* vec dq granular */
-+	  ftcprint (features1, 18, "rdseed");       /* RNG rdseed instruction */
-+	  ftcprint (features1, 19, "adx");          /* adcx/adox */
-+	  ftcprint (features1, 20, "smap");         /* sec mode access prev */
-+	  ftcprint (features1, 21, "avx512ifma");   /* vec int FMA */
-+	  ftcprint (features1, 23, "clflushopt");   /* cache line flush opt */
-+	  ftcprint (features1, 24, "clwb");         /* cache line write back */
-+	  ftcprint (features1, 25, "intel_pt");     /* intel processor trace */
-+	  ftcprint (features1, 26, "avx512pf");     /* vec prefetch */
-+	  ftcprint (features1, 27, "avx512er");     /* vec exp/recip aprx */
-+	  ftcprint (features1, 28, "avx512cd");     /* vec conflict detect */
-+	  ftcprint (features1, 29, "sha_ni");       /* SHA extensions */
-+	  ftcprint (features1, 30, "avx512bw");     /* vec byte/word gran */
-+	  ftcprint (features1, 31, "avx512vl");     /* vec vec len ext */
-+	}
-+
-+      /* more random feature flags */
-+      /* cpuid 0x0000000d:1 eax */
-+      if (maxf >= 0x0d)
-+	{
-+	  cpuid (&features1, &unused, &unused, &unused, 0x0d, 1);
-+
-+	  ftcprint (features1,  0, "xsaveopt");	/* xsaveopt instruction */
-+	  ftcprint (features1,  1, "xsavec");   /* xsavec instruction */
-+	  ftcprint (features1,  2, "xgetbv1");  /* xgetbv ecx 1 */
-+	  ftcprint (features1,  3, "xsaves");   /* xsaves/xrstors */
-+	}
-+      /* cpuid 0x0000000f edx */
-+      if (maxf >= 0x0f)
-+	{
-+	  cpuid (&unused, &unused, &unused, &features1, 0x0f);
-+
-+	  ftcprint (features1,  1, "cqm_llc");		/* llc QoS */
-+
-+	  /* cpuid 0x0000000f:1 edx */
-+	  cpuid (&unused, &unused, &unused, &features1, 0x0f, 1);
-+
-+	  ftcprint (features1,  0, "cqm_occup_llc");	/* llc occup monitor */
-+	  ftcprint (features1,  1, "cqm_mbm_total");	/* llc total MBM mon */
-+	  ftcprint (features1,  2, "cqm_mbm_local");	/* llc local MBM mon */
- 	}
-+      /* cpuid 0x00000007:1 eax */
-+      if (maxf >= 0x07)
-+	{
-+	  cpuid (&features1, &unused, &unused, &unused, 0x07, 1);
-+
-+	  ftcprint (features1,  5, "avx512_bf16");  /* vec bfloat16 short */
-+	}
-+
-+      /* AMD cpuid 0x80000008 ebx */
-+      if (is_amd && maxe >= 0x80000008)
-+        {
-+	  cpuid (&unused, &features1, &unused, &unused, 0x80000008, 0);
-+
-+	  ftcprint (features1,  0, "clzero");	    /* clzero instruction */
-+	  ftcprint (features1,  1, "irperf");       /* instr retired count */
-+	  ftcprint (features1,  2, "xsaveerptr");   /* save/rest FP err ptrs */
-+/*	  ftcprint (features1,  6,  "mba" }, */	    /* memory BW alloc */
-+	  ftcprint (features1,  9, "wbnoinvd");     /* wbnoinvd instruction */
-+/*	  ftcprint (features1, 12, "ibpb" ); */	    /* ind br pred barrier */
-+/*	  ftcprint (features1, 14, "ibrs" ); */	    /* ind br restricted spec */
-+/*	  ftcprint (features1, 15, "stibp"); */	    /* 1 thread ind br pred */
-+/*	  ftcprint (features1, 17, "stibp_always_on"); */ /* stibp always on */
-+/*	  ftcprint (features1, 24, "ssbd"); */	    /* spec store byp dis */
-+	  ftcprint (features1, 25, "virt_ssbd");    /* vir spec store byp dis */
-+/*	  ftcprint (features1, 26, "ssb_no"); */    /* ssb fixed in hardware */
-+        }
-+
-+      /* thermal & power cpuid 0x00000006 eax */
-+      if (maxf >= 0x06)
-+	{
-+	  cpuid (&features1, &unused, &features2, &unused, 0x06);
-+
-+	  ftcprint (features1,  0, "dtherm");	/* digital thermal sensor */
-+	  ftcprint (features1,  1, "ida");      /* Intel dynamic acceleration */
-+	  ftcprint (features1,  2, "arat");     /* always running APIC timer */
-+	  ftcprint (features1,  4, "pln");      /* power limit notification */
-+	  ftcprint (features1,  6, "pts");      /* package thermal status */
-+	  ftcprint (features1,  7, "hwp");      /* hardware P states */
-+	  ftcprint (features1,  8, "hwp_notify"); /* HWP notification */
-+	  ftcprint (features1,  9, "hwp_act_window"); /* HWP activity window */
-+	  ftcprint (features1, 10, "hwp_epp");  /* HWP energy perf pref */
-+	  ftcprint (features1, 11, "hwp_pkg_req"); /* HWP package level req */
-+	}
-+
-+      /* AMD SVM cpuid 0x8000000a edx */
-+      if (is_amd && maxe >= 0x8000000a)
-+        {
-+	  cpuid (&unused, &unused, &unused, &features1, 0x8000000a, 0);
-+
-+	  ftcprint (features1,  0, "npt");		/* nested paging */
-+	  ftcprint (features1,  1, "lbrv");             /* lbr virtualization */
-+	  ftcprint (features1,  2, "svm_lock");         /* SVM locking MSR */
-+	  ftcprint (features1,  3, "nrip_save");        /* SVM next rip save */
-+	  ftcprint (features1,  4, "tsc_scale");        /* TSC rate control */
-+	  ftcprint (features1,  5, "vmcb_clean");       /* VMCB clean bits */
-+	  ftcprint (features1,  6, "flushbyasid");      /* flush by ASID */
-+	  ftcprint (features1,  7, "decode_assists");   /* decode assists */
-+	  ftcprint (features1, 10, "pausefilter");      /* filt pause intrcpt */
-+	  ftcprint (features1, 12, "pfthreshold");      /* pause filt thresh */
-+	  ftcprint (features1, 13, "avic");             /* virt int control */
-+	  ftcprint (features1, 15, "v_vmsave_vmload");  /* virt vmsave vmload */
-+	  ftcprint (features1, 16, "vgif");             /* virt glb int flag */
-+        }
-+
-+      /* Intel cpuid 0x00000007 ecx */
-+      if (is_intel && maxf >= 0x07)
-+        {
-+	  cpuid (&unused, &unused, &features1, &unused, 0x07, 0);
-+
-+	  ftcprint (features1,  1, "avx512vbmi");	/* vec bit manip */
-+	  ftcprint (features1,  2, "umip");             /* user mode ins prot */
-+	  ftcprint (features1,  3, "pku");              /* prot key userspace */
-+	  ftcprint (features1,  4, "ospke");            /* OS prot keys en */
-+	  ftcprint (features1,  5, "waitpkg");          /* umon/umwait/tpause */
-+	  ftcprint (features1,  6, "avx512_vbmi2");     /* vec bit manip 2 */
-+	  ftcprint (features1,  8, "gfni");             /* Galois field instr */
-+	  ftcprint (features1,  9, "vaes");             /* vector AES */
-+	  ftcprint (features1, 10, "vpclmulqdq");       /* nc mul dbl quad */
-+	  ftcprint (features1, 11, "avx512_vnni");      /* vec neural net */
-+	  ftcprint (features1, 12, "avx512_bitalg");    /* vpopcnt/b/w vpshuf */
-+	  ftcprint (features1, 13, "tme");              /* total mem encrypt */
-+	  ftcprint (features1, 14, "avx512_vpopcntdq"); /* vec popcnt dw/qw */
-+	  ftcprint (features1, 16, "la57");             /* 5 level paging */
-+	  ftcprint (features1, 22, "rdpid");            /* rdpid instruction */
-+	  ftcprint (features1, 25, "cldemote");         /* cldemote instr */
-+	  ftcprint (features1, 27, "movdiri");          /* movdiri instr */
-+	  ftcprint (features1, 28, "movdir64b");        /* movdir64b instr */
-+        }
-+
-+      /* AMD MCA cpuid 0x80000007 ebx */
-+      if (is_amd && maxe >= 0x80000007)
-+        {
-+          cpuid (&unused, &features1, &unused, &unused, 0x80000007, 0);
-+
-+          ftcprint (features1,  0, "overflow_recov");	/* MCA oflow recovery */
-+          ftcprint (features1,  1, "succor");           /* uncor err recovery */
-+          ftcprint (features1,  3, "smca");             /* scalable MCA */
-+        }
-+
-+      /* Intel cpuid 0x00000007 edx */
-+      if (is_intel && maxf >= 0x07)
-+        {
-+          cpuid (&unused, &unused, &unused, &features1, 0x07, 0);
-+
-+          ftcprint (features1,  2, "avx512_4vnniw");	   /* vec dot prod dw */
-+          ftcprint (features1,  3, "avx512_4fmaps");       /* vec 4 FMA single */
-+          ftcprint (features1,  8, "avx512_vp2intersect"); /* vec intcpt d/q */
-+          ftcprint (features1, 10, "md_clear");            /* verw clear buf */
-+          ftcprint (features1, 18, "pconfig");		   /* platform config */
-+          ftcprint (features1, 28, "flush_l1d");	   /* flush l1d cache */
-+          ftcprint (features1, 29, "arch_capabilities");   /* arch cap MSR */
-+        }
- 
-       print ("\n");
- 
--      /* TODO: bogomips */
-+      bufptr += __small_sprintf (bufptr, "bogomips\t: %d.00\n",
-+						bogomips);
- 
-       bufptr += __small_sprintf (bufptr, "clflush size\t: %d\n"
- 					 "cache_alignment\t: %d\n",
-@@ -1243,31 +1380,27 @@ format_proc_cpuinfo (void *, char *&destbuf)
- 				     phys, virt);
- 	}
- 
-+      /* cpuid 0x80000007 edx */
-       if (maxe >= 0x80000007) /* Advanced power management. */
- 	{
- 	  cpuid (&unused, &unused, &unused, &features1, 0x80000007);
- 
- 	  print ("power management:");
--	  if (features1 & (1 << 0))
--	    print (" ts");
--	  if (features1 & (1 << 1))
--	    print (" fid");
--	  if (features1 & (1 << 2))
--	    print (" vid");
--	  if (features1 & (1 << 3))
--	    print (" ttp");
--	  if (features1 & (1 << 4))
--	    print (" tm");
--	  if (features1 & (1 << 5))
--	    print (" stc");
--	  if (features1 & (1 << 6))
--	    print (" 100mhzsteps");
--	  if (features1 & (1 << 7))
--	    print (" hwpstate");
--	  if (features1 & (1 << 9))
--	    print (" cpb");
--	  if (features1 & (1 << 10))
--	    print (" eff_freq_ro");
-+	  ftcprint (features1,  0, "ts");	    /* temperature sensor */
-+	  ftcprint (features1,  1, "fid");          /* frequency id control */
-+	  ftcprint (features1,  2, "vid");          /* voltage id control */
-+	  ftcprint (features1,  3, "ttp");          /* thermal trip */
-+	  ftcprint (features1,  4, "tm");           /* hw thermal control */
-+	  ftcprint (features1,  5, "stc");          /* sw thermal control */
-+	  ftcprint (features1,  6, "100mhzsteps");  /* 100 MHz mult control */
-+	  ftcprint (features1,  7, "hwpstate");     /* hw P state control */
-+/*	  ftcprint (features1,  8, "invariant_tsc");*/ /* TSC invariant */
-+	  ftcprint (features1,  9, "cpb");          /* core performance boost */
-+	  ftcprint (features1, 10, "eff_freq_ro");  /* ro eff freq interface */
-+/*	  ftcprint (features1, 11, "proc_feedback");*/ /* proc feedback if */
-+/*	  ftcprint (features1, 12, "acc_power");    */ /* core power reporting */
-+/*	  ftcprint (features1, 13, "connstby");	    */ /* connected standby */
-+/*	  ftcprint (features1, 14, "rapl");	    */ /* running average power limit */
- 	}
- 
-       if (orig_affinity_mask != 0)
--- 
-2.21.0
+For informal comparison, attached are Cygwin, WSL, and test release cpuinfo
+output, with diffs against the test release output, and the Windows registry
+CentralProcessor dump (be careful not to double click on Windows systems!)
+The WSL output is somewhat limited compared to current Linux tip, used to
+compare the cpufeatures/capflags names against my own cpuid_fn tables, and
+suppress flags not reported on by Linux.
 
 -- 
 Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
 
 This email may be disturbing to some readers as it contains
 too much technical detail. Reader discretion is advised.
+
+--------------48911958CD71832F1C9C8405
+Content-Type: text/plain; charset=UTF-8;
+ name="cpuinfo-cygwin-AMD-A10-9700.txt"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="cpuinfo-cygwin-AMD-A10-9700.txt"
+Content-length: 4331
+
+cHJvY2Vzc29yCTogMAp2ZW5kb3JfaWQJOiBBdXRoZW50aWNBTUQKY3B1IGZh
+bWlseQk6IDIxCm1vZGVsCQk6IDEwMQptb2RlbCBuYW1lCTogQU1EIEExMC05
+NzAwIFJBREVPTiBSNywgMTAgQ09NUFVURSBDT1JFUyA0Qys2RyAKc3RlcHBp
+bmcJOiAxCmNwdSBNSHoJCTogMzQ5My4wMDAKY2FjaGUgc2l6ZQk6IDAgS0IK
+cGh5c2ljYWwgaWQJOiAwCnNpYmxpbmdzCTogNApjb3JlIGlkCQk6IDAKY3B1
+IGNvcmVzCTogMgphcGljaWQJCTogMAppbml0aWFsIGFwaWNpZAk6IDAKZnB1
+CQk6IHllcwpmcHVfZXhjZXB0aW9uCTogeWVzCmNwdWlkIGxldmVsCTogMTMK
+d3AJCTogeWVzCmZsYWdzCQk6IGZwdSB2bWUgZGUgcHNlIHRzYyBtc3IgcGFl
+IG1jZSBjeDggYXBpYyBzZXAgbXRyciBwZ2UgbWNhIGNtb3YgcGF0IHBzZTM2
+IGNsZmx1c2ggbW14IGZ4c3Igc3NlIHNzZTIgaHQgc3lzY2FsbCBueCBtbXhl
+eHQgZnhzcl9vcHQgcGRwZTFnYiByZHRzY3AgbG0gcG5pIGN4MTYgbGFoZl9s
+bSBjbXBfbGVnYWN5IHN2bSBleHRhcGljIGNyOF9sZWdhY3kgYWJtIHNzZTRh
+IG1pc2FsaWduc3NlIDNkbm93cHJlZmV0Y2ggb3N2dyBpYnMgc3NlNSBza2lu
+aXQgd2R0IGx3cCBmbWE0IHRjZSBub2RlaWRfbXNyIHRibSBwZXJmY3RyX2Nv
+cmUgcGVyZmN0cl9uYgpjbGZsdXNoIHNpemUJOiA2NApjYWNoZV9hbGlnbm1l
+bnQJOiA2NAphZGRyZXNzIHNpemVzCTogNDggYml0cyBwaHlzaWNhbCwgNDgg
+Yml0cyB2aXJ0dWFsCnBvd2VyIG1hbmFnZW1lbnQ6IHRzIHR0cCB0bSAxMDBt
+aHpzdGVwcyBod3BzdGF0ZSBjcGIgZWZmX2ZyZXFfcm8KCnByb2Nlc3Nvcgk6
+IDEKdmVuZG9yX2lkCTogQXV0aGVudGljQU1ECmNwdSBmYW1pbHkJOiAyMQpt
+b2RlbAkJOiAxMDEKbW9kZWwgbmFtZQk6IEFNRCBBMTAtOTcwMCBSQURFT04g
+UjcsIDEwIENPTVBVVEUgQ09SRVMgNEMrNkcgCnN0ZXBwaW5nCTogMQpjcHUg
+TUh6CQk6IDM0OTMuMDAwCmNhY2hlIHNpemUJOiAwIEtCCnBoeXNpY2FsIGlk
+CTogMApzaWJsaW5ncwk6IDQKY29yZSBpZAkJOiAwCmNwdSBjb3Jlcwk6IDIK
+YXBpY2lkCQk6IDEKaW5pdGlhbCBhcGljaWQJOiAxCmZwdQkJOiB5ZXMKZnB1
+X2V4Y2VwdGlvbgk6IHllcwpjcHVpZCBsZXZlbAk6IDEzCndwCQk6IHllcwpm
+bGFncwkJOiBmcHUgdm1lIGRlIHBzZSB0c2MgbXNyIHBhZSBtY2UgY3g4IGFw
+aWMgc2VwIG10cnIgcGdlIG1jYSBjbW92IHBhdCBwc2UzNiBjbGZsdXNoIG1t
+eCBmeHNyIHNzZSBzc2UyIGh0IHN5c2NhbGwgbnggbW14ZXh0IGZ4c3Jfb3B0
+IHBkcGUxZ2IgcmR0c2NwIGxtIHBuaSBjeDE2IGxhaGZfbG0gY21wX2xlZ2Fj
+eSBzdm0gZXh0YXBpYyBjcjhfbGVnYWN5IGFibSBzc2U0YSBtaXNhbGlnbnNz
+ZSAzZG5vd3ByZWZldGNoIG9zdncgaWJzIHNzZTUgc2tpbml0IHdkdCBsd3Ag
+Zm1hNCB0Y2Ugbm9kZWlkX21zciB0Ym0gcGVyZmN0cl9jb3JlIHBlcmZjdHJf
+bmIKY2xmbHVzaCBzaXplCTogNjQKY2FjaGVfYWxpZ25tZW50CTogNjQKYWRk
+cmVzcyBzaXplcwk6IDQ4IGJpdHMgcGh5c2ljYWwsIDQ4IGJpdHMgdmlydHVh
+bApwb3dlciBtYW5hZ2VtZW50OiB0cyB0dHAgdG0gMTAwbWh6c3RlcHMgaHdw
+c3RhdGUgY3BiIGVmZl9mcmVxX3JvCgpwcm9jZXNzb3IJOiAyCnZlbmRvcl9p
+ZAk6IEF1dGhlbnRpY0FNRApjcHUgZmFtaWx5CTogMjEKbW9kZWwJCTogMTAx
+Cm1vZGVsIG5hbWUJOiBBTUQgQTEwLTk3MDAgUkFERU9OIFI3LCAxMCBDT01Q
+VVRFIENPUkVTIDRDKzZHIApzdGVwcGluZwk6IDEKY3B1IE1IegkJOiAzNDkz
+LjAwMApjYWNoZSBzaXplCTogMCBLQgpwaHlzaWNhbCBpZAk6IDAKc2libGlu
+Z3MJOiA0CmNvcmUgaWQJCTogMQpjcHUgY29yZXMJOiAyCmFwaWNpZAkJOiAy
+CmluaXRpYWwgYXBpY2lkCTogMgpmcHUJCTogeWVzCmZwdV9leGNlcHRpb24J
+OiB5ZXMKY3B1aWQgbGV2ZWwJOiAxMwp3cAkJOiB5ZXMKZmxhZ3MJCTogZnB1
+IHZtZSBkZSBwc2UgdHNjIG1zciBwYWUgbWNlIGN4OCBhcGljIHNlcCBtdHJy
+IHBnZSBtY2EgY21vdiBwYXQgcHNlMzYgY2xmbHVzaCBtbXggZnhzciBzc2Ug
+c3NlMiBodCBzeXNjYWxsIG54IG1teGV4dCBmeHNyX29wdCBwZHBlMWdiIHJk
+dHNjcCBsbSBwbmkgY3gxNiBsYWhmX2xtIGNtcF9sZWdhY3kgc3ZtIGV4dGFw
+aWMgY3I4X2xlZ2FjeSBhYm0gc3NlNGEgbWlzYWxpZ25zc2UgM2Rub3dwcmVm
+ZXRjaCBvc3Z3IGlicyBzc2U1IHNraW5pdCB3ZHQgbHdwIGZtYTQgdGNlIG5v
+ZGVpZF9tc3IgdGJtIHBlcmZjdHJfY29yZSBwZXJmY3RyX25iCmNsZmx1c2gg
+c2l6ZQk6IDY0CmNhY2hlX2FsaWdubWVudAk6IDY0CmFkZHJlc3Mgc2l6ZXMJ
+OiA0OCBiaXRzIHBoeXNpY2FsLCA0OCBiaXRzIHZpcnR1YWwKcG93ZXIgbWFu
+YWdlbWVudDogdHMgdHRwIHRtIDEwMG1oenN0ZXBzIGh3cHN0YXRlIGNwYiBl
+ZmZfZnJlcV9ybwoKcHJvY2Vzc29yCTogMwp2ZW5kb3JfaWQJOiBBdXRoZW50
+aWNBTUQKY3B1IGZhbWlseQk6IDIxCm1vZGVsCQk6IDEwMQptb2RlbCBuYW1l
+CTogQU1EIEExMC05NzAwIFJBREVPTiBSNywgMTAgQ09NUFVURSBDT1JFUyA0
+Qys2RyAKc3RlcHBpbmcJOiAxCmNwdSBNSHoJCTogMzQ5My4wMDAKY2FjaGUg
+c2l6ZQk6IDAgS0IKcGh5c2ljYWwgaWQJOiAwCnNpYmxpbmdzCTogNApjb3Jl
+IGlkCQk6IDEKY3B1IGNvcmVzCTogMgphcGljaWQJCTogMwppbml0aWFsIGFw
+aWNpZAk6IDMKZnB1CQk6IHllcwpmcHVfZXhjZXB0aW9uCTogeWVzCmNwdWlk
+IGxldmVsCTogMTMKd3AJCTogeWVzCmZsYWdzCQk6IGZwdSB2bWUgZGUgcHNl
+IHRzYyBtc3IgcGFlIG1jZSBjeDggYXBpYyBzZXAgbXRyciBwZ2UgbWNhIGNt
+b3YgcGF0IHBzZTM2IGNsZmx1c2ggbW14IGZ4c3Igc3NlIHNzZTIgaHQgc3lz
+Y2FsbCBueCBtbXhleHQgZnhzcl9vcHQgcGRwZTFnYiByZHRzY3AgbG0gcG5p
+IGN4MTYgbGFoZl9sbSBjbXBfbGVnYWN5IHN2bSBleHRhcGljIGNyOF9sZWdh
+Y3kgYWJtIHNzZTRhIG1pc2FsaWduc3NlIDNkbm93cHJlZmV0Y2ggb3N2dyBp
+YnMgc3NlNSBza2luaXQgd2R0IGx3cCBmbWE0IHRjZSBub2RlaWRfbXNyIHRi
+bSBwZXJmY3RyX2NvcmUgcGVyZmN0cl9uYgpjbGZsdXNoIHNpemUJOiA2NApj
+YWNoZV9hbGlnbm1lbnQJOiA2NAphZGRyZXNzIHNpemVzCTogNDggYml0cyBw
+aHlzaWNhbCwgNDggYml0cyB2aXJ0dWFsCnBvd2VyIG1hbmFnZW1lbnQ6IHRz
+IHR0cCB0bSAxMDBtaHpzdGVwcyBod3BzdGF0ZSBjcGIgZWZmX2ZyZXFfcm8K
+
+--------------48911958CD71832F1C9C8405
+Content-Type: text/plain; charset=UTF-8;
+ name="cpuinfo-linux-AMD-A10-9700.txt"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="cpuinfo-linux-AMD-A10-9700.txt"
+Content-length: 3965
+
+cHJvY2Vzc29yCTogMAp2ZW5kb3JfaWQJOiBBdXRoZW50aWNBTUQKY3B1IGZh
+bWlseQk6IDIxCm1vZGVsCQk6IDEwMQptb2RlbCBuYW1lCTogQU1EIEExMC05
+NzAwIFJBREVPTiBSNywgMTAgQ09NUFVURSBDT1JFUyA0Qys2RyAKc3RlcHBp
+bmcJOiAxCm1pY3JvY29kZQk6IDB4ZmZmZmZmZmYKY3B1IE1IegkJOiAzNTAw
+LjAwMApjYWNoZSBzaXplCTogMTAyNCBLQgpwaHlzaWNhbCBpZAk6IDAKc2li
+bGluZ3MJOiA0CmNvcmUgaWQJCTogMApjcHUgY29yZXMJOiA0CmFwaWNpZAkJ
+OiAwCmluaXRpYWwgYXBpY2lkCTogMApmcHUJCTogeWVzCmZwdV9leGNlcHRp
+b24JOiB5ZXMKY3B1aWQgbGV2ZWwJOiAyMQp3cAkJOiB5ZXMKZmxhZ3MJCTog
+ZnB1IHZtZSBkZSBwc2UgdHNjIG1zciBwYWUgbWNlIGN4OCBhcGljIHNlcCBt
+dHJyIHBnZSBtY2EgY21vdiBwYXQgcHNlMzYgY2xmbHVzaCBtbXggZnhzciBz
+c2Ugc3NlMiBodCBzeXNjYWxsIG54IG1teGV4dCBmeHNyX29wdCBwZHBlMWdi
+IHJkdHNjcCBsbSBwbmkgcGNsbXVscWRxIG1vbml0b3Igc3NzZTMgZm1hIGN4
+MTYgc3NlNF8xIHNzZTRfMiBtb3ZiZSBwb3BjbnQgYWVzIHhzYXZlIG9zeHNh
+dmUgYXZ4IGYxNmMgcmRyYW5kCmJvZ29taXBzCTogNzAwMC4wMApjbGZsdXNo
+IHNpemUJOiA2NApjYWNoZV9hbGlnbm1lbnQJOiA2NAphZGRyZXNzIHNpemVz
+CTogMzYgYml0cyBwaHlzaWNhbCwgNDggYml0cyB2aXJ0dWFsCnBvd2VyIG1h
+bmFnZW1lbnQ6Cgpwcm9jZXNzb3IJOiAxCnZlbmRvcl9pZAk6IEF1dGhlbnRp
+Y0FNRApjcHUgZmFtaWx5CTogMjEKbW9kZWwJCTogMTAxCm1vZGVsIG5hbWUJ
+OiBBTUQgQTEwLTk3MDAgUkFERU9OIFI3LCAxMCBDT01QVVRFIENPUkVTIDRD
+KzZHIApzdGVwcGluZwk6IDEKbWljcm9jb2RlCTogMHhmZmZmZmZmZgpjcHUg
+TUh6CQk6IDM1MDAuMDAwCmNhY2hlIHNpemUJOiAxMDI0IEtCCnBoeXNpY2Fs
+IGlkCTogMApzaWJsaW5ncwk6IDQKY29yZSBpZAkJOiAxCmNwdSBjb3Jlcwk6
+IDQKYXBpY2lkCQk6IDAKaW5pdGlhbCBhcGljaWQJOiAwCmZwdQkJOiB5ZXMK
+ZnB1X2V4Y2VwdGlvbgk6IHllcwpjcHVpZCBsZXZlbAk6IDIxCndwCQk6IHll
+cwpmbGFncwkJOiBmcHUgdm1lIGRlIHBzZSB0c2MgbXNyIHBhZSBtY2UgY3g4
+IGFwaWMgc2VwIG10cnIgcGdlIG1jYSBjbW92IHBhdCBwc2UzNiBjbGZsdXNo
+IG1teCBmeHNyIHNzZSBzc2UyIGh0IHN5c2NhbGwgbnggbW14ZXh0IGZ4c3Jf
+b3B0IHBkcGUxZ2IgcmR0c2NwIGxtIHBuaSBwY2xtdWxxZHEgbW9uaXRvciBz
+c3NlMyBmbWEgY3gxNiBzc2U0XzEgc3NlNF8yIG1vdmJlIHBvcGNudCBhZXMg
+eHNhdmUgb3N4c2F2ZSBhdnggZjE2YyByZHJhbmQKYm9nb21pcHMJOiA3MDAw
+LjAwCmNsZmx1c2ggc2l6ZQk6IDY0CmNhY2hlX2FsaWdubWVudAk6IDY0CmFk
+ZHJlc3Mgc2l6ZXMJOiAzNiBiaXRzIHBoeXNpY2FsLCA0OCBiaXRzIHZpcnR1
+YWwKcG93ZXIgbWFuYWdlbWVudDoKCnByb2Nlc3Nvcgk6IDIKdmVuZG9yX2lk
+CTogQXV0aGVudGljQU1ECmNwdSBmYW1pbHkJOiAyMQptb2RlbAkJOiAxMDEK
+bW9kZWwgbmFtZQk6IEFNRCBBMTAtOTcwMCBSQURFT04gUjcsIDEwIENPTVBV
+VEUgQ09SRVMgNEMrNkcgCnN0ZXBwaW5nCTogMQptaWNyb2NvZGUJOiAweGZm
+ZmZmZmZmCmNwdSBNSHoJCTogMzUwMC4wMDAKY2FjaGUgc2l6ZQk6IDEwMjQg
+S0IKcGh5c2ljYWwgaWQJOiAwCnNpYmxpbmdzCTogNApjb3JlIGlkCQk6IDIK
+Y3B1IGNvcmVzCTogNAphcGljaWQJCTogMAppbml0aWFsIGFwaWNpZAk6IDAK
+ZnB1CQk6IHllcwpmcHVfZXhjZXB0aW9uCTogeWVzCmNwdWlkIGxldmVsCTog
+MjEKd3AJCTogeWVzCmZsYWdzCQk6IGZwdSB2bWUgZGUgcHNlIHRzYyBtc3Ig
+cGFlIG1jZSBjeDggYXBpYyBzZXAgbXRyciBwZ2UgbWNhIGNtb3YgcGF0IHBz
+ZTM2IGNsZmx1c2ggbW14IGZ4c3Igc3NlIHNzZTIgaHQgc3lzY2FsbCBueCBt
+bXhleHQgZnhzcl9vcHQgcGRwZTFnYiByZHRzY3AgbG0gcG5pIHBjbG11bHFk
+cSBtb25pdG9yIHNzc2UzIGZtYSBjeDE2IHNzZTRfMSBzc2U0XzIgbW92YmUg
+cG9wY250IGFlcyB4c2F2ZSBvc3hzYXZlIGF2eCBmMTZjIHJkcmFuZApib2dv
+bWlwcwk6IDcwMDAuMDAKY2xmbHVzaCBzaXplCTogNjQKY2FjaGVfYWxpZ25t
+ZW50CTogNjQKYWRkcmVzcyBzaXplcwk6IDM2IGJpdHMgcGh5c2ljYWwsIDQ4
+IGJpdHMgdmlydHVhbApwb3dlciBtYW5hZ2VtZW50OgoKcHJvY2Vzc29yCTog
+Mwp2ZW5kb3JfaWQJOiBBdXRoZW50aWNBTUQKY3B1IGZhbWlseQk6IDIxCm1v
+ZGVsCQk6IDEwMQptb2RlbCBuYW1lCTogQU1EIEExMC05NzAwIFJBREVPTiBS
+NywgMTAgQ09NUFVURSBDT1JFUyA0Qys2RyAKc3RlcHBpbmcJOiAxCm1pY3Jv
+Y29kZQk6IDB4ZmZmZmZmZmYKY3B1IE1IegkJOiAzNTAwLjAwMApjYWNoZSBz
+aXplCTogMTAyNCBLQgpwaHlzaWNhbCBpZAk6IDAKc2libGluZ3MJOiA0CmNv
+cmUgaWQJCTogMwpjcHUgY29yZXMJOiA0CmFwaWNpZAkJOiAwCmluaXRpYWwg
+YXBpY2lkCTogMApmcHUJCTogeWVzCmZwdV9leGNlcHRpb24JOiB5ZXMKY3B1
+aWQgbGV2ZWwJOiAyMQp3cAkJOiB5ZXMKZmxhZ3MJCTogZnB1IHZtZSBkZSBw
+c2UgdHNjIG1zciBwYWUgbWNlIGN4OCBhcGljIHNlcCBtdHJyIHBnZSBtY2Eg
+Y21vdiBwYXQgcHNlMzYgY2xmbHVzaCBtbXggZnhzciBzc2Ugc3NlMiBodCBz
+eXNjYWxsIG54IG1teGV4dCBmeHNyX29wdCBwZHBlMWdiIHJkdHNjcCBsbSBw
+bmkgcGNsbXVscWRxIG1vbml0b3Igc3NzZTMgZm1hIGN4MTYgc3NlNF8xIHNz
+ZTRfMiBtb3ZiZSBwb3BjbnQgYWVzIHhzYXZlIG9zeHNhdmUgYXZ4IGYxNmMg
+cmRyYW5kCmJvZ29taXBzCTogNzAwMC4wMApjbGZsdXNoIHNpemUJOiA2NApj
+YWNoZV9hbGlnbm1lbnQJOiA2NAphZGRyZXNzIHNpemVzCTogMzYgYml0cyBw
+aHlzaWNhbCwgNDggYml0cyB2aXJ0dWFsCnBvd2VyIG1hbmFnZW1lbnQ6Cgo=
+
+--------------48911958CD71832F1C9C8405
+Content-Type: text/plain; charset=UTF-8;
+ name="cpuinfo-test-AMD-A10-9700.txt"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="cpuinfo-test-AMD-A10-9700.txt"
+Content-length: 6365
+
+cHJvY2Vzc29yCTogMAp2ZW5kb3JfaWQJOiBBdXRoZW50aWNBTUQKY3B1IGZh
+bWlseQk6IDIxCm1vZGVsCQk6IDEwMQptb2RlbCBuYW1lCTogQU1EIEExMC05
+NzAwIFJBREVPTiBSNywgMTAgQ09NUFVURSBDT1JFUyA0Qys2RyAKc3RlcHBp
+bmcJOiAxCm1pY3JvY29kZQk6IDB4NjAwNjExOApjcHUgTUh6CQk6IDM1MDAu
+MDAwCmNhY2hlIHNpemUJOiAxMDI0IEtCCnBoeXNpY2FsIGlkCTogMApzaWJs
+aW5ncwk6IDQKY29yZSBpZAkJOiAwCmNwdSBjb3Jlcwk6IDQKYXBpY2lkCQk6
+IDAKaW5pdGlhbCBhcGljaWQJOiAwCmZwdQkJOiB5ZXMKZnB1X2V4Y2VwdGlv
+bgk6IHllcwpjcHVpZCBsZXZlbAk6IDIyCndwCQk6IHllcwpmbGFncwkJOiBm
+cHUgdm1lIGRlIHBzZSB0c2MgbXNyIHBhZSBtY2UgY3g4IGFwaWMgc2VwIG10
+cnIgcGdlIG1jYSBjbW92IHBhdCBwc2UzNiBjbGZsdXNoIG1teCBmeHNyIHNz
+ZSBzc2UyIGh0IHN5c2NhbGwgbnggbW14ZXh0IGZ4c3Jfb3B0IHBkcGUxZ2Ig
+cmR0c2NwIGxtIGNvbnN0YW50X3RzYyBub25zdG9wX3RzYyBhcGVyZm1wZXJm
+IHBuaSBwY2xtdWxkcSBtb25pdG9yIHNzc2UzIGZtYSBjeDE2IHNzZTRfMSBz
+c2U0XzIgbW92YmUgcG9wY250IGFlcyB4c2F2ZSBhdnggZjE2YyByZHJhbmQg
+bGFoZl9sbSBjbXBfbGVnYWN5IHN2bSBleHRhcGljIGNyOF9sZWdhY3kgYWJt
+IHNzZTRhIG1pc2FsaWduc3NlIDNkbm93cHJlZmV0Y2ggb3N2dyBpYnMgeG9w
+IHNraW5pdCB3ZHQgbHdwIGZtYTQgdGNlIG5vZGVpZF9tc3IgdGJtIHBlcmZj
+dHJfY29yZSBwZXJmY3RyX25iIGJwZXh0IHB0c2MgbXdhaXR4IGNwYiBod19w
+c3RhdGUgZnNnc2Jhc2UgYm1pMSBhdngyIHNtZXAgYm1pMiB4c2F2ZW9wdCBh
+cmF0IG5wdCBsYnJ2IHN2bV9sb2NrIG5yaXBfc2F2ZSB0c2Nfc2NhbGUgdm1j
+Yl9jbGVhbiBmbHVzaGJ5YXNpZCBkZWNvZGVfYXNzaXN0cyBwYXVzZWZpbHRl
+ciBwZnRocmVzaG9sZCBhdmljIHZfdm1zYXZlX3ZtbG9hZCB2Z2lmIG92ZXJm
+bG93X3JlY292CmJvZ29taXBzCTogNzAwMC4wMApjbGZsdXNoIHNpemUJOiA2
+NApjYWNoZV9hbGlnbm1lbnQJOiA2NAphZGRyZXNzIHNpemVzCTogNDggYml0
+cyBwaHlzaWNhbCwgNDggYml0cyB2aXJ0dWFsCnBvd2VyIG1hbmFnZW1lbnQ6
+IHRzIHR0cCB0bSAxMDBtaHpzdGVwcyBod3BzdGF0ZSBjcGIgZWZmX2ZyZXFf
+cm8KCnByb2Nlc3Nvcgk6IDEKdmVuZG9yX2lkCTogQXV0aGVudGljQU1ECmNw
+dSBmYW1pbHkJOiAyMQptb2RlbAkJOiAxMDEKbW9kZWwgbmFtZQk6IEFNRCBB
+MTAtOTcwMCBSQURFT04gUjcsIDEwIENPTVBVVEUgQ09SRVMgNEMrNkcgCnN0
+ZXBwaW5nCTogMQptaWNyb2NvZGUJOiAweDYwMDYxMTgKY3B1IE1IegkJOiAz
+NTAwLjAwMApjYWNoZSBzaXplCTogMTAyNCBLQgpwaHlzaWNhbCBpZAk6IDAK
+c2libGluZ3MJOiA0CmNvcmUgaWQJCTogMApjcHUgY29yZXMJOiA0CmFwaWNp
+ZAkJOiAxCmluaXRpYWwgYXBpY2lkCTogMQpmcHUJCTogeWVzCmZwdV9leGNl
+cHRpb24JOiB5ZXMKY3B1aWQgbGV2ZWwJOiAyMgp3cAkJOiB5ZXMKZmxhZ3MJ
+CTogZnB1IHZtZSBkZSBwc2UgdHNjIG1zciBwYWUgbWNlIGN4OCBhcGljIHNl
+cCBtdHJyIHBnZSBtY2EgY21vdiBwYXQgcHNlMzYgY2xmbHVzaCBtbXggZnhz
+ciBzc2Ugc3NlMiBodCBzeXNjYWxsIG54IG1teGV4dCBmeHNyX29wdCBwZHBl
+MWdiIHJkdHNjcCBsbSBjb25zdGFudF90c2Mgbm9uc3RvcF90c2MgYXBlcmZt
+cGVyZiBwbmkgcGNsbXVsZHEgbW9uaXRvciBzc3NlMyBmbWEgY3gxNiBzc2U0
+XzEgc3NlNF8yIG1vdmJlIHBvcGNudCBhZXMgeHNhdmUgYXZ4IGYxNmMgcmRy
+YW5kIGxhaGZfbG0gY21wX2xlZ2FjeSBzdm0gZXh0YXBpYyBjcjhfbGVnYWN5
+IGFibSBzc2U0YSBtaXNhbGlnbnNzZSAzZG5vd3ByZWZldGNoIG9zdncgaWJz
+IHhvcCBza2luaXQgd2R0IGx3cCBmbWE0IHRjZSBub2RlaWRfbXNyIHRibSBw
+ZXJmY3RyX2NvcmUgcGVyZmN0cl9uYiBicGV4dCBwdHNjIG13YWl0eCBjcGIg
+aHdfcHN0YXRlIGZzZ3NiYXNlIGJtaTEgYXZ4MiBzbWVwIGJtaTIgeHNhdmVv
+cHQgYXJhdCBucHQgbGJydiBzdm1fbG9jayBucmlwX3NhdmUgdHNjX3NjYWxl
+IHZtY2JfY2xlYW4gZmx1c2hieWFzaWQgZGVjb2RlX2Fzc2lzdHMgcGF1c2Vm
+aWx0ZXIgcGZ0aHJlc2hvbGQgYXZpYyB2X3Ztc2F2ZV92bWxvYWQgdmdpZiBv
+dmVyZmxvd19yZWNvdgpib2dvbWlwcwk6IDcwMDAuMDAKY2xmbHVzaCBzaXpl
+CTogNjQKY2FjaGVfYWxpZ25tZW50CTogNjQKYWRkcmVzcyBzaXplcwk6IDQ4
+IGJpdHMgcGh5c2ljYWwsIDQ4IGJpdHMgdmlydHVhbApwb3dlciBtYW5hZ2Vt
+ZW50OiB0cyB0dHAgdG0gMTAwbWh6c3RlcHMgaHdwc3RhdGUgY3BiIGVmZl9m
+cmVxX3JvCgpwcm9jZXNzb3IJOiAyCnZlbmRvcl9pZAk6IEF1dGhlbnRpY0FN
+RApjcHUgZmFtaWx5CTogMjEKbW9kZWwJCTogMTAxCm1vZGVsIG5hbWUJOiBB
+TUQgQTEwLTk3MDAgUkFERU9OIFI3LCAxMCBDT01QVVRFIENPUkVTIDRDKzZH
+IApzdGVwcGluZwk6IDEKbWljcm9jb2RlCTogMHg2MDA2MTE4CmNwdSBNSHoJ
+CTogMzUwMC4wMDAKY2FjaGUgc2l6ZQk6IDEwMjQgS0IKcGh5c2ljYWwgaWQJ
+OiAwCnNpYmxpbmdzCTogNApjb3JlIGlkCQk6IDEKY3B1IGNvcmVzCTogNAph
+cGljaWQJCTogMgppbml0aWFsIGFwaWNpZAk6IDIKZnB1CQk6IHllcwpmcHVf
+ZXhjZXB0aW9uCTogeWVzCmNwdWlkIGxldmVsCTogMjIKd3AJCTogeWVzCmZs
+YWdzCQk6IGZwdSB2bWUgZGUgcHNlIHRzYyBtc3IgcGFlIG1jZSBjeDggYXBp
+YyBzZXAgbXRyciBwZ2UgbWNhIGNtb3YgcGF0IHBzZTM2IGNsZmx1c2ggbW14
+IGZ4c3Igc3NlIHNzZTIgaHQgc3lzY2FsbCBueCBtbXhleHQgZnhzcl9vcHQg
+cGRwZTFnYiByZHRzY3AgbG0gY29uc3RhbnRfdHNjIG5vbnN0b3BfdHNjIGFw
+ZXJmbXBlcmYgcG5pIHBjbG11bGRxIG1vbml0b3Igc3NzZTMgZm1hIGN4MTYg
+c3NlNF8xIHNzZTRfMiBtb3ZiZSBwb3BjbnQgYWVzIHhzYXZlIGF2eCBmMTZj
+IHJkcmFuZCBsYWhmX2xtIGNtcF9sZWdhY3kgc3ZtIGV4dGFwaWMgY3I4X2xl
+Z2FjeSBhYm0gc3NlNGEgbWlzYWxpZ25zc2UgM2Rub3dwcmVmZXRjaCBvc3Z3
+IGlicyB4b3Agc2tpbml0IHdkdCBsd3AgZm1hNCB0Y2Ugbm9kZWlkX21zciB0
+Ym0gcGVyZmN0cl9jb3JlIHBlcmZjdHJfbmIgYnBleHQgcHRzYyBtd2FpdHgg
+Y3BiIGh3X3BzdGF0ZSBmc2dzYmFzZSBibWkxIGF2eDIgc21lcCBibWkyIHhz
+YXZlb3B0IGFyYXQgbnB0IGxicnYgc3ZtX2xvY2sgbnJpcF9zYXZlIHRzY19z
+Y2FsZSB2bWNiX2NsZWFuIGZsdXNoYnlhc2lkIGRlY29kZV9hc3Npc3RzIHBh
+dXNlZmlsdGVyIHBmdGhyZXNob2xkIGF2aWMgdl92bXNhdmVfdm1sb2FkIHZn
+aWYgb3ZlcmZsb3dfcmVjb3YKYm9nb21pcHMJOiA3MDAwLjAwCmNsZmx1c2gg
+c2l6ZQk6IDY0CmNhY2hlX2FsaWdubWVudAk6IDY0CmFkZHJlc3Mgc2l6ZXMJ
+OiA0OCBiaXRzIHBoeXNpY2FsLCA0OCBiaXRzIHZpcnR1YWwKcG93ZXIgbWFu
+YWdlbWVudDogdHMgdHRwIHRtIDEwMG1oenN0ZXBzIGh3cHN0YXRlIGNwYiBl
+ZmZfZnJlcV9ybwoKcHJvY2Vzc29yCTogMwp2ZW5kb3JfaWQJOiBBdXRoZW50
+aWNBTUQKY3B1IGZhbWlseQk6IDIxCm1vZGVsCQk6IDEwMQptb2RlbCBuYW1l
+CTogQU1EIEExMC05NzAwIFJBREVPTiBSNywgMTAgQ09NUFVURSBDT1JFUyA0
+Qys2RyAKc3RlcHBpbmcJOiAxCm1pY3JvY29kZQk6IDB4NjAwNjExOApjcHUg
+TUh6CQk6IDM1MDAuMDAwCmNhY2hlIHNpemUJOiAxMDI0IEtCCnBoeXNpY2Fs
+IGlkCTogMApzaWJsaW5ncwk6IDQKY29yZSBpZAkJOiAxCmNwdSBjb3Jlcwk6
+IDQKYXBpY2lkCQk6IDMKaW5pdGlhbCBhcGljaWQJOiAzCmZwdQkJOiB5ZXMK
+ZnB1X2V4Y2VwdGlvbgk6IHllcwpjcHVpZCBsZXZlbAk6IDIyCndwCQk6IHll
+cwpmbGFncwkJOiBmcHUgdm1lIGRlIHBzZSB0c2MgbXNyIHBhZSBtY2UgY3g4
+IGFwaWMgc2VwIG10cnIgcGdlIG1jYSBjbW92IHBhdCBwc2UzNiBjbGZsdXNo
+IG1teCBmeHNyIHNzZSBzc2UyIGh0IHN5c2NhbGwgbnggbW14ZXh0IGZ4c3Jf
+b3B0IHBkcGUxZ2IgcmR0c2NwIGxtIGNvbnN0YW50X3RzYyBub25zdG9wX3Rz
+YyBhcGVyZm1wZXJmIHBuaSBwY2xtdWxkcSBtb25pdG9yIHNzc2UzIGZtYSBj
+eDE2IHNzZTRfMSBzc2U0XzIgbW92YmUgcG9wY250IGFlcyB4c2F2ZSBhdngg
+ZjE2YyByZHJhbmQgbGFoZl9sbSBjbXBfbGVnYWN5IHN2bSBleHRhcGljIGNy
+OF9sZWdhY3kgYWJtIHNzZTRhIG1pc2FsaWduc3NlIDNkbm93cHJlZmV0Y2gg
+b3N2dyBpYnMgeG9wIHNraW5pdCB3ZHQgbHdwIGZtYTQgdGNlIG5vZGVpZF9t
+c3IgdGJtIHBlcmZjdHJfY29yZSBwZXJmY3RyX25iIGJwZXh0IHB0c2MgbXdh
+aXR4IGNwYiBod19wc3RhdGUgZnNnc2Jhc2UgYm1pMSBhdngyIHNtZXAgYm1p
+MiB4c2F2ZW9wdCBhcmF0IG5wdCBsYnJ2IHN2bV9sb2NrIG5yaXBfc2F2ZSB0
+c2Nfc2NhbGUgdm1jYl9jbGVhbiBmbHVzaGJ5YXNpZCBkZWNvZGVfYXNzaXN0
+cyBwYXVzZWZpbHRlciBwZnRocmVzaG9sZCBhdmljIHZfdm1zYXZlX3ZtbG9h
+ZCB2Z2lmIG92ZXJmbG93X3JlY292CmJvZ29taXBzCTogNzAwMC4wMApjbGZs
+dXNoIHNpemUJOiA2NApjYWNoZV9hbGlnbm1lbnQJOiA2NAphZGRyZXNzIHNp
+emVzCTogNDggYml0cyBwaHlzaWNhbCwgNDggYml0cyB2aXJ0dWFsCnBvd2Vy
+IG1hbmFnZW1lbnQ6IHRzIHR0cCB0bSAxMDBtaHpzdGVwcyBod3BzdGF0ZSBj
+cGIgZWZmX2ZyZXFfcm8K
+
+--------------48911958CD71832F1C9C8405
+Content-Type: text/plain; charset=UTF-8;
+ name="cpuinfo-cygwin-linux.diff"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="cpuinfo-cygwin-linux.diff"
+Content-length: 7300
+
+LS0tIGNwdWluZm8tY3lnd2luLUFNRC1BMTAtOTcwMC50eHQJMjAxOS0wOC0y
+NCAyMDo0MDo0Ni40MTA2OTAyMDAgLTA2MDAKKysrIGNwdWluZm8tbGludXgt
+QU1ELUExMC05NzAwLnR4dAkyMDE5LTA5LTE0IDEzOjA0OjMzLjE3Njk2NTgw
+MCAtMDYwMApAQCAtNCwyMyArNCwyNSBAQCBjcHUgZmFtaWx5CTogMjEKIG1v
+ZGVsCQk6IDEwMQogbW9kZWwgbmFtZQk6IEFNRCBBMTAtOTcwMCBSQURFT04g
+UjcsIDEwIENPTVBVVEUgQ09SRVMgNEMrNkcgCiBzdGVwcGluZwk6IDEKLWNw
+dSBNSHoJCTogMzQ5My4wMDAKLWNhY2hlIHNpemUJOiAwIEtCCittaWNyb2Nv
+ZGUJOiAweGZmZmZmZmZmCitjcHUgTUh6CQk6IDM1MDAuMDAwCitjYWNoZSBz
+aXplCTogMTAyNCBLQgogcGh5c2ljYWwgaWQJOiAwCiBzaWJsaW5ncwk6IDQK
+IGNvcmUgaWQJCTogMAotY3B1IGNvcmVzCTogMgorY3B1IGNvcmVzCTogNAog
+YXBpY2lkCQk6IDAKIGluaXRpYWwgYXBpY2lkCTogMAogZnB1CQk6IHllcwog
+ZnB1X2V4Y2VwdGlvbgk6IHllcwotY3B1aWQgbGV2ZWwJOiAxMworY3B1aWQg
+bGV2ZWwJOiAyMQogd3AJCTogeWVzCi1mbGFncwkJOiBmcHUgdm1lIGRlIHBz
+ZSB0c2MgbXNyIHBhZSBtY2UgY3g4IGFwaWMgc2VwIG10cnIgcGdlIG1jYSBj
+bW92IHBhdCBwc2UzNiBjbGZsdXNoIG1teCBmeHNyIHNzZSBzc2UyIGh0IHN5
+c2NhbGwgbnggbW14ZXh0IGZ4c3Jfb3B0IHBkcGUxZ2IgcmR0c2NwIGxtIHBu
+aSBjeDE2IGxhaGZfbG0gY21wX2xlZ2FjeSBzdm0gZXh0YXBpYyBjcjhfbGVn
+YWN5IGFibSBzc2U0YSBtaXNhbGlnbnNzZSAzZG5vd3ByZWZldGNoIG9zdncg
+aWJzIHNzZTUgc2tpbml0IHdkdCBsd3AgZm1hNCB0Y2Ugbm9kZWlkX21zciB0
+Ym0gcGVyZmN0cl9jb3JlIHBlcmZjdHJfbmIKK2ZsYWdzCQk6IGZwdSB2bWUg
+ZGUgcHNlIHRzYyBtc3IgcGFlIG1jZSBjeDggYXBpYyBzZXAgbXRyciBwZ2Ug
+bWNhIGNtb3YgcGF0IHBzZTM2IGNsZmx1c2ggbW14IGZ4c3Igc3NlIHNzZTIg
+aHQgc3lzY2FsbCBueCBtbXhleHQgZnhzcl9vcHQgcGRwZTFnYiByZHRzY3Ag
+bG0gcG5pIHBjbG11bHFkcSBtb25pdG9yIHNzc2UzIGZtYSBjeDE2IHNzZTRf
+MSBzc2U0XzIgbW92YmUgcG9wY250IGFlcyB4c2F2ZSBvc3hzYXZlIGF2eCBm
+MTZjIHJkcmFuZAorYm9nb21pcHMJOiA3MDAwLjAwCiBjbGZsdXNoIHNpemUJ
+OiA2NAogY2FjaGVfYWxpZ25tZW50CTogNjQKLWFkZHJlc3Mgc2l6ZXMJOiA0
+OCBiaXRzIHBoeXNpY2FsLCA0OCBiaXRzIHZpcnR1YWwKLXBvd2VyIG1hbmFn
+ZW1lbnQ6IHRzIHR0cCB0bSAxMDBtaHpzdGVwcyBod3BzdGF0ZSBjcGIgZWZm
+X2ZyZXFfcm8KK2FkZHJlc3Mgc2l6ZXMJOiAzNiBiaXRzIHBoeXNpY2FsLCA0
+OCBiaXRzIHZpcnR1YWwKK3Bvd2VyIG1hbmFnZW1lbnQ6CiAKIHByb2Nlc3Nv
+cgk6IDEKIHZlbmRvcl9pZAk6IEF1dGhlbnRpY0FNRApAQCAtMjgsMjMgKzMw
+LDI1IEBAIGNwdSBmYW1pbHkJOiAyMQogbW9kZWwJCTogMTAxCiBtb2RlbCBu
+YW1lCTogQU1EIEExMC05NzAwIFJBREVPTiBSNywgMTAgQ09NUFVURSBDT1JF
+UyA0Qys2RyAKIHN0ZXBwaW5nCTogMQotY3B1IE1IegkJOiAzNDkzLjAwMAot
+Y2FjaGUgc2l6ZQk6IDAgS0IKK21pY3JvY29kZQk6IDB4ZmZmZmZmZmYKK2Nw
+dSBNSHoJCTogMzUwMC4wMDAKK2NhY2hlIHNpemUJOiAxMDI0IEtCCiBwaHlz
+aWNhbCBpZAk6IDAKIHNpYmxpbmdzCTogNAotY29yZSBpZAkJOiAwCi1jcHUg
+Y29yZXMJOiAyCi1hcGljaWQJCTogMQotaW5pdGlhbCBhcGljaWQJOiAxCitj
+b3JlIGlkCQk6IDEKK2NwdSBjb3Jlcwk6IDQKK2FwaWNpZAkJOiAwCitpbml0
+aWFsIGFwaWNpZAk6IDAKIGZwdQkJOiB5ZXMKIGZwdV9leGNlcHRpb24JOiB5
+ZXMKLWNwdWlkIGxldmVsCTogMTMKK2NwdWlkIGxldmVsCTogMjEKIHdwCQk6
+IHllcwotZmxhZ3MJCTogZnB1IHZtZSBkZSBwc2UgdHNjIG1zciBwYWUgbWNl
+IGN4OCBhcGljIHNlcCBtdHJyIHBnZSBtY2EgY21vdiBwYXQgcHNlMzYgY2xm
+bHVzaCBtbXggZnhzciBzc2Ugc3NlMiBodCBzeXNjYWxsIG54IG1teGV4dCBm
+eHNyX29wdCBwZHBlMWdiIHJkdHNjcCBsbSBwbmkgY3gxNiBsYWhmX2xtIGNt
+cF9sZWdhY3kgc3ZtIGV4dGFwaWMgY3I4X2xlZ2FjeSBhYm0gc3NlNGEgbWlz
+YWxpZ25zc2UgM2Rub3dwcmVmZXRjaCBvc3Z3IGlicyBzc2U1IHNraW5pdCB3
+ZHQgbHdwIGZtYTQgdGNlIG5vZGVpZF9tc3IgdGJtIHBlcmZjdHJfY29yZSBw
+ZXJmY3RyX25iCitmbGFncwkJOiBmcHUgdm1lIGRlIHBzZSB0c2MgbXNyIHBh
+ZSBtY2UgY3g4IGFwaWMgc2VwIG10cnIgcGdlIG1jYSBjbW92IHBhdCBwc2Uz
+NiBjbGZsdXNoIG1teCBmeHNyIHNzZSBzc2UyIGh0IHN5c2NhbGwgbnggbW14
+ZXh0IGZ4c3Jfb3B0IHBkcGUxZ2IgcmR0c2NwIGxtIHBuaSBwY2xtdWxxZHEg
+bW9uaXRvciBzc3NlMyBmbWEgY3gxNiBzc2U0XzEgc3NlNF8yIG1vdmJlIHBv
+cGNudCBhZXMgeHNhdmUgb3N4c2F2ZSBhdnggZjE2YyByZHJhbmQKK2JvZ29t
+aXBzCTogNzAwMC4wMAogY2xmbHVzaCBzaXplCTogNjQKIGNhY2hlX2FsaWdu
+bWVudAk6IDY0Ci1hZGRyZXNzIHNpemVzCTogNDggYml0cyBwaHlzaWNhbCwg
+NDggYml0cyB2aXJ0dWFsCi1wb3dlciBtYW5hZ2VtZW50OiB0cyB0dHAgdG0g
+MTAwbWh6c3RlcHMgaHdwc3RhdGUgY3BiIGVmZl9mcmVxX3JvCithZGRyZXNz
+IHNpemVzCTogMzYgYml0cyBwaHlzaWNhbCwgNDggYml0cyB2aXJ0dWFsCitw
+b3dlciBtYW5hZ2VtZW50OgogCiBwcm9jZXNzb3IJOiAyCiB2ZW5kb3JfaWQJ
+OiBBdXRoZW50aWNBTUQKQEAgLTUyLDIzICs1NiwyNSBAQCBjcHUgZmFtaWx5
+CTogMjEKIG1vZGVsCQk6IDEwMQogbW9kZWwgbmFtZQk6IEFNRCBBMTAtOTcw
+MCBSQURFT04gUjcsIDEwIENPTVBVVEUgQ09SRVMgNEMrNkcgCiBzdGVwcGlu
+Zwk6IDEKLWNwdSBNSHoJCTogMzQ5My4wMDAKLWNhY2hlIHNpemUJOiAwIEtC
+CittaWNyb2NvZGUJOiAweGZmZmZmZmZmCitjcHUgTUh6CQk6IDM1MDAuMDAw
+CitjYWNoZSBzaXplCTogMTAyNCBLQgogcGh5c2ljYWwgaWQJOiAwCiBzaWJs
+aW5ncwk6IDQKLWNvcmUgaWQJCTogMQotY3B1IGNvcmVzCTogMgotYXBpY2lk
+CQk6IDIKLWluaXRpYWwgYXBpY2lkCTogMgorY29yZSBpZAkJOiAyCitjcHUg
+Y29yZXMJOiA0CithcGljaWQJCTogMAoraW5pdGlhbCBhcGljaWQJOiAwCiBm
+cHUJCTogeWVzCiBmcHVfZXhjZXB0aW9uCTogeWVzCi1jcHVpZCBsZXZlbAk6
+IDEzCitjcHVpZCBsZXZlbAk6IDIxCiB3cAkJOiB5ZXMKLWZsYWdzCQk6IGZw
+dSB2bWUgZGUgcHNlIHRzYyBtc3IgcGFlIG1jZSBjeDggYXBpYyBzZXAgbXRy
+ciBwZ2UgbWNhIGNtb3YgcGF0IHBzZTM2IGNsZmx1c2ggbW14IGZ4c3Igc3Nl
+IHNzZTIgaHQgc3lzY2FsbCBueCBtbXhleHQgZnhzcl9vcHQgcGRwZTFnYiBy
+ZHRzY3AgbG0gcG5pIGN4MTYgbGFoZl9sbSBjbXBfbGVnYWN5IHN2bSBleHRh
+cGljIGNyOF9sZWdhY3kgYWJtIHNzZTRhIG1pc2FsaWduc3NlIDNkbm93cHJl
+ZmV0Y2ggb3N2dyBpYnMgc3NlNSBza2luaXQgd2R0IGx3cCBmbWE0IHRjZSBu
+b2RlaWRfbXNyIHRibSBwZXJmY3RyX2NvcmUgcGVyZmN0cl9uYgorZmxhZ3MJ
+CTogZnB1IHZtZSBkZSBwc2UgdHNjIG1zciBwYWUgbWNlIGN4OCBhcGljIHNl
+cCBtdHJyIHBnZSBtY2EgY21vdiBwYXQgcHNlMzYgY2xmbHVzaCBtbXggZnhz
+ciBzc2Ugc3NlMiBodCBzeXNjYWxsIG54IG1teGV4dCBmeHNyX29wdCBwZHBl
+MWdiIHJkdHNjcCBsbSBwbmkgcGNsbXVscWRxIG1vbml0b3Igc3NzZTMgZm1h
+IGN4MTYgc3NlNF8xIHNzZTRfMiBtb3ZiZSBwb3BjbnQgYWVzIHhzYXZlIG9z
+eHNhdmUgYXZ4IGYxNmMgcmRyYW5kCitib2dvbWlwcwk6IDcwMDAuMDAKIGNs
+Zmx1c2ggc2l6ZQk6IDY0CiBjYWNoZV9hbGlnbm1lbnQJOiA2NAotYWRkcmVz
+cyBzaXplcwk6IDQ4IGJpdHMgcGh5c2ljYWwsIDQ4IGJpdHMgdmlydHVhbAot
+cG93ZXIgbWFuYWdlbWVudDogdHMgdHRwIHRtIDEwMG1oenN0ZXBzIGh3cHN0
+YXRlIGNwYiBlZmZfZnJlcV9ybworYWRkcmVzcyBzaXplcwk6IDM2IGJpdHMg
+cGh5c2ljYWwsIDQ4IGJpdHMgdmlydHVhbAorcG93ZXIgbWFuYWdlbWVudDoK
+IAogcHJvY2Vzc29yCTogMwogdmVuZG9yX2lkCTogQXV0aGVudGljQU1ECkBA
+IC03NiwyMCArODIsMjMgQEAgY3B1IGZhbWlseQk6IDIxCiBtb2RlbAkJOiAx
+MDEKIG1vZGVsIG5hbWUJOiBBTUQgQTEwLTk3MDAgUkFERU9OIFI3LCAxMCBD
+T01QVVRFIENPUkVTIDRDKzZHIAogc3RlcHBpbmcJOiAxCi1jcHUgTUh6CQk6
+IDM0OTMuMDAwCi1jYWNoZSBzaXplCTogMCBLQgorbWljcm9jb2RlCTogMHhm
+ZmZmZmZmZgorY3B1IE1IegkJOiAzNTAwLjAwMAorY2FjaGUgc2l6ZQk6IDEw
+MjQgS0IKIHBoeXNpY2FsIGlkCTogMAogc2libGluZ3MJOiA0Ci1jb3JlIGlk
+CQk6IDEKLWNwdSBjb3Jlcwk6IDIKLWFwaWNpZAkJOiAzCi1pbml0aWFsIGFw
+aWNpZAk6IDMKK2NvcmUgaWQJCTogMworY3B1IGNvcmVzCTogNAorYXBpY2lk
+CQk6IDAKK2luaXRpYWwgYXBpY2lkCTogMAogZnB1CQk6IHllcwogZnB1X2V4
+Y2VwdGlvbgk6IHllcwotY3B1aWQgbGV2ZWwJOiAxMworY3B1aWQgbGV2ZWwJ
+OiAyMQogd3AJCTogeWVzCi1mbGFncwkJOiBmcHUgdm1lIGRlIHBzZSB0c2Mg
+bXNyIHBhZSBtY2UgY3g4IGFwaWMgc2VwIG10cnIgcGdlIG1jYSBjbW92IHBh
+dCBwc2UzNiBjbGZsdXNoIG1teCBmeHNyIHNzZSBzc2UyIGh0IHN5c2NhbGwg
+bnggbW14ZXh0IGZ4c3Jfb3B0IHBkcGUxZ2IgcmR0c2NwIGxtIHBuaSBjeDE2
+IGxhaGZfbG0gY21wX2xlZ2FjeSBzdm0gZXh0YXBpYyBjcjhfbGVnYWN5IGFi
+bSBzc2U0YSBtaXNhbGlnbnNzZSAzZG5vd3ByZWZldGNoIG9zdncgaWJzIHNz
+ZTUgc2tpbml0IHdkdCBsd3AgZm1hNCB0Y2Ugbm9kZWlkX21zciB0Ym0gcGVy
+ZmN0cl9jb3JlIHBlcmZjdHJfbmIKK2ZsYWdzCQk6IGZwdSB2bWUgZGUgcHNl
+IHRzYyBtc3IgcGFlIG1jZSBjeDggYXBpYyBzZXAgbXRyciBwZ2UgbWNhIGNt
+b3YgcGF0IHBzZTM2IGNsZmx1c2ggbW14IGZ4c3Igc3NlIHNzZTIgaHQgc3lz
+Y2FsbCBueCBtbXhleHQgZnhzcl9vcHQgcGRwZTFnYiByZHRzY3AgbG0gcG5p
+IHBjbG11bHFkcSBtb25pdG9yIHNzc2UzIGZtYSBjeDE2IHNzZTRfMSBzc2U0
+XzIgbW92YmUgcG9wY250IGFlcyB4c2F2ZSBvc3hzYXZlIGF2eCBmMTZjIHJk
+cmFuZAorYm9nb21pcHMJOiA3MDAwLjAwCiBjbGZsdXNoIHNpemUJOiA2NAog
+Y2FjaGVfYWxpZ25tZW50CTogNjQKLWFkZHJlc3Mgc2l6ZXMJOiA0OCBiaXRz
+IHBoeXNpY2FsLCA0OCBiaXRzIHZpcnR1YWwKLXBvd2VyIG1hbmFnZW1lbnQ6
+IHRzIHR0cCB0bSAxMDBtaHpzdGVwcyBod3BzdGF0ZSBjcGIgZWZmX2ZyZXFf
+cm8KK2FkZHJlc3Mgc2l6ZXMJOiAzNiBiaXRzIHBoeXNpY2FsLCA0OCBiaXRz
+IHZpcnR1YWwKK3Bvd2VyIG1hbmFnZW1lbnQ6CisK
+
+--------------48911958CD71832F1C9C8405
+Content-Type: text/plain; charset=UTF-8;
+ name="cpuinfo-cygwin-test.diff"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="cpuinfo-cygwin-test.diff"
+Content-length: 8341
+
+LS0tIGNwdWluZm8tY3lnd2luLUFNRC1BMTAtOTcwMC50eHQJMjAxOS0wOC0y
+NCAyMDo0MDo0Ni40MTA2OTAyMDAgLTA2MDAKKysrIGNwdWluZm8tdGVzdC1B
+TUQtQTEwLTk3MDAudHh0CTIwMTktMTAtMDIgMjI6MTg6MTIuMTc2Mzc2MzAw
+IC0wNjAwCkBAIC00LDE5ICs0LDIxIEBAIGNwdSBmYW1pbHkJOiAyMQogbW9k
+ZWwJCTogMTAxCiBtb2RlbCBuYW1lCTogQU1EIEExMC05NzAwIFJBREVPTiBS
+NywgMTAgQ09NUFVURSBDT1JFUyA0Qys2RyAKIHN0ZXBwaW5nCTogMQotY3B1
+IE1IegkJOiAzNDkzLjAwMAotY2FjaGUgc2l6ZQk6IDAgS0IKK21pY3JvY29k
+ZQk6IDB4NjAwNjExOAorY3B1IE1IegkJOiAzNTAwLjAwMAorY2FjaGUgc2l6
+ZQk6IDEwMjQgS0IKIHBoeXNpY2FsIGlkCTogMAogc2libGluZ3MJOiA0CiBj
+b3JlIGlkCQk6IDAKLWNwdSBjb3Jlcwk6IDIKK2NwdSBjb3Jlcwk6IDQKIGFw
+aWNpZAkJOiAwCiBpbml0aWFsIGFwaWNpZAk6IDAKIGZwdQkJOiB5ZXMKIGZw
+dV9leGNlcHRpb24JOiB5ZXMKLWNwdWlkIGxldmVsCTogMTMKK2NwdWlkIGxl
+dmVsCTogMjIKIHdwCQk6IHllcwotZmxhZ3MJCTogZnB1IHZtZSBkZSBwc2Ug
+dHNjIG1zciBwYWUgbWNlIGN4OCBhcGljIHNlcCBtdHJyIHBnZSBtY2EgY21v
+diBwYXQgcHNlMzYgY2xmbHVzaCBtbXggZnhzciBzc2Ugc3NlMiBodCBzeXNj
+YWxsIG54IG1teGV4dCBmeHNyX29wdCBwZHBlMWdiIHJkdHNjcCBsbSBwbmkg
+Y3gxNiBsYWhmX2xtIGNtcF9sZWdhY3kgc3ZtIGV4dGFwaWMgY3I4X2xlZ2Fj
+eSBhYm0gc3NlNGEgbWlzYWxpZ25zc2UgM2Rub3dwcmVmZXRjaCBvc3Z3IGli
+cyBzc2U1IHNraW5pdCB3ZHQgbHdwIGZtYTQgdGNlIG5vZGVpZF9tc3IgdGJt
+IHBlcmZjdHJfY29yZSBwZXJmY3RyX25iCitmbGFncwkJOiBmcHUgdm1lIGRl
+IHBzZSB0c2MgbXNyIHBhZSBtY2UgY3g4IGFwaWMgc2VwIG10cnIgcGdlIG1j
+YSBjbW92IHBhdCBwc2UzNiBjbGZsdXNoIG1teCBmeHNyIHNzZSBzc2UyIGh0
+IHN5c2NhbGwgbnggbW14ZXh0IGZ4c3Jfb3B0IHBkcGUxZ2IgcmR0c2NwIGxt
+IGNvbnN0YW50X3RzYyBub25zdG9wX3RzYyBhcGVyZm1wZXJmIHBuaSBwY2xt
+dWxkcSBtb25pdG9yIHNzc2UzIGZtYSBjeDE2IHNzZTRfMSBzc2U0XzIgbW92
+YmUgcG9wY250IGFlcyB4c2F2ZSBhdnggZjE2YyByZHJhbmQgbGFoZl9sbSBj
+bXBfbGVnYWN5IHN2bSBleHRhcGljIGNyOF9sZWdhY3kgYWJtIHNzZTRhIG1p
+c2FsaWduc3NlIDNkbm93cHJlZmV0Y2ggb3N2dyBpYnMgeG9wIHNraW5pdCB3
+ZHQgbHdwIGZtYTQgdGNlIG5vZGVpZF9tc3IgdGJtIHBlcmZjdHJfY29yZSBw
+ZXJmY3RyX25iIGJwZXh0IHB0c2MgbXdhaXR4IGNwYiBod19wc3RhdGUgZnNn
+c2Jhc2UgYm1pMSBhdngyIHNtZXAgYm1pMiB4c2F2ZW9wdCBhcmF0IG5wdCBs
+YnJ2IHN2bV9sb2NrIG5yaXBfc2F2ZSB0c2Nfc2NhbGUgdm1jYl9jbGVhbiBm
+bHVzaGJ5YXNpZCBkZWNvZGVfYXNzaXN0cyBwYXVzZWZpbHRlciBwZnRocmVz
+aG9sZCBhdmljIHZfdm1zYXZlX3ZtbG9hZCB2Z2lmIG92ZXJmbG93X3JlY292
+Citib2dvbWlwcwk6IDcwMDAuMDAKIGNsZmx1c2ggc2l6ZQk6IDY0CiBjYWNo
+ZV9hbGlnbm1lbnQJOiA2NAogYWRkcmVzcyBzaXplcwk6IDQ4IGJpdHMgcGh5
+c2ljYWwsIDQ4IGJpdHMgdmlydHVhbApAQCAtMjgsMTkgKzMwLDIxIEBAIGNw
+dSBmYW1pbHkJOiAyMQogbW9kZWwJCTogMTAxCiBtb2RlbCBuYW1lCTogQU1E
+IEExMC05NzAwIFJBREVPTiBSNywgMTAgQ09NUFVURSBDT1JFUyA0Qys2RyAK
+IHN0ZXBwaW5nCTogMQotY3B1IE1IegkJOiAzNDkzLjAwMAotY2FjaGUgc2l6
+ZQk6IDAgS0IKK21pY3JvY29kZQk6IDB4NjAwNjExOAorY3B1IE1IegkJOiAz
+NTAwLjAwMAorY2FjaGUgc2l6ZQk6IDEwMjQgS0IKIHBoeXNpY2FsIGlkCTog
+MAogc2libGluZ3MJOiA0CiBjb3JlIGlkCQk6IDAKLWNwdSBjb3Jlcwk6IDIK
+K2NwdSBjb3Jlcwk6IDQKIGFwaWNpZAkJOiAxCiBpbml0aWFsIGFwaWNpZAk6
+IDEKIGZwdQkJOiB5ZXMKIGZwdV9leGNlcHRpb24JOiB5ZXMKLWNwdWlkIGxl
+dmVsCTogMTMKK2NwdWlkIGxldmVsCTogMjIKIHdwCQk6IHllcwotZmxhZ3MJ
+CTogZnB1IHZtZSBkZSBwc2UgdHNjIG1zciBwYWUgbWNlIGN4OCBhcGljIHNl
+cCBtdHJyIHBnZSBtY2EgY21vdiBwYXQgcHNlMzYgY2xmbHVzaCBtbXggZnhz
+ciBzc2Ugc3NlMiBodCBzeXNjYWxsIG54IG1teGV4dCBmeHNyX29wdCBwZHBl
+MWdiIHJkdHNjcCBsbSBwbmkgY3gxNiBsYWhmX2xtIGNtcF9sZWdhY3kgc3Zt
+IGV4dGFwaWMgY3I4X2xlZ2FjeSBhYm0gc3NlNGEgbWlzYWxpZ25zc2UgM2Ru
+b3dwcmVmZXRjaCBvc3Z3IGlicyBzc2U1IHNraW5pdCB3ZHQgbHdwIGZtYTQg
+dGNlIG5vZGVpZF9tc3IgdGJtIHBlcmZjdHJfY29yZSBwZXJmY3RyX25iCitm
+bGFncwkJOiBmcHUgdm1lIGRlIHBzZSB0c2MgbXNyIHBhZSBtY2UgY3g4IGFw
+aWMgc2VwIG10cnIgcGdlIG1jYSBjbW92IHBhdCBwc2UzNiBjbGZsdXNoIG1t
+eCBmeHNyIHNzZSBzc2UyIGh0IHN5c2NhbGwgbnggbW14ZXh0IGZ4c3Jfb3B0
+IHBkcGUxZ2IgcmR0c2NwIGxtIGNvbnN0YW50X3RzYyBub25zdG9wX3RzYyBh
+cGVyZm1wZXJmIHBuaSBwY2xtdWxkcSBtb25pdG9yIHNzc2UzIGZtYSBjeDE2
+IHNzZTRfMSBzc2U0XzIgbW92YmUgcG9wY250IGFlcyB4c2F2ZSBhdnggZjE2
+YyByZHJhbmQgbGFoZl9sbSBjbXBfbGVnYWN5IHN2bSBleHRhcGljIGNyOF9s
+ZWdhY3kgYWJtIHNzZTRhIG1pc2FsaWduc3NlIDNkbm93cHJlZmV0Y2ggb3N2
+dyBpYnMgeG9wIHNraW5pdCB3ZHQgbHdwIGZtYTQgdGNlIG5vZGVpZF9tc3Ig
+dGJtIHBlcmZjdHJfY29yZSBwZXJmY3RyX25iIGJwZXh0IHB0c2MgbXdhaXR4
+IGNwYiBod19wc3RhdGUgZnNnc2Jhc2UgYm1pMSBhdngyIHNtZXAgYm1pMiB4
+c2F2ZW9wdCBhcmF0IG5wdCBsYnJ2IHN2bV9sb2NrIG5yaXBfc2F2ZSB0c2Nf
+c2NhbGUgdm1jYl9jbGVhbiBmbHVzaGJ5YXNpZCBkZWNvZGVfYXNzaXN0cyBw
+YXVzZWZpbHRlciBwZnRocmVzaG9sZCBhdmljIHZfdm1zYXZlX3ZtbG9hZCB2
+Z2lmIG92ZXJmbG93X3JlY292Citib2dvbWlwcwk6IDcwMDAuMDAKIGNsZmx1
+c2ggc2l6ZQk6IDY0CiBjYWNoZV9hbGlnbm1lbnQJOiA2NAogYWRkcmVzcyBz
+aXplcwk6IDQ4IGJpdHMgcGh5c2ljYWwsIDQ4IGJpdHMgdmlydHVhbApAQCAt
+NTIsMTkgKzU2LDIxIEBAIGNwdSBmYW1pbHkJOiAyMQogbW9kZWwJCTogMTAx
+CiBtb2RlbCBuYW1lCTogQU1EIEExMC05NzAwIFJBREVPTiBSNywgMTAgQ09N
+UFVURSBDT1JFUyA0Qys2RyAKIHN0ZXBwaW5nCTogMQotY3B1IE1IegkJOiAz
+NDkzLjAwMAotY2FjaGUgc2l6ZQk6IDAgS0IKK21pY3JvY29kZQk6IDB4NjAw
+NjExOAorY3B1IE1IegkJOiAzNTAwLjAwMAorY2FjaGUgc2l6ZQk6IDEwMjQg
+S0IKIHBoeXNpY2FsIGlkCTogMAogc2libGluZ3MJOiA0CiBjb3JlIGlkCQk6
+IDEKLWNwdSBjb3Jlcwk6IDIKK2NwdSBjb3Jlcwk6IDQKIGFwaWNpZAkJOiAy
+CiBpbml0aWFsIGFwaWNpZAk6IDIKIGZwdQkJOiB5ZXMKIGZwdV9leGNlcHRp
+b24JOiB5ZXMKLWNwdWlkIGxldmVsCTogMTMKK2NwdWlkIGxldmVsCTogMjIK
+IHdwCQk6IHllcwotZmxhZ3MJCTogZnB1IHZtZSBkZSBwc2UgdHNjIG1zciBw
+YWUgbWNlIGN4OCBhcGljIHNlcCBtdHJyIHBnZSBtY2EgY21vdiBwYXQgcHNl
+MzYgY2xmbHVzaCBtbXggZnhzciBzc2Ugc3NlMiBodCBzeXNjYWxsIG54IG1t
+eGV4dCBmeHNyX29wdCBwZHBlMWdiIHJkdHNjcCBsbSBwbmkgY3gxNiBsYWhm
+X2xtIGNtcF9sZWdhY3kgc3ZtIGV4dGFwaWMgY3I4X2xlZ2FjeSBhYm0gc3Nl
+NGEgbWlzYWxpZ25zc2UgM2Rub3dwcmVmZXRjaCBvc3Z3IGlicyBzc2U1IHNr
+aW5pdCB3ZHQgbHdwIGZtYTQgdGNlIG5vZGVpZF9tc3IgdGJtIHBlcmZjdHJf
+Y29yZSBwZXJmY3RyX25iCitmbGFncwkJOiBmcHUgdm1lIGRlIHBzZSB0c2Mg
+bXNyIHBhZSBtY2UgY3g4IGFwaWMgc2VwIG10cnIgcGdlIG1jYSBjbW92IHBh
+dCBwc2UzNiBjbGZsdXNoIG1teCBmeHNyIHNzZSBzc2UyIGh0IHN5c2NhbGwg
+bnggbW14ZXh0IGZ4c3Jfb3B0IHBkcGUxZ2IgcmR0c2NwIGxtIGNvbnN0YW50
+X3RzYyBub25zdG9wX3RzYyBhcGVyZm1wZXJmIHBuaSBwY2xtdWxkcSBtb25p
+dG9yIHNzc2UzIGZtYSBjeDE2IHNzZTRfMSBzc2U0XzIgbW92YmUgcG9wY250
+IGFlcyB4c2F2ZSBhdnggZjE2YyByZHJhbmQgbGFoZl9sbSBjbXBfbGVnYWN5
+IHN2bSBleHRhcGljIGNyOF9sZWdhY3kgYWJtIHNzZTRhIG1pc2FsaWduc3Nl
+IDNkbm93cHJlZmV0Y2ggb3N2dyBpYnMgeG9wIHNraW5pdCB3ZHQgbHdwIGZt
+YTQgdGNlIG5vZGVpZF9tc3IgdGJtIHBlcmZjdHJfY29yZSBwZXJmY3RyX25i
+IGJwZXh0IHB0c2MgbXdhaXR4IGNwYiBod19wc3RhdGUgZnNnc2Jhc2UgYm1p
+MSBhdngyIHNtZXAgYm1pMiB4c2F2ZW9wdCBhcmF0IG5wdCBsYnJ2IHN2bV9s
+b2NrIG5yaXBfc2F2ZSB0c2Nfc2NhbGUgdm1jYl9jbGVhbiBmbHVzaGJ5YXNp
+ZCBkZWNvZGVfYXNzaXN0cyBwYXVzZWZpbHRlciBwZnRocmVzaG9sZCBhdmlj
+IHZfdm1zYXZlX3ZtbG9hZCB2Z2lmIG92ZXJmbG93X3JlY292Citib2dvbWlw
+cwk6IDcwMDAuMDAKIGNsZmx1c2ggc2l6ZQk6IDY0CiBjYWNoZV9hbGlnbm1l
+bnQJOiA2NAogYWRkcmVzcyBzaXplcwk6IDQ4IGJpdHMgcGh5c2ljYWwsIDQ4
+IGJpdHMgdmlydHVhbApAQCAtNzYsMTkgKzgyLDIxIEBAIGNwdSBmYW1pbHkJ
+OiAyMQogbW9kZWwJCTogMTAxCiBtb2RlbCBuYW1lCTogQU1EIEExMC05NzAw
+IFJBREVPTiBSNywgMTAgQ09NUFVURSBDT1JFUyA0Qys2RyAKIHN0ZXBwaW5n
+CTogMQotY3B1IE1IegkJOiAzNDkzLjAwMAotY2FjaGUgc2l6ZQk6IDAgS0IK
+K21pY3JvY29kZQk6IDB4NjAwNjExOAorY3B1IE1IegkJOiAzNTAwLjAwMAor
+Y2FjaGUgc2l6ZQk6IDEwMjQgS0IKIHBoeXNpY2FsIGlkCTogMAogc2libGlu
+Z3MJOiA0CiBjb3JlIGlkCQk6IDEKLWNwdSBjb3Jlcwk6IDIKK2NwdSBjb3Jl
+cwk6IDQKIGFwaWNpZAkJOiAzCiBpbml0aWFsIGFwaWNpZAk6IDMKIGZwdQkJ
+OiB5ZXMKIGZwdV9leGNlcHRpb24JOiB5ZXMKLWNwdWlkIGxldmVsCTogMTMK
+K2NwdWlkIGxldmVsCTogMjIKIHdwCQk6IHllcwotZmxhZ3MJCTogZnB1IHZt
+ZSBkZSBwc2UgdHNjIG1zciBwYWUgbWNlIGN4OCBhcGljIHNlcCBtdHJyIHBn
+ZSBtY2EgY21vdiBwYXQgcHNlMzYgY2xmbHVzaCBtbXggZnhzciBzc2Ugc3Nl
+MiBodCBzeXNjYWxsIG54IG1teGV4dCBmeHNyX29wdCBwZHBlMWdiIHJkdHNj
+cCBsbSBwbmkgY3gxNiBsYWhmX2xtIGNtcF9sZWdhY3kgc3ZtIGV4dGFwaWMg
+Y3I4X2xlZ2FjeSBhYm0gc3NlNGEgbWlzYWxpZ25zc2UgM2Rub3dwcmVmZXRj
+aCBvc3Z3IGlicyBzc2U1IHNraW5pdCB3ZHQgbHdwIGZtYTQgdGNlIG5vZGVp
+ZF9tc3IgdGJtIHBlcmZjdHJfY29yZSBwZXJmY3RyX25iCitmbGFncwkJOiBm
+cHUgdm1lIGRlIHBzZSB0c2MgbXNyIHBhZSBtY2UgY3g4IGFwaWMgc2VwIG10
+cnIgcGdlIG1jYSBjbW92IHBhdCBwc2UzNiBjbGZsdXNoIG1teCBmeHNyIHNz
+ZSBzc2UyIGh0IHN5c2NhbGwgbnggbW14ZXh0IGZ4c3Jfb3B0IHBkcGUxZ2Ig
+cmR0c2NwIGxtIGNvbnN0YW50X3RzYyBub25zdG9wX3RzYyBhcGVyZm1wZXJm
+IHBuaSBwY2xtdWxkcSBtb25pdG9yIHNzc2UzIGZtYSBjeDE2IHNzZTRfMSBz
+c2U0XzIgbW92YmUgcG9wY250IGFlcyB4c2F2ZSBhdnggZjE2YyByZHJhbmQg
+bGFoZl9sbSBjbXBfbGVnYWN5IHN2bSBleHRhcGljIGNyOF9sZWdhY3kgYWJt
+IHNzZTRhIG1pc2FsaWduc3NlIDNkbm93cHJlZmV0Y2ggb3N2dyBpYnMgeG9w
+IHNraW5pdCB3ZHQgbHdwIGZtYTQgdGNlIG5vZGVpZF9tc3IgdGJtIHBlcmZj
+dHJfY29yZSBwZXJmY3RyX25iIGJwZXh0IHB0c2MgbXdhaXR4IGNwYiBod19w
+c3RhdGUgZnNnc2Jhc2UgYm1pMSBhdngyIHNtZXAgYm1pMiB4c2F2ZW9wdCBh
+cmF0IG5wdCBsYnJ2IHN2bV9sb2NrIG5yaXBfc2F2ZSB0c2Nfc2NhbGUgdm1j
+Yl9jbGVhbiBmbHVzaGJ5YXNpZCBkZWNvZGVfYXNzaXN0cyBwYXVzZWZpbHRl
+ciBwZnRocmVzaG9sZCBhdmljIHZfdm1zYXZlX3ZtbG9hZCB2Z2lmIG92ZXJm
+bG93X3JlY292Citib2dvbWlwcwk6IDcwMDAuMDAKIGNsZmx1c2ggc2l6ZQk6
+IDY0CiBjYWNoZV9hbGlnbm1lbnQJOiA2NAogYWRkcmVzcyBzaXplcwk6IDQ4
+IGJpdHMgcGh5c2ljYWwsIDQ4IGJpdHMgdmlydHVhbAo=
+
+--------------48911958CD71832F1C9C8405
+Content-Type: text/plain; charset=UTF-8;
+ name="cpuinfo-linux-test.diff"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="cpuinfo-linux-test.diff"
+Content-length: 8886
+
+LS0tIGNwdWluZm8tbGludXgtQU1ELUExMC05NzAwLnR4dAkyMDE5LTA5LTE0
+IDEzOjA0OjMzLjE3Njk2NTgwMCAtMDYwMAorKysgY3B1aW5mby10ZXN0LUFN
+RC1BMTAtOTcwMC50eHQJMjAxOS0xMC0wMiAyMjoxODoxMi4xNzYzNzYzMDAg
+LTA2MDAKQEAgLTQsNyArNCw3IEBAIGNwdSBmYW1pbHkJOiAyMQogbW9kZWwJ
+CTogMTAxCiBtb2RlbCBuYW1lCTogQU1EIEExMC05NzAwIFJBREVPTiBSNywg
+MTAgQ09NUFVURSBDT1JFUyA0Qys2RyAKIHN0ZXBwaW5nCTogMQotbWljcm9j
+b2RlCTogMHhmZmZmZmZmZgorbWljcm9jb2RlCTogMHg2MDA2MTE4CiBjcHUg
+TUh6CQk6IDM1MDAuMDAwCiBjYWNoZSBzaXplCTogMTAyNCBLQgogcGh5c2lj
+YWwgaWQJOiAwCkBAIC0xNSwxNCArMTUsMTQgQEAgYXBpY2lkCQk6IDAKIGlu
+aXRpYWwgYXBpY2lkCTogMAogZnB1CQk6IHllcwogZnB1X2V4Y2VwdGlvbgk6
+IHllcwotY3B1aWQgbGV2ZWwJOiAyMQorY3B1aWQgbGV2ZWwJOiAyMgogd3AJ
+CTogeWVzCi1mbGFncwkJOiBmcHUgdm1lIGRlIHBzZSB0c2MgbXNyIHBhZSBt
+Y2UgY3g4IGFwaWMgc2VwIG10cnIgcGdlIG1jYSBjbW92IHBhdCBwc2UzNiBj
+bGZsdXNoIG1teCBmeHNyIHNzZSBzc2UyIGh0IHN5c2NhbGwgbnggbW14ZXh0
+IGZ4c3Jfb3B0IHBkcGUxZ2IgcmR0c2NwIGxtIHBuaSBwY2xtdWxxZHEgbW9u
+aXRvciBzc3NlMyBmbWEgY3gxNiBzc2U0XzEgc3NlNF8yIG1vdmJlIHBvcGNu
+dCBhZXMgeHNhdmUgb3N4c2F2ZSBhdnggZjE2YyByZHJhbmQKK2ZsYWdzCQk6
+IGZwdSB2bWUgZGUgcHNlIHRzYyBtc3IgcGFlIG1jZSBjeDggYXBpYyBzZXAg
+bXRyciBwZ2UgbWNhIGNtb3YgcGF0IHBzZTM2IGNsZmx1c2ggbW14IGZ4c3Ig
+c3NlIHNzZTIgaHQgc3lzY2FsbCBueCBtbXhleHQgZnhzcl9vcHQgcGRwZTFn
+YiByZHRzY3AgbG0gY29uc3RhbnRfdHNjIG5vbnN0b3BfdHNjIGFwZXJmbXBl
+cmYgcG5pIHBjbG11bGRxIG1vbml0b3Igc3NzZTMgZm1hIGN4MTYgc3NlNF8x
+IHNzZTRfMiBtb3ZiZSBwb3BjbnQgYWVzIHhzYXZlIGF2eCBmMTZjIHJkcmFu
+ZCBsYWhmX2xtIGNtcF9sZWdhY3kgc3ZtIGV4dGFwaWMgY3I4X2xlZ2FjeSBh
+Ym0gc3NlNGEgbWlzYWxpZ25zc2UgM2Rub3dwcmVmZXRjaCBvc3Z3IGlicyB4
+b3Agc2tpbml0IHdkdCBsd3AgZm1hNCB0Y2Ugbm9kZWlkX21zciB0Ym0gcGVy
+ZmN0cl9jb3JlIHBlcmZjdHJfbmIgYnBleHQgcHRzYyBtd2FpdHggY3BiIGh3
+X3BzdGF0ZSBmc2dzYmFzZSBibWkxIGF2eDIgc21lcCBibWkyIHhzYXZlb3B0
+IGFyYXQgbnB0IGxicnYgc3ZtX2xvY2sgbnJpcF9zYXZlIHRzY19zY2FsZSB2
+bWNiX2NsZWFuIGZsdXNoYnlhc2lkIGRlY29kZV9hc3Npc3RzIHBhdXNlZmls
+dGVyIHBmdGhyZXNob2xkIGF2aWMgdl92bXNhdmVfdm1sb2FkIHZnaWYgb3Zl
+cmZsb3dfcmVjb3YKIGJvZ29taXBzCTogNzAwMC4wMAogY2xmbHVzaCBzaXpl
+CTogNjQKIGNhY2hlX2FsaWdubWVudAk6IDY0Ci1hZGRyZXNzIHNpemVzCTog
+MzYgYml0cyBwaHlzaWNhbCwgNDggYml0cyB2aXJ0dWFsCi1wb3dlciBtYW5h
+Z2VtZW50OgorYWRkcmVzcyBzaXplcwk6IDQ4IGJpdHMgcGh5c2ljYWwsIDQ4
+IGJpdHMgdmlydHVhbAorcG93ZXIgbWFuYWdlbWVudDogdHMgdHRwIHRtIDEw
+MG1oenN0ZXBzIGh3cHN0YXRlIGNwYiBlZmZfZnJlcV9ybwogCiBwcm9jZXNz
+b3IJOiAxCiB2ZW5kb3JfaWQJOiBBdXRoZW50aWNBTUQKQEAgLTMwLDI1ICsz
+MCwyNSBAQCBjcHUgZmFtaWx5CTogMjEKIG1vZGVsCQk6IDEwMQogbW9kZWwg
+bmFtZQk6IEFNRCBBMTAtOTcwMCBSQURFT04gUjcsIDEwIENPTVBVVEUgQ09S
+RVMgNEMrNkcgCiBzdGVwcGluZwk6IDEKLW1pY3JvY29kZQk6IDB4ZmZmZmZm
+ZmYKK21pY3JvY29kZQk6IDB4NjAwNjExOAogY3B1IE1IegkJOiAzNTAwLjAw
+MAogY2FjaGUgc2l6ZQk6IDEwMjQgS0IKIHBoeXNpY2FsIGlkCTogMAogc2li
+bGluZ3MJOiA0Ci1jb3JlIGlkCQk6IDEKK2NvcmUgaWQJCTogMAogY3B1IGNv
+cmVzCTogNAotYXBpY2lkCQk6IDAKLWluaXRpYWwgYXBpY2lkCTogMAorYXBp
+Y2lkCQk6IDEKK2luaXRpYWwgYXBpY2lkCTogMQogZnB1CQk6IHllcwogZnB1
+X2V4Y2VwdGlvbgk6IHllcwotY3B1aWQgbGV2ZWwJOiAyMQorY3B1aWQgbGV2
+ZWwJOiAyMgogd3AJCTogeWVzCi1mbGFncwkJOiBmcHUgdm1lIGRlIHBzZSB0
+c2MgbXNyIHBhZSBtY2UgY3g4IGFwaWMgc2VwIG10cnIgcGdlIG1jYSBjbW92
+IHBhdCBwc2UzNiBjbGZsdXNoIG1teCBmeHNyIHNzZSBzc2UyIGh0IHN5c2Nh
+bGwgbnggbW14ZXh0IGZ4c3Jfb3B0IHBkcGUxZ2IgcmR0c2NwIGxtIHBuaSBw
+Y2xtdWxxZHEgbW9uaXRvciBzc3NlMyBmbWEgY3gxNiBzc2U0XzEgc3NlNF8y
+IG1vdmJlIHBvcGNudCBhZXMgeHNhdmUgb3N4c2F2ZSBhdnggZjE2YyByZHJh
+bmQKK2ZsYWdzCQk6IGZwdSB2bWUgZGUgcHNlIHRzYyBtc3IgcGFlIG1jZSBj
+eDggYXBpYyBzZXAgbXRyciBwZ2UgbWNhIGNtb3YgcGF0IHBzZTM2IGNsZmx1
+c2ggbW14IGZ4c3Igc3NlIHNzZTIgaHQgc3lzY2FsbCBueCBtbXhleHQgZnhz
+cl9vcHQgcGRwZTFnYiByZHRzY3AgbG0gY29uc3RhbnRfdHNjIG5vbnN0b3Bf
+dHNjIGFwZXJmbXBlcmYgcG5pIHBjbG11bGRxIG1vbml0b3Igc3NzZTMgZm1h
+IGN4MTYgc3NlNF8xIHNzZTRfMiBtb3ZiZSBwb3BjbnQgYWVzIHhzYXZlIGF2
+eCBmMTZjIHJkcmFuZCBsYWhmX2xtIGNtcF9sZWdhY3kgc3ZtIGV4dGFwaWMg
+Y3I4X2xlZ2FjeSBhYm0gc3NlNGEgbWlzYWxpZ25zc2UgM2Rub3dwcmVmZXRj
+aCBvc3Z3IGlicyB4b3Agc2tpbml0IHdkdCBsd3AgZm1hNCB0Y2Ugbm9kZWlk
+X21zciB0Ym0gcGVyZmN0cl9jb3JlIHBlcmZjdHJfbmIgYnBleHQgcHRzYyBt
+d2FpdHggY3BiIGh3X3BzdGF0ZSBmc2dzYmFzZSBibWkxIGF2eDIgc21lcCBi
+bWkyIHhzYXZlb3B0IGFyYXQgbnB0IGxicnYgc3ZtX2xvY2sgbnJpcF9zYXZl
+IHRzY19zY2FsZSB2bWNiX2NsZWFuIGZsdXNoYnlhc2lkIGRlY29kZV9hc3Np
+c3RzIHBhdXNlZmlsdGVyIHBmdGhyZXNob2xkIGF2aWMgdl92bXNhdmVfdm1s
+b2FkIHZnaWYgb3ZlcmZsb3dfcmVjb3YKIGJvZ29taXBzCTogNzAwMC4wMAog
+Y2xmbHVzaCBzaXplCTogNjQKIGNhY2hlX2FsaWdubWVudAk6IDY0Ci1hZGRy
+ZXNzIHNpemVzCTogMzYgYml0cyBwaHlzaWNhbCwgNDggYml0cyB2aXJ0dWFs
+Ci1wb3dlciBtYW5hZ2VtZW50OgorYWRkcmVzcyBzaXplcwk6IDQ4IGJpdHMg
+cGh5c2ljYWwsIDQ4IGJpdHMgdmlydHVhbAorcG93ZXIgbWFuYWdlbWVudDog
+dHMgdHRwIHRtIDEwMG1oenN0ZXBzIGh3cHN0YXRlIGNwYiBlZmZfZnJlcV9y
+bwogCiBwcm9jZXNzb3IJOiAyCiB2ZW5kb3JfaWQJOiBBdXRoZW50aWNBTUQK
+QEAgLTU2LDI1ICs1NiwyNSBAQCBjcHUgZmFtaWx5CTogMjEKIG1vZGVsCQk6
+IDEwMQogbW9kZWwgbmFtZQk6IEFNRCBBMTAtOTcwMCBSQURFT04gUjcsIDEw
+IENPTVBVVEUgQ09SRVMgNEMrNkcgCiBzdGVwcGluZwk6IDEKLW1pY3JvY29k
+ZQk6IDB4ZmZmZmZmZmYKK21pY3JvY29kZQk6IDB4NjAwNjExOAogY3B1IE1I
+egkJOiAzNTAwLjAwMAogY2FjaGUgc2l6ZQk6IDEwMjQgS0IKIHBoeXNpY2Fs
+IGlkCTogMAogc2libGluZ3MJOiA0Ci1jb3JlIGlkCQk6IDIKK2NvcmUgaWQJ
+CTogMQogY3B1IGNvcmVzCTogNAotYXBpY2lkCQk6IDAKLWluaXRpYWwgYXBp
+Y2lkCTogMAorYXBpY2lkCQk6IDIKK2luaXRpYWwgYXBpY2lkCTogMgogZnB1
+CQk6IHllcwogZnB1X2V4Y2VwdGlvbgk6IHllcwotY3B1aWQgbGV2ZWwJOiAy
+MQorY3B1aWQgbGV2ZWwJOiAyMgogd3AJCTogeWVzCi1mbGFncwkJOiBmcHUg
+dm1lIGRlIHBzZSB0c2MgbXNyIHBhZSBtY2UgY3g4IGFwaWMgc2VwIG10cnIg
+cGdlIG1jYSBjbW92IHBhdCBwc2UzNiBjbGZsdXNoIG1teCBmeHNyIHNzZSBz
+c2UyIGh0IHN5c2NhbGwgbnggbW14ZXh0IGZ4c3Jfb3B0IHBkcGUxZ2IgcmR0
+c2NwIGxtIHBuaSBwY2xtdWxxZHEgbW9uaXRvciBzc3NlMyBmbWEgY3gxNiBz
+c2U0XzEgc3NlNF8yIG1vdmJlIHBvcGNudCBhZXMgeHNhdmUgb3N4c2F2ZSBh
+dnggZjE2YyByZHJhbmQKK2ZsYWdzCQk6IGZwdSB2bWUgZGUgcHNlIHRzYyBt
+c3IgcGFlIG1jZSBjeDggYXBpYyBzZXAgbXRyciBwZ2UgbWNhIGNtb3YgcGF0
+IHBzZTM2IGNsZmx1c2ggbW14IGZ4c3Igc3NlIHNzZTIgaHQgc3lzY2FsbCBu
+eCBtbXhleHQgZnhzcl9vcHQgcGRwZTFnYiByZHRzY3AgbG0gY29uc3RhbnRf
+dHNjIG5vbnN0b3BfdHNjIGFwZXJmbXBlcmYgcG5pIHBjbG11bGRxIG1vbml0
+b3Igc3NzZTMgZm1hIGN4MTYgc3NlNF8xIHNzZTRfMiBtb3ZiZSBwb3BjbnQg
+YWVzIHhzYXZlIGF2eCBmMTZjIHJkcmFuZCBsYWhmX2xtIGNtcF9sZWdhY3kg
+c3ZtIGV4dGFwaWMgY3I4X2xlZ2FjeSBhYm0gc3NlNGEgbWlzYWxpZ25zc2Ug
+M2Rub3dwcmVmZXRjaCBvc3Z3IGlicyB4b3Agc2tpbml0IHdkdCBsd3AgZm1h
+NCB0Y2Ugbm9kZWlkX21zciB0Ym0gcGVyZmN0cl9jb3JlIHBlcmZjdHJfbmIg
+YnBleHQgcHRzYyBtd2FpdHggY3BiIGh3X3BzdGF0ZSBmc2dzYmFzZSBibWkx
+IGF2eDIgc21lcCBibWkyIHhzYXZlb3B0IGFyYXQgbnB0IGxicnYgc3ZtX2xv
+Y2sgbnJpcF9zYXZlIHRzY19zY2FsZSB2bWNiX2NsZWFuIGZsdXNoYnlhc2lk
+IGRlY29kZV9hc3Npc3RzIHBhdXNlZmlsdGVyIHBmdGhyZXNob2xkIGF2aWMg
+dl92bXNhdmVfdm1sb2FkIHZnaWYgb3ZlcmZsb3dfcmVjb3YKIGJvZ29taXBz
+CTogNzAwMC4wMAogY2xmbHVzaCBzaXplCTogNjQKIGNhY2hlX2FsaWdubWVu
+dAk6IDY0Ci1hZGRyZXNzIHNpemVzCTogMzYgYml0cyBwaHlzaWNhbCwgNDgg
+Yml0cyB2aXJ0dWFsCi1wb3dlciBtYW5hZ2VtZW50OgorYWRkcmVzcyBzaXpl
+cwk6IDQ4IGJpdHMgcGh5c2ljYWwsIDQ4IGJpdHMgdmlydHVhbAorcG93ZXIg
+bWFuYWdlbWVudDogdHMgdHRwIHRtIDEwMG1oenN0ZXBzIGh3cHN0YXRlIGNw
+YiBlZmZfZnJlcV9ybwogCiBwcm9jZXNzb3IJOiAzCiB2ZW5kb3JfaWQJOiBB
+dXRoZW50aWNBTUQKQEAgLTgyLDIzICs4MiwyMiBAQCBjcHUgZmFtaWx5CTog
+MjEKIG1vZGVsCQk6IDEwMQogbW9kZWwgbmFtZQk6IEFNRCBBMTAtOTcwMCBS
+QURFT04gUjcsIDEwIENPTVBVVEUgQ09SRVMgNEMrNkcgCiBzdGVwcGluZwk6
+IDEKLW1pY3JvY29kZQk6IDB4ZmZmZmZmZmYKK21pY3JvY29kZQk6IDB4NjAw
+NjExOAogY3B1IE1IegkJOiAzNTAwLjAwMAogY2FjaGUgc2l6ZQk6IDEwMjQg
+S0IKIHBoeXNpY2FsIGlkCTogMAogc2libGluZ3MJOiA0Ci1jb3JlIGlkCQk6
+IDMKK2NvcmUgaWQJCTogMQogY3B1IGNvcmVzCTogNAotYXBpY2lkCQk6IDAK
+LWluaXRpYWwgYXBpY2lkCTogMAorYXBpY2lkCQk6IDMKK2luaXRpYWwgYXBp
+Y2lkCTogMwogZnB1CQk6IHllcwogZnB1X2V4Y2VwdGlvbgk6IHllcwotY3B1
+aWQgbGV2ZWwJOiAyMQorY3B1aWQgbGV2ZWwJOiAyMgogd3AJCTogeWVzCi1m
+bGFncwkJOiBmcHUgdm1lIGRlIHBzZSB0c2MgbXNyIHBhZSBtY2UgY3g4IGFw
+aWMgc2VwIG10cnIgcGdlIG1jYSBjbW92IHBhdCBwc2UzNiBjbGZsdXNoIG1t
+eCBmeHNyIHNzZSBzc2UyIGh0IHN5c2NhbGwgbnggbW14ZXh0IGZ4c3Jfb3B0
+IHBkcGUxZ2IgcmR0c2NwIGxtIHBuaSBwY2xtdWxxZHEgbW9uaXRvciBzc3Nl
+MyBmbWEgY3gxNiBzc2U0XzEgc3NlNF8yIG1vdmJlIHBvcGNudCBhZXMgeHNh
+dmUgb3N4c2F2ZSBhdnggZjE2YyByZHJhbmQKK2ZsYWdzCQk6IGZwdSB2bWUg
+ZGUgcHNlIHRzYyBtc3IgcGFlIG1jZSBjeDggYXBpYyBzZXAgbXRyciBwZ2Ug
+bWNhIGNtb3YgcGF0IHBzZTM2IGNsZmx1c2ggbW14IGZ4c3Igc3NlIHNzZTIg
+aHQgc3lzY2FsbCBueCBtbXhleHQgZnhzcl9vcHQgcGRwZTFnYiByZHRzY3Ag
+bG0gY29uc3RhbnRfdHNjIG5vbnN0b3BfdHNjIGFwZXJmbXBlcmYgcG5pIHBj
+bG11bGRxIG1vbml0b3Igc3NzZTMgZm1hIGN4MTYgc3NlNF8xIHNzZTRfMiBt
+b3ZiZSBwb3BjbnQgYWVzIHhzYXZlIGF2eCBmMTZjIHJkcmFuZCBsYWhmX2xt
+IGNtcF9sZWdhY3kgc3ZtIGV4dGFwaWMgY3I4X2xlZ2FjeSBhYm0gc3NlNGEg
+bWlzYWxpZ25zc2UgM2Rub3dwcmVmZXRjaCBvc3Z3IGlicyB4b3Agc2tpbml0
+IHdkdCBsd3AgZm1hNCB0Y2Ugbm9kZWlkX21zciB0Ym0gcGVyZmN0cl9jb3Jl
+IHBlcmZjdHJfbmIgYnBleHQgcHRzYyBtd2FpdHggY3BiIGh3X3BzdGF0ZSBm
+c2dzYmFzZSBibWkxIGF2eDIgc21lcCBibWkyIHhzYXZlb3B0IGFyYXQgbnB0
+IGxicnYgc3ZtX2xvY2sgbnJpcF9zYXZlIHRzY19zY2FsZSB2bWNiX2NsZWFu
+IGZsdXNoYnlhc2lkIGRlY29kZV9hc3Npc3RzIHBhdXNlZmlsdGVyIHBmdGhy
+ZXNob2xkIGF2aWMgdl92bXNhdmVfdm1sb2FkIHZnaWYgb3ZlcmZsb3dfcmVj
+b3YKIGJvZ29taXBzCTogNzAwMC4wMAogY2xmbHVzaCBzaXplCTogNjQKIGNh
+Y2hlX2FsaWdubWVudAk6IDY0Ci1hZGRyZXNzIHNpemVzCTogMzYgYml0cyBw
+aHlzaWNhbCwgNDggYml0cyB2aXJ0dWFsCi1wb3dlciBtYW5hZ2VtZW50Ogot
+CithZGRyZXNzIHNpemVzCTogNDggYml0cyBwaHlzaWNhbCwgNDggYml0cyB2
+aXJ0dWFsCitwb3dlciBtYW5hZ2VtZW50OiB0cyB0dHAgdG0gMTAwbWh6c3Rl
+cHMgaHdwc3RhdGUgY3BiIGVmZl9mcmVxX3JvCg==
+
+--------------48911958CD71832F1C9C8405
+Content-Type: text/plain; charset=UTF-8;
+ name="HKLM-HW-DESC-Sys-CP.reg"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="HKLM-HW-DESC-Sys-CP.reg"
+Content-length: 3412
+
+V2luZG93cyBSZWdpc3RyeSBFZGl0b3IgVmVyc2lvbiA1LjAwCgpbSEtFWV9M
+T0NBTF9NQUNISU5FXEhBUkRXQVJFXERFU0NSSVBUSU9OXFN5c3RlbVxDZW50
+cmFsUHJvY2Vzc29yXQoKW0hLRVlfTE9DQUxfTUFDSElORVxIQVJEV0FSRVxE
+RVNDUklQVElPTlxTeXN0ZW1cQ2VudHJhbFByb2Nlc3NvclwwXQoiQ29tcG9u
+ZW50IEluZm9ybWF0aW9uIj1oZXg6MDAsMDAsMDAsMDAsMDAsMDAsMDAsMDAs
+MDAsMDAsMDAsMDAsMDAsMDAsMDAsMDAKIklkZW50aWZpZXIiPSJBTUQ2NCBG
+YW1pbHkgMjEgTW9kZWwgMTAxIFN0ZXBwaW5nIDEiCiJDb25maWd1cmF0aW9u
+IERhdGEiPWhleCg5KTpmZixmZixmZixmZixmZixmZixmZixmZiwwMCwwMCww
+MCwwMCwwMCwwMCwwMCwwMAoiUHJvY2Vzc29yTmFtZVN0cmluZyI9IkFNRCBB
+MTAtOTcwMCBSQURFT04gUjcsIDEwIENPTVBVVEUgQ09SRVMgNEMrNkcgIgoi
+VmVuZG9ySWRlbnRpZmllciI9IkF1dGhlbnRpY0FNRCIKIkZlYXR1cmVTZXQi
+PWR3b3JkOjNjM2IzZGZmCiJ+TUh6Ij1kd29yZDowMDAwMGRhNQoiVXBkYXRl
+IFJldmlzaW9uIj1oZXg6MTgsNjEsMDAsMDYsMDAsMDAsMDAsMDAKIlVwZGF0
+ZSBTdGF0dXMiPWR3b3JkOjAwMDAwMDAxCiJQcmV2aW91cyBVcGRhdGUgUmV2
+aXNpb24iPWhleDoxOCw2MSwwMCwwNiwwMCwwMCwwMCwwMAoiUGxhdGZvcm0g
+U3BlY2lmaWMgRmllbGQxIj1kd29yZDowNjAwNjExOAoKW0hLRVlfTE9DQUxf
+TUFDSElORVxIQVJEV0FSRVxERVNDUklQVElPTlxTeXN0ZW1cQ2VudHJhbFBy
+b2Nlc3NvclwxXQoiQ29tcG9uZW50IEluZm9ybWF0aW9uIj1oZXg6MDAsMDAs
+MDAsMDAsMDAsMDAsMDAsMDAsMDEsMDAsMDAsMDAsMDAsMDAsMDEsMDAKIklk
+ZW50aWZpZXIiPSJBTUQ2NCBGYW1pbHkgMjEgTW9kZWwgMTAxIFN0ZXBwaW5n
+IDEiCiJDb25maWd1cmF0aW9uIERhdGEiPWhleCg5KTpmZixmZixmZixmZixm
+ZixmZixmZixmZiwwMCwwMCwwMCwwMCwwMCwwMCwwMCwwMAoiUHJvY2Vzc29y
+TmFtZVN0cmluZyI9IkFNRCBBMTAtOTcwMCBSQURFT04gUjcsIDEwIENPTVBV
+VEUgQ09SRVMgNEMrNkcgIgoiVmVuZG9ySWRlbnRpZmllciI9IkF1dGhlbnRp
+Y0FNRCIKIkZlYXR1cmVTZXQiPWR3b3JkOjNjM2IzZGZmCiJ+TUh6Ij1kd29y
+ZDowMDAwMGRhNQoiVXBkYXRlIFJldmlzaW9uIj1oZXg6MTgsNjEsMDAsMDYs
+MDAsMDAsMDAsMDAKIlVwZGF0ZSBTdGF0dXMiPWR3b3JkOjAwMDAwMDAxCiJQ
+cmV2aW91cyBVcGRhdGUgUmV2aXNpb24iPWhleDoxOCw2MSwwMCwwNiwwMCww
+MCwwMCwwMAoiUGxhdGZvcm0gU3BlY2lmaWMgRmllbGQxIj1kd29yZDowNjAw
+NjExOAoKW0hLRVlfTE9DQUxfTUFDSElORVxIQVJEV0FSRVxERVNDUklQVElP
+TlxTeXN0ZW1cQ2VudHJhbFByb2Nlc3NvclwyXQoiQ29tcG9uZW50IEluZm9y
+bWF0aW9uIj1oZXg6MDAsMDAsMDAsMDAsMDAsMDAsMDAsMDAsMDIsMDAsMDAs
+MDAsMDAsMDAsMDIsMDAKIklkZW50aWZpZXIiPSJBTUQ2NCBGYW1pbHkgMjEg
+TW9kZWwgMTAxIFN0ZXBwaW5nIDEiCiJDb25maWd1cmF0aW9uIERhdGEiPWhl
+eCg5KTpmZixmZixmZixmZixmZixmZixmZixmZiwwMCwwMCwwMCwwMCwwMCww
+MCwwMCwwMAoiUHJvY2Vzc29yTmFtZVN0cmluZyI9IkFNRCBBMTAtOTcwMCBS
+QURFT04gUjcsIDEwIENPTVBVVEUgQ09SRVMgNEMrNkcgIgoiVmVuZG9ySWRl
+bnRpZmllciI9IkF1dGhlbnRpY0FNRCIKIkZlYXR1cmVTZXQiPWR3b3JkOjNj
+M2IzZGZmCiJ+TUh6Ij1kd29yZDowMDAwMGRhNQoiVXBkYXRlIFJldmlzaW9u
+Ij1oZXg6MTgsNjEsMDAsMDYsMDAsMDAsMDAsMDAKIlVwZGF0ZSBTdGF0dXMi
+PWR3b3JkOjAwMDAwMDAxCiJQcmV2aW91cyBVcGRhdGUgUmV2aXNpb24iPWhl
+eDoxOCw2MSwwMCwwNiwwMCwwMCwwMCwwMAoiUGxhdGZvcm0gU3BlY2lmaWMg
+RmllbGQxIj1kd29yZDowNjAwNjExOAoKW0hLRVlfTE9DQUxfTUFDSElORVxI
+QVJEV0FSRVxERVNDUklQVElPTlxTeXN0ZW1cQ2VudHJhbFByb2Nlc3Nvclwz
+XQoiQ29tcG9uZW50IEluZm9ybWF0aW9uIj1oZXg6MDAsMDAsMDAsMDAsMDAs
+MDAsMDAsMDAsMDMsMDAsMDAsMDAsMDAsMDAsMDMsMDAKIklkZW50aWZpZXIi
+PSJBTUQ2NCBGYW1pbHkgMjEgTW9kZWwgMTAxIFN0ZXBwaW5nIDEiCiJDb25m
+aWd1cmF0aW9uIERhdGEiPWhleCg5KTpmZixmZixmZixmZixmZixmZixmZixm
+ZiwwMCwwMCwwMCwwMCwwMCwwMCwwMCwwMAoiUHJvY2Vzc29yTmFtZVN0cmlu
+ZyI9IkFNRCBBMTAtOTcwMCBSQURFT04gUjcsIDEwIENPTVBVVEUgQ09SRVMg
+NEMrNkcgIgoiVmVuZG9ySWRlbnRpZmllciI9IkF1dGhlbnRpY0FNRCIKIkZl
+YXR1cmVTZXQiPWR3b3JkOjNjM2IzZGZmCiJ+TUh6Ij1kd29yZDowMDAwMGRh
+NQoiVXBkYXRlIFJldmlzaW9uIj1oZXg6MTgsNjEsMDAsMDYsMDAsMDAsMDAs
+MDAKIlVwZGF0ZSBTdGF0dXMiPWR3b3JkOjAwMDAwMDAxCiJQcmV2aW91cyBV
+cGRhdGUgUmV2aXNpb24iPWhleDoxOCw2MSwwMCwwNiwwMCwwMCwwMCwwMAoi
+UGxhdGZvcm0gU3BlY2lmaWMgRmllbGQxIj1kd29yZDowNjAwNjExOAoK
+
+--------------48911958CD71832F1C9C8405--
