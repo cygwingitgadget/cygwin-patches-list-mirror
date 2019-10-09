@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9755-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 33998 invoked by alias); 7 Oct 2019 20:16:25 -0000
+Return-Path: <cygwin-patches-return-9756-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 51794 invoked by alias); 9 Oct 2019 20:06:07 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,54 +9,83 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 33988 invoked by uid 89); 7 Oct 2019 20:16:24 -0000
+Received: (qmail 51039 invoked by uid 89); 9 Oct 2019 20:06:07 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-5.3 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=HX-Languages-Length:719
-X-HELO: NAM05-DM3-obe.outbound.protection.outlook.com
-Received: from mail-eopbgr730096.outbound.protection.outlook.com (HELO NAM05-DM3-obe.outbound.protection.outlook.com) (40.107.73.96) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 07 Oct 2019 20:16:14 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none; b=lydDu8x+kT8aanKFA09EBImC9larfR+u3+jilelhTvr8cYl965zMc5Vb4F+tYCtqC1Csi28m23g3deLRUaPOb3Hhfjqv9PLWKFG3kK4QvYnEcG2wd96oOoYV1c/bFK1oGkQeT0cJf/5EabV1P8uj/VJjOLzve64EdcEhlPFThHYSLurBJtf5EOkwqdPuTaL920QJC+d1zpk8Rc6+X70P++1SG5DJvGr7FC6M8yQETfTGpkMrWO10ozPch5sdK7+V1soI9FsGsDpj41OYUbEMeZV1T5MqR3hyxGs363NresYHJnaNszHWzxQk152A3I5rN1EKngoYrH3bCOwGBojl2A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=AbxSd/7U1alhxx6uuklbT17zVdXVp2SpZTQ++hIb1fk=; b=CaediX/ESANlMJS5mndnVxazCXjDIX5By3udMb1SH+Kuieju+sYwnQUSZeuP0FHQHUrNX7uoP9XolpGJhR/ujsbcY2ed2b9y/Z9399bZ+pV0K6x3/3REEFY86EuMh8GYGrnC0fSRpww5fX0CxOuzPgXpRy2WYIfKphjdWo9GggTNNFIT6jrgkeaJcrrNJ/B3soCWKYufIs3x0idJR6YDUvsvOf+oL+XgeFr3ohAWAFpN4Z5Z3BaadbkfVaOEV9SkKT/ka3KmL3u6I7IDUCxiielfWsRD/2ZLSG4GeMegFLwE7SWhlGBWcwDQgGQS1Rfi+UoFgLbA8hVKBw4NgBkaZg==
+X-Spam-SWARE-Status: No, score=-15.6 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=
+X-HELO: NAM05-BY2-obe.outbound.protection.outlook.com
+Received: from mail-eopbgr710105.outbound.protection.outlook.com (HELO NAM05-BY2-obe.outbound.protection.outlook.com) (40.107.71.105) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 09 Oct 2019 20:06:05 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none; b=T7Ou+LXAVi40HwAFPAXLJ++bzptFNhn4yWXfFawE9t/ZIFZ3p6MJuL/ciDppoWeYLhAEvEwlnGRVihHwQXCJ8FqnhMBjcXgNWL059DpCaT5gMf3pdAq8qqWobEauKpRrQ0XGVGopB8RHtkA/vhw/SrOIxOI65L7fvJR2Hyb/A4AZNeF8Evcov8g4tX49jjew78GWNiD37Gc0Ek94EGo9JFz62RPxuJ8DwIm+x0sM0hg9Ccm/3HFrG9nGwHofcv3adjSP0MwoSCzkJxpvqoYwMgvkvhNvVJ15aOtzMW5v/Ml+Iz8YIiG0yVlBrshsZqg4NyD2uClaTqJEvi9xWGLf5w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=bhm/b3h0agjmNx2dzgmkRVIqDqq6hykAFc68SaX6MI0=; b=MiNTTTThPTyadomNMAwerzb1BgdrsK7mzAmS6cZg/xIek8ENkepYUqE0SrBjNIHxx3PiWPfC9Plo8dzcboRns23kW2Ab1cahRAjmTSwKLiYi5to3Gyc1Var3KUVtf60Cn9Vq4rEOSJZ6F2vdsXA5JkHzsrUzuU7af9Fp0X/8c/tL3TBmXp8g2iepVyWwgHPQK/pANcYF+jJS+9kOej0d4Qmo7dUW0Eptzgs4OjiYqy9GYrAkz/kc4sJRg7cfWDApyf3ofFwj71Uh6QHlozCN0GghRHelo9HM4dpHZgdZ1xmHoVbm3p4S15lHGYOX/wsPglh4PhdpNs/7vrG7E/SiDw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu; dkim=pass header.d=cornell.edu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=AbxSd/7U1alhxx6uuklbT17zVdXVp2SpZTQ++hIb1fk=; b=araNFB+RenUQ8xikdZqgzMu/RLOQmCdUBbPRRSjxOzyzb3n0KlqaFUMov1tdncVPbqZpq/UodsAMdXdwMc9gEFZav8rrMbJPUEufPso3nSjOq8x8Tdg1GkglHgctLVSxVjR4Lb6jRcUzion2A4C24Uk/SCRX/yWWGdv+GeYHwBA=
-Received: from DM6PR04MB5738.namprd04.prod.outlook.com (20.179.51.81) by DM6PR04MB6633.namprd04.prod.outlook.com (10.186.143.71) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2327.23; Mon, 7 Oct 2019 20:16:12 +0000
-Received: from DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::6998:197f:bcff:7172]) by DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::6998:197f:bcff:7172%4]) with mapi id 15.20.2327.023; Mon, 7 Oct 2019 20:16:12 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=bhm/b3h0agjmNx2dzgmkRVIqDqq6hykAFc68SaX6MI0=; b=CMF79f1HZS0ymyuGurVDHSSgbZ/G+zqEW8AflhDfNrMM58XXCjItFZ+fAtEdbgGy5j9oTtfKXDnmpfcnywZesF4bk9ZEmD1zNrVTcQ9DjopJyT/T4g1wgcUX7fxqN/I0qqESEDIZg6riEuZBLbhFjrAxVGAvXbCI9ACsAGSR/hk=
+Received: from DM6PR04MB5738.namprd04.prod.outlook.com (20.179.51.81) by DM6PR04MB3897.namprd04.prod.outlook.com (20.176.86.154) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2347.16; Wed, 9 Oct 2019 20:06:03 +0000
+Received: from DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::6998:197f:bcff:7172]) by DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::6998:197f:bcff:7172%4]) with mapi id 15.20.2327.023; Wed, 9 Oct 2019 20:06:03 +0000
 From: Ken Brown <kbrown@cornell.edu>
 To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: Re: [PATCH] Cygwin: mkdir and rmdir: treat drive names specially
-Date: Mon, 07 Oct 2019 20:16:00 -0000
-Message-ID: <8a5a5979-c632-ca36-bc56-6945f3c33812@cornell.edu>
-References: <20190927184400.1478-1-kbrown@cornell.edu>
-In-Reply-To: <20190927184400.1478-1-kbrown@cornell.edu>
-user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101 Thunderbird/60.9.0
+Subject: [PATCH] Cygwin: spawnvp, spawnvpe: fail if executable is not in $PATH
+Date: Wed, 09 Oct 2019 20:06:00 -0000
+Message-ID: <20191009200545.1641-1-kbrown@cornell.edu>
 authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
-x-ms-exchange-purlcount: 1
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-ms-exchange-purlcount: 2
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
 received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="Windows-1252"
-Content-ID: <75B9F85DAA998542BBA6264ED7CB120A@namprd04.prod.outlook.com>
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: WH5WhJ6cCFsLTOlie7fiO4Yd+EvsK8eqI4vgxe2QpCRhZ8flx0MNW6DgAxrhLCeN+i13LhFhWYoo7IS5KVpnpQ==
+X-MS-Exchange-CrossTenant-userprincipalname: R97J6nUse0LRDtCky8avvGJJuIrR50lXDOoRgcFn+RFGr3DzWvILz12dwmBJ5mDvp9+ieiN7D6jS9EHKrNFJ1g==
 X-IsSubscribed: yes
-X-SW-Source: 2019-q4/txt/msg00026.txt.bz2
+X-SW-Source: 2019-q4/txt/msg00027.txt.bz2
 
-On 9/27/2019 2:44 PM, Ken Brown wrote:
-> If the directory name has the form 'x:' followed by one or more
-> slashes or backslashes, and if there's at least one backslash, assume
-> that the user is referring to 'x:\', the root directory of drive x,
-> and don't strip the backslash.
->=20
-> Previously all trailing slashes and backslashes were stripped, and the
-> name was treated as a relative file name containing a literal colon.
->=20
-> Addresses https://cygwin.com/ml/cygwin/2019-08/msg00334.html.
-> ---
->   winsup/cygwin/dir.cc | 33 ++++++++++++++++++++++++++++-----
->   1 file changed, 28 insertions(+), 5 deletions(-)
+Call find_exec with the FE_NNF flag to enforce a NULL return when the
+executable isn't found in $PATH.  Convert NULL to "".  This aligns
+spawnvp and spawnvpe with execvp and execvpe.
+---
+ winsup/cygwin/release/3.1.0 | 3 +++
+ winsup/cygwin/spawn.cc      | 9 ++++++---
+ 2 files changed, 9 insertions(+), 3 deletions(-)
 
-No complaints, so I've pushed this.
-
-Ken
+diff --git a/winsup/cygwin/release/3.1.0 b/winsup/cygwin/release/3.1.0
+index 3f2f3c86b..fb0e37215 100644
+--- a/winsup/cygwin/release/3.1.0
++++ b/winsup/cygwin/release/3.1.0
+@@ -91,3 +91,6 @@ Bug Fixes
+ - If the argument to mkdir(2) or rmdir(2) is 'x:\', don't strip the
+   trailing backslash.
+   Addresses: https://cygwin.com/ml/cygwin/2019-08/msg00334.html
++
++- Make spawnvp, spawnvpe fail if the executable is not in $PATH.
++  Addresses: https://cygwin.com/ml/cygwin/2019-10/msg00032.html
+diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
+index f8090a6a4..f82860e72 100644
+--- a/winsup/cygwin/spawn.cc
++++ b/winsup/cygwin/spawn.cc
+@@ -1081,8 +1081,9 @@ extern "C" int
+ spawnvp (int mode, const char *file, const char * const *argv)
+ {
+   path_conv buf;
+-  return spawnve (mode | _P_PATH_TYPE_EXEC, find_exec (file, buf), argv,
+-		  cur_environ ());
++  return spawnve (mode | _P_PATH_TYPE_EXEC,
++		  find_exec (file, buf, "PATH", FE_NNF) ?: "",
++		  argv, cur_environ ());
+ }
+=20
+ extern "C" int
+@@ -1090,7 +1091,9 @@ spawnvpe (int mode, const char *file, const char * co=
+nst *argv,
+ 	  const char * const *envp)
+ {
+   path_conv buf;
+-  return spawnve (mode | _P_PATH_TYPE_EXEC, find_exec (file, buf), argv, e=
+nvp);
++  return spawnve (mode | _P_PATH_TYPE_EXEC,
++		  find_exec (file, buf, "PATH", FE_NNF) ?: "",
++		  argv, envp);
+ }
+=20
+ int
+--=20
+2.21.0
