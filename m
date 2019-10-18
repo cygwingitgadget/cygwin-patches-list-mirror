@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9762-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 113760 invoked by alias); 18 Oct 2019 11:36:39 -0000
+Return-Path: <cygwin-patches-return-9763-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 758 invoked by alias); 18 Oct 2019 11:37:38 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,42 +9,93 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 113703 invoked by uid 89); 18 Oct 2019 11:36:39 -0000
+Received: (qmail 660 invoked by uid 89); 18 Oct 2019 11:37:38 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-6.9 required=5.0 tests=AWL,BAYES_05,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=japan, Japan, western, Western
-X-HELO: conssluserg-04.nifty.com
-Received: from conssluserg-04.nifty.com (HELO conssluserg-04.nifty.com) (210.131.2.83) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 18 Oct 2019 11:36:38 +0000
-Received: from Express5800-S70 (ntsitm283243.sitm.nt.ngn.ppp.infoweb.ne.jp [125.1.151.243]) (authenticated)	by conssluserg-04.nifty.com with ESMTP id x9IBaIJb002976	for <cygwin-patches@cygwin.com>; Fri, 18 Oct 2019 20:36:19 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com x9IBaIJb002976
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1571398579;	bh=7ZaU5jknhUS3hQD7F0v8Wt2kvL2BkdrKI9+fqCLFipQ=;	h=Date:From:To:Subject:In-Reply-To:References:From;	b=JYJuK0EJ5UNlWDUMlNX9Cu/HW8kDTQtkvoDc8Hyv9LSxuuWEC2REqXcfaOjUgsvJo	 S46mRWTJZI1Y7WCXdauGAAtKHHKUKOWU28Fd8V6FRP/3poDLSMQycknvNs+UfTckY4	 EiYgA987hH0OMd7Uyfr4YHeSSsVkQQ3DseVAa2FlWW850/o2UWD+4Y9iexxhju1LEH	 ZUEMofAQuLP7mYljLjEnjK13Jw6B1tkDydctQIhzf+LgiiypKhPvYGg5ubwkP7GSS7	 X+vZ9IXCRUgE/DUHTjlQt13DFvRLwXyTLguCjx+spStl8EBmO3pyRC/DnEYgzj0TGH	 C/IXQcXVTgsUA==
-Date: Fri, 18 Oct 2019 11:36:00 -0000
+X-Spam-SWARE-Status: No, score=-20.0 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=screen, HContent-Transfer-Encoding:8bit
+X-HELO: conuserg-06.nifty.com
+Received: from conuserg-06.nifty.com (HELO conuserg-06.nifty.com) (210.131.2.73) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 18 Oct 2019 11:37:37 +0000
+Received: from localhost.localdomain (ntsitm283243.sitm.nt.ngn.ppp.infoweb.ne.jp [125.1.151.243]) (authenticated)	by conuserg-06.nifty.com with ESMTP id x9IBbMtc011786;	Fri, 18 Oct 2019 20:37:28 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-06.nifty.com x9IBbMtc011786
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1571398648;	bh=eofx1K4UQAMYBVUr68j4x9unmjUPMp7Tae5cOnqW6PQ=;	h=From:To:Cc:Subject:Date:From;	b=UsRepPhCk4xGnIU1kq4dhpA+tkqgharxEKkgb50y6rSvyaufcqj3+Z0kReaWVJIaH	 cvE0UCeZf/mgw/LG72tR4bb7wN1evjeRhOaaujY0BuHY2cOJ4NPmJwIqWW2+vS9JwT	 J8Pk0vxVoFwXUW0DNn0bbviVdwtfTEDYsK4Farn94rdH+YHadNIxF/ydJUoBTrlOKM	 ytTuQC5ZQaxLhXneyaLTrq2U6iA+VooiOXPMzoA1P2uxw+mSwag4chY/5HcPFj06dn	 +Kpdpu2MJNXu82cFIG+w32t2bzd88sCpg3Z47oTcXQzZQMvg4HYWpkg2wGLjbkYYY3	 hlFsSmLmEVGMg==
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Change the timing of clear screen.
-Message-Id: <20191018203627.489cd4a45ab0ad073b4d8d24@nifty.ne.jp>
-In-Reply-To: <1b7038e5-c0e4-b527-71e1-ee46799b215c@cornell.edu>
-References: <20191016123409.457-1-takashi.yano@nifty.ne.jp>	<20191016123409.457-2-takashi.yano@nifty.ne.jp>	<0c90ed2b-ed1e-643c-5643-78f50444f97d@cornell.edu>	<2943cac3-3b48-3753-1d06-dff6590bb3b3@ssi-schaefer.com>	<1b7038e5-c0e4-b527-71e1-ee46799b215c@cornell.edu>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: pty: Disable clear screen for ssh sessions with -t option.
+Date: Fri, 18 Oct 2019 11:37:00 -0000
+Message-Id: <20191018113721.2486-1-takashi.yano@nifty.ne.jp>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-IsSubscribed: yes
-X-SW-Source: 2019-q4/txt/msg00033.txt.bz2
+X-SW-Source: 2019-q4/txt/msg00034.txt.bz2
 
-On Thu, 17 Oct 2019 16:36:25 +0000
-Ken Brown wrote:
-> Thanks.  I'll go ahead and push both patches.  And thanks, Takashi.  (Or should 
-> I be addressing you as "Yano"?  I'm ignorant about Japanese names.)
+---
+ winsup/cygwin/fhandler_tty.cc | 21 ++++++++++++++++++++-
+ winsup/cygwin/tty.cc          |  1 +
+ winsup/cygwin/tty.h           |  1 +
+ 3 files changed, 22 insertions(+), 1 deletion(-)
 
-Takashi is the given name and Yano is the family name.
-In Japan, we usualy use the order of family-name first,
-i.e. Yano Takashi. However, many of us use inversed order
-when we talk with Western people.
-
-In formal situation, we use family name with "san", i.e.
-Yano-san, just like Mr. Yano. Contrary, given name is used
-for close relationships.
-
-So, please call me Takashi as always.
-
+diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+index da6119dfb..163f93f35 100644
+--- a/winsup/cygwin/fhandler_tty.cc
++++ b/winsup/cygwin/fhandler_tty.cc
+@@ -1305,6 +1305,20 @@ fhandler_pty_slave::write (const void *ptr, size_t len)
+   if (bg <= bg_eof)
+     return (ssize_t) bg;
+ 
++  if (get_ttyp ()->need_clear_screen_on_write)
++    {
++      const char *term = getenv ("TERM");
++      if (term && strcmp (term, "dumb") && !strstr (term, "emacs") &&
++	  wcsstr (myself->progname, L"\\usr\\sbin\\sshd.exe"))
++	{
++	  /* FIXME: Clearing sequence may not be "^[[H^[[J"
++	     depending on the terminal type. */
++	  DWORD n;
++	  WriteFile (get_output_handle_cyg (), "\033[H\033[J", 6, &n, NULL);
++	}
++      get_ttyp ()->need_clear_screen_on_write = false;
++    }
++
+   termios_printf ("pty%d, write(%p, %lu)", get_minor (), ptr, len);
+ 
+   push_process_state process_state (PID_TTYOU);
+@@ -2668,7 +2682,12 @@ fhandler_pty_slave::fixup_after_attach (bool native_maybe, int fd_set)
+ 	  if (get_ttyp ()->num_pcon_attached_slaves == 0
+ 	      && !ALWAYS_USE_PCON)
+ 	    /* Assume this is the first process using this pty slave. */
+-	    get_ttyp ()->need_clear_screen = true;
++	    {
++	      if (wcsstr (myself->progname, L"\\usr\\sbin\\sshd.exe"))
++		get_ttyp ()->need_clear_screen_on_write = true;
++	      else
++		get_ttyp ()->need_clear_screen = true;
++	    }
+ 
+ 	  get_ttyp ()->num_pcon_attached_slaves ++;
+ 	}
+diff --git a/winsup/cygwin/tty.cc b/winsup/cygwin/tty.cc
+index 460153cdb..1595d0278 100644
+--- a/winsup/cygwin/tty.cc
++++ b/winsup/cygwin/tty.cc
+@@ -245,6 +245,7 @@ tty::init ()
+   num_pcon_attached_slaves = 0;
+   term_code_page = 0;
+   need_clear_screen = false;
++  need_clear_screen_on_write = false;
+ }
+ 
+ HANDLE
+diff --git a/winsup/cygwin/tty.h b/winsup/cygwin/tty.h
+index 927d7afd9..c7aeef85b 100644
+--- a/winsup/cygwin/tty.h
++++ b/winsup/cygwin/tty.h
+@@ -106,6 +106,7 @@ private:
+   int num_pcon_attached_slaves;
+   UINT term_code_page;
+   bool need_clear_screen;
++  bool need_clear_screen_on_write;
+ 
+ public:
+   HANDLE from_master () const { return _from_master; }
 -- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+2.21.0
