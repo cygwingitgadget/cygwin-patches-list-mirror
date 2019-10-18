@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9765-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 90881 invoked by alias); 18 Oct 2019 23:50:57 -0000
+Return-Path: <cygwin-patches-return-9766-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 92212 invoked by alias); 18 Oct 2019 23:52:08 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,62 +9,153 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 90872 invoked by uid 89); 18 Oct 2019 23:50:57 -0000
+Received: (qmail 92200 invoked by uid 89); 18 Oct 2019 23:52:07 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-7.6 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=screen
-X-HELO: conssluserg-06.nifty.com
-Received: from conssluserg-06.nifty.com (HELO conssluserg-06.nifty.com) (210.131.2.91) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 18 Oct 2019 23:50:54 +0000
-Received: from Express5800-S70 (ntsitm283243.sitm.nt.ngn.ppp.infoweb.ne.jp [125.1.151.243]) (authenticated)	by conssluserg-06.nifty.com with ESMTP id x9INomj2004198	for <cygwin-patches@cygwin.com>; Sat, 19 Oct 2019 08:50:48 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com x9INomj2004198
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1571442648;	bh=2gGqrmcr5+P6GIgW6MwOUHHWfCxVIKLNynlcvSeCZk8=;	h=Date:From:To:Subject:In-Reply-To:References:From;	b=V5tYHIOuL6s6YDZg2+nDaSVWPljz6qZSohPHhbWN9pLcUzVbLQCaLPQ7a04K7ORYu	 1FAfz8qVxrhqXPA+MrpqWgpre/xL8NCbSN8/UbqlDoB3JZH6aVsxDL4XmCO2dnyBdR	 B+C/JYzQU158BL5td/Vp90FmLk6IS3on9vekc6e31LTBtUxVcYfUMo7Y+ijxkBt1MS	 PVL6RV1SNFDoAT6v1kG4QeTYyIEeRFAUzL281yq7kdHDvNyuUUULG89LmWEtr1BAA4	 gWMgJ0AIUTCrI0IgL57jt6rxck4FJiNhbMkt2qE/wz2oSv0XG03/ERK5vwujwzUXVN	 ddfs37gFj2gsw==
-Date: Fri, 18 Oct 2019 23:50:00 -0000
+X-Spam-SWARE-Status: No, score=-20.0 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=HX-Languages-Length:4166, screen
+X-HELO: conuserg-02.nifty.com
+Received: from conuserg-02.nifty.com (HELO conuserg-02.nifty.com) (210.131.2.69) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 18 Oct 2019 23:52:05 +0000
+Received: from localhost.localdomain (ntsitm283243.sitm.nt.ngn.ppp.infoweb.ne.jp [125.1.151.243]) (authenticated)	by conuserg-02.nifty.com with ESMTP id x9INplYt031899;	Sat, 19 Oct 2019 08:51:53 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-02.nifty.com x9INplYt031899
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1571442713;	bh=T9FTHsviLLY0gbO4r+1ktQKAJ9HNyWcWTvwkVsHTizo=;	h=From:To:Cc:Subject:Date:From;	b=jAjJKD4F9JcsQRA/fH05S+fCs4AEWCV/pLh8IZti2KXHU10DBL37P0ocxJGHj1quN	 i3dZjRa8XmaYvDWSICMSr7SKHnVZ5fvBWJ8ndc3ubOvC3k6RVF6IZO7mO3325t3Rgb	 wkm9Ti/Z7EkzQoARglcpAowhcNePdLdF4WdmZTRDG6AmAY4QfEoygm0PGdyXxaplNc	 pmX9D27pt5m0meILqy4A00RYq9vZXdMBrVgv7CDQ9Yg/UcHhwOd10K910unlHyNB2u	 FttsNXB8f8KqD+CYoOM7RIQtCDqyt63oPDNt62FEuL/IEaj7T8RgAvAge/QchsImhJ	 uIqywcG0AMPmw==
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Disable clear screen for ssh sessions with -t option.
-Message-Id: <20191019085051.4d2cc80811854d21b193fed6@nifty.ne.jp>
-In-Reply-To: <20191018143306.GG16240@calimero.vinschen.de>
-References: <20191018113721.2486-1-takashi.yano@nifty.ne.jp>	<20191018143306.GG16240@calimero.vinschen.de>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH v2] Cygwin: pty: Disable clear screen for ssh sessions with -t option.
+Date: Fri, 18 Oct 2019 23:52:00 -0000
+Message-Id: <20191018235140.1506-1-takashi.yano@nifty.ne.jp>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-IsSubscribed: yes
-X-SW-Source: 2019-q4/txt/msg00036.txt.bz2
+X-SW-Source: 2019-q4/txt/msg00037.txt.bz2
 
-Hi Corinna,
+---
+ winsup/cygwin/fhandler_tty.cc | 67 ++++++++++++++++++++++-------------
+ winsup/cygwin/tty.cc          |  1 +
+ winsup/cygwin/tty.h           |  1 +
+ 3 files changed, 44 insertions(+), 25 deletions(-)
 
-On Fri, 18 Oct 2019 16:33:06 +0200
-Corinna Vinschen wrote:
-> Sorry, but this doesn't look feasible.
-> 
-> You can't base the behaviour on the name of an application.  What about
-> other applications like telnetd, rshd, just to name the first ones
-> coming to mind?  What about a renamed sshd, or sshd installed into
-> another directory, or just an sshd in the build dir during testing?
-> 
-> Is this workaround really necessary at all?  Even basing this on the
-> terminal name looks pretty fragile.
-
-I agree with you. However, I couldn't come up with better method.
-Now I have come up with another implementation. Could you please
-have a look at v2 patch?
-
-As a caution, this patch is for:
-https://www.cygwin.com/ml/cygwin/2019-10/msg00074.html
-therefore, telnetd or rshd is not targeted.
-
-> Why exactly is the clear screen necessary?  You wrote something about
-> synchronizing the pseudo console and the pseudo tty content, IIRC, but
-> it still seems artificial to enforce a clear screen.  Is there no
-> other way to make the pseudo console happy?
-
-Using cygwin 3.1.0-0.7 (TEST), by the following steps, you can see
-what happens if clear screen is not done.
-
-1) Execute ls or ps to draw something to screen.
-2) env TERM=dumb script
-3) Execute cmd.exe.
-
-If we can accept this behaviour, clear screen is not necessary.
-
+diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+index da6119dfb..d82757e97 100644
+--- a/winsup/cygwin/fhandler_tty.cc
++++ b/winsup/cygwin/fhandler_tty.cc
+@@ -1296,6 +1296,30 @@ detach:
+   restore_reattach_pcon ();
+ }
+ 
++/* If master process is running as service, attaching to
++   pseudo console should be done in fork. If attaching
++   is done in spawn for inetd or sshd, it fails because
++   the helper process is running as privileged user while
++   slave process is not. This function is used to determine
++   if the process is running as a srvice or not. */
++static bool
++is_running_as_service (void)
++{
++  DWORD dwSize = 0;
++  PTOKEN_GROUPS pGroupInfo;
++  tmp_pathbuf tp;
++  pGroupInfo = (PTOKEN_GROUPS) tp.w_get ();
++  NtQueryInformationToken (hProcToken, TokenGroups, pGroupInfo,
++					2 * NT_MAX_PATH, &dwSize);
++  for (DWORD i=0; i<pGroupInfo->GroupCount; i++)
++    if (RtlEqualSid (well_known_service_sid, pGroupInfo->Groups[i].Sid))
++      return true;
++  for (DWORD i=0; i<pGroupInfo->GroupCount; i++)
++    if (RtlEqualSid (mandatory_system_integrity_sid, pGroupInfo->Groups[i].Sid))
++      return true;
++  return false;
++}
++
+ ssize_t __stdcall
+ fhandler_pty_slave::write (const void *ptr, size_t len)
+ {
+@@ -1305,6 +1329,18 @@ fhandler_pty_slave::write (const void *ptr, size_t len)
+   if (bg <= bg_eof)
+     return (ssize_t) bg;
+ 
++  if (get_ttyp ()->need_clear_screen_on_write)
++    {
++      if (is_running_as_service ())
++	{
++	  /* FIXME: Clearing sequence may not be "^[[H^[[J"
++	     depending on the terminal type. */
++	  DWORD n;
++	  WriteFile (get_output_handle_cyg (), "\033[H\033[J", 6, &n, NULL);
++	}
++      get_ttyp ()->need_clear_screen_on_write = false;
++    }
++
+   termios_printf ("pty%d, write(%p, %lu)", get_minor (), ptr, len);
+ 
+   push_process_state process_state (PID_TTYOU);
+@@ -2668,7 +2704,12 @@ fhandler_pty_slave::fixup_after_attach (bool native_maybe, int fd_set)
+ 	  if (get_ttyp ()->num_pcon_attached_slaves == 0
+ 	      && !ALWAYS_USE_PCON)
+ 	    /* Assume this is the first process using this pty slave. */
+-	    get_ttyp ()->need_clear_screen = true;
++	    {
++	      if (is_running_as_service ())
++		get_ttyp ()->need_clear_screen_on_write = true;
++	      else
++		get_ttyp ()->need_clear_screen = true;
++	    }
+ 
+ 	  get_ttyp ()->num_pcon_attached_slaves ++;
+ 	}
+@@ -3088,30 +3129,6 @@ pty_master_fwd_thread (VOID *arg)
+   return ((fhandler_pty_master *) arg)->pty_master_fwd_thread ();
+ }
+ 
+-/* If master process is running as service, attaching to
+-   pseudo console should be done in fork. If attaching
+-   is done in spawn for inetd or sshd, it fails because
+-   the helper process is running as privileged user while
+-   slave process is not. This function is used to determine
+-   if the process is running as a srvice or not. */
+-static bool
+-is_running_as_service (void)
+-{
+-  DWORD dwSize = 0;
+-  PTOKEN_GROUPS pGroupInfo;
+-  tmp_pathbuf tp;
+-  pGroupInfo = (PTOKEN_GROUPS) tp.w_get ();
+-  NtQueryInformationToken (hProcToken, TokenGroups, pGroupInfo,
+-					2 * NT_MAX_PATH, &dwSize);
+-  for (DWORD i=0; i<pGroupInfo->GroupCount; i++)
+-    if (RtlEqualSid (well_known_service_sid, pGroupInfo->Groups[i].Sid))
+-      return true;
+-  for (DWORD i=0; i<pGroupInfo->GroupCount; i++)
+-    if (RtlEqualSid (well_known_interactive_sid, pGroupInfo->Groups[i].Sid))
+-      return false;
+-  return true;
+-}
+-
+ bool
+ fhandler_pty_master::setup_pseudoconsole ()
+ {
+diff --git a/winsup/cygwin/tty.cc b/winsup/cygwin/tty.cc
+index 460153cdb..1595d0278 100644
+--- a/winsup/cygwin/tty.cc
++++ b/winsup/cygwin/tty.cc
+@@ -245,6 +245,7 @@ tty::init ()
+   num_pcon_attached_slaves = 0;
+   term_code_page = 0;
+   need_clear_screen = false;
++  need_clear_screen_on_write = false;
+ }
+ 
+ HANDLE
+diff --git a/winsup/cygwin/tty.h b/winsup/cygwin/tty.h
+index 927d7afd9..c7aeef85b 100644
+--- a/winsup/cygwin/tty.h
++++ b/winsup/cygwin/tty.h
+@@ -106,6 +106,7 @@ private:
+   int num_pcon_attached_slaves;
+   UINT term_code_page;
+   bool need_clear_screen;
++  bool need_clear_screen_on_write;
+ 
+ public:
+   HANDLE from_master () const { return _from_master; }
 -- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+2.21.0
