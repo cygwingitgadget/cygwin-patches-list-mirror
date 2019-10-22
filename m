@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9780-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 57513 invoked by alias); 22 Oct 2019 08:02:58 -0000
+Return-Path: <cygwin-patches-return-9781-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 62247 invoked by alias); 22 Oct 2019 08:04:07 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,54 +9,83 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 57496 invoked by uid 89); 22 Oct 2019 08:02:57 -0000
+Received: (qmail 62225 invoked by uid 89); 22 Oct 2019 08:04:07 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-104.5 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*F:D*cygwin.com, screen
+X-Spam-SWARE-Status: No, score=-116.8 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*c:HHu, H*F:D*cygwin.com, screen, yourself
 X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.17.24) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 22 Oct 2019 08:02:52 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id 1MulZl-1i4sTB0jT9-00ro81 for <cygwin-patches@cygwin.com>; Tue, 22 Oct 2019 10:02:50 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 15488A80773; Tue, 22 Oct 2019 10:02:42 +0200 (CEST)
-Date: Tue, 22 Oct 2019 08:02:00 -0000
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.131) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 22 Oct 2019 08:04:06 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id 1MSqbe-1iRoGj1uAg-00UH8G for <cygwin-patches@cygwin.com>; Tue, 22 Oct 2019 10:04:03 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id B1E05A80773; Tue, 22 Oct 2019 10:04:02 +0200 (CEST)
+Date: Tue, 22 Oct 2019 08:04:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] Cygwin: pty: Disable clear screen for ssh sessions with -t option.
-Message-ID: <20191022080242.GN16240@calimero.vinschen.de>
+Message-ID: <20191022080402.GO16240@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20191018113721.2486-1-takashi.yano@nifty.ne.jp> <20191018143306.GG16240@calimero.vinschen.de> <20191019085051.4d2cc80811854d21b193fed6@nifty.ne.jp> <20191021094356.GI16240@calimero.vinschen.de> <20191022090930.b312514dcf8495c1db4bb461@nifty.ne.jp> <20191022065506.GL16240@calimero.vinschen.de> <20191022162316.54c3bc2ff19dbc7ae1bdedf2@nifty.ne.jp>
+References: <20191018113721.2486-1-takashi.yano@nifty.ne.jp> <b13f5d3c-c557-ff4e-6fcd-399952bad47e@ssi-schaefer.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="lildS9pRFgpM/xzO"
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="xjamM5M9kpPM/bcu"
 Content-Disposition: inline
-In-Reply-To: <20191022162316.54c3bc2ff19dbc7ae1bdedf2@nifty.ne.jp>
+In-Reply-To: <b13f5d3c-c557-ff4e-6fcd-399952bad47e@ssi-schaefer.com>
 User-Agent: Mutt/1.12.1 (2019-06-15)
-X-SW-Source: 2019-q4/txt/msg00051.txt.bz2
+X-SW-Source: 2019-q4/txt/msg00052.txt.bz2
 
 
---lildS9pRFgpM/xzO
+--xjamM5M9kpPM/bcu
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-length: 786
+Content-length: 1706
 
-On Oct 22 16:23, Takashi Yano wrote:
-> On Tue, 22 Oct 2019 08:55:06 +0200
-> Corinna Vinschen wrote:
-> > On Oct 22 09:09, Takashi Yano wrote:
-> > > I confirmed the dwSize has right screen size and dwCursorPosition
-> > > is (0,0) just after creating pty even though the cursor position
-> > > in real screen is not at top left.
-> > >=20
-> > > Clearing screen fixes this mismatch.
-> >=20
-> > And calling SetConsoleCursorPosition instead does not?
+On Oct 22 09:20, Michael Haubenwallner wrote:
+> Hi Takashi,
 >=20
-> For SetConsoleCursorPosition, it is necessary to know the cursor
-> position of course. I cannot come up with any other way than
-> using ANSI escape sequence "ESC[6n". Do you think this is
-> feasible?
+> On 10/18/19 1:37 PM, Takashi Yano wrote:
+> > ---
+> >  winsup/cygwin/fhandler_tty.cc | 21 ++++++++++++++++++++-
+> >  winsup/cygwin/tty.cc          |  1 +
+> >  winsup/cygwin/tty.h           |  1 +
+> >  3 files changed, 22 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty=
+.cc
+> > index da6119dfb..163f93f35 100644
+> > --- a/winsup/cygwin/fhandler_tty.cc
+> > +++ b/winsup/cygwin/fhandler_tty.cc
+> > @@ -1305,6 +1305,20 @@ fhandler_pty_slave::write (const void *ptr, size=
+_t len)
+> >    if (bg <=3D bg_eof)
+> >      return (ssize_t) bg;
+> >=20=20
+> > +  if (get_ttyp ()->need_clear_screen_on_write)
+> > +    {
+> > +      const char *term =3D getenv ("TERM");
+> > +      if (term && strcmp (term, "dumb") && !strstr (term, "emacs") &&
+> > +	  wcsstr (myself->progname, L"\\usr\\sbin\\sshd.exe"))
+>=20
+> Again, my real problem does not utilize ssh at all, but is some python sc=
+ript
+> using multiple pty.openpty() to spawn commands inside, to allow for herdi=
+ng
+> all the subprocesses started by the commands (Ctrl-C or similar).
+>=20
+> The ssh -t is just the sample showing a similar effect.
+>=20
+> Unfortunately, I'm not deep enough into that python script to quickly pro=
+vide
+> a test case with pty.openpty() combined with all the tty settings used th=
+ere.
+>=20
+> I've started to extract the important bits, but that may take a while.  O=
+TOH,
+> this is an open source project if you like to try yourself: prefix.gentoo=
+.org
+>=20
+> Thanks!
+> /haubi/
 
-Hmm, interesting point.  I think that should be ok for a start.
-assuming it works.
+In terms of clearing the screen at all, what's your opinion, Michael?
 
 
 Corinna
@@ -65,25 +94,25 @@ Corinna
 Corinna Vinschen
 Cygwin Maintainer
 
---lildS9pRFgpM/xzO
+--xjamM5M9kpPM/bcu
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-length: 833
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl2ut6EACgkQ9TYGna5E
-T6AnohAAmFIM26ID/+pfojiPKbGZLOwA2PuROSLfbcDuuapHE+LPPPmsUchXbah2
-f0PPXL79kIyn56GlfuGUHfY3YNFxQaphXen5Q9g+c2ZEpUxxtnAL8lYxNYGrkH8r
-KRaHwj7bDUFPnp38Hv9u35JKNaAevsQZiM0EtMFqKfIclSMP/dNtmrM80LXu+87f
-hJ3TbuDMPOph+RaFtRGrfhtmWTx1Mh5mM8it4277Fcl0zKjkbmwoakBWm2EAOb0j
-niCDyCu6XgShvs87mNuFMSmttnO1WA6/ISXffmGBgafejv/Y7JHMo6zThxsCoimd
-STvdgKER8cxqRyS+n/zIHreu+q72UV8dms1OI+JG+NYYfaLsAMCY0lwxUzRK3r7B
-qMek/zXfXlHDe3+TTvZbHIuc4FRJVWCayYHuXrltjMN5ArHIP0cGcvzyjX7OD/5/
-0kRZFk9pQ3Yjk3I3YHr93HwF5jGT/x9MJORvpZt9kSlcko+VeQkrjXI1CvDcSj9A
-Gyglxive7I0xeeu++gEaGbuwkCTZFiWPv9opsmXyO6ITA3UwRSCdLUTRtMokmlbC
-ZRCWHEKa0v/j2Z7prjby8UrMqypYFQ9gq3w6KKMPO/T8W83KsE77oVZLHt3/TjyQ
-c/NAO4Ge1h6hG2+CwisEedceH2e4SHEsPk2GDi4OpPqlOF1MLg8=
-=H07b
+iQIyBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl2ut/IACgkQ9TYGna5E
+T6DxJA/4wEToWNK2pUH869n2wsZu2Z+bHqaA29yEMIEzGdEW5GyWVu0ot5oj+f2w
+zPzaqXB9byU3OeiaiMp67JNefj2KGany+b3wfxH8NxKqVscijZOi4u1YIg+4jTro
+wfJzrhhOulFP9N4nD+cSL7DxadZcmB6Af7+IehfCPQNQ/VjN8vHptp6Zi5qHEMpF
+ckJck1LYSEipgQLAxLTM/PfOqVcKy/LWiZt15AT7uLaEXHpYKESfwAytS2BkZfiN
+1fdZs8HeB0Y8XrZy9WuX0fJcsBzAMlNLUcPzBRffdXXVkq9j8vvfZRIgkmvWmtZY
+YBxoAah1aruC8B4+99pbVnJClt9Kxk0aC7o4iI8tfsgDGLRdaLiB2lqzbtLPMMjj
+Gt2bmf9xjWT+9gIl8K5OG9yU1c2qmnawm8xazUtHVXJcxgnkQaIwmaS5aSiuAx6J
+k/PggG6f+5WZCsHlC8sxduTXJ4JnTPnhS35CioVwNhZxkfGYDfNvMUbpamaz7uBi
+L2O4eA3YsuJ0I7i34devexOIhPTcnYHYiwBsCFr/JGWoIgoUMA6wWrHHqrGs1V7K
+Z66ERPLZbGwt5gEmRFcnEHhyr6/Od5QMZKwa1NLS/8blqsVnML3nI0g7/8BFA+sB
+epFGnSjIdV7ErRzcL/bjJrx4avLAuNT/IDcZ1rpKuZfELlP/Qw==
+=u12r
 -----END PGP SIGNATURE-----
 
---lildS9pRFgpM/xzO--
+--xjamM5M9kpPM/bcu--
