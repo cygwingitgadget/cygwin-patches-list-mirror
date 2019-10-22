@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9773-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 33690 invoked by alias); 21 Oct 2019 18:11:09 -0000
+Return-Path: <cygwin-patches-return-9774-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 18231 invoked by alias); 22 Oct 2019 00:10:02 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,48 +9,63 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 33672 invoked by uid 89); 21 Oct 2019 18:11:09 -0000
+Received: (qmail 18222 invoked by uid 89); 22 Oct 2019 00:10:02 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-2.7 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.1 spammy=anomaly, wave, HX-Spam-Relays-External:ESMTPA
-X-HELO: vsmx012.vodafonemail.xion.oxcs.net
-Received: from vsmx012.vodafonemail.xion.oxcs.net (HELO vsmx012.vodafonemail.xion.oxcs.net) (153.92.174.90) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 21 Oct 2019 18:10:59 +0000
-Received: from vsmx004.vodafonemail.xion.oxcs.net (unknown [192.168.75.198])	by mta-8-out.mta.xion.oxcs.net (Postfix) with ESMTP id F2487F34E0F	for <cygwin-patches@cygwin.com>; Mon, 21 Oct 2019 18:10:55 +0000 (UTC)
-Received: from Gertrud (unknown [84.160.192.162])	by mta-8-out.mta.xion.oxcs.net (Postfix) with ESMTPA id C39EF19AD9F	for <cygwin-patches@cygwin.com>; Mon, 21 Oct 2019 18:10:53 +0000 (UTC)
-From: Achim Gratz <Stromeko@nexgo.de>
+X-Spam-SWARE-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=screen
+X-HELO: conssluserg-02.nifty.com
+Received: from conssluserg-02.nifty.com (HELO conssluserg-02.nifty.com) (210.131.2.81) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 22 Oct 2019 00:10:00 +0000
+Received: from Express5800-S70 (ntsitm355024.sitm.nt.ngn.ppp.infoweb.ne.jp [175.184.70.24]) (authenticated)	by conssluserg-02.nifty.com with ESMTP id x9M09SnM022477	for <cygwin-patches@cygwin.com>; Tue, 22 Oct 2019 09:09:28 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com x9M09SnM022477
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1571702968;	bh=PLRk4koNkrTHTX1HIKLYztnZKhmG25PHkQ6mCBBY4zk=;	h=Date:From:To:Subject:In-Reply-To:References:From;	b=eLcOBfQvdB5apUTU/2fnuCfgCk+Lj65hLq1eTTbEYvVDRrXfBXPYeXOkhvD1aOHvg	 px24jOMKw4TCyxycIliNYQ/8KR6vyBXYaQ2db3KNDRYjq3Z+bZJ3lQm1pWbNI7c2Cc	 WC/vpCQQ4FtxNlQeOJMe2p/LQxW1doTkPTOskUU/vEW4zN77/L1Xi4JAGeK+ot//jH	 /awMc3clugWCSZShemwMR7PATNftq0PggeShuIVTfdxIXjjHpd5XriKYX5Z4fVh6wR	 DN/Bhltxc+ku7fJK5lPzx4MZduc+51dJyZAYBHaCnTqC9NxCOku9z6TCF9lqMYIOYI	 Eq+PZRMkd3HeA==
+Date: Tue, 22 Oct 2019 00:10:00 -0000
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: Provide more COM devices
-References: <87mudvwnrl.fsf@Rainer.invalid>	<20191021081844.GH16240@calimero.vinschen.de>
-Date: Mon, 21 Oct 2019 18:11:00 -0000
-In-Reply-To: <20191021081844.GH16240@calimero.vinschen.de> (Corinna Vinschen's	message of "Mon, 21 Oct 2019 10:18:44 +0200")
-Message-ID: <87pniq7yvm.fsf@Rainer.invalid>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-SW-Source: 2019-q4/txt/msg00044.txt.bz2
+Subject: Re: [PATCH] Cygwin: pty: Disable clear screen for ssh sessions with -t option.
+Message-Id: <20191022090930.b312514dcf8495c1db4bb461@nifty.ne.jp>
+In-Reply-To: <20191021094356.GI16240@calimero.vinschen.de>
+References: <20191018113721.2486-1-takashi.yano@nifty.ne.jp>	<20191018143306.GG16240@calimero.vinschen.de>	<20191019085051.4d2cc80811854d21b193fed6@nifty.ne.jp>	<20191021094356.GI16240@calimero.vinschen.de>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
+X-SW-Source: 2019-q4/txt/msg00045.txt.bz2
 
-Corinna Vinschen writes:
-> That's not the right way to patch this.  devices.cc gets generated from
-> devices.in by the gendevices script which in turn calls shilka from the
-> cocom package.
+On Mon, 21 Oct 2019 11:43:56 +0200
+Corinna Vinschen wrote:
+> So it seems cmd.exe is the only (or one of few) native CLI tools
+> actually trying to manipulate the screen buffer.  And what it does is
+> not so much clearing the screen, but to align buffer line 1 with the top
+> of the screen, even if line 1 has been produced before cmd.exe started.
 
-Now that you mention it I remember=E2=80=A6  :-(
+What is done is not clearing the screen, but redrawing the screen
+based on the screen buffer. This is done not by cmd.exe but by pseudo
+console, I believe. The trigger for redrawing is not clear to me.
 
-> Apart from the struct members you added here, it will
-> also add some code.  Which, unfortunately, raise the size of devices.cc,
-> especially troubling the 32 bit version.
+You can see what is done by pseudo console by checking "typescript"
+generated by script.
 
-So how about we only do this on 64bit as an added bonus for folks who
-"get it"?  One particular machine I've recently worked on presented me
-with COM144 to connect to, but I consider this to be an anomaly.  But
-COM port numbers in the 70=E2=80=A680 range are pretty common on some of the
-more heavily used development machines.
+> I didn't look deeper into this yet, but the question coming to mind is,
+> what does GetConsoleScreenBufferInfo return right after starting
+> `env TERM=dumb script`, how does it look like right after running
+> `reg.exe' and before `cmd.exe', and how does it look after cmd.exe
+> changed it?
 
+I confirmed the dwSize has right screen size and dwCursorPosition
+is (0,0) just after creating pty even though the cursor position
+in real screen is not at top left.
 
-Regards,
-Achim.
---=20
-+<[Q+ Matrix-12 WAVE#46+305 Neuron microQkb Andromeda XTk Blofeld]>+
+Clearing screen fixes this mismatch.
 
-SD adaptation for Waldorf rackAttack V1.04R1:
-http://Synth.Stromeko.net/Downloads.html#WaldorfSDada
+> The (admittedly vague) idea is, maybe cmd.exe can be cheated into
+> not changing the console buffer by changing it to what it expects
+> right after creating the pseudo console...
+
+To do this, it is necessary to log past data written to pty and
+push them into console screen buffer when pseudo console is started.
+
+The console screen buffer is empty just after creating pseudo console,
+therefore, clearing screen is the simplest way to match the real screen
+with the console screen buffer.
+
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
