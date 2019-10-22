@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9782-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 123587 invoked by alias); 22 Oct 2019 09:24:41 -0000
+Return-Path: <cygwin-patches-return-9783-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 80541 invoked by alias); 22 Oct 2019 10:06:46 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,98 +9,123 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 123518 invoked by uid 89); 22 Oct 2019 09:24:30 -0000
+Received: (qmail 80531 invoked by uid 89); 22 Oct 2019 10:06:45 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=screen, H*c:HHHH
-X-HELO: conssluserg-05.nifty.com
-Received: from conssluserg-05.nifty.com (HELO conssluserg-05.nifty.com) (210.131.2.90) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 22 Oct 2019 09:24:28 +0000
-Received: from Express5800-S70 (ntsitm355024.sitm.nt.ngn.ppp.infoweb.ne.jp [175.184.70.24]) (authenticated)	by conssluserg-05.nifty.com with ESMTP id x9M9NxIL027182	for <cygwin-patches@cygwin.com>; Tue, 22 Oct 2019 18:23:59 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com x9M9NxIL027182
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1571736239;	bh=0k7qBxJw542/utcEuyRVU4jNtp8ydSuvcQwDMtVWAw8=;	h=Date:From:To:Subject:In-Reply-To:References:From;	b=MZey/WFZWQRZJBr2DftFelXy+AJa1qUyE6soZnv9RdpXXzWLUENO4jppYvKPyZSZz	 oEc2vCzHzFl/7wO1XQT5P4UFpx7HoZVWqTcHD9EukMt59u7aWR67YfIznCUk0aASAq	 OF7Fugfvw3lgNuO/TQMA8GllQWpGmo/A+Bap9HoCXRo5AlebfPazPBigzEoalK3f1u	 jeFJvdjmAQsDmgMVLLmy0+ZhGO/FE2hJlGx2IGVDHZLbed3QNNXipJ+G42G7Reqqz4	 FC5udeN8yIuuw5U6zPWX6RJ4TINy+oNJFJleNqXfkd1WbSAvCzrmtswOonetnIeNY4	 +1WCvMjWk0MAQ==
-Date: Tue, 22 Oct 2019 09:24:00 -0000
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: cygwin-patches@cygwin.com
+X-Spam-SWARE-Status: No, score=-5.3 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,SPF_PASS autolearn=ham version=3.3.1 spammy=
+X-HELO: atfriesa01.ssi-schaefer.com
+Received: from atfriesa01.ssi-schaefer.com (HELO atfriesa01.ssi-schaefer.com) (193.186.16.100) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 22 Oct 2019 10:06:44 +0000
+Received: from samail03.wamas.com (HELO mailhost.salomon.at) ([172.28.33.235])  by atfriesa01.ssi-schaefer.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 Oct 2019 12:06:41 +0200
+Received: from [172.28.42.244]	by mailhost.salomon.at with esmtp (Exim 4.77)	(envelope-from <michael.haubenwallner@ssi-schaefer.com>)	id 1iMr3o-0001EA-EY; Tue, 22 Oct 2019 12:06:40 +0200
 Subject: Re: [PATCH] Cygwin: pty: Disable clear screen for ssh sessions with -t option.
-Message-Id: <20191022182405.0ce3d7c17b0e7d924430b89c@nifty.ne.jp>
-In-Reply-To: <20191022080242.GN16240@calimero.vinschen.de>
-References: <20191018113721.2486-1-takashi.yano@nifty.ne.jp>	<20191018143306.GG16240@calimero.vinschen.de>	<20191019085051.4d2cc80811854d21b193fed6@nifty.ne.jp>	<20191021094356.GI16240@calimero.vinschen.de>	<20191022090930.b312514dcf8495c1db4bb461@nifty.ne.jp>	<20191022065506.GL16240@calimero.vinschen.de>	<20191022162316.54c3bc2ff19dbc7ae1bdedf2@nifty.ne.jp>	<20191022080242.GN16240@calimero.vinschen.de>
-Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="Multipart=_Tue__22_Oct_2019_18_24_05_+0900_SYD/9kiCave4K7rw"
-X-IsSubscribed: yes
-X-SW-Source: 2019-q4/txt/msg00053.txt.bz2
+To: cygwin-patches@cygwin.com
+References: <20191018113721.2486-1-takashi.yano@nifty.ne.jp> <b13f5d3c-c557-ff4e-6fcd-399952bad47e@ssi-schaefer.com> <20191022080402.GO16240@calimero.vinschen.de>
+From: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
+Openpgp: preference=signencrypt
+Message-ID: <40c9d2ad-24a5-400a-abd4-af4235b83e2a@ssi-schaefer.com>
+Date: Tue, 22 Oct 2019 10:06:00 -0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <20191022080402.GO16240@calimero.vinschen.de>
+Content-Type: multipart/mixed; boundary="------------BF881BCA013A16CBF9A887DD"
+X-SW-Source: 2019-q4/txt/msg00054.txt.bz2
 
 This is a multi-part message in MIME format.
-
---Multipart=_Tue__22_Oct_2019_18_24_05_+0900_SYD/9kiCave4K7rw
-Content-Type: text/plain; charset=US-ASCII
+--------------BF881BCA013A16CBF9A887DD
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
-Content-length: 1124
+Content-length: 1885
 
-On Tue, 22 Oct 2019 10:02:42 +0200
-Corinna Vinschen wrote:
-> On Oct 22 16:23, Takashi Yano wrote:
-> > On Tue, 22 Oct 2019 08:55:06 +0200
-> > Corinna Vinschen wrote:
-> > > On Oct 22 09:09, Takashi Yano wrote:
-> > > > I confirmed the dwSize has right screen size and dwCursorPosition
-> > > > is (0,0) just after creating pty even though the cursor position
-> > > > in real screen is not at top left.
-> > > > 
-> > > > Clearing screen fixes this mismatch.
-> > > 
-> > > And calling SetConsoleCursorPosition instead does not?
-> > 
-> > For SetConsoleCursorPosition, it is necessary to know the cursor
-> > position of course. I cannot come up with any other way than
-> > using ANSI escape sequence "ESC[6n". Do you think this is
-> > feasible?
-> 
-> Hmm, interesting point.  I think that should be ok for a start.
-> assuming it works.
+On 10/22/19 10:04 AM, Corinna Vinschen wrote:
+> On Oct 22 09:20, Michael Haubenwallner wrote:
+>> On 10/18/19 1:37 PM, Takashi Yano wrote:
 
-Unfortunately, this does not work as expected. Please try
-attached patch. Cursor position is kept as expected, but the
-screen contents before opening pty are lost when cmd.exe is
-executed.
+>>> +      const char *term = getenv ("TERM");
+>>> +      if (term && strcmp (term, "dumb") && !strstr (term, "emacs") &&
+>>> +	  wcsstr (myself->progname, L"\\usr\\sbin\\sshd.exe"))
 
-However, this fixes cursor position problem of netsh and WMIC.
+>> Again, my real problem does not utilize ssh at all, but is some python script
+>> using multiple pty.openpty() to spawn commands inside, to allow for herding
+>> all the subprocesses started by the commands (Ctrl-C or similar).
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+> In terms of clearing the screen at all, what's your opinion, Michael?
 
---Multipart=_Tue__22_Oct_2019_18_24_05_+0900_SYD/9kiCave4K7rw
-Content-Type: application/octet-stream;
- name="cursor-position.patch"
+While I do not fully understand TTY handling, clearing the screen because
+just opening a PTY doesn't feel correct.
+
+To start with, attached is some python script where I do not expect to see
+the initial clear screen code, but the one from /usr/bin/clear only.
+
+This is what I see with python3 on *Linux*:
+
+$ TERM=dumb python3 ./ptytest1.py 
+select read: [3] except: []
+read: b'/home/haubi\r\n'
+select read: [3] except: []
+quit: [Errno 5] Input/output error
+
+$ TERM=xterm python3 ./ptytest1.py 
+select read: [3] except: []
+read: b'/home/haubi\r\n'
+select read: [3] except: []
+read: b'\x1b[H\x1b[2J\x1b[3J'
+select read: [3] except: []
+quit: [Errno 5] Input/output error
+
+$ TERM=screen python3 ./ptytest1.py 
+select read: [3] except: []
+read: b'/home/haubi\r\n'
+select read: [3] except: []
+read: b'\x1b[H\x1b[J'
+select read: [3] except: []
+quit: [Errno 5] Input/output error
+
+Note that the clear screen code does depend on the TERM value, and /usr/bin/clear
+does even yell if TERM is empty, unknown or unset.
+
+Also note that Linux select() does not yield the fd as exception when it was closed.
+
+Interesting enough, cygwin-3.0.7 does dump core somewhere in between, so the real
+python program probably does some additional setup I've not extracted yet.
+
+/haubi/
+
+--------------BF881BCA013A16CBF9A887DD
+Content-Type: text/x-python;
+ name="ptytest1.py"
+Content-Transfer-Encoding: 7bit
 Content-Disposition: attachment;
- filename="cursor-position.patch"
-Content-Transfer-Encoding: base64
-Content-length: 1566
+ filename="ptytest1.py"
+Content-length: 602
 
-ZGlmZiAtLWdpdCBhL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXJfdHR5LmNjIGIv
-d2luc3VwL2N5Z3dpbi9maGFuZGxlcl90dHkuY2MKaW5kZXggZGE2MTE5ZGZi
-Li43YjdiZTc3ODMgMTAwNjQ0Ci0tLSBhL3dpbnN1cC9jeWd3aW4vZmhhbmRs
-ZXJfdHR5LmNjCisrKyBiL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXJfdHR5LmNj
-CkBAIC0yNzIyLDEwICsyNzIyLDIxIEBAIGZoYW5kbGVyX3B0eV9zbGF2ZTo6
-Zml4dXBfYWZ0ZXJfZm9yayAoSEFORExFIHBhcmVudCkKICAgICAgIGNvbnN0
-IGNoYXIgKnRlcm0gPSBnZXRlbnYgKCJURVJNIik7CiAgICAgICBpZiAodGVy
-bSAmJiBzdHJjbXAgKHRlcm0sICJkdW1iIikgJiYgIXN0cnN0ciAodGVybSwg
-ImVtYWNzIikpCiAJewotCSAgLyogRklYTUU6IENsZWFyaW5nIHNlcXVlbmNl
-IG1heSBub3QgYmUgIl5bW0heW1tKIgotCSAgICAgZGVwZW5kaW5nIG9uIHRo
-ZSB0ZXJtaW5hbCB0eXBlLiAqLwogCSAgRFdPUkQgbjsKLQkgIFdyaXRlRmls
-ZSAoZ2V0X291dHB1dF9oYW5kbGVfY3lnICgpLCAiXDAzM1tIXDAzM1tKIiwg
-NiwgJm4sIE5VTEwpOworCSAgV3JpdGVGaWxlIChnZXRfb3V0cHV0X2hhbmRs
-ZV9jeWcgKCksICJcMDMzWzZuIiwgNCwgJm4sIE5VTEwpOworCSAgc3RydWN0
-IHRlcm1pb3MgdGksIHRpX25ldzsKKwkgIHRjZ2V0YXR0ciAoJnRpKTsKKwkg
-IHRpX25ldyA9IHRpOworCSAgdGlfbmV3LmNfbGZsYWcgJj0gKH5JQ0FOT04g
-fCBFQ0hPKTsKKwkgIHRjc2V0YXR0ciAoVENTQU5PVywgJnRpX25ldyk7CisJ
-ICBjaGFyIGJ1ZlszMl07CisJICBSZWFkRmlsZSAoZ2V0X2hhbmRsZV9jeWcg
-KCksIGJ1Ziwgc2l6ZW9mKGJ1ZiksICZuLCBOVUxMKTsKKwkgIHRjc2V0YXR0
-ciAoVENTQU5PVywgJnRpKTsKKwkgIGJ1ZltuXSA9ICdcMCc7CisJICBpbnQg
-cm93cywgY29sczsKKwkgIHNzY2FuZiAoYnVmLCAiXDAzM1slZDslZFIiLCAm
-cm93cywgJmNvbHMpOworCSAgQ09PUkQgZHdDdXJzb3JQb3NpdGlvbiA9IHso
-U0hPUlQpKGNvbHMtMSksIChTSE9SVCkocm93cy0xKX07CisJICBTZXRDb25z
-b2xlQ3Vyc29yUG9zaXRpb24gKGdldF9vdXRwdXRfaGFuZGxlICgpLCBkd0N1
-cnNvclBvc2l0aW9uKTsKIAl9CiAgICAgICBnZXRfdHR5cCAoKS0+bmVlZF9j
-bGVhcl9zY3JlZW4gPSBmYWxzZTsKICAgICB9Cg==
+#! /usr/bin/env python
 
---Multipart=_Tue__22_Oct_2019_18_24_05_+0900_SYD/9kiCave4K7rw--
+import pty
+import os
+import select
+import sys
+
+(masterfd, slavefd) = pty.openpty()
+
+if os.fork() == 0:
+  os.close(masterfd)
+  os.dup2(slavefd, 0)
+  os.dup2(slavefd, 1)
+  os.dup2(slavefd, 2)
+  os.execv("/bin/sh", ["/bin/sh","-c","/bin/pwd;/usr/bin/clear"])
+  sys.exit(0)
+
+os.close(slavefd)
+
+while True:
+  (rlist, wlist, xlist) = select.select([masterfd], [], [masterfd], 100)
+  print("select read:",rlist,"except:",xlist)
+  if rlist:
+    try:
+      line = os.read(rlist[0], 1024)
+      print("read:", line)
+    except OSError as e:
+      print("quit:",e)
+      break
+sys.exit(0)
+
+--------------BF881BCA013A16CBF9A887DD--
