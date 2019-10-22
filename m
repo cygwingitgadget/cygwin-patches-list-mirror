@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9774-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 18231 invoked by alias); 22 Oct 2019 00:10:02 -0000
+Return-Path: <cygwin-patches-return-9775-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 70511 invoked by alias); 22 Oct 2019 06:55:11 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,63 +9,90 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 18222 invoked by uid 89); 22 Oct 2019 00:10:02 -0000
+Received: (qmail 70502 invoked by uid 89); 22 Oct 2019 06:55:11 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=screen
-X-HELO: conssluserg-02.nifty.com
-Received: from conssluserg-02.nifty.com (HELO conssluserg-02.nifty.com) (210.131.2.81) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 22 Oct 2019 00:10:00 +0000
-Received: from Express5800-S70 (ntsitm355024.sitm.nt.ngn.ppp.infoweb.ne.jp [175.184.70.24]) (authenticated)	by conssluserg-02.nifty.com with ESMTP id x9M09SnM022477	for <cygwin-patches@cygwin.com>; Tue, 22 Oct 2019 09:09:28 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com x9M09SnM022477
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1571702968;	bh=PLRk4koNkrTHTX1HIKLYztnZKhmG25PHkQ6mCBBY4zk=;	h=Date:From:To:Subject:In-Reply-To:References:From;	b=eLcOBfQvdB5apUTU/2fnuCfgCk+Lj65hLq1eTTbEYvVDRrXfBXPYeXOkhvD1aOHvg	 px24jOMKw4TCyxycIliNYQ/8KR6vyBXYaQ2db3KNDRYjq3Z+bZJ3lQm1pWbNI7c2Cc	 WC/vpCQQ4FtxNlQeOJMe2p/LQxW1doTkPTOskUU/vEW4zN77/L1Xi4JAGeK+ot//jH	 /awMc3clugWCSZShemwMR7PATNftq0PggeShuIVTfdxIXjjHpd5XriKYX5Z4fVh6wR	 DN/Bhltxc+ku7fJK5lPzx4MZduc+51dJyZAYBHaCnTqC9NxCOku9z6TCF9lqMYIOYI	 Eq+PZRMkd3HeA==
-Date: Tue, 22 Oct 2019 00:10:00 -0000
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+X-Spam-SWARE-Status: No, score=-105.3 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=HX-Languages-Length:1403, H*F:D*cygwin.com, screen
+X-HELO: mout.kundenserver.de
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (217.72.192.75) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 22 Oct 2019 06:55:10 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id 1Mj7yt-1hr3cs0z2b-00f7hl for <cygwin-patches@cygwin.com>; Tue, 22 Oct 2019 08:55:07 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 16FF0A80773; Tue, 22 Oct 2019 08:55:06 +0200 (CEST)
+Date: Tue, 22 Oct 2019 06:55:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] Cygwin: pty: Disable clear screen for ssh sessions with -t option.
-Message-Id: <20191022090930.b312514dcf8495c1db4bb461@nifty.ne.jp>
-In-Reply-To: <20191021094356.GI16240@calimero.vinschen.de>
-References: <20191018113721.2486-1-takashi.yano@nifty.ne.jp>	<20191018143306.GG16240@calimero.vinschen.de>	<20191019085051.4d2cc80811854d21b193fed6@nifty.ne.jp>	<20191021094356.GI16240@calimero.vinschen.de>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-IsSubscribed: yes
-X-SW-Source: 2019-q4/txt/msg00045.txt.bz2
+Message-ID: <20191022065506.GL16240@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20191018113721.2486-1-takashi.yano@nifty.ne.jp> <20191018143306.GG16240@calimero.vinschen.de> <20191019085051.4d2cc80811854d21b193fed6@nifty.ne.jp> <20191021094356.GI16240@calimero.vinschen.de> <20191022090930.b312514dcf8495c1db4bb461@nifty.ne.jp>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="byLs0wutDcxFdwtm"
+Content-Disposition: inline
+In-Reply-To: <20191022090930.b312514dcf8495c1db4bb461@nifty.ne.jp>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-SW-Source: 2019-q4/txt/msg00046.txt.bz2
 
-On Mon, 21 Oct 2019 11:43:56 +0200
-Corinna Vinschen wrote:
-> So it seems cmd.exe is the only (or one of few) native CLI tools
-> actually trying to manipulate the screen buffer.  And what it does is
-> not so much clearing the screen, but to align buffer line 1 with the top
-> of the screen, even if line 1 has been produced before cmd.exe started.
 
-What is done is not clearing the screen, but redrawing the screen
-based on the screen buffer. This is done not by cmd.exe but by pseudo
-console, I believe. The trigger for redrawing is not clear to me.
+--byLs0wutDcxFdwtm
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 1345
 
-You can see what is done by pseudo console by checking "typescript"
-generated by script.
+On Oct 22 09:09, Takashi Yano wrote:
+> On Mon, 21 Oct 2019 11:43:56 +0200
+> Corinna Vinschen wrote:
+> > So it seems cmd.exe is the only (or one of few) native CLI tools
+> > actually trying to manipulate the screen buffer.  And what it does is
+> > not so much clearing the screen, but to align buffer line 1 with the top
+> > of the screen, even if line 1 has been produced before cmd.exe started.
+>=20
+> What is done is not clearing the screen, but redrawing the screen
+> based on the screen buffer. This is done not by cmd.exe but by pseudo
+> console, I believe. The trigger for redrawing is not clear to me.
+>=20
+> You can see what is done by pseudo console by checking "typescript"
+> generated by script.
+>=20
+> > I didn't look deeper into this yet, but the question coming to mind is,
+> > what does GetConsoleScreenBufferInfo return right after starting
+> > `env TERM=3Ddumb script`, how does it look like right after running
+> > `reg.exe' and before `cmd.exe', and how does it look after cmd.exe
+> > changed it?
+>=20
+> I confirmed the dwSize has right screen size and dwCursorPosition
+> is (0,0) just after creating pty even though the cursor position
+> in real screen is not at top left.
+>=20
+> Clearing screen fixes this mismatch.
 
-> I didn't look deeper into this yet, but the question coming to mind is,
-> what does GetConsoleScreenBufferInfo return right after starting
-> `env TERM=dumb script`, how does it look like right after running
-> `reg.exe' and before `cmd.exe', and how does it look after cmd.exe
-> changed it?
+And calling SetConsoleCursorPosition instead does not?
 
-I confirmed the dwSize has right screen size and dwCursorPosition
-is (0,0) just after creating pty even though the cursor position
-in real screen is not at top left.
 
-Clearing screen fixes this mismatch.
+Corinna
 
-> The (admittedly vague) idea is, maybe cmd.exe can be cheated into
-> not changing the console buffer by changing it to what it expects
-> right after creating the pseudo console...
+--=20
+Corinna Vinschen
+Cygwin Maintainer
 
-To do this, it is necessary to log past data written to pty and
-push them into console screen buffer when pseudo console is started.
+--byLs0wutDcxFdwtm
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 833
 
-The console screen buffer is empty just after creating pseudo console,
-therefore, clearing screen is the simplest way to match the real screen
-with the console screen buffer.
+-----BEGIN PGP SIGNATURE-----
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl2up8kACgkQ9TYGna5E
+T6CPnA//f/g1MPbSImS3UF7Ig+Kl0w9cI11RFjYa+hhILrjsEMcoZtCpnaeqSDt5
+rxkStbUHCuZNWB1KoEDDVqtG4xxXqRk8CN4fLS+Z2XLRwlv00qaj09d3Igb1A4RO
+zTOVb+Trux8TKfca+nbQDvJ/kpkYZPtwQGaLSRlNEr5WKYMCw1cWgtVIux5gBgEE
+CzgY+KrHWpHqBH/5H88lf61Mo29k/dPrsDFekWrSUgnEGJPE0JrmFwzgIko6LuAR
+HpxRjT6GbwTjG8nhLCnxokUTo8lh7BGdghyEDdOawajtsVqSuLyNhrBKgGkKKDcG
+KC6X3b8rGz6d6+1x1j6mFMr76sp9FyLrlPnuvEn8+JrwtqIq0gMKR8GutvBNe8zZ
+mLbF4SpzjIZYOVRm02oZcVIncwbjFjqPvFarfNROE9HPozlFnmbEmMJ23c6NI8ME
+rT5WCO2qUFaqhE+3yj3vyP4ND3B4JEdwDOMOV6ET5zeGUAbB1U1uOSWe9dA7E0gv
+V1os93Np+HNGxJrKjeij4BTIZvXW1U1pNNDei7cb3h2ns9hPDEQm6F08JbGScHI4
+CEsS6OIadhu6ab91Dxcv8xF8FBUi46CP2qXyLwvtAtvQ6glw5mS0nlWBsVp8cTkI
+4qCSGl8Aix7LbQ/4xFwnRmdQE22/KYcb2R+Izwd7YkhovlYpQxc=
+=9mb+
+-----END PGP SIGNATURE-----
+
+--byLs0wutDcxFdwtm--
