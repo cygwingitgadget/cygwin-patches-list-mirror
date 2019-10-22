@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9783-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 80541 invoked by alias); 22 Oct 2019 10:06:46 -0000
+Return-Path: <cygwin-patches-return-9784-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 22316 invoked by alias); 22 Oct 2019 13:40:54 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,123 +9,95 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 80531 invoked by uid 89); 22 Oct 2019 10:06:45 -0000
+Received: (qmail 22303 invoked by uid 89); 22 Oct 2019 13:40:54 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-5.3 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,SPF_PASS autolearn=ham version=3.3.1 spammy=
-X-HELO: atfriesa01.ssi-schaefer.com
-Received: from atfriesa01.ssi-schaefer.com (HELO atfriesa01.ssi-schaefer.com) (193.186.16.100) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 22 Oct 2019 10:06:44 +0000
-Received: from samail03.wamas.com (HELO mailhost.salomon.at) ([172.28.33.235])  by atfriesa01.ssi-schaefer.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 Oct 2019 12:06:41 +0200
-Received: from [172.28.42.244]	by mailhost.salomon.at with esmtp (Exim 4.77)	(envelope-from <michael.haubenwallner@ssi-schaefer.com>)	id 1iMr3o-0001EA-EY; Tue, 22 Oct 2019 12:06:40 +0200
-Subject: Re: [PATCH] Cygwin: pty: Disable clear screen for ssh sessions with -t option.
+X-Spam-SWARE-Status: No, score=-105.2 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*F:D*cygwin.com, screen, installation
+X-HELO: mout.kundenserver.de
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.134) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 22 Oct 2019 13:40:52 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id 1N0Zfg-1i8pOw09mG-00wTY7 for <cygwin-patches@cygwin.com>; Tue, 22 Oct 2019 15:40:50 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id D95BDA80773; Tue, 22 Oct 2019 15:40:48 +0200 (CEST)
+Date: Tue, 22 Oct 2019 13:40:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-References: <20191018113721.2486-1-takashi.yano@nifty.ne.jp> <b13f5d3c-c557-ff4e-6fcd-399952bad47e@ssi-schaefer.com> <20191022080402.GO16240@calimero.vinschen.de>
-From: Michael Haubenwallner <michael.haubenwallner@ssi-schaefer.com>
-Openpgp: preference=signencrypt
-Message-ID: <40c9d2ad-24a5-400a-abd4-af4235b83e2a@ssi-schaefer.com>
-Date: Tue, 22 Oct 2019 10:06:00 -0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Thunderbird/60.9.0
+Subject: Re: [PATCH] Cygwin: pty: Disable clear screen for ssh sessions with -t option.
+Message-ID: <20191022134048.GP16240@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20191018113721.2486-1-takashi.yano@nifty.ne.jp> <20191018143306.GG16240@calimero.vinschen.de> <20191019085051.4d2cc80811854d21b193fed6@nifty.ne.jp> <20191021094356.GI16240@calimero.vinschen.de> <20191022090930.b312514dcf8495c1db4bb461@nifty.ne.jp> <20191022065506.GL16240@calimero.vinschen.de> <20191022162316.54c3bc2ff19dbc7ae1bdedf2@nifty.ne.jp> <20191022080242.GN16240@calimero.vinschen.de> <20191022182405.0ce3d7c17b0e7d924430b89c@nifty.ne.jp>
 MIME-Version: 1.0
-In-Reply-To: <20191022080402.GO16240@calimero.vinschen.de>
-Content-Type: multipart/mixed; boundary="------------BF881BCA013A16CBF9A887DD"
-X-SW-Source: 2019-q4/txt/msg00054.txt.bz2
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="AQYPrgrEUc/1pSX1"
+Content-Disposition: inline
+In-Reply-To: <20191022182405.0ce3d7c17b0e7d924430b89c@nifty.ne.jp>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-SW-Source: 2019-q4/txt/msg00055.txt.bz2
 
-This is a multi-part message in MIME format.
---------------BF881BCA013A16CBF9A887DD
+
+--AQYPrgrEUc/1pSX1
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-length: 1885
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 1379
 
-On 10/22/19 10:04 AM, Corinna Vinschen wrote:
-> On Oct 22 09:20, Michael Haubenwallner wrote:
->> On 10/18/19 1:37 PM, Takashi Yano wrote:
+On Oct 22 18:24, Takashi Yano wrote:
+> On Tue, 22 Oct 2019 10:02:42 +0200
+> Corinna Vinschen wrote:
+> > On Oct 22 16:23, Takashi Yano wrote:
+> > > On Tue, 22 Oct 2019 08:55:06 +0200
+> > > Corinna Vinschen wrote:
+> > > > On Oct 22 09:09, Takashi Yano wrote:
+> > > > > I confirmed the dwSize has right screen size and dwCursorPosition
+> > > > > is (0,0) just after creating pty even though the cursor position
+> > > > > in real screen is not at top left.
+> > > > >=20
+> > > > > Clearing screen fixes this mismatch.
+> > > >=20
+> > > > And calling SetConsoleCursorPosition instead does not?
+> > >=20
+> > > For SetConsoleCursorPosition, it is necessary to know the cursor
+> > > position of course. I cannot come up with any other way than
+> > > using ANSI escape sequence "ESC[6n". Do you think this is
+> > > feasible?
+> >=20
+> > Hmm, interesting point.  I think that should be ok for a start.
+> > assuming it works.
+>=20
+> Unfortunately, this does not work as expected. Please try
+> attached patch. Cursor position is kept as expected, but the
+> screen contents before opening pty are lost when cmd.exe is
+> executed.
+>=20
+> However, this fixes cursor position problem of netsh and WMIC.
 
->>> +      const char *term = getenv ("TERM");
->>> +      if (term && strcmp (term, "dumb") && !strstr (term, "emacs") &&
->>> +	  wcsstr (myself->progname, L"\\usr\\sbin\\sshd.exe"))
+Am I doing something wrong?  This code crashes mintty on my
+installation.  At start, a string of "6n6n6n6n..." appears and then
+mintty exits.
 
->> Again, my real problem does not utilize ssh at all, but is some python script
->> using multiple pty.openpty() to spawn commands inside, to allow for herding
->> all the subprocesses started by the commands (Ctrl-C or similar).
 
-> In terms of clearing the screen at all, what's your opinion, Michael?
+Corinna
 
-While I do not fully understand TTY handling, clearing the screen because
-just opening a PTY doesn't feel correct.
+--=20
+Corinna Vinschen
+Cygwin Maintainer
 
-To start with, attached is some python script where I do not expect to see
-the initial clear screen code, but the one from /usr/bin/clear only.
+--AQYPrgrEUc/1pSX1
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 833
 
-This is what I see with python3 on *Linux*:
+-----BEGIN PGP SIGNATURE-----
 
-$ TERM=dumb python3 ./ptytest1.py 
-select read: [3] except: []
-read: b'/home/haubi\r\n'
-select read: [3] except: []
-quit: [Errno 5] Input/output error
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl2vBuAACgkQ9TYGna5E
+T6Du/w//dTt8CFDwWA1Gk5SCr8qGLETDxkm4eeeq170zGLFlE193pmd60cZ/ixMB
+X9qj/EVOXD3s/9yfbLLfKpfPhOpMUEqD84uFmfJIK/QO9xSHqkFK1xjqi5+Ecg6J
+3Qd8AHMZyNww2GEbn/rRDZ6ApSvdv6T80hYoulcsZQ1JY5yd7fd94/vFGhPh6RuR
+jlquFHMy3TtiZIzhQs0CF5sSlUpYEbpK+1MNJ/bvFeIvBoPcaKIr046yXSKVAREe
+eOQ/TaZVguTMvYFQTp0uN7l/yZ2GM0UE8i0PK1O11yUP7MCKb7UVXxxblbBi6koT
+Re/zFphhODYo7rVJwdHTDdo/E8JqZbuDlFhlXKu6Gmu7KaFThAMix+Vqvaor4GMP
+gRX/y4jtF9zhC3Ddxta581jntTu+qL9qFueHxbVagBFxI0Iy6/Ht6UXPx2ia/ziS
+MbmH17KMQJtRUB704znAh4DPIkHZ7VKGK+Ty365PoF1bm3Qrc/CQwN9+Yj/34rnz
+m21WjaI1A0BSZRTVnuKwl5O80Szv9oRvorhjq4cVedrMbONZ21No0/JctFBAaBML
+qF7/YI6mB1HuQG42NN6u8amC1eGYeGcILDLfoHo4D8cy1LBNdCHakkoXErRQwNmU
+xTasC0P6gpW7BRxrjiRxYwDgi4MSdyTY5/7wi9NiKrW2H2pZIUE=
+=nOAE
+-----END PGP SIGNATURE-----
 
-$ TERM=xterm python3 ./ptytest1.py 
-select read: [3] except: []
-read: b'/home/haubi\r\n'
-select read: [3] except: []
-read: b'\x1b[H\x1b[2J\x1b[3J'
-select read: [3] except: []
-quit: [Errno 5] Input/output error
-
-$ TERM=screen python3 ./ptytest1.py 
-select read: [3] except: []
-read: b'/home/haubi\r\n'
-select read: [3] except: []
-read: b'\x1b[H\x1b[J'
-select read: [3] except: []
-quit: [Errno 5] Input/output error
-
-Note that the clear screen code does depend on the TERM value, and /usr/bin/clear
-does even yell if TERM is empty, unknown or unset.
-
-Also note that Linux select() does not yield the fd as exception when it was closed.
-
-Interesting enough, cygwin-3.0.7 does dump core somewhere in between, so the real
-python program probably does some additional setup I've not extracted yet.
-
-/haubi/
-
---------------BF881BCA013A16CBF9A887DD
-Content-Type: text/x-python;
- name="ptytest1.py"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="ptytest1.py"
-Content-length: 602
-
-#! /usr/bin/env python
-
-import pty
-import os
-import select
-import sys
-
-(masterfd, slavefd) = pty.openpty()
-
-if os.fork() == 0:
-  os.close(masterfd)
-  os.dup2(slavefd, 0)
-  os.dup2(slavefd, 1)
-  os.dup2(slavefd, 2)
-  os.execv("/bin/sh", ["/bin/sh","-c","/bin/pwd;/usr/bin/clear"])
-  sys.exit(0)
-
-os.close(slavefd)
-
-while True:
-  (rlist, wlist, xlist) = select.select([masterfd], [], [masterfd], 100)
-  print("select read:",rlist,"except:",xlist)
-  if rlist:
-    try:
-      line = os.read(rlist[0], 1024)
-      print("read:", line)
-    except OSError as e:
-      print("quit:",e)
-      break
-sys.exit(0)
-
---------------BF881BCA013A16CBF9A887DD--
+--AQYPrgrEUc/1pSX1--
