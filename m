@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9787-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 76480 invoked by alias); 22 Oct 2019 17:52:56 -0000
+Return-Path: <cygwin-patches-return-9788-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 23437 invoked by alias); 23 Oct 2019 03:27:26 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,60 +9,175 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 76464 invoked by uid 89); 22 Oct 2019 17:52:55 -0000
+Received: (qmail 23420 invoked by uid 89); 23 Oct 2019 03:27:26 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-15.2 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.1 spammy=USB, usb, device, HX-Spam-Relays-External:ESMTPA
-X-HELO: vsmx009.vodafonemail.xion.oxcs.net
-Received: from vsmx009.vodafonemail.xion.oxcs.net (HELO vsmx009.vodafonemail.xion.oxcs.net) (153.92.174.87) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 22 Oct 2019 17:52:45 +0000
-Received: from vsmx001.vodafonemail.xion.oxcs.net (unknown [192.168.75.191])	by mta-5-out.mta.xion.oxcs.net (Postfix) with ESMTP id 584AC159D748	for <cygwin-patches@cygwin.com>; Tue, 22 Oct 2019 17:52:43 +0000 (UTC)
-Received: from Gertrud (unknown [84.160.192.162])	by mta-5-out.mta.xion.oxcs.net (Postfix) with ESMTPA id 2A693159D74E	for <cygwin-patches@cygwin.com>; Tue, 22 Oct 2019 17:52:40 +0000 (UTC)
-From: Achim Gratz <Stromeko@nexgo.de>
+X-Spam-SWARE-Status: No, score=-1.9 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=HX-Languages-Length:378, screen, H*c:HHHH, installation
+X-HELO: conssluserg-06.nifty.com
+Received: from conssluserg-06.nifty.com (HELO conssluserg-06.nifty.com) (210.131.2.91) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 23 Oct 2019 03:27:24 +0000
+Received: from Express5800-S70 (ntsitm355024.sitm.nt.ngn.ppp.infoweb.ne.jp [175.184.70.24]) (authenticated)	by conssluserg-06.nifty.com with ESMTP id x9N3RFA8026814	for <cygwin-patches@cygwin.com>; Wed, 23 Oct 2019 12:27:15 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com x9N3RFA8026814
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1571801235;	bh=MI9q9lwUDL+dImSIDHbNdjVnyvnBo7Vr/u/+/EbhKOM=;	h=Date:From:To:Subject:In-Reply-To:References:From;	b=Eg6JTGOditOlYvFSEECLO2i0U1QiPWpiHWYC042b5sd2Anc38lE9qbM52KSBGaPk4	 Zi25dWDOC6On6nLGvwitH8bAKF+9iKxVIcG2WYW2DZlHlBQDmtKYd/CcXVG8cqhRbJ	 E0ETL7wZidte4Ru3a0GT+DSmsXzzAiAPjseN9tIB/8ZkkhoAVPZfYLr8tSA9IwcZeP	 Cwv9q28MB5a8BuD6XwnYGN6sKK5VpN4AcDrC1NVw0Szgb6kNynIH0zDuv4dlqmgED2	 wtu/Rl1xM0djzD1ZHbKaCHf7EKET/X00mev3aI9rJbgzE/HYh7hp6Qa4xsOHcsxH75	 3cmOlK4cAWk/w==
+Date: Wed, 23 Oct 2019 03:27:00 -0000
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: Provide more COM devices
-References: <87mudvwnrl.fsf@Rainer.invalid>	<20191021081844.GH16240@calimero.vinschen.de>	<87pniq7yvm.fsf@Rainer.invalid>	<20191022071622.GM16240@calimero.vinschen.de>	<87d0eo65s5.fsf@Rainer.invalid>	<20191022174151.GV16240@calimero.vinschen.de>
-Date: Tue, 22 Oct 2019 17:52:00 -0000
-In-Reply-To: <20191022174151.GV16240@calimero.vinschen.de> (Corinna Vinschen's	message of "Tue, 22 Oct 2019 19:41:51 +0200")
-Message-ID: <878spc651z.fsf@Rainer.invalid>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain
-X-SW-Source: 2019-q4/txt/msg00058.txt.bz2
+Subject: Re: [PATCH] Cygwin: pty: Disable clear screen for ssh sessions with -t option.
+Message-Id: <20191023122717.66d241bd0a7814b7216d78f5@nifty.ne.jp>
+In-Reply-To: <20191022134048.GP16240@calimero.vinschen.de>
+References: <20191018113721.2486-1-takashi.yano@nifty.ne.jp>	<20191018143306.GG16240@calimero.vinschen.de>	<20191019085051.4d2cc80811854d21b193fed6@nifty.ne.jp>	<20191021094356.GI16240@calimero.vinschen.de>	<20191022090930.b312514dcf8495c1db4bb461@nifty.ne.jp>	<20191022065506.GL16240@calimero.vinschen.de>	<20191022162316.54c3bc2ff19dbc7ae1bdedf2@nifty.ne.jp>	<20191022080242.GN16240@calimero.vinschen.de>	<20191022182405.0ce3d7c17b0e7d924430b89c@nifty.ne.jp>	<20191022134048.GP16240@calimero.vinschen.de>
+Mime-Version: 1.0
+Content-Type: multipart/mixed; boundary="Multipart=_Wed__23_Oct_2019_12_27_17_+0900_nGJF1y+qj2lvLokI"
+X-IsSubscribed: yes
+X-SW-Source: 2019-q4/txt/msg00059.txt.bz2
 
+This is a multi-part message in MIME format.
 
-As requested:
+--Multipart=_Wed__23_Oct_2019_12_27_17_+0900_nGJF1y+qj2lvLokI
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Content-length: 301
 
-From 7908d09f547e0a7a707139d0faaccc151b88024c Mon Sep 17 00:00:00 2001
-From: Achim Gratz <Stromeko@Stromeko.DE>
-Date: Tue, 22 Oct 2019 19:50:50 +0200
-Subject: [PATCH] Cygwin: provide more COM devices
+On Tue, 22 Oct 2019 15:40:48 +0200
+Corinna Vinschen wrote:
+> Am I doing something wrong?  This code crashes mintty on my
+> installation.  At start, a string of "6n6n6n6n..." appears and then
+> mintty exits.
 
-* winsup/cygwin/devices.in: Provide for 128 COM devices since Windows
-  likes to create lots of these over time (one per identifiable device
-  and USB port).
----
- winsup/cygwin/devices.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I cannot reproduce that.... How about this one?
 
-diff --git a/winsup/cygwin/devices.in b/winsup/cygwin/devices.in
-index 59f5f00d2..9a42951f6 100644
---- a/winsup/cygwin/devices.in
-+++ b/winsup/cygwin/devices.in
-@@ -164,7 +164,7 @@ const _device dev_error_storage =
- "/dev/urandom", BRACK(FH_URANDOM), "\\Device\\Null", exists_ntdev, S_IFCHR, =urandom_dev
- "/dev/clipboard", BRACK(FH_CLIPBOARD), "\\Device\\Null", exists_ntdev, S_IFCHR
- "/dev/com%(1-16)d", BRACK(FHDEV(DEV_SERIAL_MAJOR, {$1 - 1})), "\\??\\COM{$1}", exists_ntdev_silent, S_IFCHR
--"/dev/ttyS%(0-63)d", BRACK(FHDEV(DEV_SERIAL_MAJOR, {$1})), "\\??\\COM{$1 + 1}", exists_ntdev, S_IFCHR
-+"/dev/ttyS%(0-127)d", BRACK(FHDEV(DEV_SERIAL_MAJOR, {$1})), "\\??\\COM{$1 + 1}", exists_ntdev, S_IFCHR
- ":pipe", BRACK(FH_PIPE), "/dev/pipe", exists_internal, S_IFCHR
- ":fifo", BRACK(FH_FIFO), "/dev/fifo", exists_internal, S_IFCHR
- "/dev/st%(0-127)d", BRACK(FHDEV(DEV_TAPE_MAJOR, {$1})), "\\Device\\Tape{$1}", exists_ntdev, S_IFBLK
 -- 
-2.23.0
+Takashi Yano <takashi.yano@nifty.ne.jp>
 
+--Multipart=_Wed__23_Oct_2019_12_27_17_+0900_nGJF1y+qj2lvLokI
+Content-Type: application/octet-stream;
+ name="cursor-position-2.patch"
+Content-Disposition: attachment;
+ filename="cursor-position-2.patch"
+Content-Transfer-Encoding: base64
+Content-length: 7508
 
-Achim.
--- 
-+<[Q+ Matrix-12 WAVE#46+305 Neuron microQkb Andromeda XTk Blofeld]>+
+ZGlmZiAtLWdpdCBhL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXJfdHR5LmNjIGIv
+d2luc3VwL2N5Z3dpbi9maGFuZGxlcl90dHkuY2MKaW5kZXggZGE2MTE5ZGZi
+Li4yNmY5OTY2OWYgMTAwNjQ0Ci0tLSBhL3dpbnN1cC9jeWd3aW4vZmhhbmRs
+ZXJfdHR5LmNjCisrKyBiL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXJfdHR5LmNj
+CkBAIC0xMjk2LDYgKzEyOTYsMzAgQEAgZGV0YWNoOgogICByZXN0b3JlX3Jl
+YXR0YWNoX3Bjb24gKCk7CiB9CiAKKy8qIElmIG1hc3RlciBwcm9jZXNzIGlz
+IHJ1bm5pbmcgYXMgc2VydmljZSwgYXR0YWNoaW5nIHRvCisgICBwc2V1ZG8g
+Y29uc29sZSBzaG91bGQgYmUgZG9uZSBpbiBmb3JrLiBJZiBhdHRhY2hpbmcK
+KyAgIGlzIGRvbmUgaW4gc3Bhd24gZm9yIGluZXRkIG9yIHNzaGQsIGl0IGZh
+aWxzIGJlY2F1c2UKKyAgIHRoZSBoZWxwZXIgcHJvY2VzcyBpcyBydW5uaW5n
+IGFzIHByaXZpbGVnZWQgdXNlciB3aGlsZQorICAgc2xhdmUgcHJvY2VzcyBp
+cyBub3QuIFRoaXMgZnVuY3Rpb24gaXMgdXNlZCB0byBkZXRlcm1pbmUKKyAg
+IGlmIHRoZSBwcm9jZXNzIGlzIHJ1bm5pbmcgYXMgYSBzcnZpY2Ugb3Igbm90
+LiAqLworc3RhdGljIGJvb2wKK2lzX3J1bm5pbmdfYXNfc2VydmljZSAodm9p
+ZCkKK3sKKyAgRFdPUkQgZHdTaXplID0gMDsKKyAgUFRPS0VOX0dST1VQUyBw
+R3JvdXBJbmZvOworICB0bXBfcGF0aGJ1ZiB0cDsKKyAgcEdyb3VwSW5mbyA9
+IChQVE9LRU5fR1JPVVBTKSB0cC53X2dldCAoKTsKKyAgTnRRdWVyeUluZm9y
+bWF0aW9uVG9rZW4gKGhQcm9jVG9rZW4sIFRva2VuR3JvdXBzLCBwR3JvdXBJ
+bmZvLAorCQkJCQkyICogTlRfTUFYX1BBVEgsICZkd1NpemUpOworICBmb3Ig
+KERXT1JEIGk9MDsgaTxwR3JvdXBJbmZvLT5Hcm91cENvdW50OyBpKyspCisg
+ICAgaWYgKFJ0bEVxdWFsU2lkICh3ZWxsX2tub3duX3NlcnZpY2Vfc2lkLCBw
+R3JvdXBJbmZvLT5Hcm91cHNbaV0uU2lkKSkKKyAgICAgIHJldHVybiB0cnVl
+OworICBmb3IgKERXT1JEIGk9MDsgaTxwR3JvdXBJbmZvLT5Hcm91cENvdW50
+OyBpKyspCisgICAgaWYgKFJ0bEVxdWFsU2lkIChtYW5kYXRvcnlfc3lzdGVt
+X2ludGVncml0eV9zaWQsIHBHcm91cEluZm8tPkdyb3Vwc1tpXS5TaWQpKQor
+ICAgICAgcmV0dXJuIHRydWU7CisgIHJldHVybiBmYWxzZTsKK30KKwogc3Np
+emVfdCBfX3N0ZGNhbGwKIGZoYW5kbGVyX3B0eV9zbGF2ZTo6d3JpdGUgKGNv
+bnN0IHZvaWQgKnB0ciwgc2l6ZV90IGxlbikKIHsKQEAgLTEzMDUsNiArMTMy
+OSwzMCBAQCBmaGFuZGxlcl9wdHlfc2xhdmU6OndyaXRlIChjb25zdCB2b2lk
+ICpwdHIsIHNpemVfdCBsZW4pCiAgIGlmIChiZyA8PSBiZ19lb2YpCiAgICAg
+cmV0dXJuIChzc2l6ZV90KSBiZzsKIAorICBpZiAoZ2V0X3R0eXAgKCktPm5l
+ZWRfY2xlYXJfc2NyZWVuX29uX3dyaXRlKQorICAgIHsKKyAgICAgIGlmIChp
+c19ydW5uaW5nX2FzX3NlcnZpY2UgKCkpCisJeworCSAgc3RydWN0IHRlcm1p
+b3MgdGksIHRpX25ldzsKKwkgIHRjZ2V0YXR0ciAoJnRpKTsKKwkgIHRpX25l
+dyA9IHRpOworCSAgdGlfbmV3LmNfbGZsYWcgJj0gKH5JQ0FOT04gfCBFQ0hP
+KTsKKwkgIHRjc2V0YXR0ciAoVENTQU5PVywgJnRpX25ldyk7CisJICBjaGFy
+IGJ1ZlszMl07CisJICBEV09SRCBuOworCSAgV3JpdGVGaWxlIChnZXRfb3V0
+cHV0X2hhbmRsZV9jeWcgKCksICJcMDMzWzZuIiwgNCwgJm4sIE5VTEwpOwor
+CSAgUmVhZEZpbGUgKGdldF9oYW5kbGVfY3lnICgpLCBidWYsIHNpemVvZihi
+dWYpLTEsICZuLCBOVUxMKTsKKwkgIFJlc2V0RXZlbnQgKGlucHV0X2F2YWls
+YWJsZV9ldmVudCk7CisJICB0Y3NldGF0dHIgKFRDU0FOT1csICZ0aSk7CisJ
+ICBidWZbbl0gPSAnXDAnOworCSAgaW50IHJvd3MsIGNvbHM7CisJICBzc2Nh
+bmYgKGJ1ZiwgIlwwMzNbJWQ7JWRSIiwgJnJvd3MsICZjb2xzKTsKKwkgIENP
+T1JEIGR3Q3Vyc29yUG9zaXRpb24gPSB7KFNIT1JUKShjb2xzLTEpLCAoU0hP
+UlQpKHJvd3MtMSl9OworCSAgU2V0Q29uc29sZUN1cnNvclBvc2l0aW9uIChn
+ZXRfb3V0cHV0X2hhbmRsZSAoKSwgZHdDdXJzb3JQb3NpdGlvbik7CisJfQor
+ICAgICAgZ2V0X3R0eXAgKCktPm5lZWRfY2xlYXJfc2NyZWVuX29uX3dyaXRl
+ID0gZmFsc2U7CisgICAgfQorCiAgIHRlcm1pb3NfcHJpbnRmICgicHR5JWQs
+IHdyaXRlKCVwLCAlbHUpIiwgZ2V0X21pbm9yICgpLCBwdHIsIGxlbik7CiAK
+ICAgcHVzaF9wcm9jZXNzX3N0YXRlIHByb2Nlc3Nfc3RhdGUgKFBJRF9UVFlP
+VSk7CkBAIC0yNjY4LDcgKzI3MTYsMTIgQEAgZmhhbmRsZXJfcHR5X3NsYXZl
+OjpmaXh1cF9hZnRlcl9hdHRhY2ggKGJvb2wgbmF0aXZlX21heWJlLCBpbnQg
+ZmRfc2V0KQogCSAgaWYgKGdldF90dHlwICgpLT5udW1fcGNvbl9hdHRhY2hl
+ZF9zbGF2ZXMgPT0gMAogCSAgICAgICYmICFBTFdBWVNfVVNFX1BDT04pCiAJ
+ICAgIC8qIEFzc3VtZSB0aGlzIGlzIHRoZSBmaXJzdCBwcm9jZXNzIHVzaW5n
+IHRoaXMgcHR5IHNsYXZlLiAqLwotCSAgICBnZXRfdHR5cCAoKS0+bmVlZF9j
+bGVhcl9zY3JlZW4gPSB0cnVlOworCSAgICB7CisJICAgICAgaWYgKGlzX3J1
+bm5pbmdfYXNfc2VydmljZSAoKSkKKwkJZ2V0X3R0eXAgKCktPm5lZWRfY2xl
+YXJfc2NyZWVuX29uX3dyaXRlID0gdHJ1ZTsKKwkgICAgICBlbHNlCisJCWdl
+dF90dHlwICgpLT5uZWVkX2NsZWFyX3NjcmVlbiA9IHRydWU7CisJICAgIH0K
+IAogCSAgZ2V0X3R0eXAgKCktPm51bV9wY29uX2F0dGFjaGVkX3NsYXZlcyAr
+KzsKIAl9CkBAIC0yNzIyLDEwICsyNzc1LDIyIEBAIGZoYW5kbGVyX3B0eV9z
+bGF2ZTo6Zml4dXBfYWZ0ZXJfZm9yayAoSEFORExFIHBhcmVudCkKICAgICAg
+IGNvbnN0IGNoYXIgKnRlcm0gPSBnZXRlbnYgKCJURVJNIik7CiAgICAgICBp
+ZiAodGVybSAmJiBzdHJjbXAgKHRlcm0sICJkdW1iIikgJiYgIXN0cnN0ciAo
+dGVybSwgImVtYWNzIikpCiAJewotCSAgLyogRklYTUU6IENsZWFyaW5nIHNl
+cXVlbmNlIG1heSBub3QgYmUgIl5bW0heW1tKIgotCSAgICAgZGVwZW5kaW5n
+IG9uIHRoZSB0ZXJtaW5hbCB0eXBlLiAqLworCSAgc3RydWN0IHRlcm1pb3Mg
+dGksIHRpX25ldzsKKwkgIHRjZ2V0YXR0ciAoJnRpKTsKKwkgIHRpX25ldyA9
+IHRpOworCSAgdGlfbmV3LmNfbGZsYWcgJj0gKH5JQ0FOT04gfCBFQ0hPKTsK
+KwkgIHRjc2V0YXR0ciAoVENTQU5PVywgJnRpX25ldyk7CisJICBjaGFyIGJ1
+ZlszMl07CiAJICBEV09SRCBuOwotCSAgV3JpdGVGaWxlIChnZXRfb3V0cHV0
+X2hhbmRsZV9jeWcgKCksICJcMDMzW0hcMDMzW0oiLCA2LCAmbiwgTlVMTCk7
+CisJICBXcml0ZUZpbGUgKGdldF9vdXRwdXRfaGFuZGxlX2N5ZyAoKSwgIlww
+MzNbNm4iLCA0LCAmbiwgTlVMTCk7CisJICBSZWFkRmlsZSAoZ2V0X2hhbmRs
+ZV9jeWcgKCksIGJ1Ziwgc2l6ZW9mKGJ1ZiktMSwgJm4sIE5VTEwpOworCSAg
+UmVzZXRFdmVudCAoaW5wdXRfYXZhaWxhYmxlX2V2ZW50KTsKKwkgIHRjc2V0
+YXR0ciAoVENTQU5PVywgJnRpKTsKKwkgIGJ1ZltuXSA9ICdcMCc7CisJICBp
+bnQgcm93cywgY29sczsKKwkgIHNzY2FuZiAoYnVmLCAiXDAzM1slZDslZFIi
+LCAmcm93cywgJmNvbHMpOworCSAgQ09PUkQgZHdDdXJzb3JQb3NpdGlvbiA9
+IHsoU0hPUlQpKGNvbHMtMSksIChTSE9SVCkocm93cy0xKX07CisJICBTZXRD
+b25zb2xlQ3Vyc29yUG9zaXRpb24gKGdldF9vdXRwdXRfaGFuZGxlICgpLCBk
+d0N1cnNvclBvc2l0aW9uKTsKIAl9CiAgICAgICBnZXRfdHR5cCAoKS0+bmVl
+ZF9jbGVhcl9zY3JlZW4gPSBmYWxzZTsKICAgICB9CkBAIC0zMDg4LDMwICsz
+MTUzLDYgQEAgcHR5X21hc3Rlcl9md2RfdGhyZWFkIChWT0lEICphcmcpCiAg
+IHJldHVybiAoKGZoYW5kbGVyX3B0eV9tYXN0ZXIgKikgYXJnKS0+cHR5X21h
+c3Rlcl9md2RfdGhyZWFkICgpOwogfQogCi0vKiBJZiBtYXN0ZXIgcHJvY2Vz
+cyBpcyBydW5uaW5nIGFzIHNlcnZpY2UsIGF0dGFjaGluZyB0bwotICAgcHNl
+dWRvIGNvbnNvbGUgc2hvdWxkIGJlIGRvbmUgaW4gZm9yay4gSWYgYXR0YWNo
+aW5nCi0gICBpcyBkb25lIGluIHNwYXduIGZvciBpbmV0ZCBvciBzc2hkLCBp
+dCBmYWlscyBiZWNhdXNlCi0gICB0aGUgaGVscGVyIHByb2Nlc3MgaXMgcnVu
+bmluZyBhcyBwcml2aWxlZ2VkIHVzZXIgd2hpbGUKLSAgIHNsYXZlIHByb2Nl
+c3MgaXMgbm90LiBUaGlzIGZ1bmN0aW9uIGlzIHVzZWQgdG8gZGV0ZXJtaW5l
+Ci0gICBpZiB0aGUgcHJvY2VzcyBpcyBydW5uaW5nIGFzIGEgc3J2aWNlIG9y
+IG5vdC4gKi8KLXN0YXRpYyBib29sCi1pc19ydW5uaW5nX2FzX3NlcnZpY2Ug
+KHZvaWQpCi17Ci0gIERXT1JEIGR3U2l6ZSA9IDA7Ci0gIFBUT0tFTl9HUk9V
+UFMgcEdyb3VwSW5mbzsKLSAgdG1wX3BhdGhidWYgdHA7Ci0gIHBHcm91cElu
+Zm8gPSAoUFRPS0VOX0dST1VQUykgdHAud19nZXQgKCk7Ci0gIE50UXVlcnlJ
+bmZvcm1hdGlvblRva2VuIChoUHJvY1Rva2VuLCBUb2tlbkdyb3VwcywgcEdy
+b3VwSW5mbywKLQkJCQkJMiAqIE5UX01BWF9QQVRILCAmZHdTaXplKTsKLSAg
+Zm9yIChEV09SRCBpPTA7IGk8cEdyb3VwSW5mby0+R3JvdXBDb3VudDsgaSsr
+KQotICAgIGlmIChSdGxFcXVhbFNpZCAod2VsbF9rbm93bl9zZXJ2aWNlX3Np
+ZCwgcEdyb3VwSW5mby0+R3JvdXBzW2ldLlNpZCkpCi0gICAgICByZXR1cm4g
+dHJ1ZTsKLSAgZm9yIChEV09SRCBpPTA7IGk8cEdyb3VwSW5mby0+R3JvdXBD
+b3VudDsgaSsrKQotICAgIGlmIChSdGxFcXVhbFNpZCAod2VsbF9rbm93bl9p
+bnRlcmFjdGl2ZV9zaWQsIHBHcm91cEluZm8tPkdyb3Vwc1tpXS5TaWQpKQot
+ICAgICAgcmV0dXJuIGZhbHNlOwotICByZXR1cm4gdHJ1ZTsKLX0KLQogYm9v
+bAogZmhhbmRsZXJfcHR5X21hc3Rlcjo6c2V0dXBfcHNldWRvY29uc29sZSAo
+KQogewpkaWZmIC0tZ2l0IGEvd2luc3VwL2N5Z3dpbi90dHkuY2MgYi93aW5z
+dXAvY3lnd2luL3R0eS5jYwppbmRleCA0NjAxNTNjZGIuLjE1OTVkMDI3OCAx
+MDA2NDQKLS0tIGEvd2luc3VwL2N5Z3dpbi90dHkuY2MKKysrIGIvd2luc3Vw
+L2N5Z3dpbi90dHkuY2MKQEAgLTI0NSw2ICsyNDUsNyBAQCB0dHk6OmluaXQg
+KCkKICAgbnVtX3Bjb25fYXR0YWNoZWRfc2xhdmVzID0gMDsKICAgdGVybV9j
+b2RlX3BhZ2UgPSAwOwogICBuZWVkX2NsZWFyX3NjcmVlbiA9IGZhbHNlOwor
+ICBuZWVkX2NsZWFyX3NjcmVlbl9vbl93cml0ZSA9IGZhbHNlOwogfQogCiBI
+QU5ETEUKZGlmZiAtLWdpdCBhL3dpbnN1cC9jeWd3aW4vdHR5LmggYi93aW5z
+dXAvY3lnd2luL3R0eS5oCmluZGV4IDkyN2Q3YWZkOS4uYzdhZWVmODViIDEw
+MDY0NAotLS0gYS93aW5zdXAvY3lnd2luL3R0eS5oCisrKyBiL3dpbnN1cC9j
+eWd3aW4vdHR5LmgKQEAgLTEwNiw2ICsxMDYsNyBAQCBwcml2YXRlOgogICBp
+bnQgbnVtX3Bjb25fYXR0YWNoZWRfc2xhdmVzOwogICBVSU5UIHRlcm1fY29k
+ZV9wYWdlOwogICBib29sIG5lZWRfY2xlYXJfc2NyZWVuOworICBib29sIG5l
+ZWRfY2xlYXJfc2NyZWVuX29uX3dyaXRlOwogCiBwdWJsaWM6CiAgIEhBTkRM
+RSBmcm9tX21hc3RlciAoKSBjb25zdCB7IHJldHVybiBfZnJvbV9tYXN0ZXI7
+IH0K
 
-Waldorf MIDI Implementation & additional documentation:
-http://Synth.Stromeko.net/Downloads.html#WaldorfDocs
+--Multipart=_Wed__23_Oct_2019_12_27_17_+0900_nGJF1y+qj2lvLokI--
