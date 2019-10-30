@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9795-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 45265 invoked by alias); 24 Oct 2019 13:33:11 -0000
+Return-Path: <cygwin-patches-return-9796-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 9176 invoked by alias); 30 Oct 2019 15:48:01 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,95 +9,49 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 45253 invoked by uid 89); 24 Oct 2019 13:33:10 -0000
+Received: (qmail 9091 invoked by uid 89); 30 Oct 2019 15:48:00 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-101.9 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=screen, H*F:D*cygwin.com
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (217.72.192.74) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 24 Oct 2019 13:33:08 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id 1MXYEr-1iVeo91L95-00YwTX for <cygwin-patches@cygwin.com>; Thu, 24 Oct 2019 15:33:06 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 82853A8045C; Thu, 24 Oct 2019 15:33:05 +0200 (CEST)
-Date: Thu, 24 Oct 2019 13:33:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-15.7 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3 autolearn=ham version=3.3.1 spammy=cygwincom, cygwin.com
+X-HELO: nihsmtpxway.hub.nih.gov
+Received: from nihsmtpxway.hub.nih.gov (HELO nihsmtpxway.hub.nih.gov) (128.231.90.103) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 30 Oct 2019 15:47:58 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;  d=nih.gov; i=@nih.gov; q=dns/txt; s=NIH; t=1572450478;  x=1603986478;  h=from:to:cc:subject:date:message-id;  bh=ti49Bu9gKHpr9XTK+psjfIT6qGqER0kBjq9VUfoUVmA=;  b=Rr7oBTl8bH8+jCyhHXHanE985mfQLBAE5gha5XlvHOqoZjtn0izZVwtJ   1nO4sgFMcucn9VMA8RUYL9G08i0mFBclKOPhqdBRCaBxKU71Vkijw2gip   SpPJ50U4q5q/TXijwEZmOCTAtP8JvxWmS7RcmUZfb8W0PNFGmfVkgADur   18CyFzHg8hSVp5aupGh443YIMmb54BKOMdgI1cPAplLQSLCzr6R2qyvUo   pASvWiFSbnTWg9hYF1llc0n+KddAY9+jxRekh62Wbjt2meZ97vK9HIRGT   b6hBVFDGqFdDNgpp0pvW46sQMkmEG8Z6aPYPFAhHvgdOCf5CpzPoWl1rz   A==;
+IronPort-SDR: TAalYmFtj7GZ90K5U1mzKp/haXxbvxsx9B5X8xlQjgdA7qh/TmW6Ra4x7zK4pKtDmzH+raJlKC UTqH0lMwY9tS+0RDIbnCsXugJQ+9erQ6j0k4A8NU5dEW95FVNzOGQUnPxfiMHRGbzNi+unMqds VH2lbo4NWwV/NUZlPGUhACsKtBF85Yv+XaGZZsISDolj7Sk2HST4bssELkbLUzZyZJA7adiebJ HVE6k17vVoGFA2xsr+i7DMBfiV2/KVBxeL7CrfBIPE8Hd/e0GykwM1RjvIsE7UMalkkWyBEa0H gRA=
+Received: from msg-b12-ltm1_v9.hub.nih.gov (HELO mail2.ncbi.nlm.nih.gov) ([128.231.90.73])  by nihsmtpxway.hub.nih.gov with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2019 11:47:33 -0400
+Received: from coredev2.be-md.ncbi.nlm.nih.gov (coredev2.be-md.ncbi.nlm.nih.gov [130.14.24.61])	by mail2.ncbi.nlm.nih.gov (Postfix) with ESMTP id 702A71A0002;	Wed, 30 Oct 2019 11:47:32 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ncbi.nlm.nih.gov;	s=ncbi-nlm; t=1572450452;	bh=pkozW09XU2rG3fJhg+2N/g60DnMXMoRnPFX0Q9eNLGg=;	h=From:To:Cc:Subject:Date;	b=mBzTsp8SS+aLvXUu326be437/32Fl6m3m7hHOW1+Oe5tazGFMXgB123iwH0L4eFqG	 A8hmGGxY5P33WS5xlc+YFjROVs5MZk6eEPDJZWKy+FAe1u7be3dUWpwX2mdt51Ostk	 LLBrj/ZwOpJr/U8vMeeZDHSnoRVNeVBAa+pWC+Ug=
+Received: from coredev2.be-md.ncbi.nlm.nih.gov (localhost [127.0.0.1])	by coredev2.be-md.ncbi.nlm.nih.gov (Postfix) with ESMTP id 211A11DBD5;	Wed, 30 Oct 2019 11:47:32 -0400 (EDT)
+From: "Anton Lavrentiev via cygwin-patches" <cygwin-patches@cygwin.com>
+Reply-To: Anton Lavrentiev <lavr@ncbi.nlm.nih.gov>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Disable clear screen for ssh sessions with -t option.
-Message-ID: <20191024133305.GF16240@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20191022065506.GL16240@calimero.vinschen.de> <20191022162316.54c3bc2ff19dbc7ae1bdedf2@nifty.ne.jp> <20191022080242.GN16240@calimero.vinschen.de> <20191022182405.0ce3d7c17b0e7d924430b89c@nifty.ne.jp> <20191022134048.GP16240@calimero.vinschen.de> <20191023122717.66d241bd0a7814b7216d78f5@nifty.ne.jp> <20191023120542.GA16240@calimero.vinschen.de> <20191024100130.4c7f6e4ac55c10143e3c86f6@nifty.ne.jp> <20191024093817.GD16240@calimero.vinschen.de> <20191024191724.f44a44745f16f78595ae1b43@nifty.ne.jp>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="rd/3IrB17klb+Ksj"
-Content-Disposition: inline
-In-Reply-To: <20191024191724.f44a44745f16f78595ae1b43@nifty.ne.jp>
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-SW-Source: 2019-q4/txt/msg00066.txt.bz2
+Cc: Anton Lavrentiev <lavr@ncbi.nlm.nih.gov>
+Subject: [PATCH] Cygwin: getpriority() consistent with process priority
+Date: Wed, 30 Oct 2019 15:48:00 -0000
+Message-Id: <20191030154725.4720-1-lavr@ncbi.nlm.nih.gov>
+X-IsSubscribed: yes
+X-SW-Source: 2019-q4/txt/msg00067.txt.bz2
 
+https://cygwin.com/ml/cygwin/2019-08/msg00122.html
+---
+ winsup/cygwin/syscalls.cc | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
---rd/3IrB17klb+Ksj
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1109
-
-On Oct 24 19:17, Takashi Yano wrote:
-> On Thu, 24 Oct 2019 11:38:17 +0200
-> Corinna Vinschen wrote:
-> > Well, what I see when starting cmd.exe with this patch is a short
-> > flicker in the existing output in mintty, but the cursor position
-> > stays the same. and cmd.exe output is where you'd expect it.
->=20
-> I mean:
-> 1) start mintty
-> 2) ps
-> 3) script
-> 4) cmd
->=20
-> In my environment, output of ps command disappears.
-
-In mine, too.  This does not occur w/o running script.
-
-> > If it's running as Local System (actually SYSTEM), it should have
-> > the user SID S-1-5-18.  You can just check this with
-> >=20
-> >   cygheap->user.saved_sid () =3D=3D well_known_system_sid
->=20
-> Thanks for the advice. Now I have confirmed the following code
-> works as expected.
->=20
-> inline static bool
-> is_running_as_service (void)
-> {
->   return check_token_membership (well_known_service_sid)
->     || RtlEqualSid (well_known_system_sid, cygheap->user.saved_sid ());
-
-Why don't you use operator cygpsid::=3D=3D as outlined above?  That's what
-it's made for :)
-
-
-Corinna
-
---=20
-Corinna Vinschen
-Cygwin Maintainer
-
---rd/3IrB17klb+Ksj
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl2xqBEACgkQ9TYGna5E
-T6BA5g/8C2sEVID7O02Jg3y1iJ+rNfhRrV5Jcbg2WeTOrHafY9LleXlE3OsNUXCk
-7FlIVzz1mUM5VsOa7SuSdsLtq0LiLLU75VqYjVBoYujSiGn3nCdR0ri9Otxtr3tA
-Jx3RPYc78jiyjdipYKYvbUAtmfZBvYGl6nejNuH2LOaVh0lz0o6yFLd8BBtPW6f9
-a7HKvkHiHwxKLPoU+aAv0b4LfRSAvNQTQvQkB1U7jHlopHmZd0lFEv5m/Cym/uoB
-LorA3HaAqSDUsOL3VaK5S+y63fRVE/AJTcKnFTI5ychvPKWDdzJzCVLb7AwLaV2g
-lkrAhe9HM7T/FtK1SDe3pMBZ96EjHpG1t3Ey3sa1qk3vOvqpJtUUtbU1WC/z1pjk
-JnPkxje99e7KGGhOwT8gG3pvu9tcJuaBiY+m5y3N4rmowqrj17Zj/NRkckyAk/Su
-wlCDpe2ODYLqW5tlQi/bNKHUSXu/oy6w3PKTssfvFk3+UcLXr8qVoZd9Jf8glGll
-APpKaWkpM4/iAsdR89FhQxsJaxhA2A05DRczHA+WMkv2xx6jbHrX07ZlJSWhHd1I
-TGkGZExasqCLPnKenDZ+U/vTddh/6bslYpodnExYMTVE/6Me5pnDsXbn64OP8U6m
-YNY3eaP5IfXCPTDemW2YmAXgYWVZXtnqZK4eLARE+TEm4P5oPLc=
-=qaGj
------END PGP SIGNATURE-----
-
---rd/3IrB17klb+Ksj--
+diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
+index a914ae8..20126ce 100644
+--- a/winsup/cygwin/syscalls.cc
++++ b/winsup/cygwin/syscalls.cc
+@@ -3977,7 +3977,12 @@ getpriority (int which, id_t who)
+       if (!who)
+ 	who = myself->pid;
+       if ((pid_t) who == myself->pid)
+-	return myself->nice;
++        {
++          DWORD winprio = GetPriorityClass(GetCurrentProcess());
++          if (winprio != nice_to_winprio(myself->nice))
++            myself->nice = winprio_to_nice(winprio);
++          return myself->nice;
++        }
+       break;
+     case PRIO_PGRP:
+       if (!who)
+-- 
+2.8.3
