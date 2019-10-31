@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9796-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 9176 invoked by alias); 30 Oct 2019 15:48:01 -0000
+Return-Path: <cygwin-patches-return-9797-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 35232 invoked by alias); 31 Oct 2019 20:41:24 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,49 +9,92 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 9091 invoked by uid 89); 30 Oct 2019 15:48:00 -0000
+Received: (qmail 35221 invoked by uid 89); 31 Oct 2019 20:41:24 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-15.7 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3 autolearn=ham version=3.3.1 spammy=cygwincom, cygwin.com
-X-HELO: nihsmtpxway.hub.nih.gov
-Received: from nihsmtpxway.hub.nih.gov (HELO nihsmtpxway.hub.nih.gov) (128.231.90.103) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 30 Oct 2019 15:47:58 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;  d=nih.gov; i=@nih.gov; q=dns/txt; s=NIH; t=1572450478;  x=1603986478;  h=from:to:cc:subject:date:message-id;  bh=ti49Bu9gKHpr9XTK+psjfIT6qGqER0kBjq9VUfoUVmA=;  b=Rr7oBTl8bH8+jCyhHXHanE985mfQLBAE5gha5XlvHOqoZjtn0izZVwtJ   1nO4sgFMcucn9VMA8RUYL9G08i0mFBclKOPhqdBRCaBxKU71Vkijw2gip   SpPJ50U4q5q/TXijwEZmOCTAtP8JvxWmS7RcmUZfb8W0PNFGmfVkgADur   18CyFzHg8hSVp5aupGh443YIMmb54BKOMdgI1cPAplLQSLCzr6R2qyvUo   pASvWiFSbnTWg9hYF1llc0n+KddAY9+jxRekh62Wbjt2meZ97vK9HIRGT   b6hBVFDGqFdDNgpp0pvW46sQMkmEG8Z6aPYPFAhHvgdOCf5CpzPoWl1rz   A==;
-IronPort-SDR: TAalYmFtj7GZ90K5U1mzKp/haXxbvxsx9B5X8xlQjgdA7qh/TmW6Ra4x7zK4pKtDmzH+raJlKC UTqH0lMwY9tS+0RDIbnCsXugJQ+9erQ6j0k4A8NU5dEW95FVNzOGQUnPxfiMHRGbzNi+unMqds VH2lbo4NWwV/NUZlPGUhACsKtBF85Yv+XaGZZsISDolj7Sk2HST4bssELkbLUzZyZJA7adiebJ HVE6k17vVoGFA2xsr+i7DMBfiV2/KVBxeL7CrfBIPE8Hd/e0GykwM1RjvIsE7UMalkkWyBEa0H gRA=
-Received: from msg-b12-ltm1_v9.hub.nih.gov (HELO mail2.ncbi.nlm.nih.gov) ([128.231.90.73])  by nihsmtpxway.hub.nih.gov with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2019 11:47:33 -0400
-Received: from coredev2.be-md.ncbi.nlm.nih.gov (coredev2.be-md.ncbi.nlm.nih.gov [130.14.24.61])	by mail2.ncbi.nlm.nih.gov (Postfix) with ESMTP id 702A71A0002;	Wed, 30 Oct 2019 11:47:32 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ncbi.nlm.nih.gov;	s=ncbi-nlm; t=1572450452;	bh=pkozW09XU2rG3fJhg+2N/g60DnMXMoRnPFX0Q9eNLGg=;	h=From:To:Cc:Subject:Date;	b=mBzTsp8SS+aLvXUu326be437/32Fl6m3m7hHOW1+Oe5tazGFMXgB123iwH0L4eFqG	 A8hmGGxY5P33WS5xlc+YFjROVs5MZk6eEPDJZWKy+FAe1u7be3dUWpwX2mdt51Ostk	 LLBrj/ZwOpJr/U8vMeeZDHSnoRVNeVBAa+pWC+Ug=
-Received: from coredev2.be-md.ncbi.nlm.nih.gov (localhost [127.0.0.1])	by coredev2.be-md.ncbi.nlm.nih.gov (Postfix) with ESMTP id 211A11DBD5;	Wed, 30 Oct 2019 11:47:32 -0400 (EDT)
-From: "Anton Lavrentiev via cygwin-patches" <cygwin-patches@cygwin.com>
-Reply-To: Anton Lavrentiev <lavr@ncbi.nlm.nih.gov>
-To: cygwin-patches@cygwin.com
-Cc: Anton Lavrentiev <lavr@ncbi.nlm.nih.gov>
-Subject: [PATCH] Cygwin: getpriority() consistent with process priority
-Date: Wed, 30 Oct 2019 15:48:00 -0000
-Message-Id: <20191030154725.4720-1-lavr@ncbi.nlm.nih.gov>
-X-IsSubscribed: yes
-X-SW-Source: 2019-q4/txt/msg00067.txt.bz2
+X-Spam-SWARE-Status: No, score=-115.7 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*F:D*cygwin.com, H*Ad:U*cygwin-patches, H*R:D*cygwin.com
+X-HELO: mout.kundenserver.de
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.134) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 31 Oct 2019 20:41:21 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id 1M2OEw-1iOd5t0eQY-003uek; Thu, 31 Oct 2019 21:41:11 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 268B9A80670; Thu, 31 Oct 2019 21:41:09 +0100 (CET)
+Date: Thu, 31 Oct 2019 20:41:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: Anton Lavrentiev <lavr@ncbi.nlm.nih.gov>
+Cc: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Cygwin: getpriority() consistent with process priority
+Message-ID: <20191031204109.GF16240@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: Anton Lavrentiev <lavr@ncbi.nlm.nih.gov>,	cygwin-patches@cygwin.com
+References: <20191030154725.4720-1-lavr@ncbi.nlm.nih.gov>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="Eldrgvv4EWsIM1sO"
+Content-Disposition: inline
+In-Reply-To: <20191030154725.4720-1-lavr@ncbi.nlm.nih.gov>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-SW-Source: 2019-q4/txt/msg00068.txt.bz2
 
-https://cygwin.com/ml/cygwin/2019-08/msg00122.html
----
- winsup/cygwin/syscalls.cc | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
-index a914ae8..20126ce 100644
---- a/winsup/cygwin/syscalls.cc
-+++ b/winsup/cygwin/syscalls.cc
-@@ -3977,7 +3977,12 @@ getpriority (int which, id_t who)
-       if (!who)
- 	who = myself->pid;
-       if ((pid_t) who == myself->pid)
--	return myself->nice;
-+        {
-+          DWORD winprio = GetPriorityClass(GetCurrentProcess());
-+          if (winprio != nice_to_winprio(myself->nice))
-+            myself->nice = winprio_to_nice(winprio);
-+          return myself->nice;
-+        }
-       break;
-     case PRIO_PGRP:
-       if (!who)
--- 
-2.8.3
+--Eldrgvv4EWsIM1sO
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 949
+
+On Oct 30 11:47, Anton Lavrentiev via cygwin-patches wrote:
+> https://cygwin.com/ml/cygwin/2019-08/msg00122.html
+> ---
+>  winsup/cygwin/syscalls.cc | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
+> index a914ae8..20126ce 100644
+> --- a/winsup/cygwin/syscalls.cc
+> +++ b/winsup/cygwin/syscalls.cc
+> @@ -3977,7 +3977,12 @@ getpriority (int which, id_t who)
+>        if (!who)
+>  	who =3D myself->pid;
+>        if ((pid_t) who =3D=3D myself->pid)
+> -	return myself->nice;
+> +        {
+> +          DWORD winprio =3D GetPriorityClass(GetCurrentProcess());
+> +          if (winprio !=3D nice_to_winprio(myself->nice))
+> +            myself->nice =3D winprio_to_nice(winprio);
+> +          return myself->nice;
+> +        }
+>        break;
+>      case PRIO_PGRP:
+>        if (!who)
+> --=20
+> 2.8.3
+
+Pushed.
+
+
+Thanks,
+Corinna
+
+--=20
+Corinna Vinschen
+Cygwin Maintainer
+
+--Eldrgvv4EWsIM1sO
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 833
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl27RuQACgkQ9TYGna5E
+T6CeOxAAjeI9sN/r68re7KxEkxVR9wY0jAxzV55WCnXnhPWQLaf50IH+v3AKn2wq
+H4rR2RStRLYqeypCxKIdfdGosXFppChdmrja7KE6NUZb9KC2wMmWFd9uXBb3TX2S
+W/qxlGnnQ+N/NiNYffaOO72bTvxLlciqIK1Q+CnbZYWmDb3T8HFu5zaqOKCQNPFr
+oUq1kE0Wd+lGGywcyNWn0CUIWD4EhB5P6X1ltN0rRfunDfVlPy8VYolwZYT+uhfa
+y9bqWLSM4AhjTobfBjWcPFy5oI/lJdVmexYaRToJFQY7IHekGfafOZ483xKncZvO
+0BcNnhPV85fDcCtzKR2ZcGX/nsQKprNxXP99whLHXJrCQ2no1+QFmFedenw8ykGe
+P83js4pWhMgAk0KT+7fcCiOHZdh1xRuDsbHWnHdjwPKoG3FibGFgKnik2x2dNdUf
+qFpAS02s2Mt767++tqAzfPPOpcKF/08+U/1ibD4VECxlV8CHUTWceHM6/MojYpLh
+5T7TmCB/IfcdgBqncqJK2h+KlZHAXdWHdNedocvrgqHZiEgytitNg4p5YkXdCrYx
+yj17rUzt5MS8m/rtht33GMMYDDe1B8E/DHfWBBvrcwejue0nuAcRxZ6mHd7WRHZV
+ZSdOJvbxD8HVCqfD5ImxewEsWgn2fQYK2ipN8No10/cplbQYgyM=
+=xbW3
+-----END PGP SIGNATURE-----
+
+--Eldrgvv4EWsIM1sO--
