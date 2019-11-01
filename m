@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9797-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 35232 invoked by alias); 31 Oct 2019 20:41:24 -0000
+Return-Path: <cygwin-patches-return-9798-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 90371 invoked by alias); 1 Nov 2019 02:57:21 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,92 +9,43 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 35221 invoked by uid 89); 31 Oct 2019 20:41:24 -0000
+Received: (qmail 90355 invoked by uid 89); 1 Nov 2019 02:57:20 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-115.7 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*F:D*cygwin.com, H*Ad:U*cygwin-patches, H*R:D*cygwin.com
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.134) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 31 Oct 2019 20:41:21 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id 1M2OEw-1iOd5t0eQY-003uek; Thu, 31 Oct 2019 21:41:11 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 268B9A80670; Thu, 31 Oct 2019 21:41:09 +0100 (CET)
-Date: Thu, 31 Oct 2019 20:41:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: Anton Lavrentiev <lavr@ncbi.nlm.nih.gov>
-Cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: getpriority() consistent with process priority
-Message-ID: <20191031204109.GF16240@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: Anton Lavrentiev <lavr@ncbi.nlm.nih.gov>,	cygwin-patches@cygwin.com
-References: <20191030154725.4720-1-lavr@ncbi.nlm.nih.gov>
+X-Spam-SWARE-Status: No, score=-3.5 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=busy, travel, you!
+X-HELO: nihcesxwayst06.hub.nih.gov
+Received: from nihcesxwayst06.hub.nih.gov (HELO nihcesxwayst06.hub.nih.gov) (165.112.13.54) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 01 Nov 2019 02:57:18 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;  d=nih.gov; i=@nih.gov; q=dns/txt; s=NIH; t=1572577038;  x=1604113038;  h=from:to:subject:date:message-id:references:in-reply-to:   content-transfer-encoding:mime-version;  bh=Fpm2+4kMK8r/FLi1PbcbtOfYIatApMAhiLxcHEB+qOs=;  b=LJ2u0gX8mpin+XGxNYLFDvc2vHAN98XOyiHmdylUXLddKIMzNdDRMLxP   L/SYDwsm/v9zmSJAmORYrgRrN2D16MBi46HOfxetcQooVLuuSfFtPo7Hq   mw9QKz7Lx8g70Fl5lrP6Pxyu0wMdbOwKwvUfuEOgYDSZATQkD79PhILKr   RwIGIvPoMgh0Fyf3EUde/45XY5DyOSCC5qncOtrKGBmS3Gf+NiARQjvWL   sWEU7/7kDNODPpoHcukmVXTj2QcuaxZc8vV9DZg9YRcKeo95ItpinD0j5   zNdpIu7QkrFrQypHZ+YhXONQL/FOFBd/+1TZGdEXR7ic+Q51FBMyL8BCv   w==;
+IronPort-SDR: r7HGLQtPDJVhgM8HsheOx6/6Z+0qD5TTSdIsEFsNPun4GPZZrHKYq6WQgAyjrtfEL1OULAXN4g QjjbD+7getBw==
+Received: from uccsx02.nih.gov (HELO ces.nih.gov) ([165.112.194.92])  by nihcesxwayst06.hub.nih.gov with ESMTP/TLS/ECDHE-RSA-AES256-SHA384; 31 Oct 2019 22:57:16 -0400
+Received: from uccsX02.nih.gov (165.112.194.92) by uccsX02.nih.gov (165.112.194.92) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 31 Oct 2019 22:57:16 -0400
+Received: from GCC02-BL0-obe.outbound.protection.outlook.com (165.112.194.6) by uccsX02.nih.gov (165.112.194.92) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend Transport; Thu, 31 Oct 2019 22:57:16 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none; b=NhtiTmGn2au+a7/TwwHBi85It9n6fFyxBAKXD8ZgqNfAT4hkIHZ2bpk+gEXg2tYTKZtz1vfQKFJayMnXS08w15Vn09XFtyrF2M4z1PJCkABcsKYW9FY5n+pEZX8omEPK6qWL/zXkCGEirzA4JgE6kqXrgFtf34MZVgSu5AjJKHqmJguJ1x0ZxCYsqWoF7HMOS7oGLRFbz5j1gWKuv8VNyYBdiiGVQTrYhZ1tijzZ3x1t8pNsKmrtmKfKK295LihxGw6BK8Qq2S5CcgL5BOdCjyWludE72KTgL93e0lcTSWuO2+Jy/2lH2b9a3gyNw7ltLD36qWByrGVmgMJi9OAudw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=Fpm2+4kMK8r/FLi1PbcbtOfYIatApMAhiLxcHEB+qOs=; b=jjS04tlKjxRJX1aA0fqQp5vyXMeMi63x1+dZi73A5jI8R2RjZjUZ16H/qg+hdtY0FWd9CujJxuZ6H34Z+TjMONLgJ5pHGthz9O1VVPRsCpBaBSpxcePzr94hrlHmltL6X2gC9vHG6q/rrTGFnARId19Clox7oWbJJK75QxYR2gpUXZ3aibD5Sb9PbHctq0MWFIOdT0JcyEb47PycMFjzEve9CWh7wRsH9SSdnrQeWzs8eJIFg8UKcDavcz5eZR1Ul1gp82nLlnxdxdvXVuclqgaPPyTsYcXSkCC/03HhgeKPljt5CWwZzyPe4s5B1QgS7k3GICuU+1LLS6ifD3uCKw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass smtp.mailfrom=ncbi.nlm.nih.gov; dmarc=pass action=none header.from=ncbi.nlm.nih.gov; dkim=pass header.d=ncbi.nlm.nih.gov; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nih.onmicrosoft.com; s=selector2-nih-onmicrosoft-com; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=Fpm2+4kMK8r/FLi1PbcbtOfYIatApMAhiLxcHEB+qOs=; b=UGCYBL4W2hIG26aiq7zUoI4qn7vQnAo92Em12oRTWHDCxGcfxcB/XkWZ0noU8YhqZwPkWgybrE0N6KywdhJqiyRQFrQyQDrb+NcTFozMf/UsDdokxNmFM/dhOL5NvZfiulJ4xwwy1r94flkeYVWg+qvw7hOH94F0X67aV/4675c=
+Received: from BN7PR09MB2724.namprd09.prod.outlook.com (52.135.254.158) by BN7PR09MB2596.namprd09.prod.outlook.com (52.135.255.12) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2408.18; Fri, 1 Nov 2019 02:57:15 +0000
+Received: from BN7PR09MB2724.namprd09.prod.outlook.com ([fe80::15e7:f448:5c8a:c7c5]) by BN7PR09MB2724.namprd09.prod.outlook.com ([fe80::15e7:f448:5c8a:c7c5%5]) with mapi id 15.20.2387.027; Fri, 1 Nov 2019 02:57:15 +0000
+From: "Lavrentiev, Anton (NIH/NLM/NCBI) [C] via cygwin-patches" <cygwin-patches@cygwin.com>
+Reply-To: "Lavrentiev, Anton (NIH/NLM/NCBI) [C]" <lavr@ncbi.nlm.nih.gov>
+To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: RE: [PATCH] Cygwin: getpriority() consistent with process priority
+Date: Fri, 01 Nov 2019 02:57:00 -0000
+Message-ID: <BN7PR09MB27247672AB84515361172B54A5620@BN7PR09MB2724.namprd09.prod.outlook.com>
+References: <20191030154725.4720-1-lavr@ncbi.nlm.nih.gov> <20191031204109.GF16240@calimero.vinschen.de>
+In-Reply-To: <20191031204109.GF16240@calimero.vinschen.de>
+authentication-results: spf=none (sender IP is ) smtp.mailfrom=lavr@ncbi.nlm.nih.gov;
+x-ms-oob-tlc-oobclassifiers: OLM:3044;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="Eldrgvv4EWsIM1sO"
-Content-Disposition: inline
-In-Reply-To: <20191030154725.4720-1-lavr@ncbi.nlm.nih.gov>
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-SW-Source: 2019-q4/txt/msg00068.txt.bz2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: RZazD9Yd6rKihHp6snbdW6O3UA5C9ovAUzPyDVNQt60Z0ZRkrRnpokqDejzeWzDe
+Return-Path: lavr@ncbi.nlm.nih.gov
+X-IsSubscribed: yes
+X-SW-Source: 2019-q4/txt/msg00069.txt.bz2
 
-
---Eldrgvv4EWsIM1sO
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 949
-
-On Oct 30 11:47, Anton Lavrentiev via cygwin-patches wrote:
-> https://cygwin.com/ml/cygwin/2019-08/msg00122.html
-> ---
->  winsup/cygwin/syscalls.cc | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
->=20
-> diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
-> index a914ae8..20126ce 100644
-> --- a/winsup/cygwin/syscalls.cc
-> +++ b/winsup/cygwin/syscalls.cc
-> @@ -3977,7 +3977,12 @@ getpriority (int which, id_t who)
->        if (!who)
->  	who =3D myself->pid;
->        if ((pid_t) who =3D=3D myself->pid)
-> -	return myself->nice;
-> +        {
-> +          DWORD winprio =3D GetPriorityClass(GetCurrentProcess());
-> +          if (winprio !=3D nice_to_winprio(myself->nice))
-> +            myself->nice =3D winprio_to_nice(winprio);
-> +          return myself->nice;
-> +        }
->        break;
->      case PRIO_PGRP:
->        if (!who)
-> --=20
-> 2.8.3
-
-Pushed.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen
-Cygwin Maintainer
-
---Eldrgvv4EWsIM1sO
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl27RuQACgkQ9TYGna5E
-T6CeOxAAjeI9sN/r68re7KxEkxVR9wY0jAxzV55WCnXnhPWQLaf50IH+v3AKn2wq
-H4rR2RStRLYqeypCxKIdfdGosXFppChdmrja7KE6NUZb9KC2wMmWFd9uXBb3TX2S
-W/qxlGnnQ+N/NiNYffaOO72bTvxLlciqIK1Q+CnbZYWmDb3T8HFu5zaqOKCQNPFr
-oUq1kE0Wd+lGGywcyNWn0CUIWD4EhB5P6X1ltN0rRfunDfVlPy8VYolwZYT+uhfa
-y9bqWLSM4AhjTobfBjWcPFy5oI/lJdVmexYaRToJFQY7IHekGfafOZ483xKncZvO
-0BcNnhPV85fDcCtzKR2ZcGX/nsQKprNxXP99whLHXJrCQ2no1+QFmFedenw8ykGe
-P83js4pWhMgAk0KT+7fcCiOHZdh1xRuDsbHWnHdjwPKoG3FibGFgKnik2x2dNdUf
-qFpAS02s2Mt767++tqAzfPPOpcKF/08+U/1ibD4VECxlV8CHUTWceHM6/MojYpLh
-5T7TmCB/IfcdgBqncqJK2h+KlZHAXdWHdNedocvrgqHZiEgytitNg4p5YkXdCrYx
-yj17rUzt5MS8m/rtht33GMMYDDe1B8E/DHfWBBvrcwejue0nuAcRxZ6mHd7WRHZV
-ZSdOJvbxD8HVCqfD5ImxewEsWgn2fQYK2ipN8No10/cplbQYgyM=
-=xbW3
------END PGP SIGNATURE-----
-
---Eldrgvv4EWsIM1sO--
+PiBQdXNoZWQuDQoNClRoYW5rIHlvdSEgIEl0IHRvb2sgbWUgYXdoaWxlLCBz
+b3JyeSBhYm91dCB0aGF0IC0tIHdhcyBleHRyZW1lbHkgYnVzeSB3aXRoIHN0
+dWZmIGFuZCB0cmF2ZWwNCg==
