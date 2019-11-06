@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9802-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 123761 invoked by alias); 6 Nov 2019 12:09:07 -0000
+Return-Path: <cygwin-patches-return-9803-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 26159 invoked by alias); 6 Nov 2019 14:05:53 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,58 +9,90 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 123749 invoked by uid 89); 6 Nov 2019 12:09:06 -0000
+Received: (qmail 26067 invoked by uid 89); 6 Nov 2019 14:05:52 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-15.3 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=sid, HContent-Transfer-Encoding:8bit
-X-HELO: conuserg-02.nifty.com
-Received: from conuserg-02.nifty.com (HELO conuserg-02.nifty.com) (210.131.2.69) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 06 Nov 2019 12:09:05 +0000
-Received: from localhost.localdomain (ntsitm355024.sitm.nt.ngn.ppp.infoweb.ne.jp [175.184.70.24]) (authenticated)	by conuserg-02.nifty.com with ESMTP id xA6C8eHE030629;	Wed, 6 Nov 2019 21:08:44 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-02.nifty.com xA6C8eHE030629
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1573042124;	bh=27HjyUCueMroe4bsT1xvCN365SZuPDAs60qbYxSX4tU=;	h=From:To:Cc:Subject:Date:From;	b=RoqvxAbDlcb3VQ7Hvg0pf6Yjx+yvekVMiBCkllYpoxPpSqS7UgfVc3BMyNOw8oBgX	 CCS0u5y4DFPUfiwKZ60eB3ztQBGvAMRSCB9+qVAHL9CTIfUcj+BlO56KLGqXgsdjIZ	 Z/qupuENZ/AYVFTz/yfWJjg4ELR/iq8V9JqfSWTmqf37XrUgUAuxhcQR/NjLQgtlU7	 x9axHt+qJzpjL8pjMTFonM2zGNLk8hhM9SiBYt+MgqauD77UscZCd3zLAT+ZOw6GnF	 kepWkEGeSXCagU0tvdkC+nP0U4oqKdzeVP1B1oS/EFQcgFt+PuP10O/XOTVf13bL+i	 dU8SSwXajUEdQ==
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+X-Spam-SWARE-Status: No, score=-103.9 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*F:D*cygwin.com
+X-HELO: mout.kundenserver.de
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (217.72.192.75) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 06 Nov 2019 14:05:51 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id 1MJW5G-1iCtUK2ca8-00Jswi for <cygwin-patches@cygwin.com>; Wed, 06 Nov 2019 15:05:48 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id DB8B3A80A67; Wed,  6 Nov 2019 15:05:47 +0100 (CET)
+Date: Wed, 06 Nov 2019 14:05:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH] Cygwin: pty: Change how to determine if running as service or not.
-Date: Wed, 06 Nov 2019 12:09:00 -0000
-Message-Id: <20191106120843.540-1-takashi.yano@nifty.ne.jp>
+Subject: Re: [PATCH] Cygwin: console, pty: Prevent error in legacy console mode.
+Message-ID: <20191106140547.GU3372@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20191106115909.429-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-IsSubscribed: yes
-X-SW-Source: 2019-q4/txt/msg00073.txt.bz2
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="6CXocAQn8Xbegyxo"
+Content-Disposition: inline
+In-Reply-To: <20191106115909.429-1-takashi.yano@nifty.ne.jp>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-SW-Source: 2019-q4/txt/msg00074.txt.bz2
 
----
- winsup/cygwin/fhandler_tty.cc | 17 +++--------------
- 1 file changed, 3 insertions(+), 14 deletions(-)
 
-diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index f87ac73f2..2b4ad6e58 100644
---- a/winsup/cygwin/fhandler_tty.cc
-+++ b/winsup/cygwin/fhandler_tty.cc
-@@ -3095,22 +3095,11 @@ pty_master_fwd_thread (VOID *arg)
-    the helper process is running as privileged user while
-    slave process is not. This function is used to determine
-    if the process is running as a srvice or not. */
--static bool
-+inline static bool
- is_running_as_service (void)
- {
--  DWORD dwSize = 0;
--  PTOKEN_GROUPS pGroupInfo;
--  tmp_pathbuf tp;
--  pGroupInfo = (PTOKEN_GROUPS) tp.w_get ();
--  NtQueryInformationToken (hProcToken, TokenGroups, pGroupInfo,
--					2 * NT_MAX_PATH, &dwSize);
--  for (DWORD i=0; i<pGroupInfo->GroupCount; i++)
--    if (RtlEqualSid (well_known_service_sid, pGroupInfo->Groups[i].Sid))
--      return true;
--  for (DWORD i=0; i<pGroupInfo->GroupCount; i++)
--    if (RtlEqualSid (well_known_interactive_sid, pGroupInfo->Groups[i].Sid))
--      return false;
--  return true;
-+  return check_token_membership (well_known_service_sid)
-+    || cygheap->user.saved_sid () == well_known_system_sid;
- }
- 
- bool
--- 
-2.21.0
+--6CXocAQn8Xbegyxo
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 852
+
+Hi Takashi,
+
+the patch is fine in general.  Still, what I really like to see is a
+descriptive log message, as well as a matching comment...
+
+On Nov  6 20:59, Takashi Yano wrote:
+> @@ -3131,6 +3134,16 @@ fhandler_pty_master::setup_pseudoconsole ()
+>        if (res !=3D S_OK)
+>  	system_printf ("CreatePseudoConsole() failed. %08x\n",
+>  		       GetLastError ());
+> +      error =3D true;
+> +    }
+> +
+
+...here, to explain briefly why this check is done.
+
+> +  reg_key reg (HKEY_CURRENT_USER, KEY_READ, L"Console", NULL);
+> +  if (reg.error ())
+> +    error =3D true;
+> +  if (reg.get_dword (L"ForceV2", 1) =3D=3D 0)
+> +    error =3D true;
+> +  if (error)
+> +    {
+>        CloseHandle (from_master);
+>        CloseHandle (to_slave);
+>        from_master =3D from_master_cyg;
+> --=20
+> 2.21.0
+
+Thanks,
+Corinna
+
+--=20
+Corinna Vinschen
+Cygwin Maintainer
+
+--6CXocAQn8Xbegyxo
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 833
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl3C0zsACgkQ9TYGna5E
+T6Aq6g/+LLf568VL3dQv4nbbIax7xBkujypF34rsAtBW6Bh3/2uFxu8NRQfFx/qZ
+gHyXL5inLcmuLxG5pxatvB9MHlVna7CoKT13z+EHyNlbBc0P7qNBKFNuzsjcjnW6
+tHO/Cwh06qku/6xEA9lU0l051t8vc+Myot368EdL/s8dfRHq69txZxLzoNbRbsbK
+ARO0Iel8jqk4j30Q1lwSj8QUVbbMKNVgL8m/G2j+O/yvMN/NaP30oVqfsF4Argw1
+IZuys65HAfCbo6g2e9B0ZHfLISRA3uci7poKSXV7VgmmAZl2yPKRNhfvFfgX/5tr
+GCCDvIF+Z8ug48QlLyPHRQe5eAlu4tlOsxrj9PmVvPXJU6iZTz8t5dM/N76qwBe5
+Q+CQDj1qfcEhzQX0pUB8K8YwH+Q9AmJoxqOcMs1StA5ffJoIVwz5hliw1VfBpCWx
+EZSpjKWkMFRlLPMu0T13JZ/84SzuE2NGZYTNrQQpS2tz5XrbxtqdqMgRb+jN4aYE
+DAAFTpsPTRI25MRhbCf8esXjDF0KtE/lOumuetJGpFTzK0f5YpyxrGYAUhDOPmEp
+CJWL09bQmrByOnUyXe+EYof8jkIPe1wohkCiQxRkb9Yoyvl8e007hcA6+bbBae9A
+5TEaGCuKJwU0vQMCxjZOAOSaSkZYUOk00DbSJGXgGxp0fjiW/so=
+=jS+2
+-----END PGP SIGNATURE-----
+
+--6CXocAQn8Xbegyxo--
