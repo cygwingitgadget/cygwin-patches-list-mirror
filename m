@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9829-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 18124 invoked by alias); 11 Nov 2019 20:47:38 -0000
+Return-Path: <cygwin-patches-return-9830-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 16203 invoked by alias); 12 Nov 2019 02:55:46 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,115 +9,170 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 18029 invoked by uid 89); 11 Nov 2019 20:47:37 -0000
+Received: (qmail 16192 invoked by uid 89); 12 Nov 2019 02:55:45 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-15.9 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_LOW autolearn=ham version=3.3.1 spammy=8:ng, 8:na, passive, zur
-X-HELO: smtp-out-no.shaw.ca
-Received: from smtp-out-no.shaw.ca (HELO smtp-out-no.shaw.ca) (64.59.134.9) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 11 Nov 2019 20:47:35 +0000
-Received: from [192.168.1.114] ([24.64.172.44])	by shaw.ca with ESMTP	id UGayiwksrnCigUGaziq1Q4; Mon, 11 Nov 2019 13:47:33 -0700
-Reply-To: Brian.Inglis@SystematicSw.ab.ca
-Subject: Re: [PATCH] regtool: Ignore /proc/registry{,32,64}/ prefix, with forward or backslashes, allowing path completion
+X-Spam-SWARE-Status: No, score=-2.9 required=5.0 tests=AWL,BAYES_40,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=D*jp, D*nifty.ne.jp, D*ne.jp, UD:jp
+X-HELO: conssluserg-06.nifty.com
+Received: from conssluserg-06.nifty.com (HELO conssluserg-06.nifty.com) (210.131.2.91) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 12 Nov 2019 02:55:43 +0000
+Received: from Express5800-S70 (ntsitm355024.sitm.nt.ngn.ppp.infoweb.ne.jp [175.184.70.24]) (authenticated)	by conssluserg-06.nifty.com with ESMTP id xAC2tW08021768	for <cygwin-patches@cygwin.com>; Tue, 12 Nov 2019 11:55:32 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com xAC2tW08021768
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1573527332;	bh=utghHZdOc8qH0O42v5S9KGhLRLHdML6fM2VhH1ATs4Q=;	h=Date:From:To:Subject:In-Reply-To:References:From;	b=GIuP1704bjBbi+PER7Slg01urBiRVlCCFKLIUMDEdJoO9vkxVlBfq3sDaLSxNXGXH	 YBM6gS7jdZE/gMDpEwffauMjwB8UodbhKo/rExN/ahMMikXj38cdq57PSXqGWS7p3I	 alB4HFJFmdMQD1bx2TJBK+BTeoIp9RCIG7zxkTFr9H1r2ISVMYXITLM46NDqsuMUmQ	 FWxSFGD+vDiPVRZwoaRi6ZOceyYbxm5vhb9mdmgJ1zyqQLngVPoBpQwyAX6nnOlH+q	 Ehiam5aXH5EH0Bt7dR5xKo7RFXPN4gtBd+8McxNK3XmT/StYHalHY45Z6iDrp33Ofu	 Xlj4TXjXLB/9g==
+Date: Tue, 12 Nov 2019 02:55:00 -0000
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-References: <20191110161445.53479-1-Brian.Inglis@SystematicSW.ab.ca> <20191111091337.GE3372@calimero.vinschen.de> <20191111091909.GG3372@calimero.vinschen.de> <130d853b-1614-0e22-3bdd-c79f311ace0f@SystematicSw.ab.ca> <20191111162853.GI3372@calimero.vinschen.de>
-From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
-Openpgp: preference=signencrypt
-Message-ID: <5f5ad434-a01b-1609-1624-c47252e56f64@SystematicSw.ab.ca>
-Date: Mon, 11 Nov 2019 20:47:00 -0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101 Thunderbird/60.9.1
-MIME-Version: 1.0
-In-Reply-To: <20191111162853.GI3372@calimero.vinschen.de>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v3] Cygwin: console, pty: Prevent error in legacy console mode.
+Message-Id: <20191112115535.90777ac110e6f72c76a99753@nifty.ne.jp>
+In-Reply-To: <20218a47-2077-878c-4d9c-e23f6b0d4add@cornell.edu>
+References: <20191106162929.739-1-takashi.yano@nifty.ne.jp>	<20218a47-2077-878c-4d9c-e23f6b0d4add@cornell.edu>
+Mime-Version: 1.0
+Content-Type: multipart/mixed; boundary="Multipart=_Tue__12_Nov_2019_11_55_35_+0900_D50fx7x5I_JuiPwN"
 X-IsSubscribed: yes
-X-SW-Source: 2019-q4/txt/msg00100.txt.bz2
+X-SW-Source: 2019-q4/txt/msg00101.txt.bz2
 
-On 2019-11-11 09:28, Corinna Vinschen wrote:
-> On Nov 11 08:30, Brian Inglis wrote:
->> On 2019-11-11 02:19, Corinna Vinschen wrote:
->>> On Nov 11 10:13, Corinna Vinschen wrote:
->>>> On Nov 10 09:14, Brian Inglis wrote:
->>>> The patch idea is nice.  Two nits, though.
->>>> Please shorten the commit msg summary line and add a bit of descriptive
->>>> text instead.
->>
->> Sorry, I forget and don't notice longer than standard messages, from using
->> 120x60 or larger windows.
->>
->>>>> ---
->>>>>  winsup/utils/regtool.cc | 13 ++++++++++++-
->>>>>  1 file changed, 12 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/winsup/utils/regtool.cc b/winsup/utils/regtool.cc
->>>>> index a44d90768..ddb1304cd 100644
->>>>> --- a/winsup/utils/regtool.cc
->>>>> +++ b/winsup/utils/regtool.cc
->>>>> @@ -167,7 +167,9 @@ usage (FILE *where = stderr)
->>>>>        "  users    HKU   HKEY_USERS\n"
->>>>>        "\n"
->>>>>        "If the keyname starts with a forward slash ('/'), the forward slash is used\n"
->>>>> -      "as separator and the backslash can be used as escape character.\n");
->>>>> +      "as separator and the backslash can be used as escape character.\n"
->>>>> +      "If the keyname starts with /proc/registry{,32,64}/, using forward or backward\n"
->>>>> +      "slashes, allowing path completion, that part of the prefix is ignored.\n");
->>>>
->>>> Is that really essential user information?
->>
->> Absolutely essential!
->>
->>>> I assume this behaviour is something you just expected to work but then
->>>> didn't.  With your patch it now works as you expected.  So it's kind of
->>>> a bugfix, rather than a change of behaviour the user needs to learn about.
->>
->> To those with similar background or experience it may appear that it should be
->> supported, but hasn't been until now.
->>
->> It is definitely not expected behaviour, given how regedit, reg, etc. expect
->> only hive paths, and how the the current regtool --help reads, clearly expecting
->> Windows style backslash separated registry paths, probably pasted within single
->> quotes. That expectation is changed somewhat by the forward slash sentence.
->> Further changes to expectation needs more documentation.
->>
->>>> The above text is, IMHO, more confusing than helpful to a user just
->>>> asking for regtool --help.  I'd just drop it.
->>
->> It needs documented because it can not in any way be inferred from the existing
->> regtool ---help, and would not be expected, that it should work. It was never
->> previously supported or seen as helpful or necessary, so it should be seen as a
->> non-obvious "surprising" addition, in the opposite sense to "least surprise".
->>
->> Please someone suggest better wording for the help, as that is the only
->> documentation available, and is needed, to update existing and inform new users.
->> Like the code, I tried to maintain the style of the existing help.
->>
->> As an alternative, how about:
->> "To support path completion, a keyname prefix of /proc/registry{,32,64}/ is
->> ignored."
-> 
-> Ok, we can add something to the help text, but the text still sounds
-> confusing, even the altenative one.  I think the reason is the negative
-> expression "ignore" here.  Why not express this in a positive way like
-> this:
-> 
->   "Use the /proc/registry{,32,64}/ registry path prefix to utilize path
->    completion."
-> 
-> Something like that anyway.
+This is a multi-part message in MIME format.
 
-Maybe something may be misinterpreted from your consideration of International
-English wording that is not even considered in my native English; "is ignored"
-is passive voice but not negative in English, and neither does it appear to be
-so in Deutsch (via Google): "Zur UnterstÃ¼tzung der PfadvervollstÃ¤ndigung wird
-das SchlÃ¼sselnamenprÃ¤fix /proc/registry{,32,64}/ ignoriert."
-Please advise if you can think why there is a wording issue.
+--Multipart=_Tue__12_Nov_2019_11_55_35_+0900_D50fx7x5I_JuiPwN
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Content-length: 343
 
-I found the doc/utils.xml entry and added the improved sentence to both,
-changing the example to be consistent and the better choice to exemplify the
-alternative, and better fit the UG, man pages, and --help.
+Hi Ken,
 
-Please review the resubmission.
+On Mon, 11 Nov 2019 19:39:46 +0000
+Ken Brown wrote:
+> After this commit, the XWin Server Start Menu shortcut no longer works.  I think 
+> it's /usr/bin/xwin-xdg-menu.exe that fails, but I haven't checked this carefully.
+
+Could you please check whether the attached patch solves the issue?
 
 -- 
-Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
+Takashi Yano <takashi.yano@nifty.ne.jp>
 
-This email may be disturbing to some readers as it contains
-too much technical detail. Reader discretion is advised.
+--Multipart=_Tue__12_Nov_2019_11_55_35_+0900_D50fx7x5I_JuiPwN
+Content-Type: application/octet-stream;
+ name="revise-check-con-is-legacy.patch"
+Content-Disposition: attachment;
+ filename="revise-check-con-is-legacy.patch"
+Content-Transfer-Encoding: base64
+Content-length: 7190
+
+ZGlmZiAtLWdpdCBhL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXJfY29uc29sZS5j
+YyBiL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXJfY29uc29sZS5jYwppbmRleCBk
+ODc1YWQ2NWMuLjBiMWM4MmZiOSAxMDA2NDQKLS0tIGEvd2luc3VwL2N5Z3dp
+bi9maGFuZGxlcl9jb25zb2xlLmNjCisrKyBiL3dpbnN1cC9jeWd3aW4vZmhh
+bmRsZXJfY29uc29sZS5jYwpAQCAtNTYsNiArNTYsNyBAQCBkZXRhaWxzLiAq
+LwogI2RlZmluZSBzckJvdHRvbSAoKGNvbi5zY3JvbGxfcmVnaW9uLkJvdHRv
+bSA8IDApID8gXAogCQkgIGNvbi5iLnNyV2luZG93LkJvdHRvbSA6IFwKIAkJ
+ICBjb24uYi5zcldpbmRvdy5Ub3AgKyBjb24uc2Nyb2xsX3JlZ2lvbi5Cb3R0
+b20pCisjZGVmaW5lIGNvbl9pc19sZWdhY3kgKHNoYXJlZF9jb25zb2xlX2lu
+Zm8gJiYgY29uLmlzX2xlZ2FjeSkKIAogY29uc3QgdW5zaWduZWQgZmhhbmRs
+ZXJfY29uc29sZTo6TUFYX1dSSVRFX0NIQVJTID0gMTYzODQ7CiAKQEAgLTMw
+OSw3ICszMTAsNyBAQCBmaGFuZGxlcl9jb25zb2xlOjpzZXRfY3Vyc29yX21h
+eWJlICgpCiB7CiAgIGNvbi5maWxsaW4gKGdldF9vdXRwdXRfaGFuZGxlICgp
+KTsKICAgLyogTm90aGluZyB0byBkbyBmb3IgeHRlcm0gY29tcGF0aWJsZSBt
+b2RlLiAqLwotICBpZiAod2luY2FwLmhhc19jb25fMjRiaXRfY29sb3JzICgp
+ICYmICFjb24uaXNfbGVnYWN5KQorICBpZiAod2luY2FwLmhhc19jb25fMjRi
+aXRfY29sb3JzICgpICYmICFjb25faXNfbGVnYWN5KQogICAgIHJldHVybjsK
+ICAgaWYgKGNvbi5kd0xhc3RDdXJzb3JQb3NpdGlvbi5YICE9IGNvbi5iLmR3
+Q3Vyc29yUG9zaXRpb24uWCB8fAogICAgICAgY29uLmR3TGFzdEN1cnNvclBv
+c2l0aW9uLlkgIT0gY29uLmIuZHdDdXJzb3JQb3NpdGlvbi5ZKQpAQCAtMzQ5
+LDcgKzM1MCw3IEBAIGZoYW5kbGVyX2NvbnNvbGU6OnNlbmRfd2luY2hfbWF5
+YmUgKCkKICAgICB7CiAgICAgICBjb24uc2Nyb2xsX3JlZ2lvbi5Ub3AgPSAw
+OwogICAgICAgY29uLnNjcm9sbF9yZWdpb24uQm90dG9tID0gLTE7Ci0gICAg
+ICBpZiAod2luY2FwLmhhc19jb25fMjRiaXRfY29sb3JzICgpICYmICFjb24u
+aXNfbGVnYWN5KQorICAgICAgaWYgKHdpbmNhcC5oYXNfY29uXzI0Yml0X2Nv
+bG9ycyAoKSAmJiAhY29uX2lzX2xlZ2FjeSkKIAlmaXhfdGFiX3Bvc2l0aW9u
+IChnZXRfb3V0cHV0X2hhbmRsZSAoKSwgY29uLmR3V2luU2l6ZS5YKTsKICAg
+ICAgIGdldF90dHlwICgpLT5raWxsX3BncnAgKFNJR1dJTkNIKTsKICAgICAg
+IHJldHVybiB0cnVlOwpAQCAtNDgzLDcgKzQ4NCw3IEBAIHNpZ19leGl0Ogog
+ZmhhbmRsZXJfY29uc29sZTo6aW5wdXRfc3RhdGVzCiBmaGFuZGxlcl9jb25z
+b2xlOjpwcm9jZXNzX2lucHV0X21lc3NhZ2UgKHZvaWQpCiB7Ci0gIGlmICh3
+aW5jYXAuaGFzX2Nvbl8yNGJpdF9jb2xvcnMgKCkgJiYgIWNvbi5pc19sZWdh
+Y3kpCisgIGlmICh3aW5jYXAuaGFzX2Nvbl8yNGJpdF9jb2xvcnMgKCkgJiYg
+IWNvbl9pc19sZWdhY3kpCiAgICAgewogICAgICAgRFdPUkQgZHdNb2RlOwog
+ICAgICAgLyogRW5hYmxlIHh0ZXJtIGNvbXBhdGlibGUgbW9kZSBpbiBpbnB1
+dCAqLwpAQCAtNTg5LDcgKzU5MCw3IEBAIGZoYW5kbGVyX2NvbnNvbGU6OnBy
+b2Nlc3NfaW5wdXRfbWVzc2FnZSAodm9pZCkKIAkgICAgfQogCSAgLyogQWxs
+b3cgQ3RybC1TcGFjZSB0byBlbWl0IF5AICovCiAJICBlbHNlIGlmIChpbnB1
+dF9yZWNbaV0uRXZlbnQuS2V5RXZlbnQud1ZpcnR1YWxLZXlDb2RlCi0JCSAg
+ID09ICgod2luY2FwLmhhc19jb25fMjRiaXRfY29sb3JzICgpICYmICFjb24u
+aXNfbGVnYWN5KSA/CisJCSAgID09ICgod2luY2FwLmhhc19jb25fMjRiaXRf
+Y29sb3JzICgpICYmICFjb25faXNfbGVnYWN5KSA/CiAJCSAgICAgICAnMicg
+OiBWS19TUEFDRSkKIAkJICAgJiYgKGN0cmxfa2V5X3N0YXRlICYgQ1RSTF9Q
+UkVTU0VEKQogCQkgICAmJiAhKGN0cmxfa2V5X3N0YXRlICYgQUxUX1BSRVNT
+RUQpKQpAQCAtMTAyOSw3ICsxMDMwLDcgQEAgZmhhbmRsZXJfY29uc29sZTo6
+b3BlbiAoaW50IGZsYWdzLCBtb2RlX3QpCiAgICAgICBlbHNlCiAJY29uLmlz
+X2xlZ2FjeSA9IGZhbHNlOwogICAgICAgLyogRW5hYmxlIHh0ZXJtIGNvbXBh
+dGlibGUgbW9kZSBpbiBpbnB1dCAqLwotICAgICAgaWYgKCFjb24uaXNfbGVn
+YWN5KQorICAgICAgaWYgKCFjb25faXNfbGVnYWN5KQogCXsKIAkgIEdldENv
+bnNvbGVNb2RlIChnZXRfaGFuZGxlICgpLCAmZHdNb2RlKTsKIAkgIGR3TW9k
+ZSB8PSBFTkFCTEVfVklSVFVBTF9URVJNSU5BTF9JTlBVVDsKQEAgLTEwMzcs
+MTQgKzEwMzgsMTQgQEAgZmhhbmRsZXJfY29uc29sZTo6b3BlbiAoaW50IGZs
+YWdzLCBtb2RlX3QpCiAJICAgIGNvbi5pc19sZWdhY3kgPSB0cnVlOwogCX0K
+ICAgICAgIGV4dGVybiBpbnQgc2F3VEVSTTsKLSAgICAgIGlmIChjb24uaXNf
+bGVnYWN5ICYmICFzYXdURVJNKQorICAgICAgaWYgKGNvbl9pc19sZWdhY3kg
+JiYgIXNhd1RFUk0pCiAJc2V0ZW52ICgiVEVSTSIsICJjeWd3aW4iLCAxKTsK
+ICAgICB9CiAKICAgRFdPUkQgY2ZsYWdzOwogICBpZiAoR2V0Q29uc29sZU1v
+ZGUgKGdldF9oYW5kbGUgKCksICZjZmxhZ3MpKQogICAgIFNldENvbnNvbGVN
+b2RlIChnZXRfaGFuZGxlICgpLCBFTkFCTEVfV0lORE9XX0lOUFVUCi0JCSAg
+ICB8ICgod2luY2FwLmhhc19jb25fMjRiaXRfY29sb3JzICgpICYmICFjb24u
+aXNfbGVnYWN5KSA/CisJCSAgICB8ICgod2luY2FwLmhhc19jb25fMjRiaXRf
+Y29sb3JzICgpICYmICFjb25faXNfbGVnYWN5KSA/CiAJCSAgICAgICAwIDog
+RU5BQkxFX01PVVNFX0lOUFVUKQogCQkgICAgfCBjZmxhZ3MpOwogCkBAIC0x
+MDc0LDcgKzEwNzUsNyBAQCBmaGFuZGxlcl9jb25zb2xlOjpjbG9zZSAoKQog
+ICBvdXRwdXRfbXV0ZXggPSBOVUxMOwogCiAgIGlmIChzaGFyZWRfY29uc29s
+ZV9pbmZvICYmIGdldHBpZCAoKSA9PSBjb24ub3duZXIgJiYKLSAgICAgIHdp
+bmNhcC5oYXNfY29uXzI0Yml0X2NvbG9ycyAoKSAmJiAhY29uLmlzX2xlZ2Fj
+eSkKKyAgICAgIHdpbmNhcC5oYXNfY29uXzI0Yml0X2NvbG9ycyAoKSAmJiAh
+Y29uX2lzX2xlZ2FjeSkKICAgICB7CiAgICAgICBEV09SRCBkd01vZGU7CiAg
+ICAgICAvKiBEaXNhYmxlIHh0ZXJtIGNvbXBhdGlibGUgbW9kZSBpbiBpbnB1
+dCAqLwpAQCAtMTIyMSw3ICsxMjIyLDcgQEAgZmhhbmRsZXJfY29uc29sZTo6
+b3V0cHV0X3Rjc2V0YXR0ciAoaW50LCBzdHJ1Y3QgdGVybWlvcyBjb25zdCAq
+dCkKICAgYWNxdWlyZV9vdXRwdXRfbXV0ZXggKElORklOSVRFKTsKICAgRFdP
+UkQgZmxhZ3MgPSBFTkFCTEVfUFJPQ0VTU0VEX09VVFBVVCB8IEVOQUJMRV9X
+UkFQX0FUX0VPTF9PVVRQVVQ7CiAgIC8qIElmIHN5c3RlbSBoYXMgMjQgYml0
+IGNvbG9yIGNhcGFiaWxpdHksIHVzZSB4dGVybSBjb21wYXRpYmxlIG1vZGUu
+ICovCi0gIGlmICh3aW5jYXAuaGFzX2Nvbl8yNGJpdF9jb2xvcnMgKCkgJiYg
+IWNvbi5pc19sZWdhY3kpCisgIGlmICh3aW5jYXAuaGFzX2Nvbl8yNGJpdF9j
+b2xvcnMgKCkgJiYgIWNvbl9pc19sZWdhY3kpCiAgICAgewogICAgICAgZmxh
+Z3MgfD0gRU5BQkxFX1ZJUlRVQUxfVEVSTUlOQUxfUFJPQ0VTU0lORzsKICAg
+ICAgIGlmICghKHQtPmNfb2ZsYWcgJiBPUE9TVCkgfHwgISh0LT5jX29mbGFn
+ICYgT05MQ1IpKQpAQCAtMTI4NiwxMCArMTI4NywxMCBAQCBmaGFuZGxlcl9j
+b25zb2xlOjppbnB1dF90Y3NldGF0dHIgKGludCwgc3RydWN0IHRlcm1pb3Mg
+Y29uc3QgKnQpCiAgICAgfQogCiAgIGZsYWdzIHw9IEVOQUJMRV9XSU5ET1df
+SU5QVVQgfAotICAgICgod2luY2FwLmhhc19jb25fMjRiaXRfY29sb3JzICgp
+ICYmICFjb24uaXNfbGVnYWN5KSA/CisgICAgKCh3aW5jYXAuaGFzX2Nvbl8y
+NGJpdF9jb2xvcnMgKCkgJiYgIWNvbl9pc19sZWdhY3kpID8KICAgICAgMCA6
+IEVOQUJMRV9NT1VTRV9JTlBVVCk7CiAgIC8qIGlmIHN5c3RlbSBoYXMgMjQg
+Yml0IGNvbG9yIGNhcGFiaWxpdHksIHVzZSB4dGVybSBjb21wYXRpYmxlIG1v
+ZGUuICovCi0gIGlmICh3aW5jYXAuaGFzX2Nvbl8yNGJpdF9jb2xvcnMgKCkg
+JiYgIWNvbi5pc19sZWdhY3kpCisgIGlmICh3aW5jYXAuaGFzX2Nvbl8yNGJp
+dF9jb2xvcnMgKCkgJiYgIWNvbl9pc19sZWdhY3kpCiAgICAgZmxhZ3MgfD0g
+RU5BQkxFX1ZJUlRVQUxfVEVSTUlOQUxfSU5QVVQ7CiAKICAgaW50IHJlczsK
+QEAgLTE2NjMsNyArMTY2NCw3IEBAIGJvb2wgZmhhbmRsZXJfY29uc29sZTo6
+d3JpdGVfY29uc29sZSAoUFdDSEFSIGJ1ZiwgRFdPUkQgbGVuLCBEV09SRCYg
+ZG9uZSkKIHsKICAgYm9vbCBuZWVkX2ZpeF90YWJfcG9zaXRpb24gPSBmYWxz
+ZTsKICAgLyogQ2hlY2sgaWYgc2NyZWVuIHdpbGwgYmUgYWx0ZXJuYXRlZC4g
+Ki8KLSAgaWYgKHdpbmNhcC5oYXNfY29uXzI0Yml0X2NvbG9ycyAoKSAmJiAh
+Y29uLmlzX2xlZ2FjeQorICBpZiAod2luY2FwLmhhc19jb25fMjRiaXRfY29s
+b3JzICgpICYmICFjb25faXNfbGVnYWN5CiAgICAgICAmJiBtZW1tZW0gKGJ1
+ZiwgbGVuKnNpemVvZiAoV0NIQVIpLCBMIlwwMzNbPzEwNDkiLCA3KnNpemVv
+ZiAoV0NIQVIpKSkKICAgICBuZWVkX2ZpeF90YWJfcG9zaXRpb24gPSB0cnVl
+OwogCkBAIC0yNTExLDcgKzI1MTIsNyBAQCBmaGFuZGxlcl9jb25zb2xlOjp3
+cml0ZV9ub3JtYWwgKGNvbnN0IHVuc2lnbmVkIGNoYXIgKnNyYywKICAgbWVt
+c2V0ICgmcHMsIDAsIHNpemVvZiBwcyk7CiAgIHdoaWxlIChmb3VuZCA8IGVu
+ZAogCSAmJiBmb3VuZCAtIHNyYyA8IENPTlZFUlRfTElNSVQKLQkgJiYgKCh3
+aW5jYXAuaGFzX2Nvbl8yNGJpdF9jb2xvcnMgKCkgJiYgIWNvbi5pc19sZWdh
+Y3kpCisJICYmICgod2luY2FwLmhhc19jb25fMjRiaXRfY29sb3JzICgpICYm
+ICFjb25faXNfbGVnYWN5KQogCSAgICAgfHwgYmFzZV9jaGFyc1sqZm91bmRd
+ID09IE5PUikgKQogICAgIHsKICAgICAgIHN3aXRjaCAocmV0ID0gZl9tYnRv
+d2MgKF9SRUVOVCwgTlVMTCwgKGNvbnN0IGNoYXIgKikgZm91bmQsCkBAIC0y
+OTcyLDcgKzI5NzMsNyBAQCBmaGFuZGxlcl9jb25zb2xlOjpmaXh1cF9hZnRl
+cl9mb3JrX2V4ZWMgKGJvb2wgZXhlY2luZykKIHsKICAgc2V0X3VuaXQgKCk7
+CiAgIHNldHVwX2lvX211dGV4ICgpOwotICBpZiAod2luY2FwLmhhc19jb25f
+MjRiaXRfY29sb3JzICgpICYmICFjb24uaXNfbGVnYWN5KQorICBpZiAod2lu
+Y2FwLmhhc19jb25fMjRiaXRfY29sb3JzICgpICYmICFjb25faXNfbGVnYWN5
+KQogICAgIHsKICAgICAgIERXT1JEIGR3TW9kZTsKICAgICAgIC8qIERpc2Fi
+bGUgeHRlcm0gY29tcGF0aWJsZSBtb2RlIGluIGlucHV0ICovCg==
+
+--Multipart=_Tue__12_Nov_2019_11_55_35_+0900_D50fx7x5I_JuiPwN--
