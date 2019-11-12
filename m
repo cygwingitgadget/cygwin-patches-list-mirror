@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9830-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 16203 invoked by alias); 12 Nov 2019 02:55:46 -0000
+Return-Path: <cygwin-patches-return-9831-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 74276 invoked by alias); 12 Nov 2019 12:58:43 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,170 +9,38 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 16192 invoked by uid 89); 12 Nov 2019 02:55:45 -0000
+Received: (qmail 74267 invoked by uid 89); 12 Nov 2019 12:58:43 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-2.9 required=5.0 tests=AWL,BAYES_40,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=D*jp, D*nifty.ne.jp, D*ne.jp, UD:jp
+X-Spam-SWARE-Status: No, score=-3.8 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=screen
 X-HELO: conssluserg-06.nifty.com
-Received: from conssluserg-06.nifty.com (HELO conssluserg-06.nifty.com) (210.131.2.91) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 12 Nov 2019 02:55:43 +0000
-Received: from Express5800-S70 (ntsitm355024.sitm.nt.ngn.ppp.infoweb.ne.jp [175.184.70.24]) (authenticated)	by conssluserg-06.nifty.com with ESMTP id xAC2tW08021768	for <cygwin-patches@cygwin.com>; Tue, 12 Nov 2019 11:55:32 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com xAC2tW08021768
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1573527332;	bh=utghHZdOc8qH0O42v5S9KGhLRLHdML6fM2VhH1ATs4Q=;	h=Date:From:To:Subject:In-Reply-To:References:From;	b=GIuP1704bjBbi+PER7Slg01urBiRVlCCFKLIUMDEdJoO9vkxVlBfq3sDaLSxNXGXH	 YBM6gS7jdZE/gMDpEwffauMjwB8UodbhKo/rExN/ahMMikXj38cdq57PSXqGWS7p3I	 alB4HFJFmdMQD1bx2TJBK+BTeoIp9RCIG7zxkTFr9H1r2ISVMYXITLM46NDqsuMUmQ	 FWxSFGD+vDiPVRZwoaRi6ZOceyYbxm5vhb9mdmgJ1zyqQLngVPoBpQwyAX6nnOlH+q	 Ehiam5aXH5EH0Bt7dR5xKo7RFXPN4gtBd+8McxNK3XmT/StYHalHY45Z6iDrp33Ofu	 Xlj4TXjXLB/9g==
-Date: Tue, 12 Nov 2019 02:55:00 -0000
+Received: from conssluserg-06.nifty.com (HELO conssluserg-06.nifty.com) (210.131.2.91) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 12 Nov 2019 12:58:41 +0000
+Received: from Express5800-S70 (ntsitm355024.sitm.nt.ngn.ppp.infoweb.ne.jp [175.184.70.24]) (authenticated)	by conssluserg-06.nifty.com with ESMTP id xACCwTdE000497	for <cygwin-patches@cygwin.com>; Tue, 12 Nov 2019 21:58:29 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com xACCwTdE000497
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1573563509;	bh=3d+WtlhtV6I1V8/xyrK7q6djpbaQ81sAfFq/PIuWP8o=;	h=Date:From:To:Subject:In-Reply-To:References:From;	b=pwghx3egs8MF2+DXQaJ50Rz4HjJHhlPZSo+wqCYEaBER77H9KTSqKbwWnZ0t3TbGE	 WlzcfbkigoypwcEsn6s04LUdrXgNo+LOPWbXx5gUemO2GinmJDp1VbWmH9j8bnEsdb	 vEUtm6pdaJyetulBt5Akb3H0FugwQ6D3jlUbmVHcdFXX6tcLPZ0D+JvETAu3CQLCZk	 3Vs0Sgq1pkuAn+3OyQBRxHhKCZgE6exmGpoQ1NoTeTZhxiOPQAj3Ij97MRdeOEF4Qr	 +4gHG1evObGcX5P9+DXpu7lcpBUX88GBFvUH5vUct541+lmytc7XugNtiHCxtaWQSD	 2r8TP/tcbdyCA==
+Date: Tue, 12 Nov 2019 12:58:00 -0000
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v3] Cygwin: console, pty: Prevent error in legacy console mode.
-Message-Id: <20191112115535.90777ac110e6f72c76a99753@nifty.ne.jp>
-In-Reply-To: <20218a47-2077-878c-4d9c-e23f6b0d4add@cornell.edu>
-References: <20191106162929.739-1-takashi.yano@nifty.ne.jp>	<20218a47-2077-878c-4d9c-e23f6b0d4add@cornell.edu>
+Subject: Re: [PATCH] Cygwin: pty: Disable clear screen for ssh sessions with -t option.
+Message-Id: <20191112215838.459efd392c64b3c8190f3493@nifty.ne.jp>
+In-Reply-To: <fa81169e-c539-dbde-bdac-61d7b22ae842@ssi-schaefer.com>
+References: <20191022182405.0ce3d7c17b0e7d924430b89c@nifty.ne.jp>	<20191022134048.GP16240@calimero.vinschen.de>	<20191023122717.66d241bd0a7814b7216d78f5@nifty.ne.jp>	<20191023120542.GA16240@calimero.vinschen.de>	<20191024100130.4c7f6e4ac55c10143e3c86f6@nifty.ne.jp>	<20191024093817.GD16240@calimero.vinschen.de>	<20191024191724.f44a44745f16f78595ae1b43@nifty.ne.jp>	<20191024133305.GF16240@calimero.vinschen.de>	<20191108110955.GC3372@calimero.vinschen.de>	<20191108224232.c58ba683250a438a44e15e56@nifty.ne.jp>	<20191111091755.GF3372@calimero.vinschen.de>	<fa81169e-c539-dbde-bdac-61d7b22ae842@ssi-schaefer.com>
 Mime-Version: 1.0
-Content-Type: multipart/mixed; boundary="Multipart=_Tue__12_Nov_2019_11_55_35_+0900_D50fx7x5I_JuiPwN"
-X-IsSubscribed: yes
-X-SW-Source: 2019-q4/txt/msg00101.txt.bz2
-
-This is a multi-part message in MIME format.
-
---Multipart=_Tue__12_Nov_2019_11_55_35_+0900_D50fx7x5I_JuiPwN
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Content-length: 343
+X-IsSubscribed: yes
+X-SW-Source: 2019-q4/txt/msg00102.txt.bz2
 
-Hi Ken,
+Hi Corinna and Michael,
 
-On Mon, 11 Nov 2019 19:39:46 +0000
-Ken Brown wrote:
-> After this commit, the XWin Server Start Menu shortcut no longer works.  I think 
-> it's /usr/bin/xwin-xdg-menu.exe that fails, but I haven't checked this carefully.
+On Mon, 11 Nov 2019 11:04:54 +0100
+Michael Haubenwallner wrote:
+> On 11/11/19 10:17 AM, Corinna Vinschen wrote:
+> > I tested it and I think this is a great step forward.  Dropping
+> > $TERM checks and clear screen sequence is the way to go!
+> 
+> I second that!
 
-Could you please check whether the attached patch solves the issue?
+Thanks for testing. I will submit this patch since you like it.
 
 -- 
 Takashi Yano <takashi.yano@nifty.ne.jp>
-
---Multipart=_Tue__12_Nov_2019_11_55_35_+0900_D50fx7x5I_JuiPwN
-Content-Type: application/octet-stream;
- name="revise-check-con-is-legacy.patch"
-Content-Disposition: attachment;
- filename="revise-check-con-is-legacy.patch"
-Content-Transfer-Encoding: base64
-Content-length: 7190
-
-ZGlmZiAtLWdpdCBhL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXJfY29uc29sZS5j
-YyBiL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXJfY29uc29sZS5jYwppbmRleCBk
-ODc1YWQ2NWMuLjBiMWM4MmZiOSAxMDA2NDQKLS0tIGEvd2luc3VwL2N5Z3dp
-bi9maGFuZGxlcl9jb25zb2xlLmNjCisrKyBiL3dpbnN1cC9jeWd3aW4vZmhh
-bmRsZXJfY29uc29sZS5jYwpAQCAtNTYsNiArNTYsNyBAQCBkZXRhaWxzLiAq
-LwogI2RlZmluZSBzckJvdHRvbSAoKGNvbi5zY3JvbGxfcmVnaW9uLkJvdHRv
-bSA8IDApID8gXAogCQkgIGNvbi5iLnNyV2luZG93LkJvdHRvbSA6IFwKIAkJ
-ICBjb24uYi5zcldpbmRvdy5Ub3AgKyBjb24uc2Nyb2xsX3JlZ2lvbi5Cb3R0
-b20pCisjZGVmaW5lIGNvbl9pc19sZWdhY3kgKHNoYXJlZF9jb25zb2xlX2lu
-Zm8gJiYgY29uLmlzX2xlZ2FjeSkKIAogY29uc3QgdW5zaWduZWQgZmhhbmRs
-ZXJfY29uc29sZTo6TUFYX1dSSVRFX0NIQVJTID0gMTYzODQ7CiAKQEAgLTMw
-OSw3ICszMTAsNyBAQCBmaGFuZGxlcl9jb25zb2xlOjpzZXRfY3Vyc29yX21h
-eWJlICgpCiB7CiAgIGNvbi5maWxsaW4gKGdldF9vdXRwdXRfaGFuZGxlICgp
-KTsKICAgLyogTm90aGluZyB0byBkbyBmb3IgeHRlcm0gY29tcGF0aWJsZSBt
-b2RlLiAqLwotICBpZiAod2luY2FwLmhhc19jb25fMjRiaXRfY29sb3JzICgp
-ICYmICFjb24uaXNfbGVnYWN5KQorICBpZiAod2luY2FwLmhhc19jb25fMjRi
-aXRfY29sb3JzICgpICYmICFjb25faXNfbGVnYWN5KQogICAgIHJldHVybjsK
-ICAgaWYgKGNvbi5kd0xhc3RDdXJzb3JQb3NpdGlvbi5YICE9IGNvbi5iLmR3
-Q3Vyc29yUG9zaXRpb24uWCB8fAogICAgICAgY29uLmR3TGFzdEN1cnNvclBv
-c2l0aW9uLlkgIT0gY29uLmIuZHdDdXJzb3JQb3NpdGlvbi5ZKQpAQCAtMzQ5
-LDcgKzM1MCw3IEBAIGZoYW5kbGVyX2NvbnNvbGU6OnNlbmRfd2luY2hfbWF5
-YmUgKCkKICAgICB7CiAgICAgICBjb24uc2Nyb2xsX3JlZ2lvbi5Ub3AgPSAw
-OwogICAgICAgY29uLnNjcm9sbF9yZWdpb24uQm90dG9tID0gLTE7Ci0gICAg
-ICBpZiAod2luY2FwLmhhc19jb25fMjRiaXRfY29sb3JzICgpICYmICFjb24u
-aXNfbGVnYWN5KQorICAgICAgaWYgKHdpbmNhcC5oYXNfY29uXzI0Yml0X2Nv
-bG9ycyAoKSAmJiAhY29uX2lzX2xlZ2FjeSkKIAlmaXhfdGFiX3Bvc2l0aW9u
-IChnZXRfb3V0cHV0X2hhbmRsZSAoKSwgY29uLmR3V2luU2l6ZS5YKTsKICAg
-ICAgIGdldF90dHlwICgpLT5raWxsX3BncnAgKFNJR1dJTkNIKTsKICAgICAg
-IHJldHVybiB0cnVlOwpAQCAtNDgzLDcgKzQ4NCw3IEBAIHNpZ19leGl0Ogog
-ZmhhbmRsZXJfY29uc29sZTo6aW5wdXRfc3RhdGVzCiBmaGFuZGxlcl9jb25z
-b2xlOjpwcm9jZXNzX2lucHV0X21lc3NhZ2UgKHZvaWQpCiB7Ci0gIGlmICh3
-aW5jYXAuaGFzX2Nvbl8yNGJpdF9jb2xvcnMgKCkgJiYgIWNvbi5pc19sZWdh
-Y3kpCisgIGlmICh3aW5jYXAuaGFzX2Nvbl8yNGJpdF9jb2xvcnMgKCkgJiYg
-IWNvbl9pc19sZWdhY3kpCiAgICAgewogICAgICAgRFdPUkQgZHdNb2RlOwog
-ICAgICAgLyogRW5hYmxlIHh0ZXJtIGNvbXBhdGlibGUgbW9kZSBpbiBpbnB1
-dCAqLwpAQCAtNTg5LDcgKzU5MCw3IEBAIGZoYW5kbGVyX2NvbnNvbGU6OnBy
-b2Nlc3NfaW5wdXRfbWVzc2FnZSAodm9pZCkKIAkgICAgfQogCSAgLyogQWxs
-b3cgQ3RybC1TcGFjZSB0byBlbWl0IF5AICovCiAJICBlbHNlIGlmIChpbnB1
-dF9yZWNbaV0uRXZlbnQuS2V5RXZlbnQud1ZpcnR1YWxLZXlDb2RlCi0JCSAg
-ID09ICgod2luY2FwLmhhc19jb25fMjRiaXRfY29sb3JzICgpICYmICFjb24u
-aXNfbGVnYWN5KSA/CisJCSAgID09ICgod2luY2FwLmhhc19jb25fMjRiaXRf
-Y29sb3JzICgpICYmICFjb25faXNfbGVnYWN5KSA/CiAJCSAgICAgICAnMicg
-OiBWS19TUEFDRSkKIAkJICAgJiYgKGN0cmxfa2V5X3N0YXRlICYgQ1RSTF9Q
-UkVTU0VEKQogCQkgICAmJiAhKGN0cmxfa2V5X3N0YXRlICYgQUxUX1BSRVNT
-RUQpKQpAQCAtMTAyOSw3ICsxMDMwLDcgQEAgZmhhbmRsZXJfY29uc29sZTo6
-b3BlbiAoaW50IGZsYWdzLCBtb2RlX3QpCiAgICAgICBlbHNlCiAJY29uLmlz
-X2xlZ2FjeSA9IGZhbHNlOwogICAgICAgLyogRW5hYmxlIHh0ZXJtIGNvbXBh
-dGlibGUgbW9kZSBpbiBpbnB1dCAqLwotICAgICAgaWYgKCFjb24uaXNfbGVn
-YWN5KQorICAgICAgaWYgKCFjb25faXNfbGVnYWN5KQogCXsKIAkgIEdldENv
-bnNvbGVNb2RlIChnZXRfaGFuZGxlICgpLCAmZHdNb2RlKTsKIAkgIGR3TW9k
-ZSB8PSBFTkFCTEVfVklSVFVBTF9URVJNSU5BTF9JTlBVVDsKQEAgLTEwMzcs
-MTQgKzEwMzgsMTQgQEAgZmhhbmRsZXJfY29uc29sZTo6b3BlbiAoaW50IGZs
-YWdzLCBtb2RlX3QpCiAJICAgIGNvbi5pc19sZWdhY3kgPSB0cnVlOwogCX0K
-ICAgICAgIGV4dGVybiBpbnQgc2F3VEVSTTsKLSAgICAgIGlmIChjb24uaXNf
-bGVnYWN5ICYmICFzYXdURVJNKQorICAgICAgaWYgKGNvbl9pc19sZWdhY3kg
-JiYgIXNhd1RFUk0pCiAJc2V0ZW52ICgiVEVSTSIsICJjeWd3aW4iLCAxKTsK
-ICAgICB9CiAKICAgRFdPUkQgY2ZsYWdzOwogICBpZiAoR2V0Q29uc29sZU1v
-ZGUgKGdldF9oYW5kbGUgKCksICZjZmxhZ3MpKQogICAgIFNldENvbnNvbGVN
-b2RlIChnZXRfaGFuZGxlICgpLCBFTkFCTEVfV0lORE9XX0lOUFVUCi0JCSAg
-ICB8ICgod2luY2FwLmhhc19jb25fMjRiaXRfY29sb3JzICgpICYmICFjb24u
-aXNfbGVnYWN5KSA/CisJCSAgICB8ICgod2luY2FwLmhhc19jb25fMjRiaXRf
-Y29sb3JzICgpICYmICFjb25faXNfbGVnYWN5KSA/CiAJCSAgICAgICAwIDog
-RU5BQkxFX01PVVNFX0lOUFVUKQogCQkgICAgfCBjZmxhZ3MpOwogCkBAIC0x
-MDc0LDcgKzEwNzUsNyBAQCBmaGFuZGxlcl9jb25zb2xlOjpjbG9zZSAoKQog
-ICBvdXRwdXRfbXV0ZXggPSBOVUxMOwogCiAgIGlmIChzaGFyZWRfY29uc29s
-ZV9pbmZvICYmIGdldHBpZCAoKSA9PSBjb24ub3duZXIgJiYKLSAgICAgIHdp
-bmNhcC5oYXNfY29uXzI0Yml0X2NvbG9ycyAoKSAmJiAhY29uLmlzX2xlZ2Fj
-eSkKKyAgICAgIHdpbmNhcC5oYXNfY29uXzI0Yml0X2NvbG9ycyAoKSAmJiAh
-Y29uX2lzX2xlZ2FjeSkKICAgICB7CiAgICAgICBEV09SRCBkd01vZGU7CiAg
-ICAgICAvKiBEaXNhYmxlIHh0ZXJtIGNvbXBhdGlibGUgbW9kZSBpbiBpbnB1
-dCAqLwpAQCAtMTIyMSw3ICsxMjIyLDcgQEAgZmhhbmRsZXJfY29uc29sZTo6
-b3V0cHV0X3Rjc2V0YXR0ciAoaW50LCBzdHJ1Y3QgdGVybWlvcyBjb25zdCAq
-dCkKICAgYWNxdWlyZV9vdXRwdXRfbXV0ZXggKElORklOSVRFKTsKICAgRFdP
-UkQgZmxhZ3MgPSBFTkFCTEVfUFJPQ0VTU0VEX09VVFBVVCB8IEVOQUJMRV9X
-UkFQX0FUX0VPTF9PVVRQVVQ7CiAgIC8qIElmIHN5c3RlbSBoYXMgMjQgYml0
-IGNvbG9yIGNhcGFiaWxpdHksIHVzZSB4dGVybSBjb21wYXRpYmxlIG1vZGUu
-ICovCi0gIGlmICh3aW5jYXAuaGFzX2Nvbl8yNGJpdF9jb2xvcnMgKCkgJiYg
-IWNvbi5pc19sZWdhY3kpCisgIGlmICh3aW5jYXAuaGFzX2Nvbl8yNGJpdF9j
-b2xvcnMgKCkgJiYgIWNvbl9pc19sZWdhY3kpCiAgICAgewogICAgICAgZmxh
-Z3MgfD0gRU5BQkxFX1ZJUlRVQUxfVEVSTUlOQUxfUFJPQ0VTU0lORzsKICAg
-ICAgIGlmICghKHQtPmNfb2ZsYWcgJiBPUE9TVCkgfHwgISh0LT5jX29mbGFn
-ICYgT05MQ1IpKQpAQCAtMTI4NiwxMCArMTI4NywxMCBAQCBmaGFuZGxlcl9j
-b25zb2xlOjppbnB1dF90Y3NldGF0dHIgKGludCwgc3RydWN0IHRlcm1pb3Mg
-Y29uc3QgKnQpCiAgICAgfQogCiAgIGZsYWdzIHw9IEVOQUJMRV9XSU5ET1df
-SU5QVVQgfAotICAgICgod2luY2FwLmhhc19jb25fMjRiaXRfY29sb3JzICgp
-ICYmICFjb24uaXNfbGVnYWN5KSA/CisgICAgKCh3aW5jYXAuaGFzX2Nvbl8y
-NGJpdF9jb2xvcnMgKCkgJiYgIWNvbl9pc19sZWdhY3kpID8KICAgICAgMCA6
-IEVOQUJMRV9NT1VTRV9JTlBVVCk7CiAgIC8qIGlmIHN5c3RlbSBoYXMgMjQg
-Yml0IGNvbG9yIGNhcGFiaWxpdHksIHVzZSB4dGVybSBjb21wYXRpYmxlIG1v
-ZGUuICovCi0gIGlmICh3aW5jYXAuaGFzX2Nvbl8yNGJpdF9jb2xvcnMgKCkg
-JiYgIWNvbi5pc19sZWdhY3kpCisgIGlmICh3aW5jYXAuaGFzX2Nvbl8yNGJp
-dF9jb2xvcnMgKCkgJiYgIWNvbl9pc19sZWdhY3kpCiAgICAgZmxhZ3MgfD0g
-RU5BQkxFX1ZJUlRVQUxfVEVSTUlOQUxfSU5QVVQ7CiAKICAgaW50IHJlczsK
-QEAgLTE2NjMsNyArMTY2NCw3IEBAIGJvb2wgZmhhbmRsZXJfY29uc29sZTo6
-d3JpdGVfY29uc29sZSAoUFdDSEFSIGJ1ZiwgRFdPUkQgbGVuLCBEV09SRCYg
-ZG9uZSkKIHsKICAgYm9vbCBuZWVkX2ZpeF90YWJfcG9zaXRpb24gPSBmYWxz
-ZTsKICAgLyogQ2hlY2sgaWYgc2NyZWVuIHdpbGwgYmUgYWx0ZXJuYXRlZC4g
-Ki8KLSAgaWYgKHdpbmNhcC5oYXNfY29uXzI0Yml0X2NvbG9ycyAoKSAmJiAh
-Y29uLmlzX2xlZ2FjeQorICBpZiAod2luY2FwLmhhc19jb25fMjRiaXRfY29s
-b3JzICgpICYmICFjb25faXNfbGVnYWN5CiAgICAgICAmJiBtZW1tZW0gKGJ1
-ZiwgbGVuKnNpemVvZiAoV0NIQVIpLCBMIlwwMzNbPzEwNDkiLCA3KnNpemVv
-ZiAoV0NIQVIpKSkKICAgICBuZWVkX2ZpeF90YWJfcG9zaXRpb24gPSB0cnVl
-OwogCkBAIC0yNTExLDcgKzI1MTIsNyBAQCBmaGFuZGxlcl9jb25zb2xlOjp3
-cml0ZV9ub3JtYWwgKGNvbnN0IHVuc2lnbmVkIGNoYXIgKnNyYywKICAgbWVt
-c2V0ICgmcHMsIDAsIHNpemVvZiBwcyk7CiAgIHdoaWxlIChmb3VuZCA8IGVu
-ZAogCSAmJiBmb3VuZCAtIHNyYyA8IENPTlZFUlRfTElNSVQKLQkgJiYgKCh3
-aW5jYXAuaGFzX2Nvbl8yNGJpdF9jb2xvcnMgKCkgJiYgIWNvbi5pc19sZWdh
-Y3kpCisJICYmICgod2luY2FwLmhhc19jb25fMjRiaXRfY29sb3JzICgpICYm
-ICFjb25faXNfbGVnYWN5KQogCSAgICAgfHwgYmFzZV9jaGFyc1sqZm91bmRd
-ID09IE5PUikgKQogICAgIHsKICAgICAgIHN3aXRjaCAocmV0ID0gZl9tYnRv
-d2MgKF9SRUVOVCwgTlVMTCwgKGNvbnN0IGNoYXIgKikgZm91bmQsCkBAIC0y
-OTcyLDcgKzI5NzMsNyBAQCBmaGFuZGxlcl9jb25zb2xlOjpmaXh1cF9hZnRl
-cl9mb3JrX2V4ZWMgKGJvb2wgZXhlY2luZykKIHsKICAgc2V0X3VuaXQgKCk7
-CiAgIHNldHVwX2lvX211dGV4ICgpOwotICBpZiAod2luY2FwLmhhc19jb25f
-MjRiaXRfY29sb3JzICgpICYmICFjb24uaXNfbGVnYWN5KQorICBpZiAod2lu
-Y2FwLmhhc19jb25fMjRiaXRfY29sb3JzICgpICYmICFjb25faXNfbGVnYWN5
-KQogICAgIHsKICAgICAgIERXT1JEIGR3TW9kZTsKICAgICAgIC8qIERpc2Fi
-bGUgeHRlcm0gY29tcGF0aWJsZSBtb2RlIGluIGlucHV0ICovCg==
-
---Multipart=_Tue__12_Nov_2019_11_55_35_+0900_D50fx7x5I_JuiPwN--
