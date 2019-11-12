@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9832-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 77074 invoked by alias); 12 Nov 2019 13:00:39 -0000
+Return-Path: <cygwin-patches-return-9833-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 24797 invoked by alias); 12 Nov 2019 13:46:11 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,118 +9,51 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 76975 invoked by uid 89); 12 Nov 2019 13:00:38 -0000
+Received: (qmail 24771 invoked by uid 89); 12 Nov 2019 13:46:10 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-16.2 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=UD:Y, H*Ad:D*jp, UD:X, sbi
-X-HELO: conuserg-06.nifty.com
-Received: from conuserg-06.nifty.com (HELO conuserg-06.nifty.com) (210.131.2.73) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 12 Nov 2019 13:00:37 +0000
-Received: from localhost.localdomain (ntsitm355024.sitm.nt.ngn.ppp.infoweb.ne.jp [175.184.70.24]) (authenticated)	by conuserg-06.nifty.com with ESMTP id xACD0O6L005023;	Tue, 12 Nov 2019 22:00:29 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-06.nifty.com xACD0O6L005023
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1573563629;	bh=ulXfVSmQwFrWczVLAmkOOJWbJIh6rLIE1fuaRH0D33c=;	h=From:To:Cc:Subject:Date:From;	b=v5podWwRmu4F1lN4Y+gBy1LbUZwzPXSCPxNsY0aVUm1FLIM4dg2EacNjmPyH5AED4	 L0JdXRxZ1vYFaBydvBYcL801C+xJe8K/tRqOGJJU4905m04hNfSWPGBkSjSIhTM+FY	 HkLMTm3V1eUqKMZslmW/Jq3VdwMynAbalJ4QuBu18MdjLSgu3a/n26AzGSN68lOlzB	 DFW8ZECx6okDACE7CCBAWn678h75hiy6Ef3fupsPhTkzcbbSFOToiiILfEX5Yc4xyo	 C4IMmlyeK4Nz/BcU3GNYMf3qPBd2w0bsTWwuzryvXQgWKEJ9pLBOwsngV+w39Ingpi	 uSQ2k5KD7D9Pg==
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH] Cygwin: pty: Use redraw screen instead of clear screen.
-Date: Tue, 12 Nov 2019 13:00:00 -0000
-Message-Id: <20191112130023.1730-1-takashi.yano@nifty.ne.jp>
+X-Spam-SWARE-Status: No, score=-6.9 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=
+X-HELO: NAM04-BN3-obe.outbound.protection.outlook.com
+Received: from mail-eopbgr680139.outbound.protection.outlook.com (HELO NAM04-BN3-obe.outbound.protection.outlook.com) (40.107.68.139) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 12 Nov 2019 13:46:08 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none; b=CDKmhUfD2fkKI0FRHHiRr6l67MUmBrE7JfOPwJTL3JWZ87j1a1vNPW4FkIuvSvnJaTeyPw+ObnRzpFyioERo/HhwUDoKfVFH6PUAhQ960s67HRlUlQCVF3985LoX1H4WGNFR6qaWlpNrIcJVREoATlwp9Hz9bsht1J4XOQi6BE5RKPtLDne0am0UT4ljXH40ZreVLl45zxiw7ChFVKYTmrCKvXqOe0N5qgwj1hPUMoNblwRPbAUswU3dqveaLYZZwu+o3dMMt3QaNwk9oik4FR5MxXtr2p/kyi9njNmUKJOQMPZQ7AijgRMFVnTp3sHkW1udx+lagTPqw0Ijfn1HZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=qR8L2VSnVlrt0S4dd9KQZIVdA/5GhM2fgqNVqgV2ttE=; b=BhJ5hdGJETTHUDapXNDQkjEJ8zduLbNjVwJaKzhts9KzFv+fMvjeNxdAO7OhEfHCUypkd8lL1VbRh6ZF/fZ9cYx0dpkdHAmUjXixWxnaBwKsS88qoXwWE3+hF/CRcblhqcvxb49l9kvvN+moKiyLiW+SJyZK7l4hnz4CBPwnQ7rGS5lidGZgzdaa6VwazJsNfsVFd0QPj13JcOfF8h6Cofqo3R+Rq3i+afCAoe7QM9fsDm25/y8BjGwPq8I/w2+A33+tT93lgURAsaZP0NklxhB3T0qxnv+dW9aE7L0KVe0V8grsKI5tMxXAqqmIdctDMw2lYZChKvBbiOXQnEva5g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu; dkim=pass header.d=cornell.edu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=qR8L2VSnVlrt0S4dd9KQZIVdA/5GhM2fgqNVqgV2ttE=; b=enh7T8zqBNmvOf+dO5AOdbpmP2Mh0NmmR4+NXktRQSwu2wdPeu8bBFoUTkJOP5hvvq5sgOEb1VA9t+VrRB/N3w51/1fqi6y7MQrkdML65BiMfynTsEf8p5PBUv2/l3ZjAT8znkFW60j8PoU5Z1OFpOpeh5Kde1cQOUCeqgdOjlI=
+Received: from DM6PR04MB5738.namprd04.prod.outlook.com (20.179.51.81) by DM6PR04MB6777.namprd04.prod.outlook.com (10.186.143.139) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2430.20; Tue, 12 Nov 2019 13:46:04 +0000
+Received: from DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::d589:29c7:67ac:164c]) by DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::d589:29c7:67ac:164c%5]) with mapi id 15.20.2430.027; Tue, 12 Nov 2019 13:46:04 +0000
+From: Ken Brown <kbrown@cornell.edu>
+To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: Re: [PATCH v3] Cygwin: console, pty: Prevent error in legacy console mode.
+Date: Tue, 12 Nov 2019 13:46:00 -0000
+Message-ID: <554c30df-d61b-22fa-e758-2c4d43186180@cornell.edu>
+References: <20191106162929.739-1-takashi.yano@nifty.ne.jp> <20218a47-2077-878c-4d9c-e23f6b0d4add@cornell.edu> <20191112115535.90777ac110e6f72c76a99753@nifty.ne.jp>
+In-Reply-To: <20191112115535.90777ac110e6f72c76a99753@nifty.ne.jp>
+user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101 Thunderbird/60.9.1
+authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
+received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="Windows-1252"
+Content-ID: <450B9F77B7E3BA47B603A599729D7310@namprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: pzcPYdeAllmsvSMIB720mixjDe4IcH1TyqlJxjiu6D3gxHCRY3Z2S3DbrvdjMsyrlucQa7SMEMHu3b3uXlR+FA==
 X-IsSubscribed: yes
-X-SW-Source: 2019-q4/txt/msg00103.txt.bz2
+X-SW-Source: 2019-q4/txt/msg00104.txt.bz2
 
-- Previously, pty cleared screen at startup for synchronization
-  between the real screen and console screen buffer for pseudo
-  console. With this patch, instead of clearing screen, the screen
-  is redrawn when the first native program is executed after pty
-  is created. In other words, synchronization is deferred until
-  the native app is executed. Moreover, this realizes excluding
-  $TERM dependent code.
----
- winsup/cygwin/fhandler_tty.cc | 30 ++++++++++++++++--------------
- winsup/cygwin/tty.cc          |  2 +-
- winsup/cygwin/tty.h           |  2 +-
- 3 files changed, 18 insertions(+), 16 deletions(-)
+On 11/11/2019 9:55 PM, Takashi Yano wrote:
+> Hi Ken,
+>=20
+> On Mon, 11 Nov 2019 19:39:46 +0000
+> Ken Brown wrote:
+>> After this commit, the XWin Server Start Menu shortcut no longer works. =
+ I think
+>> it's /usr/bin/xwin-xdg-menu.exe that fails, but I haven't checked this c=
+arefully.
+>=20
+> Could you please check whether the attached patch solves the issue?
 
-diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index c71603068..e02a8f43b 100644
---- a/winsup/cygwin/fhandler_tty.cc
-+++ b/winsup/cygwin/fhandler_tty.cc
-@@ -2669,7 +2669,7 @@ fhandler_pty_slave::fixup_after_attach (bool native_maybe, int fd_set)
- 	  if (get_ttyp ()->num_pcon_attached_slaves == 0
- 	      && !ALWAYS_USE_PCON)
- 	    /* Assume this is the first process using this pty slave. */
--	    get_ttyp ()->need_clear_screen = true;
-+	    get_ttyp ()->need_redraw_screen = true;
- 
- 	  get_ttyp ()->num_pcon_attached_slaves ++;
- 	}
-@@ -2700,6 +2700,21 @@ fhandler_pty_slave::fixup_after_attach (bool native_maybe, int fd_set)
- 		  kill (get_ttyp ()->pcon_pid, 0) != 0)
- 		get_ttyp ()->pcon_pid = myself->pid;
- 	      get_ttyp ()->switch_to_pcon_out = true;
-+
-+	      if (get_ttyp ()->need_redraw_screen)
-+		{
-+		  /* Forcibly redraw screen based on console screen buffer. */
-+		  /* The following code triggers redrawing the screen. */
-+		  CONSOLE_SCREEN_BUFFER_INFO sbi;
-+		  GetConsoleScreenBufferInfo (get_output_handle (), &sbi);
-+		  SMALL_RECT rect = {0, 0,
-+		    (SHORT) (sbi.dwSize.X -1), (SHORT) (sbi.dwSize.Y - 1)};
-+		  COORD dest = {0, 0};
-+		  CHAR_INFO fill = {' ', 0};
-+		  ScrollConsoleScreenBuffer (get_output_handle (),
-+					     &rect, NULL, dest, &fill);
-+		  get_ttyp ()->need_redraw_screen = false;
-+		}
- 	    }
- 	  init_console_handler (false);
- 	}
-@@ -2717,19 +2732,6 @@ fhandler_pty_slave::fixup_after_fork (HANDLE parent)
-   // fork_fixup (parent, inuse, "inuse");
-   // fhandler_pty_common::fixup_after_fork (parent);
-   report_tty_counts (this, "inherited", "");
--
--  if (get_ttyp ()->need_clear_screen)
--    {
--      const char *term = getenv ("TERM");
--      if (term && strcmp (term, "dumb") && !strstr (term, "emacs"))
--	{
--	  /* FIXME: Clearing sequence may not be "^[[H^[[J"
--	     depending on the terminal type. */
--	  DWORD n;
--	  WriteFile (get_output_handle_cyg (), "\033[H\033[J", 6, &n, NULL);
--	}
--      get_ttyp ()->need_clear_screen = false;
--    }
- }
- 
- void
-diff --git a/winsup/cygwin/tty.cc b/winsup/cygwin/tty.cc
-index 460153cdb..9c66b89d8 100644
---- a/winsup/cygwin/tty.cc
-+++ b/winsup/cygwin/tty.cc
-@@ -244,7 +244,7 @@ tty::init ()
-   pcon_pid = 0;
-   num_pcon_attached_slaves = 0;
-   term_code_page = 0;
--  need_clear_screen = false;
-+  need_redraw_screen = false;
- }
- 
- HANDLE
-diff --git a/winsup/cygwin/tty.h b/winsup/cygwin/tty.h
-index 927d7afd9..a6732aecc 100644
---- a/winsup/cygwin/tty.h
-+++ b/winsup/cygwin/tty.h
-@@ -105,7 +105,7 @@ private:
-   pid_t pcon_pid;
-   int num_pcon_attached_slaves;
-   UINT term_code_page;
--  bool need_clear_screen;
-+  bool need_redraw_screen;
- 
- public:
-   HANDLE from_master () const { return _from_master; }
--- 
-2.21.0
+Yes, that fixes it.  Thanks.
+
+Ken
