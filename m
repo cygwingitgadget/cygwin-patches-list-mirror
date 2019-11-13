@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9846-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 61354 invoked by alias); 13 Nov 2019 10:49:51 -0000
+Return-Path: <cygwin-patches-return-9847-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 36789 invoked by alias); 13 Nov 2019 16:50:58 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,68 +9,59 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 61344 invoked by uid 89); 13 Nov 2019 10:49:51 -0000
+Received: (qmail 36718 invoked by uid 89); 13 Nov 2019 16:50:57 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-16.9 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=screen, HContent-Transfer-Encoding:8bit
-X-HELO: conuserg-03.nifty.com
-Received: from conuserg-03.nifty.com (HELO conuserg-03.nifty.com) (210.131.2.70) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 13 Nov 2019 10:49:49 +0000
-Received: from localhost.localdomain (ntsitm355024.sitm.nt.ngn.ppp.infoweb.ne.jp [175.184.70.24]) (authenticated)	by conuserg-03.nifty.com with ESMTP id xADAnXqe027699;	Wed, 13 Nov 2019 19:49:37 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-03.nifty.com xADAnXqe027699
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1573642177;	bh=CXXEJn4TlvY7oPZX1ZVbbOZHowpL645Okf59oQVS714=;	h=From:To:Cc:Subject:Date:From;	b=J9im+bX1v4ZvgqDAxFur+2GAGwj5AvYj5mDgXdRF4i9WYWXFFV5JXD0bChrpYHweJ	 tdlyppCpw0w6+0Y8vkF0M4gmfYy5AJZjON15y6vNxXKy9GEhVdt4OJ/ykJR5a/u9ZL	 Je1B4GnzWmg/OGWsC4Zc8Kn1ht7eDUCT9mEJABJ1jl7AVX4XBKYuqehjGdztLyMYMT	 GhxzCpW/1TlPBz4rFbzlQdTWsYV/IvtbUOMIFfq2zw6oaj8aKcLaWQM+UTPCb3TXpg	 jJj1plzOyZQTfsHfNHZKxY0w+6/wGyUQQXeTlCcSgwpgmdPWCKUQn5ahUOpbel/5qF	 2AedTRN4TCQHA==
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+X-Spam-SWARE-Status: No, score=-3.4 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_LOW autolearn=ham version=3.3.1 spammy=H*F:D*ca, disturbing, explained, wish
+X-HELO: smtp-out-no.shaw.ca
+Received: from smtp-out-no.shaw.ca (HELO smtp-out-no.shaw.ca) (64.59.134.12) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 13 Nov 2019 16:50:53 +0000
+Received: from [192.168.1.114] ([24.64.172.44])	by shaw.ca with ESMTP	id Uvqwi3sG8kqGXUvqxifF4Z; Wed, 13 Nov 2019 09:50:47 -0700
+Reply-To: Brian.Inglis@SystematicSw.ab.ca
+Subject: Re: [PATCH] regtool: allow /proc/registry{,32,64}/ registry path prefix
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH] Cygwin: pty: Trigger redraw screen if ESC[?3h or ESC[?3l is sent.
-Date: Wed, 13 Nov 2019 10:49:00 -0000
-Message-Id: <20191113104929.748-1-takashi.yano@nifty.ne.jp>
+References: <20191110161445.53479-1-Brian.Inglis@SystematicSW.ab.ca> <20191111172859.39062-1-Brian.Inglis@SystematicSW.ab.ca> <20191113084621.GK3372@calimero.vinschen.de> <20191113093801.GP3372@calimero.vinschen.de>
+From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
+Openpgp: preference=signencrypt
+Message-ID: <25ea45b6-8d61-3cb8-7e7c-db55c2ef8018@SystematicSw.ab.ca>
+Date: Wed, 13 Nov 2019 16:50:00 -0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101 Thunderbird/60.9.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191113093801.GP3372@calimero.vinschen.de>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
 X-IsSubscribed: yes
-X-SW-Source: 2019-q4/txt/msg00117.txt.bz2
+X-SW-Source: 2019-q4/txt/msg00118.txt.bz2
 
-- Pseudo console clears console screen buffer if ESC[?3h or ESC[?3l
-  is sent. However, xterm/vt100 does not clear screen. This cause
-  mismatch between real screen and console screen buffer. Therefore,
-  this patch triggers redraw screen in that situation so that the
-  synchronization is done on the next execution of native app.
-  This solves the problem reported in:
-  https://www.cygwin.com/ml/cygwin-patches/2019-q4/msg00116.html
----
- winsup/cygwin/fhandler_tty.cc | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+On 2019-11-13 02:38, Corinna Vinschen wrote:
+> On Nov 13 09:46, Corinna Vinschen wrote:
+>> On Nov 11 10:29, Brian Inglis wrote:
+>>> The user can supply the registry path prefix /proc/registry{,32,64}/ to
+>>> use path completion.
+>> The git commit message does not outline why you're changing the example,
+>> Given that the example doesn't use /proc/registry anyway, what's the
+>> reasoning?  This should either be a patch on its own or at least this
+>> should be mentioned in the commit message.
 
-diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index e02a8f43b..f9c7c3ade 100644
---- a/winsup/cygwin/fhandler_tty.cc
-+++ b/winsup/cygwin/fhandler_tty.cc
-@@ -1255,6 +1255,28 @@ fhandler_pty_slave::push_to_pcon_screenbuffer (const char *ptr, size_t len)
-       memmove (p0, p0+4, nlen - (p0+4 - buf));
-       nlen -= 4;
-     }
-+
-+  /* If the ESC sequence ESC[?3h or ESC[?3l which clears console screen
-+     buffer is pushed, set need_redraw_screen to trigger redraw screen. */
-+  p0 = buf;
-+  while ((p0 = (char *) memmem (p0, nlen - (p0 - buf), "\033[?", 3)))
-+    {
-+      p0 += 3;
-+      while (p0 < buf + nlen && *p0 != 'h' && *p0 != 'l')
-+	{
-+	  int arg = 0;
-+	  while (p0 < buf + nlen && isdigit (*p0))
-+	    arg = arg * 10 + (*p0 ++) - '0';
-+	  if (arg == 3)
-+	    get_ttyp ()->need_redraw_screen = true;
-+	  if (p0 < buf + nlen && *p0 == ';')
-+	    p0 ++;
-+	}
-+      p0 ++;
-+      if (p0 >= buf + nlen)
-+	break;
-+    }
-+
-   DWORD dwMode, flags;
-   flags = ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-   GetConsoleMode (get_output_handle (), &dwMode);
+I explained in my earlier reply that it showed forward slashes and fit the doc
+pages better; adding /proc/registry/... would be difficult to fit in the width!
+
+> Sigh, I accidentally pushed this patch as is.  Never mind then.
+
+In my earlier reply I said something which could be added to the commit message
+with an --amend, if you wish:
+
+Change doc example to be consistent and a better choice to show
+forward slashes, and fit the width of the docs.
+
+New COMMIT_MSG:
+regtool: allow /proc/registry{,32,64}/ registry path prefix
+
+The user can supply the registry path prefix /proc/registry{,32,64}/
+to use path completion.
+Change doc example to be consistent and a better choice to show
+forward slashes, and fit the width of the docs.
+
 -- 
-2.21.0
+Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
+
+This email may be disturbing to some readers as it contains
+too much technical detail. Reader discretion is advised.
