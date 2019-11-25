@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9856-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 90585 invoked by alias); 23 Nov 2019 15:09:52 -0000
+Return-Path: <cygwin-patches-return-9857-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 98914 invoked by alias); 25 Nov 2019 08:46:38 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,53 +9,73 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 90576 invoked by uid 89); 23 Nov 2019 15:09:52 -0000
+Received: (qmail 98905 invoked by uid 89); 25 Nov 2019 08:46:37 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-3.3 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_LOW autolearn=ham version=3.3.1 spammy=june, June, dates, 1210
-X-HELO: smtp-out-so.shaw.ca
-Received: from smtp-out-so.shaw.ca (HELO smtp-out-so.shaw.ca) (64.59.136.139) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sat, 23 Nov 2019 15:09:51 +0000
-Received: from [192.168.1.114] ([24.64.172.44])	by shaw.ca with ESMTP	id YX2hiDEno17ZDYX2jit8IM; Sat, 23 Nov 2019 08:09:49 -0700
-Reply-To: Brian.Inglis@SystematicSw.ab.ca
-To: Cygwin Patches <cygwin-patches@cygwin.com>
-From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
-Subject: newlib/libc/include/sys/features.h: Cygwin Unicode level
-Openpgp: preference=signencrypt
-Message-ID: <9d9b6d93-eb25-5f08-015a-ec3675232201@SystematicSw.ab.ca>
-Date: Sat, 23 Nov 2019 15:09:00 -0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101 Thunderbird/60.9.1
+X-Spam-SWARE-Status: No, score=-104.5 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*F:D*cygwin.com
+X-HELO: mout.kundenserver.de
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.134) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 25 Nov 2019 08:46:36 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id 1MEmAV-1iaZ3B1On5-00GFkc for <cygwin-patches@cygwin.com>; Mon, 25 Nov 2019 09:46:34 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id A9919A80670; Mon, 25 Nov 2019 09:46:33 +0100 (CET)
+Date: Mon, 25 Nov 2019 08:46:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: newlib/libc/include/sys/features.h: Cygwin Unicode level
+Message-ID: <20191125084633.GC13501@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <9d9b6d93-eb25-5f08-015a-ec3675232201@SystematicSw.ab.ca>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="Kj7319i9nmIyA2yE"
+Content-Disposition: inline
+In-Reply-To: <9d9b6d93-eb25-5f08-015a-ec3675232201@SystematicSw.ab.ca>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-SW-Source: 2019-q4/txt/msg00128.txt.bz2
+
+
+--Kj7319i9nmIyA2yE
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-IsSubscribed: yes
-X-SW-Source: 2019-q4/txt/msg00127.txt.bz2
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 386
 
-Should the Unicode version setting of Cygwin feature macro __STDC_ISO_10646__ at
-the tail of {newlib/libc,/usr}/include/sys/features.h be updated to reflect
-Thomas Wolff's and any subsequent updates of the encoding tables to Unicode
-version 10/11/12:
+On Nov 23 08:09, Brian Inglis wrote:
+> Should the Unicode version setting of Cygwin feature macro __STDC_ISO_106=
+46__ at
+> the tail of {newlib/libc,/usr}/include/sys/features.h be updated to refle=
+ct
+> Thomas Wolff's and any subsequent updates of the encoding tables to Unico=
+de
+> version 10/11/12:
 
-	Unicode Release Dates
-Version	Year	Month (Day)	Value
-12.1.0	2019	May 7		201905L
-12.0.0	2019	March 5		201903L
-11.0.0	2018	June 5		201806L
-10.0.0	2017	June 20		201706L
+Sure, please go ahead!
 
-$ tail {newlib/libc,/usr}/include/sys/features.h
-/* The value corresponds to UNICODE version 5.2, which is the current
-   state of newlib's wide char conversion functions. */
-#define __STDC_ISO_10646__ 200910L
 
-#endif /* __CYGWIN__ */
+Thanks,
+Corinna
 
-#ifdef __cplusplus
-}
-#endif
-#endif /* _SYS_FEATURES_H */
-...
+--=20
+Corinna Vinschen
+Cygwin Maintainer
 
--- 
-Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
+--Kj7319i9nmIyA2yE
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 833
 
-This email may be disturbing to some readers as it contains
-too much technical detail. Reader discretion is advised.
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl3blOkACgkQ9TYGna5E
+T6DJAA/+Mzc8sWw/TImsHb21h15YThSLPzpYsLtAI/zVtrgowXtof+3rhOQduTG/
+wYOjeJMyTBFvvsFRpOgzgeD+J7Vl93HrlsCzrkAVNQ39FfvpPHJG0qb+rrFZ+3zq
+QOQ01hoIIZdezTLL53SMFoviHZGeIdx6Sva4GQKFYYJOxkxhi4FQsqWJFPK5JYUR
+n8arlcFbHDioaOrBrUo7Fvxv0cs1OUF+NUBjVTL+mq/vhP83Jieh+b8iXOlfL03W
+aRkNBiexpqXAWTWPfZDxuDjkDBNbT59kF9X+iaGYw98BZL7s95arOpxC62xySwoI
+zSeybJTUcyE4GKAIn5jVg/ImLATIlj6k3MNihyE27P5e0C7TfuLTBx3deDWzTH+Y
+itQJF7tktRaqUQr66NaDZzJTfij3O6bt54rkwxoXSXCs3M91KRHGNbLt7w/GTbwc
+Kztgim6ECURqt2yqRV8iXXkrEeusS6QEpG/9mf6T0I316ItLnxt04ae9EYfLmPxg
+dHXr04cUOv+AJ2vlshlzoLUgXTrtX/1WiM16A5pRdqXG/qqFqBnAgGUiaLI9CisK
+xcRRJAa4RVzvD6/UOz2tPoJGEpmcSe8wipZay9xHRTI7vngiVSiuBQJD5rwd3YRF
+Eb3qPDbJ670PxIXUL2Wqu0bgmdBHeUg7W9ChE7NWPsHf2Eezijc=
+=dYe/
+-----END PGP SIGNATURE-----
+
+--Kj7319i9nmIyA2yE--
