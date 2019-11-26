@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9857-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 98914 invoked by alias); 25 Nov 2019 08:46:38 -0000
+Return-Path: <cygwin-patches-return-9858-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 100680 invoked by alias); 26 Nov 2019 15:36:35 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,73 +9,53 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 98905 invoked by uid 89); 25 Nov 2019 08:46:37 -0000
+Received: (qmail 100671 invoked by uid 89); 26 Nov 2019 15:36:35 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-104.5 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*F:D*cygwin.com
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.134) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 25 Nov 2019 08:46:36 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id 1MEmAV-1iaZ3B1On5-00GFkc for <cygwin-patches@cygwin.com>; Mon, 25 Nov 2019 09:46:34 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id A9919A80670; Mon, 25 Nov 2019 09:46:33 +0100 (CET)
-Date: Mon, 25 Nov 2019 08:46:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: newlib/libc/include/sys/features.h: Cygwin Unicode level
-Message-ID: <20191125084633.GC13501@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <9d9b6d93-eb25-5f08-015a-ec3675232201@SystematicSw.ab.ca>
+X-Spam-SWARE-Status: No, score=-15.8 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_LOW autolearn=ham version=3.3.1 spammy=HContent-Transfer-Encoding:8bit
+X-HELO: smtp-out-no.shaw.ca
+Received: from smtp-out-no.shaw.ca (HELO smtp-out-no.shaw.ca) (64.59.134.9) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 26 Nov 2019 15:36:34 +0000
+Received: from Brian.Inglis@Shaw.ca ([24.64.172.44])	by shaw.ca with ESMTP	id ZctCi9gf6nCigZctEiZs2C; Tue, 26 Nov 2019 08:36:32 -0700
+From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+To: Cygwin Patches <cygwin-patches@cygwin.com>
+Cc: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+Subject: [PATCH] newlib/libc/include/sys/features.h: update __STDC_ISO_10646__
+Date: Tue, 26 Nov 2019 15:36:00 -0000
+Message-Id: <20191126153441.63022-1-Brian.Inglis@SystematicSW.ab.ca>
+In-Reply-To: <20191125084633.GC13501@calimero.vinschen.de>
+References: <20191125084633.GC13501@calimero.vinschen.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="Kj7319i9nmIyA2yE"
-Content-Disposition: inline
-In-Reply-To: <9d9b6d93-eb25-5f08-015a-ec3675232201@SystematicSw.ab.ca>
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-SW-Source: 2019-q4/txt/msg00128.txt.bz2
+Content-Transfer-Encoding: 8bit
+X-IsSubscribed: yes
+X-SW-Source: 2019-q4/txt/msg00129.txt.bz2
 
+newlib wide char conversion functions were updated to
+Unicode 11 on 2019-01-12
+update standard symbol __STDC_ISO_10646__ to
+Unicode 11 release date 2018-06-05 for Cygwin
+---
+ newlib/libc/include/sys/features.h | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
---Kj7319i9nmIyA2yE
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 386
-
-On Nov 23 08:09, Brian Inglis wrote:
-> Should the Unicode version setting of Cygwin feature macro __STDC_ISO_106=
-46__ at
-> the tail of {newlib/libc,/usr}/include/sys/features.h be updated to refle=
-ct
-> Thomas Wolff's and any subsequent updates of the encoding tables to Unico=
-de
-> version 10/11/12:
-
-Sure, please go ahead!
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen
-Cygwin Maintainer
-
---Kj7319i9nmIyA2yE
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl3blOkACgkQ9TYGna5E
-T6DJAA/+Mzc8sWw/TImsHb21h15YThSLPzpYsLtAI/zVtrgowXtof+3rhOQduTG/
-wYOjeJMyTBFvvsFRpOgzgeD+J7Vl93HrlsCzrkAVNQ39FfvpPHJG0qb+rrFZ+3zq
-QOQ01hoIIZdezTLL53SMFoviHZGeIdx6Sva4GQKFYYJOxkxhi4FQsqWJFPK5JYUR
-n8arlcFbHDioaOrBrUo7Fvxv0cs1OUF+NUBjVTL+mq/vhP83Jieh+b8iXOlfL03W
-aRkNBiexpqXAWTWPfZDxuDjkDBNbT59kF9X+iaGYw98BZL7s95arOpxC62xySwoI
-zSeybJTUcyE4GKAIn5jVg/ImLATIlj6k3MNihyE27P5e0C7TfuLTBx3deDWzTH+Y
-itQJF7tktRaqUQr66NaDZzJTfij3O6bt54rkwxoXSXCs3M91KRHGNbLt7w/GTbwc
-Kztgim6ECURqt2yqRV8iXXkrEeusS6QEpG/9mf6T0I316ItLnxt04ae9EYfLmPxg
-dHXr04cUOv+AJ2vlshlzoLUgXTrtX/1WiM16A5pRdqXG/qqFqBnAgGUiaLI9CisK
-xcRRJAa4RVzvD6/UOz2tPoJGEpmcSe8wipZay9xHRTI7vngiVSiuBQJD5rwd3YRF
-Eb3qPDbJ670PxIXUL2Wqu0bgmdBHeUg7W9ChE7NWPsHf2Eezijc=
-=dYe/
------END PGP SIGNATURE-----
-
---Kj7319i9nmIyA2yE--
+diff --git a/newlib/libc/include/sys/features.h b/newlib/libc/include/sys/features.h
+index f28dd071b..218807178 100644
+--- a/newlib/libc/include/sys/features.h
++++ b/newlib/libc/include/sys/features.h
+@@ -521,9 +521,13 @@ extern "C" {
+ /* #define _XOPEN_UNIX				    -1 */
+ #endif /* __XSI_VISIBLE */
+ 
+-/* The value corresponds to UNICODE version 5.2, which is the current
+-   state of newlib's wide char conversion functions. */
+-#define __STDC_ISO_10646__ 200910L
++/*
++ * newlib's wide char conversion functions were updated on
++ *	2019-01-12
++ * to UNICODE version:
++ *	11.0.0 released 2018-06-05
++ */
++#define __STDC_ISO_10646__ 201806L
+ 
+ #endif /* __CYGWIN__ */
+ 
+-- 
+2.21.0
