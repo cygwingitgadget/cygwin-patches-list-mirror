@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9864-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 32714 invoked by alias); 15 Dec 2019 08:49:59 -0000
+Return-Path: <cygwin-patches-return-9865-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 10200 invoked by alias); 15 Dec 2019 18:50:12 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,43 +9,57 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 32705 invoked by uid 89); 15 Dec 2019 08:49:58 -0000
+Received: (qmail 10191 invoked by uid 89); 15 Dec 2019 18:50:12 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-2.0 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.1 spammy=H*i:sk:adcab3c, H*f:sk:adcab3c, HX-Spam-Relays-External:ESMTPA
-X-HELO: vsmx009.vodafonemail.xion.oxcs.net
-Received: from vsmx009.vodafonemail.xion.oxcs.net (HELO vsmx009.vodafonemail.xion.oxcs.net) (153.92.174.87) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 15 Dec 2019 08:49:57 +0000
-Received: from vsmx001.vodafonemail.xion.oxcs.net (unknown [192.168.75.191])	by mta-5-out.mta.xion.oxcs.net (Postfix) with ESMTP id B3253159D368	for <cygwin-patches@cygwin.com>; Sun, 15 Dec 2019 08:49:54 +0000 (UTC)
-Received: from Gertrud (unknown [91.47.60.226])	by mta-5-out.mta.xion.oxcs.net (Postfix) with ESMTPA id 88A89159D590	for <cygwin-patches@cygwin.com>; Sun, 15 Dec 2019 08:49:52 +0000 (UTC)
-From: Achim Gratz <Stromeko@nexgo.de>
-To: cygwin-patches@cygwin.com
+X-Spam-SWARE-Status: No, score=-3.4 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_LOW autolearn=ham version=3.3.1 spammy=appearing
+X-HELO: smtp-out-so.shaw.ca
+Received: from smtp-out-so.shaw.ca (HELO smtp-out-so.shaw.ca) (64.59.136.138) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 15 Dec 2019 18:50:10 +0000
+Received: from [192.168.1.114] ([24.64.172.44])	by shaw.ca with ESMTP	id gYxziN82V17ZDgYy0i1J1w; Sun, 15 Dec 2019 11:50:08 -0700
+From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
 Subject: Re: [PATCH] Cygwin: Provide more COM devices
-References: <87mudvwnrl.fsf@Rainer.invalid>	<20191021081844.GH16240@calimero.vinschen.de>	<87pniq7yvm.fsf@Rainer.invalid>	<20191022071622.GM16240@calimero.vinschen.de>	<87sgn4ai3n.fsf@Rainer.invalid> <871rt6rbvb.fsf@Rainer.invalid>	<adcab3cf-3162-f692-e4f5-2dceb8401869@SystematicSw.ab.ca>
-Date: Sun, 15 Dec 2019 08:49:00 -0000
-In-Reply-To: <adcab3cf-3162-f692-e4f5-2dceb8401869@SystematicSw.ab.ca> (Brian	Inglis's message of "Sat, 14 Dec 2019 23:04:07 -0700")
-Message-ID: <877e2yht1v.fsf@Rainer.invalid>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
+Reply-To: Brian.Inglis@SystematicSw.ab.ca
+To: cygwin-patches@cygwin.com
+References: <87mudvwnrl.fsf@Rainer.invalid> <20191021081844.GH16240@calimero.vinschen.de> <87pniq7yvm.fsf@Rainer.invalid> <20191022071622.GM16240@calimero.vinschen.de> <87sgn4ai3n.fsf@Rainer.invalid> <871rt6rbvb.fsf@Rainer.invalid>
+Openpgp: preference=signencrypt
+Message-ID: <6db57733-0b63-54fc-3b2f-ff2c87b9dcd1@SystematicSw.ab.ca>
+Date: Sun, 15 Dec 2019 18:50:00 -0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101 Thunderbird/60.9.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-SW-Source: 2019-q4/txt/msg00135.txt.bz2
+In-Reply-To: <871rt6rbvb.fsf@Rainer.invalid>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
+X-SW-Source: 2019-q4/txt/msg00136.txt.bz2
 
-Brian Inglis writes:
-> On 2019-12-14 11:38, Achim Gratz wrote:
->
-> s[6] == 'd'?
+On 2019-12-14 11:38, Achim Gratz wrote:
 
-Indeed.
+[Sorry, thought I'd sent this, it was backgrounded!]
 
->>   if (len > 7 && len < 12 && s[7] == 'd'
-> -   if (len > 7 && len < 12 && s[7] == 'd'
-> +   if (len > 7 && len < 12 && s[DP_LEN - 1] == 'd'
+What are the distinctions between /dev/sd[a-c][a-z], /dev/sdd[a-z], and
+/dev/sd[a-z] appearing in parts of devices.cc?
 
-Yes, that's better.
+s[6] == 'd'?
 
+Better:
 
-Regards,
-Achim.
+>   if (len > 7 && len < 12 && s[7] == 'd'
+-   if (len > 7 && len < 12 && s[7] == 'd'
++   if (DP_LEN < len && len <= DP_LEN + 4 && 'd' == s[DP_LEN - 1]
+>       /* Generic check for /dev/sd[a-z] prefix */
+>       && strncmp (s, DISK_PREFIX, DP_LEN) == 0
+>       && s[DP_LEN] >= 'a' && s[DP_LEN] <= 'z')
+
+There are 127 each cons,nst,pty,ptym,st,ttyS entries allocated for potential
+devices, which will not exist on most systems.
+
+Note that GPT supports 128 partitions per device.
+
+Are there systems using more than 32 of any supported device?
+
+Are there documented Windows I/O device addressing limits?
+
 -- 
-+<[Q+ Matrix-12 WAVE#46+305 Neuron microQkb Andromeda XTk Blofeld]>+
+Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
 
-Factory and User Sound Singles for Waldorf Q+, Q and microQ:
-http://Synth.Stromeko.net/Downloads.html#WaldorfSounds
+This email may be disturbing to some readers as it contains
+too much technical detail. Reader discretion is advised.
