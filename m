@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9866-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 57669 invoked by alias); 15 Dec 2019 20:04:45 -0000
+Return-Path: <cygwin-patches-return-9867-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 81984 invoked by alias); 18 Dec 2019 16:08:02 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,76 +9,58 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 57658 invoked by uid 89); 15 Dec 2019 20:04:44 -0000
+Received: (qmail 81969 invoked by uid 89); 18 Dec 2019 16:08:02 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-2.0 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_LOW,SPF_PASS autolearn=ham version=3.3.1 spammy=spread, dos, letters, H*f:sk:6db5773
-X-HELO: vsmx009.vodafonemail.xion.oxcs.net
-Received: from vsmx009.vodafonemail.xion.oxcs.net (HELO vsmx009.vodafonemail.xion.oxcs.net) (153.92.174.87) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 15 Dec 2019 20:04:42 +0000
-Received: from vsmx001.vodafonemail.xion.oxcs.net (unknown [192.168.75.191])	by mta-5-out.mta.xion.oxcs.net (Postfix) with ESMTP id B530E159CBE0	for <cygwin-patches@cygwin.com>; Sun, 15 Dec 2019 20:04:39 +0000 (UTC)
-Received: from Gertrud (unknown [91.47.60.226])	by mta-5-out.mta.xion.oxcs.net (Postfix) with ESMTPA id 88A51159D241	for <cygwin-patches@cygwin.com>; Sun, 15 Dec 2019 20:04:37 +0000 (UTC)
-From: Achim Gratz <Stromeko@nexgo.de>
+X-Spam-SWARE-Status: No, score=-14.4 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=ESC, esc, HContent-Transfer-Encoding:8bit
+X-HELO: conuserg-02.nifty.com
+Received: from conuserg-02.nifty.com (HELO conuserg-02.nifty.com) (210.131.2.69) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 18 Dec 2019 16:08:00 +0000
+Received: from localhost.localdomain (ntsitm247158.sitm.nt.ngn.ppp.infoweb.ne.jp [124.27.253.158]) (authenticated)	by conuserg-02.nifty.com with ESMTP id xBIG7cT7024346;	Thu, 19 Dec 2019 01:07:44 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-02.nifty.com xBIG7cT7024346
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1576685264;	bh=N7C4hMJIUmjmXt72dA8sEiOoUPfJ6alJgSAwqBGNdO0=;	h=From:To:Cc:Subject:Date:From;	b=Bsx2eyl2orN2gcQPU1/TWA2ZPVIEhjrcmVIo92vwX47TaiF1cvtj6RONfJlaff1fd	 kI4vw3rV4qKwv4nesT90608b4svBKUN1D5BflyJK0eNfTDb0PM0YRoqOdhZoGXJwGR	 WdPtVS0LJlbjan0AepxUbv1/8Y74Xh+TaBseuNnWtuNgP/uePAwz8hO5FrnvPQVLg9	 hHtAGfu1w3oIK0ajbXXlD+b/DhUx1VwNIVpdgQ5GjUWrVpc9CgC5JjL0HsfbeH0hr/	 IWPBbs5hY5wQaQvoNmGU4O6qyDjhJpbeIJhv8DMmkFX1Fm7vnrx9xpxtV5vBERdAY3	 g/CQw1ziSYebA==
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: Provide more COM devices
-References: <87mudvwnrl.fsf@Rainer.invalid>	<20191021081844.GH16240@calimero.vinschen.de>	<87pniq7yvm.fsf@Rainer.invalid>	<20191022071622.GM16240@calimero.vinschen.de>	<87sgn4ai3n.fsf@Rainer.invalid> <871rt6rbvb.fsf@Rainer.invalid>	<6db57733-0b63-54fc-3b2f-ff2c87b9dcd1@SystematicSw.ab.ca>
-Date: Sun, 15 Dec 2019 20:04:00 -0000
-In-Reply-To: <6db57733-0b63-54fc-3b2f-ff2c87b9dcd1@SystematicSw.ab.ca> (Brian	Inglis's message of "Sun, 15 Dec 2019 11:50:23 -0700")
-Message-ID: <8736dlicdp.fsf@Rainer.invalid>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: pty: Fix a bug regarding ESC[?3h and ESC[?3l handling.
+Date: Wed, 18 Dec 2019 16:08:00 -0000
+Message-Id: <20191218160733.2084-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-SW-Source: 2019-q4/txt/msg00137.txt.bz2
+Content-Transfer-Encoding: 8bit
+X-IsSubscribed: yes
+X-SW-Source: 2019-q4/txt/msg00138.txt.bz2
 
-Brian Inglis writes:
-> On 2019-12-14 11:38, Achim Gratz wrote:
->
-> [Sorry, thought I'd sent this, it was backgrounded!]
->
-> What are the distinctions between /dev/sd[a-c][a-z], /dev/sdd[a-z], and
-> /dev/sd[a-z] appearing in parts of devices.cc?
+- Midnight commander (mc) does not work after the commit
+  1626569222066ee601f6c41b29efcc95202674b7 as reported in
+  https://www.cygwin.com/ml/cygwin/2019-12/msg00173.html.
+  This patch fixes the issue.
+---
+ winsup/cygwin/fhandler_tty.cc | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-/dev/sd is the base name for disks, letters denote distinct units (a..dx
-for a total of 128 units) and numbers the partitions (starting from 1,
-with no number addressing the whole device), just like Linux.
-
-The first 16 partitions of each drive have a fixed device major number
-(out of 8) and mangle the drive / partition into the lower nibbles of
-the minor.  Any drive with higher partition numbers gets mapped into 25
-higher device numbers where the bits for the unit number spread across
-major/minor and the remaining 48 partitions make up the lower part of
-the minor.  I'd rather had kept the original numbering scheme and packed
-each set of 16 extra partitions into one more major number for a total
-of 24 extra, but that's what we have now.
-
-> There are 127 each cons,nst,pty,ptym,st,ttyS entries allocated for potential
-> devices, which will not exist on most systems.
-
-You'll proably won't find a system with so many tapes, not.  But the way
-Windows deals with USB devices means that you can easily have several
-dozen of (virtual) COM ports, since it creates a distinct number for
-each device / USB port combination you've ever used.  The limit is
-probably even higher than the 128 ports Cygwin tries to support.
-
-> Note that GPT supports 128 partitions per device.
-
-But Cygwin only supports 64.
-
-> Are there systems using more than 32 of any supported device?
-
-I have systems that are way past COM64 and I seem to remember having
-seen one with a COM port past 127.
-
-> Are there documented Windows I/O device addressing limits?
-
-You could have 256 since Win98 (not for DOS applications, though), but
-that IIRC was always a limitation of the control panel, not the
-underlying platform.  Not sure if Win10 changed something in that
-regard, but probably not.
-
-
-Regards,
-Achim.
+diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+index 1d344c7fe..8c3a6e72e 100644
+--- a/winsup/cygwin/fhandler_tty.cc
++++ b/winsup/cygwin/fhandler_tty.cc
+@@ -1262,16 +1262,19 @@ fhandler_pty_slave::push_to_pcon_screenbuffer (const char *ptr, size_t len)
+   while ((p0 = (char *) memmem (p0, nlen - (p0 - buf), "\033[?", 3)))
+     {
+       p0 += 3;
+-      while (p0 < buf + nlen && *p0 != 'h' && *p0 != 'l')
++      bool exist_arg_3 = false;
++      while (p0 < buf + nlen && !isalpha (*p0))
+ 	{
+ 	  int arg = 0;
+ 	  while (p0 < buf + nlen && isdigit (*p0))
+ 	    arg = arg * 10 + (*p0 ++) - '0';
+ 	  if (arg == 3)
+-	    get_ttyp ()->need_redraw_screen = true;
++	    exist_arg_3 = true;
+ 	  if (p0 < buf + nlen && *p0 == ';')
+ 	    p0 ++;
+ 	}
++      if (p0 < buf + nlen && exist_arg_3 && (*p0 == 'h' || *p0 == 'l'))
++	get_ttyp ()->need_redraw_screen = true;
+       p0 ++;
+       if (p0 >= buf + nlen)
+ 	break;
 -- 
-+<[Q+ Matrix-12 WAVE#46+305 Neuron microQkb Andromeda XTk Blofeld]>+
-
-SD adaptations for Waldorf Q V3.00R3 and Q+ V3.54R2:
-http://Synth.Stromeko.net/Downloads.html#WaldorfSDada
+2.21.0
