@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9874-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 54558 invoked by alias); 22 Dec 2019 09:04:58 -0000
+Return-Path: <cygwin-patches-return-9875-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 115457 invoked by alias); 23 Dec 2019 06:46:09 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,103 +9,48 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 54547 invoked by uid 89); 22 Dec 2019 09:04:58 -0000
+Received: (qmail 115448 invoked by uid 89); 23 Dec 2019 06:46:09 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-116.8 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=500000
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.130) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 22 Dec 2019 09:04:56 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id 1M5wTr-1ibWNa1j1n-007Wsu for <cygwin-patches@cygwin.com>; Sun, 22 Dec 2019 10:04:53 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 50F0DA80775; Sun, 22 Dec 2019 10:04:51 +0100 (CET)
-Date: Sun, 22 Dec 2019 09:04:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-20.0 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3 autolearn=ham version=3.3.1 spammy=our, HContent-Transfer-Encoding:8bit
+X-HELO: m0.truegem.net
+Received: from m0.truegem.net (HELO m0.truegem.net) (69.55.228.47) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 23 Dec 2019 06:46:07 +0000
+Received: (from daemon@localhost)	by m0.truegem.net (8.12.11/8.12.11) id xBN6k6T1077183;	Sun, 22 Dec 2019 22:46:06 -0800 (PST)	(envelope-from mark@maxrnd.com)
+Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67), claiming to be "localhost.localdomain" via SMTP by m0.truegem.net, id smtpdTzDZR6; Sun Dec 22 22:46:01 2019
+From: Mark Geisert <mark@maxrnd.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: FIFO: use FILE_PIPE_REJECT_REMOTE_CLIENTS flag
-Message-ID: <20191222090451.GF3628@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20191221230129.2177-1-kbrown@cornell.edu>
+Cc: Mark Geisert <mark@maxrnd.com>
+Subject: [PATCH] Cygwin: Add missing Linux #define of CPU_SETSIZE
+Date: Mon, 23 Dec 2019 06:46:00 -0000
+Message-Id: <20191223064554.23791-1-mark@maxrnd.com>
+In-Reply-To: <a34db430-a10e-9049-3d70-c5512b96ceb7@gmail.com>
+References: <a34db430-a10e-9049-3d70-c5512b96ceb7@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="YkJPYEFdoxh/AXLE"
-Content-Disposition: inline
-In-Reply-To: <20191221230129.2177-1-kbrown@cornell.edu>
-X-SW-Source: 2019-q4/txt/msg00145.txt.bz2
+Content-Transfer-Encoding: 8bit
+X-IsSubscribed: yes
+X-SW-Source: 2019-q4/txt/msg00146.txt.bz2
 
+Though our implementation of cpu sets doesn't need it, software from
+Linux environments expects this definition to be present.  It's
+documented on the Linux CPU_SET(3) man page but was left out due to
+oversight.
 
---YkJPYEFdoxh/AXLE
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1505
+Addresses https://cygwin.com/ml/cygwin/2019-12/msg00248.html
 
-On Dec 21 23:01, Ken Brown wrote:
-> Add that flag to the pipe type argument when creating the Windows
-> named pipe.  And add a definition of that flag to ntdll.h (copied from
-> /usr/include/w32api/ddk/ntifs.h).
-> ---
->  winsup/cygwin/fhandler_fifo.cc | 3 ++-
->  winsup/cygwin/ntdll.h          | 3 ++-
->  2 files changed, 4 insertions(+), 2 deletions(-)
->=20
-> diff --git a/winsup/cygwin/fhandler_fifo.cc b/winsup/cygwin/fhandler_fifo=
-.cc
-> index 92797ce60..fd8223000 100644
-> --- a/winsup/cygwin/fhandler_fifo.cc
-> +++ b/winsup/cygwin/fhandler_fifo.cc
-> @@ -184,7 +184,8 @@ fhandler_fifo::create_pipe_instance (bool first)
->    timeout.QuadPart =3D -500000;
->    status =3D NtCreateNamedPipeFile (&ph, access, &attr, &io, sharing,
->  				  first ? FILE_CREATE : FILE_OPEN, 0,
-> -				  FILE_PIPE_MESSAGE_TYPE,
-> +				  FILE_PIPE_MESSAGE_TYPE
-> +				    | FILE_PIPE_REJECT_REMOTE_CLIENTS,
->  				  FILE_PIPE_MESSAGE_MODE,
->  				  nonblocking, max_instances,
->  				  DEFAULT_PIPEBUFSIZE, DEFAULT_PIPEBUFSIZE,
-> diff --git a/winsup/cygwin/ntdll.h b/winsup/cygwin/ntdll.h
-> index e19cc8ab5..1c07d0255 100644
-> --- a/winsup/cygwin/ntdll.h
-> +++ b/winsup/cygwin/ntdll.h
-> @@ -557,7 +557,8 @@ enum
->  enum
->  {
->    FILE_PIPE_BYTE_STREAM_TYPE =3D 0,
-> -  FILE_PIPE_MESSAGE_TYPE =3D 1
-> +  FILE_PIPE_MESSAGE_TYPE =3D 1,
-> +  FILE_PIPE_REJECT_REMOTE_CLIENTS =3D 2
->  };
->=20=20
->  typedef struct _FILE_PIPE_PEEK_BUFFER {
-> --=20
-> 2.21.0
+---
+ winsup/cygwin/include/sys/cpuset.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks, please push.
-
-
-Corinna
-
---=20
-Corinna Vinschen
-Cygwin Maintainer
-
---YkJPYEFdoxh/AXLE
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl3/MbMACgkQ9TYGna5E
-T6CQOg//WhXHN4IbAJTwd0hfTba42pHZvu8zmNGTOCaUA2ITGqwbHhCAdxivF3t5
-zsu/lCp1SpM4PUOzsgKuTPYBYiziyJl2P6XwBJej5CQvoXRZ7pQRJQfE+PS7wnRd
-ziESfNK78yXdva1Bhwu734uLUDtt6572EevPqT3LHuLMm/O7/rqVUqVQs45yuLNe
-Nk89kWIirKV4wFLOjNQZ9lf1Q+pBJ2vMVYYLOA1lcGgBysTnKiS4YwGFAYLtjEob
-qinhiACMbDZVQVS8b6Jn2QBrdNvy7IjfG2a3Evj7ZWc+BbP+JkOsnetRFXnaRSnt
-5Wk4N3y8gM1xHw/blMiAL2VBsMN7ASRzoeNcIzbPmi8IB+Fhi/Y4OVdhMTfyjjtj
-DJKtR7rsEgzylo7DdOosNTjO7aMWRHRf7n1Zd2iXYkZbSU3agdrH25g8/svvy14q
-YUETn9mLSPrF9y3xRV2beRxVeq9jP6HxXjiHnAsH7hJsUEPnKRe4pjSm+zNdnsI6
-AMEfRzPjOd3ozcjdUNE3CYnKZwMKOn963ApNdStIstVrExjpAQgU5F87f4hD4NMs
-B4X/ga37Rz1A2IFbghro5p7/fO1ZQPi8qQw5oNIzLO7QPhBICL1Siva2R2nI84Vz
-KOWoiOVsfIghmMKUUfqf+XVMJVRcoFlTFfOnSZC0Y9Rdl15qgSc=
-=FbNl
------END PGP SIGNATURE-----
-
---YkJPYEFdoxh/AXLE--
+diff --git a/winsup/cygwin/include/sys/cpuset.h b/winsup/cygwin/include/sys/cpuset.h
+index 1adf48d54..572565165 100644
+--- a/winsup/cygwin/include/sys/cpuset.h
++++ b/winsup/cygwin/include/sys/cpuset.h
+@@ -89,6 +89,7 @@ int __sched_getaffinity_sys (pid_t, size_t, cpu_set_t *);
+ #define CPU_XOR(dst, src1, src2)  CPU_XOR_S(sizeof (cpu_set_t), dst, src1, src2)
+ #define CPU_EQUAL(src1, src2)     CPU_EQUAL_S(sizeof (cpu_set_t), src1, src2)
+ 
++#define CPU_SETSIZE               __CPU_SETSIZE
+ #endif /* __GNU_VISIBLE */
+ 
+ #ifdef __cplusplus
+-- 
+2.21.0
