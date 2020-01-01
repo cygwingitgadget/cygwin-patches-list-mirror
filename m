@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9893-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 21831 invoked by alias); 31 Dec 2019 00:03:18 -0000
+Return-Path: <cygwin-patches-return-9894-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 17262 invoked by alias); 1 Jan 2020 06:48:36 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,135 +9,104 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 21821 invoked by uid 89); 31 Dec 2019 00:03:18 -0000
+Received: (qmail 17161 invoked by uid 89); 1 Jan 2020 06:48:24 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-6.4 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=H*MI:sk:0dee006, H*f:sk:0dee006, H*i:sk:0dee006
-X-HELO: NAM11-CO1-obe.outbound.protection.outlook.com
-Received: from mail-co1nam11on2102.outbound.protection.outlook.com (HELO NAM11-CO1-obe.outbound.protection.outlook.com) (40.107.220.102) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 31 Dec 2019 00:03:16 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none; b=gWX5fh1RfzDeHbTL8lg23WDUSTRqJrGEI5x8+mx3Uymn+/oTr+PUBntsg++KUfs2dmtfSoZKqDopYN4VGb00QJ4A4wk9xYRDyDxESmftPukEVxyYdmRvAdUkFPh5/iUprPlOC9hoDh2YNMNyag6zUf/hCwNG9fT+wO3+m6StPtHnkyUxPjqfgrY1mggXl4Sd+gnn8Fs36E6cmExNYKumPjXXQyGE7/u1Tnf0308vaOXiF2x577ie3z7H+XTjEptlEtRVrnezmzHrwZNMdMGAZUUDN9JyFqyM/Hs2W+uKNIq+1kstCoO63WwFI1j7c95FmjyQ7Ilc6fraTSWWNIhzUQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=U9d23Amz06OoJzE8KnIvyo0JCFdd/J9pxXIOOUl2YtU=; b=JIZQHA05kfxvD9tcI1ypp8+CoPnIlp2qQxZemtmi2QoDpBefBz74j5FHBkt92ykVo+2BAc1cKpiF+GAx2pB68qn5Bp3YlHbchKF//YqJhtAhCvT/ukscVSp4sIKKgeefGP4BgmVi2wVzwBZOfvJid5C4UmuyGbiydFlAtbsVbBJeBUHoWsu4/frjgqEo0Z+s9dAUWeHI4gSjib+MV5jx8TP+iAnzieENCxGy6FRpXxmvJZGPbxGCYDqUTf+mso3lklEMV3nrDwz4j7JuNFL4dTOHlXLLIZ40pySJddAEev4Jf5k1MYsY0VyCWkt+oJbdaXg3WR6Lvzroj3zbkbjLfw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu; dkim=pass header.d=cornell.edu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=U9d23Amz06OoJzE8KnIvyo0JCFdd/J9pxXIOOUl2YtU=; b=A0+UBHqi9OuOuGTM+LSWR7vp3n+nAq/LL78IONmHpp8590VY4sbYiyhL0d6X7ELU65Jr9dA+3e4JNaQnBTCpFrjCS2dU0NhlwwJXHeFWjqYg4vQHc3RX9tOKlPa+HEHMIz41C4JJo8BHaMoTAlR+1Ha6Si8ml9r8+fBE89HQadM=
-Received: from DM6PR04MB5738.namprd04.prod.outlook.com (20.179.51.81) by DM6PR04MB4266.namprd04.prod.outlook.com (20.176.76.31) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2581.12; Tue, 31 Dec 2019 00:03:13 +0000
-Received: from DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::f894:edec:b80c:d524]) by DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::f894:edec:b80c:d524%3]) with mapi id 15.20.2581.007; Tue, 31 Dec 2019 00:03:13 +0000
-Received: from [192.168.0.19] (68.175.129.7) by CH2PR19CA0002.namprd19.prod.outlook.com (2603:10b6:610:4d::12) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2581.11 via Frontend Transport; Tue, 31 Dec 2019 00:03:13 +0000
-From: Ken Brown <kbrown@cornell.edu>
-To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: Re: [PATCH v2 0/3] Support opening a symlink with O_PATH | O_NOFOLLOW
-Date: Tue, 31 Dec 2019 00:03:00 -0000
-Message-ID: <caf4f32c-640a-f520-9376-f7eae2e2c904@cornell.edu>
-References: <20191229175637.1050-1-kbrown@cornell.edu> <d88c5dee-9457-3c39-960c-ea07842cd0c5@SystematicSw.ab.ca> <aafbc75d-11db-0faf-6e13-72681c5784a3@cornell.edu> <f964457b-9d33-a252-3cc9-e035a4fe1c1a@SystematicSw.ab.ca> <9d5d81ad-9692-1e4d-b693-ef5a287c1377@cornell.edu> <0dee006c-f675-2d4b-d497-6e69c797fcca@SystematicSw.ab.ca>
-In-Reply-To: <0dee006c-f675-2d4b-d497-6e69c797fcca@SystematicSw.ab.ca>
-user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101 Thunderbird/60.9.1
-authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <E27118CB8DE66F4099435F6CBDEED04B@namprd04.prod.outlook.com>
-Content-Transfer-Encoding: base64
+X-Spam-SWARE-Status: No, score=-15.8 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=retrieve, inherited, HContent-Transfer-Encoding:8bit
+X-HELO: conuserg-01.nifty.com
+Received: from conuserg-01.nifty.com (HELO conuserg-01.nifty.com) (210.131.2.68) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 01 Jan 2020 06:48:21 +0000
+Received: from localhost.localdomain (ntsitm247158.sitm.nt.ngn.ppp.infoweb.ne.jp [124.27.253.158]) (authenticated)	by conuserg-01.nifty.com with ESMTP id 0016ltpb031000;	Wed, 1 Jan 2020 15:48:01 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-01.nifty.com 0016ltpb031000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1577861281;	bh=t63MWRgQVJYhFGSRpUwMTc9nFdGLO/Eoi3sIMUwZvxE=;	h=From:To:Cc:Subject:Date:From;	b=T598k3aIlWnOilERLppq5/TgTaB6GupxUgFJ6m6J+JCX0pZviP5Kms9vC+kqezgNM	 Fqi1jP8ACXOqYrVoA8iOAwstN+mRkUNoDqdkvnck7CYUchwhPlmo6DWNL0MhaESYZP	 hHfHUZFFdtnbh1C8nOaLDaFzxdPatnhn0iiVd1u4tRfBXes5MtvxRL4dizB+RxzPKV	 mUzXJweQjSFOcE6yx4uFdYCRxjt5zrHkF9rJXWfPxqE9nrethWgpl0P3oB/fFr3sml	 wLq9PyFhYQx55i9Pa8mPnJ0salM2rBTXie0A7xmVlcwMugeo/wMi06eAYB12I7GGQZ	 xqqDr4faJjiJQ==
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: pty: Fix the issue regarding open and close multiple PTYs.
+Date: Wed, 01 Jan 2020 06:48:00 -0000
+Message-Id: <20200101064748.8709-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: bVMbRAq2+r1AnVNNe03D7X0l/voGoltO06opAmvdhgtPLAa0QQ69H75suhn/2dasJcGR7U1udvRFWHlORWjIlw==
+Content-Transfer-Encoding: 8bit
 X-IsSubscribed: yes
-X-SW-Source: 2019-q4/txt/msg00164.txt.bz2
+X-SW-Source: 2020-q1/txt/msg00000.txt
 
-T24gMTIvMzAvMjAxOSA2OjA5IFBNLCBCcmlhbiBJbmdsaXMgd3JvdGU6DQo+
-IE9uIDIwMTktMTItMzAgMTQ6NDcsIEtlbiBCcm93biB3cm90ZToNCj4+IE9u
-IDEyLzMwLzIwMTkgMzo1NSBQTSwgQnJpYW4gSW5nbGlzIHdyb3RlOg0KPj4+
-IE9uIDIwMTktMTItMzAgMTI6NTMsIEtlbiBCcm93biB3cm90ZToNCj4+Pj4g
-T24gMTIvMzAvMjAxOSAyOjE4IFBNLCBCcmlhbiBJbmdsaXMgd3JvdGU6DQo+
-Pj4+PiBPbiAyMDE5LTEyLTI5IDEwOjU2LCBLZW4gQnJvd24gd3JvdGU6DQo+
-Pj4+Pj4gQ3VycmVudGx5LCBvcGVuaW5nIGEgc3ltbGluayB3aXRoIE9fTk9G
-T0xMT1cgZmFpbHMgd2l0aCBFTE9PUC4NCj4+Pj4+PiBGb2xsb3dpbmcgTGlu
-dXgsIHRoZSBmaXJzdCBwYXRjaCBpbiB0aGlzIHNlcmllcyBhbGxvd3MgdGhl
-IGNhbGwgdG8NCj4+Pj4+PiBzdWNjZWVkIGlmIE9fUEFUSCBpcyBhbHNvIHNw
-ZWNpZmllZC4NCj4+Pj4+Pg0KPj4+Pj4+IEFjY29yZGluZyB0byB0aGUgTGlu
-dXggbWFuIHBhZ2UgZm9yICdvcGVuJywgdGhlIGZpbGUgZGVzY3JpcHRvcg0K
-Pj4+Pj4+IHJldHVybmVkIGJ5IHRoZSBjYWxsIHNob3VsZCBiZSB1c2FibGUg
-YXMgdGhlIGRpcmZkIGFyZ3VtZW50IGluIGNhbGxzDQo+Pj4+Pj4gdG8gZnN0
-YXRhdCBhbmQgcmVhZGxpbmthdCB3aXRoIGFuIGVtcHR5IHBhdGhuYW1lLCB0
-byBoYXZlDQo+Pj4+Pj4gdGhlIGNhbGxzIG9wZXJhdGUgb24gdGhlIHN5bWJv
-bGljIGxpbmsuICBUaGUgc2Vjb25kIGFuZCB0aGlyZCBwYXRjaGVzDQo+Pj4+
-Pj4gYWNoaWV2ZSB0aGlzLiAgRm9yIGZzdGF0YXQsIHdlIGRvIHRoaXMgYnkg
-YWRkaW5nIHN1cHBvcnQNCj4+Pj4+PiBmb3IgdGhlIEFUX0VNUFRZX1BBVEgg
-ZmxhZy4NCj4+Pj4+Pg0KPj4+Pj4+IE5vdGU6IFRoZSBtYW4gcGFnZSBtZW50
-aW9ucyBmY2hvd25hdCBhbmQgbGlua2F0IGFsc28uICBsaW5rYXQgYWxyZWFk
-eQ0KPj4+Pj4+IHN1cHBvcnRzIHRoZSBBVF9FTVBUWV9QQVRIIGZsYWcsIHNv
-IG5vdGhpbmcgbmVlZHMgdG8gYmUgZG9uZS4gIEJ1dCBJDQo+Pj4+Pj4gZG9u
-J3QgdW5kZXJzdGFuZCBob3cgdGhpcyBjb3VsZCB3b3JrIGZvciBmY2hvd25h
-dCwgYmVjYXVzZSBmY2hvd24NCj4+Pj4+PiBmYWlscyB3aXRoIEVCQURGIGlm
-IGl0cyBmZCBhcmd1bWVudCB3YXMgb3BlbmVkIHdpdGggT19QQVRILiAgU28g
-SQ0KPj4+Pj4+IGhhdmVuJ3QgdG91Y2hlZCBmY2hvd25hdC4NCj4+Pj4+Pg0K
-Pj4+Pj4+IEFtIEkgbWlzc2luZyBzb21ldGhpbmc/DQo+Pj4+Pg0KPj4+Pj4g
-V1NMICQgbWFuIDIgY2hvd24NCj4+Pj4+IC4uLg0KPj4+Pj4gIkFUX0VNUFRZ
-X1BBVEggKHNpbmNlIExpbnV4IDIuNi4zOSkNCj4+Pj4+IElmIHBhdGhuYW1l
-IGlzIGFuIGVtcHR5IHN0cmluZywgb3BlcmF0ZSBvbiB0aGUgZmlsZSByZWZl
-cnJlZCB0bw0KPj4+Pj4gYnkgZGlyZmQgKHdoaWNoIG1heSBoYXZlIGJlZW4g
-b2J0YWluZWQgdXNpbmcgdGhlIG9wZW4oMikgT19QQVRIDQo+Pj4+PiBmbGFn
-KS4gSW4gIHRoaXMgY2FzZSwgZGlyZmQgY2FuIHJlZmVyIHRvIGFueSB0eXBl
-IG9mIGZpbGUsIG5vdA0KPj4+Pj4ganVzdCBhIGRpcmVjdG9yeS4gSWYgZGly
-ZmQgaXMgQVRfRkRDV0QsIHRoZSAgY2FsbCBvcGVyYXRlcyBvbg0KPj4+Pj4g
-dGhlIGN1cnJlbnQgd29ya2luZyBkaXJlY3RvcnkuIFRoaXMgZmxhZyBpcyBM
-aW51eC1zcGVjaWZpYzsgZGXigJANCj4+Pj4+IGZpbmUgX0dOVV9TT1VSQ0Ug
-dG8gb2J0YWluIGl0cyBkZWZpbml0aW9uLiINCj4+Pj4+DQo+Pj4+PiBzYXlz
-IGNob3duIHRoZSBkaXJmZCwgcmVnYXJkbGVzcyBvZiB3aGF0IGl0IGlzLA0K
-Pj4+Pj4gZXhjZXB0IGlmIEFUX0ZEQ1dELCBjaG93biB0aGUgQ1dELg0KPj4+
-Pj4NCj4+Pj4+IFdTTCAkIG1hbiAyIG9wZW4NCj4+Pj4+ICJPX1BBVEggKHNp
-bmNlIExpbnV4IDIuNi4zOSkNCj4+Pj4+IE9idGFpbiBhIGZpbGUgZGVzY3Jp
-cHRvciB0aGF0IGNhbiBiZSB1c2VkIGZvciB0d28gcHVycG9zZXM6IHRvDQo+
-Pj4+PiBpbmRpY2F0ZSBhIGxvY2F0aW9uIGluIHRoZSBmaWxlc3lzdGVtIHRy
-ZWUgYW5kIHRvIHBlcmZvcm0NCj4+Pj4+IG9wZXJhdGlvbnMgdGhhdCBhY3Qg
-cHVyZWx5IGF0IHRoZSBmaWxlIGRlc2NyaXB0b3IgbGV2ZWwuICBUaGUNCj4+
-Pj4+IGZpbGUgaXRzZWxmIGlzIG5vdCBvcGVuZWQsIGFuZCBvdGhlciBmaWxl
-IG9wZXJhdGlvbnMgKGUuZy4sDQo+Pj4+PiByZWFkKDIpLCB3cml0ZSgyKSwg
-ZmNobW9kKDIpLCBmY2hvd24oMiksIGZnZXR4YXR0cigyKSwNCj4+Pj4+IGlv
-Y3RsKDIpLCBtbWFwKDIpKSBmYWlsIHdpdGggdGhlIGVycm9yIEVCQURGLiIN
-Cj4+Pj4+DQo+Pj4+PiBPX1BBVEggZG9lcyBub3Qgb3BlbiB0aGUgZmlsZSwg
-c28gZmNob3duIHJldHVybnMgRUJBREYsDQo+Pj4+PiBhcyBpdCByZXF1aXJl
-cyBhbiBmZCBvZiBhbiBvcGVuIGZpbGUuDQo+Pj4+DQo+Pj4+IEkgdGhpbmsg
-eW91J3ZlIGp1c3QgY29uZmlybWVkIHdoYXQgSSBhbHJlYWR5IHNhaWQ6IElm
-IGZjaG93bmF0IGlzIGNhbGxlZCB3aXRoDQo+Pj4+IEFUX0VNUFRZX1BBVEgs
-IHdpdGggYW4gZW1wdHkgcGF0aG5hbWUsIGFuZCB3aXRoIGRpcmZkIHJlZmVy
-cmluZyB0byBhIGZpbGUgdGhhdA0KPj4+PiB3YXMgb3BlbmVkIHdpdGggT19Q
-QVRILCB0aGVuIGZjaG93bmF0IHdpbGwgZmFpbCB3aXRoIEVCQURGLg0KPj4+
-Pg0KPj4+PiBTbyBmb3IgdGhlIHB1cnBvc2VzIG9mIHRoaXMgcGF0Y2ggc2Vy
-aWVzLCBJIGRvbid0IHNlZSB0aGUgcG9pbnQgb2YgYWRkaW5nDQo+Pj4+IHN1
-cHBvcnQgZm9yIEFUX0VNUFRZX1BBVEggaW4gZmNob3duYXQuDQo+Pj4+DQo+
-Pj4+IEFtIEkgbWlzc2luZyBzb21ldGhpbmc/DQo+Pj4NCj4+PiBUaGF0IGlz
-IHRoZSB1c2VyJ3MgcHJvYmxlbTogaXQgaXMgdGhlaXIgcmVzcG9uc2liaWxp
-dHkgdG8gcGFzcyBhbiBmZCBvcGVuIGZvcg0KPj4+IHJlYWRpbmcgb3Igc2Vh
-cmNoaW5nLCBub3Qgb25lIG9wZW5lZCB3aXRoIE9fUEFUSCAob24gTGludXgg
-b3IgQ3lnd2luKSwgb3INCj4+PiBBVF9GRENXRDsgaXQgaXMgQ3lnd2luJ3Mg
-cmVzcG9uc2liaWxpdHkgdG8gZW5zdXJlIHRoYXQgdmFsaWQgYXJncyBzdWNj
-ZWVkIGFuZA0KPj4+IGludmFsaWQgYXJncyByZXR1cm4gdGhlIGV4cGVjdGVk
-IGVycm5vLg0KPj4NCj4+IFllcywgYnV0IEN5Z3dpbiBkb2Vzbid0IGNsYWlt
-IHRvIHN1cHBvcnQgdGhlIEFUX0VNUFRZX1BBVEggZmxhZyBleGNlcHQgaW4N
-Cj4+IGxpbmthdC4gIFNvIHRoZXJlIGlzIG5vIGV4cGVjdGVkIGVycm5vLiAg
-VGhlIG9ubHkgd2F5IHRoZXJlIHdvdWxkIGJlIGFuIGV4cGVjdGVkDQo+PiBl
-cnJubyBpcyBpZiB3ZSBkZWNpZGUgdG8gYWRkIHN1cHBvcnQgZm9yIEFUX0VN
-UFRZX1BBVEggdG8gZmNob3duYXQuICBJJ20gc2F5aW5nDQo+PiB0aGF0IEkg
-ZG9uJ3Qgc2VlIHRoZSBwb2ludCBpbiBkb2luZyB0aGF0LCBhbmQgSSdtIGFz
-a2luZyB3aGV0aGVyIEknbSBtaXNzaW5nDQo+PiBzb21ldGhpbmcuICBJZiB5
-b3UgdGhpbmsgSSBzaG91bGQgYWRkIHRoYXQgc3VwcG9ydCwgcGxlYXNlIGV4
-cGxhaW4gd2h5Lg0KPiANCj4gVG8gYWxsb3cgcGVybXMgY2hhbmdlZCBvbiB0
-aGUgY3dkLCBkaXJlY3RvcmllcyBvciBmaWxlcyB3aXRoIGFuIG9wZW4gZmQs
-IHRvDQo+IGF2b2lkIHJhY2UgY29uZGl0aW9ucywgbGlrZSB0aGUgb3RoZXIg
-Li4uYXQgZnVuY3Rpb25zLg0KPiBJIGRvbid0IGdldCB3aHkgeW91IGRvbid0
-IHNlZSB0aG9zZSBhcyB1c2VmdWwgY2FzZXMuDQoNCkkgdGhpbmsgd2UncmUg
-bWlzLWNvbW11bmljYXRpbmcuICBUaGlzIGlzIGEgcGF0Y2ggc2VyaWVzIHdo
-b3NlIHB1cnBvc2UgaXMgdG8gYWRkIA0Kc3VwcG9ydCBmb3Igb3BlbmluZyBh
-IHN5bWxpbmsgd2l0aCBPX1BBVEggfCBPX05PRk9MTE9XLiAgSW4gdGhhdCBj
-b25uZWN0aW9uIEkgDQptb2RpZmllZCByZWFkbGlua2F0IGFuZCBmc3RhdGF0
-IHRvIGFsbG93IHRoZSByZXN1bHRpbmcgZmQgdG8gYmUgdXNlZCBhcyB0aGUg
-DQpkaXJmZCBhcmd1bWVudCBpbiB0aG9zZSBjYWxscywgd2l0aCBhbiBlbXB0
-eSBwYXRobmFtZS4gIEkgZGlkbid0IGRvIHRoZSBzYW1lIGZvciANCmZjaG93
-bmF0IGJlY2F1c2UgaXQgc2VlbXMgdG8gbWUgdGhhdCBpdCB3b3VsZCBhbHdh
-eXMgZmFpbCB3aXRoIEVCQURGIGluIHRoYXQgDQpzZXR0aW5nLg0KDQpJdCdz
-IG5vdCByZWxldmFudCB0aGF0IEFUX0VNUFRZX1BBVEggbWlnaHQgYmUgdXNl
-ZnVsIGZvciBmY2hvd25hdCBpbiBhIGRpZmZlcmVudCANCnNldHRpbmcuICBU
-aGF0IGNvdWxkIGJlIHRoZSBzdWJqZWN0IG9mIGEgZGlmZmVyZW50IHBhdGNo
-LiAgSWYgeW91IHRoaW5rIGl0IHdvdWxkIA0KYmUgdXNlZnVsICppbiB0aGUg
-Y29udGV4dCBvZiB0aGlzIHBhdGNoIHNlcmllcyosIHBsZWFzZSBleHBsYWlu
-IHdoeS4NCg0KS2VuDQo=
+- If two PTYs are opened in the same process and the first one
+  is closed, the helper process for the first PTY remains running.
+  This patch fixes the issue.
+---
+ winsup/cygwin/fhandler_tty.cc         |  8 ++++----
+ winsup/utils/cygwin-console-helper.cc | 15 ++++++++++++++-
+ 2 files changed, 18 insertions(+), 5 deletions(-)
+
+diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+index f10f0fc61..65b12fd6c 100644
+--- a/winsup/cygwin/fhandler_tty.cc
++++ b/winsup/cygwin/fhandler_tty.cc
+@@ -2233,8 +2233,7 @@ fhandler_pty_master::close ()
+     termios_printf ("CloseHandle (output_mutex<%p>), %E", output_mutex);
+   if (!NT_SUCCESS (status))
+     debug_printf ("NtQueryObject: %y", status);
+-  else if (obi.HandleCount == (get_pseudo_console () ? 2 : 1))
+-			      /* Helper process has inherited one. */
++  else if (obi.HandleCount == 1)
+     {
+       termios_printf ("Closing last master of pty%d", get_minor ());
+       /* Close Pseudo Console */
+@@ -3202,14 +3201,15 @@ fhandler_pty_master::setup_pseudoconsole ()
+   path_conv helper ("/bin/cygwin-console-helper.exe");
+   size_t len = helper.get_wide_win32_path_len ();
+   helper.get_wide_win32_path (cmd);
+-  __small_swprintf (cmd + len, L" %p %p %p", hello, goodbye, hw);
++  __small_swprintf (cmd + len, L" %p %p %p %p",
++		    hello, goodbye, hw, GetCurrentProcessId ());
+   si_helper.StartupInfo.dwFlags = STARTF_USESTDHANDLES;
+   si_helper.StartupInfo.hStdInput = NULL;
+   si_helper.StartupInfo.hStdOutput = NULL;
+   si_helper.StartupInfo.hStdError = NULL;
+   PROCESS_INFORMATION pi_helper;
+   CreateProcessW (NULL, cmd, &sec_none, &sec_none,
+-		  TRUE, EXTENDED_STARTUPINFO_PRESENT,
++		  FALSE, EXTENDED_STARTUPINFO_PRESENT,
+ 		  NULL, NULL, &si_helper.StartupInfo, &pi_helper);
+   WaitForSingleObject (hello, INFINITE);
+   /* Retrieve pseudo console handles */
+diff --git a/winsup/utils/cygwin-console-helper.cc b/winsup/utils/cygwin-console-helper.cc
+index 66004bd15..6255fb93d 100644
+--- a/winsup/utils/cygwin-console-helper.cc
++++ b/winsup/utils/cygwin-console-helper.cc
+@@ -4,14 +4,24 @@ int
+ main (int argc, char **argv)
+ {
+   char *end;
++  HANDLE parent = NULL;
+   if (argc < 3)
+     exit (1);
++  if (argc == 5)
++    parent = OpenProcess (PROCESS_DUP_HANDLE, FALSE,
++			  strtoull (argv[4], &end, 0));
+   HANDLE h = (HANDLE) strtoull (argv[1], &end, 0);
++  if (parent)
++    DuplicateHandle (parent, h, GetCurrentProcess (), &h,
++		     0, FALSE, DUPLICATE_SAME_ACCESS);
+   SetEvent (h);
+-  if (argc == 4) /* Pseudo console helper mode for PTY */
++  if (argc == 4 || argc == 5) /* Pseudo console helper mode for PTY */
+     {
+       SetConsoleCtrlHandler (NULL, TRUE);
+       HANDLE hPipe = (HANDLE) strtoull (argv[3], &end, 0);
++      if (parent)
++	DuplicateHandle (parent, hPipe, GetCurrentProcess (), &hPipe,
++			 0, FALSE, DUPLICATE_SAME_ACCESS);
+       char buf[64];
+       sprintf (buf, "StdHandles=%p,%p\n",
+ 	       GetStdHandle (STD_INPUT_HANDLE),
+@@ -21,6 +31,9 @@ main (int argc, char **argv)
+       CloseHandle (hPipe);
+     }
+   h = (HANDLE) strtoull (argv[2], &end, 0);
++  if (parent)
++    DuplicateHandle (parent, h, GetCurrentProcess (), &h,
++		     0, FALSE, DUPLICATE_SAME_ACCESS);
+   WaitForSingleObject (h, INFINITE);
+   exit (0);
+ }
+-- 
+2.21.0
