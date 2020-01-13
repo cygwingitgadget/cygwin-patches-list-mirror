@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9907-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 27663 invoked by alias); 13 Jan 2020 15:28:14 -0000
+Return-Path: <cygwin-patches-return-9908-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 52364 invoked by alias); 13 Jan 2020 15:31:56 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,100 +9,99 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 27653 invoked by uid 89); 13 Jan 2020 15:28:14 -0000
+Received: (qmail 52355 invoked by uid 89); 13 Jan 2020 15:31:56 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-101.9 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*Ad:U*cygwin-patches, Ken, act
+X-Spam-SWARE-Status: No, score=-114.4 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=2698, sk:fhandle, HX-Languages-Length:1322, edition
 X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.17.10) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 13 Jan 2020 15:28:13 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id 1MacWq-1jOQds1XP0-00cBLS for <cygwin-patches@cygwin.com>; Mon, 13 Jan 2020 16:28:10 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id A279EA806B2; Mon, 13 Jan 2020 16:28:09 +0100 (CET)
-Date: Mon, 13 Jan 2020 15:28:00 -0000
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.133) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 13 Jan 2020 15:31:55 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id 1MQuwR-1j426p2C0t-00Nxku for <cygwin-patches@cygwin.com>; Mon, 13 Jan 2020 16:31:52 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 38D44A806B2; Mon, 13 Jan 2020 16:31:52 +0100 (CET)
+Date: Mon, 13 Jan 2020 15:31:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2 0/3] Support opening a symlink with O_PATH | O_NOFOLLOW
-Message-ID: <20200113152809.GE5858@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: fhandler_socket::open: support the O_PATH flag
+Message-ID: <20200113153152.GF5858@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20191229175637.1050-1-kbrown@cornell.edu>
+References: <20191226152524.10816-1-kbrown@cornell.edu>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="liOOAslEiF7prFVr"
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="bCsyhTFzCvuiizWE"
 Content-Disposition: inline
-In-Reply-To: <20191229175637.1050-1-kbrown@cornell.edu>
-X-SW-Source: 2020-q1/txt/msg00013.txt
+In-Reply-To: <20191226152524.10816-1-kbrown@cornell.edu>
+X-SW-Source: 2020-q1/txt/msg00014.txt
 
 
---liOOAslEiF7prFVr
+--bCsyhTFzCvuiizWE
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-length: 1718
+Content-length: 1309
 
 Hi Ken,
 
-On Dec 29 17:56, Ken Brown wrote:
-> Currently, opening a symlink with O_NOFOLLOW fails with ELOOP.
-> Following Linux, the first patch in this series allows the call to
-> succeed if O_PATH is also specified.
+On Dec 26 15:25, Ken Brown wrote:
+> If that flag is not set, fail with EOPNOTSUPP instead of ENXIO.  This
+> is consistent with POSIX, starting with the 2016 edition.  Earlier
+> editions were silent on this issue.
+> ---
+>  winsup/cygwin/fhandler_socket.cc | 13 +++++++++++--
+>  winsup/cygwin/release/3.1.3      |  5 +++++
+>  winsup/doc/new-features.xml      |  5 +++++
+>  3 files changed, 21 insertions(+), 2 deletions(-)
+>  create mode 100644 winsup/cygwin/release/3.1.3
 >=20
-> According to the Linux man page for 'open', the file descriptor
-> returned by the call should be usable as the dirfd argument in calls
-> to fstatat and readlinkat with an empty pathname, to have
-> the calls operate on the symbolic link.  The second and third patches
-> achieve this.  For fstatat, we do this by adding support
-> for the AT_EMPTY_PATH flag.
->=20
-> Note: The man page mentions fchownat and linkat also.  linkat already
-> supports the AT_EMPTY_PATH flag, so nothing needs to be done.  But I
-> don't understand how this could work for fchownat, because fchown
-> fails with EBADF if its fd argument was opened with O_PATH.  So I
-> haven't touched fchownat.
+> diff --git a/winsup/cygwin/fhandler_socket.cc b/winsup/cygwin/fhandler_so=
+cket.cc
+> index 9f33d8087..4a46d5a64 100644
+> --- a/winsup/cygwin/fhandler_socket.cc
+> +++ b/winsup/cygwin/fhandler_socket.cc
+> @@ -269,8 +269,17 @@ fhandler_socket::fcntl (int cmd, intptr_t arg)
+>  int
+>  fhandler_socket::open (int flags, mode_t mode)
+>  {
+> -  set_errno (ENXIO);
+> -  return 0;
+> +  /* We don't support opening sockets unless O_PATH is specified. */
+> +  if (!(flags & O_PATH))
+> +    {
+> +      set_errno (EOPNOTSUPP);
+> +      return 0;
+> +    }
+> +
+> +  query_open (query_read_attributes);
+> +  nohandle (true);
+> +  set_flags (flags);
 
-It was never supposed to work that way.  We can make fchownat work
-with AT_EMPTY_PATH, but using it on a file opened with O_PATH
-contradicts the Linux open(2) man page, afaics:
-
- O_PATH (since Linux 2.6.39)
-  Obtain a file descriptor that can be used for two  purposes:  to
-  indicate a location in the filesystem tree and to perform opera=E2=80=90
-  tions that act purely at the file descriptor  level.   The  file
-  itself  is not opened, and other file operations (e.g., read(2),
-  write(2), fchmod(2), fchown(2), fgetxattr(2), ioctl(2), mmap(2))
-                       ^^^^^^^^^
-  fail with the error EBADF.
-  ^^^^^^^^^           ^^^^^
-
-That'd from the current F31 man pages.
-
-> Am I missing something?
-
-Good question.  Let me ask in return, did *I* now miss something?
+Shouldn't that only work with AF_LOCAL/AF_UNIX sockets?  This looks
+like it will return a valid descriptor even for IP sockets.
 
 
+Thanks,
 Corinna
 
 --=20
 Corinna Vinschen
 Cygwin Maintainer
 
---liOOAslEiF7prFVr
+--bCsyhTFzCvuiizWE
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-length: 833
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl4cjIkACgkQ9TYGna5E
-T6DS1BAApO+yTOGduKFJxGOM/UFfSw1jk9Ox7CmbgJLlFPtk+fKC7FV0QeMZ3sEm
-t480ss1rmcy0YkuuMRy3P/hc4/EHK21uPkzcjHOKYuCG1fQ3+qyD1J44jQTD7VNc
-lHI6GEJ/E20RIB7IqdN03IaLQLMXsvILgulifCWYuDXGP9ETnhMulAoqU0Eo3swL
-WBpozzQnFJek1itaIpQgt1sfaTWo9L5kYZYZtLoYaLlwMUtT7YMgxpDrNwr80KhS
-mqyxyGZjg7dvkM1ybTYuKt6iQl4goPa12TawlBeReR93fuGeqTsE8HTBF+sQaQDo
-HXgxnxy695aLtFtRKfobrEnkv9ZZurw/Vpfcl8S7x3QFXvOVVJ+4Db+1LpsH10fs
-jfsaYFPAmRv8hghQtPtRQgVZBEVDLfM1B3tkspxfhguj+Z4H9melmGoE4GweCxNL
-v9u9J5b4g9CXfN0MtniD0hDI/HfKi6/aiHvomSpvrOb4ehGgU6aRRHWpc8QeOF3d
-TZCewFdu1J7MKttpnTm7Yyky0xDH3p3a3vY/PvEB1oU401e3+FNuiM2mfTWKJNvB
-xs7LUx1w6gPPQ9n2QRh1OVN0O+9cXlTma4Ta20IZM3qxQ43Z2/p9f7AYAhpROKsF
-2eQpPW1wRciGyOiSKjTkm9CXFGjK/BD0nKMYryt5MGxt/SubbtA=
-=RvyM
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl4cjWgACgkQ9TYGna5E
+T6A84BAAgF/cscKG4nT+IVDSZoUUJi49MIR5R/yKDEXd8eQSKp5Ljonp5wNmYDhl
+vVY3VNr+YzJEz9PL7/9spBvscClTCewy/T6g866WRGB48z8aaDwZd+FWC21kLUyP
+Kh9qmo8ss7ivuASfQ3k0wn1dr8rtEXjaDUB451pXe6u09wHwVUoM+cyGdIs+EBH8
+AIgGJEZHAsU+ldsv8SQbwmXkCwP71HQ5ruNLa/6v5SOanZo7HldK2g4S4Xel6vNR
+K3BPMHTMze4NaotkE+Y/kn791kcx3m2vVWd/f9mAqUYAY2e5+xxDJUdFMi6nlXox
+b9r96BJxCdhEg9jF+zINUw8Rz/3M+daVdQ5Q2elv8PukuA8MaQSNSGLOcl5eVaOm
+HDD/79QJVb2QpMgJVRQaS16HS2ONIK+11r8MGJZAJpe0QN2RfNRSyMPJAHwJmZyS
+DLh2MndVCuytxCk9aGl8/a1GW2NzlJdub3fk2vfwP8gZRXcNPmGDfL6nHtY9byPH
+GyMG7KLazBO6J9/lDcXNjgBnAeZznu4NRLoSUvIt8GIYdO9uOdvG8ERnkv5mCjL3
+OBuPWxjlKUumIGpbC9ejxN5l8ECtPgLrcEqeUCUjMsAu3k1vt3M+RY0KCwyiasvs
+uC8SkqoH+le2chKQVDAqYKaomYG3dD2CZhKh7Sq8EGCm+si+VoI=
+=JM5Z
 -----END PGP SIGNATURE-----
 
---liOOAslEiF7prFVr--
+--bCsyhTFzCvuiizWE--
