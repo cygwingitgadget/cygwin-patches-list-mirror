@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9918-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 110692 invoked by alias); 13 Jan 2020 16:27:11 -0000
+Return-Path: <cygwin-patches-return-9919-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 124434 invoked by alias); 13 Jan 2020 16:33:21 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,61 +9,46 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 110682 invoked by uid 89); 13 Jan 2020 16:27:11 -0000
+Received: (qmail 124394 invoked by uid 89); 13 Jan 2020 16:33:21 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-123.5 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=HX-Languages-Length:934
+X-Spam-SWARE-Status: No, score=-111.3 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=Speed
 X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (217.72.192.73) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 13 Jan 2020 16:27:10 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id 1MkpvV-1jWSFo2ZkF-00mJeT for <cygwin-patches@cygwin.com>; Mon, 13 Jan 2020 17:27:07 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id EEBB3A80393; Mon, 13 Jan 2020 17:27:06 +0100 (CET)
-Date: Mon, 13 Jan 2020 16:27:00 -0000
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.131) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 13 Jan 2020 16:33:20 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id 1N2SXX-1jo7Wc1hx1-013rfA for <cygwin-patches@cygwin.com>; Mon, 13 Jan 2020 17:33:17 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id DCFBCA805B9; Mon, 13 Jan 2020 17:33:16 +0100 (CET)
+Date: Mon, 13 Jan 2020 16:33:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: console: Make suspending process work properly.
-Message-ID: <20200113162706.GP5858@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: select: Speed up select() call for pty, pipe and fifo.
+Message-ID: <20200113163316.GQ5858@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200105132555.925-1-takashi.yano@nifty.ne.jp>
+References: <20200106143834.1994-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="oY1uq2ONqt5kuovO"
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="XlS4q8O07AKt4+K1"
 Content-Disposition: inline
-In-Reply-To: <20200105132555.925-1-takashi.yano@nifty.ne.jp>
-X-SW-Source: 2020-q1/txt/msg00024.txt
+In-Reply-To: <20200106143834.1994-1-takashi.yano@nifty.ne.jp>
+X-SW-Source: 2020-q1/txt/msg00025.txt
 
 
---oY1uq2ONqt5kuovO
+--XlS4q8O07AKt4+K1
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-length: 931
+Content-length: 718
 
-On Jan  5 22:25, Takashi Yano wrote:
-> - After commit f4b47827cf87f055687a0c52a3485d42b3e2b941, suspending
->   process by Ctrl-Z does not work in console and results in hang up.
->   This patch fixes the issue.
-> ---
->  winsup/cygwin/fhandler_console.cc | 2 ++
->  1 file changed, 2 insertions(+)
->=20
-> diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_c=
-onsole.cc
-> index 78f42999c..33ff8371f 100644
-> --- a/winsup/cygwin/fhandler_console.cc
-> +++ b/winsup/cygwin/fhandler_console.cc
-> @@ -853,7 +853,9 @@ fhandler_console::process_input_message (void)
->        if (toadd)
->  	{
->  	  ssize_t ret;
-> +	  release_input_mutex ();
->  	  line_edit_status res =3D line_edit (toadd, nread, *ti, &ret);
-> +	  acquire_input_mutex (INFINITE);
->  	  if (res =3D=3D line_edit_signalled)
->  	    {
->  	      stat =3D input_signalled;
-> --=20
-> 2.21.0
+On Jan  6 23:38, Takashi Yano wrote:
+> - The slowing down issue of X11 forwarding using ssh -Y, reported
+>   in https://www.cygwin.com/ml/cygwin/2019-12/msg00295.html,
+>   is due to the change of select() code for pty in the commit
+>   915fcd0ae8d83546ce135131cd25bf6795d97966. cygthread::detach()
+>   takes at most about 10msec because Sleep() is used in the thread.
+>   For this issue, this patch uses cygwait() instead of Sleep() and
+>   introduces an event to abort the wait. For not only pty, but pipe
+>   and fifo also have the same problem potentially, so this patch
+>   applies same strategy to them as well.
 
-Pushed.
+Pushed.  And thanks for testing, Marco!
 
 
 Thanks,
@@ -73,25 +58,25 @@ Corinna
 Corinna Vinschen
 Cygwin Maintainer
 
---oY1uq2ONqt5kuovO
+--XlS4q8O07AKt4+K1
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-length: 833
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl4cmloACgkQ9TYGna5E
-T6CKDhAAk+5OymKA1ACJzQMdNn8mOFVtc1T+CUNBZ8DuGa8euqPAw3QBybK5MJBI
-EtQ7UL0DpSXDJ92UH6pvA+rBZK5S0z+l1XHJ3PW4Kc/wo7mQ9BHvS0JHHzEVHfcX
-PPGkZCHm4n/Nf13jMw3pA7P7iU9/WQ3HWPUZDyf10FCHCe9NGGjTDOA3Wvay4Er8
-lYHOVJHktATNcXp2K/Zpnws1kbOzZaSGlltxSruyNq8z0iI9PbRBRyLod2L+y23n
-hdxLjsURVHmP/9Bbj+cwCLoDaQu9SYrEP+udvnujLJz4YU0WbmCCG5r6YZSjxU4y
-mZTWbuFMEjCsn8VBP+sz4ESHKYiP8Qi8f77X3jjNKPNt4nAGWyX8FrVCC3L+AroY
-/+sL3vAOlM3jlAPfPGpXd+IblOa5pnnf3/eEHTwUGvgn3EQZrEKUFKD7DFFrRmg5
-xbE5cx9t/w46C3oJMVbo/yqJsrHiu8byBVwKmJ5D1YngbWyudd0yuyqIyDEvXcos
-ZSqU75fdIELxiF0EEFTmGoZhyI222KAxF4sUHXO/qILYGYN1Hcs8455eZrj7skJC
-YqMExAAXN1qF8hPaM4L0efC3n8m6C1Zkfr3ihZfWskLbjZ63ExtN8Kai8zpqCkb0
-hkshVKoi2Kv8IcibD687fjg4HUvBBdfsI437m1BVskYuGbQwYGc=
-=jFUZ
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl4cm8wACgkQ9TYGna5E
+T6BMlg//SN9bE0Q4TE9LqChx9o2NOMOvxX622jJiNhZCx60H3sc6l5W7PKP0pzYG
+w0cflT1O+PXewssxPz2OWQhZ6gYwIK2QBwtuA8ltP9k6fYRPpi4P2hOMND4Yq1Me
+RyVKDBFZhEFzEZo84UkuZSrMZDfiuyzrQEGeuq4QFSM9hr4E3gXJPsOW7PqYThWm
+GanHXA5tYQn+IzfdTxj9h0qSEiZFkorIdVfhA4ZNRlDNvSG6LpGc6KvpUlVEnDmV
+Uj47ccTOLRTjRWYD7CX+b8AEg4htArXks4H9hjsq9LbeEHZeaF2Vd8hrIw1DuFmk
+9ZbsuWBCItp+QJqHN5Ryz6WFUxonTmf2qUozWkEvR3CAby3Z3VYuOFp/svobCHUM
+pI2P4rbMQhNAdW6rL3Ii25t/3g3OrCFxmVN4z9ThbcaK8mD2L+JNHSXrx0RrrBKi
+HM3wkorEOZWLvR7rXu27rt47SQrhokBukg/1j9D2Oc0Y4MNwx2ECYQz6uEpoMqLS
+/3LX+TDimm6gZ/VI3oGJf6QNURXM5I9c4nf062Dc/jgv+t1vcFCkAZXRWuS9Jp0S
+1jAERHU9HvNDm4EThelGdpehua8/uAfNQqXq1xCLslJHj9TDToQSRejYG2UhCovJ
+wfSU4NDA6ngnc+PnBbo55lPYdi02YfxdSapfB/wuZJ1SRNvi9HE=
+=fluz
 -----END PGP SIGNATURE-----
 
---oY1uq2ONqt5kuovO--
+--XlS4q8O07AKt4+K1--
