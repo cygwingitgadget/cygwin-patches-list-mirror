@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9924-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 68308 invoked by alias); 13 Jan 2020 18:34:35 -0000
+Return-Path: <cygwin-patches-return-9925-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 73329 invoked by alias); 13 Jan 2020 18:37:18 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,115 +9,75 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 68299 invoked by uid 89); 13 Jan 2020 18:34:34 -0000
+Received: (qmail 73320 invoked by uid 89); 13 Jan 2020 18:37:18 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-110.6 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=act
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (217.72.192.74) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 13 Jan 2020 18:34:33 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id 1N49d1-1jqqGM0RIP-0103rH for <cygwin-patches@cygwin.com>; Mon, 13 Jan 2020 19:34:31 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 51A78A806A2; Mon, 13 Jan 2020 19:34:30 +0100 (CET)
-Date: Mon, 13 Jan 2020 18:34:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
+X-Spam-SWARE-Status: No, score=-2.5 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=affects, H*MI:sk:1552bbe, HX-Languages-Length:1817, H*f:sk:1552bbe
+X-HELO: us-smtp-1.mimecast.com
+Received: from us-smtp-delivery-1.mimecast.com (HELO us-smtp-1.mimecast.com) (207.211.31.120) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 13 Jan 2020 18:37:17 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;	s=mimecast20190719; t=1578940636;	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:	 to:to:cc:mime-version:mime-version:content-type:content-type:	 content-transfer-encoding:content-transfer-encoding:	 in-reply-to:in-reply-to:references:references;	bh=qK+tZyfv4dZfPkt7/2LC17UFTUgeRlCti40/0aAj0xM=;	b=cn6vMN6DaDnu8NgWpt+f8XN8rgtqb8r4/XvxQD9fJPiI3BWC7KWRJNw42zLbRD+Mg6E7zA	c8QUWgSO96T/FnYMSFoocw6vtPSkZM3qVbF+KCOM8M0drLASCrnogLAfJSOyayv0ydEL0c	WblviYrklpSVB5qJMhOlXkEPQmS3oQo=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id us-mta-231-0g_v1BZjNfuKAdzTTQ06Gw-1; Mon, 13 Jan 2020 13:37:14 -0500
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])	(using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))	(No client certificate requested)	by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A876818B5FBA	for <cygwin-patches@cygwin.com>; Mon, 13 Jan 2020 18:37:13 +0000 (UTC)
+Received: from [10.3.117.16] (ovpn-117-16.phx2.redhat.com [10.3.117.16])	by smtp.corp.redhat.com (Postfix) with ESMTPS id 803E05DA70	for <cygwin-patches@cygwin.com>; Mon, 13 Jan 2020 18:37:13 +0000 (UTC)
 Subject: Re: [PATCH v2 0/3] Support opening a symlink with O_PATH | O_NOFOLLOW
-Message-ID: <20200113183430.GR5858@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20191229175637.1050-1-kbrown@cornell.edu> <20200113152809.GE5858@calimero.vinschen.de> <9f83d272-2dad-f652-d0c8-f3eb3b425ac2@cornell.edu>
+To: cygwin-patches@cygwin.com
+References: <20191229175637.1050-1-kbrown@cornell.edu> <20200113152809.GE5858@calimero.vinschen.de> <9f83d272-2dad-f652-d0c8-f3eb3b425ac2@cornell.edu> <8361114f-0ca9-fe51-1c4c-382192582ded@redhat.com> <1552bbe6-986a-0006-7afd-028eb0655f15@cornell.edu>
+From: Eric Blake <eblake@redhat.com>
+Message-ID: <e2680c6c-a0d3-6081-45e9-806ddd3c7f90@redhat.com>
+Date: Mon, 13 Jan 2020 18:37:00 -0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101 Thunderbird/68.3.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="Pjk796cY0SfIo9Z2"
-Content-Disposition: inline
-In-Reply-To: <9f83d272-2dad-f652-d0c8-f3eb3b425ac2@cornell.edu>
-X-SW-Source: 2020-q1/txt/msg00030.txt
-
-
---Pjk796cY0SfIo9Z2
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+In-Reply-To: <1552bbe6-986a-0006-7afd-028eb0655f15@cornell.edu>
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-Content-length: 2543
+X-IsSubscribed: yes
+X-SW-Source: 2020-q1/txt/msg00031.txt
 
-On Jan 13 16:53, Ken Brown wrote:
-> On 1/13/2020 10:28 AM, Corinna Vinschen wrote:
-> > On Dec 29 17:56, Ken Brown wrote:
-> >> [...]
-> >> Note: The man page mentions fchownat and linkat also.  linkat already
-> >> supports the AT_EMPTY_PATH flag, so nothing needs to be done.  But I
-> >> don't understand how this could work for fchownat, because fchown
-> >> fails with EBADF if its fd argument was opened with O_PATH.  So I
-> >> haven't touched fchownat.
-> >=20
-> > It was never supposed to work that way.  We can make fchownat work
-> > with AT_EMPTY_PATH, but using it on a file opened with O_PATH
-> > contradicts the Linux open(2) man page, afaics:
-> >=20
-> >   O_PATH (since Linux 2.6.39)
-> >    Obtain a file descriptor that can be used for two  purposes:  to
-> >    indicate a location in the filesystem tree and to perform opera=E2=
-=80=90
-> >    tions that act purely at the file descriptor  level.   The  file
-> >    itself  is not opened, and other file operations (e.g., read(2),
-> >    write(2), fchmod(2), fchown(2), fgetxattr(2), ioctl(2), mmap(2))
-> >                         ^^^^^^^^^
-> >    fail with the error EBADF.
-> >    ^^^^^^^^^           ^^^^^
-> >=20
-> > That'd from the current F31 man pages.
-> >=20
-> >> Am I missing something?
-> >=20
-> > Good question.  Let me ask in return, did *I* now miss something?
+On 1/13/20 11:44 AM, Ken Brown wrote:
+
+>>> I don't think so.=C2=A0 I think we agree, although maybe I didn't expre=
+ss myself
+>>> clearly enough for that to be obvious.=C2=A0 What confused me was the f=
+ollowing
+>>> paragraph further down in the open(2) man page (still discussing O_PATH=
+):
+>>>
+>>>  =C2=A0=C2=A0=C2=A0 If pathname is a symbolic link and the O_NOFOLLOW f=
+lag is also
+>>>  =C2=A0=C2=A0=C2=A0 specified, then the call returns a file descriptor =
+referring
+>>>  =C2=A0=C2=A0=C2=A0 to the symbolic link.=C2=A0 This file descriptor ca=
+n be used as the
+>>>  =C2=A0=C2=A0=C2=A0 dirfd argument in calls to fchownat(2), fstatat(2),=
+ linkat(2),
+>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^^^^^^^^^^^
+>>>  =C2=A0=C2=A0=C2=A0 and readlinkat(2) with an empty pathname to have th=
+e calls
+>>>  =C2=A0=C2=A0=C2=A0 operate on the symbolic link.
+>>>
+>>> I don't know why they include fchownat here, since the resulting call w=
+ould fail
+>>> with EBADF.=C2=A0 So I didn't implement that in my patch series.
+>>
+>> I'm not sure if the question here is about fchownat() (where you CAN cha=
+nge
+>> owner of a symlink on Linux, same as with lchown())
 >=20
-> I don't think so.  I think we agree, although maybe I didn't express myse=
-lf=20
-> clearly enough for that to be obvious.  What confused me was the followin=
-g=20
-> paragraph further down in the open(2) man page (still discussing O_PATH):
->=20
->    If pathname is a symbolic link and the O_NOFOLLOW flag is also
->    specified, then the call returns a file descriptor referring
->    to the symbolic link.  This file descriptor can be used as the
->    dirfd argument in calls to fchownat(2), fstatat(2), linkat(2),
->                               ^^^^^^^^^^^
->    and readlinkat(2) with an empty pathname to have the calls
->    operate on the symbolic link.
+> Yes, the question is about fchownat.  Are you saying you can change the o=
+wner
+> even if the symlink was opened with O_PATH?
 
-That's the part I missed, apparently.  Implementing fchownat like this
-may be a bit upside down.  The problem is that open(O_PATH) opens the
-file with query_read_attributes (aka READ_CONTROL | FILE_READ_ATTRIBUTES),
-to make sure the calls mentioned in the snippet I pasted don't succeed.=20=
-=20
-
-If fchownat is supposed to work on a symlink like this, the easiest
-approach may be checking for this scenario in fchownat and calling
-lchown on the pathname instead.  Or something along these lines.
-
-
-Corinna
+Without actually writing a test program on Linux, I'm not sure.=20
+Logically, I'd expect that changing the owner of a symlink is a metadata=20
+operation that affects the containing directory rather than the contents=20
+of the file, but that access to the directory entry is what O_PATH is=20
+supposed to provide, and therefore it seems like fchownat() on an empty=20
+filename should work the same as lchownat().  But if it fails in Linux,=20
+then we don't have to do any better.
 
 --=20
-Corinna Vinschen
-Cygwin Maintainer
-
---Pjk796cY0SfIo9Z2
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl4cuDYACgkQ9TYGna5E
-T6BL1w/+OS7ZdipDESJxhXiU5ZUAbEuw13Ak1Pqhxj/8rid+3fHaXvT7Z4AKtbmP
-z4T1TVFtV+sKXK0foxzpPnmghJEXYE9FQDNpcyi1wBv6SgQf9PNz787bcIurF45u
-NulSiK6zhnLQJW2AkEIUoiq6JlwWtcwWKSU1jQ1eYpD+vFj/WeBLJAXd3RFt+GJZ
-DeRS78mBXKT/J8Jwe27E2/SJEhcDIiXcKw0VqjCm/8OUDrz4hg9mQrAUpOy1HG8f
-bLHVKfGMyEeCAPin+C+ChUHijo3tHf3L/hT3K3AQpl5aXMGXgKIzTvkC+ex9xURw
-TW9rmBXZnSS2umgvrzEiYE8NiiwKxAUCn+1PAfg0cmPPHJGkfYBusXC/NetJGe8N
-w3WZR1LCc6eVwk5wq+0UjvXIIv8RaxpPEPgzB3kRtYxB6IQ9cgQ8KBB75xXI6fBe
-Y1jD1CYYW6BbmZo7fxeZjTcrmp13JWw4L4E7xaWyj4eoiXFmzCgUvaIzXNRs7hJX
-u+GjjHjziwKF8OkZk7jJYb1oBVxQ9H+jsRSwNb+wCWNftzq25ouDH0lK0ft+b/kR
-psaKcup2bjbdfnGvebPIwsBBTi0hfKXVGlepGvb8VOzXVEpuXqS4T/TTGrgpV/Dq
-BJIPmppKws6RmNMtTaCegZtew+F2tfM/aCQUu1h27gukPFfFVlU=
-=VvY3
------END PGP SIGNATURE-----
-
---Pjk796cY0SfIo9Z2--
+Eric Blake, Principal Software Engineer
+Red Hat, Inc.           +1-919-301-3226
+Virtualization:  qemu.org | libvirt.org
