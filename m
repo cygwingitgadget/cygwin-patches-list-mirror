@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9911-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 104916 invoked by alias); 13 Jan 2020 15:49:57 -0000
+Return-Path: <cygwin-patches-return-9912-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 63546 invoked by alias); 13 Jan 2020 15:56:23 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,91 +9,70 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 104906 invoked by uid 89); 13 Jan 2020 15:49:56 -0000
+Received: (qmail 63536 invoked by uid 89); 13 Jan 2020 15:56:23 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-123.8 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=lately
+X-Spam-SWARE-Status: No, score=-124.4 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=HX-Languages-Length:1471
 X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.187) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 13 Jan 2020 15:49:55 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id 1MhUDj-1jMV2w0wi3-00eaP4 for <cygwin-patches@cygwin.com>; Mon, 13 Jan 2020 16:49:53 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 66C29A806B2; Mon, 13 Jan 2020 16:49:52 +0100 (CET)
-Date: Mon, 13 Jan 2020 15:49:00 -0000
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.17.10) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 13 Jan 2020 15:56:22 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id 1N2mWA-1jnJ9j3Qho-0135Yd for <cygwin-patches@cygwin.com>; Mon, 13 Jan 2020 16:56:19 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 6FBC9A806B2; Mon, 13 Jan 2020 16:56:19 +0100 (CET)
+Date: Mon, 13 Jan 2020 15:56:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Fix the issue regarding open and close multiple PTYs.
-Message-ID: <20200113154952.GI5858@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: pty: Add missing CloseHandle() calls.
+Message-ID: <20200113155619.GJ5858@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200101064748.8709-1-takashi.yano@nifty.ne.jp>
+References: <20200101064845.8756-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="BQPnanjtCNWHyqYD"
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="lIrNkN/7tmsD/ALM"
 Content-Disposition: inline
-In-Reply-To: <20200101064748.8709-1-takashi.yano@nifty.ne.jp>
-X-SW-Source: 2020-q1/txt/msg00017.txt
+In-Reply-To: <20200101064845.8756-1-takashi.yano@nifty.ne.jp>
+X-SW-Source: 2020-q1/txt/msg00018.txt
 
 
---BQPnanjtCNWHyqYD
+--lIrNkN/7tmsD/ALM
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-length: 2219
+Content-length: 1501
 
 Hi Takashi,
 
-On Jan  1 15:47, Takashi Yano wrote:
-> - If two PTYs are opened in the same process and the first one
->   is closed, the helper process for the first PTY remains running.
->   This patch fixes the issue.
+On Jan  1 15:48, Takashi Yano wrote:
 > ---
-> [...]
-> diff --git a/winsup/utils/cygwin-console-helper.cc b/winsup/utils/cygwin-=
-console-helper.cc
-> index 66004bd15..6255fb93d 100644
-> --- a/winsup/utils/cygwin-console-helper.cc
-> +++ b/winsup/utils/cygwin-console-helper.cc
-> @@ -4,14 +4,24 @@ int
->  main (int argc, char **argv)
->  {
->    char *end;
-> +  HANDLE parent =3D NULL;
->    if (argc < 3)
->      exit (1);
-> +  if (argc =3D=3D 5)
-> +    parent =3D OpenProcess (PROCESS_DUP_HANDLE, FALSE,
-> +			  strtoull (argv[4], &end, 0));
->    HANDLE h =3D (HANDLE) strtoull (argv[1], &end, 0);
-> +  if (parent)
-> +    DuplicateHandle (parent, h, GetCurrentProcess (), &h,
-> +		     0, FALSE, DUPLICATE_SAME_ACCESS);
->    SetEvent (h);
-> -  if (argc =3D=3D 4) /* Pseudo console helper mode for PTY */
-> +  if (argc =3D=3D 4 || argc =3D=3D 5) /* Pseudo console helper mode for =
-PTY */
->      {
->        SetConsoleCtrlHandler (NULL, TRUE);
->        HANDLE hPipe =3D (HANDLE) strtoull (argv[3], &end, 0);
-> +      if (parent)
-> +	DuplicateHandle (parent, hPipe, GetCurrentProcess (), &hPipe,
-> +			 0, FALSE, DUPLICATE_SAME_ACCESS);
->        char buf[64];
->        sprintf (buf, "StdHandles=3D%p,%p\n",
->  	       GetStdHandle (STD_INPUT_HANDLE),
-> @@ -21,6 +31,9 @@ main (int argc, char **argv)
->        CloseHandle (hPipe);
->      }
->    h =3D (HANDLE) strtoull (argv[2], &end, 0);
-> +  if (parent)
-> +    DuplicateHandle (parent, h, GetCurrentProcess (), &h,
-> +		     0, FALSE, DUPLICATE_SAME_ACCESS);
+>  winsup/cygwin/fhandler_tty.cc | 22 ++++++++++++++++++++--
+>  1 file changed, 20 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+> index 65b12fd6c..23156f977 100644
+> --- a/winsup/cygwin/fhandler_tty.cc
+> +++ b/winsup/cygwin/fhandler_tty.cc
+> @@ -2242,11 +2242,27 @@ fhandler_pty_master::close ()
+>  	  /* Terminate helper process */
+>  	  SetEvent (get_ttyp ()->h_helper_goodbye);
+>  	  WaitForSingleObject (get_ttyp ()->h_helper_process, INFINITE);
+> +	  CloseHandle (get_ttyp ()->h_helper_goodbye);
+> +	  CloseHandle (get_ttyp ()->h_helper_process);
+>  	  /* FIXME: Pseudo console can be accessed via its handle
+>  	     only in the process which created it. What else can we do? */
+>  	  if (master_pid_tmp =3D=3D myself->pid)
+> -	    /* Release pseudo console */
+> -	    ClosePseudoConsole (get_pseudo_console ());
+> +	    {
+> +	      /* ClosePseudoConsole() seems to have a bug that one
+> +		 internal handle remains opened. This causes handle leak.
+> +		 This is a workaround for this problem. */
+> +	      typedef struct
+> +	      {
+> +		HANDLE hWritePipe;
+> +		HANDLE hConDrvReference;
+> +		HANDLE hConHostProcess;
+> +	      } HPCON_INTERNAL;
 
-I think it would be better if cygwin-console-helper closes the parent
-handle at this point before waiting.  I have a bad feeling keeping the
-PROCESS_DUP_HANDLE handle open for longer than necessary, after the
-handle leakage we had in execve lately.
-
-But then again, given that Cygwin uses EXTENDED_STARTUPINFO_PRESENT
-anyway, wouldn't it makes sense to pass the required handles with
-PROC_THREAD_ATTRIBUTE_HANDLE_LIST to avoid having to open the
-parent with PROCESS_DUP_HANDLE?
+Can you please move this struct to some header?  Even if it's not a
+really close match, maybe ntdll.h works best, combined with a short
+comment what this is about...
 
 
 Thanks,
@@ -103,25 +82,25 @@ Corinna
 Corinna Vinschen
 Cygwin Maintainer
 
---BQPnanjtCNWHyqYD
+--lIrNkN/7tmsD/ALM
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-length: 833
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl4ckaAACgkQ9TYGna5E
-T6BFzxAAgC7g05cqOQJI1puw7u9JwUJM5seMFoXY5ANhL0IhHA7yR2UoAlr7KZy8
-0578XAbzFgkYr4W9RPK+5j3cHTOxgoyYPxciA3HWan9CjJILAd1z+R3Puoy8oAWb
-NsZZfMBLVkAXpKKJ9G8NrfgPMW8i1gPUNfQwwCOC0K3bzFNWpKS75wgELJTK0PxF
-OPDyjYB5VPS5/+IVcOkli1qmdQjkvvxyvUMwuVCEO8SUidtAy46hJa4c2AdT/2GK
-uk2Ngv38Cax6etqf+KybX1ZjygOJPok/RVSFz7fMfH8aPmsGrq2BYAm/hwEGbQuG
-Gp0hvWMfNxBEJFNq/wjW8p2vORwUlSyU5Ub39Ee6HPTPxursluoPC8dYxxdbXEf/
-FvGBdpM7QbrM0f2DUZUdozaWD7mxVOnspU+p/mThZdeN06fMwKaFKjvo/Xr8LXnR
-1gp0hie7kxD0AJ1vJdRpIAJ075h2ly+zGjby/+abYEGF0tLZpuoYWFe6DcwtWICk
-vVracvIjgOfaRPPq5sClJJLd29tNLJ7mpDdfZ8ZXnBj3FfdlGSU2w61hd7n6K9I1
-S/9Di1iTUMuXrKM2xpTDzXQNldOraUGb9iE0JUgGi/9uPND3Th/fY9fz1NIqfYuo
-wVPtO6SAeTJKHAf4s2hPvQoPhbwkpyHW1s9bi68bEIvUJ9a5Vxo=
-=SokM
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl4ckyMACgkQ9TYGna5E
+T6DtSg/+PQyFaG1MF3xfjVzvW8a6SPhYZQxiclz3f98ute0/9H6/ItuN8QzRxMEF
+Mt8uY6sptrVwOYtUzvYKgsGAK1fXahmHV9l9UchS+aFddX0hQpn5jxH2/Z+a3I+A
+UXpL4rIyiKop43dDo0IkMVqDaDZQcteeBzbrmYRULEDcGxQRHTEaVOCPAsirUb01
+pBH5VxbXzg/5uyd9cNuQYNpgECkQ+6cC0LjmjTGgAo6IYAE0G7peIMB/znsBRqnB
+uKczycel024DmPTLNRbxRRuLWAdL3sGY1qloCGSuHoXVaXlNlfAnKRNNQ9KQFbLJ
+QKWQoNIHuEqOcBXIac8U9ZhrE2Z8UR6x5xf1rQy8pLZEcTGODDxMhkgKUhggSsH7
+4c0YO4FB6ym1ZA8FOiDh9gurit8JXzGhKKT2atQ6bsioIJ6EyvGowBacPWAqB0jX
+1uphOVgALcEQfgEWGWWmfW2Wn1VsR984k0YaKHrCtzQDQBMtsebio9zWG0KbdRzB
+FGbeFeEwkdYz4+QGszaDmFklXWUTlcQs/GjEhNblFV6pvsnFOUBlHa5MFmRndODk
+fBAvRTc3jdRnkaHveIgsj8ejKttNVw9THMcsjRKV8/SId2tgBVZlb4BvI5hgTXwh
+J+4yTca1BhgJmVF1GaFWNKNzXdC28h2P/opUek77XS4Bx4FrEgw=
+=gvMC
 -----END PGP SIGNATURE-----
 
---BQPnanjtCNWHyqYD--
+--lIrNkN/7tmsD/ALM--
