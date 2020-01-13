@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9906-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 35092 invoked by alias); 12 Jan 2020 11:21:07 -0000
+Return-Path: <cygwin-patches-return-9907-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 27663 invoked by alias); 13 Jan 2020 15:28:14 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,45 +9,100 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 35081 invoked by uid 89); 12 Jan 2020 11:21:07 -0000
+Received: (qmail 27653 invoked by uid 89); 13 Jan 2020 15:28:14 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-6.9 required=5.0 tests=BAYES_00,FREEMAIL_FROM,GIT_PATCH_2,RCVD_IN_DNSWL_NONE,SPF_PASS autolearn=ham version=3.3.1 spammy=Speed, HX-Spam-Relays-External:209.85.221.67, H*RU:209.85.221.67, HTo:U*cygwin-patches
-X-HELO: mail-wr1-f67.google.com
-Received: from mail-wr1-f67.google.com (HELO mail-wr1-f67.google.com) (209.85.221.67) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 12 Jan 2020 11:21:05 +0000
-Received: by mail-wr1-f67.google.com with SMTP id y17so5798580wrh.5        for <cygwin-patches@cygwin.com>; Sun, 12 Jan 2020 03:21:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;        d=gmail.com; s=20161025;        h=subject:to:references:from:message-id:date:user-agent:mime-version         :in-reply-to:content-transfer-encoding;        bh=gOB4Qmypja66E+gSO62XADkDpJLUzv/YRPWB5w7af04=;        b=snJvFz4CCwmFF+w+pe0++1gNRZDn/YazpNgYCyKdtqHWa64/85dGE1m35ATy544EFa         f1l2rYGH0vhjATD1y2ffGfrghBQP5wGg8rZcQaPPB84HQDAmC7XMcemS2KQzBZbomRxk         w2++fCkCk9SrWVCZRY6Saous9H5AtOMr/iOoZPktzV/Y8NHxvqre3UJOK5z1rhgpayYJ         5QKnd0qRm0vZWiqGinyXkBjUq5E0gqFMGaSwpxi///Z7Z3VumTpE2Rsal8aKy43Y01ba         D4j3TmqPNLmco8IqO/izl1BC8xfA6LsiXkydn+/MRxHkw4ZEPjiJLTT/UIWaPuy12DZH         QCdg==
-Return-Path: <marco.atzeri@gmail.com>
-Received: from ?IPv6:2003:ee:6727:2e01:45c5:df20:ab41:5758? (p200300EE67272E0145C5DF20AB415758.dip0.t-ipconnect.de. [2003:ee:6727:2e01:45c5:df20:ab41:5758])        by smtp.gmail.com with ESMTPSA id b10sm10451343wrt.90.2020.01.12.03.21.01        for <cygwin-patches@cygwin.com>        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);        Sun, 12 Jan 2020 03:21:02 -0800 (PST)
-Subject: Re: [PATCH] Cygwin: select: Speed up select() call for pty, pipe and fifo.
+X-Spam-SWARE-Status: No, score=-101.9 required=5.0 tests=BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*Ad:U*cygwin-patches, Ken, act
+X-HELO: mout.kundenserver.de
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.17.10) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 13 Jan 2020 15:28:13 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id 1MacWq-1jOQds1XP0-00cBLS for <cygwin-patches@cygwin.com>; Mon, 13 Jan 2020 16:28:10 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id A279EA806B2; Mon, 13 Jan 2020 16:28:09 +0100 (CET)
+Date: Mon, 13 Jan 2020 15:28:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-References: <20200106143834.1994-1-takashi.yano@nifty.ne.jp>
-From: Marco Atzeri <marco.atzeri@gmail.com>
-Message-ID: <15efba6e-a26c-50a3-ecde-1ff98764dee6@gmail.com>
-Date: Sun, 12 Jan 2020 11:21:00 -0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101 Thunderbird/68.4.1
+Subject: Re: [PATCH v2 0/3] Support opening a symlink with O_PATH | O_NOFOLLOW
+Message-ID: <20200113152809.GE5858@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20191229175637.1050-1-kbrown@cornell.edu>
 MIME-Version: 1.0
-In-Reply-To: <20200106143834.1994-1-takashi.yano@nifty.ne.jp>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-IsSubscribed: yes
-X-SW-Source: 2020-q1/txt/msg00012.txt
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="liOOAslEiF7prFVr"
+Content-Disposition: inline
+In-Reply-To: <20191229175637.1050-1-kbrown@cornell.edu>
+X-SW-Source: 2020-q1/txt/msg00013.txt
 
-Am 06.01.2020 um 15:38 schrieb Takashi Yano:
-> - The slowing down issue of X11 forwarding using ssh -Y, reported
->    in https://www.cygwin.com/ml/cygwin/2019-12/msg00295.html,
->    is due to the change of select() code for pty in the commit
->    915fcd0ae8d83546ce135131cd25bf6795d97966. cygthread::detach()
->    takes at most about 10msec because Sleep() is used in the thread.
->    For this issue, this patch uses cygwait() instead of Sleep() and
->    introduces an event to abort the wait. For not only pty, but pipe
->    and fifo also have the same problem potentially, so this patch
->    applies same strategy to them as well.
-> ---
->   winsup/cygwin/select.cc | 15 ++++++++++++---
->   winsup/cygwin/select.h  |  1 +
->   2 files changed, 13 insertions(+), 3 deletions(-)
-> 
 
-I see a substantial improvement in responsiveness
-also with local X-server.
+--liOOAslEiF7prFVr
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 1718
 
+Hi Ken,
+
+On Dec 29 17:56, Ken Brown wrote:
+> Currently, opening a symlink with O_NOFOLLOW fails with ELOOP.
+> Following Linux, the first patch in this series allows the call to
+> succeed if O_PATH is also specified.
+>=20
+> According to the Linux man page for 'open', the file descriptor
+> returned by the call should be usable as the dirfd argument in calls
+> to fstatat and readlinkat with an empty pathname, to have
+> the calls operate on the symbolic link.  The second and third patches
+> achieve this.  For fstatat, we do this by adding support
+> for the AT_EMPTY_PATH flag.
+>=20
+> Note: The man page mentions fchownat and linkat also.  linkat already
+> supports the AT_EMPTY_PATH flag, so nothing needs to be done.  But I
+> don't understand how this could work for fchownat, because fchown
+> fails with EBADF if its fd argument was opened with O_PATH.  So I
+> haven't touched fchownat.
+
+It was never supposed to work that way.  We can make fchownat work
+with AT_EMPTY_PATH, but using it on a file opened with O_PATH
+contradicts the Linux open(2) man page, afaics:
+
+ O_PATH (since Linux 2.6.39)
+  Obtain a file descriptor that can be used for two  purposes:  to
+  indicate a location in the filesystem tree and to perform opera=E2=80=90
+  tions that act purely at the file descriptor  level.   The  file
+  itself  is not opened, and other file operations (e.g., read(2),
+  write(2), fchmod(2), fchown(2), fgetxattr(2), ioctl(2), mmap(2))
+                       ^^^^^^^^^
+  fail with the error EBADF.
+  ^^^^^^^^^           ^^^^^
+
+That'd from the current F31 man pages.
+
+> Am I missing something?
+
+Good question.  Let me ask in return, did *I* now miss something?
+
+
+Corinna
+
+--=20
+Corinna Vinschen
+Cygwin Maintainer
+
+--liOOAslEiF7prFVr
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 833
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl4cjIkACgkQ9TYGna5E
+T6DS1BAApO+yTOGduKFJxGOM/UFfSw1jk9Ox7CmbgJLlFPtk+fKC7FV0QeMZ3sEm
+t480ss1rmcy0YkuuMRy3P/hc4/EHK21uPkzcjHOKYuCG1fQ3+qyD1J44jQTD7VNc
+lHI6GEJ/E20RIB7IqdN03IaLQLMXsvILgulifCWYuDXGP9ETnhMulAoqU0Eo3swL
+WBpozzQnFJek1itaIpQgt1sfaTWo9L5kYZYZtLoYaLlwMUtT7YMgxpDrNwr80KhS
+mqyxyGZjg7dvkM1ybTYuKt6iQl4goPa12TawlBeReR93fuGeqTsE8HTBF+sQaQDo
+HXgxnxy695aLtFtRKfobrEnkv9ZZurw/Vpfcl8S7x3QFXvOVVJ+4Db+1LpsH10fs
+jfsaYFPAmRv8hghQtPtRQgVZBEVDLfM1B3tkspxfhguj+Z4H9melmGoE4GweCxNL
+v9u9J5b4g9CXfN0MtniD0hDI/HfKi6/aiHvomSpvrOb4ehGgU6aRRHWpc8QeOF3d
+TZCewFdu1J7MKttpnTm7Yyky0xDH3p3a3vY/PvEB1oU401e3+FNuiM2mfTWKJNvB
+xs7LUx1w6gPPQ9n2QRh1OVN0O+9cXlTma4Ta20IZM3qxQ43Z2/p9f7AYAhpROKsF
+2eQpPW1wRciGyOiSKjTkm9CXFGjK/BD0nKMYryt5MGxt/SubbtA=
+=RvyM
+-----END PGP SIGNATURE-----
+
+--liOOAslEiF7prFVr--
