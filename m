@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9912-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 63546 invoked by alias); 13 Jan 2020 15:56:23 -0000
+Return-Path: <cygwin-patches-return-9913-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 87366 invoked by alias); 13 Jan 2020 16:00:53 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,98 +9,105 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 63536 invoked by uid 89); 13 Jan 2020 15:56:23 -0000
+Received: (qmail 73249 invoked by uid 89); 13 Jan 2020 16:00:46 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-124.4 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=HX-Languages-Length:1471
+X-Spam-SWARE-Status: No, score=-124.8 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=
 X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.17.10) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 13 Jan 2020 15:56:22 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id 1N2mWA-1jnJ9j3Qho-0135Yd for <cygwin-patches@cygwin.com>; Mon, 13 Jan 2020 16:56:19 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 6FBC9A806B2; Mon, 13 Jan 2020 16:56:19 +0100 (CET)
-Date: Mon, 13 Jan 2020 15:56:00 -0000
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.187) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 13 Jan 2020 16:00:45 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id 1Mum6l-1jiafR1eXj-00roIN for <cygwin-patches@cygwin.com>; Mon, 13 Jan 2020 17:00:42 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 0B66DA806B2; Mon, 13 Jan 2020 17:00:42 +0100 (CET)
+Date: Mon, 13 Jan 2020 16:00:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Add missing CloseHandle() calls.
-Message-ID: <20200113155619.GJ5858@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: pty: Remove destructor for fhandler_pty_master class.
+Message-ID: <20200113160042.GK5858@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200101064845.8756-1-takashi.yano@nifty.ne.jp>
+References: <20200101064941.8803-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="lIrNkN/7tmsD/ALM"
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="FwyhczKCDPOVeYh6"
 Content-Disposition: inline
-In-Reply-To: <20200101064845.8756-1-takashi.yano@nifty.ne.jp>
-X-SW-Source: 2020-q1/txt/msg00018.txt
+In-Reply-To: <20200101064941.8803-1-takashi.yano@nifty.ne.jp>
+X-SW-Source: 2020-q1/txt/msg00019.txt
 
 
---lIrNkN/7tmsD/ALM
+--FwyhczKCDPOVeYh6
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-length: 1501
+Content-length: 1448
 
-Hi Takashi,
-
-On Jan  1 15:48, Takashi Yano wrote:
+On Jan  1 15:49, Takashi Yano wrote:
+> - The destructor for fhandler_pty_master class does not seem to be
+>   necessary anymore. Therefore, it has been removed.
 > ---
->  winsup/cygwin/fhandler_tty.cc | 22 ++++++++++++++++++++--
->  1 file changed, 20 insertions(+), 2 deletions(-)
+>  winsup/cygwin/fhandler.h      | 1 -
+>  winsup/cygwin/fhandler_tty.cc | 9 ---------
+>  2 files changed, 10 deletions(-)
 >=20
+> diff --git a/winsup/cygwin/fhandler.h b/winsup/cygwin/fhandler.h
+> index 3954c37d1..4a71c1628 100644
+> --- a/winsup/cygwin/fhandler.h
+> +++ b/winsup/cygwin/fhandler.h
+> @@ -2218,7 +2218,6 @@ public:
+>    HANDLE get_echo_handle () const { return echo_r; }
+>    /* Constructor */
+>    fhandler_pty_master (int);
+> -  ~fhandler_pty_master ();
+>=20=20
+>    DWORD pty_master_thread ();
+>    DWORD pty_master_fwd_thread ();
 > diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-> index 65b12fd6c..23156f977 100644
+> index 23156f977..d3d0d7430 100644
 > --- a/winsup/cygwin/fhandler_tty.cc
 > +++ b/winsup/cygwin/fhandler_tty.cc
-> @@ -2242,11 +2242,27 @@ fhandler_pty_master::close ()
->  	  /* Terminate helper process */
->  	  SetEvent (get_ttyp ()->h_helper_goodbye);
->  	  WaitForSingleObject (get_ttyp ()->h_helper_process, INFINITE);
-> +	  CloseHandle (get_ttyp ()->h_helper_goodbye);
-> +	  CloseHandle (get_ttyp ()->h_helper_process);
->  	  /* FIXME: Pseudo console can be accessed via its handle
->  	     only in the process which created it. What else can we do? */
->  	  if (master_pid_tmp =3D=3D myself->pid)
-> -	    /* Release pseudo console */
-> -	    ClosePseudoConsole (get_pseudo_console ());
-> +	    {
-> +	      /* ClosePseudoConsole() seems to have a bug that one
-> +		 internal handle remains opened. This causes handle leak.
-> +		 This is a workaround for this problem. */
-> +	      typedef struct
-> +	      {
-> +		HANDLE hWritePipe;
-> +		HANDLE hConDrvReference;
-> +		HANDLE hConHostProcess;
-> +	      } HPCON_INTERNAL;
+> @@ -2126,15 +2126,6 @@ fhandler_pty_master::fhandler_pty_master (int unit)
+>    set_name ("/dev/ptmx");
+>  }
+>=20=20
+> -fhandler_pty_master::~fhandler_pty_master ()
+> -{
+> -  /* Without this wait, helper process for pseudo console
+> -     sometimes remains running after the pty session is
+> -     closed. The reason is not clear. */
+> -  if (to_master && from_master)
+> -    Sleep (20);
+> -}
+> -
+>  int
+>  fhandler_pty_master::open (int flags, mode_t)
+>  {
+> --=20
+> 2.21.0
 
-Can you please move this struct to some header?  Even if it's not a
-really close match, maybe ntdll.h works best, combined with a short
-comment what this is about...
+Pushed.
 
 
 Thanks,
 Corinna
-
 --=20
 Corinna Vinschen
 Cygwin Maintainer
 
---lIrNkN/7tmsD/ALM
+--FwyhczKCDPOVeYh6
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-length: 833
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl4ckyMACgkQ9TYGna5E
-T6DtSg/+PQyFaG1MF3xfjVzvW8a6SPhYZQxiclz3f98ute0/9H6/ItuN8QzRxMEF
-Mt8uY6sptrVwOYtUzvYKgsGAK1fXahmHV9l9UchS+aFddX0hQpn5jxH2/Z+a3I+A
-UXpL4rIyiKop43dDo0IkMVqDaDZQcteeBzbrmYRULEDcGxQRHTEaVOCPAsirUb01
-pBH5VxbXzg/5uyd9cNuQYNpgECkQ+6cC0LjmjTGgAo6IYAE0G7peIMB/znsBRqnB
-uKczycel024DmPTLNRbxRRuLWAdL3sGY1qloCGSuHoXVaXlNlfAnKRNNQ9KQFbLJ
-QKWQoNIHuEqOcBXIac8U9ZhrE2Z8UR6x5xf1rQy8pLZEcTGODDxMhkgKUhggSsH7
-4c0YO4FB6ym1ZA8FOiDh9gurit8JXzGhKKT2atQ6bsioIJ6EyvGowBacPWAqB0jX
-1uphOVgALcEQfgEWGWWmfW2Wn1VsR984k0YaKHrCtzQDQBMtsebio9zWG0KbdRzB
-FGbeFeEwkdYz4+QGszaDmFklXWUTlcQs/GjEhNblFV6pvsnFOUBlHa5MFmRndODk
-fBAvRTc3jdRnkaHveIgsj8ejKttNVw9THMcsjRKV8/SId2tgBVZlb4BvI5hgTXwh
-J+4yTca1BhgJmVF1GaFWNKNzXdC28h2P/opUek77XS4Bx4FrEgw=
-=gvMC
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl4clCkACgkQ9TYGna5E
+T6DyjRAAg4U+GRsEQVP3k0QGOqT1eQlAZCHc0Y6LYooV847KvZUITY+iH6CgIl1M
+FCF7+GQ+EIlDmW/iWKYwcFmTEaycZeEbySlZy6QRFyT3X8cVohqOeWpFQs5hKyxm
+6SluA6cOGR/WFmA/LybzAMXhETPvvvsCdqksVSJEKNQ1SuQptpteISdtX4Pnxneh
+4Zipc35Sk2rG81LvL7VykJt0V+Moe0VbqumLdGbhdZnMqlVw8jGfXKQ5lDq/JXzi
+MloRmipkH9qkafSMjIOwcxVzpMIHwAhtMYk7/45LPL02U/1Olrtamu94j29HMtdY
+LbEpwF+SftYmyHKKOUYQW+FvALK0ln3Za2CnLT+1B7r7r+TzI6ocMAZT5g+Gj4RP
+g5CT8VTGszEmgOXBkIyKUp70QnKU7jbZ86ARObz88UFmHURJPHF1EASrqjjeVMfp
+PIs9vUENEh49BZ+OtRHtPurkrN0bTrrQwxYE/6nPjx9w/O85UXLO7le5HOybD9/C
+ryNVtBFnpbenz1qxCj5QsoeF6fDNXSnS9/xdXn/VdF2gTV2i8uLKUmCufnt2Zx5m
+vwox14d6kbNnN+Db3V+niyZO8tecldAFmT6wnXL/zBWpy96h32b2NU+AwrBZCOw4
+0IdQccN5qEuOuKzFKv9/EXvUwlyN1vSZHpCOuFFtp/jvxwIN9Cg=
+=5R6w
 -----END PGP SIGNATURE-----
 
---lIrNkN/7tmsD/ALM--
+--FwyhczKCDPOVeYh6--
