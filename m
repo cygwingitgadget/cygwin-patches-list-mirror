@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9930-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 7442 invoked by alias); 14 Jan 2020 01:54:32 -0000
+Return-Path: <cygwin-patches-return-9931-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 99140 invoked by alias); 14 Jan 2020 02:10:21 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,194 +9,151 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 7432 invoked by uid 89); 14 Jan 2020 01:54:32 -0000
+Received: (qmail 99127 invoked by uid 89); 14 Jan 2020 02:10:21 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-19.3 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=caps, screen
-X-HELO: conuserg-04.nifty.com
-Received: from conuserg-04.nifty.com (HELO conuserg-04.nifty.com) (210.131.2.71) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 14 Jan 2020 01:54:30 +0000
-Received: from localhost.localdomain (ntsitm247158.sitm.nt.ngn.ppp.infoweb.ne.jp [124.27.253.158]) (authenticated)	by conuserg-04.nifty.com with ESMTP id 00E1s9Gv027420;	Tue, 14 Jan 2020 10:54:14 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-04.nifty.com 00E1s9Gv027420
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1578966854;	bh=7pTbFCyg0w0TUbiBL59tAAvAvObVcBTyBlGVL0xUauU=;	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;	b=UaqZNrZAdSpXqulk5PmLSoFGmGGXeacHM4whK8UwBiQ8/+gLMQPbTTEazmhfPku1x	 tosBicAzzd3Kud3QLoQRcmUbuW4e80i4L10yjBhSDbNQm1HV0fLamfcf6J3iuq0mAV	 CNKcQk+oajHU5FaFMMiv3oqVayITXRQIiWQ1TE1aXl8JY9jJ92tdBl9DhtWoe8u/vP	 MtUAO7qfd9YtH6DnmjavBOEd4JtAZ2iK5HUIk1ZxKsHnzlMt2zm1EC62088tcZwofl	 lB4Ym7la3Ui58tiPfZIhIdJSgLQTskyH5zg0qKbGhkhsQH/Iiw0nUj1jLnwzQQ7xgt	 rOi8QjkSbmPrw==
+X-Spam-SWARE-Status: No, score=-19.6 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=61026
+X-HELO: conuserg-01.nifty.com
+Received: from conuserg-01.nifty.com (HELO conuserg-01.nifty.com) (210.131.2.68) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 14 Jan 2020 02:10:19 +0000
+Received: from localhost.localdomain (ntsitm247158.sitm.nt.ngn.ppp.infoweb.ne.jp [124.27.253.158]) (authenticated)	by conuserg-01.nifty.com with ESMTP id 00E29p5I019572;	Tue, 14 Jan 2020 11:09:57 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-01.nifty.com 00E29p5I019572
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1578967797;	bh=4ldWwh08BFcU+Ag+eEjdBSa1Eofh4u/dd3S6qzbLNxU=;	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;	b=c9e4uz9zQNSGBy7LxCVAq2f5N75d7ZusKbEWJKPCWj5gmIX7zpOU8i8fmDFi03jOM	 DW3o0TdIrSWBZCe5aGGktryeo1CcgM/A6RiC/RSdDZ7bfJmr1humeQzORJADMML/6z	 wApK79TmV2HeQSzRrxiVTbX+8TDlXDHw6m1vu8WKuq/uD6h0k0S0YapljRGC3kq9V3	 hu/6D7pSFWpNBCDoD28vsrNkINE4g0/RR6+VfHJCfRVakPX595cH/WbWp7k+DUSrlw	 tGcTdIC/JFIaezS2V6WsFihku2cG8cCbSbBwcaLjaB9ZKv1YYIed48eOa7HxCmYJQs	 IMKY7NgART1/w==
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH v2] Cygwin: console: Add workaround for broken CSI3J in Win10 1809.
-Date: Tue, 14 Jan 2020 01:54:00 -0000
-Message-Id: <20200114015359.1545-1-takashi.yano@nifty.ne.jp>
-In-Reply-To: <20200113161506.GN5858@calimero.vinschen.de>
-References: <20200113161506.GN5858@calimero.vinschen.de>
+Subject: [PATCH v2] Cygwin: console: Disable xterm mode for non cygwin process only.
+Date: Tue, 14 Jan 2020 02:10:00 -0000
+Message-Id: <20200114020942.2995-1-takashi.yano@nifty.ne.jp>
+In-Reply-To: <20200113161118.GM5858@calimero.vinschen.de>
+References: <20200113161118.GM5858@calimero.vinschen.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-IsSubscribed: yes
-X-SW-Source: 2020-q1/txt/msg00036.txt
+X-SW-Source: 2020-q1/txt/msg00037.txt
 
-- In Win10 1809, the cursor position sometimes goes out of screen
-  by clear command in console. This seems to be caused by escape
-  sequence CSI3J (ESC[3J). This happens only for 1809. This patch
-  is a workaround for the issue.
+- Special function keys such as arrow keys or function keys do not
+  work in ConEmu with cygwin-connector after commit
+  6a06c6bc8f8492ea09aa3ae180fe94e4ac265611. This patch fixes the
+  issue.
 ---
- winsup/cygwin/fhandler_console.cc | 12 +++++++++
- winsup/cygwin/wincap.cc           | 41 ++++++++++++++++++++++++++++++-
- winsup/cygwin/wincap.h            |  2 ++
- 3 files changed, 54 insertions(+), 1 deletion(-)
+ winsup/cygwin/fhandler_console.cc | 19 -------------------
+ winsup/cygwin/fhandler_tty.cc     | 10 ----------
+ winsup/cygwin/spawn.cc            | 21 ++++++++++++++++++++-
+ winsup/cygwin/winlean.h           | 12 ++++++++++++
+ 4 files changed, 32 insertions(+), 30 deletions(-)
 
 diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
-index b286c6c10..8591f579d 100644
+index 8591f579d..337331be2 100644
 --- a/winsup/cygwin/fhandler_console.cc
 +++ b/winsup/cygwin/fhandler_console.cc
-@@ -1669,6 +1669,18 @@ bool fhandler_console::write_console (PWCHAR buf, DWORD len, DWORD& done)
-   if (wincap.has_con_24bit_colors () && !con_is_legacy
-       && memmem (buf, len*sizeof (WCHAR), L"\033[?1049", 7*sizeof (WCHAR)))
-     need_fix_tab_position = true;
-+  /* Workaround for broken CSI3J (ESC[3J) support in xterm compatible mode. */
-+  if (wincap.has_con_24bit_colors () && !con_is_legacy &&
-+      wincap.has_con_broken_csi3j ())
-+    {
-+      WCHAR *p = buf;
-+      while ((p = (WCHAR *) memmem (p, (len - (p - buf))*sizeof (WCHAR),
-+				    L"\033[3J", 4*sizeof (WCHAR))))
-+	{
-+	  memmove (p, p+4, (len - (p+4 - buf))*sizeof (WCHAR));
-+	  len -= 4;
-+	}
-+    }
+@@ -33,17 +33,6 @@ details. */
+ #include "child_info.h"
+ #include "cygwait.h"
  
-   if (con.iso_2022_G1
- 	? con.vt100_graphics_mode_G1
-diff --git a/winsup/cygwin/wincap.cc b/winsup/cygwin/wincap.cc
-index 5c6e6428e..a52262b89 100644
---- a/winsup/cygwin/wincap.cc
-+++ b/winsup/cygwin/wincap.cc
-@@ -42,6 +42,7 @@ wincaps wincap_vista __attribute__((section (".cygwin_dll_common"), shared)) = {
-     has_posix_rename_semantics:false,
-     no_msv1_0_s4u_logon_in_wow64:true,
-     has_con_24bit_colors:false,
-+    has_con_broken_csi3j:false,
-   },
- };
+-/* Not yet defined in Mingw-w64 */
+-#ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING
+-#define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
+-#endif /* ENABLE_VIRTUAL_TERMINAL_PROCESSING */
+-#ifndef DISABLE_NEWLINE_AUTO_RETURN
+-#define DISABLE_NEWLINE_AUTO_RETURN 0x0008
+-#endif /* DISABLE_NEWLINE_AUTO_RETURN */
+-#ifndef ENABLE_VIRTUAL_TERMINAL_INPUT
+-#define ENABLE_VIRTUAL_TERMINAL_INPUT 0x0200
+-#endif /* ENABLE_VIRTUAL_TERMINAL_INPUT */
+-
+ /* Don't make this bigger than NT_MAX_PATH as long as the temporary buffer
+    is allocated using tmp_pathbuf!!! */
+ #define CONVERT_LIMIT NT_MAX_PATH
+@@ -2987,14 +2976,6 @@ fhandler_console::fixup_after_fork_exec (bool execing)
+ {
+   set_unit ();
+   setup_io_mutex ();
+-  if (wincap.has_con_24bit_colors () && !con_is_legacy)
+-    {
+-      DWORD dwMode;
+-      /* Disable xterm compatible mode in input */
+-      GetConsoleMode (get_handle (), &dwMode);
+-      dwMode &= ~ENABLE_VIRTUAL_TERMINAL_INPUT;
+-      SetConsoleMode (get_handle (), dwMode);
+-    }
+ }
  
-@@ -69,6 +70,7 @@ wincaps wincap_7 __attribute__((section (".cygwin_dll_common"), shared)) = {
-     has_posix_rename_semantics:false,
-     no_msv1_0_s4u_logon_in_wow64:true,
-     has_con_24bit_colors:false,
-+    has_con_broken_csi3j:false,
-   },
- };
+ // #define WINSTA_ACCESS (WINSTA_READATTRIBUTES | STANDARD_RIGHTS_READ | STANDARD_RIGHTS_WRITE | WINSTA_CREATEDESKTOP | WINSTA_EXITWINDOWS)
+diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+index 0837b63e1..ca4dc1c20 100644
+--- a/winsup/cygwin/fhandler_tty.cc
++++ b/winsup/cygwin/fhandler_tty.cc
+@@ -31,19 +31,9 @@ details. */
+ #define ALWAYS_USE_PCON false
+ #define USE_API_HOOK true
  
-@@ -96,6 +98,7 @@ wincaps wincap_8 __attribute__((section (".cygwin_dll_common"), shared)) = {
-     has_posix_rename_semantics:false,
-     no_msv1_0_s4u_logon_in_wow64:false,
-     has_con_24bit_colors:false,
-+    has_con_broken_csi3j:false,
-   },
- };
+-/* Not yet defined in Mingw-w64 */
+-#ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING
+-#define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
+-#endif /* ENABLE_VIRTUAL_TERMINAL_PROCESSING */
+-#ifndef DISABLE_NEWLINE_AUTO_RETURN
+-#define DISABLE_NEWLINE_AUTO_RETURN 0x0008
+-#endif /* DISABLE_NEWLINE_AUTO_RETURN */
+ #ifndef PROC_THREAD_ATTRIBUTE_PSEUDOCONSOLE
+ #define PROC_THREAD_ATTRIBUTE_PSEUDOCONSOLE 0x00020016
+ #endif /* PROC_THREAD_ATTRIBUTE_PSEUDOCONSOLE */
+-#ifndef ENABLE_VIRTUAL_TERMINAL_INPUT
+-#define ENABLE_VIRTUAL_TERMINAL_INPUT 0x0200
+-#endif /* ENABLE_VIRTUAL_TERMINAL_INPUT */
  
-@@ -123,6 +126,7 @@ wincaps wincap_8_1 __attribute__((section (".cygwin_dll_common"), shared)) = {
-     has_posix_rename_semantics:false,
-     no_msv1_0_s4u_logon_in_wow64:false,
-     has_con_24bit_colors:false,
-+    has_con_broken_csi3j:false,
-   },
- };
+ extern "C" int sscanf (const char *, const char *, ...);
+ extern "C" int ttyname_r (int, char*, size_t);
+diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
+index cea79e326..6a5034219 100644
+--- a/winsup/cygwin/spawn.cc
++++ b/winsup/cygwin/spawn.cc
+@@ -610,7 +610,26 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+ 		}
+ 	    }
+ 	  else if (fh && fh->get_major () == DEV_CONS_MAJOR)
+-	    attach_to_console = true;
++	    {
++	      attach_to_console = true;
++	      if (wincap.has_con_24bit_colors () && !iscygwin ())
++		{
++		  DWORD dwMode;
++		  if (fd == 0)
++		    {
++		      /* Disable xterm compatible mode in input */
++		      GetConsoleMode (fh->get_handle (), &dwMode);
++		      dwMode &= ~ENABLE_VIRTUAL_TERMINAL_INPUT;
++		      SetConsoleMode (fh->get_handle (), dwMode);
++		    }
++		  else
++		    {
++		      GetConsoleMode (fh->get_output_handle (), &dwMode);
++		      dwMode &= ~ENABLE_VIRTUAL_TERMINAL_PROCESSING;
++		      SetConsoleMode (fh->get_output_handle (), dwMode);
++		    }
++		}
++	    }
+ 	}
  
-@@ -150,6 +154,7 @@ wincaps  wincap_10_1507 __attribute__((section (".cygwin_dll_common"), shared))
-     has_posix_rename_semantics:false,
-     no_msv1_0_s4u_logon_in_wow64:false,
-     has_con_24bit_colors:false,
-+    has_con_broken_csi3j:false,
-   },
- };
- 
-@@ -177,6 +182,7 @@ wincaps wincap_10_1703 __attribute__((section (".cygwin_dll_common"), shared)) =
-     has_posix_rename_semantics:false,
-     no_msv1_0_s4u_logon_in_wow64:false,
-     has_con_24bit_colors:true,
-+    has_con_broken_csi3j:false,
-   },
- };
- 
-@@ -204,6 +210,7 @@ wincaps wincap_10_1709 __attribute__((section (".cygwin_dll_common"), shared)) =
-     has_posix_rename_semantics:false,
-     no_msv1_0_s4u_logon_in_wow64:false,
-     has_con_24bit_colors:true,
-+    has_con_broken_csi3j:false,
-   },
- };
- 
-@@ -231,6 +238,7 @@ wincaps wincap_10_1803 __attribute__((section (".cygwin_dll_common"), shared)) =
-     has_posix_rename_semantics:false,
-     no_msv1_0_s4u_logon_in_wow64:false,
-     has_con_24bit_colors:true,
-+    has_con_broken_csi3j:false,
-   },
- };
- 
-@@ -258,6 +266,35 @@ wincaps wincap_10_1809 __attribute__((section (".cygwin_dll_common"), shared)) =
-     has_posix_rename_semantics:true,
-     no_msv1_0_s4u_logon_in_wow64:false,
-     has_con_24bit_colors:true,
-+    has_con_broken_csi3j:true,
-+  },
-+};
+       /* Set up needed handles for stdio */
+diff --git a/winsup/cygwin/winlean.h b/winsup/cygwin/winlean.h
+index deb79bef8..3d79a92e4 100644
+--- a/winsup/cygwin/winlean.h
++++ b/winsup/cygwin/winlean.h
+@@ -93,4 +93,16 @@ details. */
+    use this function.  Use GetSystemWindowsDirectoryW. */
+ #define GetWindowsDirectoryW dont_use_GetWindowsDirectory
+ #define GetWindowsDirectoryA dont_use_GetWindowsDirectory
 +
-+wincaps wincap_10_1903 __attribute__((section (".cygwin_dll_common"), shared)) = {
-+  def_guard_pages:2,
-+  mmap_storage_high:0x700000000000LL,
-+  {
-+    is_server:false,
-+    needs_count_in_si_lpres2:false,
-+    needs_query_information:false,
-+    has_gaa_largeaddress_bug:false,
-+    has_broken_alloc_console:true,
-+    has_console_logon_sid:true,
-+    has_precise_system_time:true,
-+    has_microsoft_accounts:true,
-+    has_processor_groups:true,
-+    has_broken_prefetchvm:false,
-+    has_new_pebteb_region:true,
-+    has_broken_whoami:false,
-+    has_unprivileged_createsymlink:true,
-+    has_unbiased_interrupt_time:true,
-+    has_precise_interrupt_time:true,
-+    has_posix_unlink_semantics:true,
-+    has_case_sensitive_dirs:true,
-+    has_posix_rename_semantics:true,
-+    no_msv1_0_s4u_logon_in_wow64:false,
-+    has_con_24bit_colors:true,
-+    has_con_broken_csi3j:false,
-   },
- };
- 
-@@ -301,7 +338,9 @@ wincapc::init ()
- 	break;
-       case 10:
-       default:
--	if (likely (version.dwBuildNumber >= 17763))
-+	if (likely (version.dwBuildNumber >= 18362))
-+	  caps = &wincap_10_1903;
-+	else if (version.dwBuildNumber >= 17763)
- 	  caps = &wincap_10_1809;
- 	else if (version.dwBuildNumber >= 17134)
- 	  caps = &wincap_10_1803;
-diff --git a/winsup/cygwin/wincap.h b/winsup/cygwin/wincap.h
-index ba01a1565..11902d976 100644
---- a/winsup/cygwin/wincap.h
-+++ b/winsup/cygwin/wincap.h
-@@ -36,6 +36,7 @@ struct wincaps
-     unsigned has_posix_rename_semantics		: 1;
-     unsigned no_msv1_0_s4u_logon_in_wow64	: 1;
-     unsigned has_con_24bit_colors		: 1;
-+    unsigned has_con_broken_csi3j		: 1;
-   };
- };
- 
-@@ -95,6 +96,7 @@ public:
-   bool	IMPLEMENT (has_posix_rename_semantics)
-   bool	IMPLEMENT (no_msv1_0_s4u_logon_in_wow64)
-   bool	IMPLEMENT (has_con_24bit_colors)
-+  bool	IMPLEMENT (has_con_broken_csi3j)
- 
-   void disable_case_sensitive_dirs ()
-   {
++/* For console with xterm compatible mode */
++/* Not yet defined in Mingw-w64 */
++#ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING
++#define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
++#endif /* ENABLE_VIRTUAL_TERMINAL_PROCESSING */
++#ifndef ENABLE_VIRTUAL_TERMINAL_INPUT
++#define ENABLE_VIRTUAL_TERMINAL_INPUT 0x0200
++#endif /* ENABLE_VIRTUAL_TERMINAL_INPUT */
++#ifndef DISABLE_NEWLINE_AUTO_RETURN
++#define DISABLE_NEWLINE_AUTO_RETURN 0x0008
++#endif /* DISABLE_NEWLINE_AUTO_RETURN */
+ #endif /*_WINLEAN_H*/
 -- 
 2.21.0
