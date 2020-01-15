@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9936-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 130371 invoked by alias); 14 Jan 2020 16:31:17 -0000
+Return-Path: <cygwin-patches-return-9937-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 48149 invoked by alias); 15 Jan 2020 17:47:08 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,108 +9,64 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 130361 invoked by uid 89); 14 Jan 2020 16:31:17 -0000
+Received: (qmail 48131 invoked by uid 89); 15 Jan 2020 17:47:07 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-108.9 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=HX-Languages-Length:1745
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.135) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 14 Jan 2020 16:31:07 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id 1N94FT-1jlYAJ1zCZ-0164qM for <cygwin-patches@cygwin.com>; Tue, 14 Jan 2020 17:31:04 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id E9AC5A806E3; Tue, 14 Jan 2020 17:31:03 +0100 (CET)
-Date: Tue, 14 Jan 2020 16:31:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: console: Add code to restore console mode on close.
-Message-ID: <20200114163103.GY5858@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200102131716.1179-1-takashi.yano@nifty.ne.jp> <20200113162553.GO5858@calimero.vinschen.de> <20200114103718.ca09c3251527ffcdc328c5cb@nifty.ne.jp>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="QLVwfW7TUsi22t4P"
-Content-Disposition: inline
-In-Reply-To: <20200114103718.ca09c3251527ffcdc328c5cb@nifty.ne.jp>
-X-SW-Source: 2020-q1/txt/msg00042.txt
-
-
---QLVwfW7TUsi22t4P
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-Spam-SWARE-Status: No, score=-15.8 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=H*r:151, letter
+X-HELO: NAM10-DM6-obe.outbound.protection.outlook.com
+Received: from mail-dm6nam10on2091.outbound.protection.outlook.com (HELO NAM10-DM6-obe.outbound.protection.outlook.com) (40.107.93.91) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 15 Jan 2020 17:46:57 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none; b=JVV+Di//GLY64fUcXr665Bzy+ecLvkE22lAsHOnfiBgxTLN5I6i6ygv8Iwauw+1DI7fZ4XosszPUzNR6B2kWrB4YJwG3U/EClfi77MvCw10NsUWzAC0DZfAubGrI6718ZCO2x2pdfttp8coR1mk8bHNmp6bur6esJKdlqMXfcOQwEDehD0teH0ieMWjlVXk3MC/Xlgh9NnKFT88gOHaF9hwDMZsw15KnTbo1HdFlYBxFL81uuqO+DtIzbYApA/a7jWxQCqmD+puVqMoeWz77ZfcFhis7KiV0yLXiJ7prKBYSAERM8729DDPU/24t9uhaVV0WOfuzkjaXzRd5Q7uvQQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=BKD8thmdQO4EHRrAi+GIVm2JUmYSABpD0X7qdRup+II=; b=PRdxIiYCccMPyWr1CcDPKaucKBgEonBwskWjUetFVYbfyJAMIndRHOq8Fty11N+njmDpEOeiOru0yVFSjltaQB0lEVl+m0oXfSm9l2BF3o30MWKfIJ5tm23vpah1BvWtFbLQFVhYY4+0Hw7BYGrLtLkVAuphJEdwbPlq5dXB1O8nRJHPG/enmGn/HV2sQyzF1fam+7L02p4XX6BptD8ATxKTTRORBJCuK3S3egy1vO9GDNIg4fwysNI9epQ8qvVJ0IIfAmjHVE5pxzUm7qPsaUFYFQxlMNhgkKQiwi7JXzhbpin1fubNjN5/xu1d/qKMGuaUyTVzhADvelZqyG7VvA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu; dkim=pass header.d=cornell.edu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=BKD8thmdQO4EHRrAi+GIVm2JUmYSABpD0X7qdRup+II=; b=R2Onza+95AsFqdGr7g1vIaHTYAX58/e3FQLZRDoHPyTiqJLoLXF/K7HzExpuY15ZcLLiCGgrQgdjHPpgD5B19PCy0X6PqwWVoBCH3V63QdRZjmTVtWgl+S+rcTqjAYm5ewPAhYZJTX7cEjhF3ipahS6b9aMg8+dS9DjJcHsdKik=
+Received: from DM6PR04MB5738.namprd04.prod.outlook.com (20.179.51.81) by DM6PR04MB5753.namprd04.prod.outlook.com (20.179.49.217) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2623.8; Wed, 15 Jan 2020 17:46:54 +0000
+Received: from DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::cc3:c238:852e:5831]) by DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::cc3:c238:852e:5831%7]) with mapi id 15.20.2644.015; Wed, 15 Jan 2020 17:46:54 +0000
+Received: from localhost.localdomain (65.112.130.194) by BN6PR20CA0067.namprd20.prod.outlook.com (2603:10b6:404:151::29) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2644.19 via Frontend Transport; Wed, 15 Jan 2020 17:46:54 +0000
+From: Ken Brown <kbrown@cornell.edu>
+To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+Subject: [PATCH] Cygwin: normalize_win32_path: allow drive without trailing backslash
+Date: Wed, 15 Jan 2020 17:47:00 -0000
+Message-ID: <20200115174632.7986-1-kbrown@cornell.edu>
+authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
-Content-length: 1730
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: R7CjUfPJvK2pNJfxD3UFoDhYmRSQxrJUtsCTRBHcZ7/7cAuPvmvNaKAr926Q51YpJDGqVQV9xn58cHSYbSy1cQ==
+X-IsSubscribed: yes
+X-SW-Source: 2020-q1/txt/msg00043.txt
 
-On Jan 14 10:37, Takashi Yano wrote:
-> Hi Corinna, welcome back!
->=20
-> On Mon, 13 Jan 2020 17:25:53 +0100
-> Corinna Vinschen wrote:
-> > On Jan  2 22:17, Takashi Yano wrote:
-> > > - The console with 24bit color support has a problem that console
-> > >   mode is changed if cygwin process is executed in cmd.exe which
-> > >   started in cygwin shell. For example, cursor keys become not
-> > >   working if bash -> cmd -> true are executed in this order.
-> > >   This patch fixes the issue.
-> >=20
-> > Is that supposed to work for deeper call trees as well?
->=20
-> I think so.
->=20
-> > I'm asking because I tried something like
-> >=20
-> >   bash -> cmd -> bash -> cmd=20
-> >=20
-> > and it turned out that the cursor keys don't work at all in the second
-> > cmd, while they work fine again in the first cmd when returning to it.
->=20
-> The cursor key itsself works in this case. You can edit command line
-> by left and right arrow keys. However, history does not work in this
-> situation. This seems to be because the history buffers are exhausted.
->=20
-> The same happens if you try
->=20
-> cmd -> cmd -> cmd -> cmd -> ........ -> cmd
->=20
-> in command prompt without cygwin.
->=20
-> I confirmed that history works in this situation if NumberOfHistoryBuffers
-> is increased using SetConsoleHistoryInfo(). The default value of
-> NumberOfHistoryBuffers seems to be 4 in windows 10.
->=20
-> The history buffer seems to be consumed by any process which attached to
-> the same console. Therefore, the same happens by
->=20
-> bash -> bash -> cmd
+Commit 283cb372, "Cygwin: normalize_win32_path: improve error
+checking", required a prefix '\\?\' or '\??\' in the source path to be
+followed by 'UNC\' or 'X:\', where X is a drive letter.  That was too
+restrictive, since it disallowed the paths '\\?\X: and '\??\X:'.  This
+caused problems when a user tried to use the root of a drive as the
+Cygwin installation root, as reported here:
 
-Ok, interesting.  I wasn't aware of that.
+  https://cygwin.com/ml/cygwin/2020-01/msg00111.html
 
-I pushed all of your outstanding patches now and I'll create a
-developer snapshot in a bit.
+Modify the requirement so that '\??\X:' and '\\?\X:' are now allowed
+as source paths, without a trailing backslash.
+---
+ winsup/cygwin/path.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-Thanks,
-Corinna
-
+diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
+index c8e73c64c..a00270210 100644
+--- a/winsup/cygwin/path.cc
++++ b/winsup/cygwin/path.cc
+@@ -1411,7 +1411,7 @@ normalize_win32_path (const char *src, char *dst, cha=
+r *&tail)
+       && src[2] =3D=3D '?' && isdirsep (src[3]))
+     {
+       src +=3D 4;
+-      if (isdrive (src) && isdirsep (src[2]))
++      if (isdrive (src) && (isdirsep (src[2]) || !src[2]))
+ 	beg_src_slash =3D false;
+       else if (!strncmp (src, "UNC", 3) && isdirsep (src[3]))
+ 	/* native UNC path */
 --=20
-Corinna Vinschen
-Cygwin Maintainer
-
---QLVwfW7TUsi22t4P
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl4d7McACgkQ9TYGna5E
-T6C6GQ//QxRQuPhme8tjcpO5ZNxoXytltp1AP9lTWhzsI7cZ+B4R0O7bJa1ndQHc
-J/CdfY9rRvV8jTk2sGWrLlDtjdfyKAFiaKthMzjdfHx8cm4TBrAfLLJMsQaxID6a
-sG4Ms7Z6s1goi1OD9KrXZZHepao+RUH8D0dIkyfwAHHaQS/OJDAdhUnmb5e74aAz
-T90F7OanJf8VyW/0sP6gqfEKFmRVNsFFX+4Q1Ayqk8x/fGJCqGinwuHN4Ycl+swt
-3w5SB1Dz02mlgpkiHD8h7Jmjzw/vjPGlj3sB8yAJHinCa93kO6Ip/o05uqgsw3Cb
-XOJJSyCQLkaBd+EQMVij+p8oSkrxDE4Nu5pTZN3qH+A2r5bU/ecq7Dd/A15O+e0L
-vOlKqxASC4+Y9IMdGbpfth/dBsbixViSj7K9eQzFXrVaUD6/lRUB5F9+hLAaoLth
-1eLjYywsPPPzYtRktv68bA4iTcEeY/YC9ufkn2JcXz7iW048uuovKiiuBDk7Os6C
-ha4IgfjdSxajxJmYq8KzgU1dYdpnHFhRGx341vb4nuTvIZnjxcFy+eM3DPAXCd6O
-H7iM4CdVxN8u0ECJsXQVjeSCHCIa0+HzGB/mDbC+jiGNvv2HL4EWVc7p+uK0Xdv9
-yqZOlm4uWk2GO0+3ynQOCKD6ywoJq9IbyEv2QyETWDKw2PJyQNQ=
-=Ke1t
------END PGP SIGNATURE-----
-
---QLVwfW7TUsi22t4P--
+2.21.0
