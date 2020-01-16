@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9937-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 48149 invoked by alias); 15 Jan 2020 17:47:08 -0000
+Return-Path: <cygwin-patches-return-9938-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 81759 invoked by alias); 16 Jan 2020 11:05:15 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,64 +9,51 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 48131 invoked by uid 89); 15 Jan 2020 17:47:07 -0000
+Received: (qmail 78553 invoked by uid 89); 16 Jan 2020 11:05:14 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-15.8 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=H*r:151, letter
-X-HELO: NAM10-DM6-obe.outbound.protection.outlook.com
-Received: from mail-dm6nam10on2091.outbound.protection.outlook.com (HELO NAM10-DM6-obe.outbound.protection.outlook.com) (40.107.93.91) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 15 Jan 2020 17:46:57 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none; b=JVV+Di//GLY64fUcXr665Bzy+ecLvkE22lAsHOnfiBgxTLN5I6i6ygv8Iwauw+1DI7fZ4XosszPUzNR6B2kWrB4YJwG3U/EClfi77MvCw10NsUWzAC0DZfAubGrI6718ZCO2x2pdfttp8coR1mk8bHNmp6bur6esJKdlqMXfcOQwEDehD0teH0ieMWjlVXk3MC/Xlgh9NnKFT88gOHaF9hwDMZsw15KnTbo1HdFlYBxFL81uuqO+DtIzbYApA/a7jWxQCqmD+puVqMoeWz77ZfcFhis7KiV0yLXiJ7prKBYSAERM8729DDPU/24t9uhaVV0WOfuzkjaXzRd5Q7uvQQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=BKD8thmdQO4EHRrAi+GIVm2JUmYSABpD0X7qdRup+II=; b=PRdxIiYCccMPyWr1CcDPKaucKBgEonBwskWjUetFVYbfyJAMIndRHOq8Fty11N+njmDpEOeiOru0yVFSjltaQB0lEVl+m0oXfSm9l2BF3o30MWKfIJ5tm23vpah1BvWtFbLQFVhYY4+0Hw7BYGrLtLkVAuphJEdwbPlq5dXB1O8nRJHPG/enmGn/HV2sQyzF1fam+7L02p4XX6BptD8ATxKTTRORBJCuK3S3egy1vO9GDNIg4fwysNI9epQ8qvVJ0IIfAmjHVE5pxzUm7qPsaUFYFQxlMNhgkKQiwi7JXzhbpin1fubNjN5/xu1d/qKMGuaUyTVzhADvelZqyG7VvA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu; dkim=pass header.d=cornell.edu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=BKD8thmdQO4EHRrAi+GIVm2JUmYSABpD0X7qdRup+II=; b=R2Onza+95AsFqdGr7g1vIaHTYAX58/e3FQLZRDoHPyTiqJLoLXF/K7HzExpuY15ZcLLiCGgrQgdjHPpgD5B19PCy0X6PqwWVoBCH3V63QdRZjmTVtWgl+S+rcTqjAYm5ewPAhYZJTX7cEjhF3ipahS6b9aMg8+dS9DjJcHsdKik=
-Received: from DM6PR04MB5738.namprd04.prod.outlook.com (20.179.51.81) by DM6PR04MB5753.namprd04.prod.outlook.com (20.179.49.217) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2623.8; Wed, 15 Jan 2020 17:46:54 +0000
-Received: from DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::cc3:c238:852e:5831]) by DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::cc3:c238:852e:5831%7]) with mapi id 15.20.2644.015; Wed, 15 Jan 2020 17:46:54 +0000
-Received: from localhost.localdomain (65.112.130.194) by BN6PR20CA0067.namprd20.prod.outlook.com (2603:10b6:404:151::29) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2644.19 via Frontend Transport; Wed, 15 Jan 2020 17:46:54 +0000
-From: Ken Brown <kbrown@cornell.edu>
-To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: [PATCH] Cygwin: normalize_win32_path: allow drive without trailing backslash
-Date: Wed, 15 Jan 2020 17:47:00 -0000
-Message-ID: <20200115174632.7986-1-kbrown@cornell.edu>
-authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+X-Spam-SWARE-Status: No, score=-19.8 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=HContent-Transfer-Encoding:8bit
+X-HELO: conuserg-06.nifty.com
+Received: from conuserg-06.nifty.com (HELO conuserg-06.nifty.com) (210.131.2.73) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 16 Jan 2020 11:05:04 +0000
+Received: from localhost.localdomain (ntsitm247158.sitm.nt.ngn.ppp.infoweb.ne.jp [124.27.253.158]) (authenticated)	by conuserg-06.nifty.com with ESMTP id 00GB4tOa017146;	Thu, 16 Jan 2020 20:05:00 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-06.nifty.com 00GB4tOa017146
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1579172700;	bh=PHYkkhqlSQp1Ka32puhhoZXv0+LPPWKTclkWEIitUIQ=;	h=From:To:Cc:Subject:Date:From;	b=XPCYlgHPPfZd4cJmzkBvwsM+EoWO0YE5BnGNbHv2kJvn2ii7tfwtve7Iq0GydOsb9	 HO4Z7bzcWPrZgL4rgUBODveup9v78Fr68Hmpf4tafhce+vHuJ1T7dc317z14p7boDd	 fMrkvr3l8LC7PTvKWScqFzO0XR568cXxjcSm5WnQvd4b3/y7p03IsjtNJcXjNaABcy	 gZm5LOMMJqP16JSdXyHPOuVwlb4fGMarAeFOnVjcXzQogtn0dNKVSSqNd8gDhzJf0u	 QEu9lXyjEsux1ZxRXbHEBD+lbuKp2giJDc1pKYMPK9hAKIezpyKPNNGkSMSHUbjSR0	 mIgtFWtjMwh4g==
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: pty: Fix state mismatch caused in octave gui.
+Date: Thu, 16 Jan 2020 11:05:00 -0000
+Message-Id: <20200116110447.1882-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: R7CjUfPJvK2pNJfxD3UFoDhYmRSQxrJUtsCTRBHcZ7/7cAuPvmvNaKAr926Q51YpJDGqVQV9xn58cHSYbSy1cQ==
+Content-Transfer-Encoding: 8bit
 X-IsSubscribed: yes
-X-SW-Source: 2020-q1/txt/msg00043.txt
+X-SW-Source: 2020-q1/txt/msg00044.txt
 
-Commit 283cb372, "Cygwin: normalize_win32_path: improve error
-checking", required a prefix '\\?\' or '\??\' in the source path to be
-followed by 'UNC\' or 'X:\', where X is a drive letter.  That was too
-restrictive, since it disallowed the paths '\\?\X: and '\??\X:'.  This
-caused problems when a user tried to use the root of a drive as the
-Cygwin installation root, as reported here:
-
-  https://cygwin.com/ml/cygwin/2020-01/msg00111.html
-
-Modify the requirement so that '\??\X:' and '\\?\X:' are now allowed
-as source paths, without a trailing backslash.
+- In octave gui, sometimes state mismatch between real pty state
+  and state variable occurs. For example, this occurs when 'ls'
+  command is executed in octave gui. This patch fixes the issue.
 ---
- winsup/cygwin/path.cc | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ winsup/cygwin/spawn.cc | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
-index c8e73c64c..a00270210 100644
---- a/winsup/cygwin/path.cc
-+++ b/winsup/cygwin/path.cc
-@@ -1411,7 +1411,7 @@ normalize_win32_path (const char *src, char *dst, cha=
-r *&tail)
-       && src[2] =3D=3D '?' && isdirsep (src[3]))
+diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
+index 08d52bb28..f7c6dd590 100644
+--- a/winsup/cygwin/spawn.cc
++++ b/winsup/cygwin/spawn.cc
+@@ -947,6 +947,15 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
      {
-       src +=3D 4;
--      if (isdrive (src) && isdirsep (src[2]))
-+      if (isdrive (src) && (isdirsep (src[2]) || !src[2]))
- 	beg_src_slash =3D false;
-       else if (!strncmp (src, "UNC", 3) && isdirsep (src[3]))
- 	/* native UNC path */
---=20
+       FreeConsole ();
+       AttachConsole (pid_restore);
++      cygheap_fdenum cfd (false);
++      int fd;
++      while ((fd = cfd.next ()) >= 0)
++	if (cfd->get_major () == DEV_PTYS_MAJOR)
++	  {
++	    fhandler_pty_slave *ptys =
++	      (fhandler_pty_slave *) (fhandler_base *) cfd;
++	    ptys->fixup_after_attach (false, fd);
++	  }
+     }
+ 
+   return (int) res;
+-- 
 2.21.0
