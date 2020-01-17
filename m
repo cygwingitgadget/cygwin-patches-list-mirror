@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9951-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 48510 invoked by alias); 17 Jan 2020 16:11:46 -0000
+Return-Path: <cygwin-patches-return-9952-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 48985 invoked by alias); 17 Jan 2020 16:11:57 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,27 +9,27 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 48501 invoked by uid 89); 17 Jan 2020 16:11:46 -0000
+Received: (qmail 48974 invoked by uid 89); 17 Jan 2020 16:11:57 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-20.9 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=
+X-Spam-SWARE-Status: No, score=-21.3 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=
 X-HELO: NAM04-CO1-obe.outbound.protection.outlook.com
-Received: from mail-eopbgr690122.outbound.protection.outlook.com (HELO NAM04-CO1-obe.outbound.protection.outlook.com) (40.107.69.122) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 17 Jan 2020 16:11:36 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none; b=SOEcfnVRyQBMqO/qcsrI4d0M1Ud11NcQOJ2MC+N0MRlhnLMBx7QSfT+/lP6lffGJ/0sikzEiYd/b7bfyHObHGuRM6r4Agx0letoNGk5UQjH+xETX20+iIWFgnYiAo+4TcBvsQRxAloX2uePoeKcaWpucFpbIDLxc9QHWuYttASGuDxF/hTeLzfJ3v6BoxZEfwXSrLduWM5OzKrO3xcYLlXxXCUK45bOIITqrl9OJTwsDBPAl+TwYks2cG/SGf3HQnA1ubDz0a36ElFVK6oYzGw8W4lZyleHl8b25YW0kRQEJXk/hldK3c1DtcR3aseqBukisAz36ijODqouURAnWOg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=bA/vkyhg3GOUS2FZD4SOanozKogl6daj6GEOd1wqBDM=; b=NHrAU9ZV0JjjMARutjAtpyHrxsCAV9kknrTaRvtI/Xto5t5mmU8MhshpWcCm4PWhaD0CAKro2YxMKRAC9xzcKUMih1yszy4Bx+FCTQRU/eriSTYQb1kNejSE2ebdUpJmf5s7CeHY4O+zwV1Jm2bBWHzitr1Ai4eFdOZUXoaQmMl8YaNUlRokWDMdG5MHeBwnGBiyY2z+NP5DBMLIznuO65929jJuqF70sifJjoGmk0imxP6nfl9EEOgx3bcgVYZVr+SMvZejyuku+b/FLtKPE2oIZO2wjmSptu9CsS3ke5HKAwIqKNn3mKNG1TWJRu8MIQsP7cMuP56L90xAgFrngA==
+Received: from mail-eopbgr690122.outbound.protection.outlook.com (HELO NAM04-CO1-obe.outbound.protection.outlook.com) (40.107.69.122) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 17 Jan 2020 16:11:47 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none; b=dt1EVQeKLrfkdBo0tzgl85lVqudA4jcrMdCoiR99eQfby6d7175Jm48io862+xlQ4hM+rDQRagr+E63JcgxH4dZRinNGiRHCdH2HkQHbrJ9fNXzbvsSHniPnW2KwTs0vpemeoCrv61VBGtzm2sEnYeCPLjPbwCBxMhtyCXAEttPr78sFXPXpxtSCgbgEIeMn0w1GKTtqAvZHkNOXCmhQL/Lv9iJ3SfvgQmBM6v2CcbFruFsw6g9nDIUZBfCA4pkRA1gL3He94F4bMyL949VPJqtW/Dg7/iLV39D82rKDMCKrY9X6O6naATAUZoI3XsoNRoTnDYxikvmRatdrfF5UWg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=+UzuasEI2FWx/EN5SWOXiRJth87YVOhsqNj/G47sYR0=; b=JCFXCfxTDwe/exvztnQ/R65H8lSPO+UBPfsWL8cOO1Vs8PXlMWkiktr4rYUJ/fA66n1+Sr0sP/qXsHFOzIOuCQ7QCy33qbFlzZUfK314QGz8MDlzVuWFuDYDk92CDh1VsHicnPBI9GAsadY9UhTLNDJQA7cn4sCG9y7t9ox9M/gjw84jW+/PzbV5IW24vzqVyrI4mcdZowI6SDgCMVbpPUZ8ZnZj1VW4MVY92gtZyY2i4hc3fQWktkDANhNWoaL+CNepIZ0plz+qSmgT0KZTJwkgmPsSjRwUdCxK3/xXAdWgKwU2c/A/RNpZb5XbS25UY52tUAOnKaGOur7Jp5cifw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu; dkim=pass header.d=cornell.edu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=bA/vkyhg3GOUS2FZD4SOanozKogl6daj6GEOd1wqBDM=; b=afQq7IDGh3BUfw9p1KCuVxSsxNLA7R0QyXaXMbDIwMNPP6ALjqV6FTz82BODrEbG3FtKdzSi255xTCdekUW8W8GkrOuj405wx3EWbBuEWdD79MRv//3o/6Ek/WC19yg6cgky539WxknvfPktsIz+3IckbpjE2ZJtsFwedBb7WXM=
-Received: from DM6PR04MB5738.namprd04.prod.outlook.com (20.179.51.81) by DM6PR04MB4761.namprd04.prod.outlook.com (20.176.107.144) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2644.19; Fri, 17 Jan 2020 16:11:03 +0000
-Received: from DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::cc3:c238:852e:5831]) by DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::cc3:c238:852e:5831%7]) with mapi id 15.20.2644.015; Fri, 17 Jan 2020 16:11:02 +0000
-Received: from localhost.localdomain (65.112.130.194) by BN6PR14CA0035.namprd14.prod.outlook.com (2603:10b6:404:13f::21) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2644.20 via Frontend Transport; Fri, 17 Jan 2020 16:11:01 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=+UzuasEI2FWx/EN5SWOXiRJth87YVOhsqNj/G47sYR0=; b=CA+Q8+Z4okFptUbgInDqrWQwwNgMFGwzebB1FbGrHV9XMqk/Fhw6nfPW77yp9Z+wSclihid663Srklzrb2tOpXWS8t7+kL7CdtZtZWDvFfYG+gCRFPyxtElWzN+dIHGtoP0rykm3RNSmSVRXGyd8dTH/opU7H8WLpispWefNpLU=
+Received: from DM6PR04MB5738.namprd04.prod.outlook.com (20.179.51.81) by DM6PR04MB4761.namprd04.prod.outlook.com (20.176.107.144) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2644.19; Fri, 17 Jan 2020 16:11:04 +0000
+Received: from DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::cc3:c238:852e:5831]) by DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::cc3:c238:852e:5831%7]) with mapi id 15.20.2644.015; Fri, 17 Jan 2020 16:11:04 +0000
+Received: from localhost.localdomain (65.112.130.194) by BN6PR14CA0035.namprd14.prod.outlook.com (2603:10b6:404:13f::21) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2644.20 via Frontend Transport; Fri, 17 Jan 2020 16:11:02 +0000
 From: Ken Brown <kbrown@cornell.edu>
 To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: [PATCH v4 3/4] Cygwin: fstatat, fchownat: support the AT_EMPTY_PATH flag
+Subject: [PATCH v4 4/4] Cygwin: document recent changes
 Date: Fri, 17 Jan 2020 16:11:00 -0000
-Message-ID: <20200117161037.1828-4-kbrown@cornell.edu>
+Message-ID: <20200117161037.1828-5-kbrown@cornell.edu>
 References: <20200117161037.1828-1-kbrown@cornell.edu>
 In-Reply-To: <20200117161037.1828-1-kbrown@cornell.edu>
 authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
 received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-transport-forked: True
@@ -37,95 +37,73 @@ Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: rtvwvVX8o/gsVrBDkC9a327p13AWEjiYsI6NwofYTvX/wa1kg2RD1gFrv/O94C/VfkY+TufQx3ZMgBHPnT2hxA==
+X-MS-Exchange-CrossTenant-userprincipalname: BzgCWicHhu61J5tXgvrZvI2X3RqNeBx+w0QcM42sErj44LiK4t592khpIyDbdRggad3k5j0mZEiKZBys6P60aA==
 X-IsSubscribed: yes
-X-SW-Source: 2020-q1/txt/msg00057.txt
+X-SW-Source: 2020-q1/txt/msg00058.txt
 
-Following Linux, allow the pathname argument to be an empty string if
-the AT_EMPTY_PATH flag is specified.  In this case the dirfd argument
-can refer to any type of file, not just a directory, and the call
-operates on that file.  In particular, dirfd can refer to a symlink
-that was opened with O_PATH and O_NOFOLLOW.
 ---
- winsup/cygwin/syscalls.cc | 47 ++++++++++++++++++++++++++++++++++-----
- 1 file changed, 41 insertions(+), 6 deletions(-)
+ winsup/cygwin/release/3.1.3 | 19 ++++++++++++++++---
+ winsup/doc/new-features.xml | 15 +++++++++++++++
+ 2 files changed, 31 insertions(+), 3 deletions(-)
 
-diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
-index 282d9e0ee..4956b6ff5 100644
---- a/winsup/cygwin/syscalls.cc
-+++ b/winsup/cygwin/syscalls.cc
-@@ -4785,14 +4785,36 @@ fchownat (int dirfd, const char *pathname, uid_t ui=
-d, gid_t gid, int flags)
-   tmp_pathbuf tp;
-   __try
-     {
--      if (flags & ~AT_SYMLINK_NOFOLLOW)
-+      if (flags & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH))
- 	{
- 	  set_errno (EINVAL);
- 	  __leave;
- 	}
-       char *path =3D tp.c_get ();
--      if (gen_full_path_at (path, dirfd, pathname))
--	__leave;
-+      int res =3D gen_full_path_at (path, dirfd, pathname);
-+      if (res)
-+	{
-+	  if (!(errno =3D=3D ENOENT && (flags & AT_EMPTY_PATH)))
-+	    __leave;
-+	  /* pathname is an empty string.  Operate on dirfd. */
-+	  if (dirfd =3D=3D AT_FDCWD)
-+	    {
-+	      cwdstuff::cwd_lock.acquire ();
-+	      strcpy (path, cygheap->cwd.get_posix ());
-+	      cwdstuff::cwd_lock.release ();
-+	    }
-+	  else
-+	    {
-+	      cygheap_fdget cfd (dirfd);
-+	      if (cfd < 0)
-+		__leave;
-+	      strcpy (path, cfd->get_name ());
-+	      /* If dirfd refers to a symlink (which was necessarily
-+		 opened with O_PATH | O_NOFOLLOW), we must operate
-+		 directly on that symlink.. */
-+	      flags =3D AT_SYMLINK_NOFOLLOW;
-+	    }
-+	}
-       return chown_worker (path, (flags & AT_SYMLINK_NOFOLLOW)
- 				 ? PC_SYM_NOFOLLOW : PC_SYM_FOLLOW, uid, gid);
-     }
-@@ -4808,14 +4830,27 @@ fstatat (int dirfd, const char *__restrict pathname=
-, struct stat *__restrict st,
-   tmp_pathbuf tp;
-   __try
-     {
--      if (flags & ~AT_SYMLINK_NOFOLLOW)
-+      if (flags & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH))
- 	{
- 	  set_errno (EINVAL);
- 	  __leave;
- 	}
-       char *path =3D tp.c_get ();
--      if (gen_full_path_at (path, dirfd, pathname))
--	__leave;
-+      int res =3D gen_full_path_at (path, dirfd, pathname);
-+      if (res)
-+	{
-+	  if (!(errno =3D=3D ENOENT && (flags & AT_EMPTY_PATH)))
-+	    __leave;
-+	  /* pathname is an empty string.  Operate on dirfd. */
-+	  if (dirfd =3D=3D AT_FDCWD)
-+	    {
-+	      cwdstuff::cwd_lock.acquire ();
-+	      strcpy (path, cygheap->cwd.get_posix ());
-+	      cwdstuff::cwd_lock.release ();
-+	    }
-+	  else
-+	    return fstat (dirfd, st);
-+	}
-       path_conv pc (path, ((flags & AT_SYMLINK_NOFOLLOW)
- 			   ? PC_SYM_NOFOLLOW : PC_SYM_FOLLOW)
- 			  | PC_POSIX | PC_KEEP_HANDLE, stat_suffixes);
+diff --git a/winsup/cygwin/release/3.1.3 b/winsup/cygwin/release/3.1.3
+index 489741136..425d8bb2d 100644
+--- a/winsup/cygwin/release/3.1.3
++++ b/winsup/cygwin/release/3.1.3
+@@ -1,5 +1,18 @@
+-Bug Fixes
+----------
++What changed:
++-------------
++
++- Allow symlinks to be opened with O_PATH | O_NOFOLLOW.
++
++- Allow the pathname argument to readlinkat(2) to be an empty string,
++  provided the dirfd argument refers to a symlink opened with
++  O_PATH | O_NOFOLLOW.  The readlinkat call then operates on that
++  symlink.
++
++- Support the Linux-specific AT_EMPTY_PATH flag for fchownat(2) and
++  fstatat(2).
++
++Bug Fixes:
++----------
+=20
+ - Define CPU_SETSIZE, as on Linux.
+   Addresses: https://cygwin.com/ml/cygwin/2019-12/msg00248.html
+@@ -7,6 +20,6 @@ Bug Fixes
+ - Fix the problem which overrides the code page setting.
+   Addresses: https://www.cygwin.com/ml/cygwin/2019-12/msg00292.html
+=20
+-- Fix a regression that prevents the root of a drive from being the
++- Fix a regression that prevented the root of a drive from being the
+   Cygwin installation root.
+   Addresses: https://cygwin.com/ml/cygwin/2020-01/msg00111.html
+diff --git a/winsup/doc/new-features.xml b/winsup/doc/new-features.xml
+index 65bdc17ab..967c64ac5 100644
+--- a/winsup/doc/new-features.xml
++++ b/winsup/doc/new-features.xml
+@@ -54,6 +54,21 @@ Allow times(2) to have a NULL argument, as on Linux.
+ Improve /proc/cpuinfo output and align more closely with Linux.
+ </para></listitem>
+=20
++<listitem><para>
++Allow symlinks to be opened with O_PATH | O_NOFOLLOW.
++</para></listitem>
++
++<listitem><para>
++Allow the pathname argument to readlinkat(2) to be an empty string,
++provided the dirfd argument refers to a symlink opened with O_PATH |
++O_NOFOLLOW.  The readlinkat call then operates on that symlink.
++</para></listitem>
++
++<listitem><para>
++Support the Linux-specific AT_EMPTY_PATH flag for fchownat(2) and
++fstatat(2).
++</para></listitem>
++
+ </itemizedlist>
+=20
+ </sect2>
 --=20
 2.21.0
