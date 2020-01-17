@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9941-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 28886 invoked by alias); 16 Jan 2020 20:50:21 -0000
+Return-Path: <cygwin-patches-return-9944-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 92421 invoked by alias); 17 Jan 2020 09:19:40 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,56 +9,96 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 28877 invoked by uid 89); 16 Jan 2020 20:50:20 -0000
+Received: (qmail 92412 invoked by uid 89); 17 Jan 2020 09:19:39 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-18.1 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=
-X-HELO: NAM10-MW2-obe.outbound.protection.outlook.com
-Received: from mail-mw2nam10on2122.outbound.protection.outlook.com (HELO NAM10-MW2-obe.outbound.protection.outlook.com) (40.107.94.122) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 16 Jan 2020 20:50:10 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none; b=KH0R4QnJ0LNizUYJPGYx07qxYXYoPSrfl97JYZyMH6y3bypQfAkTaEFZoR4qyqmYwe5mX6Ff+E6TsvR54dg8luockqhr1oV7gDcW93zIYSzzID6MEiiyNSWPtr5puelPe/BZUYUJiAtAL1vW+NA1Mi8GbQSMpHAPYDoxil+P80CZKpES9xdkyEvTUn5ZjrfruQUojthpONWNrBG1E69OOOZBCm4EfBz7McQGQExIt4us9Nio1dBCcMTMngCEWzkCD133CxIoqCgQ1tqPbUfUPL5YLi9lJgKWP3rqSj9hJyZb6RtijSBLvwLxMhZqitY3SutD/Bxhyg60qQnehh1STA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=+8tKjAKpN4egFlaFKchE7uxfSgIWvJYnzenAYPwio00=; b=IBDG3Zqs3qOomvw/JpRsdB8WMEyrvgW1n3AgbSy2FPGhIQD45OIa7AQAUgwJEgRytSBd99Iqt0tFWb1PSQ/p4XRqOvhQJH2rTH1jVKEn6+KzUbuFxcKKMaHLdRVcm9gyM+jnpPb172nEVdS04W1Hb0D1G/PIZLKSA0ZrwGsZ8gwORXDTihhnaUwd0/O+oDrfQHkL3IOifmcH0LruGHGS6wFWsT9fxv0EM/h33K/6g+ZOXLC4X0xGg1VlyHaLIDA7Hm10LSRDPVdRykq+j8erL+W+Ljgs6S1PbxE3+stPd/71vZwEJkTi8vSaUNABg1QLkYF+q+GwuQvYnDLu+IIv3A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu; dkim=pass header.d=cornell.edu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=+8tKjAKpN4egFlaFKchE7uxfSgIWvJYnzenAYPwio00=; b=JF4hQ9KZHh2LTJOOeHRVmE0LxOUgWZp55q4lG/wqVhLuMXpJKc1ZMk7nsRL87N9JQ+RETb5cYCKHN3fxFlaAbB6pkLq+mo11j+C2feVZjxIYxMQ3d6VZg6mdyFSzAUEiDcAuJkNZLfbLyBfm8MeB03Y1x01bqSLwtg06Q0Ln548=
-Received: from DM6PR04MB5738.namprd04.prod.outlook.com (20.179.51.81) by DM6PR04MB6378.namprd04.prod.outlook.com (10.141.160.86) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2644.19; Thu, 16 Jan 2020 20:50:07 +0000
-Received: from DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::cc3:c238:852e:5831]) by DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::cc3:c238:852e:5831%7]) with mapi id 15.20.2644.015; Thu, 16 Jan 2020 20:50:07 +0000
-Received: from localhost.localdomain (65.112.130.194) by BN8PR04CA0060.namprd04.prod.outlook.com (2603:10b6:408:d4::34) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2644.20 via Frontend Transport; Thu, 16 Jan 2020 20:50:06 +0000
-From: Ken Brown <kbrown@cornell.edu>
-To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: [PATCH v3 1/3] Cygwin: allow opening a symlink with O_PATH | O_NOFOLLOW
-Date: Thu, 16 Jan 2020 20:50:00 -0000
-Message-ID: <20200116204944.2348-2-kbrown@cornell.edu>
-References: <20200116204944.2348-1-kbrown@cornell.edu>
-In-Reply-To: <20200116204944.2348-1-kbrown@cornell.edu>
-authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
-x-ms-oob-tlc-oobclassifiers: OLM:2582;
-received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+X-Spam-SWARE-Status: No, score=-121.0 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=letter
+X-HELO: mout.kundenserver.de
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.131) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 17 Jan 2020 09:19:38 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id 1Mnac9-1jJhqc0xRl-00jYYF for <cygwin-patches@cygwin.com>; Fri, 17 Jan 2020 10:19:35 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 86D22A80670; Fri, 17 Jan 2020 10:19:34 +0100 (CET)
+Date: Fri, 17 Jan 2020 09:19:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Cygwin: normalize_win32_path: allow drive without trailing backslash
+Message-ID: <20200117091934.GB5858@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20200115174632.7986-1-kbrown@cornell.edu>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: l7bIQ0mr4qLsuFNSKysjgcxGlNxel43OLLqzThCjc/LXvV9kxI88xVOyMlaOTdQBOz7PcLtKEH0GEevZ+Kz1/w==
-X-IsSubscribed: yes
-X-SW-Source: 2020-q1/txt/msg00047.txt
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="v4cNTr+tRGSs1txX"
+Content-Disposition: inline
+In-Reply-To: <20200115174632.7986-1-kbrown@cornell.edu>
+X-SW-Source: 2020-q1/txt/msg00050.txt
 
-Up to now, opening a symlink with O_NOFOLLOW fails with ELOOP.
-Following Linux, allow this to succeed if O_PATH is also specified.
----
- winsup/cygwin/syscalls.cc | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
-index 20126ce10..038a316db 100644
---- a/winsup/cygwin/syscalls.cc
-+++ b/winsup/cygwin/syscalls.cc
-@@ -1470,7 +1470,7 @@ open (const char *unix_path, int flags, ...)
-=20
-       if (!(fh =3D build_fh_name (unix_path, opt, stat_suffixes)))
- 	__leave;		/* errno already set */
--      if ((flags & O_NOFOLLOW) && fh->issymlink ())
-+      if ((flags & O_NOFOLLOW) && fh->issymlink () && !(flags & O_PATH))
- 	{
- 	  set_errno (ELOOP);
- 	  __leave;
+--v4cNTr+tRGSs1txX
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 1371
+
+On Jan 15 17:46, Ken Brown wrote:
+> Commit 283cb372, "Cygwin: normalize_win32_path: improve error
+> checking", required a prefix '\\?\' or '\??\' in the source path to be
+> followed by 'UNC\' or 'X:\', where X is a drive letter.  That was too
+> restrictive, since it disallowed the paths '\\?\X: and '\??\X:'.  This
+> caused problems when a user tried to use the root of a drive as the
+> Cygwin installation root, as reported here:
+>=20
+>   https://cygwin.com/ml/cygwin/2020-01/msg00111.html
+>=20
+> Modify the requirement so that '\??\X:' and '\\?\X:' are now allowed
+> as source paths, without a trailing backslash.
+> ---
+>  winsup/cygwin/path.cc | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
+> index c8e73c64c..a00270210 100644
+> --- a/winsup/cygwin/path.cc
+> +++ b/winsup/cygwin/path.cc
+> @@ -1411,7 +1411,7 @@ normalize_win32_path (const char *src, char *dst, c=
+har *&tail)
+>        && src[2] =3D=3D '?' && isdirsep (src[3]))
+>      {
+>        src +=3D 4;
+> -      if (isdrive (src) && isdirsep (src[2]))
+> +      if (isdrive (src) && (isdirsep (src[2]) || !src[2]))
+>  	beg_src_slash =3D false;
+>        else if (!strncmp (src, "UNC", 3) && isdirsep (src[3]))
+>  	/* native UNC path */
+> --=20
+> 2.21.0
+
+Looks good, please push.
+
+
+Thanks,
+Corinna
+
 --=20
-2.21.0
+Corinna Vinschen
+Cygwin Maintainer
+
+--v4cNTr+tRGSs1txX
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 833
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl4hfCYACgkQ9TYGna5E
+T6DBpRAAg5MGFBOimfZ8SkJlpE4NCqNa7Lql/3U1HOYClBE6mERD85CRGMO85R4r
+ffDQmPqv31jtZlUktppnRAt5lDhUzW39q9QLeOTzGHFOuvXbsNOkZJWUnAXMk6Fd
+9bpLvL/LHmUVXi5SNClUABFJKjKg1jTLhzN6IGoCWmnQGP1Ggzwo6jrAXA7L2URC
++44oc+s5+MoT1kO4InXm8M1BLX7QnX7XuDFlz05tU/Qm7DYZJMG1nRdOE2wbhljb
+iMkB+RbTQ79R6Zh9uDPxtOjId3ISrLLb6dJSEah9hZAGH501qoiHXNO2na0MJv6Y
+RmQIMbo7H+4CQBaNVX3RoxR/SPRFuGH1LNaww6wb78fqUd0ctnMmAz5DADNoTouL
+ErS44EDgu9sszMq/3Pp+bHAdGi3DkFytVAkcKzRp/m1efngf0PexjHNN2bI/w9Ek
+l9F+sWx/yU9nKJds5zr3sHBPrnzUDkjFW46okvb6ggpTq/3SW0PMoUFS7+A1AuU0
+kAhdemB9QHo1MV/hWsCRnwojXrY+EAPZhC85YV+BXaLLKSSgVDtC3VNMwl4hy9+u
+9l2/rqp6wwfj9BwqxLreVeCyyd94iqqJbAfViFVvs6FCO44xHv9yOgBT/fcV/l+N
+zgBxaFI6UHqlEvVKKR4YwQR7FGbQEAL/5JYBk2T/J4wHs/uq/wc=
+=cx9A
+-----END PGP SIGNATURE-----
+
+--v4cNTr+tRGSs1txX--
