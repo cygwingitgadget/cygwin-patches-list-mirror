@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9959-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 2919 invoked by alias); 20 Jan 2020 10:39:53 -0000
+Return-Path: <cygwin-patches-return-9960-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 73792 invoked by alias); 20 Jan 2020 12:41:48 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,83 +9,52 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 2910 invoked by uid 89); 20 Jan 2020 10:39:53 -0000
+Received: (qmail 73783 invoked by uid 89); 20 Jan 2020 12:41:48 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-111.0 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.130) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 20 Jan 2020 10:39:42 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id 1MrPyJ-1jNNZD0YXn-00oVk6 for <cygwin-patches@cygwin.com>; Mon, 20 Jan 2020 11:39:40 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 712E7A80734; Mon, 20 Jan 2020 11:39:39 +0100 (CET)
-Date: Mon, 20 Jan 2020 10:39:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-7.7 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=D*jp, UD:www.cygwin.com, wwwcygwincom, www.cygwin.com
+X-HELO: conssluserg-06.nifty.com
+Received: from conssluserg-06.nifty.com (HELO conssluserg-06.nifty.com) (210.131.2.91) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 20 Jan 2020 12:41:38 +0000
+Received: from Express5800-S70 (ntsitm247158.sitm.nt.ngn.ppp.infoweb.ne.jp [124.27.253.158]) (authenticated)	by conssluserg-06.nifty.com with ESMTP id 00KCfMEA016595	for <cygwin-patches@cygwin.com>; Mon, 20 Jan 2020 21:41:22 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 00KCfMEA016595
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1579524082;	bh=NxoneY7+Vy4kQDUZV8WZ+OI2lLxfOYnZMPs0YJcpXhk=;	h=Date:From:To:Subject:In-Reply-To:References:From;	b=IZK6si5zoIEBNQeNNdRyy8YdDIjnq9r0NnTjDsYoNNCGzEZ5hjaivypGm8uKsTT9Y	 xxq70Ur/SydEALcgYBpx4O/bm62RdarxZXLdyQ2C6jgMyqPl72oKN3mfs6SCHfK/QI	 1H5a/RoX2R1jJWYG5BUfhJe/pNpY2PALZL2YV1coAVB+GsLiPNsGDg3z+wPXDhfVHJ	 tFOADz/zq24gyrtouMpZ7pLvqJnaOxu+KUXkO+brajmZf7wfRvVyF7MYA3Pm9+a1r4	 411UKdB7jg4Rn3+mtNOO4tahbbvLD4c3+4ox30d0B81K7/f1kFZhZsyLlyNDMa8Zrt	 P3V3IPQ3l58gg==
+Date: Mon, 20 Jan 2020 12:41:00 -0000
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Revise code waiting for forwarding by master_fwd_thread.
-Message-ID: <20200120103939.GF20672@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200120025058.1568-1-takashi.yano@nifty.ne.jp>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="wLAMOaPNJ0fu1fTG"
-Content-Disposition: inline
-In-Reply-To: <20200120025058.1568-1-takashi.yano@nifty.ne.jp>
-X-SW-Source: 2020-q1/txt/msg00065.txt
+Subject: Re: [PATCH] Cygwin: pty: Introduce disable_pcon in environment CYGWIN.
+Message-Id: <20200120214124.9da79990b75a658016cf34d7@nifty.ne.jp>
+In-Reply-To: <20200120100646.GE20672@calimero.vinschen.de>
+References: <20200120025015.1520-1-takashi.yano@nifty.ne.jp>	<20200120100646.GE20672@calimero.vinschen.de>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
+X-SW-Source: 2020-q1/txt/msg00066.txt
 
+Hi Corinna,
 
---wLAMOaPNJ0fu1fTG
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 779
+On Mon, 20 Jan 2020 11:06:46 +0100
+Corinna Vinschen wrote:
+> On Jan 20 11:50, Takashi Yano wrote:
+> > - For programs which does not work properly with pseudo console,
+> >   disable_pcon in environment CYGWIN is introduced. If disable_pcon
+> >   is set, pseudo console support is disabled.
+> Oh well, do we really need that?
 
-Hi Takashi,
+This is, for example, needed to solve the issue reported in
+https://www.cygwin.com/ml/cygwin/2020-01/msg00147.html.
 
-On Jan 20 11:50, Takashi Yano wrote:
-> - Though this rarely happens, sometimes the first printing of non-
->   cygwin process does not displayed correctly. To fix this issue,
->   the code for waiting for forwarding by master_fwd_thread is revised.
-> ---
-> [...]
-> +void
-> +fhandler_pty_slave::wait_forwarding (void)
-> +{
-> +  const DWORD time_to_wait =3D 40;
-> +  DWORD elasped =3D GetTickCount () - get_ttyp ()->last_fwd_time;
-> +  if (elasped < time_to_wait)
-> +    Sleep (time_to_wait - elasped);
-> +}
-> +
+I looked into this problem, and found that cgdb read output of
+gdb from pty master and write it to ncurses. The output from
+pty master includes a lot of escape sequences which are generated
+by pseudo console, however, ncurses does not pass-through them
+and shows garbages. This is the cause of that issue.
 
-Are these 40 ms an experimental value or is that based on knowledge
-of implementation details?  The real question is, isn't there any
-other, more reliable indicator to see if forwarding will work?
+cgdb is the only program do such things so far, however, there
+may be more programs which do not expect escape sequences read
+from pty.
 
+There is no way to control pseudo console not to generate
+escape sequences, therefore, I proposed this patch.
 
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen
-Cygwin Maintainer
-
---wLAMOaPNJ0fu1fTG
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl4lg2sACgkQ9TYGna5E
-T6D4mg/9HKOiinxXEoQ73GlN39cRbliFdgB5AhNFdvOWZkMsquPdy9rFRMof+a8u
-mmSq+9FpP10hOO/xUo0dqGfZeg+/pwoUYCmbOwgsOjxG9qgD5izKIrmDfFbOK2nV
-B2CjTxBOMOuolhYawQqylX2Ztcitbipff+IsAY+9PJz1IbaJ0aAliniEjIRFbgPB
-qYzLr0OVi4jBtHr0RMrKQwT62TiCR5au4Sycwp6xTlMb2LTCorBwdTX73zUdQgc8
-4VuhB0ibHLAS9MEvqnzHPjMk5L8YoUm6b5Lx/DhMmBRnpebG6sbXL3qFMwWkXfrD
-KH29Ac13kOHuJ60k/sjbiZ+JnXyRQhGZe+tKpzysyubnChMWGcempA0pA7dKLY96
-MYZ+suaEqRGreICV3Z/IjZLaIxm3Mwc8bMKR/cifz5Rdn5nAas3p7ItZW7BK5BA+
-b4OBBIge/nuMHkGYGYfWuRVMtYyzcHhIU5Swn53EksvqvtyLh9P4SgWSdqoJr4ld
-7qFUQHVXnP6SZpirX03G5Bv+O5IKLH8dBY2Fg0I/gloz/Z1Pk8SantZWUPV6ElCS
-+ygyWCzTxnfY6ABkt+SoEBLfLHXhdiGds6V1Z/SNrcAgf0OiZk5+ax9U1XsovDuG
-MxeWqtaseOJcxJfzlnK7rgR/wvZuNSGrDcppIfY8glJMnFqiKlI=
-=X0Gn
------END PGP SIGNATURE-----
-
---wLAMOaPNJ0fu1fTG--
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
