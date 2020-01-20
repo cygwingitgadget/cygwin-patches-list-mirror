@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9962-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 6351 invoked by alias); 20 Jan 2020 14:57:42 -0000
+Return-Path: <cygwin-patches-return-9963-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 8208 invoked by alias); 20 Jan 2020 14:59:06 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,74 +9,77 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 6341 invoked by uid 89); 20 Jan 2020 14:57:41 -0000
+Received: (qmail 8199 invoked by uid 89); 20 Jan 2020 14:59:05 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-13.6 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=
-X-HELO: NAM11-CO1-obe.outbound.protection.outlook.com
-Received: from mail-co1nam11on2114.outbound.protection.outlook.com (HELO NAM11-CO1-obe.outbound.protection.outlook.com) (40.107.220.114) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 20 Jan 2020 14:57:31 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none; b=h2aZakUZgwcYpXI1JOwl6eAukSkbQUQx1MnxnwLE6Ijt4lshY7RJtKWh9f+uZvH0sUK+4I3ZKc8g0v6InckV9Xzh9ycipu4FARCUk6z/Zvl9KGSs9+YoMAcIkGhTu/qPelbt6FmU8RGM5yrt/hvzMKjsEthZ0HR48HyHbN0qHAOC7TtU3IwN/j9UaXzRynCBmmu6ghPYsbPE1APGHYw/LzzqyaNLdszEY9Ipv/BgaW6f9pUUqc13qMf4g3ud2+0JNz8JcU96Dam6cpRemTyX/SlE1+XxBL4l9oeft2qVMtMh4k3jAU/RSIxracrcMO2sN5uyLdvn/puIKEC7MSia0w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=UFv5/fZ8iOVA/hrtYb5Y6BHLHS4XwXEcH4WeTEEax4o=; b=nG81Jikc6hzjKqydhn1+QFCveFziWerPvkrrvwIw9LvNYCU/RV4qlR4lq34Jap6bqVjp6rBAkDTdR8hvfV8yQmFKUY86Srx4z5oUZ3N6ID0h4g3mrJwcrPZGG709HYjaynBhxIBqmds12AwKsE8f5iokSJMTO88vmSlzFGyGbJGzi2eepA/9Hewz4C1NVbqRX8KRbCjblza1TYRygzdFsiNsFxL7NYKti6U5yORzSEvLW1hScA9YcXlzv4SEEchy9nqnsDN6Fy21rcnuL6NlHkB4alLbRZiN277vV6kOR1cX1wVelYyNRA04aBEhi1BtjLnqht4Hc1MTx6BLQEAt5A==
+X-Spam-SWARE-Status: No, score=-8.5 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=H*i:sk:ed59eb9, ANSI, styling, H*f:sk:ed59eb9
+X-HELO: NAM12-BN8-obe.outbound.protection.outlook.com
+Received: from mail-bn8nam12on2108.outbound.protection.outlook.com (HELO NAM12-BN8-obe.outbound.protection.outlook.com) (40.107.237.108) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 20 Jan 2020 14:58:55 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none; b=IBYNN7SxaP2zlQtmDCfa2vO5/M2egJXmZ6vLk4A8Rs3Wbo5KoqJt+6llRHt7+tZAwtFbbFLbm5ic6J2+mWLzxJwXx8+ZxDMKtWUiGcztSMo/66VX9I+tgWjl0cvLQZel/SOX6paDTFfBVFphs1GdtaQPtzYj5LO+JRl3qqmABPj3Spz3XVn8xUPAm2HMHrIQ6yeMX+intubc1JT2YQXnSQmjJtchSkUaAJAlOmCN/DT3on6Aqa0/5U2S8NVn++Oex922q7YZ653W3jwp2qot/LQl4UBW6+uoG7T0MBEp0z6LufhY176Kn/yDONA87ybs0FRTA60G5ma6XvDq1FJmNQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=wBshCEfIoobMmSjW77RBb7vyQPWO+RK+qBZykRp3E4Y=; b=JXfQYdTIZvKMIoFwybyHQmbsi6JjQLaIupV0ioFQphAsZD/IgIIu34mes9fDYXUXnfFBpu2BWfEZj7q3dtKzsNdMsN3rEAOJz2gFUqpGILYqa09GC0BrC9PGhpf17keFzuJfbNhoAVQOb/DkTTxSOEUawtG2V6ANVGGhjStDRkShn7o/pNLW73EtN6ExHPuYUGBQmNWYew9Zf+IrA2gd2WzcTlpEG22XTL59ApPuzIVcpYOwZQfA5KXrh6ALAAx2jvYjUcDyhwT3+ddxClYoZPDIB05gCvKYpFSt9Ko62/SRKyPhsFyzLxZytPphxla0w7uCCgyVjiZ5g2G+rOMuoQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu; dkim=pass header.d=cornell.edu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=UFv5/fZ8iOVA/hrtYb5Y6BHLHS4XwXEcH4WeTEEax4o=; b=coNQsTQPg47PQh0IeVptlfyPVPTpHUjhPGpK1xohZK7vQ0+Se5bb6ke7t7yvZskwMoAX/xacgMbT/IRNZFTq7Hf8ZQhHUnWpb18CvLiuh6Rpx9zGU+gqbB0AwcEzGr8qvqmvBPbothqZuw91XWX1D0QFQT8rTWEtuttrm/628XQ=
-Received: from DM6PR04MB5738.namprd04.prod.outlook.com (20.179.51.81) by DM6PR04MB7099.namprd04.prod.outlook.com (10.186.141.201) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2644.20; Mon, 20 Jan 2020 14:57:29 +0000
-Received: from DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::cc3:c238:852e:5831]) by DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::cc3:c238:852e:5831%7]) with mapi id 15.20.2644.024; Mon, 20 Jan 2020 14:57:29 +0000
-Received: from [10.13.22.8] (65.112.130.194) by BN6PR17CA0002.namprd17.prod.outlook.com (2603:10b6:404:65::12) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2644.18 via Frontend Transport; Mon, 20 Jan 2020 14:57:29 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=wBshCEfIoobMmSjW77RBb7vyQPWO+RK+qBZykRp3E4Y=; b=VLwWN2g6Mc3c3E/LrZEtmBN/SJZ/BAGuTtheYihZfpYGMsoOdCbAgPC4uKGw3IMUtIGVxtcvoAZxw1GXEISC/EyayR9BIHn6MuMsSciKNIHLfB1IyKffnEFzbIx4kpY2iTwUvuydGGIZMEc7IWikr4U9SR7uUfb/T6HWgVT4esw=
+Received: from DM6PR04MB5738.namprd04.prod.outlook.com (20.179.51.81) by DM6PR04MB4172.namprd04.prod.outlook.com (20.176.76.141) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2644.18; Mon, 20 Jan 2020 14:58:52 +0000
+Received: from DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::cc3:c238:852e:5831]) by DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::cc3:c238:852e:5831%7]) with mapi id 15.20.2644.024; Mon, 20 Jan 2020 14:58:52 +0000
+Received: from [10.13.22.8] (65.112.130.194) by BN6PR17CA0023.namprd17.prod.outlook.com (2603:10b6:404:65::33) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2644.20 via Frontend Transport; Mon, 20 Jan 2020 14:58:52 +0000
 From: Ken Brown <kbrown@cornell.edu>
 To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: Re: [PATCH v4 0/4] Support opening a symlink with O_PATH | O_NOFOLLOW
-Date: Mon, 20 Jan 2020 14:57:00 -0000
-Message-ID: <ed4780cb-709a-b130-4221-18974648d584@cornell.edu>
-References: <20200117161037.1828-1-kbrown@cornell.edu> <20200120095607.GD20672@calimero.vinschen.de>
-In-Reply-To: <20200120095607.GD20672@calimero.vinschen.de>
+CC: Jari Aalto <jari.aalto@cante.net>
+Subject: Re: [PATCH] Cygwin: pty: Introduce disable_pcon in environment CYGWIN.
+Date: Mon, 20 Jan 2020 14:59:00 -0000
+Message-ID: <8f78d0f4-6a03-505a-6b69-9df1e4c6cf4a@cornell.edu>
+References: <20200120025015.1520-1-takashi.yano@nifty.ne.jp> <20200120100646.GE20672@calimero.vinschen.de> <20200120214124.9da79990b75a658016cf34d7@nifty.ne.jp> <ed59eb98-8e59-f0d1-d1c3-9f44cb6cbee7@dronecode.org.uk>
+In-Reply-To: <ed59eb98-8e59-f0d1-d1c3-9f44cb6cbee7@dronecode.org.uk>
 user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101 Thunderbird/68.4.1
 authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
-x-ms-oob-tlc-oobclassifiers: OLM:5797;
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
 received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-transport-forked: True
 Content-Type: text/plain; charset="Windows-1252"
-Content-ID: <8D8AF0381164E54AA4786C74F90F9482@namprd04.prod.outlook.com>
+Content-ID: <F4B1C957777CE748AE253FA3D99EC8C9@namprd04.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zG2YKS0u5oswEY8Q8YCr8fvAvjUMcgO46D0Ktmh63cx7i45fo5KjRW8jcaLoAaSvRjtrVElqY3gSpx6soqnupQ==
+X-MS-Exchange-CrossTenant-userprincipalname: LJBBY8Ya0XexBi4wXUI0NqqxFMVwZ6UgZTinEAlsn4zlzJinc8lJRH85EiCDa+C3PMiitS5dYgXtfP9gpKy8hg==
 X-IsSubscribed: yes
-X-SW-Source: 2020-q1/txt/msg00068.txt
+X-SW-Source: 2020-q1/txt/msg00069.txt
 
-On 1/20/2020 4:56 AM, Corinna Vinschen wrote:
-> On Jan 17 16:10, Ken Brown wrote:
->> Currently, opening a symlink with O_NOFOLLOW fails with ELOOP.
->> Following Linux, the first patch in this series allows the call to
->> succeed if O_PATH is also specified.
+[Adding the cgdb maintainer to the CC.]
+
+On 1/20/2020 9:18 AM, Jon Turney wrote:
+> On 20/01/2020 12:41, Takashi Yano wrote:
+>> Hi Corinna,
 >>
->> According to the Linux man page for open(2), "the call returns a file
->> descriptor referring to the symbolic link.  This file descriptor can
->> be used as the dirfd argument in calls to fchownat(2), fstatat(2),
->> linkat(2), and readlinkat(2) with an empty pathname to have the calls
->> operate on the symbolic link."
+>> On Mon, 20 Jan 2020 11:06:46 +0100
+>> Corinna Vinschen wrote:
+>>> On Jan 20 11:50, Takashi Yano wrote:
+>>>> - For programs which does not work properly with pseudo console,
+>>>> =A0=A0 disable_pcon in environment CYGWIN is introduced. If disable_pc=
+on
+>>>> =A0=A0 is set, pseudo console support is disabled.
+>>> Oh well, do we really need that?
 >>
->> The second patch achieves this for readlinkat.  The third patch does
->> this for fstatat and fchownat by adding support for the AT_EMPTY_PATH
->> flag.  Nothing needs to be done for linkat, which already supports the
->> AT_EMPTY_PATH flag.
+>> This is, for example, needed to solve the issue reported in
+>> https://www.cygwin.com/ml/cygwin/2020-01/msg00147.html.
 >>
+>> I looked into this problem, and found that cgdb read output of
+>> gdb from pty master and write it to ncurses. The output from
+>> pty master includes a lot of escape sequences which are generated
+>> by pseudo console, however, ncurses does not pass-through them
+>> and shows garbages. This is the cause of that issue.
 >>
->> Ken Brown (4):
->>    Cygwin: allow opening a symlink with O_PATH | O_NOFOLLOW
->>    Cygwin: readlinkat: allow pathname to be empty
->>    Cygwin: fstatat, fchownat: support the AT_EMPTY_PATH flag
->>    Cygwin: document recent changes
+>> cgdb is the only program do such things so far, however, there
+>> may be more programs which do not expect escape sequences read
+>> from pty.
 >>
->>   winsup/cygwin/release/3.1.3 | 19 +++++++++--
->>   winsup/cygwin/syscalls.cc   | 68 ++++++++++++++++++++++++++++++++-----
->>   winsup/doc/new-features.xml | 19 +++++++++++
->>   3 files changed, 94 insertions(+), 12 deletions(-)
+>> There is no way to control pseudo console not to generate
+>> escape sequences, therefore, I proposed this patch.
+>>
 >=20
-> This looks good to me.  Please push.  I just wonder if this isn't
-> new feature enough to bump the Cygwin version to 3.2...
-
-Maybe.  You're in a better position to judge this than I am.  If you decide=
- to=20
-do it, I'll tweak the documentation accordingly.
-
-Ken
+> I think this may actually be an issue with cgdb being old.
+>=20
+> The latest gdb enables "output styling" using ANSI escape sequences by de=
+fault,=20
+> but our cgdb can't handle them?
+>=20
+> See: https://github.com/cgdb/cgdb/issues/211
