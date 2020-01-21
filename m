@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9967-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 50247 invoked by alias); 21 Jan 2020 09:37:47 -0000
+Return-Path: <cygwin-patches-return-9968-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 124499 invoked by alias); 21 Jan 2020 13:23:52 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,68 +9,75 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 50224 invoked by uid 89); 21 Jan 2020 09:37:47 -0000
+Received: (qmail 124490 invoked by uid 89); 21 Jan 2020 13:23:51 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-108.2 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.135) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 21 Jan 2020 09:37:38 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id 1Mg6Na-1jXrof3iOs-00hbdM for <cygwin-patches@cygwin.com>; Tue, 21 Jan 2020 10:37:35 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 6ED41A80758; Tue, 21 Jan 2020 10:37:35 +0100 (CET)
-Date: Tue, 21 Jan 2020 09:37:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-7.2 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=HX-Languages-Length:1914, our, HContent-Transfer-Encoding:8bit
+X-HELO: conssluserg-01.nifty.com
+Received: from conssluserg-01.nifty.com (HELO conssluserg-01.nifty.com) (210.131.2.80) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 21 Jan 2020 13:23:41 +0000
+Received: from Express5800-S70 (ntsitm247158.sitm.nt.ngn.ppp.infoweb.ne.jp [124.27.253.158]) (authenticated)	by conssluserg-01.nifty.com with ESMTP id 00LDNSIv017006	for <cygwin-patches@cygwin.com>; Tue, 21 Jan 2020 22:23:29 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 00LDNSIv017006
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1579613009;	bh=G9ZN/tRHFWl84hVZcvAeXK6eH0TpTi/L8JDFn2CTq1Q=;	h=Date:From:To:Subject:In-Reply-To:References:From;	b=vVIGWewQ4sgLdAZ7sgcLFXyc7EwQtnluzHMbP09FC8Bsv47zx538F0bHtV5DDDd5D	 v4UxVTzl62kLD53ofZgz9gVaojmHFF/hsqggp931SIN9YgxPJpsyVZcBHgLNsrr4gp	 FlM1rO8+o9W7Puno6Osu6E2L8r5eP9HBJwlXduYPFS/R5I8kdtNs2Dxz8+qKenmoIB	 FvrHbwt5DQX/9YVbd0GQq7T5E2V+1LN8nP89HYTzNw3kZIsJKh1YM7phC2abgwJ1Ex	 KseEs5DA2NdkmwjU9HUrBQRXImqCavoHoqB9S4lB6XJDi7Y4o6yzX7mk3hPhVzIbgz	 ZYJmMR018CSWw==
+Date: Tue, 21 Jan 2020 13:23:00 -0000
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2] Cygwin: pty: Revise code waiting for forwarding by master_fwd_thread.
-Message-ID: <20200121093735.GN20672@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200121111556.ceb40aa746220718b44dfb25@nifty.ne.jp> <20200121022202.2960-1-takashi.yano@nifty.ne.jp>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="DWg365Y4B18r8evw"
-Content-Disposition: inline
-In-Reply-To: <20200121022202.2960-1-takashi.yano@nifty.ne.jp>
-X-SW-Source: 2020-q1/txt/msg00073.txt
+Subject: Re: [PATCH] Cygwin: pty: Introduce disable_pcon in environment CYGWIN.
+Message-Id: <20200121222329.69f71c847e97da78955735a7@nifty.ne.jp>
+In-Reply-To: <8f78d0f4-6a03-505a-6b69-9df1e4c6cf4a@cornell.edu>
+References: <20200120025015.1520-1-takashi.yano@nifty.ne.jp>	<20200120100646.GE20672@calimero.vinschen.de>	<20200120214124.9da79990b75a658016cf34d7@nifty.ne.jp>	<ed59eb98-8e59-f0d1-d1c3-9f44cb6cbee7@dronecode.org.uk>	<8f78d0f4-6a03-505a-6b69-9df1e4c6cf4a@cornell.edu>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-IsSubscribed: yes
+X-SW-Source: 2020-q1/txt/msg00074.txt
 
+On Mon, 20 Jan 2020 14:58:52 +0000
+Ken Brown wrote:
+> [Adding the cgdb maintainer to the CC.]
+> 
+> On 1/20/2020 9:18 AM, Jon Turney wrote:
+> > On 20/01/2020 12:41, Takashi Yano wrote:
+> >> Hi Corinna,
+> >>
+> >> On Mon, 20 Jan 2020 11:06:46 +0100
+> >> Corinna Vinschen wrote:
+> >>> On Jan 20 11:50, Takashi Yano wrote:
+> >>>> - For programs which does not work properly with pseudo console,
+> >>>>    disable_pcon in environment CYGWIN is introduced. If disable_pcon
+> >>>>    is set, pseudo console support is disabled.
+> >>> Oh well, do we really need that?
+> >>
+> >> This is, for example, needed to solve the issue reported in
+> >> https://www.cygwin.com/ml/cygwin/2020-01/msg00147.html.
+> >>
+> >> I looked into this problem, and found that cgdb read output of
+> >> gdb from pty master and write it to ncurses. The output from
+> >> pty master includes a lot of escape sequences which are generated
+> >> by pseudo console, however, ncurses does not pass-through them
+> >> and shows garbages. This is the cause of that issue.
+> >>
+> >> cgdb is the only program do such things so far, however, there
+> >> may be more programs which do not expect escape sequences read
+> >> from pty.
+> >>
+> >> There is no way to control pseudo console not to generate
+> >> escape sequences, therefore, I proposed this patch.
+> >>
+> > 
+> > I think this may actually be an issue with cgdb being old.
+> > 
+> > The latest gdb enables "output styling" using ANSI escape sequences by default, 
+> > but our cgdb can't handle them?
+> > 
+> > See: https://github.com/cgdb/cgdb/issues/211
 
---DWg365Y4B18r8evw
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 329
+I downloaded latest cgdb source from
+https://github.com/cgdb/cgdb
+and
+https://github.com/atotic/cgdb
+then built them in cygwin, however, both do not work under
+cygwin pseudo console enabled.
 
-On Jan 21 11:22, Takashi Yano wrote:
-> - Though this rarely happens, sometimes the first printing of non-
->   cygwin process does not displayed correctly. To fix this issue,
->   the code for waiting for forwarding by master_fwd_thread is revised.
+Therefore I think this patch is needed for now.
 
-Looks good.  Pushed.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen
-Cygwin Maintainer
-
---DWg365Y4B18r8evw
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl4mxl8ACgkQ9TYGna5E
-T6CQQg/8CdHDPPY8oqYWmPx0cGB+fPLSJ/PyAbpjJ7ESwQrzyIf6cLSdLfnnHfhG
-gGDCTZuGGw5wd80o4mJreKF810tIXqqTAvzQysj5z9hghMWyC2pFG0XSaM5baUoH
-0zTbR54k5wzJ1hngWRAM/ehZGSJiQaaL9aw0wGH5NcxArXtSEr41bEz03a0yZz7c
-ItLFYpQt6WErYZarcQO1BllsU6sAWHwEJE8Lc0fiH/mWMk61TYgVD16hD7GuI4Rd
-k2guDsw5KbGVOxJDQI31ZZn2hUOAhpY+5atnXdAvLjpjsncZVKos1RawWlVxcyFv
-uNmgJjnWROUd9cKkj9pvneBCdhTSescGv9Y8/9xfvx1Hzsv7bEPQEkGR6vcxun8I
-gxKtm2CdseB/JbMmd6dGc8z/DOrxoLYXsB8mtR9M1iKhNK7iXEvKSZWRUMMQVrBl
-JTXvtOFYxgi7W1N/3GCrUKqvyf8k+s8STdl8ZZU1aH/XJrT3EIHNiHrSNMsrgLb0
-4aQ+CyFwyDtyPzGzfMg86cUiwqTJwu1vjmB5Dag8wsRlbGf3EyqVm9pYIyoM8zBp
-VqMrlz7ECvGML0FJRY5It9gNTo7x548aQl6j0N2Z8vWKlG76bRImazIAiTrklFwM
-uIe8ArM0H0d6dd8KcZtJ5gQnThKG9qJnCte39kUjlZzugHgB2rw=
-=7CFp
------END PGP SIGNATURE-----
-
---DWg365Y4B18r8evw--
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
