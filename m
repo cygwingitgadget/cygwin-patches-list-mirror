@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9970-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 29927 invoked by alias); 21 Jan 2020 14:42:15 -0000
+Return-Path: <cygwin-patches-return-9971-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 67267 invoked by alias); 22 Jan 2020 10:06:56 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,92 +9,68 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 29906 invoked by uid 89); 21 Jan 2020 14:42:14 -0000
+Received: (qmail 67257 invoked by uid 89); 22 Jan 2020 10:06:55 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-19.7 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*MI:1598, HX-Languages-Length:2251, HContent-Transfer-Encoding:8bit
-X-HELO: conuserg-05.nifty.com
-Received: from conuserg-05.nifty.com (HELO conuserg-05.nifty.com) (210.131.2.72) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 21 Jan 2020 14:42:04 +0000
-Received: from localhost.localdomain (ntsitm247158.sitm.nt.ngn.ppp.infoweb.ne.jp [124.27.253.158]) (authenticated)	by conuserg-05.nifty.com with ESMTP id 00LEfp87022724;	Tue, 21 Jan 2020 23:41:57 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-05.nifty.com 00LEfp87022724
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1579617717;	bh=7fiXWXPJa/MQ8fojdn0pmfQtk93yC6T6czepwAt4Q4s=;	h=From:To:Cc:Subject:Date:From;	b=bqiB6mv5A7YuasyMl+EWz4opCJLmIEbhNb4UuphpFd2rNMNRkZjJENdQ+0+rBsCw9	 u0SosxGoyuw8WjFEkHDtN1HqRGAo9HaAr5BVyOd/y2z1hTfiapjYM7tapSiY4+RRSp	 VnoH/6dGK9WBXlg9TZuBrhXqlabDQlcXfLTDQc/V98Zywvp2kMd8RzFgOUJDEZzmVd	 F5vo6aRXy/UxdznLZYH7GmiPE+Czd8uVlWLVGf16MvX8lPLj7yRKFZDhTzOmFJ5N+U	 OKTmjg8wqKJjHWp6OJSFbdVdliaJsre/ZTqKCUMKkLxP/Pdcc52VB52VifkquoKvNl	 G9Bxa1L6p+8oA==
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+X-Spam-SWARE-Status: No, score=-108.0 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*F:D*cygwin.com, para
+X-HELO: mout.kundenserver.de
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.17.13) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 22 Jan 2020 10:06:54 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id 1Mr9Jw-1jQnpC0vzC-00oHxL for <cygwin-patches@cygwin.com>; Wed, 22 Jan 2020 11:06:52 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 3A60FA80B77; Wed, 22 Jan 2020 11:06:51 +0100 (CET)
+Date: Wed, 22 Jan 2020 10:06:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH] Cygwin: pty: Fix reopening slave in push_to_pcon_screenbuffer().
-Date: Tue, 21 Jan 2020 14:42:00 -0000
-Message-Id: <20200121144144.1598-1-takashi.yano@nifty.ne.jp>
+Subject: Re: [PATCH v2] Cygwin: pty: Introduce disable_pcon in environment CYGWIN.
+Message-ID: <20200122100651.GT20672@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20200121222329.69f71c847e97da78955735a7@nifty.ne.jp> <20200121132513.3654-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-IsSubscribed: yes
-X-SW-Source: 2020-q1/txt/msg00076.txt
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="l06SQqiZYCi8rTKz"
+Content-Disposition: inline
+In-Reply-To: <20200121132513.3654-1-takashi.yano@nifty.ne.jp>
+X-SW-Source: 2020-q1/txt/msg00077.txt
 
-- For programs compiled with -mwindows option, reopening slave is
-  needed in push_to_pcon_screenbuffer(), however, it was not at
-  appropriate place. This causes the problem reported in
-  https://www.cygwin.com/ml/cygwin/2020-01/msg00161.html. This
-  patch fixes the issue.
----
- winsup/cygwin/fhandler_tty.cc | 31 +++++++++++++++++++------------
- 1 file changed, 19 insertions(+), 12 deletions(-)
 
-diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index fff5bebe3..b5e7368b0 100644
---- a/winsup/cygwin/fhandler_tty.cc
-+++ b/winsup/cygwin/fhandler_tty.cc
-@@ -1272,9 +1272,21 @@ fhandler_pty_slave::push_to_pcon_screenbuffer (const char *ptr, size_t len)
- 	break;
-     }
- 
-+  int retry_count;
-+  retry_count = 0;
-   DWORD dwMode, flags;
-   flags = ENABLE_VIRTUAL_TERMINAL_PROCESSING;
--  GetConsoleMode (get_output_handle (), &dwMode);
-+  while (!GetConsoleMode (get_output_handle (), &dwMode))
-+    {
-+      termios_printf ("GetConsoleMode failed, %E");
-+      /* Re-open handles */
-+      this->close ();
-+      this->open (0, 0);
-+      /* Fix pseudo console window size */
-+      this->ioctl (TIOCSWINSZ, &get_ttyp ()->winsize);
-+      if (++retry_count > 3)
-+	goto cleanup;
-+    }
-   if (!(get_ttyp ()->ti.c_oflag & OPOST) ||
-       !(get_ttyp ()->ti.c_oflag & ONLCR))
-     flags |= DISABLE_NEWLINE_AUTO_RETURN;
-@@ -1283,8 +1295,6 @@ fhandler_pty_slave::push_to_pcon_screenbuffer (const char *ptr, size_t len)
-   p = buf;
-   DWORD wLen, written;
-   written = 0;
--  int retry_count;
--  retry_count = 0;
-   BOOL (WINAPI *WriteFunc)
-     (HANDLE, LPCVOID, DWORD, LPDWORD, LPOVERLAPPED);
-   WriteFunc = WriteFile_Orig ? WriteFile_Orig : WriteFile;
-@@ -1293,16 +1303,13 @@ fhandler_pty_slave::push_to_pcon_screenbuffer (const char *ptr, size_t len)
-       if (!WriteFunc (get_output_handle (), p, nlen - written, &wLen, NULL))
- 	{
- 	  termios_printf ("WriteFile failed, %E");
--	  this->open (0, 0); /* Re-open handles */
--	  /* Fix pseudo console window size */
--	  struct winsize win;
--	  this->ioctl (TIOCGWINSZ, &win);
--	  this->ioctl (TIOCSWINSZ, &win);
--	  if (++retry_count > 3)
--	    break;
-+	  break;
-+	}
-+      else
-+	{
-+	  written += wLen;
-+	  p += wLen;
- 	}
--      written += wLen;
--      p += wLen;
-     }
-   /* Detach from pseudo console and resume. */
-   flags = ENABLE_VIRTUAL_TERMINAL_PROCESSING;
--- 
-2.21.0
+--l06SQqiZYCi8rTKz
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 340
+
+On Jan 21 22:25, Takashi Yano wrote:
+> - For programs which does not work properly with pseudo console,
+>   disable_pcon in environment CYGWIN is introduced. If disable_pcon
+>   is set, pseudo console support is disabled.
+
+Pushed.  I just fixed a missing </para> in the doc text.
+
+
+Thanks,
+Corinna
+
+--=20
+Corinna Vinschen
+Cygwin Maintainer
+
+--l06SQqiZYCi8rTKz
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 833
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl4oHrsACgkQ9TYGna5E
+T6BGtQ//QRUEKZPkl1p0Qk0AT3nhwgnjXdjlquvuiZbpoq4DISc7ToSJ4nvHLqcf
+qfcFl3v4TIdb2KJKL6Mc1lb3QO+KpJEwobkuLekwwHZXHr3cV+psIxfDXPZ8blVA
+5ogln4HwFpc4rZn2GNxiuacuqTIAGH0Cmyczgc6buSy83uDpfWdiBaEDdex8k2yt
+s5693cBzIkPDDnOONF2/9Hp+EPikHSz5RHYDjMnhVsKordYMOwOl0rTpOtb4lUvS
+lAKZ4yzNCH6wNseuEmKhFwPKaoEvz6lzWq9piXRB+MXjZ4st6vAwPtl3eiqufq3B
++96yv8UgRKfaZHcic3If3skITkNZy49x73lxSWvDopanZwxjvGbVoMxHEdVR6Xt3
+tcQZoNq++biUfuNCOkkpx1o5MLfBYmIrbaO9njRI9grc6FBPvJzDRTQAPpCnU8BQ
+5JfMON1BxOe98iOqDZbdBhgXtLElTKMCgzuSin1g1yp/bjjWQMFLZBJbLYgO6RSx
+68BHrjEliFaEv/USTYrUr1fqMddTLdocLSV1RMizuyL3c9rx8vOMLL3lggr6X7gR
+vhxRHK9A2rr3nKd7qWRXNjp4tzO6PkX01ZNrnpGt+O968L5nycpVMTfKn3LeoFVE
+iocZYu8XMYZhRkFO1IXNs5pNqLcNasR72HFCt0rddmUjFMyUhJ4=
+=2rpv
+-----END PGP SIGNATURE-----
+
+--l06SQqiZYCi8rTKz--
