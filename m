@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9977-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 1986 invoked by alias); 23 Jan 2020 04:30:26 -0000
+Return-Path: <cygwin-patches-return-9978-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 4499 invoked by alias); 23 Jan 2020 04:33:36 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,159 +9,122 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 1970 invoked by uid 89); 23 Jan 2020 04:30:26 -0000
+Received: (qmail 4490 invoked by uid 89); 23 Jan 2020 04:33:36 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-19.8 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=
-X-HELO: conuserg-05.nifty.com
-Received: from conuserg-05.nifty.com (HELO conuserg-05.nifty.com) (210.131.2.72) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 23 Jan 2020 04:30:24 +0000
-Received: from localhost.localdomain (ntsitm247158.sitm.nt.ngn.ppp.infoweb.ne.jp [124.27.253.158]) (authenticated)	by conuserg-05.nifty.com with ESMTP id 00N4U7R9006848;	Thu, 23 Jan 2020 13:30:13 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-05.nifty.com 00N4U7R9006848
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1579753814;	bh=l7xR/FVsNjXDthNmMDic4YDfAyKEY+EM2Tlg3Z+6Wqw=;	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;	b=h/9n2ZxgFMA1IY77yw1BPKI0mLSwZbtD25q5ew4icK01dHdQQMW8VxR+DgPfr28xQ	 ZwlyCsvULeZCZI+GUlr5u/jAhyNHb26DOWTHujMSj/9t+B1OydqWJpSXgkHXJYPYRA	 y5lfENuEPuWRQROpH4txgThFIU9yg89OmMvTwoj05cpzE9O+kA1VJMSOTusPNna9Ae	 ZbJRQvV6GHgBF2521NkJHOqbztZcIbcZCDrKl3C8Qsya0z3agtlEJ/a3h2As4pWGl2	 /oqf0ib6qh5Pskydc0qSkFxeYf3XlyMiWVBVZ5KpQNEuot+u9PacUZWT75JGB+UTsi	 q76qqxnNJv3Ig==
+X-Spam-SWARE-Status: No, score=-19.9 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*MI:nifty, HContent-Transfer-Encoding:8bit
+X-HELO: conuserg-01.nifty.com
+Received: from conuserg-01.nifty.com (HELO conuserg-01.nifty.com) (210.131.2.68) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 23 Jan 2020 04:33:34 +0000
+Received: from localhost.localdomain (ntsitm247158.sitm.nt.ngn.ppp.infoweb.ne.jp [124.27.253.158]) (authenticated)	by conuserg-01.nifty.com with ESMTP id 00N4XDu6017929;	Thu, 23 Jan 2020 13:33:18 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-01.nifty.com 00N4XDu6017929
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1579753998;	bh=ehBlFdrgrB7j7NqarF7dK43JlxJ9wwuyJnxp597vVB0=;	h=From:To:Cc:Subject:Date:From;	b=uamAn4k48Org/FfXwEylShs5ArVPjNRyv2QhN1c5BG16PpOqz6n25weMwDDjMgPtR	 YbJzcQ/xAPHm05j6XZ4RJtEIwJQDe8Oa0dW9w+ysaexTzwDd0IBkuHv09ZCYNSeEGX	 LxVUUTI6KMpiTCluRBEyAq3grLMncvfvNYQf2pcdn3FHo4zhENXcwrVz5J5HUUexFD	 1WhRWK/TIBIyHFygddb/obthCipm8K23MgaLOUJ4t2Uxr9HMwgaHANdPyUgEcpcsyT	 nXffOGou5PLoR85vWaxXVwk9t4XSwmcXKOZNu9L+JwTwyE+XBd+MXWgbYrok0D35Nq	 SvONGl1qoGeeA==
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH v2] Cygwin: pty: Revise code waiting for forwarding again.
-Date: Thu, 23 Jan 2020 04:30:00 -0000
-Message-Id: <20200123043007.1364-1-takashi.yano@nifty.ne.jp>
-In-Reply-To: <20200122160755.867-1-takashi.yano@nifty.ne.jp>
-References: <20200122160755.867-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: pty: Add missing console API hooks.
+Date: Thu, 23 Jan 2020 04:33:00 -0000
+Message-Id: <20200123043312.529-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-IsSubscribed: yes
-X-SW-Source: 2020-q1/txt/msg00083.txt
+X-SW-Source: 2020-q1/txt/msg00084.txt
 
-- After commit 6cc299f0e20e4b76f7dbab5ea8c296ffa4859b62, outputs of
-  cygwin programs which call both printf() and WriteConsole() are
-  frequently distorted. This patch reverts waiting function to dumb
-  Sleep().
+- Following console APIs are additionally hooked for cygwin programs
+  which directly call them.
+  * FillConsoleOutputAttribute()
+  * FillConsoleOutputCharacterA()
+  * FillConsoleOutputCharacterW()
+  * ScrollConsoleScreenBufferA()
+  * ScrollConsoleScreenBufferW()
 ---
- winsup/cygwin/fhandler_tty.cc | 30 +++++++++++++++++++-----------
- winsup/cygwin/tty.cc          |  3 ++-
- winsup/cygwin/tty.h           |  3 ++-
- 3 files changed, 23 insertions(+), 13 deletions(-)
+ winsup/cygwin/fhandler_tty.cc | 55 +++++++++++++++++++++++++++++++++--
+ 1 file changed, 53 insertions(+), 2 deletions(-)
 
 diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index 1710f2520..69ef56069 100644
+index 404216bf6..05070aa3b 100644
 --- a/winsup/cygwin/fhandler_tty.cc
 +++ b/winsup/cygwin/fhandler_tty.cc
-@@ -1109,7 +1109,9 @@ skip_console_setting:
-     }
-   else if ((fd == 1 || fd == 2) && !get_ttyp ()->switch_to_pcon_out)
-     {
--      cygwait (get_ttyp ()->fwd_done, INFINITE);
-+      DWORD elasped = GetTickCount () - get_ttyp ()->last_push_time;
-+      if (elasped < get_ttyp ()->max_fwd_latency)
-+	Sleep (get_ttyp ()->max_fwd_latency - elasped);
-       if (get_ttyp ()->pcon_pid == 0 ||
- 	  kill (get_ttyp ()->pcon_pid, 0) != 0)
- 	get_ttyp ()->pcon_pid = myself->pid;
-@@ -1151,8 +1153,7 @@ fhandler_pty_slave::reset_switch_to_pcon (void)
-       SetConsoleMode (get_handle (), mode & ~ENABLE_ECHO_INPUT);
-     }
-   if (get_ttyp ()->switch_to_pcon_out)
--    /* Wait for pty_master_fwd_thread() */
--    cygwait (get_ttyp ()->fwd_done, INFINITE);
-+    Sleep (get_ttyp ()->max_fwd_latency);
-   get_ttyp ()->pcon_pid = 0;
-   get_ttyp ()->switch_to_pcon_in = false;
-   get_ttyp ()->switch_to_pcon_out = false;
-@@ -1187,6 +1188,8 @@ fhandler_pty_slave::push_to_pcon_screenbuffer (const char *ptr, size_t len)
-     if (!try_reattach_pcon ())
-       goto detach;
- 
-+  get_ttyp ()->last_push_time = GetTickCount ();
-+
-   char *buf;
-   size_t nlen;
-   DWORD origCP;
-@@ -2210,8 +2213,6 @@ fhandler_pty_master::close ()
- 	    }
- 	  release_output_mutex ();
- 	  master_fwd_thread->terminate_thread ();
--	  CloseHandle (get_ttyp ()->fwd_done);
--	  get_ttyp ()->fwd_done = NULL;
- 	}
-     }
- 
-@@ -2728,7 +2729,11 @@ fhandler_pty_slave::fixup_after_attach (bool native_maybe, int fd_set)
- 	      DWORD mode = ENABLE_PROCESSED_OUTPUT | ENABLE_WRAP_AT_EOL_OUTPUT;
- 	      SetConsoleMode (get_output_handle (), mode);
- 	      if (!get_ttyp ()->switch_to_pcon_out)
--		cygwait (get_ttyp ()->fwd_done, INFINITE);
-+		{
-+		  DWORD elasped = GetTickCount () - get_ttyp ()->last_push_time;
-+		  if (elasped < get_ttyp ()->max_fwd_latency)
-+		    Sleep (get_ttyp ()->max_fwd_latency - elasped);
-+		}
- 	      if (get_ttyp ()->pcon_pid == 0 ||
- 		  kill (get_ttyp ()->pcon_pid, 0) != 0)
- 		get_ttyp ()->pcon_pid = myself->pid;
-@@ -3010,14 +3015,12 @@ fhandler_pty_master::pty_master_fwd_thread ()
-   termios_printf ("Started.");
-   for (;;)
-     {
--      if (::bytes_available (rlen, from_slave) && rlen == 0)
--	SetEvent (get_ttyp ()->fwd_done);
-       if (!ReadFile (from_slave, outbuf, sizeof outbuf, &rlen, NULL))
- 	{
- 	  termios_printf ("ReadFile for forwarding failed, %E");
- 	  break;
- 	}
--      ResetEvent (get_ttyp ()->fwd_done);
-+
-       ssize_t wlen = rlen;
-       char *ptr = outbuf;
-       if (get_pseudo_console ())
-@@ -3025,7 +3028,13 @@ fhandler_pty_master::pty_master_fwd_thread ()
- 	  /* Avoid duplicating slave output which is already sent to
- 	     to_master_cyg */
- 	  if (!get_ttyp ()->switch_to_pcon_out)
--	    continue;
-+	    {
-+	      DWORD elasped = GetTickCount () - get_ttyp ()->last_push_time;
-+	      if (rlen && get_ttyp ()->last_push_time &&
-+		  elasped > get_ttyp ()->max_fwd_latency)
-+		get_ttyp ()->max_fwd_latency = elasped;
-+	      continue;
-+	    }
- 
- 	  /* Avoid setting window title to "cygwin-console-helper.exe" */
- 	  int state = 0;
-@@ -3380,7 +3389,6 @@ fhandler_pty_master::setup ()
-       errstr = "pty master forwarding thread";
-       goto err;
-     }
--  get_ttyp ()->fwd_done = CreateEvent (&sec_none, true, false, NULL);
- 
-   setup_pseudoconsole ();
- 
-diff --git a/winsup/cygwin/tty.cc b/winsup/cygwin/tty.cc
-index ef9bbc1ff..b290a41e1 100644
---- a/winsup/cygwin/tty.cc
-+++ b/winsup/cygwin/tty.cc
-@@ -245,7 +245,8 @@ tty::init ()
-   num_pcon_attached_slaves = 0;
-   term_code_page = 0;
-   need_redraw_screen = false;
--  fwd_done = NULL;
-+  max_fwd_latency = 20;
-+  last_push_time = 0;
+@@ -192,6 +192,11 @@ DEF_HOOK (ReadConsoleInputA);
+ DEF_HOOK (ReadConsoleInputW);
+ DEF_HOOK (PeekConsoleInputA);
+ DEF_HOOK (PeekConsoleInputW);
++DEF_HOOK (FillConsoleOutputAttribute);
++DEF_HOOK (FillConsoleOutputCharacterA);
++DEF_HOOK (FillConsoleOutputCharacterW);
++DEF_HOOK (ScrollConsoleScreenBufferA);
++DEF_HOOK (ScrollConsoleScreenBufferW);
+ /* CreateProcess() is hooked for GDB etc. */
+ DEF_HOOK (CreateProcessA);
+ DEF_HOOK (CreateProcessW);
+@@ -329,6 +334,43 @@ PeekConsoleInputW_Hooked
+   set_ishybrid_and_switch_to_pcon (h);
+   return PeekConsoleInputW_Orig (h, r, l, n);
  }
- 
- HANDLE
-diff --git a/winsup/cygwin/tty.h b/winsup/cygwin/tty.h
-index b291fd3c1..ba2b9074a 100644
---- a/winsup/cygwin/tty.h
-+++ b/winsup/cygwin/tty.h
-@@ -106,7 +106,8 @@ private:
-   int num_pcon_attached_slaves;
-   UINT term_code_page;
-   bool need_redraw_screen;
--  HANDLE fwd_done;
-+  DWORD max_fwd_latency;
-+  DWORD last_push_time;
- 
- public:
-   HANDLE from_master () const { return _from_master; }
++static BOOL WINAPI
++FillConsoleOutputAttribute_Hooked
++     (HANDLE h, WORD a, DWORD l, COORD d, LPDWORD n)
++{
++  set_ishybrid_and_switch_to_pcon (h);
++  return FillConsoleOutputAttribute_Orig (h, a, l, d, n);
++}
++static BOOL WINAPI
++FillConsoleOutputCharacterA_Hooked
++     (HANDLE h, CHAR c, DWORD l, COORD d, LPDWORD n)
++{
++  set_ishybrid_and_switch_to_pcon (h);
++  return FillConsoleOutputCharacterA_Orig (h, c, l, d, n);
++}
++static BOOL WINAPI
++FillConsoleOutputCharacterW_Hooked
++     (HANDLE h, WCHAR c, DWORD l, COORD d, LPDWORD n)
++{
++  set_ishybrid_and_switch_to_pcon (h);
++  return FillConsoleOutputCharacterW_Orig (h, c, l, d, n);
++}
++static BOOL WINAPI
++ScrollConsoleScreenBufferA_Hooked
++     (HANDLE h, const SMALL_RECT *r, const SMALL_RECT *c, COORD d,
++      const CHAR_INFO *f)
++{
++  set_ishybrid_and_switch_to_pcon (h);
++  return ScrollConsoleScreenBufferA_Orig (h, r, c, d, f);
++}
++static BOOL WINAPI
++ScrollConsoleScreenBufferW_Hooked
++     (HANDLE h, const SMALL_RECT *r, const SMALL_RECT *c, COORD d,
++      const CHAR_INFO *f)
++{
++  set_ishybrid_and_switch_to_pcon (h);
++  return ScrollConsoleScreenBufferW_Orig (h, r, c, d, f);
++}
+ /* CreateProcess() is hooked for GDB etc. */
+ static BOOL WINAPI
+ CreateProcessA_Hooked
+@@ -2749,8 +2791,12 @@ fhandler_pty_slave::fixup_after_attach (bool native_maybe, int fd_set)
+ 		    (SHORT) (sbi.dwSize.X -1), (SHORT) (sbi.dwSize.Y - 1)};
+ 		  COORD dest = {0, 0};
+ 		  CHAR_INFO fill = {' ', 0};
+-		  ScrollConsoleScreenBuffer (get_output_handle (),
+-					     &rect, NULL, dest, &fill);
++		  BOOL (WINAPI *ScrollFunc)
++		    (HANDLE, const SMALL_RECT *, const SMALL_RECT *,
++		     COORD, const CHAR_INFO *);
++		  ScrollFunc = ScrollConsoleScreenBufferA_Orig ? :
++		    ScrollConsoleScreenBuffer;
++		  ScrollFunc (get_output_handle (), &rect, NULL, dest, &fill);
+ 		  get_ttyp ()->need_redraw_screen = false;
+ 		}
+ 	    }
+@@ -2848,6 +2894,11 @@ fhandler_pty_slave::fixup_after_exec ()
+       DO_HOOK (NULL, ReadConsoleInputW);
+       DO_HOOK (NULL, PeekConsoleInputA);
+       DO_HOOK (NULL, PeekConsoleInputW);
++      DO_HOOK (NULL, FillConsoleOutputAttribute);
++      DO_HOOK (NULL, FillConsoleOutputCharacterA);
++      DO_HOOK (NULL, FillConsoleOutputCharacterW);
++      DO_HOOK (NULL, ScrollConsoleScreenBufferA);
++      DO_HOOK (NULL, ScrollConsoleScreenBufferW);
+       /* CreateProcess() is hooked for GDB etc. */
+       DO_HOOK (NULL, CreateProcessA);
+       DO_HOOK (NULL, CreateProcessW);
 -- 
 2.21.0
