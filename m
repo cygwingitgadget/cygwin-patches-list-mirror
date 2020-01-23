@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9995-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 109277 invoked by alias); 23 Jan 2020 16:31:16 -0000
+Return-Path: <cygwin-patches-return-9996-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 92459 invoked by alias); 23 Jan 2020 17:08:27 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,67 +9,47 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 109219 invoked by uid 89); 23 Jan 2020 16:31:15 -0000
+Received: (qmail 92450 invoked by uid 89); 23 Jan 2020 17:08:26 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-24.4 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=
-X-HELO: NAM12-BN8-obe.outbound.protection.outlook.com
-Received: from mail-bn8nam12on2095.outbound.protection.outlook.com (HELO NAM12-BN8-obe.outbound.protection.outlook.com) (40.107.237.95) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 23 Jan 2020 16:31:14 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none; b=QjYlYNZGsnX3ezThPfswJBIw/7o+n8hBDrNY5b7/lt1XkjB9IjiDAOBIWWPAik8hkIeENBf3O/CBv8YvNpuOWQPLY6QyVJEG4dOmAhganefnVOpo6BK9p93IXGziD/bYAz4AKsE5mjTTKXe5vFCBSDawcyOSUlRX7xsVBChMvgDKK4hqJ4ohdryW3RLeWe1qcqqRMkw0A9Q/LzF1dn5gmJkta+ZqX07+lVPJVMbXJ6m/c14SEzM8PWccIvTwiAGpLYVq8Q7sBUeyiWDv2w8dnWJ36XLRN2U5FpbfyUWblck9y4EBRa7kmOIekRFu0sMfEDmS65Ee/i+VqFx2aEK3aQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=LwaTtJOjRnUQ7uD45t6joXRLtXZBA4cFcYZKn8wUosc=; b=IGsbCiv3kpGUWymeZzHpT5V4/6Gd77QHXGvGBsPZi8s952Uz59BPSmOOc3cbt/H4lAMjnTBaWwXxkD0eGoGK4lJv1VCAJw9D5DrTRjqStrMmH3dr28HuqWQ/5sHlFk6iuog90LH949V+M2jAXNMDeQMmPbBiLTuHgjN2juZGn6UkfTxjkU+kYaXEfmjFgm3dbe5q+CjN8v+aBM0W+2oZSKSOXKtIj1WMxUQ9j466L1JB65dbish04+R/H6W03fEVE4a3VbX/NaoyYaLBOeuZR6tkPydavw3xbsh5fi33U75ewxxmtrzEN0iehBsaAKintsJsku55vRVI3bTuv3t41g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu; dkim=pass header.d=cornell.edu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=LwaTtJOjRnUQ7uD45t6joXRLtXZBA4cFcYZKn8wUosc=; b=XM3eZSlWpvYmNQ+FY0cmhl7Fml9RkDSJrL7wCol1Srt/QIL0JTBdd6DDfrQ+pRHuvjBKKhpsEp9wLw9qjhGU1oernD3/UT+ik/Upy3EQsvQx6eFa1HK6HzhjbA1O0fwLpyHPpWpFLZ/+ZiLaSiXqjmsP4XwWrWEwqr3Wp4e7tOk=
-Received: from DM6PR04MB5738.namprd04.prod.outlook.com (20.179.51.81) by DM6PR04MB6393.namprd04.prod.outlook.com (10.141.162.145) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2665.20; Thu, 23 Jan 2020 16:31:05 +0000
-Received: from DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::cc3:c238:852e:5831]) by DM6PR04MB5738.namprd04.prod.outlook.com ([fe80::cc3:c238:852e:5831%7]) with mapi id 15.20.2644.027; Thu, 23 Jan 2020 16:31:05 +0000
-Received: from localhost.localdomain (23.31.190.121) by CH2PR15CA0001.namprd15.prod.outlook.com (2603:10b6:610:51::11) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2665.19 via Frontend Transport; Thu, 23 Jan 2020 16:31:04 +0000
-From: Ken Brown <kbrown@cornell.edu>
-To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: [PATCH 3/3] Cygwin: FIFO: tweak fcntl and dup when O_PATH is set
-Date: Thu, 23 Jan 2020 16:31:00 -0000
-Message-ID: <20200123163015.12354-4-kbrown@cornell.edu>
-References: <20200123163015.12354-1-kbrown@cornell.edu>
-In-Reply-To: <20200123163015.12354-1-kbrown@cornell.edu>
-authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
-x-ms-oob-tlc-oobclassifiers: OLM:1923;
-received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-messagedata: Mf//9BRZVObUjXoXrefzI32Drn/0g9nDpZkI/ejeetofAkP7ADCgwgFSwYM5dQX6btp8domA4lua0tfZkrXr4kX/ILQ49zSr5GLjiZFTcNHt/SrQcFqGqXsNiOWlxXQNfsDzlLPz6nVOk9dEMRozag==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+X-Spam-SWARE-Status: =?ISO-8859-1?Q?No, score=-1.3 required=5.0 tests=AWL,BAYES_00,BODY_8BITS,GARBLED_BODY,RCVD_IN_DNSWL_LOW autolearn=no version=3.3.1 spammy==c3=a2=e2?=
+X-HELO: smtp-out-so.shaw.ca
+Received: from smtp-out-so.shaw.ca (HELO smtp-out-so.shaw.ca) (64.59.136.137) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 23 Jan 2020 17:08:25 +0000
+Received: from [192.168.1.114] ([24.64.172.44])	by shaw.ca with ESMTP	id ufxuiZycTRnrKufxviT8MF; Thu, 23 Jan 2020 10:08:24 -0700
+Reply-To: Brian.Inglis@SystematicSw.ab.ca
+Subject: Re: [PATCH] fhandler_proc.cc:format_proc_cpuinfo add rdpru flag
+To: Cygwin Patches <cygwin-patches@cygwin.com>
+References: <20200123090626.58604-1-Brian.Inglis@SystematicSW.ab.ca> <20200123124425.GB263143@calimero.vinschen.de>
+From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
+Message-ID: <a84c0054-518d-291a-c1b3-de8f40d0bc15@SystematicSw.ab.ca>
+Date: Thu, 23 Jan 2020 17:08:00 -0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101 Thunderbird/68.4.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: lQslDMw2/QFqzmA0K7FTMcQykaDULYoEC5SeF23PARsx5+9FevRCj5RJjpYCN4Iauoy2ip8d2ZwCBrV/KlS3mg==
+In-Reply-To: <20200123124425.GB263143@calimero.vinschen.de>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 X-IsSubscribed: yes
-X-SW-Source: 2020-q1/txt/msg00101.txt
+X-SW-Source: 2020-q1/txt/msg00102.txt
 
-fhandler_fifo::fcntl and fhandler_fifo::dup now call the corresponding
-fhandler_base methods if the FIFO was opened with the O_PATH flag.
----
- winsup/cygwin/fhandler_fifo.cc | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+On 2020-01-23 05:44, Corinna Vinschen wrote:
+> On Jan 23 02:06, Brian Inglis wrote:
+>> rdpru flag is cpuid xfn 80000008 ebx bit 4 added in linux 5.5;
+>> see AMD64 Architecture ProgrammerÃ¢ÂÂs Manual Volume 3:
+>                                    ^^^^^^^^^
+> This came over already broken.  No idea if that's a problem of
+> your MUA or of the mailing list software.  I fixed it to an
+> ordinary quote char locally.
 
-diff --git a/winsup/cygwin/fhandler_fifo.cc b/winsup/cygwin/fhandler_fifo.cc
-index 8cbab353c..a338f12cc 100644
---- a/winsup/cygwin/fhandler_fifo.cc
-+++ b/winsup/cygwin/fhandler_fifo.cc
-@@ -997,7 +997,7 @@ fhandler_fifo::close ()
- int
- fhandler_fifo::fcntl (int cmd, intptr_t arg)
- {
--  if (cmd !=3D F_SETFL || nohandle ())
-+  if (cmd !=3D F_SETFL || nohandle () || (get_flags () & O_PATH))
-     return fhandler_base::fcntl (cmd, arg);
-=20
-   const bool was_nonblocking =3D is_nonblocking ();
-@@ -1014,6 +1014,9 @@ fhandler_fifo::dup (fhandler_base *child, int flags)
-   int ret =3D -1;
-   fhandler_fifo *fhf =3D NULL;
-=20
-+  if (get_flags () & O_PATH)
-+    return fhandler_base::dup (child, flags);
-+
-   if (fhandler_base::dup (child, flags))
-     goto out;
-=20
---=20
-2.21.0
+Sorry, didn't notice that sneaky quote from the PDF title in UTF-8 "Ã¢â¬â¢".
+Message source shows it's composed and sent in UTF-8 with:
+	Content-Transfer-Encoding: 8bit
+by:
+	X-Mailer: git-send-email 2.21.0
+but without encoding or charset headers, so added git [sendemail] *Encoding
+config settings to avoid future issues by adding header (tested):
+	Content-Type: text/plain; charset=UTF-8
+
+--
+Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
+
+This email may be disturbing to some readers as it contains
+too much technical detail. Reader discretion is advised.
