@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-9999-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 38715 invoked by alias); 24 Jan 2020 10:29:17 -0000
+Return-Path: <cygwin-patches-return-10000-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 124461 invoked by alias); 24 Jan 2020 11:07:36 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,81 +9,79 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 38702 invoked by uid 89); 24 Jan 2020 10:29:17 -0000
+Received: (qmail 124446 invoked by uid 89); 24 Jan 2020 11:07:36 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-112.5 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=act, H*F:D*cygwin.com
+X-Spam-SWARE-Status: No, score=-107.5 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*F:D*cygwin.com
 X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.134) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 24 Jan 2020 10:29:16 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id 1MCsgS-1imAlm0ONk-008tAF for <cygwin-patches@cygwin.com>; Fri, 24 Jan 2020 11:29:14 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id C1C7CA80722; Fri, 24 Jan 2020 11:29:13 +0100 (CET)
-Date: Fri, 24 Jan 2020 10:29:00 -0000
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.133) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 24 Jan 2020 11:07:35 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id 1M4384-1iuwoG0yTA-0006yu for <cygwin-patches@cygwin.com>; Fri, 24 Jan 2020 12:07:32 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 894C8A80BB0; Fri, 24 Jan 2020 12:07:30 +0100 (CET)
+Date: Fri, 24 Jan 2020 11:07:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 0/3] Fix the O_PATH support for FIFOs
-Message-ID: <20200124102913.GF263143@calimero.vinschen.de>
+Subject: Re: [PATCH v2] Cygwin: pty: Revise code waiting for forwarding again.
+Message-ID: <20200124110730.GG263143@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200123163015.12354-1-kbrown@cornell.edu>
+References: <20200122160755.867-1-takashi.yano@nifty.ne.jp> <20200123043007.1364-1-takashi.yano@nifty.ne.jp> <20200123125154.GD263143@calimero.vinschen.de> <20200123231623.ed57b0af319d1de545f2ab7c@nifty.ne.jp>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="NQTVMVnDVuULnIzU"
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="t4apE7yKrX2dGgJC"
 Content-Disposition: inline
-In-Reply-To: <20200123163015.12354-1-kbrown@cornell.edu>
-X-SW-Source: 2020-q1/txt/msg00105.txt
+In-Reply-To: <20200123231623.ed57b0af319d1de545f2ab7c@nifty.ne.jp>
+X-SW-Source: 2020-q1/txt/msg00106.txt
 
 
---NQTVMVnDVuULnIzU
+--t4apE7yKrX2dGgJC
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-length: 2076
+Content-length: 1582
 
-On Jan 23 16:31, Ken Brown wrote:
-> Commit aa55d22c, "Cygwin: honor the O_PATH flag when opening a FIFO",
-> fixed a hang but otherwise didn't accomplish the purpose of the O_PATH
-> flag as stated in the Linux man page for open(2):
+On Jan 23 23:16, Takashi Yano wrote:
+> On Thu, 23 Jan 2020 13:51:54 +0100
+> Corinna Vinschen wrote:
+> > On Jan 23 13:30, Takashi Yano wrote:
+> > > - After commit 6cc299f0e20e4b76f7dbab5ea8c296ffa4859b62, outputs of
+> > >   cygwin programs which call both printf() and WriteConsole() are
+> > >   frequently distorted. This patch reverts waiting function to dumb
+> > >   Sleep().
+> >=20
+> > I understand the need for this change, but isn't there any other
+> > way to detect if the pseudo console being ready?  E. g., something
+> > in the HPCON_INTERNAL struct or so?
 >=20
->     Obtain a file descriptor that can be used for two purposes: to
->     indicate a location in the filesystem tree and to perform
->     operations that act purely at the file descriptor level.  The
->     file itself is not opened, and other file operations (e.g.,
->     read(2), write(2), fchmod(2), fchown(2), fgetxattr(2),
->     ioctl(2), mmap(2)) fail with the error EBADF.
+> As for HPCON_INTERNAL,
 >=20
->     [The man page goes on to describe operations that *can* be
->     performed: close(2), fchdir(2), fstat(2),....]
+> typedef struct _HPCON_INTERNAL
+> {
+>   HANDLE hWritePipe;
+>   HANDLE hConDrvReference;
+>   HANDLE hConHostProcess;
+> } HPCON_INTERNAL;
 >=20
->     Opening a file or directory with the O_PATH flag requires no
->     permissions on the object itself (but does require execute
->     permission on the directories in the path prefix).
+> hWritePipe:
+> This is for sending window size change message to pseudo console
+> (conhost.exe process).
 >=20
-> The first problem in the current implementation is that if open(2) is
-> called on a FIFO, fhandler_base::device_access_denied is called and
-> tries to open the FIFO with read access, which isn't supposed to be
-> required.  This is fixed by the first patch in this series.
+> hConDrvRererence:
+> I am not sure what this is for.
 >=20
-> The second patch makes fhandler_fifo::open call fhandler_base::open_fs
-> if O_PATH is set, so that we actually obtain a handle that can be used
-> for the purposes stated above.
+> hConHostProcess:
+> Process handle of conhost.exe process.
 >=20
-> The third page tweaks fhandler_fifo::fcntl and fhandler_fifo::dup so
-> that they work with O_PATH.
->=20
-> In a followup email I'll provide the program I used to test this
-> implementation.
->=20
-> Ken Brown (3):
->   Cygwin: device_access_denied: return false if O_PATH is set
->   Cygwin: re-implement fhandler_fifo::open with O_PATH
->   Cygwin: FIFO: tweak fcntl and dup when O_PATH is set
->=20
->  winsup/cygwin/fhandler.cc      |  3 +++
->  winsup/cygwin/fhandler_fifo.cc | 15 ++++++---------
->  2 files changed, 9 insertions(+), 9 deletions(-)
->=20
-> --=20
-> 2.21.0
+> None of them seems able to be used for that purpose.
 
-Pushed.  I'll create new developer snapshots.
+Too bad.  It's pretty strange that CreatePseudoConsole returns a
+valid HPCON but then isn't ready to take input immediately.
+
+> I do not come up with other implementation so far.
+>=20
+> Let me consider a while.
+
+I wonder how others solve this problem.  I see that the native OpenSSH
+is using Sleeps, too, in their start_with_pty() function, calling
+AttachConsole in a loop, but I'm not sure if these are related to pseudo
+console usage.  The commit message don't explain anything there :(
 
 
 Thanks,
@@ -93,25 +91,25 @@ Corinna
 Corinna Vinschen
 Cygwin Maintainer
 
---NQTVMVnDVuULnIzU
+--t4apE7yKrX2dGgJC
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-length: 833
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl4qxvkACgkQ9TYGna5E
-T6Bemw//TWc0wOl6axwQNxBkIujBAuibA9OdmZtEtBvuEtbO0VWPr1gqbfd1ojtD
-HJ7zFYupp4+KgQYgJxQdYsvGaUsSsT2sV0Vy8ci1m/czCCAthiodUG1gun/t/hik
-rV5ZU+US1GlZx8yCyxx9HI0cedUyf6bzTtaTNs4Rxu873Tl1imc1no+Nzc9LTWLO
-uZyfyoTDb74z0AD5JkpkoUjk6+hR8AB1VtcY8oSNiCWou+jPBIN3uAiVgE16OUDB
-AKytQkx+VXkI7l0/aAT/hq+H9bLyM6crZYff/hQXdAVVVzV6Wbq0FC0YrHpd40zG
-8EjGAa50YjkHc4Rb0p4xtD6bC68VYhXLkeNdHJM8w4nOHveR7anRrTbu+3tiTGIL
-VDyzz0aEvoIB8v/zhxlT+rGyZtTPfmRvejSzKy0RBEPPZeGNLGD7xRSl3nTexzsv
-2wWTK+NaRtgIEtt4VKRJf162SagZKxZtos34gXTHjfRjBzUImHkGk7AMK/BbUjaH
-MGuk/lleoyBOpk3/WqmXccOLkz+YXOgKDzzGKvF5hLvfMuTzwSdFvW31g64aUVza
-DmcqAsotc9nGtUjCZQZpK7cA2tPbHoeEixY4OigWusLD73YLPSRr1lTTAH7TjG3i
-q/XkHpLFtTcLQAFyb8g6zI7J3ZTQPpbdmRW9Kr6kgRw5hXm3bJo=
-=Wb2W
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl4qz/IACgkQ9TYGna5E
+T6BqiQ/8CuAqRddgTLjPXsXMIl2SXw1kDAEreUz2YGst51X4aihEFcTosgI9sf5W
+armVJKtF1kAptIH/RznW0dgWzzWokIySV9gq9lL64IJLTlVahDlDoU14F+kw0bcY
+NrugXxQ7x7jj3mKtl7wfxCwbFfkGR7EPfP1MyrUzfYtwboT9mX0apnWF+RSKfPT0
+kSoy5t7s1tNXDN5BXGTo1sAM2AyzOL6vphLojHNVcg/Tgdk8PvsY5L+FXCSeHSqG
+2tbfFzyVHB3e2dBXgABXjq3pQArA3CKj5UgzhRfewGEQ1pW40z/RqaPRQDP7n4rt
+RQyyRU4nRqEbGnemge4YrN7yLkImtkZqQgZ4hMs7rfe0MMohVZNjlP9tHrzCPp5U
+qJfYE62AyfXuKaeoR4fUrq5Oj/OwCGqaaCOIL9FEkOIUwMLZCKvlf5iuXQWLOdqc
+v4FvAq6jb5KWaeSwnCt/Ex3j/4eyedrh5K42NIbjdi5so4cCHeWTeNVEf+LOs5qj
+Hl2IWevvZ7cFXiXmyHsVon2G3SlF4/Luk/b/6vbAWsYOYW8GuYwobOC5IDqh3DRd
+O8PSHCjnb50qfZ3shXjQLd5424u6UaG5M8DRgydVbCx5HTu4Ddp/gG4+vWKzGlrU
+a45QWeRUsaCWG+XaG0b1dfcuCFaWMqjVW5r1eqDLcZkXb9szogI=
+=7zQJ
 -----END PGP SIGNATURE-----
 
---NQTVMVnDVuULnIzU--
+--t4apE7yKrX2dGgJC--
