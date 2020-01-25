@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-10001-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 83756 invoked by alias); 25 Jan 2020 09:46:08 -0000
+Return-Path: <cygwin-patches-return-10002-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 93968 invoked by alias); 25 Jan 2020 10:19:20 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,378 +9,182 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 83747 invoked by uid 89); 25 Jan 2020 09:46:08 -0000
+Received: (qmail 93959 invoked by uid 89); 25 Jan 2020 10:19:19 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-14.4 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=crlf, H*Ad:D*jp, Share
-X-HELO: conuserg-01.nifty.com
-Received: from conuserg-01.nifty.com (HELO conuserg-01.nifty.com) (210.131.2.68) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sat, 25 Jan 2020 09:46:05 +0000
-Received: from localhost.localdomain (ntsitm196171.sitm.nt.ngn.ppp.infoweb.ne.jp [125.0.207.171]) (authenticated)	by conuserg-01.nifty.com with ESMTP id 00P9jqVe007543;	Sat, 25 Jan 2020 18:45:57 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-01.nifty.com 00P9jqVe007543
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1579945557;	bh=mp6qW8CEyBWX12/QCN57zfpJmFf4lnCV+WIXCvbs8Qs=;	h=From:To:Cc:Subject:Date:From;	b=PVG68t/+P3Oqfhc0ojAj1IwRg55rlAcTOISePnjNutuv6AFuFdITF+JrCUU37CIqR	 UvifN0hYJ2JFca4v56xXPXjgp1wsE0XLC817drgfDMnff9p85sBALskyR0LmqO1Q5a	 /CrN35I/hQjXQTmpuZiEaJynnkix0qVG6XgXSY+mWaBTINrQF40AS9h3BTo/TVkYiA	 4YYMe65s1Vb+gMxpLehuAmc7n1AV2YD7gRHSqB14reqDSePKI4aR3ts/yADDtVPX+h	 NG6337HgGljIFmRPupmeVI6bef7zm5/ZxgF1JH1uJepw8hacSz/SVLRjoy3zX9n3Wt	 CJXZ7W3IkPfdg==
+X-Spam-SWARE-Status: No, score=-8.2 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=
+X-HELO: conssluserg-03.nifty.com
+Received: from conssluserg-03.nifty.com (HELO conssluserg-03.nifty.com) (210.131.2.82) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sat, 25 Jan 2020 10:19:17 +0000
+Received: from Express5800-S70 (ntsitm196171.sitm.nt.ngn.ppp.infoweb.ne.jp [125.0.207.171]) (authenticated)	by conssluserg-03.nifty.com with ESMTP id 00PAJ3rK019888	for <cygwin-patches@cygwin.com>; Sat, 25 Jan 2020 19:19:04 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 00PAJ3rK019888
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1579947544;	bh=okQ+ch7vc73T9j93ThnG+Dk4LaGguk19xvgeExYtli8=;	h=Date:From:To:Subject:In-Reply-To:References:From;	b=eOVirNMQB9xgNp5L1YapBnoZ2H+8oKgskexzElJo5giiN0yfIfL7pgffbrq7d80e/	 iwOWQYa7Kw8alca69yOFVwV0XqEF/VD1guDhFd9gQXnT0NKBbpDsdYdLDAEvnF5qTN	 aId4x+s2qbvBeATvKDxcsdDPfAepIVekJ7UIZ/7ZEB4+HdDExTqZ9n396JmPjIlS5B	 tRpD8a8N/z9gxvu/c89Sf35PwZw8+CKVyN3xNXlOP6a3KdrgUvcGfDP5MyZ74fVFOq	 724uEqXI1G1T049Nja36N3uWlAQTmI219Ou7nbJwNzRPwCDYg9GAv6/zQYLpyuVjNm	 RFzdsKgkqEhaw==
+Date: Sat, 25 Jan 2020 10:19:00 -0000
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH] Cygwin: console: Share readahead buffer within the same process.
-Date: Sat, 25 Jan 2020 09:46:00 -0000
-Message-Id: <20200125094548.958-1-takashi.yano@nifty.ne.jp>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] Cygwin: pty: Add missing console API hooks.
+Message-Id: <20200125191911.47c91a32af7dea234f233d7e@nifty.ne.jp>
+In-Reply-To: <20200124102627.GE263143@calimero.vinschen.de>
+References: <20200123043312.529-1-takashi.yano@nifty.ne.jp>	<20200123124813.GC263143@calimero.vinschen.de>	<20200123220531.d6dcf35ce81f4fa17b0788a6@nifty.ne.jp>	<20200124102627.GE263143@calimero.vinschen.de>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-IsSubscribed: yes
-X-SW-Source: 2020-q1/txt/msg00107.txt
+X-SW-Source: 2020-q1/txt/msg00108.txt
 
-- The cause of the problem reported in
-  https://www.cygwin.com/ml/cygwin/2020-01/msg00220.html is that the
-  chars input before dup() cannot be read from the new file descriptor.
-  This is because the readahead buffer (rabuf) in the console is newly
-  created by dup(), and does not inherit from the parent. This patch
-  fixes the issue.
----
- winsup/cygwin/fhandler.cc         | 58 ++++++++++++++++---------------
- winsup/cygwin/fhandler.h          | 24 ++++++++-----
- winsup/cygwin/fhandler_console.cc | 16 ++++++++-
- winsup/cygwin/fhandler_termios.cc | 35 ++++++++++---------
- winsup/cygwin/fhandler_tty.cc     |  2 +-
- 5 files changed, 80 insertions(+), 55 deletions(-)
+Hi Corinna,
 
-diff --git a/winsup/cygwin/fhandler.cc b/winsup/cygwin/fhandler.cc
-index aeee8fe4d..ad4a7e61c 100644
---- a/winsup/cygwin/fhandler.cc
-+++ b/winsup/cygwin/fhandler.cc
-@@ -44,11 +44,12 @@ void
- fhandler_base::reset (const fhandler_base *from)
- {
-   pc << from->pc;
--  rabuf = NULL;
--  ralen = 0;
--  raixget = 0;
--  raixput = 0;
--  rabuflen = 0;
-+  ra.rabuf = NULL;
-+  ra.ralen = 0;
-+  ra.raixget = 0;
-+  ra.raixput = 0;
-+  ra.rabuflen = 0;
-+  set_rabuf ();
-   _refcnt = 0;
- }
- 
-@@ -66,15 +67,15 @@ int
- fhandler_base::put_readahead (char value)
- {
-   char *newrabuf;
--  if (raixput < rabuflen)
-+  if (raptr->raixput < raptr->rabuflen)
-     /* Nothing to do */;
--  else if ((newrabuf = (char *) realloc (rabuf, rabuflen += 32)))
--    rabuf = newrabuf;
-+  else if ((newrabuf = (char *) realloc (raptr->rabuf, raptr->rabuflen += 32)))
-+    raptr->rabuf = newrabuf;
-   else
-     return 0;
- 
--  rabuf[raixput++] = value;
--  ralen++;
-+  raptr->rabuf[raptr->raixput++] = value;
-+  raptr->ralen++;
-   return 1;
- }
- 
-@@ -82,11 +83,11 @@ int
- fhandler_base::get_readahead ()
- {
-   int chret = -1;
--  if (raixget < ralen)
--    chret = ((unsigned char) rabuf[raixget++]) & 0xff;
-+  if (raptr->raixget < raptr->ralen)
-+    chret = ((unsigned char) raptr->rabuf[raptr->raixget++]) & 0xff;
-   /* FIXME - not thread safe */
--  if (raixget >= ralen)
--    raixget = raixput = ralen = 0;
-+  if (raptr->raixget >= raptr->ralen)
-+    raptr->raixget = raptr->raixput = raptr->ralen = 0;
-   return chret;
- }
- 
-@@ -94,10 +95,10 @@ int
- fhandler_base::peek_readahead (int queryput)
- {
-   int chret = -1;
--  if (!queryput && raixget < ralen)
--    chret = ((unsigned char) rabuf[raixget]) & 0xff;
--  else if (queryput && raixput > 0)
--    chret = ((unsigned char) rabuf[raixput - 1]) & 0xff;
-+  if (!queryput && raptr->raixget < raptr->ralen)
-+    chret = ((unsigned char) raptr->rabuf[raptr->raixget]) & 0xff;
-+  else if (queryput && raptr->raixput > 0)
-+    chret = ((unsigned char) raptr->rabuf[raptr->raixput - 1]) & 0xff;
-   return chret;
- }
- 
-@@ -105,7 +106,7 @@ void
- fhandler_base::set_readahead_valid (int val, int ch)
- {
-   if (!val)
--    ralen = raixget = raixput = 0;
-+    raptr->ralen = raptr->raixget = raptr->raixput = 0;
-   if (ch != -1)
-     put_readahead (ch);
- }
-@@ -1092,7 +1093,7 @@ fhandler_base::lseek (off_t offset, int whence)
-   if (whence != SEEK_CUR || offset != 0)
-     {
-       if (whence == SEEK_CUR)
--	offset -= ralen - raixget;
-+	offset -= raptr->ralen - raptr->raixget;
-       set_readahead_valid (0);
-     }
- 
-@@ -1142,7 +1143,7 @@ fhandler_base::lseek (off_t offset, int whence)
-      readahead that we have to take into account when calculating
-      the actual position for the application.  */
-   if (whence == SEEK_CUR)
--    res -= ralen - raixget;
-+    res -= raptr->ralen - raptr->raixget;
- 
-   return res;
- }
-@@ -1565,23 +1566,24 @@ fhandler_base::fhandler_base () :
-   ino (0),
-   _refcnt (0),
-   openflags (0),
--  rabuf (NULL),
--  ralen (0),
--  raixget (0),
--  raixput (0),
--  rabuflen (0),
-   unique_id (0),
-   archetype (NULL),
-   usecount (0)
- {
-+  ra.rabuf = NULL;
-+  ra.ralen = 0;
-+  ra.raixget = 0;
-+  ra.raixput = 0;
-+  ra.rabuflen = 0;
-+  set_rabuf ();
-   isclosed (false);
- }
- 
- /* Normal I/O destructor */
- fhandler_base::~fhandler_base ()
- {
--  if (rabuf)
--    free (rabuf);
-+  if (ra.rabuf)
-+    free (ra.rabuf);
- }
- 
- /**********************************************************************/
-diff --git a/winsup/cygwin/fhandler.h b/winsup/cygwin/fhandler.h
-index c0d56b4da..35190c0fe 100644
---- a/winsup/cygwin/fhandler.h
-+++ b/winsup/cygwin/fhandler.h
-@@ -202,16 +202,22 @@ class fhandler_base
- 
-   ino_t ino;	/* file ID or hashed filename, depends on FS. */
-   LONG _refcnt;
-+ public:
-+  struct rabuf_t
-+  {
-+    char *rabuf;		/* used for crlf conversion in text files */
-+    size_t ralen;
-+    size_t raixget;
-+    size_t raixput;
-+    size_t rabuflen;
-+  };
- 
-  protected:
-   /* File open flags from open () and fcntl () calls */
-   int openflags;
- 
--  char *rabuf;		/* used for crlf conversion in text files */
--  size_t ralen;
--  size_t raixget;
--  size_t raixput;
--  size_t rabuflen;
-+  struct rabuf_t ra;
-+  struct rabuf_t *raptr;
- 
-   /* Used for advisory file locking.  See flock.cc.  */
-   int64_t unique_id;
-@@ -315,7 +321,8 @@ class fhandler_base
-     ReleaseSemaphore (read_state, n, NULL);
-   }
- 
--  bool get_readahead_valid () { return raixget < ralen; }
-+  virtual void set_rabuf (void) { raptr = &ra;};
-+  bool get_readahead_valid () { return raptr->raixget < raptr->ralen; }
-   int puts_readahead (const char *s, size_t len = (size_t) -1);
-   int put_readahead (char value);
- 
-@@ -464,8 +471,8 @@ public:
-   virtual bg_check_types bg_check (int, bool = false) {return bg_ok;}
-   virtual void clear_readahead ()
-   {
--    raixput = raixget = ralen = rabuflen = 0;
--    rabuf = NULL;
-+    raptr->raixput = raptr->raixget = raptr->ralen = raptr->rabuflen = 0;
-+    raptr->rabuf = NULL;
-   }
-   void operator delete (void *p) {cfree (p);}
-   virtual void set_eof () {}
-@@ -1968,6 +1975,7 @@ private:
-   static bool create_invisible_console (HWINSTA);
-   static bool create_invisible_console_workaround ();
-   static console_state *open_shared_console (HWND, HANDLE&, bool&);
-+  void set_rabuf (void);
- 
-  public:
-   static pid_t tc_getpgid ()
-diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
-index b3f2cb65a..9bb85e3b1 100644
---- a/winsup/cygwin/fhandler_console.cc
-+++ b/winsup/cygwin/fhandler_console.cc
-@@ -56,6 +56,11 @@ bool NO_COPY fhandler_console::invisible_console;
- static DWORD orig_conin_mode = (DWORD) -1;
- static DWORD orig_conout_mode = (DWORD) -1;
- 
-+/* con_ra is shared in the same process. */
-+/* The console can be exist only one in a process,
-+   therefore, static is suitable. */
-+static struct fhandler_base::rabuf_t con_ra;
-+
- static void
- beep ()
- {
-@@ -214,6 +219,12 @@ fhandler_console::setup ()
-     }
- }
- 
-+void
-+fhandler_console::set_rabuf (void)
-+{
-+  raptr = &con_ra;
-+}
-+
- /* Return the tty structure associated with a given tty number.  If the
-    tty number is < 0, just return a dummy record. */
- tty_min *
-@@ -454,7 +465,7 @@ fhandler_console::read (void *pv, size_t& buflen)
-   copied_chars +=
-     get_readahead_into_buffer (buf + copied_chars, buflen);
- 
--  if (!ralen)
-+  if (!con_ra.ralen)
-     input_ready = false;
-   release_input_mutex ();
- 
-@@ -1103,6 +1114,9 @@ fhandler_console::close ()
-   CloseHandle (get_handle ());
-   CloseHandle (get_output_handle ());
- 
-+  if (con_ra.rabuf)
-+    free (con_ra.rabuf);
-+
-   /* If already attached to pseudo console, don't call free_console () */
-   cygheap_fdenum cfd (false);
-   while (cfd.next () >= 0)
-diff --git a/winsup/cygwin/fhandler_termios.cc b/winsup/cygwin/fhandler_termios.cc
-index 5b0ba5603..00d2b0482 100644
---- a/winsup/cygwin/fhandler_termios.cc
-+++ b/winsup/cygwin/fhandler_termios.cc
-@@ -265,25 +265,26 @@ fhandler_termios::bg_check (int sig, bool dontsignal)
- int
- fhandler_termios::eat_readahead (int n)
- {
--  int oralen = ralen;
-+  int oralen = raptr->ralen;
-   if (n < 0)
--    n = ralen;
--  if (n > 0 && ralen > 0)
-+    n = raptr->ralen;
-+  if (n > 0 && raptr->ralen > 0)
-     {
--      if ((int) (ralen -= n) < 0)
--	ralen = 0;
-+      if ((int) (raptr->ralen -= n) < 0)
-+	raptr->ralen = 0;
-       /* If IUTF8 is set, the terminal is in UTF-8 mode.  If so, we erase
- 	 a complete UTF-8 multibyte sequence on VERASE/VWERASE.  Otherwise,
- 	 if we only erase a single byte, invalid unicode chars are left in
- 	 the input. */
-       if (tc ()->ti.c_iflag & IUTF8)
--	while (ralen > 0 && ((unsigned char) rabuf[ralen] & 0xc0) == 0x80)
--	  --ralen;
--
--      if (raixget >= ralen)
--	raixget = raixput = ralen = 0;
--      else if (raixput > ralen)
--	raixput = ralen;
-+	while (raptr->ralen > 0 &&
-+	       ((unsigned char) raptr->rabuf[raptr->ralen] & 0xc0) == 0x80)
-+	  --raptr->ralen;
-+
-+      if (raptr->raixget >= raptr->ralen)
-+	raptr->raixget = raptr->raixput = raptr->ralen = 0;
-+      else if (raptr->raixput > raptr->ralen)
-+	raptr->raixput = raptr->ralen;
-     }
- 
-   return oralen;
-@@ -411,7 +412,7 @@ fhandler_termios::line_edit (const char *rptr, size_t nread, termios& ti,
- 	  if (ti.c_lflag & ECHO)
- 	    {
- 	      doecho ("\n\r", 2);
--	      doecho (rabuf, ralen);
-+	      doecho (raptr->rabuf, raptr->ralen);
- 	    }
- 	  continue;
- 	}
-@@ -438,13 +439,13 @@ fhandler_termios::line_edit (const char *rptr, size_t nread, termios& ti,
- 	doecho (&c, 1);
-       /* Write in chunks of 32 bytes to reduce the number of WriteFile calls
-       	in non-canonical mode. */
--      if ((!iscanon && ralen >= 32) || input_done)
-+      if ((!iscanon && raptr->ralen >= 32) || input_done)
- 	{
- 	  int status = accept_input ();
- 	  if (status != 1)
- 	    {
- 	      ret = status ? line_edit_error : line_edit_pipe_full;
--	      nread += ralen;
-+	      nread += raptr->ralen;
- 	      break;
- 	    }
- 	  ret = line_edit_input_done;
-@@ -453,14 +454,14 @@ fhandler_termios::line_edit (const char *rptr, size_t nread, termios& ti,
-     }
- 
-   /* If we didn't write all bytes in non-canonical mode, write them now. */
--  if (!iscanon && ralen > 0
-+  if (!iscanon && raptr->ralen > 0
-       && (ret == line_edit_ok || ret == line_edit_input_done))
-     {
-       int status = accept_input ();
-       if (status != 1)
- 	{
- 	  ret = status ? line_edit_error : line_edit_pipe_full;
--	  nread += ralen;
-+	  nread += raptr->ralen;
- 	}
-       else
- 	ret = line_edit_input_done;
-diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index 4977a8bd5..71a1f42ba 100644
---- a/winsup/cygwin/fhandler_tty.cc
-+++ b/winsup/cygwin/fhandler_tty.cc
-@@ -525,7 +525,7 @@ fhandler_pty_master::accept_input ()
-     }
-   else
-     {
--      char *p = rabuf;
-+      char *p = raptr->rabuf;
-       DWORD rc;
-       DWORD written = 0;
- 
+On Fri, 24 Jan 2020 11:26:27 +0100
+Corinna Vinschen wrote:
+> On Jan 23 22:05, Takashi Yano wrote:
+> > On Thu, 23 Jan 2020 13:48:13 +0100
+> > Corinna Vinschen wrote:
+> > > On Jan 23 13:33, Takashi Yano wrote:
+> > > > - Following console APIs are additionally hooked for cygwin programs
+> > > >   which directly call them.
+> > > >   * FillConsoleOutputAttribute()
+> > > >   * FillConsoleOutputCharacterA()
+> > > >   * FillConsoleOutputCharacterW()
+> > > >   * ScrollConsoleScreenBufferA()
+> > > >   * ScrollConsoleScreenBufferW()
+> > > 
+> > > Which Cygwin programs are doing that?  They wouldn't work correctly in
+> > > ptys anyway, isn't it?  Does it really make sense to make them happy
+> > > rather than requesting to change them?
+> > 
+> > Just a possibility. There is no specific example.
+> 
+> In that case I'd prefer not to apply this patch.  Using native Windows
+> console functions in a Cygwin application just doesn't make sense, and
+> we shouldn't support that beyond what's necessary for older, existing
+> applications.
+
+I searched in /bin and found that many of cygwin programs calls win32 api
+directly. However, the only cygwin programs which calls console APIs are
+cygrunsrv.exe, gdb.exe and w3m.exe in my installation.
+
+cygrunsrv calls:
+        DLL Name: ADVAPI32.dll
+        vma:  Hint/Ord Member-Name Bound-To
+        264ec      87  CloseServiceHandle
+        26502      92  ControlService
+        26514     128  CreateServiceA
+        26526     218  DeleteService
+        26536     255  EnumServicesStatusA
+        2654c     511  OpenSCManagerA
+        2655e     513  OpenServiceA
+        2656e     554  QueryServiceConfigA
+        26584     559  QueryServiceStatus
+        2659a     568  RegCloseKey
+        265a8     569  RegConnectRegistryA
+        265be     576  RegCreateKeyExA
+        265d0     601  RegEnumValueA
+        265e0     603  RegFlushKey
+        265ee     616  RegOpenKeyExA
+        265fe     629  RegQueryValueExA
+        26612     645  RegSetValueExA
+        26624     654  RegisterServiceCtrlHandlerExA
+        26644     712  SetServiceStatus
+        26658     718  StartServiceA
+        26668     719  StartServiceCtrlDispatcherA
+
+        DLL Name: KERNEL32.dll
+        vma:  Hint/Ord Member-Name Bound-To
+        26686      16  AllocConsole              <==============
+        26696      83  CloseHandle
+        266a4     239  EnterCriticalSection
+        266bc     351  FormatMessageA
+        266ce     353  FreeConsole               <==============
+        266dc     356  FreeLibrary
+        266ea     482  GetExitCodeProcess
+        26700     515  GetLastError
+        26710     531  GetModuleFileNameA
+        26726     533  GetModuleHandleA
+        2673a     581  GetProcAddress
+        2674c     663  GetTickCount
+        2675c     677  GetVersion
+        2676a     747  InitializeCriticalSection
+        26786     806  LeaveCriticalSection
+        2679e     809  LoadLibraryA
+        267ae     879  OpenProcess
+        267bc    1035  SetConsoleTitleA          <==============
+        267d0    1078  SetLastError
+        267e0    1140  Sleep
+        267e8    1218  WaitForSingleObject
+
+        DLL Name: USER32.dll
+        vma:  Hint/Ord Member-Name Bound-To
+        267fe      13  BringWindowToTop
+        26812     260  GetForegroundWindow
+        26828     335  GetTopWindow
+        26838     538  SetForegroundWindow
+
+gdb calls:
+        DLL Name: KERNEL32.dll
+        vma:  Hint/Ord Member-Name Bound-To
+        60a5bc     84  CloseHandle
+        60a5ca    106  ContinueDebugEvent
+        60a5e0    140  CreateFileA
+        60a5ee    172  CreateProcessW
+        60a600    201  DebugActiveProcess
+        60a616    348  FlushInstructionCache
+        60a62e    358  FreeLibrary
+        60a63c    364  GenerateConsoleCtrlEvent   <==============
+        60a658    440  GetConsoleScreenBufferInfo <==============
+        60a676    454  GetCurrentProcess
+        60a68a    485  GetExitCodeThread
+        60a69e    517  GetLastError
+        60a6ae    535  GetModuleHandleA
+        60a6c2    538  GetModuleHandleW
+        60a6d6    583  GetProcAddress
+        60a6e8    628  GetSystemDirectoryW
+        60a6fe    651  GetThreadContext
+        60a712    661  GetThreadSelectorEntry
+        60a72c    811  LoadLibraryA
+        60a73c    882  OpenProcess
+        60a74a    950  ReadProcessMemory
+        60a75e    988  ResumeThread
+        60a76e   1015  SetConsoleCtrlHandler     <==============
+        60a786   1057  SetEnvironmentVariableW
+        60a7a0   1059  SetEvent
+        60a7ac   1115  SetThreadContext
+        60a7c0   1154  SuspendThread
+        60a7d0   1160  TerminateProcess
+        60a7e4   1221  WaitForDebugEvent
+        60a7f8   1224  WaitForSingleObject
+        60a80e   1278  WriteProcessMemory
+
+w3m calls:
+        DLL Name: KERNEL32.dll
+        vma:  Hint/Ord Member-Name Bound-To
+        1384c0     83  CloseHandle
+        1384ce    139  CreateFileA
+        1384dc    356  FreeLibrary
+        1384ea    441  GetConsoleTitleA        <==============
+        1384fe    453  GetCurrentProcessId
+        138514    533  GetModuleHandleA
+        138528    581  GetProcAddress
+        13853a    663  GetTickCount
+        13854a    678  GetVersionExA
+        13855a    809  LoadLibraryA
+        13856a    888  PeekConsoleInputA       <==============
+        13857e    929  ReadConsoleA            <==============
+        13858e    930  ReadConsoleInputA       <==============
+        1385a2   1035  SetConsoleTitleA        <==============
+        1385b6   1140  Sleep
+
+        DLL Name: USER32.dll
+        vma:  Hint/Ord Member-Name Bound-To
+        1385be    211  FindWindowA
+        1385cc    401  IsWindowVisible
+        1385de    644  wsprintfA
+
+None of them calls:
+FillConsoleOutputAttribute()
+FillConsoleOutputCharacterA()
+FillConsoleOutputCharacterW()
+ScrollConsoleScreenBufferA()
+ScrollConsoleScreenBufferW()
+
+So, I would like to withdraw this patch for now. Thanks.
+
 -- 
-2.21.0
+Takashi Yano <takashi.yano@nifty.ne.jp>
