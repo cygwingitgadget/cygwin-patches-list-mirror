@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-10008-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 84193 invoked by alias); 27 Jan 2020 04:22:37 -0000
+Return-Path: <cygwin-patches-return-10009-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 68744 invoked by alias); 27 Jan 2020 09:26:36 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,70 +9,133 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 84182 invoked by uid 89); 27 Jan 2020 04:22:37 -0000
+Received: (qmail 68734 invoked by uid 89); 27 Jan 2020 09:26:35 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-4.3 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=fundamental
-X-HELO: conssluserg-05.nifty.com
-Received: from conssluserg-05.nifty.com (HELO conssluserg-05.nifty.com) (210.131.2.90) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 27 Jan 2020 04:22:35 +0000
-Received: from Express5800-S70 (ntsitm196171.sitm.nt.ngn.ppp.infoweb.ne.jp [125.0.207.171]) (authenticated)	by conssluserg-05.nifty.com with ESMTP id 00R4MVW4012149	for <cygwin-patches@cygwin.com>; Mon, 27 Jan 2020 13:22:31 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 00R4MVW4012149
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1580098951;	bh=4dkQakcbEVV9I5IfaFH9fKVLer6EE/J7TXkncVP33og=;	h=Date:From:To:Subject:In-Reply-To:References:From;	b=ESJehuqJuFohAKFLZWazY/DowuLYklRPil5d7AIwp7dEFZmSuII3lFRsS0ea6I9Gn	 hqHsBCl9Vc2dMzcoxxfN6rhn5VTupuFs0+SkhL8n/xN0Q0SlFemAt3cvo2NNflQRmU	 O2pnPlZs/GmVjQ602bvReKMeCAVczIDswgTb//jGGCOlxwUnXk8YUbxCvk9m2q4b60	 uu3z4P9P0iI2TAoKa10uMxMDdfWngRfq0bTB64WWKtv0f+hIRAMN5319B59a0CwFvw	 h+CwBCEw5nfdNFVkh95z0mQ0d4Q2g/j2DXw2cE8qnO5VNPz2OaGjH9iPNsSPdMHKpz	 arg/yHq/ouHkg==
-Date: Mon, 27 Jan 2020 04:22:00 -0000
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+X-Spam-SWARE-Status: No, score=-119.8 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*F:D*cygwin.com, scenarios, critical
+X-HELO: mout.kundenserver.de
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (217.72.192.75) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 27 Jan 2020 09:26:34 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id 1MHndY-1ipwOn2498-00Exrj for <cygwin-patches@cygwin.com>; Mon, 27 Jan 2020 10:26:31 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 8DC2AA80BC4; Mon, 27 Jan 2020 10:26:30 +0100 (CET)
+Date: Mon, 27 Jan 2020 09:26:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2] Cygwin: pty: Revise code waiting for forwarding again.
-Message-Id: <20200127132232.43aa849e14d9a4b5bc0313e9@nifty.ne.jp>
-In-Reply-To: <20200127113822.98cc07b396b6dba26d53edeb@nifty.ne.jp>
-References: <20200122160755.867-1-takashi.yano@nifty.ne.jp>	<20200123043007.1364-1-takashi.yano@nifty.ne.jp>	<20200123125154.GD263143@calimero.vinschen.de>	<20200123231623.ed57b0af319d1de545f2ab7c@nifty.ne.jp>	<20200124110730.GG263143@calimero.vinschen.de>	<20200125203837.e37257365f30d33002f9e9f6@nifty.ne.jp>	<20200126223319.211269b451e91da6eb7f4795@nifty.ne.jp>	<20200127113822.98cc07b396b6dba26d53edeb@nifty.ne.jp>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-IsSubscribed: yes
-X-SW-Source: 2020-q1/txt/msg00114.txt
+Subject: Re: [PATCH] Cygwin: console: Share readahead buffer within the same process.
+Message-ID: <20200127092630.GB3549@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20200125094548.958-1-takashi.yano@nifty.ne.jp>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="ZGiS0Q5IWpPtfppv"
+Content-Disposition: inline
+In-Reply-To: <20200125094548.958-1-takashi.yano@nifty.ne.jp>
+X-SW-Source: 2020-q1/txt/msg00115.txt
 
-On Mon, 27 Jan 2020 11:38:22 +0900
-Takashi Yano wrote:
-> On Sun, 26 Jan 2020 22:33:19 +0900
-> Takashi Yano wrote:
-> > On Sat, 25 Jan 2020 20:38:37 +0900
-> > Takashi Yano wrote:
-> > > On Fri, 24 Jan 2020 12:07:30 +0100
-> > > Corinna Vinschen wrote:
-> > > > Too bad.  It's pretty strange that CreatePseudoConsole returns a
-> > > > valid HPCON but then isn't ready to take input immediately.
-> > > > 
-> > > > > I do not come up with other implementation so far.
-> > > > > 
-> > > > > Let me consider a while.
-> > > > 
-> > > > I wonder how others solve this problem.  I see that the native OpenSSH
-> > > > is using Sleeps, too, in their start_with_pty() function, calling
-> > > > AttachConsole in a loop, but I'm not sure if these are related to pseudo
-> > > > console usage.  The commit message don't explain anything there :(
-> > > 
-> > > The essence of the difficulty is that we have to support both cygwin
-> > > programs and native console apps. If we consider only of native console
-> > > apps, any time we can use pseudo console. However, pseudo console is
-> > > not transparent at all, so it cannot be used for cygwin programs.
-> > > 
-> > > Therefore, current cygwin is switching handles to be used between
-> > > named-pipe and pseudo console.
-> > > 
-> > > However, because pseudo console has relatively long latency, if pipe
-> > > is switched just after writing to pseudo console, the forwarding
-> > > does not get in time. So the "wait" is needed before switching.
-> > > 
-> > > I had tried WriteFile(), ReadFile() and DeviceIoControl() for
-> > > HANDLE hConDrvReference, however, all atempts of them failed.
-> > 
-> > After much struggle, I finally found a solution.
-> > Please look at v3 patch.
-> 
-> v3 patch does not seem to work as expected in Win10 1809.
-> I will submit v4 patch.
 
-Sorry for again and again.
-I think v5 is more fundamental fix than v4.
+--ZGiS0Q5IWpPtfppv
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 2277
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+Hi Takashi,
+
+On Jan 25 18:45, Takashi Yano wrote:
+> - The cause of the problem reported in
+>   https://www.cygwin.com/ml/cygwin/2020-01/msg00220.html is that the
+>   chars input before dup() cannot be read from the new file descriptor.
+>   This is because the readahead buffer (rabuf) in the console is newly
+>   created by dup(), and does not inherit from the parent. This patch
+>   fixes the issue.
+> ---
+>  winsup/cygwin/fhandler.cc         | 58 ++++++++++++++++---------------
+>  winsup/cygwin/fhandler.h          | 24 ++++++++-----
+>  winsup/cygwin/fhandler_console.cc | 16 ++++++++-
+>  winsup/cygwin/fhandler_termios.cc | 35 ++++++++++---------
+>  winsup/cygwin/fhandler_tty.cc     |  2 +-
+>  5 files changed, 80 insertions(+), 55 deletions(-)
+>=20
+> diff --git a/winsup/cygwin/fhandler.cc b/winsup/cygwin/fhandler.cc
+> index aeee8fe4d..ad4a7e61c 100644
+> --- a/winsup/cygwin/fhandler.cc
+> +++ b/winsup/cygwin/fhandler.cc
+> @@ -44,11 +44,12 @@ void
+>  fhandler_base::reset (const fhandler_base *from)
+>  {
+>    pc << from->pc;
+> -  rabuf =3D NULL;
+> -  ralen =3D 0;
+> -  raixget =3D 0;
+> -  raixput =3D 0;
+> -  rabuflen =3D 0;
+> +  ra.rabuf =3D NULL;
+> +  ra.ralen =3D 0;
+> +  ra.raixget =3D 0;
+> +  ra.raixput =3D 0;
+> +  ra.rabuflen =3D 0;
+> +  set_rabuf ();
+>    _refcnt =3D 0;
+>  }
+>=20=20
+> @@ -66,15 +67,15 @@ int
+>  fhandler_base::put_readahead (char value)
+>  {
+>    char *newrabuf;
+> -  if (raixput < rabuflen)
+> +  if (raptr->raixput < raptr->rabuflen)
+>      /* Nothing to do */;
+
+This adds extra pointer access to critical code paths, even if only
+in O_TEXT scenarios.  May I suggest dropping the extra pointer and
+converting readahead access to access methods, kind of like this:
+
+  class fhandler {
+    char *&rabuf () { return ra.rabuf; }
+    int &rabuflen () { return ra.rabuflen; }
+    [...]
+
+  class fhandler_console {
+    char *&rabuf () { return con_ra.rabuf; }
+    int &rabuflen () { return con_ra.rabuflen; }
+    [...]
+
+and then use those accessor methods throughout:
+
+> -  else if ((newrabuf =3D (char *) realloc (rabuf, rabuflen +=3D 32)))
+> -    rabuf =3D newrabuf;
+
+      else if ((newrabuf =3D (char *) realloc (rabuf (), rabuflen () +=3D 3=
+2)))
+        rabuf () =3D newrabuf;
+
+etc.
+
+
+Thanks,
+Corinna
+
+--=20
+Corinna Vinschen
+Cygwin Maintainer
+
+--ZGiS0Q5IWpPtfppv
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 833
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl4urMYACgkQ9TYGna5E
+T6Cf3A//f526ZrtcHgyMSb+syYCYxZ8fNAacmdmQaZK/+Yfof/7DZ/0/smiDfl8N
+/2/ROR89O6C4Ag+3I8kZ3UnF6ulkBfCJGKHER7YDw8OZVdDRRJ+su9Rux2FX+Jcz
+TbejQp5Gi17d1Z/nNFgJdgppqrTDewntxb0V8IB9+b0duM/Bh75kwG4uf44548jz
+o9GY+3xrku2RItPl4/mDWy1w0eQcU25/dxZbuCY/a1CYSCbfz8R8l2TuqXTAiz8I
+Xq5OWVDoara0PtEHM7E0KEbgmadx7fQIVMwk9HzKZ7lyVAB7sq+fovxxgqDQSW6d
+oRhbgrGegBGXvjiq4PJzfw/ADYJyialWdqP7/J3KjdFsiijc7TxBCxTBnehqV9WY
+j2NNhnaMdIvxSrQuQHj3Xj2KOUphmqiuArp9Od/Es7PflFhS4j6ZX0t18LSgsPtQ
+c9SuJ8uy9EPuOCTWbub15QVyQVfO/OoURk5J/Hba9wg4J7x+dKc0PmT0LwugziN+
+8+BW7Hoc5Wc5s3KiWLAKNhlaM0Yzhpackpe8xsjXHg1ZJHI8X/rTjVTLrsvc9OFK
+Pms8d07x5F0h++5OXxNZRqep4+ttXYrkNCUOE27dYLPptsiohoKJTngNk0TmxVHz
+OQN5OB0lfyb7Hkt254SHOrYXa+U3kCZOLca9dTk0XUkPvUXZbnU=
+=V7wx
+-----END PGP SIGNATURE-----
+
+--ZGiS0Q5IWpPtfppv--
