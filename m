@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-10032-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 61712 invoked by alias); 29 Jan 2020 17:31:07 -0000
+Return-Path: <cygwin-patches-return-10033-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 38641 invoked by alias); 29 Jan 2020 20:58:34 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,264 +9,127 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 61546 invoked by uid 89); 29 Jan 2020 17:30:47 -0000
+Received: (qmail 38631 invoked by uid 89); 29 Jan 2020 20:58:34 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-8.2 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham version=3.3.1 spammy=listen, H*M:b8f8
-X-HELO: NAM10-MW2-obe.outbound.protection.outlook.com
-Received: from mail-mw2nam10on2113.outbound.protection.outlook.com (HELO NAM10-MW2-obe.outbound.protection.outlook.com) (40.107.94.113) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 29 Jan 2020 17:30:24 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none; b=Eo0sRb+qOvKZ2n1cULN5sDjPHfJO3a/kCCLR0rmXo8o/CRYgB+qQ0XYtKd0P3et2JRw31jnLKtrKSmbb5njp/rWEgaPirM9xqCRqGdSp7f4dUej0TOQxDqv+D91hXX31cwPSngIk2/sUCZ1XqLphnt+sf9Zdrv/KabOhw3WWe6rZJWX6ra+4MWRDBht5Q40CN7QxcT1lfa2GDQ6Yzuhhi7wUKRRXIU6fhJhy4hwFqMXCKBspxzvhWwLFWSGH8oE7j5JhaIh+Rhs8ys1N3QvBulp938MvAD7bpRirSsbEonJRUEUwZNZS25XXDVzGyDFxGVozORr+cgqGgWHpoBe4zg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; s=arcselector9901; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=EKg2yLu9Se7vsbq84HcLtSWSDtrYd7qrBa23QqT11W0=; b=VjDDRc5cOOnAYNQT1QObNu1NXBZOeUif/ZMuclUoM2LALaCv19lQL39vgTd18KXnd74UCJPbcar6iEyERjrAuntg/kIXPv2H1BpyUi+0YKEWaKh+FhaIrsO4dSt8SwUZx+k8itJWbP6amoNGJAGcuntPkcRLjNdRry50XqkJzUJjAMkSQBhehdmzWN6iOE4A3kIZi22yL8omtq+334wiPadaVaCioijB8KqZ9+PzZ+5oHnvT3oLdUmr0XyUwO9AFb9DijeCdFwrGaYW/P9lRs3/h/po44FVTX5u4/P3b15NfmUF/xUjJwKOpx57y44o9QdDip1v07hLBKC/P0BUPLQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu; dkim=pass header.d=cornell.edu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornell.edu; s=selector2; h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck; bh=EKg2yLu9Se7vsbq84HcLtSWSDtrYd7qrBa23QqT11W0=; b=RHg1FKTH1YvHjU1VPAFu0A3AYUCkyQRisAUX/i/O6y51ghbW9MYk67ARRiX7UFbYVbKYRJYEpbh0ZOOqZKo9HtGmJupsPwYGTGEQNsWAbo0y/n+E1FvjHJY8vEdKFuBSAZidlX9iggnCimeAXXIjXIf7GowYGpEGXAQ5FSv+GDc=
-Received: from BYAPR04MB5735.namprd04.prod.outlook.com (20.179.59.153) by BYAPR04MB4005.namprd04.prod.outlook.com (52.135.213.159) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2665.23; Wed, 29 Jan 2020 17:30:10 +0000
-Received: from BYAPR04MB5735.namprd04.prod.outlook.com ([fe80::5142:1dd7:256:399]) by BYAPR04MB5735.namprd04.prod.outlook.com ([fe80::5142:1dd7:256:399%5]) with mapi id 15.20.2665.027; Wed, 29 Jan 2020 17:30:10 +0000
-Received: from [10.13.22.8] (65.112.130.194) by BN8PR15CA0069.namprd15.prod.outlook.com (2603:10b6:408:80::46) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2665.22 via Frontend Transport; Wed, 29 Jan 2020 17:30:10 +0000
-From: Ken Brown <kbrown@cornell.edu>
-To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: Re: [PATCH v2 0/5] Support opening an AF_LOCAL socket with O_PATH
-Date: Wed, 29 Jan 2020 17:31:00 -0000
-Message-ID: <0fba4331-e567-b8f8-b388-16777707c959@cornell.edu>
-References: <20200129172147.1566-1-kbrown@cornell.edu>
-In-Reply-To: <20200129172147.1566-1-kbrown@cornell.edu>
-user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101 Thunderbird/68.4.1
-authentication-results: spf=none (sender IP is ) smtp.mailfrom=kbrown@cornell.edu;
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-received-spf: None (protection.outlook.com: cornell.edu does not designate permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-messagedata: OY4XddTJ2CQu6LqjlN9wiQKKfMpGDNxgPP7HAuPJ4BStBVKYy2ACKCTxK0jDg3JWFfb1i9Vweqqbw/G/bfMaFAUbeehZgJqRCpEz4/RfcFE8w1EY2qVgx6n2y65hLCSePdUjJQBREFJo5KRoeDg4rw==
-x-ms-exchange-transport-forked: True
-Content-Type: multipart/mixed;	boundary="_002_0fba4331e567b8f8b38816777707c959cornelledu_"
+X-Spam-SWARE-Status: No, score=-119.5 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*F:D*cygwin.com
+X-HELO: mout.kundenserver.de
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (217.72.192.74) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 29 Jan 2020 20:58:33 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id 1Ml6i2-1jQRnm2pzg-00lYWN for <cygwin-patches@cygwin.com>; Wed, 29 Jan 2020 21:58:30 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id DFCFBA80BDF; Wed, 29 Jan 2020 21:58:29 +0100 (CET)
+Date: Wed, 29 Jan 2020 20:58:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH v2 4/5] Cygwin: AF_LOCAL: fix fcntl and dup if O_PATH is set
+Message-ID: <20200129205829.GT3549@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20200129172147.1566-1-kbrown@cornell.edu> <20200129172147.1566-5-kbrown@cornell.edu>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: nuP9OktGnwm+YZNIVNWDJAzwmy2JXuB5TaT5+mmKpbSc+T4rvi9/aKca0on1ZimuKqtmqjomB+DVthoaopIlFQ==
-X-IsSubscribed: yes
-X-SW-Source: 2020-q1/txt/msg00138.txt
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="jcwRHPSxFqmwpRFb"
+Content-Disposition: inline
+In-Reply-To: <20200129172147.1566-5-kbrown@cornell.edu>
+X-SW-Source: 2020-q1/txt/msg00139.txt
 
 
---_002_0fba4331e567b8f8b38816777707c959cornelledu_
-Content-Type: text/plain; charset="Windows-1252"
-Content-ID: <317AFC72C6E7FF49BEDDDFB023459B7C@namprd04.prod.outlook.com>
+--jcwRHPSxFqmwpRFb
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-length: 919
+Content-length: 2353
 
-On 1/29/2020 12:22 PM, Ken Brown wrote:
-> I'll follow up with the program I used to test this patch series.
+On Jan 29 17:22, Ken Brown wrote:
+> For fcntl this requires a new method, fhandler_socket_local::fcntl,
+> which calls fhandler_base::fcntl if O_PATH is set and
+> fhandler_socket_wsock::fcntl otherwise.
 
-Attached.
+The patchset looks great.  Please apply with just a minor change:
 
-$ gcc -Wall -o o_path_socket_test o_path_socket_test.c
+Can you please add a hint why using fhandler_base::dup and
+fhandler_base::fcntl is sufficient, despite fhandler_disk_file has its
+own methods?  It's clear from looking at those functions, but a quick
+description in the commit message and a one-line comment each in the
+source might be helpful when debugging at one point.
 
-$ ./o_path_socket_test.exe
-The following calls should fail with EBADF:
-read: OK
-write: OK
-fchmod: OK
-fchown: OK
-ioctl: OK
-fgetxattr: OK
-mmap: OK
-sockatmark: OK
 
-The following calls should fail with ENOTSOCK:
-sendto: OK
-recvfrom: OK
-setsockopt: OK
-getsockopt: OK
-getpeereid: OK
-connect: OK
-accept: OK
-accept4: OK
-bind: OK
-getsockname: OK
-listen: OK
-shutdown: OK
-getpeername: OK
-recv: OK
-send: OK
-recvmsg: OK
-sendmsg: OK
-bindresvport_sa: OK
-bindresvport with NULL arg: OK
-bindresvport with valid sin arg: OK
+Thanks,
+Corinna
 
-The following call should fail with EAFNOSUPPORT:
-bindresvport with invalid sin arg: OK
 
-The following calls should succeed:
-fstat: OK
-fstatvfs: OK
-fcntl_dup: OK
-fcntl_getfl: OK
-fcntl_setfl: OK
-fcntl_getfd: OK
-fcntl_setfd: OK
-close: OK
+> ---
+>  winsup/cygwin/fhandler.h               |  1 +
+>  winsup/cygwin/fhandler_socket_local.cc | 12 ++++++++++++
+>  2 files changed, 13 insertions(+)
+>=20
+> diff --git a/winsup/cygwin/fhandler.h b/winsup/cygwin/fhandler.h
+> index c54780ef6..1b477f633 100644
+> --- a/winsup/cygwin/fhandler.h
+> +++ b/winsup/cygwin/fhandler.h
+> @@ -836,6 +836,7 @@ class fhandler_socket_local: public fhandler_socket_w=
+sock
+>=20=20
+>    int open (int flags, mode_t mode =3D 0);
+>    int close ();
+> +  int fcntl (int cmd, intptr_t);
+>    int __reg2 fstat (struct stat *buf);
+>    int __reg2 fstatvfs (struct statvfs *buf);
+>    int __reg1 fchmod (mode_t newmode);
+> diff --git a/winsup/cygwin/fhandler_socket_local.cc b/winsup/cygwin/fhand=
+ler_socket_local.cc
+> index 76815a611..531f574b0 100644
+> --- a/winsup/cygwin/fhandler_socket_local.cc
+> +++ b/winsup/cygwin/fhandler_socket_local.cc
+> @@ -628,6 +628,9 @@ fhandler_socket_local::af_local_set_secret (char *buf)
+>  int
+>  fhandler_socket_local::dup (fhandler_base *child, int flags)
+>  {
+> +  if (get_flags () & O_PATH)
+> +    return fhandler_base::dup (child, flags);
+> +
+>    fhandler_socket_local *fhs =3D (fhandler_socket_local *) child;
+>    fhs->set_sun_path (get_sun_path ());
+>    fhs->set_peer_sun_path (get_peer_sun_path ());
+> @@ -654,6 +657,15 @@ fhandler_socket_local::close ()
+>      return fhandler_socket_wsock::close ();
+>  }
+>=20=20
+> +int
+> +fhandler_socket_local::fcntl (int cmd, intptr_t arg)
+> +{
+> +  if (get_flags () & O_PATH)
+> +    return fhandler_base::fcntl (cmd, arg);
+> +  else
+> +    return fhandler_socket_wsock::fcntl (cmd, arg);
+> +}
+> +
+>  int __reg2
+>  fhandler_socket_local::fstat (struct stat *buf)
+>  {
+> --=20
+> 2.21.0
 
---_002_0fba4331e567b8f8b38816777707c959cornelledu_
-Content-Type: text/plain; name="o_path_socket_test.c"
-Content-Description: o_path_socket_test.c
-Content-Disposition: attachment; filename="o_path_socket_test.c"; size=7007;
-	creation-date="Wed, 29 Jan 2020 17:30:10 GMT";
-	modification-date="Wed, 29 Jan 2020 17:30:10 GMT"
-Content-ID: <C6C0F5F452349641B9E4A700F92AE464@namprd04.prod.outlook.com>
-Content-Transfer-Encoding: base64
-Content-length: 9500
+--=20
+Corinna Vinschen
+Cygwin Maintainer
 
-I2RlZmluZSBfR05VX1NPVVJDRQ0KI2luY2x1ZGUgPHN5cy9zb2NrZXQuaD4N
-CiNpbmNsdWRlIDxzeXMvdW4uaD4NCiNpbmNsdWRlIDxzeXMvc3RhdC5oPg0K
-I2luY2x1ZGUgPGVycm5vLmg+DQojaW5jbHVkZSA8c3RkaW8uaD4NCiNpbmNs
-dWRlIDxzdGRsaWIuaD4NCiNpbmNsdWRlIDxmY250bC5oPg0KI2luY2x1ZGUg
-PHVuaXN0ZC5oPg0KI2luY2x1ZGUgPHN5cy9pb2N0bC5oPg0KI2luY2x1ZGUg
-PGZjbnRsLmg+DQojaW5jbHVkZSA8c3lzL3N0YXR2ZnMuaD4NCiNpbmNsdWRl
-IDxzeXMveGF0dHIuaD4NCiNpbmNsdWRlIDxzeXMvbW1hbi5oPg0KI2luY2x1
-ZGUgPG5ldGluZXQvaW4uaD4NCiNpbmNsdWRlIDxhcnBhL2luZXQuaD4NCg0K
-I2RlZmluZSBTT0NLX1BBVEggIi90bXAvbXlzb2NrZXQiDQoNCmludA0KbWFp
-biAoKQ0Kew0KICBzdHJ1Y3Qgc29ja2FkZHJfdW4gYWRkcjsNCiAgc3RydWN0
-IHN0YXQgdDsNCiAgc3RydWN0IHN0YXR2ZnMgc2ZzOw0KICBpbnQgZmQ7DQoN
-CiAgLyogQ3JlYXRlIHNvY2tldCBmaWxlLiAgKi8NCiAgaWYgKHVubGluayAo
-U09DS19QQVRIKSA9PSAtMSAgJiYgZXJybm8gIT0gRU5PRU5UKQ0KICAgIHsN
-CiAgICAgIHBlcnJvciAoInVubGluayIpOw0KICAgICAgZXhpdCAoMSk7DQog
-ICAgfQ0KICBmZCA9IHNvY2tldCAoQUZfVU5JWCwgU09DS19TVFJFQU0sIDAp
-Ow0KICBpZiAoZmQgPT0gLTEpDQogICAgew0KICAgICAgcGVycm9yICgic29j
-a2V0Iik7DQogICAgICBleGl0ICgxKTsNCiAgICB9DQogIG1lbXNldCAoJmFk
-ZHIsIDAsIHNpemVvZiAoc3RydWN0IHNvY2thZGRyX3VuKSk7DQogIGFkZHIu
-c3VuX2ZhbWlseSA9IEFGX1VOSVg7DQogIHN0cmNweSAoYWRkci5zdW5fcGF0
-aCwgU09DS19QQVRIKTsNCiAgaWYgKGJpbmQgKGZkLCAoc3RydWN0IHNvY2th
-ZGRyICopICZhZGRyLCBzaXplb2Yoc3RydWN0IHNvY2thZGRyX3VuKSkgPT0g
-LTEpDQogICAgew0KICAgICAgcGVycm9yICgiYmluZCIpOw0KICAgICAgZXhp
-dCAoMSk7DQogICAgfQ0KICBpZiAoY2xvc2UgKGZkKSA9PSAtMSkNCiAgICB7
-DQogICAgICBwZXJyb3IgKCJjbG9zZSIpOw0KICAgICAgZXhpdCAoMSk7DQog
-ICAgfQ0KDQogIC8qIFJlb3BlbiB0aGUgc29ja2V0IGZpbGUgd2l0aCBPX1BB
-VEguICAqLw0KICBmZCA9IG9wZW4gKFNPQ0tfUEFUSCwgT19QQVRIKTsNCiAg
-aWYgKGZkID09IC0xKQ0KICAgIHsNCiAgICAgIHBlcnJvciAoIm9wZW4iKTsN
-CiAgICAgIGV4aXQgKDEpOw0KICAgIH0NCg0KICBwcmludGYgKCJUaGUgZm9s
-bG93aW5nIGNhbGxzIHNob3VsZCBmYWlsIHdpdGggRUJBREY6XG4iKTsNCiAg
-ZXJybm8gPSAwOw0KICBpZiAocmVhZCAoZmQsIE5VTEwsIDApIDwgMCAmJiBl
-cnJubyA9PSBFQkFERikNCiAgICBwcmludGYgKCJyZWFkOiBPS1xuIik7DQog
-IGVsc2UNCiAgICBwZXJyb3IgKCJyZWFkIik7DQoNCiAgZXJybm8gPSAwOw0K
-ICBpZiAod3JpdGUgKGZkLCBOVUxMLCAwKSA8IDAgJiYgZXJybm8gPT0gRUJB
-REYpDQogICAgcHJpbnRmICgid3JpdGU6IE9LXG4iKTsNCiAgZWxzZQ0KICAg
-IHBlcnJvciAoIndyaXRlIik7DQoNCiAgZXJybm8gPSAwOw0KICBpZiAoZmNo
-bW9kIChmZCwgMCkgPCAwICYmIGVycm5vID09IEVCQURGKQ0KICAgIHByaW50
-ZiAoImZjaG1vZDogT0tcbiIpOw0KICBlbHNlDQogICAgcGVycm9yICgiZmNo
-bW9kIik7DQoNCiAgZXJybm8gPSAwOw0KICBpZiAoZmNob3duIChmZCwgLTEs
-IC0xKSA8IDAgJiYgZXJybm8gPT0gRUJBREYpDQogICAgcHJpbnRmICgiZmNo
-b3duOiBPS1xuIik7DQogIGVsc2UNCiAgICBwZXJyb3IgKCJmY2hvd24iKTsN
-Cg0KICBlcnJubyA9IDA7DQogIGlmIChpb2N0bCAoZmQsIEZJT05CSU8sIE5V
-TEwpIDwgMCAmJiBlcnJubyA9PSBFQkFERikNCiAgICBwcmludGYgKCJpb2N0
-bDogT0tcbiIpOw0KICBlbHNlDQogICAgcGVycm9yICgiaW9jdGwiKTsNCg0K
-ICBlcnJubyA9IDA7DQogIGlmIChmZ2V0eGF0dHIgKGZkLCAiIiwgTlVMTCwg
-MCkgPCAwICYmIGVycm5vID09IEVCQURGKQ0KICAgIHByaW50ZiAoImZnZXR4
-YXR0cjogT0tcbiIpOw0KICBlbHNlDQogICAgcGVycm9yICgiZmdldHhhdHRy
-Iik7DQoNCiAgZXJybm8gPSAwOw0KICBpZiAobW1hcCAoTlVMTCwgMSwgMCwg
-TUFQX1NIQVJFRCwgZmQsIDApID09IE1BUF9GQUlMRUQgJiYgZXJybm8gPT0g
-RUJBREYpDQogICAgcHJpbnRmICgibW1hcDogT0tcbiIpOw0KICBlbHNlDQog
-ICAgcGVycm9yICgibW1hcCIpOw0KDQogIGVycm5vID0gMDsNCiAgaWYgKHNv
-Y2thdG1hcmsgKGZkKSA8IDAgJiYgZXJybm8gPT0gRUJBREYpDQogICAgcHJp
-bnRmICgic29ja2F0bWFyazogT0tcbiIpOw0KICBlbHNlDQogICAgcGVycm9y
-ICgic29ja2F0bWFyayIpOw0KDQogIHByaW50ZiAoIlxuVGhlIGZvbGxvd2lu
-ZyBjYWxscyBzaG91bGQgZmFpbCB3aXRoIEVOT1RTT0NLOlxuIik7DQoNCiAg
-c3RydWN0IHNvY2thZGRyIHRvOw0KICBlcnJubyA9IDA7DQogIGlmIChzZW5k
-dG8gKGZkLCBOVUxMLCAwLCAwLCAmdG8sIDApIDwgMCAmJiBlcnJubyA9PSBF
-Tk9UU09DSykNCiAgICBwcmludGYgKCJzZW5kdG86IE9LXG4iKTsNCiAgZWxz
-ZQ0KICAgIHBlcnJvciAoInNlbmR0byIpOw0KDQogIHNvY2tsZW5fdCBsZW47
-DQogIGVycm5vID0gMDsNCiAgaWYgKHJlY3Zmcm9tIChmZCwgTlVMTCwgMCwg
-MCwgJnRvLCAmbGVuKSA8IDAgJiYgZXJybm8gPT0gRU5PVFNPQ0spDQogICAg
-cHJpbnRmICgicmVjdmZyb206IE9LXG4iKTsNCiAgZWxzZQ0KICAgIHBlcnJv
-ciAoInJlY3Zmcm9tIik7DQoNCiAgaW50IG9wdHZhbCA9IDE7DQogIGVycm5v
-ID0gMDsNCiAgaWYgKHNldHNvY2tvcHQgKGZkLCBTT0xfU09DS0VULCBTT19S
-RVVTRUFERFIsICZvcHR2YWwsIHNpemVvZiAob3B0dmFsKSkgPCAwDQoJCSAg
-JiYgZXJybm8gPT0gRU5PVFNPQ0spDQogICAgcHJpbnRmICgic2V0c29ja29w
-dDogT0tcbiIpOw0KICBlbHNlDQogICAgcGVycm9yICgic2V0c29ja29wdCIp
-Ow0KDQogIGxlbiA9IHNpemVvZiAob3B0dmFsKTsNCiAgZXJybm8gPSAwOw0K
-ICBpZiAoZ2V0c29ja29wdCAoZmQsIFNPTF9TT0NLRVQsIFNPX1JFVVNFQURE
-UiwgJm9wdHZhbCwgJmxlbikgPCAwDQogICAgICAmJiBlcnJubyA9PSBFTk9U
-U09DSykNCiAgICBwcmludGYgKCJnZXRzb2Nrb3B0OiBPS1xuIik7DQogIGVs
-c2UNCiAgICBwZXJyb3IgKCJnZXRzb2Nrb3B0Iik7DQoNCiAgdWlkX3QgdWlk
-Ow0KICBnaWRfdCBnaWQ7DQogIGVycm5vID0gMDsNCiAgaWYgKGdldHBlZXJl
-aWQgKGZkLCAmdWlkLCAmZ2lkKSA8IDAgJiYgZXJybm8gPT0gRU5PVFNPQ0sp
-DQogICAgcHJpbnRmICgiZ2V0cGVlcmVpZDogT0tcbiIpOw0KICBlbHNlDQog
-ICAgcGVycm9yICgiZ2V0cGVlcmVpZCIpOw0KDQogIHN0cnVjdCBzb2NrYWRk
-ciBuYW1lOw0KICBlcnJubyA9IDA7DQogIGlmIChjb25uZWN0IChmZCwgJm5h
-bWUsIDApIDwgMCAmJiBlcnJubyA9PSBFTk9UU09DSykNCiAgICBwcmludGYg
-KCJjb25uZWN0OiBPS1xuIik7DQogIGVsc2UNCiAgICBwZXJyb3IgKCJjb25u
-ZWN0Iik7DQoNCiAgZXJybm8gPSAwOw0KICBpZiAoYWNjZXB0IChmZCwgJm5h
-bWUsICZsZW4pIDwgMCAmJiBlcnJubyA9PSBFTk9UU09DSykNCiAgICBwcmlu
-dGYgKCJhY2NlcHQ6IE9LXG4iKTsNCiAgZWxzZQ0KICAgIHBlcnJvciAoImFj
-Y2VwdCIpOw0KDQogIGVycm5vID0gMDsNCiAgaWYgKGFjY2VwdDQgKGZkLCAm
-bmFtZSwgJmxlbiwgMCkgPCAwICYmIGVycm5vID09IEVOT1RTT0NLKQ0KICAg
-IHByaW50ZiAoImFjY2VwdDQ6IE9LXG4iKTsNCiAgZWxzZQ0KICAgIHBlcnJv
-ciAoImFjY2VwdDQiKTsNCg0KICBlcnJubyA9IDA7DQogIGlmIChiaW5kIChm
-ZCwgJm5hbWUsIDApIDwgMCAmJiBlcnJubyA9PSBFTk9UU09DSykNCiAgICBw
-cmludGYgKCJiaW5kOiBPS1xuIik7DQogIGVsc2UNCiAgICBwZXJyb3IgKCJi
-aW5kIik7DQoNCiAgZXJybm8gPSAwOw0KICBpZiAoZ2V0c29ja25hbWUgKGZk
-LCAmbmFtZSwgJmxlbikgPCAwICYmIGVycm5vID09IEVOT1RTT0NLKQ0KICAg
-IHByaW50ZiAoImdldHNvY2tuYW1lOiBPS1xuIik7DQogIGVsc2UNCiAgICBw
-ZXJyb3IgKCJnZXRzb2NrbmFtZSIpOw0KDQogIGVycm5vID0gMDsNCiAgaWYg
-KGxpc3RlbiAoZmQsIDApIDwgMCAmJiBlcnJubyA9PSBFTk9UU09DSykNCiAg
-ICBwcmludGYgKCJsaXN0ZW46IE9LXG4iKTsNCiAgZWxzZQ0KICAgIHBlcnJv
-ciAoImxpc3RlbiIpOw0KDQogIGVycm5vID0gMDsNCiAgaWYgKHNodXRkb3du
-IChmZCwgMCkgPCAwICYmIGVycm5vID09IEVOT1RTT0NLKQ0KICAgIHByaW50
-ZiAoInNodXRkb3duOiBPS1xuIik7DQogIGVsc2UNCiAgICBwZXJyb3IgKCJz
-aHV0ZG93biIpOw0KDQogIGVycm5vID0gMDsNCiAgaWYgKGdldHBlZXJuYW1l
-IChmZCwgJm5hbWUsICZsZW4pIDwgMCAmJiBlcnJubyA9PSBFTk9UU09DSykN
-CiAgICBwcmludGYgKCJnZXRwZWVybmFtZTogT0tcbiIpOw0KICBlbHNlDQog
-ICAgcGVycm9yICgiZ2V0cGVlcm5hbWUiKTsNCg0KICBlcnJubyA9IDA7DQog
-IGlmIChyZWN2IChmZCwgTlVMTCwgMCwgMCkgPCAwICYmIGVycm5vID09IEVO
-T1RTT0NLKQ0KICAgIHByaW50ZiAoInJlY3Y6IE9LXG4iKTsNCiAgZWxzZQ0K
-ICAgIHBlcnJvciAoInJlY3YiKTsNCg0KICBlcnJubyA9IDA7DQogIGlmIChz
-ZW5kIChmZCwgTlVMTCwgMCwgMCkgPCAwICYmIGVycm5vID09IEVOT1RTT0NL
-KQ0KICAgIHByaW50ZiAoInNlbmQ6IE9LXG4iKTsNCiAgZWxzZQ0KICAgIHBl
-cnJvciAoInNlbmQiKTsNCg0KICBzdHJ1Y3QgbXNnaGRyIG1zZzsNCiAgZXJy
-bm8gPSAwOw0KICBpZiAocmVjdm1zZyAoZmQsICZtc2csIDApIDwgMCAmJiBl
-cnJubyA9PSBFTk9UU09DSykNCiAgICBwcmludGYgKCJyZWN2bXNnOiBPS1xu
-Iik7DQogIGVsc2UNCiAgICBwZXJyb3IgKCJyZWN2bXNnIik7DQoNCiAgZXJy
-bm8gPSAwOw0KICBpZiAoc2VuZG1zZyAoZmQsICZtc2csIDApIDwgMCAmJiBl
-cnJubyA9PSBFTk9UU09DSykNCiAgICBwcmludGYgKCJzZW5kbXNnOiBPS1xu
-Iik7DQogIGVsc2UNCiAgICBwZXJyb3IgKCJzZW5kbXNnIik7DQoNCiAgZXJy
-bm8gPSAwOw0KICBpZiAoYmluZHJlc3Zwb3J0X3NhIChmZCwgTlVMTCkgPCAw
-ICYmIGVycm5vID09IEVOT1RTT0NLKQ0KICAgIHByaW50ZiAoImJpbmRyZXN2
-cG9ydF9zYTogT0tcbiIpOw0KICBlbHNlDQogICAgcGVycm9yICgiYmluZHJl
-c3Zwb3J0X3NhIik7DQoNCiAgZXJybm8gPSAwOw0KICBpZiAoYmluZHJlc3Zw
-b3J0IChmZCwgTlVMTCkgPCAwICYmIGVycm5vID09IEVOT1RTT0NLKQ0KICAg
-IHByaW50ZiAoImJpbmRyZXN2cG9ydCB3aXRoIE5VTEwgYXJnOiBPS1xuIik7
-DQogIGVsc2UNCiAgICBwZXJyb3IgKCJiaW5kcmVzdnBvcnQgd2l0aCBOVUxM
-IGFyZyIpOw0KDQogIHN0cnVjdCBzb2NrYWRkcl9pbiBzaW47DQogIG1lbXNl
-dCAoJnNpbiwgMCwgc2l6ZW9mIChzaW4pKTsNCiAgc2luLnNpbl9mYW1pbHkg
-PSBBRl9JTkVUOw0KICAvKiBzaW4uc2luX3BvcnQgPSBodG9ucyAoODApOyAq
-Lw0KICAvKiBzaW4uc2luX2FkZHIuc19hZGRyID0gaHRvbmwgKElOQUREUl9B
-TlkpOyAqLw0KICBlcnJubyA9IDA7DQogIGlmIChiaW5kcmVzdnBvcnQgKGZk
-LCAmc2luKSA8IDAgJiYgZXJybm8gPT0gRU5PVFNPQ0spDQogICAgcHJpbnRm
-ICgiYmluZHJlc3Zwb3J0IHdpdGggdmFsaWQgc2luIGFyZzogT0tcbiIpOw0K
-ICBlbHNlDQogICAgcGVycm9yICgiYmluZHJlc3Zwb3J0IHdpdGggdmFsaWQg
-c2luIGFyZyIpOw0KDQogIHByaW50ZigiXG5UaGUgZm9sbG93aW5nIGNhbGwg
-c2hvdWxkIGZhaWwgd2l0aCBFQUZOT1NVUFBPUlQ6XG4iKTsNCg0KICBlcnJu
-byA9IDA7DQogIHNpbi5zaW5fZmFtaWx5ID0gQUZfTE9DQUw7DQogIGlmIChi
-aW5kcmVzdnBvcnQgKGZkLCAmc2luKSA8IDAgJiYgZXJybm8gPT0gRUFGTk9T
-VVBQT1JUKQ0KICAgIHByaW50ZiAoImJpbmRyZXN2cG9ydCB3aXRoIGludmFs
-aWQgc2luIGFyZzogT0tcbiIpOw0KICBlbHNlDQogICAgcGVycm9yICgiYmlu
-ZHJlc3Zwb3J0IHdpdGggaW52YWxpZCBzaW4gYXJnIik7DQoNCiAgcHJpbnRm
-ICgiXG5UaGUgZm9sbG93aW5nIGNhbGxzIHNob3VsZCBzdWNjZWVkOlxuIik7
-DQoNCiAgaWYgKGZzdGF0IChmZCwgJnQpIDwgMCkNCiAgICBwZXJyb3IgKCJm
-c3RhdCIpOw0KICBlbHNlDQogICAgcHJpbnRmICgiZnN0YXQ6IE9LXG4iKTsN
-Cg0KICBpZiAoZnN0YXR2ZnMgKGZkLCAmc2ZzKSA8IDApDQogICAgcGVycm9y
-ICgiZnN0YXR2ZnMiKTsNCiAgZWxzZQ0KICAgIHByaW50ZiAoImZzdGF0dmZz
-OiBPS1xuIik7DQoNCiAgaWYgKGZjbnRsIChmZCwgRl9EVVBGRCwgMCkgPCAw
-KQ0KICAgIHBlcnJvciAoImZjbnRsX2R1cCIpOw0KICBlbHNlDQogICAgcHJp
-bnRmICgiZmNudGxfZHVwOiBPS1xuIik7DQoNCiAgaW50IGZsYWdzID0gZmNu
-dGwgKGZkLCBGX0dFVEZMKTsNCiAgaWYgKGZsYWdzIDwgMCkNCiAgICBwZXJy
-b3IgKCJmY250bF9nZXRmbCIpOw0KICBlbHNlDQogICAgcHJpbnRmICgiZmNu
-dGxfZ2V0Zmw6IE9LXG4iKTsNCg0KICBpZiAoZmxhZ3MgPj0gMCkNCiAgICB7
-DQogICAgICBpZiAoZmNudGwgKGZkLCBGX1NFVEZMLCBmbGFncykgPCAwKQ0K
-CXBlcnJvciAoImZjbnRsX3NldGZsIik7DQogICAgICBlbHNlDQoJcHJpbnRm
-ICgiZmNudGxfc2V0Zmw6IE9LXG4iKTsNCiAgICB9DQoNCiAgZmxhZ3MgPSBm
-Y250bCAoZmQsIEZfR0VURkQpOw0KICBpZiAoZmxhZ3MgPCAwKQ0KICAgIHBl
-cnJvciAoImZjbnRsX2dldGZkIik7DQogIGVsc2UNCiAgICBwcmludGYgKCJm
-Y250bF9nZXRmZDogT0tcbiIpOw0KDQogIGlmIChmbGFncyA+PSAwKQ0KICAg
-IHsNCiAgICAgIGlmIChmY250bCAoZmQsIEZfU0VURkQsIGZsYWdzKSA8IDAp
-DQoJcGVycm9yICgiZmNudGxfc2V0ZmQiKTsNCiAgICAgIGVsc2UNCglwcmlu
-dGYgKCJmY250bF9zZXRmZDogT0tcbiIpOw0KICAgIH0NCg0KICBpZiAoY2xv
-c2UgKGZkKSA8IDApDQogICAgcGVycm9yICgiY2xvc2UiKTsNCiAgZWxzZQ0K
-ICAgIHByaW50ZiAoImNsb3NlOiBPS1xuIik7DQp9DQo=
+--jcwRHPSxFqmwpRFb
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 833
 
---_002_0fba4331e567b8f8b38816777707c959cornelledu_--
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl4x8fUACgkQ9TYGna5E
+T6B7qw//d2cOZjuhJLg2j4vufcRvJGIBa2RtKRgItkr2/b4L53DUaWuqulCP0h0Q
+/jnBt/J8gHfn9EhXuNgwhRorBK8ZT+bTLvBFKo7OK3J4x/U5RXVtsRXN+bFl7sJP
+0m8ETrP9qTBOGkMqWdOJ3id3pJeH8zIPMW+Tl25hDl2fWuS5NjCuGPQsLg6d1D/O
+WrHDQuxAJvQ7LGv7NffVyEXZAUUuXH1LALsWD0V+LgAWnTBK90jFNORaiMEZ9LTO
+4DkJFyc3TPpwuh1bFQjLysMUe/luIRqJM+mLTvr3OnRP+EqrVQJXQPvsptiaSO04
+j17HNaFf2XU51GwrRn/5sM7PL9muSNxvkD7Wq5yxUX4Y5aBIbJxeolIIAMACC6X0
+zPZ9Hz7MjbhZkGNld/922/vPbLYR7UHvEvTWzaGmnjNFRlEmAfitbDh1oUUviUR8
++QN93rMkWtavkkVE9qR3IuPlp+OVw/L/BVkL3DAE6P1X3Wmr0l+fcpDj/rwbd2L9
+/CnWoQGlCPFu7jZ/tBokZXpn69CK1CSGhdzEAK91Ncuuijf6hNp8Ug/WDg4yEtHF
+98XaWKEVw9Z0c1oxChnD/44HdD57KcO42ijGYGU7awfRuVIVUjgrn2E2TWpuOGiz
+AH2sGZkzZpD/31jKJy8O7GYw1dyuWlbFo56/T2SV9YOgQpsr07w=
+=Naer
+-----END PGP SIGNATURE-----
+
+--jcwRHPSxFqmwpRFb--
