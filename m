@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-10045-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 121360 invoked by alias); 8 Feb 2020 17:13:31 -0000
+Return-Path: <cygwin-patches-return-10049-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 98488 invoked by alias); 9 Feb 2020 14:46:37 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,41 +9,166 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 121351 invoked by uid 89); 8 Feb 2020 17:13:31 -0000
+Received: (qmail 98341 invoked by uid 89); 9 Feb 2020 14:46:30 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=22.01.2020, 22012020, para
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.135) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sat, 08 Feb 2020 17:13:29 +0000
-Received: from [192.168.178.41] ([188.108.121.114]) by mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id 1Mbiak-1jVg5Y146I-00dC25 for <cygwin-patches@cygwin.com>; Sat, 08 Feb 2020 18:13:26 +0100
-Subject: Re: [PATCH v2] Cygwin: pty: Introduce disable_pcon in environment CYGWIN.
+X-Spam-SWARE-Status: No, score=-17.6 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=rect, Nothing, H*Ad:D*jp, UD:Y
+X-HELO: conuserg-04.nifty.com
+Received: from conuserg-04.nifty.com (HELO conuserg-04.nifty.com) (210.131.2.71) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Sun, 09 Feb 2020 14:46:28 +0000
+Received: from localhost.localdomain (ntsitm196171.sitm.nt.ngn.ppp.infoweb.ne.jp [125.0.207.171]) (authenticated)	by conuserg-04.nifty.com with ESMTP id 019Ek4RZ005877;	Sun, 9 Feb 2020 23:46:13 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-04.nifty.com 019Ek4RZ005877
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1581259573;	bh=5HXgQWKyr8IR4atzzetxgb+lt9x7tqO0rcolX6lUzNw=;	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;	b=MCdAbbrHknHCmwHmTO1NUYLZ+DPRJLdqas4r1FmTdNUY/iYvsOYRNi+mNRWAyyzgW	 YJBrYXN3CSVk2tq/3/FC9Jwo3jnZ1Oh5fUsPrtQ7f7ymPIiXxQbP73lgHWCgmBFyw1	 0oDmNAlvEH369NkUbxegoEXBW//r3WdNpdU3YfiwZy+hJgy4++BRB6oFL3HVDhBHIy	 sPvbPEQjOFbkIcYtHURz76CNaYtYm8TyXxa25k9UF3PzoXo6KMyhOwcxhKuIcSl6co	 +N3mNDHbaNACCaEo5SAPy8/V0V1YLy9ZVsMFcyOcW1NiJ1Sj9uVOooZSDJAWGQIhH7	 2smz2o/mrsi9g==
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-References: <20200121222329.69f71c847e97da78955735a7@nifty.ne.jp> <20200121132513.3654-1-takashi.yano@nifty.ne.jp> <20200122100651.GT20672@calimero.vinschen.de>
-From: Thomas Wolff <towo@towo.net>
-Message-ID: <a5724cea-edda-6ab9-fc7c-cbf3ad3091cc@towo.net>
-Date: Sat, 08 Feb 2020 17:13:00 -0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101 Thunderbird/68.4.2
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH 2/4] Cygwin: pty: Avoid screen distortion on slave read.
+Date: Sun, 09 Feb 2020 14:46:00 -0000
+Message-Id: <20200209144603.389-3-takashi.yano@nifty.ne.jp>
+In-Reply-To: <20200209144603.389-1-takashi.yano@nifty.ne.jp>
+References: <20200209144603.389-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-In-Reply-To: <20200122100651.GT20672@calimero.vinschen.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-IsSubscribed: yes
-X-SW-Source: 2020-q1/txt/msg00151.txt
+X-SW-Source: 2020-q1/txt/msg00155.txt
 
-On 22.01.2020 11:06, Corinna Vinschen wrote:
-> On Jan 21 22:25, Takashi Yano wrote:
->> - For programs which does not work properly with pseudo console,
->>    disable_pcon in environment CYGWIN is introduced. If disable_pcon
->>    is set, pseudo console support is disabled.
-> Pushed.  I just fixed a missing </para> in the doc text.
->
-Sorry I didn't notice this before. I think rather than having to decide 
-and unconditionally switch on or off, a better approach would be to 
-automatically enable pseudo console when forking a non-cygwin program 
-only, or have that as a third option. (I think I had suggested this before.)
-It's good we had pseudo console in unconditionally now for a while, as 
-that apparently helped identifying a bunch of issues, but targetting it 
-to where it's really needed would further help to avoid future trouble, 
-including any performance issues as recently reported.
-I'm willing to prepare a patch if desired, as I had implemented that 
-condition already for my earlier "winpty injection" proposal.
-Thomas
+- Echo back print is distorted when the cygwin program which calls
+  Win32 console API directly calls slave read(). This patch fixes
+  the issue.
+---
+ winsup/cygwin/fhandler.h      |  3 ++-
+ winsup/cygwin/fhandler_tty.cc | 51 ++++++++++++++++++++---------------
+ 2 files changed, 32 insertions(+), 22 deletions(-)
+
+diff --git a/winsup/cygwin/fhandler.h b/winsup/cygwin/fhandler.h
+index 53b6c2c45..a22f3a136 100644
+--- a/winsup/cygwin/fhandler.h
++++ b/winsup/cygwin/fhandler.h
+@@ -2206,7 +2206,7 @@ class fhandler_pty_slave: public fhandler_pty_common
+   }
+   void set_switch_to_pcon (int fd);
+   void reset_switch_to_pcon (void);
+-  void push_to_pcon_screenbuffer (const char *ptr, size_t len);
++  void push_to_pcon_screenbuffer (const char *ptr, size_t len, bool is_echo);
+   void mask_switch_to_pcon_in (bool mask);
+   void fixup_after_attach (bool native_maybe, int fd);
+   bool is_line_input (void)
+@@ -2215,6 +2215,7 @@ class fhandler_pty_slave: public fhandler_pty_common
+   }
+   void setup_locale (void);
+   void set_freeconsole_on_close (bool val);
++  void trigger_redraw_screen (void);
+   void wait_pcon_fwd (void);
+ };
+ 
+diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+index a92bcfc40..f88382752 100644
+--- a/winsup/cygwin/fhandler_tty.cc
++++ b/winsup/cygwin/fhandler_tty.cc
+@@ -80,7 +80,13 @@ set_switch_to_pcon (void)
+ 	fhandler_base *fh = cfd;
+ 	fhandler_pty_slave *ptys = (fhandler_pty_slave *) fh;
+ 	if (ptys->get_pseudo_console ())
+-	  ptys->set_switch_to_pcon (fd);
++	  {
++	    ptys->set_switch_to_pcon (fd);
++	    ptys->trigger_redraw_screen ();
++	    DWORD mode =
++	      ENABLE_PROCESSED_INPUT | ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT;
++	    SetConsoleMode (ptys->get_handle (), mode);
++	  }
+       }
+ }
+ 
+@@ -1097,9 +1103,6 @@ fhandler_pty_slave::set_switch_to_pcon (int fd_set)
+ 	if (!try_reattach_pcon ())
+ 	  goto skip_console_setting;
+       FlushConsoleInputBuffer (get_handle ());
+-      DWORD mode;
+-      mode = ENABLE_PROCESSED_INPUT | ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT;
+-      SetConsoleMode (get_handle (), mode);
+ skip_console_setting:
+       restore_reattach_pcon ();
+       if (get_ttyp ()->pcon_pid == 0 ||
+@@ -1160,7 +1163,8 @@ fhandler_pty_slave::reset_switch_to_pcon (void)
+ }
+ 
+ void
+-fhandler_pty_slave::push_to_pcon_screenbuffer (const char *ptr, size_t len)
++fhandler_pty_slave::push_to_pcon_screenbuffer (const char *ptr, size_t len,
++					       bool is_echo)
+ {
+   bool attached =
+     !!fhandler_console::get_console_process_id (get_helper_process_id (), true);
+@@ -1231,7 +1235,7 @@ fhandler_pty_slave::push_to_pcon_screenbuffer (const char *ptr, size_t len)
+     }
+   if (!nlen) /* Nothing to be synchronized */
+     goto cleanup;
+-  if (get_ttyp ()->switch_to_pcon_out)
++  if (get_ttyp ()->switch_to_pcon_out && !is_echo)
+     goto cleanup;
+   /* Remove ESC sequence which returns results to console
+      input buffer. Without this, cursor position report
+@@ -1388,7 +1392,7 @@ fhandler_pty_slave::write (const void *ptr, size_t len)
+   if (get_pseudo_console ())
+     {
+       acquire_output_mutex (INFINITE);
+-      push_to_pcon_screenbuffer ((char *)ptr, len);
++      push_to_pcon_screenbuffer ((char *)ptr, len, false);
+       release_output_mutex ();
+     }
+ 
+@@ -1716,7 +1720,9 @@ out:
+   if (get_pseudo_console () && ptr0 && (get_ttyp ()->ti.c_lflag & ECHO))
+     {
+       acquire_output_mutex (INFINITE);
+-      push_to_pcon_screenbuffer (ptr0, len);
++      push_to_pcon_screenbuffer (ptr0, len, true);
++      if (get_ttyp ()->switch_to_pcon_out)
++	trigger_redraw_screen ();
+       release_output_mutex ();
+     }
+   mask_switch_to_pcon_in (false);
+@@ -2700,6 +2706,21 @@ fhandler_pty_slave::wait_pcon_fwd (void)
+   cygwait (get_ttyp ()->fwd_done, INFINITE);
+ }
+ 
++void
++fhandler_pty_slave::trigger_redraw_screen (void)
++{
++  /* Forcibly redraw screen based on console screen buffer. */
++  /* The following code triggers redrawing the screen. */
++  CONSOLE_SCREEN_BUFFER_INFO sbi;
++  GetConsoleScreenBufferInfo (get_output_handle (), &sbi);
++  SMALL_RECT rect = {0, 0,
++    (SHORT) (sbi.dwSize.X -1), (SHORT) (sbi.dwSize.Y - 1)};
++  COORD dest = {0, 0};
++  CHAR_INFO fill = {' ', 0};
++  ScrollConsoleScreenBuffer (get_output_handle (), &rect, NULL, dest, &fill);
++  get_ttyp ()->need_redraw_screen = false;
++}
++
+ void
+ fhandler_pty_slave::fixup_after_attach (bool native_maybe, int fd_set)
+ {
+@@ -2754,19 +2775,7 @@ fhandler_pty_slave::fixup_after_attach (bool native_maybe, int fd_set)
+ 	      get_ttyp ()->switch_to_pcon_out = true;
+ 
+ 	      if (get_ttyp ()->need_redraw_screen)
+-		{
+-		  /* Forcibly redraw screen based on console screen buffer. */
+-		  /* The following code triggers redrawing the screen. */
+-		  CONSOLE_SCREEN_BUFFER_INFO sbi;
+-		  GetConsoleScreenBufferInfo (get_output_handle (), &sbi);
+-		  SMALL_RECT rect = {0, 0,
+-		    (SHORT) (sbi.dwSize.X -1), (SHORT) (sbi.dwSize.Y - 1)};
+-		  COORD dest = {0, 0};
+-		  CHAR_INFO fill = {' ', 0};
+-		  ScrollConsoleScreenBuffer (get_output_handle (),
+-					     &rect, NULL, dest, &fill);
+-		  get_ttyp ()->need_redraw_screen = false;
+-		}
++		trigger_redraw_screen ();
+ 	    }
+ 	  init_console_handler (false);
+ 	}
+-- 
+2.21.0
