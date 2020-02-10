@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-10055-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 120405 invoked by alias); 10 Feb 2020 10:05:08 -0000
+Return-Path: <cygwin-patches-return-10057-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 123009 invoked by alias); 10 Feb 2020 10:07:15 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,52 +9,63 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 120390 invoked by uid 89); 10 Feb 2020 10:05:08 -0000
+Received: (qmail 122996 invoked by uid 89); 10 Feb 2020 10:07:15 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-109.7 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=
+X-Spam-SWARE-Status: No, score=-107.1 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=identifying, willing, para
 X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.130) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 10 Feb 2020 10:05:03 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id 1N7iT4-1jWd3u2Fmc-014gTx for <cygwin-patches@cygwin.com>; Mon, 10 Feb 2020 11:05:00 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 039C8A80CFA; Mon, 10 Feb 2020 11:05:00 +0100 (CET)
-Date: Mon, 10 Feb 2020 10:05:00 -0000
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.17.24) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 10 Feb 2020 10:07:14 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id 1N5W4y-1jYp1B2Qdm-0170Ax for <cygwin-patches@cygwin.com>; Mon, 10 Feb 2020 11:07:11 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id AEAA0A80CE3; Mon, 10 Feb 2020 11:07:10 +0100 (CET)
+Date: Mon, 10 Feb 2020 10:07:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Inherit typeahead data between two input pipes.
-Message-ID: <20200210100459.GB4442@calimero.vinschen.de>
+Subject: Re: [PATCH v2] Cygwin: pty: Introduce disable_pcon in environment CYGWIN.
+Message-ID: <20200210100710.GD4442@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200209144659.441-1-takashi.yano@nifty.ne.jp>
+References: <20200121222329.69f71c847e97da78955735a7@nifty.ne.jp> <20200121132513.3654-1-takashi.yano@nifty.ne.jp> <20200122100651.GT20672@calimero.vinschen.de> <a5724cea-edda-6ab9-fc7c-cbf3ad3091cc@towo.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="24zk1gE8NUlDmwG9"
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="OaZoDhBhXzo6bW1J"
 Content-Disposition: inline
-In-Reply-To: <20200209144659.441-1-takashi.yano@nifty.ne.jp>
-X-SW-Source: 2020-q1/txt/msg00161.txt
+In-Reply-To: <a5724cea-edda-6ab9-fc7c-cbf3ad3091cc@towo.net>
+X-SW-Source: 2020-q1/txt/msg00163.txt
 
 
---24zk1gE8NUlDmwG9
+--OaZoDhBhXzo6bW1J
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-length: 954
+Content-length: 1334
 
-On Feb  9 23:46, Takashi Yano wrote:
-> - PTY has a problem that the key input, which is typed during
->   windows native app is running, disappear when it returns to shell.
->   (Problem 3 in https://cygwin.com/ml/cygwin/2020-02/msg00007.html)
->   This is beacuse pty has two input pipes, one is for cygwin apps
->   and the other one is for native windows apps. The key input during
->   windows native program is running is sent to the second input pipe
->   while cygwin shell reads input from the first input pipe.
->   This patch realize transfering input data between these two pipes.
-> ---
->  winsup/cygwin/fhandler.h      |  12 +-
->  winsup/cygwin/fhandler_tty.cc | 400 ++++++++++++++++++++++++++--------
->  winsup/cygwin/select.cc       |   2 +
->  winsup/cygwin/tty.cc          |   3 +
->  winsup/cygwin/tty.h           |   3 +
->  5 files changed, 329 insertions(+), 91 deletions(-)
+On Feb  8 18:13, Thomas Wolff wrote:
+> On 22.01.2020 11:06, Corinna Vinschen wrote:
+> > On Jan 21 22:25, Takashi Yano wrote:
+> > > - For programs which does not work properly with pseudo console,
+> > >    disable_pcon in environment CYGWIN is introduced. If disable_pcon
+> > >    is set, pseudo console support is disabled.
+> > Pushed.  I just fixed a missing </para> in the doc text.
+> >=20
+> Sorry I didn't notice this before. I think rather than having to decide a=
+nd
+> unconditionally switch on or off, a better approach would be to
+> automatically enable pseudo console when forking a non-cygwin program onl=
+y,
+> or have that as a third option. (I think I had suggested this before.)
+> It's good we had pseudo console in unconditionally now for a while, as th=
+at
+> apparently helped identifying a bunch of issues, but targetting it to whe=
+re
+> it's really needed would further help to avoid future trouble, including =
+any
+> performance issues as recently reported.
+> I'm willing to prepare a patch if desired, as I had implemented that
+> condition already for my earlier "winpty injection" proposal.
+> Thomas
 
-Pushed.
+Interesting idea, but given that all the Pseudo Console code in
+Cygwin is from Takashi, he should decide how to go forward.
+
+Takashi?  What do you think?
 
 
 Thanks,
@@ -64,25 +75,25 @@ Corinna
 Corinna Vinschen
 Cygwin Maintainer
 
---24zk1gE8NUlDmwG9
+--OaZoDhBhXzo6bW1J
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-length: 833
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl5BKssACgkQ9TYGna5E
-T6BkJg/9Gc1Zb4b8X994WnAxl6MGBkZn10Z0z0WrXAa+733o+YU6ntYFXByGw1iu
-r+CiIDu6ENI1zsg8V7u2NQuf7TRrSDXFxnQUoxNTWgyJ/gLjMdEyzEO8JzpBaKWa
-CPUq/FtTDW/Z7cLeBFcOZ/6wEiwVJUB4FF9gqzc/yHZIAAfP7se4h3XHzZbj4M6X
-lX1d280WS50uMlWMBdVKAFStOzKxQ5YF4mXpP4Zr8/fLe5F+IYO6ybi5VXBXaAdC
-PDoroZ3sQxVDtenLMuaeK99P2hHj79CT2upbF9yibjVw2DUkw6YQDoSoP6xxXWDI
-NjglzEJnHraUhdWiEh7vCGO+oqzVuMcAyyOy79lBUpQpwiEeZjZgsj0vvXDOQ32N
-GCM6cyOhHU8KOgNOVcGgLQ3P2auuTub4lJR0EspCsAMfrKDtR9dmQl/kdxmjqc3U
-pw/kRp3810G6X3OgW7mEGB5ZBU7OvfRXSsLhcLiHFR6DdWNbp8t8CRXi7JDxWxfO
-XvaFVfth4TrEbrjMAB0qbMC0yJ3A+cc44wnNWbOrSioJqf/JXE/SB/qRufrYenXR
-RWXUHSsLnLGoO4v+rNsqfb0i6bo2IcPrkOSbR6K9nRhv2Dd0HpuD6S0hqiP81rk6
-jwZzj0SPrlAJWAlO2dbfwyj2wv1cJOdOzJKHxQvz97cU+ViZH2A=
-=tCEc
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl5BK04ACgkQ9TYGna5E
+T6DhHg/+P/IumBr2ZLCdD/TLj3kQ1OYK7SeSfwjWx6t3FWq3hdu2jWh9A9dK6NwL
+izkahbSC6dxKgwU4HFPW96ET/OfZfD8UStdMAMCiuZ4EZ1BgjsrM337e3cjwEE0M
+wI2D40FWNtGn0FDSRpeIO6YjJ3g7iH6gq3vEkk252sOXMii6ECaiKlZZ9OKoKQ9+
+CMmUoHxhlEn2fO9GDDe/cInIa8OQW15Ruie3v9Fp7USdGp9SfNwb1ubaCJOYo58M
+vekEU0/QQaIKiFtVz8RIqyp/UGNQFsU1NzikhLH1AT1vKhr0Vo4+d8Efx2K598or
+n+yaaNJTXL6DK7OUGKxWGJSAmwI38/tCMvXycXVaVLMHmkcpZI6Rd4j9Vl/Xp8WC
+pXjA8Jf0nONj0Rd16+DnIoRUkzon+5qfkzPPodvvclfGd7/ZhHJtcrDwwJ/Au2aI
+ONfQF1POeXanXPfjD+IVs4vNoQ+AuG0rcln11wmide+dskQzb4qkK3CEWuOnzg1W
+g8uUpY36I+PO3EEzobuGLrp6ZbiBgP39AreFdp5QLTlMTE8NPJ7hTP54RBBS766w
+eFhCBMgbeF3DN/OWu8HP/6JZTFf+wS5X4U+j2dOB5U9uDR4Nm+KNXfnR3NT872VZ
+CZ1OtTX2KiYTAH6wFTMRAD4d9y+QelsSMeWd9PpVfLGdZBrU1P4=
+=9mFo
 -----END PGP SIGNATURE-----
 
---24zk1gE8NUlDmwG9--
+--OaZoDhBhXzo6bW1J--
