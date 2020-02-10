@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-10054-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 119331 invoked by alias); 10 Feb 2020 10:04:48 -0000
+Return-Path: <cygwin-patches-return-10056-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 120883 invoked by alias); 10 Feb 2020 10:05:17 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,48 +9,43 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 119321 invoked by uid 89); 10 Feb 2020 10:04:48 -0000
+Received: (qmail 120873 invoked by uid 89); 10 Feb 2020 10:05:17 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-109.7 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=HX-Languages-Length:661, screen
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.134) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 10 Feb 2020 10:04:46 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id 1MTw02-1issTB41Z4-00Qzvf for <cygwin-patches@cygwin.com>; Mon, 10 Feb 2020 11:04:44 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 1589BA80CFA; Mon, 10 Feb 2020 11:04:43 +0100 (CET)
-Date: Mon, 10 Feb 2020 10:04:00 -0000
+X-Spam-SWARE-Status: No, score=-109.6 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_SBL autolearn=ham version=3.3.1 spammy=HX-Languages-Length:525
+X-HELO: mout-xforward.kundenserver.de
+Received: from mout-xforward.kundenserver.de (HELO mout-xforward.kundenserver.de) (82.165.159.5) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 10 Feb 2020 10:05:16 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id 1MlfL0-1jjk672IYk-00ilzD for <cygwin-patches@cygwin.com>; Mon, 10 Feb 2020 11:05:13 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 45F09A80CFA; Mon, 10 Feb 2020 11:05:13 +0100 (CET)
+Date: Mon, 10 Feb 2020 10:05:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 0/4] Remove debug codes and organize with some fixes.
-Message-ID: <20200210100443.GA4442@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: pty: Fix state mismatch caused in mintty.
+Message-ID: <20200210100513.GC4442@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200209144603.389-1-takashi.yano@nifty.ne.jp>
+References: <20200209144730.489-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="h31gzZEtNLTqOjlF"
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="uXxzq0nDebZQVNAZ"
 Content-Disposition: inline
-In-Reply-To: <20200209144603.389-1-takashi.yano@nifty.ne.jp>
-X-SW-Source: 2020-q1/txt/msg00160.txt
+In-Reply-To: <20200209144730.489-1-takashi.yano@nifty.ne.jp>
+X-SW-Source: 2020-q1/txt/msg00162.txt
 
 
---h31gzZEtNLTqOjlF
+--uXxzq0nDebZQVNAZ
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-length: 634
+Content-length: 485
 
-On Feb  9 23:45, Takashi Yano wrote:
-> Takashi Yano (4):
->   Cygwin: pty: Define mask_switch_to_pcon_in() in fhandler_tty.cc.
->   Cygwin: pty: Avoid screen distortion on slave read.
->   Cygwin: pty: Remove debug codes and organize related codes.
->   Cygwin: pty: Add missing member initialization for struct pipe_reply.
->=20
->  winsup/cygwin/fhandler.h      |  12 +--
->  winsup/cygwin/fhandler_tty.cc | 144 +++++++++++++++-------------------
->  winsup/cygwin/select.cc       |  23 ------
->  3 files changed, 67 insertions(+), 112 deletions(-)
->=20
-> --=20
-> 2.21.0
+On Feb  9 23:47, Takashi Yano wrote:
+> - PTY has a bug reported in:
+>   https://cygwin.com/ml/cygwin/2020-02/msg00067.html.
+>   This is the result of state mismatch between real pseudo console
+>   attaching state and state variable. This patch fixes the issue.
+> ---
+>  winsup/cygwin/fhandler_tty.cc | 16 ++++++++++++++--
+>  winsup/cygwin/fork.cc         |  2 ++
+>  2 files changed, 16 insertions(+), 2 deletions(-)
 
 Pushed.
 
@@ -62,25 +57,25 @@ Corinna
 Corinna Vinschen
 Cygwin Maintainer
 
---h31gzZEtNLTqOjlF
+--uXxzq0nDebZQVNAZ
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-length: 833
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl5BKroACgkQ9TYGna5E
-T6CvFhAAoTNHCiPDA7QsdzZ+F0whDogFg5pxvQGil5xzErlsEuj7Umy3jFr4B/h3
-Bkl8YVvrsi20fmDUWusQhmLx3uzexE5+i0jp4Jp9WfFGngCKdhEt4N1fcBD8ZF25
-d0v2IMvND9zfvm2sbb2Rj/iR5RpXFO4o3bL3d/r2/3kVyvD1NJxfdp7srEqTLNp9
-FwHDl3jNJcXy4EewsFro5zatjzz2shu6FcrE9IGA90PzuLvok4WeKLRfnW9wOaEk
-4uBaI2pH9cKR+lIelDvluPhYb2g6Y25Q5PnRU/G9hagpRpGzijqy5n5HWPniFOVM
-46p6gWdHBlfuAdT5BMl9+C0vAcjbD94BDA5WzUwehq0ytQ03hsb5yTXk/8VxK3bg
-OPRtOLGVnt0GvZRcEMzofbZTZSSt6ikjOxmXDplgLXPhRvftjNiHVVZ6zAiWlHOh
-Mhmtgm5BniSxAXsr7GIh8+h5y+0JtuOQLhH6Za8qHPwCa8uf2ePeRhpayZtrrx46
-/FTDPAo2wdFtykOOx91rU7elGBTD6NdP85qy+DuSA454zT96lK9HXAg6Sv99A9ky
-6HgTC8J5K+ApqRf6IBu2/FryspN9eeubghXgJxeLUNz0ztdGzELxCow4dKG3Kmlf
-6n7FTYidbzS+uSecqY+tnal+gCULtF6vRWPON/xFKEOpCrCPpCI=
-=CwIa
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl5BKtkACgkQ9TYGna5E
+T6AvVQ/9E2pP2Er5wFe/VMhlGShfH9nxW+G9JLH2O6vVim3J5BcpRzm7eKzr2Rjt
+yJRRdDkjAk1rpqpGBKgFQ28iNSyilt7R0MQtIRD2FlcC2fgS/Mg2zqubAlMrPQCc
+m711QWbaUGdORsrPWn9HioKLfZIxH42OnKwRj+tuJOO/tBTN7U3I4fUEwaWvNKmd
+HjQjifCrlFDeY3eP+8Utb6U3D2BfGEfMUVFrSUBkJSS1nr2PSYSIRCDRS85zxxyI
+Qv+UpSd1y0uJZoJF3Mq6kB2U1XRaTpgyTFqTMaUzca460EATY0gPjRuB3EYODaEo
+5QU54d2FsuswfkI4QtxoSq+kOq3Hw7ZeQFRIq2+9ptPS7quZgp58jkRoMriwD7w0
+HQxLw3ZkVeQG+AboovcRpilY7I8Js2LAvoPQNgYpXpavFRC1LepRL69X4Ufk3q4l
+wRoHtMIEnhy/aNWQY5FPzQdG7OG7XbdLE54jl/hTcsIPukR3nicbsXDSTP6ISwik
++LypoP9FPSamCHKAetz4fV1/UaJCjoJPkAI53s5sGrqonDVkWfGWlYxF5wvXEmtI
+oAlzVERlBr4AGZrFkXPd8GAeGSL0htv6PEUYkxQ97ODm3gs6WXYSqnzF3Rn1BkdN
+i/M2kR9lzQzpIK8MqzK7lHoEjSOal5BqbXUDuES2dvsy3KezTw4=
+=nb4B
 -----END PGP SIGNATURE-----
 
---h31gzZEtNLTqOjlF--
+--uXxzq0nDebZQVNAZ--
