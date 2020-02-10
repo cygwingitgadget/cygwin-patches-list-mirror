@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-10058-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 106944 invoked by alias); 10 Feb 2020 11:43:04 -0000
+Return-Path: <cygwin-patches-return-10059-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 7223 invoked by alias); 10 Feb 2020 11:44:51 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,50 +9,53 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 106935 invoked by uid 89); 10 Feb 2020 11:43:04 -0000
+Received: (qmail 7214 invoked by uid 89); 10 Feb 2020 11:44:51 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-18.2 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=Prevent, reopen, HContent-Transfer-Encoding:8bit
-X-HELO: conuserg-06.nifty.com
-Received: from conuserg-06.nifty.com (HELO conuserg-06.nifty.com) (210.131.2.73) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 10 Feb 2020 11:43:00 +0000
-Received: from localhost.localdomain (ntsitm196171.sitm.nt.ngn.ppp.infoweb.ne.jp [125.0.207.171]) (authenticated)	by conuserg-06.nifty.com with ESMTP id 01ABglRt029161;	Mon, 10 Feb 2020 20:42:53 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-06.nifty.com 01ABglRt029161
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1581334973;	bh=wuft5ztsWZcS0Zt6B15uJXnoyzSK9HlAoQouuDNe03w=;	h=From:To:Cc:Subject:Date:From;	b=IQjM497gq1t9CSFMNwhmeT2X262mWhhXCZtRJeeKU0J//jxa/lPtUd9aF4A91AcMY	 KWg1TRteKObFoo9KPg661p54M7BN/+wVRGPYQtkxANfA8/bjdibyWIt7lwzI/SiND6	 8zt7MkV4bqkxLf1j97e3VXHHnQjOHFbDkGnkxeW4xky1i4bUUIXTZblVhmvkXBxTUN	 /8jPj+e7XKnZLTYnhRrD923FTdWVclPHYcBGaymT36whIsQxL4WxcWY8zB29T6wUgR	 1IkIIjAsEmgdcy/1/FA+Z/RIChz99N0j5AT7+M75oWmgARe9cuZNcR/SjvruizO5Sq	 qKDe9Kz58Ppyg==
+X-Spam-SWARE-Status: No, score=-5.9 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=screen
+X-HELO: conssluserg-03.nifty.com
+Received: from conssluserg-03.nifty.com (HELO conssluserg-03.nifty.com) (210.131.2.82) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 10 Feb 2020 11:44:50 +0000
+Received: from Express5800-S70 (ntsitm196171.sitm.nt.ngn.ppp.infoweb.ne.jp [125.0.207.171]) (authenticated)	by conssluserg-03.nifty.com with ESMTP id 01ABiXVT015727	for <cygwin-patches@cygwin.com>; Mon, 10 Feb 2020 20:44:34 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 01ABiXVT015727
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1581335074;	bh=rCh/nI8ndU51QBMRaBk1X/PadB423/14fy7fI+y5RRc=;	h=Date:From:To:Subject:In-Reply-To:References:From;	b=w9Vuf+0g1dF0qJ4EB3Bo5CChLLJjp7nFYdA3acesiV7efOHKqxAGhNYAgmG0KYOPh	 u8Ecmt3yDvgYIzfd06qZytuDBe4n++PtQvW8MBGt09uTkfNtuemAJrRFWYej/20hCb	 ZFV++Wd4kI/Poy8h4NuvKIdj2QgPWF7rXCE9+YyPM8HXNZwHA8bdO+aRQBm/KpzWtj	 Y4eMG9+hvFAkzGbIYUA05cDD092C1BH9CIsqGNUaoht1I2N4lrzIt/OtZRDv5R1Dit	 3woHs/CL6qeQ/ILhxQfrjqMhGJB3Foxf8Rkvr4MiqS0utiHGgEMgTxvYrMUxa3Dz8H	 2JjsYej1o4X6w==
+Date: Mon, 10 Feb 2020 11:44:00 -0000
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH] Cygwin: pty: Prevent potential errno overwriting.
-Date: Mon, 10 Feb 2020 11:43:00 -0000
-Message-Id: <20200210114245.1272-1-takashi.yano@nifty.ne.jp>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] Cygwin: pty: Use pinfo() rather than kill() with signal 0.
+Message-Id: <20200210204442.8a9e8e162e122ba0383a9944@nifty.ne.jp>
+In-Reply-To: <20200210000603.3e72d135b91e11f6b35af34a@nifty.ne.jp>
+References: <20200206104817.1116-1-takashi.yano@nifty.ne.jp>	<20200206190330.GT3403@calimero.vinschen.de>	<20200208235311.bda313987c047dc8bf69ed2e@nifty.ne.jp>	<20200210000603.3e72d135b91e11f6b35af34a@nifty.ne.jp>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-IsSubscribed: yes
-X-SW-Source: 2020-q1/txt/msg00164.txt
+X-SW-Source: 2020-q1/txt/msg00165.txt
 
-- In push_to_pcon_screenbuffer(), open() and ioctl() are called.
-  Since push_to_pcon_screenbuffer() is called in read() and write(),
-  errno which is set in read() and write() code may be overwritten
-  in open() or ioctl() call. This patch prevent this situation.
----
- winsup/cygwin/fhandler_tty.cc | 3 +++
- 1 file changed, 3 insertions(+)
+Hi Corinna,
 
-diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index 260776a56..cfd4b1c44 100644
---- a/winsup/cygwin/fhandler_tty.cc
-+++ b/winsup/cygwin/fhandler_tty.cc
-@@ -1412,10 +1412,13 @@ fhandler_pty_slave::push_to_pcon_screenbuffer (const char *ptr, size_t len,
-   while (!GetConsoleMode (get_output_handle (), &dwMode))
-     {
-       termios_printf ("GetConsoleMode failed, %E");
-+      int errno_save = errno;
-       /* Re-open handles */
-       this->open (0, 0);
-       /* Fix pseudo console window size */
-       this->ioctl (TIOCSWINSZ, &get_ttyp ()->winsize);
-+      if (errno != errno_save)
-+	set_errno (errno_save);
-       if (++retry_count > 3)
- 	goto cleanup;
-     }
+On Mon, 10 Feb 2020 00:06:03 +0900
+Takashi Yano wrote:
+> On Sat, 8 Feb 2020 23:53:11 +0900
+> Takashi Yano wrote:
+> > On Thu, 6 Feb 2020 20:03:30 +0100
+> > Corinna Vinschen wrote:
+> > > I'm inclined to release 3.1.3 next week.  Is that ok with you or
+> > > do you anticipate more patches which should go into 3.1.3?
+> > 
+> > Currently, I have two patches which are under test. I would be
+> > happy if these could be included in 3.1.3. I am planning to
+> > divide one of them into several patches. I will submit these
+> > patches in a few days.
+> 
+> Please apply these patches in the following order.
+> 
+> [PATCH 1/4] Cygwin: pty: Define mask_switch_to_pcon_in() in fhandler_tty.cc.
+> [PATCH 2/4] Cygwin: pty: Avoid screen distortion on slave read.
+> [PATCH 3/4] Cygwin: pty: Remove debug codes and organize related codes.
+> [PATCH 4/4] Cygwin: pty: Add missing member initialization for struct pipe_reply.
+> [PATCH] Cygwin: pty: Inherit typeahead data between two input pipes.
+> [PATCH] Cygwin: pty: Fix state mismatch caused in mintty.
+
+I am sorry, but I have submitted one more trivial patch.
+
 -- 
-2.21.0
+Takashi Yano <takashi.yano@nifty.ne.jp>
