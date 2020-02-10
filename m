@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-10061-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 75894 invoked by alias); 10 Feb 2020 15:07:46 -0000
+Return-Path: <cygwin-patches-return-10062-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 85524 invoked by alias); 10 Feb 2020 15:12:46 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,95 +9,190 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 75884 invoked by uid 89); 10 Feb 2020 15:07:46 -0000
+Received: (qmail 85515 invoked by uid 89); 10 Feb 2020 15:12:46 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-119.5 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.17.10) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 10 Feb 2020 15:07:45 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id 1MBDvU-1jDnhT0Ue6-00Ceam for <cygwin-patches@cygwin.com>; Mon, 10 Feb 2020 16:07:41 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id D19CEA80CFA; Mon, 10 Feb 2020 16:07:39 +0100 (CET)
-Date: Mon, 10 Feb 2020 15:07:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-18.3 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=wchar, HContent-Transfer-Encoding:8bit
+X-HELO: conuserg-01.nifty.com
+Received: from conuserg-01.nifty.com (HELO conuserg-01.nifty.com) (210.131.2.68) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 10 Feb 2020 15:12:43 +0000
+Received: from localhost.localdomain (ntsitm196171.sitm.nt.ngn.ppp.infoweb.ne.jp [125.0.207.171]) (authenticated)	by conuserg-01.nifty.com with ESMTP id 01AFCDQq022763;	Tue, 11 Feb 2020 00:12:19 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-01.nifty.com 01AFCDQq022763
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1581347539;	bh=b+JFZvRk9YLaUK2jNrobTtlwdNrrGHoVn3gQUFaZ/iQ=;	h=From:To:Cc:Subject:Date:From;	b=dj6Mr3PrBi29oH9Rgki/F4LAs0210rmxmUN8GhPbr8+3PunwYuPukzk5iywixxRxQ	 dXbJUyI0Jbz6VOHFmPpJVBZz1l6172p4Ml9Ep7yG1TqjctOuM7IeaT3NndXCdCXqFH	 2bAQLszwH5nw6ar1svs1qjfb1nvKEGruKd8DPZvtjQyZv10C2xPwNVJm8hRxOilGlb	 GCX6g4n/kypriIvjmYVz2ax31/RWdxeKqk4CeZzEDG9t+ltrVnHJyCcG8fEmw1VNj5	 fEkhW5eXQj+h9DwZKtbwFGKfi6RNkwYZHDsoUoS3BVUpZjBkYqW6ijk7dUK4wXD5/P	 /MJwWHo6IfXzA==
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Prevent potential errno overwriting.
-Message-ID: <20200210150739.GE4442@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200210114245.1272-1-takashi.yano@nifty.ne.jp>
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: pty: Add error handling in setup_pseudoconsoe().
+Date: Mon, 10 Feb 2020 15:12:00 -0000
+Message-Id: <20200210151214.39-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="9l24NVCWtSuIVIod"
-Content-Disposition: inline
-In-Reply-To: <20200210114245.1272-1-takashi.yano@nifty.ne.jp>
-X-SW-Source: 2020-q1/txt/msg00167.txt
+Content-Transfer-Encoding: 8bit
+X-IsSubscribed: yes
+X-SW-Source: 2020-q1/txt/msg00168.txt
 
+- In setup_pseudoconsole(), many error handling was omitted. This
+  patch adds missing error handling.
+---
+ winsup/cygwin/fhandler_tty.cc | 94 +++++++++++++++++++++++++----------
+ 1 file changed, 68 insertions(+), 26 deletions(-)
 
---9l24NVCWtSuIVIod
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 1223
-
-On Feb 10 20:42, Takashi Yano wrote:
-> - In push_to_pcon_screenbuffer(), open() and ioctl() are called.
->   Since push_to_pcon_screenbuffer() is called in read() and write(),
->   errno which is set in read() and write() code may be overwritten
->   in open() or ioctl() call. This patch prevent this situation.
-> ---
->  winsup/cygwin/fhandler_tty.cc | 3 +++
->  1 file changed, 3 insertions(+)
->=20
-> diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-> index 260776a56..cfd4b1c44 100644
-> --- a/winsup/cygwin/fhandler_tty.cc
-> +++ b/winsup/cygwin/fhandler_tty.cc
-> @@ -1412,10 +1412,13 @@ fhandler_pty_slave::push_to_pcon_screenbuffer (co=
-nst char *ptr, size_t len,
->    while (!GetConsoleMode (get_output_handle (), &dwMode))
->      {
->        termios_printf ("GetConsoleMode failed, %E");
-> +      int errno_save =3D errno;
->        /* Re-open handles */
->        this->open (0, 0);
->        /* Fix pseudo console window size */
->        this->ioctl (TIOCSWINSZ, &get_ttyp ()->winsize);
-> +      if (errno !=3D errno_save)
-> +	set_errno (errno_save);
->        if (++retry_count > 3)
->  	goto cleanup;
->      }
-> --=20
-> 2.21.0
-
-
-Pushed.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen
-Cygwin Maintainer
-
---9l24NVCWtSuIVIod
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl5BcbsACgkQ9TYGna5E
-T6CAog/+Pr0zceq6YB77UEWlIlXUXx8iclLKrYRiuAQ49+FUrChMU/5ikQS9ehMS
-VWfGQJ9kCGxaY/DR38T9+lE8ux84hrg3Lu3LHd173x1EgfVfaVPQHvlzUUCumkGP
-Vym4DhpDVTu94/iKVCrtgrLo4sU27YSvhzGMI4s09Rk9yMWwAm9ZN9jylCH5CpEN
-oFqSSdZuo2zoRKywBK9/ol84Rmft/1Z0B3BfoESDSDHZ/7N2Uo3twp7qxB949vM2
-M9i0g2Kcexz/lqqpEfXZdL34c25St9qZcDJ7zvISUIm4eNuvLEIU86v5fxx6iYk6
-LqYmnyb3lQulrVFWSiIG6dRReggiInhnfjv2cAQc1BTzAlEGh98rLps5+NSAHk/z
-baJZau2xJAZOO69A3+pLs3WdWspGjRP78ctXrKiy+mXK0t+WbF/qfa9NfQ5+8f8X
-O5XrNRJZBoyNUGshQJrSjeUwi3zU6H0mh+K+R4at+AVQVqTKwwTSz50HOzBp1OWO
-PSsof1LlZcqC/UpzyXzChBVhLSeRiv8sS9aGlsCiqdxAcQTI2wqWQI6tOajuePDb
-qf7KJrnVgY2H6iSKLJeibrrpguPSlLJiCdWKM1qhUK/Q9gwfpIu7rnAn0HC469ib
-uUbLYNmA3PFh0QpU9+sAZOqdAbut2Hj0rmzkWKSjbZJmwUCuGu4=
-=mapt
------END PGP SIGNATURE-----
-
---9l24NVCWtSuIVIod--
+diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+index cfd4b1c44..f5c97de14 100644
+--- a/winsup/cygwin/fhandler_tty.cc
++++ b/winsup/cygwin/fhandler_tty.cc
+@@ -3413,7 +3413,10 @@ fhandler_pty_master::setup_pseudoconsole ()
+      process in a pseudo console and get them from the helper.
+      Slave process will attach to the pseudo console in the
+      helper process using AttachConsole(). */
+-  COORD size = {80, 25};
++  COORD size = {
++    (SHORT) get_ttyp ()->winsize.ws_col,
++    (SHORT) get_ttyp ()->winsize.ws_row
++  };
+   CreatePipe (&from_master, &to_slave, &sec_none, 0);
+   SetLastError (ERROR_SUCCESS);
+   HRESULT res = CreatePseudoConsole (size, from_master, to_master,
+@@ -3423,6 +3426,7 @@ fhandler_pty_master::setup_pseudoconsole ()
+       if (res != S_OK)
+ 	system_printf ("CreatePseudoConsole() failed. %08x\n",
+ 		       GetLastError ());
++err1:
+       CloseHandle (from_master);
+       CloseHandle (to_slave);
+       from_master = from_master_cyg;
+@@ -3446,14 +3450,29 @@ fhandler_pty_master::setup_pseudoconsole ()
+   si_helper.StartupInfo.cb = sizeof (STARTUPINFOEXW);
+   si_helper.lpAttributeList = (PPROC_THREAD_ATTRIBUTE_LIST)
+     HeapAlloc (GetProcessHeap (), 0, bytesRequired);
+-  InitializeProcThreadAttributeList (si_helper.lpAttributeList,
+-				     2, 0, &bytesRequired);
+-  UpdateProcThreadAttribute (si_helper.lpAttributeList,
+-			     0,
+-			     PROC_THREAD_ATTRIBUTE_PSEUDOCONSOLE,
+-			     get_ttyp ()->h_pseudo_console,
+-			     sizeof (get_ttyp ()->h_pseudo_console),
+-			     NULL, NULL);
++  if (si_helper.lpAttributeList == NULL)
++    {
++err2:
++      HPCON_INTERNAL *hp = (HPCON_INTERNAL *) get_ttyp ()->h_pseudo_console;
++      HANDLE tmp = hp->hConHostProcess;
++      ClosePseudoConsole (get_pseudo_console ());
++      CloseHandle (tmp);
++      goto err1;
++    }
++  if (!InitializeProcThreadAttributeList (si_helper.lpAttributeList,
++					  2, 0, &bytesRequired))
++    {
++err3:
++      HeapFree (GetProcessHeap (), 0, si_helper.lpAttributeList);
++      goto err2;
++    }
++  if (!UpdateProcThreadAttribute (si_helper.lpAttributeList,
++				  0,
++				  PROC_THREAD_ATTRIBUTE_PSEUDOCONSOLE,
++				  get_ttyp ()->h_pseudo_console,
++				  sizeof (get_ttyp ()->h_pseudo_console),
++				  NULL, NULL))
++    goto err3;
+   HANDLE hello = CreateEvent (&sec_none, true, false, NULL);
+   HANDLE goodbye = CreateEvent (&sec_none, true, false, NULL);
+   /* Create a pipe for receiving pseudo console handles */
+@@ -3461,12 +3480,21 @@ fhandler_pty_master::setup_pseudoconsole ()
+   CreatePipe (&hr, &hw, &sec_none, 0);
+   /* Inherit only handles which are needed by helper. */
+   HANDLE handles_to_inherit[] = {hello, goodbye, hw};
+-  UpdateProcThreadAttribute (si_helper.lpAttributeList,
+-			     0,
+-			     PROC_THREAD_ATTRIBUTE_HANDLE_LIST,
+-			     handles_to_inherit,
+-			     sizeof (handles_to_inherit),
+-			     NULL, NULL);
++  if (!UpdateProcThreadAttribute (si_helper.lpAttributeList,
++				  0,
++				  PROC_THREAD_ATTRIBUTE_HANDLE_LIST,
++				  handles_to_inherit,
++				  sizeof (handles_to_inherit),
++				  NULL, NULL))
++    {
++err4:
++      CloseHandle (hello);
++err5:
++      CloseHandle (goodbye);
++      CloseHandle (hr);
++      CloseHandle (hw);
++      goto err3;
++    }
+   /* Create helper process */
+   WCHAR cmd[MAX_PATH];
+   path_conv helper ("/bin/cygwin-console-helper.exe");
+@@ -3478,9 +3506,10 @@ fhandler_pty_master::setup_pseudoconsole ()
+   si_helper.StartupInfo.hStdOutput = NULL;
+   si_helper.StartupInfo.hStdError = NULL;
+   PROCESS_INFORMATION pi_helper;
+-  CreateProcessW (NULL, cmd, &sec_none, &sec_none,
+-		  TRUE, EXTENDED_STARTUPINFO_PRESENT,
+-		  NULL, NULL, &si_helper.StartupInfo, &pi_helper);
++  if (!CreateProcessW (NULL, cmd, &sec_none, &sec_none,
++		       TRUE, EXTENDED_STARTUPINFO_PRESENT,
++		       NULL, NULL, &si_helper.StartupInfo, &pi_helper))
++    goto err4;
+   WaitForSingleObject (hello, INFINITE);
+   CloseHandle (hello);
+   CloseHandle (pi_helper.hThread);
+@@ -3491,12 +3520,23 @@ fhandler_pty_master::setup_pseudoconsole ()
+   buf[rLen] = '\0';
+   HANDLE hpConIn, hpConOut;
+   sscanf (buf, "StdHandles=%p,%p", &hpConIn, &hpConOut);
+-  DuplicateHandle (pi_helper.hProcess, hpConIn,
+-		   GetCurrentProcess (), &hpConIn, 0,
+-		   TRUE, DUPLICATE_SAME_ACCESS);
+-  DuplicateHandle (pi_helper.hProcess, hpConOut,
+-		   GetCurrentProcess (), &hpConOut, 0,
+-		   TRUE, DUPLICATE_SAME_ACCESS);
++  if (!DuplicateHandle (pi_helper.hProcess, hpConIn,
++			GetCurrentProcess (), &hpConIn, 0,
++			TRUE, DUPLICATE_SAME_ACCESS))
++    {
++err6:
++      SetEvent (goodbye);
++      WaitForSingleObject (pi_helper.hProcess, INFINITE);
++      CloseHandle (pi_helper.hProcess);
++      goto err5;
++    }
++  if (!DuplicateHandle (pi_helper.hProcess, hpConOut,
++			GetCurrentProcess (), &hpConOut, 0,
++			TRUE, DUPLICATE_SAME_ACCESS))
++    {
++      CloseHandle (hpConIn);
++      goto err6;
++    }
+   CloseHandle (hr);
+   CloseHandle (hw);
+   /* Clean up */
+@@ -3510,6 +3550,7 @@ fhandler_pty_master::setup_pseudoconsole ()
+   CloseHandle (to_master);
+   from_master = hpConIn;
+   to_master = hpConOut;
++  ResizePseudoConsole (get_ttyp ()->h_pseudo_console, size);
+   return true;
+ }
+ 
+@@ -3629,14 +3670,15 @@ fhandler_pty_master::setup ()
+     }
+   get_ttyp ()->fwd_done = CreateEvent (&sec_none, true, false, NULL);
+ 
++  t.winsize.ws_col = 80;
++  t.winsize.ws_row = 25;
++
+   setup_pseudoconsole ();
+ 
+   t.set_from_master (from_master);
+   t.set_from_master_cyg (from_master_cyg);
+   t.set_to_master (to_master);
+   t.set_to_master_cyg (to_master_cyg);
+-  t.winsize.ws_col = 80;
+-  t.winsize.ws_row = 25;
+   t.master_pid = myself->pid;
+ 
+   dev ().parse (DEV_PTYM_MAJOR, unit);
+-- 
+2.21.0
