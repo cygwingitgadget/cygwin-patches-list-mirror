@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-10066-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 11888 invoked by alias); 11 Feb 2020 07:27:14 -0000
+Return-Path: <cygwin-patches-return-10067-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 111961 invoked by alias); 11 Feb 2020 11:50:50 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,54 +9,70 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 11874 invoked by uid 89); 11 Feb 2020 07:27:14 -0000
+Received: (qmail 111952 invoked by uid 89); 11 Feb 2020 11:50:50 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-0.5 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=10.02.2020, para
+X-Spam-SWARE-Status: No, score=-109.6 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=
 X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.133) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 11 Feb 2020 07:27:13 +0000
-Received: from [192.168.178.45] ([95.90.246.218]) by mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id 1MXXdn-1izzZB2ej9-00Yw7S for <cygwin-patches@cygwin.com>; Tue, 11 Feb 2020 08:27:10 +0100
-Subject: Re: [PATCH v2] Cygwin: pty: Introduce disable_pcon in environment CYGWIN.
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.133) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 11 Feb 2020 11:50:48 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id 1MirX2-1jg1TO1pS8-00ewaD for <cygwin-patches@cygwin.com>; Tue, 11 Feb 2020 12:50:46 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id D0AFAA80CFA; Tue, 11 Feb 2020 12:50:45 +0100 (CET)
+Date: Tue, 11 Feb 2020 11:50:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-References: <20200121222329.69f71c847e97da78955735a7@nifty.ne.jp> <20200121132513.3654-1-takashi.yano@nifty.ne.jp> <20200122100651.GT20672@calimero.vinschen.de> <a5724cea-edda-6ab9-fc7c-cbf3ad3091cc@towo.net> <20200210100710.GD4442@calimero.vinschen.de> <20200210212441.91b09887b3518b029560ff6a@nifty.ne.jp>
-From: Thomas Wolff <towo@towo.net>
-X-Tagtoolbar-Keys: D20200211082714086
-Message-ID: <c65bd196-07a3-b0c5-6350-88d16f48a810@towo.net>
-Date: Tue, 11 Feb 2020 07:27:00 -0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101 Thunderbird/68.4.2
+Subject: Re: [PATCH v2] Cygwin: pty: Add error handling in setup_pseudoconsole().
+Message-ID: <20200211115045.GI4442@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20200210153811.GF4442@calimero.vinschen.de> <20200210174514.1164-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-In-Reply-To: <20200210212441.91b09887b3518b029560ff6a@nifty.ne.jp>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-IsSubscribed: yes
-X-SW-Source: 2020-q1/txt/msg00172.txt
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="CEUtFxTsmBsHRLs3"
+Content-Disposition: inline
+In-Reply-To: <20200210174514.1164-1-takashi.yano@nifty.ne.jp>
+X-SW-Source: 2020-q1/txt/msg00173.txt
 
-Am 10.02.2020 um 13:24 schrieb Takashi Yano:
-> On Mon, 10 Feb 2020 11:07:10 +0100
-> Corinna Vinschen wrote:
->> On Feb  8 18:13, Thomas Wolff wrote:
->>> On 22.01.2020 11:06, Corinna Vinschen wrote:
->>>> On Jan 21 22:25, Takashi Yano wrote:
->>>>> - For programs which does not work properly with pseudo console,
->>>>>     disable_pcon in environment CYGWIN is introduced. If disable_pcon
->>>>>     is set, pseudo console support is disabled.
->>>> Pushed.  I just fixed a missing </para> in the doc text.
->>>>
->>> Sorry I didn't notice this before. I think rather than having to decide and
->>> unconditionally switch on or off, a better approach would be to
->>> automatically enable pseudo console when forking a non-cygwin program only,
->>> or have that as a third option. (I think I had suggested this before.)
->>> It's good we had pseudo console in unconditionally now for a while, as that
->>> apparently helped identifying a bunch of issues, but targetting it to where
->>> it's really needed would further help to avoid future trouble, including any
->>> performance issues as recently reported.
->>> I'm willing to prepare a patch if desired, as I had implemented that
->>> condition already for my earlier "winpty injection" proposal.
->>> Thomas
->> Interesting idea, but given that all the Pseudo Console code in
->> Cygwin is from Takashi, he should decide how to go forward.
->>
->> Takashi?  What do you think?
-> I cannot imagine how to realize this right now. Let me consider.
->
-See https://cygwin.com/ml/cygwin-developers/2018-04/msg00002.html for my 
-patch.
+
+--CEUtFxTsmBsHRLs3
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 347
+
+On Feb 11 02:45, Takashi Yano wrote:
+> - In setup_pseudoconsole(), many error handling was omitted. This
+>   patch adds missing error handling.
+> ---
+>  winsup/cygwin/fhandler_tty.cc | 179 +++++++++++++++++++++-------------
+>  1 file changed, 111 insertions(+), 68 deletions(-)
+
+Pushed.
+
+
+Thanks,
+Corinna
+
+--=20
+Corinna Vinschen
+Cygwin Maintainer
+
+--CEUtFxTsmBsHRLs3
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 833
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl5ClRUACgkQ9TYGna5E
+T6ArSA/5Aa8X4ng3g8d2jl8XpVjn+z4UTUBF0MVPmpqzDnqTUfccdLXYE2/AKY2S
+7GVe8zOV2WZ9YeZtZNk4n6jHas00+Qjl9Yz8oX6UHnyVZUDXlmsCe8oD4/yLSxnS
+77nv4OI/l5RCJ53TPHVIWCc5q4ewEcdBVaDzgcurYY34H7ehb0n1OOsCHmBLuIGI
+KfhTcCw1kpiEENXP2cCLdE6fVVtgd49Io8HgKtdGPNb6O9AW5cw/arQKVoqQV06U
+EB7KYI3V+XRH6yI8o9h3u3KmKWzKWYX8dQxSUNeyN2a+lqVuBu3Klt80GAh2pXzi
+SptC0ichHIB6q4dW5Z5qi5fZjUtM7M9nqUKkZNlGPuoN7AjMWaUnkaG161YX0STx
+nLGY545sABiMkjM8XV+wcWZ1zCX9mtwLMUIoEPCT8Sv0lbdQXX2VpTlesrsiTVYR
+k9m44qWhrbEL6Elto1Sa/eL7KBGu2tjY0sKg/fi1vionGT5O3kyi8KvgwFnyCZm0
+M7lZnjJFynyaGzZfw/4VnN/42RPC+jXqbebRmtOAQfQudjukgpxCfQxYxecapd6+
+45mNjYqAWrQxcps+8D0eRzEqq4hEA76IDYeWjKfnvTslkNq1qq12fki7Ma1Grwgd
+YXl0WfvLQyhCUD3uXHtvrIhUdZJ+NwdK1mqMJyrZLwR1Hcdf43E=
+=ZyiQ
+-----END PGP SIGNATURE-----
+
+--CEUtFxTsmBsHRLs3--
