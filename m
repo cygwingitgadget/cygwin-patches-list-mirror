@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-10074-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 48725 invoked by alias); 17 Feb 2020 10:29:30 -0000
+Return-Path: <cygwin-patches-return-10075-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 64532 invoked by alias); 17 Feb 2020 12:38:06 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,344 +9,83 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 48711 invoked by uid 89); 17 Feb 2020 10:29:29 -0000
+Received: (qmail 64495 invoked by uid 89); 17 Feb 2020 12:38:06 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-17.9 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=capability, HContent-Transfer-Encoding:8bit
-X-HELO: conuserg-02.nifty.com
-Received: from conuserg-02.nifty.com (HELO conuserg-02.nifty.com) (210.131.2.69) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 17 Feb 2020 10:29:27 +0000
-Received: from localhost.localdomain (ntsitm196171.sitm.nt.ngn.ppp.infoweb.ne.jp [125.0.207.171]) (authenticated)	by conuserg-02.nifty.com with ESMTP id 01HATDis025129;	Mon, 17 Feb 2020 19:29:18 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-02.nifty.com 01HATDis025129
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1581935358;	bh=uMVqm2Prr80e3HCsFRfpWlNTZYmKuMUjITbaksjy92w=;	h=From:To:Cc:Subject:Date:From;	b=IpjcSKvA4VSE5TfQ1+xC61bM2dNFuHE8OtXsriZ+ok30r/3YKEdeRcjNyX4/EpKdX	 vUKhAOpM94PW2GUeppPsXnsekQZgyY3K+agGRD8CtP482RM6ZlRlz7oR2zhP5tzdaV	 5HvwAS9hWy6uqCawfuYTyDR5l2CyJEYGSCOxQh7yJG1NSoKt5p6eZPmR9IpFn4+Ezc	 6O0LF6TNBaPwo3UDaHZGtT7+c9K0YQaCdWADyhlZ++OJPNyB3jMQUFZ3yk9+QvA62C	 GTFNfcqNgA4J/va+sVW1CED1T8F2ycYiaZPRDJvPtAzgrYWYOmfYIQ/jZjWRkTOxlS	 9Rg75Y78go6Tg==
+X-Spam-SWARE-Status: No, score=-5.5 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=
+X-HELO: conssluserg-04.nifty.com
+Received: from conssluserg-04.nifty.com (HELO conssluserg-04.nifty.com) (210.131.2.83) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Mon, 17 Feb 2020 12:38:03 +0000
+Received: from Express5800-S70 (ntsitm196171.sitm.nt.ngn.ppp.infoweb.ne.jp [125.0.207.171]) (authenticated)	by conssluserg-04.nifty.com with ESMTP id 01HCbsbZ028357	for <cygwin-patches@cygwin.com>; Mon, 17 Feb 2020 21:37:54 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 01HCbsbZ028357
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1581943075;	bh=+VkiuU36MN+e2Rx/4SPALT5nz5X8k0WigN/ISJMvNTI=;	h=Date:From:To:Subject:In-Reply-To:References:From;	b=ibM0YsJKQUrnjxf84tpxLY2suROPqFsKcFUO5vL2fBodKXw4O95F7LxXSKJaiGtO+	 JAuws1Q45FW6+VdrJ33A6RKZIyTH9pPYi+u158TwxMS5nz1u7MYH0GsvXWYH0oBugx	 Xoew9gEHnbGo33LuMEtf58/JUBZ/vwYjdTWtxR5sb5zh8yEYjYS+vgy1lladZLxLBO	 SSU6/AyGnbCWH6JmaRTwPtcz9PT9BRIZwMb32szQRNXqi9CCWxHAHsatE4m5L7xQpq	 +6vGd/gXlbTH7PL/51Hrjfe58bw28X5PZCD8YjWDUbEXKoHRsL6+tKhg+GXo7082bT	 0iCoueqnhp7NA==
+Date: Mon, 17 Feb 2020 12:38:00 -0000
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH v2] Cygwin: console: Change timing of set/unset xterm compatible mode.
-Date: Mon, 17 Feb 2020 10:29:00 -0000
-Message-Id: <20200217102907.611-1-takashi.yano@nifty.ne.jp>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] Cygwin: console: Change timing of set/unset xterm compatible mode.
+Message-Id: <20200217213759.7e373930ae752aa918b2a426@nifty.ne.jp>
+In-Reply-To: <20200217101650.GD4092@calimero.vinschen.de>
+References: <20200216081322.1183-1-takashi.yano@nifty.ne.jp>	<20200217090015.GB4092@calimero.vinschen.de>	<20200217184545.43be636858734d029f2f5a11@nifty.ne.jp>	<20200217101650.GD4092@calimero.vinschen.de>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-IsSubscribed: yes
-X-SW-Source: 2020-q1/txt/msg00180.txt
+X-SW-Source: 2020-q1/txt/msg00181.txt
 
-- If two cygwin programs are executed simultaneousley with pipes
-  in cmd.exe, xterm compatible mode is accidentally disabled by
-  the process which ends first. After that, escape sequences are
-  not handled correctly in the other app. This is the problem 2
-  reported in https://cygwin.com/ml/cygwin/2020-02/msg00116.html.
-  This patch fixes the issue. This patch also fixes the problem 3.
-  For these issues, the timing of setting and unsetting xterm
-  compatible mode is changed. For read, xterm compatible mode is
-  enabled only within read() or select() functions. For write, it
-  is enabled every time write() is called, and restored on close().
----
- winsup/cygwin/fhandler_console.cc | 101 +++++++++++++++---------------
- winsup/cygwin/select.cc           |  32 +++++++++-
- winsup/cygwin/spawn.cc            |  23 +++----
- 3 files changed, 89 insertions(+), 67 deletions(-)
+On Mon, 17 Feb 2020 11:16:50 +0100
+Corinna Vinschen wrote:
+> On Feb 17 18:45, Takashi Yano wrote:
+> > On Mon, 17 Feb 2020 10:00:15 +0100
+> > Corinna Vinschen wrote:
+> > > On Feb 16 17:13, Takashi Yano wrote:
+> > > > - If two cygwin programs are executed simultaneousley with pipes
+> > > >   in cmd.exe, xterm compatible mode is accidentally disabled by
+> > > >   the process which ends first. After that, escape sequences are
+> > > >   not handled correctly in the other app. This is the problem 2
+> > > >   reported in https://cygwin.com/ml/cygwin/2020-02/msg00116.html.
+> > > >   This patch fixes the issue. This patch also fixes the problem 3.
+> > > >   For these issues, the timing of setting and unsetting xterm
+> > > >   compatible mode is changed. For read, xterm compatible mode is
+> > > >   enabled only within read() or select() functions. For write, it
+> > > >   is enabled every time write() is called, and restored on close().
+> > > 
+> > > Oh well, I was just going to release 3.1.3 :}
+> > > 
+> > > In terms of this patch, rather than to change the mode on every
+> > > invocation of read/write/select/close, wouldn't it make more sense to
+> > > count the number of mode switches in a shared per-console variable, i.e.
+> > > 
+> > > LONG shared_console_info::xterms_mode = 0;
+> > > 
+> > > on open:
+> > > 
+> > >   if (InterlockedIncrement (&xterm_mode) == 1)
+> > >     switch to xterm mode;
+> > > 
+> > > on close:
+> > > 
+> > >   if (InterlockedDecrement (&xterm_mode)) == 0)
+> > >     switch back to compat mode;
+> > > 
+> > > ?
+> > 
+> > Thanks for the advice. However this unfortunately does not work
+> > in bash->cmd->bash case.
+> > For cmd.exe, xterm mode should be disabled, however, the second
+> > bash need xterm mode enabled.
+> > 
+> > On Mon, 17 Feb 2020 10:28:19 +0100
+> > Corinna Vinschen wrote:
+> > > On second thought, also consider that switching the mode and
+> > > reading/writing is not atomic.  You'd either have to add locking, or you
+> > > may suffer the same problem on unfortunate task switching.
+> > 
+> > Hmm, it may be. Let me consider. It may need time, so please
+> > go ahead for 3.1.3.
+> 
+> Ok.  I just wonder if I should merge your patch into 3.1.3 as is for the
+> time being.  It's better than the old state, right?
 
-diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
-index 38eed05f4..2afb5c529 100644
---- a/winsup/cygwin/fhandler_console.cc
-+++ b/winsup/cygwin/fhandler_console.cc
-@@ -53,7 +53,6 @@ fhandler_console::console_state NO_COPY *fhandler_console::shared_console_info;
- 
- bool NO_COPY fhandler_console::invisible_console;
- 
--static DWORD orig_conin_mode = (DWORD) -1;
- static DWORD orig_conout_mode = (DWORD) -1;
- 
- /* con_ra is shared in the same process.
-@@ -361,6 +360,9 @@ fix_tab_position (HANDLE h, SHORT width)
-     __small_sprintf (buf+strlen (buf), "\033[%d;%dH\033H", 1, col+1);
-   /* Restore cursor position */
-   __small_sprintf (buf+strlen (buf), "\0338");
-+  DWORD dwMode;
-+  GetConsoleMode (h, &dwMode);
-+  SetConsoleMode (h, dwMode | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
-   DWORD dwLen;
-   WriteConsole (h, buf, strlen (buf), &dwLen, 0);
- }
-@@ -425,12 +427,19 @@ fhandler_console::read (void *pv, size_t& buflen)
- 
-   set_input_state ();
- 
-+  DWORD dwMode;
-+  GetConsoleMode (get_handle (), &dwMode);
-+  /* if system has 24 bit color capability, use xterm compatible mode. */
-+  if (wincap.has_con_24bit_colors () && !con_is_legacy)
-+    SetConsoleMode (get_handle (), dwMode | ENABLE_VIRTUAL_TERMINAL_INPUT);
-+
-   while (!input_ready && !get_cons_readahead_valid ())
-     {
-       int bgres;
-       if ((bgres = bg_check (SIGTTIN)) <= bg_eof)
- 	{
- 	  buflen = bgres;
-+	  SetConsoleMode (get_handle (), dwMode); /* Restore */
- 	  return;
- 	}
- 
-@@ -448,6 +457,7 @@ fhandler_console::read (void *pv, size_t& buflen)
- 	case WAIT_TIMEOUT:
- 	  set_sig_errno (EAGAIN);
- 	  buflen = (size_t) -1;
-+	  SetConsoleMode (get_handle (), dwMode); /* Restore */
- 	  return;
- 	default:
- 	  goto err;
-@@ -495,30 +505,24 @@ fhandler_console::read (void *pv, size_t& buflen)
- #undef buf
- 
-   buflen = copied_chars;
-+  SetConsoleMode (get_handle (), dwMode); /* Restore */
-   return;
- 
- err:
-   __seterrno ();
-   buflen = (size_t) -1;
-+  SetConsoleMode (get_handle (), dwMode); /* Restore */
-   return;
- 
- sig_exit:
-   set_sig_errno (EINTR);
-   buflen = (size_t) -1;
-+  SetConsoleMode (get_handle (), dwMode); /* Restore */
- }
- 
- fhandler_console::input_states
- fhandler_console::process_input_message (void)
- {
--  if (wincap.has_con_24bit_colors () && !con_is_legacy)
--    {
--      DWORD dwMode;
--      /* Enable xterm compatible mode in input */
--      GetConsoleMode (get_handle (), &dwMode);
--      dwMode |= ENABLE_VIRTUAL_TERMINAL_INPUT;
--      SetConsoleMode (get_handle (), dwMode);
--    }
--
-   char tmp[60];
- 
-   if (!shared_console_info)
-@@ -1047,29 +1051,26 @@ fhandler_console::open (int flags, mode_t)
-   get_ttyp ()->rstcons (false);
-   set_open_status ();
- 
--  if (orig_conin_mode == (DWORD) -1)
--    GetConsoleMode (get_handle (), &orig_conin_mode);
-   if (orig_conout_mode == (DWORD) -1)
-     GetConsoleMode (get_output_handle (), &orig_conout_mode);
- 
-   if (getpid () == con.owner && wincap.has_con_24bit_colors ())
-     {
-+      bool is_legacy = false;
-       DWORD dwMode;
--      /* Enable xterm compatible mode in output */
-+      /* Check xterm compatible mode in output */
-       GetConsoleMode (get_output_handle (), &dwMode);
--      dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
--      if (!SetConsoleMode (get_output_handle (), dwMode))
--	con.is_legacy = true;
--      else
--	con.is_legacy = false;
--      /* Enable xterm compatible mode in input */
--      if (!con_is_legacy)
--	{
--	  GetConsoleMode (get_handle (), &dwMode);
--	  dwMode |= ENABLE_VIRTUAL_TERMINAL_INPUT;
--	  if (!SetConsoleMode (get_handle (), dwMode))
--	    con.is_legacy = true;
--	}
-+      if (!SetConsoleMode (get_output_handle (),
-+			   dwMode | ENABLE_VIRTUAL_TERMINAL_PROCESSING))
-+	is_legacy = true;
-+      SetConsoleMode (get_output_handle (), dwMode);
-+      /* Check xterm compatible mode in input */
-+      GetConsoleMode (get_handle (), &dwMode);
-+      if (!SetConsoleMode (get_handle (),
-+			   dwMode | ENABLE_VIRTUAL_TERMINAL_INPUT))
-+	is_legacy = true;
-+      SetConsoleMode (get_handle (), dwMode);
-+      con.is_legacy = is_legacy;
-       extern int sawTERM;
-       if (con_is_legacy && !sawTERM)
- 	setenv ("TERM", "cygwin", 1);
-@@ -1102,19 +1103,12 @@ fhandler_console::close ()
- {
-   debug_printf ("closing: %p, %p", get_handle (), get_output_handle ());
- 
--  CloseHandle (input_mutex);
--  input_mutex = NULL;
--  CloseHandle (output_mutex);
--  output_mutex = NULL;
-+  acquire_output_mutex (INFINITE);
- 
-   if (shared_console_info && getpid () == con.owner &&
-       wincap.has_con_24bit_colors () && !con_is_legacy)
-     {
-       DWORD dwMode;
--      /* Disable xterm compatible mode in input */
--      GetConsoleMode (get_handle (), &dwMode);
--      dwMode &= ~ENABLE_VIRTUAL_TERMINAL_INPUT;
--      SetConsoleMode (get_handle (), dwMode);
-       /* Disable xterm compatible mode in output */
-       GetConsoleMode (get_output_handle (), &dwMode);
-       dwMode &= ~ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-@@ -1127,12 +1121,15 @@ fhandler_console::close ()
-   status = NtQueryObject (get_handle (), ObjectBasicInformation,
- 			  &obi, sizeof obi, NULL);
-   if (NT_SUCCESS (status) && obi.HandleCount == 1)
--    {
--      if (orig_conin_mode != (DWORD) -1)
--	SetConsoleMode (get_handle (), orig_conin_mode);
--      if (orig_conout_mode != (DWORD) -1)
--	SetConsoleMode (get_handle (), orig_conout_mode);
--    }
-+    if (orig_conout_mode != (DWORD) -1)
-+      SetConsoleMode (get_handle (), orig_conout_mode);
-+
-+  release_output_mutex ();
-+
-+  CloseHandle (input_mutex);
-+  input_mutex = NULL;
-+  CloseHandle (output_mutex);
-+  output_mutex = NULL;
- 
-   CloseHandle (get_handle ());
-   CloseHandle (get_output_handle ());
-@@ -1270,13 +1267,6 @@ fhandler_console::output_tcsetattr (int, struct termios const *t)
- 
-   acquire_output_mutex (INFINITE);
-   DWORD flags = ENABLE_PROCESSED_OUTPUT | ENABLE_WRAP_AT_EOL_OUTPUT;
--  /* If system has 24 bit color capability, use xterm compatible mode. */
--  if (wincap.has_con_24bit_colors () && !con_is_legacy)
--    {
--      flags |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
--      if (!(t->c_oflag & OPOST) || !(t->c_oflag & ONLCR))
--	flags |= DISABLE_NEWLINE_AUTO_RETURN;
--    }
- 
-   int res = SetConsoleMode (get_output_handle (), flags) ? 0 : -1;
-   if (res)
-@@ -1338,9 +1328,6 @@ fhandler_console::input_tcsetattr (int, struct termios const *t)
-   flags |= ENABLE_WINDOW_INPUT |
-     ((wincap.has_con_24bit_colors () && !con_is_legacy) ?
-      0 : ENABLE_MOUSE_INPUT);
--  /* if system has 24 bit color capability, use xterm compatible mode. */
--  if (wincap.has_con_24bit_colors () && !con_is_legacy)
--    flags |= ENABLE_VIRTUAL_TERMINAL_INPUT;
- 
-   int res;
-   if (flags == oflags)
-@@ -2716,6 +2703,20 @@ fhandler_console::write (const void *vsrc, size_t len)
-   push_process_state process_state (PID_TTYOU);
-   acquire_output_mutex (INFINITE);
- 
-+  /* If system has 24 bit color capability, use xterm compatible mode. */
-+  if (wincap.has_con_24bit_colors () && !con_is_legacy)
-+    {
-+      DWORD dwMode;
-+      GetConsoleMode (get_output_handle (), &dwMode);
-+      dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-+      if (!(get_ttyp ()->ti.c_oflag & OPOST) ||
-+	  !(get_ttyp ()->ti.c_oflag & ONLCR))
-+	dwMode |= DISABLE_NEWLINE_AUTO_RETURN;
-+      else
-+	dwMode &= ~DISABLE_NEWLINE_AUTO_RETURN;
-+      SetConsoleMode (get_output_handle (), dwMode);
-+    }
-+
-   /* Run and check for ansi sequences */
-   unsigned const char *src = (unsigned char *) vsrc;
-   unsigned const char *end = src + len;
-diff --git a/winsup/cygwin/select.cc b/winsup/cygwin/select.cc
-index b06441c77..f3e3e4482 100644
---- a/winsup/cygwin/select.cc
-+++ b/winsup/cygwin/select.cc
-@@ -1075,19 +1075,49 @@ verify_console (select_record *me, fd_set *rfds, fd_set *wfds,
-   return peek_console (me, true);
- }
- 
-+static int
-+console_startup (select_record *me, select_stuff *stuff)
-+{
-+  select_record *s = stuff->start.next;
-+  if (wincap.has_con_24bit_colors ())
-+    {
-+      DWORD dwMode;
-+      GetConsoleMode (s->h, &dwMode);
-+      /* Enable xterm compatible mode in input */
-+      dwMode |= ENABLE_VIRTUAL_TERMINAL_INPUT;
-+      SetConsoleMode (s->h, dwMode);
-+    }
-+  return 1;
-+}
-+
-+static void
-+console_cleanup (select_record *me, select_stuff *stuff)
-+{
-+  select_record *s = stuff->start.next;
-+  if (wincap.has_con_24bit_colors ())
-+    {
-+      DWORD dwMode;
-+      GetConsoleMode (s->h, &dwMode);
-+      /* Disable xterm compatible mode in input */
-+      dwMode &= ~ENABLE_VIRTUAL_TERMINAL_INPUT;
-+      SetConsoleMode (s->h, dwMode);
-+    }
-+}
-+
- select_record *
- fhandler_console::select_read (select_stuff *ss)
- {
-   select_record *s = ss->start.next;
-   if (!s->startup)
-     {
--      s->startup = no_startup;
-+      s->startup = console_startup;
-       s->verify = verify_console;
-       set_cursor_maybe ();
-     }
- 
-   s->peek = peek_console;
-   s->h = get_handle ();
-+  s->cleanup = console_cleanup;
-   s->read_selected = true;
-   s->read_ready = input_ready || get_cons_readahead_valid ();
-   return s;
-diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
-index f7c6dd590..772fe6dd6 100644
---- a/winsup/cygwin/spawn.cc
-+++ b/winsup/cygwin/spawn.cc
-@@ -615,22 +615,13 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
- 	    {
- 	      attach_to_console = true;
- 	      if (wincap.has_con_24bit_colors () && !iscygwin ())
--		{
--		  DWORD dwMode;
--		  if (fd == 0)
--		    {
--		      /* Disable xterm compatible mode in input */
--		      GetConsoleMode (fh->get_handle (), &dwMode);
--		      dwMode &= ~ENABLE_VIRTUAL_TERMINAL_INPUT;
--		      SetConsoleMode (fh->get_handle (), dwMode);
--		    }
--		  else
--		    {
--		      GetConsoleMode (fh->get_output_handle (), &dwMode);
--		      dwMode &= ~ENABLE_VIRTUAL_TERMINAL_PROCESSING;
--		      SetConsoleMode (fh->get_output_handle (), dwMode);
--		    }
--		}
-+		if (fd == 1 || fd == 2)
-+		  {
-+		    DWORD dwMode;
-+		    GetConsoleMode (fh->get_output_handle (), &dwMode);
-+		    dwMode &= ~ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-+		    SetConsoleMode (fh->get_output_handle (), dwMode);
-+		  }
- 	    }
- 	}
- 
+I am very sorry but I found one more mistake. Is it possible to
+add a patch for 3.1.3?
+
 -- 
-2.21.0
+Takashi Yano <takashi.yano@nifty.ne.jp>
