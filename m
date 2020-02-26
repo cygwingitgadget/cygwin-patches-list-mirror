@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-10131-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 109019 invoked by alias); 26 Feb 2020 20:08:50 -0000
+Return-Path: <cygwin-patches-return-10132-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 16312 invoked by alias); 26 Feb 2020 20:16:47 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,49 +9,75 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 109009 invoked by uid 89); 26 Feb 2020 20:08:50 -0000
+Received: (qmail 16287 invoked by uid 89); 26 Feb 2020 20:16:44 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-17.9 required=5.0 tests=AWL,BAYES_00,FORGED_SPF_HELO,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,KHOP_HELO_FCRDNS,SPF_HELO_PASS autolearn=ham version=3.3.1 spammy=gcc-9.2.0, gcc920, HContent-Transfer-Encoding:8bit
-X-HELO: re-prd-fep-048.btinternet.com
-Received: from mailomta2-re.btinternet.com (HELO re-prd-fep-048.btinternet.com) (213.120.69.95) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 26 Feb 2020 20:08:49 +0000
-Received: from re-prd-rgout-002.btmx-prd.synchronoss.net ([10.2.54.5])          by re-prd-fep-048.btinternet.com with ESMTP          id <20200226200847.HJJU27551.re-prd-fep-048.btinternet.com@re-prd-rgout-002.btmx-prd.synchronoss.net>;          Wed, 26 Feb 2020 20:08:47 +0000
-Authentication-Results: btinternet.com;    auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com
-X-OWM-Source-IP: 31.51.207.12 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-Received: from localhost.localdomain (31.51.207.12) by re-prd-rgout-002.btmx-prd.synchronoss.net (5.8.340) (authenticated as jonturney@btinternet.com)        id 5E3A15B6035F33DA; Wed, 26 Feb 2020 20:08:47 +0000
-From: Jon Turney <jon.turney@dronecode.org.uk>
+X-Spam-SWARE-Status: No, score=-111.6 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=
+X-HELO: mout.kundenserver.de
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.135) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 26 Feb 2020 20:16:43 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id 1MZTa2-1is9Pz0K8s-00WZtF for <cygwin-patches@cygwin.com>; Wed, 26 Feb 2020 21:16:41 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 84157A8276B; Wed, 26 Feb 2020 21:16:40 +0100 (CET)
+Date: Wed, 26 Feb 2020 20:16:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH] Cygwin: Fix size of a buffer in the ps utility
-Date: Wed, 26 Feb 2020 20:08:00 -0000
-Message-Id: <20200226200835.34501-1-jon.turney@dronecode.org.uk>
+Subject: Re: [PATCH] Cygwin: Update dumper for bfd API changes
+Message-ID: <20200226201640.GW4045@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20200226200704.34424-1-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SW-Source: 2020-q1/txt/msg00237.txt
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="YIleam+9adpUeYf+"
+Content-Disposition: inline
+In-Reply-To: <20200226200704.34424-1-jon.turney@dronecode.org.uk>
+X-SW-Source: 2020-q1/txt/msg00238.txt
 
-Fix the size of a temporary buffer used in the ps utility, reported as a
-new warning by gcc-9.2.0
 
-../../../../src/winsup/utils/ps.cc: In function 'const char* ttynam(int)':
-../../../../src/winsup/utils/ps.cc:101:23: warning: 'sprintf' may write a terminating nul past the end of the destination [-Wformat-overflow=]
-../../../../src/winsup/utils/ps.cc:101:11: note: 'sprintf' output between 9 and 10 bytes into a destination of size 9
----
- winsup/utils/ps.cc | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--YIleam+9adpUeYf+
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 472
 
-diff --git a/winsup/utils/ps.cc b/winsup/utils/ps.cc
-index 2307f7955..63b92319e 100644
---- a/winsup/utils/ps.cc
-+++ b/winsup/utils/ps.cc
-@@ -90,7 +90,7 @@ to_time_t (FILETIME *ptr)
- static const char *
- ttynam (int ntty)
- {
--  static char buf[9];
-+  static char buf[10];
-   char buf0[9];
-   if (ntty < 0)
-     strcpy (buf0, "?");
--- 
-2.21.0
+On Feb 26 20:07, Jon Turney wrote:
+> Update dumper for bfd API changes in binutils 2.34
+>=20
+> libbfd doesn't guarantee API stability, so we've just been lucky this
+> hasn't broken more often.
+>=20
+> See binutils commit fd361982.
+> ---
+>  winsup/utils/dumper.cc   | 30 ++++++++++++++++++++++--------
+>  winsup/utils/parse_pe.cc |  4 ++++
+>  2 files changed, 26 insertions(+), 8 deletions(-)
+
+Great, please push.
+
+
+Thanks,
+Corinna
+
+--=20
+Corinna Vinschen
+Cygwin Maintainer
+
+--YIleam+9adpUeYf+
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 833
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl5W0igACgkQ9TYGna5E
+T6CDVg/+LmLVCv1VcFeRTSD4F+PYiK5kyo7jt06Id1dwN8hT8Wfz1xDdkZnzWSGi
+epSk9RrvdTufgzPzDukLvx3MYTgrbclkfz8NkjUjaY7foiA7lRvNrd7t2Gl5pcoP
+9ETOm2s/xNyT4TkhW2Kkl1QYtH2fgUp2BViF7c4oGH/OdfFVqwhiqndrr6ZE/33H
+4p7MMb2h3v4Al19cmnf7NnJCKAJgHtMS+D0gxnMvf13k8aqsXA3dhETQDFCkINFQ
+5jmtv+O3cWIEmOd6WplZqjHv7hkafR45jypeBHz2xsc/V//w93fQ6XugvZ/7MzBe
+qyP4Il3o5tiUkDHvb+B6gOB4fE+ngGPOuhBCynpYOqKOW88U04grovSSZnQVtJ4O
+uyqT01YqGkM1CyXzIgh23AANBMkM9UBptUIZKwc9GdwPLbCXk9LcKk/OOxyXbKSv
+1nUbv3wNvs5M21Zcl2djyQgiBYLj+kilQEn1vTEMPQTkB4GRd5txS/AjpejwqrME
+IQW9wPFWufqE6nPSjTmTkcC8IW30T53xDZR7Tom7+z6CM/sUMT5MHb0H12+4q6nv
+lfETJM4cuFYl51azaIH1pFpbCb0uwrJPpn/v3r7+NXgbtaK3Ai7sm10JSLclPKR2
+gTGuFI7gImelGcxL+ybe+gs0XUghxoxTojG0TOC/i26dBx/pdp0=
+=B3i+
+-----END PGP SIGNATURE-----
+
+--YIleam+9adpUeYf+--
