@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-10121-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 18775 invoked by alias); 25 Feb 2020 23:45:46 -0000
+Return-Path: <cygwin-patches-return-10122-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 50446 invoked by alias); 26 Feb 2020 11:12:32 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,50 +9,42 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 18766 invoked by uid 89); 25 Feb 2020 23:45:46 -0000
+Received: (qmail 50437 invoked by uid 89); 26 Feb 2020 11:12:31 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-15.8 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_LOW autolearn=ham version=3.3.1 spammy=HContent-Transfer-Encoding:8bit
-X-HELO: smtp-out-so.shaw.ca
-Received: from smtp-out-so.shaw.ca (HELO smtp-out-so.shaw.ca) (64.59.136.137) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 25 Feb 2020 23:45:44 +0000
-Received: from Brian.Inglis@Shaw.ca ([24.64.172.44])	by shaw.ca with ESMTP	id 6jtVjvwiT17ZD6jtWjPdlb; Tue, 25 Feb 2020 16:45:42 -0700
-From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
-To: Cygwin Patches <cygwin-patches@cygwin.com>
-Cc: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
-Subject: [PATCH] cpuinfo:power management: add proc_feedback, acc_power
-Date: Tue, 25 Feb 2020 23:45:00 -0000
-Message-Id: <20200225234415.37317-1-Brian.Inglis@SystematicSW.ab.ca>
-MIME-Version: 1.0
-Bcc: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
-Content-Transfer-Encoding: 8bit
+X-Spam-SWARE-Status: No, score=-6.1 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=cygwinpatches, black
+X-HELO: conssluserg-02.nifty.com
+Received: from conssluserg-02.nifty.com (HELO conssluserg-02.nifty.com) (210.131.2.81) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 26 Feb 2020 11:12:21 +0000
+Received: from Express5800-S70 (ntsitm196171.sitm.nt.ngn.ppp.infoweb.ne.jp [125.0.207.171]) (authenticated)	by conssluserg-02.nifty.com with ESMTP id 01QBCA5i019430	for <cygwin-patches@cygwin.com>; Wed, 26 Feb 2020 20:12:10 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 01QBCA5i019430
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1582715530;	bh=3Do45cEhhxK7yuzayjHOjq4pXTzmIChjVgKc1v0J/kk=;	h=Date:From:To:Subject:In-Reply-To:References:From;	b=uTZG9hDpHwp/b/i1X8B3wHQOnJcwT2EL8aJcs4KwQ6hts0/emzpP1kHuI7aaxUxpV	 khBzqGwDBdeNMsHkt3MnC0+fWnevtJ/PcwACUhSp8Ktyexrd6mnI7C28oltTYPOiAW	 wC2pz+tNMJSQMODZBUDbNA8U/IiMy6NgHpWhPieta3LJBPcz92UY7uYSAyLGLR269P	 WR04GSBPDmeWT7lC27jWmMEVfNumPIRstPvLT5iN6DmiKBk/UqXrxKG9bZ7sNiY5oI	 cKAdm0FnGKfiIa/opE5MCO25OYUS6d11ttiDiTizFmqIPTwqr7cVDii9/FZetmTvhB	 wRXgg+42La3vQ==
+Date: Wed, 26 Feb 2020 11:12:00 -0000
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH 1/2] Cygwin: console: Add workaround for broken IL/DL in xterm mode.
+Message-Id: <20200226201223.f84202de00a3f4ec65ceb64a@nifty.ne.jp>
+In-Reply-To: <20200225171438.1243-2-takashi.yano@nifty.ne.jp>
+References: <20200225171438.1243-1-takashi.yano@nifty.ne.jp>	<20200225171438.1243-2-takashi.yano@nifty.ne.jp>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-IsSubscribed: yes
-X-SW-Source: 2020-q1/txt/msg00227.txt
+X-SW-Source: 2020-q1/txt/msg00228.txt
 
-linux 4.6 x86/cpu: Add advanced power management bits
-Bit 11 of CPUID 8000_0007 edx is processor feedback interface.
-Bit 12 of CPUID 8000_0007 edx is accumulated power.
+Hi Corinna,
 
-Print proper names in /proc/cpuinfo
+On Wed, 26 Feb 2020 02:14:37 +0900
+Takashi Yano wrote:
+> - Cygwin console with xterm compatible mode causes problem reported
+>   in https://www.cygwin.com/ml/cygwin-patches/2020-q1/msg00212.html
+>   if background/foreground colors are set to gray/black respectively
+>   in Win10 1903/1909. This is caused by "CSI Ps L" (IL), "CSI Ps M"
+>   (DL) and "ESC M" (RI) control sequences which are broken. This
+>   patch adds a workaround for the issue. Also, workaround code for
+>   "CSI3J" and "CSI?1049h/l" are unified into the codes handling
+>   escape sequences above.
 
-[missed enabling this 2016 change during previous major cpuinfo update
-as no power related changes were made to the Linux files since then]
----
- winsup/cygwin/fhandler_proc.cc | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Hmm, this fix seems to be not enough...
+Could you please wait?
 
-diff --git a/winsup/cygwin/fhandler_proc.cc b/winsup/cygwin/fhandler_proc.cc
-index 030ade68a..605a8443f 100644
---- a/winsup/cygwin/fhandler_proc.cc
-+++ b/winsup/cygwin/fhandler_proc.cc
-@@ -1397,8 +1397,8 @@ format_proc_cpuinfo (void *, char *&destbuf)
- /*	  ftcprint (features1,  8, "invariant_tsc"); */ /* TSC invariant */
- 	  ftcprint (features1,  9, "cpb");          /* core performance boost */
- 	  ftcprint (features1, 10, "eff_freq_ro");  /* ro eff freq interface */
--/*	  ftcprint (features1, 11, "proc_feedback"); */ /* proc feedback if */
--/*	  ftcprint (features1, 12, "acc_power"); */ /* core power reporting */
-+	  ftcprint (features1, 11, "proc_feedback");/* proc feedback if */
-+	  ftcprint (features1, 12, "acc_power");    /* core power reporting */
- /*	  ftcprint (features1, 13, "connstby"); */  /* connected standby */
- /*	  ftcprint (features1, 14, "rapl"); */	    /* running average power limit */
- 	}
 -- 
-2.21.0
+Takashi Yano <takashi.yano@nifty.ne.jp>
