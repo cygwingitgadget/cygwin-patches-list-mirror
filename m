@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-10132-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 16312 invoked by alias); 26 Feb 2020 20:16:47 -0000
+Return-Path: <cygwin-patches-return-10133-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 16910 invoked by alias); 26 Feb 2020 20:17:05 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,75 +9,75 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 16287 invoked by uid 89); 26 Feb 2020 20:16:44 -0000
+Received: (qmail 16858 invoked by uid 89); 26 Feb 2020 20:17:05 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-111.6 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=
+X-Spam-SWARE-Status: No, score=-109.1 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=
 X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.135) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 26 Feb 2020 20:16:43 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id 1MZTa2-1is9Pz0K8s-00WZtF for <cygwin-patches@cygwin.com>; Wed, 26 Feb 2020 21:16:41 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 84157A8276B; Wed, 26 Feb 2020 21:16:40 +0100 (CET)
-Date: Wed, 26 Feb 2020 20:16:00 -0000
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.17.13) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 26 Feb 2020 20:17:03 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id 1MStKq-1iymBf2J94-00UGPf for <cygwin-patches@cygwin.com>; Wed, 26 Feb 2020 21:17:01 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 10CB7A8276B; Wed, 26 Feb 2020 21:17:01 +0100 (CET)
+Date: Wed, 26 Feb 2020 20:17:00 -0000
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: Update dumper for bfd API changes
-Message-ID: <20200226201640.GW4045@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: Fix size of a buffer in the ps utility
+Message-ID: <20200226201701.GX4045@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200226200704.34424-1-jon.turney@dronecode.org.uk>
+References: <20200226200835.34501-1-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="YIleam+9adpUeYf+"
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="HVCoas+krw6dou6l"
 Content-Disposition: inline
-In-Reply-To: <20200226200704.34424-1-jon.turney@dronecode.org.uk>
-X-SW-Source: 2020-q1/txt/msg00238.txt
+In-Reply-To: <20200226200835.34501-1-jon.turney@dronecode.org.uk>
+X-SW-Source: 2020-q1/txt/msg00239.txt
 
 
---YIleam+9adpUeYf+
+--HVCoas+krw6dou6l
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-length: 472
+Content-length: 657
 
-On Feb 26 20:07, Jon Turney wrote:
-> Update dumper for bfd API changes in binutils 2.34
+On Feb 26 20:08, Jon Turney wrote:
+> Fix the size of a temporary buffer used in the ps utility, reported as a
+> new warning by gcc-9.2.0
 >=20
-> libbfd doesn't guarantee API stability, so we've just been lucky this
-> hasn't broken more often.
->=20
-> See binutils commit fd361982.
+> ../../../../src/winsup/utils/ps.cc: In function 'const char* ttynam(int)':
+> ../../../../src/winsup/utils/ps.cc:101:23: warning: 'sprintf' may write a=
+ terminating nul past the end of the destination [-Wformat-overflow=3D]
+> ../../../../src/winsup/utils/ps.cc:101:11: note: 'sprintf' output between=
+ 9 and 10 bytes into a destination of size 9
 > ---
->  winsup/utils/dumper.cc   | 30 ++++++++++++++++++++++--------
->  winsup/utils/parse_pe.cc |  4 ++++
->  2 files changed, 26 insertions(+), 8 deletions(-)
+>  winsup/utils/ps.cc | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Great, please push.
+This is already fixed in git.
 
 
-Thanks,
 Corinna
 
 --=20
 Corinna Vinschen
 Cygwin Maintainer
 
---YIleam+9adpUeYf+
+--HVCoas+krw6dou6l
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-length: 833
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl5W0igACgkQ9TYGna5E
-T6CDVg/+LmLVCv1VcFeRTSD4F+PYiK5kyo7jt06Id1dwN8hT8Wfz1xDdkZnzWSGi
-epSk9RrvdTufgzPzDukLvx3MYTgrbclkfz8NkjUjaY7foiA7lRvNrd7t2Gl5pcoP
-9ETOm2s/xNyT4TkhW2Kkl1QYtH2fgUp2BViF7c4oGH/OdfFVqwhiqndrr6ZE/33H
-4p7MMb2h3v4Al19cmnf7NnJCKAJgHtMS+D0gxnMvf13k8aqsXA3dhETQDFCkINFQ
-5jmtv+O3cWIEmOd6WplZqjHv7hkafR45jypeBHz2xsc/V//w93fQ6XugvZ/7MzBe
-qyP4Il3o5tiUkDHvb+B6gOB4fE+ngGPOuhBCynpYOqKOW88U04grovSSZnQVtJ4O
-uyqT01YqGkM1CyXzIgh23AANBMkM9UBptUIZKwc9GdwPLbCXk9LcKk/OOxyXbKSv
-1nUbv3wNvs5M21Zcl2djyQgiBYLj+kilQEn1vTEMPQTkB4GRd5txS/AjpejwqrME
-IQW9wPFWufqE6nPSjTmTkcC8IW30T53xDZR7Tom7+z6CM/sUMT5MHb0H12+4q6nv
-lfETJM4cuFYl51azaIH1pFpbCb0uwrJPpn/v3r7+NXgbtaK3Ai7sm10JSLclPKR2
-gTGuFI7gImelGcxL+ybe+gs0XUghxoxTojG0TOC/i26dBx/pdp0=
-=B3i+
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl5W0jwACgkQ9TYGna5E
+T6AFXw/9EGDFq/rvfQiwKbyPtIIcrPpl0XCykjDJdkbIww+nR9UMMhqnddLrwMb2
+Pzp7ayaX1zRsa7IonR1Zz6xFhvWK9fvyUBaJ9+hMtLA3SDy+1m1qOYqRqcS8hwmt
+mim8HjZkCoRi93cXj3OPpI6aDaNo8pclsQi/IKls/lLvm8zJTI8ZRH/UbEAlmnyu
+13z+8gSGl3LgwXItY12BPtGyl1a2ZrcT59XPAEZuotWqSLp2vM+njgzo4IQwezxg
+A4xYBvd5HFgX4a9KxMIQJsdVpSNdHp2KNH7fzjU/uwpBYip0bykVpZqpFwq4TzAE
+bbgbEw9JOBOSLVuL2wI/GWGjHLyNXVz+rsVUq6PlIOVwQepPFA4uQAqyl7hZffW0
+OLdKrFFpujYD7oc0zKV5YiP0vT9Q8vVPU/bJN27Rt4m+OnixSbPdil7ndprmzBfe
+dJ1vsQ+k8rD36hZhRny03bquE6pTDlJLPsU6xwXe4vj80T+IqqatW03XVMrVxC/a
+wEo+j9LEoOggOAMwC+q0hR6d+XYENmCZMSFm9Yi7RXR2LO+nmkO6s6vRGIn6K+1B
+F8DxbUNGGnYhMD5G1lNXtOi4mMg7MI8TbxoFMn46qtuAjEVUmXtcfMGg5XIbnPP7
+QtFrFdUA2/lW26KyFO5fEE31SJ/VuNA643vnF8NonTHpUJ7s/r0=
+=8Qb+
 -----END PGP SIGNATURE-----
 
---YIleam+9adpUeYf+--
+--HVCoas+krw6dou6l--
