@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-10134-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 25361 invoked by alias); 26 Feb 2020 20:22:30 -0000
+Return-Path: <cygwin-patches-return-10135-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 29009 invoked by alias); 27 Feb 2020 02:34:33 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,78 +9,148 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 25352 invoked by uid 89); 26 Feb 2020 20:22:30 -0000
+Received: (qmail 29000 invoked by uid 89); 27 Feb 2020 02:34:32 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-111.6 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.187) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 26 Feb 2020 20:22:29 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id 1Mo77T-1jmSRE0xJr-00pcId for <cygwin-patches@cygwin.com>; Wed, 26 Feb 2020 21:22:27 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id E2921A82772; Wed, 26 Feb 2020 21:22:26 +0100 (CET)
-Date: Wed, 26 Feb 2020 20:22:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+X-Spam-SWARE-Status: No, score=-18.8 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=
+X-HELO: conuserg-06.nifty.com
+Received: from conuserg-06.nifty.com (HELO conuserg-06.nifty.com) (210.131.2.73) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Thu, 27 Feb 2020 02:34:30 +0000
+Received: from localhost.localdomain (ntsitm196171.sitm.nt.ngn.ppp.infoweb.ne.jp [125.0.207.171]) (authenticated)	by conuserg-06.nifty.com with ESMTP id 01R2XvJb001072;	Thu, 27 Feb 2020 11:34:03 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-06.nifty.com 01R2XvJb001072
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1582770843;	bh=EENsljYSJvBIyH7C/O3LXR90YyDTCKpQV3k7FJ8DG7c=;	h=From:To:Cc:Subject:Date:From;	b=P6xRz97Dhu4Imy49vOo1YNqT0FoxxJpKCi6mGjjoK5zk+Y+HjqQvjOzbsKEJHoMip	 pp10Cb97+kGFs4gHIsGL3ulwta87dY6uD22/oUvRwxax6Yrm4b4XUEUruWT68QjEo8	 jPI0Xgmk1wq9gW0CgX9vhyfwz6QaHDnDaiCzV0M1ClNX46C0LdCa2lsxtwb64ybGkg	 vxMNGrKEAoDOP74ph17cWYP/cpRAD3WzqrCZZeiJ59y9N8Tr8hMS6IchAmapMrPZTv	 rkI/n0GIzIBvZZxaNjgaNCoh/gL5naQZkL8AJ01+EE7ICXbEIXCrygSgG3IMHz4zOU	 H8RTa1wytftmQ==
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2 0/4] Modify handling of several ESC sequences in xterm mode.
-Message-ID: <20200226202226.GY4045@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200226153302.584-1-takashi.yano@nifty.ne.jp>
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: console: Adjust the detailed behaviour of ESC sequences.
+Date: Thu, 27 Feb 2020 02:34:00 -0000
+Message-Id: <20200227023350.868-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="/TUrtqMIkCP4YtJm"
-Content-Disposition: inline
-In-Reply-To: <20200226153302.584-1-takashi.yano@nifty.ne.jp>
-X-SW-Source: 2020-q1/txt/msg00240.txt
+Content-Transfer-Encoding: 8bit
+X-IsSubscribed: yes
+X-SW-Source: 2020-q1/txt/msg00241.txt
 
+- This patch makes some detailed behaviour of ESC sequences such as
+  "CSI Ps L" (IL), "CSI Ps M" (DL) and "ESC M" (RI) in xterm mode
+  match with real xterm.
+---
+ winsup/cygwin/fhandler.h          |  1 +
+ winsup/cygwin/fhandler_console.cc | 51 ++++++++++++++++++++++++++-----
+ 2 files changed, 45 insertions(+), 7 deletions(-)
 
---/TUrtqMIkCP4YtJm
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 662
-
-On Feb 27 00:32, Takashi Yano wrote:
-> Takashi Yano (4):
->   Cygwin: console: Add workaround for broken IL/DL in xterm mode.
->   Cygwin: console: Unify workaround code for CSI3J and CSI?1049h/l.
->   Cygwin: console: Add support for REP escape sequence to xterm mode.
->   Cygwin: console: Add emulation of CSI3J on Win10 1809.
->=20
->  winsup/cygwin/fhandler_console.cc | 247 +++++++++++++++++++++++++++---
->  winsup/cygwin/wincap.cc           |  20 +++
->  winsup/cygwin/wincap.h            |   4 +
->  3 files changed, 248 insertions(+), 23 deletions(-)
->=20
-> --=20
-> 2.21.0
-
-Looks good to me.  Pushed.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen
-Cygwin Maintainer
-
---/TUrtqMIkCP4YtJm
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl5W04IACgkQ9TYGna5E
-T6Ap8Q//UoltViVgAA4IN8Fwx1ty4CrW+BW9+aCTCpFIYUkVYVzFYRvKrebH2eRN
-ipR/1T6t95obabWItaV5NX+nVAmirzL9svUOo3NJRnZYw8dajAEOrcigGAww8Ave
-scRFrUSfuQBegroSomlQvpP7O9V8k9f/USWGfp/36nlz65MmCZs7BH0xRMbmvZYD
-cgKbuq5k/XvRDjc82ImQxqIoBymxjMNkzj0zp9ela0rxfJjSG1bCDLZtGm8Vwxk9
-qJShP1h5RRucpKkL2l3co15EveMaNLv/qMRuD5UqrbTkC4kvLiMkrzwvFKno5Ii9
-DIe5E0Rfmdcoxo9/rqrgvi98dlOXm0PGCvR+908OU/p3o9+HKmxtnMpzm/lX6/rQ
-V5V3hQOER+NKHfrcLaohGUKNXcH3VITMNe76Ebkf6zIPMGFMogSYEG7YVAle1ThK
-sWbHW00OZagRlBELua0YEuiwPklboUTv3FSuIPSMUXXlieZBYv9KYZAPM474/OIe
-jrJY+o5PaNaobGL5CUmRkjGNkbqB5soN5YweG69eRXLDJosJUjnL2AO1a7flpBzo
-4I90lUAqqAW/bPS0GezzWRqK+7DKNSll0OKhScZfsCdBDvfwBAjVmUFeQPo3gYll
-8JW01CimAoqIfxfTOwMcJMvp4JDLr/Jw5dwo7cO2Wmc+NtOUJCA=
-=ThOh
------END PGP SIGNATURE-----
-
---/TUrtqMIkCP4YtJm--
+diff --git a/winsup/cygwin/fhandler.h b/winsup/cygwin/fhandler.h
+index 55f18aebd..c897380ae 100644
+--- a/winsup/cygwin/fhandler.h
++++ b/winsup/cygwin/fhandler.h
+@@ -1861,6 +1861,7 @@ class dev_console
+   bool saw_question_mark;
+   bool saw_greater_than_sign;
+   bool saw_space;
++  bool saw_exclamation_mark;
+   bool vt100_graphics_mode_G0;
+   bool vt100_graphics_mode_G1;
+   bool iso_2022_G1;
+diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
+index 4ab9bcab8..64e12b832 100644
+--- a/winsup/cygwin/fhandler_console.cc
++++ b/winsup/cygwin/fhandler_console.cc
+@@ -2053,6 +2053,19 @@ fhandler_console::char_command (char c)
+ 	    {
+ 	      /* Use "CSI Ps T" instead */
+ 	      cursor_get (&x, &y);
++	      if (y < srTop || y > srBottom)
++		break;
++	      if (y == con.b.srWindow.Top
++		  && srBottom == con.b.srWindow.Bottom)
++		{
++		  /* Erase scroll down area */
++		  n = con.args[0] ? : 1;
++		  __small_sprintf (buf, "\033[%d;1H\033[J\033[%d;%dH",
++				   srBottom - (n-1) - con.b.srWindow.Top + 1,
++				   y + 1 - con.b.srWindow.Top, x + 1);
++		  WriteConsoleA (get_output_handle (),
++				 buf, strlen (buf), &wn, 0);
++		}
+ 	      __small_sprintf (buf, "\033[%d;%dr",
+ 			       y + 1 - con.b.srWindow.Top,
+ 			       srBottom + 1 - con.b.srWindow.Top);
+@@ -2079,6 +2092,8 @@ fhandler_console::char_command (char c)
+ 	    {
+ 	      /* Use "CSI Ps S" instead */
+ 	      cursor_get (&x, &y);
++	      if (y < srTop || y > srBottom)
++		break;
+ 	      __small_sprintf (buf, "\033[%d;%dr",
+ 			       y + 1 - con.b.srWindow.Top,
+ 			       srBottom + 1 - con.b.srWindow.Top);
+@@ -2137,6 +2152,16 @@ fhandler_console::char_command (char c)
+ 		fix_tab_position ();
+ 	    }
+ 	  break;
++	case 'p':
++	  if (con.saw_exclamation_mark) /* DECSTR Soft reset */
++	    {
++	      con.scroll_region.Top = 0;
++	      con.scroll_region.Bottom = -1;
++	    }
++	  wpbuf_put (c);
++	  /* Just send the sequence */
++	  WriteConsoleA (get_output_handle (), wpbuf, wpixput, &wn, 0);
++	  break;
+ 	default:
+ 	  /* Other escape sequences */
+ 	  wpbuf_put (c);
+@@ -2970,6 +2995,7 @@ fhandler_console::write (const void *vsrc, size_t len)
+ 	      con.saw_question_mark = false;
+ 	      con.saw_greater_than_sign = false;
+ 	      con.saw_space = false;
++	      con.saw_exclamation_mark = false;
+ 	    }
+ 	  else if (wincap.has_con_24bit_colors () && !con_is_legacy
+ 		   && wincap.has_con_broken_il_dl () && *src == 'M')
+@@ -2979,13 +3005,17 @@ fhandler_console::write (const void *vsrc, size_t len)
+ 	      cursor_get (&x, &y);
+ 	      if (y == srTop)
+ 		{
+-		  /* Erase scroll down area */
+-		  char buf[] = "\033[32768;1H\033[J\033[32768;32768";
+-		  __small_sprintf (buf, "\033[%d;1H\033[J\033[%d;%dH",
+-			     srBottom - con.b.srWindow.Top + 1,
+-			     y + 1 - con.b.srWindow.Top, x + 1);
+-		  WriteConsoleA (get_output_handle (),
+-				 buf, strlen (buf), &n, 0);
++		  if (y == con.b.srWindow.Top
++		      && srBottom == con.b.srWindow.Bottom)
++		    {
++		      /* Erase scroll down area */
++		      char buf[] = "\033[32768;1H\033[J\033[32768;32768";
++		      __small_sprintf (buf, "\033[%d;1H\033[J\033[%d;%dH",
++				       srBottom - con.b.srWindow.Top + 1,
++				       y + 1 - con.b.srWindow.Top, x + 1);
++		      WriteConsoleA (get_output_handle (),
++				     buf, strlen (buf), &n, 0);
++		    }
+ 		  /* Substitute "CSI Ps T" */
+ 		  wpbuf_put ('[');
+ 		  wpbuf_put ('T');
+@@ -2998,6 +3028,11 @@ fhandler_console::write (const void *vsrc, size_t len)
+ 	    }
+ 	  else if (wincap.has_con_24bit_colors () && !con_is_legacy)
+ 	    { /* Only CSI is handled in xterm compatible mode. */
++	      if (*src == 'c') /* RIS Full reset */
++		{
++		  con.scroll_region.Top = 0;
++		  con.scroll_region.Bottom = -1;
++		}
+ 	      wpbuf_put (*src);
+ 	      /* Just send the sequence */
+ 	      DWORD n;
+@@ -3169,6 +3204,8 @@ fhandler_console::write (const void *vsrc, size_t len)
+ 		con.saw_question_mark = true;
+ 	      else if (*src == '>')
+ 		con.saw_greater_than_sign = true;
++	      else if (*src == '!')
++		con.saw_exclamation_mark = true;
+ 	      wpbuf_put (*src);
+ 	      /* ignore any extra chars between [ and first arg or command */
+ 	      src++;
+-- 
+2.21.0
