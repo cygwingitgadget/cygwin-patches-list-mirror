@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-10145-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 123959 invoked by alias); 28 Feb 2020 19:11:35 -0000
+Return-Path: <cygwin-patches-return-10146-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 23846 invoked by alias); 28 Feb 2020 21:00:56 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,73 +9,77 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 123944 invoked by uid 89); 28 Feb 2020 19:11:34 -0000
+Received: (qmail 23821 invoked by uid 89); 28 Feb 2020 21:00:55 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-106.4 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=
-X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.17.13) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 28 Feb 2020 19:11:33 +0000
-Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id 1MzyAy-1jMgp73ex4-00x1q2; Fri, 28 Feb 2020 20:11:27 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)	id 40266A819D3; Fri, 28 Feb 2020 20:11:25 +0100 (CET)
-Date: Fri, 28 Feb 2020 19:11:00 -0000
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: Takashi Yano <takashi.yano@nifty.ne.jp>
-Cc: cygwin-patches@cygwin.com,	Hans-Bernhard =?utf-8?Q?Br=C3=B6ker?= <HBBroeker@t-online.de>
+X-Spam-SWARE-Status: No, score=-6.4 required=5.0 tests=AWL,BAYES_00,FREEMAIL_FROM,GIT_PATCH_2,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=eyes, H*r:encrypted, H*M:1880
+X-HELO: mailout01.t-online.de
+Received: from mailout01.t-online.de (HELO mailout01.t-online.de) (194.25.134.80) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 28 Feb 2020 21:00:54 +0000
+Received: from fwd37.aul.t-online.de (fwd37.aul.t-online.de [172.20.27.137])	by mailout01.t-online.de (Postfix) with SMTP id 3A87E42CE244	for <cygwin-patches@cygwin.com>; Fri, 28 Feb 2020 22:00:51 +0100 (CET)
+Received: from [192.168.178.26] (S37k8ZZLrhhFexmzprV1zsad-FnK-DhdeNpS3nxYXbt4B+30gexYouh9TBnKZwxwE3@[79.228.65.18]) by fwd37.t-online.de	with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)	esmtp id 1j7mkS-0BubMe0; Fri, 28 Feb 2020 22:00:40 +0100
 Subject: Re: [PATCH v2 1/4] Cygwin: console: Add workaround for broken IL/DL in xterm mode.
-Message-ID: <20200228191125.GM4045@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: Takashi Yano <takashi.yano@nifty.ne.jp>,	cygwin-patches@cygwin.com,	Hans-Bernhard =?utf-8?Q?Br=C3=B6ker?= <HBBroeker@t-online.de>
-References: <20200226153302.584-1-takashi.yano@nifty.ne.jp> <20200226153302.584-2-takashi.yano@nifty.ne.jp> <05cca441-eb83-4600-90f3-bf82ec7a0190@dronecode.org.uk> <20200228111409.149929dcf710cabf99a879b3@nifty.ne.jp> <20200228133122.GG4045@calimero.vinschen.de> <20200228144459.GI4045@calimero.vinschen.de> <20200228144905.GK4045@calimero.vinschen.de> <20200229020604.6e1e7f204349b4b84e813dae@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
+References: <20200226153302.584-1-takashi.yano@nifty.ne.jp> <20200226153302.584-2-takashi.yano@nifty.ne.jp> <05cca441-eb83-4600-90f3-bf82ec7a0190@dronecode.org.uk> <20200228111409.149929dcf710cabf99a879b3@nifty.ne.jp> <20200228133122.GG4045@calimero.vinschen.de>
+From: =?UTF-8?Q?Hans-Bernhard_Br=c3=b6ker?= <HBBroeker@t-online.de>
+Message-ID: <cc657f02-e3a4-1880-34a2-dcf04d6e902a@t-online.de>
+Date: Fri, 28 Feb 2020 21:00:00 -0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101 Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="mlvFMpb4NrD3AMcD"
-Content-Disposition: inline
-In-Reply-To: <20200229020604.6e1e7f204349b4b84e813dae@nifty.ne.jp>
-X-SW-Source: 2020-q1/txt/msg00251.txt
+In-Reply-To: <20200228133122.GG4045@calimero.vinschen.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-IsSubscribed: yes
+X-SW-Source: 2020-q1/txt/msg00252.txt
 
+Am 28.02.2020 um 14:31 schrieb Corinna Vinschen:
+> [CC Hans]
 
---mlvFMpb4NrD3AMcD
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Content-length: 449
+Thanks.  I wasn't subscribed to -patches so far.  Will change that.
 
-On Feb 29 02:06, Takashi Yano wrote:
-> On Fri, 28 Feb 2020 15:49:05 +0100
-> Corinna Vinschen wrote:
-> > Also, on second thought, given wpbuf is global inside this file, doesn't
-> > this require guarding against multi-threaded access?
->=20
-> wpbuf_put() is used in write(), and almost whole of write()
-> code is guarded by output_mutex. So, I think it is already
-> thread-safe.
+>> Hans,
+>> as for making a patch for this issue, may I leave it to you
+>> because you are already working on it?
 
-Ah, right, thanks.
+My patch was meant only as a minimally-invasive stop-gap fix, because 
+the new GCC refused to compile the code as-is (it triggers a 
+-Werror...).  As such, sorry for hurting Brian's eyes. ;-)
 
+I agree that this really should be an inline function.  I barely speak 
+C++, but even I have glimpsed that multi-statement macros are rightfully 
+frowned upon in C++ circles.
 
-Corinna
+I believe a more C++-like implementation would have to encapsulate wpbuf 
+and wpixput into a helper class.  This is what my _very_ rusty C++ 
+allowed me to come up with:
 
---=20
-Corinna Vinschen
-Cygwin Maintainer
+// simple helper class to accumulate output in a buffer
+// and send that to the console on request:
+static class
+{
+private:
+   unsigned char buf[WPBUF_LEN];
+   int ixput;
 
---mlvFMpb4NrD3AMcD
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-length: 833
+public:
+   inline void put(unsigned char x)
+   {
+     if (ixput < WPBUF_LEN)
+       {
+         buf[ixput++] = x;
+       }
+   };
+   inline void empty() { ixput = 0; };
+   inline void sendOut(HANDLE &handle, DWORD *wn) {
+     WriteConsoleA (handle, buf, ixput, wn, 0);
+   };
+} wpbuf;
 
------BEGIN PGP SIGNATURE-----
+Using it works like this:
 
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl5ZZd0ACgkQ9TYGna5E
-T6C+LQ/+KKJIuOjP4/YOq3WBm0XSuLYJCSzKE4AxYUz875wh/ijmv1D6N89V4Ayh
-v4HAUlAYz2szuNccSyhmvc6uS1fsBuwWXE1MVBMb8vj4vHUnPfASwoXqH6eVPSPH
-NdbPnU6l6eWmo9cATofzv1HahoGLJH+RaHVpOu3X5wDq4V92cdrUxhnoBj0KbMga
-KhipA6yvxc7oFx7EPg4jslrzoWtBJ83/TzyGq0fNnoKCxENVHMsAMVauVB2gM/0q
-77Ik4hAKwzknUPIQkPGAGwQFoV/DBuL//4UjIrOa5KKUpyTHccWcF2j6qzt9mroZ
-PxConKxu9+34nZJoZ4ZnFmFaCEy07unia0ujEvr08ByOMklQosX7fdlAWdTaHlTr
-9v7MDTIjmLumLYaWeVNbZxgJrmvcuUwq6lemedaqe2TWMjghWXQo7rlvuPRqVH8s
-CJooBElgqmlDVWl+IeuQyx0Ic551gbSZoi5cNiTzkZm7TwFRQ1EVKgAY2sNeorFa
-DuiAqVmloUYw+vkg/DfutpV1idznevYkBj7c0SgEF8W/1UTX8/Bg/bj3RdrLimUl
-FERx+4WIaf7+8IwaPgSPkJng3ApQEFazhJ/h4rIvzwvp7WAfeLBxgkABJ2pO5NhI
-ohVKGo7AnI9YM0hSYtOhregtAaTgz5MBPVVmg/hsXcZ7psIbZHk=
-=EXZb
------END PGP SIGNATURE-----
+s/wpbuf_put/wpbuf.put/
+s/wpixput = 0/wpbuf.empty()/
+s/WriteConsoleA ( get_output_handle (), wpbuf, wpixput, \(&w*n\), 0 
+/wpbuf.sendOut( get_output_handle (), \1/g
 
---mlvFMpb4NrD3AMcD--
+Yes, sendOut() is ugly --- I didn't manage to find out how this class 
+could access get_output_handle() itself, so I had to let its callers 
+deal with that.
