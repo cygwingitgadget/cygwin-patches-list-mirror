@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-10138-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 53163 invoked by alias); 28 Feb 2020 12:04:29 -0000
+Return-Path: <cygwin-patches-return-10139-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 72596 invoked by alias); 28 Feb 2020 13:31:54 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,79 +9,86 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 53154 invoked by uid 89); 28 Feb 2020 12:04:29 -0000
+Received: (qmail 71180 invoked by uid 89); 28 Feb 2020 13:31:26 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-18.1 required=5.0 tests=AWL,BAYES_00,FORGED_SPF_HELO,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,KHOP_HELO_FCRDNS,SPF_HELO_PASS autolearn=ham version=3.3.1 spammy=$-16, UD:N.B, nb, NB
-X-HELO: sa-prd-fep-042.btinternet.com
-Received: from mailomta5-sa.btinternet.com (HELO sa-prd-fep-042.btinternet.com) (213.120.69.11) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 28 Feb 2020 12:04:27 +0000
-Received: from sa-prd-rgout-001.btmx-prd.synchronoss.net ([10.2.38.4])          by sa-prd-fep-042.btinternet.com with ESMTP          id <20200228120424.QJXU20292.sa-prd-fep-042.btinternet.com@sa-prd-rgout-001.btmx-prd.synchronoss.net>;          Fri, 28 Feb 2020 12:04:24 +0000
-Authentication-Results: btinternet.com;    auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com
-X-OWM-Source-IP: 31.51.207.12 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-Received: from localhost.localdomain (31.51.207.12) by sa-prd-rgout-001.btmx-prd.synchronoss.net (5.8.340) (authenticated as jonturney@btinternet.com)        id 5E3A241103AACC2A; Fri, 28 Feb 2020 12:04:24 +0000
-From: Jon Turney <jon.turney@dronecode.org.uk>
+X-Spam-SWARE-Status: No, score=-106.4 required=5.0 tests=AWL,BAYES_00,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=
+X-HELO: mout.kundenserver.de
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.133) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 28 Feb 2020 13:31:25 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id 1MGxYh-1jCMYr2MOR-00E3Xp; Fri, 28 Feb 2020 14:31:22 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id 2A5FFA819D3; Fri, 28 Feb 2020 14:31:22 +0100 (CET)
+Date: Fri, 28 Feb 2020 13:31:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH] Cygwin: remove %esp from asm clobber list
-Date: Fri, 28 Feb 2020 12:04:00 -0000
-Message-Id: <20200228120413.1560-1-jon.turney@dronecode.org.uk>
+Cc: Hans-Bernhard =?utf-8?Q?Br=C3=B6ker?= <HBBroeker@t-online.de>
+Subject: Re: [PATCH v2 1/4] Cygwin: console: Add workaround for broken IL/DL in xterm mode.
+Message-ID: <20200228133122.GG4045@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com,	Hans-Bernhard =?utf-8?Q?Br=C3=B6ker?= <HBBroeker@t-online.de>
+References: <20200226153302.584-1-takashi.yano@nifty.ne.jp> <20200226153302.584-2-takashi.yano@nifty.ne.jp> <05cca441-eb83-4600-90f3-bf82ec7a0190@dronecode.org.uk> <20200228111409.149929dcf710cabf99a879b3@nifty.ne.jp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SW-Source: 2020-q1/txt/msg00244.txt
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="foM9DbudB2CcldhH"
+Content-Disposition: inline
+In-Reply-To: <20200228111409.149929dcf710cabf99a879b3@nifty.ne.jp>
+X-SW-Source: 2020-q1/txt/msg00245.txt
 
-Mentioning the stack pointer in the clobber list is now a gcc warning.
 
-We never wanted gcc to try to restore %esp after this (x86-specific)
-asm, since the whole point of the inline asm here is to adjust %esp to
-satisfy alignment, so remove %esp from the asm clobber list.
+--foM9DbudB2CcldhH
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 803
 
-Of more concern is the alleged requirement that %esp must be unchanged
-over an asm statement (which makes what this code is trying to do
-impossible to write as a C function), although on x86 we are probably ok
-in this particular instance.
+[CC Hans]
 
-../../../../winsup/cygwin/init.cc: In function 'void threadfunc_fe(void*)':
-../../../../winsup/cygwin/init.cc:33:46: error: listing the stack pointer register '%esp' in a clobber list is deprecated [-Werror=deprecated]
-../../../../winsup/cygwin/init.cc:33:46: note: the value of the stack pointer after an 'asm' statement must be the same as it was before the statement
+On Feb 28 11:14, Takashi Yano wrote:
+> On Thu, 27 Feb 2020 18:03:47 +0000
+> Jon Turney wrote:
+> > > +#define wpbuf_put(x) \
+> > > +  wpbuf[wpixput++] =3D x; \
+> > > +  if (wpixput > WPBUF_LEN) \
+> > > +    wpixput--;
+> > > +
+> >=20
+> > So I think either the macro need it contents contained by a 'do { ... }=
+=20
+> > while(0)',  or that instance of it needs to be surrounded by braces, to=
+=20
+> > do what you intend.
+>=20
+> Thanks for the advice. Fortunately, "if" statement does not
+> cause a problem even if it is accidentally executed outside
+> "else" block in this case.
+>=20
+> Hans,
+> as for making a patch for this issue, may I leave it to you
+> because you are already working on it?=20
+>=20
+> --=20
+> Takashi Yano <takashi.yano@nifty.ne.jp>
 
-Also, because we now using gcc's "basic" rather than "extended" asm
-syntax we don't need to escape the '%' in '%esp' as '%%esp'.
----
+--=20
+Corinna Vinschen
+Cygwin Maintainer
 
-Notes:
-    N.B: This comes with a 'this should be ok, but I haven't actually
-    tested that x86 Cygwin works after this' caveat.
+--foM9DbudB2CcldhH
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 833
 
- winsup/cygwin/crt0.c  | 2 +-
- winsup/cygwin/init.cc | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/winsup/cygwin/crt0.c b/winsup/cygwin/crt0.c
-index fee4b2e24..9fcebd8fa 100644
---- a/winsup/cygwin/crt0.c
-+++ b/winsup/cygwin/crt0.c
-@@ -27,7 +27,7 @@ mainCRTStartup ()
- #if __GNUC_PREREQ(6,0)
- #pragma GCC diagnostic pop
- #endif
--  asm volatile ("andl $-16,%%esp" ::: "%esp");
-+  asm volatile ("andl $-16,%esp");
- #endif
- 
-   cygwin_crt0 (main);
-diff --git a/winsup/cygwin/init.cc b/winsup/cygwin/init.cc
-index 851a7ffed..7ae7d08fe 100644
---- a/winsup/cygwin/init.cc
-+++ b/winsup/cygwin/init.cc
-@@ -30,7 +30,7 @@ threadfunc_fe (VOID *arg)
- #if __GNUC_PREREQ(6,0)
- #pragma GCC diagnostic pop
- #endif
--  asm volatile ("andl $-16,%%esp" ::: "%esp");
-+  asm volatile ("andl $-16,%esp");
- #endif
-   _cygtls::call ((DWORD (*)  (void *, void *)) TlsGetValue (_my_oldfunc), arg);
- }
--- 
-2.21.0
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl5ZFikACgkQ9TYGna5E
+T6ANSQ/6A+NVpLgqlea+YIiYJffIUWY08yH9zjvhHXdsmCwhV5x+ZycutEpopkf6
+P9ct84YzM1vmS/DvugXWsw3sRicGWZvXKlHcwyk5UoC0GZxWgyngJnxjWRU2Icd/
+rLqCXConan1ADGP5rXfYzTOiRiJmyJA5sPIzfz7v89J5/t2jr1KfFTSZb3w6NsNi
+3Ow1VQ04kmW+ZfZSmW/Uzu6nelvsnzOiSpOh1S4c9BKE3Rx1NuTICeYWTJg5C8I4
+i1wHlhnFKoE3TwQjLZ43C5wjSLiqseWeQe56QnqlfRMLnw8Jk5u7q1CLv/ofbbVj
+sdPQqi9/z74Ywh/iO8k5TUv3QOnoiH0pDILPkwfXiTrGTci7UIIkO97p3comgIku
+yTaDwatzBf6VYGU1OpqtcEtdd7EQpJayrGK8RS4jtJ2m5q3MGMFQTohCUbUjljhE
+eQ+nIigjf/fYIXYxd8uB0m5qn4W6NPG+O9/tkyqqEXmhFLNsnWwBtKbq+F+P/DLC
+fOJMTgdzl0boIhx9ITBFu7qSDOP1gxg2cETaHJsU5H8HwNV+1cqjpzI7rfHHJdDO
+E+4/HAdzxhONMDkmOxmQpRKpUahK4CeY1TD6Gpc5HLzRmquyYMPWc7yAZkWlkjgH
+fPO4kuWfZ+iU8kg+G2JaKWGVrDfUmb6Zf6EHX35iOfO7WWq+crg=
+=3zq0
+-----END PGP SIGNATURE-----
+
+--foM9DbudB2CcldhH--
