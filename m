@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-10168-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 111092 invoked by alias); 3 Mar 2020 06:22:11 -0000
+Return-Path: <cygwin-patches-return-10169-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 14179 invoked by alias); 3 Mar 2020 11:14:07 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,110 +9,147 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 111078 invoked by uid 89); 3 Mar 2020 06:22:11 -0000
+Received: (qmail 14143 invoked by uid 89); 3 Mar 2020 11:14:06 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-17.1 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=03.03.2020, 03032020
+X-Spam-SWARE-Status: No, score=-118.6 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,GOOD_FROM_CORINNA_CYGWIN,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=
 X-HELO: mout.kundenserver.de
-Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.133) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 03 Mar 2020 06:22:09 +0000
-Received: from [192.168.178.45] ([95.90.246.218]) by mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id 1MvKL3-1jQ89X42ef-00rGCA for <cygwin-patches@cygwin.com>; Tue, 03 Mar 2020 07:22:07 +0100
-Subject: Re: /proc/partitions: add some space to avoid ragged output format
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.187) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 03 Mar 2020 11:14:05 +0000
+Received: from calimero.vinschen.de ([24.134.7.25]) by mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id 1M28O9-1j79YR1YZF-002W4I for <cygwin-patches@cygwin.com>; Tue, 03 Mar 2020 12:14:02 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)	id BBE0FA82778; Tue,  3 Mar 2020 12:14:00 +0100 (CET)
+Date: Tue, 03 Mar 2020 11:14:00 -0000
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-References: <dc387652-11c2-92c5-70e6-b096c318f58c@towo.net> <5655db7b-5ffb-cdda-d944-3d4f3e639329@SystematicSw.ab.ca>
-From: Thomas Wolff <towo@towo.net>
-X-Tagtoolbar-Keys: D20200303072207675
-Message-ID: <f7877c6c-8165-b00e-c265-9a1974cfdb72@towo.net>
-Date: Tue, 03 Mar 2020 06:22:00 -0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101 Thunderbird/68.5.0
+Subject: Re: [PATCH 1/1] Collect handling of wpixput and wpbuf into a helper class.
+Message-ID: <20200303111400.GZ4045@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <877f246b-08c2-6ccd-faac-6c90661212e5@t-online.de>
 MIME-Version: 1.0
-In-Reply-To: <5655db7b-5ffb-cdda-d944-3d4f3e639329@SystematicSw.ab.ca>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-IsSubscribed: yes
-X-SW-Source: 2020-q1/txt/msg00274.txt
-
-Am 03.03.2020 um 00:26 schrieb Brian Inglis:
-> Hi Thomas,
->
-> In this industry, you plan ahead a bit further and longer: you need to go for at
-> least a three digit increase (below) or more; legacy 8TB HDDs are cheap and
-> common, 20TB are available, 100TB SSDs are available now (#blocks 97656250000 -
-> 11 digits), capacity is expanding *faster* than HDDs:
->
-> https://www.tomshardware.com/news/100tb-ssd-nimbus-sata-flash,36687.html
->
-> and speeds now exceed 6GB/s and 1M IO/s.
->
-> We're also at 64C/128T 6GHz (overclocked) chips with 256MB L3 and L4 caches,
-> 256GB memory, and over the next decade, feature sizes dropping by an order of
-> magnitude from 14nm to 1.4nm, with corresponding increases, so maintainers
-> should consider capacity increases when they look at code.
->
-> To make this easier next time ;^> I'd define a couple of formats:
->
-> #define PROC_PARTITION_HDR	"%5s %5s %12s %s\n\n"
-> #define PROC_PARTITION_FMT	"%5d %5d %12U %s\n"
->
-> or simplify the code further with:
->
-> #define PROC_PARTITION_HDR	"%5s %5s %12s %-6s %-s\n\n"
-> #define PROC_PARTITION_FMT	"%5d %5d %12U %-6s %-s\n"
->
-> and sprintf the header into the buffer:
->
-> -	  print ("major minor  #blocks  name   win-mounts\n\n");
-> +	  bufptr += __small_sprintf (bufptr, PROC_PARTITION_HDR,
-> +				    "major", "minor", "#blocks",
-> +				    "name   win-mounts\n\n");
->
-> *or*
->
-> -	  print ("major minor  #blocks  name   win-mounts\n\n");
-> +	  bufptr += __small_sprintf (bufptr, PROC_PARTITION_HDR,
-> +				    "major", "minor", "#blocks",
-> +				    "name", "win-mounts\n\n");
->
-Hi Brian,
-yes, I thought about factoring out the format as well, but then only 
-submitted a quick-and-dirty patch.
-If you're suggesting a more solid solution, would you submit your patch?
-Thomas
+Content-Type: multipart/signed; micalg=pgp-sha256;	protocol="application/pgp-signature"; boundary="9gXqgVhKaPB5h51M"
+Content-Disposition: inline
+In-Reply-To: <877f246b-08c2-6ccd-faac-6c90661212e5@t-online.de>
+X-SW-Source: 2020-q1/txt/msg00275.txt
 
 
-> On 2020-03-02 14:39, Thomas Wolff wrote:
->
+--9gXqgVhKaPB5h51M
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Content-length: 2654
+
+Hi Hans-Bernhard,
+
+On Mar  3 00:07, Hans-Bernhard Br=C3=B6ker wrote:
+> Replace direct access to a pair of co-dependent variables
+> by calls to methods of a class that encapsulates their relation.
+>=20
+> Also replace C #define by C++ class constant.
 > ---
->   winsup/cygwin/fhandler_proc.cc | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/winsup/cygwin/fhandler_proc.cc b/winsup/cygwin/fhandler_proc.cc
-> index 605a8443f..3373f3ef5 100644
-> --- a/winsup/cygwin/fhandler_proc.cc
-> +++ b/winsup/cygwin/fhandler_proc.cc
-> @@ -1491,7 +1491,7 @@ format_proc_partitions (void *, char *&destbuf)
->   	}
->         if (!got_one)
->   	{
-> -	  print ("major minor  #blocks  name   win-mounts\n\n");
-> +	  print ("major minor    #blocks   name   win-mounts\n\n");
->   	  got_one = true;
->   	}
->         /* Fetch partition info for the entire disk to get its size. */
-> @@ -1514,7 +1514,7 @@ format_proc_partitions (void *, char *&destbuf)
->   	  size = 0;
->   	}
->         device dev (drive_num, 0);
-> -      bufptr += __small_sprintf (bufptr, "%5d %5d %9U %s\n",
-> +      bufptr += __small_sprintf (bufptr, "%5d %5d %12U %s\n",
->   				 dev.get_major (), dev.get_minor (),
->   				 size >> 10, dev.name () + 5);
->         /* Fetch drive layout info to get size of all partitions on the disk. */
-> @@ -1561,7 +1561,7 @@ format_proc_partitions (void *, char *&destbuf)
->   	      continue;
->   	    device dev (drive_num, part_num);
->
-> -	    bufptr += __small_sprintf (bufptr, "%5d %5d %9U %s",
-> +	    bufptr += __small_sprintf (bufptr, "%5d %5d %12U %s",
->   				       dev.get_major (), dev.get_minor (),
->   				       size >> 10, dev.name () + 5);
->   	    /* Check if the partition is mounted in Windows and, if so,
->
+>  winsup/cygwin/fhandler_console.cc | 135 ++++++++++++++++--------------
+>  1 file changed, 70 insertions(+), 65 deletions(-)
+>=20
+> diff --git a/winsup/cygwin/fhandler_console.cc
+> b/winsup/cygwin/fhandler_console.cc
+> index c5f269168..af2fb11a4 100644
+> --- a/winsup/cygwin/fhandler_console.cc
+> +++ b/winsup/cygwin/fhandler_console.cc
+> @@ -59,17 +59,22 @@ static struct fhandler_base::rabuf_t con_ra;
+>   /* Write pending buffer for ESC sequence handling
+>     in xterm compatible mode */
+> -#define WPBUF_LEN 256
+> -static unsigned char wpbuf[WPBUF_LEN];
+> -static int wpixput;
+>  static unsigned char last_char;
+>  -static inline void
+> -wpbuf_put (unsigned char x)
+
+This patch won't apply since commit ecf27dd2e0ed.  Can you please
+recreate the patch on top of current master?
+
+Also, a few style issues:
+
+> +// simple helper class to accumulate output in a buffer
+> +// and send that to the console on request:
+
+The /* */ style of comments is preferred.  Please use it always
+for multiline comments.
+
+> +static class WritePendingBuf
+
+No camelback, please.  Make that `static class write_pending_buf'.
+
+>  {
+> -  if (wpixput < WPBUF_LEN)
+> -    wpbuf[wpixput++] =3D x;
+> -}
+> +private:
+> +  static const size_t WPBUF_LEN =3D 256u;
+> +  unsigned char buf[WPBUF_LEN];
+> +  size_t ixput;
+> +
+> +public:
+> +  inline void put(unsigned char x) { if (ixput < WPBUF_LEN) { buf[ixput+=
++]
+> =3D x; } };
+
+Please put a space before an opening parenthesis, i.e.
+
+  inline void put (...)
+
+The semicolon after the closing brace is obsolete.
+
+Line length > 80 chars.  Also, it's an expression which is multiline
+by default.  Make that
+
+  inline void put (unsigned char x)
+  {
+    if (ixput < WPBUF_LEN)
+      buf[ixput++] =3D x;
+  }
+
+> +  inline void empty() { ixput =3D 0u; };
+> +  inline void sendOut(HANDLE &handle, DWORD *wn) { WriteConsoleA (handle,
+> buf, ixput, wn, 0); };
+
+Camelback, missing space, line too long, obsolete semicolon:
+
+  inline void send_out (HANDLE &handle, DWORD *wn)
+  { WriteConsoleA (handle, buf, ixput, wn, 0); }
+
+"send" or "write" or "flush" would be ok as name, too, no underscore :)
+
+Btw., looking through the code with this change I wonder about ixput not
+being set to 0 in sendOut, right after calling WriteConsoleA.  That
+would drop the need to call empty after calls to sendOut and thus clean
+up the code, no?
+
+
+Thanks,
+Corinna
+
+--=20
+Corinna Vinschen
+Cygwin Maintainer
+
+--9gXqgVhKaPB5h51M
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-length: 833
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl5eO/gACgkQ9TYGna5E
+T6C9iA/9Gpf/9xvPzh5eoHP1ZSyr9m9IQEFYf/5G/MS6BfFxkQWOX5KNMoY4Utm3
+nOiMp+zUl6rxzJXRMZVIwzm+ZENj6ePJj8uTg8a67FFfB69z63EUJyKdyp93/Qa/
+AbIA085B8X3NABHN/KA4jrDfFQHRATlQE0sE0CPglocb3qXMQTAm9Gj4fy95crwb
+sONVx45DhEgt5CKm/EoXY0T4Q5uLhvqTXIHtxqv6KpMB3v+cQCOBqf02+upVyUzD
+bC4BTvBo5S1fgBgLuqWQUb83UaX+WyV1/LzYxWv3cEC52g2R1Yt6psgQqiXptTz6
+yc3pvm2m/1sPYAxTdGCOY22iYqPoGYy1dTEKWttOAGpE2YGouUWLWCB3gsDFqJzY
+4oLm4cpt+lN9XCJy/iaJgVzL1UnpOAfJ7Ud57jNZjHioU6HXsbcXqXo5oR6WGF9b
+8+/15dNXg8BxhekBuFS1j/4rl7oXx16ZmKJVTZHHQaISxfQDF9VSq09QWzvfeYcL
+a6Ai3yJhiFO43RtaLgAHTK81bdBQe9geYpXWdpoidXehPsRY7C0heZiHuPX8N9kM
+lgFlgzeKGscz2sF1IB3haHHdWN1VUnl1DSEP/1oRlXxQnKV8Y72Ul9F2nCznL+Fo
+swLVFk7i2WqO5/1xgIVLqyzV5ihsSc0W/76Am5OggePG1mHeVRg=
+=+gTf
+-----END PGP SIGNATURE-----
+
+--9gXqgVhKaPB5h51M--
