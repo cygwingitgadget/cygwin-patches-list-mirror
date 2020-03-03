@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-10167-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 1447 invoked by alias); 3 Mar 2020 00:35:56 -0000
+Return-Path: <cygwin-patches-return-10168-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 111092 invoked by alias); 3 Mar 2020 06:22:11 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,44 +9,110 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 1438 invoked by uid 89); 3 Mar 2020 00:35:55 -0000
+Received: (qmail 111078 invoked by uid 89); 3 Mar 2020 06:22:11 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-6.4 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=HContent-Transfer-Encoding:8bit
-X-HELO: conssluserg-02.nifty.com
-Received: from conssluserg-02.nifty.com (HELO conssluserg-02.nifty.com) (210.131.2.81) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 03 Mar 2020 00:35:53 +0000
-Received: from Express5800-S70 (ntsitm196171.sitm.nt.ngn.ppp.infoweb.ne.jp [125.0.207.171]) (authenticated)	by conssluserg-02.nifty.com with ESMTP id 0230ZXah006768	for <cygwin-patches@cygwin.com>; Tue, 3 Mar 2020 09:35:33 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 0230ZXah006768
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1583195733;	bh=006OHr2gbhMlhOYDQKz4mO92qA5U071bwG5QpMTZSpY=;	h=Date:From:To:Subject:In-Reply-To:References:From;	b=KKDRA7vRsykhJA/U42NN9s/Xw4r3bpVdca9/KFQz4qdnmUa/92vBVCEQY7KYH+afc	 pI6LHvBPYODRewVlSTt4C1vPnZEJyVK7YMpKAhwjDldBFQ8VAoAkONE+vxJg6CBi7S	 Q4u93P+UEabOhmwdysZtEzZmBslIPLXUdX+akztXAcOoSAFvEq5gsJwYW/m0+ChCvy	 zIqYIZm1b7ppqHaMcNb4ZcRHGLBScilYt69OTUBWdG9BM9049OXQKFpqmx0EuMoxd5	 3cyn1dg0cfEu9UTpHHsEggaV/Gg245ed1HJj24cGozqrEUph5H2tbtGf8T3a2rR3b7	 4T5vz4LEE6Vmg==
-Date: Tue, 03 Mar 2020 00:35:00 -0000
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+X-Spam-SWARE-Status: No, score=-17.1 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=03.03.2020, 03032020
+X-HELO: mout.kundenserver.de
+Received: from mout.kundenserver.de (HELO mout.kundenserver.de) (212.227.126.133) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Tue, 03 Mar 2020 06:22:09 +0000
+Received: from [192.168.178.45] ([95.90.246.218]) by mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id 1MvKL3-1jQ89X42ef-00rGCA for <cygwin-patches@cygwin.com>; Tue, 03 Mar 2020 07:22:07 +0100
+Subject: Re: /proc/partitions: add some space to avoid ragged output format
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 1/1] Collect handling of wpixput and wpbuf into a helper class.
-Message-Id: <20200303093535.f27696d9250af844c0eaec52@nifty.ne.jp>
-In-Reply-To: <877f246b-08c2-6ccd-faac-6c90661212e5@t-online.de>
-References: <877f246b-08c2-6ccd-faac-6c90661212e5@t-online.de>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <dc387652-11c2-92c5-70e6-b096c318f58c@towo.net> <5655db7b-5ffb-cdda-d944-3d4f3e639329@SystematicSw.ab.ca>
+From: Thomas Wolff <towo@towo.net>
+X-Tagtoolbar-Keys: D20200303072207675
+Message-ID: <f7877c6c-8165-b00e-c265-9a1974cfdb72@towo.net>
+Date: Tue, 03 Mar 2020 06:22:00 -0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101 Thunderbird/68.5.0
+MIME-Version: 1.0
+In-Reply-To: <5655db7b-5ffb-cdda-d944-3d4f3e639329@SystematicSw.ab.ca>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-IsSubscribed: yes
-X-SW-Source: 2020-q1/txt/msg00273.txt
+X-SW-Source: 2020-q1/txt/msg00274.txt
 
-Hi Hans,
+Am 03.03.2020 um 00:26 schrieb Brian Inglis:
+> Hi Thomas,
+>
+> In this industry, you plan ahead a bit further and longer: you need to go for at
+> least a three digit increase (below) or more; legacy 8TB HDDs are cheap and
+> common, 20TB are available, 100TB SSDs are available now (#blocks 97656250000 -
+> 11 digits), capacity is expanding *faster* than HDDs:
+>
+> https://www.tomshardware.com/news/100tb-ssd-nimbus-sata-flash,36687.html
+>
+> and speeds now exceed 6GB/s and 1M IO/s.
+>
+> We're also at 64C/128T 6GHz (overclocked) chips with 256MB L3 and L4 caches,
+> 256GB memory, and over the next decade, feature sizes dropping by an order of
+> magnitude from 14nm to 1.4nm, with corresponding increases, so maintainers
+> should consider capacity increases when they look at code.
+>
+> To make this easier next time ;^> I'd define a couple of formats:
+>
+> #define PROC_PARTITION_HDR	"%5s %5s %12s %s\n\n"
+> #define PROC_PARTITION_FMT	"%5d %5d %12U %s\n"
+>
+> or simplify the code further with:
+>
+> #define PROC_PARTITION_HDR	"%5s %5s %12s %-6s %-s\n\n"
+> #define PROC_PARTITION_FMT	"%5d %5d %12U %-6s %-s\n"
+>
+> and sprintf the header into the buffer:
+>
+> -	  print ("major minor  #blocks  name   win-mounts\n\n");
+> +	  bufptr += __small_sprintf (bufptr, PROC_PARTITION_HDR,
+> +				    "major", "minor", "#blocks",
+> +				    "name   win-mounts\n\n");
+>
+> *or*
+>
+> -	  print ("major minor  #blocks  name   win-mounts\n\n");
+> +	  bufptr += __small_sprintf (bufptr, PROC_PARTITION_HDR,
+> +				    "major", "minor", "#blocks",
+> +				    "name", "win-mounts\n\n");
+>
+Hi Brian,
+yes, I thought about factoring out the format as well, but then only 
+submitted a quick-and-dirty patch.
+If you're suggesting a more solid solution, would you submit your patch?
+Thomas
 
-Thanks for the patch.
 
-On Tue, 3 Mar 2020 00:07:25 +0100
-Hans-Bernhard Bröker wrote:
-> +  inline void sendOut(HANDLE &handle, DWORD *wn) { WriteConsoleA 
-> (handle, buf, ixput, wn, 0); };
-
-The second argument DWORD *wn of sendOut() is not used
-outside sendOut(), so it can be covered up like:
-
-inline void sendOut (HANDLE &handle)
-{
-  DWORD wn;
-  WriteConsoleA (handle, buf, ixput, &wn, 0);
-}
-
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+> On 2020-03-02 14:39, Thomas Wolff wrote:
+>
+> ---
+>   winsup/cygwin/fhandler_proc.cc | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/winsup/cygwin/fhandler_proc.cc b/winsup/cygwin/fhandler_proc.cc
+> index 605a8443f..3373f3ef5 100644
+> --- a/winsup/cygwin/fhandler_proc.cc
+> +++ b/winsup/cygwin/fhandler_proc.cc
+> @@ -1491,7 +1491,7 @@ format_proc_partitions (void *, char *&destbuf)
+>   	}
+>         if (!got_one)
+>   	{
+> -	  print ("major minor  #blocks  name   win-mounts\n\n");
+> +	  print ("major minor    #blocks   name   win-mounts\n\n");
+>   	  got_one = true;
+>   	}
+>         /* Fetch partition info for the entire disk to get its size. */
+> @@ -1514,7 +1514,7 @@ format_proc_partitions (void *, char *&destbuf)
+>   	  size = 0;
+>   	}
+>         device dev (drive_num, 0);
+> -      bufptr += __small_sprintf (bufptr, "%5d %5d %9U %s\n",
+> +      bufptr += __small_sprintf (bufptr, "%5d %5d %12U %s\n",
+>   				 dev.get_major (), dev.get_minor (),
+>   				 size >> 10, dev.name () + 5);
+>         /* Fetch drive layout info to get size of all partitions on the disk. */
+> @@ -1561,7 +1561,7 @@ format_proc_partitions (void *, char *&destbuf)
+>   	      continue;
+>   	    device dev (drive_num, part_num);
+>
+> -	    bufptr += __small_sprintf (bufptr, "%5d %5d %9U %s",
+> +	    bufptr += __small_sprintf (bufptr, "%5d %5d %12U %s",
+>   				       dev.get_major (), dev.get_minor (),
+>   				       size >> 10, dev.name () + 5);
+>   	    /* Check if the partition is mounted in Windows and, if so,
+>
