@@ -1,5 +1,5 @@
-Return-Path: <cygwin-patches-return-10172-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 130733 invoked by alias); 4 Mar 2020 01:49:03 -0000
+Return-Path: <cygwin-patches-return-10173-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
+Received: (qmail 15498 invoked by alias); 6 Mar 2020 01:55:37 -0000
 Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
 Precedence: bulk
 List-Id: <cygwin-patches.cygwin.com>
@@ -9,43 +9,62 @@ List-Archive: <http://sourceware.org/ml/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
 Sender: cygwin-patches-owner@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 130724 invoked by uid 89); 4 Mar 2020 01:49:03 -0000
+Received: (qmail 15483 invoked by uid 89); 6 Mar 2020 01:55:37 -0000
 Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-6.3 required=5.0 tests=AWL,BAYES_00,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=HContent-Transfer-Encoding:8bit
-X-HELO: conssluserg-05.nifty.com
-Received: from conssluserg-05.nifty.com (HELO conssluserg-05.nifty.com) (210.131.2.90) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Wed, 04 Mar 2020 01:49:01 +0000
-Received: from Express5800-S70 (ntsitm196171.sitm.nt.ngn.ppp.infoweb.ne.jp [125.0.207.171]) (authenticated)	by conssluserg-05.nifty.com with ESMTP id 0241mur8023311	for <cygwin-patches@cygwin.com>; Wed, 4 Mar 2020 10:48:56 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 0241mur8023311
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1583286536;	bh=mOZ41fD/QsEGdeQsn+7vwbJun9sQhztxOnLFV7KN7Vo=;	h=Date:From:To:Subject:In-Reply-To:References:From;	b=AAvCdMl8c61Jn0GEMebQhyoGwryV2V+nyHNATbITh7X3GEtW7HjiIpbGP66JuqAG5	 GSyCLo9BcSHvkUNvL+ZJu4Dnm3tHvxfCD1QyZEoIKOxjezdvlJtQrdydrbP75XXtQ4	 EfJsUsgPQyl7fABxGEykZirLDWbK8jw98o9X4Kk6pRGLqvnCtoCpwBYZPwHHS1t+MZ	 UNYzvIWMC8LEYYt2rebg9Lx0TdTLp+2bbZofqr6bBuMkiahSMN1bWdDnSYXvJKtHW3	 Usz1MK098xoknswEc8MjOLXiMBgsCHVo8Uvesqs3PV6MUkSD0T5e5EDDCtl7OHJv0L	 3wtkA0xGsWe0w==
-Date: Wed, 04 Mar 2020 01:49:00 -0000
+X-Spam-SWARE-Status: No, score=-18.7 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*Ad:D*jp, H*Ad:D*ne.jp, HX-Languages-Length:1328, HContent-Transfer-Encoding:8bit
+X-HELO: conuserg-06.nifty.com
+Received: from conuserg-06.nifty.com (HELO conuserg-06.nifty.com) (210.131.2.73) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 06 Mar 2020 01:55:35 +0000
+Received: from localhost.localdomain (ntsitm196171.sitm.nt.ngn.ppp.infoweb.ne.jp [125.0.207.171]) (authenticated)	by conuserg-06.nifty.com with ESMTP id 0261tOCU024547;	Fri, 6 Mar 2020 10:55:29 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-06.nifty.com 0261tOCU024547
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1583459730;	bh=OenlEUatNPX4y/Ahhyfibyi9gNE9OFEi86adaB2245U=;	h=From:To:Cc:Subject:Date:From;	b=y6FP0PvWD3CgXLSJeF7uA3lNJiHBaEllFU6UXXf8VkSVE4F09UN5OITM8r6aZVYNV	 73EHhI0S75ICjeV9lGiQAgJzcc7XgxPSoVozoaXp5yEtHK68GiP1ejTOCCJpOMMGS+	 pZkqIzVOViI+wpg8sjwu1HrQc0Y+kn5j+tCPZWnH7NjnSik6emm2s9ypIeqFwz3wv/	 imhM8uPZ7/Zgl2SiF0lDFHvXCYsMXtnHDIqy6GDkwk+GM+FJBjQtX9eM+26cAuImSF	 Itf2Xty5ikU9bDQu6520xRaUIqbj1uUXYPVEQr7/UwjBbvyTL0xDLfjr3fuujlrwQU	 QTI5bkm4xmDHQ==
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 1/1] Collect handling of wpixput and wpbuf into a helper class.
-Message-Id: <20200304104858.123db5286f1112cef986a2f4@nifty.ne.jp>
-In-Reply-To: <a4ff7dc0-0e14-28f8-373c-34ab221524ec@t-online.de>
-References: <877f246b-08c2-6ccd-faac-6c90661212e5@t-online.de>	<20200303093535.f27696d9250af844c0eaec52@nifty.ne.jp>	<a4ff7dc0-0e14-28f8-373c-34ab221524ec@t-online.de>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: console: Fix behaviour of "ESC 8" after reset.
+Date: Fri, 06 Mar 2020 01:55:00 -0000
+Message-Id: <20200306015528.671-1-takashi.yano@nifty.ne.jp>
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-IsSubscribed: yes
-X-SW-Source: 2020-q1/txt/msg00278.txt
+X-SW-Source: 2020-q1/txt/msg00279.txt
 
-On Tue, 3 Mar 2020 21:03:38 +0100
-Hans-Bernhard Bröker wrote:
-> OTOH the MS documentation calls this DWORD* an "optional output" 
-> argument.  If I'm reading that right, it means it should be fine to just 
-> pass NULL to indicate that we don't need it:
-> 
-> inline void sendOut (HANDLE &handle)
-> {
->    WriteConsoleA (handle, buf, ixput, 0, 0);
-> }
-> 
-> The same would apply to all the other calls of WriteConsoleA, it seems.
+- This patch matches the behaviour of "ESC 8" (DECRC) to the real
+  xterm after full reset (RIS), soft reset (DECSTR) and "CSI 3 J".
+---
+ winsup/cygwin/fhandler_console.cc | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Yeah, it could be. However, please note that it should be
-saparate patch if you remove wn from WriteConsoleA() other
-than wpbuf related.
-
+diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
+index c5f269168..72ccf7910 100644
+--- a/winsup/cygwin/fhandler_console.cc
++++ b/winsup/cygwin/fhandler_console.cc
+@@ -2114,6 +2114,11 @@ fhandler_console::char_command (char c)
+ 	  break;
+ 	case 'J': /* ED */
+ 	  wpbuf_put (c);
++	  if (con.args[0] == 3 && con.savey >= 0)
++	    {
++	      con.fillin (get_output_handle ());
++	      con.savey -= con.b.srWindow.Top;
++	    }
+ 	  if (con.args[0] == 3 && wincap.has_con_broken_csi3j ())
+ 	    { /* Workaround for broken CSI3J in Win10 1809 */
+ 	      CONSOLE_SCREEN_BUFFER_INFO sbi;
+@@ -2158,6 +2163,7 @@ fhandler_console::char_command (char c)
+ 	    {
+ 	      con.scroll_region.Top = 0;
+ 	      con.scroll_region.Bottom = -1;
++	      con.savex = con.savey = -1;
+ 	    }
+ 	  wpbuf_put (c);
+ 	  /* Just send the sequence */
+@@ -3063,6 +3069,7 @@ fhandler_console::write (const void *vsrc, size_t len)
+ 		{
+ 		  con.scroll_region.Top = 0;
+ 		  con.scroll_region.Bottom = -1;
++		  con.savex = con.savey = -1;
+ 		}
+ 	      /* ESC sequences below (e.g. OSC, etc) are left to xterm
+ 		 emulation in xterm compatible mode, therefore, are not
 -- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+2.21.0
