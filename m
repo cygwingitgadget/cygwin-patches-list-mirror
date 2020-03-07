@@ -1,70 +1,56 @@
-Return-Path: <cygwin-patches-return-10173-listarch-cygwin-patches=sources.redhat.com@cygwin.com>
-Received: (qmail 15498 invoked by alias); 6 Mar 2020 01:55:37 -0000
-Mailing-List: contact cygwin-patches-help@cygwin.com; run by ezmlm
-Precedence: bulk
-List-Id: <cygwin-patches.cygwin.com>
-List-Subscribe: <mailto:cygwin-patches-subscribe@cygwin.com>
-List-Post: <mailto:cygwin-patches@cygwin.com>
-List-Archive: <http://sourceware.org/ml/cygwin-patches/>
-List-Help: <mailto:cygwin-patches-help@cygwin.com>, <http://sourceware.org/ml/#faqs>
-Sender: cygwin-patches-owner@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-Received: (qmail 15483 invoked by uid 89); 6 Mar 2020 01:55:37 -0000
-Authentication-Results: sourceware.org; auth=none
-X-Spam-SWARE-Status: No, score=-18.7 required=5.0 tests=AWL,BAYES_00,GIT_PATCH_0,GIT_PATCH_1,GIT_PATCH_2,GIT_PATCH_3,RCVD_IN_DNSWL_NONE autolearn=ham version=3.3.1 spammy=H*Ad:D*jp, H*Ad:D*ne.jp, HX-Languages-Length:1328, HContent-Transfer-Encoding:8bit
-X-HELO: conuserg-06.nifty.com
-Received: from conuserg-06.nifty.com (HELO conuserg-06.nifty.com) (210.131.2.73) by sourceware.org (qpsmtpd/0.93/v0.84-503-g423c35a) with ESMTP; Fri, 06 Mar 2020 01:55:35 +0000
-Received: from localhost.localdomain (ntsitm196171.sitm.nt.ngn.ppp.infoweb.ne.jp [125.0.207.171]) (authenticated)	by conuserg-06.nifty.com with ESMTP id 0261tOCU024547;	Fri, 6 Mar 2020 10:55:29 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-06.nifty.com 0261tOCU024547
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.ne.jp;	s=dec2015msa; t=1583459730;	bh=OenlEUatNPX4y/Ahhyfibyi9gNE9OFEi86adaB2245U=;	h=From:To:Cc:Subject:Date:From;	b=y6FP0PvWD3CgXLSJeF7uA3lNJiHBaEllFU6UXXf8VkSVE4F09UN5OITM8r6aZVYNV	 73EHhI0S75ICjeV9lGiQAgJzcc7XgxPSoVozoaXp5yEtHK68GiP1ejTOCCJpOMMGS+	 pZkqIzVOViI+wpg8sjwu1HrQc0Y+kn5j+tCPZWnH7NjnSik6emm2s9ypIeqFwz3wv/	 imhM8uPZ7/Zgl2SiF0lDFHvXCYsMXtnHDIqy6GDkwk+GM+FJBjQtX9eM+26cAuImSF	 Itf2Xty5ikU9bDQu6520xRaUIqbj1uUXYPVEQr7/UwjBbvyTL0xDLfjr3fuujlrwQU	 QTI5bkm4xmDHQ==
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Return-Path: <HBBroeker@t-online.de>
+Received: from mailout05.t-online.de (mailout05.t-online.de [194.25.134.82])
+ by server2.sourceware.org (Postfix) with ESMTPS id C52ED393FC33
+ for <cygwin-patches@cygwin.com>; Sat,  7 Mar 2020 20:04:33 +0000 (GMT)
+Received: from fwd17.aul.t-online.de (fwd17.aul.t-online.de [172.20.27.64])
+ by mailout05.t-online.de (Postfix) with SMTP id 336B1420866D
+ for <cygwin-patches@cygwin.com>; Sat,  7 Mar 2020 21:04:32 +0100 (CET)
+Received: from [192.168.178.26]
+ (SgrK7YZdrh-ZYQ0DBHEM1CBuDzLN5XufDSFjoo4A3T42FTstEezITRwjydJOtDXZ+3@[79.228.65.18])
+ by fwd17.t-online.de
+ with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
+ esmtp id 1jAfgV-07lUdU0; Sat, 7 Mar 2020 21:04:31 +0100
+From: =?UTF-8?Q?Hans-Bernhard_Br=c3=b6ker?= <HBBroeker@t-online.de>
+Subject: [PATCH 0/2] wpbuf class-ification
 To: cygwin-patches@cygwin.com
-Cc: Takashi Yano <takashi.yano@nifty.ne.jp>
-Subject: [PATCH] Cygwin: console: Fix behaviour of "ESC 8" after reset.
-Date: Fri, 06 Mar 2020 01:55:00 -0000
-Message-Id: <20200306015528.671-1-takashi.yano@nifty.ne.jp>
+Message-ID: <5a6f115d-d6b4-22c8-1584-51b82db97639@t-online.de>
+Date: Sat, 7 Mar 2020 21:04:27 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-IsSubscribed: yes
-X-SW-Source: 2020-q1/txt/msg00279.txt
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: de-DE
+Content-Transfer-Encoding: 7bit
+X-ID: SgrK7YZdrh-ZYQ0DBHEM1CBuDzLN5XufDSFjoo4A3T42FTstEezITRwjydJOtDXZ+3
+X-TOI-MSGID: 4f5c1536-6125-492f-a250-7bba1d5347cc
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_50, FREEMAIL_FROM,
+ GIT_PATCH_2, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL,
+ SPF_HELO_NONE, SPF_NONE,
+ SPOOFED_FREEMAIL autolearn=ham autolearn_force=no version=3.4.2
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
+ server2.sourceware.org
+X-BeenThere: cygwin-patches@cygwin.com
+X-Mailman-Version: 2.1.29
+Precedence: list
+List-Id: Cygwin-patches mailing list <cygwin-patches.cygwin.com>
+List-Unsubscribe: <http://cygwin.com/mailman/options/cygwin-patches>,
+ <mailto:cygwin-patches-request@cygwin.com?subject=unsubscribe>
+List-Archive: <http://cygwin.com/pipermail/cygwin-patches/>
+List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
+List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
+ <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
+X-List-Received-Date: Sat, 07 Mar 2020 20:04:34 -0000
 
-- This patch matches the behaviour of "ESC 8" (DECRC) to the real
-  xterm after full reset (RIS), soft reset (DECSTR) and "CSI 3 J".
----
- winsup/cygwin/fhandler_console.cc | 7 +++++++
- 1 file changed, 7 insertions(+)
+Second shot at wpbuf class-ification.  Also no longer
+request data from WriteConsoleA that is not used for anything.
 
-diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
-index c5f269168..72ccf7910 100644
---- a/winsup/cygwin/fhandler_console.cc
-+++ b/winsup/cygwin/fhandler_console.cc
-@@ -2114,6 +2114,11 @@ fhandler_console::char_command (char c)
- 	  break;
- 	case 'J': /* ED */
- 	  wpbuf_put (c);
-+	  if (con.args[0] == 3 && con.savey >= 0)
-+	    {
-+	      con.fillin (get_output_handle ());
-+	      con.savey -= con.b.srWindow.Top;
-+	    }
- 	  if (con.args[0] == 3 && wincap.has_con_broken_csi3j ())
- 	    { /* Workaround for broken CSI3J in Win10 1809 */
- 	      CONSOLE_SCREEN_BUFFER_INFO sbi;
-@@ -2158,6 +2163,7 @@ fhandler_console::char_command (char c)
- 	    {
- 	      con.scroll_region.Top = 0;
- 	      con.scroll_region.Bottom = -1;
-+	      con.savex = con.savey = -1;
- 	    }
- 	  wpbuf_put (c);
- 	  /* Just send the sequence */
-@@ -3063,6 +3069,7 @@ fhandler_console::write (const void *vsrc, size_t len)
- 		{
- 		  con.scroll_region.Top = 0;
- 		  con.scroll_region.Bottom = -1;
-+		  con.savex = con.savey = -1;
- 		}
- 	      /* ESC sequences below (e.g. OSC, etc) are left to xterm
- 		 emulation in xterm compatible mode, therefore, are not
+Hans-Bernhard Broeker (2):
+   Collect handling of wpixput and wpbuf into a helper class.
+   Do not bother passing optional argument to WriteConsoleA.
+
+  winsup/cygwin/fhandler_console.cc | 164 ++++++++++++++++--------------
+  1 file changed, 85 insertions(+), 79 deletions(-)
+
 -- 
 2.21.0
+
