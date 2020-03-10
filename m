@@ -1,49 +1,30 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
- by server2.sourceware.org (Postfix) with ESMTPS id D72A33940CE1
- for <cygwin-patches@cygwin.com>; Mon,  9 Mar 2020 08:59:28 +0000 (GMT)
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1M8QiW-1jFe6p2cV6-004RDy for <cygwin-patches@cygwin.com>; Mon, 09 Mar 2020
- 09:59:27 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 60B1AA827DA; Mon,  9 Mar 2020 09:59:27 +0100 (CET)
-Date: Mon, 9 Mar 2020 09:59:27 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2] Cygwin: console: Fix behaviour of "ESC 8" after reset.
-Message-ID: <20200309085927.GC4042@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200309013836.1999-1-takashi.yano@nifty.ne.jp>
+Return-Path: <sales02@qiuxing.store>
+Received: from server1.qiuxing.store (unknown [118.25.152.208])
+ by sourceware.org (Postfix) with ESMTP id 196B9387701F
+ for <cygwin-patches@cygwin.com>; Tue, 10 Mar 2020 10:26:08 +0000 (GMT)
+Received: from Admin (183.17.124.96) by server1.qiuxing.store id hctlk00e97cd
+ for <cygwin-patches@cygwin.com>;
+ Tue, 10 Mar 2020 18:25:57 +0800 (envelope-from <sales02@qiuxing.store>)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature"; boundary="ftEhullJWpWg/VHq"
-Content-Disposition: inline
-In-Reply-To: <20200309013836.1999-1-takashi.yano@nifty.ne.jp>
-X-Provags-ID: V03:K1:9FDt6XT+pJCDR3KY6oh/MGmW68IZd1O9UVZRsgUw72rplsJ90fr
- 2MHPT6qJZCmyTVgPeGbQ4e+aow1FA3YrNLJ39gqhsoELZrOVyGwswvzBbkghktR4FDiQdit
- DGFP+FgEy3DqCCWyjwM3T6ViBwcHychM1tiX1x9Xw9lWmqWchrODwNiyke/SpxPCs39vdpW
- Un15oPMH0NUgCREC4pIeg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:W7mu8ZuXIzA=:b83dyaq1EaKlA2tIjMBSur
- Nw9/SVj1WENMaDGQFMWGRHelzSSyI3xk7XnSR9IA2KMV1RvnTFb/PqdlGflwrcCyyN+VoISiQ
- Y1oYA2bHR9xw3cPiKPompTMlrZB9xvq4Vr8KGfsU57m7Z33M7Ffw8R/afN/mPshziA5UrjVv6
- 7F9NdvxGSjYEdYmZ6ANfKU5cx6X0zjpPrsYwB0h3dTwes5M/Z/pNWxdKe9J2Dta9ScY1cq22n
- cKDnwHO0Q27E38YTChZ48xIppfOagFXcci8eladkJ59p7YDnAvnetMw9vLvaF9/mAQ2wSG/7i
- H3rdVl+sSZaQUNGbAZW7ksEGBqhEY58EP4HyaaiQrcxsecqsYyu9pJEB0qhW/DcTe72AFq3zK
- UtEEhtPntCTQqiMP41AZOKYJv7S06RXYUSbIaikrbKdjgtJXrDbs4VrJkI8idgR9smiKMYajL
- k9D9O1zO+WcJTQX7r7VUnmKfkkX9PtJAn1K4T5PCGGYqcG97JK6Z4RBjWzuOP4L7Of8Esp0xv
- RHBFcngOHMBa6gPTBsdsS+HW4xOmN7CIeQs9v9MjZUAQdScOpfXa2QqzZ+d2sa4dLZr0Ekl5w
- /zwMrC/zuTIfuEeg/iu2aSwhStlqhRm73I9yMFWs1fUobuW0+sezghH84fGDdGQr0UG/fS41U
- l4ggf3Hg+kwRDtlcQRk3oV8umZSXZhCkCkj1Vf7ph/NJGQS+iT/6NSgt6Iy4/K8NJ9K8C31/D
- SDJaduq9atYRNEgbEoe18bc98jBZVsfVO8quL7+bCaGOhWmKnqpB/UtyUL4iMTizcZzChVpEV
- VziFXTomSqGaYaylo5ZbF1VlEeHTVXotylOfPlXz1DK26TIbjKxhEa/n5gKnan88nxYyn0W
-X-Spam-Status: No, score=-124.9 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- GIT_PATCH_1, GIT_PATCH_2, GIT_PATCH_3, GOOD_FROM_CORINNA_CYGWIN,
- PDS_OTHER_BAD_TLD, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE,
- SPF_NONE autolearn=ham autolearn_force=no version=3.4.2
+Date: Tue, 10 Mar 2020 18:26:01 +0800
+From: "sales08@innovatetop.com" <sales08@innovatetop.com>
+Subject: All You Need to Know About USB C to HDMI Cable
+To: cygwin-patches@cygwin.com
+Sender: sales02@qiuxing.store
+Reply-To: sales08@innovatetop.com
+Message-ID: <2020030010182600010941@qiuxing.store>
+X-Mailer: Foxmail 6, 13, 102, 15 [cn]
+In-Reply-To: <2020030010182600010941@qiuxing.store>
+X-Spam-Status: No, score=3.6 required=5.0 tests=BAYES_50, DEAR_FRIEND,
+ HEADER_FROM_DIFFERENT_DOMAINS, HTML_MESSAGE, SPF_HELO_NONE,
+ SPF_PASS autolearn=no autolearn_force=no version=3.4.2
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: Base64
+Content-Disposition: inline
+X-Content-Filtered-By: Mailman/MimeDel 2.1.29
 X-BeenThere: cygwin-patches@cygwin.com
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -54,86 +35,66 @@ List-Archive: <http://cygwin.com/pipermail/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 09 Mar 2020 08:59:29 -0000
+X-List-Received-Date: Tue, 10 Mar 2020 10:26:09 -0000
 
-
---ftEhullJWpWg/VHq
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mar  9 10:38, Takashi Yano wrote:
-> - This patch matches the behaviour of "ESC 8" (DECRC) to the real
->   xterm after full reset (RIS), soft reset (DECSTR) and "CSI 3 J".
-> ---
->  winsup/cygwin/fhandler_console.cc | 7 +++++++
->  1 file changed, 7 insertions(+)
->=20
-> diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_c=
-onsole.cc
-> index 1c376291f..2a239b866 100644
-> --- a/winsup/cygwin/fhandler_console.cc
-> +++ b/winsup/cygwin/fhandler_console.cc
-> @@ -2124,6 +2124,11 @@ fhandler_console::char_command (char c)
->  	  break;
->  	case 'J': /* ED */
->  	  wpbuf.put (c);
-> +	  if (con.args[0] =3D=3D 3 && con.savey >=3D 0)
-> +	    {
-> +	      con.fillin (get_output_handle ());
-> +	      con.savey -=3D con.b.srWindow.Top;
-> +	    }
->  	  if (con.args[0] =3D=3D 3 && wincap.has_con_broken_csi3j ())
->  	    { /* Workaround for broken CSI3J in Win10 1809 */
->  	      CONSOLE_SCREEN_BUFFER_INFO sbi;
-> @@ -2168,6 +2173,7 @@ fhandler_console::char_command (char c)
->  	    {
->  	      con.scroll_region.Top =3D 0;
->  	      con.scroll_region.Bottom =3D -1;
-> +	      con.savex =3D con.savey =3D -1;
->  	    }
->  	  wpbuf.put (c);
->  	  /* Just send the sequence */
-> @@ -3070,6 +3076,7 @@ fhandler_console::write (const void *vsrc, size_t l=
-en)
->  		{
->  		  con.scroll_region.Top =3D 0;
->  		  con.scroll_region.Bottom =3D -1;
-> +		  con.savex =3D con.savey =3D -1;
->  		}
->  	      /* ESC sequences below (e.g. OSC, etc) are left to xterm
->  		 emulation in xterm compatible mode, therefore, are not
-> --=20
-> 2.21.0
-
-Pushed.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen
-Cygwin Maintainer
-
---ftEhullJWpWg/VHq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl5mBW8ACgkQ9TYGna5E
-T6B0Ew/8Dve4ZhlKp0CHmwWnPLqmm9PeeJQPy4oVgCCcrp/zznTuarSAn4wpxuh/
-OA8+W7FmDEDk5OeEjuMHjwKl4H9qnRToY33EzEaJJeagQvbz93cvoU3lfgoZa/vA
-HbfYYbEh6prXaBAGhEzgXR2FcaRrj4hgj18qsWOFSU4VJgKQR4hmRtK+L0LaEOw3
-yTubWJixZepA1D1XOQhfbiYVjoMhMGj2md8bEv7ek/UmWmqVLkt2bQwXdGU1EdEj
-pgz3olBm9SF0OQdqdDAWFrVTdC1qmpsaIxguPXPztDKHZBh79iHwhicfy7czMaWI
-O/anDl8X0EFuZPuEhSGofBG+EiO6AvJtdpKKZdtOrdxuSZ27mv0iE/GwpZt32ic9
-BMVKKnGbqBEZT4r8NuuJzK18mf6NQF40Xeqfiq07qbirfAECRj69lb2QXbbtYj0T
-DpXFzTrZcSFUG0ziN+qB9o6jzVgBm97o9Fx4UdgeTT/ccE7MongQuJymQYxjbvwu
-1yrI/bFpWccQ+6OVAYvY8E5BiTwUqupHZRpC8v46CX6lWSRzeXkbErGIbhh5twGI
-lYXuSqpXxzPxSNhGxtkt7LxFnDP4Qc+eWRs9ML9PoB9mZZM0g/VRwDvCTCLJ1EfF
-hV2KXo5PCf+ohkZ9mSxVu7Cq287mnByozJKjvHJo1wHH4N9f1kc=
-=3j4s
------END PGP SIGNATURE-----
-
---ftEhullJWpWg/VHq--
+RGVhciBmcmllbmQsDQpIb3BlIGl0IGZpbmRzIHdlbGwgd2l0aCB5b3UuDQpUaGlzIGlzIENhcm9s
+IGZyb20gRW1pbmVuY2UtdG9wLg0KT24gMXN0IEZlYnJ1YXJ5LCAyMDIwLCB0aGUgRXVyb3BlYW4g
+VW5pb24gaGFzIHVuaWZpZWQgdGhlIFVTQiBDIGludGVyZmFjZSBmb3IgbW9iaWxlIHBob25lcywg
+YWx0aG91Z2ggQXBwbGUgaW5zaXN0IG9uIHVzaW5nIGxpZ2h0bmluZyBjb25uZWN0b3IgZm9yIGl0
+cyBpcGhvbmUgZGV2aWNlcywgdGhlIG5ldyBBcHBsZSB0YWJsZXQgYW5kIE1hY2Jvb2sgaGFzIGFk
+b3B0ZWQgdGhlIFVTQiBDIGludGVyZmFjZS4gVGhlcmVmb3JlLCBhIGdyb3dpbmcgZGVtYW5kIG9m
+IG9mIFVTQiBDIHRvIEhETUkgY2FibGUgd2lsbCBpbmNyZWFzZSBzaWduaWZpY2FudGx5IHdoZW4g
+dGhlc2UgQXBwbGUgZGV2aWNlcyBhcmUgdG8gYmUgY29ubmVjdGVkIHRvIFRWcywgcHJvamVjdG9y
+cyBhbmQgb3RoZXIgZGV2aWNlcy4gTWFueSBiaWcgYnJhbmRzLCBsaWtlIEFua2VyIGFuZCBCZWxr
+aW4gaGF2ZSByZWNlbnRseSBsYXVuY2hlZCB0aGVpciBvd24gVVNCIEMgdG8gSERNSSBjYWJsZXMg
+ZHVlIHRvIHN1YnN0YW50aWFsIHBvdGVudGlhbCBwcm9maXRzLg0KSSBhbSB3cml0aW5nIHRvIHJl
+Y29tbWVuZCBvdXIgVVNCIEMgdG8gSERNSSBjYWJsZS4gV2UgaGF2ZSBsYXVuY2hlZCBzZXZlcmFs
+IFVTQiBDIHRvIEhETUkgZGF0YSBjYWJsZXMuIFlvdSBjYW4gdXNlIGl0IHRvIGNvbm5lY3QgTWFj
+Ym9vaywgTWFjYm9vayBBaXIgYW5kIG90aGVyIGRldmljZXMgd2l0aCBIRE1JIGludGVyZmFjZS4N
+CldpdGggdGhlIGJlbG93IHNwZWNpZmljYXRpb25zLCBvdXIgVVNCIEMgdG8gSERNSSBjYWJsZSBo
+YXMgdGhlIHZlcnkgcG93ZXJmdWwgZnVuY3Rpb25zIGFuZCBjYW4gc3VwcG9ydCBtb3N0IHRoZSBj
+dXN0b21lcnPigJkgcmVxdWlyZW1lbnRzOg0KRGlzcGxheSBQb3J0IDEuMiBBbHRlcm5hdGUgTW9k
+ZUFsdGVybmF0ZSBNb2RlIGFsbG93cyBhIFVTQiBDIGVxdWlwcGVkIGNvbXB1dGVyIHRvIGNvbm5l
+Y3QgZGlyZWN0bHkgdG8gYSBkaXNwbGF5IG9yIG1vbml0b3IuIFRoZSBtb25pdG9yIHdpbGwgbmVl
+ZCB0byBoYXZlIGEgVVNCIEMgcG9ydCBmb3IgeW91IHRvIG1ha2UgdGhpcyBjb25uZWN0aW9uLg0K
+VVNCIEMgQ29ubmVjdG9yIGFuZCBIRE1JIHBvcnRDYW4gZWFzaWx5IGNvbm5lY3QgYSBVU0IgQyBl
+bmFibGVkIHNtYXJ0cGhvbmUvUEMvTGFwdG9wIHRvIGEgSERUViwgbW9uaXRvciBvciBwcm9qZWN0
+b3Igd2l0aCBIRE1JIHBvcnQuIEl0IGlzIGlkZWFsIGZvciBjb25mZXJlbmNlLCBwcmVzZW50YXRp
+b24sIGdhbWluZywgb3IgZXhwYW5kaW5nIHdvcmtzcGFjZSBieSBjb25uZWN0aW5nIHlvdXIgVVNC
+IEMgZGV2aWNlcyB0byBhIGxhcmdlIHNjcmVlbi4NCjRLQDYwSHogUmVzb2x1dGlvblN1cHBvcnRz
+IHJlc29sdXRpb24gdXAgdG8gNEsqMksgKDM4NDAqMjE2MCksIHVwZ3JhZGVkIHRvIDYwSHouIEJh
+Y2t3YXJkcyBjb21wYXRpYmxlIHdpdGggMTA4MHAuIEl0IGlzIGNhcGFibGUgb2YgZGVsaXZlcmlu
+ZyBpbmNyZWRpYmx5IGZhc3QgZGF0YSB0cmFuc2ZlcnMgYW5kIHRyYW5zbWl0cyB2aWRlbyBhbmQg
+YXVkaW8gd2l0aCBoaWdoIGRlZmluaXRpb24uDQo1RyBUcmFuc2ZlciBTcGVlZCAgU3VwcG9ydCBo
+aWdoIHNwZWVkIGRhdGEgdHJhbnNmZXIsIHVwIHRvIDVHYnBzLg0KU3VwcG9ydCBIaWdoIER5bmFt
+aWMgUmFuZ2UgdmlkZW9IRE1JIG91dHB1dCBzdXBwb3J0cyByZXNvbHV0aW9ucyB1cCB0byA0SyBh
+bmQgcHJvdmlkZXMgYSBzaW1wbGUgcGx1ZyBhbmQgcGxheSBjb25uZWN0aW9uIHRvIGhpZ2gtZGVm
+aW5pdGlvbiBkaXNwbGF5cyBvciBtb25pdG9ycy4NCkhpZ2ggcGVyZm9ybWFuY2UgU2lnbmFsIFRy
+YW5zbWlzc2lvblBsdWcgYW5kIFBsYXksIGRvZXMgbm90IHJlcXVpcmUgYW55IGFkZGl0aW9uYWwg
+cHJvZ3JhbXMuIFRpbm5lZCBjb3BwZXIgd2l0aCB0cmlwbGUtbGF5ZXIgc2hpZWxkaW5nIHRvIGVu
+c3VyZSBzdGFibGUgc2lnbmFsIHRyYW5zbWlzc2lvbjsgQWx1bWludW0gYWxsb3kgQ2FzaW5nLCBO
+eWxvbiBicmFpZGVkIG1hdGVyaWFsIGFuZCBHb2xkLXBsYXRlZCBjb25uZWN0b3JzIHRvIGVuc3Vy
+ZSBhIHN1cGVyaW9yIGR1cmFiaWxpdHkgYW5kIGZ1bmN0aW9uYWxpdHkgdW5kZXIgaGVhdnkgdXNh
+Z2UuDQpDb21wYXRpYmlsaXR5IExpc3RDb21wYXRpYmxlIHdpdGggTWFjQm9vayBQcm8gMTUiKDIw
+MTYtMjAxOCksIE1hY0Jvb2sgUHJvIDEzIigyMDE2LTIwMTkpLCBNYWNCb29rIDIwMTcvMjAxNi8y
+MDE1LCBNYWNCb29rIEFpciAyMDE4LzIwMTksIGlNYWMyMDE4LzIwMTcoMjEuNSIvMjciKSwgaU1h
+YyBwcm8gMjAxOC8yMDE3KDI3IiksIE1hYyBtaW5pLCBNYWMgUHJvLCBTdXJmYWNlIEJvb2sgMiwg
+UGl4ZWxib29rLCBEZWxsIFhQUyAxNS8xMywgaXBhZCBwcm8yMDE4IDEyLjkiKEdlbjMpLCBpcGFk
+IHBybzIwMTggMTEiLCBTdXJmYWNlIEdvLCBTYW1zdW5nIE5vdGUgOC85LzEwLCBTYW1zdW5nIFM4
+L1M5L1MxMCBvciBwbHVzLCBIVUFXRUkgbWF0ZTEwL21hdGUyMC9wMjAvcDMwIGFuZCBtb3JlLg0K
+TWF4IDVNVGhlIHBlcmZlY3QgbGVuZ3RoIDVtIGNhbiBlbmxhcmdlIHRoZSBzY2VuZXMgaW4geW91
+ciBkYWlseSBsaWZlLiBCZXNpZGVzIHRoZSBzY2VuZXMgb2Ygb3RoZXIgc2hvcnRlciBjYWJsZXMg
+YXBwbGllZCBmb3IsIHlvdSBjb3VsZCBhbHNvIGNvbm5lY3QgeW91ciBkZXZpY2VzIHRvIHlvdXIg
+VFYgd2hpbGUgc2l0aW5nIG9uIGEgY29hY2ggb3IgYmVkIGF0IGhvbWUgb3IgaW4gYSBob3RlbC4N
+ClBsZWFzZSBhd2FyZSB0aGF0IHdlIGhhdmUgc2V0IHVwIFZpZXRuYW0gYnJhbmNoIGF0IDIwMTcs
+IGFuZCBzdGFydGVkIHByb2R1Y3Rpb24gbW9zdCBjb25zdW1lciBlbGVjdHJvbmljcyBzaW5jZSB0
+aGUgYmVnaW5uaW5nIG9mIDIwMTgsIGlmIHRoZXJl4oCZcyBhbnkgdGFyaWZmIGNvbmNlc3Npb25z
+IGF2YWlsYWJsZSBmb3IgeW91IHRvIGltcG9ydCBmcm9tIFZpZXRuYW0sIEkgd291bGQgbG92ZSB0
+byBvZmZlciBzdXBwb3J0IC4NCkZvciBtb3JlIGluZm9ybWF0aW9uLCBwbGVhc2UgZG8gbm90IGhl
+c2l0YXRlIHRvIGNvbnRhY3QgbWUsIG9yIHZpc2l0IG91ciB3ZWJzaXRlIGJlbG93Lg0KTG9va2lu
+ZyBmb3J3YXJkIHRvIGhlYXIgZnJvbSB5b3UuDQpUaGFua3MgYW5kIEJlc3QgcmVnYXJkcy4NCkNh
+cm9sIEZhblNoZW56aGVuIEVtaW5lbmNlLVRvcCBUZWNobm9sb2d5IENvLiwgTHRkLg0KQWRk77ya
+WWludGlhbiBpbmR1c3RyaWFsIFBhcmssIFhpeGlhbmcsIEJhbydhbiBkaXN0cmljdCwgU2hlbnpo
+ZW4gNTE4MTAwDQpXZWJzaXRlOiB3d3cuZW1pbmVuY2UtdG9wLmNvbQ0KU2t5cGU6IHNhbGVzMDhf
+NzI5DQpXaGF0c0FwcDogKzg2IDE4Mjc3MjA2OTk3DQpUZWwvV2VjaGF0OiArODYgMTczMDI2NjU4
+MTYNCg==
