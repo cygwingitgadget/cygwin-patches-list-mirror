@@ -1,30 +1,27 @@
-Return-Path: <sales02@qiuxing.store>
-Received: from server1.qiuxing.store (unknown [118.25.152.208])
- by sourceware.org (Postfix) with ESMTP id 196B9387701F
- for <cygwin-patches@cygwin.com>; Tue, 10 Mar 2020 10:26:08 +0000 (GMT)
-Received: from Admin (183.17.124.96) by server1.qiuxing.store id hctlk00e97cd
- for <cygwin-patches@cygwin.com>;
- Tue, 10 Mar 2020 18:25:57 +0800 (envelope-from <sales02@qiuxing.store>)
-MIME-Version: 1.0
-Date: Tue, 10 Mar 2020 18:26:01 +0800
-From: "sales08@innovatetop.com" <sales08@innovatetop.com>
-Subject: All You Need to Know About USB C to HDMI Cable
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conuserg-01.nifty.com (conuserg-01.nifty.com [210.131.2.68])
+ by sourceware.org (Postfix) with ESMTPS id B4E44393FC2C
+ for <cygwin-patches@cygwin.com>; Fri, 13 Mar 2020 03:07:14 +0000 (GMT)
+Received: from localhost.localdomain
+ (ntsitm194054.sitm.nt.ngn.ppp.infoweb.ne.jp [125.0.205.54]) (authenticated)
+ by conuserg-01.nifty.com with ESMTP id 02D36pEG018687;
+ Fri, 13 Mar 2020 12:06:57 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-01.nifty.com 02D36pEG018687
+X-Nifty-SrcIP: [125.0.205.54]
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Sender: sales02@qiuxing.store
-Reply-To: sales08@innovatetop.com
-Message-ID: <2020030010182600010941@qiuxing.store>
-X-Mailer: Foxmail 6, 13, 102, 15 [cn]
-In-Reply-To: <2020030010182600010941@qiuxing.store>
-X-Spam-Status: No, score=3.6 required=5.0 tests=BAYES_50, DEAR_FRIEND,
- HEADER_FROM_DIFFERENT_DOMAINS, HTML_MESSAGE, SPF_HELO_NONE,
- SPF_PASS autolearn=no autolearn_force=no version=3.4.2
-X-Spam-Level: ***
+Subject: [PATCH] Cygwin: pty: Add FreeConsole to destructor of pty slave.
+Date: Fri, 13 Mar 2020 12:06:49 +0900
+Message-Id: <20200313030649.874-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.21.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-27.1 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, GIT_PATCH_1,
+ GIT_PATCH_2, GIT_PATCH_3, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE,
+ SPF_PASS autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: Base64
-Content-Disposition: inline
-X-Content-Filtered-By: Mailman/MimeDel 2.1.29
 X-BeenThere: cygwin-patches@cygwin.com
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -35,66 +32,38 @@ List-Archive: <http://cygwin.com/pipermail/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 10 Mar 2020 10:26:09 -0000
+X-List-Received-Date: Fri, 13 Mar 2020 03:07:15 -0000
 
-RGVhciBmcmllbmQsDQpIb3BlIGl0IGZpbmRzIHdlbGwgd2l0aCB5b3UuDQpUaGlzIGlzIENhcm9s
-IGZyb20gRW1pbmVuY2UtdG9wLg0KT24gMXN0IEZlYnJ1YXJ5LCAyMDIwLCB0aGUgRXVyb3BlYW4g
-VW5pb24gaGFzIHVuaWZpZWQgdGhlIFVTQiBDIGludGVyZmFjZSBmb3IgbW9iaWxlIHBob25lcywg
-YWx0aG91Z2ggQXBwbGUgaW5zaXN0IG9uIHVzaW5nIGxpZ2h0bmluZyBjb25uZWN0b3IgZm9yIGl0
-cyBpcGhvbmUgZGV2aWNlcywgdGhlIG5ldyBBcHBsZSB0YWJsZXQgYW5kIE1hY2Jvb2sgaGFzIGFk
-b3B0ZWQgdGhlIFVTQiBDIGludGVyZmFjZS4gVGhlcmVmb3JlLCBhIGdyb3dpbmcgZGVtYW5kIG9m
-IG9mIFVTQiBDIHRvIEhETUkgY2FibGUgd2lsbCBpbmNyZWFzZSBzaWduaWZpY2FudGx5IHdoZW4g
-dGhlc2UgQXBwbGUgZGV2aWNlcyBhcmUgdG8gYmUgY29ubmVjdGVkIHRvIFRWcywgcHJvamVjdG9y
-cyBhbmQgb3RoZXIgZGV2aWNlcy4gTWFueSBiaWcgYnJhbmRzLCBsaWtlIEFua2VyIGFuZCBCZWxr
-aW4gaGF2ZSByZWNlbnRseSBsYXVuY2hlZCB0aGVpciBvd24gVVNCIEMgdG8gSERNSSBjYWJsZXMg
-ZHVlIHRvIHN1YnN0YW50aWFsIHBvdGVudGlhbCBwcm9maXRzLg0KSSBhbSB3cml0aW5nIHRvIHJl
-Y29tbWVuZCBvdXIgVVNCIEMgdG8gSERNSSBjYWJsZS4gV2UgaGF2ZSBsYXVuY2hlZCBzZXZlcmFs
-IFVTQiBDIHRvIEhETUkgZGF0YSBjYWJsZXMuIFlvdSBjYW4gdXNlIGl0IHRvIGNvbm5lY3QgTWFj
-Ym9vaywgTWFjYm9vayBBaXIgYW5kIG90aGVyIGRldmljZXMgd2l0aCBIRE1JIGludGVyZmFjZS4N
-CldpdGggdGhlIGJlbG93IHNwZWNpZmljYXRpb25zLCBvdXIgVVNCIEMgdG8gSERNSSBjYWJsZSBo
-YXMgdGhlIHZlcnkgcG93ZXJmdWwgZnVuY3Rpb25zIGFuZCBjYW4gc3VwcG9ydCBtb3N0IHRoZSBj
-dXN0b21lcnPigJkgcmVxdWlyZW1lbnRzOg0KRGlzcGxheSBQb3J0IDEuMiBBbHRlcm5hdGUgTW9k
-ZUFsdGVybmF0ZSBNb2RlIGFsbG93cyBhIFVTQiBDIGVxdWlwcGVkIGNvbXB1dGVyIHRvIGNvbm5l
-Y3QgZGlyZWN0bHkgdG8gYSBkaXNwbGF5IG9yIG1vbml0b3IuIFRoZSBtb25pdG9yIHdpbGwgbmVl
-ZCB0byBoYXZlIGEgVVNCIEMgcG9ydCBmb3IgeW91IHRvIG1ha2UgdGhpcyBjb25uZWN0aW9uLg0K
-VVNCIEMgQ29ubmVjdG9yIGFuZCBIRE1JIHBvcnRDYW4gZWFzaWx5IGNvbm5lY3QgYSBVU0IgQyBl
-bmFibGVkIHNtYXJ0cGhvbmUvUEMvTGFwdG9wIHRvIGEgSERUViwgbW9uaXRvciBvciBwcm9qZWN0
-b3Igd2l0aCBIRE1JIHBvcnQuIEl0IGlzIGlkZWFsIGZvciBjb25mZXJlbmNlLCBwcmVzZW50YXRp
-b24sIGdhbWluZywgb3IgZXhwYW5kaW5nIHdvcmtzcGFjZSBieSBjb25uZWN0aW5nIHlvdXIgVVNC
-IEMgZGV2aWNlcyB0byBhIGxhcmdlIHNjcmVlbi4NCjRLQDYwSHogUmVzb2x1dGlvblN1cHBvcnRz
-IHJlc29sdXRpb24gdXAgdG8gNEsqMksgKDM4NDAqMjE2MCksIHVwZ3JhZGVkIHRvIDYwSHouIEJh
-Y2t3YXJkcyBjb21wYXRpYmxlIHdpdGggMTA4MHAuIEl0IGlzIGNhcGFibGUgb2YgZGVsaXZlcmlu
-ZyBpbmNyZWRpYmx5IGZhc3QgZGF0YSB0cmFuc2ZlcnMgYW5kIHRyYW5zbWl0cyB2aWRlbyBhbmQg
-YXVkaW8gd2l0aCBoaWdoIGRlZmluaXRpb24uDQo1RyBUcmFuc2ZlciBTcGVlZCAgU3VwcG9ydCBo
-aWdoIHNwZWVkIGRhdGEgdHJhbnNmZXIsIHVwIHRvIDVHYnBzLg0KU3VwcG9ydCBIaWdoIER5bmFt
-aWMgUmFuZ2UgdmlkZW9IRE1JIG91dHB1dCBzdXBwb3J0cyByZXNvbHV0aW9ucyB1cCB0byA0SyBh
-bmQgcHJvdmlkZXMgYSBzaW1wbGUgcGx1ZyBhbmQgcGxheSBjb25uZWN0aW9uIHRvIGhpZ2gtZGVm
-aW5pdGlvbiBkaXNwbGF5cyBvciBtb25pdG9ycy4NCkhpZ2ggcGVyZm9ybWFuY2UgU2lnbmFsIFRy
-YW5zbWlzc2lvblBsdWcgYW5kIFBsYXksIGRvZXMgbm90IHJlcXVpcmUgYW55IGFkZGl0aW9uYWwg
-cHJvZ3JhbXMuIFRpbm5lZCBjb3BwZXIgd2l0aCB0cmlwbGUtbGF5ZXIgc2hpZWxkaW5nIHRvIGVu
-c3VyZSBzdGFibGUgc2lnbmFsIHRyYW5zbWlzc2lvbjsgQWx1bWludW0gYWxsb3kgQ2FzaW5nLCBO
-eWxvbiBicmFpZGVkIG1hdGVyaWFsIGFuZCBHb2xkLXBsYXRlZCBjb25uZWN0b3JzIHRvIGVuc3Vy
-ZSBhIHN1cGVyaW9yIGR1cmFiaWxpdHkgYW5kIGZ1bmN0aW9uYWxpdHkgdW5kZXIgaGVhdnkgdXNh
-Z2UuDQpDb21wYXRpYmlsaXR5IExpc3RDb21wYXRpYmxlIHdpdGggTWFjQm9vayBQcm8gMTUiKDIw
-MTYtMjAxOCksIE1hY0Jvb2sgUHJvIDEzIigyMDE2LTIwMTkpLCBNYWNCb29rIDIwMTcvMjAxNi8y
-MDE1LCBNYWNCb29rIEFpciAyMDE4LzIwMTksIGlNYWMyMDE4LzIwMTcoMjEuNSIvMjciKSwgaU1h
-YyBwcm8gMjAxOC8yMDE3KDI3IiksIE1hYyBtaW5pLCBNYWMgUHJvLCBTdXJmYWNlIEJvb2sgMiwg
-UGl4ZWxib29rLCBEZWxsIFhQUyAxNS8xMywgaXBhZCBwcm8yMDE4IDEyLjkiKEdlbjMpLCBpcGFk
-IHBybzIwMTggMTEiLCBTdXJmYWNlIEdvLCBTYW1zdW5nIE5vdGUgOC85LzEwLCBTYW1zdW5nIFM4
-L1M5L1MxMCBvciBwbHVzLCBIVUFXRUkgbWF0ZTEwL21hdGUyMC9wMjAvcDMwIGFuZCBtb3JlLg0K
-TWF4IDVNVGhlIHBlcmZlY3QgbGVuZ3RoIDVtIGNhbiBlbmxhcmdlIHRoZSBzY2VuZXMgaW4geW91
-ciBkYWlseSBsaWZlLiBCZXNpZGVzIHRoZSBzY2VuZXMgb2Ygb3RoZXIgc2hvcnRlciBjYWJsZXMg
-YXBwbGllZCBmb3IsIHlvdSBjb3VsZCBhbHNvIGNvbm5lY3QgeW91ciBkZXZpY2VzIHRvIHlvdXIg
-VFYgd2hpbGUgc2l0aW5nIG9uIGEgY29hY2ggb3IgYmVkIGF0IGhvbWUgb3IgaW4gYSBob3RlbC4N
-ClBsZWFzZSBhd2FyZSB0aGF0IHdlIGhhdmUgc2V0IHVwIFZpZXRuYW0gYnJhbmNoIGF0IDIwMTcs
-IGFuZCBzdGFydGVkIHByb2R1Y3Rpb24gbW9zdCBjb25zdW1lciBlbGVjdHJvbmljcyBzaW5jZSB0
-aGUgYmVnaW5uaW5nIG9mIDIwMTgsIGlmIHRoZXJl4oCZcyBhbnkgdGFyaWZmIGNvbmNlc3Npb25z
-IGF2YWlsYWJsZSBmb3IgeW91IHRvIGltcG9ydCBmcm9tIFZpZXRuYW0sIEkgd291bGQgbG92ZSB0
-byBvZmZlciBzdXBwb3J0IC4NCkZvciBtb3JlIGluZm9ybWF0aW9uLCBwbGVhc2UgZG8gbm90IGhl
-c2l0YXRlIHRvIGNvbnRhY3QgbWUsIG9yIHZpc2l0IG91ciB3ZWJzaXRlIGJlbG93Lg0KTG9va2lu
-ZyBmb3J3YXJkIHRvIGhlYXIgZnJvbSB5b3UuDQpUaGFua3MgYW5kIEJlc3QgcmVnYXJkcy4NCkNh
-cm9sIEZhblNoZW56aGVuIEVtaW5lbmNlLVRvcCBUZWNobm9sb2d5IENvLiwgTHRkLg0KQWRk77ya
-WWludGlhbiBpbmR1c3RyaWFsIFBhcmssIFhpeGlhbmcsIEJhbydhbiBkaXN0cmljdCwgU2hlbnpo
-ZW4gNTE4MTAwDQpXZWJzaXRlOiB3d3cuZW1pbmVuY2UtdG9wLmNvbQ0KU2t5cGU6IHNhbGVzMDhf
-NzI5DQpXaGF0c0FwcDogKzg2IDE4Mjc3MjA2OTk3DQpUZWwvV2VjaGF0OiArODYgMTczMDI2NjU4
-MTYNCg==
+- When pseudo console is closed, all the processes attched to the
+  pseudo console are terminated. This causes the problem reported
+  in https://sourceware.org/pipermail/cygwin/2020-March/244046.html.
+  This patch fixes the issue.
+---
+ winsup/cygwin/fhandler_tty.cc | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+index b42e0aeb6..b2e725d5d 100644
+--- a/winsup/cygwin/fhandler_tty.cc
++++ b/winsup/cygwin/fhandler_tty.cc
+@@ -706,8 +706,15 @@ fhandler_pty_slave::fhandler_pty_slave (int unit)
+ fhandler_pty_slave::~fhandler_pty_slave ()
+ {
+   if (!get_ttyp ())
+-    /* Why comes here? Who clears _tc? */
+-    return;
++    {
++      /* Why comes here? Who clears _tc? */
++      if (freeconsole_on_close)
++	{
++	  FreeConsole ();
++	  pcon_attached_to = -1;
++	}
++      return;
++    }
+   if (get_pseudo_console ())
+     {
+       int used = 0;
+-- 
+2.21.0
+
