@@ -1,56 +1,45 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
- by sourceware.org (Postfix) with ESMTPS id 3C21A387702F
- for <cygwin-patches@cygwin.com>; Thu, 19 Mar 2020 15:45:07 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 3C21A387702F
+Return-Path: <jon.turney@dronecode.org.uk>
+Received: from sa-prd-fep-040.btinternet.com (mailomta31-sa.btinternet.com
+ [213.120.69.37])
+ by sourceware.org (Postfix) with ESMTPS id C20AF385F01D
+ for <cygwin-patches@cygwin.com>; Thu, 19 Mar 2020 16:43:53 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org C20AF385F01D
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=dronecode.org.uk
 Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1N6bwO-1jM45z1RN8-0180sp; Thu, 19 Mar 2020 16:45:01 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id DE67FA80734; Thu, 19 Mar 2020 16:45:00 +0100 (CET)
-Date: Thu, 19 Mar 2020 16:45:00 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: Jon Turney <jon.turney@dronecode.org.uk>
-Cc: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: Use a separate Start Menu folder for WoW64
- installs
-Message-ID: <20200319154500.GG778468@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: Jon Turney <jon.turney@dronecode.org.uk>,
- cygwin-patches@cygwin.com
-References: <20200319135837.2104-1-jon.turney@dronecode.org.uk>
- <20200319150249.GC778468@calimero.vinschen.de>
- <20200319150419.GD778468@calimero.vinschen.de>
- <38387a81-5368-e6ec-b653-fd6f6e05478f@dronecode.org.uk>
+ spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
+Received: from sa-prd-rgout-001.btmx-prd.synchronoss.net ([10.2.38.4])
+ by sa-prd-fep-040.btinternet.com with ESMTP id
+ <20200319164352.EPMB30239.sa-prd-fep-040.btinternet.com@sa-prd-rgout-001.btmx-prd.synchronoss.net>;
+ Thu, 19 Mar 2020 16:43:52 +0000
+Authentication-Results: btinternet.com;
+ auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com
+X-Originating-IP: [31.51.206.134]
+X-OWM-Source-IP: 31.51.206.134 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedugedrudefledgleduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucffohhmrghinhepshhouhhrtggvfigrrhgvrdhorhhgpdgthihgfihinhdqughotgdrshhhnecukfhppeefuddrhedurddvtdeirddufeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeefuddrhedurddvtdeirddufeegpdhmrghilhhfrhhomhepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqedprhgtphhtthhopeeotgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomheqpdhrtghpthhtohepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqe
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from localhost.localdomain (31.51.206.134) by
+ sa-prd-rgout-001.btmx-prd.synchronoss.net (5.8.340) (authenticated as
+ jonturney@btinternet.com)
+ id 5E3A241106ADDDF8; Thu, 19 Mar 2020 16:43:52 +0000
+From: Jon Turney <jon.turney@dronecode.org.uk>
+To: cygwin-patches@cygwin.com
+Cc: Jon Turney <jon.turney@dronecode.org.uk>
+Subject: [PATCH] Cygwin: Use a separate Start Menu folder for WoW64 installs
+Date: Thu, 19 Mar 2020 16:43:41 +0000
+Message-Id: <20200319164341.3313-1-jon.turney@dronecode.org.uk>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20200319154500.GG778468@calimero.vinschen.de>
+References: <20200319154500.GG778468@calimero.vinschen.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature"; boundary="mR8QP4gmHujQHb1c"
-Content-Disposition: inline
-In-Reply-To: <38387a81-5368-e6ec-b653-fd6f6e05478f@dronecode.org.uk>
-X-Provags-ID: V03:K1:CZI2t/9qeT9E1Ykl93wJig5DIbSDQrFjQrtEXC5Q/nTbgztI+PF
- Znqv40eq9hF+kEbDfTztBVwWH1F0ZLFGGUTDbXalkLK9maM+g6bGocn5BmjHIGyfSZnYQkx
- PK8hZrMq4aV2KXs/l84NIHUafTZE602wfY6+oVn4JFWBqBqe98IQJlef9bF0IPiGQy8RHFj
- XHW3bvgcYQTz1AiNj+vlg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:vJqLhJBNYXg=:5/5vT/dRzVmY7G78a/sHzc
- u2WLAh/8/2J3xCnAHq9TP3CivE8iRe6cpT9d/8nXnRT+hLBQh2lsy1iBNlrahMVZKhGHQkmyv
- /lBYdWH+48cfSNPrYWZ+P2nRkr2gZZuOAvga3jWYSsgAZA5tRi4QFFlWJ3UUI7beec7vHQk9o
- TJ8IQiVGUW33n1MRSKZwiHJfjy88Y6gS7W24c1EKhWVpuzFnsFraNdabVqw0JAHdTtp1NUFKJ
- 8wDOkKXkWYYBlyZmy/J0HlOkrIj/HXMananEFZeT4sR9Azgk7Ctqdb/wwC7aUFVFmSUEqsySK
- YHADaBRmFz53MLVBOPPFwtZdvoZ6bJMEgOj4GDOBFrHO1iOemiqKq50D0v3MK9eQwupT+d9pc
- KbYwymYQ6k7i5qrpnjRgM5+C3K1lWaObP7OPitIusNSPI//0B0WbpR4f/sE1oau77Dbgl0KN5
- /maIYJk/Ao5MFd44lx7B81dS8sPEk/FYc4VosSSwI9zP1Gi4XTu+sUPi2SMGLiTak5PGdhZi5
- 6UzV1+NUtkSatrEKS9VOh0dz0X7+Lu8KOcee52a3sUM9wyZmfHlLqb0o3vP9B/SLB3y80z6ie
- WDIo+k/QXdlft91S+JEXXpBCcGG1u8ivQdQcJ1JqmdVjpWMTEBp7hfjhZ4OljH7tde8PhQdYo
- VsS0so5bOlcCsudkGLo+KpFp8WmyVOSJUugQ9NMNkmBbYivNooBFKxEHhFNf0Z59qSAn8Jz6C
- YTEZVGpGWpFXm5a0V0nuDy2c+lDc4CVmWaevwnuWSlV+F0odpYte4EDBk58q/DFcqNnoVgexs
- AThm0yty3WPE1c2PufCU5aVImviotjdCVXUtGZ1xzIUa5DZpM9m1tc7bHGfY0OmXDLk7xxI
-X-Spam-Status: No, score=-99.2 required=5.0 tests=GOOD_FROM_CORINNA_CYGWIN,
- KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE,
- SPF_NEUTRAL autolearn=ham autolearn_force=no version=3.4.2
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-23.7 required=5.0 tests=FORGED_SPF_HELO, GIT_PATCH_0,
+ GIT_PATCH_1, GIT_PATCH_2, GIT_PATCH_3, KAM_DMARC_STATUS,
+ KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW, SPF_HELO_PASS,
+ SPF_NONE autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -63,63 +52,78 @@ List-Archive: <http://cygwin.com/pipermail/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 19 Mar 2020 15:45:08 -0000
+X-List-Received-Date: Thu, 19 Mar 2020 16:43:55 -0000
 
+This aligns the shortcuts to documentation with the setup changes in
+https://sourceware.org/pipermail/cygwin-apps/2020-March/039873.html
 
---mR8QP4gmHujQHb1c
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+v2:
+Create/remove the Start Menu directory as needed/possible
+Correctly use that directory when making shortcuts
+---
+ winsup/doc/etc.postinstall.cygwin-doc.sh | 12 ++++++------
+ winsup/doc/etc.preremove.cygwin-doc.sh   |  5 ++++-
+ 2 files changed, 10 insertions(+), 7 deletions(-)
 
-On Mar 19 15:40, Jon Turney wrote:
-> On 19/03/2020 15:04, Corinna Vinschen wrote:
-> > On Mar 19 16:02, Corinna Vinschen wrote:
-> > > On Mar 19 13:58, Jon Turney wrote:
-> > > > This aligns the shortcuts to documentation with the setup changes in
-> > > > https://sourceware.org/pipermail/cygwin-apps/2020-March/039873.html
-> [...]
-> > > Good idea, please push.
-> >=20
-> > ...this requires a new release of setup and Cygwin in lockstep, right?
->=20
-> Worse than that, since this postinstall script checks if smpc_dir exists,
-> and does nothing if it doesn't.
->=20
-> So I think I probably want to change that to creating the smpc_dir if it
-> doesn't exist, so we don't require that the updated setup has run (and
-> completed, creating that directory) before we run that postinstall script.
->=20
-> Sigh.
+diff --git a/winsup/doc/etc.postinstall.cygwin-doc.sh b/winsup/doc/etc.postinstall.cygwin-doc.sh
+index de7d9e0c3..97f88a16d 100755
+--- a/winsup/doc/etc.postinstall.cygwin-doc.sh
++++ b/winsup/doc/etc.postinstall.cygwin-doc.sh
+@@ -37,10 +37,11 @@ do
+ done
+ 
+ # Cygwin Start Menu directory
+-smpc_dir="$($cygp $CYGWINFORALL -P -U --)/Cygwin"
++case $(uname -s) in *-WOW*) wow64=" (32-bit)" ;; esac
++smpc_dir="$($cygp $CYGWINFORALL -P -U --)/Cygwin${wow64}"
+ 
+-# check Cygwin Start Menu directory exists
+-[ -d "$smpc_dir/" ] || exit 0
++# ensure Cygwin Start Menu directory exists
++/usr/bin/mkdir -p "$smpc_dir"
+ 
+ # check Cygwin Start Menu directory writable
+ if [ ! -w "$smpc_dir/" ]
+@@ -52,7 +53,7 @@ fi
+ # create User Guide and API PDF and HTML shortcuts
+ while read target name desc
+ do
+-	[ -r "$target" ] && $mks $CYGWINFORALL -P -n "Cygwin/$name" -d "$desc" -- $target
++	[ -r "$target" ] && $mks $CYGWINFORALL -P -n "Cygwin${wow64}/$name" -d "$desc" -- $target
+ done <<EOF
+ $doc/cygwin-ug-net.pdf		User\ Guide\ \(PDF\)  Cygwin\ User\ Guide\ PDF
+ $html/cygwin-ug-net/index.html	User\ Guide\ \(HTML\) Cygwin\ User\ Guide\ HTML
+@@ -63,9 +64,8 @@ EOF
+ # create Home Page and FAQ URL link shortcuts
+ while read target name desc
+ do
+-	$mks $CYGWINFORALL -P -n "Cygwin/$name" -d "$desc" -a $target -- $launch
++	$mks $CYGWINFORALL -P -n "Cygwin${wow64}/$name" -d "$desc" -a $target -- $launch
+ done <<EOF
+ $site/index.html	Home\ Page	Cygwin\ Home\ Page\ Link
+ $site/faq.html		FAQ	Cygwin\ Frequently\ Asked\ Questions\ Link
+ EOF
+-
+diff --git a/winsup/doc/etc.preremove.cygwin-doc.sh b/winsup/doc/etc.preremove.cygwin-doc.sh
+index 5e47eb579..b098e6dac 100755
+--- a/winsup/doc/etc.preremove.cygwin-doc.sh
++++ b/winsup/doc/etc.preremove.cygwin-doc.sh
+@@ -26,7 +26,8 @@ do
+ done
+ 
+ # Cygwin Start Menu directory
+-smpc_dir="$($cygp $CYGWINFORALL -P -U --)/Cygwin"
++case $(uname -s) in *-WOW*) wow64=" (32-bit)" ;; esac
++smpc_dir="$($cygp $CYGWINFORALL -P -U --)/Cygwin${wow64}"
+ 
+ # check Cygwin Start Menu directory still exists
+ [ -d "$smpc_dir/" ] || exit 0
+@@ -52,3 +53,5 @@ $site/index.html	Home\ Page	Cygwin\ Home\ Page\ Link
+ $site/faq.html		FAQ	Cygwin\ Frequently\ Asked\ Questions\ Link
+ EOF
+ 
++# remove Cygwin Start Menu directory if empty
++/usr/bin/rmdir --ignore-fail-on-non-empty "${smpc_dir}"
+-- 
+2.21.0
 
-No worries.  You have free reign over that postinstall issue.  Just
-go ahead as you see fit.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen
-Cygwin Maintainer
-
---mR8QP4gmHujQHb1c
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl5zk3wACgkQ9TYGna5E
-T6C1yw/9EswevZFFY8hZUDqAMpBQA4wGbrhAvmED8X9uQYNZQt56fSOdQxV3oTNk
-n9X9+bC7o74Ef1PTQJTxqsyYoqWgAvTuDwxZSeFcjby46S8DIk2F9DEuALVd0jMf
-IY+iRGUenPBoTsvN1bUwmdsCO6UdOCVWwSHiMjjUqsE3ABdPsIBrKqmnawkwKgvO
-divuuurRqnHKtj7XpriKU2iAVMLxFIbMdYV2QBP34kCyenPNPK3jBiD42pEfYL6z
-04J3AVO5RlgSgpq05/eGjyTC+M5vNAjA6odFyfwXsxaPii/Y0Tb3D9SDuSIlsQOl
-t9x+u5mBYBU4XmOZCvSLFoWR1MqM7TL1C2o+h+PTO5OgnqnZ3xj0kbC1bzo+xmMg
-4R/GOfZLyT6jmPgUbCX84ryutHS0DrZgvh5yFx4aKJLYtcsiLmISV8nZmOk2HcAP
-TJRm8SkfuIzQtSm/sU7LK4MDMO6YdVpd/NvqTUnWZh159FaQ0Leb2chdHhIg18/U
-mq/b1wCEZm6Afax1vew76Z/SvnBiBIvq8goFQVQdBY0zKHY/3ROUY8ScYn6x2EcV
-UPIIVpaw5OmvN6y7ksi/ew7Z6sKa7itlujbQYvC+I5tOLqQlU4cjS+COeYq0eSWg
-z9qoUk4/EB6YvE6/eYj2XuuZFVvxCKKnQwOn2Vf8E2MQqzucxB0=
-=yrtk
------END PGP SIGNATURE-----
-
---mR8QP4gmHujQHb1c--
