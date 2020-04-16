@@ -1,52 +1,46 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
- by sourceware.org (Postfix) with ESMTPS id 850EA385DC1C
- for <cygwin-patches@cygwin.com>; Tue, 14 Apr 2020 10:37:52 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 850EA385DC1C
-Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1M26iv-1jQEtB3hQf-002Taq for <cygwin-patches@cygwin.com>; Tue, 14 Apr 2020
- 12:37:48 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 5A667A826F8; Tue, 14 Apr 2020 12:37:48 +0200 (CEST)
-Date: Tue, 14 Apr 2020 12:37:48 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: Cygwin Patches <cygwin-patches@cygwin.com>
-Subject: Re: [PATCH] proc_cpuinfo: Add PPIN support for AMD
-Message-ID: <20200414103748.GB3943@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: Cygwin Patches <cygwin-patches@cygwin.com>
-References: <20200411043527.6881-1-Brian.Inglis@SystematicSW.ab.ca>
+Return-Path: <david.macek.0@gmail.com>
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com
+ [IPv6:2a00:1450:4864:20::342])
+ by sourceware.org (Postfix) with ESMTPS id EA5BB385B835
+ for <cygwin-patches@cygwin.com>; Thu, 16 Apr 2020 21:09:17 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org EA5BB385B835
+Received: by mail-wm1-x342.google.com with SMTP id r26so387788wmh.0
+ for <cygwin-patches@cygwin.com>; Thu, 16 Apr 2020 14:09:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+ :content-transfer-encoding;
+ bh=NMmHUGhztbSqcierimHP+bDeCjVsQhAa1nEinGPqPGI=;
+ b=dIFiBYbOQFmJtiknUmZRleMxlEcscW5LcNcCyELLMlu9dMFB9RPUbFIY73prlieWZt
+ afg7wqHfcH4TnasXHknS2pZSB7UfRqRL9HqAZjUSdfrb5kVcPRkogwvrXJb15L5YI/wR
+ ShjYSvsEmgtp99hOqegtYmhU2phgSGXJzvsXfIZLfPke2UdP6TeQN0fEbMDnwwCynupZ
+ MTCCeZdtf3jFfHreMfg+pCFUCzSgeA9DUt6gtnufEugNBegOslRlV3ER/7en7V233GVK
+ 4PKM9Ct70tOT9HxAvuyzLJ+/gJzodEyisEH6HuCVMC76nXSlCuw7mMftU6MCTRCZ5JgF
+ u9wA==
+X-Gm-Message-State: AGi0PuYS1MM6O8a1sId6ym9XTFDEqkoK3ZGpwlzdx98J8xUJ06xoYA2p
+ ejnpQP/mh9WhqopfUXI3ErgyOzNUhR0=
+X-Google-Smtp-Source: APiQypLYrIfBndcqYeT8WUGSmzewMrfKNiHsyz3RfOZbv9GQhqgQvLX4rWo9n3+rJjRZEGXe1MtHAg==
+X-Received: by 2002:a7b:cb86:: with SMTP id m6mr6393941wmi.64.1587071356656;
+ Thu, 16 Apr 2020 14:09:16 -0700 (PDT)
+Received: from localhost ([193.165.97.202])
+ by smtp.gmail.com with ESMTPSA id g74sm5213808wme.44.2020.04.16.14.09.15
+ for <cygwin-patches@cygwin.com>
+ (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+ Thu, 16 Apr 2020 14:09:16 -0700 (PDT)
+Date: Thu, 16 Apr 2020 23:09:07 +0200
+From: David Macek <david.macek.0@gmail.com>
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] cygheap_pwdgrp: Handle invalid db_* entries correctly
+Message-ID: <20200416225237.00004a1a@gmail.com>
+X-Mailer: Claws Mail 3.15.0 (GTK+ 2.24.31; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature"; boundary="cWoXeonUoKmBZSoM"
-Content-Disposition: inline
-In-Reply-To: <20200411043527.6881-1-Brian.Inglis@SystematicSW.ab.ca>
-X-Provags-ID: V03:K1:mqMeScdmDWf+/yO4GfKqH39ZNVXJQivKRwNLAvqAjedSkcXe5Zw
- 7jP01zmyxL+wArzv5jn9jidk2uWudNU3LRFxHvPWFUl3vIro5Af8Hg7VUMhPFjppU904sP5
- da79y5332xk5gPvHEqQXYPgc/8IvYBEj6znPo388f6pKKz2dTiIRSK8715ljsEVIdM/A+UB
- 7sYfO0Aw83kBoY1BMSRbw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:lPouaiwWQMM=:3IJBvrbeBp3IlLaubR9Jgq
- KxQkF83Q3SUOJncCfq8otP06fskXt7dM9yjFLeDjbnoe4jCpIiDmoT1kIgPZCk/waKNEuQyIe
- mFJUUDjU3YSnVwIuZ7bs3s7zJrXo8oTb8vop57bD/hXyUFdNdkW3Zpjxkksh6K1dRLJ1qUPtF
- B44EkgnfOoPsHQT624c5HjVG+0X+WQTE56SWy7Ade8snaxlKSBPYU0P818MfzAFT5Go+n4UcB
- VFTp7LgsgcQ4yHUJAUbUlVS5zjWoderaHVrhUyWwMA0B6KXwRQE0QeFhBmAy4SYw1slIk0d5u
- b1ZIqlKH/LtChSM3mGyYyVeYwLe1wqF4YwoSM5sx2/4rUnLHwnS+BRBZRgbYDFpeN25Iw7ynA
- ZoC7SjMwz1wYNtTHFjXUs+VahFHHZBcO8qdPQTZQWZ9xtLh/MvZN2FY1aSKZcSduWPbUfgRwg
- QK7WeSV+iMJv/8DvYzs/nJzabw2jDv1JrgYmx62CiQ6aomlaW7PUlolvrkqZpXGpaAf0z2vTg
- Ud6VHVC4zqm43T/ymyj2wxEOK6o6nk4PDBvgDmKQ3WBJaVHS/R2sHaeAJldRmx8Jy+HHKFhS7
- jdUwSQGvJ+ZT82RJlKfrYMi5ne+wRDVDpjqr3MNhKXRvSEb3X7YhQg9p6O0u4mMSGN8k63U0o
- 3Fl+y09q4zA7xxH014/PF23y+Fz0Kr6XJzRLRhlP/gX+Ogb704FCESWHehEcTxaw1BBuJKvvO
- QW15xZBJRaLWqhc89yuWgsu5jouKuyMnL9EanmXpVP3wL0bW78GcXo1/0KnmmhgF2+58zEjNb
- VDAmQj3BFSN8iKFpJlYTdNmji67h1eZV+KY8jj7ywaBG2HHqppenhJ+/yiTS5AiNGN6RtYu
-X-Spam-Status: No, score=-107.9 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- GIT_PATCH_1, GIT_PATCH_2, GIT_PATCH_3, GOOD_FROM_CORINNA_CYGWIN,
- JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE,
- SPF_NEUTRAL, TXREP autolearn=ham autolearn_force=no version=3.4.2
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-22.0 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, FREEMAIL_ENVFROM_END_DIGIT,
+ FREEMAIL_FROM, GIT_PATCH_0, GIT_PATCH_1, GIT_PATCH_2, GIT_PATCH_3,
+ RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_PASS,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -60,69 +54,33 @@ List-Archive: <https://cygwin.com/pipermail/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 14 Apr 2020 10:37:54 -0000
+X-List-Received-Date: Thu, 16 Apr 2020 21:09:20 -0000
 
+If the first scheme in db_* was invalid, the code would think there
+were no schemes specified and replace the second scheme with
+NSS_SCHEME_DESC.
 
---cWoXeonUoKmBZSoM
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: David Macek <david.macek.0@gmail.com>
+---
+ winsup/cygwin/uinfo.cc | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-On Apr 10 22:35, Brian Inglis wrote:
-> Newer AMD CPUs support a feature called protected processor
-> identification number (PPIN). This feature can be detected via
-> CPUID_Fn80000008_EBX[23].
-> ---
->  winsup/cygwin/fhandler_proc.cc | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/winsup/cygwin/fhandler_proc.cc b/winsup/cygwin/fhandler_proc=
-=2Ecc
-> index 605a8443f0..5c5f4bd9ef 100644
-> --- a/winsup/cygwin/fhandler_proc.cc
-> +++ b/winsup/cygwin/fhandler_proc.cc
-> @@ -1262,6 +1262,7 @@ format_proc_cpuinfo (void *, char *&destbuf)
->  /*	  ftcprint (features1, 14, "ibrs" ); */	    /* ind br restricted spec=
- */
->  /*	  ftcprint (features1, 15, "stibp"); */	    /* 1 thread ind br pred */
->  /*	  ftcprint (features1, 17, "stibp_always_on"); */ /* stibp always on =
-*/
-> +	  ftcprint (features1, 23, "amd_ppin");     /* protected proc id no */
->  /*	  ftcprint (features1, 24, "ssbd"); */	    /* spec store byp dis */
->  	  ftcprint (features1, 25, "virt_ssbd");    /* vir spec store byp dis */
->  /*	  ftcprint (features1, 26, "ssb_no"); */    /* ssb fixed in hardware =
-*/
-> --=20
-> 2.21.0
+diff --git a/winsup/cygwin/uinfo.cc b/winsup/cygwin/uinfo.cc
+index bfcce00da0..be3c4855cc 100644
+--- a/winsup/cygwin/uinfo.cc
++++ b/winsup/cygwin/uinfo.cc
+@@ -823,7 +823,10 @@ cygheap_pwdgrp::nss_init_line (const char *line)
+ 					  c, e - c);
+ 		    }
+ 		  else
+-		    debug_printf ("Invalid nsswitch.conf content: %s", line);
++		    {
++		      debug_printf ("Invalid nsswitch.conf content: %s", line);
++		      --idx;
++		    }
+ 		  c += strcspn (c, " \t");
+ 		  c += strspn (c, " \t");
+ 		  ++idx;
+-- 
+2.26.1.windows.1
 
-Pushed.
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen
-Cygwin Maintainer
-
---cWoXeonUoKmBZSoM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl6VknwACgkQ9TYGna5E
-T6DpGxAAlKRK/JpOxq2NQGhD2vyP9og7F/OSnKneDi3o/1wi9CSWNmI9NV5MwKQJ
-Kll6MNaN6cqnvmwgCb7nM0EgWQ7deCnpTOIPdzn8JarBlFoDYhh6DZ39N4qRWiYj
-lxX+WqDNk0wlh/BvCB2EBfMYBW6M3G7o922kFywr2ayICQzHqWL6cB2TpgGG7Nwi
-MYAsel4QCEG0fQKhdGqCcYNfg1Dt4a0YldiHjBU3qKsNERLa14fWiUDhtKGMqb7W
-ki+P9wSkW1QFiIaZPB5osHN1gNK2hMslsFzARCf6WCPw1L7FabayVVUg+juymHLl
-YPjxwqiubcunlt2kz1/VcseNmfBTC/tdLNgfFqM6ULcQKxiqQ7S77GzFSR8mdIvc
-sNGx4DAnb9h16qtyzDLJPGMVcvF8tc/BRt2L5pURm+xu9LNUfYOBIppdCi8AN/RJ
-VccQzmnJq13wmRa+/gHetRHZJGVJisXc17RdA5oVzIVseGALtg5cwueFUEil5fkJ
-4Z2Jb7hneAcR8vbNStseiEknCCh/TjoIKXFvNIu3Q+8tuf5x/CqxcRZ8/bCacsKk
-b2qkr04xWX6CbGZHVYy1HkEJ1Uk6R6BvD61Hr9jPsbsQb7DVywSohhgH2C11GVwj
-B9KwBqU7xYrP3QTbAARyVCfXiIR3qW1S4Kxq76q2Sn29iHIbV0w=
-=Hdi1
------END PGP SIGNATURE-----
-
---cWoXeonUoKmBZSoM--
