@@ -1,52 +1,52 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
- by sourceware.org (Postfix) with ESMTPS id 59CBF385B835
- for <cygwin-patches@cygwin.com>; Fri, 17 Apr 2020 15:19:54 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 59CBF385B835
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+ by sourceware.org (Postfix) with ESMTPS id 623B0385B835
+ for <cygwin-patches@cygwin.com>; Fri, 17 Apr 2020 15:34:09 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 623B0385B835
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org;
  spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MDy54-1jZOwv0ipQ-009zjl for <cygwin-patches@cygwin.com>; Fri, 17 Apr 2020
- 17:19:53 +0200
+ mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1N64JK-1j9u9I0Duq-016PWw for <cygwin-patches@cygwin.com>; Fri, 17 Apr 2020
+ 17:34:08 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 6BF0BA826F8; Fri, 17 Apr 2020 17:19:52 +0200 (CEST)
-Date: Fri, 17 Apr 2020 17:19:52 +0200
+ id 7DAD6A826FB; Fri, 17 Apr 2020 17:34:07 +0200 (CEST)
+Date: Fri, 17 Apr 2020 17:34:07 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 1/2] cygheap_pwdgrp: Don't invent undocumented defaults
- in nsswitch.conf
-Message-ID: <20200417151952.GL3943@calimero.vinschen.de>
+Subject: Re: [PATCH 2/2] cygheap_pwdgrp: Don't keep old schemes when parsing
+ nsswitch.conf
+Message-ID: <20200417153407.GM3943@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200417113051.000020ef@gmail.com>
+References: <20200417113107.00005311@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature"; boundary="7lMq7vMTJT4tNk0a"
+ protocol="application/pgp-signature"; boundary="9jHkwA2TBA/ec6v+"
 Content-Disposition: inline
-In-Reply-To: <20200417113051.000020ef@gmail.com>
-X-Provags-ID: V03:K1:s9PPasoIQSuQKxoFtQ8u76h2vzzYkdnJaTQZ+HlDYCPizrxe4gv
- rbZRmZgL5/1RLgu4oFsRZndiDeh1/SHHhR0orEpx8U+coyIMUCqQ0St+w0CKFuVU9grDuJk
- BhW0cjFMD0XFiuipFElWHeR3L77W6RH3yS/ypAWReumMIqWKp6PIFlTlDFkCFRZ5IkDyZBn
- cjQ9bmYrhM8J0AhEL9vig==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:2Z6TOIdPJfs=:E0cwsrr2yD5Q+lymfYFtd7
- zK/MoEG0xuQid+XgQzKF2FtWLokGldKyHTI6LVTPP1+o8wggeouHu91ySNXPoFLiVnl5+O6Dy
- 5voQdtbmf6OkYGhqmbvIKeNHAJNSwCOtbIHYgl52yJW0Sd9XmGaA8Tgbn1YCCS9cJcTlffbKN
- sAfVhU5ySS+BURsSnE7xLtHxx2DDg7Utc9knuyqE11ZJpBM84DfN18OFTYTBpsRTqTJKovoPU
- 4abcY0A0dPKwKo27vyoUaDxIKgHXk7dsGdVNOd4kGKUCu6CcCZjMTskBMQtDstjRAW4HT7113
- hmrAmhSMNcRuQOdImdKW1MmLc/Qwwz42D32ozSDCzLLhWOOLe7O+LK1Fe/MYugpKmYO4ZGfQV
- 97nY4bagu4INhJdMaFq5NnGhL6nLwFCp0DHqzRgmpKelD+uQ66NSssMjD0gdQ3qbk29op6EPf
- 0ed5ozrVBiBAoCdAoe+sAlDxNIdY0b30nXPCn6x1Z7FP8r34fh4bhAIBpxFYOpDJC3hc92hUw
- t//JfU1rc7yGke1eEXbRiRZybiYiQLJToe9cfZ5Ik6S2hYZ+lYZ0M+V49QyEnzovhDDxQ3YOO
- hcEBytcu19VZO5HqzRQiEvwKYiquKrjaMLe1k9F6P9aa9ktUQWVZZORzjf56J7c5MZdhwDmbj
- au7RTP1KGa6fLv+jiz3HhR9goo3EaTGlLOZuoO2e/sGV5jkGFtQ2WvvrFPAKuJjlcw6UWWuT9
- d+VN5BW7oTIdajmsSghj3Y7n88DNq5k7IDo3dRrdqcoB9FWpu15cEaqaHy6RHCnzSMOyifTv5
- npFzC8mWVqVrFCFYbksYH/wTz4C2M8sJLr8NbHx6wYvOJxODcClktud0whJJH7JAVyLCg7q
-X-Spam-Status: No, score=-108.7 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+In-Reply-To: <20200417113107.00005311@gmail.com>
+X-Provags-ID: V03:K1:MaRICpbYyb834UnquQuXJgZQH2X8G24AVg4J04crZ+XRA8eSJ93
+ JvpKMkWVdUPdQRnzXy0tepwLx60xzi7nwYx9MVgPBzpK/YE2e2AOlA4v82f8M0e84QjKs17
+ /2antcTzhGk27u9xn3/nwdhmACkziT2o0ZuVgyiCx3LWsMIP6B5ZOTFr2TBLXRjLW+FmDz5
+ sWSkRFBvIyg6NkmXTODNA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:xGpA1QttYyU=:PQ7BveyDcyyKpwj5KNUXYo
+ fj+y534VnVnI7QECb+7zHE4l6gXN6JTQpMG0itMizKtl5WKDksx0xfoPLBARIXi9suBq0VomX
+ P0s3wXbSbmvG7Dg55bXG62gNAUaE/YktMgfePfRuOQSgV0s5LW44sqEi44t1iqzq5UDMTkLov
+ zwsBVtV9iMqTsOlef8ocnL+rzxPQZyHNxrlEcSQyRZJt1oRrl932Ux0uHQxYAogkZMoey6nn9
+ xbsNBfJVAEmgcgcU59CE+HzBBK+42ARGiztSuR4HFPFbGGBQSXsmT0oDm+AxlpXAF6Z0MQ9al
+ e0H8Xg0iZ2OA2tO9SVDUMAcEqwNmjIwPRdBxARgRN9DYE1+gnT0cQj4tsouLt+DFBrjX87iHS
+ zQpaGEsimwKjdJSXxbklTe3fEHVKNy47jGo94yW7CPCS81XlBsJucInwVhXU09zjiD51LTGM/
+ +E6GeQFk7mc2cc5GD0jLvyveLa4F1v6gc46N0xNn8P0tMupRLBirKPvJOXDOMK3HcDyTKaclX
+ XJYEJ8jGFEjvJlCy35MXDnYFlQ+Y0YAq0j0uEOLdLqZDas/nWtgonpm7B1SPXWbIQXNRbxQaT
+ RwvHxTiLzJpAmAgSho5YAK6/8/jIT0qIAMVa7SVrtOm00FbqN59Qr2ZCQngsOweLMWEtuOQgb
+ d9AVnI5ZYXSRJgPm9gL4xAMO1vwlSRLLSWEb9S0pAj8N6ENWP9ohqd7YmstzvIWr0SEKaEQ5h
+ ckWzIZxHNeQjMerknPnPjT/+3zOk42kHFdoFRuVZUBTSGgCH1CUZRLava/2UqKKK/xcCdhakz
+ RgEEHBpfyZc79GQHnH4KK1Li6AoepOU8MSCASqzlZqt8Hob4Ko3OM0IN+oxOMQA8jah5mOe
+X-Spam-Status: No, score=-108.8 required=5.0 tests=BAYES_00, GIT_PATCH_0,
  GIT_PATCH_1, GIT_PATCH_2, GIT_PATCH_3, GOOD_FROM_CORINNA_CYGWIN,
- KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE,
+ JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE,
  SPF_NEUTRAL, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -61,44 +61,82 @@ List-Archive: <https://cygwin.com/pipermail/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 17 Apr 2020 15:19:56 -0000
+X-List-Received-Date: Fri, 17 Apr 2020 15:34:11 -0000
 
 
---7lMq7vMTJT4tNk0a
+--9jHkwA2TBA/ec6v+
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Apr 17 11:30, David Macek via Cygwin-patches wrote:
+On Apr 17 11:31, David Macek via Cygwin-patches wrote:
+> The implicit assumption seemed to be that any subsequent occurence of
+> the same setting in nsswitch.conf is supposed to rewrite the previous
+> ones completely.  This was not the case if the third or any further
+> schema was previously defined and the last line defined less than that
+> (but at least 2), for example:
+>=20
+> ```
+> db_home: windows cygwin /myhome/%U
+> db_home: cygwin desc
+> ```
+>=20
+> Let's document this behavior as well.
 > ---
->  winsup/cygwin/uinfo.cc | 6 ------
->  1 file changed, 6 deletions(-)
+>  winsup/cygwin/uinfo.cc | 5 +++--
+>  winsup/doc/ntsec.xml   | 5 +++++
+>  2 files changed, 8 insertions(+), 2 deletions(-)
 >=20
 > diff --git a/winsup/cygwin/uinfo.cc b/winsup/cygwin/uinfo.cc
-> index 57d90189d3..227faa4248 100644
+> index 227faa4248..a4fcc33d8d 100644
 > --- a/winsup/cygwin/uinfo.cc
 > +++ b/winsup/cygwin/uinfo.cc
-> @@ -831,12 +831,6 @@ cygheap_pwdgrp::nss_init_line (const char *line)
->  		  c +=3D strspn (c, " \t");
->  		  ++idx;
->  		}
-> -	      /* If nothing has been set, revert to default. */
-> -	      if (scheme[0].method =3D=3D NSS_SCHEME_FALLBACK)
-> -		{
-> -		  scheme[0].method =3D NSS_SCHEME_CYGWIN;
-> -		  scheme[1].method =3D NSS_SCHEME_DESC;
-> -		}
->  	    }
->  	}
->        break;
-> --=20
-> 2.26.1.windows.1
+> @@ -793,9 +793,10 @@ cygheap_pwdgrp::nss_init_line (const char *line)
+>  	    scheme =3D gecos_scheme;
+>  	  if (scheme)
+>  	    {
+> -	      uint16_t idx =3D 0;
+> +	      for (uint16_t idx =3D 0; idx < NSS_SCHEME_MAX; ++idx)
+> +		scheme[idx].method =3D NSS_SCHEME_FALLBACK;
+> =20
+> -	      scheme[0].method =3D scheme[1].method =3D NSS_SCHEME_FALLBACK;
+> +	      uint16_t idx =3D 0;
 
-The defaults are not undocumented, see at least the source, uinfo.cc
-line 629ff.  If I screwed that up somehow, the right patch is to make
-sure the defaults are set right in cygheap_pwdgrp::init, rather than
-removing the defaults altogether.  If it's really important, we can also
-add the exact default settings to the docs.
+Hmmm.  This `idx' usage is a bit puzzeling.  Here's a counter-proposal:
+
+diff --git a/winsup/cygwin/uinfo.cc b/winsup/cygwin/uinfo.cc
+index 57d90189d390..9521a973803e 100644
+--- a/winsup/cygwin/uinfo.cc
++++ b/winsup/cygwin/uinfo.cc
+@@ -793,12 +793,12 @@ cygheap_pwdgrp::nss_init_line (const char *line)
+ 	    scheme =3D gecos_scheme;
+ 	  if (scheme)
+ 	    {
+-	      uint16_t idx =3D 0;
++	      for (uint16_t idx =3D 0; idx < NSS_SCHEME_MAX; ++idx)
++		scheme[idx].method =3D NSS_SCHEME_FALLBACK;
+=20
+-	      scheme[0].method =3D scheme[1].method =3D NSS_SCHEME_FALLBACK;
+ 	      c =3D strchr (c, ':') + 1;
+ 	      c +=3D strspn (c, " \t");
+-	      while (*c && idx < NSS_SCHEME_MAX)
++	      for (uint16_t idx =3D 0; *c && idx < NSS_SCHEME_MAX; ++idx)
+ 		{
+ 		  if (NSS_CMP ("windows"))
+ 		    scheme[idx].method =3D NSS_SCHEME_WINDOWS;
+@@ -829,7 +829,6 @@ cygheap_pwdgrp::nss_init_line (const char *line)
+ 		    }
+ 		  c +=3D strcspn (c, " \t");
+ 		  c +=3D strspn (c, " \t");
+-		  ++idx;
+ 		}
+ 	      /* If nothing has been set, revert to default. */
+ 	      if (scheme[0].method =3D=3D NSS_SCHEME_FALLBACK)
+
+If that's ok with you I check it in as your patch.
+
+Can you please send the 2-clause BSD waiver per
+https://cygwin.com/contrib.html to this list, too?
 
 
 Thanks,
@@ -108,24 +146,24 @@ Corinna
 Corinna Vinschen
 Cygwin Maintainer
 
---7lMq7vMTJT4tNk0a
+--9jHkwA2TBA/ec6v+
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl6ZyRgACgkQ9TYGna5E
-T6CuEhAAplb0plnafoE1m+GkOev690rNWGb/iF99nwEYou2SmOz1wbAUjm3rtiQ3
-/RvyLQClpPO1P5RSgbKlMqBzXqN17Ua3pPhd2fxe+EpxP94VWfp62QVMjl9qOTXK
-5NZEVAO9ftY2SjpGmn+W22OLExam1Oy13c1UTY3StIgwX3A2ssTEFpsbaqZzhKJi
-pdSp2R/jzLDiAxSvoh1cwxoFJORYqSh4tsA7t77Xj4hMCJCZXc+33nYWT0Yn06Vk
-El9coE9C9UFrwxo/OEOpH7Seyr15fuVZWWsKFTUwlBDMramjMUWfoPhirjv9Gth6
-xv9i/oiSDRsuMzmYkqAZowH2j4fQSrikDACquwqUKS0YkUsaUsdUkANUnpCxf/pf
-EcNCX7/iXZZFVcrNb6zfN98x4S/gVnpaVThOb2dAWyKHvtEGxBo5OOpyZiEGC73C
-yAPdIaqwUnI3F+YvSdzKR4NCtFVMfLwTAGYcWs2RlZVwjuABqjsZcyAjYtY2GQOA
-WPs/crXJUMe/yg8HtosmeQ/+BEFv4+g8K/DKG04W7k270asjysl8tEw5uoDqprbt
-A5AbhIIssFRXtyZQgzFO6BaFfG84VeViAcQjoNyDNAGzwWMH3cqAde5lQn3L6U0y
-SYvNDWLG7XnUsMmDAHQlPdueKQTGirLqONg/K5gbVpB5tgqPzZo=
-=bVzT
+iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl6ZzG8ACgkQ9TYGna5E
+T6C2mA/9GKTjmJ6NBRF1nvgZh9hSYXyFIQF6weklYdwAa6sxpcgVJwFmsfxuBdZp
+zDMewJO+gDionrj4W8XS8T+1MKgBQBSshem8pwZNCVC/AuYoRVGRinGUoU8aLQ/B
+Cn3EpnQvD/l8gfNj+6dO/BfVAF5IpKzQdvtD8hKRSB3L/pF3oWdSIDmgYimA3LHw
+Xm5e5uogEoYlIUw+MpsfG2DJwcjd7gXPCt9MVaYxQCkRuX66ctFNeQiwU+ivGUch
+NJQGuQzfXnYbECOXEIthYYm+484anvjpn6Bwsw+521TcQ6Phjlm3DnDCeEJOnrZA
+ELCZPxKDkHFmLfZaZ132WW1OOBGotvrdY5zm+T8tJ2gMQ6aRPP0EK03tsn/l1I2r
+j93hQI1kKGS6N1TelGPMq3qQJfoS34M6UOzmw6ibE5Gzlf5JD6LvSJDroxD33s0r
+zNYR/lmff8L0hOFTlJKnYU1eyuoFzoocuZcSZlnD/mZJbp9/x3HN5MtaZ4Zm2hN1
+bKKNPDmKVeWrN/8/bEq5nR+E6P3Xt9lyylNTr+2Db4SRKP17N8TdX5ud97eRlyhd
+OP61ISE/1M8EYwdvaUkdPugzUYv8s1uPW8EZ95VR2k1bVgMw5Q0tQh10/oSSAim7
+9R5h77zdKipRGmu7osgnPK7mqo1HqN6X0jLM67QGSI4ObZ6PeyE=
+=8txJ
 -----END PGP SIGNATURE-----
 
---7lMq7vMTJT4tNk0a--
+--9jHkwA2TBA/ec6v+--
