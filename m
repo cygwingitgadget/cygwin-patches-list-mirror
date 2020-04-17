@@ -1,38 +1,38 @@
 Return-Path: <david.macek.0@gmail.com>
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com
- [IPv6:2a00:1450:4864:20::444])
- by sourceware.org (Postfix) with ESMTPS id 240E6385B835
- for <cygwin-patches@cygwin.com>; Fri, 17 Apr 2020 09:30:57 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 240E6385B835
-Received: by mail-wr1-x444.google.com with SMTP id j2so2232810wrs.9
- for <cygwin-patches@cygwin.com>; Fri, 17 Apr 2020 02:30:57 -0700 (PDT)
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com
+ [IPv6:2a00:1450:4864:20::442])
+ by sourceware.org (Postfix) with ESMTPS id E1550385B835
+ for <cygwin-patches@cygwin.com>; Fri, 17 Apr 2020 09:31:13 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org E1550385B835
+Received: by mail-wr1-x442.google.com with SMTP id i10so2230290wrv.10
+ for <cygwin-patches@cygwin.com>; Fri, 17 Apr 2020 02:31:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20161025;
  h=x-gm-message-state:date:from:to:subject:message-id:mime-version
  :content-transfer-encoding;
- bh=D5VnBNm97DRButadGZlMCGPq0WJeREt5Chuze6c+JQM=;
- b=ZcuvCWPpEgVSjo67GVGoaCjKz8mXuZ6OxT4ry/jh0xvM4V3SDJ/u4YwLdhX5rHNnZt
- nv1GyJaMQRr2umJd4T4uWCCj7XC/gRSNeycgqP6BXnbO2sdt5tVMJfTEsE2YvEMy9bwL
- fiETpxIc5jzIodJgN1xmd+B7F14octjB76x+CxRutihghZXv4z3zlinAijwhdx9OeSJ7
- NPkWHyLr3c57kHv4aWZi1gZgkUkhBTGfyKImwaEw8almJrRvBje+rmKJMh0jHuSDh+G6
- U/0Z5di9kb4Ywu4UAL/0Gm1Ganu1BzPqF08JAWw1wsHJTXbL4VFVtnH5EAOTbfSKgSvX
- X2hw==
-X-Gm-Message-State: AGi0PuZgxeLf1QPelMAq49vSP2TE6bIUjUY9nypTBkidchAoeonh8mmn
- LdMJz/bZm6nHQ2+L3NP9dypfI5kZm6Q=
-X-Google-Smtp-Source: APiQypI8+by2VpnGvIpBN0KNeIgPDQRtOzv73vz+TOTKc6TLVNx+9NbSP4pndehTq8vqJOqTykSZ/A==
-X-Received: by 2002:adf:e2c2:: with SMTP id d2mr3155976wrj.55.1587115855879;
- Fri, 17 Apr 2020 02:30:55 -0700 (PDT)
+ bh=gI7j3pQWJyRbo2Ivp4zpMiPR+q5lVc/L1ub2ykoUTmg=;
+ b=Ip/a7F932h1IkJLonz3W+J5UccvfzTcECTiPtnJrTMCMOOh/JrE7jEetTsb/GPtrUt
+ wQUxiB1no/JERz1vOYJ6D3wn5Ihx7neFKoDYZg+gPR1quvCBlqSjXLqMaYVAOILlfZMB
+ Uf0dxwhyGYYVS2Z+80iSP5SGRn7CRS0hPxOKdD3tNYryvXPPGED3c+IRZBHm479dGrIN
+ q3+WBk2l7YHI9cN541jLg8XVcco4JPNaY9NMnpxdskzxXN3tpaZM0+kMgrRo/JEPtCj9
+ Q21HNHZFL6ERjRvvdk38CxrPKCc7eeMZhELC5Sf7A+i4a2l9qN1FfL0OPcphsGvc9BrF
+ 9xgg==
+X-Gm-Message-State: AGi0PuYzDBIiR8uodO6w/IjBoS2T5qNViAUfbKqMRAHfu+cMz79Qr97r
+ WcwxgdLC0OoCNrxMlzEazwjpwAAZ4mQ=
+X-Google-Smtp-Source: APiQypKoYS2ztCvJl8XtqbX5p3GlTW8NXx35eT+F18cySdx+HcUiYqgwGZFrrWCwn46drbO0/sgnOg==
+X-Received: by 2002:adf:f5c4:: with SMTP id k4mr2888141wrp.294.1587115872683; 
+ Fri, 17 Apr 2020 02:31:12 -0700 (PDT)
 Received: from localhost ([193.165.97.202])
- by smtp.gmail.com with ESMTPSA id t20sm6533428wmi.2.2020.04.17.02.30.55
+ by smtp.gmail.com with ESMTPSA id k5sm17221819wrg.48.2020.04.17.02.31.11
  for <cygwin-patches@cygwin.com>
  (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
- Fri, 17 Apr 2020 02:30:55 -0700 (PDT)
-Date: Fri, 17 Apr 2020 11:30:51 +0200
+ Fri, 17 Apr 2020 02:31:12 -0700 (PDT)
+Date: Fri, 17 Apr 2020 11:31:07 +0200
 From: David Macek <david.macek.0@gmail.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH 1/2] cygheap_pwdgrp: Don't invent undocumented defaults in
+Subject: [PATCH 2/2] cygheap_pwdgrp: Don't keep old schemes when parsing
  nsswitch.conf
-Message-ID: <20200417113051.000020ef@gmail.com>
+Message-ID: <20200417113107.00005311@gmail.com>
 X-Mailer: Claws Mail 3.15.0 (GTK+ 2.24.31; i686-w64-mingw32)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -55,29 +55,58 @@ List-Archive: <https://cygwin.com/pipermail/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 17 Apr 2020 09:30:58 -0000
+X-List-Received-Date: Fri, 17 Apr 2020 09:31:15 -0000
 
+The implicit assumption seemed to be that any subsequent occurence of
+the same setting in nsswitch.conf is supposed to rewrite the previous
+ones completely.  This was not the case if the third or any further
+schema was previously defined and the last line defined less than that
+(but at least 2), for example:
+
+```
+db_home: windows cygwin /myhome/%U
+db_home: cygwin desc
+```
+
+Let's document this behavior as well.
 ---
- winsup/cygwin/uinfo.cc | 6 ------
- 1 file changed, 6 deletions(-)
+ winsup/cygwin/uinfo.cc | 5 +++--
+ winsup/doc/ntsec.xml   | 5 +++++
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
 diff --git a/winsup/cygwin/uinfo.cc b/winsup/cygwin/uinfo.cc
-index 57d90189d3..227faa4248 100644
+index 227faa4248..a4fcc33d8d 100644
 --- a/winsup/cygwin/uinfo.cc
 +++ b/winsup/cygwin/uinfo.cc
-@@ -831,12 +831,6 @@ cygheap_pwdgrp::nss_init_line (const char *line)
- 		  c += strspn (c, " \t");
- 		  ++idx;
- 		}
--	      /* If nothing has been set, revert to default. */
--	      if (scheme[0].method == NSS_SCHEME_FALLBACK)
--		{
--		  scheme[0].method = NSS_SCHEME_CYGWIN;
--		  scheme[1].method = NSS_SCHEME_DESC;
--		}
- 	    }
- 	}
-       break;
+@@ -793,9 +793,10 @@ cygheap_pwdgrp::nss_init_line (const char *line)
+ 	    scheme = gecos_scheme;
+ 	  if (scheme)
+ 	    {
+-	      uint16_t idx = 0;
++	      for (uint16_t idx = 0; idx < NSS_SCHEME_MAX; ++idx)
++		scheme[idx].method = NSS_SCHEME_FALLBACK;
+ 
+-	      scheme[0].method = scheme[1].method = NSS_SCHEME_FALLBACK;
++	      uint16_t idx = 0;
+ 	      c = strchr (c, ':') + 1;
+ 	      c += strspn (c, " \t");
+ 	      while (*c && idx < NSS_SCHEME_MAX)
+diff --git a/winsup/doc/ntsec.xml b/winsup/doc/ntsec.xml
+index 5287845686..153ff1eac8 100644
+--- a/winsup/doc/ntsec.xml
++++ b/winsup/doc/ntsec.xml
+@@ -918,6 +918,11 @@ Apart from this restriction, the remainder of the line can have as
+ many spaces and TABs as you like.
+ </para>
+ 
++<para>
++When the same keyword occurs multiple times, the last one wins, as if the
++previous ones were ignored.
++</para>
++
+ </sect4>
+ 
+ <sect4 id="ntsec-mapping-nsswitch-pwdgrp"><title id="ntsec-mapping-nsswitch-pwdgrp.title">The <literal>passwd:</literal> and <literal>group:</literal> settings</title>
 -- 
 2.26.1.windows.1
 
