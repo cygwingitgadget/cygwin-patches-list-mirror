@@ -1,53 +1,45 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
- by sourceware.org (Postfix) with ESMTPS id 623B0385B835
- for <cygwin-patches@cygwin.com>; Fri, 17 Apr 2020 15:34:09 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 623B0385B835
-Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1N64JK-1j9u9I0Duq-016PWw for <cygwin-patches@cygwin.com>; Fri, 17 Apr 2020
- 17:34:08 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 7DAD6A826FB; Fri, 17 Apr 2020 17:34:07 +0200 (CEST)
-Date: Fri, 17 Apr 2020 17:34:07 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <david.macek.0@gmail.com>
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by sourceware.org (Postfix) with ESMTPS id 04ACD3858D31
+ for <cygwin-patches@cygwin.com>; Mon, 20 Apr 2020 16:29:47 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 04ACD3858D31
+Received: by mail-wr1-x430.google.com with SMTP id i10so12941302wrv.10
+ for <cygwin-patches@cygwin.com>; Mon, 20 Apr 2020 09:29:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+ :content-transfer-encoding;
+ bh=es5hk36d6vVtm5hM3Ys2niwEDk8VdCdiYzKi/LFgXHk=;
+ b=dIsRFf4sJoZPpS+rQPPSju4xNGcz7cmYW80mAPgsFu0CDFaEzG/qwWJm+xyRqSytDY
+ tueAf9Dc6WjErWxH7o7Ec6BBiNozIYBVnmdQcg4QE9c1J8j5IWhmZxNWaHjR7sb/lpOk
+ nl66EuZu7xYUs7OMMR1lEENVjAaqJ9JPrkEuwlN1dH8ftpO1GnGVG+7Qa6KSW5aiTxBx
+ mfXzyvM3Eq9vZHDbNifsIXH+8FDwzBNe1qrA6Ak4plLPi+IvV/6CTGK2NU1Pr9NXI8Mq
+ 6zcP2VKk0eAKWZAPZ8Oqs94TIyqqRUXra0u6g3t5/XhHCl5cyfl5m4BDwukvHSF1KEdw
+ rF0Q==
+X-Gm-Message-State: AGi0PuYXC6+2pqO7jGPBQ2SmeYay8WgsCn8szl45+MnUpXLz+tb5LwJF
+ jvrGhVON22HFZxr9RNX6EVTRxMAdvEk=
+X-Google-Smtp-Source: APiQypK+cq89WeLYI1RwfboNkXbUTwFQWC0Iqy/wAT6hkFd4ez62sJtPp1GJhTn4LPHfirFvcsbvfA==
+X-Received: by 2002:adf:eecc:: with SMTP id a12mr19187906wrp.112.1587400185776; 
+ Mon, 20 Apr 2020 09:29:45 -0700 (PDT)
+Received: from localhost ([193.165.97.202])
+ by smtp.gmail.com with ESMTPSA id h2sm45077wro.9.2020.04.20.09.29.44
+ for <cygwin-patches@cygwin.com>
+ (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+ Mon, 20 Apr 2020 09:29:45 -0700 (PDT)
+Date: Mon, 20 Apr 2020 18:29:41 +0200
+From: David Macek <david.macek.0@gmail.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 2/2] cygheap_pwdgrp: Don't keep old schemes when parsing
- nsswitch.conf
-Message-ID: <20200417153407.GM3943@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200417113107.00005311@gmail.com>
+Subject: License declaration
+Message-ID: <20200420182936.000023a4@gmail.com>
+X-Mailer: Claws Mail 3.15.0 (GTK+ 2.24.31; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature"; boundary="9jHkwA2TBA/ec6v+"
-Content-Disposition: inline
-In-Reply-To: <20200417113107.00005311@gmail.com>
-X-Provags-ID: V03:K1:MaRICpbYyb834UnquQuXJgZQH2X8G24AVg4J04crZ+XRA8eSJ93
- JvpKMkWVdUPdQRnzXy0tepwLx60xzi7nwYx9MVgPBzpK/YE2e2AOlA4v82f8M0e84QjKs17
- /2antcTzhGk27u9xn3/nwdhmACkziT2o0ZuVgyiCx3LWsMIP6B5ZOTFr2TBLXRjLW+FmDz5
- sWSkRFBvIyg6NkmXTODNA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:xGpA1QttYyU=:PQ7BveyDcyyKpwj5KNUXYo
- fj+y534VnVnI7QECb+7zHE4l6gXN6JTQpMG0itMizKtl5WKDksx0xfoPLBARIXi9suBq0VomX
- P0s3wXbSbmvG7Dg55bXG62gNAUaE/YktMgfePfRuOQSgV0s5LW44sqEi44t1iqzq5UDMTkLov
- zwsBVtV9iMqTsOlef8ocnL+rzxPQZyHNxrlEcSQyRZJt1oRrl932Ux0uHQxYAogkZMoey6nn9
- xbsNBfJVAEmgcgcU59CE+HzBBK+42ARGiztSuR4HFPFbGGBQSXsmT0oDm+AxlpXAF6Z0MQ9al
- e0H8Xg0iZ2OA2tO9SVDUMAcEqwNmjIwPRdBxARgRN9DYE1+gnT0cQj4tsouLt+DFBrjX87iHS
- zQpaGEsimwKjdJSXxbklTe3fEHVKNy47jGo94yW7CPCS81XlBsJucInwVhXU09zjiD51LTGM/
- +E6GeQFk7mc2cc5GD0jLvyveLa4F1v6gc46N0xNn8P0tMupRLBirKPvJOXDOMK3HcDyTKaclX
- XJYEJ8jGFEjvJlCy35MXDnYFlQ+Y0YAq0j0uEOLdLqZDas/nWtgonpm7B1SPXWbIQXNRbxQaT
- RwvHxTiLzJpAmAgSho5YAK6/8/jIT0qIAMVa7SVrtOm00FbqN59Qr2ZCQngsOweLMWEtuOQgb
- d9AVnI5ZYXSRJgPm9gL4xAMO1vwlSRLLSWEb9S0pAj8N6ENWP9ohqd7YmstzvIWr0SEKaEQ5h
- ckWzIZxHNeQjMerknPnPjT/+3zOk42kHFdoFRuVZUBTSGgCH1CUZRLava/2UqKKK/xcCdhakz
- RgEEHBpfyZc79GQHnH4KK1Li6AoepOU8MSCASqzlZqt8Hob4Ko3OM0IN+oxOMQA8jah5mOe
-X-Spam-Status: No, score=-108.8 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- GIT_PATCH_1, GIT_PATCH_2, GIT_PATCH_3, GOOD_FROM_CORINNA_CYGWIN,
- JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE,
- SPF_NEUTRAL, TXREP autolearn=ham autolearn_force=no version=3.4.2
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, FREEMAIL_ENVFROM_END_DIGIT,
+ FREEMAIL_FROM, RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE,
+ SPF_PASS, TXREP autolearn=no autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -61,109 +53,12 @@ List-Archive: <https://cygwin.com/pipermail/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 17 Apr 2020 15:34:11 -0000
+X-List-Received-Date: Mon, 20 Apr 2020 16:29:49 -0000
 
+Patches to the Cygwin sources sent by me are licensed under the
+2-clause BSD license.  This applies to all past patches as well.
 
---9jHkwA2TBA/ec6v+
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I'll try to add a Signed-off-by to each patch.
 
-On Apr 17 11:31, David Macek via Cygwin-patches wrote:
-> The implicit assumption seemed to be that any subsequent occurence of
-> the same setting in nsswitch.conf is supposed to rewrite the previous
-> ones completely.  This was not the case if the third or any further
-> schema was previously defined and the last line defined less than that
-> (but at least 2), for example:
->=20
-> ```
-> db_home: windows cygwin /myhome/%U
-> db_home: cygwin desc
-> ```
->=20
-> Let's document this behavior as well.
-> ---
->  winsup/cygwin/uinfo.cc | 5 +++--
->  winsup/doc/ntsec.xml   | 5 +++++
->  2 files changed, 8 insertions(+), 2 deletions(-)
->=20
-> diff --git a/winsup/cygwin/uinfo.cc b/winsup/cygwin/uinfo.cc
-> index 227faa4248..a4fcc33d8d 100644
-> --- a/winsup/cygwin/uinfo.cc
-> +++ b/winsup/cygwin/uinfo.cc
-> @@ -793,9 +793,10 @@ cygheap_pwdgrp::nss_init_line (const char *line)
->  	    scheme =3D gecos_scheme;
->  	  if (scheme)
->  	    {
-> -	      uint16_t idx =3D 0;
-> +	      for (uint16_t idx =3D 0; idx < NSS_SCHEME_MAX; ++idx)
-> +		scheme[idx].method =3D NSS_SCHEME_FALLBACK;
-> =20
-> -	      scheme[0].method =3D scheme[1].method =3D NSS_SCHEME_FALLBACK;
-> +	      uint16_t idx =3D 0;
-
-Hmmm.  This `idx' usage is a bit puzzeling.  Here's a counter-proposal:
-
-diff --git a/winsup/cygwin/uinfo.cc b/winsup/cygwin/uinfo.cc
-index 57d90189d390..9521a973803e 100644
---- a/winsup/cygwin/uinfo.cc
-+++ b/winsup/cygwin/uinfo.cc
-@@ -793,12 +793,12 @@ cygheap_pwdgrp::nss_init_line (const char *line)
- 	    scheme =3D gecos_scheme;
- 	  if (scheme)
- 	    {
--	      uint16_t idx =3D 0;
-+	      for (uint16_t idx =3D 0; idx < NSS_SCHEME_MAX; ++idx)
-+		scheme[idx].method =3D NSS_SCHEME_FALLBACK;
-=20
--	      scheme[0].method =3D scheme[1].method =3D NSS_SCHEME_FALLBACK;
- 	      c =3D strchr (c, ':') + 1;
- 	      c +=3D strspn (c, " \t");
--	      while (*c && idx < NSS_SCHEME_MAX)
-+	      for (uint16_t idx =3D 0; *c && idx < NSS_SCHEME_MAX; ++idx)
- 		{
- 		  if (NSS_CMP ("windows"))
- 		    scheme[idx].method =3D NSS_SCHEME_WINDOWS;
-@@ -829,7 +829,6 @@ cygheap_pwdgrp::nss_init_line (const char *line)
- 		    }
- 		  c +=3D strcspn (c, " \t");
- 		  c +=3D strspn (c, " \t");
--		  ++idx;
- 		}
- 	      /* If nothing has been set, revert to default. */
- 	      if (scheme[0].method =3D=3D NSS_SCHEME_FALLBACK)
-
-If that's ok with you I check it in as your patch.
-
-Can you please send the 2-clause BSD waiver per
-https://cygwin.com/contrib.html to this list, too?
-
-
-Thanks,
-Corinna
-
---=20
-Corinna Vinschen
-Cygwin Maintainer
-
---9jHkwA2TBA/ec6v+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEoVYPmneWZnwT6kwF9TYGna5ET6AFAl6ZzG8ACgkQ9TYGna5E
-T6C2mA/9GKTjmJ6NBRF1nvgZh9hSYXyFIQF6weklYdwAa6sxpcgVJwFmsfxuBdZp
-zDMewJO+gDionrj4W8XS8T+1MKgBQBSshem8pwZNCVC/AuYoRVGRinGUoU8aLQ/B
-Cn3EpnQvD/l8gfNj+6dO/BfVAF5IpKzQdvtD8hKRSB3L/pF3oWdSIDmgYimA3LHw
-Xm5e5uogEoYlIUw+MpsfG2DJwcjd7gXPCt9MVaYxQCkRuX66ctFNeQiwU+ivGUch
-NJQGuQzfXnYbECOXEIthYYm+484anvjpn6Bwsw+521TcQ6Phjlm3DnDCeEJOnrZA
-ELCZPxKDkHFmLfZaZ132WW1OOBGotvrdY5zm+T8tJ2gMQ6aRPP0EK03tsn/l1I2r
-j93hQI1kKGS6N1TelGPMq3qQJfoS34M6UOzmw6ibE5Gzlf5JD6LvSJDroxD33s0r
-zNYR/lmff8L0hOFTlJKnYU1eyuoFzoocuZcSZlnD/mZJbp9/x3HN5MtaZ4Zm2hN1
-bKKNPDmKVeWrN/8/bEq5nR+E6P3Xt9lyylNTr+2Db4SRKP17N8TdX5ud97eRlyhd
-OP61ISE/1M8EYwdvaUkdPugzUYv8s1uPW8EZ95VR2k1bVgMw5Q0tQh10/oSSAim7
-9R5h77zdKipRGmu7osgnPK7mqo1HqN6X0jLM67QGSI4ObZ6PeyE=
-=8txJ
------END PGP SIGNATURE-----
-
---9jHkwA2TBA/ec6v+--
+-- 
+David Macek
