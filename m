@@ -1,52 +1,78 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
- by sourceware.org (Postfix) with ESMTPS id 45330385AC19
- for <cygwin-patches@cygwin.com>; Mon,  4 May 2020 09:27:05 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 45330385AC19
-Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MBUuV-1jIdCa3Z79-00D1EA for <cygwin-patches@cygwin.com>; Mon, 04 May 2020
- 11:27:03 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 59532A80FA3; Mon,  4 May 2020 11:27:02 +0200 (CEST)
-Date: Mon, 4 May 2020 11:27:02 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <kbrown@cornell.edu>
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com
+ (mail-eopbgr770093.outbound.protection.outlook.com [40.107.77.93])
+ by sourceware.org (Postfix) with ESMTPS id EBCCA395C064
+ for <cygwin-patches@cygwin.com>; Thu,  7 May 2020 20:21:53 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org EBCCA395C064
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fsovI5SqGJe/HsWKWI5S5jBH2FQT9IgHKfP96aRl8I/vn7Pl+rHPp2rPmdQtZjotgCc/Q9lTNRyeVUmtBXl/6MmvfszyYMa2EvsoS9UY/G3gJWD0mvr54nQ5kmVebqquAs8uXZbTWZqYL7FnUNm+wtSOOpihyA9/fbgC5htpN9jXkmigodbp/sa39NjikzUVBG3Z0dF+CYMaqyGBdgilUMFMMbiIMY3QPCz6TQMV4QzLBrbyIl9QvrRKZXqh0sN1jmxTi58lmgTCDNC9sIBR7L8g9FKzImDS8IuF3p5wS26lGOYEuETAW128NHdVsgZPR6lJxbFPWYoDbzwOH92pwg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jLOuISc/Lrzkq5LKrxoMG5hfdDsX50Ia/tZuAS1wVrI=;
+ b=nf+uMDiC48dAkkBLqwUUyWK87ZQwowvz68hg8KZ+r54raNwt0/w8xLdSnjdfhp1Pms/VHzmCCyY99Iwcp50EzmVrvZr1dvAxb4Ep8B61yYBMkyCODmuc7DQSLcT0Iugcg6YJQWTWnkXXesvmgu3E0eUPFhgtKaDqsYENje3TBb1y8ooqAGk07MGxkMPg+VHFp7P+RA6cmtCItSt1lzqVILJIcSM2aJ3wIN8QdqaMVxRKKVuoYaummqQ8X1a6PcRob5hbW/WrYdL2/7v+vqQCXbI8G+CpEM7Sf7HjjlF7zHSdF7mAZTy2H/yeOsQ7aeK2pJ7ZoIv7oEGLgMXAJU3eoA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu;
+ dkim=pass header.d=cornell.edu; arc=none
+Received: from DM6PR04MB6075.namprd04.prod.outlook.com (2603:10b6:5:127::31)
+ by DM6PR04MB6075.namprd04.prod.outlook.com (2603:10b6:5:127::31) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2979.26; Thu, 7 May
+ 2020 20:21:48 +0000
+Received: from DM6PR04MB6075.namprd04.prod.outlook.com
+ ([fe80::f48b:4e13:94d7:f7c4]) by DM6PR04MB6075.namprd04.prod.outlook.com
+ ([fe80::f48b:4e13:94d7:f7c4%4]) with mapi id 15.20.2979.025; Thu, 7 May 2020
+ 20:21:48 +0000
+From: Ken Brown <kbrown@cornell.edu>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] setup_pseudoconsole(): handle missing/incorrect helper
- gracefully
-Message-ID: <20200504092702.GA3947@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <nycvar.QRO.7.76.6.2005021459560.18039@tvgsbejvaqbjf.bet>
+Cc: sten.kristian.ivarsson@gmail.com
+Subject: [PATCH 07/21] Cygwin: FIFO: dup/fork/exec: make sure child starts
+ unlocked
+Date: Thu,  7 May 2020 16:21:10 -0400
+Message-Id: <20200507202124.1463-8-kbrown@cornell.edu>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20200507202124.1463-1-kbrown@cornell.edu>
+References: <20200507202124.1463-1-kbrown@cornell.edu>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MN2PR01CA0064.prod.exchangelabs.com (2603:10b6:208:23f::33)
+ To DM6PR04MB6075.namprd04.prod.outlook.com
+ (2603:10b6:5:127::31)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <nycvar.QRO.7.76.6.2005021459560.18039@tvgsbejvaqbjf.bet>
-X-Provags-ID: V03:K1:0nCTjJuE20/fazNiXxPUW7lvIkH8oMQXQvnQATUNNT2mqbS48Ik
- EB1tassIUx4SajJz4CCVoUmxA/hp0/y7Cig++oCrdafgSaYwmSmJKoBqUxWFiVkioYC4tFd
- tWrtLtzxcNNS3acxC6S4dTILpVGApDU7jjTl26vvvEOxFJY1yqxnrd88Vz+J765RUvNAZpw
- 9xvGjbSEdZCSaIPoNWC5w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:M2eRYY9vryA=:VKF20VF7Zql894uiO/ueZd
- q8x13aV/qQ6QOConO6uakZFWCVlRcksCSawyfYhUWiRkeKHJ+CYTKZun8dtUI4F8HlGDYLDBp
- rSqa4TDlRDWS08UKETBqahU2VqWsU8GXW6Dz/ZiFZKzfzkrqFjamjiEX3y9eMWsPJm6zeqN+1
- JIQhqRhoUaGOysF+Llia9jfyWuqd7/h9RBYwqWmft3caA3iUPrVdybSug5HF76cU125DmpLSu
- keQvKNAKpFE87ZF1fYSwrX41sM24qfW1+9jBoPW54WkbIUCHkm7IVVQui51Oa0jpdFwHUV+KS
- SasZU91ojYjh+U4QXtoxCOOWp4Mhhwky/6T1YPGf2buVFy88hckz1bVTL+zewPTBO2IueG66a
- l0OreqyCPUoSHWIs7VLcZvuW5//bQFiy/0DfIbkBnHe6fSI7joN3XvbI5DfR9ObsSuwU8gzFN
- NADDFVRDVvl2u1xYcfK/CqNemECAlsuhoOY2fEjx5U+Jr5SnDFpDt0Y29jKe2zrdSVTAVY4mc
- r1aPLd3lXY61K94RkhSioH8CzfodipNOWVWQYtPxHY1tbX2LLFKNzE0LX+JBQSKcc+ZfTYZ4L
- k2cFVMNMgtT3RGHJONRLpJ6Klb8Fd11qOhpK2AJRvpglF+nCcFIrUOtdWz6qjhjiatzNobVSW
- 6+9IMLMd/vEWTfjh9fHUPqsYPDYpWWdOlFsbsXKV5VMe1MCMocex1BVjgz9A1LfBeNpjB6dRq
- 1Kca/SIDn5M707Ca9FEy8nP8g2fiG1GonOKzXA1tWQYvE1qfl12q8ZXCjKwenTj/5OHHpwQrj
- a5lAeZn6RZ3vzKfOwQ88+ZyqA65QENDYgI4MvasAfJalEkODJP/+ByILwYM0hbbj/nBXNcZ
-X-Spam-Status: No, score=-97.9 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H4, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from localhost.localdomain (2604:6000:b407:7f00:e532:58da:20b8:9136)
+ by MN2PR01CA0064.prod.exchangelabs.com (2603:10b6:208:23f::33) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2979.28 via Frontend Transport; Thu, 7 May 2020 20:21:46 +0000
+X-Mailer: git-send-email 2.21.0
+X-Originating-IP: [2604:6000:b407:7f00:e532:58da:20b8:9136]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 556eb825-0126-4178-5408-08d7f2c4448a
+X-MS-TrafficTypeDiagnostic: DM6PR04MB6075:
+X-Microsoft-Antispam-PRVS: <DM6PR04MB607539A7623AE318981E7F47D8A50@DM6PR04MB6075.namprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3044;
+X-Forefront-PRVS: 03965EFC76
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5v+1kHVXfC/VZ5kjZU33UYV6qt3aLbzuDa8J3q/CZ+pYCOyaheQbfz8cEYfc7HpoRwecRf+zLSH/4QLMPeQdbcQtHeelgGs6+l+Eh8VkLQBl7MhwBSqZwhP+kxH6iPphzebfq7OqaMDkXs0Br0tGzpifs0esh1OvUgh1tXcoYgzPNIxjocS3TT1LDN+OPE/YudyH1QobXOFVqg5bt86Du7+LIUA0reOwrKnEgDuyJfhv1Qbl8RZkaUw7Vhvj8Gi1svgKFidPpxHYzn1K1JnzeZ1o4uEpxGSduN1bf2olWg0WuMyOnLb385KpAkYeWsA3C0wcmi1LB4i/XyOc5A6YlhZ2ILIVqfTHFVxupW4vwpVBrrIx70qgfnjriSq2VUUzVeDl5hRUR0in98AWxQI85Vfhz25G1orap9eVmSI8LMDLAVP+kFuyjXvElVeaSBbh/uLMFKD6XLbodrctcXsfYQoDjP6wL0s5n0HsK8YmTKRWCQncw5G2XtKsmFbi8/0ApOM7lk6DrH/ivL7TiEiOkvmopRAxg26jS0yyRBhHSzq/x8LH4E2JU/7AFalv7B4D
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:DM6PR04MB6075.namprd04.prod.outlook.com; PTR:; CAT:NONE;
+ SFTY:;
+ SFS:(4636009)(396003)(136003)(376002)(366004)(346002)(39860400002)(33430700001)(33440700001)(6512007)(6486002)(478600001)(786003)(8676002)(66946007)(1076003)(5660300002)(8936002)(83300400001)(66476007)(316002)(83320400001)(83280400001)(83310400001)(83290400001)(66556008)(69590400007)(75432002)(36756003)(2616005)(4326008)(86362001)(6666004)(2906002)(6916009)(186003)(6506007)(16526019)(52116002);
+ DIR:OUT; SFP:1102; 
+X-MS-Exchange-AntiSpam-MessageData: Ic8bJ9Q9WT0l3XmwmzmUz38WQ9x82dkFNumJNFEp8M3hDC0ByFSvoNn5wXseQz5JxF6emy+6Gk2slWajopJ2W7WA7nFK2rqKLyyVIMKkk+YUWDrI/74NbzfVFlNDUDRGzsx3dnqOzTcMedcqRG2QiToJh8WPVaNt51yIpCJPzfV6mL9tWnuxaBoRdvnZ1mEIig+jcb8zwq9cOh2+4FTmKrxdzV8yudOfE/Fcgkz32YDAXFAYikcu55Wc9eiJVqOHdqwtC3FqV3XJde1boRITUbc9mgUMHZoqWaK0EQWa0AGbs5Wm/Hx9nhmVEHupZS032lV4jwQqitjYPbHObQLuFge+dvGAdMt5vd6WOtvzN+hXKw90CgmQNex/ILhEzdLFMQpqmkZdpor0d3NDEBa7RZe2g1e1x/GwWFXQkM97NAYHNmV5xvZuWEs4VepiQinPRqjacUhfOhiwMoSVQ4Y4nIuSwaOjaADQ0/qhLNt4S0I7IIkl8IPECtoCrywfL4pF6/VtxY20PlmlWJay2OqBM6e2XgCIPzII1ZpeTvItI/mzX6uh2qIOk6chSfYSw2qexb3/AbMb2bsoqOnj2jVwvVZD6mC6bSj5q4KjAqrvKm4qykyHyWo2h/FquR1rPfWN9LC8jV21P9ZuJBcn0DvB+I1h/RdQSJNsCmJjBGocYWRegBXBIT10NSymxx/ZyOybNZoJc+BHlBlTxvK5n8y+4GIay3la+fZ77AQAMgXzs0o91o/Q0SnF0iz25PJltEwfooMZf+HHUhuOqnAFq/r9zNyjgkJeGYkqN1FQCKCs83Sf0+S8dDAQvdzsGDEpG1PERFI3ybIx6F2HBR0apQAZEzVO7zyibTDtzNiNOPmmTpK99VyDNzEem7mVGzSUETJq
+X-OriginatorOrg: cornell.edu
+X-MS-Exchange-CrossTenant-Network-Message-Id: 556eb825-0126-4178-5408-08d7f2c4448a
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 May 2020 20:21:47.5921 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5d7e4366-1b9b-45cf-8e79-b14b27df46e1
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: XYN6d4MGjMFU2nCWiz+Lm5nYfqBur67xbPM5fcbAkN47jl3UJhuNsxd5iLPgT2hb/pmfZSh15nDSx8QS9gCDtQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR04MB6075
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, JMQ_SPF_NEUTRAL,
+ MSGID_FROM_MTA_HEADER, RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H2, SPF_HELO_PASS,
+ SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -60,24 +86,69 @@ List-Archive: <https://cygwin.com/pipermail/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 04 May 2020 09:27:07 -0000
+X-List-Received-Date: Thu, 07 May 2020 20:21:56 -0000
 
-On May  2 15:03, Johannes Schindelin wrote:
-> When `cygwin-console-helper.exe` is either missing, or corresponds to a
-> different Cygwin runtime, we currently wait forever while setting up
-> access to the pseudo console, even long after the process is gone that
-> was supposed to signal that it set up access to the pseudo console.
-> 
-> Let's handle that more gracefully: if the process exited without
-> signaling, we cannot use the pseudo console. In that case, let's just
-> fall back to not using it.
+There can be deadlocks if the child starts with its fifo_client_lock
+in the locked state.
+---
+ winsup/cygwin/fhandler_fifo.cc | 31 +++++++++++++++++++++++--------
+ 1 file changed, 23 insertions(+), 8 deletions(-)
 
-Pushed.
-
-
-Thanks,
-Corinna
-
+diff --git a/winsup/cygwin/fhandler_fifo.cc b/winsup/cygwin/fhandler_fifo.cc
+index f61e2fe72..4904a535d 100644
+--- a/winsup/cygwin/fhandler_fifo.cc
++++ b/winsup/cygwin/fhandler_fifo.cc
+@@ -981,6 +981,9 @@ fhandler_fifo::dup (fhandler_base *child, int flags)
+     }
+   if (reader)
+     {
++      /* Make sure the child starts unlocked. */
++      fhf->fifo_client_unlock ();
++
+       fifo_client_lock ();
+       for (i = 0; i < nhandlers; i++)
+ 	{
+@@ -1025,20 +1028,32 @@ fhandler_fifo::fixup_after_fork (HANDLE parent)
+   fhandler_base::fixup_after_fork (parent);
+   fork_fixup (parent, read_ready, "read_ready");
+   fork_fixup (parent, write_ready, "write_ready");
+-  fifo_client_lock ();
+-  for (int i = 0; i < nhandlers; i++)
+-  fork_fixup (parent, fc_handler[i].h, "fc_handler[].h");
+-  fifo_client_unlock ();
+-  if (reader && !listen_client ())
+-    debug_printf ("failed to start lct, %E");
++  if (reader)
++    {
++      /* Make sure the child starts unlocked. */
++      fifo_client_unlock ();
++
++      fifo_client_lock ();
++      for (int i = 0; i < nhandlers; i++)
++	fork_fixup (parent, fc_handler[i].h, "fc_handler[].h");
++      fifo_client_unlock ();
++      if (!listen_client ())
++	debug_printf ("failed to start lct, %E");
++    }
+ }
+ 
+ void
+ fhandler_fifo::fixup_after_exec ()
+ {
+   fhandler_base::fixup_after_exec ();
+-  if (reader && !listen_client ())
+-    debug_printf ("failed to start lct, %E");
++  if (reader && !close_on_exec ())
++    {
++      /* Make sure the child starts unlocked. */
++      fifo_client_unlock ();
++
++      if (!listen_client ())
++	debug_printf ("failed to start lct, %E");
++    }
+ }
+ 
+ void
 -- 
-Corinna Vinschen
-Cygwin Maintainer
+2.21.0
+
