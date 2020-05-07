@@ -1,16 +1,16 @@
 Return-Path: <kbrown@cornell.edu>
 Received: from NAM02-SN1-obe.outbound.protection.outlook.com
- (mail-eopbgr770124.outbound.protection.outlook.com [40.107.77.124])
- by sourceware.org (Postfix) with ESMTPS id 536C0395C02C
- for <cygwin-patches@cygwin.com>; Thu,  7 May 2020 20:21:50 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 536C0395C02C
+ (mail-eopbgr770127.outbound.protection.outlook.com [40.107.77.127])
+ by sourceware.org (Postfix) with ESMTPS id 15FAD395B81B
+ for <cygwin-patches@cygwin.com>; Thu,  7 May 2020 20:21:46 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 15FAD395B81B
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=J9ER5bM41+DHFAnkRAIEJKTnnpEZ4h4+zbdBD2JnqUKAAkvQ0CEeDiK35ihGLtv8omWwX1Pb8qZcJIuL+zXEiQo54GYbFLRs0fTeA3VzAgA/CjaAtE4asBWBUOb4apyXYydBDYTfnmokf8p4Q6LpOixTsx4gEkzIFQYpuDHozuM9tazw1+IbSUXimlJzpigm9EEPmJY4cY8sowbMBAF7ikFwyggUV5J+dmF0oRG2S1KygEgJGJXbbGn/l1LoRvvy+WHKuhLGpJ0ILSA6vA/M9IiQa7e5VUu3sXmAzSY7LTv4F9oc/7CndEMwEO03DdijFG/MUP8PYy9Zsho3GUzDXQ==
+ b=eJlLVXw3cvWbDDlSTAFCD49/0kaYnTpJO7zC3BYnLPYXiNPmyLhTuR2aakYkHRkgg8HAhgnxqKlM2gac9rczpZtgieJBzhjoOyovXl+JTbsiqitsbjRiItrz96GzZHuj/rTrOoVluL4BQ63D3BKMKnXbpF6d3seNz8zZ03w3Zl27kGAorBI2yoisST+vPpn84PkWsS3jGbAN8wMdqQOKrhvNRjI6YjsV0QY0yWngLXzVxNuevqvAjsl5avFgNJ3PqU1PS+9ZdpFN3d0GIhdTev7UlsxL2uzAtGbC7/P8q2sfX5CxrQ5JmTTFA6lmOCBndLwoweIKPSLWl/b1IHPL9A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+q/QpFHo1sBLXlMSYidsMsywywOEZENCfwwom7Zj7E8=;
- b=fWmiVeEYkxtCIVAS3dTvG3+QcJg+y/9+Z7VaovdJu8DBkl4kX2DsBMSvU3YnzVPMYAsYOqt+a0xgUgdkz5qw/6noSfhjaE96Ji14vBAien6UTfwsOU++uLfZDJt4mF0ot1EFc2H+vM+UeUJLTnWEL3cfpG4/ap9762Lg6347icQc8mO8cfkH3fYHY9mWf/4VaJ/tdHwmN4uUx5uaolxGF2w0E36xcScJyBZvnvcnzif9sKgY1IRuOFszD5DbrhJ998xiYwpwdPIbCspAtHpPCP5Jln5l2vvTIHgXNHUqiec9aPlY/yFFqcob7XPAMTJLhFNp+4O5EwwRCIDEAhwaIw==
+ bh=0EXQRR0cqdbRaOXT3gDOfVeB6i5xLxmtQANCx2TWm54=;
+ b=I4iizKF7V8k85IpI+gGB1adm1qXCP709YeidFt5xJysvfLy9iOZLRTebGlXPqlDY0aEkCDg/mgbfGlAtcHGyXllNvFq9pFP8HSVXFuPjlieBDF7OecKkMGxl6QMmDvUV0yPqdZZwogjttzXji3nOo/XhzSA2KP2XM6bp5W2ttqmzPULv6sb5f3FFpceoCE26aBWZW2XgqmoJk8Sv6A0IbfMdgAHdytW96nDn3a+YVleNW1mzkM3h+OSahaYE+tzvw6m7KaTnC2W39Ah3BPzvySZ1sbmr3jkm/UckBRRlMORJj8W2NJtYMcsuNLdnEUp/w6qUmW/uJGlFwpxyvCXxgQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu;
  dkim=pass header.d=cornell.edu; arc=none
@@ -18,20 +18,18 @@ Received: from DM6PR04MB6075.namprd04.prod.outlook.com (2603:10b6:5:127::31)
  by DM6PR04MB4666.namprd04.prod.outlook.com (2603:10b6:5:24::15) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2979.28; Thu, 7 May
- 2020 20:21:45 +0000
+ 2020 20:21:42 +0000
 Received: from DM6PR04MB6075.namprd04.prod.outlook.com
  ([fe80::f48b:4e13:94d7:f7c4]) by DM6PR04MB6075.namprd04.prod.outlook.com
  ([fe80::f48b:4e13:94d7:f7c4%4]) with mapi id 15.20.2979.025; Thu, 7 May 2020
- 20:21:45 +0000
+ 20:21:41 +0000
 From: Ken Brown <kbrown@cornell.edu>
 To: cygwin-patches@cygwin.com
 Cc: sten.kristian.ivarsson@gmail.com
-Subject: [PATCH 01/21] Cygwin: FIFO: minor change - use NtClose
-Date: Thu,  7 May 2020 16:21:04 -0400
-Message-Id: <20200507202124.1463-2-kbrown@cornell.edu>
+Subject: [PATCH 00/21] FIFO: Support multiple readers
+Date: Thu,  7 May 2020 16:21:03 -0400
+Message-Id: <20200507202124.1463-1-kbrown@cornell.edu>
 X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20200507202124.1463-1-kbrown@cornell.edu>
-References: <20200507202124.1463-1-kbrown@cornell.edu>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: MN2PR01CA0064.prod.exchangelabs.com (2603:10b6:208:23f::33)
@@ -42,34 +40,34 @@ X-MS-Exchange-MessageSentRepresentingType: 1
 Received: from localhost.localdomain (2604:6000:b407:7f00:e532:58da:20b8:9136)
  by MN2PR01CA0064.prod.exchangelabs.com (2603:10b6:208:23f::33) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2979.28 via Frontend Transport; Thu, 7 May 2020 20:21:42 +0000
+ 15.20.2979.28 via Frontend Transport; Thu, 7 May 2020 20:21:41 +0000
 X-Mailer: git-send-email 2.21.0
 X-Originating-IP: [2604:6000:b407:7f00:e532:58da:20b8:9136]
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 89c0d89a-262e-4737-841e-08d7f2c441a1
+X-MS-Office365-Filtering-Correlation-Id: e97c89cd-1932-4ef8-7b11-08d7f2c4412b
 X-MS-TrafficTypeDiagnostic: DM6PR04MB4666:
-X-Microsoft-Antispam-PRVS: <DM6PR04MB46669506D31CCF6AA2DB6EE7D8A50@DM6PR04MB4666.namprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:255;
+X-Microsoft-Antispam-PRVS: <DM6PR04MB4666A71E9B162965B311B844D8A50@DM6PR04MB4666.namprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
 X-Forefront-PRVS: 03965EFC76
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qDkGXUEmT3r2B7h7HQnPeLbqsyhE5ddM/5OQG9jyEyIroX1rub8IEo2+l27hVUpSxHKumw4RyfLGQRERhotZDkTKPfrtihmbUrOWLi5zdlcFlyR0oKp0/rxBQF3OsnnLk2jJxmQuRpEwFsPS7kJG9e7alhCwSuNeXDNz3aYnEGy4YvPdVwTHRUZSIZdnkRu0oMyK5gyE3+gIpNHvUAkVsN0VnHAQjWs6cqd2yM6nDB7VeFgEspkLrlwA7ncQhQkxwQTqKIXOP2FUJvdQio7Zks3H5h4vKh8nvX7m8nJysAKuY7ofZcfovlnouTe/JhxOhhvSGJuomPpqny58ON5+FRRV9hjWPZdwWrB4wjcpGQ46GC9p/VT9hz2WzQRWQ75s1DTyVKD1HqbzpzFgaWJTPdMF5cxLhdmCiHoSY2mN17xBz2Czjd/iCfNdQloCDEoekobwM/vyzt9VJpESdTQ5GYiXGpiULi5TCVJMu8e1iu9SnBzZ1tO8v+6Ap5Mox92L1Zspfw8KsIlcUyxJTfwp6lznoqQlg086o/9+eg3Gxsg7dwHCvVYOT4CJPsUDQf0D
+X-Microsoft-Antispam-Message-Info: Y0qB2XRZNpnFLJtd5Cqcd6DbDdAIlFdgbBL4RmNxqJgVa6Og62Mxwm/C5ZB8oC7oqvzBkqt+MER8w+N5gCl98NGokTFSccmP9Dxwpu9TOI50HLlNBvQ9zjAWCfwoODGc82QdyFX8OWyyM//8qN0AMv8Hunvx8Mt4IUGevGSjlOm1iN5gWRMoUsWmp7qojiESp7RrQAfYlBKpWzx6Q63/wpNeWozTcV9BnGma3X1uhFkJwWp8ANBHlGTyrXmt+C6GQ2GUlL0kVSoChGkAbo9ZfignCWLzQWpvCCa2/cP3CDvqHxtE2XnLlq8o9DA1UhVQJfiOjGMbn2+zJogPbKGjH8WfqwnbeAOd4wV1hV1+GCzLyj5+016j2E0ErFx+G/6wbdj9l9KcGETJpsZ/SeIZn3ebylDCijtohEk4bviPspSEKRL/uX0bBilAjNB3oiI5H3Zo4eGfC2MMoQ8lguP8CjgMv3d/YauGXHWu52NR/ZKevZTRUE76kiav5ngv/tV5CRFpYFZpAD69yCAIf2iDLj0qlt8vrbFoAGvzU9ixgitx6/DjO8GFcFizusrcl2XNOOPFcpoSUq0KcXTRvc3AJeDt4hC786l1C4HWUi5KygZtcgF1rHx75Wt0Ef2MdH3m+YRdRZJ/mNF3K/snvdWC1Q==
 X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:DM6PR04MB6075.namprd04.prod.outlook.com; PTR:; CAT:NONE;
  SFTY:;
- SFS:(6029001)(4636009)(346002)(39860400002)(396003)(366004)(136003)(376002)(33430700001)(66946007)(1076003)(69590400007)(75432002)(6486002)(66556008)(316002)(2906002)(2616005)(6506007)(6512007)(36756003)(16526019)(4326008)(6666004)(33440700001)(5660300002)(786003)(66476007)(86362001)(478600001)(186003)(8676002)(83320400001)(83280400001)(83310400001)(83290400001)(6916009)(8936002)(83300400001)(52116002);
+ SFS:(4636009)(346002)(39860400002)(396003)(366004)(136003)(376002)(33430700001)(66946007)(1076003)(69590400007)(75432002)(6486002)(66556008)(316002)(2906002)(2616005)(6506007)(6512007)(36756003)(16526019)(4326008)(6666004)(33440700001)(5660300002)(786003)(66476007)(86362001)(478600001)(966005)(186003)(8676002)(83320400001)(83280400001)(83310400001)(83290400001)(6916009)(8936002)(83300400001)(52116002);
  DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData: KXNi3398uURriIlk+T033XBRJTxc2liBVO+ggN/dzfNER++ZnSN3TZtrkyXYSvVlMDoQqhJspLZyCCu/VVvBiTu5mVeKbZaD/By69T+3Hc8abOa/LVzOZtR/6fuwq3Dq2IhpPGCd2J/7MX3z2mpgDZX0cwjd9vbScKsprQKkCEgc98iSXvrnFWfeZMhGDr0hymAQnTMOjNoeYTAYYlpmSPlGCz1pRFvsLVvr9k8P4gOFC8vPEX7MNd3xsKEwItj+IeKWpIIRw0KKwPKRMJt6P6kaOZ0+RVymsapY1TSQiVJK6Zj6yIOnOFcy85vtAB7xTHma1Rwv/NKjexhQSl/1E8UBvVlY9W0+aMh7kSTLAyzK1nRbCubPEWCdFwpMvemWnIrv1MQZoMYAnq6xKrbZW2cZDYa6IMT/gbnNdIx2fB7hRMmtNI4MtFzs2QtCkBlcJpGqrAzVfHeq9wp49USCTVbo1oO5dYH469NRLGsTmLTq1j3+Xz1s73WTXqABmIeCW11sSGbk5yk91z+pRedOVhEBT8XuxooAR+bRqF9VTK/TEvK6Dr5hxUKnhV3Dnze4sndEJwU3gkLOEaHj3qs9xEiKb5O4v1DSAO3mPw5X9VnvlHdH0OvM0DFYpxS2rsa7aSixeoL7lt4PANbCYeg/9cpYsHTjCnjD+chcBJV3E8RoIVuVZySf2TsT3fMLIIqINo2GDkFxi1cWLp0xHs/6E1k/gtJm6WWfbpsGO8trGIaiLPuX2hPv3nGe48u4MvkI0PrSi7Fhb3VPn2YsJtOFuFLb5RLsN58nPesGSkF6wZkb6HRhrFeg9h1jyOYTC7C5v/iR2JgPXRxuFom1Z49guhYyHQQM/8PE0Mix6/9RTwE8HxtLsnQkRC1sAj5nJgMe
+X-MS-Exchange-AntiSpam-MessageData: SJvI9nPNlQwhu9xPZ3UqIslVdj+pxjFQT29mVNK7ekOQ+Re+wvlyVQrFfN/BZo0tZL/H3qtwMvfrWwTLnORpQgjtb5fA+ngaOnol54FSr+eHfmIaKxyY3/aAERZpEDDTFtNJQ3+Sk1NiN0qtbKF8L3YWk2LXiL8Jgq7Z0/ml9atL2iM6dlr0bNwxlZ4Yv50Ct+jWcTOe/KZa8s3w9JHrltCkYmAUoStp3Iz73C/lvUA+IPDsup+bEQedSLFP2/MfQAhJn92ijOKS2HanCChLb5Rzzou+wnIZyOgjoiToyDkqS0JIOq3AYCRU1jLmsHGvNZ05CmnolGh1w30hj/LmJOyXnEaf2UKQa+od3ijWimrkHjvWsA5vJu6ksWWTf5TM0yRhiF9jhkQ5Bj31Xwprh/rLb1wnsPo10u/zRwORZH+2TZhL8BeNQFkQlqgDyGCN6YTHGj3ZfqW2EjIoA+1F1lBzE4ju+HsM3v4p58CtRLAlrV/iH9xMkz7Ffi6fFy+3n6siokD30rqn5LfNE/C3lp2n6QcgPM7LnSrthHtTj+KYTJcLA02/QYXYx94ovMvEepXhusmZxI8rlgdgYLiD4BrgogHpF0KVqoIRLcUm29T63dTRv4Z4Sovq+zTz0o9M0iKvEXVYHpPrCO9VAQM+2myAgqWI8ctVe4dW5Imqosbh0CS/ECoqkhgRKY94rEYpSDX4wYXCOb40uxfd51XsdYEPZaDEe+d0GUwMq41XBSDGEmLXHVUkuaH1xKEqlR2q5JkSZ1jPY2TK5LDMOumRyl6LJj3UM/PfwqT96hIipThSTQlKZjPSNzQOqrkbBO/b+ae2PEWAPTeSKcZClp68RLvXg7Asqy5rx0AiTKr3zN1VEoE6/0xFICdlHD0P99pE
 X-OriginatorOrg: cornell.edu
-X-MS-Exchange-CrossTenant-Network-Message-Id: 89c0d89a-262e-4737-841e-08d7f2c441a1
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 May 2020 20:21:42.6589 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e97c89cd-1932-4ef8-7b11-08d7f2c4412b
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 May 2020 20:21:41.8783 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 5d7e4366-1b9b-45cf-8e79-b14b27df46e1
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JtabdhkYgXtBCIxt4Ox/iQe0Mk3cwanLC0hvTEF/77n/C5sFhacd6hOFDN9pCOId5JKlyBCwZggFc9zKfQ8pSg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: hV3ivmfMztX31g5JvcBIcfsjt+RrEsG2W7CYmMLqrEL0NzrnjsxTasZ410xUFPFtY0PSELI6dkjm1KcGzI6SpQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR04MB4666
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, MSGID_FROM_MTA_HEADER,
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, MSGID_FROM_MTA_HEADER,
  RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_PASS,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
@@ -87,136 +85,80 @@ List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
 X-List-Received-Date: Thu, 07 May 2020 20:21:56 -0000
 
-Replace CloseHandle by NtClose since all handles are created by NT
-functions.
----
- winsup/cygwin/fhandler_fifo.cc | 32 ++++++++++++++++----------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
+This project began as a an attempt to allow a FIFO to be opened
+multiple times for reading.  The initial motivation was that Midnight
+Commander running under tcsh does this (unsuccessfully on Cygwin).
+See
 
-diff --git a/winsup/cygwin/fhandler_fifo.cc b/winsup/cygwin/fhandler_fifo.cc
-index 19cd0e507..c091b0add 100644
---- a/winsup/cygwin/fhandler_fifo.cc
-+++ b/winsup/cygwin/fhandler_fifo.cc
-@@ -319,7 +319,7 @@ fhandler_fifo::listen_client ()
-       __seterrno ();
-       HANDLE evt = InterlockedExchangePointer (&lct_termination_evt, NULL);
-       if (evt)
--	CloseHandle (evt);
-+	NtClose (evt);
-       return false;
-     }
-   return true;
-@@ -441,7 +441,7 @@ fhandler_fifo::listen_client_thread ()
- 	      ret = -1;
- 	    }
- 	  if (ph)
--	    CloseHandle (ph);
-+	    NtClose (ph);
- 	  fifo_client_unlock ();
- 	  goto out;
- 	default:
-@@ -462,7 +462,7 @@ fhandler_fifo::listen_client_thread ()
-     }
- out:
-   if (evt)
--    CloseHandle (evt);
-+    NtClose (evt);
-   ResetEvent (read_ready);
-   if (ret < 0)
-     debug_printf ("exiting with error, %E");
-@@ -617,16 +617,16 @@ out:
-     {
-       if (read_ready)
- 	{
--	  CloseHandle (read_ready);
-+	  NtClose (read_ready);
- 	  read_ready = NULL;
- 	}
-       if (write_ready)
- 	{
--	  CloseHandle (write_ready);
-+	  NtClose (write_ready);
- 	  write_ready = NULL;
- 	}
-       if (get_handle ())
--	CloseHandle (get_handle ());
-+	NtClose (get_handle ());
-       if (listen_client_thr)
- 	stop_listen_client ();
-     }
-@@ -775,7 +775,7 @@ fhandler_fifo::raw_write (const void *ptr, size_t len)
- 	ret = nbytes;
-     }
-   if (evt)
--    CloseHandle (evt);
-+    NtClose (evt);
-   if (status == STATUS_THREAD_SIGNALED && ret < 0)
-     set_errno (EINTR);
-   else if (status == STATUS_THREAD_CANCELED)
-@@ -819,7 +819,7 @@ fhandler_fifo::check_listen_client_thread ()
-       switch (waitret)
- 	{
- 	case WAIT_OBJECT_0:
--	  CloseHandle (listen_client_thr);
-+	  NtClose (listen_client_thr);
- 	  break;
- 	case WAIT_TIMEOUT:
- 	  ret = 1;
-@@ -828,7 +828,7 @@ fhandler_fifo::check_listen_client_thread ()
- 	  debug_printf ("WaitForSingleObject failed, %E");
- 	  ret = -1;
- 	  __seterrno ();
--	  CloseHandle (listen_client_thr);
-+	  NtClose (listen_client_thr);
- 	  break;
- 	}
-     }
-@@ -1001,11 +1001,11 @@ fhandler_fifo::stop_listen_client ()
- 	  ret = -1;
- 	  debug_printf ("listen_client_thread exited with error");
- 	}
--      CloseHandle (thr);
-+      NtClose (thr);
-     }
-   evt = InterlockedExchangePointer (&lct_termination_evt, NULL);
-   if (evt)
--    CloseHandle (evt);
-+    NtClose (evt);
-   return ret;
- }
- 
-@@ -1017,9 +1017,9 @@ fhandler_fifo::close ()
-   fifo_client_unlock ();
-   int ret = stop_listen_client ();
-   if (read_ready)
--    CloseHandle (read_ready);
-+    NtClose (read_ready);
-   if (write_ready)
--    CloseHandle (write_ready);
-+    NtClose (write_ready);
-   fifo_client_lock ();
-   for (int i = 0; i < nhandlers; i++)
-     if (fc_handler[i].close () < 0)
-@@ -1070,7 +1070,7 @@ fhandler_fifo::dup (fhandler_base *child, int flags)
- 			GetCurrentProcess (), &fhf->write_ready,
- 			0, true, DUPLICATE_SAME_ACCESS))
-     {
--      CloseHandle (fhf->read_ready);
-+      NtClose (fhf->read_ready);
-       fhf->close ();
-       __seterrno ();
-       goto out;
-@@ -1084,8 +1084,8 @@ fhandler_fifo::dup (fhandler_base *child, int flags)
- 			    0, true, DUPLICATE_SAME_ACCESS))
- 	{
- 	  fifo_client_unlock ();
--	  CloseHandle (fhf->read_ready);
--	  CloseHandle (fhf->write_ready);
-+	  NtClose (fhf->read_ready);
-+	  NtClose (fhf->write_ready);
- 	  fhf->close ();
- 	  __seterrno ();
- 	  goto out;
+   https://sourceware.org/pipermail/cygwin/2019-December/243317.html
+
+It quickly became apparent, however, that the current code doesn't
+even properly handle the case where the FIFO is *explicitly* opened
+only once for reading, but additional readers are created via
+dup/fork/exec.
+
+This explained some of the bugs reported by Kristian Ivarsson.  See,
+for example, the thread starting here:
+
+  https://sourceware.org/pipermail/cygwin/2020-March/000206.html
+
+as well as later similar threads.
+
+[The discussion continued in private email, with many bug reports and
+test programs by Kristian.  I'm very grateful to him for his reports
+and testing.]
+
+The first 10 patches in this series make some improvements and bug
+fixes that came up along the way and don't specifically relate to
+multiple readers.  The next 10 patches, with the exception of "allow
+fc_handler list to grow dynamically", add the support for multiple
+readers.  The last one updates the commentary at the beginning of
+fhandler_fifo.cc that tries to explain how it all works.
+
+The key ideas in these patches are:
+
+1. Use shared memory, so that all readers have the necessary
+information about the writers that are open.
+
+2. Designate one reader as the "owner".  This reader runs a thread
+that listens for connections and keeps track of the writers.
+
+3. Use a second shared memory block to be used for transfer of
+ownership.  Ownership must be transferred when the owner closes or
+execs.  And a reader that wants to read or run select must take
+ownership in order to be able to poll the writers for input.
+
+The patches in this series have been applied to the topic/fifo branch
+in case it's easier to review/test them there.
+
+Ken Brown (21):
+  Cygwin: FIFO: minor change - use NtClose
+  Cygwin: FIFO: simplify the fifo_client_handler structure
+  Cygwin: FIFO: change the fifo_client_connect_state enum
+  Cygwin: FIFO: simplify the listen_client_thread code
+  Cygwin: FIFO: remove the arm method
+  Cygwin: FIFO: honor the flags argument in dup
+  Cygwin: FIFO: dup/fork/exec: make sure child starts unlocked
+  Cygwin: FIFO: fix hit_eof
+  Cygwin: FIFO: make opening a writer more robust
+  Cygwin: FIFO: use a cygthread instead of a homemade thread
+  Cygwin: FIFO: add shared memory
+  Cygwin: FIFO: keep track of the number of readers
+  Cygwin: FIFO: introduce a new type, fifo_reader_id_t
+  Cygwin: FIFO: designate one reader as owner
+  Cygwin: FIFO: allow fc_handler list to grow dynamically
+  Cygwin: FIFO: add a shared fifo_client_handler list
+  Cygwin: FIFO: take ownership on exec
+  Cygwin: FIFO: find a new owner when closing
+  Cygwin: FIFO: allow any reader to take ownership
+  Cygwin: FIFO: support opening multiple readers
+  Cygwin: FIFO: update commentary
+
+ winsup/cygwin/fhandler.h       |  208 ++++-
+ winsup/cygwin/fhandler_fifo.cc | 1564 ++++++++++++++++++++++----------
+ winsup/cygwin/select.cc        |   48 +-
+ 3 files changed, 1311 insertions(+), 509 deletions(-)
+
 -- 
 2.21.0
 
