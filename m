@@ -1,34 +1,34 @@
 Return-Path: <kbrown@cornell.edu>
 Received: from NAM02-SN1-obe.outbound.protection.outlook.com
- (mail-eopbgr770133.outbound.protection.outlook.com [40.107.77.133])
- by sourceware.org (Postfix) with ESMTPS id EC4F3395C01D
- for <cygwin-patches@cygwin.com>; Thu,  7 May 2020 20:21:48 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org EC4F3395C01D
+ (mail-eopbgr770127.outbound.protection.outlook.com [40.107.77.127])
+ by sourceware.org (Postfix) with ESMTPS id 9A72C395C02C
+ for <cygwin-patches@cygwin.com>; Thu,  7 May 2020 20:21:56 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 9A72C395C02C
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JlDdJOOvlf6YnpUHhUksk94hkCHTBw00IkFRrq/OCIHS/Z0rKc0y5t/SPdb+fa6MDKPo3x9FUD67z4sn41+eOylvtKRk2S+9DgueJSkeVFRNIyfaEfjnfKEcY81j3W0bOcXIz6GFZxV2rlvYmYOeJGhbWTF8+Gg8Of8VVjMN5ma8sEYAxt0K6kHy3f5TfmGfLrGNBO5fNvYaJ00X8jT8wd4uUc4R7/35wE5Ddkr2tjbCe6f6sGqgSCFZ0RGHGGf/szczUkzEE6WvZer7ZRc42eyZNWoGanwbAdqpYH40sSQwu42AOfDlwLaj5SbpzWWeBhozYWOmXi70T78/7bpxxw==
+ b=JlmZdHNk8MuF22keyz3bKFU4moUaTjbeuNYTK3PiHJXAE5zAzgisHNjRyxmKdyri/DC1iRQ4kgH4m2oU4bmjLUcR0p/fkcw+WT/nhqhtKojw/91l/holZ7ekHD9URTo1gGVCHD0h1Cy2HriW5p2Lt2jXIyDXtb9KsgvcvOBDmSt5R9Y/8NHAO3D7PEovzS1VyLam7Wyu+JlFfEbuyCBE3kcYyhjGx06+Xw5fnhqscgg1kvJvgzaN1B5i4e3M1EnQyg+vj/X05VrxMODSvX7EUNZhlkyUhiNTxLixO8AI1P8SXG+cjZlVTLgLiDeY894hrdmEKhDsAH2f2NOt1I4Q+Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WA3Gh37Lpahh7eonhpg50X9ZjdNhm7Ox6wClKFcmEp0=;
- b=UBFcaLC4dRmnVs4Phiv0jd19GE2h4NG9SQf8FJK5WQCujvKDkaxnIcr+zoOc/n5DxtjOVUIJ8/rx8XScYs+fjJDwwOgSOyGUoHeTu/2j0Pi30Y4hvF7gt3UmHwomzejSc5AXC05ohhEy9Nk82LrE7S4TJXgXyDTbvf9H4fkKmDXlp7i83fkW4HOXY9YSoIlBEJZI9QoTmCuPZtGMbtHjtGKsgNx1OwhfZvfynvLWX/2s93IdSZ9i9+Q2lF14scUa5WhCgLdXxdhM4J2CS+QBoaWwdpl5OuU+gP3lKyp2txXw2HQIWWjLXCS0FDrgy4beTbkPHTa6LSBQnWaazTjGnQ==
+ bh=ahyxGddY3rvxmJqezv9gpyuT7aSmlxWbDbsBAqOL7P8=;
+ b=OVISjt9xm9ImFps7dmROTrvf0MJ9jQHNh/i+g57lukSEYLlYXeMDaAcezXAA+GGwYO4YSJVhH7miEl2XOdmS9ymHH+8boWq2ua/6lcfY5c8+JhhRfcjk6OhGpIYP6MAUuqhWBM2RBcN8ejpPbvr5reJ5BV+ykJjB/nO+4Nc662kBC/ajwPXmJtZBkTB4p0zPG3HEQQpye4LNPAeHgtPdjQ2e+2nBf0bBfeRUJ4HUQjxYCPOa+GPXWUwd4Z+tLfBs3oZgebbtNiNsYQlruST4o/oMZvQc5vL3TORmpYHfzOtC5agUIjcbRF4JdPnEdgBPX+FIjvdA66ZIEH/f6pwgYA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu;
  dkim=pass header.d=cornell.edu; arc=none
 Received: from DM6PR04MB6075.namprd04.prod.outlook.com (2603:10b6:5:127::31)
- by DM6PR04MB6075.namprd04.prod.outlook.com (2603:10b6:5:127::31) with
+ by DM6PR04MB4666.namprd04.prod.outlook.com (2603:10b6:5:24::15) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2979.26; Thu, 7 May
- 2020 20:21:47 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2979.28; Thu, 7 May
+ 2020 20:21:46 +0000
 Received: from DM6PR04MB6075.namprd04.prod.outlook.com
  ([fe80::f48b:4e13:94d7:f7c4]) by DM6PR04MB6075.namprd04.prod.outlook.com
  ([fe80::f48b:4e13:94d7:f7c4%4]) with mapi id 15.20.2979.025; Thu, 7 May 2020
- 20:21:47 +0000
+ 20:21:46 +0000
 From: Ken Brown <kbrown@cornell.edu>
 To: cygwin-patches@cygwin.com
 Cc: sten.kristian.ivarsson@gmail.com
-Subject: [PATCH 06/21] Cygwin: FIFO: honor the flags argument in dup
-Date: Thu,  7 May 2020 16:21:09 -0400
-Message-Id: <20200507202124.1463-7-kbrown@cornell.edu>
+Subject: [PATCH 03/21] Cygwin: FIFO: change the fifo_client_connect_state enum
+Date: Thu,  7 May 2020 16:21:06 -0400
+Message-Id: <20200507202124.1463-4-kbrown@cornell.edu>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20200507202124.1463-1-kbrown@cornell.edu>
 References: <20200507202124.1463-1-kbrown@cornell.edu>
@@ -42,33 +42,33 @@ X-MS-Exchange-MessageSentRepresentingType: 1
 Received: from localhost.localdomain (2604:6000:b407:7f00:e532:58da:20b8:9136)
  by MN2PR01CA0064.prod.exchangelabs.com (2603:10b6:208:23f::33) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2979.28 via Frontend Transport; Thu, 7 May 2020 20:21:46 +0000
+ 15.20.2979.28 via Frontend Transport; Thu, 7 May 2020 20:21:43 +0000
 X-Mailer: git-send-email 2.21.0
 X-Originating-IP: [2604:6000:b407:7f00:e532:58da:20b8:9136]
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a3a4efd8-fc82-4a35-5ce9-08d7f2c4440c
-X-MS-TrafficTypeDiagnostic: DM6PR04MB6075:
-X-Microsoft-Antispam-PRVS: <DM6PR04MB60751A021AF796397FA7AC5BD8A50@DM6PR04MB6075.namprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1013;
+X-MS-Office365-Filtering-Correlation-Id: 1db5c6c9-a67b-414b-7c04-08d7f2c44290
+X-MS-TrafficTypeDiagnostic: DM6PR04MB4666:
+X-Microsoft-Antispam-PRVS: <DM6PR04MB4666B1928761D8A9549112EBD8A50@DM6PR04MB4666.namprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:935;
 X-Forefront-PRVS: 03965EFC76
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RTNsuybbIl+9ylzUXPpcb067t5nVwzBjQb9EfdA0mf+c1HoSQHK4UYRDV/7JwiALnTdr5Rus0u4BaOQrfybTBplCpVbLzvg9Q8e95cC6DdfHRcRlgIgaA5nLl511XG0uTH6frDKrcC3cVPiuQdwhf3yQVuQPjiyWF8QURHE4B/p5WSezRG9U/8Grup7ieXlsxrPyPEH7vpFmkV67auE/l1lRMCQ+BO7vdkUxRylL3ZbyXFGWkqyA2PWvQGKTqYFDOFzSxoY0DcIQnN+thMFwuHK6ufJvMRbq8ddkj7nHQmYGhF+w3mQiXbZb3asrdiER09ekO1gZSm4U4qeehYkc7C6ErEyLlkHUPsx+tIbyxCn03ZHLRhSHGa7p9STeqMivUUGlSPGqI7aIGVjUMx3JrK96xHSlc77pslByoTQ5a3kvdgPSKfePayY4EQrt/3dZ6mlH4j5H3cAVNzz/5qCPatxfCx/86Ci/oeGX55pfIC+NMPSEEH6ViMVDq2eympTdVbQBNg1sFDjup/obuCKAZjtw7YbpUW4ZLAJ9G+es6MPoH2VozxLffQwse3btfnZc
+X-Microsoft-Antispam-Message-Info: 1qbaRJTw9NDh3vlJg1O576KmxcKrknm2/4vlZgTbJ8TeZsieNMOwpotum0VgcSjiS/LgLJ1aoUQ3wbdgcSrwN5QiNm6ptdXRExvpv1qpAlgvFvQyFU+A8I/vXsP2zCup0cwgkKJtpuTxYUEKN95pPttbFiL5nkrmxSEiBa5YACC7L2fJVlMv73DyHH1IK+T49MkgdtLt+KSHN0nmtIiaOWj5Fh7BVfY/YbGlPXo2QtvWdGmD05YBBB0g0L+nQ6Vkm/FLZUvg6N76XmulRBIM9tSq/UOFWBWdd9tCiBKn6iBlnOgxEQParYSdOE+VWkDUiJNeAJrC2DN13qhvODfOiW6dGOqOYuVlD+yNe7nZsMPIfHvVGdsOl5jbFE4JgzdTeCv2WqeaMzmAVsRXZnlvdq1IhXZW8kO3qWbo0nT5EAODxV63OGnYaqdaIlObaOKcgsjOogE9sBiHgPqH+hdD/CsDlghZVXTUGQO8RHMZ5vDKUL5cy1yk3U5OUjatvWa6mUPcyR3hCjy49Ilz3SmiTQq93la/b4lBFawDMhv1Y4H+QXqM/PVHTnVeSZLkCAP9
 X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:DM6PR04MB6075.namprd04.prod.outlook.com; PTR:; CAT:NONE;
  SFTY:;
- SFS:(4636009)(396003)(136003)(376002)(366004)(346002)(39860400002)(33430700001)(33440700001)(6512007)(6486002)(478600001)(786003)(8676002)(66946007)(1076003)(5660300002)(8936002)(83300400001)(66476007)(316002)(83320400001)(83280400001)(83310400001)(83290400001)(66556008)(69590400007)(75432002)(36756003)(2616005)(4326008)(86362001)(6666004)(2906002)(6916009)(186003)(6506007)(16526019)(52116002);
+ SFS:(4636009)(346002)(39860400002)(396003)(366004)(136003)(376002)(33430700001)(66946007)(1076003)(69590400007)(75432002)(6486002)(66556008)(316002)(2906002)(2616005)(6506007)(6512007)(36756003)(16526019)(4326008)(6666004)(33440700001)(5660300002)(786003)(66476007)(86362001)(478600001)(186003)(8676002)(83320400001)(83280400001)(83310400001)(83290400001)(6916009)(8936002)(83300400001)(52116002);
  DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData: DQmK4lo97mHVAbWSsO0ceTVF/bD6IKbUK+WSUh2xF/vYlqSMH8Zkpqw1vldFMdHBeD7FWRAXr1Ejt1vl0KCoOj91CAApl+hc0ZTnr1RKIk+EHsqcWzUPpQFsPdQI9DfR22aCJNmk0vsIDJ27jIl9a6JAFabsR5/h2fbITVObouqSbfIHwMmSMW3mHHcn9Kt5d0ho+b8LrT5IuyqbGOVRD7R/+GzfaDiJMKTfpnGky+PL/dvKsCsWU+8nrUXja3sH9dIN9uURpe/kCXgx5MMa+DCXgYrH0zUzxhr4QO0i7Eqmb47Q/icQySPrVpqjbzuAPjsckjCBvu1L7XroSUre9fUFIJpPURT+nuSZa6ZVb/XpIBHhe2N9X4qUAnJ6TYneQVEziqOHCgeOLPwSjNysCRKY1Txq//q04nRuDWSnPDPd7/7yu38XzEiit8cN+53CRdWQGw4utRFExaGfMc4xkYWSrx4dmQjyjDxV8MlxkowqD/jazZ4YOOqHt71szMvycbro28Ju5yakFrRnAZvLpxhwbxKnJQAqM5QMdBc2B2k2SiQ7rhuKXIubUfCHgmbfc24NF9tHrwhtdVkMbcZL0eMPRyM0w4+QWeQjlIz+Y9NfS9IR5TS49w7qBOJTte9RqGs1R4bOfDIa2xgywd9gwiYNhP2X0MMkIefpSfe8LsJNjeWqEfcQIH8UFhH8/phtRVnyMcOTrQfba3t4OKOHVXoUa3kVQq5LJDAUSVP6/pGVaw0hAXdOW6MfG23ThFTQj23ISge+o4NIOUnqdF/hw8+PcI+dReGqY6nfSALXGB4vCesmtsShZAhxGIDTNecCqanF4Y2xhvQkuDIkMPTYxcopRhVYnFF0reMTxJVbWnyNhice5m3vEiSSUOGlck8m
+X-MS-Exchange-AntiSpam-MessageData: l81eL6c5dtQ9TmrdVflwMsgfzE0XntGCygBhR1zuxbcGD/RIkPFe0+oIu4hmXdE+kVqvAOl2mN3aElA34xBOdNOTer37BeJ4jsQq/986S7eFG0JoNKF2R18GldlEP7zt4hE/jVBTTv5J22xXEC8QEQ4VQNL/JQYcfsmJPfuIzcj7Va7GuApncFMaLR2jsrbf3mL8V6RBWnLq7fG/PWhugA7c+h+M8IqOWzi7VGG3UBljcYtC9Z+C5tsnf6nwP/tUmXRGCbQsAk/xx9MS3b0xM/EGUsfsongTQWtlo3n5FMfO/Kqci+0q1XSHtg0sFY12MoNsxGdREgwwe702QHRxS8cJVd7+IVc+CDsf3BPB+JSMIY3XNYs0CkxzSyJN/+NCdN0QE1bN+vk3py3cc02bCuibvgLA75GgsD7yNDuNzFJmsKNHlm1cqL94KAHRKQhHgOI2OWajUnDCTAlXLMrHU98RUqfScL+qIGdLL0iB6/FW2NuJpAJmb0dz5lMsMbeRuyAmqrLjmKUnjU5rqUJpsWK09Hkl+vvtpChYtzyfDnG/MivVsyGdpm7GcL0VvGk2p/tstKRz+AwLfOY5AOJPBI8rr/QLZs2ImF5gYjTr3cb6X8vAIsAfX/kDie8ruoxOFggdedVrHgoahwcXtwCN1OGiBHuSyv8nmhRKFCNNkCL6ZFRLuIF8+Y52sbEFnoamUcEq98Rdx2uYM6UOHvnXFui7rU8upJ2Ya4yQrn4nwBJlJRneojVBpfKrAwjcmY0Vrbqya+ZEQXFoloWH3hKLouRZrv3SE72Cnshmu69ftnTWl4BN4fyVSXUSKTd0gmGxRxsg86uQVsBXv2KD3p36KCIL7usPv8P9s7K84KEJuSr/7VEuNRp0+jxfz0hlYyO7
 X-OriginatorOrg: cornell.edu
-X-MS-Exchange-CrossTenant-Network-Message-Id: a3a4efd8-fc82-4a35-5ce9-08d7f2c4440c
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 May 2020 20:21:46.7565 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1db5c6c9-a67b-414b-7c04-08d7f2c44290
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 May 2020 20:21:44.3110 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 5d7e4366-1b9b-45cf-8e79-b14b27df46e1
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0+Sm916Azsm27hHReW1ilayVZ+6x1jDSYkQ8n6yS0FFbgyd75uwW2JxSzMO3ImXVdtk5+ftsBqf5+1nYrL0Sww==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR04MB6075
-X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+X-MS-Exchange-CrossTenant-UserPrincipalName: s+oNa3Lvqtqlrdzkc0YHkyNg0x8fylcQ02dAipR9SWokS5wz4D1Ho13o6Qm2S8YriB6BCEuWF3nlNESCYiEpFw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR04MB4666
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00, DKIM_SIGNED,
  DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, JMQ_SPF_NEUTRAL,
  MSGID_FROM_MTA_HEADER, RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H2, SPF_HELO_PASS,
  SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
@@ -85,107 +85,145 @@ List-Archive: <https://cygwin.com/pipermail/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 07 May 2020 20:21:56 -0000
+X-List-Received-Date: Thu, 07 May 2020 20:21:58 -0000
 
-Also improve the error handling.
+Make the values correspond to the possible return values of
+fifo_client_handler::pipe_state().
+
+When cleaning up the fc_handler list in listen_client_thread(), don't
+delete handlers in the fc_closing state.  I think the pipe might still
+have input to be read in that case.
+
+Set the state to fc_closing later in the same function if a connection
+is made and the status returned by NtFsControlFile is
+STATUS_PIPE_CLOSING.
+
+In raw_read, don't error out if NtReadFile returns an unexpected
+status; just set the state of that handler to fc_error.  One writer in
+a bad state doesn't justify giving up on reading.
 ---
- winsup/cygwin/fhandler_fifo.cc | 60 +++++++++++++++++++---------------
- 1 file changed, 33 insertions(+), 27 deletions(-)
+ winsup/cygwin/fhandler.h       | 10 ++++++++--
+ winsup/cygwin/fhandler_fifo.cc | 29 ++++++++++++++---------------
+ 2 files changed, 22 insertions(+), 17 deletions(-)
 
+diff --git a/winsup/cygwin/fhandler.h b/winsup/cygwin/fhandler.h
+index e841f96ac..c1f47025a 100644
+--- a/winsup/cygwin/fhandler.h
++++ b/winsup/cygwin/fhandler.h
+@@ -1270,11 +1270,16 @@ public:
+ #define CYGWIN_FIFO_PIPE_NAME_LEN     47
+ #define MAX_CLIENTS 64
+ 
++/* The last three are the ones we try to read from. */
+ enum fifo_client_connect_state
+ {
+   fc_unknown,
++  fc_error,
++  fc_disconnected,
++  fc_listening,
+   fc_connected,
+-  fc_invalid
++  fc_closing,
++  fc_input_avail,
+ };
+ 
+ enum
+@@ -1316,7 +1321,8 @@ class fhandler_fifo: public fhandler_base
+   bool listen_client ();
+   int stop_listen_client ();
+   int check_listen_client_thread ();
+-  void record_connection (fifo_client_handler&);
++  void record_connection (fifo_client_handler&,
++			  fifo_client_connect_state = fc_connected);
+ public:
+   fhandler_fifo ();
+   bool hit_eof ();
 diff --git a/winsup/cygwin/fhandler_fifo.cc b/winsup/cygwin/fhandler_fifo.cc
-index 44919c19e..f61e2fe72 100644
+index 6b71dd950..ba3dbb124 100644
 --- a/winsup/cygwin/fhandler_fifo.cc
 +++ b/winsup/cygwin/fhandler_fifo.cc
-@@ -955,56 +955,62 @@ fhandler_fifo::fcntl (int cmd, intptr_t arg)
- int
- fhandler_fifo::dup (fhandler_base *child, int flags)
- {
--  int ret = -1;
-+  int i = 0;
-   fhandler_fifo *fhf = NULL;
- 
-   if (get_flags () & O_PATH)
-     return fhandler_base::dup (child, flags);
- 
-   if (fhandler_base::dup (child, flags))
--    goto out;
-+    goto err;
- 
-   fhf = (fhandler_fifo *) child;
-   if (!DuplicateHandle (GetCurrentProcess (), read_ready,
- 			GetCurrentProcess (), &fhf->read_ready,
--			0, true, DUPLICATE_SAME_ACCESS))
-+			0, !(flags & O_CLOEXEC), DUPLICATE_SAME_ACCESS))
+@@ -267,6 +267,7 @@ fhandler_fifo::add_client_handler ()
      {
--      fhf->close ();
-       __seterrno ();
--      goto out;
-+      goto err;
+       ret = 0;
+       fc.h = ph;
++      fc.state = fc_listening;
+       fc_handler[nhandlers++] = fc;
      }
-   if (!DuplicateHandle (GetCurrentProcess (), write_ready,
- 			GetCurrentProcess (), &fhf->write_ready,
--			0, true, DUPLICATE_SAME_ACCESS))
-+			0, !(flags & O_CLOEXEC), DUPLICATE_SAME_ACCESS))
-     {
--      NtClose (fhf->read_ready);
--      fhf->close ();
-       __seterrno ();
--      goto out;
-+      goto err_close_read_ready;
-     }
--  fifo_client_lock ();
--  for (int i = 0; i < nhandlers; i++)
-+  if (reader)
-     {
--      if (!DuplicateHandle (GetCurrentProcess (), fc_handler[i].h,
--			    GetCurrentProcess (),
--			    &fhf->fc_handler[i].h,
--			    0, true, DUPLICATE_SAME_ACCESS))
-+      fifo_client_lock ();
-+      for (i = 0; i < nhandlers; i++)
-+	{
-+	  if (!DuplicateHandle (GetCurrentProcess (), fc_handler[i].h,
-+				GetCurrentProcess (), &fhf->fc_handler[i].h,
-+				0, !(flags & O_CLOEXEC), DUPLICATE_SAME_ACCESS))
-+	    {
-+	      __seterrno ();
-+	      break;
-+	    }
-+	}
-+      if (i < nhandlers)
- 	{
- 	  fifo_client_unlock ();
--	  NtClose (fhf->read_ready);
--	  NtClose (fhf->write_ready);
--	  fhf->close ();
--	  __seterrno ();
--	  goto out;
-+	  goto err_close_handlers;
- 	}
-+      fifo_client_unlock ();
-+      if (!fhf->listen_client ())
-+	goto err_close_handlers;
-+      fhf->init_fixup_before ();
-     }
--  fifo_client_unlock ();
--  if (!reader || fhf->listen_client ())
--    ret = 0;
--  if (reader)
--    fhf->init_fixup_before ();
--out:
--  return ret;
-+  return 0;
-+err_close_handlers:
-+  for (int j = 0; j < i; j++)
-+    fhf->fc_handler[j].close ();
-+  NtClose (fhf->write_ready);
-+err_close_read_ready:
-+  NtClose (fhf->read_ready);
-+err:
-+  return -1;
+ out:
+@@ -311,10 +312,11 @@ fhandler_fifo::listen_client ()
  }
  
  void
+-fhandler_fifo::record_connection (fifo_client_handler& fc)
++fhandler_fifo::record_connection (fifo_client_handler& fc,
++				  fifo_client_connect_state s)
+ {
+   SetEvent (write_ready);
+-  fc.state = fc_connected;
++  fc.state = s;
+   nconnected++;
+   set_pipe_non_blocking (fc.h, true);
+ }
+@@ -330,15 +332,12 @@ fhandler_fifo::listen_client_thread ()
+ 
+   while (1)
+     {
+-      /* At the beginning of the loop, all client handlers are
+-	 in the fc_connected or fc_invalid state. */
+-
+-      /* Delete any invalid clients. */
++      /* Cleanup the fc_handler list. */
+       fifo_client_lock ();
+       int i = 0;
+       while (i < nhandlers)
+ 	{
+-	  if (fc_handler[i].state == fc_invalid)
++	  if (fc_handler[i].state < fc_connected)
+ 	    delete_client_handler (i);
+ 	  else
+ 	    i++;
+@@ -393,6 +392,10 @@ fhandler_fifo::listen_client_thread ()
+ 	  record_connection (fc);
+ 	  ResetEvent (evt);
+ 	  break;
++	case STATUS_PIPE_CLOSING:
++	  record_connection (fc, fc_closing);
++	  ResetEvent (evt);
++	  break;
+ 	case STATUS_THREAD_IS_TERMINATING:
+ 	  /* Force NtFsControlFile to complete.  Otherwise the next
+ 	     writer to connect might not be recorded in the client
+@@ -835,7 +838,7 @@ fhandler_fifo::raw_read (void *in_ptr, size_t& len)
+       /* Poll the connected clients for input. */
+       fifo_client_lock ();
+       for (int i = 0; i < nhandlers; i++)
+-	if (fc_handler[i].state == fc_connected)
++	if (fc_handler[i].state >= fc_connected)
+ 	  {
+ 	    NTSTATUS status;
+ 	    IO_STATUS_BLOCK io;
+@@ -859,18 +862,14 @@ fhandler_fifo::raw_read (void *in_ptr, size_t& len)
+ 	      case STATUS_PIPE_EMPTY:
+ 		break;
+ 	      case STATUS_PIPE_BROKEN:
+-		/* Client has disconnected.  Mark the client handler
+-		   to be deleted when it's safe to do that. */
+-		fc_handler[i].state = fc_invalid;
++		fc_handler[i].state = fc_disconnected;
+ 		nconnected--;
+ 		break;
+ 	      default:
+ 		debug_printf ("NtReadFile status %y", status);
+-		__seterrno_from_nt_status (status);
+-		fc_handler[i].state = fc_invalid;
++		fc_handler[i].state = fc_error;
+ 		nconnected--;
+-		fifo_client_unlock ();
+-		goto errout;
++		break;
+ 	      }
+ 	  }
+       fifo_client_unlock ();
 -- 
 2.21.0
 
