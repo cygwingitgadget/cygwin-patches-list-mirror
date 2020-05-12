@@ -1,51 +1,45 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
- by sourceware.org (Postfix) with ESMTPS id B9AAB396EC8C
- for <cygwin-patches@cygwin.com>; Fri,  8 May 2020 10:11:49 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org B9AAB396EC8C
-Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MEC8L-1jMnMf27nx-00ADOI for <cygwin-patches@cygwin.com>; Fri, 08 May 2020
- 12:11:48 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 094F6A80656; Fri,  8 May 2020 12:11:48 +0200 (CEST)
-Date: Fri, 8 May 2020 12:11:48 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <david.macek.0@gmail.com>
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com
+ [IPv6:2a00:1450:4864:20::344])
+ by sourceware.org (Postfix) with ESMTPS id 5D9D5386F46B
+ for <cygwin-patches@cygwin.com>; Tue, 12 May 2020 20:49:19 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 5D9D5386F46B
+Received: by mail-wm1-x344.google.com with SMTP id z72so15816644wmc.2
+ for <cygwin-patches@cygwin.com>; Tue, 12 May 2020 13:49:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+ :content-transfer-encoding;
+ bh=4K/G8p5byxHLg5JDYI9AIrpVUchBncIrFY0jY3DF9tU=;
+ b=CRL1oGOslrJ7zf02M+Loq63dEoRzh2JdmhS/ZR6sQTm47B13QKW/nSDB/5aEWPikFd
+ bkFPkrd2YjCwcIFyHQ5pGXZFzPJXvk6wlmYi/e9kaw56bfGatSUalv4Wd0vROrPBYJ1d
+ n/aJzXRm2hyPUOTLb1uufCNz6A64/LDzlp5WskttrFlreVvgZlYL62ozJHjPzPJEdQH5
+ Mu1xe4LNy2VOCbrm7m5skn7t1UDvPnmUP5b9odtsYwDgNg5C80yoPMrJWfX/OZftGjXf
+ rjywBUuqw/KDQxcdamrrENGaR49GCSSh9YoJLKYvgGdGqJEnwR2DE7QH9pOlo48pRl1J
+ cfuw==
+X-Gm-Message-State: AGi0PubsTj0xvGvc0Ay+nmre3kWDyDj7hhfgskkeyfCpqsSGnUfWAyYJ
+ w9zq+S1eOEvHsNJmBVrOCr8B9YZ7
+X-Google-Smtp-Source: APiQypISMzKp/KJDDPCcKbX0dKtDK6d1OtgTEcNIJnkHoY0LsV9fA4We89Qh3G33O55aGBqU1fnfnQ==
+X-Received: by 2002:a1c:7d92:: with SMTP id y140mr23887658wmc.10.1589316558025; 
+ Tue, 12 May 2020 13:49:18 -0700 (PDT)
+Received: from localhost ([193.165.97.191])
+ by smtp.gmail.com with ESMTPSA id d1sm22908145wrx.65.2020.05.12.13.49.17
+ for <cygwin-patches@cygwin.com>
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 12 May 2020 13:49:17 -0700 (PDT)
+Date: Tue, 12 May 2020 22:49:15 +0200
+From: David Macek <david.macek.0@gmail.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 00/21] FIFO: Support multiple readers
-Message-ID: <20200508101148.GJ3947@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200507202124.1463-1-kbrown@cornell.edu>
+Subject: [PATCH] cygwin: doc: Add keywords for ACE order issues
+Message-ID: <20200512224910.0000040e@gmail.com>
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200507202124.1463-1-kbrown@cornell.edu>
-X-Provags-ID: V03:K1:ih/n3PZTipNtVMVLMpEq2eS/NwEe/S0s8C7n/q5huUZkdZqnbMj
- th/eWw3nX0huOLNxf7HkRQ56uGaJIgiYb78MXVkNakW309I0vaikPdx18rEu2KHmBDZ6P3Y
- ml8VJ6KMphmK7iV9GZS5vAqNMsVsGo63U/Ya/cz+8tu3jpVIe4XESWGB+pyk3LUbLvkgpoD
- jPagrRAyN87nMS8PBTMGQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:0bBPx3PPyLY=:cAGzm2DYpavTvCDT2kFzuB
- zVQvNzc9sVxooAE9wIAMJBvXbZ76NFURYNUbfZJgG468mzFych2v3d9XFDKe6VO76OO0hdoO/
- 0YambZLolSf5Imv/Ot1/iAi0OeT89/AYYDzXY4m6Nb86cly5w9zPdzgRtjkuYi2x2jF4KwRrJ
- nlyC6uXwEXVIW36S4GlpYg59U1eP8PeDsoOcw0Ux8YXXcIHfRlim6VhQ7U669vTOS781FDvY0
- Cbx0Qe4rnJ0YzINZptEfhw7cdBx1Iud3hF8CbfC7bg0ZIrYPc1WEIO78+ExBv+jRv0fi2nQH1
- QXNL0qzOxrQArT/YIP/SNnZt7ccYvYpMoX7/Gzei2jhJmsn8Kk/G1Nc3m3TMWaYPitgVRQT6u
- ZAy1xHFEqfvz+kPi64/C5TXpDdyoUtlHn3qOtiGRsnNYg2pgSF9+txgtrQzqrgglw88/zjA0B
- Bw/xrgrR124vF1TVTV5SZhrMk0LAfyia37uY7LdLgAcHtUF5mREkLTISpKmhwvbZ/USs/BF7j
- dN5NxgIk5M2zkofj/kWhqh0McbMsv5fWIJrpJkHsFY0EfZkr98HqixPCsKWCQ4ayv0+1twQqp
- +UQZvvMYuKy3HCpPs5YxYV8ihhK5ERM46Z/7UKpcQ5yyJvfd55s3raTeHAoME2irl6+v7IdJY
- 8R1efGs1dApRWXT4lR7uqV+76hfhPQiJggIshX3owyhrJOTbMW02i+dV8d52c6VBawso6y58h
- 5f9cwlr/8SZunGJ2UnLQuWkhuk7MvqSnWihelM9C2jYh62XVnx4RbUdL/HfZkI9AgOWGpmZLM
- uugr+Xbhll/lM5JtC9bFOMNaOa7/S741gx1ON0FhpnaXnQivG84M7sI0/pIrltSv6pS2iIe
-X-Spam-Status: No, score=-98.1 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, FREEMAIL_ENVFROM_END_DIGIT,
+ FREEMAIL_FROM, GIT_PATCH_0, RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -59,58 +53,36 @@ List-Archive: <https://cygwin.com/pipermail/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 08 May 2020 10:12:00 -0000
+X-List-Received-Date: Tue, 12 May 2020 20:49:20 -0000
 
-On May  7 16:21, Ken Brown via Cygwin-patches wrote:
-> This project began as a an attempt to allow a FIFO to be opened
-> multiple times for reading.  The initial motivation was that Midnight
-> Commander running under tcsh does this (unsuccessfully on Cygwin).
-> See
-> 
->    https://sourceware.org/pipermail/cygwin/2019-December/243317.html
-> 
-> It quickly became apparent, however, that the current code doesn't
-> even properly handle the case where the FIFO is *explicitly* opened
-> only once for reading, but additional readers are created via
-> dup/fork/exec.
-> 
-> This explained some of the bugs reported by Kristian Ivarsson.  See,
-> for example, the thread starting here:
-> 
->   https://sourceware.org/pipermail/cygwin/2020-March/000206.html
-> 
-> as well as later similar threads.
-> 
-> [The discussion continued in private email, with many bug reports and
-> test programs by Kristian.  I'm very grateful to him for his reports
-> and testing.]
-> 
-> The first 10 patches in this series make some improvements and bug
-> fixes that came up along the way and don't specifically relate to
-> multiple readers.  The next 10 patches, with the exception of "allow
-> fc_handler list to grow dynamically", add the support for multiple
-> readers.  The last one updates the commentary at the beginning of
-> fhandler_fifo.cc that tries to explain how it all works.
-> 
-> The key ideas in these patches are:
-> 
-> 1. Use shared memory, so that all readers have the necessary
-> information about the writers that are open.
-> 
-> 2. Designate one reader as the "owner".  This reader runs a thread
-> that listens for connections and keeps track of the writers.
-> 
-> 3. Use a second shared memory block to be used for transfer of
-> ownership.  Ownership must be transferred when the owner closes or
-> execs.  And a reader that wants to read or run select must take
-> ownership in order to be able to poll the writers for input.
+Windows Explorer shows a warning with Cygwin-created DACLs, but putting
+the text of the warning into Google doesn't lead to the relevant Cygwin
+docs.  Let's copy the warning text into the docs in the hopes of helping
+confused users.
 
-This looks great.  Please push at your own discretion.
+Latest inquiry: <https://cygwin.com/pipermail/cygwin/2020-May/244814.html>
 
+Signed-off-by: David Macek <david.macek.0@gmail.com>
+---
+ winsup/doc/ntsec.xml | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Thanks,
-Corinna
-
+diff --git a/winsup/doc/ntsec.xml b/winsup/doc/ntsec.xml
+index 08a33bdc6c..b94cdd9a97 100644
+--- a/winsup/doc/ntsec.xml
++++ b/winsup/doc/ntsec.xml
+@@ -2163,7 +2163,10 @@ preferred order.</para>
+ the Windows Explorer insists to rearrange the order of the ACEs to
+ canonical order before you can read them. Thank God, the sort order
+ remains unchanged if one presses the Cancel button.  But don't even
+-<emphasis role='bold'>think</emphasis> of pressing OK...</para>
++<emphasis role='bold'>think</emphasis> of pressing OK...  For the sake
++of people searching for this explanation, let's note that the Explorer
++warning says "The permissions on ... are incorrectly orderer, which may
++cause some entries to be ineffective."</para>
+ 
+ <para>Canonical ACLs are unable to reflect each possible combination
+ of POSIX permissions. Example:</para>
 -- 
-Corinna Vinschen
-Cygwin Maintainer
+2.26.2.windows.1
+
