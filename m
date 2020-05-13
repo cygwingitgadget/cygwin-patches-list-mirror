@@ -1,30 +1,31 @@
 Return-Path: <mark@maxrnd.com>
 Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
- by sourceware.org (Postfix) with ESMTPS id 16EA5388A832
- for <cygwin-patches@cygwin.com>; Wed, 13 May 2020 08:24:21 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 16EA5388A832
+ by sourceware.org (Postfix) with ESMTPS id C5C80388A838
+ for <cygwin-patches@cygwin.com>; Wed, 13 May 2020 08:24:22 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org C5C80388A838
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=maxrnd.com
 Authentication-Results: sourceware.org; spf=none smtp.mailfrom=mark@maxrnd.com
 Received: (from daemon@localhost)
- by m0.truegem.net (8.12.11/8.12.11) id 04D8OLHM090320;
- Wed, 13 May 2020 01:24:21 -0700 (PDT) (envelope-from mark@maxrnd.com)
+ by m0.truegem.net (8.12.11/8.12.11) id 04D8OMTR090429;
+ Wed, 13 May 2020 01:24:22 -0700 (PDT) (envelope-from mark@maxrnd.com)
 Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67),
  claiming to be "localhost.localdomain"
- via SMTP by m0.truegem.net, id smtpdHMXurA; Wed May 13 01:24:15 2020
+ via SMTP by m0.truegem.net, id smtpdqEIPE9; Wed May 13 01:24:16 2020
 From: Mark Geisert <mark@maxrnd.com>
 To: cygwin-patches@cygwin.com
-Subject: [Cygwin PATCH 7/9] tzcode resync: private.h
-Date: Wed, 13 May 2020 01:23:47 -0700
-Message-Id: <20200513082349.831-7-mark@maxrnd.com>
+Subject: [Cygwin PATCH 9/9] tzcode resync: tz_posixrules.h
+Date: Wed, 13 May 2020 01:23:49 -0700
+Message-Id: <20200513082349.831-9-mark@maxrnd.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20200513082349.831-1-mark@maxrnd.com>
 References: <20200513082349.831-1-mark@maxrnd.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-15.3 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, SPF_HELO_NONE, SPF_NONE,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+X-Spam-Status: No, score=-13.0 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, SCC_10_SHORT_WORD_LINES,
+ SCC_20_SHORT_WORD_LINES, SCC_35_SHORT_WORD_LINES, SCC_5_SHORT_WORD_LINES,
+ SPF_HELO_NONE, SPF_NONE, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -38,816 +39,253 @@ List-Archive: <https://cygwin.com/pipermail/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 13 May 2020 08:24:26 -0000
+X-List-Received-Date: Wed, 13 May 2020 08:24:27 -0000
 
-Imported NetBSD private.h, current as of 2020/05/13, version 1.55.
+Internal copy of file /usr/share/zoneinfo/posixrules generated from the
+Cygwin tzdata 2020a-1 package.  Current as of 2020/05/13.
 
 ---
- winsup/cygwin/tzcode/private.h | 795 +++++++++++++++++++++++++++++++++
- 1 file changed, 795 insertions(+)
- create mode 100644 winsup/cygwin/tzcode/private.h
+ winsup/cygwin/tzcode/tz_posixrules.h | 231 +++++++++++++++++++++++++++
+ 1 file changed, 231 insertions(+)
+ create mode 100644 winsup/cygwin/tzcode/tz_posixrules.h
 
-diff --git a/winsup/cygwin/tzcode/private.h b/winsup/cygwin/tzcode/private.h
+diff --git a/winsup/cygwin/tzcode/tz_posixrules.h b/winsup/cygwin/tzcode/tz_posixrules.h
 new file mode 100644
-index 000000000..830750ad5
+index 000000000..7981fcffc
 --- /dev/null
-+++ b/winsup/cygwin/tzcode/private.h
-@@ -0,0 +1,795 @@
-+/* Private header for tzdb code.  */
-+
-+/*	$NetBSD: private.h,v 1.55 2019/04/04 22:03:23 christos Exp $	*/
-+
-+#ifndef PRIVATE_H
-+#define PRIVATE_H
-+
-+/* NetBSD defaults */
-+#define TM_GMTOFF	tm_gmtoff
-+#define TM_ZONE		tm_zone
-+#define STD_INSPIRED	1
-+#define HAVE_LONG_DOUBLE 1
-+
-+/* For when we build zic as a host tool. */
-+#if HAVE_NBTOOL_CONFIG_H
-+#include "nbtool_config.h"
-+#endif
-+
-+/*
-+** This file is in the public domain, so clarified as of
-+** 1996-06-05 by Arthur David Olson.
-+*/
-+
-+/*
-+** This header is for use ONLY with the time conversion code.
-+** There is no guarantee that it will remain unchanged,
-+** or that it will remain at all.
-+** Do NOT copy it to any system include directory.
-+** Thank you!
-+*/
-+
-+/*
-+** zdump has been made independent of the rest of the time
-+** conversion package to increase confidence in the verification it provides.
-+** You can use zdump to help in verifying other implementations.
-+** To do this, compile with -DUSE_LTZ=0 and link without the tz library.
-+*/
-+#ifndef USE_LTZ
-+# define USE_LTZ 1
-+#endif
-+
-+/* This string was in the Factory zone through version 2016f.  */
-+#define GRANDPARENTED	"Local time zone must be set--see zic manual page"
-+
-+/*
-+** Defaults for preprocessor symbols.
-+** You can override these in your C compiler options, e.g. '-DHAVE_GETTEXT=1'.
-+*/
-+
-+#ifndef HAVE_DECL_ASCTIME_R
-+#define HAVE_DECL_ASCTIME_R 1
-+#endif
-+
-+#if !defined HAVE_GENERIC && defined __has_extension
-+# if __has_extension(c_generic_selections)
-+#  define HAVE_GENERIC 1
-+# else
-+#  define HAVE_GENERIC 0
-+# endif
-+#endif
-+/* _Generic is buggy in pre-4.9 GCC.  */
-+#if !defined HAVE_GENERIC && defined __GNUC__
-+# define HAVE_GENERIC (4 < __GNUC__ + (9 <= __GNUC_MINOR__))
-+#endif
-+#ifndef HAVE_GENERIC
-+# define HAVE_GENERIC (201112 <= __STDC_VERSION__)
-+#endif
-+
-+#ifndef HAVE_GETTEXT
-+#define HAVE_GETTEXT		0
-+#endif /* !defined HAVE_GETTEXT */
-+
-+#ifndef HAVE_INCOMPATIBLE_CTIME_R
-+#define HAVE_INCOMPATIBLE_CTIME_R	0
-+#endif
-+
-+#ifndef HAVE_LINK
-+#define HAVE_LINK		1
-+#endif /* !defined HAVE_LINK */
-+
-+#ifndef HAVE_POSIX_DECLS
-+#define HAVE_POSIX_DECLS 1
-+#endif
-+
-+#ifndef HAVE_STDBOOL_H
-+#define HAVE_STDBOOL_H (199901 <= __STDC_VERSION__)
-+#endif
-+
-+#ifndef HAVE_STRDUP
-+#define HAVE_STRDUP 1
-+#endif
-+
-+#ifndef HAVE_STRTOLL
-+#define HAVE_STRTOLL 1
-+#endif
-+
-+#ifndef HAVE_SYMLINK
-+#define HAVE_SYMLINK		1
-+#endif /* !defined HAVE_SYMLINK */
-+
-+#ifndef HAVE_SYS_STAT_H
-+#define HAVE_SYS_STAT_H		1
-+#endif /* !defined HAVE_SYS_STAT_H */
-+
-+#ifndef HAVE_SYS_WAIT_H
-+#define HAVE_SYS_WAIT_H		1
-+#endif /* !defined HAVE_SYS_WAIT_H */
-+
-+#ifndef HAVE_UNISTD_H
-+#define HAVE_UNISTD_H		1
-+#endif /* !defined HAVE_UNISTD_H */
-+
-+#ifndef HAVE_UTMPX_H
-+#define HAVE_UTMPX_H		1
-+#endif /* !defined HAVE_UTMPX_H */
-+
-+#ifndef NETBSD_INSPIRED
-+# define NETBSD_INSPIRED 1
-+#endif
-+
-+#if HAVE_INCOMPATIBLE_CTIME_R
-+#define asctime_r _incompatible_asctime_r
-+#define ctime_r _incompatible_ctime_r
-+#endif /* HAVE_INCOMPATIBLE_CTIME_R */
-+
-+/* Enable tm_gmtoff, tm_zone, and environ on GNUish systems.  */
-+#define _GNU_SOURCE 1
-+/* Fix asctime_r on Solaris 11.  */
-+#define _POSIX_PTHREAD_SEMANTICS 1
-+/* Enable strtoimax on pre-C99 Solaris 11.  */
-+#define __EXTENSIONS__ 1
-+
-+/* To avoid having 'stat' fail unnecessarily with errno == EOVERFLOW,
-+   enable large files on GNUish systems ...  */
-+#ifndef _FILE_OFFSET_BITS
-+# define _FILE_OFFSET_BITS 64
-+#endif
-+/* ... and on AIX ...  */
-+#define _LARGE_FILES 1
-+/* ... and enable large inode numbers on Mac OS X 10.5 and later.  */
-+#define _DARWIN_USE_64_BIT_INODE 1
-+
-+/*
-+** Nested includes
-+*/
-+
-+#ifndef __NetBSD__
-+/* Avoid clashes with NetBSD by renaming NetBSD's declarations.  */
-+#define localtime_rz sys_localtime_rz
-+#define mktime_z sys_mktime_z
-+#define posix2time_z sys_posix2time_z
-+#define time2posix_z sys_time2posix_z
-+#define timezone_t sys_timezone_t
-+#define tzalloc sys_tzalloc
-+#define tzfree sys_tzfree
-+#include <time.h>
-+#undef localtime_rz
-+#undef mktime_z
-+#undef posix2time_z
-+#undef time2posix_z
-+#undef timezone_t
-+#undef tzalloc
-+#undef tzfree
-+#else
-+#include "time.h"
-+#endif
-+
-+#include <sys/types.h>	/* for time_t */
-+#include <string.h>
-+#include <limits.h>	/* for CHAR_BIT et al. */
-+#include <stdlib.h>
-+
-+#include <errno.h>
-+
-+#ifndef ENAMETOOLONG
-+# define ENAMETOOLONG EINVAL
-+#endif
-+#ifndef ENOTSUP
-+# define ENOTSUP EINVAL
-+#endif
-+#ifndef EOVERFLOW
-+# define EOVERFLOW EINVAL
-+#endif
-+
-+#if HAVE_GETTEXT
-+#include <libintl.h>
-+#endif /* HAVE_GETTEXT */
-+
-+#if HAVE_UNISTD_H
-+#include <unistd.h>	/* for R_OK, and other POSIX goodness */
-+#endif /* HAVE_UNISTD_H */
-+
-+#ifndef HAVE_STRFTIME_L
-+# if _POSIX_VERSION < 200809
-+#  define HAVE_STRFTIME_L 0
-+# else
-+#  define HAVE_STRFTIME_L 1
-+# endif
-+#endif
-+
-+#ifndef USG_COMPAT
-+# ifndef _XOPEN_VERSION
-+#  define USG_COMPAT 0
-+# else
-+#  define USG_COMPAT 1
-+# endif
-+#endif
-+
-+#ifndef HAVE_TZNAME
-+# if _POSIX_VERSION < 198808 && !USG_COMPAT
-+#  define HAVE_TZNAME 0
-+# else
-+#  define HAVE_TZNAME 1
-+# endif
-+#endif
-+
-+#ifndef R_OK
-+#define R_OK	4
-+#endif /* !defined R_OK */
-+
-+/* Unlike <ctype.h>'s isdigit, this also works if c < 0 | c > UCHAR_MAX. */
-+#define is_digit(c) ((unsigned)(c) - '0' <= 9)
-+
-+/*
-+** Define HAVE_STDINT_H's default value here, rather than at the
-+** start, since __GLIBC__ and INTMAX_MAX's values depend on
-+** previously-included files.  glibc 2.1 and Solaris 10 and later have
-+** stdint.h, even with pre-C99 compilers.
-+*/
-+#ifndef HAVE_STDINT_H
-+#define HAVE_STDINT_H \
-+   (199901 <= __STDC_VERSION__ \
-+    || 2 < __GLIBC__ + (1 <= __GLIBC_MINOR__)	\
-+    || __CYGWIN__ || INTMAX_MAX)
-+#endif /* !defined HAVE_STDINT_H */
-+
-+#if HAVE_STDINT_H
-+#include <stdint.h>
-+#endif /* !HAVE_STDINT_H */
-+
-+#ifndef HAVE_INTTYPES_H
-+# define HAVE_INTTYPES_H HAVE_STDINT_H
-+#endif
-+#if HAVE_INTTYPES_H
-+# include <inttypes.h>
-+#endif
-+
-+/* Pre-C99 GCC compilers define __LONG_LONG_MAX__ instead of LLONG_MAX.  */
-+#ifdef __LONG_LONG_MAX__
-+# ifndef LLONG_MAX
-+#  define LLONG_MAX __LONG_LONG_MAX__
-+# endif
-+# ifndef LLONG_MIN
-+#  define LLONG_MIN (-1 - LLONG_MAX)
-+# endif
-+#endif
-+
-+#ifndef INT_FAST64_MAX
-+# ifdef LLONG_MAX
-+typedef long long	int_fast64_t;
-+#  define INT_FAST64_MIN LLONG_MIN
-+#  define INT_FAST64_MAX LLONG_MAX
-+# else
-+#  if LONG_MAX >> 31 < 0xffffffff
-+Please use a compiler that supports a 64-bit integer type (or wider);
-+you may need to compile with "-DHAVE_STDINT_H".
-+#  endif
-+typedef long		int_fast64_t;
-+#  define INT_FAST64_MIN LONG_MIN
-+#  define INT_FAST64_MAX LONG_MAX
-+# endif
-+#endif
-+
-+#ifndef PRIdFAST64
-+# if INT_FAST64_MAX == LLONG_MAX
-+#  define PRIdFAST64 "lld"
-+# else
-+#  define PRIdFAST64 "ld"
-+# endif
-+#endif
-+
-+#ifndef SCNdFAST64
-+# define SCNdFAST64 PRIdFAST64
-+#endif
-+
-+#ifndef INT_FAST32_MAX
-+# if INT_MAX >> 31 == 0
-+typedef long int_fast32_t;
-+#  define INT_FAST32_MAX LONG_MAX
-+#  define INT_FAST32_MIN LONG_MIN
-+# else
-+typedef int int_fast32_t;
-+#  define INT_FAST32_MAX INT_MAX
-+#  define INT_FAST32_MIN INT_MIN
-+# endif
-+#endif
-+
-+#ifndef INTMAX_MAX
-+# ifdef LLONG_MAX
-+typedef long long intmax_t;
-+#  if HAVE_STRTOLL
-+#   define strtoimax strtoll
-+#  endif
-+#  define INTMAX_MAX LLONG_MAX
-+#  define INTMAX_MIN LLONG_MIN
-+# else
-+typedef long intmax_t;
-+#  define INTMAX_MAX LONG_MAX
-+#  define INTMAX_MIN LONG_MIN
-+# endif
-+# ifndef strtoimax
-+#  define strtoimax strtol
-+# endif
-+#endif
-+
-+#ifndef PRIdMAX
-+# if INTMAX_MAX == LLONG_MAX
-+#  define PRIdMAX "lld"
-+# else
-+#  define PRIdMAX "ld"
-+# endif
-+#endif
-+
-+#ifndef UINT_FAST64_MAX
-+# if defined ULLONG_MAX || defined __LONG_LONG_MAX__
-+typedef unsigned long long uint_fast64_t;
-+# else
-+#  if ULONG_MAX >> 31 >> 1 < 0xffffffff
-+Please use a compiler that supports a 64-bit integer type (or wider);
-+you may need to compile with "-DHAVE_STDINT_H".
-+#  endif
-+typedef unsigned long	uint_fast64_t;
-+# endif
-+#endif
-+
-+#ifndef UINTMAX_MAX
-+# if defined ULLONG_MAX || defined __LONG_LONG_MAX__
-+typedef unsigned long long uintmax_t;
-+# else
-+typedef unsigned long uintmax_t;
-+# endif
-+#endif
-+
-+#ifndef PRIuMAX
-+# if defined ULLONG_MAX || defined __LONG_LONG_MAX__
-+#  define PRIuMAX "llu"
-+# else
-+#  define PRIuMAX "lu"
-+# endif
-+#endif
-+
-+#ifndef INT32_MAX
-+#define INT32_MAX 0x7fffffff
-+#endif /* !defined INT32_MAX */
-+#ifndef INT32_MIN
-+#define INT32_MIN (-1 - INT32_MAX)
-+#endif /* !defined INT32_MIN */
-+
-+#ifndef SIZE_MAX
-+#define SIZE_MAX ((size_t) -1)
-+#endif
-+
-+#if 3 <= __GNUC__
-+# define ATTRIBUTE_CONST __attribute__ ((__const__))
-+# define ATTRIBUTE_MALLOC __attribute__ ((__malloc__))
-+# define ATTRIBUTE_PURE __attribute__ ((__pure__))
-+# define ATTRIBUTE_FORMAT(spec) __attribute__ ((__format__ spec))
-+#else
-+# define ATTRIBUTE_CONST /* empty */
-+# define ATTRIBUTE_MALLOC /* empty */
-+# define ATTRIBUTE_PURE /* empty */
-+# define ATTRIBUTE_FORMAT(spec) /* empty */
-+#endif
-+
-+#if !defined _Noreturn && __STDC_VERSION__ < 201112
-+# if 2 < __GNUC__ + (8 <= __GNUC_MINOR__)
-+#  define _Noreturn __attribute__ ((__noreturn__))
-+# else
-+#  define _Noreturn
-+# endif
-+#endif
-+
-+#if __STDC_VERSION__ < 199901 && !defined restrict
-+# define restrict /* empty */
-+#endif
-+
-+/*
-+** Workarounds for compilers/systems.
-+*/
-+
-+#ifndef EPOCH_LOCAL
-+# define EPOCH_LOCAL 0
-+#endif
-+#ifndef EPOCH_OFFSET
-+# define EPOCH_OFFSET 0
-+#endif
-+#ifndef RESERVE_STD_EXT_IDS
-+# define RESERVE_STD_EXT_IDS 0
-+#endif
-+
-+/* If standard C identifiers with external linkage (e.g., localtime)
-+   are reserved and are not already being renamed anyway, rename them
-+   as if compiling with '-Dtime_tz=time_t'.  */
-+#if !defined time_tz && RESERVE_STD_EXT_IDS && USE_LTZ
-+# define time_tz time_t
-+#endif
-+
-+/*
-+** Compile with -Dtime_tz=T to build the tz package with a private
-+** time_t type equivalent to T rather than the system-supplied time_t.
-+** This debugging feature can test unusual design decisions
-+** (e.g., time_t wider than 'long', or unsigned time_t) even on
-+** typical platforms.
-+*/
-+#if defined time_tz || EPOCH_LOCAL || EPOCH_OFFSET != 0
-+# define TZ_TIME_T 1
-+#else
-+# define TZ_TIME_T 0
-+#endif
-+
-+#if TZ_TIME_T
-+# ifdef LOCALTIME_IMPLEMENTATION
-+static time_t sys_time(time_t *x) { return time(x); }
-+# endif
-+
-+typedef time_tz tz_time_t;
-+
-+# undef  ctime
-+# define ctime tz_ctime
-+# undef  ctime_r
-+# define ctime_r tz_ctime_r
-+# undef  difftime
-+# define difftime tz_difftime
-+# undef  gmtime
-+# define gmtime tz_gmtime
-+# undef  gmtime_r
-+# define gmtime_r tz_gmtime_r
-+# undef  localtime
-+# define localtime tz_localtime
-+# undef  localtime_r
-+# define localtime_r tz_localtime_r
-+# undef  localtime_rz
-+# define localtime_rz tz_localtime_rz
-+# undef  mktime
-+# define mktime tz_mktime
-+# undef  mktime_z
-+# define mktime_z tz_mktime_z
-+# undef  offtime
-+# define offtime tz_offtime
-+# undef  posix2time
-+# define posix2time tz_posix2time
-+# undef  posix2time_z
-+# define posix2time_z tz_posix2time_z
-+# undef  strftime
-+# define strftime tz_strftime
-+# undef  time
-+# define time tz_time
-+# undef  time2posix
-+# define time2posix tz_time2posix
-+# undef  time2posix_z
-+# define time2posix_z tz_time2posix_z
-+# undef  time_t
-+# define time_t tz_time_t
-+# undef  timegm
-+# define timegm tz_timegm
-+# undef  timelocal
-+# define timelocal tz_timelocal
-+# undef  timeoff
-+# define timeoff tz_timeoff
-+# undef  tzalloc
-+# define tzalloc tz_tzalloc
-+# undef  tzfree
-+# define tzfree tz_tzfree
-+# undef  tzset
-+# define tzset tz_tzset
-+# undef  tzsetwall
-+# define tzsetwall tz_tzsetwall
-+# if HAVE_STRFTIME_L
-+#  undef  strftime_l
-+#  define strftime_l tz_strftime_l
-+# endif
-+# if HAVE_TZNAME
-+#  undef  tzname
-+#  define tzname tz_tzname
-+# endif
-+# if USG_COMPAT
-+#  undef  daylight
-+#  define daylight tz_daylight
-+#  undef  timezone
-+#  define timezone tz_timezone
-+# endif
-+# ifdef ALTZONE
-+#  undef  altzone
-+#  define altzone tz_altzone
-+# endif
-+
-+char *ctime(time_t const *);
-+char *ctime_r(time_t const *, char *);
-+double difftime(time_t, time_t) ATTRIBUTE_CONST;
-+size_t strftime(char *restrict, size_t, char const *restrict,
-+		struct tm const *restrict);
-+# if HAVE_STRFTIME_L
-+size_t strftime_l(char *restrict, size_t, char const *restrict,
-+		  struct tm const *restrict, locale_t);
-+# endif
-+struct tm *gmtime(time_t const *);
-+struct tm *gmtime_r(time_t const *restrict, struct tm *restrict);
-+struct tm *localtime(time_t const *);
-+struct tm *localtime_r(time_t const *restrict, struct tm *restrict);
-+time_t mktime(struct tm *);
-+time_t time(time_t *);
-+void tzset(void);
-+#endif
-+
-+#if !HAVE_DECL_ASCTIME_R && !defined asctime_r
-+extern char *asctime_r(struct tm const *restrict, char *restrict);
-+#endif
-+
-+#ifndef HAVE_DECL_ENVIRON
-+# if defined environ || defined __USE_GNU
-+#  define HAVE_DECL_ENVIRON 1
-+# else
-+#  define HAVE_DECL_ENVIRON 0
-+# endif
-+#endif
-+
-+#if !HAVE_DECL_ENVIRON
-+extern char **environ;
-+#endif
-+
-+#if TZ_TIME_T || !HAVE_POSIX_DECLS
-+# if HAVE_TZNAME
-+extern char *tzname[];
-+# endif
-+# if USG_COMPAT
-+extern long timezone;
-+extern int daylight;
-+# endif
-+#endif
-+
-+#ifdef ALTZONE
-+extern long altzone;
-+#endif
-+
-+/*
-+** The STD_INSPIRED functions are similar, but most also need
-+** declarations if time_tz is defined.
-+*/
-+
-+#ifdef STD_INSPIRED
-+# if TZ_TIME_T || !defined tzsetwall
-+void tzsetwall(void);
-+# endif
-+# if TZ_TIME_T || !defined offtime
-+struct tm *offtime(time_t const *, long);
-+# endif
-+# if TZ_TIME_T || !defined timegm
-+time_t timegm(struct tm *);
-+# endif
-+# if TZ_TIME_T || !defined timelocal
-+time_t timelocal(struct tm *);
-+# endif
-+# if TZ_TIME_T || !defined timeoff
-+time_t timeoff(struct tm *, long);
-+# endif
-+# if TZ_TIME_T || !defined time2posix
-+time_t time2posix(time_t);
-+# endif
-+# if TZ_TIME_T || !defined posix2time
-+time_t posix2time(time_t);
-+# endif
-+#endif
-+
-+/* Infer TM_ZONE on systems where this information is known, but suppress
-+   guessing if NO_TM_ZONE is defined.  Similarly for TM_GMTOFF.  */
-+#if (defined __GLIBC__ \
-+     || defined __FreeBSD__ || defined __NetBSD__ || defined __OpenBSD__ \
-+     || (defined __APPLE__ && defined __MACH__))
-+# if !defined TM_GMTOFF && !defined NO_TM_GMTOFF
-+#  define TM_GMTOFF tm_gmtoff
-+# endif
-+# if !defined TM_ZONE && !defined NO_TM_ZONE
-+#  define TM_ZONE tm_zone
-+# endif
-+#endif
-+
-+/*
-+** Define functions that are ABI compatible with NetBSD but have
-+** better prototypes.  NetBSD 6.1.4 defines a pointer type timezone_t
-+** and labors under the misconception that 'const timezone_t' is a
-+** pointer to a constant.  This use of 'const' is ineffective, so it
-+** is not done here.  What we call 'struct state' NetBSD calls
-+** 'struct __state', but this is a private name so it doesn't matter.
-+*/
-+#ifndef __NetBSD__
-+#if NETBSD_INSPIRED
-+typedef struct state *timezone_t;
-+struct tm *localtime_rz(timezone_t restrict, time_t const *restrict,
-+			struct tm *restrict);
-+time_t mktime_z(timezone_t restrict, struct tm *restrict);
-+timezone_t tzalloc(char const *);
-+void tzfree(timezone_t);
-+# ifdef STD_INSPIRED
-+#  if TZ_TIME_T || !defined posix2time_z
-+time_t posix2time_z(timezone_t __restrict, time_t) ATTRIBUTE_PURE;
-+#  endif
-+#  if TZ_TIME_T || !defined time2posix_z
-+time_t time2posix_z(timezone_t __restrict, time_t) ATTRIBUTE_PURE;
-+#  endif
-+# endif
-+#endif
-+#endif
-+
-+/*
-+** Finally, some convenience items.
-+*/
-+
-+#if HAVE_STDBOOL_H
-+# include <stdbool.h>
-+#else
-+# define true 1
-+# define false 0
-+# define bool int
-+#endif
-+
-+#define TYPE_BIT(type)	(sizeof (type) * CHAR_BIT)
-+#define TYPE_SIGNED(type) (/*CONSTCOND*/((type) -1) < 0)
-+#define TWOS_COMPLEMENT(t) (/*CONSTCOND*/(t) ~ (t) 0 < 0)
-+
-+/* Max and min values of the integer type T, of which only the bottom
-+   B bits are used, and where the highest-order used bit is considered
-+   to be a sign bit if T is signed.  */
-+#define MAXVAL(t, b) /*LINTED*/					\
-+  ((t) (((t) 1 << ((b) - 1 - TYPE_SIGNED(t)))			\
-+	- 1 + ((t) 1 << ((b) - 1 - TYPE_SIGNED(t)))))
-+#define MINVAL(t, b)						\
-+  ((t) (TYPE_SIGNED(t) ? - TWOS_COMPLEMENT(t) - MAXVAL(t, b) : 0))
-+
-+/* The extreme time values, assuming no padding.  */
-+#define TIME_T_MIN_NO_PADDING MINVAL(time_t, TYPE_BIT(time_t))
-+#define TIME_T_MAX_NO_PADDING MAXVAL(time_t, TYPE_BIT(time_t))
-+
-+/* The extreme time values.  These are macros, not constants, so that
-+   any portability problem occur only when compiling .c files that use
-+   the macros, which is safer for applications that need only zdump and zic.
-+   This implementation assumes no padding if time_t is signed and
-+   either the compiler lacks support for _Generic or time_t is not one
-+   of the standard signed integer types.  */
-+#if HAVE_GENERIC
-+# define TIME_T_MIN \
-+    _Generic((time_t) 0, \
-+	     signed char: SCHAR_MIN, short: SHRT_MIN, \
-+	     int: INT_MIN, long: LONG_MIN, long long: LLONG_MIN, \
-+	     default: TIME_T_MIN_NO_PADDING)
-+# define TIME_T_MAX \
-+    (TYPE_SIGNED(time_t) \
-+     ? _Generic((time_t) 0, \
-+		signed char: SCHAR_MAX, short: SHRT_MAX, \
-+		int: INT_MAX, long: LONG_MAX, long long: LLONG_MAX, \
-+		default: TIME_T_MAX_NO_PADDING)			    \
-+     : (time_t) -1)
-+#else
-+# define TIME_T_MIN TIME_T_MIN_NO_PADDING
-+# define TIME_T_MAX TIME_T_MAX_NO_PADDING
-+#endif
-+
-+/*
-+** 302 / 1000 is log10(2.0) rounded up.
-+** Subtract one for the sign bit if the type is signed;
-+** add one for integer division truncation;
-+** add one more for a minus sign if the type is signed.
-+*/
-+#define INT_STRLEN_MAXIMUM(type) \
-+	((TYPE_BIT(type) - TYPE_SIGNED(type)) * 302 / 1000 + \
-+	1 + TYPE_SIGNED(type))
-+
-+/*
-+** INITIALIZE(x)
-+*/
-+
-+#if defined(__GNUC__) || defined(__lint__)
-+# define INITIALIZE(x)	((x) = 0)
-+#else
-+# define INITIALIZE(x)
-+#endif
-+
-+#ifndef UNINIT_TRAP
-+# define UNINIT_TRAP 0
-+#endif
-+
-+/*
-+** For the benefit of GNU folk...
-+** '_(MSGID)' uses the current locale's message library string for MSGID.
-+** The default is to use gettext if available, and use MSGID otherwise.
-+*/
-+
-+#if HAVE_GETTEXT
-+#define _(msgid) gettext(msgid)
-+#else /* !HAVE_GETTEXT */
-+#define _(msgid) msgid
-+#endif /* !HAVE_GETTEXT */
-+
-+#if !defined TZ_DOMAIN && defined HAVE_GETTEXT
-+# define TZ_DOMAIN "tz"
-+#endif
-+
-+#if HAVE_INCOMPATIBLE_CTIME_R
-+#undef asctime_r
-+#undef ctime_r
-+char *asctime_r(struct tm const *, char *);
-+char *ctime_r(time_t const *, char *);
-+#endif /* HAVE_INCOMPATIBLE_CTIME_R */
-+
-+/* Handy macros that are independent of tzfile implementation.  */
-+
-+#define YEARSPERREPEAT		400	/* years before a Gregorian repeat */
-+
-+#define SECSPERMIN	60
-+#define MINSPERHOUR	60
-+#define HOURSPERDAY	24
-+#define DAYSPERWEEK	7
-+#define DAYSPERNYEAR	365
-+#define DAYSPERLYEAR	366
-+#define SECSPERHOUR	(SECSPERMIN * MINSPERHOUR)
-+#define SECSPERDAY	((int_fast32_t) SECSPERHOUR * HOURSPERDAY)
-+#define MONSPERYEAR	12
-+
-+#define TM_SUNDAY	0
-+#define TM_MONDAY	1
-+#define TM_TUESDAY	2
-+#define TM_WEDNESDAY	3
-+#define TM_THURSDAY	4
-+#define TM_FRIDAY	5
-+#define TM_SATURDAY	6
-+
-+#define TM_JANUARY	0
-+#define TM_FEBRUARY	1
-+#define TM_MARCH	2
-+#define TM_APRIL	3
-+#define TM_MAY		4
-+#define TM_JUNE		5
-+#define TM_JULY		6
-+#define TM_AUGUST	7
-+#define TM_SEPTEMBER	8
-+#define TM_OCTOBER	9
-+#define TM_NOVEMBER	10
-+#define TM_DECEMBER	11
-+
-+#define TM_YEAR_BASE	1900
-+
-+#define EPOCH_YEAR	1970
-+#define EPOCH_WDAY	TM_THURSDAY
-+
-+#define isleap(y) (((y) % 4) == 0 && (((y) % 100) != 0 || ((y) % 400) == 0))
-+
-+/*
-+** Since everything in isleap is modulo 400 (or a factor of 400), we know that
-+**	isleap(y) == isleap(y % 400)
-+** and so
-+**	isleap(a + b) == isleap((a + b) % 400)
-+** or
-+**	isleap(a + b) == isleap(a % 400 + b % 400)
-+** This is true even if % means modulo rather than Fortran remainder
-+** (which is allowed by C89 but not by C99 or later).
-+** We use this to avoid addition overflow problems.
-+*/
-+
-+#define isleap_sum(a, b)	isleap((a) % 400 + (b) % 400)
-+
-+
-+/*
-+** The Gregorian year averages 365.2425 days, which is 31556952 seconds.
-+*/
-+
-+#define AVGSECSPERYEAR		31556952L
-+#define SECSPERREPEAT \
-+  ((int_fast64_t) YEARSPERREPEAT * (int_fast64_t) AVGSECSPERYEAR)
-+#define SECSPERREPEAT_BITS	34	/* ceil(log2(SECSPERREPEAT)) */
-+
-+#ifdef _LIBC
-+#include "reentrant.h"
-+extern struct __state *__lclptr;
-+#if defined(__LIBC12_SOURCE__)
-+#define tzset_unlocked __tzset_unlocked
-+#else
-+#define tzset_unlocked __tzset_unlocked50
-+#endif
-+
-+void tzset_unlocked(void);
-+#ifdef _REENTRANT
-+extern rwlock_t __lcl_lock;
-+#endif
-+#endif
-+
-+#endif /* !defined PRIVATE_H */
++++ b/winsup/cygwin/tzcode/tz_posixrules.h
+@@ -0,0 +1,231 @@
++/*	tz_posixrules.h
++ *
++ *	The data elements were generated with...
++ *	od -vt u1 -A n /usr/share/zoneinfo/posixrules | 
++ *		sed 's/$/,/;s/^ //;s/[0-9] /&,/g;s/ ,/, /g' > tz_posixrules.h
++ *
++ *	The source posixrules file is from the Cygwin tzdata 2020a-1 package.
++ */
++static NO_COPY unsigned char _posixrules_data[] = {
++ 84,  90, 105, 102,  50,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
++  0,   0,   0,   0,   0,   0,   0,   5,   0,   0,   0,   5,   0,   0,   0,   0,
++  0,   0,   0, 236,   0,   0,   0,   5,   0,   0,   0,  20, 128,   0,   0,   0,
++158, 166,  30, 112, 159, 186, 235,  96, 160, 134,   0, 112, 161, 154, 205,  96,
++162, 101, 226, 112, 163, 131, 233, 224, 164, 106, 174, 112, 165,  53, 167,  96,
++166,  83, 202, 240, 167,  21, 137,  96, 168,  51, 172, 240, 168, 254, 165, 224,
++170,  19, 142, 240, 170, 222, 135, 224, 171, 243, 112, 240, 172, 190, 105, 224,
++173, 211,  82, 240, 174, 158,  75, 224, 175, 179,  52, 240, 176, 126,  45, 224,
++177, 156,  81, 112, 178, 103,  74,  96, 179, 124,  51, 112, 180,  71,  44,  96,
++181,  92,  21, 112, 182,  39,  14,  96, 183,  59, 247, 112, 184,   6, 240,  96,
++185,  27, 217, 112, 185, 230, 210,  96, 187,   4, 245, 240, 187, 198, 180,  96,
++188, 228, 215, 240, 189, 175, 208, 224, 190, 196, 185, 240, 191, 143, 178, 224,
++192, 164, 155, 240, 193, 111, 148, 224, 194, 132, 125, 240, 195,  79, 118, 224,
++196, 100,  95, 240, 197,  47,  88, 224, 198,  77, 124, 112, 199,  15,  58, 224,
++200,  45,  94, 112, 200, 248,  87,  96, 202,  13,  64, 112, 202, 216,  57,  96,
++203, 136, 240, 112, 210,  35, 244, 112, 210,  96, 251, 224, 211, 117, 228, 240,
++212,  64, 221, 224, 213,  85, 198, 240, 214,  32, 191, 224, 215,  53, 168, 240,
++216,   0, 161, 224, 217,  21, 138, 240, 217, 224, 131, 224, 218, 254, 167, 112,
++219, 192, 101, 224, 220, 222, 137, 112, 221, 169, 130,  96, 222, 190, 107, 112,
++223, 137, 100,  96, 224, 158,  77, 112, 225, 105,  70,  96, 226, 126,  47, 112,
++227,  73,  40,  96, 228,  94,  17, 112, 229,  87,  46, 224, 230,  71,  45, 240,
++231,  55,  16, 224, 232,  39,  15, 240, 233,  22, 242, 224, 234,   6, 241, 240,
++234, 246, 212, 224, 235, 230, 211, 240, 236, 214, 182, 224, 237, 198, 181, 240,
++238, 191, 211,  96, 239, 175, 210, 112, 240, 159, 181,  96, 241, 143, 180, 112,
++242, 127, 151,  96, 243, 111, 150, 112, 244,  95, 121,  96, 245,  79, 120, 112,
++246,  63,  91,  96, 247,  47,  90, 112, 248,  40, 119, 224, 249,  15,  60, 112,
++250,   8,  89, 224, 250, 248,  88, 240, 251, 232,  59, 224, 252, 216,  58, 240,
++253, 200,  29, 224, 254, 184,  28, 240, 255, 167, 255, 224,   0, 151, 254, 240,
++  1, 135, 225, 224,   2, 119, 224, 240,   3, 112, 254,  96,   4,  96, 253, 112,
++  5,  80, 224,  96,   6,  64, 223, 112,   7,  48, 194,  96,   7, 141,  25, 112,
++  9,  16, 164,  96,   9, 173, 148, 240,  10, 240, 134,  96,  11, 224, 133, 112,
++ 12, 217, 162, 224,  13, 192, 103, 112,  14, 185, 132, 224,  15, 169, 131, 240,
++ 16, 153, 102, 224,  17, 137, 101, 240,  18, 121,  72, 224,  19, 105,  71, 240,
++ 20,  89,  42, 224,  21,  73,  41, 240,  22,  57,  12, 224,  23,  41,  11, 240,
++ 24,  34,  41,  96,  25,   8, 237, 240,  26,   2,  11,  96,  26, 242,  10, 112,
++ 27, 225, 237,  96,  28, 209, 236, 112,  29, 193, 207,  96,  30, 177, 206, 112,
++ 31, 161, 177,  96,  32, 118,   0, 240,  33, 129, 147,  96,  34,  85, 226, 240,
++ 35, 106, 175, 224,  36,  53, 196, 240,  37,  74, 145, 224,  38,  21, 166, 240,
++ 39,  42, 115, 224,  39, 254, 195, 112,  41,  10,  85, 224,  41, 222, 165, 112,
++ 42, 234,  55, 224,  43, 190, 135, 112,  44, 211,  84,  96,  45, 158, 105, 112,
++ 46, 179,  54,  96,  47, 126,  75, 112,  48, 147,  24,  96,  49, 103, 103, 240,
++ 50, 114, 250,  96,  51,  71,  73, 240,  52,  82, 220,  96,  53,  39,  43, 240,
++ 54,  50, 190,  96,  55,   7,  13, 240,  56,  27, 218, 224,  56, 230, 239, 240,
++ 57, 251, 188, 224,  58, 198, 209, 240,  59, 219, 158, 224,  60, 175, 238, 112,
++ 61, 187, 128, 224,  62, 143, 208, 112,  63, 155,  98, 224,  64, 111, 178, 112,
++ 65, 132, 127,  96,  66,  79, 148, 112,  67, 100,  97,  96,  68,  47, 118, 112,
++ 69,  68,  67,  96,  69, 243, 168, 240,  71,  45,  95, 224,  71, 211, 138, 240,
++ 73,  13,  65, 224,  73, 179, 108, 240,  74, 237,  35, 224,  75, 156, 137, 112,
++ 76, 214,  64,  96,  77, 124, 107, 112,  78, 182,  34,  96,  79,  92,  77, 112,
++ 80, 150,   4,  96,  81,  60,  47, 112,  82, 117, 230,  96,  83,  28,  17, 112,
++ 84,  85, 200,  96,  84, 251, 243, 112,  86,  53, 170,  96,  86, 229,  15, 240,
++ 88,  30, 198, 224,  88, 196, 241, 240,  89, 254, 168, 224,  90, 164, 211, 240,
++ 91, 222, 138, 224,  92, 132, 181, 240,  93, 190, 108, 224,  94, 100, 151, 240,
++ 95, 158,  78, 224,  96,  77, 180, 112,  97, 135, 107,  96,  98,  45, 150, 112,
++ 99, 103,  77,  96, 100,  13, 120, 112, 101,  71,  47,  96, 101, 237,  90, 112,
++103,  39,  17,  96, 103, 205,  60, 112, 105,   6, 243,  96, 105, 173,  30, 112,
++106, 230, 213,  96, 107, 150,  58, 240, 108, 207, 241, 224, 109, 118,  28, 240,
++110, 175, 211, 224, 111,  85, 254, 240, 112, 143, 181, 224, 113,  53, 224, 240,
++114, 111, 151, 224, 115,  21, 194, 240, 116,  79, 121, 224, 116, 254, 223, 112,
++118,  56, 150,  96, 118, 222, 193, 112, 120,  24, 120,  96, 120, 190, 163, 112,
++121, 248,  90,  96, 122, 158, 133, 112, 123, 216,  60,  96, 124, 126, 103, 112,
++125, 184,  30,  96, 126,  94,  73, 112, 127, 152,   0,  96,   2,   1,   2,   1,
++  2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,
++  2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,
++  2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   3,   4,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2, 255, 255, 186, 158,   0,   0, 255, 255,
++199, 192,   1,   4, 255, 255, 185, 176,   0,   8, 255, 255, 199, 192,   1,  12,
++255, 255, 199, 192,   1,  16,  76,  77,  84,   0,  69,  68,  84,   0,  69,  83,
++ 84,   0,  69,  87,  84,   0,  69,  80,  84,   0,   0,   0,   0,   0,   1,   0,
++  0,   0,   0,   1,  84,  90, 105, 102,  50,   0,   0,   0,   0,   0,   0,   0,
++  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   5,   0,   0,   0,   5,
++  0,   0,   0,   0,   0,   0,   0, 236,   0,   0,   0,   5,   0,   0,   0,  20,
++255, 255, 255, 255,  94,   3, 240, 144, 255, 255, 255, 255, 158, 166,  30, 112,
++255, 255, 255, 255, 159, 186, 235,  96, 255, 255, 255, 255, 160, 134,   0, 112,
++255, 255, 255, 255, 161, 154, 205,  96, 255, 255, 255, 255, 162, 101, 226, 112,
++255, 255, 255, 255, 163, 131, 233, 224, 255, 255, 255, 255, 164, 106, 174, 112,
++255, 255, 255, 255, 165,  53, 167,  96, 255, 255, 255, 255, 166,  83, 202, 240,
++255, 255, 255, 255, 167,  21, 137,  96, 255, 255, 255, 255, 168,  51, 172, 240,
++255, 255, 255, 255, 168, 254, 165, 224, 255, 255, 255, 255, 170,  19, 142, 240,
++255, 255, 255, 255, 170, 222, 135, 224, 255, 255, 255, 255, 171, 243, 112, 240,
++255, 255, 255, 255, 172, 190, 105, 224, 255, 255, 255, 255, 173, 211,  82, 240,
++255, 255, 255, 255, 174, 158,  75, 224, 255, 255, 255, 255, 175, 179,  52, 240,
++255, 255, 255, 255, 176, 126,  45, 224, 255, 255, 255, 255, 177, 156,  81, 112,
++255, 255, 255, 255, 178, 103,  74,  96, 255, 255, 255, 255, 179, 124,  51, 112,
++255, 255, 255, 255, 180,  71,  44,  96, 255, 255, 255, 255, 181,  92,  21, 112,
++255, 255, 255, 255, 182,  39,  14,  96, 255, 255, 255, 255, 183,  59, 247, 112,
++255, 255, 255, 255, 184,   6, 240,  96, 255, 255, 255, 255, 185,  27, 217, 112,
++255, 255, 255, 255, 185, 230, 210,  96, 255, 255, 255, 255, 187,   4, 245, 240,
++255, 255, 255, 255, 187, 198, 180,  96, 255, 255, 255, 255, 188, 228, 215, 240,
++255, 255, 255, 255, 189, 175, 208, 224, 255, 255, 255, 255, 190, 196, 185, 240,
++255, 255, 255, 255, 191, 143, 178, 224, 255, 255, 255, 255, 192, 164, 155, 240,
++255, 255, 255, 255, 193, 111, 148, 224, 255, 255, 255, 255, 194, 132, 125, 240,
++255, 255, 255, 255, 195,  79, 118, 224, 255, 255, 255, 255, 196, 100,  95, 240,
++255, 255, 255, 255, 197,  47,  88, 224, 255, 255, 255, 255, 198,  77, 124, 112,
++255, 255, 255, 255, 199,  15,  58, 224, 255, 255, 255, 255, 200,  45,  94, 112,
++255, 255, 255, 255, 200, 248,  87,  96, 255, 255, 255, 255, 202,  13,  64, 112,
++255, 255, 255, 255, 202, 216,  57,  96, 255, 255, 255, 255, 203, 136, 240, 112,
++255, 255, 255, 255, 210,  35, 244, 112, 255, 255, 255, 255, 210,  96, 251, 224,
++255, 255, 255, 255, 211, 117, 228, 240, 255, 255, 255, 255, 212,  64, 221, 224,
++255, 255, 255, 255, 213,  85, 198, 240, 255, 255, 255, 255, 214,  32, 191, 224,
++255, 255, 255, 255, 215,  53, 168, 240, 255, 255, 255, 255, 216,   0, 161, 224,
++255, 255, 255, 255, 217,  21, 138, 240, 255, 255, 255, 255, 217, 224, 131, 224,
++255, 255, 255, 255, 218, 254, 167, 112, 255, 255, 255, 255, 219, 192, 101, 224,
++255, 255, 255, 255, 220, 222, 137, 112, 255, 255, 255, 255, 221, 169, 130,  96,
++255, 255, 255, 255, 222, 190, 107, 112, 255, 255, 255, 255, 223, 137, 100,  96,
++255, 255, 255, 255, 224, 158,  77, 112, 255, 255, 255, 255, 225, 105,  70,  96,
++255, 255, 255, 255, 226, 126,  47, 112, 255, 255, 255, 255, 227,  73,  40,  96,
++255, 255, 255, 255, 228,  94,  17, 112, 255, 255, 255, 255, 229,  87,  46, 224,
++255, 255, 255, 255, 230,  71,  45, 240, 255, 255, 255, 255, 231,  55,  16, 224,
++255, 255, 255, 255, 232,  39,  15, 240, 255, 255, 255, 255, 233,  22, 242, 224,
++255, 255, 255, 255, 234,   6, 241, 240, 255, 255, 255, 255, 234, 246, 212, 224,
++255, 255, 255, 255, 235, 230, 211, 240, 255, 255, 255, 255, 236, 214, 182, 224,
++255, 255, 255, 255, 237, 198, 181, 240, 255, 255, 255, 255, 238, 191, 211,  96,
++255, 255, 255, 255, 239, 175, 210, 112, 255, 255, 255, 255, 240, 159, 181,  96,
++255, 255, 255, 255, 241, 143, 180, 112, 255, 255, 255, 255, 242, 127, 151,  96,
++255, 255, 255, 255, 243, 111, 150, 112, 255, 255, 255, 255, 244,  95, 121,  96,
++255, 255, 255, 255, 245,  79, 120, 112, 255, 255, 255, 255, 246,  63,  91,  96,
++255, 255, 255, 255, 247,  47,  90, 112, 255, 255, 255, 255, 248,  40, 119, 224,
++255, 255, 255, 255, 249,  15,  60, 112, 255, 255, 255, 255, 250,   8,  89, 224,
++255, 255, 255, 255, 250, 248,  88, 240, 255, 255, 255, 255, 251, 232,  59, 224,
++255, 255, 255, 255, 252, 216,  58, 240, 255, 255, 255, 255, 253, 200,  29, 224,
++255, 255, 255, 255, 254, 184,  28, 240, 255, 255, 255, 255, 255, 167, 255, 224,
++  0,   0,   0,   0,   0, 151, 254, 240,   0,   0,   0,   0,   1, 135, 225, 224,
++  0,   0,   0,   0,   2, 119, 224, 240,   0,   0,   0,   0,   3, 112, 254,  96,
++  0,   0,   0,   0,   4,  96, 253, 112,   0,   0,   0,   0,   5,  80, 224,  96,
++  0,   0,   0,   0,   6,  64, 223, 112,   0,   0,   0,   0,   7,  48, 194,  96,
++  0,   0,   0,   0,   7, 141,  25, 112,   0,   0,   0,   0,   9,  16, 164,  96,
++  0,   0,   0,   0,   9, 173, 148, 240,   0,   0,   0,   0,  10, 240, 134,  96,
++  0,   0,   0,   0,  11, 224, 133, 112,   0,   0,   0,   0,  12, 217, 162, 224,
++  0,   0,   0,   0,  13, 192, 103, 112,   0,   0,   0,   0,  14, 185, 132, 224,
++  0,   0,   0,   0,  15, 169, 131, 240,   0,   0,   0,   0,  16, 153, 102, 224,
++  0,   0,   0,   0,  17, 137, 101, 240,   0,   0,   0,   0,  18, 121,  72, 224,
++  0,   0,   0,   0,  19, 105,  71, 240,   0,   0,   0,   0,  20,  89,  42, 224,
++  0,   0,   0,   0,  21,  73,  41, 240,   0,   0,   0,   0,  22,  57,  12, 224,
++  0,   0,   0,   0,  23,  41,  11, 240,   0,   0,   0,   0,  24,  34,  41,  96,
++  0,   0,   0,   0,  25,   8, 237, 240,   0,   0,   0,   0,  26,   2,  11,  96,
++  0,   0,   0,   0,  26, 242,  10, 112,   0,   0,   0,   0,  27, 225, 237,  96,
++  0,   0,   0,   0,  28, 209, 236, 112,   0,   0,   0,   0,  29, 193, 207,  96,
++  0,   0,   0,   0,  30, 177, 206, 112,   0,   0,   0,   0,  31, 161, 177,  96,
++  0,   0,   0,   0,  32, 118,   0, 240,   0,   0,   0,   0,  33, 129, 147,  96,
++  0,   0,   0,   0,  34,  85, 226, 240,   0,   0,   0,   0,  35, 106, 175, 224,
++  0,   0,   0,   0,  36,  53, 196, 240,   0,   0,   0,   0,  37,  74, 145, 224,
++  0,   0,   0,   0,  38,  21, 166, 240,   0,   0,   0,   0,  39,  42, 115, 224,
++  0,   0,   0,   0,  39, 254, 195, 112,   0,   0,   0,   0,  41,  10,  85, 224,
++  0,   0,   0,   0,  41, 222, 165, 112,   0,   0,   0,   0,  42, 234,  55, 224,
++  0,   0,   0,   0,  43, 190, 135, 112,   0,   0,   0,   0,  44, 211,  84,  96,
++  0,   0,   0,   0,  45, 158, 105, 112,   0,   0,   0,   0,  46, 179,  54,  96,
++  0,   0,   0,   0,  47, 126,  75, 112,   0,   0,   0,   0,  48, 147,  24,  96,
++  0,   0,   0,   0,  49, 103, 103, 240,   0,   0,   0,   0,  50, 114, 250,  96,
++  0,   0,   0,   0,  51,  71,  73, 240,   0,   0,   0,   0,  52,  82, 220,  96,
++  0,   0,   0,   0,  53,  39,  43, 240,   0,   0,   0,   0,  54,  50, 190,  96,
++  0,   0,   0,   0,  55,   7,  13, 240,   0,   0,   0,   0,  56,  27, 218, 224,
++  0,   0,   0,   0,  56, 230, 239, 240,   0,   0,   0,   0,  57, 251, 188, 224,
++  0,   0,   0,   0,  58, 198, 209, 240,   0,   0,   0,   0,  59, 219, 158, 224,
++  0,   0,   0,   0,  60, 175, 238, 112,   0,   0,   0,   0,  61, 187, 128, 224,
++  0,   0,   0,   0,  62, 143, 208, 112,   0,   0,   0,   0,  63, 155,  98, 224,
++  0,   0,   0,   0,  64, 111, 178, 112,   0,   0,   0,   0,  65, 132, 127,  96,
++  0,   0,   0,   0,  66,  79, 148, 112,   0,   0,   0,   0,  67, 100,  97,  96,
++  0,   0,   0,   0,  68,  47, 118, 112,   0,   0,   0,   0,  69,  68,  67,  96,
++  0,   0,   0,   0,  69, 243, 168, 240,   0,   0,   0,   0,  71,  45,  95, 224,
++  0,   0,   0,   0,  71, 211, 138, 240,   0,   0,   0,   0,  73,  13,  65, 224,
++  0,   0,   0,   0,  73, 179, 108, 240,   0,   0,   0,   0,  74, 237,  35, 224,
++  0,   0,   0,   0,  75, 156, 137, 112,   0,   0,   0,   0,  76, 214,  64,  96,
++  0,   0,   0,   0,  77, 124, 107, 112,   0,   0,   0,   0,  78, 182,  34,  96,
++  0,   0,   0,   0,  79,  92,  77, 112,   0,   0,   0,   0,  80, 150,   4,  96,
++  0,   0,   0,   0,  81,  60,  47, 112,   0,   0,   0,   0,  82, 117, 230,  96,
++  0,   0,   0,   0,  83,  28,  17, 112,   0,   0,   0,   0,  84,  85, 200,  96,
++  0,   0,   0,   0,  84, 251, 243, 112,   0,   0,   0,   0,  86,  53, 170,  96,
++  0,   0,   0,   0,  86, 229,  15, 240,   0,   0,   0,   0,  88,  30, 198, 224,
++  0,   0,   0,   0,  88, 196, 241, 240,   0,   0,   0,   0,  89, 254, 168, 224,
++  0,   0,   0,   0,  90, 164, 211, 240,   0,   0,   0,   0,  91, 222, 138, 224,
++  0,   0,   0,   0,  92, 132, 181, 240,   0,   0,   0,   0,  93, 190, 108, 224,
++  0,   0,   0,   0,  94, 100, 151, 240,   0,   0,   0,   0,  95, 158,  78, 224,
++  0,   0,   0,   0,  96,  77, 180, 112,   0,   0,   0,   0,  97, 135, 107,  96,
++  0,   0,   0,   0,  98,  45, 150, 112,   0,   0,   0,   0,  99, 103,  77,  96,
++  0,   0,   0,   0, 100,  13, 120, 112,   0,   0,   0,   0, 101,  71,  47,  96,
++  0,   0,   0,   0, 101, 237,  90, 112,   0,   0,   0,   0, 103,  39,  17,  96,
++  0,   0,   0,   0, 103, 205,  60, 112,   0,   0,   0,   0, 105,   6, 243,  96,
++  0,   0,   0,   0, 105, 173,  30, 112,   0,   0,   0,   0, 106, 230, 213,  96,
++  0,   0,   0,   0, 107, 150,  58, 240,   0,   0,   0,   0, 108, 207, 241, 224,
++  0,   0,   0,   0, 109, 118,  28, 240,   0,   0,   0,   0, 110, 175, 211, 224,
++  0,   0,   0,   0, 111,  85, 254, 240,   0,   0,   0,   0, 112, 143, 181, 224,
++  0,   0,   0,   0, 113,  53, 224, 240,   0,   0,   0,   0, 114, 111, 151, 224,
++  0,   0,   0,   0, 115,  21, 194, 240,   0,   0,   0,   0, 116,  79, 121, 224,
++  0,   0,   0,   0, 116, 254, 223, 112,   0,   0,   0,   0, 118,  56, 150,  96,
++  0,   0,   0,   0, 118, 222, 193, 112,   0,   0,   0,   0, 120,  24, 120,  96,
++  0,   0,   0,   0, 120, 190, 163, 112,   0,   0,   0,   0, 121, 248,  90,  96,
++  0,   0,   0,   0, 122, 158, 133, 112,   0,   0,   0,   0, 123, 216,  60,  96,
++  0,   0,   0,   0, 124, 126, 103, 112,   0,   0,   0,   0, 125, 184,  30,  96,
++  0,   0,   0,   0, 126,  94,  73, 112,   0,   0,   0,   0, 127, 152,   0,  96,
++  2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,
++  2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,
++  2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,
++  2,   3,   4,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2, 255, 255, 186, 158,
++  0,   0, 255, 255, 199, 192,   1,   4, 255, 255, 185, 176,   0,   8, 255, 255,
++199, 192,   1,  12, 255, 255, 199, 192,   1,  16,  76,  77,  84,   0,  69,  68,
++ 84,   0,  69,  83,  84,   0,  69,  87,  84,   0,  69,  80,  84,   0,   0,   0,
++  0,   0,   1,   0,   0,   0,   0,   1,  10,  69,  83,  84,  53,  69,  68,  84,
++ 44,  77,  51,  46,  50,  46,  48,  44,  77,  49,  49,  46,  49,  46,  48,  10,
++};
 -- 
 2.21.0
 
