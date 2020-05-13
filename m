@@ -1,30 +1,47 @@
-Return-Path: <mark@maxrnd.com>
-Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
- by sourceware.org (Postfix) with ESMTPS id 0F851388A820
- for <cygwin-patches@cygwin.com>; Wed, 13 May 2020 08:24:30 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 0F851388A820
-Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=maxrnd.com
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=mark@maxrnd.com
-Received: (from daemon@localhost)
- by m0.truegem.net (8.12.11/8.12.11) id 04D8OKum090264;
- Wed, 13 May 2020 01:24:20 -0700 (PDT) (envelope-from mark@maxrnd.com)
-Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67),
- claiming to be "localhost.localdomain"
- via SMTP by m0.truegem.net, id smtpdTeAbNM; Wed May 13 01:24:14 2020
-From: Mark Geisert <mark@maxrnd.com>
+Return-Path: <david.macek.0@gmail.com>
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by sourceware.org (Postfix) with ESMTPS id B4E633851C0D
+ for <cygwin-patches@cygwin.com>; Wed, 13 May 2020 15:34:11 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org B4E633851C0D
+Received: by mail-wr1-x435.google.com with SMTP id y3so21430873wrt.1
+ for <cygwin-patches@cygwin.com>; Wed, 13 May 2020 08:34:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:date:from:to:subject:message-id:in-reply-to
+ :references:mime-version:content-transfer-encoding;
+ bh=UyEZdaDlOK09zmN+be30C2a6WOAdFkhHMDG6rvsy8zc=;
+ b=YRCaRp/1Y9HBu3x0IrCOPmVxsLKpyFFIaA58ArAr7In/17wSq8MLo5XVSGGLjQB6vH
+ cMOGX4VcbkXaWvSPHI9Q7As2w3lZYcRROC0g9cIJdyvTac8cwWYgFwRM/iuPmMVWxHoL
+ bbdogNypx0c4078GSldNxcUfmKwqNYggFkro3HGodZsqosSKXFSqdRSUkaFjM94Rs0dE
+ p9YMoFStvYx3i0u2q9Eq88ts6q3B21EoTA0PMDI+zEXMaOFTcKTolCf9ZlZ3cAGWTela
+ U6ePux3hippU93Pcamtpws0B9nDwoJHMUDRvgiD4vKflKnGkQpx4BXJw2koYWPn+YZyb
+ d7wQ==
+X-Gm-Message-State: AGi0Pub91EASSuGtIfZCUM8tKGTnIUSZYsMVmOLDinAIEbuoIAVs6LpA
+ rz2QWPd1a2io7+FxaCHQ4cbmIxvR
+X-Google-Smtp-Source: APiQypKzIvPLqcx92Rn2y94E3Y6sovIu6EC55d0+sB2/DorUWQJNbftBYNHzHpyLjvbdFUrKPqPNFw==
+X-Received: by 2002:adf:f102:: with SMTP id r2mr30968369wro.316.1589384050446; 
+ Wed, 13 May 2020 08:34:10 -0700 (PDT)
+Received: from localhost ([193.165.97.191])
+ by smtp.gmail.com with ESMTPSA id 18sm23406973wmj.19.2020.05.13.08.34.09
+ for <cygwin-patches@cygwin.com>
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 13 May 2020 08:34:09 -0700 (PDT)
+Date: Wed, 13 May 2020 17:34:06 +0200
+From: David Macek <david.macek.0@gmail.com>
 To: cygwin-patches@cygwin.com
-Subject: [Cygwin PATCH 3/9] tzcode resync: localtime.cc
-Date: Wed, 13 May 2020 01:23:43 -0700
-Message-Id: <20200513082349.831-3-mark@maxrnd.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20200513082349.831-1-mark@maxrnd.com>
-References: <20200513082349.831-1-mark@maxrnd.com>
+Subject: [PATCH v2] cygwin: doc: Add keywords for ACE order issues
+Message-ID: <20200513173402.00004eda@gmail.com>
+In-Reply-To: <3749ce9f7c2eaeee1f600c4e8bede070f332bb69.camel@redhat.com>
+References: <3749ce9f7c2eaeee1f600c4e8bede070f332bb69.camel@redhat.com>
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, SPF_HELO_NONE, SPF_NONE,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, FREEMAIL_ENVFROM_END_DIGIT,
+ FREEMAIL_FROM, GIT_PATCH_0, RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -38,183 +55,51 @@ List-Archive: <https://cygwin.com/pipermail/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 13 May 2020 08:24:32 -0000
+X-List-Received-Date: Wed, 13 May 2020 15:34:13 -0000
 
-Cygwin's wrapper around NetBSD's localtime.c.
+Windows Explorer shows a warning with Cygwin-created DACLs, but putting
+the text of the warning into Google doesn't lead to the relevant Cygwin
+docs.  Let's copy the warning text into the docs in the hopes of helping
+confused users.  Most of the credit for the wording belongs to Yaakov
+Selkowitz.
 
+Latest inquiry: <https://cygwin.com/pipermail/cygwin/2020-May/244814.html>
+
+Signed-off-by: David Macek <david.macek.0@gmail.com>
 ---
- winsup/cygwin/tzcode/localtime.cc | 162 ++++++++++++++++++++++++++++++
- 1 file changed, 162 insertions(+)
- create mode 100644 winsup/cygwin/tzcode/localtime.cc
 
-diff --git a/winsup/cygwin/tzcode/localtime.cc b/winsup/cygwin/tzcode/localtime.cc
-new file mode 100644
-index 000000000..9ea885ece
---- /dev/null
-+++ b/winsup/cygwin/tzcode/localtime.cc
-@@ -0,0 +1,162 @@
-+/* localtime.cc: Wrapper of NetBSD tzcode support for Cygwin. See README file.
-+
-+This file is part of Cygwin.
-+
-+This software is a copyrighted work licensed under the terms of the
-+Cygwin license.  Please consult the file "CYGWIN_LICENSE" for
-+details. */
-+
-+#include "winsup.h"
-+#include "sync.h"
-+#include "../include/cygwin/version.h"
-+#include "tz_posixrules.h"
-+
-+// Set these NetBSD-related option #defines appropriately for Cygwin
-+//#define STD_INSPIRED	// early-include private.h below does this
-+#define lint
-+#define USG_COMPAT 1
-+#define NO_ERROR_IN_DST_GAP
-+#define state __state
-+
-+static NO_COPY muto tzset_guard;
-+
-+// Turn these NetBSD ops into the corresponding Cygwin ops
-+#define rwlock_wrlock(X) tzset_guard.init ("tzset_guard")->acquire ()
-+#define rwlock_unlock(X) tzset_guard.release ()
-+
-+// Turn a specific known kind of const parameter into non-const
-+#define __UNCONST(X) ((char *) (X))
-+
-+// Turn off these NetBSD audit-related definitions
-+#define __aconst
-+#define _DIAGASSERT(X)
-+
-+// Get ready to enclose NetBSD's localtime.c
-+#ifdef __cplusplus
-+extern "C" {
-+#endif
-+
-+// Supply this Cygwin-specific function in advance of its use in localtime.c
-+static char *
-+tzgetwintz (char *wildabbr, char *outbuf)
-+{
-+    TIME_ZONE_INFORMATION tzi;
-+    char *cp, *dst;
-+    wchar_t *src;
-+    div_t d;
-+
-+    GetTimeZoneInformation (&tzi);
-+    dst = cp = outbuf;
-+    for (src = tzi.StandardName; *src; src++)
-+	if (*src >= L'A' && *src <= L'Z')
-+	    *dst++ = *src;
-+    if ((dst - cp) < 3)
-+      {
-+	/* In non-english Windows, converted tz.StandardName
-+	   may not contain a valid standard timezone name. */
-+	strcpy (cp, wildabbr);
-+	cp += strlen (wildabbr);
-+      }
-+    else
-+	cp = dst;
-+    d = div (tzi.Bias + tzi.StandardBias, 60);
-+    __small_sprintf (cp, "%d", d.quot);
-+    if (d.rem)
-+	__small_sprintf (cp = strchr (cp, 0), ":%d", abs (d.rem));
-+    if (tzi.StandardDate.wMonth)
-+      {
-+	cp = strchr (cp, 0);
-+	dst = cp;
-+	for (src = tzi.DaylightName; *src; src++)
-+	    if (*src >= L'A' && *src <= L'Z')
-+		*dst++ = *src;
-+	if ((dst - cp) < 3)
-+	  {
-+	    /* In non-english Windows, converted tz.DaylightName
-+	       may not contain a valid daylight timezone name. */
-+	    strcpy (cp, wildabbr);
-+	    cp += strlen (wildabbr);
-+	  }
-+	else
-+	    cp = dst;
-+	d = div (tzi.Bias + tzi.DaylightBias, 60);
-+	__small_sprintf (cp, "%d", d.quot);
-+	if (d.rem)
-+	    __small_sprintf (cp = strchr (cp, 0), ":%d", abs (d.rem));
-+	cp = strchr (cp, 0);
-+	__small_sprintf (cp = strchr (cp, 0), ",M%d.%d.%d/%d",
-+			 tzi.DaylightDate.wMonth,
-+			 tzi.DaylightDate.wDay,
-+			 tzi.DaylightDate.wDayOfWeek,
-+			 tzi.DaylightDate.wHour);
-+	if (tzi.DaylightDate.wMinute || tzi.DaylightDate.wSecond)
-+	    __small_sprintf (cp = strchr (cp, 0), ":%d",
-+			     tzi.DaylightDate.wMinute);
-+	if (tzi.DaylightDate.wSecond)
-+	    __small_sprintf (cp = strchr (cp, 0), ":%d",
-+			     tzi.DaylightDate.wSecond);
-+	cp = strchr (cp, 0);
-+	__small_sprintf (cp = strchr (cp, 0), ",M%d.%d.%d/%d",
-+			 tzi.StandardDate.wMonth,
-+			 tzi.StandardDate.wDay,
-+			 tzi.StandardDate.wDayOfWeek,
-+			 tzi.StandardDate.wHour);
-+	if (tzi.StandardDate.wMinute || tzi.StandardDate.wSecond)
-+	    __small_sprintf (cp = strchr (cp, 0), ":%d",
-+			     tzi.StandardDate.wMinute);
-+	if (tzi.StandardDate.wSecond)
-+	    __small_sprintf (cp = strchr (cp, 0), ":%d",
-+			     tzi.StandardDate.wSecond);
-+      }
-+    /* __small_printf ("TZ deduced as `%s'\n", outbuf); */
-+    return outbuf;
-+}
-+
-+// Pull these in early to catch any small issues before the real test
-+#include "private.h"
-+#include "tzfile.h"
-+
-+/* Some NetBSD differences were too difficult to work around..
-+   so #include a patched copy of localtime.c rather than the NetBSD original.
-+   Here is a list of the patches...
-+   (1) fix an erroneous decl of tzdirslash size (flagged by g++)
-+   (2) add missing casts on all results of malloc() calls (flagged by g++)
-+   (3) change all malloc() calls to analogous calloc() calls
-+   (4) add conditional call to Cygwin's tzgetwintz() from tzsetlcl()
-+   (5) add Cygwin's historical "posixrules" support to tzloadbody()
-+   (6) enable defs of daylight, timezone, and tzname
-+   (7) make def of __lclptr static to avoid exporting it
-+*/
-+#include "localtime.c.patched"
-+
-+#ifdef __cplusplus
-+}
-+#endif
-+
-+// Don't forget these Cygwin-specific additions from this point to EOF
-+EXPORT_ALIAS (tzset_unlocked, _tzset_unlocked)
-+
-+extern "C" long
-+__cygwin_gettzoffset (const struct tm *tmp)
-+{
-+#ifdef TM_GMTOFF
-+    if (CYGWIN_VERSION_CHECK_FOR_EXTRA_TM_MEMBERS)
-+    	return tmp->TM_GMTOFF;
-+#endif /* defined TM_GMTOFF */
-+    __tzinfo_type *tz = __gettzinfo ();
-+    /* The sign of this is exactly opposite the envvar TZ.  We
-+       could directly use the global _timezone for tm_isdst==0,
-+       but have to use __tzrule for daylight savings.  */
-+    long offset = -tz->__tzrule[tmp->tm_isdst > 0].offset;
-+    return offset;
-+}
-+
-+extern "C" const char *
-+__cygwin_gettzname (const struct tm *tmp)
-+{
-+#ifdef TM_ZONE
-+    if (CYGWIN_VERSION_CHECK_FOR_EXTRA_TM_MEMBERS)
-+	return tmp->TM_ZONE;
-+#endif
-+    return _tzname[tmp->tm_isdst > 0];
-+}
+I thought about the wording and there was one one advantage of the
+clumsy variant -- anyone intending to modify the paragraph would
+immediately know why the full message is there (in my opinion it
+doesn't add much value for the reader).  In any case, here's the
+variant with nicer wording (which I also like better).
+
+ winsup/doc/ntsec.xml | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/winsup/doc/ntsec.xml b/winsup/doc/ntsec.xml
+index 08a33bdc6c..8644965349 100644
+--- a/winsup/doc/ntsec.xml
++++ b/winsup/doc/ntsec.xml
+@@ -2159,11 +2159,13 @@ will correctly deal with the ACL regardless of the order of allow and
+ deny ACEs.  The second rule is not modified to get the ACEs in the
+ preferred order.</para>
+ 
+-<para>Unfortunately the security tab in the file properties dialog of
+-the Windows Explorer insists to rearrange the order of the ACEs to
+-canonical order before you can read them. Thank God, the sort order
+-remains unchanged if one presses the Cancel button.  But don't even
+-<emphasis role='bold'>think</emphasis> of pressing OK...</para>
++<para>Unfortunately, the security tab in the file properties dialog of
++the Windows Explorer will pop up a warning stating "The permissions on
++... are incorrectly ordered, which may cause some entries to be
++ineffective."  Pressing the Cancel button of the properties dialog
++fortunately leaves the sort order unchanged, but pressing OK will cause
++Explorer to canonicalize the order of the ACEs, thereby invalidating
++POSIX compatibility.</para>
+ 
+ <para>Canonical ACLs are unable to reflect each possible combination
+ of POSIX permissions. Example:</para>
 -- 
-2.21.0
+2.26.2.windows.1
 
