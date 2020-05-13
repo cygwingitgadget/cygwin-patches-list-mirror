@@ -1,41 +1,27 @@
-Return-Path: <yselkowi@redhat.com>
-Received: from us-smtp-1.mimecast.com (us-smtp-delivery-1.mimecast.com
- [205.139.110.120])
- by sourceware.org (Postfix) with ESMTP id 2A3D53938C2D
- for <cygwin-patches@cygwin.com>; Tue, 12 May 2020 21:23:33 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 2A3D53938C2D
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-276-zoBUY5JJOKeIwZRDZLHd_g-1; Tue, 12 May 2020 17:23:28 -0400
-X-MC-Unique: zoBUY5JJOKeIwZRDZLHd_g-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com
- [10.5.11.13])
- (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
- (No client certificate requested)
- by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 17F761005510
- for <cygwin-patches@cygwin.com>; Tue, 12 May 2020 21:23:28 +0000 (UTC)
-Received: from ovpn-113-5.rdu2.redhat.com (ovpn-113-5.rdu2.redhat.com
- [10.10.113.5])
- by smtp.corp.redhat.com (Postfix) with ESMTPS id C23547D8C3
- for <cygwin-patches@cygwin.com>; Tue, 12 May 2020 21:23:27 +0000 (UTC)
-Message-ID: <3749ce9f7c2eaeee1f600c4e8bede070f332bb69.camel@redhat.com>
-Subject: Re: [PATCH] cygwin: doc: Add keywords for ACE order issues
-From: Yaakov Selkowitz <yselkowi@redhat.com>
+Return-Path: <mark@maxrnd.com>
+Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
+ by sourceware.org (Postfix) with ESMTPS id 14656388A829
+ for <cygwin-patches@cygwin.com>; Wed, 13 May 2020 08:24:21 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 14656388A829
+Authentication-Results: sourceware.org;
+ dmarc=none (p=none dis=none) header.from=maxrnd.com
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=mark@maxrnd.com
+Received: (from daemon@localhost)
+ by m0.truegem.net (8.12.11/8.12.11) id 04D8OKtl090262;
+ Wed, 13 May 2020 01:24:20 -0700 (PDT) (envelope-from mark@maxrnd.com)
+Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67),
+ claiming to be "localhost.localdomain"
+ via SMTP by m0.truegem.net, id smtpd9YcvMa; Wed May 13 01:24:12 2020
+From: Mark Geisert <mark@maxrnd.com>
 To: cygwin-patches@cygwin.com
-Date: Tue, 12 May 2020 17:23:26 -0400
-In-Reply-To: <20200512224910.0000040e@gmail.com>
-References: <20200512224910.0000040e@gmail.com>
-Organization: Red Hat
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31)
+Subject: [Cygwin PATCH 1/9] tzcode resync: Makefile.in
+Date: Wed, 13 May 2020 01:23:41 -0700
+Message-Id: <20200513082349.831-1-mark@maxrnd.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-13.9 required=5.0 tests=BAYES_00, DKIMWL_WL_HIGH,
- DKIM_SIGNED, DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-15.7 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, SPF_HELO_NONE, SPF_NONE,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -50,52 +36,52 @@ List-Archive: <https://cygwin.com/pipermail/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 12 May 2020 21:23:34 -0000
+X-List-Received-Date: Wed, 13 May 2020 08:24:24 -0000
 
-On Tue, 2020-05-12 at 22:49 +0200, David Macek via Cygwin-patches
-wrote:
-> Windows Explorer shows a warning with Cygwin-created DACLs, but putting
-> the text of the warning into Google doesn't lead to the relevant Cygwin
-> docs.  Let's copy the warning text into the docs in the hopes of helping
-> confused users.
-> 
-> Latest inquiry: <https://cygwin.com/pipermail/cygwin/2020-May/244814.html>
-> 
-> Signed-off-by: David Macek <david.macek.0@gmail.com>
-> ---
->  winsup/doc/ntsec.xml | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/winsup/doc/ntsec.xml b/winsup/doc/ntsec.xml
-> index 08a33bdc6c..b94cdd9a97 100644
-> --- a/winsup/doc/ntsec.xml
-> +++ b/winsup/doc/ntsec.xml
-> @@ -2163,7 +2163,10 @@ preferred order.</para>
->  the Windows Explorer insists to rearrange the order of the ACEs to
->  canonical order before you can read them. Thank God, the sort order
->  remains unchanged if one presses the Cancel button.  But don't even
-> -<emphasis role='bold'>think</emphasis> of pressing OK...</para>
-> +<emphasis role='bold'>think</emphasis> of pressing OK...  For the sake
-> +of people searching for this explanation, let's note that the Explorer
-> +warning says "The permissions on ... are incorrectly orderer, which may
-> +cause some entries to be ineffective."</para>
->  
->  <para>Canonical ACLs are unable to reflect each possible combination
->  of POSIX permissions. Example:</para>
+Establish cygwin subdirectory tzcode to hold updates to imported NetBSD files.
 
-The wording seems awkward.  Why not quote the text of the warning
-directly earlier in the paragraph, e.g.:
+---
+ winsup/cygwin/Makefile.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-<para>Unfortunately, the security tab in the file properties dialog of
-the Windows Explorer will pop up a warning stating: "The permissions on
-... are incorrectly ordered, which may cause some entries to be
-ineffective."  Pressing the Cancel button will leave the order
-unchanged, but pressing OK will cause Windows to canonicalize the order
-of the ACEs, thereby invalidating POSIX compatibility.</para>
-
+diff --git a/winsup/cygwin/Makefile.in b/winsup/cygwin/Makefile.in
+index f273ba793..69aa2277e 100644
+--- a/winsup/cygwin/Makefile.in
++++ b/winsup/cygwin/Makefile.in
+@@ -27,7 +27,7 @@ export CCWRAP_HEADERS:=. ${srcdir}
+ export CCWRAP_SYSTEM_HEADERS:=@cygwin_headers@ @newlib_headers@
+ export CCWRAP_DIRAFTER_HEADERS:=@windows_headers@
+ 
+-VPATH+=$(srcdir)/regex $(srcdir)/lib $(srcdir)/libc $(srcdir)/math
++VPATH+=$(srcdir)/regex $(srcdir)/lib $(srcdir)/libc $(srcdir)/math $(srcdir)/tzcode
+ 
+ target_cpu:=@target_cpu@
+ target_alias:=@target_alias@
+@@ -246,6 +246,8 @@ MATH_OFILES:= \
+ 	tgammal.o \
+ 	truncl.o
+ 
++TZCODE_OFILES:=localtime.o
++
+ DLL_OFILES:= \
+ 	advapi32.o \
+ 	aio.o \
+@@ -333,7 +335,6 @@ DLL_OFILES:= \
+ 	ldap.o \
+ 	libstdcxx_wrapper.o \
+ 	loadavg.o \
+-	localtime.o \
+ 	lsearch.o \
+ 	malloc_wrapper.o \
+ 	minires-os-if.o \
+@@ -412,6 +413,7 @@ DLL_OFILES:= \
+ 	$(EXTRA_OFILES) \
+ 	$(MALLOC_OFILES) \
+ 	$(MATH_OFILES) \
++	$(TZCODE_OFILES) \
+ 	$(MT_SAFE_OBJECTS)
+ 
+ EXCLUDE_STATIC_OFILES:=$(addprefix --exclude=,\
 -- 
-Yaakov Selkowitz
-Senior Software Engineer - Platform Enablement
-Red Hat, Inc.
-
+2.21.0
 
