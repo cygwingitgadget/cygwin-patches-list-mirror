@@ -1,28 +1,28 @@
 Return-Path: <mark@maxrnd.com>
 Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
- by sourceware.org (Postfix) with ESMTPS id 0C88D388A820
- for <cygwin-patches@cygwin.com>; Wed, 13 May 2020 08:24:21 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 0C88D388A820
+ by sourceware.org (Postfix) with ESMTPS id 19796388A834
+ for <cygwin-patches@cygwin.com>; Wed, 13 May 2020 08:24:22 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 19796388A834
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=maxrnd.com
 Authentication-Results: sourceware.org; spf=none smtp.mailfrom=mark@maxrnd.com
 Received: (from daemon@localhost)
- by m0.truegem.net (8.12.11/8.12.11) id 04D8OKCj090263;
- Wed, 13 May 2020 01:24:20 -0700 (PDT) (envelope-from mark@maxrnd.com)
+ by m0.truegem.net (8.12.11/8.12.11) id 04D8OLhB090317;
+ Wed, 13 May 2020 01:24:21 -0700 (PDT) (envelope-from mark@maxrnd.com)
 Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67),
  claiming to be "localhost.localdomain"
- via SMTP by m0.truegem.net, id smtpdxGj5o3; Wed May 13 01:24:14 2020
+ via SMTP by m0.truegem.net, id smtpdiwHply; Wed May 13 01:24:15 2020
 From: Mark Geisert <mark@maxrnd.com>
 To: cygwin-patches@cygwin.com
-Subject: [Cygwin PATCH 4/9] tzcode resync: localtime.c.patched
-Date: Wed, 13 May 2020 01:23:44 -0700
-Message-Id: <20200513082349.831-4-mark@maxrnd.com>
+Subject: [Cygwin PATCH 5/9] tzcode resync: localtime.c
+Date: Wed, 13 May 2020 01:23:45 -0700
+Message-Id: <20200513082349.831-5-mark@maxrnd.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20200513082349.831-1-mark@maxrnd.com>
 References: <20200513082349.831-1-mark@maxrnd.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-14.2 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+X-Spam-Status: No, score=-14.0 required=5.0 tests=BAYES_00, GIT_PATCH_0,
  KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, SCC_5_SHORT_WORD_LINES,
  SPF_HELO_NONE, SPF_NONE, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
@@ -38,24 +38,21 @@ List-Archive: <https://cygwin.com/pipermail/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 13 May 2020 08:24:29 -0000
+X-List-Received-Date: Wed, 13 May 2020 08:24:30 -0000
 
-Patched copy of NetBSD's localtime.c to hold changes that could not be
-accomplished in the wrapper file localtime.cc.  It is this file that
-compilation of localtime.cc includes.
+Imported NetBSD localtime.c, current as of 2020/05/13, version 1.122.
 
 ---
- winsup/cygwin/tzcode/localtime.c.patched | 2509 ++++++++++++++++++++++
- 1 file changed, 2509 insertions(+)
- create mode 100644 winsup/cygwin/tzcode/localtime.c.patched
+ winsup/cygwin/tzcode/localtime.c | 2493 ++++++++++++++++++++++++++++++
+ 1 file changed, 2493 insertions(+)
+ create mode 100644 winsup/cygwin/tzcode/localtime.c
 
-diff --git a/winsup/cygwin/tzcode/localtime.c.patched b/winsup/cygwin/tzcode/localtime.c.patched
+diff --git a/winsup/cygwin/tzcode/localtime.c b/winsup/cygwin/tzcode/localtime.c
 new file mode 100644
-index 000000000..58e45d2bc
+index 000000000..a4d02a4c7
 --- /dev/null
-+++ b/winsup/cygwin/tzcode/localtime.c.patched
-@@ -0,0 +1,2509 @@
-+// localtime.c.patched: based on NetBSD's localtime.c version 1.122
++++ b/winsup/cygwin/tzcode/localtime.c
+@@ -0,0 +1,2493 @@
 +/*	$NetBSD: localtime.c,v 1.122 2019/07/03 15:50:16 christos Exp $	*/
 +
 +/* Convert timestamp from time_t to struct tm.  */
@@ -240,9 +237,6 @@ index 000000000..58e45d2bc
 +
 +
 +#if !defined(__LIBC12_SOURCE__)
-+#ifdef __CYGWIN__
-+static
-+#endif
 +timezone_t __lclptr;
 +#ifdef _REENTRANT
 +rwlock_t __lcl_lock = RWLOCK_INITIALIZER;
@@ -259,7 +253,7 @@ index 000000000..58e45d2bc
 +
 +static struct tm	tm;
 +
-+#if !HAVE_POSIX_DECLS || TZ_TIME_T || defined(__NetBSD__) || defined(__CYGWIN__)
++#if !HAVE_POSIX_DECLS || TZ_TIME_T || defined(__NetBSD__)
 +# if !defined(__LIBC12_SOURCE__)
 +
 +__aconst char *		tzname[2] = {
@@ -474,8 +468,7 @@ index 000000000..58e45d2bc
 +};
 +
 +/* TZDIR with a trailing '/' rather than a trailing '\0'.  */
-+static char const tzdirslash[] = TZDIR "/";
-+#define sizeof_tzdirslash (sizeof tzdirslash - 1)
++static char const tzdirslash[sizeof TZDIR] = TZDIR "/";
 +
 +/* Local storage needed for 'tzloadbody'.  */
 +union local_storage {
@@ -490,7 +483,7 @@ index 000000000..58e45d2bc
 +
 +	/* The file name to be opened.  */
 +	char fullname[/*CONSTCOND*/BIGGEST(sizeof (struct file_analysis),
-+	    sizeof_tzdirslash + 1024)];
++	    sizeof tzdirslash + 1024)];
 +};
 +
 +/* Load tz data from the file named NAME into *SP.  Read extended
@@ -528,14 +521,14 @@ index 000000000..58e45d2bc
 +	if (!doaccess) {
 +		char const *dot;
 +		size_t namelen = strlen(name);
-+		if (sizeof lsp->fullname - sizeof_tzdirslash <= namelen)
++		if (sizeof lsp->fullname - sizeof tzdirslash <= namelen)
 +			return ENAMETOOLONG;
 +
 +		/* Create a string "TZDIR/NAME".  Using sprintf here
 +		   would pull in stdio (and would fail if the
 +		   resulting string length exceeded INT_MAX!).  */
-+		memcpy(lsp->fullname, tzdirslash, sizeof_tzdirslash);
-+		strcpy(lsp->fullname + sizeof_tzdirslash, name);
++		memcpy(lsp->fullname, tzdirslash, sizeof tzdirslash);
++		strcpy(lsp->fullname + sizeof tzdirslash, name);
 +
 +		/* Set doaccess if NAME contains a ".." file name
 +		   component, as such a name could read a file outside
@@ -550,11 +543,11 @@ index 000000000..58e45d2bc
 +		name = lsp->fullname;
 +	}
 +	if (doaccess && access(name, R_OK) != 0)
-+		goto trydefrules;
++		return errno;
 +
 +	fid = open(name, OPEN_MODE);
 +	if (fid < 0)
-+		goto trydefrules;
++		return errno;
 +	nread = read(fid, up->buf, sizeof up->buf);
 +	if (nread < (ssize_t)tzheadsize) {
 +		int err = nread < 0 ? errno : EINVAL;
@@ -563,15 +556,6 @@ index 000000000..58e45d2bc
 +	}
 +	if (close(fid) < 0)
 +		return errno;
-+	if (0) {
-+trydefrules:
-+		const char *base = strrchr(name, '/');
-+		base = base ? base + 1 : name;
-+		if (strcmp(base, TZDEFRULES))
-+		    return errno;
-+		nread = sizeof _posixrules_data;
-+		memcpy(up->buf, _posixrules_data, nread);
-+	}
 +	for (stored = 4; stored <= 8; stored *= 2) {
 +		int_fast32_t ttisstdcnt = detzcode(up->tzhead.tzh_ttisstdcnt);
 +		int_fast32_t ttisutcnt = detzcode(up->tzhead.tzh_ttisutcnt);
@@ -864,7 +848,7 @@ index 000000000..58e45d2bc
 +static int
 +tzload(char const *name, struct state *sp, bool doextend)
 +{
-+	union local_storage *lsp = (union local_storage *) calloc(1, sizeof *lsp);
++	union local_storage *lsp = malloc(sizeof *lsp);
 +	if (!lsp)
 +		return errno;
 +	else {
@@ -1488,15 +1472,13 @@ index 000000000..58e45d2bc
 +tzsetlcl(char const *name)
 +{
 +	struct state *sp = __lclptr;
-+	if (! name)
-+		name = tzgetwintz(__UNCONST(wildabbr), (char *) alloca (512));
 +	int lcl = name ? strlen(name) < sizeof lcl_TZname : -1;
 +	if (lcl < 0 ? lcl_is_set < 0
 +	    : 0 < lcl_is_set && strcmp(lcl_TZname, name) == 0)
 +		return;
 +
 +	if (! sp)
-+		__lclptr = sp = (struct state *) calloc(1, sizeof *__lclptr);
++		__lclptr = sp = malloc(sizeof *__lclptr);
 +	if (sp) {
 +		if (zoneinit(sp, name) != 0)
 +			zoneinit(sp, "");
@@ -1537,7 +1519,7 @@ index 000000000..58e45d2bc
 +	static bool gmt_is_set;
 +	rwlock_wrlock(&__lcl_lock);
 +	if (! gmt_is_set) {
-+		gmtptr = (timezone_t) calloc(1, sizeof *gmtptr);
++		gmtptr = malloc(sizeof *gmtptr);
 +		if (gmtptr)
 +			gmtload(gmtptr);
 +		gmt_is_set = true;
@@ -1550,7 +1532,7 @@ index 000000000..58e45d2bc
 +timezone_t
 +tzalloc(const char *name)
 +{
-+	timezone_t sp = (timezone_t) calloc(1, sizeof *sp);
++	timezone_t sp = malloc(sizeof *sp);
 +	if (sp) {
 +		int err = zoneinit(sp, name);
 +		if (err != 0) {
