@@ -1,28 +1,28 @@
 Return-Path: <mark@maxrnd.com>
 Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
- by sourceware.org (Postfix) with ESMTPS id 1BF48388A835
- for <cygwin-patches@cygwin.com>; Wed, 13 May 2020 08:24:22 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 1BF48388A835
+ by sourceware.org (Postfix) with ESMTPS id 0FDB5388A825
+ for <cygwin-patches@cygwin.com>; Wed, 13 May 2020 08:24:21 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 0FDB5388A825
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=maxrnd.com
 Authentication-Results: sourceware.org; spf=none smtp.mailfrom=mark@maxrnd.com
 Received: (from daemon@localhost)
- by m0.truegem.net (8.12.11/8.12.11) id 04D8OLi2090319;
+ by m0.truegem.net (8.12.11/8.12.11) id 04D8OL1Z090321;
  Wed, 13 May 2020 01:24:21 -0700 (PDT) (envelope-from mark@maxrnd.com)
 Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67),
  claiming to be "localhost.localdomain"
- via SMTP by m0.truegem.net, id smtpdT4MJmv; Wed May 13 01:24:15 2020
+ via SMTP by m0.truegem.net, id smtpdnZlofh; Wed May 13 01:24:15 2020
 From: Mark Geisert <mark@maxrnd.com>
 To: cygwin-patches@cygwin.com
-Subject: [Cygwin PATCH 6/9] tzcode resync: namespace.h
-Date: Wed, 13 May 2020 01:23:46 -0700
-Message-Id: <20200513082349.831-6-mark@maxrnd.com>
+Subject: [Cygwin PATCH 8/9] tzcode resync: tzfile.h
+Date: Wed, 13 May 2020 01:23:48 -0700
+Message-Id: <20200513082349.831-8-mark@maxrnd.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20200513082349.831-1-mark@maxrnd.com>
 References: <20200513082349.831-1-mark@maxrnd.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-16.0 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+X-Spam-Status: No, score=-15.5 required=5.0 tests=BAYES_00, GIT_PATCH_0,
  KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, SPF_HELO_NONE, SPF_NONE,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
@@ -38,20 +38,195 @@ List-Archive: <https://cygwin.com/pipermail/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 13 May 2020 08:24:24 -0000
+X-List-Received-Date: Wed, 13 May 2020 08:24:25 -0000
 
-Empty file not including current NetBSD namespace.h because Cygwin
-doesn't implement that functionality.  This allows compilation that
-avoids an error due to a missing include file.
+Imported NetBSD tzfile.h, current as of 2020/05/13, version 1.10.
 
 ---
- winsup/cygwin/tzcode/namespace.h | 0
- 1 file changed, 0 insertions(+), 0 deletions(-)
- create mode 100644 winsup/cygwin/tzcode/namespace.h
+ winsup/cygwin/tzcode/tzfile.h | 174 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 174 insertions(+)
+ create mode 100644 winsup/cygwin/tzcode/tzfile.h
 
-diff --git a/winsup/cygwin/tzcode/namespace.h b/winsup/cygwin/tzcode/namespace.h
+diff --git a/winsup/cygwin/tzcode/tzfile.h b/winsup/cygwin/tzcode/tzfile.h
 new file mode 100644
-index 000000000..e69de29bb
+index 000000000..5c7a22239
+--- /dev/null
++++ b/winsup/cygwin/tzcode/tzfile.h
+@@ -0,0 +1,174 @@
++/*	$NetBSD: tzfile.h,v 1.10 2019/07/03 15:49:21 christos Exp $	*/
++
++#ifndef _TZFILE_H_
++#define _TZFILE_H_
++
++/*
++** This file is in the public domain, so clarified as of
++** 1996-06-05 by Arthur David Olson.
++*/
++
++/*
++** This header is for use ONLY with the time conversion code.
++** There is no guarantee that it will remain unchanged,
++** or that it will remain at all.
++** Do NOT copy it to any system include directory.
++** Thank you!
++*/
++
++/*
++** Information about time zone files.
++*/
++
++#ifndef TZDIR		/* Time zone object file directory */
++#define TZDIR		"/usr/share/zoneinfo"
++#endif /* !defined TZDIR */
++
++#ifndef TZDEFAULT
++#define TZDEFAULT	"/etc/localtime"
++#endif /* !defined TZDEFAULT */
++
++#ifndef TZDEFRULES
++#define TZDEFRULES	"posixrules"
++#endif /* !defined TZDEFRULES */
++
++
++/* See Internet RFC 8536 for more details about the following format.  */
++
++/*
++** Each file begins with. . .
++*/
++
++#define	TZ_MAGIC	"TZif"
++
++struct tzhead {
++	char	tzh_magic[4];		/* TZ_MAGIC */
++	char	tzh_version[1];		/* '\0' or '2' or '3' as of 2013 */
++	char	tzh_reserved[15];	/* reserved; must be zero */
++	char	tzh_ttisutcnt[4];	/* coded number of trans. time flags */
++	char	tzh_ttisstdcnt[4];	/* coded number of trans. time flags */
++	char	tzh_leapcnt[4];		/* coded number of leap seconds */
++	char	tzh_timecnt[4];		/* coded number of transition times */
++	char	tzh_typecnt[4];		/* coded number of local time types */
++	char	tzh_charcnt[4];		/* coded number of abbr. chars */
++};
++
++/*
++** . . .followed by. . .
++**
++**	tzh_timecnt (char [4])s		coded transition times a la time(2)
++**	tzh_timecnt (unsigned char)s	types of local time starting at above
++**	tzh_typecnt repetitions of
++**		one (char [4])		coded UT offset in seconds
++**		one (unsigned char)	used to set tm_isdst
++**		one (unsigned char)	that's an abbreviation list index
++**	tzh_charcnt (char)s		'\0'-terminated zone abbreviations
++**	tzh_leapcnt repetitions of
++**		one (char [4])		coded leap second transition times
++**		one (char [4])		total correction after above
++**	tzh_ttisstdcnt (char)s		indexed by type; if 1, transition
++**					time is standard time, if 0,
++**					transition time is local (wall clock)
++**					time; if absent, transition times are
++**					assumed to be local time
++**	tzh_ttisutcnt (char)s		indexed by type; if 1, transition
++**					time is UT, if 0, transition time is
++**					local time; if absent, transition
++**					times are assumed to be local time.
++**					When this is 1, the corresponding
++**					std/wall indicator must also be 1.
++*/
++
++/*
++** If tzh_version is '2' or greater, the above is followed by a second instance
++** of tzhead and a second instance of the data in which each coded transition
++** time uses 8 rather than 4 chars,
++** then a POSIX-TZ-environment-variable-style string for use in handling
++** instants after the last transition time stored in the file
++** (with nothing between the newlines if there is no POSIX representation for
++** such instants).
++**
++** If tz_version is '3' or greater, the above is extended as follows.
++** First, the POSIX TZ string's hour offset may range from -167
++** through 167 as compared to the POSIX-required 0 through 24.
++** Second, its DST start time may be January 1 at 00:00 and its stop
++** time December 31 at 24:00 plus the difference between DST and
++** standard time, indicating DST all year.
++*/
++
++/*
++** In the current implementation, "tzset()" refuses to deal with files that
++** exceed any of the limits below.
++*/
++
++#ifndef TZ_MAX_TIMES
++#define TZ_MAX_TIMES	2000
++#endif /* !defined TZ_MAX_TIMES */
++
++#ifndef TZ_MAX_TYPES
++/* This must be at least 17 for Europe/Samara and Europe/Vilnius.  */
++#define TZ_MAX_TYPES	256 /* Limited by what (unsigned char)'s can hold */
++#endif /* !defined TZ_MAX_TYPES */
++
++#ifndef TZ_MAX_CHARS
++#define TZ_MAX_CHARS	50	/* Maximum number of abbreviation characters */
++				/* (limited by what unsigned chars can hold) */
++#endif /* !defined TZ_MAX_CHARS */
++
++#ifndef TZ_MAX_LEAPS
++#define TZ_MAX_LEAPS	50	/* Maximum number of leap second corrections */
++#endif /* !defined TZ_MAX_LEAPS */
++
++#define SECSPERMIN	60
++#define MINSPERHOUR	60
++#define HOURSPERDAY	24
++#define DAYSPERWEEK	7
++#define DAYSPERNYEAR	365
++#define DAYSPERLYEAR	366
++#define SECSPERHOUR	(SECSPERMIN * MINSPERHOUR)
++#define SECSPERDAY	((int_fast32_t) SECSPERHOUR * HOURSPERDAY)
++#define MONSPERYEAR	12
++
++#define TM_SUNDAY	0
++#define TM_MONDAY	1
++#define TM_TUESDAY	2
++#define TM_WEDNESDAY	3
++#define TM_THURSDAY	4
++#define TM_FRIDAY	5
++#define TM_SATURDAY	6
++
++#define TM_JANUARY	0
++#define TM_FEBRUARY	1
++#define TM_MARCH	2
++#define TM_APRIL	3
++#define TM_MAY		4
++#define TM_JUNE		5
++#define TM_JULY		6
++#define TM_AUGUST	7
++#define TM_SEPTEMBER	8
++#define TM_OCTOBER	9
++#define TM_NOVEMBER	10
++#define TM_DECEMBER	11
++
++#define TM_YEAR_BASE	1900
++
++#define EPOCH_YEAR	1970
++#define EPOCH_WDAY	TM_THURSDAY
++
++#define isleap(y) (((y) % 4) == 0 && (((y) % 100) != 0 || ((y) % 400) == 0))
++
++/*
++** Since everything in isleap is modulo 400 (or a factor of 400), we know that
++**	isleap(y) == isleap(y % 400)
++** and so
++**	isleap(a + b) == isleap((a + b) % 400)
++** or
++**	isleap(a + b) == isleap(a % 400 + b % 400)
++** This is true even if % means modulo rather than Fortran remainder
++** (which is allowed by C89 but not C99).
++** We use this to avoid addition overflow problems.
++*/
++
++#define isleap_sum(a, b)	isleap((a) % 400 + (b) % 400)
++
++#endif /* !defined _TZFILE_H_ */
 -- 
 2.21.0
 
