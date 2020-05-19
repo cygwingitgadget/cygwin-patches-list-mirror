@@ -1,78 +1,52 @@
-Return-Path: <kbrown@cornell.edu>
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com
- (mail-bn8nam11on2136.outbound.protection.outlook.com [40.107.236.136])
- by sourceware.org (Postfix) with ESMTPS id C11B53851C04
- for <cygwin-patches@cygwin.com>; Tue, 19 May 2020 19:04:28 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org C11B53851C04
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cNyvYuggE4LIKKAAF0AMBL6VBFlQnzejwIVWYDqBP94ibvFCPUUOCyWmho5qHSHKd2dsJ88ukQ/BZm+BCIoxKIytWEJTvxJH027TbtrhYyWTMoxydjJHnb+y8iUHHRKC/ytRBwn38bLeiNST56zv7/+auEbm1EqD13tw5shEXsWIFl6OnMNaD9wFSf9jDrEJuO6ZmoInjTpn9Xg9eh9t52EC4Gz1bz7BydybsWBuXx5Cnsrx0ycbV9/nmXylsZR358JoTpLsyc+Mj0d4vavPtJ7rogOyvDuFViRFx1NQ6Ltv7+4gYRlV+uSw34fHoU/aLAZsocl8tk77aQ+yDVLPWw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0m2eTbnamcczjYa0cApGQfveq7+fkFRlRl3A40VOHNc=;
- b=ZrzR+rSI33SFB5/a7K0H/s48xqslF1bIp4gph+VAVYmZOfmIWviZO7D3I2iNT3gMWzcm/bijcbqX2tfFqnenABg8fANcSfniIEoFtQjTfZKgLz975Z77QBGy5aTAdRKFsqxHUOH0LWafSJByrX7rM/dndyA5nHXNl5Pdt73kYnjIIYOanS+Vs/WuH7aJYi5A2u+Udbetcy4S5zaPmWBGaVvw6LEU0vUYKKK1zF0MujFneVJkfeDtBU3uIaaJDKzkaHT8YqnHcmaPXuIqL6N4x55ueWx0YI/IvJvZ2pN4IkqxyUGxbePJchve1gSj08BZQ0/02hEUfBmH3TKoLDXXww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu;
- dkim=pass header.d=cornell.edu; arc=none
-Received: from DM6PR04MB6075.namprd04.prod.outlook.com (2603:10b6:5:127::31)
- by DM6PR04MB5658.namprd04.prod.outlook.com (2603:10b6:5:168::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3000.26; Tue, 19 May
- 2020 19:04:28 +0000
-Received: from DM6PR04MB6075.namprd04.prod.outlook.com
- ([fe80::f48b:4e13:94d7:f7c4]) by DM6PR04MB6075.namprd04.prod.outlook.com
- ([fe80::f48b:4e13:94d7:f7c4%4]) with mapi id 15.20.3000.034; Tue, 19 May 2020
- 19:04:28 +0000
-Subject: Re: [PATCH] Cygwin: pty: Make system_printf() work after closing pty
- slave.
+Return-Path: <brian.inglis@systematicsw.ab.ca>
+Received: from smtp-out-no.shaw.ca (smtp-out-no.shaw.ca [64.59.134.13])
+ by sourceware.org (Postfix) with ESMTPS id C10C1384A87E
+ for <cygwin-patches@cygwin.com>; Tue, 19 May 2020 19:33:10 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org C10C1384A87E
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=SystematicSw.ab.ca
+Authentication-Results: sourceware.org;
+ spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
+Received: from [192.168.1.104] ([24.64.172.44]) by shaw.ca with ESMTP
+ id b7zAjxSTWng7Kb7zBjpwxT; Tue, 19 May 2020 13:33:10 -0600
+X-Authority-Analysis: v=2.3 cv=ecemg4MH c=1 sm=1 tr=0
+ a=kiZT5GMN3KAWqtYcXc+/4Q==:117 a=kiZT5GMN3KAWqtYcXc+/4Q==:17
+ a=IkcTkHD0fZMA:10 a=w_pzkKWiAAAA:8 a=Ed7FdIT4gc43trk-okQA:9 a=QEXdDO2ut3YA:10
+ a=8pRm4NV5SmQA:10 a=sRI3_1zDfAgwuvI8zelB:22
+Reply-To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Cygwin: termios: Set ECHOE, ECHOK, ECHOCTL and ECHOKE by
+ default.
 To: cygwin-patches@cygwin.com
-References: <20200519113600.467-1-takashi.yano@nifty.ne.jp>
-From: Ken Brown <kbrown@cornell.edu>
-Message-ID: <c6a10e57-9492-adf1-6773-1d731512ce20@cornell.edu>
-Date: Tue, 19 May 2020 15:04:24 -0400
+References: <20200517023444.286-1-takashi.yano@nifty.ne.jp>
+ <CABPLASQozh_iBkLA-hGpQ88dQ6BHB0m=U_VBSotuM4zFXS3Piw@mail.gmail.com>
+ <20200518095027.5965dbaadf685666e126fa13@nifty.ne.jp>
+From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
+Autocrypt: addr=Brian.Inglis@SystematicSw.ab.ca; prefer-encrypt=mutual;
+ keydata=
+ mDMEXopx8xYJKwYBBAHaRw8BAQdAnCK0qv/xwUCCZQoA9BHRYpstERrspfT0NkUWQVuoePa0
+ LkJyaWFuIEluZ2xpcyA8QnJpYW4uSW5nbGlzQFN5c3RlbWF0aWNTdy5hYi5jYT6IlgQTFggA
+ PhYhBMM5/lbU970GBS2bZB62lxu92I8YBQJeinHzAhsDBQkJZgGABQsJCAcCBhUKCQgLAgQW
+ AgMBAh4BAheAAAoJEB62lxu92I8Y0ioBAI8xrggNxziAVmr+Xm6nnyjoujMqWcq3oEhlYGAO
+ WacZAQDFtdDx2koSVSoOmfaOyRTbIWSf9/Cjai29060fsmdsDLg4BF6KcfMSCisGAQQBl1UB
+ BQEBB0Awv8kHI2PaEgViDqzbnoe8B9KMHoBZLS92HdC7ZPh8HQMBCAeIfgQYFggAJhYhBMM5
+ /lbU970GBS2bZB62lxu92I8YBQJeinHzAhsMBQkJZgGAAAoJEB62lxu92I8YZwUBAJw/74rF
+ IyaSsGI7ewCdCy88Lce/kdwX7zGwid+f8NZ3AQC/ezTFFi5obXnyMxZJN464nPXiggtT9gN5
+ RSyTY8X+AQ==
+Organization: Systematic Software
+Message-ID: <4a536510-8893-3c48-0c16-ff15a7d9a017@SystematicSw.ab.ca>
+Date: Tue, 19 May 2020 13:33:08 -0600
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.0
-In-Reply-To: <20200519113600.467-1-takashi.yano@nifty.ne.jp>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH2PR18CA0038.namprd18.prod.outlook.com
- (2603:10b6:610:55::18) To DM6PR04MB6075.namprd04.prod.outlook.com
- (2603:10b6:5:127::31)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [192.168.0.17] (68.175.129.7) by
- CH2PR18CA0038.namprd18.prod.outlook.com (2603:10b6:610:55::18) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3000.26 via Frontend Transport; Tue, 19 May 2020 19:04:27 +0000
-X-Originating-IP: [68.175.129.7]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2714ac5f-2ebf-4b1c-aad4-08d7fc277416
-X-MS-TrafficTypeDiagnostic: DM6PR04MB5658:
-X-Microsoft-Antispam-PRVS: <DM6PR04MB5658223F45F92E0665AF9C4DD8B90@DM6PR04MB5658.namprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4714;
-X-Forefront-PRVS: 040866B734
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uzQa6SGDpiNbhmYBhaxuOKEAUcaMDSu5TXksDCeXvIJjTxiY00lGaqhcHGnjPErfPlaq7hSaXAGyCF8YoB3kfIRSJu0fd6xh2cuymnTAT3zYL8F2LxcVv+cBWDDbovvtA44HHJMEQugz8l85Ge2LAHiprNitOO9yCgpZBl+rLlt25kGJDPlOpdwWh8iCMq/dMUFz9sYpupQEvb9rztHwXyvf47sP95V1M4rHAosdFBnpO0ENwf6awLnkQ5AT9HVpEYVHcZbGESUPuEP3sCVT8OU1n8RSbfpMx+h26upZZCTLBQgUzVcSYjmFLtsC6GKraWUk0V6XqfO9pvazOoqIZAIHtwgO9j517Bu+XIJIT/7rtztEZ8aSCq1U8VoWAZxzS60jysDrNJF8wXNPBihxIwDKaxDPQLzn3A8Vn8lxDD2aZVgxN7EUD7BkDRhc0+9x5vxADzZKxoIo9tlLyGmXSu94efFdATB7iPe3TwPn7DUtqPQY82DR3+4YZmelUbRhBifS4YGHHT4Ucdd4aLNmJIV7+j3dQ7xpjy8kkRyn5Xr7bkWHJgsQ1yn0VG7esQy70fJOTwe8OHOF1+uo+pJk0g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:DM6PR04MB6075.namprd04.prod.outlook.com; PTR:; CAT:NONE;
- SFTY:;
- SFS:(4636009)(346002)(376002)(396003)(136003)(366004)(39860400002)(26005)(2616005)(16526019)(5660300002)(8936002)(36756003)(6486002)(786003)(966005)(66946007)(316002)(66476007)(66556008)(86362001)(31696002)(186003)(16576012)(478600001)(53546011)(956004)(6666004)(8676002)(75432002)(31686004)(6916009)(2906002)(52116002)(43740500002);
- DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData: wmrFzbdFLx3jlk42Is7LOwSN3sskB7aIEoO2C8A8aNO2oIuhOevcofibiT2W1cR6VD8XLtAdanEm0Hz6whrC3dDszMId4N4+xthV3tBgn4GXlKUzba1DIjb/aLOOMSlZImA20MfUcaZZww++RJM2zNugf0yT20AABSZtMQybmw3xhuoCuykN4ezAFgc3uNLPNpNCVnYQpAwWhec6iyAAorftFmvLSQHYRgCjOkVKWBbkCK6/84QaX0zlQBbL+5OnPCUWJkfFUHvodgYILi+krVJfEsqnAqY0ZVRKby2GNHYVUu6jNR7f7qWUF2PUSb4/Rppv1CxCO4YokkVp5T3FgrId2v08Uc3KDvyMZSmUensRDwg33del4TjfOG2SGC0fywEUvL0DW7NdleXqKMOhuSoLaL9IBF8aVv0CU918r7I2DFvGkblgP4jwqMGSIx1y5PJo/PKTPqjZkB1j50ph5wcu7Kp5ybYeppDegm8GlZs=
-X-OriginatorOrg: cornell.edu
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2714ac5f-2ebf-4b1c-aad4-08d7fc277416
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2020 19:04:27.9620 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5d7e4366-1b9b-45cf-8e79-b14b27df46e1
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Uqbn5It8twrp3ymVV1lNiiaAEJn15gTyDREq69S0mBkxMtZQAjK5h0Hc0p/6QDdghb6PJpwb/sDUHKjbZrQGmQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR04MB5658
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, MSGID_FROM_MTA_HEADER,
- RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_PASS,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+In-Reply-To: <20200518095027.5965dbaadf685666e126fa13@nifty.ne.jp>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfI84ZcgZyaj7FK/U1lw0wbASIw+eRd/8CGlxRxsP6JEj6MfzwksoDEXfKdhpbgk1NoKUFvmRqqo4oyXiQSYSV5t/1nOk4redusH75Gkuq7xOP2ofEfte
+ aDzYAM2QKMUK/ls/ZWNV2vhl0pVoEpEVmOY0zq6lNLtxHmE8JNjAptM7/S/Hx2TGu15rb0MZqCfw4g==
+X-Spam-Status: No, score=-19.3 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW, SPF_HELO_NONE,
+ SPF_NONE, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -87,38 +61,83 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 19 May 2020 19:04:31 -0000
+X-List-Received-Date: Tue, 19 May 2020 19:33:12 -0000
 
-Hi Takashi,
+On 2020-05-17 18:50, Takashi Yano wrote:
+> On Mon, 18 May 2020 01:21:07 +0200, Kacper Michajlow wrote:
+>> On Sun, 17 May 2020 at 04:53, Takashi Yano wrote:
 
-On 5/19/2020 7:35 AM, Takashi Yano via Cygwin-patches wrote:
-> - Current pty cannot show system_printf() output after closing pty
->    slave. This patch fixes the issue.
+>>> - Backspace key does not work correctly in linux session opend by
+>>>   ssh from cygwin console if the shell is bash. This is due to lack
+>>>   of these flags.
+>>>
+>>>   Addresses: https://cygwin.com/pipermail/cygwin/2020-May/244837.html.
+>>> ---
+>>>  winsup/cygwin/fhandler_termios.cc | 3 ++-
+>>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/winsup/cygwin/fhandler_termios.cc
+>>> b/winsup/cygwin/fhandler_termios.cc
+>>> index b6759b0a7..b03478b87 100644
+>>> --- a/winsup/cygwin/fhandler_termios.cc
+>>> +++ b/winsup/cygwin/fhandler_termios.cc
+>>> @@ -33,7 +33,8 @@ fhandler_termios::tcinit (bool is_pty_master)
+>>>        tc ()->ti.c_iflag = BRKINT | ICRNL | IXON | IUTF8;
+>>>        tc ()->ti.c_oflag = OPOST | ONLCR;
+>>>        tc ()->ti.c_cflag = B38400 | CS8 | CREAD;
+>>> -      tc ()->ti.c_lflag = ISIG | ICANON | ECHO | IEXTEN;
+>>> +      tc ()->ti.c_lflag = ISIG | ICANON | ECHO | IEXTEN
+>>> +       | ECHOE | ECHOK | ECHOCTL | ECHOKE;
+>>>
+>>>        tc ()->ti.c_cc[VDISCARD] = CFLUSH;
+>>>        tc ()->ti.c_cc[VEOL]     = CEOL;
+>>> --
+>>> 2.21.0
 
-Sorry to be returning the favor so soon, but this patch causes 'make check' in 
-the texinfo source tree to hang.  I don't have time at the moment to try to 
-produce a simple test case, so here's a complicated way to reproduce the problem:
+>> Maybe also set  IXANY | IMAXBEL? For reasonable set of default values.
 
-1. Clone the texinfo git repo:
+> I don't think so, because they are not set also in xterm in linux.
 
-   $ git clone https://git.savannah.gnu.org/git/texinfo.git
+IMAXBEL defaults in Cygwin mintty and Debian lxterminal:
+my non-default settings are in the first output group;
+all current settings are in the second output group;
+these settings work with no issues across Cygwin and Linux systems;
+on BSD YMMV:
 
-2. Build texinfo:
+Cygwin 3.1.4 mintty 3.1.4 $ stty; echo; stty -a
+speed 3000000 baud; line = 0;
+erase = ^H;
+ixany iutf8
 
-   $ cd texinfo
-   $ ./autogen.sh && ./configure # Maybe CFLAGS='-g -O0' for debugging
-   $ make
+speed 3000000 baud; rows 60; columns 120; line = 0;
+intr = ^C; quit = ^\; erase = ^H; kill = ^U; eof = ^D; eol = <undef>; eol2 =
+<undef>; swtch = ^Z; start = ^Q; stop = ^S;
+susp = ^Z; rprnt = ^R; werase = ^W; lnext = ^V; discard = ^O; min = 1; time = 0;
+-parenb -parodd cs8 -hupcl -cstopb cread -clocal -crtscts
+-ignbrk brkint -ignpar -parmrk -inpck -istrip -inlcr -igncr icrnl ixon -ixoff
+-iuclc ixany imaxbel iutf8
+opost -olcuc -ocrnl onlcr -onocr -onlret -ofill -ofdel nl0 cr0 tab0 bs0 vt0 ff0
+isig icanon iexten echo echoe echok -echonl -noflsh -tostop echoctl echoke -flusho
 
-3. Test the standalone info reader:
+Debian 10.4 lxterminal 0.3.2 $ stty; echo; stty -a
+speed 3000000 baud; line = 0;
+erase = ^H; swtch = ^Z;
+ixany iutf8
 
-   $ cd info
-   $ make check
+speed 3000000 baud; rows 45; columns 120; line = 0;
+intr = ^C; quit = ^\; erase = ^H; kill = ^U; eof = ^D; eol = <undef>; eol2 =
+<undef>; swtch = ^Z; start = ^Q; stop = ^S;
+susp = ^Z; rprnt = ^R; werase = ^W; lnext = ^V; discard = ^O; min = 1; time = 0;
+-parenb -parodd -cmspar cs8 -hupcl -cstopb cread -clocal -crtscts
+-ignbrk brkint -ignpar -parmrk -inpck -istrip -inlcr -igncr icrnl ixon -ixoff
+-iuclc ixany imaxbel iutf8
+opost -olcuc -ocrnl onlcr -onocr -onlret -ofill -ofdel nl0 cr0 tab0 bs0 vt0 ff0
+isig icanon iexten echo echoe echok -echonl -noflsh -xcase -tostop -echoprt
+echoctl echoke -flusho -extproc
 
-It hangs while running the test t/malformed-split.sh, leaving a ginfo process 
-and a pseudotty process running, with ginfo trying to close a pty slave.
+-- 
+Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
 
-Note that this test uses both ptys and fifos, so there's always a chance that 
-this is another fifo bug.  But reverting your patch fixes the problem, so I 
-think it's probably a pty bug.
-
-Ken
+This email may be disturbing to some readers as it contains
+too much technical detail. Reader discretion is advised.
+[Data in IEC units and prefixes, physical quantities in SI.]
