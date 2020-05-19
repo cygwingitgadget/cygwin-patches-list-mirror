@@ -1,37 +1,78 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com
- [210.131.2.83])
- by sourceware.org (Postfix) with ESMTPS id 8489E3840C1D
- for <cygwin-patches@cygwin.com>; Tue, 19 May 2020 14:07:43 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 8489E3840C1D
-Received: from Express5800-S70 (v040007.dynamic.ppp.asahi-net.or.jp
- [124.155.40.7]) (authenticated)
- by conssluserg-04.nifty.com with ESMTP id 04JE7FL8008405;
- Tue, 19 May 2020 23:07:15 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 04JE7FL8008405
-X-Nifty-SrcIP: [124.155.40.7]
-Date: Tue, 19 May 2020 23:07:17 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Return-Path: <kbrown@cornell.edu>
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com
+ (mail-bn8nam11on2136.outbound.protection.outlook.com [40.107.236.136])
+ by sourceware.org (Postfix) with ESMTPS id C11B53851C04
+ for <cygwin-patches@cygwin.com>; Tue, 19 May 2020 19:04:28 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org C11B53851C04
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cNyvYuggE4LIKKAAF0AMBL6VBFlQnzejwIVWYDqBP94ibvFCPUUOCyWmho5qHSHKd2dsJ88ukQ/BZm+BCIoxKIytWEJTvxJH027TbtrhYyWTMoxydjJHnb+y8iUHHRKC/ytRBwn38bLeiNST56zv7/+auEbm1EqD13tw5shEXsWIFl6OnMNaD9wFSf9jDrEJuO6ZmoInjTpn9Xg9eh9t52EC4Gz1bz7BydybsWBuXx5Cnsrx0ycbV9/nmXylsZR358JoTpLsyc+Mj0d4vavPtJ7rogOyvDuFViRFx1NQ6Ltv7+4gYRlV+uSw34fHoU/aLAZsocl8tk77aQ+yDVLPWw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0m2eTbnamcczjYa0cApGQfveq7+fkFRlRl3A40VOHNc=;
+ b=ZrzR+rSI33SFB5/a7K0H/s48xqslF1bIp4gph+VAVYmZOfmIWviZO7D3I2iNT3gMWzcm/bijcbqX2tfFqnenABg8fANcSfniIEoFtQjTfZKgLz975Z77QBGy5aTAdRKFsqxHUOH0LWafSJByrX7rM/dndyA5nHXNl5Pdt73kYnjIIYOanS+Vs/WuH7aJYi5A2u+Udbetcy4S5zaPmWBGaVvw6LEU0vUYKKK1zF0MujFneVJkfeDtBU3uIaaJDKzkaHT8YqnHcmaPXuIqL6N4x55ueWx0YI/IvJvZ2pN4IkqxyUGxbePJchve1gSj08BZQ0/02hEUfBmH3TKoLDXXww==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu;
+ dkim=pass header.d=cornell.edu; arc=none
+Received: from DM6PR04MB6075.namprd04.prod.outlook.com (2603:10b6:5:127::31)
+ by DM6PR04MB5658.namprd04.prod.outlook.com (2603:10b6:5:168::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3000.26; Tue, 19 May
+ 2020 19:04:28 +0000
+Received: from DM6PR04MB6075.namprd04.prod.outlook.com
+ ([fe80::f48b:4e13:94d7:f7c4]) by DM6PR04MB6075.namprd04.prod.outlook.com
+ ([fe80::f48b:4e13:94d7:f7c4%4]) with mapi id 15.20.3000.034; Tue, 19 May 2020
+ 19:04:28 +0000
+Subject: Re: [PATCH] Cygwin: pty: Make system_printf() work after closing pty
+ slave.
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 00/21] FIFO: Support multiple readers
-Message-Id: <20200519230717.d84c2bfbb10cf5f89c698e3e@nifty.ne.jp>
-In-Reply-To: <48b29425-61fa-34c2-4b4a-afaf3c4a1c03@cornell.edu>
-References: <20200507202124.1463-1-kbrown@cornell.edu>
- <20200518142519.cb6d805fa92afe4dcb017b02@nifty.ne.jp>
- <20200518143657.4e9f732f5456174348688f69@nifty.ne.jp>
- <912d46fc-3138-f3ec-f4d1-612433d9f128@cornell.edu>
- <cd2e382e-1c32-864a-31a4-8a6b7cfffc08@cornell.edu>
- <20200519102609.a3c2faa4f19ac655126c0680@nifty.ne.jp>
- <20200519151535.b4a97a0173f4d2ad4590d4c1@nifty.ne.jp>
- <21fa9885-0405-10b7-982e-9fa19058070d@cornell.edu>
- <48b29425-61fa-34c2-4b4a-afaf3c4a1c03@cornell.edu>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE,
- SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
+References: <20200519113600.467-1-takashi.yano@nifty.ne.jp>
+From: Ken Brown <kbrown@cornell.edu>
+Message-ID: <c6a10e57-9492-adf1-6773-1d731512ce20@cornell.edu>
+Date: Tue, 19 May 2020 15:04:24 -0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
+In-Reply-To: <20200519113600.467-1-takashi.yano@nifty.ne.jp>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH2PR18CA0038.namprd18.prod.outlook.com
+ (2603:10b6:610:55::18) To DM6PR04MB6075.namprd04.prod.outlook.com
+ (2603:10b6:5:127::31)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [192.168.0.17] (68.175.129.7) by
+ CH2PR18CA0038.namprd18.prod.outlook.com (2603:10b6:610:55::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3000.26 via Frontend Transport; Tue, 19 May 2020 19:04:27 +0000
+X-Originating-IP: [68.175.129.7]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2714ac5f-2ebf-4b1c-aad4-08d7fc277416
+X-MS-TrafficTypeDiagnostic: DM6PR04MB5658:
+X-Microsoft-Antispam-PRVS: <DM6PR04MB5658223F45F92E0665AF9C4DD8B90@DM6PR04MB5658.namprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4714;
+X-Forefront-PRVS: 040866B734
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: uzQa6SGDpiNbhmYBhaxuOKEAUcaMDSu5TXksDCeXvIJjTxiY00lGaqhcHGnjPErfPlaq7hSaXAGyCF8YoB3kfIRSJu0fd6xh2cuymnTAT3zYL8F2LxcVv+cBWDDbovvtA44HHJMEQugz8l85Ge2LAHiprNitOO9yCgpZBl+rLlt25kGJDPlOpdwWh8iCMq/dMUFz9sYpupQEvb9rztHwXyvf47sP95V1M4rHAosdFBnpO0ENwf6awLnkQ5AT9HVpEYVHcZbGESUPuEP3sCVT8OU1n8RSbfpMx+h26upZZCTLBQgUzVcSYjmFLtsC6GKraWUk0V6XqfO9pvazOoqIZAIHtwgO9j517Bu+XIJIT/7rtztEZ8aSCq1U8VoWAZxzS60jysDrNJF8wXNPBihxIwDKaxDPQLzn3A8Vn8lxDD2aZVgxN7EUD7BkDRhc0+9x5vxADzZKxoIo9tlLyGmXSu94efFdATB7iPe3TwPn7DUtqPQY82DR3+4YZmelUbRhBifS4YGHHT4Ucdd4aLNmJIV7+j3dQ7xpjy8kkRyn5Xr7bkWHJgsQ1yn0VG7esQy70fJOTwe8OHOF1+uo+pJk0g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:DM6PR04MB6075.namprd04.prod.outlook.com; PTR:; CAT:NONE;
+ SFTY:;
+ SFS:(4636009)(346002)(376002)(396003)(136003)(366004)(39860400002)(26005)(2616005)(16526019)(5660300002)(8936002)(36756003)(6486002)(786003)(966005)(66946007)(316002)(66476007)(66556008)(86362001)(31696002)(186003)(16576012)(478600001)(53546011)(956004)(6666004)(8676002)(75432002)(31686004)(6916009)(2906002)(52116002)(43740500002);
+ DIR:OUT; SFP:1102; 
+X-MS-Exchange-AntiSpam-MessageData: wmrFzbdFLx3jlk42Is7LOwSN3sskB7aIEoO2C8A8aNO2oIuhOevcofibiT2W1cR6VD8XLtAdanEm0Hz6whrC3dDszMId4N4+xthV3tBgn4GXlKUzba1DIjb/aLOOMSlZImA20MfUcaZZww++RJM2zNugf0yT20AABSZtMQybmw3xhuoCuykN4ezAFgc3uNLPNpNCVnYQpAwWhec6iyAAorftFmvLSQHYRgCjOkVKWBbkCK6/84QaX0zlQBbL+5OnPCUWJkfFUHvodgYILi+krVJfEsqnAqY0ZVRKby2GNHYVUu6jNR7f7qWUF2PUSb4/Rppv1CxCO4YokkVp5T3FgrId2v08Uc3KDvyMZSmUensRDwg33del4TjfOG2SGC0fywEUvL0DW7NdleXqKMOhuSoLaL9IBF8aVv0CU918r7I2DFvGkblgP4jwqMGSIx1y5PJo/PKTPqjZkB1j50ph5wcu7Kp5ybYeppDegm8GlZs=
+X-OriginatorOrg: cornell.edu
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2714ac5f-2ebf-4b1c-aad4-08d7fc277416
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2020 19:04:27.9620 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5d7e4366-1b9b-45cf-8e79-b14b27df46e1
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Uqbn5It8twrp3ymVV1lNiiaAEJn15gTyDREq69S0mBkxMtZQAjK5h0Hc0p/6QDdghb6PJpwb/sDUHKjbZrQGmQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR04MB5658
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, MSGID_FROM_MTA_HEADER,
+ RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_PASS,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -46,102 +87,38 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 19 May 2020 14:07:45 -0000
+X-List-Received-Date: Tue, 19 May 2020 19:04:31 -0000
 
-On Tue, 19 May 2020 09:37:17 -0400
-Ken Brown via Cygwin-patches <cygwin-patches@cygwin.com> wrote:
-> On 5/19/2020 8:51 AM, Ken Brown via Cygwin-patches wrote:
-> > On 5/19/2020 2:15 AM, Takashi Yano via Cygwin-patches wrote:
-> >> On Tue, 19 May 2020 10:26:09 +0900
-> >> Takashi Yano via Cygwin-patches <cygwin-patches@cygwin.com> wrote:
-> >>> Hi Ken,
-> >>>
-> >>> On Mon, 18 May 2020 13:42:19 -0400
-> >>> Ken Brown via Cygwin-patches <cygwin-patches@cygwin.com> wrote:
-> >>>> Hi Takashi,
-> >>>>
-> >>>> On 5/18/2020 12:03 PM, Ken Brown via Cygwin-patches wrote:
-> >>>>> On 5/18/2020 1:36 AM, Takashi Yano via Cygwin-patches wrote:
-> >>>>>> On Mon, 18 May 2020 14:25:19 +0900
-> >>>>>> Takashi Yano via Cygwin-patches <cygwin-patches@cygwin.com> wrote:
-> >>>>>>> However, mc hangs by several operations.
-> >>>>>>>
-> >>>>>>> To reproduce this:
-> >>>>>>> 1. Start mc with 'env SHELL=tcsh mc -a'
-> >>>>>>
-> >>>>>> I mean 'env SHELL=/bin/tcsh mc -a'
-> >>>>>>
-> >>>>>>> 2. Select a file using up/down cursor keys.
-> >>>>>>> 3. Press F3 (View) key.
-> >>>>>
-> >>>>> Thanks for the report.  I can reproduce the problem and will look into it.
-> >>>>
-> >>>> I'm not convinced that this is a FIFO bug.  I tried two things.
-> >>>>
-> >>>> 1. I attached gdb to mc while it was hanging and got the following backtrace
-> >>>> (abbreviated):
-> >>>>
-> >>>> #1  0x00007ff901638037 in WaitForMultipleObjectsEx ()
-> >>>> #2  0x00007ff901637f1e in WaitForMultipleObjects ()
-> >>>> #3  0x0000000180048df5 in cygwait () at ...winsup/cygwin/cygwait.cc:75
-> >>>> #4  0x000000018019b1c0 in wait4 () at ...winsup/cygwin/wait.cc:80
-> >>>> #5  0x000000018019afea in waitpid () at ...winsup/cygwin/wait.cc:28
-> >>>> #6  0x000000018017d2d8 in pclose () at ...winsup/cygwin/syscalls.cc:4627
-> >>>> #7  0x000000018015943b in _sigfe () at sigfe.s:35
-> >>>> #8  0x000000010040d002 in get_popen_information () at filemanager/ext.c:561
-> >>>> [...]
-> >>>>
-> >>>> So pclose is blocking after calling waitpid.  As far as I can tell from looking
-> >>>> at backtraces of all threads, there are no FIFOs open.
-> >>>>
-> >>>> 2. I ran mc under strace (after exporting SHELL=/bin/tcsh), and I didn't see
-> >>>> anything suspicious involving FIFOs.  But I saw many EBADF errors from fstat 
-> >>>> and
-> >>>> close that don't appear to be related to FIFOs.
-> >>>>
-> >>>> So my best guess at this point is that the FIFO changes just exposed some
-> >>>> unrelated bug(s).
-> >>>>
-> >>>> Prior to the FIFO changes, mc would get an error when it tried to open 
-> >>>> tcsh_fifo
-> >>>> the second time, and it would then set
-> >>>>
-> >>>>     mc_global.tty.use_subshell = FALSE;
-> >>>>
-> >>>> see the mc source file subshell/common.c:1087.
-> >>>
-> >>> I looked into this problem and found pclose() stucks if FIFO
-> >>> is opened.
-> >>>
-> >>> Attached is a simple test case. It works under cygwin 3.1.4,
-> >>> but stucks at pclose() under cygwin git head.
-> >>>
-> >>> Isn't this a FIFO related issue?
-> >>
-> >> In the test case, fhandler_fifo::close() called from /bin/true
-> >> seems to get into infinite loop at:
-> >>
-> >> do
-> >> ...
-> >> while (inc_nreaders () > 0 && !found);
-> > 
-> > Thank you!  I see the problem.  After the popen call, the original 
-> > fhandler_fifo's fifo_reader_thread was no longer running, so it was unable to 
-> > take ownership.
-> > 
-> > It might take a little while for me to figure out how to fix this.
-> 
-> Actually, I think it's easy.  Please try the two attached patches.  The second 
-> one is the crucial one for the mc problem, but the first is something I noticed 
-> while working on this.
-> 
-> I just did a quick and dirty patch for testing purposes.  I still have to do a 
-> lot of cleanup and make sure the fix doesn't break something else.
+Hi Takashi,
 
-For a shor time, I tested these patches, and confirmed
-that this fixes the problem.
+On 5/19/2020 7:35 AM, Takashi Yano via Cygwin-patches wrote:
+> - Current pty cannot show system_printf() output after closing pty
+>    slave. This patch fixes the issue.
 
-Thanks for the quick response.
+Sorry to be returning the favor so soon, but this patch causes 'make check' in 
+the texinfo source tree to hang.  I don't have time at the moment to try to 
+produce a simple test case, so here's a complicated way to reproduce the problem:
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+1. Clone the texinfo git repo:
+
+   $ git clone https://git.savannah.gnu.org/git/texinfo.git
+
+2. Build texinfo:
+
+   $ cd texinfo
+   $ ./autogen.sh && ./configure # Maybe CFLAGS='-g -O0' for debugging
+   $ make
+
+3. Test the standalone info reader:
+
+   $ cd info
+   $ make check
+
+It hangs while running the test t/malformed-split.sh, leaving a ginfo process 
+and a pseudotty process running, with ginfo trying to close a pty slave.
+
+Note that this test uses both ptys and fifos, so there's always a chance that 
+this is another fifo bug.  But reverting your patch fixes the problem, so I 
+think it's probably a pty bug.
+
+Ken
