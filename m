@@ -1,51 +1,51 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
- by sourceware.org (Postfix) with ESMTPS id 0E2113851C0A
- for <cygwin-patches@cygwin.com>; Tue, 19 May 2020 13:28:07 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 0E2113851C0A
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+ by sourceware.org (Postfix) with ESMTPS id 386DB3840C10
+ for <cygwin-patches@cygwin.com>; Tue, 19 May 2020 13:28:52 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 386DB3840C10
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org;
  spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MfqCF-1j804N3ZTV-00gF3s for <cygwin-patches@cygwin.com>; Tue, 19 May 2020
- 15:28:06 +0200
+ mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MUXlA-1jSCd104ga-00QPxz for <cygwin-patches@cygwin.com>; Tue, 19 May 2020
+ 15:28:51 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 4209AA80F7E; Tue, 19 May 2020 15:28:06 +0200 (CEST)
-Date: Tue, 19 May 2020 15:28:06 +0200
+ id ACCAEA80F7E; Tue, 19 May 2020 15:28:50 +0200 (CEST)
+Date: Tue, 19 May 2020 15:28:50 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2] Cygwin: pty: Call FreeConsole() only if attached to
- current pty.
-Message-ID: <20200519132806.GX3947@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: pty: Make system_printf() work after closing pty
+ slave.
+Message-ID: <20200519132850.GY3947@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200519105523.1620-1-takashi.yano@nifty.ne.jp>
+References: <20200519113600.467-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200519105523.1620-1-takashi.yano@nifty.ne.jp>
-X-Provags-ID: V03:K1:xUPHQ6W67m8ES0V1gDu4W/rknAj98/kCaMeW5/jUSWtdFNn6WFL
- a59GJeEU+v5qkVQ5CcUs3zDndmDNK3byMDBsVHU33jI4JZ4/ySFq2s2YhkTy/kRe5XTHyAp
- 7zL3daPU63ucPhnzusfB8V8H8+e2GoodUMb6JH8cAE212dqg311tQixo+EIGrBHeAvepDQL
- PvEYTY8TI3yiqEPtNQIUA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:+LTLbL/dvJ8=:KbDCZFCPOYYMUJvd4zEcZN
- r+SudFdiFuCXfu3gPzpgCFSP/rqykwv9j54lqSRETAson1DTGASlOAbqlt4vNZiSSQxdrdCgr
- XhYnsQpAdpjfcyI8CktBsgijP3/Kf8JhCWRXONoTOCrBmx8Zejml49PasdmfH22F9bqmnaFw1
- DIokk1lP0SOO3l8V8nZbvsCR7+7gRdtt/sUQrASTXgdFgxoYh78csIw6an8vN0ApHXktxRI8M
- jRGmn4JQHQCvTna8hjOK/fnspW/q4t0fPQ5EVteWKbQ5m0xy8AK/dTS342KyKgigoSAVSad27
- 81TzV984DEM4dpIpiPmQWzs0iljgsAriK17Ag3K2sJmFDHCT35MjQxFbKUf6Er6d51ghWku5M
- jXqrwzZGhQirbvnfU4EgRMeresRYYjFfg+rZ4QTBPhsuZ9W+LAmcsiyHaqSUiRS1iG4wUhhS7
- wU6KTLrdThrdSaELqJTIlMtjQujbBvktFruaTrRFpAwSYHCsMdfTwPAPfuWtU1tUwgCkMwy4B
- GzkypT+XaeItfTs+BtbCClhpKj4/4W9fDHq5ESY2Hy51yPTRoIKZ9YHY7NQc+8/PJjzOjyp7W
- 3XU3SUXBQj34C6ap8bQIwY8m8Bzm3WQ9jiSpjqzolD+KwaVhymjlxxofKUGe8syIozhm2Z5xU
- DfuJLc7Q1yh5prqegFDLhNIWyXx/lifChTmjiPvKJBZ91lOwduG5OdA1jIXC0QuHFY+O+JoMx
- MDweqIKj6WdI4NZY9OBLovSAH/OYZnrdo/s0O1GTUeAqOqPcusy0t2uqpk6FQMVYb4fA7E7Dp
- vJVF438n78YUe3NP9YJLiuyizpTjw6f+BtVnoUJjCESqEJMgmz7p5K0HBwZ/TcVkCVQn4nm
-X-Spam-Status: No, score=-98.5 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+In-Reply-To: <20200519113600.467-1-takashi.yano@nifty.ne.jp>
+X-Provags-ID: V03:K1:zQ67r9qp7B0iZR9VxuXvXBn+oLFwJgalf55TExsh6hsa5OswztV
+ nRSQFk2+J2458kDyQujuePEedcpej27yEg9k1URbTCYnTbXoDwWj293m5PLOleJS3tAu/1R
+ QmF0lpgCfdmILYrtlTZx+A7tFesBO351SjEYL2j2gODbkIaEzf3avG244y0n1IpDclxBqi7
+ MtFADprmnxdiQ+3eV0Akw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:GCrHOs93mVo=:BSSkK5XzqLFB+IBuu8kDJg
+ 2I/vBq7dA5bkGy3x/z+zcCmlVDKAbZ2w7tBvsatBEQrg+oS2rGXnHKKZshmkn9bL056jv76n5
+ Ztp/b9fysea4xrOOtblC7MkweAavZoE7wvyrIpUFykwHqtnMkDdLaDIu2PNHhEuq4s1NSYdfU
+ nwP5Ng50fcuVvEPQ53jlumD3k/A4hfGHlCjUiEV00bS1c0rD1JL/YgX0ogi+ue4ZA8Ezp6vh1
+ PbYsFVkDqYCEndVsJ/I/X69tH0Wqr5EOZ35MhDiLWx5UpQoVHs9LJsscLmua9g1TFIIufmvoq
+ 9Ur/QadNI2ZuTcFxI02AOqoeOEsE29W6oMs9+AJTU8ppv2gRj4yTOJEYzl+QTeBb84nOiuING
+ Dnkg1U+W7bmylmSPowlNi0yIGeEbpjf73gY6GtAwW0vYzgY86WfN4MgEQcXxTFnAoqZEpeXB0
+ ByJ70vOBTAPDJsXNkLHsXU2nBgekxqfja5ex3M9q7TM7pUfjxcCCJfaEjzUhot5tUuzuX8eMB
+ XCurBoCJQ9eJVNgQXQp2qgadP6s3PALxgWBntv8meXBM6WksbESVuN52+m1lg1GsHGcuWOVFb
+ PACIZKsEr1GNkrlvvJnBnJs9twILxdpRRiLmXi6otrfzdC5SCMppOLKVM6Z8aH7zDqov0R4HG
+ 0r/HbJSsQCHOEw92zPknj22tfzaiXJJ1w6D3wONbvN2zxy6gPMu1MgpIa7fu1vhw/Yyo4cc2W
+ ZqBom5zQnmZOicnmP8Il2EjZDch9yj5f2VTTgZWEsPXgOkI4Oj/q0Dl9yUXvoQJCor6JQWuma
+ yEuoB3xqdfTvJjRi511hIDBUF/4VWjemxsAoq10DiHlNNs8DzgXqnR09ypFGNBJSQkUQXj0
+X-Spam-Status: No, score=-103.4 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
+ RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -61,19 +61,40 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 19 May 2020 13:28:09 -0000
+X-List-Received-Date: Tue, 19 May 2020 13:28:53 -0000
 
-On May 19 19:55, Takashi Yano via Cygwin-patches wrote:
-> - After commit 071b8e0cbd4be33449c12bb0d58f514ed8ef893c, the problem
->   reported in https://cygwin.com/pipermail/cygwin/2020-May/244873.html
->   occurs. This is due to freeing console device accidentally rather
->   than pseudo console. This patch makes sure to call FreeConsole()
->   only if the process is attached to the pseudo console of the current
->   pty.
+On May 19 20:35, Takashi Yano via Cygwin-patches wrote:
+> - Current pty cannot show system_printf() output after closing pty
+>   slave. This patch fixes the issue.
 > ---
->  winsup/cygwin/fhandler.h      |  1 +
->  winsup/cygwin/fhandler_tty.cc | 28 +++++++++++++---------------
->  2 files changed, 14 insertions(+), 15 deletions(-)
+>  winsup/cygwin/fhandler_tty.cc | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+> index 5a1bcd3ce..02b78cd2c 100644
+> --- a/winsup/cygwin/fhandler_tty.cc
+> +++ b/winsup/cygwin/fhandler_tty.cc
+> @@ -948,6 +948,10 @@ fhandler_pty_slave::open (int flags, mode_t)
+>        init_console_handler (true);
+>      }
+>  
+> +  get_ttyp ()->pcon_pid = 0;
+> +  get_ttyp ()->switch_to_pcon_in = false;
+> +  get_ttyp ()->switch_to_pcon_out = false;
+> +
+>    set_open_status ();
+>    return 1;
+>  
+> @@ -1008,6 +1012,7 @@ fhandler_pty_slave::close ()
+>      termios_printf ("CloseHandle (output_mutex<%p>), %E", output_mutex);
+>    if (pcon_attached_to == get_minor ())
+>      get_ttyp ()->num_pcon_attached_slaves --;
+> +  set_switch_to_pcon (2); /* Make system_printf() work after close. */
+>    return 0;
+>  }
+>  
+> -- 
+> 2.21.0
 
 Pushed.
 
