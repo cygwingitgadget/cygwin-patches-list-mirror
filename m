@@ -1,29 +1,31 @@
 Return-Path: <mark@maxrnd.com>
 Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
- by sourceware.org (Postfix) with ESMTPS id 978543840C0F
+ by sourceware.org (Postfix) with ESMTPS id 92F77386F451
  for <cygwin-patches@cygwin.com>; Tue, 19 May 2020 05:02:44 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 978543840C0F
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 92F77386F451
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=maxrnd.com
 Authentication-Results: sourceware.org; spf=none smtp.mailfrom=mark@maxrnd.com
 Received: (from daemon@localhost)
- by m0.truegem.net (8.12.11/8.12.11) id 04J52hZ7038163
- for <cygwin-patches@cygwin.com>; Mon, 18 May 2020 22:02:43 -0700 (PDT)
- (envelope-from mark@maxrnd.com)
+ by m0.truegem.net (8.12.11/8.12.11) id 04J52hRc038164;
+ Mon, 18 May 2020 22:02:43 -0700 (PDT) (envelope-from mark@maxrnd.com)
 Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67),
  claiming to be "localhost.localdomain"
- via SMTP by m0.truegem.net, id smtpd5HtRUo; Mon May 18 22:02:40 2020
+ via SMTP by m0.truegem.net, id smtpdrx3vPu; Mon May 18 22:02:41 2020
 From: Mark Geisert <mark@maxrnd.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH 0/3] Cygwin: tzcode resync v2
-Date: Mon, 18 May 2020 22:02:26 -0700
-Message-Id: <20200519050229.28209-1-mark@maxrnd.com>
+Subject: [PATCH 3/3] Cygwin: tzcode resync v2: details
+Date: Mon, 18 May 2020 22:02:29 -0700
+Message-Id: <20200519050229.28209-4-mark@maxrnd.com>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20200519050229.28209-1-mark@maxrnd.com>
+References: <20200519050229.28209-1-mark@maxrnd.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.8 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
- KAM_LAZY_DOMAIN_SECURITY, KAM_NUMSUBJECT, SPF_HELO_NONE, SPF_NONE,
- TXREP autolearn=no autolearn_force=no version=3.4.2
+X-Spam-Status: No, score=-11.8 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, SCC_10_SHORT_WORD_LINES,
+ SCC_20_SHORT_WORD_LINES, SCC_35_SHORT_WORD_LINES, SCC_5_SHORT_WORD_LINES,
+ SPF_HELO_NONE, SPF_NONE, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -37,20 +39,873 @@ List-Archive: <https://cygwin.com/pipermail/cygwin-patches/>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 19 May 2020 05:02:47 -0000
+X-List-Received-Date: Tue, 19 May 2020 05:02:55 -0000
 
-This is a reorganization of the previous patch contents to cut down on
-extraneous material.  It seems to be complete and could thus be applied
-to a copy of the newlib-cygwin tree successfully for testing or review.
+Add tz_posixrules.h with data generated from most recent Cygwin tzdata
+package.  Establish localtime.cc as primarily a wrapper around a patched
+copy of localtime.c.  See README for more information.
 
-Methods of testing can be discussed by reply to this post, or on
-cygwin-developers, whichever is most appropriate.  I'm also open to other
-strategies of implementation if this one seems risky or unattractive for
-some reason.
+---
+ winsup/cygwin/tzcode/README            |  37 +++
+ winsup/cygwin/tzcode/localtime.c.patch | 399 +++++++++++++++++++++++++
+ winsup/cygwin/tzcode/localtime.cc      | 159 ++++++++++
+ winsup/cygwin/tzcode/tz_posixrules.h   | 231 ++++++++++++++
+ 4 files changed, 826 insertions(+)
+ create mode 100644 winsup/cygwin/tzcode/README
+ create mode 100644 winsup/cygwin/tzcode/localtime.c.patch
+ create mode 100644 winsup/cygwin/tzcode/localtime.cc
+ create mode 100644 winsup/cygwin/tzcode/tz_posixrules.h
 
-..mark
-
-[PATCH 1/3] Cygwin: tzcode resync v2: basics
-[PATCH 2/3] Cygwin: tzcode resync v2: imports
-[PATCH 3/3] Cygwin: tzcode resync v2: details
+diff --git a/winsup/cygwin/tzcode/README b/winsup/cygwin/tzcode/README
+new file mode 100644
+index 000000000..dd01ac565
+--- /dev/null
++++ b/winsup/cygwin/tzcode/README
+@@ -0,0 +1,37 @@
++/*
++	How the code in this directory is supposed to work...
++	2020/05/13 Mark Geisert <mark@maxrnd.com>
++
++	localtime.cc is the Cygwin-specific module that is compiled into
++	the Cygwin DLL when the latter is built.  It's just a wrapper that
++	#defines a bunch of stuff then #includes localtime.c.
++
++	localtime.c, at any point in time, is a reasonably recent version
++	of /src/lib/libc/time/localtime.c from NetBSD.  The same goes for
++	private.h and tzfile.h.
++
++	The idea is that in the future, one just needs to bring over newer
++	versions of localtime.c, private.h, and/or tzfile.h from NetBSD as
++	they become available.
++
++	With luck, you can drop those files into this directory and they
++	can be immediately used to build a newer Cygwin DLL that has the
++	newer NetBSD functionality.  Without luck, you'll have to tweak the
++	wrapper localtime.cc.  In the worst case, some other strategy will
++	need to be figured out, such as manually pulling out the parts of
++	the NetBSD code Cygwin needs to build a stand-alone localtime.cc.
++
++	Re tz_posixrules.h: The data elements can be generated from
++	/usr/share/zoneinfo/posixrules in any version of Cygwin's tzdata
++	package.  Instructions are in the comment leading tz_posixrules.h.
++
++	Addendum:
++	Implementation of the strategy above has uncovered a small number
++	of NetBSD-isms in localtime.c that cannot be worked around with
++	preprocessor tricks.  So there is another file localtime.c.patched
++	that holds just these adjustments for Cygwin, and it's this file
++	that localtime.cc #includes.  localtime.c.patched is generated by
++	winsup/cygwin/Makefile[.in] operating with localtime.c.patch.
++
++	..mark
++*/
+diff --git a/winsup/cygwin/tzcode/localtime.c.patch b/winsup/cygwin/tzcode/localtime.c.patch
+new file mode 100644
+index 000000000..a17d9ee90
+--- /dev/null
++++ b/winsup/cygwin/tzcode/localtime.c.patch
+@@ -0,0 +1,399 @@
++*** localtime.c	2020-05-16 21:54:00.533111800 -0700
++--- localtime.c.patched	2020-05-16 22:42:40.486924300 -0700
++***************
++*** 1,3 ****
++--- 1,4 ----
+++ // localtime.c.patched: based on NetBSD's localtime.c version 1.122
++  /*	$NetBSD: localtime.c,v 1.122 2019/07/03 15:50:16 christos Exp $	*/
++  
++  /* Convert timestamp from time_t to struct tm.  */
++***************
++*** 23,29 ****
++  
++  /*LINTLIBRARY*/
++  
++- #include "namespace.h"
++  #include <assert.h>
++  #define LOCALTIME_IMPLEMENTATION
++  #include "private.h"
++--- 24,29 ----
++***************
++*** 182,188 ****
++  
++  
++  #if !defined(__LIBC12_SOURCE__)
++! timezone_t __lclptr;
++  #ifdef _REENTRANT
++  rwlock_t __lcl_lock = RWLOCK_INITIALIZER;
++  #endif
++--- 182,188 ----
++  
++  
++  #if !defined(__LIBC12_SOURCE__)
++! static timezone_t __lclptr;
++  #ifdef _REENTRANT
++  rwlock_t __lcl_lock = RWLOCK_INITIALIZER;
++  #endif
++***************
++*** 198,204 ****
++  
++  static struct tm	tm;
++  
++! #if !HAVE_POSIX_DECLS || TZ_TIME_T || defined(__NetBSD__)
++  # if !defined(__LIBC12_SOURCE__)
++  
++  __aconst char *		tzname[2] = {
++--- 198,204 ----
++  
++  static struct tm	tm;
++  
++! #if !HAVE_POSIX_DECLS || TZ_TIME_T || defined(__NetBSD__) || defined(__CYGWIN__)
++  # if !defined(__LIBC12_SOURCE__)
++  
++  __aconst char *		tzname[2] = {
++***************
++*** 413,419 ****
++  };
++  
++  /* TZDIR with a trailing '/' rather than a trailing '\0'.  */
++! static char const tzdirslash[sizeof TZDIR] = TZDIR "/";
++  
++  /* Local storage needed for 'tzloadbody'.  */
++  union local_storage {
++--- 413,420 ----
++  };
++  
++  /* TZDIR with a trailing '/' rather than a trailing '\0'.  */
++! static char const tzdirslash[] = TZDIR "/";
++! #define sizeof_tzdirslash (sizeof tzdirslash - 1)
++  
++  /* Local storage needed for 'tzloadbody'.  */
++  union local_storage {
++***************
++*** 428,434 ****
++  
++  	/* The file name to be opened.  */
++  	char fullname[/*CONSTCOND*/BIGGEST(sizeof (struct file_analysis),
++! 	    sizeof tzdirslash + 1024)];
++  };
++  
++  /* Load tz data from the file named NAME into *SP.  Read extended
++--- 429,435 ----
++  
++  	/* The file name to be opened.  */
++  	char fullname[/*CONSTCOND*/BIGGEST(sizeof (struct file_analysis),
++! 	    sizeof_tzdirslash + 1024)];
++  };
++  
++  /* Load tz data from the file named NAME into *SP.  Read extended
++***************
++*** 466,479 ****
++  	if (!doaccess) {
++  		char const *dot;
++  		size_t namelen = strlen(name);
++! 		if (sizeof lsp->fullname - sizeof tzdirslash <= namelen)
++  			return ENAMETOOLONG;
++  
++  		/* Create a string "TZDIR/NAME".  Using sprintf here
++  		   would pull in stdio (and would fail if the
++  		   resulting string length exceeded INT_MAX!).  */
++! 		memcpy(lsp->fullname, tzdirslash, sizeof tzdirslash);
++! 		strcpy(lsp->fullname + sizeof tzdirslash, name);
++  
++  		/* Set doaccess if NAME contains a ".." file name
++  		   component, as such a name could read a file outside
++--- 467,480 ----
++  	if (!doaccess) {
++  		char const *dot;
++  		size_t namelen = strlen(name);
++! 		if (sizeof lsp->fullname - sizeof_tzdirslash <= namelen)
++  			return ENAMETOOLONG;
++  
++  		/* Create a string "TZDIR/NAME".  Using sprintf here
++  		   would pull in stdio (and would fail if the
++  		   resulting string length exceeded INT_MAX!).  */
++! 		memcpy(lsp->fullname, tzdirslash, sizeof_tzdirslash);
++! 		strcpy(lsp->fullname + sizeof_tzdirslash, name);
++  
++  		/* Set doaccess if NAME contains a ".." file name
++  		   component, as such a name could read a file outside
++***************
++*** 488,498 ****
++  		name = lsp->fullname;
++  	}
++  	if (doaccess && access(name, R_OK) != 0)
++! 		return errno;
++  
++  	fid = open(name, OPEN_MODE);
++  	if (fid < 0)
++! 		return errno;
++  	nread = read(fid, up->buf, sizeof up->buf);
++  	if (nread < (ssize_t)tzheadsize) {
++  		int err = nread < 0 ? errno : EINVAL;
++--- 489,499 ----
++  		name = lsp->fullname;
++  	}
++  	if (doaccess && access(name, R_OK) != 0)
++! 		goto trydefrules;
++  
++  	fid = open(name, OPEN_MODE);
++  	if (fid < 0)
++! 		goto trydefrules;
++  	nread = read(fid, up->buf, sizeof up->buf);
++  	if (nread < (ssize_t)tzheadsize) {
++  		int err = nread < 0 ? errno : EINVAL;
++***************
++*** 501,506 ****
++--- 502,516 ----
++  	}
++  	if (close(fid) < 0)
++  		return errno;
+++ 	if (0) {
+++ trydefrules:
+++ 		const char *base = strrchr(name, '/');
+++ 		base = base ? base + 1 : name;
+++ 		if (strcmp(base, TZDEFRULES))
+++ 		    return errno;
+++ 		nread = sizeof _posixrules_data;
+++ 		memcpy(up->buf, _posixrules_data, nread);
+++ 	}
++  	for (stored = 4; stored <= 8; stored *= 2) {
++  		int_fast32_t ttisstdcnt = detzcode(up->tzhead.tzh_ttisstdcnt);
++  		int_fast32_t ttisutcnt = detzcode(up->tzhead.tzh_ttisutcnt);
++***************
++*** 793,799 ****
++  static int
++  tzload(char const *name, struct state *sp, bool doextend)
++  {
++! 	union local_storage *lsp = malloc(sizeof *lsp);
++  	if (!lsp)
++  		return errno;
++  	else {
++--- 803,809 ----
++  static int
++  tzload(char const *name, struct state *sp, bool doextend)
++  {
++! 	union local_storage *lsp = (union local_storage *) calloc(1, sizeof *lsp);
++  	if (!lsp)
++  		return errno;
++  	else {
++***************
++*** 1417,1429 ****
++  tzsetlcl(char const *name)
++  {
++  	struct state *sp = __lclptr;
++  	int lcl = name ? strlen(name) < sizeof lcl_TZname : -1;
++  	if (lcl < 0 ? lcl_is_set < 0
++  	    : 0 < lcl_is_set && strcmp(lcl_TZname, name) == 0)
++  		return;
++  
++  	if (! sp)
++! 		__lclptr = sp = malloc(sizeof *__lclptr);
++  	if (sp) {
++  		if (zoneinit(sp, name) != 0)
++  			zoneinit(sp, "");
++--- 1427,1441 ----
++  tzsetlcl(char const *name)
++  {
++  	struct state *sp = __lclptr;
+++ 	if (! name)
+++ 		name = tzgetwintzi(__UNCONST(wildabbr), (char *) alloca (512));
++  	int lcl = name ? strlen(name) < sizeof lcl_TZname : -1;
++  	if (lcl < 0 ? lcl_is_set < 0
++  	    : 0 < lcl_is_set && strcmp(lcl_TZname, name) == 0)
++  		return;
++  
++  	if (! sp)
++! 		__lclptr = sp = (struct state *) calloc(1, sizeof *__lclptr);
++  	if (sp) {
++  		if (zoneinit(sp, name) != 0)
++  			zoneinit(sp, "");
++***************
++*** 1438,1446 ****
++  void
++  tzsetwall(void)
++  {
++! 	rwlock_wrlock(&__lcl_lock);
++  	tzsetlcl(NULL);
++! 	rwlock_unlock(&__lcl_lock);
++  }
++  #endif
++  
++--- 1450,1458 ----
++  void
++  tzsetwall(void)
++  {
++! 	tzset_guard.init("tzset_guard")->acquire();
++  	tzsetlcl(NULL);
++! 	tzset_guard.release();
++  }
++  #endif
++  
++***************
++*** 1453,1475 ****
++  void
++  tzset(void)
++  {
++! 	rwlock_wrlock(&__lcl_lock);
++  	tzset_unlocked();
++! 	rwlock_unlock(&__lcl_lock);
++  }
++  
++  static void
++  gmtcheck(void)
++  {
++  	static bool gmt_is_set;
++! 	rwlock_wrlock(&__lcl_lock);
++  	if (! gmt_is_set) {
++! 		gmtptr = malloc(sizeof *gmtptr);
++  		if (gmtptr)
++  			gmtload(gmtptr);
++  		gmt_is_set = true;
++  	}
++! 	rwlock_unlock(&__lcl_lock);
++  }
++  
++  #if NETBSD_INSPIRED
++--- 1465,1487 ----
++  void
++  tzset(void)
++  {
++! 	tzset_guard.init("tzset_guard")->acquire();
++  	tzset_unlocked();
++! 	tzset_guard.release();
++  }
++  
++  static void
++  gmtcheck(void)
++  {
++  	static bool gmt_is_set;
++! 	tzset_guard.init("tzset_guard")->acquire();
++  	if (! gmt_is_set) {
++! 		gmtptr = (timezone_t) calloc(1, sizeof *gmtptr);
++  		if (gmtptr)
++  			gmtload(gmtptr);
++  		gmt_is_set = true;
++  	}
++! 	tzset_guard.release();
++  }
++  
++  #if NETBSD_INSPIRED
++***************
++*** 1477,1483 ****
++  timezone_t
++  tzalloc(const char *name)
++  {
++! 	timezone_t sp = malloc(sizeof *sp);
++  	if (sp) {
++  		int err = zoneinit(sp, name);
++  		if (err != 0) {
++--- 1489,1495 ----
++  timezone_t
++  tzalloc(const char *name)
++  {
++! 	timezone_t sp = (timezone_t) calloc(1, sizeof *sp);
++  	if (sp) {
++  		int err = zoneinit(sp, name);
++  		if (err != 0) {
++***************
++*** 1618,1628 ****
++  static struct tm *
++  localtime_tzset(time_t const *timep, struct tm *tmp, bool setname)
++  {
++! 	rwlock_wrlock(&__lcl_lock);
++  	if (setname || !lcl_is_set)
++  		tzset_unlocked();
++  	tmp = localsub(__lclptr, timep, setname, tmp);
++! 	rwlock_unlock(&__lcl_lock);
++  	return tmp;
++  }
++  
++--- 1630,1640 ----
++  static struct tm *
++  localtime_tzset(time_t const *timep, struct tm *tmp, bool setname)
++  {
++! 	tzset_guard.init("tzset_guard")->acquire();
++  	if (setname || !lcl_is_set)
++  		tzset_unlocked();
++  	tmp = localsub(__lclptr, timep, setname, tmp);
++! 	tzset_guard.release();
++  	return tmp;
++  }
++  
++***************
++*** 2358,2367 ****
++  {
++  	time_t t;
++  
++! 	rwlock_wrlock(&__lcl_lock);
++  	tzset_unlocked();
++  	t = mktime_tzname(__lclptr, tmp, true);
++! 	rwlock_unlock(&__lcl_lock);
++  	return t;
++  }
++  
++--- 2370,2379 ----
++  {
++  	time_t t;
++  
++! 	tzset_guard.init("tzset_guard")->acquire();
++  	tzset_unlocked();
++  	t = mktime_tzname(__lclptr, tmp, true);
++! 	tzset_guard.release();
++  	return t;
++  }
++  
++***************
++*** 2439,2450 ****
++  time_t
++  time2posix(time_t t)
++  {
++! 	rwlock_wrlock(&__lcl_lock);
++  	if (!lcl_is_set)
++  		tzset_unlocked();
++  	if (__lclptr)
++  		t = (time_t)(t - leapcorr(__lclptr, t));
++! 	rwlock_unlock(&__lcl_lock);
++  	return t;
++  }
++  
++--- 2451,2462 ----
++  time_t
++  time2posix(time_t t)
++  {
++! 	tzset_guard.init("tzset_guard")->acquire();
++  	if (!lcl_is_set)
++  		tzset_unlocked();
++  	if (__lclptr)
++  		t = (time_t)(t - leapcorr(__lclptr, t));
++! 	tzset_guard.release();
++  	return t;
++  }
++  
++***************
++*** 2481,2492 ****
++  time_t
++  posix2time(time_t t)
++  {
++! 	rwlock_wrlock(&__lcl_lock);
++  	if (!lcl_is_set)
++  		tzset_unlocked();
++  	if (__lclptr)
++  		t = posix2time_z(__lclptr, t);
++! 	rwlock_unlock(&__lcl_lock);
++  	return t;
++  }
++  
++--- 2493,2504 ----
++  time_t
++  posix2time(time_t t)
++  {
++! 	tzset_guard.init("tzset_guard")->acquire();
++  	if (!lcl_is_set)
++  		tzset_unlocked();
++  	if (__lclptr)
++  		t = posix2time_z(__lclptr, t);
++! 	tzset_guard.release();
++  	return t;
++  }
++  
+diff --git a/winsup/cygwin/tzcode/localtime.cc b/winsup/cygwin/tzcode/localtime.cc
+new file mode 100644
+index 000000000..893f84ad8
+--- /dev/null
++++ b/winsup/cygwin/tzcode/localtime.cc
+@@ -0,0 +1,159 @@
++/* localtime.cc: Wrapper of NetBSD tzcode support for Cygwin. See README file.
++
++This file is part of Cygwin.
++
++This software is a copyrighted work licensed under the terms of the
++Cygwin license.  Please consult the file "CYGWIN_LICENSE" for
++details. */
++
++#include "../winsup.h"
++#include "../sync.h"
++#include "../include/cygwin/version.h"
++#include "tz_posixrules.h"
++
++static NO_COPY muto tzset_guard;
++
++// Set these NetBSD-related option #defines appropriately for Cygwin
++//#define STD_INSPIRED	// early-include private.h below does this
++#define lint
++#define USG_COMPAT 1
++#define NO_ERROR_IN_DST_GAP
++#define state __state
++
++// Turn a specific known kind of const parameter into non-const
++#define __UNCONST(X) ((char *) (X))
++
++// Turn off these NetBSD audit-related definitions
++#define __aconst
++#define _DIAGASSERT(X)
++
++// Supply this Cygwin-specific function in advance of its use in localtime.c
++static char *
++tzgetwintzi (char *wildabbr, char *outbuf)
++{
++    TIME_ZONE_INFORMATION tzi;
++    char *cp, *dst;
++    wchar_t *wsrc;
++    div_t d;
++
++    GetTimeZoneInformation (&tzi);
++    dst = cp = outbuf;
++    for (wsrc = tzi.StandardName; *wsrc; wsrc++)
++	if (*wsrc >= L'A' && *wsrc <= L'Z')
++	    *dst++ = *wsrc;
++    if ((dst - cp) < 3)
++      {
++	/* In non-english Windows, converted tz.StandardName
++	   may not contain a valid standard timezone name. */
++	strcpy (cp, wildabbr);
++	cp += strlen (wildabbr);
++      }
++    else
++	cp = dst;
++    d = div (tzi.Bias + tzi.StandardBias, 60);
++    __small_sprintf (cp, "%d", d.quot);
++    if (d.rem)
++	__small_sprintf (cp = strchr (cp, 0), ":%d", abs (d.rem));
++    if (tzi.StandardDate.wMonth)
++      {
++	cp = strchr (cp, 0);
++	dst = cp;
++	for (wsrc = tzi.DaylightName; *wsrc; wsrc++)
++	    if (*wsrc >= L'A' && *wsrc <= L'Z')
++		*dst++ = *wsrc;
++	if ((dst - cp) < 3)
++	  {
++	    /* In non-english Windows, converted tz.DaylightName
++	       may not contain a valid daylight timezone name. */
++	    strcpy (cp, wildabbr);
++	    cp += strlen (wildabbr);
++	  }
++	else
++	    cp = dst;
++	d = div (tzi.Bias + tzi.DaylightBias, 60);
++	__small_sprintf (cp, "%d", d.quot);
++	if (d.rem)
++	    __small_sprintf (cp = strchr (cp, 0), ":%d", abs (d.rem));
++	cp = strchr (cp, 0);
++	__small_sprintf (cp = strchr (cp, 0), ",M%d.%d.%d/%d",
++			 tzi.DaylightDate.wMonth,
++			 tzi.DaylightDate.wDay,
++			 tzi.DaylightDate.wDayOfWeek,
++			 tzi.DaylightDate.wHour);
++	if (tzi.DaylightDate.wMinute || tzi.DaylightDate.wSecond)
++	    __small_sprintf (cp = strchr (cp, 0), ":%d",
++			     tzi.DaylightDate.wMinute);
++	if (tzi.DaylightDate.wSecond)
++	    __small_sprintf (cp = strchr (cp, 0), ":%d",
++			     tzi.DaylightDate.wSecond);
++	cp = strchr (cp, 0);
++	__small_sprintf (cp = strchr (cp, 0), ",M%d.%d.%d/%d",
++			 tzi.StandardDate.wMonth,
++			 tzi.StandardDate.wDay,
++			 tzi.StandardDate.wDayOfWeek,
++			 tzi.StandardDate.wHour);
++	if (tzi.StandardDate.wMinute || tzi.StandardDate.wSecond)
++	    __small_sprintf (cp = strchr (cp, 0), ":%d",
++			     tzi.StandardDate.wMinute);
++	if (tzi.StandardDate.wSecond)
++	    __small_sprintf (cp = strchr (cp, 0), ":%d",
++			     tzi.StandardDate.wSecond);
++      }
++    /* __small_printf ("TZ deduced as `%s'\n", outbuf); */
++    return outbuf;
++}
++
++// Get ready to wrap NetBSD's localtime.c
++#ifdef __cplusplus
++extern "C" {
++#endif
++
++// Pull these in early to catch any small issues before the real test
++#include "private.h"
++#include "tzfile.h"
++
++/* Some NetBSD differences were too difficult to work around..
++   so #include a patched copy of localtime.c rather than the NetBSD original.
++   Here is a list of the patches...
++   (1) fix an erroneous decl of tzdirslash size (flagged by g++)
++   (2) add missing casts on all results of malloc() calls (flagged by g++)
++   (3) change all malloc() calls to analogous calloc() calls
++   (4) add conditional call to Cygwin's tzgetwintzi() from tzsetlcl()
++   (5) add Cygwin's historical "posixrules" support to tzloadbody()
++   (6) enable exported defs of daylight, timezone, and tzname
++   (7) make def of __lclptr static to avoid exporting it
++   (8) change NetBSD rwlock ops to analogous Cygwin muto ops
++*/
++#include "localtime.c.patched"
++
++#ifdef __cplusplus
++}
++#endif
++
++// Don't forget these Cygwin-specific additions from this point to EOF
++EXPORT_ALIAS (tzset_unlocked, _tzset_unlocked)
++
++extern "C" long
++__cygwin_gettzoffset (const struct tm *tmp)
++{
++#ifdef TM_GMTOFF
++    if (CYGWIN_VERSION_CHECK_FOR_EXTRA_TM_MEMBERS)
++    	return tmp->TM_GMTOFF;
++#endif /* defined TM_GMTOFF */
++    __tzinfo_type *tz = __gettzinfo ();
++    /* The sign of this is exactly opposite the envvar TZ.  We
++       could directly use the global _timezone for tm_isdst==0,
++       but have to use __tzrule for daylight savings.  */
++    long offset = -tz->__tzrule[tmp->tm_isdst > 0].offset;
++    return offset;
++}
++
++extern "C" const char *
++__cygwin_gettzname (const struct tm *tmp)
++{
++#ifdef TM_ZONE
++    if (CYGWIN_VERSION_CHECK_FOR_EXTRA_TM_MEMBERS)
++	return tmp->TM_ZONE;
++#endif
++    return _tzname[tmp->tm_isdst > 0];
++}
+diff --git a/winsup/cygwin/tzcode/tz_posixrules.h b/winsup/cygwin/tzcode/tz_posixrules.h
+new file mode 100644
+index 000000000..ebfcd065a
+--- /dev/null
++++ b/winsup/cygwin/tzcode/tz_posixrules.h
+@@ -0,0 +1,231 @@
++/*	tz_posixrules.h
++ *
++ *	The data elements were generated with...
++ *	od -vt u1 -A n /usr/share/zoneinfo/posixrules | 
++ *		sed 's/$/,/;s/^ //;s/[0-9] /&,/g;s/ ,/, /g' > elements_file
++ *
++ *	The source posixrules file is from the Cygwin tzdata 2020a-1 package.
++ */
++static NO_COPY unsigned char _posixrules_data[] = {
++ 84,  90, 105, 102,  50,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,
++  0,   0,   0,   0,   0,   0,   0,   5,   0,   0,   0,   5,   0,   0,   0,   0,
++  0,   0,   0, 236,   0,   0,   0,   5,   0,   0,   0,  20, 128,   0,   0,   0,
++158, 166,  30, 112, 159, 186, 235,  96, 160, 134,   0, 112, 161, 154, 205,  96,
++162, 101, 226, 112, 163, 131, 233, 224, 164, 106, 174, 112, 165,  53, 167,  96,
++166,  83, 202, 240, 167,  21, 137,  96, 168,  51, 172, 240, 168, 254, 165, 224,
++170,  19, 142, 240, 170, 222, 135, 224, 171, 243, 112, 240, 172, 190, 105, 224,
++173, 211,  82, 240, 174, 158,  75, 224, 175, 179,  52, 240, 176, 126,  45, 224,
++177, 156,  81, 112, 178, 103,  74,  96, 179, 124,  51, 112, 180,  71,  44,  96,
++181,  92,  21, 112, 182,  39,  14,  96, 183,  59, 247, 112, 184,   6, 240,  96,
++185,  27, 217, 112, 185, 230, 210,  96, 187,   4, 245, 240, 187, 198, 180,  96,
++188, 228, 215, 240, 189, 175, 208, 224, 190, 196, 185, 240, 191, 143, 178, 224,
++192, 164, 155, 240, 193, 111, 148, 224, 194, 132, 125, 240, 195,  79, 118, 224,
++196, 100,  95, 240, 197,  47,  88, 224, 198,  77, 124, 112, 199,  15,  58, 224,
++200,  45,  94, 112, 200, 248,  87,  96, 202,  13,  64, 112, 202, 216,  57,  96,
++203, 136, 240, 112, 210,  35, 244, 112, 210,  96, 251, 224, 211, 117, 228, 240,
++212,  64, 221, 224, 213,  85, 198, 240, 214,  32, 191, 224, 215,  53, 168, 240,
++216,   0, 161, 224, 217,  21, 138, 240, 217, 224, 131, 224, 218, 254, 167, 112,
++219, 192, 101, 224, 220, 222, 137, 112, 221, 169, 130,  96, 222, 190, 107, 112,
++223, 137, 100,  96, 224, 158,  77, 112, 225, 105,  70,  96, 226, 126,  47, 112,
++227,  73,  40,  96, 228,  94,  17, 112, 229,  87,  46, 224, 230,  71,  45, 240,
++231,  55,  16, 224, 232,  39,  15, 240, 233,  22, 242, 224, 234,   6, 241, 240,
++234, 246, 212, 224, 235, 230, 211, 240, 236, 214, 182, 224, 237, 198, 181, 240,
++238, 191, 211,  96, 239, 175, 210, 112, 240, 159, 181,  96, 241, 143, 180, 112,
++242, 127, 151,  96, 243, 111, 150, 112, 244,  95, 121,  96, 245,  79, 120, 112,
++246,  63,  91,  96, 247,  47,  90, 112, 248,  40, 119, 224, 249,  15,  60, 112,
++250,   8,  89, 224, 250, 248,  88, 240, 251, 232,  59, 224, 252, 216,  58, 240,
++253, 200,  29, 224, 254, 184,  28, 240, 255, 167, 255, 224,   0, 151, 254, 240,
++  1, 135, 225, 224,   2, 119, 224, 240,   3, 112, 254,  96,   4,  96, 253, 112,
++  5,  80, 224,  96,   6,  64, 223, 112,   7,  48, 194,  96,   7, 141,  25, 112,
++  9,  16, 164,  96,   9, 173, 148, 240,  10, 240, 134,  96,  11, 224, 133, 112,
++ 12, 217, 162, 224,  13, 192, 103, 112,  14, 185, 132, 224,  15, 169, 131, 240,
++ 16, 153, 102, 224,  17, 137, 101, 240,  18, 121,  72, 224,  19, 105,  71, 240,
++ 20,  89,  42, 224,  21,  73,  41, 240,  22,  57,  12, 224,  23,  41,  11, 240,
++ 24,  34,  41,  96,  25,   8, 237, 240,  26,   2,  11,  96,  26, 242,  10, 112,
++ 27, 225, 237,  96,  28, 209, 236, 112,  29, 193, 207,  96,  30, 177, 206, 112,
++ 31, 161, 177,  96,  32, 118,   0, 240,  33, 129, 147,  96,  34,  85, 226, 240,
++ 35, 106, 175, 224,  36,  53, 196, 240,  37,  74, 145, 224,  38,  21, 166, 240,
++ 39,  42, 115, 224,  39, 254, 195, 112,  41,  10,  85, 224,  41, 222, 165, 112,
++ 42, 234,  55, 224,  43, 190, 135, 112,  44, 211,  84,  96,  45, 158, 105, 112,
++ 46, 179,  54,  96,  47, 126,  75, 112,  48, 147,  24,  96,  49, 103, 103, 240,
++ 50, 114, 250,  96,  51,  71,  73, 240,  52,  82, 220,  96,  53,  39,  43, 240,
++ 54,  50, 190,  96,  55,   7,  13, 240,  56,  27, 218, 224,  56, 230, 239, 240,
++ 57, 251, 188, 224,  58, 198, 209, 240,  59, 219, 158, 224,  60, 175, 238, 112,
++ 61, 187, 128, 224,  62, 143, 208, 112,  63, 155,  98, 224,  64, 111, 178, 112,
++ 65, 132, 127,  96,  66,  79, 148, 112,  67, 100,  97,  96,  68,  47, 118, 112,
++ 69,  68,  67,  96,  69, 243, 168, 240,  71,  45,  95, 224,  71, 211, 138, 240,
++ 73,  13,  65, 224,  73, 179, 108, 240,  74, 237,  35, 224,  75, 156, 137, 112,
++ 76, 214,  64,  96,  77, 124, 107, 112,  78, 182,  34,  96,  79,  92,  77, 112,
++ 80, 150,   4,  96,  81,  60,  47, 112,  82, 117, 230,  96,  83,  28,  17, 112,
++ 84,  85, 200,  96,  84, 251, 243, 112,  86,  53, 170,  96,  86, 229,  15, 240,
++ 88,  30, 198, 224,  88, 196, 241, 240,  89, 254, 168, 224,  90, 164, 211, 240,
++ 91, 222, 138, 224,  92, 132, 181, 240,  93, 190, 108, 224,  94, 100, 151, 240,
++ 95, 158,  78, 224,  96,  77, 180, 112,  97, 135, 107,  96,  98,  45, 150, 112,
++ 99, 103,  77,  96, 100,  13, 120, 112, 101,  71,  47,  96, 101, 237,  90, 112,
++103,  39,  17,  96, 103, 205,  60, 112, 105,   6, 243,  96, 105, 173,  30, 112,
++106, 230, 213,  96, 107, 150,  58, 240, 108, 207, 241, 224, 109, 118,  28, 240,
++110, 175, 211, 224, 111,  85, 254, 240, 112, 143, 181, 224, 113,  53, 224, 240,
++114, 111, 151, 224, 115,  21, 194, 240, 116,  79, 121, 224, 116, 254, 223, 112,
++118,  56, 150,  96, 118, 222, 193, 112, 120,  24, 120,  96, 120, 190, 163, 112,
++121, 248,  90,  96, 122, 158, 133, 112, 123, 216,  60,  96, 124, 126, 103, 112,
++125, 184,  30,  96, 126,  94,  73, 112, 127, 152,   0,  96,   2,   1,   2,   1,
++  2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,
++  2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,
++  2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   3,   4,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2, 255, 255, 186, 158,   0,   0, 255, 255,
++199, 192,   1,   4, 255, 255, 185, 176,   0,   8, 255, 255, 199, 192,   1,  12,
++255, 255, 199, 192,   1,  16,  76,  77,  84,   0,  69,  68,  84,   0,  69,  83,
++ 84,   0,  69,  87,  84,   0,  69,  80,  84,   0,   0,   0,   0,   0,   1,   0,
++  0,   0,   0,   1,  84,  90, 105, 102,  50,   0,   0,   0,   0,   0,   0,   0,
++  0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   5,   0,   0,   0,   5,
++  0,   0,   0,   0,   0,   0,   0, 236,   0,   0,   0,   5,   0,   0,   0,  20,
++255, 255, 255, 255,  94,   3, 240, 144, 255, 255, 255, 255, 158, 166,  30, 112,
++255, 255, 255, 255, 159, 186, 235,  96, 255, 255, 255, 255, 160, 134,   0, 112,
++255, 255, 255, 255, 161, 154, 205,  96, 255, 255, 255, 255, 162, 101, 226, 112,
++255, 255, 255, 255, 163, 131, 233, 224, 255, 255, 255, 255, 164, 106, 174, 112,
++255, 255, 255, 255, 165,  53, 167,  96, 255, 255, 255, 255, 166,  83, 202, 240,
++255, 255, 255, 255, 167,  21, 137,  96, 255, 255, 255, 255, 168,  51, 172, 240,
++255, 255, 255, 255, 168, 254, 165, 224, 255, 255, 255, 255, 170,  19, 142, 240,
++255, 255, 255, 255, 170, 222, 135, 224, 255, 255, 255, 255, 171, 243, 112, 240,
++255, 255, 255, 255, 172, 190, 105, 224, 255, 255, 255, 255, 173, 211,  82, 240,
++255, 255, 255, 255, 174, 158,  75, 224, 255, 255, 255, 255, 175, 179,  52, 240,
++255, 255, 255, 255, 176, 126,  45, 224, 255, 255, 255, 255, 177, 156,  81, 112,
++255, 255, 255, 255, 178, 103,  74,  96, 255, 255, 255, 255, 179, 124,  51, 112,
++255, 255, 255, 255, 180,  71,  44,  96, 255, 255, 255, 255, 181,  92,  21, 112,
++255, 255, 255, 255, 182,  39,  14,  96, 255, 255, 255, 255, 183,  59, 247, 112,
++255, 255, 255, 255, 184,   6, 240,  96, 255, 255, 255, 255, 185,  27, 217, 112,
++255, 255, 255, 255, 185, 230, 210,  96, 255, 255, 255, 255, 187,   4, 245, 240,
++255, 255, 255, 255, 187, 198, 180,  96, 255, 255, 255, 255, 188, 228, 215, 240,
++255, 255, 255, 255, 189, 175, 208, 224, 255, 255, 255, 255, 190, 196, 185, 240,
++255, 255, 255, 255, 191, 143, 178, 224, 255, 255, 255, 255, 192, 164, 155, 240,
++255, 255, 255, 255, 193, 111, 148, 224, 255, 255, 255, 255, 194, 132, 125, 240,
++255, 255, 255, 255, 195,  79, 118, 224, 255, 255, 255, 255, 196, 100,  95, 240,
++255, 255, 255, 255, 197,  47,  88, 224, 255, 255, 255, 255, 198,  77, 124, 112,
++255, 255, 255, 255, 199,  15,  58, 224, 255, 255, 255, 255, 200,  45,  94, 112,
++255, 255, 255, 255, 200, 248,  87,  96, 255, 255, 255, 255, 202,  13,  64, 112,
++255, 255, 255, 255, 202, 216,  57,  96, 255, 255, 255, 255, 203, 136, 240, 112,
++255, 255, 255, 255, 210,  35, 244, 112, 255, 255, 255, 255, 210,  96, 251, 224,
++255, 255, 255, 255, 211, 117, 228, 240, 255, 255, 255, 255, 212,  64, 221, 224,
++255, 255, 255, 255, 213,  85, 198, 240, 255, 255, 255, 255, 214,  32, 191, 224,
++255, 255, 255, 255, 215,  53, 168, 240, 255, 255, 255, 255, 216,   0, 161, 224,
++255, 255, 255, 255, 217,  21, 138, 240, 255, 255, 255, 255, 217, 224, 131, 224,
++255, 255, 255, 255, 218, 254, 167, 112, 255, 255, 255, 255, 219, 192, 101, 224,
++255, 255, 255, 255, 220, 222, 137, 112, 255, 255, 255, 255, 221, 169, 130,  96,
++255, 255, 255, 255, 222, 190, 107, 112, 255, 255, 255, 255, 223, 137, 100,  96,
++255, 255, 255, 255, 224, 158,  77, 112, 255, 255, 255, 255, 225, 105,  70,  96,
++255, 255, 255, 255, 226, 126,  47, 112, 255, 255, 255, 255, 227,  73,  40,  96,
++255, 255, 255, 255, 228,  94,  17, 112, 255, 255, 255, 255, 229,  87,  46, 224,
++255, 255, 255, 255, 230,  71,  45, 240, 255, 255, 255, 255, 231,  55,  16, 224,
++255, 255, 255, 255, 232,  39,  15, 240, 255, 255, 255, 255, 233,  22, 242, 224,
++255, 255, 255, 255, 234,   6, 241, 240, 255, 255, 255, 255, 234, 246, 212, 224,
++255, 255, 255, 255, 235, 230, 211, 240, 255, 255, 255, 255, 236, 214, 182, 224,
++255, 255, 255, 255, 237, 198, 181, 240, 255, 255, 255, 255, 238, 191, 211,  96,
++255, 255, 255, 255, 239, 175, 210, 112, 255, 255, 255, 255, 240, 159, 181,  96,
++255, 255, 255, 255, 241, 143, 180, 112, 255, 255, 255, 255, 242, 127, 151,  96,
++255, 255, 255, 255, 243, 111, 150, 112, 255, 255, 255, 255, 244,  95, 121,  96,
++255, 255, 255, 255, 245,  79, 120, 112, 255, 255, 255, 255, 246,  63,  91,  96,
++255, 255, 255, 255, 247,  47,  90, 112, 255, 255, 255, 255, 248,  40, 119, 224,
++255, 255, 255, 255, 249,  15,  60, 112, 255, 255, 255, 255, 250,   8,  89, 224,
++255, 255, 255, 255, 250, 248,  88, 240, 255, 255, 255, 255, 251, 232,  59, 224,
++255, 255, 255, 255, 252, 216,  58, 240, 255, 255, 255, 255, 253, 200,  29, 224,
++255, 255, 255, 255, 254, 184,  28, 240, 255, 255, 255, 255, 255, 167, 255, 224,
++  0,   0,   0,   0,   0, 151, 254, 240,   0,   0,   0,   0,   1, 135, 225, 224,
++  0,   0,   0,   0,   2, 119, 224, 240,   0,   0,   0,   0,   3, 112, 254,  96,
++  0,   0,   0,   0,   4,  96, 253, 112,   0,   0,   0,   0,   5,  80, 224,  96,
++  0,   0,   0,   0,   6,  64, 223, 112,   0,   0,   0,   0,   7,  48, 194,  96,
++  0,   0,   0,   0,   7, 141,  25, 112,   0,   0,   0,   0,   9,  16, 164,  96,
++  0,   0,   0,   0,   9, 173, 148, 240,   0,   0,   0,   0,  10, 240, 134,  96,
++  0,   0,   0,   0,  11, 224, 133, 112,   0,   0,   0,   0,  12, 217, 162, 224,
++  0,   0,   0,   0,  13, 192, 103, 112,   0,   0,   0,   0,  14, 185, 132, 224,
++  0,   0,   0,   0,  15, 169, 131, 240,   0,   0,   0,   0,  16, 153, 102, 224,
++  0,   0,   0,   0,  17, 137, 101, 240,   0,   0,   0,   0,  18, 121,  72, 224,
++  0,   0,   0,   0,  19, 105,  71, 240,   0,   0,   0,   0,  20,  89,  42, 224,
++  0,   0,   0,   0,  21,  73,  41, 240,   0,   0,   0,   0,  22,  57,  12, 224,
++  0,   0,   0,   0,  23,  41,  11, 240,   0,   0,   0,   0,  24,  34,  41,  96,
++  0,   0,   0,   0,  25,   8, 237, 240,   0,   0,   0,   0,  26,   2,  11,  96,
++  0,   0,   0,   0,  26, 242,  10, 112,   0,   0,   0,   0,  27, 225, 237,  96,
++  0,   0,   0,   0,  28, 209, 236, 112,   0,   0,   0,   0,  29, 193, 207,  96,
++  0,   0,   0,   0,  30, 177, 206, 112,   0,   0,   0,   0,  31, 161, 177,  96,
++  0,   0,   0,   0,  32, 118,   0, 240,   0,   0,   0,   0,  33, 129, 147,  96,
++  0,   0,   0,   0,  34,  85, 226, 240,   0,   0,   0,   0,  35, 106, 175, 224,
++  0,   0,   0,   0,  36,  53, 196, 240,   0,   0,   0,   0,  37,  74, 145, 224,
++  0,   0,   0,   0,  38,  21, 166, 240,   0,   0,   0,   0,  39,  42, 115, 224,
++  0,   0,   0,   0,  39, 254, 195, 112,   0,   0,   0,   0,  41,  10,  85, 224,
++  0,   0,   0,   0,  41, 222, 165, 112,   0,   0,   0,   0,  42, 234,  55, 224,
++  0,   0,   0,   0,  43, 190, 135, 112,   0,   0,   0,   0,  44, 211,  84,  96,
++  0,   0,   0,   0,  45, 158, 105, 112,   0,   0,   0,   0,  46, 179,  54,  96,
++  0,   0,   0,   0,  47, 126,  75, 112,   0,   0,   0,   0,  48, 147,  24,  96,
++  0,   0,   0,   0,  49, 103, 103, 240,   0,   0,   0,   0,  50, 114, 250,  96,
++  0,   0,   0,   0,  51,  71,  73, 240,   0,   0,   0,   0,  52,  82, 220,  96,
++  0,   0,   0,   0,  53,  39,  43, 240,   0,   0,   0,   0,  54,  50, 190,  96,
++  0,   0,   0,   0,  55,   7,  13, 240,   0,   0,   0,   0,  56,  27, 218, 224,
++  0,   0,   0,   0,  56, 230, 239, 240,   0,   0,   0,   0,  57, 251, 188, 224,
++  0,   0,   0,   0,  58, 198, 209, 240,   0,   0,   0,   0,  59, 219, 158, 224,
++  0,   0,   0,   0,  60, 175, 238, 112,   0,   0,   0,   0,  61, 187, 128, 224,
++  0,   0,   0,   0,  62, 143, 208, 112,   0,   0,   0,   0,  63, 155,  98, 224,
++  0,   0,   0,   0,  64, 111, 178, 112,   0,   0,   0,   0,  65, 132, 127,  96,
++  0,   0,   0,   0,  66,  79, 148, 112,   0,   0,   0,   0,  67, 100,  97,  96,
++  0,   0,   0,   0,  68,  47, 118, 112,   0,   0,   0,   0,  69,  68,  67,  96,
++  0,   0,   0,   0,  69, 243, 168, 240,   0,   0,   0,   0,  71,  45,  95, 224,
++  0,   0,   0,   0,  71, 211, 138, 240,   0,   0,   0,   0,  73,  13,  65, 224,
++  0,   0,   0,   0,  73, 179, 108, 240,   0,   0,   0,   0,  74, 237,  35, 224,
++  0,   0,   0,   0,  75, 156, 137, 112,   0,   0,   0,   0,  76, 214,  64,  96,
++  0,   0,   0,   0,  77, 124, 107, 112,   0,   0,   0,   0,  78, 182,  34,  96,
++  0,   0,   0,   0,  79,  92,  77, 112,   0,   0,   0,   0,  80, 150,   4,  96,
++  0,   0,   0,   0,  81,  60,  47, 112,   0,   0,   0,   0,  82, 117, 230,  96,
++  0,   0,   0,   0,  83,  28,  17, 112,   0,   0,   0,   0,  84,  85, 200,  96,
++  0,   0,   0,   0,  84, 251, 243, 112,   0,   0,   0,   0,  86,  53, 170,  96,
++  0,   0,   0,   0,  86, 229,  15, 240,   0,   0,   0,   0,  88,  30, 198, 224,
++  0,   0,   0,   0,  88, 196, 241, 240,   0,   0,   0,   0,  89, 254, 168, 224,
++  0,   0,   0,   0,  90, 164, 211, 240,   0,   0,   0,   0,  91, 222, 138, 224,
++  0,   0,   0,   0,  92, 132, 181, 240,   0,   0,   0,   0,  93, 190, 108, 224,
++  0,   0,   0,   0,  94, 100, 151, 240,   0,   0,   0,   0,  95, 158,  78, 224,
++  0,   0,   0,   0,  96,  77, 180, 112,   0,   0,   0,   0,  97, 135, 107,  96,
++  0,   0,   0,   0,  98,  45, 150, 112,   0,   0,   0,   0,  99, 103,  77,  96,
++  0,   0,   0,   0, 100,  13, 120, 112,   0,   0,   0,   0, 101,  71,  47,  96,
++  0,   0,   0,   0, 101, 237,  90, 112,   0,   0,   0,   0, 103,  39,  17,  96,
++  0,   0,   0,   0, 103, 205,  60, 112,   0,   0,   0,   0, 105,   6, 243,  96,
++  0,   0,   0,   0, 105, 173,  30, 112,   0,   0,   0,   0, 106, 230, 213,  96,
++  0,   0,   0,   0, 107, 150,  58, 240,   0,   0,   0,   0, 108, 207, 241, 224,
++  0,   0,   0,   0, 109, 118,  28, 240,   0,   0,   0,   0, 110, 175, 211, 224,
++  0,   0,   0,   0, 111,  85, 254, 240,   0,   0,   0,   0, 112, 143, 181, 224,
++  0,   0,   0,   0, 113,  53, 224, 240,   0,   0,   0,   0, 114, 111, 151, 224,
++  0,   0,   0,   0, 115,  21, 194, 240,   0,   0,   0,   0, 116,  79, 121, 224,
++  0,   0,   0,   0, 116, 254, 223, 112,   0,   0,   0,   0, 118,  56, 150,  96,
++  0,   0,   0,   0, 118, 222, 193, 112,   0,   0,   0,   0, 120,  24, 120,  96,
++  0,   0,   0,   0, 120, 190, 163, 112,   0,   0,   0,   0, 121, 248,  90,  96,
++  0,   0,   0,   0, 122, 158, 133, 112,   0,   0,   0,   0, 123, 216,  60,  96,
++  0,   0,   0,   0, 124, 126, 103, 112,   0,   0,   0,   0, 125, 184,  30,  96,
++  0,   0,   0,   0, 126,  94,  73, 112,   0,   0,   0,   0, 127, 152,   0,  96,
++  2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,
++  2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,
++  2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,
++  2,   3,   4,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2,
++  1,   2,   1,   2,   1,   2,   1,   2,   1,   2,   1,   2, 255, 255, 186, 158,
++  0,   0, 255, 255, 199, 192,   1,   4, 255, 255, 185, 176,   0,   8, 255, 255,
++199, 192,   1,  12, 255, 255, 199, 192,   1,  16,  76,  77,  84,   0,  69,  68,
++ 84,   0,  69,  83,  84,   0,  69,  87,  84,   0,  69,  80,  84,   0,   0,   0,
++  0,   0,   1,   0,   0,   0,   0,   1,  10,  69,  83,  84,  53,  69,  68,  84,
++ 44,  77,  51,  46,  50,  46,  48,  44,  77,  49,  49,  46,  49,  46,  48,  10,
++};
+-- 
+2.21.0
 
