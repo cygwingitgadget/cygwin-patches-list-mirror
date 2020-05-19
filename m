@@ -1,52 +1,85 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
- by sourceware.org (Postfix) with ESMTPS id 8B8E23851C04
- for <cygwin-patches@cygwin.com>; Tue, 19 May 2020 11:41:30 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 8B8E23851C04
-Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MjSPq-1jCAS30ziE-00kwEy for <cygwin-patches@cygwin.com>; Tue, 19 May 2020
- 13:41:29 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 8D5ABA80F7E; Tue, 19 May 2020 13:41:27 +0200 (CEST)
-Date: Tue, 19 May 2020 13:41:27 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 3/3] Cygwin: tzcode resync v2: details
-Message-ID: <20200519114127.GV3947@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200519050229.28209-1-mark@maxrnd.com>
- <20200519050229.28209-4-mark@maxrnd.com>
+Return-Path: <kbrown@cornell.edu>
+Received: from NAM04-SN1-obe.outbound.protection.outlook.com
+ (mail-eopbgr700097.outbound.protection.outlook.com [40.107.70.97])
+ by sourceware.org (Postfix) with ESMTPS id 47E5E3851C04
+ for <cygwin-patches@cygwin.com>; Tue, 19 May 2020 12:51:08 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 47E5E3851C04
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lcwG/xhVGRYxSMR7G6qy3IQTEhWSntX7Vme37CHWvE3eJi/VRqFEdIzN+SAChKCDjr1RMuRsnxi/0UopHpcutrhzm4J+pVCOD31KtDCIgC6A1x2Iy4UvEkthpKwltKYDBKS9mMmy9eMh+4/nDoX24O5yegBhmSnXoQvV7xR+9qix+vSzlAFiFMF88Q9y1+0+06PfrfETySzgBMPwlddYYmv6aBbxB6sTT+sy9H7RUyOIX1Y3wNqn4nphV5rsWDjWPCVbYgVHBuDtb4c2ymikFS5JTsrezJ1Gw0OmuVvFWOoKvFurBr7j2H6UtC92s8eC0764ije9ZCh/75HrAWHPzw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZJ3AmsRenX2XCbfVakslnYkqmYlhOKH8UW84N71GYxM=;
+ b=gpE/yb5lmhE+YroOnfyRSQIhhQzIo0o8uwev5qFz6VxFj9tDBNtnF5lOm0/jvGNEV02JdIldUVOPJiwi8BSxUgnNl/uOt0M3Nz+KQ1DJ7zC53lYPciz/5zU+AskbFhMP2CUbO7rdG+6ncdleiTt2FoUu/FDy8fr+dTnzMWLOGcjZrA9kWt6nE04BnMxKGBH9PU8xBJtuLvtyaYUHoCV1ACuS0H0H9JAQsQHg4QwZtL1c8R2V7urWAxk0nuXEipwWh3XQBGMfCADU7lXSI4Uoz+EKNC8Mb1d1ZYhM2BxhJWGZ4qqc5iXldSVbsmt48E+0ARuD/st16f+V88GEYiJoIw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu;
+ dkim=pass header.d=cornell.edu; arc=none
+Received: from DM6PR04MB6075.namprd04.prod.outlook.com (2603:10b6:5:127::31)
+ by DM6PR04MB5308.namprd04.prod.outlook.com (2603:10b6:5:111::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3000.31; Tue, 19 May
+ 2020 12:51:07 +0000
+Received: from DM6PR04MB6075.namprd04.prod.outlook.com
+ ([fe80::f48b:4e13:94d7:f7c4]) by DM6PR04MB6075.namprd04.prod.outlook.com
+ ([fe80::f48b:4e13:94d7:f7c4%4]) with mapi id 15.20.3000.034; Tue, 19 May 2020
+ 12:51:07 +0000
+Subject: Re: [PATCH 00/21] FIFO: Support multiple readers
+To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
+References: <20200507202124.1463-1-kbrown@cornell.edu>
+ <20200518142519.cb6d805fa92afe4dcb017b02@nifty.ne.jp>
+ <20200518143657.4e9f732f5456174348688f69@nifty.ne.jp>
+ <912d46fc-3138-f3ec-f4d1-612433d9f128@cornell.edu>
+ <cd2e382e-1c32-864a-31a4-8a6b7cfffc08@cornell.edu>
+ <20200519102609.a3c2faa4f19ac655126c0680@nifty.ne.jp>
+ <20200519151535.b4a97a0173f4d2ad4590d4c1@nifty.ne.jp>
+From: Ken Brown <kbrown@cornell.edu>
+Message-ID: <21fa9885-0405-10b7-982e-9fa19058070d@cornell.edu>
+Date: Tue, 19 May 2020 08:51:03 -0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
+In-Reply-To: <20200519151535.b4a97a0173f4d2ad4590d4c1@nifty.ne.jp>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MN2PR22CA0019.namprd22.prod.outlook.com
+ (2603:10b6:208:238::24) To DM6PR04MB6075.namprd04.prod.outlook.com
+ (2603:10b6:5:127::31)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200519050229.28209-4-mark@maxrnd.com>
-X-Provags-ID: V03:K1:QD1CPTnJenoxLuQ0tiXA/euZ2VnTfk/4Fg6BYTihxTNe9mzzKRG
- rIM/RzZaMupQ0V6EWRuUXnW1WmRRhuWVNKiZZufQ14Gwrmm0fsMRQNCFOholpKgFgNDrcQv
- VXTYyeI+s0dVggBx3G8mBifz6lwzhRUC9T5pqs4x8r0EcpQm2LYVSV1L9rWdoF/VnemKLsG
- cIFtzmD2mBBzj3BpdgBjw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:NXNnglM2M8k=:pKDq1NHWWbMUEYHz4idLE8
- lknyiAbnr9XmzIfXZdozv/qSqa604nMABSBq9pk8T8l1zJlspHLzZ8pgKIbS/sJA2mwZMDQWv
- BHXSendfbQoJQS2q/4O6GeMBNMrAoGjjpawG/6ol8G3If3/KjMDMGjU5btXcm/EoB9JUCmCqZ
- 0hWoQhiGG48scgFphCLk2ujXa7CDVr+Gy/n9XH1Czk2sJqxkHQO7tCTmnYsTDOyZRkRloWj1P
- ys/f3xfgxHBsKC+p5OMqF6Xt++u8zPXyu/dqRchDxTvtxKDaMMByNHYS4B3B5+vAL1qJgC3VT
- kJJ/fYO+FNASxP2+uAmhdc45lFZQIDZ6X6S4/EaCMKhnwZs3rdHUCRPNNZG3DPp/e00PpFSCF
- NiBhCj0X1uXd7I1oOC38EUPeq2uEuB6vD8WbQBPAqJgUEd0Q/oJ/cRz1SFrY5JLARGgzkDsAd
- yezI94WJKFmH8Ip5ahHfETB3OvBoS4cup1cFXu7e/xFykl1anFDAPctAsap8IlwcsrFsk1L++
- IZBywRYiZLthvk0VnafOvY9zbdK6ZbMJF4eh08R5c/D9PryonwGXagT6G6YMLhc9f+yE0fS7j
- MaiQE6hqpEAIiY2sbfuN13At3T8ykUjfZzl/52eoMlI1IWp4GQ/SEaR4iYl3C0v0nm17fShCs
- S3OcodbwLxQgeBHJ08mf+uB2uuyolal+9pwkI/cgLnnKVkbo3vc5kAXbkBZ1MZewi1ZDS+h44
- PRS1mcQiun/6o1q8ViPj1+VG4EeTLcLu75UtasxbzLv71kE69gQOv0y0J3FSU0cGpkGL3gvmq
- 91g8DMwquoj0Xfv9d0Rg9maX8N83l02CKiKJ3kmM2zw4TcMchgsK2cemFDEWpQ6BTqoHGU/
-X-Spam-Status: No, score=-103.3 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2604:6000:b407:7f00:650a:68f2:73c8:4345]
+ (2604:6000:b407:7f00:650a:68f2:73c8:4345) by
+ MN2PR22CA0019.namprd22.prod.outlook.com (2603:10b6:208:238::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3000.20 via Frontend
+ Transport; Tue, 19 May 2020 12:51:06 +0000
+X-Originating-IP: [2604:6000:b407:7f00:650a:68f2:73c8:4345]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 29d0a5e1-ea20-4bda-5939-08d7fbf34be5
+X-MS-TrafficTypeDiagnostic: DM6PR04MB5308:
+X-Microsoft-Antispam-PRVS: <DM6PR04MB5308DFF294CC4E9C41D5A301D8B90@DM6PR04MB5308.namprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
+X-Forefront-PRVS: 040866B734
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zugYf53+90AFUjvmOee2C0VExGoIIr9B9vXfJ2EARpZRxFWnBxAzPh3mACUeLRjf+oYrePYxQwFtL3x1MmAgnIkabx52vofXqxCdyaakrwYUd2M1/SLWDAcNoAzPJAK5g/kIpaXEEil67m+WAvJdNhhgJQW3YVejL57hqas+J+ZW4ikF/TphLXwQc/ooca43D4lOEEN5+GGb8mnPW472ULuELd3YbiHn2GXcRYXgWcg1ivRkvAUpDmpMtycq8VY3kF0AtYNW1HDZt46vOe/FlrEH7qLlL2Vlva+GMYukZEUNlBBc2nb7yxQuJzHDSx8lbbCE640Skk5Brfhm9jcG5PpazbMKMYuuqq+bk+JQR7p81gami4ndNhFi7S6Bw/1R6TXxdz+djdalvD/bCIezZ2zcVV9AxgYbrEkGm0GgGwf6UimWKUimrUcFGV3r1stpPdZqccvbuLZ6cezc84MK/RkaExWoovsBDokeOaMj1DIo17HvxLdKYlLjGqcHffiR
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:DM6PR04MB6075.namprd04.prod.outlook.com; PTR:; CAT:NONE;
+ SFTY:;
+ SFS:(4636009)(136003)(346002)(396003)(366004)(39860400002)(376002)(66556008)(36756003)(316002)(66476007)(786003)(31696002)(6916009)(53546011)(66946007)(6486002)(6666004)(31686004)(2616005)(2906002)(52116002)(5660300002)(16526019)(478600001)(186003)(75432002)(8676002)(86362001)(8936002)(43740500002);
+ DIR:OUT; SFP:1102; 
+X-MS-Exchange-AntiSpam-MessageData: GNQO2EhxBUBMEmQ8o9AU/hjfU7nkNnzKvija9kco9a2ZqnyG/gK52zSU3VStZnfWkHtNE5R5oM1bh+j1i9+bvttQIyZHUWKVEsdW4gxPj2tN4P35/O4CNvVn+SNFrhUPaK6e3lS2EBa67xK/pYQ0ZdSep9Qf4ovKEVm2/Xx3vA2KEnbHGXIKDQ+TPcexGyz4K3981cDMibXIvJbVFrzlfT+sw2ncLSvg1G+pEbyRiHnAO/5aDQKy8mnamlrHaMie0B8RFP/kLqbtsLTrQNscLis1/drB90/M7nrkD4pZG1lbyEB4bT1er+ilrjwgjFHqjV4/xeaeeMTNinSlXka2NlJYSCbb5yxEXnIylhruzPiZc8eikoTPVVJyc6iMivivht0jnmcXBVQySObxL64u5UJEUoTcXb/UwD37EBorwwIxGR/xuqfzbXU4eW6y8rp257UY7j5Tf7FUXowAhzjsoV/qjCtAZ42s60oK6nwqSQnjffr26uEgUrLztJ1uAyGUzpnXS26LzGgec+L/VCP2xxCDMVIxyHQa1qlzMJjimVE=
+X-OriginatorOrg: cornell.edu
+X-MS-Exchange-CrossTenant-Network-Message-Id: 29d0a5e1-ea20-4bda-5939-08d7fbf34be5
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2020 12:51:06.8269 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5d7e4366-1b9b-45cf-8e79-b14b27df46e1
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5lgROImr6ZjdN4KPka+c6c0NHHJiVcz+9eLMKmtAACHNMemqqukumtztVOCbGUp1YAf6QIdKSKxgrEX6PqevNw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR04MB5308
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00, DKIM_INVALID,
+ DKIM_SIGNED, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS, MSGID_FROM_MTA_HEADER,
+ RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_PASS,
+ TXREP autolearn=no autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -61,234 +94,86 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 19 May 2020 11:41:32 -0000
+X-List-Received-Date: Tue, 19 May 2020 12:51:10 -0000
 
-Hi Mark,
+On 5/19/2020 2:15 AM, Takashi Yano via Cygwin-patches wrote:
+> On Tue, 19 May 2020 10:26:09 +0900
+> Takashi Yano via Cygwin-patches <cygwin-patches@cygwin.com> wrote:
+>> Hi Ken,
+>>
+>> On Mon, 18 May 2020 13:42:19 -0400
+>> Ken Brown via Cygwin-patches <cygwin-patches@cygwin.com> wrote:
+>>> Hi Takashi,
+>>>
+>>> On 5/18/2020 12:03 PM, Ken Brown via Cygwin-patches wrote:
+>>>> On 5/18/2020 1:36 AM, Takashi Yano via Cygwin-patches wrote:
+>>>>> On Mon, 18 May 2020 14:25:19 +0900
+>>>>> Takashi Yano via Cygwin-patches <cygwin-patches@cygwin.com> wrote:
+>>>>>> However, mc hangs by several operations.
+>>>>>>
+>>>>>> To reproduce this:
+>>>>>> 1. Start mc with 'env SHELL=tcsh mc -a'
+>>>>>
+>>>>> I mean 'env SHELL=/bin/tcsh mc -a'
+>>>>>
+>>>>>> 2. Select a file using up/down cursor keys.
+>>>>>> 3. Press F3 (View) key.
+>>>>
+>>>> Thanks for the report.  I can reproduce the problem and will look into it.
+>>>
+>>> I'm not convinced that this is a FIFO bug.  I tried two things.
+>>>
+>>> 1. I attached gdb to mc while it was hanging and got the following backtrace
+>>> (abbreviated):
+>>>
+>>> #1  0x00007ff901638037 in WaitForMultipleObjectsEx ()
+>>> #2  0x00007ff901637f1e in WaitForMultipleObjects ()
+>>> #3  0x0000000180048df5 in cygwait () at ...winsup/cygwin/cygwait.cc:75
+>>> #4  0x000000018019b1c0 in wait4 () at ...winsup/cygwin/wait.cc:80
+>>> #5  0x000000018019afea in waitpid () at ...winsup/cygwin/wait.cc:28
+>>> #6  0x000000018017d2d8 in pclose () at ...winsup/cygwin/syscalls.cc:4627
+>>> #7  0x000000018015943b in _sigfe () at sigfe.s:35
+>>> #8  0x000000010040d002 in get_popen_information () at filemanager/ext.c:561
+>>> [...]
+>>>
+>>> So pclose is blocking after calling waitpid.  As far as I can tell from looking
+>>> at backtraces of all threads, there are no FIFOs open.
+>>>
+>>> 2. I ran mc under strace (after exporting SHELL=/bin/tcsh), and I didn't see
+>>> anything suspicious involving FIFOs.  But I saw many EBADF errors from fstat and
+>>> close that don't appear to be related to FIFOs.
+>>>
+>>> So my best guess at this point is that the FIFO changes just exposed some
+>>> unrelated bug(s).
+>>>
+>>> Prior to the FIFO changes, mc would get an error when it tried to open tcsh_fifo
+>>> the second time, and it would then set
+>>>
+>>>     mc_global.tty.use_subshell = FALSE;
+>>>
+>>> see the mc source file subshell/common.c:1087.
+>>
+>> I looked into this problem and found pclose() stucks if FIFO
+>> is opened.
+>>
+>> Attached is a simple test case. It works under cygwin 3.1.4,
+>> but stucks at pclose() under cygwin git head.
+>>
+>> Isn't this a FIFO related issue?
+> 
+> In the test case, fhandler_fifo::close() called from /bin/true
+> seems to get into infinite loop at:
+> 
+> do
+> ...
+> while (inc_nreaders () > 0 && !found);
 
-On May 18 22:02, Mark Geisert wrote:
-> Add tz_posixrules.h with data generated from most recent Cygwin tzdata
-> package.  Establish localtime.cc as primarily a wrapper around a patched
-> copy of localtime.c.  See README for more information.
+Thank you!  I see the problem.  After the popen call, the original 
+fhandler_fifo's fifo_reader_thread was no longer running, so it was unable to 
+take ownership.
 
-The idea is nice, but there are a few problems.
+It might take a little while for me to figure out how to fix this.
 
-> diff --git a/winsup/cygwin/tzcode/localtime.c.patch b/winsup/cygwin/tzcode/localtime.c.patch
-> new file mode 100644
-> index 000000000..a17d9ee90
-> --- /dev/null
-> +++ b/winsup/cygwin/tzcode/localtime.c.patch
-> @@ -0,0 +1,399 @@
-> +*** localtime.c	2020-05-16 21:54:00.533111800 -0700
-> +--- localtime.c.patched	2020-05-16 22:42:40.486924300 -0700
-> +***************
-> +*** 1,3 ****
+Thanks for your persistence and, especially, for the test case.
 
-Ideally this patch should be in unified (-u) diff format.
-
-I also wonder if some of these patches may be dropped or made
-less invasive, given that localtime.cc wraps localtime.c.
-
-For example:
-
-> +***************
-> +*** 23,29 ****
-> +  
-> +  /*LINTLIBRARY*/
-> +  
-> +- #include "namespace.h"
-
-Adding a local namesapce.h file?
-
-> +  #include <assert.h>
-> +  #define LOCALTIME_IMPLEMENTATION
-> +  #include "private.h"
-> +--- 24,29 ----
-> +***************
-> +*** 182,188 ****
-> +  
-> +  
-> +  #if !defined(__LIBC12_SOURCE__)
-> +! timezone_t __lclptr;
-> +  #ifdef _REENTRANT
-> +  rwlock_t __lcl_lock = RWLOCK_INITIALIZER;
-> +  #endif
-> +--- 182,188 ----
-> +  
-> +  
-> +  #if !defined(__LIBC12_SOURCE__)
-> +! static timezone_t __lclptr;
-
-Do we really need this static?  Even if it's not static, it won't
-be exported from the DLL anyway, so it seems we can drop this, no?
-
-> +  #ifdef _REENTRANT
-> +  rwlock_t __lcl_lock = RWLOCK_INITIALIZER;
-> +  #endif
-> +***************
-> +*** 198,204 ****
-> +  
-> +  static struct tm	tm;
-> +  
-> +! #if !HAVE_POSIX_DECLS || TZ_TIME_T || defined(__NetBSD__)
-> +  # if !defined(__LIBC12_SOURCE__)
-> +  
-> +  __aconst char *		tzname[2] = {
-> +--- 198,204 ----
-> +  
-> +  static struct tm	tm;
-> +  
-> +! #if !HAVE_POSIX_DECLS || TZ_TIME_T || defined(__NetBSD__) || defined(__CYGWIN__)
-
-What about just #defining TZ_TIME_T or HAVE_POSIX_DECLS in localtime.cc
-or even (see above) namespace.h?
-
-> +  # if !defined(__LIBC12_SOURCE__)
-> +  
-> +  __aconst char *		tzname[2] = {
-> +***************
-> +*** 413,419 ****
-> +  };
-> +  
-> +  /* TZDIR with a trailing '/' rather than a trailing '\0'.  */
-> +! static char const tzdirslash[sizeof TZDIR] = TZDIR "/";
-
-Yay, this one is tricky (and soooo dumb)
-
-> +  
-> +  /* Local storage needed for 'tzloadbody'.  */
-> +  union local_storage {
-> +--- 413,420 ----
-> +  };
-> +  
-> +  /* TZDIR with a trailing '/' rather than a trailing '\0'.  */
-> +! static char const tzdirslash[] = TZDIR "/";
-> +! #define sizeof_tzdirslash (sizeof tzdirslash - 1)
-
-What about this instead:
-
-  - static char const tzdirslash[sizeof TZDIR] = TZDIR "/";
-  + static char const tzdirslash[sizeof TZDIR + 1] = TZDIR "/";
-
-checking what "sizeof tzdirslash" is used for, it doesn't matter
-at all:
-
-> +***************
-> +*** 428,434 ****
-> +  
-> +  	/* The file name to be opened.  */
-> +  	char fullname[/*CONSTCOND*/BIGGEST(sizeof (struct file_analysis),
-> +! 	    sizeof tzdirslash + 1024)];
-
-This makes fullname one byte longer than in NetBSD...
-
-> +*** 466,479 ****
-> +  	if (!doaccess) {
-> +  		char const *dot;
-> +  		size_t namelen = strlen(name);
-> +! 		if (sizeof lsp->fullname - sizeof tzdirslash <= namelen)
-
-lsp->fullname is one byte longer, tzdirslash is one byte longer,
-therefore
-
-  Cygwin:  sizeof lsp->fullname - sizeof tzdirslash
-
-is equivalent to 
-
-  NetBSD: (sizeof lsp->fullname + 1) - (sizeof tzdirslash + 1)
-  ==       sizeof lsp->fullname + 1 - sizeof tzdirslash - 1
-  ==       sizeof lsp->fullname - sizeof tzdirslash
-
-So it's in fact the same expression and no change is required.
-
-> +  			return ENAMETOOLONG;
-> +  
-> +  		/* Create a string "TZDIR/NAME".  Using sprintf here
-> +  		   would pull in stdio (and would fail if the
-> +  		   resulting string length exceeded INT_MAX!).  */
-> +! 		memcpy(lsp->fullname, tzdirslash, sizeof tzdirslash);
-> +! 		strcpy(lsp->fullname + sizeof tzdirslash, name);
-
-This could then be changed to just
-
-  -		strcpy(lsp->fullname + sizeof tzdirslash, name);
-  +		strcpy(lsp->fullname + sizeof tzdirslash - 1, name);
-
-> +***************
-> +*** 488,498 ****
-> +  		name = lsp->fullname;
-> +  	}
-> +  	if (doaccess && access(name, R_OK) != 0)
-> +! 		return errno;
-> +  
-> +  	fid = open(name, OPEN_MODE);
-> +  	if (fid < 0)
-> +! 		return errno;
-> +  	nread = read(fid, up->buf, sizeof up->buf);
-> +  	if (nread < (ssize_t)tzheadsize) {
-> +  		int err = nread < 0 ? errno : EINVAL;
-> +--- 489,499 ----
-> +  		name = lsp->fullname;
-> +  	}
-> +  	if (doaccess && access(name, R_OK) != 0)
-> +! 		goto trydefrules;
-> +  
-> +  	fid = open(name, OPEN_MODE);
-> +  	if (fid < 0)
-> +! 		goto trydefrules;
-> +  	nread = read(fid, up->buf, sizeof up->buf);
-> +  	if (nread < (ssize_t)tzheadsize) {
-> +  		int err = nread < 0 ? errno : EINVAL;
-> +***************
-> +*** 501,506 ****
-> +--- 502,516 ----
-> +  	}
-> +  	if (close(fid) < 0)
-> +  		return errno;
-> ++ 	if (0) {
-> ++ trydefrules:
-> ++ 		const char *base = strrchr(name, '/');
-> ++ 		base = base ? base + 1 : name;
-> ++ 		if (strcmp(base, TZDEFRULES))
-> ++ 		    return errno;
-> ++ 		nread = sizeof _posixrules_data;
-> ++ 		memcpy(up->buf, _posixrules_data, nread);
-> ++ 	}
-
-Couldn't this be wrapped in localtime.cc?  If this function in
-localtime.c returns an error, just do the trydefrules stuff?
-Just an idea, that may be too tricky depending on context.
-
-> +*** 793,799 ****
-> +  static int
-> +  tzload(char const *name, struct state *sp, bool doextend)
-> +  {
-> +! 	union local_storage *lsp = malloc(sizeof *lsp);
-> +  	if (!lsp)
-> +  		return errno;
-> +  	else {
-> +--- 803,809 ----
-> +  static int
-> +  tzload(char const *name, struct state *sp, bool doextend)
-> +  {
-> +! 	union local_storage *lsp = (union local_storage *) calloc(1, sizeof *lsp);
-
-This is where -Wall -Werror is getting annoying.  We should contemplate
-to drop -Werror for localtime.cc, or better to drop certain warnings by
-using `#pragma GCC diagnostic ignored "..." from within localtime.cc to
-allow certain warnings to go unpunished.
-
-I'm also not quite sure anymore why we use calloc instead of malloc
-where malloc is sufficient for the original code.  We should probably
-just drop this (but better check every call).
-
-
-These are just examples, but the idea is clear I guess.  The less
-changes in localtime.c, the better for maintenance.
-
-
-Thanks,
-Corinna
-
--- 
-Corinna Vinschen
-Cygwin Maintainer
+Ken
