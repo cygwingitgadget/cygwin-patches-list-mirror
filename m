@@ -1,26 +1,51 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
- by sourceware.org (Postfix) with ESMTPS id D61E13858D35
- for <cygwin-patches@cygwin.com>; Mon, 25 May 2020 08:49:31 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org D61E13858D35
-Received: from localhost.localdomain (v038192.dynamic.ppp.asahi-net.or.jp
- [124.155.38.192]) (authenticated)
- by conuserg-11.nifty.com with ESMTP id 04P8nAKm023371;
- Mon, 25 May 2020 17:49:17 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 04P8nAKm023371
-X-Nifty-SrcIP: [124.155.38.192]
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+ by sourceware.org (Postfix) with ESMTPS id E51B5388E825
+ for <cygwin-patches@cygwin.com>; Mon, 25 May 2020 09:00:56 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org E51B5388E825
+Authentication-Results: sourceware.org;
+ dmarc=none (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org;
+ spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MMWcT-1jLtTM3H8h-00Jb6U for <cygwin-patches@cygwin.com>; Mon, 25 May 2020
+ 11:00:55 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 18083A80FF6; Mon, 25 May 2020 11:00:55 +0200 (CEST)
+Date: Mon, 25 May 2020 11:00:55 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: pty: Stop counting number of slaves attached to
- pseudo console.
-Date: Mon, 25 May 2020 17:49:08 +0900
-Message-Id: <20200525084908.980-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.26.2
+Subject: Re: [PATCH] Cygwin: pty: Revise code to make system_printf() work
+ after close.
+Message-ID: <20200525090055.GB6801@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20200521082501.1324-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0,
- RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_PASS,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200521082501.1324-1-takashi.yano@nifty.ne.jp>
+X-Provags-ID: V03:K1:CR7zZasSmmqqMoAalttGG8F9ii0KR4WV+6OVzXWsTSuM6hTNWaY
+ kKDXQuFCVJYlC6V1nuGSjdYJn5VifrGhmp+wbm35Nwqo/G8/4eJHCzxiOqZzx9vq54wA75f
+ TwDGP9jzAagb/PbAb9+7DzGwo5uQdZ23rIX9As6eGmRC6zceZGigIMCSNDOQ3/Pw+hQywFL
+ ZforypPXa5RmaHwrNI4lQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:JHv2YgP/kgw=:fFp/Jt1QVAP4psT3VypMlO
+ 19O1Jn7HDvyqbK3+JgXD/HHlZpcb0JBqHzOLXVjNdRfQUyJnnCA0Tu1VRfPEUf8SbcuQFCCxp
+ AG96mOxDdbBIlHzfxdptDqtXV7dn6nig8VKKzXYcTC6otTiN657NLEY1ERYDPhJ+aQcSDWD2y
+ nnRHLRFZ5MeHPcZtnvyiXB3l0Vj2NpS/B2J04H1tScfbFR+Pbehe0cNTLv78tBsW7SybLnUdS
+ qCP+BQp3zlO3Wwx6xlVcxZ002erGc8cFLHA/vwvDPl2xwalMyTCNhBl5p8HVh1W2fEyIdisPO
+ JsOlAEiiEiKFnB/lrIjManjffj1DtKcR27v8ka7Hbtzya3zpHFj5Gj15RZvD9om9026If38dv
+ 50+pt0KE+d5l7q0e5wHS/guA/IpMYec4EbpPOwyUSXCg/ign5hy6dP6Kzra/WoMC04Wo3oOTW
+ lz8Yh86BUGkI3cDmx/gHgRaC1rf/P7f1GRUlCn9m4A3SqX0ZHG04vvQ81tPoDVAQwmYgOX2zy
+ xeEBmvYoDOh3Uzqy87AdeCN1RFsfZ7eFX0NkDs6gwqkkFZ7Y9VJ3dZFOaTXt/3WLBpLvlCj9l
+ 38xXuVT2AmXX3Mi8VICIc9dt1bq6aBqDwO2jCWa+2sXde2KYTD+J1wori7VUr6aSjFSagkxMx
+ ZY3CaZBGNRn0m30fYFJOPdNUHhu2DZDqqoRUKuXZfCVt/t7WzTJf4a38iLhFNhPQwYKDB2PYv
+ lo4UnjR0a3Ic354pUrkrEnG57MD8QO7AEnCFdR96hOTRzm5ywdjJ4pFymaip57aYUkVsPnCDb
+ sLV3tPmDKAEKW7xz+xv4GfuA4TmP304JsNshjhcMqLgP9LT5Usnq10UuaEUkLGe3IoMW7ss
+X-Spam-Status: No, score=-98.4 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -36,84 +61,24 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 25 May 2020 08:49:35 -0000
+X-List-Received-Date: Mon, 25 May 2020 09:00:58 -0000
 
-- The number of slaves attached to pseudo console is used only for
-  triggering redraw screen. Counting was not only needless, but also
-  did not work as expected. This patch removes the code for counting.
----
- winsup/cygwin/fhandler_tty.cc | 22 +++++-----------------
- winsup/cygwin/tty.cc          |  3 +--
- winsup/cygwin/tty.h           |  1 -
- 3 files changed, 6 insertions(+), 20 deletions(-)
+On May 21 17:25, Takashi Yano via Cygwin-patches wrote:
+> - After commit 0365031ce1347600d854a23f30f1355745a1765c, the issue
+>   https://cygwin.com/pipermail/cygwin-patches/2020q2/010259.html
+>   occurs. This patch fixes the issue.
+> ---
+>  winsup/cygwin/fhandler_tty.cc | 15 ++++++++++++---
+>  winsup/cygwin/tty.cc          | 23 +++++++++++++++++++++++
+>  winsup/cygwin/tty.h           |  2 ++
+>  3 files changed, 37 insertions(+), 3 deletions(-)
 
-diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index 5faf896e4..df08dd20a 100644
---- a/winsup/cygwin/fhandler_tty.cc
-+++ b/winsup/cygwin/fhandler_tty.cc
-@@ -1019,8 +1019,6 @@ fhandler_pty_slave::close ()
-   fhandler_pty_common::close ();
-   if (!ForceCloseHandle (output_mutex))
-     termios_printf ("CloseHandle (output_mutex<%p>), %E", output_mutex);
--  if (pcon_attached_to == get_minor ())
--    get_ttyp ()->num_pcon_attached_slaves --;
-   return 0;
- }
- 
-@@ -2924,21 +2922,11 @@ fhandler_pty_slave::fixup_after_attach (bool native_maybe, int fd_set)
-     {
-       if (fhandler_console::get_console_process_id (get_helper_process_id (),
- 						    true))
--	{
--	  if (pcon_attached_to != get_minor ())
--	    {
--	      pcon_attached_to = get_minor ();
--	      init_console_handler (true);
--	    }
--	  /* Clear screen to synchronize pseudo console screen buffer
--	     with real terminal. This is necessary because pseudo
--	     console screen buffer is empty at start. */
--	  if (get_ttyp ()->num_pcon_attached_slaves == 0)
--	    /* Assume this is the first process using this pty slave. */
--	    get_ttyp ()->need_redraw_screen = true;
--
--	  get_ttyp ()->num_pcon_attached_slaves ++;
--	}
-+	if (pcon_attached_to != get_minor ())
-+	  {
-+	    pcon_attached_to = get_minor ();
-+	    init_console_handler (true);
-+	  }
- 
- #if 0 /* This is for debug only. */
-       isHybrid = true;
-diff --git a/winsup/cygwin/tty.cc b/winsup/cygwin/tty.cc
-index 3fc46fb29..efdae4697 100644
---- a/winsup/cygwin/tty.cc
-+++ b/winsup/cygwin/tty.cc
-@@ -242,9 +242,8 @@ tty::init ()
-   screen_alternated = false;
-   mask_switch_to_pcon_in = false;
-   pcon_pid = 0;
--  num_pcon_attached_slaves = 0;
-   term_code_page = 0;
--  need_redraw_screen = false;
-+  need_redraw_screen = true;
-   fwd_done = NULL;
-   pcon_last_time = 0;
-   pcon_in_empty = true;
-diff --git a/winsup/cygwin/tty.h b/winsup/cygwin/tty.h
-index c4dd2e458..7d6fc8fef 100644
---- a/winsup/cygwin/tty.h
-+++ b/winsup/cygwin/tty.h
-@@ -103,7 +103,6 @@ private:
-   bool screen_alternated;
-   bool mask_switch_to_pcon_in;
-   pid_t pcon_pid;
--  int num_pcon_attached_slaves;
-   UINT term_code_page;
-   bool need_redraw_screen;
-   HANDLE fwd_done;
+Pushed.
+
+
+Thanks,
+Corinna
+
 -- 
-2.26.2
-
+Corinna Vinschen
+Cygwin Maintainer
