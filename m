@@ -1,49 +1,49 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
- by sourceware.org (Postfix) with ESMTPS id 2ABAF3840C1E
- for <cygwin-patches@cygwin.com>; Mon, 25 May 2020 12:06:36 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 2ABAF3840C1E
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+ by sourceware.org (Postfix) with ESMTPS id 1DE98388A824
+ for <cygwin-patches@cygwin.com>; Mon, 25 May 2020 15:49:53 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 1DE98388A824
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org;
  spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MmlCY-1jDASq3PHy-00jrwQ for <cygwin-patches@cygwin.com>; Mon, 25 May 2020
- 14:06:34 +0200
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1Mj831-1j99r24AEf-00fCT8; Mon, 25 May 2020 17:49:06 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 465FFA80FF6; Mon, 25 May 2020 14:06:34 +0200 (CEST)
-Date: Mon, 25 May 2020 14:06:34 +0200
+ id CBFABA80FF8; Mon, 25 May 2020 17:49:01 +0200 (CEST)
+Date: Mon, 25 May 2020 17:49:01 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH 1/3 v3] Cygwin: tzcode resync: basics
-Message-ID: <20200525120634.GD6801@calimero.vinschen.de>
+Message-ID: <20200525154901.GG6801@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com, Mark Geisert <mark@maxrnd.com>
 References: <20200522093253.995-1-mark@maxrnd.com>
  <20200522093253.995-2-mark@maxrnd.com>
+ <20200525120634.GD6801@calimero.vinschen.de>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="AqsLC8rIMeq19msA"
+Content-Type: multipart/mixed; boundary="NKoe5XOeduwbEQHU"
 Content-Disposition: inline
-In-Reply-To: <20200522093253.995-2-mark@maxrnd.com>
-X-Provags-ID: V03:K1:EaQHseDGm80WzJp02Jgv5eFMsP42Pn57FHA8l4atVZxFS7jEHKM
- YDnQCP40X88Jj3ue2aexqYJ21Zvqdtt/QotQysfHtvjJlLqCkRsib2g4aQuaxOULZHY6Y8R
- VkzhijukR1NgCSBm2oKoP2mTBt3G8s0MxaaYg+/EWbx0YWbFmsU/+ZfH2Xk/MxvvdusA/vz
- AlL1v+3dhdl03GnAYcGlQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:bmMJyW49OoM=:MLXSpS3pcsfKRjDnmAQ98g
- UTNIf23DTrfXmo4DZWJFlkcMJQdZKqzVB4YGEZ3V7WlOP5Pw1E7ckCWj0HHAnmzGCbAOzQ+/0
- fEIAtb7QzmwlLY0F2QI9MI9EaXA4l9KTtuG+qu56pvKhYOk1Y//730dpfk8zqiNWfw5t5Si8k
- kNFyQE0ri7NA35rAI95fDqYSJQOFkpQFEmpcQZtEvO/0af8RVcSvcuO0KFOIaMtMN0wq8Q8j1
- yv6eufBOK9E/UDjpih+JEGXXnz7BmQZGpss9guFlfFcmbNEvULNPXYZ3/L/pV0/tb7S0Mx97c
- b1v38j/E2I1WDrtzmGZ9Ca9ES1vNJB8vKx9oPG+aAecg5g0a53VtgZe6nfT0Cefam6NkuPKBJ
- 1r2YKCohPzhzLY4rDMLWAQH3nMmB7Hx6+D4OWIODkz9b+Av3NaFAH9OV84KtbGdC/FGq+HHZb
- jOUK/n4KKqnJYGGXVJhM4B/5gK5B/6R/jc1dk8ezlWNtrrRSn8c3qw1wmqdf7Gtrk/727fELw
- EAY6hUWiL7cq8bWkI1b52xcAYYr2LnyoUAuoxlBO028q2dWS5LKjtVYozK+PaW4Hh/8kcPsCE
- 7z9zLeH9rP6GsNUYwxQtve8KhOVd+y09pX0wl085vaqZJGs/TnXMbx4fUCBNFas256XaH960g
- M9a77MdW6kDblB1LmrDrR9HTmm36tb3JrZpSGPvLa98Q4VNPv0RBgpiC/Y0Tep9q0FlHmbHuc
- T3SbVLzs+FpGUeDEnHgg1+DpwU1C+5DyE6jWdsjNM3bGrhSAdmcXz20101e8jmRmCv3oWwjHc
- jVvGGeGFkr2VCMW9iSc3lEf4HAy3+3hHmMzX8rW695o0eJ0DnLl3mbj2ZeXhRdPqxCOoAQH
-X-Spam-Status: No, score=-103.5 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+In-Reply-To: <20200525120634.GD6801@calimero.vinschen.de>
+X-Provags-ID: V03:K1:QaedXFWEQKr5SmndqmxTMFrhZ+m1iy0HCMsEFQthJwieyd1bnBW
+ kW4FjNVeA5a+WDnCWRQEVdFcqehJMsyecOen5FaYSroYoEIq07VVwYsxBlKucfq5OP2Voaa
+ Ap/pPYJZUqazk/c65R/x8fxfxhA0R31mS23WUNJmPhMO9tBmQEvZQuhywpjOBdW9efzQ/Ry
+ dOuuN+BfbaxysOmCk1ajA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:VI4IJd/ZDng=:+McDhox8EGX8+T/NqkiiCD
+ S6syrOYuGvpiQ2PpnNbRPyCm+YLcHN1oXf2dkJfJGSn/9p1ejOzHTIouWUDjIieYdWTNff4Yj
+ L+GVup5idNYUzag1ajLdITG0SzCziBNmIky7baC7TUPdJ9w3ny5mQdavXBrRs1CMQSYBerAVu
+ WfoTV1vV1HB91geQY31RkX2n6S1kDMOSnby31DHfUV1aarLLoYzbeS4psSKVRp8vjcc3mg6J1
+ 6zjKUbBcUTtNCbvljntIyYpaJmwR7MPK5En6Da0WfPVaCVLtkygg0b7wPV7e/Vz41CYobiCMG
+ mWvJpujl2gbpkbVoGUbZmlY+XyrtJMSu4KtvHihyulrVlkNy8Qh1/RZZBjTuNUDVMgNE5K6Rp
+ 7npcRDFBNU3NNLNUg0fd2y1oRp8P5sqEInC6GFO7qAIfJ0iAA+kZ+laM5lYO+/8KGtUXyLuEw
+ PX3U8qaIs/A+jA84yecZZi7Mo5CyXREQsfxU/WImfbdNNGhX/yRVFLZWanNb8J9P9GRSnAzYh
+ xkXogD8IhiX9XtEUeF8tgvDutNraJu58K6Q8yqlu9uChb3KDghcEn+GzwJO3YvCiJRQuLp06y
+ 4LI3xKj+YJPgfl3hoOYyj2FH3Y2fPA59GX4MJZFnxaHiAAyi6SnlokmNHIt00SgN3wfmJ31ne
+ qJ1BZlEJmh7NQ4BH1S+IhW9t8gxUX4+v6zenHBsIa1MPLLLwfaeLyu5MCqTepE0GnjfOKGQGq
+ OpnbSTPAuwG/KtsPjuwXGZ6jpEDfis29sZMzaNO67t2ysgkruQOkbu2m/EBvL+Ki9BX6UBjR+
+ PO/78hqIMOhcKKgfEgK93jjZ82FHaiJr5wJHVkTsK86jt1cqgMx3Wm9YQmQedFP+Eci2iMp
+X-Spam-Status: No, score=-103.6 required=5.0 tests=BAYES_00, GIT_PATCH_0,
  GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
  RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
@@ -61,70 +61,82 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 25 May 2020 12:06:46 -0000
+X-List-Received-Date: Mon, 25 May 2020 15:49:55 -0000
 
 
---AqsLC8rIMeq19msA
+--NKoe5XOeduwbEQHU
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 
 Hi Mark,
 
-On May 22 02:32, Mark Geisert wrote:
-> Modifies winsup/cygwin/Makefile.in to build localtime.o from items in
-> new winsup/cygwin/tzcode subdirectory.  Compiler option "-fpermissive"
-> is used to accept warnings about missing casts on the return values of
-> malloc() calls.  This patch also removes existing localtime.cc and
-> tz_posixrules.h from winsup/cygwin as they are superseded by the
-> subsequent patches in this set.
-> [...]
-> @@ -246,6 +246,15 @@ MATH_OFILES:= \
->  	tgammal.o \
->  	truncl.o
->  
-> +TZCODE_OFILES:=localtime.o
-> +
-> +localtime.o: $(srcdir)/tzcode/localtime.cc $(srcdir)/tzcode/localtime.c.patch
-> +	(cd $(srcdir)/tzcode && \
-> +		patch -u -o localtime.c.patched localtime.c localtime.c.patch)
-> +	$(CXX) ${CXXFLAGS} ${localtime_CFLAGS} \
-> +		-I$(target_builddir)/winsup/cygwin \
-> +		-I$(srcdir) -I$(srcdir)/tzcode -c -o $@ $<
-> +
+> On May 22 02:32, Mark Geisert wrote:
+On May 25 14:06, Corinna Vinschen wrote:
+> > Modifies winsup/cygwin/Makefile.in to build localtime.o from items in
+> > new winsup/cygwin/tzcode subdirectory.  Compiler option "-fpermissive"
+> > is used to accept warnings about missing casts on the return values of
+> > malloc() calls.  This patch also removes existing localtime.cc and
+> > tz_posixrules.h from winsup/cygwin as they are superseded by the
+> > subsequent patches in this set.
+> > [...]
+> > @@ -246,6 +246,15 @@ MATH_OFILES:= \
+> >  	tgammal.o \
+> >  	truncl.o
+> >  
+> > +TZCODE_OFILES:=localtime.o
+> > +
+> > +localtime.o: $(srcdir)/tzcode/localtime.cc $(srcdir)/tzcode/localtime.c.patch
+> > +	(cd $(srcdir)/tzcode && \
+> > +		patch -u -o localtime.c.patched localtime.c localtime.c.patch)
+> > +	$(CXX) ${CXXFLAGS} ${localtime_CFLAGS} \
+> > +		-I$(target_builddir)/winsup/cygwin \
+> > +		-I$(srcdir) -I$(srcdir)/tzcode -c -o $@ $<
+> > +
+> 
+> This doesn't work well for me.  That rule is the top rule in Makefile.in
+> now, so just calling `make' doesn't build the DLL anymore, only
+> localtime.o.  The rule should get moved way down Makefile.in.
+> 
+> What still bugs me is that we get these -fpermissive warnings (albeit
+> non-fatal) and the fact that we don't get a dependencies file.  On
+> second thought, there's no good reason to keep localtime.cc a C++ file.
+> Converting this file to a plain C wrapper drops the C++-specific warning
+> and thus allows to revert the localtime.o build rule to use ${COMMON_CFLAGS}.
+> 
+> So I took the liberty to tweak your patch a bit.  I created a followup
+> patchset, which I'd like you to take a look at.
+> 
+> I attached the followup patches to this mail.  Please scrutinize it and
+> don't hesitate to discuss the changes.  For a start:
+> 
+> - I do not exactly like the name "localtime_wrapper.c" but I don't
+>   have a better idea.
+> 
+> - muto's are C++-only, so I changed rwlock_wrlock/rwlock_unlock to use
+>   Windows SRWLocks.  I think this is a good thing and I'm inclined
+>   to drop the muto datatype entirely in favor of using SRWLocks since
+>   they are cleaner and langauge-agnostic.
 
-This doesn't work well for me.  That rule is the top rule in Makefile.in
-now, so just calling `make' doesn't build the DLL anymore, only
-localtime.o.  The rule should get moved way down Makefile.in.
+Two changes in my patchset:
 
-What still bugs me is that we get these -fpermissive warnings (albeit
-non-fatal) and the fact that we don't get a dependencies file.  On
-second thought, there's no good reason to keep localtime.cc a C++ file.
-Converting this file to a plain C wrapper drops the C++-specific warning
-and thus allows to revert the localtime.o build rule to use ${COMMON_CFLAGS}.
+- I didn't initialize the SRWLOCK following the books.  Fixed that.
 
-So I took the liberty to tweak your patch a bit.  I created a followup
-patchset, which I'd like you to take a look at.
+- Rather than creating the patched file in the source dir, I changed
+  the Makefile.in rule so that the patched file is created in the build
+  dir.  This drops the requirement to tweak .gitignore.  It's also
+  cleaner.
 
-I attached the followup patches to this mail.  Please scrutinize it and
-don't hesitate to discuss the changes.  For a start:
+- Splitting the build rule for localtime.c.patched from the build rule
+  for localtime.o makes sure that the patched file is not regenerated
+  every time we build localtime.o.
 
-- I do not exactly like the name "localtime_wrapper.c" but I don't
-  have a better idea.
-
-- muto's are C++-only, so I changed rwlock_wrlock/rwlock_unlock to use
-  Windows SRWLocks.  I think this is a good thing and I'm inclined
-  to drop the muto datatype entirely in favor of using SRWLocks since
-  they are cleaner and langauge-agnostic.
+I attached my patchset again, but only patch 3 and 4 actually changed.
 
 
 Thanks,
 Corinna
 
--- 
-Corinna Vinschen
-Cygwin Maintainer
-
---AqsLC8rIMeq19msA
+--NKoe5XOeduwbEQHU
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: attachment;
 	filename="0001-Cygwin-move-localtime.o-build-rule-to-end-of-file.patch"
@@ -178,7 +190,7 @@ index 2ac8bcbd89ff..2e8c274a36b3 100644
 2.25.4
 
 
---AqsLC8rIMeq19msA
+--NKoe5XOeduwbEQHU
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: attachment;
 	filename="0002-Cygwin-rename-localtime.cc-to-localtime_wrapper.c.patch"
@@ -216,12 +228,12 @@ rename to winsup/cygwin/tzcode/localtime_wrapper.c
 2.25.4
 
 
---AqsLC8rIMeq19msA
+--NKoe5XOeduwbEQHU
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: attachment;
 	filename="0003-Cygwin-convert-localtime_wrapper.c-to-plain-C-source.patch"
 
-From b4fdc99de23da851791b9976a8ae4e6e7a9a04f5 Mon Sep 17 00:00:00 2001
+From 6735981b78820c8d244e7fc0bb0ec4b56e88ef03 Mon Sep 17 00:00:00 2001
 From: Corinna Vinschen <corinna@vinschen.de>
 Date: Mon, 25 May 2020 13:50:36 +0200
 Subject: [PATCH 3/4] Cygwin: convert localtime_wrapper.c to plain C source
@@ -290,7 +302,7 @@ index e19a2cd0254f..0587b5ea7626 100644
   {
   	struct state *sp = __lclptr;
 diff --git a/winsup/cygwin/tzcode/localtime_wrapper.c b/winsup/cygwin/tzcode/localtime_wrapper.c
-index c903bf3b9d6d..fce3e36cbbef 100644
+index c903bf3b9d6d..c7c0bf333aae 100644
 --- a/winsup/cygwin/tzcode/localtime_wrapper.c
 +++ b/winsup/cygwin/tzcode/localtime_wrapper.c
 @@ -7,15 +7,16 @@ Cygwin license.  Please consult the file "CYGWIN_LICENSE" for
@@ -304,7 +316,7 @@ index c903bf3b9d6d..fce3e36cbbef 100644
 +#include <stdlib.h>
  
 -static NO_COPY muto tzset_guard;
-+static SRWLOCK tzset_guard;
++static NO_COPY SRWLOCK tzset_guard = SRWLOCK_INIT;
  
 -// Convert these NetBSD rwlock ops into Cygwin muto ops
 -#define rwlock_wrlock(X) tzset_guard.init("tzset_guard")->acquire()
@@ -360,35 +372,48 @@ index c903bf3b9d6d..fce3e36cbbef 100644
 2.25.4
 
 
---AqsLC8rIMeq19msA
+--NKoe5XOeduwbEQHU
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: attachment;
-	filename="0004-.gitignore-add-.patched-to-support-Cygwin-s-new-loca.patch"
+	filename="0004-Cygwin-revamp-localtime.o-build-rule.patch"
 
-From 48c341531c6e1117405d1f163bdf9cc02117d45c Mon Sep 17 00:00:00 2001
+From 1ca2a88ec9116d3384e76284eb3382f7f706d836 Mon Sep 17 00:00:00 2001
 From: Corinna Vinschen <corinna@vinschen.de>
-Date: Mon, 25 May 2020 13:51:35 +0200
-Subject: [PATCH 4/4] .gitignore: add *.patched to support Cygwin's new
- localtime build rules
+Date: Mon, 25 May 2020 17:40:27 +0200
+Subject: [PATCH 4/4] Cygwin: revamp localtime.o build rule
+
+Create the generated file localtime.c.patched in the build dir
+rather than in the source dir.  Decouple build rule for creating
+localtime.c.patched from the rule to build localtime.o, so we
+don't have to rebuild the patched source file all the time.
 
 Signed-off-by: Corinna Vinschen <corinna@vinschen.de>
 ---
- .gitignore | 1 +
- 1 file changed, 1 insertion(+)
+ winsup/cygwin/Makefile.in | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/.gitignore b/.gitignore
-index 13a554aa0986..578d9d8fdc01 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -1,5 +1,6 @@
- *.diff
- *.patch
-+*.patched
- *.orig
- *.rej
+diff --git a/winsup/cygwin/Makefile.in b/winsup/cygwin/Makefile.in
+index 1801b1a114eb..6bd38b22ea93 100644
+--- a/winsup/cygwin/Makefile.in
++++ b/winsup/cygwin/Makefile.in
+@@ -734,9 +734,12 @@ dcrt0.o sigproc.o: child_info_magic.h
  
+ shared.o: shared_info_magic.h
+ 
+-localtime.o: $(srcdir)/tzcode/localtime_wrapper.c $(srcdir)/tzcode/localtime.c.patch
+-	(cd $(srcdir)/tzcode && \
+-		patch -u -o localtime.c.patched localtime.c localtime.c.patch)
++localtime.c.patched: tzcode/localtime.c tzcode/localtime.c.patch
++	patch -u -o localtime.c.patched \
++		    $(srcdir)/tzcode/localtime.c \
++		    $(srcdir)/tzcode/localtime.c.patch
++
++localtime.o: tzcode/localtime_wrapper.c localtime.c.patched
+ 	$(CC) ${COMMON_CFLAGS} ${localtime_CFLAGS} \
+ 		-I$(target_builddir)/winsup/cygwin \
+ 		-I$(srcdir) -I$(srcdir)/tzcode -c -o $@ $<
 -- 
 2.25.4
 
 
---AqsLC8rIMeq19msA--
+--NKoe5XOeduwbEQHU--
