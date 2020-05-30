@@ -1,52 +1,26 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
- by sourceware.org (Postfix) with ESMTPS id 9B4BB3972C1D
- for <cygwin-patches@cygwin.com>; Thu, 28 May 2020 14:45:15 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 9B4BB3972C1D
-Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MUXYs-1jVU3m0pu4-00QVsq for <cygwin-patches@cygwin.com>; Thu, 28 May 2020
- 16:45:14 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id AD1F3A81006; Thu, 28 May 2020 16:45:13 +0200 (CEST)
-Date: Thu, 28 May 2020 16:45:13 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
+ by sourceware.org (Postfix) with ESMTPS id 0043F385BF81
+ for <cygwin-patches@cygwin.com>; Sat, 30 May 2020 09:25:30 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 0043F385BF81
+Received: from localhost.localdomain (v038192.dynamic.ppp.asahi-net.or.jp
+ [124.155.38.192]) (authenticated)
+ by conuserg-10.nifty.com with ESMTP id 04U9P85G028886;
+ Sat, 30 May 2020 18:25:13 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 04U9P85G028886
+X-Nifty-SrcIP: [124.155.38.192]
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Prevent meaningless ResizePseudoConsole()
- calls.
-Message-ID: <20200528144513.GO6801@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200528134926.488-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: console: Make cursor keys work in vim under ConEmu.
+Date: Sat, 30 May 2020 18:25:03 +0900
+Message-Id: <20200530092503.1142-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200528134926.488-1-takashi.yano@nifty.ne.jp>
-X-Provags-ID: V03:K1:VpK8Di3XbMt834ghlrsYL/9ZhREHQk2R2f+mRL8kQBUHYYaext+
- V3bn1eKMvG94/w1sLjLoXYTHzQsz+viyIwNYRW1KrwEik/ZtkQi0mz2alm+rDXREmDThRPe
- KxUsdotMXRMrIFOOddzWaOXbEWUrhp2Qb93afvJwOw0ZLuz4fYZLlPhYmPIYamWreM35YQu
- o6BToX234d/t1jz8xlaBg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:DAEv+UDPF9Y=:L/vI/yHhPjnn1pyY+s9o42
- sUtz7R7hNO2EfrEoXiVcygGamanuru040mqU2BQmv7XBfkOasE6u1GX1+d3+w4SMcqqVFaXrJ
- Afd1HaH7oQFDp9QeZv4k6CwXbk/vM5n5pdaFVjwPfe/Hddy3LTkw1SqmFsj/L3KkrsSrXx9Q3
- h5xoamjfORHki4Ar/pV8yyxGnPOyLvKow77REkkhgxRAThNpggcbeX1R29k6Y+qD5qNd045Zg
- MbJAUHMFnk9kuQIX5yCUHYuI1dIshN6elc/ykyN/10Ero8OCiiD84aLbBWolKSs4/vwW0gGlR
- dOz/2wnzh/+iTYjsuu84+WXCY/J26KPhMsTJbWJQbnx/SOGA8B5AfjBz3lYnhaKgJ+1mtvSJy
- c0J+WgWcWF1r431KhdjNMCWHfJwxbRnEhU8tOBDTkUJGNlHcigLGzS8VBYdCfFkPqdLWihw/j
- 7FG4Boh1UuAfuQyb5t/TLd/H+HwauMYk7IM2HxduaA/WXIGLuDgscbwgfk+x9uguCwSic+X7V
- L4ufpi4wXw7CLnFdDRt4B9jwgBONOZqYrdn0x9z4DqBXMK0P4q8scSDQZ0M/qwq22ShetLDR5
- tB174pKvX+kc6OJ3/djrtOsCbbkE7EQeOslIPOI6orA/oJ5rrE2bgCtSRXHRTLqUvIjIQv9n+
- iNFERYe/w0VyOAG9EWQPAJDr7+yjOC1sbnzgNQn7lmV2wJ8IJAD8y1yHWpob2TYnCYRVZXq2w
- rq+SctJBQ0z6U1HXvulWgPOBkAHY9dQalnhgZ+rfUHO8xt7Ah/8jmUaOtwWVeX7tZH64UDryn
- M71SmRFSNLYHSVNkc5mlwcvDDazvaky52YxNG3F2+Z1kbqI+vqtmgd2/SFx0s80lgG9go48
-X-Spam-Status: No, score=-104.0 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, KAM_SOMETLD_ARE_BAD_TLD,
+ PDS_OTHER_BAD_TLD, RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE,
+ SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -61,56 +35,94 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 28 May 2020 14:45:17 -0000
+X-List-Received-Date: Sat, 30 May 2020 09:25:35 -0000
 
-On May 28 22:49, Takashi Yano via Cygwin-patches wrote:
-> - This patch prevents to call ResizePseudoConsole() unless the pty
->   is resized.
-> ---
->  winsup/cygwin/fhandler_tty.cc | 18 +++++++++---------
->  1 file changed, 9 insertions(+), 9 deletions(-)
-> 
-> diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-> index f29a2c214..b091765b3 100644
-> --- a/winsup/cygwin/fhandler_tty.cc
-> +++ b/winsup/cygwin/fhandler_tty.cc
-> @@ -2615,18 +2615,18 @@ fhandler_pty_master::ioctl (unsigned int cmd, void *arg)
->        *(struct winsize *) arg = get_ttyp ()->winsize;
->        break;
->      case TIOCSWINSZ:
-> -      /* FIXME: Pseudo console can be accessed via its handle
-> -	 only in the process which created it. What else can we do? */
-> -      if (get_pseudo_console () && get_ttyp ()->master_pid == myself->pid)
-> -	{
-> -	  COORD size;
-> -	  size.X = ((struct winsize *) arg)->ws_col;
-> -	  size.Y = ((struct winsize *) arg)->ws_row;
-> -	  ResizePseudoConsole (get_pseudo_console (), size);
-> -	}
->        if (get_ttyp ()->winsize.ws_row != ((struct winsize *) arg)->ws_row
->  	  || get_ttyp ()->winsize.ws_col != ((struct winsize *) arg)->ws_col)
->  	{
-> +	  /* FIXME: Pseudo console can be accessed via its handle
-> +	     only in the process which created it. What else can we do? */
-> +	  if (get_pseudo_console () && get_ttyp ()->master_pid == myself->pid)
-> +	    {
-> +	      COORD size;
-> +	      size.X = ((struct winsize *) arg)->ws_col;
-> +	      size.Y = ((struct winsize *) arg)->ws_row;
-> +	      ResizePseudoConsole (get_pseudo_console (), size);
-> +	    }
->  	  get_ttyp ()->winsize = *(struct winsize *) arg;
->  	  get_ttyp ()->kill_pgrp (SIGWINCH);
->  	}
-> -- 
-> 2.26.2
+- After commit 774b8996d1f3e535e8267be4eb8e751d756c2cec, cursor
+  keys do not work in vim under ConEmu without cygwin-connector.
+  This patch fixes the issue.
+---
+ winsup/cygwin/fhandler.h          |  1 +
+ winsup/cygwin/fhandler_console.cc | 20 ++++++++++++++------
+ 2 files changed, 15 insertions(+), 6 deletions(-)
 
-Pushed.
-
-
-Thanks,
-Corinna
-
+diff --git a/winsup/cygwin/fhandler.h b/winsup/cygwin/fhandler.h
+index 76ad2aab0..b2957e4ee 100644
+--- a/winsup/cygwin/fhandler.h
++++ b/winsup/cygwin/fhandler.h
+@@ -2040,6 +2040,7 @@ class dev_console
+   char *cons_rapoi;
+   LONG xterm_mode_input;
+   LONG xterm_mode_output;
++  bool cursor_key_app_mode;
+ 
+   inline UINT get_console_cp ();
+   DWORD con_to_str (char *d, int dlen, WCHAR w);
+diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
+index 3930c6068..5cb4343ea 100644
+--- a/winsup/cygwin/fhandler_console.cc
++++ b/winsup/cygwin/fhandler_console.cc
+@@ -243,6 +243,7 @@ fhandler_console::setup ()
+       con.backspace_keycode = CERASE;
+       con.cons_rapoi = NULL;
+       shared_console_info->tty_min_state.is_console = true;
++      con.cursor_key_app_mode = false;
+     }
+ }
+ 
+@@ -289,6 +290,8 @@ fhandler_console::request_xterm_mode_input (bool req)
+ 	  GetConsoleMode (get_handle (), &dwMode);
+ 	  dwMode |= ENABLE_VIRTUAL_TERMINAL_INPUT;
+ 	  SetConsoleMode (get_handle (), dwMode);
++	  if (con.cursor_key_app_mode) /* Restore DECCKM */
++	    WriteConsoleA (get_output_handle (), "\033[?1h", 5, NULL, 0);
+ 	}
+     }
+   else
+@@ -2150,10 +2153,6 @@ fhandler_console::char_command (char c)
+ 	  break;
+ 	case 'h': /* DECSET */
+ 	case 'l': /* DECRST */
+-	  if (c == 'h')
+-	    con.screen_alternated = true;
+-	  else
+-	    con.screen_alternated = false;
+ 	  wpbuf.put (c);
+ 	  /* Just send the sequence */
+ 	  wpbuf.send (get_output_handle ());
+@@ -2161,8 +2160,15 @@ fhandler_console::char_command (char c)
+ 	    {
+ 	      bool need_fix_tab_position = false;
+ 	      for (int i = 0; i < con.nargs; i++)
+-		if (con.args[i] == 1049)
+-		  need_fix_tab_position = true;
++		{
++		  if (con.args[i] == 1049)
++		    {
++		      con.screen_alternated = (c == 'h');
++		      need_fix_tab_position = true;
++		    }
++		  if (con.args[i] == 1) /* DECCKM */
++		    con.cursor_key_app_mode = (c == 'h');
++		}
+ 	      /* Call fix_tab_position() if screen has been alternated. */
+ 	      if (need_fix_tab_position)
+ 		fix_tab_position ();
+@@ -2174,6 +2180,7 @@ fhandler_console::char_command (char c)
+ 	      con.scroll_region.Top = 0;
+ 	      con.scroll_region.Bottom = -1;
+ 	      con.savex = con.savey = -1;
++	      con.cursor_key_app_mode = false;
+ 	    }
+ 	  wpbuf.put (c);
+ 	  /* Just send the sequence */
+@@ -3077,6 +3084,7 @@ fhandler_console::write (const void *vsrc, size_t len)
+ 		  con.scroll_region.Top = 0;
+ 		  con.scroll_region.Bottom = -1;
+ 		  con.savex = con.savey = -1;
++		  con.cursor_key_app_mode = false;
+ 		}
+ 	      /* ESC sequences below (e.g. OSC, etc) are left to xterm
+ 		 emulation in xterm compatible mode, therefore, are not
 -- 
-Corinna Vinschen
-Cygwin Maintainer
+2.26.2
+
