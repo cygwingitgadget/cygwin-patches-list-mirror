@@ -1,26 +1,52 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
- by sourceware.org (Postfix) with ESMTPS id 0043F385BF81
- for <cygwin-patches@cygwin.com>; Sat, 30 May 2020 09:25:30 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 0043F385BF81
-Received: from localhost.localdomain (v038192.dynamic.ppp.asahi-net.or.jp
- [124.155.38.192]) (authenticated)
- by conuserg-10.nifty.com with ESMTP id 04U9P85G028886;
- Sat, 30 May 2020 18:25:13 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 04U9P85G028886
-X-Nifty-SrcIP: [124.155.38.192]
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+ by sourceware.org (Postfix) with ESMTPS id 81A053840C0D
+ for <cygwin-patches@cygwin.com>; Sat, 30 May 2020 17:42:12 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 81A053840C0D
+Authentication-Results: sourceware.org;
+ dmarc=none (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org;
+ spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MjBNV-1j2iP93xFV-00f8LO for <cygwin-patches@cygwin.com>; Sat, 30 May 2020
+ 19:42:10 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 86F3EA80FF6; Sat, 30 May 2020 19:42:10 +0200 (CEST)
+Date: Sat, 30 May 2020 19:42:10 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: console: Make cursor keys work in vim under ConEmu.
-Date: Sat, 30 May 2020 18:25:03 +0900
-Message-Id: <20200530092503.1142-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.26.2
+Subject: Re: [PATCH] Cygwin: console: Make cursor keys work in vim under
+ ConEmu.
+Message-ID: <20200530174210.GV6801@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20200530092503.1142-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, KAM_SOMETLD_ARE_BAD_TLD,
- PDS_OTHER_BAD_TLD, RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE,
- SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200530092503.1142-1-takashi.yano@nifty.ne.jp>
+X-Provags-ID: V03:K1:S+BwzxJpUqUxzFZXGnpu9FNuwrrAUUjGk7YhFbPM/ousrCPCh9W
+ ziJlsJ6eleS3mSe+CYp6NHReXuk0pns9D1dG5hCIX7DUpucAgA2D68BDsUbFSslY2QJgLN5
+ CwtY8iDBOTA2tpuY2ipSgMuoehFdYbQaEM3g58rzoSuy62NkSfniZzdOJKnsoOsTYwj7j1a
+ YlEo9IpoJR0hZsMvwwjEw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:xMGRYFGScfg=:OhBMtj4mjeCFBMHPTSG861
+ jQv8vj+GShmsMDLAgj+uX/i7uwdFLuHDzLv0NCSFURiF3wldphMO3ihnAT5mykhc0Ohu/fYjR
+ ORwCrA5ph0WX+7hQaXKVuFfaUw2TO6Zog4Jw5FktakQis5ZNRY5sBGF5CHCcOJrQtSptq9PqJ
+ 4WcS9hipQeUn4XjReYt8Q2ZbIIzEV938w6IaNmI2i0fWOOeE4Wcm8n9qpitT1fqc9tclbVVaf
+ Pa0UX5meyUWV2XVUTdfprgFWiCsY+uTRvUIDN3Iu+o1TuYHQMvUevNQtjEeFA1MQXYDl8WrHP
+ SuNBGxPMOnOYVL7WJagArw1varEEZnt+MWUCcQ1Be47sfCRkZBTpCzH/tbkQR+CYaJc7aovRk
+ Wfw7/rWBl7/Q4bcdC3Ox9opHOj+zIiCVzJutJjQH4Z89xbbqN4ZtKPt9sT9bvD9y7FPHca+Bl
+ gvhaV+loSrTlC4LhqnETW7ncoHIcNjFSMq6OsZiN5/2y0RA3ZpPLRZRLENAUvA8uhHtIJmCrU
+ /VfaJgTT1Bg5oa21qt+uE630qUDUwOPaZzVfkA6RSVScPadXmKdMGvqEAwVKtdNbTqJO/H1Yz
+ dmhteiBqxfSDJj8DBThnQwmkLPU/bEQ1AOFCODzED26CCz7IoxNs4OW2LLxecXha5p1FdkusJ
+ JsPJIaNPeBbUSO77SvtWfypUhNapg/Zcc23/ILHi+ZN1fxZ+g72FerfNLA5f+sxCT5ZmKotvb
+ HFZDs4ctVx6KxRbnpYjFOJK1+ho/gIR1woQ79aKMztQiMs78ohzeO8SRmCK6/U257g+knqIFQ
+ TIh01OvED1cv6eb44fkAWb5U0PxzK65NAk2EjaeyjM+uKNkNZIK+O1XgQ79uzowhvECt5q7
+X-Spam-Status: No, score=-99.3 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -35,94 +61,23 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sat, 30 May 2020 09:25:35 -0000
+X-List-Received-Date: Sat, 30 May 2020 17:42:14 -0000
 
-- After commit 774b8996d1f3e535e8267be4eb8e751d756c2cec, cursor
-  keys do not work in vim under ConEmu without cygwin-connector.
-  This patch fixes the issue.
----
- winsup/cygwin/fhandler.h          |  1 +
- winsup/cygwin/fhandler_console.cc | 20 ++++++++++++++------
- 2 files changed, 15 insertions(+), 6 deletions(-)
+On May 30 18:25, Takashi Yano via Cygwin-patches wrote:
+> - After commit 774b8996d1f3e535e8267be4eb8e751d756c2cec, cursor
+>   keys do not work in vim under ConEmu without cygwin-connector.
+>   This patch fixes the issue.
+> ---
+>  winsup/cygwin/fhandler.h          |  1 +
+>  winsup/cygwin/fhandler_console.cc | 20 ++++++++++++++------
+>  2 files changed, 15 insertions(+), 6 deletions(-)
 
-diff --git a/winsup/cygwin/fhandler.h b/winsup/cygwin/fhandler.h
-index 76ad2aab0..b2957e4ee 100644
---- a/winsup/cygwin/fhandler.h
-+++ b/winsup/cygwin/fhandler.h
-@@ -2040,6 +2040,7 @@ class dev_console
-   char *cons_rapoi;
-   LONG xterm_mode_input;
-   LONG xterm_mode_output;
-+  bool cursor_key_app_mode;
- 
-   inline UINT get_console_cp ();
-   DWORD con_to_str (char *d, int dlen, WCHAR w);
-diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
-index 3930c6068..5cb4343ea 100644
---- a/winsup/cygwin/fhandler_console.cc
-+++ b/winsup/cygwin/fhandler_console.cc
-@@ -243,6 +243,7 @@ fhandler_console::setup ()
-       con.backspace_keycode = CERASE;
-       con.cons_rapoi = NULL;
-       shared_console_info->tty_min_state.is_console = true;
-+      con.cursor_key_app_mode = false;
-     }
- }
- 
-@@ -289,6 +290,8 @@ fhandler_console::request_xterm_mode_input (bool req)
- 	  GetConsoleMode (get_handle (), &dwMode);
- 	  dwMode |= ENABLE_VIRTUAL_TERMINAL_INPUT;
- 	  SetConsoleMode (get_handle (), dwMode);
-+	  if (con.cursor_key_app_mode) /* Restore DECCKM */
-+	    WriteConsoleA (get_output_handle (), "\033[?1h", 5, NULL, 0);
- 	}
-     }
-   else
-@@ -2150,10 +2153,6 @@ fhandler_console::char_command (char c)
- 	  break;
- 	case 'h': /* DECSET */
- 	case 'l': /* DECRST */
--	  if (c == 'h')
--	    con.screen_alternated = true;
--	  else
--	    con.screen_alternated = false;
- 	  wpbuf.put (c);
- 	  /* Just send the sequence */
- 	  wpbuf.send (get_output_handle ());
-@@ -2161,8 +2160,15 @@ fhandler_console::char_command (char c)
- 	    {
- 	      bool need_fix_tab_position = false;
- 	      for (int i = 0; i < con.nargs; i++)
--		if (con.args[i] == 1049)
--		  need_fix_tab_position = true;
-+		{
-+		  if (con.args[i] == 1049)
-+		    {
-+		      con.screen_alternated = (c == 'h');
-+		      need_fix_tab_position = true;
-+		    }
-+		  if (con.args[i] == 1) /* DECCKM */
-+		    con.cursor_key_app_mode = (c == 'h');
-+		}
- 	      /* Call fix_tab_position() if screen has been alternated. */
- 	      if (need_fix_tab_position)
- 		fix_tab_position ();
-@@ -2174,6 +2180,7 @@ fhandler_console::char_command (char c)
- 	      con.scroll_region.Top = 0;
- 	      con.scroll_region.Bottom = -1;
- 	      con.savex = con.savey = -1;
-+	      con.cursor_key_app_mode = false;
- 	    }
- 	  wpbuf.put (c);
- 	  /* Just send the sequence */
-@@ -3077,6 +3084,7 @@ fhandler_console::write (const void *vsrc, size_t len)
- 		  con.scroll_region.Top = 0;
- 		  con.scroll_region.Bottom = -1;
- 		  con.savex = con.savey = -1;
-+		  con.cursor_key_app_mode = false;
- 		}
- 	      /* ESC sequences below (e.g. OSC, etc) are left to xterm
- 		 emulation in xterm compatible mode, therefore, are not
+Pushed.
+
+
+Thanks,
+Corinna
+
 -- 
-2.26.2
-
+Corinna Vinschen
+Cygwin Maintainer
