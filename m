@@ -1,20 +1,20 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
 Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
- by sourceware.org (Postfix) with ESMTPS id 23289386EC42
+ by sourceware.org (Postfix) with ESMTPS id 25D83383F875
  for <cygwin-patches@cygwin.com>; Sun, 31 May 2020 05:54:18 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 23289386EC42
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 25D83383F875
 Received: from localhost.localdomain (v038192.dynamic.ppp.asahi-net.or.jp
  [124.155.38.192]) (authenticated)
- by conuserg-07.nifty.com with ESMTP id 04V5rSi7024218;
- Sun, 31 May 2020 14:53:59 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 04V5rSi7024218
+ by conuserg-07.nifty.com with ESMTP id 04V5rSi5024218;
+ Sun, 31 May 2020 14:53:51 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 04V5rSi5024218
 X-Nifty-SrcIP: [124.155.38.192]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH 4/4] Cygwin: pty: Revise the code which prevents undesired
- window title.
-Date: Sun, 31 May 2020 14:53:20 +0900
-Message-Id: <20200531055320.1419-5-takashi.yano@nifty.ne.jp>
+Subject: [PATCH 3/4] Cygwin: pty: Clean up
+ fhandler_pty_master::pty_master_fwd_thread().
+Date: Sun, 31 May 2020 14:53:19 +0900
+Message-Id: <20200531055320.1419-4-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200531055320.1419-1-takashi.yano@nifty.ne.jp>
 References: <20200531055320.1419-1-takashi.yano@nifty.ne.jp>
@@ -40,35 +40,40 @@ List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
 X-List-Received-Date: Sun, 31 May 2020 05:54:20 -0000
 
-- In current pty, the window title can not be set from non-cygwin
-  program due to the code which prevents overwriting the window
-  title to "cygwin-console-helper.exe" in fhandler_pty_master::pty_
-  master_fwd_thread(). This patch fixes the issue.
+- Remove the code which is not necessary anymore.
 ---
- winsup/cygwin/fhandler_tty.cc | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ winsup/cygwin/fhandler_tty.cc | 18 ------------------
+ 1 file changed, 18 deletions(-)
 
 diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index c3d49968d..e434b7878 100644
+index d017cde38..c3d49968d 100644
 --- a/winsup/cygwin/fhandler_tty.cc
 +++ b/winsup/cygwin/fhandler_tty.cc
-@@ -3313,9 +3313,14 @@ fhandler_pty_master::pty_master_fwd_thread ()
- 	      }
- 	    else if (state == 4 && outbuf[i] == '\a')
- 	      {
--		memmove (&outbuf[start_at], &outbuf[i+1], rlen-i-1);
-+		const char *helper_str = "\\bin\\cygwin-console-helper.exe";
-+		if (memmem (&outbuf[start_at], i + 1 - start_at,
-+			    helper_str, strlen (helper_str)))
-+		  {
-+		    memmove (&outbuf[start_at], &outbuf[i+1], rlen-i-1);
-+		    rlen = wlen = start_at + rlen - i - 1;
-+		  }
- 		state = 0;
--		rlen = wlen = start_at + rlen - i - 1;
+@@ -3324,24 +3324,6 @@ fhandler_pty_master::pty_master_fwd_thread ()
  		continue;
  	      }
- 	    else if (outbuf[i] == '\a')
+ 
+-	  /* Remove ESC sequence which returns results to console
+-	     input buffer. Without this, cursor position report
+-	     is put into the input buffer as a garbage. */
+-	  /* Remove ESC sequence to report cursor position. */
+-	  char *p0;
+-	  while ((p0 = (char *) memmem (outbuf, rlen, "\033[6n", 4)))
+-	    {
+-	      memmove (p0, p0+4, rlen - (p0+4 - outbuf));
+-	      rlen -= 4;
+-	    }
+-	  /* Remove ESC sequence to report terminal identity. */
+-	  while ((p0 = (char *) memmem (outbuf, rlen, "\033[0c", 4)))
+-	    {
+-	      memmove (p0, p0+4, rlen - (p0+4 - outbuf));
+-	      rlen -= 4;
+-	    }
+-	  wlen = rlen;
+-
+ 	  size_t nlen;
+ 	  char *buf = convert_mb_str
+ 	    (get_ttyp ()->term_code_page, &nlen, CP_UTF8, ptr, wlen);
 -- 
 2.26.2
 
