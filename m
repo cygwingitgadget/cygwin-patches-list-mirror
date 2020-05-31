@@ -1,20 +1,20 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
 Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
- by sourceware.org (Postfix) with ESMTPS id 7B7EB386EC42
- for <cygwin-patches@cygwin.com>; Sun, 31 May 2020 05:53:57 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 7B7EB386EC42
+ by sourceware.org (Postfix) with ESMTPS id 23289386EC42
+ for <cygwin-patches@cygwin.com>; Sun, 31 May 2020 05:54:18 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 23289386EC42
 Received: from localhost.localdomain (v038192.dynamic.ppp.asahi-net.or.jp
  [124.155.38.192]) (authenticated)
- by conuserg-07.nifty.com with ESMTP id 04V5rSi1024218;
- Sun, 31 May 2020 14:53:42 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 04V5rSi1024218
+ by conuserg-07.nifty.com with ESMTP id 04V5rSi7024218;
+ Sun, 31 May 2020 14:53:59 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 04V5rSi7024218
 X-Nifty-SrcIP: [124.155.38.192]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH 1/4] Cygwin: pty: Prevent garbage remained in read ahead
- buffer.
-Date: Sun, 31 May 2020 14:53:17 +0900
-Message-Id: <20200531055320.1419-2-takashi.yano@nifty.ne.jp>
+Subject: [PATCH 4/4] Cygwin: pty: Revise the code which prevents undesired
+ window title.
+Date: Sun, 31 May 2020 14:53:20 +0900
+Message-Id: <20200531055320.1419-5-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200531055320.1419-1-takashi.yano@nifty.ne.jp>
 References: <20200531055320.1419-1-takashi.yano@nifty.ne.jp>
@@ -38,83 +38,37 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sun, 31 May 2020 05:53:59 -0000
+X-List-Received-Date: Sun, 31 May 2020 05:54:20 -0000
 
-- After commit 29431fcb5b14d4c5ac3b3161a076eb1a208349d9, the issue
-  reported in https://cygwin.com/pipermail/cygwin/2020-May/245057.html
-  occurs. This is caused by the following mechanism. Cygwin less
-  called from non-cygwin git is executed under /dev/cons* rather
-  than /dev/pty* because parent git process only inherits pseudo
-  console handle. Therefore, less sets ICANON flag for /dev/cons*
-  rather than original /dev/pty*. When pty is switched to non-cygwin
-  git process, line_edit() is used in fhandler_pty_master::write()
-  only to set input_available_event and read ahead buffer is supposed
-  to be flushed in accept_input(). However, ICANON flag is not set
-  for /dev/pty*, so accept_input() is not called unless newline
-  is entered. As a result, the input data remains in the read ahead
-  buffer. This patch fixes the issue.
+- In current pty, the window title can not be set from non-cygwin
+  program due to the code which prevents overwriting the window
+  title to "cygwin-console-helper.exe" in fhandler_pty_master::pty_
+  master_fwd_thread(). This patch fixes the issue.
 ---
- winsup/cygwin/fhandler.h      |  3 ++-
- winsup/cygwin/fhandler_tty.cc | 14 ++++++++++++--
- 2 files changed, 14 insertions(+), 3 deletions(-)
+ winsup/cygwin/fhandler_tty.cc | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/winsup/cygwin/fhandler.h b/winsup/cygwin/fhandler.h
-index b2957e4ee..4035c7e56 100644
---- a/winsup/cygwin/fhandler.h
-+++ b/winsup/cygwin/fhandler.h
-@@ -328,7 +328,7 @@ class fhandler_base
- 
-   virtual bool get_readahead_valid () { return raixget () < ralen (); }
-   int puts_readahead (const char *s, size_t len = (size_t) -1);
--  int put_readahead (char value);
-+  virtual int put_readahead (char value);
- 
-   int get_readahead ();
-   int peek_readahead (int queryput = 0);
-@@ -2381,6 +2381,7 @@ public:
-   int process_slave_output (char *buf, size_t len, int pktmode_on);
-   void doecho (const void *str, DWORD len);
-   int accept_input ();
-+  int put_readahead (char value);
-   int open (int flags, mode_t mode = 0);
-   void open_setup (int flags);
-   ssize_t __stdcall write (const void *ptr, size_t len);
 diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index b091765b3..d017cde38 100644
+index c3d49968d..e434b7878 100644
 --- a/winsup/cygwin/fhandler_tty.cc
 +++ b/winsup/cygwin/fhandler_tty.cc
-@@ -532,6 +532,14 @@ fhandler_pty_master::doecho (const void *str, DWORD len)
-   release_output_mutex ();
- }
- 
-+int
-+fhandler_pty_master::put_readahead (char value)
-+{
-+  if (to_be_read_from_pcon ())
-+    return 1;
-+  return fhandler_base::put_readahead (value);
-+}
-+
- int
- fhandler_pty_master::accept_input ()
- {
-@@ -542,12 +550,14 @@ fhandler_pty_master::accept_input ()
- 
-   bytes_left = eat_readahead (-1);
- 
--  if (!bytes_left)
-+  if (to_be_read_from_pcon ())
-+    ; /* Do nothing */
-+  else if (!bytes_left)
-     {
-       termios_printf ("sending EOF to slave");
-       get_ttyp ()->read_retval = 0;
-     }
--  else if (!to_be_read_from_pcon ())
-+  else
-     {
-       char *p = rabuf ();
-       DWORD rc;
+@@ -3313,9 +3313,14 @@ fhandler_pty_master::pty_master_fwd_thread ()
+ 	      }
+ 	    else if (state == 4 && outbuf[i] == '\a')
+ 	      {
+-		memmove (&outbuf[start_at], &outbuf[i+1], rlen-i-1);
++		const char *helper_str = "\\bin\\cygwin-console-helper.exe";
++		if (memmem (&outbuf[start_at], i + 1 - start_at,
++			    helper_str, strlen (helper_str)))
++		  {
++		    memmove (&outbuf[start_at], &outbuf[i+1], rlen-i-1);
++		    rlen = wlen = start_at + rlen - i - 1;
++		  }
+ 		state = 0;
+-		rlen = wlen = start_at + rlen - i - 1;
+ 		continue;
+ 	      }
+ 	    else if (outbuf[i] == '\a')
 -- 
 2.26.2
 
