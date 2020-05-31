@@ -1,20 +1,20 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
 Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
- by sourceware.org (Postfix) with ESMTPS id 25D83383F875
+ by sourceware.org (Postfix) with ESMTPS id 26303383E808
  for <cygwin-patches@cygwin.com>; Sun, 31 May 2020 05:54:18 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 25D83383F875
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 26303383E808
 Received: from localhost.localdomain (v038192.dynamic.ppp.asahi-net.or.jp
  [124.155.38.192]) (authenticated)
- by conuserg-07.nifty.com with ESMTP id 04V5rSi5024218;
- Sun, 31 May 2020 14:53:51 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 04V5rSi5024218
+ by conuserg-07.nifty.com with ESMTP id 04V5rSi3024218;
+ Sun, 31 May 2020 14:53:47 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 04V5rSi3024218
 X-Nifty-SrcIP: [124.155.38.192]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH 3/4] Cygwin: pty: Clean up
- fhandler_pty_master::pty_master_fwd_thread().
-Date: Sun, 31 May 2020 14:53:19 +0900
-Message-Id: <20200531055320.1419-4-takashi.yano@nifty.ne.jp>
+Subject: [PATCH 2/4] Cygwin: console: Discard some unsupported escape
+ sequences.
+Date: Sun, 31 May 2020 14:53:18 +0900
+Message-Id: <20200531055320.1419-3-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200531055320.1419-1-takashi.yano@nifty.ne.jp>
 References: <20200531055320.1419-1-takashi.yano@nifty.ne.jp>
@@ -40,40 +40,135 @@ List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
 X-List-Received-Date: Sun, 31 May 2020 05:54:20 -0000
 
-- Remove the code which is not necessary anymore.
+- If the cygwin vim is started from a non-cygwin process which is
+  executed in pseudo console, shift key and ctrl key do not work.
+  In this case, vim is executed under /dev/cons*. If vim outputs
+  escape sequence which is not supported by pseudo console, the
+  escape sequence is leaked into the parent pty. This causes
+  unexpected results. This patch fixes the issue by discarding
+  "CSI > Pm m". "OSC 10;? BEL/ST" and "OSC 11;? BEL/ST" are
+  discarded as well.
 ---
- winsup/cygwin/fhandler_tty.cc | 18 ------------------
- 1 file changed, 18 deletions(-)
+ winsup/cygwin/fhandler_console.cc | 54 ++++++++++++++++++++++---------
+ 1 file changed, 38 insertions(+), 16 deletions(-)
 
-diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index d017cde38..c3d49968d 100644
---- a/winsup/cygwin/fhandler_tty.cc
-+++ b/winsup/cygwin/fhandler_tty.cc
-@@ -3324,24 +3324,6 @@ fhandler_pty_master::pty_master_fwd_thread ()
- 		continue;
+diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
+index 5cb4343ea..dd979fb8e 100644
+--- a/winsup/cygwin/fhandler_console.cc
++++ b/winsup/cygwin/fhandler_console.cc
+@@ -2186,6 +2186,14 @@ fhandler_console::char_command (char c)
+ 	  /* Just send the sequence */
+ 	  wpbuf.send (get_output_handle ());
+ 	  break;
++	case 'm':
++	  if (con.saw_greater_than_sign)
++	    break; /* Ignore unsupported CSI > Pm m */
++	  /* Text attribute settings */
++	  wpbuf.put (c);
++	  /* Just send the sequence */
++	  wpbuf.send (get_output_handle ());
++	  break;
+ 	default:
+ 	  /* Other escape sequences */
+ 	  wpbuf.put (c);
+@@ -3077,6 +3085,13 @@ fhandler_console::write (const void *vsrc, size_t len)
+ 	      con.state = normal;
+ 	      wpbuf.empty();
+ 	    }
++	  else if (*src == ']')		/* OSC Operating System Command */
++	    {
++	      wpbuf.put (*src);
++	      con.rarg = 0;
++	      con.my_title_buf[0] = '\0';
++	      con.state = gotrsquare;
++	    }
+ 	  else if (wincap.has_con_24bit_colors () && !con_is_legacy)
+ 	    {
+ 	      if (*src == 'c') /* RIS Full reset */
+@@ -3095,13 +3110,6 @@ fhandler_console::write (const void *vsrc, size_t len)
+ 	      con.state = normal;
+ 	      wpbuf.empty();
+ 	    }
+-	  else if (*src == ']')		/* OSC Operating System Command */
+-	    {
+-	      wpbuf.put (*src);
+-	      con.rarg = 0;
+-	      con.my_title_buf[0] = '\0';
+-	      con.state = gotrsquare;
+-	    }
+ 	  else if (*src == '(')		/* Designate G0 character set */
+ 	    {
+ 	      wpbuf.put (*src);
+@@ -3179,7 +3187,8 @@ fhandler_console::write (const void *vsrc, size_t len)
+ 	    con.rarg = con.rarg * 10 + (*src - '0');
+ 	  else if (*src == ';' && (con.rarg == 2 || con.rarg == 0))
+ 	    con.state = gettitle;
+-	  else if (*src == ';' && (con.rarg == 4 || con.rarg == 104))
++	  else if (*src == ';' && (con.rarg == 4 || con.rarg == 104
++				   || (con.rarg >= 10 && con.rarg <= 19)))
+ 	    con.state = eatpalette;
+ 	  else
+ 	    con.state = eattitle;
+@@ -3189,10 +3198,13 @@ fhandler_console::write (const void *vsrc, size_t len)
+ 	case eattitle:
+ 	case gettitle:
+ 	  {
++	    wpbuf.put (*src);
+ 	    int n = strlen (con.my_title_buf);
+ 	    if (*src < ' ')
+ 	      {
+-		if (*src == '\007' && con.state == gettitle)
++		if (wincap.has_con_24bit_colors () && !con_is_legacy)
++		  wpbuf.send (get_output_handle ());
++		else if (*src == '\007' && con.state == gettitle)
+ 		  set_console_title (con.my_title_buf);
+ 		con.state = normal;
+ 		wpbuf.empty();
+@@ -3201,27 +3213,37 @@ fhandler_console::write (const void *vsrc, size_t len)
+ 	      {
+ 		con.my_title_buf[n++] = *src;
+ 		con.my_title_buf[n] = '\0';
+-		wpbuf.put (*src);
  	      }
- 
--	  /* Remove ESC sequence which returns results to console
--	     input buffer. Without this, cursor position report
--	     is put into the input buffer as a garbage. */
--	  /* Remove ESC sequence to report cursor position. */
--	  char *p0;
--	  while ((p0 = (char *) memmem (outbuf, rlen, "\033[6n", 4)))
+ 	    src++;
+ 	    break;
+ 	  }
+ 	case eatpalette:
+-	  if (*src == '\033')
 -	    {
--	      memmove (p0, p0+4, rlen - (p0+4 - outbuf));
--	      rlen -= 4;
+-	      wpbuf.put (*src);
+-	      con.state = endpalette;
 -	    }
--	  /* Remove ESC sequence to report terminal identity. */
--	  while ((p0 = (char *) memmem (outbuf, rlen, "\033[0c", 4)))
--	    {
--	      memmove (p0, p0+4, rlen - (p0+4 - outbuf));
--	      rlen -= 4;
--	    }
--	  wlen = rlen;
--
- 	  size_t nlen;
- 	  char *buf = convert_mb_str
- 	    (get_ttyp ()->term_code_page, &nlen, CP_UTF8, ptr, wlen);
++	  wpbuf.put (*src);
++	  if (*src == '?')
++	    con.saw_question_mark = true;
++	  else if (*src == '\033')
++	    con.state = endpalette;
+ 	  else if (*src == '\a')
+ 	    {
++	      /* Send OSC Ps; Pt BEL other than OSC Ps; ? BEL */
++	      if (wincap.has_con_24bit_colors () && !con_is_legacy
++		  && !con.saw_question_mark)
++		wpbuf.send (get_output_handle ());
+ 	      con.state = normal;
+ 	      wpbuf.empty();
+ 	    }
+ 	  src++;
+ 	  break;
+ 	case endpalette:
++	  wpbuf.put (*src);
+ 	  if (*src == '\\')
+-	    con.state = normal;
++	    {
++	      /* Send OSC Ps; Pt ST other than OSC Ps; ? ST */
++	      if (wincap.has_con_24bit_colors () && !con_is_legacy
++		  && !con.saw_question_mark)
++		wpbuf.send (get_output_handle ());
++	      con.state = normal;
++	    }
+ 	  else
+ 	    /* Sequence error (abort) */
+ 	    con.state = normal;
 -- 
 2.26.2
 
