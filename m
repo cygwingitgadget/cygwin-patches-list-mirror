@@ -1,50 +1,26 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
- by sourceware.org (Postfix) with ESMTPS id 237013851C04
- for <cygwin-patches@cygwin.com>; Sun, 31 May 2020 08:40:18 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 237013851C04
-Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1Mt6wz-1iqV9F2szx-00tRpF for <cygwin-patches@cygwin.com>; Sun, 31 May 2020
- 10:40:16 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 10B5CA80FFD; Sun, 31 May 2020 10:40:16 +0200 (CEST)
-Date: Sun, 31 May 2020 10:40:16 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
+ by sourceware.org (Postfix) with ESMTPS id A8CDA386F432
+ for <cygwin-patches@cygwin.com>; Mon,  1 Jun 2020 06:16:50 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org A8CDA386F432
+Received: from localhost.localdomain (v038192.dynamic.ppp.asahi-net.or.jp
+ [124.155.38.192]) (authenticated)
+ by conuserg-07.nifty.com with ESMTP id 0516GCfG009321;
+ Mon, 1 Jun 2020 15:16:17 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 0516GCfG009321
+X-Nifty-SrcIP: [124.155.38.192]
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 0/4] Some fixes for pty.
-Message-ID: <20200531084016.GY6801@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200531055320.1419-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: pty: Fix screen distortion after using less for
+ native apps.
+Date: Mon,  1 Jun 2020 15:16:18 +0900
+Message-Id: <20200601061618.893-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200531055320.1419-1-takashi.yano@nifty.ne.jp>
-X-Provags-ID: V03:K1:CYOyxzlkHSwy0Cd9vxbABl2SQjHSx85mzCk/4EkGMsnGNzUOohY
- rT4YStlYwJ8ZYCXsdI65bz6Jna2YiymppMv94kjL0r4Wr7SLAn0lx3PsNkrEws0BiUMTGHG
- +fB3S2v3KhK2N2pvhFDWJfwxnNwTTHklXRwWQDwngtaW4ZkxyFKjPMU7PACcSgRUewQhMrD
- c+4RVeTHLCnlJiytb11BA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:7kEeyBw0jJQ=:wglnIeHyfD6xDMDLtgCtWz
- uIPkbcYlo483TGVU2+Rvreg0GKHtISfRQL5LohRKZMoavi8AJPl33Hi6K0waUfqwCe98nMnZ9
- HyyUBJd7yLPXjEnEuWj+xihx9fsASJ8A0LR9+wGz+BlVCqJnjrgurD7DKjRjb4AOzA9gWfV4o
- 7JEbflYZOy1zBbl3FM9QweVnEvXncDeF2T1GQrhlIkfr2Sxsro3HcvV/Ju/gg63ODHOSPkjwj
- EgKzB1+PJk1/wXedRe5SAMgeiioySoxkvFtxs8MuUuyGPk3bBI2FhzMOJL1O2GU12FXawfliP
- qq5Ow5xlINWN7qBuYOvozu5lPZtJvsJV+mU0PlHhBjOTDaX0U5lO2zAaU9q0fuYE+m6koA4Ha
- J/dNZFfYcJIGiqr1MKK0d1gFGcAVrU/DLhO/jliHuZhHMh5l2jdGmqtXTS1z3JG1uixd5MPYs
- paF+SKeu3UUsFQefYnZgjocO/8lqH5nOZKfcANGJAEzKeCJTy0jL8XKb+i3DLbHFhz6G8tDbt
- TagoRSIDY48UiByfwYL2JvQknw3padv5klrN7glF+svkzPuGKVC3/wwuC5ccsEYja+DOjpnTu
- 8+QaPJoGYmyqBxO+LOumdhocOpAp0aX4wD1nHwKlf2mmPEWrenPrfHAu4xQKODUC14g1A+ec1
- 9HZ/1Nza4FmaKT40eqWSlYzjq6BXkFakNn2XgMv8h0YS+ilbzjIknKC9HnIUjJdn9cy22FODc
- 1q5vG7h3LDKIQDLcxShSAAF4Nm9K0Iv4BhLqdiJSPYK4d7tzXs8T7comh3sfZ1hPrwfFXe0xj
- rhhea36lhwCTyQ/DAJxvGjMhVvpbrZhgqTJfZM9v11TXhSHsLAfkUSyucekbT9sY1cXUjmw
-X-Spam-Status: No, score=-99.3 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0,
+ RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_PASS,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -60,35 +36,87 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sun, 31 May 2020 08:40:20 -0000
+X-List-Received-Date: Mon, 01 Jun 2020 06:16:54 -0000
 
-On May 31 14:53, Takashi Yano via Cygwin-patches wrote:
-> Patches for https://cygwin.com/pipermail/cygwin/2020-May/245057.html
-> and three other issues that were noticed during this fix.
-> 
-> Takashi Yano (4):
->   Cygwin: pty: Prevent garbage remained in read ahead buffer.
->   Cygwin: console: Discard some unsupported escape sequences.
->   Cygwin: pty: Clean up fhandler_pty_master::pty_master_fwd_thread().
->   Cygwin: pty: Revise the code which prevents undesired window title.
-> 
->  winsup/cygwin/fhandler.h          |  3 +-
->  winsup/cygwin/fhandler_console.cc | 54 ++++++++++++++++++++++---------
->  winsup/cygwin/fhandler_tty.cc     | 41 +++++++++++------------
->  3 files changed, 59 insertions(+), 39 deletions(-)
-> 
-> -- 
-> 2.26.2
+- If the output of non-cygwin apps is browsed using less, screen is
+  ocasionally distorted after less exits. This frequently happens
+  if cmd.exe is executed after less. This patch fixes the issue.
+---
+ winsup/cygwin/fhandler_tty.cc | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
-Pushed.
-
-I'm going to create a developer snapshot for testing right now, should
-take just a few minutes.
-
-
-Thanks,
-Corinna
-
+diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+index e434b7878..bcc7648f3 100644
+--- a/winsup/cygwin/fhandler_tty.cc
++++ b/winsup/cygwin/fhandler_tty.cc
+@@ -1372,7 +1372,7 @@ fhandler_pty_slave::push_to_pcon_screenbuffer (const char *ptr, size_t len,
+ 	  p0 = (char *) memmem (p1, nlen - (p1-buf), "\033[?1049h", 8);
+ 	  if (p0)
+ 	    {
+-	      //p0 += 8;
++	      p0 += 8;
+ 	      get_ttyp ()->screen_alternated = true;
+ 	      if (get_ttyp ()->switch_to_pcon_out)
+ 		do_not_reset_switch_to_pcon = true;
+@@ -1384,7 +1384,7 @@ fhandler_pty_slave::push_to_pcon_screenbuffer (const char *ptr, size_t len,
+ 	  p1 = (char *) memmem (p0, nlen - (p0-buf), "\033[?1049l", 8);
+ 	  if (p1)
+ 	    {
+-	      p1 += 8;
++	      //p1 += 8;
+ 	      get_ttyp ()->screen_alternated = false;
+ 	      do_not_reset_switch_to_pcon = false;
+ 	      memmove (p0, p1, buf+nlen - p1);
+@@ -1504,7 +1504,10 @@ fhandler_pty_slave::write (const void *ptr, size_t len)
+ 
+   reset_switch_to_pcon ();
+ 
+-  UINT target_code_page = get_ttyp ()->switch_to_pcon_out ?
++  bool output_to_pcon =
++    get_ttyp ()->switch_to_pcon_out && !get_ttyp ()->screen_alternated;
++
++  UINT target_code_page = output_to_pcon ?
+     GetConsoleOutputCP () : get_ttyp ()->term_code_page;
+   ssize_t nlen;
+   char *buf = convert_mb_str (target_code_page, (size_t *) &nlen,
+@@ -1513,11 +1516,11 @@ fhandler_pty_slave::write (const void *ptr, size_t len)
+   /* If not attached to this pseudo console, try to attach temporarily. */
+   pid_restore = 0;
+   bool fallback = false;
+-  if (get_ttyp ()->switch_to_pcon_out && pcon_attached_to != get_minor ())
++  if (output_to_pcon && pcon_attached_to != get_minor ())
+     if (!try_reattach_pcon ())
+       fallback = true;
+ 
+-  if (get_ttyp ()->switch_to_pcon_out && !fallback &&
++  if (output_to_pcon && !fallback &&
+       (memmem (buf, nlen, "\033[6n", 4) || memmem (buf, nlen, "\033[0c", 4)))
+     {
+       get_ttyp ()->pcon_in_empty = false;
+@@ -1530,12 +1533,12 @@ fhandler_pty_slave::write (const void *ptr, size_t len)
+   if (!(get_ttyp ()->ti.c_oflag & OPOST) ||
+       !(get_ttyp ()->ti.c_oflag & ONLCR))
+     flags |= DISABLE_NEWLINE_AUTO_RETURN;
+-  if (get_ttyp ()->switch_to_pcon_out && !fallback)
++  if (output_to_pcon && !fallback)
+     {
+       GetConsoleMode (get_output_handle (), &dwMode);
+       SetConsoleMode (get_output_handle (), dwMode | flags);
+     }
+-  HANDLE to = (get_ttyp ()->switch_to_pcon_out && !fallback) ?
++  HANDLE to = (output_to_pcon && !fallback) ?
+     get_output_handle () : get_output_handle_cyg ();
+   acquire_output_mutex (INFINITE);
+   if (!process_opost_output (to, buf, nlen, false))
+@@ -1555,7 +1558,7 @@ fhandler_pty_slave::write (const void *ptr, size_t len)
+   release_output_mutex ();
+   mb_str_free (buf);
+   flags = ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+-  if (get_ttyp ()->switch_to_pcon_out && !fallback)
++  if (output_to_pcon && !fallback)
+     SetConsoleMode (get_output_handle (), dwMode | flags);
+ 
+   restore_reattach_pcon ();
 -- 
-Corinna Vinschen
-Cygwin Maintainer
+2.26.2
+
