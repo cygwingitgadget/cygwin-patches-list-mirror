@@ -1,52 +1,26 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
- by sourceware.org (Postfix) with ESMTPS id B901E3851C08
- for <cygwin-patches@cygwin.com>; Mon,  1 Jun 2020 08:59:11 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org B901E3851C08
-Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1Mirb8-1j0rso1Hgi-00etZ7 for <cygwin-patches@cygwin.com>; Mon, 01 Jun 2020
- 10:59:10 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id A1EA7A8100A; Mon,  1 Jun 2020 10:59:09 +0200 (CEST)
-Date: Mon, 1 Jun 2020 10:59:09 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
+ by sourceware.org (Postfix) with ESMTPS id 81AAB3851C26
+ for <cygwin-patches@cygwin.com>; Tue,  2 Jun 2020 12:45:28 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 81AAB3851C26
+Received: from localhost.localdomain (v038192.dynamic.ppp.asahi-net.or.jp
+ [124.155.38.192]) (authenticated)
+ by conuserg-08.nifty.com with ESMTP id 052CikNV010039;
+ Tue, 2 Jun 2020 21:44:53 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 052CikNV010039
+X-Nifty-SrcIP: [124.155.38.192]
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Fix screen distortion after using less for
- native apps.
-Message-ID: <20200601085909.GA6801@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200601061618.893-1-takashi.yano@nifty.ne.jp>
- <20200601152115.3b5492035b186072ea6ead5c@nifty.ne.jp>
+Subject: [PATCH] Cygwin: pty: Fix screen distortion after less for native apps
+ again.
+Date: Tue,  2 Jun 2020 21:44:40 +0900
+Message-Id: <20200602124440.1925-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200601152115.3b5492035b186072ea6ead5c@nifty.ne.jp>
-X-Provags-ID: V03:K1:U38JDSLHkFbd1zSkYudll/qRx7qrX8IVceVR7hQis5xq37vpeTh
- BxLSnnz6yhmvlQvtdWyt89sqM8AoWwcUZlIJUCap7aMrec5XOeMwLbxbS/BZm8Vdd4uy6L2
- UqQCH0RrLffYKY6ARIq2J9INPiKbHnpzvvFS/aQA5xDdM404Y3PVRn/+WBe/c3mG4u5UWCA
- 3X6jQoIk9ubWTCLISUFvw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:eh0GDxb8Tdg=:AeZCX7RMoJ6KpdB+Gz+hjg
- 9iRzF8KML+orCqrSwzxXYZ7njbKfQGJAo6nCM/B6uiO9FRTDh2jERnCfZItNQ31ZQVMLrtFtW
- apUUPaG36lC9noAxjNDqOSZ/O+OI7CIULj81UIEa4erL0siBR/7OPjRc1uJAkgYPCBMCMWr3i
- IfY2PgRFFP/RRMELGMz5uQxatA1A2Ad4h5Ild8i0GeckyoMvGvV/IKP+guV7/Oqjt0CXYTYrC
- /5AQnTcMkVEngL0oIoPGRu3vc4y1+P7MXCSdatHx3LOkkHG8R1mVk+nGVarAIDEFmS+weQn5Q
- aBzwIP1oo6SfE/c/5jKrbjXwc1/OiKVP1z+6EfHnZAurmIWrlkGs2zrg6Uu4Ior030ydDeSEm
- KC9ssYbFE22NtOCq8LN7D4/8sJEXg2qBjSXw4VN+ZXypglzXj0xpdyPXh319IcvpRTOdtxAKe
- qp2D7XFRG5Zl6mHGXfHZ+QDeGqK2RTBbEBzI3dMxB6v1vx+FI3aq6XBCpifcNMcH6u1r9AE7u
- VAcUJ4D0/RA3rnFYhYZtgiDJZu09B8rGgxlettOJao0V6nSavOKiwF2XtS1ZkGHQsSLETWI77
- y4U1uO1Ya+Z8on58QEh7jazpHv+khTcczHT2Io7sDkwo0XrfX8gz54muEok5/W6EnbX+iw5pN
- lulm9YzwWwfHkL01audhPFX/LClL6eS3yMrcW66Eb2T9bdYrOAqpL7uUOqOX8fawh5Uwy5+Fz
- nQ7fICRbJlRVeWJs+Ored5dvIeeeocBb/2wrC3cuWFjFj11LFCw2j90gCkyqQRWGdvxTPMSwE
- HKphNahNix0mdFuwF5LJA6mJr11tmCfY2qA+83/RG1Ql90E5iUbWCEUgOybwyiuu1eHF2v8
-X-Spam-Status: No, score=-99.1 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0,
+ RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_PASS,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -62,29 +36,65 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 01 Jun 2020 08:59:13 -0000
+X-List-Received-Date: Tue, 02 Jun 2020 12:45:32 -0000
 
-On Jun  1 15:21, Takashi Yano via Cygwin-patches wrote:
-> Hi Corinna,
-> 
-> On Mon,  1 Jun 2020 15:16:18 +0900
-> Takashi Yano <takashi.yano@nifty.ne.jp> wrote:
-> > - If the output of non-cygwin apps is browsed using less, screen is
-> >   ocasionally distorted after less exits. This frequently happens
-> >   if cmd.exe is executed after less. This patch fixes the issue.
-> 
-> I have submitted this patch, but it's up to you to decide whether
-> to include it in the cygwin 3.1.5 release.
-> 
-> I apologize again for the submission at the very last minute.
+- Commit c4b060e3fe3bed05b3a69ccbcc20993ad85e163d seems to be not
+  enough. Fixed again.
+---
+ winsup/cygwin/fhandler_tty.cc | 19 ++++++++++++++-----
+ 1 file changed, 14 insertions(+), 5 deletions(-)
 
-No worries, pushed.  I marked this as the 3.1.5 release and will
-release it today.
-
-
-Thanks,
-Corinna
-
+diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+index bcc7648f3..742fa7e33 100644
+--- a/winsup/cygwin/fhandler_tty.cc
++++ b/winsup/cygwin/fhandler_tty.cc
+@@ -1394,10 +1394,6 @@ fhandler_pty_slave::push_to_pcon_screenbuffer (const char *ptr, size_t len,
+ 	    nlen = p0 - buf;
+ 	}
+     }
+-  if (!nlen) /* Nothing to be synchronized */
+-    goto cleanup;
+-  if (get_ttyp ()->switch_to_pcon_out && !is_echo)
+-    goto cleanup;
+   /* Remove ESC sequence which returns results to console
+      input buffer. Without this, cursor position report
+      is put into the input buffer as a garbage. */
+@@ -1413,6 +1409,10 @@ fhandler_pty_slave::push_to_pcon_screenbuffer (const char *ptr, size_t len,
+       memmove (p0, p0+4, nlen - (p0+4 - buf));
+       nlen -= 4;
+     }
++  if (!nlen) /* Nothing to be synchronized */
++    goto cleanup;
++  if (get_ttyp ()->switch_to_pcon_out && !is_echo)
++    goto cleanup;
+ 
+   /* If the ESC sequence ESC[?3h or ESC[?3l which clears console screen
+      buffer is pushed, set need_redraw_screen to trigger redraw screen. */
+@@ -1504,6 +1504,15 @@ fhandler_pty_slave::write (const void *ptr, size_t len)
+ 
+   reset_switch_to_pcon ();
+ 
++  bool screen_alternated_orig = get_ttyp ()->screen_alternated;
++  /* Push slave output to pseudo console screen buffer */
++  if (get_pseudo_console () && !screen_alternated_orig)
++    {
++      acquire_output_mutex (INFINITE);
++      push_to_pcon_screenbuffer ((char *)ptr, len, false);
++      release_output_mutex ();
++    }
++
+   bool output_to_pcon =
+     get_ttyp ()->switch_to_pcon_out && !get_ttyp ()->screen_alternated;
+ 
+@@ -1564,7 +1573,7 @@ fhandler_pty_slave::write (const void *ptr, size_t len)
+   restore_reattach_pcon ();
+ 
+   /* Push slave output to pseudo console screen buffer */
+-  if (get_pseudo_console ())
++  if (get_pseudo_console () && screen_alternated_orig)
+     {
+       acquire_output_mutex (INFINITE);
+       push_to_pcon_screenbuffer ((char *)ptr, len, false);
 -- 
-Corinna Vinschen
-Cygwin Maintainer
+2.26.2
+
