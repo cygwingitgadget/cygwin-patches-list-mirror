@@ -1,87 +1,59 @@
-Return-Path: <arthur2e5@aosc.io>
-Received: from relay1.mymailcheap.com (relay1.mymailcheap.com
- [144.217.248.102])
- by sourceware.org (Postfix) with ESMTPS id F3A153858D34
- for <cygwin-patches@cygwin.com>; Thu, 25 Jun 2020 14:49:39 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org F3A153858D34
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+ by sourceware.org (Postfix) with ESMTPS id 94E473857003
+ for <cygwin-patches@cygwin.com>; Tue, 30 Jun 2020 10:18:59 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 94E473857003
 Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=aosc.io
+ dmarc=none (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org;
- spf=pass smtp.mailfrom=arthur2e5@aosc.io
-Received: from filter2.mymailcheap.com (filter2.mymailcheap.com
- [91.134.140.82])
- by relay1.mymailcheap.com (Postfix) with ESMTPS id 8ECE53ECE3
- for <cygwin-patches@cygwin.com>; Thu, 25 Jun 2020 10:49:39 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
- by filter2.mymailcheap.com (Postfix) with ESMTP id D685A2A514
- for <cygwin-patches@cygwin.com>; Thu, 25 Jun 2020 16:49:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mymailcheap.com;
- s=default; t=1593096578;
- bh=T9YKyTEmNbi8CFm6l4rEi7mCfEjXSOMm1TgRr2Wl3sc=;
- h=Subject:To:References:From:Date:In-Reply-To:From;
- b=y0HtWX3/iScN+c7ylqPr8Hqit6UHvFX8Whgqmwr1D79iJ1NimI9Dakqf+kRmZF4Bw
- PskfG41YDnK5JWmrPxVuTwgqLFVIjPdNRKgyGm9D3YYWKmOssJvNeCwTmEb2o5Ta3T
- ZctqZl/0KbxOzqfwWt/CyolzrfJpJjXeahPI3mzU=
-X-Virus-Scanned: Debian amavisd-new at filter2.mymailcheap.com
-Received: from filter2.mymailcheap.com ([127.0.0.1])
- by localhost (filter2.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id HvcHY_uu7T2r for <cygwin-patches@cygwin.com>;
- Thu, 25 Jun 2020 16:49:37 +0200 (CEST)
-Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
- (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by filter2.mymailcheap.com (Postfix) with ESMTPS
- for <cygwin-patches@cygwin.com>; Thu, 25 Jun 2020 16:49:37 +0200 (CEST)
-Received: from [148.251.23.173] (ml.mymailcheap.com [148.251.23.173])
- by mail20.mymailcheap.com (Postfix) with ESMTP id 9D1E7403ED
- for <cygwin-patches@cygwin.com>; Thu, 25 Jun 2020 14:49:36 +0000 (UTC)
-Authentication-Results: mail20.mymailcheap.com; dkim=pass (1024-bit key;
- unprotected) header.d=aosc.io header.i=@aosc.io header.b="KZWYkZNx"; 
- dkim-atps=neutral
-AI-Spam-Status: Not processed
-Received: from [IPv6:::] (42-98-198-124.static.netvigator.com [42.98.198.124])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest
- SHA256) (No client certificate requested)
- by mail20.mymailcheap.com (Postfix) with ESMTPSA id 46C7D403ED
- for <cygwin-patches@cygwin.com>; Thu, 25 Jun 2020 14:49:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=aosc.io; s=default;
- t=1593096565; bh=T9YKyTEmNbi8CFm6l4rEi7mCfEjXSOMm1TgRr2Wl3sc=;
- h=Subject:To:References:From:Date:In-Reply-To:From;
- b=KZWYkZNxMvknWtjXLoFFXRQLoFAAwYFgzy7UTwSMSAAhw4cDoLn7gcRtXYHejIY+F
- lTNKggOPM/HVzf552Xj8Lx86pcDPGow9nCPrmxgIfduR5KFvu5baq9xzg6+cWXhHza
- WB0InYi2lhOWhR0QYwB1yCokF0P61MDICFmiABgU=
-Subject: Re: [PATCH v2] Cygwin: rewrite cmdline parser
+ spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MODeL-1jRng31Cbx-00OUKQ for <cygwin-patches@cygwin.com>; Tue, 30 Jun 2020
+ 12:18:58 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id D3D59A80864; Tue, 30 Jun 2020 12:18:57 +0200 (CEST)
+Date: Tue, 30 Jun 2020 12:18:57 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-References: <20200624223553.8892-1-arthur2e5@aosc.io>
- <20200625144315.12388-1-arthur2e5@aosc.io>
-From: Mingye Wang <arthur2e5@aosc.io>
-Message-ID: <36d4f94e-70fd-dbb9-2fa7-c597e9ebae59@aosc.io>
-Date: Thu, 25 Jun 2020 22:49:19 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+Subject: Re: [PATCH 1/3 v3] Cygwin: tzcode resync: basics
+Message-ID: <20200630101857.GB3499@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20200522093253.995-1-mark@maxrnd.com>
+ <20200522093253.995-2-mark@maxrnd.com>
+ <20200525120634.GD6801@calimero.vinschen.de>
+ <20200525154901.GG6801@calimero.vinschen.de>
+ <bcff83ee-c3b6-0b99-90d6-650694562250@maxrnd.com>
+ <20200526082736.GH6801@calimero.vinschen.de>
+ <394b2ab3-f239-72a1-21b2-a28952137253@SystematicSw.ab.ca>
+ <Pine.BSF.4.63.2006092130070.1307@m0.truegem.net>
+ <c24d5439-aed4-4ec6-65a0-92f3fcfa0edb@SystematicSw.ab.ca>
 MIME-Version: 1.0
-In-Reply-To: <20200625144315.12388-1-arthur2e5@aosc.io>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 9D1E7403ED
-X-Spamd-Result: default: False [-0.10 / 10.00]; ARC_NA(0.00)[];
- RCVD_VIA_SMTP_AUTH(0.00)[];
- R_DKIM_ALLOW(0.00)[aosc.io:s=default]; FROM_HAS_DN(0.00)[];
- TO_MATCH_ENVRCPT_ALL(0.00)[]; MIME_GOOD(-0.10)[text/plain];
- PREVIOUSLY_DELIVERED(0.00)[cygwin-patches@cygwin.com];
- TO_DN_NONE(0.00)[]; R_SPF_SOFTFAIL(0.00)[~all:c];
- RCPT_COUNT_ONE(0.00)[1]; DMARC_NA(0.00)[aosc.io];
- ML_SERVERS(-3.10)[148.251.23.173]; DKIM_TRACE(0.00)[aosc.io:+];
- RCVD_NO_TLS_LAST(0.10)[]; FROM_EQ_ENVFROM(0.00)[];
- MIME_TRACE(0.00)[0:+];
- ASN(0.00)[asn:24940, ipnet:148.251.0.0/16, country:DE];
- RCVD_COUNT_TWO(0.00)[2]; MID_RHS_MATCH_FROM(0.00)[];
- HFILTER_HELO_BAREIP(3.00)[148.251.23.173,1]
-X-Rspamd-Server: mail20.mymailcheap.com
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, SPF_HELO_NONE, SPF_PASS,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c24d5439-aed4-4ec6-65a0-92f3fcfa0edb@SystematicSw.ab.ca>
+X-Provags-ID: V03:K1:amqNsO4t7aCX9OwVsH4NT2/qs/T3uwbTTiPprBoxjBboOROO+0A
+ ZAAeta5g8ucQj3YvlfbEkTuFSPZ3rdtPmu8S39vhQRzOwXnJpq+0a9ZQL72ztPzLuPe4wFm
+ V+Xkcw0J9YLah1BV6BmtC27FU5vQ1JLKcBzJCPsyRELwj1cyJxEwsrHt0fo7LuCXiIMwnB0
+ EtRcZi+amqhM4wPWGAiwQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:oY/FwIHfeAs=:tL4Fa2mlfw3gx0fWBuxhAK
+ X1PDFJReefkHX0euhBG0b5Aqj5XpbTNWsqVbsTq/5OhBD+vlPaOLBTcIJpc/OK1XIzwmNPLyJ
+ su3yj+lt/kNgirHEUyulskIgAmhw57dXWthI/rdYbP1Zv25ytqosqac3uCxcBK+TUL2tHibk5
+ 8HVfiURaehYcZ+6/UAqvcvxdnw8wBvrN+Qf99wn/msSJPFw/wukq/uGChcG1qy/85v/MUjZkp
+ AJApXhTkKyjQ6fCDZCqCiEjne/K6i2V6+6NVJS4FA6+pbTB8vklmT+CTAEvWe+Ix/KZbiDFkG
+ oo2XWwzQpT9wW0urgFtgaGvGNnKVCXaLTzzbdh6FFljj9zXjjzLuF++pm4U1etM32iyzkwdIf
+ n9YDcnBuYkCBcMqn2mZz0xyO47HE6hpkBIe115/cVKLRlqa2G3maBT6zii3EI4q4Rjv6lZ1OF
+ j85yKfW0Zysi8+d1jZ9wZFYB9GKdwgQhCNC8CNI7gkTwkrBmnt0w875xVSNY7u6DS2HM4lu9W
+ XZJUnitk4T4A6kxMoGpTnjDd7NwzP4GLjnwFX7aBM0j1zk2lN35XooORI3Pqb9kxFnfMH9g81
+ 341GCSBBhXJqJ1anKYNeaXBZtNaz01WIS6zBY6vawGwEmemMMmgiS134l4yZM4hTfNNiz6NC4
+ 7pBhsFFIUFWvDCB4xRMoh6+LRVHNRtaAW2D4p3zSLWnyPfxLI0GL8vJAixQdpV4scnN++chpM
+ 91d77Cnwo7ydAgtX01ikrhoh6TBSOipmKXgtq+zRphXY2LzRClY8BR2/X4sg03FuTuH+Ej9BA
+ niRWS8TTO2Htp5q7d39rLcONXJsjKcYiFb9u9Ji7iE4XcPNaGBYh5FiRxOrsrOkt0XFm+ie
+X-Spam-Status: No, score=-99.5 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -97,10 +69,48 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 25 Jun 2020 14:49:41 -0000
+X-List-Received-Date: Tue, 30 Jun 2020 10:19:01 -0000
 
-On 2020/6/25 22:43, Mingye Wang wrote:
-> + free (word);
+On Jun 10 15:53, Brian Inglis wrote:
+> On 2020-06-09 22:37, Mark Geisert wrote:
+> > On Tue, 9 Jun 2020, Brian Inglis wrote:
+> >> On 2020-05-26 02:27, Corinna Vinschen wrote:
+> >>> On May 26 00:09, Mark Geisert wrote:
+> >>>> Corinna Vinschen wrote:
+> >>>>>> On May 22 02:32, Mark Geisert wrote:
+> >>>>> On May 25 14:06, Corinna Vinschen wrote:
+> >> The tzcode package needs updated to get fixes into zic and zdump.
+> >> Also tzdata was maintained by Yaakov.
+> >>
+> >> Corinna, would you like to keep tzcode co-maintained with Yaakov?
+> >>
+> >> Or Mark, would you like to ITA tzcode and/or tzdata to keep it in sync with the
+> >> base code?
+> >>
+> >> Or would you like me to ITA tzcode and/or tzdata?
+> >> I currently check tzdb weekly in cron to download updates for my own interests.
+> >> I could add cygport builds to that job.
+> > 
+> > This "tzcode" patch I did was a one-shot task just getting some time zone
+> > handling code within the Cygwin DLL up to date.  I don't know if there's any
+> > overlap between what I worked on and the tzcode+tzdata packages.  Eh, just the
+> > internal binary copy of a particular tzdata file which should be kept up to
+> > date: /usr/share/zoneinfo/posixrules.  Dunno how often that changes though.
+> > 
+> > It's fine with me for you to take over both tzcode+tzdata if nobody else
+> > objects.  Sounds like you have a regular schedule for looking over updates which
+> > is more than I have :-).
+> 
+> Thanks Mark,
+> 
+> I'll wait to see if we hear from Corinna or ITA if no response soon.
 
-Grrr, this should not be in there. Waiting for reviews and saving that 
-up for v3.
+You don't have to ask me to ITA packages, really :)
+
+
+Thanks,
+Corinna
+
+-- 
+Corinna Vinschen
+Cygwin Maintainer
