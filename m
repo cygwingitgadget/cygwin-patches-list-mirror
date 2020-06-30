@@ -1,27 +1,57 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
- by sourceware.org (Postfix) with ESMTPS id 3F31C3857025
- for <cygwin-patches@cygwin.com>; Tue, 30 Jun 2020 11:13:27 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 3F31C3857025
-Received: from localhost.localdomain (v038192.dynamic.ppp.asahi-net.or.jp
- [124.155.38.192]) (authenticated)
- by conuserg-12.nifty.com with ESMTP id 05UBCvVp015554;
- Tue, 30 Jun 2020 20:13:01 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 05UBCvVp015554
-X-Nifty-SrcIP: [124.155.38.192]
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Return-Path: <brian.inglis@systematicsw.ab.ca>
+Received: from smtp-out-no.shaw.ca (smtp-out-no.shaw.ca [64.59.134.13])
+ by sourceware.org (Postfix) with ESMTPS id A67FC3851C19
+ for <cygwin-patches@cygwin.com>; Tue, 30 Jun 2020 13:51:22 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org A67FC3851C19
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=SystematicSw.ab.ca
+Authentication-Results: sourceware.org;
+ spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
+Received: from [192.168.1.104] ([24.64.172.44]) by shaw.ca with ESMTP
+ id qGfPjYFMn62brqGfQjNDjb; Tue, 30 Jun 2020 07:51:21 -0600
+X-Authority-Analysis: v=2.3 cv=LKf9vKe9 c=1 sm=1 tr=0
+ a=kiZT5GMN3KAWqtYcXc+/4Q==:117 a=kiZT5GMN3KAWqtYcXc+/4Q==:17
+ a=IkcTkHD0fZMA:10 a=jChkm-x5hCMFubTIiR0A:9 a=QEXdDO2ut3YA:10
+Reply-To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH 1/3 v3] Cygwin: tzcode resync: basics
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: pty,
- termios: Unify thoughts of read ahead beffer handling.
-Date: Tue, 30 Jun 2020 20:12:50 +0900
-Message-Id: <20200630111250.2724-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.27.0
+References: <20200522093253.995-1-mark@maxrnd.com>
+ <20200522093253.995-2-mark@maxrnd.com>
+ <20200525120634.GD6801@calimero.vinschen.de>
+ <20200525154901.GG6801@calimero.vinschen.de>
+ <bcff83ee-c3b6-0b99-90d6-650694562250@maxrnd.com>
+ <20200526082736.GH6801@calimero.vinschen.de>
+ <394b2ab3-f239-72a1-21b2-a28952137253@SystematicSw.ab.ca>
+ <Pine.BSF.4.63.2006092130070.1307@m0.truegem.net>
+ <c24d5439-aed4-4ec6-65a0-92f3fcfa0edb@SystematicSw.ab.ca>
+ <20200630101857.GB3499@calimero.vinschen.de>
+From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
+Autocrypt: addr=Brian.Inglis@SystematicSw.ab.ca; prefer-encrypt=mutual;
+ keydata=
+ mDMEXopx8xYJKwYBBAHaRw8BAQdAnCK0qv/xwUCCZQoA9BHRYpstERrspfT0NkUWQVuoePa0
+ LkJyaWFuIEluZ2xpcyA8QnJpYW4uSW5nbGlzQFN5c3RlbWF0aWNTdy5hYi5jYT6IlgQTFggA
+ PhYhBMM5/lbU970GBS2bZB62lxu92I8YBQJeinHzAhsDBQkJZgGABQsJCAcCBhUKCQgLAgQW
+ AgMBAh4BAheAAAoJEB62lxu92I8Y0ioBAI8xrggNxziAVmr+Xm6nnyjoujMqWcq3oEhlYGAO
+ WacZAQDFtdDx2koSVSoOmfaOyRTbIWSf9/Cjai29060fsmdsDLg4BF6KcfMSCisGAQQBl1UB
+ BQEBB0Awv8kHI2PaEgViDqzbnoe8B9KMHoBZLS92HdC7ZPh8HQMBCAeIfgQYFggAJhYhBMM5
+ /lbU970GBS2bZB62lxu92I8YBQJeinHzAhsMBQkJZgGAAAoJEB62lxu92I8YZwUBAJw/74rF
+ IyaSsGI7ewCdCy88Lce/kdwX7zGwid+f8NZ3AQC/ezTFFi5obXnyMxZJN464nPXiggtT9gN5
+ RSyTY8X+AQ==
+Organization: Systematic Software
+Message-ID: <482e623f-7b4b-1650-96c3-4fc85d7abede@SystematicSw.ab.ca>
+Date: Tue, 30 Jun 2020 07:51:19 -0600
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
+In-Reply-To: <20200630101857.GB3499@calimero.vinschen.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-CA
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0,
- RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_PASS,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+X-CMAE-Envelope: MS4wfD4iGEeIldAlZ8tcdfHq1GsEZ4lo4TrMMSI9M8MdR8O11baJSkN71gL4qR5ZdFyAARJTrkbdxh6tcRcmPmdb+7XZNKIHq5CeQIqoQO1Ek/xLUGI8qK1B
+ cnLhTlEQ6AQ77Zp3sIdxLz9J7ExMO9Bi1pJEazggGIj8ZuB3nFoZPeDY4sLrTJ/bby/dKztaTbAZNA==
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
+ KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW, SPF_HELO_NONE, SPF_NONE,
+ TXREP autolearn=no autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -36,180 +66,52 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 30 Jun 2020 11:13:29 -0000
+X-List-Received-Date: Tue, 30 Jun 2020 13:51:24 -0000
 
-- Return value of eat_readahead() is redefined. The return values
-  of fhandler_termios::eat_readahead() and fhandler_pty_slave::
-  eat_readahead() were little bit different. This patch unifies
-  them to number of bytes eaten by eat_readahead().
-- Considerration for raixget() is added to fhandler_pty_master::
-  accept_input() code.
-- Transfering contents of read ahead buffer in
-  fhandler_pty_master::transfer_input_to_pcon() is removed since
-  it is not necessary.
-- fhandler_pty_slave::eat_readahead() ckecks EOL only when ICANON
-  is set.
-- Guard for _POSIX_VDISABLE is added in checking EOL.
----
- winsup/cygwin/fhandler_termios.cc | 20 ++++++++---------
- winsup/cygwin/fhandler_tty.cc     | 37 +++++++++++++------------------
- 2 files changed, 26 insertions(+), 31 deletions(-)
+On 2020-06-30 04:18, Corinna Vinschen wrote:
+> On Jun 10 15:53, Brian Inglis wrote:
+>> On 2020-06-09 22:37, Mark Geisert wrote:
+>>> On Tue, 9 Jun 2020, Brian Inglis wrote:
+>>>> On 2020-05-26 02:27, Corinna Vinschen wrote:
+>>>>> On May 26 00:09, Mark Geisert wrote:
+>>>>>> Corinna Vinschen wrote:
+>>>>>>>> On May 22 02:32, Mark Geisert wrote:
+>>>>>>> On May 25 14:06, Corinna Vinschen wrote:
+>>>> The tzcode package needs updated to get fixes into zic and zdump.
+>>>> Also tzdata was maintained by Yaakov.
+>>>>
+>>>> Corinna, would you like to keep tzcode co-maintained with Yaakov?
+>>>>
+>>>> Or Mark, would you like to ITA tzcode and/or tzdata to keep it in sync with the
+>>>> base code?
+>>>>
+>>>> Or would you like me to ITA tzcode and/or tzdata?
+>>>> I currently check tzdb weekly in cron to download updates for my own interests.
+>>>> I could add cygport builds to that job.
+>>>
+>>> This "tzcode" patch I did was a one-shot task just getting some time zone
+>>> handling code within the Cygwin DLL up to date.  I don't know if there's any
+>>> overlap between what I worked on and the tzcode+tzdata packages.  Eh, just the
+>>> internal binary copy of a particular tzdata file which should be kept up to
+>>> date: /usr/share/zoneinfo/posixrules.  Dunno how often that changes though.
+>>>
+>>> It's fine with me for you to take over both tzcode+tzdata if nobody else
+>>> objects.  Sounds like you have a regular schedule for looking over updates which
+>>> is more than I have :-).
+>>
+>> Thanks Mark,
+>>
+>> I'll wait to see if we hear from Corinna or ITA if no response soon.
+> 
+> You don't have to ask me to ITA packages, really :)
 
-diff --git a/winsup/cygwin/fhandler_termios.cc b/winsup/cygwin/fhandler_termios.cc
-index b03478b87..ac1d5bd5c 100644
---- a/winsup/cygwin/fhandler_termios.cc
-+++ b/winsup/cygwin/fhandler_termios.cc
-@@ -268,25 +268,25 @@ fhandler_termios::eat_readahead (int n)
- {
-   int oralen = ralen ();
-   if (n < 0)
--    n = ralen ();
--  if (n > 0 && ralen () > 0)
-+    n = ralen () - raixget ();
-+  if (n > 0 && ralen () > raixget ())
-     {
--      if ((int) (ralen () -= n) < 0)
--	ralen () = 0;
-+      if ((int) (ralen () -= n) < (int) raixget ())
-+	ralen () = raixget ();
-       /* If IUTF8 is set, the terminal is in UTF-8 mode.  If so, we erase
- 	 a complete UTF-8 multibyte sequence on VERASE/VWERASE.  Otherwise,
- 	 if we only erase a single byte, invalid unicode chars are left in
- 	 the input. */
-       if (tc ()->ti.c_iflag & IUTF8)
--	while (ralen () > 0 &&
-+	while (ralen () > raixget () &&
- 	       ((unsigned char) rabuf ()[ralen ()] & 0xc0) == 0x80)
- 	  --ralen ();
--
--      if (raixget () >= ralen ())
--	raixget () = raixput () = ralen () = 0;
--      else if (raixput () > ralen ())
--	raixput () = ralen ();
-     }
-+  oralen = oralen - ralen ();
-+  if (raixget () >= ralen ())
-+    raixget () = raixput () = ralen () = 0;
-+  else if (raixput () > ralen ())
-+    raixput () = ralen ();
- 
-   return oralen;
- }
-diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index 0f95cec2e..a61167116 100644
---- a/winsup/cygwin/fhandler_tty.cc
-+++ b/winsup/cygwin/fhandler_tty.cc
-@@ -548,6 +548,7 @@ fhandler_pty_master::accept_input ()
- 
-   WaitForSingleObject (input_mutex, INFINITE);
- 
-+  char *p = rabuf () + raixget ();
-   bytes_left = eat_readahead (-1);
- 
-   if (to_be_read_from_pcon ())
-@@ -559,7 +560,6 @@ fhandler_pty_master::accept_input ()
-     }
-   else
-     {
--      char *p = rabuf ();
-       DWORD rc;
-       DWORD written = 0;
- 
-@@ -1171,10 +1171,10 @@ fhandler_pty_slave::update_pcon_input_state (bool need_lock)
- 	  '\n',
- 	  '\r'
- 	};
--	if (is_line_input () && memchr (eols, c, sizeof (eols)))
-+	if (is_line_input () && c && memchr (eols, c, sizeof (eols)))
- 	  saw_accept = true;
--	if ((get_ttyp ()->ti.c_lflag & ISIG) &&
--	    memchr (sigs, c, sizeof (sigs)))
-+	if ((get_ttyp ()->ti.c_lflag & ISIG)
-+	    && c && memchr (sigs, c, sizeof (sigs)))
- 	  saw_accept = true;
-       }
-   get_ttyp ()->pcon_in_empty = pipe_empty && !(ralen () > raixget ());
-@@ -1189,7 +1189,7 @@ fhandler_pty_slave::update_pcon_input_state (bool need_lock)
- int
- fhandler_pty_slave::eat_readahead (int n)
- {
--  int oralen = ralen () - raixget ();
-+  int oralen = ralen ();
-   if (n < 0)
-     n = ralen () - raixget ();
-   if (n > 0 && ralen () > raixget ())
-@@ -1202,7 +1202,8 @@ fhandler_pty_slave::eat_readahead (int n)
-       };
-       while (n > 0 && ralen () > raixget ())
- 	{
--	  if (memchr (eols, rabuf ()[ralen ()-1], sizeof (eols)))
-+	  if (is_line_input () && rabuf ()[ralen ()-1]
-+	      && memchr (eols, rabuf ()[ralen ()-1], sizeof (eols)))
- 	    break;
- 	  -- n;
- 	  -- ralen ();
-@@ -1213,15 +1214,15 @@ fhandler_pty_slave::eat_readahead (int n)
- 	 if we only erase a single byte, invalid unicode chars are left in
- 	 the input. */
-       if (get_ttyp ()->ti.c_iflag & IUTF8)
--	while (ralen () > 0 &&
-+	while (ralen () > raixget () &&
- 	       ((unsigned char) rabuf ()[ralen ()] & 0xc0) == 0x80)
- 	  --ralen ();
--
--      if (raixget () >= ralen ())
--	raixget () = raixput () = ralen () = 0;
--      else if (raixput () > ralen ())
--	raixput () = ralen ();
-     }
-+  oralen = oralen - ralen ();
-+  if (raixget () >= ralen ())
-+    raixget () = raixput () = ralen () = 0;
-+  else if (raixput () > ralen ())
-+    raixput () = ralen ();
- 
-   return oralen;
- }
-@@ -1245,7 +1246,7 @@ fhandler_pty_slave::get_readahead_into_buffer (char *buf, size_t buflen)
- 	};
- 	buf[copied_chars++] = (unsigned char)(ch & 0xff);
- 	buflen--;
--	if (is_line_input () && memchr (eols, ch & 0xff, sizeof (eols)))
-+	if (is_line_input () && ch && memchr (eols, ch & 0xff, sizeof (eols)))
- 	  break;
-       }
- 
-@@ -1264,7 +1265,7 @@ fhandler_pty_slave::get_readahead_valid (void)
- 	'\n'
-       };
-       for (size_t i=raixget (); i<ralen (); i++)
--	if (memchr (eols, rabuf ()[i], sizeof (eols)))
-+	if (rabuf ()[i] && memchr (eols, rabuf ()[i], sizeof (eols)))
- 	  return true;
-       return false;
-     }
-@@ -2554,7 +2555,7 @@ fhandler_pty_master::write (const void *ptr, size_t len)
-       };
-       if (tc ()->ti.c_lflag & ISIG)
- 	for (size_t i=0; i<sizeof (sigs); i++)
--	  if (memchr (buf, sigs[i], nlen))
-+	  if (sigs[i] && memchr (buf, sigs[i], nlen))
- 	    {
- 	      eat_readahead (-1);
- 	      SetEvent (input_available_event);
-@@ -3224,12 +3225,6 @@ fhandler_pty_master::transfer_input_to_pcon (void)
-       if (WriteFile (to_slave, buf, n, &n, 0))
- 	transfered += n;
-     }
--  DWORD bytes_left = eat_readahead (-1);
--  if (bytes_left)
--    {
--      if (WriteFile (to_slave, rabuf (), bytes_left, &n, NULL))
--	transfered += n;
--    }
-   if (transfered)
-     get_ttyp ()->pcon_in_empty = false;
-   ReleaseMutex (input_mutex);
+They are currently under your/Yaakov's maintainership - I assume as little as
+possible so have an ITA under apps - please respond there - if you agree
+Jon/Marco can update
+
 -- 
-2.27.0
+Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
 
+This email may be disturbing to some readers as it contains
+too much technical detail. Reader discretion is advised.
+[Data in IEC units and prefixes, physical quantities in SI.]
