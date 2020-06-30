@@ -1,59 +1,52 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
- by sourceware.org (Postfix) with ESMTPS id 94E473857003
- for <cygwin-patches@cygwin.com>; Tue, 30 Jun 2020 10:18:59 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 94E473857003
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+ by sourceware.org (Postfix) with ESMTPS id B1ACB3858D37
+ for <cygwin-patches@cygwin.com>; Tue, 30 Jun 2020 10:30:46 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org B1ACB3858D37
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org;
  spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MODeL-1jRng31Cbx-00OUKQ for <cygwin-patches@cygwin.com>; Tue, 30 Jun 2020
- 12:18:58 +0200
+ mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1M1HqM-1jnTiL1xfu-002lda; Tue, 30 Jun 2020 12:30:43 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id D3D59A80864; Tue, 30 Jun 2020 12:18:57 +0200 (CEST)
-Date: Tue, 30 Jun 2020 12:18:57 +0200
+ id 9CD17A80864; Tue, 30 Jun 2020 12:30:40 +0200 (CEST)
+Date: Tue, 30 Jun 2020 12:30:40 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 1/3 v3] Cygwin: tzcode resync: basics
-Message-ID: <20200630101857.GB3499@calimero.vinschen.de>
+To: Mingye Wang <arthur2e5@aosc.io>
+Cc: cygwin-patches@cygwin.com
+Subject: Re: [PATCH v2] Cygwin: rewrite cmdline parser
+Message-ID: <20200630103040.GC3499@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200522093253.995-1-mark@maxrnd.com>
- <20200522093253.995-2-mark@maxrnd.com>
- <20200525120634.GD6801@calimero.vinschen.de>
- <20200525154901.GG6801@calimero.vinschen.de>
- <bcff83ee-c3b6-0b99-90d6-650694562250@maxrnd.com>
- <20200526082736.GH6801@calimero.vinschen.de>
- <394b2ab3-f239-72a1-21b2-a28952137253@SystematicSw.ab.ca>
- <Pine.BSF.4.63.2006092130070.1307@m0.truegem.net>
- <c24d5439-aed4-4ec6-65a0-92f3fcfa0edb@SystematicSw.ab.ca>
+Mail-Followup-To: Mingye Wang <arthur2e5@aosc.io>,
+	cygwin-patches@cygwin.com
+References: <20200624223553.8892-1-arthur2e5@aosc.io>
+ <20200625144315.12388-1-arthur2e5@aosc.io>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c24d5439-aed4-4ec6-65a0-92f3fcfa0edb@SystematicSw.ab.ca>
-X-Provags-ID: V03:K1:amqNsO4t7aCX9OwVsH4NT2/qs/T3uwbTTiPprBoxjBboOROO+0A
- ZAAeta5g8ucQj3YvlfbEkTuFSPZ3rdtPmu8S39vhQRzOwXnJpq+0a9ZQL72ztPzLuPe4wFm
- V+Xkcw0J9YLah1BV6BmtC27FU5vQ1JLKcBzJCPsyRELwj1cyJxEwsrHt0fo7LuCXiIMwnB0
- EtRcZi+amqhM4wPWGAiwQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:oY/FwIHfeAs=:tL4Fa2mlfw3gx0fWBuxhAK
- X1PDFJReefkHX0euhBG0b5Aqj5XpbTNWsqVbsTq/5OhBD+vlPaOLBTcIJpc/OK1XIzwmNPLyJ
- su3yj+lt/kNgirHEUyulskIgAmhw57dXWthI/rdYbP1Zv25ytqosqac3uCxcBK+TUL2tHibk5
- 8HVfiURaehYcZ+6/UAqvcvxdnw8wBvrN+Qf99wn/msSJPFw/wukq/uGChcG1qy/85v/MUjZkp
- AJApXhTkKyjQ6fCDZCqCiEjne/K6i2V6+6NVJS4FA6+pbTB8vklmT+CTAEvWe+Ix/KZbiDFkG
- oo2XWwzQpT9wW0urgFtgaGvGNnKVCXaLTzzbdh6FFljj9zXjjzLuF++pm4U1etM32iyzkwdIf
- n9YDcnBuYkCBcMqn2mZz0xyO47HE6hpkBIe115/cVKLRlqa2G3maBT6zii3EI4q4Rjv6lZ1OF
- j85yKfW0Zysi8+d1jZ9wZFYB9GKdwgQhCNC8CNI7gkTwkrBmnt0w875xVSNY7u6DS2HM4lu9W
- XZJUnitk4T4A6kxMoGpTnjDd7NwzP4GLjnwFX7aBM0j1zk2lN35XooORI3Pqb9kxFnfMH9g81
- 341GCSBBhXJqJ1anKYNeaXBZtNaz01WIS6zBY6vawGwEmemMMmgiS134l4yZM4hTfNNiz6NC4
- 7pBhsFFIUFWvDCB4xRMoh6+LRVHNRtaAW2D4p3zSLWnyPfxLI0GL8vJAixQdpV4scnN++chpM
- 91d77Cnwo7ydAgtX01ikrhoh6TBSOipmKXgtq+zRphXY2LzRClY8BR2/X4sg03FuTuH+Ej9BA
- niRWS8TTO2Htp5q7d39rLcONXJsjKcYiFb9u9Ji7iE4XcPNaGBYh5FiRxOrsrOkt0XFm+ie
-X-Spam-Status: No, score=-99.5 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+In-Reply-To: <20200625144315.12388-1-arthur2e5@aosc.io>
+X-Provags-ID: V03:K1:9xV6tySD5LFULToOSOBMhFin6PaEwOKWCZlJJc7ag8YQivo6aiw
+ vjhq8QQ5BORoPtoR83xpJPs1okU0oYnTv9K2Thdg8PkhD/1Q0UlSPPcOZZrl7a6woklhrp5
+ +5pwnvdyFXOc8t2qTxAFuruMqinDmsxIgj9Efqyq3pR+QexUC+hU9fHauJCz/suT0LXY1Da
+ 1XxhQ8pAoXndwq1W5rTeA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:3+c5dqfH8eA=:cKEbiOUW5l3HqesGLvwhHn
+ gSiCSdtY6qR8Rtf7C+YxdsLfzzdheJv4GOKAyFKwGZL8MyHbUr5t7f/pdak1iUSq2J4BxG4l2
+ UOWqtYi8ji02lsD2Yz8+KQhXVoIfi3ilWCyosKRF/DuK4HHCSdvkaak6cggcJMHfQm9LHK7wA
+ fAZWOizmY9PATa4+zfYAIhPSjUMhM47E25z3NuNE74+BHNcmb+Wh9P7bdjLMyaPNTd3vbKHgz
+ KEghg98LgTjKORrjYESVPy5OUp/mFg/78qD7PYp4ZURIbQcfqaXkuZ5CW5u6kxLz18/9NKu6R
+ /WUuQLTeeBowGuQGMlZLl4Lob1oO4Ni4dtY/wWAj9VXpxmanTGpxCDYkZ/SEs/vfd54Zxuv11
+ nqB8AGI4Drt64HOiG6r02MV0JqHpwvdxsHxvhCSUG9yofNxtGS8R8qs9aCFBocqQXk/izr1GE
+ AHxQ3iZv9tThGsKjZ06QaXNjKGCuc6BQeQCF53xYl4e131QgYndpgluCgnDt2mwevmJ0yC/1M
+ IO0xijC/N4vWrljveqVR45sHtHLNoe8E1duD6g0SbPKaOXPhx8e/FRdsam1JVF2To9xhfqZfK
+ qm16OXCATYM3aEFmtc4f2vjZcYbI0obDA6oFMtlB7F3B00kt/bVoSorSnsMu0YvriT/Zc4vsC
+ rFp8JrgoDB2y2MjzK1iRqVS+AAfqbiJQoDEWn+bhW4E2j15AiwelSBgY0yth67UyFqhABouC8
+ pq1UlFNq3rSdGBqo//Jo8qK1xOZsOZ8wb/wHWxjJHEolcfP+4XMhJWyKtw/O98nzZZdnOfB36
+ DNptAe4P0nOWjnLjPdxx1Y5JDLGhWasdliAiWsIzzL04dLeKJYaLa2mGL2LdK7OvaLdpUff
+X-Spam-Status: No, score=-99.2 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -69,47 +62,60 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 30 Jun 2020 10:19:01 -0000
+X-List-Received-Date: Tue, 30 Jun 2020 10:30:48 -0000
 
-On Jun 10 15:53, Brian Inglis wrote:
-> On 2020-06-09 22:37, Mark Geisert wrote:
-> > On Tue, 9 Jun 2020, Brian Inglis wrote:
-> >> On 2020-05-26 02:27, Corinna Vinschen wrote:
-> >>> On May 26 00:09, Mark Geisert wrote:
-> >>>> Corinna Vinschen wrote:
-> >>>>>> On May 22 02:32, Mark Geisert wrote:
-> >>>>> On May 25 14:06, Corinna Vinschen wrote:
-> >> The tzcode package needs updated to get fixes into zic and zdump.
-> >> Also tzdata was maintained by Yaakov.
-> >>
-> >> Corinna, would you like to keep tzcode co-maintained with Yaakov?
-> >>
-> >> Or Mark, would you like to ITA tzcode and/or tzdata to keep it in sync with the
-> >> base code?
-> >>
-> >> Or would you like me to ITA tzcode and/or tzdata?
-> >> I currently check tzdb weekly in cron to download updates for my own interests.
-> >> I could add cygport builds to that job.
-> > 
-> > This "tzcode" patch I did was a one-shot task just getting some time zone
-> > handling code within the Cygwin DLL up to date.  I don't know if there's any
-> > overlap between what I worked on and the tzcode+tzdata packages.  Eh, just the
-> > internal binary copy of a particular tzdata file which should be kept up to
-> > date: /usr/share/zoneinfo/posixrules.  Dunno how often that changes though.
-> > 
-> > It's fine with me for you to take over both tzcode+tzdata if nobody else
-> > objects.  Sounds like you have a regular schedule for looking over updates which
-> > is more than I have :-).
-> 
-> Thanks Mark,
-> 
-> I'll wait to see if we hear from Corinna or ITA if no response soon.
+Hi Mingye,
 
-You don't have to ask me to ITA packages, really :)
+On Jun 25 22:43, Mingye Wang wrote:
+> This commit rewrites the cmdline parser to achieve the following:
+> * MSVCRT compatibility. Except for the single-quote handling (an
+>   extension for compatibility with old Cygwin), the parser now
+>   interprets option boundaries exactly like MSVCR since 2008. This fixes
+>   the issue where our escaping does not work with our own parsing.
+> * Clarity. Since globify() is no longer responsible for handling the
+>   opening and closing of quotes, the code is much simpler.
+> * Sanity. The GLOB_NOCHECK flag is removed, so a failed glob correctly
+>   returns the literal value. Without the change, anything path-like
+>   would be garbled by globify's escaping.
+> 
+> Some clarifications are made in the documentation for when globs are not
+> expanded.  A minor change was made to insert_file to remove the memory
+> leak with multiple files.
+> 
+> The change fixes two complaints of mine:
+> * That cygwin is incompatible with its own escape.[1]
+> * That there is no way to echo `C:\"` from win32.[2]
+>   [1]: https://cygwin.com/pipermail/cygwin/2020-June/245162.html
+>   [2]: https://cygwin.com/pipermail/cygwin/2019-October/242790.html
+> 
+> (It's never the point to spawn cygwin32 from cygwin64. Consistency
+> matters: with yourself always, and with the outside world when you are
+> supposed to.)
+
+Apart from the small free() problem, you mention in your reply to self,
+this patch looks great at first glance.
+
+Three questions/requests if you don't mind:
+
+- Would you mind to send the corrected version yet?
+
+- A contribution like this still(*) requires the 2-clause BSD waiver per
+  the winsup/CONTRIBUTORS file, see the chapter "Before you get started"
+  on https://cygwin.com/contrib.html
+
+- Can you please take a bit of time and try to outline in how far this
+  change introduces backward compatibility problems with the old code?
+  I don't mean the obvious bug like the backslash problem, but rather
+  the question is, what input did something useful before which doesn't
+  work the same way now?  I'd like to get a feeling how much this may
+  affect existing scripts.
 
 
 Thanks,
 Corinna
+
+
+(*) IIRC, 2020 is the last year requiring this...
 
 -- 
 Corinna Vinschen
