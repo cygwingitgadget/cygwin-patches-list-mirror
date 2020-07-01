@@ -1,52 +1,51 @@
 Return-Path: <corinna-cygwin@cygwin.com>
 Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
- by sourceware.org (Postfix) with ESMTPS id BB9433860C3D
- for <cygwin-patches@cygwin.com>; Wed,  1 Jul 2020 07:27:55 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org BB9433860C3D
+ by sourceware.org (Postfix) with ESMTPS id 654E33861029
+ for <cygwin-patches@cygwin.com>; Wed,  1 Jul 2020 07:28:03 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 654E33861029
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org;
  spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MkYkI-1j5snM0lGI-00m16s for <cygwin-patches@cygwin.com>; Wed, 01 Jul 2020
- 09:27:54 +0200
+ mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1Mv3I0-1izwbi0MxU-00r3u8 for <cygwin-patches@cygwin.com>; Wed, 01 Jul 2020
+ 09:28:02 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 1D271A80991; Wed,  1 Jul 2020 09:27:48 +0200 (CEST)
-Date: Wed, 1 Jul 2020 09:27:48 +0200
+ id 2622EA80991; Wed,  1 Jul 2020 09:27:59 +0200 (CEST)
+Date: Wed, 1 Jul 2020 09:27:59 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Discard CSI > Pm m sequence from native
- windows apps.
-Message-ID: <20200701072748.GI3499@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: pty, termios: Unify thoughts of read ahead
+ beffer handling.
+Message-ID: <20200701072759.GJ3499@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200630111213.2678-1-takashi.yano@nifty.ne.jp>
+References: <20200630111250.2724-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200630111213.2678-1-takashi.yano@nifty.ne.jp>
-X-Provags-ID: V03:K1:Eksqfl3Y2DuOV4LQZDKx+MEbCOTAQ173/EF2OYmmA8lkxC2kokY
- w9fqIvnHva5OlbT1rCnLgj29kor2H3tXRs/mcFClDvgxl4P1pGfuHnYdqwey7vxWjEkDNWH
- E7Wq3kLud5+gUBZNdDqu8fnXh5FeMPPXxf0gd04e0ewEU75sy1uN5PovcBZnzagX6Z3knLy
- nPPYuHsI0LH2yy4SHoJSA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:KJhbiWvYTD0=:FlCmyMepKjie6ADQjwH9Ra
- Wmray1pErR1qg2KfzVFOLBnn13DzikDIusb2T6vz1b4m+4MrjnkjBmW8iGgJHIlvoJf+TBYCA
- LW4+NyX4aje/LJl/Sak6400jWzXHEjwbxcIrFxS51JDcLNg+0wM0VqzLWBL3Bb8xQtGxJZtMC
- SpgKe8JwyoMRVvqBZ2giu3I4xKA1cIUIaDgsCH+I8Acl0B1W1IzoLOGfuy1lbGu55W4ioWtgR
- vj80LutGNSKYZMXfCz6qD7ZFy9OzjdUzWgF2he+2IQx2EXEKa6PWOpvtNS/3GuAsZL0jt0tRK
- kAIiwGkwkHWy9thVWv8bQ59C9rWEb5iYcVTEBaqs7ttdfxhGG4t+CMKV/4yzvu5Dz0QUW007S
- qjQWDCrMCCJUm3HGaHBiRhBk56OiHS7ursE/sJm5c1EsmCkpaR/kJrw2a25GlXQy2GSsTlsd5
- JcL4HHrQlbi7hPU0bOBrVhg6aqzs4AVLryuMupJh/jANXusJTmitSywQOseIB6RNjkqfN/cpU
- 5QfY6neYXitoeFK5GCSmY8Y0jwXGhrkG5UFrLOHDos4cL+RSbXD4TLlDD/KXezoZptdCcu+/c
- 16KV/KuVUk1XddaWp316sr948lr7Go6+SBWBvViFXeFs+CniCUvUrEok8POIRnFfCYu98IVsq
- 4pUY4lK8GVJnxk4ETkwU4dD4I8snTLRQHSLk/XO+2ZqIYjly1PjDq0QMAmUWYdQgXV45qW+Lx
- RPlYjzDQrniP9V3benoEsbtX1ypa0BuCcKU3rVSpnd8LVzPiO/SLBKU9mTahvf3oh1bU+XGLh
- 2cS7jqE3A3FDwulnFOUPxVrbqpWsCSKHxkoNWlv8P6iSz1CEZ7q1zyuR3lEfXTnqCl5Xj1OXS
- PKAsC165Y4cV984U+q2w==
-X-Spam-Status: No, score=-99.6 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+In-Reply-To: <20200630111250.2724-1-takashi.yano@nifty.ne.jp>
+X-Provags-ID: V03:K1:J3xdnwhtgdTT5J5UYH0crNf/fOUY66cM5KniqHmL/moGCemoi+4
+ TBS/EIypZCoDW6Pn5QMD4K0PLoGjYwLKnP/aRwL/HS8R4LCxXJcY2eLZPJvLRm/MPUi9OnM
+ AttKCiwKEJVKYm3P9+7JUn9YXC5XPgP4/l5VOX0DWg7nuO+ECPDs5Lq4nATTiABzDHVX1Z6
+ /KNg3ThWULR2V6HdgvCRg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:0NwQ4TtzsIE=:bv3rYUEI6UCvYdZyt+WTgZ
+ tGCJJaDLksm4/7xHVlmB1MQN+MOJKI05H3DDP4ZjHmAqCUOG2jdC/rwz2DMZGFHNES3B+/Mo/
+ X6fa8/hnTSo9zdz1UDCNXqV3j9wzG0xUGS6yLw9LV3EraQDlQ/CDzDLU25WHHuj8oklnKjwsQ
+ 6cErzY6aoXJECn2BKG4LpMpLyhfiA2a2GT+6BKf2cQRWmncjyUj3cNYf/QAXuXmW3TLGuoqgh
+ G+TQJ5Kc7zi+o1xXG9vNk2UpbCjCybKmFDPgatJf8tI7uAJFKAil15JfTrWigSgRjzdjhJYBn
+ 7jeA8+AaSy/3+6h2tYx+G/cvA+mroe74gE96ZYFMDMetBChfvjPjg/6s39KnsZOlHTiVk4Ak/
+ MU8JSIPTv87gHUb0kLQ83ZfXJ7SekvuQM+rUqUlVcK1kIMAsVkGH8aiE6McVTv0rgnOBWnK1a
+ IM+o8DORpq3gQReHCcYiD0ZpYqkEC05CboOMCk7F2O4LAzIS6VrdofvU5aUh0hDd3rcou6BbQ
+ nnLVoCaKuVnn7zu9jjKPu/lFzm+Rn1CH28r6HIRswpzrm7ZyuZtjWQzH2o21Gu6R0ZL4iT6QQ
+ 6MQYjQRaYS4kQlP4bEwLry31bcmOxYvNrOGoUAPi2dGzedtqATLUbdrPE3c7ZKNxarfOBnvI3
+ /cpN8H9gEm67L/2SxoTbF6+euUC7MKh/d2TozXsCpLahl4v4gO7y87hB0y2aLKdmqU8N548iw
+ IEymS5QCkht2kr6gbI3BoUmyY8bznVGIEEA0TyWeFBs+ZgTLgYGQlhUfLsygVfhpP2/nwHXs1
+ JDnU8otUQbAIHCSJeJIN/4CDvau8Ri8ExXSG4pFgTGKvjJlMGp97aCcYq0lCeYQZGTfpp/d
+X-Spam-Status: No, score=-99.3 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -62,18 +61,25 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 01 Jul 2020 07:27:57 -0000
+X-List-Received-Date: Wed, 01 Jul 2020 07:28:04 -0000
 
 On Jun 30 20:12, Takashi Yano via Cygwin-patches wrote:
-> - If vim is started from WSL (Ubuntu) which is executed in pseudo
->   console in mintty, shift key and ctrl key do not work. Though
->   this issue is similar to the issue resolved by commit
->   4527541ec66af8d82bb9dba5d25afdf489d71271, that commit is not
->   effective for this issue. This patch fixes the issue by discarding
->   "CSI > Pm m" in fhandler_pty_master::pty_master_fwd_thread().
+> - Return value of eat_readahead() is redefined. The return values
+>   of fhandler_termios::eat_readahead() and fhandler_pty_slave::
+>   eat_readahead() were little bit different. This patch unifies
+>   them to number of bytes eaten by eat_readahead().
+> - Considerration for raixget() is added to fhandler_pty_master::
+>   accept_input() code.
+> - Transfering contents of read ahead buffer in
+>   fhandler_pty_master::transfer_input_to_pcon() is removed since
+>   it is not necessary.
+> - fhandler_pty_slave::eat_readahead() ckecks EOL only when ICANON
+>   is set.
+> - Guard for _POSIX_VDISABLE is added in checking EOL.
 > ---
->  winsup/cygwin/fhandler_tty.cc | 28 ++++++++++++++++++++++++++++
->  1 file changed, 28 insertions(+)
+>  winsup/cygwin/fhandler_termios.cc | 20 ++++++++---------
+>  winsup/cygwin/fhandler_tty.cc     | 37 +++++++++++++------------------
+>  2 files changed, 26 insertions(+), 31 deletions(-)
 
 Pushed.
 
