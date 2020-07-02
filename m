@@ -1,49 +1,53 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
- by sourceware.org (Postfix) with ESMTPS id 63EB43858D34
- for <cygwin-patches@cygwin.com>; Thu,  2 Jul 2020 07:47:51 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 63EB43858D34
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+ by sourceware.org (Postfix) with ESMTPS id A5DAE3858D34
+ for <cygwin-patches@cygwin.com>; Thu,  2 Jul 2020 07:48:59 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org A5DAE3858D34
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org;
  spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
 Received: from calimero.vinschen.de ([217.91.18.234]) by
- mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1M8hlZ-1jmCzE3UuX-004iYQ for <cygwin-patches@cygwin.com>; Thu, 02 Jul 2020
- 09:47:49 +0200
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1Mq2Sa-1j4w9o15Aw-00n7Am for <cygwin-patches@cygwin.com>; Thu, 02 Jul 2020
+ 09:48:58 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 2C6F6A80926; Thu,  2 Jul 2020 09:47:48 +0200 (CEST)
-Date: Thu, 2 Jul 2020 09:47:48 +0200
+ id CFDE1A80926; Thu,  2 Jul 2020 09:48:57 +0200 (CEST)
+Date: Thu, 2 Jul 2020 09:48:57 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 0/8] Fix dumper for x86_64
-Message-ID: <20200702074748.GO3499@calimero.vinschen.de>
+Subject: Re: [PATCH 8/8] Cygwin: Consider DLL rebasing when computing dumper
+ exclusions
+Message-ID: <20200702074857.GP3499@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20200701212529.13998-1-jon.turney@dronecode.org.uk>
+ <20200701212529.13998-9-jon.turney@dronecode.org.uk>
+ <20200702074317.GM3499@calimero.vinschen.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200701212529.13998-1-jon.turney@dronecode.org.uk>
-X-Provags-ID: V03:K1:g0nu312dNFv1FlpGF0K8HgQvMXUwnI2oRBPioL3xuft1mrwwTQi
- lKLbQwXM5WAOXmr/Kh9wyZEL58Mt9EaDCw7R+FH+PBip723IhZDi389suP94UO44DsrwQ1l
- 6wfFFqaXb2nCWdtcf8G5gJUgWCPxDzftjMuknWVOo51nBefPClotAYzjWZYAAQwDHQj2Ece
- re7YQ/SI/Chu95jKgAmuA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:1yfEWENrz+o=:QWbPKrVptj9bJUjwkVSvlw
- AlLtdW+Ys99YpqYzs65luLrUvAf//ElUrb3zMO/TDe6aWrLFLHv+jjFMNA2sSClPHzH7n81MU
- ls3vnSHEoPFvl2pihF4qzyO0Ll1ewyN6q67ATw7gW7z0UnGvJdI8iwzHh0mh/VVrd3Qv14fAx
- bP9sWWsStl7DjEMXFIsuZKKTbftLZOkty/ecDujtFjkj3u7TKC/OhS1bBJQQ3hM27v6JqbDnH
- Wup/Csxt05QOHldmKBuIlsr6Rb/vFulurfGevVO8FNvSox3da+qu01WUPxATS+RlrhDI29uHF
- cjyYhlQ5LeYvlo9UeFGrEgSdCH+oIJiWxdXEG4YPJVjbFHlbL9LnU3pbxxbw42cv/VvRZ5kBU
- Xy4uaHlP3QgPZnC8VB1aMSeNEjMkoKJT2d/hxubSyGBNx216s1HsFmWPLGh0YwacqUj3z50mf
- pZWVP2tkxOyMLtXlmf6W6Jbwjk5RSHyBJzjESlD9SjukmlAFQ/ST2gZvyZz8fTXowbO2IX9i7
- TJ4RA1OK+BW2Iu/pcHzjsMsQdvlpISbPRjQL0AWgAlMtv6af1Z0xNcHaVtOm83CQFd6OIk0u0
- Z5endESaymKTkIYZwvunkipqZXI/vr7Brd/PP1oO8notrjiTaAgLX0mvmJuXtXbZdkBnzQiVc
- sl7Zp9HiW3cnBKAX3RMpbf04DAg2gEZef+yTIhWiPfk4GAoqhUQUB2q+TzSG5oiyFEBSJ1P8B
- 6yHD4GivZmEJVJFF1AfGWMc3WwJNjFO/L3t4X0CBWZiDjq3LYJjIleWOTZCMR3g+i8Daj/mQv
- lAVuofv567ebJ65B8AYivxcybD8B3iwAj+8+VxuMU9ISdSt5zpyYXUf2irOp4USVq+Ak7ES
-X-Spam-Status: No, score=-98.4 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS, KAM_NUMSUBJECT,
+In-Reply-To: <20200702074317.GM3499@calimero.vinschen.de>
+X-Provags-ID: V03:K1:+Eh4+UKS5EhGRuSPMnccbcii9DWMsFW/s0XEmvxLh2x4QBejb0r
+ k6llwNPuOe7Pjy/dKhoVsks/YxAkYV1PzStaeuLYh/tCpD9qmfwKG+YSZk3iK5H2FzYiEmY
+ rS0gjAtoBuLCCgMBGM/98Swf5hrKDntHc7jQ5gUXVuQO6BatDrRxCIHQHW9TWjpR4hY1/wJ
+ tlutGCTcMixO30hWOgcNQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:GmpL2KbsRK0=:Gmblv3cJvGFaYm1CUgSbeH
+ Uoffr4dTlbATwE6qsXpedoIvwiMe3b0DaMHp6C8iHa+kkyG2E4QhOAuSdaJqDkKQfZQkfJym0
+ iIctbT7AS7leDrWdeVPDiAgKJ7XMCrq78nrYN7EybpCeycgfRE7CH0HZPdSBZ3F+bFe/yJfh+
+ Z6HxSbLcH72X7zt1t+VwzvFM9sxVQAyoBeHLn710Ddpq2kRSYQAYZiAHyZlPnfpEF7klTptE0
+ MfyY8pVRQwF7MejXBqQnfiTckh1aAmzirKK72M7mpXPjd5SZvw/0MqKHmngIjfCstpLVtYDPh
+ ZFIDRuEXCb4XZibLPgbYLF1+UQTlTIDN9/xISUDUTjsR60ZFBalPiK3iSCMGi2ZXBu1Tm8hjF
+ 7Fkn72w1WO6rPQlLOPwdIz/vZEiwuYxg/jwbovQWzHegZl32vs7Zy49dIiDxAEhCpLU8vlS+F
+ y2jat+r3D9YWHK0gFhgyRn1E0DGSbmZfValmoo3CSWyoc2szdG7lgyL/GahFSv9audpvlKH2n
+ ksqcsUs4VjHuUdiqAhUZviRrBXLmsCaPN0yWIty3L9AbuLeuCAnt/Dqsiy87eHwiDclHROcBQ
+ 8WW34LxGmApxzkV7m5JhIzfAFQA+B4lVufQh0sru0q7i6OE2Kyr02irTVvQizy8TRklyv6Paz
+ yKG9zeklf3p2AiS43LpxgZDqCo576ic8bVkps9QspYHarLMNFdKBSPIqs5vHry3h4y7DH9qXz
+ Avc+4OS10i7XNIDk/swLLDua//Aw9RKIE1l/7EXtWJ+GRCc723A+g0x6kBfDO4xNPjuH0ZkPE
+ gSi52fn6o3QYiJ5hvR/2DlIIPWfpkcRTOVt7lUyUmZis4d2kJu3cD5Rmrkledx7DTzDwJ20In
+ Z9kwm95f4NHYk9mAH9jQ==
+X-Spam-Status: No, score=-98.6 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
  RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
@@ -60,34 +64,38 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 02 Jul 2020 07:47:52 -0000
+X-List-Received-Date: Thu, 02 Jul 2020 07:49:01 -0000
 
-On Jul  1 22:25, Jon Turney wrote:
-> Jon Turney (8):
->   Cygwin: Slightly improve error_start documentation
->   Cygwin: Update ELF target used by dumper on x86_64
->   Cygwin: Add a new win32_pstatus data type for modules on x86_64
->   Cygwin: Make dumper scan more than first 4GB of VM on x86_64
->   Cygwin: Fix bfd target for parsing PE files on x86_64 in dumper
->   Cygwin: Fix dumper region order/overlap checking
->   Cygwin: Handle excluded regions more robustly in dumper
->   Cygwin: Consider DLL rebasing when computing dumper exclusions
+On Jul  2 09:43, Corinna Vinschen wrote:
+> On Jul  1 22:25, Jon Turney wrote:
+> > I think this would always have been neeeded, but is essential on x86_64,
+> > as kernel32.dll has an ImageBase of 00000001:80000000 (but is always
 > 
->  winsup/cygwin/include/cygwin/core_dump.h | 16 ++++++---
->  winsup/doc/cygwinenv.xml                 |  6 +++-
->  winsup/utils/dumper.cc                   | 23 ++++++++++---
->  winsup/utils/dumper.h                    |  2 +-
->  winsup/utils/parse_pe.cc                 | 43 +++++++++++++++++-------
->  5 files changed, 66 insertions(+), 24 deletions(-)
+> Great, but that shouldn't matter much given that system DLLs are
+> ASLRed all the time.
 > 
-> -- 
-> 2.27.0
+> > +parse_pe (const char *file_name, exclusion * excl_list, LPVOID base_address)
+> >  {
+> >    if (file_name == NULL || excl_list == NULL)
+> >      return 0;
+> > @@ -104,7 +104,19 @@ parse_pe (const char *file_name, exclusion * excl_list)
+> >      }
+> >  
+> >    bfd_check_format (abfd, bfd_object);
+> > -  bfd_map_over_sections (abfd, &select_data_section, (PTR) excl_list);
+> > +
+> > +  /* Compute the relocation offset for this DLL.  Unfortunately, we have to
+> > +     guess at ImageBase (one page before vma of first section), since bfd
+> > +     doesn't let us get at backend-private data */
+> > +  bfd_vma imagebase = abfd->sections->vma - 0x1000;
+> 
+> VirtualQueryEx?  The AllocationBase is identical to the base address
+> of the DLL loaded at that address.
 
-As soon as you're sure the timing is right, feel free to apply
-patches as you see fit.  Dumper is all yours :)
+Uhm... right.  Always assuming you get at the Windows process handle
+from bfd...
 
 
-Thanks,
 Corinna
 
 -- 
