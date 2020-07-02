@@ -1,52 +1,52 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
- by sourceware.org (Postfix) with ESMTPS id AF2C23875461
- for <cygwin-patches@cygwin.com>; Thu,  2 Jul 2020 07:43:19 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org AF2C23875461
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+ by sourceware.org (Postfix) with ESMTPS id 75050388B01E
+ for <cygwin-patches@cygwin.com>; Thu,  2 Jul 2020 07:44:46 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 75050388B01E
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org;
  spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
 Received: from calimero.vinschen.de ([217.91.18.234]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MIMXC-1jccfS0Lem-00EJfS for <cygwin-patches@cygwin.com>; Thu, 02 Jul 2020
- 09:43:18 +0200
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MAPBF-1jgDqR4AsF-00Bqqf for <cygwin-patches@cygwin.com>; Thu, 02 Jul 2020
+ 09:44:45 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 8BCC4A80926; Thu,  2 Jul 2020 09:43:17 +0200 (CEST)
-Date: Thu, 2 Jul 2020 09:43:17 +0200
+ id A816DA80926; Thu,  2 Jul 2020 09:44:44 +0200 (CEST)
+Date: Thu, 2 Jul 2020 09:44:44 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 8/8] Cygwin: Consider DLL rebasing when computing dumper
- exclusions
-Message-ID: <20200702074317.GM3499@calimero.vinschen.de>
+Subject: Re: [PATCH 0/8] Fix dumper for x86_64
+Message-ID: <20200702074444.GN3499@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20200701212529.13998-1-jon.turney@dronecode.org.uk>
- <20200701212529.13998-9-jon.turney@dronecode.org.uk>
+ <e058a12f-97b2-d237-a97f-4a691bf5c6e3@dronecode.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200701212529.13998-9-jon.turney@dronecode.org.uk>
-X-Provags-ID: V03:K1:BoRaIo3WBzy8QM4w/0MUDAsBVr5XMOMKKSC3spDn2KnzXCU1kXv
- Q/6Mn2h5517v/qoW82JuAQ5BN53UfHlqOITYyzWuBaKo4sZ6NID8cAvo+62cLLT39L9L94j
- UwPixB24ONVhzwnDwkytB0eRsDNNxFUCoUtZcl+vSjTTAD5q/TW+6iikdPAd1p2f7mknbyv
- aB8XKeY7quLEHBsxrQMIA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:nr/RrVgzqUk=:7jlC8sSJcKrV1W/qCalIi2
- AkYQpKdS77gsI8uldVl99rcV6qx8Z83BXjq+UvHsuSsY5pZ9reBe/OHy583VKndtFCdipA8W7
- Sxb11FYikO8Wlw35PvH83fYto/lW+blJC35sHwz+syGMO7sX7yJOJnjl21X73Vu+Mtbw6fe2T
- x5Y98T7INPtwHlNau3QbLEIuTE12wx3qkQjBKnCZ5+H7JG3NUJTXaGGTQt0zp8yFbdT6bBSwz
- whhAAAE6sEwNE7x5ZSHqwraQHwo1XH1Pm9x2vm4jkzRzpa3qzpZ5R7XvqlytEAijf5IRMpw1F
- W3lMZY40n1UJ9AwwVTJzbS3Ha1Bo0Vh3xfsVm4A+gp6U+fTzAmeKfM6Jj7HGeXA2b8YuQTvQe
- rOb04+xQ2hslkfKeq6IsHGhcEUPST6KmmGHm+If/cDVf78CY7W1ed5fMgO9gufW3S/5bef9Et
- aQOefUBR1MLoUO0fkmOoXJgxRMrq2HU9embDb/ZDkILd1C7NrLGZ6pcbUYM+eE6ph3T27fwmu
- uLA2rejbiKI/BXYlwvpsTQ5kUMzv73sEY7j2UZp8bl4lDx+2AMeWZGc2cu6Cw99FE9OEwQbEA
- UWYrqj6LpMK27hrz9f9ueKvcKUo9I3R5QEs1EC0iqsZ4ZVO0vuVq1hlQdG8aNNhuhihClXrtO
- +VQmkDMvTb+TrvWtg28yhVKc5DARuMJlTOq9A7Gjy26xgpTeM1e/Rz/3E8wIzFw3z0YKhGt15
- QHDN00vdk87vo+Rk9hdRbC+qIoV5nM9+4h6UKYGjB6KFcZ5wZO5UYFRJhlR1Oco4PQi768T7F
- ub67VlCntHsVMKGH+p3Z0/l1lH4vaf3EYS6Cr6G3FNt/1xLwgxutYJzutrKW5+Bd3AHU8Q1
-X-Spam-Status: No, score=-99.0 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+In-Reply-To: <e058a12f-97b2-d237-a97f-4a691bf5c6e3@dronecode.org.uk>
+X-Provags-ID: V03:K1:Rvakr1KJq/B22XNoqvrztairAdbpwAsBFFsvGvKqMtnWwiXOn+u
+ WeobLDC/W0c9qUOdpnqY0zmi/h/TmIE+viJwxC2MIF5/KZmrahPfhADtwpKKxD8bY/GPSmr
+ fPEJu6ChKLke2UL3KEot7mfP4eNNJvXR4r5gzkwb70yY2rCE/7Qm+XrzXNpCq4knRU0OAaf
+ ML1rN7CWn40B2WvthZItw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:5ZOZy/qpA+I=:vmDBfpswR3bgkDLCxXSmuc
+ V+QWVgBUFcDwPzloTHv+o4IYNdX6OQ5O5VWH5IHVDmatcGrnih1qhs7zsDnp6durehzUnAdKu
+ clFOCuFM3GErNgzAwB1Ncfqhzfkgjx23tG6qeVxtFyaQlJt7zjwncXONGSO5ouwSY+0+dQOG0
+ HmrxHISO1Sv2uzV/xm70NeSThrSeOlZ/ABG74k9CW4uBq3xrLHhTMU1xn9Jck+JEyS0vAk0D1
+ NUf/Fcll9poV3NZZDIAa0cIF+PNp8Q2fcOUH54R1m91vpaKeRL3xN0XqJmyZgCBTFGZsqhtw+
+ zs+opOxChj7J+CyPBTRCV3lHcemqCuelbTwoI/+Ca7tbT7LIVtTxQwNiS1dYC6d3ChBi0Dn7F
+ EaK5hQTIPRGSD6/VZJ7e9wN4G2PVImLBZU+rvlu522yHtt0TQ/8L5u3jkYA47YxcDeqJYN8Ts
+ IzLoaE5xHgtPR/YDu8Kr7CdWMgzqZJ7JSEdMYhEh80UGvIPtEcpqo8ZX6MULRQ/W08uc7W/2b
+ om8OMoPsJ7esJjl6i3wpq8N9EJeM+UGM7hb7lRAI+kKQcUQQ4Z3IaRWQdJ/89+bKaCB8cdV+/
+ IuhxnELmvKF474WdgVIm/X0CkTMehit6QSXN+cVoG+RA+6Ltd0v+rH0+ETJajV2s7I4bnSpzV
+ qU64Ehmq8I8sIFafD2rkiWlEBEthA5BOwCdElSD0P10zTjCPHbaP/B8toJwzyCSftZtl5Ab7P
+ gueXsKxOdkrYzfId39Fxty6pq2Sy/8tp1dhJec2jmfiFxXGVJTpS/7pkxqYPDpGabXL1jo6LD
+ VsmyB3Ix5krtg3z2qPgnq6wB3+l1V1bwwceiTrULDuzGbo1nZsWKK/T203tB7gjxJVZAQAvby
+ zVEN9FHpa94Lzgm+FrUQ==
+X-Spam-Status: No, score=-98.4 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS, KAM_NUMSUBJECT,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -62,32 +62,28 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 02 Jul 2020 07:43:21 -0000
+X-List-Received-Date: Thu, 02 Jul 2020 07:44:47 -0000
 
-On Jul  1 22:25, Jon Turney wrote:
-> I think this would always have been neeeded, but is essential on x86_64,
-> as kernel32.dll has an ImageBase of 00000001:80000000 (but is always
+On Jul  1 22:29, Jon Turney wrote:
+> 
+> This needs to be aligned with some changes to gdb to consume the dumps it
+> produces, so it's probably best to hold off applying this until it's more
+> obvious what's going to happen with those.
+> 
+> Random notes:
+> 
+> - objdump identifies the output of dumper on x86_64 as
+> 'elf64-x86-64-cloudabi' (perhaps due to some over-eager sniffer).
+> 
+> - regions excluded from the dump aren't rounded up to page size, so we may
+> end up writing the excess into the dump.
+> 
+> - looking at the loaded modules and inspecting them to determine what memory
+> regions don't need to appear in the dump seems odd.  I'm not sure we don't
+> just exclude MEMORY_BASIC_INFORMATION.Type == MEM_IMAGE regions (assuming
+> they get converted to MEM_PRIVATE regions if written when copy-on-write).
 
-Great, but that shouldn't matter much given that system DLLs are
-ASLRed all the time.
-
-> +parse_pe (const char *file_name, exclusion * excl_list, LPVOID base_address)
->  {
->    if (file_name == NULL || excl_list == NULL)
->      return 0;
-> @@ -104,7 +104,19 @@ parse_pe (const char *file_name, exclusion * excl_list)
->      }
->  
->    bfd_check_format (abfd, bfd_object);
-> -  bfd_map_over_sections (abfd, &select_data_section, (PTR) excl_list);
-> +
-> +  /* Compute the relocation offset for this DLL.  Unfortunately, we have to
-> +     guess at ImageBase (one page before vma of first section), since bfd
-> +     doesn't let us get at backend-private data */
-> +  bfd_vma imagebase = abfd->sections->vma - 0x1000;
-
-VirtualQueryEx?  The AllocationBase is identical to the base address
-of the DLL loaded at that address.
+Could format_process_maps() in fhandler_process.cc be a role model here?
 
 
 Corinna
