@@ -1,49 +1,47 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
- by sourceware.org (Postfix) with ESMTPS id 75050388B01E
- for <cygwin-patches@cygwin.com>; Thu,  2 Jul 2020 07:44:46 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 75050388B01E
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+ by sourceware.org (Postfix) with ESMTPS id 63EB43858D34
+ for <cygwin-patches@cygwin.com>; Thu,  2 Jul 2020 07:47:51 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 63EB43858D34
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org;
  spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
 Received: from calimero.vinschen.de ([217.91.18.234]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MAPBF-1jgDqR4AsF-00Bqqf for <cygwin-patches@cygwin.com>; Thu, 02 Jul 2020
- 09:44:45 +0200
+ mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1M8hlZ-1jmCzE3UuX-004iYQ for <cygwin-patches@cygwin.com>; Thu, 02 Jul 2020
+ 09:47:49 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id A816DA80926; Thu,  2 Jul 2020 09:44:44 +0200 (CEST)
-Date: Thu, 2 Jul 2020 09:44:44 +0200
+ id 2C6F6A80926; Thu,  2 Jul 2020 09:47:48 +0200 (CEST)
+Date: Thu, 2 Jul 2020 09:47:48 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH 0/8] Fix dumper for x86_64
-Message-ID: <20200702074444.GN3499@calimero.vinschen.de>
+Message-ID: <20200702074748.GO3499@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20200701212529.13998-1-jon.turney@dronecode.org.uk>
- <e058a12f-97b2-d237-a97f-4a691bf5c6e3@dronecode.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <e058a12f-97b2-d237-a97f-4a691bf5c6e3@dronecode.org.uk>
-X-Provags-ID: V03:K1:Rvakr1KJq/B22XNoqvrztairAdbpwAsBFFsvGvKqMtnWwiXOn+u
- WeobLDC/W0c9qUOdpnqY0zmi/h/TmIE+viJwxC2MIF5/KZmrahPfhADtwpKKxD8bY/GPSmr
- fPEJu6ChKLke2UL3KEot7mfP4eNNJvXR4r5gzkwb70yY2rCE/7Qm+XrzXNpCq4knRU0OAaf
- ML1rN7CWn40B2WvthZItw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:5ZOZy/qpA+I=:vmDBfpswR3bgkDLCxXSmuc
- V+QWVgBUFcDwPzloTHv+o4IYNdX6OQ5O5VWH5IHVDmatcGrnih1qhs7zsDnp6durehzUnAdKu
- clFOCuFM3GErNgzAwB1Ncfqhzfkgjx23tG6qeVxtFyaQlJt7zjwncXONGSO5ouwSY+0+dQOG0
- HmrxHISO1Sv2uzV/xm70NeSThrSeOlZ/ABG74k9CW4uBq3xrLHhTMU1xn9Jck+JEyS0vAk0D1
- NUf/Fcll9poV3NZZDIAa0cIF+PNp8Q2fcOUH54R1m91vpaKeRL3xN0XqJmyZgCBTFGZsqhtw+
- zs+opOxChj7J+CyPBTRCV3lHcemqCuelbTwoI/+Ca7tbT7LIVtTxQwNiS1dYC6d3ChBi0Dn7F
- EaK5hQTIPRGSD6/VZJ7e9wN4G2PVImLBZU+rvlu522yHtt0TQ/8L5u3jkYA47YxcDeqJYN8Ts
- IzLoaE5xHgtPR/YDu8Kr7CdWMgzqZJ7JSEdMYhEh80UGvIPtEcpqo8ZX6MULRQ/W08uc7W/2b
- om8OMoPsJ7esJjl6i3wpq8N9EJeM+UGM7hb7lRAI+kKQcUQQ4Z3IaRWQdJ/89+bKaCB8cdV+/
- IuhxnELmvKF474WdgVIm/X0CkTMehit6QSXN+cVoG+RA+6Ltd0v+rH0+ETJajV2s7I4bnSpzV
- qU64Ehmq8I8sIFafD2rkiWlEBEthA5BOwCdElSD0P10zTjCPHbaP/B8toJwzyCSftZtl5Ab7P
- gueXsKxOdkrYzfId39Fxty6pq2Sy/8tp1dhJec2jmfiFxXGVJTpS/7pkxqYPDpGabXL1jo6LD
- VsmyB3Ix5krtg3z2qPgnq6wB3+l1V1bwwceiTrULDuzGbo1nZsWKK/T203tB7gjxJVZAQAvby
- zVEN9FHpa94Lzgm+FrUQ==
+In-Reply-To: <20200701212529.13998-1-jon.turney@dronecode.org.uk>
+X-Provags-ID: V03:K1:g0nu312dNFv1FlpGF0K8HgQvMXUwnI2oRBPioL3xuft1mrwwTQi
+ lKLbQwXM5WAOXmr/Kh9wyZEL58Mt9EaDCw7R+FH+PBip723IhZDi389suP94UO44DsrwQ1l
+ 6wfFFqaXb2nCWdtcf8G5gJUgWCPxDzftjMuknWVOo51nBefPClotAYzjWZYAAQwDHQj2Ece
+ re7YQ/SI/Chu95jKgAmuA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:1yfEWENrz+o=:QWbPKrVptj9bJUjwkVSvlw
+ AlLtdW+Ys99YpqYzs65luLrUvAf//ElUrb3zMO/TDe6aWrLFLHv+jjFMNA2sSClPHzH7n81MU
+ ls3vnSHEoPFvl2pihF4qzyO0Ll1ewyN6q67ATw7gW7z0UnGvJdI8iwzHh0mh/VVrd3Qv14fAx
+ bP9sWWsStl7DjEMXFIsuZKKTbftLZOkty/ecDujtFjkj3u7TKC/OhS1bBJQQ3hM27v6JqbDnH
+ Wup/Csxt05QOHldmKBuIlsr6Rb/vFulurfGevVO8FNvSox3da+qu01WUPxATS+RlrhDI29uHF
+ cjyYhlQ5LeYvlo9UeFGrEgSdCH+oIJiWxdXEG4YPJVjbFHlbL9LnU3pbxxbw42cv/VvRZ5kBU
+ Xy4uaHlP3QgPZnC8VB1aMSeNEjMkoKJT2d/hxubSyGBNx216s1HsFmWPLGh0YwacqUj3z50mf
+ pZWVP2tkxOyMLtXlmf6W6Jbwjk5RSHyBJzjESlD9SjukmlAFQ/ST2gZvyZz8fTXowbO2IX9i7
+ TJ4RA1OK+BW2Iu/pcHzjsMsQdvlpISbPRjQL0AWgAlMtv6af1Z0xNcHaVtOm83CQFd6OIk0u0
+ Z5endESaymKTkIYZwvunkipqZXI/vr7Brd/PP1oO8notrjiTaAgLX0mvmJuXtXbZdkBnzQiVc
+ sl7Zp9HiW3cnBKAX3RMpbf04DAg2gEZef+yTIhWiPfk4GAoqhUQUB2q+TzSG5oiyFEBSJ1P8B
+ 6yHD4GivZmEJVJFF1AfGWMc3WwJNjFO/L3t4X0CBWZiDjq3LYJjIleWOTZCMR3g+i8Daj/mQv
+ lAVuofv567ebJ65B8AYivxcybD8B3iwAj+8+VxuMU9ISdSt5zpyYXUf2irOp4USVq+Ak7ES
 X-Spam-Status: No, score=-98.4 required=5.0 tests=BAYES_00,
  GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS, KAM_NUMSUBJECT,
  RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
@@ -62,30 +60,34 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 02 Jul 2020 07:44:47 -0000
+X-List-Received-Date: Thu, 02 Jul 2020 07:47:52 -0000
 
-On Jul  1 22:29, Jon Turney wrote:
+On Jul  1 22:25, Jon Turney wrote:
+> Jon Turney (8):
+>   Cygwin: Slightly improve error_start documentation
+>   Cygwin: Update ELF target used by dumper on x86_64
+>   Cygwin: Add a new win32_pstatus data type for modules on x86_64
+>   Cygwin: Make dumper scan more than first 4GB of VM on x86_64
+>   Cygwin: Fix bfd target for parsing PE files on x86_64 in dumper
+>   Cygwin: Fix dumper region order/overlap checking
+>   Cygwin: Handle excluded regions more robustly in dumper
+>   Cygwin: Consider DLL rebasing when computing dumper exclusions
 > 
-> This needs to be aligned with some changes to gdb to consume the dumps it
-> produces, so it's probably best to hold off applying this until it's more
-> obvious what's going to happen with those.
+>  winsup/cygwin/include/cygwin/core_dump.h | 16 ++++++---
+>  winsup/doc/cygwinenv.xml                 |  6 +++-
+>  winsup/utils/dumper.cc                   | 23 ++++++++++---
+>  winsup/utils/dumper.h                    |  2 +-
+>  winsup/utils/parse_pe.cc                 | 43 +++++++++++++++++-------
+>  5 files changed, 66 insertions(+), 24 deletions(-)
 > 
-> Random notes:
-> 
-> - objdump identifies the output of dumper on x86_64 as
-> 'elf64-x86-64-cloudabi' (perhaps due to some over-eager sniffer).
-> 
-> - regions excluded from the dump aren't rounded up to page size, so we may
-> end up writing the excess into the dump.
-> 
-> - looking at the loaded modules and inspecting them to determine what memory
-> regions don't need to appear in the dump seems odd.  I'm not sure we don't
-> just exclude MEMORY_BASIC_INFORMATION.Type == MEM_IMAGE regions (assuming
-> they get converted to MEM_PRIVATE regions if written when copy-on-write).
+> -- 
+> 2.27.0
 
-Could format_process_maps() in fhandler_process.cc be a role model here?
+As soon as you're sure the timing is right, feel free to apply
+patches as you see fit.  Dumper is all yours :)
 
 
+Thanks,
 Corinna
 
 -- 
