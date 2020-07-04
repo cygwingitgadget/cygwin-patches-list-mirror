@@ -1,34 +1,49 @@
 Return-Path: <brian.inglis@systematicsw.ab.ca>
-Received: from smtp-out-no.shaw.ca (smtp-out-no.shaw.ca [64.59.134.12])
- by sourceware.org (Postfix) with ESMTPS id C6B853851C09
- for <cygwin-patches@cygwin.com>; Fri,  3 Jul 2020 23:18:12 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org C6B853851C09
+Received: from smtp-out-so.shaw.ca (smtp-out-so.shaw.ca [64.59.136.138])
+ by sourceware.org (Postfix) with ESMTPS id D43C23842402
+ for <cygwin-patches@cygwin.com>; Sat,  4 Jul 2020 03:47:43 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org D43C23842402
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=SystematicSW.ab.ca
+ header.from=SystematicSw.ab.ca
 Authentication-Results: sourceware.org;
  spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
-Received: from Brian.Inglis@Shaw.ca ([24.64.172.44]) by shaw.ca with ESMTP
- id rUwcj1xv462brrUwdjaQhc; Fri, 03 Jul 2020 17:18:11 -0600
-X-Authority-Analysis: v=2.3 cv=LKf9vKe9 c=1 sm=1 tr=0
+Received: from [192.168.1.104] ([24.64.172.44]) by shaw.ca with ESMTP
+ id rZ9Qjibn9YYpxrZ9RjtBKK; Fri, 03 Jul 2020 21:47:42 -0600
+X-Authority-Analysis: v=2.3 cv=OubUNx3t c=1 sm=1 tr=0
  a=kiZT5GMN3KAWqtYcXc+/4Q==:117 a=kiZT5GMN3KAWqtYcXc+/4Q==:17
- a=BqgCfznX7MUA:10 a=UsIZ3BRvCboA:10 a=w_pzkKWiAAAA:8 a=51kjSXn8rxP2_lg2150A:9
- a=fxnx5gAmH_237FX_:21 a=dM2mh-vyZaXv8Wvn:21 a=gRcj7Hltp7ieFsb-:21
- a=WK-i71OpKu4A:10 a=sRI3_1zDfAgwuvI8zelB:22
-From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+ a=IkcTkHD0fZMA:10 a=w_pzkKWiAAAA:8 a=gwMg6M9y6T5EFgRA8E4A:9 a=QEXdDO2ut3YA:10
+ a=FhXMovWKs60A:10 a=l4lHiSdNQNsA:10 a=sRI3_1zDfAgwuvI8zelB:22
+Reply-To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Clarify FAQ 1.5 What version of Cygwin is this, anyway?
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Clarify FAQ 1.5 What version of Cygwin is this, anyway?
-Date: Fri,  3 Jul 2020 17:17:17 -0600
-Message-Id: <20200703231716.24076-1-Brian.Inglis@SystematicSW.ab.ca>
-X-Mailer: git-send-email 2.27.0
+References: <20200703231716.24076-1-Brian.Inglis@SystematicSW.ab.ca>
+From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
+Autocrypt: addr=Brian.Inglis@SystematicSw.ab.ca; prefer-encrypt=mutual;
+ keydata=
+ mDMEXopx8xYJKwYBBAHaRw8BAQdAnCK0qv/xwUCCZQoA9BHRYpstERrspfT0NkUWQVuoePa0
+ LkJyaWFuIEluZ2xpcyA8QnJpYW4uSW5nbGlzQFN5c3RlbWF0aWNTdy5hYi5jYT6IlgQTFggA
+ PhYhBMM5/lbU970GBS2bZB62lxu92I8YBQJeinHzAhsDBQkJZgGABQsJCAcCBhUKCQgLAgQW
+ AgMBAh4BAheAAAoJEB62lxu92I8Y0ioBAI8xrggNxziAVmr+Xm6nnyjoujMqWcq3oEhlYGAO
+ WacZAQDFtdDx2koSVSoOmfaOyRTbIWSf9/Cjai29060fsmdsDLg4BF6KcfMSCisGAQQBl1UB
+ BQEBB0Awv8kHI2PaEgViDqzbnoe8B9KMHoBZLS92HdC7ZPh8HQMBCAeIfgQYFggAJhYhBMM5
+ /lbU970GBS2bZB62lxu92I8YBQJeinHzAhsMBQkJZgGAAAoJEB62lxu92I8YZwUBAJw/74rF
+ IyaSsGI7ewCdCy88Lce/kdwX7zGwid+f8NZ3AQC/ezTFFi5obXnyMxZJN464nPXiggtT9gN5
+ RSyTY8X+AQ==
+Organization: Systematic Software
+Message-ID: <c30067ad-2a47-bd21-1ca4-21d4c3c217ba@SystematicSw.ab.ca>
+Date: Fri, 3 Jul 2020 21:47:40 -0600
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfAXTTxjeojRBgRL4kJYVmQ1MqowRVnFnihinMtSC42yZCD3gzwIQK1MaMjHmjeWB1R20ve6EeX/VCffi2G09+N9QzI+zOvufETAiVwArYgqW3CTo0hA2
- mqAzpX6kboFF8IWNO2PyBCJIkI4yrKI1ySqtKaJ0Hpse8fn9bi3I/RyfC4B2IWWQldr3Cz/yqPk94aD1LLkp0f7cBDDq0fTso9e8TDBxnfqJ+7OAVeLrh8N0
- JbA5oZ1Ej9E67jgXsHalaQ==
-X-Spam-Status: No, score=-14.9 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW,
- RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_NONE,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+In-Reply-To: <20200703231716.24076-1-Brian.Inglis@SystematicSW.ab.ca>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfKQ20FORGEQD4d/2ILr7kpaic+7xyMk0Y8YwttASTJ5UcQXeoWLRxV379an9BnwvYjziFTB7DAtE0z0g6183toSFDxm5lWV8oR+EGCbwcCxc+1gGhDNR
+ ILdzR7a1cBvPA9LVxcqMfKBRQ1lvpIJJ6JDrPRDTYk3A3gFvHawgnsCHzN6OpLwC+yPE43zd61EBfQ==
+X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
+ KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW, SPF_HELO_NONE, SPF_NONE,
+ TXREP autolearn=no autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -43,62 +58,26 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 03 Jul 2020 23:18:14 -0000
+X-List-Received-Date: Sat, 04 Jul 2020 03:47:45 -0000
 
-Relate Cygwin DLL to Unix kernel,
-add required options to command examples,
-differentiate Unix and Cygwin commands;
-mention that the cygwin package contains the DLL.
+On 2020-07-03 17:17, Brian Inglis wrote:
+> Relate Cygwin DLL to Unix kernel,
+> add required options to command examples,
+> differentiate Unix and Cygwin commands;
+> mention that the cygwin package contains the DLL.
+> 
+> ---
+>  faq/faq.html | 34 ++++++++++++++++++++++++----------
+>  1 file changed, 24 insertions(+), 10 deletions(-)
 
----
- faq/faq.html | 34 ++++++++++++++++++++++++----------
- 1 file changed, 24 insertions(+), 10 deletions(-)
+Patch to:
+	https://cygwin.com/git/?p=cygwin-htdocs.git;f=faq/faq.html;hb=HEAD
+as a result of thread:
+	https://cygwin.com/pipermail/cygwin/2020-July/245442.html
 
-diff --git a/faq/faq.html b/faq/faq.html
-index 1f2686c6..846e087e 100644
---- a/faq/faq.html
-+++ b/faq/faq.html
-@@ -53,16 +53,30 @@ such freedom is that the people who use a given piece of software
- should be able to change it to fit their needs, learn from it, share
- it with their friends, etc.  The GPL or LGPL licenses allows you those
- freedoms, so it is free software.
--</p></td></tr><tr class="question"><td align="left" valign="top"><a name="faq.what.version"></a><p><b>1.5.</b></p></td><td align="left" valign="top"><p>What version of Cygwin <span class="emphasis"><em>is</em></span> this, anyway?</p></td></tr><tr class="answer"><td align="left" valign="top"></td><td align="left" valign="top"><p>To find the version of the Cygwin DLL installed, you can use
--<code class="filename">uname</code> as on Linux or <code class="filename">cygcheck</code>. Refer to each command's
--<code class="literal">--help</code> output and the
--<a class="ulink" href="https://cygwin.com/cygwin-ug-net/" target="_top">Cygwin User's Guide</a>
--for more information.
--</p><p>If you are looking for the version number for the whole Cygwin
--release, there is none. Each package in the Cygwin release has its own
--version.  The packages in Cygwin are continually improving, thanks to
--the efforts of net volunteers who maintain the Cygwin binary ports.
--Each package has its own version numbers and its own release process.
-+</p></td></tr>
-+<tr class="question"><td align="left" valign="top"><a name="faq.what.version"></a><p><b>1.5.</b></p></td>
-+    <td align="left" valign="top"><p>What version of Cygwin <span class="emphasis"><em>is</em></span> this, anyway?</p></td></tr>
-+<tr class="answer"><td align="left" valign="top"></td><td align="left" valign="top">
-+    <p>As the Cygwin DLL takes the place of a Unix kernel,
-+	to find the version of the Cygwin DLL installed,
-+	you can use any of the Unix compatible commands:
-+	<code class="command"><strong>uname&nbsp;-a</strong></code>;
-+	<code class="command"><strong>uname&nbsp;-srvm</strong></code>;
-+	<code class="command"><strong>head&nbsp;/proc/version</strong></code>;
-+	or the Cygwin command:
-+	<code class="command"><strong>cygcheck&nbsp;-V</strong></code>.
-+	Refer to each command's
-+	<code class="option">--help</code> output or the
-+	<a class="ulink" href="https://cygwin.com/cygwin-ug-net/" target="_top">Cygwin User's Guide</a>
-+	for more information.</p>
-+    <p>If you are looking for the version number for the whole Cygwin release,
-+	there is none.
-+	Each package in the Cygwin release has its own version, and the
-+	<code class="package">cygwin</code> package containing the Cygwin DLL and
-+	Cygwin system specific utilities is just another (but very important!) package.
-+	The packages in Cygwin are continually improving, thanks to
-+	the efforts of net volunteers who maintain the Cygwin binary ports.
-+	Each package has its own version numbers and its own release process.
- </p><p>So, how do you get the most up-to-date version of Cygwin?  Easy.  Just
- download the Cygwin Setup program by following the instructions
- <a class="ulink" href="https://cygwin.com/install.html" target="_top">here</a>.
 -- 
-2.27.0
+Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
 
+This email may be disturbing to some readers as it contains
+too much technical detail. Reader discretion is advised.
+[Data in IEC units and prefixes, physical quantities in SI.]
