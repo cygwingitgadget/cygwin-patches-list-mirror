@@ -1,48 +1,47 @@
-Return-Path: <brian.inglis@systematicsw.ab.ca>
-Received: from smtp-out-so.shaw.ca (smtp-out-so.shaw.ca [64.59.136.138])
- by sourceware.org (Postfix) with ESMTPS id D43C23842402
- for <cygwin-patches@cygwin.com>; Sat,  4 Jul 2020 03:47:43 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org D43C23842402
+Return-Path: <jon.turney@dronecode.org.uk>
+Received: from sa-prd-fep-044.btinternet.com (mailomta29-sa.btinternet.com
+ [213.120.69.35])
+ by sourceware.org (Postfix) with ESMTPS id B86E03851C1C
+ for <cygwin-patches@cygwin.com>; Sat,  4 Jul 2020 15:35:09 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org B86E03851C1C
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=SystematicSw.ab.ca
+ header.from=dronecode.org.uk
 Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
-Received: from [192.168.1.104] ([24.64.172.44]) by shaw.ca with ESMTP
- id rZ9Qjibn9YYpxrZ9RjtBKK; Fri, 03 Jul 2020 21:47:42 -0600
-X-Authority-Analysis: v=2.3 cv=OubUNx3t c=1 sm=1 tr=0
- a=kiZT5GMN3KAWqtYcXc+/4Q==:117 a=kiZT5GMN3KAWqtYcXc+/4Q==:17
- a=IkcTkHD0fZMA:10 a=w_pzkKWiAAAA:8 a=gwMg6M9y6T5EFgRA8E4A:9 a=QEXdDO2ut3YA:10
- a=FhXMovWKs60A:10 a=l4lHiSdNQNsA:10 a=sRI3_1zDfAgwuvI8zelB:22
-Reply-To: cygwin-patches@cygwin.com
+ spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
+Received: from sa-prd-rgout-003.btmx-prd.synchronoss.net ([10.2.38.6])
+ by sa-prd-fep-044.btinternet.com with ESMTP id
+ <20200704153508.YVRS3440.sa-prd-fep-044.btinternet.com@sa-prd-rgout-003.btmx-prd.synchronoss.net>;
+ Sat, 4 Jul 2020 16:35:08 +0100
+Authentication-Results: btinternet.com;
+ auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
+X-Originating-IP: [31.51.206.31]
+X-OWM-Source-IP: 31.51.206.31 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeduiedrtdekgdeltdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepuffvfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepteelffegteeiudeuteehffevledvffeffeekgffhhfehvdfhgffhteehteelteeknecuffhomhgrihhnpegthihgfihinhdrtghomhenucfkphepfedurdehuddrvddtiedrfedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddurdduuddungdpihhnvghtpeefuddrhedurddvtdeirdefuddpmhgrihhlfhhrohhmpeeojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhequceuqfffjgepkeeukffvoffkoffgpdhrtghpthhtohepoeeurhhirghnrdfknhhglhhishesufihshhtvghmrghtihgtufifrdgrsgdrtggrqedprhgtphhtthhopeeotgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomheq
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from [192.168.1.111] (31.51.206.31) by
+ sa-prd-rgout-003.btmx-prd.synchronoss.net (5.8.340) (authenticated as
+ jonturney@btinternet.com)
+ id 5ED9AFBE0526BBF6; Sat, 4 Jul 2020 16:35:08 +0100
 Subject: Re: [PATCH] Clarify FAQ 1.5 What version of Cygwin is this, anyway?
-To: cygwin-patches@cygwin.com
+To: Cygwin Patches <cygwin-patches@cygwin.com>
 References: <20200703231716.24076-1-Brian.Inglis@SystematicSW.ab.ca>
-From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
-Autocrypt: addr=Brian.Inglis@SystematicSw.ab.ca; prefer-encrypt=mutual;
- keydata=
- mDMEXopx8xYJKwYBBAHaRw8BAQdAnCK0qv/xwUCCZQoA9BHRYpstERrspfT0NkUWQVuoePa0
- LkJyaWFuIEluZ2xpcyA8QnJpYW4uSW5nbGlzQFN5c3RlbWF0aWNTdy5hYi5jYT6IlgQTFggA
- PhYhBMM5/lbU970GBS2bZB62lxu92I8YBQJeinHzAhsDBQkJZgGABQsJCAcCBhUKCQgLAgQW
- AgMBAh4BAheAAAoJEB62lxu92I8Y0ioBAI8xrggNxziAVmr+Xm6nnyjoujMqWcq3oEhlYGAO
- WacZAQDFtdDx2koSVSoOmfaOyRTbIWSf9/Cjai29060fsmdsDLg4BF6KcfMSCisGAQQBl1UB
- BQEBB0Awv8kHI2PaEgViDqzbnoe8B9KMHoBZLS92HdC7ZPh8HQMBCAeIfgQYFggAJhYhBMM5
- /lbU970GBS2bZB62lxu92I8YBQJeinHzAhsMBQkJZgGAAAoJEB62lxu92I8YZwUBAJw/74rF
- IyaSsGI7ewCdCy88Lce/kdwX7zGwid+f8NZ3AQC/ezTFFi5obXnyMxZJN464nPXiggtT9gN5
- RSyTY8X+AQ==
-Organization: Systematic Software
-Message-ID: <c30067ad-2a47-bd21-1ca4-21d4c3c217ba@SystematicSw.ab.ca>
-Date: Fri, 3 Jul 2020 21:47:40 -0600
+ <c30067ad-2a47-bd21-1ca4-21d4c3c217ba@SystematicSw.ab.ca>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+Message-ID: <f525fe8f-8c72-3c28-2910-0e0cdc58b62d@dronecode.org.uk>
+Date: Sat, 4 Jul 2020 16:35:06 +0100
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200703231716.24076-1-Brian.Inglis@SystematicSW.ab.ca>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-CA
+In-Reply-To: <c30067ad-2a47-bd21-1ca4-21d4c3c217ba@SystematicSw.ab.ca>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfKQ20FORGEQD4d/2ILr7kpaic+7xyMk0Y8YwttASTJ5UcQXeoWLRxV379an9BnwvYjziFTB7DAtE0z0g6183toSFDxm5lWV8oR+EGCbwcCxc+1gGhDNR
- ILdzR7a1cBvPA9LVxcqMfKBRQ1lvpIJJ6JDrPRDTYk3A3gFvHawgnsCHzN6OpLwC+yPE43zd61EBfQ==
-X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
- KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW, SPF_HELO_NONE, SPF_NONE,
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_NONE,
  TXREP autolearn=no autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -58,26 +57,40 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sat, 04 Jul 2020 03:47:45 -0000
+X-List-Received-Date: Sat, 04 Jul 2020 15:35:12 -0000
 
-On 2020-07-03 17:17, Brian Inglis wrote:
-> Relate Cygwin DLL to Unix kernel,
-> add required options to command examples,
-> differentiate Unix and Cygwin commands;
-> mention that the cygwin package contains the DLL.
+On 04/07/2020 04:47, Brian Inglis wrote:
+> On 2020-07-03 17:17, Brian Inglis wrote:
+>> Relate Cygwin DLL to Unix kernel,
+>> add required options to command examples,
+>> differentiate Unix and Cygwin commands;
+>> mention that the cygwin package contains the DLL.
+>>
+>> ---
+>>   faq/faq.html | 34 ++++++++++++++++++++++++----------
+>>   1 file changed, 24 insertions(+), 10 deletions(-)
 > 
-> ---
->  faq/faq.html | 34 ++++++++++++++++++++++++----------
->  1 file changed, 24 insertions(+), 10 deletions(-)
+> Patch to:
+> 	https://cygwin.com/git/?p=cygwin-htdocs.git;f=faq/faq.html;hb=HEAD
+> as a result of thread:
+> 	https://cygwin.com/pipermail/cygwin/2020-July/245442.html
 
-Patch to:
-	https://cygwin.com/git/?p=cygwin-htdocs.git;f=faq/faq.html;hb=HEAD
-as a result of thread:
-	https://cygwin.com/pipermail/cygwin/2020-July/245442.html
+Thanks for looking at this.
 
--- 
-Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
+My perspective is that, if (as appears to be the case here) the problem 
+is with people who can't or won't read and *absorb* the available 
+information, the solution is not to add more words reiterating and 
+expanding, but rather to focus on clarifying the existing words.
 
-This email may be disturbing to some readers as it contains
-too much technical detail. Reader discretion is advised.
-[Data in IEC units and prefixes, physical quantities in SI.]
+So, I'd think this faq should start with a paragraph consisting of a 
+single sentence similar to:
+
+"To find the version of the Cygwin DLL installed, you can use `uname 
+-a`, as you would for a Unix kernel".
+
+Feel free to elaborate on alternatives and refinements on that in later 
+paragraphs.
+
+If you're touching this FAQ, please also replace the literal `setup.exe` 
+with `the setup program` or similar circumlocutions, as we no longer use 
+that literal name.
