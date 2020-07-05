@@ -1,53 +1,45 @@
-Return-Path: <brian.inglis@systematicsw.ab.ca>
-Received: from smtp-out-so.shaw.ca (smtp-out-so.shaw.ca [64.59.136.138])
- by sourceware.org (Postfix) with ESMTPS id 540A73844041
- for <cygwin-patches@cygwin.com>; Sat,  4 Jul 2020 17:31:52 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 540A73844041
+Return-Path: <jon.turney@dronecode.org.uk>
+Received: from sa-prd-fep-049.btinternet.com (mailomta31-sa.btinternet.com
+ [213.120.69.37])
+ by sourceware.org (Postfix) with ESMTPS id 51585385700E
+ for <cygwin-patches@cygwin.com>; Sun,  5 Jul 2020 16:46:04 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 51585385700E
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=SystematicSw.ab.ca
+ header.from=dronecode.org.uk
 Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
-Received: from [192.168.1.104] ([24.64.172.44]) by shaw.ca with ESMTP
- id rm0zj6IKYFXePrm10jAkcH; Sat, 04 Jul 2020 11:31:50 -0600
-X-Authority-Analysis: v=2.3 cv=ePaIcEh1 c=1 sm=1 tr=0
- a=kiZT5GMN3KAWqtYcXc+/4Q==:117 a=kiZT5GMN3KAWqtYcXc+/4Q==:17
- a=IkcTkHD0fZMA:10 a=w_pzkKWiAAAA:8 a=1aXmNyeANRQqbgJahQUA:9
- a=qtViSuBYugYqSnX2:21 a=jrT4zNLgkUQeh_RB:21 a=QEXdDO2ut3YA:10
- a=FhXMovWKs60A:10 a=daI9ojH3vpgA:10 a=sRI3_1zDfAgwuvI8zelB:22
-Reply-To: Brian.Inglis@SystematicSw.ab.ca
-Subject: Re: [PATCH] Clarify FAQ 1.5 What version of Cygwin is this, anyway?
-To: Cygwin Patches <cygwin-patches@cygwin.com>
-References: <20200703231716.24076-1-Brian.Inglis@SystematicSW.ab.ca>
- <c30067ad-2a47-bd21-1ca4-21d4c3c217ba@SystematicSw.ab.ca>
- <f525fe8f-8c72-3c28-2910-0e0cdc58b62d@dronecode.org.uk>
+ spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
+Received: from sa-prd-rgout-001.btmx-prd.synchronoss.net ([10.2.38.4])
+ by sa-prd-fep-049.btinternet.com with ESMTP id
+ <20200705164603.QLOO4195.sa-prd-fep-049.btinternet.com@sa-prd-rgout-001.btmx-prd.synchronoss.net>;
+ Sun, 5 Jul 2020 17:46:03 +0100
+Authentication-Results: btinternet.com;
+ auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com
+X-Originating-IP: [31.51.206.31]
+X-OWM-Source-IP: 31.51.206.31 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeduiedruddugddutdejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeefieduveehgfffffeuueehleefgeevfedvffeljeefheduteelteelvdettefhvdenucfkphepfedurdehuddrvddtiedrfedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeefuddrhedurddvtdeirdefuddpmhgrihhlfhhrohhmpeeojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqpdhrtghpthhtohepoegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmqedprhgtphhtthhopeeojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheq
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from localhost.localdomain (31.51.206.31) by
+ sa-prd-rgout-001.btmx-prd.synchronoss.net (5.8.340) (authenticated as
+ jonturney@btinternet.com)
+ id 5ED99EC905523C07; Sun, 5 Jul 2020 17:46:03 +0100
+From: Jon Turney <jon.turney@dronecode.org.uk>
+To: cygwin-patches@cygwin.com
 Cc: Jon Turney <jon.turney@dronecode.org.uk>
-From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
-Autocrypt: addr=Brian.Inglis@SystematicSw.ab.ca; prefer-encrypt=mutual;
- keydata=
- mDMEXopx8xYJKwYBBAHaRw8BAQdAnCK0qv/xwUCCZQoA9BHRYpstERrspfT0NkUWQVuoePa0
- LkJyaWFuIEluZ2xpcyA8QnJpYW4uSW5nbGlzQFN5c3RlbWF0aWNTdy5hYi5jYT6IlgQTFggA
- PhYhBMM5/lbU970GBS2bZB62lxu92I8YBQJeinHzAhsDBQkJZgGABQsJCAcCBhUKCQgLAgQW
- AgMBAh4BAheAAAoJEB62lxu92I8Y0ioBAI8xrggNxziAVmr+Xm6nnyjoujMqWcq3oEhlYGAO
- WacZAQDFtdDx2koSVSoOmfaOyRTbIWSf9/Cjai29060fsmdsDLg4BF6KcfMSCisGAQQBl1UB
- BQEBB0Awv8kHI2PaEgViDqzbnoe8B9KMHoBZLS92HdC7ZPh8HQMBCAeIfgQYFggAJhYhBMM5
- /lbU970GBS2bZB62lxu92I8YBQJeinHzAhsMBQkJZgGAAAoJEB62lxu92I8YZwUBAJw/74rF
- IyaSsGI7ewCdCy88Lce/kdwX7zGwid+f8NZ3AQC/ezTFFi5obXnyMxZJN464nPXiggtT9gN5
- RSyTY8X+AQ==
-Organization: Systematic Software
-Message-ID: <8d92bc01-f5a0-73e0-8715-4e155abaa9d8@SystematicSw.ab.ca>
-Date: Sat, 4 Jul 2020 11:31:49 -0600
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+Subject: [PATCH 9/8] Add all memory regions details to dumper debug output
+Date: Sun,  5 Jul 2020 17:45:28 +0100
+Message-Id: <20200705164531.31995-1-jon.turney@dronecode.org.uk>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200701212529.13998-1-jon.turney@dronecode.org.uk>
+References: <20200701212529.13998-1-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
-In-Reply-To: <f525fe8f-8c72-3c28-2910-0e0cdc58b62d@dronecode.org.uk>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-CA
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfACVcY2Eb/2ehFJ4YBhvyGk7GV5Hb8fuy34Q53Dl7tHQcASlsn3AZ8yF4Qmu1sj6DolsjFPFgpCxmtBcOth1n4vV/BdBKQ7FIyO4G+FDunAuPeTU2f6l
- uWmoGXwEneaNFX3qE4gkMQgrXpzHs93Zy+K4bYlOhszBASrZ6cfkH7jg3pcIFLNjSiYr2fpSrY+i4eBfAJhYXgjYdgA0AbOu9brwR+YYgVdTq6U5mMyzKje/
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00, BODY_8BITS,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW, SPF_HELO_NONE,
- SPF_NONE, TXREP autolearn=no autolearn_force=no version=3.4.2
+X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
+ GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW,
+ RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_NONE,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -62,103 +54,141 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sat, 04 Jul 2020 17:31:53 -0000
+X-List-Received-Date: Sun, 05 Jul 2020 16:46:05 -0000
 
-On 2020-07-04 09:35, Jon Turney wrote:
-> On 04/07/2020 04:47, Brian Inglis wrote:
->> On 2020-07-03 17:17, Brian Inglis wrote:
->>> Relate Cygwin DLL to Unix kernel,
->>> add required options to command examples,
->>> differentiate Unix and Cygwin commands;
->>> mention that the cygwin package contains the DLL.
->>>
->>> ---
->>>   faq/faq.html | 34 ++++++++++++++++++++++++----------
->>>   1 file changed, 24 insertions(+), 10 deletions(-)
->>
->> Patch to:
->>     https://cygwin.com/git/?p=cygwin-htdocs.git;f=faq/faq.html;hb=HEAD
->> as a result of thread:
->>     https://cygwin.com/pipermail/cygwin/2020-July/245442.html
-> 
-> Thanks for looking at this.
-> 
-> My perspective is that, if (as appears to be the case here) the problem is with
-> people who can't or won't read and *absorb* the available information, the
-> solution is not to add more words reiterating and expanding, but rather to focus
-> on clarifying the existing words.
-> 
-> So, I'd think this faq should start with a paragraph consisting of a single
-> sentence similar to:
-> 
-> "To find the version of the Cygwin DLL installed, you can use `uname -a`, as you
-> would for a Unix kernel".
-> 
-> Feel free to elaborate on alternatives and refinements on that in later paragraphs.
-> 
-> If you're touching this FAQ, please also replace the literal `setup.exe` with
-> `the setup program` or similar circumlocutions, as we no longer use that literal
-> name.
+---
+ winsup/utils/dumper.cc | 101 ++++++++++++++++++++++++++++++++---------
+ 1 file changed, 80 insertions(+), 21 deletions(-)
 
-Thanks Jon,
-
-Good point, this will now read:
-
-"1.5. What version of Cygwin is this, anyway?
-
-To find the version of the Cygwin DLL installed, you can use: *uname -a*; as you
-would for a Unix kernel. As the Cygwin DLL takes the place of a Unix kernel, you
-can also use any of the Unix compatible commands: *uname -srvm*;
-*head /proc/version*; or the Cygwin command: *cygcheck -V*. Refer to each
-command's `--help` output or the _Cygwin User's Guide_ for more information.
-
-If you are looking for the version number for the whole Cygwin release, there is
-none. Each package in the Cygwin release has its own version, and the cygwin
-package containing the Cygwin DLL and Cygwin system specific utilities is just
-another (but very important!) package. The packages in Cygwin are continually
-improving, thanks to the efforts of net volunteers who maintain the Cygwin
-binary ports. Each package has its own version numbers and its own release process.
-
-So, how do you get the most up-to-date version of Cygwin? Easy. Just download
-the Cygwin Setup program by following the instructions _here_. The Setup program
-will handle the task of updating the packages on your system to the latest
-version. For more information about using Cygwin's Setup program, see _Setting
-Up Cygwin_ in the Cygwin User's Guide."
-
-and I have also changed the other occurrences of setup.exe to use the Cygwin
-Setup program or similar.
-
-In the above, I think we should also change the link _here_ (so '90s!) to
-_installation instructions_.
-
-Maybe also under 1.6:
-
-	https://cygwin.com/faq.html#faq.what.who
-
-which seems to be from when Redhat sold Cygwin, so:
-- comment out or otherwise memorialize Yaakov;
-- omit Redhat from Corinna's entry, and clean up;
-- change "people; a complete list can be found _here_" link to just _maintainers_;
-- anyone else with committer rights who should be added?
-- maybe update that guy Jon? ;^>
-
-In the following para:
-
-"Please note that all of us working on Cygwin try to be as responsive as
-possible and deal with patches and questions as we get them, but realistically
-we don't have time to answer all of the email that is sent to the main mailing
-list. Making Net releases of the Win32 tools and helping people on the Net out
-is not our primary job function, so some email will have to go unanswered."
-
-"working" to "volunteering";
-remove "Win32" and "Net" there and earlier paras;
-change "is not our primary job function" to "is an activity in our spare time":
-
-Anyhting else that comes to mind?
-
+diff --git a/winsup/utils/dumper.cc b/winsup/utils/dumper.cc
+index fa3fe1fbc..04b7aa638 100644
+--- a/winsup/utils/dumper.cc
++++ b/winsup/utils/dumper.cc
+@@ -292,6 +292,25 @@ dumper::add_module (LPVOID base_address)
+ 
+ #define PAGE_BUFFER_SIZE 4096
+ 
++void protect_dump(DWORD protect, char *buf)
++{
++  const char *pt[10];
++  pt[0] = (protect & PAGE_READONLY) ? "RO " : "";
++  pt[1] = (protect & PAGE_READWRITE) ? "RW " : "";
++  pt[2] = (protect & PAGE_WRITECOPY) ? "WC " : "";
++  pt[3] = (protect & PAGE_EXECUTE) ? "EX " : "";
++  pt[4] = (protect & PAGE_EXECUTE_READ) ? "EXRO " : "";
++  pt[5] = (protect & PAGE_EXECUTE_READWRITE) ? "EXRW " : "";
++  pt[6] = (protect & PAGE_EXECUTE_WRITECOPY) ? "EXWC " : "";
++  pt[7] = (protect & PAGE_GUARD) ? "GRD " : "";
++  pt[8] = (protect & PAGE_NOACCESS) ? "NA " : "";
++  pt[9] = (protect & PAGE_NOCACHE) ? "NC " : "";
++
++  buf[0] = '\0';
++  for (int i = 0; i < 10; i++)
++    strcat (buf, pt[i]);
++}
++
+ int
+ dumper::collect_memory_sections ()
+ {
+@@ -316,10 +335,65 @@ dumper::collect_memory_sections ()
+ 	break;
+ 
+       int skip_region_p = 0;
++      const char *disposition = "dumped";
+ 
+-      if (mbi.Protect & (PAGE_NOACCESS | PAGE_GUARD) ||
+-	  mbi.State != MEM_COMMIT)
+-	skip_region_p = 1;
++      if (mbi.Protect & PAGE_NOACCESS)
++	{
++	  skip_region_p = 1;
++	  disposition = "skipped due to noaccess";
++	}
++
++      if (mbi.Protect & PAGE_GUARD)
++	{
++	  skip_region_p = 1;
++	  disposition = "skipped due to guardpage";
++	}
++
++      if (mbi.State != MEM_COMMIT)
++	{
++	  skip_region_p = 1;
++	  disposition = "skipped due to uncommited";
++	}
++
++      {
++	char buf[10 * 6];
++	protect_dump(mbi.Protect, buf);
++
++	const char *state = "";
++	const char *type = "";
++
++	if (mbi.State & MEM_COMMIT)
++	  {
++	    state = "COMMIT";
++	  }
++	else if (mbi.State & MEM_FREE)
++	  {
++	    state = "FREE";
++	    type = "FREE";
++	  }
++	else if (mbi.State & MEM_RESERVE)
++	  {
++	    state = "RESERVE";
++	  }
++
++	if (mbi.Type & MEM_IMAGE)
++	  {
++	    type = "IMAGE";
++	  }
++	else if (mbi.Type & MEM_MAPPED)
++	  {
++	    type = "MAPPED";
++	  }
++	else if (mbi.Type & MEM_PRIVATE)
++	  {
++	    type = "PRIVATE";
++	  }
++
++	deb_printf ("region 0x%016lx-0x%016lx (protect = %-8s, state = %-7s, type = %-7s, %s)\n",
++		    current_page_address,
++		    current_page_address + mbi.RegionSize,
++		    buf, state, type, disposition);
++      }
+ 
+       if (!skip_region_p)
+ 	{
+@@ -329,26 +403,11 @@ dumper::collect_memory_sections ()
+ 	  if (!ReadProcessMemory (hProcess, current_page_address, mem_buf, sizeof (mem_buf), &done))
+ 	    {
+ 	      DWORD err = GetLastError ();
+-	      const char *pt[10];
+-	      pt[0] = (mbi.Protect & PAGE_READONLY) ? "RO " : "";
+-	      pt[1] = (mbi.Protect & PAGE_READWRITE) ? "RW " : "";
+-	      pt[2] = (mbi.Protect & PAGE_WRITECOPY) ? "WC " : "";
+-	      pt[3] = (mbi.Protect & PAGE_EXECUTE) ? "EX " : "";
+-	      pt[4] = (mbi.Protect & PAGE_EXECUTE_READ) ? "EXRO " : "";
+-	      pt[5] = (mbi.Protect & PAGE_EXECUTE_READWRITE) ? "EXRW " : "";
+-	      pt[6] = (mbi.Protect & PAGE_EXECUTE_WRITECOPY) ? "EXWC " : "";
+-	      pt[7] = (mbi.Protect & PAGE_GUARD) ? "GRD " : "";
+-	      pt[8] = (mbi.Protect & PAGE_NOACCESS) ? "NA " : "";
+-	      pt[9] = (mbi.Protect & PAGE_NOCACHE) ? "NC " : "";
+-	      char buf[10 * 6];
+-	      buf[0] = '\0';
+-	      for (int i = 0; i < 10; i++)
+-		strcat (buf, pt[i]);
+-
+-	      deb_printf ("warning: failed to read memory at %p-%p (protect = %s), error %ld.\n",
++
++	      deb_printf ("warning: failed to read memory at %p-%p, error %ld.\n",
+ 			  current_page_address,
+ 			  current_page_address + mbi.RegionSize,
+-			  buf, err);
++			  err);
+ 	      skip_region_p = 1;
+ 	    }
+ 	}
 -- 
-Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
+2.27.0
 
-This email may be disturbing to some readers as it contains
-too much technical detail. Reader discretion is advised.
-[Data in IEC units and prefixes, physical quantities in SI.]
