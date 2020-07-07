@@ -1,33 +1,48 @@
-Return-Path: <mark@maxrnd.com>
-Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
- by sourceware.org (Postfix) with ESMTPS id 7BBDD3858D37
- for <cygwin-patches@cygwin.com>; Mon,  6 Jul 2020 20:17:13 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 7BBDD3858D37
+Return-Path: <jon.turney@dronecode.org.uk>
+Received: from re-prd-fep-041.btinternet.com (mailomta21-re.btinternet.com
+ [213.120.69.114])
+ by sourceware.org (Postfix) with ESMTPS id 366373858D35
+ for <cygwin-patches@cygwin.com>; Tue,  7 Jul 2020 01:28:19 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 366373858D35
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=dronecode.org.uk
 Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=maxrnd.com
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=mark@maxrnd.com
-Received: (from daemon@localhost)
- by m0.truegem.net (8.12.11/8.12.11) id 066KHCNs066972
- for <cygwin-patches@cygwin.com>; Mon, 6 Jul 2020 13:17:12 -0700 (PDT)
- (envelope-from mark@maxrnd.com)
-Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67),
- claiming to be "[192.168.1.100]"
- via SMTP by m0.truegem.net, id smtpdl1v9zp; Mon Jul  6 13:17:10 2020
+ spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
+Received: from re-prd-rgout-005.btmx-prd.synchronoss.net ([10.2.54.8])
+ by re-prd-fep-041.btinternet.com with ESMTP id
+ <20200707012818.UCET30588.re-prd-fep-041.btinternet.com@re-prd-rgout-005.btmx-prd.synchronoss.net>
+ for <cygwin-patches@cygwin.com>; Tue, 7 Jul 2020 02:28:18 +0100
+Authentication-Results: btinternet.com;
+ auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
+X-Originating-IP: [31.51.206.31]
+X-OWM-Source-IP: 31.51.206.31 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeduiedrudeggdegkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepuffvfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhephfejkeetffdvgeelgfetgeefkedtgeffveefheffudffjeetffevgfeigfejgffgnecuffhomhgrihhnpehsohhurhgtvgifrghrvgdrohhrghenucfkphepfedurdehuddrvddtiedrfedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddurdduuddungdpihhnvghtpeefuddrhedurddvtdeirdefuddpmhgrihhlfhhrohhmpeeojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhequceuqfffjgepkeeukffvoffkoffgpdhrtghpthhtohepoegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmqe
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from [192.168.1.111] (31.51.206.31) by
+ re-prd-rgout-005.btmx-prd.synchronoss.net (5.8.340) (authenticated as
+ jonturney@btinternet.com)
+ id 5ED9C74D059752BB for cygwin-patches@cygwin.com;
+ Tue, 7 Jul 2020 02:28:18 +0100
 Subject: Re: Cygwin 3.1.6
-To: cygwin-patches@cygwin.com
+To: Cygwin Patches <cygwin-patches@cygwin.com>
 References: <20200706195041.GI514059@calimero.vinschen.de>
-From: Mark Geisert <mark@maxrnd.com>
-Message-ID: <9d336a71-8ccc-7f4f-cc18-518769aed6eb@maxrnd.com>
-Date: Mon, 6 Jul 2020 13:17:10 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Firefox/52.0 SeaMonkey/2.49.4
+From: Jon Turney <jon.turney@dronecode.org.uk>
+Message-ID: <6d8e377f-1ff0-6b47-33a7-3f3b5af317b3@dronecode.org.uk>
+Date: Tue, 7 Jul 2020 02:28:17 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
 In-Reply-To: <20200706195041.GI514059@calimero.vinschen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
- KAM_LAZY_DOMAIN_SECURITY, KAM_NUMSUBJECT, SPF_HELO_NONE, SPF_NONE,
- TXREP autolearn=no autolearn_force=no version=3.4.2
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, KAM_LINKBAIT, KAM_NUMSUBJECT,
+ RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_PASS,
+ SPF_NONE, TXREP autolearn=no autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -42,13 +57,15 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 06 Jul 2020 20:17:17 -0000
+X-List-Received-Date: Tue, 07 Jul 2020 01:28:21 -0000
 
-Corinna Vinschen wrote:
+On 06/07/2020 20:50, Corinna Vinschen wrote:
 > Hi guys,
 > 
 > Do you have anything in the loop which should go into 3.1.6?
 
-Nothing from me, thanks.
+No
 
-..mark
+> Given https://sourceware.org/git/?p=newlib-cygwin.git;a=commitdiff;h=bb96bd0,
+> I'd like to release 3.1.6 this week.
+
