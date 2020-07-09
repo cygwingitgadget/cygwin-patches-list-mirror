@@ -1,53 +1,55 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
- by sourceware.org (Postfix) with ESMTPS id 01DEA384C005
- for <cygwin-patches@cygwin.com>; Thu,  9 Jul 2020 07:56:22 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 01DEA384C005
-Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([217.91.18.234]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1Mt7x1-1kmUqS2lTN-00tXOb for <cygwin-patches@cygwin.com>; Thu, 09 Jul 2020
- 09:56:21 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 39DE2A8068F; Thu,  9 Jul 2020 09:56:21 +0200 (CEST)
-Date: Thu, 9 Jul 2020 09:56:21 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 1/2] fhandler_proc.cc(format_proc_cpuinfo): add microcode
- registry lookup values
-Message-ID: <20200709075621.GM514059@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200707190036.3404-1-Brian.Inglis@SystematicSW.ab.ca>
+Return-Path: <David.Allsopp@cl.cam.ac.uk>
+Received: from outmail148098.authsmtp.com (outmail148098.authsmtp.com
+ [62.13.148.98])
+ by sourceware.org (Postfix) with ESMTPS id 234D8384B13D
+ for <cygwin-patches@cygwin.com>; Thu,  9 Jul 2020 19:30:38 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 234D8384B13D
+Received: from mail-c237.authsmtp.com (mail-c237.authsmtp.com [62.13.128.237])
+ by punt15.authsmtp.com. (8.15.2/8.15.2) with ESMTP id 069JUbmV088120
+ for <cygwin-patches@cygwin.com>; Thu, 9 Jul 2020 20:30:37 +0100 (BST)
+ (envelope-from David.Allsopp@cl.cam.ac.uk)
+Received: from romulus.metastack.com
+ (26.77-31-62.static.virginmediabusiness.co.uk [62.31.77.26])
+ (authenticated bits=0)
+ by mail.authsmtp.com (8.15.2/8.15.2) with ESMTPSA id 069JUY8G048084
+ (version=TLSv1 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO)
+ for <cygwin-patches@cygwin.com>; Thu, 9 Jul 2020 20:30:35 +0100 (BST)
+ (envelope-from David.Allsopp@cl.cam.ac.uk)
+Received: from Libera ([172.16.0.125]) (authenticated bits=0)
+ by romulus.metastack.com (8.14.2/8.14.2) with ESMTP id 069JUYd4010500
+ for <cygwin-patches@cygwin.com>; Thu, 9 Jul 2020 20:30:34 +0100
+From: "David Allsopp" <David.Allsopp@cl.cam.ac.uk>
+To: <cygwin-patches@cygwin.com>
+References: 
+In-Reply-To: 
+Subject: [PATCH] Fix incorrect sign-extension of pointer in 32-bit acl
+ __to_entry
+Date: Thu, 9 Jul 2020 20:30:35 +0100
+Message-ID: <001101d65627$6b726260$42572720$@cl.cam.ac.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200707190036.3404-1-Brian.Inglis@SystematicSW.ab.ca>
-X-Provags-ID: V03:K1:kJ1m43y6ptUiacWoDlN/Vgf2vCvQVDtqMIJZsdoGt81kFvjZdVN
- 3+ozXSycQFBMMeM3g2arLvUHfy5a7GUiFSadXghG/z7JEt5e2tAxz4tJ0vrWfr53wJC0uNG
- LW4NFQyyVjRWPk7IQfhlEhxBHVkFekFqYf/NiLyZfbikxXU6Ze0OyfR1gHBgnovRxLj67Iq
- ZNu/H9/0oZkRk9SLjGGSQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:jJGeLtMJv9w=:3/jtuDn0heMEjzligKeBcB
- lM1Ifqz33/nfNp5t6yi6LyrARmzdLXOEzK8G4BAKL9t/Ova7skEWJjU+gbIhDDp3fOMTTAFqi
- 4IrfOHKC03usRYGtcGgrL6OCD0IRpl7Bi1OXYgYPyEJAaIx2WE+jVqmPJNlbVp4A/AlZ5NJOE
- 6XrpEJWAg2x/g/HD8bP2owgzmV7rlnrWuvrtMRxl9flk20t0iHXGUF/phxnOrkZF6R96WNYNO
- UCTexFOO5JfPR1dAcBebKZ0t93TYRPk70r7wexxPdC3eEwAe7uo7azVk2WroPf6iZ+HEfgJqh
- hbeEcVZpaxgqqnA4KTeiSKJ0D9iRkC1P2WNkLY/0SlxykBh7rSaW0Yql2cyw0WW7cXfmEIMWW
- jLmNTLTp0SsU6c+RihngncvdgmAXEPaYzPc0UINk62nmTRhPApuYsn4xDgBCJyE4vcABBleWF
- uQQKHp9pfZ3aF69Ou5wQNphLlJLgjjNaz/7p28e/DA5wIkGn4VUn9tCaW+dD8f9fCsBlixkR2
- nCgkD1FI25xgX5bF7Bf3JmEtj73v4LgkxwVmLqio4l1eIs0/mrFiSuVAL59Bpe6XCR8m/hqwS
- Mi2tv1yEVPp1Hggji9wl++JpdNTVCvRxrszaYbA78ayfP75ow09B0wtp/3uY77NpZO0J3w0HI
- gFWXtUHy4zqNC0mrHqZgk2JjIrfJhWre26dP27kA02BBbuEwkHfqZnKbGxMzej/lt3Ym0DGzI
- ExX+4FXmmgw3f+FM+lSZ13k4GHmpgdlQXQjkUXBvcEYgwmUBcOLN6kBvODe5+DoqA6tkDqzII
- zLMtYyK3RLQuYANfMNMgOVr1hGMh9gDLQwP1YY8ZkUvidQ3mRqw/eySThU7tC58CivTUWOdnu
- sCPGrIsj5qvbK/bJGF1A==
-X-Spam-Status: No, score=-98.1 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+Content-Type: multipart/mixed;
+ boundary="----=_NextPart_000_0012_01D6562F.CD36F170"
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: en-gb
+Thread-Index: AdZWJQHHESV98qffT7qyu7zaVSI0DgAAgZpQ
+X-Scanned-By: MIMEDefang 2.65 on 62.31.77.26
+X-Server-Quench: a9bb3445-c21a-11ea-8a6b-8434971169dc
+X-AuthReport-Spam: If SPAM / abuse - report it at:
+ http://www.authsmtp.com/abuse
+X-AuthRoute: OCd1ZAARAlZ5RRob BmUtCCtbTh09DhZI RxQKKE1TKxwUVhJa
+ I0lFL1wWKFQATlFU QBZYEgMTCQNvCjwo JQpYcn8YPlVMXwdq QEpJSFFSHgZuTxoD
+ GB0fTB51aQdAZ3x1 ekcsXnZSJiETfTF9 RkZUHWlIZmdlbC5O WRIKdAdQdR4ZfB4U
+ d1F+ASIQaTQBNGdo Q1Rvbm9oZGsOJC9D cTkkEXkydA4lHy50 RhYJGi81EEYZDz4y
+ IBpjJ04AEUAKM0I0 eVwvEUofMhkOBxcW HkcFW3UcLVgdDyMg CUttalIZJzBbXT1N agAA
+X-Authentic-SMTP: 61633634383431.1024:7364
+X-AuthFastPath: 0 (Was 255)
+X-AuthSMTP-Origin: 62.31.77.26/25
+X-AuthVirus-Status: No virus detected - but ensure you scan with your own
+ anti-virus system.
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
+ KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H3,
+ RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_NONE,
+ TXREP autolearn=no autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -62,27 +64,74 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 09 Jul 2020 07:56:24 -0000
+X-List-Received-Date: Thu, 09 Jul 2020 19:30:39 -0000
 
-On Jul  7 13:00, Brian Inglis wrote:
-> Re: CPU microcode reported wrong in /proc/cpuinfo
->     https://sourceware.org/pipermail/cygwin/2020-May/245063.html
-> earlier Windows releases used different registry values to store microcode
-> revisions depending on the MSR name being used to get microcode revisions:
-> add these alternative registry values to the cpuinfo registry value lookup;
-> iterate thru the registry data until a valid microcode revision is found;
-> some revision values are in the high bits, so if the low bits are all clear,
-> shift the revision value down into the low bits
-> ---
->  winsup/cygwin/fhandler_proc.cc | 44 +++++++++++++++++++++++++++-------
->  1 file changed, 35 insertions(+), 9 deletions(-)
+This is a multipart message in MIME format.
 
-Series pushed.  I'm going to release Cygwin 3.1.6 today.
+------=_NextPart_000_0012_01D6562F.CD36F170
+Content-Type: text/plain;
+	charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+
+I have some code where the acl_t returned by get_file_acl is allocated at
+0x80038248. As a result the acl_entry_t generated by acl_get_entry has an
+"index" of -1, since the pointer was sign-extended to 64-bits.
+
+My fix is trivial and simply casts the pointer to uintptr_t first.
+
+All best,
 
 
-Thanks,
-Corinna
+David
 
--- 
-Corinna Vinschen
-Cygwin Maintainer
+------=_NextPart_000_0012_01D6562F.CD36F170
+Content-Type: application/octet-stream;
+	name="0001-Fix-invalid-acl_entry_t-on-32-bit-Cygwin.patch"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment;
+	filename="0001-Fix-invalid-acl_entry_t-on-32-bit-Cygwin.patch"
+
+From c9af9cc1ecba0c716577f7fe6b380437c817de2c Mon Sep 17 00:00:00 2001=0A=
+From: David Allsopp <david.allsopp@metastack.com>=0A=
+Date: Thu, 9 Jul 2020 20:17:03 +0100=0A=
+Subject: [PATCH] Fix invalid acl_entry_t on 32-bit Cygwin=0A=
+=0A=
+If the acl_t struct was at or above 0x80000000 then the pointer was=0A=
+sign-extended to 0xffff_ffff_8000_0000 and so the index was lost.=0A=
+=0A=
+Signed-off-by: David Allsopp <david.allsopp@metastack.com>=0A=
+---=0A=
+ winsup/cygwin/release/3.1.7  | 4 ++++=0A=
+ winsup/cygwin/sec_posixacl.h | 2 +-=0A=
+ 2 files changed, 5 insertions(+), 1 deletion(-)=0A=
+ create mode 100644 winsup/cygwin/release/3.1.7=0A=
+=0A=
+diff --git a/winsup/cygwin/release/3.1.7 b/winsup/cygwin/release/3.1.7=0A=
+new file mode 100644=0A=
+index 000000000..6ce316fc4=0A=
+--- /dev/null=0A=
++++ b/winsup/cygwin/release/3.1.7=0A=
+@@ -0,0 +1,4 @@=0A=
++Bug Fixes:=0A=
++----------=0A=
++=0A=
++- Fix acl_get_* functions in 32-bit Cygwin (pointer sign extension)=0A=
+diff --git a/winsup/cygwin/sec_posixacl.h b/winsup/cygwin/sec_posixacl.h=0A=
+index a3790a52b..0f9e7bde3 100644=0A=
+--- a/winsup/cygwin/sec_posixacl.h=0A=
++++ b/winsup/cygwin/sec_posixacl.h=0A=
+@@ -34,7 +34,7 @@ struct __acl_t=0A=
+ inline acl_entry_t=0A=
+ __to_entry (acl_t acl, uint16_t idx)=0A=
+ {=0A=
+-  return ((uint64_t) idx << 48) | (uint64_t) acl;=0A=
++  return ((uint64_t) idx << 48) | (uint64_t) ((uintptr_t) acl);=0A=
+ }=0A=
+ #define __to_permset(a,i)	((acl_permset_t)__to_entry((a),(i)))=0A=
+ =0A=
+-- =0A=
+2.19.2.windows.1=0A=
+=0A=
+
+------=_NextPart_000_0012_01D6562F.CD36F170--
+
