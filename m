@@ -1,34 +1,53 @@
-Return-Path: <brian.inglis@systematicsw.ab.ca>
-Received: from smtp-out-so.shaw.ca (smtp-out-so.shaw.ca [64.59.136.138])
- by sourceware.org (Postfix) with ESMTPS id B751D3857C54
- for <cygwin-patches@cygwin.com>; Tue,  7 Jul 2020 19:01:14 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org B751D3857C54
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=SystematicSW.ab.ca
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+ by sourceware.org (Postfix) with ESMTPS id 1AC863858D34
+ for <cygwin-patches@cygwin.com>; Thu,  9 Jul 2020 07:35:34 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 1AC863858D34
 Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
-Received: from Brian.Inglis@Shaw.ca ([24.64.172.44]) by shaw.ca with ESMTP
- id ssq8j53hLYYpxssq9j3Mdv; Tue, 07 Jul 2020 13:01:14 -0600
-X-Authority-Analysis: v=2.3 cv=OubUNx3t c=1 sm=1 tr=0
- a=kiZT5GMN3KAWqtYcXc+/4Q==:117 a=kiZT5GMN3KAWqtYcXc+/4Q==:17
- a=BqgCfznX7MUA:10 a=UsIZ3BRvCboA:10 a=CCpqsmhAAAAA:8 a=9hJHHtsMjto-fbLiiKYA:9
- a=YocQtCf9LIkA:10 a=ul9cdbp4aOFLsgKbc677:22 a=pHzHmUro8NiASowvMSCR:22
- a=nt3jZW36AmriUCFCBwmW:22
-From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+ dmarc=none (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org;
+ spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
+Received: from calimero.vinschen.de ([217.91.18.234]) by
+ mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1Md66H-1kSDwW2WP5-00aFBO for <cygwin-patches@cygwin.com>; Thu, 09 Jul 2020
+ 09:35:31 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 1D555A80746; Thu,  9 Jul 2020 09:35:31 +0200 (CEST)
+Date: Thu, 9 Jul 2020 09:35:31 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH 1/2] fhandler_proc.cc(format_proc_cpuinfo): add microcode
- registry lookup values
-Date: Tue,  7 Jul 2020 13:00:36 -0600
-Message-Id: <20200707190036.3404-1-Brian.Inglis@SystematicSW.ab.ca>
-X-Mailer: git-send-email 2.27.0
+Subject: Re: Cygwin 3.1.6
+Message-ID: <20200709073531.GL514059@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfLuA2uxEVBhlOi3xIGHmA+Le0nvAX5WlQ8m+9g3uaY/vrYHP2GwIzg9v8xKRKS/IgnGwKPoeZ5/QUC7YyhXvXJcEW7DykHPxKygZ8HVgUicN5Yz/fe4k
- I7EI0YwaxiHb5nBp9B6iMIQA7gPTYfQYLyVLDgGcSLEZqTo5YZ5hkqDB2ZnzbtMDZSeZOmuB79jih5P+tBdNHrHJnIBCW3/ySBDkTpptp21JpeRgEDaALJHs
- kKZ+zFEpLoJrpRYXLSzNiA==
-X-Spam-Status: No, score=-14.6 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW, SPF_HELO_NONE,
- SPF_NONE, TXREP autolearn=ham autolearn_force=no version=3.4.2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <6d8e377f-1ff0-6b47-33a7-3f3b5af317b3@dronecode.org.uk>
+ <9d336a71-8ccc-7f4f-cc18-518769aed6eb@maxrnd.com>
+ <5f9895b3-411b-0264-ed3d-8b576389f037@cornell.edu>
+X-Provags-ID: V03:K1:7UhUF/gJAI3nsXrkaei4Sbv3UgoejVYz/GzxY1G2BNphPWdkMt5
+ hciFBQlHxYuIyVEtvkJEZzaLEOAjn8yCtDFeLnSyL7hOpzmIui/oD5DVktwAsugPLt2zco3
+ wzX4YXBmvvDGdHQcoDFVlpdaxdMfxbPx45AxFv30Y/rrKboVZW3JrcECp+DnKUFhcbrXNQl
+ 9P0Q/Pd7DSPGpM8j37Frg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:f4x1BOgBJw8=:facOS9dG0LA4v+yZyaVLcg
+ VV7BtCc3DD3xzsvDkuR32ob1llax9EMepEjA+v2Q5mHZE9FxMIprocaoLtctOjZIEP5Qdx3Dg
+ 9b2wMuqAlvxgfLCSr4bbcXG0Rv2iBK/Y4bSRXdJfl4M4+1FxOXARIV/S3ViYYVkPLJimLwouw
+ ikJrk4b8srW/22gNZw4ZPkpqacz2tJNPvIFdWquVm8F0pRZx3NWlRH6XfMKS7oWHjqXWaqPKm
+ nHgyHWtNXRCx/6z/Gn2QCHIcvSQCMLVnVSFsP/nmNvZPOlPKIvzFed77DvQI+TvGtBap6CNvm
+ WonLSZUVfFwTGwqWphX27tyEB9Ujnv6OfmQeAgF138Vhc5SInf9x/36ZYYrRfYMBtJK6fMt8I
+ LxKrCdiLQV3eqB+p+FNxxF/Iae99ts1SpxLlFn6dbCLmxERdb672cxIytEb8KlBtRC027tjz0
+ LW2nbov3izUCRo3CrelgoAl4zoNzcizl5HLU8xkrFwAR9IGf94atX6ZqfMkg8mSl6O7WRPeTq
+ miDpkZXWZZLqERFGQu8yVF++uPCuxNkD2lZ/dBuhfoaGAZiYFtdTMfK2xB5HWpPiGKyGt0sFZ
+ PIBB0iOBGJLS8+W45FayKJkepzEWVhaChQtcXfVo0D5O7CyRuIAOXxdHWsSoweFFgYCuc6xyQ
+ PTTpqKB3Wt9Jlpf33dNHsCzUsf1Oc1QZQNN9W9DK+zJ/ru3HSiXNJ/fIswr+oosFtk1sshSBr
+ +xrPeUQDdDKF37PN9t/qHpaomKRWd44cKU/nYFj1NiORLUvMblhslVHj37vc1lNciWiqPus1j
+ SwTstmpSk2phcPMKUffwNXvNSv6w1wdlPaYKHO8DlTBdAYk/XsY4cj29jLPltNF0ZA1sLJgpG
+ PryKP0FC9OjOKcjYtdIw==
+X-Spam-Status: No, score=-97.8 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_STATUS, KAM_NUMSUBJECT, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -43,86 +62,39 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 07 Jul 2020 19:01:16 -0000
+X-List-Received-Date: Thu, 09 Jul 2020 07:35:35 -0000
 
-Re: CPU microcode reported wrong in /proc/cpuinfo
-    https://sourceware.org/pipermail/cygwin/2020-May/245063.html
-earlier Windows releases used different registry values to store microcode
-revisions depending on the MSR name being used to get microcode revisions:
-add these alternative registry values to the cpuinfo registry value lookup;
-iterate thru the registry data until a valid microcode revision is found;
-some revision values are in the high bits, so if the low bits are all clear,
-shift the revision value down into the low bits
----
- winsup/cygwin/fhandler_proc.cc | 44 +++++++++++++++++++++++++++-------
- 1 file changed, 35 insertions(+), 9 deletions(-)
+On Jul  6 16:01, Ken Brown via Cygwin-patches wrote:
+> On 7/6/2020 3:50 PM, Corinna Vinschen wrote:
+> > Hi guys,
+> > 
+> > Do you have anything in the loop which should go into 3.1.6?
+> > 
+> > Given https://sourceware.org/git/?p=newlib-cygwin.git;a=commitdiff;h=bb96bd0,
+> > I'd like to release 3.1.6 this week.
+> 
+> I'm working on some FIFO fixes, but it could be another week until they're
+> done and thoroughly tested.  So I think you should go ahead, and the FIFO
+> stuff can wait for 3.1.7.
+> 
+> Ken
 
-diff --git a/winsup/cygwin/fhandler_proc.cc b/winsup/cygwin/fhandler_proc.cc
-index f1bc1c7405..f637dfd8e4 100644
---- a/winsup/cygwin/fhandler_proc.cc
-+++ b/winsup/cygwin/fhandler_proc.cc
-@@ -692,26 +692,52 @@ format_proc_cpuinfo (void *, char *&destbuf)
-       union
-         {
- 	  LONG uc_len;		/* -max size of buffer before call */
--	  char uc_microcode[16];
--        } uc;
-+	  char uc_microcode[16];	/* at least 8 bytes */
-+        } uc[4];		/* microcode values changed historically */
- 
--      RTL_QUERY_REGISTRY_TABLE tab[3] =
-+      RTL_QUERY_REGISTRY_TABLE tab[6] =
-         {
- 	  { NULL, RTL_QUERY_REGISTRY_DIRECT | RTL_QUERY_REGISTRY_NOSTRING,
--	    L"~Mhz", &cpu_mhz, REG_NONE, NULL, 0 },
-+	    L"~Mhz",		       &cpu_mhz, REG_NONE, NULL, 0 },
- 	  { NULL, RTL_QUERY_REGISTRY_DIRECT | RTL_QUERY_REGISTRY_NOSTRING,
--	    L"Update Revision", &uc, REG_NONE, NULL, 0 },
-+	    L"Update Revision",		 &uc[0], REG_NONE, NULL, 0 },
-+							/* latest MSR */
-+	  { NULL, RTL_QUERY_REGISTRY_DIRECT | RTL_QUERY_REGISTRY_NOSTRING,
-+	    L"Update Signature",	 &uc[1], REG_NONE, NULL, 0 },
-+							/* previous MSR */
-+	  { NULL, RTL_QUERY_REGISTRY_DIRECT | RTL_QUERY_REGISTRY_NOSTRING,
-+	    L"CurrentPatchLevel",	 &uc[2], REG_NONE, NULL, 0 },
-+							/* earlier MSR */
-+	  { NULL, RTL_QUERY_REGISTRY_DIRECT | RTL_QUERY_REGISTRY_NOSTRING,
-+	    L"Platform Specific Field1", &uc[3], REG_NONE, NULL, 0 },
-+							/* alternative */
- 	  { NULL, 0, NULL, NULL, 0, NULL, 0 }
-         };
- 
--      memset (&uc, 0, sizeof (uc.uc_microcode));
--      uc.uc_len = -16;	/* -max size of microcode buffer */
-+      for (size_t uci = 0; uci < sizeof (uc)/sizeof (*uc); ++uci)
-+	{
-+	  memset (&uc[uci], 0, sizeof (uc[uci]));
-+	  uc[uci].uc_len = -(LONG)sizeof (uc[0].uc_microcode);
-+							/* neg buffer size */
-+	}
-+
-       RtlQueryRegistryValues (RTL_REGISTRY_ABSOLUTE, cpu_key, tab,
- 			      NULL, NULL);
-       cpu_mhz = ((cpu_mhz - 1) / 10 + 1) * 10;	/* round up to multiple of 10 */
-       DWORD bogomips = cpu_mhz * 2; /* bogomips is double cpu MHz since MMX */
--      long long microcode = 0;	/* at least 8 bytes for AMD */
--      memcpy (&microcode, &uc, sizeof (microcode));
-+
-+      unsigned long long microcode = 0;	/* needs 8 bytes */
-+      for (size_t uci = 0; uci < sizeof (uc)/sizeof (*uc) && !microcode; ++uci)
-+	{
-+	  /* still neg buffer size => no data */
-+	  if (-(LONG)sizeof (uc[uci].uc_microcode) != uc[uci].uc_len)
-+	    {
-+	      memcpy (&microcode, uc[uci].uc_microcode, sizeof (microcode));
-+
-+	      if (!(microcode & 0xFFFFFFFFLL))	/* some values in high bits */
-+		  microcode <<= 32;		/* shift them down */
-+	    }
-+	}
- 
-       bufptr += __small_sprintf (bufptr, "processor\t: %d\n", cpu_number);
-       uint32_t maxf, vendor_id[4], unused;
+On Jul  6 13:17, Mark Geisert wrote:
+> Nothing from me, thanks.
+
+On Jul  7 02:28, Jon Turney wrote:
+> On 06/07/2020 20:50, Corinna Vinschen wrote:
+> > Hi guys,
+> > 
+> > Do you have anything in the loop which should go into 3.1.6?
+> 
+> No
+
+Thanks, guys!
+
+
+Corinna
+
 -- 
-2.27.0
-
+Corinna Vinschen
+Cygwin Maintainer
