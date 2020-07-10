@@ -1,55 +1,34 @@
-Return-Path: <David.Allsopp@cl.cam.ac.uk>
-Received: from outmail148098.authsmtp.com (outmail148098.authsmtp.com
- [62.13.148.98])
- by sourceware.org (Postfix) with ESMTPS id 234D8384B13D
- for <cygwin-patches@cygwin.com>; Thu,  9 Jul 2020 19:30:38 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 234D8384B13D
-Received: from mail-c237.authsmtp.com (mail-c237.authsmtp.com [62.13.128.237])
- by punt15.authsmtp.com. (8.15.2/8.15.2) with ESMTP id 069JUbmV088120
- for <cygwin-patches@cygwin.com>; Thu, 9 Jul 2020 20:30:37 +0100 (BST)
- (envelope-from David.Allsopp@cl.cam.ac.uk)
-Received: from romulus.metastack.com
- (26.77-31-62.static.virginmediabusiness.co.uk [62.31.77.26])
- (authenticated bits=0)
- by mail.authsmtp.com (8.15.2/8.15.2) with ESMTPSA id 069JUY8G048084
- (version=TLSv1 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO)
- for <cygwin-patches@cygwin.com>; Thu, 9 Jul 2020 20:30:35 +0100 (BST)
- (envelope-from David.Allsopp@cl.cam.ac.uk)
-Received: from Libera ([172.16.0.125]) (authenticated bits=0)
- by romulus.metastack.com (8.14.2/8.14.2) with ESMTP id 069JUYd4010500
- for <cygwin-patches@cygwin.com>; Thu, 9 Jul 2020 20:30:34 +0100
-From: "David Allsopp" <David.Allsopp@cl.cam.ac.uk>
-To: <cygwin-patches@cygwin.com>
-References: 
-In-Reply-To: 
-Subject: [PATCH] Fix incorrect sign-extension of pointer in 32-bit acl
- __to_entry
-Date: Thu, 9 Jul 2020 20:30:35 +0100
-Message-ID: <001101d65627$6b726260$42572720$@cl.cam.ac.uk>
+Return-Path: <brian.inglis@systematicsw.ab.ca>
+Received: from smtp-out-no.shaw.ca (smtp-out-no.shaw.ca [64.59.134.9])
+ by sourceware.org (Postfix) with ESMTPS id 276CD3861970
+ for <cygwin-patches@cygwin.com>; Fri, 10 Jul 2020 01:17:18 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 276CD3861970
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=SystematicSW.ab.ca
+Authentication-Results: sourceware.org;
+ spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
+Received: from Brian.Inglis@Shaw.ca ([24.64.172.44]) by shaw.ca with ESMTP
+ id thf9jKrDWng7KthfAjcMN1; Thu, 09 Jul 2020 19:17:16 -0600
+X-Authority-Analysis: v=2.3 cv=ecemg4MH c=1 sm=1 tr=0
+ a=kiZT5GMN3KAWqtYcXc+/4Q==:117 a=kiZT5GMN3KAWqtYcXc+/4Q==:17
+ a=BqgCfznX7MUA:10 a=UsIZ3BRvCboA:10 a=w_pzkKWiAAAA:8 a=51kjSXn8rxP2_lg2150A:9
+ a=fxnx5gAmH_237FX_:21 a=dM2mh-vyZaXv8Wvn:21 a=gRcj7Hltp7ieFsb-:21
+ a=WK-i71OpKu4A:10 a=sRI3_1zDfAgwuvI8zelB:22
+From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+To: cygwin-patches@cygwin.com
+Subject: [PATCH 1/2] Clarify FAQ 1.5 What version of Cygwin is this, anyway?
+Date: Thu,  9 Jul 2020 19:15:44 -0600
+Message-Id: <20200710011544.28272-1-Brian.Inglis@SystematicSW.ab.ca>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="----=_NextPart_000_0012_01D6562F.CD36F170"
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-gb
-Thread-Index: AdZWJQHHESV98qffT7qyu7zaVSI0DgAAgZpQ
-X-Scanned-By: MIMEDefang 2.65 on 62.31.77.26
-X-Server-Quench: a9bb3445-c21a-11ea-8a6b-8434971169dc
-X-AuthReport-Spam: If SPAM / abuse - report it at:
- http://www.authsmtp.com/abuse
-X-AuthRoute: OCd1ZAARAlZ5RRob BmUtCCtbTh09DhZI RxQKKE1TKxwUVhJa
- I0lFL1wWKFQATlFU QBZYEgMTCQNvCjwo JQpYcn8YPlVMXwdq QEpJSFFSHgZuTxoD
- GB0fTB51aQdAZ3x1 ekcsXnZSJiETfTF9 RkZUHWlIZmdlbC5O WRIKdAdQdR4ZfB4U
- d1F+ASIQaTQBNGdo Q1Rvbm9oZGsOJC9D cTkkEXkydA4lHy50 RhYJGi81EEYZDz4y
- IBpjJ04AEUAKM0I0 eVwvEUofMhkOBxcW HkcFW3UcLVgdDyMg CUttalIZJzBbXT1N agAA
-X-Authentic-SMTP: 61633634383431.1024:7364
-X-AuthFastPath: 0 (Was 255)
-X-AuthSMTP-Origin: 62.31.77.26/25
-X-AuthVirus-Status: No virus detected - but ensure you scan with your own
- anti-virus system.
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
- KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H3,
- RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_NONE,
- TXREP autolearn=no autolearn_force=no version=3.4.2
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4wfCmuza2ugQNFUBndvur/PGei/5ZMXR9EHvN97RQ5c7nb64UQIhdJYpVJkExVvSIlWuhOwn3l8tSUTGb9sQ2XZ0a3isOBpqJGkv8w8czdOaMgMjWI0D+2
+ 8WVOlSqdUfZGSEH9fa6bPdLEQYoWNrROeUbmS/DzOEQZ4Iml4py8Atxob+mnxYcP8mId9FoJjUiuWann5EWmtMJO4rt+ytSRor6a7Pr8H+qxNY/b5XPW4O3O
+ g0+i84/wXAuI3plisnqztA==
+X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW,
+ RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_NONE,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -64,74 +43,62 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 09 Jul 2020 19:30:39 -0000
+X-List-Received-Date: Fri, 10 Jul 2020 01:17:19 -0000
 
-This is a multipart message in MIME format.
+ Relate Cygwin DLL to Unix kernel,
+ add required options to command examples,
+ differentiate Unix and Cygwin commands;
+ mention that the cygwin package contains the DLL.
 
-------=_NextPart_000_0012_01D6562F.CD36F170
-Content-Type: text/plain;
-	charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+---
+ faq/faq.html | 34 ++++++++++++++++++++++++----------
+ 1 file changed, 24 insertions(+), 10 deletions(-)
 
-I have some code where the acl_t returned by get_file_acl is allocated at
-0x80038248. As a result the acl_entry_t generated by acl_get_entry has an
-"index" of -1, since the pointer was sign-extended to 64-bits.
-
-My fix is trivial and simply casts the pointer to uintptr_t first.
-
-All best,
-
-
-David
-
-------=_NextPart_000_0012_01D6562F.CD36F170
-Content-Type: application/octet-stream;
-	name="0001-Fix-invalid-acl_entry_t-on-32-bit-Cygwin.patch"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment;
-	filename="0001-Fix-invalid-acl_entry_t-on-32-bit-Cygwin.patch"
-
-From c9af9cc1ecba0c716577f7fe6b380437c817de2c Mon Sep 17 00:00:00 2001=0A=
-From: David Allsopp <david.allsopp@metastack.com>=0A=
-Date: Thu, 9 Jul 2020 20:17:03 +0100=0A=
-Subject: [PATCH] Fix invalid acl_entry_t on 32-bit Cygwin=0A=
-=0A=
-If the acl_t struct was at or above 0x80000000 then the pointer was=0A=
-sign-extended to 0xffff_ffff_8000_0000 and so the index was lost.=0A=
-=0A=
-Signed-off-by: David Allsopp <david.allsopp@metastack.com>=0A=
----=0A=
- winsup/cygwin/release/3.1.7  | 4 ++++=0A=
- winsup/cygwin/sec_posixacl.h | 2 +-=0A=
- 2 files changed, 5 insertions(+), 1 deletion(-)=0A=
- create mode 100644 winsup/cygwin/release/3.1.7=0A=
-=0A=
-diff --git a/winsup/cygwin/release/3.1.7 b/winsup/cygwin/release/3.1.7=0A=
-new file mode 100644=0A=
-index 000000000..6ce316fc4=0A=
---- /dev/null=0A=
-+++ b/winsup/cygwin/release/3.1.7=0A=
-@@ -0,0 +1,4 @@=0A=
-+Bug Fixes:=0A=
-+----------=0A=
-+=0A=
-+- Fix acl_get_* functions in 32-bit Cygwin (pointer sign extension)=0A=
-diff --git a/winsup/cygwin/sec_posixacl.h b/winsup/cygwin/sec_posixacl.h=0A=
-index a3790a52b..0f9e7bde3 100644=0A=
---- a/winsup/cygwin/sec_posixacl.h=0A=
-+++ b/winsup/cygwin/sec_posixacl.h=0A=
-@@ -34,7 +34,7 @@ struct __acl_t=0A=
- inline acl_entry_t=0A=
- __to_entry (acl_t acl, uint16_t idx)=0A=
- {=0A=
--  return ((uint64_t) idx << 48) | (uint64_t) acl;=0A=
-+  return ((uint64_t) idx << 48) | (uint64_t) ((uintptr_t) acl);=0A=
- }=0A=
- #define __to_permset(a,i)	((acl_permset_t)__to_entry((a),(i)))=0A=
- =0A=
--- =0A=
-2.19.2.windows.1=0A=
-=0A=
-
-------=_NextPart_000_0012_01D6562F.CD36F170--
+diff --git a/faq/faq.html b/faq/faq.html
+index 1f2686c6..846e087e 100644
+--- a/faq/faq.html
++++ b/faq/faq.html
+@@ -53,16 +53,30 @@ such freedom is that the people who use a given piece of software
+ should be able to change it to fit their needs, learn from it, share
+ it with their friends, etc.  The GPL or LGPL licenses allows you those
+ freedoms, so it is free software.
+-</p></td></tr><tr class="question"><td align="left" valign="top"><a name="faq.what.version"></a><p><b>1.5.</b></p></td><td align="left" valign="top"><p>What version of Cygwin <span class="emphasis"><em>is</em></span> this, anyway?</p></td></tr><tr class="answer"><td align="left" valign="top"></td><td align="left" valign="top"><p>To find the version of the Cygwin DLL installed, you can use
+-<code class="filename">uname</code> as on Linux or <code class="filename">cygcheck</code>. Refer to each command's
+-<code class="literal">--help</code> output and the
+-<a class="ulink" href="https://cygwin.com/cygwin-ug-net/" target="_top">Cygwin User's Guide</a>
+-for more information.
+-</p><p>If you are looking for the version number for the whole Cygwin
+-release, there is none. Each package in the Cygwin release has its own
+-version.  The packages in Cygwin are continually improving, thanks to
+-the efforts of net volunteers who maintain the Cygwin binary ports.
+-Each package has its own version numbers and its own release process.
++</p></td></tr>
++<tr class="question"><td align="left" valign="top"><a name="faq.what.version"></a><p><b>1.5.</b></p></td>
++    <td align="left" valign="top"><p>What version of Cygwin <span class="emphasis"><em>is</em></span> this, anyway?</p></td></tr>
++<tr class="answer"><td align="left" valign="top"></td><td align="left" valign="top">
++    <p>As the Cygwin DLL takes the place of a Unix kernel,
++	to find the version of the Cygwin DLL installed,
++	you can use any of the Unix compatible commands:
++	<code class="command"><strong>uname&nbsp;-a</strong></code>;
++	<code class="command"><strong>uname&nbsp;-srvm</strong></code>;
++	<code class="command"><strong>head&nbsp;/proc/version</strong></code>;
++	or the Cygwin command:
++	<code class="command"><strong>cygcheck&nbsp;-V</strong></code>.
++	Refer to each command's
++	<code class="option">--help</code> output or the
++	<a class="ulink" href="https://cygwin.com/cygwin-ug-net/" target="_top">Cygwin User's Guide</a>
++	for more information.</p>
++    <p>If you are looking for the version number for the whole Cygwin release,
++	there is none.
++	Each package in the Cygwin release has its own version, and the
++	<code class="package">cygwin</code> package containing the Cygwin DLL and
++	Cygwin system specific utilities is just another (but very important!) package.
++	The packages in Cygwin are continually improving, thanks to
++	the efforts of net volunteers who maintain the Cygwin binary ports.
++	Each package has its own version numbers and its own release process.
+ </p><p>So, how do you get the most up-to-date version of Cygwin?  Easy.  Just
+ download the Cygwin Setup program by following the instructions
+ <a class="ulink" href="https://cygwin.com/install.html" target="_top">here</a>.
+-- 
+2.27.0
 
