@@ -1,70 +1,58 @@
-Return-Path: <David.Allsopp@cl.cam.ac.uk>
-Received: from outmail148099.authsmtp.net (outmail148099.authsmtp.net
- [62.13.148.99])
- by sourceware.org (Postfix) with ESMTPS id 6E095385700D
- for <cygwin-patches@cygwin.com>; Fri, 10 Jul 2020 15:22:18 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 6E095385700D
-Received: from mail-c237.authsmtp.com (mail-c237.authsmtp.com [62.13.128.237])
- by punt16.authsmtp.com. (8.15.2/8.15.2) with ESMTP id 06AFMGFG013339
- for <cygwin-patches@cygwin.com>;
- Fri, 10 Jul 2020 16:22:16 +0100 (BST)
- (envelope-from David.Allsopp@cl.cam.ac.uk)
-Received: from romulus.metastack.com
- (26.77-31-62.static.virginmediabusiness.co.uk [62.31.77.26])
- (authenticated bits=0)
- by mail.authsmtp.com (8.15.2/8.15.2) with ESMTPSA id 06AFMFEl086784
- (version=TLSv1 cipher=DHE-RSA-AES256-SHA bits=256 verify=NO)
- for <cygwin-patches@cygwin.com>; Fri, 10 Jul 2020 16:22:15 +0100 (BST)
- (envelope-from David.Allsopp@cl.cam.ac.uk)
-Received: from remus.metastack.local
- (27.77-31-62.static.virginmediabusiness.co.uk [62.31.77.27])
- by romulus.metastack.com (8.14.2/8.14.2) with ESMTP id 06AFMEVj020866
- (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=NO)
- for <cygwin-patches@cygwin.com>; Fri, 10 Jul 2020 16:22:14 +0100
-Received: from Hermes.metastack.local (172.16.0.8) by Hermes.metastack.local
- (172.16.0.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3; Fri, 10 Jul
- 2020 16:22:15 +0100
-Received: from Hermes.metastack.local ([fe80::210d:d258:cd04:7b5a]) by
- Hermes.metastack.local ([fe80::210d:d258:cd04:7b5a%2]) with mapi id
- 15.01.1979.003; Fri, 10 Jul 2020 16:22:15 +0100
-From: David Allsopp <David.Allsopp@cl.cam.ac.uk>
-To: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>
-Subject: RE: [PATCH] Fix incorrect sign-extension of pointer in 32-bit acl
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+ by sourceware.org (Postfix) with ESMTPS id 2EC5E3842400
+ for <cygwin-patches@cygwin.com>; Fri, 10 Jul 2020 15:59:05 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 2EC5E3842400
+Authentication-Results: sourceware.org;
+ dmarc=none (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org;
+ spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
+Received: from calimero.vinschen.de ([217.91.18.234]) by
+ mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1N4yyQ-1kuajh2Z5o-010wDc; Fri, 10 Jul 2020 17:59:01 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 00F2AA80B92; Fri, 10 Jul 2020 17:58:58 +0200 (CEST)
+Date: Fri, 10 Jul 2020 17:58:58 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: David Allsopp <David.Allsopp@cl.cam.ac.uk>
+Cc: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>,
+ JonY <10walls@gmail.com>
+Subject: Re: [PATCH] Fix incorrect sign-extension of pointer in 32-bit acl
  __to_entry
-Thread-Topic: [PATCH] Fix incorrect sign-extension of pointer in 32-bit acl
- __to_entry
-Thread-Index: AdZWJQHHESV98qffT7qyu7zaVSI0DgAAgZpQABlPZQAAEDn7IA==
-Date: Fri, 10 Jul 2020 15:22:14 +0000
-Message-ID: <17ec8f4865d648ab80d259266f315de7@metastack.com>
+Message-ID: <20200710155858.GG514059@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: David Allsopp <David.Allsopp@cl.cam.ac.uk>,
+ "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>,
+ JonY <10walls@gmail.com>
 References: <001101d65627$6b726260$42572720$@cl.cam.ac.uk>
  <20200710083232.GD514059@calimero.vinschen.de>
-In-Reply-To: <20200710083232.GD514059@calimero.vinschen.de>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.0.125]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ <17ec8f4865d648ab80d259266f315de7@metastack.com>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.65 on 62.31.77.26
-X-Server-Quench: 22f51576-c2c1-11ea-8a6b-8434971169dc
-X-AuthReport-Spam: If SPAM / abuse - report it at:
- http://www.authsmtp.com/abuse
-X-AuthRoute: OCd1ZAARAlZ5RRob BmUtCCtbTh09DhZI RxQKKE1TKxwUVhJa
- I0lFL1wWKFQATlFU QBZYEgMTCQNvCjwo JQtRcn8YPlVMXwdq QElPSFBQHgRtTxoD
- GB0fTB51aQdAZ3x1 ekcsXnYqKjkMABp9 SkhTHWlIZ2FoaS4d UhZddgZTdh4ZfExE
- d1F+ASIQaTQBNGdo Q1Rvbm9oZGsOJC9D eCxfZWEqaHogPgt0 aRESVTQpFkofXSg4
- M1Q9K1EaWUsBLkg0 KlomXxofPVcKDQxY A0xXSC5fbwJbAiAq EUtTVkp8WApqXSBr Dxs0OA4g
-X-Authentic-SMTP: 61633634383431.1024:7364
-X-AuthFastPath: 0 (Was 255)
-X-AuthSMTP-Origin: 62.31.77.26/25
-X-AuthVirus-Status: No virus detected - but ensure you scan with your own
- anti-virus system.
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
- KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW, SPF_HELO_NONE, SPF_NONE,
- TXREP autolearn=no autolearn_force=no version=3.4.2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <17ec8f4865d648ab80d259266f315de7@metastack.com>
+X-Provags-ID: V03:K1:xq2mOZpo5WLVFchRu49sFAuTX9UmeaPvkLV97Z2nua6J3kxYL5X
+ xCf69JTa0fmZkxnDLPJrnX36nsc/Bn1cSdCLHkEJypmfCmdZXkB+bV4W+DujhCWmvw+oD1r
+ Tpj6bY1h6QhZuU8jcnDI7aP0hz/p9u8taMH6b5yraYCpAJBr+aZ+n3+QAde7ShT7DC7pmnt
+ /QRRipdKJfJO8HLFxv8mQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Un5yF8uhmOo=:YCzGCU+xt0alhKIaYu/KTB
+ 5L6G5UqbLfA62gy23Ak1fIhkemrkOxOQMnTgJQqvHnT7g7XrB0i8MpTdxo/Bu9H6GefAm5Wu8
+ 7YxO2tiXvGr7fYFm7ik34bLtuBmzvLHtk7RZvweGuIP+38eIzrDm4AzzI3S19iXWwfiY7nbz0
+ j8/zCfrUj1unAuwpens3Lmw73mZkdpJ+b2rNt9804LdfK9bIkWhCyq5Is7i0r801jgap3vXTG
+ 1Tnq9Vpv/vj91mKHZhsMF4INLrrjS4c4EqLBPXcgUEPHgMOcDxLp5BLFdF/vsSCnKyDGDvSfD
+ qk+HhlTjOuNd6UNd9hnF9GVteUs1uUCVZVwOrBNq7q7HB44grr+dqAHxIYyW+5W2rVL1fLaaC
+ Xot2Z38QKJcMjc6S8lM8+SPsRdAs/xYzqO+Yn+itI3deALgiT9HRvms4VWgx0D2wtFgI53tED
+ cN4SFYhjjQV6fJ8A2DIMqH2kS8AVGOLyyXOrm9xFcCxL3MfdaNuyo8DdFgT399SwaYn26wzZC
+ X6I6m+V2D3K1kNP6Wyh3ldiADU/8us8aAIvt8E0drdu0fFazO5lhgSf+qT1uH/NkdVM8l10Bx
+ byE9A6T3APsYGF3XJwqCOkxwvIRRQs0xJjhpJPOJDAKsCEON/q1DSivf3iBE44D4YhtegwHeI
+ zt5c8vijEo2kAYtoh1GwuCZ9NNLJRR4sg/1m7FqGvp4ZnXIl1fewyU0nDVO5vLwr1o0MVYeRp
+ hYYAs2ris6TfejQhbTqo8DK2hJK7L0izTBWUG2pF7AttntAtWEKtVYNUFqPIve5SpIEMSvaTc
+ wfrEI5Lq3gKwemiM3bn7v4v1eB3+t1DDdI6uVvds5Y6UL1saHar+3pI52jXzEAjKACSonu5yb
+ BqrOV7PyvFPJrJ0sNZig==
+X-Spam-Status: No, score=-98.3 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -79,20 +67,33 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 10 Jul 2020 15:22:19 -0000
+X-List-Received-Date: Fri, 10 Jul 2020 15:59:06 -0000
 
-Q29yaW5uYSBWaW5zY2hlbiB3cm90ZToNCj4gT24gSnVsICA5IDIwOjMwLCBEYXZpZCBBbGxzb3Bw
-IHZpYSBDeWd3aW4tcGF0Y2hlcyB3cm90ZToNCj4gPiBJIGhhdmUgc29tZSBjb2RlIHdoZXJlIHRo
-ZSBhY2xfdCByZXR1cm5lZCBieSBnZXRfZmlsZV9hY2wgaXMgYWxsb2NhdGVkDQo+ID4gYXQgMHg4
-MDAzODI0OC4gQXMgYSByZXN1bHQgdGhlIGFjbF9lbnRyeV90IGdlbmVyYXRlZCBieSBhY2xfZ2V0
-X2VudHJ5DQo+ID4gaGFzIGFuICJpbmRleCIgb2YgLTEsIHNpbmNlIHRoZSBwb2ludGVyIHdhcyBz
-aWduLWV4dGVuZGVkIHRvIDY0LWJpdHMuDQo+ID4NCj4gPiBNeSBmaXggaXMgdHJpdmlhbCBhbmQg
-c2ltcGx5IGNhc3RzIHRoZSBwb2ludGVyIHRvIHVpbnRwdHJfdCBmaXJzdC4NCj4gDQo+IFB1c2hl
-ZC4gIEkgc3RpbGwgZG9uJ3QgcXVpdGUgdW5kZXJzdGFuZCB3aGF0IHRoZSBjb21waWxlciBpcyB0
-aGlua2luZw0KPiB0aGVyZSwgc2lnbi1leHRlbmRpbmcgYSBwb2ludGVyIHdoZW4gY2FzdGVkIHRv
-IGFuIHVuc2lnZW5kIGludCB0eXBlLCBidXQNCj4geW91ciBwYXRjaCB3b3Jrcywgc28gYWxsIGlz
-IHdlbGwsIEkgZ3Vlc3MuDQoNClRoYW5rIHlvdSAtIGl0IGlzIGluZGVlZCBoYXJkIHRvIGltYWdp
-bmUgd2hlbiB5b3UnZCBldmVyIHdhbnQgdGhhdCBiZWhhdmlvdXIhDQoNCldvdWxkIGl0IGJlIHBv
-c3NpYmxlIHRvIGhhdmUgYSBzbmFwc2hvdCB3aXRoIGl0LCBqdXN0IGZvciBjb250aW51b3VzIGlu
-dGVncmF0aW9uIHNlcnZlcnMgd2hpY2ggbmVlZCB0aGUgZml4LCBwbGVhc2U/DQoNCg0KRGF2aWQN
-Cg==
+On Jul 10 15:22, David Allsopp via Cygwin-patches wrote:
+> Corinna Vinschen wrote:
+> > On Jul  9 20:30, David Allsopp via Cygwin-patches wrote:
+> > > I have some code where the acl_t returned by get_file_acl is allocated
+> > > at 0x80038248. As a result the acl_entry_t generated by acl_get_entry
+> > > has an "index" of -1, since the pointer was sign-extended to 64-bits.
+> > >
+> > > My fix is trivial and simply casts the pointer to uintptr_t first.
+> > 
+> > Pushed.  I still don't quite understand what the compiler is thinking
+> > there, sign-extending a pointer when casted to an unsigend int type, but
+> > your patch works, so all is well, I guess.
+> 
+> Thank you - it is indeed hard to imagine when you'd ever want that behaviour!
+
+I wonder if this is a bug in x86 gcc... Jon?
+
+> Would it be possible to have a snapshot with it, just for continuous
+> integration servers which need the fix, please?
+
+Sure, done.
+
+
+Corinna
+
+-- 
+Corinna Vinschen
+Cygwin Maintainer
