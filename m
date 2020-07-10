@@ -1,58 +1,34 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
- by sourceware.org (Postfix) with ESMTPS id 2EC5E3842400
- for <cygwin-patches@cygwin.com>; Fri, 10 Jul 2020 15:59:05 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 2EC5E3842400
+Return-Path: <brian.inglis@systematicsw.ab.ca>
+Received: from smtp-out-so.shaw.ca (smtp-out-so.shaw.ca [64.59.136.139])
+ by sourceware.org (Postfix) with ESMTPS id C80523840C24
+ for <cygwin-patches@cygwin.com>; Fri, 10 Jul 2020 17:35:21 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org C80523840C24
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=SystematicSW.ab.ca
 Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([217.91.18.234]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1N4yyQ-1kuajh2Z5o-010wDc; Fri, 10 Jul 2020 17:59:01 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 00F2AA80B92; Fri, 10 Jul 2020 17:58:58 +0200 (CEST)
-Date: Fri, 10 Jul 2020 17:58:58 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: David Allsopp <David.Allsopp@cl.cam.ac.uk>
-Cc: "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>,
- JonY <10walls@gmail.com>
-Subject: Re: [PATCH] Fix incorrect sign-extension of pointer in 32-bit acl
- __to_entry
-Message-ID: <20200710155858.GG514059@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: David Allsopp <David.Allsopp@cl.cam.ac.uk>,
- "cygwin-patches@cygwin.com" <cygwin-patches@cygwin.com>,
- JonY <10walls@gmail.com>
-References: <001101d65627$6b726260$42572720$@cl.cam.ac.uk>
- <20200710083232.GD514059@calimero.vinschen.de>
- <17ec8f4865d648ab80d259266f315de7@metastack.com>
+ spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
+Received: from BWINGLISD.cg.shawcable.net ([24.64.172.44])
+ by shaw.ca with ESMTP
+ id twvejQJ3jYYpxtwvfjDF4k; Fri, 10 Jul 2020 11:35:20 -0600
+X-Authority-Analysis: v=2.3 cv=OubUNx3t c=1 sm=1 tr=0
+ a=kiZT5GMN3KAWqtYcXc+/4Q==:117 a=kiZT5GMN3KAWqtYcXc+/4Q==:17 a=w_pzkKWiAAAA:8
+ a=UB0UgkEmhwAVqxie5Z0A:9 a=cTIoticSJXVV-ev_:21 a=7c-70XkDUcg6bGs9:21
+ a=c9-Lal56WJz_DM2L:21 a=FhXMovWKs60A:10 a=ylEQVlorgLYA:10 a=WK-i71OpKu4A:10
+ a=uvLZkzHzGa8A:10 a=sRI3_1zDfAgwuvI8zelB:22
+From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+To: cygwin-patches@cygwin.com
+Subject: [PATCH v3] Clarify FAQ 1.5 What version of Cygwin is this, anyway?
+Date: Fri, 10 Jul 2020 11:34:51 -0600
+Message-Id: <20200710173450.46857-1-Brian.Inglis@SystematicSW.ab.ca>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <17ec8f4865d648ab80d259266f315de7@metastack.com>
-X-Provags-ID: V03:K1:xq2mOZpo5WLVFchRu49sFAuTX9UmeaPvkLV97Z2nua6J3kxYL5X
- xCf69JTa0fmZkxnDLPJrnX36nsc/Bn1cSdCLHkEJypmfCmdZXkB+bV4W+DujhCWmvw+oD1r
- Tpj6bY1h6QhZuU8jcnDI7aP0hz/p9u8taMH6b5yraYCpAJBr+aZ+n3+QAde7ShT7DC7pmnt
- /QRRipdKJfJO8HLFxv8mQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Un5yF8uhmOo=:YCzGCU+xt0alhKIaYu/KTB
- 5L6G5UqbLfA62gy23Ak1fIhkemrkOxOQMnTgJQqvHnT7g7XrB0i8MpTdxo/Bu9H6GefAm5Wu8
- 7YxO2tiXvGr7fYFm7ik34bLtuBmzvLHtk7RZvweGuIP+38eIzrDm4AzzI3S19iXWwfiY7nbz0
- j8/zCfrUj1unAuwpens3Lmw73mZkdpJ+b2rNt9804LdfK9bIkWhCyq5Is7i0r801jgap3vXTG
- 1Tnq9Vpv/vj91mKHZhsMF4INLrrjS4c4EqLBPXcgUEPHgMOcDxLp5BLFdF/vsSCnKyDGDvSfD
- qk+HhlTjOuNd6UNd9hnF9GVteUs1uUCVZVwOrBNq7q7HB44grr+dqAHxIYyW+5W2rVL1fLaaC
- Xot2Z38QKJcMjc6S8lM8+SPsRdAs/xYzqO+Yn+itI3deALgiT9HRvms4VWgx0D2wtFgI53tED
- cN4SFYhjjQV6fJ8A2DIMqH2kS8AVGOLyyXOrm9xFcCxL3MfdaNuyo8DdFgT399SwaYn26wzZC
- X6I6m+V2D3K1kNP6Wyh3ldiADU/8us8aAIvt8E0drdu0fFazO5lhgSf+qT1uH/NkdVM8l10Bx
- byE9A6T3APsYGF3XJwqCOkxwvIRRQs0xJjhpJPOJDAKsCEON/q1DSivf3iBE44D4YhtegwHeI
- zt5c8vijEo2kAYtoh1GwuCZ9NNLJRR4sg/1m7FqGvp4ZnXIl1fewyU0nDVO5vLwr1o0MVYeRp
- hYYAs2ris6TfejQhbTqo8DK2hJK7L0izTBWUG2pF7AttntAtWEKtVYNUFqPIve5SpIEMSvaTc
- wfrEI5Lq3gKwemiM3bn7v4v1eB3+t1DDdI6uVvds5Y6UL1saHar+3pI52jXzEAjKACSonu5yb
- BqrOV7PyvFPJrJ0sNZig==
-X-Spam-Status: No, score=-98.3 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4wfGaFXJtVXZ0/sDa4bNLfYVvM6LNS3vBxQz8X3hlAAMlqznYwhk8lfs/t3hbnlSXshfhCMlyZa14fKcI4pztQi7zyUu9eWodZibdXubK7xzb8U/v1r4hH
+ StAdofRxTK412YL4/cQ+dTsrPAU5jRmj8ggoec9Fo9i4REMRIObMTFMgnGBzO5vn82RFEShz7sGqBB+32vTW7GR4nAy+jiSfLBZqHZuUmLH/JaWBVFx9TEQa
+ g6dbTHo0FIr2D4kF5SvyfQ==
+X-Spam-Status: No, score=-14.3 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW, SPF_HELO_NONE,
+ SPF_NONE, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -67,33 +43,100 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 10 Jul 2020 15:59:06 -0000
+X-List-Received-Date: Fri, 10 Jul 2020 17:35:24 -0000
 
-On Jul 10 15:22, David Allsopp via Cygwin-patches wrote:
-> Corinna Vinschen wrote:
-> > On Jul  9 20:30, David Allsopp via Cygwin-patches wrote:
-> > > I have some code where the acl_t returned by get_file_acl is allocated
-> > > at 0x80038248. As a result the acl_entry_t generated by acl_get_entry
-> > > has an "index" of -1, since the pointer was sign-extended to 64-bits.
-> > >
-> > > My fix is trivial and simply casts the pointer to uintptr_t first.
-> > 
-> > Pushed.  I still don't quite understand what the compiler is thinking
-> > there, sign-extending a pointer when casted to an unsigend int type, but
-> > your patch works, so all is well, I guess.
-> 
-> Thank you - it is indeed hard to imagine when you'd ever want that behaviour!
+Patch to:
+	https://cygwin.com/git/?p=cygwin-htdocs.git;f=faq/faq.html;hb=HEAD
+as a result of thread:
+	https://cygwin.com/pipermail/cygwin/2020-July/245442.html
+and comments:
+	https://cygwin.com/pipermail/cygwin-patches/2020q3/010331.html
 
-I wonder if this is a bug in x86 gcc... Jon?
+Relate Cygwin DLL to Unix kernel,
+add required options to command examples,
+differentiate Unix and Cygwin commands;
+mention that the cygwin package contains the DLL.
+---
+ faq/faq.html | 49 +++++++++++++++++++++++++++++++++----------------
+ 1 file changed, 33 insertions(+), 16 deletions(-)
 
-> Would it be possible to have a snapshot with it, just for continuous
-> integration servers which need the fix, please?
-
-Sure, done.
-
-
-Corinna
-
+diff --git a/faq/faq.html b/faq/faq.html
+index 1f2686c6..8659db5d 100644
+--- a/faq/faq.html
++++ b/faq/faq.html
+@@ -53,22 +53,39 @@ such freedom is that the people who use a given piece of software
+ should be able to change it to fit their needs, learn from it, share
+ it with their friends, etc.  The GPL or LGPL licenses allows you those
+ freedoms, so it is free software.
+-</p></td></tr><tr class="question"><td align="left" valign="top"><a name="faq.what.version"></a><p><b>1.5.</b></p></td><td align="left" valign="top"><p>What version of Cygwin <span class="emphasis"><em>is</em></span> this, anyway?</p></td></tr><tr class="answer"><td align="left" valign="top"></td><td align="left" valign="top"><p>To find the version of the Cygwin DLL installed, you can use
+-<code class="filename">uname</code> as on Linux or <code class="filename">cygcheck</code>. Refer to each command's
+-<code class="literal">--help</code> output and the
+-<a class="ulink" href="https://cygwin.com/cygwin-ug-net/" target="_top">Cygwin User's Guide</a>
+-for more information.
+-</p><p>If you are looking for the version number for the whole Cygwin
+-release, there is none. Each package in the Cygwin release has its own
+-version.  The packages in Cygwin are continually improving, thanks to
+-the efforts of net volunteers who maintain the Cygwin binary ports.
+-Each package has its own version numbers and its own release process.
++</p></td></tr>
++<tr class="question"><td align="left" valign="top"><a name="faq.what.version"></a><p><b>1.5.</b></p></td>
++    <td align="left" valign="top"><p>What version of Cygwin <span class="emphasis"><em>is</em></span> this, anyway?</p></td></tr>
++<tr class="answer"><td align="left" valign="top"></td><td align="left" valign="top">
++    <p>To find the version of the Cygwin DLL installed,
++	you can use:
++	<code class="command"><strong>uname&nbsp;-a</strong></code>;
++        as you would for a Unix kernel.
++        As the Cygwin DLL takes the place of a Unix kernel,
++	you can also use any of the Unix compatible commands:
++	<code class="command"><strong>uname&nbsp;-srvm</strong></code>;
++	<code class="command"><strong>head&nbsp;/proc/version</strong></code>;
++	or the Cygwin command:
++	<code class="command"><strong>cygcheck&nbsp;-V</strong></code>.
++	Refer to each command's
++	<code class="option">--help</code> output or the
++	<a class="ulink" href="https://cygwin.com/cygwin-ug-net/" target="_top">Cygwin User's Guide</a>
++	for more information.</p>
++    <p>If you are looking for the version number for the whole Cygwin release,
++	there is none.
++	Each package in the Cygwin release has its own version, and the
++	<code class="package">cygwin</code> package containing the Cygwin DLL
++	and Cygwin system specific utilities is just another (but very
++	important!) package.
++	The packages in Cygwin are continually improving, thanks to
++	the efforts of net volunteers who maintain the Cygwin binary ports.
++	Each package has its own version numbers and its own release process.
+ </p><p>So, how do you get the most up-to-date version of Cygwin?  Easy.  Just
+ download the Cygwin Setup program by following the instructions
+ <a class="ulink" href="https://cygwin.com/install.html" target="_top">here</a>.
+-The setup program will handle the task of updating the packages on your system
+-to the latest version. For more information about using Cygwin's
+-<code class="filename">setup.exe</code>, see 
++The Setup program will handle the task of updating the packages on your system
++to the latest version. For more information about using Cygwin's Setup program,
++see 
+ <a class="ulink" href="https://cygwin.com/cygwin-ug-net/setup-net.html" target="_top">Setting Up Cygwin</a>
+ in the Cygwin User's Guide. 
+ </p></td></tr><tr class="question"><td align="left" valign="top"><a name="faq.what.who"></a><p><b>1.6.</b></p></td><td align="left" valign="top"><p>Who's behind the project?</p></td></tr><tr class="answer"><td align="left" valign="top"></td><td align="left" valign="top"><p><span class="bold"><strong>(Please note that if you have cygwin-specific
+@@ -692,7 +709,8 @@ user with <code class="literal">cygrunsrv -u</code> (see
+ information).
+ </p></td></tr><tr class="question"><td align="left" valign="top"><a name="faq.using.path"></a><p><b>4.5.</b></p></td><td align="left" valign="top"><p>How should I set my PATH?</p></td></tr><tr class="answer"><td align="left" valign="top"></td><td align="left" valign="top"><p>This is done for you in the file /etc/profile, which is sourced by bash
+ when you start it from the Desktop or Start Menu shortcut, created by
+-<code class="literal">setup.exe</code>.  The line is
++the Cygwin Setup program.
++The line is
+ </p><pre class="screen">
+ 	PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
+ </pre><p>Effectively, this <span class="bold"><strong>prepends</strong></span> /usr/local/bin and /usr/bin to your
+@@ -889,8 +907,7 @@ services like sshd) beforehand.</p><p>The only DLL that is sanctioned by the Cyg
+ you get by running <a class="ulink" href="https://cygwin.com/install.html" target="_top">setup-x86.exe or setup-x86_64.exe</a>,
+ installed in a directory controlled by this program.  If you have other
+ versions on your system and desire help from the cygwin project, you should
+-delete or rename all DLLs that are not installed by
+-<code class="filename">setup.exe</code>.
++delete or rename all DLLs that are not installed by the Cygwin Setup program.
+ </p><p>If you're trying to find multiple versions of the DLL that are causing
+ this problem, reboot first, in case DLLs still loaded in memory are the
+ cause.  Then use the Windows System find utility to search your whole
 -- 
-Corinna Vinschen
-Cygwin Maintainer
+2.27.0
+
