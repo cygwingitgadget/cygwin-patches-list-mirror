@@ -1,49 +1,34 @@
 Return-Path: <brian.inglis@systematicsw.ab.ca>
 Received: from smtp-out-so.shaw.ca (smtp-out-so.shaw.ca [64.59.136.138])
- by sourceware.org (Postfix) with ESMTPS id C9A1D3858D38
- for <cygwin-patches@cygwin.com>; Fri, 10 Jul 2020 23:30:37 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org C9A1D3858D38
+ by sourceware.org (Postfix) with ESMTPS id 78EF73857C48
+ for <cygwin-patches@cygwin.com>; Sat, 11 Jul 2020 04:13:54 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 78EF73857C48
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=SystematicSw.ab.ca
+ header.from=SystematicSW.ab.ca
 Authentication-Results: sourceware.org;
  spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
-Received: from [192.168.1.104] ([24.64.172.44]) by shaw.ca with ESMTP
- id u2TTjSUCsYYpxu2TVjERaL; Fri, 10 Jul 2020 17:30:37 -0600
+Received: from BWINGLISD.cg.shawcable.net ([24.64.172.44])
+ by shaw.ca with ESMTP
+ id u6tcjTsTcYYpxu6tdjEzVT; Fri, 10 Jul 2020 22:13:53 -0600
 X-Authority-Analysis: v=2.3 cv=OubUNx3t c=1 sm=1 tr=0
  a=kiZT5GMN3KAWqtYcXc+/4Q==:117 a=kiZT5GMN3KAWqtYcXc+/4Q==:17
- a=IkcTkHD0fZMA:10 a=gwMg6M9y6T5EFgRA8E4A:9 a=QEXdDO2ut3YA:10
-Reply-To: Cygwin Patches <cygwin-patches@cygwin.com>
-Subject: Re: [PATCH] COMMIT_MSG - cygport patches
-References: <20200710230432.57869-1-Brian.Inglis@SystematicSW.ab.ca>
-From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
-Autocrypt: addr=Brian.Inglis@SystematicSw.ab.ca; prefer-encrypt=mutual;
- keydata=
- mDMEXopx8xYJKwYBBAHaRw8BAQdAnCK0qv/xwUCCZQoA9BHRYpstERrspfT0NkUWQVuoePa0
- LkJyaWFuIEluZ2xpcyA8QnJpYW4uSW5nbGlzQFN5c3RlbWF0aWNTdy5hYi5jYT6IlgQTFggA
- PhYhBMM5/lbU970GBS2bZB62lxu92I8YBQJeinHzAhsDBQkJZgGABQsJCAcCBhUKCQgLAgQW
- AgMBAh4BAheAAAoJEB62lxu92I8Y0ioBAI8xrggNxziAVmr+Xm6nnyjoujMqWcq3oEhlYGAO
- WacZAQDFtdDx2koSVSoOmfaOyRTbIWSf9/Cjai29060fsmdsDLg4BF6KcfMSCisGAQQBl1UB
- BQEBB0Awv8kHI2PaEgViDqzbnoe8B9KMHoBZLS92HdC7ZPh8HQMBCAeIfgQYFggAJhYhBMM5
- /lbU970GBS2bZB62lxu92I8YBQJeinHzAhsMBQkJZgGAAAoJEB62lxu92I8YZwUBAJw/74rF
- IyaSsGI7ewCdCy88Lce/kdwX7zGwid+f8NZ3AQC/ezTFFi5obXnyMxZJN464nPXiggtT9gN5
- RSyTY8X+AQ==
-Organization: Systematic Software
-To: Cygwin Patches <cygwin-patches@cygwin.com>
-Message-ID: <1f6ba88b-ccc9-5df5-ecdf-c9e9204ae92e@SystematicSw.ab.ca>
-Date: Fri, 10 Jul 2020 17:30:35 -0600
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+ a=VAVI7avi-4p2PNOo0hMA:9
+From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] cygport announce SMTP HELO fails without smtp server FQDN
+Date: Fri, 10 Jul 2020 22:13:11 -0600
+Message-Id: <20200711041310.24880-1-Brian.Inglis@SystematicSW.ab.ca>
+X-Mailer: git-send-email 2.27.0
+Reply-To: cygwin-patches@cygwin.com
 MIME-Version: 1.0
-In-Reply-To: <20200710230432.57869-1-Brian.Inglis@SystematicSW.ab.ca>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-CA
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfC3VPq3JM2JmLkuxWuBVs1JrfiTDcewXDiLLI50qvRh1pzryyyhAitlIT6tLfkBKrBzbT45iWBeyTczBXFo/SGgnaIsBjGHGJax3+koCgJ0qc8OT+imV
- F9QTb2F0/LkmGgpzeyEirP2qZQzqG0V6t7CYOInVHdqdlGBZdzMbKu9h29n08h63tYLzmq+ca8vSSg==
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
- KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_BL,
- RCVD_IN_MSPIKE_L3, SPF_HELO_NONE, SPF_NONE,
- TXREP autolearn=no autolearn_force=no version=3.4.2
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4wfBEyFW5RynofF//a/Aw2wxZuC90vzrx0Uowf84sBh7BAljEzwT3QO1SyWFeqWudxtqi9yQ22qXxtGJsx8ZEYCUIn698CxQwAZ4v5ITb79OltI23ezMS1
+ qmu7fYm1wPkv9UzmO5YtOGtASWfR4X3e+zP8OBQzTqhFFY73UtcTPH3e2DChIpTg/RSrdo4+e+qDTq0yVyFMeltCz61usWbq01KCPC0FGEMuRaW3eKO0Wdo8
+ 4k/IhJb16SPFjoeEpPQpjA==
+X-Spam-Status: No, score=-14.1 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW,
+ RCVD_IN_MSPIKE_BL, RCVD_IN_MSPIKE_L3, SPF_HELO_NONE, SPF_NONE,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -58,22 +43,99 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 10 Jul 2020 23:30:39 -0000
+X-List-Received-Date: Sat, 11 Jul 2020 04:13:56 -0000
 
-Sorry,
-These cygport patches were expected to allow edits as usual but just went!
-Minor "unrelated" ~/.gitconfig changes seem to have removed confirmation.
+pkg_upload.cygpart(__pkg_announce): added perl code to embedded perl
+script for email domain FQDN copied from git send-email with minor hooks
+---
+ lib/pkg_upload.cygpart | 51 +++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 50 insertions(+), 1 deletion(-)
 
-This should have been an -F COMMIT_MSG but I typed -m COMMIT_MSG.
-
-The next fixes a cygport announce SMTP server issue using code from git send-email.
-
-The last fixes a cygport install infinite loop when there is a symlink along the
-path to DEST host prefix.
-
+diff --git a/lib/pkg_upload.cygpart b/lib/pkg_upload.cygpart
+index f88525d..06024b4 100644
+--- a/lib/pkg_upload.cygpart
++++ b/lib/pkg_upload.cygpart
+@@ -168,6 +168,7 @@ EOF
+ 	echo "Upload complete."
+ }
+ 
++
+ __pkg_announce() {
+ 	local msg=$(mktemp -t cygwin-announce-${PF}.XXXXXX)
+ 	local msgat=$(date +@%s)
+@@ -198,7 +199,52 @@ _EOF
+ 
+ 	${EDITOR:-vi} $msg || error "Editor exited abormally, aborting annoucement"
+ 
++# FQDN from git send-email
++# Returns the local Fully Qualified Domain Name (FQDN) if available.
++#
++# Tightly configured MTAa require that a caller sends a real DNS
++# domain name that corresponds the IP address in the HELO/EHLO
++# handshake. This is used to verify the connection and prevent
++# spammers from trying to hide their identity. If the DNS and IP don't
++# match, the receiving MTA may deny the connection.
++#
++# Here is a deny example of Net::SMTP with the default "localhost.localdomain"
++#
++# Net::SMTP=GLOB(0x267ec28)>>> EHLO localhost.localdomain
++# Net::SMTP=GLOB(0x267ec28)<<< 550 EHLO argument does not match calling host
++#
++# This maildomain*() code is based on ideas in Perl library Test::Reporter
++# /usr/share/perl5/Test/Reporter/Mail/Util.pm ==> sub _maildomain ()
++
+ 	perl <(cat <<EOF
++sub valid_fqdn {
++	my \$domain = shift;
++	return defined \$domain && !(\$^O eq 'darwin' && \$domain =~ /\.local\$/) && \$domain =~ /\./;
++}
++sub maildomain_net {
++    use Net::Domain ();
++	my \$maildomain;
++	my \$domain = Net::Domain::domainname();
++	\$maildomain = \$domain if valid_fqdn(\$domain);
++	return \$maildomain;
++}
++sub maildomain_mta {
++	my \$maildomain;
++	for my \$host (qw(mailhost localhost)) {
++		my \$smtp = Net::SMTP->new(\$host);
++		if (defined \$smtp) {
++			my \$domain = \$smtp->domain;
++			\$smtp->quit;
++			\$maildomain = \$domain if valid_fqdn(\$domain);
++			last if \$maildomain;
++		}
++	}
++	return \$maildomain;
++}
++sub maildomain {
++	return maildomain_net() || maildomain_mta() || 'localhost.localdomain';
++}
++
+ use strict;
+ use MIME::Parser;
+ use Net::SMTP;
+@@ -214,7 +260,9 @@ my \$entity = \$parser->parse_open("$msg");
+ 
+ print "Sending announcement of ${NAME}-${PVR} via \$smtp_server\n";
+ 
++my \$smtp_domain ||= maildomain();  # get FQDN and add Hello below
+ my \$smtp = new Net::SMTP(\$smtp_server,
++			  Hello => \$smtp_domain,
+ 			  ${SMTP_SERVER_PORT+Port => ${SMTP_SERVER_PORT},}
+ 			  SSL => \$smtp_encryption eq 'ssl')
+ 	 or die "No mailserver at ".\$smtp_server;
+@@ -224,7 +272,8 @@ if (\$smtp_encryption eq 'tls') {
+ 	\$smtp->response();
+ 	\$smtp->code == 220 or die "$server does not support STARTTLS";
+ 	\$smtp = Net::SMTP::SSL->start_SSL(\$smtp) or die "STARTTLS failed";
+-	\$smtp->hello(\$smtp_server);
++	# Send EHLO again to receive fresh supported commands
++	\$smtp->hello(\$smtp_domain);
+ }
+ if (defined \$smtp_user) {
+ 	use Authen::SASL qw(Perl);
 -- 
-Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
+2.27.0
 
-This email may be disturbing to some readers as it contains
-too much technical detail. Reader discretion is advised.
-[Data in IEC units and prefixes, physical quantities in SI.]
