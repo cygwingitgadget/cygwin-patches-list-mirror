@@ -1,53 +1,52 @@
-Return-Path: <jon.turney@dronecode.org.uk>
-Received: from re-prd-fep-042.btinternet.com (mailomta6-re.btinternet.com
- [213.120.69.99])
- by sourceware.org (Postfix) with ESMTPS id C71CC3858D37
- for <cygwin-patches@cygwin.com>; Sun, 12 Jul 2020 14:47:22 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org C71CC3858D37
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=dronecode.org.uk
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+ by sourceware.org (Postfix) with ESMTPS id 7B8603857C5A
+ for <cygwin-patches@cygwin.com>; Mon, 13 Jul 2020 07:04:36 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 7B8603857C5A
 Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
-Received: from re-prd-rgout-001.btmx-prd.synchronoss.net ([10.2.54.4])
- by re-prd-fep-042.btinternet.com with ESMTP id
- <20200712144721.XAQ13627.re-prd-fep-042.btinternet.com@re-prd-rgout-001.btmx-prd.synchronoss.net>
- for <cygwin-patches@cygwin.com>; Sun, 12 Jul 2020 15:47:21 +0100
-Authentication-Results: btinternet.com;
- auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-Originating-IP: [31.51.206.31]
-X-OWM-Source-IP: 31.51.206.31 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeduiedrvdeigdekgecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepuffhvfhfkffffgggjggtgfesthekredttdefjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepffffhfekudfftdeukedtgffftddvteelffeiudegfeevffeitedufeeiueekjefgnecukfhppeefuddrhedurddvtdeirdefudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddrudduudgnpdhinhgvthepfedurdehuddrvddtiedrfedupdhmrghilhhfrhhomhepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqecuuefqffgjpeekuefkvffokffogfdprhgtphhtthhopeeotgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomheq
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from [192.168.1.111] (31.51.206.31) by
- re-prd-rgout-001.btmx-prd.synchronoss.net (5.8.340) (authenticated as
- jonturney@btinternet.com)
- id 5ED9BDD006735508 for cygwin-patches@cygwin.com;
- Sun, 12 Jul 2020 15:47:21 +0100
-Subject: Re: [PATCH 0/8] Fix dumper for x86_64
-From: Jon Turney <jon.turney@dronecode.org.uk>
-To: Cygwin Patches <cygwin-patches@cygwin.com>
-References: <20200701212529.13998-1-jon.turney@dronecode.org.uk>
- <e058a12f-97b2-d237-a97f-4a691bf5c6e3@dronecode.org.uk>
- <20200702074444.GN3499@calimero.vinschen.de>
- <b2a72bb3-1852-46fe-81d2-0107c0076564@dronecode.org.uk>
- <20200706081200.GA514059@calimero.vinschen.de>
- <edcb449d-43b1-b80a-a4f7-e7b8c64d4b3d@dronecode.org.uk>
-Message-ID: <eca34472-973f-1e5d-2ac9-7767e2ca127c@dronecode.org.uk>
-Date: Sun, 12 Jul 2020 15:47:20 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+ dmarc=none (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org;
+ spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
+Received: from calimero.vinschen.de ([217.91.18.234]) by
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MlNgx-1ka1dM3e0b-00lihI for <cygwin-patches@cygwin.com>; Mon, 13 Jul 2020
+ 09:04:33 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 10E20A80D0B; Mon, 13 Jul 2020 09:04:33 +0200 (CEST)
+Date: Mon, 13 Jul 2020 09:04:33 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH v3] Clarify FAQ 1.5 What version of Cygwin is this, anyway?
+Message-ID: <20200713070433.GH514059@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20200710173450.46857-1-Brian.Inglis@SystematicSW.ab.ca>
 MIME-Version: 1.0
-In-Reply-To: <edcb449d-43b1-b80a-a4f7-e7b8c64d4b3d@dronecode.org.uk>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, KAM_NUMSUBJECT, RCVD_IN_DNSWL_LOW,
- RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_NONE,
- TXREP autolearn=no autolearn_force=no version=3.4.2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200710173450.46857-1-Brian.Inglis@SystematicSW.ab.ca>
+X-Provags-ID: V03:K1:HI15IKnaNiftCG/iOXhZcVU3mUIb0pULeaEk5oDsFDXnSL7TBkO
+ AW8itmG/Oh7eFrR+FwyXCHsUaz6JIe3XYYxq6ZMXNtwHovQYJcQcyhYoxOa3f7CWOOrj2JO
+ JVyIR7QB9WHqU3e1ukaqQKHMEdIzehM2X3OC75LHnqSPyJnVB+AMWiiWmytGohKcOHLLWQ2
+ c4a7X8zNwvjM/53QhF5JQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ZDAjDbcQ1ao=:fvKsFMXVrjr+xpLrEVDr7f
+ vTzklT/PVlP+pymWe/UqBr4jZQWbdW+qfY3G7mciHGry3tKPNbnssHQwyAwwV89BRShQSfyS1
+ a2Czb65j2/wECVpVJr5Tw24sCdDKap61+zMJzsqkdcivRk9ld34xsrMjrJf9aIINXH4EAqTyY
+ ZH8Y1wUycImWhncwm3+ZaiqC+qhdURZIGguyZgx0ikiu5QlB+MhFlx3GH8fOa+lEGFEsno1zD
+ O4BJUkmYQL2PA227rUP0MgE41L56iGYUtYBY68H21t6YZ8MZ7IxZQ5g15ebcB4PTtTydWlI+1
+ rv9BzJSNG7mM77/YrwVyulV2T7o4XnImzogcLik2iHmx37dr0DO+PmMwUZYpWu5mX24reATN0
+ V46vXmZE7yDVN0dTQ8FSMAVlNi0VXl9NAsM2J3mhwZB3aOIoRxeZlIq05vkzB6J8BVsReRdfr
+ 2cqDY92SYSguWW2X6MYDwfgyXDamhaRwdKPtkTOAaKtiDX6fNDvMyASEk2G8kjN6eIeypB+iN
+ hszpTICs6N50F0yXZFHacLYR+JTAum+K68C7RjdEF3IEJkXnl3YDEcysCcaKYC7llPjHLPCR8
+ WkzpFhCyYEyu4mCpmDQ18rGrJzIIgOMkqY/ItxKDTuM/iuyG/zskX4M8c4K0Cavk+LS4XxVVm
+ 3CJhihwbdG62ACt4zL/ah6W/pvGnRhiGHMwaQbEVvtDkE0i7ZPDViVI2eeJS9+WSnL0wdKl2i
+ ZEQV5kqbBhIGMtJ4c41zAU+qXXpq3uu/OKh7ZMcoEPqQaBel7eI4oP69em8z1Ro0ecx+AuDU5
+ cclCox9hKWe0q2uv/K1zWAM5ig0B2oHJ2ZxfPA+g2sWbKCA23w5NWcx2xjc/jyYu8A5K4dQUZ
+ qmMOgHBeahIB6ACfPG2A==
+X-Spam-Status: No, score=-103.5 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -62,38 +61,39 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sun, 12 Jul 2020 14:47:24 -0000
+X-List-Received-Date: Mon, 13 Jul 2020 07:04:37 -0000
 
-On 06/07/2020 14:34, Jon Turney wrote:
-> On 06/07/2020 09:12, Corinna Vinschen wrote: 
+Hi Brian,
+
+On Jul 10 11:34, Brian Inglis wrote:
+> Patch to:
+> 	https://cygwin.com/git/?p=cygwin-htdocs.git;f=faq/faq.html;hb=HEAD
+> as a result of thread:
+> 	https://cygwin.com/pipermail/cygwin/2020-July/245442.html
+> and comments:
+> 	https://cygwin.com/pipermail/cygwin-patches/2020q3/010331.html
 > 
->> What about the two protection fields in MEMORY_BASIC_INFORMATION?  If
->> something changed, Protect != AllocationProtect.  Is that insufficient
->> to handle your case?
+> Relate Cygwin DLL to Unix kernel,
+> add required options to command examples,
+> differentiate Unix and Cygwin commands;
+> mention that the cygwin package contains the DLL.
+> ---
+>  faq/faq.html | 49 +++++++++++++++++++++++++++++++++----------------
+>  1 file changed, 33 insertions(+), 16 deletions(-)
 > 
-> Unfortunately that doesn't seem to provide any additional information. 
-> The Windows loader seems to allocate all regions with EXWC protection, 
-> then change it to match the section. (Not that there are any guarantees 
-> about it's behaviour)
-> 
-> I wasn't able to observe a region corresponding to an unmodified .data 
-> section with WC protection, which is somewhat confusing.
+> diff --git a/faq/faq.html b/faq/faq.html
+> index 1f2686c6..8659db5d 100644
+> --- a/faq/faq.html
+> +++ b/faq/faq.html
 
-I guess that might be due to something in crt0 modifying .data, since 
-testing with something like:
+Huh?  This file doesn't exist in the repo.  The path is not relative to
+the repo root, and the file is called faq-what.xml.  Can you please
+check this again?
 
-      1  #include <windows.h>
-      2
-      3  int __attribute__ ((section (".special"))) mutable = 2;
-      4
-      5  int main()
-      6  {
-      7    // modify rw data
-      8    // mutable = 0;
-      9
-     10    // deref null pointer
-     11    *(int *)0 = 1;
-     12  }
 
-The memory region corresponding to the '.special' section has WC 
-protection, which changes to RW if it gets modified (as expected).
+Thanks,
+Corinna
+
+-- 
+Corinna Vinschen
+Cygwin Maintainer
