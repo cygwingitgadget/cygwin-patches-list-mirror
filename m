@@ -1,51 +1,51 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
- by sourceware.org (Postfix) with ESMTPS id 7B8603857C5A
- for <cygwin-patches@cygwin.com>; Mon, 13 Jul 2020 07:04:36 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 7B8603857C5A
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+ by sourceware.org (Postfix) with ESMTPS id DD6E13857C5A
+ for <cygwin-patches@cygwin.com>; Mon, 13 Jul 2020 07:14:58 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org DD6E13857C5A
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org;
  spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
 Received: from calimero.vinschen.de ([217.91.18.234]) by
  mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MlNgx-1ka1dM3e0b-00lihI for <cygwin-patches@cygwin.com>; Mon, 13 Jul 2020
- 09:04:33 +0200
+ id 1MMoXC-1kBS7h2SzU-00Inv9 for <cygwin-patches@cygwin.com>; Mon, 13 Jul 2020
+ 09:14:57 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 10E20A80D0B; Mon, 13 Jul 2020 09:04:33 +0200 (CEST)
-Date: Mon, 13 Jul 2020 09:04:33 +0200
+ id 3150EA80D0B; Mon, 13 Jul 2020 09:14:57 +0200 (CEST)
+Date: Mon, 13 Jul 2020 09:14:57 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v3] Clarify FAQ 1.5 What version of Cygwin is this, anyway?
-Message-ID: <20200713070433.GH514059@calimero.vinschen.de>
+Subject: Re: [PATCH] COMMIT_MSG
+Message-ID: <20200713071457.GI514059@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200710173450.46857-1-Brian.Inglis@SystematicSW.ab.ca>
+References: <20200710230432.57869-1-Brian.Inglis@SystematicSW.ab.ca>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200710173450.46857-1-Brian.Inglis@SystematicSW.ab.ca>
-X-Provags-ID: V03:K1:HI15IKnaNiftCG/iOXhZcVU3mUIb0pULeaEk5oDsFDXnSL7TBkO
- AW8itmG/Oh7eFrR+FwyXCHsUaz6JIe3XYYxq6ZMXNtwHovQYJcQcyhYoxOa3f7CWOOrj2JO
- JVyIR7QB9WHqU3e1ukaqQKHMEdIzehM2X3OC75LHnqSPyJnVB+AMWiiWmytGohKcOHLLWQ2
- c4a7X8zNwvjM/53QhF5JQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ZDAjDbcQ1ao=:fvKsFMXVrjr+xpLrEVDr7f
- vTzklT/PVlP+pymWe/UqBr4jZQWbdW+qfY3G7mciHGry3tKPNbnssHQwyAwwV89BRShQSfyS1
- a2Czb65j2/wECVpVJr5Tw24sCdDKap61+zMJzsqkdcivRk9ld34xsrMjrJf9aIINXH4EAqTyY
- ZH8Y1wUycImWhncwm3+ZaiqC+qhdURZIGguyZgx0ikiu5QlB+MhFlx3GH8fOa+lEGFEsno1zD
- O4BJUkmYQL2PA227rUP0MgE41L56iGYUtYBY68H21t6YZ8MZ7IxZQ5g15ebcB4PTtTydWlI+1
- rv9BzJSNG7mM77/YrwVyulV2T7o4XnImzogcLik2iHmx37dr0DO+PmMwUZYpWu5mX24reATN0
- V46vXmZE7yDVN0dTQ8FSMAVlNi0VXl9NAsM2J3mhwZB3aOIoRxeZlIq05vkzB6J8BVsReRdfr
- 2cqDY92SYSguWW2X6MYDwfgyXDamhaRwdKPtkTOAaKtiDX6fNDvMyASEk2G8kjN6eIeypB+iN
- hszpTICs6N50F0yXZFHacLYR+JTAum+K68C7RjdEF3IEJkXnl3YDEcysCcaKYC7llPjHLPCR8
- WkzpFhCyYEyu4mCpmDQ18rGrJzIIgOMkqY/ItxKDTuM/iuyG/zskX4M8c4K0Cavk+LS4XxVVm
- 3CJhihwbdG62ACt4zL/ah6W/pvGnRhiGHMwaQbEVvtDkE0i7ZPDViVI2eeJS9+WSnL0wdKl2i
- ZEQV5kqbBhIGMtJ4c41zAU+qXXpq3uu/OKh7ZMcoEPqQaBel7eI4oP69em8z1Ro0ecx+AuDU5
- cclCox9hKWe0q2uv/K1zWAM5ig0B2oHJ2ZxfPA+g2sWbKCA23w5NWcx2xjc/jyYu8A5K4dQUZ
- qmMOgHBeahIB6ACfPG2A==
-X-Spam-Status: No, score=-103.5 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+In-Reply-To: <20200710230432.57869-1-Brian.Inglis@SystematicSW.ab.ca>
+X-Provags-ID: V03:K1:XbaM3+tSdUurdXDRehRgw1AP0SPwsR4dZv5H2NHp1BCwFUNBziY
+ 1BBE5ltEc95UOA8hDwxj7kCskTnZoMMSjov/cD3k2ICFOEMHCsLuvHFIPF1rFvF3gbJRSLN
+ zU1b+yYZrKhlaEhh4WIcBsReLIgA22crnWWHM8mj5/Dzya9BT2ELIvkcx6Brlg5QXND+hIP
+ DGYnn/xjOoTfjIpDBz0pg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:U0ljvtc++Ps=:6HSRLi05hPdO1Xne1MWJ3M
+ bc7uKe37CQmT8oBaNZVzKCyWbyIyV8P90WrEYNZjmuZw2LVJ8Mkhm6SRWyui4MOUCp1vQYm6g
+ bU3xNSvqxdMvXcex2qpOz3s7hkyw+FcMH6xGBejmSK4Xmqtpndy4vUmpwkBJv+bCniwJXo4TR
+ l967ud1aRUFjDKMPa8SoK2W4MR8dQKcVt4yCWfBUGDCIfQM9WCf8bfYfLnrWfyckF7V4SVJOt
+ jamCp/6NQvD/bo4uClUG7k2H4+raJmoAtRntlA1VPxIrcEshp7BlaCW9uwI3skjS3L05imGIY
+ GaxPdQJ1Q+ZYByHBscDgUM1Fv531ciUkMTwjsttX27wUU2tv3ELJmGH8zbkg+6O3/jfvwY3Lm
+ SmCZpBep/uAo/lSLg7gLdjG5NKEuSizV+jDbI2/H5d/Kr6za2Tqy/rxrBsCsCLJHGEJbpitEo
+ AgqdNSB/we8keBfnWSmf1Ki8zOTdKhswImoTQkFesF+3ngSAoUqxO485XtMuY6InrajY99R6d
+ UlO0+TX9aUpyfyYde0g6CAOnuvPLDqVURgeSKYdtPD0fdFqrdZvaVKwIoILLkaom/h+v4wujO
+ JHTMaSAkd8NFLRulqVSavUw5Z8x0a4U8I51ECZZu70KR6M2ucy1Km7GsumKfvGDJ51keRA1ms
+ aQ+axqKUnjJVVmLmBO3goLvCKSvUJOIMF51dG8+ynQGsWq1min4yeXo39/BMF5E4jpcMq/8he
+ QGBJ52qfj7JZ+AoqkshafM0+u8Vn031Dlz3CBO1XIJmTUNy+8lNj+QxsjJGeGNN4lx9IQjgJe
+ o7I6d3jAy8S3L77VO0eqTFKZXPo8R+V9kiwvWBvUJIV/HRJL9e+zCiZGJ3oA8uvklwCgr+MD/
+ UwZ1R0c7UbA/rEgSGT6Q==
+X-Spam-Status: No, score=-98.5 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL, SUBJ_ALL_CAPS,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -61,37 +61,18 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 13 Jul 2020 07:04:37 -0000
+X-List-Received-Date: Mon, 13 Jul 2020 07:15:00 -0000
 
 Hi Brian,
 
-On Jul 10 11:34, Brian Inglis wrote:
-> Patch to:
-> 	https://cygwin.com/git/?p=cygwin-htdocs.git;f=faq/faq.html;hb=HEAD
-> as a result of thread:
-> 	https://cygwin.com/pipermail/cygwin/2020-July/245442.html
-> and comments:
-> 	https://cygwin.com/pipermail/cygwin-patches/2020q3/010331.html
-> 
-> Relate Cygwin DLL to Unix kernel,
-> add required options to command examples,
-> differentiate Unix and Cygwin commands;
-> mention that the cygwin package contains the DLL.
+On Jul 10 17:04, Brian Inglis wrote:
 > ---
->  faq/faq.html | 49 +++++++++++++++++++++++++++++++++----------------
->  1 file changed, 33 insertions(+), 16 deletions(-)
-> 
-> diff --git a/faq/faq.html b/faq/faq.html
-> index 1f2686c6..8659db5d 100644
-> --- a/faq/faq.html
-> +++ b/faq/faq.html
+>  lib/src_postinst.cygpart | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 
-Huh?  This file doesn't exist in the repo.  The path is not relative to
-the repo root, and the file is called faq-what.xml.  Can you please
-check this again?
+cygwin-patches is not for cygport patches(*).  Please use cygwin-apps.
 
 
-Thanks,
 Corinna
 
 -- 
