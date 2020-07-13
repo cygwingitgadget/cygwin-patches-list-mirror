@@ -1,32 +1,54 @@
-Return-Path: <brian.inglis@systematicsw.ab.ca>
-Received: from smtp-out-so.shaw.ca (smtp-out-so.shaw.ca [64.59.136.137])
- by sourceware.org (Postfix) with ESMTPS id 1DC363861899
- for <cygwin-patches@cygwin.com>; Mon, 13 Jul 2020 13:31:06 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 1DC363861899
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=SystematicSW.ab.ca
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+ by sourceware.org (Postfix) with ESMTPS id 318AA3857031
+ for <cygwin-patches@cygwin.com>; Mon, 13 Jul 2020 13:48:38 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 318AA3857031
 Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
-Received: from BWINGLISD.cg.shawcable.net ([24.64.172.44])
- by shaw.ca with ESMTP
- id uyXwjHfnsFXePuyXxjc5We; Mon, 13 Jul 2020 07:31:05 -0600
-X-Authority-Analysis: v=2.3 cv=ePaIcEh1 c=1 sm=1 tr=0
- a=kiZT5GMN3KAWqtYcXc+/4Q==:117 a=kiZT5GMN3KAWqtYcXc+/4Q==:17 a=w_pzkKWiAAAA:8
- a=Maegdg8Ow6QiC2z6ULYA:9 a=sRI3_1zDfAgwuvI8zelB:22
-From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+ dmarc=none (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org;
+ spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
+Received: from calimero.vinschen.de ([217.91.18.234]) by
+ mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MnagF-1kcFiT3Zwb-00jYdK for <cygwin-patches@cygwin.com>; Mon, 13 Jul 2020
+ 15:48:36 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 6C290A80D0B; Mon, 13 Jul 2020 15:48:36 +0200 (CEST)
+Date: Mon, 13 Jul 2020 15:48:36 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] FAQ 1.6 Update Who's behind the project?
-Date: Mon, 13 Jul 2020 07:30:07 -0600
-Message-Id: <20200713133006.18422-1-Brian.Inglis@SystematicSW.ab.ca>
-X-Mailer: git-send-email 2.27.0
+Subject: Re: [PATCH v3] Clarify FAQ 1.5 What version of Cygwin is this, anyway?
+Message-ID: <20200713134836.GM514059@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20200710173450.46857-1-Brian.Inglis@SystematicSW.ab.ca>
+ <20200713070433.GH514059@calimero.vinschen.de>
+ <ba6d154a-679f-a121-f151-dd84d29ba116@SystematicSw.ab.ca>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfB7qYIwUMNnrA7I72nVzaRC31IXBW9LDVnhVP+TT8DKpkWA2gcEKANeBkk1avgdc8N0UerY/WrrWG/OWFgtaBlgOtgNmVPWJHz5Ye6CmZHkpN5e0vtfm
- Y/OrM3S0cz6bBi0AvWI5xoif/IFx98K+4ZRAYR529pESCQGwQhFX4EOp5hWNqpKMVbXuhWWe4aFxykNE0cKqyF7AMxu2HV8f87oV8ZP15mZKkg04eN67ETO6
- AV/owbmBeeZFDr+lSGQNKQ==
-X-Spam-Status: No, score=-13.9 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW, SPF_HELO_NONE,
- SPF_NONE, TXREP autolearn=ham autolearn_force=no version=3.4.2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ba6d154a-679f-a121-f151-dd84d29ba116@SystematicSw.ab.ca>
+X-Provags-ID: V03:K1:3N3EhTSNYtinXX2bhY2EvGYPOucd4FJpvSX+7z7XSIpEMa9GoZT
+ YjkcqGDnh922Y2R+iC4i/o8TE2VsmfgONG4Qev1TWJEVyomlwMt+O8MyC3zOSIySTWP8xLq
+ U5CnFa/bYs6O0Ext/9dHQaH0Naxqh5TMVKE6LK1ZXHa4h6WWh3SSTNYb8tSyRLEW8DTFkUN
+ F0J7kqGURbQMSKky9W18w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:TeN4e9j9hnY=:s5GzKn1PQ0eHV1b9g9YeGs
+ VbMgmG0nrif5Jam75Gr94C6U30/mQAujUlDBc0tyV6jgbAP9QfglxHQOUJqB/uR8mPeEfy/1M
+ sRLvGqJF8RRR8uowwXPOwMHgkK1IGev7fXl2xwso96sQ3wOjF3hjcfC5QrxGWlDlfazN3q8Wi
+ huRErAifxqG055/bBmKeST6OjMw+dErngEc3JKz+/K4Yt67P1dZ71zLL/baW5QwbJw9at0H+z
+ 709piJ0iUaIuDZ0ZPiAvIAaGPxi0Z4lBtWKQumla4cdmZRVVQ44VVTfzJYBXnwQm5lZLrfOQs
+ 1lv1IjXNt/lOe9YxpLVL3SsWhMapKgK8kz5YDowCoXomGddzNfTIuBanNgfp450PN1DU5fXdM
+ yAQsWbJlcJkQ9qd6ZgAIefn6AQR3miEGvzE9f1FdZ04F/wX6/ZFM8xRHDWRd3q00EdQQcgpzW
+ r1NZfvHmp4FdkI2dvzRIlBa2hgJxUfOT97hnr/QuKoN1K7LxyxUKfIf4eOqWnTlgcGTeRPOB+
+ yJZYKtPVKCYU5VDFpovg9JVec0uuBTbrl/jjfTb3XzUCc1oIdaMnqqL/5ADVFnBahGEEMQSU2
+ ZmfBrivDAsJjuMxOcf+T+pnXREr/3yeZSCMXfMhbnOGVgpTXJQ8hcqqH7PCUGVbvqNY0SGJds
+ tEcKEKTUeKYFZvs/GByRT8n8TgX5YBS0/Mxfnq3gLja9QFjlI9hy7UjDXgWtMBFx3e2vd6LM5
+ pPPQwdbKsPMJS5rAOl2A2yUL0xpmpUzkOiMIFb/imsidVV/+cXhvLYDs7Qq9kwuYmyYcZ6e91
+ udtnGbp5S4nQcHU0+Ymx+yaeSQnrId/35J6Dtxhqak+5PonXd0Cjk38GgSQDVEqTWWenUHYF4
+ FnmlCRGlZEceBs/6EjEQ==
+X-Spam-Status: No, score=-103.7 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -41,63 +63,51 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 13 Jul 2020 13:31:07 -0000
+X-List-Received-Date: Mon, 13 Jul 2020 13:48:39 -0000
 
-winsup/doc/faq-what.xml: remove Red Hat, Net, Win32 references and clean up
----
- winsup/doc/faq-what.xml | 33 ++++++++++++++++-----------------
- 1 file changed, 16 insertions(+), 17 deletions(-)
+On Jul 13 06:06, Brian Inglis wrote:
+> On 2020-07-13 01:04, Corinna Vinschen wrote:
+> > On Jul 10 11:34, Brian Inglis wrote:
+> >> Patch to:
+> >> 	https://cygwin.com/git/?p=cygwin-htdocs.git;f=faq/faq.html;hb=HEAD
+> >> as a result of thread:
+> >> 	https://cygwin.com/pipermail/cygwin/2020-July/245442.html
+> >> and comments:
+> >> 	https://cygwin.com/pipermail/cygwin-patches/2020q3/010331.html
+> >>
+> >> Relate Cygwin DLL to Unix kernel,
+> >> add required options to command examples,
+> >> differentiate Unix and Cygwin commands;
+> >> mention that the cygwin package contains the DLL.
+> >> ---
+> >>  faq/faq.html | 49 +++++++++++++++++++++++++++++++++----------------
+> >>  1 file changed, 33 insertions(+), 16 deletions(-)
+> >>
+> >> diff --git a/faq/faq.html b/faq/faq.html
+> >> index 1f2686c6..8659db5d 100644
+> >> --- a/faq/faq.html
+> >> +++ b/faq/faq.html
+> > 
+> > Huh?  This file doesn't exist in the repo.  The path is not relative to
+> > the repo root, and the file is called faq-what.xml.  Can you please
+> > check this again?
+> 
+> See top. So does:
+> 
+> 	https://cygwin.com/git/?p=cygwin-htdocs.git;f=faq/faq.html
+> 
+> get generated from:
+> 
+> https://cygwin.com/git/?p=newlib-cygwin.git;a=blob;f=winsup/doc/faq-what.xml
+> 
+> which is where I should be making FAQ patches?
 
-diff --git a/winsup/doc/faq-what.xml b/winsup/doc/faq-what.xml
-index 772fc04645..ea8496ccbc 100644
---- a/winsup/doc/faq-what.xml
-+++ b/winsup/doc/faq-what.xml
-@@ -124,29 +124,28 @@ questions, all of these people will appreciate it if you use the cygwin
- mailing lists rather than sending personal email.)</emphasis>
- </para>
- <para>
--Corinna Vinschen is the current project lead. Corinna is a senior Red Hat
--engineer. Corinna is responsible for the Cygwin library and maintains a couple
--of packages, for instance OpenSSH, OpenSSL, and a lot more.
-+Corinna Vinschen is the current project lead,
-+responsible for the Cygwin library and a lot more.
- </para>
- <para>
--Yaakov Selkowitz is another Red Hat engineer working on the Cygwin project.
--He's the guy behind the current build and packaging system and maintains by
--far the most packages in the Cygwin distribution.
-+Yaakov Selkowitz is the guy behind the current build and packaging system
-+and maintained by far the most packages in the Cygwin distribution.
- </para>
- <para>
--Jon Turney is developer and maintainer of the Cygwin X server and a couple
--of related packages.
-+Jon Turney is maintainer of the Cygwin X server and related packages.
- </para>
- <para>
--The packages in the Net release are maintained by a large group of people;
--a complete list can be found
--<ulink url='https://cygwin.com/cygwin-pkg-maint'>here</ulink>.
--</para>
--<para>Please note that all of us working on Cygwin try to be as responsive as
--possible and deal with patches and questions as we get them, but realistically
--we don't have time to answer all of the email that is sent to the main mailing
--list.  Making Net releases of the Win32 tools and helping people on the Net out
--is not our primary job function, so some email will have to go unanswered.
-+The packages are maintained by a large group of
-+<ulink url='https://cygwin.com/cygwin-pkg-maint'>volunteers</ulink>.
-+</para>
-+<para>
-+Please note that all of us volunteering on Cygwin try to be as responsive as
-+possible and deal with patches and questions as we get them, but
-+realistically we don't have time to answer all of the email that is sent to
-+the main mailing list.
-+Making releases of the tools and packages is an activity in our spare time,
-+helping people out is not our primary focus, so some email will have to go
-+unanswered.
- </para>
- <para>Many thanks to everyone using the tools for their many contributions in
- the form of advice, bug reports, and code fixes.  Keep them coming!
+Exactly.  cygwin-htdocs is just an upload area for the cygwin website.
+
+
+Thanks,
+Corinna
+
 -- 
-2.27.0
-
+Corinna Vinschen
+Cygwin Maintainer
