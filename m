@@ -1,52 +1,51 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
- by sourceware.org (Postfix) with ESMTPS id D658E3851C12
- for <cygwin-patches@cygwin.com>; Mon, 13 Jul 2020 15:21:05 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org D658E3851C12
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+ by sourceware.org (Postfix) with ESMTPS id A86F33938C35
+ for <cygwin-patches@cygwin.com>; Mon, 13 Jul 2020 15:21:19 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org A86F33938C35
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org;
  spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
 Received: from calimero.vinschen.de ([217.91.18.234]) by
- mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MC3H1-1k0joz2Hzp-00CU1o for <cygwin-patches@cygwin.com>; Mon, 13 Jul 2020
- 17:21:04 +0200
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MfYHW-1kWVoU1IxE-00fzP6 for <cygwin-patches@cygwin.com>; Mon, 13 Jul 2020
+ 17:21:18 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 10416A80D1F; Mon, 13 Jul 2020 17:21:04 +0200 (CEST)
-Date: Mon, 13 Jul 2020 17:21:04 +0200
+ id CDCCCA80D0E; Mon, 13 Jul 2020 17:21:17 +0200 (CEST)
+Date: Mon, 13 Jul 2020 17:21:17 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] winsup/doc/faq-what.xml FAQ 1.5 Clarify What version is
- this
-Message-ID: <20200713152104.GO514059@calimero.vinschen.de>
+Subject: Re: [PATCH] FAQ 1.6 Update Who's behind the project?
+Message-ID: <20200713152117.GP514059@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200713125855.17015-1-Brian.Inglis@SystematicSW.ab.ca>
+References: <20200713133006.18422-1-Brian.Inglis@SystematicSW.ab.ca>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200713125855.17015-1-Brian.Inglis@SystematicSW.ab.ca>
-X-Provags-ID: V03:K1:F+cDByQ3OuTRCEVXNySAydnzc1Ok7y4DxBA8JDCcvneO5CL/JeS
- yTy3HziqnvVzBjLfz1154XN9Uo3ysxyHeyOVnTAouySXxyKIyw8cbgSDZOyDA+vSwGWGLTe
- dQoW4WXAkjKoaxrWWptmFrAKuu1Li2AT53fQklSjVTAaGqRTBcivy6VM+sp/oHLBsTZ+q5z
- OnACxLX1Wyex0PdM2lRmQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:LY1I65r+QyI=:1glz49Jww3J2rXjzVmLyxT
- n3/1Ecj4n4NWYNMMoMBY2UEfi4GZZM4rThKKAqmJC5cNRbjMGhEgQ0WxkZa8C0COU1YKZUIRb
- COlA62FjAs9JQzCoTN2PnNGqPrwXY0m32JFXRA45hy/n3IkOxEswwGLQYhcb2qzFt4AbB6Zrq
- t3nSdsIL2s4B8ZrucTeYZoqZcyFq1dB00fiuyijulVAghu9brmBjF5xYRDIIH6ksDpUu0vVX3
- IR7JKR8yD4slt6PalhmjgdO5FQCR8IeUKGiCx3ik8iwg5IKxf11YyYoPuCm//zVb1PVGOwZOU
- jtyFm7yaIa+zhJkXt04w/iWHpul2npcGxlO0t7gjSZiF6QDc6VN60C4HNSOVxEHQMUlcX6L0M
- hHmlcpia3okKwml3vJN+Bb7cZFotqbMblxuaoZs8lwu3MYpCAY4W32xEB1TMRaOWnuc58/ZeS
- qEkn3Rcpk7+OpeUuxETEROY2U6w86b1T7z9VzBcfQK8EUMoC4iun29rtbIRBcULSYi2DT0KfQ
- G5ck1njOo5Mag6yQruaGm95kYFiMiUCJIqqBcZmKlyb22Bzs6gdfq7mJXBn2bO+EBtA8lgPUt
- /PSchCHQYp3lhSKh06eZIlMyPpzhIx+6eGXAJ020H6QF81Ze0W7Qj2FWonJaFx/1CMkPDXIC+
- s+vT86LbY0OB0e12WKvIPeRCbPPcv7pVsCZcadXTwfRZtUf/p/Rhw7afbyNiw673PnGxoG31i
- apKbItwU2GZs1kjrHRo+L3Db0s/NA3atvWnyjAz3paaChuo+LI1WZAYzJr9+iJR7l+k6nbCcN
- +50yrTKdfSE4kJLS8g4ziLR9ciSXkqw/IjlK26Tr4r7sVr3siros4trjqn1ZHGRdz+hywAC1I
- FF0Wkbq5mdgXs2kt5RlQ==
-X-Spam-Status: No, score=-98.7 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+In-Reply-To: <20200713133006.18422-1-Brian.Inglis@SystematicSW.ab.ca>
+X-Provags-ID: V03:K1:xGPOl7jRbcOYS3jwULKSUXFZOfdHP69TZ8dzd9dQ160IV14Xgzr
+ 6EFwBzdBZ4AhHmvl0BOoM9t+P+p+Ib+Wz4VNsq3G48AmoNzR/f1W//sUQoQ8RKrxOO2dHeS
+ XGSzjyCFHtZBWd7EwwJ3N/VfaX0va6RXsFruW7d5/MymcnGqohAWwiBgmyWk7r3D/A5Zs3h
+ igj2CTTqqDjPFdwrfbNhA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:p0B4EuYBBkw=:B/E0WwGT7+1fM9xQaC9d5o
+ AIklDNj+8NvSt6huVoI845k4IKokyVUZJFtdwrQwTOtp44+Zyt2rs1BFEYV8dCrcufDre7wSd
+ iJ6ekVhOWjp3a5TxGmdKXIE96psceXReUVJumNgYdsBy6oxxF5/FE33+7xFBr9nFz+lF+ASkf
+ 7pZRjCDBZIAvskdGLRN0ITW775o3fO5ycaG54HoJQ5xEL69oEk2YdM7paH2oui2+INdjRoMfm
+ 1xfiunGRsajX5JNYUTB1Wvc7mr1Oh7XEugKsUYaKNEXWF0eJXEcNxSdybTtoIgmH1BG9WsdLy
+ b1pXv4VdOzVeWRqNWy2PSrCiR9jbVxkBWxFjG69V5LKr4YNNrgBHFnfVKtsikIJG2R7tuIvri
+ ab9z8viojrwhdFkhWmPcuSFkybrwNvCI/DZw5upyGuzV5NNBoLg72RWng5ljTdifbUr5u4qjM
+ TJThu+HIyDwcqYWzf3MjlNVncj+z+jiYaMjRc+n7zy3wj/Cpzn1UIX1oDUInjqSj1/8B1tqdb
+ chu+/RE3twGWQJ5DvtRfvbdfDv87BTo49q3UKVHbFQs/Jrpg2D+AbuTa5WyQngbTgWfMfr91v
+ 2XWNAKrjVBU955aPzGnQHGH4SLIW+9ACDH5GUWNZfse6D1gCeSMyqb5SwU9OSSY5vxQLH7R5b
+ RzFb1S7v8kXQiQfWk8onxJyMTamuLnBRwdrGeENXLMND3gu62hZGvlIZmX50+RPB5li/KMxFe
+ l3tT4Dgh4s7YtkphfOXcBlkWABt8u47AtSt6wQZtVBL7oTtLu1Y4oFu9/CXAtZ+LqByE55rkU
+ T8XKPsrae6jyj2gwze21+cf8NLbaVUNlToI1ImCjgY/OEWHXc9K8+MVfbSyMFFo0776GP8PkU
+ xIR75dKzEpFX5FzRSgaA==
+X-Spam-Status: No, score=-98.5 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -62,23 +61,13 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 13 Jul 2020 15:21:07 -0000
+X-List-Received-Date: Mon, 13 Jul 2020 15:21:20 -0000
 
-On Jul 13 06:58, Brian Inglis wrote:
-> Patch to:
-> https://sourceware.org/git/?p=newlib-cygwin.git;f=winsup/doc/faq-what.xml;a=blob
-> as a result of thread:
-> 	https://cygwin.com/pipermail/cygwin/2020-July/245442.html
-> and comments:
-> 	https://cygwin.com/pipermail/cygwin-patches/2020q3/010331.html
-> Relate Cygwin DLL to Unix kernel,
-> add required options to command examples,
-> differentiate Unix and Cygwin commands;
-> mention that the cygwin package contains the DLL,
-> replace setup.exe reference by Cygwin Setup program wording.
+On Jul 13 07:30, Brian Inglis wrote:
+> winsup/doc/faq-what.xml: remove Red Hat, Net, Win32 references and clean up
 > ---
->  winsup/doc/faq-what.xml | 29 +++++++++++++++++++----------
->  1 file changed, 19 insertions(+), 10 deletions(-)
+>  winsup/doc/faq-what.xml | 33 ++++++++++++++++-----------------
+>  1 file changed, 16 insertions(+), 17 deletions(-)
 
 Pushed with minor change to log message subject line.
 
