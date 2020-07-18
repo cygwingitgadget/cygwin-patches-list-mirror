@@ -1,27 +1,43 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-09.nifty.com (conuserg-09.nifty.com [210.131.2.76])
- by sourceware.org (Postfix) with ESMTPS id 3F4563857014
- for <cygwin-patches@cygwin.com>; Sat, 18 Jul 2020 04:49:22 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 3F4563857014
-Received: from localhost.localdomain (v038192.dynamic.ppp.asahi-net.or.jp
- [124.155.38.192]) (authenticated)
- by conuserg-09.nifty.com with ESMTP id 06I4miTU020015;
- Sat, 18 Jul 2020 13:49:07 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 06I4miTU020015
-X-Nifty-SrcIP: [124.155.38.192]
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Return-Path: <jon.turney@dronecode.org.uk>
+Received: from sa-prd-fep-042.btinternet.com (mailomta9-sa.btinternet.com
+ [213.120.69.15])
+ by sourceware.org (Postfix) with ESMTPS id 5E3A43860C2D
+ for <cygwin-patches@cygwin.com>; Sat, 18 Jul 2020 15:00:47 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 5E3A43860C2D
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=dronecode.org.uk
+Authentication-Results: sourceware.org;
+ spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
+Received: from sa-prd-rgout-003.btmx-prd.synchronoss.net ([10.2.38.6])
+ by sa-prd-fep-042.btinternet.com with ESMTP id
+ <20200718150046.LZAF2233.sa-prd-fep-042.btinternet.com@sa-prd-rgout-003.btmx-prd.synchronoss.net>;
+ Sat, 18 Jul 2020 16:00:46 +0100
+Authentication-Results: btinternet.com;
+ auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com
+X-Originating-IP: [31.51.206.146]
+X-OWM-Source-IP: 31.51.206.146 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeduiedrfeelgdekgecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepueeijeeguddvuedtffeiieelfeffudefkeehgfejffefhedtkeejgeekfedtffefnecukfhppeefuddrhedurddvtdeirddugeeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeefuddrhedurddvtdeirddugeeipdhmrghilhhfrhhomhepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqedprhgtphhtthhopeeotgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomheqpdhrtghpthhtohepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqe
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from localhost.localdomain (31.51.206.146) by
+ sa-prd-rgout-003.btmx-prd.synchronoss.net (5.8.340) (authenticated as
+ jonturney@btinternet.com)
+ id 5ED9AFBE076FE316; Sat, 18 Jul 2020 16:00:46 +0100
+From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: pty: Fix a bug on redirecting something to /dev/pty*.
-Date: Sat, 18 Jul 2020 13:48:47 +0900
-Message-Id: <20200718044848.1085-1-takashi.yano@nifty.ne.jp>
+Cc: Jon Turney <jon.turney@dronecode.org.uk>
+Subject: [PATCH 0/5] Improve dumper megion region selection
+Date: Sat, 18 Jul 2020 16:00:23 +0100
+Message-Id: <20200718150028.1709-1-jon.turney@dronecode.org.uk>
 X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0,
- RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_BL,
- RCVD_IN_MSPIKE_L3, SPF_HELO_NONE, SPF_PASS,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW,
+ RCVD_IN_MSPIKE_H4, RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_NONE,
+ TXREP autolearn=no autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -36,34 +52,45 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sat, 18 Jul 2020 04:49:26 -0000
+X-List-Received-Date: Sat, 18 Jul 2020 15:00:49 -0000
 
-- After commit 0365031ce1347600d854a23f30f1355745a1765c, key input
-  becomes not working by following steps.
-   1) Start cmd.exe in mintty.
-   2) Open another mintty.
-   3) Execute "echo AAA > /dev/pty*" (pty* is the pty opened in 1.)
-  This patch fixes the issue.
----
- winsup/cygwin/fhandler_tty.cc | 5 -----
- 1 file changed, 5 deletions(-)
+Improve how dumper determines if a memory region should be dumped:
 
-diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index a61167116..6a004f3a5 100644
---- a/winsup/cygwin/fhandler_tty.cc
-+++ b/winsup/cygwin/fhandler_tty.cc
-@@ -969,11 +969,6 @@ fhandler_pty_slave::open (int flags, mode_t)
-       init_console_handler (true);
-     }
- 
--  isHybrid = false;
--  get_ttyp ()->pcon_pid = 0;
--  get_ttyp ()->switch_to_pcon_in = false;
--  get_ttyp ()->switch_to_pcon_out = false;
--
-   set_open_status ();
-   return 1;
- 
+Currently we open and read the PE file for each module, and exclude regions
+corresponding to sections marked 'DEBUGGING' or 'CODE'.
+
+This doesn't work correctly if the DLL has been loaded to an address other
+than the ImageBase recorded in the PE header.  It fails to produce a useful
+dump if there's a collision in excluded region addresses (which will always
+occur on x86_64, as kernel32.dll has an ImageBase which collides with the
+cygwin1.dll)
+
+This probably also doesn't produce correct dumps if the protection on memory
+regions corresponding to 'CODE' sections is manipulated using VirtualProtect().
+
+Instead, dump memory region based on their type, protection and sharability:
+
+- state is MEM_COMMIT (i.e. is not MEM_RESERVE or MEM_FREE), and
+-- type is MEM_PRIVATE and protection allows reads (i.e. not a guardpage), or
+-- type is MEM_IMAGE and attribute is non-sharable (i.e. it was WC, got 
+   written to, and is now a RW copy)
+
+Jon Turney (5):
+  Cygwin: Show details of all memory regions details in dumper debug
+    output
+  Cygwin: Remove reading of PE for section flags from dumper
+  Cygwin: Drop excluded regions list from dumper
+  Cygwin: Don't dump non-writable image regions
+  Cygwin: Use MEMORY_WORKING_SET_EX_INFORMATION in dumper
+
+ winsup/doc/utils.xml     |   8 +-
+ winsup/utils/Makefile.in |   8 +-
+ winsup/utils/dumper.cc   | 214 +++++++++++++++++++++++++++------------
+ winsup/utils/dumper.h    |  19 ----
+ winsup/utils/parse_pe.cc | 107 --------------------
+ 5 files changed, 155 insertions(+), 201 deletions(-)
+ delete mode 100644 winsup/utils/parse_pe.cc
+
 -- 
 2.27.0
 
