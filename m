@@ -1,50 +1,51 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
- by sourceware.org (Postfix) with ESMTPS id 936FA385DC0F
- for <cygwin-patches@cygwin.com>; Mon, 20 Jul 2020 08:07:46 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 936FA385DC0F
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+ by sourceware.org (Postfix) with ESMTPS id E393B3861031
+ for <cygwin-patches@cygwin.com>; Mon, 20 Jul 2020 08:15:28 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org E393B3861031
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org;
  spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
 Received: from calimero.vinschen.de ([217.91.18.234]) by
  mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MlsWZ-1kfsXa1FMR-00iy2i for <cygwin-patches@cygwin.com>; Mon, 20 Jul 2020
- 10:07:45 +0200
+ id 1MoeU5-1kd7V02cPZ-00p1yE for <cygwin-patches@cygwin.com>; Mon, 20 Jul 2020
+ 10:15:27 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id B2DADA8092C; Mon, 20 Jul 2020 10:07:42 +0200 (CEST)
-Date: Mon, 20 Jul 2020 10:07:42 +0200
+ id 27A9EA80D14; Mon, 20 Jul 2020 10:15:27 +0200 (CEST)
+Date: Mon, 20 Jul 2020 10:15:27 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Fix a bug on redirecting something to
- /dev/pty*.
-Message-ID: <20200720080742.GF16360@calimero.vinschen.de>
+Subject: Re: [PATCH 5/5] Cygwin: Use MEMORY_WORKING_SET_EX_INFORMATION in
+ dumper
+Message-ID: <20200720081527.GG16360@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200718044848.1085-1-takashi.yano@nifty.ne.jp>
+References: <20200718150028.1709-1-jon.turney@dronecode.org.uk>
+ <20200718150028.1709-6-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200718044848.1085-1-takashi.yano@nifty.ne.jp>
-X-Provags-ID: V03:K1:zh1xfUiwPpNg5da0jEhuQt3ywAFt+g6mXrlbwonBuYNOMn5vGYH
- 7a4Pmvh7ECIYpGpRK1XFPvL67g9FTbD4HTjZrrkIYxz7m8UJqK7YIYSL6n/1/R+ljbwEzJF
- sF0f1JbPOGApZ2pY4FBerc7IG4/bfeQg7HFEbl3c1xDfNtCWZVXgzOvTwlNjlvqIMlwBVA6
- 1ptagroPCDzr1Uji3VssQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:R5PDIcJ6SgU=:gRLRf+YZQimaIbsVSe/PXh
- 6VugVe5OUMORqESUWbxu1mqGWQb9vIpKdweYNqjDiopX8jV5owkV2qXXdIYD/EiooPPA6PSFZ
- hWzQJoJgJovfQAvmnPZ3MWkqsQoK3xD2cTQ51AXSBAfjBdcKkWxafBVMzK/KKiHl55kAhX3mw
- ZbSxotIdRMCF93u5iY98KgG2rsuASXdXz46UhLZCyKVrskGOPEu+gbiu0ep0tfXCGXZWbFqmz
- v2zKLxR+hyBNcptKzqrj9cT4I27VMpnVp8q1E4YOQlqiLoFqzn/gZ4kj9Q9+IRSzaHLwj1uK6
- H9wHcjQPWscKF0HNKLMepNCIeotHmO7LBU4cZ1wrB8RoNF+vgTxcUiI8ierTHxZXYoIstSi7h
- Xm8RiOVXgQFLxw1XsTJyENlaXok3fkaewIRs1isAlBx/mHTc2wcyrCle19srSUTMfDO59zFMQ
- j3BgAaxon8Ru+uJpbG8DJbEqV/Hoffl1tv0/z2Q21gLZca3T8o0qlKkzftQTvuxUD2nL+A+z8
- WQzb6XG+ikI0l2R1Mo6a16iQyf9yN61/+ubPH1QsbRr9ugKO8mHI81Yr4ImoUTPaJc/CLvuGy
- AjCYzwvtxQ4u608nq3ifUK9vTGtpzsAERuvPUG+QwLcpgLN0fFEgOc8plpRcQG9YeSjSiXvVe
- 6AvjNaAk0WzpzmNlaruDNyw3cObwBX0ZIvPEvVjD4E7xibszVCpczH8YjJ47Mxnv5FRHgSsKJ
- umqoTulPbHvwaAkoebjQ6tSnSn4n2erneUcfklftHWpveycrStjjSd1ZsbYX4oprSogIBA4EI
- jdBqPSKpTIlFc1IwB3poMNFMvNUYjt0Mdpul5nUWiFdcnvxqaE9/OanNVl/cbREOlwVC9m83H
- 6yhKKGQFwhR3fVcv+2Lw==
-X-Spam-Status: No, score=-104.0 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+In-Reply-To: <20200718150028.1709-6-jon.turney@dronecode.org.uk>
+X-Provags-ID: V03:K1:DDSJ/4nl2e1MGUE5CJ1vD76955xKEbdVEbCUhTm+2XPCYAPYKbZ
+ OaK97hQXGAJlrXr3bpuy6auHr2QHOmq/2bwXDwbpW2U69SvWOfcQqk+tqemPza2z6uJq93s
+ PTb4lzDLw2QGa6Ys0vYEDteyeDHs85wxSynnFaMDoyB+jvYwKtpp042d3ZFXl3Dt7t8oYsM
+ CIjJhr00R/LexOup1uOVg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:MfOIHD+k7+o=:+3WZiQhoxMlSs51sNTqPNe
+ AgPtNlKQnP8Epo6bh+pffrz2hRYjQxuJtcWgJ96jWDBEOQ9lZGDMh4MDzeFLcRudB4+jV/uJC
+ oLZjhNQRM2yW8I9p1SqcUfW+/5nP2Tag3zW3iC5t2v14gR8O8MYh4uSQbUitl2rf/DpaoGwhW
+ jCK/7fiRChCLNy9ZsJPUar+VF5CmhBUZXtZZCZ5KEyleVUZnVTIgeVzIAa3u/oZCdbiglDKt2
+ XAmSe1o3TdbfxmGDsS8GyE0CoxvusaejRzsrq4uJXgyOS8B5Ztvnj58xLjrJUJwYyCuV7NmUC
+ gVe95Uw5dZhytGq0GI59ihqEFKw5U9311HoDClZ8P3sZIw5iZg9/Yqm2i8X3IW46/cJxZkeIt
+ K1OJfqo5mfvBe7Ns+5ceOzkZDsHR2jLTe1Ba770HNftml3FDsDJUuIjmxrDFdODLVgttF0FGQ
+ Cu/6A3TBnMLyYeagNKAtrMEthRAh6hYheXJFUMFitpeMZLRE3JqrKPdjqjwsmw5OKeJu3C58Z
+ JzSJx1tpFefQgs2DokTE/m5GmN3HvkTi6oN9UrbvTGS0VTY4u+im8UqB/jYWkBOavaeT5d0z8
+ TaN1nO8fms4gDnaVmNhQu+aoOPB/aazDd1tKnBsc5wscMHTXb9Fg4mbC/veDU5x1f5Qk95VmJ
+ oQvUxotACq7+dvwOe4gHccxXQPex178oy4rkBbAMw0X1JYJRWPXjfWMIFzSn9bfZwkEIVfN2g
+ Fsb/Gznt/qtLY7twr21xnIIdflUdzVMaI8Fbu0J1Nt7cXjAHj55joI7Zt35PaxQHRMdFpvPK5
+ bZHDFby8PZwvZuL/3aflgtN6gQL7+QkEwWdDGEnQ6Rb0XpE2LcfTWLNtU5eXnx1l2YNctq54D
+ QA/Tsgw3sZRACxZrM8Yg==
+X-Spam-Status: No, score=-99.0 required=5.0 tests=BAYES_00,
  GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
  RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
@@ -62,42 +63,16 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 20 Jul 2020 08:07:48 -0000
+X-List-Received-Date: Mon, 20 Jul 2020 08:15:30 -0000
 
-On Jul 18 13:48, Takashi Yano via Cygwin-patches wrote:
-> - After commit 0365031ce1347600d854a23f30f1355745a1765c, key input
->   becomes not working by following steps.
->    1) Start cmd.exe in mintty.
->    2) Open another mintty.
->    3) Execute "echo AAA > /dev/pty*" (pty* is the pty opened in 1.)
->   This patch fixes the issue.
-> ---
->  winsup/cygwin/fhandler_tty.cc | 5 -----
->  1 file changed, 5 deletions(-)
-> 
-> diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-> index a61167116..6a004f3a5 100644
-> --- a/winsup/cygwin/fhandler_tty.cc
-> +++ b/winsup/cygwin/fhandler_tty.cc
-> @@ -969,11 +969,6 @@ fhandler_pty_slave::open (int flags, mode_t)
->        init_console_handler (true);
->      }
->  
-> -  isHybrid = false;
-> -  get_ttyp ()->pcon_pid = 0;
-> -  get_ttyp ()->switch_to_pcon_in = false;
-> -  get_ttyp ()->switch_to_pcon_out = false;
-> -
->    set_open_status ();
->    return 1;
->  
-> -- 
-> 2.27.0
+On Jul 18 16:00, Jon Turney wrote:
+> Use the (undocumented) MEMORY_WORKING_SET_EX_INFORMATION in dumper to
+> determine if a MEM_IMAGE region is unsharable, and hence has been
+> modified.
 
-Pushed.
+Great!
 
 
-Thanks,
 Corinna
 
 -- 
