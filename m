@@ -1,48 +1,54 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
- by sourceware.org (Postfix) with ESMTPS id EC0643861031
- for <cygwin-patches@cygwin.com>; Mon, 20 Jul 2020 18:55:48 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org EC0643861031
+Return-Path: <brian.inglis@systematicsw.ab.ca>
+Received: from smtp-out-no.shaw.ca (smtp-out-no.shaw.ca [64.59.134.13])
+ by sourceware.org (Postfix) with ESMTPS id C58623857C51
+ for <cygwin-patches@cygwin.com>; Mon, 20 Jul 2020 20:29:33 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org C58623857C51
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=SystematicSw.ab.ca
 Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([217.91.18.234]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MYNW8-1kK3lq1czS-00VRhT; Mon, 20 Jul 2020 20:55:44 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id B0B50A82B92; Mon, 20 Jul 2020 20:55:43 +0200 (CEST)
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: mmap: Remove AT_ROUND_TO_PAGE workaround
-Date: Mon, 20 Jul 2020 20:55:43 +0200
-Message-Id: <20200720185543.183292-1-corinna-cygwin@cygwin.com>
-X-Mailer: git-send-email 2.26.2
+ spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
+Received: from [192.168.1.104] ([24.64.172.44]) by shaw.ca with ESMTP
+ id xcPjj9Y8Hng7KxcPkj9aO2; Mon, 20 Jul 2020 14:29:32 -0600
+X-Authority-Analysis: v=2.3 cv=ecemg4MH c=1 sm=1 tr=0
+ a=kiZT5GMN3KAWqtYcXc+/4Q==:117 a=kiZT5GMN3KAWqtYcXc+/4Q==:17
+ a=IkcTkHD0fZMA:10 a=JZeu4sPTHj9YQVegERsA:9 a=ScRBEX30mr1d40Os:21
+ a=-827Cxc37FkvmoCp:21 a=QEXdDO2ut3YA:10
 Reply-To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Cygwin: mmap: fix mapping beyond EOF on 64 bit
+To: cygwin-patches@cygwin.com
+References: <20200720133442.11432-1-kbrown@cornell.edu>
+ <20200720142303.GJ16360@calimero.vinschen.de>
+ <ceb31948-ec43-3bf1-a164-53b54828535f@cornell.edu>
+ <3d3597af-7bb8-bc83-2522-9282566f80b8@cornell.edu>
+ <d1ac7543-34a2-90c6-07b4-96d90142df34@cornell.edu>
+ <20200720154139.GL16360@calimero.vinschen.de>
+From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
+Autocrypt: addr=Brian.Inglis@SystematicSw.ab.ca; prefer-encrypt=mutual;
+ keydata=
+ mDMEXopx8xYJKwYBBAHaRw8BAQdAnCK0qv/xwUCCZQoA9BHRYpstERrspfT0NkUWQVuoePa0
+ LkJyaWFuIEluZ2xpcyA8QnJpYW4uSW5nbGlzQFN5c3RlbWF0aWNTdy5hYi5jYT6IlgQTFggA
+ PhYhBMM5/lbU970GBS2bZB62lxu92I8YBQJeinHzAhsDBQkJZgGABQsJCAcCBhUKCQgLAgQW
+ AgMBAh4BAheAAAoJEB62lxu92I8Y0ioBAI8xrggNxziAVmr+Xm6nnyjoujMqWcq3oEhlYGAO
+ WacZAQDFtdDx2koSVSoOmfaOyRTbIWSf9/Cjai29060fsmdsDLg4BF6KcfMSCisGAQQBl1UB
+ BQEBB0Awv8kHI2PaEgViDqzbnoe8B9KMHoBZLS92HdC7ZPh8HQMBCAeIfgQYFggAJhYhBMM5
+ /lbU970GBS2bZB62lxu92I8YBQJeinHzAhsMBQkJZgGAAAoJEB62lxu92I8YZwUBAJw/74rF
+ IyaSsGI7ewCdCy88Lce/kdwX7zGwid+f8NZ3AQC/ezTFFi5obXnyMxZJN464nPXiggtT9gN5
+ RSyTY8X+AQ==
+Organization: Systematic Software
+Message-ID: <c0269ad1-515e-dbf5-aae1-8d57b7ef39b2@SystematicSw.ab.ca>
+Date: Mon, 20 Jul 2020 14:29:31 -0600
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:c90GPJ//vFa75Yu99ypFQo+Co0F451EDw/fm+CxwVZCkg54G8Hx
- WuVV7anXXMCZFR2EC2L8g8GJYj0ZZRJJlaYssGgR/zAzaC1/wslscCfo7j+lf5d6TsUMHGN
- GbzUUjnytzd97hCna55mgsRbF76ffGxiQnloX1K6qEHZZlfG8GSn25r2MvvfisyYNbFFLk9
- nShpNj2vK1t1a4zWryMZw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:/7rwW2FSPr4=:CaQMmL1yjm5+18yBx2nXZP
- 9Fy12QvtntAIrgLXedOnR3TDtUCQcZIfW1V41TihaRdeFdlnqKOpBIUr+0C861+pf3AAfkAHo
- My1QqIVhUYfx36KY8TnNYObu8X0ybN0GARK4TcCISKWPUmNFlJagmyXiqIOJ4HZ8/gF1XenOk
- sjDhbNve2KJs2PTd8+lRen++PaBQY+I0DnaBTlJB+NyNb0e9eWc2pXm1UelWEFIIFaekzbOwC
- nt/eZpm91Xdoxw5jD6DYMzr3CJBTdlmcvaEXxVGC9IE4woOmqJTfZMY2jMCOTEOxUVbcQQkEE
- ds4ksoZ7eLftSLyZ/GjeSu/jCCQ4Xu1bHwNrXA/teCXgcF1cdyUogsiY1LcLITVK1o/Yjcdi4
- FxCVzjscAShqoaqRJkHrRfML9AZr01ZVfcFBs/FrVDeMO4rCwMf7/+tp7u4ctoIrXE+igvFkO
- KyVaM9EOyCs2/2uvXmmPFU3Tjq6dEzjk1CyF3BPEU4ZrRHInbVOpx/vIouWqagHFH0jrXUUYG
- 7Rkl4LMOJFlOv2YVGcj8FtNEwR8mxzvJHUpAfajFnuI3wZeIEMh0+oxPBLqKy7kRSuioCF7xG
- fwj+R8MEYV3JEmHrRWV2wl5NG3mCOjSEuv2YpIpq2IH6OSHwGB1OpTIYYTY/6ED/v6TmP+kid
- lCLAonBQ7sgCEquiv3a5ZHD9b2pM2F6dax7WuH3cD49cu1e5HTzLqv/1nsLaxN8trSrNmEYZU
- /oCadDVf7xLv63iHbBO6VEy6xyds3Jykyc8vP5vPRjcG+lJJsvXp8dm4E8pAX89eINNfGzuB+
- wvCRfijBEszVArTQqF9mZzyayaMeDsLYUTOQkZ/yExrlClcZlINWxCbguyiVZrITmXrZRTiKw
- mSZ6bB9O02MsPUrdaD6Q==
-X-Spam-Status: No, score=-104.6 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+In-Reply-To: <20200720154139.GL16360@calimero.vinschen.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfPmyo0XFkb03ZWhbgSFAcPGsqW7QAXY58pRABhArtgXDlPbLyKn1VcxmldswJREeDjQoeqMMqJZx7jaETffQJIOTlNBMcy9MYFkwMZmW9rlIgMYgUNtS
+ rWlcB3PO0X4MJNQrLuh4ROeHTbjfdY8+h/t1J/rCoOvsxM3dE9HeAsgdIH5v3kNzq7nK3LKwSOdxvg==
+X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
+ KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW, SPF_HELO_NONE, SPF_NONE,
+ TXREP autolearn=no autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -57,204 +63,32 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 20 Jul 2020 18:55:51 -0000
+X-List-Received-Date: Mon, 20 Jul 2020 20:29:35 -0000
 
-From: Corinna Vinschen <corinna@vinschen.de>
+On 2020-07-20 09:41, Corinna Vinschen wrote:
+> Ultimately, I wonder if we really should keep all the 32 bit OS stuff
+> in.  The number of real 32 bit systems (not WOW64) is dwindling fast.
+> Keeping all the AT_ROUND_TO_PAGE stuff in just for what? 2%? of the
+> systems is really not worth it, I guess.
 
-It's working on 32 bit OSes only anyway. It even fails on WOW64.
+A lot of older/smaller laptops, especially low cost budget models for lower
+income groups including students, seniors and for developing countries, Windows
+(Surface, etc.) tablets, and VMs supporting legacy systems and applications, run
+Windows 32 bit, and MS still sells W10 and supports 32 bit for that reason,
+except in OEM channels going forward from the 2020-04 release[1].
+About 40% of W7 systems sold were 32 bit, with about 25% of systems still
+running W7, so 10% of systems could still be 32-bit.
 
-Signed-off-by: Corinna Vinschen <corinna@vinschen.de>
----
+If you don't want to ask and perhaps reconsider the impact of your approach,
+maybe give folks a heads up on the mailing list that the current release will be
+the last to support 32 bit Windows?
 
-Notes:
-    Hi Ken,
-    
-    can you please review this patch and check if it doesn't break
-    your testcase again?
-    
-    Thanks,
-    Corinna
-
- winsup/cygwin/mmap.cc | 117 ++++++++++++------------------------------
- 1 file changed, 34 insertions(+), 83 deletions(-)
-
-diff --git a/winsup/cygwin/mmap.cc b/winsup/cygwin/mmap.cc
-index 1fccc6c58ee9..8ac96606c2e6 100644
---- a/winsup/cygwin/mmap.cc
-+++ b/winsup/cygwin/mmap.cc
-@@ -195,12 +195,7 @@ MapView (HANDLE h, void *addr, size_t len, DWORD openflags,
-   DWORD protect = gen_create_protect (openflags, flags);
-   void *base = addr;
-   SIZE_T viewsize = len;
--#ifdef __x86_64__ /* AT_ROUND_TO_PAGE isn't supported on 64 bit systems. */
-   ULONG alloc_type = MEM_TOP_DOWN;
--#else
--  ULONG alloc_type = (base && !wincap.is_wow64 () ? AT_ROUND_TO_PAGE : 0)
--		     | MEM_TOP_DOWN;
--#endif
- 
- #ifdef __x86_64__
-   /* Don't call NtMapViewOfSectionEx during fork.  It requires autoloading
-@@ -878,6 +873,10 @@ mmap64 (void *addr, size_t len, int prot, int flags, int fd, off_t off)
- 
-   if (!anonymous (flags) && fd != -1)
-     {
-+      UNICODE_STRING fname;
-+      IO_STATUS_BLOCK io;
-+      FILE_STANDARD_INFORMATION fsi;
-+
-       /* Ensure that fd is open */
-       cygheap_fdget cfd (fd);
-       if (cfd < 0)
-@@ -896,19 +895,16 @@ mmap64 (void *addr, size_t len, int prot, int flags, int fd, off_t off)
- 
-       /* The autoconf mmap test maps a file of size 1 byte.  It then tests
- 	 every byte of the entire mapped page of 64K for 0-bytes since that's
--	 what POSIX requires.  The problem is, we can't create that mapping on
--	 64 bit systems.  The file mapping will be only a single page, 4K, and
--	 since 64 bit systems don't support the AT_ROUND_TO_PAGE flag, the
--	 remainder of the 64K slot will result in a SEGV when accessed.
--
--	 So, what we do here is cheating for the sake of the autoconf test
--	 on 64 bit systems.  The justification is that there's very likely
--	 no application actually utilizing the map beyond EOF, and we know that
--	 all bytes beyond EOF are set to 0 anyway.  If this test doesn't work
--	 on 64 bit systems, it will result in not using mmap at all in a
--	 package.  But we want that mmap is treated as usable by autoconf,
--	 regardless whether the autoconf test runs on a 32 bit or a 64 bit
--	 system.
-+	 what POSIX requires.  The problem is, we can't create that mapping.
-+	 The file mapping will be only a single page, 4K, and the remainder
-+	 of the 64K slot will result in a SEGV when accessed.
-+
-+	 So, what we do here is cheating for the sake of the autoconf test.
-+	 The justification is that there's very likely no application actually
-+	 utilizing the map beyond EOF, and we know that all bytes beyond EOF
-+	 are set to 0 anyway.  If this test doesn't work, it will result in
-+	 not using mmap at all in a package.  But we want mmap being treated
-+	 as usable by autoconf.
- 
- 	 Ok, so we know exactly what autoconf is doing.  The file is called
- 	 "conftest.txt", it has a size of 1 byte, the mapping size is the
-@@ -916,31 +912,19 @@ mmap64 (void *addr, size_t len, int prot, int flags, int fd, off_t off)
- 	 mapping is MAP_SHARED, the offset is 0.
- 
- 	 If all these requirements are given, we just return an anonymous map.
--	 This will help to get over the autoconf test even on 64 bit systems.
- 	 The tests are ordered for speed. */
--#ifdef __x86_64__
--      if (1)
--#else
--      if (wincap.is_wow64 ())
--#endif
--	{
--	  UNICODE_STRING fname;
--	  IO_STATUS_BLOCK io;
--	  FILE_STANDARD_INFORMATION fsi;
--
--	  if (len == pagesize
--	      && prot == (PROT_READ | PROT_WRITE)
--	      && flags == MAP_SHARED
--	      && off == 0
--	      && (RtlSplitUnicodePath (fh->pc.get_nt_native_path (), NULL,
--				       &fname),
--		  wcscmp (fname.Buffer, L"conftest.txt") == 0)
--	      && NT_SUCCESS (NtQueryInformationFile (fh->get_handle (), &io,
--						     &fsi, sizeof fsi,
--						     FileStandardInformation))
--	      && fsi.EndOfFile.QuadPart == 1LL)
--	    flags |= MAP_ANONYMOUS;
--	}
-+      if (len == pagesize
-+	  && prot == (PROT_READ | PROT_WRITE)
-+	  && flags == MAP_SHARED
-+	  && off == 0
-+	  && (RtlSplitUnicodePath (fh->pc.get_nt_native_path (), NULL,
-+				   &fname),
-+	      wcscmp (fname.Buffer, L"conftest.txt") == 0)
-+	  && NT_SUCCESS (NtQueryInformationFile (fh->get_handle (), &io,
-+						 &fsi, sizeof fsi,
-+						 FileStandardInformation))
-+	  && fsi.EndOfFile.QuadPart == 1LL)
-+	flags |= MAP_ANONYMOUS;
-     }
- 
-   if (anonymous (flags) || fd == -1)
-@@ -1089,6 +1073,7 @@ go_ahead:
-     }
- 
- #ifdef __x86_64__
-+  orig_len = roundup2 (orig_len, pagesize);
-   if (!wincap.has_extended_mem_api ())
-     addr = mmap_alloc.alloc (addr, orig_len ?: len, fixed (flags));
- #else
-@@ -1099,7 +1084,6 @@ go_ahead:
- 	 deallocated and the address we got is used as base address for the
- 	 subsequent real mappings.  This ensures that we have enough space
- 	 for the whole thing. */
--      orig_len = roundup2 (orig_len, pagesize);
-       PVOID newaddr = VirtualAlloc (addr, orig_len, MEM_TOP_DOWN | MEM_RESERVE,
- 				    PAGE_READWRITE);
-       if (!newaddr)
-@@ -1132,51 +1116,18 @@ go_ahead:
-   if (orig_len)
-     {
-       /* If the requested length is bigger than the file size, the
--	 remainder is created as anonymous mapping.  Actually two
--	 mappings are created, first the remainder from the file end to
--	 the next 64K boundary as accessible pages with the same
--	 protection as the file's pages, then as much pages as necessary
--	 to accomodate the requested length, but as reserved pages which
--	 raise a SIGBUS when trying to access them.  AT_ROUND_TO_PAGE
--	 and page protection on shared pages is only supported by the
--	 32 bit environment, so don't even try on 64 bit or even WOW64.
--	 This results in an allocation gap in the first 64K block the file
--	 ends in, but there's nothing at all we can do about that. */
--#ifdef __x86_64__
--      len = roundup2 (len, wincap.allocation_granularity ());
--      orig_len = roundup2 (orig_len, wincap.allocation_granularity ());
--#else
--      len = roundup2 (len, wincap.is_wow64 () ? wincap.allocation_granularity ()
--					      : wincap.page_size ());
--#endif
-+	 remainder is created as anonymous mapping, as reserved pages which
-+	 raise a SIGBUS when trying to access them.  This results in an
-+	 allocation gap in the first 64K block the file ends in, but there's
-+	 nothing at all we can do about that. */
-+      len = roundup2 (len, pagesize);
-       if (orig_len - len)
- 	{
--	  orig_len -= len;
--	  size_t valid_page_len = 0;
--#ifndef __x86_64__
--	  if (!wincap.is_wow64 ())
--	    valid_page_len = orig_len % pagesize;
--#endif
--	  size_t sigbus_page_len = orig_len - valid_page_len;
-+	  size_t sigbus_page_len = orig_len - len;
- 
--	  caddr_t at_base = base + len;
--	  if (valid_page_len)
--	    {
--	      prot |= __PROT_FILLER;
--	      flags &= MAP_SHARED | MAP_PRIVATE;
--	      flags |= MAP_ANONYMOUS | MAP_FIXED;
--	      at_base = mmap_worker (NULL, &fh_anonymous, at_base,
--				     valid_page_len, prot, flags, -1, 0, NULL);
--	      if (!at_base)
--		{
--		  fh->munmap (fh->get_handle (), base, len);
--		  set_errno (ENOMEM);
--		  goto out_with_unlock;
--		}
--	      at_base += valid_page_len;
--	    }
- 	  if (sigbus_page_len)
- 	    {
-+	      caddr_t at_base = base + len;
- 	      prot = PROT_READ | PROT_WRITE | __PROT_ATTACH;
- 	      flags = MAP_ANONYMOUS | MAP_NORESERVE | MAP_FIXED;
- 	      at_base = mmap_worker (NULL, &fh_anonymous, at_base,
 -- 
-2.26.2
+Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
 
+This email may be disturbing to some readers as it contains
+too much technical detail. Reader discretion is advised.
+[Data in IEC units and prefixes, physical quantities in SI.]
+
+[1] 2004 looks like it is 16 years old - delete software still using 2 digit
+years for anything, as we will have many ambiguities until 2032!
