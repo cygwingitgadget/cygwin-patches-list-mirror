@@ -1,55 +1,53 @@
-Return-Path: <brian.inglis@systematicsw.ab.ca>
-Received: from smtp-out-no.shaw.ca (smtp-out-no.shaw.ca [64.59.134.13])
- by sourceware.org (Postfix) with ESMTPS id 8979A3857C73
- for <cygwin-patches@cygwin.com>; Mon, 20 Jul 2020 23:14:10 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 8979A3857C73
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=SystematicSw.ab.ca
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+ by sourceware.org (Postfix) with ESMTPS id 7903A3858D38
+ for <cygwin-patches@cygwin.com>; Tue, 21 Jul 2020 07:36:05 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 7903A3858D38
 Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
-Received: from [192.168.1.104] ([24.64.172.44]) by shaw.ca with ESMTP
- id xez1jJVML62brxez2jRQNb; Mon, 20 Jul 2020 17:14:09 -0600
-X-Authority-Analysis: v=2.3 cv=LKf9vKe9 c=1 sm=1 tr=0
- a=kiZT5GMN3KAWqtYcXc+/4Q==:117 a=kiZT5GMN3KAWqtYcXc+/4Q==:17
- a=IkcTkHD0fZMA:10 a=JZeu4sPTHj9YQVegERsA:9 a=QEXdDO2ut3YA:10
+ dmarc=none (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org;
+ spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
+Received: from calimero.vinschen.de ([217.91.18.234]) by
+ mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1Mv3Ds-1koVtY3ckS-00r3iM; Tue, 21 Jul 2020 09:36:00 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id E5F5BA82B90; Tue, 21 Jul 2020 09:35:59 +0200 (CEST)
+Date: Tue, 21 Jul 2020 09:35:59 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: Ken Brown <kbrown@cornell.edu>
+Cc: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Cygwin: mmap: Remove AT_ROUND_TO_PAGE workaround
+Message-ID: <20200721073559.GM16360@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: mmap: fix mapping beyond EOF on 64 bit
-To: cygwin-patches@cygwin.com
-References: <20200720133442.11432-1-kbrown@cornell.edu>
- <20200720142303.GJ16360@calimero.vinschen.de>
- <ceb31948-ec43-3bf1-a164-53b54828535f@cornell.edu>
- <3d3597af-7bb8-bc83-2522-9282566f80b8@cornell.edu>
- <d1ac7543-34a2-90c6-07b4-96d90142df34@cornell.edu>
- <20200720154139.GL16360@calimero.vinschen.de>
- <c0269ad1-515e-dbf5-aae1-8d57b7ef39b2@SystematicSw.ab.ca>
- <f85c42c6-18ce-720d-328a-352ca7cb78fe@cornell.edu>
-From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
-Autocrypt: addr=Brian.Inglis@SystematicSw.ab.ca; prefer-encrypt=mutual;
- keydata=
- mDMEXopx8xYJKwYBBAHaRw8BAQdAnCK0qv/xwUCCZQoA9BHRYpstERrspfT0NkUWQVuoePa0
- LkJyaWFuIEluZ2xpcyA8QnJpYW4uSW5nbGlzQFN5c3RlbWF0aWNTdy5hYi5jYT6IlgQTFggA
- PhYhBMM5/lbU970GBS2bZB62lxu92I8YBQJeinHzAhsDBQkJZgGABQsJCAcCBhUKCQgLAgQW
- AgMBAh4BAheAAAoJEB62lxu92I8Y0ioBAI8xrggNxziAVmr+Xm6nnyjoujMqWcq3oEhlYGAO
- WacZAQDFtdDx2koSVSoOmfaOyRTbIWSf9/Cjai29060fsmdsDLg4BF6KcfMSCisGAQQBl1UB
- BQEBB0Awv8kHI2PaEgViDqzbnoe8B9KMHoBZLS92HdC7ZPh8HQMBCAeIfgQYFggAJhYhBMM5
- /lbU970GBS2bZB62lxu92I8YBQJeinHzAhsMBQkJZgGAAAoJEB62lxu92I8YZwUBAJw/74rF
- IyaSsGI7ewCdCy88Lce/kdwX7zGwid+f8NZ3AQC/ezTFFi5obXnyMxZJN464nPXiggtT9gN5
- RSyTY8X+AQ==
-Organization: Systematic Software
-Message-ID: <eef0b033-2ecc-b803-e9b4-4c9c9d1812b6@SystematicSw.ab.ca>
-Date: Mon, 20 Jul 2020 17:14:07 -0600
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+Mail-Followup-To: Ken Brown <kbrown@cornell.edu>, cygwin-patches@cygwin.com
+References: <20200720185543.183292-1-corinna-cygwin@cygwin.com>
+ <6eee5eb3-e37b-0255-4cc7-f66774092a03@cornell.edu>
 MIME-Version: 1.0
-In-Reply-To: <f85c42c6-18ce-720d-328a-352ca7cb78fe@cornell.edu>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-CA
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4wfGBeuxLPsheKuEf9yTUtrkTCvVnlFi3YIa9ZcTOkTxUYKQns6OZnblPQ1jMMQJjqA936BXpG6ABerenWO621EZlQCe89+jkhkQdi8vG8nxX7lREhtz1A
- qCz6ZGXXEAYRsjliMZWAWVlq1EhCgH6Xqm9tykQiQ+Iz/+ObLw2Ly00jiTUKnQ3puGJyalwqdebBfA==
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
- KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW, SPF_HELO_NONE, SPF_NONE,
- TXREP autolearn=no autolearn_force=no version=3.4.2
+Content-Disposition: inline
+In-Reply-To: <6eee5eb3-e37b-0255-4cc7-f66774092a03@cornell.edu>
+X-Provags-ID: V03:K1:wszHLN14HmoFIM7RH0/hIHZh15UeXmwOd9q55QJlsH+t+tCOkt6
+ SVPG1XY5jVfz0TTEsYGjBqJi6PudEheJ3HZPJiyGIwEOvNAajpyidhw9CwSL0+4xBKYVBlq
+ bW/9aQ6NW82mCnAmN6DOT00LKHn92p6VtA7y8KoMZin7pEjOgmXmiQzrhmOFwqw4YLeCT59
+ a+KiUm9s/tR4z9ZyYIuyg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:vF0m657FpoY=:bqKMONsoJWYUBsWepBHMXj
+ YdtmBXrwHTe7S1/YABcbggOpXO2IYFCjknbcN2hmtC0zG9reSEkaAuVaO9mbix1XVArX1kHTK
+ e2bLR4qxSp09qbmO9tSqkEQiwGcM4CCL8gpaEKSyfm9K22JhoQB3SJSeWFDtWNYUxBJoH+2xu
+ /DwKFaNnhtbhKh3YnrOhTkItz4wz3lU5ZclG009e0y1TWJDr2NxJpz8y7CoJp0qszGzM/dTG5
+ WTQ/sci85+gLYEwH5fE7TyqkNptc3p9LWrtXra7xjzmpJJ46mPJ9dDPbQJJONvxnmFFg0R9x+
+ Ln5hymbqp59ddTibWK+pvXmOocoxmuyaTs7/c2/bXOEXlPqH9gwFOkBzjdoglILtNcGXfElOw
+ tsXEKdMaCseiRbHaSVgyEG4ZCfKbssTFR5vPP9+iRuaBOAnEdQMOBJUb5PoypZ7LrmQH2XJF1
+ 3YhfAnPeuSLOmYdHqO9r7POsXk5OQxBVMqv4UFFBXMg1xpLVek+6/NdAmTOY/FjZnzaZ4QJ28
+ BUe0eW1HqP2UvE8oFgdXqatt9AI2taqhpCPGnuBCkuwn8Ypk3mSvN88kLix+72/Gix11NNv21
+ IcF3HY3vhmKKoHxgtNnJwtrUV5VqHWksEPqsIyHVvwMndtMyf2UWMRoOCEmX8YG2m3aLMHBWo
+ e5P17JLKAz+SZIEWUQDvpmbxEkfy0meSPMXobUUH/shC1hQi4fEC135PxUmYLYODQNjwwXPs+
+ dKEpZT/Ru8CQTE1lwuyOuGtC3fFJkisUZey7nB7/OfkqM/h1SNIi3szqID4CJXZdfFniTlsIa
+ XbAoFMHSWsuoQb4tuwtUwoZqRzYrckSwDREAFBi6Y/nJG/GySBo3tlfqlwT2BJ/bClIALoIYg
+ BSUf9GZQErhPtF+xnR9g==
+X-Spam-Status: No, score=-104.4 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -64,32 +62,107 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 20 Jul 2020 23:14:12 -0000
+X-List-Received-Date: Tue, 21 Jul 2020 07:36:07 -0000
 
-On 2020-07-20 15:08, Ken Brown via Cygwin-patches wrote:
-> On 7/20/2020 4:29 PM, Brian Inglis wrote:
->> On 2020-07-20 09:41, Corinna Vinschen wrote:
->>> Ultimately, I wonder if we really should keep all the 32 bit OS stuff
->>> in.  The number of real 32 bit systems (not WOW64) is dwindling fast.
->>> Keeping all the AT_ROUND_TO_PAGE stuff in just for what? 2%? of the
->>> systems is really not worth it, I guess.
-> [...]
->> If you don't want to ask and perhaps reconsider the impact of your approach,
->> maybe give folks a heads up on the mailing list that the current release will be
->> the last to support 32 bit Windows?
+Hi Ken,
+
+On Jul 20 17:26, Ken Brown via Cygwin-patches wrote:
+> Hi Corinna,
 > 
-> Corinna didn't propose dropping support for 32 bit Windows.  She proposed
-> dropping a feature that works *only* on 32 bit Windows.
+> On 7/20/2020 2:55 PM, Corinna Vinschen wrote:
+> > From: Corinna Vinschen <corinna@vinschen.de>
+> > [...]
+> > @@ -1089,6 +1073,7 @@ go_ahead:
+> >       }
+> >   #ifdef __x86_64__
+> > +  orig_len = roundup2 (orig_len, pagesize);
 
-Sorry if I misunderstood, but it sounded more drastic than that, and required
-for the code to work compatibly on Windows 32 bit, rather than supporting a
-different feature that only worked on Windows 32 bit, as anything
-non-Linux/BSD/POSIX can be considered non-essential if support is not
-widespread, nor essential for critical packages.
+Urgh, this line was supposed to go *outside* the #ifdef bracket.  Duh!
+
+Thanks for catching.
+
+> >     if (!wincap.has_extended_mem_api ())
+> >       addr = mmap_alloc.alloc (addr, orig_len ?: len, fixed (flags));
+> >   #else
+> > [...]
+> 
+> I think you still left in some 32 bit code that should be removed, and also
+> orig_len now doesn't get rounded up on 32 bit.  Here's an additional diff
+> that I think is needed beyond your patch:
+> 
+> diff --git a/winsup/cygwin/mmap.cc b/winsup/cygwin/mmap.cc
+> index 8ac96606c..fa9266825 100644
+> --- a/winsup/cygwin/mmap.cc
+> +++ b/winsup/cygwin/mmap.cc
+> @@ -1009,20 +1009,8 @@ mmap64 (void *addr, size_t len, int prot, int flags,
+> int fd, off_t off)
+>           goto go_ahead;
+>         }
+>        fsiz -= off;
+> -      /* We're creating the pages beyond EOF as reserved, anonymous pages.
+> -        Note that 64 bit environments don't support the AT_ROUND_TO_PAGE
+> -        flag, which is required to get this right for the remainder of
+> -        the first 64K block the file ends in.  We perform the workaround
+> -        nevertheless to support expectations that the range mapped beyond
+> -        EOF can be safely munmap'ed instead of being taken by another,
+> -        totally unrelated mapping. */
+> -      if ((off_t) len > fsiz && !autogrow (flags))
+> -       orig_len = len;
+> -#ifdef __i386__
+> -      else if (!wincap.is_wow64 () && roundup2 (len, wincap.page_size ())
+> -                                     < roundup2 (len, pagesize))
+> -       orig_len = len;
+> -#endif
+> +      /* We're creating the pages beyond EOF as reserved, anonymous
+> +        pages if MAP_AUTOGROW is not set. */
+>        if ((off_t) len > fsiz)
+>         {
+>           if (autogrow (flags))
+> @@ -1037,9 +1025,12 @@ mmap64 (void *addr, size_t len, int prot, int flags,
+> int fd, off_t off)
+>                 }
+>             }
+>           else
+> -           /* Otherwise, don't map beyond EOF, since Windows would change
+> -              the file to the new length, in contrast to POSIX. */
+> -           len = fsiz;
+> +           {
+> +             /* Otherwise, don't map beyond EOF, since Windows would change
+> +                the file to the new length, in contrast to POSIX. */
+> +             orig_len = len;
+> +             len = fsiz;
+> +           }
+
+Oh, yes, that also simplifies the logic, great!
+
+>         }
+> 
+>        /* If the requested offset + len is <= file size, drop MAP_AUTOGROW.
+> @@ -1072,8 +1063,8 @@ go_ahead:
+>         }
+>      }
+> 
+> -#ifdef __x86_64__
+>    orig_len = roundup2 (orig_len, pagesize);
+> +#ifdef __x86_64__
+>    if (!wincap.has_extended_mem_api ())
+>      addr = mmap_alloc.alloc (addr, orig_len ?: len, fixed (flags));
+>  #else
+> 
+> I'm attaching an amended commit.
+> 
+> I could easily have missed something, and I don't have a 32 bit OS to test
+> on, so just ignore my changes if I'm wrong.
+> 
+> But I've retested the php test case, and it's still OK with this patch.
+> 
+> Ken
+
+Thanks a lot for checking and the attached full patch!
+
+
+Corinna
 
 -- 
-Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
-
-This email may be disturbing to some readers as it contains
-too much technical detail. Reader discretion is advised.
-[Data in IEC units and prefixes, physical quantities in SI.]
+Corinna Vinschen
+Cygwin Maintainer
