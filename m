@@ -1,52 +1,31 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
- by sourceware.org (Postfix) with ESMTPS id 8623E3857C42
- for <cygwin-patches@cygwin.com>; Fri, 24 Jul 2020 08:42:33 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 8623E3857C42
-Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([217.91.18.234]) by
- mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1N2VGj-1kx3wP1n4x-013tmX for <cygwin-patches@cygwin.com>; Fri, 24 Jul 2020
- 10:42:30 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id D363BA81012; Fri, 24 Jul 2020 10:42:29 +0200 (CEST)
-Date: Fri, 24 Jul 2020 10:42:29 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com
+ [210.131.2.81])
+ by sourceware.org (Postfix) with ESMTPS id D2B383857C49
+ for <cygwin-patches@cygwin.com>; Tue, 28 Jul 2020 02:20:58 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org D2B383857C49
+Received: from Express5800-S70 (v038192.dynamic.ppp.asahi-net.or.jp
+ [124.155.38.192]) (authenticated)
+ by conssluserg-02.nifty.com with ESMTP id 06S2KgJn003597
+ for <cygwin-patches@cygwin.com>; Tue, 28 Jul 2020 11:20:42 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 06S2KgJn003597
+X-Nifty-SrcIP: [124.155.38.192]
+Date: Tue, 28 Jul 2020 11:20:56 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] fhandler_proc.cc(format_proc_cpuinfo): add flags and TLB
- size
-Message-ID: <20200724084229.GA4206@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200722192254.13188-1-Brian.Inglis@SystematicSW.ab.ca>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200722192254.13188-1-Brian.Inglis@SystematicSW.ab.ca>
-X-Provags-ID: V03:K1:vsyd1agIljpdjxoTVJFjZRQcW/iD/PSAU2SSnzCmj/l9/kMzh12
- 5JeVw/X5MVYYq+K+JLBZN9Jo+kEc/Hs8KEeH6dvBZ6yApclj05UnlVNFqGIN/gp9kSxR6zi
- o54vmIbJaoRSgr40+cP3sNyLLzYx5cWEW0CorILw011KHBbeePRfrMQmmZlEiG3i7/7CDdP
- zmeK+2Q2G4K7IV1vN6sxg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:yJzkpjzN1ds=:IKRJnUZUDwFspF27zaNt4W
- 9eHSKpHj1fF1hqZ5/GrfHlPuEwIhIrnaNyEBUqb/sJI1Bt1AK8EtEQWQTJtxQRFuHsGVBnvxF
- btAUlkh8McXLgRsSoujxi4WoK6y4uaHgEaKXHvYvLCswtfvUj9KcEkneJMN1ko4dwcq8+2rPo
- oayGAcIHkO2POfqsg+71QZLnEF45ldqxLTvG+qap/7hrqFJHYLFAKEeg6UGAq9wLZj7SQZmN7
- w6kBnebNifXdpK4toeenKQYAFDc9NVntpfpAyXZrbcEF23bQAz1BQHUHN+qagalWIjPNtevTi
- 31ML1oCVO+MRLbCmB9KIb6Cvhu3G55s16oHu6o93TYUyQmePRx+kO1uXeZOl/0ymASGki+2vw
- 89ntBVmSTgxTBgGVg3aMOQzuxWRlCxBWWGq3zWlPT2lSTtRN2OuxW45Neyr3OO6fBwAf3cZ/1
- WX5uivHjFkFuLXOgWU8J1xMcWjI7IUnccdn5jOhsyYiNuwzBxelXDk3acABi/qt6Wq76od/5x
- thq9lncscMAzVkobHBMyE5H4G/TWl9YuNPePB4l3mteMzwdJDKKf47AtTJK9l7hGUSTmdLp4C
- IGnYpJ1EIyJByrWZio/p6oDJ9i9DUMiCLDQB1sJFCv7HOtRWccVuL/z13fqYsByc2Zo2tWFMf
- Ut8AQv70XTWhGY2Pk+o9G72G+42S0vRK6nIsSfA0cWiaM62O5UsZA8Q/Biq6YlkYqgp38ZY37
- fXglDC3sl3p66tvZ0IIsIwAyU8tko1ZCm2QXy9evkVGCseCufgcdLdJ7fycfXYzuXASd3ao/c
- D7954mBb8kCKoyJ2KtQbuIS55t8v034nND5QPf/Jn4nbpH9ncjYW9eW+JQpBof7YFBbmwNGVs
- ntHQKCxGj433y1VWUBgg==
-X-Spam-Status: No, score=-99.4 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+Subject: Re: [PATCH 5/5] Cygwin: Use MEMORY_WORKING_SET_EX_INFORMATION in
+ dumper
+Message-Id: <20200728112056.86427f1c9e2a3e044dfa169e@nifty.ne.jp>
+In-Reply-To: <20200718150028.1709-6-jon.turney@dronecode.org.uk>
+References: <20200718150028.1709-1-jon.turney@dronecode.org.uk>
+ <20200718150028.1709-6-jon.turney@dronecode.org.uk>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0,
+ RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_PASS,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -62,28 +41,40 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <http://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 24 Jul 2020 08:42:34 -0000
+X-List-Received-Date: Tue, 28 Jul 2020 02:21:02 -0000
 
-On Jul 22 13:22, Brian Inglis wrote:
-> update to Linux-next 5.8 order fields and flags:
-> add amd_dcm, arch_lbr, arch_perfmon, art, cpuid, extd_apicid, ibpb,
-> ibrs, ibrs_enhanced, nonstop_tsc_s3, nopl, rep_good, ring3mwait, ssbd,
-> stibp, tsc_known_freq, tsc_reliable, xtopology flags;
-> add TLB size line;
-> add ftuprint macro for feature test unconditional flag print;
-> add commented out flags requiring CR or MSR access in print order with
-> comment explaining issue;
-> make cpuid leaf numbers consistent 8 hex digits for searching
+Hi Jon,
+
+On Sat, 18 Jul 2020 16:00:28 +0100
+Jon Turney wrote:
+> Use the (undocumented) MEMORY_WORKING_SET_EX_INFORMATION in dumper to
+> determine if a MEM_IMAGE region is unsharable, and hence has been
+> modified.
 > ---
->  winsup/cygwin/fhandler_proc.cc | 297 ++++++++++++++++++++++++++++-----
->  1 file changed, 255 insertions(+), 42 deletions(-)
+>  winsup/doc/utils.xml     |  8 ++---
+>  winsup/utils/Makefile.in |  2 +-
+>  winsup/utils/dumper.cc   | 63 ++++++++++++++++++++++++++++++++++++++--
+>  3 files changed, 65 insertions(+), 8 deletions(-)
 
-Pushed.
+After this commit, 32bit build failes with:
 
+/usr/lib/gcc/i686-pc-cygwin/9.3.0/../../../../i686-pc-cygwin/bin/ld: dumper.o:/home/yano/newlib-cygwin/i686-pc-cygwin/winsup/utils/../../.././winsup/utils/dumper.cc:295: undefined reference to `NtQueryVirtualMemory'
 
-Thanks,
-Corinna
+This seems to be solved with the patch:
+
+diff --git a/winsup/utils/dumper.cc b/winsup/utils/dumper.cc
+index 3af138b9e..36dbf9dbb 100644
+--- a/winsup/utils/dumper.cc
++++ b/winsup/utils/dumper.cc
+@@ -272,7 +272,7 @@ typedef enum _MEMORY_INFORMATION_CLASS
+ } MEMORY_INFORMATION_CLASS;
+
+ extern "C"
+-NTSTATUS
++NTSTATUS NTAPI
+ NtQueryVirtualMemory(HANDLE ProcessHandle,
+                     LPVOID BaseAddress,
+                     MEMORY_INFORMATION_CLASS MemoryInformationClass,
 
 -- 
-Corinna Vinschen
-Cygwin Maintainer
+Takashi Yano <takashi.yano@nifty.ne.jp>
