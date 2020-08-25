@@ -1,24 +1,24 @@
 Return-Path: <brian.inglis@systematicsw.ab.ca>
 Received: from smtp-out-no.shaw.ca (smtp-out-no.shaw.ca [64.59.134.12])
- by sourceware.org (Postfix) with ESMTPS id 365BE3857815
+ by sourceware.org (Postfix) with ESMTPS id 38B52385700C
  for <cygwin-patches@cygwin.com>; Tue, 25 Aug 2020 12:57:24 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 365BE3857815
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 38B52385700C
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
  header.from=SystematicSW.ab.ca
 Authentication-Results: sourceware.org;
  spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
 Received: from BWINGLISD.cg.shawcable.net ([24.64.172.44])
  by shaw.ca with ESMTP
- id AYVtkhGx8ng7KAYVvky6TA; Tue, 25 Aug 2020 06:57:23 -0600
+ id AYVtkhGx8ng7KAYVvky6T6; Tue, 25 Aug 2020 06:57:23 -0600
 X-Authority-Analysis: v=2.3 cv=ecemg4MH c=1 sm=1 tr=0
- a=kiZT5GMN3KAWqtYcXc+/4Q==:117 a=kiZT5GMN3KAWqtYcXc+/4Q==:17 a=I0CVDw5ZAAAA:8
- a=2vgJobJ0UVLQsd_972UA:9 a=YdXdGVBxRxTCRzIkH2Jn:22
+ a=kiZT5GMN3KAWqtYcXc+/4Q==:117 a=kiZT5GMN3KAWqtYcXc+/4Q==:17 a=w_pzkKWiAAAA:8
+ a=PHortqyt3Qne_rW-jEQA:9 a=VTJOHQwvoJQA:10 a=sRI3_1zDfAgwuvI8zelB:22
 From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v2 3/3] winsup/doc/faq-api.xml(faq.api.timezone): explain time
- zone updates
-Date: Tue, 25 Aug 2020 06:57:15 -0600
-Message-Id: <20200825125715.48238-4-Brian.Inglis@SystematicSW.ab.ca>
+Subject: [PATCH v2 2/3] winsup/doc/faq-api.xml,
+ -programming.xml: change Win32 to Windows/API
+Date: Tue, 25 Aug 2020 06:57:14 -0600
+Message-Id: <20200825125715.48238-3-Brian.Inglis@SystematicSW.ab.ca>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200825125715.48238-1-Brian.Inglis@SystematicSW.ab.ca>
 References: <20200825125715.48238-1-Brian.Inglis@SystematicSW.ab.ca>
@@ -48,51 +48,130 @@ List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
 X-List-Received-Date: Tue, 25 Aug 2020 12:57:25 -0000
 
-based on material from tz@IANA.org mailing list sources
 ---
- winsup/doc/faq-api.xml | 29 +++++++++++++++++++++++++----
- 1 file changed, 25 insertions(+), 4 deletions(-)
+ winsup/doc/faq-api.xml         | 10 +++++-----
+ winsup/doc/faq-programming.xml | 20 ++++++++++----------
+ 2 files changed, 15 insertions(+), 15 deletions(-)
 
 diff --git a/winsup/doc/faq-api.xml b/winsup/doc/faq-api.xml
-index 829e4d7febd8..365e301555a5 100644
+index 313f15d37c4d..829e4d7febd8 100644
 --- a/winsup/doc/faq-api.xml
 +++ b/winsup/doc/faq-api.xml
-@@ -385,13 +385,34 @@ Cygwin version number details, check out the
+@@ -18,7 +18,7 @@ Windows into the C library.  Then your apps should (ideally) run on POSIX
+ systems (Unix/Linux) and Windows with no changes at the source level.
+ </para>
+ <para>The C library is in a DLL, which makes basic applications quite small.
+-And it allows relatively easy upgrades to the Win32/POSIX translation
++And it allows relatively easy upgrades to the Windows/POSIX translation
+ layer, providing that DLL changes stay backward-compatible.
+ </para>
+ <para>For a good overview of Cygwin, you may want to read the Cygwin
+@@ -140,7 +140,7 @@ spawn family of calls if possible.
+ <para>Here's how it works:
+ </para>
+ <para>Parent initializes a space in the Cygwin process table for child.
+-Parent creates child suspended using Win32 CreateProcess call, giving
++Parent creates child suspended using Windows CreateProcess call, giving
+ the same path it was invoked with itself.  Parent calls setjmp to save
+ its own context and then sets a pointer to this in the Cygwin shared
+ memory area (shared among all Cygwin tasks).  Parent fills in the child's
+@@ -326,7 +326,7 @@ name under the API.
+ <para>E.g., the POSIX select system call can wait on a standard file handles
+ and handles to sockets.  The select call in Winsock can only wait on
+ sockets.  Because of this, the Cygwin dll does a lot of nasty stuff behind
+-the scenes, trying to persuade various Winsock/Win32 functions to do what
++the scenes, trying to persuade various Winsock/Windows functions to do what
+ a Unix select would do.
+ </para>
+ <para>If you are porting an application which already uses Winsock, then
+@@ -337,11 +337,11 @@ direct calls to Winsock functions.  If you use Cygwin, use the POSIX API.
  </answer></qandaentry>
  
- <qandaentry id="faq.api.timezone">
--<question><para>Why isn't timezone set correctly?</para></question>
-+<question><para>Why isn't time zone set correctly?</para></question>
+ <qandaentry id="faq.api.winsock">
+-<question><para>I don't want Unix sockets, how do I use normal Win32 winsock?</para></question>
++<question><para>I don't want Unix sockets, how do I use normal Windows winsock?</para></question>
  <answer>
  
--<para><emphasis role='bold'>(Please note: This section has not yet been updated for the latest net release.)</emphasis>
--</para>
--<para>Did you explicitly call tzset() before checking the value of timezone?
-+<para>Did you explicitly call tzset() before checking the value of time zone?
- If not, you must do so.
-+Time zone settings are updated by changes to the tzdata package included in all
-+Cygwin installations.
-+Have you run the Cygwin Setup program recently to update at least the
-+<filename>tzdata</filename>
-+package to include the latest current daylight saving (summer time) rules
-+for dates of changes, hour offsets from UTC of time zones, and the
-+geographic regions to which those rules and offsets apply.
-+</para>
-+<para>These changes are decided on by politicians, and announced
-+by government officials, sometimes with short or no notice, so
-+<filename>tzdata</filename>
-+package updates are released at least a few, and sometimes several,
-+times a year.
-+As details of changes are not known until they are announced publicly by
-+officials, often in foreign languages, and those details then have to be
-+noticed, possibly translated, passed to, and picked up by the official
-+<filename>tzdata</filename>
-+source package maintainers, subsequently released in an update to the
-+<filename>tzdata</filename>
-+source package, and then those changes have to be picked up on and applied
-+to the Cygwin
-+<filename>tzdata</filename>
-+package, which has to be updated, built, tested, and released publicly.
+ <para>You don't.  Look for the Mingw-w64 project to port applications using
+-native Win32/Winsock functions.  Cross compilers packages to build Mingw-w64
++native Windows API/Winsock functions.  Cross compilers packages to build Mingw-w64
+ targets are available in the Cygwin distro.
+ </para>
+ </answer></qandaentry>
+diff --git a/winsup/doc/faq-programming.xml b/winsup/doc/faq-programming.xml
+index 5920ca8c44d5..07d3a61f2fb2 100644
+--- a/winsup/doc/faq-programming.xml
++++ b/winsup/doc/faq-programming.xml
+@@ -76,7 +76,7 @@ sizeof(void*)       4        8        8
+ </screen>
+ 
+ <para>This difference can result in interesting problems, especially when
+-using Win32 functions, especially when using pointers to Windows
++using Windows API functions using pointers to Windows
+ datatypes like LONG, ULONG, DWORD.  Given that Windows is LLP64, all of
+ the aforementioned types are 4 byte in size, on 32 as well as on 64 bit
+ Windows, while `long' on 64 bit Cygwin is 8 bytes.</para>
+@@ -189,10 +189,10 @@ string pointer given to printf is missing the upper 4 bytes.
+ </para></listitem>
+ 
+ <listitem><para>
+-<emphasis>Don't</emphasis> use C base types together with Win32 functions.
++<emphasis>Don't</emphasis> use C base types together with Windows API functions.
+ Keep in mind that DWORD, LONG, ULONG are <emphasis>not</emphasis> the same
+-as long and unsigned long.  Try to use only Win32 datatypes in conjunction
+-with Win32 API function calls to avoid type problems.  See the above
++as long and unsigned long.  Try to use only Windows datatypes in conjunction
++with Windows API function calls to avoid type problems.  See the above
+ ReadFile example.  Windows functions in printf calls should be treated
+ carefully as well.  This code is common for 32 bit code, but probably prints
+ the wrong value on 64 bit:
+@@ -438,11 +438,11 @@ gcj --main=Hello Hello.java
+ </answer></qandaentry>
+ 
+ <qandaentry id="faq.programming.win32-api">
+-<question><para>How do I use Win32 API calls?</para></question>
++<question><para>How do I use Windows API calls?</para></question>
+ <answer>
+ 
+ <para>Cygwin tools require that you explicitly link the import libraries
+-for whatever Win32 API functions that you are going to use, with the exception
++for whatever Windows API functions that you are going to use, with the exception
+ of kernel32, which is linked automatically (because the startup and/or
+ built-in code uses it).
+ </para>
+@@ -464,7 +464,7 @@ including user32, gdi32 and comdlg32.
+ or at least after all the object files and static libraries that reference them.
+ </para>
+ 
+-<note><para>There are a few restrictions for calls to the Win32 API.
++<note><para>There are a few restrictions for calls to the Windows API.
+ For details, see the User's Guide section
+ <ulink url="https://cygwin.com/cygwin-ug-net/setup-env.html#setup-env-win32">Restricted Win32 environment</ulink>,
+ as well as the User's Guide section
+@@ -472,7 +472,7 @@ as well as the User's Guide section
+ </answer></qandaentry>
+ 
+ <qandaentry id="faq.programming.win32-no-cygwin">
+-<question><para>How do I compile a Win32 executable that doesn't use Cygwin?</para></question>
++<question><para>How do I compile a Windows executable that doesn't use Cygwin?</para></question>
+ <answer>
+ 
+ <para>The compilers provided by the <literal>mingw64-i686-gcc</literal> and
+@@ -528,7 +528,7 @@ lines must start with tabs.  This is not specific to Cygwin.
+ </answer></qandaentry>
+ 
+ <qandaentry id="faq.programming.win32-headers">
+-<question><para>Why can't we redistribute Microsoft's Win32 headers?</para></question>
++<question><para>Why can't we redistribute Microsoft's Windows API headers?</para></question>
+ <answer>
+ 
+ <para>Subsection 2.d.f of the `Microsoft Open Tools License agreement' looks
+@@ -536,7 +536,7 @@ like it says that one may not "permit further redistribution of the
+ Redistributables to their end users".  We take this to mean that we can
+ give them to you, but you can't give them to anyone else, which is
+ something that we can't agree to.  Fortunately, we
+-have our own Win32 headers which are pretty complete.
++have our own Windows API headers which are pretty complete.
  </para>
  </answer></qandaentry>
  
