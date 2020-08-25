@@ -1,24 +1,29 @@
 Return-Path: <brian.inglis@systematicsw.ab.ca>
-Received: from smtp-out-no.shaw.ca (smtp-out-no.shaw.ca [64.59.134.12])
- by sourceware.org (Postfix) with ESMTPS id 38B52385700C
+Received: from smtp-out-no.shaw.ca (smtp-out-no.shaw.ca [64.59.134.13])
+ by sourceware.org (Postfix) with ESMTPS id 40E2C385DC37
  for <cygwin-patches@cygwin.com>; Tue, 25 Aug 2020 12:57:24 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 38B52385700C
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 40E2C385DC37
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
  header.from=SystematicSW.ab.ca
 Authentication-Results: sourceware.org;
  spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
 Received: from BWINGLISD.cg.shawcable.net ([24.64.172.44])
  by shaw.ca with ESMTP
- id AYVtkhGx8ng7KAYVvky6T6; Tue, 25 Aug 2020 06:57:23 -0600
+ id AYVtkhGx8ng7KAYVuky6T3; Tue, 25 Aug 2020 06:57:23 -0600
 X-Authority-Analysis: v=2.3 cv=ecemg4MH c=1 sm=1 tr=0
  a=kiZT5GMN3KAWqtYcXc+/4Q==:117 a=kiZT5GMN3KAWqtYcXc+/4Q==:17 a=w_pzkKWiAAAA:8
- a=PHortqyt3Qne_rW-jEQA:9 a=VTJOHQwvoJQA:10 a=sRI3_1zDfAgwuvI8zelB:22
+ a=2oS-sqozAAAA:8 a=CCpqsmhAAAAA:8 a=hGzw-44bAAAA:8 a=mDV3o1hIAAAA:8
+ a=JYl-ayNxTlm7OI1ZeWQA:9 a=0D4IKGIlUUynqJrZ:21 a=F0fVVIdU1W0WJmal:21
+ a=uvLZkzHzGa8A:10 a=OWQaqklJ0g0A:10 a=9c8rtzwoRDUA:10 a=WK-i71OpKu4A:10
+ a=rFA1MAFG28cA:10 a=sRI3_1zDfAgwuvI8zelB:22 a=WiNvAwpe8B6hZcWahKGt:22
+ a=ul9cdbp4aOFLsgKbc677:22 a=HvKuF1_PTVFglORKqfwH:22 a=_FVE-zBwftR9WsbkzFJk:22
+ a=pHzHmUro8NiASowvMSCR:22 a=n87TN5wuljxrRezIQYnT:22
 From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v2 2/3] winsup/doc/faq-api.xml,
- -programming.xml: change Win32 to Windows/API
-Date: Tue, 25 Aug 2020 06:57:14 -0600
-Message-Id: <20200825125715.48238-3-Brian.Inglis@SystematicSW.ab.ca>
+Subject: [PATCH v2 1/3] winsup/doc/faq-setup.xml,
+ faq-using.xml: update setup FAQ
+Date: Tue, 25 Aug 2020 06:57:13 -0600
+Message-Id: <20200825125715.48238-2-Brian.Inglis@SystematicSW.ab.ca>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200825125715.48238-1-Brian.Inglis@SystematicSW.ab.ca>
 References: <20200825125715.48238-1-Brian.Inglis@SystematicSW.ab.ca>
@@ -29,9 +34,8 @@ X-CMAE-Envelope: MS4wfHMzJDzRlUiWiq3xgQb+WeF/jIvK8qxWRGRB2hbQctnY+qzHHxUzkyhRtRm
  KDVfWA05u9UvepQmKjyf28Rymd39BJ59LJ4cazYM0MoWIlc4ZECCOxfiYUoM9lESxvVA5LRcTCyR3ojzA1XMjqsYznk82n2LiaIU1TcKN3RxT55ciAxSJX18
  yr62Z+x+hxTfa3s5xBoSKQ==
 X-Spam-Status: No, score=-12.3 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW,
- RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_NONE,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, KAM_SHORT, RCVD_IN_DNSWL_LOW,
+ SPF_HELO_NONE, SPF_NONE, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -46,135 +50,600 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 25 Aug 2020 12:57:25 -0000
+X-List-Received-Date: Tue, 25 Aug 2020 12:57:28 -0000
 
+change all kinds of setup references to "the Cygwin Setup program";
+emphasize 64 bit and deemphasize 32 bit;
+update options list;
+explain why installing everything is now extremely inadvisable, with stats
 ---
- winsup/doc/faq-api.xml         | 10 +++++-----
- winsup/doc/faq-programming.xml | 20 ++++++++++----------
- 2 files changed, 15 insertions(+), 15 deletions(-)
+ winsup/doc/faq-setup.xml | 229 ++++++++++++++++++---------------------
+ winsup/doc/faq-using.xml |  27 ++---
+ 2 files changed, 118 insertions(+), 138 deletions(-)
 
-diff --git a/winsup/doc/faq-api.xml b/winsup/doc/faq-api.xml
-index 313f15d37c4d..829e4d7febd8 100644
---- a/winsup/doc/faq-api.xml
-+++ b/winsup/doc/faq-api.xml
-@@ -18,7 +18,7 @@ Windows into the C library.  Then your apps should (ideally) run on POSIX
- systems (Unix/Linux) and Windows with no changes at the source level.
- </para>
- <para>The C library is in a DLL, which makes basic applications quite small.
--And it allows relatively easy upgrades to the Win32/POSIX translation
-+And it allows relatively easy upgrades to the Windows/POSIX translation
- layer, providing that DLL changes stay backward-compatible.
- </para>
- <para>For a good overview of Cygwin, you may want to read the Cygwin
-@@ -140,7 +140,7 @@ spawn family of calls if possible.
- <para>Here's how it works:
- </para>
- <para>Parent initializes a space in the Cygwin process table for child.
--Parent creates child suspended using Win32 CreateProcess call, giving
-+Parent creates child suspended using Windows CreateProcess call, giving
- the same path it was invoked with itself.  Parent calls setjmp to save
- its own context and then sets a pointer to this in the Cygwin shared
- memory area (shared among all Cygwin tasks).  Parent fills in the child's
-@@ -326,7 +326,7 @@ name under the API.
- <para>E.g., the POSIX select system call can wait on a standard file handles
- and handles to sockets.  The select call in Winsock can only wait on
- sockets.  Because of this, the Cygwin dll does a lot of nasty stuff behind
--the scenes, trying to persuade various Winsock/Win32 functions to do what
-+the scenes, trying to persuade various Winsock/Windows functions to do what
- a Unix select would do.
- </para>
- <para>If you are porting an application which already uses Winsock, then
-@@ -337,11 +337,11 @@ direct calls to Winsock functions.  If you use Cygwin, use the POSIX API.
- </answer></qandaentry>
- 
- <qandaentry id="faq.api.winsock">
--<question><para>I don't want Unix sockets, how do I use normal Win32 winsock?</para></question>
-+<question><para>I don't want Unix sockets, how do I use normal Windows winsock?</para></question>
+diff --git a/winsup/doc/faq-setup.xml b/winsup/doc/faq-setup.xml
+index b242fbae422c..c04ffe9a56e7 100644
+--- a/winsup/doc/faq-setup.xml
++++ b/winsup/doc/faq-setup.xml
+@@ -10,12 +10,16 @@
+ <question><para>What is the recommended installation procedure?</para></question>
  <answer>
  
- <para>You don't.  Look for the Mingw-w64 project to port applications using
--native Win32/Winsock functions.  Cross compilers packages to build Mingw-w64
-+native Windows API/Winsock functions.  Cross compilers packages to build Mingw-w64
- targets are available in the Cygwin distro.
+-<para>There is only one recommended way to install Cygwin, which is to use the GUI
+-installer <command>setup-*.exe</command>.  It is flexible and easy to use.  
++<para>
++There is only one recommended way to install Cygwin, which is to use the
++Cygwin Setup program, a GUI installer named
++<command>setup-x86_64.exe</command> for 64 bit Windows, or
++<command>setup-x86.exe</command> for 32 bit Windows. It is flexible and easy to use.
+ You can pick and choose the packages you wish to install, and update
+ them individually.  Full source code is available for all packages and
+-tools.  More information on using Cygwin Setup may be found at
+-<ulink url="https://cygwin.com/cygwin-ug-net/setup-net.html"/>.
++tools.
++<ulink url="https://cygwin.com/cygwin-ug-net/setup-net.html">More information</ulink>
++is available on using the Cygwin Setup program.
  </para>
+ <para>If you do it any other way, you're on your own!
+ If something doesn't work right for you, and
+@@ -35,8 +39,8 @@ see <ulink url="https://cygwin.com/packages/"/>.
+ <para>The Cygwin Setup program is designed to be interactive, but there are
+ a few different ways to automate it. If you are deploying to multiple systems,
+ the best way is to run through a full installation once, saving the entire 
+-downloaded package tree. Then, on target systems, run Cygwin Setup as a
+-"Local Install" pointed at your downloaded package tree. You could do this 
++downloaded package tree. Then, on target systems, run the Cygwin Setup program as a
++"Local Install" pointed at your downloaded package tree. You could do this
+ non-interactively with the command line options
+ <literal>-q -L -l x:\cygwin-local\</literal>, where your downloaded 
+ package tree is in <literal>x:\cygwin-local\</literal> (see the next FAQ for
+@@ -50,32 +54,33 @@ For other options, search the mailing lists with terms such as
  </answer></qandaentry>
-diff --git a/winsup/doc/faq-programming.xml b/winsup/doc/faq-programming.xml
-index 5920ca8c44d5..07d3a61f2fb2 100644
---- a/winsup/doc/faq-programming.xml
-+++ b/winsup/doc/faq-programming.xml
-@@ -76,7 +76,7 @@ sizeof(void*)       4        8        8
+ 
+ <qandaentry id="faq.setup.cli">
+-<question><para>Does Setup accept command-line arguments?</para></question>
++<question><para>Does the Cygwin Setup program accept command-line arguments?</para></question>
+ <answer>
+ 
+-<para>Yes, run <literal>setup-x86.exe --help</literal> or
+-<literal>setup-x86_64.exe --help</literal> for a list.
++<para>Yes, run the Cygwin Setup program with option
++<literal>--help</literal> for an up to date list:
+ </para>
+ 
+ <screen>
+     --allow-unsupported-windows    Allow old, unsupported Windows versions
+- -a --arch                         architecture to install (x86_64 or x86)
++ -a --arch                         Architecture to install (x86_64 or x86)
+  -C --categories                   Specify entire categories to install
+- -o --delete-orphans               remove orphaned packages
++ -o --delete-orphans               Remove orphaned packages
+  -A --disable-buggy-antivirus      Disable known or suspected buggy anti virus
+                                    software packages during execution.
+- -D --download                     Download from internet
+- -f --force-current                select the current version for all packages
+- -h --help                         print help
+- -I --include-source               Automatically include source download
++ -D --download                     Download packages from internet only
++ -f --force-current                Select the current version for all packages
++ -h --help                         Print help
++ -I --include-source               Automatically install source for every
++                                   package installed
+  -i --ini-basename                 Use a different basename, e.g. "foo",
+                                    instead of "setup"
+  -U --keep-untrusted-keys          Use untrusted keys and retain all
+- -L --local-install                Install from local directory
++ -L --local-install                Install packages from local directory only
+  -l --local-package-dir            Local package directory
+- -m --mirror-mode                  Skip availability check when installing from
+-                                   local directory (requires local directory to
+-                                   be clean mirror!)
++ -m --mirror-mode                  Skip package availability check when
++                                   installing from local directory (requires
++                                   local directory to be clean mirror!)
+  -B --no-admin                     Do not check for and enforce running as
+                                    Administrator
+  -d --no-desktop                   Disable creation of desktop shortcut
+@@ -85,23 +90,29 @@ For other options, search the mailing lists with terms such as
+                                    shortcuts
+  -N --no-startmenu                 Disable creation of start menu shortcut
+  -X --no-verify                    Don't verify setup.ini signatures
+- -O --only-site                    Ignore all sites except for -s
++    --no-version-check             Suppress checking if a newer version of
++                                   setup is available
++    --old-keys                     Enable old cygwin.com keys
++ -O --only-site                    Do not download mirror list.  Only use sites
++                                   specified with -s.
+  -M --package-manager              Semi-attended chooser-only mode
+  -P --packages                     Specify packages to install
+  -p --proxy                        HTTP/FTP proxy (host:port)
+- -Y --prune-install                prune the installation to only the requested
++ -Y --prune-install                Prune the installation to only the requested
+                                    packages
+- -K --pubkey                       URL of extra public key file (gpg format)
++ -K --pubkey                       URL or absolute path of extra public key
++                                   file (RFC4880 format)
+  -q --quiet-mode                   Unattended setup mode
+  -c --remove-categories            Specify categories to uninstall
+  -x --remove-packages              Specify packages to uninstall
+  -R --root                         Root installation directory
+- -S --sexpr-pubkey                 Extra public key in s-expr format
+- -s --site                         Download site
+- -u --untrusted-keys               Use untrusted keys from last-extrakeys
+- -g --upgrade-also                 also upgrade installed packages
++ -S --sexpr-pubkey                 Extra DSA public key in s-expr format
++ -s --site                         Download site URL
++ -u --untrusted-keys               Use untrusted saved extra keys
++ -g --upgrade-also                 Also upgrade installed packages
+     --user-agent                   User agent string for HTTP requests
+  -v --verbose                      Verbose output
++ -V --version                      Show version
+  -W --wait                         When elevating, wait for elevated child
+                                    process
  </screen>
+@@ -116,15 +127,14 @@ For other options, search the mailing lists with terms such as
+ this allows to set up the Cygwin environment so that all users can start
+ a Cygwin shell out of the box.  However, if you don't have administrator
+ rights for your machine, and the admins don't want to install it for you,
+-you can install Cygwin just for yourself by downloading
+-<command>setup-x86.exe</command> (for a 32 bit install) or
+-<command>setup-x86_64.exe</command> (for a 64 bit install) and then start
++you can install Cygwin just for yourself by downloading the Cygwin Setup
++program, and then start
+ it from the command line or via the "Run..." dialog from the start menu
+ using the <literal>--no-admin</literal> option, for instance:</para>
  
- <para>This difference can result in interesting problems, especially when
--using Win32 functions, especially when using pointers to Windows
-+using Windows API functions using pointers to Windows
- datatypes like LONG, ULONG, DWORD.  Given that Windows is LLP64, all of
- the aforementioned types are 4 byte in size, on 32 as well as on 64 bit
- Windows, while `long' on 64 bit Cygwin is 8 bytes.</para>
-@@ -189,10 +189,10 @@ string pointer given to printf is missing the upper 4 bytes.
+ <para>
+ <screen>
+-  setup-x86.exe --no-admin
++  setup-x86_64.exe --no-admin
+ </screen>
+ </para>
+ </answer></qandaentry>
+@@ -151,11 +161,11 @@ now.)
+ </answer></qandaentry>
+ 
+ <qandaentry id="faq.setup.old-versions">
+-<question><para>Can I use Cygwin Setup to get old versions of packages (like gcc-2.95)?</para></question>
++<question><para>Can I use the Cygwin Setup program to get old versions of packages (like gcc-2.95)?</para></question>
+ <answer>
+ 
+-<para>Cygwin Setup can be used to install any packages that are on a
+-Cygwin mirror, which usually includes one version previous to the
++<para>The Cygwin Setup program can be used to install any packages that are on a
++Cygwin mirror, which usually includes at least one version previous to the
+ current one. The complete list may be searched at 
+ <ulink url="https://cygwin.com/packages/"/>.  There is no complete archive of
+ older packages. If you have a problem with the current version of
+@@ -180,12 +190,12 @@ Here is how Cygwin secures the installation and update process to counter
+ </para>
+ 
+ <orderedlist>
+-<listitem><para>The Cygwin website provides the setup program
++<listitem><para>The Cygwin website provides the Cygwin Setup program
+ (<literal>setup-x86.exe</literal> or <literal>setup-x86_64.exe</literal>)
+ using HTTPS (SSL/TLS).
+-This authenticates that the setup program
++This authenticates that the Cygwin Setup program
+ came from the Cygwin website
+-(users simply use their web browsers to download the setup program).
++(users simply use their web browsers to download the Cygwin Setup program).
+ You can use tools like Qualsys' SSL Server Test,
+ <ulink url="https://www.ssllabs.com/ssltest/"/>,
+ to check the HTTPS configuration of Cygwin.
+@@ -193,31 +203,32 @@ The cygwin.com site supports HTTP Strict Transport Security (HSTS),
+ which forces the browser to keep using HTTPS once the browser has seen
+ it before (this counters many downgrade attacks).
  </para></listitem>
+-<listitem><para>The setup program has the
++<listitem><para>The Cygwin Setup program has the
+ Cygwin public key embedded in it.
+ The Cygwin public key is protected from attacker subversion
+ during transmission by the previous step, and this public
+ key is then used to protect all later steps.
+-You can confirm that the key is in setup by looking at the setup project
++You can confirm that the key is in the Cygwin Setup program by looking at the setup project
+ (<ulink url="http://sourceware.org/cygwin-apps/setup.html"/>)
+ source code file <literal>cyg-pubkey.h</literal>
+ (the key is automatically generated from file <literal>cygwin.pub</literal>).
+ </para></listitem>
+-<listitem><para>The setup program downloads
++<listitem><para>The Cygwin Setup program downloads
+ the package list <literal>setup.ini</literal> from a mirror
+ and checks its digital signature.
+-The package list is in the file
++The package list is in the files
++<filename>setup.xz</filename>, <filename>setup.zst</filename>,
+ <literal>setup.bz2</literal> (compressed) or
+ <literal>setup.ini</literal> (uncompressed) on the selected mirror.
+ The package list includes for every official Cygwin package
+ the package name, cryptographic hash, and length (in bytes).
+-The setup program also gets the relevant <literal>.sig</literal>
++The Cygwin Setup program also gets the relevant <literal>.sig</literal>
+ (signature) file for that package list, and checks that the package list
+-is properly signed with the Cygwin public key embedded in the setup program.
++is properly signed with the Cygwin public key embedded in the Setup program.
+ A mirror could corrupt the package list and/or signature, but this
+-would be detected by setup program's signature detection
++would be detected by the Cygwin Setup program's signature detection
+ (unless you use the <literal>-X</literal> option to disable signature checking).
+-The setup program also checks the package list
++The Cygwin Setup program also checks the package list
+ timestamp/version and reports to the user if the file
+ goes backwards in time; that process detects downgrade attacks
+ (e.g., where an attacker subverts a mirror to send a signed package list
+@@ -226,7 +237,7 @@ that is older than the currently-downloaded version).
+ <listitem><para>The packages to be installed
+ (which may be updates) are downloaded and both their
+ lengths and cryptographic hashes
+-(from the signed <literal>setup.{bz2,ini}</literal> file) are checked.
++(from the signed <filename>setup.xz/.zst/.bz2/.ini</filename> file) are checked.
+ Non-matching packages are rejected, countering any attacker's
+ attempt to subvert the files on a mirror.
+ Cygwin currently uses the cryptographic hash function SHA-512
+@@ -250,8 +261,8 @@ widely-used SHA-2 suite of cryptographic hashes).
  
- <listitem><para>
--<emphasis>Don't</emphasis> use C base types together with Win32 functions.
-+<emphasis>Don't</emphasis> use C base types together with Windows API functions.
- Keep in mind that DWORD, LONG, ULONG are <emphasis>not</emphasis> the same
--as long and unsigned long.  Try to use only Win32 datatypes in conjunction
--with Win32 API function calls to avoid type problems.  See the above
-+as long and unsigned long.  Try to use only Windows datatypes in conjunction
-+with Windows API function calls to avoid type problems.  See the above
- ReadFile example.  Windows functions in printf calls should be treated
- carefully as well.  This code is common for 32 bit code, but probably prints
- the wrong value on 64 bit:
-@@ -438,11 +438,11 @@ gcj --main=Hello Hello.java
+ <para>
+ To best secure your installation and update process, download
+-the setup program <literal>setup-x86.exe</literal> (32-bit) or
+-<literal>setup-x86_64.exe</literal> (64-bit), and then
++the Cygwin Setup program <filename>setup-x86_64.exe</filename> (64-bit) or
++<filename>setup-x86.exe</filename> (32-bit), and then
+ check its signature (using a signature-checking tool you trust)
+ using the Cygwin public key
+ (<ulink url="https://cygwin.com/key/pubring.asc"/>).
+@@ -277,22 +288,22 @@ Not everyone will go through this additional effort,
+ but we make it possible for those who want that extra confidence.
+ We also provide automatic mechanisms
+ (such as our use of HTTPS) for those with limited time and
+-do not want to perform the signature checking on the setup program itself.
+-Once the correct setup program is running, it will counter other attacks
++do not want to perform the signature checking on the Cygwin Setup program itself.
++Once the correct Setup program is running, it will counter other attacks
+ as described in
+ <ulink url="https://cygwin.com/faq/faq.html#faq.setup.install-security"/>.
+ </para>
  </answer></qandaentry>
  
- <qandaentry id="faq.programming.win32-api">
--<question><para>How do I use Win32 API calls?</para></question>
-+<question><para>How do I use Windows API calls?</para></question>
+ <qandaentry id="faq.setup.virus">
+-<question><para>Is Cygwin Setup, or one of the packages, infected with a virus?</para></question>
++<question><para>Is the Cygwin Setup program, or one of the packages, infected with a virus?</para></question>
  <answer>
  
- <para>Cygwin tools require that you explicitly link the import libraries
--for whatever Win32 API functions that you are going to use, with the exception
-+for whatever Windows API functions that you are going to use, with the exception
- of kernel32, which is linked automatically (because the startup and/or
- built-in code uses it).
+ <para>Unlikely.  Unless you can confirm it, please don't report it to the
+ mailing list.  Anti-virus products have been known to detect false
+ positives when extracting compressed tar archives.  If this causes
+ problems for you, consider disabling your anti-virus software when
+-running <literal>setup</literal>.  Read the next entry for a fairly safe way to do
++running the Cygwin Setup program.  Read the next entry for a fairly safe way to do
+ this.
  </para>
-@@ -464,7 +464,7 @@ including user32, gdi32 and comdlg32.
- or at least after all the object files and static libraries that reference them.
+ </answer></qandaentry>
+@@ -304,17 +315,18 @@ this.
+ <para>Both Network Associates (formerly McAfee) and Norton anti-virus
+ products have been reported to "hang" when extracting Cygwin tar
+ archives.  If this happens to you, consider disabling your anti-virus
+-software when running Cygwin Setup.  The following procedure should be
++software when running the Cygwin Setup program.  The following procedure should be
+ a fairly safe way to do that:
  </para>
+-<orderedlist><listitem><para>Download <literal>setup-x86.exe</literal> or
+-<literal>setup-x86_64.exe</literal> and scan it explicitly.
++<orderedlist><listitem><para>Download <filename>setup-x86_64.exe</filename> or
++<filename>setup-x86.exe</filename> and scan it explicitly.
+ </para>
+ </listitem>
+ <listitem><para>Turn off the anti-virus software.
+ </para>
+ </listitem>
+-<listitem><para>Run setup to download and extract all the tar files.
++<listitem><para>Run the Cygwin Setup program to download and install or upgrade
++all desired packages.
+ </para>
+ </listitem>
+ <listitem><para>Re-activate your anti-virus software and scan everything
+@@ -324,7 +336,7 @@ disk if you are paranoid.
+ </listitem>
+ </orderedlist>
  
--<note><para>There are a few restrictions for calls to the Win32 API.
-+<note><para>There are a few restrictions for calls to the Windows API.
- For details, see the User's Guide section
- <ulink url="https://cygwin.com/cygwin-ug-net/setup-env.html#setup-env-win32">Restricted Win32 environment</ulink>,
- as well as the User's Guide section
-@@ -472,7 +472,7 @@ as well as the User's Guide section
+-<para>This should be safe, but only if Cygwin Setup is not substituted by
++<para>This should be safe, but only if the Cygwin Setup program is not substituted by
+ something malicious.
+ See also
+ <ulink url="https://cygwin.com/faq/faq.html#faq.setup.install-security"/>
+@@ -341,7 +353,7 @@ interfere with the normal functioning of Cygwin.
+ <qandaentry id="faq.setup.what-packages">
+ <question><para>What packages should I download? Where are 'make', 'gcc', 'vi', etc?  </para></question>
+ <answer>
+-<para>When using Cygwin Setup for the first time, the default is to install
++<para>When using the Cygwin Setup program for the first time, the default is to install
+ a minimal subset of all available packages.  If you want anything beyond that,
+ you will have to select it explicitly.  See 
+ <ulink url="https://cygwin.com/packages/"/> for a searchable list of available
+@@ -361,53 +373,20 @@ User's Guide at
+ 
+ <para>Long ago, the default was to install everything, much to the
+ irritation of most users.  Now the default is to install only a basic
+-core of packages.  Cygwin Setup is designed to make it easy to browse
++core of packages. The Cygwin Setup program is designed to make it easy to browse
+ categories and select what you want to install or omit from those
+-categories.  It's also easy to install everything:
+-</para>
+-<orderedlist>
+-<listitem><para>At the ``Select Packages'' screen, in ``Categories'' view, at the line 
+-marked ``All'', click on the word ``default'' so that it changes to
+-``install''.  (Be patient, there is some computing to do at this step.
+-It may take a second or two to register the change.)  This tells Setup
+-to install <emphasis>everything</emphasis>, not just what it thinks you should have
+-by default.
+-</para>
+-</listitem>
+-<listitem><para>Now click on the ``View'' button (twice) until you get to the
+-``Pending'' view.  This shows exactly which packages are about to be
+-downloaded and installed.
+-</para>
+-</listitem>
+-</orderedlist>
+-
+-<para>This procedure only works for packages that are currently available.
+-There is no way to tell Cygwin Setup to install all packages by
+-default from now on.  As new packages become available that would not
+-be installed by default, you have to repeat the above procedure to get
+-them.
+-</para>
+-<para>In general, a better method (in my opinion), is to:
++categories.
++There are now more than 10000 Cygwin packages requiring more than 150GB
++of disk space just to download and hundreds of GB more to install so you
++are strongly advised not to attempt to
++<ulink url="https://cygwin.com/install.html#everything">install everything</ulink>
++at once, unless you have a lot of free disk space, a very high speed network
++connection, and the system will not be required for any other purpose for
++many hours (or days) until installation completes.
++For a 32-bit Cygwin installation, you can not install everything, as the
++installation will fail because the 4GB memory available is insufficient to allow
++all the DLLs required to run along with the programs using them.
+ </para>
+-<orderedlist>
+-<listitem><para>First download &amp; install all packages that would normally be
+-installed by default.  This includes fundamental packages and any
+-updates to what you have already installed.  Then...
+-</para>
+-</listitem>
+-<listitem><para>Run Cygwin Setup again, and apply the above technique to get all
+-new packages that would not be installed by default.  You can check
+-the list in the ``Pending'' view before proceeding, in case there's
+-something you really <emphasis>don't</emphasis> want.
+-</para>
+-</listitem>
+-<listitem><para>In the latest version of Cygwin Setup, if you click the ``View''
+-button (twice) more, it shows packages not currently installed.  You
+-ought to check whether you <emphasis>really</emphasis> want to install everything!
+-</para>
+-</listitem>
+-</orderedlist>
+-
  </answer></qandaentry>
  
- <qandaentry id="faq.programming.win32-no-cygwin">
--<question><para>How do I compile a Win32 executable that doesn't use Cygwin?</para></question>
-+<question><para>How do I compile a Windows executable that doesn't use Cygwin?</para></question>
+ <qandaentry id="faq.setup.disk-space">
+@@ -415,16 +394,16 @@ ought to check whether you <emphasis>really</emphasis> want to install everythin
  <answer>
  
- <para>The compilers provided by the <literal>mingw64-i686-gcc</literal> and
-@@ -528,7 +528,7 @@ lines must start with tabs.  This is not specific to Cygwin.
- </answer></qandaentry>
- 
- <qandaentry id="faq.programming.win32-headers">
--<question><para>Why can't we redistribute Microsoft's Win32 headers?</para></question>
-+<question><para>Why can't we redistribute Microsoft's Windows API headers?</para></question>
+ <para>That depends, obviously, on what you've chosen to download and
+-install.  A full installation today is probably larger than 1 GB
++install.  A full installation today is many hundreds of GB
+ installed, not including the package archives themselves nor the source
+ code.
+ </para>
+ <para>After installation, the package archives remain in your ``Local
+-Package Directory''.  By default the location of
+-<literal>setup-x86{_64}.exe</literal>.  You may conserve disk space by
++Package Directory''.  By default the location of the Cygwin Setup program.
++You may conserve disk space by
+ deleting the subdirectories there.  These directories will have very weird
+ looking names, being encoded with their URLs
+-(named <literal>ftp%3a%2f...</literal>).
++(named <literal>http%3a%2f...cygwin...%2f</literal>).
+ </para>
+ <para>Of course, you can keep them around in case you want to reinstall a
+ package. If you want to clean out only the outdated packages, Michael Chase
+@@ -438,42 +417,42 @@ at <filename>unsupported/clean_setup.pl</filename> in a Cygwin mirror.
  <answer>
  
- <para>Subsection 2.d.f of the `Microsoft Open Tools License agreement' looks
-@@ -536,7 +536,7 @@ like it says that one may not "permit further redistribution of the
- Redistributables to their end users".  We take this to mean that we can
- give them to you, but you can't give them to anyone else, which is
- something that we can't agree to.  Fortunately, we
--have our own Win32 headers which are pretty complete.
-+have our own Windows API headers which are pretty complete.
+ <para>Detailed logs of the most recent Cygwin Setup session can be found in
+-<literal>/var/log/setup.log.full</literal> and less verbose information about
+-prior actions is in <literal>/var/log/setup.log</literal>.
++<filename>/var/log/setup.log.full</filename> and less verbose information about
++prior actions is in <filename>/var/log/setup.log</filename>.
+ </para>
+ 
+ </answer></qandaentry>
+ 
+ <qandaentry id="faq.setup.setup-fails">
+-<question><para>What if setup fails?</para></question>
++<question><para>What if the Cygwin Setup program fails?</para></question>
+ <answer>
+ 
+-<para>First, make sure that you are using the latest version of Cygwin Setup.
++<para>First, make sure that you are using the latest version of the Cygwin Setup program.
+ The latest version is always available from the Cygwin Home Page at
+ <ulink url="https://cygwin.com/"/>.
+ </para>
+ <para>If you are downloading from the Internet, setup will fail if it cannot
+-download the list of mirrors at <ulink url="https://cygwin.com/mirrors.html"/>.
++download the list of mirrors at <ulink url="https://cygwin.com/mirrors.lst"/>.
+ It could be that the network is too busy.  Something similar could be the
+ cause of a download site not working.  Try another mirror, or try again
+ later.
+ </para>
+-<para>If setup refuses to download a package that you know needs to be
++<para>If the Cygwin Setup program refuses to download a package that you know needs to be
+ upgraded, try deleting that package's entry from /etc/setup.  If you are
+ reacting quickly to an announcement on the mailing list, it could be
+ that the mirror you are using doesn't have the latest copy yet.  Try
+ another mirror, or try again tomorrow.
+ </para>
+-<para>If setup has otherwise behaved strangely, check the files
+-<literal>setup.log</literal> and <literal>setup.log.full</literal> in
+-<literal>/var/log</literal> (<literal>C:\cygwin\var\log</literal> by
++<para>If the Cygwin Setup program has otherwise behaved strangely, check the files
++<filename>setup.log</filename> and <filename>setup.log.full</filename> in
++<filename>/var/log</filename> (<filename>C:\cygwin\var\log</filename> by
+ default).  It may provide some clues as to what went wrong and why.
+ </para>
+ <para>If you're still baffled, search the Cygwin mailing list for clues.
+ Others may have the same problem, and a solution may be posted there.
+ If that search proves fruitless, send a query to the Cygwin mailing
+ list.  You must provide complete details in your query: version of
+-setup, options you selected, contents of setup.log and setup.log.full,
++the Cygwin Setup program, options you selected, contents of setup.log and setup.log.full,
+ what happened that wasn't supposed to happen, etc.
+ </para>
+ </answer></qandaentry>
+@@ -542,7 +521,7 @@ getpwnam(3), disregarding <literal>HOME</literal>.
+ <question><para>How do I uninstall individual packages?</para></question>
+ <answer>
+ 
+-<para>Run Cygwin Setup as you would to install packages.  In the list of
++<para>Run the Cygwin Setup program as you would to install packages.  In the list of
+ packages to install, browse the relevant category or click on the
+ ``View'' button to get a full listing.  Click on the cycle glyph until
+ the action reads ``Uninstall''.  Proceed by clicking ``Next''.
+@@ -627,8 +606,8 @@ mount points as well.
+ </para>
+ </listitem>
+ <listitem><para>Delete the Cygwin shortcuts on the Desktop and Start Menu, and
+-anything left by setup-x86{_64}.exe in the download directory.  However, if you
+-plan to reinstall Cygwin it's a good idea to keep your setup-x86{_64}.exe
++anything left by the Cygwin Setup program in the download directory.  However, if you
++plan to reinstall Cygwin it's a good idea to keep your
+ download directory since you can reinstall the packages left in its cache
+ without redownloading them.
+ </para>
+@@ -659,7 +638,7 @@ have not been tested.  Use them <emphasis role='bold'>only</emphasis> if there i
+ bugfix that you need to try, and you are willing to deal with any
+ problems, or at the request of a Cygwin developer.
+ </para>
+-<para>You cannot use Cygwin Setup to install a snapshot.
++<para>You cannot use the Cygwin Setup program to install a snapshot.
+ </para>
+ <para>First, you will need to download the snapshot from the snapshots
+ page at <ulink url="https://cygwin.com/snapshots/"/>.  Note the directory where
+@@ -699,21 +678,21 @@ DLL, again, close all Cygwin processes, delete
+ rename <literal>C:\cygwin\bin\cygwin1-prev.dll</literal> back to
+ <literal>C:\cygwin\bin\cygwin1.dll</literal> (again assuming that your "<literal>/</literal>" is
+ <literal>C:\cygwin</literal>).  To restore the rest of the snapshot
+-files, reinstall the "<literal>cygwin</literal>" package using Setup.
++files, reinstall the "<literal>cygwin</literal>" package using the Cygwin Setup program.
+ </para>
+ 
+ </answer></qandaentry>
+ 
+ <qandaentry id="faq.setup.mirror">
+-<question><para>Can Cygwin Setup maintain a ``mirror''?</para></question>
++<question><para>Can the Cygwin Setup program maintain a ``mirror''?</para></question>
+ <answer>
+ 
+-<para>NO.  Cygwin Setup cannot do this for you.  Use a tool designed for
++<para>NO. The Cygwin Setup program cannot do this for you.  Use a tool designed for
+ this purpose.  See <ulink url="http://rsync.samba.org/"/>,
+ <ulink url="http://www.gnu.org/software/wget/"/> for utilities that can do this for you.
+ For more information on setting up a custom Cygwin package server, see
+-the Cygwin Setup homepage at
+-<ulink url="https://sourceware.org/cygwin-apps/setup.html"/>.
++the <ulink url="https://sourceware.org/cygwin-apps/setup.html">Cygwin Setup program page</ulink>.
++
  </para>
  </answer></qandaentry>
  
+diff --git a/winsup/doc/faq-using.xml b/winsup/doc/faq-using.xml
+index c24ecf6c5a41..7b9bbe1c1587 100644
+--- a/winsup/doc/faq-using.xml
++++ b/winsup/doc/faq-using.xml
+@@ -12,10 +12,10 @@
+ 
+ <para>Well, something has gone wrong somehow...
+ </para>
+-<para>To repair the damage, you must run Cygwin Setup again, and re-install the
++<para>To repair the damage, you must run the Cygwin Setup program again, and re-install the
+ package which provides the missing DLL package.
+ </para>
+-<para>If you already installed the package at one point, Cygwin Setup won't
++<para>If you already installed the package at one point, the Cygwin Setup program won't
+ show the option to install the package by default.  In the
+ ``Select packages to install'' dialog, click on the <literal>Full/Part</literal>
+ button.  This lists all packages, even those that are already
+@@ -188,7 +188,7 @@ information).
+ 
+ <para>This is done for you in the file /etc/profile, which is sourced by bash
+ when you start it from the Desktop or Start Menu shortcut, created by
+-<literal>setup.exe</literal>.  The line is
++the Cygwin Setup program. The line is
+ </para>
+ <screen>
+ 	PATH="/usr/local/bin:/usr/bin:/bin:$PATH"
+@@ -537,11 +537,11 @@ if you have one a single Cygwin installation, for example, if you update the
+ Cygwin package without exiting <emphasis>all</emphasis> Cygwin apps (including
+ services like sshd) beforehand.</para>
+ <para>The only DLL that is sanctioned by the Cygwin project is the one that
+-you get by running <ulink url="https://cygwin.com/install.html">setup-x86.exe or setup-x86_64.exe</ulink>,
++you get by running the <ulink url="https://cygwin.com/install.html">Cygwin Setup program</ulink>,
+ installed in a directory controlled by this program.  If you have other
+ versions on your system and desire help from the cygwin project, you should
+ delete or rename all DLLs that are not installed by
+-<filename>setup.exe</filename>.
++the Cygwin Setup program.
+ </para>
+ <para>If you're trying to find multiple versions of the DLL that are causing
+ this problem, reboot first, in case DLLs still loaded in memory are the
+@@ -882,7 +882,7 @@ this is still a problem, however.)
+ hang when unpacking tar.gz archives.  This is surely a bug in VirusScan,
+ and should be reported to NAI.  The only workaround is to disable
+ VirusScan when accessing these files.  This can be an issue during
+-setup, and is discussed in that FAQ entry.
++Setup, and is discussed in that FAQ entry.
+ </para>
+ <para>Some users report a significant performance hit using Cygwin when their
+ anti-virus software is enabled.  Rather than disable the anti-virus
+@@ -1402,10 +1402,10 @@ such as virtual memory paging and file caching.</para>
+     <listitem>
+       <para>
+ 	Force a full rebase: Run <command>rebase-trigger fullrebase</command>,
+-	exit all Cygwin programs and run Cygwin setup.
++	exit all Cygwin programs and run the Cygwin Setup program.
+       </para>
+       <para>
+-	By default, Cygwin's setup program automatically performs an incremental
++	By default, the Cygwin Setup program automatically performs an incremental
+ 	rebase of newly installed files.  Forcing a full rebase causes the
+ 	rebase map to be cleared before doing the rebase.
+       </para>
+@@ -1448,11 +1448,12 @@ such as virtual memory paging and file caching.</para>
+ 	They also may not provide any obvious way to keep the Cygwin packages
+ 	their application uses up to date with fixes for security issues and
+ 	upgrades.</para>
+-    <para>The solution is simply downloading and running Cygwin Setup,
+-	following the instructions in the Internet Setup section of
++    <para>The solution is simply downloading and running the Cygwin Setup program,
++	following the instructions in the
+ 	<ulink url="https://cygwin.com/cygwin-ug-net/setup-net.html#internet-setup">
+-	    Setting Up Cygwin</ulink> in the Cygwin User's Guide.</para>
+-    <para>Please exit from all applications before running Cygwin Setup.
++	Internet Setup</ulink> section of ``Setting Up Cygwin'' in the
++	Cygwin User's Guide.</para>
++    <para>Please exit from all applications before running the Cygwin Setup program.
+ 	When running Setup, you should not change most of the values presented,
+ 	just select the <literal>Next</literal> button in most cases, as you
+ 	already have a Cygwin release installed, and only want to upgrade your
+@@ -1463,7 +1464,7 @@ such as virtual memory paging and file caching.</para>
+ 	faster downloads, as shown, with more details to help you choose, on the
+ 	<ulink url="https://cygwin.com/mirrors.html">
+ 	    Mirror Sites</ulink> web page.</para>
+-    <para>Cygwin Setup will download and apply upgrades to all packages
++    <para>The Cygwin Setup program will download and apply upgrades to all packages
+ 	required for Cygwin itself and installed applications.
+ 	Any problems with applying updates, or the application after updates,
+ 	should be reported to the project or product supplier for remedial
 -- 
 2.28.0
 
