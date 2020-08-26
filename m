@@ -1,49 +1,54 @@
-Return-Path: <brian.inglis@systematicsw.ab.ca>
-Received: from smtp-out-so.shaw.ca (smtp-out-so.shaw.ca [64.59.136.138])
- by sourceware.org (Postfix) with ESMTPS id CB5C33857C79
- for <cygwin-patches@cygwin.com>; Tue, 25 Aug 2020 13:04:44 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org CB5C33857C79
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=SystematicSw.ab.ca
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+ by sourceware.org (Postfix) with ESMTPS id 22B8E3860017
+ for <cygwin-patches@cygwin.com>; Wed, 26 Aug 2020 08:16:24 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 22B8E3860017
 Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
-Received: from [192.168.1.104] ([24.64.172.44]) by shaw.ca with ESMTP
- id AYd0kg2UzYYpxAYd2kPwqn; Tue, 25 Aug 2020 07:04:44 -0600
-X-Authority-Analysis: v=2.3 cv=OubUNx3t c=1 sm=1 tr=0
- a=kiZT5GMN3KAWqtYcXc+/4Q==:117 a=kiZT5GMN3KAWqtYcXc+/4Q==:17
- a=IkcTkHD0fZMA:10 a=gwMg6M9y6T5EFgRA8E4A:9 a=QEXdDO2ut3YA:10
-Reply-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 0/3] FAQ api, programming, timezone, setup patches
+ dmarc=none (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org;
+ spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
+Received: from calimero.vinschen.de ([217.91.18.234]) by
+ mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1M5Qhx-1kA1n13EST-001TjP for <cygwin-patches@cygwin.com>; Wed, 26 Aug 2020
+ 10:16:22 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 30432A83A75; Wed, 26 Aug 2020 10:16:22 +0200 (CEST)
+Date: Wed, 26 Aug 2020 10:16:22 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-References: <20200824201058.4916-1-Brian.Inglis@SystematicSW.ab.ca>
- <20200825110443.GH3272@calimero.vinschen.de>
-From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
-Autocrypt: addr=Brian.Inglis@SystematicSw.ab.ca; prefer-encrypt=mutual;
- keydata=
- mDMEXopx8xYJKwYBBAHaRw8BAQdAnCK0qv/xwUCCZQoA9BHRYpstERrspfT0NkUWQVuoePa0
- LkJyaWFuIEluZ2xpcyA8QnJpYW4uSW5nbGlzQFN5c3RlbWF0aWNTdy5hYi5jYT6IlgQTFggA
- PhYhBMM5/lbU970GBS2bZB62lxu92I8YBQJeinHzAhsDBQkJZgGABQsJCAcCBhUKCQgLAgQW
- AgMBAh4BAheAAAoJEB62lxu92I8Y0ioBAI8xrggNxziAVmr+Xm6nnyjoujMqWcq3oEhlYGAO
- WacZAQDFtdDx2koSVSoOmfaOyRTbIWSf9/Cjai29060fsmdsDLg4BF6KcfMSCisGAQQBl1UB
- BQEBB0Awv8kHI2PaEgViDqzbnoe8B9KMHoBZLS92HdC7ZPh8HQMBCAeIfgQYFggAJhYhBMM5
- /lbU970GBS2bZB62lxu92I8YBQJeinHzAhsMBQkJZgGAAAoJEB62lxu92I8YZwUBAJw/74rF
- IyaSsGI7ewCdCy88Lce/kdwX7zGwid+f8NZ3AQC/ezTFFi5obXnyMxZJN464nPXiggtT9gN5
- RSyTY8X+AQ==
-Organization: Systematic Software
-Message-ID: <8f6e8ffc-0fcd-f60c-cba4-723b6232c0b6@SystematicSw.ab.ca>
-Date: Tue, 25 Aug 2020 07:04:42 -0600
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+Subject: Re: [PATCH v2 3/3] winsup/doc/faq-api.xml(faq.api.timezone): explain
+ time zone updates
+Message-ID: <20200826081622.GM3272@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20200825125715.48238-1-Brian.Inglis@SystematicSW.ab.ca>
+ <20200825125715.48238-4-Brian.Inglis@SystematicSW.ab.ca>
 MIME-Version: 1.0
-In-Reply-To: <20200825110443.GH3272@calimero.vinschen.de>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-CA
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfBaqPgE8PIcacJgrMKxDl5rlJHQuNexx0Cf48db3LBlbnxjRE58Eu0vVkdoHyhf871ehWJoKI26hc5XbtXy6o5xkPMQCATTqED2XUYs2dH3ekXn86TDi
- bhpCpv8zNp+CjTiB9d/Gw/eZnb0nXq8j8UB4g430KSRn8uXirOsTgqL9UaHHyBSSXkVCVPbetLrF/A==
-X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
- KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_DNSWL_LOW, SPF_HELO_NONE,
- SPF_NONE, TXREP autolearn=ham autolearn_force=no version=3.4.2
+Content-Disposition: inline
+In-Reply-To: <20200825125715.48238-4-Brian.Inglis@SystematicSW.ab.ca>
+X-Provags-ID: V03:K1:QthNdnlms/WxTCWsahZRmk8zLUw6h4jiF++r8h2GfIARLcZu5aq
+ iPC7nydqkyQlAzY03JndNE85EGZcnKjIgvlxYdjmQD33n+xWUHoxT2tc/aD5CpB+1Nxhnbf
+ L3SIrXPFQUvovcLTloRixm3RzpqVmNLbzi2tZrVYojP2N/Ycg79BPTfIpAQh7Ndsb8ZGfCx
+ 4Yfalq1GST0Kgr7v7yKgw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:XLJJsw5zRVA=:8y8LPHaNZeev/AlXVgR6cI
+ KHshcsZuUNrlhd9Ug3T1YM7JYIS3YzzeHpJPQqRbh1IsN+88QGlS5ur2MqZdZc3roJxgoihmz
+ BM5JsnVuZIdbaT2D1R7GhRviG+WzfZ2IFvERpGQpdmX8GPmyLuz25Tq688coZg8WWKsEqKduJ
+ dm0LZg5PKlqUB/C33Q9yf4dgBc/oyVuYfAXE8g3a0HfJ0MD7XJAwIR7/8ZJosvTxHVbjlLZoC
+ kRUgOSqnJIJBGWGz2SRFsbwNZRoy+D/d1swSR16ElgDftcigAXDt91/oStHq4XWoU5VcOCEMI
+ KYtRLPiTCePhcqUEZUiLAlQbovWX24eXOSieDbivNl6giXH3KyBTkeDpuieudA/m+JLDo9ldC
+ aHWQLVEGngUIfjc0LPm0SSX0UkU9FI7/YhwQ27RL07ajbaumh/6AV1mU6+bU9/TzN/4MNq1sI
+ Rw1iSCxxLJq0EXB7vWAyqyPUqRcM7I7Hu9RXodTCEDhxA1g29imbh71cvdLcs2wuv3K8vJ7U5
+ dTEQBGJgEXlp/d5ovNO+/D5lYJ7MBPYEl80EZJ0btfLn7yyxWSaUfK8cHIryzahiieKJTPs4g
+ PQWF+d3/bogcpzvHPpN6U9/Qs8Qg8eueggf7Qtnl7h+cqzO7ZbBwPDLFxszz3aI33BCMkKTF4
+ XlI3vMd6Qa92v6NUYRjT3D1uhHwqDZokefdMqKeuvl3a192qiGmHMEjiA826sZ1g6ubqUtfvm
+ IyhptgMo9BG2HVRcrPJcDEKoMdjpQhzd4X1gYGqHKaZzJ9f2xEYDddwtcwU6gDa4L/t0byVZq
+ 0ZSygfSZZ74WRlWuiFBDgepy2WnRd9sXAUKi3CZqEuG3OLHb548pP5/PmTaxb9I5IBaZ/Lvcx
+ 4qhsa1wEeVDaLFMi8/5w==
+X-Spam-Status: No, score=-105.0 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -58,25 +63,49 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 25 Aug 2020 13:04:46 -0000
+X-List-Received-Date: Wed, 26 Aug 2020 08:16:25 -0000
 
-On 2020-08-25 05:04, Corinna Vinschen wrote:
-> Hi Brian,
+On Aug 25 06:57, Brian Inglis wrote:
+> based on material from tz@IANA.org mailing list sources
+> ---
+>  winsup/doc/faq-api.xml | 29 +++++++++++++++++++++++++----
+>  1 file changed, 25 insertions(+), 4 deletions(-)
 > 
-> On Aug 24 14:10, Brian Inglis wrote:
->>   winsup/doc/faq-api.xml,faq-programming.xml: change Win32 to Windows
-> 
-> Didn't we agree on WinAPI?  Windows is fine when used in the context of
-> the OS, but Win32 was mainly used to denote the API.  So "Windows API"
-> or, better, WinAPI, should be used in these places.
+> diff --git a/winsup/doc/faq-api.xml b/winsup/doc/faq-api.xml
+> index 829e4d7febd8..365e301555a5 100644
+> --- a/winsup/doc/faq-api.xml
+> +++ b/winsup/doc/faq-api.xml
+> @@ -385,13 +385,34 @@ Cygwin version number details, check out the
+>  </answer></qandaentry>
+>  
+>  <qandaentry id="faq.api.timezone">
+> -<question><para>Why isn't timezone set correctly?</para></question>
+> +<question><para>Why isn't time zone set correctly?</para></question>
+>  <answer>
+>  
+> -<para><emphasis role='bold'>(Please note: This section has not yet been updated for the latest net release.)</emphasis>
+> -</para>
+> -<para>Did you explicitly call tzset() before checking the value of timezone?
+> +<para>Did you explicitly call tzset() before checking the value of time zone?
+>  If not, you must do so.
+> +Time zone settings are updated by changes to the tzdata package included in all
+> +Cygwin installations.
 
-Sorry, forgot to add API in a few places - Windows API seemed to fit better in
-most contexts than WinAPI which seemed too buzzword-like in those contexts.
-PATCH v2 series sent!
+Shouldn't a new paragraph start at this point?
 
--- 
-Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
+Actually, maybe this could be changed a bit more.  The question might be
+better called "Why isn't my (or the) time zone set correctly?" and the
+order inside the FAQ seems a bit upside down now.  Starting with a reply
+only affecting developers with self-written applications is rather weird
+given the general discussion only follows afterwards.
 
-This email may be disturbing to some readers as it contains
-too much technical detail. Reader discretion is advised.
-[Data in IEC units and prefixes, physical quantities in SI.]
+The discussion on how time zones are updated in real life might be the
+better start, then how to rectify local settings by running Setup, and
+only then implications for developers.
+
+Make sense?
+
+Thanks, I pushed the other two patches in the meantime.
+
+
+Corinna
