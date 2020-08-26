@@ -1,53 +1,43 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
- by sourceware.org (Postfix) with ESMTPS id B05493857C76
- for <cygwin-patches@cygwin.com>; Wed, 26 Aug 2020 17:36:07 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org B05493857C76
+Return-Path: <jon.turney@dronecode.org.uk>
+Received: from re-prd-fep-046.btinternet.com (mailomta2-re.btinternet.com
+ [213.120.69.95])
+ by sourceware.org (Postfix) with ESMTPS id 0B5C8386EC28
+ for <cygwin-patches@cygwin.com>; Wed, 26 Aug 2020 21:04:28 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 0B5C8386EC28
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=dronecode.org.uk
 Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([217.91.18.234]) by
- mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MYvoW-1k6fuo2EPw-00UpvM for <cygwin-patches@cygwin.com>; Wed, 26 Aug 2020
- 19:36:06 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 1EFBCA83A75; Wed, 26 Aug 2020 19:36:06 +0200 (CEST)
-Date: Wed, 26 Aug 2020 19:36:06 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+ spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
+Received: from re-prd-rgout-002.btmx-prd.synchronoss.net ([10.2.54.5])
+ by re-prd-fep-046.btinternet.com with ESMTP id
+ <20200826210427.UKRF4657.re-prd-fep-046.btinternet.com@re-prd-rgout-002.btmx-prd.synchronoss.net>;
+ Wed, 26 Aug 2020 22:04:27 +0100
+Authentication-Results: btinternet.com;
+ auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com
+X-Originating-IP: [31.51.205.206]
+X-OWM-Source-IP: 31.51.205.206 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeduiedruddvvddgudehfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepueeijeeguddvuedtffeiieelfeffudefkeehgfejffefhedtkeejgeekfedtffefnecukfhppeefuddrhedurddvtdehrddvtdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeefuddrhedurddvtdehrddvtdeipdhmrghilhhfrhhomhepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqedprhgtphhtthhopeeotgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomheqpdhrtghpthhtohepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqe
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from localhost.localdomain (31.51.205.206) by
+ re-prd-rgout-002.btmx-prd.synchronoss.net (5.8.340) (authenticated as
+ jonturney@btinternet.com)
+ id 5ED9C0CC0DC16FB0; Wed, 26 Aug 2020 22:04:27 +0100
+From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Disable pseudo console if TERM is dumb or
- not set.
-Message-ID: <20200826173606.GP3272@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200826120015.1188-1-takashi.yano@nifty.ne.jp>
+Cc: Jon Turney <jon.turney@dronecode.org.uk>
+Subject: [PATCH 0/3] CI update
+Date: Wed, 26 Aug 2020 22:04:06 +0100
+Message-Id: <20200826210409.2497-1-jon.turney@dronecode.org.uk>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200826120015.1188-1-takashi.yano@nifty.ne.jp>
-X-Provags-ID: V03:K1:GxH2XB+XtsdH5ax8+bBLH1xMXq49V0BAPSTtD5o2McsZSJ373Mh
- nSkZ+EsAyAHArPld/AnSHMty84TS7ERlIGYUeuMZV6UQ4pKOP6J+jddF40eHtSkovOUNsIb
- SAxSxO5X8LHUrUnoFeyKTLY7pLW2k3Ub8zHyIDXM1VO2uXKxzF0mFIW0jRaBp4MdbbhR0DK
- 2VYQv9yHjtKj3J/gishYw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:6fXoMRddP4o=:jtu/vwhXAVrtFNWqNRvo+j
- /fEF/Qb7ovI5pT5fnHIvZcCQ2qQ6ZxP8bD0leiRClmNe7gM/7j7Bc6fpxojHaWRVlS27QnnHX
- /EPOgv7N8jegDQkrKrzaoCoZTM7kS1jll3m199qHV/qkaFMI6sUCOSmNjOEYNO7YQaqb47u5c
- MR11OcU1Cmoh2wxxR1jBzzBkqCSoY6cWMjLO7kCOzdg1vubI/ZxmwGqfGcm8vbfmSV8YGFeVj
- L+FJl08KF8RAkFuk6KXVNbjDlmdFCn6nZwxJzZ1Y4oPRfwbduuVqFh2YWo1DLQIV2JrRHu71I
- Lm6QzMrYt/bHpnACnXp8CcbbqSKC4LgyUlyobct58VPaSj9yEN2a1Clbe8qgFNf6PEnyU5OEr
- /mUGLmL99VuB3m7YXDCq35vNquTg5QzIb3DGdszi0+xm1XPQaVz21ggKio36wR8gwB61b5rf1
- tCokB/cjKEkWBpnQbrGf8mhGsr0ohyOCj5DOASTE1pPLsGaIQCf1NdjQLDuYL+cM3BOyoPRqs
- FBQGYlkpG2btXYkCtxnqhBEm2tR42BOcqvLFy7Sss8wAuyNrkeMTW32En4QbEseFy7kYkK4jp
- 7U3yxG9GyCg3E0l8iU2U07U/LMjJRofRHJENXQxEpx4xpvZ0n5R6weVl+Ngvqtuf9WICcXQSN
- Y2Rs/dEGW5fkjPZJvNjUs5N8nPmQjMe6eObZEfdErsWIU7HQGJs7B8A7n10PpyRYg4e5XZJcz
- 4ECoGiBS3G9oUl34FcphfeswUsqB5IZ7kJhlyJ0jdU4zqAPPTNNkKXsDL9KtROPZxQ8K/Yi3C
- r2r6MhuKKxl/GOJG/SWyEcLluG4l6VFS69A/fDPeO3coiFpTCi++WH0Jw2HwJuWcTSP9meFOd
- 33/e+v9MJc1KDeynCQAg==
-X-Spam-Status: No, score=-99.8 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_NONE,
+ TXREP autolearn=no autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -62,22 +52,31 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 26 Aug 2020 17:36:09 -0000
+X-List-Received-Date: Wed, 26 Aug 2020 21:04:30 -0000
 
-Hi Takashi,
+Since we recently had the unpleasant surprise of discovering that Cygwin
+doesn't build on F32 when trying to make a release, this adds some CI to
+test that.
 
-On Aug 26 21:00, Takashi Yano via Cygwin-patches wrote:
-> Pseudo console generates escape sequences on execution of non-cygwin
-> apps.  If the terminal does not support escape sequence, output will
-> be garbled. This patch prevents garbled output in dumb terminal by
-> disabling pseudo console.
+Open issues: Since there don't seem to be RedHat packages for cocom, this
+grabs a cocom package from some random 3rd party I found on the internet.
+That might not be the best idea :).
 
-I'm a bit puzzled by this patch.  We had code handling emacs and dumb
-terminals explicitely in the early forms of the first incarnation of
-the pseudo tty code, but fortunately you found a way to handle this
-without hardcoding terminal types into Cygwin.  Why do you think we
-have to do this now?
+This also updates other CI configurations.
 
+Jon Turney (3):
+  Cygwin: Add .appveyor.yml
+  Cygwin: Add github action to cross-build on Fedora
+  Cygwin: Remove .drone.yml
 
-Thanks,
-Corinna
+ .appveyor.yml                | 69 ++++++++++++++++++++++++++++++++++++
+ .drone.yml                   | 58 ------------------------------
+ .github/workflows/cygwin.yml | 45 +++++++++++++++++++++++
+ 3 files changed, 114 insertions(+), 58 deletions(-)
+ create mode 100644 .appveyor.yml
+ delete mode 100644 .drone.yml
+ create mode 100644 .github/workflows/cygwin.yml
+
+-- 
+2.28.0
+
