@@ -1,50 +1,50 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
- by sourceware.org (Postfix) with ESMTPS id 94F37386F455
- for <cygwin-patches@cygwin.com>; Thu, 27 Aug 2020 08:49:54 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 94F37386F455
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+ by sourceware.org (Postfix) with ESMTPS id A29EA386F419
+ for <cygwin-patches@cygwin.com>; Thu, 27 Aug 2020 08:53:38 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org A29EA386F419
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org;
  spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
 Received: from calimero.vinschen.de ([217.91.18.234]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MowX2-1kyGGF18Aw-00qVNv for <cygwin-patches@cygwin.com>; Thu, 27 Aug 2020
- 10:49:53 +0200
+ mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MIxJq-1jvDFT1MWw-00KO3k for <cygwin-patches@cygwin.com>; Thu, 27 Aug 2020
+ 10:53:37 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id D7E53A83A77; Thu, 27 Aug 2020 10:49:52 +0200 (CEST)
-Date: Thu, 27 Aug 2020 10:49:52 +0200
+ id E3965A83A77; Thu, 27 Aug 2020 10:53:36 +0200 (CEST)
+Date: Thu, 27 Aug 2020 10:53:36 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: fhandler_fifo::delete_client_handler: improve
- efficiency
-Message-ID: <20200827084952.GW3272@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: console: Replace WriteConsoleA() with
+ WriteConsoleW().
+Message-ID: <20200827085336.GX3272@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200827020311.5450-1-kbrown@cornell.edu>
+References: <20200827033504.1949-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200827020311.5450-1-kbrown@cornell.edu>
-X-Provags-ID: V03:K1:1+TkjgqiXogKsEgNBgBFdhfF15Zy8XgFoPHK+M3XhtDnU0mBZ89
- UT4dlRaTp9iGxpfwzwwuZtYo70VVQ5guLU+CQxYL343X/LLeCgI+1mOxu3oHAA7IAbMl57n
- VmPpX4/j3RqkJIndnM6//p46OowzhA8RW/U5zYFGjr+GYDCztT3F0iMVwNCpA7iaLevtbXi
- eEKHPrsnGRoXtt9BZds2g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:a7Lf/HutsFk=:ryqhUah6C4mp+hP7DTlb1j
- Qqa7l3Y1Vw/h1y9kKAgFH6jB2mfje/029XRo0doWfcMvsPmCnJZZ9/gZrQv0+fsFq98WPsUjW
- a2+ax4TQNaQF/LUsmklQ2zYK7mZWe+QtmKDNLhFn8fUSA59gUVKOEYxb4kq+mhgxrLBJAxJQN
- VtWL9IDDPNE8KWMbR9cL+q9Td9vhww/X/iDMKK9h5fXW0qsU6doMvVaduGSwb5Uc0MMTF+s00
- 5uf6fMiYjriB0MLM6qnoYfC6dDc+56APpfCVwUwu8tjf4QKHGfZrw6+rJmUVIVacu9qgFnJ0u
- b1XpmAmbJNUWAicoOFtVruM4ccax+5h2iI8UBnP8H/RRZ105BwXo4fB4hPkn4pTXYoSZGZfO4
- UrIcHiHLWljtAS1CVEVGYQmoN0HyM8MjtkRe8BVda2mQh6hNCazvtSwleUZnkaaXx+6lg4hzv
- Ksq5WftgWsot8vLU1T4Y3gJ5/skDkLUaC6cNncJB1JL3AhMhlE41cFM00XgpQssJFC9uPR9Jw
- ZQ6t2ZrbJWxHOVUVZBJc+qKRQ0rj+rRxkv48fMsqL7XNjV1iHwJgWIHqO20+n7z6Dm0uwh2We
- TdXC66z6pKru2krHq9uHQoCE//z6SFwWOxia3kXSXvWQRfM4ecL985rey3gNiLeQAP3WDX7Q2
- 9hJu/U4McoffJVS8niY//qUZZH8EGla2naxsMXYKrQny+99B1SqI5RB6JK3Ogu9La0gXWb/gm
- hjCRIwcsgvMp2qNKcU2O1ZX4l4xthfnovSmL88kHzXc/V1XLeQAsGTjq4iBm+515SOS35Vpo5
- x2lhvvPSKy1rgXA+vgIug+mQPQKL2thryJ5qtCbfJ0WuZkojlfN0WCY8LT2uRN+w2uAIJEg4s
- BmKEle4FQvBZJlUj299w==
-X-Spam-Status: No, score=-104.8 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+In-Reply-To: <20200827033504.1949-1-takashi.yano@nifty.ne.jp>
+X-Provags-ID: V03:K1:8Tk1G9aCPZLBJ5Ub6xy0Jftmh0S0ISkWkGGE9CRfk7fRhXU/yX2
+ aQpCRrz917gYSa8IvNE59s8f7ug4WM5asLzLAedFYeQMgYFt+wwQQeSV6Qj9d2zfW2T9LLg
+ hWkzzsbkMoXT2iXM7DfdO2Hv6zTeF+eiaYKXfL7TBursTmjs1Abu7CMfZwibi4SS3HzVln6
+ KibIvGuj3/TxPQ/rig6+A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:q0GMnPkqd0k=:dRdyGU81vazu5kgD2ISXcT
+ +z9Pno2Ra58DHcssh/gViVqNuxh6vgZ7whHK5SfLQZkORJs/R1cyx4YvkXTKhQy6jf6R3PvKN
+ xaLtpEVfol1Y0IHPJrN90NJfmiZ9/bZl1H2hgJ9AJwiQq0LsdHXcuAKJndr2OzXzr56yUrBr4
+ E12GsfSwzOptz8JXvXmtwKj8IEoaK+AZmM3rfSy1CDtNl8bZ/2ON0cz3FoOT0jaW2N3LcmyKW
+ gwFvc1jcu2IXoOwg3K63bm+OcoMTHP6KTazaEqUiGULbAV39+47yC/1otgVrPIPAPRWEa9Vjd
+ flVCLC2HG+ePlaGtQ+dGVofy90ouR8wDSXvD1ETL3pgkWkiyS5JGFnB88CfVrT8mpO4khlMGX
+ /8kjSOT3Kvvbv3mMG39DSIEwgFU6I7DGtkmk3tJfpcae/Nxpk4ItV41CNGzeND0ZmPsZfP8Rs
+ lT5jrGs59mfbxT85ZG1wVxMG3hAjmVP3hK9nUYrVYtHYe4mK7CLjiErwTWOwbuqE3+iuLaBXx
+ Ey4G+18/w5kmv+pPa9ycHH7+reBEi//dZd468rKBurFIRpueO3OtZrAzfPM1g9GSiuid2VV0W
+ uQqnXBmofledZaLGBzftg18m5zDnZ3uLtq2b5PJ4fh7T7gR+ws1GcvYk0AF2bFaiAp/dguUdW
+ o62YKTCiXWlILarTYzG3EId9vp4rsmkmflOS/fmn0ux5qp0K0asyrQUC6WPjp8pM2Ou7wpbmU
+ aOLgOBcdcxO9T/OeK9tJk6M8SUdondEWFmaN5KzwPvXpc0kFZXlHQshfsQIceMJD9Vcs6mCER
+ QAOiv00ipy/FR567x26EZy4St2hcsITYU78QA1HIm6DdwvOd/mec+MA3rkXDR4GfRI1FjRLBp
+ lZv99u/Joro90S1tFG7Q==
+X-Spam-Status: No, score=-99.8 required=5.0 tests=BAYES_00,
  GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
  RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
@@ -62,41 +62,18 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 27 Aug 2020 08:49:55 -0000
+X-List-Received-Date: Thu, 27 Aug 2020 08:53:40 -0000
 
-On Aug 26 22:03, Ken Brown via Cygwin-patches wrote:
-> Delete a client handler by swapping it with the last one in the list
-> instead of calling memmove.
+On Aug 27 12:35, Takashi Yano via Cygwin-patches wrote:
+> - To allow sending non-ASCII chars to console, all WriteConsoleA()
+>   are replaced by WriteConsoleW().
+>   Addresses:
+>   https://cygwin.com/pipermail/cygwin-patches/2020q3/010476.html
 > ---
->  winsup/cygwin/fhandler_fifo.cc | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/winsup/cygwin/fhandler_fifo.cc b/winsup/cygwin/fhandler_fifo.cc
-> index b3c4c4a25..75c8406fe 100644
-> --- a/winsup/cygwin/fhandler_fifo.cc
-> +++ b/winsup/cygwin/fhandler_fifo.cc
-> @@ -377,14 +377,14 @@ fhandler_fifo::add_client_handler (bool new_pipe_instance)
->    return 0;
->  }
->  
-> -/* Always called with fifo_client_lock in place. */
-> +/* Always called with fifo_client_lock in place.  Delete a
-> +   client_handler by swapping it with the last one in the list. */
->  void
->  fhandler_fifo::delete_client_handler (int i)
->  {
->    fc_handler[i].close ();
->    if (i < --nhandlers)
-> -    memmove (fc_handler + i, fc_handler + i + 1,
-> -	     (nhandlers - i) * sizeof (fc_handler[i]));
-> +    fc_handler[i] = fc_handler[nhandlers];
->  }
->  
->  /* Delete handlers that we will never read from.  Always called with
-> -- 
-> 2.28.0
+>  winsup/cygwin/fhandler_console.cc | 89 ++++++++++++++++---------------
+>  1 file changed, 47 insertions(+), 42 deletions(-)
 
-Yup, please push.
+Pushed.
 
 
 Thanks,
