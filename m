@@ -1,75 +1,34 @@
-Return-Path: <kbrown@cornell.edu>
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com
- (mail-bn8nam12on2090.outbound.protection.outlook.com [40.107.237.90])
- by sourceware.org (Postfix) with ESMTPS id 56B0C385703A
- for <cygwin-patches@cygwin.com>; Thu, 27 Aug 2020 02:03:29 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 56B0C385703A
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZIE2yZAoXrVbIGDB3oWKGnwOY1j07NKdS9re3y6/qCj1nYOkkzyrxVM9xBV2k9lbu9oNRQ3wNKj3PT1GfzWJAuh8lsj4feKvp3845sIK9IufVupWvCAbgNk63tPzu7xgdadagCM0+2IXarQq02sDAT+eGgqNahaGvYvvztN0IpQH6tiqFmUpEQBUrWDXRJA+TyqmrdgF8FjuA/sUAXtTIkjiaWm9T/ip0rUVt4agzSYvHYZdTRTHQv4sf5pwcJdcfolCMkeUHvBfGczbId1jtUYCzDMq/SjH4pA4gKdf2cJE8jQGbX9yDkpjpxPT1XlAMV9q1pl05BYIOSBYu3MZpw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zKzl+1dwq+t56A2Bc1QtebFYW+1xocfGcmoFAY80PQ8=;
- b=oSKEFPo7/kn4ObJPMIggvDoDxBuIzdS1jYIICwRjbF1WysLg1equL4vaGNKhmCV676ad2UGENEJNdRVZdbjbRn43wGGERSXzNYaRZyf7C5VvGqjZl/VtREmWmLLlKcSoJbGQHzXYI8oGM91N/fO41VoMc/7Fr+JyoEwq5zzyZt5jEAN4f/3yQr5uMMnyG/p2OtFjbh3Fo8uBmKUkQSTI84e1f+RCqLc2HfOIUYHTcQlzFdw+8lxZ1bU0RkLpemj2Fydaa+a/YjrfPtg6384SoUCKHl6dVuICu0RD3KJMi/M6toTCnb9BmnqvrKMO0Y66uROkaac2Cgtv9mYxdUAN6Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu;
- dkim=pass header.d=cornell.edu; arc=none
-Received: from MN2PR04MB6176.namprd04.prod.outlook.com (2603:10b6:208:e3::13)
- by MN2PR04MB5631.namprd04.prod.outlook.com (2603:10b6:208:a4::21)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3326.19; Thu, 27 Aug
- 2020 02:03:28 +0000
-Received: from MN2PR04MB6176.namprd04.prod.outlook.com
- ([fe80::184d:a265:1d48:499a]) by MN2PR04MB6176.namprd04.prod.outlook.com
- ([fe80::184d:a265:1d48:499a%7]) with mapi id 15.20.3305.032; Thu, 27 Aug 2020
- 02:03:27 +0000
-From: Ken Brown <kbrown@cornell.edu>
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com
+ [210.131.2.81])
+ by sourceware.org (Postfix) with ESMTPS id ECAFF3857C47
+ for <cygwin-patches@cygwin.com>; Thu, 27 Aug 2020 03:34:40 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org ECAFF3857C47
+Received: from Express5800-S70 (v038192.dynamic.ppp.asahi-net.or.jp
+ [124.155.38.192]) (authenticated)
+ by conssluserg-02.nifty.com with ESMTP id 07R3YG2W017782
+ for <cygwin-patches@cygwin.com>; Thu, 27 Aug 2020 12:34:16 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 07R3YG2W017782
+X-Nifty-SrcIP: [124.155.38.192]
+Date: Thu, 27 Aug 2020 12:34:18 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: fhandler_fifo::delete_client_handler: improve
- efficiency
-Date: Wed, 26 Aug 2020 22:03:11 -0400
-Message-Id: <20200827020311.5450-1-kbrown@cornell.edu>
-X-Mailer: git-send-email 2.28.0
+Subject: Re: [Patch] Fix incorrect code page when setting console title on
+ Win10
+Message-Id: <20200827123418.ab6d9a9a6157daa43aef1e5f@nifty.ne.jp>
+In-Reply-To: <20200826173345.GO3272@calimero.vinschen.de>
+References: <tencent_DEAF96B572731C3B3E524F22CCAC86D3AD07@qq.com>
+ <20200826090625.GN3272@calimero.vinschen.de>
+ <nycvar.QRO.7.76.6.2008260919460.56@tvgsbejvaqbjf.bet>
+ <20200826173345.GO3272@calimero.vinschen.de>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BL0PR02CA0051.namprd02.prod.outlook.com
- (2603:10b6:207:3d::28) To MN2PR04MB6176.namprd04.prod.outlook.com
- (2603:10b6:208:e3::13)
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from 255.255.255.255 (255.255.255.255) by
- BL0PR02CA0051.namprd02.prod.outlook.com (2603:10b6:207:3d::28) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3326.19 via Frontend Transport; Thu, 27 Aug 2020 02:03:27 +0000
-X-Mailer: git-send-email 2.28.0
-X-Originating-IP: [68.175.129.7]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8a59fba8-6bbe-4e19-07ed-08d84a2d635e
-X-MS-TrafficTypeDiagnostic: MN2PR04MB5631:
-X-Microsoft-Antispam-PRVS: <MN2PR04MB5631B607B1831A6EB2783A6DD8550@MN2PR04MB5631.namprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sdkDuMGnbAQueKAtw6F6eLAba1oNjtx78m1PA7/ajqfQiFIe1DR3Zj6wKzfJVLs2akzpuaQVWD5h8QtdrfW/5Z5I4SWwhlaPgyRzz2qPJj/LB0lgxzNJowdvldRoHsKrdkVuUmdLWtXiioC7BUJnpZ3jqbIK+12mXReNFeoKcp1XDcIinGN6rqKtGMvvd/GH8YYqoJJrjyzNKZU35F3ovTwOcJccyg+0Umve2ZyxCB7GJPEXwYaMGOuZwTLIMLBNiKnzFqzwefEvl++1bPp5YHfrT+yhxeHDiGTFh6Q3w0qgfPI9uXHxX7cFPHEYLeACHxGqv5vicSrcwcJeTuNELA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:MN2PR04MB6176.namprd04.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(4636009)(136003)(366004)(396003)(346002)(376002)(39860400002)(86362001)(26005)(66476007)(186003)(66556008)(66946007)(8676002)(16576012)(6916009)(316002)(786003)(6486002)(36756003)(1076003)(5660300002)(478600001)(83380400001)(2906002)(52116002)(4744005)(75432002)(8936002)(956004)(6666004)(2616005);
- DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData: ocC3vc+YoblMhR59w8OGTcpP3nYQM4qSqxo0SNfS4cG1S+S5Nbab8H3GZEuoDZCgDqkK0swEUHLPyYQi3jUjs++DeEbUYePvCcoT2RCKkjvRqlDCtRwObDYBGN1AmTfRC6xjOjPGZwip9GqF3/Bz+KLioIgem6A+XFZmCD47yqvrSG4Q3PLN9141UkNGsBi2Z398PE9GLBQF66IroZ/hDZi6IlWPXwSUMxUC/OYQIB/4ehA8Ov6Hz6PdNfXI4WxmeV+RgdSWSO/2DNXmKdj08QNxVhQ7y2s6kDNqmyUaNk4ZmNnCgTyFQeIFKaolVYcvXGtcyENkGH8p7xjhONaX2OxRU4LOzudaFhhEsO4gW0y4YH+m+8MlCnk8Q0wdQzIJrp1q39L2LZcst4URCQvwmOPb7aihAtlD7sBRwp0zhKzqS7a56PYeAiQh/fxy58OHXc1jJr1cxqqmCBQyV6Tb3/1LFEVbRbVcDA55HcJIVqEPIoQGi/XiRSzBiPt5C9T/cIULtBkfRBsGDHriQvGx6hCkRAwayG0wPWrrO3iHnQ3Fp2n+jZtad7bTrQAEDAZgXAD+8U71parvZTVFx3rEZ9CCI9ZeVJF1wN6I2XdBL/07sl29T9j+YD9tw7xI+F42A4JutUB0UcMsugqHxfMwEg==
-X-OriginatorOrg: cornell.edu
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8a59fba8-6bbe-4e19-07ed-08d84a2d635e
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR04MB6176.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Aug 2020 02:03:27.6574 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5d7e4366-1b9b-45cf-8e79-b14b27df46e1
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mcHvlbfc9ykrao2UTQDmywufZW8v7H/SWdWf18+0Y29b4or36t3iDkrx7+1dWg2ggRs9fliJo76wZbWZ1OCgCA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR04MB5631
-X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, MSGID_FROM_MTA_HEADER,
- RCVD_ILLEGAL_IP, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_PASS,
- SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00, BODY_8BITS,
+ DKIM_SIGNED, DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, KAM_NUMSUBJECT,
+ NICE_REPLY_A, RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2,
+ SPF_HELO_NONE, SPF_PASS, TXREP autolearn=no autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -84,36 +43,66 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 27 Aug 2020 02:03:30 -0000
+X-List-Received-Date: Thu, 27 Aug 2020 03:34:44 -0000
 
-Delete a client handler by swapping it with the last one in the list
-instead of calling memmove.
----
- winsup/cygwin/fhandler_fifo.cc | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On Wed, 26 Aug 2020 19:33:45 +0200
+Corinna Vinschen wrote:
+> On Aug 26 09:30, Johannes Schindelin wrote:
+> > Hi Corinna,
+> > 
+> > On Wed, 26 Aug 2020, Corinna Vinschen wrote:
+> > 
+> > > On Aug 26 16:43, 宫大汉 via Cygwin-patches wrote:
+> > > > When Cygwin sets console titles on Win10 (has_con_24bit_colors &amp;&amp; !con_is_legacy),
+> > > > `WriteConsoleA` is used and causes an error if:
+> > > > 1. the environment variable of `LANG` is `***.UTF-8`
+> > > > 2. and the code page of console.exe is not UTF-8
+> > > > &nbsp; 1. e.g. on my Computer, it's GB2312, for Chinese text
+> > > >
+> > > >
+> > > > I've done some tests on msys2 and details are on https://github.com/git-for-windows/git/issues/2738,
+> > > > and I filed a PR of https://github.com/git-for-windows/msys2-runtime/pull/25.
+> > 
+> > Just in case you want to have a look at it, you can download the patch via
+> > https://github.com/git-for-windows/msys2-runtime/commit/334f52a53a2e6b7f560b0e8810b9f672ebb3ad24.patch
+> > 
+> > FWIW my original reviewer comment was: "why not fix wpbuf.send() in the
+> > first place?" but after having a good look around, that method seemed to
+> > be called from so many places that I "got cold feet" of that approach.
+> > 
+> > For one, I saw at least one caller that wants to send Escape sequences,
+> > and I have no idea whether it is a good idea to do that in the `*W()`
+> > version of the `WriteConsole()` function.
+> 
+> Yes, it is.  There's no good reason to use the A functions, actually.
+> They are just wrappers calling the W functions and WriteConsoleW
+> evaluates ESC sequences just fine (just given as UTF-16 chars).
+> 
+> > So the real question from my side is: how to address properly the many
+> > uses of `WriteConsoleA()` (which breaks all kinds of encodings in many
+> > situations because Windows' idea of the current code page and Cygwin's
+> > idea of the current locale are pretty often at odds).
+> > 
+> > The patch discussed here circumvents one of those call sites.
+> > 
+> > However, even though there have not been any callers of `WriteConsoleA()`
+> > in Cygwin v3.0.7 (but four callers of `WriteConsoleW()` which I suspect
+> > were converted to `*A()` calls in v3.1.0 by the Pseudo Console patches),
+> > there are now a whopping 15 callers of that `*A()` function in Cygwin
+> > v3.1.7. See here:
+> > [...]
+> > That cannot be intentional, can it? We should always thrive to use the
+> > `*W()` functions so that we can be sure that the expected encoding is
+> > used, right?
+> 
+> Takashi?  Any reason to use WriteConsoleA rather than WriteConsoleW?  If
+> at all, WriteConsoleA should only be used if it's 100% safe to assume
+> that the buffer only contains ASCII chars < 127.
 
-diff --git a/winsup/cygwin/fhandler_fifo.cc b/winsup/cygwin/fhandler_fifo.cc
-index b3c4c4a25..75c8406fe 100644
---- a/winsup/cygwin/fhandler_fifo.cc
-+++ b/winsup/cygwin/fhandler_fifo.cc
-@@ -377,14 +377,14 @@ fhandler_fifo::add_client_handler (bool new_pipe_instance)
-   return 0;
- }
- 
--/* Always called with fifo_client_lock in place. */
-+/* Always called with fifo_client_lock in place.  Delete a
-+   client_handler by swapping it with the last one in the list. */
- void
- fhandler_fifo::delete_client_handler (int i)
- {
-   fc_handler[i].close ();
-   if (i < --nhandlers)
--    memmove (fc_handler + i, fc_handler + i + 1,
--	     (nhandlers - i) * sizeof (fc_handler[i]));
-+    fc_handler[i] = fc_handler[nhandlers];
- }
- 
- /* Delete handlers that we will never read from.  Always called with
+No. I just did not realize that the escapce sequence cound contain
+non-ASCII chars. I am sorry.
+
+I will submit a patch for that issue.
+
 -- 
-2.28.0
-
+Takashi Yano <takashi.yano@nifty.ne.jp>
