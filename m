@@ -1,54 +1,51 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
- by sourceware.org (Postfix) with ESMTPS id 41418386F421
- for <cygwin-patches@cygwin.com>; Thu, 27 Aug 2020 08:47:58 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 41418386F421
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+ by sourceware.org (Postfix) with ESMTPS id E51EF386F421
+ for <cygwin-patches@cygwin.com>; Thu, 27 Aug 2020 08:49:19 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org E51EF386F421
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org;
  spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
 Received: from calimero.vinschen.de ([217.91.18.234]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MaIzb-1k5KI52uZh-00WCdf for <cygwin-patches@cygwin.com>; Thu, 27 Aug 2020
- 10:47:56 +0200
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MwPjf-1kRVvP2Xgb-00sJnz for <cygwin-patches@cygwin.com>; Thu, 27 Aug 2020
+ 10:49:18 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 24F5EA83A77; Thu, 27 Aug 2020 10:47:56 +0200 (CEST)
-Date: Thu, 27 Aug 2020 10:47:56 +0200
+ id 3BB4DA83A77; Thu, 27 Aug 2020 10:49:18 +0200 (CEST)
+Date: Thu, 27 Aug 2020 10:49:18 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Disable pseudo console if TERM is dumb or
- not set.
-Message-ID: <20200827084756.GU3272@calimero.vinschen.de>
+Subject: Re: [PATCH 0/3] CI update
+Message-ID: <20200827084918.GV3272@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200826120015.1188-1-takashi.yano@nifty.ne.jp>
- <20200826173606.GP3272@calimero.vinschen.de>
- <20200827130720.f9f618c1313e18848a995f8c@nifty.ne.jp>
+References: <20200826210409.2497-1-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200827130720.f9f618c1313e18848a995f8c@nifty.ne.jp>
-X-Provags-ID: V03:K1:O6KBUpavbBHdhxyqYYKh9b3EWeTJaxNOTMJoMh96SlpXkFfbUyD
- AQTpHrhQIIKyy7d//3EYwFLP8BdUS+xu/23SmCaigpUnEROrFee3JlUQ3p8F/kHeiVBHwuX
- bZZINztBjwabK6PRsXtgtT2bvcDmYTkpY9C0FubZKsQn7W6Q9DTZ41ih/xFrw2LRDkrZvs/
- fIlaRnIp0vDwcijUSkFFA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:kFfMlIs78cM=:AZk+SMRH/aihmvu7SaOXD/
- m/xw+pkKDLaG2edeelf0t74JaM0IapiG95IT0B3om1HtKocK7hSvg/WDpj7Pmpg7V6xPEwScu
- dkfDNX4YwTeYrp/ky6LI52MrpOkRRRnawA61k+l53GR1+HSFMO1GObzYKfEYnJuxr0YBWvrfz
- XxANd/Of9JiuGVcW/tVnsYeaDG19HRflcjX4Rs3r0zHC3TcbvpnfVn3AJmlLHWcnNGqo+zT/Q
- y50WuKto9KpIhk4KVEYik0fJ8OILNdQhvYWij9EbnQTmx0q9bIj//pgJChTMRJp6/UHRDyIOV
- de3dhnoXrVvYGShEyLGxopo5rM0km+1dwUUYx+pnZ4UWyal1cJ5B3gz43A10uLtqfFi2x+yxk
- 7yb41n06miuHesjB40WN9v6VfS5R10iURMbP/a2jJ7ozFJiPxm0CU+n250flP84A35CFD9CSC
- LEP46hOQ2Vin6VgR6T8A1gBtUx07VVzqcbjAGd6vlEEDIZIa7t6/zD8DFSIZHr8bmIT+/laAJ
- u8M9ns2LwEa4FTLd9Z/04GP9nGZodxa2joQCXJFWIHhYOH0LrNBwL4ktp+UrnQmNblb8M8cQ0
- vV5FENAqqpKNrpSEIm0yhx+iBokvk6wSrqx6OIxZ6YiTt4+P2K5rbDiadVVk1Y0ImvZpDpUP6
- cYIbSn5BumiyQWXPX2WVEfQQQuaR/0VNXns5yk1NLA6+XXu3qK8EMeY3WDNtHwoxP95LP0Zn0
- RelLY8i/B9lmJL89wUivSRUUcF6WRuioIWZwygcEO1KEp8AD2ZI9yoyX1ZH90O8Xtn3axuj4b
- piZewFMKIpV/F2d72t8Csnc453PGugitB3dBS8umOVINR9iaOh0RabTW+dtWhFQXFjjWt4vel
- BrPvaHBqHKOWFn+S/Tuw==
-X-Spam-Status: No, score=-99.8 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+In-Reply-To: <20200826210409.2497-1-jon.turney@dronecode.org.uk>
+X-Provags-ID: V03:K1:02FZsz5devEc2TBNNjSSdTJAYP62bhD8E9QXUo5U4Du+yu0Y8sR
+ EcryaOkvlDuQNkAm1hEhBLR9SSJyiK8+pdN2o7JbKevnyE9hGO0OMQDXXVq2ii/8qbx2V+S
+ yYks9gYznNNqvG3DSb2qzHGwcKeFMvvjdIXlDDzDZ0cMpNqDifx6LaLry7tuE3vLFS9zQTt
+ 1jmyZnMfQTwQyzCE7V9Hw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:QDj4eOzqLoE=:SIaQOWRYWwjc5kcsbgHth/
+ KSOjMofcLPsBuF2DqU42I/nxeeAyZlEjCIo69vNjaWZUdlt/aQxaiNKsxkS2jRfwyIkbxAs6V
+ EqRVSfSjsSj0dtBrZNc/dZbxHcPZGa/JgpIrsJdb6ZjC91jjvE+tySTjkmJbIorZtS8dqlTTX
+ 4KgXhPIc3v/GJ2B1aTl0CfPCC4FPaCvcw+hJHSDlXx+JWm5hodBlLIoq2nd9UmpCAzcp4bnQL
+ CoJPmPD2ura3/Uli9tdtKE98OFMI4cy9xkcS4vijMtVkqPX6XVadqahDD/7UTUAmzqbg1fK6Y
+ VY5PR2Sjn2M5/1s3KsTD8VoGnGBGbi+AAjAXRlsQPKN/5hDrbJGc0ViXOI98Ii1LiKb62hUEo
+ PTxlTdy8eKCqex1mlckK/N9W2KLMj1Qw+Gy1fL9EpQDYUZFrzvl639RcfM+Kl8Xe47Dy5RaWW
+ ov702GUCoR0kYPAESdgwtYuFF27W07R2jGRTHMONK3o4H6a910tvb1QL+m9QEafgUm4HvoHMV
+ MlU8tG6H1sh3VlOAulHLg/lIbZaG6gkc9Jvq49v9PZJE3EHiNyjydv73haXstptIZIyD2yLtA
+ zAGvU6r+iL2rjrmkCRPKMNaSiCcrIXcbB0K9aKWM1HbzhOadlR9TkCD48KlQZPy77VEGHVlkP
+ 1I2oVgVPwqsKeIi+TPaVgSrGKxL8IJSL1EBOP7r6d0uMaXn1+DG4mSspdDbC5Bce2EvmLdTbl
+ kcBpcKqQc+Ea10/paNsqpbftxtcWNyZ4ZA0gkfeyCv3WD9cOsdfkitw9CFrzcjz/sKM72IIms
+ uQRfM5PNGbFL3wjROaByj6zZ0tX8UQGgUqqueZDkWcgAvesMWHDgslr/WGdJqToGSy2qTGZLC
+ z4a+/q70Zsa68Jdkem6g==
+X-Spam-Status: No, score=-100.0 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -64,42 +61,37 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 27 Aug 2020 08:47:59 -0000
+X-List-Received-Date: Thu, 27 Aug 2020 08:49:21 -0000
 
-On Aug 27 13:07, Takashi Yano via Cygwin-patches wrote:
-> On Wed, 26 Aug 2020 19:36:06 +0200
-> Corinna Vinschen wrote:
-> > On Aug 26 21:00, Takashi Yano via Cygwin-patches wrote:
-> > > Pseudo console generates escape sequences on execution of non-cygwin
-> > > apps.  If the terminal does not support escape sequence, output will
-> > > be garbled. This patch prevents garbled output in dumb terminal by
-> > > disabling pseudo console.
-> > 
-> > I'm a bit puzzled by this patch.  We had code handling emacs and dumb
-> > terminals explicitely in the early forms of the first incarnation of
-> > the pseudo tty code, but fortunately you found a way to handle this
-> > without hardcoding terminal types into Cygwin.  Why do you think we
-> > have to do this now?
+On Aug 26 22:04, Jon Turney wrote:
+> Since we recently had the unpleasant surprise of discovering that Cygwin
+> doesn't build on F32 when trying to make a release, this adds some CI to
+> test that.
 > 
-> What previously disccussed was the problem that the clearing
-> screen at pty startup displays garbage (^[[H^[[2J) in emacs.
-> Finally, this was settled by eliminating clear-screen and
-> triggering redraw-screen instead at the first execution of
-> non-cygwin app.
+> Open issues: Since there don't seem to be RedHat packages for cocom, this
+> grabs a cocom package from some random 3rd party I found on the internet.
+> That might not be the best idea :).
 > 
-> However, the problem reported in
-> https://cygwin.com/pipermail/cygwin/2020-August/245983.html
-> still remains. 
+> This also updates other CI configurations.
 > 
-> What's worse in the new implementation, pseudo console sends
-> ESC[6n (querying cursor position) internally on startup and
-> waits for a response. This causes hang if pseudo console is
-> started in dumb terminal.
+> Jon Turney (3):
+>   Cygwin: Add .appveyor.yml
+>   Cygwin: Add github action to cross-build on Fedora
+>   Cygwin: Remove .drone.yml
 > 
-> This patch is for fixing this issue.
+>  .appveyor.yml                | 69 ++++++++++++++++++++++++++++++++++++
+>  .drone.yml                   | 58 ------------------------------
+>  .github/workflows/cygwin.yml | 45 +++++++++++++++++++++++
+>  3 files changed, 114 insertions(+), 58 deletions(-)
+>  create mode 100644 .appveyor.yml
+>  delete mode 100644 .drone.yml
+>  create mode 100644 .github/workflows/cygwin.yml
+> 
+> -- 
+> 2.28.0
 
-Would it be feasible to implement this using a timeout instead?
-If the response isn't sent within, say, 100ms, just skip it?
+Fine with me.  Please push.
 
 
+Thanks,
 Corinna
