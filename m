@@ -1,33 +1,35 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com
- [210.131.2.91])
- by sourceware.org (Postfix) with ESMTPS id C65C13861845
- for <cygwin-patches@cygwin.com>; Thu, 27 Aug 2020 04:07:48 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org C65C13861845
-Received: from Express5800-S70 (v038192.dynamic.ppp.asahi-net.or.jp
- [124.155.38.192]) (authenticated)
- by conssluserg-06.nifty.com with ESMTP id 07R47I4C014539
- for <cygwin-patches@cygwin.com>; Thu, 27 Aug 2020 13:07:19 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 07R47I4C014539
-X-Nifty-SrcIP: [124.155.38.192]
-Date: Thu, 27 Aug 2020 13:07:20 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Return-Path: <brian.inglis@systematicsw.ab.ca>
+Received: from smtp-out-so.shaw.ca (smtp-out-so.shaw.ca [64.59.136.138])
+ by sourceware.org (Postfix) with ESMTPS id B1458384404C
+ for <cygwin-patches@cygwin.com>; Thu, 27 Aug 2020 07:17:15 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org B1458384404C
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=SystematicSW.ab.ca
+Authentication-Results: sourceware.org;
+ spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
+Received: from BWINGLISD.cg.shawcable.net ([24.64.172.44])
+ by shaw.ca with ESMTP
+ id BC9okXWpT695cBC9pkP2cn; Thu, 27 Aug 2020 01:17:14 -0600
+X-Authority-Analysis: v=2.3 cv=fZA2N3YF c=1 sm=1 tr=0
+ a=kiZT5GMN3KAWqtYcXc+/4Q==:117 a=kiZT5GMN3KAWqtYcXc+/4Q==:17 a=I0CVDw5ZAAAA:8
+ a=zBVnKYl2S0ZIkKNPMc8A:9 a=YdXdGVBxRxTCRzIkH2Jn:22
+From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Disable pseudo console if TERM is dumb or
- not set.
-Message-Id: <20200827130720.f9f618c1313e18848a995f8c@nifty.ne.jp>
-In-Reply-To: <20200826173606.GP3272@calimero.vinschen.de>
-References: <20200826120015.1188-1-takashi.yano@nifty.ne.jp>
- <20200826173606.GP3272@calimero.vinschen.de>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, NICE_REPLY_A,
- RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H4,
- RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_PASS,
- TXREP autolearn=no autolearn_force=no version=3.4.2
+Subject: [PATCH v3 3/3] winsup/doc/faq-api.xml(faq.api.timezone): explain time
+ zone updates
+Date: Thu, 27 Aug 2020 01:17:09 -0600
+Message-Id: <20200827071709.18558-1-Brian.Inglis@SystematicSW.ab.ca>
+X-Mailer: git-send-email 2.28.0
+MIME-Version: 1.0
+Reply-To: cygwin-patches@cygwin.com
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4wfJD6SlCpS3hC+w6YGslaWFNJ8VasZ9Q3y88l14OI34L7zD27J3OZWsMdvWbKFDH4MsnH1jYLgc5NgkLMJUrjvJUK1XJidGYP4BKnD5g1jESXoBcZX0k0
+ Os909bYhku2e2LzunBl0mXOPHFnyGO6D7gmv9YqDVAvyx8WetOFTqWtwiI1976HLTnzEAriQ0LHR8uBKDv49QuF8uxLBclgyK3NmNqorTVf7VdLZBJnvmYcQ
+ 4J6GdptONBVkZXD8UsdqRQ==
+X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW,
+ RCVD_IN_MSPIKE_H2, SPAM_BODY, SPF_HELO_NONE, SPF_NONE,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -42,38 +44,66 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 27 Aug 2020 04:07:51 -0000
+X-List-Received-Date: Thu, 27 Aug 2020 07:17:17 -0000
 
-On Wed, 26 Aug 2020 19:36:06 +0200
-Corinna Vinschen wrote:
-> On Aug 26 21:00, Takashi Yano via Cygwin-patches wrote:
-> > Pseudo console generates escape sequences on execution of non-cygwin
-> > apps.  If the terminal does not support escape sequence, output will
-> > be garbled. This patch prevents garbled output in dumb terminal by
-> > disabling pseudo console.
-> 
-> I'm a bit puzzled by this patch.  We had code handling emacs and dumb
-> terminals explicitely in the early forms of the first incarnation of
-> the pseudo tty code, but fortunately you found a way to handle this
-> without hardcoding terminal types into Cygwin.  Why do you think we
-> have to do this now?
+based on material from tz@IANA.org mailing list sources
+---
+ winsup/doc/faq-api.xml | 40 +++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 35 insertions(+), 5 deletions(-)
 
-What previously disccussed was the problem that the clearing
-screen at pty startup displays garbage (^[[H^[[2J) in emacs.
-Finally, this was settled by eliminating clear-screen and
-triggering redraw-screen instead at the first execution of
-non-cygwin app.
-
-However, the problem reported in
-https://cygwin.com/pipermail/cygwin/2020-August/245983.html
-still remains. 
-
-What's worse in the new implementation, pseudo console sends
-ESC[6n (querying cursor position) internally on startup and
-waits for a response. This causes hang if pseudo console is
-started in dumb terminal.
-
-This patch is for fixing this issue.
-
+diff --git a/winsup/doc/faq-api.xml b/winsup/doc/faq-api.xml
+index 829e4d7febd8..6283fb663d77 100644
+--- a/winsup/doc/faq-api.xml
++++ b/winsup/doc/faq-api.xml
+@@ -385,13 +385,43 @@ Cygwin version number details, check out the
+ </answer></qandaentry>
+ 
+ <qandaentry id="faq.api.timezone">
+-<question><para>Why isn't timezone set correctly?</para></question>
++<question><para>Why isn't my time (or zone) set correctly?</para></question>
+ <answer>
+ 
+-<para><emphasis role='bold'>(Please note: This section has not yet been updated for the latest net release.)</emphasis>
+-</para>
+-<para>Did you explicitly call tzset() before checking the value of timezone?
+-If not, you must do so.
++<para>Daylight saving (Summer time) and other time zone changes are
++decided on by politicians, and announced by government officials,
++sometimes with short or no notice, so time zone updates are released at
++least a few, and sometimes several, times a year.
++Details of changes are not known until they are announced publicly by
++officials, often in foreign languages.
++Those details then have to be noticed, possibly translated, passed to,
++picked up, and applied by the official <filename>tzdata</filename>
++source package maintainers.
++That information has to be compiled, checked, and released publicly in
++an update to the official <filename>tzdata</filename> source package.
++Then those changes have to be picked up and applied to the Cygwin
++<filename>tzdata</filename> package, which has to be updated, built,
++tested, and released publicly.
++</para>
++<para>Time zone settings are updates to the daylight saving (Summer
++time) rules for dates of changes, hour offsets from UTC of time zones,
++and the geographic regions to which those rules and offsets apply,
++provided in the <filename>tzdata</filename> package included in all
++Cygwin installations.
++Have you run the Cygwin Setup program recently to update at least
++the <filename>tzdata</filename> package?
++</para>
++<para>Are you developing applications using times which may be affected
++by time zones?
++Since the <literal>ctime()</literal>, <literal>localtime()</literal>,
++<literal>mktime()</literal>, and <literal>strftime()</literal> functions
++are required to set time zone information as if by calling
++<literal>tzset()</literal>, there is no need for an explicit
++<literal>tzset()</literal> call before using these functions.
++However, if none of the above functions are called first, applications
++should ensure <literal>tzset()</literal> is called explicitly before
++using any other time functions, or checking or using time zone
++information.
+ </para>
+ </answer></qandaentry>
+ 
 -- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+2.28.0
+
