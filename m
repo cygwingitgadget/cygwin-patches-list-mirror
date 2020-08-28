@@ -1,53 +1,53 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
- by sourceware.org (Postfix) with ESMTPS id A523C3943541
- for <cygwin-patches@cygwin.com>; Fri, 28 Aug 2020 13:45:05 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org A523C3943541
+Return-Path: <brian.inglis@systematicsw.ab.ca>
+Received: from smtp-out-no.shaw.ca (smtp-out-no.shaw.ca [64.59.134.13])
+ by sourceware.org (Postfix) with ESMTPS id 2CE25393C870
+ for <cygwin-patches@cygwin.com>; Fri, 28 Aug 2020 13:57:27 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 2CE25393C870
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=SystematicSw.ab.ca
 Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([217.91.18.234]) by
- mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MKsaz-1jskMX0spR-00LIVu for <cygwin-patches@cygwin.com>; Fri, 28 Aug 2020
- 15:45:04 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id C0405A83A79; Fri, 28 Aug 2020 15:45:03 +0200 (CEST)
-Date: Fri, 28 Aug 2020 15:45:03 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Disable pseudo console if TERM is dumb or
- not set.
-Message-ID: <20200828134503.GL3272@calimero.vinschen.de>
+ spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
+Received: from [192.168.1.104] ([24.64.172.44]) by shaw.ca with ESMTP
+ id Besek3oZIng7KBesfk8xvH; Fri, 28 Aug 2020 07:57:25 -0600
+X-Authority-Analysis: v=2.3 cv=ecemg4MH c=1 sm=1 tr=0
+ a=kiZT5GMN3KAWqtYcXc+/4Q==:117 a=kiZT5GMN3KAWqtYcXc+/4Q==:17
+ a=IkcTkHD0fZMA:10 a=LZesOzRlAAAA:20 a=2z1OXlWFAAAA:8 a=mDV3o1hIAAAA:8
+ a=20KFwNOVAAAA:8 a=zxemJ--iAAAA:8 a=jChkm-x5hCMFubTIiR0A:9 a=QEXdDO2ut3YA:10
+ a=SNRPda0NjyR9MlWdJ_lJ:22 a=_FVE-zBwftR9WsbkzFJk:22 a=W7RGQCILMHV2VnGx2DLc:22
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200826120015.1188-1-takashi.yano@nifty.ne.jp>
+Subject: Re: [PATCH 0/3] CI update
+To: cygwin-patches@cygwin.com
+References: <20200826210409.2497-1-jon.turney@dronecode.org.uk>
+ <20200827084918.GV3272@calimero.vinschen.de>
+ <1b88af66-9b92-99a3-a4e8-4ed1a506b19a@SystematicSw.ab.ca>
+ <20200828084305.GH3272@calimero.vinschen.de>
+From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
+Autocrypt: addr=Brian.Inglis@SystematicSw.ab.ca; prefer-encrypt=mutual;
+ keydata=
+ mDMEXopx8xYJKwYBBAHaRw8BAQdAnCK0qv/xwUCCZQoA9BHRYpstERrspfT0NkUWQVuoePa0
+ LkJyaWFuIEluZ2xpcyA8QnJpYW4uSW5nbGlzQFN5c3RlbWF0aWNTdy5hYi5jYT6IlgQTFggA
+ PhYhBMM5/lbU970GBS2bZB62lxu92I8YBQJeinHzAhsDBQkJZgGABQsJCAcCBhUKCQgLAgQW
+ AgMBAh4BAheAAAoJEB62lxu92I8Y0ioBAI8xrggNxziAVmr+Xm6nnyjoujMqWcq3oEhlYGAO
+ WacZAQDFtdDx2koSVSoOmfaOyRTbIWSf9/Cjai29060fsmdsDLg4BF6KcfMSCisGAQQBl1UB
+ BQEBB0Awv8kHI2PaEgViDqzbnoe8B9KMHoBZLS92HdC7ZPh8HQMBCAeIfgQYFggAJhYhBMM5
+ /lbU970GBS2bZB62lxu92I8YBQJeinHzAhsMBQkJZgGAAAoJEB62lxu92I8YZwUBAJw/74rF
+ IyaSsGI7ewCdCy88Lce/kdwX7zGwid+f8NZ3AQC/ezTFFi5obXnyMxZJN464nPXiggtT9gN5
+ RSyTY8X+AQ==
+Organization: Systematic Software
+Message-ID: <2abf7aa2-c926-8f7b-3f70-b508b33fe101@SystematicSw.ab.ca>
+Date: Fri, 28 Aug 2020 07:57:24 -0600
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
+In-Reply-To: <20200828084305.GH3272@calimero.vinschen.de>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200826120015.1188-1-takashi.yano@nifty.ne.jp>
-X-Provags-ID: V03:K1:vGYHUzU0JBzBFR7UczKaWhHUNxgx4sOJn8/pSLTQN+Aqee7ibAY
- umNRN6FF4eLrVYheLBT85h/9zMjUo5AlKCWiQF+FNSHdkQKXOYfqN7mXBeT2qXrKmlSw6Xz
- BC5c5wSzQtegcbWOv5Juf5mUlSfdJ4NWfIXsyl8slrt7v1LFStxDnYXHFV91T18Pst9/RS0
- 14dzb9iLtyZfmknl4Duww==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:O3+GaQ/mvjU=:J43YxdXa4knOS53L1mTPG/
- 6Tw+gDjjBIRee2f2VEXZFo7ls9HvlzyzQENy8lSraShzEiHi/xKyYsK/HaMAh2pz+qpjBb1Y9
- 0QDDCpKq0J7X59EyRDIP5i1tIKMr9zOpE2asN4uqnxk4DPCaAXGj98CxhUrQ8kn2czydP2jdu
- 5CDk4e3Cl0t/TlxwwXoXaTZmT9jB/b+h7qxzMJsbNvpGhI2OdkqaZjivd467OQQFPo0dui7wN
- TahgAAGa4W5FbitWQeOoVN8ae2Hx92cLpofOME4u2BxOrC7OyMZdiFlmXWrVWsyi5UeqOUNBx
- r9dCs70Dl2nq9EvRIJDtP5jLt1eTpCSCmLRZr6oTQ2qbLrsavS8UEhs6vg3a/rHpQq/yFLz7I
- CwYiOfATGjFuGf3R1O0A7i/XNBsJzRI1duIjSlWGycXQ73Ik3ALHHtpLPvSJnNxrlrmnaT1yy
- kX1VHQpV387yagfhAgFOdM/Ps6WX7ubvM+rBExSFQgNGb/eHUjgqqPlALQs0l7pAcCQlj+STz
- RG8zDuNs+MH183f8rHG5dbXQyEIs4yALBYwLf9mUJrPcut/Zk4one2LHxdNWNM5qd7IoV0JvI
- rwYRvrwxQZL35jGYO41kIwAxc+0YbMFIsUS2lABVDbY8ZbbGh6EljfZe722q0ru8P5YGsxjVB
- od2ynpHg+PN2cSFJO4jYFbraJMw1LffBx+PIskBwTo6jVr4a2i5Mnu6x4P1eJaOnMrXwWXYdl
- 68VNJj2HmXQO1n/ob2GAe+4Xzk2YXa1ryo6TRgrcdeGDct8EZFeG9+R1ne3ELG7cXml+05y8C
- nLKZqr0TSvr7K+t8qvU1X6K7rmvZUWoRk+uet2A3P+sJHu9SCSJ+IVZgH6swV258ryZyJ4Mi6
- ZLtkWX9r69Y9BaibrRAA==
-X-Spam-Status: No, score=-104.9 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfHqR3Tz0Uof3ws7R+vBOQy54temaKX1XzuyvvXRmQrSZyHeU9StDlay+YBp+naPStZEZa+pP0pIp2yw2FsowL5UAIfKakTt/UzFT9Rj+QezbmnB/QoLM
+ Ef4Kt+gPy1spr+zbhI88LWlPrFhfh6c7Fbjjhp8ytaJZXl3PEDcpWipeQVg+ey2b0Qpui3DRC50u8Q==
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
+ KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_DNSWL_LOW, SPF_HELO_NONE,
+ SPF_NONE, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -62,73 +62,45 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 28 Aug 2020 13:45:07 -0000
+X-List-Received-Date: Fri, 28 Aug 2020 13:57:28 -0000
 
-Hi Takashi,
-
-On Aug 26 21:00, Takashi Yano via Cygwin-patches wrote:
-> Pseudo console generates escape sequences on execution of non-cygwin
-> apps.  If the terminal does not support escape sequence, output will
-> be garbled. This patch prevents garbled output in dumb terminal by
-> disabling pseudo console.
-> ---
->  winsup/cygwin/spawn.cc | 36 +++++++++++++++++++++++++++++-------
->  1 file changed, 29 insertions(+), 7 deletions(-)
+On 2020-08-28 02:43, Corinna Vinschen wrote:
+> On Aug 27 13:29, Brian Inglis wrote:
+>> On 2020-08-27 02:49, Corinna Vinschen wrote:
+>>> On Aug 26 22:04, Jon Turney wrote:
+>>>> Since we recently had the unpleasant surprise of discovering that Cygwin
+>>>> doesn't build on F32 when trying to make a release, this adds some CI to
+>>>> test that.
+>>>>
+>>>> Open issues: Since there don't seem to be RedHat packages for cocom, this
+>>>> grabs a cocom package from some random 3rd party I found on the internet.
+>>
+>> New official site V0.98 Unicode 8:
+>>
+>> 	https://github.com/dino-lang/dino/blob/master/cocom.spec
 > 
-> diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
-> index 8308bccf3..b6d58e97a 100644
-> --- a/winsup/cygwin/spawn.cc
-> +++ b/winsup/cygwin/spawn.cc
-> @@ -647,13 +647,35 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
->        ZeroMemory (&si_pcon, sizeof (si_pcon));
->        STARTUPINFOW *si_tmp = &si;
->        if (!iscygwin () && ptys_primary && is_console_app (runpath))
-> -	if (ptys_primary->setup_pseudoconsole (&si_pcon,
-> -			     mode != _P_OVERLAY && mode != _P_WAIT))
-> -	  {
-> -	    c_flags |= EXTENDED_STARTUPINFO_PRESENT;
-> -	    si_tmp = &si_pcon.StartupInfo;
-> -	    enable_pcon = true;
-> -	  }
-> +	{
-> +	  bool nopcon = mode != _P_OVERLAY && mode != _P_WAIT;
-> +	  /* If TERM is "dumb" or not set, disable pseudo console */
-> +	  if (envblock)
-> +	    {
-> +	      bool term_is_set = false;
-> +	      for (PWCHAR p = envblock; *p != L'\0'; p += wcslen (p) + 1)
-> +		{
-> +		  if (wcscmp (p, L"TERM=dumb") == 0)
-> +		    nopcon = true;
-> +		  if (wcsncmp (p, L"TERM=", 5) == 0)
-> +		    term_is_set = true;
-> +		}
-> +	      if (!term_is_set)
-> +		nopcon = true;
-> +	    }
-> +	  else
-> +	    {
-> +	      const char *term = getenv ("TERM");
-> +	      if (!term || strcmp (term, "dumb") == 0)
-> +		nopcon = true;
-> +	    }
-> +	  if (ptys_primary->setup_pseudoconsole (&si_pcon, nopcon))
-> +	    {
-> +	      c_flags |= EXTENDED_STARTUPINFO_PRESENT;
-> +	      si_tmp = &si_pcon.StartupInfo;
-> +	      enable_pcon = true;
-> +	    }
-> +	}
->  
->      loop:
->        /* When ruid != euid we create the new process under the current original
-> -- 
-> 2.28.0
+> Weird version numbering scheme.  Our cocom package is version 0.996.
+> Is it safe to assume this stuff is newer then ours?
 
-Would you mind to encapsulate the TERM checks into a fhandler_pty_slave
-method so the TERM specific stuff is done in the fhandler code, not
-in spawn.cc?
+Same guy Vladimir Makarov and link from previous SF to current GH sources; not
+seeing the earlier emphasis on Russian armaments, rather focus is on Dino
+language; affiliation RedHat Toronto; GH INSTALL files all date from 20 years
+ago; our CHANGES says Win32 support was removed in 2007 at the top, and that
+agrees with GH ChangeLog, which continues up to 2019; closed Issue mentions he
+changed to autotools for Cygwin and MacOSX between 2015 and 2016; switches email
+from users.sf.net to gcc.gnu.org in 2016, and redhat.com briefly 2016 Mar, about
+when he switched to GH.
 
+There are few mentions of versions; preference on GH seems to be dates, latest
+mainly 2016, regenerated configure, Makefile.in, aclocal.m4 across directories 9
+months ago: although our file dates are 2015, that version 0.996 applies to
+Ammunition from 2002; version mentions include above Ammunition v0.996,
+Onigurama 6.0.0, Dino updates to .5 and .55, http://dino-lang.github.io/download
+offers V0.97 with Dino 0.5, GH says V0.98 with Dino 0.55.
 
-Thanks,
-Corinna
+-- 
+Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
+
+This email may be disturbing to some readers as it contains
+too much technical detail. Reader discretion is advised.
+[Data in IEC units and prefixes, physical quantities in SI.]
