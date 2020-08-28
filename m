@@ -1,49 +1,50 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
- by sourceware.org (Postfix) with ESMTPS id 07ABF393C860
- for <cygwin-patches@cygwin.com>; Fri, 28 Aug 2020 13:25:19 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 07ABF393C860
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+ by sourceware.org (Postfix) with ESMTPS id A523C3943541
+ for <cygwin-patches@cygwin.com>; Fri, 28 Aug 2020 13:45:05 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org A523C3943541
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org;
  spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
 Received: from calimero.vinschen.de ([217.91.18.234]) by
  mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1M597s-1kCkJ82tTo-0019Ul for <cygwin-patches@cygwin.com>; Fri, 28 Aug 2020
- 15:25:18 +0200
+ id 1MKsaz-1jskMX0spR-00LIVu for <cygwin-patches@cygwin.com>; Fri, 28 Aug 2020
+ 15:45:04 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 498F8A83A79; Fri, 28 Aug 2020 15:25:18 +0200 (CEST)
-Date: Fri, 28 Aug 2020 15:25:18 +0200
+ id C0405A83A79; Fri, 28 Aug 2020 15:45:03 +0200 (CEST)
+Date: Fri, 28 Aug 2020 15:45:03 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: select: Fix a bug on closing pi->bye event.
-Message-ID: <20200828132518.GJ3272@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: pty: Disable pseudo console if TERM is dumb or
+ not set.
+Message-ID: <20200828134503.GL3272@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200827094620.591-1-takashi.yano@nifty.ne.jp>
+References: <20200826120015.1188-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200827094620.591-1-takashi.yano@nifty.ne.jp>
-X-Provags-ID: V03:K1:X7oZlc9NXDww5JLoLh/cgYR9SEUi8WPmmURUoTpB5Mn3JtREQ8N
- A2sjW7+1YzUUR9TiMrvEVhrAdr9jXuBGxcIv8O+VVOsHT/cFsdOAl50xPB25ZsG0wboxuf8
- Uh3jbfnjKNzdAcn3hA/xZXjHGtjisLJ7vELTzA1mcQbe9zOR2VxKvYxBOTljsFRkSPmFQBM
- Z0EpHl93vIX4QDt+S53yw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:uJ5O/GcAlCU=:MFifiHDvxiKqnfkBPWqfCh
- JB3Sc2EZhKRpT6kOvmke24+jCItxFvGz041A28btpdZzpbahcjyfnwArarYMzpB1gGw0HV/Ku
- D264a8H7NJ3LyxJb5yb5epxkVjw73PfRbkvbH4mfswUmBJinAHrfrx/WtHDPLzO/fVYnfx0XP
- HTmRcwweMhVnmyM6eqwuXHcMEC8PaNlDfAWnvzmUbTE9AU3/wL3OowC+CpG4UwBFNlVyDalVZ
- vMPjsT1Qy3qS8zKzpbjO4Ub6cH7Y1TAPMzDkzjBJHpPIt8KAerRTNG5lOC4p3x1+S4Fsp/sVt
- r9XcEzH2udI10R085Cpak8Q1RMDITGP6Y3NBHQhtGQ+zGcnqMTaMhRpB/IXBZH6FZJ3iwLqZF
- zl3fmLHe+uCzLpWgeyLux62svWoJS/UJzz0ZzWGqA1Ls/km3S5ZkBwKVatQu2oUoS1DNjtK8I
- i6eYsfct5WOZ9OJGDeTKluJflgjR+aqBlZlGQq0grQ3TDIpZYsTAS4g7AaH/b9GHlZNNKpjMq
- Gn5Gr2USc3i8sKYt4bVhTN8sM8mv2lSJ/XWnjGxMw1WW6qZE8cf46WaE4hv5wh+8X6KS04oXx
- 2ScgVgdVrugWV2LM4JisPM+7Sw1h3bUsTL12Xngj1zOqR0FFuZSjH0/rk6DMCjEt9bZZ71qM6
- 3wOFoRgdGr71nDXZ/1mcOmJhihLUb5CH1mjhA8BihxSuQME+SclgqrvmPeEMzOr2ABhA3/3Dg
- 0fctfLJrUsuD3p9BXRCMcLkCpQxq9DFcmMJBbiecpjiCietAK+6dM+lt6BS6J9nY1R8+vrj/y
- K7QTjxTB264RYjCs9DMPgSuaMTR/FyV7rqBmn4LQv8fvG2a2gOKNUrZF5JnRmmDsCH0yED2VR
- RoW8PnUow+/pFTLkPnTw==
-X-Spam-Status: No, score=-99.9 required=5.0 tests=BAYES_00,
+In-Reply-To: <20200826120015.1188-1-takashi.yano@nifty.ne.jp>
+X-Provags-ID: V03:K1:vGYHUzU0JBzBFR7UczKaWhHUNxgx4sOJn8/pSLTQN+Aqee7ibAY
+ umNRN6FF4eLrVYheLBT85h/9zMjUo5AlKCWiQF+FNSHdkQKXOYfqN7mXBeT2qXrKmlSw6Xz
+ BC5c5wSzQtegcbWOv5Juf5mUlSfdJ4NWfIXsyl8slrt7v1LFStxDnYXHFV91T18Pst9/RS0
+ 14dzb9iLtyZfmknl4Duww==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:O3+GaQ/mvjU=:J43YxdXa4knOS53L1mTPG/
+ 6Tw+gDjjBIRee2f2VEXZFo7ls9HvlzyzQENy8lSraShzEiHi/xKyYsK/HaMAh2pz+qpjBb1Y9
+ 0QDDCpKq0J7X59EyRDIP5i1tIKMr9zOpE2asN4uqnxk4DPCaAXGj98CxhUrQ8kn2czydP2jdu
+ 5CDk4e3Cl0t/TlxwwXoXaTZmT9jB/b+h7qxzMJsbNvpGhI2OdkqaZjivd467OQQFPo0dui7wN
+ TahgAAGa4W5FbitWQeOoVN8ae2Hx92cLpofOME4u2BxOrC7OyMZdiFlmXWrVWsyi5UeqOUNBx
+ r9dCs70Dl2nq9EvRIJDtP5jLt1eTpCSCmLRZr6oTQ2qbLrsavS8UEhs6vg3a/rHpQq/yFLz7I
+ CwYiOfATGjFuGf3R1O0A7i/XNBsJzRI1duIjSlWGycXQ73Ik3ALHHtpLPvSJnNxrlrmnaT1yy
+ kX1VHQpV387yagfhAgFOdM/Ps6WX7ubvM+rBExSFQgNGb/eHUjgqqPlALQs0l7pAcCQlj+STz
+ RG8zDuNs+MH183f8rHG5dbXQyEIs4yALBYwLf9mUJrPcut/Zk4one2LHxdNWNM5qd7IoV0JvI
+ rwYRvrwxQZL35jGYO41kIwAxc+0YbMFIsUS2lABVDbY8ZbbGh6EljfZe722q0ru8P5YGsxjVB
+ od2ynpHg+PN2cSFJO4jYFbraJMw1LffBx+PIskBwTo6jVr4a2i5Mnu6x4P1eJaOnMrXwWXYdl
+ 68VNJj2HmXQO1n/ob2GAe+4Xzk2YXa1ryo6TRgrcdeGDct8EZFeG9+R1ne3ELG7cXml+05y8C
+ nLKZqr0TSvr7K+t8qvU1X6K7rmvZUWoRk+uet2A3P+sJHu9SCSJ+IVZgH6swV258ryZyJ4Mi6
+ ZLtkWX9r69Y9BaibrRAA==
+X-Spam-Status: No, score=-104.9 required=5.0 tests=BAYES_00, GIT_PATCH_0,
  GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
  RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
@@ -61,17 +62,72 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 28 Aug 2020 13:25:21 -0000
+X-List-Received-Date: Fri, 28 Aug 2020 13:45:07 -0000
 
-On Aug 27 18:46, Takashi Yano via Cygwin-patches wrote:
-> - Close event handle pi->bye only if it was created.
->   Addresses:
->   https://cygwin.com/pipermail/cygwin-developers/2020-August/011948.html
+Hi Takashi,
+
+On Aug 26 21:00, Takashi Yano via Cygwin-patches wrote:
+> Pseudo console generates escape sequences on execution of non-cygwin
+> apps.  If the terminal does not support escape sequence, output will
+> be garbled. This patch prevents garbled output in dumb terminal by
+> disabling pseudo console.
 > ---
->  winsup/cygwin/select.cc | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  winsup/cygwin/spawn.cc | 36 +++++++++++++++++++++++++++++-------
+>  1 file changed, 29 insertions(+), 7 deletions(-)
+> 
+> diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
+> index 8308bccf3..b6d58e97a 100644
+> --- a/winsup/cygwin/spawn.cc
+> +++ b/winsup/cygwin/spawn.cc
+> @@ -647,13 +647,35 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+>        ZeroMemory (&si_pcon, sizeof (si_pcon));
+>        STARTUPINFOW *si_tmp = &si;
+>        if (!iscygwin () && ptys_primary && is_console_app (runpath))
+> -	if (ptys_primary->setup_pseudoconsole (&si_pcon,
+> -			     mode != _P_OVERLAY && mode != _P_WAIT))
+> -	  {
+> -	    c_flags |= EXTENDED_STARTUPINFO_PRESENT;
+> -	    si_tmp = &si_pcon.StartupInfo;
+> -	    enable_pcon = true;
+> -	  }
+> +	{
+> +	  bool nopcon = mode != _P_OVERLAY && mode != _P_WAIT;
+> +	  /* If TERM is "dumb" or not set, disable pseudo console */
+> +	  if (envblock)
+> +	    {
+> +	      bool term_is_set = false;
+> +	      for (PWCHAR p = envblock; *p != L'\0'; p += wcslen (p) + 1)
+> +		{
+> +		  if (wcscmp (p, L"TERM=dumb") == 0)
+> +		    nopcon = true;
+> +		  if (wcsncmp (p, L"TERM=", 5) == 0)
+> +		    term_is_set = true;
+> +		}
+> +	      if (!term_is_set)
+> +		nopcon = true;
+> +	    }
+> +	  else
+> +	    {
+> +	      const char *term = getenv ("TERM");
+> +	      if (!term || strcmp (term, "dumb") == 0)
+> +		nopcon = true;
+> +	    }
+> +	  if (ptys_primary->setup_pseudoconsole (&si_pcon, nopcon))
+> +	    {
+> +	      c_flags |= EXTENDED_STARTUPINFO_PRESENT;
+> +	      si_tmp = &si_pcon.StartupInfo;
+> +	      enable_pcon = true;
+> +	    }
+> +	}
+>  
+>      loop:
+>        /* When ruid != euid we create the new process under the current original
+> -- 
+> 2.28.0
 
-Pushed.
+Would you mind to encapsulate the TERM checks into a fhandler_pty_slave
+method so the TERM specific stuff is done in the fhandler code, not
+in spawn.cc?
 
 
 Thanks,
