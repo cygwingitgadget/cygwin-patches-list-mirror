@@ -1,53 +1,51 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
- by sourceware.org (Postfix) with ESMTPS id D9BAE3857C5F
- for <cygwin-patches@cygwin.com>; Fri, 28 Aug 2020 08:43:08 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org D9BAE3857C5F
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+ by sourceware.org (Postfix) with ESMTPS id 54B1D393C85D
+ for <cygwin-patches@cygwin.com>; Fri, 28 Aug 2020 13:24:14 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 54B1D393C85D
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org;
  spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
 Received: from calimero.vinschen.de ([217.91.18.234]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1N8XDT-1kgUpe1VMf-014TTw for <cygwin-patches@cygwin.com>; Fri, 28 Aug 2020
- 10:43:07 +0200
+ mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1M27ep-1k9BNy3URV-002aGK for <cygwin-patches@cygwin.com>; Fri, 28 Aug 2020
+ 15:24:11 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id B7EFBA83A7B; Fri, 28 Aug 2020 10:43:05 +0200 (CEST)
-Date: Fri, 28 Aug 2020 10:43:05 +0200
+ id 57FE6A83A79; Fri, 28 Aug 2020 15:24:11 +0200 (CEST)
+Date: Fri, 28 Aug 2020 15:24:11 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH 0/3] CI update
-Message-ID: <20200828084305.GH3272@calimero.vinschen.de>
+Message-ID: <20200828132411.GI3272@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20200826210409.2497-1-jon.turney@dronecode.org.uk>
- <20200827084918.GV3272@calimero.vinschen.de>
- <1b88af66-9b92-99a3-a4e8-4ed1a506b19a@SystematicSw.ab.ca>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1b88af66-9b92-99a3-a4e8-4ed1a506b19a@SystematicSw.ab.ca>
-X-Provags-ID: V03:K1:oCqtSpO0Kml7jCsQSRwhckhnFnmkeibCefqu2yJC1iQH91KhWFG
- h7l2WJTzMI2ku04cJNBsWe74EAq8kCSPZZNwqg8rhDmFzYw1d7iYfncls+GYTciYoVnsEe+
- PPvTnlwFjY+Ltiutr5B2ZzqzVGbTIgNoN4dzeyfrhC6J5MKj9UIgd1Tz3821XKE7KC8CL43
- m9bOYEhYcjl4icDqNirWw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:V9VSdIkqKkY=:zBcUd5paiFTGR/zH0zXPlj
- qwse+sNzbdv/AfpO0WHUiaKcvMUaisHlUiDRFBwuT25Yis/6NJwctXi2wkR6Ofi3nqy1XMPXV
- C9YjooYcAbwXPH9VjPY/WIkrP/7zumKSWWj6Dh9psRGsC8N/MxnECjCBFoy5nOyTl//2+NGJ4
- DepXl7o1TPTD432qVbXvz0XqT1nMLjLu53VXxuPCWsXLWGX0S0ONCFwKQSyPFWO6xMFfoYEud
- INMUaWq1SWg0HZGNUFlulIaUyjc3uugLxSxUQ/x6f1y9XUwgGgcHYbCs7H7xl066DSgbbUIDd
- pDuMsBXM2n5shMgHRYay+n7+JEGIRpp9AUOMjZyXQAVmDjZNeKhln76NazA8EJI0/Ro9G2OcU
- nDumivWN8Z2UktKnsqRDg1A7Oe8XJuk2G1J1n1uVPy3oDWCTMK+UZWe3dZS105FkU9g4rdsA2
- fyIK14rQjuoFku3yCk9lTXJqW0ZSsc73AtAjqHhFqKoMzxwftz3MNpCIBuN/IgsBLvIqhvx7w
- 9JEPNYNDiElv9PMpLELAtk3fvQTQzSAPDxdqd6OUi+MvKLGY7Hm8YDIEm4Z1ZjelX6XuTJMCz
- tnhVGOCLEdkdidu9iWjlhm9Xi56vc6/Cw5Um6s8BADelhtuHtkS5Q6E4Ey4V3Q3x92TCAZeFI
- //G73+/+uYo0EN5UfBzTjsSfpvARwSIeuJ7KWtV3o1Pzo5gTGnYFiNXl3tLB1iPTNR35/Z5rV
- m8r03fAY0xhEEf9xOBx/NUYdvkLVXeOuTMd/svWc2+vcd+k3cEZGLPAhd9aOj5jmJ0IJiTzsA
- QIY7yIvmu8MOInCrUwUOi1VlMUMp8CJ3mEECddzHO5mKfTpvWVZ8//ou1pJY1cuGH0h5TfXwl
- dj73v7n7rhAOoyIE2mvw==
-X-Spam-Status: No, score=-100.1 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+In-Reply-To: <20200826210409.2497-1-jon.turney@dronecode.org.uk>
+X-Provags-ID: V03:K1:GtIMAw9Qikwv47x4ohJO+1RwOP8d+PJasK1yKALmJHWlKf47EeT
+ tFaTQBFTWxpUR5gzT2tm5VGgS3QbdX0h4ywatJqLHqKYp9B4zShEet+x1IY7IJ7llZUYaBh
+ OZ/zyoxu1LNCRTdSpfOvtPIfo2BNVq236ylPbgVznAgOGlDrIv+KTlgwicZKUaGbfZznfE/
+ alDGCeuffnkcllN1cYAUw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ZAW1SfgkqeU=:bEj+QasBxWxHI1w+X6tGW6
+ CQeYPM9WgKQykaSZMMas98RmloMtLe80EtMYBZHynpVXF3JY8i/cE3+L4vm4Q/Tq/U6fsfIiQ
+ jSaTAcXdiI9onARgrHgcRFrR3ShcH9/dHW4pyS7r4CjY9RNXScENryU/As9lAVsjsdVepadd6
+ 5anCt3XfOndK6n02YuVnWtXpZstdz/3nU3HbAnKHQIyrMfVAITF3bT6wxPd+SRkmDCFosycFi
+ 9COn4SZFVe8ubb2DbDUyv9+wnXY7bLipQmaWk/A1XlSVxGGj6onQVIBZ0hKwMi2mx2YuFPI+e
+ kKb9hbVpXxtSBM1oNPEqEc1b1N1AP/m9oV9dsSG+E/jTtKV6CZMljj3TP1F0+5Fw7zbwxv1RP
+ ep+hq5jYvnf0YWerETKJXGGy5dhhDZ3LVd9hMORldsiYOw4gCcF+jO7YkZQPC7ys4UDiYm5DA
+ iDX4S5vRZg3tx+lAV1Axyv/iGEDeyI3DRCL7ySEZtuoYNUDKVHsDwfZF2H8K4LSHF6ZvkAgCE
+ T58/c/1TVw+voHuxfAU32f23xb8lUgkvkrXIkGHVIP4xSBND46ViG944Bk5ZadA42nqlnf2tN
+ WNE+W0/mJ8irgw+AkA7diO3G7Tb5MjI5pkxp1XiAkZNRVDfzhJvOrWhZAXgw8zWnbVmLDy2dm
+ ChmV+NcDXLasw4A+A4nP07bSrPQl3FYeNEtrtH8zmZJuX/DHC9CJeGJxhm7Q0NyD86Ws/NWaf
+ 02ubnNbiTPwKcIuy1jRqmQNMh+bIoU/k+iskRPIVbSAmwXK7hMDX50AUGFzyQwALjSOrlGmAk
+ JzC7ezIc3iQ9voetwm4/8bhCmZ9XYZZHX+sRBJ8Sd6vo4s8eSFDANd/0J2gujzWsR3J3Vc6R4
+ 9m5aKLm0RZJbGUoLXCjg==
+X-Spam-Status: No, score=-99.9 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -63,24 +61,34 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 28 Aug 2020 08:43:10 -0000
+X-List-Received-Date: Fri, 28 Aug 2020 13:24:16 -0000
 
-On Aug 27 13:29, Brian Inglis wrote:
-> On 2020-08-27 02:49, Corinna Vinschen wrote:
-> > On Aug 26 22:04, Jon Turney wrote:
-> >> Since we recently had the unpleasant surprise of discovering that Cygwin
-> >> doesn't build on F32 when trying to make a release, this adds some CI to
-> >> test that.
-> >>
-> >> Open issues: Since there don't seem to be RedHat packages for cocom, this
-> >> grabs a cocom package from some random 3rd party I found on the internet.
+On Aug 26 22:04, Jon Turney wrote:
+> Since we recently had the unpleasant surprise of discovering that Cygwin
+> doesn't build on F32 when trying to make a release, this adds some CI to
+> test that.
 > 
-> New official site V0.98 Unicode 8:
+> Open issues: Since there don't seem to be RedHat packages for cocom, this
+> grabs a cocom package from some random 3rd party I found on the internet.
+> That might not be the best idea :).
 > 
-> 	https://github.com/dino-lang/dino/blob/master/cocom.spec
+> This also updates other CI configurations.
+> 
+> Jon Turney (3):
+>   Cygwin: Add .appveyor.yml
+>   Cygwin: Add github action to cross-build on Fedora
+>   Cygwin: Remove .drone.yml
+> 
+>  .appveyor.yml                | 69 ++++++++++++++++++++++++++++++++++++
+>  .drone.yml                   | 58 ------------------------------
+>  .github/workflows/cygwin.yml | 45 +++++++++++++++++++++++
+>  3 files changed, 114 insertions(+), 58 deletions(-)
+>  create mode 100644 .appveyor.yml
+>  delete mode 100644 .drone.yml
+>  create mode 100644 .github/workflows/cygwin.yml
 
-Weird version numbering scheme.  Our cocom package is version 0.996.
-Is it safe to assume this stuff is newer then ours?
+Go ahead.
 
 
+Thanks,
 Corinna
