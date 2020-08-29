@@ -1,43 +1,35 @@
-Return-Path: <jon.turney@dronecode.org.uk>
-Received: from re-prd-fep-041.btinternet.com (mailomta25-re.btinternet.com
- [213.120.69.118])
- by sourceware.org (Postfix) with ESMTPS id 587AB385043D
- for <cygwin-patches@cygwin.com>; Sat, 29 Aug 2020 14:43:48 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 587AB385043D
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=dronecode.org.uk
-Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
-Received: from re-prd-rgout-002.btmx-prd.synchronoss.net ([10.2.54.5])
- by re-prd-fep-041.btinternet.com with ESMTP id
- <20200829144347.MZIE30588.re-prd-fep-041.btinternet.com@re-prd-rgout-002.btmx-prd.synchronoss.net>;
- Sat, 29 Aug 2020 15:43:47 +0100
-Authentication-Results: btinternet.com;
- auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com
-X-Originating-IP: [31.51.206.212]
-X-OWM-Source-IP: 31.51.206.212 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeduiedrudefuddgkedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeeuieejgeduvdeutdffieeileefffdufeekhefgjefffeehtdekjeegkeeftdfffeenucfkphepfedurdehuddrvddtiedrvdduvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhinhgvthepfedurdehuddrvddtiedrvdduvddpmhgrihhlfhhrohhmpeeojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqpdhrtghpthhtohepoegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmqedprhgtphhtthhopeeojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheq
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from localhost.localdomain (31.51.206.212) by
- re-prd-rgout-002.btmx-prd.synchronoss.net (5.8.340) (authenticated as
- jonturney@btinternet.com)
- id 5ED9C0CC0E5029BF; Sat, 29 Aug 2020 15:43:47 +0100
-From: Jon Turney <jon.turney@dronecode.org.uk>
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com
+ [210.131.2.83])
+ by sourceware.org (Postfix) with ESMTPS id 182893857C53
+ for <cygwin-patches@cygwin.com>; Sat, 29 Aug 2020 20:25:21 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 182893857C53
+Received: from Express5800-S70 (v038192.dynamic.ppp.asahi-net.or.jp
+ [124.155.38.192]) (authenticated)
+ by conssluserg-04.nifty.com with ESMTP id 07TKP460032066
+ for <cygwin-patches@cygwin.com>; Sun, 30 Aug 2020 05:25:04 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 07TKP460032066
+X-Nifty-SrcIP: [124.155.38.192]
+Date: Sun, 30 Aug 2020 05:25:06 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH] Cygwin: Remove waitloop argument from try_to_debug()
-Date: Sat, 29 Aug 2020 15:43:32 +0100
-Message-Id: <20200829144332.9065-1-jon.turney@dronecode.org.uk>
-X-Mailer: git-send-email 2.28.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
- GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW,
- RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_NONE,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+Subject: Re: [PATCH] Cygwin: pty: Disable pseudo console if TERM is dumb or
+ not set.
+Message-Id: <20200830052506.cc15ac67c0820274a09228e5@nifty.ne.jp>
+In-Reply-To: <20200829221420.65bf54f2848c30c5415fbf29@nifty.ne.jp>
+References: <20200826120015.1188-1-takashi.yano@nifty.ne.jp>
+ <20200828134503.GL3272@calimero.vinschen.de>
+ <20200829042554.e18de504a93bb80da347e858@nifty.ne.jp>
+ <20200829201228.b327d38eab10a64d941f99c0@nifty.ne.jp>
+ <20200829221420.65bf54f2848c30c5415fbf29@nifty.ne.jp>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: multipart/mixed;
+ boundary="Multipart=_Sun__30_Aug_2020_05_25_06_+0900_meMudTebw3OJOL/v"
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, NICE_REPLY_A,
+ RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_PASS,
+ TXREP autolearn=no autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -52,83 +44,198 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sat, 29 Aug 2020 14:43:50 -0000
+X-List-Received-Date: Sat, 29 Aug 2020 20:25:26 -0000
 
-Currently, when using CYGWIN='error_start=dumper', the core dump written
-in response to an exception is non-deterministic, as the faulting
-process isn't stopped while the dumper is started (it even seems
-possible in theory that the faulting process could have exited before
-the dumper process attaches).
+This is a multi-part message in MIME format.
 
-Remove the waitloop argument, only used in this case, so the faulting
-process busy-waits until the dump starts.
+--Multipart=_Sun__30_Aug_2020_05_25_06_+0900_meMudTebw3OJOL/v
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Code archeology to determine why the code is this way didn't really turn
-up any answers, but this seems a low-risk change, as this only changes
-the behaviour when:
+On Sat, 29 Aug 2020 22:14:20 +0900
+Takashi Yano via Cygwin-patches <cygwin-patches@cygwin.com> wrote:
+> On Sat, 29 Aug 2020 20:12:28 +0900
+> Takashi Yano via Cygwin-patches <cygwin-patches@cygwin.com> wrote:
+> > Hi Corinna,
+> > 
+> > On Sat, 29 Aug 2020 04:25:54 +0900
+> > Takashi Yano via Cygwin-patches <cygwin-patches@cygwin.com> wrote:
+> > > Hi Corinna,
+> > >
+> > > On Fri, 28 Aug 2020 15:45:03 +0200
+> > > Corinna Vinschen wrote:
+> > > > Hi Takashi,
+> > > > 
+> > > > On Aug 26 21:00, Takashi Yano via Cygwin-patches wrote:
+> > > > > Pseudo console generates escape sequences on execution of non-cygwin
+> > > > > apps.  If the terminal does not support escape sequence, output will
+> > > > > be garbled. This patch prevents garbled output in dumb terminal by
+> > > > > disabling pseudo console.
+> > [...]
+> > > > 
+> > > > Would you mind to encapsulate the TERM checks into a fhandler_pty_slave
+> > > > method so the TERM specific stuff is done in the fhandler code, not
+> > > > in spawn.cc?
+> > > 
+> > > Thansk for the suggestion. I will submit v2 patch.
+> > 
+> > What do you think of v3 patch attached? With this patch,
+> > terminal capability is checked by looking into terminfo
+> > database rather than just checking terminal name. This
+> > solution is more essential for the issue to be solved,
+> > I think.
+> > 
+> > One downside of this solution, I noticed, is that tmux
+> > sets TERM to "screen", which does not have CSI6n, by
+> > default. As a result, pseudo console is disbled in tmux
+> > by default. Setting TERM, such as screen.xterm-256color,
+> > will solve the issue.
+> 
+> Attached is the v4 patch. Small bug was fixed.
 
- - a debugger isn't already attached
- - an error_start is specified in CYGWIN env var
- - an exception has occured which will be translated to a signal
+Bug fixed again. v5 patch attached.
 
-Future work: This probably can be further simplified to make it
-completely synchronous by waiting for the dumper process to exit. This
-would avoid the race condition of the dumper attaching and detaching
-before we get around to checking for that (which we try to work around
-by juggling thread priorities), and the failure state where the dumper
-doesn't attach and we spin indefinitely.
----
- winsup/cygwin/exceptions.cc | 8 ++------
- winsup/cygwin/winsup.h      | 2 +-
- 2 files changed, 3 insertions(+), 7 deletions(-)
-
-diff --git a/winsup/cygwin/exceptions.cc b/winsup/cygwin/exceptions.cc
-index bb7704f94..3ed2db1eb 100644
---- a/winsup/cygwin/exceptions.cc
-+++ b/winsup/cygwin/exceptions.cc
-@@ -461,10 +461,8 @@ cygwin_stackdump ()
-   exc.dumpstack ();
- }
- 
--#define TIME_TO_WAIT_FOR_DEBUGGER 10000
--
- extern "C" int
--try_to_debug (bool waitloop)
-+try_to_debug ()
- {
-   if (!debugger_command)
-     return 0;
-@@ -537,8 +535,6 @@ try_to_debug (bool waitloop)
-     system_printf ("Failed to start debugger, %E");
-   else
-     {
--      if (!waitloop)
--	return dbg;
-       SetThreadPriority (GetCurrentThread (), THREAD_PRIORITY_IDLE);
-       while (!being_debugged ())
- 	Sleep (1);
-@@ -812,7 +808,7 @@ exception::handle (EXCEPTION_RECORD *e, exception_list *frame, CONTEXT *in,
-   if (exit_state >= ES_SIGNAL_EXIT
-       && (NTSTATUS) e->ExceptionCode != STATUS_CONTROL_C_EXIT)
-     api_fatal ("Exception during process exit");
--  else if (!try_to_debug (0))
-+  else if (!try_to_debug ())
-     rtl_unwind (frame, e);
-   else
-     {
-diff --git a/winsup/cygwin/winsup.h b/winsup/cygwin/winsup.h
-index 79844cb87..0ffd8c5af 100644
---- a/winsup/cygwin/winsup.h
-+++ b/winsup/cygwin/winsup.h
-@@ -190,7 +190,7 @@ void close_all_files (bool = false);
- 
- /* debug_on_trap support. see exceptions.cc:try_to_debug() */
- extern "C" void error_start_init (const char*);
--extern "C" int try_to_debug (bool waitloop = 1);
-+extern "C" int try_to_debug ();
- 
- void ld_preload ();
- void fixup_hooks_after_fork ();
 -- 
-2.28.0
+Takashi Yano <takashi.yano@nifty.ne.jp>
 
+--Multipart=_Sun__30_Aug_2020_05_25_06_+0900_meMudTebw3OJOL/v
+Content-Type: application/octet-stream;
+ name="v5-0001-Cygwin-pty-Disable-pseudo-console-if-TERM-does-no.patch"
+Content-Disposition: attachment;
+ filename="v5-0001-Cygwin-pty-Disable-pseudo-console-if-TERM-does-no.patch"
+Content-Transfer-Encoding: base64
+
+RnJvbSAzZjFlOGViOWVkNTYzYjUxMGRhZTc2NmE5MDkxNTA3NTQxZDE2YjRhIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBUYWthc2hpIFlhbm8gPHRha2FzaGkueWFub0BuaWZ0eS5uZS5q
+cD4KRGF0ZTogU3VuLCAzMCBBdWcgMjAyMCAwNTowNzo1MiArMDkwMApTdWJqZWN0OiBbUEFUQ0gg
+djVdIEN5Z3dpbjogcHR5OiBEaXNhYmxlIHBzZXVkbyBjb25zb2xlIGlmIFRFUk0gZG9lcyBub3Qg
+aGF2ZQogQ1NJNm4uCgotIFBzZXVkbyBjb25zb2xlIGludGVybmFsbHkgc2VuZHMgZXNjYXBlIHNl
+cXVlbmNlIENTSTZuIChxdWVyeSBjdXJzb3IKICBwb3NpdGlvbikgb24gc3RhcnR1cCBvZiBub24t
+Y3lnd2luIGFwcHMuIElmIHRoZSB0ZXJtaW5hbCBkb2VzIG5vdAogIHN1cHBvcnQgQ1NJNm4sIENy
+ZWF0ZVByb2Nlc3MoKSBoYW5ncyB3YWl0aW5nIGZvciByZXNwb25zZS4gVG8gcHJldmVudAogIGhh
+bmcsIHRoaXMgcGF0Y2ggZGlzYWJsZXMgcHNldWRvIGNvbnNvbGUgaWYgdGhlIHRlcm1pbmFsIGRv
+ZXMgbm90CiAgaGF2ZSBDU0k2biBpbiB0ZXJtaW5mbyBkYXRhYmFzZS4gQWxzbywgcmVtb3ZlcyBl
+c2NhcGUgc2VxdWVuY2UgZm9yCiAgc2V0dGluZyB3aW5kb3cgdGl0bGUgaWYgdGhlIHRlcm1pbmFs
+IGRvZXMgbm90IGhhdmUgdGhlIHNldC10aXRsZQogIGNhcGFiaWxpdHkuCi0tLQogd2luc3VwL2N5
+Z3dpbi9maGFuZGxlci5oICAgICAgfCAgIDEgKwogd2luc3VwL2N5Z3dpbi9maGFuZGxlcl90dHku
+Y2MgfCAxMjQgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKwogd2luc3VwL2N5Z3dp
+bi9zcGF3bi5jYyAgICAgICAgfCAgMTkgKysrKy0tCiB3aW5zdXAvY3lnd2luL3R0eS5jYyAgICAg
+ICAgICB8ICAgMSArCiB3aW5zdXAvY3lnd2luL3R0eS5oICAgICAgICAgICB8ICAgMSArCiA1IGZp
+bGVzIGNoYW5nZWQsIDEzOSBpbnNlcnRpb25zKCspLCA3IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdp
+dCBhL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXIuaCBiL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXIuaApp
+bmRleCA5ZmQ5NWMwOTguLmY1NWJjZjlkMSAxMDA2NDQKLS0tIGEvd2luc3VwL2N5Z3dpbi9maGFu
+ZGxlci5oCisrKyBiL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXIuaApAQCAtMjMzMiw2ICsyMzMyLDcg
+QEAgY2xhc3MgZmhhbmRsZXJfcHR5X3NsYXZlOiBwdWJsaWMgZmhhbmRsZXJfcHR5X2NvbW1vbgog
+ICB9CiAgIGJvb2wgc2V0dXBfcHNldWRvY29uc29sZSAoU1RBUlRVUElORk9FWFcgKnNpLCBib29s
+IG5vcGNvbik7CiAgIHZvaWQgY2xvc2VfcHNldWRvY29uc29sZSAodm9pZCk7CisgIGJvb2wgdGVy
+bV9oYXNfcGNvbl9jYXAgKGNvbnN0IFdDSEFSICplbnYsIGJvb2wgYmcpOwogICB2b2lkIHNldF9z
+d2l0Y2hfdG9fcGNvbiAodm9pZCk7CiAgIHZvaWQgcmVzZXRfc3dpdGNoX3RvX3Bjb24gKHZvaWQp
+OwogICB2b2lkIG1hc2tfc3dpdGNoX3RvX3Bjb25faW4gKGJvb2wgbWFzayk7CmRpZmYgLS1naXQg
+YS93aW5zdXAvY3lnd2luL2ZoYW5kbGVyX3R0eS5jYyBiL3dpbnN1cC9jeWd3aW4vZmhhbmRsZXJf
+dHR5LmNjCmluZGV4IDA4NjVjMWZhYy4uMGE2ZDIxMWNkIDEwMDY0NAotLS0gYS93aW5zdXAvY3ln
+d2luL2ZoYW5kbGVyX3R0eS5jYworKysgYi93aW5zdXAvY3lnd2luL2ZoYW5kbGVyX3R0eS5jYwpA
+QCAtMjE2OSw2ICsyMTY5LDIyIEBAIGZoYW5kbGVyX3B0eV9tYXN0ZXI6OnB0eV9tYXN0ZXJfZndk
+X3RocmVhZCAoKQogICAgICAgY2hhciAqcHRyID0gb3V0YnVmOwogICAgICAgaWYgKGdldF90dHlw
+ICgpLT5oX3BzZXVkb19jb25zb2xlKQogCXsKKwkgIGlmICghZ2V0X3R0eXAgKCktPmhhc19zZXRf
+dGl0bGUpCisJICAgIHsKKwkgICAgICAvKiBSZW1vdmUgU2V0IHRpdGxlIHNlcXVlbmNlICovCisJ
+ICAgICAgY2hhciAqcDAsICpwMTsKKwkgICAgICBwMCA9IG91dGJ1ZjsKKwkgICAgICB3aGlsZSAo
+KHAwID0gKGNoYXIgKikgbWVtbWVtIChwMCwgcmxlbiwgIlwwMzNdMDsiLCA0KSkpCisJCXsKKwkJ
+ICBwMSA9IChjaGFyICopIG1lbWNociAocDAsICdcMDA3JywgcmxlbiAtIChwMCAtIG91dGJ1Zikp
+OworCQkgIGlmIChwMSkKKwkJICAgIHsKKwkJICAgICAgbWVtbW92ZSAocDAsIHAxICsgMSwgcmxl
+biAtIChwMSArIDEgLSBvdXRidWYpKTsKKwkJICAgICAgcmxlbiAtPSBwMSArIDEgLSBwMDsKKwkJ
+ICAgICAgd2xlbiA9IHJsZW47CisJCSAgICB9CisJCX0KKwkgICAgfQogCSAgLyogUmVtb3ZlIENT
+SSA+IFBtIG0gKi8KIAkgIGludCBzdGF0ZSA9IDA7CiAJICBpbnQgc3RhcnRfYXQgPSAwOwpAQCAt
+MjY1OSwzICsyNjc1LDExMSBAQCBmaGFuZGxlcl9wdHlfc2xhdmU6OmNsb3NlX3BzZXVkb2NvbnNv
+bGUgKHZvaWQpCiAgICAgICBnZXRfdHR5cCAoKS0+cGNvbl9zdGFydCA9IGZhbHNlOwogICAgIH0K
+IH0KKworYm9vbAorZmhhbmRsZXJfcHR5X3NsYXZlOjp0ZXJtX2hhc19wY29uX2NhcCAoY29uc3Qg
+V0NIQVIgKmVudiwgYm9vbCBiYWNrZ3JvdW5kKQoreworICBjb25zdCBjaGFyICp0ZXJtID0gTlVM
+TDsKKyAgY2hhciB0ZXJtX3N0clsyNjBdOworICBpZiAoZW52KQorICAgIHsKKyAgICBmb3IgKGNv
+bnN0IFdDSEFSICpwID0gZW52OyAqcCAhPSBMJ1wwJzsgcCArPSB3Y3NsZW4gKHApICsgMSkKKyAg
+ICAgIGlmIChzd3NjYW5mIChwLCBMIlRFUk09JTIzNnMiLCB0ZXJtX3N0cikgPT0gMSkKKwl7CisJ
+ICB0ZXJtID0gdGVybV9zdHI7CisJICBicmVhazsKKwl9CisgICAgfQorICBlbHNlCisgICAgdGVy
+bSA9IGdldGVudiAoIlRFUk0iKTsKKworICBpZiAoIXRlcm0pCisgICAgcmV0dXJuIGZhbHNlOwor
+CisgIC8qIENoZWNrIGlmIHRlcm1pbmFsIGhhcyBjYXBhYmlsaXR5IHdoaWNoIHB1c2VkbyBjb25z
+b2xlIG5lZWRzICovCisgIGNoYXIgdGluZm9bMjYwXTsKKyAgX19zbWFsbF9zcHJpbnRmICh0aW5m
+bywgIi91c3Ivc2hhcmUvdGVybWluZm8vJTAyeC8lcyIsIHRlcm1bMF0sIHRlcm0pOworICBwYXRo
+X2NvbnYgcGF0aCAodGluZm8pOworICBXQ0hBUiB3dGluZm9bMjYwXTsKKyAgcGF0aC5nZXRfd2lk
+ZV93aW4zMl9wYXRoICh3dGluZm8pOworICBIQU5ETEUgaDsKKyAgaCA9IENyZWF0ZUZpbGVXICh3
+dGluZm8sIEdFTkVSSUNfUkVBRCwgRklMRV9TSEFSRV9SRUFELAorCQkgICBOVUxMLCBPUEVOX0VY
+SVNUSU5HLCAwLCBOVUxMKTsKKyAgaWYgKGggPT0gTlVMTCkKKyAgICByZXR1cm4gZmFsc2U7Cisg
+IGNoYXIgdGVybWluZm9bNDA5Nl07CisgIERXT1JEIG47CisgIFJlYWRGaWxlIChoLCB0ZXJtaW5m
+bywgc2l6ZW9mICh0ZXJtaW5mbyksICZuLCAwKTsKKyAgQ2xvc2VIYW5kbGUgKGgpOworCisgIGlu
+dCBudW1fc2l6ZSA9IDI7CisgIGlmICgqKGludDE2X3QgKil0ZXJtaW5mbyA9PSAwMTAzNiAvKiBN
+QUdJQzIgKi8pCisgICAgbnVtX3NpemUgPSA0OworICBjb25zdCBpbnQgbmFtZV9wb3MgPSAxMjsg
+LyogUG9zaXRpb24gb2YgdGVybWluYWwgbmFtZSAqLworICBjb25zdCBpbnQgbmFtZV9zaXplID0g
+KihpbnQxNl90ICopICh0ZXJtaW5mbyArIDIpOworICBjb25zdCBpbnQgYm9vbF9jb3VudCA9ICoo
+aW50MTZfdCAqKSAodGVybWluZm8gKyA0KTsKKyAgY29uc3QgaW50IG51bV9jb3VudCA9ICooaW50
+MTZfdCAqKSAodGVybWluZm8gKyA2KTsKKyAgY29uc3QgaW50IHN0cl9jb3VudCA9ICooaW50MTZf
+dCAqKSAodGVybWluZm8gKyA4KTsKKyAgY29uc3QgaW50IHN0cl9zaXplID0gKihpbnQxNl90ICop
+ICh0ZXJtaW5mbyArIDEwKTsKKyAgY29uc3QgaW50IHVzZXI3ID0gMjk0OyAvKiB1NyAocXVlcnkg
+Y3Vyc29yIHBvc2l0aW9uKSBlbnRyeSBpbmRleCAqLworICBpZiAodXNlcjcgPj0gc3RyX2NvdW50
+KQorICAgIHJldHVybiBmYWxzZTsKKyAgaW50IHN0cl9pZHhfcG9zID0gbmFtZV9wb3MgKyBuYW1l
+X3NpemUgKyBib29sX2NvdW50ICsgbnVtX3NpemUgKiBudW1fY291bnQ7CisgIGlmIChzdHJfaWR4
+X3BvcyAmIDEpCisgICAgc3RyX2lkeF9wb3MgKys7CisgIGNvbnN0IGludDE2X3QgKnN0cl9pZHgg
+PSAoaW50MTZfdCAqKSAodGVybWluZm8gKyBzdHJfaWR4X3Bvcyk7CisgIGNvbnN0IGNoYXIgKnN0
+cl90YWJsZSA9IChjb25zdCBjaGFyICopIChzdHJfaWR4ICsgc3RyX2NvdW50KTsKKyAgaWYgKHN0
+cl9pZHggKyB1c2VyNyA+PSAoaW50MTZfdCAqKSAodGVybWluZm8gKyBuKSkKKyAgICByZXR1cm4g
+ZmFsc2U7CisgIGlmIChzdHJfaWR4W3VzZXI3XSA9PSAtMSkKKyAgICByZXR1cm4gZmFsc2U7Cisg
+IGNvbnN0IGNoYXIgKnVzZXI3X3N0ciA9IHN0cl90YWJsZSArIHN0cl9pZHhbdXNlcjddOworICBp
+ZiAodXNlcjdfc3RyID49IHN0cl90YWJsZSArIHN0cl9zaXplKQorICAgIHJldHVybiBmYWxzZTsK
+KyAgaWYgKHVzZXI3X3N0ciA+PSB0ZXJtaW5mbyArIG4pCisgICAgcmV0dXJuIGZhbHNlOworICBp
+ZiAoc3RyY21wICh1c2VyN19zdHIsICJcMDMzWzZuIikgPT0gMCkKKyAgICB7CisgICAgICAvKiBJ
+ZiB0aGUgcHJvY2VzcyBpcyBiYWNrZ3JvdW5kLCBvciBhbm90aGVyIHByb2Nlc3MgaXMgYWxyZWFk
+eQorCSBzdGFydGVkIHVuZGVyIHBzZXVkbyBjb25zb2xlLCByZXNwb25jZSBmb3IgQ1NJNm4gbWF5
+IGJlIGVhdGVuCisJIGJ5IHRoZSBvdGhlciBwcm9jZXNzLiBUaGVyZWZvcmUsIGNoZWNraW5nIHNl
+dC10aXRsZSBjYXBhYmlsaXR5CisJIHNob3VsZCBiZSBza2lwcGVkLiAqLworICAgICAgaWYgKGdl
+dF90dHlwICgpLT5wY29uX3BpZCAmJiBnZXRfdHR5cCAoKS0+cGNvbl9waWQgIT0gbXlzZWxmLT5w
+aWQKKwkgICYmICEhcGluZm8gKGdldF90dHlwICgpLT5wY29uX3BpZCkpCisJOyAvKiBEbyBub3Ro
+aW5nICovCisgICAgICBlbHNlIGlmICghYmFja2dyb3VuZCkKKwl7CisJICAvKiBDaGVjayBpZiB0
+ZXJtaW5hbCBoYXMgc2V0LXRpdGxlIGNhcGFiaWxpdHkgKi8KKwkgIHRjZmxhZ190IGNfbGZsYWcg
+PSBnZXRfdHR5cCAoKS0+dGkuY19sZmxhZzsKKwkgIGdldF90dHlwICgpLT50aS5jX2xmbGFnICY9
+IH5JQ0FOT047CisJICB3cml0ZSAoIlwwMzNbNm5cMDMzXTA7XDAwN1wwMzNbNm4iLCAxMyk7CisJ
+ICBjaGFyIGJ1ZltdID0gIlwwMzNbMzI3Njg7MzI3NjhSXDAzM1szMjc2ODszMjc2OFIiOworCSAg
+Y2hhciAqcCA9IGJ1ZjsKKwkgIGludCBsZW4gPSBzaXplb2YgKGJ1ZikgLSAxOworCSAgaW50IHgx
+LCB5MSwgeDIsIHkyOworCSAgZG8KKwkgICAgeworCSAgICAgIHNpemVfdCBuID0gbGVuOworCSAg
+ICAgIHJlYWQgKHAsIG4pOworCSAgICAgIHAgKz0gbjsKKwkgICAgICBsZW4gLT0gbjsKKwkgICAg
+ICAqcCA9ICdcMCc7CisJICAgIH0KKwkgIHdoaWxlIChzc2NhbmYgKGJ1ZiwgIlwwMzNbJWQ7JWRS
+XDAzM1slZDslZFIiLAorCQkJICZ5MSwgJngxLCAmeTIsICZ4MikgIT0gNCk7CisJICBnZXRfdHR5
+cCAoKS0+dGkuY19sZmxhZyA9IGNfbGZsYWc7CisJICBpZiAoeDIgPT0geDEgJiYgeTIgPT0geTEp
+CisJICAgIC8qIElmICJcMDMzXTA7XDAwNyIgZG9lcyBub3QgbW92ZSBjdXJzb3IgcG9zaXRpb24s
+CisJICAgICAgIHNldC10aXRsZSBpcyBzdXBwb3NlZCB0byBiZSBzdXBwb3J0ZWQuICovCisJICAg
+IGdldF90dHlwICgpLT5oYXNfc2V0X3RpdGxlID0gdHJ1ZTsKKwkgIGVsc2UKKwkgICAgeworCSAg
+ICAgIGZvciAoaW50IGk9MDsgaTx4Mi14MTsgaSsrKQorCQl3cml0ZSAoIlxiIFxiIiwgMyk7CisJ
+ICAgICAgZ2V0X3R0eXAgKCktPmhhc19zZXRfdGl0bGUgPSBmYWxzZTsKKwkgICAgfQorCX0KKyAg
+ICAgIHJldHVybiB0cnVlOworICAgIH0KKyAgcmV0dXJuIGZhbHNlOworfQpkaWZmIC0tZ2l0IGEv
+d2luc3VwL2N5Z3dpbi9zcGF3bi5jYyBiL3dpbnN1cC9jeWd3aW4vc3Bhd24uY2MKaW5kZXggYTJm
+NzY5N2Q3Li45YTVlM2Y2ZWYgMTAwNjQ0Ci0tLSBhL3dpbnN1cC9jeWd3aW4vc3Bhd24uY2MKKysr
+IGIvd2luc3VwL2N5Z3dpbi9zcGF3bi5jYwpAQCAtNjQ3LDEzICs2NDcsMTggQEAgY2hpbGRfaW5m
+b19zcGF3bjo6d29ya2VyIChjb25zdCBjaGFyICpwcm9nX2FyZywgY29uc3QgY2hhciAqY29uc3Qg
+KmFyZ3YsCiAgICAgICBaZXJvTWVtb3J5ICgmc2lfcGNvbiwgc2l6ZW9mIChzaV9wY29uKSk7CiAg
+ICAgICBTVEFSVFVQSU5GT1cgKnNpX3RtcCA9ICZzaTsKICAgICAgIGlmICghaXNjeWd3aW4gKCkg
+JiYgcHR5c19wcmltYXJ5ICYmIGlzX2NvbnNvbGVfYXBwIChydW5wYXRoKSkKLQlpZiAocHR5c19w
+cmltYXJ5LT5zZXR1cF9wc2V1ZG9jb25zb2xlICgmc2lfcGNvbiwKLQkJCSAgICAgbW9kZSAhPSBf
+UF9PVkVSTEFZICYmIG1vZGUgIT0gX1BfV0FJVCkpCi0JICB7Ci0JICAgIGNfZmxhZ3MgfD0gRVhU
+RU5ERURfU1RBUlRVUElORk9fUFJFU0VOVDsKLQkgICAgc2lfdG1wID0gJnNpX3Bjb24uU3RhcnR1
+cEluZm87Ci0JICAgIGVuYWJsZV9wY29uID0gdHJ1ZTsKLQkgIH0KKwl7CisJICBib29sIG5vcGNv
+biA9IG1vZGUgIT0gX1BfT1ZFUkxBWSAmJiBtb2RlICE9IF9QX1dBSVQ7CisJICBib29sIGJhY2tn
+cm91bmQgPSBjdHR5X3BnaWQgJiYgY3R0eV9wZ2lkICE9IG15c2VsZi0+cGdpZDsKKwkgIGlmICgh
+cHR5c19wcmltYXJ5LT50ZXJtX2hhc19wY29uX2NhcCAoZW52YmxvY2ssIGJhY2tncm91bmQpKQor
+CSAgICBub3Bjb24gPSB0cnVlOworCSAgaWYgKHB0eXNfcHJpbWFyeS0+c2V0dXBfcHNldWRvY29u
+c29sZSAoJnNpX3Bjb24sIG5vcGNvbikpCisJICAgIHsKKwkgICAgICBjX2ZsYWdzIHw9IEVYVEVO
+REVEX1NUQVJUVVBJTkZPX1BSRVNFTlQ7CisJICAgICAgc2lfdG1wID0gJnNpX3Bjb24uU3RhcnR1
+cEluZm87CisJICAgICAgZW5hYmxlX3Bjb24gPSB0cnVlOworCSAgICB9CisJfQogCiAgICAgbG9v
+cDoKICAgICAgIC8qIFdoZW4gcnVpZCAhPSBldWlkIHdlIGNyZWF0ZSB0aGUgbmV3IHByb2Nlc3Mg
+dW5kZXIgdGhlIGN1cnJlbnQgb3JpZ2luYWwKZGlmZiAtLWdpdCBhL3dpbnN1cC9jeWd3aW4vdHR5
+LmNjIGIvd2luc3VwL2N5Z3dpbi90dHkuY2MKaW5kZXggZDYwZjI3NTQ1Li5lNmQ1N2ZmNmUgMTAw
+NjQ0Ci0tLSBhL3dpbnN1cC9jeWd3aW4vdHR5LmNjCisrKyBiL3dpbnN1cC9jeWd3aW4vdHR5LmNj
+CkBAIC0yNDIsNiArMjQyLDcgQEAgdHR5Ojppbml0ICgpCiAgIHRlcm1fY29kZV9wYWdlID0gMDsK
+ICAgcGNvbl9sYXN0X3RpbWUgPSAwOwogICBwY29uX3N0YXJ0ID0gZmFsc2U7CisgIGhhc19zZXRf
+dGl0bGUgPSBmYWxzZTsKIH0KIAogSEFORExFCmRpZmYgLS1naXQgYS93aW5zdXAvY3lnd2luL3R0
+eS5oIGIvd2luc3VwL2N5Z3dpbi90dHkuaAppbmRleCBjNDkxZDM4OTEuLjEzYWY5NTY4NyAxMDA2
+NDQKLS0tIGEvd2luc3VwL2N5Z3dpbi90dHkuaAorKysgYi93aW5zdXAvY3lnd2luL3R0eS5oCkBA
+IC0xMDEsNiArMTAxLDcgQEAgcHJpdmF0ZToKICAgVUlOVCB0ZXJtX2NvZGVfcGFnZTsKICAgRFdP
+UkQgcGNvbl9sYXN0X3RpbWU7CiAgIEhBTkRMRSBoX3Bjb25fd3JpdGVfcGlwZTsKKyAgYm9vbCBo
+YXNfc2V0X3RpdGxlOwogCiBwdWJsaWM6CiAgIEhBTkRMRSBmcm9tX21hc3RlciAoKSBjb25zdCB7
+IHJldHVybiBfZnJvbV9tYXN0ZXI7IH0KLS0gCjIuMjguMAoK
+
+--Multipart=_Sun__30_Aug_2020_05_25_06_+0900_meMudTebw3OJOL/v--
