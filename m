@@ -1,51 +1,55 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
- by sourceware.org (Postfix) with ESMTPS id D1587386F801
- for <cygwin-patches@cygwin.com>; Sun, 30 Aug 2020 12:47:02 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org D1587386F801
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+ by sourceware.org (Postfix) with ESMTPS id 3671E386F801
+ for <cygwin-patches@cygwin.com>; Sun, 30 Aug 2020 12:49:32 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 3671E386F801
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org;
  spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
 Received: from calimero.vinschen.de ([217.91.18.234]) by
- mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MqINP-1kxoW61tSN-00nS4S for <cygwin-patches@cygwin.com>; Sun, 30 Aug 2020
- 14:47:01 +0200
+ mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MVv8f-1k4QoC43d7-00Rokv for <cygwin-patches@cygwin.com>; Sun, 30 Aug 2020
+ 14:49:26 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id C27ECA83A7E; Sun, 30 Aug 2020 14:47:00 +0200 (CEST)
-Date: Sun, 30 Aug 2020 14:47:00 +0200
+ id 8F260A83A7E; Sun, 30 Aug 2020 14:49:25 +0200 (CEST)
+Date: Sun, 30 Aug 2020 14:49:25 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: Remove waitloop argument from try_to_debug()
-Message-ID: <20200830124700.GP3272@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: pty: Disable pseudo console if TERM is dumb or
+ not set.
+Message-ID: <20200830124925.GQ3272@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200829144332.9065-1-jon.turney@dronecode.org.uk>
+References: <20200826120015.1188-1-takashi.yano@nifty.ne.jp>
+ <20200828134503.GL3272@calimero.vinschen.de>
+ <20200829042554.e18de504a93bb80da347e858@nifty.ne.jp>
+ <20200829201228.b327d38eab10a64d941f99c0@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200829144332.9065-1-jon.turney@dronecode.org.uk>
-X-Provags-ID: V03:K1:o+3SxuXoF3kLpW+dlYNpW0BxpMbBW28lwzlUK/OqG1lxWG4jSiZ
- XS7VlAwW12ipH4U13xjuj7PWMSHsWanVVOdUc0tp3LKF9XbumhMVHBFjpJjSuKEA/Jq8Sio
- 45W5rBpxDd+aeXDEIecDhj1AbF5yvCdWvBVhREbcCbx27VgA/sRAMqWhYlXSGt6vjl4jtMf
- tQ497o/jaAUtktTq0udkw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:GwCOgMXTFMM=:Y2BHJ9KzoP0IQwp+0vu2FM
- KZJlSlaYOW0Uz/7A0kH6L39Vor88Hx4IjLZU3BmgBEv+qW10NcePd7AXaysz7q6kb+QDQfmC+
- D0dT/cjEGM5IiqeJgYytDJWF//YGXk8kn105+EUJZJVj/PdJOEprlht+Fqn+t+cNP744IttHy
- F0Z9eLnqcEObGH5n1th7WcFx229jn6W3+7TPOJGahA4cDicC1EJ7SeF1ZkfnW9MivIDFHzcxZ
- 99vc1u7jL6TBWJHOQExusNJEHTTWcR1Ple+DwwoZJHtEBxpGUiV24cLQ4UgmqhCiQwDJJzRee
- EfBtT7/IMQipb8HlW0jsn7VHngFb88D6j2ZJLsQpNNIcn7BDPoA6IcvhZUt97IBpctW0km1IH
- SsaT0ForTSfRy1gwEx+BaCMf82zpYj7q/u+VvEs38Gm0WynpWGKHEmEYGK5WZNUi4+ITY5w6Q
- nl2Gry7JAOyKqnfxv6JeYr0aHbDbF0S+Pg0lC8SiV6F++om26F2YRO0346h6wcY873/I1GVk1
- uCSSJ5rkxiKYRBgcKQBD4CkNF/fmTq+R8z9dTpfFZmsq17GcnpuG3aKuMX4wRIdvFP2Q141h/
- krj/MQWgF31Y6LDTNl6Ff73SxqoUKRwX5mlOIzGlvxG+qN3BeYjmmMIVBjE3hK1Nqdp1eOwfI
- Osef4KZjteei7aiZqc3EshF1NQxYOptq1qM3YWWdn7gYp4oXW/pQyPkBFurpGP5CkCT8F9sDx
- oFjvleApQVLfLz6Bo9ykB1O/aQ6IzKiYmZcGhPg95bKkejK9Z86A1xa9BbtppFQ769W7TGWuH
- TCtsa4pYfQjtLcf9z5okYask8nu1Cub5tg5Y58839dy+yl/nh5H9Wt/0lgKfM8IZsP/ED828I
- +AJXof6cYUXAxO2PJXew==
+In-Reply-To: <20200829201228.b327d38eab10a64d941f99c0@nifty.ne.jp>
+X-Provags-ID: V03:K1:dn1qSp2LxV//mTDrDbdcoul/F2ZGu+lNEiEVOOe8MczuQySzwqL
+ 0w/L7qCtl0NBKf/yMBiZ0rPnHhHmlWP8HJWybk1ZRwiFJK8G7M7mmUvboUX3nE/vjRLHHTU
+ QJr+7Y+Lx+6XOtMQBHy/f9PDpwwYXH7MMIpeL6pzjuiPyZXetjWbOOY5D+NuC4mFa8ahGEY
+ 0Oin1Shbdb8ab896gdfcg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:WWYmg/xxxRI=:11isRz8fbzNekY1xJT3S3v
+ pP1X78gLtIl3d7WL+G7z2zODio9JACEaRCdKhdJoGc5HwN3kSi3mNFpZ9Ke9SDV9T0wWagRSs
+ QZO3bMsnop0vsdPME3o33kJVswFfsBZI30Lq3aoKCF3njsgeen7/qJREgbdRRwB54/C9q3Nb1
+ okbhSHfKJAlyr0bLr+TPhTnh/cwRTJz+8eBX1DQWaS/8xVzRa0vBUhirWmE1CMkD/ILafke13
+ 7aCxEL7e/L7+0exWDZfMSaT2dGuGnu7uVKDJLk/cqDVf5SVYf2zR7s7iXE5H7x1AyEiR/MH47
+ Q5B+KQ+XaLpbHPNamuVDRiThEdDq6cMFch8DVv3NNLnMjWZk24MDAuHRNBsmvex3dgBTYgqT2
+ CrhUWPuYlRCszJzAwM+V7NGovimyX64NSKQH8ILUAbBFsWMECmwM+6gWxMzH9CXzM6AE7pCEU
+ jjc80jXOI5gd8Do/MwDDUwZXhsCZWDNd6FBV/fosjMb99vfWvRfy5DHAoG3kpgGcEgtoGHnNM
+ J/LQwPXDWvC01WwBmhf+emLzRYH/s5AHgZ47oJ/sMFp1s8h7znNZWs0bEOOsU4RBorqxONdtW
+ lkg83t3b4mdJhWr3soiPq3vqKZftdNTrMfsEuMt+chbD7hrFqKC5BgxBcevPGhBODVd5nDc/q
+ ngCgwuysKS4uEQpACLxfW1DX2a51di7ZFPo0pMLPMKeJv+PrR9DU7OGLWZEqYYf9KkIAzjiq9
+ dLj00FZd75IY4EHRW16+sS1K3/gl0I08mTbnpHNNSL1RgyhPMXxqk/99U3oJ3OY/srVBTz+KI
+ Tw7ShhUtmbDJ7wtsceSDCZokwTwGiQC5k0njPrOAR8rz1V/9Lb/zwZtcxS+ZRvhHbQBIst/qY
+ iDL6tl5LzNsQaBi6XL+Q==
 X-Spam-Status: No, score=-100.3 required=5.0 tests=BAYES_00,
  GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+ RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -61,43 +65,47 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sun, 30 Aug 2020 12:47:13 -0000
+X-List-Received-Date: Sun, 30 Aug 2020 12:49:42 -0000
 
-On Aug 29 15:43, Jon Turney wrote:
-> Currently, when using CYGWIN='error_start=dumper', the core dump written
-> in response to an exception is non-deterministic, as the faulting
-> process isn't stopped while the dumper is started (it even seems
-> possible in theory that the faulting process could have exited before
-> the dumper process attaches).
-> 
-> Remove the waitloop argument, only used in this case, so the faulting
-> process busy-waits until the dump starts.
-> 
-> Code archeology to determine why the code is this way didn't really turn
-> up any answers, but this seems a low-risk change, as this only changes
-> the behaviour when:
-> 
->  - a debugger isn't already attached
->  - an error_start is specified in CYGWIN env var
->  - an exception has occured which will be translated to a signal
-> 
-> Future work: This probably can be further simplified to make it
-> completely synchronous by waiting for the dumper process to exit. This
-> would avoid the race condition of the dumper attaching and detaching
-> before we get around to checking for that (which we try to work around
-> by juggling thread priorities), and the failure state where the dumper
-> doesn't attach and we spin indefinitely.
-> ---
->  winsup/cygwin/exceptions.cc | 8 ++------
->  winsup/cygwin/winsup.h      | 2 +-
->  2 files changed, 3 insertions(+), 7 deletions(-)
+Hi Takashi,
 
-I'm a bit fuzzy on the implications but it doesn't look like it
-hurts a lot(*).  Let's get it in.
+On Aug 29 20:12, Takashi Yano via Cygwin-patches wrote:
+> Hi Corinna,
+> 
+> On Sat, 29 Aug 2020 04:25:54 +0900
+> Takashi Yano via Cygwin-patches <cygwin-patches@cygwin.com> wrote:
+> > Hi Corinna,
+> >
+> > On Fri, 28 Aug 2020 15:45:03 +0200
+> > Corinna Vinschen wrote:
+> > > Hi Takashi,
+> > > 
+> > > On Aug 26 21:00, Takashi Yano via Cygwin-patches wrote:
+> > > > Pseudo console generates escape sequences on execution of non-cygwin
+> > > > apps.  If the terminal does not support escape sequence, output will
+> > > > be garbled. This patch prevents garbled output in dumb terminal by
+> > > > disabling pseudo console.
+> [...]
+> > > 
+> > > Would you mind to encapsulate the TERM checks into a fhandler_pty_slave
+> > > method so the TERM specific stuff is done in the fhandler code, not
+> > > in spawn.cc?
+> > 
+> > Thansk for the suggestion. I will submit v2 patch.
+> 
+> What do you think of v3 patch attached? With this patch,
+> terminal capability is checked by looking into terminfo
+> database rather than just checking terminal name. This
+> solution is more essential for the issue to be solved,
+> I think.
+> 
+> One downside of this solution, I noticed, is that tmux
+> sets TERM to "screen", which does not have CSI6n, by
+> default. As a result, pseudo console is disbled in tmux
+> by default. Setting TERM, such as screen.xterm-256color,
+> will solve the issue.
+
+I like the idea in general, but isn't there a noticable perfomance hit?
 
 
-Thanks,
 Corinna
-
-
-(*) Famous last words alarm...
