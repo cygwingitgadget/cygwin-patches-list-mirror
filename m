@@ -1,53 +1,61 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
- by sourceware.org (Postfix) with ESMTPS id 8D2D83851C17
- for <cygwin-patches@cygwin.com>; Mon, 31 Aug 2020 14:48:22 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 8D2D83851C17
+Return-Path: <johannes.schindelin@gmx.de>
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+ by sourceware.org (Postfix) with ESMTPS id C75A03892454
+ for <cygwin-patches@cygwin.com>; Tue,  1 Sep 2020 19:49:28 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org C75A03892454
 Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=cygwin.com
+ dmarc=none (p=none dis=none) header.from=gmx.de
 Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([217.91.18.234]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MdNHa-1km5rA0oiG-00ZQ4U for <cygwin-patches@cygwin.com>; Mon, 31 Aug 2020
- 16:48:20 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 8823BA80797; Mon, 31 Aug 2020 16:48:19 +0200 (CEST)
-Date: Mon, 31 Aug 2020 16:48:19 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+ spf=pass smtp.mailfrom=johannes.schindelin@gmx.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+ s=badeba3b8450; t=1598989765;
+ bh=SmFQVgCNUf5Nbtm2UIys/sX6nw+Si/t5SOki1cTVQuc=;
+ h=X-UI-Sender-Class:Date:From:To:Subject;
+ b=gEt3EGdtylJZ0oWce9LKCR2XHa/tflc8pwJ+ilMesgjyXWD/CrJdM6B24qMj3lEWv
+ 76v/3rEuJ9f9FYwUAhZmUEk79hCBkzhQm5wEqYb6HBL1U/rrqvna1BFbELhpXuKZxB
+ ohd1eu/rPpV8pXLez5WH1aBH4mGT6kV8MHrG0AE0=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [172.18.169.176] ([89.1.214.118]) by mail.gmx.com (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M7b6b-1kEanQ0HWP-0080Ya for
+ <cygwin-patches@cygwin.com>; Tue, 01 Sep 2020 21:49:25 +0200
+Date: Tue, 1 Sep 2020 18:18:15 +0200 (CEST)
+From: Johannes Schindelin <johannes.schindelin@gmx.de>
+X-X-Sender: virtualbox@gitforwindows.org
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Fix a bug in the code removing set window
- title sequence.
-Message-ID: <20200831144819.GA3272@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200831120213.1706-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH 0/3] pty: use the UTF-8 code page by default for non-Cygwin
+ console applications
+Message-ID: <nycvar.QRO.7.76.6.2009011813260.56@tvgsbejvaqbjf.bet>
+User-Agent: Alpine 2.21.1 (DEB 209 2017-03-23)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200831120213.1706-1-takashi.yano@nifty.ne.jp>
-X-Provags-ID: V03:K1:2vH7jXyHNeFWTcCJgmuo8T1f458Xg01uxXbgaOWbiqQOK5UpKVn
- wir2oLdb5RGOfkClo2eg0PVQh4vGiXZ5zfJOC7ZEAebg3vbrr+Xf3skiZAA8k6L4XfJjqB0
- yGQ24tmXgHC1I1USGIpAxiU6977DsvEnaHdqQIOG8eXwaRQ4caKx7gkkAaPwrHL8CCu9igW
- c1D9kMuFf8jgEyVZVzDgQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:lXhvq7WhZaA=:a7s4s+YofhYci3hvFh6NnS
- cWf1VTe8PqlFjY2UzAXtwJN/klz7GMLO9PFyrDJvEE4dFKxVmtif6rEfWDaay7XJuENk3xRXs
- 19fxVMLL5jJaPPFHaQiTTJlGqqlZw387Q3/XcgnvvZ/4yC67+QOLYhkee6YqFnJGrHJfxcN8B
- TYHlHLRVlvzkUWPB+Hh4K3rXJHqS2hdmuaWXT3ftVge8VKoHgSGGDd8dVtjBieB44vsKSlZXe
- 68hsjtqXnhL9FxhtfToZLfJDFF3+eTPKrKwPRvJ2tRnVHnQyLLb2QxcVaqVK9vYsjsZ98YUCM
- w/+J3n4meJwEfEfZHuxScEcTP634hYyAaYgjGUz2iIMOkUR9VYETpG0MRuuGRhN+VZMoAx/QI
- 48ogSGBVFnGN1hqbTymTZJQTQpyMn9qPgscRPqk3DCshFEUQN3fvYGBY6yw+7gimZW0wS2WG7
- y+IPaiwYPBw3g0yfaCjwjoR6vEPc2gSH4ZF6olxszzD8oY2+4T0ZTCvCjRBfad2yRHAISHLrj
- 9dCUgdQKQXE07ZuTLhsnGQF1JMuspQrKmEoC8J4aHhjjugF95jxn498nB9ZJUyQE9UPcXQOlD
- UBDnOV+Q9/Xus2f9bENw0a3Wt5qTQyv94x7efJKYS8hx61pLrWoj2COXl+sK3chJl+4DxNHQi
- lMxqpMaXXLLc425WLlVNwlgg2hkQy4JK5UNiODq5whx2P0QGeW0U8kiOWHWZqO1W8zo1KpLIV
- jSp/1cgR24H+3RCaf/j4prHv5sxaVym/GOwJj0RZkXasJEUYMJh45kb9NHQ0ztND1+IUHlu2t
- D/hJ2lcRO1gs1X2WTsCD5X8yPQkbvHLDDYpkzXd/nixNE3FKk9TPkmucNj5ylRCx3Ct8T79k6
- WVIyfNdv5GkSZ4ouev7g==
-X-Spam-Status: No, score=-105.5 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+Content-Type: text/plain; charset=US-ASCII
+X-Provags-ID: V03:K1:DBgdIUlThdF34Z4QI3Bv2J5rouLlmRNwohqsp4Lo60wNvIgQ2uL
+ i6yraW/UzEQqomICDJciKAjt7vCvyuk4xpoUZY7Ev9+kRhbKoloFiKtKAVF+gMu7kXkdyyh
+ H2rsSb9W1dn/cQVtJtA9AkJd/Lyd67pshd4KKgiM4SrYTbTw8GUbJ0Lk5hKvzoe/dQ7YLyw
+ ZZvZQuYNYB2f1xaDuRJow==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:lKtbr5S2Z8M=:/lE1XglNhzST7peEOzMXb7
+ xrzZJhHX7OMuegw1elfvxtMDmbeSSB+KTSiVLzRI8PIYUV5kYz8nIivJdxdpxkGLvNBG2hmwr
+ X/AcEvEH6ZrehggWgnV2LRQjIK5mZbeqFOoGSDWli3o/H+w/dg3uHBV/SsRP4IPUE7QD6ybHJ
+ 3TGYOAiBYnVJ1cInuUjYFPEe9UkOyoB9J8IDi1OAlkWuWdqFANq0r5eH6jrERG3ou3nz0GLkQ
+ vXCg2Y0fHwwoVMkMQIk0gGpSG9DYi6rF/qY6035Vzvk6KAqbRzXgDjP7Tp0hJ5Pmyr8TuyegV
+ 4Jz9T8IZTdQVXhmEH8hu3uHjpKPChB86GBM2pS7SgE5+cnVSupUq8NhZiplZ/i/h2IYzVYuTS
+ kmBxzs0YiRduQGlM8OLEbI5XE/LVsdhnUsLGWNyLJISSIWywUOO7G/Sd2OKrqE7F339oNtBGZ
+ 1l0fcuk0Hr0GI+g8jnlmZldDcAKYnRIPSMrT34DGpexTus++JlyEOc1HhpvP29BcXaCkSbQzO
+ a/IdwaDqRRFTvuH6km7VQGhabwGA3LwGKvne47pXLzirN7IZdXd4XFLaNM6w5NgFX1aBWI8r5
+ MF3RhChj9pAk+r4jM4jSdqzEKp5a1F/wtXuBDaVmfWGYSIYSpID+H1gVsmDC6SFd5L9QYUFdr
+ OYrgJo5gfErIxnBldPxdqdeDivPNoHoiddQs/GKkTF84ulDoY7gy3lsDiNeG34KXPYqt2zqKM
+ zA00WAB8HyyDcdBAqzgzFz+oiRTNSsSnN+sJt7VVhxwDFz0WqofPRGdFKfLPFwLPZafYepQV4
+ WeTB8gNiqp98EeamietBYkLNhe4i6sff/Q8MzMg6Q4AwMU9hewtddOFgLPJGth+ittaDgPxpS
+ LIjHRTEJmbQV8FqWrJZDzHm+YUkZVHJMsndsjYDeCMXwEI/WDu5k6mVXWPcxdvH5v1JjOOnwl
+ q9Cspopp6rZ2swXPd0slFxImschdfHLpR4ubn3jUrQMw/2imv36e0TYXMPjoTXx/NdpeX+QPa
+ 6dsZ8fwJGh9bv2zHUG2e+4jOelgNxcVh6Gx4EtLFM2vqB23+/Zh7e08/mvjT+QxmcJNWbThj/
+ /NeY9DAaRUVud8PtmIfZBQH4wAeV7dXnQf4SGeiKsDfUBJIZKZReRpwrMj26EXbhEezm2VTZM
+ h50v5Et+rrJtQBaZW1wtMOvo+UcVhSuZsyCSfOEt+nsOWbX2xtukesKULqltSpOJJ/5/GD9oX
+ nGq1BHTTAga8sO3Yi/P/kXdkNIF0zh5ux4X4u7A==
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00, DATE_IN_PAST_03_06,
+ DKIM_SIGNED, DKIM_VALID, FREEMAIL_FROM, RCVD_IN_BARRACUDACENTRAL,
+ RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_PASS,
+ TXREP autolearn=no autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -62,46 +70,27 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 31 Aug 2020 14:48:24 -0000
+X-List-Received-Date: Tue, 01 Sep 2020 19:49:30 -0000
 
-On Aug 31 21:02, Takashi Yano via Cygwin-patches wrote:
-> - Commit 4e08fe42c9f3fdba63a57a8e3a6d705c4e10f50f has a bug which
->   may cause infinite loop in pty_master_fwd_thread(). This patch
->   fixes the issue.
-> ---
->  winsup/cygwin/fhandler_tty.cc | 13 +++++--------
->  1 file changed, 5 insertions(+), 8 deletions(-)
-> 
-> diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-> index e4e94f114..8bf39c3e6 100644
-> --- a/winsup/cygwin/fhandler_tty.cc
-> +++ b/winsup/cygwin/fhandler_tty.cc
-> @@ -2168,15 +2168,12 @@ fhandler_pty_master::pty_master_fwd_thread ()
->  	      /* Remove Set title sequence */
->  	      char *p0, *p1;
->  	      p0 = outbuf;
-> -	      while ((p0 = (char *) memmem (p0, rlen, "\033]0;", 4)))
-> +	      while ((p0 = (char *) memmem (p0, rlen, "\033]0;", 4))
-> +		     && (p1 = (char *) memchr (p0, '\007', rlen-(p0-outbuf))))
->  		{
-> -		  p1 = (char *) memchr (p0, '\007', rlen - (p0 - outbuf));
-> -		  if (p1)
-> -		    {
-> -		      memmove (p0, p1 + 1, rlen - (p1 + 1 - outbuf));
-> -		      rlen -= p1 + 1 - p0;
-> -		      wlen = rlen;
-> -		    }
-> +		  memmove (p0, p1 + 1, rlen - (p1 + 1 - outbuf));
-> +		  rlen -= p1 + 1 - p0;
-> +		  wlen = rlen;
->  		}
->  	    }
->  	  /* Remove CSI > Pm m */
-> -- 
-> 2.28.0
+This patch series is the result of what was discussed in
+https://cygwin.com/pipermail/cygwin-developers/2020-September/011962.html
 
-Pushed.
+While it is still not quite clear to me how the Console output code page
+is used under `disable_pcon` (when it was not used at all prior to the
+Pseudo Console patches, i.e. in v3.0.x), it is clear to me that using
+ASCII by default is not desirable.
 
+So here are patches to address this. Incidentally, this addresses quite a
+few tickets in the MSYS2 and Git for Windows projects.
 
-Thanks,
-Corinna
+Johannes Schindelin (3):
+  fhandler_pty_slave::setup_locale: fix typo
+  fhandler_pty_slave::setup_locale: fall back to UTF-8, not ASCII
+  fhandler_pty_slave::setup_locale: respect charset =3D=3D "UTF-8"
+
+ winsup/cygwin/fhandler_tty.cc | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
+
+=2D-
+2.27.0
+
