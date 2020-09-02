@@ -1,36 +1,56 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com
- [210.131.2.80])
- by sourceware.org (Postfix) with ESMTPS id DEB70393C87F
- for <cygwin-patches@cygwin.com>; Wed,  2 Sep 2020 14:52:18 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org DEB70393C87F
-Received: from Express5800-S70 (v038192.dynamic.ppp.asahi-net.or.jp
- [124.155.38.192]) (authenticated)
- by conssluserg-01.nifty.com with ESMTP id 082Eq1oQ008147;
- Wed, 2 Sep 2020 23:52:01 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 082Eq1oQ008147
-X-Nifty-SrcIP: [124.155.38.192]
-Date: Wed, 2 Sep 2020 23:52:10 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+ by sourceware.org (Postfix) with ESMTPS id C4156384A40A
+ for <cygwin-patches@cygwin.com>; Wed,  2 Sep 2020 15:24:52 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org C4156384A40A
+Authentication-Results: sourceware.org;
+ dmarc=none (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org;
+ spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
+Received: from calimero.vinschen.de ([217.91.18.234]) by
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MZCSt-1k8pn81QGn-00V8kh for <cygwin-patches@cygwin.com>; Wed, 02 Sep 2020
+ 17:24:51 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id BD777A80D14; Wed,  2 Sep 2020 17:24:50 +0200 (CEST)
+Date: Wed, 2 Sep 2020 17:24:50 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 3/3] fhandler_pty_slave::setup_locale: respect charset
- == "UTF-8"
-Message-Id: <20200902235210.0165c624688db6a90937753e@nifty.ne.jp>
-In-Reply-To: <nycvar.QRO.7.76.6.2009021111190.56@tvgsbejvaqbjf.bet>
+Subject: Re: [PATCH 3/3] fhandler_pty_slave::setup_locale: respect charset ==
+ "UTF-8"
+Message-ID: <20200902152450.GJ4127@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
 References: <nycvar.QRO.7.76.6.2009011818560.56@tvgsbejvaqbjf.bet>
  <20200902083014.GH4127@calimero.vinschen.de>
- <20200902184104.a4a754ab3827352eab126e5c@nifty.ne.jp>
- <nycvar.QRO.7.76.6.2009020822590.56@tvgsbejvaqbjf.bet>
- <20200902220600.8e4e994b275545bcfafa1802@nifty.ne.jp>
- <nycvar.QRO.7.76.6.2009021111190.56@tvgsbejvaqbjf.bet>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, KAM_ASCII_DIVIDERS, NICE_REPLY_A,
- RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_PASS,
- TXREP autolearn=no autolearn_force=no version=3.4.2
+ <20200902083818.GI4127@calimero.vinschen.de>
+ <20200902195412.aa7f233231d893a7a065b691@nifty.ne.jp>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200902195412.aa7f233231d893a7a065b691@nifty.ne.jp>
+X-Provags-ID: V03:K1:2OyCmmUZifjgtC+maGqsjaid9zEjRnFxDz6XAxeD86noFfgZFoD
+ a2sJYGpCQyGpGQVomjd55hGBqGhhTasCq+A/0B+Zh3ll1QJV661qFAnh14ZSxqixJedRZ/O
+ X2Z9KWUarRIRh1XpeRMPPN31rbyDUJtKvqhyP9mxxqNhRtoXXRKiqa3x6EpDHCpFiSxdn3i
+ ilZZ6NqUNwJrHiYT8FivA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:eAaw+Rbucsg=:aD/dosyIpx3jNGL0kgC6Yb
+ fLdaFYAiBLn6Q9g3t6IYxEkkDCjvIgrszY1iTXrwSLNqg9NKBedy5hgpujRTajyAc0hnBX3rv
+ BMxMPG9/KxcUys3YynTZzGsXvsf00UuuSq6vVbE1C+JqpaACkAcSDvAVZkUQvdgn7/jP/LMF2
+ CryZAQfWp9XgrpezaV7vErdv8oaD6V+B4et/kqJdQ0YMU/tww1lQa28eeNIRJyHwu5Ufsfc6M
+ jpRUvlIyWnlUmM5nbQGuUYVP6g6lBby+/UNvtIVoHncqZc9M8N96W4V89ZL3Kd3IZMQ6nQzXt
+ 3qWAVtXSuEbet6PaL+KQ92ZSNhnqxIUd6FsxZ19WWRHzgAtdBVBqGRmyoD2eQQLbGmX5x0hop
+ JLtyR/NPUYjlQ6dV0rs7s9rXD7lQIr2J+GdqMcw6NEwuYzaP48eOWWL2+biCQjAEW2Gifjos1
+ JEPeeJIZSFYoQaw4KjMNvSQvawqRJA7FBrrlSPZw73r/7CH4dMZzFhwwBiu43tRmQeIfEr5nm
+ X6qhCf9c+dCmv6cyG5zFruBWiH7g9shAwZmAiI2eztSgvCT/CK/NkDykmsUqb20ygDxUQ1Pmt
+ n9RO2dxNQJt0vZqf0nJKrFKImsAVfuwK398qzaf4guWUGD2Sc8R82y5Sj3jyy8nBzNB8fFrSZ
+ kMJVV5iDx8XB+ApTfOKJXfZtEsXiYZZpm5msGYkQWW462e6Fpjp/lO/OcHF1KkYS2bLex/DMK
+ u9uBpbeeZ6rabh2h6lj2odfQWozNJlZh/xuHvE6PiUWwObrUcXqGGJfT9ro+kUWzUdAvYHN5L
+ l/ef6G1uYIzQNfyzfHCWZtRZxNc9/b4xfwgHSJ65ZNfnmPWZIinDAjpfAJa2HvtE+YdFgL46q
+ 0Zt0qV0RPGK72Hlx/PYw==
+X-Spam-Status: No, score=-105.6 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -45,82 +65,78 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 02 Sep 2020 14:52:22 -0000
+X-List-Received-Date: Wed, 02 Sep 2020 15:24:54 -0000
 
-On Wed, 2 Sep 2020 11:12:53 +0200 (CEST)
-Johannes Schindelin wrote:
-> On Wed, 2 Sep 2020, Takashi Yano wrote:
-> > OK, I will check Angular/CLI next. But I am not familier with
-> > Agnular/CLI. Could you please provide simple steps to reproduce
-> > the problem?
+On Sep  2 19:54, Takashi Yano via Cygwin-patches wrote:
+> Hi Corinna,
 > 
-> Here is a report: https://github.com/git-for-windows/git/issues/2793
+> On Wed, 2 Sep 2020 10:38:18 +0200
+> Corinna Vinschen wrote:
+> > On Sep  2 10:30, Corinna Vinschen wrote:
+> > > Ok guys, I'm not opposed to this change in terms of its result,
+> > > but I'm starting to wonder why all this locale code in fhandler_tty
+> > > is necessary at all.
+> > > 
+> > > I see that get_langinfo() calls __loadlocale and performs a lot of stuff
+> > > on the charsets which looks like duplicates of the initial_setlocale()
+> > > call performed at DLL startup.
+> > > 
+> > > If there's anything missing in the initial_setlocale() call which would
+> > > be required by the pseudo tty code?  What exactly is it?  The codepage?
+> > > And why can't we just add the info to cygheap->locale at initial_setlocale()
+> > > time so it's available at exec time without going through all this hassle
+> > > every time?
+> > > 
+> > > Apart from that, all this locale/charset/lcid stuff should be concentrated
+> > > in nlsfunc.cc ideally.
+> > 
+> > get_locale_from_env() and get_langinfo() should go away.  If we just
+> > need a codepage for get_ttyp ()->term_code_page, we should really find a
+> > way to do this from within internal_setlocale().
+> 
+> I looked into internal_setlocale() code, but I could not found
+> the code which handles thecode page. I found the code handling
+> the code page in __set_charset_from_locale() function in nlsfuncs.cc,
+> but it does not return code page itself. Could you please explain
+> more detail of your idea?
 
-I already read that thread, and I have try following step.
+I had none yet :)  I was just musing, without actually thinking about a
+solution.  But I think this isn't very complicated.  Given this is
+inside Cygwin, nothing keeps the function to have a well-defined
+side-effect, as in setting a (not yet existing) member "term_code_page"
+of cygheap->locale.
 
-1) Install node.js
-2) npm install --global @angular/cli
-3) ng new test-app
-4) cd test-app
-5) ng test --code-coverage
+Kind of like this:
 
-However, the output is very differnt from the bug report,
-and there seems to be no garbled output.
+diff --git a/winsup/cygwin/cygheap.h b/winsup/cygwin/cygheap.h
+index 8877cc358c39..2b84f4252071 100644
+--- a/winsup/cygwin/cygheap.h
++++ b/winsup/cygwin/cygheap.h
+@@ -341,6 +341,7 @@ struct cygheap_debug
+ struct cygheap_locale
+ {
+   mbtowc_p mbtowc;
++  UINT term_code_page;
+ };
+ 
+ struct user_heap_info
+diff --git a/winsup/cygwin/nlsfuncs.cc b/winsup/cygwin/nlsfuncs.cc
+index 668d7eb9e778..752f4239d911 100644
+--- a/winsup/cygwin/nlsfuncs.cc
++++ b/winsup/cygwin/nlsfuncs.cc
+@@ -1298,6 +1298,9 @@ __set_charset_from_locale (const char *locale, char *charset)
+ 			    LOCALE_IDEFAULTANSICODEPAGE | LOCALE_RETURN_NUMBER,
+ 			    (PWCHAR) &cp, sizeof cp))
+     cp = 0;
++  /* Store codepage in cygheap->locale so fhandler_tty can switch the
++     pseudo console to the correct codepage. */
++  cygheap->locale.term_code_page = cp ?: CP_UTF8;
+   /* Translate codepage and lcid to a charset closely aligned with the default
+      charsets defined in Glibc. */
+   const char *cs;
 
-The output is something like:
+Make sense?
 
-Compiling @angular/core : es2015 as esm2015
-Compiling @angular/animations : es2015 as esm2015
-Compiling @angular/compiler/testing : es2015 as esm2015
-Compiling @angular/common : es2015 as esm2015
-Compiling @angular/animations/browser : es2015 as esm2015
-Compiling @angular/core/testing : es2015 as esm2015
-Compiling @angular/animations/browser/testing : es2015 as esm2015
-Compiling @angular/platform-browser : es2015 as esm2015
-Compiling @angular/common/http : es2015 as esm2015
-Compiling @angular/common/testing : es2015 as esm2015
-Compiling @angular/router : es2015 as esm2015
-Compiling @angular/forms : es2015 as esm2015
-Compiling @angular/platform-browser-dynamic : es2015 as esm2015
-Compiling @angular/platform-browser/testing : es2015 as esm2015
-Compiling @angular/platform-browser/animations : es2015 as esm2015
-Compiling @angular/common/http/testing : es2015 as esm2015
-Compiling @angular/platform-browser-dynamic/testing : es2015 as esm2015
-Compiling @angular/router/testing : es2015 as esm2015
-10% building 2/2 modules 0 active02 09 2020 23:49:25.110:WARN [karma]: No captur
-ed browser, open http://localhost:9876/
-02 09 2020 23:49:25.118:INFO [karma-server]: Karma v5.0.9 server started at http
-://0.0.0.0:9876/
-02 09 2020 23:49:25.119:INFO [launcher]: Launching browsers Chrome with concurre
-ncy unlimited
-02 09 2020 23:49:25.125:INFO [launcher]: Starting browser Chrome
-92% additional asset processing copy-webpack-plugin02 09 2020 23:49:34.003:WARN
-[karma]: No captured browser, open http://localhost:9876/
-02 09 2020 23:49:34.907:INFO [Chrome 85.0.4183.83 (Windows 10)]: Connected on so
-cket z7khH23JfW4v-_TtAAAA with id 59608191
-Chrome 85.0.4183.83 (Windows 10): Executed 3 of 3 SUCCESS (0.62 secs / 0.273 sec
-s)
-TOTAL: 3 SUCCESS
-TOTAL: 3 SUCCESS
-TOTAL: 3 SUCCESS
 
-=============================== Coverage summary ===============================
-Statements   : 100% ( 6/6 )
-Branches     : 100% ( 0/0 )
-Functions    : 100% ( 0/0 )
-Lines        : 100% ( 5/5 )
-================================================================================
-
-What's wrong?
-
-> But why do you want to look into Angular/CLI? Do you really think that it
-> makes sense to try to fix every console app out there? Really? Wouldn't it
-> make more sense to just accept that there are many console applications
-> that are broken by the recent change, and accommodate them in the Cygwin
-> runtime? That would take substantially less time.
-
-It is important to know what's happning actually to fix the issue.
-Superficial patch makes the problem more complicated.
-
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+Thanks,
+Corinna
