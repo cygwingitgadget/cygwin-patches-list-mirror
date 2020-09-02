@@ -1,54 +1,33 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
- by sourceware.org (Postfix) with ESMTPS id 974D4384C004
- for <cygwin-patches@cygwin.com>; Wed,  2 Sep 2020 08:38:20 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 974D4384C004
-Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([217.91.18.234]) by
- mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MUp8r-1k4HRi1Lnt-00Qgy7 for <cygwin-patches@cygwin.com>; Wed, 02 Sep 2020
- 10:38:19 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id C92B2A81009; Wed,  2 Sep 2020 10:38:18 +0200 (CEST)
-Date: Wed, 2 Sep 2020 10:38:18 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com
+ [210.131.2.83])
+ by sourceware.org (Postfix) with ESMTPS id A4BB2386EC47
+ for <cygwin-patches@cygwin.com>; Wed,  2 Sep 2020 09:41:29 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org A4BB2386EC47
+Received: from Express5800-S70 (v038192.dynamic.ppp.asahi-net.or.jp
+ [124.155.38.192]) (authenticated)
+ by conssluserg-04.nifty.com with ESMTP id 0829ewAm030348
+ for <cygwin-patches@cygwin.com>; Wed, 2 Sep 2020 18:40:58 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 0829ewAm030348
+X-Nifty-SrcIP: [124.155.38.192]
+Date: Wed, 2 Sep 2020 18:41:04 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 3/3] fhandler_pty_slave::setup_locale: respect charset ==
- "UTF-8"
-Message-ID: <20200902083818.GI4127@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH 3/3] fhandler_pty_slave::setup_locale: respect charset
+ == "UTF-8"
+Message-Id: <20200902184104.a4a754ab3827352eab126e5c@nifty.ne.jp>
+In-Reply-To: <20200902083014.GH4127@calimero.vinschen.de>
 References: <nycvar.QRO.7.76.6.2009011818560.56@tvgsbejvaqbjf.bet>
  <20200902083014.GH4127@calimero.vinschen.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200902083014.GH4127@calimero.vinschen.de>
-X-Provags-ID: V03:K1:cGVCbXrYVheOtFCytpymJz/kUbqUFTXXQbCjpmdghDln8JYCurl
- jkmbpv3XwXL/BvDscORQqMfnSs6m1rYbYgfSI+Adq1P7k3Ay/AH/RedwYbbDrVmeWPRJJJq
- m7bvLN7y2NO8XxJ+cd3FcVl9Cx3Kfprj/heqL1bMI0s8rAMnShRC0hqjyX42wReTjVvcU8J
- P+r3mhFBXgcQR9kUlaNvw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:606LeOwsVt8=:lSsAM6zXg3bTdW+n3NHYYo
- vNYXLV13aJoXT09GDzJ0Lox8JvD+JCTOjYcdR+IFVG0mPVz11ZAPQDNKdHbFislBtDSBLA+rG
- wUsyc1mcpBkrn64sGcmy3FVs9izvGC3mOuUuv+OIBZclIO1XE9S/7XBfvIl3ghBu8jgPLHPY+
- OyxuMwwX3hQGD3a3JYU2igJK+LoD0l23+TGfX+CsrhkUdiU/m9wqXGrDKMIk1Atx9RcDRNoKM
- lyJ5WFtc8h9VZAJbOlKk9hFZVNnUWIq9OOB0CWjwyBXopjbC7CCpfG2KVue0apX2tAlrGLb/l
- v5LDYbM1V62RiljC9yvH8LPVitIzP1YoQgPAtHHdq85FXCUY4oGXU2bI765d13Oqi3VVA8v5U
- oz95qNcwuZyZG8qxxd0ZARiNbssRZ2fXQO6+5h9khYmEztvCTpCzwH0lzjOjRgFVhDfpgGquU
- RIJ0LC4JA4brYf+GD2T0gfWIbMpInl9J92IMmCotONzRxvHvuG/d3UlowR3wUwFMN2KoaNk7v
- Ey68JanNJ80rxrfx+sSnFaUGTogWKfyfKMiAPWFA5ssEeHQzY2vJ3PyJGxAp6rJdwDKCPAEzr
- kXTUpMU91w6JEcEgf9xWcfStzbUcunXjX0UW751ZgImFd5w/nB8P7HZph6L1rogwLD+Y6Z2Fw
- byutgXn3sdQC6PcgHMETE9nJrSEtM4Qr1exKRcjqNwoKeDRGUePvfF4cLZRNDFqv48hd5DnPE
- MbyJn1Dj231ZuHCAC4EuGWWr3yCq4HW0UXcstN9pxZ+1FSjCPstbnOFUdzc0Vf0WIcvJHNC6D
- z9j8yhSgdWrwLsf+jqxF1t3WDsRiLlWvom7/OLdnxJMsydCuXIR//LyaeKbxWq10wHCcN60Y0
- QhZO4pllLWOtXP74ctcQ==
-X-Spam-Status: No, score=-100.3 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, NICE_REPLY_A,
+ RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H4,
+ RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_PASS,
+ TXREP autolearn=no autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -63,9 +42,10 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 02 Sep 2020 08:38:22 -0000
+X-List-Received-Date: Wed, 02 Sep 2020 09:41:33 -0000
 
-On Sep  2 10:30, Corinna Vinschen wrote:
+On Wed, 2 Sep 2020 10:30:14 +0200
+Corinna Vinschen wrote:
 > On Sep  1 18:19, Johannes Schindelin wrote:
 > > When `LANG=en_US.UTF-8`, the detected `LCID` is 0x0409, which is
 > > correct, but after that (at least if Pseudo Console support is enabled),
@@ -97,25 +77,36 @@ On Sep  2 10:30, Corinna Vinschen wrote:
 > >  1 file changed, 9 insertions(+)
 > 
 > Ok guys, I'm not opposed to this change in terms of its result,
-> but I'm starting to wonder why all this locale code in fhandler_tty
-> is necessary at all.
-> 
-> I see that get_langinfo() calls __loadlocale and performs a lot of stuff
-> on the charsets which looks like duplicates of the initial_setlocale()
-> call performed at DLL startup.
-> 
-> If there's anything missing in the initial_setlocale() call which would
-> be required by the pseudo tty code?  What exactly is it?  The codepage?
-> And why can't we just add the info to cygheap->locale at initial_setlocale()
-> time so it's available at exec time without going through all this hassle
-> every time?
-> 
-> Apart from that, all this locale/charset/lcid stuff should be concentrated
-> in nlsfunc.cc ideally.
 
-get_locale_from_env() and get_langinfo() should go away.  If we just
-need a codepage for get_ttyp ()->term_code_page, we should really find a
-way to do this from within internal_setlocale().
+I am sorry, but I cannot agree with Johannes's patch.
 
+For example, code page in Japan is CP932 by default.
+In this case, cmd.exe, netsh.exe and so on are generate
+messages in Japanese.
 
-Corinna
+If the code page is set to CP_UTF8, messages from such
+commands changes to english. I guess similar things happen
+for other locales.
+
+I do not prefer this result.
+
+Furthermore, I looked into the issue:
+https://github.com/git-for-windows/git/issues/2734
+and I found that git-for-windows always use utf-8
+encoding even if the locale is ja_JP.CP932.
+It does not change coding based on locale or code
+page.
+
+Even with Johannes's patch, if mintty is started with
+locale ja_JP.CP932, the file name will be garbled
+bacause SetConsoleOutputCP(CP_UTF8) will not be called.
+
+IMHO, it is the problem of git-for-windows rather
+than cygwin and msys2.
+
+To make current version of git-for-windows work, it is
+necessary to set code page to CP_UTF8 regardless locale.
+This does not make sense at all.
+
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
