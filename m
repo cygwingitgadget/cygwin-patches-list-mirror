@@ -1,60 +1,52 @@
-Return-Path: <johannes.schindelin@gmx.de>
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by sourceware.org (Postfix) with ESMTPS id A3F5E3959CB6
- for <cygwin-patches@cygwin.com>; Tue,  1 Sep 2020 19:50:27 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org A3F5E3959CB6
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+ by sourceware.org (Postfix) with ESMTPS id 513F5384C004
+ for <cygwin-patches@cygwin.com>; Wed,  2 Sep 2020 08:30:17 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 513F5384C004
 Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=gmx.de
+ dmarc=none (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org;
- spf=pass smtp.mailfrom=johannes.schindelin@gmx.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1598989826;
- bh=wMPcy3XbRNJKxxeWi8UqIZhG5XQKFP00u+MEVC8prvo=;
- h=X-UI-Sender-Class:Date:From:To:Subject;
- b=k74xDf1NM/gSzkLcxa3uyvl+ajh3KKC5VRkLOhV2w1dx0/Rfdrekb+QWsJVIyxnQy
- LikR1ABSvHirHusplH+DuFFbQlndLVJb7RYovdaYoIPpLiXDlBNcCIN+3RUKyG/aLM
- K2k+KXhpCTOZQMhQzmnTndXpffft/mb/1ogKf4gA=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [172.18.169.176] ([89.1.214.118]) by mail.gmx.com (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MoO6C-1kxFVK1K5w-00olVW for
- <cygwin-patches@cygwin.com>; Tue, 01 Sep 2020 21:50:26 +0200
-Date: Tue, 1 Sep 2020 18:19:16 +0200 (CEST)
-From: Johannes Schindelin <johannes.schindelin@gmx.de>
-X-X-Sender: virtualbox@gitforwindows.org
+ spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
+Received: from calimero.vinschen.de ([217.91.18.234]) by
+ mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1M3lgJ-1kCZD23OVv-000skR for <cygwin-patches@cygwin.com>; Wed, 02 Sep 2020
+ 10:30:15 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 0ABEFA81009; Wed,  2 Sep 2020 10:30:14 +0200 (CEST)
+Date: Wed, 2 Sep 2020 10:30:14 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH 3/3] fhandler_pty_slave::setup_locale: respect charset ==
+Subject: Re: [PATCH 3/3] fhandler_pty_slave::setup_locale: respect charset ==
  "UTF-8"
-Message-ID: <nycvar.QRO.7.76.6.2009011818560.56@tvgsbejvaqbjf.bet>
-User-Agent: Alpine 2.21.1 (DEB 209 2017-03-23)
+Message-ID: <20200902083014.GH4127@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <nycvar.QRO.7.76.6.2009011818560.56@tvgsbejvaqbjf.bet>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Provags-ID: V03:K1:VtoDZoVd9eDVNVDOQxd/R/hF5TE+GulL6foWVOYHajj2IE52YZw
- nSeX40PjPepqAr16nR4PD/9X/KFhfIEbNvFC4wo4N/eSvjt1g0P11O/kHyUD2GxsNPVMvef
- 9SvKgpfCntYQYSfTmKjQBKALI4ic3Y80WRnUKp1w25v3zpfJtF2sjeahk1sDEiG48gdkfQR
- zULKNsfUqczSka/2s6LvQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:rxwJE7h6/CI=:i8hzNJEydcVlk0o8NzXhRn
- eFp2sNGhDzDy0KM0A9hCSLfq6sdVTkHNflU+WpFrYxEWLxDjh/J/TUjvtV2U1s4NEwVgYzosF
- NRTJPvI9hymK8PJa2dn86tcAzn/WGOzGzxtwSqFZzeWB5W/dRAUeqDXLocerBOdlyddD9duYr
- srAD6yHthrLhRpw/yXftx0aWjd2TLPw53JEws+fJSdTD4vn+3eb805HiFJFK8NGvayrop+eJT
- KzYcBYVOjCPArv0HnlUqH0N7vrlyezjfhwhb9KdVK0das8d+70679K0LVh5kjONlxDsAHIul2
- 91Nj0rXQZtLisXmoSzRdzfE7rqWfKIIs9k+6Zyt7Xt2ZznOKD3iClesZlMz1k4BTC3BEUyzng
- HZE0MURnUJLDoLwbKPr1NjuM3jB0PjBD7tJ+oFmvxDMBK0KreL3hO25chY+Po535mzEqotBmc
- He8XBJF5KIBgi/raVe8UNytsMLPwCGQZgiLnnObv/wc7kl353znS16YJlxXuTvS3dLo4INZu0
- 8yn4rxXCuuE+3jJPZ55sIGS2msWtNtMdDqazDHHuWMWj7QdRujQJm/APx1R2cBQBPPXuJm3cY
- 2kkZgZb/O3GhOBuurqP9M4r9VYIbcUcUsg2aMk7BxBvVKvPNDixVjPft7hHItBxFqfIbw+TP2
- KvPXB0lg2TqyxZ5ZWcUcInCPkfkttTCRv7WUuR3FjW5xwrJcLQDSfKiuqVPt61PR5xTNDxWTU
- G7gFsv37kxHU/t+TFSgMM7FygGSePSm7Idh1hxVUzFt/bZ/ocON2L7AxL4AWxxSBmG3WN/ehS
- Yt22W1f4HcrYhP8Woe4ud+OyssRtpuzucWCOhO7zc+zw8GQ27s9owi1j1da3Yn3Tv7bq3zrtp
- tp+wJQBibQ0iPb18BkP/vzGXe2E7wUb84jo9EVjbIpkVRM6xKVtQtoVsyvYGtmLJsArrWfKRg
- tH4/aV6qV7SOMzIC/IKjU4XpxEP1jZjVL7D0+bsfYmxr5reH8QJwVB8BNAhNz//OvDeb/ig3h
- l0AiwxogD5thg4P7x/dlwbzmFUPixhBr2eepEiTWWUVtCmh+pgqbKXp/XeiNQjH960NDcmXY8
- OWU3NknUBNu84oZ0gU5PGWcluBeRgDRgwGUfSAUvvdJWjswLbbeJpHFG2gmKFuETCz2Mf2yl4
- xVS+AjE+ZXzVkikebm/ssfoEXwdcdR48IqEmIKlWW1V3g1qR/q5OZb8GEGoHzVNFgR9wlhR2E
- GCSOSHKk/Vl5QJdtFdvxlBO5/lTT9UYPSNmH5ag==
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00, DATE_IN_PAST_03_06,
- DKIM_SIGNED, DKIM_VALID, FREEMAIL_FROM, GIT_PATCH_0, RCVD_IN_BARRACUDACENTRAL,
- RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_PASS,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <nycvar.QRO.7.76.6.2009011818560.56@tvgsbejvaqbjf.bet>
+X-Provags-ID: V03:K1:lDioc3rcBJTFU/Wo3/oPtK0XvPJeCW/D5r2LvdINUs+Wn7U/mgV
+ aRqAS3duEebVkxVooh/OD8xmKakdA5guUwkygurqyAkxaeo9/vyefG7P3p9lQyVpb8mXrPJ
+ sGT9WU+ZozjjfwEHqywOvnqvMPryhi8woe+LemHau0R9KOxntXbXHy+e0e+AjyFmsXpF8Lk
+ c5s9t00lcPKRpbA08q1Uw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:BiZ4MTZNGZg=:m9pQ/FuM4JLzlXoNfEGaHF
+ 5T59BL2hqoz2q5vbHEeKsG2OckFf8tIXvUvmlGKQ7o+RIXJKB/UcHdGt1MMvG7E7QJmux9fPx
+ wnF5vXS/oEutjeKv2XNxcjmHJ5l7t9n701Qlf8t8YqtqTD9SnNob7cIFmVMU+hbVR7iGYz/le
+ ukY/HoqGvHu+t7ps197dZxhMbFVG7eugoQhAPmpHeiSbZs4G8Oj5Izmd2nhwp3KcxAI+W2bsW
+ gDoil/XvnnIYtiuD1GbYRBC+m36BSloboMLKWKKblzHFZMsZPcZ5kxEsvlApxC0kuWxS+dDDq
+ D+9KQqz7SnIUSWY+kZu21Go7D729RYv9f28ju/CZo2mKN2XQQBNVuUaTmZfubLe+SD12wJ5lk
+ CWGIByH6ohyLaDtIBpZKgZSPHf5dvdJIhjtsBnXqzATUEp53ngMmRQ9B8lHZgiN2WQ9s0zyC3
+ OWA4aailjK7AoUZs0f+ClzgIZo0ZCt90i4DeC7asDvw6pW2lqyNR/4rkogrXOg1OcisTRxc22
+ SijEn+vI5YNQer+2b+yBNHZb2MkU69kES3adu16Xjd1ingEvZ8dNnwOcnYCH/6C/lxQGwME74
+ V/EpS84NNTxdLWQcLma7AVfmxxtJcJE1v79VFl0ec8OvqH7UQX4Q1B9w7z1iF0dWlLRSViP8H
+ 6DYT1q1gCse4o7uK/xAy6lSs/ZqSN85i1mnOcxY0UR7hMtUzJF+q1UDauJfHmjJuTdUyoR/ts
+ nQ3Fk0JdtGv9lv3FhNCUX2S7XBXo66R0/S0CM30DkZ0XKu2gEpttLPNAOcPrw+6GDZeox2lNs
+ bEpKVjbqEKnS/S51EZHBEL4954ZG5QpLTJwvBQVMTaCJN1zoSlxu5htJIIdENbfRiyDIcag5t
+ 79mQ1PjjXuqA7OiG5Eaw==
+X-Spam-Status: No, score=-100.3 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -70,57 +62,55 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 01 Sep 2020 19:50:29 -0000
+X-List-Received-Date: Wed, 02 Sep 2020 08:30:19 -0000
 
-When `LANG=3Den_US.UTF-8`, the detected `LCID` is 0x0409, which is
-correct, but after that (at least if Pseudo Console support is enabled),
-we try to find the default code page for that `LCID`, which is ASCII
-(437). Subsequently, we set the Console output code page to that value,
-completely ignoring that we wanted to use UTF-8.
+On Sep  1 18:19, Johannes Schindelin wrote:
+> When `LANG=en_US.UTF-8`, the detected `LCID` is 0x0409, which is
+> correct, but after that (at least if Pseudo Console support is enabled),
+> we try to find the default code page for that `LCID`, which is ASCII
+> (437). Subsequently, we set the Console output code page to that value,
+> completely ignoring that we wanted to use UTF-8.
+> 
+> Let's not ignore the specifically asked-for UTF-8 character set.
+> 
+> While at it, let's also set the Console output code page even if Pseudo
+> Console support is disabled; contrary to the behavior of v3.0.7, the
+> Console output code page is not ignored in that case.
+> 
+> The most common symptom would be that console applications which do not
+> specifically call `SetConsoleOutputCP()` but output UTF-8-encoded text
+> seem to be broken with v3.1.x when they worked plenty fine with v3.0.x.
+> 
+> This fixes https://github.com/msys2/MSYS2-packages/issues/1974,
+> https://github.com/msys2/MSYS2-packages/issues/2012,
+> https://github.com/rust-lang/cargo/issues/8369,
+> https://github.com/git-for-windows/git/issues/2734,
+> https://github.com/git-for-windows/git/issues/2793,
+> https://github.com/git-for-windows/git/issues/2792, and possibly quite a
+> few others.
+> 
+> Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
+> ---
+>  winsup/cygwin/fhandler_tty.cc | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 
-Let's not ignore the specifically asked-for UTF-8 character set.
+Ok guys, I'm not opposed to this change in terms of its result,
+but I'm starting to wonder why all this locale code in fhandler_tty
+is necessary at all.
 
-While at it, let's also set the Console output code page even if Pseudo
-Console support is disabled; contrary to the behavior of v3.0.7, the
-Console output code page is not ignored in that case.
+I see that get_langinfo() calls __loadlocale and performs a lot of stuff
+on the charsets which looks like duplicates of the initial_setlocale()
+call performed at DLL startup.
 
-The most common symptom would be that console applications which do not
-specifically call `SetConsoleOutputCP()` but output UTF-8-encoded text
-seem to be broken with v3.1.x when they worked plenty fine with v3.0.x.
+If there's anything missing in the initial_setlocale() call which would
+be required by the pseudo tty code?  What exactly is it?  The codepage?
+And why can't we just add the info to cygheap->locale at initial_setlocale()
+time so it's available at exec time without going through all this hassle
+every time?
 
-This fixes https://github.com/msys2/MSYS2-packages/issues/1974,
-https://github.com/msys2/MSYS2-packages/issues/2012,
-https://github.com/rust-lang/cargo/issues/8369,
-https://github.com/git-for-windows/git/issues/2734,
-https://github.com/git-for-windows/git/issues/2793,
-https://github.com/git-for-windows/git/issues/2792, and possibly quite a
-few others.
+Apart from that, all this locale/charset/lcid stuff should be concentrated
+in nlsfunc.cc ideally.
 
-Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
-=2D--
- winsup/cygwin/fhandler_tty.cc | 9 +++++++++
- 1 file changed, 9 insertions(+)
 
-diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index 06789a500..414c26992 100644
-=2D-- a/winsup/cygwin/fhandler_tty.cc
-+++ b/winsup/cygwin/fhandler_tty.cc
-@@ -2859,6 +2859,15 @@ fhandler_pty_slave::setup_locale (void)
-   char charset[ENCODING_LEN + 1] =3D "ASCII";
-   LCID lcid =3D get_langinfo (locale, charset);
-
-+  /* Special-case the UTF-8 character set */
-+  if (strcasecmp (charset, "UTF-8") =3D=3D 0)
-+    {
-+      get_ttyp ()->term_code_page =3D CP_UTF8;
-+      SetConsoleCP (CP_UTF8);
-+      SetConsoleOutputCP (CP_UTF8);
-+      return;
-+    }
-+
-   /* Set console code page from locale */
-   if (get_pseudo_console ())
-     {
-=2D-
-2.27.0
-
+Thanks,
+Corinna
