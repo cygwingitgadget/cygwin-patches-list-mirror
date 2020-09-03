@@ -1,24 +1,24 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
- by sourceware.org (Postfix) with ESMTPS id 30A933857C62
- for <cygwin-patches@cygwin.com>; Wed,  2 Sep 2020 16:38:41 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 30A933857C62
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+ by sourceware.org (Postfix) with ESMTPS id 32065385043D
+ for <cygwin-patches@cygwin.com>; Thu,  3 Sep 2020 17:59:14 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 32065385043D
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org;
  spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
 Received: from calimero.vinschen.de ([217.91.18.234]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MIdaF-1kPOQN2ae5-00EfVJ for <cygwin-patches@cygwin.com>; Wed, 02 Sep 2020
- 18:38:38 +0200
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1N3Kc8-1kf0lu2OZO-010KfV for <cygwin-patches@cygwin.com>; Thu, 03 Sep 2020
+ 19:59:12 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id CC4A0A80D14; Wed,  2 Sep 2020 18:38:36 +0200 (CEST)
-Date: Wed, 2 Sep 2020 18:38:36 +0200
+ id 1BACFA83A7D; Thu,  3 Sep 2020 19:59:12 +0200 (CEST)
+Date: Thu, 3 Sep 2020 19:59:12 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH 3/3] fhandler_pty_slave::setup_locale: respect charset ==
  "UTF-8"
-Message-ID: <20200902163836.GL4127@calimero.vinschen.de>
+Message-ID: <20200903175912.GP4127@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
 References: <nycvar.QRO.7.76.6.2009011818560.56@tvgsbejvaqbjf.bet>
@@ -27,31 +27,32 @@ References: <nycvar.QRO.7.76.6.2009011818560.56@tvgsbejvaqbjf.bet>
  <20200902195412.aa7f233231d893a7a065b691@nifty.ne.jp>
  <20200902152450.GJ4127@calimero.vinschen.de>
  <20200903012500.640e36573c67328fc3e1bc70@nifty.ne.jp>
+ <20200902163836.GL4127@calimero.vinschen.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200903012500.640e36573c67328fc3e1bc70@nifty.ne.jp>
-X-Provags-ID: V03:K1:tMr7L5z+bEhfwhlcgtutm4d74++tKjwcn2k8kG3Ag+5RFTRxwYf
- fflUnVGih+14dxfaO65bkgFbOARKsyZL494zsB2/MUP5i1R6ouJ6ZdPAqgAsryt9HmxRR+z
- jQBt/dFMjn34RWTgdFZXJWWFa37rn1j7B52v7HKzNZzb79ADYjFO7qiUMu6/1heSYbfkNAx
- Add7m1XJd9EraSXykGpcw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ou++CAIqutM=:JmmsLGAVrgGKvu+PDrSGu4
- C8s6QlZnintJKQtO1bmi+DRx9feh3oXMKjPE+nuywBUG3JwUPFZOx0l7hYIyUwPyCS60hpUm9
- C0egRphLN11QudCJ8/WRc6VijmBwzBfC9iIQwyFNxWXfar+oDVoHO+QaXkoetm82+b7hx7S2y
- XwD1LPCILstBm4RzotTaIiMiU7LjXSByyovltxx9JrVvt1RHANJkQ+UJlEAP47dE+/b/pHPKE
- vRCaa4DoeBMheN8TjzzUA3N67jzX/8w6soIWB4zLL7ugzL0tmGogH6KL1O2p0CZgONrk1ymx6
- 99yRoy9mBGqIPYwfpQTsngyM6hWdpkLzxFRH9QX9KQI2mvgTIAEllb0oWYmS+7GnBb2fiV1jf
- GXiiW+nBAw2mTwU/RHni3Fmbo69y9rawp05MyzpBNjI7SDyDXrHq4NhzqkDaKwf8fXcCmRO8A
- Zvoljj/y6qiU2SWzI6cm3wCgsijkroGf7Ck2gCOitQv+ZNIgbE53rcqarLy1TqfTfYE17NMkz
- ououoq9ZOUfIzkFgHe6aSndvfJZvA++oEnzhoMIue4Uof0O/J/0QU8df7CvkAhrqEai3fnjrJ
- J71LP8dAgBdjq2YrXa/GNJOXQpPoCETvbWKwOz2Rb2qHPCfDEek90rA4klXBpHIJfksVdbCse
- X4VZgSw82KT/OfXrKAESzchO+2V/OE3mpNl27IMnLq4ZIQa0mYAkVwX6QV235Air9uXTUz7Vu
- x0+mJ/6HkQwP0UNJOSLN9zz7iTergfIsRi84eSUBHI+V9SIg2cYOmtGvYmgfYCQk58ke1jCAY
- sNbR/TzuWoK8siUpkAyrTDB+0yiaQkokMhaQbGYeHQSSLY93NnBPnnmIpFboUfRCHBcfu+T8T
- ZBot2jDzDirZOqWxVP2w==
-X-Spam-Status: No, score=-100.6 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+In-Reply-To: <20200902163836.GL4127@calimero.vinschen.de>
+X-Provags-ID: V03:K1:xtyKf+ljLkr6ZJOebEBdZ8bqjeXfnEAkbn7u+/otviYK9LhGZ7L
+ SwZrJON2xdLJcKVQFaTiKrmyaiQziKG9Xr2wNtRymKeIp+neRmQ4uLJ9Kbrv6OS2uWZucB9
+ r2CI/eW6pGiYPOMCBxrpozHkQawum5ROQ2QOjhmYzNxIyM1fs6wXUuXvkUH1u32Q6yY+jnR
+ VikAH1wD9gZceL4paQiaA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:SxdhjPelzWA=:W4LdlAUw7g83rm6n4GQa9P
+ S0P0tk63pUoEe29efeR7a9TTmBIRYEfdc3Z9DN6BlZG2e1CpwtQ6Lz4gJjvqzAC3SK9+amwpk
+ J7eMvM2/gWCX4syD1dAlvYoSMbP+VMVz6uqpGnx6YDWfnk8LaDiZbJ1DrJWzit2wVQ5dRi6t8
+ E5KuvNIHbrzXjGkwnqP7JoBwFSyjbvIlOXkh1onRLf8E+6EAg7KEPokKHTNfb1R4rDA5KNkKY
+ BcO2gqhCkvOfOf+6NowcMs6Cv+qNKrmmKNUzdwdXfMLRuM5309YWAhqjYC9d9HhRjZKSadcmq
+ 5HUk3djEJmEuA/2iNBrmGphRs3pQFF5heCoK7kDyunuKF8bW39VD7TVX7f0vgNb203Mgz8NPf
+ dRSbn1lV8a2xWve4iJdIpBstuXoJ2HCijkG2SU7AiWZmah6z+pHIufjsMHxD/z2NZj2M1djQW
+ 9Nl2foQwEuBOfmBpUm34k8WAlea60uuaUxnjtUZh9Xk7tLD2MsWtHTpQPaq0NPpZPycsyqSXM
+ VKYWpGQ8Py/EdHrwdypTRcFWkqt8feU1RsUDoZYtFvopuEG4mnSdSIIcrsoyCE1hpbPtY5TnO
+ zXeiY276BMmVz8bsSrA3eGhA2oPvPAv9Sa775nbHYkeiqBY/EGBG5U4D1Zf//BlNDBLArO18U
+ jWinqz1YZBCz4jkUWV1d5Egb3KfOxxBU+GQB6W0RDDbw6c41Rr1i3FpVbcT4ff0QYhFcL34Xi
+ JmHkonxJHgQV3aFtQbJ1Y6moxOHTjp3wkF+Pk8KK/9VPgUpliu15tSYTUTNdTjKCQIWwzscND
+ Cn9G+xahGoDVke41EFOQF12TdjDrWUbEBnqaiG49klgD3t/SJLTviqesAd+nSZPbnDieq8ZWv
+ 8dledj2IuwRimtbswgzw==
+X-Spam-Status: No, score=-100.2 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -67,50 +68,62 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 02 Sep 2020 16:38:42 -0000
+X-List-Received-Date: Thu, 03 Sep 2020 17:59:15 -0000
 
-Hi Takashi,
-
-On Sep  3 01:25, Takashi Yano via Cygwin-patches wrote:
-> Hi Corinna,
+On Sep  2 18:38, Corinna Vinschen wrote:
+> Hi Takashi,
 > 
-> On Wed, 2 Sep 2020 17:24:50 +0200
-> Corinna Vinschen  wrote:
-> > > > get_locale_from_env() and get_langinfo() should go away.  If we just
-> > > > need a codepage for get_ttyp ()->term_code_page, we should really find a
-> > > > way to do this from within internal_setlocale().
+> On Sep  3 01:25, Takashi Yano via Cygwin-patches wrote:
+> > Hi Corinna,
+> > 
+> > On Wed, 2 Sep 2020 17:24:50 +0200
+> > Corinna Vinschen  wrote:
+> > > > > get_locale_from_env() and get_langinfo() should go away.  If we just
+> > > > > need a codepage for get_ttyp ()->term_code_page, we should really find a
+> > > > > way to do this from within internal_setlocale().
+> > > > 
+> > > > I looked into internal_setlocale() code, but I could not found
+> > > > the code which handles thecode page. I found the code handling
+> > > > the code page in __set_charset_from_locale() function in nlsfuncs.cc,
+> > > > but it does not return code page itself. Could you please explain
+> > > > more detail of your idea?
 > > > 
-> > > I looked into internal_setlocale() code, but I could not found
-> > > the code which handles thecode page. I found the code handling
-> > > the code page in __set_charset_from_locale() function in nlsfuncs.cc,
-> > > but it does not return code page itself. Could you please explain
-> > > more detail of your idea?
-> > 
-> > I had none yet :)  I was just musing, without actually thinking about a
-> > solution.  But I think this isn't very complicated.  Given this is
-> > inside Cygwin, nothing keeps the function to have a well-defined
-> > side-effect, as in setting a (not yet existing) member "term_code_page"
-> > of cygheap->locale.
-> > 
-> > Kind of like this:
-> > [...]
-> I have tried your code, however, it does not work as expected.
-> It seems that __set_charset_from_locale() is not called.
-> cygheap->locale.term_code_page is always 0.
+> > > I had none yet :)  I was just musing, without actually thinking about a
+> > > solution.  But I think this isn't very complicated.  Given this is
+> > > inside Cygwin, nothing keeps the function to have a well-defined
+> > > side-effect, as in setting a (not yet existing) member "term_code_page"
+> > > of cygheap->locale.
+> > > 
+> > > Kind of like this:
+> > > [...]
+> > I have tried your code, however, it does not work as expected.
+> > It seems that __set_charset_from_locale() is not called.
+> > cygheap->locale.term_code_page is always 0.
+> 
+> Ah, right!  Take a look into newlib/libc/locale/locale.c, function
+> __loadlocale().  This function is called from _setlocale_r().  However,
+> it calls __set_charset_from_locale() *only* if the charset isn't already
+> given explicitely in the LC_* or LANG string, because otherwise we
+> already know the charset, after all.
+> 
+> Darn!  That foils my plans for world domination...
+> 
+> > Let me consider a while.
+> 
+> Thanks, I'll do the same.  I'd really like to simplify this stuff
+> and doing the locale shuffle in two entirely different locations
+> at different times is prone to getting out of sync.
 
-Ah, right!  Take a look into newlib/libc/locale/locale.c, function
-__loadlocale().  This function is called from _setlocale_r().  However,
-it calls __set_charset_from_locale() *only* if the charset isn't already
-given explicitely in the LC_* or LANG string, because otherwise we
-already know the charset, after all.
+The only idea I had so far was, changing the way __set_charset_from_locale
+works from within _setlocale_r:
 
-Darn!  That foils my plans for world domination...
+We could add a Cygwin-specific function only fetching the codepage and
+call it unconditionally from _setlocale_r.  __set_charset_from_locale is
+called with a new parameter "codepage", so it doesn't have to fetch the
+CP by itself, but it's still only called from _setlocale_r if necessary.
 
-> Let me consider a while.
-
-Thanks, I'll do the same.  I'd really like to simplify this stuff
-and doing the locale shuffle in two entirely different locations
-at different times is prone to getting out of sync.
+Would that be sufficient?  The CP conversion from 20127/ASCII to 65001/UTF8
+could be done at the point the codepage is actually required.
 
 
 Corinna
