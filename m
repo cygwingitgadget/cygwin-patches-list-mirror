@@ -1,51 +1,58 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
- by sourceware.org (Postfix) with ESMTPS id 9196E386F424
- for <cygwin-patches@cygwin.com>; Fri,  4 Sep 2020 12:54:12 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 9196E386F424
+Return-Path: <brian.inglis@systematicsw.ab.ca>
+Received: from smtp-out-no.shaw.ca (smtp-out-no.shaw.ca [64.59.134.12])
+ by sourceware.org (Postfix) with ESMTPS id 84003385700D
+ for <cygwin-patches@cygwin.com>; Fri,  4 Sep 2020 14:05:16 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 84003385700D
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=SystematicSw.ab.ca
 Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([217.91.18.234]) by
- mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MQdtO-1jsmzV0VFu-00Ngia for <cygwin-patches@cygwin.com>; Fri, 04 Sep 2020
- 14:54:11 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 95074A83A87; Fri,  4 Sep 2020 14:54:10 +0200 (CEST)
-Date: Fri, 4 Sep 2020 14:54:10 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: create install dir for libs
-Message-ID: <20200904125410.GR4127@calimero.vinschen.de>
+ spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
+Received: from [192.168.1.104] ([24.64.172.44]) by shaw.ca with ESMTP
+ id ECL3kuh73ng7KECL5kWavF; Fri, 04 Sep 2020 08:05:15 -0600
+X-Authority-Analysis: v=2.3 cv=ecemg4MH c=1 sm=1 tr=0
+ a=kiZT5GMN3KAWqtYcXc+/4Q==:117 a=kiZT5GMN3KAWqtYcXc+/4Q==:17
+ a=IkcTkHD0fZMA:10 a=wpI6bJtTXzhJjXI-IrUA:9 a=QEXdDO2ut3YA:10
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <vrit8sdpaezo.fsf@gmail.com>
+Subject: Re: [PATCH 3/3] fhandler_pty_slave::setup_locale: respect charset ==
+ "UTF-8"
+To: cygwin-patches@cygwin.com
+References: <nycvar.QRO.7.76.6.2009011818560.56@tvgsbejvaqbjf.bet>
+ <20200902083014.GH4127@calimero.vinschen.de>
+ <20200902083818.GI4127@calimero.vinschen.de>
+ <20200902195412.aa7f233231d893a7a065b691@nifty.ne.jp>
+ <20200902152450.GJ4127@calimero.vinschen.de>
+ <20200903012500.640e36573c67328fc3e1bc70@nifty.ne.jp>
+ <20200902163836.GL4127@calimero.vinschen.de>
+ <20200903175912.GP4127@calimero.vinschen.de>
+ <20200904182149.18cd752eef58c67ee8d39135@nifty.ne.jp>
+ <20200904124400.GQ4127@calimero.vinschen.de>
+From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
+Autocrypt: addr=Brian.Inglis@SystematicSw.ab.ca; prefer-encrypt=mutual;
+ keydata=
+ mDMEXopx8xYJKwYBBAHaRw8BAQdAnCK0qv/xwUCCZQoA9BHRYpstERrspfT0NkUWQVuoePa0
+ LkJyaWFuIEluZ2xpcyA8QnJpYW4uSW5nbGlzQFN5c3RlbWF0aWNTdy5hYi5jYT6IlgQTFggA
+ PhYhBMM5/lbU970GBS2bZB62lxu92I8YBQJeinHzAhsDBQkJZgGABQsJCAcCBhUKCQgLAgQW
+ AgMBAh4BAheAAAoJEB62lxu92I8Y0ioBAI8xrggNxziAVmr+Xm6nnyjoujMqWcq3oEhlYGAO
+ WacZAQDFtdDx2koSVSoOmfaOyRTbIWSf9/Cjai29060fsmdsDLg4BF6KcfMSCisGAQQBl1UB
+ BQEBB0Awv8kHI2PaEgViDqzbnoe8B9KMHoBZLS92HdC7ZPh8HQMBCAeIfgQYFggAJhYhBMM5
+ /lbU970GBS2bZB62lxu92I8YBQJeinHzAhsMBQkJZgGAAAoJEB62lxu92I8YZwUBAJw/74rF
+ IyaSsGI7ewCdCy88Lce/kdwX7zGwid+f8NZ3AQC/ezTFFi5obXnyMxZJN464nPXiggtT9gN5
+ RSyTY8X+AQ==
+Organization: Systematic Software
+Message-ID: <79c66b27-1d0c-28b7-b5e1-6822b08faf9e@SystematicSw.ab.ca>
+Date: Fri, 4 Sep 2020 08:05:13 -0600
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
+In-Reply-To: <20200904124400.GQ4127@calimero.vinschen.de>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <vrit8sdpaezo.fsf@gmail.com>
-X-Provags-ID: V03:K1:UQgzeAl6+UrnnFRNgti7cJzoVMxI2RDO3BvjBjk5f8b57wNeHYY
- JOFAP/VgOKBSYhnTe8XqApkT+NaIv1JgBpvfHe47CFGbJezVaWxm3RkcffsSZXn1twkSIC1
- +kYIepJHoXiUrtMDut+DbP9yj8ytOojV52K9r66BgmsMAye+vcUCNXUza511kLoDfHtrDR1
- hDGplTlh69DikAV7unwxQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ubvjyXKIALs=:5nL+pVaAkOcML7mzjCPdos
- SCJg1relDvhRphiWiH02SX6kFGZQa6x+L7zHyRXc7NEJCMYCUtqKb8vETf2A8krm/3iVnE5ws
- QHCMHNM8QDCp5+g4TstQ3BcjJtCwRpDcwSF5Qj/LW6eZ/vJNu6IDcyqpH7LYNz+ABGzM0pOd9
- 5RXoAXvnpZN5VkP2MKYvvZptRMGfPvD52Rp3xIZBfXTEVZRMaTIoI1z3BPAzEgmgouTPlNrWl
- hvbJr+QZmPbG3+7ujKA631f2RUlw4y9+BVA6oQW12wmtbiDULAeX5vhuIsQRHlsddY8O6lOOq
- CGZ28OHkpkeR+qsQPD0Ap1D/GCm7xYWiB4//l7CmeZU7nzqJJuVWpzmFwqBrwZpc8JquKIfwi
- WG/UayWXpYWZK5VnMz0r1cNuriqzmsykxohIx54H/E5IhGabydCFFfRAJ+6aY+CiaP9EWQvQG
- aUKZ+hQC6bB4Ocw34kPG/w4c6CSQaOPA8F5N3VBCMXSTjeKk+0L3H2j2X1zzwcMtkQ87wJUjn
- a7jxHOSu/e0JQMBHlmB7FISzswkJbEaZClAoMqe/tlndf9WngU9DqDLHsPQ38kt6iWQstdjGb
- E9dK7zo6ZUraPhOa56OoQ0CU/cB3Gike6t0MhcDRDCES6CXPw9QYjfEd1CQj4TQpBCmnkPJpj
- +Qs4abwEvWm/q/ewHyk1q2lDmAjWmb558iffZrnVq3FhSZ8hDVl9riWDrAOSdMRb+zirAF2W0
- v8dwTxWBqkouo7VAU0w59NSrsJcSryM4ph1EJBPXC7ORt/cBBen2p3yTYxTGQ3gIonX05UamP
- JnAJP+ybl+5nZoZzfJjj+cqRrIrUVGWTiPIiGYd2DjqrNaad6pJfknHG9JLSNxiXyHjKmIY9d
- 74zx1Yvvz37PFWLCCE4w==
-X-Spam-Status: No, score=-105.5 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfNoHi4P9aSBB0JYVZYRgWTGD+GAt7iDFNTcyDAKIOPS+C5i9S+tLQmuHpqP5rqqOyVHBnzIytD4NxK2X6GfjLm7mbh+nfnbqZ7oCGYpobQjMFzdTXEWa
+ 7ur9Lnl/bBLc36GNom2LG+Gq6HZmoGcdNkMeuUuQEAU2xU0HMkOBLcRf1nNwOYoUui4ddpDjngyBxA==
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
+ KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H3,
+ RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_NONE,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -61,31 +68,69 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 04 Sep 2020 12:54:14 -0000
+X-List-Received-Date: Fri, 04 Sep 2020 14:05:18 -0000
 
-On Aug 27 09:02, David McFarland via Cygwin-patches wrote:
-> This fixes a race in parallel installs.
-> ---
->  winsup/cygwin/Makefile.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On 2020-09-04 06:44, Corinna Vinschen wrote:
+> Hi Takashi,
 > 
-> diff --git a/winsup/cygwin/Makefile.in b/winsup/cygwin/Makefile.in
-> index fac81759e..ea0243033 100644
-> --- a/winsup/cygwin/Makefile.in
-> +++ b/winsup/cygwin/Makefile.in
-> @@ -600,7 +600,7 @@ install: install-libs install-headers install-man install-ldif install_target \
->  uninstall: uninstall-libs uninstall-headers uninstall-man
->  
->  install-libs: $(TARGET_LIBS)
-> -	@$(MKDIRP) $(DESTDIR)$(bindir)
-> +	@$(MKDIRP) $(DESTDIR)$(bindir) $(DESTDIR)$(tooldir)/lib
->  	$(INSTALL_PROGRAM) $(TEST_DLL_NAME) $(DESTDIR)$(bindir)/$(DLL_NAME); \
->  	for i in $^; do \
->  	    $(INSTALL_DATA) $$i $(DESTDIR)$(tooldir)/lib/`basename $$i` ; \
-> -- 
-> 2.28.0
+> On Sep  4 18:21, Takashi Yano via Cygwin-patches wrote:
+>> Hi Corinna,
+>>
+>> On Thu, 3 Sep 2020 19:59:12 +0200
+>> Corinna Vinschen wrote:
+>>> The only idea I had so far was, changing the way __set_charset_from_locale
+>>> works from within _setlocale_r:
+>>>
+>>> We could add a Cygwin-specific function only fetching the codepage and
+>>> call it unconditionally from _setlocale_r.  __set_charset_from_locale is
+>>> called with a new parameter "codepage", so it doesn't have to fetch the
+>>> CP by itself, but it's still only called from _setlocale_r if necessary.
+>>>
+>>> Would that be sufficient?  The CP conversion from 20127/ASCII to 65001/UTF8
+>>> could be done at the point the codepage is actually required.
+>>
+>> I think I have found the answer to your request.
+>> Patch attached. What do you think of this patch?
+>>
+>> Calling initial_setlocale() is necessary because
+>> nl_langinfo() always returns "ANSI_X3.4-1968"
+>> regardless locale setting if this is not called.
+> 
+> Well, this is correct.  Per POSIX, a standard-conformant application is
+> running in the "C" locale unless it calls setlocale() explicitely.
+> That's one reason Cygwin defaults to UTF-8 internally.  Everything,
+> including the terminal, is supposed to default to UTF-8.  That's the
+> most sane default, even if an application is not locale-aware.
+> 
+> So, to follow POSIX, initial_setlocale() is used to set up the
+> environment and command line stuff and then, before calling the
+> application's main, Cygwin calls _setlocale_r (_REENT, LC_CTYPE, "C");
+> to reset the apps default locale to "C".  That's why nl_langinfo()
+> returns "ANSI_X3.4-1968".
+> 
+> However, the initial_setlocale() call in dll_crt0_1 calls
+> internal_setlocale(), and *that* function sets the conversion functions
+> for the internal conversions.  What it *doesn't* do yet at the moment is
+> to store the charset name itself or, better, the equivalent codepage.
+> 
+> If we change that, setup_locale can simply go away.  Below is a patch
+> doing just that.  Can you please check if that works in your test
+> scenarios?
+> 
+> However, there's something which worries me.  Why do we need or set the
+> pseudo terminal codepage at all?  I see that you convert from MB charset
+> to MB charset and then use the result in WriteFile to the connecting
+> pipes.  Question is this: Why not just converting the strings via
+> sys_mbstowcs to a UTF-16 string and then send that over the line, using
+> WriteConsoleW for the final output to the console?  That would simplify
+> this stuff quite a bit, wouldn't it?  After all, for writing UTF-16 to
+> the console, we simply don't need to know or care for the console CP.
 
-Pushed.
+IIRC his locale was ja_JP.UTF-8 but he got English messages on CP 932!
 
-Thanks,
-Corinna
+-- 
+Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
+
+This email may be disturbing to some readers as it contains
+too much technical detail. Reader discretion is advised.
+[Data in IEC units and prefixes, physical quantities in SI.]
