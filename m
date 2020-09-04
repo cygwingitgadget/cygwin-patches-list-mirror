@@ -1,58 +1,64 @@
-Return-Path: <brian.inglis@systematicsw.ab.ca>
-Received: from smtp-out-no.shaw.ca (smtp-out-no.shaw.ca [64.59.134.12])
- by sourceware.org (Postfix) with ESMTPS id 84003385700D
- for <cygwin-patches@cygwin.com>; Fri,  4 Sep 2020 14:05:16 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 84003385700D
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=SystematicSw.ab.ca
+Return-Path: <Johannes.Schindelin@gmx.de>
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+ by sourceware.org (Postfix) with ESMTPS id EE47D385141D
+ for <cygwin-patches@cygwin.com>; Fri,  4 Sep 2020 14:48:10 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org EE47D385141D
 Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
-Received: from [192.168.1.104] ([24.64.172.44]) by shaw.ca with ESMTP
- id ECL3kuh73ng7KECL5kWavF; Fri, 04 Sep 2020 08:05:15 -0600
-X-Authority-Analysis: v=2.3 cv=ecemg4MH c=1 sm=1 tr=0
- a=kiZT5GMN3KAWqtYcXc+/4Q==:117 a=kiZT5GMN3KAWqtYcXc+/4Q==:17
- a=IkcTkHD0fZMA:10 a=wpI6bJtTXzhJjXI-IrUA:9 a=QEXdDO2ut3YA:10
-Reply-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 3/3] fhandler_pty_slave::setup_locale: respect charset ==
- "UTF-8"
-To: cygwin-patches@cygwin.com
+ dmarc=none (p=none dis=none) header.from=gmx.de
+Authentication-Results: sourceware.org;
+ spf=pass smtp.mailfrom=Johannes.Schindelin@gmx.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+ s=badeba3b8450; t=1599230886;
+ bh=YCHkJBmvGeaJdx+FnFHhxkZE8gutIOIctyijqe6DG40=;
+ h=X-UI-Sender-Class:Date:From:To:cc:Subject:In-Reply-To:References;
+ b=KYawU/Cql+W3lZsDA+iLP0ijEh/iTz+9wUQotQaEtfhGuIE99YW/CqtNmB/WcWoAl
+ 7QIsDNxoVqivPy52n3Amm9CXG3cWkc44pu/hIuZDTFpXEfAjWiHc9ovoDQWwfXSaAb
+ eqiygpR/tR2XNMz7QNIRZlsbo0bMDmX+KA+D0if4=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [172.18.169.176] ([89.1.212.11]) by mail.gmx.com (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N7zFZ-1ka0yj0ooF-0151v2; Fri, 04
+ Sep 2020 16:48:06 +0200
+Date: Fri, 4 Sep 2020 08:23:42 +0200 (CEST)
+From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
+X-X-Sender: virtualbox@gitforwindows.org
+To: Takashi Yano <takashi.yano@nifty.ne.jp>
+cc: cygwin-patches@cygwin.com
+Subject: Re: [PATCH 3/3] fhandler_pty_slave::setup_locale: respect charset
+ == "UTF-8"
+In-Reply-To: <20200904190337.cde290e4b690793ef6a0f496@nifty.ne.jp>
+Message-ID: <nycvar.QRO.7.76.6.2009040822000.56@tvgsbejvaqbjf.bet>
 References: <nycvar.QRO.7.76.6.2009011818560.56@tvgsbejvaqbjf.bet>
- <20200902083014.GH4127@calimero.vinschen.de>
- <20200902083818.GI4127@calimero.vinschen.de>
- <20200902195412.aa7f233231d893a7a065b691@nifty.ne.jp>
- <20200902152450.GJ4127@calimero.vinschen.de>
- <20200903012500.640e36573c67328fc3e1bc70@nifty.ne.jp>
- <20200902163836.GL4127@calimero.vinschen.de>
- <20200903175912.GP4127@calimero.vinschen.de>
- <20200904182149.18cd752eef58c67ee8d39135@nifty.ne.jp>
- <20200904124400.GQ4127@calimero.vinschen.de>
-From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
-Autocrypt: addr=Brian.Inglis@SystematicSw.ab.ca; prefer-encrypt=mutual;
- keydata=
- mDMEXopx8xYJKwYBBAHaRw8BAQdAnCK0qv/xwUCCZQoA9BHRYpstERrspfT0NkUWQVuoePa0
- LkJyaWFuIEluZ2xpcyA8QnJpYW4uSW5nbGlzQFN5c3RlbWF0aWNTdy5hYi5jYT6IlgQTFggA
- PhYhBMM5/lbU970GBS2bZB62lxu92I8YBQJeinHzAhsDBQkJZgGABQsJCAcCBhUKCQgLAgQW
- AgMBAh4BAheAAAoJEB62lxu92I8Y0ioBAI8xrggNxziAVmr+Xm6nnyjoujMqWcq3oEhlYGAO
- WacZAQDFtdDx2koSVSoOmfaOyRTbIWSf9/Cjai29060fsmdsDLg4BF6KcfMSCisGAQQBl1UB
- BQEBB0Awv8kHI2PaEgViDqzbnoe8B9KMHoBZLS92HdC7ZPh8HQMBCAeIfgQYFggAJhYhBMM5
- /lbU970GBS2bZB62lxu92I8YBQJeinHzAhsMBQkJZgGAAAoJEB62lxu92I8YZwUBAJw/74rF
- IyaSsGI7ewCdCy88Lce/kdwX7zGwid+f8NZ3AQC/ezTFFi5obXnyMxZJN464nPXiggtT9gN5
- RSyTY8X+AQ==
-Organization: Systematic Software
-Message-ID: <79c66b27-1d0c-28b7-b5e1-6822b08faf9e@SystematicSw.ab.ca>
-Date: Fri, 4 Sep 2020 08:05:13 -0600
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+ <20200904190337.cde290e4b690793ef6a0f496@nifty.ne.jp>
+User-Agent: Alpine 2.21.1 (DEB 209 2017-03-23)
 MIME-Version: 1.0
-In-Reply-To: <20200904124400.GQ4127@calimero.vinschen.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-CA
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfNoHi4P9aSBB0JYVZYRgWTGD+GAt7iDFNTcyDAKIOPS+C5i9S+tLQmuHpqP5rqqOyVHBnzIytD4NxK2X6GfjLm7mbh+nfnbqZ7oCGYpobQjMFzdTXEWa
- 7ur9Lnl/bBLc36GNom2LG+Gq6HZmoGcdNkMeuUuQEAU2xU0HMkOBLcRf1nNwOYoUui4ddpDjngyBxA==
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
- KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H3,
- RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_NONE,
+Content-Type: text/plain; charset=US-ASCII
+X-Provags-ID: V03:K1:YeylBpnG/4nyHCJSpU8H8RHCK6aR9OlVggEtVQHa7mkONJko/Ag
+ gJcMGD2J4fUXYzUn3Q4ML/u2KZa8aF5y+1N44Jlwi6YnMejl2oUgj9l//J1Hf8qSuRYmBAt
+ MrVCcx7LhYSePFkTPBT+k2p+q4ONPMhh4ffA5YqJOvW8uMTvn+/Iob95UClPlRQMAGf6V5b
+ CzJFSw6ymQ2BAUG4KCiqA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:7Qm155/rCeA=:nscmlSVTbN/0n1szgFG740
+ pfsNAKBifj0oytBSD0BctoNkYOPyjJ/6xHk31gFTD3t3x6Pzgis0oa5X1eDCCbIzJf7RhJZct
+ X3ALjwDVusHVJT0tP9QrJxkqIcOQ4EV0P4EmENxyL2aNB0BUlzSk0OlP0PiVA2iuFic7GYHR3
+ ZZnYvhz1xglVeiP+nIjmW7fleG3aug0FwDeXZDTGV2hxMXpXISrupbt3fcbCcJf/BqfPk691V
+ 6IZtQB5n8eMsT2ljQTb/S0LYsmKOb2jjqWJQ7E5kG4N+U0Wut59ah2YTvPtxi0fJR0Egl2pZ1
+ SogJM1N2RJPJSP4B1DCGaJutJChWKZS3cSmpqvXI8oPKN6ZTOsDREPFl1I6811tC7lldCd0NV
+ 8Oeiqh8m6gN0oSK2TTkbNKy0UYv0agJRs63aEVc8HMjvdmuAhLju/jwCGPeKJO4idDUrqHaB9
+ PoIeCMgO9ggFIjPl56FWC0C9uf0n3jSg2MGaKXQ4wVMBI07YnFDvpzjUHR0Bw0lOgyOQfwRt9
+ /kiFTe7o2y0o99EMBsJPmwA3TkrEMg9QbAMa3U+dFYd59sEqShfwdPROuIkYn4LML2EKhGAeT
+ x4+K8fX1+E472e6rnFYf4swsgCXqKRnT9jZwM/OT+f7cPecHm55q4fFdyz2rEwSLRyTbdfPlj
+ XzuI2vhhWT2+hAbAP1IojpIJoU+4sFRODoki0to9nrgdqvNS3ZxsCRWUsUrOuJekdjtBzNlp4
+ dcfr0z2aqVu0kAc0ZZu0w686Xqu3KnR1jnxBZUQVGtunZAZA3zZ5j/loIOEcznFJjEg8Rg4/h
+ SKwYwU1g3bJ6i3nm2XqxXbNYbYhHHA0/evXjtB+2TMR6xnXX5c+Dm+lEOGyztQHzL0tEHk/O9
+ VLrqX0nuWlOaPPCKXqn4ko0u1uaS8hjDnXMnhhVLuRPOZ6fRLCN22dGUztSwINEuOGcyB1sQG
+ sayCXrDa43mUQeBdbFizD1gzmzDEk+/HwseobHDhE+JglhNXW8K24iKa28A3We1Zo97qG6XVI
+ yD0V9HgfcjFyEgh8HMLZRa11kNpZFAd+ihAv+PdA60ubb+J5D7PIao/djGD6LXwruOYi7w5CD
+ z94WxsEixZqy91Lca5Crf119IqAS8o5/xen7kKTh9JoBp2QItxcXSlZ+NpwGIYCV3JUyZ4TQI
+ Kn4PzjvQyDF8egVrAn0w0xpV/vdH4elnI40rsjPVu/P/7NYm1PaoU6065AnFnkIFdgbmY7st1
+ Hf0aI+rxD+6gG2arsxr/83/09nFSVqn5/MGVcpw==
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00, DATE_IN_PAST_06_12,
+ DKIM_SIGNED, DKIM_VALID, FREEMAIL_FROM, GIT_PATCH_0, RCVD_IN_BARRACUDACENTRAL,
+ RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_PASS,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -68,69 +74,88 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 04 Sep 2020 14:05:18 -0000
+X-List-Received-Date: Fri, 04 Sep 2020 14:48:12 -0000
 
-On 2020-09-04 06:44, Corinna Vinschen wrote:
-> Hi Takashi,
-> 
-> On Sep  4 18:21, Takashi Yano via Cygwin-patches wrote:
->> Hi Corinna,
->>
->> On Thu, 3 Sep 2020 19:59:12 +0200
->> Corinna Vinschen wrote:
->>> The only idea I had so far was, changing the way __set_charset_from_locale
->>> works from within _setlocale_r:
->>>
->>> We could add a Cygwin-specific function only fetching the codepage and
->>> call it unconditionally from _setlocale_r.  __set_charset_from_locale is
->>> called with a new parameter "codepage", so it doesn't have to fetch the
->>> CP by itself, but it's still only called from _setlocale_r if necessary.
->>>
->>> Would that be sufficient?  The CP conversion from 20127/ASCII to 65001/UTF8
->>> could be done at the point the codepage is actually required.
->>
->> I think I have found the answer to your request.
->> Patch attached. What do you think of this patch?
->>
->> Calling initial_setlocale() is necessary because
->> nl_langinfo() always returns "ANSI_X3.4-1968"
->> regardless locale setting if this is not called.
-> 
-> Well, this is correct.  Per POSIX, a standard-conformant application is
-> running in the "C" locale unless it calls setlocale() explicitely.
-> That's one reason Cygwin defaults to UTF-8 internally.  Everything,
-> including the terminal, is supposed to default to UTF-8.  That's the
-> most sane default, even if an application is not locale-aware.
-> 
-> So, to follow POSIX, initial_setlocale() is used to set up the
-> environment and command line stuff and then, before calling the
-> application's main, Cygwin calls _setlocale_r (_REENT, LC_CTYPE, "C");
-> to reset the apps default locale to "C".  That's why nl_langinfo()
-> returns "ANSI_X3.4-1968".
-> 
-> However, the initial_setlocale() call in dll_crt0_1 calls
-> internal_setlocale(), and *that* function sets the conversion functions
-> for the internal conversions.  What it *doesn't* do yet at the moment is
-> to store the charset name itself or, better, the equivalent codepage.
-> 
-> If we change that, setup_locale can simply go away.  Below is a patch
-> doing just that.  Can you please check if that works in your test
-> scenarios?
-> 
-> However, there's something which worries me.  Why do we need or set the
-> pseudo terminal codepage at all?  I see that you convert from MB charset
-> to MB charset and then use the result in WriteFile to the connecting
-> pipes.  Question is this: Why not just converting the strings via
-> sys_mbstowcs to a UTF-16 string and then send that over the line, using
-> WriteConsoleW for the final output to the console?  That would simplify
-> this stuff quite a bit, wouldn't it?  After all, for writing UTF-16 to
-> the console, we simply don't need to know or care for the console CP.
+Hi Takashi,
 
-IIRC his locale was ja_JP.UTF-8 but he got English messages on CP 932!
+On Fri, 4 Sep 2020, Takashi Yano via Cygwin-patches wrote:
 
--- 
-Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
+> Hi Johannes and Corinna,
+>
+> On Tue, 1 Sep 2020 18:19:16 +0200 (CEST)
+> Johannes Schindelin wrote:
+>
+> > When `LANG=3Den_US.UTF-8`, the detected `LCID` is 0x0409, which is
+> > correct, but after that (at least if Pseudo Console support is enabled=
+),
+> > we try to find the default code page for that `LCID`, which is ASCII
+> > (437). Subsequently, we set the Console output code page to that value=
+,
+> > completely ignoring that we wanted to use UTF-8.
+> >
+> > Let's not ignore the specifically asked-for UTF-8 character set.
+> >
+> > While at it, let's also set the Console output code page even if Pseud=
+o
+> > Console support is disabled; contrary to the behavior of v3.0.7, the
+> > Console output code page is not ignored in that case.
+> >
+> > The most common symptom would be that console applications which do no=
+t
+> > specifically call `SetConsoleOutputCP()` but output UTF-8-encoded text
+> > seem to be broken with v3.1.x when they worked plenty fine with v3.0.x=
+.
+> >
+> > This fixes https://github.com/msys2/MSYS2-packages/issues/1974,
+> > https://github.com/msys2/MSYS2-packages/issues/2012,
+> > https://github.com/rust-lang/cargo/issues/8369,
+> > https://github.com/git-for-windows/git/issues/2734,
+> > https://github.com/git-for-windows/git/issues/2793,
+> > https://github.com/git-for-windows/git/issues/2792, and possibly quite=
+ a
+> > few others.
+> >
+> > Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
+> > ---
+> >  winsup/cygwin/fhandler_tty.cc | 9 +++++++++
+> >  1 file changed, 9 insertions(+)
+> >
+> > diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tt=
+y.cc
+> > index 06789a500..414c26992 100644
+> > --- a/winsup/cygwin/fhandler_tty.cc
+> > +++ b/winsup/cygwin/fhandler_tty.cc
+> > @@ -2859,6 +2859,15 @@ fhandler_pty_slave::setup_locale (void)
+> >    char charset[ENCODING_LEN + 1] =3D "ASCII";
+> >    LCID lcid =3D get_langinfo (locale, charset);
+> >
+> > +  /* Special-case the UTF-8 character set */
+> > +  if (strcasecmp (charset, "UTF-8") =3D=3D 0)
+> > +    {
+> > +      get_ttyp ()->term_code_page =3D CP_UTF8;
+> > +      SetConsoleCP (CP_UTF8);
+> > +      SetConsoleOutputCP (CP_UTF8);
+> > +      return;
+> > +    }
+> > +
+> >    /* Set console code page from locale */
+> >    if (get_pseudo_console ())
+> >      {
+> > --
+> > 2.27.0
+>
+> I would like to propose a counter patch attached.
+> What do you think of this patch?
+>
+> This patch does not treat UTF-8 as special.
 
-This email may be disturbing to some readers as it contains
-too much technical detail. Reader discretion is advised.
-[Data in IEC units and prefixes, physical quantities in SI.]
+Sure, but it only fixes the issue in `disable_pcon` mode in the current
+tip commit. That's because a new Pseudo Console is created for every
+spawned non-Cygwin console application, and that new Pseudo Console does
+_not_ have the code page set by your patch.
+
+I verified that this patch works around the issue in `disable_pcon` mode,
+which is good.
+
+Ciao,
+Dscho
