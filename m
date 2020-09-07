@@ -1,22 +1,22 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com
- [210.131.2.83])
- by sourceware.org (Postfix) with ESMTPS id 8361A38708DB
- for <cygwin-patches@cygwin.com>; Mon,  7 Sep 2020 13:41:25 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 8361A38708DB
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com
+ [210.131.2.82])
+ by sourceware.org (Postfix) with ESMTPS id EA3893851C25
+ for <cygwin-patches@cygwin.com>; Mon,  7 Sep 2020 18:24:10 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org EA3893851C25
 Received: from Express5800-S70 (v038192.dynamic.ppp.asahi-net.or.jp
  [124.155.38.192]) (authenticated)
- by conssluserg-04.nifty.com with ESMTP id 087DerKh019362
- for <cygwin-patches@cygwin.com>; Mon, 7 Sep 2020 22:40:53 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 087DerKh019362
+ by conssluserg-03.nifty.com with ESMTP id 087INtIU009039
+ for <cygwin-patches@cygwin.com>; Tue, 8 Sep 2020 03:23:55 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 087INtIU009039
 X-Nifty-SrcIP: [124.155.38.192]
-Date: Mon, 7 Sep 2020 22:40:56 +0900
+Date: Tue, 8 Sep 2020 03:24:00 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH 3/3] fhandler_pty_slave::setup_locale: respect charset
  == "UTF-8"
-Message-Id: <20200907224056.bdd8818cd7013248b41871a4@nifty.ne.jp>
-In-Reply-To: <20200907192713.54ca04cdc8264c6a03ce6f59@nifty.ne.jp>
+Message-Id: <20200908032400.a3ec467f2bcf8bbfb8f75694@nifty.ne.jp>
+In-Reply-To: <20200907183659.5150b2a8f296e4df13b1df1c@nifty.ne.jp>
 References: <20200902195412.aa7f233231d893a7a065b691@nifty.ne.jp>
  <20200902152450.GJ4127@calimero.vinschen.de>
  <20200903012500.640e36573c67328fc3e1bc70@nifty.ne.jp>
@@ -28,14 +28,14 @@ References: <20200902195412.aa7f233231d893a7a065b691@nifty.ne.jp>
  <20200904192235.GW4127@calimero.vinschen.de>
  <20200905174301.adbb3c147122fbe0636a0d56@nifty.ne.jp>
  <20200907082633.GC4127@calimero.vinschen.de>
- <20200907192713.54ca04cdc8264c6a03ce6f59@nifty.ne.jp>
+ <20200907183659.5150b2a8f296e4df13b1df1c@nifty.ne.jp>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00, DKIM_SIGNED,
  DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, NICE_REPLY_A,
- RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H4,
+ RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H3,
  RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_PASS,
  TXREP autolearn=no autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
@@ -52,53 +52,23 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 07 Sep 2020 13:41:28 -0000
+X-List-Received-Date: Mon, 07 Sep 2020 18:24:14 -0000
 
-Here is a summary of my points:
+On Mon, 7 Sep 2020 18:36:59 +0900
+Takashi Yano via Cygwin-patches <cygwin-patches@cygwin.com> wrote:
+> > This is really confusing me.  We never set the console codepage in the
+> > old pty code before, it was just pipes transmitting bytes.  Why do we
+> > suddenly have to handle native apps running in a console in this case?!?
+> 
+> This is actually not related to pseudo console. In Japanese environment,
+> cmd.exe output CP932 string by default. This caused gabled output in old
+> cygwin such as 3.0.7. The code for the case that pseudo console is
+> disabled is to fix this.
 
-[Senario 1]
-1) Start mintty (UTF-8).
-2) Start another mintty by 
-     mintty -o charset=SJIS
-   from the first mintty.
-
-[Senario 2]
-  int pm = getpt();
-  if (fork()) {
-    [do the master operations]
-  } else {
-    setsid();
-    ps = open(ptsname(pm), O_RDWR);
-    close(pm);
-    dup2(ps, 0);
-    dup2(ps, 1);
-    dup2(ps, 2);
-    close(ps);
-    setenv("LANG", "ja_JP.SJIS", 1);
-    [exec shell]
-  }
-
-
-Q1) cygheap or tty shared memory?
-
-Consider senario 1. If the term_code_page is in cygheap,
-it is inherited to child process. Therefore, the second
-mintty cannot update term_code_page while locale is changed.
-
-Consider senario 2. Since only the child process knows the
-locale, master (parent process) cannot get term_code_page
-if it is in cygheap.
-
-Q2) Is checking environment necessary?
-
-As for senario 2, setlocale() is not called. So it is
-necessary to check environment to know locale.
-
-Q3) Where and when should term_code_page be set?
-
-In senario 2, LANG is set just before exec() in the CHILD
-process. Therefore, term_code_page should be determined
-in the child_info_spawn:worker or in the execed process.
+If your question is "Why is GetConsoleOutputCP() used for
+non-console handle?", the answer is "I am not sure why, but
+it affected by codepage". Even with cygwin 3.0.7 which does
+not support pseudo console, chcp.com works.
 
 -- 
 Takashi Yano <takashi.yano@nifty.ne.jp>
