@@ -1,74 +1,66 @@
 Return-Path: <Johannes.Schindelin@gmx.de>
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
- by sourceware.org (Postfix) with ESMTPS id 09DE63861035
- for <cygwin-patches@cygwin.com>; Mon,  7 Sep 2020 21:08:12 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 09DE63861035
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+ by sourceware.org (Postfix) with ESMTPS id D112738460A2
+ for <cygwin-patches@cygwin.com>; Mon,  7 Sep 2020 21:17:43 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org D112738460A2
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=gmx.de
 Authentication-Results: sourceware.org;
  spf=pass smtp.mailfrom=Johannes.Schindelin@gmx.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
- s=badeba3b8450; t=1599512887;
- bh=IDIzZJCj/KA6G0WCAT5FeltTwXvHEYW5540DnMFp6So=;
+ s=badeba3b8450; t=1599513458;
+ bh=fB3L7sbS8lTHfoaAsZ6/fhdL7D/0hg/ofy8fsmhflo4=;
  h=X-UI-Sender-Class:Date:From:To:cc:Subject:In-Reply-To:References;
- b=ipCJSRRZpr11TuM48nPtO5GtjigrIPAbUdfuihqm4an/n7EReoFojq2q/ZGQjeAPr
- 02b9Ic5sVbCCZXMfPIFaG7FQKe2OY+yvLsTwzYmnUHAJzFm/wGNNjX7+2HLuso9+bT
- G9743UhsvSz5HWo3fum2KLP8rDOKtZst16qMm8r0=
+ b=Q21yfME5TUN/y/GT4wHL36BU7dl/hM9JNwuPGCcU2/pGpX49WGma5clmae3L2Y5Hl
+ OWVV4vF3qjzm2rjnw2ddmGyFbHtUCdieHpkyoqZgPNykvjk+xHG6e+VKTRqOMdtn/B
+ nTQSQNq+ZJIzswDFuhgAD2LWOz9OuAYuQYQH/ze0=
 X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
 Received: from [172.18.169.176] ([89.1.215.223]) by mail.gmx.com (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MDhhN-1kMmsj4Ajv-00AnFw; Mon, 07
- Sep 2020 23:08:07 +0200
-Date: Mon, 7 Sep 2020 23:08:03 +0200 (CEST)
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M4b1o-1kDkMG1JBO-001ksj; Mon, 07
+ Sep 2020 23:17:38 +0200
+Date: Mon, 7 Sep 2020 23:17:36 +0200 (CEST)
 From: Johannes Schindelin <Johannes.Schindelin@gmx.de>
 X-X-Sender: virtualbox@gitforwindows.org
 To: Takashi Yano <takashi.yano@nifty.ne.jp>
 cc: cygwin-patches@cygwin.com
 Subject: Re: [PATCH 3/3] fhandler_pty_slave::setup_locale: respect charset
  == "UTF-8"
-In-Reply-To: <20200907183659.5150b2a8f296e4df13b1df1c@nifty.ne.jp>
-Message-ID: <nycvar.QRO.7.76.6.2009072252550.56@tvgsbejvaqbjf.bet>
-References: <20200902195412.aa7f233231d893a7a065b691@nifty.ne.jp>
- <20200902152450.GJ4127@calimero.vinschen.de>
- <20200903012500.640e36573c67328fc3e1bc70@nifty.ne.jp>
- <20200902163836.GL4127@calimero.vinschen.de>
- <20200903175912.GP4127@calimero.vinschen.de>
- <20200904182149.18cd752eef58c67ee8d39135@nifty.ne.jp>
- <20200904124400.GQ4127@calimero.vinschen.de>
- <20200904235016.9c34d04e809b5ad9f2bdfdf3@nifty.ne.jp>
- <20200904192235.GW4127@calimero.vinschen.de>
- <20200905174301.adbb3c147122fbe0636a0d56@nifty.ne.jp>
- <20200907082633.GC4127@calimero.vinschen.de>
- <20200907183659.5150b2a8f296e4df13b1df1c@nifty.ne.jp>
+In-Reply-To: <20200905000302.9c777e3d2df4f49f3a641e42@nifty.ne.jp>
+Message-ID: <nycvar.QRO.7.76.6.2009072309070.56@tvgsbejvaqbjf.bet>
+References: <nycvar.QRO.7.76.6.2009011818560.56@tvgsbejvaqbjf.bet>
+ <20200904190337.cde290e4b690793ef6a0f496@nifty.ne.jp>
+ <nycvar.QRO.7.76.6.2009040822000.56@tvgsbejvaqbjf.bet>
+ <20200905000302.9c777e3d2df4f49f3a641e42@nifty.ne.jp>
 User-Agent: Alpine 2.21.1 (DEB 209 2017-03-23)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Provags-ID: V03:K1:WbyOtZoyjClUfRoByCxwpYKjcd7rkg6XB2UoQAoBm7oeM1hYicG
- trIjkUvibTCzOUv8Zqyc6JZRGIsgaFeJ7W9jkMC0/BR29PiwUCMhI6eRscSISz3OAin1jk1
- 0zFCmpu4vPQqZNNu9IxtR/72egjBq01irpRPZvOEq/2ZDrrL7bW+TDVPKAe6n0LaT5GAyWc
- wTucxDngCeu0PVXwxXq5w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:VwplGHcxQ3o=:3tFDdf5bVF2APXmbBM5ije
- u2KBa9gd3LoIIODMjOYJvo4AS+HZhyz4NXHuK+r2z6//sbAXoai65MEYOSJmkUKDTfKj7Ue16
- kZbEzLgUb0EUmoLdy3QTWF6ltFNiQqrZXM7QQfbpbxPKSXTz9cqxmYgjQwc9J7CE2M8nJRvbW
- kkFG0ufK3In74i6vATDNgP0yn7YcN+2rmxQqBK1Hzvp90ekQ7Yymek6pctoOOs/nwwDoXq/4k
- NpXkLKuzcGnZUKMrL2vOUeFvmSOhS55pYAEYdu9NAw7eKGE7tPvxFwNztnVanUgVkC2DGLwaK
- FpxSgQvdF+/iUj9Hrfb95KGRJXrVQQbGQfLoHzyNJq5aM1XA5oH2jsj6fSTgjB0vLqYIDniXs
- JYnxcxCoXDMAfYpXKD4Q2YUz/7NEtlQoq2qLGszStuaSDmZxCiALee78qKKP0+QGGTGbFhjzw
- 41NN13G3CfIOE6NUEOYV+cRxNFIflESOIKF2WMcgxlK5Kwyd/zOjEW0wU/04QjAqlJdO2DgCR
- S/ax/BrckEg/Rutff1JPQblV4/zC+sO38RQ4+Yo96SH01oK7AKNnTMnGnS0G9LBLl2nI9SlEu
- E4uVXbZb5wRYYkCOUywkf+Aui+XvotBL3a1vEl1UrHMiUf8dZYBJxFa5bNWrMnk96Y9h2OlkQ
- KsWyUx7XDZJFzO8N/9ddRMB7GxwPzpbGOlxNjlQ75P90uwNHL59sB09Gm/wLsYEFqd0BcMdbn
- +JA8iED2J2Wrob/ASyZBksbqutEUXme71E48KyDPs92IJOaER3btFpLJgho6x3dGp9mLyjdci
- Te+cFwgyLipRkTqrKStQLrVVTDjQAjNPVPQOcrpRFgHa43Tq6VHYsw13ErYX8mGSwnZx16s7I
- ToUHVqnVzDUUJEeC8jOOTUSo97N4C+Z1FnvNQjcn7tgUuJSRS3KL/H+G5lcHQ8KlIqClWfR8I
- sgaWIOimPmWtETdllOrGFiGxaFy3+M2ViyOsStfIyqs5iA9jTiz3wSLbCl1rkFMv+Y6yBYpVs
- tAGrXkXtSsk72YG5plpMSfFXKIqD2ioV7naetQq7tfPkIBBmpvnu6C1LzSTIy96t9ruN8i+Ks
- lwPTu2Y/OUaN8AgMxarE1VT8NlYmFfNEUeFsx0NCT/XI6quRR/1C3C5MPVBn+a2g842MILceC
- cRGvr4mleQAwclprXsloHIQcvrcZvmAsUQkF8waZSQjMQZoGbqbolqJ9zs1paZWYS1xh6QmX1
- F+tvYuDDDjLfydFtu6AF22S9v1KOZUUEE092RxQ==
+X-Provags-ID: V03:K1:lv6elIjIEVFBQCBFH3ECaRc/H4bRJnuWeIjSwBxgK3AXqjlqKDv
+ Yu8Aq6UW4G4i4SFIygMGdPtBNPt7CIRYxkRlpeq8D2mVLOhd19Inob/BiapHBDPBnI7g/xh
+ qXXdW26NB1AlVgiJKgxpfd6EOj7+BM5K5YcKeABQjOpwq6oWRgNV0rA4k4ycJ5pSnU2+eGQ
+ mUT/+1Ao7X9WGvjx9hGKw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:px2VQDL1i7Q=:0WI0roYyN2qJOz2uonD7tz
+ 0+FUQyyrLwnYL0ib+U/9VnWh5qUZF03LOFeep2mLkTirbgr2FmHR2OupplYEqDxrkqaQAEBB7
+ tsLeU7HX1CygFgP+0NgLLcqdl4isQ3acd4ab0dior9Z5vT4/ArAqeVfHYXnOvDbQLw5M4+ZsX
+ x0+z4/JVj+mpVjhMqWOER0ndIzUUf/tpeq/LxN+rD36f41StG1VxsEAqOUSJiVoWvmfb4e8OC
+ NRj32at9eU5pNPnFQ2LQcaPtQiS/BVRR78NnUXg63MxAF3jQyS8+7pbbgez2E6FUW+IMD7+ZB
+ dG7il34XVoH0Fv0bP6UMPlp+9uKMcAdcB05sgBYPwTBYf1M0D/krNq+r7Y5HxFGRTVodG7slb
+ 1z2Y9ZaEniDJFEezI/EO8/x0W7G1PiAkl4zGP11JVktm/oq9CGqNujZbKUFxNhQ7+CgOSGWar
+ LfGnYZai6GIZQumGAWImmbbQvr7twhIChnDyi494YuxOH3fKpjB2rAzIdLBlQTg7mJI8wbqmn
+ AZQuqGQQ9ymDxyLKvHhPDiqPsPEg7TwD/hRAw1CuYyjMDx0slwLi9EwCvBXnPEpBGoPRia84P
+ LzRe3loQVkaBoEjzPYNxxby0eLBbj01kV4V4PIWvT0czX/D8DfDtMb9wuMprCiC1g9WE4cSn0
+ Szc0j2vby822+J1kdOX60IcXEYecBpO1qVyRXVnxahUv4dntTa+nDyInHRJwa6w6EGhBx6VZr
+ BzPaJKmKa+mo8QQcaYUOzwwInu+Pxg3qEN9z7YBNbwpe7xsbcltEDNGy2Phs/bThSi8vU0Z2K
+ gDzlpciw5FiSR5xSNDXTJ4CjWoVVW+rd6oowLXZ5VtQks/u8vajPiCeuRTOSdtGNg0BvPO3iA
+ o3sYWowLqXbw+/YYJjwegm22j7OnoGcEuhSWqMduCL/aokRye5Osjs/nFmNhK5fkdW2wggK83
+ aoqx7a7UwEucuJe6ziq/V5TQ6Sz46ttriVr01vkKyVsoQhYKE+CswUxLGn+vzj+pCbMqIPzxF
+ KwaJ7BeED1UR+RH4wlo5m1ha/HiZOJ+eS/XsAvTlNZq/6xJ/YtC+6AU9GWiWmuh3SWGGGTSaQ
+ 3rQbib9kES50Qmyumzq/bzngmGrQzwB4wMpEVGqosupSGe1e9BMdaCBqUiC0mbDSADbCEr9rx
+ zHlYsVR1u8xE872hY5JyEbuAqzGXzwc29mmr47zJvP9WftotacnWNDI7uQdKVO6I77mqq/xZF
+ tAqbzqDD/LEyyq+v269I8YO6vsl4bkD/6EiouFQ==
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, FREEMAIL_FROM, RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE,
- SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, FREEMAIL_FROM, GIT_PATCH_0, RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H2,
+ SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -83,85 +75,126 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 07 Sep 2020 21:08:15 -0000
+X-List-Received-Date: Mon, 07 Sep 2020 21:17:45 -0000
 
-Hi,
+Hi Takashi,
 
-On Mon, 7 Sep 2020, Takashi Yano via Cygwin-patches wrote:
+On Sat, 5 Sep 2020, Takashi Yano wrote:
 
-> On Mon, 7 Sep 2020 10:26:33 +0200
-> Corinna Vinschen wrote:
-> > Hi Takashi,
-> > On Sep  5 17:43, Takashi Yano via Cygwin-patches wrote:
-> > > On Fri, 4 Sep 2020 21:22:35 +0200
-> > > Corinna Vinschen wrote:
-> > >
-> > > > Btw., the main loop in
-> > > > fhandler_pty_master::pty_master_fwd_thread() calls
-> > > >
-> > > >   char *buf =3D convert_mb_str (cygheap->locale.term_code_page,
-> > > >                               &nlen, CP_UTF8, ptr, wlen);
-> > > >                                      ^^^^^^^
-> > > >   [...]
-> > > >   WriteFile (to_master_cyg, ...
-> > > >
-> > > > But then, after the code breaks from that loop, it calls
-> > > >
-> > > >   char *buf =3D convert_mb_str (cygheap->locale.term_code_page, &n=
-len,
-> > > >                               GetConsoleOutputCP (), ptr, wlen);
-> > > >                               ^^^^^^^^^^^^^^^^^^^^^
-> > > >   [...]
-> > > >   process_opost_output (to_master_cyg, ...
-> > > >
-> > > > process_opost_output then calls WriteFile on that to_master_cyg ha=
-ndle,
-> > > > just like the WriteFile call above.
-> > > >
-> > > > Is that really correct?  Shouldn't the second invocation use CP_UT=
-F8 as
-> > > > well?
-> > >
-> > > That is correct. The first conversion is for the case that pseudo
-> > > console is enabled, and the second one is for the case that pseudo
-> > > console is disabled.
-> > >
-> > > Pseudo console converts charset from console code page to UTF-8.
-> > > Therefore, data read from from_slave is always UTF-8 when pseudo
-> > > console is enabled. Moreover, OPOST processing is done in pseudo
-> > > console, so write data simply by WriteFile() is enough.
-> > >
-> > > If pseudo console is disabled, cmd.exe and so on uses console
-> > > code page, so the code page of data read from from_slave is
-> > > GetConsoleOutputCP(). In this case, OPOST processing is necessary.
+> On Fri, 4 Sep 2020 08:23:42 +0200 (CEST)
+> Johannes Schindelin wrote:
 > >
-> > This is really confusing me.  We never set the console codepage in the
-> > old pty code before, it was just pipes transmitting bytes.  Why do we
-> > suddenly have to handle native apps running in a console in this case?=
-!?
+> > On Fri, 4 Sep 2020, Takashi Yano via Cygwin-patches wrote:
+> >
+> > > On Tue, 1 Sep 2020 18:19:16 +0200 (CEST)
+> > > Johannes Schindelin wrote:
+> > >
+> > > > When `LANG=3Den_US.UTF-8`, the detected `LCID` is 0x0409, which is
+> > > > correct, but after that (at least if Pseudo Console support is ena=
+bled),
+> > > > we try to find the default code page for that `LCID`, which is ASC=
+II
+> > > > (437). Subsequently, we set the Console output code page to that v=
+alue,
+> > > > completely ignoring that we wanted to use UTF-8.
+> > > >
+> > > > Let's not ignore the specifically asked-for UTF-8 character set.
+> > > >
+> > > > While at it, let's also set the Console output code page even if P=
+seudo
+> > > > Console support is disabled; contrary to the behavior of v3.0.7, t=
+he
+> > > > Console output code page is not ignored in that case.
+> > > >
+> > > > The most common symptom would be that console applications which d=
+o not
+> > > > specifically call `SetConsoleOutputCP()` but output UTF-8-encoded =
+text
+> > > > seem to be broken with v3.1.x when they worked plenty fine with v3=
+.0.x.
+> > > >
+> > > > This fixes https://github.com/msys2/MSYS2-packages/issues/1974,
+> > > > https://github.com/msys2/MSYS2-packages/issues/2012,
+> > > > https://github.com/rust-lang/cargo/issues/8369,
+> > > > https://github.com/git-for-windows/git/issues/2734,
+> > > > https://github.com/git-for-windows/git/issues/2793,
+> > > > https://github.com/git-for-windows/git/issues/2792, and possibly q=
+uite a
+> > > > few others.
+> > > >
+> > > > Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
+> > > > ---
+> > > >  winsup/cygwin/fhandler_tty.cc | 9 +++++++++
+> > > >  1 file changed, 9 insertions(+)
+> > > >
+> > > > diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandle=
+r_tty.cc
+> > > > index 06789a500..414c26992 100644
+> > > > --- a/winsup/cygwin/fhandler_tty.cc
+> > > > +++ b/winsup/cygwin/fhandler_tty.cc
+> > > > @@ -2859,6 +2859,15 @@ fhandler_pty_slave::setup_locale (void)
+> > > >    char charset[ENCODING_LEN + 1] =3D "ASCII";
+> > > >    LCID lcid =3D get_langinfo (locale, charset);
+> > > >
+> > > > +  /* Special-case the UTF-8 character set */
+> > > > +  if (strcasecmp (charset, "UTF-8") =3D=3D 0)
+> > > > +    {
+> > > > +      get_ttyp ()->term_code_page =3D CP_UTF8;
+> > > > +      SetConsoleCP (CP_UTF8);
+> > > > +      SetConsoleOutputCP (CP_UTF8);
+> > > > +      return;
+> > > > +    }
+> > > > +
+> > > >    /* Set console code page from locale */
+> > > >    if (get_pseudo_console ())
+> > > >      {
+> > > > --
+> > > > 2.27.0
+> > >
+> > > I would like to propose a counter patch attached.
+> > > What do you think of this patch?
+> > >
+> > > This patch does not treat UTF-8 as special.
+> >
+> > Sure, but it only fixes the issue in `disable_pcon` mode in the curren=
+t
+> > tip commit. That's because a new Pseudo Console is created for every
+> > spawned non-Cygwin console application, and that new Pseudo Console do=
+es
+> > _not_ have the code page set by your patch.
 >
-> This is actually not related to pseudo console. In Japanese environment,
-> cmd.exe output CP932 string by default. This caused gabled output in old
-> cygwin such as 3.0.7. The code for the case that pseudo console is
-> disabled is to fix this.
+> You are right. However, if pseudo console is enabled, the app
+> which works correclty in command prompt should work as well in
+> pseudo console. Therefore, there is nothing to be fixed.
 
-It is related to Pseudo Console insofar as it was slipped in as part of
-the Pseudo Console patches.
+I am coming to the conclusion that your definition what is correct differs
+from my definition of what is correct.
 
-And what Takashi reports as a bug fix is the underlying reason for the
-tickets in MSYS2 (and elsewhere) that I mentioned.
+For me, it matters what users see. And what users actually see is the
+output of UTF-8 encoded text that is now interpreted via the default code
+page of their LCID, i.e. it is incorrect.
 
-In fact, I even suggested in
-https://github.com/msys2/MSYS2-packages/issues/1974#issuecomment-685475967
-to revert that change.
+Sure, you can argue all you want that those console applications are _all
+wrong_. _All of them_.
 
-What Takashi describes as "correct behavior" unfortunately seems not to be
-very common in practice, which is why I contend that from the users' point
-of view, it could not matter less whether the console applications are
-"correct" or not. From the point of view of users who have their `LANG`
-set to something like `en_US.UTF-8`, the encoding was correct before, and
-now it is no longer correct. And _that_ is the correctness users actually
-care about.
+In practice, that matters very little, as many users have
+`LANG=3Den_US.UTF-8` (meaning your patches force their console application=
+s'
+output to be interpreted with code page 437) and therefore for those
+users, things looked fine before, and now they don't.
+
+Note that I am not talking about developers who develop said console
+applications. I am talking about users who use those console applications.
+In other words, I am talking about a vastly larger group of affected
+people.
+
+All of those people (or at least a substantial majority) will now have to
+be told to please disable Pseudo Console support in v3.2.0 because they
+would have to patch and rebuild those console applications that don't call
+`SetConsoleOutputCP()`, and that is certainly unreasonable to expect of
+the majority of users. Not even the `cmd /c chcp 65001` work-around (that
+helps with v3.1.7) will work with v3.2.0 when Pseudo Console support is
+enabled.
 
 Ciao,
 Dscho
