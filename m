@@ -1,59 +1,50 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
- by sourceware.org (Postfix) with ESMTPS id B313438708DF
- for <cygwin-patches@cygwin.com>; Mon,  7 Sep 2020 09:09:09 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org B313438708DF
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+ by sourceware.org (Postfix) with ESMTPS id CA5E33870907
+ for <cygwin-patches@cygwin.com>; Mon,  7 Sep 2020 09:11:28 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org CA5E33870907
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org;
  spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
 Received: from calimero.vinschen.de ([217.91.18.234]) by
- mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1M2NqA-1kGrJC1b26-003x8R for <cygwin-patches@cygwin.com>; Mon, 07 Sep 2020
- 11:09:08 +0200
+ mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MQeIA-1jsaFt239i-00NkrB for <cygwin-patches@cygwin.com>; Mon, 07 Sep 2020
+ 11:11:27 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 05112A83A8F; Mon,  7 Sep 2020 11:09:08 +0200 (CEST)
-Date: Mon, 7 Sep 2020 11:09:07 +0200
+ id 1421EA80A4D; Mon,  7 Sep 2020 11:11:27 +0200 (CEST)
+Date: Mon, 7 Sep 2020 11:11:27 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 3/3] fhandler_pty_slave::setup_locale: respect charset ==
- "UTF-8"
-Message-ID: <20200907090907.GG4127@calimero.vinschen.de>
+Subject: Re: [PATCH v4 2/3] regparm: make code highlight happy
+Message-ID: <20200907091127.GH4127@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200902163836.GL4127@calimero.vinschen.de>
- <20200903175912.GP4127@calimero.vinschen.de>
- <20200904182149.18cd752eef58c67ee8d39135@nifty.ne.jp>
- <20200904124400.GQ4127@calimero.vinschen.de>
- <20200904235016.9c34d04e809b5ad9f2bdfdf3@nifty.ne.jp>
- <20200904192235.GW4127@calimero.vinschen.de>
- <20200905174301.adbb3c147122fbe0636a0d56@nifty.ne.jp>
- <20200905201506.8bbca09f51a2b2b06135affa@nifty.ne.jp>
- <20200907082738.GD4127@calimero.vinschen.de>
- <20200907173824.3c382c6a5924b25d5563e5bf@nifty.ne.jp>
+References: <20200905052711.13008-1-arthur2e5@aosc.io>
+ <20200905052711.13008-2-arthur2e5@aosc.io>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200907173824.3c382c6a5924b25d5563e5bf@nifty.ne.jp>
-X-Provags-ID: V03:K1:wdqYgzxHVZ+UD6fXYAfHMBLkEyvuo7vDg5bRf3IwiIc+ZBGe699
- fCQ5/apmAEpy3AJukmcUEGowF1lacsfT7bGrNAlxU0gfQCX8CUCIkqmVwINz9fujfN6s0xQ
- ccaC/efT4X7C1o5stvodJYsXXAiTpUROaZcJB6cpHf6se3oaP5qx9AZzsYHGhSMn8I6y7fL
- J4H2bGkeuHj8W4JeknGZQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:1ETd2WpzJwo=:2WES2yMF1m99qnBddp1nLR
- JOfMBPNt3UtzuY+qnyL7YNFlYgemagaETGX4GGj8rdghWd19ChY+yiv9pIc7xrWZF8qtMPFxG
- L0gymb2GcnxouraAmPIhXl/WHHEG6bJ8G1WGBFcIDyQ4D1hYJkmGb8thsUt0vM4B1lqH9LQhH
- c6kjVAKM3DlS0m5hpuYU1Q0toPjhqDGgT3vxgqEuUMRF2+Nh9O/guls37UzI2B/LPN8bEIB0L
- HC88f0SUxxVGkJKrEF7x0m7iXa/vj9B2TUH9hlcW45Epuf1Tv7pJ3e0kHscCe3Nq3JDidB4aW
- en9zYa2OK5C1kILisbnPfF+nE18mTcj03zz4TlE8okq0m85bIgptpQR03TSnPmFAFJiItMztZ
- TQwwmKV9mohFQAxSNxQ+8gFf1F2TjMIIO6MJsxTHqtPInZvu/e++PvNxwrxsJ9focJEdNiZOf
- knN7oBd7RSeZ9BARVn7WAOzVuUz/taMLKIKdgGQdKRUcCZYu82eXrkWiZjzVkPUkBe7PASGsd
- 6nphFQIqxDwQ4FG3f1Wyxf6BhAn9tYIij+FQPQyL0tcqUKSYGmTQPlA6LR42LNzu/Gvwt2V2M
- DBSOfR7i8cOGmy7qAp9cS9XMbN/X9uRAqI79Ax87JCaWStgK4Vh13hBo+xgrwyillwq5v9Q40
- 2dXDM90UM1W68ni6ztQzRC5f6rdaZr92LO8l6MWqTSRGMULnCfXvyaZG0qfw7Bx13CbuHsHDU
- hZ7Ac2dxgbhPBvmQvUvoJSrqv3C4apAL94Ha67B5ClFURSlydEx5Du82a++3Mwn2dJkEd2LLs
- vmnXLhMhzx5gze3nrjjBi6RQKi/0M14kM85q6cdQELHDNPNvfRFyPVNlLrWz03RKTzRUk6TB1
- AsAAaL2Q8dGyazC8KmFA==
-X-Spam-Status: No, score=-100.3 required=5.0 tests=BAYES_00,
+In-Reply-To: <20200905052711.13008-2-arthur2e5@aosc.io>
+X-Provags-ID: V03:K1:5V/I+QAQ50Oemdct1cZvHTcG2GDeCSVZbAS8pFqv9DJP9wPnAbQ
+ 4Ek0Kqgrrok4m6ol2X5BwmG6MRst6uFeE2qWgLFA4/BlQaOaE+Oe1x+8U8EcJMSTrWfu/VE
+ sJCURme0MbQTbmAhjGz7ylbIL6ouyVhKQFxycFlc4HLUayrs2KbSBFgoofCblsIV9quHLYg
+ A1AkGJp4uoY1+GovHKz3w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:AAavMdm6nhY=:WW+kdGFjSvxQmN/43Dfjoi
+ Pm7YnLrdGWXzKkeaBb+lrOhd+CuCA+2GJzpjM1PmasN+5Ikk4m1QRtcHib/IT/q37FKUSL1gy
+ XDnN9+aPPdbDyzU67Ql9973k2wSaB6RSnvtSjHYIJwtwKJLFb4vp99T3fAbXZj52tAJBhst/3
+ x/kC2Dx8IifvFO3o+1bZ5U2s8akY2jGN7KJXY+tK/41innYVvWA+F613R/sxHHpi9F2okIu2o
+ +prYeo18cqjk0HDgtmsZM/ZTYdEtyI8vwIiiz9koXAmE/kz5egMkAAoY+wFVi2YTs/kr6fEyr
+ diUJp51LNyHWSiSMkB1o/X4BlSrNcfCJ12MXaeHEvLkNbYr1xMbH4w4cjhIDei5APRxzrMdei
+ cSvQOGbfdirzguMJeJhgsZ8Bf+wyn8wCxnWWDQvkN552xFhjGC4vzrv9AYgFFlhYpfHPWEGvz
+ 1ehXiBemV5y1Lg24qE0pF5WlJhFu0kPEw9ODgXwKNx1cFT5eMkG+Db2IGC/dOXG5Wr2Kgz2TJ
+ AiLoermpYvVcH65cHqKSeXOsTUiPQ4fkvo3DYEHDw8kfLsWMI0wVdkXsfGxcwpugOCb/cB+ZV
+ DI84argEXhLeaPFdikuI1kJ1bTt0bxFBx367sN/XHeee3STx8zhEr6ihujsmhL39mfwtZmdB3
+ Os0bYVir7j/sWkI8h2KZ0lLPNk0LEJ+HN65yXscpDztudQGaP5hofoSvrjQKkoKZwUMeOD9n5
+ Ac8Z7Hxx8SUPw28stkNoUStIp6Bt+XW0oojmeOH9YCkso/xZ3KNp+wc7ipS65gq17IARjpUgE
+ fFB0woNEJEFKQXDZwIn44D7rdoc+TaobvztJit777NMrgxvufP0Yq+4r4msFkIEYqTjADt/SF
+ 32p2FPN50ozxH26NPooA==
+X-Spam-Status: No, score=-105.3 required=5.0 tests=BAYES_00, GIT_PATCH_0,
  GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
  RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
@@ -71,26 +62,32 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 07 Sep 2020 09:09:11 -0000
+X-List-Received-Date: Mon, 07 Sep 2020 09:11:30 -0000
 
-On Sep  7 17:38, Takashi Yano via Cygwin-patches wrote:
-> On Mon, 7 Sep 2020 10:27:38 +0200
-> Corinna Vinschen wrote:
-> > On Sep  5 20:15, Takashi Yano via Cygwin-patches wrote:
-> > > On Sat, 5 Sep 2020 17:43:01 +0900
-> > > Takashi Yano via Cygwin-patches <cygwin-patches@cygwin.com> wrote:
-> > > No. This does not fix enough.
-> > > 
-> > > In the test case above, if it does not call setlocale(),
-> > > __eval_codepage_from_internal_charset() always returns "ASCII"
-> > 
-> > ??? __eval_codepage_from_internal_charset() never returns ASCII.
-> > It returns UTF-8 by default.
-> 
-> Sorry, I meant __locale_charset (__get_global_locale ()) returns
-> "ASCII".
+On Sep  5 13:27, Mingye Wang wrote:
+> Subject: [PATCH v4 2/3] regparm: make code highlight happy
 
-Which is correct and translates to UTF8 as default charset.
+-v, please?
 
 
 Corinna
+
+> ---
+>  winsup/cygwin/regparm.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/winsup/cygwin/regparm.h b/winsup/cygwin/regparm.h
+> index cce1bab4a..a14c501db 100644
+> --- a/winsup/cygwin/regparm.h
+> +++ b/winsup/cygwin/regparm.h
+> @@ -8,7 +8,7 @@ details. */
+>  
+>  #pragma once
+>  
+> -#if defined (__x86_64__) || defined (__CYGMAGIC__)
+> +#if defined (__x86_64__) || defined (__CYGMAGIC__) || !defined (__GNUC__)
+>  # define __reg1
+>  # define __reg2
+>  # define __reg3
+> -- 
+> 2.20.1.windows.1
