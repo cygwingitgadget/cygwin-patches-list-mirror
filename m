@@ -1,52 +1,42 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
- by sourceware.org (Postfix) with ESMTPS id 1D839393C868
- for <cygwin-patches@cygwin.com>; Mon,  7 Sep 2020 09:39:46 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 1D839393C868
-Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([217.91.18.234]) by
- mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MNwXA-1jvKES24QC-00OGA8 for <cygwin-patches@cygwin.com>; Mon, 07 Sep 2020
- 11:39:44 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id EF79BA83A8B; Mon,  7 Sep 2020 11:39:43 +0200 (CEST)
-Date: Mon, 7 Sep 2020 11:39:43 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com
+ [210.131.2.83])
+ by sourceware.org (Postfix) with ESMTPS id B7007393C853
+ for <cygwin-patches@cygwin.com>; Mon,  7 Sep 2020 09:54:58 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org B7007393C853
+Received: from Express5800-S70 (v038192.dynamic.ppp.asahi-net.or.jp
+ [124.155.38.192]) (authenticated)
+ by conssluserg-04.nifty.com with ESMTP id 0879sidk009063
+ for <cygwin-patches@cygwin.com>; Mon, 7 Sep 2020 18:54:44 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 0879sidk009063
+X-Nifty-SrcIP: [124.155.38.192]
+Date: Mon, 7 Sep 2020 18:54:45 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v4 1/3] Cygwin: rewrite and make public cmdline parser
-Message-ID: <20200907093943.GJ4127@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200905052711.13008-1-arthur2e5@aosc.io>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200905052711.13008-1-arthur2e5@aosc.io>
-X-Provags-ID: V03:K1:bYPi1ZGmhTg2EmndkMuAj4/h+yTP0CyoikTGbViCVjBEmCqvLI6
- KaTbflATjKPo9AuDDR9IW7CBFaA5l+Qa0mUUdAqM9+Bxfj20t4C/5XomQrDUoAY9sP/Hbcf
- b9pEcaMLqe36dkAF2DrrNRx539vbpFL23jdTewwguEjZ/mq6PmNFrQBVs3lViFeudvkQM/G
- bwUTWW/+ZIjphWoTkiEMQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:74+COBDY2KY=:edHcbu2yPo6OVb3Higl84E
- 0EoiK8kOOM+9EA3+JhjyMtNnR8DrHR1IEGNIYtY0txVJVp9XbaFrZ5osXG3rPzyC4WKj46eDv
- Dls3A8CaNZXfD+kdGgHCUotS1w3CrN1Q7NLaEQKkdF23u+KrWh1JyI9bnbJKpDRfHcvARwIYO
- XsaP0JOxHHZTsYlSU4fP4hmCXKbG28Po/hP/Y8o3X0o/cvPrFP/71DAWcl0XfwIw0llxH2rdr
- zfH2GAa3n8iGOG2kxPxdlzr+VMdmasxq7/OA101NqJceNrtIXuOUWYwbFXokvtCCYsJ9WqaC/
- wKDQ0Cs/XfPZce1AJL+pAsHiLgQ0yvYxN2RVEPhdeSqNwSV3ywyZtc/ChS4Ia5mxtvrZa7F28
- hel+cEPljJvT+7+GM/LTowTgi+Rq5VWP5kfiCRJia9oI0OvYf193lfWyg+/6n5wccUr+UFOXL
- PrjsXcdavKJHcTeL95mfgK0T0QY5Lt3QW+SR1h/PvYo9AYqvZheEXtHRwAwcnQlQmaBjmqFz/
- UGx7hgrfaRP1NfefJ2Rcw8JEt1fd7F2RLMkP0IBi5pJizYd/SJrSdccdiUwri8hP6KeDz6Z6j
- XZloN0oLG46tezrzxieu8oEb1zuuaC6tjMncI1Gk33ZV9wnZ3Q0Z39CIRT/udNps0OjoPeMo1
- 7Ld7bxTJXBz7MpTTc5uwS7uTos4/ZCmryzOS6z5GN04OkQrobyQ2IYUYjBvkoObjqKi3w7Xqd
- ZSQE2loXtUns4uDEq6Lw6bdb7N+FWoJPcphRNnZeNqj22eWh3/zIXjrSp1p7oS4cXE6Nv3jS/
- NhmCyzgKjTxA/3K0tVo6S+gnDcFUfqqCUAw6fDsQDL9BLOOiRl1bo1Kny3Vk0pObu6CE5mjIG
- 9Nz9GscHuciqiJS4rf5w==
-X-Spam-Status: No, score=-105.6 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+Subject: Re: [PATCH 3/3] fhandler_pty_slave::setup_locale: respect charset
+ == "UTF-8"
+Message-Id: <20200907185445.557d29d868856787e3c0f5b2@nifty.ne.jp>
+In-Reply-To: <20200907090823.GF4127@calimero.vinschen.de>
+References: <20200904124400.GQ4127@calimero.vinschen.de>
+ <20200904235016.9c34d04e809b5ad9f2bdfdf3@nifty.ne.jp>
+ <20200904192235.GW4127@calimero.vinschen.de>
+ <20200905174301.adbb3c147122fbe0636a0d56@nifty.ne.jp>
+ <20200905201506.8bbca09f51a2b2b06135affa@nifty.ne.jp>
+ <20200905231516.c799225e61b2b96bf05f65a6@nifty.ne.jp>
+ <20200906175703.5875d4dd6140d9f6812cf2a9@nifty.ne.jp>
+ <20200906191530.32230a99bf23d3c6f21beb41@nifty.ne.jp>
+ <20200907010413.53ef9a9b727e8f971ca6b2ea@nifty.ne.jp>
+ <20200907134558.3e1cd8bd4070991b856f58bb@nifty.ne.jp>
+ <20200907090823.GF4127@calimero.vinschen.de>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, NICE_REPLY_A,
+ RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H4,
+ RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_PASS,
+ TXREP autolearn=no autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -61,121 +51,97 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 07 Sep 2020 09:39:47 -0000
+X-List-Received-Date: Mon, 07 Sep 2020 09:55:02 -0000
 
-On Sep  5 13:27, Mingye Wang wrote:
-> This commit rewrites the cmdline parser to achieve the following:
-> * MSVCRT compatibility. Except for the single-quote handling (an
->   extension for compatibility with old Cygwin), the parser now
->   interprets option boundaries exactly like MSVCR since 2008. This fixes
->   the issue where our escaping does not work with our own parsing.
-> * Clarity. Since globify() is no longer responsible for handling the
->   opening and closing of quotes, the code is much simpler.
-> * Sanity. The GLOB_NOCHECK flag is removed, so a failed glob correctly
->   returns the literal value. Without the change, anything path-like
->   would be garbled by globify's escaping.
-> * A memory leak in the @file expansion is removed by rewriting it to use
->   a stack of buffers. This also simplifies the code since we no longer
->   have to move stuff. The "downside" is that tokens can no longer cross
->   file boundaries.
+On Mon, 7 Sep 2020 11:08:23 +0200
+Corinna Vinschen wrote:
+> Hi Takashi,
 > 
-> Some clarifications are made in the documentation for when globs are not
-> expanded.  The functions are made public for testing, but my tcl setup
-> is currently too messed up for running them!  I did test them as an
-> isolated program on WSL-Debian.
+> On Sep  7 13:45, Takashi Yano via Cygwin-patches wrote:
+> >  #if 0 /* Let's try this if setting codepage at pty open time is not enough */
+> > -  if (!cygheap->locale.term_code_page)
+> > -    cygheap->locale.term_code_page = __eval_codepage_from_internal_charset ();
+> > +  if (!get_ttyp ()->term_code_page)
+> > +    get_ttyp ()->term_code_page = __eval_codepage_from_internal_charset (NULL);
+> >  #endif
 > 
-> The change fixes two complaints of mine:
-> * That cygwin is incompatible with its own escape.[1]
-> * That there is no way to echo `C:\"` from win32.[2]
->   [1]: https://cygwin.com/pipermail/cygwin/2020-June/245162.html
->   [2]: https://cygwin.com/pipermail/cygwin/2019-October/242790.html
+> *If* we revert back to using setup_locale, these #if blocks would
+> go away.
 > 
-> (It's never the point to spawn cygwin32 from cygwin64. Consistency
-> matters: with yourself always, and with the outside world when you are
-> supposed to.)
+> > -__eval_codepage_from_internal_charset ()
+> > +__eval_codepage_from_internal_charset (const WCHAR *envblock)
+> >  {
+> > -  const char *charset = __locale_charset (__get_global_locale ());
+> > +  const char *charset;
+> > +  __locale_t *loc = NULL;
+> > +  if (__get_current_locale ()->lc_cat[LC_CTYPE].buf)
+> > +    charset = __locale_charset (__get_current_locale ());
+> > +  else
+> > +    {
+> > +      char locale[ENCODING_LEN + 1] = {0, };
+> > +      if (envblock)
+> > +	{
+> > +	  const WCHAR *lc_all = NULL, *lc_ctype = NULL, *lang = NULL;
+> > +	  for (const WCHAR *p = envblock; *p != L'\0'; p += wcslen (p) + 1)
+> > +	    if (wcsncmp (p, L"LC_ALL=", 7) == 0)
+> > +	      lc_all = p + 7;
+> > +	    else if (wcsncmp (p, L"LC_CTYPE=", 9) == 0)
+> > +	      lc_ctype = p + 9;
+> > +	    else if (wcsncmp (p, L"LANG=", 5) == 0)
+> > +	      lang = p + 5;
+> > +	  if (lc_all && *lc_all)
+> > +	    snprintf (locale, ENCODING_LEN + 1, "%ls", lc_all);
+> 	    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 	    sys_wcstombs (locale, ENCODING_LEN + 1, lc_all);
 > 
-> This is the fourth version of the patch. I provide all my patches to
-> Cygwin, including this one and all future ones, under the 2-clause BSD
-> license.
+> OTOH, if you read these environment vars right from our current POSIX
+> env, you don't have to convert from mbs to wcs at all.  Just call
+> getenv("LC_ALL"), etc.  After all, envblock is just the wide char
+> copy of our current POSIX env.
 
-Great, thanks.  A couple of (mostly minor) nits, though.
+IIUC, envblock is not a copy of environment if exec*e() is used.
+In this case, getenv() cannot retrieve the new environment values
+passed to exec*e(). This is needed by the test case bellow.
 
-> diff --git a/winsup/cygwin/common.din b/winsup/cygwin/common.din
-> index a7b4aa2b0..f15dc6a9e 100644
-> --- a/winsup/cygwin/common.din
-> +++ b/winsup/cygwin/common.din
-> @@ -393,6 +393,8 @@ cygwin_split_path NOSIGFE
->  cygwin_stackdump SIGFE
->  cygwin_umount SIGFE
->  cygwin_winpid_to_pid SIGFE
-> +cygwin_cmdline_parse SIGFE
-> +cygwin_cmdline_build SIGFE
+  int pm = getpt();
+  if (fork()) {
+    [do the master operations]
+  } else {
+    char *env[] = {"LANG=ja_JP.SJIS", ...., NULL};
+    setsid();
+    ps = open(ptsname(pm), O_RDWR);
+    close(pm);
+    dup2(ps, 0);
+    dup2(ps, 1);
+    dup2(ps, 2);
+    close(ps);
+    execle("/bin/tcsh", "/bin/tcsh", "-l", NULL, env);
+  }
 
-Nope, we won't do that.  The command line parsing is an internal
-thing, and we won't export arbitrary internal functions using
-their own symbol.  *If* we should export this stuff at all, which
-I highly doubt as necessary, it should use the cygwin_internal API.
+> > +	  else if (lc_ctype && *lc_ctype)
+> > +	    snprintf (locale, ENCODING_LEN + 1, "%ls", lc_ctype);
+> > +	  else if (lang && *lang)
+> > +	    snprintf (locale, ENCODING_LEN + 1, "%ls", lang);
+> > +	}
+> > +      if (!*locale)
+> > +	{
+> > +	  const char *env = __get_locale_env (_REENT, LC_CTYPE);
+> > +	  strncpy (locale, env, ENCODING_LEN);
+> > +	  locale[ENCODING_LEN] = '\0';
+> > +	}
+> > +      loc = duplocale (__get_current_locale ());
+> > +      __loadlocale (loc, LC_CTYPE, locale);
+> > +      charset = __locale_charset (loc);
+> > +    }
+> 
+> Oh, boy, this is really a lot.  I have some doubts this complexity is
+> really necessary.  It's a bit weird to go to such great lengths for
+> native applications.  Still, why not just do this once in the process
+> creating the pty rather than trying on every execve?
 
-> diff --git a/winsup/cygwin/include/sys/cygwin.h b/winsup/cygwin/include/sys/cygwin.h
-> index 805671ef9..e19ac0cd2 100644
-> --- a/winsup/cygwin/include/sys/cygwin.h
-> +++ b/winsup/cygwin/include/sys/cygwin.h
-> @@ -86,6 +86,8 @@ extern void *cygwin_create_path (cygwin_conv_path_t what, const void *from);
->  extern pid_t cygwin_winpid_to_pid (int);
->  extern int cygwin_posix_path_list_p (const char *);
->  extern void cygwin_split_path (const char *, char *, char *);
-> +extern int cygwin_cmdline_parse (char *, char ***, char **, int, int);
-> +extern char *cygwin_cmdline_build (const char * const *, int, int);
+This is executed just once for a pty. Because
+__eval_codepage_from_internal_charset() is called only when
+get_ttyp ()->term_code_page is not set yet.
 
-Ditto.
-
-> +static char* __reg1
-> +read_file (const char *name)
-> +{
-> +#ifndef WINF_STDIO_TEST
-
-Please drop this, together with the else branch for WSL.
-
-> +      // For anything else, sort out backslashes first.
-> +      // All backslashes are literal, except these before a quote.
-> +      // Single-quote is our addition.  Would love to remove it.
-
-Pleae use /* */ coments for multiline comments.
-
-> +/* Perform a glob on word if it contains wildcard characters.
-> +   Also quote every character between quotes to force glob to
-> +   treat the characters literally.
-> +
-> +   Call glob(3) on the word, and fill argv accordingly.
-> +   If the input looks like a DOS path, double up backslashes.
-> + */
-
-Please join the last two lines.  The closing */ should be on the
-last comment line.
-
-> +extern "C" int
-> +extern "C" char *
-> +extern "C"
-> +{
-> +  int cygwin_cmdline_parse (char *, char ***, char **, int, int);
-> +  char *cygwin_cmdline_build (const char * const *, int, int);
-> +}
-
-Bzz.
-
-> --- a/winsup/doc/misc-funcs.xml
-> +++ b/winsup/doc/misc-funcs.xml
-
-Ditto.
-
-> diff --git a/winsup/testsuite/Makefile.in b/winsup/testsuite/Makefile.in
-> index a86a35b88..bdc116d12 100644
-> --- a/winsup/testsuite/Makefile.in
-> +++ b/winsup/testsuite/Makefile.in
-
-Skip it.  Just add this as a standalone testcase as attachement, that's
-sufficient.
-
-
-Thanks,
-Corinna
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
