@@ -1,52 +1,79 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
- by sourceware.org (Postfix) with ESMTPS id 3DE62385783A
- for <cygwin-patches@cygwin.com>; Tue,  8 Sep 2020 18:42:49 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 3DE62385783A
-Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([217.91.18.234]) by
- mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1M1ZQT-1kH6YW3T2p-0038Dd for <cygwin-patches@cygwin.com>; Tue, 08 Sep 2020
- 20:42:47 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 57093A83A8D; Tue,  8 Sep 2020 20:42:47 +0200 (CEST)
-Date: Tue, 8 Sep 2020 20:42:47 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <kbrown@cornell.edu>
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam12on2125.outbound.protection.outlook.com [40.107.243.125])
+ by sourceware.org (Postfix) with ESMTPS id B165C3864877
+ for <cygwin-patches@cygwin.com>; Tue,  8 Sep 2020 18:57:03 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org B165C3864877
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PkNYLkOejyh9QifFzyPTa5ISQxTr8IDbwFtA29D9Ilebx+Wk4xyhaf6xXoR2NW2qfNSBzZg/rVCmai+3/GIGFUxQtpozxYAB/CB7UAg87hL6erfYvOsoPNCqI6NhPOiw3M0GKHctxL4GJG9RZ+H1kTLh1FkVxlpUkD4FuuJT1X4RYzPn/3w3lOo6wHxBSBnwTgUQaHU40dmXYGSdZQ+GsenogVbSocR2l0uAE5b2pmXaTzCc6/SKjQCBbG2Y3snTHT+P3WMXCPxm84HjrVzr1ZkEvaab+Kb2xt4LGYX8SvRde6AwczI7q7Lhnwhi1jv36mYpZ1bNlKBop2C1B/8trg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8uWsxfFphXghd25FLIzquJHJtNrvqXWOLORxd4bt+Oo=;
+ b=IsbBO/FUla8Ue/NXBopLgPv9UcXdvxuySAJMfRMPgFohoc/oyrM3jpCNu2YB8qxaCP5JORUImU1/nn50hWMbg54jaOT7ysAb5oFDr+v8LH+2OK0c23EjL/Hiojm5JLnavZLGVru8ah967feuPXuroNmG36MwUNnfm8cD/WpDwk/N6Fp2ITKWzOZyi+6F1zSqm1qfAGpgWC73PuAjML3Ucry2Vu2bJad82l19O4KrYJy0icf22VSd8xg2X7ak53N3QVUHAfGbq/oZIFPQPp6rRSK0xZ7SL/zGlplFEDFIl5jJE2D63CTsXYcT8WBJcgRSG3T/jT5CuS1kwCg1Hg6+mw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu;
+ dkim=pass header.d=cornell.edu; arc=none
+Received: from MN2PR04MB6176.namprd04.prod.outlook.com (2603:10b6:208:e3::13)
+ by MN2PR04MB5613.namprd04.prod.outlook.com (2603:10b6:208:fd::27)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3348.15; Tue, 8 Sep
+ 2020 18:57:02 +0000
+Received: from MN2PR04MB6176.namprd04.prod.outlook.com
+ ([fe80::c144:d206:c369:af44]) by MN2PR04MB6176.namprd04.prod.outlook.com
+ ([fe80::c144:d206:c369:af44%7]) with mapi id 15.20.3348.017; Tue, 8 Sep 2020
+ 18:57:02 +0000
+Subject: Re: [PATCH 2/2] Cygwin: path_conv::check: handle error from
+ fhandler_process::exists
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Fix input charset for non-cygwin apps with
- disable_pcon.
-Message-ID: <20200908184247.GQ4127@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200908095757.2042-1-takashi.yano@nifty.ne.jp>
+References: <20200908165048.47566-1-kbrown@cornell.edu>
+ <20200908165048.47566-3-kbrown@cornell.edu>
+From: Ken Brown <kbrown@cornell.edu>
+Message-ID: <8737d1df-5749-379d-4bf8-950e32ee4dd8@cornell.edu>
+Date: Tue, 8 Sep 2020 14:57:00 -0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
+In-Reply-To: <20200908165048.47566-3-kbrown@cornell.edu>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH2PR19CA0001.namprd19.prod.outlook.com
+ (2603:10b6:610:4d::11) To MN2PR04MB6176.namprd04.prod.outlook.com
+ (2603:10b6:208:e3::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200908095757.2042-1-takashi.yano@nifty.ne.jp>
-X-Provags-ID: V03:K1:hbszBDeO3g3vg3R8i7R++0Hswi1pZlvVywaSPsRk3UjiyOZDhsl
- 4MYa7yynpU4ZA5AiOw/sS5jrhC+bEoSrOTgEs9ZqPz2vooLWZNFnaOweRehheBOxIgbTp94
- ARBPf+lE3i/caRIXZd0A/twK9dCJQfVS4p7SqFl1kui1yPC7GlewND0uNhtWn+T7+SuI398
- anEMQbxZV3J8GOXWJnGvw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:3gEnURn6Siw=:2Y0JruHa/ifvVXOWlY4pse
- 5lfVfRCIzmIkWMFD4KEnuUp86A4mwIe68H1H/ye4AD53Qrc0c+pcRyos+iW3VADBGHQEHLjny
- YXFrSSLXfXcMbVArDgORpuDpaAhbvSMp3V+wP2hs+xPXDwibdC3rTWR2mF8mSt5xlEHL/sauB
- tQNv+otCr5ajmUSL06o8KfBZeuFMTyP2+hwrXTLCI4n6Q4Q6z/ypLsuD8LwbFH2Gbio2Q/irI
- m4xfc60if3HVWyu1K/SkF/k6ftkt5iwauQ34EhzB0bBDvyIYqPxilzJoLiCSO3RKCU7Xr7DbI
- QnvGY+lnW/p238NfarwYC34UM04uYiiGcCnVppYrO3sktsyT7QRbSKCVi0GR00fNuTqSLH9Iy
- t23eCuIbX6yBdD/reHOg/MXO6fExs4AkpC+LkyaRptsoDXbiMrwEVr3QwIisf2YzdB8O5N3WT
- KQaEWbre4ypE3UEIUvDg4ExkTSjxM+voHn8NAzf/5GNdALe1M4IUzLZCrJnEAfyInsm7cmkL1
- 0DoQob0Br4jRw+icnexiALvfNGX9fdMBL5b+OpB7POdPDwWjIT250kBV7JqzlG2syPRgQeUlv
- xmO2hbdtR4rWP79lLJmr1QMhfvNjE6c1suKUaLQi7bsjfvlQncJjkoOj9iYzuS8YOUkLbJQwE
- L0aydWKu69uVbgg9yrvaqOUcENlpPFL7JxK5K8zJDD4iW/+OYCwwX1CtWEb1yT6Vqr/6lPHNx
- 1xjTGNqTt0wjlgP1umdCDSIRUIPttSlNK3TlR2gBOfWZ29yaaFxZ9pmNE0BxSVq/9y7XeydsK
- nHpzoKXMAnPaSWLnkg/zXyCkZmO6UMz/bW9sigstyu68cAlrfp0lcjhHAerU4HFRfhQHFiEwb
- Q0ncMqR8hWfAmHmBD3hA==
-X-Spam-Status: No, score=-105.3 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2604:6000:b407:7f00:fc34:902a:527a:1c90]
+ (2604:6000:b407:7f00:fc34:902a:527a:1c90) by
+ CH2PR19CA0001.namprd19.prod.outlook.com (2603:10b6:610:4d::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3370.16 via Frontend Transport; Tue, 8 Sep 2020 18:57:01 +0000
+X-Originating-IP: [2604:6000:b407:7f00:fc34:902a:527a:1c90]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5e99c406-f17c-42a8-30bc-08d85428f84c
+X-MS-TrafficTypeDiagnostic: MN2PR04MB5613:
+X-Microsoft-Antispam-PRVS: <MN2PR04MB56139517398731C74FAE02F4D8290@MN2PR04MB5613.namprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3173;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: l+X+Iesj1t4H7lpsMSdLrfMeWWxz7uNe206CWcPfNT/q2IN07RXI9sTagGzmlcWiczzvh7O40tUxQwwTRTEeQaa9Qj01k4j684RPh/vogTk9VJesOYIdzNXrNKEZTV1byp6nXgG7UUF4Ii57cC0TsFmISRH8r0QrvvPP3D1MoMl/ug9+5UKKdFLZPfs4aN/DEHwknOpBQ3m41yzxY+6zZ+8KNCCcRyAzQH7JHPwW9f476ed64ieY/MLDodNo2w+ITF5XQ9z/xCIHget1MvRFB14rf4szvLS0QTGMrLBGoyXlPXh4CYjdbs8nOtz0i9mkbJYcv32Q8k5KmMTOb48EiB9BW2kD3smXT8Ntr33Mv/L3NSSY6OJ0NaX1Xcq6Q+8n
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:MN2PR04MB6176.namprd04.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(4636009)(366004)(376002)(136003)(346002)(396003)(39860400002)(5660300002)(31686004)(316002)(4744005)(2616005)(36756003)(478600001)(86362001)(75432002)(786003)(8936002)(83380400001)(52116002)(31696002)(16526019)(186003)(2906002)(53546011)(66946007)(6916009)(6486002)(8676002)(66476007)(66556008)(43740500002);
+ DIR:OUT; SFP:1102; 
+X-MS-Exchange-AntiSpam-MessageData: oS+fhejVblY5L9LsPKfVDQGVtrY3cWlecfTAll06WTOxrTg8x76srrUCiFDUlrI3h+qE7Y7WaAITA3wsKpPxYp40iuGIpc8JQpy6fnGv+JdA4TwQC9GSQJ72ydfNxWKSoGgC0K3GX3q+RTEsm65/PpdPCTblocW3CujSTU4RTHgttd68eNJMfeH/oaGYZ89lrVsFRez1aO53JPJT4QWPKy7L++lpFZoD4wVAATczRiLFpqDvWcq1yIerR1WfuKZxxRX4R6K8bVeBEnCmPnk6pXppLE195XCiBuwY53X8xdo6cS7dj3jxkM0waLc3y003LV3uqNKo3qIDb7gCAy3Fj9I9wX75eqqafiy+oqzwXlqugnrHfb0KCeWZN4VjJcQO+x5CEA4Ms8f/z/2EzImytqa+nxF3zmKPO3wiK+ZUDV+VSLpKXG0vZqmZR7mOQMQJ+SiJFfGUqMAeMQKQYmHR1lTKdvULuf5xPhUx7Abqm/xLqLMzVKDA9KnxCkpDpelM1fmGUKxlcCdQ21gTfQXgQC07qp5UnERJK55G3xw1euXg4o00FSE0yWicJ0ZiwKrUWzxSA6RG7gMLlFu5tY8IcYcHm0gOHbkNExr3S4y3pRnIlXg3qT5nhvM5Nc338sqMfRa2U66bV4xr9BrMPGqmKxTrUF/VTuMBL7Fts3g9HHx2Xa4BiGmFj6/UUp7DEaPZ2psbg2UvbnotX2Ex+ZwOLA==
+X-OriginatorOrg: cornell.edu
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5e99c406-f17c-42a8-30bc-08d85428f84c
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR04MB6176.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2020 18:57:01.9360 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5d7e4366-1b9b-45cf-8e79-b14b27df46e1
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: noJQ+vc3JBBdMs8sxYWBU1qGvbOL1+AxjmYLo7QWnMqV4ayUeyYt0l8EH5uUByzVB05k9N4kYEuID5oK7QfYVQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR04MB5613
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, MSGID_FROM_MTA_HEADER,
+ NICE_REPLY_A, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_PASS,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -62,51 +89,36 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 08 Sep 2020 18:42:50 -0000
+X-List-Received-Date: Tue, 08 Sep 2020 18:57:05 -0000
 
-Hi Takashi,
-
-On Sep  8 18:57, Takashi Yano via Cygwin-patches wrote:
-> - If the non-cygwin apps is executed under pseudo console disabled,
->   multibyte input for the apps are garbled. This patch fixes the
->   issue.
+On 9/8/2020 12:50 PM, Ken Brown via Cygwin-patches wrote:
+> fhandler_process::exists is called when we are checking a path
+> starting with "/proc/<pid>/fd".  If it returns virt_none and sets an
+> errno, there is no need for further checking.  Just set 'error' and
+> return.
 > ---
->  winsup/cygwin/fhandler_tty.cc | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
+>   winsup/cygwin/path.cc | 6 ++++++
+>   1 file changed, 6 insertions(+)
 > 
-> diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-> index 6de591d9b..afaa4546e 100644
-> --- a/winsup/cygwin/fhandler_tty.cc
-> +++ b/winsup/cygwin/fhandler_tty.cc
-> @@ -271,8 +271,17 @@ fhandler_pty_master::accept_input ()
->    bytes_left = eat_readahead (-1);
->  
->    HANDLE write_to = get_output_handle ();
-> +  char *buf = NULL;
->    if (to_be_read_from_pcon ())
-> -    write_to = to_slave;
-> +    {
-> +      write_to = to_slave;
-> +      size_t nlen;
-> +      buf = convert_mb_str (GetConsoleCP (), &nlen,
-> +			    get_ttyp ()->term_code_page,
-> +			    (const char *) p, bytes_left);
-> +      p = buf;
-> +      bytes_left = nlen;
-> +    }
+> diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
+> index 95faf8ca7..092261939 100644
+> --- a/winsup/cygwin/path.cc
+> +++ b/winsup/cygwin/path.cc
+> @@ -809,6 +809,12 @@ path_conv::check (const char *src, unsigned opt,
+>   			  delete fh;
+>   			  goto retry_fs_via_processfd;
+>   			}
+> +		      else if (file_type == virt_none && dev == FH_PROCESSFD)
+> +			{
+> +			  error = get_errno ();
+> +			  if (error)
+> +			    return;
+> +			}
+>   		      delete fh;
+>   		    }
+>   		  switch (file_type)
+> 
 
-How big are chances that the string in p is larger than 32767 chars?
+There's a missing 'delete fh' above.  I'll send v2 shortly.
 
-I'd like to see convert_mb_str use a tmp_pathbuf buffer instead of
-calling HeapAlloc/HeapFree every time.  That also drops the mb_str_free
-entirely.
-
-Isn't there a problem anyway with calling convert_mb_str?  Consider
-a write call which stops in the middle of a multibyte char, the
-second half only sent with the next write call.  convert_mb_str
-only allows to convert complete multibyte chars, and the caller does
-not keep something like an mbstate_t around, which would allow
-continuation of split multibyte chars.
-
-
-Corinna
+Ken
