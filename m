@@ -1,26 +1,22 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
- by sourceware.org (Postfix) with ESMTPS id 026C03857C56
- for <cygwin-patches@cygwin.com>; Tue,  8 Sep 2020 08:40:38 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 026C03857C56
-Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([217.91.18.234]) by
- mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1M60HD-1kCZ2s2zkJ-007YbB for <cygwin-patches@cygwin.com>; Tue, 08 Sep 2020
- 10:40:37 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id CC245A83A97; Tue,  8 Sep 2020 10:40:34 +0200 (CEST)
-Date: Tue, 8 Sep 2020 10:40:34 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com
+ [210.131.2.82])
+ by sourceware.org (Postfix) with ESMTPS id 771373857C5A
+ for <cygwin-patches@cygwin.com>; Tue,  8 Sep 2020 09:45:40 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 771373857C5A
+Received: from Express5800-S70 (v038192.dynamic.ppp.asahi-net.or.jp
+ [124.155.38.192]) (authenticated)
+ by conssluserg-03.nifty.com with ESMTP id 0889jNvT025100
+ for <cygwin-patches@cygwin.com>; Tue, 8 Sep 2020 18:45:23 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 0889jNvT025100
+X-Nifty-SrcIP: [124.155.38.192]
+Date: Tue, 8 Sep 2020 18:45:36 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 3/3] fhandler_pty_slave::setup_locale: respect charset ==
- "UTF-8"
-Message-ID: <20200908084034.GO4127@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH 3/3] fhandler_pty_slave::setup_locale: respect charset
+ == "UTF-8"
+Message-Id: <20200908184536.3670324a2026ef0394de3821@nifty.ne.jp>
+In-Reply-To: <20200908084034.GO4127@calimero.vinschen.de>
 References: <20200904124400.GQ4127@calimero.vinschen.de>
  <20200904235016.9c34d04e809b5ad9f2bdfdf3@nifty.ne.jp>
  <20200904192235.GW4127@calimero.vinschen.de>
@@ -31,32 +27,16 @@ References: <20200904124400.GQ4127@calimero.vinschen.de>
  <20200906191530.32230a99bf23d3c6f21beb41@nifty.ne.jp>
  <20200907010413.53ef9a9b727e8f971ca6b2ea@nifty.ne.jp>
  <20200907134558.3e1cd8bd4070991b856f58bb@nifty.ne.jp>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200907134558.3e1cd8bd4070991b856f58bb@nifty.ne.jp>
-X-Provags-ID: V03:K1:ZZpIXAFV1pyevXEGctDaRqEPdB2emv5e3G0kgDgtq3leYND8ZV/
- /BBMiy2yvLBhyuorq1H5IhSFhyXUNfgJs0GT7ZgZBam7/VExPjRAqrXprhwf03flUrfa4fg
- EUqb3zUKCfQSwwKAUtDQSrPNgoqmXaXNnIbSvUfiPIH+EmAkfK3SB7Z5U5zJyIf5H6FFwDz
- LODFRCuC3cMpBxfVNCmMA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:rRE8DNJcvqA=:NqRuzCMA4Ovoja/psrbatX
- xqU0f5hEL4TbSMOLaJhAbVJqUfBzdxo8JtGXNXndxL26cSxP3tk+dAhI9jez8NM8FcQ/vXt8L
- aLZclGmA1FsJ6y3HM40Gm3gNcZwQhb8KqXFIGkq7u9PHtwEOenra4C88QzJsTQXuYAXNXUlRV
- SPFFQ8ICT/SfgyIts6jJ3i8riEaE7vHfk+/Hk1u/2uUYMCLuYAlA2cY+rZZTWoKw0jlr+T9cJ
- Je5FQGX5JtHSQ7AcWDqWlrxVzeZbMzrZi3jh84uZKv+ZN6aSd90XcuTTrqYFL1N3Hybu9yYbi
- BmkHjI7xBmwumNaoCwoL8E1DoZ+4nYX7SdBHeUaGMxGa05in5rA++q7YxhAr5rup00WtZePSG
- rLUTO41vlGCzJKU182BH+qOzKfanO9cAoKxWODUoPKjmVbJ0cgkOKVhEM+uShgpuxIga7rZG/
- s+xrLaI4xKXKBAJW8HKM36KVuSRPPOEQy2MHoQqsGQIgyEVhUW2eLUbUUuWz4H2HfefKksYfD
- vG461pukknpz7CXbZt/Xoj61SnBTAq3FLL1e8VVDyvsAnAQsZKLRcIbyali4rzlZnXtMRwGkn
- MkcGabGWlgPz/JKcmn11V16MX5JJa5/TNBYKqQYU1/2Rh3M3Bahx/INy3DrM2P1/WZ/acD4yV
- DzByLDZ3dBjR3SRGKzQZaSFrxu3v98CbJPu/ehyH356bAa0vWIfzKbGgnt2MOOW7eafiSgasi
- lPmIpu9NN+un2Nt5Z6tGa1nR2+SZhSPN61HuewcWAY6hoG2DJpLathWsn/7aXDGDDXvk9sxOJ
- dSJsePxwgh8r0eBBK+revM5h6maOzgIZijnspwYbpwAfatDObq56AjX0j+IDZX9M2GgaCF1ur
- tARfNt8T5VtnctRIohjw==
-X-Spam-Status: No, score=-100.6 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+ <20200908084034.GO4127@calimero.vinschen.de>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, NICE_REPLY_A,
+ RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H3,
+ RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_PASS,
+ TXREP autolearn=no autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -71,26 +51,64 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 08 Sep 2020 08:40:40 -0000
+X-List-Received-Date: Tue, 08 Sep 2020 09:45:44 -0000
 
-On Sep  7 13:45, Takashi Yano via Cygwin-patches wrote:
-> On Mon, 7 Sep 2020 01:04:13 +0900
-> > > Chages:
-> > > - If global locale is set, it takes precedence.
+Hi Corinna,
+
+On Tue, 8 Sep 2020 10:40:34 +0200
+Corinna Vinschen wrote:
+> On Sep  7 13:45, Takashi Yano via Cygwin-patches wrote:
+> > On Mon, 7 Sep 2020 01:04:13 +0900
+> > > > Chages:
+> > > > - If global locale is set, it takes precedence.
+> > > 
+> > > Changes:
+> > > - Use __get_current_locale() instead of __get_global_locale().
+> > > - Fix a bug for ISO-8859-* charset.
 > > 
 > > Changes:
-> > - Use __get_current_locale() instead of __get_global_locale().
-> > - Fix a bug for ISO-8859-* charset.
+> > - Use envblock if it is passed to CreateProcess in spawn.cc.
 > 
-> Changes:
-> - Use envblock if it is passed to CreateProcess in spawn.cc.
+> For the time being and to make at least *some* progress and with my
+> upcoming "away from keyboard"-time , I pushed the gist of my patch,
+> replacing the locale evaluating code in fhandler_tty with the function
+> __eval_codepage_from_internal_charset in its most simple form.
+> I didn't touch anything else, given that this discussion is still
+> ongoing.
 
-For the time being and to make at least *some* progress and with my
-upcoming "away from keyboard"-time , I pushed the gist of my patch,
-replacing the locale evaluating code in fhandler_tty with the function
-__eval_codepage_from_internal_charset in its most simple form.
-I didn't touch anything else, given that this discussion is still
-ongoing.
+Your patch pushed does the magic!
 
+Even cygterm works even though the code does not check environment.
 
-Corinna
+The point is here.
+
+@@ -1977,9 +1807,6 @@ fhandler_pty_slave::fixup_after_exec ()
+   if (!close_on_exec ())
+     fixup_after_fork (NULL);   /* No parent handle required. */
+
+-  /* Set locale */
+-  setup_locale ();
+-
+   /* Hook Console API */
+ #define DO_HOOK(module, name) \
+   if (!name##_Orig) \
+
+Without this deletion, term_code_page is determined when
+cygwin shell is executed. Since it is in fixup_after_exec(),
+setlocale() does not called yet in the shell. As a result,
+term_code_page cannot be determined correctly.
+
+In your new patch, term_code_page is determined when the first
+non-cygwin program is execed in the shell. The shell process
+already calls setlocale(), so term_code_page can be determined
+using global locale.
+
+Thanks for the excellent idea!
+
+Only the problem I noticed is that cygterm does not work if the
+shell does not call setlocale(). This happens if the shell is
+non-cygwin program, for example, cmd.exe, however, it is unusual
+case.
+
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
