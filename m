@@ -1,49 +1,50 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
- by sourceware.org (Postfix) with ESMTPS id 3196D385783A
- for <cygwin-patches@cygwin.com>; Tue,  8 Sep 2020 19:13:13 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 3196D385783A
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+ by sourceware.org (Postfix) with ESMTPS id 49B02385783A
+ for <cygwin-patches@cygwin.com>; Tue,  8 Sep 2020 19:15:43 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 49B02385783A
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org;
  spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
 Received: from calimero.vinschen.de ([217.91.18.234]) by
- mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MHX3R-1kJrnS3v9t-00DU1g for <cygwin-patches@cygwin.com>; Tue, 08 Sep 2020
- 21:13:11 +0200
+ mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MZCKd-1k2CYG3T4T-00V6St for <cygwin-patches@cygwin.com>; Tue, 08 Sep 2020
+ 21:15:41 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 54B56A83A8D; Tue,  8 Sep 2020 21:13:11 +0200 (CEST)
-Date: Tue, 8 Sep 2020 21:13:11 +0200
+ id 41A0BA83A8D; Tue,  8 Sep 2020 21:15:41 +0200 (CEST)
+Date: Tue, 8 Sep 2020 21:15:41 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 1/2] Cygwin: format_process_fd: add directory check
-Message-ID: <20200908191311.GR4127@calimero.vinschen.de>
+Subject: Re: [PATCH v2 2/3] Cygwin: path_conv::check: handle error from
+ fhandler_process::exists
+Message-ID: <20200908191541.GS4127@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200908165048.47566-1-kbrown@cornell.edu>
- <20200908165048.47566-2-kbrown@cornell.edu>
+References: <20200908190246.48533-1-kbrown@cornell.edu>
+ <f73dd163-6875-5f66-4b0c-4196f245bed3@cornell.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200908165048.47566-2-kbrown@cornell.edu>
-X-Provags-ID: V03:K1:B5ptuapMArz1Nk6lqCGLGZuf+bpHGuR8nG7ZFcXAd5hvDOXpz0m
- OOe7N16RGzyYO6kLjmL5K8i1qXt7SiohEMkkpWj4Gx2md6DFNouvvAve1Xg7/e6bUs9zk7S
- US/SDXxZyLJD2rx5tyZtXpmK0UJpaXM0AknbqeQNI4VQJr5Ph9qbFehyvBYYRXKH0K7vHYY
- dey7WNoEQbZxoSUYOicig==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:c8DTCBfhuLw=:17nSVvgproxeier6zXM7mE
- /wpCm9BPSkmY8JwduE5FE0dShSUbxRTiQvK5u/8+jTYbkwebcSUK9zxKoVrtmV5al2BuykNf1
- nIAWOKktcV3aEqpBC9x2YIQPpUqNr3+cDtQH+89J6TqXxexHID5XIJktBPOuzoo7c/JaxhWKX
- nH5AO0j6qfHF2N5tYRVQxbhd9gK5A0XrBO6l7vcCprTGAxZfCuBjJ1nhqoQpIsKyVijODx+Em
- qDa0f0N/FVKigvtkCS0IRVEtvGxvWJgP+ifAnYd/XwSeY+D3+H06Ac/h0MU0RjpQlDTOJ9LIP
- wOJRmx+MgJEvsZrlzyTdWUAPkSXplM8Jtl4cd/DBPTTLHuYSUqIbPtpTUXFfs0HX6b0xXtKEu
- EQ/HzVHCJ4DfCreLEND50sNTdXL2eJYzSXAOMLP8YFWqidE9nkth7WZWEerK2xOSb3wFFwInv
- JZ5uc93lRcLFMLFJSWirnMzIML/5+PhKSGaZLC4UnEQrsasBRiLPSXftqq7pr2xpuiRnAcBiV
- yepCy0UWLnHhsDxbqLU68G5L3ZcANq14d0ymwQi8v5Vlcmz/aGhjnftb6TYTy3qteKq332V2b
- JverdJ7nKsS0hxESDVG8I5kDKhb/70UBev++e5bKjcb609+neLpRz6s1gEzWH7OYMJ90mdroI
- J+ltkR6xpXlCAANWeLcdal+Ctpu014KSjGdy/CdjnBEtdeFiAALFLgMmmhG6bAFe1TX2gr45a
- X6ad+YJ/NLZlcAvONrInckw0ZEh0QwrAFE0kfD0UtCjr3l9gpRn6ePWr/aRh/ASmOoQx9YkM4
- EVI3UjRbK0pMXRSNqlA0j1S/SUKzz/aCOpHp+JqpW/VFJuEZHzR4cLUDGP6ylW83g+iPFTz/s
- 8YuzaXrBUgr78AWOamtw==
+In-Reply-To: <f73dd163-6875-5f66-4b0c-4196f245bed3@cornell.edu>
+X-Provags-ID: V03:K1:KtjQfIQnxp2A+cYq3yB8IjerFTQ4+3pfMY8XqgoAdeNip0ecbnd
+ LlT4QHo+2+f9GGkhm5bOFrQlE+O0S18ZX7gRqgHgWrM+7wgjx9F2GtEwpQ+c4JZcI/a+Kcd
+ VPbEISgINytn+QAuF/u4ZPjUn3kEnjL8v994acIERQEMwSjs80FDtuWLFt6C9sGtUhkukT1
+ fvdNB3b5FAYEzq6ph21Vw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:2vkpF/Po470=:4nIxPBz62si+tZZpzw6ut5
+ SvG2ddniZkC/ybycy8Vvy3rX/JdElwf4E505zU5Q75a8jFg/cJQ78gIlhcINBXQz4I0lFluz3
+ XFe0BlWVhbABhCRIIo+rvN/kwwLxzrpZKAX9jHQwEyVrliWtRREKoBOZ1NzItprttBawJy9/M
+ SQWruOSKruZoG16scE/rqjZiTMfIuJB/9UHu8a+wlMezp+wIcFLuI6MPMhPqWDdD8rLnv5fP2
+ XwS14KXKZca3MymXaJ3KlD5fM7uwSRD/IjhkaJTZG7YcEiVAY5mXLPh+bKYIVCG/Xp1eANiPW
+ G/k1QbMRujp/ph1Uy7ikxH/xElrLBldnNlY1u3iZ4l53m+8mOiS8UjCEQv1VEgsUC9ZG/KYXu
+ zFLF5U950oYEnuiwWfhEkE+70vTeiIniY/5LQd/jCGHyez3rta+FSR9CbbRRQc8sqJwRBV6+k
+ Ohed0W1rP+fFgNS6o673Yq0jxN7TciEnx8pWFPvqs5yBb92rsyoBOq8kcJd2Kd9QgtAy2Upwq
+ mB4l3acBOkCfQq8LEdN42ZTqJKoOJxeSxSgP781LYhEi7KvAjf9QvYXUA1MuBicD1M4wVgetE
+ 7FoIVY+pEKGz5GrnBNM8l3Ouv/XJe0jrX/jOA16a30NOtu8+IsCDp0cNC1UUhdXEtzgKN3PYo
+ ViNwusus4NYjTwC9aQj2+cS5vhbmEle761Suntg3EllCPx3jQSDyQFV/3l3iYv+gQgxrMgIyk
+ 3L2S84CnLyR4DeGf6SfOOp5aLoC1Cx+ICnul6BcUaX+KAJvml2lF3jQNnBPXfa1tYmRdzdnKN
+ DP2l68Iq6MF6u4PGaoHKNoIYL2xCmkiXtJZ5IwJrpcImiCsnk0uYwhbR8OQFihxIfaQLgYach
+ pb9ENQi+4bfS4BzbEiHw==
 X-Spam-Status: No, score=-105.3 required=5.0 tests=BAYES_00, GIT_PATCH_0,
  GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
  RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
@@ -62,51 +63,44 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 08 Sep 2020 19:13:14 -0000
+X-List-Received-Date: Tue, 08 Sep 2020 19:15:44 -0000
 
-Hi Ken,
-
-On Sep  8 12:50, Ken Brown via Cygwin-patches wrote:
-> The incoming path is allowed to have the form "$PID/fd/[0-9]*/.*"
-> provided the descriptor symlink points to a directory.  Check that
-> this is indeed the case.
-> ---
->  winsup/cygwin/fhandler_process.cc | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
+On Sep  8 15:05, Ken Brown via Cygwin-patches wrote:
+> On 9/8/2020 3:02 PM, Ken Brown via Cygwin-patches wrote:
+> > fhandler_process::exists is called when we are checking a path
+> > starting with "/proc/<pid>/fd".  If it returns virt_none and sets an
+> > errno, there is no need for further checking.  Just set 'error' and
+> > return.
+> > ---
+> >   winsup/cygwin/path.cc | 9 +++++++++
+> >   1 file changed, 9 insertions(+)
+> > 
+> > diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
+> > index 95faf8ca7..1d0c38a20 100644
+> > --- a/winsup/cygwin/path.cc
+> > +++ b/winsup/cygwin/path.cc
+> > @@ -809,6 +809,15 @@ path_conv::check (const char *src, unsigned opt,
+> >   			  delete fh;
+> >   			  goto retry_fs_via_processfd;
+> >   			}
+> > +		      else if (file_type == virt_none && dev == FH_PROCESSFD)
+> > +			{
+> > +			  error = get_errno ();
+> > +			  if (error)
+> > +			    {
+> > +			      delete fh;
+> > +			      return;
+> > +			    }
+> > +			}
+> >   		      delete fh;
+> >   		    }
+> >   		  switch (file_type)
+> > 
 > 
-> diff --git a/winsup/cygwin/fhandler_process.cc b/winsup/cygwin/fhandler_process.cc
-> index a6c358217..888604e3d 100644
-> --- a/winsup/cygwin/fhandler_process.cc
-> +++ b/winsup/cygwin/fhandler_process.cc
-> @@ -398,6 +398,21 @@ format_process_fd (void *data, char *&destbuf)
->  	*((process_fd_t *) data)->fd_type = virt_fdsymlink;
->        else /* trailing path */
->  	{
-> +	  /* Does the descriptor link point to a directory? */
-> +	  bool dir;
-> +	  if (*destbuf != '/')	/* e.g., "pipe:[" or "socket:[" */
-> +	    dir = false;
-> +	  else
-> +	    {
-> +	      path_conv pc (destbuf);
-> +	      dir = pc.isdir ();
-> +	    }
-> +	  if (!dir)
-> +	    {
-> +	      set_errno (ENOTDIR);
-> +	      cfree (destbuf);
-> +	      return -1;
-> +	    }
->  	  char *newbuf = (char *) cmalloc_abort (HEAP_STR, strlen (destbuf)
->  							   + strlen (e) + 1);
->  	  stpcpy (stpcpy (newbuf, destbuf), e);
-> -- 
-> 2.28.0
+> The subject should say "2/2", not "2/3".  I have a local third patch
+> documenting the bug fix, which I didn't bother to send.
 
-Huh, I'd never realized this check is missing.  I was just puzzeling
-over your patch, searching for the directory check, but yeah, there is
-none.  Please push.
+ACk to both patches, 2 and 3 ;)
 
 
-Thanks,
 Corinna
