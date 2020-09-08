@@ -1,75 +1,78 @@
 Return-Path: <kbrown@cornell.edu>
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam12on2095.outbound.protection.outlook.com [40.107.243.95])
- by sourceware.org (Postfix) with ESMTPS id BCE4E3861930
- for <cygwin-patches@cygwin.com>; Tue,  8 Sep 2020 19:03:06 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org BCE4E3861930
+Received: from NAM02-BL2-obe.outbound.protection.outlook.com
+ (mail-eopbgr750098.outbound.protection.outlook.com [40.107.75.98])
+ by sourceware.org (Postfix) with ESMTPS id 9F8C83861930
+ for <cygwin-patches@cygwin.com>; Tue,  8 Sep 2020 19:05:10 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 9F8C83861930
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WqJro41rgXYEH4OD2uhNtnldeUeMyEXsroxIxdctWIOLHU0Kn4OZ6b+1zUoj33E077s2OCwR9L99afunbqux6LPJODr5uTFavclUtqgpyKvP226Om4xDaQEk7/OXNwzOSfimpKeFW3/AuB94X5MN2lfirwZ6ZetygKlv46y/yvjWDGH6by1boKASCXeLjQZHrwSABZgNKfsfZgmRThCifRgGwQNMfxh4aSage0wk3Kh4hIxe7092cS1wF/QV7EAnpnO5VFXxedhcMQfZQmdXXzvGkVi4+Jl7PjoASvtEQA/EZ14m1Cz3wLw43Q7rIb5SwW26uJGgyPw0qP21HjY/Hw==
+ b=gmidKE7iHrJvmIQcp7k0xM7oPEZA84On4kycEvsx+cfK6py+IkvCP5ynI4UdT3UfZ5Ubrx/O64bO1JlbsNDgFCFJMj8EBBcl+iSeMBDlY1IrtyRvWRPuif42/b88jyi/GCvOR0xsu+Fab+kxmdVcOmoLTdQkccAey+D0byL6RFVuLsKIijL/aCSVTlEIki4z7gs9FLR3VPpMhlROWNuZBWcEh7MY7RZCF8iH6/J5Nn4l3IGQpJc9VCzvgZd5WoAcJhUBPnDY0miM8Xv2zj1UtgDMZaIYl4Dx5QuXUbeWFTk21G8aocWRbydlCdv9ZH3d5VH71mJ3gUY0SCdVmRkMog==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=e9cRKHFla3NHelcKFJKfZbdVrEV57HDNueH4x4mTDIk=;
- b=XgoDnY4TSyLaAiSt7mdDUu9WfTdbVswV4qRsb6tAsHEi+IPY1ZXFoYtjyLeic3h4XTnvVtpOnZw/gA2j0Vcym7hBsqgtuS8CE4rAcSkDz1X/zbBop+VbWQvtCw+F/Yk1fyYPM/FJODVeBU8wKB2UJZ3jlShBwp5HCafpDYDvphhAj5OT9WCs3Jf12tD/2cqapmfE0rvs43/hJVUkNQNEuIe2nxgOe/gAxKRi+fPGxdYq8JQdEdU7hw01KE0RwVrBfdLgcXGn7gqeTRJoF3v69WbRAKSyU9U3TQvni/K1/+k9WRNrvWrTZ3Z6Iq0zX4zLuw9PHK4gjPW429hGOfEc9Q==
+ bh=rjVYyH+TQbRIuxh0PqcsO9obsXJ3Pl1aJ0/Qn7aKAsM=;
+ b=amCYWhwaYCd8X7lQfosF3XRY31+my1kUOvnF/tOCn99gMu2N1OejTe2DYvBVHVlxyJRvceeuEkpRg8Pc0vPOxqT1nMZfbeFS8qLfKODrGCUwaD4yujnTs1QgBwksigzfDBeCoFA1hZ1B/vOlqYxKEDop4E0rN1uMmvgPXuob/HfoO6L6RXcMGqDhSK/ZxYP0yoZgu1Vh9/KrjeaeVb1q8KtniDr+r4OxiTfy+LHwJ3IKR91AdxslxC6FYNSih2+kY2FfAE4UNBwB43eRu17OG0B0WpFEAEv0sfSm/jn+UzLmPjXekzuOUmhEygj3iKaaURuofI40klg5aURyHsBHXA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu;
  dkim=pass header.d=cornell.edu; arc=none
 Received: from MN2PR04MB6176.namprd04.prod.outlook.com (2603:10b6:208:e3::13)
- by MN2PR04MB6061.namprd04.prod.outlook.com (2603:10b6:208:d8::15)
+ by MN2PR04MB5534.namprd04.prod.outlook.com (2603:10b6:208:e6::28)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3348.16; Tue, 8 Sep
- 2020 19:03:04 +0000
+ 2020 19:05:09 +0000
 Received: from MN2PR04MB6176.namprd04.prod.outlook.com
  ([fe80::c144:d206:c369:af44]) by MN2PR04MB6176.namprd04.prod.outlook.com
  ([fe80::c144:d206:c369:af44%7]) with mapi id 15.20.3348.017; Tue, 8 Sep 2020
- 19:03:04 +0000
-From: Ken Brown <kbrown@cornell.edu>
-To: cygwin-patches@cygwin.com
-Subject: [PATCH v2 2/3] Cygwin: path_conv::check: handle error from
+ 19:05:09 +0000
+Subject: Re: [PATCH v2 2/3] Cygwin: path_conv::check: handle error from
  fhandler_process::exists
-Date: Tue,  8 Sep 2020 15:02:46 -0400
-Message-Id: <20200908190246.48533-1-kbrown@cornell.edu>
-X-Mailer: git-send-email 2.28.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MN2PR20CA0041.namprd20.prod.outlook.com
- (2603:10b6:208:235::10) To MN2PR04MB6176.namprd04.prod.outlook.com
+To: cygwin-patches@cygwin.com
+References: <20200908190246.48533-1-kbrown@cornell.edu>
+From: Ken Brown <kbrown@cornell.edu>
+Message-ID: <f73dd163-6875-5f66-4b0c-4196f245bed3@cornell.edu>
+Date: Tue, 8 Sep 2020 15:05:09 -0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
+In-Reply-To: <20200908190246.48533-1-kbrown@cornell.edu>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH2PR11CA0022.namprd11.prod.outlook.com
+ (2603:10b6:610:54::32) To MN2PR04MB6176.namprd04.prod.outlook.com
  (2603:10b6:208:e3::13)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (2604:6000:b407:7f00:fc34:902a:527a:1c90)
- by MN2PR20CA0041.namprd20.prod.outlook.com (2603:10b6:208:235::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3370.16 via Frontend
- Transport; Tue, 8 Sep 2020 19:03:03 +0000
-X-Mailer: git-send-email 2.28.0
+Received: from [IPv6:2604:6000:b407:7f00:fc34:902a:527a:1c90]
+ (2604:6000:b407:7f00:fc34:902a:527a:1c90) by
+ CH2PR11CA0022.namprd11.prod.outlook.com (2603:10b6:610:54::32) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3348.16 via Frontend Transport; Tue, 8 Sep 2020 19:05:09 +0000
 X-Originating-IP: [2604:6000:b407:7f00:fc34:902a:527a:1c90]
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 2818efcf-09dc-4bdc-0650-08d85429d04e
-X-MS-TrafficTypeDiagnostic: MN2PR04MB6061:
-X-Microsoft-Antispam-PRVS: <MN2PR04MB606154E8879AC932CF1D1DADD8290@MN2PR04MB6061.namprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3173;
+X-MS-Office365-Filtering-Correlation-Id: 01682cda-ca94-46ee-7a28-08d8542a1b4a
+X-MS-TrafficTypeDiagnostic: MN2PR04MB5534:
+X-Microsoft-Antispam-PRVS: <MN2PR04MB5534E87EB77509F4A613EFE0D8290@MN2PR04MB5534.namprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: w18A+wHdK2dw6tSZwIO0700HFfd4ozYOEMcHehVHyXTSzcSm0fPBmtl71F9b3Db/YBVwF6WIVN6ECtryq0xB92rn5MLnw8XEikRiQo49qMDhSY4rrChlIlKnFpxQH7Hf3J23Z3i7nY+vuctlCeNWvbC0r6pDF5HHsHM5bOJZj/5Wzaw4aC5kg31HwA5qiT4Orj6WhHwye6iKBAB8PyZLMw4+kHF/18BRagxZk4kWs4v92L4iM4nASrKnDgzLJlgrxD7NaXMm82I2ZqYEe1uVkYXvTXzoH239Y2I3/2wp2eModsmJoy5LHDLwrhWSUwQ8OT5skMcCEzbK+X73bXxfS+ECjhQkivGcIHBaeIIh5LxSyCePjZvs5yWdo2cQeI8X
+X-Microsoft-Antispam-Message-Info: zkcBT+2om87bgWDQ7Y4TlRaFwMyFiUc+EVn7FiIIrmrTXVM6q5F9IL/WB2RbsvDuSu07A5NMzE+Dmjm8W5GTdlfq9klSnLQetZ+rxdw9gssUiHgEbPz2+OjFlbW7tiifZpfMGqBE8NNAms2g11PNnbF4YaUa4ygj9VHfv0KCY7I/TJOaaIsVavszLnlMiTKacOB2AmHOAS/KZ9VEGAEDA5K4yHc4+aSbrj38KKm4omXGg+lyO0ZCBtFT4rzi/qd7VnGWIEC9L2NevYBKye7RhYXDxB+Qp7Qk3U8UelcXllAjv3fiRDi3+z8/aKDQeeoxvQlpya19xQHsXYgz+Pr5uaKW6NWVfsYagxOD9ptVJmPj1ckh4ZN07Kkd3wM3l/EA
 X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:MN2PR04MB6176.namprd04.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(4636009)(376002)(346002)(396003)(136003)(366004)(39860400002)(16526019)(186003)(8676002)(86362001)(2616005)(8936002)(36756003)(5660300002)(1076003)(6916009)(66556008)(316002)(6506007)(786003)(6486002)(6512007)(4744005)(52116002)(478600001)(66946007)(69590400008)(66476007)(2906002)(83380400001)(6666004)(75432002);
+ SFS:(4636009)(366004)(376002)(136003)(346002)(396003)(39850400004)(186003)(16526019)(4744005)(786003)(2616005)(316002)(66946007)(31686004)(5660300002)(66556008)(6916009)(75432002)(83380400001)(86362001)(36756003)(31696002)(66476007)(8936002)(53546011)(8676002)(52116002)(478600001)(6486002)(2906002)(43740500002);
  DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData: JpUaIdwVVAHTz9AQ4RS7XvbwPpQjFT/I1+k7sfLJhgyzwsuA2I1rqKL6idmjXremBLJmHC72sROqUVm2roDQOm8aTLgq9Zm+k3ZqRGUTOca+CH3qAWDa4/AG8ItZTiQvKaO3u2GOFLMA40aZV1dcMEGEcDZWYE2+sIchqnR3OYLrIylrZdwqVhgg+Y5Y5DLQXBdJABWV2MkZfNt/Tgdnb76ExF3Kmc+dP3LpPvvABHI9grd62TQftM9IyikfzINBQjbKhdFz9WuoyJPppqnMFIkA7YG196MX3qLMTMAkn0H8hrrUSo9oBJ/Z17z7MbKFqIl/O1L3jPDab0b6DTXHdi8UeD5KHZlty0YXSAwNAbQqCoX7bUQo7fUaMPdkH+A+nbd8nPZ3XEwfNgkyPl2oGkZSZFlSv+RA//K2ySsXn1wSufeVhvfK10tL2SmDDVSoNId/GJythIUbIcjWtfstVlnQxcP0JggO0Y/bI/a+2x3gEhbKp6ya1E5s4BTKxqzWcJ/QyzlJANS+pdhk/8z0zKmo+VchIHHkgkKR9jj1qqwPcI68RO3vckdOrDDaabRcPz27DdfJJSiOIdgdOMHmilppKvCGiL/+pe3y31DoSe92ACQpJGNNHyLff/hhlIJZe8X+naX2embR77M17cO5jLC3eioZEhHAO9X3mHfyAG33e9KJc6h/+KYzeN/6mce6o1G8WK6iYLOBXWJVw2rLyA==
+X-MS-Exchange-AntiSpam-MessageData: plLBqQ5mx/drz9mllV4LwqJVe1vTuG/4VRB2vIPVSTitKBAIYgHYDGKj2PvA8NeEG/gq/a+arHgEC/hn+i9M5eM0nynSrfialT6ZIvCLNhRoTVIXnFC7mKP0OkQyFkKRCs03e6IbiEPsb5Gzm4tgI5Fhwc5i1O2KdONv7sCksNnYHE8y36h2PZa60O1XAPQpehmyaUPly57p7JHMXp5zk909nPNR6uVb8o5hx1Ct+hJNjy3KSmr7AW1OEnpbh7IQED8AR2gX6gnWW/+XfOjC+jLTUY8OBBYRtegjW5p1blYgDKZThkhDwk6qmGXAw25qUHCwwjnn9VpfI3/EfZWZukWDiOPeplxXlEIzZ0lGDWuI+M7sz5dsGKn4e0F3BWQU96kslf9oNIzNjIQXGFmqESWTfUsVmri/Ga1ttKAAwGRFX1GkqfIqG5mU7HVAPPK7/jB3Qo82EhLEd4WYkURRysIWFLuGTL+KqbSK26euUga85Xo4+oemjddSucjcvsF5aqiIXFVMLW9hSxADQwJaJDyiCF5ZWsk+VPzIh+rVrpBnVOAJC8B/pdo9fkjbmWGjWNi2EsJP1wpBA4av0ssqiB5wRcd6EDZ+qg3YRzBOvDlYm4EL2kdfg/QRbNAKPTbPWC+RVmoTUPSYGtWlteAljvLO52GTzJDFLKmrxXSvkIDkHvXqB9VVAdI/L9rL3k9kFTL0Dswx3IECUrCTmObrYg==
 X-OriginatorOrg: cornell.edu
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2818efcf-09dc-4bdc-0650-08d85429d04e
+X-MS-Exchange-CrossTenant-Network-Message-Id: 01682cda-ca94-46ee-7a28-08d8542a1b4a
 X-MS-Exchange-CrossTenant-AuthSource: MN2PR04MB6176.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2020 19:03:04.0680 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2020 19:05:09.8439 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 5d7e4366-1b9b-45cf-8e79-b14b27df46e1
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TlzFpSBq5YFAKbbc+Ndj9fl31PN7Lye8BJO7CugZK8k5l0QbVZhedxLKMuysz4/QV0w1eAicHKDfVPKtIpKd8Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR04MB6061
-X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+X-MS-Exchange-CrossTenant-UserPrincipalName: ufgcvDquScVd/rMX4XsdfhNzOVw6uC4rjXkENJYtlYEq6ipGYbRrowFIFLjnPcFud4OrHSw15PvJeIHHfQWX4g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR04MB5534
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00, DKIM_SIGNED,
  DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, MSGID_FROM_MTA_HEADER,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_PASS,
+ NICE_REPLY_A, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_PASS,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -85,36 +88,40 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 08 Sep 2020 19:03:08 -0000
+X-List-Received-Date: Tue, 08 Sep 2020 19:05:11 -0000
 
-fhandler_process::exists is called when we are checking a path
-starting with "/proc/<pid>/fd".  If it returns virt_none and sets an
-errno, there is no need for further checking.  Just set 'error' and
-return.
----
- winsup/cygwin/path.cc | 9 +++++++++
- 1 file changed, 9 insertions(+)
+On 9/8/2020 3:02 PM, Ken Brown via Cygwin-patches wrote:
+> fhandler_process::exists is called when we are checking a path
+> starting with "/proc/<pid>/fd".  If it returns virt_none and sets an
+> errno, there is no need for further checking.  Just set 'error' and
+> return.
+> ---
+>   winsup/cygwin/path.cc | 9 +++++++++
+>   1 file changed, 9 insertions(+)
+> 
+> diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
+> index 95faf8ca7..1d0c38a20 100644
+> --- a/winsup/cygwin/path.cc
+> +++ b/winsup/cygwin/path.cc
+> @@ -809,6 +809,15 @@ path_conv::check (const char *src, unsigned opt,
+>   			  delete fh;
+>   			  goto retry_fs_via_processfd;
+>   			}
+> +		      else if (file_type == virt_none && dev == FH_PROCESSFD)
+> +			{
+> +			  error = get_errno ();
+> +			  if (error)
+> +			    {
+> +			      delete fh;
+> +			      return;
+> +			    }
+> +			}
+>   		      delete fh;
+>   		    }
+>   		  switch (file_type)
+> 
 
-diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
-index 95faf8ca7..1d0c38a20 100644
---- a/winsup/cygwin/path.cc
-+++ b/winsup/cygwin/path.cc
-@@ -809,6 +809,15 @@ path_conv::check (const char *src, unsigned opt,
- 			  delete fh;
- 			  goto retry_fs_via_processfd;
- 			}
-+		      else if (file_type == virt_none && dev == FH_PROCESSFD)
-+			{
-+			  error = get_errno ();
-+			  if (error)
-+			    {
-+			      delete fh;
-+			      return;
-+			    }
-+			}
- 		      delete fh;
- 		    }
- 		  switch (file_type)
--- 
-2.28.0
+The subject should say "2/2", not "2/3".  I have a local third patch documenting 
+the bug fix, which I didn't bother to send.
 
+Ken
