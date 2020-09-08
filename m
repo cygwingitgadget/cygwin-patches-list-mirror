@@ -1,78 +1,52 @@
-Return-Path: <kbrown@cornell.edu>
-Received: from NAM02-BL2-obe.outbound.protection.outlook.com
- (mail-eopbgr750098.outbound.protection.outlook.com [40.107.75.98])
- by sourceware.org (Postfix) with ESMTPS id 9F8C83861930
- for <cygwin-patches@cygwin.com>; Tue,  8 Sep 2020 19:05:10 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 9F8C83861930
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gmidKE7iHrJvmIQcp7k0xM7oPEZA84On4kycEvsx+cfK6py+IkvCP5ynI4UdT3UfZ5Ubrx/O64bO1JlbsNDgFCFJMj8EBBcl+iSeMBDlY1IrtyRvWRPuif42/b88jyi/GCvOR0xsu+Fab+kxmdVcOmoLTdQkccAey+D0byL6RFVuLsKIijL/aCSVTlEIki4z7gs9FLR3VPpMhlROWNuZBWcEh7MY7RZCF8iH6/J5Nn4l3IGQpJc9VCzvgZd5WoAcJhUBPnDY0miM8Xv2zj1UtgDMZaIYl4Dx5QuXUbeWFTk21G8aocWRbydlCdv9ZH3d5VH71mJ3gUY0SCdVmRkMog==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rjVYyH+TQbRIuxh0PqcsO9obsXJ3Pl1aJ0/Qn7aKAsM=;
- b=amCYWhwaYCd8X7lQfosF3XRY31+my1kUOvnF/tOCn99gMu2N1OejTe2DYvBVHVlxyJRvceeuEkpRg8Pc0vPOxqT1nMZfbeFS8qLfKODrGCUwaD4yujnTs1QgBwksigzfDBeCoFA1hZ1B/vOlqYxKEDop4E0rN1uMmvgPXuob/HfoO6L6RXcMGqDhSK/ZxYP0yoZgu1Vh9/KrjeaeVb1q8KtniDr+r4OxiTfy+LHwJ3IKR91AdxslxC6FYNSih2+kY2FfAE4UNBwB43eRu17OG0B0WpFEAEv0sfSm/jn+UzLmPjXekzuOUmhEygj3iKaaURuofI40klg5aURyHsBHXA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu;
- dkim=pass header.d=cornell.edu; arc=none
-Received: from MN2PR04MB6176.namprd04.prod.outlook.com (2603:10b6:208:e3::13)
- by MN2PR04MB5534.namprd04.prod.outlook.com (2603:10b6:208:e6::28)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3348.16; Tue, 8 Sep
- 2020 19:05:09 +0000
-Received: from MN2PR04MB6176.namprd04.prod.outlook.com
- ([fe80::c144:d206:c369:af44]) by MN2PR04MB6176.namprd04.prod.outlook.com
- ([fe80::c144:d206:c369:af44%7]) with mapi id 15.20.3348.017; Tue, 8 Sep 2020
- 19:05:09 +0000
-Subject: Re: [PATCH v2 2/3] Cygwin: path_conv::check: handle error from
- fhandler_process::exists
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+ by sourceware.org (Postfix) with ESMTPS id 3196D385783A
+ for <cygwin-patches@cygwin.com>; Tue,  8 Sep 2020 19:13:13 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 3196D385783A
+Authentication-Results: sourceware.org;
+ dmarc=none (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org;
+ spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
+Received: from calimero.vinschen.de ([217.91.18.234]) by
+ mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MHX3R-1kJrnS3v9t-00DU1g for <cygwin-patches@cygwin.com>; Tue, 08 Sep 2020
+ 21:13:11 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 54B56A83A8D; Tue,  8 Sep 2020 21:13:11 +0200 (CEST)
+Date: Tue, 8 Sep 2020 21:13:11 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-References: <20200908190246.48533-1-kbrown@cornell.edu>
-From: Ken Brown <kbrown@cornell.edu>
-Message-ID: <f73dd163-6875-5f66-4b0c-4196f245bed3@cornell.edu>
-Date: Tue, 8 Sep 2020 15:05:09 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
-In-Reply-To: <20200908190246.48533-1-kbrown@cornell.edu>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH2PR11CA0022.namprd11.prod.outlook.com
- (2603:10b6:610:54::32) To MN2PR04MB6176.namprd04.prod.outlook.com
- (2603:10b6:208:e3::13)
+Subject: Re: [PATCH 1/2] Cygwin: format_process_fd: add directory check
+Message-ID: <20200908191311.GR4127@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20200908165048.47566-1-kbrown@cornell.edu>
+ <20200908165048.47566-2-kbrown@cornell.edu>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2604:6000:b407:7f00:fc34:902a:527a:1c90]
- (2604:6000:b407:7f00:fc34:902a:527a:1c90) by
- CH2PR11CA0022.namprd11.prod.outlook.com (2603:10b6:610:54::32) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3348.16 via Frontend Transport; Tue, 8 Sep 2020 19:05:09 +0000
-X-Originating-IP: [2604:6000:b407:7f00:fc34:902a:527a:1c90]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 01682cda-ca94-46ee-7a28-08d8542a1b4a
-X-MS-TrafficTypeDiagnostic: MN2PR04MB5534:
-X-Microsoft-Antispam-PRVS: <MN2PR04MB5534E87EB77509F4A613EFE0D8290@MN2PR04MB5534.namprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zkcBT+2om87bgWDQ7Y4TlRaFwMyFiUc+EVn7FiIIrmrTXVM6q5F9IL/WB2RbsvDuSu07A5NMzE+Dmjm8W5GTdlfq9klSnLQetZ+rxdw9gssUiHgEbPz2+OjFlbW7tiifZpfMGqBE8NNAms2g11PNnbF4YaUa4ygj9VHfv0KCY7I/TJOaaIsVavszLnlMiTKacOB2AmHOAS/KZ9VEGAEDA5K4yHc4+aSbrj38KKm4omXGg+lyO0ZCBtFT4rzi/qd7VnGWIEC9L2NevYBKye7RhYXDxB+Qp7Qk3U8UelcXllAjv3fiRDi3+z8/aKDQeeoxvQlpya19xQHsXYgz+Pr5uaKW6NWVfsYagxOD9ptVJmPj1ckh4ZN07Kkd3wM3l/EA
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:MN2PR04MB6176.namprd04.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(4636009)(366004)(376002)(136003)(346002)(396003)(39850400004)(186003)(16526019)(4744005)(786003)(2616005)(316002)(66946007)(31686004)(5660300002)(66556008)(6916009)(75432002)(83380400001)(86362001)(36756003)(31696002)(66476007)(8936002)(53546011)(8676002)(52116002)(478600001)(6486002)(2906002)(43740500002);
- DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData: plLBqQ5mx/drz9mllV4LwqJVe1vTuG/4VRB2vIPVSTitKBAIYgHYDGKj2PvA8NeEG/gq/a+arHgEC/hn+i9M5eM0nynSrfialT6ZIvCLNhRoTVIXnFC7mKP0OkQyFkKRCs03e6IbiEPsb5Gzm4tgI5Fhwc5i1O2KdONv7sCksNnYHE8y36h2PZa60O1XAPQpehmyaUPly57p7JHMXp5zk909nPNR6uVb8o5hx1Ct+hJNjy3KSmr7AW1OEnpbh7IQED8AR2gX6gnWW/+XfOjC+jLTUY8OBBYRtegjW5p1blYgDKZThkhDwk6qmGXAw25qUHCwwjnn9VpfI3/EfZWZukWDiOPeplxXlEIzZ0lGDWuI+M7sz5dsGKn4e0F3BWQU96kslf9oNIzNjIQXGFmqESWTfUsVmri/Ga1ttKAAwGRFX1GkqfIqG5mU7HVAPPK7/jB3Qo82EhLEd4WYkURRysIWFLuGTL+KqbSK26euUga85Xo4+oemjddSucjcvsF5aqiIXFVMLW9hSxADQwJaJDyiCF5ZWsk+VPzIh+rVrpBnVOAJC8B/pdo9fkjbmWGjWNi2EsJP1wpBA4av0ssqiB5wRcd6EDZ+qg3YRzBOvDlYm4EL2kdfg/QRbNAKPTbPWC+RVmoTUPSYGtWlteAljvLO52GTzJDFLKmrxXSvkIDkHvXqB9VVAdI/L9rL3k9kFTL0Dswx3IECUrCTmObrYg==
-X-OriginatorOrg: cornell.edu
-X-MS-Exchange-CrossTenant-Network-Message-Id: 01682cda-ca94-46ee-7a28-08d8542a1b4a
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR04MB6176.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2020 19:05:09.8439 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5d7e4366-1b9b-45cf-8e79-b14b27df46e1
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ufgcvDquScVd/rMX4XsdfhNzOVw6uC4rjXkENJYtlYEq6ipGYbRrowFIFLjnPcFud4OrHSw15PvJeIHHfQWX4g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR04MB5534
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, MSGID_FROM_MTA_HEADER,
- NICE_REPLY_A, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_PASS,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200908165048.47566-2-kbrown@cornell.edu>
+X-Provags-ID: V03:K1:B5ptuapMArz1Nk6lqCGLGZuf+bpHGuR8nG7ZFcXAd5hvDOXpz0m
+ OOe7N16RGzyYO6kLjmL5K8i1qXt7SiohEMkkpWj4Gx2md6DFNouvvAve1Xg7/e6bUs9zk7S
+ US/SDXxZyLJD2rx5tyZtXpmK0UJpaXM0AknbqeQNI4VQJr5Ph9qbFehyvBYYRXKH0K7vHYY
+ dey7WNoEQbZxoSUYOicig==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:c8DTCBfhuLw=:17nSVvgproxeier6zXM7mE
+ /wpCm9BPSkmY8JwduE5FE0dShSUbxRTiQvK5u/8+jTYbkwebcSUK9zxKoVrtmV5al2BuykNf1
+ nIAWOKktcV3aEqpBC9x2YIQPpUqNr3+cDtQH+89J6TqXxexHID5XIJktBPOuzoo7c/JaxhWKX
+ nH5AO0j6qfHF2N5tYRVQxbhd9gK5A0XrBO6l7vcCprTGAxZfCuBjJ1nhqoQpIsKyVijODx+Em
+ qDa0f0N/FVKigvtkCS0IRVEtvGxvWJgP+ifAnYd/XwSeY+D3+H06Ac/h0MU0RjpQlDTOJ9LIP
+ wOJRmx+MgJEvsZrlzyTdWUAPkSXplM8Jtl4cd/DBPTTLHuYSUqIbPtpTUXFfs0HX6b0xXtKEu
+ EQ/HzVHCJ4DfCreLEND50sNTdXL2eJYzSXAOMLP8YFWqidE9nkth7WZWEerK2xOSb3wFFwInv
+ JZ5uc93lRcLFMLFJSWirnMzIML/5+PhKSGaZLC4UnEQrsasBRiLPSXftqq7pr2xpuiRnAcBiV
+ yepCy0UWLnHhsDxbqLU68G5L3ZcANq14d0ymwQi8v5Vlcmz/aGhjnftb6TYTy3qteKq332V2b
+ JverdJ7nKsS0hxESDVG8I5kDKhb/70UBev++e5bKjcb609+neLpRz6s1gEzWH7OYMJ90mdroI
+ J+ltkR6xpXlCAANWeLcdal+Ctpu014KSjGdy/CdjnBEtdeFiAALFLgMmmhG6bAFe1TX2gr45a
+ X6ad+YJ/NLZlcAvONrInckw0ZEh0QwrAFE0kfD0UtCjr3l9gpRn6ePWr/aRh/ASmOoQx9YkM4
+ EVI3UjRbK0pMXRSNqlA0j1S/SUKzz/aCOpHp+JqpW/VFJuEZHzR4cLUDGP6ylW83g+iPFTz/s
+ 8YuzaXrBUgr78AWOamtw==
+X-Spam-Status: No, score=-105.3 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -88,40 +62,51 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 08 Sep 2020 19:05:11 -0000
+X-List-Received-Date: Tue, 08 Sep 2020 19:13:14 -0000
 
-On 9/8/2020 3:02 PM, Ken Brown via Cygwin-patches wrote:
-> fhandler_process::exists is called when we are checking a path
-> starting with "/proc/<pid>/fd".  If it returns virt_none and sets an
-> errno, there is no need for further checking.  Just set 'error' and
-> return.
+Hi Ken,
+
+On Sep  8 12:50, Ken Brown via Cygwin-patches wrote:
+> The incoming path is allowed to have the form "$PID/fd/[0-9]*/.*"
+> provided the descriptor symlink points to a directory.  Check that
+> this is indeed the case.
 > ---
->   winsup/cygwin/path.cc | 9 +++++++++
->   1 file changed, 9 insertions(+)
+>  winsup/cygwin/fhandler_process.cc | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
 > 
-> diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
-> index 95faf8ca7..1d0c38a20 100644
-> --- a/winsup/cygwin/path.cc
-> +++ b/winsup/cygwin/path.cc
-> @@ -809,6 +809,15 @@ path_conv::check (const char *src, unsigned opt,
->   			  delete fh;
->   			  goto retry_fs_via_processfd;
->   			}
-> +		      else if (file_type == virt_none && dev == FH_PROCESSFD)
-> +			{
-> +			  error = get_errno ();
-> +			  if (error)
-> +			    {
-> +			      delete fh;
-> +			      return;
-> +			    }
-> +			}
->   		      delete fh;
->   		    }
->   		  switch (file_type)
-> 
+> diff --git a/winsup/cygwin/fhandler_process.cc b/winsup/cygwin/fhandler_process.cc
+> index a6c358217..888604e3d 100644
+> --- a/winsup/cygwin/fhandler_process.cc
+> +++ b/winsup/cygwin/fhandler_process.cc
+> @@ -398,6 +398,21 @@ format_process_fd (void *data, char *&destbuf)
+>  	*((process_fd_t *) data)->fd_type = virt_fdsymlink;
+>        else /* trailing path */
+>  	{
+> +	  /* Does the descriptor link point to a directory? */
+> +	  bool dir;
+> +	  if (*destbuf != '/')	/* e.g., "pipe:[" or "socket:[" */
+> +	    dir = false;
+> +	  else
+> +	    {
+> +	      path_conv pc (destbuf);
+> +	      dir = pc.isdir ();
+> +	    }
+> +	  if (!dir)
+> +	    {
+> +	      set_errno (ENOTDIR);
+> +	      cfree (destbuf);
+> +	      return -1;
+> +	    }
+>  	  char *newbuf = (char *) cmalloc_abort (HEAP_STR, strlen (destbuf)
+>  							   + strlen (e) + 1);
+>  	  stpcpy (stpcpy (newbuf, destbuf), e);
+> -- 
+> 2.28.0
 
-The subject should say "2/2", not "2/3".  I have a local third patch documenting 
-the bug fix, which I didn't bother to send.
+Huh, I'd never realized this check is missing.  I was just puzzeling
+over your patch, searching for the directory check, but yeah, there is
+none.  Please push.
 
-Ken
+
+Thanks,
+Corinna
