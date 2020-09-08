@@ -1,61 +1,35 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
- by sourceware.org (Postfix) with ESMTPS id 05CDA3857C56
- for <cygwin-patches@cygwin.com>; Tue,  8 Sep 2020 07:55:48 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 05CDA3857C56
-Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([217.91.18.234]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1Mw8cU-1kWGW51JAK-00s2gH for <cygwin-patches@cygwin.com>; Tue, 08 Sep 2020
- 09:55:45 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 8FE33A83A95; Tue,  8 Sep 2020 09:55:44 +0200 (CEST)
-Date: Tue, 8 Sep 2020 09:55:44 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com
+ [210.131.2.90])
+ by sourceware.org (Postfix) with ESMTPS id E31AE3857C56
+ for <cygwin-patches@cygwin.com>; Tue,  8 Sep 2020 08:17:15 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org E31AE3857C56
+Received: from Express5800-S70 (v038192.dynamic.ppp.asahi-net.or.jp
+ [124.155.38.192]) (authenticated)
+ by conssluserg-05.nifty.com with ESMTP id 0888GZAx027247;
+ Tue, 8 Sep 2020 17:16:35 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 0888GZAx027247
+X-Nifty-SrcIP: [124.155.38.192]
+Date: Tue, 8 Sep 2020 17:16:48 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 3/3] fhandler_pty_slave::setup_locale: respect charset ==
- "UTF-8"
-Message-ID: <20200908075544.GN4127@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200902163836.GL4127@calimero.vinschen.de>
- <20200903175912.GP4127@calimero.vinschen.de>
- <20200904182149.18cd752eef58c67ee8d39135@nifty.ne.jp>
- <20200904124400.GQ4127@calimero.vinschen.de>
- <20200904235016.9c34d04e809b5ad9f2bdfdf3@nifty.ne.jp>
- <20200904192235.GW4127@calimero.vinschen.de>
- <20200905174301.adbb3c147122fbe0636a0d56@nifty.ne.jp>
- <20200907082633.GC4127@calimero.vinschen.de>
- <20200907192713.54ca04cdc8264c6a03ce6f59@nifty.ne.jp>
- <20200907224056.bdd8818cd7013248b41871a4@nifty.ne.jp>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200907224056.bdd8818cd7013248b41871a4@nifty.ne.jp>
-X-Provags-ID: V03:K1:F+QvSdcqMiPxDiS0qu/gArs1iJ0HSyqSYHreP8dUFHRQzL/VH3F
- 3RMnagdMQG0bt5svszJmWuzpQJaoAFB3vTOJEWD0iWA1gXOd2ziJj804LspBeW9lITytYq4
- hZLhI5WpZiro0M78QGmKq/KO8hRahCsB4LdNhV3tildro9RdZHJbMSHWL/3kH/TIOX9K8W7
- ah/rIWoXB/QHnj/D55HlA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:CiYt4fD90rc=:WNoqdeNrrV+eUVOuEMnUlQ
- CWsakubm2hKkxlV5VEdFaDm/SJzPe49xk42oboQQA+kGY08reIcI7D32rQynyZk1jlMB6HD4V
- pVuSSOmPc0pEb7R5yNNh/o2CV9A+rMrp8FtOfOnByFhPrik8GRT/mk8L+kciwYAA8gP87+oUP
- 7uiUEjGCznltumv3Dses5hMsG1fs5+3em6RNdsc+cpYbpKBZxCJhZlGoh2cwb711uwrUYitQj
- aG81wSZBDwP4sUM7LN7dXPOuCwcIJJJljAD/owZM5ecJ67atbpvMrwTd4ZCd9zbpfCdy/Bucl
- JGpeBHqv5Z5RsHT8IBiuQBFXO65HCGIWPmSDdDW/Z9Bl4i4NUILrungaDkH0hlfkJ9k9V9S3k
- NkHhqiBoDB8YF7enhZ+qSS2dkLWK0wUuM6UNp8xzL97bKwBsIfbb4XI/zzNIiTiuW1Nb1s5pR
- YdfdVAAMrmx0WBfhy4afzHlYMGE5+0wTtSm6cJYunw9AmKBaLRDY/xqzSc7U6Ja5oQ16fSvc+
- NpT5Uxzwl3CauMnNcEgOZfuunAxDuZM2eTjCpMiEOaXvFeBJXI1kFrHS9bYJFcYxfXgHWecxK
- PhHYqYRDOZ73qAqga2iDCfz+hZNxm/xCPQ7JO72Ax1cC+JIfjUh2qGRtFZnaXexE/I7J1oe5x
- PzcN7H1WJ/tvvyJZTrqgPusa+vOvfF6oQz7rtDcgr1fcP7NaUXXR5h5DC8s3U3OsPUfQQt6oo
- MjI4QMlnLizxo6EBpSgig/fhtKTowlZPNvuRlTcK3AzPEC2HCEZ3oU2nRw4cjgXKDpG6oCIF9
- IYDyVlIIXK9GOcs5nsjKNOqvVGaC8FF3OhMFDrIEaQc3kZpxnxCTD6pDNXKqbvfeuK1vkrTNj
- M/OBT0VNXj4FU37SB8ew==
-X-Spam-Status: No, score=-100.3 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+Subject: Re: [PATCH 3/3] fhandler_pty_slave::setup_locale: respect charset
+ == "UTF-8"
+Message-Id: <20200908171648.e65665caebb643ce99910fa3@nifty.ne.jp>
+In-Reply-To: <nycvar.QRO.7.76.6.2009072309070.56@tvgsbejvaqbjf.bet>
+References: <nycvar.QRO.7.76.6.2009011818560.56@tvgsbejvaqbjf.bet>
+ <20200904190337.cde290e4b690793ef6a0f496@nifty.ne.jp>
+ <nycvar.QRO.7.76.6.2009040822000.56@tvgsbejvaqbjf.bet>
+ <20200905000302.9c777e3d2df4f49f3a641e42@nifty.ne.jp>
+ <nycvar.QRO.7.76.6.2009072309070.56@tvgsbejvaqbjf.bet>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, NICE_REPLY_A,
+ RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H4,
+ RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_PASS,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -71,71 +45,140 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 08 Sep 2020 07:55:50 -0000
+X-List-Received-Date: Tue, 08 Sep 2020 08:17:20 -0000
 
-On Sep  7 22:40, Takashi Yano via Cygwin-patches wrote:
-> Here is a summary of my points:
+On Mon, 7 Sep 2020 23:17:36 +0200 (CEST)
+Johannes Schindelin wrote:
+> Hi Takashi,
 > 
-> [Senario 1]
-> 1) Start mintty (UTF-8).
-> 2) Start another mintty by 
->      mintty -o charset=SJIS
->    from the first mintty.
+> On Sat, 5 Sep 2020, Takashi Yano wrote:
 > 
-> [Senario 2]
->   int pm = getpt();
->   if (fork()) {
->     [do the master operations]
->   } else {
->     setsid();
->     ps = open(ptsname(pm), O_RDWR);
->     close(pm);
->     dup2(ps, 0);
->     dup2(ps, 1);
->     dup2(ps, 2);
->     close(ps);
->     setenv("LANG", "ja_JP.SJIS", 1);
->     [exec shell]
->   }
+> > On Fri, 4 Sep 2020 08:23:42 +0200 (CEST)
+> > Johannes Schindelin wrote:
+> > >
+> > > On Fri, 4 Sep 2020, Takashi Yano via Cygwin-patches wrote:
+> > >
+> > > > On Tue, 1 Sep 2020 18:19:16 +0200 (CEST)
+> > > > Johannes Schindelin wrote:
+> > > >
+> > > > > When `LANG=en_US.UTF-8`, the detected `LCID` is 0x0409, which is
+> > > > > correct, but after that (at least if Pseudo Console support is enabled),
+> > > > > we try to find the default code page for that `LCID`, which is ASCII
+> > > > > (437). Subsequently, we set the Console output code page to that value,
+> > > > > completely ignoring that we wanted to use UTF-8.
+> > > > >
+> > > > > Let's not ignore the specifically asked-for UTF-8 character set.
+> > > > >
+> > > > > While at it, let's also set the Console output code page even if Pseudo
+> > > > > Console support is disabled; contrary to the behavior of v3.0.7, the
+> > > > > Console output code page is not ignored in that case.
+> > > > >
+> > > > > The most common symptom would be that console applications which do not
+> > > > > specifically call `SetConsoleOutputCP()` but output UTF-8-encoded text
+> > > > > seem to be broken with v3.1.x when they worked plenty fine with v3.0.x.
+> > > > >
+> > > > > This fixes https://github.com/msys2/MSYS2-packages/issues/1974,
+> > > > > https://github.com/msys2/MSYS2-packages/issues/2012,
+> > > > > https://github.com/rust-lang/cargo/issues/8369,
+> > > > > https://github.com/git-for-windows/git/issues/2734,
+> > > > > https://github.com/git-for-windows/git/issues/2793,
+> > > > > https://github.com/git-for-windows/git/issues/2792, and possibly quite a
+> > > > > few others.
+> > > > >
+> > > > > Signed-off-by: Johannes Schindelin <johannes.schindelin@gmx.de>
+> > > > > ---
+> > > > >  winsup/cygwin/fhandler_tty.cc | 9 +++++++++
+> > > > >  1 file changed, 9 insertions(+)
+> > > > >
+> > > > > diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+> > > > > index 06789a500..414c26992 100644
+> > > > > --- a/winsup/cygwin/fhandler_tty.cc
+> > > > > +++ b/winsup/cygwin/fhandler_tty.cc
+> > > > > @@ -2859,6 +2859,15 @@ fhandler_pty_slave::setup_locale (void)
+> > > > >    char charset[ENCODING_LEN + 1] = "ASCII";
+> > > > >    LCID lcid = get_langinfo (locale, charset);
+> > > > >
+> > > > > +  /* Special-case the UTF-8 character set */
+> > > > > +  if (strcasecmp (charset, "UTF-8") == 0)
+> > > > > +    {
+> > > > > +      get_ttyp ()->term_code_page = CP_UTF8;
+> > > > > +      SetConsoleCP (CP_UTF8);
+> > > > > +      SetConsoleOutputCP (CP_UTF8);
+> > > > > +      return;
+> > > > > +    }
+> > > > > +
+> > > > >    /* Set console code page from locale */
+> > > > >    if (get_pseudo_console ())
+> > > > >      {
+> > > > > --
+> > > > > 2.27.0
+> > > >
+> > > > I would like to propose a counter patch attached.
+> > > > What do you think of this patch?
+> > > >
+> > > > This patch does not treat UTF-8 as special.
+> > >
+> > > Sure, but it only fixes the issue in `disable_pcon` mode in the current
+> > > tip commit. That's because a new Pseudo Console is created for every
+> > > spawned non-Cygwin console application, and that new Pseudo Console does
+> > > _not_ have the code page set by your patch.
+> >
+> > You are right. However, if pseudo console is enabled, the app
+> > which works correclty in command prompt should work as well in
+> > pseudo console. Therefore, there is nothing to be fixed.
 > 
+> I am coming to the conclusion that your definition what is correct differs
+> from my definition of what is correct.
 > 
-> Q1) cygheap or tty shared memory?
+> For me, it matters what users see. And what users actually see is the
+> output of UTF-8 encoded text that is now interpreted via the default code
+> page of their LCID, i.e. it is incorrect.
 > 
-> Consider senario 1. If the term_code_page is in cygheap,
-> it is inherited to child process. Therefore, the second
-> mintty cannot update term_code_page while locale is changed.
+> Sure, you can argue all you want that those console applications are _all
+> wrong_. _All of them_.
 > 
-> Consider senario 2. Since only the child process knows the
-> locale, master (parent process) cannot get term_code_page
-> if it is in cygheap.
+> In practice, that matters very little, as many users have
+> `LANG=en_US.UTF-8` (meaning your patches force their console applications'
+> output to be interpreted with code page 437) and therefore for those
+> users, things looked fine before, and now they don't.
 > 
-> Q2) Is checking environment necessary?
+> Note that I am not talking about developers who develop said console
+> applications. I am talking about users who use those console applications.
+> In other words, I am talking about a vastly larger group of affected
+> people.
 > 
-> As for senario 2, setlocale() is not called. So it is
-> necessary to check environment to know locale.
-> 
-> Q3) Where and when should term_code_page be set?
-> 
-> In senario 2, LANG is set just before exec() in the CHILD
-> process. Therefore, term_code_page should be determined
-> in the child_info_spawn:worker or in the execed process.
+> All of those people (or at least a substantial majority) will now have to
+> be told to please disable Pseudo Console support in v3.2.0 because they
+> would have to patch and rebuild those console applications that don't call
+> `SetConsoleOutputCP()`, and that is certainly unreasonable to expect of
+> the majority of users. Not even the `cmd /c chcp 65001` work-around (that
+> helps with v3.1.7) will work with v3.2.0 when Pseudo Console support is
+> enabled.
 
-What bugs me here is that in scenario 1, the codeset of the master side
-is the defining factor, while in case 2 the slave side is the defining
-factor.
+In the case where pseudo console is disabled, the patch I proposed in
+https://cygwin.com/pipermail/cygwin-patches/2020q3/010548.html
+will solve the issue. I mean apps which work correctly in cygwin 3.0.7
+work in cygwin 3.2.0 as well with that patch.
 
-Actually, the only defining factor is the codeset of the master side of
-the pty.  If the master side interprets all input as utf-8, then the
-slave side should either send utf-8, or live with the consequences.
-It's the task of the *user* on the slave side, to set the env setting
-matching to the master side.
+OTOH, in the case where pseudo console is enabled, non-cygwin apps which
+work correctly in command prompt, work in cygwin 3.2.0 as well.
 
-I tend to agree with Johannes.  We should not enforce a codepage setting
-inside Cygwin.  The bytes should go to the master side and the master
-side interprets them.  If native apps produce garbage, well, I'm not
-overly sympathetic.  Especially given the fact that even Microsoft is
-now doing a lot to switch to UTF-8 as much as possible.  It's the only
-sane option anyway.
+It is enough for all, isn't it?
 
+You may think that all non-cygwin apps which work in cygwin 3.0.7 must
+work in cygwin 3.2.0 even when pseudo console is enabled, but it is
+against the purpose of the pseudo console support. The goal of pseudo
+console support is to make non-cygwin apps work as if it is executed in
+command prompt.
 
-Corinna
+By the way, you complained regarding garbled output of the program which
+outputs UTF-8 string regardless of locale.
+https://cygwin.com/pipermail/cygwin-developers/2020-August/011951.html
+However, many Japanese programmers, for example, make programs which
+output SJIS (CP932) string regardless of locale.
+
+Why do you think the former must work while the latter deos not have to?
+Is there any reasonable reason other than backward compatibility?
+
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
