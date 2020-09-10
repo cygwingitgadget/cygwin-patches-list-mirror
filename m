@@ -1,22 +1,22 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com
- [210.131.2.80])
- by sourceware.org (Postfix) with ESMTPS id D63DB3861038
- for <cygwin-patches@cygwin.com>; Thu, 10 Sep 2020 14:16:29 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org D63DB3861038
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com
+ [210.131.2.83])
+ by sourceware.org (Postfix) with ESMTPS id CAAAE3971C6F
+ for <cygwin-patches@cygwin.com>; Thu, 10 Sep 2020 14:18:59 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org CAAAE3971C6F
 Received: from Express5800-S70 (v038192.dynamic.ppp.asahi-net.or.jp
  [124.155.38.192]) (authenticated)
- by conssluserg-01.nifty.com with ESMTP id 08AEG7bE018915
- for <cygwin-patches@cygwin.com>; Thu, 10 Sep 2020 23:16:07 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 08AEG7bE018915
+ by conssluserg-04.nifty.com with ESMTP id 08AEIMQY027937
+ for <cygwin-patches@cygwin.com>; Thu, 10 Sep 2020 23:18:22 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 08AEIMQY027937
 X-Nifty-SrcIP: [124.155.38.192]
-Date: Thu, 10 Sep 2020 23:16:10 +0900
+Date: Thu, 10 Sep 2020 23:18:25 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH 3/3] fhandler_pty_slave::setup_locale: respect charset
  == "UTF-8"
-Message-Id: <20200910231610.18a2871e38406e5c96cd2fc3@nifty.ne.jp>
-In-Reply-To: <20200910140407.GB4127@calimero.vinschen.de>
+Message-Id: <20200910231825.02bac7b42aabbd7ee9a1715e@nifty.ne.jp>
+In-Reply-To: <20200910231610.18a2871e38406e5c96cd2fc3@nifty.ne.jp>
 References: <nycvar.QRO.7.76.6.2009011818560.56@tvgsbejvaqbjf.bet>
  <20200904190337.cde290e4b690793ef6a0f496@nifty.ne.jp>
  <nycvar.QRO.7.76.6.2009040822000.56@tvgsbejvaqbjf.bet>
@@ -26,6 +26,7 @@ References: <nycvar.QRO.7.76.6.2009011818560.56@tvgsbejvaqbjf.bet>
  <20200909072123.GX4127@calimero.vinschen.de>
  <20200910091500.388ab2f6796a4abce57a3cd2@nifty.ne.jp>
  <20200910140407.GB4127@calimero.vinschen.de>
+ <20200910231610.18a2871e38406e5c96cd2fc3@nifty.ne.jp>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -48,57 +49,63 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 10 Sep 2020 14:16:33 -0000
+X-List-Received-Date: Thu, 10 Sep 2020 14:19:01 -0000
 
-On Thu, 10 Sep 2020 16:04:07 +0200
-Corinna Vinschen wrote:
+On Thu, 10 Sep 2020 23:16:10 +0900
+Takashi Yano  wrote:
 
-> Hi Takashi,
+> On Thu, 10 Sep 2020 16:04:07 +0200
+> Corinna Vinschen wrote:
 > 
-> On Sep 10 09:15, Takashi Yano via Cygwin-patches wrote:
-> > On Wed, 9 Sep 2020 09:21:23 +0200
-> > Corinna Vinschen wrote:
-> > > Takashi, does the patch from
-> > > https://cygwin.com/pipermail/cygwin-developers/2020-August/011951.html
-> > > still apply to the latest from master?  Question is, shouldn't the
-> > > Windows calls setting the codepage be only called if started from
-> > > child_info_spawn::worker for non-Cygwin executables?
+> > Hi Takashi,
 > > 
-> > I'd propose the patch:
+> > On Sep 10 09:15, Takashi Yano via Cygwin-patches wrote:
+> > > On Wed, 9 Sep 2020 09:21:23 +0200
+> > > Corinna Vinschen wrote:
+> > > > Takashi, does the patch from
+> > > > https://cygwin.com/pipermail/cygwin-developers/2020-August/011951.html
+> > > > still apply to the latest from master?  Question is, shouldn't the
+> > > > Windows calls setting the codepage be only called if started from
+> > > > child_info_spawn::worker for non-Cygwin executables?
+> > > 
+> > > I'd propose the patch:
+> > > 
+> > > diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+> > > index 37d033bbe..95b28c3da 100644
+> > > --- a/winsup/cygwin/fhandler_tty.cc
+> > > +++ b/winsup/cygwin/fhandler_tty.cc
+> > > @@ -1830,7 +1830,11 @@ fhandler_pty_slave::setup_locale (void)
+> > >    extern UINT __eval_codepage_from_internal_charset ();
+> > > 
+> > >    if (!get_ttyp ()->term_code_page)
+> > > -    get_ttyp ()->term_code_page = __eval_codepage_from_internal_charset ();
+> > > +    {
+> > > +      get_ttyp ()->term_code_page = __eval_codepage_from_internal_charset ();
+> > > +      SetConsoleCP (get_ttyp ()->term_code_page);
+> > > +      SetConsoleOutputCP (get_ttyp ()->term_code_page);
+> > > +    }
+> > >  }
+> > > 
+> > >  void
+> > > 
+> > > However, Johannes insists setting codepage for non-cygwin apps
+> > > even when pseudo console is enabled, which I cannot agree.
+> > > 
+> > > Actually, I hesitate even the patch above, however, it seems to
+> > > be necessary for msys apps in terms of backward compatibility.
 > > 
-> > diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-> > index 37d033bbe..95b28c3da 100644
-> > --- a/winsup/cygwin/fhandler_tty.cc
-> > +++ b/winsup/cygwin/fhandler_tty.cc
-> > @@ -1830,7 +1830,11 @@ fhandler_pty_slave::setup_locale (void)
-> >    extern UINT __eval_codepage_from_internal_charset ();
-> > 
-> >    if (!get_ttyp ()->term_code_page)
-> > -    get_ttyp ()->term_code_page = __eval_codepage_from_internal_charset ();
-> > +    {
-> > +      get_ttyp ()->term_code_page = __eval_codepage_from_internal_charset ();
-> > +      SetConsoleCP (get_ttyp ()->term_code_page);
-> > +      SetConsoleOutputCP (get_ttyp ()->term_code_page);
-> > +    }
-> >  }
-> > 
-> >  void
-> > 
-> > However, Johannes insists setting codepage for non-cygwin apps
-> > even when pseudo console is enabled, which I cannot agree.
-> > 
-> > Actually, I hesitate even the patch above, however, it seems to
-> > be necessary for msys apps in terms of backward compatibility.
+> > If we do as above, doesn't that mean the invocation of convert_mb_str in
+> > fhandler_pty_master::accept_input, as well as the second invocation of
+> > convert_mb_str in fhandler_pty_master::pty_master_fwd_thread are
+> > redundant?  Both are only called if get_ttyp ()->term_code_page differs
+> > from the input or output console codepage.  Given the above setting of
+> > the console CP to term_code_page, this would never be the case, right?
 > 
-> If we do as above, doesn't that mean the invocation of convert_mb_str in
-> fhandler_pty_master::accept_input, as well as the second invocation of
-> convert_mb_str in fhandler_pty_master::pty_master_fwd_thread are
-> redundant?  Both are only called if get_ttyp ()->term_code_page differs
-> from the input or output console codepage.  Given the above setting of
-> the console CP to term_code_page, this would never be the case, right?
+> You are right by default. However, if user change the code page using
+> chcp.com, conversion does work.
 
-You are right by default. However, if user change the code page using
-chcp.com, conversion does work.
+Not only user, but also app may change the codepage by SetConsoleCP()
+and SetConsoleOutputCP().
 
 -- 
 Takashi Yano <takashi.yano@nifty.ne.jp>
