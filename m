@@ -1,41 +1,59 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com
- [210.131.2.90])
- by sourceware.org (Postfix) with ESMTPS id E65393857806
- for <cygwin-patches@cygwin.com>; Thu, 10 Sep 2020 13:08:38 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org E65393857806
-Received: from Express5800-S70 (v038192.dynamic.ppp.asahi-net.or.jp
- [124.155.38.192]) (authenticated)
- by conssluserg-05.nifty.com with ESMTP id 08AD872f029315
- for <cygwin-patches@cygwin.com>; Thu, 10 Sep 2020 22:08:08 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 08AD872f029315
-X-Nifty-SrcIP: [124.155.38.192]
-Date: Thu, 10 Sep 2020 22:08:10 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+ by sourceware.org (Postfix) with ESMTPS id 662643857806
+ for <cygwin-patches@cygwin.com>; Thu, 10 Sep 2020 14:04:09 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 662643857806
+Authentication-Results: sourceware.org;
+ dmarc=none (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org;
+ spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
+Received: from calimero.vinschen.de ([217.91.18.234]) by
+ mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1N45th-1khDfi3l9F-0100on for <cygwin-patches@cygwin.com>; Thu, 10 Sep 2020
+ 16:04:07 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 3BC67A804C1; Thu, 10 Sep 2020 16:04:07 +0200 (CEST)
+Date: Thu, 10 Sep 2020 16:04:07 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 3/3] fhandler_pty_slave::setup_locale: respect charset
- == "UTF-8"
-Message-Id: <20200910220810.3f3910eb065dd3be0186b885@nifty.ne.jp>
-In-Reply-To: <20200908184536.3670324a2026ef0394de3821@nifty.ne.jp>
-References: <20200904124400.GQ4127@calimero.vinschen.de>
- <20200904235016.9c34d04e809b5ad9f2bdfdf3@nifty.ne.jp>
- <20200904192235.GW4127@calimero.vinschen.de>
- <20200905174301.adbb3c147122fbe0636a0d56@nifty.ne.jp>
- <20200905201506.8bbca09f51a2b2b06135affa@nifty.ne.jp>
- <20200905231516.c799225e61b2b96bf05f65a6@nifty.ne.jp>
- <20200906175703.5875d4dd6140d9f6812cf2a9@nifty.ne.jp>
- <20200906191530.32230a99bf23d3c6f21beb41@nifty.ne.jp>
- <20200907010413.53ef9a9b727e8f971ca6b2ea@nifty.ne.jp>
- <20200907134558.3e1cd8bd4070991b856f58bb@nifty.ne.jp>
- <20200908084034.GO4127@calimero.vinschen.de>
- <20200908184536.3670324a2026ef0394de3821@nifty.ne.jp>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, NICE_REPLY_A,
- RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_PASS,
+Subject: Re: [PATCH 3/3] fhandler_pty_slave::setup_locale: respect charset ==
+ "UTF-8"
+Message-ID: <20200910140407.GB4127@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <nycvar.QRO.7.76.6.2009011818560.56@tvgsbejvaqbjf.bet>
+ <20200904190337.cde290e4b690793ef6a0f496@nifty.ne.jp>
+ <nycvar.QRO.7.76.6.2009040822000.56@tvgsbejvaqbjf.bet>
+ <20200905000302.9c777e3d2df4f49f3a641e42@nifty.ne.jp>
+ <nycvar.QRO.7.76.6.2009072309070.56@tvgsbejvaqbjf.bet>
+ <20200908171648.e65665caebb643ce99910fa3@nifty.ne.jp>
+ <20200909072123.GX4127@calimero.vinschen.de>
+ <20200910091500.388ab2f6796a4abce57a3cd2@nifty.ne.jp>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200910091500.388ab2f6796a4abce57a3cd2@nifty.ne.jp>
+X-Provags-ID: V03:K1:uX/MijhQ9uUSSj6ooPj8CpVD2cPU711RStwH7WqtGU4hMVzyZmX
+ ulnrOJ3Ug4vYzD9hwmhQA69UAmlKo9eWBKrNwy5cxt01Vm8K1Y+3PDWirwNj3US72zs1PBg
+ hZqVXUaX5JubR5iWFQoyR7e6hVC2WByTHK5YQLfRND/Oe5DgmOUgt8QYWIdfCzVw+YqYd4o
+ Z1Gb6MpDG1ghKqdg76k3Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:UUjO0H7ewnA=:Zkmk3zz+ddpmVxvEvzVkJC
+ uTF8sRTVh1DzFz/sBhWXf3U869iO+DohhrX9YOWLst703bMrYYE1ikxWBSVJ2Ov7umcfN9lv/
+ u3qzpEATjAUJwsE06r7bJ85AiT5scOH35cygszGvTmFvN4+ykyu9CTZ4sLm5TeenyvCKlwvub
+ jeMgn8MN7uGupAm9tKS0P5DRfMzGyFrnP1KuHlO6oqOKaB4dXp2/SSkKIInDRRN5GfJmEXh5Q
+ 3IMaJZSJeie3ReE6U2bMP6Wni62IahaR9Mhi3ZqI0yTdPlgLXCKAkJfU8gjlxMeULoLIZb04l
+ 87VLiB+27jjNBXzEDmMl4D60QbrKRN2V/pIEAHB1xg9TiZTHIw51jBE2OfFJvA8WVBaBk6/3o
+ OAUrnxWwNGQN4FFB5GdUtTCJ1YhodFUohcv99iza/53sT9v+bBy43U7kjTsIlD/Gq8f6+pmMJ
+ WFirCStkrFm+uGP5IvQtW31EEbtzutOR06Rd4HafYDMwpi6KPZ+SCGwkkgGiyAukh3OSJmb+w
+ SMn8sUjvdHd09Svz/HJD6uN+yloadM5SJAYBoNP+achJmX5wPLub73xkTBMNGwJnSnA+FexqV
+ 4IN/wiYPwoF2IaJs+8SypZhi1UTjtfmCJk9aDpAZstXY38fhZy9I8aA+vPw1HG1momxSAH3jr
+ 67bHDn/SZP8e6lNzvzXLkbtekNbL6XYUT8qnCVNkZjkAS+KZVQkwu6420r6JBIOjHB1xh6fCH
+ dQnUXGI8wv+VCjJ0f59iAp25IA9US8ARqPJuTTPDqBTVHnJJ5CCe79Rul+8MjMnoLHMNzBbBc
+ kdDSlAfebL9tD4hL3QLAsvJdWEa15B5Aw0Zj83tcyDteX6ElqO2FtNCxolN22Tu8kq5QoJX4e
+ o8sMty4k1yXBvu0GMbIw==
+X-Spam-Status: No, score=-105.4 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -51,70 +69,51 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 10 Sep 2020 13:08:41 -0000
+X-List-Received-Date: Thu, 10 Sep 2020 14:04:11 -0000
 
-On Tue, 8 Sep 2020 18:45:36 +0900
-Takashi Yano via Cygwin-patches <cygwin-patches@cygwin.com> wrote:
+Hi Takashi,
 
-> Hi Corinna,
-> 
-> On Tue, 8 Sep 2020 10:40:34 +0200
+On Sep 10 09:15, Takashi Yano via Cygwin-patches wrote:
+> On Wed, 9 Sep 2020 09:21:23 +0200
 > Corinna Vinschen wrote:
-> > On Sep  7 13:45, Takashi Yano via Cygwin-patches wrote:
-> > > On Mon, 7 Sep 2020 01:04:13 +0900
-> > > > > Chages:
-> > > > > - If global locale is set, it takes precedence.
-> > > > 
-> > > > Changes:
-> > > > - Use __get_current_locale() instead of __get_global_locale().
-> > > > - Fix a bug for ISO-8859-* charset.
-> > > 
-> > > Changes:
-> > > - Use envblock if it is passed to CreateProcess in spawn.cc.
-> > 
-> > For the time being and to make at least *some* progress and with my
-> > upcoming "away from keyboard"-time , I pushed the gist of my patch,
-> > replacing the locale evaluating code in fhandler_tty with the function
-> > __eval_codepage_from_internal_charset in its most simple form.
-> > I didn't touch anything else, given that this discussion is still
-> > ongoing.
+> > Takashi, does the patch from
+> > https://cygwin.com/pipermail/cygwin-developers/2020-August/011951.html
+> > still apply to the latest from master?  Question is, shouldn't the
+> > Windows calls setting the codepage be only called if started from
+> > child_info_spawn::worker for non-Cygwin executables?
 > 
-> Your patch pushed does the magic!
+> I'd propose the patch:
 > 
-> Even cygterm works even though the code does not check environment.
+> diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+> index 37d033bbe..95b28c3da 100644
+> --- a/winsup/cygwin/fhandler_tty.cc
+> +++ b/winsup/cygwin/fhandler_tty.cc
+> @@ -1830,7 +1830,11 @@ fhandler_pty_slave::setup_locale (void)
+>    extern UINT __eval_codepage_from_internal_charset ();
 > 
-> The point is here.
+>    if (!get_ttyp ()->term_code_page)
+> -    get_ttyp ()->term_code_page = __eval_codepage_from_internal_charset ();
+> +    {
+> +      get_ttyp ()->term_code_page = __eval_codepage_from_internal_charset ();
+> +      SetConsoleCP (get_ttyp ()->term_code_page);
+> +      SetConsoleOutputCP (get_ttyp ()->term_code_page);
+> +    }
+>  }
 > 
-> @@ -1977,9 +1807,6 @@ fhandler_pty_slave::fixup_after_exec ()
->    if (!close_on_exec ())
->      fixup_after_fork (NULL);   /* No parent handle required. */
+>  void
 > 
-> -  /* Set locale */
-> -  setup_locale ();
-> -
->    /* Hook Console API */
->  #define DO_HOOK(module, name) \
->    if (!name##_Orig) \
+> However, Johannes insists setting codepage for non-cygwin apps
+> even when pseudo console is enabled, which I cannot agree.
 > 
-> Without this deletion, term_code_page is determined when
-> cygwin shell is executed. Since it is in fixup_after_exec(),
-> setlocale() does not called yet in the shell. As a result,
-> term_code_page cannot be determined correctly.
-> 
-> In your new patch, term_code_page is determined when the first
-> non-cygwin program is execed in the shell. The shell process
-> already calls setlocale(), so term_code_page can be determined
-> using global locale.
-> 
-> Thanks for the excellent idea!
-> 
-> Only the problem I noticed is that cygterm does not work if the
-> shell does not call setlocale(). This happens if the shell is
-> non-cygwin program, for example, cmd.exe, however, it is unusual
-> case.
+> Actually, I hesitate even the patch above, however, it seems to
+> be necessary for msys apps in terms of backward compatibility.
 
-I noticed this also happens when shell is /bin/ash (/bin/dash).
-However, it's still acceptable for me.
+If we do as above, doesn't that mean the invocation of convert_mb_str in
+fhandler_pty_master::accept_input, as well as the second invocation of
+convert_mb_str in fhandler_pty_master::pty_master_fwd_thread are
+redundant?  Both are only called if get_ttyp ()->term_code_page differs
+from the input or output console codepage.  Given the above setting of
+the console CP to term_code_page, this would never be the case, right?
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+
+Corinna
