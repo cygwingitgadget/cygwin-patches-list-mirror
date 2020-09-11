@@ -1,51 +1,32 @@
-Return-Path: <jon.turney@dronecode.org.uk>
-Received: from re-prd-fep-040.btinternet.com (mailomta1-re.btinternet.com
- [213.120.69.94])
- by sourceware.org (Postfix) with ESMTPS id 80976386F001
- for <cygwin-patches@cygwin.com>; Fri, 11 Sep 2020 12:33:56 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 80976386F001
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=dronecode.org.uk
-Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
-Received: from re-prd-rgout-003.btmx-prd.synchronoss.net ([10.2.54.6])
- by re-prd-fep-040.btinternet.com with ESMTP id
- <20200911123355.FBCH10362.re-prd-fep-040.btinternet.com@re-prd-rgout-003.btmx-prd.synchronoss.net>
- for <cygwin-patches@cygwin.com>; Fri, 11 Sep 2020 13:33:55 +0100
-Authentication-Results: btinternet.com;
- auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-Originating-IP: [86.141.128.138]
-X-OWM-Source-IP: 86.141.128.138 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgeduiedrudehledgheeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefuvfhfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeetleffgeetieduueetheffveelvdfffeefkefghffhhedvhffghfetheetleetkeenucffohhmrghinheptgihghifihhnrdgtohhmnecukfhppeekiedrudeguddruddvkedrudefkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddrudduudgnpdhinhgvthepkeeirddugedurdduvdekrddufeekpdhmrghilhhfrhhomhepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqecuuefqffgjpeekuefkvffokffogfdprhgtphhtthhopeeotgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomheq
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from [192.168.1.111] (86.141.128.138) by
- re-prd-rgout-003.btmx-prd.synchronoss.net (5.8.340) (authenticated as
- jonturney@btinternet.com)
- id 5ED9C2FD1068BFBB for cygwin-patches@cygwin.com;
- Fri, 11 Sep 2020 13:33:55 +0100
-Subject: Re: [PATCH] Cygwin: ldd: Also look for not found DLLs when exit
- status is non-zero
-To: Cygwin Patches <cygwin-patches@cygwin.com>
-References: <20200910122740.8534-1-jon.turney@dronecode.org.uk>
- <20200910140455.GC4127@calimero.vinschen.de>
-From: Jon Turney <jon.turney@dronecode.org.uk>
-Message-ID: <50e65d21-e501-99fe-80ef-e3b9c04bb4ed@dronecode.org.uk>
-Date: Fri, 11 Sep 2020 13:33:53 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
-MIME-Version: 1.0
-In-Reply-To: <20200910140455.GC4127@calimero.vinschen.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com
+ [210.131.2.82])
+ by sourceware.org (Postfix) with ESMTPS id DBE713987401
+ for <cygwin-patches@cygwin.com>; Fri, 11 Sep 2020 12:35:40 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org DBE713987401
+Received: from Express5800-S70 (v038192.dynamic.ppp.asahi-net.or.jp
+ [124.155.38.192]) (authenticated)
+ by conssluserg-03.nifty.com with ESMTP id 08BCZ8ZD018645
+ for <cygwin-patches@cygwin.com>; Fri, 11 Sep 2020 21:35:09 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 08BCZ8ZD018645
+X-Nifty-SrcIP: [124.155.38.192]
+Date: Fri, 11 Sep 2020 21:35:15 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Cygwin: pty: Add workaround for ISO-2022 and ISCII in
+ convert_mb_str().
+Message-Id: <20200911213515.98a88ca7f186ede9bf8fc106@nifty.ne.jp>
+In-Reply-To: <20200911120840.GH4127@calimero.vinschen.de>
+References: <20200911105401.153-1-takashi.yano@nifty.ne.jp>
+ <20200911120840.GH4127@calimero.vinschen.de>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A,
- RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H3,
- RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_NONE,
- TXREP autolearn=no autolearn_force=no version=3.4.2
+X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, NICE_REPLY_A,
+ RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_PASS,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -60,28 +41,74 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 11 Sep 2020 12:33:58 -0000
+X-List-Received-Date: Fri, 11 Sep 2020 12:35:44 -0000
 
-On 10/09/2020 15:04, Corinna Vinschen wrote:
-> On Sep 10 13:27, Jon Turney wrote:
->> If the process exited with e.g. STATUS_DLL_NOT_FOUND, also process the
->> file to look for not found DLLs.
->>
->> (We currently only do this when a STATUS_DLL_NOT_FOUND exception occurs,
->> which I haven't managed to observe)
->>
->> This still isn't 100% correct, as it only examines the specified file
->> for missing DLLs, not recursively on the DLLs it depends upon.
+Hi Corinna,
+
+On Fri, 11 Sep 2020 14:08:40 +0200
+Corinna Vinschen wrote:
+> On Sep 11 19:54, Takashi Yano via Cygwin-patches wrote:
+> > - In convert_mb_str(), exclude ISO-2022 and ISCII from the processing
+> >   for the case that the multibyte char is splitted in the middle.
+> >   The reason is as follows.
+> >   * ISO-2022 is too complicated to handle correctly.
+> >   * Not sure what to do with ISCII.
+> > ---
+> >  winsup/cygwin/fhandler_tty.cc | 9 +++++++--
+> >  1 file changed, 7 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+> > index 37d033bbe..ee5c6a90a 100644
+> > --- a/winsup/cygwin/fhandler_tty.cc
+> > +++ b/winsup/cygwin/fhandler_tty.cc
+> > @@ -117,6 +117,9 @@ CreateProcessW_Hooked
+> >    return CreateProcessW_Orig (n, c, pa, ta, inh, f, e, d, si, pi);
+> >  }
+> >  
+> > +#define IS_ISO_2022(x) ( (x) >= 50220 && (x) <= 50229 )
+> > +#define IS_ISCII(x) ( (x) >= 57002 && (x) <= 57011 )
+> > +
+> >  static void
+> >  convert_mb_str (UINT cp_to, char *ptr_to, size_t *len_to,
+> >  		UINT cp_from, const char *ptr_from, size_t len_from,
+> > @@ -126,8 +129,10 @@ convert_mb_str (UINT cp_to, char *ptr_to, size_t *len_to,
+> >    tmp_pathbuf tp;
+> >    wchar_t *wbuf = tp.w_get ();
+> >    int wlen = 0;
+> > -  if (cp_from == CP_UTF7)
+> > -    /* MB_ERR_INVALID_CHARS does not work properly for UTF-7.
+> > +  if (cp_from == CP_UTF7 || IS_ISO_2022 (cp_from) || IS_ISCII (cp_from))
+> > +    /* - MB_ERR_INVALID_CHARS does not work properly for UTF-7.
+> > +       - ISO-2022 is too complicated to handle correctly.
+> > +       - FIXME: Not sure what to do for ISCII.
+> >         Therefore, just convert string without checking */
+> >      wlen = MultiByteToWideChar (cp_from, 0, ptr_from, len_from,
+> >  				wbuf, NT_MAX_PATH);
+> > -- 
+> > 2.28.0
 > 
-> Better than nothing?
+> I'd prefer to not handle them at all.  We just don't support these
+> charsets, same as JIS, EBCDIC, you name it, which are not ASCII
+> compatible.  Let's please just drop any handling for these weird
+> or outdated codepages.
 
-Well, except when people are misled when investigating problems because 
-they assume the output is accurate. (e.g. [1])
+What do you mean by "just drop any handling"? 
 
-[1] https://cygwin.com/pipermail/cygwin/2020-September/246164.html
+Do you mean remove following if block?
+> > +  if (cp_from == CP_UTF7 || IS_ISO_2022 (cp_from) || IS_ISCII (cp_from))
+> > +    /* - MB_ERR_INVALID_CHARS does not work properly for UTF-7.
+> > +       - ISO-2022 is too complicated to handle correctly.
+> > +       - FIXME: Not sure what to do for ISCII.
+> >         Therefore, just convert string without checking */
+> >      wlen = MultiByteToWideChar (cp_from, 0, ptr_from, len_from,
+> >  				wbuf, NT_MAX_PATH);
+In this case, the conversion for ISO-2022, ISCII and UTF-7 will
+not be done correctly.
 
-I guess what's maybe needed is some indication that an error occurred 
-and the output may be incomplete if the inferior process exited with a 
-non-zero status.  But not sure how we can do that while keeping the 
-output compatible with linux ldd.
+Or skip charset conversion if the codepage is EBCDIC, ISO-2022
+or ISCII? What should we do for UTF-7?
 
+What should happen if user or apps chage codepage to one of them?
+
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
