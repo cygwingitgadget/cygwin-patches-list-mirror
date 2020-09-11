@@ -1,56 +1,26 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
- by sourceware.org (Postfix) with ESMTPS id 98B0D3986418
- for <cygwin-patches@cygwin.com>; Fri, 11 Sep 2020 18:15:00 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 98B0D3986418
-Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([217.91.18.234]) by
- mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MelWf-1kqgDu0IoX-00aobq for <cygwin-patches@cygwin.com>; Fri, 11 Sep 2020
- 20:14:59 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 8A6F4A80637; Fri, 11 Sep 2020 20:14:58 +0200 (CEST)
-Date: Fri, 11 Sep 2020 20:14:58 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
+ by sourceware.org (Postfix) with ESMTPS id BC815396E428
+ for <cygwin-patches@cygwin.com>; Fri, 11 Sep 2020 18:35:20 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org BC815396E428
+Received: from localhost.localdomain (v038192.dynamic.ppp.asahi-net.or.jp
+ [124.155.38.192]) (authenticated)
+ by conuserg-08.nifty.com with ESMTP id 08BIYnEO017768;
+ Sat, 12 Sep 2020 03:34:54 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 08BIYnEO017768
+X-Nifty-SrcIP: [124.155.38.192]
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Add workaround for ISO-2022 and ISCII in
- convert_mb_str().
-Message-ID: <20200911181458.GM4127@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200911105401.153-1-takashi.yano@nifty.ne.jp>
- <20200911120840.GH4127@calimero.vinschen.de>
- <20200911213515.98a88ca7f186ede9bf8fc106@nifty.ne.jp>
- <20200911140601.GK4127@calimero.vinschen.de>
- <20200912010504.586a156f1712f61c3c696d40@nifty.ne.jp>
+Subject: [PATCH] Cygwin: pty: Skip multibyte char boundary check conditionally.
+Date: Sat, 12 Sep 2020 03:34:41 +0900
+Message-Id: <20200911183441.758-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200912010504.586a156f1712f61c3c696d40@nifty.ne.jp>
-X-Provags-ID: V03:K1:M6tkdzK1dz8XYoXjmh7FN1unLVisuhKxzkwQEmP6ZxVf+iGpsM8
- /1GlPL6gtFNhGd/AzeVwG3Ui8zvDy3JIo0ocUFJDGpIktdfSy56UoytX5pcJQ8DAwU2+Jlh
- wsD6wYGUhxMNEe3QpVRub+vOYSQ9KjNmutMQGtpq06i7MamMT7eP1evE674dLQ20sns3kfc
- vitjKBgOTWWTxprQdeyDg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Q3dA3RHqjeA=:SSds41YYHRFeJsM9ddml0g
- Z9pifzgc8sqhvtCfRV44OiE1i0lE8nSG6tEVLUwo1N+8qpAdPdc4Jh7WwIMrKspc3IWFKshwB
- HVWldlJF1Uy+arvQN+E0u0/ya+7XOofSFWzYpRdNSdbvr6UYdlaokUqNLVMKIeEYRuSJFHO15
- PAdDsK+IuGTnK2HNjyGTPDBED/vLhB17w+0ytJc3R4BiGYhBz1nNVOEDiy+mQ8TmRvYtr7TUe
- PbcgCGAJr7LdvdQ1bNu1Q2FE04Su6FWFeqwLfn2b0mBEWIOz8MQPlLGAZEUgl5VrYLJS/0Qn3
- 2wq4vOMdSZaWN8DwFLSv/wOyxZTR5uVz5ys911mHfgNiQhu7MkrOYTuMpZRyz8j7Z9lXHQtAw
- u9LomGMEHOs6HqEnPO37FNSx0pmannV5Tfg0VRjgsYBAUkXsCh9Ll6hKXe6myrAgEDAhfbthq
- 0VEtbPg4zBqzI44NI735oB5tVuLVLvum7zCRf++c9G5wXbANzEkjSiqyeofDHk+/3k09psWzV
- 6Azz8p7+SqYpiWEzGGLmIwOVlgJ+dwE4XZQvlXur5Z8eoYGN5uEsLEXqEeK9ejmXHhMtfZgC1
- lU5niuwvFjqbYSxgBMs7xgTwcCtOcz133Z/6seXrDe1hH7z5pBMv1sRvTroX8M/vNvUKjAnBQ
- mtFgoBRpFajZVhQmO5LC9pvyspLyVBSZ67zbwve9tPLLCIKUNXzyzT+NnTLb3IaSRMpRfWpGj
- n4lxfoWV4Fd0DPBjfZ8RXXZ17C2JqCJgp1Xt3ZOqTKWxOLaX7nGsCVexSMIgXSD+qh6QjmLGA
- Cyvz8VnXBBSewzBQ0RWX8ilKQY/wbcDNuWTyB907BV0DMtQ1N28PW/LIx5LA6SyJ/oGYOkEup
- IlMs4TdQTYbEJ99E886g==
-X-Spam-Status: No, score=-100.5 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0,
+ RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_BL,
+ RCVD_IN_MSPIKE_L4, SPF_HELO_NONE, SPF_PASS,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -66,41 +36,112 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 11 Sep 2020 18:15:02 -0000
+X-List-Received-Date: Fri, 11 Sep 2020 18:35:22 -0000
 
-On Sep 12 01:05, Takashi Yano via Cygwin-patches wrote:
-> On Fri, 11 Sep 2020 16:06:01 +0200
-> Corinna Vinschen wrote:
-> > On Sep 11 21:35, Takashi Yano via Cygwin-patches wrote:
-> > > What do you mean by "just drop any handling"? 
-> > > 
-> > > Do you mean remove following if block?
-> > > > > +  if (cp_from == CP_UTF7 || IS_ISO_2022 (cp_from) || IS_ISCII (cp_from))
-> > > > > +    /* - MB_ERR_INVALID_CHARS does not work properly for UTF-7.
-> > > > > +       - ISO-2022 is too complicated to handle correctly.
-> > > > > +       - FIXME: Not sure what to do for ISCII.
-> > > > >         Therefore, just convert string without checking */
-> > > > >      wlen = MultiByteToWideChar (cp_from, 0, ptr_from, len_from,
-> > > > >  				wbuf, NT_MAX_PATH);
-> > > In this case, the conversion for ISO-2022, ISCII and UTF-7 will
-> > > not be done correctly.
-> > > 
-> > > Or skip charset conversion if the codepage is EBCDIC, ISO-2022
-> > > or ISCII? What should we do for UTF-7?
-> > 
-> > Nothing, just like for any other of these weird charsets.  Cygwin never
-> > supported any charset which wasn't at least ASCII compatible in the
-> > 0 <= x <= 127 range.  Just ignore them and the possibility that a
-> > user chooses them for fun.
-> > 
-> > > What should happen if user or apps chage codepage to one of them?
-> > 
-> > Garbage output, I guess.  We shouldn't really care.
-> 
-> Do you mean a patch attached?
+- For charset in which MB_ERR_INVALID_CHARS does not work properly,
+  skip multibyte char boundary check in convert_mb_str().
+---
+ winsup/cygwin/fhandler_tty.cc | 83 ++++++++++++++++++++---------------
+ 1 file changed, 47 insertions(+), 36 deletions(-)
 
-Yes.  I pushed it.  We should really not care for them.
+diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+index 8910af1e7..dd514049f 100644
+--- a/winsup/cygwin/fhandler_tty.cc
++++ b/winsup/cygwin/fhandler_tty.cc
+@@ -122,46 +122,57 @@ convert_mb_str (UINT cp_to, char *ptr_to, size_t *len_to,
+ 		UINT cp_from, const char *ptr_from, size_t len_from,
+ 		mbstate_t *mbp)
+ {
++  bool check_boundary = false;
++  if (MultiByteToWideChar (cp_from, MB_ERR_INVALID_CHARS, "A", 1, NULL, 0))
++    check_boundary = true;
+   tmp_pathbuf tp;
+   wchar_t *wbuf = tp.w_get ();
+   int wlen = 0;
+-  char *tmpbuf = tp.c_get ();
+-  memcpy (tmpbuf, mbp->__value.__wchb, mbp->__count);
+-  if (mbp->__count + len_from > NT_MAX_PATH)
+-    len_from = NT_MAX_PATH - mbp->__count;
+-  memcpy (tmpbuf + mbp->__count, ptr_from, len_from);
+-  int total_len = mbp->__count + len_from;
+-  mbp->__count = 0;
+-  int mblen = 0;
+-  for (const char *p = tmpbuf; p < tmpbuf + total_len; p += mblen)
+-    /* Max bytes in multibyte char supported is 4. */
+-    for (mblen = 1; mblen <= 4; mblen ++)
+-      {
+-	/* Try conversion */
+-	int l = MultiByteToWideChar (cp_from, MB_ERR_INVALID_CHARS,
+-				     p, mblen,
+-				     wbuf + wlen, NT_MAX_PATH - wlen);
+-	if (l)
+-	  { /* Conversion Success */
+-	    wlen += l;
+-	    break;
+-	  }
+-	else if (mblen == 4)
+-	  { /* Conversion Fail */
+-	    l = MultiByteToWideChar (cp_from, 0, p, 1,
+-				     wbuf + wlen, NT_MAX_PATH - wlen);
+-	    wlen += l;
+-	    mblen = 1;
+-	    break;
+-	  }
+-	else if (p + mblen == tmpbuf + total_len)
+-	  { /* Multibyte char incomplete */
+-	    memcpy (mbp->__value.__wchb, p, mblen);
+-	    mbp->__count = mblen;
+-	    break;
++  if (!check_boundary)
++    /* If MB_ERR_INVALID_CHARS does not work properly,
++       just convert string without checking */
++    wlen = MultiByteToWideChar (cp_from, 0, ptr_from, len_from,
++				wbuf, NT_MAX_PATH);
++  else
++    {
++      char *tmpbuf = tp.c_get ();
++      memcpy (tmpbuf, mbp->__value.__wchb, mbp->__count);
++      if (mbp->__count + len_from > NT_MAX_PATH)
++	len_from = NT_MAX_PATH - mbp->__count;
++      memcpy (tmpbuf + mbp->__count, ptr_from, len_from);
++      int total_len = mbp->__count + len_from;
++      mbp->__count = 0;
++      int mblen = 0;
++      for (const char *p = tmpbuf; p < tmpbuf + total_len; p += mblen)
++	/* Max bytes in multibyte char supported is 4. */
++	for (mblen = 1; mblen <= 4; mblen ++)
++	  {
++	    /* Try conversion */
++	    int l = MultiByteToWideChar (cp_from, MB_ERR_INVALID_CHARS,
++					 p, mblen,
++					 wbuf + wlen, NT_MAX_PATH - wlen);
++	    if (l)
++	      { /* Conversion Success */
++		wlen += l;
++		break;
++	      }
++	    else if (mblen == 4)
++	      { /* Conversion Fail */
++		l = MultiByteToWideChar (cp_from, 0, p, 1,
++					 wbuf + wlen, NT_MAX_PATH - wlen);
++		wlen += l;
++		mblen = 1;
++		break;
++	      }
++	    else if (p + mblen == tmpbuf + total_len)
++	      { /* Multibyte char incomplete */
++		memcpy (mbp->__value.__wchb, p, mblen);
++		mbp->__count = mblen;
++		break;
++	      }
++	    /* Retry conversion with extended length */
+ 	  }
+-	/* Retry conversion with extended length */
+-      }
++    }
+   *len_to = WideCharToMultiByte (cp_to, 0, wbuf, wlen,
+ 				 ptr_to, *len_to, NULL, NULL);
+ }
+-- 
+2.28.0
 
-
-Thanks,
-Corinna
