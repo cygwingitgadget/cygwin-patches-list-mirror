@@ -1,20 +1,20 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
- by sourceware.org (Postfix) with ESMTPS id 3C14E3986039
- for <cygwin-patches@cygwin.com>; Fri, 11 Sep 2020 10:54:30 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 3C14E3986039
+Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
+ by sourceware.org (Postfix) with ESMTPS id 16CF33986039
+ for <cygwin-patches@cygwin.com>; Fri, 11 Sep 2020 10:55:08 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 16CF33986039
 Received: from localhost.localdomain (v038192.dynamic.ppp.asahi-net.or.jp
  [124.155.38.192]) (authenticated)
- by conuserg-12.nifty.com with ESMTP id 08BAs54L009439;
- Fri, 11 Sep 2020 19:54:10 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 08BAs54L009439
+ by conuserg-08.nifty.com with ESMTP id 08BAsik8003469;
+ Fri, 11 Sep 2020 19:54:49 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 08BAsik8003469
 X-Nifty-SrcIP: [124.155.38.192]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: pty: Add workaround for ISO-2022 and ISCII in
- convert_mb_str().
-Date: Fri, 11 Sep 2020 19:54:01 +0900
-Message-Id: <20200911105401.153-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: pty: Prevent garbled output for existing non-cygwin
+ apps.
+Date: Fri, 11 Sep 2020 19:54:40 +0900
+Message-Id: <20200911105440.199-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -36,44 +36,41 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 11 Sep 2020 10:54:33 -0000
+X-List-Received-Date: Fri, 11 Sep 2020 10:55:10 -0000
 
-- In convert_mb_str(), exclude ISO-2022 and ISCII from the processing
-  for the case that the multibyte char is splitted in the middle.
-  The reason is as follows.
-  * ISO-2022 is too complicated to handle correctly.
-  * Not sure what to do with ISCII.
+- If pseudo console is disabled, non-cygwin apps do not detect
+  console device. In this case, some apps output UTF-8 regardless
+  of the locale setting. At least git-for-windows, rust-based apps
+  and node.js do that. This patch provides backward compatibility
+  as default behaviour by setting console codepage to the charset of
+  the locale. Even in the cases above, garbled output is prevented
+  with this patch in most cases because mintty uses UTF-8 by default.
+
+  I beleave this is not really a problem in cygwin side but that in
+  app side, however, some users complain about garbled output with
+  existing apps in MSYS2 (which is based on cygwin) in which pseudo
+  console is disabled by default.
 ---
- winsup/cygwin/fhandler_tty.cc | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ winsup/cygwin/fhandler_tty.cc | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index 37d033bbe..ee5c6a90a 100644
+index ee5c6a90a..3d93bef30 100644
 --- a/winsup/cygwin/fhandler_tty.cc
 +++ b/winsup/cygwin/fhandler_tty.cc
-@@ -117,6 +117,9 @@ CreateProcessW_Hooked
-   return CreateProcessW_Orig (n, c, pa, ta, inh, f, e, d, si, pi);
+@@ -1835,7 +1835,11 @@ fhandler_pty_slave::setup_locale (void)
+   extern UINT __eval_codepage_from_internal_charset ();
+ 
+   if (!get_ttyp ()->term_code_page)
+-    get_ttyp ()->term_code_page = __eval_codepage_from_internal_charset ();
++    {
++      get_ttyp ()->term_code_page = __eval_codepage_from_internal_charset ();
++      SetConsoleCP (get_ttyp ()->term_code_page);
++      SetConsoleOutputCP (get_ttyp ()->term_code_page);
++    }
  }
  
-+#define IS_ISO_2022(x) ( (x) >= 50220 && (x) <= 50229 )
-+#define IS_ISCII(x) ( (x) >= 57002 && (x) <= 57011 )
-+
- static void
- convert_mb_str (UINT cp_to, char *ptr_to, size_t *len_to,
- 		UINT cp_from, const char *ptr_from, size_t len_from,
-@@ -126,8 +129,10 @@ convert_mb_str (UINT cp_to, char *ptr_to, size_t *len_to,
-   tmp_pathbuf tp;
-   wchar_t *wbuf = tp.w_get ();
-   int wlen = 0;
--  if (cp_from == CP_UTF7)
--    /* MB_ERR_INVALID_CHARS does not work properly for UTF-7.
-+  if (cp_from == CP_UTF7 || IS_ISO_2022 (cp_from) || IS_ISCII (cp_from))
-+    /* - MB_ERR_INVALID_CHARS does not work properly for UTF-7.
-+       - ISO-2022 is too complicated to handle correctly.
-+       - FIXME: Not sure what to do for ISCII.
-        Therefore, just convert string without checking */
-     wlen = MultiByteToWideChar (cp_from, 0, ptr_from, len_from,
- 				wbuf, NT_MAX_PATH);
+ void
 -- 
 2.28.0
 
