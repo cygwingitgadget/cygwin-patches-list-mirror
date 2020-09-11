@@ -1,54 +1,52 @@
-Return-Path: <corinna-cygwin@cygwin.com>
+Return-Path: <towo@towo.net>
 Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
- by sourceware.org (Postfix) with ESMTPS id 9CC36385703C
- for <cygwin-patches@cygwin.com>; Fri, 11 Sep 2020 14:08:49 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 9CC36385703C
+ by sourceware.org (Postfix) with ESMTPS id 9BB9F3857026
+ for <cygwin-patches@cygwin.com>; Fri, 11 Sep 2020 15:10:14 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 9BB9F3857026
 Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([217.91.18.234]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MQMqN-1juY9O495N-00MKkT for <cygwin-patches@cygwin.com>; Fri, 11 Sep 2020
- 16:08:48 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 620DCA803FC; Fri, 11 Sep 2020 16:08:47 +0200 (CEST)
-Date: Fri, 11 Sep 2020 16:08:47 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+ dmarc=none (p=none dis=none) header.from=towo.net
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=towo@towo.net
+Received: from [192.168.178.45] ([95.90.245.244]) by mrelayeu.kundenserver.de
+ (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MOzfO-1jtiYb0nVM-00PJZs for <cygwin-patches@cygwin.com>; Fri, 11 Sep 2020
+ 17:10:13 +0200
+Subject: Re: [PATCH] Cygwin: pty: Add workaround for ISO-2022 and ISCII in
+ convert_mb_str().
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: ldd: Also look for not found DLLs when exit
- status is non-zero
-Message-ID: <20200911140847.GL4127@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200910122740.8534-1-jon.turney@dronecode.org.uk>
- <20200910140455.GC4127@calimero.vinschen.de>
- <50e65d21-e501-99fe-80ef-e3b9c04bb4ed@dronecode.org.uk>
+References: <20200911105401.153-1-takashi.yano@nifty.ne.jp>
+ <20200911120840.GH4127@calimero.vinschen.de>
+ <20200911213515.98a88ca7f186ede9bf8fc106@nifty.ne.jp>
+ <20200911140601.GK4127@calimero.vinschen.de>
+From: Thomas Wolff <towo@towo.net>
+X-Tagtoolbar-Keys: D20200911171013415
+Message-ID: <bfc29d4a-f65d-435b-ca6b-52472a9d5a02@towo.net>
+Date: Fri, 11 Sep 2020 17:10:13 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <50e65d21-e501-99fe-80ef-e3b9c04bb4ed@dronecode.org.uk>
-X-Provags-ID: V03:K1:GtShr+BGufz2GvhEc8NpW066Vzyk0THKuFJiGRRWImvmhUFC1uC
- +IGgOXDyAnhTbErTzjfgs/VxYqPP4X0+z5hBi/gmZ3SfJqCfYxrXtkxKttqwIH+qcSkRmlz
- mot4e4cG2pZr8TOu79doAatusQQiEqjkYrNfcQ5QSDZ4+7Ot+LSbhnJ3K5KfJK4KYrp6GEM
- 4jetot69i/zAYEBwPt8bw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:H0GJhCYc0cY=:YkgAuoJ4PHzlb0et+qZYr1
- +aZ74SiES3569G+kfHBOPSHc4qBwBxkVQXRLLmOrYJfPqz25fP4RwsKINqrssz1U5aWrx9tHD
- 6v7n2WlGYuvmoymQtuR5nfEpTKCoCYDZgJn6vq6icci3mSjavuHTWKPsLvt4/fM2LXy4x48bA
- u3ojN9rIyY+yXEEBfTqxa7QiFV12kJ8qng1UuSPrm7z+s/g4rZZnxi13cFTrXul6MlsaKGMF6
- G+l0HpA4HpuNygwDtHFAmZCxX71M1TZt54lANOXdChzH7xU8ym/YUCeJDs8Z3kLfBl45DQtAo
- CrndvllydOVEU0IUyMlUaepfM0hM+LOAfpKU8knd3QQXitwffYtu2ksPOPGjaWAr1WAV1OPxI
- AE1V7fJY+9BKqlpsiMSdiAL/ahGEbwYcLhAXqMp2+n1BRt1FuyV4VpR4Dh7z89C4lqyi1NY+s
- ypdJnfQ9uiMx39iDWI3Yr95RCfmm1onmVjaDm01HxBP+B6d5ya372n1+Zjf3JELusjePkeeR7
- 5pf5yb4I7/G6SHqm1NjtJ5P0a0y+FiIzMND92U793amSf6UpbPZ9JXZhxLUYhU10J4LztI4zK
- vfhXhf0Pk/dYTDC0/Cpvscdutl+AKP9gapg3+4NHdSH6coyhrvcb+jhPJjJ4ysgX1D2hs1k7s
- zmjUNY89421mc66DpmO9DEha4fIi0Y47zSA+nm9jVYU1jPduNpHcakghhYglgAFeg/iw7hkiK
- O5yZ+JRKZ5k8CZUJyYMl9Enyf1AiHbB5xySUjC1alFN1XJIXeoO0Lid0VpOYjWkSsbg+Xx5KN
- wYHnh6pKJD2PPBHVyK3mzax4rarosvesd5go41wcH7Uj0jvZGFcOpfpzFwMS+kcZIXR/SfnXG
- aSrcAVApHk/TBokQQnzw==
-X-Spam-Status: No, score=-100.5 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+In-Reply-To: <20200911140601.GK4127@calimero.vinschen.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:ku+6/k6wNNO54vdWH19gHKuIjMGdhj/2k+hX4eVYfoDe7hbNIcB
+ zFbmJCP5D7LkI1wJxmklK//MA9erHK2dgZjPHjdvXeEIz0ll13hB+Sx4+8LH6rOp7HhcL8u
+ xAJlwfm49zHbAFD2Ib5NZg1d0X9ucTF5vZYehC8suwjcWWJO5sGoNQdZSqRac/xrbH6ux1k
+ EcvZZk1I44htRS2MN1gOQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:WGguFvFbJJg=:2GJb+9vx/i02+2wjuoXb8V
+ JHWRVTtCO8nfpi0UlOerJJEkERZcaIMF1TWyOjhSt8OwrxjkidgKptPRruNzvCL4VDHWl3xpI
+ NCMj/D4qdadaLdSJY4limM9cvedDbUqTTDClj2r9dMJfboeZa/UXsJtOFeylMct0SlaUBNyAo
+ 0a4tDpev85uZl3T/6WnF8Tmy5bZ88i8gB42l74dIsgEwmWyfveI5Yy0ZPCR4bMgjLUshz1hWE
+ YDuhI7j3YfQ338KDBacLqYNMh32P1M2b93Ho4s0bx2Xnu9pEOol2U2Qzc6EV1wWnTC5PmVRLQ
+ 76g4PDjpzTm9u4BF9JxOI1x1UQsyXOPJpBbApNVHW+EL9qkkFUUGAOYAe7Id70PQujyVwJGYZ
+ yvLJ98EE4tUKev7kOL6TnmXT/l07ZgRZHhZ6UHMfpU33Mfv0lHml5+OWfKG4RiKW2urE1VE1I
+ 3YUc8waelgBBMifvCaqXAFtSTKfwRUPDZoo5YD3v9mjAjrz6/gevrM5E3a8txIHC+TrBJWIpI
+ ep4dlcQUSppjrppfMmGDQavFCZmMAQ5hD7DE19BBD7G+J8fJDx/ronaWMNFsnZFlTSgo4Bva2
+ YUQjcZa9qejMgcp0AM5Y/WmjHQPzKlHMpd/gJ6H77gQHH3SpGvl8WLT1VcG1HuH/QUxXtPoEh
+ dDbwXoE3zJLAVw/umSO+KIh56dtYDTpXY8r4iIeeBM7t5g7xoi/RT+r1sL04wOAqsTNpK5aPu
+ VX/wa8xXmbeJ2wB+8i7BXQppZhYdf53OurIYVe2atVTVU7yU4H4S4q1TUYBLn6IsmDRJllPHX
+ 6yyLUb0XoNbJizx6ZQ/LBfJMlcNYYtykBTCblGcryVkCJ7UsIrSUONoq/8wXdHb/D+APatd
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_ABUSEAT,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NONE,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -64,35 +62,83 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 11 Sep 2020 14:08:51 -0000
+X-List-Received-Date: Fri, 11 Sep 2020 15:10:16 -0000
 
-On Sep 11 13:33, Jon Turney wrote:
-> On 10/09/2020 15:04, Corinna Vinschen wrote:
-> > On Sep 10 13:27, Jon Turney wrote:
-> > > If the process exited with e.g. STATUS_DLL_NOT_FOUND, also process the
-> > > file to look for not found DLLs.
-> > > 
-> > > (We currently only do this when a STATUS_DLL_NOT_FOUND exception occurs,
-> > > which I haven't managed to observe)
-> > > 
-> > > This still isn't 100% correct, as it only examines the specified file
-> > > for missing DLLs, not recursively on the DLLs it depends upon.
-> > 
-> > Better than nothing?
-> 
-> Well, except when people are misled when investigating problems because they
-> assume the output is accurate. (e.g. [1])
-> 
-> [1] https://cygwin.com/pipermail/cygwin/2020-September/246164.html
-> 
-> I guess what's maybe needed is some indication that an error occurred and
-> the output may be incomplete if the inferior process exited with a non-zero
-> status.  But not sure how we can do that while keeping the output compatible
-> with linux ldd.
+Am 11.09.2020 um 16:06 schrieb Corinna Vinschen:
+> On Sep 11 21:35, Takashi Yano via Cygwin-patches wrote:
+>> Hi Corinna,
+>>
+>> On Fri, 11 Sep 2020 14:08:40 +0200
+>> Corinna Vinschen wrote:
+>>> On Sep 11 19:54, Takashi Yano via Cygwin-patches wrote:
+>>>> - In convert_mb_str(), exclude ISO-2022 and ISCII from the processing
+>>>>    for the case that the multibyte char is splitted in the middle.
+>>>>    The reason is as follows.
+>>>>    * ISO-2022 is too complicated to handle correctly.
+>>>>    * Not sure what to do with ISCII.
+>>>> ---
+>>>>   winsup/cygwin/fhandler_tty.cc | 9 +++++++--
+>>>>   1 file changed, 7 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+>>>> index 37d033bbe..ee5c6a90a 100644
+>>>> --- a/winsup/cygwin/fhandler_tty.cc
+>>>> +++ b/winsup/cygwin/fhandler_tty.cc
+>>>> @@ -117,6 +117,9 @@ CreateProcessW_Hooked
+>>>>     return CreateProcessW_Orig (n, c, pa, ta, inh, f, e, d, si, pi);
+>>>>   }
+>>>>   
+>>>> +#define IS_ISO_2022(x) ( (x) >= 50220 && (x) <= 50229 )
+>>>> +#define IS_ISCII(x) ( (x) >= 57002 && (x) <= 57011 )
+>>>> +
+>>>>   static void
+>>>>   convert_mb_str (UINT cp_to, char *ptr_to, size_t *len_to,
+>>>>   		UINT cp_from, const char *ptr_from, size_t len_from,
+>>>> @@ -126,8 +129,10 @@ convert_mb_str (UINT cp_to, char *ptr_to, size_t *len_to,
+>>>>     tmp_pathbuf tp;
+>>>>     wchar_t *wbuf = tp.w_get ();
+>>>>     int wlen = 0;
+>>>> -  if (cp_from == CP_UTF7)
+>>>> -    /* MB_ERR_INVALID_CHARS does not work properly for UTF-7.
+>>>> +  if (cp_from == CP_UTF7 || IS_ISO_2022 (cp_from) || IS_ISCII (cp_from))
+>>>> +    /* - MB_ERR_INVALID_CHARS does not work properly for UTF-7.
+>>>> +       - ISO-2022 is too complicated to handle correctly.
+>>>> +       - FIXME: Not sure what to do for ISCII.
+>>>>          Therefore, just convert string without checking */
+>>>>       wlen = MultiByteToWideChar (cp_from, 0, ptr_from, len_from,
+>>>>   				wbuf, NT_MAX_PATH);
+>>>> -- 
+>>>> 2.28.0
+>>> I'd prefer to not handle them at all.  We just don't support these
+>>> charsets, same as JIS, EBCDIC, you name it, which are not ASCII
+>>> compatible.  Let's please just drop any handling for these weird
+>>> or outdated codepages.
+>> What do you mean by "just drop any handling"?
+>>
+>> Do you mean remove following if block?
+>>>> +  if (cp_from == CP_UTF7 || IS_ISO_2022 (cp_from) || IS_ISCII (cp_from))
+>>>> +    /* - MB_ERR_INVALID_CHARS does not work properly for UTF-7.
+>>>> +       - ISO-2022 is too complicated to handle correctly.
+>>>> +       - FIXME: Not sure what to do for ISCII.
+>>>>          Therefore, just convert string without checking */
+>>>>       wlen = MultiByteToWideChar (cp_from, 0, ptr_from, len_from,
+>>>>   				wbuf, NT_MAX_PATH);
+>> In this case, the conversion for ISO-2022, ISCII and UTF-7 will
+>> not be done correctly.
+>>
+>> Or skip charset conversion if the codepage is EBCDIC, ISO-2022
+>> or ISCII? What should we do for UTF-7?
+> Nothing, just like for any other of these weird charsets.  Cygwin never
+> supported any charset which wasn't at least ASCII compatible in the
+> 0 <= x <= 127 range.
+Actually, in Shift-JIS (CP932, supported via locale ja_JP.sjis), 0x5C is 
+¥ :/
+>    Just ignore them and the possibility that a
+> user chooses them for fun.
+>
+>> What should happen if user or apps chage codepage to one of them?
+> Garbage output, I guess.  We shouldn't really care.
+>
+>
+> Corinna
 
-I assume there *may* occur an error in ldd as well, so it might be
-intersting to check the Linux ldd sources to see how it generates
-error output.
-
-
-Corinna
