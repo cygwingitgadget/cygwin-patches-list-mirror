@@ -1,24 +1,24 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
- by sourceware.org (Postfix) with ESMTPS id 622A6384640E
- for <cygwin-patches@cygwin.com>; Fri, 11 Sep 2020 09:05:50 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 622A6384640E
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+ by sourceware.org (Postfix) with ESMTPS id CEC00384640E
+ for <cygwin-patches@cygwin.com>; Fri, 11 Sep 2020 09:23:04 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org CEC00384640E
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org;
  spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
 Received: from calimero.vinschen.de ([217.91.18.234]) by
- mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MCska-1kPQQW41oW-008srp for <cygwin-patches@cygwin.com>; Fri, 11 Sep 2020
- 11:05:49 +0200
+ mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1Mc0Aj-1ko5Xs1Nwl-00dZ4V for <cygwin-patches@cygwin.com>; Fri, 11 Sep 2020
+ 11:23:03 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 1DF8CA804E5; Fri, 11 Sep 2020 11:05:47 +0200 (CEST)
-Date: Fri, 11 Sep 2020 11:05:47 +0200
+ id D3402A804E5; Fri, 11 Sep 2020 11:23:02 +0200 (CEST)
+Date: Fri, 11 Sep 2020 11:23:02 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH 3/3] fhandler_pty_slave::setup_locale: respect charset ==
  "UTF-8"
-Message-ID: <20200911090547.GE4127@calimero.vinschen.de>
+Message-ID: <20200911092302.GF4127@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
 References: <nycvar.QRO.7.76.6.2009011818560.56@tvgsbejvaqbjf.bet>
@@ -30,28 +30,29 @@ References: <nycvar.QRO.7.76.6.2009011818560.56@tvgsbejvaqbjf.bet>
  <20200909072123.GX4127@calimero.vinschen.de>
  <20200910091500.388ab2f6796a4abce57a3cd2@nifty.ne.jp>
  <20200910213403.0e876be50bc2d1bbd2da0979@nifty.ne.jp>
+ <20200911090547.GE4127@calimero.vinschen.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200910213403.0e876be50bc2d1bbd2da0979@nifty.ne.jp>
-X-Provags-ID: V03:K1:5kAoL64FvH6PUUEOIDzTjt1naSsixh3SJ2+qWV1e63fdBR4/6rU
- /iTHxK2Q4RrXFYQE3r9hZE9/xrSpP67WBv1C+tcuDarXtXbpWmTRIkueltwc0aFf+vu1RXV
- NYWkz1nNLVkwYR272wmIqm8B1jWlWVyvHmHktX/TgTSexGH9LP6SlPDFkH3IyQZRczedYDU
- yE6E4qcgi5Jf0YM7mK94w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:nBlWt2prWp8=:iwXGgsHfxsaDKPIz45C5yw
- yJN6lgLZGYDaLBCH9ktz5YPMzEGYJGLpmFZbukCXgBNSKfzUd4ttcZlK8ETLKK1K9eyLe7KAB
- zyVKJti9xePxg13HnuMjMTtXmHbHYmiZ2bbyskZe0LT/AKba1nASFx3AiWsetbp76SgFnefRX
- m/tQqbdJc10ubXcN/1CU2sSvojODtnGO4n4UpPJ5ZiHuIqaBqGwFKhA9LSAqnPTkUvFgkzMdK
- jDv6Upgc+TpHOtamtC+P60vHbVcN6/iAvoIVvRSkqiB6wctJ8WFGtwxqDLTqcVLiGXGEDEQTg
- K5KfLWSfHrfZ1jvELKjP+YsRSJwnj1776BtalKBF3Y6m2P3RniIIh9jI67b6jBsIWW7SyaQje
- mmNGGXT5wyr1HEghkH7ZMIwkX3zRauRoGfEGCgJHIFS0Y5uvlyv21uYUN23tBY7H8+bnnYuA4
- yX5tQE8Et3LbYdzhUsOAB8PwaXgzFJu1u7qfKM/EDxOAFaIVAMDTmWdjxIxFms/t58K2HKqJi
- a6QUSWNT39gu90Re2AUEd7vmK1h6a5PdAP4r6TvvWz7HEFDWVq2gfKJ/UubQCVUEz2NBaWXxO
- xrVVvnAtfR6leyDhZj9lxr3QXXQOllb44PD+TIACvAut4nBmp3xMopXbGRbECAVFsM5fyC5Ug
- OiPgj8NzF+O/eYedNWuMuch5sMZCu0P9HKQ3lB/RRJZsUuEnsd98T/fgJkbANTB416feQqRMY
- /KqVvkZuxC8j9/sFYyL2HS0F+BWSSfqxKHLaDWOxVV/cfs37jsold3pZiqt8wy/Gtg+4esVhe
- E0XaWkaEgiQeOOemLbDj+bdC5dvVNuFyzyRZnfhsmsc1oCUVETbS4rezxLak8/c2XBQ/wqGcc
- gQjDyAYNqbgsgoi+73Vw==
+In-Reply-To: <20200911090547.GE4127@calimero.vinschen.de>
+X-Provags-ID: V03:K1:o28q1wNM+/7L1aPyMndkx1bJn1N4CUo4nFzKG09BkhBVajXWub1
+ libHuys9pNhyYo33iCZDsgs/XQZuGIxtJGtLUCboLauyKOoCYT/Z94TujcyZ3n+4ea2teHE
+ 5hpwu54ksK69pLp3xrZjkGdk0VCMO1RjIP7eVO4fAfhWeKdiyYLfE+DAiz8u+qfoG2CqsG5
+ VLbscd1aVRHjXhjhLKv1g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Zv2Rfg0+lOk=:XWexhLAD1Q/JvnYlL2XaKC
+ hQ6M2GgoFz8RFv0ssNMAFEHwJ3+8v6n+jUvrakbEDGmTSjUp3gSrOqDmafoPzBb9Ma7jZWYJV
+ edAophHC73iAzOzlimzpEwTxYeXbFgmsiJG/vf2MQoBl2gFWMyvDqXZZouJ1Nr6vfvTYKmbJn
+ BOhf5prZWslWrViTTtu66ENHsTE6zyz5Mz36xFLzq9miOGGC5qbf1lRbJKjaGfH8LCkYUP2Tn
+ LpQhN5qfm268L/bqYkTzje8JnYdKPS9sxvDJ85utowHs7/iRES0sy5MwnRNUIDELh8B+ZzoHd
+ lcuAl8afhv2tKbOLG5/xIO3XOUmw+aTk6yBj2w3j8W/4JxkHS40wTxS+/gWRuHIi21lLEMm8w
+ lIJI2p7ae+hnQRS+mJ78iD+Mp9YOhhd5vcnNLwF20TfwFqR0tZTwRzNQPrzAuRqAYFajcMCJF
+ 46dzUPhe4Un9e81BBveNcxkMkGStCwVc9oS7gGUKy931lWuTMJyMfpVvJRMpPetsmB0oj3csE
+ h6QjWRf0iutqV+jFIHjsmY4kLqBwYmoiAeOA0jo1jd0TSVlTYHDyF39lth5C8XzjtWPc8ryhk
+ 9J3Mwwxko+MMEOBnC1AcCiVJBAVt+M678ohDhy7m+BFm9k8fTlqUmXBaJdrNd0Snww5yTsDcb
+ tV8mNS51C1WQzmtND6wg/EaxGs1FgCm/qAIggDK+k1NrRuFSdtMkM9ZBzhorOPWBUtgJaTJov
+ ZnNM16af+hN5FEpARGWWpG2wYvJ1Xz2/F9EvklsIlC307rZkyLfQ8QgLwj/lTHtRI44kAD7ax
+ Jbum0iQ6bHGFTtxVe+Z1PhOD6tgnQeP37n6bBu58BvUhspULpEYKsNDuTzR+nmRuY+40lZ7F3
+ 3G24pwOeTWcd5KNyc4Jw==
 X-Spam-Status: No, score=-105.7 required=5.0 tests=BAYES_00, GIT_PATCH_0,
  GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
  RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
@@ -70,60 +71,63 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 11 Sep 2020 09:05:51 -0000
+X-List-Received-Date: Fri, 11 Sep 2020 09:23:06 -0000
 
-On Sep 10 21:34, Takashi Yano via Cygwin-patches wrote:
-> On Thu, 10 Sep 2020 09:15:00 +0900
-> Takashi Yano via Cygwin-patches <cygwin-patches@cygwin.com> wrote:
-> > I'd propose the patch:
+On Sep 11 11:05, Corinna Vinschen wrote:
+> On Sep 10 21:34, Takashi Yano via Cygwin-patches wrote:
+> > On Thu, 10 Sep 2020 09:15:00 +0900
+> > Takashi Yano via Cygwin-patches <cygwin-patches@cygwin.com> wrote:
+> > > I'd propose the patch:
+> > > 
+> > > diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+> > > index 37d033bbe..95b28c3da 100644
+> > > --- a/winsup/cygwin/fhandler_tty.cc
+> > > +++ b/winsup/cygwin/fhandler_tty.cc
+> > > @@ -1830,7 +1830,11 @@ fhandler_pty_slave::setup_locale (void)
+> > >    extern UINT __eval_codepage_from_internal_charset ();
+> > > 
+> > >    if (!get_ttyp ()->term_code_page)
+> > > -    get_ttyp ()->term_code_page = __eval_codepage_from_internal_charset ();
+> > > +    {
+> > > +      get_ttyp ()->term_code_page = __eval_codepage_from_internal_charset ();
+> > > +      SetConsoleCP (get_ttyp ()->term_code_page);
+> > > +      SetConsoleOutputCP (get_ttyp ()->term_code_page);
+> > > +    }
+> > >  }
+> > > 
+> > >  void
+> > > 
+> > > However, Johannes insists setting codepage for non-cygwin apps
+> > > even when pseudo console is enabled, which I cannot agree.
+> > > 
+> > > Actually, I hesitate even the patch above, however, it seems to
+> > > be necessary for msys apps in terms of backward compatibility.
 > > 
-> > diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-> > index 37d033bbe..95b28c3da 100644
-> > --- a/winsup/cygwin/fhandler_tty.cc
-> > +++ b/winsup/cygwin/fhandler_tty.cc
-> > @@ -1830,7 +1830,11 @@ fhandler_pty_slave::setup_locale (void)
-> >    extern UINT __eval_codepage_from_internal_charset ();
+> > I found that output of Oracle java.exe and javac.exe are garbled
+> > if the patch above is applied. This is because java.exe and javac.exe
+> > output SJIS code unconditionally in my environment.
 > > 
-> >    if (!get_ttyp ()->term_code_page)
-> > -    get_ttyp ()->term_code_page = __eval_codepage_from_internal_charset ();
-> > +    {
-> > +      get_ttyp ()->term_code_page = __eval_codepage_from_internal_charset ();
-> > +      SetConsoleCP (get_ttyp ()->term_code_page);
-> > +      SetConsoleOutputCP (get_ttyp ()->term_code_page);
-> > +    }
-> >  }
+> > OTOH, rust-based program such as cargo and ripgrep output UTF-8
+> > unconditionally. node.js also seems to output UTF-8 string by
+> > default.
 > > 
-> >  void
+> > I think there is no way for both apps to work properly if pseudo
+> > console is disabled. As far as I tested, both of them works when
+> > pseudo console is enabled. IMHO, the best way to achieve maximum
+> > compatibility, is enabling pseudo console, which is disabled in
+> > MSYS2 by default.
 > > 
-> > However, Johannes insists setting codepage for non-cygwin apps
-> > even when pseudo console is enabled, which I cannot agree.
+> > As for the case with pseudo console disabled:
 > > 
-> > Actually, I hesitate even the patch above, however, it seems to
-> > be necessary for msys apps in terms of backward compatibility.
+> > If backward compatibility is important, we should apply the patch
+> > above. If compatibility with the behaviour in command prompt is
+> > important, we should leave the codepage to the system default.
 > 
-> I found that output of Oracle java.exe and javac.exe are garbled
-> if the patch above is applied. This is because java.exe and javac.exe
-> output SJIS code unconditionally in my environment.
-> 
-> OTOH, rust-based program such as cargo and ripgrep output UTF-8
-> unconditionally. node.js also seems to output UTF-8 string by
-> default.
-> 
-> I think there is no way for both apps to work properly if pseudo
-> console is disabled. As far as I tested, both of them works when
-> pseudo console is enabled. IMHO, the best way to achieve maximum
-> compatibility, is enabling pseudo console, which is disabled in
-> MSYS2 by default.
-> 
-> As for the case with pseudo console disabled:
-> 
-> If backward compatibility is important, we should apply the patch
-> above. If compatibility with the behaviour in command prompt is
-> important, we should leave the codepage to the system default.
+> Pseudo console is probbaly the way to go in future anyway.  For
+> older OSes and older apps, we might better opt for backward compat.
+> I'll apply your patch for the time being.
 
-Pseudo console is probbaly the way to go in future anyway.  For
-older OSes and older apps, we might better opt for backward compat.
-I'll apply your patch for the time being.
+Oh, right, can you please send it again in git style?
 
 
 Thanks,
