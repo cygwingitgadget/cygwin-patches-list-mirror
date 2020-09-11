@@ -1,22 +1,26 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com
- [210.131.2.83])
- by sourceware.org (Postfix) with ESMTPS id CAAAE3971C6F
- for <cygwin-patches@cygwin.com>; Thu, 10 Sep 2020 14:18:59 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org CAAAE3971C6F
-Received: from Express5800-S70 (v038192.dynamic.ppp.asahi-net.or.jp
- [124.155.38.192]) (authenticated)
- by conssluserg-04.nifty.com with ESMTP id 08AEIMQY027937
- for <cygwin-patches@cygwin.com>; Thu, 10 Sep 2020 23:18:22 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 08AEIMQY027937
-X-Nifty-SrcIP: [124.155.38.192]
-Date: Thu, 10 Sep 2020 23:18:25 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+ by sourceware.org (Postfix) with ESMTPS id 622A6384640E
+ for <cygwin-patches@cygwin.com>; Fri, 11 Sep 2020 09:05:50 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 622A6384640E
+Authentication-Results: sourceware.org;
+ dmarc=none (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org;
+ spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
+Received: from calimero.vinschen.de ([217.91.18.234]) by
+ mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MCska-1kPQQW41oW-008srp for <cygwin-patches@cygwin.com>; Fri, 11 Sep 2020
+ 11:05:49 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 1DF8CA804E5; Fri, 11 Sep 2020 11:05:47 +0200 (CEST)
+Date: Fri, 11 Sep 2020 11:05:47 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 3/3] fhandler_pty_slave::setup_locale: respect charset
- == "UTF-8"
-Message-Id: <20200910231825.02bac7b42aabbd7ee9a1715e@nifty.ne.jp>
-In-Reply-To: <20200910231610.18a2871e38406e5c96cd2fc3@nifty.ne.jp>
+Subject: Re: [PATCH 3/3] fhandler_pty_slave::setup_locale: respect charset ==
+ "UTF-8"
+Message-ID: <20200911090547.GE4127@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
 References: <nycvar.QRO.7.76.6.2009011818560.56@tvgsbejvaqbjf.bet>
  <20200904190337.cde290e4b690793ef6a0f496@nifty.ne.jp>
  <nycvar.QRO.7.76.6.2009040822000.56@tvgsbejvaqbjf.bet>
@@ -25,15 +29,32 @@ References: <nycvar.QRO.7.76.6.2009011818560.56@tvgsbejvaqbjf.bet>
  <20200908171648.e65665caebb643ce99910fa3@nifty.ne.jp>
  <20200909072123.GX4127@calimero.vinschen.de>
  <20200910091500.388ab2f6796a4abce57a3cd2@nifty.ne.jp>
- <20200910140407.GB4127@calimero.vinschen.de>
- <20200910231610.18a2871e38406e5c96cd2fc3@nifty.ne.jp>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.9 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, NICE_REPLY_A,
- RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_PASS,
+ <20200910213403.0e876be50bc2d1bbd2da0979@nifty.ne.jp>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200910213403.0e876be50bc2d1bbd2da0979@nifty.ne.jp>
+X-Provags-ID: V03:K1:5kAoL64FvH6PUUEOIDzTjt1naSsixh3SJ2+qWV1e63fdBR4/6rU
+ /iTHxK2Q4RrXFYQE3r9hZE9/xrSpP67WBv1C+tcuDarXtXbpWmTRIkueltwc0aFf+vu1RXV
+ NYWkz1nNLVkwYR272wmIqm8B1jWlWVyvHmHktX/TgTSexGH9LP6SlPDFkH3IyQZRczedYDU
+ yE6E4qcgi5Jf0YM7mK94w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:nBlWt2prWp8=:iwXGgsHfxsaDKPIz45C5yw
+ yJN6lgLZGYDaLBCH9ktz5YPMzEGYJGLpmFZbukCXgBNSKfzUd4ttcZlK8ETLKK1K9eyLe7KAB
+ zyVKJti9xePxg13HnuMjMTtXmHbHYmiZ2bbyskZe0LT/AKba1nASFx3AiWsetbp76SgFnefRX
+ m/tQqbdJc10ubXcN/1CU2sSvojODtnGO4n4UpPJ5ZiHuIqaBqGwFKhA9LSAqnPTkUvFgkzMdK
+ jDv6Upgc+TpHOtamtC+P60vHbVcN6/iAvoIVvRSkqiB6wctJ8WFGtwxqDLTqcVLiGXGEDEQTg
+ K5KfLWSfHrfZ1jvELKjP+YsRSJwnj1776BtalKBF3Y6m2P3RniIIh9jI67b6jBsIWW7SyaQje
+ mmNGGXT5wyr1HEghkH7ZMIwkX3zRauRoGfEGCgJHIFS0Y5uvlyv21uYUN23tBY7H8+bnnYuA4
+ yX5tQE8Et3LbYdzhUsOAB8PwaXgzFJu1u7qfKM/EDxOAFaIVAMDTmWdjxIxFms/t58K2HKqJi
+ a6QUSWNT39gu90Re2AUEd7vmK1h6a5PdAP4r6TvvWz7HEFDWVq2gfKJ/UubQCVUEz2NBaWXxO
+ xrVVvnAtfR6leyDhZj9lxr3QXXQOllb44PD+TIACvAut4nBmp3xMopXbGRbECAVFsM5fyC5Ug
+ OiPgj8NzF+O/eYedNWuMuch5sMZCu0P9HKQ3lB/RRJZsUuEnsd98T/fgJkbANTB416feQqRMY
+ /KqVvkZuxC8j9/sFYyL2HS0F+BWSSfqxKHLaDWOxVV/cfs37jsold3pZiqt8wy/Gtg+4esVhe
+ E0XaWkaEgiQeOOemLbDj+bdC5dvVNuFyzyRZnfhsmsc1oCUVETbS4rezxLak8/c2XBQ/wqGcc
+ gQjDyAYNqbgsgoi+73Vw==
+X-Spam-Status: No, score=-105.7 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -49,63 +70,61 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 10 Sep 2020 14:19:01 -0000
+X-List-Received-Date: Fri, 11 Sep 2020 09:05:51 -0000
 
-On Thu, 10 Sep 2020 23:16:10 +0900
-Takashi Yano  wrote:
-
-> On Thu, 10 Sep 2020 16:04:07 +0200
-> Corinna Vinschen wrote:
-> 
-> > Hi Takashi,
+On Sep 10 21:34, Takashi Yano via Cygwin-patches wrote:
+> On Thu, 10 Sep 2020 09:15:00 +0900
+> Takashi Yano via Cygwin-patches <cygwin-patches@cygwin.com> wrote:
+> > I'd propose the patch:
 > > 
-> > On Sep 10 09:15, Takashi Yano via Cygwin-patches wrote:
-> > > On Wed, 9 Sep 2020 09:21:23 +0200
-> > > Corinna Vinschen wrote:
-> > > > Takashi, does the patch from
-> > > > https://cygwin.com/pipermail/cygwin-developers/2020-August/011951.html
-> > > > still apply to the latest from master?  Question is, shouldn't the
-> > > > Windows calls setting the codepage be only called if started from
-> > > > child_info_spawn::worker for non-Cygwin executables?
-> > > 
-> > > I'd propose the patch:
-> > > 
-> > > diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-> > > index 37d033bbe..95b28c3da 100644
-> > > --- a/winsup/cygwin/fhandler_tty.cc
-> > > +++ b/winsup/cygwin/fhandler_tty.cc
-> > > @@ -1830,7 +1830,11 @@ fhandler_pty_slave::setup_locale (void)
-> > >    extern UINT __eval_codepage_from_internal_charset ();
-> > > 
-> > >    if (!get_ttyp ()->term_code_page)
-> > > -    get_ttyp ()->term_code_page = __eval_codepage_from_internal_charset ();
-> > > +    {
-> > > +      get_ttyp ()->term_code_page = __eval_codepage_from_internal_charset ();
-> > > +      SetConsoleCP (get_ttyp ()->term_code_page);
-> > > +      SetConsoleOutputCP (get_ttyp ()->term_code_page);
-> > > +    }
-> > >  }
-> > > 
-> > >  void
-> > > 
-> > > However, Johannes insists setting codepage for non-cygwin apps
-> > > even when pseudo console is enabled, which I cannot agree.
-> > > 
-> > > Actually, I hesitate even the patch above, however, it seems to
-> > > be necessary for msys apps in terms of backward compatibility.
+> > diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+> > index 37d033bbe..95b28c3da 100644
+> > --- a/winsup/cygwin/fhandler_tty.cc
+> > +++ b/winsup/cygwin/fhandler_tty.cc
+> > @@ -1830,7 +1830,11 @@ fhandler_pty_slave::setup_locale (void)
+> >    extern UINT __eval_codepage_from_internal_charset ();
 > > 
-> > If we do as above, doesn't that mean the invocation of convert_mb_str in
-> > fhandler_pty_master::accept_input, as well as the second invocation of
-> > convert_mb_str in fhandler_pty_master::pty_master_fwd_thread are
-> > redundant?  Both are only called if get_ttyp ()->term_code_page differs
-> > from the input or output console codepage.  Given the above setting of
-> > the console CP to term_code_page, this would never be the case, right?
+> >    if (!get_ttyp ()->term_code_page)
+> > -    get_ttyp ()->term_code_page = __eval_codepage_from_internal_charset ();
+> > +    {
+> > +      get_ttyp ()->term_code_page = __eval_codepage_from_internal_charset ();
+> > +      SetConsoleCP (get_ttyp ()->term_code_page);
+> > +      SetConsoleOutputCP (get_ttyp ()->term_code_page);
+> > +    }
+> >  }
+> > 
+> >  void
+> > 
+> > However, Johannes insists setting codepage for non-cygwin apps
+> > even when pseudo console is enabled, which I cannot agree.
+> > 
+> > Actually, I hesitate even the patch above, however, it seems to
+> > be necessary for msys apps in terms of backward compatibility.
 > 
-> You are right by default. However, if user change the code page using
-> chcp.com, conversion does work.
+> I found that output of Oracle java.exe and javac.exe are garbled
+> if the patch above is applied. This is because java.exe and javac.exe
+> output SJIS code unconditionally in my environment.
+> 
+> OTOH, rust-based program such as cargo and ripgrep output UTF-8
+> unconditionally. node.js also seems to output UTF-8 string by
+> default.
+> 
+> I think there is no way for both apps to work properly if pseudo
+> console is disabled. As far as I tested, both of them works when
+> pseudo console is enabled. IMHO, the best way to achieve maximum
+> compatibility, is enabling pseudo console, which is disabled in
+> MSYS2 by default.
+> 
+> As for the case with pseudo console disabled:
+> 
+> If backward compatibility is important, we should apply the patch
+> above. If compatibility with the behaviour in command prompt is
+> important, we should leave the codepage to the system default.
 
-Not only user, but also app may change the codepage by SetConsoleCP()
-and SetConsoleOutputCP().
+Pseudo console is probbaly the way to go in future anyway.  For
+older OSes and older apps, we might better opt for backward compat.
+I'll apply your patch for the time being.
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+
+Thanks,
+Corinna
