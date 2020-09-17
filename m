@@ -1,78 +1,78 @@
 Return-Path: <kbrown@cornell.edu>
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com
- (mail-bn8nam08on2120.outbound.protection.outlook.com [40.107.100.120])
- by sourceware.org (Postfix) with ESMTPS id C32C73944424
- for <cygwin-patches@cygwin.com>; Thu, 17 Sep 2020 22:22:14 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org C32C73944424
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam10on2111.outbound.protection.outlook.com [40.107.93.111])
+ by sourceware.org (Postfix) with ESMTPS id E5AF4393C843
+ for <cygwin-patches@cygwin.com>; Thu, 17 Sep 2020 22:34:17 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org E5AF4393C843
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JAskkgIOYLaAXZrJKFm2skfnuPU2NrpYTJyiOycNcVUonsHBBVUWexrF5SNR7bgIaG+aPOA9NQkXZw//9RXKifKpPc/p6STlCVz/L4dA2gm9RiYBO6AciYEwHgG86CFheL9nxlDsdIUQDwIHYaGLQB3dfak45roLuA5nAvFApSLm+t22iIPCb6Qgl7BkNkrofszq50EtzuGrnAnqPGDiKZFpC5eDiq9ot/ynx8uiQFNp79EpfeMrztucSSsLkl4Qx+VhdN5rP9gLtQJWV/3SBte494Pn8ygjQbV/seJKqhpuedv/KYJWE0ODseF/I+9t5UuiyRirybSQ/7SyGP3oOw==
+ b=Oi9QvaaXkQXUrgIh5BKqHfF5dyDu5jYyXUVBB1+h0dSzi1qWQ5IW4e30kw9lJy54SWuOGJA8zyOHsSnFsFEe5yxTpgl4gYSwRSXZGTJt/nghcs+J1+h1TdvujBnJ3PP7WLQeNtN37zkSWBSezGzI9ER6vR+z9NgtEOH3QX72U0Ikop01S63gdNmU2aGazvFojeK1JwJZZmvR8pVPzUrndVrAGtsMGU7Zzvcegzhw8BqwFlivoW/7eTH9CmGOm4zHkdJfJempeZFwBEbi3iZVPr9m1V9YvxXJcjwF9mUvERilJMGTlncG+H97gbX5mr1JRycErArmtZzswpyQ2Qd+9Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=izn/liYEflHqz9cbx4ca95mXQCMMT2MdJWYNVSVd2tk=;
- b=n4UaatJa1ethV+Jjo//We/QvxEtK5RnzmjAn6+mp3Uqdva7ag7dl86JlKF0g1zrjhsqotp3u27Q5N3SjFljWmE+M79lu2z1L9rXiQga92RlJqog7GBlJyGiB1odCMqZRU6zEgJzhnU3JupwBRwEakbRz+2pxjpLNYdhbKWenwMWUvYge8mGggN9PJg/L3fDVgs6ulC/NrqPTUKhwmiy4zo5qkaL/0jEs/IWOqHR4bmtKGGWGRKUwsr5qKrrwZ99dFP4isPcdAIuRXBBowOid6Ng12tnHUHQZ7KUoed9i8DtbEMXbrV3flRUPwCV0ZQo/D3Z9CAUpPOB2pCIvSS2p/Q==
+ bh=JhxDJFUtvCuzzlFHMZ4XCZfFB5fLQtGw9zB9oAHAbOI=;
+ b=FqM0hEix4YkgSUrvm3dPTdq9SIAhkGN6JspKLcij1kOBX/loCfX74/JDeTdticfgx05upwQVavpDn2AY6vXaeaKKPMeHDHiOg+rJOpMUL1SZE7UHUI493JWpuNivBU37vcSQID7I7aZDU8rTIe3jlkobbmIfuimsOicdLdY+DMEbOHuKgpyM8M71J/149Y40nQ2n/oCsjtN1IoxCWYJfztttcmnNMqZsD/ylTJqVIrilN0mlpBNt5HgeYqIV+3kMbaUu+h0ar2Hl3KSRNa6NGJllwjZsW2ODNGfG6cIp6RniUnHlXgoGRkEPkmFCLvDCJF0CnaW/2eHvGk07Gzs7Yw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu;
  dkim=pass header.d=cornell.edu; arc=none
 Received: from MN2PR04MB6176.namprd04.prod.outlook.com (2603:10b6:208:e3::13)
- by MN2PR04MB5565.namprd04.prod.outlook.com (2603:10b6:208:d8::28)
+ by MN2PR04MB5661.namprd04.prod.outlook.com (2603:10b6:208:a0::14)
  with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3391.11; Thu, 17 Sep
- 2020 22:22:13 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3391.14; Thu, 17 Sep
+ 2020 22:34:17 +0000
 Received: from MN2PR04MB6176.namprd04.prod.outlook.com
  ([fe80::c144:d206:c369:af44]) by MN2PR04MB6176.namprd04.prod.outlook.com
  ([fe80::c144:d206:c369:af44%7]) with mapi id 15.20.3348.019; Thu, 17 Sep 2020
- 22:22:13 +0000
-Subject: Re: [PATCH] winsup/doc/faq-what.xml: FAQ 1.2 Windows versions
- supported
+ 22:34:17 +0000
+Subject: Re: [PATCH] fhandler_proc.cc(format_proc_cpuinfo): add tsxldtrk,
+ sev_es flags
 To: cygwin-patches@cygwin.com
-References: <20200917182917.6116-1-Brian.Inglis@SystematicSW.ab.ca>
+References: <20200917185125.6208-1-Brian.Inglis@SystematicSW.ab.ca>
 From: Ken Brown <kbrown@cornell.edu>
-Message-ID: <f5cadd54-84dc-9511-3cd0-c18ee94c9ebb@cornell.edu>
-Date: Thu, 17 Sep 2020 18:22:11 -0400
+Message-ID: <4c46b54d-e7d6-0e36-bc03-63b039decbe2@cornell.edu>
+Date: Thu, 17 Sep 2020 18:34:15 -0400
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
-In-Reply-To: <20200917182917.6116-1-Brian.Inglis@SystematicSW.ab.ca>
+In-Reply-To: <20200917185125.6208-1-Brian.Inglis@SystematicSW.ab.ca>
 Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR01CA0064.prod.exchangelabs.com (2603:10b6:208:23f::33)
- To MN2PR04MB6176.namprd04.prod.outlook.com
+X-ClientProxiedBy: MN2PR22CA0001.namprd22.prod.outlook.com
+ (2603:10b6:208:238::6) To MN2PR04MB6176.namprd04.prod.outlook.com
  (2603:10b6:208:e3::13)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 Received: from [192.168.0.17] (68.175.129.7) by
- MN2PR01CA0064.prod.exchangelabs.com (2603:10b6:208:23f::33) with Microsoft
+ MN2PR22CA0001.namprd22.prod.outlook.com (2603:10b6:208:238::6) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3391.13 via Frontend Transport; Thu, 17 Sep 2020 22:22:13 +0000
+ 15.20.3391.11 via Frontend Transport; Thu, 17 Sep 2020 22:34:16 +0000
 X-Originating-IP: [68.175.129.7]
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: da10fac6-db08-4690-4d33-08d85b58206a
-X-MS-TrafficTypeDiagnostic: MN2PR04MB5565:
-X-Microsoft-Antispam-PRVS: <MN2PR04MB5565AAE5FA2A9F3BEA053800D83E0@MN2PR04MB5565.namprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
+X-MS-Office365-Filtering-Correlation-Id: afe2ccbd-187c-4e41-0ba5-08d85b59cfae
+X-MS-TrafficTypeDiagnostic: MN2PR04MB5661:
+X-Microsoft-Antispam-PRVS: <MN2PR04MB5661D1F3D15FC5FC31FD0F00D83E0@MN2PR04MB5661.namprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:983;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iIO33+boYOsBj5XTA3dSITjsF95oabHza1Hh8t/FzB1qOSEk3BRn58Z9QlaSk1yd2tTDtWKJvDadpaJowDlylTh8s53SKqqLLTJ5wOPP3NE6o0otn41UCjIn+brjMzsX4FMY0jXzE7AhqjaQom9SZgYy4bGP+0BQJwqRnB6rQPH+KeTRZ31NPs4pFxn3BT38jZl3wcTNntX7ypAsG971Ne3UMtv86cTjnOAOegNJU5qbl7WRktNunDIgrN0d7i36ZSWnOe/N6ULNULN12DJgWFoW1+gEv5JKCdyR7uwX2q2Sn9Evo7ZG8NsiP655ztQc/0DJEv9j0teZdstcal5MHiAVJWO/R4GxHXUCAkPuGlVzhgxPK7aZkAF1jn4I4tG98jRdoAUqECOqXNpFAkn+IlBmfghhBlhxhWnfIxn54N59MwrmWBJWpkKCv7ce0a+me8pJMKynEK+X/N34k6/eCw==
+X-Microsoft-Antispam-Message-Info: H5vHn0GwJsdhtMC1OvLIh2eS670Jne9IpqVcAjGUEdd2v7hAa1roiZJzuYZQhvYq9IUsWoil+V7uOSMjozGH+qgnLO2Zz9+eor361jlYYknCY8UgCzUAFHfS00iM6wp2gSWRw5xnpOldC168y4PZcgg40QCurr7BLty2hK6GxzQPiVsRa4Q3CXoq++YkbnCtWBNVoi31eVmVLyUeTPtPa9raWNnX5+FKvJxQWVe5efBbETxvAkvXXvDBy5KP4ze0RVR5Um6nYeIdl+cOKWIDEJ8B/o0BdVDvra33vPSDANiwCxvZouAiUJxkuW0oChOyMc8LGo/+WpyYzf4frCAVzEGNSPV4G63qbrb+v1ZIo9dOVj3x+1fhF/5BedWXbfpN9qdh7ZApe4x8amC3kx4OVzevgxmPMWK1xZXujkaINdYDR536aI5Stb7AWr/0hkUJ
 X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:MN2PR04MB6176.namprd04.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(4636009)(39860400002)(376002)(366004)(346002)(136003)(396003)(66946007)(6486002)(8936002)(36756003)(966005)(31696002)(86362001)(956004)(478600001)(52116002)(2616005)(83380400001)(26005)(186003)(2906002)(6916009)(16526019)(66556008)(316002)(66476007)(786003)(75432002)(16576012)(53546011)(5660300002)(31686004)(8676002)(43740500002);
+ SFS:(4636009)(39860400002)(366004)(346002)(376002)(396003)(136003)(26005)(66946007)(478600001)(2616005)(5660300002)(36756003)(53546011)(2906002)(52116002)(316002)(956004)(186003)(16526019)(6486002)(16576012)(786003)(8676002)(6916009)(66556008)(66476007)(8936002)(31696002)(75432002)(86362001)(31686004)(83380400001)(133343001)(121003001)(43740500002);
  DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData: L58wJ29rH//IBzuVuvPNS7iN8aY1Sb3rsO+hq9+7qGi7lI6ye7bGX8KBainYWu5m88DjAwbwWfMNSo8BEgtM0jykb/JCsrUp1ByvrMfgkRwftpqsf/NeRS7yT6rQm27hcszXD/RPiC0AI5e9RkJ7FAHKEJcDD2/3yIT1tjME82UVxXFtZRiZGUODMzWiZ8fbssKjhXvEC3E+UOilnZObGJw222YmehNxdKXao+4XH2Q5nNHg9l+fMg5lAGRZFHFiqfy0gpjVk8tA9dUqRrKP6fGF8wkU8Yvd3FyWfXHtN93wrqhDLboxt7q9JQNRt9Qf5gHnJdzvY5wSbmGvMPIq1SCgOMb/6FLz6pELXg0PqMblqO0pvuZwPcaY/Gb2JxAySu5UqCdWmrxslpWdzUJ+uE7o5yEDQzobMCKKTwBevmMFxVGBYzXeTjRHm5R/knGD0rWfrPusEGuyWC65ciksKhHkhF5r+jbfpgDmqsl8Av90FxgsOvYrTE/LTXzR3qz43WLAjfTKmc/mmFVRTtMduCiRTmyh67NVUjcKDx0QxUG+D58B7S23tYI0KLdU1KXaDVFcSlyBfssxge9QYTySgFng0WKKmUZNHEvaGyvhjDOK9H0zIRtAa5STpRIMTbbEzqG01is/VPjJTrXaJrJ9RA==
+X-MS-Exchange-AntiSpam-MessageData: cj3127sSzuRrPWsxINj9yiGNKoZk6OmHxRJxy3TeT/YRSC5+RPxPzZannVp6X6FuRgwEGBDjle2w4cHtV8EalOvgNKusLa6OcuenEJbmjiJ6e5U5XrsSb7KrpLES26AjiEC1GQ+5e/bXgz68JRiOkQxmm1Q5JyiTCifc/XgMpSY2McCfJYXziZT8haAIMWjd0O+h+q8EMkUdES2N+SfrHVr5880aWbflFxFZnWgT6HwmyI1xZNcfPdOePvRM8VO3H3cGDG8nA474mcem3PAfZW4SyUVLCwajLQRHqonmjaF76ohdTEfivxkOTXViSyqvt95CyypBv9CjTO5n/STON3YHmD/3FVxZaXGbQMhKCrdQ1iJh0zE0YQhvlM2/GM3bFp5CFqVQhc+xI8vhAjkFfuNeGKTplJd9AmE0GK260ICYY/QMph7ioWKedbdkP/ZFljfbCD4q4Un9IJzzsTIjZ9bv5E8dEINNp3iWlLR2DGZQxxWj6Hj4TJAetxYoryeZzNRp4mgSdJNUbyrPNpC516BkyCB0HpbTBOJEsfiyJyQcI2Pm6fPgN2xyjKyORbieWtn9T8BMKUxk6udY2QtkL4BPv1X2xB5DfSApp4YO56t8+URg9U/+WG+OjyBiz7c79+faVsxX6WXUNVMRoPB89A==
 X-OriginatorOrg: cornell.edu
-X-MS-Exchange-CrossTenant-Network-Message-Id: da10fac6-db08-4690-4d33-08d85b58206a
+X-MS-Exchange-CrossTenant-Network-Message-Id: afe2ccbd-187c-4e41-0ba5-08d85b59cfae
 X-MS-Exchange-CrossTenant-AuthSource: MN2PR04MB6176.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Sep 2020 22:22:13.4231 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Sep 2020 22:34:16.9021 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 5d7e4366-1b9b-45cf-8e79-b14b27df46e1
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ucXNS6Xi3R5n9+d9jV0BPZpTmPIMvjEtFh1b382mxjK9N1Hiez2YFXSSJC9kCBhp+lINQVeOB7A3VVsppgNqWw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR04MB5565
-X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, JMQ_SPF_NEUTRAL,
- MSGID_FROM_MTA_HEADER, NICE_REPLY_A, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2,
- SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
+X-MS-Exchange-CrossTenant-UserPrincipalName: Z4X2Khbef3EB96cd+i3fR5Uu1+tXv3vn92sODVjzq+QwCqVOugu0+zdcWQ/y9XdluBFqICx1pdxi4uh1eLiteQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR04MB5661
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, MSGID_FROM_MTA_HEADER,
+ NICE_REPLY_A, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_PASS,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -87,39 +87,51 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 17 Sep 2020 22:22:16 -0000
+X-List-Received-Date: Thu, 17 Sep 2020 22:34:19 -0000
 
-On 9/17/2020 2:29 PM, Brian Inglis wrote:
-> Based on thread https://cygwin.com/pipermail/cygwin/2020-September/246318.html
-> enumerate Vista, 7, 8, 10 progression to be clear, and earliest server 2008
+On 9/17/2020 2:51 PM, Brian Inglis wrote:
+> Add linux-next cpuinfo flags for Intel TSX suspend load address tracking
+> instructions and AMD Secure Encrypted Virtualization with Encrypted State
 > ---
->   winsup/doc/faq-what.xml | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
+>   winsup/cygwin/fhandler_proc.cc | 8 ++++++++
+>   1 file changed, 8 insertions(+)
 > 
-> diff --git a/winsup/doc/faq-what.xml b/winsup/doc/faq-what.xml
-> index ea8496ccbc65..09747532c2e8 100644
-> --- a/winsup/doc/faq-what.xml
-> +++ b/winsup/doc/faq-what.xml
-> @@ -30,9 +30,9 @@ They can be used from one of the provided Unix shells like bash, tcsh or zsh.
->   <question><para>What versions of Windows are supported?</para></question>
->   <answer>
+> diff --git a/winsup/cygwin/fhandler_proc.cc b/winsup/cygwin/fhandler_proc.cc
+> index 196bafd18993..6f6e8291a0ca 100644
+> --- a/winsup/cygwin/fhandler_proc.cc
+> +++ b/winsup/cygwin/fhandler_proc.cc
+> @@ -1376,6 +1376,7 @@ format_proc_cpuinfo (void *, char *&destbuf)
+>   	  cpuid (&features2, &unused, &unused, &unused, 0x8000001f);
 >   
-> -<para>Cygwin can be expected to run on all modern, released versions of Windows.
-> -State January 2016 this includes Windows Vista, Windows Server 2008 and all
-> -later versions of Windows up to Windows 10 and Windows Server 2016.
-> +<para>Cygwin can be expected to run on all modern, released versions of Windows,
-> +from Windows Vista, 7, 8, 10, Windows Server 2008, and all
-> +later versions of Windows.
->   The 32 bit version of Cygwin also runs in the WOW64 32 bit environment on
->   released 64 bit versions of Windows, the 64 bit version of course only on
->   64 bit Windows.
+>   	  ftcprint (features2,  1, "sev");	/* secure encrypted virt */
+> +	/*ftcprint (features2,  3, "sev_es"); - print below */
+>   	}
+>         /* cpuid 0x80000008 ebx */
+>         if (maxe >= 0x80000008)
+> @@ -1400,6 +1401,12 @@ format_proc_cpuinfo (void *, char *&destbuf)
+>   /*	  ftcprint (features1, 26, "ssb_no");	*//* ssb fixed in hardware */
+>           }
+>   
+> +      /* cpuid 0x8000001f eax - set above */
+> +      if (maxe >= 0x8000001f)
+> +	{
+> +	  ftcprint (features2,  3, "sev_es");	/* AMD SEV encrypted state */
+> +	}
+> +
+>         /* cpuid 0x00000007 ebx */
+>         if (maxf >= 0x00000007)
+>   	{
+> @@ -1579,6 +1586,7 @@ format_proc_cpuinfo (void *, char *&destbuf)
+>             ftcprint (features1,  8, "avx512_vp2intersect"); /* vec intcpt d/q */
+>             ftcprint (features1, 10, "md_clear");            /* verw clear buf */
+>             ftcprint (features1, 14, "serialize");           /* SERIALIZE instruction */
+> +          ftcprint (features1, 16, "tsxldtrk");		   /* TSX Susp Ld Addr Track */
+>             ftcprint (features1, 18, "pconfig");		   /* platform config */
+>             ftcprint (features1, 19, "arch_lbr");		   /* last branch records */
+>             ftcprint (features1, 28, "flush_l1d");	   /* flush l1d cache */
 
-Since this is something that changes over time, I don't think you should drop 
-the date completely, though I see no reason to retain "January 2016".  What 
-would you think of revising your patch so that the text says something like this:
+Pushed with a trivial change (added a period at the end of the commit message).
 
-"Cygwin can be expected to run on all modern, released versions of Windows.  As 
-of September 2020 this includes Windows Vista, 7, 8, 8.1, and 10, Windows Server 
-2008, and all later versions of Windows Server."
+Thanks.
 
 Ken
