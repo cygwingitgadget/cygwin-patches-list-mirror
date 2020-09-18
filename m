@@ -1,78 +1,50 @@
-Return-Path: <kbrown@cornell.edu>
-Received: from NAM04-CO1-obe.outbound.protection.outlook.com
- (mail-eopbgr690106.outbound.protection.outlook.com [40.107.69.106])
- by sourceware.org (Postfix) with ESMTPS id 5F5B239540F0
- for <cygwin-patches@cygwin.com>; Fri, 18 Sep 2020 11:59:12 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 5F5B239540F0
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HDOfIN6ykCoWLPZ58Wjw/Oid+ZcLgKnfgoA4ImCJEVWEn/n6uTCqD28jK1IyC6craJaAqE+fVQJhy1NfsLWgmWyd6SB43UkwrVd2qVSjSwQfdumz/Lay01TKpnrgLuVTulFEfH1sxs9LrHqVEXZQTeZmB0IhOUZsBDnNSh9ffRc/pAphY9Vx3riny0LO8W3EgZIbxiXZMdiraO/Sbta27nvKXcl24r9hybUj7kulrtMfyj8iS532f19bSIdOWeXx8l6a8Gq0/x5o+kVN7JwKZ9NMKXqiW3Br4KKDq2A2+pGzzsLLCRhl3GZ5TH/7k0zIYrkvpQfnt31KoIn20wYwCQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9i6/5qx0eSiYeppzue2+HXL2qRDJX5edNu3GIvvBWMI=;
- b=bX1CBpgbZqM/7SXRKoQV6wupqO9yDtIjku2KsIff+rp0MHRifZ4Y/7ByN2qpmNPGEy7h/h1jWd00YoeLIIymg8xNNsioMRIOVenEa8eMnL39vF1IxmeDdLXP7dWaD1/0rcl5kJ/iY7+RxdRRsls13910Z+braZnwLjpPrw20cBsyqM5CHx0zt6SyW2u+Wg9/+a/nsjKiUexWX6CTWDfMpRz+PVuR3/dmr2vUYUN52FBxnOcMwZqowpQeB8LXI9hDjoPfxCtFC1giX6bwmjYh5mrs8OVVs5qJxd21jN/rUBptQ6eEtEcmvL2hJjrZe/oZKXbrR/CDGa+Jtqx2xkg2fQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu;
- dkim=pass header.d=cornell.edu; arc=none
-Received: from MN2PR04MB6176.namprd04.prod.outlook.com (2603:10b6:208:e3::13)
- by MN2PR04MB6158.namprd04.prod.outlook.com (2603:10b6:208:d9::14)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3391.15; Fri, 18 Sep
- 2020 11:59:10 +0000
-Received: from MN2PR04MB6176.namprd04.prod.outlook.com
- ([fe80::c144:d206:c369:af44]) by MN2PR04MB6176.namprd04.prod.outlook.com
- ([fe80::c144:d206:c369:af44%7]) with mapi id 15.20.3348.019; Fri, 18 Sep 2020
- 11:59:10 +0000
+Return-Path: <brian.inglis@systematicsw.ab.ca>
+Received: from smtp-out-so.shaw.ca (smtp-out-so.shaw.ca [64.59.136.137])
+ by sourceware.org (Postfix) with ESMTPS id 26F933850426
+ for <cygwin-patches@cygwin.com>; Fri, 18 Sep 2020 15:29:44 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 26F933850426
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=SystematicSw.ab.ca
+Authentication-Results: sourceware.org;
+ spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
+Received: from [192.168.1.104] ([24.64.172.44]) by shaw.ca with ESMTP
+ id JIKTkQA1bHxtDJIKVkesTU; Fri, 18 Sep 2020 09:29:43 -0600
+X-Authority-Analysis: v=2.4 cv=Ce22WJnl c=1 sm=1 tr=0 ts=5f64d267
+ a=kiZT5GMN3KAWqtYcXc+/4Q==:117 a=kiZT5GMN3KAWqtYcXc+/4Q==:17
+ a=IkcTkHD0fZMA:10 a=jChkm-x5hCMFubTIiR0A:9 a=QEXdDO2ut3YA:10
+Reply-To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH v2] winsup/doc/faq-what.xml: FAQ 1.2 Windows versions
  supported
 To: cygwin-patches@cygwin.com
 References: <20200918025335.43795-1-Brian.Inglis@SystematicSW.ab.ca>
-From: Ken Brown <kbrown@cornell.edu>
-Message-ID: <ea6c7db5-5c8c-6e5c-d9be-6ffa50f2d236@cornell.edu>
-Date: Fri, 18 Sep 2020 07:59:08 -0400
+ <ea6c7db5-5c8c-6e5c-d9be-6ffa50f2d236@cornell.edu>
+From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
+Autocrypt: addr=Brian.Inglis@SystematicSw.ab.ca; prefer-encrypt=mutual;
+ keydata=
+ mDMEXopx8xYJKwYBBAHaRw8BAQdAnCK0qv/xwUCCZQoA9BHRYpstERrspfT0NkUWQVuoePa0
+ LkJyaWFuIEluZ2xpcyA8QnJpYW4uSW5nbGlzQFN5c3RlbWF0aWNTdy5hYi5jYT6IlgQTFggA
+ PhYhBMM5/lbU970GBS2bZB62lxu92I8YBQJeinHzAhsDBQkJZgGABQsJCAcCBhUKCQgLAgQW
+ AgMBAh4BAheAAAoJEB62lxu92I8Y0ioBAI8xrggNxziAVmr+Xm6nnyjoujMqWcq3oEhlYGAO
+ WacZAQDFtdDx2koSVSoOmfaOyRTbIWSf9/Cjai29060fsmdsDLg4BF6KcfMSCisGAQQBl1UB
+ BQEBB0Awv8kHI2PaEgViDqzbnoe8B9KMHoBZLS92HdC7ZPh8HQMBCAeIfgQYFggAJhYhBMM5
+ /lbU970GBS2bZB62lxu92I8YBQJeinHzAhsMBQkJZgGAAAoJEB62lxu92I8YZwUBAJw/74rF
+ IyaSsGI7ewCdCy88Lce/kdwX7zGwid+f8NZ3AQC/ezTFFi5obXnyMxZJN464nPXiggtT9gN5
+ RSyTY8X+AQ==
+Organization: Systematic Software
+Message-ID: <b347ae40-0eaf-8fd6-9698-f3a04f5640ff@SystematicSw.ab.ca>
+Date: Fri, 18 Sep 2020 09:29:41 -0600
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.12.0
-In-Reply-To: <20200918025335.43795-1-Brian.Inglis@SystematicSW.ab.ca>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH2PR02CA0008.namprd02.prod.outlook.com
- (2603:10b6:610:4e::18) To MN2PR04MB6176.namprd04.prod.outlook.com
- (2603:10b6:208:e3::13)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [192.168.0.17] (68.175.129.7) by
- CH2PR02CA0008.namprd02.prod.outlook.com (2603:10b6:610:4e::18) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3391.14 via Frontend Transport; Fri, 18 Sep 2020 11:59:10 +0000
-X-Originating-IP: [68.175.129.7]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 10394626-b719-4ca7-72df-08d85bca40f1
-X-MS-TrafficTypeDiagnostic: MN2PR04MB6158:
-X-Microsoft-Antispam-PRVS: <MN2PR04MB6158E7085313CF876413E032D83F0@MN2PR04MB6158.namprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3Xu4dwBaOIPdPzpig+z+e+S0+TKnbvHeY8UlaPsL7wYn1GIza7iCsYpI8XoOAGOpRtppD6DV2gUyhML4Q+SnDiiNlrhqGRX02KcRHaFtXEHFRazg7ItndjVd6k4D4XyN+gMsaq4L0oSpnxAY0ZoePtif2T4lTZI4PK3WR9Qk9XxWUv2N2kuSQnVIZl4pi7MLorKkl9PjEZjGbpu0L9LwSBjOe1bWuJQUa8AMn4cLr37UcgnPIVCDBMoEH5WvPMrZpmzeDHRi9326NZsgBx2izzgov5fsjB4hYkHjIScpYODIjLR5JiLusB9lFHXFqY8L9qHrwwooO0eWognKoHeUXcReRi0M1btRFbBUdicBOK1eFdC7lTWz11SYDegdJVAx
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:MN2PR04MB6176.namprd04.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(4636009)(376002)(346002)(136003)(366004)(39860400002)(396003)(26005)(5660300002)(478600001)(52116002)(75432002)(2616005)(956004)(53546011)(83380400001)(36756003)(31686004)(31696002)(86362001)(8676002)(6916009)(6486002)(2906002)(66946007)(16526019)(186003)(66476007)(786003)(316002)(16576012)(66556008)(8936002)(43740500002);
- DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData: lfiX+uNOaSzSDGOPRBHN2wSYP8Ypxg9hj8gnSLm96n/8vK/BZ3utKQ56L92EOv16/qG21wx3hDqhJ7tdizSRNEyxwJOtD/FaQcOuzox77DLTNQtJGlH1oM+URQmj+HanMJHJJ/ncLiIU32wePfM19M07fEW792UBMgKqNWnvXR6IE6wziT56zra9T8C+y1g2WTObuQjn43BvEVNRM2l2/hCcjhE8KpDSfL31B22RQGXH/20KP5ZV8oZuWy3hkK0iDe2f/HsULtrP07ibCFgDlOvmJLNv3EXoCm/rkyCEkfyaRpFUekFutSFj1eyxgZcu9U+lrd/ofb8jMfCJ/UhQPLSzdYdp/YNsvqSQW9d+IwB1BGtFG7hbTZqNbOo1ijEMVSZSeEZ0f9cfVCShR9L1UMKYVvj1fN0DphATI4nA6PMY/saP2NQz36k1e9lURkg+18EutpHc5crt/7vnkMGZ2B8Kqjmxrrd+r/Arz8Y1nwGZC9qMMBjreV46VXt+g6Ij590uftEunoUO7s7/gZ0HkpUWRzKST6wtQOtUSewS5brRY58izGTlJOa4+eWH72kDmhah/lpr3VmuSYem88GA1pWKOMlpRgHhD55d7Qcqk5ipejswiCeIlvltW2ND3cENlDszsDpDiZlJpRxMMVmmAQ==
-X-OriginatorOrg: cornell.edu
-X-MS-Exchange-CrossTenant-Network-Message-Id: 10394626-b719-4ca7-72df-08d85bca40f1
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR04MB6176.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Sep 2020 11:59:10.5581 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5d7e4366-1b9b-45cf-8e79-b14b27df46e1
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sYjNFLx9EShhBzwbMIMoF4zBrIRGaJ66J9NrCUUqjhatpLIklT3CixuBmu4YjAHoV42lxItdvPyT2fzPbqxbfg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR04MB6158
-X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, MSGID_FROM_MTA_HEADER,
- NICE_REPLY_A, RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_PASS,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+In-Reply-To: <ea6c7db5-5c8c-6e5c-d9be-6ffa50f2d236@cornell.edu>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-CA
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfG2z6WvMoj82za9AnnKs0rbV6yOOF4TOvv6Z5IqzLRJx6jMG25EvWMgCUdrG5KJudi/zLqMK2O8i4+uaOXtXuo3u5ZHFE8I46zHYKFOYc32mFOPOt75z
+ fTsPcRFoAJOLKTsqdbV3tNwCa/C1ICrDwAOVsu0H3k3P52Y2Uz/pfzazbc+l3IlebJ/d1r7h0Zfo6oA7GCuvImT2oIMEzOlNt1s=
+X-Spam-Status: No, score=-12.5 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_DNSWL_LOW,
+ SPF_HELO_NONE, SPF_NONE, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -87,38 +59,52 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 18 Sep 2020 11:59:14 -0000
+X-List-Received-Date: Fri, 18 Sep 2020 15:29:45 -0000
 
-On 9/17/2020 10:53 PM, Brian Inglis wrote:
-> enumerate Vista, 7, 8, 10 progression to be clear, and earliest server 2008;
-> add 8.1, exclude S mode, add Cygwin32 on ARM, specify 64 bit only AMD/Intel
-> ---
->   winsup/doc/faq-what.xml | 10 +++++-----
->   1 file changed, 5 insertions(+), 5 deletions(-)
+On 2020-09-18 05:59, Ken Brown via Cygwin-patches wrote:
+> On 9/17/2020 10:53 PM, Brian Inglis wrote:
+>> enumerate Vista, 7, 8, 10 progression to be clear, and earliest server 2008;
+>> add 8.1, exclude S mode, add Cygwin32 on ARM, specify 64 bit only AMD/Intel
+>> ---
+>>   winsup/doc/faq-what.xml | 10 +++++-----
+>>   1 file changed, 5 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/winsup/doc/faq-what.xml b/winsup/doc/faq-what.xml
+>> index ea8496ccbc65..77ba1c5fdd9c 100644
+>> --- a/winsup/doc/faq-what.xml
+>> +++ b/winsup/doc/faq-what.xml
+>> @@ -30,12 +30,12 @@ They can be used from one of the provided Unix shells like
+>> bash, tcsh or zsh.
+>>   <question><para>What versions of Windows are supported?</para></question>
+>>   <answer>
+>>   -<para>Cygwin can be expected to run on all modern, released versions of
+>> Windows.
+>> -State January 2016 this includes Windows Vista, Windows Server 2008 and all
+>> -later versions of Windows up to Windows 10 and Windows Server 2016.
+>> +<para>Cygwin can be expected to run on all modern, released versions of Windows,
+>> +from Windows Vista, 7, 8, 8.1, 10, Windows Server 2008 and all
+>> +later versions of Windows, except Windows S mode due to its limitations.
+>>   The 32 bit version of Cygwin also runs in the WOW64 32 bit environment on
+>> -released 64 bit versions of Windows, the 64 bit version of course only on
+>> -64 bit Windows.
+>> +released 64 bit versions of Windows including ARM PCs,
+>> +the 64 bit version of course only on 64 bit AMD/Intel compatible PCs.
+>>   </para>
+>>   <para>Keep in mind that Cygwin can only do as much as the underlying OS
+>>   supports.  Because of this, Cygwin will behave differently, and
 > 
-> diff --git a/winsup/doc/faq-what.xml b/winsup/doc/faq-what.xml
-> index ea8496ccbc65..77ba1c5fdd9c 100644
-> --- a/winsup/doc/faq-what.xml
-> +++ b/winsup/doc/faq-what.xml
-> @@ -30,12 +30,12 @@ They can be used from one of the provided Unix shells like bash, tcsh or zsh.
->   <question><para>What versions of Windows are supported?</para></question>
->   <answer>
->   
-> -<para>Cygwin can be expected to run on all modern, released versions of Windows.
-> -State January 2016 this includes Windows Vista, Windows Server 2008 and all
-> -later versions of Windows up to Windows 10 and Windows Server 2016.
-> +<para>Cygwin can be expected to run on all modern, released versions of Windows,
-> +from Windows Vista, 7, 8, 8.1, 10, Windows Server 2008 and all
-> +later versions of Windows, except Windows S mode due to its limitations.
->   The 32 bit version of Cygwin also runs in the WOW64 32 bit environment on
-> -released 64 bit versions of Windows, the 64 bit version of course only on
-> -64 bit Windows.
-> +released 64 bit versions of Windows including ARM PCs,
-> +the 64 bit version of course only on 64 bit AMD/Intel compatible PCs.
->   </para>
->   <para>Keep in mind that Cygwin can only do as much as the underlying OS
->   supports.  Because of this, Cygwin will behave differently, and
+> Pushed.  Thanks.
+> 
+> Ken
 
-Pushed.  Thanks.
+Thanks Ken,
+Do you have to run something to regen the docs, FAQ.html, and push to the web
+site, or does it run periodically, so I can follow up to the OP and get feed
+back from the responder?
 
-Ken
+-- 
+Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
+
+This email may be disturbing to some readers as it contains
+too much technical detail. Reader discretion is advised.
+[Data in IEC units and prefixes, physical quantities in SI.]
