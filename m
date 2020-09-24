@@ -1,87 +1,47 @@
-Return-Path: <arthur2e5@aosc.io>
-Received: from relay3.mymailcheap.com (relay3.mymailcheap.com
- [217.182.119.155])
- by sourceware.org (Postfix) with ESMTPS id 7B1F33857C4F;
- Thu, 24 Sep 2020 08:40:08 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 7B1F33857C4F
+Return-Path: <jon.turney@dronecode.org.uk>
+Received: from re-prd-fep-046.btinternet.com (mailomta22-re.btinternet.com
+ [213.120.69.115])
+ by sourceware.org (Postfix) with ESMTPS id B27B83973045
+ for <cygwin-patches@cygwin.com>; Thu, 24 Sep 2020 14:04:22 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org B27B83973045
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=dronecode.org.uk
 Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=aosc.io
-Authentication-Results: sourceware.org;
- spf=pass smtp.mailfrom=arthur2e5@aosc.io
-Received: from filter1.mymailcheap.com (filter1.mymailcheap.com
- [149.56.130.247])
- by relay3.mymailcheap.com (Postfix) with ESMTPS id 2E9223ECDF;
- Thu, 24 Sep 2020 10:40:07 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
- by filter1.mymailcheap.com (Postfix) with ESMTP id 7618B2A0F2;
- Thu, 24 Sep 2020 04:40:06 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mymailcheap.com;
- s=default; t=1600936806;
- bh=FxUd7F1E3xj1ZyEz9JNAfAwqZg53bCLy95RpVg+bZEA=;
- h=Subject:To:References:Cc:From:Date:In-Reply-To:From;
- b=RFYb9wFLm/+PoGpHA3dH6Ng1xjus4iPL+MFhJwzxDyPDzktAsZpAT1AZMMSbHseCf
- /GMoLbudYXbdv1IsqObDYxLlAhjavFIPPQdg1FiJbR9zBjscHTWiQ9HaF84HtSJB6J
- M5rCYpeFsWMBWSnyECZLQhlLDxBj+CjLceX8E3MY=
-X-Virus-Scanned: Debian amavisd-new at filter1.mymailcheap.com
-Received: from filter1.mymailcheap.com ([127.0.0.1])
- by localhost (filter1.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id CdxIRLzSdtVW; Thu, 24 Sep 2020 04:40:05 -0400 (EDT)
-Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
- (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by filter1.mymailcheap.com (Postfix) with ESMTPS;
- Thu, 24 Sep 2020 04:40:05 -0400 (EDT)
-Received: from [148.251.23.173] (ml.mymailcheap.com [148.251.23.173])
- by mail20.mymailcheap.com (Postfix) with ESMTP id 097A940858;
- Thu, 24 Sep 2020 08:40:04 +0000 (UTC)
-Authentication-Results: mail20.mymailcheap.com; dkim=pass (1024-bit key;
- unprotected) header.d=aosc.io header.i=@aosc.io header.b="pvalyJDI"; 
- dkim-atps=neutral
-AI-Spam-Status: Not processed
-Received: from [0.0.0.0] (unknown [58.120.138.18])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest
- SHA256) (No client certificate requested)
- by mail20.mymailcheap.com (Postfix) with ESMTPSA id E29FE40858;
- Thu, 24 Sep 2020 08:39:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=aosc.io; s=default;
- t=1600936796; bh=FxUd7F1E3xj1ZyEz9JNAfAwqZg53bCLy95RpVg+bZEA=;
- h=Subject:To:References:Cc:From:Date:In-Reply-To:From;
- b=pvalyJDIc2sTg25q4K34dU0H0+pDkhxshOlMUpoRHHaV7VGhve/y9gb1FX9xIAY73
- EmZ341gBE29glaHv6c0iEP1zpwJR5PHmFzcM8WOeNtRDA+PvLjDZzYeJ2UW+8sjNVR
- 89X5yQA4j23t5Ro7iimoSZTDzUmBDW3gG/WPVFqU=
-Subject: Re: Re: [PATCH v4 1/3] Cygwin: rewrite and make public cmdline parser
-To: Corinna Vinschen <corinna-cygwin@cygwin.com>
-References: <20200905052711.13008-1-arthur2e5@aosc.io>
- <20200907093943.GJ4127@calimero.vinschen.de>
-Cc: cygwin-patches@cygwin.com
-From: "Mingye Wang (Artoria2e5)" <arthur2e5@aosc.io>
-Message-ID: <33c7b23a-5f59-bcaa-3b0a-6e6d4bc4f30b@aosc.io>
-Date: Thu, 24 Sep 2020 16:39:44 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+ spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
+Received: from re-prd-rgout-002.btmx-prd.synchronoss.net ([10.2.54.5])
+ by re-prd-fep-046.btinternet.com with ESMTP id
+ <20200924140421.NHCL4657.re-prd-fep-046.btinternet.com@re-prd-rgout-002.btmx-prd.synchronoss.net>;
+ Thu, 24 Sep 2020 15:04:21 +0100
+Authentication-Results: btinternet.com;
+ auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
+X-Originating-IP: [86.176.137.240]
+X-OWM-Source-IP: 86.176.137.240 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedujedrudekgdejfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepuffvfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepgeeuhfekvdefieeghfehtdejheeigedthefhhfehfffgheehgedtffeljeetueeunecukfhppeekiedrudejiedrudefjedrvdegtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddrudduudgnpdhinhgvthepkeeirddujeeirddufeejrddvgedtpdhmrghilhhfrhhomhepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqecuuefqffgjpeekuefkvffokffogfdprhgtphhtthhopeeotgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomheqpdhrtghpthhtohepoehksghrohifnhestghorhhnvghllhdrvgguuheq
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from [192.168.1.111] (86.176.137.240) by
+ re-prd-rgout-002.btmx-prd.synchronoss.net (5.8.340) (authenticated as
+ jonturney@btinternet.com)
+ id 5ED9C0CC127FEAAD; Thu, 24 Sep 2020 15:04:21 +0100
+Subject: Re: [PATCH] Cygwin: winlean.h: remove most of extended memory API
+To: Cygwin Patches <cygwin-patches@cygwin.com>
+References: <20200923235225.46299-1-kbrown@cornell.edu>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+Message-ID: <ddeace5b-33a2-ed1f-5b30-0d33bfe61ca3@dronecode.org.uk>
+Date: Thu, 24 Sep 2020 15:04:19 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.2.2
 MIME-Version: 1.0
-In-Reply-To: <20200907093943.GJ4127@calimero.vinschen.de>
+In-Reply-To: <20200923235225.46299-1-kbrown@cornell.edu>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 097A940858
-X-Spamd-Result: default: False [-0.10 / 10.00]; RCVD_VIA_SMTP_AUTH(0.00)[];
- ARC_NA(0.00)[]; R_DKIM_ALLOW(0.00)[aosc.io:s=default];
- RECEIVED_SPAMHAUS_PBL(0.00)[58.120.138.18:received];
- FROM_HAS_DN(0.00)[]; TO_DN_SOME(0.00)[];
- TO_MATCH_ENVRCPT_ALL(0.00)[]; MIME_GOOD(-0.10)[text/plain];
- DMARC_NA(0.00)[aosc.io]; R_SPF_SOFTFAIL(0.00)[~all];
- ML_SERVERS(-3.10)[148.251.23.173]; DKIM_TRACE(0.00)[aosc.io:+];
- RCPT_COUNT_TWO(0.00)[2]; RCVD_NO_TLS_LAST(0.10)[];
- FROM_EQ_ENVFROM(0.00)[]; MIME_TRACE(0.00)[0:+];
- ASN(0.00)[asn:24940, ipnet:148.251.0.0/16, country:DE];
- RCVD_COUNT_TWO(0.00)[2]; MID_RHS_MATCH_FROM(0.00)[];
- HFILTER_HELO_BAREIP(3.00)[148.251.23.173,1]
-X-Rspamd-Server: mail20.mymailcheap.com
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, NICE_REPLY_A, SPF_HELO_NONE,
- SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_DNSWL_LOW,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_NONE,
+ TXREP autolearn=no autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -96,23 +56,36 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 24 Sep 2020 08:40:10 -0000
+X-List-Received-Date: Thu, 24 Sep 2020 14:04:25 -0000
 
-On 2020/9/7 17:39, Corinna Vinschen wrote:
+On 24/09/2020 00:52, Ken Brown via Cygwin-patches wrote:
+> This was added as a temporary measure in commit e18f7f99 because it
+> wasn't yet in the mingw-w64 headers.  With one exception, it is now in
+> the current release of the headers (version 8.0.0), so we don't need
+> it in winlean.h.  The exception is that VirtualAlloc2 is only declared
+> conditionally in <w32api/memoryapi.h>, so retain it in winlean.h.  Add
+
+I assume it's conditional on the windows version targetted, but it might 
+help to mention that in a comment.
+
+> "WINAPI" to its declaration for consistency with the delaration in
+> memoryapi.h.
 > 
-> Nope, we won't do that.  The command line parsing is an internal
-> thing, and we won't export arbitrary internal functions using
-> their own symbol.  *If* we should export this stuff at all, which
-> I highly doubt as necessary, it should use the cygwin_internal API.
+> Also revert commit 3d136011, which was a related temporary workaround.
 
-The idea is that the sort of thing get reimplemented incorrectly a lot, 
-and since we have the extra @file feature and the Unix glob it would be 
-nice to allow other people to use it. Win32 has CommandLineToArgvW, so I 
-figured it wouldn't be too strange to have.
+Looks good to me.
 
-The escaping function is there mostly for symmetry and convenience, 
-since it's basically the standard escape.
+I think this isn't going work any more with older win32api, but we 
+probably don't care about that.  It would perhaps be nice to explicitly 
+complain about that (checking __MINGW64_VERSION_MAJOR somehow), rather 
+than exploding incomprehensibly if the w32api is too old?
 
---
-Regards,
-Mingye
+> In particular, I'd like to know if my handling of the 
+> declaration of VirtualAlloc2 seems reasonable.  Among other things, I'm 
+> puzzled by the apparent need to add WINAPI.  If it's really needed, I 
+> don't know how the calls of that function could have worked before.  Can 
+> anyone enlighten me?
+
+I believe that WINAPI only does something (stdcall) on x86, so it might 
+well be that it's never worked on Windows 10 =>1803 x86?
+
