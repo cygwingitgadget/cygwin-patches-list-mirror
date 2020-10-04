@@ -1,50 +1,74 @@
-Return-Path: <brian.inglis@systematicsw.ab.ca>
-Received: from smtp-out-so.shaw.ca (smtp-out-so.shaw.ca [64.59.136.139])
- by sourceware.org (Postfix) with ESMTPS id 6A09A3857C6B
- for <cygwin-patches@cygwin.com>; Wed, 30 Sep 2020 03:30:14 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 6A09A3857C6B
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=SystematicSw.ab.ca
-Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
-Received: from [192.168.1.104] ([24.64.172.44]) by shaw.ca with ESMTP
- id NSolkpbYzHxtDNSomkHADN; Tue, 29 Sep 2020 21:30:13 -0600
-X-Authority-Analysis: v=2.4 cv=Ce22WJnl c=1 sm=1 tr=0 ts=5f73fbc5
- a=kiZT5GMN3KAWqtYcXc+/4Q==:117 a=kiZT5GMN3KAWqtYcXc+/4Q==:17
- a=IkcTkHD0fZMA:10 a=iMpC6L0jGsNNbTZxuiUA:9 a=QEXdDO2ut3YA:10
-Reply-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 0/3] Warning fixes for gcc 10.2
+Return-Path: <kbrown@cornell.edu>
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam10on2131.outbound.protection.outlook.com [40.107.93.131])
+ by sourceware.org (Postfix) with ESMTPS id 0E6FA3857C7F
+ for <cygwin-patches@cygwin.com>; Sun,  4 Oct 2020 16:50:08 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 0E6FA3857C7F
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=R5dEudrRngoZG404We2yRwKuw4RVgg+/N3jW4QNSFyMJ0MzE8dWdmUYXqfPanj0kv5Lkps3abl9MegWItAx26uv3h6GvV9L1wCrWoVVM2Bx7yNl3bhHR7Mj/2WiFmqEux5EjNP+n0BreEu1PwypszS9DDPe5pW95jeEndtUljsAGFMzFKpzsPsDviQNCwNDLID9kKnil/qtGOiBMDhcQcBKHFIaEVf83+DYRLhBFiNaWc/rELdgYISAiC7MfmClvrWJ6IXebT0AIn/dRGoxDyVH8bFePp+u0hif02W3P7zXwZdw0jvYEMnrV5BUT05vxFo3sqYZqXzq8vIhvxUZp9A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MPL1Pdod50qFG4p3TJbx0XpFQDeiHCB4KlI3nF2J0iA=;
+ b=CuUjrwgp8IlYO59/DviG36xm+pkI1btb/TeSBycllhwjij/4IQJpTktoqh/2Gtf1FI5Oe5XpSMNrwgzBKZo2qJbfqzrENT0QHTomA4XjWMC4WQC89GlHmNa6wX6BCHd7K4hbp/9Bd3wn2zApmb6oumrChPOeacSeVr3yWtTy13rJvP5AcIpoGxSxa42X7tmu9y8LEsAg8Dz6rqJfRo3gb+OUcad1mFH7SX4bclGiJ1wWx6HPmRqmqQ2uxGEyAAlKdjVu3JYUr9mpNEdJNIe6FPLcMAFwbNdg9UG/OS7fPbN7VbgcfZoXRX1W+CN72WPNRgaPalqtNl8BCqaOHU40WA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu;
+ dkim=pass header.d=cornell.edu; arc=none
+Received: from MN2PR04MB6176.namprd04.prod.outlook.com (2603:10b6:208:e3::13)
+ by MN2PR04MB6176.namprd04.prod.outlook.com (2603:10b6:208:e3::13)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3433.32; Sun, 4 Oct
+ 2020 16:50:06 +0000
+Received: from MN2PR04MB6176.namprd04.prod.outlook.com
+ ([fe80::c144:d206:c369:af44]) by MN2PR04MB6176.namprd04.prod.outlook.com
+ ([fe80::c144:d206:c369:af44%7]) with mapi id 15.20.3433.042; Sun, 4 Oct 2020
+ 16:50:06 +0000
+From: Ken Brown <kbrown@cornell.edu>
 To: cygwin-patches@cygwin.com
-References: <20200921192526.36773-1-jon.turney@dronecode.org.uk>
- <1425a69b-d1a9-1479-4083-3839910352ee@cornell.edu>
- <f5291780-3a7e-9112-8178-2ef0edafc006@SystematicSw.ab.ca>
-From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
-Autocrypt: addr=Brian.Inglis@SystematicSw.ab.ca; prefer-encrypt=mutual;
- keydata=
- mDMEXopx8xYJKwYBBAHaRw8BAQdAnCK0qv/xwUCCZQoA9BHRYpstERrspfT0NkUWQVuoePa0
- LkJyaWFuIEluZ2xpcyA8QnJpYW4uSW5nbGlzQFN5c3RlbWF0aWNTdy5hYi5jYT6IlgQTFggA
- PhYhBMM5/lbU970GBS2bZB62lxu92I8YBQJeinHzAhsDBQkJZgGABQsJCAcCBhUKCQgLAgQW
- AgMBAh4BAheAAAoJEB62lxu92I8Y0ioBAI8xrggNxziAVmr+Xm6nnyjoujMqWcq3oEhlYGAO
- WacZAQDFtdDx2koSVSoOmfaOyRTbIWSf9/Cjai29060fsmdsDLg4BF6KcfMSCisGAQQBl1UB
- BQEBB0Awv8kHI2PaEgViDqzbnoe8B9KMHoBZLS92HdC7ZPh8HQMBCAeIfgQYFggAJhYhBMM5
- /lbU970GBS2bZB62lxu92I8YBQJeinHzAhsMBQkJZgGAAAoJEB62lxu92I8YZwUBAJw/74rF
- IyaSsGI7ewCdCy88Lce/kdwX7zGwid+f8NZ3AQC/ezTFFi5obXnyMxZJN464nPXiggtT9gN5
- RSyTY8X+AQ==
-Organization: Systematic Software
-Message-ID: <1c0de813-d574-1b86-1b70-258e736c0f57@SystematicSw.ab.ca>
-Date: Tue, 29 Sep 2020 21:30:11 -0600
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+Subject: [PATCH v2 0/6] Some AF_UNIX fixes
+Date: Sun,  4 Oct 2020 12:49:42 -0400
+Message-Id: <20201004164948.48649-1-kbrown@cornell.edu>
+X-Mailer: git-send-email 2.28.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [2604:6000:b407:7f00:48c7:bebb:3651:4c42]
+X-ClientProxiedBy: MN2PR03CA0014.namprd03.prod.outlook.com
+ (2603:10b6:208:23a::19) To MN2PR04MB6176.namprd04.prod.outlook.com
+ (2603:10b6:208:e3::13)
 MIME-Version: 1.0
-In-Reply-To: <f5291780-3a7e-9112-8178-2ef0edafc006@SystematicSw.ab.ca>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-CA
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfLCs+dcxj9/IyyFSiB863HvG9QdXSHauu2OBaMQKusTO+66CkQBLymTOhOgq3PvHIFaIHKhdDb0e5abF7Ej68oZ0niwmCT8tB1Qt6BihAs8uuxSWAj3z
- e1aBYODpG1C9wP3weYMQ9IuR9jV7HBGDRNd7TuefDEVVjGniNxzoNW98xKd1dd+9kviDXKLLDhP81/UJVNgnS4lag9C3yC2TJJY=
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
- KAM_LAZY_DOMAIN_SECURITY, KAM_NUMSUBJECT, NICE_REPLY_A, RCVD_IN_DNSWL_LOW,
- SPF_HELO_NONE, SPF_NONE, TXREP autolearn=no autolearn_force=no version=3.4.2
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from localhost.localdomain (2604:6000:b407:7f00:48c7:bebb:3651:4c42)
+ by MN2PR03CA0014.namprd03.prod.outlook.com (2603:10b6:208:23a::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3433.36 via Frontend
+ Transport; Sun, 4 Oct 2020 16:50:06 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 808bcc74-5a79-4abc-7143-08d868858c27
+X-MS-TrafficTypeDiagnostic: MN2PR04MB6176:
+X-Microsoft-Antispam-PRVS: <MN2PR04MB6176EEF23F3969F27BA8BFEFD80F0@MN2PR04MB6176.namprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mz2eigWWetFvEvaM0msb/ns3Q7Tdubq2E28Xqauk+AbgOzCOzKRpFN460ZACZnxEvlGStLtKrtpoU7tjVXdxgxCVeOTDaETInwYLENyhHhWPCQvTfmgxOcP00gHgO6EsQCihoZgOhB27bDj1Hpx9Ab2rWXPha21tdcQ+DfYHryPKU7Jp7J2vl1IR7zYzaWiz2LNah4nn4KkRHM7mC0QnuO9br/75r6ttQWd20SyE8mQ9BFUmR95evphpZNLBAjaIOdVGmj9QKZ3ClE4Z6A38keOujOxgTraYfyU3MIwC5dbkyftxVbjod7B1IPWIzTLwGGc+9RIuR+NbjNdsCESbckBr7xnMtdf9Pve6f3kNvQIeWjZLJZNkw3/xo/YT6PU5
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:MN2PR04MB6176.namprd04.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(4636009)(136003)(376002)(346002)(366004)(39860400002)(396003)(2616005)(186003)(16526019)(5660300002)(75432002)(52116002)(66476007)(66556008)(66946007)(316002)(786003)(8676002)(36756003)(6512007)(6506007)(478600001)(8936002)(1076003)(69590400008)(6486002)(83380400001)(6916009)(2906002)(86362001)(6666004);
+ DIR:OUT; SFP:1102; 
+X-MS-Exchange-AntiSpam-MessageData: c1SQUq+WWldAI7GazJuHLTTYLmhqstunF2FoF0IrMMcmaS3tGdVmyFoZU2XDMIbVrJQkkOzDeqMPmLRs/WlQ9AWJGdBT7BNFw7jx+eS9xWGl3/UikcSNY1wKCbvI4sAMPqQu8oTlaUXMXxlIiGjns2QH5Bu3iJ1Fijqdl2oX6Oyo2CcgNQ53Wo4e22V3GWkaALHpZsVYjdxPZpWY4Q/zfHYEW223Z+4jsG+MHDUTCNGog3rUk9R5v0oMulSZg4pHv0CfEyli6vGmZhtRbuTgVwZl1X9ICQGDMlBbzOcQVwanP3PHKu0/62WBc9lnxHa8FBlcmyikuRHNQCKPfp3l8sTeyCduvWgdGzGvHpz2pxh7Bq0KhGqAV0q1IEdUxOu1Wr4T8xgFAEuHkrxpLj3qozGEM61vOij2ikv/g2sOp6vhtj1A9U+UQamfqq/wDgsXG9EY2jk9/KEm4Uofta9ydYYUP99FhZe70ONNPZKIgz11iFGTOnwahPANi3zOAZbXGWVwrnNP+I44Q6Hk7xkqzOJSXJt3KRee9vIrcZ8YsHc7ejcrEk9amhx3OCBGrDVrhYGiDdaofZMCS5zF0jqP8GBjhSG+BNeSBEFRzplkLN4i+kNXK0z5Tw1M8VcaKlRWDsDuDOAmFgep0ZIEmx3hf2+G2qIa3Lce/zI4l4baRCMEmCLTo6OeZ4ib8hGHlw3l81hD4p6txQrF5ZqyCDEoaw==
+X-OriginatorOrg: cornell.edu
+X-MS-Exchange-CrossTenant-Network-Message-Id: 808bcc74-5a79-4abc-7143-08d868858c27
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR04MB6176.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Oct 2020 16:50:06.6698 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5d7e4366-1b9b-45cf-8e79-b14b27df46e1
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FeE93Idz3/tbcSnCHdqh50+ZRdDLWp5MhC1R52TbsjTXOn5wcLQnBRp7fNE9OEniCrXqUc/QHMos/54/WmegTg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR04MB6176
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, MSGID_FROM_MTA_HEADER,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_PASS,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -59,22 +83,36 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 30 Sep 2020 03:30:15 -0000
+X-List-Received-Date: Sun, 04 Oct 2020 16:50:09 -0000
 
-After pulling the error fixes, rm **/config.cache, and re-making, I got some
-funny results while rebuilding cygwin32 only.
-Some previously built object files were no longer recognized as such, and halted
-the build; even file showed them as generic "data".
-This persisted even after rm **/config.cache, plus those object files not
-showing as "Intel 80386 COFF object file", and redoing ./configure && make.
-Only after doing "make distclean", rm **/config.cache, ./configure && make, did
-the build complete normally.
-Any ideas what the issue might have been, and best practices for rebuilding
-cygwin after tool updates?
+I'm about to push these.  Corinna, please check them when you return.
+The only difference between v2 and v1 is that there are a few more
+fixes.
+
+I'm trying to help get the AF_UNIX development going again.  I'm
+mostly working on the topic/af_unix branch.  But when I find bugs that
+exist on master, I'll push those to master and then merge master to
+topic/af_unix.
+
+So far what I have on that branch locally (to be pushed shortly) is an
+implementation of fhandler_socket_unix::read, which I've tested by
+running the srver/client programs from Section 57.2 of Kerrisk's book,
+"The Linux Programming Interface".
+
+Ken Brown (6):
+  Cygwin: AF_UNIX: use FILE_OPEN_REPARSE_POINT when needed
+  Cygwin: fix handling of known reparse points that are not symlinks
+  Cygwin: always recognize AF_UNIX sockets as reparse points
+  Cygwin: AF_UNIX: socket: set the O_RDWR flag
+  Cygwin: AF_UNIX: listen_pipe: check for STATUS_SUCCESS
+  Cygwin: AF_UNIX: open_pipe: call recv_peer_info
+
+ winsup/cygwin/fhandler.cc             | 11 ++++++++--
+ winsup/cygwin/fhandler_socket_unix.cc | 31 +++++++++++++++++----------
+ winsup/cygwin/path.cc                 | 27 +++++++++++++++--------
+ winsup/cygwin/security.cc             |  8 +++++--
+ 4 files changed, 53 insertions(+), 24 deletions(-)
 
 -- 
-Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
+2.28.0
 
-This email may be disturbing to some readers as it contains
-too much technical detail. Reader discretion is advised.
-[Data in binary units and prefixes, physical quantities in SI.]
