@@ -1,41 +1,41 @@
 Return-Path: <jon.turney@dronecode.org.uk>
-Received: from re-prd-fep-047.btinternet.com (mailomta29-re.btinternet.com
- [213.120.69.122])
- by sourceware.org (Postfix) with ESMTPS id 7A23C3870858
- for <cygwin-patches@cygwin.com>; Mon, 12 Oct 2020 19:30:18 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 7A23C3870858
+Received: from re-prd-fep-045.btinternet.com (mailomta17-re.btinternet.com
+ [213.120.69.110])
+ by sourceware.org (Postfix) with ESMTPS id 2698F3857C5B
+ for <cygwin-patches@cygwin.com>; Mon, 12 Oct 2020 19:30:24 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 2698F3857C5B
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
  header.from=dronecode.org.uk
 Authentication-Results: sourceware.org;
  spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
 Received: from re-prd-rgout-002.btmx-prd.synchronoss.net ([10.2.54.5])
- by re-prd-fep-047.btinternet.com with ESMTP id
- <20201012193017.VLOF4599.re-prd-fep-047.btinternet.com@re-prd-rgout-002.btmx-prd.synchronoss.net>;
- Mon, 12 Oct 2020 20:30:17 +0100
+ by re-prd-fep-045.btinternet.com with ESMTP id
+ <20201012193023.CBHK4080.re-prd-fep-045.btinternet.com@re-prd-rgout-002.btmx-prd.synchronoss.net>;
+ Mon, 12 Oct 2020 20:30:23 +0100
 Authentication-Results: btinternet.com; none
 X-Originating-IP: [86.141.130.13]
 X-OWM-Source-IP: 86.141.130.13 (GB)
 X-OWM-Env-Sender: jonturney@btinternet.com
 X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedujedrheejgddugedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeefieduveehgfffffeuueehleefgeevfedvffeljeefheduteelteelvdettefhvdenucfkphepkeeirddugedurddufedtrddufeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhinhgvthepkeeirddugedurddufedtrddufedpmhgrihhlfhhrohhmpeeojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqpdhrtghpthhtohepoegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmqedprhgtphhtthhopeeojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheq
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedujedrheejgddugedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeefieduveehgfffffeuueehleefgeevfedvffeljeefheduteelteelvdettefhvdenucfkphepkeeirddugedurddufedtrddufeenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhephhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhinhgvthepkeeirddugedurddufedtrddufedpmhgrihhlfhhrohhmpeeojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqpdhrtghpthhtohepoegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmqedprhgtphhtthhopeeojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheq
 X-RazorGate-Vade-Verdict: clean 0
 X-RazorGate-Vade-Classification: clean
 Received: from localhost.localdomain (86.141.130.13) by
  re-prd-rgout-002.btmx-prd.synchronoss.net (5.8.340) (authenticated as
  jonturney@btinternet.com)
- id 5ED9C0CC158892B4; Mon, 12 Oct 2020 20:30:17 +0100
+ id 5ED9C0CC1588939E; Mon, 12 Oct 2020 20:30:23 +0100
 From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
 Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH 3/8] Remove AC_PROG_MAKE_SET
-Date: Mon, 12 Oct 2020 20:29:38 +0100
-Message-Id: <20201012192943.15732-4-jon.turney@dronecode.org.uk>
+Subject: [PATCH 4/8] Remove AC_ARG_PROGRAM/program_transform_name
+Date: Mon, 12 Oct 2020 20:29:39 +0100
+Message-Id: <20201012192943.15732-5-jon.turney@dronecode.org.uk>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201012192943.15732-1-jon.turney@dronecode.org.uk>
 References: <20201012192943.15732-1-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
+X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
  GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW,
  RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_NONE,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
@@ -53,71 +53,90 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 12 Oct 2020 19:30:20 -0000
+X-List-Received-Date: Mon, 12 Oct 2020 19:30:25 -0000
 
-This is only needed if we are using an ancient make which doesn't set
-${MAKE}, but we say "This makefile requires GNU make." everywhere.
-
-It only has an effect if @SET_MAKE@ is used, which we aren't doing
-consistently.
+Not done consistently, and probably never used.
 ---
- winsup/configure.ac           | 2 --
- winsup/cygserver/configure.ac | 2 --
- winsup/cygwin/Makefile.in     | 2 --
- winsup/cygwin/configure.ac    | 2 --
- 4 files changed, 8 deletions(-)
+ winsup/cygwin/configure.ac  | 15 ---------------
+ winsup/lsaauth/configure.ac |  2 --
+ winsup/utils/Makefile.in    |  4 +---
+ winsup/utils/configure.ac   |  2 --
+ 4 files changed, 1 insertion(+), 22 deletions(-)
 
-diff --git a/winsup/configure.ac b/winsup/configure.ac
-index 131dc79ee..e917ee1c5 100644
---- a/winsup/configure.ac
-+++ b/winsup/configure.ac
-@@ -43,7 +43,5 @@ INSTALL_LICENSE="install-license"
- 
- AC_SUBST(INSTALL_LICENSE)
- 
--AC_PROG_MAKE_SET
--
- AC_CONFIG_FILES([Makefile])
- AC_OUTPUT
-diff --git a/winsup/cygserver/configure.ac b/winsup/cygserver/configure.ac
-index 560de0c05..d8b2a61fa 100644
---- a/winsup/cygserver/configure.ac
-+++ b/winsup/cygserver/configure.ac
-@@ -55,8 +55,6 @@ AC_CHECK_TOOL(NM, nm, nm)
- AC_CHECK_TOOL(DLLTOOL, dlltool, dlltool)
- AC_CHECK_TOOL(WINDRES, windres, windres)
- 
--AC_PROG_MAKE_SET
--
- AC_ARG_ENABLE(debugging,
- [ --enable-debugging		Build a cygwin DLL which has more consistency checking for debugging],
- [case "${enableval}" in
-diff --git a/winsup/cygwin/Makefile.in b/winsup/cygwin/Makefile.in
-index 3a7a73adb..7f19a57fd 100644
---- a/winsup/cygwin/Makefile.in
-+++ b/winsup/cygwin/Makefile.in
-@@ -94,8 +94,6 @@ STRIP:=@STRIP@
- LDSCRIPT:=cygwin.sc
- MKDIRP:=$(INSTALL) -m 755 -d
- 
--@SET_MAKE@
--
- # Setup the testing framework, if you have one
- EXPECT = `if [ -f $${rootme}/../../expect/expect$(EXEEXT) ] ; then \
- 	    echo $${rootme}/../../expect/expect$(EXEEXT) ; \
 diff --git a/winsup/cygwin/configure.ac b/winsup/cygwin/configure.ac
-index ff12dc259..ac019c94e 100644
+index ac019c94e..757ebcfb0 100644
 --- a/winsup/cygwin/configure.ac
 +++ b/winsup/cygwin/configure.ac
-@@ -59,8 +59,6 @@ AC_CHECK_TOOL(RANLIB, ranlib, ranlib)
- AC_CHECK_TOOL(STRIP, strip, strip)
- AC_CHECK_TOOL(WINDRES, windres, windres)
+@@ -67,21 +67,6 @@ no)	 ;;
+ esac
+ ])
  
--AC_PROG_MAKE_SET
+-dnl The only time we might want to transform the install names
+-dnl is for unix x cygwin.  Otherwise we don't.  For now we don't
+-dnl transform names.
 -
- AC_ARG_ENABLE(debugging,
- [ --enable-debugging		Build a cygwin DLL which has more consistency checking for debugging],
- [case "${enableval}" in
+-dnl if test "x$cross_compiling" = "xno" -a ; then
+-dnl   if test "x$program_transform_name" = "xs,x,x,"; then
+-dnl     program_transform_name=""
+-dnl   fi
+-dnl   if test "x$program_transform_name" = "x"; then
+-dnl     program_transform_name="s,^,$target_alias-,"
+-dnl   else
+-dnl     program_transform_name="$program_transform_name -e s,^,$target_alias-,"
+-dnl   fi
+-dnl fi
+-
+ case "$target_cpu" in
+    i?86)
+ 		DLL_NAME="cygwin1.dll"
+diff --git a/winsup/lsaauth/configure.ac b/winsup/lsaauth/configure.ac
+index 995a0991d..f2b2c6329 100644
+--- a/winsup/lsaauth/configure.ac
++++ b/winsup/lsaauth/configure.ac
+@@ -32,8 +32,6 @@ esac
+ AC_CHECK_PROGS(MINGW64_CC, x86_64-w64-mingw32-gcc)
+ test -z "$MINGW64_CC" && AC_MSG_ERROR([no acceptable mingw64 cc found in \$PATH])
+ 
+-AC_ARG_PROGRAM
+-
+ AC_PROG_INSTALL
+ 
+ AC_CONFIG_FILES([Makefile cyglsa.def:cyglsa.din])
+diff --git a/winsup/utils/Makefile.in b/winsup/utils/Makefile.in
+index 248939645..c3297c6c1 100644
+--- a/winsup/utils/Makefile.in
++++ b/winsup/utils/Makefile.in
+@@ -37,7 +37,6 @@ prefix:=@prefix@
+ exec_prefix:=@exec_prefix@
+ 
+ bindir:=@bindir@
+-program_transform_name:=@program_transform_name@
+ 
+ override INSTALL:=@INSTALL@
+ override INSTALL_PROGRAM:=@INSTALL_PROGRAM@
+@@ -176,8 +175,7 @@ realclean: clean
+ install: all
+ 	/bin/mkdir -p ${DESTDIR}${bindir}
+ 	for i in $(CYGWIN_BINS) ${filter-out testsuite.exe,$(MINGW_BINS)} ; do \
+-	  n=`echo $$i | sed '$(program_transform_name)'`; \
+-	  $(INSTALL_PROGRAM) $$i $(DESTDIR)$(bindir)/$$n; \
++	  $(INSTALL_PROGRAM) $$i $(DESTDIR)$(bindir)/$$i; \
+ 	done
+ 
+ $(cygwin_build)/libcygwin.a: $(cygwin_build)/Makefile
+diff --git a/winsup/utils/configure.ac b/winsup/utils/configure.ac
+index 63fc55e56..ce35f9c7b 100644
+--- a/winsup/utils/configure.ac
++++ b/winsup/utils/configure.ac
+@@ -28,8 +28,6 @@ AC_PROG_CXX
+ 
+ AC_CYGWIN_INCLUDES
+ 
+-AC_ARG_PROGRAM
+-
+ AC_PROG_INSTALL
+ 
+ AC_CHECK_PROGS(MINGW_CXX, ${target_cpu}-w64-mingw32-g++)
 -- 
 2.28.0
 
