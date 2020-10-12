@@ -1,17 +1,17 @@
 Return-Path: <jon.turney@dronecode.org.uk>
-Received: from re-prd-fep-049.btinternet.com (mailomta2-re.btinternet.com
- [213.120.69.95])
- by sourceware.org (Postfix) with ESMTPS id 0FB783887001
- for <cygwin-patches@cygwin.com>; Mon, 12 Oct 2020 19:30:28 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 0FB783887001
+Received: from re-prd-fep-049.btinternet.com (mailomta12-re.btinternet.com
+ [213.120.69.105])
+ by sourceware.org (Postfix) with ESMTPS id 0A2403870858
+ for <cygwin-patches@cygwin.com>; Mon, 12 Oct 2020 19:30:33 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 0A2403870858
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
  header.from=dronecode.org.uk
 Authentication-Results: sourceware.org;
  spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
 Received: from re-prd-rgout-002.btmx-prd.synchronoss.net ([10.2.54.5])
  by re-prd-fep-049.btinternet.com with ESMTP id
- <20201012193028.HIQB4131.re-prd-fep-049.btinternet.com@re-prd-rgout-002.btmx-prd.synchronoss.net>;
- Mon, 12 Oct 2020 20:30:28 +0100
+ <20201012193033.HIQF4131.re-prd-fep-049.btinternet.com@re-prd-rgout-002.btmx-prd.synchronoss.net>;
+ Mon, 12 Oct 2020 20:30:33 +0100
 Authentication-Results: btinternet.com; none
 X-Originating-IP: [86.141.130.13]
 X-OWM-Source-IP: 86.141.130.13 (GB)
@@ -23,21 +23,21 @@ X-RazorGate-Vade-Classification: clean
 Received: from localhost.localdomain (86.141.130.13) by
  re-prd-rgout-002.btmx-prd.synchronoss.net (5.8.340) (authenticated as
  jonturney@btinternet.com)
- id 5ED9C0CC1588942D; Mon, 12 Oct 2020 20:30:28 +0100
+ id 5ED9C0CC158894DE; Mon, 12 Oct 2020 20:30:33 +0100
 From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
 Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH 5/8] Drop AC_SUBST(LIBSERVER)
-Date: Mon, 12 Oct 2020 20:29:40 +0100
-Message-Id: <20201012192943.15732-6-jon.turney@dronecode.org.uk>
+Subject: [PATCH 6/8] Remove autoconf variable INSTALL_LICENSE
+Date: Mon, 12 Oct 2020 20:29:41 +0100
+Message-Id: <20201012192943.15732-7-jon.turney@dronecode.org.uk>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201012192943.15732-1-jon.turney@dronecode.org.uk>
 References: <20201012192943.15732-1-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
+X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
  GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW,
- RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_NONE,
+ RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_NONE,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -53,27 +53,51 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 12 Oct 2020 19:30:30 -0000
+X-List-Received-Date: Mon, 12 Oct 2020 19:30:35 -0000
 
-The autoconf variable LIBSERVER isn't defined, and it's value isn't
-used. (The Makefile.in contains a literal value for the name of this
-library instead).
+Remove autoconf variable INSTALL_LICENSE, which has a constant value
+which is only used once.
 ---
- winsup/cygwin/configure.ac | 1 -
- 1 file changed, 1 deletion(-)
+ winsup/Makefile.in  | 4 +---
+ winsup/configure.ac | 4 ----
+ 2 files changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/winsup/cygwin/configure.ac b/winsup/cygwin/configure.ac
-index 757ebcfb0..32862d7e5 100644
---- a/winsup/cygwin/configure.ac
-+++ b/winsup/cygwin/configure.ac
-@@ -86,7 +86,6 @@ case "$target_cpu" in
- esac
+diff --git a/winsup/Makefile.in b/winsup/Makefile.in
+index 148d98531..dc1c04444 100644
+--- a/winsup/Makefile.in
++++ b/winsup/Makefile.in
+@@ -44,8 +44,6 @@ SUBDIRS=@subdirs@
+ INSTALL_SUBDIRS=${patsubst %,install_%,$(SUBDIRS)}
+ CLEAN_SUBDIRS=${patsubst %,clean_%,$(SUBDIRS)}
  
- AC_CONFIGURE_ARGS
--AC_SUBST(LIBSERVER)
- AC_SUBST(DLL_NAME)
- AC_SUBST(DLL_ENTRY)
- AC_SUBST(DEF_DLL_ENTRY)
+-INSTALL_LICENSE:=@INSTALL_LICENSE@
+-
+ .PHONY: all install clean distclean all-info info install-info install-license check \
+ 	$(SUBDIRS) $(INSTALL_SUBDIRS) $(CLEAN_SUBDIRS)
+ 
+@@ -67,7 +65,7 @@ install-license: CYGWIN_LICENSE COPYING
+ 	  ${INSTALL} $$i $(DESTDIR)$(prefix)/share/doc/Cygwin ; \
+ 	done
+ 
+-install: Makefile $(INSTALL_LICENSE) $(INSTALL_SUBDIRS)
++install: Makefile install-license $(INSTALL_SUBDIRS)
+ 
+ clean distclean: $(CLEAN_SUBDIRS)
+ 
+diff --git a/winsup/configure.ac b/winsup/configure.ac
+index e917ee1c5..13f8883eb 100644
+--- a/winsup/configure.ac
++++ b/winsup/configure.ac
+@@ -39,9 +39,5 @@ if test "x$with_cross_bootstrap" != "xyes"; then
+     AC_CONFIG_SUBDIRS([utils])
+ fi
+ 
+-INSTALL_LICENSE="install-license"
+-
+-AC_SUBST(INSTALL_LICENSE)
+-
+ AC_CONFIG_FILES([Makefile])
+ AC_OUTPUT
 -- 
 2.28.0
 
