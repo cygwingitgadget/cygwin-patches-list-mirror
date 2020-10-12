@@ -1,78 +1,74 @@
 Return-Path: <kbrown@cornell.edu>
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com
- (mail-eopbgr770123.outbound.protection.outlook.com [40.107.77.123])
- by sourceware.org (Postfix) with ESMTPS id E7C7C387087B
- for <cygwin-patches@cygwin.com>; Thu,  8 Oct 2020 21:36:21 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org E7C7C387087B
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam10on2134.outbound.protection.outlook.com [40.107.93.134])
+ by sourceware.org (Postfix) with ESMTPS id 96B51385EC4E
+ for <cygwin-patches@cygwin.com>; Mon, 12 Oct 2020 18:02:34 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 96B51385EC4E
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mA6m/JW0+BOc+3JY8+D2ls1hwOYIoBS9u70qwa/sLoaGjFjg18ee9AhfkQYW2X6jYKfL0xzW93LJD4cBEEVrA8gPTyvHeSnZytg9fGOsS3n4YWa6Gk/qw87s/ZmAYAq0CqA3SXokrhK2ViP6UtC4I4g+08+O8oy+hR8VOBgn5JV4Zdfnj9XzhqRqFixw0yDuvWAFG/5CHU6J7utKkF7rqPN2c8t7d/jLxCGOtUGep33svY2H8fLp+5OFcxrf83lQBKME6gQUoPfyG65EospbiU26oIj0tjJgq+Q0xvdAJCH/PaNB1RlAxWPiLz3qZVB3EkPHv9AU/lDrX1MLE4xdZw==
+ b=VecdGfkGzRaDPezz4QyRP8go2ILRkWoOL6SMbtAWBR9QpeGYDiPPJR8cG8iD5sQQmHUxWhyd25jzhOQPjhl3+VipLPL7EKeqZn6+/6QAjuKhE3SlsW4iuIYJi4Wv9qRODGiqycl8pLYV1fKNH1GD04BOqIrsFnRJZa2Mwx6MJg1bYO/sQxN0YT1QoYV91YvfsNhgS5dNRYyrSH+BpHe9LZLxqIItbxpb8KSEFgcQsobEnNMMw+k9Lsfj/Tl7+Da8PAFfDER3mxiRQ5pat/FJzgwfVFLm/gPWzodIKN57kxpim9byxOnbf5tBdey5dba9pS2iAOr6Lkihn3WOaYRYnQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=e72xl1WRo3DFwpPOOu5U/5baZPROsaaLVNV/S80Ydx0=;
- b=X8TBFZj3HSd6QNUptVESStLwA6E8Vh6M1a+vDekg8pEZKcpD8aW8gsSM6pYpJxDOps2tYCldCt9FyKV/beR2p/nLEs/AcWDW2yc1lxTlNOds8BRiGjmjMqS6zrQul+ua2vdEfSv4IPVRT7NzVx0kXQLlz9RahGo7IozOMu6wkryiTjh0lIMtoyzW26X2BojR2iGcbsdpU2LTK3VEgTgWhMrps8zx0qPjOCGH3geG5HelnPJEh1HQojmWjsPaWtfoFBIq1dn0UHg0NPB7Q8UFCkE1IYIv2t4+jxKXjQNPbw+xju2LxSFOUdVepMPb7LAvf5fR1532ALEWdXHwTjn9Og==
+ bh=TIr7kr32eFrFZNqUvJ57JSbJBAp0nne4pjhOusyAvMI=;
+ b=feKiYUxvFgmHbPgm0B0dOqvjzRfF7abHZDKqV7fmrtJTw+rvGhqYaF25AsdeCpO6ghvjFe2DA9R+VDNvHELjcWuXZ1B5G7ICmyRmXFXlfEqd5TGWAdyJKGu+fI93ElKkpY85LhIcCKoselVXjvlDp6qX0mszVJcREZqmA3tezrhfg9dUfWrM+VsD6PEBFKNlq0pJB4oyDqh30zD+XZuGby9rAqOgATLL05etzDKHaQeKopEZcHA85agcztZYTGLhh3uPCtvu9t3esMDz+iwMANcZ6YOTn6rYwwbYx300MOUtU1XD72qbgqCSObGXdRgl7Xbj1XINQ1TIlp66ZpzPGA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu;
  dkim=pass header.d=cornell.edu; arc=none
 Received: from MN2PR04MB6176.namprd04.prod.outlook.com (2603:10b6:208:e3::13)
- by MN2PR04MB5760.namprd04.prod.outlook.com (2603:10b6:208:3e::31)
+ by MN2PR04MB6063.namprd04.prod.outlook.com (2603:10b6:208:e3::32)
  with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3433.32; Thu, 8 Oct
- 2020 21:36:18 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3455.24; Mon, 12 Oct
+ 2020 18:02:31 +0000
 Received: from MN2PR04MB6176.namprd04.prod.outlook.com
  ([fe80::c144:d206:c369:af44]) by MN2PR04MB6176.namprd04.prod.outlook.com
- ([fe80::c144:d206:c369:af44%7]) with mapi id 15.20.3433.044; Thu, 8 Oct 2020
- 21:36:18 +0000
-Subject: Re: [PATCH v2 0/6] Some AF_UNIX fixes
-To: cygwin-patches@cygwin.com
-References: <20201004164948.48649-1-kbrown@cornell.edu>
+ ([fe80::c144:d206:c369:af44%7]) with mapi id 15.20.3455.029; Mon, 12 Oct 2020
+ 18:02:31 +0000
 From: Ken Brown <kbrown@cornell.edu>
-Message-ID: <87bd83c6-5333-6287-01ce-d91ffec83244@cornell.edu>
-Date: Thu, 8 Oct 2020 17:36:17 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
-In-Reply-To: <20201004164948.48649-1-kbrown@cornell.edu>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+To: cygwin-patches@cygwin.com
+Subject: [PATCH 0/1] Fix MSG_WAITALL support
+Date: Mon, 12 Oct 2020 14:02:12 -0400
+Message-Id: <20201012180213.21748-1-kbrown@cornell.edu>
+X-Mailer: git-send-email 2.28.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Originating-IP: [2604:6000:b407:7f00:946b:663a:1a3:dfd2]
-X-ClientProxiedBy: CH2PR18CA0023.namprd18.prod.outlook.com
- (2603:10b6:610:4f::33) To MN2PR04MB6176.namprd04.prod.outlook.com
+X-ClientProxiedBy: CH2PR16CA0024.namprd16.prod.outlook.com
+ (2603:10b6:610:50::34) To MN2PR04MB6176.namprd04.prod.outlook.com
  (2603:10b6:208:e3::13)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2604:6000:b407:7f00:946b:663a:1a3:dfd2]
- (2604:6000:b407:7f00:946b:663a:1a3:dfd2) by
- CH2PR18CA0023.namprd18.prod.outlook.com (2603:10b6:610:4f::33) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3455.23 via Frontend Transport; Thu, 8 Oct 2020 21:36:18 +0000
+Received: from localhost.localdomain (2604:6000:b407:7f00:946b:663a:1a3:dfd2)
+ by CH2PR16CA0024.namprd16.prod.outlook.com (2603:10b6:610:50::34) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3455.23 via Frontend
+ Transport; Mon, 12 Oct 2020 18:02:30 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 003cb7ce-a351-4048-2b95-08d86bd23136
-X-MS-TrafficTypeDiagnostic: MN2PR04MB5760:
-X-Microsoft-Antispam-PRVS: <MN2PR04MB5760F2D017845BE4F1FA55A4D80B0@MN2PR04MB5760.namprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Office365-Filtering-Correlation-Id: d069f0c8-876f-45db-05a0-08d86ed8fceb
+X-MS-TrafficTypeDiagnostic: MN2PR04MB6063:
+X-Microsoft-Antispam-PRVS: <MN2PR04MB6063CCEEA98D92AD95837269D8070@MN2PR04MB6063.namprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:923;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: B1Ec42QKRtm8cdJouWoxYYpWG9y+ZqJQksbB5tiE3mlS7kKoVQYMEr7r5s4/A3B3y7SY+CMGLx5HZpVkeGFnSza/O4SZQtHCKLtDmYX2PgvfnvfxL3JpoIZnF/VEUy9EYki7RtUFkLRZbZzVaEXYkEvmO0FPUGhDdKK7Hw2+xGQJR99TTorolxOIepT0AlSkkoNemGyVTouOCGYG86ihLO7SsFJzlYCOSIJVVAI56GGc3ijV5DmXDv6vjA1rBGBbkXi1jgsqFQ+TfpfvS3GiP7srHQmMrzWSVsHDgx4INMnQrAh3yJG3+asA++H5ItYiu77gS6ZKisAlimhCin9spL+ARShAK/Qkqk3pbOKvQU7CfTa0tcwWFea6krNwyNNd
+X-Microsoft-Antispam-Message-Info: JYKYL8QffhJ67Qspu5wYqjhbEkJXK8r1Vq+sWC0kcecfpQDVcCHxfF+nVb5LuXu4ZyRP/AUXT5ircJSnmrXxHt9tSqMRznKDb97NlKLlEH2csSygRflS1ZodIsDoiF13CqnmphVfByneSH2gjiPg12CrkHRZ0C0rmPu8WZGLWbbcMMq9ORgqNWNNmcqJeYks4KWHIZHReopq0RHf83vyPkv67e4q6BiBCfB+8fvl72kgCVNqnVMSAUpvA/grItXczl2IMPoYY7MaVsSZlfIDzLudhGs+r26Gctfzo0F7bbTxT/+eJVe7KJ2aibZBB+Aj08c0KcGcNhVjP/qLq9cx2/uMdDZ6TLcc474dTxEKiFmUmC9eCUrJWBcpaFv8v2CV
 X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:MN2PR04MB6176.namprd04.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(4636009)(396003)(346002)(39860400002)(376002)(366004)(136003)(8676002)(16526019)(53546011)(786003)(5660300002)(66946007)(66556008)(4744005)(316002)(66476007)(186003)(478600001)(83380400001)(52116002)(75432002)(2616005)(6486002)(8936002)(36756003)(31686004)(6916009)(2906002)(86362001)(31696002)(43740500002);
+ SFS:(4636009)(366004)(396003)(136003)(39860400002)(376002)(346002)(186003)(316002)(6916009)(786003)(8936002)(75432002)(66476007)(16526019)(66946007)(5660300002)(66556008)(69590400008)(2906002)(478600001)(6486002)(86362001)(8676002)(6666004)(6506007)(52116002)(6512007)(36756003)(2616005)(4744005)(1076003)(83380400001);
  DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData: myoLm30ZVZWHJ2N0EOJl0bYDuvhf1bIB6U1gOJS/Yx8TNY6iqSPErookSAajxwGOW263yZLUUj/s4JHfkP/9tRhnw+iFcqRFWbGxh/RlX5Qtcex6qjaPEGbus0oWsZvxbWmSalJrn1Q3zS724cx0qbq86kSOtf8YGJE2FeBB60ly9k5bn7izz+ZkRnPXc2mHHrQzwa/kP3N0yniA+b89nK1H2HwB6PP94qPrC2KQv2yktXOepGSoiSg50i0XMKQiWLvIe5ua3nruMIU6CqciFQpl2chQW4eJz1VrosmEIbJLCvxQTs8hp5vsw6ysrnn5rioBqGNJJyyfVg8wB1ZD1gb3OGbEAmqTcLZ2nB0XqNtZrVpzb8stJ3H8LxGe4lgqO/zZH9DIsW1SaVjZG4wW56BoSmOXjYcdCJsPM2OObrXiZ70Op38tnCZwJS64F/lw5Dv6nra8aRuXSEtDjU/xs8AnXRfqaMagXgO4rJRq5S2fxZOaX63klDS3dzMjdaVYMfIZ9zybuqQOfNcDmvumQHoIFHe8oVZYHlbMEHtp+pgjcYoVS/UBz9MDEBa67kF3qc+NXzZ/gi5PLGvjZw52BzJn9BzVdBlgw53iZvogsZot09sWeoRhc/CRewM+aBsydKuMOJNE3vSfza8uf0U288IIZoRPVsGu0OCn+3FByAyiJQFrSr5lNaArYLGjPIvGazjfGlaGGiJLWif4UPRBEQ==
+X-MS-Exchange-AntiSpam-MessageData: XGvRsyTwi2Bpex3KnnvY4Fo39M8rjb7wNeZFNwlRTRs2WnbCww1UCkIPxpMu72PE3uJHgXnU9JABXcdcT/ETJp/86vnQwJmZ/H4pHXIIbYozSuHfD0wiZeSSQy3sEFkAwNhBbPZl1fC5cXscNhzUM9MhkVpNR4IeAaMYz9s5yZJOvCQE1Ad44x5CM+t4b4sZbvM8GSpB8lof93Y6h7a3yhmmpbqY/goDgOWv6FZX4e8p3Gu1iKXVFi+fBDcESbezwQqxNv6yrf+vtUJWErkfOJFWC3VBBmycrJYr8GowA9cM4rwErCr5Z2dJ7av5HfHlwuCWoYfEYigzR1BGCdk1uBukMe/f1vOFQt9nhJ4KoWuWHiSTMgD5otrE/oayDSW4/hq5FNI8fgqJWLhzRI6LS/87FGUemQcoUC8tbsfHdqyFu1PXKHnOTCUX3o9WLGyLdS4dH3GAlZUCcx0ISyMu1Qs6MboBzamMZwzt0bu/r9r1xw/n496XIEaKdUvXIopzj/jsRIOgaS31XK2pT2QDnsbHyJ2GYb5ouQHecQfGvMTJEX6hX2QxbArCrCyFD77JkOqOEuPXGZ8s4IqGg+xXWCb0+4vFAi6FJR/wjghHHUlsaqx/6wXLBpf3IX7DBtQfm1R/nZ3HuE0Cbi6ylwcKNU47IvJ7uz5L+0KNpOA3RAFngcoNROT0IZtnS93G7VaFIcnejQsDhLdFUVRU0CXbOA==
 X-OriginatorOrg: cornell.edu
-X-MS-Exchange-CrossTenant-Network-Message-Id: 003cb7ce-a351-4048-2b95-08d86bd23136
+X-MS-Exchange-CrossTenant-Network-Message-Id: d069f0c8-876f-45db-05a0-08d86ed8fceb
 X-MS-Exchange-CrossTenant-AuthSource: MN2PR04MB6176.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Oct 2020 21:36:18.8481 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Oct 2020 18:02:31.4093 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 5d7e4366-1b9b-45cf-8e79-b14b27df46e1
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nw5VIo96NuGJ1PBQOKJdYYpKiSfuGR8AtOnj3XhdNOOOT6v3MqTI3/dVXI1Du44CxJBlvchO5fXICfYjPsHR/Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR04MB5760
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, JMQ_SPF_NEUTRAL,
- MSGID_FROM_MTA_HEADER, NICE_REPLY_A, RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H2,
- SPF_HELO_PASS, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5mUnhmHf46kdQkJYC/idrHqMROrMT5LfWlUBU1/1CjbUIUq8XGWmZCPiXFedCq5DCtKEyUW0U6t0g/v8UZOVfQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR04MB6063
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, MSGID_FROM_MTA_HEADER,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_PASS,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -87,22 +83,25 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 08 Oct 2020 21:36:23 -0000
+X-List-Received-Date: Mon, 12 Oct 2020 18:02:36 -0000
 
-On 10/4/2020 12:49 PM, Ken Brown via Cygwin-patches wrote:
-> I'm about to push these.  Corinna, please check them when you return.
-> The only difference between v2 and v1 is that there are a few more
-> fixes.
-> 
-> I'm trying to help get the AF_UNIX development going again.  I'm
-> mostly working on the topic/af_unix branch.  But when I find bugs that
-> exist on master, I'll push those to master and then merge master to
-> topic/af_unix.
+It looks to me like there's been a bug in the MSG_WAITALL support for
+AF_INET and AF_LOCAL sockets ever since that support was first
+introduced 13 years ago in commit 023a2fa7.  If I'm right, MSG_WAITALL
+has never worked.
 
-FYI to Corinna and anyone else interested in AF_UNIX development.  After pushing 
-a few patches to the topic/af_unix branch I did some cleanup (locally) and 
-merged master into the topic branch.  I don't want to do a forced push and risk 
-messing up the branch, so I've created a new branch, topic/af_unix_new, and will 
-do all further work there until Corinna returns and decides how we should proceed.
+This patch fixes it.  I'll push it in a few days if no one sees
+anything wrong with it.
 
-Ken
+In a followup email I'll show how I tested it.
+
+Ken Brown (1):
+  Cygwin: AF_INET and AF_LOCAL: recv_internal: fix MSG_WAITALL support
+
+ winsup/cygwin/fhandler_socket_inet.cc  | 2 +-
+ winsup/cygwin/fhandler_socket_local.cc | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+-- 
+2.28.0
+
