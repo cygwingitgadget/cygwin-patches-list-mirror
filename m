@@ -1,43 +1,43 @@
 Return-Path: <jon.turney@dronecode.org.uk>
-Received: from re-prd-fep-049.btinternet.com (mailomta12-re.btinternet.com
- [213.120.69.105])
- by sourceware.org (Postfix) with ESMTPS id 0A2403870858
- for <cygwin-patches@cygwin.com>; Mon, 12 Oct 2020 19:30:33 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 0A2403870858
+Received: from re-prd-fep-041.btinternet.com (mailomta17-re.btinternet.com
+ [213.120.69.110])
+ by sourceware.org (Postfix) with ESMTPS id 2B6F7386F80B
+ for <cygwin-patches@cygwin.com>; Mon, 12 Oct 2020 19:30:39 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 2B6F7386F80B
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
  header.from=dronecode.org.uk
 Authentication-Results: sourceware.org;
  spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
 Received: from re-prd-rgout-002.btmx-prd.synchronoss.net ([10.2.54.5])
- by re-prd-fep-049.btinternet.com with ESMTP id
- <20201012193033.HIQF4131.re-prd-fep-049.btinternet.com@re-prd-rgout-002.btmx-prd.synchronoss.net>;
- Mon, 12 Oct 2020 20:30:33 +0100
+ by re-prd-fep-041.btinternet.com with ESMTP id
+ <20201012193038.BDSN30588.re-prd-fep-041.btinternet.com@re-prd-rgout-002.btmx-prd.synchronoss.net>;
+ Mon, 12 Oct 2020 20:30:38 +0100
 Authentication-Results: btinternet.com; none
 X-Originating-IP: [86.141.130.13]
 X-OWM-Source-IP: 86.141.130.13 (GB)
 X-OWM-Env-Sender: jonturney@btinternet.com
 X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedujedrheejgddugedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeefieduveehgfffffeuueehleefgeevfedvffeljeefheduteelteelvdettefhvdenucfkphepkeeirddugedurddufedtrddufeenucevlhhushhtvghrufhiiigvpedvnecurfgrrhgrmhephhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhinhgvthepkeeirddugedurddufedtrddufedpmhgrihhlfhhrohhmpeeojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqpdhrtghpthhtohepoegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmqedprhgtphhtthhopeeojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheq
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedujedrheejgddugedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeefieduveehgfffffeuueehleefgeevfedvffeljeefheduteelteelvdettefhvdenucfkphepkeeirddugedurddufedtrddufeenucevlhhushhtvghrufhiiigvpeegnecurfgrrhgrmhephhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhinhgvthepkeeirddugedurddufedtrddufedpmhgrihhlfhhrohhmpeeojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqpdhrtghpthhtohepoegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmqedprhgtphhtthhopeeojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheq
 X-RazorGate-Vade-Verdict: clean 0
 X-RazorGate-Vade-Classification: clean
 Received: from localhost.localdomain (86.141.130.13) by
  re-prd-rgout-002.btmx-prd.synchronoss.net (5.8.340) (authenticated as
  jonturney@btinternet.com)
- id 5ED9C0CC158894DE; Mon, 12 Oct 2020 20:30:33 +0100
+ id 5ED9C0CC15889587; Mon, 12 Oct 2020 20:30:38 +0100
 From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
 Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH 6/8] Remove autoconf variable INSTALL_LICENSE
-Date: Mon, 12 Oct 2020 20:29:41 +0100
-Message-Id: <20201012192943.15732-7-jon.turney@dronecode.org.uk>
+Subject: [PATCH 7/8] Remove empty MT_SAFE and MT_SAFE_OBJECTS
+Date: Mon, 12 Oct 2020 20:29:42 +0100
+Message-Id: <20201012192943.15732-8-jon.turney@dronecode.org.uk>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201012192943.15732-1-jon.turney@dronecode.org.uk>
 References: <20201012192943.15732-1-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
+X-Spam-Status: No, score=-10.5 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
  GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW,
- RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_NONE,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -53,51 +53,40 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 12 Oct 2020 19:30:35 -0000
+X-List-Received-Date: Mon, 12 Oct 2020 19:30:40 -0000
 
-Remove autoconf variable INSTALL_LICENSE, which has a constant value
-which is only used once.
 ---
- winsup/Makefile.in  | 4 +---
- winsup/configure.ac | 4 ----
- 2 files changed, 1 insertion(+), 7 deletions(-)
+ winsup/cygwin/Makefile.in | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/winsup/Makefile.in b/winsup/Makefile.in
-index 148d98531..dc1c04444 100644
---- a/winsup/Makefile.in
-+++ b/winsup/Makefile.in
-@@ -44,8 +44,6 @@ SUBDIRS=@subdirs@
- INSTALL_SUBDIRS=${patsubst %,install_%,$(SUBDIRS)}
- CLEAN_SUBDIRS=${patsubst %,clean_%,$(SUBDIRS)}
+diff --git a/winsup/cygwin/Makefile.in b/winsup/cygwin/Makefile.in
+index 7f19a57fd..6d205f7a7 100644
+--- a/winsup/cygwin/Makefile.in
++++ b/winsup/cygwin/Makefile.in
+@@ -71,7 +71,6 @@ CRT0:=$(cygwin_build)/crt0.o
+ #
+ # --enable options from configure
+ #
+-MT_SAFE:=@MT_SAFE@
+ CCEXTRA=
+ COMMON_CFLAGS=-MMD ${$(*F)_CFLAGS} -Wimplicit-fallthrough=5 -Werror -fmerge-constants -ftracer $(CCEXTRA)
+ ifeq ($(target_cpu),x86_64)
+@@ -147,7 +146,6 @@ MALLOC_OFILES:=malloc.o
  
--INSTALL_LICENSE:=@INSTALL_LICENSE@
--
- .PHONY: all install clean distclean all-info info install-info install-license check \
- 	$(SUBDIRS) $(INSTALL_SUBDIRS) $(CLEAN_SUBDIRS)
+ DLL_IMPORTS:=${shell $(CC) -print-file-name=w32api/libkernel32.a} ${shell $(CC) -print-file-name=w32api/libntdll.a}
  
-@@ -67,7 +65,7 @@ install-license: CYGWIN_LICENSE COPYING
- 	  ${INSTALL} $$i $(DESTDIR)$(prefix)/share/doc/Cygwin ; \
- 	done
+-MT_SAFE_OBJECTS:=
+ #
+ LIBC_OFILES:= \
+ 	arc4random_stir.o \
+@@ -420,7 +418,6 @@ DLL_OFILES:= \
+ 	$(LIBC_OFILES) \
+ 	$(MATH_OFILES) \
+ 	$(TZCODE_OFILES) \
+-	$(MT_SAFE_OBJECTS)
  
--install: Makefile $(INSTALL_LICENSE) $(INSTALL_SUBDIRS)
-+install: Makefile install-license $(INSTALL_SUBDIRS)
- 
- clean distclean: $(CLEAN_SUBDIRS)
- 
-diff --git a/winsup/configure.ac b/winsup/configure.ac
-index e917ee1c5..13f8883eb 100644
---- a/winsup/configure.ac
-+++ b/winsup/configure.ac
-@@ -39,9 +39,5 @@ if test "x$with_cross_bootstrap" != "xyes"; then
-     AC_CONFIG_SUBDIRS([utils])
- fi
- 
--INSTALL_LICENSE="install-license"
--
--AC_SUBST(INSTALL_LICENSE)
--
- AC_CONFIG_FILES([Makefile])
- AC_OUTPUT
+ EXCLUDE_STATIC_OFILES:=$(addprefix --exclude=,\
+ 	cygtls.o \
 -- 
 2.28.0
 
