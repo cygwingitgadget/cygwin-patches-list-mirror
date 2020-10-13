@@ -1,33 +1,55 @@
-Return-Path: <brian.inglis@systematicsw.ab.ca>
-Received: from smtp-out-no.shaw.ca (smtp-out-no.shaw.ca [64.59.134.9])
- by sourceware.org (Postfix) with ESMTPS id A160D38618EB
- for <cygwin-patches@cygwin.com>; Tue, 13 Oct 2020 15:11:12 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org A160D38618EB
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=SystematicSW.ab.ca
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+ by sourceware.org (Postfix) with ESMTPS id B283638618EB
+ for <cygwin-patches@cygwin.com>; Tue, 13 Oct 2020 15:31:37 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org B283638618EB
 Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
-Received: from BWINGLISD.cg.shawcable.net ([24.64.172.44])
- by shaw.ca with ESMTP
- id SLxGkyVK5TWWpSLxHkMvZG; Tue, 13 Oct 2020 09:11:11 -0600
-X-Authority-Analysis: v=2.4 cv=EcV2/NqC c=1 sm=1 tr=0 ts=5f85c38f
- a=kiZT5GMN3KAWqtYcXc+/4Q==:117 a=kiZT5GMN3KAWqtYcXc+/4Q==:17
- a=h_dkKMdqjYuC9GeYJ54A:9
-From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+ dmarc=none (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org;
+ spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1M5xDJ-1kZFDv0xHH-007Rp3 for <cygwin-patches@cygwin.com>; Tue, 13 Oct 2020
+ 17:31:36 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id C7524A80637; Tue, 13 Oct 2020 17:31:35 +0200 (CEST)
+Date: Tue, 13 Oct 2020 17:31:35 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] format_proc_cpuinfo: add enqcmd cpuinfo flag
-Date: Tue, 13 Oct 2020 09:11:08 -0600
-Message-Id: <20201013151108.36189-1-Brian.Inglis@SystematicSW.ab.ca>
-X-Mailer: git-send-email 2.28.0
-MIME-Version: 1.0
+Subject: Re: [PATCH v2 5/6] Cygwin: AF_UNIX: listen_pipe: check for
+ STATUS_SUCCESS
+Message-ID: <20201013153135.GT26704@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfHF8sYoWrcW4EmQndc034d0VXWFGgO0Uz1yWHIyTIUiI6bC7GW5TuJ7g6PyU6lgITU+gugm7VML5nWuM6D8B2OFybDgBe+vR0zwSk3hNi9Qq24UNzZQu
- CY1MwLqpQWonxTkCrrBJns9ZshCh9jk/r7fOhXW33sCZTEeUJnA5hrOUPyLeio4DT+niGV71wkox68547rNppQPaCs+axhv3Gp6ZHsJaFNH99DBxZllEWykM
- Sn5LbOnbw3ufCvk779MZRgy+ci20Q5NdYVWAiZlAx+g=
-X-Spam-Status: No, score=-12.6 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW,
- RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_NONE,
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20201004164948.48649-1-kbrown@cornell.edu>
+ <20201004164948.48649-6-kbrown@cornell.edu>
+ <20201013112829.GH26704@calimero.vinschen.de>
+ <2a83e5b7-8dfb-5138-f8ef-99c62e7403ca@cornell.edu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <2a83e5b7-8dfb-5138-f8ef-99c62e7403ca@cornell.edu>
+X-Provags-ID: V03:K1:ukP7MWgWS/t3+zocZGt6Hz714EX4NYyygE1pflQgg39SwkFXvaK
+ sEVGIsB6pKRib6uR6VW+H2M59jhyMbb/QAKT3jJhG+P9+RGzQHAZ4Bcg8UNUOEtGUH96z+2
+ M3sdE8fIfSFIM+MCDx0q4FWowEMXZ2AcyzJ77MuvwXnbFyw8aHk1Z3NpwUI9Af9K6bNuYh9
+ FFTEGJqHYPyOKH7/0tZ2A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:QNwW5V6dYjw=:60Sl0dsJm8zr7FiIPLsAU7
+ 8H+DAjNwkpZ4j0xac/q0g71XZ8nDl2NfDW4DE8RSvWwQdNKjc9JMLyMbcr1dm31x80n4ITUbB
+ 6nBTLMxNFdmVxinrbthSjP8wC4GnjIyVrZQzJblYFHG3OMqfryRVnVmGkwNa02eYHLv6MGyYP
+ 0fvu8mYsv04p3bMTu/1+7xO3/UhO5zXzfesEsBp+K4BpE12TLFeJ0EvRFcePuvSsqJXedqGAt
+ J6c9cdyg4nvqGHHlrSen7BhA2FYZYzZODy8BZJfgzS7Iq9B7DRmm86/Qt9s5ytR+f9xI2MyxI
+ KGDTkl8KOPMkZXMHms7lQX+f0eJIZvJpdmdE373SCYAfoiMkvnYxwkclqxabeFoUhwQyuyT1X
+ uU6Q0wYerMRdh/FhsZz6Dyooe5P5QQfGkfHU3JJynkCwe2oHe7/p5bgQaQSEAREFQHoSxU0fo
+ RnIUYNVESXrISt6NGtGj5MQzWhuPSY7BdIsABVBp0365u7mUwo17lNzzzArk2GFiFfSMaxZdZ
+ La2/HLj3B+dKFuyElyWWkVX/j/ihB1SvcEmBivMO1smRUGMcWb3MStO4yZzHu0oGgNAT0qsHn
+ oy5SCUnqEHXDS6PqXwa5DVSKR6n1Nyo7zgCvF/NrFEE3smUaECnHXCmUyFA7MB725TP5E8uNR
+ cHZ6trzjrNK7R7TSvgIRSsdIUxgy9IWMGOy/6V0Z27umJ1Ezazj8/H74j5Hkm+WZ8oYmtLB1R
+ s+FLDT7Pxs8Qr4OizW+OeKSaVoqHkfJEBNyIjfW+/ENVB/9jIbzvFeRdH9qfY5IZHj996Kv4Q
+ T25byNIjP1bDWFVQqpLHI6yfHHVHwZFqAq7qjwWHWiHqMqUdasUDYANBpb7ee3AaLWxOFbIbI
+ jBkPgo3p859vYESUJkWk5L2ciktmkGZJjCOtsgW1ulY4nRgQuVeExLXTXxNLvN
+X-Spam-Status: No, score=-100.1 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -43,33 +65,24 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 13 Oct 2020 15:11:14 -0000
+X-List-Received-Date: Tue, 13 Oct 2020 15:31:39 -0000
 
-Add linux-next 5.9 cpuinfo flag for Intel enqcmd/s instructions:
-x86/cpufeatures: Enumerate ENQCMD and ENQCMDS instructions:
-Work submission instruction comes in two flavors. ENQCMD can be called
-both in ring 3 and ring 0 and always uses the contents of a PASID MSR
-when shipping the command to the device. ENQCMDS allows a kernel driver
-to submit commands on behalf of a user process. The driver supplies the
-PASID value in ENQCMDS. There isn't any usage of ENQCMD in the kernel as
-of now.
-The CPU feature flag is shown as "enqcmd" in /proc/cpuinfo.
----
- winsup/cygwin/fhandler_proc.cc | 1 +
- 1 file changed, 1 insertion(+)
+On Oct 13 13:18, Ken Brown via Cygwin-patches wrote:
+> On 10/13/2020 7:28 AM, Corinna Vinschen wrote:
+> > On Oct  4 12:49, Ken Brown via Cygwin-patches wrote:
+> >> A successful connection can be indicated by STATUS_SUCCESS or
+> >> STATUS_PIPE_CONNECTED.
+> > 
+> > THanks for catching but... huh?  How does Windows generate two different
+> > status codes for the same result from the same function?
+> 
+> I think (but I'd have to recheck) that if the pipe is already connected when 
+> NtFsControlFile is called, then the latter returns STATUS_PIPE_CONNECTED.  But 
+> if you first get STATUS_PENDING and then set status = io.Status after 
+> completion, then the result is STATUS_SUCCESS.
 
-diff --git a/winsup/cygwin/fhandler_proc.cc b/winsup/cygwin/fhandler_proc.cc
-index 6f6e8291a0ca..13397150ff53 100644
---- a/winsup/cygwin/fhandler_proc.cc
-+++ b/winsup/cygwin/fhandler_proc.cc
-@@ -1563,6 +1563,7 @@ format_proc_cpuinfo (void *, char *&destbuf)
- 	  ftcprint (features1, 25, "cldemote");         /* cldemote instr */
- 	  ftcprint (features1, 27, "movdiri");          /* movdiri instr */
- 	  ftcprint (features1, 28, "movdir64b");        /* movdir64b instr */
-+	  ftcprint (features1, 29, "enqcmd");		/* enqcmd/s instructions*/
-         }
- 
-       /* AMD MCA cpuid 0x80000007 ebx */
--- 
-2.28.0
+Ah, ok.  I guess I just missed this scenario for some reason.
 
+
+Thanks,
+Corinna
