@@ -1,49 +1,42 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
- by sourceware.org (Postfix) with ESMTPS id 153923858001
- for <cygwin-patches@cygwin.com>; Tue, 13 Oct 2020 11:00:07 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 153923858001
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+ by sourceware.org (Postfix) with ESMTPS id BE2B63857003
+ for <cygwin-patches@cygwin.com>; Tue, 13 Oct 2020 11:02:57 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org BE2B63857003
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org;
  spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MrQ2R-1k5O4H2tOR-00oUZO for <cygwin-patches@cygwin.com>; Tue, 13 Oct 2020
- 13:00:06 +0200
+ mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MUXlA-1ksn8y1tMu-00QRG4 for <cygwin-patches@cygwin.com>; Tue, 13 Oct 2020
+ 13:02:56 +0200
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 0F8D9A82BD6; Tue, 13 Oct 2020 13:00:06 +0200 (CEST)
-Date: Tue, 13 Oct 2020 13:00:06 +0200
+ id 11E25A82BD6; Tue, 13 Oct 2020 13:02:56 +0200 (CEST)
+Date: Tue, 13 Oct 2020 13:02:56 +0200
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: winlean.h: remove most of extended memory API
-Message-ID: <20201013110006.GF26704@calimero.vinschen.de>
+Subject: Re: [PATCH v2 0/6] Some AF_UNIX fixes
+Message-ID: <20201013110256.GG26704@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20200923235225.46299-1-kbrown@cornell.edu>
- <ddeace5b-33a2-ed1f-5b30-0d33bfe61ca3@dronecode.org.uk>
+References: <20201004164948.48649-1-kbrown@cornell.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ddeace5b-33a2-ed1f-5b30-0d33bfe61ca3@dronecode.org.uk>
-X-Provags-ID: V03:K1:r1/grUPd3/4YxgTfIFiP0gfF1f0E6FFVcj7OMtGQrB50E21LJlK
- idzrb9pAwJXCUNrDKe1UTnNyruXy0rISiIb9ViU/Um6Do5UipVfxCz78UtYYF4sTN3Lflkw
- f7sx0jAjivLprOtD6U1hCvmE1Mw4pVmM3kF/F3dY0OnQyk64efzSD/r91eEhcCqm1+1TMuB
- 6NjPyFw+PWNxzOEeXTRcw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:70C0Hfi+l4U=:8CqOdoSneDIGcom/YSDJfb
- 09WBW/2YQZ+I5Xz1qxpf1pTexhCTng8wrmSIsPremmOpua6bVj/UCO/CcraEGa0opqABcFBUN
- taSCD7op8BTUc5SgBvngFeT0HQNvyIpQZSBoCmBl4gBLBdBf1n3DPAyEfeuuEn0VN/eW8gTMy
- Bs8MtnxUC3tnFHCmC8VybrifuWWsHLnqlLjjJ+AKeqCKUTqZ1Ijd4xylNd3Vdl7HSF+6RPGmC
- sar4VYS621AFf2Hr4ZVj9nM9w+w6zkrA9+GgWJn8xO6p1d4yt0shEN0HW+Gsa7dxGxtFBhZGX
- Jzx/GRCWeljNMaTlf7BG870kGQWvB5rlSyisb3qZjulYbgs61gK3yZdKeDDz5uIJirnXQ7tEs
- 0Gp9hlC8K5jifmTfEQjuDgTNgMoqecNbInm4+E2ZmI4YfRing8bKpqiov6fNWxwmaaFVm67X6
- 2j0HJsGg9yVd3fM11AfzifnOkU0AndabioaVQqdWACSOP7svV8075WCMqTZ0nB+z/45e25ILF
- uoCK+ijDXzegkiK/dh6ZKpQiTv9P8wZrXcc3QkmEcxFAYBdBJzJ95JfOweXtCV64F/5DJyFyp
- gzd4pt2W0gj+7ivcv9gsI2hIXNQ5VNTLNnDXmztSj3YEz1c/AFbnq4/LoILpmKbDjrvRIdBZF
- KVh4qF93c7/uDN0aqAfuF/J79nCsKKhR3urE02jZsvLqXWbCgP3Dd1CcIv1YUueemgMvVkBEU
- qlKHI+qruwQteuC3XB/bOFdrZM9w4gvjjKsPz42K9Jhb29GDslxm2zGZVw0KM3MPosuOUwLqs
- ibwR9eRbi3fgaf8EKwAmgQzxsxrcL+DF/YCbQRDurwZyGBfDxSniWLKS6yoxk5snnjzXcNduo
- wWGr1YjB7acz5XnjNiDQ==
+In-Reply-To: <20201004164948.48649-1-kbrown@cornell.edu>
+X-Provags-ID: V03:K1:07bef+4ec51P+8mdD4Ly8hhrpI198CZAlu1aocd3+fTGfa6+LG4
+ Xhwf6uN0Fzt+VRvt0bCZMQVcMkck/Q7Nh7CHK5XeJdAiILEzvz8LIq3Opf+CeEru7cJP07I
+ vGQHgmwYGufa7Jg8GG7wQdeW9eL4Eep9ih2EARcMJTeX6klQlvG0uJTF2/pEJCp9OlKyO2Z
+ VQGIF8HpzIEXF6zBvskhQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:kMY5WO/8iOY=:9soieKZfK49QSbUiRiEmPv
+ DYXAEKqTjIo8XjMx+Evsf9hLbpxQg9p8IelV7hUS0khGwRs833lHCBuudLnRPBcUbHV/NsJ7q
+ /hgvyFhTeUuEa4x/oUOqhwF8A7Bmz6vsg84JfMDHnxN2w3583AflFtLgmgWix4iUBlghqesid
+ l305peK6RSebW0gvNPy4GfKva/5fFXN3nhSw5zS0+DH0rOl3YT8kQydO7lx737ERJUphe5WF4
+ P/VKJGbFLF+LqEVJ0xYeMRbvfUUnpcUuFRZZtdLeECZgWDlhicU/xGqitBiMuajcv66IBxfOq
+ eqa7YlrE6ElJ8all+0hj/5HwbIt3YOBXf/SA70+BUDJ5/qT2Vtyw+sIGWr4fhhLLskfWeh607
+ WLl2f8DC5JzhX/JdUuMp40BDgqaM3os4YY/NRGyK7uSWswXoIyK6M5E8ZkfGpNtRD2KBT84Vc
+ PrxAj6yQGA==
 X-Spam-Status: No, score=-100.1 required=5.0 tests=BAYES_00,
  GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
  RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
@@ -62,42 +55,24 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 13 Oct 2020 11:00:09 -0000
+X-List-Received-Date: Tue, 13 Oct 2020 11:02:59 -0000
 
-On Sep 24 15:04, Jon Turney wrote:
-> On 24/09/2020 00:52, Ken Brown via Cygwin-patches wrote:
-> > This was added as a temporary measure in commit e18f7f99 because it
-> > wasn't yet in the mingw-w64 headers.  With one exception, it is now in
-> > the current release of the headers (version 8.0.0), so we don't need
-> > it in winlean.h.  The exception is that VirtualAlloc2 is only declared
-> > conditionally in <w32api/memoryapi.h>, so retain it in winlean.h.  Add
+On Oct  4 12:49, Ken Brown via Cygwin-patches wrote:
+> I'm about to push these.  Corinna, please check them when you return.
+> The only difference between v2 and v1 is that there are a few more
+> fixes.
 > 
-> I assume it's conditional on the windows version targetted, but it might
-> help to mention that in a comment.
+> I'm trying to help get the AF_UNIX development going again.  I'm
+> mostly working on the topic/af_unix branch.  But when I find bugs that
+> exist on master, I'll push those to master and then merge master to
+> topic/af_unix.
 > 
-> > "WINAPI" to its declaration for consistency with the delaration in
-> > memoryapi.h.
-> > 
-> > Also revert commit 3d136011, which was a related temporary workaround.
-> 
-> Looks good to me.
-> 
-> I think this isn't going work any more with older win32api, but we probably
-> don't care about that.  It would perhaps be nice to explicitly complain
-> about that (checking __MINGW64_VERSION_MAJOR somehow), rather than exploding
-> incomprehensibly if the w32api is too old?
-> 
-> > In particular, I'd like to know if my handling of the declaration of
-> > VirtualAlloc2 seems reasonable.  Among other things, I'm puzzled by the
-> > apparent need to add WINAPI.  If it's really needed, I don't know how
-> > the calls of that function could have worked before.  Can anyone
-> > enlighten me?
-> 
-> I believe that WINAPI only does something (stdcall) on x86, so it might well
-> be that it's never worked on Windows 10 =>1803 x86?
+> So far what I have on that branch locally (to be pushed shortly) is an
+> implementation of fhandler_socket_unix::read, which I've tested by
+> running the srver/client programs from Section 57.2 of Kerrisk's book,
+> "The Linux Programming Interface".
 
-VirtualAlloc2 is only called in x86_64 code, so the WINAPI was not
-required.  x86 is a lost case in terms of memory allocation anyway.
+Oh boy, this is SOOOO great!  Thanks for working on that!
 
 
 Corinna
