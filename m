@@ -1,44 +1,43 @@
 Return-Path: <jon.turney@dronecode.org.uk>
-Received: from re-prd-fep-042.btinternet.com (mailomta28-re.btinternet.com
- [213.120.69.121])
- by sourceware.org (Postfix) with ESMTPS id 28D093947403
- for <cygwin-patches@cygwin.com>; Thu, 15 Oct 2020 14:37:13 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 28D093947403
+Received: from re-prd-fep-045.btinternet.com (mailomta6-re.btinternet.com
+ [213.120.69.99])
+ by sourceware.org (Postfix) with ESMTPS id 5B26A385782B
+ for <cygwin-patches@cygwin.com>; Thu, 15 Oct 2020 14:37:11 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 5B26A385782B
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
  header.from=dronecode.org.uk
 Authentication-Results: sourceware.org;
  spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
 Received: from re-prd-rgout-002.btmx-prd.synchronoss.net ([10.2.54.5])
- by re-prd-fep-042.btinternet.com with ESMTP id
- <20201015143712.GFIW13627.re-prd-fep-042.btinternet.com@re-prd-rgout-002.btmx-prd.synchronoss.net>;
- Thu, 15 Oct 2020 15:37:12 +0100
-Authentication-Results: btinternet.com; none
+ by re-prd-fep-045.btinternet.com with ESMTP id
+ <20201015143710.PETV4080.re-prd-fep-045.btinternet.com@re-prd-rgout-002.btmx-prd.synchronoss.net>;
+ Thu, 15 Oct 2020 15:37:10 +0100
+Authentication-Results: btinternet.com;
+ auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com
 X-Originating-IP: [86.143.43.37]
 X-OWM-Source-IP: 86.143.43.37 (GB)
 X-OWM-Env-Sender: jonturney@btinternet.com
 X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedujedrieefgdejkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepfeeiudevhefgffffueeuheelfeegveefvdffleejfeehudetleetledvteethfdvnecukfhppeekiedrudegfedrgeefrdefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhinhgvthepkeeirddugeefrdegfedrfeejpdhmrghilhhfrhhomhepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqedprhgtphhtthhopeeotgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomheqpdhrtghpthhtohepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqe
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedujedrieefgdejkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepueeijeeguddvuedtffeiieelfeffudefkeehgfejffefhedtkeejgeekfedtffefnecukfhppeekiedrudegfedrgeefrdefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhinhgvthepkeeirddugeefrdegfedrfeejpdhmrghilhhfrhhomhepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqedprhgtphhtthhopeeotgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomheqpdhrtghpthhtohepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqe
 X-RazorGate-Vade-Verdict: clean 0
 X-RazorGate-Vade-Classification: clean
 Received: from localhost.localdomain (86.143.43.37) by
  re-prd-rgout-002.btmx-prd.synchronoss.net (5.8.340) (authenticated as
  jonturney@btinternet.com)
- id 5ED9C0CC15FB5A46; Thu, 15 Oct 2020 15:37:12 +0100
+ id 5ED9C0CC15FB5A09; Thu, 15 Oct 2020 15:37:10 +0100
 From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
 Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH 1/3] Stop using c++wrap for MinGW-compiled utilities
-Date: Thu, 15 Oct 2020 15:36:50 +0100
-Message-Id: <20201015143652.56501-2-jon.turney@dronecode.org.uk>
+Subject: [PATCH 0/3] Remove ccwrap
+Date: Thu, 15 Oct 2020 15:36:49 +0100
+Message-Id: <20201015143652.56501-1-jon.turney@dronecode.org.uk>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201015143652.56501-1-jon.turney@dronecode.org.uk>
-References: <20201015143652.56501-1-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1201.2 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
- GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-3571.8 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_NONE,
  RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_NONE,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+ TXREP autolearn=no autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -55,64 +54,48 @@ List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
 X-List-Received-Date: Thu, 15 Oct 2020 14:37:15 -0000
 
-Stop using c++wrap for MinGW-compiled utilities.
+What does ccwrap actually do?
 
-(Partially reverts 96079146)
----
- winsup/ccwrap            | 9 ++-------
- winsup/utils/Makefile.in | 6 +-----
- 2 files changed, 3 insertions(+), 12 deletions(-)
+ccwrap massages the compiler's standard include directories to remove
+'/usr/include/w32api', with the intent of allowing it to be overriden by
+'--with-windows-headers' (See 4c36016b)
 
-diff --git a/winsup/ccwrap b/winsup/ccwrap
-index 0c6a17020..900fc4ae5 100755
---- a/winsup/ccwrap
-+++ b/winsup/ccwrap
-@@ -26,11 +26,6 @@ if ("@ARGV" !~ / -nostdinc/o) {
-     push @compiler, '-I' . $_ for split ' ', $ENV{CCWRAP_HEADERS};
-     push @compiler, '-isystem', $_ for split ' ', $ENV{CCWRAP_SYSTEM_HEADERS};
-     my $finding_paths = 0;
--    my $mingw_compiler = $compiler[0] =~ /mingw/o;
--    my @dirafters;
--    for my $d (split ' ', $ENV{CCWRAP_DIRAFTER_HEADERS}) {
--	push @dirafters, '-isystem', $d if !$mingw_compiler || $d !~ /w32api/o;
--    }
-     while (<$fd>) {
- 	if (/^\*\*\*/o) {
- 	    print;
-@@ -40,13 +35,13 @@ if ("@ARGV" !~ / -nostdinc/o) {
- 	    next;
- 	} elsif ($_ eq "End of search list.\n") {
- 	    last;
--	} elsif (!@dirafters || !m%w32api|mingw.*/include%o) {
-+	} elsif (!m%w32api%o) {
- 	    chomp;
- 	    s/^\s+//;
- 	    push @compiler, '-isystem', Cwd::abs_path($_);
- 	}
-     }
--    push @compiler, @dirafters;
-+    push @compiler, '-isystem', $_ for split ' ', $ENV{CCWRAP_DIRAFTER_HEADERS};
-     close $fd;
- }
- 
-diff --git a/winsup/utils/Makefile.in b/winsup/utils/Makefile.in
-index c3297c6c1..889fdaab3 100644
---- a/winsup/utils/Makefile.in
-+++ b/winsup/utils/Makefile.in
-@@ -140,12 +140,8 @@ check: testsuite.exe ; $(<D)/$(<F)
- # the rest of this file contains generic rules
- 
- # how to compile a MinGW object
--${MINGW_OBJS}: override CXX:=${MINGW_CXX}
--${MINGW_OBJS}: CCWRAP_HEADERS:=${srcdir}
--${MINGW_OBJS}: CCWRAP_SYSTEM_HEADERS:=
--# ${MINGW_OBJS}: CCWRAP_DIRAFTER_HEADERS:=
- $(MINGW_OBJS): %.o: %.cc
--	c++wrap -c -o $@ ${CXXFLAGS} $(MINGW_CXXFLAGS) $<
-+	${MINGW_CXX} -c -o $@ ${CXXFLAGS} $(MINGW_CXXFLAGS) $<
- 
- # how to link a MinGW binary
- $(MINGW_BINS): %.exe: %.o
+I'm not 100% convinced that this is always working as desired, since in some
+places w32api includes are done using <w32api/something.h>, which will find
+them via the path /usr/include.
+
+Removing ccwrap simplifies Automake-ification, and also permits 'CXX=ccache
+c++', which doesn't work currently in some place.
+
+If this does turn out to be needed, this could also be implemented by
+constructing the appropriate compiler flags once, rather than on every compiler
+invocation.
+
+For ease of reviewing, this patch series doesn't contain changes to
+generated files which would be made by an autoreconf.
+
+Jon Turney (3):
+  Stop using c++wrap for MinGW-compiled utilities
+  Remove ccwrap
+  Remove --with-windows-{libs,headers}
+
+ winsup/Makefile.common        |  4 +--
+ winsup/acinclude.m4           | 53 ++++-----------------------------
+ winsup/c++wrap                |  6 ----
+ winsup/ccwrap                 | 56 -----------------------------------
+ winsup/configure.ac           |  5 ----
+ winsup/configure.cygwin       | 10 -------
+ winsup/cygserver/Makefile.in  |  9 +-----
+ winsup/cygserver/configure.ac |  6 ----
+ winsup/cygwin/Makefile.in     | 17 +++--------
+ winsup/cygwin/configure.ac    |  5 ----
+ winsup/cygwin/gentls_offsets  |  2 +-
+ winsup/utils/Makefile.in      | 21 ++-----------
+ winsup/utils/configure.ac     |  3 --
+ 13 files changed, 17 insertions(+), 180 deletions(-)
+ delete mode 100755 winsup/c++wrap
+ delete mode 100755 winsup/ccwrap
+
 -- 
 2.28.0
 
