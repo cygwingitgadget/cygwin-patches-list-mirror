@@ -1,17 +1,17 @@
 Return-Path: <jon.turney@dronecode.org.uk>
-Received: from re-prd-fep-041.btinternet.com (mailomta21-re.btinternet.com
- [213.120.69.114])
- by sourceware.org (Postfix) with ESMTPS id 3469F3950C6E
- for <cygwin-patches@cygwin.com>; Thu, 15 Oct 2020 14:37:18 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 3469F3950C6E
+Received: from re-prd-fep-041.btinternet.com (mailomta10-re.btinternet.com
+ [213.120.69.103])
+ by sourceware.org (Postfix) with ESMTPS id EFAC23950C06
+ for <cygwin-patches@cygwin.com>; Thu, 15 Oct 2020 14:37:14 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org EFAC23950C06
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
  header.from=dronecode.org.uk
 Authentication-Results: sourceware.org;
  spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
 Received: from re-prd-rgout-002.btmx-prd.synchronoss.net ([10.2.54.5])
  by re-prd-fep-041.btinternet.com with ESMTP id
- <20201015143717.OORB30588.re-prd-fep-041.btinternet.com@re-prd-rgout-002.btmx-prd.synchronoss.net>;
- Thu, 15 Oct 2020 15:37:17 +0100
+ <20201015143714.OOQV30588.re-prd-fep-041.btinternet.com@re-prd-rgout-002.btmx-prd.synchronoss.net>;
+ Thu, 15 Oct 2020 15:37:14 +0100
 Authentication-Results: btinternet.com; none
 X-Originating-IP: [86.143.43.37]
 X-OWM-Source-IP: 86.143.43.37 (GB)
@@ -23,13 +23,13 @@ X-RazorGate-Vade-Classification: clean
 Received: from localhost.localdomain (86.143.43.37) by
  re-prd-rgout-002.btmx-prd.synchronoss.net (5.8.340) (authenticated as
  jonturney@btinternet.com)
- id 5ED9C0CC15FB5ACB; Thu, 15 Oct 2020 15:37:17 +0100
+ id 5ED9C0CC15FB5A73; Thu, 15 Oct 2020 15:37:14 +0100
 From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
 Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH 3/3] Remove --with-windows-{libs,headers}
-Date: Thu, 15 Oct 2020 15:36:52 +0100
-Message-Id: <20201015143652.56501-4-jon.turney@dronecode.org.uk>
+Subject: [PATCH 2/3] Remove ccwrap
+Date: Thu, 15 Oct 2020 15:36:51 +0100
+Message-Id: <20201015143652.56501-3-jon.turney@dronecode.org.uk>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201015143652.56501-1-jon.turney@dronecode.org.uk>
 References: <20201015143652.56501-1-jon.turney@dronecode.org.uk>
@@ -53,189 +53,274 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 15 Oct 2020 14:37:19 -0000
+X-List-Received-Date: Thu, 15 Oct 2020 14:37:25 -0000
 
 ---
- winsup/acinclude.m4           | 41 -----------------------------------
- winsup/configure.ac           |  5 -----
- winsup/cygserver/configure.ac |  6 -----
- winsup/cygwin/Makefile.in     |  4 +---
- winsup/cygwin/configure.ac    |  5 -----
- winsup/utils/Makefile.in      |  4 +---
- winsup/utils/configure.ac     |  3 ---
- 7 files changed, 2 insertions(+), 66 deletions(-)
+ winsup/Makefile.common       |  4 +--
+ winsup/acinclude.m4          | 16 +++++------
+ winsup/c++wrap               |  6 -----
+ winsup/ccwrap                | 51 ------------------------------------
+ winsup/configure.cygwin      | 10 -------
+ winsup/cygserver/Makefile.in |  9 +------
+ winsup/cygwin/Makefile.in    | 13 +++------
+ winsup/cygwin/gentls_offsets |  2 +-
+ winsup/utils/Makefile.in     | 11 +-------
+ 9 files changed, 16 insertions(+), 106 deletions(-)
+ delete mode 100755 winsup/c++wrap
+ delete mode 100755 winsup/ccwrap
 
+diff --git a/winsup/Makefile.common b/winsup/Makefile.common
+index a04d8e1de..69cac9b43 100644
+--- a/winsup/Makefile.common
++++ b/winsup/Makefile.common
+@@ -21,8 +21,8 @@ opt=$(filter -O%,${CFLAGS}) $(filter -g%,${CFLAGS})
+ override CXXFLAGS:=${filter-out -g%,$(filter-out -O%,${CXXFLAGS})} ${opt}
+ 
+ cflags_common:=-Wall -Wstrict-aliasing -Wwrite-strings -fno-common -pipe -fbuiltin -fmessage-length=0
+-COMPILE.cc=c++wrap ${CXXFLAGS} -fno-rtti -fno-exceptions -fno-use-cxa-atexit ${cflags_common}
+-COMPILE.c=ccwrap ${CFLAGS} ${cflags_common}
++COMPILE.cc=${CXX} ${INCLUDES} ${CXXFLAGS} -fno-rtti -fno-exceptions -fno-use-cxa-atexit ${cflags_common}
++COMPILE.c=${CC} ${INCLUDES} ${CFLAGS} ${cflags_common}
+ 
+ top_srcdir:=$(call justdir,${winsup_srcdir})
+ top_builddir:=$(call justdir,${target_builddir})
 diff --git a/winsup/acinclude.m4 b/winsup/acinclude.m4
-index 5f71871ec..5248e2a2a 100644
+index 865ef8b5d..5f71871ec 100644
 --- a/winsup/acinclude.m4
 +++ b/winsup/acinclude.m4
-@@ -1,33 +1,6 @@
- dnl This provides configure definitions used by all the cygwin
- dnl configure.in files.
+@@ -29,7 +29,6 @@ AC_SUBST(windows_libdir)
+ )
  
--AC_DEFUN([AC_WINDOWS_HEADERS],[
--AC_ARG_WITH(
--    [windows-headers],
--    [AS_HELP_STRING([--with-windows-headers=DIR],
--		    [specify where the windows includes are located])],
--    [test -z "$withval" && AC_MSG_ERROR([must specify value for --with-windows-headers])]
--)
--])
--
--AC_DEFUN([AC_WINDOWS_LIBS],[
--AC_ARG_WITH(
--    [windows-libs],
--    [AS_HELP_STRING([--with-windows-libs=DIR],
--		    [specify where the windows libraries are located])],
--    [test -z "$withval" && AC_MSG_ERROR([must specify value for --with-windows-libs])]
--)
--windows_libdir=$(realdirpath "$with_windows_libs")
--if test -z "$windows_libdir"; then
--    windows_libdir=$(realdirpath $(${ac_cv_prog_CC:-$CC} -xc /dev/null  -Wl,--verbose=1 -lntdll 2>&1 | sed -rn 's%^.*\s(\S+)/libntdll\..*succeeded%\1%p'))
--    if test -z "$windows_libdir"; then
--	AC_MSG_ERROR([cannot find windows library files])
--    fi
--fi
--AC_SUBST(windows_libdir)
--]
--)
--
  AC_DEFUN([AC_CYGWIN_INCLUDES], [
+-addto_CPPFLAGS -nostdinc
  : ${ac_cv_prog_CXX:=$CXX}
  : ${ac_cv_prog_CC:=$CC}
-@@ -43,25 +16,11 @@ if test -z "$newlib_headers"; then
- fi
- newlib_headers="$target_builddir/newlib/targ-include $newlib_headers"
  
--if test -n "$with_windows_headers"; then
--    if test -e "$with_windows_headers/windef.h"; then
--	windows_headers="$with_windows_headers"
--    else
--	AC_MSG_ERROR([cannot find windef.h in specified --with-windows-headers path: $saw_windows_headers]);
--    fi
--else
--    windows_headers=$(cd $($ac_cv_prog_CC -xc /dev/null -E -include windef.h 2>/dev/null | sed -n 's%^# 1 "\([^"]*\)/windef\.h".*$%\1%p' | head -n1) 2>/dev/null && pwd)
--    if test -z "$windows_headers" -o ! -d "$windows_headers"; then
--	AC_MSG_ERROR([cannot find windows header files])
--    fi
--fi
--
- INCLUDES="-I${srcdir}/../cygwin -I${target_builddir}/winsup/cygwin"
- INCLUDES="${INCLUDES} -isystem ${cygwin_headers}"
- for h in ${newlib_headers}; do
-     INCLUDES="${INCLUDES} -isystem $h"
- done
--INCLUDES="${INCLUDES} -isystem ${windows_headers}"
- AC_SUBST(INCLUDES)
+@@ -56,13 +55,14 @@ else
+ 	AC_MSG_ERROR([cannot find windows header files])
+     fi
+ fi
+-CC=$ac_cv_prog_CC
+-CXX=$ac_cv_prog_CXX
+-export CC
+-export CXX
+-AC_SUBST(windows_headers)
+-AC_SUBST(newlib_headers)
+-AC_SUBST(cygwin_headers)
++
++INCLUDES="-I${srcdir}/../cygwin -I${target_builddir}/winsup/cygwin"
++INCLUDES="${INCLUDES} -isystem ${cygwin_headers}"
++for h in ${newlib_headers}; do
++    INCLUDES="${INCLUDES} -isystem $h"
++done
++INCLUDES="${INCLUDES} -isystem ${windows_headers}"
++AC_SUBST(INCLUDES)
  ])
  
-diff --git a/winsup/configure.ac b/winsup/configure.ac
-index 13f8883eb..65369ae7f 100644
---- a/winsup/configure.ac
-+++ b/winsup/configure.ac
-@@ -25,11 +25,6 @@ AC_PROG_CPP
- AC_LANG(C)
- AC_ARG_WITH([cross-bootstrap],[AS_HELP_STRING([--with-cross-bootstrap],[do not build programs using the mingw toolchain or check for mingw libraries (useful for bootstrapping a cross-compiler)])],[],[with_cross_bootstrap=no])
- 
--AC_WINDOWS_HEADERS
--if test "x$with_cross_bootstrap" != "xyes"; then
--    AC_WINDOWS_LIBS
--fi
+ AC_DEFUN([AC_CONFIGURE_ARGS], [
+diff --git a/winsup/c++wrap b/winsup/c++wrap
+deleted file mode 100755
+index 987acb8c5..000000000
+--- a/winsup/c++wrap
++++ /dev/null
+@@ -1,6 +0,0 @@
+-#!/usr/bin/perl
+-use strict;
+-use File::Basename;
+-my $pgm = basename($0);
+-(my $wrapper = $pgm) =~ s/\+\+/c/o;
+-exec $wrapper, '++', @ARGV;
+diff --git a/winsup/ccwrap b/winsup/ccwrap
+deleted file mode 100755
+index 900fc4ae5..000000000
+--- a/winsup/ccwrap
++++ /dev/null
+@@ -1,51 +0,0 @@
+-#!/usr/bin/perl
+-use Cwd;
+-use strict;
+-my $cxx;
+-my $ccorcxx;
+-if ($ARGV[0] ne '++') {
+-    $ccorcxx = 'CC';
+-    $cxx = 0;
+-} else {
+-    shift @ARGV;
+-    $ccorcxx = 'CXX';
+-    $cxx = 1;
+-}
+-die "$0: $ccorcxx environment variable does not exist\n" unless exists $ENV{$ccorcxx};
+-$ENV{'LANG'} = 'C';
+-my @compiler = split ' ', $ENV{$ccorcxx};
+-if ("@ARGV" !~ / -nostdinc/o) {
+-    my $fd;
+-    push @compiler, ($cxx ? '-xc++' : '-xc');
+-    if (!open $fd, '-|') {
+-	open STDERR, '>&', \*STDOUT;
+-	exec @compiler, '/dev/null', '-v', '-E', '-o', '/dev/null' or die "*** error execing $compiler[0] - $!\n";
+-    }
+-    $compiler[1] =~ s/xc/nostdinc/o;
+-    push @compiler, '-nostdinc' if $cxx;
+-    push @compiler, '-I' . $_ for split ' ', $ENV{CCWRAP_HEADERS};
+-    push @compiler, '-isystem', $_ for split ' ', $ENV{CCWRAP_SYSTEM_HEADERS};
+-    my $finding_paths = 0;
+-    while (<$fd>) {
+-	if (/^\*\*\*/o) {
+-	    print;
+-	} elsif ($_ eq "#include <...> search starts here:\n") {
+-	    $finding_paths = 1;
+-	} elsif (!$finding_paths) {
+-	    next;
+-	} elsif ($_ eq "End of search list.\n") {
+-	    last;
+-	} elsif (!m%w32api%o) {
+-	    chomp;
+-	    s/^\s+//;
+-	    push @compiler, '-isystem', Cwd::abs_path($_);
+-	}
+-    }
+-    push @compiler, '-isystem', $_ for split ' ', $ENV{CCWRAP_DIRAFTER_HEADERS};
+-    close $fd;
+-}
 -
- AC_LANG(C++)
- 
- AC_CYGWIN_INCLUDES
-diff --git a/winsup/cygserver/configure.ac b/winsup/cygserver/configure.ac
-index d8b2a61fa..9a6baceb7 100644
---- a/winsup/cygserver/configure.ac
-+++ b/winsup/cygserver/configure.ac
-@@ -23,12 +23,6 @@ AC_PROG_CC
- AC_PROG_CXX
- AC_PROG_CPP
- AC_LANG(C)
+-push @compiler, @ARGV;
 -
--AC_WINDOWS_HEADERS
--if test "x$with_cross_bootstrap" != "xyes"; then
--  AC_WINDOWS_LIBS
--fi
+-print join(' ', '+', @compiler), "\n" if $ENV{CCWRAP_VERBOSE};
+-exec @compiler or die "$0: $compiler[0] failed to execute\n";
+diff --git a/winsup/configure.cygwin b/winsup/configure.cygwin
+index 06df92211..ff1f749c4 100755
+--- a/winsup/configure.cygwin
++++ b/winsup/configure.cygwin
+@@ -1,13 +1,3 @@
+-addto_CPPFLAGS() {
+-    local f
+-    for f; do
+-	case " $CPPFLAGS " in
+-	    *\ $f\ *) ;;
+-	    *) CPPFLAGS="$CPPFLAGS $f" ;;
+-	esac
+-    done
+-}
 -
- AC_LANG(C++)
+ realdirpath() {
+     [ -z "$1" ] && return 1
+     (cd "$1" 2>/dev/null && pwd)
+diff --git a/winsup/cygserver/Makefile.in b/winsup/cygserver/Makefile.in
+index 70f38233c..e360d8fd0 100644
+--- a/winsup/cygserver/Makefile.in
++++ b/winsup/cygserver/Makefile.in
+@@ -11,22 +11,15 @@ target_builddir:=@target_builddir@
+ winsup_srcdir:=@winsup_srcdir@
+ configure_args=@configure_args@
  
- AC_CYGWIN_INCLUDES
-diff --git a/winsup/cygwin/Makefile.in b/winsup/cygwin/Makefile.in
-index 01c2f72a3..a56a311b8 100644
---- a/winsup/cygwin/Makefile.in
-+++ b/winsup/cygwin/Makefile.in
-@@ -52,8 +52,6 @@ override INSTALL:=@INSTALL@
- override INSTALL_PROGRAM:=@INSTALL_PROGRAM@
- override INSTALL_DATA:=@INSTALL_DATA@
- 
--WINDOWS_LIBDIR:=@windows_libdir@
+-export CC:=@CC@
+-export CXX:=@CXX@
 -
- cygserver_blddir:=${target_builddir}/winsup/cygserver
- LIBSERVER:=${cygserver_blddir}/libcygserver.a
+ CFLAGS:=@CFLAGS@
+ override CXXFLAGS=@CXXFLAGS@
+ override CXXFLAGS+=-MMD -Wimplicit-fallthrough=5 -Werror -D__OUTSIDE_CYGWIN__ -DSYSCONFDIR="\"$(sysconfdir)\""
++INCLUDES:=@INCLUDES@
  
-@@ -680,7 +678,7 @@ $(LDSCRIPT): $(LDSCRIPT).in
- # Rule to build cygwin.dll
- $(TEST_DLL_NAME): $(LDSCRIPT) dllfixdbg $(DLL_OFILES) $(LIBSERVER) $(LIBC) $(LIBM) $(API_VER) Makefile $(VERSION_OFILES)
- 	$(CXX) $(CXXFLAGS) \
--	-mno-use-libstdc-wrappers -L${WINDOWS_LIBDIR} \
-+	-mno-use-libstdc-wrappers \
- 	-Wl,--gc-sections $(nostdlib) -Wl,-T$(firstword $^) -static \
- 	-Wl,--heap=0 -Wl,--out-implib,cygdll.a -shared -o $@ \
- 	-e $(DLL_ENTRY) $(DEF_FILE) $(DLL_OFILES) $(VERSION_OFILES) \
-diff --git a/winsup/cygwin/configure.ac b/winsup/cygwin/configure.ac
-index 32862d7e5..0e9df29bb 100644
---- a/winsup/cygwin/configure.ac
-+++ b/winsup/cygwin/configure.ac
-@@ -25,11 +25,6 @@ AC_PROG_CXX
- AC_PROG_CPP
- AC_LANG(C)
- 
--AC_WINDOWS_HEADERS
--if test "x$with_cross_bootstrap" != "xyes"; then
--  AC_WINDOWS_LIBS
--fi
--
- AC_LANG(C++)
- 
- AC_CYGWIN_INCLUDES
-diff --git a/winsup/utils/Makefile.in b/winsup/utils/Makefile.in
-index bd17d6862..add29d10f 100644
---- a/winsup/utils/Makefile.in
-+++ b/winsup/utils/Makefile.in
-@@ -22,8 +22,6 @@ include ${srcdir}/../Makefile.common
+ include ${srcdir}/../Makefile.common
  
  cygwin_build:=${target_builddir}/winsup/cygwin
  
--WINDOWS_LIBDIR:=@windows_libdir@
+-# environment variables used by ccwrap
+-export CCWRAP_HEADERS:=$(dir ${srcdir})/cygwin ${cygwin_build}
+-export CCWRAP_SYSTEM_HEADERS:=@cygwin_headers@ @newlib_headers@
+-export CCWRAP_DIRAFTER_HEADERS:=@windows_headers@
 -
+ DESTDIR=
+ prefix:=${DESTDIR}@prefix@
+ exec_prefix:=${DESTDIR}@exec_prefix@
+diff --git a/winsup/cygwin/Makefile.in b/winsup/cygwin/Makefile.in
+index 8ab654e9b..01c2f72a3 100644
+--- a/winsup/cygwin/Makefile.in
++++ b/winsup/cygwin/Makefile.in
+@@ -14,19 +14,12 @@ target_builddir:=@target_builddir@
+ winsup_srcdir:=@winsup_srcdir@
+ configure_args=@configure_args@
+ 
+-export CC:=@CC@
+-export CXX:=@CXX@
+-
+ CFLAGS?=@CFLAGS@
+ CXXFLAGS?=@CXXFLAGS@
++INCLUDES?=@INCLUDES@
+ 
+ include ${srcdir}/../Makefile.common
+ 
+-# environment variables used by ccwrap
+-export CCWRAP_HEADERS:=. ${srcdir}
+-export CCWRAP_SYSTEM_HEADERS:=@cygwin_headers@ @newlib_headers@
+-export CCWRAP_DIRAFTER_HEADERS:=@windows_headers@
+-
+ VPATH+=$(srcdir)/regex $(srcdir)/lib $(srcdir)/libc $(srcdir)/math $(srcdir)/tzcode
+ 
+ target_cpu:=@target_cpu@
+@@ -788,7 +781,7 @@ src_files := $(foreach dir,$(VPATH),$(find_src_files))
+ # second, so version.cc is always older than winver.o
+ version.cc: mkvers.sh include/cygwin/version.h winver.rc $(src_files)
+ 	@echo "Making version.cc and winver.o";\
+-	/bin/sh ${word 1,$^} ${word 2,$^} ${word 3,$^} $(WINDRES) ${CFLAGS} $(addprefix -I,${CCWRAP_SYSTEM_HEADERS} ${CCWRAP_DIRAFTER_HEADERS})
++	/bin/sh ${word 1,$^} ${word 2,$^} ${word 3,$^} $(WINDRES) ${CFLAGS} -I${srcdir}/include
+ $(VERSION_OFILES): version.cc
+ 
+ Makefile: ${srcdir}/Makefile.in
+@@ -815,7 +808,7 @@ CTAGS:
+ 	ctags -R --c++-kinds=+p --fields=+iaS --extra=+q \
+ 	--regex-C++='/EXPORT_ALIAS *\([a-zA-Z0-9_]*, *([a-zA-Z0-9_]*)\)/\1/' \
+ 	--regex-C++='/__ASMNAME *\("([a-zA-Z0-9_]+)"\)/\1/' \
+-	@newlib_headers@ .
++	.
+ 
+ deps:=${wildcard *.d}
+ ifneq (,$(deps))
+diff --git a/winsup/cygwin/gentls_offsets b/winsup/cygwin/gentls_offsets
+index 59080c331..ef78d449a 100755
+--- a/winsup/cygwin/gentls_offsets
++++ b/winsup/cygwin/gentls_offsets
+@@ -89,7 +89,7 @@ EOF
+ close TMP;
+ my @avoid_headers = qw'-D_XMMINTRIN_H_INCLUDED -D_ADXINTRIN_H_INCLUDED -D_EMMINTRIN_H_INCLUDED -D_X86INTRIN_H_INCLUDED';
+ my @cmd = (@ARGV, @avoid_headers, '-o', "/tmp/$$-1.cc", '-E', "/tmp/$$.cc");
+-$ENV{CCWRAP_VERBOSE}=1;
++
+ system @cmd;
+ system 'g++', "$tgt_opt", '-o', "/tmp/$$.a.out", "/tmp/$$-1.cc" and
+ ($? == 127 && system 'c++', "$tgt_opt", '-o', "/tmp/$$.a.out", "/tmp/$$-1.cc") and
+diff --git a/winsup/utils/Makefile.in b/winsup/utils/Makefile.in
+index 889fdaab3..bd17d6862 100644
+--- a/winsup/utils/Makefile.in
++++ b/winsup/utils/Makefile.in
+@@ -11,12 +11,10 @@ target_builddir:=@target_builddir@
+ winsup_srcdir:=@winsup_srcdir@
+ configure_args=@configure_args@
+ 
+-export CC:=@CC@
+-export CXX:=@CXX@
+-
+ CFLAGS_COMMON=-Wimplicit-fallthrough=4 -Werror
+ CFLAGS:=@CFLAGS@
+ CXXFLAGS:=@CXXFLAGS@
++INCLUDES:=@INCLUDES@
+ override CFLAGS+=${CFLAGS_COMMON}
+ override CXXFLAGS+=-fno-exceptions -fno-rtti ${CFLAGS_COMMON}
+ 
+@@ -24,13 +22,6 @@ include ${srcdir}/../Makefile.common
+ 
+ cygwin_build:=${target_builddir}/winsup/cygwin
+ 
+-cygwin_headers:=@cygwin_headers@
+-
+-# environment variables used by ccwrap
+-export CCWRAP_HEADERS:=. ${srcdir} $(call justdir,${cygwin_headers})
+-export CCWRAP_SYSTEM_HEADERS:=${cygwin_headers} @newlib_headers@
+-export CCWRAP_DIRAFTER_HEADERS:=@windows_headers@
+-
+ WINDOWS_LIBDIR:=@windows_libdir@
+ 
  prefix:=@prefix@
- exec_prefix:=@exec_prefix@
- 
-@@ -39,7 +37,7 @@ EXEEXT_FOR_BUILD:=@EXEEXT_FOR_BUILD@
- .PHONY: all install clean realclean warn_dumper warn_cygcheck_zlib
- 
- LDLIBS := -lnetapi32 -ladvapi32 -lkernel32 -luser32
--CYGWIN_LDFLAGS := -static -Wl,--enable-auto-import -L${WINDOWS_LIBDIR} $(LDLIBS)
-+CYGWIN_LDFLAGS := -static -Wl,--enable-auto-import $(LDLIBS)
- DEP_LDLIBS := $(cygwin_build)/libcygwin.a
- 
- MINGW_CXX      := @MINGW_CXX@
-diff --git a/winsup/utils/configure.ac b/winsup/utils/configure.ac
-index ce35f9c7b..5fff31414 100644
---- a/winsup/utils/configure.ac
-+++ b/winsup/utils/configure.ac
-@@ -21,9 +21,6 @@ AC_CANONICAL_TARGET
- 
- AC_PROG_CC
- 
--AC_WINDOWS_HEADERS
--AC_WINDOWS_LIBS
--
- AC_PROG_CXX
- 
- AC_CYGWIN_INCLUDES
 -- 
 2.28.0
 
