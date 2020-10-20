@@ -1,45 +1,43 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
- by sourceware.org (Postfix) with ESMTPS id 055433854824;
- Mon, 19 Oct 2020 11:51:16 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 055433854824
+Return-Path: <jon.turney@dronecode.org.uk>
+Received: from sa-prd-fep-042.btinternet.com (mailomta31-sa.btinternet.com
+ [213.120.69.37])
+ by sourceware.org (Postfix) with ESMTPS id C5F743857C62
+ for <cygwin-patches@cygwin.com>; Tue, 20 Oct 2020 13:43:26 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org C5F743857C62
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=dronecode.org.uk
 Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1Mgebs-1jwUFr2vJk-00h2aU; Mon, 19 Oct 2020 13:51:15 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 4A33EA80797; Mon, 19 Oct 2020 13:51:15 +0200 (CEST)
-Date: Mon, 19 Oct 2020 13:51:15 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com, cygwin@cygwin.com, cygwin-apps@cygwin.com
-Subject: Re: Happy TwentyFifth (25th) Birthday Cygwin!
-Message-ID: <20201019115115.GF5492@calimero.vinschen.de>
-Mail-Followup-To: cygwin-patches@cygwin.com, cygwin@cygwin.com,
- cygwin-apps@cygwin.com
-References: <0747943f-ae9b-9d56-846b-d1f05b7ad9d2@SystematicSw.ab.ca>
+ spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
+Received: from sa-prd-rgout-003.btmx-prd.synchronoss.net ([10.2.38.6])
+ by sa-prd-fep-042.btinternet.com with ESMTP id
+ <20201020134325.SGU4736.sa-prd-fep-042.btinternet.com@sa-prd-rgout-003.btmx-prd.synchronoss.net>;
+ Tue, 20 Oct 2020 14:43:25 +0100
+Authentication-Results: btinternet.com;
+ auth=pass (LOGIN) smtp.auth=jonturney@btinternet.com
+X-Originating-IP: [86.139.158.27]
+X-OWM-Source-IP: 86.139.158.27 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedujedrjeefgdeiiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepueeijeeguddvuedtffeiieelfeffudefkeehgfejffefhedtkeejgeekfedtffefnecukfhppeekiedrudefledrudehkedrvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekiedrudefledrudehkedrvdejpdhmrghilhhfrhhomhepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqedprhgtphhtthhopeeotgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomheqpdhrtghpthhtohepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqe
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from localhost.localdomain (86.139.158.27) by
+ sa-prd-rgout-003.btmx-prd.synchronoss.net (5.8.340) (authenticated as
+ jonturney@btinternet.com)
+ id 5ED9AFBE16F22A81; Tue, 20 Oct 2020 14:43:25 +0100
+From: Jon Turney <jon.turney@dronecode.org.uk>
+To: cygwin-patches@cygwin.com
+Cc: Jon Turney <jon.turney@dronecode.org.uk>
+Subject: [PATCH 0/6] More Makefile/configure cleanups
+Date: Tue, 20 Oct 2020 14:42:58 +0100
+Message-Id: <20201020134304.11281-1-jon.turney@dronecode.org.uk>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <0747943f-ae9b-9d56-846b-d1f05b7ad9d2@SystematicSw.ab.ca>
-X-Provags-ID: V03:K1:WzZ11msu0ErjJ9pdpBqNqgE9y3E5ljUDcowr8APg6U6bEeWcj9A
- rFwr2Xnix+VkF93wLAx1lXE6bmLNjUhsEPE1LV4JVATtpbb57Odq5X/bldlw++zq5H1KKoJ
- LpHG/bD+CqGi+2dk4OBvAYv0qR+BgiTeclk3DawcFJrDLINvOgAAOplKbCkwIFB1G5pJpC2
- 5QSiphgCOIqrTpxMYiH7A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:sxZgivYiQoE=:jAlAdAwD5owiT3wwjwvNf1
- JiihJMlGXc0aNSZgxopBeoYYa0jCE9+j2nxZEvmmXMlKLuV0qA4V5F00aGbivEYaCZI9Z1Dlw
- UIeK+c71w1ij59UHQ7zhuzbIFj9IWeS8WxiZ2zE/o7bH2Mc4ZeoHcEme0LPZupijkTH4VEY+x
- pa+bPZvgyVfzpr/HFYRRO9sV+PrtGhVzNcCv3Z5ms4hfFDmgJekgaqSRXyxtwpTpaFmonjeYS
- J2UaRpYLlw9Z5S6FZq/Nl2bU1jpabTqZhSsmMsoNrd+hl+oKHVfRLaPXXX8ss9+WPv0LK6/FE
- QwQWAjPUPV2+DzlDVN2lX2gi0h1QRiyhEHPxihSFC9bj81o/SQbEiYCT2/JFhzoUAF1vBJ26x
- dQN0bE4HbqzaYbYDjfpBpyiediEaTichjB1JJICBI/dY6YZKRkRMQarFKtXzulT8/GzQ2UyJa
- 2a3F9co4wg==
-X-Spam-Status: No, score=-100.2 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3571.8 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_NONE,
+ TXREP autolearn=no autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -54,15 +52,42 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 19 Oct 2020 11:51:18 -0000
+X-List-Received-Date: Tue, 20 Oct 2020 13:43:29 -0000
 
-On Oct 18 09:31, Brian Inglis wrote:
-> ...and many more until Windows runs on a POSIX compatible kernel!
-> 
-> Thanks to all the contributors, documentors, testers, and especially users, who
-> keep us honest, and without which we would have little encouragement to continue!
+For ease of reviewing, this patch series doesn't contain changes to
+generated files which would be made by an autoreconf.
 
-Great talk, thanks for taking over this task :)
+Jon Turney (6):
+  Remove lsaauth
+  Drop cygwin version.o from cygserver
+  gendef generates sigfe.s and cygwin.def
+  Remove nostdlib Makefile variable
+  Drop do-nothing install_host target
+  Drop do-nothing install_target target
 
+ winsup/Makefile.common        |    2 -
+ winsup/Makefile.in            |    2 -
+ winsup/cygserver/Makefile.in  |    4 +-
+ winsup/cygserver/configure.ac |    3 -
+ winsup/cygwin/Makefile.in     |   19 +-
+ winsup/cygwin/configure.ac    |    3 -
+ winsup/lsaauth/Makefile.in    |   94 -
+ winsup/lsaauth/configure      | 4130 ---------------------------------
+ winsup/lsaauth/configure.ac   |   38 -
+ winsup/lsaauth/cyglsa-config  |  121 -
+ winsup/lsaauth/cyglsa.c       |  598 -----
+ winsup/lsaauth/cyglsa.din     |    9 -
+ winsup/lsaauth/cyglsa64.def   |    9 -
+ winsup/testsuite/Makefile.in  |    4 +-
+ 14 files changed, 7 insertions(+), 5029 deletions(-)
+ delete mode 100644 winsup/lsaauth/Makefile.in
+ delete mode 100755 winsup/lsaauth/configure
+ delete mode 100644 winsup/lsaauth/configure.ac
+ delete mode 100755 winsup/lsaauth/cyglsa-config
+ delete mode 100644 winsup/lsaauth/cyglsa.c
+ delete mode 100644 winsup/lsaauth/cyglsa.din
+ delete mode 100644 winsup/lsaauth/cyglsa64.def
 
-Corinna
+-- 
+2.28.0
+
