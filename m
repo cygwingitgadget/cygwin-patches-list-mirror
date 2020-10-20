@@ -1,43 +1,44 @@
 Return-Path: <jon.turney@dronecode.org.uk>
-Received: from sa-prd-fep-046.btinternet.com (mailomta29-sa.btinternet.com
- [213.120.69.35])
- by sourceware.org (Postfix) with ESMTPS id 4D6923857C62
- for <cygwin-patches@cygwin.com>; Tue, 20 Oct 2020 13:43:39 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 4D6923857C62
+Received: from sa-prd-fep-043.btinternet.com (mailomta22-sa.btinternet.com
+ [213.120.69.28])
+ by sourceware.org (Postfix) with ESMTPS id 629553857C7B
+ for <cygwin-patches@cygwin.com>; Tue, 20 Oct 2020 13:43:29 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 629553857C7B
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
  header.from=dronecode.org.uk
 Authentication-Results: sourceware.org;
  spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
 Received: from sa-prd-rgout-003.btmx-prd.synchronoss.net ([10.2.38.6])
- by sa-prd-fep-046.btinternet.com with ESMTP id
- <20201020134338.MMC4272.sa-prd-fep-046.btinternet.com@sa-prd-rgout-003.btmx-prd.synchronoss.net>;
- Tue, 20 Oct 2020 14:43:38 +0100
+ by sa-prd-fep-043.btinternet.com with ESMTP id
+ <20201020134328.UCP4350.sa-prd-fep-043.btinternet.com@sa-prd-rgout-003.btmx-prd.synchronoss.net>;
+ Tue, 20 Oct 2020 14:43:28 +0100
 Authentication-Results: btinternet.com; none
 X-Originating-IP: [86.139.158.27]
 X-OWM-Source-IP: 86.139.158.27 (GB)
 X-OWM-Env-Sender: jonturney@btinternet.com
 X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedujedrjeefgdeiiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepfeeiudevhefgffffueeuheelfeegveefvdffleejfeehudetleetledvteethfdvnecukfhppeekiedrudefledrudehkedrvdejnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekiedrudefledrudehkedrvdejpdhmrghilhhfrhhomhepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqedprhgtphhtthhopeeotgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomheqpdhrtghpthhtohepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqe
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedujedrjeefgdeiiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepveevffefgfelvdelieehieekleelveeviedugfdvhfegfeehtdfgvdeiudegfedvnecuffhomhgrihhnpehgnhhurdhorhhgpdgthihgfihinhdrtghomhdpshhusgdrqdhshhgvlhhlpdhouhhtrddqihhtnecukfhppeekiedrudefledrudehkedrvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekiedrudefledrudehkedrvdejpdhmrghilhhfrhhomhepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqedprhgtphhtthhopeeotgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomheqpdhrtghpthhtohepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqe
 X-RazorGate-Vade-Verdict: clean 0
 X-RazorGate-Vade-Classification: clean
 Received: from localhost.localdomain (86.139.158.27) by
  sa-prd-rgout-003.btmx-prd.synchronoss.net (5.8.340) (authenticated as
  jonturney@btinternet.com)
- id 5ED9AFBE16F22C98; Tue, 20 Oct 2020 14:43:38 +0100
+ id 5ED9AFBE16F22B02; Tue, 20 Oct 2020 14:43:28 +0100
 From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
 Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH 5/6] Drop do-nothing install_host target
-Date: Tue, 20 Oct 2020 14:43:03 +0100
-Message-Id: <20201020134304.11281-6-jon.turney@dronecode.org.uk>
+Subject: [PATCH 1/6] Remove lsaauth
+Date: Tue, 20 Oct 2020 14:42:59 +0100
+Message-Id: <20201020134304.11281-2-jon.turney@dronecode.org.uk>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201020134304.11281-1-jon.turney@dronecode.org.uk>
 References: <20201020134304.11281-1-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1200.9 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
- GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H4, RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_NONE,
+X-Spam-Status: No, score=-1199.4 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
+ GIT_PATCH_0, KAM_ASCII_DIVIDERS, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY,
+ KAM_SHORT, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SCC_10_SHORT_WORD_LINES,
+ SCC_5_SHORT_WORD_LINES, SPF_HELO_PASS, SPF_NONE,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -55,114 +56,5076 @@ List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
 X-List-Received-Date: Tue, 20 Oct 2020 13:43:41 -0000
 
-Drop do-nothing install_host target, which is only used when not
-cross-compiling.
+Remove lsaauth, not built since 2741dd05.
 ---
- winsup/cygserver/configure.ac | 3 ---
- winsup/cygwin/Makefile.in     | 7 ++-----
- winsup/cygwin/configure.ac    | 3 ---
- winsup/testsuite/Makefile.in  | 4 +---
- 4 files changed, 3 insertions(+), 14 deletions(-)
+ winsup/Makefile.in           |    2 -
+ winsup/lsaauth/Makefile.in   |   94 -
+ winsup/lsaauth/configure     | 4130 ----------------------------------
+ winsup/lsaauth/configure.ac  |   38 -
+ winsup/lsaauth/cyglsa-config |  121 -
+ winsup/lsaauth/cyglsa.c      |  598 -----
+ winsup/lsaauth/cyglsa.din    |    9 -
+ winsup/lsaauth/cyglsa64.def  |    9 -
+ 8 files changed, 5001 deletions(-)
+ delete mode 100644 winsup/lsaauth/Makefile.in
+ delete mode 100755 winsup/lsaauth/configure
+ delete mode 100644 winsup/lsaauth/configure.ac
+ delete mode 100755 winsup/lsaauth/cyglsa-config
+ delete mode 100644 winsup/lsaauth/cyglsa.c
+ delete mode 100644 winsup/lsaauth/cyglsa.din
+ delete mode 100644 winsup/lsaauth/cyglsa64.def
 
-diff --git a/winsup/cygserver/configure.ac b/winsup/cygserver/configure.ac
-index 9a6baceb7..4ff784e47 100644
---- a/winsup/cygserver/configure.ac
-+++ b/winsup/cygserver/configure.ac
-@@ -30,16 +30,13 @@ AC_CYGWIN_INCLUDES
- case "$with_cross_host" in
-   ""|*cygwin*)
-     all_host="all_host"
--    install_host="install_host"
-     ;;
-   *)
-     all_host=
--    install_host=
-     ;;
- esac
+diff --git a/winsup/Makefile.in b/winsup/Makefile.in
+index dc1c04444..f1c1ce771 100644
+--- a/winsup/Makefile.in
++++ b/winsup/Makefile.in
+@@ -122,5 +122,3 @@ install_utils: cygwin
+ install_cygwin:
  
- AC_SUBST(all_host)
--AC_SUBST(install_host)
- 
- AC_CHECK_TOOL(AR, ar, ar)
- AC_CHECK_TOOL(AS, as, as)
-diff --git a/winsup/cygwin/Makefile.in b/winsup/cygwin/Makefile.in
-index 0dca13fab..33ee17d1e 100644
---- a/winsup/cygwin/Makefile.in
-+++ b/winsup/cygwin/Makefile.in
-@@ -570,11 +570,10 @@ fhandler_proc_CFLAGS+=-DUSERNAME="\"$(USER)\"" -DHOSTNAME="\"$(HOSTNAME)\""
- fhandler_proc_CFLAGS+=-DGCC_VERSION="\"`$(CC) -v 2>&1 | tail -n 1`\""
- 
- .PHONY: all force dll_ofiles install all_target install_target all_host \
--	install_host install install-libs install-headers \
-+	install install-libs install-headers \
- 	clean distclean realclean maintainer-clean
- 
- all_host=@all_host@
--install_host=@install_host@
- 
- all: all_target $(all_host)
- 
-@@ -585,7 +584,7 @@ all_host: $(TEST_LIB_NAME)
- force:
- 
- install: install-libs install-headers install-man install-ldif install_target \
--	$(install_host) $(install_target)
-+	$(install_target)
- 
- uninstall: uninstall-libs uninstall-headers uninstall-man
- 
-@@ -628,8 +627,6 @@ install-ldif:
- 
- install_target:
- 
--install_host:
+ install_cygserver: cygwin
 -
- uninstall-libs: $(TARGET_LIBS)
- 	rm -f $(bindir)/$(DLL_NAME); \
- 	for i in $^; do \
-diff --git a/winsup/cygwin/configure.ac b/winsup/cygwin/configure.ac
-index 0e9df29bb..aafc4d925 100644
---- a/winsup/cygwin/configure.ac
-+++ b/winsup/cygwin/configure.ac
-@@ -32,16 +32,13 @@ AC_CYGWIN_INCLUDES
- case "$with_cross_host" in
-   ""|*cygwin*)
-     all_host="all_host"
--    install_host="install_host"
-     ;;
-   *)
-     all_host=
--    install_host=
-     ;;
- esac
- 
- AC_SUBST(all_host)
--AC_SUBST(install_host)
- 
- AC_CHECK_TOOL(AR, ar, ar)
- AC_CHECK_TOOL(AS, as, as)
-diff --git a/winsup/testsuite/Makefile.in b/winsup/testsuite/Makefile.in
-index a86a35b88..050d5b164 100644
---- a/winsup/testsuite/Makefile.in
-+++ b/winsup/testsuite/Makefile.in
-@@ -82,7 +82,7 @@ override COMPILE_CC:=${filter-out -O%,$(COMPILE_CC)}
- override CFLAGS:=${filter-out -O%,$(CFLAGS)}
- export CFLAGS
- 
--.PHONY: all force dll_ofiles install all_target install_target install_host
-+.PHONY: all force dll_ofiles install all_target install_target
- 
- .SUFFIXES:
- .SUFFIXES: .c .cc .def .a .o .d
-@@ -93,8 +93,6 @@ force:
- 
- install:
- 
--install_host:
+-lsaauth:
+diff --git a/winsup/lsaauth/Makefile.in b/winsup/lsaauth/Makefile.in
+deleted file mode 100644
+index 997eaf9b4..000000000
+--- a/winsup/lsaauth/Makefile.in
++++ /dev/null
+@@ -1,94 +0,0 @@
+-#
+-#     This program is free software; you can redistribute it and/or modify
+-#     it under the terms of the GNU General Public License as published by
+-#     the Free Software Foundation; either version 2 of the License, or
+-#     (at your option) any later version.
+-#
+-#     A copy of the GNU General Public License can be found at
+-#     http://www.gnu.org/
+-#
+-# Written by Corinna Vinschen <vinschen@redhat.de>
+-#
+-# Makefile for Cygwin subauthentication DLL.
 -
- clean:
- 	-rm -f *.o *.dll *.a *.exp junk *.bak *.base *.exe testsuite/* *.d *.dat
- 
+-SHELL := @SHELL@
+-
+-srcdir          := @srcdir@
+-VPATH           := @srcdir@
+-prefix          := @prefix@
+-exec_prefix     := @exec_prefix@
+-
+-bindir          := @bindir@
+-etcdir          := $(exec_prefix)/etc
+-
+-INSTALL         := @INSTALL@
+-INSTALL_PROGRAM := @INSTALL_PROGRAM@
+-INSTALL_DATA    := @INSTALL_DATA@
+-
+-CC              := @CC@
+-CC_FOR_TARGET   := $(CC)
+-
+-MINGW32_CC	:= @MINGW32_CC@
+-MINGW64_CC	:= @MINGW64_CC@
+-
+-CFLAGS          := @CFLAGS@
+-
+-include $(srcdir)/../Makefile.common
+-
+-target_cpu:=@target_cpu@
+-
+-WIN32_INCLUDES  := -I. -I$(srcdir)
+-WIN32_CFLAGS    := $(CFLAGS) $(WIN32_INCLUDES)
+-WIN32_LDFLAGS	:= $(CFLAGS) -nostdlib -Wl,-shared
+-
+-# Never again try to remove advapi32.  It does not matter if the DLL calls
+-# advapi32 functions or the equivalent ntdll functions.
+-# But if the LSA authentication DLL is not linked against advapi32, it's
+-# not recognized by LSA.
+-LIBS		:= -ladvapi32 -lkernel32 -lntdll
+-
+-ifneq ($(target_cpu),x86_64)
+-DLL32	:=	cyglsa.dll
+-DEF32	:=	cyglsa.def
+-OBJ32	:=	cyglsa.o
+-endif
+-
+-DLL64	:=	cyglsa64.dll
+-DEF64	:=	cyglsa64.def
+-OBJ64	:=	cyglsa64.o
+-
+-.SUFFIXES:
+-.NOEXPORT:
+-
+-all: Makefile $(DLL32) $(DLL64)
+-
+-$(DEF32): cyglsa.din config.status
+-	$(SHELL) config.status
+-
+-$(DLL32): $(OBJ32) $(DEF32)
+-	$(MINGW32_CC) -s $(WIN32_LDFLAGS) -e _DllMain@12 -o $@ $^ $(LIBS)
+-
+-$(OBJ32): cyglsa.c
+-	$(MINGW32_CC) $(WIN32_CFLAGS) -c -o $@ $<
+-
+-$(DLL64): $(OBJ64) $(DEF64)
+-	$(MINGW64_CC) -s $(WIN32_LDFLAGS) -e DllMain -o $@ $^ $(LIBS)
+-
+-$(OBJ64): cyglsa.c
+-	$(MINGW64_CC) $(WIN32_CFLAGS) -c -o $@ $<
+-
+-.PHONY: all install clean realclean
+-
+-realclean: clean
+-	rm -f  Makefile config.cache
+-
+-clean:
+-	rm -f *.o *.dll cyglsa.def
+-
+-install: all
+-	/bin/mkdir -p $(DESTDIR)$(bindir)
+-ifneq ($(target_cpu),x86_64)
+-	$(INSTALL_PROGRAM) $(DLL32) $(DESTDIR)$(bindir)/$(DLL32)
+-endif
+-	$(INSTALL_PROGRAM) $(DLL64) $(DESTDIR)$(bindir)/$(DLL64)
+-	$(INSTALL_PROGRAM) $(srcdir)/cyglsa-config $(DESTDIR)$(bindir)/cyglsa-config
+diff --git a/winsup/lsaauth/configure b/winsup/lsaauth/configure
+deleted file mode 100755
+index 173d3a887..000000000
+--- a/winsup/lsaauth/configure
++++ /dev/null
+@@ -1,4130 +0,0 @@
+-#! /bin/sh
+-# Guess values for system-dependent variables and create Makefiles.
+-# Generated by GNU Autoconf 2.69 for Cygwin Lsaauth 0.
+-#
+-# Report bugs to <cygwin@cygwin.com>.
+-#
+-#
+-# Copyright (C) 1992-1996, 1998-2012 Free Software Foundation, Inc.
+-#
+-#
+-# This configure script is free software; the Free Software Foundation
+-# gives unlimited permission to copy, distribute and modify it.
+-## -------------------- ##
+-## M4sh Initialization. ##
+-## -------------------- ##
+-
+-# Be more Bourne compatible
+-DUALCASE=1; export DUALCASE # for MKS sh
+-if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then :
+-  emulate sh
+-  NULLCMD=:
+-  # Pre-4.2 versions of Zsh do word splitting on ${1+"$@"}, which
+-  # is contrary to our usage.  Disable this feature.
+-  alias -g '${1+"$@"}'='"$@"'
+-  setopt NO_GLOB_SUBST
+-else
+-  case `(set -o) 2>/dev/null` in #(
+-  *posix*) :
+-    set -o posix ;; #(
+-  *) :
+-     ;;
+-esac
+-fi
+-
+-
+-as_nl='
+-'
+-export as_nl
+-# Printing a long string crashes Solaris 7 /usr/bin/printf.
+-as_echo='\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\'
+-as_echo=$as_echo$as_echo$as_echo$as_echo$as_echo
+-as_echo=$as_echo$as_echo$as_echo$as_echo$as_echo$as_echo
+-# Prefer a ksh shell builtin over an external printf program on Solaris,
+-# but without wasting forks for bash or zsh.
+-if test -z "$BASH_VERSION$ZSH_VERSION" \
+-    && (test "X`print -r -- $as_echo`" = "X$as_echo") 2>/dev/null; then
+-  as_echo='print -r --'
+-  as_echo_n='print -rn --'
+-elif (test "X`printf %s $as_echo`" = "X$as_echo") 2>/dev/null; then
+-  as_echo='printf %s\n'
+-  as_echo_n='printf %s'
+-else
+-  if test "X`(/usr/ucb/echo -n -n $as_echo) 2>/dev/null`" = "X-n $as_echo"; then
+-    as_echo_body='eval /usr/ucb/echo -n "$1$as_nl"'
+-    as_echo_n='/usr/ucb/echo -n'
+-  else
+-    as_echo_body='eval expr "X$1" : "X\\(.*\\)"'
+-    as_echo_n_body='eval
+-      arg=$1;
+-      case $arg in #(
+-      *"$as_nl"*)
+-	expr "X$arg" : "X\\(.*\\)$as_nl";
+-	arg=`expr "X$arg" : ".*$as_nl\\(.*\\)"`;;
+-      esac;
+-      expr "X$arg" : "X\\(.*\\)" | tr -d "$as_nl"
+-    '
+-    export as_echo_n_body
+-    as_echo_n='sh -c $as_echo_n_body as_echo'
+-  fi
+-  export as_echo_body
+-  as_echo='sh -c $as_echo_body as_echo'
+-fi
+-
+-# The user is always right.
+-if test "${PATH_SEPARATOR+set}" != set; then
+-  PATH_SEPARATOR=:
+-  (PATH='/bin;/bin'; FPATH=$PATH; sh -c :) >/dev/null 2>&1 && {
+-    (PATH='/bin:/bin'; FPATH=$PATH; sh -c :) >/dev/null 2>&1 ||
+-      PATH_SEPARATOR=';'
+-  }
+-fi
+-
+-
+-# IFS
+-# We need space, tab and new line, in precisely that order.  Quoting is
+-# there to prevent editors from complaining about space-tab.
+-# (If _AS_PATH_WALK were called with IFS unset, it would disable word
+-# splitting by setting IFS to empty value.)
+-IFS=" ""	$as_nl"
+-
+-# Find who we are.  Look in the path if we contain no directory separator.
+-as_myself=
+-case $0 in #((
+-  *[\\/]* ) as_myself=$0 ;;
+-  *) as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-for as_dir in $PATH
+-do
+-  IFS=$as_save_IFS
+-  test -z "$as_dir" && as_dir=.
+-    test -r "$as_dir/$0" && as_myself=$as_dir/$0 && break
+-  done
+-IFS=$as_save_IFS
+-
+-     ;;
+-esac
+-# We did not find ourselves, most probably we were run as `sh COMMAND'
+-# in which case we are not to be found in the path.
+-if test "x$as_myself" = x; then
+-  as_myself=$0
+-fi
+-if test ! -f "$as_myself"; then
+-  $as_echo "$as_myself: error: cannot find myself; rerun with an absolute file name" >&2
+-  exit 1
+-fi
+-
+-# Unset variables that we do not need and which cause bugs (e.g. in
+-# pre-3.0 UWIN ksh).  But do not cause bugs in bash 2.01; the "|| exit 1"
+-# suppresses any "Segmentation fault" message there.  '((' could
+-# trigger a bug in pdksh 5.2.14.
+-for as_var in BASH_ENV ENV MAIL MAILPATH
+-do eval test x\${$as_var+set} = xset \
+-  && ( (unset $as_var) || exit 1) >/dev/null 2>&1 && unset $as_var || :
+-done
+-PS1='$ '
+-PS2='> '
+-PS4='+ '
+-
+-# NLS nuisances.
+-LC_ALL=C
+-export LC_ALL
+-LANGUAGE=C
+-export LANGUAGE
+-
+-# CDPATH.
+-(unset CDPATH) >/dev/null 2>&1 && unset CDPATH
+-
+-# Use a proper internal environment variable to ensure we don't fall
+-  # into an infinite loop, continuously re-executing ourselves.
+-  if test x"${_as_can_reexec}" != xno && test "x$CONFIG_SHELL" != x; then
+-    _as_can_reexec=no; export _as_can_reexec;
+-    # We cannot yet assume a decent shell, so we have to provide a
+-# neutralization value for shells without unset; and this also
+-# works around shells that cannot unset nonexistent variables.
+-# Preserve -v and -x to the replacement shell.
+-BASH_ENV=/dev/null
+-ENV=/dev/null
+-(unset BASH_ENV) >/dev/null 2>&1 && unset BASH_ENV ENV
+-case $- in # ((((
+-  *v*x* | *x*v* ) as_opts=-vx ;;
+-  *v* ) as_opts=-v ;;
+-  *x* ) as_opts=-x ;;
+-  * ) as_opts= ;;
+-esac
+-exec $CONFIG_SHELL $as_opts "$as_myself" ${1+"$@"}
+-# Admittedly, this is quite paranoid, since all the known shells bail
+-# out after a failed `exec'.
+-$as_echo "$0: could not re-execute with $CONFIG_SHELL" >&2
+-as_fn_exit 255
+-  fi
+-  # We don't want this to propagate to other subprocesses.
+-          { _as_can_reexec=; unset _as_can_reexec;}
+-if test "x$CONFIG_SHELL" = x; then
+-  as_bourne_compatible="if test -n \"\${ZSH_VERSION+set}\" && (emulate sh) >/dev/null 2>&1; then :
+-  emulate sh
+-  NULLCMD=:
+-  # Pre-4.2 versions of Zsh do word splitting on \${1+\"\$@\"}, which
+-  # is contrary to our usage.  Disable this feature.
+-  alias -g '\${1+\"\$@\"}'='\"\$@\"'
+-  setopt NO_GLOB_SUBST
+-else
+-  case \`(set -o) 2>/dev/null\` in #(
+-  *posix*) :
+-    set -o posix ;; #(
+-  *) :
+-     ;;
+-esac
+-fi
+-"
+-  as_required="as_fn_return () { (exit \$1); }
+-as_fn_success () { as_fn_return 0; }
+-as_fn_failure () { as_fn_return 1; }
+-as_fn_ret_success () { return 0; }
+-as_fn_ret_failure () { return 1; }
+-
+-exitcode=0
+-as_fn_success || { exitcode=1; echo as_fn_success failed.; }
+-as_fn_failure && { exitcode=1; echo as_fn_failure succeeded.; }
+-as_fn_ret_success || { exitcode=1; echo as_fn_ret_success failed.; }
+-as_fn_ret_failure && { exitcode=1; echo as_fn_ret_failure succeeded.; }
+-if ( set x; as_fn_ret_success y && test x = \"\$1\" ); then :
+-
+-else
+-  exitcode=1; echo positional parameters were not saved.
+-fi
+-test x\$exitcode = x0 || exit 1
+-test -x / || exit 1"
+-  as_suggested="  as_lineno_1=";as_suggested=$as_suggested$LINENO;as_suggested=$as_suggested" as_lineno_1a=\$LINENO
+-  as_lineno_2=";as_suggested=$as_suggested$LINENO;as_suggested=$as_suggested" as_lineno_2a=\$LINENO
+-  eval 'test \"x\$as_lineno_1'\$as_run'\" != \"x\$as_lineno_2'\$as_run'\" &&
+-  test \"x\`expr \$as_lineno_1'\$as_run' + 1\`\" = \"x\$as_lineno_2'\$as_run'\"' || exit 1"
+-  if (eval "$as_required") 2>/dev/null; then :
+-  as_have_required=yes
+-else
+-  as_have_required=no
+-fi
+-  if test x$as_have_required = xyes && (eval "$as_suggested") 2>/dev/null; then :
+-
+-else
+-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-as_found=false
+-for as_dir in /bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH
+-do
+-  IFS=$as_save_IFS
+-  test -z "$as_dir" && as_dir=.
+-  as_found=:
+-  case $as_dir in #(
+-	 /*)
+-	   for as_base in sh bash ksh sh5; do
+-	     # Try only shells that exist, to save several forks.
+-	     as_shell=$as_dir/$as_base
+-	     if { test -f "$as_shell" || test -f "$as_shell.exe"; } &&
+-		    { $as_echo "$as_bourne_compatible""$as_required" | as_run=a "$as_shell"; } 2>/dev/null; then :
+-  CONFIG_SHELL=$as_shell as_have_required=yes
+-		   if { $as_echo "$as_bourne_compatible""$as_suggested" | as_run=a "$as_shell"; } 2>/dev/null; then :
+-  break 2
+-fi
+-fi
+-	   done;;
+-       esac
+-  as_found=false
+-done
+-$as_found || { if { test -f "$SHELL" || test -f "$SHELL.exe"; } &&
+-	      { $as_echo "$as_bourne_compatible""$as_required" | as_run=a "$SHELL"; } 2>/dev/null; then :
+-  CONFIG_SHELL=$SHELL as_have_required=yes
+-fi; }
+-IFS=$as_save_IFS
+-
+-
+-      if test "x$CONFIG_SHELL" != x; then :
+-  export CONFIG_SHELL
+-             # We cannot yet assume a decent shell, so we have to provide a
+-# neutralization value for shells without unset; and this also
+-# works around shells that cannot unset nonexistent variables.
+-# Preserve -v and -x to the replacement shell.
+-BASH_ENV=/dev/null
+-ENV=/dev/null
+-(unset BASH_ENV) >/dev/null 2>&1 && unset BASH_ENV ENV
+-case $- in # ((((
+-  *v*x* | *x*v* ) as_opts=-vx ;;
+-  *v* ) as_opts=-v ;;
+-  *x* ) as_opts=-x ;;
+-  * ) as_opts= ;;
+-esac
+-exec $CONFIG_SHELL $as_opts "$as_myself" ${1+"$@"}
+-# Admittedly, this is quite paranoid, since all the known shells bail
+-# out after a failed `exec'.
+-$as_echo "$0: could not re-execute with $CONFIG_SHELL" >&2
+-exit 255
+-fi
+-
+-    if test x$as_have_required = xno; then :
+-  $as_echo "$0: This script requires a shell more modern than all"
+-  $as_echo "$0: the shells that I found on your system."
+-  if test x${ZSH_VERSION+set} = xset ; then
+-    $as_echo "$0: In particular, zsh $ZSH_VERSION has bugs and should"
+-    $as_echo "$0: be upgraded to zsh 4.3.4 or later."
+-  else
+-    $as_echo "$0: Please tell bug-autoconf@gnu.org and cygwin@cygwin.com
+-$0: about your system, including any error possibly output
+-$0: before this message. Then install a modern shell, or
+-$0: manually run the script under such a shell if you do
+-$0: have one."
+-  fi
+-  exit 1
+-fi
+-fi
+-fi
+-SHELL=${CONFIG_SHELL-/bin/sh}
+-export SHELL
+-# Unset more variables known to interfere with behavior of common tools.
+-CLICOLOR_FORCE= GREP_OPTIONS=
+-unset CLICOLOR_FORCE GREP_OPTIONS
+-
+-## --------------------- ##
+-## M4sh Shell Functions. ##
+-## --------------------- ##
+-# as_fn_unset VAR
+-# ---------------
+-# Portably unset VAR.
+-as_fn_unset ()
+-{
+-  { eval $1=; unset $1;}
+-}
+-as_unset=as_fn_unset
+-
+-# as_fn_set_status STATUS
+-# -----------------------
+-# Set $? to STATUS, without forking.
+-as_fn_set_status ()
+-{
+-  return $1
+-} # as_fn_set_status
+-
+-# as_fn_exit STATUS
+-# -----------------
+-# Exit the shell with STATUS, even in a "trap 0" or "set -e" context.
+-as_fn_exit ()
+-{
+-  set +e
+-  as_fn_set_status $1
+-  exit $1
+-} # as_fn_exit
+-
+-# as_fn_mkdir_p
+-# -------------
+-# Create "$as_dir" as a directory, including parents if necessary.
+-as_fn_mkdir_p ()
+-{
+-
+-  case $as_dir in #(
+-  -*) as_dir=./$as_dir;;
+-  esac
+-  test -d "$as_dir" || eval $as_mkdir_p || {
+-    as_dirs=
+-    while :; do
+-      case $as_dir in #(
+-      *\'*) as_qdir=`$as_echo "$as_dir" | sed "s/'/'\\\\\\\\''/g"`;; #'(
+-      *) as_qdir=$as_dir;;
+-      esac
+-      as_dirs="'$as_qdir' $as_dirs"
+-      as_dir=`$as_dirname -- "$as_dir" ||
+-$as_expr X"$as_dir" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+-	 X"$as_dir" : 'X\(//\)[^/]' \| \
+-	 X"$as_dir" : 'X\(//\)$' \| \
+-	 X"$as_dir" : 'X\(/\)' \| . 2>/dev/null ||
+-$as_echo X"$as_dir" |
+-    sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
+-	    s//\1/
+-	    q
+-	  }
+-	  /^X\(\/\/\)[^/].*/{
+-	    s//\1/
+-	    q
+-	  }
+-	  /^X\(\/\/\)$/{
+-	    s//\1/
+-	    q
+-	  }
+-	  /^X\(\/\).*/{
+-	    s//\1/
+-	    q
+-	  }
+-	  s/.*/./; q'`
+-      test -d "$as_dir" && break
+-    done
+-    test -z "$as_dirs" || eval "mkdir $as_dirs"
+-  } || test -d "$as_dir" || as_fn_error $? "cannot create directory $as_dir"
+-
+-
+-} # as_fn_mkdir_p
+-
+-# as_fn_executable_p FILE
+-# -----------------------
+-# Test if FILE is an executable regular file.
+-as_fn_executable_p ()
+-{
+-  test -f "$1" && test -x "$1"
+-} # as_fn_executable_p
+-# as_fn_append VAR VALUE
+-# ----------------------
+-# Append the text in VALUE to the end of the definition contained in VAR. Take
+-# advantage of any shell optimizations that allow amortized linear growth over
+-# repeated appends, instead of the typical quadratic growth present in naive
+-# implementations.
+-if (eval "as_var=1; as_var+=2; test x\$as_var = x12") 2>/dev/null; then :
+-  eval 'as_fn_append ()
+-  {
+-    eval $1+=\$2
+-  }'
+-else
+-  as_fn_append ()
+-  {
+-    eval $1=\$$1\$2
+-  }
+-fi # as_fn_append
+-
+-# as_fn_arith ARG...
+-# ------------------
+-# Perform arithmetic evaluation on the ARGs, and store the result in the
+-# global $as_val. Take advantage of shells that can avoid forks. The arguments
+-# must be portable across $(()) and expr.
+-if (eval "test \$(( 1 + 1 )) = 2") 2>/dev/null; then :
+-  eval 'as_fn_arith ()
+-  {
+-    as_val=$(( $* ))
+-  }'
+-else
+-  as_fn_arith ()
+-  {
+-    as_val=`expr "$@" || test $? -eq 1`
+-  }
+-fi # as_fn_arith
+-
+-
+-# as_fn_error STATUS ERROR [LINENO LOG_FD]
+-# ----------------------------------------
+-# Output "`basename $0`: error: ERROR" to stderr. If LINENO and LOG_FD are
+-# provided, also output the error to LOG_FD, referencing LINENO. Then exit the
+-# script with STATUS, using 1 if that was 0.
+-as_fn_error ()
+-{
+-  as_status=$1; test $as_status -eq 0 && as_status=1
+-  if test "$4"; then
+-    as_lineno=${as_lineno-"$3"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
+-    $as_echo "$as_me:${as_lineno-$LINENO}: error: $2" >&$4
+-  fi
+-  $as_echo "$as_me: error: $2" >&2
+-  as_fn_exit $as_status
+-} # as_fn_error
+-
+-if expr a : '\(a\)' >/dev/null 2>&1 &&
+-   test "X`expr 00001 : '.*\(...\)'`" = X001; then
+-  as_expr=expr
+-else
+-  as_expr=false
+-fi
+-
+-if (basename -- /) >/dev/null 2>&1 && test "X`basename -- / 2>&1`" = "X/"; then
+-  as_basename=basename
+-else
+-  as_basename=false
+-fi
+-
+-if (as_dir=`dirname -- /` && test "X$as_dir" = X/) >/dev/null 2>&1; then
+-  as_dirname=dirname
+-else
+-  as_dirname=false
+-fi
+-
+-as_me=`$as_basename -- "$0" ||
+-$as_expr X/"$0" : '.*/\([^/][^/]*\)/*$' \| \
+-	 X"$0" : 'X\(//\)$' \| \
+-	 X"$0" : 'X\(/\)' \| . 2>/dev/null ||
+-$as_echo X/"$0" |
+-    sed '/^.*\/\([^/][^/]*\)\/*$/{
+-	    s//\1/
+-	    q
+-	  }
+-	  /^X\/\(\/\/\)$/{
+-	    s//\1/
+-	    q
+-	  }
+-	  /^X\/\(\/\).*/{
+-	    s//\1/
+-	    q
+-	  }
+-	  s/.*/./; q'`
+-
+-# Avoid depending upon Character Ranges.
+-as_cr_letters='abcdefghijklmnopqrstuvwxyz'
+-as_cr_LETTERS='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+-as_cr_Letters=$as_cr_letters$as_cr_LETTERS
+-as_cr_digits='0123456789'
+-as_cr_alnum=$as_cr_Letters$as_cr_digits
+-
+-
+-  as_lineno_1=$LINENO as_lineno_1a=$LINENO
+-  as_lineno_2=$LINENO as_lineno_2a=$LINENO
+-  eval 'test "x$as_lineno_1'$as_run'" != "x$as_lineno_2'$as_run'" &&
+-  test "x`expr $as_lineno_1'$as_run' + 1`" = "x$as_lineno_2'$as_run'"' || {
+-  # Blame Lee E. McMahon (1931-1989) for sed's syntax.  :-)
+-  sed -n '
+-    p
+-    /[$]LINENO/=
+-  ' <$as_myself |
+-    sed '
+-      s/[$]LINENO.*/&-/
+-      t lineno
+-      b
+-      :lineno
+-      N
+-      :loop
+-      s/[$]LINENO\([^'$as_cr_alnum'_].*\n\)\(.*\)/\2\1\2/
+-      t loop
+-      s/-\n.*//
+-    ' >$as_me.lineno &&
+-  chmod +x "$as_me.lineno" ||
+-    { $as_echo "$as_me: error: cannot create $as_me.lineno; rerun with a POSIX shell" >&2; as_fn_exit 1; }
+-
+-  # If we had to re-execute with $CONFIG_SHELL, we're ensured to have
+-  # already done that, so ensure we don't try to do so again and fall
+-  # in an infinite loop.  This has already happened in practice.
+-  _as_can_reexec=no; export _as_can_reexec
+-  # Don't try to exec as it changes $[0], causing all sort of problems
+-  # (the dirname of $[0] is not the place where we might find the
+-  # original and so on.  Autoconf is especially sensitive to this).
+-  . "./$as_me.lineno"
+-  # Exit status is that of the last command.
+-  exit
+-}
+-
+-ECHO_C= ECHO_N= ECHO_T=
+-case `echo -n x` in #(((((
+--n*)
+-  case `echo 'xy\c'` in
+-  *c*) ECHO_T='	';;	# ECHO_T is single tab character.
+-  xy)  ECHO_C='\c';;
+-  *)   echo `echo ksh88 bug on AIX 6.1` > /dev/null
+-       ECHO_T='	';;
+-  esac;;
+-*)
+-  ECHO_N='-n';;
+-esac
+-
+-rm -f conf$$ conf$$.exe conf$$.file
+-if test -d conf$$.dir; then
+-  rm -f conf$$.dir/conf$$.file
+-else
+-  rm -f conf$$.dir
+-  mkdir conf$$.dir 2>/dev/null
+-fi
+-if (echo >conf$$.file) 2>/dev/null; then
+-  if ln -s conf$$.file conf$$ 2>/dev/null; then
+-    as_ln_s='ln -s'
+-    # ... but there are two gotchas:
+-    # 1) On MSYS, both `ln -s file dir' and `ln file dir' fail.
+-    # 2) DJGPP < 2.04 has no symlinks; `ln -s' creates a wrapper executable.
+-    # In both cases, we have to default to `cp -pR'.
+-    ln -s conf$$.file conf$$.dir 2>/dev/null && test ! -f conf$$.exe ||
+-      as_ln_s='cp -pR'
+-  elif ln conf$$.file conf$$ 2>/dev/null; then
+-    as_ln_s=ln
+-  else
+-    as_ln_s='cp -pR'
+-  fi
+-else
+-  as_ln_s='cp -pR'
+-fi
+-rm -f conf$$ conf$$.exe conf$$.dir/conf$$.file conf$$.file
+-rmdir conf$$.dir 2>/dev/null
+-
+-if mkdir -p . 2>/dev/null; then
+-  as_mkdir_p='mkdir -p "$as_dir"'
+-else
+-  test -d ./-p && rmdir ./-p
+-  as_mkdir_p=false
+-fi
+-
+-as_test_x='test -x'
+-as_executable_p=as_fn_executable_p
+-
+-# Sed expression to map a string onto a valid CPP name.
+-as_tr_cpp="eval sed 'y%*$as_cr_letters%P$as_cr_LETTERS%;s%[^_$as_cr_alnum]%_%g'"
+-
+-# Sed expression to map a string onto a valid variable name.
+-as_tr_sh="eval sed 'y%*+%pp%;s%[^_$as_cr_alnum]%_%g'"
+-
+-
+-test -n "$DJDIR" || exec 7<&0 </dev/null
+-exec 6>&1
+-
+-# Name of the host.
+-# hostname on some systems (SVR3.2, old GNU/Linux) returns a bogus exit status,
+-# so uname gets run too.
+-ac_hostname=`(hostname || uname -n) 2>/dev/null | sed 1q`
+-
+-#
+-# Initializations.
+-#
+-ac_default_prefix=/usr/local
+-ac_clean_files=
+-ac_config_libobj_dir=.
+-LIBOBJS=
+-cross_compiling=no
+-subdirs=
+-MFLAGS=
+-MAKEFLAGS=
+-
+-# Identity of this package.
+-PACKAGE_NAME='Cygwin Lsaauth'
+-PACKAGE_TARNAME='cygwin'
+-PACKAGE_VERSION='0'
+-PACKAGE_STRING='Cygwin Lsaauth 0'
+-PACKAGE_BUGREPORT='cygwin@cygwin.com'
+-PACKAGE_URL='https://cygwin.com'
+-
+-ac_unique_file="Makefile.in"
+-ac_no_link=no
+-ac_subst_vars='LTLIBOBJS
+-LIBOBJS
+-INSTALL_DATA
+-INSTALL_SCRIPT
+-INSTALL_PROGRAM
+-MINGW64_CC
+-MINGW32_CC
+-OBJEXT
+-EXEEXT
+-ac_ct_CC
+-CPPFLAGS
+-LDFLAGS
+-CFLAGS
+-CC
+-target_os
+-target_vendor
+-target_cpu
+-target
+-host_os
+-host_vendor
+-host_cpu
+-host
+-build_os
+-build_vendor
+-build_cpu
+-build
+-target_alias
+-host_alias
+-build_alias
+-LIBS
+-ECHO_T
+-ECHO_N
+-ECHO_C
+-DEFS
+-mandir
+-localedir
+-libdir
+-psdir
+-pdfdir
+-dvidir
+-htmldir
+-infodir
+-docdir
+-oldincludedir
+-includedir
+-localstatedir
+-sharedstatedir
+-sysconfdir
+-datadir
+-datarootdir
+-libexecdir
+-sbindir
+-bindir
+-program_transform_name
+-prefix
+-exec_prefix
+-PACKAGE_URL
+-PACKAGE_BUGREPORT
+-PACKAGE_STRING
+-PACKAGE_VERSION
+-PACKAGE_TARNAME
+-PACKAGE_NAME
+-PATH_SEPARATOR
+-SHELL'
+-ac_subst_files=''
+-ac_user_opts='
+-enable_option_checking
+-'
+-      ac_precious_vars='build_alias
+-host_alias
+-target_alias
+-CC
+-CFLAGS
+-LDFLAGS
+-LIBS
+-CPPFLAGS'
+-
+-
+-# Initialize some variables set by options.
+-ac_init_help=
+-ac_init_version=false
+-ac_unrecognized_opts=
+-ac_unrecognized_sep=
+-# The variables have the same names as the options, with
+-# dashes changed to underlines.
+-cache_file=/dev/null
+-exec_prefix=NONE
+-no_create=
+-no_recursion=
+-prefix=NONE
+-program_prefix=NONE
+-program_suffix=NONE
+-program_transform_name=s,x,x,
+-silent=
+-site=
+-srcdir=
+-verbose=
+-x_includes=NONE
+-x_libraries=NONE
+-
+-# Installation directory options.
+-# These are left unexpanded so users can "make install exec_prefix=/foo"
+-# and all the variables that are supposed to be based on exec_prefix
+-# by default will actually change.
+-# Use braces instead of parens because sh, perl, etc. also accept them.
+-# (The list follows the same order as the GNU Coding Standards.)
+-bindir='${exec_prefix}/bin'
+-sbindir='${exec_prefix}/sbin'
+-libexecdir='${exec_prefix}/libexec'
+-datarootdir='${prefix}/share'
+-datadir='${datarootdir}'
+-sysconfdir='${prefix}/etc'
+-sharedstatedir='${prefix}/com'
+-localstatedir='${prefix}/var'
+-includedir='${prefix}/include'
+-oldincludedir='/usr/include'
+-docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
+-infodir='${datarootdir}/info'
+-htmldir='${docdir}'
+-dvidir='${docdir}'
+-pdfdir='${docdir}'
+-psdir='${docdir}'
+-libdir='${exec_prefix}/lib'
+-localedir='${datarootdir}/locale'
+-mandir='${datarootdir}/man'
+-
+-ac_prev=
+-ac_dashdash=
+-for ac_option
+-do
+-  # If the previous option needs an argument, assign it.
+-  if test -n "$ac_prev"; then
+-    eval $ac_prev=\$ac_option
+-    ac_prev=
+-    continue
+-  fi
+-
+-  case $ac_option in
+-  *=?*) ac_optarg=`expr "X$ac_option" : '[^=]*=\(.*\)'` ;;
+-  *=)   ac_optarg= ;;
+-  *)    ac_optarg=yes ;;
+-  esac
+-
+-  # Accept the important Cygnus configure options, so we can diagnose typos.
+-
+-  case $ac_dashdash$ac_option in
+-  --)
+-    ac_dashdash=yes ;;
+-
+-  -bindir | --bindir | --bindi | --bind | --bin | --bi)
+-    ac_prev=bindir ;;
+-  -bindir=* | --bindir=* | --bindi=* | --bind=* | --bin=* | --bi=*)
+-    bindir=$ac_optarg ;;
+-
+-  -build | --build | --buil | --bui | --bu)
+-    ac_prev=build_alias ;;
+-  -build=* | --build=* | --buil=* | --bui=* | --bu=*)
+-    build_alias=$ac_optarg ;;
+-
+-  -cache-file | --cache-file | --cache-fil | --cache-fi \
+-  | --cache-f | --cache- | --cache | --cach | --cac | --ca | --c)
+-    ac_prev=cache_file ;;
+-  -cache-file=* | --cache-file=* | --cache-fil=* | --cache-fi=* \
+-  | --cache-f=* | --cache-=* | --cache=* | --cach=* | --cac=* | --ca=* | --c=*)
+-    cache_file=$ac_optarg ;;
+-
+-  --config-cache | -C)
+-    cache_file=config.cache ;;
+-
+-  -datadir | --datadir | --datadi | --datad)
+-    ac_prev=datadir ;;
+-  -datadir=* | --datadir=* | --datadi=* | --datad=*)
+-    datadir=$ac_optarg ;;
+-
+-  -datarootdir | --datarootdir | --datarootdi | --datarootd | --dataroot \
+-  | --dataroo | --dataro | --datar)
+-    ac_prev=datarootdir ;;
+-  -datarootdir=* | --datarootdir=* | --datarootdi=* | --datarootd=* \
+-  | --dataroot=* | --dataroo=* | --dataro=* | --datar=*)
+-    datarootdir=$ac_optarg ;;
+-
+-  -disable-* | --disable-*)
+-    ac_useropt=`expr "x$ac_option" : 'x-*disable-\(.*\)'`
+-    # Reject names that are not valid shell variable names.
+-    expr "x$ac_useropt" : ".*[^-+._$as_cr_alnum]" >/dev/null &&
+-      as_fn_error $? "invalid feature name: $ac_useropt"
+-    ac_useropt_orig=$ac_useropt
+-    ac_useropt=`$as_echo "$ac_useropt" | sed 's/[-+.]/_/g'`
+-    case $ac_user_opts in
+-      *"
+-"enable_$ac_useropt"
+-"*) ;;
+-      *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--disable-$ac_useropt_orig"
+-	 ac_unrecognized_sep=', ';;
+-    esac
+-    eval enable_$ac_useropt=no ;;
+-
+-  -docdir | --docdir | --docdi | --doc | --do)
+-    ac_prev=docdir ;;
+-  -docdir=* | --docdir=* | --docdi=* | --doc=* | --do=*)
+-    docdir=$ac_optarg ;;
+-
+-  -dvidir | --dvidir | --dvidi | --dvid | --dvi | --dv)
+-    ac_prev=dvidir ;;
+-  -dvidir=* | --dvidir=* | --dvidi=* | --dvid=* | --dvi=* | --dv=*)
+-    dvidir=$ac_optarg ;;
+-
+-  -enable-* | --enable-*)
+-    ac_useropt=`expr "x$ac_option" : 'x-*enable-\([^=]*\)'`
+-    # Reject names that are not valid shell variable names.
+-    expr "x$ac_useropt" : ".*[^-+._$as_cr_alnum]" >/dev/null &&
+-      as_fn_error $? "invalid feature name: $ac_useropt"
+-    ac_useropt_orig=$ac_useropt
+-    ac_useropt=`$as_echo "$ac_useropt" | sed 's/[-+.]/_/g'`
+-    case $ac_user_opts in
+-      *"
+-"enable_$ac_useropt"
+-"*) ;;
+-      *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--enable-$ac_useropt_orig"
+-	 ac_unrecognized_sep=', ';;
+-    esac
+-    eval enable_$ac_useropt=\$ac_optarg ;;
+-
+-  -exec-prefix | --exec_prefix | --exec-prefix | --exec-prefi \
+-  | --exec-pref | --exec-pre | --exec-pr | --exec-p | --exec- \
+-  | --exec | --exe | --ex)
+-    ac_prev=exec_prefix ;;
+-  -exec-prefix=* | --exec_prefix=* | --exec-prefix=* | --exec-prefi=* \
+-  | --exec-pref=* | --exec-pre=* | --exec-pr=* | --exec-p=* | --exec-=* \
+-  | --exec=* | --exe=* | --ex=*)
+-    exec_prefix=$ac_optarg ;;
+-
+-  -gas | --gas | --ga | --g)
+-    # Obsolete; use --with-gas.
+-    with_gas=yes ;;
+-
+-  -help | --help | --hel | --he | -h)
+-    ac_init_help=long ;;
+-  -help=r* | --help=r* | --hel=r* | --he=r* | -hr*)
+-    ac_init_help=recursive ;;
+-  -help=s* | --help=s* | --hel=s* | --he=s* | -hs*)
+-    ac_init_help=short ;;
+-
+-  -host | --host | --hos | --ho)
+-    ac_prev=host_alias ;;
+-  -host=* | --host=* | --hos=* | --ho=*)
+-    host_alias=$ac_optarg ;;
+-
+-  -htmldir | --htmldir | --htmldi | --htmld | --html | --htm | --ht)
+-    ac_prev=htmldir ;;
+-  -htmldir=* | --htmldir=* | --htmldi=* | --htmld=* | --html=* | --htm=* \
+-  | --ht=*)
+-    htmldir=$ac_optarg ;;
+-
+-  -includedir | --includedir | --includedi | --included | --include \
+-  | --includ | --inclu | --incl | --inc)
+-    ac_prev=includedir ;;
+-  -includedir=* | --includedir=* | --includedi=* | --included=* | --include=* \
+-  | --includ=* | --inclu=* | --incl=* | --inc=*)
+-    includedir=$ac_optarg ;;
+-
+-  -infodir | --infodir | --infodi | --infod | --info | --inf)
+-    ac_prev=infodir ;;
+-  -infodir=* | --infodir=* | --infodi=* | --infod=* | --info=* | --inf=*)
+-    infodir=$ac_optarg ;;
+-
+-  -libdir | --libdir | --libdi | --libd)
+-    ac_prev=libdir ;;
+-  -libdir=* | --libdir=* | --libdi=* | --libd=*)
+-    libdir=$ac_optarg ;;
+-
+-  -libexecdir | --libexecdir | --libexecdi | --libexecd | --libexec \
+-  | --libexe | --libex | --libe)
+-    ac_prev=libexecdir ;;
+-  -libexecdir=* | --libexecdir=* | --libexecdi=* | --libexecd=* | --libexec=* \
+-  | --libexe=* | --libex=* | --libe=*)
+-    libexecdir=$ac_optarg ;;
+-
+-  -localedir | --localedir | --localedi | --localed | --locale)
+-    ac_prev=localedir ;;
+-  -localedir=* | --localedir=* | --localedi=* | --localed=* | --locale=*)
+-    localedir=$ac_optarg ;;
+-
+-  -localstatedir | --localstatedir | --localstatedi | --localstated \
+-  | --localstate | --localstat | --localsta | --localst | --locals)
+-    ac_prev=localstatedir ;;
+-  -localstatedir=* | --localstatedir=* | --localstatedi=* | --localstated=* \
+-  | --localstate=* | --localstat=* | --localsta=* | --localst=* | --locals=*)
+-    localstatedir=$ac_optarg ;;
+-
+-  -mandir | --mandir | --mandi | --mand | --man | --ma | --m)
+-    ac_prev=mandir ;;
+-  -mandir=* | --mandir=* | --mandi=* | --mand=* | --man=* | --ma=* | --m=*)
+-    mandir=$ac_optarg ;;
+-
+-  -nfp | --nfp | --nf)
+-    # Obsolete; use --without-fp.
+-    with_fp=no ;;
+-
+-  -no-create | --no-create | --no-creat | --no-crea | --no-cre \
+-  | --no-cr | --no-c | -n)
+-    no_create=yes ;;
+-
+-  -no-recursion | --no-recursion | --no-recursio | --no-recursi \
+-  | --no-recurs | --no-recur | --no-recu | --no-rec | --no-re | --no-r)
+-    no_recursion=yes ;;
+-
+-  -oldincludedir | --oldincludedir | --oldincludedi | --oldincluded \
+-  | --oldinclude | --oldinclud | --oldinclu | --oldincl | --oldinc \
+-  | --oldin | --oldi | --old | --ol | --o)
+-    ac_prev=oldincludedir ;;
+-  -oldincludedir=* | --oldincludedir=* | --oldincludedi=* | --oldincluded=* \
+-  | --oldinclude=* | --oldinclud=* | --oldinclu=* | --oldincl=* | --oldinc=* \
+-  | --oldin=* | --oldi=* | --old=* | --ol=* | --o=*)
+-    oldincludedir=$ac_optarg ;;
+-
+-  -prefix | --prefix | --prefi | --pref | --pre | --pr | --p)
+-    ac_prev=prefix ;;
+-  -prefix=* | --prefix=* | --prefi=* | --pref=* | --pre=* | --pr=* | --p=*)
+-    prefix=$ac_optarg ;;
+-
+-  -program-prefix | --program-prefix | --program-prefi | --program-pref \
+-  | --program-pre | --program-pr | --program-p)
+-    ac_prev=program_prefix ;;
+-  -program-prefix=* | --program-prefix=* | --program-prefi=* \
+-  | --program-pref=* | --program-pre=* | --program-pr=* | --program-p=*)
+-    program_prefix=$ac_optarg ;;
+-
+-  -program-suffix | --program-suffix | --program-suffi | --program-suff \
+-  | --program-suf | --program-su | --program-s)
+-    ac_prev=program_suffix ;;
+-  -program-suffix=* | --program-suffix=* | --program-suffi=* \
+-  | --program-suff=* | --program-suf=* | --program-su=* | --program-s=*)
+-    program_suffix=$ac_optarg ;;
+-
+-  -program-transform-name | --program-transform-name \
+-  | --program-transform-nam | --program-transform-na \
+-  | --program-transform-n | --program-transform- \
+-  | --program-transform | --program-transfor \
+-  | --program-transfo | --program-transf \
+-  | --program-trans | --program-tran \
+-  | --progr-tra | --program-tr | --program-t)
+-    ac_prev=program_transform_name ;;
+-  -program-transform-name=* | --program-transform-name=* \
+-  | --program-transform-nam=* | --program-transform-na=* \
+-  | --program-transform-n=* | --program-transform-=* \
+-  | --program-transform=* | --program-transfor=* \
+-  | --program-transfo=* | --program-transf=* \
+-  | --program-trans=* | --program-tran=* \
+-  | --progr-tra=* | --program-tr=* | --program-t=*)
+-    program_transform_name=$ac_optarg ;;
+-
+-  -pdfdir | --pdfdir | --pdfdi | --pdfd | --pdf | --pd)
+-    ac_prev=pdfdir ;;
+-  -pdfdir=* | --pdfdir=* | --pdfdi=* | --pdfd=* | --pdf=* | --pd=*)
+-    pdfdir=$ac_optarg ;;
+-
+-  -psdir | --psdir | --psdi | --psd | --ps)
+-    ac_prev=psdir ;;
+-  -psdir=* | --psdir=* | --psdi=* | --psd=* | --ps=*)
+-    psdir=$ac_optarg ;;
+-
+-  -q | -quiet | --quiet | --quie | --qui | --qu | --q \
+-  | -silent | --silent | --silen | --sile | --sil)
+-    silent=yes ;;
+-
+-  -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
+-    ac_prev=sbindir ;;
+-  -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
+-  | --sbi=* | --sb=*)
+-    sbindir=$ac_optarg ;;
+-
+-  -sharedstatedir | --sharedstatedir | --sharedstatedi \
+-  | --sharedstated | --sharedstate | --sharedstat | --sharedsta \
+-  | --sharedst | --shareds | --shared | --share | --shar \
+-  | --sha | --sh)
+-    ac_prev=sharedstatedir ;;
+-  -sharedstatedir=* | --sharedstatedir=* | --sharedstatedi=* \
+-  | --sharedstated=* | --sharedstate=* | --sharedstat=* | --sharedsta=* \
+-  | --sharedst=* | --shareds=* | --shared=* | --share=* | --shar=* \
+-  | --sha=* | --sh=*)
+-    sharedstatedir=$ac_optarg ;;
+-
+-  -site | --site | --sit)
+-    ac_prev=site ;;
+-  -site=* | --site=* | --sit=*)
+-    site=$ac_optarg ;;
+-
+-  -srcdir | --srcdir | --srcdi | --srcd | --src | --sr)
+-    ac_prev=srcdir ;;
+-  -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=*)
+-    srcdir=$ac_optarg ;;
+-
+-  -sysconfdir | --sysconfdir | --sysconfdi | --sysconfd | --sysconf \
+-  | --syscon | --sysco | --sysc | --sys | --sy)
+-    ac_prev=sysconfdir ;;
+-  -sysconfdir=* | --sysconfdir=* | --sysconfdi=* | --sysconfd=* | --sysconf=* \
+-  | --syscon=* | --sysco=* | --sysc=* | --sys=* | --sy=*)
+-    sysconfdir=$ac_optarg ;;
+-
+-  -target | --target | --targe | --targ | --tar | --ta | --t)
+-    ac_prev=target_alias ;;
+-  -target=* | --target=* | --targe=* | --targ=* | --tar=* | --ta=* | --t=*)
+-    target_alias=$ac_optarg ;;
+-
+-  -v | -verbose | --verbose | --verbos | --verbo | --verb)
+-    verbose=yes ;;
+-
+-  -version | --version | --versio | --versi | --vers | -V)
+-    ac_init_version=: ;;
+-
+-  -with-* | --with-*)
+-    ac_useropt=`expr "x$ac_option" : 'x-*with-\([^=]*\)'`
+-    # Reject names that are not valid shell variable names.
+-    expr "x$ac_useropt" : ".*[^-+._$as_cr_alnum]" >/dev/null &&
+-      as_fn_error $? "invalid package name: $ac_useropt"
+-    ac_useropt_orig=$ac_useropt
+-    ac_useropt=`$as_echo "$ac_useropt" | sed 's/[-+.]/_/g'`
+-    case $ac_user_opts in
+-      *"
+-"with_$ac_useropt"
+-"*) ;;
+-      *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--with-$ac_useropt_orig"
+-	 ac_unrecognized_sep=', ';;
+-    esac
+-    eval with_$ac_useropt=\$ac_optarg ;;
+-
+-  -without-* | --without-*)
+-    ac_useropt=`expr "x$ac_option" : 'x-*without-\(.*\)'`
+-    # Reject names that are not valid shell variable names.
+-    expr "x$ac_useropt" : ".*[^-+._$as_cr_alnum]" >/dev/null &&
+-      as_fn_error $? "invalid package name: $ac_useropt"
+-    ac_useropt_orig=$ac_useropt
+-    ac_useropt=`$as_echo "$ac_useropt" | sed 's/[-+.]/_/g'`
+-    case $ac_user_opts in
+-      *"
+-"with_$ac_useropt"
+-"*) ;;
+-      *) ac_unrecognized_opts="$ac_unrecognized_opts$ac_unrecognized_sep--without-$ac_useropt_orig"
+-	 ac_unrecognized_sep=', ';;
+-    esac
+-    eval with_$ac_useropt=no ;;
+-
+-  --x)
+-    # Obsolete; use --with-x.
+-    with_x=yes ;;
+-
+-  -x-includes | --x-includes | --x-include | --x-includ | --x-inclu \
+-  | --x-incl | --x-inc | --x-in | --x-i)
+-    ac_prev=x_includes ;;
+-  -x-includes=* | --x-includes=* | --x-include=* | --x-includ=* | --x-inclu=* \
+-  | --x-incl=* | --x-inc=* | --x-in=* | --x-i=*)
+-    x_includes=$ac_optarg ;;
+-
+-  -x-libraries | --x-libraries | --x-librarie | --x-librari \
+-  | --x-librar | --x-libra | --x-libr | --x-lib | --x-li | --x-l)
+-    ac_prev=x_libraries ;;
+-  -x-libraries=* | --x-libraries=* | --x-librarie=* | --x-librari=* \
+-  | --x-librar=* | --x-libra=* | --x-libr=* | --x-lib=* | --x-li=* | --x-l=*)
+-    x_libraries=$ac_optarg ;;
+-
+-  -*) as_fn_error $? "unrecognized option: \`$ac_option'
+-Try \`$0 --help' for more information"
+-    ;;
+-
+-  *=*)
+-    ac_envvar=`expr "x$ac_option" : 'x\([^=]*\)='`
+-    # Reject names that are not valid shell variable names.
+-    case $ac_envvar in #(
+-      '' | [0-9]* | *[!_$as_cr_alnum]* )
+-      as_fn_error $? "invalid variable name: \`$ac_envvar'" ;;
+-    esac
+-    eval $ac_envvar=\$ac_optarg
+-    export $ac_envvar ;;
+-
+-  *)
+-    # FIXME: should be removed in autoconf 3.0.
+-    $as_echo "$as_me: WARNING: you should use --build, --host, --target" >&2
+-    expr "x$ac_option" : ".*[^-._$as_cr_alnum]" >/dev/null &&
+-      $as_echo "$as_me: WARNING: invalid host type: $ac_option" >&2
+-    : "${build_alias=$ac_option} ${host_alias=$ac_option} ${target_alias=$ac_option}"
+-    ;;
+-
+-  esac
+-done
+-
+-if test -n "$ac_prev"; then
+-  ac_option=--`echo $ac_prev | sed 's/_/-/g'`
+-  as_fn_error $? "missing argument to $ac_option"
+-fi
+-
+-if test -n "$ac_unrecognized_opts"; then
+-  case $enable_option_checking in
+-    no) ;;
+-    fatal) as_fn_error $? "unrecognized options: $ac_unrecognized_opts" ;;
+-    *)     $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2 ;;
+-  esac
+-fi
+-
+-# Check all directory arguments for consistency.
+-for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
+-		datadir sysconfdir sharedstatedir localstatedir includedir \
+-		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
+-		libdir localedir mandir
+-do
+-  eval ac_val=\$$ac_var
+-  # Remove trailing slashes.
+-  case $ac_val in
+-    */ )
+-      ac_val=`expr "X$ac_val" : 'X\(.*[^/]\)' \| "X$ac_val" : 'X\(.*\)'`
+-      eval $ac_var=\$ac_val;;
+-  esac
+-  # Be sure to have absolute directory names.
+-  case $ac_val in
+-    [\\/$]* | ?:[\\/]* )  continue;;
+-    NONE | '' ) case $ac_var in *prefix ) continue;; esac;;
+-  esac
+-  as_fn_error $? "expected an absolute directory name for --$ac_var: $ac_val"
+-done
+-
+-# There might be people who depend on the old broken behavior: `$host'
+-# used to hold the argument of --host etc.
+-# FIXME: To remove some day.
+-build=$build_alias
+-host=$host_alias
+-target=$target_alias
+-
+-# FIXME: To remove some day.
+-if test "x$host_alias" != x; then
+-  if test "x$build_alias" = x; then
+-    cross_compiling=maybe
+-  elif test "x$build_alias" != "x$host_alias"; then
+-    cross_compiling=yes
+-  fi
+-fi
+-
+-ac_tool_prefix=
+-test -n "$host_alias" && ac_tool_prefix=$host_alias-
+-
+-test "$silent" = yes && exec 6>/dev/null
+-
+-
+-ac_pwd=`pwd` && test -n "$ac_pwd" &&
+-ac_ls_di=`ls -di .` &&
+-ac_pwd_ls_di=`cd "$ac_pwd" && ls -di .` ||
+-  as_fn_error $? "working directory cannot be determined"
+-test "X$ac_ls_di" = "X$ac_pwd_ls_di" ||
+-  as_fn_error $? "pwd does not report name of working directory"
+-
+-
+-# Find the source files, if location was not specified.
+-if test -z "$srcdir"; then
+-  ac_srcdir_defaulted=yes
+-  # Try the directory containing this script, then the parent directory.
+-  ac_confdir=`$as_dirname -- "$as_myself" ||
+-$as_expr X"$as_myself" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+-	 X"$as_myself" : 'X\(//\)[^/]' \| \
+-	 X"$as_myself" : 'X\(//\)$' \| \
+-	 X"$as_myself" : 'X\(/\)' \| . 2>/dev/null ||
+-$as_echo X"$as_myself" |
+-    sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
+-	    s//\1/
+-	    q
+-	  }
+-	  /^X\(\/\/\)[^/].*/{
+-	    s//\1/
+-	    q
+-	  }
+-	  /^X\(\/\/\)$/{
+-	    s//\1/
+-	    q
+-	  }
+-	  /^X\(\/\).*/{
+-	    s//\1/
+-	    q
+-	  }
+-	  s/.*/./; q'`
+-  srcdir=$ac_confdir
+-  if test ! -r "$srcdir/$ac_unique_file"; then
+-    srcdir=..
+-  fi
+-else
+-  ac_srcdir_defaulted=no
+-fi
+-if test ! -r "$srcdir/$ac_unique_file"; then
+-  test "$ac_srcdir_defaulted" = yes && srcdir="$ac_confdir or .."
+-  as_fn_error $? "cannot find sources ($ac_unique_file) in $srcdir"
+-fi
+-ac_msg="sources are in $srcdir, but \`cd $srcdir' does not work"
+-ac_abs_confdir=`(
+-	cd "$srcdir" && test -r "./$ac_unique_file" || as_fn_error $? "$ac_msg"
+-	pwd)`
+-# When building in place, set srcdir=.
+-if test "$ac_abs_confdir" = "$ac_pwd"; then
+-  srcdir=.
+-fi
+-# Remove unnecessary trailing slashes from srcdir.
+-# Double slashes in file names in object file debugging info
+-# mess up M-x gdb in Emacs.
+-case $srcdir in
+-*/) srcdir=`expr "X$srcdir" : 'X\(.*[^/]\)' \| "X$srcdir" : 'X\(.*\)'`;;
+-esac
+-for ac_var in $ac_precious_vars; do
+-  eval ac_env_${ac_var}_set=\${${ac_var}+set}
+-  eval ac_env_${ac_var}_value=\$${ac_var}
+-  eval ac_cv_env_${ac_var}_set=\${${ac_var}+set}
+-  eval ac_cv_env_${ac_var}_value=\$${ac_var}
+-done
+-
+-#
+-# Report the --help message.
+-#
+-if test "$ac_init_help" = "long"; then
+-  # Omit some internal or obsolete options to make the list less imposing.
+-  # This message is too long to be a string in the A/UX 3.1 sh.
+-  cat <<_ACEOF
+-\`configure' configures Cygwin Lsaauth 0 to adapt to many kinds of systems.
+-
+-Usage: $0 [OPTION]... [VAR=VALUE]...
+-
+-To assign environment variables (e.g., CC, CFLAGS...), specify them as
+-VAR=VALUE.  See below for descriptions of some of the useful variables.
+-
+-Defaults for the options are specified in brackets.
+-
+-Configuration:
+-  -h, --help              display this help and exit
+-      --help=short        display options specific to this package
+-      --help=recursive    display the short help of all the included packages
+-  -V, --version           display version information and exit
+-  -q, --quiet, --silent   do not print \`checking ...' messages
+-      --cache-file=FILE   cache test results in FILE [disabled]
+-  -C, --config-cache      alias for \`--cache-file=config.cache'
+-  -n, --no-create         do not create output files
+-      --srcdir=DIR        find the sources in DIR [configure dir or \`..']
+-
+-Installation directories:
+-  --prefix=PREFIX         install architecture-independent files in PREFIX
+-                          [$ac_default_prefix]
+-  --exec-prefix=EPREFIX   install architecture-dependent files in EPREFIX
+-                          [PREFIX]
+-
+-By default, \`make install' will install all the files in
+-\`$ac_default_prefix/bin', \`$ac_default_prefix/lib' etc.  You can specify
+-an installation prefix other than \`$ac_default_prefix' using \`--prefix',
+-for instance \`--prefix=\$HOME'.
+-
+-For better control, use the options below.
+-
+-Fine tuning of the installation directories:
+-  --bindir=DIR            user executables [EPREFIX/bin]
+-  --sbindir=DIR           system admin executables [EPREFIX/sbin]
+-  --libexecdir=DIR        program executables [EPREFIX/libexec]
+-  --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
+-  --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
+-  --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+-  --libdir=DIR            object code libraries [EPREFIX/lib]
+-  --includedir=DIR        C header files [PREFIX/include]
+-  --oldincludedir=DIR     C header files for non-gcc [/usr/include]
+-  --datarootdir=DIR       read-only arch.-independent data root [PREFIX/share]
+-  --datadir=DIR           read-only architecture-independent data [DATAROOTDIR]
+-  --infodir=DIR           info documentation [DATAROOTDIR/info]
+-  --localedir=DIR         locale-dependent data [DATAROOTDIR/locale]
+-  --mandir=DIR            man documentation [DATAROOTDIR/man]
+-  --docdir=DIR            documentation root [DATAROOTDIR/doc/cygwin]
+-  --htmldir=DIR           html documentation [DOCDIR]
+-  --dvidir=DIR            dvi documentation [DOCDIR]
+-  --pdfdir=DIR            pdf documentation [DOCDIR]
+-  --psdir=DIR             ps documentation [DOCDIR]
+-_ACEOF
+-
+-  cat <<\_ACEOF
+-
+-Program names:
+-  --program-prefix=PREFIX            prepend PREFIX to installed program names
+-  --program-suffix=SUFFIX            append SUFFIX to installed program names
+-  --program-transform-name=PROGRAM   run sed PROGRAM on installed program names
+-
+-System types:
+-  --build=BUILD     configure for building on BUILD [guessed]
+-  --host=HOST       cross-compile to build programs to run on HOST [BUILD]
+-  --target=TARGET   configure for building compilers for TARGET [HOST]
+-_ACEOF
+-fi
+-
+-if test -n "$ac_init_help"; then
+-  case $ac_init_help in
+-     short | recursive ) echo "Configuration of Cygwin Lsaauth 0:";;
+-   esac
+-  cat <<\_ACEOF
+-
+-Some influential environment variables:
+-  CC          C compiler command
+-  CFLAGS      C compiler flags
+-  LDFLAGS     linker flags, e.g. -L<lib dir> if you have libraries in a
+-              nonstandard directory <lib dir>
+-  LIBS        libraries to pass to the linker, e.g. -l<library>
+-  CPPFLAGS    (Objective) C/C++ preprocessor flags, e.g. -I<include dir> if
+-              you have headers in a nonstandard directory <include dir>
+-
+-Use these variables to override the choices made by `configure' or to help
+-it to find libraries and programs with nonstandard names/locations.
+-
+-Report bugs to <cygwin@cygwin.com>.
+-Cygwin Lsaauth home page: <https://cygwin.com>.
+-_ACEOF
+-ac_status=$?
+-fi
+-
+-if test "$ac_init_help" = "recursive"; then
+-  # If there are subdirs, report their specific --help.
+-  for ac_dir in : $ac_subdirs_all; do test "x$ac_dir" = x: && continue
+-    test -d "$ac_dir" ||
+-      { cd "$srcdir" && ac_pwd=`pwd` && srcdir=. && test -d "$ac_dir"; } ||
+-      continue
+-    ac_builddir=.
+-
+-case "$ac_dir" in
+-.) ac_dir_suffix= ac_top_builddir_sub=. ac_top_build_prefix= ;;
+-*)
+-  ac_dir_suffix=/`$as_echo "$ac_dir" | sed 's|^\.[\\/]||'`
+-  # A ".." for each directory in $ac_dir_suffix.
+-  ac_top_builddir_sub=`$as_echo "$ac_dir_suffix" | sed 's|/[^\\/]*|/..|g;s|/||'`
+-  case $ac_top_builddir_sub in
+-  "") ac_top_builddir_sub=. ac_top_build_prefix= ;;
+-  *)  ac_top_build_prefix=$ac_top_builddir_sub/ ;;
+-  esac ;;
+-esac
+-ac_abs_top_builddir=$ac_pwd
+-ac_abs_builddir=$ac_pwd$ac_dir_suffix
+-# for backward compatibility:
+-ac_top_builddir=$ac_top_build_prefix
+-
+-case $srcdir in
+-  .)  # We are building in place.
+-    ac_srcdir=.
+-    ac_top_srcdir=$ac_top_builddir_sub
+-    ac_abs_top_srcdir=$ac_pwd ;;
+-  [\\/]* | ?:[\\/]* )  # Absolute name.
+-    ac_srcdir=$srcdir$ac_dir_suffix;
+-    ac_top_srcdir=$srcdir
+-    ac_abs_top_srcdir=$srcdir ;;
+-  *) # Relative name.
+-    ac_srcdir=$ac_top_build_prefix$srcdir$ac_dir_suffix
+-    ac_top_srcdir=$ac_top_build_prefix$srcdir
+-    ac_abs_top_srcdir=$ac_pwd/$srcdir ;;
+-esac
+-ac_abs_srcdir=$ac_abs_top_srcdir$ac_dir_suffix
+-
+-    cd "$ac_dir" || { ac_status=$?; continue; }
+-    # Check for guested configure.
+-    if test -f "$ac_srcdir/configure.gnu"; then
+-      echo &&
+-      $SHELL "$ac_srcdir/configure.gnu" --help=recursive
+-    elif test -f "$ac_srcdir/configure"; then
+-      echo &&
+-      $SHELL "$ac_srcdir/configure" --help=recursive
+-    else
+-      $as_echo "$as_me: WARNING: no configuration information is in $ac_dir" >&2
+-    fi || ac_status=$?
+-    cd "$ac_pwd" || { ac_status=$?; break; }
+-  done
+-fi
+-
+-test -n "$ac_init_help" && exit $ac_status
+-if $ac_init_version; then
+-  cat <<\_ACEOF
+-Cygwin Lsaauth configure 0
+-generated by GNU Autoconf 2.69
+-
+-Copyright (C) 2012 Free Software Foundation, Inc.
+-This configure script is free software; the Free Software Foundation
+-gives unlimited permission to copy, distribute and modify it.
+-_ACEOF
+-  exit
+-fi
+-
+-## ------------------------ ##
+-## Autoconf initialization. ##
+-## ------------------------ ##
+-
+-# ac_fn_c_try_compile LINENO
+-# --------------------------
+-# Try to compile conftest.$ac_ext, and return whether this succeeded.
+-ac_fn_c_try_compile ()
+-{
+-  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
+-  rm -f conftest.$ac_objext
+-  if { { ac_try="$ac_compile"
+-case "(($ac_try" in
+-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+-  *) ac_try_echo=$ac_try;;
+-esac
+-eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
+-$as_echo "$ac_try_echo"; } >&5
+-  (eval "$ac_compile") 2>conftest.err
+-  ac_status=$?
+-  if test -s conftest.err; then
+-    grep -v '^ *+' conftest.err >conftest.er1
+-    cat conftest.er1 >&5
+-    mv -f conftest.er1 conftest.err
+-  fi
+-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+-  test $ac_status = 0; } && {
+-	 test -z "$ac_c_werror_flag" ||
+-	 test ! -s conftest.err
+-       } && test -s conftest.$ac_objext; then :
+-  ac_retval=0
+-else
+-  $as_echo "$as_me: failed program was:" >&5
+-sed 's/^/| /' conftest.$ac_ext >&5
+-
+-	ac_retval=1
+-fi
+-  eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
+-  as_fn_set_status $ac_retval
+-
+-} # ac_fn_c_try_compile
+-cat >config.log <<_ACEOF
+-This file contains any messages produced by compilers while
+-running configure, to aid debugging if configure makes a mistake.
+-
+-It was created by Cygwin Lsaauth $as_me 0, which was
+-generated by GNU Autoconf 2.69.  Invocation command line was
+-
+-  $ $0 $@
+-
+-_ACEOF
+-exec 5>>config.log
+-{
+-cat <<_ASUNAME
+-## --------- ##
+-## Platform. ##
+-## --------- ##
+-
+-hostname = `(hostname || uname -n) 2>/dev/null | sed 1q`
+-uname -m = `(uname -m) 2>/dev/null || echo unknown`
+-uname -r = `(uname -r) 2>/dev/null || echo unknown`
+-uname -s = `(uname -s) 2>/dev/null || echo unknown`
+-uname -v = `(uname -v) 2>/dev/null || echo unknown`
+-
+-/usr/bin/uname -p = `(/usr/bin/uname -p) 2>/dev/null || echo unknown`
+-/bin/uname -X     = `(/bin/uname -X) 2>/dev/null     || echo unknown`
+-
+-/bin/arch              = `(/bin/arch) 2>/dev/null              || echo unknown`
+-/usr/bin/arch -k       = `(/usr/bin/arch -k) 2>/dev/null       || echo unknown`
+-/usr/convex/getsysinfo = `(/usr/convex/getsysinfo) 2>/dev/null || echo unknown`
+-/usr/bin/hostinfo      = `(/usr/bin/hostinfo) 2>/dev/null      || echo unknown`
+-/bin/machine           = `(/bin/machine) 2>/dev/null           || echo unknown`
+-/usr/bin/oslevel       = `(/usr/bin/oslevel) 2>/dev/null       || echo unknown`
+-/bin/universe          = `(/bin/universe) 2>/dev/null          || echo unknown`
+-
+-_ASUNAME
+-
+-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-for as_dir in $PATH
+-do
+-  IFS=$as_save_IFS
+-  test -z "$as_dir" && as_dir=.
+-    $as_echo "PATH: $as_dir"
+-  done
+-IFS=$as_save_IFS
+-
+-} >&5
+-
+-cat >&5 <<_ACEOF
+-
+-
+-## ----------- ##
+-## Core tests. ##
+-## ----------- ##
+-
+-_ACEOF
+-
+-
+-# Keep a trace of the command line.
+-# Strip out --no-create and --no-recursion so they do not pile up.
+-# Strip out --silent because we don't want to record it for future runs.
+-# Also quote any args containing shell meta-characters.
+-# Make two passes to allow for proper duplicate-argument suppression.
+-ac_configure_args=
+-ac_configure_args0=
+-ac_configure_args1=
+-ac_must_keep_next=false
+-for ac_pass in 1 2
+-do
+-  for ac_arg
+-  do
+-    case $ac_arg in
+-    -no-create | --no-c* | -n | -no-recursion | --no-r*) continue ;;
+-    -q | -quiet | --quiet | --quie | --qui | --qu | --q \
+-    | -silent | --silent | --silen | --sile | --sil)
+-      continue ;;
+-    *\'*)
+-      ac_arg=`$as_echo "$ac_arg" | sed "s/'/'\\\\\\\\''/g"` ;;
+-    esac
+-    case $ac_pass in
+-    1) as_fn_append ac_configure_args0 " '$ac_arg'" ;;
+-    2)
+-      as_fn_append ac_configure_args1 " '$ac_arg'"
+-      if test $ac_must_keep_next = true; then
+-	ac_must_keep_next=false # Got value, back to normal.
+-      else
+-	case $ac_arg in
+-	  *=* | --config-cache | -C | -disable-* | --disable-* \
+-	  | -enable-* | --enable-* | -gas | --g* | -nfp | --nf* \
+-	  | -q | -quiet | --q* | -silent | --sil* | -v | -verb* \
+-	  | -with-* | --with-* | -without-* | --without-* | --x)
+-	    case "$ac_configure_args0 " in
+-	      "$ac_configure_args1"*" '$ac_arg' "* ) continue ;;
+-	    esac
+-	    ;;
+-	  -* ) ac_must_keep_next=true ;;
+-	esac
+-      fi
+-      as_fn_append ac_configure_args " '$ac_arg'"
+-      ;;
+-    esac
+-  done
+-done
+-{ ac_configure_args0=; unset ac_configure_args0;}
+-{ ac_configure_args1=; unset ac_configure_args1;}
+-
+-# When interrupted or exit'd, cleanup temporary files, and complete
+-# config.log.  We remove comments because anyway the quotes in there
+-# would cause problems or look ugly.
+-# WARNING: Use '\'' to represent an apostrophe within the trap.
+-# WARNING: Do not start the trap code with a newline, due to a FreeBSD 4.0 bug.
+-trap 'exit_status=$?
+-  # Save into config.log some information that might help in debugging.
+-  {
+-    echo
+-
+-    $as_echo "## ---------------- ##
+-## Cache variables. ##
+-## ---------------- ##"
+-    echo
+-    # The following way of writing the cache mishandles newlines in values,
+-(
+-  for ac_var in `(set) 2>&1 | sed -n '\''s/^\([a-zA-Z_][a-zA-Z0-9_]*\)=.*/\1/p'\''`; do
+-    eval ac_val=\$$ac_var
+-    case $ac_val in #(
+-    *${as_nl}*)
+-      case $ac_var in #(
+-      *_cv_*) { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: cache variable $ac_var contains a newline" >&5
+-$as_echo "$as_me: WARNING: cache variable $ac_var contains a newline" >&2;} ;;
+-      esac
+-      case $ac_var in #(
+-      _ | IFS | as_nl) ;; #(
+-      BASH_ARGV | BASH_SOURCE) eval $ac_var= ;; #(
+-      *) { eval $ac_var=; unset $ac_var;} ;;
+-      esac ;;
+-    esac
+-  done
+-  (set) 2>&1 |
+-    case $as_nl`(ac_space='\'' '\''; set) 2>&1` in #(
+-    *${as_nl}ac_space=\ *)
+-      sed -n \
+-	"s/'\''/'\''\\\\'\'''\''/g;
+-	  s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1='\''\\2'\''/p"
+-      ;; #(
+-    *)
+-      sed -n "/^[_$as_cr_alnum]*_cv_[_$as_cr_alnum]*=/p"
+-      ;;
+-    esac |
+-    sort
+-)
+-    echo
+-
+-    $as_echo "## ----------------- ##
+-## Output variables. ##
+-## ----------------- ##"
+-    echo
+-    for ac_var in $ac_subst_vars
+-    do
+-      eval ac_val=\$$ac_var
+-      case $ac_val in
+-      *\'\''*) ac_val=`$as_echo "$ac_val" | sed "s/'\''/'\''\\\\\\\\'\'''\''/g"`;;
+-      esac
+-      $as_echo "$ac_var='\''$ac_val'\''"
+-    done | sort
+-    echo
+-
+-    if test -n "$ac_subst_files"; then
+-      $as_echo "## ------------------- ##
+-## File substitutions. ##
+-## ------------------- ##"
+-      echo
+-      for ac_var in $ac_subst_files
+-      do
+-	eval ac_val=\$$ac_var
+-	case $ac_val in
+-	*\'\''*) ac_val=`$as_echo "$ac_val" | sed "s/'\''/'\''\\\\\\\\'\'''\''/g"`;;
+-	esac
+-	$as_echo "$ac_var='\''$ac_val'\''"
+-      done | sort
+-      echo
+-    fi
+-
+-    if test -s confdefs.h; then
+-      $as_echo "## ----------- ##
+-## confdefs.h. ##
+-## ----------- ##"
+-      echo
+-      cat confdefs.h
+-      echo
+-    fi
+-    test "$ac_signal" != 0 &&
+-      $as_echo "$as_me: caught signal $ac_signal"
+-    $as_echo "$as_me: exit $exit_status"
+-  } >&5
+-  rm -f core *.core core.conftest.* &&
+-    rm -f -r conftest* confdefs* conf$$* $ac_clean_files &&
+-    exit $exit_status
+-' 0
+-for ac_signal in 1 2 13 15; do
+-  trap 'ac_signal='$ac_signal'; as_fn_exit 1' $ac_signal
+-done
+-ac_signal=0
+-
+-# confdefs.h avoids OS command line length limits that DEFS can exceed.
+-rm -f -r conftest* confdefs.h
+-
+-$as_echo "/* confdefs.h */" > confdefs.h
+-
+-# Predefined preprocessor variables.
+-
+-cat >>confdefs.h <<_ACEOF
+-#define PACKAGE_NAME "$PACKAGE_NAME"
+-_ACEOF
+-
+-cat >>confdefs.h <<_ACEOF
+-#define PACKAGE_TARNAME "$PACKAGE_TARNAME"
+-_ACEOF
+-
+-cat >>confdefs.h <<_ACEOF
+-#define PACKAGE_VERSION "$PACKAGE_VERSION"
+-_ACEOF
+-
+-cat >>confdefs.h <<_ACEOF
+-#define PACKAGE_STRING "$PACKAGE_STRING"
+-_ACEOF
+-
+-cat >>confdefs.h <<_ACEOF
+-#define PACKAGE_BUGREPORT "$PACKAGE_BUGREPORT"
+-_ACEOF
+-
+-cat >>confdefs.h <<_ACEOF
+-#define PACKAGE_URL "$PACKAGE_URL"
+-_ACEOF
+-
+-
+-# Let the site file select an alternate cache file if it wants to.
+-# Prefer an explicitly selected file to automatically selected ones.
+-ac_site_file1=NONE
+-ac_site_file2=NONE
+-if test -n "$CONFIG_SITE"; then
+-  # We do not want a PATH search for config.site.
+-  case $CONFIG_SITE in #((
+-    -*)  ac_site_file1=./$CONFIG_SITE;;
+-    */*) ac_site_file1=$CONFIG_SITE;;
+-    *)   ac_site_file1=./$CONFIG_SITE;;
+-  esac
+-elif test "x$prefix" != xNONE; then
+-  ac_site_file1=$prefix/share/config.site
+-  ac_site_file2=$prefix/etc/config.site
+-else
+-  ac_site_file1=$ac_default_prefix/share/config.site
+-  ac_site_file2=$ac_default_prefix/etc/config.site
+-fi
+-for ac_site_file in "$ac_site_file1" "$ac_site_file2"
+-do
+-  test "x$ac_site_file" = xNONE && continue
+-  if test /dev/null != "$ac_site_file" && test -r "$ac_site_file"; then
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: loading site script $ac_site_file" >&5
+-$as_echo "$as_me: loading site script $ac_site_file" >&6;}
+-    sed 's/^/| /' "$ac_site_file" >&5
+-    . "$ac_site_file" \
+-      || { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+-as_fn_error $? "failed to load site script $ac_site_file
+-See \`config.log' for more details" "$LINENO" 5; }
+-  fi
+-done
+-
+-if test -r "$cache_file"; then
+-  # Some versions of bash will fail to source /dev/null (special files
+-  # actually), so we avoid doing that.  DJGPP emulates it as a regular file.
+-  if test /dev/null != "$cache_file" && test -f "$cache_file"; then
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: loading cache $cache_file" >&5
+-$as_echo "$as_me: loading cache $cache_file" >&6;}
+-    case $cache_file in
+-      [\\/]* | ?:[\\/]* ) . "$cache_file";;
+-      *)                      . "./$cache_file";;
+-    esac
+-  fi
+-else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: creating cache $cache_file" >&5
+-$as_echo "$as_me: creating cache $cache_file" >&6;}
+-  >$cache_file
+-fi
+-
+-# Check that the precious variables saved in the cache have kept the same
+-# value.
+-ac_cache_corrupted=false
+-for ac_var in $ac_precious_vars; do
+-  eval ac_old_set=\$ac_cv_env_${ac_var}_set
+-  eval ac_new_set=\$ac_env_${ac_var}_set
+-  eval ac_old_val=\$ac_cv_env_${ac_var}_value
+-  eval ac_new_val=\$ac_env_${ac_var}_value
+-  case $ac_old_set,$ac_new_set in
+-    set,)
+-      { $as_echo "$as_me:${as_lineno-$LINENO}: error: \`$ac_var' was set to \`$ac_old_val' in the previous run" >&5
+-$as_echo "$as_me: error: \`$ac_var' was set to \`$ac_old_val' in the previous run" >&2;}
+-      ac_cache_corrupted=: ;;
+-    ,set)
+-      { $as_echo "$as_me:${as_lineno-$LINENO}: error: \`$ac_var' was not set in the previous run" >&5
+-$as_echo "$as_me: error: \`$ac_var' was not set in the previous run" >&2;}
+-      ac_cache_corrupted=: ;;
+-    ,);;
+-    *)
+-      if test "x$ac_old_val" != "x$ac_new_val"; then
+-	# differences in whitespace do not lead to failure.
+-	ac_old_val_w=`echo x $ac_old_val`
+-	ac_new_val_w=`echo x $ac_new_val`
+-	if test "$ac_old_val_w" != "$ac_new_val_w"; then
+-	  { $as_echo "$as_me:${as_lineno-$LINENO}: error: \`$ac_var' has changed since the previous run:" >&5
+-$as_echo "$as_me: error: \`$ac_var' has changed since the previous run:" >&2;}
+-	  ac_cache_corrupted=:
+-	else
+-	  { $as_echo "$as_me:${as_lineno-$LINENO}: warning: ignoring whitespace changes in \`$ac_var' since the previous run:" >&5
+-$as_echo "$as_me: warning: ignoring whitespace changes in \`$ac_var' since the previous run:" >&2;}
+-	  eval $ac_var=\$ac_old_val
+-	fi
+-	{ $as_echo "$as_me:${as_lineno-$LINENO}:   former value:  \`$ac_old_val'" >&5
+-$as_echo "$as_me:   former value:  \`$ac_old_val'" >&2;}
+-	{ $as_echo "$as_me:${as_lineno-$LINENO}:   current value: \`$ac_new_val'" >&5
+-$as_echo "$as_me:   current value: \`$ac_new_val'" >&2;}
+-      fi;;
+-  esac
+-  # Pass precious variables to config.status.
+-  if test "$ac_new_set" = set; then
+-    case $ac_new_val in
+-    *\'*) ac_arg=$ac_var=`$as_echo "$ac_new_val" | sed "s/'/'\\\\\\\\''/g"` ;;
+-    *) ac_arg=$ac_var=$ac_new_val ;;
+-    esac
+-    case " $ac_configure_args " in
+-      *" '$ac_arg' "*) ;; # Avoid dups.  Use of quotes ensures accuracy.
+-      *) as_fn_append ac_configure_args " '$ac_arg'" ;;
+-    esac
+-  fi
+-done
+-if $ac_cache_corrupted; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: error: changes in the environment can compromise the build" >&5
+-$as_echo "$as_me: error: changes in the environment can compromise the build" >&2;}
+-  as_fn_error $? "run \`make distclean' and/or \`rm $cache_file' and start over" "$LINENO" 5
+-fi
+-## -------------------- ##
+-## Main body of script. ##
+-## -------------------- ##
+-
+-ac_ext=c
+-ac_cpp='$CPP $CPPFLAGS'
+-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+-ac_compiler_gnu=$ac_cv_c_compiler_gnu
+-
+-
+-
+-
+-ac_aux_dir=
+-for ac_dir in ../.. "$srcdir"/../..; do
+-  if test -f "$ac_dir/install-sh"; then
+-    ac_aux_dir=$ac_dir
+-    ac_install_sh="$ac_aux_dir/install-sh -c"
+-    break
+-  elif test -f "$ac_dir/install.sh"; then
+-    ac_aux_dir=$ac_dir
+-    ac_install_sh="$ac_aux_dir/install.sh -c"
+-    break
+-  elif test -f "$ac_dir/shtool"; then
+-    ac_aux_dir=$ac_dir
+-    ac_install_sh="$ac_aux_dir/shtool install -c"
+-    break
+-  fi
+-done
+-if test -z "$ac_aux_dir"; then
+-  as_fn_error $? "cannot find install-sh, install.sh, or shtool in ../.. \"$srcdir\"/../.." "$LINENO" 5
+-fi
+-
+-# These three variables are undocumented and unsupported,
+-# and are intended to be withdrawn in a future Autoconf release.
+-# They can cause serious problems if a builder's source tree is in a directory
+-# whose full name contains unusual characters.
+-ac_config_guess="$SHELL $ac_aux_dir/config.guess"  # Please don't use this var.
+-ac_config_sub="$SHELL $ac_aux_dir/config.sub"  # Please don't use this var.
+-ac_configure="$SHELL $ac_aux_dir/configure"  # Please don't use this var.
+-
+-
+-
+-
+-# Make sure we can run config.sub.
+-$SHELL "$ac_aux_dir/config.sub" sun4 >/dev/null 2>&1 ||
+-  as_fn_error $? "cannot run $SHELL $ac_aux_dir/config.sub" "$LINENO" 5
+-
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking build system type" >&5
+-$as_echo_n "checking build system type... " >&6; }
+-if ${ac_cv_build+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  ac_build_alias=$build_alias
+-test "x$ac_build_alias" = x &&
+-  ac_build_alias=`$SHELL "$ac_aux_dir/config.guess"`
+-test "x$ac_build_alias" = x &&
+-  as_fn_error $? "cannot guess build type; you must specify one" "$LINENO" 5
+-ac_cv_build=`$SHELL "$ac_aux_dir/config.sub" $ac_build_alias` ||
+-  as_fn_error $? "$SHELL $ac_aux_dir/config.sub $ac_build_alias failed" "$LINENO" 5
+-
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_build" >&5
+-$as_echo "$ac_cv_build" >&6; }
+-case $ac_cv_build in
+-*-*-*) ;;
+-*) as_fn_error $? "invalid value of canonical build" "$LINENO" 5;;
+-esac
+-build=$ac_cv_build
+-ac_save_IFS=$IFS; IFS='-'
+-set x $ac_cv_build
+-shift
+-build_cpu=$1
+-build_vendor=$2
+-shift; shift
+-# Remember, the first character of IFS is used to create $*,
+-# except with old shells:
+-build_os=$*
+-IFS=$ac_save_IFS
+-case $build_os in *\ *) build_os=`echo "$build_os" | sed 's/ /-/g'`;; esac
+-
+-
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking host system type" >&5
+-$as_echo_n "checking host system type... " >&6; }
+-if ${ac_cv_host+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  if test "x$host_alias" = x; then
+-  ac_cv_host=$ac_cv_build
+-else
+-  ac_cv_host=`$SHELL "$ac_aux_dir/config.sub" $host_alias` ||
+-    as_fn_error $? "$SHELL $ac_aux_dir/config.sub $host_alias failed" "$LINENO" 5
+-fi
+-
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_host" >&5
+-$as_echo "$ac_cv_host" >&6; }
+-case $ac_cv_host in
+-*-*-*) ;;
+-*) as_fn_error $? "invalid value of canonical host" "$LINENO" 5;;
+-esac
+-host=$ac_cv_host
+-ac_save_IFS=$IFS; IFS='-'
+-set x $ac_cv_host
+-shift
+-host_cpu=$1
+-host_vendor=$2
+-shift; shift
+-# Remember, the first character of IFS is used to create $*,
+-# except with old shells:
+-host_os=$*
+-IFS=$ac_save_IFS
+-case $host_os in *\ *) host_os=`echo "$host_os" | sed 's/ /-/g'`;; esac
+-
+-
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking target system type" >&5
+-$as_echo_n "checking target system type... " >&6; }
+-if ${ac_cv_target+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  if test "x$target_alias" = x; then
+-  ac_cv_target=$ac_cv_host
+-else
+-  ac_cv_target=`$SHELL "$ac_aux_dir/config.sub" $target_alias` ||
+-    as_fn_error $? "$SHELL $ac_aux_dir/config.sub $target_alias failed" "$LINENO" 5
+-fi
+-
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_target" >&5
+-$as_echo "$ac_cv_target" >&6; }
+-case $ac_cv_target in
+-*-*-*) ;;
+-*) as_fn_error $? "invalid value of canonical target" "$LINENO" 5;;
+-esac
+-target=$ac_cv_target
+-ac_save_IFS=$IFS; IFS='-'
+-set x $ac_cv_target
+-shift
+-target_cpu=$1
+-target_vendor=$2
+-shift; shift
+-# Remember, the first character of IFS is used to create $*,
+-# except with old shells:
+-target_os=$*
+-IFS=$ac_save_IFS
+-case $target_os in *\ *) target_os=`echo "$target_os" | sed 's/ /-/g'`;; esac
+-
+-
+-# The aliases save the names the user supplied, while $host etc.
+-# will get canonicalized.
+-test -n "$target_alias" &&
+-  test "$program_prefix$program_suffix$program_transform_name" = \
+-    NONENONEs,x,x, &&
+-  program_prefix=${target_alias}-
+-
+-ac_ext=c
+-ac_cpp='$CPP $CPPFLAGS'
+-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+-ac_compiler_gnu=$ac_cv_c_compiler_gnu
+-if test -n "$ac_tool_prefix"; then
+-  # Extract the first word of "${ac_tool_prefix}gcc", so it can be a program name with args.
+-set dummy ${ac_tool_prefix}gcc; ac_word=$2
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+-$as_echo_n "checking for $ac_word... " >&6; }
+-if ${ac_cv_prog_CC+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  if test -n "$CC"; then
+-  ac_cv_prog_CC="$CC" # Let the user override the test.
+-else
+-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-for as_dir in $PATH
+-do
+-  IFS=$as_save_IFS
+-  test -z "$as_dir" && as_dir=.
+-    for ac_exec_ext in '' $ac_executable_extensions; do
+-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+-    ac_cv_prog_CC="${ac_tool_prefix}gcc"
+-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+-    break 2
+-  fi
+-done
+-  done
+-IFS=$as_save_IFS
+-
+-fi
+-fi
+-CC=$ac_cv_prog_CC
+-if test -n "$CC"; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $CC" >&5
+-$as_echo "$CC" >&6; }
+-else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-fi
+-
+-
+-fi
+-if test -z "$ac_cv_prog_CC"; then
+-  ac_ct_CC=$CC
+-  # Extract the first word of "gcc", so it can be a program name with args.
+-set dummy gcc; ac_word=$2
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+-$as_echo_n "checking for $ac_word... " >&6; }
+-if ${ac_cv_prog_ac_ct_CC+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  if test -n "$ac_ct_CC"; then
+-  ac_cv_prog_ac_ct_CC="$ac_ct_CC" # Let the user override the test.
+-else
+-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-for as_dir in $PATH
+-do
+-  IFS=$as_save_IFS
+-  test -z "$as_dir" && as_dir=.
+-    for ac_exec_ext in '' $ac_executable_extensions; do
+-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+-    ac_cv_prog_ac_ct_CC="gcc"
+-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+-    break 2
+-  fi
+-done
+-  done
+-IFS=$as_save_IFS
+-
+-fi
+-fi
+-ac_ct_CC=$ac_cv_prog_ac_ct_CC
+-if test -n "$ac_ct_CC"; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_ct_CC" >&5
+-$as_echo "$ac_ct_CC" >&6; }
+-else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-fi
+-
+-  if test "x$ac_ct_CC" = x; then
+-    CC=""
+-  else
+-    case $cross_compiling:$ac_tool_warned in
+-yes:)
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: using cross tools not prefixed with host triplet" >&5
+-$as_echo "$as_me: WARNING: using cross tools not prefixed with host triplet" >&2;}
+-ac_tool_warned=yes ;;
+-esac
+-    CC=$ac_ct_CC
+-  fi
+-else
+-  CC="$ac_cv_prog_CC"
+-fi
+-
+-if test -z "$CC"; then
+-          if test -n "$ac_tool_prefix"; then
+-    # Extract the first word of "${ac_tool_prefix}cc", so it can be a program name with args.
+-set dummy ${ac_tool_prefix}cc; ac_word=$2
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+-$as_echo_n "checking for $ac_word... " >&6; }
+-if ${ac_cv_prog_CC+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  if test -n "$CC"; then
+-  ac_cv_prog_CC="$CC" # Let the user override the test.
+-else
+-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-for as_dir in $PATH
+-do
+-  IFS=$as_save_IFS
+-  test -z "$as_dir" && as_dir=.
+-    for ac_exec_ext in '' $ac_executable_extensions; do
+-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+-    ac_cv_prog_CC="${ac_tool_prefix}cc"
+-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+-    break 2
+-  fi
+-done
+-  done
+-IFS=$as_save_IFS
+-
+-fi
+-fi
+-CC=$ac_cv_prog_CC
+-if test -n "$CC"; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $CC" >&5
+-$as_echo "$CC" >&6; }
+-else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-fi
+-
+-
+-  fi
+-fi
+-if test -z "$CC"; then
+-  # Extract the first word of "cc", so it can be a program name with args.
+-set dummy cc; ac_word=$2
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+-$as_echo_n "checking for $ac_word... " >&6; }
+-if ${ac_cv_prog_CC+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  if test -n "$CC"; then
+-  ac_cv_prog_CC="$CC" # Let the user override the test.
+-else
+-  ac_prog_rejected=no
+-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-for as_dir in $PATH
+-do
+-  IFS=$as_save_IFS
+-  test -z "$as_dir" && as_dir=.
+-    for ac_exec_ext in '' $ac_executable_extensions; do
+-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+-    if test "$as_dir/$ac_word$ac_exec_ext" = "/usr/ucb/cc"; then
+-       ac_prog_rejected=yes
+-       continue
+-     fi
+-    ac_cv_prog_CC="cc"
+-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+-    break 2
+-  fi
+-done
+-  done
+-IFS=$as_save_IFS
+-
+-if test $ac_prog_rejected = yes; then
+-  # We found a bogon in the path, so make sure we never use it.
+-  set dummy $ac_cv_prog_CC
+-  shift
+-  if test $# != 0; then
+-    # We chose a different compiler from the bogus one.
+-    # However, it has the same basename, so the bogon will be chosen
+-    # first if we set CC to just the basename; use the full file name.
+-    shift
+-    ac_cv_prog_CC="$as_dir/$ac_word${1+' '}$@"
+-  fi
+-fi
+-fi
+-fi
+-CC=$ac_cv_prog_CC
+-if test -n "$CC"; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $CC" >&5
+-$as_echo "$CC" >&6; }
+-else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-fi
+-
+-
+-fi
+-if test -z "$CC"; then
+-  if test -n "$ac_tool_prefix"; then
+-  for ac_prog in cl.exe
+-  do
+-    # Extract the first word of "$ac_tool_prefix$ac_prog", so it can be a program name with args.
+-set dummy $ac_tool_prefix$ac_prog; ac_word=$2
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+-$as_echo_n "checking for $ac_word... " >&6; }
+-if ${ac_cv_prog_CC+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  if test -n "$CC"; then
+-  ac_cv_prog_CC="$CC" # Let the user override the test.
+-else
+-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-for as_dir in $PATH
+-do
+-  IFS=$as_save_IFS
+-  test -z "$as_dir" && as_dir=.
+-    for ac_exec_ext in '' $ac_executable_extensions; do
+-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+-    ac_cv_prog_CC="$ac_tool_prefix$ac_prog"
+-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+-    break 2
+-  fi
+-done
+-  done
+-IFS=$as_save_IFS
+-
+-fi
+-fi
+-CC=$ac_cv_prog_CC
+-if test -n "$CC"; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $CC" >&5
+-$as_echo "$CC" >&6; }
+-else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-fi
+-
+-
+-    test -n "$CC" && break
+-  done
+-fi
+-if test -z "$CC"; then
+-  ac_ct_CC=$CC
+-  for ac_prog in cl.exe
+-do
+-  # Extract the first word of "$ac_prog", so it can be a program name with args.
+-set dummy $ac_prog; ac_word=$2
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+-$as_echo_n "checking for $ac_word... " >&6; }
+-if ${ac_cv_prog_ac_ct_CC+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  if test -n "$ac_ct_CC"; then
+-  ac_cv_prog_ac_ct_CC="$ac_ct_CC" # Let the user override the test.
+-else
+-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-for as_dir in $PATH
+-do
+-  IFS=$as_save_IFS
+-  test -z "$as_dir" && as_dir=.
+-    for ac_exec_ext in '' $ac_executable_extensions; do
+-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+-    ac_cv_prog_ac_ct_CC="$ac_prog"
+-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+-    break 2
+-  fi
+-done
+-  done
+-IFS=$as_save_IFS
+-
+-fi
+-fi
+-ac_ct_CC=$ac_cv_prog_ac_ct_CC
+-if test -n "$ac_ct_CC"; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_ct_CC" >&5
+-$as_echo "$ac_ct_CC" >&6; }
+-else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-fi
+-
+-
+-  test -n "$ac_ct_CC" && break
+-done
+-
+-  if test "x$ac_ct_CC" = x; then
+-    CC=""
+-  else
+-    case $cross_compiling:$ac_tool_warned in
+-yes:)
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: using cross tools not prefixed with host triplet" >&5
+-$as_echo "$as_me: WARNING: using cross tools not prefixed with host triplet" >&2;}
+-ac_tool_warned=yes ;;
+-esac
+-    CC=$ac_ct_CC
+-  fi
+-fi
+-
+-fi
+-
+-
+-test -z "$CC" && { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+-as_fn_error $? "no acceptable C compiler found in \$PATH
+-See \`config.log' for more details" "$LINENO" 5; }
+-
+-# Provide some information about the compiler.
+-$as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler version" >&5
+-set X $ac_compile
+-ac_compiler=$2
+-for ac_option in --version -v -V -qversion; do
+-  { { ac_try="$ac_compiler $ac_option >&5"
+-case "(($ac_try" in
+-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+-  *) ac_try_echo=$ac_try;;
+-esac
+-eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
+-$as_echo "$ac_try_echo"; } >&5
+-  (eval "$ac_compiler $ac_option >&5") 2>conftest.err
+-  ac_status=$?
+-  if test -s conftest.err; then
+-    sed '10a\
+-... rest of stderr output deleted ...
+-         10q' conftest.err >conftest.er1
+-    cat conftest.er1 >&5
+-  fi
+-  rm -f conftest.er1 conftest.err
+-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+-  test $ac_status = 0; }
+-done
+-
+-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-int
+-main ()
+-{
+-
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if { { ac_try="$ac_link"
+-case "(($ac_try" in
+-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+-  *) ac_try_echo=$ac_try;;
+-esac
+-eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
+-$as_echo "$ac_try_echo"; } >&5
+-  (eval "$ac_link") 2>&5
+-  ac_status=$?
+-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+-  test $ac_status = 0; }; then
+-  ac_no_link=no
+-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-int
+-main ()
+-{
+-
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-ac_clean_files_save=$ac_clean_files
+-ac_clean_files="$ac_clean_files a.out a.out.dSYM a.exe b.out"
+-# Try to create an executable without -o first, disregard a.out.
+-# It will help us diagnose broken compilers, and finding out an intuition
+-# of exeext.
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether the C compiler works" >&5
+-$as_echo_n "checking whether the C compiler works... " >&6; }
+-ac_link_default=`$as_echo "$ac_link" | sed 's/ -o *conftest[^ ]*//'`
+-
+-# The possible output files:
+-ac_files="a.out conftest.exe conftest a.exe a_out.exe b.out conftest.*"
+-
+-ac_rmfiles=
+-for ac_file in $ac_files
+-do
+-  case $ac_file in
+-    *.$ac_ext | *.xcoff | *.tds | *.d | *.pdb | *.xSYM | *.bb | *.bbg | *.map | *.inf | *.dSYM | *.o | *.obj ) ;;
+-    * ) ac_rmfiles="$ac_rmfiles $ac_file";;
+-  esac
+-done
+-rm -f $ac_rmfiles
+-
+-if { { ac_try="$ac_link_default"
+-case "(($ac_try" in
+-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+-  *) ac_try_echo=$ac_try;;
+-esac
+-eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
+-$as_echo "$ac_try_echo"; } >&5
+-  (eval "$ac_link_default") 2>&5
+-  ac_status=$?
+-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+-  test $ac_status = 0; }; then :
+-  # Autoconf-2.13 could set the ac_cv_exeext variable to `no'.
+-# So ignore a value of `no', otherwise this would lead to `EXEEXT = no'
+-# in a Makefile.  We should not override ac_cv_exeext if it was cached,
+-# so that the user can short-circuit this test for compilers unknown to
+-# Autoconf.
+-for ac_file in $ac_files ''
+-do
+-  test -f "$ac_file" || continue
+-  case $ac_file in
+-    *.$ac_ext | *.xcoff | *.tds | *.d | *.pdb | *.xSYM | *.bb | *.bbg | *.map | *.inf | *.dSYM | *.o | *.obj )
+-	;;
+-    [ab].out )
+-	# We found the default executable, but exeext='' is most
+-	# certainly right.
+-	break;;
+-    *.* )
+-	if test "${ac_cv_exeext+set}" = set && test "$ac_cv_exeext" != no;
+-	then :; else
+-	   ac_cv_exeext=`expr "$ac_file" : '[^.]*\(\..*\)'`
+-	fi
+-	# We set ac_cv_exeext here because the later test for it is not
+-	# safe: cross compilers may not add the suffix if given an `-o'
+-	# argument, so we may need to know it at that point already.
+-	# Even if this section looks crufty: it has the advantage of
+-	# actually working.
+-	break;;
+-    * )
+-	break;;
+-  esac
+-done
+-test "$ac_cv_exeext" = no && ac_cv_exeext=
+-
+-else
+-  ac_file=''
+-fi
+-if test -z "$ac_file"; then :
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-$as_echo "$as_me: failed program was:" >&5
+-sed 's/^/| /' conftest.$ac_ext >&5
+-
+-{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+-as_fn_error 77 "C compiler cannot create executables
+-See \`config.log' for more details" "$LINENO" 5; }
+-else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+-$as_echo "yes" >&6; }
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for C compiler default output file name" >&5
+-$as_echo_n "checking for C compiler default output file name... " >&6; }
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_file" >&5
+-$as_echo "$ac_file" >&6; }
+-ac_exeext=$ac_cv_exeext
+-
+-rm -f -r a.out a.out.dSYM a.exe conftest$ac_cv_exeext b.out
+-ac_clean_files=$ac_clean_files_save
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for suffix of executables" >&5
+-$as_echo_n "checking for suffix of executables... " >&6; }
+-if { { ac_try="$ac_link"
+-case "(($ac_try" in
+-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+-  *) ac_try_echo=$ac_try;;
+-esac
+-eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
+-$as_echo "$ac_try_echo"; } >&5
+-  (eval "$ac_link") 2>&5
+-  ac_status=$?
+-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+-  test $ac_status = 0; }; then :
+-  # If both `conftest.exe' and `conftest' are `present' (well, observable)
+-# catch `conftest.exe'.  For instance with Cygwin, `ls conftest' will
+-# work properly (i.e., refer to `conftest.exe'), while it won't with
+-# `rm'.
+-for ac_file in conftest.exe conftest conftest.*; do
+-  test -f "$ac_file" || continue
+-  case $ac_file in
+-    *.$ac_ext | *.xcoff | *.tds | *.d | *.pdb | *.xSYM | *.bb | *.bbg | *.map | *.inf | *.dSYM | *.o | *.obj ) ;;
+-    *.* ) ac_cv_exeext=`expr "$ac_file" : '[^.]*\(\..*\)'`
+-	  break;;
+-    * ) break;;
+-  esac
+-done
+-else
+-  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+-as_fn_error $? "cannot compute suffix of executables: cannot compile and link
+-See \`config.log' for more details" "$LINENO" 5; }
+-fi
+-rm -f conftest conftest$ac_cv_exeext
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_exeext" >&5
+-$as_echo "$ac_cv_exeext" >&6; }
+-
+-rm -f conftest.$ac_ext
+-EXEEXT=$ac_cv_exeext
+-ac_exeext=$EXEEXT
+-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-#include <stdio.h>
+-int
+-main ()
+-{
+-FILE *f = fopen ("conftest.out", "w");
+- return ferror (f) || fclose (f) != 0;
+-
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-ac_clean_files="$ac_clean_files conftest.out"
+-# Check that the compiler produces executables we can run.  If not, either
+-# the compiler is broken, or we cross compile.
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether we are cross compiling" >&5
+-$as_echo_n "checking whether we are cross compiling... " >&6; }
+-if test "$cross_compiling" != yes; then
+-  { { ac_try="$ac_link"
+-case "(($ac_try" in
+-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+-  *) ac_try_echo=$ac_try;;
+-esac
+-eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
+-$as_echo "$ac_try_echo"; } >&5
+-  (eval "$ac_link") 2>&5
+-  ac_status=$?
+-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+-  test $ac_status = 0; }
+-  if { ac_try='./conftest$ac_cv_exeext'
+-  { { case "(($ac_try" in
+-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+-  *) ac_try_echo=$ac_try;;
+-esac
+-eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
+-$as_echo "$ac_try_echo"; } >&5
+-  (eval "$ac_try") 2>&5
+-  ac_status=$?
+-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+-  test $ac_status = 0; }; }; then
+-    cross_compiling=no
+-  else
+-    if test "$cross_compiling" = maybe; then
+-	cross_compiling=yes
+-    else
+-	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+-as_fn_error $? "cannot run C compiled programs.
+-If you meant to cross compile, use \`--host'.
+-See \`config.log' for more details" "$LINENO" 5; }
+-    fi
+-  fi
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $cross_compiling" >&5
+-$as_echo "$cross_compiling" >&6; }
+-
+-rm -f conftest.$ac_ext conftest$ac_cv_exeext conftest.out
+-ac_clean_files=$ac_clean_files_save
+-
+-else
+-  rm -f -r a.out a.exe b.out conftest.$ac_ext conftest.o conftest.obj conftest.dSYM
+-  ac_no_link=yes
+-  # Setting cross_compile will disable run tests; it will
+-  # also disable AC_CHECK_FILE but that's generally
+-  # correct if we can't link.
+-  cross_compiling=yes
+-  EXEEXT=
+-  # Check that the compiler produces executables we can run.  If not, either
+-# the compiler is broken, or we cross compile.
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether we are cross compiling" >&5
+-$as_echo_n "checking whether we are cross compiling... " >&6; }
+-if test "$cross_compiling" != yes; then
+-  { { ac_try="$ac_link"
+-case "(($ac_try" in
+-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+-  *) ac_try_echo=$ac_try;;
+-esac
+-eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
+-$as_echo "$ac_try_echo"; } >&5
+-  (eval "$ac_link") 2>&5
+-  ac_status=$?
+-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+-  test $ac_status = 0; }
+-  if { ac_try='./conftest$ac_cv_exeext'
+-  { { case "(($ac_try" in
+-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+-  *) ac_try_echo=$ac_try;;
+-esac
+-eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
+-$as_echo "$ac_try_echo"; } >&5
+-  (eval "$ac_try") 2>&5
+-  ac_status=$?
+-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+-  test $ac_status = 0; }; }; then
+-    cross_compiling=no
+-  else
+-    if test "$cross_compiling" = maybe; then
+-	cross_compiling=yes
+-    else
+-	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+-as_fn_error $? "cannot run C compiled programs.
+-If you meant to cross compile, use \`--host'.
+-See \`config.log' for more details" "$LINENO" 5; }
+-    fi
+-  fi
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $cross_compiling" >&5
+-$as_echo "$cross_compiling" >&6; }
+-
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for suffix of object files" >&5
+-$as_echo_n "checking for suffix of object files... " >&6; }
+-if ${ac_cv_objext+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-int
+-main ()
+-{
+-
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-rm -f conftest.o conftest.obj
+-if { { ac_try="$ac_compile"
+-case "(($ac_try" in
+-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+-  *) ac_try_echo=$ac_try;;
+-esac
+-eval ac_try_echo="\"\$as_me:${as_lineno-$LINENO}: $ac_try_echo\""
+-$as_echo "$ac_try_echo"; } >&5
+-  (eval "$ac_compile") 2>&5
+-  ac_status=$?
+-  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+-  test $ac_status = 0; }; then :
+-  for ac_file in conftest.o conftest.obj conftest.*; do
+-  test -f "$ac_file" || continue;
+-  case $ac_file in
+-    *.$ac_ext | *.xcoff | *.tds | *.d | *.pdb | *.xSYM | *.bb | *.bbg | *.map | *.inf | *.dSYM ) ;;
+-    *) ac_cv_objext=`expr "$ac_file" : '.*\.\(.*\)'`
+-       break;;
+-  esac
+-done
+-else
+-  $as_echo "$as_me: failed program was:" >&5
+-sed 's/^/| /' conftest.$ac_ext >&5
+-
+-{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+-as_fn_error $? "cannot compute suffix of object files: cannot compile
+-See \`config.log' for more details" "$LINENO" 5; }
+-fi
+-rm -f conftest.$ac_cv_objext conftest.$ac_ext
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_objext" >&5
+-$as_echo "$ac_cv_objext" >&6; }
+-OBJEXT=$ac_cv_objext
+-ac_objext=$OBJEXT
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether we are using the GNU C compiler" >&5
+-$as_echo_n "checking whether we are using the GNU C compiler... " >&6; }
+-if ${ac_cv_c_compiler_gnu+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-int
+-main ()
+-{
+-#ifndef __GNUC__
+-       choke me
+-#endif
+-
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_compile "$LINENO"; then :
+-  ac_compiler_gnu=yes
+-else
+-  ac_compiler_gnu=no
+-fi
+-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+-ac_cv_c_compiler_gnu=$ac_compiler_gnu
+-
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_c_compiler_gnu" >&5
+-$as_echo "$ac_cv_c_compiler_gnu" >&6; }
+-if test $ac_compiler_gnu = yes; then
+-  GCC=yes
+-else
+-  GCC=
+-fi
+-ac_test_CFLAGS=${CFLAGS+set}
+-ac_save_CFLAGS=$CFLAGS
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether $CC accepts -g" >&5
+-$as_echo_n "checking whether $CC accepts -g... " >&6; }
+-if ${ac_cv_prog_cc_g+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  ac_save_c_werror_flag=$ac_c_werror_flag
+-   ac_c_werror_flag=yes
+-   ac_cv_prog_cc_g=no
+-   CFLAGS="-g"
+-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-int
+-main ()
+-{
+-
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_compile "$LINENO"; then :
+-  ac_cv_prog_cc_g=yes
+-else
+-  CFLAGS=""
+-      cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-int
+-main ()
+-{
+-
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_compile "$LINENO"; then :
+-
+-else
+-  ac_c_werror_flag=$ac_save_c_werror_flag
+-	 CFLAGS="-g"
+-	 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-int
+-main ()
+-{
+-
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_compile "$LINENO"; then :
+-  ac_cv_prog_cc_g=yes
+-fi
+-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+-fi
+-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+-fi
+-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+-   ac_c_werror_flag=$ac_save_c_werror_flag
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_prog_cc_g" >&5
+-$as_echo "$ac_cv_prog_cc_g" >&6; }
+-if test "$ac_test_CFLAGS" = set; then
+-  CFLAGS=$ac_save_CFLAGS
+-elif test $ac_cv_prog_cc_g = yes; then
+-  if test "$GCC" = yes; then
+-    CFLAGS="-g -O2"
+-  else
+-    CFLAGS="-g"
+-  fi
+-else
+-  if test "$GCC" = yes; then
+-    CFLAGS="-O2"
+-  else
+-    CFLAGS=
+-  fi
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $CC option to accept ISO C89" >&5
+-$as_echo_n "checking for $CC option to accept ISO C89... " >&6; }
+-if ${ac_cv_prog_cc_c89+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  ac_cv_prog_cc_c89=no
+-ac_save_CC=$CC
+-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-#include <stdarg.h>
+-#include <stdio.h>
+-struct stat;
+-/* Most of the following tests are stolen from RCS 5.7's src/conf.sh.  */
+-struct buf { int x; };
+-FILE * (*rcsopen) (struct buf *, struct stat *, int);
+-static char *e (p, i)
+-     char **p;
+-     int i;
+-{
+-  return p[i];
+-}
+-static char *f (char * (*g) (char **, int), char **p, ...)
+-{
+-  char *s;
+-  va_list v;
+-  va_start (v,p);
+-  s = g (p, va_arg (v,int));
+-  va_end (v);
+-  return s;
+-}
+-
+-/* OSF 4.0 Compaq cc is some sort of almost-ANSI by default.  It has
+-   function prototypes and stuff, but not '\xHH' hex character constants.
+-   These don't provoke an error unfortunately, instead are silently treated
+-   as 'x'.  The following induces an error, until -std is added to get
+-   proper ANSI mode.  Curiously '\x00'!='x' always comes out true, for an
+-   array size at least.  It's necessary to write '\x00'==0 to get something
+-   that's true only with -std.  */
+-int osf4_cc_array ['\x00' == 0 ? 1 : -1];
+-
+-/* IBM C 6 for AIX is almost-ANSI by default, but it replaces macro parameters
+-   inside strings and character constants.  */
+-#define FOO(x) 'x'
+-int xlc6_cc_array[FOO(a) == 'x' ? 1 : -1];
+-
+-int test (int i, double x);
+-struct s1 {int (*f) (int a);};
+-struct s2 {int (*f) (double a);};
+-int pairnames (int, char **, FILE *(*)(struct buf *, struct stat *, int), int, int);
+-int argc;
+-char **argv;
+-int
+-main ()
+-{
+-return f (e, argv, 0) != argv[0]  ||  f (e, argv, 1) != argv[1];
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-for ac_arg in '' -qlanglvl=extc89 -qlanglvl=ansi -std \
+-	-Ae "-Aa -D_HPUX_SOURCE" "-Xc -D__EXTENSIONS__"
+-do
+-  CC="$ac_save_CC $ac_arg"
+-  if ac_fn_c_try_compile "$LINENO"; then :
+-  ac_cv_prog_cc_c89=$ac_arg
+-fi
+-rm -f core conftest.err conftest.$ac_objext
+-  test "x$ac_cv_prog_cc_c89" != "xno" && break
+-done
+-rm -f conftest.$ac_ext
+-CC=$ac_save_CC
+-
+-fi
+-# AC_CACHE_VAL
+-case "x$ac_cv_prog_cc_c89" in
+-  x)
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: none needed" >&5
+-$as_echo "none needed" >&6; } ;;
+-  xno)
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: unsupported" >&5
+-$as_echo "unsupported" >&6; } ;;
+-  *)
+-    CC="$CC $ac_cv_prog_cc_c89"
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_prog_cc_c89" >&5
+-$as_echo "$ac_cv_prog_cc_c89" >&6; } ;;
+-esac
+-if test "x$ac_cv_prog_cc_c89" != xno; then :
+-
+-fi
+-
+-ac_ext=c
+-ac_cpp='$CPP $CPPFLAGS'
+-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+-ac_compiler_gnu=$ac_cv_c_compiler_gnu
+-
+-
+-case "$target_cpu" in
+-i?86)
+-  for ac_prog in i686-w64-mingw32-gcc
+-do
+-  # Extract the first word of "$ac_prog", so it can be a program name with args.
+-set dummy $ac_prog; ac_word=$2
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+-$as_echo_n "checking for $ac_word... " >&6; }
+-if ${ac_cv_prog_MINGW32_CC+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  if test -n "$MINGW32_CC"; then
+-  ac_cv_prog_MINGW32_CC="$MINGW32_CC" # Let the user override the test.
+-else
+-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-for as_dir in $PATH
+-do
+-  IFS=$as_save_IFS
+-  test -z "$as_dir" && as_dir=.
+-    for ac_exec_ext in '' $ac_executable_extensions; do
+-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+-    ac_cv_prog_MINGW32_CC="$ac_prog"
+-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+-    break 2
+-  fi
+-done
+-  done
+-IFS=$as_save_IFS
+-
+-fi
+-fi
+-MINGW32_CC=$ac_cv_prog_MINGW32_CC
+-if test -n "$MINGW32_CC"; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $MINGW32_CC" >&5
+-$as_echo "$MINGW32_CC" >&6; }
+-else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-fi
+-
+-
+-  test -n "$MINGW32_CC" && break
+-done
+-
+-  test -z "$MINGW32_CC" && as_fn_error $? "no acceptable mingw32 cc found in \$PATH" "$LINENO" 5
+-  ;;
+-esac
+-
+-for ac_prog in x86_64-w64-mingw32-gcc
+-do
+-  # Extract the first word of "$ac_prog", so it can be a program name with args.
+-set dummy $ac_prog; ac_word=$2
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+-$as_echo_n "checking for $ac_word... " >&6; }
+-if ${ac_cv_prog_MINGW64_CC+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  if test -n "$MINGW64_CC"; then
+-  ac_cv_prog_MINGW64_CC="$MINGW64_CC" # Let the user override the test.
+-else
+-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-for as_dir in $PATH
+-do
+-  IFS=$as_save_IFS
+-  test -z "$as_dir" && as_dir=.
+-    for ac_exec_ext in '' $ac_executable_extensions; do
+-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+-    ac_cv_prog_MINGW64_CC="$ac_prog"
+-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+-    break 2
+-  fi
+-done
+-  done
+-IFS=$as_save_IFS
+-
+-fi
+-fi
+-MINGW64_CC=$ac_cv_prog_MINGW64_CC
+-if test -n "$MINGW64_CC"; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $MINGW64_CC" >&5
+-$as_echo "$MINGW64_CC" >&6; }
+-else
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-fi
+-
+-
+-  test -n "$MINGW64_CC" && break
+-done
+-
+-test -z "$MINGW64_CC" && as_fn_error $? "no acceptable mingw64 cc found in \$PATH" "$LINENO" 5
+-
+-test "$program_prefix" != NONE &&
+-  program_transform_name="s&^&$program_prefix&;$program_transform_name"
+-# Use a double $ so make ignores it.
+-test "$program_suffix" != NONE &&
+-  program_transform_name="s&\$&$program_suffix&;$program_transform_name"
+-# Double any \ or $.
+-# By default was `s,x,x', remove it if useless.
+-ac_script='s/[\\$]/&&/g;s/;s,x,x,$//'
+-program_transform_name=`$as_echo "$program_transform_name" | sed "$ac_script"`
+-
+-
+-# Find a good install program.  We prefer a C program (faster),
+-# so one script is as good as another.  But avoid the broken or
+-# incompatible versions:
+-# SysV /etc/install, /usr/sbin/install
+-# SunOS /usr/etc/install
+-# IRIX /sbin/install
+-# AIX /bin/install
+-# AmigaOS /C/install, which installs bootblocks on floppy discs
+-# AIX 4 /usr/bin/installbsd, which doesn't work without a -g flag
+-# AFS /usr/afsws/bin/install, which mishandles nonexistent args
+-# SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
+-# OS/2's system install, which has a completely different semantic
+-# ./install, which can be erroneously created by make from ./install.sh.
+-# Reject install programs that cannot install multiple files.
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for a BSD-compatible install" >&5
+-$as_echo_n "checking for a BSD-compatible install... " >&6; }
+-if test -z "$INSTALL"; then
+-if ${ac_cv_path_install+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-for as_dir in $PATH
+-do
+-  IFS=$as_save_IFS
+-  test -z "$as_dir" && as_dir=.
+-    # Account for people who put trailing slashes in PATH elements.
+-case $as_dir/ in #((
+-  ./ | .// | /[cC]/* | \
+-  /etc/* | /usr/sbin/* | /usr/etc/* | /sbin/* | /usr/afsws/bin/* | \
+-  ?:[\\/]os2[\\/]install[\\/]* | ?:[\\/]OS2[\\/]INSTALL[\\/]* | \
+-  /usr/ucb/* ) ;;
+-  *)
+-    # OSF1 and SCO ODT 3.0 have their own names for install.
+-    # Don't use installbsd from OSF since it installs stuff as root
+-    # by default.
+-    for ac_prog in ginstall scoinst install; do
+-      for ac_exec_ext in '' $ac_executable_extensions; do
+-	if as_fn_executable_p "$as_dir/$ac_prog$ac_exec_ext"; then
+-	  if test $ac_prog = install &&
+-	    grep dspmsg "$as_dir/$ac_prog$ac_exec_ext" >/dev/null 2>&1; then
+-	    # AIX install.  It has an incompatible calling convention.
+-	    :
+-	  elif test $ac_prog = install &&
+-	    grep pwplus "$as_dir/$ac_prog$ac_exec_ext" >/dev/null 2>&1; then
+-	    # program-specific install script used by HP pwplus--don't use.
+-	    :
+-	  else
+-	    rm -rf conftest.one conftest.two conftest.dir
+-	    echo one > conftest.one
+-	    echo two > conftest.two
+-	    mkdir conftest.dir
+-	    if "$as_dir/$ac_prog$ac_exec_ext" -c conftest.one conftest.two "`pwd`/conftest.dir" &&
+-	      test -s conftest.one && test -s conftest.two &&
+-	      test -s conftest.dir/conftest.one &&
+-	      test -s conftest.dir/conftest.two
+-	    then
+-	      ac_cv_path_install="$as_dir/$ac_prog$ac_exec_ext -c"
+-	      break 3
+-	    fi
+-	  fi
+-	fi
+-      done
+-    done
+-    ;;
+-esac
+-
+-  done
+-IFS=$as_save_IFS
+-
+-rm -rf conftest.one conftest.two conftest.dir
+-
+-fi
+-  if test "${ac_cv_path_install+set}" = set; then
+-    INSTALL=$ac_cv_path_install
+-  else
+-    # As a last resort, use the slow shell script.  Don't cache a
+-    # value for INSTALL within a source directory, because that will
+-    # break other packages using the cache if that directory is
+-    # removed, or if the value is a relative name.
+-    INSTALL=$ac_install_sh
+-  fi
+-fi
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $INSTALL" >&5
+-$as_echo "$INSTALL" >&6; }
+-
+-# Use test -z because SunOS4 sh mishandles braces in ${var-val}.
+-# It thinks the first close brace ends the variable substitution.
+-test -z "$INSTALL_PROGRAM" && INSTALL_PROGRAM='${INSTALL}'
+-
+-test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL}'
+-
+-test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
+-
+-
+-ac_config_files="$ac_config_files Makefile cyglsa.def:cyglsa.din"
+-
+-cat >confcache <<\_ACEOF
+-# This file is a shell script that caches the results of configure
+-# tests run on this system so they can be shared between configure
+-# scripts and configure runs, see configure's option --config-cache.
+-# It is not useful on other systems.  If it contains results you don't
+-# want to keep, you may remove or edit it.
+-#
+-# config.status only pays attention to the cache file if you give it
+-# the --recheck option to rerun configure.
+-#
+-# `ac_cv_env_foo' variables (set or unset) will be overridden when
+-# loading this file, other *unset* `ac_cv_foo' will be assigned the
+-# following values.
+-
+-_ACEOF
+-
+-# The following way of writing the cache mishandles newlines in values,
+-# but we know of no workaround that is simple, portable, and efficient.
+-# So, we kill variables containing newlines.
+-# Ultrix sh set writes to stderr and can't be redirected directly,
+-# and sets the high bit in the cache file unless we assign to the vars.
+-(
+-  for ac_var in `(set) 2>&1 | sed -n 's/^\([a-zA-Z_][a-zA-Z0-9_]*\)=.*/\1/p'`; do
+-    eval ac_val=\$$ac_var
+-    case $ac_val in #(
+-    *${as_nl}*)
+-      case $ac_var in #(
+-      *_cv_*) { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: cache variable $ac_var contains a newline" >&5
+-$as_echo "$as_me: WARNING: cache variable $ac_var contains a newline" >&2;} ;;
+-      esac
+-      case $ac_var in #(
+-      _ | IFS | as_nl) ;; #(
+-      BASH_ARGV | BASH_SOURCE) eval $ac_var= ;; #(
+-      *) { eval $ac_var=; unset $ac_var;} ;;
+-      esac ;;
+-    esac
+-  done
+-
+-  (set) 2>&1 |
+-    case $as_nl`(ac_space=' '; set) 2>&1` in #(
+-    *${as_nl}ac_space=\ *)
+-      # `set' does not quote correctly, so add quotes: double-quote
+-      # substitution turns \\\\ into \\, and sed turns \\ into \.
+-      sed -n \
+-	"s/'/'\\\\''/g;
+-	  s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1='\\2'/p"
+-      ;; #(
+-    *)
+-      # `set' quotes correctly as required by POSIX, so do not add quotes.
+-      sed -n "/^[_$as_cr_alnum]*_cv_[_$as_cr_alnum]*=/p"
+-      ;;
+-    esac |
+-    sort
+-) |
+-  sed '
+-     /^ac_cv_env_/b end
+-     t clear
+-     :clear
+-     s/^\([^=]*\)=\(.*[{}].*\)$/test "${\1+set}" = set || &/
+-     t end
+-     s/^\([^=]*\)=\(.*\)$/\1=${\1=\2}/
+-     :end' >>confcache
+-if diff "$cache_file" confcache >/dev/null 2>&1; then :; else
+-  if test -w "$cache_file"; then
+-    if test "x$cache_file" != "x/dev/null"; then
+-      { $as_echo "$as_me:${as_lineno-$LINENO}: updating cache $cache_file" >&5
+-$as_echo "$as_me: updating cache $cache_file" >&6;}
+-      if test ! -f "$cache_file" || test -h "$cache_file"; then
+-	cat confcache >"$cache_file"
+-      else
+-        case $cache_file in #(
+-        */* | ?:*)
+-	  mv -f confcache "$cache_file"$$ &&
+-	  mv -f "$cache_file"$$ "$cache_file" ;; #(
+-        *)
+-	  mv -f confcache "$cache_file" ;;
+-	esac
+-      fi
+-    fi
+-  else
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: not updating unwritable cache $cache_file" >&5
+-$as_echo "$as_me: not updating unwritable cache $cache_file" >&6;}
+-  fi
+-fi
+-rm -f confcache
+-
+-test "x$prefix" = xNONE && prefix=$ac_default_prefix
+-# Let make expand exec_prefix.
+-test "x$exec_prefix" = xNONE && exec_prefix='${prefix}'
+-
+-# Transform confdefs.h into DEFS.
+-# Protect against shell expansion while executing Makefile rules.
+-# Protect against Makefile macro expansion.
+-#
+-# If the first sed substitution is executed (which looks for macros that
+-# take arguments), then branch to the quote section.  Otherwise,
+-# look for a macro that doesn't take arguments.
+-ac_script='
+-:mline
+-/\\$/{
+- N
+- s,\\\n,,
+- b mline
+-}
+-t clear
+-:clear
+-s/^[	 ]*#[	 ]*define[	 ][	 ]*\([^	 (][^	 (]*([^)]*)\)[	 ]*\(.*\)/-D\1=\2/g
+-t quote
+-s/^[	 ]*#[	 ]*define[	 ][	 ]*\([^	 ][^	 ]*\)[	 ]*\(.*\)/-D\1=\2/g
+-t quote
+-b any
+-:quote
+-s/[	 `~#$^&*(){}\\|;'\''"<>?]/\\&/g
+-s/\[/\\&/g
+-s/\]/\\&/g
+-s/\$/$$/g
+-H
+-:any
+-${
+-	g
+-	s/^\n//
+-	s/\n/ /g
+-	p
+-}
+-'
+-DEFS=`sed -n "$ac_script" confdefs.h`
+-
+-
+-ac_libobjs=
+-ac_ltlibobjs=
+-U=
+-for ac_i in : $LIBOBJS; do test "x$ac_i" = x: && continue
+-  # 1. Remove the extension, and $U if already installed.
+-  ac_script='s/\$U\././;s/\.o$//;s/\.obj$//'
+-  ac_i=`$as_echo "$ac_i" | sed "$ac_script"`
+-  # 2. Prepend LIBOBJDIR.  When used with automake>=1.10 LIBOBJDIR
+-  #    will be set to the directory where LIBOBJS objects are built.
+-  as_fn_append ac_libobjs " \${LIBOBJDIR}$ac_i\$U.$ac_objext"
+-  as_fn_append ac_ltlibobjs " \${LIBOBJDIR}$ac_i"'$U.lo'
+-done
+-LIBOBJS=$ac_libobjs
+-
+-LTLIBOBJS=$ac_ltlibobjs
+-
+-
+-
+-: "${CONFIG_STATUS=./config.status}"
+-ac_write_fail=0
+-ac_clean_files_save=$ac_clean_files
+-ac_clean_files="$ac_clean_files $CONFIG_STATUS"
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: creating $CONFIG_STATUS" >&5
+-$as_echo "$as_me: creating $CONFIG_STATUS" >&6;}
+-as_write_fail=0
+-cat >$CONFIG_STATUS <<_ASEOF || as_write_fail=1
+-#! $SHELL
+-# Generated by $as_me.
+-# Run this file to recreate the current configuration.
+-# Compiler output produced by configure, useful for debugging
+-# configure, is in config.log if it exists.
+-
+-debug=false
+-ac_cs_recheck=false
+-ac_cs_silent=false
+-
+-SHELL=\${CONFIG_SHELL-$SHELL}
+-export SHELL
+-_ASEOF
+-cat >>$CONFIG_STATUS <<\_ASEOF || as_write_fail=1
+-## -------------------- ##
+-## M4sh Initialization. ##
+-## -------------------- ##
+-
+-# Be more Bourne compatible
+-DUALCASE=1; export DUALCASE # for MKS sh
+-if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then :
+-  emulate sh
+-  NULLCMD=:
+-  # Pre-4.2 versions of Zsh do word splitting on ${1+"$@"}, which
+-  # is contrary to our usage.  Disable this feature.
+-  alias -g '${1+"$@"}'='"$@"'
+-  setopt NO_GLOB_SUBST
+-else
+-  case `(set -o) 2>/dev/null` in #(
+-  *posix*) :
+-    set -o posix ;; #(
+-  *) :
+-     ;;
+-esac
+-fi
+-
+-
+-as_nl='
+-'
+-export as_nl
+-# Printing a long string crashes Solaris 7 /usr/bin/printf.
+-as_echo='\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\'
+-as_echo=$as_echo$as_echo$as_echo$as_echo$as_echo
+-as_echo=$as_echo$as_echo$as_echo$as_echo$as_echo$as_echo
+-# Prefer a ksh shell builtin over an external printf program on Solaris,
+-# but without wasting forks for bash or zsh.
+-if test -z "$BASH_VERSION$ZSH_VERSION" \
+-    && (test "X`print -r -- $as_echo`" = "X$as_echo") 2>/dev/null; then
+-  as_echo='print -r --'
+-  as_echo_n='print -rn --'
+-elif (test "X`printf %s $as_echo`" = "X$as_echo") 2>/dev/null; then
+-  as_echo='printf %s\n'
+-  as_echo_n='printf %s'
+-else
+-  if test "X`(/usr/ucb/echo -n -n $as_echo) 2>/dev/null`" = "X-n $as_echo"; then
+-    as_echo_body='eval /usr/ucb/echo -n "$1$as_nl"'
+-    as_echo_n='/usr/ucb/echo -n'
+-  else
+-    as_echo_body='eval expr "X$1" : "X\\(.*\\)"'
+-    as_echo_n_body='eval
+-      arg=$1;
+-      case $arg in #(
+-      *"$as_nl"*)
+-	expr "X$arg" : "X\\(.*\\)$as_nl";
+-	arg=`expr "X$arg" : ".*$as_nl\\(.*\\)"`;;
+-      esac;
+-      expr "X$arg" : "X\\(.*\\)" | tr -d "$as_nl"
+-    '
+-    export as_echo_n_body
+-    as_echo_n='sh -c $as_echo_n_body as_echo'
+-  fi
+-  export as_echo_body
+-  as_echo='sh -c $as_echo_body as_echo'
+-fi
+-
+-# The user is always right.
+-if test "${PATH_SEPARATOR+set}" != set; then
+-  PATH_SEPARATOR=:
+-  (PATH='/bin;/bin'; FPATH=$PATH; sh -c :) >/dev/null 2>&1 && {
+-    (PATH='/bin:/bin'; FPATH=$PATH; sh -c :) >/dev/null 2>&1 ||
+-      PATH_SEPARATOR=';'
+-  }
+-fi
+-
+-
+-# IFS
+-# We need space, tab and new line, in precisely that order.  Quoting is
+-# there to prevent editors from complaining about space-tab.
+-# (If _AS_PATH_WALK were called with IFS unset, it would disable word
+-# splitting by setting IFS to empty value.)
+-IFS=" ""	$as_nl"
+-
+-# Find who we are.  Look in the path if we contain no directory separator.
+-as_myself=
+-case $0 in #((
+-  *[\\/]* ) as_myself=$0 ;;
+-  *) as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-for as_dir in $PATH
+-do
+-  IFS=$as_save_IFS
+-  test -z "$as_dir" && as_dir=.
+-    test -r "$as_dir/$0" && as_myself=$as_dir/$0 && break
+-  done
+-IFS=$as_save_IFS
+-
+-     ;;
+-esac
+-# We did not find ourselves, most probably we were run as `sh COMMAND'
+-# in which case we are not to be found in the path.
+-if test "x$as_myself" = x; then
+-  as_myself=$0
+-fi
+-if test ! -f "$as_myself"; then
+-  $as_echo "$as_myself: error: cannot find myself; rerun with an absolute file name" >&2
+-  exit 1
+-fi
+-
+-# Unset variables that we do not need and which cause bugs (e.g. in
+-# pre-3.0 UWIN ksh).  But do not cause bugs in bash 2.01; the "|| exit 1"
+-# suppresses any "Segmentation fault" message there.  '((' could
+-# trigger a bug in pdksh 5.2.14.
+-for as_var in BASH_ENV ENV MAIL MAILPATH
+-do eval test x\${$as_var+set} = xset \
+-  && ( (unset $as_var) || exit 1) >/dev/null 2>&1 && unset $as_var || :
+-done
+-PS1='$ '
+-PS2='> '
+-PS4='+ '
+-
+-# NLS nuisances.
+-LC_ALL=C
+-export LC_ALL
+-LANGUAGE=C
+-export LANGUAGE
+-
+-# CDPATH.
+-(unset CDPATH) >/dev/null 2>&1 && unset CDPATH
+-
+-
+-# as_fn_error STATUS ERROR [LINENO LOG_FD]
+-# ----------------------------------------
+-# Output "`basename $0`: error: ERROR" to stderr. If LINENO and LOG_FD are
+-# provided, also output the error to LOG_FD, referencing LINENO. Then exit the
+-# script with STATUS, using 1 if that was 0.
+-as_fn_error ()
+-{
+-  as_status=$1; test $as_status -eq 0 && as_status=1
+-  if test "$4"; then
+-    as_lineno=${as_lineno-"$3"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
+-    $as_echo "$as_me:${as_lineno-$LINENO}: error: $2" >&$4
+-  fi
+-  $as_echo "$as_me: error: $2" >&2
+-  as_fn_exit $as_status
+-} # as_fn_error
+-
+-
+-# as_fn_set_status STATUS
+-# -----------------------
+-# Set $? to STATUS, without forking.
+-as_fn_set_status ()
+-{
+-  return $1
+-} # as_fn_set_status
+-
+-# as_fn_exit STATUS
+-# -----------------
+-# Exit the shell with STATUS, even in a "trap 0" or "set -e" context.
+-as_fn_exit ()
+-{
+-  set +e
+-  as_fn_set_status $1
+-  exit $1
+-} # as_fn_exit
+-
+-# as_fn_unset VAR
+-# ---------------
+-# Portably unset VAR.
+-as_fn_unset ()
+-{
+-  { eval $1=; unset $1;}
+-}
+-as_unset=as_fn_unset
+-# as_fn_append VAR VALUE
+-# ----------------------
+-# Append the text in VALUE to the end of the definition contained in VAR. Take
+-# advantage of any shell optimizations that allow amortized linear growth over
+-# repeated appends, instead of the typical quadratic growth present in naive
+-# implementations.
+-if (eval "as_var=1; as_var+=2; test x\$as_var = x12") 2>/dev/null; then :
+-  eval 'as_fn_append ()
+-  {
+-    eval $1+=\$2
+-  }'
+-else
+-  as_fn_append ()
+-  {
+-    eval $1=\$$1\$2
+-  }
+-fi # as_fn_append
+-
+-# as_fn_arith ARG...
+-# ------------------
+-# Perform arithmetic evaluation on the ARGs, and store the result in the
+-# global $as_val. Take advantage of shells that can avoid forks. The arguments
+-# must be portable across $(()) and expr.
+-if (eval "test \$(( 1 + 1 )) = 2") 2>/dev/null; then :
+-  eval 'as_fn_arith ()
+-  {
+-    as_val=$(( $* ))
+-  }'
+-else
+-  as_fn_arith ()
+-  {
+-    as_val=`expr "$@" || test $? -eq 1`
+-  }
+-fi # as_fn_arith
+-
+-
+-if expr a : '\(a\)' >/dev/null 2>&1 &&
+-   test "X`expr 00001 : '.*\(...\)'`" = X001; then
+-  as_expr=expr
+-else
+-  as_expr=false
+-fi
+-
+-if (basename -- /) >/dev/null 2>&1 && test "X`basename -- / 2>&1`" = "X/"; then
+-  as_basename=basename
+-else
+-  as_basename=false
+-fi
+-
+-if (as_dir=`dirname -- /` && test "X$as_dir" = X/) >/dev/null 2>&1; then
+-  as_dirname=dirname
+-else
+-  as_dirname=false
+-fi
+-
+-as_me=`$as_basename -- "$0" ||
+-$as_expr X/"$0" : '.*/\([^/][^/]*\)/*$' \| \
+-	 X"$0" : 'X\(//\)$' \| \
+-	 X"$0" : 'X\(/\)' \| . 2>/dev/null ||
+-$as_echo X/"$0" |
+-    sed '/^.*\/\([^/][^/]*\)\/*$/{
+-	    s//\1/
+-	    q
+-	  }
+-	  /^X\/\(\/\/\)$/{
+-	    s//\1/
+-	    q
+-	  }
+-	  /^X\/\(\/\).*/{
+-	    s//\1/
+-	    q
+-	  }
+-	  s/.*/./; q'`
+-
+-# Avoid depending upon Character Ranges.
+-as_cr_letters='abcdefghijklmnopqrstuvwxyz'
+-as_cr_LETTERS='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+-as_cr_Letters=$as_cr_letters$as_cr_LETTERS
+-as_cr_digits='0123456789'
+-as_cr_alnum=$as_cr_Letters$as_cr_digits
+-
+-ECHO_C= ECHO_N= ECHO_T=
+-case `echo -n x` in #(((((
+--n*)
+-  case `echo 'xy\c'` in
+-  *c*) ECHO_T='	';;	# ECHO_T is single tab character.
+-  xy)  ECHO_C='\c';;
+-  *)   echo `echo ksh88 bug on AIX 6.1` > /dev/null
+-       ECHO_T='	';;
+-  esac;;
+-*)
+-  ECHO_N='-n';;
+-esac
+-
+-rm -f conf$$ conf$$.exe conf$$.file
+-if test -d conf$$.dir; then
+-  rm -f conf$$.dir/conf$$.file
+-else
+-  rm -f conf$$.dir
+-  mkdir conf$$.dir 2>/dev/null
+-fi
+-if (echo >conf$$.file) 2>/dev/null; then
+-  if ln -s conf$$.file conf$$ 2>/dev/null; then
+-    as_ln_s='ln -s'
+-    # ... but there are two gotchas:
+-    # 1) On MSYS, both `ln -s file dir' and `ln file dir' fail.
+-    # 2) DJGPP < 2.04 has no symlinks; `ln -s' creates a wrapper executable.
+-    # In both cases, we have to default to `cp -pR'.
+-    ln -s conf$$.file conf$$.dir 2>/dev/null && test ! -f conf$$.exe ||
+-      as_ln_s='cp -pR'
+-  elif ln conf$$.file conf$$ 2>/dev/null; then
+-    as_ln_s=ln
+-  else
+-    as_ln_s='cp -pR'
+-  fi
+-else
+-  as_ln_s='cp -pR'
+-fi
+-rm -f conf$$ conf$$.exe conf$$.dir/conf$$.file conf$$.file
+-rmdir conf$$.dir 2>/dev/null
+-
+-
+-# as_fn_mkdir_p
+-# -------------
+-# Create "$as_dir" as a directory, including parents if necessary.
+-as_fn_mkdir_p ()
+-{
+-
+-  case $as_dir in #(
+-  -*) as_dir=./$as_dir;;
+-  esac
+-  test -d "$as_dir" || eval $as_mkdir_p || {
+-    as_dirs=
+-    while :; do
+-      case $as_dir in #(
+-      *\'*) as_qdir=`$as_echo "$as_dir" | sed "s/'/'\\\\\\\\''/g"`;; #'(
+-      *) as_qdir=$as_dir;;
+-      esac
+-      as_dirs="'$as_qdir' $as_dirs"
+-      as_dir=`$as_dirname -- "$as_dir" ||
+-$as_expr X"$as_dir" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+-	 X"$as_dir" : 'X\(//\)[^/]' \| \
+-	 X"$as_dir" : 'X\(//\)$' \| \
+-	 X"$as_dir" : 'X\(/\)' \| . 2>/dev/null ||
+-$as_echo X"$as_dir" |
+-    sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
+-	    s//\1/
+-	    q
+-	  }
+-	  /^X\(\/\/\)[^/].*/{
+-	    s//\1/
+-	    q
+-	  }
+-	  /^X\(\/\/\)$/{
+-	    s//\1/
+-	    q
+-	  }
+-	  /^X\(\/\).*/{
+-	    s//\1/
+-	    q
+-	  }
+-	  s/.*/./; q'`
+-      test -d "$as_dir" && break
+-    done
+-    test -z "$as_dirs" || eval "mkdir $as_dirs"
+-  } || test -d "$as_dir" || as_fn_error $? "cannot create directory $as_dir"
+-
+-
+-} # as_fn_mkdir_p
+-if mkdir -p . 2>/dev/null; then
+-  as_mkdir_p='mkdir -p "$as_dir"'
+-else
+-  test -d ./-p && rmdir ./-p
+-  as_mkdir_p=false
+-fi
+-
+-
+-# as_fn_executable_p FILE
+-# -----------------------
+-# Test if FILE is an executable regular file.
+-as_fn_executable_p ()
+-{
+-  test -f "$1" && test -x "$1"
+-} # as_fn_executable_p
+-as_test_x='test -x'
+-as_executable_p=as_fn_executable_p
+-
+-# Sed expression to map a string onto a valid CPP name.
+-as_tr_cpp="eval sed 'y%*$as_cr_letters%P$as_cr_LETTERS%;s%[^_$as_cr_alnum]%_%g'"
+-
+-# Sed expression to map a string onto a valid variable name.
+-as_tr_sh="eval sed 'y%*+%pp%;s%[^_$as_cr_alnum]%_%g'"
+-
+-
+-exec 6>&1
+-## ----------------------------------- ##
+-## Main body of $CONFIG_STATUS script. ##
+-## ----------------------------------- ##
+-_ASEOF
+-test $as_write_fail = 0 && chmod +x $CONFIG_STATUS || ac_write_fail=1
+-
+-cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
+-# Save the log message, to keep $0 and so on meaningful, and to
+-# report actual input values of CONFIG_FILES etc. instead of their
+-# values after options handling.
+-ac_log="
+-This file was extended by Cygwin Lsaauth $as_me 0, which was
+-generated by GNU Autoconf 2.69.  Invocation command line was
+-
+-  CONFIG_FILES    = $CONFIG_FILES
+-  CONFIG_HEADERS  = $CONFIG_HEADERS
+-  CONFIG_LINKS    = $CONFIG_LINKS
+-  CONFIG_COMMANDS = $CONFIG_COMMANDS
+-  $ $0 $@
+-
+-on `(hostname || uname -n) 2>/dev/null | sed 1q`
+-"
+-
+-_ACEOF
+-
+-case $ac_config_files in *"
+-"*) set x $ac_config_files; shift; ac_config_files=$*;;
+-esac
+-
+-
+-
+-cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
+-# Files that config.status was made for.
+-config_files="$ac_config_files"
+-
+-_ACEOF
+-
+-cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
+-ac_cs_usage="\
+-\`$as_me' instantiates files and other configuration actions
+-from templates according to the current configuration.  Unless the files
+-and actions are specified as TAGs, all are instantiated by default.
+-
+-Usage: $0 [OPTION]... [TAG]...
+-
+-  -h, --help       print this help, then exit
+-  -V, --version    print version number and configuration settings, then exit
+-      --config     print configuration, then exit
+-  -q, --quiet, --silent
+-                   do not print progress messages
+-  -d, --debug      don't remove temporary files
+-      --recheck    update $as_me by reconfiguring in the same conditions
+-      --file=FILE[:TEMPLATE]
+-                   instantiate the configuration file FILE
+-
+-Configuration files:
+-$config_files
+-
+-Report bugs to <cygwin@cygwin.com>.
+-Cygwin Lsaauth home page: <https://cygwin.com>."
+-
+-_ACEOF
+-cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
+-ac_cs_config="`$as_echo "$ac_configure_args" | sed 's/^ //; s/[\\""\`\$]/\\\\&/g'`"
+-ac_cs_version="\\
+-Cygwin Lsaauth config.status 0
+-configured by $0, generated by GNU Autoconf 2.69,
+-  with options \\"\$ac_cs_config\\"
+-
+-Copyright (C) 2012 Free Software Foundation, Inc.
+-This config.status script is free software; the Free Software Foundation
+-gives unlimited permission to copy, distribute and modify it."
+-
+-ac_pwd='$ac_pwd'
+-srcdir='$srcdir'
+-INSTALL='$INSTALL'
+-test -n "\$AWK" || AWK=awk
+-_ACEOF
+-
+-cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
+-# The default lists apply if the user does not specify any file.
+-ac_need_defaults=:
+-while test $# != 0
+-do
+-  case $1 in
+-  --*=?*)
+-    ac_option=`expr "X$1" : 'X\([^=]*\)='`
+-    ac_optarg=`expr "X$1" : 'X[^=]*=\(.*\)'`
+-    ac_shift=:
+-    ;;
+-  --*=)
+-    ac_option=`expr "X$1" : 'X\([^=]*\)='`
+-    ac_optarg=
+-    ac_shift=:
+-    ;;
+-  *)
+-    ac_option=$1
+-    ac_optarg=$2
+-    ac_shift=shift
+-    ;;
+-  esac
+-
+-  case $ac_option in
+-  # Handling of the options.
+-  -recheck | --recheck | --rechec | --reche | --rech | --rec | --re | --r)
+-    ac_cs_recheck=: ;;
+-  --version | --versio | --versi | --vers | --ver | --ve | --v | -V )
+-    $as_echo "$ac_cs_version"; exit ;;
+-  --config | --confi | --conf | --con | --co | --c )
+-    $as_echo "$ac_cs_config"; exit ;;
+-  --debug | --debu | --deb | --de | --d | -d )
+-    debug=: ;;
+-  --file | --fil | --fi | --f )
+-    $ac_shift
+-    case $ac_optarg in
+-    *\'*) ac_optarg=`$as_echo "$ac_optarg" | sed "s/'/'\\\\\\\\''/g"` ;;
+-    '') as_fn_error $? "missing file argument" ;;
+-    esac
+-    as_fn_append CONFIG_FILES " '$ac_optarg'"
+-    ac_need_defaults=false;;
+-  --he | --h |  --help | --hel | -h )
+-    $as_echo "$ac_cs_usage"; exit ;;
+-  -q | -quiet | --quiet | --quie | --qui | --qu | --q \
+-  | -silent | --silent | --silen | --sile | --sil | --si | --s)
+-    ac_cs_silent=: ;;
+-
+-  # This is an error.
+-  -*) as_fn_error $? "unrecognized option: \`$1'
+-Try \`$0 --help' for more information." ;;
+-
+-  *) as_fn_append ac_config_targets " $1"
+-     ac_need_defaults=false ;;
+-
+-  esac
+-  shift
+-done
+-
+-ac_configure_extra_args=
+-
+-if $ac_cs_silent; then
+-  exec 6>/dev/null
+-  ac_configure_extra_args="$ac_configure_extra_args --silent"
+-fi
+-
+-_ACEOF
+-cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
+-if \$ac_cs_recheck; then
+-  set X $SHELL '$0' $ac_configure_args \$ac_configure_extra_args --no-create --no-recursion
+-  shift
+-  \$as_echo "running CONFIG_SHELL=$SHELL \$*" >&6
+-  CONFIG_SHELL='$SHELL'
+-  export CONFIG_SHELL
+-  exec "\$@"
+-fi
+-
+-_ACEOF
+-cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
+-exec 5>>config.log
+-{
+-  echo
+-  sed 'h;s/./-/g;s/^.../## /;s/...$/ ##/;p;x;p;x' <<_ASBOX
+-## Running $as_me. ##
+-_ASBOX
+-  $as_echo "$ac_log"
+-} >&5
+-
+-_ACEOF
+-cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
+-_ACEOF
+-
+-cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
+-
+-# Handling of arguments.
+-for ac_config_target in $ac_config_targets
+-do
+-  case $ac_config_target in
+-    "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
+-    "cyglsa.def") CONFIG_FILES="$CONFIG_FILES cyglsa.def:cyglsa.din" ;;
+-
+-  *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
+-  esac
+-done
+-
+-
+-# If the user did not use the arguments to specify the items to instantiate,
+-# then the envvar interface is used.  Set only those that are not.
+-# We use the long form for the default assignment because of an extremely
+-# bizarre bug on SunOS 4.1.3.
+-if $ac_need_defaults; then
+-  test "${CONFIG_FILES+set}" = set || CONFIG_FILES=$config_files
+-fi
+-
+-# Have a temporary directory for convenience.  Make it in the build tree
+-# simply because there is no reason against having it here, and in addition,
+-# creating and moving files from /tmp can sometimes cause problems.
+-# Hook for its removal unless debugging.
+-# Note that there is a small window in which the directory will not be cleaned:
+-# after its creation but before its name has been assigned to `$tmp'.
+-$debug ||
+-{
+-  tmp= ac_tmp=
+-  trap 'exit_status=$?
+-  : "${ac_tmp:=$tmp}"
+-  { test ! -d "$ac_tmp" || rm -fr "$ac_tmp"; } && exit $exit_status
+-' 0
+-  trap 'as_fn_exit 1' 1 2 13 15
+-}
+-# Create a (secure) tmp directory for tmp files.
+-
+-{
+-  tmp=`(umask 077 && mktemp -d "./confXXXXXX") 2>/dev/null` &&
+-  test -d "$tmp"
+-}  ||
+-{
+-  tmp=./conf$$-$RANDOM
+-  (umask 077 && mkdir "$tmp")
+-} || as_fn_error $? "cannot create a temporary directory in ." "$LINENO" 5
+-ac_tmp=$tmp
+-
+-# Set up the scripts for CONFIG_FILES section.
+-# No need to generate them if there are no CONFIG_FILES.
+-# This happens for instance with `./config.status config.h'.
+-if test -n "$CONFIG_FILES"; then
+-
+-
+-ac_cr=`echo X | tr X '\015'`
+-# On cygwin, bash can eat \r inside `` if the user requested igncr.
+-# But we know of no other shell where ac_cr would be empty at this
+-# point, so we can use a bashism as a fallback.
+-if test "x$ac_cr" = x; then
+-  eval ac_cr=\$\'\\r\'
+-fi
+-ac_cs_awk_cr=`$AWK 'BEGIN { print "a\rb" }' </dev/null 2>/dev/null`
+-if test "$ac_cs_awk_cr" = "a${ac_cr}b"; then
+-  ac_cs_awk_cr='\\r'
+-else
+-  ac_cs_awk_cr=$ac_cr
+-fi
+-
+-echo 'BEGIN {' >"$ac_tmp/subs1.awk" &&
+-_ACEOF
+-
+-
+-{
+-  echo "cat >conf$$subs.awk <<_ACEOF" &&
+-  echo "$ac_subst_vars" | sed 's/.*/&!$&$ac_delim/' &&
+-  echo "_ACEOF"
+-} >conf$$subs.sh ||
+-  as_fn_error $? "could not make $CONFIG_STATUS" "$LINENO" 5
+-ac_delim_num=`echo "$ac_subst_vars" | grep -c '^'`
+-ac_delim='%!_!# '
+-for ac_last_try in false false false false false :; do
+-  . ./conf$$subs.sh ||
+-    as_fn_error $? "could not make $CONFIG_STATUS" "$LINENO" 5
+-
+-  ac_delim_n=`sed -n "s/.*$ac_delim\$/X/p" conf$$subs.awk | grep -c X`
+-  if test $ac_delim_n = $ac_delim_num; then
+-    break
+-  elif $ac_last_try; then
+-    as_fn_error $? "could not make $CONFIG_STATUS" "$LINENO" 5
+-  else
+-    ac_delim="$ac_delim!$ac_delim _$ac_delim!! "
+-  fi
+-done
+-rm -f conf$$subs.sh
+-
+-cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
+-cat >>"\$ac_tmp/subs1.awk" <<\\_ACAWK &&
+-_ACEOF
+-sed -n '
+-h
+-s/^/S["/; s/!.*/"]=/
+-p
+-g
+-s/^[^!]*!//
+-:repl
+-t repl
+-s/'"$ac_delim"'$//
+-t delim
+-:nl
+-h
+-s/\(.\{148\}\)..*/\1/
+-t more1
+-s/["\\]/\\&/g; s/^/"/; s/$/\\n"\\/
+-p
+-n
+-b repl
+-:more1
+-s/["\\]/\\&/g; s/^/"/; s/$/"\\/
+-p
+-g
+-s/.\{148\}//
+-t nl
+-:delim
+-h
+-s/\(.\{148\}\)..*/\1/
+-t more2
+-s/["\\]/\\&/g; s/^/"/; s/$/"/
+-p
+-b
+-:more2
+-s/["\\]/\\&/g; s/^/"/; s/$/"\\/
+-p
+-g
+-s/.\{148\}//
+-t delim
+-' <conf$$subs.awk | sed '
+-/^[^""]/{
+-  N
+-  s/\n//
+-}
+-' >>$CONFIG_STATUS || ac_write_fail=1
+-rm -f conf$$subs.awk
+-cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
+-_ACAWK
+-cat >>"\$ac_tmp/subs1.awk" <<_ACAWK &&
+-  for (key in S) S_is_set[key] = 1
+-  FS = ""
+-
+-}
+-{
+-  line = $ 0
+-  nfields = split(line, field, "@")
+-  substed = 0
+-  len = length(field[1])
+-  for (i = 2; i < nfields; i++) {
+-    key = field[i]
+-    keylen = length(key)
+-    if (S_is_set[key]) {
+-      value = S[key]
+-      line = substr(line, 1, len) "" value "" substr(line, len + keylen + 3)
+-      len += length(value) + length(field[++i])
+-      substed = 1
+-    } else
+-      len += 1 + keylen
+-  }
+-
+-  print line
+-}
+-
+-_ACAWK
+-_ACEOF
+-cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
+-if sed "s/$ac_cr//" < /dev/null > /dev/null 2>&1; then
+-  sed "s/$ac_cr\$//; s/$ac_cr/$ac_cs_awk_cr/g"
+-else
+-  cat
+-fi < "$ac_tmp/subs1.awk" > "$ac_tmp/subs.awk" \
+-  || as_fn_error $? "could not setup config files machinery" "$LINENO" 5
+-_ACEOF
+-
+-# VPATH may cause trouble with some makes, so we remove sole $(srcdir),
+-# ${srcdir} and @srcdir@ entries from VPATH if srcdir is ".", strip leading and
+-# trailing colons and then remove the whole line if VPATH becomes empty
+-# (actually we leave an empty line to preserve line numbers).
+-if test "x$srcdir" = x.; then
+-  ac_vpsub='/^[	 ]*VPATH[	 ]*=[	 ]*/{
+-h
+-s///
+-s/^/:/
+-s/[	 ]*$/:/
+-s/:\$(srcdir):/:/g
+-s/:\${srcdir}:/:/g
+-s/:@srcdir@:/:/g
+-s/^:*//
+-s/:*$//
+-x
+-s/\(=[	 ]*\).*/\1/
+-G
+-s/\n//
+-s/^[^=]*=[	 ]*$//
+-}'
+-fi
+-
+-cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
+-fi # test -n "$CONFIG_FILES"
+-
+-
+-eval set X "  :F $CONFIG_FILES      "
+-shift
+-for ac_tag
+-do
+-  case $ac_tag in
+-  :[FHLC]) ac_mode=$ac_tag; continue;;
+-  esac
+-  case $ac_mode$ac_tag in
+-  :[FHL]*:*);;
+-  :L* | :C*:*) as_fn_error $? "invalid tag \`$ac_tag'" "$LINENO" 5;;
+-  :[FH]-) ac_tag=-:-;;
+-  :[FH]*) ac_tag=$ac_tag:$ac_tag.in;;
+-  esac
+-  ac_save_IFS=$IFS
+-  IFS=:
+-  set x $ac_tag
+-  IFS=$ac_save_IFS
+-  shift
+-  ac_file=$1
+-  shift
+-
+-  case $ac_mode in
+-  :L) ac_source=$1;;
+-  :[FH])
+-    ac_file_inputs=
+-    for ac_f
+-    do
+-      case $ac_f in
+-      -) ac_f="$ac_tmp/stdin";;
+-      *) # Look for the file first in the build tree, then in the source tree
+-	 # (if the path is not absolute).  The absolute path cannot be DOS-style,
+-	 # because $ac_f cannot contain `:'.
+-	 test -f "$ac_f" ||
+-	   case $ac_f in
+-	   [\\/$]*) false;;
+-	   *) test -f "$srcdir/$ac_f" && ac_f="$srcdir/$ac_f";;
+-	   esac ||
+-	   as_fn_error 1 "cannot find input file: \`$ac_f'" "$LINENO" 5;;
+-      esac
+-      case $ac_f in *\'*) ac_f=`$as_echo "$ac_f" | sed "s/'/'\\\\\\\\''/g"`;; esac
+-      as_fn_append ac_file_inputs " '$ac_f'"
+-    done
+-
+-    # Let's still pretend it is `configure' which instantiates (i.e., don't
+-    # use $as_me), people would be surprised to read:
+-    #    /* config.h.  Generated by config.status.  */
+-    configure_input='Generated from '`
+-	  $as_echo "$*" | sed 's|^[^:]*/||;s|:[^:]*/|, |g'
+-	`' by configure.'
+-    if test x"$ac_file" != x-; then
+-      configure_input="$ac_file.  $configure_input"
+-      { $as_echo "$as_me:${as_lineno-$LINENO}: creating $ac_file" >&5
+-$as_echo "$as_me: creating $ac_file" >&6;}
+-    fi
+-    # Neutralize special characters interpreted by sed in replacement strings.
+-    case $configure_input in #(
+-    *\&* | *\|* | *\\* )
+-       ac_sed_conf_input=`$as_echo "$configure_input" |
+-       sed 's/[\\\\&|]/\\\\&/g'`;; #(
+-    *) ac_sed_conf_input=$configure_input;;
+-    esac
+-
+-    case $ac_tag in
+-    *:-:* | *:-) cat >"$ac_tmp/stdin" \
+-      || as_fn_error $? "could not create $ac_file" "$LINENO" 5 ;;
+-    esac
+-    ;;
+-  esac
+-
+-  ac_dir=`$as_dirname -- "$ac_file" ||
+-$as_expr X"$ac_file" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
+-	 X"$ac_file" : 'X\(//\)[^/]' \| \
+-	 X"$ac_file" : 'X\(//\)$' \| \
+-	 X"$ac_file" : 'X\(/\)' \| . 2>/dev/null ||
+-$as_echo X"$ac_file" |
+-    sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
+-	    s//\1/
+-	    q
+-	  }
+-	  /^X\(\/\/\)[^/].*/{
+-	    s//\1/
+-	    q
+-	  }
+-	  /^X\(\/\/\)$/{
+-	    s//\1/
+-	    q
+-	  }
+-	  /^X\(\/\).*/{
+-	    s//\1/
+-	    q
+-	  }
+-	  s/.*/./; q'`
+-  as_dir="$ac_dir"; as_fn_mkdir_p
+-  ac_builddir=.
+-
+-case "$ac_dir" in
+-.) ac_dir_suffix= ac_top_builddir_sub=. ac_top_build_prefix= ;;
+-*)
+-  ac_dir_suffix=/`$as_echo "$ac_dir" | sed 's|^\.[\\/]||'`
+-  # A ".." for each directory in $ac_dir_suffix.
+-  ac_top_builddir_sub=`$as_echo "$ac_dir_suffix" | sed 's|/[^\\/]*|/..|g;s|/||'`
+-  case $ac_top_builddir_sub in
+-  "") ac_top_builddir_sub=. ac_top_build_prefix= ;;
+-  *)  ac_top_build_prefix=$ac_top_builddir_sub/ ;;
+-  esac ;;
+-esac
+-ac_abs_top_builddir=$ac_pwd
+-ac_abs_builddir=$ac_pwd$ac_dir_suffix
+-# for backward compatibility:
+-ac_top_builddir=$ac_top_build_prefix
+-
+-case $srcdir in
+-  .)  # We are building in place.
+-    ac_srcdir=.
+-    ac_top_srcdir=$ac_top_builddir_sub
+-    ac_abs_top_srcdir=$ac_pwd ;;
+-  [\\/]* | ?:[\\/]* )  # Absolute name.
+-    ac_srcdir=$srcdir$ac_dir_suffix;
+-    ac_top_srcdir=$srcdir
+-    ac_abs_top_srcdir=$srcdir ;;
+-  *) # Relative name.
+-    ac_srcdir=$ac_top_build_prefix$srcdir$ac_dir_suffix
+-    ac_top_srcdir=$ac_top_build_prefix$srcdir
+-    ac_abs_top_srcdir=$ac_pwd/$srcdir ;;
+-esac
+-ac_abs_srcdir=$ac_abs_top_srcdir$ac_dir_suffix
+-
+-
+-  case $ac_mode in
+-  :F)
+-  #
+-  # CONFIG_FILE
+-  #
+-
+-  case $INSTALL in
+-  [\\/$]* | ?:[\\/]* ) ac_INSTALL=$INSTALL ;;
+-  *) ac_INSTALL=$ac_top_build_prefix$INSTALL ;;
+-  esac
+-_ACEOF
+-
+-cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
+-# If the template does not know about datarootdir, expand it.
+-# FIXME: This hack should be removed a few years after 2.60.
+-ac_datarootdir_hack=; ac_datarootdir_seen=
+-ac_sed_dataroot='
+-/datarootdir/ {
+-  p
+-  q
+-}
+-/@datadir@/p
+-/@docdir@/p
+-/@infodir@/p
+-/@localedir@/p
+-/@mandir@/p'
+-case `eval "sed -n \"\$ac_sed_dataroot\" $ac_file_inputs"` in
+-*datarootdir*) ac_datarootdir_seen=yes;;
+-*@datadir@*|*@docdir@*|*@infodir@*|*@localedir@*|*@mandir@*)
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $ac_file_inputs seems to ignore the --datarootdir setting" >&5
+-$as_echo "$as_me: WARNING: $ac_file_inputs seems to ignore the --datarootdir setting" >&2;}
+-_ACEOF
+-cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
+-  ac_datarootdir_hack='
+-  s&@datadir@&$datadir&g
+-  s&@docdir@&$docdir&g
+-  s&@infodir@&$infodir&g
+-  s&@localedir@&$localedir&g
+-  s&@mandir@&$mandir&g
+-  s&\\\${datarootdir}&$datarootdir&g' ;;
+-esac
+-_ACEOF
+-
+-# Neutralize VPATH when `$srcdir' = `.'.
+-# Shell code in configure.ac might set extrasub.
+-# FIXME: do we really want to maintain this feature?
+-cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
+-ac_sed_extra="$ac_vpsub
+-$extrasub
+-_ACEOF
+-cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
+-:t
+-/@[a-zA-Z_][a-zA-Z_0-9]*@/!b
+-s|@configure_input@|$ac_sed_conf_input|;t t
+-s&@top_builddir@&$ac_top_builddir_sub&;t t
+-s&@top_build_prefix@&$ac_top_build_prefix&;t t
+-s&@srcdir@&$ac_srcdir&;t t
+-s&@abs_srcdir@&$ac_abs_srcdir&;t t
+-s&@top_srcdir@&$ac_top_srcdir&;t t
+-s&@abs_top_srcdir@&$ac_abs_top_srcdir&;t t
+-s&@builddir@&$ac_builddir&;t t
+-s&@abs_builddir@&$ac_abs_builddir&;t t
+-s&@abs_top_builddir@&$ac_abs_top_builddir&;t t
+-s&@INSTALL@&$ac_INSTALL&;t t
+-$ac_datarootdir_hack
+-"
+-eval sed \"\$ac_sed_extra\" "$ac_file_inputs" | $AWK -f "$ac_tmp/subs.awk" \
+-  >$ac_tmp/out || as_fn_error $? "could not create $ac_file" "$LINENO" 5
+-
+-test -z "$ac_datarootdir_hack$ac_datarootdir_seen" &&
+-  { ac_out=`sed -n '/\${datarootdir}/p' "$ac_tmp/out"`; test -n "$ac_out"; } &&
+-  { ac_out=`sed -n '/^[	 ]*datarootdir[	 ]*:*=/p' \
+-      "$ac_tmp/out"`; test -z "$ac_out"; } &&
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: $ac_file contains a reference to the variable \`datarootdir'
+-which seems to be undefined.  Please make sure it is defined" >&5
+-$as_echo "$as_me: WARNING: $ac_file contains a reference to the variable \`datarootdir'
+-which seems to be undefined.  Please make sure it is defined" >&2;}
+-
+-  rm -f "$ac_tmp/stdin"
+-  case $ac_file in
+-  -) cat "$ac_tmp/out" && rm -f "$ac_tmp/out";;
+-  *) rm -f "$ac_file" && mv "$ac_tmp/out" "$ac_file";;
+-  esac \
+-  || as_fn_error $? "could not create $ac_file" "$LINENO" 5
+- ;;
+-
+-
+-
+-  esac
+-
+-done # for ac_tag
+-
+-
+-as_fn_exit 0
+-_ACEOF
+-ac_clean_files=$ac_clean_files_save
+-
+-test $ac_write_fail = 0 ||
+-  as_fn_error $? "write failure creating $CONFIG_STATUS" "$LINENO" 5
+-
+-
+-# configure is writing to config.log, and then calls config.status.
+-# config.status does its own redirection, appending to config.log.
+-# Unfortunately, on DOS this fails, as config.log is still kept open
+-# by configure, so config.status won't be able to write to it; its
+-# output is simply discarded.  So we exec the FD to /dev/null,
+-# effectively closing config.log, so it can be properly (re)opened and
+-# appended to by config.status.  When coming back to configure, we
+-# need to make the FD available again.
+-if test "$no_create" != yes; then
+-  ac_cs_success=:
+-  ac_config_status_args=
+-  test "$silent" = yes &&
+-    ac_config_status_args="$ac_config_status_args --quiet"
+-  exec 5>/dev/null
+-  $SHELL $CONFIG_STATUS $ac_config_status_args || ac_cs_success=false
+-  exec 5>>config.log
+-  # Use ||, not &&, to avoid exiting from the if with $? = 1, which
+-  # would make configure fail if this is the last instruction.
+-  $ac_cs_success || as_fn_exit 1
+-fi
+-if test -n "$ac_unrecognized_opts" && test "$enable_option_checking" != no; then
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: unrecognized options: $ac_unrecognized_opts" >&5
+-$as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
+-fi
+-
+diff --git a/winsup/lsaauth/configure.ac b/winsup/lsaauth/configure.ac
+deleted file mode 100644
+index f2b2c6329..000000000
+--- a/winsup/lsaauth/configure.ac
++++ /dev/null
+@@ -1,38 +0,0 @@
+-dnl Autoconf configure script for Cygwin utilities.
+-dnl
+-dnl This file is part of Cygwin.
+-dnl 
+-dnl This software is a copyrighted work licensed under the terms of the
+-dnl Cygwin license.  Please consult the file "CYGWIN_LICENSE" for
+-dnl details.
+-dnl
+-dnl Written by Christopher Faylor <cgf@redhat.com>
+-dnl Changed for lsa subdir by Corinna Vinschen <corinna@vinschen.de>
+-
+-dnl Process this file with autoconf to produce a configure script.
+-
+-AC_PREREQ([2.59])
+-AC_INIT([Cygwin Lsaauth],[0],[cygwin@cygwin.com],[cygwin],[https://cygwin.com])
+-AC_CONFIG_SRCDIR(Makefile.in)
+-
+-AC_CONFIG_AUX_DIR(../..)
+-
+-AC_NO_EXECUTABLES
+-AC_CANONICAL_TARGET
+-
+-AC_PROG_CC
+-
+-case "$target_cpu" in
+-i?86)
+-  AC_CHECK_PROGS(MINGW32_CC, i686-w64-mingw32-gcc)
+-  test -z "$MINGW32_CC" && AC_MSG_ERROR([no acceptable mingw32 cc found in \$PATH])
+-  ;;
+-esac
+-
+-AC_CHECK_PROGS(MINGW64_CC, x86_64-w64-mingw32-gcc)
+-test -z "$MINGW64_CC" && AC_MSG_ERROR([no acceptable mingw64 cc found in \$PATH])
+-
+-AC_PROG_INSTALL
+-
+-AC_CONFIG_FILES([Makefile cyglsa.def:cyglsa.din])
+-AC_OUTPUT
+diff --git a/winsup/lsaauth/cyglsa-config b/winsup/lsaauth/cyglsa-config
+deleted file mode 100755
+index 0e911c278..000000000
+--- a/winsup/lsaauth/cyglsa-config
++++ /dev/null
+@@ -1,121 +0,0 @@
+-#!/bin/bash
+-#
+-#     This program is free software; you can redistribute it and/or modify
+-#     it under the terms of the GNU General Public License as published by
+-#     the Free Software Foundation; either version 2 of the License, or
+-#     (at your option) any later version.
+-#
+-#     A copy of the GNU General Public License can be found at
+-#     http://www.gnu.org/
+-#
+-# This file is part of the Cygwin LSA authentication package.
+-
+-request()
+-{
+-  if [ "${auto_answer}" = "yes" ]
+-  then
+-    echo "$1 (yes/no) yes"
+-    return 0
+-  elif [ "${auto_answer}" = "no" ]
+-  then
+-    echo "$1 (yes/no) no"
+-    return 1
+-  fi
+-
+-  answer=""
+-  while [ "X${answer}" != "Xyes" -a "X${answer}" != "Xno" ]
+-  do
+-    echo -n "$1 (yes/no) "
+-    read -e answer
+-  done
+-  if [ "X${answer}" = "Xyes" ]
+-  then
+-    return 0
+-  else
+-    return 1
+-  fi
+-}
+-
+-# Check if running under at least Windows 2000
+-_nt_too_old=`uname | awk -F- '{print ( $2 < 5.0 ) ? 1 : 0;}'`
+-if [ ${_nt_too_old} -eq 1 ]
+-then
+-  echo "Cygwin LSA authentication not supported on Windows NT4 or older.  Exiting."
+-  exit 1
+-fi
+-
+-# Directory in which cyglsa DLL is installed as DOS path.
+-bindir=`cygpath -w /`\\bin
+-
+-# Check if we're running on 64 bit Windows.  If so, we need the 64 bit
+-# cyglsa DLL.
+-dll=cyglsa.dll
+-test -d `cygpath -p ${SYSTEMROOT}`/SysWOW64 && dll=cyglsa64.dll
+-
+-# Check if the DLL is actually installed.  If not, bail out.
+-if [ ! -f /bin/${dll} ]
+-then
+-  echo "Required Cygwin authentication DLL /bin/${dll} doesn't exist.  Exiting."
+-  exit 1
+-fi
+-
+-echo
+-echo "Warning: Registering the Cygwin LSA authentication package requires"
+-echo "administrator privileges!  You also have to reboot the machine to"
+-echo "activate the change."
+-echo
+-request "Are you sure you want to continue?" || exit 0
+-
+-# The registry value which keeps the authentication packages.
+-value='/HKEY_LOCAL_MACHINE/SYSTEM/CurrentControlSet/Control/Lsa/Authentication Packages'
+-
+-[ -f /bin/cyglsa -a ! -d /bin/cyglsa ] && rm -rf /bin/cyglsa
+-if [ ! -d /bin/cyglsa ]
+-then
+-  if ! mkdir -m 755 /bin/cyglsa
+-  then
+-    echo "Creating the /bin/cyglsa directory failed.  Exiting."
+-    exit 1
+-  fi
+-fi
+-if ! cp -b "/bin/${dll}" "/bin/cyglsa/${dll}"
+-then
+-    echo "Copying the new LSA authentication package /bin/${dll} to"
+-    echo "/bin/cyglsa/${dll} failed.  Exiting."
+-    exit 1
+-fi
+-
+-# Get old content, remove every trace of "cyglsa" from it and write the
+-# content back to the registry with the new, correct path to the cyglsa DLL.
+-old=`regtool get "${value}"`
+-new=`for i in ${old}
+-do
+-  echo $i | GREP_OPTIONS="" grep -v cyglsa
+-done`
+-if ! regtool set "${value}" ${new} "${bindir}\\cyglsa\\${dll}"
+-then
+-  echo "Setting the new registry value failed.  Exiting."
+-  exit 1
+-fi
+-
+-echo
+-echo "Cygwin LSA authentication package registered."
+-echo
+-echo "Activating Cygwin's LSA authentication package requires to reboot."
+-if [ -x /bin/shutdown ]
+-then
+-  if request "Do you want to do this immediately?"
+-  then
+-    echo
+-    echo "Other users might still be working on this machine."
+-    echo
+-    if request "Are you sure?"
+-    then
+-      echo
+-      echo "Ok, will reboot in 30 seconds."
+-      echo
+-      echo "If you change your mind, call 'shutdown -a' within 30 seconds"
+-      shutdown -r 30
+-    fi
+-  fi
+-fi
+diff --git a/winsup/lsaauth/cyglsa.c b/winsup/lsaauth/cyglsa.c
+deleted file mode 100644
+index 9d9c9ff03..000000000
+--- a/winsup/lsaauth/cyglsa.c
++++ /dev/null
+@@ -1,598 +0,0 @@
+-/* cyglsa.c: LSA authentication module for Cygwin
+-
+-   Written by Corinna Vinschen <corinna@vinschen.de>
+-
+-This file is part of Cygwin.
+-
+-This software is a copyrighted work licensed under the terms of the
+-Cygwin license.  Please consult the file "CYGWIN_LICENSE" for details. */
+-
+-#define WINVER 0x0600
+-#include <ntstatus.h>
+-#include <windows.h>
+-#include <wininet.h>
+-#include <lmcons.h>
+-#include <iptypes.h>
+-#include <ntsecapi.h>
+-#include "../cygwin/cyglsa.h"
+-#include "../cygwin/include/cygwin/version.h"
+-
+-static PLSA_SECPKG_FUNCS funcs;
+-
+-BOOL APIENTRY
+-DllMain (HINSTANCE inst, DWORD reason, LPVOID res)
+-{
+-  switch (reason)
+-    {
+-      case DLL_PROCESS_ATTACH:
+-      case DLL_THREAD_ATTACH:
+-      case DLL_THREAD_DETACH:
+-      case DLL_PROCESS_DETACH:
+-        break;
+-    }
+-  return TRUE;
+-}
+-
+-/* Declare NTDLL functions here to avoid problems with different
+-   header file layout in different compiler environments. */
+-#ifndef NT_SUCCESS
+-#define NT_SUCCESS(s)	((s) >= 0)
+-#endif
+-/* These standard POSIX functions are implemented in NTDLL and exported.
+-   There's just no header to define them and using wchar.h from mingw
+-   or Cygwin seems wrong somehow. */
+-wchar_t *__cdecl wcscpy (wchar_t *, const wchar_t *);
+-size_t __cdecl wcslen (const wchar_t *);
+-
+-#ifndef RtlInitEmptyUnicodeString
+-__inline VOID NTAPI
+-RtlInitEmptyUnicodeString(PUNICODE_STRING dest, PCWSTR buf, USHORT len)
+-{
+-  dest->Length = 0;
+-  dest->MaximumLength = len;
+-  dest->Buffer = (PWSTR) buf;
+-}
+-#endif
+-
+-static PUNICODE_STRING
+-uni_alloc (PWCHAR src, USHORT len)
+-{
+-  PUNICODE_STRING tgt;
+-
+-  if (!(tgt = funcs->AllocateLsaHeap (sizeof (UNICODE_STRING))))
+-    return NULL;
+-  tgt->Length = len * sizeof (WCHAR);
+-  tgt->MaximumLength = tgt->Length + sizeof (WCHAR);
+-  if (!(tgt->Buffer = funcs->AllocateLsaHeap (tgt->MaximumLength)))
+-    {
+-      funcs->FreeLsaHeap (tgt);
+-      return NULL;
+-    }
+-  wcscpy (tgt->Buffer, src);
+-  return tgt;
+-}
+-
+-/* No, I don't want to include stdio.h so I take what ntdll offers. */
+-extern int _vsnprintf (char *, size_t, const char *, va_list);
+-
+-static HANDLE fh = INVALID_HANDLE_VALUE;
+-
+-static int
+-cyglsa_printf (const char *format, ...)
+-{
+-  char buf[256];
+-  DWORD wr;
+-  int ret;
+-  va_list ap;
+-
+-  if (fh == INVALID_HANDLE_VALUE)
+-    return 0;
+-
+-  va_start (ap, format);
+-  ret = _vsnprintf (buf, 256, format, ap);
+-  va_end (ap);
+-  if (ret <= 0)
+-    return ret;
+-  if (ret > 256)
+-    ret = 255;
+-  buf[255] = '\0';
+-  WriteFile (fh, buf, ret, &wr, NULL);
+-  return wr;
+-}
+-
+-static void
+-print_sid (const char *prefix, int idx, PISID sid)
+-{
+-  DWORD i;
+-
+-  cyglsa_printf ("%s", prefix);
+-  if (idx >= 0)
+-    cyglsa_printf ("[%d] ", idx);
+-  cyglsa_printf ("(0x%08x) ", (INT_PTR) sid);
+-  if (!sid)
+-    cyglsa_printf ("NULL\n");
+-  else if (IsBadReadPtr (sid, 8))
+-    cyglsa_printf ("INVALID POINTER\n");
+-  else if (!IsValidSid ((PSID) sid))
+-    cyglsa_printf ("INVALID SID\n");
+-  else if (IsBadReadPtr (sid, 8 + sizeof (DWORD) * sid->SubAuthorityCount))
+-    cyglsa_printf ("INVALID POINTER SPACE\n");
+-  else
+-    {
+-      cyglsa_printf ("S-%d-%d", sid->Revision, sid->IdentifierAuthority.Value[5]);
+-      for (i = 0; i < sid->SubAuthorityCount; ++i)
+-        cyglsa_printf ("-%lu", sid->SubAuthority[i]);
+-      cyglsa_printf ("\n");
+-    }
+-}
+-
+-static void
+-print_groups (PTOKEN_GROUPS grps)
+-{
+-  DWORD i;
+-
+-  cyglsa_printf ("Groups: (0x%08x) ", (INT_PTR) grps);
+-  if (!grps)
+-    cyglsa_printf ("NULL\n");
+-  else if (IsBadReadPtr (grps, sizeof (DWORD)))
+-    cyglsa_printf ("INVALID POINTER\n");
+-  else if (IsBadReadPtr (grps, sizeof (DWORD) + sizeof (SID_AND_ATTRIBUTES)
+-  						* grps->GroupCount))
+-    cyglsa_printf ("INVALID POINTER SPACE\n");
+-  else
+-    {
+-      cyglsa_printf ("Count: %lu\n", grps->GroupCount);
+-      for (i = 0; i < grps->GroupCount; ++i)
+-        {
+-	  cyglsa_printf ("(attr: 0x%lx)", grps->Groups[i].Attributes);
+-	  print_sid (" ", i, (PISID) grps->Groups[i].Sid);
+-	}
+-    }
+-}
+-
+-static void
+-print_privs (PTOKEN_PRIVILEGES privs)
+-{
+-  DWORD i;
+-
+-  cyglsa_printf ("Privileges: (0x%08x) ", (INT_PTR) privs);
+-  if (!privs)
+-    cyglsa_printf ("NULL\n");
+-  else if (IsBadReadPtr (privs, sizeof (DWORD)))
+-    cyglsa_printf ("INVALID POINTER\n");
+-  else if (IsBadReadPtr (privs, sizeof (DWORD) + sizeof (LUID_AND_ATTRIBUTES)
+-						 * privs->PrivilegeCount))
+-    cyglsa_printf ("INVALID POINTER SPACE\n");
+-  else
+-    {
+-      cyglsa_printf ("Count: %lu\n", privs->PrivilegeCount);
+-      for (i = 0; i < privs->PrivilegeCount; ++i)
+-	cyglsa_printf ("Luid: {%ld, %lu} Attributes: 0x%lx\n",
+-		privs->Privileges[i].Luid.HighPart,
+-		privs->Privileges[i].Luid.LowPart,
+-		privs->Privileges[i].Attributes);
+-    }
+-}
+-
+-static void
+-print_dacl (PACL dacl)
+-{
+-  DWORD i;
+-
+-  cyglsa_printf ("DefaultDacl: (0x%08x) ", (INT_PTR) dacl);
+-  if (!dacl)
+-    cyglsa_printf ("NULL\n");
+-  else if (IsBadReadPtr (dacl, sizeof (ACL)))
+-    cyglsa_printf ("INVALID POINTER\n");
+-  else if (IsBadReadPtr (dacl, dacl->AclSize))
+-    cyglsa_printf ("INVALID POINTER SPACE\n");
+-  else
+-    {
+-      cyglsa_printf ("Rev: %d, Count: %d\n", dacl->AclRevision, dacl->AceCount);
+-      for (i = 0; i < dacl->AceCount; ++i)
+-        {
+-	  PVOID vace;
+-	  PACCESS_ALLOWED_ACE ace;
+-
+-	  if (!GetAce (dacl, i, &vace))
+-	    cyglsa_printf ("[%lu] GetAce error %lu\n", i, GetLastError ());
+-	  else
+-	    {
+-	      ace = (PACCESS_ALLOWED_ACE) vace;
+-	      cyglsa_printf ("Type: %x, Flags: %x, Access: %lx,",
+-		      ace->Header.AceType, ace->Header.AceFlags, (DWORD) ace->Mask);
+-	      print_sid (" ", i, (PISID) &ace->SidStart);
+-	    }
+-	}
+-    }
+-}
+-
+-static void
+-print_tokinf (PLSA_TOKEN_INFORMATION_V2 ptok, size_t size,
+-	       PVOID got_start, PVOID gotinf_start, PVOID gotinf_end)
+-{
+-  if (fh == INVALID_HANDLE_VALUE)
+-    return;
+-
+-  cyglsa_printf ("INCOMING: start: 0x%08x infstart: 0x%08x infend: 0x%08x\n",
+-	  (INT_PTR) got_start, (INT_PTR) gotinf_start,
+-	  (INT_PTR) gotinf_end);
+-
+-  cyglsa_printf ("LSA_TOKEN_INFORMATION_V2: 0x%08x - 0x%08x\n",
+-	  (INT_PTR) ptok, (INT_PTR) ptok + size);
+-
+-  /* User SID */
+-  cyglsa_printf ("User: (attr: 0x%lx)", ptok->User.User.Attributes);
+-  print_sid (" ", -1, (PISID) ptok->User.User.Sid);
+-
+-  /* Groups */
+-  print_groups (ptok->Groups);
+-
+-  /* Primary Group SID */
+-  print_sid ("Primary Group: ", -1, (PISID)ptok->PrimaryGroup.PrimaryGroup);
+-
+-  /* Privileges */
+-  print_privs (ptok->Privileges);
+-
+-  /* Owner */
+-  print_sid ("Owner: ", -1, (PISID) ptok->Owner.Owner);
+-
+-  /* Default DACL */
+-  print_dacl (ptok->DefaultDacl.DefaultDacl);
+-
+-  // CloseHandle (fh);
+-}
+-
+-NTSTATUS NTAPI
+-LsaApInitializePackage (ULONG authp_id, PLSA_SECPKG_FUNCS dpt,
+-			PLSA_STRING dummy1, PLSA_STRING dummy2,
+-			PLSA_STRING *authp_name)
+-{
+-  PLSA_STRING name = NULL;
+-
+-  /* Set global pointer to lsa helper function table. */
+-  funcs = dpt;
+-
+-  /* Allocate and set the name of the authentication package.  This is the
+-     name which has to be used in LsaLookupAuthenticationPackage. */
+-  if (!(name = funcs->AllocateLsaHeap (sizeof *name)))
+-    return STATUS_NO_MEMORY;
+-  if (!(name->Buffer = funcs->AllocateLsaHeap (sizeof (CYG_LSA_PKGNAME))))
+-    {
+-      funcs->FreeLsaHeap (name);
+-      return STATUS_NO_MEMORY;
+-    }
+-  name->Length = sizeof (CYG_LSA_PKGNAME) - 1;
+-  name->MaximumLength = sizeof (CYG_LSA_PKGNAME);
+-  strcpy (name->Buffer, CYG_LSA_PKGNAME);
+-  (*authp_name) = name;
+-
+-#ifdef DEBUGGING
+-  fh = CreateFile ("C:\\cyglsa.dbgout", GENERIC_WRITE,
+-		   FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+-		   NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+-  cyglsa_printf ("Initialized\n");
+-#endif /* DEBUGGING */
+-
+-  return STATUS_SUCCESS;
+-}
+-
+-NTSTATUS NTAPI
+-LsaApLogonUserEx (PLSA_CLIENT_REQUEST request, SECURITY_LOGON_TYPE logon_type,
+-		  PVOID auth, PVOID client_auth_base, ULONG auth_len,
+-		  PVOID *pbuf, PULONG pbuf_len, PLUID logon_id,
+-		  PNTSTATUS sub_stat, PLSA_TOKEN_INFORMATION_TYPE tok_type,
+-		  PVOID *tok, PUNICODE_STRING *account,
+-		  PUNICODE_STRING *authority, PUNICODE_STRING *machine)
+-{
+-  DWORD checksum, i;
+-  PDWORD csp, csp_end;
+-  NTSTATUS stat;
+-  SECPKG_CLIENT_INFO clinf;
+-  PLSA_TOKEN_INFORMATION_V2 tokinf;
+-
+-  cyglsa_t *authinf = (cyglsa_t *) auth;
+-
+-  /* Check if the caller has the SeTcbPrivilege, otherwise refuse service. */
+-  stat = funcs->GetClientInfo (&clinf);
+-  if (stat != STATUS_SUCCESS)
+-    {
+-      cyglsa_printf ("GetClientInfo failed: 0x%08lx\n", stat);
+-      return stat;
+-    }
+-  if (!clinf.HasTcbPrivilege)
+-    {
+-      cyglsa_printf ("Client has no TCB privilege.  Access denied.\n");
+-      return STATUS_ACCESS_DENIED;
+-    }
+-
+-  /* Make a couple of validity checks. */
+-  if (auth_len < sizeof *authinf
+-      || authinf->magic != CYG_LSA_MAGIC
+-      || !authinf->username[0]
+-      || !authinf->domain[0])
+-    {
+-      cyglsa_printf ("Invalid authentication parameter.\n");
+-      return STATUS_INVALID_PARAMETER;
+-    }
+-  checksum = CYG_LSA_MAGIC;
+-  csp = (PDWORD) &authinf->username;
+-  csp_end = (PDWORD) ((PBYTE) authinf + auth_len);
+-  while (csp < csp_end)
+-    checksum += *csp++;
+-  if (authinf->checksum != checksum)
+-    {
+-      cyglsa_printf ("Invalid checksum.\n");
+-      return STATUS_INVALID_PARAMETER_3;
+-    }
+-
+-  /* Set account to username and authority to domain resp. machine name.
+-     The name of the logon account name as returned by LookupAccountSid
+-     is created from here as "authority\account". */
+-  authinf->username[UNLEN] = '\0';
+-  authinf->domain[MAX_DOMAIN_NAME_LEN] = '\0';
+-  if (account && !(*account = uni_alloc (authinf->username,
+-  					 wcslen (authinf->username))))
+-    {
+-      cyglsa_printf ("No memory trying to create account.\n");
+-      return STATUS_NO_MEMORY;
+-    }
+-  if (authority && !(*authority = uni_alloc (authinf->domain,
+-					     wcslen (authinf->domain))))
+-    {
+-      cyglsa_printf ("No memory trying to create authority.\n");
+-      return STATUS_NO_MEMORY;
+-    }
+-  if (machine)
+-    {
+-      WCHAR mach[MAX_COMPUTERNAME_LENGTH + 1];
+-      DWORD msize = MAX_COMPUTERNAME_LENGTH + 1;
+-      if (!GetComputerNameW (mach, &msize))
+-        wcscpy (mach, L"UNKNOWN");
+-      if (!(*machine = uni_alloc (mach, wcslen (mach))))
+-	{
+-	  cyglsa_printf ("No memory trying to create machine.\n");
+-	  return STATUS_NO_MEMORY;
+-	}
+-    }
+-  /* Create a fake buffer in pbuf which is free'd again in the client.
+-     Windows 2000 tends to crash when setting this pointer to NULL. */
+-  if (pbuf)
+-    {
+-#ifdef JUST_ANOTHER_NONWORKING_SOLUTION
+-      cygprf_t prf;
+-      WCHAR sam_username[MAX_DOMAIN_NAME_LEN + UNLEN + 2];
+-      SECURITY_STRING sam_user, prefix;
+-      PUCHAR user_auth;
+-      ULONG user_auth_size;
+-      WCHAR flatname[UNLEN + 1];
+-      UNICODE_STRING flatnm;
+-      TOKEN_SOURCE ts;
+-      HANDLE token;
+-#endif /* JUST_ANOTHER_NONWORKING_SOLUTION */
+-
+-      stat = funcs->AllocateClientBuffer (request, 64UL, pbuf);
+-      if (!LSA_SUCCESS (stat))
+-	{
+-	  cyglsa_printf ("AllocateClientBuffer failed: 0x%08lx\n", stat);
+-	  return stat;
+-	}
+-#ifdef JUST_ANOTHER_NONWORKING_SOLUTION
+-      prf.magic_pre = MAGIC_PRE;
+-      prf.token = NULL;
+-      prf.magic_post = MAGIC_POST;
+-
+-#if 0
+-      /* That's how it was supposed to work according to MSDN... */
+-      wcscpy (sam_username, authinf->domain);
+-      wcscat (sam_username, L"\\");
+-      wcscat (sam_username, authinf->username);
+-#else
+-      /* That's the only solution which worked, and then it only worked
+-         for machine local accounts.  No domain authentication possible.
+-	 STATUS_NO_SUCH_USER galore! */
+-      wcscpy (sam_username, authinf->username);
+-#endif
+-      RtlInitUnicodeString (&sam_user, sam_username);
+-      RtlInitUnicodeString (&prefix, L"");
+-      RtlInitEmptyUnicodeString (&flatnm, flatname,
+-				 (UNLEN + 1) * sizeof (WCHAR));
+-
+-      stat = funcs->GetAuthDataForUser (&sam_user, SecNameSamCompatible,
+-					NULL, &user_auth,
+-					&user_auth_size, &flatnm);
+-      if (!NT_SUCCESS (stat))
+-	{
+-	  char sam_u[MAX_DOMAIN_NAME_LEN + UNLEN + 2];
+-	  wcstombs (sam_u, sam_user.Buffer, sizeof (sam_u));
+-	  cyglsa_printf ("GetAuthDataForUser (%u,%u,%s) failed: 0x%08lx\n",
+-		  sam_user.Length, sam_user.MaximumLength, sam_u, stat);
+-	  return stat;
+-	}
+-
+-      memcpy (ts.SourceName, "Cygwin.1", 8);
+-      ts.SourceIdentifier.HighPart = 0;
+-      ts.SourceIdentifier.LowPart = 0x0104;
+-      RtlInitEmptyUnicodeString (&flatnm, flatname,
+-				 (UNLEN + 1) * sizeof (WCHAR));
+-      stat = funcs->ConvertAuthDataToToken (user_auth, user_auth_size,
+-					    SecurityDelegation, &ts,
+-					    Interactive, *authority,
+-					    &token, logon_id, &flatnm,
+-					    sub_stat);
+-      if (!NT_SUCCESS (stat))
+-	{
+-	  cyglsa_printf ("ConvertAuthDataToToken failed: 0x%08lx\n", stat);
+-	  return stat;
+-	}
+-
+-      stat = funcs->DuplicateHandle (token, &prf.token);
+-      if (!NT_SUCCESS (stat))
+-	{
+-	  cyglsa_printf ("DuplicateHandle failed: 0x%08lx\n", stat);
+-	  return stat;
+-	}
+-      
+-      stat = funcs->CopyToClientBuffer (request, sizeof prf, *pbuf, &prf);
+-      if (!NT_SUCCESS (stat))
+-	{
+-	  cyglsa_printf ("CopyToClientBuffer failed: 0x%08lx\n", stat);
+-	  return stat;
+-	}
+-      funcs->FreeLsaHeap (user_auth);
+-#endif /* JUST_ANOTHER_NONWORKING_SOLUTION */
+-    }
+-  if (pbuf_len)
+-    *pbuf_len = 64UL;
+-
+-  /* A PLSA_TOKEN_INFORMATION_V2 is allocated in one piece, so... */
+-#if defined (__x86_64__) || defined (_M_AMD64)
+-    {
+-      /* ...on 64 bit systems we have to convert the incoming 32 bit offsets
+-	 into 64 bit pointers.  That requires to re-evaluate the size of the
+-	 outgoing tokinf structure and a somewhat awkward procedure to copy
+-	 the information over. */
+-      LONG_PTR base;
+-      PBYTE tptr;
+-      DWORD size, newsize;
+-      PSID src_sid;
+-      PCYG_TOKEN_GROUPS src_grps;
+-      PTOKEN_GROUPS grps;
+-      PTOKEN_PRIVILEGES src_privs;
+-      PACL src_acl;
+-
+-      base = (LONG_PTR) &authinf->inf;
+-
+-      newsize = authinf->inf_size;
+-      newsize += sizeof (TOKEN_USER) - sizeof (CYG_TOKEN_USER); /* User SID */
+-      newsize += sizeof (PTOKEN_GROUPS) - sizeof (OFFSET); /* Groups */
+-      src_grps = (PCYG_TOKEN_GROUPS) (base + authinf->inf.Groups);
+-      newsize += src_grps->GroupCount		  /* Group SIDs */
+-      		 * (sizeof (SID_AND_ATTRIBUTES)
+-		    - sizeof (CYG_SID_AND_ATTRIBUTES));
+-      newsize += sizeof (PSID) - sizeof (OFFSET); /* Primary Group SID */
+-      newsize += sizeof (PTOKEN_PRIVILEGES) - sizeof (OFFSET); /* Privileges */
+-      newsize += 0; /* Owner SID */
+-      newsize += sizeof (PACL) - sizeof (OFFSET); /* Default DACL */
+-
+-      if (!(tokinf = funcs->AllocateLsaHeap (newsize)))
+-	return STATUS_NO_MEMORY;
+-      tptr = (PBYTE)(tokinf + 1);
+-
+-      tokinf->ExpirationTime = authinf->inf.ExpirationTime;
+-      /* User SID */
+-      src_sid = (PSID) (base + authinf->inf.User.User.Sid);
+-      size = GetLengthSid (src_sid);
+-      CopySid (size, (PSID) tptr, src_sid);
+-      tokinf->User.User.Sid = (PSID) tptr;
+-      tptr += size;
+-      tokinf->User.User.Attributes = authinf->inf.User.User.Attributes;
+-      /* Groups */
+-      grps = (PTOKEN_GROUPS) tptr;
+-      tokinf->Groups = grps;
+-      grps->GroupCount = src_grps->GroupCount;
+-      tptr += sizeof grps->GroupCount
+-	      + grps->GroupCount * sizeof (SID_AND_ATTRIBUTES);
+-      /* Group SIDs */
+-      for (i = 0; i < src_grps->GroupCount; ++i)
+-	{
+-	  src_sid = (PSID) (base + src_grps->Groups[i].Sid);
+-	  size = GetLengthSid (src_sid);
+-	  CopySid (size, (PSID) tptr, src_sid);
+-	  tokinf->Groups->Groups[i].Sid = (PSID) tptr;
+-	  tptr += size;
+-	  tokinf->Groups->Groups[i].Attributes = src_grps->Groups[i].Attributes;
+-	}
+-      /* Primary Group SID */
+-      src_sid = (PSID) (base + authinf->inf.PrimaryGroup.PrimaryGroup);
+-      size = GetLengthSid (src_sid);
+-      CopySid (size, (PSID) tptr, src_sid);
+-      tokinf->PrimaryGroup.PrimaryGroup = (PSID) tptr;
+-      tptr += size;
+-      /* Privileges */
+-      src_privs = (PTOKEN_PRIVILEGES) (base + authinf->inf.Privileges);
+-      size = sizeof src_privs->PrivilegeCount
+-	     + src_privs->PrivilegeCount * sizeof (LUID_AND_ATTRIBUTES);
+-      memcpy (tptr, src_privs, size);
+-      tokinf->Privileges = (PTOKEN_PRIVILEGES) tptr;
+-      tptr += size;
+-      /* Owner */
+-      tokinf->Owner.Owner = NULL;
+-      /* Default DACL */
+-      src_acl = (PACL) (base + authinf->inf.DefaultDacl.DefaultDacl);
+-      size = src_acl->AclSize;
+-      memcpy (tptr, src_acl, size);
+-      tokinf->DefaultDacl.DefaultDacl = (PACL) tptr;
+-    }
+-#else
+-    {
+-      /* ...on 32 bit systems we just allocate tokinf with the same size as
+-         we get, copy the whole structure and convert offsets into pointers. */
+-      if (!(tokinf = funcs->AllocateLsaHeap (authinf->inf_size)))
+-	return STATUS_NO_MEMORY;
+-      memcpy (tokinf, &authinf->inf, authinf->inf_size);
+-
+-      /* User SID */
+-      tokinf->User.User.Sid = (PSID)
+-	      ((PBYTE) tokinf + (LONG_PTR) tokinf->User.User.Sid);
+-      /* Groups */
+-      tokinf->Groups = (PTOKEN_GROUPS)
+-	      ((PBYTE) tokinf + (LONG_PTR) tokinf->Groups);
+-      /* Group SIDs */
+-      for (i = 0; i < tokinf->Groups->GroupCount; ++i)
+-	tokinf->Groups->Groups[i].Sid = (PSID)
+-	      ((PBYTE) tokinf + (LONG_PTR) tokinf->Groups->Groups[i].Sid);
+-      /* Primary Group SID */
+-      tokinf->PrimaryGroup.PrimaryGroup = (PSID)
+-	      ((PBYTE) tokinf + (LONG_PTR) tokinf->PrimaryGroup.PrimaryGroup);
+-      /* Privileges */
+-      tokinf->Privileges = (PTOKEN_PRIVILEGES)
+-	      ((PBYTE) tokinf + (LONG_PTR) tokinf->Privileges);
+-      /* Owner SID */
+-      tokinf->Owner.Owner = NULL;
+-      /* Default DACL */
+-      tokinf->DefaultDacl.DefaultDacl = (PACL)
+-	      ((PBYTE) tokinf + (LONG_PTR) tokinf->DefaultDacl.DefaultDacl);
+-    }
+-#endif
+-
+-  *tok = (PVOID) tokinf;
+-  *tok_type = LsaTokenInformationV2;
+-
+-  print_tokinf (tokinf, authinf->inf_size, authinf, &authinf->inf,
+-		(PVOID)((LONG_PTR) &authinf->inf + authinf->inf_size));
+-
+-  /* Create logon session. */
+-  if (!AllocateLocallyUniqueId (logon_id))
+-    {
+-      funcs->FreeLsaHeap (*tok);
+-      *tok = NULL;
+-      cyglsa_printf ("AllocateLocallyUniqueId failed: Win32 error %lu\n",
+-		     GetLastError ());
+-      return STATUS_INSUFFICIENT_RESOURCES;
+-    }
+-  stat = funcs->CreateLogonSession (logon_id);
+-  if (stat != STATUS_SUCCESS)
+-    {
+-      funcs->FreeLsaHeap (*tok);
+-      *tok = NULL;
+-      cyglsa_printf ("CreateLogonSession failed: 0x%08lx\n", stat);
+-      return stat;
+-    }
+-
+-  cyglsa_printf ("BINGO!!!\n", stat);
+-  return STATUS_SUCCESS;
+-}
+-
+-VOID NTAPI
+-LsaApLogonTerminated(PLUID LogonId)
+-{
+-}
+-
+-NTSTATUS NTAPI
+-LsaApCallPackage (PLSA_CLIENT_REQUEST request, PVOID authinf,
+-		  PVOID client_auth_base, ULONG auth_len, PVOID *ret_buf,
+-		  PULONG ret_buf_len, PNTSTATUS ret_stat) 
+-{
+-  return STATUS_NOT_IMPLEMENTED;
+-}
+diff --git a/winsup/lsaauth/cyglsa.din b/winsup/lsaauth/cyglsa.din
+deleted file mode 100644
+index 69eece0cb..000000000
+--- a/winsup/lsaauth/cyglsa.din
++++ /dev/null
+@@ -1,9 +0,0 @@
+-LIBRARY "cyglsa"
+-
+-EXPORTS
+-LsaApInitializePackage = LsaApInitializePackage@20
+-LsaApLogonUserEx = LsaApLogonUserEx@56
+-LsaApLogonTerminated = LsaApLogonTerminated@4
+-LsaApCallPackage = LsaApCallPackage@28
+-LsaApCallPackagePassthrough = LsaApCallPackage@28
+-LsaApCallPackageUntrusted = LsaApCallPackage@28
+diff --git a/winsup/lsaauth/cyglsa64.def b/winsup/lsaauth/cyglsa64.def
+deleted file mode 100644
+index 7b2d5921e..000000000
+--- a/winsup/lsaauth/cyglsa64.def
++++ /dev/null
+@@ -1,9 +0,0 @@
+-LIBRARY "cyglsa64"
+-
+-EXPORTS
+-LsaApInitializePackage
+-LsaApLogonUserEx
+-LsaApLogonTerminated
+-LsaApCallPackage
+-LsaApCallPackagePassthrough = LsaApCallPackage
+-LsaApCallPackageUntrusted = LsaApCallPackage
 -- 
 2.28.0
 
