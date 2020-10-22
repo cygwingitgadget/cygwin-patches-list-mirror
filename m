@@ -1,47 +1,51 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
- by sourceware.org (Postfix) with ESMTPS id 56A903857C4D
- for <cygwin-patches@cygwin.com>; Thu, 22 Oct 2020 17:27:12 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 56A903857C4D
+Return-Path: <jon.turney@dronecode.org.uk>
+Received: from sa-prd-fep-041.btinternet.com (mailomta11-sa.btinternet.com
+ [213.120.69.17])
+ by sourceware.org (Postfix) with ESMTPS id 3F3FD386103B
+ for <cygwin-patches@cygwin.com>; Thu, 22 Oct 2020 18:58:01 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 3F3FD386103B
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=dronecode.org.uk
 Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MD5fd-1keD4Z39P7-009602 for <cygwin-patches@cygwin.com>; Thu, 22 Oct 2020
- 19:27:10 +0200
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 4C74AA8093C; Thu, 22 Oct 2020 19:27:10 +0200 (CEST)
-Date: Thu, 22 Oct 2020 19:27:10 +0200
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
+ spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
+Received: from sa-prd-rgout-005.btmx-prd.synchronoss.net ([10.2.38.8])
+ by sa-prd-fep-041.btinternet.com with ESMTP id
+ <20201022185800.IUIX29142.sa-prd-fep-041.btinternet.com@sa-prd-rgout-005.btmx-prd.synchronoss.net>
+ for <cygwin-patches@cygwin.com>; Thu, 22 Oct 2020 19:58:00 +0100
+Authentication-Results: btinternet.com;
+ auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 5ED9B8A7174E68CE
+X-Originating-IP: [86.139.158.27]
+X-OWM-Source-IP: 86.139.158.27 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedujedrjeekgdehtdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepuffvfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepudekiefgledvudfhgeevffehieeuieeujeehfeelffdtgeeltefguedtvdegffejnecuffhomhgrihhnpehgnhhurdhorhhgnecukfhppeekiedrudefledrudehkedrvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddurdduuddungdpihhnvghtpeekiedrudefledrudehkedrvdejpdhmrghilhhfrhhomhepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqecuuefqffgjpeekuefkvffokffogfdprhgtphhtthhopeeotgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomheq
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from [192.168.1.111] (86.139.158.27) by
+ sa-prd-rgout-005.btmx-prd.synchronoss.net (5.8.340) (authenticated as
+ jonturney@btinternet.com)
+ id 5ED9B8A7174E68CE for cygwin-patches@cygwin.com;
+ Thu, 22 Oct 2020 19:58:00 +0100
 Subject: Re: [PATCH 3/3] Remove recursive configure for cygwin
-Message-ID: <20201022172710.GS5492@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
+To: Cygwin Patches <cygwin-patches@cygwin.com>
 References: <20201021194705.19056-1-jon.turney@dronecode.org.uk>
  <20201021194705.19056-4-jon.turney@dronecode.org.uk>
+ <20201022172710.GS5492@calimero.vinschen.de>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+Message-ID: <fb4a8bf6-9b4a-3e77-cb32-bdd7fcce49fe@dronecode.org.uk>
+Date: Thu, 22 Oct 2020 19:57:57 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201021194705.19056-4-jon.turney@dronecode.org.uk>
-X-Provags-ID: V03:K1:p7C9jg6bMZjEvOQ1ZXydGd1QVGnS0INw9bM56jB2A3xt4QBFW8+
- n3JgVEgqiXIgb1cQqacUymJAqNCRGyrhSinOJHnx35x1RqFy+nuS2E9C6EnpuS2yfw/5HNQ
- aKLfuE22LHhM1dZ0srhwemJXsZY4674qycpEBUlIUudoZFm2bgy7CwYyWY7tjTB4PIImVyY
- KLv5LRbCylcf470Pqup7w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:16gx+oDFYWE=:dcYCkwGit7M3KZYFlKGtO3
- a2tXWY0ZphnD7EWLcIAE6lHYeWOasH1Cs4WRyiBEL4MKWO7HoF9fVaNe016tD/64YcapmMaGs
- NVpyzTGufSzALNp/PbE7Pp5hW/jtvvVjZ1wm837d75pk36fMqMPsVJo6pfastguzjv9z3aFN3
- 6wA6btaWYr2WVacA4NBavSZ4I3rGyKqDMlpRL3EVyBEAOAB7UYZweyp2+SrWyMvs3EgRdQDWM
- dckqQxxliPM5HnCmRGi5wYiqXjcMdS30OsqZv7rBPfm77BgS6xBmkZT+tbpiZ3j6Q3e3W54J/
- w6n2OcUsu/NY+L8KK9N77plf/ojvmG8Fwr1RY10A/NWgZYnXnW2NVArPP5dhutAO5c1geySS8
- Eh6/fJc7bPGtjGeT85DUt+OyDP96jPU4yUrL7Kh+xu0/kScWH1EwAmCFWJx2saRIkYvwjEkst
- bAL5+hiLuw==
-X-Spam-Status: No, score=-100.5 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+In-Reply-To: <20201022172710.GS5492@calimero.vinschen.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1194.4 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, KAM_SHORT, NICE_REPLY_A,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_NONE,
+ TXREP autolearn=no autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -56,33 +60,54 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 22 Oct 2020 17:27:13 -0000
+X-List-Received-Date: Thu, 22 Oct 2020 18:58:02 -0000
 
-On Oct 21 20:47, Jon Turney wrote:
-> There's doesn't seem to be much use in independently building these
-> subdirectories,
+On 22/10/2020 18:27, Corinna Vinschen wrote:
+> On Oct 21 20:47, Jon Turney wrote:
+>> There's doesn't seem to be much use in independently building these
+>> subdirectories,
+> 
+> Uhm... that doesn't match how I'm working in these dirs.  I'm building
+> the subdirs independently all the time, especially during debugging
+> sessions.  I'd not want to lose the ability to build in the
+> cygwin or utils dirs independently.
 
-Uhm... that doesn't match how I'm working in these dirs.  I'm building
-the subdirs independently all the time, especially during debugging
-sessions.  I'd not want to lose the ability to build in the
-cygwin or utils dirs independently.
+Sorry for being unclear here.  What I mean here is we are currently 
+handling those subdirectories as if they are independent packages, which 
+could distributed and built separately.
 
-> so allowing them to be independently configured seems
-> pointless and overcomplicated.
+(See discussion of AC_CONFIG_SUBDIRS in [1])
 
-There's not much of a reason to allow independent configuring, I guess,
-but apart from the base configure run during a build from top-level,
-I sometimes run configure only in the dir I change or add files.
+[1] 
+https://www.gnu.org/software/autoconf/manual/autoconf-2.69/html_node/Subdirectories.html
 
-> The order in which the subdirectories are built is still a little odd,
-> as cygwin is linked with libcygserver, and cygserver is then linked with
-> cygwin. So, we build the cygwin directory first, which invokes a build
-> of libcygserver in the cygserver directory, and then build in the
-> cygserver directory to build the cygserver executable.
+This doesn't remove the ability to run make in those subdirectories.
 
-Does creating a new subdir called libcygserver just to build the lib
-clean up things, perhaps?
+>> so allowing them to be independently configured seems
+>> pointless and overcomplicated.
+> 
+> There's not much of a reason to allow independent configuring, I guess,
+> but apart from the base configure run during a build from top-level,
+> I sometimes run configure only in the dir I change or add files.
 
+I actually skimped on writing the rules which reconfigure when needed 
+when make is run in a subdirectory, as working them out seemed complex 
+and a bit redundant, as when I convert to automake, it writes them for you.
 
-Thanks,
-Corinna
+I guess I should take another look at that.
+
+>> The order in which the subdirectories are built is still a little odd,
+>> as cygwin is linked with libcygserver, and cygserver is then linked with
+>> cygwin. So, we build the cygwin directory first, which invokes a build
+>> of libcygserver in the cygserver directory, and then build in the
+>> cygserver directory to build the cygserver executable.
+> 
+> Does creating a new subdir called libcygserver just to build the lib
+> clean up things, perhaps?
+
+I did experiment with something like that, but I'm not sure if it makes 
+things any clearer, as:
+
+(i) It's the same source files built with/without -D__OUTSIDE_CYGWIN__
+(ii) building libcygserver requires the generated file globals.h
+
