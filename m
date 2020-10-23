@@ -1,43 +1,46 @@
-Return-Path: <marco.atzeri@gmail.com>
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com
- [IPv6:2a00:1450:4864:20::643])
- by sourceware.org (Postfix) with ESMTPS id 76F03385802D
- for <cygwin-patches@cygwin.com>; Fri, 23 Oct 2020 08:17:04 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 76F03385802D
-Received: by mail-ej1-x643.google.com with SMTP id k3so1150978ejj.10
- for <cygwin-patches@cygwin.com>; Fri, 23 Oct 2020 01:17:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20161025;
- h=x-gm-message-state:mime-version:references:in-reply-to:from:date
- :message-id:subject:to;
- bh=VT1RHdU506jvypNsKdgMbO5Gd9Ik8h1SFIEDdaGAzHA=;
- b=UXe8T7OA6qAJ48ZaR2r8+DPFQUmwb9lrid5syd+RYT0HNdZck+wTCb8d87qjLwGr/B
- 4zDcdHDaFG8ZipY5yKIB4feLx1mkcqWgveisSDApyaNqmv7V+ugDDApnbIdeqTvk0mPb
- DfH8cHDLjEaLO0ZTjDjpUMQbAMPQprjHnR7/5YuqgdYsxnVNWU49qXDMyTFGyWZe1xWd
- YCXQkeBWoad8C4Zn/ISiD/l7cMKsDEwv5ihJxGquG0OyAfLaeH+HCNlt3vYJdInoMPU6
- p94l3gZy1JhuNzpCxLk0ZP29iVprL2Op6H59Vvws8Y6URWQJvFm7I2YJVAT1NmCY4puD
- KlXQ==
-X-Gm-Message-State: AOAM533ROzjNv0eBYbX8ROB3tm1xdIxMSXomxkE3T6l1u5Q0A8kTx+uX
- HFgjMKZdduMW6HHxlDPlDhtiS57nilTkoGQqKmi2sleNngo=
-X-Google-Smtp-Source: ABdhPJydezcdCCo9WzG8AY3i4BkYug2MQ+b2B68ujM4EeK1j8fLL8H03pcjtQzdoNvaOEzA2pGPYSW3yLTUiaDPIA2s=
-X-Received: by 2002:a17:906:3b02:: with SMTP id
- g2mr905882ejf.512.1603441023275; 
- Fri, 23 Oct 2020 01:17:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20201020134304.11281-1-jon.turney@dronecode.org.uk>
- <20201020134304.11281-4-jon.turney@dronecode.org.uk>
- <fe4bf082-427b-9611-39a5-8d50a79ba9f1@dronecode.org.uk>
- <20201021150727.GQ5492@calimero.vinschen.de>
-In-Reply-To: <20201021150727.GQ5492@calimero.vinschen.de>
-From: marco atzeri <marco.atzeri@gmail.com>
-Date: Fri, 23 Oct 2020 10:16:52 +0200
-Message-ID: <CAB8Xom-TYSsKCgSY6BEo-jj6p3wySbiyQdpkCajmzqoN9=8bXQ@mail.gmail.com>
-Subject: Re: [PATCH 3/6] gendef generates sigfe.s and cygwin.def
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+ by sourceware.org (Postfix) with ESMTPS id 04B343858036
+ for <cygwin-patches@cygwin.com>; Fri, 23 Oct 2020 09:21:19 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 04B343858036
+Authentication-Results: sourceware.org;
+ dmarc=none (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org;
+ spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MHG4W-1kaGzO0R7I-00DJgx for <cygwin-patches@cygwin.com>; Fri, 23 Oct 2020
+ 11:21:18 +0200
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id F18C3A81039; Fri, 23 Oct 2020 11:21:16 +0200 (CEST)
+Date: Fri, 23 Oct 2020 11:21:16 +0200
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, FREEMAIL_FROM, GIT_PATCH_0,
- RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_PASS,
+Subject: Re: [PATCH 0/1] Fix MSG_WAITALL support
+Message-ID: <20201023092116.GT5492@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20201012180213.21748-1-kbrown@cornell.edu>
+ <48028fa7-5bcd-2c37-f535-87ad622840ba@cornell.edu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <48028fa7-5bcd-2c37-f535-87ad622840ba@cornell.edu>
+X-Provags-ID: V03:K1:kvnSvWLlMd1tqonWMASwWgTOWmS5NwOgpyAbJnZFzQLzydzMtxm
+ SdRiMk9dnOO91aNx8w0RRLdvrtUnex5apEJJo99mFmB8jGibsDbOow1pAHhWdxYLADJMfuC
+ elfn7Js2Qa4GwvyVmH31Om8F99MD9NWD3nikXpq/I3QeA2apSNSkZRnLoGhLd8Cw4+LMVVz
+ tWWqkyY6qEhs+eV08+akg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Nzy9gSI2RQc=:4HaJADQHveaJMfkEQb5Pzz
+ lO/i+lvDCvi6JeH/na6WHjSVq8y4L2CD3rR72Q5ksf0fi/Q6j5v3bbsrelt3niYMZhvCuSNnf
+ eUoiCCXBKl1p2V3I3P8qriRn5NXHYfwLxS2Cd6RzlBznbr3niIzKJDiqf3uQcOqw1RMnQSU00
+ kapDHHg8yFIsyiZZqSUzJ4Y7JRYzhxjqzKgpzYkiSnTNjIaUR60h7thOMvPD7r50Cu0HyY70t
+ 5/BifJG014eBsGTFv7CFLeXbA137ePJG/lZ6sAcLmOcA+h5VguRNiiO3LqhLeuKnZ9MGoFOaf
+ rqMz38KCB/GC2u4H1ATUAXnRcuWzp+Kh5NfZRKc13owP6f/3kDDDq+sDAjDQ7ZuRzj1+sxNKD
+ D5jkyQmenkk8HZwu7NiQsJLDtDjP2/P425F5xbvA2oenhC1CVbSQpO/JUinb7/qHgTuthQL3C
+ l2M2fPCEHg==
+X-Spam-Status: No, score=-100.7 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -53,49 +56,29 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 23 Oct 2020 08:17:15 -0000
+X-List-Received-Date: Fri, 23 Oct 2020 09:21:21 -0000
 
-On Wed, Oct 21, 2020 at 5:07 PM Corinna Vinschen
-<corinna-cygwin@cygwin.com> wrote:
->
-> On Oct 21 15:31, Jon Turney wrote:
-> > On 20/10/2020 14:43, Jon Turney wrote:
-> > > Express that gendef generates sigfe.s and cygwin.def in a slightly less
-> > > nutty way.
-> > > ---
-> > >   winsup/cygwin/Makefile.in | 5 +----
-> > >   1 file changed, 1 insertion(+), 4 deletions(-)
-> > >
-> > > diff --git a/winsup/cygwin/Makefile.in b/winsup/cygwin/Makefile.in
-> > > index a56a311b8..9d05b17b3 100644
-> > > --- a/winsup/cygwin/Makefile.in
-> > > +++ b/winsup/cygwin/Makefile.in
-> > > @@ -785,16 +785,13 @@ $(VERSION_OFILES): version.cc
-> > >   Makefile: ${srcdir}/Makefile.in
-> > >     /bin/sh ./config.status
-> > > -$(DEF_FILE): gendef $(srcdir)/$(TLSOFFSETS_H) $(DIN_FILE)
-> > > +$(DEF_FILE) sigfe.s: gendef $(srcdir)/$(TLSOFFSETS_H) $(DIN_FILE)
-> > >     $(word 1,$^) --cpu=${target_cpu} --output-def=$@  --tlsoffsets=$(word 2,$^) $(wordlist 3,99,$^)
-> >
-> > Using $@ is wrong if make decides to build sigfe.s first, and $^ will
-> > contain an unwanted $(DEF_FILE) from the dependency below.
-> >
-> > So please try the attached instead.
->
-> With this patch, both architectures build and *drumrole* still
-> seem to run fine.
->
-> I'd say, ship it!
->
->
-> Thanks,
-> Corinna
+On Oct 22 15:26, Ken Brown via Cygwin-patches wrote:
+> On 10/12/2020 2:02 PM, Ken Brown via Cygwin-patches wrote:
+> > It looks to me like there's been a bug in the MSG_WAITALL support for
+> > AF_INET and AF_LOCAL sockets ever since that support was first
+> > introduced 13 years ago in commit 023a2fa7.  If I'm right, MSG_WAITALL
+> > has never worked.
+> > 
+> > This patch fixes it.  I'll push it in a few days if no one sees
+> > anything wrong with it.
+> > 
+> > In a followup email I'll show how I tested it.
+> 
+> Hi Corinna,
+> 
+> I know I said I'd push this in a few days, but that was when I thought you'd
+> be gone for a while longer.
+> 
+> Does the patch look OK?
 
-Jon,
-in the past sigfe.s was missing from the debuginfo
-https://stackoverflow.com/questions/44770147/gdb-in-cygwin-is-missing-sigfe-s
+Sure!  I mean, you tested it and it fixing a problem, right?
 
-and I assume it is still missing, can you double check ?
 
-Thanks
-Marco
+Thanks,
+Corinna
