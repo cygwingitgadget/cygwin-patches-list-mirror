@@ -1,54 +1,27 @@
-Return-Path: <jon.turney@dronecode.org.uk>
-Received: from re-prd-fep-047.btinternet.com (mailomta26-re.btinternet.com
- [213.120.69.119])
- by sourceware.org (Postfix) with ESMTPS id BBB83398B45C
- for <cygwin-patches@cygwin.com>; Fri, 23 Oct 2020 20:12:23 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org BBB83398B45C
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=dronecode.org.uk
-Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
-Received: from re-prd-rgout-002.btmx-prd.synchronoss.net ([10.2.54.5])
- by re-prd-fep-047.btinternet.com with ESMTP id
- <20201023201222.LPEV14484.re-prd-fep-047.btinternet.com@re-prd-rgout-002.btmx-prd.synchronoss.net>
- for <cygwin-patches@cygwin.com>; Fri, 23 Oct 2020 21:12:22 +0100
-Authentication-Results: btinternet.com;
- auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 5ED9C0CC1731A36E
-X-Originating-IP: [86.140.194.67]
-X-OWM-Source-IP: 86.140.194.67 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedujedrkedtgddugeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefuvfhfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeeguefhkedvfeeigefhhedtjeehieegtdehhffhheffgfehheegtdffleejteeuueenucfkphepkeeirddugedtrdduleegrdeijeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddrudduudgnpdhinhgvthepkeeirddugedtrdduleegrdeijedpmhgrihhlfhhrohhmpeeojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhequceuqfffjgepkeeukffvoffkoffgpdhrtghpthhtohepoegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmqe
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from [192.168.1.111] (86.140.194.67) by
- re-prd-rgout-002.btmx-prd.synchronoss.net (5.8.340) (authenticated as
- jonturney@btinternet.com)
- id 5ED9C0CC1731A36E for cygwin-patches@cygwin.com;
- Fri, 23 Oct 2020 21:12:22 +0100
-Subject: Re: [PATCH 3/3] Remove recursive configure for cygwin
-To: Cygwin Patches <cygwin-patches@cygwin.com>
-References: <20201021194705.19056-1-jon.turney@dronecode.org.uk>
- <20201021194705.19056-4-jon.turney@dronecode.org.uk>
- <20201022172710.GS5492@calimero.vinschen.de>
- <fb4a8bf6-9b4a-3e77-cb32-bdd7fcce49fe@dronecode.org.uk>
- <20201023092700.GU5492@calimero.vinschen.de>
- <20201023093601.GV5492@calimero.vinschen.de>
-From: Jon Turney <jon.turney@dronecode.org.uk>
-Message-ID: <c0c876c8-c666-57bf-b8a9-dbbb3348da46@dronecode.org.uk>
-Date: Fri, 23 Oct 2020 21:12:21 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.3.3
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
+ by sourceware.org (Postfix) with ESMTPS id 816383857C73
+ for <cygwin-patches@cygwin.com>; Mon, 26 Oct 2020 08:30:02 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 816383857C73
+Received: from localhost.localdomain (v038192.dynamic.ppp.asahi-net.or.jp
+ [124.155.38.192]) (authenticated)
+ by conuserg-10.nifty.com with ESMTP id 09Q8TfwJ012519;
+ Mon, 26 Oct 2020 17:29:46 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 09Q8TfwJ012519
+X-Nifty-SrcIP: [124.155.38.192]
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] Cygwin: pty: Fix race condition in initialization of pseudo
+ console.
+Date: Mon, 26 Oct 2020 17:29:31 +0900
+Message-Id: <20201026082931.85-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-In-Reply-To: <20201023093601.GV5492@calimero.vinschen.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1190.7 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H4, RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_NONE,
- TXREP autolearn=no autolearn_force=no version=3.4.2
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0,
+ RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_PASS,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -63,33 +36,64 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 23 Oct 2020 20:12:27 -0000
+X-List-Received-Date: Mon, 26 Oct 2020 08:30:06 -0000
 
-On 23/10/2020 10:36, Corinna Vinschen wrote:
->>>>
->>>> Does creating a new subdir called libcygserver just to build the lib
->>>> clean up things, perhaps?
->>>
->>> I did experiment with something like that, but I'm not sure if it makes
->>> things any clearer, as:
->>>
->>> (i) It's the same source files built with/without -D__OUTSIDE_CYGWIN__
-> 
-> Oh, btw., this is bothering me for a while now.  This may have been
-> a nice idea at the time, but wouldn't it be much better to put
-> common methods into headers and otherwise split the source between
-> client and server code? 
-> 
->>> (ii) building libcygserver requires the generated file globals.h
->>
->> I don't actually see a reason to keep this.
->>
->> There's nothing wrong simplifying this stuff, removing mkglobals_h and
->> creating a static version of globals.h inside the source dir.  For
->> instance, defining enum exit_states or enum winsym_t in global.cc just
->> to generate a globals.h from there is kind of weird anyway.  Getting rid
->> of another undocumented perl script and getting rid of the globals.h
->> build rule sounds rather good to me.
+- If output of non-cygwin process is piped to cygwin process, such
+  as less, the non-cygwin process sometimes fails to start and hangs.
+  This patch fixes the issue.
+---
+ winsup/cygwin/fhandler_tty.cc | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-I'd really prefer to do those kinds of change as separate patches, to 
-maximize the chances of having something that works. :)
+diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+index 8910af1e7..c5a081ebd 100644
+--- a/winsup/cygwin/fhandler_tty.cc
++++ b/winsup/cygwin/fhandler_tty.cc
+@@ -784,8 +784,6 @@ fhandler_pty_slave::reset_switch_to_pcon (void)
+     return;
+   get_ttyp ()->pcon_pid = 0;
+   get_ttyp ()->switch_to_pcon_in = false;
+-  get_ttyp ()->h_pseudo_console = NULL;
+-  get_ttyp ()->pcon_start = false;
+ }
+ 
+ ssize_t __stdcall
+@@ -2620,7 +2618,6 @@ fhandler_pty_slave::term_has_pcon_cap (const WCHAR *env)
+   char *p;
+   int len;
+   int x1, y1, x2, y2;
+-  tcflag_t c_lflag;
+   DWORD t0;
+ 
+   /* Check if terminal has ANSI escape sequence. */
+@@ -2629,8 +2626,6 @@ fhandler_pty_slave::term_has_pcon_cap (const WCHAR *env)
+ 
+   /* Check if terminal has CSI6n */
+   WaitForSingleObject (input_mutex, INFINITE);
+-  c_lflag = get_ttyp ()->ti.c_lflag;
+-  get_ttyp ()->ti.c_lflag &= ~ICANON;
+   /* Set h_pseudo_console and pcon_start so that the response
+      will sent to io_handle rather than io_handle_cyg. */
+   get_ttyp ()->h_pseudo_console = (HPCON *) -1; /* dummy */
+@@ -2687,10 +2682,7 @@ fhandler_pty_slave::term_has_pcon_cap (const WCHAR *env)
+       break;
+     }
+   while (len);
+-  WaitForSingleObject (input_mutex, INFINITE);
+   get_ttyp ()->h_pseudo_console = NULL;
+-  get_ttyp ()->ti.c_lflag = c_lflag;
+-  ReleaseMutex (input_mutex);
+ 
+   if (len == 0)
+     return true;
+@@ -2711,7 +2703,6 @@ not_has_csi6n:
+      in master write(). Therefore, clear it here manually. */
+   get_ttyp ()->pcon_start = false;
+   get_ttyp ()->h_pseudo_console = NULL;
+-  get_ttyp ()->ti.c_lflag = c_lflag;
+   ReleaseMutex (input_mutex);
+ maybe_dumb:
+   get_ttyp ()->pcon_cap_checked = true;
+-- 
+2.29.0
+
