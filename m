@@ -1,46 +1,26 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
- by sourceware.org (Postfix) with ESMTPS id 9D552386F022
- for <cygwin-patches@cygwin.com>; Mon, 26 Oct 2020 09:05:21 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 9D552386F022
-Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MrhLu-1k0xc41KpI-00nj5f for <cygwin-patches@cygwin.com>; Mon, 26 Oct 2020
- 10:05:20 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id EF653A81020; Mon, 26 Oct 2020 10:05:19 +0100 (CET)
-Date: Mon, 26 Oct 2020 10:05:19 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
+ by sourceware.org (Postfix) with ESMTPS id 85FA13858D37
+ for <cygwin-patches@cygwin.com>; Tue, 27 Oct 2020 08:27:28 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 85FA13858D37
+Received: from localhost.localdomain (v038192.dynamic.ppp.asahi-net.or.jp
+ [124.155.38.192]) (authenticated)
+ by conuserg-10.nifty.com with ESMTP id 09R8QiP1017894;
+ Tue, 27 Oct 2020 17:26:50 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 09R8QiP1017894
+X-Nifty-SrcIP: [124.155.38.192]
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Fix race condition in initialization of
- pseudo console.
-Message-ID: <20201026090519.GY5492@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20201026082931.85-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: pty: Disable ResizePseudoConsole() if stdout is
+ redirected.
+Date: Tue, 27 Oct 2020 17:26:34 +0900
+Message-Id: <20201027082634.441-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20201026082931.85-1-takashi.yano@nifty.ne.jp>
-X-Provags-ID: V03:K1:Npydp1JYBeyoyDOo3vRoIAdb8SJCz5Ie00Oc/15HaNuOCg9uciC
- E6frBlm/bbxcIlU5yzczLc9RMbKWQN9klg9hZwidmUM8XI+pj2gGN64i4dzqw5rwlLVzCMU
- mCK6MCb7VKQgBortDrrI0PYTzNLzZYFXs/2+Q2zCSSEM5lKQJ1xaOVe+NZTMjeOfqn37mDX
- fsm3h6njxpoCOSsHY7I8w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:2ISky8uoCqk=:Dt39+RoQChkIbz1vJJurj0
- RMBLXI2r90RbRiMFqg4DeXi7PHLr5jhC9K1M9ncyidUt+bFqBvkh9uQbMyXbhm/CM5yIVwPjE
- cEPcI/8iF4TN9ZeTAd3OqOqVGPZY/OGo9+esLA67rVvdixH0v0k5IOdF9TWepnqVqr3D1+8PK
- BUdvTFFi6A56X3UzlYQAQxkSIIuIRviMlToVpdd8rsK0S66dPNxqxfMAcgaYGBbPKAg7QOkjs
- T1R1gQS6guInN+X7BhthR+A9gp7i+bFqgtwKwDw8V/5zntQBdy9897YXXjzVLDhGqWR7M8tWp
- Jq1rblMZmNvGQXOXZuj/Zr4MHV1nEaRcI21Ja48rYC2/rYGG+drFJFclt1LMYrbOkgWzWss/y
- 8FHoatUTEZZOxgYfC2A9Mh0njVyaRs1DQKDKFi7qOqnFDlH3+0Mu5thDfQ/15Bqt+Hy5O3/7g
- Fe4V6dXXhw==
-X-Spam-Status: No, score=-100.7 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0,
+ RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_PASS,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -56,18 +36,76 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 26 Oct 2020 09:05:22 -0000
+X-List-Received-Date: Tue, 27 Oct 2020 08:27:34 -0000
 
-On Oct 26 17:29, Takashi Yano via Cygwin-patches wrote:
-> - If output of non-cygwin process is piped to cygwin process, such
->   as less, the non-cygwin process sometimes fails to start and hangs.
->   This patch fixes the issue.
-> ---
->  winsup/cygwin/fhandler_tty.cc | 9 ---------
->  1 file changed, 9 deletions(-)
+- Calling ResizePseudoConsole() generates some escape sequences.
+  Due to this behaviour, if the output of non-cygwin app is piped
+  to less, screen is sometimes distorted when the screen is resized.
+  With this patch, ResizePseudoConsole() is not called if stdout is
+  redirected.
+---
+ winsup/cygwin/fhandler_tty.cc | 8 ++++++--
+ winsup/cygwin/tty.cc          | 1 +
+ winsup/cygwin/tty.h           | 1 +
+ 3 files changed, 8 insertions(+), 2 deletions(-)
 
-Pushed.
+diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+index c5a081ebd..600de085c 100644
+--- a/winsup/cygwin/fhandler_tty.cc
++++ b/winsup/cygwin/fhandler_tty.cc
+@@ -1511,7 +1511,7 @@ fhandler_pty_common::resize_pseudo_console (struct winsize *ws)
+   size.X = ws->ws_col;
+   size.Y = ws->ws_row;
+   pinfo p (get_ttyp ()->pcon_pid);
+-  if (p)
++  if (p && !get_ttyp ()->do_not_resize_pcon)
+     {
+       HPCON_INTERNAL hpcon_local;
+       HANDLE pcon_owner =
+@@ -2489,7 +2489,10 @@ fhandler_pty_slave::setup_pseudoconsole (STARTUPINFOEXW *si, bool nopcon)
+       si->StartupInfo.hStdInput = fh0->get_handle ();
+     fhandler_base *fh1 = ::cygheap->fdtab[1];
+     if (fh1 && fh1->get_device () != get_device ())
+-      si->StartupInfo.hStdOutput = fh1->get_output_handle ();
++      {
++	get_ttyp ()->do_not_resize_pcon = true;
++	si->StartupInfo.hStdOutput = fh1->get_output_handle ();
++      }
+     fhandler_base *fh2 = ::cygheap->fdtab[2];
+     if (fh2 && fh2->get_device () != get_device ())
+       si->StartupInfo.hStdError = fh2->get_output_handle ();
+@@ -2535,6 +2538,7 @@ fhandler_pty_slave::close_pseudoconsole (void)
+       get_ttyp ()->switch_to_pcon_in = false;
+       get_ttyp ()->pcon_pid = 0;
+       get_ttyp ()->pcon_start = false;
++      get_ttyp ()->do_not_resize_pcon = false;
+     }
+ }
+ 
+diff --git a/winsup/cygwin/tty.cc b/winsup/cygwin/tty.cc
+index 7e3b88b0b..d4b8d7651 100644
+--- a/winsup/cygwin/tty.cc
++++ b/winsup/cygwin/tty.cc
+@@ -245,6 +245,7 @@ tty::init ()
+   pcon_cap_checked = false;
+   has_csi6n = false;
+   has_set_title = false;
++  do_not_resize_pcon = false;
+ }
+ 
+ HANDLE
+diff --git a/winsup/cygwin/tty.h b/winsup/cygwin/tty.h
+index 4e9199dba..2c1ac7f5d 100644
+--- a/winsup/cygwin/tty.h
++++ b/winsup/cygwin/tty.h
+@@ -104,6 +104,7 @@ private:
+   bool pcon_cap_checked;
+   bool has_csi6n;
+   bool has_set_title;
++  bool do_not_resize_pcon;
+ 
+ public:
+   HANDLE from_master () const { return _from_master; }
+-- 
+2.29.0
 
-
-Thanks,
-Corinna
