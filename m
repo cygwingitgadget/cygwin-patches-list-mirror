@@ -1,42 +1,42 @@
 Return-Path: <jon.turney@dronecode.org.uk>
-Received: from re-prd-fep-045.btinternet.com (mailomta25-re.btinternet.com
+Received: from re-prd-fep-044.btinternet.com (mailomta25-re.btinternet.com
  [213.120.69.118])
- by sourceware.org (Postfix) with ESMTPS id C27DF3842422
- for <cygwin-patches@cygwin.com>; Sat, 31 Oct 2020 15:08:50 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org C27DF3842422
+ by sourceware.org (Postfix) with ESMTPS id B26323842428
+ for <cygwin-patches@cygwin.com>; Sat, 31 Oct 2020 15:08:54 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org B26323842428
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
  header.from=dronecode.org.uk
 Authentication-Results: sourceware.org;
  spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
 Received: from re-prd-rgout-001.btmx-prd.synchronoss.net ([10.2.54.4])
- by re-prd-fep-045.btinternet.com with ESMTP id
- <20201031150849.RRAA30806.re-prd-fep-045.btinternet.com@re-prd-rgout-001.btmx-prd.synchronoss.net>;
- Sat, 31 Oct 2020 15:08:49 +0000
+ by re-prd-fep-044.btinternet.com with ESMTP id
+ <20201031150854.TPTW29010.re-prd-fep-044.btinternet.com@re-prd-rgout-001.btmx-prd.synchronoss.net>;
+ Sat, 31 Oct 2020 15:08:54 +0000
 Authentication-Results: btinternet.com; none
-X-SNCR-Rigid: 5ED9BDD0183B938A
+X-SNCR-Rigid: 5ED9BDD0183B93E5
 X-Originating-IP: [86.140.194.67]
 X-OWM-Source-IP: 86.140.194.67 (GB)
 X-OWM-Env-Sender: jonturney@btinternet.com
 X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedujedrleejgdejfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepfeeiudevhefgffffueeuheelfeegveefvdffleejfeehudetleetledvteethfdvnecukfhppeekiedrudegtddrudelgedrieejnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekiedrudegtddrudelgedrieejpdhmrghilhhfrhhomhepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqedprhgtphhtthhopeeotgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomheqpdhrtghpthhtohepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqe
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedujedrleejgdejfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepfeeiudevhefgffffueeuheelfeegveefvdffleejfeehudetleetledvteethfdvnecukfhppeekiedrudegtddrudelgedrieejnecuvehluhhsthgvrhfuihiivgepfeenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekiedrudegtddrudelgedrieejpdhmrghilhhfrhhomhepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqedprhgtphhtthhopeeotgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomheqpdhrtghpthhtohepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqe
 X-RazorGate-Vade-Verdict: clean 0
 X-RazorGate-Vade-Classification: clean
 Received: from localhost.localdomain (86.140.194.67) by
  re-prd-rgout-001.btmx-prd.synchronoss.net (5.8.340) (authenticated as
  jonturney@btinternet.com)
- id 5ED9BDD0183B938A; Sat, 31 Oct 2020 15:08:49 +0000
+ id 5ED9BDD0183B93E5; Sat, 31 Oct 2020 15:08:53 +0000
 From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
 Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH 3/7] Remove autoconf variable DLL_NAME
-Date: Sat, 31 Oct 2020 15:08:17 +0000
-Message-Id: <20201031150821.18041-4-jon.turney@dronecode.org.uk>
+Subject: [PATCH 4/7] Drop autoconf variable all_host
+Date: Sat, 31 Oct 2020 15:08:18 +0000
+Message-Id: <20201031150821.18041-5-jon.turney@dronecode.org.uk>
 X-Mailer: git-send-email 2.29.0
 In-Reply-To: <20201031150821.18041-1-jon.turney@dronecode.org.uk>
 References: <20201031150821.18041-1-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1199.2 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
+X-Spam-Status: No, score=-1199.4 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
  GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, KHOP_HELO_FCRDNS,
  RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_NONE,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
@@ -54,57 +54,87 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sat, 31 Oct 2020 15:08:52 -0000
+X-List-Received-Date: Sat, 31 Oct 2020 15:08:56 -0000
 
-Remove autoconf variable DLL_NAME, which has a constant value which is
-only used in one place.
+The autoconf variable all_host is used to make building of the stub
+library used by the testsuite conditional on not cross-compiling.
+
+Make it unconditional, so we will notice if it's broken when
+cross-compiling.
 ---
- winsup/cygwin/Makefile.in  | 4 ++--
- winsup/cygwin/configure.ac | 3 ---
- 2 files changed, 2 insertions(+), 5 deletions(-)
+ winsup/cygserver/configure.ac | 11 -----------
+ winsup/cygwin/Makefile.in     | 10 ++--------
+ winsup/cygwin/configure.ac    | 11 -----------
+ 3 files changed, 2 insertions(+), 30 deletions(-)
 
+diff --git a/winsup/cygserver/configure.ac b/winsup/cygserver/configure.ac
+index 4ff784e47..e1b29debf 100644
+--- a/winsup/cygserver/configure.ac
++++ b/winsup/cygserver/configure.ac
+@@ -27,17 +27,6 @@ AC_LANG(C++)
+ 
+ AC_CYGWIN_INCLUDES
+ 
+-case "$with_cross_host" in
+-  ""|*cygwin*)
+-    all_host="all_host"
+-    ;;
+-  *)
+-    all_host=
+-    ;;
+-esac
+-
+-AC_SUBST(all_host)
+-
+ AC_CHECK_TOOL(AR, ar, ar)
+ AC_CHECK_TOOL(AS, as, as)
+ AC_CHECK_TOOL(RANLIB, ranlib, ranlib)
 diff --git a/winsup/cygwin/Makefile.in b/winsup/cygwin/Makefile.in
-index cb9924b3a..89e1b7567 100644
+index 89e1b7567..9b07d9833 100644
 --- a/winsup/cygwin/Makefile.in
 +++ b/winsup/cygwin/Makefile.in
-@@ -102,8 +102,8 @@ RUNTESTFLAGS =
- # native rebuilding issues (we don't want the build tools to see a partially
- # built cygwin.dll and attempt to use it instead of the old one).
+@@ -572,17 +572,11 @@ exec_CFLAGS:=-fno-builtin-execve
+ fhandler_proc_CFLAGS+=-DUSERNAME="\"$(USER)\"" -DHOSTNAME="\"$(HOSTNAME)\""
+ fhandler_proc_CFLAGS+=-DGCC_VERSION="\"`$(CC) -v 2>&1 | tail -n 1`\""
  
--DLL_NAME:=@DLL_NAME@
--TEST_DLL_NAME:=${patsubst %1.dll,%0.dll,@DLL_NAME@}
-+DLL_NAME:=cygwin1.dll
-+TEST_DLL_NAME:=${patsubst %1.dll,%0.dll,$(DLL_NAME)}
- TEST_LIB_NAME:=libcygwin0.a
- STATIC_LIB_NAME:=libcygwin_s.a
- DIN_FILE=@DIN_FILE@ common.din
+-.PHONY: all force dll_ofiles install all_target all_host \
++.PHONY: all force dll_ofiles install \
+ 	install install-libs install-headers \
+ 	clean distclean realclean maintainer-clean
+ 
+-all_host=@all_host@
+-
+-all: all_target $(all_host)
+-
+-all_target: $(TARGET_LIBS)
+-
+-all_host: $(TEST_LIB_NAME)
++all: $(TARGET_LIBS) $(TEST_LIB_NAME)
+ 
+ force:
+ 
 diff --git a/winsup/cygwin/configure.ac b/winsup/cygwin/configure.ac
-index aafc4d925..658247099 100644
+index 658247099..cf9bbaba1 100644
 --- a/winsup/cygwin/configure.ac
 +++ b/winsup/cygwin/configure.ac
-@@ -61,14 +61,12 @@ esac
+@@ -29,17 +29,6 @@ AC_LANG(C++)
  
- case "$target_cpu" in
-    i?86)
--		DLL_NAME="cygwin1.dll"
- 		DLL_ENTRY="_dll_entry@12"
- 		DEF_DLL_ENTRY="dll_entry@12"
- 		DIN_FILE="i686.din"
- 		TLSOFFSETS_H="tlsoffsets.h"
- 		;;
-    x86_64)
--		DLL_NAME="cygwin1.dll"
- 		DLL_ENTRY="dll_entry"
- 		DEF_DLL_ENTRY="dll_entry"
- 		DIN_FILE="x86_64.din"
-@@ -78,7 +76,6 @@ case "$target_cpu" in
- esac
+ AC_CYGWIN_INCLUDES
  
- AC_CONFIGURE_ARGS
--AC_SUBST(DLL_NAME)
- AC_SUBST(DLL_ENTRY)
- AC_SUBST(DEF_DLL_ENTRY)
- AC_SUBST(DIN_FILE)
+-case "$with_cross_host" in
+-  ""|*cygwin*)
+-    all_host="all_host"
+-    ;;
+-  *)
+-    all_host=
+-    ;;
+-esac
+-
+-AC_SUBST(all_host)
+-
+ AC_CHECK_TOOL(AR, ar, ar)
+ AC_CHECK_TOOL(AS, as, as)
+ AC_CHECK_TOOL(DLLTOOL, dlltool, dlltool)
 -- 
 2.29.0
 
