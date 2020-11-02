@@ -1,44 +1,45 @@
-Return-Path: <jon.turney@dronecode.org.uk>
-Received: from re-prd-fep-046.btinternet.com (mailomta17-re.btinternet.com
- [213.120.69.110])
- by sourceware.org (Postfix) with ESMTPS id 2D7BF3842411
- for <cygwin-patches@cygwin.com>; Sat, 31 Oct 2020 15:09:09 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 2D7BF3842411
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=dronecode.org.uk
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+ by sourceware.org (Postfix) with ESMTPS id 6A5DB3858005
+ for <cygwin-patches@cygwin.com>; Mon,  2 Nov 2020 11:21:29 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 6A5DB3858005
 Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
-Received: from re-prd-rgout-001.btmx-prd.synchronoss.net ([10.2.54.4])
- by re-prd-fep-046.btinternet.com with ESMTP id
- <20201031150908.QUEC13971.re-prd-fep-046.btinternet.com@re-prd-rgout-001.btmx-prd.synchronoss.net>;
- Sat, 31 Oct 2020 15:09:08 +0000
-Authentication-Results: btinternet.com; none
-X-SNCR-Rigid: 5ED9BDD0183B9540
-X-Originating-IP: [86.140.194.67]
-X-OWM-Source-IP: 86.140.194.67 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedujedrleejgdejfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepfeeiudevhefgffffueeuheelfeegveefvdffleejfeehudetleetledvteethfdvnecukfhppeekiedrudegtddrudelgedrieejnecuvehluhhsthgvrhfuihiivgepheenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekiedrudegtddrudelgedrieejpdhmrghilhhfrhhomhepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqedprhgtphhtthhopeeotgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomheqpdhrtghpthhtohepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqe
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from localhost.localdomain (86.140.194.67) by
- re-prd-rgout-001.btmx-prd.synchronoss.net (5.8.340) (authenticated as
- jonturney@btinternet.com)
- id 5ED9BDD0183B9540; Sat, 31 Oct 2020 15:09:08 +0000
-From: Jon Turney <jon.turney@dronecode.org.uk>
+ dmarc=none (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org;
+ spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MDQRy-1kgfAH3qh4-00AWAk for <cygwin-patches@cygwin.com>; Mon, 02 Nov 2020
+ 12:21:27 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 7FACAA80DDC; Mon,  2 Nov 2020 12:21:26 +0100 (CET)
+Date: Mon, 2 Nov 2020 12:21:26 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH 7/7] Drop passing '-c' compiler flag into gentls_offsets
-Date: Sat, 31 Oct 2020 15:08:21 +0000
-Message-Id: <20201031150821.18041-8-jon.turney@dronecode.org.uk>
-X-Mailer: git-send-email 2.29.0
-In-Reply-To: <20201031150821.18041-1-jon.turney@dronecode.org.uk>
+Subject: Re: [PATCH 0/7] Yet more Makefile/configure cleanups
+Message-ID: <20201102112126.GB33165@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20201031150821.18041-1-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1199.7 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
- GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, KHOP_HELO_FCRDNS,
- RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20201031150821.18041-1-jon.turney@dronecode.org.uk>
+X-Provags-ID: V03:K1:9zoDlHv87irH1zlijnGvzDy9PTUrOR2HM6GROFqhs3/YNXEn//l
+ wGU8FUfcrykxOn0bbRO/7TpN3fFc/whv1GOo+soEtmUALlvJ4wObUGgLiFqqXqJd57zC7zS
+ 3jU/WBeTg7Kvgf8qKEm58WEt/k+WVImoZ6IolZ/HEg2RsBcJSccn+LFzbdQez67lLkM7Fqp
+ ciw3lWsNatbjLO2AnY77A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:eWj2mvzonD4=:2Lqehb+oIts/A2e3hm3i3B
+ rnVhKgDem4pkrd1XwhViDauB3GFRdV6iOjGH3/smwdiopE30bNVlsKPDurdDF5kBGGyi38PSL
+ OYToEwfog/fbr24kb6CIfw2/LL6XMjQktb8rKKs4GilJLkb48u/mB7OiLH+EMaVG1Hveli3o8
+ 3N+zMlgIBg8Uwmt0IkZlQRYl1zFuRhD88p/faH1ZX22tCg/rFcBw+FgMIDyB6eKwaVmph9AgZ
+ 35kUJShrQOKkmlVbGnx8bAXS7jnx8vSLVmuP9TjYLK7DXwGnilNaXuoYAEcc5znz/b8rnJNoO
+ yjZR/S6z2mrc64Lw3cNy6m1HTEthgNPdxPElEege+gBoHtI5Ya3494pXTzLk335TodnqaNlHG
+ uUmi0w1zH2gSl/HLle/AVMTXbUUONekIg1+veKsheES90sP9YqmRtMbiPnoq0AXrVlbvmS8Gz
+ 0VjC4NsRzw==
+X-Spam-Status: No, score=-100.9 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -54,27 +55,37 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sat, 31 Oct 2020 15:09:11 -0000
+X-List-Received-Date: Mon, 02 Nov 2020 11:21:33 -0000
 
-That script appends a '-E', since we only use $(CC) to preprocess, and
-thus adding '-c' is having no effect.
----
- winsup/cygwin/Makefile.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Oct 31 15:08, Jon Turney wrote:
+> For ease of reviewing, this patch series doesn't contain changes to
+> generated files which would be made by an autoreconf.
+> 
+> Jon Turney (7):
+>   Remove intro2man.stamp on clean
+>   Drop AC_SUBST(build_exeext)
+>   Remove autoconf variable DLL_NAME
+>   Drop autoconf variable all_host
+>   Remove Makefile contents conditional on PREPROCESS, which is never
+>     defined
+>   Remove rules for building libcygwin_s.a
+>   Drop passing '-c' compiler flag into gentls_offsets
+> 
+>  winsup/cygserver/configure.ac | 11 ------
+>  winsup/cygwin/Makefile.in     | 36 +++-----------------
+>  winsup/cygwin/configure.ac    | 14 --------
+>  winsup/cygwin/mkstatic        | 63 -----------------------------------
+>  winsup/doc/Makefile.in        |  5 +--
+>  winsup/doc/configure.ac       |  2 --
+>  6 files changed, 8 insertions(+), 123 deletions(-)
+>  delete mode 100755 winsup/cygwin/mkstatic
+> 
+> -- 
+> 2.29.0
 
-diff --git a/winsup/cygwin/Makefile.in b/winsup/cygwin/Makefile.in
-index 0add2320b..ec5d1efed 100644
---- a/winsup/cygwin/Makefile.in
-+++ b/winsup/cygwin/Makefile.in
-@@ -761,7 +761,7 @@ $(DEF_FILE): gendef $(srcdir)/$(TLSOFFSETS_H) $(DIN_FILE)
- 	$(word 1,$^) --cpu=${target_cpu} --output-def=$@  --tlsoffsets=$(word 2,$^) $(wordlist 3,99,$^)
- 
- $(srcdir)/$(TLSOFFSETS_H): gentls_offsets cygtls.h
--	$^ $@ $(target_cpu) $(COMPILE.cc) -c || rm $@
-+	$^ $@ $(target_cpu) $(COMPILE.cc) || rm $@
- 
- sigfe.s: $(DEF_FILE)
- 	@[ -s $@ ] || \
--- 
-2.29.0
+Looks good, I checked full build from scratch and partial
+build from inside the cygwin dir.  Please push.
 
+
+Thanks,
+Corinna
