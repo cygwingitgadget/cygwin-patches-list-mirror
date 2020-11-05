@@ -1,42 +1,42 @@
 Return-Path: <jon.turney@dronecode.org.uk>
-Received: from sa-prd-fep-047.btinternet.com (mailomta21-sa.btinternet.com
- [213.120.69.27])
- by sourceware.org (Postfix) with ESMTPS id 4294739F501E
- for <cygwin-patches@cygwin.com>; Thu,  5 Nov 2020 19:48:19 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 4294739F501E
+Received: from sa-prd-fep-042.btinternet.com (mailomta5-sa.btinternet.com
+ [213.120.69.11])
+ by sourceware.org (Postfix) with ESMTPS id 9E2B339F501E
+ for <cygwin-patches@cygwin.com>; Thu,  5 Nov 2020 19:48:21 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 9E2B339F501E
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
  header.from=dronecode.org.uk
 Authentication-Results: sourceware.org;
  spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
 Received: from sa-prd-rgout-004.btmx-prd.synchronoss.net ([10.2.38.7])
- by sa-prd-fep-047.btinternet.com with ESMTP id
- <20201105194818.YFPU28522.sa-prd-fep-047.btinternet.com@sa-prd-rgout-004.btmx-prd.synchronoss.net>;
- Thu, 5 Nov 2020 19:48:18 +0000
+ by sa-prd-fep-042.btinternet.com with ESMTP id
+ <20201105194820.ZELQ15135.sa-prd-fep-042.btinternet.com@sa-prd-rgout-004.btmx-prd.synchronoss.net>;
+ Thu, 5 Nov 2020 19:48:20 +0000
 Authentication-Results: btinternet.com; none
-X-SNCR-Rigid: 5ED9B66119336E06
+X-SNCR-Rigid: 5ED9B66119336E36
 X-Originating-IP: [86.139.158.14]
 X-OWM-Source-IP: 86.139.158.14 (GB)
 X-OWM-Env-Sender: jonturney@btinternet.com
 X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedujedruddtjedguddvlecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnheptdeltdekgeffvefflefgueeftefffeegvefguefgfeduledvtdekteevgeekieevnecuffhomhgrihhnpegthihgfihinhdrtghomhenucfkphepkeeirddufeelrdduheekrddugeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhinhgvthepkeeirddufeelrdduheekrddugedpmhgrihhlfhhrohhmpeeojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqpdhrtghpthhtohepoegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmqedprhgtphhtthhopeeojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheq
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedujedruddtjedguddvlecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepfeeiudevhefgffffueeuheelfeegveefvdffleejfeehudetleetledvteethfdvnecukfhppeekiedrudefledrudehkedrudegnecuvehluhhsthgvrhfuihiivgepgeenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekiedrudefledrudehkedrudegpdhmrghilhhfrhhomhepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqedprhgtphhtthhopeeotgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomheqpdhrtghpthhtohepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqe
 X-RazorGate-Vade-Verdict: clean 0
 X-RazorGate-Vade-Classification: clean
 Received: from localhost.localdomain (86.139.158.14) by
  sa-prd-rgout-004.btmx-prd.synchronoss.net (5.8.340) (authenticated as
  jonturney@btinternet.com)
- id 5ED9B66119336E06; Thu, 5 Nov 2020 19:48:18 +0000
+ id 5ED9B66119336E36; Thu, 5 Nov 2020 19:48:20 +0000
 From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
 Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH 06/11] Define target_builddir autoconf and Makefile variables
-Date: Thu,  5 Nov 2020 19:47:43 +0000
-Message-Id: <20201105194748.31282-7-jon.turney@dronecode.org.uk>
+Subject: [PATCH 07/11] Detect and use MinGW compilers for testsuite wrappers
+Date: Thu,  5 Nov 2020 19:47:44 +0000
+Message-Id: <20201105194748.31282-8-jon.turney@dronecode.org.uk>
 X-Mailer: git-send-email 2.29.0
 In-Reply-To: <20201105194748.31282-1-jon.turney@dronecode.org.uk>
 References: <20201105194748.31282-1-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1200.6 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
+X-Spam-Status: No, score=-1200.7 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
  GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_NONE,
  RCVD_IN_MSPIKE_H4, RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_NONE,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
@@ -54,48 +54,86 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 05 Nov 2020 19:48:20 -0000
+X-List-Received-Date: Thu, 05 Nov 2020 19:48:23 -0000
 
-This now required as cygwin_build is defined in terms of
-target_builddir.
+Drop MINGW_FE, which I can't find any trace of, and instead detect and
+use MinGW compilers.
 
-(Note that in other subdirectories, the autoconf variable
-target_builddir is AC_SUBST-ed as a side-effect of using a macro from
-winsup/acinclude.m4, which is perhaps less than ideal)
+This requires adding AC_CANONICAL_TARGET, to set $target_cpu.
 ---
- winsup/testsuite/Makefile.in  | 1 +
- winsup/testsuite/configure.ac | 4 ++++
- 2 files changed, 5 insertions(+)
+ winsup/testsuite/Makefile.in            | 8 +++++---
+ winsup/testsuite/configure.ac           | 5 +++++
+ winsup/testsuite/winsup.api/cygload.exp | 2 +-
+ 3 files changed, 11 insertions(+), 4 deletions(-)
 
 diff --git a/winsup/testsuite/Makefile.in b/winsup/testsuite/Makefile.in
-index aaa5851b2..2a44fec07 100644
+index 2a44fec07..53eb67308 100644
 --- a/winsup/testsuite/Makefile.in
 +++ b/winsup/testsuite/Makefile.in
-@@ -12,6 +12,7 @@ SHELL:=@SHELL@
- srcdir:=@srcdir@
- objdir:=.
- libltp_srcdir=$(srcdir)/libltp
-+target_builddir:=@target_builddir@
+@@ -56,7 +56,8 @@ endif
  
- target_alias:=@target_alias@
- build_alias:=@build_alias@
+ AR:=@AR@
+ AR_FLAGS:=qv
+-MINGW_FE:=$(dir ${srcdir})/utils/mingw
++MINGW_CC:= @MINGW_CC@
++MINGW_CXX:= @MINGW_CXX@
+ 
+ #
+ # Include common definitions for winsup directory
+@@ -140,6 +141,7 @@ site.exp: ./config.status Makefile
+ 	@echo "set CC \"$(CC)\"" >> ./tmp0
+ # CFLAGS is set even though it's empty to show we reserve the right to set it.
+ 	@echo "set CFLAGS \"$(ALL_CFLAGS)\"" >> ./tmp0
++	@echo "set MINGW_CXX \"$(MINGW_CXX)\"" >> ./tmp0
+ 	echo "set tmpdir $(objdir)/testsuite" >> ./tmp0
+ 	@echo "set ltp_includes \"$(libltp_srcdir)/include\"" >> ./tmp0
+ 	@echo "## All variables above are generated by configure. Do Not Edit ##" >> ./tmp0
+@@ -163,10 +165,10 @@ check: $(TESTSUP_LIB_NAME) $(RUNTIME) cygrun.exe testsuite/site.exp
+ 	cd testsuite; runtest --tool winsup $(RUNTESTFLAGS)
+ 
+ cygrun.o: cygrun.c
+-	${MINGW_FE} $(CC) $(MINGW_CFLAGS) -o $@ -c $<
++	$(MINGW_CC) $(MINGW_CFLAGS) -o $@ -c $<
+ 
+ cygrun.exe : cygrun.o
+-	${MINGW_FE} $(CC) ${MINGW_LDFLAGS} -o $@ $<
++	$(MINGW_CC) $(MINGW_LDFLAGS) -o $@ $<
+ 
+ Makefile: Makefile.in $(srcdir)/configure config.status
+ 	$(SHELL) config.status
 diff --git a/winsup/testsuite/configure.ac b/winsup/testsuite/configure.ac
-index 46f9fb092..effea48c9 100755
+index effea48c9..b82ec7f60 100755
 --- a/winsup/testsuite/configure.ac
 +++ b/winsup/testsuite/configure.ac
-@@ -12,8 +12,12 @@ AC_PREREQ(2.59)
- AC_INIT([Cygwin Testsuite],[0],[cygwin@cygwin.com],[cygwin],[https://cygwin.com])
- AC_CONFIG_SRCDIR(Makefile.in)
+@@ -14,10 +14,15 @@ AC_CONFIG_SRCDIR(Makefile.in)
  
-+. ${srcdir}/../configure.cygwin
+ . ${srcdir}/../configure.cygwin
+ 
++AC_CANONICAL_TARGET
 +
  AC_PROG_CC
  AC_PROG_CPP
  AC_CHECK_TOOL(AR,ar)
  
-+AC_SUBST(target_builddir)
+ AC_SUBST(target_builddir)
+ 
++AC_CHECK_PROGS(MINGW_CXX, ${target_cpu}-w64-mingw32-g++)
++AC_CHECK_PROGS(MINGW_CC, ${target_cpu}-w64-mingw32-gcc)
 +
  AC_OUTPUT(Makefile)
+diff --git a/winsup/testsuite/winsup.api/cygload.exp b/winsup/testsuite/winsup.api/cygload.exp
+index a07a549f9..e7b439512 100644
+--- a/winsup/testsuite/winsup.api/cygload.exp
++++ b/winsup/testsuite/winsup.api/cygload.exp
+@@ -14,7 +14,7 @@ proc ws_spawn {cmd args} {
+     verbose send "catchCode = $rv\n"
+ }
+ 
+-ws_spawn "gcc -mno-cygwin $srcdir/$subdir/cygload.cc -o mingw-cygload.exe -lstdc++ -Wl,-e,_cygloadCRTStartup@0"
++ws_spawn "$MINGW_CXX $srcdir/$subdir/cygload.cc -o mingw-cygload.exe -lstdc++ -Wl,-e,_cygloadCRTStartup@0"
+ 
+ if { $rv != {0 {}} } {
+     verbose -log "$rv"
 -- 
 2.29.0
 
