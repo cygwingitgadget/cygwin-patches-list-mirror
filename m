@@ -1,44 +1,45 @@
-Return-Path: <jon.turney@dronecode.org.uk>
-Received: from sa-prd-fep-046.btinternet.com (mailomta30-sa.btinternet.com
- [213.120.69.36])
- by sourceware.org (Postfix) with ESMTPS id 1862739F501E
- for <cygwin-patches@cygwin.com>; Thu,  5 Nov 2020 19:48:32 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 1862739F501E
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=dronecode.org.uk
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+ by sourceware.org (Postfix) with ESMTPS id 18F9D3857C5E
+ for <cygwin-patches@cygwin.com>; Fri,  6 Nov 2020 09:44:52 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 18F9D3857C5E
 Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
-Received: from sa-prd-rgout-004.btmx-prd.synchronoss.net ([10.2.38.7])
- by sa-prd-fep-046.btinternet.com with ESMTP id
- <20201105194831.XAVE28150.sa-prd-fep-046.btinternet.com@sa-prd-rgout-004.btmx-prd.synchronoss.net>;
- Thu, 5 Nov 2020 19:48:31 +0000
-Authentication-Results: btinternet.com; none
-X-SNCR-Rigid: 5ED9B66119336F28
-X-Originating-IP: [86.139.158.14]
-X-OWM-Source-IP: 86.139.158.14 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedujedruddtjedguddvlecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepfeeiudevhefgffffueeuheelfeegveefvdffleejfeehudetleetledvteethfdvnecukfhppeekiedrudefledrudehkedrudegnecuvehluhhsthgvrhfuihiivgepkeenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekiedrudefledrudehkedrudegpdhmrghilhhfrhhomhepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqedprhgtphhtthhopeeotgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomheqpdhrtghpthhtohepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqe
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from localhost.localdomain (86.139.158.14) by
- sa-prd-rgout-004.btmx-prd.synchronoss.net (5.8.340) (authenticated as
- jonturney@btinternet.com)
- id 5ED9B66119336F28; Thu, 5 Nov 2020 19:48:31 +0000
-From: Jon Turney <jon.turney@dronecode.org.uk>
+ dmarc=none (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org;
+ spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1My3AX-1kPKV21yGN-00za3W for <cygwin-patches@cygwin.com>; Fri, 06 Nov 2020
+ 10:44:51 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id DB6B0A80E0B; Fri,  6 Nov 2020 10:44:50 +0100 (CET)
+Date: Fri, 6 Nov 2020 10:44:50 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH 11/11] Ensure temporary directory used by tests exists
-Date: Thu,  5 Nov 2020 19:47:48 +0000
-Message-Id: <20201105194748.31282-12-jon.turney@dronecode.org.uk>
-X-Mailer: git-send-email 2.29.0
-In-Reply-To: <20201105194748.31282-1-jon.turney@dronecode.org.uk>
+Subject: Re: [PATCH 00/11] testsuite refurbishment
+Message-ID: <20201106094450.GU33165@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20201105194748.31282-1-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1200.8 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
- GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20201105194748.31282-1-jon.turney@dronecode.org.uk>
+X-Provags-ID: V03:K1:udV2gRUP2WHxewBd7WBOzQV6eADsgPhpn7saw9qtMQjycMlV8t6
+ c1VV6SzPQIBpv3o/qOJ1pisxyTG49krz7dKzZGj0Dfpgra2jNsXwF7n2p0HMTq975TamgeJ
+ ozNlY8OJ+NKPu9q2R9+D+Y+G+qlSp9bmYSQfDheX2ZpwY7oSXUC1S2h5plZapYbdLslvczM
+ a+1439JJxIHzc3zK++g0Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:iQLeUGFbOmc=:XCvxgeZwqmvnrQ7ULH5u68
+ Igaw8mn0W/BxazmYjecCzAmR/sDtJwNHjdphUAjnoLTQIA2Hj+v7+RBD+wYd3IR+wo/4dl8aD
+ Y+WiAxLi0eDMaVkaZPQborpmBVwbDcu9PDxYt6KM26gJH0GsgPtyhShYeE1Yw3XmfNyyvBAmg
+ QqFM4jKNXGbsJtFwsyrQmmEEyMgnLAUC6qK/92ASuvraIhyfjAjAI0cAuDCerh3RZBhvGd32R
+ OH2u5UPn4s10ZnidQlc3ClCNuEyWffK4MGYaVCd8c4Om6kuIXVbWX+QolixtUjTqZsqxT26Vk
+ l2lt9i5d6xyM4mApSKqfD+N21+mSuUB8yi4vxGbAVXNTmk53AdxrK3cuoJ+SIB89DWU9XrHOq
+ zAkaF3h1ONBM33iuM74S7WARMOptbNvga7qCtcYxpUfPy5f71wkOpR043XqV38KnzKjmaYVpU
+ ovvexLWxyQ==
+X-Spam-Status: No, score=-100.6 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -54,95 +55,59 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 05 Nov 2020 19:48:33 -0000
+X-List-Received-Date: Fri, 06 Nov 2020 09:44:57 -0000
 
-By default, libltp tests will create temporary files in a subdirectory
-of /tmp, which will (nowadays) be located relative to the test DLL (by
-assuming that it is in /bin).  This will evaluate to the directory
-$target_builddir/winsup/tmp, which doesn't exist.
+On Nov  5 19:47, Jon Turney wrote:
+> Fix testsuite Makefile/configure, so I have some idea what it's supposed to
+> be doing, prior to cleanup and Automake-ification.
+> 
+> > $ make check
+> [...]
+> > # of expected passes            253
+> > # of unexpected failures        23
+> > # of unexpected successes       1
+> > # of expected failures          7
+>  
+> Future work:
+> - Investigate and fix failing tests
+> - Tests are re-compiled every time they are run
+> - No parallelization of tests
+> 
+> For ease of reviewing, this patch series doesn't contain changes to
+> generated files which would be made by an autoreconf.
+> 
+> Jon Turney (11):
+>   Add testsuite directory to autogen.sh
+>   Always configure in testsuite subdirectory
+>   Add rule to testsuite Makefile to regenerate it when needed
+>   Avoid 'Makefile.in seems to ignore the --datarootdir setting' warning
+>   Move adding libltp to VPATH after Makefile.common
+>   Define target_builddir autoconf and Makefile variables
+>   Detect and use MinGW compilers for testsuite wrappers
+>   Use absolute path to libltp includes
+>   Check exit code of a test, rather than stdout
+>   Set PATH for tests to pick up cygwin0.dll
+>   Ensure temporary directory used by tests exists
+> 
+>  winsup/Makefile.in                      |  16 +-
+>  winsup/autogen.sh                       |   2 +-
+>  winsup/configure.ac                     |   2 +-
+>  winsup/testsuite/Makefile.in            |  31 +-
+>  winsup/testsuite/aclocal.m4             | 831 ------------------------
+>  winsup/testsuite/autogen.sh             |   4 +
+>  winsup/testsuite/configure.ac           |   9 +
+>  winsup/testsuite/cygrun.c               |   5 +-
+>  winsup/testsuite/winsup.api/cygload.exp |   2 +-
+>  winsup/testsuite/winsup.api/winsup.exp  |  24 +-
+>  10 files changed, 60 insertions(+), 866 deletions(-)
+>  delete mode 100644 winsup/testsuite/aclocal.m4
+>  create mode 100755 winsup/testsuite/autogen.sh
+> 
+> -- 
+> 2.29.0
 
-The location used for these temporary files can be explicitly controlled
-by setting the TDIRECTORY env var.  Arrange to set that env var to the
-/cygdrive path of a tmp subdirectory of the build directory.
+Looks good, please push.
 
-Unfortunately, libltp doesn't clean the temporary directory if
-TDIRECTORY is set, and some tests assume they are started in a clean
-directory, so we need to do that in tcl.
----
- winsup/testsuite/Makefile.in           | 10 ++++++++--
- winsup/testsuite/cygrun.c              |  5 ++++-
- winsup/testsuite/winsup.api/winsup.exp |  4 +++-
- 3 files changed, 15 insertions(+), 4 deletions(-)
 
-diff --git a/winsup/testsuite/Makefile.in b/winsup/testsuite/Makefile.in
-index b77961878..3b5a251b2 100644
---- a/winsup/testsuite/Makefile.in
-+++ b/winsup/testsuite/Makefile.in
-@@ -97,7 +97,8 @@ force:
- install:
- 
- clean:
--	-rm -f *.o *.dll *.a *.exp junk *.bak *.base *.exe testsuite/* *.d *.dat
-+	-rm -f *.o *.dll *.a *.exp junk *.bak *.base *.exe *.d *.dat
-+	-rm -rf testsuite
- 
- maintainer-clean realclean: clean
- 	@echo "This command is intended for maintainers to use;"
-@@ -123,6 +124,11 @@ $(RUNTIME) : $(cygwin_build)/Makefile
- # Set to $(target_alias)/ for cross.
- target_subdir = @target_subdir@
- 
-+# temporary directory to be used for files created by tests (as an absolute,
-+# /cygdrive path, so it can be understood by the test DLL, which will have
-+# different mount table)
-+tmpdir = $(shell cygpath -ma $(objdir)/testsuite/tmp/ | sed -e 's#^\([A-Z]\):#/cygdrive/\L\1#')
-+
- site.exp: ./config.status Makefile
- 	@echo "Making a new config file..."
- 	-@rm -f ./tmp?
-@@ -142,7 +148,7 @@ site.exp: ./config.status Makefile
- # CFLAGS is set even though it's empty to show we reserve the right to set it.
- 	@echo "set CFLAGS \"$(ALL_CFLAGS)\"" >> ./tmp0
- 	@echo "set MINGW_CXX \"$(MINGW_CXX)\"" >> ./tmp0
--	echo "set tmpdir $(objdir)/testsuite" >> ./tmp0
-+	@echo "set tmpdir $(tmpdir)" >> ./tmp0
- 	@echo "set ltp_includes \"$(realpath $(libltp_srcdir))/include\"" >> ./tmp0
- 	@echo "## All variables above are generated by configure. Do Not Edit ##" >> ./tmp0
- 	@cat ./tmp0 > site.exp
-diff --git a/winsup/testsuite/cygrun.c b/winsup/testsuite/cygrun.c
-index d1f53aad3..65d859d59 100644
---- a/winsup/testsuite/cygrun.c
-+++ b/winsup/testsuite/cygrun.c
-@@ -25,10 +25,13 @@ main (int argc, char **argv)
- 
-   if (argc < 2)
-     {
--      fprintf (stderr, "Usage: cygrun [program]\n");
-+      fprintf (stderr, "Usage: cygrun [program] [tmpdir]\n");
-       exit (0);
-     }
- 
-+  if (argc >= 3)
-+    SetEnvironmentVariable ("TDIRECTORY", argv[2]);
-+
-   SetEnvironmentVariable ("CYGWIN_TESTING", "1");
-   if ((p = getenv ("CYGWIN")) == NULL || (strstr (p, "ntsec") == NULL))
-     {
-diff --git a/winsup/testsuite/winsup.api/winsup.exp b/winsup/testsuite/winsup.api/winsup.exp
-index 1550b9445..cd5964d47 100644
---- a/winsup/testsuite/winsup.api/winsup.exp
-+++ b/winsup/testsuite/winsup.api/winsup.exp
-@@ -68,7 +68,9 @@ foreach src [lsort [glob -nocomplain $srcdir/$subdir/*.c $srcdir/$subdir/*/*.{cc
- 	    } else {
- 	       set redirect_output /dev/null
- 	    }
--	    ws_spawn "$rootme/cygrun ./$base.exe > $redirect_output"
-+	    file mkdir $tmpdir/$base
-+	    ws_spawn "$rootme/cygrun ./$base.exe $tmpdir/$base > $redirect_output"
-+	    file delete -force $tmpdir/$base
- 	    if { $rv } {
- 		fail "$testcase (execute)"
- 		if { $xfail_expected } {
--- 
-2.29.0
-
+Thanks,
+Corinna
