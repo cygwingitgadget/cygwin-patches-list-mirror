@@ -1,44 +1,44 @@
 Return-Path: <jon.turney@dronecode.org.uk>
-Received: from sa-prd-fep-049.btinternet.com (mailomta8-sa.btinternet.com
- [213.120.69.14])
- by sourceware.org (Postfix) with ESMTPS id EE0F639FF057
- for <cygwin-patches@cygwin.com>; Thu, 12 Nov 2020 19:46:50 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org EE0F639FF057
+Received: from sa-prd-fep-040.btinternet.com (mailomta17-sa.btinternet.com
+ [213.120.69.23])
+ by sourceware.org (Postfix) with ESMTPS id C1C9A39FF072
+ for <cygwin-patches@cygwin.com>; Thu, 12 Nov 2020 19:46:54 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org C1C9A39FF072
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
  header.from=dronecode.org.uk
 Authentication-Results: sourceware.org;
  spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
 Received: from sa-prd-rgout-004.btmx-prd.synchronoss.net ([10.2.38.7])
- by sa-prd-fep-049.btinternet.com with ESMTP id
- <20201112194649.LITY8377.sa-prd-fep-049.btinternet.com@sa-prd-rgout-004.btmx-prd.synchronoss.net>;
- Thu, 12 Nov 2020 19:46:49 +0000
+ by sa-prd-fep-040.btinternet.com with ESMTP id
+ <20201112194653.DXQS29410.sa-prd-fep-040.btinternet.com@sa-prd-rgout-004.btmx-prd.synchronoss.net>;
+ Thu, 12 Nov 2020 19:46:53 +0000
 Authentication-Results: btinternet.com; none
-X-SNCR-Rigid: 5ED9B6611A29D170
+X-SNCR-Rigid: 5ED9B6611A29D1D4
 X-Originating-IP: [86.139.158.14]
 X-OWM-Source-IP: 86.139.158.14 (GB)
 X-OWM-Env-Sender: jonturney@btinternet.com
 X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedujedruddvfedguddthecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepfeeiudevhefgffffueeuheelfeegveefvdffleejfeehudetleetledvteethfdvnecukfhppeekiedrudefledrudehkedrudegnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekiedrudefledrudehkedrudegpdhmrghilhhfrhhomhepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqedprhgtphhtthhopeeotgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomheqpdhrtghpthhtohepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqe
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedujedruddvfedguddthecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepfeeiudevhefgffffueeuheelfeegveefvdffleejfeehudetleetledvteethfdvnecukfhppeekiedrudefledrudehkedrudegnecuvehluhhsthgvrhfuihiivgepfeenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekiedrudefledrudehkedrudegpdhmrghilhhfrhhomhepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqedprhgtphhtthhopeeotgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomheqpdhrtghpthhtohepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqe
 X-RazorGate-Vade-Verdict: clean 0
 X-RazorGate-Vade-Classification: clean
 Received: from localhost.localdomain (86.139.158.14) by
  sa-prd-rgout-004.btmx-prd.synchronoss.net (5.8.340) (authenticated as
  jonturney@btinternet.com)
- id 5ED9B6611A29D170; Thu, 12 Nov 2020 19:46:49 +0000
+ id 5ED9B6611A29D1D4; Thu, 12 Nov 2020 19:46:53 +0000
 From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
 Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH 3/4] Fix 'make check' in utils
-Date: Thu, 12 Nov 2020 19:46:27 +0000
-Message-Id: <20201112194629.13493-4-jon.turney@dronecode.org.uk>
+Subject: [PATCH 4/4] Testsuite Makefile cleanup
+Date: Thu, 12 Nov 2020 19:46:28 +0000
+Message-Id: <20201112194629.13493-5-jon.turney@dronecode.org.uk>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201112194629.13493-1-jon.turney@dronecode.org.uk>
 References: <20201112194629.13493-1-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1200.7 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
+X-Spam-Status: No, score=-1200.8 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
  GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H4, RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_NONE,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -54,82 +54,78 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 12 Nov 2020 19:46:52 -0000
+X-List-Received-Date: Thu, 12 Nov 2020 19:46:56 -0000
 
-This has a test of the path translation code used in various
-utilities (mount, cygpath, strace).
-
-MOUNT_BINARY is replaced with the absence of MOUNT_TEXT since 26e0b37e.
-The isys member of mnt_t struct was removed in b677a99b.
-
-> $ make check
-[...]
-> total tests: 63
-> pass       : 63 (100.0%)
-> fail       : 0 (0.0%)
+Drop unused variables CC_FOR_TARGET, GCC_INCLUDE, ALL_CFLAGS
+Stop exporting CC, CFLAGS
+Drop unused, empty targets force, dll_ofiles, all_target
 ---
- winsup/utils/Makefile.in |  4 ++--
- winsup/utils/path.h      |  2 ++
- winsup/utils/testsuite.h | 16 ++++++++--------
- 3 files changed, 12 insertions(+), 10 deletions(-)
+ winsup/testsuite/Makefile.in | 15 ++-------------
+ 1 file changed, 2 insertions(+), 13 deletions(-)
 
-diff --git a/winsup/utils/Makefile.in b/winsup/utils/Makefile.in
-index a9d66a5ee..46ca13c04 100644
---- a/winsup/utils/Makefile.in
-+++ b/winsup/utils/Makefile.in
-@@ -123,9 +123,9 @@ MINGW_BINS += testsuite.exe
- MINGW_OBJS += path-testsuite.o testsuite.o
- testsuite.exe: path-testsuite.o
- path-testsuite.cc: path.cc ; @test -L $@ || ln -sf ${filter %.cc,$^} $@
--path-testsuite.o: MINGW_CXXFLAGS += -DTESTSUITE
-+path-testsuite.o: MINGW_CXXFLAGS += -DTESTSUITE -Wno-error=write-strings
- # this is necessary because this .c lives in the build dir instead of src
--path-testsuite.o: MINGW_CXX := ${patsubst -I.,-I$(utils_source),$(MINGW_CXX)}
-+path-testsuite.o: MINGW_CXXFLAGS += -I$(srcdir)
- path-testsuite.cc path.cc testsuite.cc: testsuite.h
- check: testsuite.exe ; $(<D)/$(<F)
+diff --git a/winsup/testsuite/Makefile.in b/winsup/testsuite/Makefile.in
+index 4948a0bc7..d29112491 100644
+--- a/winsup/testsuite/Makefile.in
++++ b/winsup/testsuite/Makefile.in
+@@ -46,8 +46,6 @@ TESTSUP_INCLUDES:=-I$(libltp_srcdir)/include
+ #
  
-diff --git a/winsup/utils/path.h b/winsup/utils/path.h
-index ee7c28a7a..af5deeba6 100644
---- a/winsup/utils/path.h
-+++ b/winsup/utils/path.h
-@@ -22,7 +22,9 @@ int get_word (HANDLE, int);
- int get_dword (HANDLE, int);
- bool from_fstab_line (mnt_t *m, char *line, bool user);
+ CC:=@CC@
+-# FIXME: Which is it, CC or CC_FOR_TARGET?
+-CC_FOR_TARGET:=$(CC)
+ ifneq (,$(CFLAGS))
+   override CFLAGS+= -MD $(TESTSUP_INCLUDES)
+ else
+@@ -66,9 +64,6 @@ include $(srcdir)/../Makefile.common
  
-+#ifndef TESTSUITE
- extern mnt_t mount_table[255];
-+#endif
- extern int max_mount_entry;
+ VPATH+=$(libltp_srcdir)/lib
  
- #ifndef SYMLINK_MAX
-diff --git a/winsup/utils/testsuite.h b/winsup/utils/testsuite.h
-index 4ed9eb2c4..d0a47b23a 100644
---- a/winsup/utils/testsuite.h
-+++ b/winsup/utils/testsuite.h
-@@ -29,14 +29,14 @@ details. */
+-override CC:=$(CC) $(GCC_INCLUDE)
+-export CC
+-
+ RUNTESTFLAGS =
  
- #if defined(TESTSUITE_MOUNT_TABLE)
- static mnt_t mount_table[] = {
--/* native                 posix               flags                        issys */
-- { TESTSUITE_ROOT,        (char*)"/",                MOUNT_BINARY | MOUNT_SYSTEM, 1 },
-- { "O:\\other",           (char*)"/otherdir",        MOUNT_BINARY | MOUNT_SYSTEM, 1 },
-- { "S:\\some\\dir",       (char*)"/somedir",         MOUNT_BINARY | MOUNT_SYSTEM, 1 },
-- { TESTSUITE_ROOT"\\bin", (char*)"/usr/bin",         MOUNT_BINARY | MOUNT_SYSTEM, 1 },
-- { TESTSUITE_ROOT"\\lib", (char*)"/usr/lib",         MOUNT_BINARY | MOUNT_SYSTEM, 1 },
-- { ".",                   (char*)TESTSUITE_CYGDRIVE, MOUNT_BINARY | MOUNT_SYSTEM | MOUNT_CYGDRIVE, 1 },
-- { NULL,                  (char*)NULL,               0,                           0 }
-+/* native                 posix               flags */
-+ { TESTSUITE_ROOT,        (char*)"/",                MOUNT_SYSTEM},
-+ { "O:\\other",           (char*)"/otherdir",        MOUNT_SYSTEM},
-+ { "S:\\some\\dir",       (char*)"/somedir",         MOUNT_SYSTEM},
-+ { TESTSUITE_ROOT"\\bin", (char*)"/usr/bin",         MOUNT_SYSTEM},
-+ { TESTSUITE_ROOT"\\lib", (char*)"/usr/lib",         MOUNT_SYSTEM},
-+ { ".",                   (char*)TESTSUITE_CYGDRIVE, MOUNT_SYSTEM | MOUNT_CYGDRIVE},
-+ { NULL,                  (char*)NULL,               0}
- };
+ ifdef VERBOSE
+@@ -80,20 +75,16 @@ RUNTIME=$(cygwin_build)/cygwin0.dll $(cygwin_build)/libcygwin0.a
+ TESTSUP_LIB_NAME:=libltp.a
+ TESTSUP_OFILES:=${sort ${addsuffix .o,${basename ${notdir ${wildcard $(libltp_srcdir)/lib/*.c}}}}}
  
+-override ALL_CFLAGS:=${filter-out -O%,$(ALL_CFLAGS)}
+ override COMPILE_CC:=${filter-out -O%,$(COMPILE_CC)}
+ override CFLAGS:=${filter-out -O%,$(CFLAGS)}
+-export CFLAGS
  
+-.PHONY: all force dll_ofiles install all_target
++.PHONY: all install
+ 
+ .SUFFIXES:
+ .SUFFIXES: .c .cc .def .a .o .d
+ 
+ all: $(TESTSUP_LIB_NAME)
+ 
+-force:
+-
+ install:
+ 
+ clean:
+@@ -114,8 +105,6 @@ $(TESTSUP_LIB_NAME): $(TESTSUP_OFILES)
+ $(RUNTIME) : $(cygwin_build)/Makefile
+ 	@$(MAKE) --no-print-dir -C $(@D) $(@F)
+ 
+-# Rule to make stub library used by "make check"
+-
+ #
+ 
+ # These targets are for the dejagnu testsuites. The file site.exp
+@@ -147,7 +136,7 @@ site.exp: ./config.status Makefile
+ 	@echo "set target_alias $(target_alias)" >> ./tmp0
+ 	@echo "set CC \"$(CC)\"" >> ./tmp0
+ # CFLAGS is set even though it's empty to show we reserve the right to set it.
+-	@echo "set CFLAGS \"$(ALL_CFLAGS)\"" >> ./tmp0
++	@echo "set CFLAGS \"\"" >> ./tmp0
+ 	@echo "set MINGW_CXX \"$(MINGW_CXX)\"" >> ./tmp0
+ 	@echo "set tmpdir $(tmpdir)" >> ./tmp0
+ 	@echo "set testdll_tmpdir $(testdll_tmpdir)" >> ./tmp0
 -- 
 2.29.2
 
