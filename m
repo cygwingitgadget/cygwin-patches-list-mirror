@@ -1,44 +1,46 @@
-Return-Path: <jon.turney@dronecode.org.uk>
-Received: from sa-prd-fep-040.btinternet.com (mailomta17-sa.btinternet.com
- [213.120.69.23])
- by sourceware.org (Postfix) with ESMTPS id C1C9A39FF072
- for <cygwin-patches@cygwin.com>; Thu, 12 Nov 2020 19:46:54 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org C1C9A39FF072
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=dronecode.org.uk
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+ by sourceware.org (Postfix) with ESMTPS id 4CA943A19821
+ for <cygwin-patches@cygwin.com>; Fri, 13 Nov 2020 09:18:17 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 4CA943A19821
 Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
-Received: from sa-prd-rgout-004.btmx-prd.synchronoss.net ([10.2.38.7])
- by sa-prd-fep-040.btinternet.com with ESMTP id
- <20201112194653.DXQS29410.sa-prd-fep-040.btinternet.com@sa-prd-rgout-004.btmx-prd.synchronoss.net>;
- Thu, 12 Nov 2020 19:46:53 +0000
-Authentication-Results: btinternet.com; none
-X-SNCR-Rigid: 5ED9B6611A29D1D4
-X-Originating-IP: [86.139.158.14]
-X-OWM-Source-IP: 86.139.158.14 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedujedruddvfedguddthecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepfeeiudevhefgffffueeuheelfeegveefvdffleejfeehudetleetledvteethfdvnecukfhppeekiedrudefledrudehkedrudegnecuvehluhhsthgvrhfuihiivgepfeenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekiedrudefledrudehkedrudegpdhmrghilhhfrhhomhepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqedprhgtphhtthhopeeotgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomheqpdhrtghpthhtohepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqe
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from localhost.localdomain (86.139.158.14) by
- sa-prd-rgout-004.btmx-prd.synchronoss.net (5.8.340) (authenticated as
- jonturney@btinternet.com)
- id 5ED9B6611A29D1D4; Thu, 12 Nov 2020 19:46:53 +0000
-From: Jon Turney <jon.turney@dronecode.org.uk>
+ dmarc=none (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org;
+ spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MoOpq-1jxt0x3gD2-00opat for <cygwin-patches@cygwin.com>; Fri, 13 Nov 2020
+ 10:18:15 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 2E54DA80D91; Fri, 13 Nov 2020 10:18:15 +0100 (CET)
+Date: Fri, 13 Nov 2020 10:18:15 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH 4/4] Testsuite Makefile cleanup
-Date: Thu, 12 Nov 2020 19:46:28 +0000
-Message-Id: <20201112194629.13493-5-jon.turney@dronecode.org.uk>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20201112194629.13493-1-jon.turney@dronecode.org.uk>
+Subject: Re: [PATCH 3/4] Fix 'make check' in utils
+Message-ID: <20201113091815.GS33165@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20201112194629.13493-1-jon.turney@dronecode.org.uk>
+ <20201112194629.13493-4-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1200.8 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
- GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20201112194629.13493-4-jon.turney@dronecode.org.uk>
+X-Provags-ID: V03:K1:ANDEo3Xs87oK6Cvux4QaUYVw36vph/wI6CqN/i4tNQgDeIiP0WN
+ 5YmRQLqrMGUWRwQnaThzxZzR0LrBS6nA+TGM5wf0cMabY2uViK5U0ZksIpEnO2GzezPZxbL
+ h1zr/JAIk8if5gaOBJJJ84Blt2Dav5SgBFNcmd8ug5WTj+F6vzQnlq1Icnlz9BGpdsWA45v
+ JQM+JhWlavGxzbaeqhkNA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:PeZtaCVyiS8=:mTU4LoZa/Zhl19NvEidhfM
+ 7hh9Cj11czwJv+7JNIbgimDUeV99T7J1bbOB3SXqyJXjWCeLbhNpHgECgWxiQtvlpVMtyahKB
+ QmjU/x05p0q+FHXBowCveBOQJ3zH9XjeXvhVdd5ZsVh/f68/5oeJs+rFsjHp46Yx/fB+cHBhh
+ AoiMOdlDYSvTP9GzIVUHCdo+cPqeblOozDHcgEgwsTmMOr2tGLhcCZeNA0riHMDPRS77AJOJ7
+ VoR3HzNupXoSuesxp+L033AygCN8/RNyBBl4sAiWVxcdvLP6CNJVajhwKLiTn/nWrwlGJLQG7
+ o1yV5qbY6U1vhySPPqt+Ob/PdiVNNNReNA/gIJ2pXlr+PcHy3f9O2kEQmPVog5q4QyUgcsvmF
+ v9T0EVgOc4vXjlE2A1/v2RZbBzzV4wCNam1aKXs+HqcdH1IClK3bD0ZYyisQ1/8ayhtAK5ewo
+ UeTODqTX/A==
+X-Spam-Status: No, score=-100.6 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -54,78 +56,21 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 12 Nov 2020 19:46:56 -0000
+X-List-Received-Date: Fri, 13 Nov 2020 09:18:18 -0000
 
-Drop unused variables CC_FOR_TARGET, GCC_INCLUDE, ALL_CFLAGS
-Stop exporting CC, CFLAGS
-Drop unused, empty targets force, dll_ofiles, all_target
----
- winsup/testsuite/Makefile.in | 15 ++-------------
- 1 file changed, 2 insertions(+), 13 deletions(-)
+Hi Jon,
 
-diff --git a/winsup/testsuite/Makefile.in b/winsup/testsuite/Makefile.in
-index 4948a0bc7..d29112491 100644
---- a/winsup/testsuite/Makefile.in
-+++ b/winsup/testsuite/Makefile.in
-@@ -46,8 +46,6 @@ TESTSUP_INCLUDES:=-I$(libltp_srcdir)/include
- #
- 
- CC:=@CC@
--# FIXME: Which is it, CC or CC_FOR_TARGET?
--CC_FOR_TARGET:=$(CC)
- ifneq (,$(CFLAGS))
-   override CFLAGS+= -MD $(TESTSUP_INCLUDES)
- else
-@@ -66,9 +64,6 @@ include $(srcdir)/../Makefile.common
- 
- VPATH+=$(libltp_srcdir)/lib
- 
--override CC:=$(CC) $(GCC_INCLUDE)
--export CC
--
- RUNTESTFLAGS =
- 
- ifdef VERBOSE
-@@ -80,20 +75,16 @@ RUNTIME=$(cygwin_build)/cygwin0.dll $(cygwin_build)/libcygwin0.a
- TESTSUP_LIB_NAME:=libltp.a
- TESTSUP_OFILES:=${sort ${addsuffix .o,${basename ${notdir ${wildcard $(libltp_srcdir)/lib/*.c}}}}}
- 
--override ALL_CFLAGS:=${filter-out -O%,$(ALL_CFLAGS)}
- override COMPILE_CC:=${filter-out -O%,$(COMPILE_CC)}
- override CFLAGS:=${filter-out -O%,$(CFLAGS)}
--export CFLAGS
- 
--.PHONY: all force dll_ofiles install all_target
-+.PHONY: all install
- 
- .SUFFIXES:
- .SUFFIXES: .c .cc .def .a .o .d
- 
- all: $(TESTSUP_LIB_NAME)
- 
--force:
--
- install:
- 
- clean:
-@@ -114,8 +105,6 @@ $(TESTSUP_LIB_NAME): $(TESTSUP_OFILES)
- $(RUNTIME) : $(cygwin_build)/Makefile
- 	@$(MAKE) --no-print-dir -C $(@D) $(@F)
- 
--# Rule to make stub library used by "make check"
--
- #
- 
- # These targets are for the dejagnu testsuites. The file site.exp
-@@ -147,7 +136,7 @@ site.exp: ./config.status Makefile
- 	@echo "set target_alias $(target_alias)" >> ./tmp0
- 	@echo "set CC \"$(CC)\"" >> ./tmp0
- # CFLAGS is set even though it's empty to show we reserve the right to set it.
--	@echo "set CFLAGS \"$(ALL_CFLAGS)\"" >> ./tmp0
-+	@echo "set CFLAGS \"\"" >> ./tmp0
- 	@echo "set MINGW_CXX \"$(MINGW_CXX)\"" >> ./tmp0
- 	@echo "set tmpdir $(tmpdir)" >> ./tmp0
- 	@echo "set testdll_tmpdir $(testdll_tmpdir)" >> ./tmp0
--- 
-2.29.2
+On Nov 12 19:46, Jon Turney wrote:
+> This has a test of the path translation code used in various
+> utilities (mount, cygpath, strace).
+> 
+> MOUNT_BINARY is replaced with the absence of MOUNT_TEXT since 26e0b37e.
+> The isys member of mnt_t struct was removed in b677a99b.
 
+issys?
+
+Other than that typo, the series LGTM.
+
+
+Thanks,
+Corinna
