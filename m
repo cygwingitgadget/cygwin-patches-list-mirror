@@ -1,72 +1,46 @@
-Return-Path: <kbrown@cornell.edu>
-Received: from NAM02-CY1-obe.outbound.protection.outlook.com
- (mail-eopbgr760099.outbound.protection.outlook.com [40.107.76.99])
- by sourceware.org (Postfix) with ESMTPS id 4D71A3857C78
- for <cygwin-patches@cygwin.com>; Sat, 14 Nov 2020 14:16:46 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 4D71A3857C78
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=erOzBFTEqbmHqbxd2EeR/xUQA0F/VNMuwFoFn2cHCzxPLUlCqfcsCyfMxuaibGou0w7N6Mt0Uk8tmcgz1nfEN7GmnL1tE4HczxdMQackQ6fxousrNdizsgre8X7Ki7EO3RxbVLIR1tD+jkNvJXDEOa+EPyd8C+nuBWfq/Aky9sHLixZOn0HRz8aBblXdZHt/R6EceWVlq+3TC2fDQL0MDKeIQlUaj+a6u9GuNsF9mDns/RbLVmXhHiFpK+zzXwt4+aNzPQ5HorulTexg5HmHQb3CnaW/9QIntRGdJo1YH6fuZRiRqtqArWz1ZLmZdTpamRwN2w40mqrvUQLF7wcg6Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pvdu4de21lsujUDNjYR5OUuPvAqBKzdJ/KiA6NnMHE8=;
- b=AtShIOyshR/SJsi5GK3D6PQpGGcSw0Z0L6zJVIis1ElAyYApoZ07JpBmZd4F5rlPEQHhJnAG0awTzk4uBq3LsraMC+GglmeNhlpJiB+4Bm6U8m3NWkCoc75it41PFrKnpnkqJk7SLlsMF7kXJpF2rgx6tuc+ba4XzHpYGGhlyyVz1flni0iSsINJ1Roh7SbOdjMuJEcDtZIEBFs4ZWwZjMsBbYyuzhWiJQKnUl8lUzhvpGAe6FRT+gisyly5E2um0S/YNX3ODwn7EK6KIZvI8cQ6MAj0/KNcLZU5lCpFAtmeDj3hZnvFI5T0IW+3cKRNG/3HEHGYA64wYfePaNci4Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu;
- dkim=pass header.d=cornell.edu; arc=none
-Received: from MN2PR04MB6176.namprd04.prod.outlook.com (2603:10b6:208:e3::13)
- by MN2PR04MB5838.namprd04.prod.outlook.com (2603:10b6:208:3f::17)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.21; Sat, 14 Nov
- 2020 14:16:44 +0000
-Received: from MN2PR04MB6176.namprd04.prod.outlook.com
- ([fe80::113e:c874:1207:eca8]) by MN2PR04MB6176.namprd04.prod.outlook.com
- ([fe80::113e:c874:1207:eca8%6]) with mapi id 15.20.3541.026; Sat, 14 Nov 2020
- 14:16:44 +0000
-From: Ken Brown <kbrown@cornell.edu>
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+ by sourceware.org (Postfix) with ESMTPS id 00862385E83A
+ for <cygwin-patches@cygwin.com>; Mon, 16 Nov 2020 12:07:26 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 00862385E83A
+Authentication-Results: sourceware.org;
+ dmarc=none (p=none dis=none) header.from=cygwin.com
+Authentication-Results: sourceware.org;
+ spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1Mv2tK-1kN6RG3cHY-00r3Hk; Mon, 16 Nov 2020 13:07:22 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id B6430A8093F; Mon, 16 Nov 2020 13:07:21 +0100 (CET)
+Date: Mon, 16 Nov 2020 13:07:21 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: path_conv::eq_worker: add NULL pointer checks
-Date: Sat, 14 Nov 2020 09:16:25 -0500
-Message-Id: <20201114141625.24465-1-kbrown@cornell.edu>
-X-Mailer: git-send-email 2.29.2
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [68.175.129.7]
-X-ClientProxiedBy: CH2PR03CA0001.namprd03.prod.outlook.com
- (2603:10b6:610:59::11) To MN2PR04MB6176.namprd04.prod.outlook.com
- (2603:10b6:208:e3::13)
+Cc: Jon TURNEY <jon.turney@dronecode.org.uk>
+Subject: Re: proc(5) and xml version
+Message-ID: <20201116120721.GA41926@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com,
+ Jon TURNEY <jon.turney@dronecode.org.uk>
+References: <072e5252-9056-2af8-bf62-caec89830d38@SystematicSw.ab.ca>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (68.175.129.7) by
- CH2PR03CA0001.namprd03.prod.outlook.com (2603:10b6:610:59::11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3564.25 via Frontend Transport; Sat, 14 Nov 2020 14:16:43 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e9700aef-f1ae-4f5e-39f7-08d888a7e9ba
-X-MS-TrafficTypeDiagnostic: MN2PR04MB5838:
-X-Microsoft-Antispam-PRVS: <MN2PR04MB5838D80CB8B8711B81AB7086D8E50@MN2PR04MB5838.namprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EQ1vo69NSLiF7T/H4w/KHuZOqe4HhjL+7FX0ep9zBJDaR/hwzyBAgaMFJAsKrhAG5tj0ggtF6Za9XLtLhMBpSSz0slE0kgtgUBoM8PGJiPewq2PUfvZr6qUebdF7z2VltzuU5b/ZmUftZ4yjYMjTmB2X/KIEgnhTgRYjADMmBKb4S2bddC/+AgmzlMVDkx1mhCQETTL+i6d9ZqyZIGk4dHXPquFXiowdHpuaxjnrHxC82ZdRpNMKYfR5WvUTarH4+RZKWfmVdumlu9panrAsM8XiwALinw1ZFsdsyQqvH///uVS0Jgy4pBZYd9VRAOysIVBEAfJ35F9033uktakmXYX9jlL6Cnypt8+dBVEuK04iK+rpyj6qqOVjDuGc9Ky9
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:MN2PR04MB6176.namprd04.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(4636009)(366004)(39860400002)(136003)(346002)(376002)(396003)(786003)(316002)(2616005)(2906002)(52116002)(956004)(8936002)(36756003)(75432002)(6506007)(86362001)(6512007)(26005)(6916009)(478600001)(16526019)(6486002)(8676002)(66556008)(4744005)(69590400008)(66946007)(1076003)(186003)(66476007)(6666004)(83380400001)(5660300002);
- DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData: y40xUPK0//ljbRC76vROLj32KEYiFg3oDtJiQhsqTSj4W+vPHcdeBWvVB3/4qFjNL33NDAyRoY5X62hQ0hNbpanwmIN6F7RvDKtdrfKjr/L7GVi39I9L2k4PELJth3lARFZ54ZeC5CuzPrhpYy4HJ/adxRqS0GzNAZLzCbDOAHgSBBqsaURpBzJyoamOb1hZsAWpLgtCOvWKy+bnFkQMsNkOOXmaDqlyn3d9d93xCmqJrUWAdWRQO3xZU849+Rzs7maS8/75VD7zE+DRVRjB5gTm5Zje15YeGHIc3etP7vSdAioZ+QxwmG68hgnSdkrZautzradUTwMcTo6kg5XN6YtbVjOfJRS7bd0vlwzBulyNqrn8ktjLnM/YL5h9p1ezli6zxh9luRL+4mqmWKymConXM71bMIKkRXAXkUdKBicXHhb0F8atp4VWKre8P6JAF6zMo0cJbP5GLmdNv6PUE0TERylmSV4FHhjGHE+m3O5ouXbxjM2fhcB5pBGUQhKciY1yHIMVUZ4KDqyqGVb1rdrmVHLq3KfmfCp7o/HN1OwV5rDVL5Eaqq4AtfbEzl2skibM04NPhGjIv9Oi5HLMpVklgDDuuTgODGoN+HyoPEkYSmFPmfkaAGyiW9LS1QWADymiPHKa7pPEq8wSTWAPfg==
-X-OriginatorOrg: cornell.edu
-X-MS-Exchange-CrossTenant-Network-Message-Id: e9700aef-f1ae-4f5e-39f7-08d888a7e9ba
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR04MB6176.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2020 14:16:43.8405 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5d7e4366-1b9b-45cf-8e79-b14b27df46e1
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 20Or7PQi67z0vwV8ruZN4Daiiu27RwptrAq3hIQShMmUPcWmDnCSM6txdnfuMag41JQDCis/fRRbEBKQu/gF1g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR04MB5838
-X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, MSGID_FROM_MTA_HEADER,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_PASS,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <072e5252-9056-2af8-bf62-caec89830d38@SystematicSw.ab.ca>
+X-Provags-ID: V03:K1:b99zkpztzKxTBVhO0BakX+LFBybaCP5UhyAWXmGcm2md6d/Y3cM
+ QkUJ7mdii6I6Wvb6apoixMJQbwPDTNJLyUINrx+Vcap03dPUPUGvjXDoxArBnZxk0v0tNFQ
+ 4vABnk71n1mczVaMD3IXandLCkU/d027AWeV/dk4hs0UI0YAXv2VUldBd0h0cze5nE6tn2d
+ K0gEsRIYo96UGab/Jeo1A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:w55g2D7QYWE=:tw8NaUUwXVK+CKCXkR/N0N
+ lF9zv8oRRgIpgSDhEqmypsPDUT1sPLdWuxeTGKD0zCSw65bc4nhnxLGDOKp6GxtLMj0BLVTdJ
+ M8PAXiWaK0vYCuEf5xfxwlnI8Cf4ohRyCpWaiPFoSuAg4Op+cUuO6/V2GGidGEJ0u+KAIX8I5
+ iBo2tw7tKzQSdv2mKbQwbuPfgMsJJ7hCROeHrjpDmSz37ScAltS4AUq37k/4Lql8mXH/aNDgV
+ C2YoqM9JrmILGFl6mtzpkwasb45wJFP00/nLwA4mnn17uhUJOcfAUhtw/VuYV0U2kAoIBNUDM
+ m3QewsQ/j2wycMpEax07m4cj1t+PIeh2NNxXZPXOnjiJYmapuVMjrhKsHCCTxlR3Repv4m7sO
+ tOkgJv58o37QBql0r3ZA7ijuNs1eVlIWqYLhbfs6rrme7BF3nVISGyrA20Zj7rIVvsQhXlwtG
+ 9HiSo4rHNQ==
+X-Spam-Status: No, score=-100.8 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -82,31 +56,251 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sat, 14 Nov 2020 14:16:48 -0000
+X-List-Received-Date: Mon, 16 Nov 2020 12:07:29 -0000
 
-Don't call cstrdup on NULL pointers.
----
- winsup/cygwin/path.h | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Hi Brain,
 
-diff --git a/winsup/cygwin/path.h b/winsup/cygwin/path.h
-index b94f13df8..0b3e72fc1 100644
---- a/winsup/cygwin/path.h
-+++ b/winsup/cygwin/path.h
-@@ -320,9 +320,11 @@ class path_conv
-        contrast to statically allocated strings.  Calling device::dup()
-        will duplicate the string if the source was allocated. */
-     dev.dup ();
--    path = cstrdup (in_path);
-+    if (in_path)
-+      path = cstrdup (in_path);
-     conv_handle.dup (pc.conv_handle);
--    posix_path = cstrdup(pc.posix_path);
-+    if (pc.posix_path)
-+      posix_path = cstrdup(pc.posix_path);
-     if (pc.wide_path)
-       {
- 	wide_path = cwcsdup (uni_path.Buffer);
--- 
-2.29.2
+On Nov 13 07:25, Brian Inglis wrote:
+> Hacked a Cygwin proc.5 man page FMOI over time, by combing through
+> fhandler_proc..., converted to proc-5.xml using doclifter, back with xmlto
+> as in the build, man width 80 output from both, and diff (all attached).
 
+Nice idea!
+
+> Unsure how this might best be fitted into the distro (cygwin, cygwin-doc,
+> ...?) and/or whether there may be xml remediation possible to generate
+> verbatim output left justified with zero margin, and character value
+> displays, the major output issues in the diff? Content feedback is also
+> welcome.
+
+This could replace the pathnames-proc and pathnames-proc-registry
+sections in specialnames.xml. 
+
+I think by using the refentry markup the man page would be generated
+automagically, but Jon (CCed) is the definitiv source of wisdom here.
+
+A few comments in terms of the content...
+
+> The
+> .I /proc/[pid]
+> subdirectories are visible when iterating through
+> .I /proc
+> with
+> .BR getdents (2)
+      ^^^^^^^^
+
+We don't have that system call.  readdir(2) is the matching, exposed API.
+
+> .I /proc/[pid]/environ
+> This read-only file contains the initial environment that was set
+> when the currently executing program was started via
+> .BR execve (2).
+
+Neither Cygwin nor Windows maintain the initial environment.  What you
+get is the current environment, with all changes performed by the process
+itself.
+
+> If, after an
+> .BR execve (2),
+> the process modifies its environment
+> (e.g., by calling functions such as
+> .BR putenv (3)
+> or modifying the
+> .BR environ (7)
+> variable directly),
+> this file will
+> .I not
+> reflect those changes.
+
+Yeah, see above.
+
+> .IR /proc/[pid]/mounts
+> file, and fixes various other problems with that file
+> (e.g., nonextensibility,
+> failure to distinguish per-mount versus per-superblock options).
+> .IP
+> The file contains lines of the form:
+> .IP
+> .in 0n
+> .EX
+> 36 35 98:0 /mnt1 /mnt2 rw,noatime master:1 \- ext3 /dev/root rw,errors=continue
+> (1)(2)(3)   (4)   (5)      (6)      (7)   (8) (9)   (10)         (11)
+> .in
+> .EE
+> .IP
+> The numbers in parentheses are labels for the descriptions below:
+> .RS 7
+> .TP 5
+> (1)
+> mount ID: a unique ID for the mount (may be reused after
+> .BR umount (2)).
+> .TP
+> (2)
+> parent ID: the ID of the parent mount
+> (or of self for the root of this mount namespace's mount tree).
+
+Has no meaning in Cygwin, it's just the same number as (1).
+
+> If the parent mount point lies outside the process's root directory (see
+> .BR chroot (2)),
+> the ID shown here won't have a corresponding record in
+
+That affects chroot as well.  I'd rather not mention this function
+call anyway, it was a bad idea in the first place.
+
+> .I mountinfo
+> whose mount ID (field 1) matches this parent mount ID
+> (because mount points that lie outside the process's root directory
+> are not shown in
+> .IR mountinfo ).
+> As a special case of this point,
+> the process's root mount point may have a parent mount
+> (for the initramfs filesystem) that lies
+> .\" Miklos Szeredi, Nov 2017: The hidden one is the initramfs, I believe
+> .\" mtk: In the initial mount namespace, this hidden ID has the value 0
+> outside the process's root directory,
+> and an entry for that mount point will not appear in
+
+I think this can entirely go away either.
+
+> (7)
+> optional fields: zero or more fields of the form "tag[:value]"; see below.
+
+This field doesn't exist on Cygwin.  Do we have to update the output
+to follow current Linux?
+
+> .TP
+> (8)
+> separator: the end of the optional fields is marked by a single hyphen.
+
+So that's field 7.
+
+> .TP
+> (9)
+> filesystem type: the filesystem type in the form "type[.subtype]".
+
+Field 8
+
+> .TP
+> (10)
+> mount source: filesystem-specific information or "none".
+
+Field 9
+
+> .TP
+> (11)
+> super options: per-superblock options (see
+> .BR mount (2)).
+
+Field 10, always ro or rw, so it's just the info if the filesystem is
+read-only or read-write
+
+> .I /proc/[pid]/stat
+> Status information about the process.
+> This is used by
+> .BR ps (1).
+
+Only by ps from the procps package
+
+> One of the following characters, indicating process state:
+> .RS
+> .IP R 3
+> Runnable
+> .IP O
+> Running
+
+We don't generate O, but I don't quite grok why.  There is a per-Thread
+StateRunning state in Windows, so I don't see why the code doesn't just
+use it.  A process with a single thread in StateRunning is running, no?
+
+> .IP S
+> Sleeping in an interruptible wait
+> .IP D
+> Waiting in uninterruptible
+> disk sleep
+
+We don't know the 'D' state.
+
+> (14) \fIutime\fP \ %lu
+> Amount of time that this process has been scheduled in user mode,
+> measured in clock ticks (divide by
+> .IR sysconf(_SC_CLK_TCK) ).
+
+This includes Cygwin time.
+
+> This includes guest time, \fIguest_time\fP
+> (time spent running a virtual CPU, see below),
+> so that applications that are not aware of the guest time field
+> do not lose that time from their calculations.
+
+The guest time hints should go away, I think.
+
+> (16) \fIcutime\fP \ %ld
+> (17) \fIcstime\fP \ %ld
+
+Faked.
+
+> (20) \fInum_threads\fP \ %ld
+> Number of threads in this process.
+
+Always 0, albeit we probably could print this info.
+
+> This file is a symbolic link that points to the user's
+> Windows mapped drive mount point, and behaves in the same way as
+> .IR root .
+
+I don't understand what you're trying to say here.
+
+> Incidentally, this file may be used by
+> .BR mount (8)
+> when no filesystem is specified and it didn't manage to determine the
+> filesystem type.
+> Then filesystems contained in this file are tried
+> (excepted those that are marked with "nodev").
+
+Doesn't work that way on Cygwin
+
+> .I /proc/sys
+> This directory contains a number of files
+> and subdirectories corresponding to kernel variables.
+> These variables can be read using
+> the \fI/proc\fP filesystem, and the (deprecated)
+> .BR sysctl (2)
+> system call.
+
+This is wrong for Cygwin.  /proc/sys is kind of a mount point, pointing
+into the native NT object namespace.  E.g., /proc/sys/GLOBAL?? is the
+native NT directory containing native NT object namespace symlinks
+constituting the DOS device names as returned by the QueryDosDevice
+WinAPI call.  Global?? is the global subdir available to all sessions.
+Session-specific ?? dirs exist
+
+https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file#nt-namespaces may be helpful here.
+
+> These files list the System V Interprocess Communication (IPC) objects
+> (respectively: message queues, semaphores, and shared memory)
+> that currently exist on the system,
+> providing similar information to that available via
+> .BR ipcs (1).
+> These files have headers and are formatted (one IPC object per line)
+> for easy understanding.
+
+> .BR svipc (7)
+> provides further background on the information shown by these files.
+
+This should be replaced with the info that the files in sysvipc
+are only available if cygserver is running, just as SYSV ipc, too.
+
+> This string identifies the kernel version that is currently running.
+                             ^^^^^^
+                             Cygwin
+> .SH COLOPHON
+> This page is part of version 3 of
+
+I would skip that "of version 3" part
+
+Other than these minor nits, this looks great!
+
+
+Thanks,
+Corinna
