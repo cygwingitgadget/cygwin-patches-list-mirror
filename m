@@ -1,45 +1,45 @@
 Return-Path: <jon.turney@dronecode.org.uk>
-Received: from sa-prd-fep-043.btinternet.com (mailomta12-sa.btinternet.com
- [213.120.69.18])
- by sourceware.org (Postfix) with ESMTPS id 3E3EE3857C61
- for <cygwin-patches@cygwin.com>; Mon, 16 Nov 2020 13:54:22 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 3E3EE3857C61
+Received: from sa-prd-fep-046.btinternet.com (mailomta27-sa.btinternet.com
+ [213.120.69.33])
+ by sourceware.org (Postfix) with ESMTPS id 508EA385EC57
+ for <cygwin-patches@cygwin.com>; Mon, 16 Nov 2020 13:54:26 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 508EA385EC57
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
  header.from=dronecode.org.uk
 Authentication-Results: sourceware.org;
  spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
 Received: from sa-prd-rgout-002.btmx-prd.synchronoss.net ([10.2.38.5])
- by sa-prd-fep-043.btinternet.com with ESMTP id
- <20201116135421.KZCR15936.sa-prd-fep-043.btinternet.com@sa-prd-rgout-002.btmx-prd.synchronoss.net>;
- Mon, 16 Nov 2020 13:54:21 +0000
+ by sa-prd-fep-046.btinternet.com with ESMTP id
+ <20201116135425.TKDV28150.sa-prd-fep-046.btinternet.com@sa-prd-rgout-002.btmx-prd.synchronoss.net>;
+ Mon, 16 Nov 2020 13:54:25 +0000
 Authentication-Results: btinternet.com; none
-X-SNCR-Rigid: 5ED9AA6E1AB2853F
+X-SNCR-Rigid: 5ED9AA6E1AB285B5
 X-Originating-IP: [86.139.158.14]
 X-OWM-Source-IP: 86.139.158.14 (GB)
 X-OWM-Env-Sender: jonturney@btinternet.com
 X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedujedrudefuddgheekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecufghrlhcuvffnffculddqvdegmdenucfjughrpefhvffufffkofgjfhgggfestdekredtredttdenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepffejkeefieelieekfedvueejiedukeefgfekhfelhfegvdetudeludffheelfedunecuffhomhgrihhnpehgnhhurdhorhhgnecukfhppeekiedrudefledrudehkedrudegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpihhnvghtpeekiedrudefledrudehkedrudegpdhmrghilhhfrhhomhepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqedprhgtphhtthhopeeotgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomheqpdhrtghpthhtohepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqe
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedujedrudefuddgheekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpefhgfelhfdviefhveejheevjefhteevheehhedviedujeevgefhffevfeeitdefudenucffohhmrghinheptgihghifihhnrdgtohhmpdgthihgfihinhdqughotgdrshhhpdhtiihmrghpqdhfrhhomhdquhhnihgtohguvgdrohhrghenucfkphepkeeirddufeelrdduheekrddugeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhinhgvthepkeeirddufeelrdduheekrddugedpmhgrihhlfhhrohhmpeeojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqpdhrtghpthhtohepoegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmqedprhgtphhtthhopeeojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheq
 X-RazorGate-Vade-Verdict: clean 0
 X-RazorGate-Vade-Classification: clean
 Received: from localhost.localdomain (86.139.158.14) by
  sa-prd-rgout-002.btmx-prd.synchronoss.net (5.8.340) (authenticated as
  jonturney@btinternet.com)
- id 5ED9AA6E1AB2853F; Mon, 16 Nov 2020 13:54:21 +0000
+ id 5ED9AA6E1AB285B5; Mon, 16 Nov 2020 13:54:25 +0000
 From: Jon Turney <jon.turney@dronecode.org.uk>
 To: cygwin-patches@cygwin.com
 Cc: Jon Turney <jon.turney@dronecode.org.uk>
-Subject: [PATCH 2/3] Remove surplus autoconf auxiliary files
-Date: Mon, 16 Nov 2020 13:53:49 +0000
-Message-Id: <20201116135350.27289-3-jon.turney@dronecode.org.uk>
+Subject: [PATCH 3/3] Use automake
+Date: Mon, 16 Nov 2020 13:53:50 +0000
+Message-Id: <20201116135350.27289-4-jon.turney@dronecode.org.uk>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201116135350.27289-1-jon.turney@dronecode.org.uk>
 References: <20201116135350.27289-1-jon.turney@dronecode.org.uk>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1199.7 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
- GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, KAM_SHORT,
- LIKELY_SPAM_BODY, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H4, RCVD_IN_MSPIKE_WL,
- SPF_HELO_PASS, SPF_NONE, TXREP autolearn=ham autolearn_force=no version=3.4.2
+X-Spam-Status: No, score=-1198.9 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
+ GIT_PATCH_0, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_NONE, TXREP, URIBL_SBL, URIBL_SBL_A,
+ URI_NOVOWEL autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -54,3905 +54,1503 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 16 Nov 2020 13:54:31 -0000
+X-List-Received-Date: Mon, 16 Nov 2020 13:54:32 -0000
 
-Since we are now only configuring once, in winsup, with
-AC_CONFIG_AUX_DIR(..), the auxiliary files are taken from the top-level.
-
-(Previously we had a random assorment of AC_CONFIG_AUX_DIR(..) and
-AC_CONFIG_AUX_DIR(../..) in winsup subdirectories, so auxiliary files
-would be taken from winsup or the top-level.)
 ---
- winsup/autogen.sh   |    9 -
- winsup/config.guess | 1537 -------------------------------------
- winsup/config.sub   | 1789 -------------------------------------------
- winsup/install-sh   |  520 -------------
- 4 files changed, 3855 deletions(-)
- delete mode 100755 winsup/config.guess
- delete mode 100755 winsup/config.sub
- delete mode 100755 winsup/install-sh
+ winsup/Makefile.am                     |  19 +
+ winsup/Makefile.am.common              |  15 +
+ winsup/Makefile.common                 |  51 --
+ winsup/autogen.sh                      |   1 +
+ winsup/configure.ac                    |  21 +-
+ winsup/cygserver/Makefile.am           |  58 ++
+ winsup/cygwin/Makefile.am              | 764 +++++++++++++++++++++++++
+ winsup/cygwin/config.h.in              |   2 +-
+ winsup/doc/Makefile.am                 | 155 +++++
+ winsup/testsuite/Makefile.am           |  64 +++
+ winsup/testsuite/config/default.exp    |   4 +-
+ winsup/testsuite/cygrun/Makefile.am    |  21 +
+ winsup/testsuite/winsup.api/winsup.exp |   6 +-
+ winsup/utils/Makefile.am               |  79 +++
+ winsup/utils/mingw/Makefile.am         |  50 ++
+ 15 files changed, 1251 insertions(+), 59 deletions(-)
+ create mode 100644 winsup/Makefile.am
+ create mode 100644 winsup/Makefile.am.common
+ delete mode 100644 winsup/Makefile.common
+ create mode 100644 winsup/cygserver/Makefile.am
+ create mode 100644 winsup/cygwin/Makefile.am
+ create mode 100644 winsup/doc/Makefile.am
+ create mode 100644 winsup/testsuite/Makefile.am
+ create mode 100644 winsup/testsuite/cygrun/Makefile.am
+ create mode 100644 winsup/utils/Makefile.am
+ create mode 100644 winsup/utils/mingw/Makefile.am
 
+diff --git a/winsup/Makefile.am b/winsup/Makefile.am
+new file mode 100644
+index 000000000..067f74688
+--- /dev/null
++++ b/winsup/Makefile.am
+@@ -0,0 +1,19 @@
++# Makefile.am for winsup stuff
++#
++# This file is part of Cygwin.
++#
++# This software is a copyrighted work licensed under the terms of the
++# Cygwin license.  Please consult the file "CYGWIN_LICENSE" for
++# details.
++
++# This makefile requires GNU make.
++
++cygdocdir = $(datarootdir)/doc/Cygwin
++
++cygdoc_DATA = \
++	CYGWIN_LICENSE \
++	COPYING
++
++SUBDIRS = cygwin cygserver doc utils testsuite
++
++cygserver utils testsuite: cygwin
+diff --git a/winsup/Makefile.am.common b/winsup/Makefile.am.common
+new file mode 100644
+index 000000000..884194df2
+--- /dev/null
++++ b/winsup/Makefile.am.common
+@@ -0,0 +1,15 @@
++# Makefile.am.common - common definitions for the winsup directory
++#
++# This file is part of Cygwin.
++#
++# This software is a copyrighted work licensed under the terms of the
++# Cygwin license.  Please consult the file "CYGWIN_LICENSE" for
++# details.
++
++flags_common=-Wall -Wstrict-aliasing -Wwrite-strings -fno-common -pipe -fbuiltin -fmessage-length=0
++
++# compiler flags commonly used (but not for MinGW compilation, because they
++# include the Cygwin header paths via @INCLUDES@)
++
++cxxflags_common=$(INCLUDES) -fno-rtti -fno-exceptions -fno-use-cxa-atexit $(flags_common)
++cflags_common=$(INCLUDES) $(flags_common)
+diff --git a/winsup/Makefile.common b/winsup/Makefile.common
+deleted file mode 100644
+index 3141bd111..000000000
+--- a/winsup/Makefile.common
++++ /dev/null
+@@ -1,51 +0,0 @@
+-# Makefile.common - common definitions for the winsup directory
+-#
+-# This file is part of Cygwin.
+-#
+-# This software is a copyrighted work licensed under the terms of the
+-# Cygwin license.  Please consult the file "CYGWIN_LICENSE" for
+-# details.
+-
+-define justdir
+-$(patsubst %/,%,$(dir $1))
+-endef
+-
+-define libname
+-$(realpath $(shell ${CC} --print-file-name=$1 $2))
+-endef
+-
+-export PATH:=${winsup_srcdir}:${PATH}
+-
+-# Allow CFLAGS=-O,-g to control CXXFLAGS too
+-opt=$(filter -O%,${CFLAGS}) $(filter -g%,${CFLAGS})
+-override CXXFLAGS:=${filter-out -g%,$(filter-out -O%,${CXXFLAGS})} ${opt}
+-
+-cflags_common:=-Wall -Wstrict-aliasing -Wwrite-strings -fno-common -pipe -fbuiltin -fmessage-length=0
+-COMPILE.cc=${CXX} ${INCLUDES} ${CXXFLAGS} -fno-rtti -fno-exceptions -fno-use-cxa-atexit ${cflags_common}
+-COMPILE.c=${CC} ${INCLUDES} ${CFLAGS} ${cflags_common}
+-
+-top_srcdir:=$(call justdir,${winsup_srcdir})
+-top_builddir:=$(call justdir,${target_builddir})
+-
+-cygwin_build:=${target_builddir}/winsup/cygwin
+-newlib_build:=${target_builddir}/newlib
+-
+-VPATH:=${srcdir}
+-
+-.SUFFIXES:
+-.SUFFIXES: .c .cc .def .S .a .o .d .s .E
+-
+-%.o: %.cc
+-	$(strip ${COMPILE.cc} -c -o $@ $<)
+-
+-%.o: %.c
+-	$(strip ${COMPILE.c} -c -o $@ $<)
+-
+-%.E: %.cc
+-	$(strip ${COMPILE.cc} -E -dD -o $@ $<)
+-
+-%.E: %.c
+-	$(strip ${COMPILE.c} -E -dD -o $@ $<)
+-
+-%.o: %.S
+-	$(strip ${COMPILE.S} -c -o $@ $<)
 diff --git a/winsup/autogen.sh b/winsup/autogen.sh
-index 0b1d4668d..4a60ef39f 100755
+index 4a60ef39f..1db91add9 100755
 --- a/winsup/autogen.sh
 +++ b/winsup/autogen.sh
-@@ -1,12 +1,3 @@
--#!/bin/sh -e
--if ! /usr/bin/test -e config.guess; then
--    /usr/bin/wget -q -O config.guess 'http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD'
--    /bin/chmod a+x config.guess
--fi
--if ! /usr/bin/test -e config.sub; then
--    /usr/bin/wget -q -O config.sub 'http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD'
--    /bin/chmod a+x config.sub
--fi
+@@ -1,3 +1,4 @@
  /usr/bin/aclocal --force
  /usr/bin/autoconf -f
++/usr/bin/automake -ac
  /bin/rm -rf autom4te.cache
-diff --git a/winsup/config.guess b/winsup/config.guess
-deleted file mode 100755
-index 872b96a16..000000000
---- a/winsup/config.guess
-+++ /dev/null
-@@ -1,1537 +0,0 @@
--#! /bin/sh
--# Attempt to guess a canonical system name.
--#   Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
--#   2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
--#   2011, 2012 Free Software Foundation, Inc.
--
--timestamp='2012-09-25'
--
--# This file is free software; you can redistribute it and/or modify it
--# under the terms of the GNU General Public License as published by
--# the Free Software Foundation; either version 2 of the License, or
--# (at your option) any later version.
--#
--# This program is distributed in the hope that it will be useful, but
--# WITHOUT ANY WARRANTY; without even the implied warranty of
--# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
--# General Public License for more details.
--#
--# You should have received a copy of the GNU General Public License
--# along with this program; if not, see <http://www.gnu.org/licenses/>.
--#
--# As a special exception to the GNU General Public License, if you
--# distribute this file as part of a program that contains a
--# configuration script generated by Autoconf, you may include it under
--# the same distribution terms that you use for the rest of that program.
--
--
--# Originally written by Per Bothner.  Please send patches (context
--# diff format) to <config-patches@gnu.org> and include a ChangeLog
--# entry.
--#
--# This script attempts to guess a canonical system name similar to
--# config.sub.  If it succeeds, it prints the system name on stdout, and
--# exits with 0.  Otherwise, it exits with 1.
--#
--# You can get the latest version of this script from:
--# http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD
--
--me=`echo "$0" | sed -e 's,.*/,,'`
--
--usage="\
--Usage: $0 [OPTION]
--
--Output the configuration name of the system \`$me' is run on.
--
--Operation modes:
--  -h, --help         print this help, then exit
--  -t, --time-stamp   print date of last modification, then exit
--  -v, --version      print version number, then exit
--
--Report bugs and patches to <config-patches@gnu.org>."
--
--version="\
--GNU config.guess ($timestamp)
--
--Originally written by Per Bothner.
--Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000,
--2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012
--Free Software Foundation, Inc.
--
--This is free software; see the source for copying conditions.  There is NO
--warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
--
--help="
--Try \`$me --help' for more information."
--
--# Parse command line
--while test $# -gt 0 ; do
--  case $1 in
--    --time-stamp | --time* | -t )
--       echo "$timestamp" ; exit ;;
--    --version | -v )
--       echo "$version" ; exit ;;
--    --help | --h* | -h )
--       echo "$usage"; exit ;;
--    -- )     # Stop option processing
--       shift; break ;;
--    - )	# Use stdin as input.
--       break ;;
--    -* )
--       echo "$me: invalid option $1$help" >&2
--       exit 1 ;;
--    * )
--       break ;;
--  esac
--done
--
--if test $# != 0; then
--  echo "$me: too many arguments$help" >&2
--  exit 1
--fi
--
--trap 'exit 1' 1 2 15
--
--# CC_FOR_BUILD -- compiler used by this script. Note that the use of a
--# compiler to aid in system detection is discouraged as it requires
--# temporary files to be created and, as you can see below, it is a
--# headache to deal with in a portable fashion.
--
--# Historically, `CC_FOR_BUILD' used to be named `HOST_CC'. We still
--# use `HOST_CC' if defined, but it is deprecated.
--
--# Portable tmp directory creation inspired by the Autoconf team.
--
--set_cc_for_build='
--trap "exitcode=\$?; (rm -f \$tmpfiles 2>/dev/null; rmdir \$tmp 2>/dev/null) && exit \$exitcode" 0 ;
--trap "rm -f \$tmpfiles 2>/dev/null; rmdir \$tmp 2>/dev/null; exit 1" 1 2 13 15 ;
--: ${TMPDIR=/tmp} ;
-- { tmp=`(umask 077 && mktemp -d "$TMPDIR/cgXXXXXX") 2>/dev/null` && test -n "$tmp" && test -d "$tmp" ; } ||
-- { test -n "$RANDOM" && tmp=$TMPDIR/cg$$-$RANDOM && (umask 077 && mkdir $tmp) ; } ||
-- { tmp=$TMPDIR/cg-$$ && (umask 077 && mkdir $tmp) && echo "Warning: creating insecure temp directory" >&2 ; } ||
-- { echo "$me: cannot create a temporary directory in $TMPDIR" >&2 ; exit 1 ; } ;
--dummy=$tmp/dummy ;
--tmpfiles="$dummy.c $dummy.o $dummy.rel $dummy" ;
--case $CC_FOR_BUILD,$HOST_CC,$CC in
-- ,,)    echo "int x;" > $dummy.c ;
--	for c in cc gcc c89 c99 ; do
--	  if ($c -c -o $dummy.o $dummy.c) >/dev/null 2>&1 ; then
--	     CC_FOR_BUILD="$c"; break ;
--	  fi ;
--	done ;
--	if test x"$CC_FOR_BUILD" = x ; then
--	  CC_FOR_BUILD=no_compiler_found ;
--	fi
--	;;
-- ,,*)   CC_FOR_BUILD=$CC ;;
-- ,*,*)  CC_FOR_BUILD=$HOST_CC ;;
--esac ; set_cc_for_build= ;'
--
--# This is needed to find uname on a Pyramid OSx when run in the BSD universe.
--# (ghazi@noc.rutgers.edu 1994-08-24)
--if (test -f /.attbin/uname) >/dev/null 2>&1 ; then
--	PATH=$PATH:/.attbin ; export PATH
--fi
--
--UNAME_MACHINE=`(uname -m) 2>/dev/null` || UNAME_MACHINE=unknown
--UNAME_RELEASE=`(uname -r) 2>/dev/null` || UNAME_RELEASE=unknown
--UNAME_SYSTEM=`(uname -s) 2>/dev/null`  || UNAME_SYSTEM=unknown
--UNAME_VERSION=`(uname -v) 2>/dev/null` || UNAME_VERSION=unknown
--
--# Note: order is significant - the case branches are not exclusive.
--
--case "${UNAME_MACHINE}:${UNAME_SYSTEM}:${UNAME_RELEASE}:${UNAME_VERSION}" in
--    *:NetBSD:*:*)
--	# NetBSD (nbsd) targets should (where applicable) match one or
--	# more of the tuples: *-*-netbsdelf*, *-*-netbsdaout*,
--	# *-*-netbsdecoff* and *-*-netbsd*.  For targets that recently
--	# switched to ELF, *-*-netbsd* would select the old
--	# object file format.  This provides both forward
--	# compatibility and a consistent mechanism for selecting the
--	# object file format.
--	#
--	# Note: NetBSD doesn't particularly care about the vendor
--	# portion of the name.  We always set it to "unknown".
--	sysctl="sysctl -n hw.machine_arch"
--	UNAME_MACHINE_ARCH=`(/sbin/$sysctl 2>/dev/null || \
--	    /usr/sbin/$sysctl 2>/dev/null || echo unknown)`
--	case "${UNAME_MACHINE_ARCH}" in
--	    armeb) machine=armeb-unknown ;;
--	    arm*) machine=arm-unknown ;;
--	    sh3el) machine=shl-unknown ;;
--	    sh3eb) machine=sh-unknown ;;
--	    sh5el) machine=sh5le-unknown ;;
--	    *) machine=${UNAME_MACHINE_ARCH}-unknown ;;
--	esac
--	# The Operating System including object format, if it has switched
--	# to ELF recently, or will in the future.
--	case "${UNAME_MACHINE_ARCH}" in
--	    arm*|i386|m68k|ns32k|sh3*|sparc|vax)
--		eval $set_cc_for_build
--		if echo __ELF__ | $CC_FOR_BUILD -E - 2>/dev/null \
--			| grep -q __ELF__
--		then
--		    # Once all utilities can be ECOFF (netbsdecoff) or a.out (netbsdaout).
--		    # Return netbsd for either.  FIX?
--		    os=netbsd
--		else
--		    os=netbsdelf
--		fi
--		;;
--	    *)
--		os=netbsd
--		;;
--	esac
--	# The OS release
--	# Debian GNU/NetBSD machines have a different userland, and
--	# thus, need a distinct triplet. However, they do not need
--	# kernel version information, so it can be replaced with a
--	# suitable tag, in the style of linux-gnu.
--	case "${UNAME_VERSION}" in
--	    Debian*)
--		release='-gnu'
--		;;
--	    *)
--		release=`echo ${UNAME_RELEASE}|sed -e 's/[-_].*/\./'`
--		;;
--	esac
--	# Since CPU_TYPE-MANUFACTURER-KERNEL-OPERATING_SYSTEM:
--	# contains redundant information, the shorter form:
--	# CPU_TYPE-MANUFACTURER-OPERATING_SYSTEM is used.
--	echo "${machine}-${os}${release}"
--	exit ;;
--    *:Bitrig:*:*)
--	UNAME_MACHINE_ARCH=`arch | sed 's/Bitrig.//'`
--	echo ${UNAME_MACHINE_ARCH}-unknown-bitrig${UNAME_RELEASE}
--	exit ;;
--    *:OpenBSD:*:*)
--	UNAME_MACHINE_ARCH=`arch | sed 's/OpenBSD.//'`
--	echo ${UNAME_MACHINE_ARCH}-unknown-openbsd${UNAME_RELEASE}
--	exit ;;
--    *:ekkoBSD:*:*)
--	echo ${UNAME_MACHINE}-unknown-ekkobsd${UNAME_RELEASE}
--	exit ;;
--    *:SolidBSD:*:*)
--	echo ${UNAME_MACHINE}-unknown-solidbsd${UNAME_RELEASE}
--	exit ;;
--    macppc:MirBSD:*:*)
--	echo powerpc-unknown-mirbsd${UNAME_RELEASE}
--	exit ;;
--    *:MirBSD:*:*)
--	echo ${UNAME_MACHINE}-unknown-mirbsd${UNAME_RELEASE}
--	exit ;;
--    alpha:OSF1:*:*)
--	case $UNAME_RELEASE in
--	*4.0)
--		UNAME_RELEASE=`/usr/sbin/sizer -v | awk '{print $3}'`
--		;;
--	*5.*)
--		UNAME_RELEASE=`/usr/sbin/sizer -v | awk '{print $4}'`
--		;;
--	esac
--	# According to Compaq, /usr/sbin/psrinfo has been available on
--	# OSF/1 and Tru64 systems produced since 1995.  I hope that
--	# covers most systems running today.  This code pipes the CPU
--	# types through head -n 1, so we only detect the type of CPU 0.
--	ALPHA_CPU_TYPE=`/usr/sbin/psrinfo -v | sed -n -e 's/^  The alpha \(.*\) processor.*$/\1/p' | head -n 1`
--	case "$ALPHA_CPU_TYPE" in
--	    "EV4 (21064)")
--		UNAME_MACHINE="alpha" ;;
--	    "EV4.5 (21064)")
--		UNAME_MACHINE="alpha" ;;
--	    "LCA4 (21066/21068)")
--		UNAME_MACHINE="alpha" ;;
--	    "EV5 (21164)")
--		UNAME_MACHINE="alphaev5" ;;
--	    "EV5.6 (21164A)")
--		UNAME_MACHINE="alphaev56" ;;
--	    "EV5.6 (21164PC)")
--		UNAME_MACHINE="alphapca56" ;;
--	    "EV5.7 (21164PC)")
--		UNAME_MACHINE="alphapca57" ;;
--	    "EV6 (21264)")
--		UNAME_MACHINE="alphaev6" ;;
--	    "EV6.7 (21264A)")
--		UNAME_MACHINE="alphaev67" ;;
--	    "EV6.8CB (21264C)")
--		UNAME_MACHINE="alphaev68" ;;
--	    "EV6.8AL (21264B)")
--		UNAME_MACHINE="alphaev68" ;;
--	    "EV6.8CX (21264D)")
--		UNAME_MACHINE="alphaev68" ;;
--	    "EV6.9A (21264/EV69A)")
--		UNAME_MACHINE="alphaev69" ;;
--	    "EV7 (21364)")
--		UNAME_MACHINE="alphaev7" ;;
--	    "EV7.9 (21364A)")
--		UNAME_MACHINE="alphaev79" ;;
--	esac
--	# A Pn.n version is a patched version.
--	# A Vn.n version is a released version.
--	# A Tn.n version is a released field test version.
--	# A Xn.n version is an unreleased experimental baselevel.
--	# 1.2 uses "1.2" for uname -r.
--	echo ${UNAME_MACHINE}-dec-osf`echo ${UNAME_RELEASE} | sed -e 's/^[PVTX]//' | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' 'abcdefghijklmnopqrstuvwxyz'`
--	# Reset EXIT trap before exiting to avoid spurious non-zero exit code.
--	exitcode=$?
--	trap '' 0
--	exit $exitcode ;;
--    Alpha\ *:Windows_NT*:*)
--	# How do we know it's Interix rather than the generic POSIX subsystem?
--	# Should we change UNAME_MACHINE based on the output of uname instead
--	# of the specific Alpha model?
--	echo alpha-pc-interix
--	exit ;;
--    21064:Windows_NT:50:3)
--	echo alpha-dec-winnt3.5
--	exit ;;
--    Amiga*:UNIX_System_V:4.0:*)
--	echo m68k-unknown-sysv4
--	exit ;;
--    *:[Aa]miga[Oo][Ss]:*:*)
--	echo ${UNAME_MACHINE}-unknown-amigaos
--	exit ;;
--    *:[Mm]orph[Oo][Ss]:*:*)
--	echo ${UNAME_MACHINE}-unknown-morphos
--	exit ;;
--    *:OS/390:*:*)
--	echo i370-ibm-openedition
--	exit ;;
--    *:z/VM:*:*)
--	echo s390-ibm-zvmoe
--	exit ;;
--    *:OS400:*:*)
--	echo powerpc-ibm-os400
--	exit ;;
--    arm:RISC*:1.[012]*:*|arm:riscix:1.[012]*:*)
--	echo arm-acorn-riscix${UNAME_RELEASE}
--	exit ;;
--    arm*:riscos:*:*|arm*:RISCOS:*:*)
--	echo arm-unknown-riscos
--	exit ;;
--    SR2?01:HI-UX/MPP:*:* | SR8000:HI-UX/MPP:*:*)
--	echo hppa1.1-hitachi-hiuxmpp
--	exit ;;
--    Pyramid*:OSx*:*:* | MIS*:OSx*:*:* | MIS*:SMP_DC-OSx*:*:*)
--	# akee@wpdis03.wpafb.af.mil (Earle F. Ake) contributed MIS and NILE.
--	if test "`(/bin/universe) 2>/dev/null`" = att ; then
--		echo pyramid-pyramid-sysv3
--	else
--		echo pyramid-pyramid-bsd
--	fi
--	exit ;;
--    NILE*:*:*:dcosx)
--	echo pyramid-pyramid-svr4
--	exit ;;
--    DRS?6000:unix:4.0:6*)
--	echo sparc-icl-nx6
--	exit ;;
--    DRS?6000:UNIX_SV:4.2*:7* | DRS?6000:isis:4.2*:7*)
--	case `/usr/bin/uname -p` in
--	    sparc) echo sparc-icl-nx7; exit ;;
--	esac ;;
--    s390x:SunOS:*:*)
--	echo ${UNAME_MACHINE}-ibm-solaris2`echo ${UNAME_RELEASE}|sed -e 's/[^.]*//'`
--	exit ;;
--    sun4H:SunOS:5.*:*)
--	echo sparc-hal-solaris2`echo ${UNAME_RELEASE}|sed -e 's/[^.]*//'`
--	exit ;;
--    sun4*:SunOS:5.*:* | tadpole*:SunOS:5.*:*)
--	echo sparc-sun-solaris2`echo ${UNAME_RELEASE}|sed -e 's/[^.]*//'`
--	exit ;;
--    i86pc:AuroraUX:5.*:* | i86xen:AuroraUX:5.*:*)
--	echo i386-pc-auroraux${UNAME_RELEASE}
--	exit ;;
--    i86pc:SunOS:5.*:* | i86xen:SunOS:5.*:*)
--	eval $set_cc_for_build
--	SUN_ARCH="i386"
--	# If there is a compiler, see if it is configured for 64-bit objects.
--	# Note that the Sun cc does not turn __LP64__ into 1 like gcc does.
--	# This test works for both compilers.
--	if [ "$CC_FOR_BUILD" != 'no_compiler_found' ]; then
--	    if (echo '#ifdef __amd64'; echo IS_64BIT_ARCH; echo '#endif') | \
--		(CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) | \
--		grep IS_64BIT_ARCH >/dev/null
--	    then
--		SUN_ARCH="x86_64"
--	    fi
--	fi
--	echo ${SUN_ARCH}-pc-solaris2`echo ${UNAME_RELEASE}|sed -e 's/[^.]*//'`
--	exit ;;
--    sun4*:SunOS:6*:*)
--	# According to config.sub, this is the proper way to canonicalize
--	# SunOS6.  Hard to guess exactly what SunOS6 will be like, but
--	# it's likely to be more like Solaris than SunOS4.
--	echo sparc-sun-solaris3`echo ${UNAME_RELEASE}|sed -e 's/[^.]*//'`
--	exit ;;
--    sun4*:SunOS:*:*)
--	case "`/usr/bin/arch -k`" in
--	    Series*|S4*)
--		UNAME_RELEASE=`uname -v`
--		;;
--	esac
--	# Japanese Language versions have a version number like `4.1.3-JL'.
--	echo sparc-sun-sunos`echo ${UNAME_RELEASE}|sed -e 's/-/_/'`
--	exit ;;
--    sun3*:SunOS:*:*)
--	echo m68k-sun-sunos${UNAME_RELEASE}
--	exit ;;
--    sun*:*:4.2BSD:*)
--	UNAME_RELEASE=`(sed 1q /etc/motd | awk '{print substr($5,1,3)}') 2>/dev/null`
--	test "x${UNAME_RELEASE}" = "x" && UNAME_RELEASE=3
--	case "`/bin/arch`" in
--	    sun3)
--		echo m68k-sun-sunos${UNAME_RELEASE}
--		;;
--	    sun4)
--		echo sparc-sun-sunos${UNAME_RELEASE}
--		;;
--	esac
--	exit ;;
--    aushp:SunOS:*:*)
--	echo sparc-auspex-sunos${UNAME_RELEASE}
--	exit ;;
--    # The situation for MiNT is a little confusing.  The machine name
--    # can be virtually everything (everything which is not
--    # "atarist" or "atariste" at least should have a processor
--    # > m68000).  The system name ranges from "MiNT" over "FreeMiNT"
--    # to the lowercase version "mint" (or "freemint").  Finally
--    # the system name "TOS" denotes a system which is actually not
--    # MiNT.  But MiNT is downward compatible to TOS, so this should
--    # be no problem.
--    atarist[e]:*MiNT:*:* | atarist[e]:*mint:*:* | atarist[e]:*TOS:*:*)
--	echo m68k-atari-mint${UNAME_RELEASE}
--	exit ;;
--    atari*:*MiNT:*:* | atari*:*mint:*:* | atarist[e]:*TOS:*:*)
--	echo m68k-atari-mint${UNAME_RELEASE}
--	exit ;;
--    *falcon*:*MiNT:*:* | *falcon*:*mint:*:* | *falcon*:*TOS:*:*)
--	echo m68k-atari-mint${UNAME_RELEASE}
--	exit ;;
--    milan*:*MiNT:*:* | milan*:*mint:*:* | *milan*:*TOS:*:*)
--	echo m68k-milan-mint${UNAME_RELEASE}
--	exit ;;
--    hades*:*MiNT:*:* | hades*:*mint:*:* | *hades*:*TOS:*:*)
--	echo m68k-hades-mint${UNAME_RELEASE}
--	exit ;;
--    *:*MiNT:*:* | *:*mint:*:* | *:*TOS:*:*)
--	echo m68k-unknown-mint${UNAME_RELEASE}
--	exit ;;
--    m68k:machten:*:*)
--	echo m68k-apple-machten${UNAME_RELEASE}
--	exit ;;
--    powerpc:machten:*:*)
--	echo powerpc-apple-machten${UNAME_RELEASE}
--	exit ;;
--    RISC*:Mach:*:*)
--	echo mips-dec-mach_bsd4.3
--	exit ;;
--    RISC*:ULTRIX:*:*)
--	echo mips-dec-ultrix${UNAME_RELEASE}
--	exit ;;
--    VAX*:ULTRIX*:*:*)
--	echo vax-dec-ultrix${UNAME_RELEASE}
--	exit ;;
--    2020:CLIX:*:* | 2430:CLIX:*:*)
--	echo clipper-intergraph-clix${UNAME_RELEASE}
--	exit ;;
--    mips:*:*:UMIPS | mips:*:*:RISCos)
--	eval $set_cc_for_build
--	sed 's/^	//' << EOF >$dummy.c
--#ifdef __cplusplus
--#include <stdio.h>  /* for printf() prototype */
--	int main (int argc, char *argv[]) {
--#else
--	int main (argc, argv) int argc; char *argv[]; {
--#endif
--	#if defined (host_mips) && defined (MIPSEB)
--	#if defined (SYSTYPE_SYSV)
--	  printf ("mips-mips-riscos%ssysv\n", argv[1]); exit (0);
--	#endif
--	#if defined (SYSTYPE_SVR4)
--	  printf ("mips-mips-riscos%ssvr4\n", argv[1]); exit (0);
--	#endif
--	#if defined (SYSTYPE_BSD43) || defined(SYSTYPE_BSD)
--	  printf ("mips-mips-riscos%sbsd\n", argv[1]); exit (0);
--	#endif
--	#endif
--	  exit (-1);
--	}
--EOF
--	$CC_FOR_BUILD -o $dummy $dummy.c &&
--	  dummyarg=`echo "${UNAME_RELEASE}" | sed -n 's/\([0-9]*\).*/\1/p'` &&
--	  SYSTEM_NAME=`$dummy $dummyarg` &&
--	    { echo "$SYSTEM_NAME"; exit; }
--	echo mips-mips-riscos${UNAME_RELEASE}
--	exit ;;
--    Motorola:PowerMAX_OS:*:*)
--	echo powerpc-motorola-powermax
--	exit ;;
--    Motorola:*:4.3:PL8-*)
--	echo powerpc-harris-powermax
--	exit ;;
--    Night_Hawk:*:*:PowerMAX_OS | Synergy:PowerMAX_OS:*:*)
--	echo powerpc-harris-powermax
--	exit ;;
--    Night_Hawk:Power_UNIX:*:*)
--	echo powerpc-harris-powerunix
--	exit ;;
--    m88k:CX/UX:7*:*)
--	echo m88k-harris-cxux7
--	exit ;;
--    m88k:*:4*:R4*)
--	echo m88k-motorola-sysv4
--	exit ;;
--    m88k:*:3*:R3*)
--	echo m88k-motorola-sysv3
--	exit ;;
--    AViiON:dgux:*:*)
--	# DG/UX returns AViiON for all architectures
--	UNAME_PROCESSOR=`/usr/bin/uname -p`
--	if [ $UNAME_PROCESSOR = mc88100 ] || [ $UNAME_PROCESSOR = mc88110 ]
--	then
--	    if [ ${TARGET_BINARY_INTERFACE}x = m88kdguxelfx ] || \
--	       [ ${TARGET_BINARY_INTERFACE}x = x ]
--	    then
--		echo m88k-dg-dgux${UNAME_RELEASE}
--	    else
--		echo m88k-dg-dguxbcs${UNAME_RELEASE}
--	    fi
--	else
--	    echo i586-dg-dgux${UNAME_RELEASE}
--	fi
--	exit ;;
--    M88*:DolphinOS:*:*)	# DolphinOS (SVR3)
--	echo m88k-dolphin-sysv3
--	exit ;;
--    M88*:*:R3*:*)
--	# Delta 88k system running SVR3
--	echo m88k-motorola-sysv3
--	exit ;;
--    XD88*:*:*:*) # Tektronix XD88 system running UTekV (SVR3)
--	echo m88k-tektronix-sysv3
--	exit ;;
--    Tek43[0-9][0-9]:UTek:*:*) # Tektronix 4300 system running UTek (BSD)
--	echo m68k-tektronix-bsd
--	exit ;;
--    *:IRIX*:*:*)
--	echo mips-sgi-irix`echo ${UNAME_RELEASE}|sed -e 's/-/_/g'`
--	exit ;;
--    ????????:AIX?:[12].1:2)   # AIX 2.2.1 or AIX 2.1.1 is RT/PC AIX.
--	echo romp-ibm-aix     # uname -m gives an 8 hex-code CPU id
--	exit ;;               # Note that: echo "'`uname -s`'" gives 'AIX '
--    i*86:AIX:*:*)
--	echo i386-ibm-aix
--	exit ;;
--    ia64:AIX:*:*)
--	if [ -x /usr/bin/oslevel ] ; then
--		IBM_REV=`/usr/bin/oslevel`
--	else
--		IBM_REV=${UNAME_VERSION}.${UNAME_RELEASE}
--	fi
--	echo ${UNAME_MACHINE}-ibm-aix${IBM_REV}
--	exit ;;
--    *:AIX:2:3)
--	if grep bos325 /usr/include/stdio.h >/dev/null 2>&1; then
--		eval $set_cc_for_build
--		sed 's/^		//' << EOF >$dummy.c
--		#include <sys/systemcfg.h>
--
--		main()
--			{
--			if (!__power_pc())
--				exit(1);
--			puts("powerpc-ibm-aix3.2.5");
--			exit(0);
--			}
--EOF
--		if $CC_FOR_BUILD -o $dummy $dummy.c && SYSTEM_NAME=`$dummy`
--		then
--			echo "$SYSTEM_NAME"
--		else
--			echo rs6000-ibm-aix3.2.5
--		fi
--	elif grep bos324 /usr/include/stdio.h >/dev/null 2>&1; then
--		echo rs6000-ibm-aix3.2.4
--	else
--		echo rs6000-ibm-aix3.2
--	fi
--	exit ;;
--    *:AIX:*:[4567])
--	IBM_CPU_ID=`/usr/sbin/lsdev -C -c processor -S available | sed 1q | awk '{ print $1 }'`
--	if /usr/sbin/lsattr -El ${IBM_CPU_ID} | grep ' POWER' >/dev/null 2>&1; then
--		IBM_ARCH=rs6000
--	else
--		IBM_ARCH=powerpc
--	fi
--	if [ -x /usr/bin/oslevel ] ; then
--		IBM_REV=`/usr/bin/oslevel`
--	else
--		IBM_REV=${UNAME_VERSION}.${UNAME_RELEASE}
--	fi
--	echo ${IBM_ARCH}-ibm-aix${IBM_REV}
--	exit ;;
--    *:AIX:*:*)
--	echo rs6000-ibm-aix
--	exit ;;
--    ibmrt:4.4BSD:*|romp-ibm:BSD:*)
--	echo romp-ibm-bsd4.4
--	exit ;;
--    ibmrt:*BSD:*|romp-ibm:BSD:*)            # covers RT/PC BSD and
--	echo romp-ibm-bsd${UNAME_RELEASE}   # 4.3 with uname added to
--	exit ;;                             # report: romp-ibm BSD 4.3
--    *:BOSX:*:*)
--	echo rs6000-bull-bosx
--	exit ;;
--    DPX/2?00:B.O.S.:*:*)
--	echo m68k-bull-sysv3
--	exit ;;
--    9000/[34]??:4.3bsd:1.*:*)
--	echo m68k-hp-bsd
--	exit ;;
--    hp300:4.4BSD:*:* | 9000/[34]??:4.3bsd:2.*:*)
--	echo m68k-hp-bsd4.4
--	exit ;;
--    9000/[34678]??:HP-UX:*:*)
--	HPUX_REV=`echo ${UNAME_RELEASE}|sed -e 's/[^.]*.[0B]*//'`
--	case "${UNAME_MACHINE}" in
--	    9000/31? )            HP_ARCH=m68000 ;;
--	    9000/[34]?? )         HP_ARCH=m68k ;;
--	    9000/[678][0-9][0-9])
--		if [ -x /usr/bin/getconf ]; then
--		    sc_cpu_version=`/usr/bin/getconf SC_CPU_VERSION 2>/dev/null`
--		    sc_kernel_bits=`/usr/bin/getconf SC_KERNEL_BITS 2>/dev/null`
--		    case "${sc_cpu_version}" in
--		      523) HP_ARCH="hppa1.0" ;; # CPU_PA_RISC1_0
--		      528) HP_ARCH="hppa1.1" ;; # CPU_PA_RISC1_1
--		      532)                      # CPU_PA_RISC2_0
--			case "${sc_kernel_bits}" in
--			  32) HP_ARCH="hppa2.0n" ;;
--			  64) HP_ARCH="hppa2.0w" ;;
--			  '') HP_ARCH="hppa2.0" ;;   # HP-UX 10.20
--			esac ;;
--		    esac
--		fi
--		if [ "${HP_ARCH}" = "" ]; then
--		    eval $set_cc_for_build
--		    sed 's/^		//' << EOF >$dummy.c
--
--		#define _HPUX_SOURCE
--		#include <stdlib.h>
--		#include <unistd.h>
--
--		int main ()
--		{
--		#if defined(_SC_KERNEL_BITS)
--		    long bits = sysconf(_SC_KERNEL_BITS);
--		#endif
--		    long cpu  = sysconf (_SC_CPU_VERSION);
--
--		    switch (cpu)
--			{
--			case CPU_PA_RISC1_0: puts ("hppa1.0"); break;
--			case CPU_PA_RISC1_1: puts ("hppa1.1"); break;
--			case CPU_PA_RISC2_0:
--		#if defined(_SC_KERNEL_BITS)
--			    switch (bits)
--				{
--				case 64: puts ("hppa2.0w"); break;
--				case 32: puts ("hppa2.0n"); break;
--				default: puts ("hppa2.0"); break;
--				} break;
--		#else  /* !defined(_SC_KERNEL_BITS) */
--			    puts ("hppa2.0"); break;
--		#endif
--			default: puts ("hppa1.0"); break;
--			}
--		    exit (0);
--		}
--EOF
--		    (CCOPTS= $CC_FOR_BUILD -o $dummy $dummy.c 2>/dev/null) && HP_ARCH=`$dummy`
--		    test -z "$HP_ARCH" && HP_ARCH=hppa
--		fi ;;
--	esac
--	if [ ${HP_ARCH} = "hppa2.0w" ]
--	then
--	    eval $set_cc_for_build
--
--	    # hppa2.0w-hp-hpux* has a 64-bit kernel and a compiler generating
--	    # 32-bit code.  hppa64-hp-hpux* has the same kernel and a compiler
--	    # generating 64-bit code.  GNU and HP use different nomenclature:
--	    #
--	    # $ CC_FOR_BUILD=cc ./config.guess
--	    # => hppa2.0w-hp-hpux11.23
--	    # $ CC_FOR_BUILD="cc +DA2.0w" ./config.guess
--	    # => hppa64-hp-hpux11.23
--
--	    if echo __LP64__ | (CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) |
--		grep -q __LP64__
--	    then
--		HP_ARCH="hppa2.0w"
--	    else
--		HP_ARCH="hppa64"
--	    fi
--	fi
--	echo ${HP_ARCH}-hp-hpux${HPUX_REV}
--	exit ;;
--    ia64:HP-UX:*:*)
--	HPUX_REV=`echo ${UNAME_RELEASE}|sed -e 's/[^.]*.[0B]*//'`
--	echo ia64-hp-hpux${HPUX_REV}
--	exit ;;
--    3050*:HI-UX:*:*)
--	eval $set_cc_for_build
--	sed 's/^	//' << EOF >$dummy.c
--	#include <unistd.h>
--	int
--	main ()
--	{
--	  long cpu = sysconf (_SC_CPU_VERSION);
--	  /* The order matters, because CPU_IS_HP_MC68K erroneously returns
--	     true for CPU_PA_RISC1_0.  CPU_IS_PA_RISC returns correct
--	     results, however.  */
--	  if (CPU_IS_PA_RISC (cpu))
--	    {
--	      switch (cpu)
--		{
--		  case CPU_PA_RISC1_0: puts ("hppa1.0-hitachi-hiuxwe2"); break;
--		  case CPU_PA_RISC1_1: puts ("hppa1.1-hitachi-hiuxwe2"); break;
--		  case CPU_PA_RISC2_0: puts ("hppa2.0-hitachi-hiuxwe2"); break;
--		  default: puts ("hppa-hitachi-hiuxwe2"); break;
--		}
--	    }
--	  else if (CPU_IS_HP_MC68K (cpu))
--	    puts ("m68k-hitachi-hiuxwe2");
--	  else puts ("unknown-hitachi-hiuxwe2");
--	  exit (0);
--	}
--EOF
--	$CC_FOR_BUILD -o $dummy $dummy.c && SYSTEM_NAME=`$dummy` &&
--		{ echo "$SYSTEM_NAME"; exit; }
--	echo unknown-hitachi-hiuxwe2
--	exit ;;
--    9000/7??:4.3bsd:*:* | 9000/8?[79]:4.3bsd:*:* )
--	echo hppa1.1-hp-bsd
--	exit ;;
--    9000/8??:4.3bsd:*:*)
--	echo hppa1.0-hp-bsd
--	exit ;;
--    *9??*:MPE/iX:*:* | *3000*:MPE/iX:*:*)
--	echo hppa1.0-hp-mpeix
--	exit ;;
--    hp7??:OSF1:*:* | hp8?[79]:OSF1:*:* )
--	echo hppa1.1-hp-osf
--	exit ;;
--    hp8??:OSF1:*:*)
--	echo hppa1.0-hp-osf
--	exit ;;
--    i*86:OSF1:*:*)
--	if [ -x /usr/sbin/sysversion ] ; then
--	    echo ${UNAME_MACHINE}-unknown-osf1mk
--	else
--	    echo ${UNAME_MACHINE}-unknown-osf1
--	fi
--	exit ;;
--    parisc*:Lites*:*:*)
--	echo hppa1.1-hp-lites
--	exit ;;
--    C1*:ConvexOS:*:* | convex:ConvexOS:C1*:*)
--	echo c1-convex-bsd
--	exit ;;
--    C2*:ConvexOS:*:* | convex:ConvexOS:C2*:*)
--	if getsysinfo -f scalar_acc
--	then echo c32-convex-bsd
--	else echo c2-convex-bsd
--	fi
--	exit ;;
--    C34*:ConvexOS:*:* | convex:ConvexOS:C34*:*)
--	echo c34-convex-bsd
--	exit ;;
--    C38*:ConvexOS:*:* | convex:ConvexOS:C38*:*)
--	echo c38-convex-bsd
--	exit ;;
--    C4*:ConvexOS:*:* | convex:ConvexOS:C4*:*)
--	echo c4-convex-bsd
--	exit ;;
--    CRAY*Y-MP:*:*:*)
--	echo ymp-cray-unicos${UNAME_RELEASE} | sed -e 's/\.[^.]*$/.X/'
--	exit ;;
--    CRAY*[A-Z]90:*:*:*)
--	echo ${UNAME_MACHINE}-cray-unicos${UNAME_RELEASE} \
--	| sed -e 's/CRAY.*\([A-Z]90\)/\1/' \
--	      -e y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/ \
--	      -e 's/\.[^.]*$/.X/'
--	exit ;;
--    CRAY*TS:*:*:*)
--	echo t90-cray-unicos${UNAME_RELEASE} | sed -e 's/\.[^.]*$/.X/'
--	exit ;;
--    CRAY*T3E:*:*:*)
--	echo alphaev5-cray-unicosmk${UNAME_RELEASE} | sed -e 's/\.[^.]*$/.X/'
--	exit ;;
--    CRAY*SV1:*:*:*)
--	echo sv1-cray-unicos${UNAME_RELEASE} | sed -e 's/\.[^.]*$/.X/'
--	exit ;;
--    *:UNICOS/mp:*:*)
--	echo craynv-cray-unicosmp${UNAME_RELEASE} | sed -e 's/\.[^.]*$/.X/'
--	exit ;;
--    F30[01]:UNIX_System_V:*:* | F700:UNIX_System_V:*:*)
--	FUJITSU_PROC=`uname -m | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' 'abcdefghijklmnopqrstuvwxyz'`
--	FUJITSU_SYS=`uname -p | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' 'abcdefghijklmnopqrstuvwxyz' | sed -e 's/\///'`
--	FUJITSU_REL=`echo ${UNAME_RELEASE} | sed -e 's/ /_/'`
--	echo "${FUJITSU_PROC}-fujitsu-${FUJITSU_SYS}${FUJITSU_REL}"
--	exit ;;
--    5000:UNIX_System_V:4.*:*)
--	FUJITSU_SYS=`uname -p | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' 'abcdefghijklmnopqrstuvwxyz' | sed -e 's/\///'`
--	FUJITSU_REL=`echo ${UNAME_RELEASE} | tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' 'abcdefghijklmnopqrstuvwxyz' | sed -e 's/ /_/'`
--	echo "sparc-fujitsu-${FUJITSU_SYS}${FUJITSU_REL}"
--	exit ;;
--    i*86:BSD/386:*:* | i*86:BSD/OS:*:* | *:Ascend\ Embedded/OS:*:*)
--	echo ${UNAME_MACHINE}-pc-bsdi${UNAME_RELEASE}
--	exit ;;
--    sparc*:BSD/OS:*:*)
--	echo sparc-unknown-bsdi${UNAME_RELEASE}
--	exit ;;
--    *:BSD/OS:*:*)
--	echo ${UNAME_MACHINE}-unknown-bsdi${UNAME_RELEASE}
--	exit ;;
--    *:FreeBSD:*:*)
--	UNAME_PROCESSOR=`/usr/bin/uname -p`
--	case ${UNAME_PROCESSOR} in
--	    amd64)
--		echo x86_64-unknown-freebsd`echo ${UNAME_RELEASE}|sed -e 's/[-(].*//'` ;;
--	    *)
--		echo ${UNAME_PROCESSOR}-unknown-freebsd`echo ${UNAME_RELEASE}|sed -e 's/[-(].*//'` ;;
--	esac
--	exit ;;
--    i*:CYGWIN*:*)
--	echo ${UNAME_MACHINE}-pc-cygwin
--	exit ;;
--    *:MINGW64*:*)
--	echo ${UNAME_MACHINE}-pc-mingw64
--	exit ;;
--    *:MINGW*:*)
--	echo ${UNAME_MACHINE}-pc-mingw32
--	exit ;;
--    i*:MSYS*:*)
--	echo ${UNAME_MACHINE}-pc-msys
--	exit ;;
--    i*:windows32*:*)
--	# uname -m includes "-pc" on this system.
--	echo ${UNAME_MACHINE}-mingw32
--	exit ;;
--    i*:PW*:*)
--	echo ${UNAME_MACHINE}-pc-pw32
--	exit ;;
--    *:Interix*:*)
--	case ${UNAME_MACHINE} in
--	    x86)
--		echo i586-pc-interix${UNAME_RELEASE}
--		exit ;;
--	    authenticamd | genuineintel | EM64T)
--		echo x86_64-unknown-interix${UNAME_RELEASE}
--		exit ;;
--	    IA64)
--		echo ia64-unknown-interix${UNAME_RELEASE}
--		exit ;;
--	esac ;;
--    [345]86:Windows_95:* | [345]86:Windows_98:* | [345]86:Windows_NT:*)
--	echo i${UNAME_MACHINE}-pc-mks
--	exit ;;
--    8664:Windows_NT:*)
--	echo x86_64-pc-mks
--	exit ;;
--    i*:Windows_NT*:* | Pentium*:Windows_NT*:*)
--	# How do we know it's Interix rather than the generic POSIX subsystem?
--	# It also conflicts with pre-2.0 versions of AT&T UWIN. Should we
--	# UNAME_MACHINE based on the output of uname instead of i386?
--	echo i586-pc-interix
--	exit ;;
--    i*:UWIN*:*)
--	echo ${UNAME_MACHINE}-pc-uwin
--	exit ;;
--    amd64:CYGWIN*:*:* | x86_64:CYGWIN*:*:*)
--	echo x86_64-unknown-cygwin
--	exit ;;
--    p*:CYGWIN*:*)
--	echo powerpcle-unknown-cygwin
--	exit ;;
--    prep*:SunOS:5.*:*)
--	echo powerpcle-unknown-solaris2`echo ${UNAME_RELEASE}|sed -e 's/[^.]*//'`
--	exit ;;
--    *:GNU:*:*)
--	# the GNU system
--	echo `echo ${UNAME_MACHINE}|sed -e 's,[-/].*$,,'`-unknown-gnu`echo ${UNAME_RELEASE}|sed -e 's,/.*$,,'`
--	exit ;;
--    *:GNU/*:*:*)
--	# other systems with GNU libc and userland
--	echo ${UNAME_MACHINE}-unknown-`echo ${UNAME_SYSTEM} | sed 's,^[^/]*/,,' | tr '[A-Z]' '[a-z]'``echo ${UNAME_RELEASE}|sed -e 's/[-(].*//'`-gnu
--	exit ;;
--    i*86:Minix:*:*)
--	echo ${UNAME_MACHINE}-pc-minix
--	exit ;;
--    aarch64:Linux:*:*)
--	echo ${UNAME_MACHINE}-unknown-linux-gnu
--	exit ;;
--    aarch64_be:Linux:*:*)
--	UNAME_MACHINE=aarch64_be
--	echo ${UNAME_MACHINE}-unknown-linux-gnu
--	exit ;;
--    alpha:Linux:*:*)
--	case `sed -n '/^cpu model/s/^.*: \(.*\)/\1/p' < /proc/cpuinfo` in
--	  EV5)   UNAME_MACHINE=alphaev5 ;;
--	  EV56)  UNAME_MACHINE=alphaev56 ;;
--	  PCA56) UNAME_MACHINE=alphapca56 ;;
--	  PCA57) UNAME_MACHINE=alphapca56 ;;
--	  EV6)   UNAME_MACHINE=alphaev6 ;;
--	  EV67)  UNAME_MACHINE=alphaev67 ;;
--	  EV68*) UNAME_MACHINE=alphaev68 ;;
--	esac
--	objdump --private-headers /bin/sh | grep -q ld.so.1
--	if test "$?" = 0 ; then LIBC="libc1" ; else LIBC="" ; fi
--	echo ${UNAME_MACHINE}-unknown-linux-gnu${LIBC}
--	exit ;;
--    arm*:Linux:*:*)
--	eval $set_cc_for_build
--	if echo __ARM_EABI__ | $CC_FOR_BUILD -E - 2>/dev/null \
--	    | grep -q __ARM_EABI__
--	then
--	    echo ${UNAME_MACHINE}-unknown-linux-gnu
--	else
--	    if echo __ARM_PCS_VFP | $CC_FOR_BUILD -E - 2>/dev/null \
--		| grep -q __ARM_PCS_VFP
--	    then
--		echo ${UNAME_MACHINE}-unknown-linux-gnueabi
--	    else
--		echo ${UNAME_MACHINE}-unknown-linux-gnueabihf
--	    fi
--	fi
--	exit ;;
--    avr32*:Linux:*:*)
--	echo ${UNAME_MACHINE}-unknown-linux-gnu
--	exit ;;
--    cris:Linux:*:*)
--	echo ${UNAME_MACHINE}-axis-linux-gnu
--	exit ;;
--    crisv32:Linux:*:*)
--	echo ${UNAME_MACHINE}-axis-linux-gnu
--	exit ;;
--    frv:Linux:*:*)
--	echo ${UNAME_MACHINE}-unknown-linux-gnu
--	exit ;;
--    hexagon:Linux:*:*)
--	echo ${UNAME_MACHINE}-unknown-linux-gnu
--	exit ;;
--    i*86:Linux:*:*)
--	LIBC=gnu
--	eval $set_cc_for_build
--	sed 's/^	//' << EOF >$dummy.c
--	#ifdef __dietlibc__
--	LIBC=dietlibc
--	#endif
--EOF
--	eval `$CC_FOR_BUILD -E $dummy.c 2>/dev/null | grep '^LIBC'`
--	echo "${UNAME_MACHINE}-pc-linux-${LIBC}"
--	exit ;;
--    ia64:Linux:*:*)
--	echo ${UNAME_MACHINE}-unknown-linux-gnu
--	exit ;;
--    m32r*:Linux:*:*)
--	echo ${UNAME_MACHINE}-unknown-linux-gnu
--	exit ;;
--    m68*:Linux:*:*)
--	echo ${UNAME_MACHINE}-unknown-linux-gnu
--	exit ;;
--    mips:Linux:*:* | mips64:Linux:*:*)
--	eval $set_cc_for_build
--	sed 's/^	//' << EOF >$dummy.c
--	#undef CPU
--	#undef ${UNAME_MACHINE}
--	#undef ${UNAME_MACHINE}el
--	#if defined(__MIPSEL__) || defined(__MIPSEL) || defined(_MIPSEL) || defined(MIPSEL)
--	CPU=${UNAME_MACHINE}el
--	#else
--	#if defined(__MIPSEB__) || defined(__MIPSEB) || defined(_MIPSEB) || defined(MIPSEB)
--	CPU=${UNAME_MACHINE}
--	#else
--	CPU=
--	#endif
--	#endif
--EOF
--	eval `$CC_FOR_BUILD -E $dummy.c 2>/dev/null | grep '^CPU'`
--	test x"${CPU}" != x && { echo "${CPU}-unknown-linux-gnu"; exit; }
--	;;
--    or32:Linux:*:*)
--	echo ${UNAME_MACHINE}-unknown-linux-gnu
--	exit ;;
--    padre:Linux:*:*)
--	echo sparc-unknown-linux-gnu
--	exit ;;
--    parisc64:Linux:*:* | hppa64:Linux:*:*)
--	echo hppa64-unknown-linux-gnu
--	exit ;;
--    parisc:Linux:*:* | hppa:Linux:*:*)
--	# Look for CPU level
--	case `grep '^cpu[^a-z]*:' /proc/cpuinfo 2>/dev/null | cut -d' ' -f2` in
--	  PA7*) echo hppa1.1-unknown-linux-gnu ;;
--	  PA8*) echo hppa2.0-unknown-linux-gnu ;;
--	  *)    echo hppa-unknown-linux-gnu ;;
--	esac
--	exit ;;
--    ppc64:Linux:*:*)
--	echo powerpc64-unknown-linux-gnu
--	exit ;;
--    ppc:Linux:*:*)
--	echo powerpc-unknown-linux-gnu
--	exit ;;
--    s390:Linux:*:* | s390x:Linux:*:*)
--	echo ${UNAME_MACHINE}-ibm-linux
--	exit ;;
--    sh64*:Linux:*:*)
--	echo ${UNAME_MACHINE}-unknown-linux-gnu
--	exit ;;
--    sh*:Linux:*:*)
--	echo ${UNAME_MACHINE}-unknown-linux-gnu
--	exit ;;
--    sparc:Linux:*:* | sparc64:Linux:*:*)
--	echo ${UNAME_MACHINE}-unknown-linux-gnu
--	exit ;;
--    tile*:Linux:*:*)
--	echo ${UNAME_MACHINE}-unknown-linux-gnu
--	exit ;;
--    vax:Linux:*:*)
--	echo ${UNAME_MACHINE}-dec-linux-gnu
--	exit ;;
--    x86_64:Linux:*:*)
--	echo ${UNAME_MACHINE}-unknown-linux-gnu
--	exit ;;
--    xtensa*:Linux:*:*)
--	echo ${UNAME_MACHINE}-unknown-linux-gnu
--	exit ;;
--    i*86:DYNIX/ptx:4*:*)
--	# ptx 4.0 does uname -s correctly, with DYNIX/ptx in there.
--	# earlier versions are messed up and put the nodename in both
--	# sysname and nodename.
--	echo i386-sequent-sysv4
--	exit ;;
--    i*86:UNIX_SV:4.2MP:2.*)
--	# Unixware is an offshoot of SVR4, but it has its own version
--	# number series starting with 2...
--	# I am not positive that other SVR4 systems won't match this,
--	# I just have to hope.  -- rms.
--	# Use sysv4.2uw... so that sysv4* matches it.
--	echo ${UNAME_MACHINE}-pc-sysv4.2uw${UNAME_VERSION}
--	exit ;;
--    i*86:OS/2:*:*)
--	# If we were able to find `uname', then EMX Unix compatibility
--	# is probably installed.
--	echo ${UNAME_MACHINE}-pc-os2-emx
--	exit ;;
--    i*86:XTS-300:*:STOP)
--	echo ${UNAME_MACHINE}-unknown-stop
--	exit ;;
--    i*86:atheos:*:*)
--	echo ${UNAME_MACHINE}-unknown-atheos
--	exit ;;
--    i*86:syllable:*:*)
--	echo ${UNAME_MACHINE}-pc-syllable
--	exit ;;
--    i*86:LynxOS:2.*:* | i*86:LynxOS:3.[01]*:* | i*86:LynxOS:4.[02]*:*)
--	echo i386-unknown-lynxos${UNAME_RELEASE}
--	exit ;;
--    i*86:*DOS:*:*)
--	echo ${UNAME_MACHINE}-pc-msdosdjgpp
--	exit ;;
--    i*86:*:4.*:* | i*86:SYSTEM_V:4.*:*)
--	UNAME_REL=`echo ${UNAME_RELEASE} | sed 's/\/MP$//'`
--	if grep Novell /usr/include/link.h >/dev/null 2>/dev/null; then
--		echo ${UNAME_MACHINE}-univel-sysv${UNAME_REL}
--	else
--		echo ${UNAME_MACHINE}-pc-sysv${UNAME_REL}
--	fi
--	exit ;;
--    i*86:*:5:[678]*)
--	# UnixWare 7.x, OpenUNIX and OpenServer 6.
--	case `/bin/uname -X | grep "^Machine"` in
--	    *486*)	     UNAME_MACHINE=i486 ;;
--	    *Pentium)	     UNAME_MACHINE=i586 ;;
--	    *Pent*|*Celeron) UNAME_MACHINE=i686 ;;
--	esac
--	echo ${UNAME_MACHINE}-unknown-sysv${UNAME_RELEASE}${UNAME_SYSTEM}${UNAME_VERSION}
--	exit ;;
--    i*86:*:3.2:*)
--	if test -f /usr/options/cb.name; then
--		UNAME_REL=`sed -n 's/.*Version //p' </usr/options/cb.name`
--		echo ${UNAME_MACHINE}-pc-isc$UNAME_REL
--	elif /bin/uname -X 2>/dev/null >/dev/null ; then
--		UNAME_REL=`(/bin/uname -X|grep Release|sed -e 's/.*= //')`
--		(/bin/uname -X|grep i80486 >/dev/null) && UNAME_MACHINE=i486
--		(/bin/uname -X|grep '^Machine.*Pentium' >/dev/null) \
--			&& UNAME_MACHINE=i586
--		(/bin/uname -X|grep '^Machine.*Pent *II' >/dev/null) \
--			&& UNAME_MACHINE=i686
--		(/bin/uname -X|grep '^Machine.*Pentium Pro' >/dev/null) \
--			&& UNAME_MACHINE=i686
--		echo ${UNAME_MACHINE}-pc-sco$UNAME_REL
--	else
--		echo ${UNAME_MACHINE}-pc-sysv32
--	fi
--	exit ;;
--    pc:*:*:*)
--	# Left here for compatibility:
--	# uname -m prints for DJGPP always 'pc', but it prints nothing about
--	# the processor, so we play safe by assuming i586.
--	# Note: whatever this is, it MUST be the same as what config.sub
--	# prints for the "djgpp" host, or else GDB configury will decide that
--	# this is a cross-build.
--	echo i586-pc-msdosdjgpp
--	exit ;;
--    Intel:Mach:3*:*)
--	echo i386-pc-mach3
--	exit ;;
--    paragon:*:*:*)
--	echo i860-intel-osf1
--	exit ;;
--    i860:*:4.*:*) # i860-SVR4
--	if grep Stardent /usr/include/sys/uadmin.h >/dev/null 2>&1 ; then
--	  echo i860-stardent-sysv${UNAME_RELEASE} # Stardent Vistra i860-SVR4
--	else # Add other i860-SVR4 vendors below as they are discovered.
--	  echo i860-unknown-sysv${UNAME_RELEASE}  # Unknown i860-SVR4
--	fi
--	exit ;;
--    mini*:CTIX:SYS*5:*)
--	# "miniframe"
--	echo m68010-convergent-sysv
--	exit ;;
--    mc68k:UNIX:SYSTEM5:3.51m)
--	echo m68k-convergent-sysv
--	exit ;;
--    M680?0:D-NIX:5.3:*)
--	echo m68k-diab-dnix
--	exit ;;
--    M68*:*:R3V[5678]*:*)
--	test -r /sysV68 && { echo 'm68k-motorola-sysv'; exit; } ;;
--    3[345]??:*:4.0:3.0 | 3[34]??A:*:4.0:3.0 | 3[34]??,*:*:4.0:3.0 | 3[34]??/*:*:4.0:3.0 | 4400:*:4.0:3.0 | 4850:*:4.0:3.0 | SKA40:*:4.0:3.0 | SDS2:*:4.0:3.0 | SHG2:*:4.0:3.0 | S7501*:*:4.0:3.0)
--	OS_REL=''
--	test -r /etc/.relid \
--	&& OS_REL=.`sed -n 's/[^ ]* [^ ]* \([0-9][0-9]\).*/\1/p' < /etc/.relid`
--	/bin/uname -p 2>/dev/null | grep 86 >/dev/null \
--	  && { echo i486-ncr-sysv4.3${OS_REL}; exit; }
--	/bin/uname -p 2>/dev/null | /bin/grep entium >/dev/null \
--	  && { echo i586-ncr-sysv4.3${OS_REL}; exit; } ;;
--    3[34]??:*:4.0:* | 3[34]??,*:*:4.0:*)
--	/bin/uname -p 2>/dev/null | grep 86 >/dev/null \
--	  && { echo i486-ncr-sysv4; exit; } ;;
--    NCR*:*:4.2:* | MPRAS*:*:4.2:*)
--	OS_REL='.3'
--	test -r /etc/.relid \
--	    && OS_REL=.`sed -n 's/[^ ]* [^ ]* \([0-9][0-9]\).*/\1/p' < /etc/.relid`
--	/bin/uname -p 2>/dev/null | grep 86 >/dev/null \
--	    && { echo i486-ncr-sysv4.3${OS_REL}; exit; }
--	/bin/uname -p 2>/dev/null | /bin/grep entium >/dev/null \
--	    && { echo i586-ncr-sysv4.3${OS_REL}; exit; }
--	/bin/uname -p 2>/dev/null | /bin/grep pteron >/dev/null \
--	    && { echo i586-ncr-sysv4.3${OS_REL}; exit; } ;;
--    m68*:LynxOS:2.*:* | m68*:LynxOS:3.0*:*)
--	echo m68k-unknown-lynxos${UNAME_RELEASE}
--	exit ;;
--    mc68030:UNIX_System_V:4.*:*)
--	echo m68k-atari-sysv4
--	exit ;;
--    TSUNAMI:LynxOS:2.*:*)
--	echo sparc-unknown-lynxos${UNAME_RELEASE}
--	exit ;;
--    rs6000:LynxOS:2.*:*)
--	echo rs6000-unknown-lynxos${UNAME_RELEASE}
--	exit ;;
--    PowerPC:LynxOS:2.*:* | PowerPC:LynxOS:3.[01]*:* | PowerPC:LynxOS:4.[02]*:*)
--	echo powerpc-unknown-lynxos${UNAME_RELEASE}
--	exit ;;
--    SM[BE]S:UNIX_SV:*:*)
--	echo mips-dde-sysv${UNAME_RELEASE}
--	exit ;;
--    RM*:ReliantUNIX-*:*:*)
--	echo mips-sni-sysv4
--	exit ;;
--    RM*:SINIX-*:*:*)
--	echo mips-sni-sysv4
--	exit ;;
--    *:SINIX-*:*:*)
--	if uname -p 2>/dev/null >/dev/null ; then
--		UNAME_MACHINE=`(uname -p) 2>/dev/null`
--		echo ${UNAME_MACHINE}-sni-sysv4
--	else
--		echo ns32k-sni-sysv
--	fi
--	exit ;;
--    PENTIUM:*:4.0*:*)	# Unisys `ClearPath HMP IX 4000' SVR4/MP effort
--			# says <Richard.M.Bartel@ccMail.Census.GOV>
--	echo i586-unisys-sysv4
--	exit ;;
--    *:UNIX_System_V:4*:FTX*)
--	# From Gerald Hewes <hewes@openmarket.com>.
--	# How about differentiating between stratus architectures? -djm
--	echo hppa1.1-stratus-sysv4
--	exit ;;
--    *:*:*:FTX*)
--	# From seanf@swdc.stratus.com.
--	echo i860-stratus-sysv4
--	exit ;;
--    i*86:VOS:*:*)
--	# From Paul.Green@stratus.com.
--	echo ${UNAME_MACHINE}-stratus-vos
--	exit ;;
--    *:VOS:*:*)
--	# From Paul.Green@stratus.com.
--	echo hppa1.1-stratus-vos
--	exit ;;
--    mc68*:A/UX:*:*)
--	echo m68k-apple-aux${UNAME_RELEASE}
--	exit ;;
--    news*:NEWS-OS:6*:*)
--	echo mips-sony-newsos6
--	exit ;;
--    R[34]000:*System_V*:*:* | R4000:UNIX_SYSV:*:* | R*000:UNIX_SV:*:*)
--	if [ -d /usr/nec ]; then
--		echo mips-nec-sysv${UNAME_RELEASE}
--	else
--		echo mips-unknown-sysv${UNAME_RELEASE}
--	fi
--	exit ;;
--    BeBox:BeOS:*:*)	# BeOS running on hardware made by Be, PPC only.
--	echo powerpc-be-beos
--	exit ;;
--    BeMac:BeOS:*:*)	# BeOS running on Mac or Mac clone, PPC only.
--	echo powerpc-apple-beos
--	exit ;;
--    BePC:BeOS:*:*)	# BeOS running on Intel PC compatible.
--	echo i586-pc-beos
--	exit ;;
--    BePC:Haiku:*:*)	# Haiku running on Intel PC compatible.
--	echo i586-pc-haiku
--	exit ;;
--    x86_64:Haiku:*:*)
--	echo x86_64-unknown-haiku
--	exit ;;
--    SX-4:SUPER-UX:*:*)
--	echo sx4-nec-superux${UNAME_RELEASE}
--	exit ;;
--    SX-5:SUPER-UX:*:*)
--	echo sx5-nec-superux${UNAME_RELEASE}
--	exit ;;
--    SX-6:SUPER-UX:*:*)
--	echo sx6-nec-superux${UNAME_RELEASE}
--	exit ;;
--    SX-7:SUPER-UX:*:*)
--	echo sx7-nec-superux${UNAME_RELEASE}
--	exit ;;
--    SX-8:SUPER-UX:*:*)
--	echo sx8-nec-superux${UNAME_RELEASE}
--	exit ;;
--    SX-8R:SUPER-UX:*:*)
--	echo sx8r-nec-superux${UNAME_RELEASE}
--	exit ;;
--    Power*:Rhapsody:*:*)
--	echo powerpc-apple-rhapsody${UNAME_RELEASE}
--	exit ;;
--    *:Rhapsody:*:*)
--	echo ${UNAME_MACHINE}-apple-rhapsody${UNAME_RELEASE}
--	exit ;;
--    *:Darwin:*:*)
--	UNAME_PROCESSOR=`uname -p` || UNAME_PROCESSOR=unknown
--	case $UNAME_PROCESSOR in
--	    i386)
--		eval $set_cc_for_build
--		if [ "$CC_FOR_BUILD" != 'no_compiler_found' ]; then
--		  if (echo '#ifdef __LP64__'; echo IS_64BIT_ARCH; echo '#endif') | \
--		      (CCOPTS= $CC_FOR_BUILD -E - 2>/dev/null) | \
--		      grep IS_64BIT_ARCH >/dev/null
--		  then
--		      UNAME_PROCESSOR="x86_64"
--		  fi
--		fi ;;
--	    unknown) UNAME_PROCESSOR=powerpc ;;
--	esac
--	echo ${UNAME_PROCESSOR}-apple-darwin${UNAME_RELEASE}
--	exit ;;
--    *:procnto*:*:* | *:QNX:[0123456789]*:*)
--	UNAME_PROCESSOR=`uname -p`
--	if test "$UNAME_PROCESSOR" = "x86"; then
--		UNAME_PROCESSOR=i386
--		UNAME_MACHINE=pc
--	fi
--	echo ${UNAME_PROCESSOR}-${UNAME_MACHINE}-nto-qnx${UNAME_RELEASE}
--	exit ;;
--    *:QNX:*:4*)
--	echo i386-pc-qnx
--	exit ;;
--    NEO-?:NONSTOP_KERNEL:*:*)
--	echo neo-tandem-nsk${UNAME_RELEASE}
--	exit ;;
--    NSE-*:NONSTOP_KERNEL:*:*)
--	echo nse-tandem-nsk${UNAME_RELEASE}
--	exit ;;
--    NSR-?:NONSTOP_KERNEL:*:*)
--	echo nsr-tandem-nsk${UNAME_RELEASE}
--	exit ;;
--    *:NonStop-UX:*:*)
--	echo mips-compaq-nonstopux
--	exit ;;
--    BS2000:POSIX*:*:*)
--	echo bs2000-siemens-sysv
--	exit ;;
--    DS/*:UNIX_System_V:*:*)
--	echo ${UNAME_MACHINE}-${UNAME_SYSTEM}-${UNAME_RELEASE}
--	exit ;;
--    *:Plan9:*:*)
--	# "uname -m" is not consistent, so use $cputype instead. 386
--	# is converted to i386 for consistency with other x86
--	# operating systems.
--	if test "$cputype" = "386"; then
--	    UNAME_MACHINE=i386
--	else
--	    UNAME_MACHINE="$cputype"
--	fi
--	echo ${UNAME_MACHINE}-unknown-plan9
--	exit ;;
--    *:TOPS-10:*:*)
--	echo pdp10-unknown-tops10
--	exit ;;
--    *:TENEX:*:*)
--	echo pdp10-unknown-tenex
--	exit ;;
--    KS10:TOPS-20:*:* | KL10:TOPS-20:*:* | TYPE4:TOPS-20:*:*)
--	echo pdp10-dec-tops20
--	exit ;;
--    XKL-1:TOPS-20:*:* | TYPE5:TOPS-20:*:*)
--	echo pdp10-xkl-tops20
--	exit ;;
--    *:TOPS-20:*:*)
--	echo pdp10-unknown-tops20
--	exit ;;
--    *:ITS:*:*)
--	echo pdp10-unknown-its
--	exit ;;
--    SEI:*:*:SEIUX)
--	echo mips-sei-seiux${UNAME_RELEASE}
--	exit ;;
--    *:DragonFly:*:*)
--	echo ${UNAME_MACHINE}-unknown-dragonfly`echo ${UNAME_RELEASE}|sed -e 's/[-(].*//'`
--	exit ;;
--    *:*VMS:*:*)
--	UNAME_MACHINE=`(uname -p) 2>/dev/null`
--	case "${UNAME_MACHINE}" in
--	    A*) echo alpha-dec-vms ; exit ;;
--	    I*) echo ia64-dec-vms ; exit ;;
--	    V*) echo vax-dec-vms ; exit ;;
--	esac ;;
--    *:XENIX:*:SysV)
--	echo i386-pc-xenix
--	exit ;;
--    i*86:skyos:*:*)
--	echo ${UNAME_MACHINE}-pc-skyos`echo ${UNAME_RELEASE}` | sed -e 's/ .*$//'
--	exit ;;
--    i*86:rdos:*:*)
--	echo ${UNAME_MACHINE}-pc-rdos
--	exit ;;
--    i*86:AROS:*:*)
--	echo ${UNAME_MACHINE}-pc-aros
--	exit ;;
--    x86_64:VMkernel:*:*)
--	echo ${UNAME_MACHINE}-unknown-esx
--	exit ;;
--esac
--
--eval $set_cc_for_build
--cat >$dummy.c <<EOF
--#ifdef _SEQUENT_
--# include <sys/types.h>
--# include <sys/utsname.h>
--#endif
--main ()
--{
--#if defined (sony)
--#if defined (MIPSEB)
--  /* BFD wants "bsd" instead of "newsos".  Perhaps BFD should be changed,
--     I don't know....  */
--  printf ("mips-sony-bsd\n"); exit (0);
--#else
--#include <sys/param.h>
--  printf ("m68k-sony-newsos%s\n",
--#ifdef NEWSOS4
--	"4"
--#else
--	""
--#endif
--	); exit (0);
--#endif
--#endif
--
--#if defined (__arm) && defined (__acorn) && defined (__unix)
--  printf ("arm-acorn-riscix\n"); exit (0);
--#endif
--
--#if defined (hp300) && !defined (hpux)
--  printf ("m68k-hp-bsd\n"); exit (0);
--#endif
--
--#if defined (NeXT)
--#if !defined (__ARCHITECTURE__)
--#define __ARCHITECTURE__ "m68k"
--#endif
--  int version;
--  version=`(hostinfo | sed -n 's/.*NeXT Mach \([0-9]*\).*/\1/p') 2>/dev/null`;
--  if (version < 4)
--    printf ("%s-next-nextstep%d\n", __ARCHITECTURE__, version);
--  else
--    printf ("%s-next-openstep%d\n", __ARCHITECTURE__, version);
--  exit (0);
--#endif
--
--#if defined (MULTIMAX) || defined (n16)
--#if defined (UMAXV)
--  printf ("ns32k-encore-sysv\n"); exit (0);
--#else
--#if defined (CMU)
--  printf ("ns32k-encore-mach\n"); exit (0);
--#else
--  printf ("ns32k-encore-bsd\n"); exit (0);
--#endif
--#endif
--#endif
--
--#if defined (__386BSD__)
--  printf ("i386-pc-bsd\n"); exit (0);
--#endif
--
--#if defined (sequent)
--#if defined (i386)
--  printf ("i386-sequent-dynix\n"); exit (0);
--#endif
--#if defined (ns32000)
--  printf ("ns32k-sequent-dynix\n"); exit (0);
--#endif
--#endif
--
--#if defined (_SEQUENT_)
--    struct utsname un;
--
--    uname(&un);
--
--    if (strncmp(un.version, "V2", 2) == 0) {
--	printf ("i386-sequent-ptx2\n"); exit (0);
--    }
--    if (strncmp(un.version, "V1", 2) == 0) { /* XXX is V1 correct? */
--	printf ("i386-sequent-ptx1\n"); exit (0);
--    }
--    printf ("i386-sequent-ptx\n"); exit (0);
--
--#endif
--
--#if defined (vax)
--# if !defined (ultrix)
--#  include <sys/param.h>
--#  if defined (BSD)
--#   if BSD == 43
--      printf ("vax-dec-bsd4.3\n"); exit (0);
--#   else
--#    if BSD == 199006
--      printf ("vax-dec-bsd4.3reno\n"); exit (0);
--#    else
--      printf ("vax-dec-bsd\n"); exit (0);
--#    endif
--#   endif
--#  else
--    printf ("vax-dec-bsd\n"); exit (0);
--#  endif
--# else
--    printf ("vax-dec-ultrix\n"); exit (0);
--# endif
--#endif
--
--#if defined (alliant) && defined (i860)
--  printf ("i860-alliant-bsd\n"); exit (0);
--#endif
--
--  exit (1);
--}
--EOF
--
--$CC_FOR_BUILD -o $dummy $dummy.c 2>/dev/null && SYSTEM_NAME=`$dummy` &&
--	{ echo "$SYSTEM_NAME"; exit; }
--
--# Apollos put the system type in the environment.
--
--test -d /usr/apollo && { echo ${ISP}-apollo-${SYSTYPE}; exit; }
--
--# Convex versions that predate uname can use getsysinfo(1)
--
--if [ -x /usr/convex/getsysinfo ]
--then
--    case `getsysinfo -f cpu_type` in
--    c1*)
--	echo c1-convex-bsd
--	exit ;;
--    c2*)
--	if getsysinfo -f scalar_acc
--	then echo c32-convex-bsd
--	else echo c2-convex-bsd
--	fi
--	exit ;;
--    c34*)
--	echo c34-convex-bsd
--	exit ;;
--    c38*)
--	echo c38-convex-bsd
--	exit ;;
--    c4*)
--	echo c4-convex-bsd
--	exit ;;
--    esac
--fi
--
--cat >&2 <<EOF
--$0: unable to guess system type
--
--This script, last modified $timestamp, has failed to recognize
--the operating system you are using. It is advised that you
--download the most up to date version of the config scripts from
--
--  http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.guess;hb=HEAD
--and
--  http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD
--
--If the version you run ($0) is already up to date, please
--send the following data and any information you think might be
--pertinent to <config-patches@gnu.org> in order to provide the needed
--information to handle your system.
--
--config.guess timestamp = $timestamp
--
--uname -m = `(uname -m) 2>/dev/null || echo unknown`
--uname -r = `(uname -r) 2>/dev/null || echo unknown`
--uname -s = `(uname -s) 2>/dev/null || echo unknown`
--uname -v = `(uname -v) 2>/dev/null || echo unknown`
--
--/usr/bin/uname -p = `(/usr/bin/uname -p) 2>/dev/null`
--/bin/uname -X     = `(/bin/uname -X) 2>/dev/null`
--
--hostinfo               = `(hostinfo) 2>/dev/null`
--/bin/universe          = `(/bin/universe) 2>/dev/null`
--/usr/bin/arch -k       = `(/usr/bin/arch -k) 2>/dev/null`
--/bin/arch              = `(/bin/arch) 2>/dev/null`
--/usr/bin/oslevel       = `(/usr/bin/oslevel) 2>/dev/null`
--/usr/convex/getsysinfo = `(/usr/convex/getsysinfo) 2>/dev/null`
--
--UNAME_MACHINE = ${UNAME_MACHINE}
--UNAME_RELEASE = ${UNAME_RELEASE}
--UNAME_SYSTEM  = ${UNAME_SYSTEM}
--UNAME_VERSION = ${UNAME_VERSION}
--EOF
--
--exit 1
--
--# Local variables:
--# eval: (add-hook 'write-file-hooks 'time-stamp)
--# time-stamp-start: "timestamp='"
--# time-stamp-format: "%:y-%02m-%02d"
--# time-stamp-end: "'"
--# End:
-diff --git a/winsup/config.sub b/winsup/config.sub
-deleted file mode 100755
-index 89b128630..000000000
---- a/winsup/config.sub
-+++ /dev/null
-@@ -1,1789 +0,0 @@
--#! /bin/sh
--# Configuration validation subroutine script.
--#   Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999,
--#   2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
--#   2011, 2012 Free Software Foundation, Inc.
--
--timestamp='2012-10-10'
--
--# This file is (in principle) common to ALL GNU software.
--# The presence of a machine in this file suggests that SOME GNU software
--# can handle that machine.  It does not imply ALL GNU software can.
--#
--# This file is free software; you can redistribute it and/or modify
--# it under the terms of the GNU General Public License as published by
--# the Free Software Foundation; either version 2 of the License, or
--# (at your option) any later version.
--#
--# This program is distributed in the hope that it will be useful,
--# but WITHOUT ANY WARRANTY; without even the implied warranty of
--# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
--# GNU General Public License for more details.
--#
--# You should have received a copy of the GNU General Public License
--# along with this program; if not, see <http://www.gnu.org/licenses/>.
--#
--# As a special exception to the GNU General Public License, if you
--# distribute this file as part of a program that contains a
--# configuration script generated by Autoconf, you may include it under
--# the same distribution terms that you use for the rest of that program.
--
--
--# Please send patches to <config-patches@gnu.org>.  Submit a context
--# diff and a properly formatted GNU ChangeLog entry.
--#
--# Configuration subroutine to validate and canonicalize a configuration type.
--# Supply the specified configuration type as an argument.
--# If it is invalid, we print an error message on stderr and exit with code 1.
--# Otherwise, we print the canonical config type on stdout and succeed.
--
--# You can get the latest version of this script from:
--# http://git.savannah.gnu.org/gitweb/?p=config.git;a=blob_plain;f=config.sub;hb=HEAD
--
--# This file is supposed to be the same for all GNU packages
--# and recognize all the CPU types, system types and aliases
--# that are meaningful with *any* GNU software.
--# Each package is responsible for reporting which valid configurations
--# it does not support.  The user should be able to distinguish
--# a failure to support a valid configuration from a meaningless
--# configuration.
--
--# The goal of this file is to map all the various variations of a given
--# machine specification into a single specification in the form:
--#	CPU_TYPE-MANUFACTURER-OPERATING_SYSTEM
--# or in some cases, the newer four-part form:
--#	CPU_TYPE-MANUFACTURER-KERNEL-OPERATING_SYSTEM
--# It is wrong to echo any other type of specification.
--
--me=`echo "$0" | sed -e 's,.*/,,'`
--
--usage="\
--Usage: $0 [OPTION] CPU-MFR-OPSYS
--       $0 [OPTION] ALIAS
--
--Canonicalize a configuration name.
--
--Operation modes:
--  -h, --help         print this help, then exit
--  -t, --time-stamp   print date of last modification, then exit
--  -v, --version      print version number, then exit
--
--Report bugs and patches to <config-patches@gnu.org>."
--
--version="\
--GNU config.sub ($timestamp)
--
--Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000,
--2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012
--Free Software Foundation, Inc.
--
--This is free software; see the source for copying conditions.  There is NO
--warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
--
--help="
--Try \`$me --help' for more information."
--
--# Parse command line
--while test $# -gt 0 ; do
--  case $1 in
--    --time-stamp | --time* | -t )
--       echo "$timestamp" ; exit ;;
--    --version | -v )
--       echo "$version" ; exit ;;
--    --help | --h* | -h )
--       echo "$usage"; exit ;;
--    -- )     # Stop option processing
--       shift; break ;;
--    - )	# Use stdin as input.
--       break ;;
--    -* )
--       echo "$me: invalid option $1$help"
--       exit 1 ;;
--
--    *local*)
--       # First pass through any local machine types.
--       echo $1
--       exit ;;
--
--    * )
--       break ;;
--  esac
--done
--
--case $# in
-- 0) echo "$me: missing argument$help" >&2
--    exit 1;;
-- 1) ;;
-- *) echo "$me: too many arguments$help" >&2
--    exit 1;;
--esac
--
--# Separate what the user gave into CPU-COMPANY and OS or KERNEL-OS (if any).
--# Here we must recognize all the valid KERNEL-OS combinations.
--maybe_os=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\2/'`
--case $maybe_os in
--  nto-qnx* | linux-gnu* | linux-android* | linux-dietlibc | linux-newlib* | \
--  linux-musl* | linux-uclibc* | uclinux-uclibc* | uclinux-gnu* | kfreebsd*-gnu* | \
--  knetbsd*-gnu* | netbsd*-gnu* | \
--  kopensolaris*-gnu* | \
--  storm-chaos* | os2-emx* | rtmk-nova*)
--    os=-$maybe_os
--    basic_machine=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\1/'`
--    ;;
--  android-linux)
--    os=-linux-android
--    basic_machine=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\1/'`-unknown
--    ;;
--  *)
--    basic_machine=`echo $1 | sed 's/-[^-]*$//'`
--    if [ $basic_machine != $1 ]
--    then os=`echo $1 | sed 's/.*-/-/'`
--    else os=; fi
--    ;;
--esac
--
--### Let's recognize common machines as not being operating systems so
--### that things like config.sub decstation-3100 work.  We also
--### recognize some manufacturers as not being operating systems, so we
--### can provide default operating systems below.
--case $os in
--	-sun*os*)
--		# Prevent following clause from handling this invalid input.
--		;;
--	-dec* | -mips* | -sequent* | -encore* | -pc532* | -sgi* | -sony* | \
--	-att* | -7300* | -3300* | -delta* | -motorola* | -sun[234]* | \
--	-unicom* | -ibm* | -next | -hp | -isi* | -apollo | -altos* | \
--	-convergent* | -ncr* | -news | -32* | -3600* | -3100* | -hitachi* |\
--	-c[123]* | -convex* | -sun | -crds | -omron* | -dg | -ultra | -tti* | \
--	-harris | -dolphin | -highlevel | -gould | -cbm | -ns | -masscomp | \
--	-apple | -axis | -knuth | -cray | -microblaze*)
--		os=
--		basic_machine=$1
--		;;
--	-bluegene*)
--		os=-cnk
--		;;
--	-sim | -cisco | -oki | -wec | -winbond)
--		os=
--		basic_machine=$1
--		;;
--	-scout)
--		;;
--	-wrs)
--		os=-vxworks
--		basic_machine=$1
--		;;
--	-chorusos*)
--		os=-chorusos
--		basic_machine=$1
--		;;
--	-chorusrdb)
--		os=-chorusrdb
--		basic_machine=$1
--		;;
--	-hiux*)
--		os=-hiuxwe2
--		;;
--	-sco6)
--		os=-sco5v6
--		basic_machine=`echo $1 | sed -e 's/86-.*/86-pc/'`
--		;;
--	-sco5)
--		os=-sco3.2v5
--		basic_machine=`echo $1 | sed -e 's/86-.*/86-pc/'`
--		;;
--	-sco4)
--		os=-sco3.2v4
--		basic_machine=`echo $1 | sed -e 's/86-.*/86-pc/'`
--		;;
--	-sco3.2.[4-9]*)
--		os=`echo $os | sed -e 's/sco3.2./sco3.2v/'`
--		basic_machine=`echo $1 | sed -e 's/86-.*/86-pc/'`
--		;;
--	-sco3.2v[4-9]*)
--		# Don't forget version if it is 3.2v4 or newer.
--		basic_machine=`echo $1 | sed -e 's/86-.*/86-pc/'`
--		;;
--	-sco5v6*)
--		# Don't forget version if it is 3.2v4 or newer.
--		basic_machine=`echo $1 | sed -e 's/86-.*/86-pc/'`
--		;;
--	-sco*)
--		os=-sco3.2v2
--		basic_machine=`echo $1 | sed -e 's/86-.*/86-pc/'`
--		;;
--	-udk*)
--		basic_machine=`echo $1 | sed -e 's/86-.*/86-pc/'`
--		;;
--	-isc)
--		os=-isc2.2
--		basic_machine=`echo $1 | sed -e 's/86-.*/86-pc/'`
--		;;
--	-clix*)
--		basic_machine=clipper-intergraph
--		;;
--	-isc*)
--		basic_machine=`echo $1 | sed -e 's/86-.*/86-pc/'`
--		;;
--	-lynx*178)
--		os=-lynxos178
--		;;
--	-lynx*5)
--		os=-lynxos5
--		;;
--	-lynx*)
--		os=-lynxos
--		;;
--	-ptx*)
--		basic_machine=`echo $1 | sed -e 's/86-.*/86-sequent/'`
--		;;
--	-windowsnt*)
--		os=`echo $os | sed -e 's/windowsnt/winnt/'`
--		;;
--	-psos*)
--		os=-psos
--		;;
--	-mint | -mint[0-9]*)
--		basic_machine=m68k-atari
--		os=-mint
--		;;
--esac
--
--# Decode aliases for certain CPU-COMPANY combinations.
--case $basic_machine in
--	# Recognize the basic CPU types without company name.
--	# Some are omitted here because they have special meanings below.
--	1750a | 580 \
--	| a29k \
--	| aarch64 | aarch64_be \
--	| alpha | alphaev[4-8] | alphaev56 | alphaev6[78] | alphapca5[67] \
--	| alpha64 | alpha64ev[4-8] | alpha64ev56 | alpha64ev6[78] | alpha64pca5[67] \
--	| am33_2.0 \
--	| arc \
--	| arm | arm[bl]e | arme[lb] | armv[2-8] | armv[3-8][lb] | armv7[arm] \
--	| avr | avr32 \
--	| be32 | be64 \
--	| bfin \
--	| c4x | clipper \
--	| d10v | d30v | dlx | dsp16xx \
--	| epiphany \
--	| fido | fr30 | frv \
--	| h8300 | h8500 | hppa | hppa1.[01] | hppa2.0 | hppa2.0[nw] | hppa64 \
--	| hexagon \
--	| i370 | i860 | i960 | ia64 \
--	| ip2k | iq2000 \
--	| le32 | le64 \
--	| lm32 \
--	| m32c | m32r | m32rle | m68000 | m68k | m88k \
--	| maxq | mb | microblaze | microblazeel | mcore | mep | metag \
--	| mips | mipsbe | mipseb | mipsel | mipsle \
--	| mips16 \
--	| mips64 | mips64el \
--	| mips64octeon | mips64octeonel \
--	| mips64orion | mips64orionel \
--	| mips64r5900 | mips64r5900el \
--	| mips64vr | mips64vrel \
--	| mips64vr4100 | mips64vr4100el \
--	| mips64vr4300 | mips64vr4300el \
--	| mips64vr5000 | mips64vr5000el \
--	| mips64vr5900 | mips64vr5900el \
--	| mipsisa32 | mipsisa32el \
--	| mipsisa32r2 | mipsisa32r2el \
--	| mipsisa64 | mipsisa64el \
--	| mipsisa64r2 | mipsisa64r2el \
--	| mipsisa64sb1 | mipsisa64sb1el \
--	| mipsisa64sr71k | mipsisa64sr71kel \
--	| mipstx39 | mipstx39el \
--	| mn10200 | mn10300 \
--	| moxie \
--	| mt \
--	| msp430 \
--	| nds32 | nds32le | nds32be \
--	| nios | nios2 \
--	| ns16k | ns32k \
--	| open8 \
--	| or32 \
--	| pdp10 | pdp11 | pj | pjl \
--	| powerpc | powerpc64 | powerpc64le | powerpcle \
--	| pyramid \
--	| rl78 | rx \
--	| score \
--	| sh | sh[1234] | sh[24]a | sh[24]aeb | sh[23]e | sh[34]eb | sheb | shbe | shle | sh[1234]le | sh3ele \
--	| sh64 | sh64le \
--	| sparc | sparc64 | sparc64b | sparc64v | sparc86x | sparclet | sparclite \
--	| sparcv8 | sparcv9 | sparcv9b | sparcv9v \
--	| spu \
--	| tahoe | tic4x | tic54x | tic55x | tic6x | tic80 | tron \
--	| ubicom32 \
--	| v850 | v850e | v850e1 | v850e2 | v850es | v850e2v3 \
--	| we32k \
--	| x86 | xc16x | xstormy16 | xtensa \
--	| z8k | z80)
--		basic_machine=$basic_machine-unknown
--		;;
--	c54x)
--		basic_machine=tic54x-unknown
--		;;
--	c55x)
--		basic_machine=tic55x-unknown
--		;;
--	c6x)
--		basic_machine=tic6x-unknown
--		;;
--	m6811 | m68hc11 | m6812 | m68hc12 | m68hcs12x | picochip)
--		basic_machine=$basic_machine-unknown
--		os=-none
--		;;
--	m88110 | m680[12346]0 | m683?2 | m68360 | m5200 | v70 | w65 | z8k)
--		;;
--	ms1)
--		basic_machine=mt-unknown
--		;;
--
--	strongarm | thumb | xscale)
--		basic_machine=arm-unknown
--		;;
--	xgate)
--		basic_machine=$basic_machine-unknown
--		os=-none
--		;;
--	xscaleeb)
--		basic_machine=armeb-unknown
--		;;
--
--	xscaleel)
--		basic_machine=armel-unknown
--		;;
--
--	# We use `pc' rather than `unknown'
--	# because (1) that's what they normally are, and
--	# (2) the word "unknown" tends to confuse beginning users.
--	i*86 | x86_64)
--	  basic_machine=$basic_machine-pc
--	  ;;
--	# Object if more than one company name word.
--	*-*-*)
--		echo Invalid configuration \`$1\': machine \`$basic_machine\' not recognized 1>&2
--		exit 1
--		;;
--	# Recognize the basic CPU types with company name.
--	580-* \
--	| a29k-* \
--	| aarch64-* | aarch64_be-* \
--	| alpha-* | alphaev[4-8]-* | alphaev56-* | alphaev6[78]-* \
--	| alpha64-* | alpha64ev[4-8]-* | alpha64ev56-* | alpha64ev6[78]-* \
--	| alphapca5[67]-* | alpha64pca5[67]-* | arc-* \
--	| arm-*  | armbe-* | armle-* | armeb-* | armv*-* \
--	| avr-* | avr32-* \
--	| be32-* | be64-* \
--	| bfin-* | bs2000-* \
--	| c[123]* | c30-* | [cjt]90-* | c4x-* \
--	| clipper-* | craynv-* | cydra-* \
--	| d10v-* | d30v-* | dlx-* \
--	| elxsi-* \
--	| f30[01]-* | f700-* | fido-* | fr30-* | frv-* | fx80-* \
--	| h8300-* | h8500-* \
--	| hppa-* | hppa1.[01]-* | hppa2.0-* | hppa2.0[nw]-* | hppa64-* \
--	| hexagon-* \
--	| i*86-* | i860-* | i960-* | ia64-* \
--	| ip2k-* | iq2000-* \
--	| le32-* | le64-* \
--	| lm32-* \
--	| m32c-* | m32r-* | m32rle-* \
--	| m68000-* | m680[012346]0-* | m68360-* | m683?2-* | m68k-* \
--	| m88110-* | m88k-* | maxq-* | mcore-* | metag-* \
--	| microblaze-* | microblazeel-* \
--	| mips-* | mipsbe-* | mipseb-* | mipsel-* | mipsle-* \
--	| mips16-* \
--	| mips64-* | mips64el-* \
--	| mips64octeon-* | mips64octeonel-* \
--	| mips64orion-* | mips64orionel-* \
--	| mips64r5900-* | mips64r5900el-* \
--	| mips64vr-* | mips64vrel-* \
--	| mips64vr4100-* | mips64vr4100el-* \
--	| mips64vr4300-* | mips64vr4300el-* \
--	| mips64vr5000-* | mips64vr5000el-* \
--	| mips64vr5900-* | mips64vr5900el-* \
--	| mipsisa32-* | mipsisa32el-* \
--	| mipsisa32r2-* | mipsisa32r2el-* \
--	| mipsisa64-* | mipsisa64el-* \
--	| mipsisa64r2-* | mipsisa64r2el-* \
--	| mipsisa64sb1-* | mipsisa64sb1el-* \
--	| mipsisa64sr71k-* | mipsisa64sr71kel-* \
--	| mipstx39-* | mipstx39el-* \
--	| mmix-* \
--	| mt-* \
--	| msp430-* \
--	| nds32-* | nds32le-* | nds32be-* \
--	| nios-* | nios2-* \
--	| none-* | np1-* | ns16k-* | ns32k-* \
--	| open8-* \
--	| orion-* \
--	| pdp10-* | pdp11-* | pj-* | pjl-* | pn-* | power-* \
--	| powerpc-* | powerpc64-* | powerpc64le-* | powerpcle-* \
--	| pyramid-* \
--	| rl78-* | romp-* | rs6000-* | rx-* \
--	| sh-* | sh[1234]-* | sh[24]a-* | sh[24]aeb-* | sh[23]e-* | sh[34]eb-* | sheb-* | shbe-* \
--	| shle-* | sh[1234]le-* | sh3ele-* | sh64-* | sh64le-* \
--	| sparc-* | sparc64-* | sparc64b-* | sparc64v-* | sparc86x-* | sparclet-* \
--	| sparclite-* \
--	| sparcv8-* | sparcv9-* | sparcv9b-* | sparcv9v-* | sv1-* | sx?-* \
--	| tahoe-* \
--	| tic30-* | tic4x-* | tic54x-* | tic55x-* | tic6x-* | tic80-* \
--	| tile*-* \
--	| tron-* \
--	| ubicom32-* \
--	| v850-* | v850e-* | v850e1-* | v850es-* | v850e2-* | v850e2v3-* \
--	| vax-* \
--	| we32k-* \
--	| x86-* | x86_64-* | xc16x-* | xps100-* \
--	| xstormy16-* | xtensa*-* \
--	| ymp-* \
--	| z8k-* | z80-*)
--		;;
--	# Recognize the basic CPU types without company name, with glob match.
--	xtensa*)
--		basic_machine=$basic_machine-unknown
--		;;
--	# Recognize the various machine names and aliases which stand
--	# for a CPU type and a company and sometimes even an OS.
--	386bsd)
--		basic_machine=i386-unknown
--		os=-bsd
--		;;
--	3b1 | 7300 | 7300-att | att-7300 | pc7300 | safari | unixpc)
--		basic_machine=m68000-att
--		;;
--	3b*)
--		basic_machine=we32k-att
--		;;
--	a29khif)
--		basic_machine=a29k-amd
--		os=-udi
--		;;
--	abacus)
--		basic_machine=abacus-unknown
--		;;
--	adobe68k)
--		basic_machine=m68010-adobe
--		os=-scout
--		;;
--	alliant | fx80)
--		basic_machine=fx80-alliant
--		;;
--	altos | altos3068)
--		basic_machine=m68k-altos
--		;;
--	am29k)
--		basic_machine=a29k-none
--		os=-bsd
--		;;
--	amd64)
--		basic_machine=x86_64-pc
--		;;
--	amd64-*)
--		basic_machine=x86_64-`echo $basic_machine | sed 's/^[^-]*-//'`
--		;;
--	amdahl)
--		basic_machine=580-amdahl
--		os=-sysv
--		;;
--	amiga | amiga-*)
--		basic_machine=m68k-unknown
--		;;
--	amigaos | amigados)
--		basic_machine=m68k-unknown
--		os=-amigaos
--		;;
--	amigaunix | amix)
--		basic_machine=m68k-unknown
--		os=-sysv4
--		;;
--	apollo68)
--		basic_machine=m68k-apollo
--		os=-sysv
--		;;
--	apollo68bsd)
--		basic_machine=m68k-apollo
--		os=-bsd
--		;;
--	aros)
--		basic_machine=i386-pc
--		os=-aros
--		;;
--	aux)
--		basic_machine=m68k-apple
--		os=-aux
--		;;
--	balance)
--		basic_machine=ns32k-sequent
--		os=-dynix
--		;;
--	blackfin)
--		basic_machine=bfin-unknown
--		os=-linux
--		;;
--	blackfin-*)
--		basic_machine=bfin-`echo $basic_machine | sed 's/^[^-]*-//'`
--		os=-linux
--		;;
--	bluegene*)
--		basic_machine=powerpc-ibm
--		os=-cnk
--		;;
--	c54x-*)
--		basic_machine=tic54x-`echo $basic_machine | sed 's/^[^-]*-//'`
--		;;
--	c55x-*)
--		basic_machine=tic55x-`echo $basic_machine | sed 's/^[^-]*-//'`
--		;;
--	c6x-*)
--		basic_machine=tic6x-`echo $basic_machine | sed 's/^[^-]*-//'`
--		;;
--	c90)
--		basic_machine=c90-cray
--		os=-unicos
--		;;
--	cegcc)
--		basic_machine=arm-unknown
--		os=-cegcc
--		;;
--	convex-c1)
--		basic_machine=c1-convex
--		os=-bsd
--		;;
--	convex-c2)
--		basic_machine=c2-convex
--		os=-bsd
--		;;
--	convex-c32)
--		basic_machine=c32-convex
--		os=-bsd
--		;;
--	convex-c34)
--		basic_machine=c34-convex
--		os=-bsd
--		;;
--	convex-c38)
--		basic_machine=c38-convex
--		os=-bsd
--		;;
--	cray | j90)
--		basic_machine=j90-cray
--		os=-unicos
--		;;
--	craynv)
--		basic_machine=craynv-cray
--		os=-unicosmp
--		;;
--	cr16 | cr16-*)
--		basic_machine=cr16-unknown
--		os=-elf
--		;;
--	crds | unos)
--		basic_machine=m68k-crds
--		;;
--	crisv32 | crisv32-* | etraxfs*)
--		basic_machine=crisv32-axis
--		;;
--	cris | cris-* | etrax*)
--		basic_machine=cris-axis
--		;;
--	crx)
--		basic_machine=crx-unknown
--		os=-elf
--		;;
--	da30 | da30-*)
--		basic_machine=m68k-da30
--		;;
--	decstation | decstation-3100 | pmax | pmax-* | pmin | dec3100 | decstatn)
--		basic_machine=mips-dec
--		;;
--	decsystem10* | dec10*)
--		basic_machine=pdp10-dec
--		os=-tops10
--		;;
--	decsystem20* | dec20*)
--		basic_machine=pdp10-dec
--		os=-tops20
--		;;
--	delta | 3300 | motorola-3300 | motorola-delta \
--	      | 3300-motorola | delta-motorola)
--		basic_machine=m68k-motorola
--		;;
--	delta88)
--		basic_machine=m88k-motorola
--		os=-sysv3
--		;;
--	dicos)
--		basic_machine=i686-pc
--		os=-dicos
--		;;
--	djgpp)
--		basic_machine=i586-pc
--		os=-msdosdjgpp
--		;;
--	dpx20 | dpx20-*)
--		basic_machine=rs6000-bull
--		os=-bosx
--		;;
--	dpx2* | dpx2*-bull)
--		basic_machine=m68k-bull
--		os=-sysv3
--		;;
--	ebmon29k)
--		basic_machine=a29k-amd
--		os=-ebmon
--		;;
--	elxsi)
--		basic_machine=elxsi-elxsi
--		os=-bsd
--		;;
--	encore | umax | mmax)
--		basic_machine=ns32k-encore
--		;;
--	es1800 | OSE68k | ose68k | ose | OSE)
--		basic_machine=m68k-ericsson
--		os=-ose
--		;;
--	fx2800)
--		basic_machine=i860-alliant
--		;;
--	genix)
--		basic_machine=ns32k-ns
--		;;
--	gmicro)
--		basic_machine=tron-gmicro
--		os=-sysv
--		;;
--	go32)
--		basic_machine=i386-pc
--		os=-go32
--		;;
--	h3050r* | hiux*)
--		basic_machine=hppa1.1-hitachi
--		os=-hiuxwe2
--		;;
--	h8300hms)
--		basic_machine=h8300-hitachi
--		os=-hms
--		;;
--	h8300xray)
--		basic_machine=h8300-hitachi
--		os=-xray
--		;;
--	h8500hms)
--		basic_machine=h8500-hitachi
--		os=-hms
--		;;
--	harris)
--		basic_machine=m88k-harris
--		os=-sysv3
--		;;
--	hp300-*)
--		basic_machine=m68k-hp
--		;;
--	hp300bsd)
--		basic_machine=m68k-hp
--		os=-bsd
--		;;
--	hp300hpux)
--		basic_machine=m68k-hp
--		os=-hpux
--		;;
--	hp3k9[0-9][0-9] | hp9[0-9][0-9])
--		basic_machine=hppa1.0-hp
--		;;
--	hp9k2[0-9][0-9] | hp9k31[0-9])
--		basic_machine=m68000-hp
--		;;
--	hp9k3[2-9][0-9])
--		basic_machine=m68k-hp
--		;;
--	hp9k6[0-9][0-9] | hp6[0-9][0-9])
--		basic_machine=hppa1.0-hp
--		;;
--	hp9k7[0-79][0-9] | hp7[0-79][0-9])
--		basic_machine=hppa1.1-hp
--		;;
--	hp9k78[0-9] | hp78[0-9])
--		# FIXME: really hppa2.0-hp
--		basic_machine=hppa1.1-hp
--		;;
--	hp9k8[67]1 | hp8[67]1 | hp9k80[24] | hp80[24] | hp9k8[78]9 | hp8[78]9 | hp9k893 | hp893)
--		# FIXME: really hppa2.0-hp
--		basic_machine=hppa1.1-hp
--		;;
--	hp9k8[0-9][13679] | hp8[0-9][13679])
--		basic_machine=hppa1.1-hp
--		;;
--	hp9k8[0-9][0-9] | hp8[0-9][0-9])
--		basic_machine=hppa1.0-hp
--		;;
--	hppa-next)
--		os=-nextstep3
--		;;
--	hppaosf)
--		basic_machine=hppa1.1-hp
--		os=-osf
--		;;
--	hppro)
--		basic_machine=hppa1.1-hp
--		os=-proelf
--		;;
--	i370-ibm* | ibm*)
--		basic_machine=i370-ibm
--		;;
--	i*86v32)
--		basic_machine=`echo $1 | sed -e 's/86.*/86-pc/'`
--		os=-sysv32
--		;;
--	i*86v4*)
--		basic_machine=`echo $1 | sed -e 's/86.*/86-pc/'`
--		os=-sysv4
--		;;
--	i*86v)
--		basic_machine=`echo $1 | sed -e 's/86.*/86-pc/'`
--		os=-sysv
--		;;
--	i*86sol2)
--		basic_machine=`echo $1 | sed -e 's/86.*/86-pc/'`
--		os=-solaris2
--		;;
--	i386mach)
--		basic_machine=i386-mach
--		os=-mach
--		;;
--	i386-vsta | vsta)
--		basic_machine=i386-unknown
--		os=-vsta
--		;;
--	iris | iris4d)
--		basic_machine=mips-sgi
--		case $os in
--		    -irix*)
--			;;
--		    *)
--			os=-irix4
--			;;
--		esac
--		;;
--	isi68 | isi)
--		basic_machine=m68k-isi
--		os=-sysv
--		;;
--	m68knommu)
--		basic_machine=m68k-unknown
--		os=-linux
--		;;
--	m68knommu-*)
--		basic_machine=m68k-`echo $basic_machine | sed 's/^[^-]*-//'`
--		os=-linux
--		;;
--	m88k-omron*)
--		basic_machine=m88k-omron
--		;;
--	magnum | m3230)
--		basic_machine=mips-mips
--		os=-sysv
--		;;
--	merlin)
--		basic_machine=ns32k-utek
--		os=-sysv
--		;;
--	microblaze*)
--		basic_machine=microblaze-xilinx
--		;;
--	mingw64)
--		basic_machine=x86_64-pc
--		os=-mingw64
--		;;
--	mingw32)
--		basic_machine=i386-pc
--		os=-mingw32
--		;;
--	mingw32ce)
--		basic_machine=arm-unknown
--		os=-mingw32ce
--		;;
--	miniframe)
--		basic_machine=m68000-convergent
--		;;
--	*mint | -mint[0-9]* | *MiNT | *MiNT[0-9]*)
--		basic_machine=m68k-atari
--		os=-mint
--		;;
--	mips3*-*)
--		basic_machine=`echo $basic_machine | sed -e 's/mips3/mips64/'`
--		;;
--	mips3*)
--		basic_machine=`echo $basic_machine | sed -e 's/mips3/mips64/'`-unknown
--		;;
--	monitor)
--		basic_machine=m68k-rom68k
--		os=-coff
--		;;
--	morphos)
--		basic_machine=powerpc-unknown
--		os=-morphos
--		;;
--	msdos)
--		basic_machine=i386-pc
--		os=-msdos
--		;;
--	ms1-*)
--		basic_machine=`echo $basic_machine | sed -e 's/ms1-/mt-/'`
--		;;
--	msys)
--		basic_machine=i386-pc
--		os=-msys
--		;;
--	mvs)
--		basic_machine=i370-ibm
--		os=-mvs
--		;;
--	nacl)
--		basic_machine=le32-unknown
--		os=-nacl
--		;;
--	ncr3000)
--		basic_machine=i486-ncr
--		os=-sysv4
--		;;
--	netbsd386)
--		basic_machine=i386-unknown
--		os=-netbsd
--		;;
--	netwinder)
--		basic_machine=armv4l-rebel
--		os=-linux
--		;;
--	news | news700 | news800 | news900)
--		basic_machine=m68k-sony
--		os=-newsos
--		;;
--	news1000)
--		basic_machine=m68030-sony
--		os=-newsos
--		;;
--	news-3600 | risc-news)
--		basic_machine=mips-sony
--		os=-newsos
--		;;
--	necv70)
--		basic_machine=v70-nec
--		os=-sysv
--		;;
--	next | m*-next )
--		basic_machine=m68k-next
--		case $os in
--		    -nextstep* )
--			;;
--		    -ns2*)
--		      os=-nextstep2
--			;;
--		    *)
--		      os=-nextstep3
--			;;
--		esac
--		;;
--	nh3000)
--		basic_machine=m68k-harris
--		os=-cxux
--		;;
--	nh[45]000)
--		basic_machine=m88k-harris
--		os=-cxux
--		;;
--	nindy960)
--		basic_machine=i960-intel
--		os=-nindy
--		;;
--	mon960)
--		basic_machine=i960-intel
--		os=-mon960
--		;;
--	nonstopux)
--		basic_machine=mips-compaq
--		os=-nonstopux
--		;;
--	np1)
--		basic_machine=np1-gould
--		;;
--	neo-tandem)
--		basic_machine=neo-tandem
--		;;
--	nse-tandem)
--		basic_machine=nse-tandem
--		;;
--	nsr-tandem)
--		basic_machine=nsr-tandem
--		;;
--	op50n-* | op60c-*)
--		basic_machine=hppa1.1-oki
--		os=-proelf
--		;;
--	openrisc | openrisc-*)
--		basic_machine=or32-unknown
--		;;
--	os400)
--		basic_machine=powerpc-ibm
--		os=-os400
--		;;
--	OSE68000 | ose68000)
--		basic_machine=m68000-ericsson
--		os=-ose
--		;;
--	os68k)
--		basic_machine=m68k-none
--		os=-os68k
--		;;
--	pa-hitachi)
--		basic_machine=hppa1.1-hitachi
--		os=-hiuxwe2
--		;;
--	paragon)
--		basic_machine=i860-intel
--		os=-osf
--		;;
--	parisc)
--		basic_machine=hppa-unknown
--		os=-linux
--		;;
--	parisc-*)
--		basic_machine=hppa-`echo $basic_machine | sed 's/^[^-]*-//'`
--		os=-linux
--		;;
--	pbd)
--		basic_machine=sparc-tti
--		;;
--	pbb)
--		basic_machine=m68k-tti
--		;;
--	pc532 | pc532-*)
--		basic_machine=ns32k-pc532
--		;;
--	pc98)
--		basic_machine=i386-pc
--		;;
--	pc98-*)
--		basic_machine=i386-`echo $basic_machine | sed 's/^[^-]*-//'`
--		;;
--	pentium | p5 | k5 | k6 | nexgen | viac3)
--		basic_machine=i586-pc
--		;;
--	pentiumpro | p6 | 6x86 | athlon | athlon_*)
--		basic_machine=i686-pc
--		;;
--	pentiumii | pentium2 | pentiumiii | pentium3)
--		basic_machine=i686-pc
--		;;
--	pentium4)
--		basic_machine=i786-pc
--		;;
--	pentium-* | p5-* | k5-* | k6-* | nexgen-* | viac3-*)
--		basic_machine=i586-`echo $basic_machine | sed 's/^[^-]*-//'`
--		;;
--	pentiumpro-* | p6-* | 6x86-* | athlon-*)
--		basic_machine=i686-`echo $basic_machine | sed 's/^[^-]*-//'`
--		;;
--	pentiumii-* | pentium2-* | pentiumiii-* | pentium3-*)
--		basic_machine=i686-`echo $basic_machine | sed 's/^[^-]*-//'`
--		;;
--	pentium4-*)
--		basic_machine=i786-`echo $basic_machine | sed 's/^[^-]*-//'`
--		;;
--	pn)
--		basic_machine=pn-gould
--		;;
--	power)	basic_machine=power-ibm
--		;;
--	ppc | ppcbe)	basic_machine=powerpc-unknown
--		;;
--	ppc-* | ppcbe-*)
--		basic_machine=powerpc-`echo $basic_machine | sed 's/^[^-]*-//'`
--		;;
--	ppcle | powerpclittle | ppc-le | powerpc-little)
--		basic_machine=powerpcle-unknown
--		;;
--	ppcle-* | powerpclittle-*)
--		basic_machine=powerpcle-`echo $basic_machine | sed 's/^[^-]*-//'`
--		;;
--	ppc64)	basic_machine=powerpc64-unknown
--		;;
--	ppc64-*) basic_machine=powerpc64-`echo $basic_machine | sed 's/^[^-]*-//'`
--		;;
--	ppc64le | powerpc64little | ppc64-le | powerpc64-little)
--		basic_machine=powerpc64le-unknown
--		;;
--	ppc64le-* | powerpc64little-*)
--		basic_machine=powerpc64le-`echo $basic_machine | sed 's/^[^-]*-//'`
--		;;
--	ps2)
--		basic_machine=i386-ibm
--		;;
--	pw32)
--		basic_machine=i586-unknown
--		os=-pw32
--		;;
--	rdos)
--		basic_machine=i386-pc
--		os=-rdos
--		;;
--	rom68k)
--		basic_machine=m68k-rom68k
--		os=-coff
--		;;
--	rm[46]00)
--		basic_machine=mips-siemens
--		;;
--	rtpc | rtpc-*)
--		basic_machine=romp-ibm
--		;;
--	s390 | s390-*)
--		basic_machine=s390-ibm
--		;;
--	s390x | s390x-*)
--		basic_machine=s390x-ibm
--		;;
--	sa29200)
--		basic_machine=a29k-amd
--		os=-udi
--		;;
--	sb1)
--		basic_machine=mipsisa64sb1-unknown
--		;;
--	sb1el)
--		basic_machine=mipsisa64sb1el-unknown
--		;;
--	sde)
--		basic_machine=mipsisa32-sde
--		os=-elf
--		;;
--	sei)
--		basic_machine=mips-sei
--		os=-seiux
--		;;
--	sequent)
--		basic_machine=i386-sequent
--		;;
--	sh)
--		basic_machine=sh-hitachi
--		os=-hms
--		;;
--	sh5el)
--		basic_machine=sh5le-unknown
--		;;
--	sh64)
--		basic_machine=sh64-unknown
--		;;
--	sparclite-wrs | simso-wrs)
--		basic_machine=sparclite-wrs
--		os=-vxworks
--		;;
--	sps7)
--		basic_machine=m68k-bull
--		os=-sysv2
--		;;
--	spur)
--		basic_machine=spur-unknown
--		;;
--	st2000)
--		basic_machine=m68k-tandem
--		;;
--	stratus)
--		basic_machine=i860-stratus
--		os=-sysv4
--		;;
--	strongarm-* | thumb-*)
--		basic_machine=arm-`echo $basic_machine | sed 's/^[^-]*-//'`
--		;;
--	sun2)
--		basic_machine=m68000-sun
--		;;
--	sun2os3)
--		basic_machine=m68000-sun
--		os=-sunos3
--		;;
--	sun2os4)
--		basic_machine=m68000-sun
--		os=-sunos4
--		;;
--	sun3os3)
--		basic_machine=m68k-sun
--		os=-sunos3
--		;;
--	sun3os4)
--		basic_machine=m68k-sun
--		os=-sunos4
--		;;
--	sun4os3)
--		basic_machine=sparc-sun
--		os=-sunos3
--		;;
--	sun4os4)
--		basic_machine=sparc-sun
--		os=-sunos4
--		;;
--	sun4sol2)
--		basic_machine=sparc-sun
--		os=-solaris2
--		;;
--	sun3 | sun3-*)
--		basic_machine=m68k-sun
--		;;
--	sun4)
--		basic_machine=sparc-sun
--		;;
--	sun386 | sun386i | roadrunner)
--		basic_machine=i386-sun
--		;;
--	sv1)
--		basic_machine=sv1-cray
--		os=-unicos
--		;;
--	symmetry)
--		basic_machine=i386-sequent
--		os=-dynix
--		;;
--	t3e)
--		basic_machine=alphaev5-cray
--		os=-unicos
--		;;
--	t90)
--		basic_machine=t90-cray
--		os=-unicos
--		;;
--	tile*)
--		basic_machine=$basic_machine-unknown
--		os=-linux-gnu
--		;;
--	tx39)
--		basic_machine=mipstx39-unknown
--		;;
--	tx39el)
--		basic_machine=mipstx39el-unknown
--		;;
--	toad1)
--		basic_machine=pdp10-xkl
--		os=-tops20
--		;;
--	tower | tower-32)
--		basic_machine=m68k-ncr
--		;;
--	tpf)
--		basic_machine=s390x-ibm
--		os=-tpf
--		;;
--	udi29k)
--		basic_machine=a29k-amd
--		os=-udi
--		;;
--	ultra3)
--		basic_machine=a29k-nyu
--		os=-sym1
--		;;
--	v810 | necv810)
--		basic_machine=v810-nec
--		os=-none
--		;;
--	vaxv)
--		basic_machine=vax-dec
--		os=-sysv
--		;;
--	vms)
--		basic_machine=vax-dec
--		os=-vms
--		;;
--	vpp*|vx|vx-*)
--		basic_machine=f301-fujitsu
--		;;
--	vxworks960)
--		basic_machine=i960-wrs
--		os=-vxworks
--		;;
--	vxworks68)
--		basic_machine=m68k-wrs
--		os=-vxworks
--		;;
--	vxworks29k)
--		basic_machine=a29k-wrs
--		os=-vxworks
--		;;
--	w65*)
--		basic_machine=w65-wdc
--		os=-none
--		;;
--	w89k-*)
--		basic_machine=hppa1.1-winbond
--		os=-proelf
--		;;
--	xbox)
--		basic_machine=i686-pc
--		os=-mingw32
--		;;
--	xps | xps100)
--		basic_machine=xps100-honeywell
--		;;
--	xscale-* | xscalee[bl]-*)
--		basic_machine=`echo $basic_machine | sed 's/^xscale/arm/'`
--		;;
--	ymp)
--		basic_machine=ymp-cray
--		os=-unicos
--		;;
--	z8k-*-coff)
--		basic_machine=z8k-unknown
--		os=-sim
--		;;
--	z80-*-coff)
--		basic_machine=z80-unknown
--		os=-sim
--		;;
--	none)
--		basic_machine=none-none
--		os=-none
--		;;
--
--# Here we handle the default manufacturer of certain CPU types.  It is in
--# some cases the only manufacturer, in others, it is the most popular.
--	w89k)
--		basic_machine=hppa1.1-winbond
--		;;
--	op50n)
--		basic_machine=hppa1.1-oki
--		;;
--	op60c)
--		basic_machine=hppa1.1-oki
--		;;
--	romp)
--		basic_machine=romp-ibm
--		;;
--	mmix)
--		basic_machine=mmix-knuth
--		;;
--	rs6000)
--		basic_machine=rs6000-ibm
--		;;
--	vax)
--		basic_machine=vax-dec
--		;;
--	pdp10)
--		# there are many clones, so DEC is not a safe bet
--		basic_machine=pdp10-unknown
--		;;
--	pdp11)
--		basic_machine=pdp11-dec
--		;;
--	we32k)
--		basic_machine=we32k-att
--		;;
--	sh[1234] | sh[24]a | sh[24]aeb | sh[34]eb | sh[1234]le | sh[23]ele)
--		basic_machine=sh-unknown
--		;;
--	sparc | sparcv8 | sparcv9 | sparcv9b | sparcv9v)
--		basic_machine=sparc-sun
--		;;
--	cydra)
--		basic_machine=cydra-cydrome
--		;;
--	orion)
--		basic_machine=orion-highlevel
--		;;
--	orion105)
--		basic_machine=clipper-highlevel
--		;;
--	mac | mpw | mac-mpw)
--		basic_machine=m68k-apple
--		;;
--	pmac | pmac-mpw)
--		basic_machine=powerpc-apple
--		;;
--	*-unknown)
--		# Make sure to match an already-canonicalized machine name.
--		;;
--	*)
--		echo Invalid configuration \`$1\': machine \`$basic_machine\' not recognized 1>&2
--		exit 1
--		;;
--esac
--
--# Here we canonicalize certain aliases for manufacturers.
--case $basic_machine in
--	*-digital*)
--		basic_machine=`echo $basic_machine | sed 's/digital.*/dec/'`
--		;;
--	*-commodore*)
--		basic_machine=`echo $basic_machine | sed 's/commodore.*/cbm/'`
--		;;
--	*)
--		;;
--esac
--
--# Decode manufacturer-specific aliases for certain operating systems.
--
--if [ x"$os" != x"" ]
--then
--case $os in
--	# First match some system type aliases
--	# that might get confused with valid system types.
--	# -solaris* is a basic system type, with this one exception.
--	-auroraux)
--		os=-auroraux
--		;;
--	-solaris1 | -solaris1.*)
--		os=`echo $os | sed -e 's|solaris1|sunos4|'`
--		;;
--	-solaris)
--		os=-solaris2
--		;;
--	-svr4*)
--		os=-sysv4
--		;;
--	-unixware*)
--		os=-sysv4.2uw
--		;;
--	-gnu/linux*)
--		os=`echo $os | sed -e 's|gnu/linux|linux-gnu|'`
--		;;
--	# First accept the basic system types.
--	# The portable systems comes first.
--	# Each alternative MUST END IN A *, to match a version number.
--	# -sysv* is not here because it comes later, after sysvr4.
--	-gnu* | -bsd* | -mach* | -minix* | -genix* | -ultrix* | -irix* \
--	      | -*vms* | -sco* | -esix* | -isc* | -aix* | -cnk* | -sunos | -sunos[34]*\
--	      | -hpux* | -unos* | -osf* | -luna* | -dgux* | -auroraux* | -solaris* \
--	      | -sym* | -kopensolaris* \
--	      | -amigaos* | -amigados* | -msdos* | -newsos* | -unicos* | -aof* \
--	      | -aos* | -aros* \
--	      | -nindy* | -vxsim* | -vxworks* | -ebmon* | -hms* | -mvs* \
--	      | -clix* | -riscos* | -uniplus* | -iris* | -rtu* | -xenix* \
--	      | -hiux* | -386bsd* | -knetbsd* | -mirbsd* | -netbsd* \
--	      | -bitrig* | -openbsd* | -solidbsd* \
--	      | -ekkobsd* | -kfreebsd* | -freebsd* | -riscix* | -lynxos* \
--	      | -bosx* | -nextstep* | -cxux* | -aout* | -elf* | -oabi* \
--	      | -ptx* | -coff* | -ecoff* | -winnt* | -domain* | -vsta* \
--	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
--	      | -chorusos* | -chorusrdb* | -cegcc* \
--	      | -cygwin* | -msys* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
--	      | -mingw32* | -mingw64* | -linux-gnu* | -linux-android* \
--	      | -linux-newlib* | -linux-musl* | -linux-uclibc* \
--	      | -uxpv* | -beos* | -mpeix* | -udk* \
--	      | -interix* | -uwin* | -mks* | -rhapsody* | -darwin* | -opened* \
--	      | -openstep* | -oskit* | -conix* | -pw32* | -nonstopux* \
--	      | -storm-chaos* | -tops10* | -tenex* | -tops20* | -its* \
--	      | -os2* | -vos* | -palmos* | -uclinux* | -nucleus* \
--	      | -morphos* | -superux* | -rtmk* | -rtmk-nova* | -windiss* \
--	      | -powermax* | -dnix* | -nx6 | -nx7 | -sei* | -dragonfly* \
--	      | -skyos* | -haiku* | -rdos* | -toppers* | -drops* | -es*)
--	# Remember, each alternative MUST END IN *, to match a version number.
--		;;
--	-qnx*)
--		case $basic_machine in
--		    x86-* | i*86-*)
--			;;
--		    *)
--			os=-nto$os
--			;;
--		esac
--		;;
--	-nto-qnx*)
--		;;
--	-nto*)
--		os=`echo $os | sed -e 's|nto|nto-qnx|'`
--		;;
--	-sim | -es1800* | -hms* | -xray | -os68k* | -none* | -v88r* \
--	      | -windows* | -osx | -abug | -netware* | -os9* | -beos* | -haiku* \
--	      | -macos* | -mpw* | -magic* | -mmixware* | -mon960* | -lnews*)
--		;;
--	-mac*)
--		os=`echo $os | sed -e 's|mac|macos|'`
--		;;
--	-linux-dietlibc)
--		os=-linux-dietlibc
--		;;
--	-linux*)
--		os=`echo $os | sed -e 's|linux|linux-gnu|'`
--		;;
--	-sunos5*)
--		os=`echo $os | sed -e 's|sunos5|solaris2|'`
--		;;
--	-sunos6*)
--		os=`echo $os | sed -e 's|sunos6|solaris3|'`
--		;;
--	-opened*)
--		os=-openedition
--		;;
--	-os400*)
--		os=-os400
--		;;
--	-wince*)
--		os=-wince
--		;;
--	-osfrose*)
--		os=-osfrose
--		;;
--	-osf*)
--		os=-osf
--		;;
--	-utek*)
--		os=-bsd
--		;;
--	-dynix*)
--		os=-bsd
--		;;
--	-acis*)
--		os=-aos
--		;;
--	-atheos*)
--		os=-atheos
--		;;
--	-syllable*)
--		os=-syllable
--		;;
--	-386bsd)
--		os=-bsd
--		;;
--	-ctix* | -uts*)
--		os=-sysv
--		;;
--	-nova*)
--		os=-rtmk-nova
--		;;
--	-ns2 )
--		os=-nextstep2
--		;;
--	-nsk*)
--		os=-nsk
--		;;
--	# Preserve the version number of sinix5.
--	-sinix5.*)
--		os=`echo $os | sed -e 's|sinix|sysv|'`
--		;;
--	-sinix*)
--		os=-sysv4
--		;;
--	-tpf*)
--		os=-tpf
--		;;
--	-triton*)
--		os=-sysv3
--		;;
--	-oss*)
--		os=-sysv3
--		;;
--	-svr4)
--		os=-sysv4
--		;;
--	-svr3)
--		os=-sysv3
--		;;
--	-sysvr4)
--		os=-sysv4
--		;;
--	# This must come after -sysvr4.
--	-sysv*)
--		;;
--	-ose*)
--		os=-ose
--		;;
--	-es1800*)
--		os=-ose
--		;;
--	-xenix)
--		os=-xenix
--		;;
--	-*mint | -mint[0-9]* | -*MiNT | -MiNT[0-9]*)
--		os=-mint
--		;;
--	-aros*)
--		os=-aros
--		;;
--	-kaos*)
--		os=-kaos
--		;;
--	-zvmoe)
--		os=-zvmoe
--		;;
--	-dicos*)
--		os=-dicos
--		;;
--	-nacl*)
--		;;
--	-none)
--		;;
--	*)
--		# Get rid of the `-' at the beginning of $os.
--		os=`echo $os | sed 's/[^-]*-//'`
--		echo Invalid configuration \`$1\': system \`$os\' not recognized 1>&2
--		exit 1
--		;;
--esac
--else
--
--# Here we handle the default operating systems that come with various machines.
--# The value should be what the vendor currently ships out the door with their
--# machine or put another way, the most popular os provided with the machine.
--
--# Note that if you're going to try to match "-MANUFACTURER" here (say,
--# "-sun"), then you have to tell the case statement up towards the top
--# that MANUFACTURER isn't an operating system.  Otherwise, code above
--# will signal an error saying that MANUFACTURER isn't an operating
--# system, and we'll never get to this point.
--
--case $basic_machine in
--	score-*)
--		os=-elf
--		;;
--	spu-*)
--		os=-elf
--		;;
--	*-acorn)
--		os=-riscix1.2
--		;;
--	arm*-rebel)
--		os=-linux
--		;;
--	arm*-semi)
--		os=-aout
--		;;
--	c4x-* | tic4x-*)
--		os=-coff
--		;;
--	hexagon-*)
--		os=-elf
--		;;
--	tic54x-*)
--		os=-coff
--		;;
--	tic55x-*)
--		os=-coff
--		;;
--	tic6x-*)
--		os=-coff
--		;;
--	# This must come before the *-dec entry.
--	pdp10-*)
--		os=-tops20
--		;;
--	pdp11-*)
--		os=-none
--		;;
--	*-dec | vax-*)
--		os=-ultrix4.2
--		;;
--	m68*-apollo)
--		os=-domain
--		;;
--	i386-sun)
--		os=-sunos4.0.2
--		;;
--	m68000-sun)
--		os=-sunos3
--		;;
--	m68*-cisco)
--		os=-aout
--		;;
--	mep-*)
--		os=-elf
--		;;
--	mips*-cisco)
--		os=-elf
--		;;
--	mips*-*)
--		os=-elf
--		;;
--	or32-*)
--		os=-coff
--		;;
--	*-tti)	# must be before sparc entry or we get the wrong os.
--		os=-sysv3
--		;;
--	sparc-* | *-sun)
--		os=-sunos4.1.1
--		;;
--	*-be)
--		os=-beos
--		;;
--	*-haiku)
--		os=-haiku
--		;;
--	*-ibm)
--		os=-aix
--		;;
--	*-knuth)
--		os=-mmixware
--		;;
--	*-wec)
--		os=-proelf
--		;;
--	*-winbond)
--		os=-proelf
--		;;
--	*-oki)
--		os=-proelf
--		;;
--	*-hp)
--		os=-hpux
--		;;
--	*-hitachi)
--		os=-hiux
--		;;
--	i860-* | *-att | *-ncr | *-altos | *-motorola | *-convergent)
--		os=-sysv
--		;;
--	*-cbm)
--		os=-amigaos
--		;;
--	*-dg)
--		os=-dgux
--		;;
--	*-dolphin)
--		os=-sysv3
--		;;
--	m68k-ccur)
--		os=-rtu
--		;;
--	m88k-omron*)
--		os=-luna
--		;;
--	*-next )
--		os=-nextstep
--		;;
--	*-sequent)
--		os=-ptx
--		;;
--	*-crds)
--		os=-unos
--		;;
--	*-ns)
--		os=-genix
--		;;
--	i370-*)
--		os=-mvs
--		;;
--	*-next)
--		os=-nextstep3
--		;;
--	*-gould)
--		os=-sysv
--		;;
--	*-highlevel)
--		os=-bsd
--		;;
--	*-encore)
--		os=-bsd
--		;;
--	*-sgi)
--		os=-irix
--		;;
--	*-siemens)
--		os=-sysv4
--		;;
--	*-masscomp)
--		os=-rtu
--		;;
--	f30[01]-fujitsu | f700-fujitsu)
--		os=-uxpv
--		;;
--	*-rom68k)
--		os=-coff
--		;;
--	*-*bug)
--		os=-coff
--		;;
--	*-apple)
--		os=-macos
--		;;
--	*-atari*)
--		os=-mint
--		;;
--	*)
--		os=-none
--		;;
--esac
--fi
--
--# Here we handle the case where we know the os, and the CPU type, but not the
--# manufacturer.  We pick the logical manufacturer.
--vendor=unknown
--case $basic_machine in
--	*-unknown)
--		case $os in
--			-riscix*)
--				vendor=acorn
--				;;
--			-sunos*)
--				vendor=sun
--				;;
--			-cnk*|-aix*)
--				vendor=ibm
--				;;
--			-beos*)
--				vendor=be
--				;;
--			-hpux*)
--				vendor=hp
--				;;
--			-mpeix*)
--				vendor=hp
--				;;
--			-hiux*)
--				vendor=hitachi
--				;;
--			-unos*)
--				vendor=crds
--				;;
--			-dgux*)
--				vendor=dg
--				;;
--			-luna*)
--				vendor=omron
--				;;
--			-genix*)
--				vendor=ns
--				;;
--			-mvs* | -opened*)
--				vendor=ibm
--				;;
--			-os400*)
--				vendor=ibm
--				;;
--			-ptx*)
--				vendor=sequent
--				;;
--			-tpf*)
--				vendor=ibm
--				;;
--			-vxsim* | -vxworks* | -windiss*)
--				vendor=wrs
--				;;
--			-aux*)
--				vendor=apple
--				;;
--			-hms*)
--				vendor=hitachi
--				;;
--			-mpw* | -macos*)
--				vendor=apple
--				;;
--			-*mint | -mint[0-9]* | -*MiNT | -MiNT[0-9]*)
--				vendor=atari
--				;;
--			-vos*)
--				vendor=stratus
--				;;
--		esac
--		basic_machine=`echo $basic_machine | sed "s/unknown/$vendor/"`
--		;;
--esac
--
--echo $basic_machine$os
--exit
--
--# Local variables:
--# eval: (add-hook 'write-file-hooks 'time-stamp)
--# time-stamp-start: "timestamp='"
--# time-stamp-format: "%:y-%02m-%02d"
--# time-stamp-end: "'"
--# End:
-diff --git a/winsup/install-sh b/winsup/install-sh
-deleted file mode 100755
-index 6781b987b..000000000
---- a/winsup/install-sh
-+++ /dev/null
-@@ -1,520 +0,0 @@
--#!/bin/sh
--# install - install a program, script, or datafile
--
--scriptversion=2009-04-28.21; # UTC
--
--# This originates from X11R5 (mit/util/scripts/install.sh), which was
--# later released in X11R6 (xc/config/util/install.sh) with the
--# following copyright and license.
--#
--# Copyright (C) 1994 X Consortium
--#
--# Permission is hereby granted, free of charge, to any person obtaining a copy
--# of this software and associated documentation files (the "Software"), to
--# deal in the Software without restriction, including without limitation the
--# rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
--# sell copies of the Software, and to permit persons to whom the Software is
--# furnished to do so, subject to the following conditions:
--#
--# The above copyright notice and this permission notice shall be included in
--# all copies or substantial portions of the Software.
--#
--# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
--# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
--# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
--# X CONSORTIUM BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
--# AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNEC-
--# TION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
--#
--# Except as contained in this notice, the name of the X Consortium shall not
--# be used in advertising or otherwise to promote the sale, use or other deal-
--# ings in this Software without prior written authorization from the X Consor-
--# tium.
--#
--#
--# FSF changes to this file are in the public domain.
--#
--# Calling this script install-sh is preferred over install.sh, to prevent
--# `make' implicit rules from creating a file called install from it
--# when there is no Makefile.
--#
--# This script is compatible with the BSD install script, but was written
--# from scratch.
--
--nl='
--'
--IFS=" ""	$nl"
--
--# set DOITPROG to echo to test this script
--
--# Don't use :- since 4.3BSD and earlier shells don't like it.
--doit=${DOITPROG-}
--if test -z "$doit"; then
--  doit_exec=exec
--else
--  doit_exec=$doit
--fi
--
--# Put in absolute file names if you don't have them in your path;
--# or use environment vars.
--
--chgrpprog=${CHGRPPROG-chgrp}
--chmodprog=${CHMODPROG-chmod}
--chownprog=${CHOWNPROG-chown}
--cmpprog=${CMPPROG-cmp}
--cpprog=${CPPROG-cp}
--mkdirprog=${MKDIRPROG-mkdir}
--mvprog=${MVPROG-mv}
--rmprog=${RMPROG-rm}
--stripprog=${STRIPPROG-strip}
--
--posix_glob='?'
--initialize_posix_glob='
--  test "$posix_glob" != "?" || {
--    if (set -f) 2>/dev/null; then
--      posix_glob=
--    else
--      posix_glob=:
--    fi
--  }
--'
--
--posix_mkdir=
--
--# Desired mode of installed file.
--mode=0755
--
--chgrpcmd=
--chmodcmd=$chmodprog
--chowncmd=
--mvcmd=$mvprog
--rmcmd="$rmprog -f"
--stripcmd=
--
--src=
--dst=
--dir_arg=
--dst_arg=
--
--copy_on_change=false
--no_target_directory=
--
--usage="\
--Usage: $0 [OPTION]... [-T] SRCFILE DSTFILE
--   or: $0 [OPTION]... SRCFILES... DIRECTORY
--   or: $0 [OPTION]... -t DIRECTORY SRCFILES...
--   or: $0 [OPTION]... -d DIRECTORIES...
--
--In the 1st form, copy SRCFILE to DSTFILE.
--In the 2nd and 3rd, copy all SRCFILES to DIRECTORY.
--In the 4th, create DIRECTORIES.
--
--Options:
--     --help     display this help and exit.
--     --version  display version info and exit.
--
--  -c            (ignored)
--  -C            install only if different (preserve the last data modification time)
--  -d            create directories instead of installing files.
--  -g GROUP      $chgrpprog installed files to GROUP.
--  -m MODE       $chmodprog installed files to MODE.
--  -o USER       $chownprog installed files to USER.
--  -s            $stripprog installed files.
--  -t DIRECTORY  install into DIRECTORY.
--  -T            report an error if DSTFILE is a directory.
--
--Environment variables override the default commands:
--  CHGRPPROG CHMODPROG CHOWNPROG CMPPROG CPPROG MKDIRPROG MVPROG
--  RMPROG STRIPPROG
--"
--
--while test $# -ne 0; do
--  case $1 in
--    -c) ;;
--
--    -C) copy_on_change=true;;
--
--    -d) dir_arg=true;;
--
--    -g) chgrpcmd="$chgrpprog $2"
--	shift;;
--
--    --help) echo "$usage"; exit $?;;
--
--    -m) mode=$2
--	case $mode in
--	  *' '* | *'	'* | *'
--'*	  | *'*'* | *'?'* | *'['*)
--	    echo "$0: invalid mode: $mode" >&2
--	    exit 1;;
--	esac
--	shift;;
--
--    -o) chowncmd="$chownprog $2"
--	shift;;
--
--    -s) stripcmd=$stripprog;;
--
--    -t) dst_arg=$2
--	shift;;
--
--    -T) no_target_directory=true;;
--
--    --version) echo "$0 $scriptversion"; exit $?;;
--
--    --)	shift
--	break;;
--
--    -*)	echo "$0: invalid option: $1" >&2
--	exit 1;;
--
--    *)  break;;
--  esac
--  shift
--done
--
--if test $# -ne 0 && test -z "$dir_arg$dst_arg"; then
--  # When -d is used, all remaining arguments are directories to create.
--  # When -t is used, the destination is already specified.
--  # Otherwise, the last argument is the destination.  Remove it from $@.
--  for arg
--  do
--    if test -n "$dst_arg"; then
--      # $@ is not empty: it contains at least $arg.
--      set fnord "$@" "$dst_arg"
--      shift # fnord
--    fi
--    shift # arg
--    dst_arg=$arg
--  done
--fi
--
--if test $# -eq 0; then
--  if test -z "$dir_arg"; then
--    echo "$0: no input file specified." >&2
--    exit 1
--  fi
--  # It's OK to call `install-sh -d' without argument.
--  # This can happen when creating conditional directories.
--  exit 0
--fi
--
--if test -z "$dir_arg"; then
--  trap '(exit $?); exit' 1 2 13 15
--
--  # Set umask so as not to create temps with too-generous modes.
--  # However, 'strip' requires both read and write access to temps.
--  case $mode in
--    # Optimize common cases.
--    *644) cp_umask=133;;
--    *755) cp_umask=22;;
--
--    *[0-7])
--      if test -z "$stripcmd"; then
--	u_plus_rw=
--      else
--	u_plus_rw='% 200'
--      fi
--      cp_umask=`expr '(' 777 - $mode % 1000 ')' $u_plus_rw`;;
--    *)
--      if test -z "$stripcmd"; then
--	u_plus_rw=
--      else
--	u_plus_rw=,u+rw
--      fi
--      cp_umask=$mode$u_plus_rw;;
--  esac
--fi
--
--for src
--do
--  # Protect names starting with `-'.
--  case $src in
--    -*) src=./$src;;
--  esac
--
--  if test -n "$dir_arg"; then
--    dst=$src
--    dstdir=$dst
--    test -d "$dstdir"
--    dstdir_status=$?
--  else
--
--    # Waiting for this to be detected by the "$cpprog $src $dsttmp" command
--    # might cause directories to be created, which would be especially bad
--    # if $src (and thus $dsttmp) contains '*'.
--    if test ! -f "$src" && test ! -d "$src"; then
--      echo "$0: $src does not exist." >&2
--      exit 1
--    fi
--
--    if test -z "$dst_arg"; then
--      echo "$0: no destination specified." >&2
--      exit 1
--    fi
--
--    dst=$dst_arg
--    # Protect names starting with `-'.
--    case $dst in
--      -*) dst=./$dst;;
--    esac
--
--    # If destination is a directory, append the input filename; won't work
--    # if double slashes aren't ignored.
--    if test -d "$dst"; then
--      if test -n "$no_target_directory"; then
--	echo "$0: $dst_arg: Is a directory" >&2
--	exit 1
--      fi
--      dstdir=$dst
--      dst=$dstdir/`basename "$src"`
--      dstdir_status=0
--    else
--      # Prefer dirname, but fall back on a substitute if dirname fails.
--      dstdir=`
--	(dirname "$dst") 2>/dev/null ||
--	expr X"$dst" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
--	     X"$dst" : 'X\(//\)[^/]' \| \
--	     X"$dst" : 'X\(//\)$' \| \
--	     X"$dst" : 'X\(/\)' \| . 2>/dev/null ||
--	echo X"$dst" |
--	    sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{
--		   s//\1/
--		   q
--		 }
--		 /^X\(\/\/\)[^/].*/{
--		   s//\1/
--		   q
--		 }
--		 /^X\(\/\/\)$/{
--		   s//\1/
--		   q
--		 }
--		 /^X\(\/\).*/{
--		   s//\1/
--		   q
--		 }
--		 s/.*/./; q'
--      `
--
--      test -d "$dstdir"
--      dstdir_status=$?
--    fi
--  fi
--
--  obsolete_mkdir_used=false
--
--  if test $dstdir_status != 0; then
--    case $posix_mkdir in
--      '')
--	# Create intermediate dirs using mode 755 as modified by the umask.
--	# This is like FreeBSD 'install' as of 1997-10-28.
--	umask=`umask`
--	case $stripcmd.$umask in
--	  # Optimize common cases.
--	  *[2367][2367]) mkdir_umask=$umask;;
--	  .*0[02][02] | .[02][02] | .[02]) mkdir_umask=22;;
--
--	  *[0-7])
--	    mkdir_umask=`expr $umask + 22 \
--	      - $umask % 100 % 40 + $umask % 20 \
--	      - $umask % 10 % 4 + $umask % 2
--	    `;;
--	  *) mkdir_umask=$umask,go-w;;
--	esac
--
--	# With -d, create the new directory with the user-specified mode.
--	# Otherwise, rely on $mkdir_umask.
--	if test -n "$dir_arg"; then
--	  mkdir_mode=-m$mode
--	else
--	  mkdir_mode=
--	fi
--
--	posix_mkdir=false
--	case $umask in
--	  *[123567][0-7][0-7])
--	    # POSIX mkdir -p sets u+wx bits regardless of umask, which
--	    # is incompatible with FreeBSD 'install' when (umask & 300) != 0.
--	    ;;
--	  *)
--	    tmpdir=${TMPDIR-/tmp}/ins$RANDOM-$$
--	    trap 'ret=$?; rmdir "$tmpdir/d" "$tmpdir" 2>/dev/null; exit $ret' 0
--
--	    if (umask $mkdir_umask &&
--		exec $mkdirprog $mkdir_mode -p -- "$tmpdir/d") >/dev/null 2>&1
--	    then
--	      if test -z "$dir_arg" || {
--		   # Check for POSIX incompatibilities with -m.
--		   # HP-UX 11.23 and IRIX 6.5 mkdir -m -p sets group- or
--		   # other-writeable bit of parent directory when it shouldn't.
--		   # FreeBSD 6.1 mkdir -m -p sets mode of existing directory.
--		   ls_ld_tmpdir=`ls -ld "$tmpdir"`
--		   case $ls_ld_tmpdir in
--		     d????-?r-*) different_mode=700;;
--		     d????-?--*) different_mode=755;;
--		     *) false;;
--		   esac &&
--		   $mkdirprog -m$different_mode -p -- "$tmpdir" && {
--		     ls_ld_tmpdir_1=`ls -ld "$tmpdir"`
--		     test "$ls_ld_tmpdir" = "$ls_ld_tmpdir_1"
--		   }
--		 }
--	      then posix_mkdir=:
--	      fi
--	      rmdir "$tmpdir/d" "$tmpdir"
--	    else
--	      # Remove any dirs left behind by ancient mkdir implementations.
--	      rmdir ./$mkdir_mode ./-p ./-- 2>/dev/null
--	    fi
--	    trap '' 0;;
--	esac;;
--    esac
--
--    if
--      $posix_mkdir && (
--	umask $mkdir_umask &&
--	$doit_exec $mkdirprog $mkdir_mode -p -- "$dstdir"
--      )
--    then :
--    else
--
--      # The umask is ridiculous, or mkdir does not conform to POSIX,
--      # or it failed possibly due to a race condition.  Create the
--      # directory the slow way, step by step, checking for races as we go.
--
--      case $dstdir in
--	/*) prefix='/';;
--	-*) prefix='./';;
--	*)  prefix='';;
--      esac
--
--      eval "$initialize_posix_glob"
--
--      oIFS=$IFS
--      IFS=/
--      $posix_glob set -f
--      set fnord $dstdir
--      shift
--      $posix_glob set +f
--      IFS=$oIFS
--
--      prefixes=
--
--      for d
--      do
--	test -z "$d" && continue
--
--	prefix=$prefix$d
--	if test -d "$prefix"; then
--	  prefixes=
--	else
--	  if $posix_mkdir; then
--	    (umask=$mkdir_umask &&
--	     $doit_exec $mkdirprog $mkdir_mode -p -- "$dstdir") && break
--	    # Don't fail if two instances are running concurrently.
--	    test -d "$prefix" || exit 1
--	  else
--	    case $prefix in
--	      *\'*) qprefix=`echo "$prefix" | sed "s/'/'\\\\\\\\''/g"`;;
--	      *) qprefix=$prefix;;
--	    esac
--	    prefixes="$prefixes '$qprefix'"
--	  fi
--	fi
--	prefix=$prefix/
--      done
--
--      if test -n "$prefixes"; then
--	# Don't fail if two instances are running concurrently.
--	(umask $mkdir_umask &&
--	 eval "\$doit_exec \$mkdirprog $prefixes") ||
--	  test -d "$dstdir" || exit 1
--	obsolete_mkdir_used=true
--      fi
--    fi
--  fi
--
--  if test -n "$dir_arg"; then
--    { test -z "$chowncmd" || $doit $chowncmd "$dst"; } &&
--    { test -z "$chgrpcmd" || $doit $chgrpcmd "$dst"; } &&
--    { test "$obsolete_mkdir_used$chowncmd$chgrpcmd" = false ||
--      test -z "$chmodcmd" || $doit $chmodcmd $mode "$dst"; } || exit 1
--  else
--
--    # Make a couple of temp file names in the proper directory.
--    dsttmp=$dstdir/_inst.$$_
--    rmtmp=$dstdir/_rm.$$_
--
--    # Trap to clean up those temp files at exit.
--    trap 'ret=$?; rm -f "$dsttmp" "$rmtmp" && exit $ret' 0
--
--    # Copy the file name to the temp name.
--    (umask $cp_umask && $doit_exec $cpprog "$src" "$dsttmp") &&
--
--    # and set any options; do chmod last to preserve setuid bits.
--    #
--    # If any of these fail, we abort the whole thing.  If we want to
--    # ignore errors from any of these, just make sure not to ignore
--    # errors from the above "$doit $cpprog $src $dsttmp" command.
--    #
--    { test -z "$chowncmd" || $doit $chowncmd "$dsttmp"; } &&
--    { test -z "$chgrpcmd" || $doit $chgrpcmd "$dsttmp"; } &&
--    { test -z "$stripcmd" || $doit $stripcmd "$dsttmp"; } &&
--    { test -z "$chmodcmd" || $doit $chmodcmd $mode "$dsttmp"; } &&
--
--    # If -C, don't bother to copy if it wouldn't change the file.
--    if $copy_on_change &&
--       old=`LC_ALL=C ls -dlL "$dst"	2>/dev/null` &&
--       new=`LC_ALL=C ls -dlL "$dsttmp"	2>/dev/null` &&
--
--       eval "$initialize_posix_glob" &&
--       $posix_glob set -f &&
--       set X $old && old=:$2:$4:$5:$6 &&
--       set X $new && new=:$2:$4:$5:$6 &&
--       $posix_glob set +f &&
--
--       test "$old" = "$new" &&
--       $cmpprog "$dst" "$dsttmp" >/dev/null 2>&1
--    then
--      rm -f "$dsttmp"
--    else
--      # Rename the file to the real destination.
--      $doit $mvcmd -f "$dsttmp" "$dst" 2>/dev/null ||
--
--      # The rename failed, perhaps because mv can't rename something else
--      # to itself, or perhaps because mv is so ancient that it does not
--      # support -f.
--      {
--	# Now remove or move aside any old file at destination location.
--	# We try this two ways since rm can't unlink itself on some
--	# systems and the destination file might be busy for other
--	# reasons.  In this case, the final cleanup might fail but the new
--	# file should still install successfully.
--	{
--	  test ! -f "$dst" ||
--	  $doit $rmcmd -f "$dst" 2>/dev/null ||
--	  { $doit $mvcmd -f "$dst" "$rmtmp" 2>/dev/null &&
--	    { $doit $rmcmd -f "$rmtmp" 2>/dev/null; :; }
--	  } ||
--	  { echo "$0: cannot unlink or rename $dst" >&2
--	    (exit 1); exit 1
--	  }
--	} &&
--
--	# Now rename the file to the real destination.
--	$doit $mvcmd "$dsttmp" "$dst"
--      }
--    fi || exit 1
--
--    trap '' 0
--  fi
--done
--
--# Local variables:
--# eval: (add-hook 'write-file-hooks 'time-stamp)
--# time-stamp-start: "scriptversion="
--# time-stamp-format: "%:y-%02m-%02d.%02H"
--# time-stamp-time-zone: "UTC"
--# time-stamp-end: "; # UTC"
--# End:
+diff --git a/winsup/configure.ac b/winsup/configure.ac
+index 438e629e7..9a11411ab 100644
+--- a/winsup/configure.ac
++++ b/winsup/configure.ac
+@@ -10,8 +10,10 @@ dnl Process this file with autoconf to produce a configure script.
+ 
+ AC_PREREQ([2.59])
+ AC_INIT([Cygwin],[0],[cygwin@cygwin.com],[cygwin],[https://cygwin.com])
+-AC_CONFIG_SRCDIR(Makefile.in)
+ AC_CONFIG_AUX_DIR(..)
++AC_CANONICAL_TARGET
++AM_INIT_AUTOMAKE([dejagnu foreign no-define no-dist subdir-objects -Wall -Wno-portability -Wno-extra-portability])
++AM_SILENT_RULES([yes])
+ 
+ realdirpath() {
+     test -z "$1" && return 1
+@@ -26,13 +28,15 @@ realdirpath() {
+ winsup_srcdir="$(realdirpath $srcdir)"
+ target_builddir="$(realdirpath ..)"
+ 
+-AC_PROG_INSTALL
+ AC_NO_EXECUTABLES
+-AC_CANONICAL_TARGET
+ 
++AC_PROG_INSTALL
++AC_PROG_MKDIR_P
+ AC_PROG_CC
+ AC_PROG_CXX
+ AC_PROG_CPP
++AM_PROG_AS
++
+ AC_LANG(C)
+ AC_LANG(C++)
+ 
+@@ -82,6 +86,8 @@ AC_SUBST(DEF_DLL_ENTRY)
+ AC_SUBST(DIN_FILE)
+ AC_SUBST(TLSOFFSETS_H)
+ 
++AM_CONDITIONAL(TARGET_X86_64, [test $target_cpu = "x86_64"])
++
+ AC_CHECK_PROGS([DOCBOOK2XTEXI], [docbook2x-texi db2x_docbook2texi], [true])
+ 
+ if test "x$with_cross_bootstrap" != "xyes"; then
+@@ -90,15 +96,24 @@ if test "x$with_cross_bootstrap" != "xyes"; then
+     AC_CHECK_PROGS(MINGW_CC, ${target_cpu}-w64-mingw32-gcc)
+     test -n "$MINGW_CC" || AC_MSG_ERROR([no acceptable MinGW gcc found in \$PATH])
+ fi
++AM_CONDITIONAL(CROSS_BOOTSTRAP, [test "x$with_cross_bootstrap" != "xyes"])
++
+ AC_EXEEXT
+ 
++AC_CHECK_LIB([bfd], [bfd_init], [true],
++	     AC_MSG_WARN([Not building dumper.exe since some required libraries or headers are missing]))
++
++AM_CONDITIONAL(BUILD_DUMPER, [test "x$ac_cv_lib_bfd_bfd_init" = "xyes"])
++
+ AC_CONFIG_FILES([
+     Makefile
+     cygwin/Makefile
+     cygserver/Makefile
+     doc/Makefile
+     utils/Makefile
++    utils/mingw/Makefile
+     testsuite/Makefile
++    testsuite/cygrun/Makefile
+ ])
+ 
+ AC_OUTPUT
+diff --git a/winsup/cygserver/Makefile.am b/winsup/cygserver/Makefile.am
+new file mode 100644
+index 000000000..d52f93ce0
+--- /dev/null
++++ b/winsup/cygserver/Makefile.am
+@@ -0,0 +1,58 @@
++# Makefile for Cygwin server
++
++# This file is part of Cygwin.
++
++# This software is a copyrighted work licensed under the terms of the
++# Cygwin license.  Please consult the file "CYGWIN_LICENSE" for
++# details.
++
++include $(top_srcdir)/Makefile.am.common
++
++cygserver_flags=$(cxxflags_common) -Wimplicit-fallthrough=5 -Werror -DSYSCONFDIR="\"$(sysconfdir)\""
++
++noinst_LIBRARIES = libcygserver.a
++sbin_PROGRAMS = cygserver
++bin_SCRIPTS = cygserver-config
++
++cygserver_SOURCES = \
++	bsd_helper.cc \
++	bsd_log.cc \
++	bsd_mutex.cc \
++	client.cc \
++	cygserver.cc \
++	msg.cc \
++	process.cc \
++	pwdgrp.cc \
++	sem.cc \
++	setpwd.cc \
++	shm.cc \
++	sysv_msg.cc \
++	sysv_sem.cc \
++	sysv_shm.cc \
++	threaded_queue.cc \
++	transport.cc \
++	transport_pipes.cc
++
++cygserver_CXXFLAGS = $(cygserver_flags) -D__OUTSIDE_CYGWIN__
++cygserver_LDADD = -lntdll
++cygserver_LDFLAGS = -static -static-libgcc
++
++# Note: the objects in libcygserver are built without -D__OUTSIDE_CYGWIN__,
++# unlike cygserver.exe
++
++libcygserver_a_SOURCES = \
++	$(cygserver_SOURCES)
++
++libcygserver_a_CXXFLAGS = $(cygserver_flags)
++
++cygdocdir = $(datarootdir)/doc/Cygwin
++
++install-data-local:
++	@$(MKDIR_P) $(DESTDIR)$(cygdocdir)
++	$(INSTALL_DATA) $(srcdir)/README $(DESTDIR)$(cygdocdir)/cygserver.README
++	@$(MKDIR_P) $(DESTDIR)$(sysconfdir)/defaults/etc
++	$(INSTALL_DATA) $(srcdir)/cygserver.conf $(DESTDIR)$(sysconfdir)/defaults/etc/cygserver.conf
++
++uninstall-local:
++	rm -f $(DESTDIR)$(cygdocdir)/cygserver.README
++	rm -f $(DESTDIR)$(sysconfdir)/defaults/etc/cygserver.conf
+diff --git a/winsup/cygwin/Makefile.am b/winsup/cygwin/Makefile.am
+new file mode 100644
+index 000000000..2e8215457
+--- /dev/null
++++ b/winsup/cygwin/Makefile.am
+@@ -0,0 +1,764 @@
++# Makefile.am for Cygwin.
++#
++# This file is part of Cygwin.
++#
++# This software is a copyrighted work licensed under the terms of the
++# Cygwin license.  Please consult the file "CYGWIN_LICENSE" for
++# details.
++
++# This makefile requires GNU make.
++
++include $(top_srcdir)/Makefile.am.common
++
++COMMON_CFLAGS=$($(*F)_CFLAGS) -Wimplicit-fallthrough=5 -Werror -fmerge-constants -ftracer
++if TARGET_X86_64
++COMMON_CFLAGS+=-mcmodel=small
++endif
++
++AM_CFLAGS=$(cflags_common) $(COMMON_CFLAGS)
++AM_CXXFLAGS=$(cxxflags_common) $(COMMON_CFLAGS)
++
++if TARGET_X86_64
++# Needed by mcountFunc.S to choose the right code path and symbol names
++AM_CCASFLAGS=-D_WIN64
++endif
++
++target_builddir=@target_builddir@
++newlib_build=$(target_builddir)/newlib
++
++#
++# Specialize libdir and includedir to use tooldir prefixed paths (containing
++# target_alias) as used by newlib, because we overwrite library and header files
++# installed there by newlib.
++#
++
++toollibdir=$(prefix)/$(target_alias)/lib
++toolincludedir=$(prefix)/$(target_alias)/include
++
++# Parameters used in building the cygwin.dll.
++
++DLL_NAME=cygwin1.dll
++TEST_DLL_NAME=cygwin0.dll
++DIN_FILE=@DIN_FILE@
++DEF_FILE=cygwin.def
++TLSOFFSETS_H=@TLSOFFSETS_H@
++LIB_NAME=libcygwin.a
++TEST_LIB_NAME=libcygwin0.a
++
++#
++# sources
++#
++
++# These objects are included directly into the import library
++LIB_FILES= \
++	lib/_cygwin_crt0_common.cc \
++	lib/atexit.c \
++	lib/cygwin_attach_dll.c \
++	lib/cygwin_crt0.c \
++	lib/dll_entry.c \
++	lib/dll_main.cc \
++	lib/dso_handle.c \
++	lib/libcmain.c \
++	lib/premain0.c \
++	lib/premain1.c \
++	lib/premain2.c \
++	lib/premain3.c \
++	lib/pseudo-reloc-dummy.c
++
++LIBC_FILES= \
++	libc/arc4random_stir.c \
++	libc/base64.c \
++	libc/bsdlib.cc \
++	libc/call_once.c \
++	libc/cnd.c \
++	libc/fnmatch.c \
++	libc/fts.c \
++	libc/ftw.c \
++	libc/getentropy.cc \
++	libc/getopt.c \
++	libc/inet_addr.c \
++	libc/inet_network.c \
++	libc/minires-os-if.c \
++	libc/minires.c \
++	libc/msgcat.c \
++	libc/mtx.c \
++	libc/nftw.c \
++	libc/rcmd.cc \
++	libc/rexec.cc \
++	libc/strfmon.c \
++	libc/strptime.cc \
++	libc/thrd.c \
++	libc/tss.c \
++	libc/xsique.cc
++
++MATH_FILES= \
++	math/acoshl.c \
++	math/acosl.c \
++	math/asinhl.c \
++	math/asinl.c \
++	math/atan2l.c \
++	math/atanhl.c \
++	math/atanl.c \
++	math/cabsl.c \
++	math/cacosl.c \
++	math/cargl.c \
++	math/casinl.c \
++	math/catanl.c \
++	math/cbrtl.c \
++	math/ccosl.c \
++	math/ceill.S \
++	math/cephes_emath.c \
++	math/cexpl.c \
++	math/cimagl.c \
++	math/clog10l.c \
++	math/clogl.c \
++	math/conjl.c \
++	math/copysignl.S \
++	math/coshl.c \
++	math/cosl.c \
++	math/cosl_internal.S \
++	math/cossin.c \
++	math/cpowl.c \
++	math/cprojl.c \
++	math/creall.c \
++	math/csinl.c \
++	math/csqrtl.c \
++	math/ctanl.c \
++	math/erfl.c \
++	math/exp10l.c \
++	math/exp2l.S \
++	math/expl.c \
++	math/expm1l.c \
++	math/fabsl.c \
++	math/fdiml.c \
++	math/finite.c \
++	math/floorl.S \
++	math/fmal.c \
++	math/fmaxl.c \
++	math/fminl.c \
++	math/fmodl.c \
++	math/frexpl.S \
++	math/ilogbl.S \
++	math/internal_logl.S \
++	math/isinf.c \
++	math/isnan.c \
++	math/ldexpl.c \
++	math/lgammal.c \
++	math/llrint.c \
++	math/llrintf.c \
++	math/llrintl.c \
++	math/llroundl.c \
++	math/log10l.S \
++	math/log1pl.S \
++	math/log2l.S \
++	math/logbl.c \
++	math/logl.c \
++	math/lrint.c \
++	math/lrintf.c \
++	math/lrintl.c \
++	math/lroundl.c \
++	math/modfl.c \
++	math/nearbyint.S \
++	math/nearbyintf.S \
++	math/nearbyintl.S \
++	math/nextafterl.c \
++	math/nexttoward.c \
++	math/nexttowardf.c \
++	math/pow10l.c \
++	math/powil.c \
++	math/powl.c \
++	math/remainder.S \
++	math/remainderf.S \
++	math/remainderl.S \
++	math/remquol.S \
++	math/rint.c \
++	math/rintf.c \
++	math/rintl.c \
++	math/roundl.c \
++	math/scalbl.S \
++	math/scalbnl.S \
++	math/sinhl.c \
++	math/sinl.c \
++	math/sinl_internal.S \
++	math/sqrtl.c \
++	math/tanhl.c \
++	math/tanl.S \
++	math/tgammal.c \
++	math/truncl.c
++
++REGEX_FILES = \
++	regex/regcomp.c \
++	regex/regerror.c \
++	regex/regexec.c \
++	regex/regfree.c
++
++TZCODE_FILES= \
++	tzcode/localtime_wrapper.c
++
++DLL_FILES= \
++	advapi32.cc \
++	aio.cc \
++	assert.cc \
++	autoload.cc \
++	clock.cc \
++	ctype.cc \
++	cxx.cc \
++	cygheap.cc \
++	cygthread.cc \
++	cygtls.cc \
++	cygwait.cc \
++	cygxdr.cc \
++	dcrt0.cc \
++	debug.cc \
++	devices.cc \
++	dir.cc \
++	dlfcn.cc \
++	dll_init.cc \
++	dtable.cc \
++	environ.cc \
++	errno.cc \
++	exceptions.cc \
++	exec.cc \
++	external.cc \
++	fcntl.cc \
++	fenv.cc \
++	fhandler.cc \
++	fhandler_clipboard.cc \
++	fhandler_console.cc \
++	fhandler_cygdrive.cc \
++	fhandler_dev.cc \
++	fhandler_disk_file.cc \
++	fhandler_dsp.cc \
++	fhandler_fifo.cc \
++	fhandler_floppy.cc \
++	fhandler_netdrive.cc \
++	fhandler_nodevice.cc \
++	fhandler_pipe.cc \
++	fhandler_proc.cc \
++	fhandler_process.cc \
++	fhandler_process_fd.cc \
++	fhandler_procnet.cc \
++	fhandler_procsys.cc \
++	fhandler_procsysvipc.cc \
++	fhandler_random.cc \
++	fhandler_raw.cc \
++	fhandler_registry.cc \
++	fhandler_serial.cc \
++	fhandler_signalfd.cc \
++	fhandler_socket.cc \
++	fhandler_socket_inet.cc \
++	fhandler_socket_local.cc \
++	fhandler_socket_unix.cc \
++	fhandler_tape.cc \
++	fhandler_termios.cc \
++	fhandler_timerfd.cc \
++	fhandler_tty.cc \
++	fhandler_virtual.cc \
++	fhandler_windows.cc \
++	fhandler_zero.cc \
++	flock.cc \
++	fork.cc \
++	forkable.cc \
++	glob.cc \
++	glob_pattern_p.cc \
++	globals.cc \
++	grp.cc \
++	heap.cc \
++	hookapi.cc \
++	init.cc \
++	ioctl.cc \
++	ipc.cc \
++	kernel32.cc \
++	ldap.cc \
++	libstdcxx_wrapper.cc \
++	loadavg.cc \
++	lsearch.cc \
++	malloc_wrapper.cc \
++	miscfuncs.cc \
++	mktemp.cc \
++	mmap.cc \
++	mmap_alloc.cc \
++	msg.cc \
++	mount.cc \
++	net.cc \
++	netdb.cc \
++	nfs.cc \
++	nlsfuncs.cc \
++	ntea.cc \
++	passwd.cc \
++	path.cc \
++	pinfo.cc \
++	poll.cc \
++	posix_ipc.cc \
++	posix_timer.cc \
++	pseudo-reloc.cc \
++	pthread.cc \
++	quotactl.cc \
++	random.cc \
++	registry.cc \
++	resource.cc \
++	scandir.cc \
++	sched.cc \
++	sec_acl.cc \
++	sec_auth.cc \
++	sec_helper.cc \
++	sec_posixacl.cc \
++	security.cc \
++	select.cc \
++	sem.cc \
++	setlsapwd.cc \
++	shared.cc \
++	shm.cc \
++	signal.cc \
++	sigproc.cc \
++	smallprint.cc \
++	spawn.cc \
++	strace.cc \
++	strfuncs.cc \
++	strsep.cc \
++	strsig.cc \
++	sync.cc \
++	syscalls.cc \
++	sysconf.cc \
++	syslog.cc \
++	termios.cc \
++	thread.cc \
++	timerfd.cc \
++	times.cc \
++	tls_pbuf.cc \
++	tty.cc \
++	uinfo.cc \
++	uname.cc \
++	wait.cc \
++	wincap.cc \
++	window.cc \
++	winf.cc
++
++MALLOC_FILES= \
++	malloc.cc
++
++GMON_FILES= \
++	gmon.c
++	mcount.c
++	mcountFunc.S
++	profil.c
++
++GENERATED_FILES= \
++	sigfe.s
++
++liblib_a_SOURCES= \
++	$(LIB_FILES)
++
++libdll_a_SOURCES= \
++	$(DLL_FILES) \
++	$(REGEX_FILES) \
++	$(MALLOC_FILES) \
++	$(LIBC_FILES) \
++	$(MATH_FILES) \
++	$(TZCODE_FILES) \
++	$(GENERATED_FILES)
++
++#
++# generated sources
++#
++
++shared_info_magic.h: cygmagic shared_info.h
++	$(srcdir)/cygmagic $@ "$(CC) $(INCLUDES) $(CPPFLAGS) -E -x c++" $(word 2,$^) SHARED_MAGIC 'class shared_info' USER_MAGIC 'class user_info'
++
++child_info_magic.h: cygmagic child_info.h
++	$(srcdir)/cygmagic $@ "$(CC) $(INCLUDES) $(CPPFLAGS) -E -x c++" $(word 2,$^) CHILD_INFO_MAGIC 'class child_info'
++
++globals.h: mkglobals_h globals.cc
++	$^ > $@
++
++localtime.patched.c: tzcode/localtime.c tzcode/localtime.c.patch
++	patch -u -o localtime.patched.c \
++		    $(srcdir)/tzcode/localtime.c \
++		    $(srcdir)/tzcode/localtime.c.patch
++
++$(srcdir)/devices.cc: gendevices devices.in devices.h
++	$(wordlist 1,2,$^) $@
++
++$(srcdir)/$(TLSOFFSETS_H): gentls_offsets cygtls.h
++	$^ $@ $(target_cpu) $(CC) $(AM_CFLAGS) -c || rm $@
++
++BUILT_SOURCES = \
++	child_info_magic.h \
++	shared_info_magic.h \
++	globals.h \
++	localtime.patched.c
++
++# Every time we touch a source file, the version info has to be rebuilt
++# to maintain a correct build date, especially in uname release output
++dirs = $(srcdir) $(srcdir)/regex $(srcdir)/lib $(srcdir)/libc $(srcdir)/math $(srcdir)/tzcode
++find_src_files = $(wildcard $(dir)/*.[chS]) $(wildcard $(dir)/*.cc)
++src_files := $(foreach dir,$(dirs),$(find_src_files))
++
++# mkvers.sh creates version.cc in the first place, winver.o always
++# second, so version.cc is always older than winver.o
++version.cc: mkvers.sh include/cygwin/version.h winver.rc $(src_files)
++	@echo "Making version.cc and winver.o";\
++	export CC="$(CC)";\
++	/bin/sh $(word 1,$^) $(word 2,$^) $(word 3,$^) $(WINDRES) $(CFLAGS)
++
++winver.o: version.cc
++
++VERSION_OFILES = version.o winver.o
++
++#
++# export renames for mkimport
++#
++
++NEW_FUNCTIONS=$(addprefix --replace=,\
++	atexit= \
++	timezone= \
++	uname=uname_x \
++	__xdrrec_getrec= \
++	__xdrrec_setnonblock= \
++	xdr_array= \
++	xdr_bool= \
++	xdr_bytes= \
++	xdr_char= \
++	xdr_double= \
++	xdr_enum= \
++	xdr_float= \
++	xdr_free= \
++	xdr_hyper= \
++	xdr_int= \
++	xdr_int16_t= \
++	xdr_int32_t= \
++	xdr_int64_t= \
++	xdr_int8_t= \
++	xdr_long= \
++	xdr_longlong_t= \
++	xdr_netobj= \
++	xdr_opaque= \
++	xdr_pointer= \
++	xdr_reference= \
++	xdr_short= \
++	xdr_sizeof= \
++	xdr_string= \
++	xdr_u_char= \
++	xdr_u_hyper= \
++	xdr_u_int= \
++	xdr_u_int16_t= \
++	xdr_u_int32_t= \
++	xdr_u_int64_t= \
++	xdr_u_int8_t= \
++	xdr_u_long= \
++	xdr_u_longlong_t= \
++	xdr_u_short= \
++	xdr_uint16_t= \
++	xdr_uint32_t= \
++	xdr_uint64_t= \
++	xdr_uint8_t= \
++	xdr_union= \
++	xdr_vector= \
++	xdr_void= \
++	xdr_wrapstring= \
++	xdrmem_create= \
++	xdrrec_create= \
++	xdrrec_endofrecord= \
++	xdrrec_eof= \
++	xdrrec_skiprecord= \
++	xdrstdio_create= \
++)
++
++if !TARGET_X86_64
++NEW_FUNCTIONS+=$(addprefix --replace=,\
++	acl=_acl32 \
++	aclcheck=_aclcheck32 \
++	aclfrommode=_aclfrommode32 \
++	aclfrompbits=_aclfrompbits32 \
++	aclfromtext=_aclfromtext32 \
++	aclsort=_aclsort32 \
++	acltomode=_acltomode32 \
++	acltopbits=_acltopbits32 \
++	acltotext=_acltotext32 \
++	chown=_chown32 \
++	facl=_facl32 \
++	fchown=_fchown32 \
++	fcntl=_fcntl64 \
++	fdopen=_fdopen64 \
++	fgetpos=_fgetpos64 \
++	fopen=_fopen64 \
++	freopen=_freopen64 \
++	fseeko=_fseeko64 \
++	fsetpos=_fsetpos64 \
++	fstat=_fstat64 \
++	ftello=_ftello64 \
++	ftruncate=_ftruncate64 \
++	getegid=_getegid32 \
++	geteuid=_geteuid32 \
++	getgid=_getgid32 \
++	getgrent=_getgrent32 \
++	getgrgid=_getgrgid32 \
++	getgrnam=_getgrnam32 \
++	getgroups=_getgroups32 \
++	getpwuid=_getpwuid32 \
++	getpwuid_r=_getpwuid_r32 \
++	getuid=_getuid32 \
++	initgroups=_initgroups32 \
++	lchown=_lchown32 \
++	lseek=_lseek64 \
++	lstat=_lstat64 \
++	mknod=_mknod32 \
++	mmap=_mmap64 \
++	open=_open64 \
++	setegid=_setegid32 \
++	seteuid=_seteuid32 \
++	setgid=_setgid32 \
++	setgroups=_setgroups32 \
++	setregid=_setregid32 \
++	setreuid=_setreuid32 \
++	setuid=_setuid32 \
++	stat=_stat64 \
++	tmpfile=_tmpfile64 \
++	truncate=_truncate64 \
++)
++endif
++
++#
++# per-file compilation flags
++#
++
++localtime_wrapper_CFLAGS=-I$(srcdir)/tzcode
++
++# required since gcc 9.x
++exec_CFLAGS=-fno-builtin-execve
++
++fhandler_proc_CFLAGS=-DUSERNAME="\"$(USER)\"" -DHOSTNAME="\"$(HOSTNAME)\"" \
++		     -DGCC_VERSION="\"`$(CC) -v 2>&1 | tail -n 1`\""
++
++if !TARGET_X86_64
++# on x86, exceptions.cc must be compiled with a frame-pointer as it uses RtlCaptureContext()
++exceptions_CFLAGS=-fno-omit-frame-pointer
++endif
++
++dtable_CFLAGS=-fcheck-new
++localtime_wrapper_CFLAGS+=-fwrapv
++
++# If an optimization level is explicitly set in CXXFLAGS, set -O3 for these files
++# XXX: this seems to assume it's not -O0?
++#
++# (the indentation here prevents automake trying to process this as an automake
++# conditional)
++ ifneq "${filter -O%,$(CXXFLAGS)}" ""
++  malloc_CFLAGS=-O3
++  sync_CFLAGS=-O3
++ endif
++
++#
++# libraries and installed objects
++#
++# (Don't ever try to use automake's shared library support via libtool to build
++# Cygwin. Instead we have explicit rules to build it.)
++#
++
++SUBLIBS = \
++	libpthread.a \
++	libutil.a \
++	libm.a \
++	libc.a \
++	libdl.a \
++	libresolv.a \
++	librt.a \
++	libacl.a \
++	libssp.a
++
++EXTRALIBS = \
++	libautomode.a \
++	libbinmode.a \
++	libtextmode.a \
++	libtextreadmode.a
++
++noinst_LIBRARIES = \
++	libdll.a \
++	liblib.a
++
++toollib_LIBRARIES = \
++	libgmon.a \
++	$(EXTRALIBS)
++
++CYGWIN_START=crt0.o
++GMON_START=gcrt0.o
++INSTOBJS=automode.o binmode.o textmode.o textreadmode.o
++
++toollib_DATA = \
++	$(CYGWIN_START) \
++	$(GMON_START) \
++	$(INSTOBJS) \
++	$(LIB_NAME) \
++	$(SUBLIBS)
++
++libgmon_a_SOURCES = $(GMON_FILES)
++libgmon_a_LIBADD = $(GMON_START)
++
++libautomode_a_SOURCES =
++libautomode_a_LIBADD = automode.o
++
++libbinmode_a_SOURCES =
++libbinmode_a_LIBADD = binmode.o
++
++libtextmode_a_SOURCES =
++libtextmode_a_LIBADD = textmode.o
++
++libtextreadmode_a_SOURCES =
++libtextreadmode_a_LIBADD = textreadmode.o
++
++# cygserver library
++cygserver_blddir = ${target_builddir}/winsup/cygserver
++LIBSERVER = $(cygserver_blddir)/libcygserver.a
++
++$(LIBSERVER):
++	$(MAKE) -C $(cygserver_blddir) libcygserver.a
++
++# We build as cygwin0.dll and rename at install time to overcome native
++# rebuilding issues (we don't want the build tools to see a partially built
++# cygwin.dll and attempt to use it instead of the old one).
++
++# linker script
++LDSCRIPT=cygwin.sc
++$(LDSCRIPT): $(LDSCRIPT).in
++	$(CC) -E - -P < $^ -o $@
++
++# cygwin dll
++$(TEST_DLL_NAME): $(LDSCRIPT) dllfixdbg libdll.a $(VERSION_OFILES) $(LIBSERVER)
++	$(CXX) $(CXXFLAGS) \
++	-mno-use-libstdc-wrappers \
++	-Wl,--gc-sections -nostdlib -Wl,-T$(LDSCRIPT) -static \
++	-Wl,--heap=0 -Wl,--out-implib,cygdll.a -shared -o $@ \
++	-e @DLL_ENTRY@ $(DEF_FILE) \
++	-Wl,-whole-archive libdll.a -Wl,-no-whole-archive \
++	$(VERSION_OFILES) \
++	$(LIBSERVER) \
++	$(newlib_build)/libm/libm.a \
++	$(newlib_build)/libc/libc.a \
++	-lgcc -lkernel32 -lntdll -Wl,-Map,cygwin.map
++	$(srcdir)/dllfixdbg $(OBJDUMP) $(OBJCOPY) $@ cygwin1.dbg
++	@ln -f $@ new-cygwin1.dll
++
++# cygwin import library
++toolopts=--cpu=@target_cpu@ --ar=@AR@ --as=@AS@ --nm=@NM@ --objcopy=@OBJCOPY@
++
++$(DEF_FILE): gendef $(srcdir)/$(TLSOFFSETS_H) $(DIN_FILE) common.din
++	$(srcdir)/gendef --cpu=@target_cpu@ --output-def=$(DEF_FILE) --tlsoffsets=$(srcdir)/$(TLSOFFSETS_H) $(srcdir)/$(DIN_FILE) $(srcdir)/common.din
++
++sigfe.s: $(DEF_FILE)
++	@[ -s $@ ] || \
++	{ rm -f $(DEF_FILE); $(MAKE) -s -j1 $(DEF_FILE); }; \
++	[ -s $@ ] && touch $@
++
++LIBCOS=$(addsuffix .o,$(basename $(LIB_FILES)))
++$(LIB_NAME): $(DEF_FILE) $(LIBCOS) | $(TEST_DLL_NAME)
++	$(srcdir)/mkimport $(toolopts) $(NEW_FUNCTIONS) $@ cygdll.a $(wordlist 2,99,$^)
++
++# cygwin import library used by testsuite
++$(TEST_LIB_NAME): $(LIB_NAME)
++	perl -p -e 'BEGIN{binmode(STDIN); binmode(STDOUT);}; s/cygwin1/cygwin0/g' < $? > $@
++
++# sublibs
++# import libraries for some subset of symbols indicated by given objects
++speclib=\
++	$(srcdir)/speclib $(toolopts) \
++	--exclude='cygwin' \
++	--exclude='(?i:dll)' \
++	--exclude='reloc' \
++	--exclude='^main$$' \
++	--exclude='^_main$$'
++
++libc.a: $(LIB_NAME) libm.a libpthread.a libutil.a
++	$(speclib) $^ -v $(@F)
++
++libm.a: $(LIB_NAME) $(newlib_build)/libm/libm.a $(MATH_OFILES)
++	$(speclib) $^ $(@F)
++
++libpthread.a: $(LIB_NAME) pthread.o thread.o libc/call_once.o libc/cnd.o \
++	      libc/mtx.o libc/thrd.o libc/tss.o
++	$(speclib) $^ $(@F)
++
++libutil.a: $(LIB_NAME) libc/bsdlib.o
++	$(speclib) $^ $(@F)
++
++libdl.a: $(LIB_NAME) dlfcn.o
++	$(speclib) $^ $(@F)
++
++libresolv.a: $(LIB_NAME) libc/minires.o
++	$(speclib) $^ $(@F)
++
++librt.a: $(LIB_NAME) posix_ipc.o
++	$(speclib) $^ $(@F)
++
++libacl.a: $(LIB_NAME) sec_posixacl.o
++	$(speclib) $^ $(@F)
++
++libssp.a: $(LIB_NAME) $(newlib_build)/libc/ssp/lib.a
++	$(speclib) $^ $(@F)
++
++#
++# all
++#
++
++all-local: $(LIB_NAME) $(TEST_LIB_NAME) $(SUBLIBS)
++
++#
++# clean
++#
++
++clean-local:
++	-rm -f $(BUILT_SOURCES)
++	-rm -f $(DEF_FILE) sigfe.s
++	-rm -f cygwin.sc cygdll.a cygwin.map $(TEST_DLL_NAME) cygwin1.dbg new-cygwin1.dll
++	-rm -f $(LIB_NAME) $(TEST_LIB_NAME) $(SUBLIBS)
++	-rm -f version.cc
++
++maintainer-clean-local:
++	-rm -f $(srcdir)/$(TLSOFFSETS_H) $(srcdir)/devices.cc
++
++#
++# install
++#
++
++man_MANS = regex/regex.3 regex/regex.7
++
++install-exec-hook: install-libs
++install-data-local: install-headers install-ldif
++
++install-libs:
++	@$(MKDIR_P) $(DESTDIR)$(bindir)
++	$(INSTALL_PROGRAM) $(TEST_DLL_NAME) $(DESTDIR)$(bindir)/$(DLL_NAME)
++	(cd $(DESTDIR)$(toollibdir) && ln -sf $(LIB_NAME) libg.a)
++
++install-headers:
++	cd $(srcdir)/include; \
++	for sub in `find . -type d -print | sort`; do \
++	    $(MKDIR_P) $(DESTDIR)$(toolincludedir)/$$sub; \
++	    for i in $$sub/*.h ; do \
++	      $(INSTALL_DATA) $$i $(DESTDIR)$(toolincludedir)/$$sub/`basename $$i` ; \
++	    done ; \
++	done ;
++
++install-ldif:
++	@$(MKDIR_P) $(DESTDIR)$(datarootdir)/cygwin
++	$(INSTALL_DATA) $(srcdir)/cygwin.ldif $(DESTDIR)$(datarootdir)/cygwin
++
++#
++# uninstall
++#
++
++uninstall-hook: uninstall-headers uninstall-ldif uninstall-libs
++
++uninstall-libs:
++	rm -f $(DESTDIR)$(bindir)/cygwin1.dll
++	rm -f $(DESTDIR)$(toollibdir)/libg.a
++
++uninstall-headers:
++	cd $(srcdir)/include; \
++	for sub in `find . -type d -print | sort`; do \
++	    for i in $$sub/*.h ; do \
++	      rm -f $(DESTDIR)$(toolincludedir)/$$sub/`basename $$i` ; \
++	    done ; \
++	done ;
++
++uninstall-ldif:
++	rm -f $(DESTDIR)$(datarootdir)/cygwin/cygwin.ldif
+diff --git a/winsup/cygwin/config.h.in b/winsup/cygwin/config.h.in
+index 5ddff249f..1c4940951 100644
+--- a/winsup/cygwin/config.h.in
++++ b/winsup/cygwin/config.h.in
+@@ -1,4 +1,4 @@
+-/* config.h.in.  Generated from configure.ac by autoheader.  */
++/* cygwin/config.h.in.  Generated from configure.ac by autoheader.  */
+ 
+ /* Define if DEBUGGING support is requested. */
+ #undef DEBUGGING
+diff --git a/winsup/doc/Makefile.am b/winsup/doc/Makefile.am
+new file mode 100644
+index 000000000..72b803c49
+--- /dev/null
++++ b/winsup/doc/Makefile.am
+@@ -0,0 +1,155 @@
++# -*- Makefile -*- for winsup/doc
++#
++# This file is part of Cygwin.
++#
++# This software is a copyrighted work licensed under the terms of the
++# Cygwin license.  Please consult the file "CYGWIN_LICENSE" for
++# details.
++
++man1_MANS =
++man3_MANS =
++
++doc_DATA = \
++	cygwin-ug-net/cygwin-ug-net.pdf \
++	cygwin-api/cygwin-api.pdf
++
++htmldir = $(datarootdir)/doc
++
++XMLTO=xmlto --skip-validation --with-dblatex
++DOCBOOK2XTEXI=@DOCBOOK2XTEXI@ --xinclude --info --utf8trans-map=charmap
++
++-include Makefile.dep
++
++.PHONY: install-extra-man install-etc
++
++all-local: Makefile.dep \
++	cygwin-api/cygwin-api.html \
++	cygwin-ug-net/cygwin-ug-net.html \
++	faq/faq.html faq/faq.body \
++	cygwin-ug-net/cygwin-ug-net-nochunks.html.gz \
++	api2man.stamp intro2man.stamp utils2man.stamp \
++	cygwin-api.info cygwin-ug-net.info
++
++clean-local:
++	rm -f Makefile.dep
++	rm -f *.html *.html.gz
++	rm -Rf cygwin-api cygwin-ug-net faq
++	rm -f api2man.stamp intro2man.stamp utils2man.stamp
++	rm -f *.1
++	rm -f *.3
++	rm -f *.info* charmap
++
++install-html-local: cygwin-ug-net/cygwin-ug-net.html cygwin-api/cygwin-api.html
++	@$(MKDIR_P) $(DESTDIR)$(htmldir)/cygwin-ug-net
++	$(INSTALL_DATA) cygwin-ug-net/*.html $(DESTDIR)$(htmldir)/cygwin-ug-net
++	(cd $(DESTDIR)$(htmldir)/cygwin-ug-net && ln -f cygwin-ug-net.html index.html)
++	$(INSTALL_DATA) $(srcdir)/docbook.css $(DESTDIR)$(htmldir)/cygwin-ug-net
++	@$(MKDIR_P) $(DESTDIR)$(htmldir)/cygwin-api
++	$(INSTALL_DATA) cygwin-api/*.html $(DESTDIR)$(htmldir)/cygwin-api
++	(cd $(DESTDIR)$(htmldir)/cygwin-api && ln -f cygwin-api.html index.html)
++	$(INSTALL_DATA) $(srcdir)/docbook.css $(DESTDIR)$(htmldir)/cygwin-api
++
++install-extra-man: api2man.stamp intro2man.stamp utils2man.stamp
++	@$(MKDIR_P) $(DESTDIR)$(man1dir)
++	$(INSTALL_DATA) *.1 $(DESTDIR)$(man1dir)
++	@$(MKDIR_P) $(DESTDIR)$(man3dir)
++	$(INSTALL_DATA) *.3 $(DESTDIR)$(man3dir)
++
++install-info-local: cygwin-ug-net.info cygwin-api.info
++	@$(MKDIR_P) $(DESTDIR)$(infodir)
++	$(INSTALL_DATA) *.info* $(DESTDIR)$(infodir)
++
++install-etc:
++	@$(MKDIR_P) $(DESTDIR)$(sysconfdir)/postinstall
++	$(INSTALL_SCRIPT) $(srcdir)/etc.postinstall.cygwin-doc.sh $(DESTDIR)$(sysconfdir)/postinstall/cygwin-doc.sh
++	@$(MKDIR_P) $(DESTDIR)$(sysconfdir)/preremove
++	$(INSTALL_SCRIPT) $(srcdir)/etc.preremove.cygwin-doc.sh $(DESTDIR)$(sysconfdir)/preremove/cygwin-doc.sh
++
++install-data-hook: install-extra-man install-html-local install-info-local install-etc
++
++uninstall-extra-man:
++	for i in *.1 ; do \
++	    rm -f $(DESTDIR)$(man1dir)/$$i ; \
++	done
++	for i in *.3 ; do \
++	    rm -f $(DESTDIR)$(man3dir)/$$i ; \
++	done
++
++uninstall-html:
++	for i in cygwin-ug-net/*.html ; do \
++	    rm -f $(DESTDIR)$(htmldir)/$$i ; \
++	done ;
++	rm -f $(DESTDIR)$(htmldir)/cygwin-ug-net/index.html
++	rm -f $(DESTDIR)$(htmldir)/cygwin-ug-net/docbook.css
++	for i in cygwin-api/*.html ; do \
++	    rm -f $(DESTDIR)$(htmldir)/$$i ; \
++	done ;
++	rm -f $(DESTDIR)$(htmldir)/cygwin-api/index.html
++	rm -f $(DESTDIR)$(htmldir)/cygwin-api/docbook.css
++
++uninstall-info:
++	for i in *.info* ; do \
++	    rm -f $(DESTDIR)$(infodir)/$$i ; \
++	done ;
++
++uninstall-etc:
++	rm -f $(DESTDIR)$(sysconfdir)/postinstall/cygwin-doc.sh
++	rm -f $(DESTDIR)$(sysconfdir)/preremove/cygwin-doc.sh
++
++uninstall-hook: uninstall-extra-man uninstall-html uninstall-info uninstall-etc
++
++# nochunks ug html is not installed, but will be deployed to website
++cygwin-ug-net/cygwin-ug-net-nochunks.html.gz: $(cygwin-ug-net_SOURCES) html.xsl
++	$(XMLTO) html-nochunks -m $(srcdir)/html.xsl $<
++	@$(MKDIR_P) cygwin-ug-net
++	cp cygwin-ug-net.html cygwin-ug-net/cygwin-ug-net-nochunks.html
++	rm -f cygwin-ug-net/cygwin-ug-net-nochunks.html.gz
++	gzip cygwin-ug-net/cygwin-ug-net-nochunks.html
++
++cygwin-ug-net/cygwin-ug-net.html: $(cygwin-ug-net_SOURCES) html.xsl
++	$(XMLTO) html -o cygwin-ug-net/ -m $(srcdir)/html.xsl $<
++
++cygwin-ug-net/cygwin-ug-net.pdf: $(cygwin-ug-net_SOURCES) fo.xsl
++	$(XMLTO) pdf -o cygwin-ug-net/ -m $(srcdir)/fo.xsl $<
++
++utils2man.stamp: $(cygwin-ug-net_SOURCES) man.xsl
++	$(XMLTO) man -m $(srcdir)/man.xsl $<
++	@touch $@
++
++cygwin-ug-net.info: $(cygwin-ug-net_SOURCES) charmap
++	$(DOCBOOK2XTEXI) $(srcdir)/cygwin-ug-net.xml --string-param output-file=cygwin-ug-net
++
++cygwin-api/cygwin-api.html: $(cygwin-api_SOURCES) html.xsl
++	$(XMLTO) html -o cygwin-api/ -m $(srcdir)/html.xsl $<
++
++cygwin-api/cygwin-api.pdf: $(cygwin-api_SOURCES) fo.xsl
++	$(XMLTO) pdf -o cygwin-api/ -m $(srcdir)/fo.xsl $<
++
++api2man.stamp: $(cygwin-api_SOURCES) man.xsl
++	$(XMLTO) man -m $(srcdir)/man.xsl $<
++	@touch $@
++
++cygwin-api.info: $(cygwin-api_SOURCES) charmap
++	$(DOCBOOK2XTEXI) $(srcdir)/cygwin-api.xml --string-param output-file=cygwin-api
++
++# this generates a custom charmap for docbook2x-texi which has a mapping for &reg;
++charmap:
++	cp /usr/share/docbook2X/charmaps/texi.charmap charmap
++	echo "ae (R)" >>charmap
++
++intro2man.stamp: intro.xml man.xsl
++	$(XMLTO) man -m $(srcdir)/man.xsl $<
++	@echo ".so intro.1" >cygwin.1
++	@touch $@
++
++faq/faq.html: $(faq_SOURCES) html.xsl
++	$(XMLTO) html -o faq -m $(srcdir)/html.xsl $(srcdir)/faq.xml
++	sed -i 's;<a name="id[mp][0-9]*"></a>;;g' faq/faq.html
++
++# faq body is not installed, but is intended to be deployed to website, where it
++# can be SSI included in a framing page
++faq/faq.body: faq/faq.html
++	$(srcdir)/bodysnatcher.pl $<
++
++Makefile.dep: cygwin-ug-net.xml cygwin-api.xml faq.xml intro.xml
++	cd $(srcdir) && ./xidepend $^ > "$(CURDIR)/$@"
+diff --git a/winsup/testsuite/Makefile.am b/winsup/testsuite/Makefile.am
+new file mode 100644
+index 000000000..4b8c7dbb7
+--- /dev/null
++++ b/winsup/testsuite/Makefile.am
+@@ -0,0 +1,64 @@
++# Makefile.am for Cygwin's testsuite.
++#
++# This file is part of Cygwin.
++#
++# This software is a copyrighted work licensed under the terms of the
++# Cygwin license.  Please consult the file "CYGWIN_LICENSE" for
++# details.
++
++# This makefile requires GNU make.
++
++noinst_LIBRARIES = libltp.a
++
++libltp_a_CPPFLAGS=-I$(srcdir)/libltp/include
++
++libltp_a_SOURCES = \
++	libltp/lib/dataascii.c \
++	libltp/lib/databin.c \
++	libltp/lib/datapid.c \
++	libltp/lib/forker.c \
++	libltp/lib/get_high_address.c \
++	libltp/lib/libtestsuite.c \
++	libltp/lib/open_flags.c \
++	libltp/lib/parse_opts.c \
++	libltp/lib/pattern.c \
++	libltp/lib/rmobj.c \
++	libltp/lib/search_path.c \
++	libltp/lib/str_to_bytes.c \
++	libltp/lib/string_to_tokens.c \
++	libltp/lib/tst_res.c \
++	libltp/lib/tst_sig.c \
++	libltp/lib/tst_tmpdir.c \
++	libltp/lib/write_log.c
++
++DEJATOOL = winsup
++
++# Add '-v' to RUNTESTFLAGS if V=1
++RUNTESTFLAGS_1 = -v
++RUNTESTFLAGS = $(RUNTESTFLAGS_$(V))
++
++# a temporary directory, to be used for files created by tests
++tmpdir = $(abspath $(objdir)/testsuite/tmp/)
++# the same temporary directory, as an absolute, /cygdrive path (so it can be
++# understood by the test DLL, which will have a different mount table)
++testdll_tmpdir = $(shell cygpath -ma $(tmpdir) | sed -e 's#^\([A-Z]\):#/cygdrive/\L\1#')
++
++site-extra.exp: ../config.status Makefile
++	@rm -f ./tmp0
++	@echo "set runtime_root \"`pwd`/../cygwin\"" >> ./tmp0
++	@echo "set CC \"$(CC)\"" >> ./tmp0
++	@echo "set CFLAGS \"\"" >> ./tmp0
++	@echo "set MINGW_CXX \"$(MINGW_CXX)\"" >> ./tmp0
++	@echo "set tmpdir $(tmpdir)" >> ./tmp0
++	@echo "set testdll_tmpdir $(testdll_tmpdir)" >> ./tmp0
++	@echo "set ltp_includes \"$(srcdir)/libltp/include\"" >> ./tmp0
++	@echo "set ltp_libs \"`pwd`/libltp.a\"" >> ./tmp0
++	@echo "set cygrun \"`pwd`/cygrun/cygrun\"" >> ./tmp0
++	@mv ./tmp0 site-extra.exp
++
++EXTRA_DEJAGNU_SITE_CONFIG = site-extra.exp
++
++clean-local:
++	rm -f *.log *.exe *.exp *.bak *.stackdump winsup.sum
++
++SUBDIRS = cygrun
+diff --git a/winsup/testsuite/config/default.exp b/winsup/testsuite/config/default.exp
+index 3936979a6..28c614187 100644
+--- a/winsup/testsuite/config/default.exp
++++ b/winsup/testsuite/config/default.exp
+@@ -1,7 +1,7 @@
+ proc winsup_version {} {
+     global env
+-    global rootme
+-    clone_output "\n[exec grep ^%%% $rootme/../cygwin/cygwin0.dll]\n"
++    global runtime_root
++    clone_output "\n[exec grep ^%%% $runtime_root/cygwin0.dll]\n"
+     if { [info exists env(CYGWIN)] } {
+         clone_output "CYGWIN=$env(CYGWIN)\n"
+     } else {
+diff --git a/winsup/testsuite/cygrun/Makefile.am b/winsup/testsuite/cygrun/Makefile.am
+new file mode 100644
+index 000000000..eb3b41224
+--- /dev/null
++++ b/winsup/testsuite/cygrun/Makefile.am
+@@ -0,0 +1,21 @@
++# Makefile.am for Cygwin the testsuite wrapper cygrun.
++#
++# This file is part of Cygwin.
++#
++# This software is a copyrighted work licensed under the terms of the
++# Cygwin license.  Please consult the file "CYGWIN_LICENSE" for
++# details.
++
++# This makefile requires GNU make.
++
++# This is built with the MinGW compiler, so is in a separate Makefile here
++# because it's tricky with Automake to use different compilers for the same
++# language in the same Makefile.
++
++override CC = @MINGW_CC@
++INCLUDES =
++
++noinst_PROGRAMS = cygrun
++
++cygrun_SOURCES = \
++	../cygrun.c
+diff --git a/winsup/testsuite/winsup.api/winsup.exp b/winsup/testsuite/winsup.api/winsup.exp
+index 4978136a1..584aa5755 100644
+--- a/winsup/testsuite/winsup.api/winsup.exp
++++ b/winsup/testsuite/winsup.api/winsup.exp
+@@ -9,13 +9,15 @@ if { ! [isnative] } {
+ set rv ""
+ 
+ set ltp_includes "-I$ltp_includes"
+-set ltp_libs "$rootme/libltp.a"
++set ltp_libs "$ltp_libs"
+ 
+ set add_includes $ltp_includes
+ set add_libs $ltp_libs
+ 
+ set test_filter ""
+ 
++set env(PATH) "$runtime_root:$env(PATH)"
++
+ if { [info exists env(CYGWIN_TESTSUITE_TESTS)] } {
+     set test_filter "$env(CYGWIN_TESTSUITE_TESTS)"
+ }
+@@ -69,7 +71,7 @@ foreach src [lsort [glob -nocomplain $srcdir/$subdir/*.c $srcdir/$subdir/*/*.{cc
+ 	       set redirect_output /dev/null
+ 	    }
+ 	    file mkdir $tmpdir/$base
+-	    ws_spawn "$rootme/cygrun ./$base.exe $testdll_tmpdir/$base > $redirect_output"
++	    ws_spawn "$cygrun ./$base.exe $testdll_tmpdir/$base > $redirect_output"
+ 	    file delete -force $tmpdir/$base
+ 	    if { $rv } {
+ 		fail "$testcase (execute)"
+diff --git a/winsup/utils/Makefile.am b/winsup/utils/Makefile.am
+new file mode 100644
+index 000000000..0b974a1fd
+--- /dev/null
++++ b/winsup/utils/Makefile.am
+@@ -0,0 +1,79 @@
++# Makefile for Cygwin utilities
++
++# This file is part of Cygwin.
++
++# This software is a copyrighted work licensed under the terms of the
++# Cygwin license.  Please consult the file "CYGWIN_LICENSE" for
++# details.
++
++include $(top_srcdir)/Makefile.am.common
++
++CFLAGS_COMMON=-Wimplicit-fallthrough=4 -Werror
++AM_CFLAGS=$(cflags_common) $(CFLAGS_COMMON)
++AM_CXXFLAGS=$(cxxflags_common) $(CFLAGS_COMMON)
++
++bin_PROGRAMS = \
++	chattr \
++	cygpath \
++	gencat \
++	getconf \
++	getfacl \
++	kill \
++	ldd \
++	locale \
++	lsattr \
++	minidumper \
++	mkgroup \
++	mkpasswd \
++	mount \
++	passwd \
++	pldd \
++	ps \
++	regtool \
++	setfacl \
++	setmetamode \
++	ssp \
++	tzset \
++	umount
++
++# dumper is only built if libbfd.a available
++if BUILD_DUMPER
++bin_PROGRAMS += dumper
++endif
++
++# If prog_SOURCES is not specified, automake defaults to the single file prog.c
++cygpath_SOURCES = cygpath.cc
++dumper_SOURCES = dumper.cc module_info.cc
++kill_SOURCES = kill.cc
++ldd_SOURCES = ldd.cc
++locale_SOURCES = locale.cc
++minidumper_SOURCES = minidumper.cc
++mount_SOURCES = mount.cc path.cc
++ps_SOURCES = ps.cc
++regtool_SOURCES = regtool.cc
++umount_SOURCES = umount.cc
++
++# rules to create/update tzmap.h from an online resource
++.PHONY: tzmap
++tzmap:
++	$(srcdir)/tzmap-from-unicode.org > $(srcdir)/$@.h
++
++tzmap.h:
++	[ -f "$(srcdir)/tzmap.h" ] || $(srcdir)/tzmap-from-unicode.org > $(srcdir)/$@
++
++AM_LDFLAGS = -static -Wl,--enable-auto-import
++LDADD = -lnetapi32
++
++cygpath_CXXFLAGS = -fno-threadsafe-statics $(AM_CXXFLAGS)
++cygpath_LDADD = $(LDADD) -luserenv -lntdll
++dumper_CXXFLAGS = -I$(top_srcdir)/../include $(AM_CXXFLAGS)
++dumper_LDADD = $(LDADD) -lpsapi -lbfd -lintl -liconv -liberty -lz -lntdll
++ldd_LDADD = $(LDADD) -lpsapi -lntdll
++mount_CXXFLAGS = -DFSTAB_ONLY $(AM_CXXFLAGS)
++minidumper_LDADD = $(LDADD) -ldbghelp
++pldd_LDADD = $(LDADD) -lpsapi
++ps_LDADD = $(LDADD) -lpsapi -lntdll
++
++if CROSS_BOOTSTRAP
++SUBDIRS = mingw
++endif
+diff --git a/winsup/utils/mingw/Makefile.am b/winsup/utils/mingw/Makefile.am
+new file mode 100644
+index 000000000..dca7f09dc
+--- /dev/null
++++ b/winsup/utils/mingw/Makefile.am
+@@ -0,0 +1,50 @@
++# Makefile for Cygwin utilities
++
++# This file is part of Cygwin.
++
++# This software is a copyrighted work licensed under the terms of the
++# Cygwin license.  Please consult the file "CYGWIN_LICENSE" for
++# details.
++
++# We put utilities built with a MinGW compiler in a separate Makefile here
++# because it's tricky with Automake to use different compilers for the same
++# language in the same Makefile.
++
++override CXX = @MINGW_CXX@
++INCLUDES =
++
++include $(top_srcdir)/Makefile.am.common
++
++CFLAGS_COMMON=-Wimplicit-fallthrough=4 -Werror
++AM_CXXFLAGS=-fno-exceptions -fno-rtti -fno-use-cxa-atexit $(flags_common) $(CFLAGS_COMMON)
++
++bin_PROGRAMS = \
++	cygcheck \
++	cygwin-console-helper \
++	ldh \
++	strace
++
++cygcheck_SOURCES = \
++	../bloda.cc \
++	../cygcheck.cc \
++	../dump_setup.cc \
++	../path.cc
++cygcheck_LDADD = -lz -lwininet -lpsapi -lntdll
++
++cygwin_console_helper_SOURCES = ../cygwin-console-helper.cc
++
++ldh_SOURCES = ../ldh.cc
++
++strace_SOURCES = \
++	../path.cc \
++	../strace.cc
++strace_LDADD = -lntdll
++
++noinst_PROGRAMS = path-testsuite
++
++path_testsuite_SOURCES = \
++	../path.cc \
++	../testsuite.cc
++path_testsuite_CXXFLAGS = -DTESTSUITE -Wno-error=write-strings
++
++TESTS = path-testsuite
 -- 
 2.29.2
 
