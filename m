@@ -1,26 +1,26 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
 Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
- by sourceware.org (Postfix) with ESMTPS id AC1E0385800D
- for <cygwin-patches@cygwin.com>; Mon, 23 Nov 2020 11:03:48 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org AC1E0385800D
+ by sourceware.org (Postfix) with ESMTPS id 5B806385800D
+ for <cygwin-patches@cygwin.com>; Mon, 23 Nov 2020 11:04:01 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 5B806385800D
 Received: from localhost.localdomain (v038192.dynamic.ppp.asahi-net.or.jp
  [124.155.38.192]) (authenticated)
- by conuserg-07.nifty.com with ESMTP id 0ANB3Dw7027048;
- Mon, 23 Nov 2020 20:03:29 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 0ANB3Dw7027048
+ by conuserg-07.nifty.com with ESMTP id 0ANB3Dw9027048;
+ Mon, 23 Nov 2020 20:03:43 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 0ANB3Dw9027048
 X-Nifty-SrcIP: [124.155.38.192]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v2 1/3] Cygwin: pty: Fix a bug in the code removing "CSI > Pm
- m".
-Date: Mon, 23 Nov 2020 20:03:02 +0900
-Message-Id: <20201123110304.1368-2-takashi.yano@nifty.ne.jp>
+Subject: [PATCH v2 2/3] Cygwin: pty: Discard "OSC Ps;
+ ? BEL/ST" in pseudo console output.
+Date: Mon, 23 Nov 2020 20:03:03 +0900
+Message-Id: <20201123110304.1368-3-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20201123110304.1368-1-takashi.yano@nifty.ne.jp>
 References: <20201123110304.1368-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00, DKIM_SIGNED,
  DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0,
  RCVD_IN_BARRACUDACENTRAL, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_PASS,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
@@ -38,27 +38,57 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 23 Nov 2020 11:03:50 -0000
+X-List-Received-Date: Mon, 23 Nov 2020 11:04:04 -0000
 
-- The code added by 8121b606e843c001d5ca5213d24099e04ebc62ca has a
-  bug which fails to remove multiple "CSI > Pm m" sequences. This
-  patch fixes the bug.
+- If vim is executed in WSL in mintty, some garbage string caused
+  by "OSC Ps;? BEL/ST" will be shown in some situations. This patch
+  fixes the issue by removing "OSC Ps;? BEL/ST" from pseudo console
+  output.
 ---
- winsup/cygwin/fhandler_tty.cc | 1 +
- 1 file changed, 1 insertion(+)
+ winsup/cygwin/fhandler_tty.cc | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
 diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index 600de085c..911945675 100644
+index 911945675..3d58cc7df 100644
 --- a/winsup/cygwin/fhandler_tty.cc
 +++ b/winsup/cygwin/fhandler_tty.cc
-@@ -2063,6 +2063,7 @@ fhandler_pty_master::pty_master_fwd_thread ()
- 		memmove (&outbuf[start_at], &outbuf[i+1], rlen-i-1);
- 		rlen = wlen = start_at + rlen - i - 1;
- 		state = 0;
-+		i = start_at - 1;
- 		continue;
- 	      }
+@@ -2069,6 +2069,36 @@ fhandler_pty_master::pty_master_fwd_thread ()
  	    else
+ 	      state = 0;
+ 
++	  /* Remove OSC Ps ; ? BEL/ST */
++	  for (DWORD i = 0; i < rlen; i ++)
++	    if (state == 0 && outbuf[i] == '\033')
++	      {
++		start_at = i;
++		state = 1;
++		continue;
++	      }
++	    else if ((state == 1 && outbuf[i] == ']')
++		     || (state == 2 && outbuf[i] == ';')
++		     || (state == 3 && outbuf[i] == '?')
++		     || (state == 4 && outbuf[i] == '\033'))
++	      {
++		state ++;
++		continue;
++	      }
++	    else if (state == 2 && isdigit (outbuf[i]))
++	      continue;
++	    else if ((state == 4 && outbuf[i] == '\a')
++		     || (state == 5 && outbuf[i] == '\\'))
++	      {
++		memmove (&outbuf[start_at], &outbuf[i+1], rlen-i-1);
++		rlen = wlen = start_at + rlen - i - 1;
++		state = 0;
++		i = start_at - 1;
++		continue;
++	      }
++	    else
++	      state = 0;
++
+ 	  if (get_ttyp ()->term_code_page != CP_UTF8)
+ 	    {
+ 	      size_t nlen = NT_MAX_PATH;
 -- 
 2.29.2
 
