@@ -1,43 +1,45 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
- by sourceware.org (Postfix) with ESMTPS id 8D9713850424
- for <cygwin-patches@cygwin.com>; Mon, 23 Nov 2020 08:46:13 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 8D9713850424
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+ by sourceware.org (Postfix) with ESMTPS id 8325A3850414
+ for <cygwin-patches@cygwin.com>; Mon, 23 Nov 2020 08:59:01 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 8325A3850414
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org;
  spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MBll6-1kXBs01TFU-00C7ia for <cygwin-patches@cygwin.com>; Mon, 23 Nov 2020
- 09:46:12 +0100
+ mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MAfQe-1kW54m0FWi-00B00J for <cygwin-patches@cygwin.com>; Mon, 23 Nov 2020
+ 09:59:00 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id DCA2CA80A56; Mon, 23 Nov 2020 09:46:11 +0100 (CET)
-Date: Mon, 23 Nov 2020 09:46:11 +0100
+ id 822E3A80A56; Mon, 23 Nov 2020 09:58:59 +0100 (CET)
+Date: Mon, 23 Nov 2020 09:58:59 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 0/3] Further build cleanups
-Message-ID: <20201123084611.GM303847@calimero.vinschen.de>
+Subject: Re: [PATCH 2/2] Cygwin: pty: Discard "OSC Ps; ? BEL/ST" in pseudo
+ console output.
+Message-ID: <20201123085859.GN303847@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20201120140901.44474-1-jon.turney@dronecode.org.uk>
+References: <20201123052815.761-1-takashi.yano@nifty.ne.jp>
+ <20201123052815.761-3-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201120140901.44474-1-jon.turney@dronecode.org.uk>
-X-Provags-ID: V03:K1:vx9incxbouFwTSgoxHeDxNOgAcj5FAXPIx6o2+EBMBjDWyy2BUL
- fgNUR9PUjKhWc9nnWonf+ItxBDx/vJMSI4GZU2o5ighBhWcVJxxgjmKqwPOm0kuhjqySd3j
- XepUIVr/AyqHsbZjXf0X1Qjb/QqW9dhJdgrWfM9x3JZgoitzdLftcueR5tv3mPEaVe7kZ3K
- mHenl2rtuYWUVyipK+NjQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:581wjd7wVjI=:teuuXYXpEfv1F+IC4Okc7s
- yRGS+AZHb2RPMq07Monn7/Psjuboo2Z3gGV4UX9KauZZKmjWYV4CSU+QXya+TCkc1j995xEXz
- 8ztFlrdMowIQK/2oOuo2Mumzsuo9gcXe+LHemdAxuLezYU+lt/mRKMqrCZDkXYhcSeLbX9bGe
- 294XpED0WtOVQehAPFDc/N187N1QB93IJyWMVFNNNHBflKClNE+v6i4huZQ+/iZeLsSeElg5Q
- I6ErjRi+EIgfyXMEczebm1raRTppCfwT/L9zuLrRKzsrLRaolSq1WpQ9RNdlgf9SBlpVUjiW+
- S/HWaPZY8Pt23dDbiZJ90Gvs0QWOlhGvegNXCoJJShO0LQ+tAIIlhjXczDgWZYiYQLGucyA+r
- vfQRMqVb/qD16a7g0zBs7s1LTNMXcBcPhiqZFO5NEKz0kY7sjpauV16pXPqBZ4d+tWzgnr4f8
- 03siqRSkPQ==
-X-Spam-Status: No, score=-100.8 required=5.0 tests=BAYES_00,
+In-Reply-To: <20201123052815.761-3-takashi.yano@nifty.ne.jp>
+X-Provags-ID: V03:K1:EUb9bPWGoyVz5y1QbBC95PcEGAYATddgyMoFfW708k+5dvW21dg
+ LTzjbMYQVwq1VbafuW2WK7gVKD3E4jjPcqtRhToDMKmugnUhOEO4f0OnwhljYb0rGFHuNHS
+ 8R6cowvpUUR+FQY8sRal2yzCqGGBfGBVBGoYXS7gJ4ORXAtZnUzI80gE151HFQ8v+jSZzLr
+ 2Y6fj2JuSohRMA5kRkZ7g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:kV0MXoYkQx4=:PAJ2r/r7BN7PjUDjm02+No
+ UWItALOvxg5EtuF5xNAraX5wmKUSN37sVdoPKZaCrEzX+aWM9DMjhsijEX7qb9N3jIDYk7cSs
+ 0WgqAvG0qblvu0qtdhEHp7LscF8LERrMFygLlHJskjJn0twVwNnj0nKTeCIOyux18xvkwavKm
+ nDoVdZF+S2Xr8BD0rkfnW7QgWbZY9OC9WLt2q6OwdMtfcw/jkuXyNFXD17v1zYNEkCoZEqldb
+ 0t/FrP1pkiBz6o11EDHx2F2THpM0rxQq+xniU0FSLBehLhPmpMw0RP+igUb+kM1ZuHhle2fXt
+ uJv1fgFRQgL7Bd1Qsie6t0PWdqVUlIygtkJZgARD9qFbyPWpTX7KfE0LzyKF+qSF9wLx1xGGV
+ cB+ApMx+K2ZZHcSHtgdkzETR8UQHD6Db47kw9y1cU7qdzoeIuZITZNd1Nxjw1Ee9cGyUKl1i+
+ z02/trFAeA==
+X-Spam-Status: No, score=-106.9 required=5.0 tests=BAYES_00, GIT_PATCH_0,
  GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
  RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
@@ -55,23 +57,33 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 23 Nov 2020 08:46:14 -0000
+X-List-Received-Date: Mon, 23 Nov 2020 08:59:02 -0000
 
-On Nov 20 14:08, Jon Turney wrote:
-> Jon Turney (3):
->   Drop libgmon.a build dependency on gcrt0.o
->   Use standard CXXFLAGS when compiling localtime_wrapper.c
->   Have cygmagic not create output if an error occurs
+Hi Takashi,
+
+just a small style nit:
+
+On Nov 23 14:28, Takashi Yano via Cygwin-patches wrote:
+> - If vim is executed in WSL in mintty, some garbage string caused
+>   by "OSC Ps;? BEL/ST" will be shown in some situations. This patch
+>   fixes the issue by removing "OSC Ps;? BEL/ST" from pseudo console
+>   output.
+> ---
+>  winsup/cygwin/fhandler_tty.cc | 30 ++++++++++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
 > 
->  winsup/cygwin/Makefile.in |  4 ++--
->  winsup/cygwin/cygmagic    | 17 ++++++++++++++---
->  2 files changed, 16 insertions(+), 5 deletions(-)
-> 
-> -- 
-> 2.29.2
-
-GTG
-
+> diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+> index 911945675..38285c7f4 100644
+> --- a/winsup/cygwin/fhandler_tty.cc
+> +++ b/winsup/cygwin/fhandler_tty.cc
+> @@ -2069,6 +2069,36 @@ fhandler_pty_master::pty_master_fwd_thread ()
+>  	    else
+>  	      state = 0;
+>  
+> +	  /* Remove OSC Ps ; ? BEL/ST */
+> +	  for (DWORD i=0; i<rlen; i++)
+                     ^^^  ^^^^^^
+                     spaces
 
 Thanks,
 Corinna
