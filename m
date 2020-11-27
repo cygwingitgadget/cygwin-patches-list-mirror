@@ -1,34 +1,37 @@
-Return-Path: <mark@maxrnd.com>
-Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
- by sourceware.org (Postfix) with ESMTPS id D2E28385780D
- for <cygwin-patches@cygwin.com>; Fri, 27 Nov 2020 10:07:17 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org D2E28385780D
+Return-Path: <Stromeko@nexgo.de>
+Received: from vsmx009.vodafonemail.xion.oxcs.net
+ (vsmx009.vodafonemail.xion.oxcs.net [153.92.174.87])
+ by sourceware.org (Postfix) with ESMTPS id 4F57D3858021
+ for <cygwin-patches@cygwin.com>; Fri, 27 Nov 2020 18:38:09 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 4F57D3858021
 Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=maxrnd.com
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=mark@maxrnd.com
-Received: (from daemon@localhost)
- by m0.truegem.net (8.12.11/8.12.11) id 0ARA7Hpm006013
- for <cygwin-patches@cygwin.com>; Fri, 27 Nov 2020 02:07:17 -0800 (PST)
- (envelope-from mark@maxrnd.com)
-Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67),
- claiming to be "[192.168.1.100]"
- via SMTP by m0.truegem.net, id smtpd3msUjU; Fri Nov 27 02:07:09 2020
+ dmarc=none (p=none dis=none) header.from=nexgo.de
+Authentication-Results: sourceware.org;
+ spf=pass smtp.mailfrom=Stromeko@nexgo.de
+Received: from vsmx001.vodafonemail.xion.oxcs.net (unknown [192.168.75.191])
+ by mta-5-out.mta.xion.oxcs.net (Postfix) with ESMTP id 426B5159DB45
+ for <cygwin-patches@cygwin.com>; Fri, 27 Nov 2020 18:38:08 +0000 (UTC)
+Received: from Gertrud (unknown [84.160.202.5])
+ by mta-5-out.mta.xion.oxcs.net (Postfix) with ESMTPA id 17CB6159D630
+ for <cygwin-patches@cygwin.com>; Fri, 27 Nov 2020 18:38:05 +0000 (UTC)
+From: Achim Gratz <Stromeko@nexgo.de>
+To: cygwin-patches@cygwin.com
 Subject: Re: [PATCH] Cygwin: Speed up mkimport
-To: Cygwin Patches <cygwin-patches@cygwin.com>
 References: <20201126095620.38808-1-mark@maxrnd.com>
- <c9e9ed07-48fc-62d1-8288-c5ef88301a88@dronecode.org.uk>
-From: Mark Geisert <mark@maxrnd.com>
-Message-ID: <a8df021c-d340-a150-eeed-2063604e870f@maxrnd.com>
-Date: Fri, 27 Nov 2020 02:07:10 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Firefox/52.0 SeaMonkey/2.49.4
+ <87wny76eur.fsf@Rainer.invalid>
+ <ee4d7296-e9b3-13c8-cc15-f2e393b42e6f@maxrnd.com>
+Date: Fri, 27 Nov 2020 19:37:59 +0100
+In-Reply-To: <ee4d7296-e9b3-13c8-cc15-f2e393b42e6f@maxrnd.com> (Mark Geisert's
+ message of "Fri, 27 Nov 2020 01:56:02 -0800")
+Message-ID: <87360ubq7s.fsf@Rainer.invalid>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <c9e9ed07-48fc-62d1-8288-c5ef88301a88@dronecode.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00, BODY_8BITS,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, SPF_HELO_NONE,
- SPF_NONE, TXREP autolearn=no autolearn_force=no version=3.4.2
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-VADE-STATUS: LEGIT
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
+ RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H4, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE,
+ SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -43,51 +46,40 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 27 Nov 2020 10:07:19 -0000
+X-List-Received-Date: Fri, 27 Nov 2020 18:38:11 -0000
 
-Jon Turney wrote:
-> On 26/11/2020 09:56, Mark Geisert wrote:
->> @@ -86,8 +94,18 @@ for my $f (keys %text) {
->>       if (!$text{$f}) {
->>       unlink $f;
->>       } else {
->> -    system $objcopy, '-R', '.text', $f and exit 1;
->> -    system $objcopy, '-R', '.bss', '-R', '.data', "t-$f" and exit 1;
->> +    if ($forking && fork) {
->> +        # Testing shows parent does need to sleep a short time here,
->> +        # otherwise system is inundated with hundreds of objcopy processes
->> +        # and the forked perl processes that launched them.
->> +        my $delay = 0.01; # NOTE: Slower systems may need to raise this
->> +        select(undef, undef, undef, $delay); # Supports fractional seconds
->> +    } else {
->> +        # Do two objcopy calls at once to avoid one system() call overhead
->> +        system '(', $objcopy, '-R', '.text', $f, ')', '||',
->> +        $objcopy, '-R', '.bss', '-R', '.data', "t-$f" and exit 1;
->> +        exit 0 if $forking;
->> +    }
->>       }
->>   }
-> 
-> Hmm... not so sure about this.  This seems racy, as nothing ensures that these 
-> objcopies have finished before we combine all the produced .o files into a library.
+Mark Geisert writes:
+> Still faster than two system commands :-).  But thanks for the
+> comment;
 
-Good point.  I've added a hash to track the forked pids, and after each of these 
-two time-consuming loops finishes I loop over the pids list doing waitpid() on 
-each pid.
+It still seems you are barking up the wrong tree.
 
-> I'm pretty sure with more understanding, this whole thing could be done better:  
-> For example, from a brief look, it seems that the t-*.o files are produced by gas, 
-> and then we remove .bss and .data sections.  Could we not arrange to assemble 
-> these objects without those sections in the first place?
+> I thought I was merely grouping args, to get around Perl's
+> greedy arg list building for the system command.
 
-I looked over as's options in its man page but could not see anything obvious.  I 
-wonder if defining the sections explicitly as zero-length somehow in mkimport's 
-assembler snippets would accomplish the same thing.  I'll try this next.
+Wot?  It just takes a list which you can build any which way you desire.
+The other option is to give it the full command line in a string, which
+does work for this script (but not on Windows).  If it finds shell
+metacharacters in the arguments it'll run a shell, otherwise the forked
+perl just does an execve.
 
-Note that mkimport operates both on those tiny object files it creates with as, 
-but also on the object files created by the whole Cygwin build.  So adjusting the 
-latter object files would need to be done somewhere else.
-Thanks,
+If it's really the forking that is causing the slowdown, why not do
+either of those things:
 
-..mark
+a) Generate a complete shell script and fork once to run that.
 
+b) Open up two pipes to an "xargs -P $ncpu/2 L 1 =E2=80=A6" and feed in the=
+ file
+names.
+
+Getting the error codes back to the script and handling the error is
+left as an exercise for the reader.
+
+
+Regards,
+Achim.
+--=20
++<[Q+ Matrix-12 WAVE#46+305 Neuron microQkb Andromeda XTk Blofeld]>+
+
+Factory and User Sound Singles for Waldorf Q+, Q and microQ:
+http://Synth.Stromeko.net/Downloads.html#WaldorfSounds
