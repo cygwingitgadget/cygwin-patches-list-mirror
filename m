@@ -1,50 +1,50 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
- by sourceware.org (Postfix) with ESMTPS id E4AD638708C4
- for <cygwin-patches@cygwin.com>; Mon, 30 Nov 2020 14:21:25 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org E4AD638708C4
+Return-Path: <jon.turney@dronecode.org.uk>
+Received: from sa-prd-fep-044.btinternet.com (mailomta7-sa.btinternet.com
+ [213.120.69.13])
+ by sourceware.org (Postfix) with ESMTPS id 6A96B3857811
+ for <cygwin-patches@cygwin.com>; Mon, 30 Nov 2020 17:01:48 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 6A96B3857811
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=dronecode.org.uk
 Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MZk1p-1kewHD1TCZ-00Wl1g for <cygwin-patches@cygwin.com>; Mon, 30 Nov 2020
- 15:21:24 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id DDD3AA80D1D; Mon, 30 Nov 2020 15:21:23 +0100 (CET)
-Date: Mon, 30 Nov 2020 15:21:23 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: Fix access to block devices below /proc/sys.
-Message-ID: <20201130142123.GI303847@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <9c5f23af-ac11-3856-7aab-88dd1c184429@t-online.de>
- <20201130110344.GF303847@calimero.vinschen.de>
- <cd58c473-6aa4-b104-5909-5bd9ed6df1b1@t-online.de>
- <20201130140435.GH303847@calimero.vinschen.de>
+ spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
+Received: from sa-prd-rgout-004.btmx-prd.synchronoss.net ([10.2.38.7])
+ by sa-prd-fep-044.btinternet.com with ESMTP id
+ <20201130170147.GEMA11685.sa-prd-fep-044.btinternet.com@sa-prd-rgout-004.btmx-prd.synchronoss.net>
+ for <cygwin-patches@cygwin.com>; Mon, 30 Nov 2020 17:01:47 +0000
+Authentication-Results: btinternet.com;
+ auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 5ED9B6611CCABCD2
+X-Originating-IP: [86.139.158.14]
+X-OWM-Source-IP: 86.139.158.14 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedujedrudeitddgleehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefuvfhfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeeguefhkedvfeeigefhhedtjeehieegtdehhffhheffgfehheegtdffleejteeuueenucfkphepkeeirddufeelrdduheekrddugeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddrudduudgnpdhinhgvthepkeeirddufeelrdduheekrddugedpmhgrihhlfhhrohhmpeeojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhequceuqfffjgepkeeukffvoffkoffgpdhrtghpthhtohepoegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmqe
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from [192.168.1.111] (86.139.158.14) by
+ sa-prd-rgout-004.btmx-prd.synchronoss.net (5.8.340) (authenticated as
+ jonturney@btinternet.com)
+ id 5ED9B6611CCABCD2 for cygwin-patches@cygwin.com;
+ Mon, 30 Nov 2020 17:01:47 +0000
+Subject: Re: [PATCH] Use automake (v3)
+To: Cygwin Patches <cygwin-patches@cygwin.com>
+References: <20201124133720.45823-1-jon.turney@dronecode.org.uk>
+ <20201130102524.GC303847@calimero.vinschen.de>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+Message-ID: <768836f9-dc70-bc1d-ef7e-23f053376100@dronecode.org.uk>
+Date: Mon, 30 Nov 2020 17:01:45 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201130140435.GH303847@calimero.vinschen.de>
-X-Provags-ID: V03:K1:awSM01uuwdCkoqAJlDHcQk8zAhoyc+wRUvaXmCtGfDxJZ6M1a1J
- jrrmAYDmSEYxGaPRREBGnUw6Tq86xkEPa5QAx6S14UjxrXRL3PxPcNVmQlXe/5rXhf6US+6
- AdQaPYQWHbEbitHKO2XFEMX38/WKzOYmWLlXlkfDnkb2ApG3TKXgZilQG8vW1mLBzJm1AVp
- hFWt17letF1KddlpnKllQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:UbFXRMQeFCA=:hSZeF1jj2XsoA09jB+q1Fg
- /3e8xqtLkOuZBVcNOaE8rnjEhPnsEgzkk8OCdAuIvEriPpqoC5uStexn4RY3z3boF8ZVw0A43
- otWa8zhHaEVxCs8XrwIfUB2DMaUiFx2frhq0WX5RPp3ESAitY6co2oIpzRt63xOYXTgHiKRN/
- H8i4Oa4RRVKMBmJ8Fu3Fv5+op4Ci1nBdrfxipb0KlM5WXE4fB5QdS7U7tcXasEwFX/XbkRqv2
- phNta8a/6tjcMtSTwQUOnF96+YQYsUKGoJv5jSbc6nWs30zJ/ffS6VHxG+nizqy8iNM+LNSvb
- cDLPGJWGrI7+ScgiZzgJY42M7xvqEXr+wq9yBD0khr45V2OT0+TynPuwLLxUJI5u2fHCPTxMH
- kqHxR+qNKbmy+YxlHO88419I955zc+BUngjSge2PL8k7MlwEA+1UetH1cxbCpSLEOwPVulW94
- gqbWxEWAqQ==
-X-Spam-Status: No, score=-100.6 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+In-Reply-To: <20201130102524.GC303847@calimero.vinschen.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3571.8 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H4, RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_NONE,
+ TXREP autolearn=no autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -59,74 +59,49 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 30 Nov 2020 14:21:27 -0000
+X-List-Received-Date: Mon, 30 Nov 2020 17:01:50 -0000
 
-On Nov 30 15:04, Corinna Vinschen wrote:
-> On Nov 30 13:49, Christian Franke wrote:
-> > Corinna Vinschen wrote:
-> > > On Nov 28 22:59, Christian Franke wrote:
-> > > > ...
-> > > > The attached experimental patch does not fix the lseek() (sorry), but
-> > > > handles such block devices with fhandler_dev_floppy instead. Tested with
-> > > > above use cases.
-> > > > 
-> > > > I'm not sure whether this could break access to other /proc/sys block
-> > > > devices. This would happen if fh->exists() returns virt_blk for devices
-> > > > which do not support IOCTL_DISK_GET_DRIVE_GEOMETRY* or
-> > > > IOCTL_DISK_GET_PARTITION_INFO*.
-> > > Pushed, becasue it's a nice idea.  The above problem shouldn't happen,
-> > > in theory, but I'm not sure.  virt_blk is generated for devices types
-> > > 
-> > >    FILE_DEVICE_DISK
-> > >    FILE_DEVICE_CD_ROM
-> > >    FILE_DEVICE_VIRTUAL_DISK
-> > >    FILE_DEVICE_DFS
-> > >    FILE_DEVICE_NETWORK_FILE_SYSTEM
-> > > 
-> > > FILE_DEVICE_DFS or FILE_DEVICE_NETWORK_FILE_SYSTEM might be a problem,
-> > > but there should be a way to workaround that, if necessary, isn't it?
-> > > Maybe it's a bad idea to treat those as blk devices at all?
-> > 
-> > Could anything be read from such a node? If yes, treat as character device?
-> > 
-> > If no and /proc/sys/foo/bar/some/path allows access to /some/path behind
-> > DFS/NFS node /proc/sys/foo/bar, then treat as directory?
-> > 
-> > This is already the case for SMB shares:
-> > 
-> > $ ls -ld /proc/sys/DosDevices/X:
-> > lr-------- 1 ... 0 Nov 30 13:10 /proc/sys/DosDevices/X: ->
-> >   /proc/sys/Device/LanmanRedirector/;X:..../127.0.0.1/Share
-> > 
-> > $ ls -lLd /proc/sys/DosDevices/X:
-> > drwxr-xr-x 1 ... 0 Nov 14 09:06 /proc/sys/DosDevices/X:
-> > 
-> > $ ls -L /proc/sys/DosDevices/X:
-> > ... files on this share
+On 30/11/2020 10:25, Corinna Vinschen wrote:
+> Hi Jon,
 > 
-> ...and it's already the case for NFS shares, too:
+> On Nov 24 13:37, Jon Turney wrote:
+>> For ease of reviewing, this patch doesn't contain changes to generated
+>> files which would be made by running ./autogen.sh.
+>>
+>> v2:
+>> * Include tzmap.h in BUILT_SOURCES
+>> * Make per-file flags appear after user-supplied CXXFLAGS, so they can
+>> override optimization level.
+>> * Correct .o files used to define symbols exported by libm.a
+>> * Drop gcrt0.o mistakenly incuded in libgmon.a
+>> * Add missing line continuations in GMON_FILES value
+>>
+>> v3:
+>> * use per-file flags for .c compilation
+>> * override C{XX,}FLAGS, as they are set on the command line by top-level make
 > 
-> $ ls -ld /proc/sys/DosDevices/Y:
-> lr-------- 1 corinna vinschen 0 Nov 30 14:59 /proc/sys/DosDevices/Y: -> /proc/sys/Device/MRxNfs/;Y:00000000001cb27f/...
+> Running autogen.sh shows a couple of warnings:
 > 
-> $ ls -lLd /proc/sys/DosDevices/Y:
-> drwxr-xr-x 5 corinna vinschen 41 May 19  2016 /proc/sys/DosDevices/Y:
+> configure.ac:45: warning: 'INCLUDES' is the old name for 'AM_CPPFLAGS' (or '*_CPPFLAGS')
+> configure.ac:45: warning: 'INCLUDES' is the old name for 'AM_CPPFLAGS' (or '*_CPPFLAGS')
+> configure.ac:45: warning: 'INCLUDES' is the old name for 'AM_CPPFLAGS' (or '*_CPPFLAGS')
+> configure.ac:45: warning: 'INCLUDES' is the old name for 'AM_CPPFLAGS' (or '*_CPPFLAGS')
+> configure.ac:45: warning: 'INCLUDES' is the old name for 'AM_CPPFLAGS' (or '*_CPPFLAGS')
+> testsuite/cygrun/Makefile.am:16: warning: 'INCLUDES' is the old name for 'AM_CPPFLAGS' (or '*_CPPFLAGS')
+> configure.ac:45: warning: 'INCLUDES' is the old name for 'AM_CPPFLAGS' (or '*_CPPFLAGS')
+> automake: warning: redefinition of 'ps' ...
+> /usr/share/automake-1.16/am/program.am: ... 'ps$(EXEEXT)' previously defined here
+> utils/Makefile.am:15:   while processing program 'ps'
+> utils/mingw/Makefile.am:14: warning: 'INCLUDES' is the old name for 'AM_CPPFLAGS' (or '*_CPPFLAGS')
 > 
-> That means we don't have to handle FILE_DEVICE_NETWORK_FILE_SYSTEM in
-> the code creating the virt_blk device type at all.  I have high hopes
-> this is the same for DFS, albeit I can't test it...
+> Something to worry about?
 
-Oh, right, I just realized that \Device\MRxNfs, as well as
-\Device\LanmanRedirector are symlinks pointing below \Device\Mup:
+Thanks for taking a look.
 
-$ ls -l /proc/sys/Device/LanmanRedirector
-lr--r--r-- 1 Administrators SYSTEM 0 Nov 30 15:20 /proc/sys/Device/LanmanRedirector -> /proc/sys/Device/Mup/;LanmanRedirector
+These warnings are expected at the moment.
 
-$ ls -l /proc/sys/Device/MRxNfs
-lr--r--r-- 1 Administrators SYSTEM 0 Nov 30 15:20 /proc/sys/Device/MRxNfs -> /proc/sys/Device/Mup/;MRxNfs
+I plan to clean up INCLUDES -> CPPFLAGS in a future patch
 
-\Device\Mup is a character device and thus the devices below are not
-accessible for directory enumeration.  I assume it's the same for DFS.
-
-
-Corinna
+The redefinition of 'ps' is due to a conflict between a target built 
+into automake for postscript documentation and an executable we have 
+called 'ps'.  I'm not sure how to address that.
