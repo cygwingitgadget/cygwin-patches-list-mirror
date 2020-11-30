@@ -1,45 +1,45 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
- by sourceware.org (Postfix) with ESMTPS id EDEDB3833012
- for <cygwin-patches@cygwin.com>; Mon, 30 Nov 2020 10:47:57 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org EDEDB3833012
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+ by sourceware.org (Postfix) with ESMTPS id 9DFC738708B2
+ for <cygwin-patches@cygwin.com>; Mon, 30 Nov 2020 11:03:46 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 9DFC738708B2
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=cygwin.com
 Authentication-Results: sourceware.org;
  spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MGgRW-1kxUVC3EGo-00DpXZ for <cygwin-patches@cygwin.com>; Mon, 30 Nov 2020
- 11:47:56 +0100
+ mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MQeIA-1kVrbr0xl8-00NeMQ for <cygwin-patches@cygwin.com>; Mon, 30 Nov 2020
+ 12:03:45 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id E142BA80D0E; Mon, 30 Nov 2020 11:47:55 +0100 (CET)
-Date: Mon, 30 Nov 2020 11:47:55 +0100
+ id 86242A80D0E; Mon, 30 Nov 2020 12:03:44 +0100 (CET)
+Date: Mon, 30 Nov 2020 12:03:44 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2 0/2] proc(5) man page
-Message-ID: <20201130104755.GE303847@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: Fix access to block devices below /proc/sys.
+Message-ID: <20201130110344.GF303847@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20201125064931.17081-1-Brian.Inglis@SystematicSW.ab.ca>
+References: <9c5f23af-ac11-3856-7aab-88dd1c184429@t-online.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201125064931.17081-1-Brian.Inglis@SystematicSW.ab.ca>
-X-Provags-ID: V03:K1:kp/uk+axXYeP8psLXSsN/Ed6+fpNhNtD4wGZ04k4baPc0eJQ1Wk
- EhX4SJy4g593UyeWdxfT97OTWQiWjKgAV37zqcZ6b0Ydl2VRslW3oVaktgD1Hi+c/++N100
- sHw4FIzCesyE6QfeexZX9+07nkhzz/QYCAqV+zOQvk4YSjAbgDp/wQ01LbGNeFiqzw2QuyI
- JhK6fuYMVwdJS/yK4I/Pw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:GDXVpiFR610=:Y5lDnM8dyv3WTMhuN37kMk
- 6JutDMYfjogBHsBvALxlkmFDlGhBPGibyfYFZVqZ43i6Jn2AiLlQ36vaRRm2ZOoCIDFnTaXQP
- 3EVkK9fZhEYCVj2hDSnFsSOAwNtm0fTVtAfupwBfMFGtjEI/yeZbnVaGPwuJ2g4wstxq2NZNp
- /Bzf82Eqa5rx3mKbBpwzkL0L73L0NMGfN3WXI4rqhDRQoX2aI4Io/Uxsub7fawlFkcxojFbqd
- NZtNnjjzkr8zUwwUr0jj4XL0Y2amoXUcJdI9OGtwUsCiQWIIfVKfY6VjVtson0LNsKV02YBw6
- VQWwcyjUwnIThubJfc45tn7yv0S3CRSFAKJXk4KeArvOpCVvo2exD7SqtGlKcLKH4MZYmPKWM
- QdGUW2nr2HkaUjrkduBS6FwxnFEJqZaxpt4OB7j4SXbTnXfLIrVkPqeNrYlgHeT/EOAZhq/i9
- wxFxl2eguw==
-X-Spam-Status: No, score=-100.6 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+In-Reply-To: <9c5f23af-ac11-3856-7aab-88dd1c184429@t-online.de>
+X-Provags-ID: V03:K1:FEl9aPg7GhSf3+2GRi/zXtNlbyZhcgR6ndfB23XV7mgCa8QZzYi
+ 9zgDAKRfoZr8cXQoq7pzR311YyHXXxgmjKbDqilI62uUSybD3DAC4Ace5VqlD7X4LkbmWK0
+ 7l05qZL6pIkHXMssJgjC4WwH4+gCsLf4xPlUVv9Za2/Jp/soRwKRrdMo9u11YG4vVagcQ7V
+ H50NhF5PIdBGFN/Elqc0w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:5fYNXBLhu3s=:wj4dJjEg4WgKr7W826snLQ
+ Hu/huQxxxswvmvGL4W1Fkdoy8xGYEHD6wMrwOKmRHww1XMY6s2r6vqMKqlHJCR64rN5Pl4q3d
+ lYX21lT6AXj2W6LqxBSgGta2x3XLupu44jgFdgEzL2/hxUfFGyqRXY8WYsgAqDsiR40D5EKEo
+ jTy1VcJCe0E9vQy5ITt5URcn9z6R1PV8vmnk5txVOs6e3OAzWRExY05TGgOg8JzVJGWJAe2/a
+ p5Z+Y9LPAZowvpXpgtsVgGsNjMX6HkAUz8aWYtLabqFYuNYC0eshlcoaLe2IMnFND0EoTX8nH
+ yQ2f6gkYZTF3EjZ5+ZaCqccxsCyxyOsjbvgcLZ3Jw2FaW46Nl/zWix5rWgWyjbCos+m5CgLbl
+ aVKDMzEjN6EQOCniMZ8cPQk3dxy6W5nvmrdfWOfC+h2r6vK8cCHzJkRSvWNYihxfR+7touX+F
+ nGXZKA6d0Q==
+X-Spam-Status: No, score=-100.8 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -55,23 +55,46 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 30 Nov 2020 10:47:59 -0000
+X-List-Received-Date: Mon, 30 Nov 2020 11:03:48 -0000
 
-Hi Brian,
-
-On Nov 24 23:49, Brian Inglis wrote:
-> Brian Inglis (2):
->   specialnames.xml: add proc(5) Cygwin man page
->   winsup/doc/Makefile.in: create man5 dir and install generated proc.5
+On Nov 28 22:59, Christian Franke wrote:
+> There a very few but occasionally interesting use cases for read access to
+> block devices below /proc/sys:
 > 
->  winsup/doc/Makefile.in      |    4 +
->  winsup/doc/specialnames.xml | 2094 +++++++++++++++++++++++++++++++++++
->  2 files changed, 2098 insertions(+)
+> - Read raw images behind drive letters which are not linked to regular
+> /dev/sdXN partitions. For example read decrypted images of VeraCrypt
+> partitions or container files:
+> /proc/sys/DosDevices/X: -> /proc/sys/Device/VeraCryptVolumeX
 > 
-> -- 
-> 2.29.2
+> - Read raw images of Volume Shadow Copies:
+> /proc/sys/Device/HarddiskVolumeShadowCopy*
+> 
+> Copying such an image actually works with 'dd', but 'ddrescue' reports a non
+> seekable device. This is because fhandler_virtual::lseek() is used. It calls
+> fhandler_procsys::fill_filebuf() which does not make any sense in this
+> context. This lseek() always fails - without setting errno, BTW.
+> 
+> The attached experimental patch does not fix the lseek() (sorry), but
+> handles such block devices with fhandler_dev_floppy instead. Tested with
+> above use cases.
+> 
+> I'm not sure whether this could break access to other /proc/sys block
+> devices. This would happen if fh->exists() returns virt_blk for devices
+> which do not support IOCTL_DISK_GET_DRIVE_GEOMETRY* or
+> IOCTL_DISK_GET_PARTITION_INFO*.
 
-It would be helpful if you could outline the changes from v1.
+Pushed, becasue it's a nice idea.  The above problem shouldn't happen,
+in theory, but I'm not sure.  virt_blk is generated for devices types
+
+  FILE_DEVICE_DISK
+  FILE_DEVICE_CD_ROM
+  FILE_DEVICE_VIRTUAL_DISK
+  FILE_DEVICE_DFS
+  FILE_DEVICE_NETWORK_FILE_SYSTEM
+
+FILE_DEVICE_DFS or FILE_DEVICE_NETWORK_FILE_SYSTEM might be a problem,
+but there should be a way to workaround that, if necessary, isn't it?
+Maybe it's a bad idea to treat those as blk devices at all?
 
 
 Thanks,
