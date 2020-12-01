@@ -1,41 +1,45 @@
-Return-Path: <brian.inglis@systematicsw.ab.ca>
-Received: from smtp-out-so.shaw.ca (smtp-out-so.shaw.ca [64.59.136.138])
- by sourceware.org (Postfix) with ESMTPS id A4AF33844041
- for <cygwin-patches@cygwin.com>; Tue,  1 Dec 2020 16:49:47 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org A4AF33844041
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=SystematicSw.ab.ca
+Return-Path: <Christian.Franke@t-online.de>
+Received: from mailout05.t-online.de (mailout05.t-online.de [194.25.134.82])
+ by sourceware.org (Postfix) with ESMTPS id AC643389203D
+ for <cygwin-patches@cygwin.com>; Tue,  1 Dec 2020 18:48:16 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org AC643389203D
 Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
-Received: from [192.168.1.104] ([24.64.172.44]) by shaw.ca with ESMTP
- id k8qXkVIODbYg3k8qYkr9Yq; Tue, 01 Dec 2020 09:49:46 -0700
-X-Authority-Analysis: v=2.4 cv=Q4RsX66a c=1 sm=1 tr=0 ts=5fc6742a
- a=kiZT5GMN3KAWqtYcXc+/4Q==:117 a=kiZT5GMN3KAWqtYcXc+/4Q==:17
- a=IkcTkHD0fZMA:10 a=CCpqsmhAAAAA:8 a=uYT-Tk0qkVT609LjNaIA:9 a=QEXdDO2ut3YA:10
- a=xzThDHTN9DUA:10 a=ul9cdbp4aOFLsgKbc677:22
-Reply-To: cygwin-patches@cygwin.com
+ dmarc=none (p=none dis=none) header.from=t-online.de
+Authentication-Results: sourceware.org;
+ spf=none smtp.mailfrom=Christian.Franke@t-online.de
+Received: from fwd19.aul.t-online.de (fwd19.aul.t-online.de [172.20.27.65])
+ by mailout05.t-online.de (Postfix) with SMTP id 5E63B425306D
+ for <cygwin-patches@cygwin.com>; Tue,  1 Dec 2020 19:48:14 +0100 (CET)
+Received: from [192.168.2.101]
+ (ZkRC-rZLghk0w-9HO5DRtv03egM9-MpN5AzZ88bBddcniGeibJpcw9KHTB6sHq2wb1@[79.230.165.86])
+ by fwd19.t-online.de
+ with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
+ esmtp id 1kkAhC-0tu9Tc0; Tue, 1 Dec 2020 19:48:14 +0100
+Subject: Re: [PATCH] Cygwin: Fix access to block devices below /proc/sys.
 To: cygwin-patches@cygwin.com
-References: <20201125064931.17081-1-Brian.Inglis@SystematicSW.ab.ca>
- <20201130104755.GE303847@calimero.vinschen.de>
- <f6be8646-4e4c-9133-f9ac-00a89a437aad@SystematicSw.ab.ca>
- <20201201095554.GK303847@calimero.vinschen.de>
-From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
-Organization: Systematic Software
-Subject: Re: [PATCH v2 0/2] proc(5) man page
-Message-ID: <48e990d4-f527-1eb1-f2ce-6fc0e594c99d@SystematicSw.ab.ca>
-Date: Tue, 1 Dec 2020 09:49:45 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+References: <9c5f23af-ac11-3856-7aab-88dd1c184429@t-online.de>
+ <20201130110344.GF303847@calimero.vinschen.de>
+ <cd58c473-6aa4-b104-5909-5bd9ed6df1b1@t-online.de>
+ <20201130140435.GH303847@calimero.vinschen.de>
+ <20201130142123.GI303847@calimero.vinschen.de>
+ <c07b35fb-525f-0744-0297-af49aa219cdd@t-online.de>
+ <20201201160455.GN303847@calimero.vinschen.de>
+From: Christian Franke <Christian.Franke@t-online.de>
+Message-ID: <46d31f81-d077-b088-6e07-3684582f666d@t-online.de>
+Date: Tue, 1 Dec 2020 19:48:13 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101
+ SeaMonkey/2.53.4
 MIME-Version: 1.0
-In-Reply-To: <20201201095554.GK303847@calimero.vinschen.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-CA
+In-Reply-To: <20201201160455.GN303847@calimero.vinschen.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfBBzVUhRo2OITPVlkq+r/Ci2rg2alIxVt8746ube5GVvzntmk1GyHblJBzdcZhK2vL6rSJ2MT1VpyTeRRglibiyopureU3ekSbsCQrJcbrT6TRHUoSdp
- cpx6l+hUYGWCv14EGS71DL4jF5PU0U/NZpjuAq56yOXfnivF/dvTOxPrmlJLpSabboETnG59g6wKThr48AZzPzjV6aHl20ANub8=
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
- KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H2,
- SPF_HELO_NONE, SPF_NONE, TXREP autolearn=no autolearn_force=no version=3.4.2
+X-ID: ZkRC-rZLghk0w-9HO5DRtv03egM9-MpN5AzZ88bBddcniGeibJpcw9KHTB6sHq2wb1
+X-TOI-EXPURGATEID: 150726::1606848494-00008954-2D053CEF/0/0 CLEAN NORMAL
+X-TOI-MSGID: faa81660-fd8d-4853-b618-10d3d1852722
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00, BODY_8BITS,
+ FREEMAIL_FROM, KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE,
+ SPF_NONE, TXREP autolearn=no autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -50,49 +54,49 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 01 Dec 2020 16:49:49 -0000
+X-List-Received-Date: Tue, 01 Dec 2020 18:48:18 -0000
 
-On 2020-12-01 02:55, Corinna Vinschen wrote:
-> On Nov 30 17:57, Brian Inglis wrote:
->> On 2020-11-30 03:47, Corinna Vinschen wrote:
->>> On Nov 24 23:49, Brian Inglis wrote:
->>>> Brian Inglis (2):
->>>>     specialnames.xml: add proc(5) Cygwin man page
->>>>     winsup/doc/Makefile.in: create man5 dir and install generated proc.5
->>>>
->>>>    winsup/doc/Makefile.in      |    4 +
->>>>    winsup/doc/specialnames.xml | 2094 +++++++++++++++++++++++++++++++++++
->>>>    2 files changed, 2098 insertions(+)
+Corinna Vinschen wrote:
+> On Dec  1 16:59, Christian Franke wrote:
+>> Corinna Vinschen wrote:
+>>> \Device\Mup is a character device and thus the devices below are not
+>>> accessible for directory enumeration.  I assume it's the same for DFS.
+>> Here I see \Device\Mup as a block device on two systems (cygwin1.dll 3.1.7):
 >>
->>> It would be helpful if you could outline the changes from v1.
->>
->> Those were fairly minor fixes to content and some processing outlined in the
->> (lengthy) responses to Jon's (lengthy) comments under:
->> https://sourceware.org/pipermail/cygwin-patches/2020q4/010829.html
->>
->> and I have copied them below, so please clarify if the below is not what you want?
-> 
-> I was after a short list with bullet points, ratehr than copying
-> an email I have in my inbox anyway :}
-> 
-> Jon, can you please take another look, too?
+>> $ ls -l /proc/sys/Device/Mup
+>> brwxrwx--x 1 Administrators SYSTEM 0, 250 Dec  1 16:50 /proc/sys/Device/Mup
+> Huh?
+>
+> $ ls -l /proc/sys/Device/Mup
+> crwxrwx--x 1 Administrators SYSTEM 0, 250 Dec  1 17:04 /proc/sys/Device/Mup
+>
+> This is what I'd expect.  Can you debug why this is a block device
+> on your systems?
+>
 
-* patches are sent directly from git send-email
-* trailing whitespace only in Makefile.in context lines so left as is
-* comment changed to "based on" Linux manpages project proc(5)
-* dates retained to show how current content is, rather than when last built
-* /proc/loadavg 'D' state mention removed
-* /proc/registry Windows changed to Cygwin to clarify this variation
-* /proc/version kernel changed to Cygwin
-* Notes subsection missing title and Copyright subsection not included in 
-standalone man page due to Colophon subsection messing up man rendering
-* removed Colophon subsection and Notes reappears properly and Copyright is 
-included; other system show these under Notes except RH uses Caveats
-* retain remap attributes as Docbook rendering hints
+NtQueryVolumeInformationFile() returns {DeviceType = 0x14, 
+Characteristics = 0x20010}
 
--- 
-Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
+fhandler_procsys::exists(...):
+...
+   status = NtOpenFile (&h, READ_CONTROL | FILE_READ_ATTRIBUTES, &attr, &io,
+                   FILE_SHARE_VALID_FLAGS, FILE_OPEN_FOR_BACKUP_INTENT);
+...
+   if (NT_SUCCESS (status))
+     {
+       FILE_FS_DEVICE_INFORMATION ffdi;
+...
+       /* Check for the device type. */
+       status = NtQueryVolumeInformationFile (h, &io, &ffdi, sizeof ffdi,
+                          FileFsDeviceInformation);
+...
+       if (NT_SUCCESS (status))
+       {
+         if (ffdi.DeviceType == FILE_DEVICE_NETWORK_FILE_SYSTEM)
+           file_type = virt_blk;  <<===============
+        ...
 
-This email may be disturbing to some readers as it contains
-too much technical detail. Reader discretion is advised.
-[Data in binary units and prefixes, physical quantities in SI.]
+
+Thanks,
+Christian
+
