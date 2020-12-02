@@ -1,54 +1,53 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
- by sourceware.org (Postfix) with ESMTPS id A9D823944826
- for <cygwin-patches@cygwin.com>; Tue,  1 Dec 2020 19:37:00 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org A9D823944826
+Return-Path: <jon.turney@dronecode.org.uk>
+Received: from re-prd-fep-040.btinternet.com (mailomta4-re.btinternet.com
+ [213.120.69.97])
+ by sourceware.org (Postfix) with ESMTPS id ED3E9395C81D
+ for <cygwin-patches@cygwin.com>; Wed,  2 Dec 2020 15:36:16 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org ED3E9395C81D
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=dronecode.org.uk
 Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=cygwin.com
-Authentication-Results: sourceware.org;
- spf=fail smtp.mailfrom=corinna-cygwin@cygwin.com
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1Ml72g-1kKmL10SgG-00lU76 for <cygwin-patches@cygwin.com>; Tue, 01 Dec 2020
- 20:36:59 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 3EE66A80D13; Tue,  1 Dec 2020 20:36:58 +0100 (CET)
-Date: Tue, 1 Dec 2020 20:36:58 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: Fix access to block devices below /proc/sys.
-Message-ID: <20201201193658.GO303847@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <9c5f23af-ac11-3856-7aab-88dd1c184429@t-online.de>
- <20201130110344.GF303847@calimero.vinschen.de>
- <cd58c473-6aa4-b104-5909-5bd9ed6df1b1@t-online.de>
- <20201130140435.GH303847@calimero.vinschen.de>
- <20201130142123.GI303847@calimero.vinschen.de>
- <c07b35fb-525f-0744-0297-af49aa219cdd@t-online.de>
- <20201201160455.GN303847@calimero.vinschen.de>
- <46d31f81-d077-b088-6e07-3684582f666d@t-online.de>
+ spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
+Received: from re-prd-rgout-005.btmx-prd.synchronoss.net ([10.2.54.8])
+ by re-prd-fep-040.btinternet.com with ESMTP id
+ <20201202153615.NIVA20789.re-prd-fep-040.btinternet.com@re-prd-rgout-005.btmx-prd.synchronoss.net>
+ for <cygwin-patches@cygwin.com>; Wed, 2 Dec 2020 15:36:15 +0000
+Authentication-Results: btinternet.com;
+ auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
+X-SNCR-Rigid: 5ED9C74D1CCD3EB4
+X-Originating-IP: [86.139.158.14]
+X-OWM-Source-IP: 86.139.158.14 (GB)
+X-OWM-Env-Sender: jonturney@btinternet.com
+X-VadeSecure-score: verdict=clean score=0/300, class=clean
+X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedujedrudeigedgkedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefuvfhfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeeguefhkedvfeeigefhhedtjeehieegtdehhffhheffgfehheegtdffleejteeuueenucfkphepkeeirddufeelrdduheekrddugeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddrudduudgnpdhinhgvthepkeeirddufeelrdduheekrddugedpmhgrihhlfhhrohhmpeeojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhequceuqfffjgepkeeukffvoffkoffgpdhrtghpthhtohepoegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmqe
+X-RazorGate-Vade-Verdict: clean 0
+X-RazorGate-Vade-Classification: clean
+Received: from [192.168.1.111] (86.139.158.14) by
+ re-prd-rgout-005.btmx-prd.synchronoss.net (5.8.340) (authenticated as
+ jonturney@btinternet.com)
+ id 5ED9C74D1CCD3EB4 for cygwin-patches@cygwin.com;
+ Wed, 2 Dec 2020 15:36:15 +0000
+Subject: Re: [PATCH] Use automake (v3)
+To: Cygwin Patches <cygwin-patches@cygwin.com>
+References: <20201124133720.45823-1-jon.turney@dronecode.org.uk>
+ <20201130102524.GC303847@calimero.vinschen.de>
+ <20201130104718.GD303847@calimero.vinschen.de>
+ <6fa43a94-c29d-fa48-07d0-1ef095d9f5e3@dronecode.org.uk>
+ <20201201091833.GJ303847@calimero.vinschen.de>
+From: Jon Turney <jon.turney@dronecode.org.uk>
+Message-ID: <b8610713-5e7d-7b19-93f1-3ded9ca12bc6@dronecode.org.uk>
+Date: Wed, 2 Dec 2020 15:36:13 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <46d31f81-d077-b088-6e07-3684582f666d@t-online.de>
-X-Provags-ID: V03:K1:3Ypnzlh6MJtI8me6EVRyW59J1lWg8mdOySL2R+P3kiRJXXbks9i
- ZsaW+pV89KvstKtn6oZW0ecDxUjOxySFb1IVrwLizqiGo3TKgwE+uqa05rE/UI5cM+UWoR+
- 7DFc3tl5iL5ZWqw0pqv9jdqWVxeh6tglaF94XyV/JQmgJpxkC6gAqq0no9kXZRpOIQssrSK
- V+JYb1p0puETmZXGZm0Kw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:heD6R0TopbQ=:i1EXz1ofY6/lqy1Tfnz/JR
- MJVNPFJFLdbiYcUyD6dDEPRiZGy0mBeZvOKxWeL6uO+ddmvh8iLcxQp2pG0BWlZZYz4iTwCsm
- YVLYcM3CsqpH2GbScIYvDszkPYvt9hhZGxUDkrmq4KqbB8V9b8/GqT8N+ME+FgSfLMjCsXqdC
- ulcJgeL0J1OEDra/Ik4100/qFi1puSgGVMR2IebkVbCqVIphmPgQ43B/e2lbrCeueFXKYjtfv
- lS9UQOV2Su16Y0CkMmX4RHVp5G3dCcb/FDVK39tPdX/fcKLQhpH194rpLyTmDmBGLfmSFmQZ2
- h2WC29fouYyMw1gZG16pa/OZde2UmcwdcDj3YGvLwRSSSJW/1IxByOG0YEEi2GIEOk3wufQT+
- V75SWv+c31L9FmdGXIYBw0tCI0alzGzMnoUtl2wilxBPYASEmXTkPJ8JTmCTH9E9tLXtRvzUU
- vVF0o0OiZw==
-X-Spam-Status: No, score=-99.3 required=5.0 tests=BAYES_00, BODY_8BITS,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+In-Reply-To: <20201201091833.GJ303847@calimero.vinschen.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3571.8 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_NONE,
+ TXREP autolearn=no autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -63,52 +62,18 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 01 Dec 2020 19:37:02 -0000
+X-List-Received-Date: Wed, 02 Dec 2020 15:36:19 -0000
 
-On Dec  1 19:48, Christian Franke wrote:
-> Corinna Vinschen wrote:
-> > On Dec  1 16:59, Christian Franke wrote:
-> > > Corinna Vinschen wrote:
-> > > > \Device\Mup is a character device and thus the devices below are not
-> > > > accessible for directory enumeration.  I assume it's the same for DFS.
-> > > Here I see \Device\Mup as a block device on two systems (cygwin1.dll 3.1.7):
-> > > 
-> > > $ ls -l /proc/sys/Device/Mup
-> > > brwxrwx--x 1 Administrators SYSTEM 0, 250 Dec  1 16:50 /proc/sys/Device/Mup
-> > Huh?
-> > 
-> > $ ls -l /proc/sys/Device/Mup
-> > crwxrwx--x 1 Administrators SYSTEM 0, 250 Dec  1 17:04 /proc/sys/Device/Mup
-> > 
-> > This is what I'd expect.  Can you debug why this is a block device
-> > on your systems?
-> > 
+On 01/12/2020 09:18, Corinna Vinschen wrote:
 > 
-> NtQueryVolumeInformationFile() returns {DeviceType = 0x14, Characteristics =
-> 0x20010}
-> 
-> fhandler_procsys::exists(...):
-> ...
->   status = NtOpenFile (&h, READ_CONTROL | FILE_READ_ATTRIBUTES, &attr, &io,
->                   FILE_SHARE_VALID_FLAGS, FILE_OPEN_FOR_BACKUP_INTENT);
-> ...
->   if (NT_SUCCESS (status))
->     {
->       FILE_FS_DEVICE_INFORMATION ffdi;
-> ...
->       /* Check for the device type. */
->       status = NtQueryVolumeInformationFile (h, &io, &ffdi, sizeof ffdi,
->                          FileFsDeviceInformation);
-> ...
->       if (NT_SUCCESS (status))
->       {
->         if (ffdi.DeviceType == FILE_DEVICE_NETWORK_FILE_SYSTEM)
->           file_type = virt_blk;  <<===============
->        ...
+> What bugs me is that the mingw executables are built in utils/mingw,
+> but the object files are still in utils.  Any problem generating the
+> object files in utils/mingw, too?
 
+Not easily.
 
-Uh... ok, that's what had changed with commit 80e35a211f69 as of
-this morning :}
+This behaviour can be turned off by not using the 'subdir-objects' 
+automake option.
 
-
-Corinna
+But then automake warns that option is disabled (since it's going to be 
+the default in future).
