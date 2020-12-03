@@ -1,50 +1,28 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
- by sourceware.org (Postfix) with ESMTPS id D28A8396D818
- for <cygwin-patches@cygwin.com>; Wed,  2 Dec 2020 19:03:51 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org D28A8396D818
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MYeV1-1kfEFJ2PwJ-00Vkzd for <cygwin-patches@cygwin.com>; Wed, 02 Dec 2020
- 20:03:50 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 71B23A80D26; Wed,  2 Dec 2020 20:03:49 +0100 (CET)
-Date: Wed, 2 Dec 2020 20:03:49 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <cygwin@jdrake.com>
+Received: from mail231.csoft.net (mail231.csoft.net [96.47.74.235])
+ by sourceware.org (Postfix) with ESMTPS id 2C3E43858C27
+ for <cygwin-patches@cygwin.com>; Thu,  3 Dec 2020 21:21:40 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 2C3E43858C27
+Received: from mail231.csoft.net (localhost [127.0.0.1])
+ by mail231.csoft.net (Postfix) with ESMTP id 2D24ECB81
+ for <cygwin-patches@cygwin.com>; Thu,  3 Dec 2020 16:21:38 -0500 (EST)
+Received: from mail231 (mail231 [96.47.74.235])
+ (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+ (No client certificate requested) (Authenticated sender: jeremyd)
+ by mail231.csoft.net (Postfix) with ESMTPSA id 2B7E4CB56
+ for <cygwin-patches@cygwin.com>; Thu,  3 Dec 2020 16:21:38 -0500 (EST)
+Date: Thu, 3 Dec 2020 13:21:38 -0800 (PST)
+From: Jeremy Drake <cygwin@jdrake.com>
+X-X-Sender: jeremyd@resin.csoft.net
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Use automake (v3)
-Message-ID: <20201202190349.GY303847@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20201124133720.45823-1-jon.turney@dronecode.org.uk>
- <20201130102524.GC303847@calimero.vinschen.de>
- <20201130104718.GD303847@calimero.vinschen.de>
- <6fa43a94-c29d-fa48-07d0-1ef095d9f5e3@dronecode.org.uk>
- <20201201091833.GJ303847@calimero.vinschen.de>
- <b8610713-5e7d-7b19-93f1-3ded9ca12bc6@dronecode.org.uk>
- <20201202170526.GW303847@calimero.vinschen.de>
- <161bd779-bd17-1e98-5644-bea42c3206cf@dronecode.org.uk>
- <42d8f1f139939b45fef85d00c3e368cf2500b603.camel@cygwin.com>
+Subject: [PATCH 1/1] cygwin: use CREATE_DEFAULT_ERROR_MODE in spawn
+Message-ID: <alpine.BSO.2.21.2012031317260.9707@resin.csoft.net>
+User-Agent: Alpine 2.21 (BSO 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <42d8f1f139939b45fef85d00c3e368cf2500b603.camel@cygwin.com>
-X-Provags-ID: V03:K1:RmJTTcWdSNM4R/bi8tcFftDv7dLXxa5miO62wJVr74/3P/bHXTD
- F+NNBVIFPuiTUTAfI6Pu1UqQ9uOowWhuHHogFIWiCTGQ+zjxqiYy6jFotUy1QiiLg2bUOMT
- tRQDSVnqZUeC52Hiie5Q0Z36bzu2g9MVCJuFmtfXif6AuKcXc+Bp+l4H/8pyc7CIYqSfV5X
- Ie3C5SX28yRAiCVY6dyqQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:768Bye3SQdw=:DQEh10/I6yMeoZH63ZKKaB
- /I8R7XhmC8HNZILs2aBkbShVv277s3i79jUU/C84aVJObCr/2LGMu87VPUFRP+o2CJkSxfDeH
- L7AhXWiZvbbjpS0Y7Pn1dgZue96eDJmLs5OJnhSOwnX9trZr5T7Uuu3Nyl3J4vrqpMx7y0Vz1
- q6c2ztE3OoKa6NIdMNWl/RT1OjJ3TeQH1Efmi+7VrV5iXw/Ic53zhUIfzr/ZR88L9sYP+QLnX
- DE5Ttp9Qf+binh6U2yZJDQhP5pKuf2QfW5y2HTtS8roMYbqXUaQqQoVvFUufhDuMpQomnx1FT
- U6i/1+uVRjhzN9sRevVY9j5Bz3NjOH7xwRlXdDJHN/LXMo+DeJSvt9a5bVE2AGxC/zOafEsES
- m3DbE/GKFJDHuOII4V66qxqoykAZ0eJmf0PeVlMZNPZ1NzSHdVHkV1SnIdyOe/b66sG27cuMr
- RsJRWHeIKQ==
-X-Spam-Status: No, score=-100.7 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-14.8 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_LOW,
+ SPF_HELO_PASS, SPF_PASS autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -59,50 +37,83 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 02 Dec 2020 19:03:53 -0000
+X-List-Received-Date: Thu, 03 Dec 2020 21:21:41 -0000
 
-On Dec  2 13:33, Yaakov Selkowitz via Cygwin-patches wrote:
-> On Wed, 2020-12-02 at 18:03 +0000, Jon Turney wrote:
-> > On 02/12/2020 17:05, Corinna Vinschen via Cygwin-patches wrote:
-> > > On Dec  2 15:36, Jon Turney wrote:
-> > > > On 01/12/2020 09:18, Corinna Vinschen wrote:
-> > > > > What bugs me is that the mingw executables are built in
-> > > > > utils/mingw,
-> > > > > but the object files are still in utils.  Any problem
-> > > > > generating the
-> > > > > object files in utils/mingw, too?
-> > > > 
-> > > > Not easily.
-> > > > 
-> > > > This behaviour can be turned off by not using the 'subdir-
-> > > > objects' automake
-> > > > option.
-> > > > 
-> > > > But then automake warns that option is disabled (since it's going
-> > > > to be the
-> > > > default in future).
-> > > 
-> > > So why not just move the mingw source files to utils/mingw, too?
-> > 
-> > There's probably some scope for doing that, but not in all cases, as 
-> > some files are built multiple times with different compilers and/or
-> > flags.
-> > 
-> > e.g. path.cc is built with a cygwin compiler and -DFSTAB as part of 
-> > mount, with a MinGW compiler as part of cygcheck, and with a MinGW 
-> > compiler and -DTESTSUITE as part of path-testsuite.
-> 
-> Then something like:
-> 
-> $ cat > winsup/utils/mingw/path.cc <<_EOF
-> #define MINGW // whatever is needed here...
-> #include "../path.cc"
-> _EOF
-> 
-> ??
+if a new CYGWIN/MSYS environment option `winjitdebug` is true, allowing
+native subprocesses to get Windows-default error handling behavior (such
+as invoking the registered JIT debugger).  Cygwin processes will quickly
+set their error mode on start, so getting JIT debugging for them will
+still require setting `error_start`.
 
-+1
+This patch was previously submitted to MSYS2
+(https://github.com/msys2/msys2-runtime/pull/18) but it was suggested I
+should try sending it upstream.
 
-> 
-> -- 
-> Yaakov
+---
+ winsup/cygwin/environ.cc | 1 +
+ winsup/cygwin/globals.cc | 1 +
+ winsup/cygwin/spawn.cc   | 2 ++
+ winsup/doc/cygwinenv.xml | 9 +++++++++
+ 4 files changed, 13 insertions(+)
+
+diff --git a/winsup/cygwin/environ.cc b/winsup/cygwin/environ.cc
+index 3a03657db..fa47f4b31 100644
+--- a/winsup/cygwin/environ.cc
++++ b/winsup/cygwin/environ.cc
+@@ -120,6 +120,7 @@ static struct parse_thing
+   {"wincmdln", {&wincmdln}, setbool, NULL, {{false}, {true}}},
+   {"winsymlinks", {func: set_winsymlinks}, isfunc, NULL, {{0}, {0}}},
+   {"disable_pcon", {&disable_pcon}, setbool, NULL, {{false}, {true}}},
++  {"winjitdebug", {&spawn_default_errmode}, setbool, NULL, {{false}, {true}}},
+   {NULL, {0}, setdword, 0, {{0}, {0}}}
+ };
+
+diff --git a/winsup/cygwin/globals.cc b/winsup/cygwin/globals.cc
+index 942bd1c83..2d2ac0949 100644
+--- a/winsup/cygwin/globals.cc
++++ b/winsup/cygwin/globals.cc
+@@ -71,6 +71,7 @@ bool reset_com;
+ bool wincmdln;
+ winsym_t allow_winsymlinks = WSYM_sysfile;
+ bool disable_pcon;
++bool spawn_default_errmode;
+
+ bool NO_COPY in_forkee;
+
+diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
+index 92d190d1a..6239e3539 100644
+--- a/winsup/cygwin/spawn.cc
++++ b/winsup/cygwin/spawn.cc
+@@ -430,6 +430,8 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+       sigproc_printf ("priority class %d", c_flags);
+
+       c_flags |= CREATE_SEPARATE_WOW_VDM | CREATE_UNICODE_ENVIRONMENT;
++      if (spawn_default_errmode)
++	c_flags |= CREATE_DEFAULT_ERROR_MODE;
+
+       /* We're adding the CREATE_BREAKAWAY_FROM_JOB flag here to workaround
+ 	 issues with the "Program Compatibility Assistant (PCA) Service".
+diff --git a/winsup/doc/cygwinenv.xml b/winsup/doc/cygwinenv.xml
+index a52b6ac19..7137edcb9 100644
+--- a/winsup/doc/cygwinenv.xml
++++ b/winsup/doc/cygwinenv.xml
+@@ -103,6 +103,15 @@ pty will be disabled.  This is for programs which do not work properly
+ under pty with pseudo console enabled.  Defaults to not set.</para>
+ </listitem>
+
++<listitem>
++<para><envar>winjitdebug</envar> - if set, the
++<literal>CREATE_DEFAULT_ERROR_MODE</literal> flag is passed to
++<literal>CreateProcess</literal> in <literal>spawn</literal>.  This prevents
++cygwin-set error mode flags from being inherited by the new process, allowing
++native processes to invoke any system-registered JIT debugger, and/or invoke
++Windows Error Reporting.  Defaults to not set.</para>
++</listitem>
++
+ </itemizedlist>
+
+ </sect2>
+-- 
+2.29.2.windows.2
+
+
