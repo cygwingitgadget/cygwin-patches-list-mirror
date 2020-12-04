@@ -1,28 +1,46 @@
-Return-Path: <cygwin@jdrake.com>
-Received: from mail231.csoft.net (mail231.csoft.net [96.47.74.235])
- by sourceware.org (Postfix) with ESMTPS id 2C3E43858C27
- for <cygwin-patches@cygwin.com>; Thu,  3 Dec 2020 21:21:40 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 2C3E43858C27
-Received: from mail231.csoft.net (localhost [127.0.0.1])
- by mail231.csoft.net (Postfix) with ESMTP id 2D24ECB81
- for <cygwin-patches@cygwin.com>; Thu,  3 Dec 2020 16:21:38 -0500 (EST)
-Received: from mail231 (mail231 [96.47.74.235])
- (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
- (No client certificate requested) (Authenticated sender: jeremyd)
- by mail231.csoft.net (Postfix) with ESMTPSA id 2B7E4CB56
- for <cygwin-patches@cygwin.com>; Thu,  3 Dec 2020 16:21:38 -0500 (EST)
-Date: Thu, 3 Dec 2020 13:21:38 -0800 (PST)
-From: Jeremy Drake <cygwin@jdrake.com>
-X-X-Sender: jeremyd@resin.csoft.net
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+ by sourceware.org (Postfix) with ESMTPS id ECA5B385480D
+ for <cygwin-patches@cygwin.com>; Fri,  4 Dec 2020 12:09:06 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org ECA5B385480D
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MEFrX-1kvIMm0GKD-00AHGh for <cygwin-patches@cygwin.com>; Fri, 04 Dec 2020
+ 13:09:05 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 71FF2A80671; Fri,  4 Dec 2020 13:09:04 +0100 (CET)
+Date: Fri, 4 Dec 2020 13:09:04 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH 1/1] cygwin: use CREATE_DEFAULT_ERROR_MODE in spawn
-Message-ID: <alpine.BSO.2.21.2012031317260.9707@resin.csoft.net>
-User-Agent: Alpine 2.21 (BSO 202 2017-01-01)
+Subject: Re: [PATCH v2 0/2] proc(5) man page
+Message-ID: <20201204120904.GA5295@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20201125064931.17081-1-Brian.Inglis@SystematicSW.ab.ca>
+ <20201130104755.GE303847@calimero.vinschen.de>
+ <f6be8646-4e4c-9133-f9ac-00a89a437aad@SystematicSw.ab.ca>
+ <20201201095554.GK303847@calimero.vinschen.de>
+ <48e990d4-f527-1eb1-f2ce-6fc0e594c99d@SystematicSw.ab.ca>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-14.8 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_LOW,
- SPF_HELO_PASS, SPF_PASS autolearn=ham autolearn_force=no version=3.4.2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <48e990d4-f527-1eb1-f2ce-6fc0e594c99d@SystematicSw.ab.ca>
+X-Provags-ID: V03:K1:8imE/A2xT18FchajkKowAeJJQZk0XwWoy16g52zM1LoJm4peiA8
+ H1mps8gRfwpG0zBjSv2T3Yy177X72AbgBzWfotkkybnT5UM0hAFEs9/skNeefXv3YEqG72b
+ yEIA4iCPUKTst1UTOFyaKW81KtFu0CcQn3qVJLLu/uXcdgde09StlVaghy/DL0CdSDNh5hR
+ V3gvy7kDPu5bGyl/rg4/g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:TCm5i9SPTOs=:MyDOXFwV/4nkLJ175Rog4T
+ v3TbfShCFRetq0aISIdbhYimeb1wD6MJvGqtIkxSMeZaa8gR+Cvj+UxgLA1WiztSAuMsAaEN7
+ gs/Wwv6ZVZA0G7VkhzHieWqwcwdKVvpifhjtc9mbt9iJSo2mCDYSxBL+iS6a2aJ0u5qFYSMzz
+ ca4U9cokD+0XMtP1mCHjx7XpgNdld0MrMi4gX63kgeSEf291vZ6+SeDkkr/drb3f/Cz2h4j38
+ 5u9h2huoCFEZYI+dMOLjAHtRFr8KVpnLZ5COtPDzf+Wvv/mErKKR4/ZO0/osgZtjTpUkWASxv
+ 70fKQIN7f/iqJDi+upqrViIo2rouGGB3AhbIGRs8f8HGW+um+J3eoYC3Wg5wMr5gz9YlYaYNP
+ pw2xjkptMphU7fZ+wiLHk3FRziKfR9LFy2fcrDTlekUf8dhDWKiHV3vS2jdEg+uwhhCvpsy8K
+ IT4Wv+D6Fw==
+X-Spam-Status: No, score=-100.4 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -37,83 +55,55 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 03 Dec 2020 21:21:41 -0000
+X-List-Received-Date: Fri, 04 Dec 2020 12:09:08 -0000
 
-if a new CYGWIN/MSYS environment option `winjitdebug` is true, allowing
-native subprocesses to get Windows-default error handling behavior (such
-as invoking the registered JIT debugger).  Cygwin processes will quickly
-set their error mode on start, so getting JIT debugging for them will
-still require setting `error_start`.
+On Dec  1 09:49, Brian Inglis wrote:
+> On 2020-12-01 02:55, Corinna Vinschen wrote:
+> > On Nov 30 17:57, Brian Inglis wrote:
+> > > On 2020-11-30 03:47, Corinna Vinschen wrote:
+> > > > On Nov 24 23:49, Brian Inglis wrote:
+> > > > > Brian Inglis (2):
+> > > > >     specialnames.xml: add proc(5) Cygwin man page
+> > > > >     winsup/doc/Makefile.in: create man5 dir and install generated proc.5
+> > > > > 
+> > > > >    winsup/doc/Makefile.in      |    4 +
+> > > > >    winsup/doc/specialnames.xml | 2094 +++++++++++++++++++++++++++++++++++
+> > > > >    2 files changed, 2098 insertions(+)
+> > > 
+> > > > It would be helpful if you could outline the changes from v1.
+> > > 
+> > > Those were fairly minor fixes to content and some processing outlined in the
+> > > (lengthy) responses to Jon's (lengthy) comments under:
+> > > https://sourceware.org/pipermail/cygwin-patches/2020q4/010829.html
+> > > 
+> > > and I have copied them below, so please clarify if the below is not what you want?
+> > 
+> > I was after a short list with bullet points, ratehr than copying
+> > an email I have in my inbox anyway :}
+> > 
+> > Jon, can you please take another look, too?
+> 
+> * patches are sent directly from git send-email
+> * trailing whitespace only in Makefile.in context lines so left as is
+> * comment changed to "based on" Linux manpages project proc(5)
+> * dates retained to show how current content is, rather than when last built
+> * /proc/loadavg 'D' state mention removed
+> * /proc/registry Windows changed to Cygwin to clarify this variation
+> * /proc/version kernel changed to Cygwin
+> * Notes subsection missing title and Copyright subsection not included in
+> standalone man page due to Colophon subsection messing up man rendering
+> * removed Colophon subsection and Notes reappears properly and Copyright is
+> included; other system show these under Notes except RH uses Caveats
+> * retain remap attributes as Docbook rendering hints
+> 
+> -- 
+> Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
+> 
+> This email may be disturbing to some readers as it contains
+> too much technical detail. Reader discretion is advised.
+> [Data in binary units and prefixes, physical quantities in SI.]
 
-This patch was previously submitted to MSYS2
-(https://github.com/msys2/msys2-runtime/pull/18) but it was suggested I
-should try sending it upstream.
-
----
- winsup/cygwin/environ.cc | 1 +
- winsup/cygwin/globals.cc | 1 +
- winsup/cygwin/spawn.cc   | 2 ++
- winsup/doc/cygwinenv.xml | 9 +++++++++
- 4 files changed, 13 insertions(+)
-
-diff --git a/winsup/cygwin/environ.cc b/winsup/cygwin/environ.cc
-index 3a03657db..fa47f4b31 100644
---- a/winsup/cygwin/environ.cc
-+++ b/winsup/cygwin/environ.cc
-@@ -120,6 +120,7 @@ static struct parse_thing
-   {"wincmdln", {&wincmdln}, setbool, NULL, {{false}, {true}}},
-   {"winsymlinks", {func: set_winsymlinks}, isfunc, NULL, {{0}, {0}}},
-   {"disable_pcon", {&disable_pcon}, setbool, NULL, {{false}, {true}}},
-+  {"winjitdebug", {&spawn_default_errmode}, setbool, NULL, {{false}, {true}}},
-   {NULL, {0}, setdword, 0, {{0}, {0}}}
- };
-
-diff --git a/winsup/cygwin/globals.cc b/winsup/cygwin/globals.cc
-index 942bd1c83..2d2ac0949 100644
---- a/winsup/cygwin/globals.cc
-+++ b/winsup/cygwin/globals.cc
-@@ -71,6 +71,7 @@ bool reset_com;
- bool wincmdln;
- winsym_t allow_winsymlinks = WSYM_sysfile;
- bool disable_pcon;
-+bool spawn_default_errmode;
-
- bool NO_COPY in_forkee;
-
-diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
-index 92d190d1a..6239e3539 100644
---- a/winsup/cygwin/spawn.cc
-+++ b/winsup/cygwin/spawn.cc
-@@ -430,6 +430,8 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
-       sigproc_printf ("priority class %d", c_flags);
-
-       c_flags |= CREATE_SEPARATE_WOW_VDM | CREATE_UNICODE_ENVIRONMENT;
-+      if (spawn_default_errmode)
-+	c_flags |= CREATE_DEFAULT_ERROR_MODE;
-
-       /* We're adding the CREATE_BREAKAWAY_FROM_JOB flag here to workaround
- 	 issues with the "Program Compatibility Assistant (PCA) Service".
-diff --git a/winsup/doc/cygwinenv.xml b/winsup/doc/cygwinenv.xml
-index a52b6ac19..7137edcb9 100644
---- a/winsup/doc/cygwinenv.xml
-+++ b/winsup/doc/cygwinenv.xml
-@@ -103,6 +103,15 @@ pty will be disabled.  This is for programs which do not work properly
- under pty with pseudo console enabled.  Defaults to not set.</para>
- </listitem>
-
-+<listitem>
-+<para><envar>winjitdebug</envar> - if set, the
-+<literal>CREATE_DEFAULT_ERROR_MODE</literal> flag is passed to
-+<literal>CreateProcess</literal> in <literal>spawn</literal>.  This prevents
-+cygwin-set error mode flags from being inherited by the new process, allowing
-+native processes to invoke any system-registered JIT debugger, and/or invoke
-+Windows Error Reporting.  Defaults to not set.</para>
-+</listitem>
-+
- </itemizedlist>
-
- </sect2>
--- 
-2.29.2.windows.2
+Thanks, pushed.
 
 
+Corinna
