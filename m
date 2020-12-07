@@ -1,44 +1,27 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
- by sourceware.org (Postfix) with ESMTPS id 5D2213896823
- for <cygwin-patches@cygwin.com>; Mon,  7 Dec 2020 09:43:22 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 5D2213896823
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MRn0U-1kbePM0N4M-00TAuC; Mon, 07 Dec 2020 10:43:18 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 97CAAA80668; Mon,  7 Dec 2020 10:43:17 +0100 (CET)
-Date: Mon, 7 Dec 2020 10:43:17 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <mark@maxrnd.com>
+Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
+ by sourceware.org (Postfix) with ESMTPS id 988493846079
+ for <cygwin-patches@cygwin.com>; Mon,  7 Dec 2020 10:29:56 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 988493846079
+Authentication-Results: sourceware.org;
+ dmarc=none (p=none dis=none) header.from=maxrnd.com
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=mark@maxrnd.com
+Received: (from daemon@localhost)
+ by m0.truegem.net (8.12.11/8.12.11) id 0B7ATtIN024707;
+ Mon, 7 Dec 2020 02:29:55 -0800 (PST) (envelope-from mark@maxrnd.com)
+Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67),
+ claiming to be "localhost.localdomain"
+ via SMTP by m0.truegem.net, id smtpdEEmJgM; Mon Dec  7 02:29:54 2020
+From: Mark Geisert <mark@maxrnd.com>
 To: cygwin-patches@cygwin.com
-Cc: Jon TURNEY <jon.turney@dronecode.org.uk>
-Subject: Re: [PATCH 1/1] cygwin: use CREATE_DEFAULT_ERROR_MODE in spawn
-Message-ID: <20201207094317.GI5295@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com,
- Jon TURNEY <jon.turney@dronecode.org.uk>
-References: <alpine.BSO.2.21.2012031317260.9707@resin.csoft.net>
- <20201204121043.GB5295@calimero.vinschen.de>
- <alpine.BSO.2.21.2012041028060.9707@resin.csoft.net>
+Subject: [PATCH] Cygwin: Allow to set SO_PEERCRED zero (v2)
+Date: Mon,  7 Dec 2020 02:29:36 -0800
+Message-Id: <20201207102936.1527-1-mark@maxrnd.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <alpine.BSO.2.21.2012041028060.9707@resin.csoft.net>
-X-Provags-ID: V03:K1:Mt6rOgSKKMM5HIj4z8KjZgf0tFgK0NVdNT8vhGeXIaXXCMcypUk
- WzqRx3CQs0I5JKfmfEUkbb5l5NZpvo1xzGh3rr3Via+AVraeC1mrHV+qWvpgh13U7c0DTFI
- AcAvzQxfOxHvXTsj6saq1OPBvOwthILKVXgeyPn1uTNUTSvdyfUuHRtdN5/EOKqkSx3X4Ky
- hwJDQcxeEvQX6K9SaqQJA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:njf5UQefB1I=:ruA3FQ0a7Ubpfc5IbWo7Da
- 7OKqVE10m8+xDe7mg5bAffq9NVh9lpZhPoreM75FL/6Civ5aYHsv3UMNC75r1eOPFhe5E/p/G
- XyjxUf/sZRnwRxmv3p1QWWoJcpd2oxn2X5g/E7uYDItMdjeerJXUJDBzZ76MSl0xR8rWGqvhF
- zBlqdx0e1yNOTKZs8PgNrWC6EdzuaV7BELRCm+DWwK1To7YSmgylFAjSxFhHH7YvR1LP9UJdW
- JlofW985noaZKTjgxLVqSF2F5ODkrui3+VNLcKXZ+10P3lcC2LIizfeFoMjmfT8MiLmOLdRd8
- 6ZFMYuMjYuCvXXsZVNZMl8Yobnn8svZNL9IeHkXluI2JYCZkn2d/D+ERWsTScT+cYU3WspGX3
- USwK9TbMcrTpRodpGp38/q1dEiPgqCmN31OY9UnDv/mtjPvp2Qyik+5TS29WkvwHJZk8oOz8n
- Uw2UJqv0fg==
-X-Spam-Status: No, score=-100.7 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-11.4 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, SPF_HELO_NONE, SPF_NONE,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -54,25 +37,45 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 07 Dec 2020 09:43:23 -0000
+X-List-Received-Date: Mon, 07 Dec 2020 10:30:00 -0000
 
-On Dec  4 10:35, Jeremy Drake via Cygwin-patches wrote:
-> On Fri, 4 Dec 2020, Corinna Vinschen via Cygwin-patches wrote:
-> 
-> > I'm not happy about a new CYGWIN option.
-> >
-> > Wouldn't it make sense, perhaps, to switch to CREATE_DEFAULT_ERROR_MODE
-> > for all non-Cygwin processes by default instead?
-> 
-> In fact, my first iteration was to set that flag unconditionally (relying
-> on the fact that SetErrorMode is called extremely early in Cygwin process
-> startup rather than only setting it for non-Cygwin processes), but I
-> received feedback that it would be better to put it behind an option:
-> 
-> https://github.com/msys2/msys2-runtime/pull/18#issuecomment-723683606
+The existing code errors as EINVAL any attempt to set a value for
+SO_PEERCRED via setsockopt() on an AF_UNIX/AF_LOCAL socket.  But to
+enable the workaround set_no_getpeereid behavior for Python one has
+to be able to set SO_PEERCRED to zero.  Ergo, this patch.  Python has
+no way to specify a NULL pointer for 'optval'.
 
-Jon, thoughts on that as GDB maintainer?
+This v2 of patch allows the original working (i.e., allow NULL,0 for
+optval,optlen to mean turn off SO_PEERCRED) in addition to the new
+working described above.  The sense of the 'if' stmt is reversed for
+readability.
 
+---
+ winsup/cygwin/fhandler_socket_local.cc | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-Thanks,
-Corinna
+diff --git a/winsup/cygwin/fhandler_socket_local.cc b/winsup/cygwin/fhandler_socket_local.cc
+index c94bf828f..964f3e819 100644
+--- a/winsup/cygwin/fhandler_socket_local.cc
++++ b/winsup/cygwin/fhandler_socket_local.cc
+@@ -1430,10 +1430,14 @@ fhandler_socket_local::setsockopt (int level, int optname, const void *optval,
+ 	     FIXME: In the long run we should find a more generic solution
+ 	     which doesn't require a blocking handshake in accept/connect
+ 	     to exchange SO_PEERCRED credentials. */
+-	  if (optval || optlen)
+-	    set_errno (EINVAL);
+-	  else
++	  /* Temporary: Allow SO_PEERCRED to only be zeroed. Two ways to
++	     accomplish this: pass NULL,0 for optval,optlen; or pass the
++	     address,length of an '(int) 0' set up by the caller. */
++	  if ((!optval && !optlen) ||
++		(optlen == (socklen_t) sizeof (int) && !*(int *) optval))
+ 	    ret = af_local_set_no_getpeereid ();
++	  else
++	    set_errno (EINVAL);
+ 	  return ret;
+ 
+ 	case SO_REUSEADDR:
+-- 
+2.29.2
+
