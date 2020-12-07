@@ -1,22 +1,22 @@
 Return-Path: <mark@maxrnd.com>
 Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
- by sourceware.org (Postfix) with ESMTPS id 0C7B73857C66
- for <cygwin-patches@cygwin.com>; Mon,  7 Dec 2020 06:17:30 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 0C7B73857C66
+ by sourceware.org (Postfix) with ESMTPS id 5DE403857C66
+ for <cygwin-patches@cygwin.com>; Mon,  7 Dec 2020 06:29:01 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 5DE403857C66
 Authentication-Results: sourceware.org;
  dmarc=none (p=none dis=none) header.from=maxrnd.com
 Authentication-Results: sourceware.org; spf=none smtp.mailfrom=mark@maxrnd.com
 Received: (from daemon@localhost)
- by m0.truegem.net (8.12.11/8.12.11) id 0B76HTvI059522;
- Sun, 6 Dec 2020 22:17:29 -0800 (PST) (envelope-from mark@maxrnd.com)
+ by m0.truegem.net (8.12.11/8.12.11) id 0B76T0ET007625;
+ Sun, 6 Dec 2020 22:29:00 -0800 (PST) (envelope-from mark@maxrnd.com)
 Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67),
  claiming to be "localhost.localdomain"
- via SMTP by m0.truegem.net, id smtpdPioE7q; Sun Dec  6 22:17:26 2020
+ via SMTP by m0.truegem.net, id smtpdcpGBtR; Sun Dec  6 22:29:00 2020
 From: Mark Geisert <mark@maxrnd.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: Launch cygmagic with bash, not sh
-Date: Sun,  6 Dec 2020 22:17:15 -0800
-Message-Id: <20201207061715.1028-1-mark@maxrnd.com>
+Subject: [PATCH] Cygwin: Allow to set SO_PEERCRED zero
+Date: Sun,  6 Dec 2020 22:28:50 -0800
+Message-Id: <20201207062850.1088-1-mark@maxrnd.com>
 X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -37,33 +37,32 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 07 Dec 2020 06:17:34 -0000
+X-List-Received-Date: Mon, 07 Dec 2020 06:29:02 -0000
 
-On some systems /bin/sh is not /bin/bash and cygmagic has bash-isms in
-it.  So even though cygmagic has a /bin/bash shebang, it also needs to be
-launched with bash from within Makefile.in.
+The existing code errors as EINVAL any attempt to set a value for
+SO_PEERCRED via setsockopt() on an AF_UNIX/AF_LOCAL socket.  But to
+enable the workaround set_no_getpeereid behavior for Python one has
+to be able to set SO_PEERCRED to zero.  Ergo, this patch.  Python has
+no way to specify a NULL pointer for 'optval'.
 
 ---
- winsup/cygwin/Makefile.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ winsup/cygwin/fhandler_socket_local.cc | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/winsup/cygwin/Makefile.in b/winsup/cygwin/Makefile.in
-index b15c746cf..a840f2b83 100644
---- a/winsup/cygwin/Makefile.in
-+++ b/winsup/cygwin/Makefile.in
-@@ -683,10 +683,10 @@ globals.h: mkglobals_h globals.cc
- ${DLL_OFILES} ${LIBCOS}: globals.h $(srcdir)/$(TLSOFFSETS_H)
- 
- shared_info_magic.h: cygmagic shared_info.h
--	/bin/sh $(word 1,$^) $@ "${COMPILE.cc} -E -x c++" $(word 2,$^) SHARED_MAGIC 'class shared_info' USER_MAGIC 'class user_info'
-+	/bin/bash $(word 1,$^) $@ "${COMPILE.cc} -E -x c++" $(word 2,$^) SHARED_MAGIC 'class shared_info' USER_MAGIC 'class user_info'
- 
- child_info_magic.h: cygmagic child_info.h
--	/bin/sh $(word 1,$^) $@ "${COMPILE.cc} -E -x c++" $(word 2,$^) CHILD_INFO_MAGIC 'class child_info'
-+	/bin/bash $(word 1,$^) $@ "${COMPILE.cc} -E -x c++" $(word 2,$^) CHILD_INFO_MAGIC 'class child_info'
- 
- dcrt0.o sigproc.o: child_info_magic.h
- 
+diff --git a/winsup/cygwin/fhandler_socket_local.cc b/winsup/cygwin/fhandler_socket_local.cc
+index c94bf828f..421b8bbdb 100644
+--- a/winsup/cygwin/fhandler_socket_local.cc
++++ b/winsup/cygwin/fhandler_socket_local.cc
+@@ -1430,7 +1430,8 @@ fhandler_socket_local::setsockopt (int level, int optname, const void *optval,
+ 	     FIXME: In the long run we should find a more generic solution
+ 	     which doesn't require a blocking handshake in accept/connect
+ 	     to exchange SO_PEERCRED credentials. */
+-	  if (optval || optlen)
++	  /* Temporary: Allow only '(int) 0' to be specified. */
++	  if (optlen < (socklen_t) sizeof (int) || 0 != *(int *) optval)
+ 	    set_errno (EINVAL);
+ 	  else
+ 	    ret = af_local_set_no_getpeereid ();
 -- 
 2.29.2
 
