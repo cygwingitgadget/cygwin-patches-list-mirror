@@ -1,41 +1,41 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
- by sourceware.org (Postfix) with ESMTPS id 94A543896C21
- for <cygwin-patches@cygwin.com>; Mon,  7 Dec 2020 09:36:05 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 94A543896C21
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+ by sourceware.org (Postfix) with ESMTPS id 780693857027
+ for <cygwin-patches@cygwin.com>; Mon,  7 Dec 2020 09:41:34 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 780693857027
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MjjKf-1kJiYR0mvT-00lGuw for <cygwin-patches@cygwin.com>; Mon, 07 Dec 2020
- 10:36:04 +0100
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MnJdC-1kKXiT0B1w-00jFJO for <cygwin-patches@cygwin.com>; Mon, 07 Dec 2020
+ 10:41:33 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 8D079A806B8; Mon,  7 Dec 2020 10:36:03 +0100 (CET)
-Date: Mon, 7 Dec 2020 10:36:03 +0100
+ id 1B085A806B8; Mon,  7 Dec 2020 10:41:32 +0100 (CET)
+Date: Mon, 7 Dec 2020 10:41:32 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: Allow to set SO_PEERCRED zero
-Message-ID: <20201207093603.GF5295@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: Launch cygmagic with bash, not sh
+Message-ID: <20201207094132.GG5295@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20201207062850.1088-1-mark@maxrnd.com>
+References: <20201207061715.1028-1-mark@maxrnd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201207062850.1088-1-mark@maxrnd.com>
-X-Provags-ID: V03:K1:W2OuefPsQ2nZzMQzm0yD8SqEDbT5Q2P5+RG/1rImWDhfT9mYdDB
- CbOs6YJ1H42A8Ku/pgij7kYukz9ew+lYZLk7v63N0tV9rsQbkpx0Fw6NciklwRNmUsswNAh
- h+xeglWE93pRGNhXwgVt1fPS4ZKXZGWVNV2S/mD0low2siYPoKLbXd+uK3U+GDZMbpHOOtq
- CwZQzEIQy79rYa6abF3GA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:pKw2Nv00h2g=:riVV9Jz/P5/SJ/QRXWe3Z8
- dog5A211OSzsJaydl10iknMYpgR2ENfWcnOux1m/wnXXnSGU3eOfhF6TlsAMOD2i8AgsvZA6d
- Tb2zQveHG35tyJeLmF2sDRjKyuoVTk96rzq2ylzZP56RdguWfbXFzbNVsqz+E13/GuSutzVdq
- oOEGtW6t79+20sDT4A2tQqc2EpaOkpO+fd6yTZagzMku1nQ1LnWKPZNbEpFtUTEGyXQcyNhXT
- qLNpreBnjQj5+feJ8P1VZZjXW0fWzkQY923lqwymVfGqfp1HnBjzBUYCYOnSEB6hqpTFIUYyk
- GxMedGkumOWYCrQ8DIwcOZEv3R3ZPa9j77yStJxwwbwy5X2BzfiV5lP3hzc5xNOe1HdWEietw
- hruCjkQRSu1AzBVQPfCTbqqv/qMho25uDfcAJa/Dd6fv7DQlM0rHXAZu9HZcnigcnp/vnl64i
- li8wS46ehA==
-X-Spam-Status: No, score=-106.4 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+In-Reply-To: <20201207061715.1028-1-mark@maxrnd.com>
+X-Provags-ID: V03:K1:2PLpVHVn6vxL28uD1aLYOfrrE85TCIUkSqDIEVo5Q5cfCr9uAdQ
+ pxA9rX1rNC+1eioFil9qyc8sOcfKgTrh4+uESftSCRQKCw6gEHpFt8qNvNKI52IdLxgZTVA
+ U5V7CzZ75KFBbgVZTu0HAZg+xkSNmO46f+Jcg+4nFyCPUmZQyQm9YqpYYN5MKnzhHl6Ow9z
+ SZwVy9ZCvULvsTdrCtNlA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:8sGFIybTG4o=:6J/GooNXxudYVombY5djMr
+ i/07GyjrOOg8mksxrp6OpMYaGeL9xmxwhHjysW/xjINcWxY9RGmydxdyM7Yp5Ib8FsVjBv7BA
+ el0I/4dIXrnWAIlti9pnReLX8alrPGQIt3TixCTsrLSo6vppQuOSd/F1xmreysdN2dZAJPek6
+ JyzFdSFzou7rdObjEpVZ21mJDDHzftM2ShBmDr3Ovy99jiFGDkEz/J2YZtPiWIGcf2G9f4OCz
+ CGOBzjqg4Rs/9vn+t1fDwdNsX/idDbIp+9EVgko37XGGj8gEpuuDcWHV0xWTwuynNNDzz+2CC
+ rU4kk5n58ORpkdKgp28pXfSDz6oXoqrVtJvAZKBp21wO9OImsJMME1aHnoPkRaJ8RCnRUMoOt
+ Q0v+4wNEyL+VG4k5z+dId7L+wB7fDr0dY4JXkJPZhOVMWJX4G9rhzIsAuW6N8auTnSCoq4Dqa
+ 3mWqpy1fSw==
+X-Spam-Status: No, score=-106.7 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -51,49 +51,38 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 07 Dec 2020 09:36:10 -0000
+X-List-Received-Date: Mon, 07 Dec 2020 09:41:36 -0000
 
-Hi Mark,
-
-On Dec  6 22:28, Mark Geisert wrote:
-> The existing code errors as EINVAL any attempt to set a value for
-> SO_PEERCRED via setsockopt() on an AF_UNIX/AF_LOCAL socket.  But to
-> enable the workaround set_no_getpeereid behavior for Python one has
-> to be able to set SO_PEERCRED to zero.  Ergo, this patch.  Python has
-> no way to specify a NULL pointer for 'optval'.
+On Dec  6 22:17, Mark Geisert wrote:
+> On some systems /bin/sh is not /bin/bash and cygmagic has bash-isms in
+> it.  So even though cygmagic has a /bin/bash shebang, it also needs to be
+> launched with bash from within Makefile.in.
 > 
 > ---
->  winsup/cygwin/fhandler_socket_local.cc | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  winsup/cygwin/Makefile.in | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/winsup/cygwin/fhandler_socket_local.cc b/winsup/cygwin/fhandler_socket_local.cc
-> index c94bf828f..421b8bbdb 100644
-> --- a/winsup/cygwin/fhandler_socket_local.cc
-> +++ b/winsup/cygwin/fhandler_socket_local.cc
-> @@ -1430,7 +1430,8 @@ fhandler_socket_local::setsockopt (int level, int optname, const void *optval,
->  	     FIXME: In the long run we should find a more generic solution
->  	     which doesn't require a blocking handshake in accept/connect
->  	     to exchange SO_PEERCRED credentials. */
-> -	  if (optval || optlen)
-> +	  /* Temporary: Allow only '(int) 0' to be specified. */
-> +	  if (optlen < (socklen_t) sizeof (int) || 0 != *(int *) optval)
->  	    set_errno (EINVAL);
+> diff --git a/winsup/cygwin/Makefile.in b/winsup/cygwin/Makefile.in
+> index b15c746cf..a840f2b83 100644
+> --- a/winsup/cygwin/Makefile.in
+> +++ b/winsup/cygwin/Makefile.in
+> @@ -683,10 +683,10 @@ globals.h: mkglobals_h globals.cc
+>  ${DLL_OFILES} ${LIBCOS}: globals.h $(srcdir)/$(TLSOFFSETS_H)
+>  
+>  shared_info_magic.h: cygmagic shared_info.h
+> -	/bin/sh $(word 1,$^) $@ "${COMPILE.cc} -E -x c++" $(word 2,$^) SHARED_MAGIC 'class shared_info' USER_MAGIC 'class user_info'
+> +	/bin/bash $(word 1,$^) $@ "${COMPILE.cc} -E -x c++" $(word 2,$^) SHARED_MAGIC 'class shared_info' USER_MAGIC 'class user_info'
+>  
+>  child_info_magic.h: cygmagic child_info.h
+> -	/bin/sh $(word 1,$^) $@ "${COMPILE.cc} -E -x c++" $(word 2,$^) CHILD_INFO_MAGIC 'class child_info'
+> +	/bin/bash $(word 1,$^) $@ "${COMPILE.cc} -E -x c++" $(word 2,$^) CHILD_INFO_MAGIC 'class child_info'
+>  
+>  dcrt0.o sigproc.o: child_info_magic.h
+>  
+> -- 
+> 2.29.2
 
-That breaks existing callers calling setsockopt like this:
-
-  setsockopt (fd, SOL_SOCKET, SO_PEERCRED, NULL, 0);
-
-This should stay backward-compatible.  It should allow the above
-as well as your int usage, otherwise postfix will stop working.
-
-Also, please write either
-
-  *(int *) optval != 0
-
-or just
-
-  !!*(int *) optval
-
+Pushed
 
 Thanks,
 Corinna
