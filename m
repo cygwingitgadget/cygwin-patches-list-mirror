@@ -1,38 +1,38 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
- by sourceware.org (Postfix) with ESMTPS id 780693857027
- for <cygwin-patches@cygwin.com>; Mon,  7 Dec 2020 09:41:34 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 780693857027
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+ by sourceware.org (Postfix) with ESMTPS id 9AF8A3857027
+ for <cygwin-patches@cygwin.com>; Mon,  7 Dec 2020 09:41:48 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 9AF8A3857027
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MnJdC-1kKXiT0B1w-00jFJO for <cygwin-patches@cygwin.com>; Mon, 07 Dec 2020
- 10:41:33 +0100
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1N0FE1-1jylpc1Sh5-00xNhH for <cygwin-patches@cygwin.com>; Mon, 07 Dec 2020
+ 10:41:47 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 1B085A806B8; Mon,  7 Dec 2020 10:41:32 +0100 (CET)
-Date: Mon, 7 Dec 2020 10:41:32 +0100
+ id 5D3D0A806B8; Mon,  7 Dec 2020 10:41:46 +0100 (CET)
+Date: Mon, 7 Dec 2020 10:41:46 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: Launch cygmagic with bash, not sh
-Message-ID: <20201207094132.GG5295@calimero.vinschen.de>
+Subject: Re: [PATCH] Fix trace output for getdomainname()
+Message-ID: <20201207094146.GH5295@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20201207061715.1028-1-mark@maxrnd.com>
+References: <20201204225801.48037-1-lavr@ncbi.nlm.nih.gov>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201207061715.1028-1-mark@maxrnd.com>
-X-Provags-ID: V03:K1:2PLpVHVn6vxL28uD1aLYOfrrE85TCIUkSqDIEVo5Q5cfCr9uAdQ
- pxA9rX1rNC+1eioFil9qyc8sOcfKgTrh4+uESftSCRQKCw6gEHpFt8qNvNKI52IdLxgZTVA
- U5V7CzZ75KFBbgVZTu0HAZg+xkSNmO46f+Jcg+4nFyCPUmZQyQm9YqpYYN5MKnzhHl6Ow9z
- SZwVy9ZCvULvsTdrCtNlA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:8sGFIybTG4o=:6J/GooNXxudYVombY5djMr
- i/07GyjrOOg8mksxrp6OpMYaGeL9xmxwhHjysW/xjINcWxY9RGmydxdyM7Yp5Ib8FsVjBv7BA
- el0I/4dIXrnWAIlti9pnReLX8alrPGQIt3TixCTsrLSo6vppQuOSd/F1xmreysdN2dZAJPek6
- JyzFdSFzou7rdObjEpVZ21mJDDHzftM2ShBmDr3Ovy99jiFGDkEz/J2YZtPiWIGcf2G9f4OCz
- CGOBzjqg4Rs/9vn+t1fDwdNsX/idDbIp+9EVgko37XGGj8gEpuuDcWHV0xWTwuynNNDzz+2CC
- rU4kk5n58ORpkdKgp28pXfSDz6oXoqrVtJvAZKBp21wO9OImsJMME1aHnoPkRaJ8RCnRUMoOt
- Q0v+4wNEyL+VG4k5z+dId7L+wB7fDr0dY4JXkJPZhOVMWJX4G9rhzIsAuW6N8auTnSCoq4Dqa
- 3mWqpy1fSw==
+In-Reply-To: <20201204225801.48037-1-lavr@ncbi.nlm.nih.gov>
+X-Provags-ID: V03:K1:HrXFFfUCdCmBpQY55biWbAji5rZkh9SntJLCCx9oJe+UYvXKRTe
+ N5BfRgzjNuUczyARKgR0+yng4repJzTQEfGxPqciVmR9rSZ1/12G7835I0OcPB9VLKGbW4m
+ gzo/Et9/Ubgzew2Kl13o7RRBA8IxJ3/A8jbLY5dvaddcmSvMCeA4aNwT7S8wa4o1g/rhIdP
+ 1Zvhuazho60ILWFNL02sA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:+cX6OEuxbMs=:/qIghC/daAMKsB82n1P0oK
+ 6H494P0sYgp78xAlxGsh1wwz9f7b+aJ1E+yRV/BLXvbH7Kn/dkzGJhwvUHKtnXiL1WjGvNqsZ
+ PDosXVSCYtLVv6WGelXBrUYo9nU3PBv6MAr8PjTzQWi3hQ9Dx46KWOju+0A7Nqc4284gIQSZP
+ 8ipurzmLi6jRuxiaSI4quLJyZPfvA8jlAHH7H8hwEp7QwSis+eNvQPx03I7nVoaDuFGjd84m6
+ zZPKcX1iz/Itux+QdAoK7aPaVcnFtVCQdQwsXGeo6n5JBnvDxfADWfcULsTChmwYr9Kx1g+/n
+ xWYLmf3sL7Bx6pygJzK+tt1AM+z/ldAxcU925UmrPquRYaa7dDVmh2fU75rmnfZgDZejlI4kz
+ jZMs+Us3V+TxVBIzq0uOQ6Y5LDJgHAfCjiSXXAJTcrzR4ulIJ4FpIwBzzaxOLNZQ9EXC5WXDZ
+ 3rZeQqww7Q==
 X-Spam-Status: No, score=-106.7 required=5.0 tests=BAYES_00, GIT_PATCH_0,
  GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
  RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
@@ -51,34 +51,26 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 07 Dec 2020 09:41:36 -0000
+X-List-Received-Date: Mon, 07 Dec 2020 09:41:49 -0000
 
-On Dec  6 22:17, Mark Geisert wrote:
-> On some systems /bin/sh is not /bin/bash and cygmagic has bash-isms in
-> it.  So even though cygmagic has a /bin/bash shebang, it also needs to be
-> launched with bash from within Makefile.in.
-> 
+On Dec  4 17:58, Anton Lavrentiev via Cygwin-patches wrote:
 > ---
->  winsup/cygwin/Makefile.in | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  winsup/cygwin/net.cc | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/winsup/cygwin/Makefile.in b/winsup/cygwin/Makefile.in
-> index b15c746cf..a840f2b83 100644
-> --- a/winsup/cygwin/Makefile.in
-> +++ b/winsup/cygwin/Makefile.in
-> @@ -683,10 +683,10 @@ globals.h: mkglobals_h globals.cc
->  ${DLL_OFILES} ${LIBCOS}: globals.h $(srcdir)/$(TLSOFFSETS_H)
->  
->  shared_info_magic.h: cygmagic shared_info.h
-> -	/bin/sh $(word 1,$^) $@ "${COMPILE.cc} -E -x c++" $(word 2,$^) SHARED_MAGIC 'class shared_info' USER_MAGIC 'class user_info'
-> +	/bin/bash $(word 1,$^) $@ "${COMPILE.cc} -E -x c++" $(word 2,$^) SHARED_MAGIC 'class shared_info' USER_MAGIC 'class user_info'
->  
->  child_info_magic.h: cygmagic child_info.h
-> -	/bin/sh $(word 1,$^) $@ "${COMPILE.cc} -E -x c++" $(word 2,$^) CHILD_INFO_MAGIC 'class child_info'
-> +	/bin/bash $(word 1,$^) $@ "${COMPILE.cc} -E -x c++" $(word 2,$^) CHILD_INFO_MAGIC 'class child_info'
->  
->  dcrt0.o sigproc.o: child_info_magic.h
->  
+> diff --git a/winsup/cygwin/net.cc b/winsup/cygwin/net.cc
+> index 724e787fe..cec0a70cc 100644
+> --- a/winsup/cygwin/net.cc
+> +++ b/winsup/cygwin/net.cc
+> @@ -772,7 +772,7 @@ getdomainname (char *domain, size_t len)
+>  	  && GetNetworkParams(info, &size) == ERROR_SUCCESS)
+>  	{
+>  	  strncpy(domain, info->DomainName, len);
+> -	  debug_printf ("gethostname %s", domain);
+> +	  debug_printf ("getdomainname %s", domain);
+>  	  return 0;
+>  	}
+>        __seterrno ();
 > -- 
 > 2.29.2
 
