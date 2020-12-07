@@ -1,37 +1,27 @@
-Return-Path: <lavr@ncbi.nlm.nih.gov>
-Received: from nihsmtpxwayst06.hub.nih.gov (nihsmtpxwayst06.hub.nih.gov
- [165.112.13.57])
- by sourceware.org (Postfix) with ESMTPS id 670C7385700A
- for <cygwin-patches@cygwin.com>; Fri,  4 Dec 2020 22:58:23 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 670C7385700A
-IronPort-SDR: mVEFW2GwYgonHW6QzLyllQxOrueDdRmd7bOccQSokB1Q1CMpHPkKU0pNffDsOKoJhKoSWNvZC1
- yIDmsBnmcCh8wR/W7UNelYs98F0VSAp/L6tp3avKMkwvUZexgSTnOYIEmJ9fovxmc4es0fCjQI
- DacTAwuRvKdk8N5FGon+HuNVSqcEnIoQk4PYhT0nZbldziT9ByQ5RXdx83IiUxzcQFZQzMH4AT
- 7riZUXMvtH76UM9KFU8+z9caDlgHlIe3+ZYlVhVvL8ixvmEyurD5DsVyVb4ZMT34XV5pcmNeHv
- phc=
-X-SBRS-Extended: Low
-X-IronPortListener: non-ces-out
-X-IronPortListener: non-ces-out
-X-IronPort-AV: E=Sophos;i="5.78,393,1599537600"; d="scan'208";a="38772607"
-Received: from msg-b12-ltm1_v9.hub.nih.gov (HELO mail1.ncbi.nlm.nih.gov)
- ([128.231.90.73])
- by nihsmtpxwayst06.hub.nih.gov with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 04 Dec 2020 17:58:23 -0500
-Received: from mail1.ncbi.nlm.nih.gov (vhod23.be-md.ncbi.nlm.nih.gov
- [130.14.26.86])
- by mail1.ncbi.nlm.nih.gov (Postfix) with ESMTP id 6F8DD340002;
- Fri,  4 Dec 2020 17:58:22 -0500 (EST)
-From: Anton Lavrentiev <lavr@ncbi.nlm.nih.gov>
+Return-Path: <mark@maxrnd.com>
+Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
+ by sourceware.org (Postfix) with ESMTPS id 0C7B73857C66
+ for <cygwin-patches@cygwin.com>; Mon,  7 Dec 2020 06:17:30 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 0C7B73857C66
+Authentication-Results: sourceware.org;
+ dmarc=none (p=none dis=none) header.from=maxrnd.com
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=mark@maxrnd.com
+Received: (from daemon@localhost)
+ by m0.truegem.net (8.12.11/8.12.11) id 0B76HTvI059522;
+ Sun, 6 Dec 2020 22:17:29 -0800 (PST) (envelope-from mark@maxrnd.com)
+Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67),
+ claiming to be "localhost.localdomain"
+ via SMTP by m0.truegem.net, id smtpdPioE7q; Sun Dec  6 22:17:26 2020
+From: Mark Geisert <mark@maxrnd.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Fix trace output for getdomainname()
-Date: Fri,  4 Dec 2020 17:58:01 -0500
-Message-Id: <20201204225801.48037-1-lavr@ncbi.nlm.nih.gov>
+Subject: [PATCH] Cygwin: Launch cygmagic with bash, not sh
+Date: Sun,  6 Dec 2020 22:17:15 -0800
+Message-Id: <20201207061715.1028-1-mark@maxrnd.com>
 X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-12.1 required=5.0 tests=BAYES_00, DKIMWL_WL_HIGH,
- DKIM_SIGNED, DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, FROM_GOV_DKIM_AU,
- GIT_PATCH_0, RCVD_IN_MSPIKE_H4, RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_PASS,
+X-Spam-Status: No, score=-11.4 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, SPF_HELO_NONE, SPF_NONE,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -47,25 +37,33 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 04 Dec 2020 22:58:25 -0000
+X-List-Received-Date: Mon, 07 Dec 2020 06:17:34 -0000
+
+On some systems /bin/sh is not /bin/bash and cygmagic has bash-isms in
+it.  So even though cygmagic has a /bin/bash shebang, it also needs to be
+launched with bash from within Makefile.in.
 
 ---
- winsup/cygwin/net.cc | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ winsup/cygwin/Makefile.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/winsup/cygwin/net.cc b/winsup/cygwin/net.cc
-index 724e787fe..cec0a70cc 100644
---- a/winsup/cygwin/net.cc
-+++ b/winsup/cygwin/net.cc
-@@ -772,7 +772,7 @@ getdomainname (char *domain, size_t len)
- 	  && GetNetworkParams(info, &size) == ERROR_SUCCESS)
- 	{
- 	  strncpy(domain, info->DomainName, len);
--	  debug_printf ("gethostname %s", domain);
-+	  debug_printf ("getdomainname %s", domain);
- 	  return 0;
- 	}
-       __seterrno ();
+diff --git a/winsup/cygwin/Makefile.in b/winsup/cygwin/Makefile.in
+index b15c746cf..a840f2b83 100644
+--- a/winsup/cygwin/Makefile.in
++++ b/winsup/cygwin/Makefile.in
+@@ -683,10 +683,10 @@ globals.h: mkglobals_h globals.cc
+ ${DLL_OFILES} ${LIBCOS}: globals.h $(srcdir)/$(TLSOFFSETS_H)
+ 
+ shared_info_magic.h: cygmagic shared_info.h
+-	/bin/sh $(word 1,$^) $@ "${COMPILE.cc} -E -x c++" $(word 2,$^) SHARED_MAGIC 'class shared_info' USER_MAGIC 'class user_info'
++	/bin/bash $(word 1,$^) $@ "${COMPILE.cc} -E -x c++" $(word 2,$^) SHARED_MAGIC 'class shared_info' USER_MAGIC 'class user_info'
+ 
+ child_info_magic.h: cygmagic child_info.h
+-	/bin/sh $(word 1,$^) $@ "${COMPILE.cc} -E -x c++" $(word 2,$^) CHILD_INFO_MAGIC 'class child_info'
++	/bin/bash $(word 1,$^) $@ "${COMPILE.cc} -E -x c++" $(word 2,$^) CHILD_INFO_MAGIC 'class child_info'
+ 
+ dcrt0.o sigproc.o: child_info_magic.h
+ 
 -- 
 2.29.2
 
