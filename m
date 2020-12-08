@@ -1,58 +1,34 @@
-Return-Path: <jon.turney@dronecode.org.uk>
-Received: from sa-prd-fep-047.btinternet.com (mailomta4-sa.btinternet.com
- [213.120.69.10])
- by sourceware.org (Postfix) with ESMTPS id C9B89385800D
- for <cygwin-patches@cygwin.com>; Tue,  8 Dec 2020 15:50:24 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org C9B89385800D
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=dronecode.org.uk
-Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
-Received: from sa-prd-rgout-005.btmx-prd.synchronoss.net ([10.2.38.8])
- by sa-prd-fep-047.btinternet.com with ESMTP id
- <20201208155023.YVCI28522.sa-prd-fep-047.btinternet.com@sa-prd-rgout-005.btmx-prd.synchronoss.net>
- for <cygwin-patches@cygwin.com>; Tue, 8 Dec 2020 15:50:23 +0000
-Authentication-Results: btinternet.com;
- auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 5ED9B8A71DD597F4
-X-Originating-IP: [86.139.158.14]
-X-OWM-Source-IP: 86.139.158.14 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedujedrudejiedgkedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuueftkffvkffujffvgffngfevqffopdfqfgfvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefuvfhfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpeflohhnucfvuhhrnhgvhicuoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqeenucggtffrrghtthgvrhhnpeeguefhkedvfeeigefhhedtjeehieegtdehhffhheffgfehheegtdffleejteeuueenucfkphepkeeirddufeelrdduheekrddugeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopegludelvddrudeikedruddrudduudgnpdhinhgvthepkeeirddufeelrdduheekrddugedpmhgrihhlfhhrohhmpeeojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukhequceuqfffjgepkeeukffvoffkoffgpdhrtghpthhtohepoegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhmqe
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from [192.168.1.111] (86.139.158.14) by
- sa-prd-rgout-005.btmx-prd.synchronoss.net (5.8.340) (authenticated as
- jonturney@btinternet.com)
- id 5ED9B8A71DD597F4 for cygwin-patches@cygwin.com;
- Tue, 8 Dec 2020 15:50:23 +0000
-Subject: Re: [PATCH] Use automake (v3)
-To: Cygwin Patches <cygwin-patches@cygwin.com>
-References: <20201124133720.45823-1-jon.turney@dronecode.org.uk>
- <20201130102524.GC303847@calimero.vinschen.de>
- <20201130104718.GD303847@calimero.vinschen.de>
- <6fa43a94-c29d-fa48-07d0-1ef095d9f5e3@dronecode.org.uk>
- <20201201091833.GJ303847@calimero.vinschen.de>
- <b8610713-5e7d-7b19-93f1-3ded9ca12bc6@dronecode.org.uk>
- <20201202170526.GW303847@calimero.vinschen.de>
- <161bd779-bd17-1e98-5644-bea42c3206cf@dronecode.org.uk>
- <42d8f1f139939b45fef85d00c3e368cf2500b603.camel@cygwin.com>
- <20201202190349.GY303847@calimero.vinschen.de>
-From: Jon Turney <jon.turney@dronecode.org.uk>
-Message-ID: <4d97646f-0d7f-2980-f6da-91c6bd7d15cc@dronecode.org.uk>
-Date: Tue, 8 Dec 2020 15:50:22 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+Return-Path: <cygwin@jdrake.com>
+Received: from mail231.csoft.net (mail231.csoft.net [96.47.74.235])
+ by sourceware.org (Postfix) with ESMTPS id 7768F3854805
+ for <cygwin-patches@cygwin.com>; Tue,  8 Dec 2020 19:58:20 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 7768F3854805
+Received: from mail231.csoft.net (localhost [127.0.0.1])
+ by mail231.csoft.net (Postfix) with ESMTP id 7FB31CB51
+ for <cygwin-patches@cygwin.com>; Tue,  8 Dec 2020 14:58:18 -0500 (EST)
+Received: from mail231 (mail231 [96.47.74.235])
+ (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+ (No client certificate requested) (Authenticated sender: jeremyd)
+ by mail231.csoft.net (Postfix) with ESMTPSA id 7AB52CB4E
+ for <cygwin-patches@cygwin.com>; Tue,  8 Dec 2020 14:58:18 -0500 (EST)
+Date: Tue, 8 Dec 2020 11:58:18 -0800 (PST)
+From: Jeremy Drake <cygwin@jdrake.com>
+X-X-Sender: jeremyd@resin.csoft.net
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH 1/1] cygwin: use CREATE_DEFAULT_ERROR_MODE in spawn
+In-Reply-To: <26ef013a-d3ff-7389-c022-1b10568faf79@dronecode.org.uk>
+Message-ID: <alpine.BSO.2.21.2012081142000.9707@resin.csoft.net>
+References: <alpine.BSO.2.21.2012031317260.9707@resin.csoft.net>
+ <20201204121043.GB5295@calimero.vinschen.de>
+ <alpine.BSO.2.21.2012041028060.9707@resin.csoft.net>
+ <20201207094317.GI5295@calimero.vinschen.de>
+ <26ef013a-d3ff-7389-c022-1b10568faf79@dronecode.org.uk>
+User-Agent: Alpine 2.21 (BSO 202 2017-01-01)
 MIME-Version: 1.0
-In-Reply-To: <20201202190349.GY303847@calimero.vinschen.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3571.7 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_NONE,
- TXREP autolearn=no autolearn_force=no version=3.4.2
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-12.8 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_LOW,
+ SPF_HELO_PASS, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -67,52 +43,48 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 08 Dec 2020 15:50:26 -0000
+X-List-Received-Date: Tue, 08 Dec 2020 19:58:21 -0000
 
-On 02/12/2020 19:03, Corinna Vinschen via Cygwin-patches wrote:
-> On Dec  2 13:33, Yaakov Selkowitz via Cygwin-patches wrote:
->> On Wed, 2020-12-02 at 18:03 +0000, Jon Turney wrote:
->>> On 02/12/2020 17:05, Corinna Vinschen via Cygwin-patches wrote:
->>>> On Dec  2 15:36, Jon Turney wrote:
->>>>> On 01/12/2020 09:18, Corinna Vinschen wrote:
->>>>>> What bugs me is that the mingw executables are built in
->>>>>> utils/mingw,
->>>>>> but the object files are still in utils.  Any problem
->>>>>> generating the
->>>>>> object files in utils/mingw, too?
->>>>>
->>>>> Not easily.
->>>>>
->>>>> This behaviour can be turned off by not using the 'subdir-
->>>>> objects' automake
->>>>> option.
->>>>>
->>>>> But then automake warns that option is disabled (since it's going
->>>>> to be the
->>>>> default in future).
->>>>
->>>> So why not just move the mingw source files to utils/mingw, too?
->>>
->>> There's probably some scope for doing that, but not in all cases, as
->>> some files are built multiple times with different compilers and/or
->>> flags.
->>>
->>> e.g. path.cc is built with a cygwin compiler and -DFSTAB as part of
->>> mount, with a MinGW compiler as part of cygcheck, and with a MinGW
->>> compiler and -DTESTSUITE as part of path-testsuite.
->>
->> Then something like:
->>
->> $ cat > winsup/utils/mingw/path.cc <<_EOF
->> #define MINGW // whatever is needed here...
->> #include "../path.cc"
->> _EOF
->>
->> ??
-> 
-> +1
+On Tue, 8 Dec 2020, Jon Turney wrote:
+> On 07/12/2020 09:43, Corinna Vinschen wrote:
+> > On Dec  4 10:35, Jeremy Drake via Cygwin-patches wrote:
+> > > On Fri, 4 Dec 2020, Corinna Vinschen via Cygwin-patches wrote:
+> > >
+> > > > I'm not happy about a new CYGWIN option.
+> > > >
+> > > > Wouldn't it make sense, perhaps, to switch to CREATE_DEFAULT_ERROR_MODE
+> > > > for all non-Cygwin processes by default instead?
+>
+> I agree.
+>
+> Cygwin calls SetErrorMode(), so we need to use this flag to prevent that
+> non-default behaviour being inherited by processes started with
+> CreateProcess().
+>
 
-Sure, there are plenty of ways of rearranging the code to address this.
+In that case, here's my initial, much simpler patch
 
-I'm not sure I see what the benefit of that additional complexity is.
+-- >8 --
+Subject: [PATCH] cygwin: use CREATE_DEFAULT_ERROR_MODE in spawn
 
+This allows native processes to get Windows-default error handling
+behavior (such as invoking the registered JIT debugger), while cygwin
+processes would quickly set their error mode back to what they expect.
+---
+ winsup/cygwin/spawn.cc | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
+index c77d62984..f5952d53b 100644
+--- a/winsup/cygwin/spawn.cc
++++ b/winsup/cygwin/spawn.cc
+@@ -429,7 +429,8 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
+       c_flags = GetPriorityClass (GetCurrentProcess ());
+       sigproc_printf ("priority class %d", c_flags);
+
+-      c_flags |= CREATE_SEPARATE_WOW_VDM | CREATE_UNICODE_ENVIRONMENT;
++      c_flags |= CREATE_SEPARATE_WOW_VDM | CREATE_UNICODE_ENVIRONMENT
++	      | CREATE_DEFAULT_ERROR_MODE;
+
+       /* We're adding the CREATE_BREAKAWAY_FROM_JOB flag here to workaround
+ 	 issues with the "Program Compatibility Assistant (PCA) Service".
