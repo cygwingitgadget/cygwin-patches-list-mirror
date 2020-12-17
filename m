@@ -1,47 +1,36 @@
-Return-Path: <jon.turney@dronecode.org.uk>
-Received: from sa-prd-fep-045.btinternet.com (mailomta8-sa.btinternet.com
- [213.120.69.14])
- by sourceware.org (Postfix) with ESMTPS id 822A73854810
- for <cygwin-patches@cygwin.com>; Wed, 16 Dec 2020 14:29:47 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 822A73854810
+Return-Path: <brian.inglis@systematicsw.ab.ca>
+Received: from smtp-out-no.shaw.ca (smtp-out-no.shaw.ca [64.59.134.12])
+ by sourceware.org (Postfix) with ESMTPS id 2D235386EC5B
+ for <cygwin-patches@cygwin.com>; Thu, 17 Dec 2020 07:12:18 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 2D235386EC5B
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=dronecode.org.uk
+ header.from=SystematicSW.ab.ca
 Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=jon.turney@dronecode.org.uk
-Received: from sa-prd-rgout-002.btmx-prd.synchronoss.net ([10.2.38.5])
- by sa-prd-fep-048.btinternet.com with ESMTP id
- <20201126210143.EOJE7754.sa-prd-fep-048.btinternet.com@sa-prd-rgout-002.btmx-prd.synchronoss.net>;
- Thu, 26 Nov 2020 21:01:43 +0000
-Authentication-Results: btinternet.com;
- auth=pass (PLAIN) smtp.auth=jonturney@btinternet.com
-X-SNCR-Rigid: 5ED9AA6E1C476F58
-X-Originating-IP: [86.139.158.14]
-X-OWM-Source-IP: 86.139.158.14 (GB)
-X-OWM-Env-Sender: jonturney@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedujedrudehvddgudegiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepuffvfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomheplfhonhcuvfhurhhnvgihuceojhhonhdrthhurhhnvgihsegurhhonhgvtghouggvrdhorhhgrdhukheqnecuggftrfgrthhtvghrnhepgeeuhfekvdefieeghfehtdejheeigedthefhhfehfffgheehgedtffeljeetueeunecukfhppeekiedrudefledrudehkedrudegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehhvghloheplgduledvrdduieekrddurdduuddungdpihhnvghtpeekiedrudefledrudehkedrudegpdhmrghilhhfrhhomhepoehjohhnrdhtuhhrnhgvhiesughrohhnvggtohguvgdrohhrghdruhhkqecuuefqffgjpeekuefkvffokffogfdprhgtphhtthhopeeotgihghifihhnqdhprghttghhvghssegthihgfihinhdrtghomheqpdhrtghpthhtohepoehmrghrkhesmhgrgihrnhgurdgtohhmqe
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from [192.168.1.111] (86.139.158.14) by
- sa-prd-rgout-002.btmx-prd.synchronoss.net (5.8.340) (authenticated as
- jonturney@btinternet.com)
- id 5ED9AA6E1C476F58; Thu, 26 Nov 2020 21:01:43 +0000
-Subject: Re: [PATCH] Cygwin: Speed up mkimport
-To: Mark Geisert <mark@maxrnd.com>, Cygwin Patches <cygwin-patches@cygwin.com>
-References: <20201126095620.38808-1-mark@maxrnd.com>
-From: Jon Turney <jon.turney@dronecode.org.uk>
-Message-ID: <c9e9ed07-48fc-62d1-8288-c5ef88301a88@dronecode.org.uk>
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+ spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
+Received: from BWINGLISD.cg.shawcable.net ([24.64.172.44])
+ by shaw.ca with ESMTP
+ id pnSSkL1fU34axpnSTkZ06c; Thu, 17 Dec 2020 00:12:17 -0700
+X-Authority-Analysis: v=2.4 cv=LvQsdlRc c=1 sm=1 tr=0 ts=5fdb04d1
+ a=kiZT5GMN3KAWqtYcXc+/4Q==:117 a=kiZT5GMN3KAWqtYcXc+/4Q==:17
+ a=r77TgQKjGQsHNAKrUKIA:9 a=1aU8EytXyWyOelARygEA:9 a=QEXdDO2ut3YA:10
+ a=3SSaSaTa4kKZ3wpe8fAA:9 a=B2y7HmGcmWMA:10
+From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] fhandler_proc.cc(format_proc_cpuinfo): report Intel SGX bits
+Date: Thu, 17 Dec 2020 00:11:28 -0700
+Message-Id: <20201217071127.60537-1-Brian.Inglis@SystematicSW.ab.ca>
+X-Mailer: git-send-email 2.29.2
+Reply-To: <cygwin-patches@cygwin.com>
 MIME-Version: 1.0
-In-Reply-To: <20201126095620.38808-1-mark@maxrnd.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3571.6 required=5.0 tests=BAYES_00, FORGED_SPF_HELO,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H4, RCVD_IN_MSPIKE_WL, SPF_HELO_PASS, SPF_NONE,
- TXREP autolearn=no autolearn_force=no version=3.4.2
+Content-Type: multipart/mixed; boundary="------------2.29.2"
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfGn81bUZdC+iKF/HD+75vCNRZeuTUy8qyls/HGFhDZ3Oa1wSE2WAKMS9mb6Kx43r8Z/gVnNYCZOzhBxZo35MUdFCMKtw6WWizNqQWxRsfTsyBpEYYNwo
+ Qty59TYqDb4lPkZzzvk/Of/smlSDegdiWPW7z6nbXBrcJle5w79Bze3fU2ceERlZOezXYaruk+UODSQN2+2PeFFBmeb5vN1J4X6D5mz/4j8m1Y9J2yhq2TaY
+ x64w2YKIaq3gHut2t/knSqZFUFRDw0RDQx8Vt9w8sDs=
+X-Spam-Status: No, score=-12.1 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW,
+ RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_NONE,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -56,46 +45,46 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-Date: Wed, 16 Dec 2020 14:29:49 -0000
-X-Original-Date: Thu, 26 Nov 2020 21:01:42 +0000
-X-List-Received-Date: Wed, 16 Dec 2020 14:29:49 -0000
+X-List-Received-Date: Thu, 17 Dec 2020 07:12:19 -0000
 
-On 26/11/2020 09:56, Mark Geisert wrote:
-> Cut mkimport elapsed time in half by forking each iteration of the two
-> time-consuming loops within.  Only do this if more than one CPU is
-> present.  In the second loop, combine the two 'objdump' calls into one
-> system() invocation to avoid a system() invocation per iteration.
+This is a multi-part message in MIME format.
+--------------2.29.2
+Content-Type: text/plain; charset=UTF-8; format=fixed
+Content-Transfer-Encoding: 8bit
 
-Nice.  Thanks for looking into this.
+Update to Linux next 5.10 cpuinfo flags for Intel SDM 36.7.1 Software
+Guard Extensions, and 38.1.4 SGX Launch Control Configuration.
+Launch control restricts what software can run with enclave protections,
+which helps protect the system from bad enclaves.
+---
+ winsup/cygwin/fhandler_proc.cc | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> @@ -86,8 +94,18 @@ for my $f (keys %text) {
->       if (!$text{$f}) {
->   	unlink $f;
->       } else {
-> -	system $objcopy, '-R', '.text', $f and exit 1;
-> -	system $objcopy, '-R', '.bss', '-R', '.data', "t-$f" and exit 1;
-> +	if ($forking && fork) {
-> +	    # Testing shows parent does need to sleep a short time here,
-> +	    # otherwise system is inundated with hundreds of objcopy processes
-> +	    # and the forked perl processes that launched them.
-> +	    my $delay = 0.01; # NOTE: Slower systems may need to raise this
-> +	    select(undef, undef, undef, $delay); # Supports fractional seconds
-> +	} else {
-> +	    # Do two objcopy calls at once to avoid one system() call overhead
-> +	    system '(', $objcopy, '-R', '.text', $f, ')', '||',
-> +		$objcopy, '-R', '.bss', '-R', '.data', "t-$f" and exit 1;
-> +	    exit 0 if $forking;
-> +	}
->       }
->   }
->   
+--------------2.29.2
+Content-Type: text/x-patch; name="0001-fhandler_proc.cc-format_proc_cpuinfo-add-Intel-SGX-h.patch"
+Content-Transfer-Encoding: 8bit
+Content-Disposition: attachment; filename="0001-fhandler_proc.cc-format_proc_cpuinfo-add-Intel-SGX-h.patch"
 
-Hmm... not so sure about this.  This seems racy, as nothing ensures that 
-these objcopies have finished before we combine all the produced .o 
-files into a library.
+diff --git a/winsup/cygwin/fhandler_proc.cc b/winsup/cygwin/fhandler_proc.cc
+index 13397150ff53..8e23c0609485 100644
+--- a/winsup/cygwin/fhandler_proc.cc
++++ b/winsup/cygwin/fhandler_proc.cc
+@@ -1414,6 +1414,7 @@ format_proc_cpuinfo (void *, char *&destbuf)
+ 
+ 	  ftcprint (features1,  0, "fsgsbase");	    /* rd/wr fs/gs base */
+ 	  ftcprint (features1,  1, "tsc_adjust");   /* TSC adjustment MSR 0x3B */
++	  ftcprint (features1,  2, "sgx");	    /* software guard extensions */
+ 	  ftcprint (features1,  3, "bmi1");         /* bit manip ext group 1 */
+ 	  ftcprint (features1,  4, "hle");          /* hardware lock elision */
+ 	  ftcprint (features1,  5, "avx2");         /* AVX ext instructions */
+@@ -1564,6 +1565,7 @@ format_proc_cpuinfo (void *, char *&destbuf)
+ 	  ftcprint (features1, 27, "movdiri");          /* movdiri instr */
+ 	  ftcprint (features1, 28, "movdir64b");        /* movdir64b instr */
+ 	  ftcprint (features1, 29, "enqcmd");		/* enqcmd/s instructions*/
++	  ftcprint (features1, 30, "sgx_lc");		/* sgx launch control */
+         }
+ 
+       /* AMD MCA cpuid 0x80000007 ebx */
 
-I'm pretty sure with more understanding, this whole thing could be done 
-better:  For example, from a brief look, it seems that the t-*.o files 
-are produced by gas, and then we remove .bss and .data sections.  Could 
-we not arrange to assemble these objects without those sections in the 
-first place?
+--------------2.29.2--
+
