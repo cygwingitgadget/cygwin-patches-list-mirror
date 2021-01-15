@@ -1,93 +1,88 @@
 Return-Path: <kbrown@cornell.edu>
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com
- (mail-bn7nam10on2092.outbound.protection.outlook.com [40.107.92.92])
- by sourceware.org (Postfix) with ESMTPS id 92C7E3857819
- for <cygwin-patches@cygwin.com>; Fri, 15 Jan 2021 17:51:48 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 92C7E3857819
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam10on2113.outbound.protection.outlook.com [40.107.93.113])
+ by sourceware.org (Postfix) with ESMTPS id 029AD3987942
+ for <cygwin-patches@cygwin.com>; Fri, 15 Jan 2021 17:52:37 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 029AD3987942
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ktDLOL1+uBv8HjuxFfO4we5asOUk3fAg32SY/6iuk7WXFpO5E6VOjj5hECyOrkRTcx7d7shHk+Kg582/XAYPhxm3WHMjcNkrQh28DO0uxPr1sCpqMZRzwuvJVNvtiz7Qgpa40GtYSCoeATZYca1Wo8dxJZbkqkOdMO8oTobWk6/Vxrnf1kqzRHxdQYPt5EC5QvPU41JabtpItudBit+yQMLCqWS6EgT78oz6kubVnu8FSZdFXvocS34iH6jmdq5S2WDxYonkeMapBRCia00ca8qVOFdP5YVx3aaoNFvmac9d1vDFtKg/tGbb+4uyVQPFvv1NBRyM9Fsz57/TROUsfQ==
+ b=nxNRRQ/T9vjUNWSi3fCDSUnQhKHW2jvv9IsvfkQhLESafJExjtV6xgi2cSuqNs8+CaQAIkdJc9sKtpfPwKvdx4lD+yArSrUnxu6EPhq9TjvawixqYSjzQppBTofabK9Z03885Na4qXxKTki081BaKefRV9B0h2qQD8HWdpG9d9oX1vh9n13MSu9GsXWiKLlYjeCKUd2wLwD/wOMSg1PvzadEu2h3p6uRKbqu59Ad1eF1tWp72KMUeRxZq+bMYe+2N27quS/ZzuJjZ50SRt3WTkRxfw4UKd4b7sWSZb4DtoTlWJkS2PugOKu14ZCO/UdV4T+Ui08hjw4d12czGkzLCw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sS1QmGhDlifV1B9oei50S4Yd89JGzCYRcn7BTSOPt/g=;
- b=fDowj7FBqc9z8t1FGArgNet1iCahHA+lFuMh4Laq0lVrg8Wv1dFLo0zK7JxoNen84JWjwGZMPDmhkfZMRpUxbKYqz3bNZXo6bgksEppPruzQWGyM2uRqTn8VSWhpxdnSwR8J9ig/L2cTZ64lteIVDsziRHTKU0fnfIHrWTbRfmftWAbSNKQ1WWXeB1lF/V3WRVGx6VXySvlJrPd9cK8BGW4wclVYNbPNCxJ4pRpuOf5vD+dHL+44AhN3W7Dx4hh5UNQo2jDK72aDZW99GhpoOBlEL4S09Wya8X91EfqdoKSZqofN0+Egll1rblPU/XaMOKUe4iHhvREbCktetclfzA==
+ bh=QvSIviG+N0ecbTAfcjojbeD2bSy098xEJ6Ymwebn880=;
+ b=DjJ/3uC6467AEp4lFRXhrRKFHN+BZ+RQtm7P3lg9PDG8f8nfGe1xtMuS2tmrawoHb01fsqzhT8TZFoXWpgpzK+Hn2LMmnjpVtM9eu53ymOjeinC2LpZG12WcUwS9BNPZi9uPsswSSpVa773A4md9vRxv4A2Wts9ID+DFH1kelgvr4DA1GOh6Yck/yF+oWeWZcaYcO3Hvs44vozsWipBTPy19hSZA42svBYAMEJYjc9O3AhV9NXMPR2SogN7MqRZ0lERDsDLgsdCr8BiOhyk8kvK7xsZaVDcQjwN3NAEnnltwE7LNiMcpEBNDEQG6v/4EqLczFz6MKkjgRamrqvqP+Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu;
  dkim=pass header.d=cornell.edu; arc=none
 Received: from BN7PR04MB4388.namprd04.prod.outlook.com (2603:10b6:406:f8::19)
- by BN8PR04MB6161.namprd04.prod.outlook.com (2603:10b6:408:50::18)
+ by BN8PR04MB6387.namprd04.prod.outlook.com (2603:10b6:408:d7::22)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3763.11; Fri, 15 Jan
- 2021 17:51:47 +0000
+ 2021 17:52:36 +0000
 Received: from BN7PR04MB4388.namprd04.prod.outlook.com
  ([fe80::f071:e174:ef12:375c]) by BN7PR04MB4388.namprd04.prod.outlook.com
  ([fe80::f071:e174:ef12:375c%7]) with mapi id 15.20.3742.012; Fri, 15 Jan 2021
- 17:51:47 +0000
-Subject: Re: [PATCH] Cygwin: document a recent bug fix
-To: cygwin-patches@cygwin.com
-References: <20210115174211.16619-1-kbrown@cornell.edu>
+ 17:52:36 +0000
 From: Ken Brown <kbrown@cornell.edu>
-Message-ID: <4d7472d9-b00c-9bbb-e514-7eee07500211@cornell.edu>
-Date: Fri, 15 Jan 2021 12:51:46 -0500
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
-In-Reply-To: <20210115174211.16619-1-kbrown@cornell.edu>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] Cygwin: document a recent bug fix
+Date: Fri, 15 Jan 2021 12:52:15 -0500
+Message-Id: <20210115175215.16678-1-kbrown@cornell.edu>
+X-Mailer: git-send-email 2.30.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Originating-IP: [65.112.130.200]
-X-ClientProxiedBy: BN6PR10CA0004.namprd10.prod.outlook.com
- (2603:10b6:405:1::14) To BN7PR04MB4388.namprd04.prod.outlook.com
+X-ClientProxiedBy: BN0PR03CA0047.namprd03.prod.outlook.com
+ (2603:10b6:408:e7::22) To BN7PR04MB4388.namprd04.prod.outlook.com
  (2603:10b6:406:f8::19)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [10.13.22.4] (65.112.130.200) by
- BN6PR10CA0004.namprd10.prod.outlook.com (2603:10b6:405:1::14) with Microsoft
+Received: from localhost.localdomain (65.112.130.200) by
+ BN0PR03CA0047.namprd03.prod.outlook.com (2603:10b6:408:e7::22) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3763.9 via Frontend Transport; Fri, 15 Jan 2021 17:51:47 +0000
+ 15.20.3763.9 via Frontend Transport; Fri, 15 Jan 2021 17:52:35 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7d7fea69-846b-4692-a358-08d8b97e3a8b
-X-MS-TrafficTypeDiagnostic: BN8PR04MB6161:
-X-Microsoft-Antispam-PRVS: <BN8PR04MB6161999576B587DF847BC942D8A70@BN8PR04MB6161.namprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:576;
+X-MS-Office365-Filtering-Correlation-Id: a76254df-b6f6-46d8-7531-08d8b97e5793
+X-MS-TrafficTypeDiagnostic: BN8PR04MB6387:
+X-Microsoft-Antispam-PRVS: <BN8PR04MB6387D609A46851D1AD7A00E9D8A70@BN8PR04MB6387.namprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:124;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tSV6Toz3y65oRYSb5nBk61jJJUUY2xXpSar6OlI7HoGWVPIXGAVQ1JHDheaV4FSgoYJTFcfb4+u39puEt8ZmgVyTYAZ5q6twFC281W95zzoaAGhJibqvUqqPC/22wF53T8kjvhXaFI+B2RD4SkT4hp1rCCPdHAnE/8SF07RdC7xpHOpFbxxqGxtQMi08yydG3Pksfx8Em1CZ+BPa90k5yRJWe8cz6tbdsLjSQE7oipTzWMvYNEVg3/u/VXfvcGDmsHTN4O6XqlmNC4Wk9cSdiVPv96zqqKzFzHdl4B31xn6GoKdQco3/p18UmmCAcY7acvO87/+0S/0pNE6Bf75rNviYYetV3qfBlTqB0mJt15Fqc4pZgqhfwlo0zP9CI1kaMPdsduA324PJyv9d7e6nZxr+OAe9hHTOxIWnUOjCXUD54Utjm3tv6SBs8xvu82A1gkG44HcV6xMsIfZK1RHckqlrTQf9uXWCWCOTwwedKDs=
+X-Microsoft-Antispam-Message-Info: g2DyhtX2DndgPhmAFbpmAWLHSbXpIWrBC23fAkg7pMChBrom7G85m2L1gkO9q3gKKGam0WIdzxwYfhCWsPJnfih4+DdbvnUTq39HC6Wa93Xo8lTj0lL2rwfdKod7WEccuo6Zw4iPoj/Qhovo8TiYcCUOi+hz4aBtxUwGSTBlxD6dcvWeYYspMnWbqcBSa4HnCPmElL+vnMVTYQelRrdcv8/KmknNLmqSDgb0qmdxX9khU0S/zF6mXd5+WBx/XQu1Sk0SiXm6V/C3cdn9furUd+sXyEBPTznr20U4LUaOtV50bG2DInC8XALbwNCmKjUz7vfkufkYZfTGWsGUIHt0dCz1Kjrh96/WsyVqUDl42GrlSQr/9nyrUDKD+61glpXtA1ASWr5Ih59kxtPK3Z+xcFuIynDKbHXgg4OTGKBC6w2HlVa3QOUzExCvTXPMgg9bYti+lEVaKnEETlzudc23Q5/PwAuyjd0YOURW2Bc6PvRWSvtqi1+SUjm0B/zyoxfkxwA495se7ridrGS1F92j2A==
 X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:BN7PR04MB4388.namprd04.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(4636009)(366004)(346002)(136003)(396003)(39860400002)(376002)(26005)(75432002)(66946007)(36756003)(5660300002)(558084003)(2616005)(52116002)(186003)(53546011)(16526019)(6916009)(2906002)(31696002)(66476007)(8676002)(86362001)(6486002)(83380400001)(16576012)(316002)(8936002)(956004)(786003)(66556008)(478600001)(31686004)(43740500002)(45980500001);
+ SFS:(4636009)(39860400002)(136003)(366004)(396003)(346002)(376002)(1076003)(75432002)(5660300002)(2616005)(6512007)(786003)(6486002)(316002)(86362001)(69590400011)(52116002)(6506007)(26005)(66556008)(66476007)(6666004)(2906002)(66946007)(16526019)(186003)(8936002)(966005)(36756003)(6916009)(956004)(4744005)(8676002)(478600001);
  DIR:OUT; SFP:1102; 
-X-MS-Exchange-AntiSpam-MessageData: =?Windows-1252?Q?HKWoWxpnkg4IPqhNhvBZBg2OcqshmPc2oIr3dT9d3XLbsck5+0OsCHX8?=
- =?Windows-1252?Q?1Wup9f1cCL5SzEUFWKR0Z+c2tqclHJnPxKyzjQ7LD67q+RRGD7Od3WvE?=
- =?Windows-1252?Q?AoobzwjIpWaP5p7MJwYeaB6ZnRJn2wjM3B7hUDDU1fu46FughRhQXm/V?=
- =?Windows-1252?Q?jmvm5+h6B7s66KEU4Uu+GkPr7dig/dco1f/q+bP3dzRdzgwTf4mWcd8A?=
- =?Windows-1252?Q?d2P7eWQa5SdHQQ4zT95YlC+eAiTRqDivrvPg4kdbOYduhJndoal9tIDu?=
- =?Windows-1252?Q?KBV3XYL82LnSMi+yUqps7j+dISUrlA2N7YcbwJnQYZ24Tyne0LSkfrpg?=
- =?Windows-1252?Q?rmfBzyjNOeatmwotTb1R1BdC6Ru8WKpfjL/DiBrJ+NLPlJxWq6cxI/n1?=
- =?Windows-1252?Q?grdmF4yQxN4PWSmhxeogi/BdVNOZPw6oBPI9q5J3O/PY5KFIW2ZKvdXD?=
- =?Windows-1252?Q?dZG0NlouChiZp1AIc/SBIfOH1gwhbbhrr9/bKoL09tweqVhVW+tDvAA2?=
- =?Windows-1252?Q?am4g+dkel9IFeRafmrt/BEk0fkm2MJpk+EOJHpBCDVzKjmSRyz8JaNq7?=
- =?Windows-1252?Q?X0FMkQSGjQBpQ2SV+ShBgkWYA/d85hjtjtfKbxx91xxIFscJRJ1NAfCB?=
- =?Windows-1252?Q?ATJy4uANSa73i3OicREBjYmnClIsIPH5WVmnEgeby0cwoBlut424iSao?=
- =?Windows-1252?Q?YwdvezfHmRIeqerTfrote55zBXSWos5yNZB1NIJNKT8D/S/EOodp7JMr?=
- =?Windows-1252?Q?H3DUyIabC7csJCo8vAzz2WktzMzCQGGnIeUVsTkKksTs739Jh8FlNSKl?=
- =?Windows-1252?Q?2UFw/8wrM/eYUGK+/FdCZZ6PMotTmpSw4CG7dgQPBxHyIiwvN7XCvHRy?=
- =?Windows-1252?Q?eOXyGjU2g1jLqshmTdVQVsxu1szQKl+DuNLlJ74sGLjF8dMoglnJmfVO?=
- =?Windows-1252?Q?UG1tispKxbr+LCJops2Hj+wgFj40RhsKsHaiEPBpIh2nYZ2KSAXTJAmt?=
- =?Windows-1252?Q?5Jk27xFR2lEg0F1+QoCyjxV1D+YUSMrdP0ZsxeXpMbpwLSFhdou3LdZX?=
- =?Windows-1252?Q?Jza1q58wVYiTOTEE?=
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?GAMaxshyE39D8Z9NLQj4sqXMRUT7JUhNhtrpebwzJcFH5O7l6yPf7ZibjdGi?=
+ =?us-ascii?Q?rfbePNKNvXU4YVPmEqpDVUCM8BlO3oOLQJ66vEdh3bnr2r5xUGQToYRkPQEH?=
+ =?us-ascii?Q?PtjbKKLLF2EAvmGcWRgRYntaAspQtAugkCOPT4bR2Gqjru56qpHU9+DeI753?=
+ =?us-ascii?Q?75oniMWO9eQ4fs3fx/dK5BFotnKMGryLw85UL7t/QOLknciflqaj5yEVD5Yy?=
+ =?us-ascii?Q?5FkbIjJOoLLyGwXAYWEUxK6dRSHP/H97bpGux//UyrbV3X9/SqCZ3Ht/hpGf?=
+ =?us-ascii?Q?6Y0pUN7Zl2FSvcQlstBfBEH1eAhz3bTbcFa1QifxQ7nNkVowvHkBOue0SFC2?=
+ =?us-ascii?Q?Reh5Ej4DgVbV9hYl7PzHDFMLoPZlhS20i+blS8NvKvwMnjySpP054ZZ7LWms?=
+ =?us-ascii?Q?i1i2U2Q4YVgBaCJp8brsLjtJ1oCrHFUTi5OHZ5h6s0TVfxNJ61kUkCDGfFq+?=
+ =?us-ascii?Q?DtuXCXyPyvP9IVEmCktmyWA8V5EBfOcHsNVxezWHpjerTLOmTpos5pro3O9K?=
+ =?us-ascii?Q?g/yv004cM/hVFxhEzAWJlShpeVMq6zfQ5b7puWSwDJQ/DZm0U9sCOt5YjDFG?=
+ =?us-ascii?Q?FU9yPtVA2YDhRH4mt4xR/uO1Jp0PwST5lUqxHMW9qsw4rJluwC0+v4u4vWfC?=
+ =?us-ascii?Q?RQxgVLKedMVhytp9Vb74nBlG5C8AZvD7pbkHOhB3meMfEYMK5omJokfsezZ+?=
+ =?us-ascii?Q?aiIud4lzCS7np4DOjo+cXOMPTVIQDq1otBKydDGUUbL/Q5Kg2eqSZOO4SAGM?=
+ =?us-ascii?Q?y6uK7nf+E9SWHuSCuGtKJUk7PLjMCYpu9O7KVrnscp3MDWfv/SMi/lavURRE?=
+ =?us-ascii?Q?5iBQf9OQogwr3lL53RCAh18RHORvqIif6cJaHCq/lKhqvjkEC6kvCn1+uAP/?=
+ =?us-ascii?Q?S3XrKGEPShLjFdTBEpC1r3WZLFF5AKEAzRBSZtWiRCVF1jBBx82BblFyk9rX?=
+ =?us-ascii?Q?WnH5YcQLI9cyxfqc5JzvhXyjCJZVQVS1EPUDpZYPLM6+kCRm+BKIqzR2HAdD?=
+ =?us-ascii?Q?cMqb?=
 X-OriginatorOrg: cornell.edu
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7d7fea69-846b-4692-a358-08d8b97e3a8b
+X-MS-Exchange-CrossTenant-Network-Message-Id: a76254df-b6f6-46d8-7531-08d8b97e5793
 X-MS-Exchange-CrossTenant-AuthSource: BN7PR04MB4388.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jan 2021 17:51:47.3602 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jan 2021 17:52:36.1053 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 5d7e4366-1b9b-45cf-8e79-b14b27df46e1
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /f5qBNT1C5UyepMiRJZBZ2Sqy8N9JUL1Q5AgE6XGyQJpcpPX1zrX8813YsOjw7izA9In5VzgQPTas76yi8wbHg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR04MB6161
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, MSGID_FROM_MTA_HEADER, NICE_REPLY_A,
+X-MS-Exchange-CrossTenant-UserPrincipalName: Kye2nVu2fIiJ+rugmaO+WrdQIrXwO6E8w4UY7KsbThVdKFu62Zbweb9Q2TbfBGP8U8Q/oHmkKb4qjsOcpnJQjg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR04MB6387
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, MSGID_FROM_MTA_HEADER,
  RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_PASS,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
@@ -104,12 +99,27 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 15 Jan 2021 17:51:49 -0000
+X-List-Received-Date: Fri, 15 Jan 2021 17:52:38 -0000
 
-On 1/15/2021 12:42 PM, Ken Brown via Cygwin-patches wrote:
-> This documents commit b951adce, "Cygwin: add flag to indicate reparse
-> points unknown to WinAPI".
+This documents commit aec64798, "Cygwin: add flag to indicate reparse
+points unknown to WinAPI".
+---
+ winsup/cygwin/release/3.2.0 | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Sorry, there's a mistake in the commit message.  A corrected version is on the way.
+diff --git a/winsup/cygwin/release/3.2.0 b/winsup/cygwin/release/3.2.0
+index 132d5c810..c18a848de 100644
+--- a/winsup/cygwin/release/3.2.0
++++ b/winsup/cygwin/release/3.2.0
+@@ -43,5 +43,8 @@ Bug Fixes
+ - Fix return value of sqrtl on negative infinity.
+   Addresses: https://cygwin.com/pipermail/cygwin/2020-October/246606.html
+ 
++- Fix a path handling problem if there is a WSL symlink in PATH.
++  Addresses: https://cygwin.com/pipermail/cygwin/2020-December/246938.html
++
+ - Fix a bug in fstatat(2) on 32 bit that could cause it to return garbage.
+   Addresses: https://cygwin.com/pipermail/cygwin/2021-January/247399.html
+-- 
+2.30.0
 
-Ken
