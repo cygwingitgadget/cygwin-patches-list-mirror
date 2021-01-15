@@ -1,26 +1,25 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
 Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
- by sourceware.org (Postfix) with ESMTPS id 7B94D397182D
- for <cygwin-patches@cygwin.com>; Fri, 15 Jan 2021 08:34:01 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 7B94D397182D
+ by sourceware.org (Postfix) with ESMTPS id 42DCC397182D
+ for <cygwin-patches@cygwin.com>; Fri, 15 Jan 2021 08:34:09 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 42DCC397182D
 Received: from localhost.localdomain (x067108.dynamic.ppp.asahi-net.or.jp
  [122.249.67.108]) (authenticated)
- by conuserg-10.nifty.com with ESMTP id 10F8WSAd017561;
- Fri, 15 Jan 2021 17:33:36 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 10F8WSAd017561
+ by conuserg-10.nifty.com with ESMTP id 10F8WSAf017561;
+ Fri, 15 Jan 2021 17:33:49 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 10F8WSAf017561
 X-Nifty-SrcIP: [122.249.67.108]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH 4/5] Cygwin: pty: Prevent pty from changing code page of
- parent console.
-Date: Fri, 15 Jan 2021 17:32:12 +0900
-Message-Id: <20210115083213.676-5-takashi.yano@nifty.ne.jp>
+Subject: [PATCH 5/5] Cygwin: pty: Make master thread functions be static.
+Date: Fri, 15 Jan 2021 17:32:13 +0900
+Message-Id: <20210115083213.676-6-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210115083213.676-1-takashi.yano@nifty.ne.jp>
 References: <20210115083213.676-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00, DKIM_SIGNED,
  DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
  SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
@@ -37,391 +36,489 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 15 Jan 2021 08:34:04 -0000
+X-List-Received-Date: Fri, 15 Jan 2021 08:34:12 -0000
 
-- After commit 232fde0e, pty changes console code page when the first
-  non-cygwin app is executed. If pty is started in real console device,
-  pty changes the code page of root console. This causes very annoying
-  result because changing code page changes the font of command prompt
-  if console is in legacy mode. This patch avoids this by creating a
-  new invisible console for the first pty started in console device.
+- The functions pty_master_thread() and pty_master_fwd_thread()
+  should be static (i.e. should not access class member) because
+  the instance is deleted if the master is dup()'ed and the first
+  master is closed. In this case, because the dup()'ed instance
+  still exists, these master threads are also still alive even
+  though the instance has been deleted. As a result, accesing
+  class members in these functions causes accessi violation.
+
+  Addresses:
+  https://cygwin.com/pipermail/cygwin-developers/2021-January/012030.html
 ---
- winsup/cygwin/fhandler.h          |   5 +-
- winsup/cygwin/fhandler_console.cc |  38 +++++++--
- winsup/cygwin/fhandler_tty.cc     | 126 +++++++++++++++++++++++++++++-
- winsup/cygwin/spawn.cc            |   1 +
- winsup/cygwin/tty.cc              |   2 +
- winsup/cygwin/tty.h               |   2 +
- 6 files changed, 163 insertions(+), 11 deletions(-)
+ winsup/cygwin/fhandler.h      |  30 ++++++-
+ winsup/cygwin/fhandler_tty.cc | 154 ++++++++++++++++++++++------------
+ 2 files changed, 128 insertions(+), 56 deletions(-)
 
 diff --git a/winsup/cygwin/fhandler.h b/winsup/cygwin/fhandler.h
-index 2077b5245..ffd19a590 100644
+index ffd19a590..d134b180c 100644
 --- a/winsup/cygwin/fhandler.h
 +++ b/winsup/cygwin/fhandler.h
-@@ -2127,7 +2127,7 @@ private:
-   int input_tcsetattr (int a, const struct termios *t);
-   void set_cursor_maybe ();
-   static bool create_invisible_console (HWINSTA);
--  static bool create_invisible_console_workaround ();
-+  static bool create_invisible_console_workaround (bool force);
-   static console_state *open_shared_console (HWND, HANDLE&, bool&);
-   void fix_tab_position (void);
+@@ -2274,8 +2274,9 @@ class fhandler_pty_common: public fhandler_termios
+   void resize_pseudo_console (struct winsize *);
  
-@@ -2185,7 +2185,7 @@ private:
-   bool send_winch_maybe ();
-   void setup ();
-   bool set_unit ();
--  static bool need_invisible ();
-+  static bool need_invisible (bool force=false);
-   static void free_console ();
-   static const char *get_nonascii_key (INPUT_RECORD& input_rec, char *);
- 
-@@ -2346,6 +2346,7 @@ class fhandler_pty_slave: public fhandler_pty_common
-   void mask_switch_to_pcon_in (bool mask);
-   void setup_locale (void);
-   tty *get_ttyp () { return (tty *) tc (); } /* Override as public */
-+  void create_invisible_console (void);
+  protected:
+-  BOOL process_opost_output (HANDLE h,
+-			     const void *ptr, ssize_t& len, bool is_echo);
++  static BOOL process_opost_output (HANDLE h, const void *ptr, ssize_t& len,
++				    bool is_echo, tty *ttyp,
++				    bool is_nonblocking);
  };
  
+ class fhandler_pty_slave: public fhandler_pty_common
+@@ -2352,6 +2353,24 @@ class fhandler_pty_slave: public fhandler_pty_common
  #define __ptsname(buf, unit) __small_sprintf ((buf), "/dev/pty%d", (unit))
-diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
-index a4c054e24..dd00079fa 100644
---- a/winsup/cygwin/fhandler_console.cc
-+++ b/winsup/cygwin/fhandler_console.cc
-@@ -53,6 +53,23 @@ fhandler_console::console_state NO_COPY *fhandler_console::shared_console_info;
- 
- bool NO_COPY fhandler_console::invisible_console;
- 
-+/* Mutex for AttachConsole()/FreeConsole() in fhandler_tty.cc */
-+HANDLE NO_COPY attach_mutex;
-+
-+static inline void
-+acquire_attach_mutex (DWORD t)
-+{
-+  if (attach_mutex)
-+    WaitForSingleObject (attach_mutex, t);
-+}
-+
-+static inline void
-+release_attach_mutex ()
-+{
-+  if (attach_mutex)
-+    ReleaseMutex (attach_mutex);
-+}
-+
- /* con_ra is shared in the same process.
-    Only one console can exist in a process, therefore, static is suitable. */
- static struct fhandler_base::rabuf_t con_ra;
-@@ -599,6 +616,8 @@ fhandler_console::process_input_message (void)
-   if (!shared_console_info)
-     return input_error;
- 
-+  acquire_attach_mutex (INFINITE);
-+
-   termios *ti = &(get_ttyp ()->ti);
- 
-   fhandler_console::input_states stat = input_processing;
-@@ -608,6 +627,7 @@ fhandler_console::process_input_message (void)
-   if (!PeekConsoleInputW (get_handle (), input_rec, INREC_SIZE, &total_read))
-     {
-       termios_printf ("PeekConsoleInput failed, %E");
-+      release_attach_mutex ();
-       return input_error;
-     }
- 
-@@ -972,6 +992,7 @@ out:
-   /* Discard processed recored. */
-   DWORD dummy;
-   ReadConsoleInputW (get_handle (), input_rec, min (total_read, i+1), &dummy);
-+  release_attach_mutex ();
-   return stat;
- }
- 
-@@ -2973,6 +2994,7 @@ fhandler_console::write (const void *vsrc, size_t len)
-   if (bg <= bg_eof)
-     return (ssize_t) bg;
- 
-+  acquire_attach_mutex (INFINITE);
-   push_process_state process_state (PID_TTYOU);
-   acquire_output_mutex (INFINITE);
- 
-@@ -3298,6 +3320,7 @@ fhandler_console::write (const void *vsrc, size_t len)
- 
-   syscall_printf ("%ld = fhandler_console::write(...)", len);
- 
-+  release_attach_mutex ();
-   return len;
- }
- 
-@@ -3469,12 +3492,13 @@ fhandler_console::create_invisible_console (HWINSTA horig)
-    function is currently only called at startup and during exec, it shouldn't
-    be a big deal.  */
- bool
--fhandler_console::create_invisible_console_workaround ()
-+fhandler_console::create_invisible_console_workaround (bool force)
+ class fhandler_pty_master: public fhandler_pty_common
  {
--  if (!AttachConsole (-1))
-+  /* If force is set, avoid to reattach to existing console. */
-+  if (force || !AttachConsole (-1))
-     {
-       bool taskbar;
--      DWORD err = GetLastError ();
-+      DWORD err = force ? 0 : GetLastError ();
-       path_conv helper ("/bin/cygwin-console-helper.exe");
-       HANDLE hello = NULL;
-       HANDLE goodbye = NULL;
-@@ -3559,10 +3583,12 @@ fhandler_console::free_console ()
- }
++public:
++  /* Parameter set for the static function pty_master_thread() */
++  struct master_thread_param_t {
++    HANDLE from_master;
++    HANDLE from_master_cyg;
++    HANDLE to_master;
++    HANDLE to_master_cyg;
++    HANDLE master_ctl;
++    HANDLE input_available_event;
++  };
++  /* Parameter set for the static function pty_master_fwd_thread() */
++  struct master_fwd_thread_param_t {
++    HANDLE to_master_cyg;
++    HANDLE from_slave;
++    HANDLE output_mutex;
++    tty *ttyp;
++  };
++private:
+   int pktmode;			// non-zero if pty in a packet mode.
+   HANDLE master_ctl;		// Control socket for handle duplication
+   cygthread *master_thread;	// Master control thread
+@@ -2360,14 +2379,15 @@ class fhandler_pty_master: public fhandler_pty_common
+   DWORD dwProcessId;		// Owner of master handles
+   HANDLE to_master_cyg, from_master_cyg;
+   cygthread *master_fwd_thread;	// Master forwarding thread
++  HANDLE thread_param_copied_event;
  
- bool
--fhandler_console::need_invisible ()
-+fhandler_console::need_invisible (bool force)
- {
-   BOOL b = false;
--  if (exists ())
-+  /* If force is set, forcibly create a new invisible console
-+     even if a console device already exists. */
-+  if (exists () && !force)
-     invisible_console = false;
-   else
-     {
-@@ -3600,7 +3626,7 @@ fhandler_console::need_invisible ()
- 	  invisible_console = true;
- 	}
-       else if (wincap.has_broken_alloc_console ())
--	b = create_invisible_console_workaround ();
-+	b = create_invisible_console_workaround (force);
-       else
- 	b = create_invisible_console (h);
-     }
+ public:
+   HANDLE get_echo_handle () const { return echo_r; }
+   /* Constructor */
+   fhandler_pty_master (int);
+ 
+-  DWORD pty_master_thread ();
+-  DWORD pty_master_fwd_thread ();
++  static DWORD pty_master_thread (const master_thread_param_t *p);
++  static DWORD pty_master_fwd_thread (const master_fwd_thread_param_t *p);
+   int process_slave_output (char *buf, size_t len, int pktmode_on);
+   void doecho (const void *str, DWORD len);
+   int accept_input ();
+@@ -2410,6 +2430,8 @@ public:
+     return fh;
+   }
+   bool to_be_read_from_pcon (void);
++  void get_master_thread_param (master_thread_param_t *p);
++  void get_master_fwd_thread_param (master_fwd_thread_param_t *p);
+ };
+ 
+ class fhandler_dev_null: public fhandler_base
 diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index 0c92f41d4..789bcdfdf 100644
+index 789bcdfdf..e4993bf31 100644
 --- a/winsup/cygwin/fhandler_tty.cc
 +++ b/winsup/cygwin/fhandler_tty.cc
-@@ -59,6 +59,39 @@ struct pipe_reply {
-   DWORD error;
- };
- 
-+extern HANDLE attach_mutex; /* Defined in fhandler_console.cc */
-+
-+static DWORD
-+get_console_process_id (DWORD pid, bool match)
-+{
-+  DWORD tmp;
-+  DWORD num, num_req;
-+  num = 1;
-+  num_req = GetConsoleProcessList (&tmp, num);
-+  DWORD *list;
-+  while (true)
-+    {
-+      list = (DWORD *)
-+	HeapAlloc (GetProcessHeap (), 0, num_req * sizeof (DWORD));
-+      num = num_req;
-+      num_req = GetConsoleProcessList (list, num);
-+      if (num_req > num)
-+	HeapFree (GetProcessHeap (), 0, list);
-+      else
-+	break;
-+    }
-+  num = num_req;
-+
-+  tmp = 0;
-+  for (DWORD i=0; i<num; i++)
-+    if ((match && list[i] == pid) || (!match && list[i] != pid))
-+      /* Last one is the oldest. */
-+      /* https://github.com/microsoft/terminal/issues/95 */
-+      tmp = list[i];
-+  HeapFree (GetProcessHeap (), 0, list);
-+  return tmp;
-+}
-+
- static bool isHybrid;
- 
- static void
-@@ -289,7 +322,33 @@ fhandler_pty_master::accept_input ()
-   if (to_be_read_from_pcon ())
-     {
-       write_to = to_slave;
--      UINT cp_to = GetConsoleCP ();
-+
-+      UINT cp_to;
-+      pinfo pinfo_target = pinfo (get_ttyp ()->invisible_console_pid);
-+      DWORD target_pid = 0;
-+      if (pinfo_target)
-+	target_pid = pinfo_target->dwProcessId;
-+      pinfo pinfo_resume = pinfo (myself->ppid);
-+      DWORD resume_pid;
-+      if (pinfo_resume)
-+	resume_pid = pinfo_resume->dwProcessId;
-+      else
-+	resume_pid = get_console_process_id (myself->dwProcessId, false);
-+      if (target_pid && resume_pid)
-+	{
-+	  /* Slave attaches to a different console than master.
-+	     Therefore reattach here. */
-+	  WaitForSingleObject (attach_mutex, INFINITE);
-+	  FreeConsole ();
-+	  AttachConsole (target_pid);
-+	  cp_to = GetConsoleCP ();
-+	  FreeConsole ();
-+	  AttachConsole (resume_pid);
-+	  ReleaseMutex (attach_mutex);
-+	}
-+      else
-+	cp_to = GetConsoleCP ();
-+
-       if (get_ttyp ()->term_code_page != cp_to)
- 	{
- 	  static mbstate_t mbp;
-@@ -659,7 +718,20 @@ fhandler_pty_slave::open (int flags, mode_t)
-   set_output_handle (to_master_local);
-   set_output_handle_cyg (to_master_cyg_local);
- 
--  fhandler_console::need_invisible ();
-+  if (_major (myself->ctty) == DEV_CONS_MAJOR
-+      && !(!pinfo (myself->ppid) && getenv ("ConEmuPID")))
-+    /* This process is supposed to be a master process which is
-+       running on console. Invisible console will be created in
-+       primary slave process to prevent overriding code page
-+       of root console by setup_locale(). */
-+    /* ... except for ConEmu cygwin-connector in which this
-+       code does not work as expected because it calls Win32
-+       API directly rather than cygwin read()/write(). Due to
-+       this behaviour, protection based on attach_mutex does
-+       not take effect. */
-+    get_ttyp ()->need_invisible_console = true;
-+  else
-+    fhandler_console::need_invisible ();
- 
-   set_open_status ();
-   return 1;
-@@ -1572,6 +1644,7 @@ fhandler_pty_master::close ()
- 	    }
- 	  release_output_mutex ();
- 	  master_fwd_thread->terminate_thread ();
-+	  CloseHandle (attach_mutex);
- 	}
-     }
- 
-@@ -1847,6 +1920,7 @@ void
- fhandler_pty_slave::fixup_after_exec ()
+@@ -301,7 +301,8 @@ fhandler_pty_master::doecho (const void *str, DWORD len)
  {
+   ssize_t towrite = len;
+   acquire_output_mutex (INFINITE);
+-  if (!process_opost_output (echo_w, str, towrite, true))
++  if (!process_opost_output (echo_w, str, towrite, true,
++			     get_ttyp (), is_nonblocking ()))
+     termios_printf ("Write to echo pipe failed, %E");
+   release_output_mutex ();
+ }
+@@ -874,7 +875,8 @@ fhandler_pty_slave::write (const void *ptr, size_t len)
    reset_switch_to_pcon ();
-+  create_invisible_console ();
  
-   if (!close_on_exec ())
-     fixup_after_fork (NULL);	/* No parent handle required. */
-@@ -2135,7 +2209,32 @@ fhandler_pty_master::pty_master_fwd_thread ()
- 	  continue;
+   acquire_output_mutex (INFINITE);
+-  if (!process_opost_output (get_output_handle_cyg (), ptr, towrite, false))
++  if (!process_opost_output (get_output_handle_cyg (), ptr, towrite, false,
++			     get_ttyp (), is_nonblocking ()))
+     {
+       DWORD err = GetLastError ();
+       termios_printf ("WriteFile failed, %E");
+@@ -1955,8 +1957,15 @@ fhandler_pty_slave::fixup_after_exec ()
+    calls to CallNamedPipe should have a big enough timeout value.  For now this
+    is 500ms.  Hope that's enough. */
+ 
++/* The function pty_master_thread() should be static because the instance
++   is deleted if the master is dup()'ed and the original is closed. In
++   this case, dup()'ed instance still exists, therefore, master thread
++   is also still alive even though the instance has been deleted. As a
++   result, accesing member variables in this function causes access
++   violation. */
++
+ DWORD
+-fhandler_pty_master::pty_master_thread ()
++fhandler_pty_master::pty_master_thread (const master_thread_param_t *p)
+ {
+   bool exit = false;
+   GENERIC_MAPPING map = { EVENT_QUERY_STATE, EVENT_MODIFY_STATE, 0,
+@@ -1970,7 +1979,7 @@ fhandler_pty_master::pty_master_thread ()
+   NTSTATUS status;
+ 
+   termios_printf ("Entered");
+-  while (!exit && (ConnectNamedPipe (master_ctl, NULL)
++  while (!exit && (ConnectNamedPipe (p->master_ctl, NULL)
+ 		   || GetLastError () == ERROR_PIPE_CONNECTED))
+     {
+       pipe_reply repl = { NULL, NULL, NULL, NULL, 0 };
+@@ -1979,21 +1988,21 @@ fhandler_pty_master::pty_master_thread ()
+       ACCESS_MASK access = EVENT_MODIFY_STATE;
+       HANDLE client = NULL;
+ 
+-      if (!ReadFile (master_ctl, &req, sizeof req, &len, NULL))
++      if (!ReadFile (p->master_ctl, &req, sizeof req, &len, NULL))
+ 	{
+ 	  termios_printf ("ReadFile, %E");
+ 	  goto reply;
+ 	}
+-      if (!GetNamedPipeClientProcessId (master_ctl, &pid))
++      if (!GetNamedPipeClientProcessId (p->master_ctl, &pid))
+ 	pid = req.pid;
+-      if (get_object_sd (input_available_event, sd))
++      if (get_object_sd (p->input_available_event, sd))
+ 	{
+ 	  termios_printf ("get_object_sd, %E");
+ 	  goto reply;
+ 	}
+       cygheap->user.deimpersonate ();
+       deimp = true;
+-      if (!ImpersonateNamedPipeClient (master_ctl))
++      if (!ImpersonateNamedPipeClient (p->master_ctl))
+ 	{
+ 	  termios_printf ("ImpersonateNamedPipeClient, %E");
+ 	  goto reply;
+@@ -2036,28 +2045,28 @@ fhandler_pty_master::pty_master_thread ()
+ 	      termios_printf ("OpenProcess, %E");
+ 	      goto reply;
+ 	    }
+-	  if (!DuplicateHandle (GetCurrentProcess (), from_master,
++	  if (!DuplicateHandle (GetCurrentProcess (), p->from_master,
+ 			       client, &repl.from_master,
+ 			       0, TRUE, DUPLICATE_SAME_ACCESS))
+ 	    {
+ 	      termios_printf ("DuplicateHandle (from_master), %E");
+ 	      goto reply;
+ 	    }
+-	  if (!DuplicateHandle (GetCurrentProcess (), from_master_cyg,
++	  if (!DuplicateHandle (GetCurrentProcess (), p->from_master_cyg,
+ 			       client, &repl.from_master_cyg,
+ 			       0, TRUE, DUPLICATE_SAME_ACCESS))
+ 	    {
+ 	      termios_printf ("DuplicateHandle (from_master_cyg), %E");
+ 	      goto reply;
+ 	    }
+-	  if (!DuplicateHandle (GetCurrentProcess (), to_master,
++	  if (!DuplicateHandle (GetCurrentProcess (), p->to_master,
+ 				client, &repl.to_master,
+ 				0, TRUE, DUPLICATE_SAME_ACCESS))
+ 	    {
+ 	      termios_printf ("DuplicateHandle (to_master), %E");
+ 	      goto reply;
+ 	    }
+-	  if (!DuplicateHandle (GetCurrentProcess (), to_master_cyg,
++	  if (!DuplicateHandle (GetCurrentProcess (), p->to_master_cyg,
+ 				client, &repl.to_master_cyg,
+ 				0, TRUE, DUPLICATE_SAME_ACCESS))
+ 	    {
+@@ -2074,9 +2083,9 @@ reply:
+       sd.free ();
+       termios_printf ("Reply: from %p, to %p, error %u",
+ 		      repl.from_master, repl.to_master, repl.error );
+-      if (!WriteFile (master_ctl, &repl, sizeof repl, &len, NULL))
++      if (!WriteFile (p->master_ctl, &repl, sizeof repl, &len, NULL))
+ 	termios_printf ("WriteFile, %E");
+-      if (!DisconnectNamedPipe (master_ctl))
++      if (!DisconnectNamedPipe (p->master_ctl))
+ 	termios_printf ("DisconnectNamedPipe, %E");
+     }
+   termios_printf ("Leaving");
+@@ -2086,11 +2095,20 @@ reply:
+ static DWORD WINAPI
+ pty_master_thread (VOID *arg)
+ {
+-  return ((fhandler_pty_master *) arg)->pty_master_thread ();
++  fhandler_pty_master::master_thread_param_t p;
++  ((fhandler_pty_master *) arg)->get_master_thread_param (&p);
++  return fhandler_pty_master::pty_master_thread (&p);
+ }
+ 
++/* The function pty_master_fwd_thread() should be static because the
++   instance is deleted if the master is dup()'ed and the original is
++   closed. In this case, dup()'ed instance still exists, therefore,
++   master forwarding thread is also still alive even though the instance
++   has been deleted. As a result, accesing member variables in this
++   function causes access violation. */
++
+ DWORD
+-fhandler_pty_master::pty_master_fwd_thread ()
++fhandler_pty_master::pty_master_fwd_thread (const master_fwd_thread_param_t *p)
+ {
+   DWORD rlen;
+   tmp_pathbuf tp;
+@@ -2101,17 +2119,17 @@ fhandler_pty_master::pty_master_fwd_thread ()
+   termios_printf ("Started.");
+   for (;;)
+     {
+-      get_ttyp ()->pcon_last_time = GetTickCount ();
+-      if (!ReadFile (from_slave, outbuf, NT_MAX_PATH, &rlen, NULL))
++      p->ttyp->pcon_last_time = GetTickCount ();
++      if (!ReadFile (p->from_slave, outbuf, NT_MAX_PATH, &rlen, NULL))
+ 	{
+ 	  termios_printf ("ReadFile for forwarding failed, %E");
+ 	  break;
+ 	}
+       ssize_t wlen = rlen;
+       char *ptr = outbuf;
+-      if (get_ttyp ()->h_pseudo_console)
++      if (p->ttyp->h_pseudo_console)
+ 	{
+-	  if (!get_ttyp ()->has_set_title)
++	  if (!p->ttyp->has_set_title)
+ 	    {
+ 	      /* Remove Set title sequence */
+ 	      char *p0, *p1;
+@@ -2183,10 +2201,10 @@ fhandler_pty_master::pty_master_fwd_thread ()
+ 	    else
+ 	      state = 0;
+ 
+-	  if (get_ttyp ()->term_code_page != CP_UTF8)
++	  if (p->ttyp->term_code_page != CP_UTF8)
+ 	    {
+ 	      size_t nlen = NT_MAX_PATH;
+-	      convert_mb_str (get_ttyp ()->term_code_page, mbbuf, &nlen,
++	      convert_mb_str (p->ttyp->term_code_page, mbbuf, &nlen,
+ 			      CP_UTF8, ptr, wlen, &mbp);
+ 
+ 	      ptr = mbbuf;
+@@ -2198,7 +2216,7 @@ fhandler_pty_master::pty_master_fwd_thread ()
+ 	  DWORD written;
+ 	  while (rlen>0)
+ 	    {
+-	      if (!WriteFile (to_master_cyg, ptr, wlen, &written, NULL))
++	      if (!WriteFile (p->to_master_cyg, ptr, wlen, &written, NULL))
+ 		{
+ 		  termios_printf ("WriteFile for forwarding failed, %E");
+ 		  break;
+@@ -2210,7 +2228,7 @@ fhandler_pty_master::pty_master_fwd_thread ()
  	}
  
--      UINT cp_from = GetConsoleOutputCP ();
-+      UINT cp_from;
-+      pinfo pinfo_target = pinfo (get_ttyp ()->invisible_console_pid);
-+      DWORD target_pid = 0;
-+      if (pinfo_target)
-+	target_pid = pinfo_target->dwProcessId;
-+      pinfo pinfo_resume = pinfo (myself->ppid);
-+      DWORD resume_pid;
-+      if (pinfo_resume)
-+	resume_pid = pinfo_resume->dwProcessId;
-+      else
-+	resume_pid = get_console_process_id (myself->dwProcessId, false);
-+      if (target_pid && resume_pid)
-+	{
-+	  /* Slave attaches to a different console than master.
-+	     Therefore reattach here. */
-+	  WaitForSingleObject (attach_mutex, INFINITE);
-+	  FreeConsole ();
-+	  AttachConsole (target_pid);
-+	  cp_from = GetConsoleOutputCP ();
-+	  FreeConsole ();
-+	  AttachConsole (resume_pid);
-+	  ReleaseMutex (attach_mutex);
-+	}
-+      else
-+	cp_from = GetConsoleOutputCP ();
-+
-       if (get_ttyp ()->term_code_page != cp_from)
+       UINT cp_from;
+-      pinfo pinfo_target = pinfo (get_ttyp ()->invisible_console_pid);
++      pinfo pinfo_target = pinfo (p->ttyp->invisible_console_pid);
+       DWORD target_pid = 0;
+       if (pinfo_target)
+ 	target_pid = pinfo_target->dwProcessId;
+@@ -2235,20 +2253,21 @@ fhandler_pty_master::pty_master_fwd_thread ()
+       else
+ 	cp_from = GetConsoleOutputCP ();
+ 
+-      if (get_ttyp ()->term_code_page != cp_from)
++      if (p->ttyp->term_code_page != cp_from)
  	{
  	  size_t nlen = NT_MAX_PATH;
-@@ -2250,6 +2349,8 @@ fhandler_pty_master::setup ()
-   if (!(input_mutex = CreateMutex (&sa, FALSE, buf)))
-     goto err;
+-	  convert_mb_str (get_ttyp ()->term_code_page, mbbuf, &nlen,
++	  convert_mb_str (p->ttyp->term_code_page, mbbuf, &nlen,
+ 			  cp_from, ptr, wlen, &mbp);
  
-+  attach_mutex = CreateMutex (&sa, FALSE, NULL);
+ 	  ptr = mbbuf;
+ 	  wlen = rlen = nlen;
+ 	}
+ 
+-      acquire_output_mutex (INFINITE);
++      WaitForSingleObject (p->output_mutex, INFINITE);
+       while (rlen>0)
+ 	{
+-	  if (!process_opost_output (to_master_cyg, ptr, wlen, false))
++	  if (!process_opost_output (p->to_master_cyg, ptr, wlen, false,
++				     p->ttyp, false))
+ 	    {
+ 	      termios_printf ("WriteFile for forwarding failed, %E");
+ 	      break;
+@@ -2256,7 +2275,7 @@ fhandler_pty_master::pty_master_fwd_thread ()
+ 	  ptr += wlen;
+ 	  wlen = (rlen -= wlen);
+ 	}
+-      release_output_mutex ();
++      ReleaseMutex (p->output_mutex);
+     }
+   return 0;
+ }
+@@ -2264,7 +2283,9 @@ fhandler_pty_master::pty_master_fwd_thread ()
+ static DWORD WINAPI
+ pty_master_fwd_thread (VOID *arg)
+ {
+-  return ((fhandler_pty_master *) arg)->pty_master_fwd_thread ();
++  fhandler_pty_master::master_fwd_thread_param_t p;
++  ((fhandler_pty_master *) arg)->get_master_fwd_thread_param (&p);
++  return fhandler_pty_master::pty_master_fwd_thread (&p);
+ }
+ 
+ bool
+@@ -2312,6 +2333,15 @@ fhandler_pty_master::setup ()
+       goto err;
+     }
+ 
++  __small_sprintf (pipename, "pty%d-to-slave", unit);
++  res = fhandler_pipe::create (&sec_none, &from_master, &to_slave,
++			       fhandler_pty_common::pipesize, pipename, 0);
++  if (res)
++    {
++      errstr = "input pipe";
++      goto err;
++    }
 +
-   /* Create master control pipe which allows the master to duplicate
-      the pty pipe handles to processes which deserve it. */
-   __small_sprintf (buf, "\\\\.\\pipe\\cygwin-%S-pty%d-master-ctl",
-@@ -2311,6 +2412,7 @@ err:
-   close_maybe (input_available_event);
-   close_maybe (output_mutex);
-   close_maybe (input_mutex);
-+  close_maybe (attach_mutex);
-   close_maybe (from_master);
-   close_maybe (from_master_cyg);
-   close_maybe (to_master);
-@@ -2757,3 +2859,21 @@ maybe_dumb:
-   get_ttyp ()->pcon_cap_checked = true;
-   return false;
+   ProtectHandle1 (from_slave, from_pty);
+ 
+   __small_sprintf (pipename, "pty%d-echoloop", unit);
+@@ -2366,27 +2396,23 @@ fhandler_pty_master::setup ()
+       errstr = "pty master control pipe";
+       goto err;
+     }
++
++  thread_param_copied_event = CreateEvent(NULL, FALSE, FALSE, NULL);
+   master_thread = new cygthread (::pty_master_thread, this, "ptym");
+   if (!master_thread)
+     {
+       errstr = "pty master control thread";
+       goto err;
+     }
++  WaitForSingleObject (thread_param_copied_event, INFINITE);
+   master_fwd_thread = new cygthread (::pty_master_fwd_thread, this, "ptymf");
+   if (!master_fwd_thread)
+     {
+       errstr = "pty master forwarding thread";
+       goto err;
+     }
+-
+-  __small_sprintf (pipename, "pty%d-to-slave", unit);
+-  res = fhandler_pipe::create (&sec_none, &from_master, &to_slave,
+-			       fhandler_pty_common::pipesize, pipename, 0);
+-  if (res)
+-    {
+-      errstr = "input pipe";
+-      goto err;
+-    }
++  WaitForSingleObject (thread_param_copied_event, INFINITE);
++  CloseHandle (thread_param_copied_event);
+ 
+   t.set_from_master (from_master);
+   t.set_from_master_cyg (from_master_cyg);
+@@ -2463,7 +2489,9 @@ fhandler_pty_master::fixup_after_exec ()
+ }
+ 
+ BOOL
+-fhandler_pty_common::process_opost_output (HANDLE h, const void *ptr, ssize_t& len, bool is_echo)
++fhandler_pty_common::process_opost_output (HANDLE h, const void *ptr,
++					   ssize_t& len, bool is_echo,
++					   tty *ttyp, bool is_nonblocking)
+ {
+   ssize_t towrite = len;
+   BOOL res = TRUE;
+@@ -2471,7 +2499,7 @@ fhandler_pty_common::process_opost_output (HANDLE h, const void *ptr, ssize_t& l
+     {
+       if (!is_echo)
+ 	{
+-	  if (tc ()->output_stopped && is_nonblocking ())
++	  if (ttyp->output_stopped && is_nonblocking)
+ 	    {
+ 	      if (towrite < len)
+ 		break;
+@@ -2482,11 +2510,11 @@ fhandler_pty_common::process_opost_output (HANDLE h, const void *ptr, ssize_t& l
+ 		  return TRUE;
+ 		}
+ 	    }
+-	  while (tc ()->output_stopped)
++	  while (ttyp->output_stopped)
+ 	    cygwait (10);
+ 	}
+ 
+-      if (!(get_ttyp ()->ti.c_oflag & OPOST))	// raw output mode
++      if (!(ttyp->ti.c_oflag & OPOST))	// raw output mode
+ 	{
+ 	  DWORD n = MIN (OUT_BUFFER_SIZE, towrite);
+ 	  res = WriteFile (h, ptr, n, &n, NULL);
+@@ -2506,13 +2534,13 @@ fhandler_pty_common::process_opost_output (HANDLE h, const void *ptr, ssize_t& l
+ 	      switch (buf[rc])
+ 		{
+ 		case '\r':
+-		  if ((get_ttyp ()->ti.c_oflag & ONOCR)
+-		      && get_ttyp ()->column == 0)
++		  if ((ttyp->ti.c_oflag & ONOCR)
++		      && ttyp->column == 0)
+ 		    {
+ 		      rc++;
+ 		      continue;
+ 		    }
+-		  if (get_ttyp ()->ti.c_oflag & OCRNL)
++		  if (ttyp->ti.c_oflag & OCRNL)
+ 		    {
+ 		      outbuf[n++] = '\n';
+ 		      rc++;
+@@ -2520,22 +2548,22 @@ fhandler_pty_common::process_opost_output (HANDLE h, const void *ptr, ssize_t& l
+ 		  else
+ 		    {
+ 		      outbuf[n++] = buf[rc++];
+-		      get_ttyp ()->column = 0;
++		      ttyp->column = 0;
+ 		    }
+ 		  break;
+ 		case '\n':
+-		  if (get_ttyp ()->ti.c_oflag & ONLCR)
++		  if (ttyp->ti.c_oflag & ONLCR)
+ 		    {
+ 		      outbuf[n++] = '\r';
+-		      get_ttyp ()->column = 0;
++		      ttyp->column = 0;
+ 		    }
+-		  if (get_ttyp ()->ti.c_oflag & ONLRET)
+-		    get_ttyp ()->column = 0;
++		  if (ttyp->ti.c_oflag & ONLRET)
++		    ttyp->column = 0;
+ 		  outbuf[n++] = buf[rc++];
+ 		  break;
+ 		default:
+ 		  outbuf[n++] = buf[rc++];
+-		  get_ttyp ()->column++;
++		  ttyp->column++;
+ 		  break;
+ 		}
+ 	    }
+@@ -2877,3 +2905,25 @@ fhandler_pty_slave::create_invisible_console ()
+        this process becomes the primary. */
+     get_ttyp ()->invisible_console_pid = myself->pid;
  }
 +
 +void
-+fhandler_pty_slave::create_invisible_console ()
++fhandler_pty_master::get_master_thread_param (master_thread_param_t *p)
 +{
-+  if (get_ttyp ()->need_invisible_console)
-+    {
-+      /* Detach from console device and create new invisible console. */
-+      FreeConsole();
-+      fhandler_console::need_invisible (true);
-+      get_ttyp ()->need_invisible_console = false;
-+      get_ttyp ()->invisible_console_pid = myself->pid;
-+    }
-+  if (get_ttyp ()->invisible_console_pid
-+      && !pinfo (get_ttyp ()->invisible_console_pid))
-+    /* If primary slave process does not exist anymore,
-+       this process becomes the primary. */
-+    get_ttyp ()->invisible_console_pid = myself->pid;
++  p->from_master = from_master;
++  p->from_master_cyg = from_master_cyg;
++  p->to_master = to_master;
++  p->to_master_cyg = to_master_cyg;
++  p->master_ctl = master_ctl;
++  p->input_available_event = input_available_event;
++  SetEvent (thread_param_copied_event);
 +}
-diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
-index bf1b08057..42044ab53 100644
---- a/winsup/cygwin/spawn.cc
-+++ b/winsup/cygwin/spawn.cc
-@@ -648,6 +648,7 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
- 	      {
- 		fhandler_pty_slave *ptys =
- 		  (fhandler_pty_slave *)(fhandler_base *) cfd;
-+		ptys->create_invisible_console ();
- 		ptys->setup_locale ();
- 	      }
- 	}
-diff --git a/winsup/cygwin/tty.cc b/winsup/cygwin/tty.cc
-index d4b8d7651..c6e13f111 100644
---- a/winsup/cygwin/tty.cc
-+++ b/winsup/cygwin/tty.cc
-@@ -246,6 +246,8 @@ tty::init ()
-   has_csi6n = false;
-   has_set_title = false;
-   do_not_resize_pcon = false;
-+  need_invisible_console = false;
-+  invisible_console_pid = 0;
- }
- 
- HANDLE
-diff --git a/winsup/cygwin/tty.h b/winsup/cygwin/tty.h
-index 2c1ac7f5d..a975aba45 100644
---- a/winsup/cygwin/tty.h
-+++ b/winsup/cygwin/tty.h
-@@ -105,6 +105,8 @@ private:
-   bool has_csi6n;
-   bool has_set_title;
-   bool do_not_resize_pcon;
-+  bool need_invisible_console;
-+  pid_t invisible_console_pid;
- 
- public:
-   HANDLE from_master () const { return _from_master; }
++
++void
++fhandler_pty_master::get_master_fwd_thread_param (master_fwd_thread_param_t *p)
++{
++  p->to_master_cyg = to_master_cyg;
++  p->from_slave = from_slave;
++  p->output_mutex = output_mutex;
++  p->ttyp = get_ttyp ();
++  SetEvent (thread_param_copied_event);
++}
 -- 
 2.30.0
 
