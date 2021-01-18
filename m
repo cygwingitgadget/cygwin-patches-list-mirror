@@ -1,42 +1,42 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
- by sourceware.org (Postfix) with ESMTPS id 3B825385B805
- for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 11:36:32 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 3B825385B805
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+ by sourceware.org (Postfix) with ESMTPS id BCD15385782C
+ for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 11:51:05 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org BCD15385782C
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MRmsE-1lUW1s3fn0-00TDC2 for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021
- 12:36:30 +0100
+ mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1M9nlN-1l4TL31kMH-005mx3 for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021
+ 12:51:04 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 7EA4CA80988; Mon, 18 Jan 2021 12:36:30 +0100 (CET)
-Date: Mon, 18 Jan 2021 12:36:30 +0100
+ id D9219A80B92; Mon, 18 Jan 2021 12:51:03 +0100 (CET)
+Date: Mon, 18 Jan 2021 12:51:03 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 08/11] path.cc: Allow to skip filesystem checks
-Message-ID: <20210118113630.GX59030@calimero.vinschen.de>
+Subject: Re: [PATCH 09/11] mount.cc: Implement poor-man's cache
+Message-ID: <20210118115103.GY59030@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20210115134534.13290-1-ben@wijen.net>
- <20210115134534.13290-9-ben@wijen.net>
+ <20210115134534.13290-10-ben@wijen.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210115134534.13290-9-ben@wijen.net>
-X-Provags-ID: V03:K1:N7XglFXsTiuGwNDSQJA3AghEuFEKAIXJ3GrcPRqXSvSuTRyb8Mz
- LS/k1i2yYEiA4O+OyWkBXzk4DnB434S1IPAUdzjROZ58ADZZVLRdOfHNObVA8f105UBGPe1
- cW17dZEHVg2cQNqEb1v9XY2wDWM6Z08FVBHeQQlVM8OyMzahmZCLq5wZ3oIOzI3pGPNlmUk
- hy6W5yWjD4Ym15zaKDCkQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:oYW0XAafpx4=:fTAbWldsGMF90rzx0eyEtN
- 3A/lnnEpj1cosdIMIegYw67yhanT9Y5w52W9bstrMJdLwbdZOWincu13YI1puz+wryQzALXSQ
- ndtaIEASozwpB4/b+EeWXKvgvbs4YaWdiLEPJx3IwjnpS1DHLvQlI3lWzA8XL/WVYC1UfWEW0
- b/xM4yQ25W7nuNd7l4YVHr6AcC1PYWAbO4Zdi9THC+KVXkwdqdlfDWUJbN+X8u4323FMSKr74
- sBJDNoduR6weX5k6DxwMaJVQKc2vQ9Of4LmENzuYihAQJTyVOX3/lXjB1xTTFjfFLZWawbV3w
- lNsL/eNTSOWbNkOGfAhkww8qdaO+ZbiNU8rARpAnqS9DhEPz+z+ms82ixn1fk+txx4wwKfWXV
- lLNpfDiosyOIqYNdoaf2Kj3ORP5cb9NbK67WYvqwQkhLvo9KCChpuN7DNgrT0Xxl7JJYURMMg
- HpO403Qiqw==
-X-Spam-Status: No, score=-107.0 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_NEUTRAL,
+In-Reply-To: <20210115134534.13290-10-ben@wijen.net>
+X-Provags-ID: V03:K1:hqBG9ULbxIOIXfgqeRELU94PWM+ypVnOy5DNaesPueNZGhSna/8
+ RntRmSHvlKFjY2bU6kFNKoWueDWmwPnP1Tz1R8eZo3L6076kgObbPzuoyFECLDliqcIWzq+
+ g1A3nFazx29KBoFrALie7LCIP6l4+RcEvosu9ERQNHoErYO303GWZpxR4wezrnYh42TZdyn
+ xEkYOReTiTESOqZbJlWcQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:nyaHf3sP+7A=:8P9xGhkf+Tq5H+kE3YXXxC
+ gGUoEe5XUnscEfXymhk3L+zcxjugoNxYHp5pKEr7W7ooG9Q/Yly2iHF++i0nKJn2cBp99pfLF
+ JFNtophSt7dM4BVvrJEJGQvGqQqWIg0Ey8AVqKtRmjNHg1HojbzhJt+mZSq6gDJkSNJdeewMx
+ Z8/Z6HTjiV5SmgVJrC/RftpqE5gjpATPDUTSODLaHSBBwAc68E9F2pJowY55o6y6uD+o30dqT
+ F6/vNuSdZNiHUWpKPoZg6A5hrku2pIj4sd6IqOJDGRVTqNWw1Y8s1EWCjX9A+NJOIqCmO1ihN
+ atPUxeWWOmvaGfK6+n8uQZs0w0LBCiNqFeR0nxFTn+uPnmLlczbObpnMbikE90b3VsrGV0tcV
+ DPPxT5Emoqj2uFJbQ5foOqz28CMCmU5Ufi209KffetpJD/glwM0M7fFQcEQuPghqxMD91x4+R
+ NJV1XK2HoQ==
+X-Spam-Status: No, score=-106.8 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -52,37 +52,87 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 18 Jan 2021 11:36:33 -0000
+X-List-Received-Date: Mon, 18 Jan 2021 11:51:07 -0000
 
 On Jan 15 14:45, Ben Wijen wrote:
-> When file attributes are of no concern,
-> there is no point to query them.
-
-Without any code setting the flag, this doesn't seem to make any
-sense.  At least the commit message should reflect on the reasons
-for this change.
-
+> Try to avoid NtQueryVolumeInformationFile.
 > ---
->  winsup/cygwin/path.cc | 3 +++
->  winsup/cygwin/path.h  | 1 +
->  2 files changed, 4 insertions(+)
+>  winsup/cygwin/mount.cc | 78 ++++++++++++++++++++++++++++--------------
+>  winsup/cygwin/mount.h  |  2 +-
+>  winsup/cygwin/path.cc  |  2 +-
+>  winsup/cygwin/path.h   |  1 +
+>  4 files changed, 56 insertions(+), 27 deletions(-)
 > 
-> diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
-> index abd3687df..f00707e86 100644
-> --- a/winsup/cygwin/path.cc
-> +++ b/winsup/cygwin/path.cc
-> @@ -931,7 +931,10 @@ path_conv::check (const char *src, unsigned opt,
+> diff --git a/winsup/cygwin/mount.cc b/winsup/cygwin/mount.cc
+> index e0349815d..1d2b3a61a 100644
+> --- a/winsup/cygwin/mount.cc
+> +++ b/winsup/cygwin/mount.cc
+> @@ -82,6 +82,32 @@ win32_device_name (const char *src_path, char *win32_path, device& dev)
+>    return true;
+>  }
 >  
->      is_fs_via_procsys:
->  
-> +	    if (!(opt & PC_SKIP_SYM_CHECK))
-> +	    {
->  	      symlen = sym.check (full_path, suff, fs, conv_handle);
-> +	    }
+> +static uint32_t
+> +hash_prefix (const PUNICODE_STRING upath)
+> +{
+> +  UNICODE_STRING prefix;
+> +  WCHAR *p;
+> +
+> +  if (upath->Buffer[5] == L':' && upath->Buffer[6] == L'\\')
+> +    p = upath->Buffer + 6;
+> +  else
+> +    {
+> +      /* We're expecting an UNC path.  Move p to the backslash after
+> +       "\??\UNC\server\share" or the trailing NUL. */
+> +      p = upath->Buffer + 7; /* Skip "\??\UNC" */
+> +      int bs_cnt = 0;
+> +
+> +      while (*++p)
+> +        if (*p == L'\\')
+> +          if (++bs_cnt > 1)
+> +            break;
+> +    }
+> +  RtlInitCountedUnicodeString (&prefix, upath->Buffer,
+> +                               (p - upath->Buffer) * sizeof(WCHAR));
+> +
+> +  return hash_path_name ((ino_t) 0, &prefix);
+> +}
+> +
 
-Please follow the indentation 4 lines above, and please don't add curly
-braces for single line blocks.
+Ok, so hash_prefix reduces the path to a drive letter or the UNC path
+prefix and hashes it.  However, what about partitions mounted to a
+subdir of, say, drive C?  In that case the hashing goes awry, because
+you're comparing with the hash of drive C while the path is actually
+pointing to another partition.
+
+> @@ -233,27 +281,7 @@ fs_info::update (PUNICODE_STRING upath, HANDLE in_vol)
+>  	 a unique per-drive/share hash. */
+>        if (ffvi_buf.ffvi.VolumeSerialNumber == 0)
+>  	{
+> -	  UNICODE_STRING path_prefix;
+> -	  WCHAR *p;
+> -
+> -	  if (upath->Buffer[5] == L':' && upath->Buffer[6] == L'\\')
+> -	    p = upath->Buffer + 6;
+> -	  else
+> -	    {
+> -	      /* We're expecting an UNC path.  Move p to the backslash after
+> -	         "\??\UNC\server\share" or the trailing NUL. */
+> -	      p = upath->Buffer + 7;  /* Skip "\??\UNC" */
+> -	      int bs_cnt = 0;
+> -
+> -	      while (*++p)
+> -		if (*p == L'\\')
+> -		    if (++bs_cnt > 1)
+> -		      break;
+> -	    }
+> -	  RtlInitCountedUnicodeString (&path_prefix, upath->Buffer,
+> -				       (p - upath->Buffer) * sizeof (WCHAR));
+> -	  ffvi_buf.ffvi.VolumeSerialNumber = hash_path_name ((ino_t) 0,
+> -							     &path_prefix);
+> +	  ffvi_buf.ffvi.VolumeSerialNumber = hash_prefix(upath);
+
+Please note that we did this *only* for border case FSes returning a VSN
+of 0.  This was sufficient for these cases, but not in a a general sense.
 
 
-Thanks,
 Corinna
