@@ -1,43 +1,32 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
- by sourceware.org (Postfix) with ESMTPS id A4C5138460B4
- for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 11:08:50 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org A4C5138460B4
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MNtny-1lPaxs3CkS-00OCYD for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021
- 12:08:48 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 4981FA8093E; Mon, 18 Jan 2021 12:08:48 +0100 (CET)
-Date: Mon, 18 Jan 2021 12:08:48 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com
+ [210.131.2.83])
+ by sourceware.org (Postfix) with ESMTPS id 404403846402
+ for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 11:24:12 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 404403846402
+Received: from Express5800-S70 (x067108.dynamic.ppp.asahi-net.or.jp
+ [122.249.67.108]) (authenticated)
+ by conssluserg-04.nifty.com with ESMTP id 10IBNlNU012562
+ for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 20:23:47 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 10IBNlNU012562
+X-Nifty-SrcIP: [122.249.67.108]
+Date: Mon, 18 Jan 2021 20:23:49 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 05/11] Cygwin: Move post-dir unlink check
-Message-ID: <20210118110848.GV59030@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20210115134534.13290-1-ben@wijen.net>
- <20210115134534.13290-6-ben@wijen.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210115134534.13290-6-ben@wijen.net>
-X-Provags-ID: V03:K1:HIkuuhLixuG/oognxPskIYDm5NtElhiEvvxLVGU4KL9ZFxe00HN
- vrK15IiNz3rReTW0C0JvJPSQlmenNoRrnyQ0/hPUJnuB7cDJIuLkAsattVcJQZ1/HDBJM9s
- PpooAGNZe8xhZSOy3jCodYF/NeBsp5R6YBP9VYPAiE+scKQqDvrQf/pG+C5wHbx2KUMM3CG
- T8GhsY4bRgJ8g/oGSw7Ew==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:fztJIGIcsQQ=:J/RM3cLBtKBZrbHHoOY95v
- U5zcwINoBUk+NiJw4JUffgIzVLcakTXjA6K3ijG3+gTAzOgSRE1WDGPN+dU3WYcRQQK+r85+x
- OQ5gzdfpz/HwC5gx16MO/N39RCKHRKK1eECzKGpfcaCfqVLZ0cxqqBGJfpyppGOsvP0QJdyFk
- NN1L8Sad+8+dgdos2rVozb3om3CtNqceCy9C5LdC2za5ajegTtKrl2BxmtNqE80InBu7BMgOF
- y9AnDPvdF/zk3eJJH66Gma+zB3p0wyHNJFTdENjGkKoV/xHnti9UiCSmuiQ8GsP1iOtE9Z/y1
- 1uqJ8cx6sGOkbZRR2p2gkEC6T1OfvBregG1VFO5mIreK7gMXRWVw23Y0YxDOIZvXP/XBC8Ka8
- glG874QAxFxgazBEfelyDyjMapvhk7LwK/ygDdhd9xUAEGRBFpQTgFyYek/SSRnwpq4IWwRfI
- DbkoaLb7xw==
-X-Spam-Status: No, score=-100.9 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+Subject: Re: [PATCH 4/5] Cygwin: pty: Prevent pty from changing code page of
+ parent console.
+Message-Id: <20210118202349.b0d9035855eddf53488143d9@nifty.ne.jp>
+In-Reply-To: <20210118102340.GO59030@calimero.vinschen.de>
+References: <20210115083213.676-1-takashi.yano@nifty.ne.jp>
+ <20210115083213.676-5-takashi.yano@nifty.ne.jp>
+ <20210118102340.GO59030@calimero.vinschen.de>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
+ SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -52,14 +41,60 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 18 Jan 2021 11:08:51 -0000
+X-List-Received-Date: Mon, 18 Jan 2021 11:24:16 -0000
 
-On Jan 15 14:45, Ben Wijen wrote:
-> Move post-dir unlink check from
-> fhandler_disk_file::rmdir to _unlink_nt
+Hi Corinna,
 
-Why?  It's not much of a problem, codewise, but the commit message
-could be improved here.
+On Mon, 18 Jan 2021 11:23:40 +0100
+Corinna Vinschen wrote:
+> I'm going to push patches 1 - 3.  In terms of patch 4 I have a few
+> questions:
+> 
+> On Jan 15 17:32, Takashi Yano via Cygwin-patches wrote:
+> > @@ -2185,7 +2185,7 @@ private:
+> >    bool send_winch_maybe ();
+> >    void setup ();
+> >    bool set_unit ();
+> > -  static bool need_invisible ();
+> > +  static bool need_invisible (bool force=false);
+> 
+> Please add spaces, i. e., force = false
+> 
+> > +static DWORD
+> > +get_console_process_id (DWORD pid, bool match)
+> > +{
+> > +  DWORD tmp;
+> > +  DWORD num, num_req;
+> > +  num = 1;
+> > +  num_req = GetConsoleProcessList (&tmp, num);
+> > +  DWORD *list;
+> 
+> So, assuming num_req is 1 after the call, shouldn't that skip the
+> rest of the code?
+> 
+> > +  while (true)
+> > +    {
+> > +      list = (DWORD *)
+> > +	HeapAlloc (GetProcessHeap (), 0, num_req * sizeof (DWORD));
+> > +      num = num_req;
+> > +      num_req = GetConsoleProcessList (list, num);
+> > +      if (num_req > num)
+> > +	HeapFree (GetProcessHeap (), 0, list);
+> > +      else
+> > +	break;
+> > +    }
+> > +  num = num_req;
+> > +
+> > +  tmp = 0;
+> > +  for (DWORD i=0; i<num; i++)
+> > +    if ((match && list[i] == pid) || (!match && list[i] != pid))
+> > +      /* Last one is the oldest. */
+> > +      /* https://github.com/microsoft/terminal/issues/95 */
+> 
+> Given that, wouldn't it make more sense to count backwards, from
+> num - 1 to 0, from a performance perspective?
 
+Thanks for the advice. I will submit the revised patch.
 
-Corinna
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
