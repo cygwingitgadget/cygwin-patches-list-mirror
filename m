@@ -1,40 +1,40 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
- by sourceware.org (Postfix) with ESMTPS id 25F5B386EC7A
- for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 11:06:04 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 25F5B386EC7A
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+ by sourceware.org (Postfix) with ESMTPS id A4C5138460B4
+ for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 11:08:50 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org A4C5138460B4
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MLQl3-1lJG5h3FTP-00IWTs for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021
- 12:06:02 +0100
+ mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MNtny-1lPaxs3CkS-00OCYD for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021
+ 12:08:48 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 3DD47A8093E; Mon, 18 Jan 2021 12:06:02 +0100 (CET)
-Date: Mon, 18 Jan 2021 12:06:02 +0100
+ id 4981FA8093E; Mon, 18 Jan 2021 12:08:48 +0100 (CET)
+Date: Mon, 18 Jan 2021 12:08:48 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 04/11] syscalls.cc: Use EISDIR
-Message-ID: <20210118110602.GU59030@calimero.vinschen.de>
+Subject: Re: [PATCH 05/11] Cygwin: Move post-dir unlink check
+Message-ID: <20210118110848.GV59030@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20210115134534.13290-1-ben@wijen.net>
- <20210115134534.13290-5-ben@wijen.net>
+ <20210115134534.13290-6-ben@wijen.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210115134534.13290-5-ben@wijen.net>
-X-Provags-ID: V03:K1:Rbq00d2eSwsmIOJtQaK9235i7Io+OIuvt2h/ZYszxLHEPBkDE6z
- 7uFGuLAgPAfcQkV0zCsxJvZjD0ExGzeJhHLEXBE9DxPm5WFGpo8iEDS15pkczHF2tx0LMfB
- x2enUhLEfZRwv6s2Ik/+EdOP4b6Z5uRFHeDPnMHUK03eFfxOhs0Rf+JqJ/vnpLXqRZdZPbk
- xwbciNqd6PMe2bGPH9nUA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:51jSZmty0fE=:2N4KXumSjN1HNSAR33dVbW
- vRmoe4qP8DaFIONDkJUJM+ZGZcG1gnI+7O1SmVfcJk6EyabwmpJarQ/5CA0d+Vgd03Cj75S6S
- 9Y9sSBzndTbSJ7gMvHlAX4CUofAAa9S6kR9z4+3koXcti9+Dw/CH+K2cz3qvaBhGuXLy+Gyee
- a5UQzr+bOUAC+tcjaEbr02LYAxmy/drDGYLMM7FJlnjnsTWY5EeWBLLc2ThTg2L3hm1oQPyp1
- 71xgQc9ZCM2OPOwwwloqBhpcRHE2t0LNKsNRHd4DsV5uYJ83TckfbNLC/GYkKEwbVDJCq1GNl
- 3vpVM3ji+Qz9J0lJai/zDjt6JW2wC88/HXL5i9C2Swcz8LX61QGD/vGo4VJWJF1VayfTvHVhs
- 89DpLBQr0mOw74hdA2EXVWhCtrX8rEsVEoe0glGIG4QVmGwyHPu9qWRXqXSgbAiOE590yMMoH
- bOCr2OomYA==
-X-Spam-Status: No, score=-107.0 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+In-Reply-To: <20210115134534.13290-6-ben@wijen.net>
+X-Provags-ID: V03:K1:HIkuuhLixuG/oognxPskIYDm5NtElhiEvvxLVGU4KL9ZFxe00HN
+ vrK15IiNz3rReTW0C0JvJPSQlmenNoRrnyQ0/hPUJnuB7cDJIuLkAsattVcJQZ1/HDBJM9s
+ PpooAGNZe8xhZSOy3jCodYF/NeBsp5R6YBP9VYPAiE+scKQqDvrQf/pG+C5wHbx2KUMM3CG
+ T8GhsY4bRgJ8g/oGSw7Ew==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:fztJIGIcsQQ=:J/RM3cLBtKBZrbHHoOY95v
+ U5zcwINoBUk+NiJw4JUffgIzVLcakTXjA6K3ijG3+gTAzOgSRE1WDGPN+dU3WYcRQQK+r85+x
+ OQ5gzdfpz/HwC5gx16MO/N39RCKHRKK1eECzKGpfcaCfqVLZ0cxqqBGJfpyppGOsvP0QJdyFk
+ NN1L8Sad+8+dgdos2rVozb3om3CtNqceCy9C5LdC2za5ajegTtKrl2BxmtNqE80InBu7BMgOF
+ y9AnDPvdF/zk3eJJH66Gma+zB3p0wyHNJFTdENjGkKoV/xHnti9UiCSmuiQ8GsP1iOtE9Z/y1
+ 1uqJ8cx6sGOkbZRR2p2gkEC6T1OfvBregG1VFO5mIreK7gMXRWVw23Y0YxDOIZvXP/XBC8Ka8
+ glG874QAxFxgazBEfelyDyjMapvhk7LwK/ygDdhd9xUAEGRBFpQTgFyYek/SSRnwpq4IWwRfI
+ DbkoaLb7xw==
+X-Spam-Status: No, score=-100.9 required=5.0 tests=BAYES_00,
  GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
  RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
@@ -52,32 +52,14 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 18 Jan 2021 11:06:07 -0000
+X-List-Received-Date: Mon, 18 Jan 2021 11:08:51 -0000
 
 On Jan 15 14:45, Ben Wijen wrote:
-> This is the non-POSIX value returned by Linux since 2.1.132.
-> ---
->  winsup/cygwin/syscalls.cc | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
-> index 227d1a911..043ccdb99 100644
-> --- a/winsup/cygwin/syscalls.cc
-> +++ b/winsup/cygwin/syscalls.cc
-> @@ -1118,7 +1118,7 @@ unlink (const char *ourname)
->    else if (win32_name.isdir ())
->      {
->        debug_printf ("unlinking a directory");
-> -      set_errno (EPERM);
-> +      set_errno (EISDIR);
->        goto done;
->      }
->  
-> -- 
-> 2.29.2
+> Move post-dir unlink check from
+> fhandler_disk_file::rmdir to _unlink_nt
 
-Pushed.
+Why?  It's not much of a problem, codewise, but the commit message
+could be improved here.
 
 
-Thanks,
 Corinna
