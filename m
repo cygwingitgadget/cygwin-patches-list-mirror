@@ -1,49 +1,31 @@
-Return-Path: <ben@wijen.net>
-Received: from 7.mo5.mail-out.ovh.net (7.mo5.mail-out.ovh.net [178.32.124.100])
- by sourceware.org (Postfix) with ESMTPS id 151143854813
- for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 15:00:01 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 151143854813
-Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=wijen.net
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=ben@wijen.net
-Received: from player750.ha.ovh.net (unknown [10.108.16.43])
- by mo5.mail-out.ovh.net (Postfix) with ESMTP id BBF782A8B3D
- for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 15:59:59 +0100 (CET)
-Received: from wijen.net (80-112-22-40.cable.dynamic.v4.ziggo.nl
- [80.112.22.40]) (Authenticated sender: ben@wijen.net)
- by player750.ha.ovh.net (Postfix) with ESMTPSA id DE6B31A11676B
- for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 14:59:57 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass
- (GARM-106R006f11511c3-2bb1-4948-8686-e988a39a07c9,
- 1E059570D1A9E336F11081F47AF01A3014A153AE) smtp.auth=ben@wijen.net
-X-OVh-ClientIp: 80.112.22.40
-Subject: Re: [PATCH 01/11] syscalls.cc: unlink_nt: Try
- FILE_DISPOSITION_IGNORE_READONLY_ATTRIBUTE first
-To: Corinna Vinschen via Cygwin-patches <cygwin-patches@cygwin.com>
-References: <20210115134534.13290-1-ben@wijen.net>
- <20210115134534.13290-2-ben@wijen.net>
- <20210118104534.GR59030@calimero.vinschen.de>
- <c96cefe7-3148-5d6b-5839-08f7dd85dc30@wijen.net>
- <20210118122211.GA59030@calimero.vinschen.de>
- <51b3e03d-9a97-d83f-1858-751a9a51394e@wijen.net>
- <20210118143934.GG59030@calimero.vinschen.de>
-From: Ben <ben@wijen.net>
-Message-ID: <ae146480-ba1c-d5ba-0039-fb4e9a8f39db@wijen.net>
-Date: Mon, 18 Jan 2021 15:59:55 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
-MIME-Version: 1.0
-In-Reply-To: <20210118143934.GG59030@calimero.vinschen.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com
+ [210.131.2.91])
+ by sourceware.org (Postfix) with ESMTPS id 7FC023857C4C
+ for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 15:00:59 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 7FC023857C4C
+Received: from Express5800-S70 (x067108.dynamic.ppp.asahi-net.or.jp
+ [122.249.67.108]) (authenticated)
+ by conssluserg-06.nifty.com with ESMTP id 10IF0RnJ019426
+ for <cygwin-patches@cygwin.com>; Tue, 19 Jan 2021 00:00:28 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 10IF0RnJ019426
+X-Nifty-SrcIP: [122.249.67.108]
+Date: Tue, 19 Jan 2021 00:00:31 +0900
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Cygwin: pty: Set input_available_event only for cygwin
+ pipe.
+Message-Id: <20210119000031.4eab2786d24768f405b6bfdf@nifty.ne.jp>
+In-Reply-To: <20210115092631.748-1-takashi.yano@nifty.ne.jp>
+References: <20210115092631.748-1-takashi.yano@nifty.ne.jp>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Ovh-Tracer-Id: 11704573959164479236
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduledrtdekgdejvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefuvfhfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpeeuvghnuceosggvnhesfihijhgvnhdrnhgvtheqnecuggftrfgrthhtvghrnhepvefhgefghfdvueekgeejteevgffgtdeljeelhfffvdejffeigeeuveefueetteeunecukfhppedtrddtrddtrddtpdektddrudduvddrvddvrdegtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphdqohhuthdphhgvlhhopehplhgrhigvrhejhedtrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepsggvnhesfihijhgvnhdrnhgvthdprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhm
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
- NICE_REPLY_A, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL,
- SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, NICE_REPLY_A,
+ RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_PASS,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -58,10 +40,41 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 18 Jan 2021 15:00:02 -0000
+X-List-Received-Date: Mon, 18 Jan 2021 15:01:07 -0000
 
+Hi Corinna,
+
+On Fri, 15 Jan 2021 18:26:31 +0900
+Takashi Yano wrote:
+> - cat exits immediately in the following senario.
+>     1) Execute env CYGWIN=disable_pcon script
+>     2) Execute cmd.exe
+>     3) Execute cat in cmd.exe.
+>   This is caused by setting input_available_event for the pipe for
+>   non-cygwin app. This patch fixes the issue.
+> ---
+>  winsup/cygwin/fhandler_tty.cc | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> I'm sure, but that code path is called on non-remote ntfs only anyway.
+> diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+> index e4993bf31..0b9901974 100644
+> --- a/winsup/cygwin/fhandler_tty.cc
+> +++ b/winsup/cygwin/fhandler_tty.cc
+> @@ -394,7 +394,8 @@ fhandler_pty_master::accept_input ()
+>  	}
+>      }
+>  
+> -  SetEvent (input_available_event);
+> +  if (write_to == get_output_handle ())
+> +    SetEvent (input_available_event);
+>    ReleaseMutex (input_mutex);
+>    return ret;
+>  }
+> -- 
+> 2.30.0
 > 
 
-Ofcourse, I was thinking about the new _unlink_nt...
+I would be happy if you could review this patch as well.
+
+-- 
+Takashi Yano <takashi.yano@nifty.ne.jp>
