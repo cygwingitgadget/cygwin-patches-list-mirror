@@ -1,42 +1,44 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
- by sourceware.org (Postfix) with ESMTPS id 74B1E385782C
- for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 12:39:03 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 74B1E385782C
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MrQR7-1lmyIr0M9n-00oWYZ for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021
- 13:39:02 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 59E55A80988; Mon, 18 Jan 2021 13:39:01 +0100 (CET)
-Date: Mon, 18 Jan 2021 13:39:01 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2 4/5] Cygwin: pty: Prevent pty from changing code page
- of parent console.
-Message-ID: <20210118123901.GB59030@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20210118112447.1518-1-takashi.yano@nifty.ne.jp>
+Return-Path: <ben@wijen.net>
+Received: from 4.mo178.mail-out.ovh.net (4.mo178.mail-out.ovh.net
+ [46.105.49.171])
+ by sourceware.org (Postfix) with ESMTPS id 380123AAA0ED
+ for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 12:40:21 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 380123AAA0ED
+Authentication-Results: sourceware.org;
+ dmarc=none (p=none dis=none) header.from=wijen.net
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=ben@wijen.net
+Received: from player728.ha.ovh.net (unknown [10.109.146.131])
+ by mo178.mail-out.ovh.net (Postfix) with ESMTP id BA8C3C0E6F
+ for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 13:40:19 +0100 (CET)
+Received: from wijen.net (80-112-22-40.cable.dynamic.v4.ziggo.nl
+ [80.112.22.40]) (Authenticated sender: ben@wijen.net)
+ by player728.ha.ovh.net (Postfix) with ESMTPSA id C2E631A0D5D58
+ for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 12:40:18 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass
+ (GARM-97G00253e69c74-f54f-42e9-b561-07d14d823fa7,
+ 1E059570D1A9E336F11081F47AF01A3014A153AE) smtp.auth=ben@wijen.net
+X-OVh-ClientIp: 80.112.22.40
+Subject: Re: [PATCH 02/11] syscalls.cc: Deduplicate _remove_r
+To: Corinna Vinschen via Cygwin-patches <cygwin-patches@cygwin.com>
+References: <20210115134534.13290-1-ben@wijen.net>
+ <20210115134534.13290-3-ben@wijen.net>
+ <20210118105603.GS59030@calimero.vinschen.de>
+From: Ben <ben@wijen.net>
+Message-ID: <6de2f124-c5dd-34cb-1914-4eb0454b41d8@wijen.net>
+Date: Mon, 18 Jan 2021 13:40:17 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
+In-Reply-To: <20210118105603.GS59030@calimero.vinschen.de>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210118112447.1518-1-takashi.yano@nifty.ne.jp>
-X-Provags-ID: V03:K1:ed38/zFiIBXkiT3k7BCz3+Bhc/XNkQXv30b7qz9JkMQjvOpllY3
- tSlQos0XWXmPrdO3EXC5BJ8kECpZzEJBfu/t/ROhEWvbjO9SxyMW4nmtaXUbcDOsVIth+bD
- tbz/uFdqq1NF2qE+OpJbpxpUYF5rL/JWWqPUex4pZCXr/PSwER5GnZlXYcoZEnSUW78SQjO
- w4VBawbF63Kga2bgwZb5Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Pun7cASZs4Y=:CPOJNZ/ihz0ePFOlF4mecW
- BJrlgcKwAg0nf/DHAZYmPv09byDmB7/JxZZd4WmI1mvgUT1P7k8gLWihzXNdDmx2aF+bhAVYC
- f8xG1w4KqpF3ZIGzYj8L99wz7TvnX4e/Af6mjVDG5TJUquDmAIwFQke5JWAefGYwu9z72f4u8
- 5FajFNnB4ZqVoUp8IWsBWB9de8VgLIBiybXuOfL4okfGAY9utMACekf3AzGO9C94elNRsQxI/
- KW94Fy6w2W/YZB1BHDDfFLIoT3/XxJE3XBwHn5bjOalZgFLy3Qef+eDUc++7WKwhKET4Cle8i
- ilk37cmrLrXaeeObNQ/nGbWwSpBelZ81VJGUO5E3Xjhl1BZxJ/firfSJnN+hXDKTmtbLhKW3O
- Ly0MzfFxSuHycPiqb1QC+m8MVF9Ay6TVunrm487oMNABIwp1x4ItxNZjfC8x/ibSB5UyNU1tl
- DkjXVjU9CA==
-X-Spam-Status: No, score=-100.8 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Ovh-Tracer-Id: 9345813652709852932
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduledrtdekgdegfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefuvfhfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpeeuvghnuceosggvnhesfihijhgvnhdrnhgvtheqnecuggftrfgrthhtvghrnhepvefhgefghfdvueekgeejteevgffgtdeljeelhfffvdejffeigeeuveefueetteeunecukfhppedtrddtrddtrddtpdektddrudduvddrvddvrdegtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphdqohhuthdphhgvlhhopehplhgrhigvrhejvdekrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepsggvnhesfihijhgvnhdrnhgvthdprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhm
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
+ NICE_REPLY_A, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_PASS,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -52,82 +54,22 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 18 Jan 2021 12:39:05 -0000
-
-Hi Takashi,
-
-On Jan 18 20:24, Takashi Yano via Cygwin-patches wrote:
-> @@ -59,6 +59,46 @@ struct pipe_reply {
->    DWORD error;
->  };
->  
-> +extern HANDLE attach_mutex; /* Defined in fhandler_console.cc */
-> +
-> +static DWORD
-> +get_console_process_id (DWORD pid, bool match)
-> +{
-> +  DWORD list1;
-> +  DWORD num, num_req;
-> +  num = 1;
-> +  num_req = GetConsoleProcessList (&list1, num);
-> +  DWORD *list;
-> +  if (num_req == 1)
-> +    list = &list1;
-> +  else
-> +    while (true)
-> +      {
-> +	list = (DWORD *)
-> +	  HeapAlloc (GetProcessHeap (), 0, num_req * sizeof (DWORD));
-> +	num = num_req;
-> +	num_req = GetConsoleProcessList (list, num);
-> +	if (num_req > num)
-> +	  HeapFree (GetProcessHeap (), 0, list);
-> +	else
-> +	  break;
-> +      }
-> +  num = num_req;
-> +
-> +  DWORD res = 0;
-> +  /* Last one is the oldest. */
-> +  /* https://github.com/microsoft/terminal/issues/95 */
-> +  for (int i = (int) num - 1; i >= 0; i--)
-> +    if ((match && list[i] == pid) || (!match && list[i] != pid))
-> +      {
-> +	res = list[i];
-> +	break;
-> +      }
-> +  if (num > 1)
-> +    HeapFree (GetProcessHeap (), 0, list);
-> +  return res;
-> +}
-
-Sorry if I'm slow, but I was just mulling over this code snippet again,
-and I was wondering if we couldn't do without the HeapAlloc loop.
-Assuming you use a tmp_pathbuf here, you'd have space for 16384
-processes per console.  Shouldn't that be more than enough?  I.e.
-
-static DWORD
-get_console_process_id (DWORD pid, bool match)
-{
-  tmp_pathbuf tp;
-  DWORD *list = (DWORD *) tp.w_get ();
-  const DWORD num = NT_MAX_PATH * sizeof (WCHAR) / sizeof (DWORD);
-  DWORD res = 0;
-
-  num = GetConsoleProcessList (&list, num);
-
-  /* Last one is the oldest. */
-  /* https://github.com/microsoft/terminal/issues/95 */
-  for (int i = (int) num - 1; i >= 0; i--)
-    if ((match && list[i] == pid) || (!match && list[i] != pid))
-      {
-	res = list[i];
-	break;
-      }
-  return res;
-}
+X-List-Received-Date: Mon, 18 Jan 2021 12:40:22 -0000
 
 
-What do you think?
 
-Corinna
+On 18-01-2021 11:56, Corinna Vinschen via Cygwin-patches wrote:
+> Hmm, you're adding another function call to the call stack.  Doesn't
+> that slow down _remove_r rather than speeding it up?  Ok, this function
+> is called from _tmpfile_r/_tmpfile64_r only, so dedup may trump speed
+> here...
+> 
+> What's your stance?
+> 
+While I could do without:
+In an earlier version I had changed remove and missed remove_r.
+
+So, this commit is more about de-duplication rather than speed.
+
+
+Ben...
