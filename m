@@ -1,34 +1,44 @@
-Return-Path: <mark@maxrnd.com>
-Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
- by sourceware.org (Postfix) with ESMTPS id E73F53857C7F
- for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 06:47:50 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org E73F53857C7F
-Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=maxrnd.com
-Authentication-Results: sourceware.org; spf=none smtp.mailfrom=mark@maxrnd.com
-Received: (from daemon@localhost)
- by m0.truegem.net (8.12.11/8.12.11) id 10I6lnJI012432
- for <cygwin-patches@cygwin.com>; Sun, 17 Jan 2021 22:47:49 -0800 (PST)
- (envelope-from mark@maxrnd.com)
-Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67),
- claiming to be "[192.168.1.20]"
- via SMTP by m0.truegem.net, id smtpdIVsVeK; Sun Jan 17 22:47:43 2021
-Subject: Re: [PATCH] Cygwin: Interim malloc speedup
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+ by sourceware.org (Postfix) with ESMTPS id E4F7B38460A3
+ for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 10:23:43 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org E4F7B38460A3
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MacWq-1ldXbI106U-00c6HQ for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021
+ 11:23:42 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id D39E8A8093E; Mon, 18 Jan 2021 11:23:40 +0100 (CET)
+Date: Mon, 18 Jan 2021 11:23:40 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-References: <20201222045348.10562-1-mark@maxrnd.com>
- <20210111121828.GC59030@calimero.vinschen.de>
-From: Mark Geisert <mark@maxrnd.com>
-Message-ID: <d75ea761-7243-5f8d-4959-082933b1d223@maxrnd.com>
-Date: Sun, 17 Jan 2021 22:47:44 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Firefox/52.0 SeaMonkey/2.49.4
+Subject: Re: [PATCH 4/5] Cygwin: pty: Prevent pty from changing code page of
+ parent console.
+Message-ID: <20210118102340.GO59030@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20210115083213.676-1-takashi.yano@nifty.ne.jp>
+ <20210115083213.676-5-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
-In-Reply-To: <20210111121828.GC59030@calimero.vinschen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, SPF_HELO_NONE,
- SPF_NONE, TXREP autolearn=ham autolearn_force=no version=3.4.2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210115083213.676-5-takashi.yano@nifty.ne.jp>
+X-Provags-ID: V03:K1:L+3/Mov5T+x5P1MLHXs1EmzyUbYOZ3MUHVdXjE2H0BFSNSWqm/H
+ vY1VapKJGT+7y4EOsHWP764CC/Eovy/gPEp3z9L0FsaF9o9mknOGgkz74uarD/L5NaoeI+f
+ WDIRQyB787Ta5/126FA5DKhHluFoCiX1d9YAy61n+mb9DcgrnXE1GB7Rnn6G1OArARv9fLN
+ Ty7UrpSd4OmdOEMIUsRxw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:iX8CgF28l5k=:rXRYZsfj4mFEm4VnZ2D8Ov
+ auGtvekco9lz0vMPqTBkk8xtPhPRfFkWQ/CbDCw1tOrcMqpqlrQi+V/HVsmJiJL8aeG6FyQiN
+ eJNIurOhI0Kf74IL75yE5BlO43IqH9ugD6HSWvooVFs6ZYghYqmfftxIUxdCrNsNAD0UoOcJ3
+ OIBPc9UsumH//kLFA0f4YqyJyGzYX1x7CbbjSoL869A/4rHxL/HniSjHY0NIn7O5c9cWR74Wa
+ GqCUH1mUZh9H+Gl7MjPMRCyroh8cTHOKpUHmw1uXtPt+BVfPAJpqclrCsXWcYCO7a1pnrrSnN
+ k6KFZ5MASy8SsXYkys3BMuFoT238AIpx4to/oZesijhguZtELHb7Pa0hkH7P+Y1+jIEkXuf/L
+ c4CEwlzvRwfB228FiuOxNmxTdev+NUHu44M8G5yROvYbala1ZaQoqnmYaUY2RAWMj1lFFPdqW
+ F5KnoaNjTA==
+X-Spam-Status: No, score=-100.8 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -43,110 +53,58 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 18 Jan 2021 06:47:54 -0000
+X-List-Received-Date: Mon, 18 Jan 2021 10:23:45 -0000
 
-Hi Corinna,
-Happy New Year back at you!  I'm very glad to see you posting again!
+Hi Takashi,
 
-Corinna Vinschen via Cygwin-patches wrote:
-> Hi Mark,
-> 
-> Happy New Year!
-> 
-> On Dec 21 20:53, Mark Geisert wrote:
->> Replaces function-level lock with data-level lock provided by existing
->> dlmalloc.  Sets up to enable dlmalloc's MSPACES, but does not yet enable
->> them due to visible but uninvestigated issues.
->>
->> Single-thread applications may or may not see a performance gain,
->> depending on how heavily it uses the malloc functions.  Multi-thread
->> apps will likely see a performance gain.
-[...]
->> diff --git a/winsup/cygwin/cygmalloc.h b/winsup/cygwin/cygmalloc.h
->> index 84bad824c..67a9f3b3f 100644
->> --- a/winsup/cygwin/cygmalloc.h
->> +++ b/winsup/cygwin/cygmalloc.h
-[...]
->> +/* These defines tune the dlmalloc implementation in malloc.cc */
->>   # define MALLOC_FAILURE_ACTION	__set_ENOMEM ()
->>   # define USE_DL_PREFIX 1
->> +# define USE_LOCKS 1
-> 
-> Just enabling USE_LOCKS looks wrong to me.  Before enabling USE_LOCKS,
-> you should check how the actual locking is performed.  For non WIN32,
-> that will be pthread_mutex_lock/unlock, which may not be feasible,
-> because it may break expectations during fork.
 
-I did investigate this before setting it, and I've been running with '#define 
-USE_LOCKS 1' for many weeks and haven't seen any memory issues of any kind. 
-Malloc multi-thread stress testing, fork() stress testing, Cygwin DLL builds, 
-Python and binutils builds, routine X usage; all OK.  (Once I straightened out 
-sped-up mkimport to actually do what Jon T suggested, blush.)
+I'm going to push patches 1 - 3.  In terms of patch 4 I have a few
+questions:
 
-> What you may want to do is setting USE_LOCKS to 2, and defining your own
-> MLOCK_T/ACQUIRE_LOCK/... macros (in the `#if USE_LOCKS > 1' branch of
-> the malloc source, see lines 1798ff), using a type which is non-critical
-> during forking, as well as during process initialization.  Win32 fast
-> R/W Locks come to mind and adding them should be pretty straight-forward.
-> This may also allow MSPACES to work OOTB.
+On Jan 15 17:32, Takashi Yano via Cygwin-patches wrote:
+> @@ -2185,7 +2185,7 @@ private:
+>    bool send_winch_maybe ();
+>    void setup ();
+>    bool set_unit ();
+> -  static bool need_invisible ();
+> +  static bool need_invisible (bool force=false);
 
-With '#define USE_LOCKS 1' the tangled mess of #if-logic in malloc.cc resolves on 
-Cygwin to using pthread_mutex_locks, so that seems to be OK as-is unless what 
-you're suggesting is preferable for speed (or MSPACES when I get to that).
->> +# define LOCK_AT_FORK 0
-> 
-> This looks dangerous.  You're removing the locking from fork entirely
-> *and* the lock isn't re-initialized in the child.  This reinitializing
-> was no problem before because mallock was NO_COPY, but it's a problem
-> now because the global malloc_state _gm_ isn't (and mustn't).  The
-> current implementation calling
-> 
->    #if LOCK_AT_FORK
->        pthread_atfork(&pre_fork, &post_fork_parent, &post_fork_child);
->    #endif
-> 
-> should do the trick, assuming the USE_LOCKS stuff is working as desired.
+Please add spaces, i. e., force = false
 
-I don't remember what led me to #define LOCK_AT_FORK 0, but in the new light of 
-this year it's obviously wrong.  I've #define'd it 1.
+> +static DWORD
+> +get_console_process_id (DWORD pid, bool match)
+> +{
+> +  DWORD tmp;
+> +  DWORD num, num_req;
+> +  num = 1;
+> +  num_req = GetConsoleProcessList (&tmp, num);
+> +  DWORD *list;
 
->> [...]
->> +#if MSPACES
->> +/* If mspaces (thread-specific memory pools) are enabled, use a thread-
->> +   local variable to store a pointer to the calling thread's mspace.
->> +
->> +   On any use of a malloc-family function, if the appropriate mspace cannot
->> +   be determined, the general (non-mspace) form of the corresponding malloc
->> +   function is substituted.  This is not expected to happen often.
->> +*/
->> +static NO_COPY DWORD tls_mspace; // index into thread's TLS array
->> +
->> +static void *
->> +get_current_mspace ()
->> +{
->> +  if (unlikely (tls_mspace == 0))
->> +    return 0;
->> +
->> +  void *m = TlsGetValue (tls_mspace);
->> +  if (unlikely (m == 0))
->> +    {
->> +      m = create_mspace (MSPACE_SIZE, 0);
->> +      if (!m)
->> +        return 0;
->> +      TlsSetValue (tls_mspace, m);
->> +    }
->> +  return m;
->> +}
->> +#endif
-> 
-> Please define a new slot in _cygtls keeping the memory address returned
-> by create_mspace.  You don't have to call TlsGetValue/TlsSetValue.
+So, assuming num_req is 1 after the call, shouldn't that skip the
+rest of the code?
 
-Thank you for repeating this suggestion.  I now understand why it's better.
+> +  while (true)
+> +    {
+> +      list = (DWORD *)
+> +	HeapAlloc (GetProcessHeap (), 0, num_req * sizeof (DWORD));
+> +      num = num_req;
+> +      num_req = GetConsoleProcessList (list, num);
+> +      if (num_req > num)
+> +	HeapFree (GetProcessHeap (), 0, list);
+> +      else
+> +	break;
+> +    }
+> +  num = num_req;
+> +
+> +  tmp = 0;
+> +  for (DWORD i=0; i<num; i++)
+> +    if ((match && list[i] == pid) || (!match && list[i] != pid))
+> +      /* Last one is the oldest. */
+> +      /* https://github.com/microsoft/terminal/issues/95 */
 
-I'm going to delay submitting the v2 patch until I see where the investigation of 
-Achim's malloc testcase (running zstd on 1600 files, for instance) leads.  I'm 
-about to respond to his thread in cygwin-apps.
-Thanks & Regards,
+Given that, wouldn't it make more sense to count backwards, from
+num - 1 to 0, from a performance perspective?
 
-..mark
+
+Thanks,
+Corinna
