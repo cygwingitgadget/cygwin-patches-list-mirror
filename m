@@ -1,44 +1,43 @@
-Return-Path: <ben@wijen.net>
-Received: from 4.mo178.mail-out.ovh.net (4.mo178.mail-out.ovh.net
- [46.105.49.171])
- by sourceware.org (Postfix) with ESMTPS id 380123AAA0ED
- for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 12:40:21 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 380123AAA0ED
-Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=wijen.net
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=ben@wijen.net
-Received: from player728.ha.ovh.net (unknown [10.109.146.131])
- by mo178.mail-out.ovh.net (Postfix) with ESMTP id BA8C3C0E6F
- for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 13:40:19 +0100 (CET)
-Received: from wijen.net (80-112-22-40.cable.dynamic.v4.ziggo.nl
- [80.112.22.40]) (Authenticated sender: ben@wijen.net)
- by player728.ha.ovh.net (Postfix) with ESMTPSA id C2E631A0D5D58
- for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 12:40:18 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass
- (GARM-97G00253e69c74-f54f-42e9-b561-07d14d823fa7,
- 1E059570D1A9E336F11081F47AF01A3014A153AE) smtp.auth=ben@wijen.net
-X-OVh-ClientIp: 80.112.22.40
-Subject: Re: [PATCH 02/11] syscalls.cc: Deduplicate _remove_r
-To: Corinna Vinschen via Cygwin-patches <cygwin-patches@cygwin.com>
-References: <20210115134534.13290-1-ben@wijen.net>
- <20210115134534.13290-3-ben@wijen.net>
- <20210118105603.GS59030@calimero.vinschen.de>
-From: Ben <ben@wijen.net>
-Message-ID: <6de2f124-c5dd-34cb-1914-4eb0454b41d8@wijen.net>
-Date: Mon, 18 Jan 2021 13:40:17 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
+ by sourceware.org (Postfix) with ESMTPS id 0DC1D386F466
+ for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 12:50:40 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 0DC1D386F466
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MhlCg-1lexbT2z2m-00dlQw for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021
+ 13:50:39 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 2AFC7A80988; Mon, 18 Jan 2021 13:50:39 +0100 (CET)
+Date: Mon, 18 Jan 2021 13:50:39 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH] Cygwin: Interim malloc speedup
+Message-ID: <20210118125039.GC59030@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20201222045348.10562-1-mark@maxrnd.com>
+ <20210111121828.GC59030@calimero.vinschen.de>
+ <d75ea761-7243-5f8d-4959-082933b1d223@maxrnd.com>
 MIME-Version: 1.0
-In-Reply-To: <20210118105603.GS59030@calimero.vinschen.de>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Ovh-Tracer-Id: 9345813652709852932
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduledrtdekgdegfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefuvfhfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpeeuvghnuceosggvnhesfihijhgvnhdrnhgvtheqnecuggftrfgrthhtvghrnhepvefhgefghfdvueekgeejteevgffgtdeljeelhfffvdejffeigeeuveefueetteeunecukfhppedtrddtrddtrddtpdektddrudduvddrvddvrdegtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphdqohhuthdphhgvlhhopehplhgrhigvrhejvdekrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepsggvnhesfihijhgvnhdrnhgvthdprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhm
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
- NICE_REPLY_A, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_PASS,
+Content-Disposition: inline
+In-Reply-To: <d75ea761-7243-5f8d-4959-082933b1d223@maxrnd.com>
+X-Provags-ID: V03:K1:g7EL+IJobwRFy9TunrvBMQPV+aG8yf8b+yijWriwvjymq13daIy
+ ppkewrbPQiXi+qgRqzNY1jaPXiZKyQHaLYpoTEWpRqUbEo3VZEirtopwEVVYxGlVhw+Z3FC
+ LdSMCiq7yBK6rzO6EKfGoI+9hOMhksKouu99YuJqM1gFj53LINVPxijXrN6poqF64Cuu9sK
+ 7pm84AzzHCYrkwntTU2AA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:dG84KnjwRWA=:jbk60iH+rKIGOzaKT0YkQo
+ S/qhW8cg44I7sfnAvUXOCFwdF+ZklzxxUS4o9bEVo8xIro6tnUzysj+SlxU8nlwWpVDSMHLkq
+ qhkw3mEjmj0l1Y1qZE35hNf0mhGdVz3lxqFQyUtNJlSCBLjnAgpfHLBpHkj4VAzFC4LAZspXF
+ sceIndpqMAGtweV5J6FUUlJ0l08AeXRtT2/kDCII/vZyp2lyllCwSos/yvXGiBbaedB30O+2g
+ HC2yrAZcEpGK2L8Lx+/1H66Xeb309pR1DdNKvuDH07Rlkq93qI8CmfV/dIfKqKxqE+4p69rQy
+ 9cu5ff66K+XUGF5kEz4RMzAuVeR9xEy774HC6h2tPEt5GMUjo5DR1OCRbh8uvNv8UgkOWgaDN
+ lWSZ7cMkR2BNV5vZ6u8EDgrBS4VUp+24AL5X+Rbhn8/9mdM6UhnefjxIu2K+O/iwY81dAendL
+ G47csqN+xg==
+X-Spam-Status: No, score=-106.8 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -54,22 +53,72 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 18 Jan 2021 12:40:22 -0000
+X-List-Received-Date: Mon, 18 Jan 2021 12:50:42 -0000
 
+Hi Mark,
 
+On Jan 17 22:47, Mark Geisert wrote:
+> Hi Corinna,
+> Happy New Year back at you!  I'm very glad to see you posting again!
 
-On 18-01-2021 11:56, Corinna Vinschen via Cygwin-patches wrote:
-> Hmm, you're adding another function call to the call stack.  Doesn't
-> that slow down _remove_r rather than speeding it up?  Ok, this function
-> is called from _tmpfile_r/_tmpfile64_r only, so dedup may trump speed
-> here...
+Yeah, I took a longer timeout over the holiday season.
+
+> Corinna Vinschen via Cygwin-patches wrote:
+> > Hi Mark,
+> > 
+> > Happy New Year!
+> > 
+> > On Dec 21 20:53, Mark Geisert wrote:
+> > > Replaces function-level lock with data-level lock provided by existing
+> > > dlmalloc.  Sets up to enable dlmalloc's MSPACES, but does not yet enable
+> > > them due to visible but uninvestigated issues.
+> > > 
+> > > Single-thread applications may or may not see a performance gain,
+> > > depending on how heavily it uses the malloc functions.  Multi-thread
+> > > apps will likely see a performance gain.
+> [...]
+> > > diff --git a/winsup/cygwin/cygmalloc.h b/winsup/cygwin/cygmalloc.h
+> > > index 84bad824c..67a9f3b3f 100644
+> > > --- a/winsup/cygwin/cygmalloc.h
+> > > +++ b/winsup/cygwin/cygmalloc.h
+> [...]
+> > > +/* These defines tune the dlmalloc implementation in malloc.cc */
+> > >   # define MALLOC_FAILURE_ACTION	__set_ENOMEM ()
+> > >   # define USE_DL_PREFIX 1
+> > > +# define USE_LOCKS 1
+> > 
+> > Just enabling USE_LOCKS looks wrong to me.  Before enabling USE_LOCKS,
+> > you should check how the actual locking is performed.  For non WIN32,
+> > that will be pthread_mutex_lock/unlock, which may not be feasible,
+> > because it may break expectations during fork.
 > 
-> What's your stance?
+> I did investigate this before setting it, and I've been running with
+> '#define USE_LOCKS 1' for many weeks and haven't seen any memory issues of
+> any kind. Malloc multi-thread stress testing, fork() stress testing, Cygwin
+> DLL builds, Python and binutils builds, routine X usage; all OK.  (Once I
+> straightened out sped-up mkimport to actually do what Jon T suggested,
+> blush.)
 > 
-While I could do without:
-In an earlier version I had changed remove and missed remove_r.
+> > What you may want to do is setting USE_LOCKS to 2, and defining your own
+> > MLOCK_T/ACQUIRE_LOCK/... macros (in the `#if USE_LOCKS > 1' branch of
+> > the malloc source, see lines 1798ff), using a type which is non-critical
+> > during forking, as well as during process initialization.  Win32 fast
+> > R/W Locks come to mind and adding them should be pretty straight-forward.
+> > This may also allow MSPACES to work OOTB.
+> 
+> With '#define USE_LOCKS 1' the tangled mess of #if-logic in malloc.cc
+> resolves on Cygwin to using pthread_mutex_locks, so that seems to be OK
+> as-is unless what you're suggesting is preferable for speed (or MSPACES when
+> I get to that).
 
-So, this commit is more about de-duplication rather than speed.
+Admittedly, I'm not sure if pthread mutexes pose a problem here, I'm
+just cautious.
+
+Malloc locking is single-process only and pthread mutexes are adding some
+unnecessary overhead (Event object, bookkeeping list, fixup_after_fork
+handling).  Win32 SRW Locks, especially the exclusive type, is much
+faster and also easy to use, unless you need recursive locking.
 
 
-Ben...
+Thanks,
+Corinna
