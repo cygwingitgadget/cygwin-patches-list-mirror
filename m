@@ -1,42 +1,42 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
- by sourceware.org (Postfix) with ESMTPS id 4456438708BE
- for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 13:00:18 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 4456438708BE
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+ by sourceware.org (Postfix) with ESMTPS id E7F01386F47D
+ for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 13:04:22 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org E7F01386F47D
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1N0X0U-1lvWg03ZQK-00wWPc for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021
- 14:00:16 +0100
+ mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MhDIw-1lfVmZ1Fgo-00eIbO for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021
+ 14:04:21 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 725DDA80988; Mon, 18 Jan 2021 14:00:16 +0100 (CET)
-Date: Mon, 18 Jan 2021 14:00:16 +0100
+ id E09AAA80988; Mon, 18 Jan 2021 14:04:20 +0100 (CET)
+Date: Mon, 18 Jan 2021 14:04:20 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2 4/5] Cygwin: pty: Prevent pty from changing code page
- of parent console.
-Message-ID: <20210118130016.GD59030@calimero.vinschen.de>
+Subject: Re: [PATCH 02/11] syscalls.cc: Deduplicate _remove_r
+Message-ID: <20210118130420.GE59030@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20210118112447.1518-1-takashi.yano@nifty.ne.jp>
- <20210118123901.GB59030@calimero.vinschen.de>
- <20210118215748.53084ce47333655288d09aaa@nifty.ne.jp>
+References: <20210115134534.13290-1-ben@wijen.net>
+ <20210115134534.13290-3-ben@wijen.net>
+ <20210118105603.GS59030@calimero.vinschen.de>
+ <6de2f124-c5dd-34cb-1914-4eb0454b41d8@wijen.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210118215748.53084ce47333655288d09aaa@nifty.ne.jp>
-X-Provags-ID: V03:K1:u1PrYGy7CSIZUHnsG2lSO/7nNiP8u75/fgeUXt+UAHmk5M3FqpN
- a0JOWRa1gTt7SvKfxjXpkG8imGvwwxkWKD61voY7nKweA4QpZyv1TXv7T8VgR9LzEp9UwHw
- lAi2VUEAc2vJbZh5cAWA7/MN3ESUuLHGkFvOQV4w9Da6HX9UKHOW5fB9ayk4Wkw/zt89Sdc
- lOc8IKY+R2ubkomD7Q+rg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ukz5bJjsHME=:CbHe8YYTeYTHqashbqNpJ9
- 6qS6uUZNTDCjfLLiWIFymOMCmXPj9AaKLa7egOxufKHPRI8AiU1MQfCu1Bfuv6LZBNemh64qC
- Yg7VxnzixvljthXt1vhVhtSRNv+OYpEidBMQq0fRIxuAlpDD6NcQ9aulFFGYEy4VKO9WI8dTA
- TJeN8s4MWGS+3rtCvoN0q8SsPExtqGwZMSeOid2up7NiP2Vd/pyux1GpB7Clfsc+iJunvGp0X
- 1pqQTpjRRBplZEmDJKUVCMJIVstQ1xMVw9a4dB8MlcBsvx9Z39VRJALwWY/yoqzsvZdfxMbLc
- dQL/f/VUSlU1J4kn8PTqdaA/s6L7k5zixbp8LDtqax+AJB1qYB/G3eP+NbFZsIL4vjfGXXarh
- DbvQQm2/BzOMXf7U0mo/MAmzueYVXSYZr72lzyGohSXv7nOWxb466zRVpcClZQZD403A/CZgj
- 4zYa46C4Gg==
-X-Spam-Status: No, score=-101.0 required=5.0 tests=BAYES_00,
+In-Reply-To: <6de2f124-c5dd-34cb-1914-4eb0454b41d8@wijen.net>
+X-Provags-ID: V03:K1:qSU9ehm72rlAWN3+5R26uJCv5QI5Yo+AxHqUbOTxOy7ZnXE4eJV
+ nnayQl3iNEQfe7wy8dJ3DI90qU//1jfXaMydzWNzRVgymhKywDugw9Fql/8IfGXxcurOYbZ
+ dFygFg2xFDjArCOzzBt0RycCbFhB+SzPUG6T9JjNq+ayGubMefrwrIW1tfNitFL5xrJ0Vvx
+ 1rDO7TGjhwRqs10ZDB+bA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:lT/M6FJydXQ=:bbhcoW9CaeJNnVFhaXUX6W
+ LFkffkczJFjoqDCGdIUb+EIWaKv87LCjnUGoJgipHCLeJ1AFdKPQvLPhCXxGhiyiBG9AvszMW
+ S9ROyTlQIR49fMJX1IKIYuEsOwMa7qrUQ1eqjLtBPpzHGyENi/0k1z2QtPvZmV1dSdpqSqltq
+ GCThg8ONy1TjDMU4w91emZQHBZEknAljpCZwCWOYVLxSK01RJpNUdAvK8aUCqbTpp8Jk8ob/j
+ h3Lbz/7VbJxP8HrFAqnfxoPDvE2slAkZMVAeaiYLHn5AvIsG1Mwxya6SMR7BSdGriYMNkwMRZ
+ T/8vzYVt0Ao0Y6nw+iLoI3OTbAP2YPcNSW/HSWvBUMObkenIjPU87aB2edkrDAYfI+/tHXzxa
+ 9jP2rObM8l1nSZLlKxlJ6o0+RUvhYv60fuju52G3Qk2SYKHnQLvlLRIdC/GyNXdqAGjlg6Ypb
+ skPM5FvC5A==
+X-Spam-Status: No, score=-107.1 required=5.0 tests=BAYES_00, GIT_PATCH_0,
  GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
  RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
@@ -54,46 +54,58 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 18 Jan 2021 13:00:19 -0000
+X-List-Received-Date: Mon, 18 Jan 2021 13:04:27 -0000
 
-On Jan 18 21:57, Takashi Yano via Cygwin-patches wrote:
-> On Mon, 18 Jan 2021 13:39:01 +0100
-> Corinna Vinschen wrote:
-> > Sorry if I'm slow, but I was just mulling over this code snippet again,
-> > and I was wondering if we couldn't do without the HeapAlloc loop.
-> > Assuming you use a tmp_pathbuf here, you'd have space for 16384
-> > processes per console.  Shouldn't that be more than enough?  I.e.
+On Jan 18 13:40, Ben wrote:
+> On 18-01-2021 11:56, Corinna Vinschen via Cygwin-patches wrote:
+> > Hmm, you're adding another function call to the call stack.  Doesn't
+> > that slow down _remove_r rather than speeding it up?  Ok, this function
+> > is called from _tmpfile_r/_tmpfile64_r only, so dedup may trump speed
+> > here...
 > > 
-> > static DWORD
-> > get_console_process_id (DWORD pid, bool match)
-> > {
-> >   tmp_pathbuf tp;
-> >   DWORD *list = (DWORD *) tp.w_get ();
-> >   const DWORD num = NT_MAX_PATH * sizeof (WCHAR) / sizeof (DWORD);
-> >   DWORD res = 0;
+> > What's your stance?
 > > 
-> >   num = GetConsoleProcessList (&list, num);
-> > 
-> >   /* Last one is the oldest. */
-> >   /* https://github.com/microsoft/terminal/issues/95 */
-> >   for (int i = (int) num - 1; i >= 0; i--)
-> >     if ((match && list[i] == pid) || (!match && list[i] != pid))
-> >       {
-> > 	res = list[i];
-> > 	break;
-> >       }
-> >   return res;
-> > }
-> > 
-> > 
-> > What do you think?
+> While I could do without:
+> In an earlier version I had changed remove and missed remove_r.
 > 
-> That's more that enough. I will submit v3 patch. Thanks again.
-> By the way, why do you think tmp_pathbuf is better than HeapAlloc()?
+> So, this commit is more about de-duplication rather than speed.
 
-tmp_pathbuf never frees the buffers it used at least once. so
-chances are hight that the call just returns the next free
-pointer to an already alloocated buffer.
+What about this instead?  It should be better optimizable:
+
+diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
+index 4742c665339c..2d8acb4c1052 100644
+--- a/winsup/cygwin/syscalls.cc
++++ b/winsup/cygwin/syscalls.cc
+@@ -1133,24 +1133,15 @@ _remove_r (struct _reent *, const char *ourname)
+       return -1;
+     }
+ 
+-  return win32_name.isdir () ? rmdir (ourname) : unlink (ourname);
++  int res = win32_name.isdir () ? rmdir (ourname) : unlink (ourname);
++  syscall_printf ("%R = remove(%s)", res, ourname);
++  return res;
+ }
+ 
+ extern "C" int
+ remove (const char *ourname)
+ {
+-  path_conv win32_name (ourname, PC_SYM_NOFOLLOW);
+-
+-  if (win32_name.error)
+-    {
+-      set_errno (win32_name.error);
+-      syscall_printf ("-1 = remove (%s)", ourname);
+-      return -1;
+-    }
+-
+-  int res = win32_name.isdir () ? rmdir (ourname) : unlink (ourname);
+-  syscall_printf ("%R = remove(%s)", res, ourname);
+-  return res;
++  return _remove_r (_GLOBAL_REENT, ourname);
+ }
+ 
+ extern "C" pid_t
+
 
 
 Corinna
