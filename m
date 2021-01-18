@@ -1,41 +1,39 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
- by sourceware.org (Postfix) with ESMTPS id E4F7B38460A3
- for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 10:23:43 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org E4F7B38460A3
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+ by sourceware.org (Postfix) with ESMTPS id 5B7F238460A3
+ for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 10:24:22 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 5B7F238460A3
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MacWq-1ldXbI106U-00c6HQ for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021
- 11:23:42 +0100
+ mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1M4roN-1l0ctP1TVP-001xCA for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021
+ 11:24:20 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id D39E8A8093E; Mon, 18 Jan 2021 11:23:40 +0100 (CET)
-Date: Mon, 18 Jan 2021 11:23:40 +0100
+ id BAB57A8093E; Mon, 18 Jan 2021 11:24:19 +0100 (CET)
+Date: Mon, 18 Jan 2021 11:24:19 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 4/5] Cygwin: pty: Prevent pty from changing code page of
- parent console.
-Message-ID: <20210118102340.GO59030@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: document a recent bug fix
+Message-ID: <20210118102419.GP59030@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20210115083213.676-1-takashi.yano@nifty.ne.jp>
- <20210115083213.676-5-takashi.yano@nifty.ne.jp>
+References: <20210115175215.16678-1-kbrown@cornell.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210115083213.676-5-takashi.yano@nifty.ne.jp>
-X-Provags-ID: V03:K1:L+3/Mov5T+x5P1MLHXs1EmzyUbYOZ3MUHVdXjE2H0BFSNSWqm/H
- vY1VapKJGT+7y4EOsHWP764CC/Eovy/gPEp3z9L0FsaF9o9mknOGgkz74uarD/L5NaoeI+f
- WDIRQyB787Ta5/126FA5DKhHluFoCiX1d9YAy61n+mb9DcgrnXE1GB7Rnn6G1OArARv9fLN
- Ty7UrpSd4OmdOEMIUsRxw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:iX8CgF28l5k=:rXRYZsfj4mFEm4VnZ2D8Ov
- auGtvekco9lz0vMPqTBkk8xtPhPRfFkWQ/CbDCw1tOrcMqpqlrQi+V/HVsmJiJL8aeG6FyQiN
- eJNIurOhI0Kf74IL75yE5BlO43IqH9ugD6HSWvooVFs6ZYghYqmfftxIUxdCrNsNAD0UoOcJ3
- OIBPc9UsumH//kLFA0f4YqyJyGzYX1x7CbbjSoL869A/4rHxL/HniSjHY0NIn7O5c9cWR74Wa
- GqCUH1mUZh9H+Gl7MjPMRCyroh8cTHOKpUHmw1uXtPt+BVfPAJpqclrCsXWcYCO7a1pnrrSnN
- k6KFZ5MASy8SsXYkys3BMuFoT238AIpx4to/oZesijhguZtELHb7Pa0hkH7P+Y1+jIEkXuf/L
- c4CEwlzvRwfB228FiuOxNmxTdev+NUHu44M8G5yROvYbala1ZaQoqnmYaUY2RAWMj1lFFPdqW
- F5KnoaNjTA==
-X-Spam-Status: No, score=-100.8 required=5.0 tests=BAYES_00,
+In-Reply-To: <20210115175215.16678-1-kbrown@cornell.edu>
+X-Provags-ID: V03:K1:WmEcDl67R5GGiwnJadZMrChaE85PL0QcE2hUJ2pto4mhffeSs0O
+ 9JxY7XeRY7xbSH3W8dvK5Ok2tPQ9fdOiR85JR31xfm0BPMYdgYLSuhLXxeDCQmd/nYI5g6v
+ 8LDv7Uf3gbGvTRsfoDI5TyfYa/vLWynuix6cFIXyPoEQoDSwfFqjPoPoBUuO/Ieno4hFZMx
+ e4dFz62R5UVWfMoRLVqSw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:aPCn4cItO1o=:XAz9aEYCcE7wKHrCYuPLUl
+ DyNIuhRM90HrTS1pL1V2Y7be5p53OLEF2c5a+DnjRvXfLEjAOK1HDIvO11aeQ0WzC/aIso/Qu
+ brhn2u1t1TGmVliwPApvs1zCvYsc+RyrNU6Dj0YzCLYZojLM7F9CWmuaQ3Amc7BICJqCtQ1Sj
+ Rbyt16jGIhGHSUijcmjqQMELVhjH/6bzQPZwCRe5vER/1aZguRlqOTIBV7NP/AsmgxAQGuBvJ
+ u/4WBqSyWUjxKxc9N7+v6LLTD4mCIcACzhsQjxzNtKzIiDmWCdR0UZm/qn7QAc6n/BmVHwc8a
+ QN7vDsSJM4XlVOrwGW7py+uLKDD0J/08O4Wfz/SM1q0Felad4dRn+I6iqNHR/3AtG9LRrNoqR
+ KPO44JKfIsnTK0IXmg74S3sHzhVQPjCNLHyI1vy+aaG2yVs4brwUbijxbzwq/h+k4MZKzgbvq
+ jVIFkpzVRA==
+X-Spam-Status: No, score=-106.9 required=5.0 tests=BAYES_00, GIT_PATCH_0,
  GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
  RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
@@ -53,57 +51,32 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 18 Jan 2021 10:23:45 -0000
+X-List-Received-Date: Mon, 18 Jan 2021 10:24:23 -0000
 
-Hi Takashi,
-
-
-I'm going to push patches 1 - 3.  In terms of patch 4 I have a few
-questions:
-
-On Jan 15 17:32, Takashi Yano via Cygwin-patches wrote:
-> @@ -2185,7 +2185,7 @@ private:
->    bool send_winch_maybe ();
->    void setup ();
->    bool set_unit ();
-> -  static bool need_invisible ();
-> +  static bool need_invisible (bool force=false);
-
-Please add spaces, i. e., force = false
-
-> +static DWORD
-> +get_console_process_id (DWORD pid, bool match)
-> +{
-> +  DWORD tmp;
-> +  DWORD num, num_req;
-> +  num = 1;
-> +  num_req = GetConsoleProcessList (&tmp, num);
-> +  DWORD *list;
-
-So, assuming num_req is 1 after the call, shouldn't that skip the
-rest of the code?
-
-> +  while (true)
-> +    {
-> +      list = (DWORD *)
-> +	HeapAlloc (GetProcessHeap (), 0, num_req * sizeof (DWORD));
-> +      num = num_req;
-> +      num_req = GetConsoleProcessList (list, num);
-> +      if (num_req > num)
-> +	HeapFree (GetProcessHeap (), 0, list);
-> +      else
-> +	break;
-> +    }
-> +  num = num_req;
+On Jan 15 12:52, Ken Brown via Cygwin-patches wrote:
+> This documents commit aec64798, "Cygwin: add flag to indicate reparse
+> points unknown to WinAPI".
+> ---
+>  winsup/cygwin/release/3.2.0 | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/winsup/cygwin/release/3.2.0 b/winsup/cygwin/release/3.2.0
+> index 132d5c810..c18a848de 100644
+> --- a/winsup/cygwin/release/3.2.0
+> +++ b/winsup/cygwin/release/3.2.0
+> @@ -43,5 +43,8 @@ Bug Fixes
+>  - Fix return value of sqrtl on negative infinity.
+>    Addresses: https://cygwin.com/pipermail/cygwin/2020-October/246606.html
+>  
+> +- Fix a path handling problem if there is a WSL symlink in PATH.
+> +  Addresses: https://cygwin.com/pipermail/cygwin/2020-December/246938.html
 > +
-> +  tmp = 0;
-> +  for (DWORD i=0; i<num; i++)
-> +    if ((match && list[i] == pid) || (!match && list[i] != pid))
-> +      /* Last one is the oldest. */
-> +      /* https://github.com/microsoft/terminal/issues/95 */
+>  - Fix a bug in fstatat(2) on 32 bit that could cause it to return garbage.
+>    Addresses: https://cygwin.com/pipermail/cygwin/2021-January/247399.html
+> -- 
+> 2.30.0
 
-Given that, wouldn't it make more sense to count backwards, from
-num - 1 to 0, from a performance perspective?
+Please push.
 
 
 Thanks,
