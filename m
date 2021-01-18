@@ -1,33 +1,45 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com
- [210.131.2.80])
- by sourceware.org (Postfix) with ESMTPS id 262FB386184F
- for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 15:41:18 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 262FB386184F
-Received: from Express5800-S70 (x067108.dynamic.ppp.asahi-net.or.jp
- [122.249.67.108]) (authenticated)
- by conssluserg-01.nifty.com with ESMTP id 10IFevIM009393
- for <cygwin-patches@cygwin.com>; Tue, 19 Jan 2021 00:40:57 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 10IFevIM009393
-X-Nifty-SrcIP: [122.249.67.108]
-Date: Tue, 19 Jan 2021 00:41:01 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Set input_available_event only for cygwin
- pipe.
-Message-Id: <20210119004101.482327ca82eef5461b6b3e3c@nifty.ne.jp>
-In-Reply-To: <20210118152700.GJ59030@calimero.vinschen.de>
-References: <20210115092631.748-1-takashi.yano@nifty.ne.jp>
- <20210119000031.4eab2786d24768f405b6bfdf@nifty.ne.jp>
- <20210118152700.GJ59030@calimero.vinschen.de>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Return-Path: <ben@wijen.net>
+Received: from 14.mo3.mail-out.ovh.net (14.mo3.mail-out.ovh.net
+ [188.165.43.98])
+ by sourceware.org (Postfix) with ESMTPS id 727573864877
+ for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 17:07:41 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 727573864877
+Authentication-Results: sourceware.org;
+ dmarc=none (p=none dis=none) header.from=wijen.net
+Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=ben@wijen.net
+Received: from player797.ha.ovh.net (unknown [10.108.57.50])
+ by mo3.mail-out.ovh.net (Postfix) with ESMTP id 094512729D6
+ for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 18:07:39 +0100 (CET)
+Received: from wijen.net (80-112-22-40.cable.dynamic.v4.ziggo.nl
+ [80.112.22.40]) (Authenticated sender: ben@wijen.net)
+ by player797.ha.ovh.net (Postfix) with ESMTPSA id 1E3621616E622
+ for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 17:07:38 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass
+ (GARM-106R006af27460f-96a5-47ed-b620-cabd13eb2492,
+ 1E059570D1A9E336F11081F47AF01A3014A153AE) smtp.auth=ben@wijen.net
+X-OVh-ClientIp: 80.112.22.40
+Subject: Re: [PATCH 11/11] dir.cc: Try unlink_nt first
+To: Corinna Vinschen via Cygwin-patches <cygwin-patches@cygwin.com>
+References: <20210115134534.13290-1-ben@wijen.net>
+ <20210115134534.13290-12-ben@wijen.net>
+ <20210118121343.GZ59030@calimero.vinschen.de>
+From: Ben <ben@wijen.net>
+Message-ID: <1e7f1329-37bc-0e83-ed03-9d7f006acdde@wijen.net>
+Date: Mon, 18 Jan 2021 18:07:38 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
+MIME-Version: 1.0
+In-Reply-To: <20210118121343.GZ59030@calimero.vinschen.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, NICE_REPLY_A,
- RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_PASS,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+X-Ovh-Tracer-Id: 13860672278757132036
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduledrtdekgdelkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefuvfhfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpeeuvghnuceosggvnhesfihijhgvnhdrnhgvtheqnecuggftrfgrthhtvghrnhepvefhgefghfdvueekgeejteevgffgtdeljeelhfffvdejffeigeeuveefueetteeunecukfhppedtrddtrddtrddtpdektddrudduvddrvddvrdegtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphdqohhuthdphhgvlhhopehplhgrhigvrhejleejrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepsggvnhesfihijhgvnhdrnhgvthdprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhm
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
+ NICE_REPLY_A, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL,
+ SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -42,48 +54,34 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 18 Jan 2021 15:41:21 -0000
+X-List-Received-Date: Mon, 18 Jan 2021 17:07:43 -0000
 
-On Mon, 18 Jan 2021 16:27:00 +0100
-Corinna Vinschen wrote:
-> On Jan 19 00:00, Takashi Yano via Cygwin-patches wrote:
-> > Hi Corinna,
-> > 
-> > On Fri, 15 Jan 2021 18:26:31 +0900
-> > Takashi Yano wrote:
-> > > - cat exits immediately in the following senario.
-> > >     1) Execute env CYGWIN=disable_pcon script
-> > >     2) Execute cmd.exe
-> > >     3) Execute cat in cmd.exe.
-> > >   This is caused by setting input_available_event for the pipe for
-> > >   non-cygwin app. This patch fixes the issue.
-> > > ---
-> > >  winsup/cygwin/fhandler_tty.cc | 3 ++-
-> > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-> > > index e4993bf31..0b9901974 100644
-> > > --- a/winsup/cygwin/fhandler_tty.cc
-> > > +++ b/winsup/cygwin/fhandler_tty.cc
-> > > @@ -394,7 +394,8 @@ fhandler_pty_master::accept_input ()
-> > >  	}
-> > >      }
-> > >  
-> > > -  SetEvent (input_available_event);
-> > > +  if (write_to == get_output_handle ())
-> > > +    SetEvent (input_available_event);
-> > >    ReleaseMutex (input_mutex);
-> > >    return ret;
-> > >  }
-> > > -- 
-> > > 2.30.0
-> > > 
-> > 
-> > I would be happy if you could review this patch as well.
+
+
+On 18-01-2021 13:13, Corinna Vinschen via Cygwin-patches wrote:
 > 
-> Sorry, I missed that one!  Pushed.
+> Your code is skipping the safety checks and the has_dot_last_component()
+> check.  The latter implements a check required by POSIX.  Skipping
+> it introduces an incompatibility, see man 2 rmdir.
+> 
 
-Thanks!
+Yes, I missed has_dot_last_component completely.
 
--- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+As for the other checks:
+dir.cc: 404: fh->error ():
+* Done in unlink_nt
+dir.cc: 409: fh->exists ():
+* Done in _unlink_nt through NtOpenFile, which will return either
+  STATUS_OBJECT_NAME_NOT_FOUND or STATUS_OBJECT_PATH_NOT_FOUND,
+  both of which resolve to ENOENT
+dir.cc: 413: isdev_dev (fh->dev ()):
+* Done in unlink_nt
+fhandler_siak_file.cc: 1842:  if (!pc.isdir ())
+* Done in _unlink_nt through NtOpenFile with flags FILE_DIRECTORY_FILE
+  and FILE_NON_DIRECTORY_FILE which will return STATUS_NOT_A_DIRECTORY
+  and STATUS_FILE_IS_A_DIRECTORY respectively.
+
+Have I missed something else?
+
+Also, I think it's better to have isdev_dev (fh->dev ()) return EROFS,
+which is the same as unlink.
