@@ -1,46 +1,43 @@
-Return-Path: <ben@wijen.net>
-Received: from 15.mo6.mail-out.ovh.net (15.mo6.mail-out.ovh.net
- [188.165.39.161])
- by sourceware.org (Postfix) with ESMTPS id 1C9673858025
- for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 12:11:50 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 1C9673858025
-Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=wijen.net
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=ben@wijen.net
-Received: from player715.ha.ovh.net (unknown [10.108.20.107])
- by mo6.mail-out.ovh.net (Postfix) with ESMTP id C27C623774D
- for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 13:11:48 +0100 (CET)
-Received: from wijen.net (80-112-22-40.cable.dynamic.v4.ziggo.nl
- [80.112.22.40]) (Authenticated sender: ben@wijen.net)
- by player715.ha.ovh.net (Postfix) with ESMTPSA id B553019F44BB2
- for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 12:11:47 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass
- (GARM-100R003dd1dc0d6-9383-4f3a-ae44-72e322c88bd6,
- 1E059570D1A9E336F11081F47AF01A3014A153AE) smtp.auth=ben@wijen.net
-X-OVh-ClientIp: 80.112.22.40
-Subject: Re: [PATCH 01/11] syscalls.cc: unlink_nt: Try
- FILE_DISPOSITION_IGNORE_READONLY_ATTRIBUTE first
-To: Corinna Vinschen via Cygwin-patches <cygwin-patches@cygwin.com>
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+ by sourceware.org (Postfix) with ESMTPS id 1CBAA3858025
+ for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 12:13:46 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 1CBAA3858025
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1Mr8O8-1lnPPK0o7y-00oEOV for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021
+ 13:13:44 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id 36A07A80988; Mon, 18 Jan 2021 13:13:43 +0100 (CET)
+Date: Mon, 18 Jan 2021 13:13:43 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+To: cygwin-patches@cygwin.com
+Subject: Re: [PATCH 11/11] dir.cc: Try unlink_nt first
+Message-ID: <20210118121343.GZ59030@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20210115134534.13290-1-ben@wijen.net>
- <20210115134534.13290-2-ben@wijen.net>
- <20210118104534.GR59030@calimero.vinschen.de>
-From: Ben <ben@wijen.net>
-Message-ID: <c96cefe7-3148-5d6b-5839-08f7dd85dc30@wijen.net>
-Date: Mon, 18 Jan 2021 13:11:47 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+ <20210115134534.13290-12-ben@wijen.net>
 MIME-Version: 1.0
-In-Reply-To: <20210118104534.GR59030@calimero.vinschen.de>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Ovh-Tracer-Id: 8863928494775879428
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduledrtdekgdefjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefuvfhfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpeeuvghnuceosggvnhesfihijhgvnhdrnhgvtheqnecuggftrfgrthhtvghrnhepvefhgefghfdvueekgeejteevgffgtdeljeelhfffvdejffeigeeuveefueetteeunecukfhppedtrddtrddtrddtpdektddrudduvddrvddvrdegtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphdqohhuthdphhgvlhhopehplhgrhigvrhejudehrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepsggvnhesfihijhgvnhdrnhgvthdprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhm
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
- NICE_REPLY_A, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL,
- SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
+Content-Disposition: inline
+In-Reply-To: <20210115134534.13290-12-ben@wijen.net>
+X-Provags-ID: V03:K1:LzWRo849Hs6z5mYvsfiDltltM/Rlh0Ci5heq9TuaQ7y9Oi4PNrR
+ xBwQzPIQzc3a+N+bwITRatTGTDlT7ssKAXH3FTL/UefiZ7AMvUuj6T2BAd19u8spH4YBhFw
+ I94sRYb03xah571B1up22bWMnhZ4KKfzAtOchvVF+1L668jybSDeaT/ZRpli+7T2FkYn+12
+ hs+M2JRL4awAYT4neorcA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:1nd8Wzo9t5s=:ia9i+Ue1TS8itU52v/k2EY
+ zMOg47rAgACgw6Q6ng+UGIzwFJ64/tITlPuOBMwfgFnmpOUJrzqe5QreU/Qikd0+U/2ZbdK89
+ KZBCdD+FOL2ikY7apbIhK6gDaluah5lGEUPGQ+PVbaYZhwCLe9JY1O/MP/45YLiAvNERPXX1H
+ SxZEZK7GNhIFY33TPmUGqN3sr0aG4o+Pbjn1mg0oogk0OExgkCsJAh3F4EpNXLBADkl4vI5PR
+ o+JgT+ckFKndmzRjFj4yxHg6hCBidFEeAYntWp2iFmTUVZd+aaP2yjCrshcl0yjI2/IUJtfNx
+ UChmZfDqzJH1muqCkh/Nd1keUlLhRX6w5Nj7SwMHA4GoDqGXisQnONlACJ3akxlSXG4gLxL4F
+ 1xxjT6+W/F35xvTCkI1VhNfSHOepslWRPeTr/a7pwp+fK1S+JbGCcu/0zOrbp4mnghXjN8NlL
+ FN3qQJ2fEA==
+X-Spam-Status: No, score=-107.0 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H4, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_NEUTRAL,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -55,27 +52,38 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 18 Jan 2021 12:11:54 -0000
+X-List-Received-Date: Mon, 18 Jan 2021 12:13:56 -0000
+
+On Jan 15 14:45, Ben Wijen wrote:
+> Speedup deletion of directories.
+> ---
+>  winsup/cygwin/dir.cc | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/winsup/cygwin/dir.cc b/winsup/cygwin/dir.cc
+> index f912a9e47..2e7da3638 100644
+> --- a/winsup/cygwin/dir.cc
+> +++ b/winsup/cygwin/dir.cc
+> @@ -22,6 +22,8 @@ details. */
+>  #include "cygtls.h"
+>  #include "tls_pbuf.h"
+>  
+> +extern NTSTATUS unlink_nt (const char *ourname, ULONG eflags);
+> +
+>  extern "C" int
+>  dirfd (DIR *dir)
+>  {
+> @@ -398,6 +400,10 @@ rmdir (const char *dir)
+>  	  if (msdos && p == dir + 1 && isdrive (dir))
+>  	    p[1] = '\\';
+>  	}
+> +      if(NT_SUCCESS(unlink_nt (dir, FILE_DIRECTORY_FILE))) {
+          ^^         ^^
+          spaces
+
+Your code is skipping the safety checks and the has_dot_last_component()
+check.  The latter implements a check required by POSIX.  Skipping
+it introduces an incompatibility, see man 2 rmdir.
 
 
-
-On 18-01-2021 11:45, Corinna Vinschen via Cygwin-patches wrote:
-> Rather than calling NtSetInformationFile here again, we should rather
-> just skip the transaction stuff on 1809 and later.  I'd suggest adding
-> another wincap flag like, say, "has_posix_ro_override", being true
-> for 1809 and later.  Then we can skip the transaction handling if
-> wincap.has_posix_ro_override () and just add the
-> FILE_DISPOSITION_IGNORE_READONLY_ATTRIBUTE flag to fdie.Flags, if
-> it's available.
-
-Hmmm, I'm not sure if I follow you: This extra NtSetInformationFile is not
-related to the transaction stuff?
-
-Also I have seen NtSetInformationFile fail with STATUS_INVALID_PARAMETER.
-So a retry without FILE_DISPOSITION_IGNORE_READONLY_ATTRIBUTE is valid here.
-
-I have thought about adding wincap.has_posix_unlink_semantics_with_ignore_readonly
-but it is equal to wincap.has_posix_rename_semantics so I didn't bother adding it.
-
-Ben...
-
+Corinna
