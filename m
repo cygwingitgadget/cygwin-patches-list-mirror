@@ -1,42 +1,39 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
- by sourceware.org (Postfix) with ESMTPS id 0744F3858025
- for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 12:22:12 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 0744F3858025
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+ by sourceware.org (Postfix) with ESMTPS id 74B1E385782C
+ for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 12:39:03 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 74B1E385782C
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1Mzz6s-1lwAhJ2y86-00wz69 for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021
- 13:22:11 +0100
+ mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MrQR7-1lmyIr0M9n-00oWYZ for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021
+ 13:39:02 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 2ABF0A80988; Mon, 18 Jan 2021 13:22:11 +0100 (CET)
-Date: Mon, 18 Jan 2021 13:22:11 +0100
+ id 59E55A80988; Mon, 18 Jan 2021 13:39:01 +0100 (CET)
+Date: Mon, 18 Jan 2021 13:39:01 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 01/11] syscalls.cc: unlink_nt: Try
- FILE_DISPOSITION_IGNORE_READONLY_ATTRIBUTE first
-Message-ID: <20210118122211.GA59030@calimero.vinschen.de>
+Subject: Re: [PATCH v2 4/5] Cygwin: pty: Prevent pty from changing code page
+ of parent console.
+Message-ID: <20210118123901.GB59030@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20210115134534.13290-1-ben@wijen.net>
- <20210115134534.13290-2-ben@wijen.net>
- <20210118104534.GR59030@calimero.vinschen.de>
- <c96cefe7-3148-5d6b-5839-08f7dd85dc30@wijen.net>
+References: <20210118112447.1518-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <c96cefe7-3148-5d6b-5839-08f7dd85dc30@wijen.net>
-X-Provags-ID: V03:K1:v/FnviM96ieKIIK0tSWeXdqgu/j32HKixBqhGVZ7fLVX1FIvQmU
- f3C9DfVBRoTOsJ1RmDs2i4Dm50HpQtyXB/ROwLATamtaL1H6s6j9IvGGF71HO77JeVQG3i7
- z885g42lpqS31tY47rVsqubhm4aLCVwm6hPZjrrsbWBaW3Q8ldD+CLHISLfQvgEh743Q5B0
- x7i16lvnXUDPZxTijwSNw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:BOdu97CePE4=:1ywnRag7vJut3j/QPjQuwe
- m+4KG1dfNb4TAN8Z1AtGDYvpwad9DfqizThBOGCAdatslTigmLSMG+59Q8GRFB6C9yLW+5jx1
- RsdNX3zXQ5soIddVvJxFI2Mh/GUDeL+AlkE68wFiHikgdG2npw55kJ55B0s4r6sKSO1tJ5PjJ
- rerOjO/kKAsvkMf/nHKZdwxcU2iZA6FpwLAkij+4MrWNGC60DaED+VzAbKuGHTTO6zYCXTnEc
- FmGopnyFbfoHam9zEig/B0JjfSYZpbH1DDEBrEDtHrOdd3ofHanmGQPBV6pm1Yn8XQ4geY2vj
- 82Kgu9LVayIuQFogxt5OgxH8iDyJxVvFr6PaG6sGmR4hN+TQfG+44DmikDh/WLuDtfBesPik/
- PcOoWZypfL1nsufnS/+LrhGnKlNpqCDioYe9wSRFbnbnDLoYbu0HR06Q29hv+WO0rEsjBgKDw
- eRMMYV3zXg==
+In-Reply-To: <20210118112447.1518-1-takashi.yano@nifty.ne.jp>
+X-Provags-ID: V03:K1:ed38/zFiIBXkiT3k7BCz3+Bhc/XNkQXv30b7qz9JkMQjvOpllY3
+ tSlQos0XWXmPrdO3EXC5BJ8kECpZzEJBfu/t/ROhEWvbjO9SxyMW4nmtaXUbcDOsVIth+bD
+ tbz/uFdqq1NF2qE+OpJbpxpUYF5rL/JWWqPUex4pZCXr/PSwER5GnZlXYcoZEnSUW78SQjO
+ w4VBawbF63Kga2bgwZb5Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Pun7cASZs4Y=:CPOJNZ/ihz0ePFOlF4mecW
+ BJrlgcKwAg0nf/DHAZYmPv09byDmB7/JxZZd4WmI1mvgUT1P7k8gLWihzXNdDmx2aF+bhAVYC
+ f8xG1w4KqpF3ZIGzYj8L99wz7TvnX4e/Af6mjVDG5TJUquDmAIwFQke5JWAefGYwu9z72f4u8
+ 5FajFNnB4ZqVoUp8IWsBWB9de8VgLIBiybXuOfL4okfGAY9utMACekf3AzGO9C94elNRsQxI/
+ KW94Fy6w2W/YZB1BHDDfFLIoT3/XxJE3XBwHn5bjOalZgFLy3Qef+eDUc++7WKwhKET4Cle8i
+ ilk37cmrLrXaeeObNQ/nGbWwSpBelZ81VJGUO5E3Xjhl1BZxJ/firfSJnN+hXDKTmtbLhKW3O
+ Ly0MzfFxSuHycPiqb1QC+m8MVF9Ay6TVunrm487oMNABIwp1x4ItxNZjfC8x/ibSB5UyNU1tl
+ DkjXVjU9CA==
 X-Spam-Status: No, score=-100.8 required=5.0 tests=BAYES_00,
  GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
  RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
@@ -55,55 +52,82 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 18 Jan 2021 12:22:16 -0000
+X-List-Received-Date: Mon, 18 Jan 2021 12:39:05 -0000
 
-On Jan 18 13:11, Ben wrote:
-> 
-> 
-> On 18-01-2021 11:45, Corinna Vinschen via Cygwin-patches wrote:
-> > Rather than calling NtSetInformationFile here again, we should rather
-> > just skip the transaction stuff on 1809 and later.  I'd suggest adding
-> > another wincap flag like, say, "has_posix_ro_override", being true
-> > for 1809 and later.  Then we can skip the transaction handling if
-> > wincap.has_posix_ro_override () and just add the
-> > FILE_DISPOSITION_IGNORE_READONLY_ATTRIBUTE flag to fdie.Flags, if
-> > it's available.
-> 
-> Hmmm, I'm not sure if I follow you: This extra NtSetInformationFile is not
-> related to the transaction stuff?
+Hi Takashi,
 
-Right, sorry.  I meant the
+On Jan 18 20:24, Takashi Yano via Cygwin-patches wrote:
+> @@ -59,6 +59,46 @@ struct pipe_reply {
+>    DWORD error;
+>  };
+>  
+> +extern HANDLE attach_mutex; /* Defined in fhandler_console.cc */
+> +
+> +static DWORD
+> +get_console_process_id (DWORD pid, bool match)
+> +{
+> +  DWORD list1;
+> +  DWORD num, num_req;
+> +  num = 1;
+> +  num_req = GetConsoleProcessList (&list1, num);
+> +  DWORD *list;
+> +  if (num_req == 1)
+> +    list = &list1;
+> +  else
+> +    while (true)
+> +      {
+> +	list = (DWORD *)
+> +	  HeapAlloc (GetProcessHeap (), 0, num_req * sizeof (DWORD));
+> +	num = num_req;
+> +	num_req = GetConsoleProcessList (list, num);
+> +	if (num_req > num)
+> +	  HeapFree (GetProcessHeap (), 0, list);
+> +	else
+> +	  break;
+> +      }
+> +  num = num_req;
+> +
+> +  DWORD res = 0;
+> +  /* Last one is the oldest. */
+> +  /* https://github.com/microsoft/terminal/issues/95 */
+> +  for (int i = (int) num - 1; i >= 0; i--)
+> +    if ((match && list[i] == pid) || (!match && list[i] != pid))
+> +      {
+> +	res = list[i];
+> +	break;
+> +      }
+> +  if (num > 1)
+> +    HeapFree (GetProcessHeap (), 0, list);
+> +  return res;
+> +}
 
-  if (pc.file_attributes () & FILE_ATTRIBUTE_READONLY)
+Sorry if I'm slow, but I was just mulling over this code snippet again,
+and I was wondering if we couldn't do without the HeapAlloc loop.
+Assuming you use a tmp_pathbuf here, you'd have space for 16384
+processes per console.  Shouldn't that be more than enough?  I.e.
 
-bracketed code in fact.  What I meant is to keep it at
+static DWORD
+get_console_process_id (DWORD pid, bool match)
+{
+  tmp_pathbuf tp;
+  DWORD *list = (DWORD *) tp.w_get ();
+  const DWORD num = NT_MAX_PATH * sizeof (WCHAR) / sizeof (DWORD);
+  DWORD res = 0;
 
-  open
-  if (ro)
-    setattributes
-  setinformation
-  ...
+  num = GetConsoleProcessList (&list, num);
 
-and only add the required additional flag.
+  /* Last one is the oldest. */
+  /* https://github.com/microsoft/terminal/issues/95 */
+  for (int i = (int) num - 1; i >= 0; i--)
+    if ((match && list[i] == pid) || (!match && list[i] != pid))
+      {
+	res = list[i];
+	break;
+      }
+  return res;
+}
 
 
-> Also I have seen NtSetInformationFile fail with STATUS_INVALID_PARAMETER.
-
-That should only occur on pre-1809 then, and adding the extra wincap
-would fix that.
-
-> So a retry without FILE_DISPOSITION_IGNORE_READONLY_ATTRIBUTE is valid here.
-
-That would be a border case which might then occur with the
-FILE_DISPOSITION_POSIX_SEMANTICS flag, too.  The current code falls
-through anyway, that should be sufficient, right?
-
-> 
-> I have thought about adding wincap.has_posix_unlink_semantics_with_ignore_readonly
-> but it is equal to wincap.has_posix_rename_semantics so I didn't bother adding it.
-
-It doesn't hurt to add another flag with the same values.  It's better
-readable in context, which easily makes up for the extra bit :)
-
+What do you think?
 
 Corinna
