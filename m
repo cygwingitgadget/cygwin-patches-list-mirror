@@ -1,25 +1,45 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
- by sourceware.org (Postfix) with ESMTPS id 66561384243E
- for <cygwin-patches@cygwin.com>; Mon, 18 Jan 2021 18:45:53 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 66561384243E
-Received: from localhost.localdomain (x067108.dynamic.ppp.asahi-net.or.jp
- [122.249.67.108]) (authenticated)
- by conuserg-07.nifty.com with ESMTP id 10IIjSfV019632;
- Tue, 19 Jan 2021 03:45:34 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 10IIjSfV019632
-X-Nifty-SrcIP: [122.249.67.108]
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Return-Path: <corinna-cygwin@cygwin.com>
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+ by sourceware.org (Postfix) with ESMTPS id C8F573890413
+ for <cygwin-patches@cygwin.com>; Tue, 19 Jan 2021 09:25:33 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org C8F573890413
+Received: from calimero.vinschen.de ([24.134.7.25]) by
+ mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MQ8OG-1lNsWi1z1c-00M0RP for <cygwin-patches@cygwin.com>; Tue, 19 Jan 2021
+ 10:25:32 +0100
+Received: by calimero.vinschen.de (Postfix, from userid 500)
+ id CE78DA80D4D; Tue, 19 Jan 2021 10:25:31 +0100 (CET)
+Date: Tue, 19 Jan 2021 10:25:31 +0100
+From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: spawn.cc: Fix typo in comment by commit 974e6d76.
-Date: Tue, 19 Jan 2021 03:45:24 +0900
-Message-Id: <20210118184524.792-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.30.0
+Subject: Re: [PATCH 08/11] path.cc: Allow to skip filesystem checks
+Message-ID: <20210119092531.GL59030@calimero.vinschen.de>
+Reply-To: cygwin-patches@cygwin.com
+Mail-Followup-To: cygwin-patches@cygwin.com
+References: <20210115134534.13290-1-ben@wijen.net>
+ <20210115134534.13290-9-ben@wijen.net>
+ <20210118113630.GX59030@calimero.vinschen.de>
+ <a1fb688c-a327-940a-ec99-651760ce02eb@wijen.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <a1fb688c-a327-940a-ec99-651760ce02eb@wijen.net>
+X-Provags-ID: V03:K1:oPxaBrIyET4mLDL4q04tupYWAk2iLgyVTCPsqujEbQJ2XvMppld
+ eqsIO3pNUlcpYZlGZreRamS4IYmq+s0Fw9G1PyJiCi6FyM1Np7PvSNqYI2wHKRA9py3ILM0
+ /OFXge5LUeXZK1RgCYJIF6BGX7j8601Zp6L+r9Req0CeV+jYmIRVg9wQgx4Pr/MKWOVoXgZ
+ 763iR+8HtidF0VJ2nW5Ug==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:SMBag2P3Xrc=:FcUQn5lAa7qWuHYLVtjMpb
+ eVONhqQJ104vn7RYYpYYQqJAVY85Kxeq3Q7XhZUIhO8TLQ3Hem61HPEk9pvkM2t5iw5xetgGB
+ pGwV/urkoyBb2X3TZLZd7+UViTgAlatYdmqBYDcPY9lqrnKbz8gWGL4tDxyjMtbnFZ6en9itf
+ n9lz2VmAr8lyi0ma8HstTG7r9sFMsFKycjDj3DzeclntUVRTgnzrpzCAp6yVKdfAgsdcT74Pt
+ DLBByL5D38Dep40IwxoOEOKaWwlJK4Lwa0hRKa6aPHwZDJf/aDZLMCi7+tVHyO7WPkPUw3jWm
+ IkkYj8EdmvCQYM6wlHET6NLswKGvcANmHCjLuS+P2+KpCm/xelcpWgK3/GvDZ9TOi0vTJiYqJ
+ 8yAFd1CcT4f5WPpHr6kc+W/segVkMuwb+N2Qc9E8WIVhTX7Q92Nfp5cvZXJHL9QaP9dwB7Pkg
+ wKEfagfPKA==
+X-Spam-Status: No, score=-100.8 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -34,25 +54,41 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 18 Jan 2021 18:45:56 -0000
+X-List-Received-Date: Tue, 19 Jan 2021 09:25:35 -0000
 
----
- winsup/cygwin/spawn.cc | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Jan 18 18:15, Ben wrote:
+> 
+> 
+> On 18-01-2021 12:36, Corinna Vinschen via Cygwin-patches wrote:
+> > On Jan 15 14:45, Ben Wijen wrote:
+> > 
+> > Without any code setting the flag, this doesn't seem to make any
+> > sense.  At least the commit message should reflect on the reasons
+> > for this change.
+> > 
+> Something like this:
+>     path.cc: Allow to skip filesystem checks
+>     
+>     When file attributes are of no concern, there is no point to query them.
+>     This can greatly speedup code which doesn't need it.
+>     
+>     For example, this can be used to try a path without filesystem checks first
+>     and try again with filesystem checks
+> 
+> 
+> If you want, I can also squash some of these related commits.
 
-diff --git a/winsup/cygwin/spawn.cc b/winsup/cygwin/spawn.cc
-index 42044ab53..d03492ee6 100644
---- a/winsup/cygwin/spawn.cc
-+++ b/winsup/cygwin/spawn.cc
-@@ -636,7 +636,7 @@ child_info_spawn::worker (const char *prog_arg, const char *const *argv,
- 	}
-       struct fhandler_console::handle_set_t cons_handle_set = { 0, };
-       if (cons_native)
--	/* Console handles will be closed by close_all_handle(),
-+	/* Console handles will be closed by close_all_files(),
- 	   therefore, duplicate them here */
- 	cons_native->get_duplicated_handle_set (&cons_handle_set);
- 
--- 
-2.30.0
+That's not necessary, but a log msg hint along the lines of "in
+preparation of <what follow up patch is doing>" would help.
 
+However, just to be clear here.  While I really appreciate your efforts,
+I'm not sure yet if we really *can* skip the filesystem checks.  This is
+dangerous but often perpetrated territory.  Trying to work around
+certain checks almost always resulted in other problems in the past,
+like POSIX/Linux incompatibilities or forgetting to handle Windows
+quirks.  A certain callousness and high frustration barrier are
+required.
+
+
+Thanks,
+Corinna
