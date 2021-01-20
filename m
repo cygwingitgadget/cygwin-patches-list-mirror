@@ -1,42 +1,42 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
- by sourceware.org (Postfix) with ESMTPS id CD8E33947C24
- for <cygwin-patches@cygwin.com>; Wed, 20 Jan 2021 09:50:26 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org CD8E33947C24
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+ by sourceware.org (Postfix) with ESMTPS id 477DB394D8AB
+ for <cygwin-patches@cygwin.com>; Wed, 20 Jan 2021 09:50:46 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 477DB394D8AB
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MRCFu-1lMyF232pA-00NCBU for <cygwin-patches@cygwin.com>; Wed, 20 Jan 2021
- 10:50:24 +0100
+ mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1Mdvyo-1lZZPW3tRu-00b4S4 for <cygwin-patches@cygwin.com>; Wed, 20 Jan 2021
+ 10:50:44 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 1C6ADA80D4C; Wed, 20 Jan 2021 10:50:24 +0100 (CET)
-Date: Wed, 20 Jan 2021 10:50:24 +0100
+ id 874D7A80D4C; Wed, 20 Jan 2021 10:50:43 +0100 (CET)
+Date: Wed, 20 Jan 2021 10:50:43 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Reduce buffer size in
- get_console_process_id().
-Message-ID: <20210120095024.GR59030@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: console: Fix "Bad file descriptor" error in
+ script command.
+Message-ID: <20210120095043.GS59030@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20210120005700.531-1-takashi.yano@nifty.ne.jp>
+References: <20210120091620.814-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210120005700.531-1-takashi.yano@nifty.ne.jp>
-X-Provags-ID: V03:K1:ieM6avsuxVDKxh3TY2szO5i5nlq7bl249Au/2PK1FesGg5q1jp0
- dEqdn/MDH2VJZZ8VV2XCIlA/Fimz7J+Vdh6gBMMK2mRu03t0i9Km8s3o6LwD3NHtT2C9WOH
- dh+ADWJbAg7hCPWZ4+aJkqwj23/jz0WpEcEJzyQ0yliXx1v7atCYLhffX0ekl8B38oQb9aF
- UYbR77LY6VpKqPG5KcwMQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:vzG69Qpbr6Y=:tTz0bBsAZm9x+D8z4GHKpQ
- jlObCVPimYQGr1SueOXpWyvhFwt3SDU4OYYUZ1MBbNk//JmNBW8c9c3r9lziV9aaG5LBCiZsV
- OLXr30FP9dq7B7ir8aMQvEoxZK3fXG/0itW05jPa2lNT2E50oc0px1ySOtIercA3lW6jb4qJW
- SKwUuie4wE88OsN7UN7xSQoB9ajthtFn4YHafjKi2eYJ7UgIsToWXbqXqbct24TNgIenaOU0E
- +E/jgWl81lVNQQj3Hn/gQtffNOgcpM+AtI/VZAbXbM8jOZgGHJ1BhsBkknaO076oQK3JUqV8E
- XVaj0+PbHwcovCit2gdR942P/RCA4EHXh6F8oqoatURdPVEOMTIGsorvrxHxYSdFkr4uPqKTq
- RydvBxq+l0fBmhgRFhlANsRMZzqjeckoR9F3OJsAVl1oKqBt2OOm1f9a4PzIkkB08i257TxDk
- C18m4llrFw==
-X-Spam-Status: No, score=-101.1 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+In-Reply-To: <20210120091620.814-1-takashi.yano@nifty.ne.jp>
+X-Provags-ID: V03:K1:31CHMCif1+jlGUACMIJ0LG0BLKuAPa+b70ligrah1XF2hLz6Ng0
+ CqjVBhP+EDJ6OAVFNiZUF33pxYzLkTlCWZlL/VGZzTzObs21K6aUZDFfCFWf0fVLIPeGD7B
+ CuraYkj/WaLW3mi0ndEhuN1m8j9AFu9aocMlKbHNcighLw9a5qKVtasrIPOpQk0leQAlHdX
+ dO1B/1YdMSNzqvYYwGiOg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:MgCU6nlRq8c=:UrUsvTlA71NPlzTzN5daL2
+ RK5wpSCrITJuoUVo7XYHt1kc3scxfg2WAXTY0VtoNB3Vo4AdQAMmYBGxo90RUblbPH9tNSE5v
+ SpX7jm49BCqmt1Eo/o9BNF0rgR3az++jfimxrzydNHF9K9m1n8+fUgY0jstzLAmszytGqH0Hr
+ Fr0QVIqy1p0XYWnACEuJ1Wk3UDwJSCn4sW1xc8d99VjBXvYxTRnrUWx0n8R7JCHvDuonl8rQQ
+ nij7nHjznOTpOVDq6VEFZwkLMkPugUeHZl5HK12VbVkBWeHIMBjRosCkA/A5xfRymgfyKrw42
+ kllHhwkJkvrblPo6fri83q2YP+mGIABn5r68GyDb/MuNo9HhrTxP6GPorkiO/d+MhlNp95SVI
+ WvFPRfnv6rfyIfuYkPwRhQiuv1OiXM9vHqBSYiAdYjpECV1F2NJiXJXzsNp/SP2zs2fRl2nq2
+ bp/Vrs8duA==
+X-Spam-Status: No, score=-100.8 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -52,22 +52,20 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 20 Jan 2021 09:50:28 -0000
+X-List-Received-Date: Wed, 20 Jan 2021 09:50:47 -0000
 
-On Jan 20 09:57, Takashi Yano via Cygwin-patches wrote:
-> - The buffer used in get_console_process_id(), introduced by commit
->   72770148, is too large and ERROR_NOT_ENOUGH_MEMORY occurs in Win7.
-
-Huh, funny!  Will we ever be happy with just 8192 processes per
-console? :)
-
->   Therefore, the buffer size has been reduced.
+On Jan 20 18:16, Takashi Yano via Cygwin-patches wrote:
+> - After the commit 72770148, script command exits occasionally with
+>   the error "Bad file descriptor" if it is started in console on Win7
+>   and non-cygwin process is executed. This patch fixes the issue.
 > ---
->  winsup/cygwin/fhandler_tty.cc | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  winsup/cygwin/fhandler_console.cc | 10 ++--
+>  winsup/cygwin/select.cc           | 95 ++++++++++++++++++++++++++++++-
+>  winsup/cygwin/select.h            |  7 +++
+>  3 files changed, 105 insertions(+), 7 deletions(-)
 
 Pushed.
 
 
-THanks,
+Thanks,
 Corinna
