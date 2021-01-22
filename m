@@ -1,41 +1,42 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
- by sourceware.org (Postfix) with ESMTPS id 997FD382D83C
- for <cygwin-patches@cygwin.com>; Fri, 22 Jan 2021 12:20:59 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 997FD382D83C
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.13])
+ by sourceware.org (Postfix) with ESMTPS id 26E18382D83C
+ for <cygwin-patches@cygwin.com>; Fri, 22 Jan 2021 12:22:18 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 26E18382D83C
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1M7auJ-1l6Ws03V2z-007zI0 for <cygwin-patches@cygwin.com>; Fri, 22 Jan 2021
- 13:20:57 +0100
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1N5W0q-1m41Vy3Xha-016zed for <cygwin-patches@cygwin.com>; Fri, 22 Jan 2021
+ 13:22:16 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 5B374A80D50; Fri, 22 Jan 2021 13:20:57 +0100 (CET)
-Date: Fri, 22 Jan 2021 13:20:57 +0100
+ id CBC46A80D50; Fri, 22 Jan 2021 13:22:15 +0100 (CET)
+Date: Fri, 22 Jan 2021 13:22:15 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2 0/4] Improve pseudo console support.
-Message-ID: <20210122122057.GE810271@calimero.vinschen.de>
+Subject: Re: [PATCH v2 2/8] syscalls.cc: Deduplicate remove
+Message-ID: <20210122122215.GF810271@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20210121205852.536-1-takashi.yano@nifty.ne.jp>
+References: <20210115134534.13290-1-ben@wijen.net>
+ <20210120161056.77784-3-ben@wijen.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210121205852.536-1-takashi.yano@nifty.ne.jp>
-X-Provags-ID: V03:K1:wK2ONlJeTaIeZS8noAPCn5eDfZ0DLSKxgHCF9Rm9OmnoI63WFdZ
- Sv0RXkZZkQnNeYs5Y0V0PGQkfqXn0cy4nNJRFiS8uoSUtp83lHwL+Nm4g2WUcQ6xGu4Hb3b
- bDcqWNOO1Pwec7rrsxzkeHjntox/wXiyaryw0Un/SFa885tCP9tTVsC2gtfJvFDsXPItm+n
- gptzyMdmJNYGGiUWIVP1g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:KXUnzvWrnuQ=:rTDwJvYsCGXO+GcyZ1zZmq
- EIN5lYVwXwmRjwep3elRC0kxD5RYrx4n3i3I+yQMsBI6JQwF5rUOJ7fBGZZG2e5DVsnuiQj5s
- XxeMwgCcU37HeFNcZh+xtUHBpCMOCzWHtIsL7G6viXJCHjGWOw9r/yXPuFwTolpceHOws81Jn
- zNKtm1lzpfOuTwQORG80ATvzMiSwvb6E9X1EtpnRL4WLUQ1+EY8dcWdw5gZp4pV5d8W8iIvkP
- Lemb6rG+LapHDWqWEtE/sY3SJfyTRsdxqfHGDD6BnFeuo/9oJMEOTfUngVuxAtCd39wAgNf1T
- hAQ4Ok09j9sMfnceqgXD2g/jG7FCCitLa3cRcB2Ax2rC+6hcbkrHMJkLDDkGfMJHxcCAw/G+U
- GR53iVAGOm2eCF/MHzxSuHkcm2+o+M5i+Oqx/HdHJjEQ8eSSqGrsdWwmWHp4jkY17qv1vkqRF
- GH/aij5dxg==
-X-Spam-Status: No, score=-100.9 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+In-Reply-To: <20210120161056.77784-3-ben@wijen.net>
+X-Provags-ID: V03:K1:Er7CIHOqXLzvdNX361iszvcy6ACdd2X+8KuObfzwttDgGe1yO//
+ 6NjH7p4YW63N5poOi1B9D5E8cpqzP/15I5cHI9G3oKTHqFEOPmgLSKAs5ilBYbCGOOBQufU
+ IxJiwXWuFeBR374OK5vR7tbx81bVaG/WlmfsQx3rY1y6ES5os9F+z1xUIji3gdIwwIi2Pug
+ ngw8iCp1lXBVFLJsB2tNA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:s1RXBg1oC60=:BmDotZI6Hh9Os2W7PPBU0z
+ XB9/O6BhBsVTtWtaCvk+yB8I5mZSMMLx6oy/U3kifwn68UHN1Zn5RXOc/20oF/59GSZzPFZSd
+ 4qeK3cs4zy+4Usa7jQs0hFOvNPji/EVkjEeh+Jd9EqRea9rHf9hosEY9lZs19ZjPImcJO10Lr
+ mcNa5/21Ah+/U2QgrCsOpwligtdBNJKhuZ/r6VPEvbL/l8bxCrbNjBzdldEDMkmrzFTlRtH19
+ ZFbqvktKBGAR1tI9moQuUjrWhO5yht3CpuanoWAlUThy7c7k0xt0s8CDeON337TSpCE/Ntufv
+ k0qXbG0+aHveFi/F+p1CwtgVZEtIJme//U685BMK1qk2O/CS5Q8AF1FkoU+vUafg/lEYGgTSA
+ q8FKMODhYNKIHUyPMVff8o0Sg20DCRFCxljiwOsGqlCykOA3WhxzZAgDWIotLreFNYW08N9TO
+ +O9fFmD4lQ==
+X-Spam-Status: No, score=-107.1 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -51,84 +52,47 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 22 Jan 2021 12:21:01 -0000
+X-List-Received-Date: Fri, 22 Jan 2021 12:22:19 -0000
 
-Hi Takashi,
-
-On Jan 22 05:58, Takashi Yano via Cygwin-patches wrote:
-> The new implementation of pseudo console support by commit bb428520
-> provides the important advantages, while there also has been several
-> disadvantages compared to the previous implementation.
+On Jan 20 17:10, Ben Wijen wrote:
+> The remove code is already in the _remove_r function.
+> So, just call the _remove_r function.
+> ---
+>  winsup/cygwin/syscalls.cc | 17 ++++-------------
+>  1 file changed, 4 insertions(+), 13 deletions(-)
 > 
-> These patches overturn some of them.
-> 
-> The disadvantage:
->  1) The cygwin program which calls console API directly does not work.
-> is supposed to be able to be overcome as well, however, I am not sure
-> it is worth enough. This will need a lot of hooks for console APIs.
-> 
-> Takashi Yano (4):
->   Cygwin: pty: Inherit typeahead data between two input pipes.
->   Cygwin: pty: Keep code page between non-cygwin apps.
->   Cygwin: pty: Make apps using console APIs be able to debug with gdb.
->   Cygwin: pty: Allow multiple apps to enable pseudo console
->     simultaneously.
-> 
->  winsup/cygwin/fhandler.h      |  15 +-
->  winsup/cygwin/fhandler_tty.cc | 805 ++++++++++++++++++++++++++--------
->  winsup/cygwin/spawn.cc        | 102 +++--
->  winsup/cygwin/tty.cc          |  11 +-
->  winsup/cygwin/tty.h           |  18 +-
->  5 files changed, 730 insertions(+), 221 deletions(-)
-> 
-> -- 
-> 2.30.0
-
-I found a problem with this patchset.
-
-Try this:
-
-  Start mintty
-
-  $ touch foo
-  $ attrib +r foo
-  $ gdb /bin/rm
-  $ start foo
-
-  At this point, starting rm will take a few seconds.  While GDB is
-  still working on this, *before* GDB returns to the prompt, type some
-  keys on keyboard, e. g., "1234".
-
-Without this patchset, you'll see the keys being echoed in mintty, and
-as soon as GDB returns to the prompt, the keys are copied to GDBs input
-buffer and the keys you typed show up after the prompt.  This is the
-expected behaviour.
-
-  (gdb) 1234
-
-With this patchset, the keys are *not* echoed in mintty, and as soon
-as the GDB prompt returns, the keys are still not visible.
-
-Now continue the execution of rm:
-
-  (gdb) c
-  /usr/bin/rm: remove write-protected regular file 'foo'? 
-
-Without this patchset, I get
-
-  /usr/bin/rm: error closing file
-  [...]
-  [Inferior 1 (process 1224) exited with code 01]
-  (gdb)
-
-That's not optimal, apparently.  With this patchset:
-
-  (gdb) c
-  /usr/bin/rm: remove write-protected regular file 'foo'? 1234
-
-so the keys typed while gdb was starting rm have been saved up and then
-used as input for rm.  That's not quite right either, is it?
+> diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
+> index 2e50ad7d5..54b065733 100644
+> --- a/winsup/cygwin/syscalls.cc
+> +++ b/winsup/cygwin/syscalls.cc
+> @@ -1133,24 +1133,15 @@ _remove_r (struct _reent *, const char *ourname)
+>        return -1;
+>      }
+>  
+> -  return win32_name.isdir () ? rmdir (ourname) : unlink (ourname);
+> +  int res = win32_name.isdir () ? rmdir (ourname) : unlink (ourname);
+> +  syscall_printf ("%R = remove(%s)", res, ourname);
+> +  return res;
+>  }
+>  
+>  extern "C" int
+>  remove (const char *ourname)
+>  {
+> -  path_conv win32_name (ourname, PC_SYM_NOFOLLOW);
+> -
+> -  if (win32_name.error)
+> -    {
+> -      set_errno (win32_name.error);
+> -      syscall_printf ("-1 = remove (%s)", ourname);
+> -      return -1;
+> -    }
+> -
+> -  int res = win32_name.isdir () ? rmdir (ourname) : unlink (ourname);
+> -  syscall_printf ("%R = remove(%s)", res, ourname);
+> -  return res;
+> +  return _remove_r(_REENT, ourname);
+                    ^^^
+		    space
 
 
-Thanks,
 Corinna
