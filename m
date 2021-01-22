@@ -1,43 +1,42 @@
 Return-Path: <corinna-cygwin@cygwin.com>
 Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
- by sourceware.org (Postfix) with ESMTPS id 2E4C13890406
- for <cygwin-patches@cygwin.com>; Fri, 22 Jan 2021 09:44:22 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 2E4C13890406
+ by sourceware.org (Postfix) with ESMTPS id 8A5FB3890406
+ for <cygwin-patches@cygwin.com>; Fri, 22 Jan 2021 09:44:54 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 8A5FB3890406
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MFbeI-1lERAI2vl8-00HA38 for <cygwin-patches@cygwin.com>; Fri, 22 Jan 2021
- 10:44:20 +0100
+ mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MFsER-1lEiJ00eJ5-00HPid for <cygwin-patches@cygwin.com>; Fri, 22 Jan 2021
+ 10:44:53 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id DE36CA80D50; Fri, 22 Jan 2021 10:44:19 +0100 (CET)
-Date: Fri, 22 Jan 2021 10:44:19 +0100
+ id C6DB2A80D50; Fri, 22 Jan 2021 10:44:52 +0100 (CET)
+Date: Fri, 22 Jan 2021 10:44:52 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: ptsname_r: always return an error number on
- failure
-Message-ID: <20210122094419.GA810271@calimero.vinschen.de>
+Subject: Re: [PATCH] Cygwin: normalize_posix_path: fix error handling when ..
+ is encountered
+Message-ID: <20210122094452.GB810271@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20210120180003.1458-1-kbrown@cornell.edu>
- <b7ae5752-cfce-0be8-92b5-81515d5a57d0@cornell.edu>
+References: <20210120154006.53040-1-kbrown@cornell.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <b7ae5752-cfce-0be8-92b5-81515d5a57d0@cornell.edu>
-X-Provags-ID: V03:K1:z9EiRdzQrY20N3LPLFNuuXn89NGK+PQZkg7CyIyl/uoIqRJiqqz
- wpQu3I5to6vmv/SKyJIeq99fC7FI220DeOkutBSJJc1nUFIcZ2Y8/tgPxyjmjqAsvGaDwUX
- wB/fvF8R2+UT45CAgHXb1a6cUrZuL45ri06ALYrSYd0BoVudZJ1wPQZnWNsmdzt8UdVN1Zl
- wp0TMH9EVJydPKndexiRA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:t44eGnlXrn4=:aXwuqERT0IlWfRNUcfhPbg
- cLXjAbj6kqGJqUS5yyRiec2HZD/Yy/OwJjW5arJcKPJcZ+moe/fVl6pRiHgcT/451ZHsN2B3k
- MIsVv/mWsSKdLO2lNCn/ZI6Ty9TmxuO+kWTpN9ej89NDJnoxAvqJy/RQiYqXXnCRJyPmsA7kn
- k6i0eKPyTPh+Yxr9J+oyYvtLxeU1+7st5XFoOaEVga0BUNBnQTU+7s+FiTtwKI0M/ilbWm3tG
- XvxWsg7b633NRRFEIEzF6hzVsE6Jo/GKJoBJwYNB1jbCadvQ/xbNMji8R78ltXWVkKjnmUetg
- 3KVIONgD5LYGDol4ObCSD/C2lBAMz4dm8W0jJ1yVCR1oqfgVf45i/uQcrHD3FbcBODZcxvcK/
- p1ZUoBYf3JlYkHfU5Th2IZRsdM1j4rJryfmo2CGfCpEogAJw8iCBMe0jJ6pIA94rIYIpLAOOY
- m6Z/OrCuKslt5l4eV9PMdz2MRwCJo+E=
-X-Spam-Status: No, score=-106.8 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
- KAM_SHORT, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+In-Reply-To: <20210120154006.53040-1-kbrown@cornell.edu>
+X-Provags-ID: V03:K1:2UM6sCEjZodYTzB/laT0XPodWzcEo1IZOyKFl/Bh8zj3c5iNGLT
+ Dib02mr728D2Gw5xQz9dIKBnG1i7maDBXTp+xQHqRv5l1fuTHKGT12sUcbsY3G3AX0oFYdY
+ 8nrYdKFxMNt+LgsIKFlKVdfNJLlJFuDPLf22GcP5o4KgIqQ7gFYCYCD1RqeqXL+J8aJ2/xz
+ 4LgV5skLyIxzaS+BWwSIg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:XJ1r/dU53pI=:EOuf9O3bZptowpWzux7pFO
+ W6z3oqsPbD7CDemJ2pwkTpFR1F3t3NhMgL5q1XKJhrd3HVO/IT+rnFPRa57GPAhX4fHJmqFxC
+ QM7AL+9KNvgx0fWkMQZ+onbC1W331sgG0/OWwMuWkIm06RxoutCgTPfRspfGHgvQvwSMAYW6J
+ RICidVvfbtd6V4aozJl8gf1RbSmIxXItQVHuTYywS0qcmFiWunz/LzPSEMCc4lGju0Y0bc4Og
+ m9DfRS5LvdvwiviJRVTk/XilIdkRNdSBTwiVtboYkmzvIa7fc6ibDVORHgzJrY1t1CYO287vR
+ k98U9/PhIK3cZFLHstC0OD3+7Z89ZBRblaaHKN4VWMQPG/a6fUXcZiSih2+T2N0xvRrZbZGbi
+ 0fitsGDwwebj0M3wO1qyksdsTVkKCZFUwgnVzxdCBEQ+YalzleOhjxW+3Lph1MuWmgqlKJjga
+ +ECbBkVPMP6vVO6taNUj4zv0dwrgcWM=
+X-Spam-Status: No, score=-107.1 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -53,62 +52,51 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 22 Jan 2021 09:44:23 -0000
+X-List-Received-Date: Fri, 22 Jan 2021 09:44:56 -0000
 
-On Jan 21 17:48, Ken Brown via Cygwin-patches wrote:
-> On 1/20/2021 1:00 PM, Ken Brown via Cygwin-patches wrote:
-> > Following Linux, return ENOTTY on a bad file descriptor and also set
-> > errno to ENOTTY.
-> > 
-> > Previously 0 was returned and errno was set to EBADF.  Returning 0
-> > violates the requirement in
-> > https://man7.org/linux/man-pages/man3/ptsname_r.3.html that an error
-> > number should be returned on failure.  (That man page doesn't specify
-> > setting errno.)
-> > 
-> > Addresses: https://lists.gnu.org/archive/html/bug-gnulib/2021-01/msg00245.html
-> > ---
-> >   winsup/cygwin/release/3.2.0 | 3 +++
-> >   winsup/cygwin/syscalls.cc   | 5 ++++-
-> >   2 files changed, 7 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/winsup/cygwin/release/3.2.0 b/winsup/cygwin/release/3.2.0
-> > index 43725cec2..f748a9bc8 100644
-> > --- a/winsup/cygwin/release/3.2.0
-> > +++ b/winsup/cygwin/release/3.2.0
-> > @@ -52,3 +52,6 @@ Bug Fixes
-> >   - Fix the errno when a path contains .. and the prefix exists but is
-> >     not a directory.
-> >     Addresses: https://lists.gnu.org/archive/html/bug-gnulib/2021-01/msg00214.html
-> > +
-> > +- Fix the return value when ptsname_r(3) is called with a bad file descriptor
-> > +  Addresses: https://lists.gnu.org/archive/html/bug-gnulib/2021-01/msg00245.html
-> > diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
-> > index 4742c6653..18d9e3f88 100644
-> > --- a/winsup/cygwin/syscalls.cc
-> > +++ b/winsup/cygwin/syscalls.cc
-> > @@ -3364,7 +3364,10 @@ ptsname_r (int fd, char *buf, size_t buflen)
-> >     cygheap_fdget cfd (fd);
-> >     if (cfd < 0)
-> > -    return 0;
-> > +    {
-> > +      set_errno (ENOTTY);
-> > +      return ENOTTY;
-> > +    }
-> >     return cfd->ptsname_r (buf, buflen);
-> >   }
-> > 
+On Jan 20 10:40, Ken Brown via Cygwin-patches wrote:
+> When .. is in the source path and the path prefix exists but is not a
+> directory, return ENOTDIR instead of ENOENT.  This fixes a failing
+> gnulib test of realpath(3).
 > 
-> I'm not really convinced we should blindly follow Linux here, when EBADF
-> would seem to make more sense.  See
+> Addresses: https://lists.gnu.org/archive/html/bug-gnulib/2021-01/msg00214.html
+> ---
+>  winsup/cygwin/path.cc       | 4 +++-
+>  winsup/cygwin/release/3.2.0 | 4 ++++
+>  2 files changed, 7 insertions(+), 1 deletion(-)
 > 
->   https://lists.gnu.org/archive/html/bug-gnulib/2021-01/msg00264.html
-> 
-> Corinna, what's your preference?
+> diff --git a/winsup/cygwin/path.cc b/winsup/cygwin/path.cc
+> index abd3687df..6dc162806 100644
+> --- a/winsup/cygwin/path.cc
+> +++ b/winsup/cygwin/path.cc
+> @@ -323,8 +323,10 @@ normalize_posix_path (const char *src, char *dst, char *&tail)
+>  			  if (!tp.check_usage (4, 3))
+>  			    return ELOOP;
+>  			  path_conv head (dst, PC_SYM_FOLLOW | PC_POSIX);
+> -			  if (!head.isdir())
+> +			  if (!head.exists ())
+>  			    return ENOENT;
+> +			  if (!head.isdir ())
+> +			    return ENOTDIR;
+>  			  /* At this point, dst is a normalized path.  If the
+>  			     normalized path created by path_conv does not
+>  			     match the normalized path we're just testing, then
+> diff --git a/winsup/cygwin/release/3.2.0 b/winsup/cygwin/release/3.2.0
+> index c18a848de..43725cec2 100644
+> --- a/winsup/cygwin/release/3.2.0
+> +++ b/winsup/cygwin/release/3.2.0
+> @@ -48,3 +48,7 @@ Bug Fixes
+>  
+>  - Fix a bug in fstatat(2) on 32 bit that could cause it to return garbage.
+>    Addresses: https://cygwin.com/pipermail/cygwin/2021-January/247399.html
+> +
+> +- Fix the errno when a path contains .. and the prefix exists but is
+> +  not a directory.
+> +  Addresses: https://lists.gnu.org/archive/html/bug-gnulib/2021-01/msg00214.html
+> -- 
+> 2.30.0
 
-EBADF actually makes more sense, as Bruno points out.
-
-Please push, whatever you prefer.
+Ok, please push.
 
 
 Thanks,
