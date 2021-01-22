@@ -1,39 +1,41 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
- by sourceware.org (Postfix) with ESMTPS id B9ECB398BC09
- for <cygwin-patches@cygwin.com>; Fri, 22 Jan 2021 09:50:30 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org B9ECB398BC09
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+ by sourceware.org (Postfix) with ESMTPS id F2EE73890427
+ for <cygwin-patches@cygwin.com>; Fri, 22 Jan 2021 10:52:02 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org F2EE73890427
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1M7KG2-1l69oP1bR6-007hN7 for <cygwin-patches@cygwin.com>; Fri, 22 Jan 2021
- 10:50:29 +0100
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1MCsLu-1lBfUH1xoW-008qcM for <cygwin-patches@cygwin.com>; Fri, 22 Jan 2021
+ 11:52:01 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 03799A80D50; Fri, 22 Jan 2021 10:50:29 +0100 (CET)
-Date: Fri, 22 Jan 2021 10:50:28 +0100
+ id 14A35A80D50; Fri, 22 Jan 2021 11:52:01 +0100 (CET)
+Date: Fri, 22 Jan 2021 11:52:01 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2 0/4] Improve pseudo console support.
-Message-ID: <20210122095028.GC810271@calimero.vinschen.de>
+Subject: Re: [PATCH v2 1/8] syscalls.cc: unlink_nt: Try
+ FILE_DISPOSITION_IGNORE_READONLY_ATTRIBUTE
+Message-ID: <20210122105201.GD810271@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20210121205852.536-1-takashi.yano@nifty.ne.jp>
+References: <20210115134534.13290-1-ben@wijen.net>
+ <20210120161056.77784-2-ben@wijen.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210121205852.536-1-takashi.yano@nifty.ne.jp>
-X-Provags-ID: V03:K1:6A98bftZ+a7diLzTNDZgA+5DvGW65lks+M+chJMr/QO8YS1e/8y
- VLSZtzCy8ow4HYZ+fNQoZeDnC4iNOU42Z8wnOC3CeKhxYSV5Q8zV4UxxMGhVjQDBfQipS53
- Ryy36mUWuC6nioMp/eNW443Nht+BHPqOB07WfBwPBnxqpmDGy3eUIVNS+SSvMCoIGClTWj9
- 9l7tPK/s5mp+8E6X9hXdw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ab6Oio+d/C8=:XVJqkoDPBasq7Hs6J64Sss
- CV2KZRSGT7PHy3Jq9eIjiH3qaUcIYOkAl3ehAVomyBwR5ZfCEpvFX/Xpt9XEKZqhvf+Lwz3uq
- JsXfAOYCjPMiN5z3fIIYwYgfGRaHRGCxkNPgd4PeSncmSTIlm/ep4Qg0VuIq5kEPLs4cvo4XZ
- cRT4RTpJmmKy2OukwhmDTK0ygikVAjJ2y3O+JKLLxkQk898SXIxzAjmQsSuT8YKt195UdZQKV
- XOFlTZkGtaLkI/SrUhTgxScbKMxI5saNnGz6vn1vRrNy7vrUo2Qizhq32gGvgDey5DCTSxtoy
- L4FO4R/+Q2vkDNvG5JKTgWrtaeZUo77WOKV8iV/bCRU8iZagNLmL5vBfpUESZMYAgHRagaEJZ
- 6WXn5hbKP1+smFylYio9pHwtFm5WOYx96UUSQyOmtIemWsuslanUmOEl0nRG08pCW/EOuaqvh
- 1FECR6hPZupWtrGcTK8rwxultjTtZTc=
-X-Spam-Status: No, score=-101.1 required=5.0 tests=BAYES_00,
+In-Reply-To: <20210120161056.77784-2-ben@wijen.net>
+X-Provags-ID: V03:K1:mTThS9gV6fhciQmBHh8QCCmk0pjrGBqLBO5d/XZ8Ncretq5ENVm
+ 4qBHLQkHxcRTLEpiXwXDXGPE6Jn+n9L9f9zWAlBS7idJ9dxN3AVzYjYbt2HoSaaL6ukET8p
+ 5+hgQEnSoKuAGkrezDC/Eudt/RrTlMRpY0VWj3Fsw1F+c0M4BK7X9lRK8KKQVQLKkftNbPG
+ 6y/jYewTuluAm+obKZCFQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:r24n9H704iI=:0bh7DBJUjUYWXSLlYkOo5m
+ 7DNodKu1jXh4Rvzk5OZ0s+jsO6R+E0Cw25rt9+VPeg/OgSRNGjbK+J+NhAaBrTTbB97144hRS
+ 1H8nKLE7q7bUHwrH2ZET8XvcZP2WDDZ2wVvMLuW7AEthfzF+8XGcOSsX/US1hxNc53H2UNXnG
+ qva06ZGO2AxSaBSERibgv32laJaBb3bGdUrFQxaMKP+JhqEhUGhPMToE/8fySg1D0JT3JVAl/
+ afs1uT0IyT0Mp/SvRNGIyUonhI9bDtVegcxtY10h47BlV2Gl7TenXlP3itedr4/segFIzdyji
+ VHhebP+2LHwWuS+zqSpsqTC8Ua/9yDYFTVOoR5PRbdKomG5Zs78ivH6bKIUXvJ+C5Jk/aTgmO
+ r+V/83zKdTyz7Jsd+UGQB6RAQhxZhV6QDefJ1L4NQ5ac7V7loONcQrEcKl49pqE8HAiwS57Sj
+ CyvFWhaG7Q==
+X-Spam-Status: No, score=-107.1 required=5.0 tests=BAYES_00, GIT_PATCH_0,
  GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
  RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
@@ -51,25 +53,103 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 22 Jan 2021 09:50:32 -0000
+X-List-Received-Date: Fri, 22 Jan 2021 10:52:13 -0000
 
-On Jan 22 05:58, Takashi Yano via Cygwin-patches wrote:
-> The new implementation of pseudo console support by commit bb428520
-> provides the important advantages, while there also has been several
-> disadvantages compared to the previous implementation.
+Hi Ben,
+
+On Jan 20 17:10, Ben Wijen wrote:
+> Implement wincap.has_posix_unlink_semantics_with_ignore_readonly and when set
+> skip setting/clearing of READONLY attribute and instead use
+> FILE_DISPOSITION_IGNORE_READONLY_ATTRIBUTE
+> ---
+>  winsup/cygwin/ntdll.h     |  3 ++-
+>  winsup/cygwin/syscalls.cc | 14 +++++-----
+>  winsup/cygwin/wincap.cc   | 11 ++++++++
+>  winsup/cygwin/wincap.h    | 56 ++++++++++++++++++++-------------------
+>  4 files changed, 49 insertions(+), 35 deletions(-)
 > 
-> These patches overturn some of them.
-> 
-> The disadvantage:
->  1) The cygwin program which calls console API directly does not work.
-> is supposed to be able to be overcome as well, however, I am not sure
-> it is worth enough. This will need a lot of hooks for console APIs.
+> diff --git a/winsup/cygwin/ntdll.h b/winsup/cygwin/ntdll.h
+> index d4f6aaf45..7eee383dd 100644
+> --- a/winsup/cygwin/ntdll.h
+> +++ b/winsup/cygwin/ntdll.h
+> @@ -497,7 +497,8 @@ enum {
+>    FILE_DISPOSITION_DELETE				= 0x01,
+>    FILE_DISPOSITION_POSIX_SEMANTICS			= 0x02,
+>    FILE_DISPOSITION_FORCE_IMAGE_SECTION_CHECK		= 0x04,
+> -  FILE_DISPOSITION_ON_CLOSE				= 0x08
+> +  FILE_DISPOSITION_ON_CLOSE				= 0x08,
+> +  FILE_DISPOSITION_IGNORE_READONLY_ATTRIBUTE		= 0x10,
+>  };
+>  
+>  enum
+> diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
+> index 4742c6653..2e50ad7d5 100644
+> --- a/winsup/cygwin/syscalls.cc
+> +++ b/winsup/cygwin/syscalls.cc
+> @@ -709,14 +709,11 @@ _unlink_nt (path_conv &pc, bool shareable)
+>  			   flags);
 
-Definitely not.  We should really not cave in to such expectations.
-Cygwin apps are POSIX apps in the first place and should use the API
-provided by Cygwin and other Cygwin libs.  Yes, there are border cases
-like the X server or cygrunsrv, but these are limited and should stay
-limited.
+A few lines above, FILE_WRITE_ATTRIBUTES is added to the
+access mask, if the file is R/O.  This, too, depends on
+wincap.has_posix_unlink_semantics_with_ignore_readonly().
+
+>        if (!NT_SUCCESS (status))
+>  	goto out;
+> -      /* Why didn't the devs add a FILE_DELETE_IGNORE_READONLY_ATTRIBUTE
+> -	 flag just like they did with FILE_LINK_IGNORE_READONLY_ATTRIBUTE
+> -	 and FILE_LINK_IGNORE_READONLY_ATTRIBUTE???
+> -
+> -         POSIX unlink semantics are nice, but they still fail if the file
+> +      /* POSIX unlink semantics are nice, but they still fail if the file
+>  	 has the R/O attribute set.  Removing the file is very much a safe
+>  	 bet afterwards, so, no transaction. */
+
+This comment should contain a short comment "W10 1809+, blah blah",
+analogue to the comment in line 698 in terms of 1709+ ("++"?  Oops,
+fix typo...).
 
 
+> -      if (pc.file_attributes () & FILE_ATTRIBUTE_READONLY)
+> +      if (!wincap.has_posix_unlink_semantics_with_ignore_readonly ()
+> +          && (pc.file_attributes () & FILE_ATTRIBUTE_READONLY))
+
+I'd invert the test order here.  On 1809+ systems, the majority of
+systems these days, the first test is always true, but it's always
+checked, even if the file is not R/O.  First checking for R/O would
+reduce the hits on the "with_ignore_readonly" check.
+
+>  	{
+>  	  status = NtSetAttributesFile (fh, pc.file_attributes ()
+>  					    & ~FILE_ATTRIBUTE_READONLY);
+> @@ -727,10 +724,13 @@ _unlink_nt (path_conv &pc, bool shareable)
+>  	    }
+>  	}
+>        fdie.Flags = FILE_DISPOSITION_DELETE | FILE_DISPOSITION_POSIX_SEMANTICS;
+> +      if(wincap.has_posix_unlink_semantics_with_ignore_readonly ())
+          ^^^
+          space
+> +          fdie.Flags |= FILE_DISPOSITION_IGNORE_READONLY_ATTRIBUTE;
+         ^^^^
+         indentation 2, not 4.
+
+>        status = NtSetInformationFile (fh, &io, &fdie, sizeof fdie,
+>  				     FileDispositionInformationEx);
+>        /* Restore R/O attribute in case we have multiple hardlinks. */
+> -      if (pc.file_attributes () & FILE_ATTRIBUTE_READONLY)
+> +      if (!wincap.has_posix_unlink_semantics_with_ignore_readonly ()
+> +          && (pc.file_attributes () & FILE_ATTRIBUTE_READONLY))
+
+Same here.
+
+Actually, on second thought, what about introducing another bool at the
+start of the posix handling, along the lines of
+
+   const bool needs_ro_handling =
+     (pc.file_attributes () & FILE_ATTRIBUTE_READONLY)
+     && !wincap.has_posix_unlink_semantics_with_ignore_readonly ();
+
+and then check for needs_ro_handling throughout?
+
+
+Thanks,
 Corinna
