@@ -1,39 +1,24 @@
-Return-Path: <ben@wijen.net>
-Received: from 14.mo3.mail-out.ovh.net (14.mo3.mail-out.ovh.net
- [188.165.43.98])
- by sourceware.org (Postfix) with ESMTPS id 11F2A3894C19
- for <cygwin-patches@cygwin.com>; Fri, 22 Jan 2021 15:47:20 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 11F2A3894C19
-Authentication-Results: sourceware.org;
- dmarc=none (p=none dis=none) header.from=wijen.net
-Authentication-Results: sourceware.org; spf=pass smtp.mailfrom=ben@wijen.net
-Received: from player687.ha.ovh.net (unknown [10.108.54.156])
- by mo3.mail-out.ovh.net (Postfix) with ESMTP id 0208C27846C
- for <cygwin-patches@cygwin.com>; Fri, 22 Jan 2021 16:47:18 +0100 (CET)
-Received: from wijen.net (80-112-22-40.cable.dynamic.v4.ziggo.nl
- [80.112.22.40]) (Authenticated sender: ben@wijen.net)
- by player687.ha.ovh.net (Postfix) with ESMTPSA id B039D1A471418;
- Fri, 22 Jan 2021 15:47:16 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass
- (GARM-97G002854fa605-04f8-4779-bf11-6ef80dd3945a,
- D56DA46DA961A8A8A8B23CBF9B3EE5535B21C570) smtp.auth=ben@wijen.net
-X-OVh-ClientIp: 80.112.22.40
-From: Ben Wijen <ben@wijen.net>
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
+ by sourceware.org (Postfix) with ESMTPS id AD8823858034
+ for <cygwin-patches@cygwin.com>; Mon, 25 Jan 2021 09:18:45 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org AD8823858034
+Received: from localhost.localdomain (x067108.dynamic.ppp.asahi-net.or.jp
+ [122.249.67.108]) (authenticated)
+ by conuserg-11.nifty.com with ESMTP id 10P9IL6d002406;
+ Mon, 25 Jan 2021 18:18:28 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 10P9IL6d002406
+X-Nifty-SrcIP: [122.249.67.108]
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v3 2/8] syscalls.cc: Deduplicate remove
-Date: Fri, 22 Jan 2021 16:47:12 +0100
-Message-Id: <20210122154712.3207-2-ben@wijen.net>
+Subject: [PATCH] Cygwin: console: Add missing guard regarding attach_mutex.
+Date: Mon, 25 Jan 2021 18:18:11 +0900
+Message-Id: <20210125091812.1765-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210122122215.GF810271@calimero.vinschen.de>
-References: <20210122122215.GF810271@calimero.vinschen.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 17547713002217162500
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: 0
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeduledrudeigdekhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecunecujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeeuvghnucghihhjvghnuceosggvnhesfihijhgvnhdrnhgvtheqnecuggftrfgrthhtvghrnhepieelvddtjeffgeetjeduffegkeeltdetffektdfgvdejledugfeffefgfeefffeknecukfhppedtrddtrddtrddtpdektddrudduvddrvddvrdegtdenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhhouggvpehsmhhtphdqohhuthdphhgvlhhopehplhgrhigvrheikeejrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepsggvnhesfihijhgvnhdrnhgvthdprhgtphhtthhopegthihgfihinhdqphgrthgthhgvshestgihghifihhnrdgtohhm
-X-Spam-Status: No, score=-11.8 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL,
+X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
  SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -49,47 +34,148 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 22 Jan 2021 15:47:21 -0000
+X-List-Received-Date: Mon, 25 Jan 2021 09:18:49 -0000
 
-The remove code is already in the _remove_r function.
-So, just call the _remove_r function.
+- The commit a5333345 did not fix the problem enough. This patch
+  provides additional guard for the issue.
 ---
- winsup/cygwin/syscalls.cc | 17 ++++-------------
- 1 file changed, 4 insertions(+), 13 deletions(-)
+ winsup/cygwin/fhandler_console.cc | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
-index 8651cfade..e6ff0fd7a 100644
---- a/winsup/cygwin/syscalls.cc
-+++ b/winsup/cygwin/syscalls.cc
-@@ -1161,24 +1161,15 @@ _remove_r (struct _reent *, const char *ourname)
-       return -1;
-     }
- 
--  return win32_name.isdir () ? rmdir (ourname) : unlink (ourname);
-+  int res = win32_name.isdir () ? rmdir (ourname) : unlink (ourname);
-+  syscall_printf ("%R = remove(%s)", res, ourname);
-+  return res;
- }
- 
- extern "C" int
- remove (const char *ourname)
+diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
+index 49963e719..02d0ac052 100644
+--- a/winsup/cygwin/fhandler_console.cc
++++ b/winsup/cygwin/fhandler_console.cc
+@@ -439,14 +439,18 @@ fhandler_console::set_raw_win32_keyboard_mode (bool new_mode)
+ void
+ fhandler_console::set_cursor_maybe ()
  {
--  path_conv win32_name (ourname, PC_SYM_NOFOLLOW);
--
--  if (win32_name.error)
--    {
--      set_errno (win32_name.error);
--      syscall_printf ("-1 = remove (%s)", ourname);
--      return -1;
--    }
--
--  int res = win32_name.isdir () ? rmdir (ourname) : unlink (ourname);
--  syscall_printf ("%R = remove(%s)", res, ourname);
--  return res;
-+  return _remove_r (_REENT, ourname);
++  acquire_attach_mutex (INFINITE);
+   con.fillin (get_output_handle ());
++  release_attach_mutex ();
+   /* Nothing to do for xterm compatible mode. */
+   if (wincap.has_con_24bit_colors () && !con_is_legacy)
+     return;
+   if (con.dwLastCursorPosition.X != con.b.dwCursorPosition.X ||
+       con.dwLastCursorPosition.Y != con.b.dwCursorPosition.Y)
+     {
++      acquire_attach_mutex (INFINITE);
+       SetConsoleCursorPosition (get_output_handle (), con.b.dwCursorPosition);
++      release_attach_mutex ();
+       con.dwLastCursorPosition = con.b.dwCursorPosition;
+     }
  }
+@@ -536,6 +540,7 @@ fhandler_console::read (void *pv, size_t& buflen)
+ 	}
  
- extern "C" pid_t
+       set_cursor_maybe (); /* to make cursor appear on the screen immediately */
++wait_retry:
+       switch (cygwait (get_handle (), timeout))
+ 	{
+ 	case WAIT_OBJECT_0:
+@@ -551,6 +556,15 @@ fhandler_console::read (void *pv, size_t& buflen)
+ 	  buflen = (size_t) -1;
+ 	  return;
+ 	default:
++	  if (GetLastError () == ERROR_INVALID_HANDLE)
++	    { /* Confirm the handle is still valid */
++	      DWORD mode;
++	      acquire_attach_mutex (INFINITE);
++	      BOOL res = GetConsoleMode (get_handle (), &mode);
++	      release_attach_mutex ();
++	      if (res)
++		goto wait_retry;
++	    }
+ 	  goto err;
+ 	}
+ 
+@@ -1243,7 +1257,9 @@ fhandler_console::ioctl (unsigned int cmd, void *arg)
+       case TIOCGWINSZ:
+ 	int st;
+ 
++	acquire_attach_mutex (INFINITE);
+ 	st = con.fillin (get_output_handle ());
++	release_attach_mutex ();
+ 	if (st)
+ 	  {
+ 	    /* *not* the buffer size, the actual screen size... */
+@@ -1301,12 +1317,15 @@ fhandler_console::ioctl (unsigned int cmd, void *arg)
+ 	  DWORD n;
+ 	  int ret = 0;
+ 	  INPUT_RECORD inp[INREC_SIZE];
++	  acquire_attach_mutex (INFINITE);
+ 	  if (!PeekConsoleInputW (get_handle (), inp, INREC_SIZE, &n))
+ 	    {
+ 	      set_errno (EINVAL);
++	      release_attach_mutex ();
+ 	      release_output_mutex ();
+ 	      return -1;
+ 	    }
++	  release_attach_mutex ();
+ 	  bool saw_eol = false;
+ 	  for (DWORD i=0; i<n; i++)
+ 	    if (inp[i].EventType == KEY_EVENT &&
+@@ -1357,11 +1376,13 @@ fhandler_console::tcflush (int queue)
+   if (queue == TCIFLUSH
+       || queue == TCIOFLUSH)
+     {
++      acquire_attach_mutex (INFINITE);
+       if (!FlushConsoleInputBuffer (get_handle ()))
+ 	{
+ 	  __seterrno ();
+ 	  res = -1;
+ 	}
++      release_attach_mutex ();
+     }
+   return res;
+ }
+@@ -1375,12 +1396,14 @@ fhandler_console::output_tcsetattr (int, struct termios const *t)
+   DWORD flags = ENABLE_PROCESSED_OUTPUT | ENABLE_WRAP_AT_EOL_OUTPUT;
+ 
+   DWORD oflags;
++  acquire_attach_mutex (INFINITE);
+   GetConsoleMode (get_output_handle (), &oflags);
+   if (wincap.has_con_24bit_colors () && !con_is_legacy
+       && (oflags & ENABLE_VIRTUAL_TERMINAL_PROCESSING))
+     flags |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+ 
+   int res = SetConsoleMode (get_output_handle (), flags) ? 0 : -1;
++  release_attach_mutex ();
+   if (res)
+     __seterrno_from_win_error (GetLastError ());
+   release_output_mutex ();
+@@ -1398,6 +1421,7 @@ fhandler_console::input_tcsetattr (int, struct termios const *t)
+ 
+   DWORD oflags;
+ 
++  acquire_attach_mutex (INFINITE);
+   if (!GetConsoleMode (get_handle (), &oflags))
+     oflags = 0;
+   DWORD flags = 0;
+@@ -1456,6 +1480,7 @@ fhandler_console::input_tcsetattr (int, struct termios const *t)
+       syscall_printf ("%d = tcsetattr(,%p) enable flags %y, c_lflag %y iflag %y",
+ 		      res, t, flags, t->c_lflag, t->c_iflag);
+     }
++  release_attach_mutex ();
+ 
+   get_ttyp ()->rstcons (false);
+   release_input_mutex ();
+@@ -1481,6 +1506,7 @@ fhandler_console::tcgetattr (struct termios *t)
+ 
+   DWORD flags;
+ 
++  acquire_attach_mutex (INFINITE);
+   if (!GetConsoleMode (get_handle (), &flags))
+     {
+       __seterrno ();
+@@ -1505,6 +1531,7 @@ fhandler_console::tcgetattr (struct termios *t)
+       /* All the output bits we can ignore */
+       res = 0;
+     }
++  release_attach_mutex ();
+   syscall_printf ("%d = tcgetattr(%p) enable flags %y, t->lflag %y, t->iflag %y",
+ 		 res, t, flags, t->c_lflag, t->c_iflag);
+   return res;
 -- 
 2.30.0
 
