@@ -1,39 +1,40 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
- by sourceware.org (Postfix) with ESMTPS id B0C64385781A
- for <cygwin-patches@cygwin.com>; Mon, 25 Jan 2021 18:57:32 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org B0C64385781A
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+ by sourceware.org (Postfix) with ESMTPS id 74C50385781A
+ for <cygwin-patches@cygwin.com>; Mon, 25 Jan 2021 18:58:54 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 74C50385781A
 Received: from calimero.vinschen.de ([24.134.7.25]) by
  mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MLR5h-1lKxVw1ohP-00IVW1 for <cygwin-patches@cygwin.com>; Mon, 25 Jan 2021
- 19:57:31 +0100
+ id 1N63NW-1m68kX0btI-016Sbj for <cygwin-patches@cygwin.com>; Mon, 25 Jan 2021
+ 19:58:53 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 48F8EA80D4E; Mon, 25 Jan 2021 19:57:30 +0100 (CET)
-Date: Mon, 25 Jan 2021 19:57:30 +0100
+ id C7B08A80D4E; Mon, 25 Jan 2021 19:58:52 +0100 (CET)
+Date: Mon, 25 Jan 2021 19:58:52 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: chown: make sure ctime gets updated when necessary
-Message-ID: <20210125185730.GF4393@calimero.vinschen.de>
+Subject: Re: [PATCH v3 2/8] syscalls.cc: Deduplicate remove
+Message-ID: <20210125185852.GG4393@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20210125172455.64675-1-kbrown@cornell.edu>
+References: <20210122122215.GF810271@calimero.vinschen.de>
+ <20210122154712.3207-2-ben@wijen.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210125172455.64675-1-kbrown@cornell.edu>
-X-Provags-ID: V03:K1:Jrf3NvCMRiX3VowIlXDVEruKNQfXOSgX+FgaqJXz0cGQpnb/nqV
- hnsa6i6Q14LRlbdzLqRFvyWsKCFJB3HJbZzpPLyaPPa/QsGGGB8552KdOkr7u7KIa5Afy2D
- cPlC+w14eeWSjSnFyGgn0OtGzcbuc7YcIdmDzAI3bhCx6d7Rq7WEfJ/p3VkKgssyw07yMBk
- j/j8GnZ9Tp0MMmBTJqGxg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:k7LLkpAFSMA=:b1eeOm4SOtcjIEli+iMZ9R
- 1qZ5qA1hx7CBvR8/XbxE9xCsaG8aYxfFgnV5M/1gYSls/J2Pc3wng8QtobpOeVhIuc4uepWVo
- nRTu3TbDEQT4r40fer0S7ZTKbdYa/+yA+tVRQX++n6uTkSM29dEIzRMg5xxC6lDH0zRGeLgZ3
- UfHAHM7bCJVztpg7Kai57HMN/ecYdS1bQkDF6cJQ7uD5CMX9LUF3RZrDuXX0e7fb1sROHecJF
- kZof3s5a4HMfC0YqhBLMnhkTjraSaLBemySZxLzZK6lV09Io914ZbBkaBvI1qChtoDvRZJ40+
- lgHlymSffSIyh7CDV1EhRS89Z9CLzYcDKJA+fI5szwmn1awpS0ckpv/1IaZnuWCuMP3h44IfH
- 2+T3NBeaSrCweE9sFSh1E7tVLdX3ohrJK9DpnRDZXCblo9JITtnwe/hDErFTkuEQwoIUP2BRK
- bNhDlfCfKw==
-X-Spam-Status: No, score=-107.1 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+In-Reply-To: <20210122154712.3207-2-ben@wijen.net>
+X-Provags-ID: V03:K1:Us1/5a76OcrQC/7Hrie1GbgRemLcBxDiZKGpLKrhApZx2fmhaQL
+ W0rRMAsnKAWTciev0aAFMcUAG0aHukFVTLNxJ6RKDaiLz67IdAeC7bizRDbBJYb1DaRLCCR
+ 0HQTCMz5hRqiZ69eB3zzppjDCP3qZL4d0zsc5h58FpJiTh/SYasv+/QhLygJlaVft2+kbs9
+ Qu4kDbl7349cb8CTrXL/A==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:3dLT8NZ748Q=:wCTN9oJsh9hR4CeJg18dwN
+ Zd5pcnW5lnxzF6caYDKL5iIg7jBqv+7MHMXzi/L+aGOxQOSQHjM+QA6FvwS81ixVsRdlpVtjm
+ QGvBcsuIYuHSQNBqos31N7SoyGKno4jd5RZl0XOZQILyHUoyhTLR24bxKT59j/ZfjVwhfSl0+
+ oXxVY29WL/vM3z4Oj0TIW8kZVlnl9Xp+qOjzCNywhubZWETq5FXu+pqtE8/jCjyj2XzIOee72
+ /WU7ppCO43ofhVFudXB9iKifw9eHSsV8eXOlcKnXNmpThmWlBn2AqRskeGuIJKeNNp9h+j/Sl
+ gLQ9yaEZc5NNaMgfTRl0uJtFjRJLJbNYMbgAKrdtVUbQhzvPSqT6oYP11H85q0eXid2euK57V
+ vbx5sAdbnsj7Rf8iFFqoZTPyD9XjbKlnGKu0/gWh6qm3jXQtchIzjqOwtZAm52cFi/MGO2akA
+ dAiM2YnZvg==
+X-Spam-Status: No, score=-101.1 required=5.0 tests=BAYES_00,
  GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
  RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
@@ -51,54 +52,17 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 25 Jan 2021 18:57:34 -0000
+X-List-Received-Date: Mon, 25 Jan 2021 18:58:55 -0000
 
-On Jan 25 12:24, Ken Brown via Cygwin-patches wrote:
-> Following POSIX, ensure that ctime is updated if chown succeeds,
-> unless the new owner is specified as (uid_t)-1 and the new group is
-> specified as (gid_t)-1.  Previously, ctime was unchanged whenever the
-> owner and group were both unchanged.
-> 
-> Aside from POSIX compliance, this fix makes gnulib report that chown
-> works on Cygwin.  This improves the efficiency of packages like GNU
-> tar that use gnulib's chown module.  Previously such packages would
-> use a gnulib replacement for chown on Cygwin.
+On Jan 22 16:47, Ben Wijen wrote:
+> The remove code is already in the _remove_r function.
+> So, just call the _remove_r function.
 > ---
->  winsup/cygwin/fhandler_disk_file.cc | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/winsup/cygwin/fhandler_disk_file.cc b/winsup/cygwin/fhandler_disk_file.cc
-> index 07f9c513a..72d259579 100644
-> --- a/winsup/cygwin/fhandler_disk_file.cc
-> +++ b/winsup/cygwin/fhandler_disk_file.cc
-> @@ -863,6 +863,7 @@ fhandler_disk_file::fchown (uid_t uid, gid_t gid)
->    tmp_pathbuf tp;
->    aclent_t *aclp;
->    int nentries;
-> +  bool noop = true;
->  
->    if (!pc.has_acls ())
->      {
-> @@ -887,11 +888,18 @@ fhandler_disk_file::fchown (uid_t uid, gid_t gid)
->  				    aclp, MAX_ACL_ENTRIES)) < 0)
->      goto out;
->  
-> +  /* According to POSIX, chown can be a no-op if uid is (uid_t)-1 and
-> +     gid is (gid_t)-1.  Otherwise, even if uid and gid are unchanged,
-> +     we must ensure that ctime is updated. */
->    if (uid == ILLEGAL_UID)
->      uid = old_uid;
-> +  else
-> +    noop = false;
->    if (gid == ILLEGAL_GID)
->      gid = old_gid;
-> -  if (uid == old_uid && gid == old_gid)
+>  winsup/cygwin/syscalls.cc | 17 ++++-------------
+>  1 file changed, 4 insertions(+), 13 deletions(-)
 
-Basically ok, but why not just
-
-     if (uid == ILLEGAL_UID && gid == ILLEGAL_GID)
-
-instead of the noop var?
+Pushed.
 
 
+Thanks,
 Corinna
