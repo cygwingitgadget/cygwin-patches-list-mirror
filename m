@@ -1,24 +1,29 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
- by sourceware.org (Postfix) with ESMTPS id AD8823858034
- for <cygwin-patches@cygwin.com>; Mon, 25 Jan 2021 09:18:45 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org AD8823858034
-Received: from localhost.localdomain (x067108.dynamic.ppp.asahi-net.or.jp
+Received: from conssluserg-02.nifty.com (conssluserg-02.nifty.com
+ [210.131.2.81])
+ by sourceware.org (Postfix) with ESMTPS id 47F083858C27
+ for <cygwin-patches@cygwin.com>; Mon, 25 Jan 2021 09:38:24 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 47F083858C27
+Received: from Express5800-S70 (x067108.dynamic.ppp.asahi-net.or.jp
  [122.249.67.108]) (authenticated)
- by conuserg-11.nifty.com with ESMTP id 10P9IL6d002406;
- Mon, 25 Jan 2021 18:18:28 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 10P9IL6d002406
+ by conssluserg-02.nifty.com with ESMTP id 10P9bh51018665
+ for <cygwin-patches@cygwin.com>; Mon, 25 Jan 2021 18:37:43 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com 10P9bh51018665
 X-Nifty-SrcIP: [122.249.67.108]
+Date: Mon, 25 Jan 2021 18:37:43 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: console: Add missing guard regarding attach_mutex.
-Date: Mon, 25 Jan 2021 18:18:11 +0900
-Message-Id: <20210125091812.1765-1-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.30.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.1 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
+Subject: Re: [PATCH v2 0/4] Improve pseudo console support.
+Message-Id: <20210125183743.6b12ed0a506c303fc4bd6bab@nifty.ne.jp>
+In-Reply-To: <20210122122057.GE810271@calimero.vinschen.de>
+References: <20210121205852.536-1-takashi.yano@nifty.ne.jp>
+ <20210122122057.GE810271@calimero.vinschen.de>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
  SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -34,148 +39,125 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 25 Jan 2021 09:18:49 -0000
+X-List-Received-Date: Mon, 25 Jan 2021 09:38:26 -0000
 
-- The commit a5333345 did not fix the problem enough. This patch
-  provides additional guard for the issue.
----
- winsup/cygwin/fhandler_console.cc | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+Hi Corinna,
 
-diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
-index 49963e719..02d0ac052 100644
---- a/winsup/cygwin/fhandler_console.cc
-+++ b/winsup/cygwin/fhandler_console.cc
-@@ -439,14 +439,18 @@ fhandler_console::set_raw_win32_keyboard_mode (bool new_mode)
- void
- fhandler_console::set_cursor_maybe ()
- {
-+  acquire_attach_mutex (INFINITE);
-   con.fillin (get_output_handle ());
-+  release_attach_mutex ();
-   /* Nothing to do for xterm compatible mode. */
-   if (wincap.has_con_24bit_colors () && !con_is_legacy)
-     return;
-   if (con.dwLastCursorPosition.X != con.b.dwCursorPosition.X ||
-       con.dwLastCursorPosition.Y != con.b.dwCursorPosition.Y)
-     {
-+      acquire_attach_mutex (INFINITE);
-       SetConsoleCursorPosition (get_output_handle (), con.b.dwCursorPosition);
-+      release_attach_mutex ();
-       con.dwLastCursorPosition = con.b.dwCursorPosition;
-     }
- }
-@@ -536,6 +540,7 @@ fhandler_console::read (void *pv, size_t& buflen)
- 	}
- 
-       set_cursor_maybe (); /* to make cursor appear on the screen immediately */
-+wait_retry:
-       switch (cygwait (get_handle (), timeout))
- 	{
- 	case WAIT_OBJECT_0:
-@@ -551,6 +556,15 @@ fhandler_console::read (void *pv, size_t& buflen)
- 	  buflen = (size_t) -1;
- 	  return;
- 	default:
-+	  if (GetLastError () == ERROR_INVALID_HANDLE)
-+	    { /* Confirm the handle is still valid */
-+	      DWORD mode;
-+	      acquire_attach_mutex (INFINITE);
-+	      BOOL res = GetConsoleMode (get_handle (), &mode);
-+	      release_attach_mutex ();
-+	      if (res)
-+		goto wait_retry;
-+	    }
- 	  goto err;
- 	}
- 
-@@ -1243,7 +1257,9 @@ fhandler_console::ioctl (unsigned int cmd, void *arg)
-       case TIOCGWINSZ:
- 	int st;
- 
-+	acquire_attach_mutex (INFINITE);
- 	st = con.fillin (get_output_handle ());
-+	release_attach_mutex ();
- 	if (st)
- 	  {
- 	    /* *not* the buffer size, the actual screen size... */
-@@ -1301,12 +1317,15 @@ fhandler_console::ioctl (unsigned int cmd, void *arg)
- 	  DWORD n;
- 	  int ret = 0;
- 	  INPUT_RECORD inp[INREC_SIZE];
-+	  acquire_attach_mutex (INFINITE);
- 	  if (!PeekConsoleInputW (get_handle (), inp, INREC_SIZE, &n))
- 	    {
- 	      set_errno (EINVAL);
-+	      release_attach_mutex ();
- 	      release_output_mutex ();
- 	      return -1;
- 	    }
-+	  release_attach_mutex ();
- 	  bool saw_eol = false;
- 	  for (DWORD i=0; i<n; i++)
- 	    if (inp[i].EventType == KEY_EVENT &&
-@@ -1357,11 +1376,13 @@ fhandler_console::tcflush (int queue)
-   if (queue == TCIFLUSH
-       || queue == TCIOFLUSH)
-     {
-+      acquire_attach_mutex (INFINITE);
-       if (!FlushConsoleInputBuffer (get_handle ()))
- 	{
- 	  __seterrno ();
- 	  res = -1;
- 	}
-+      release_attach_mutex ();
-     }
-   return res;
- }
-@@ -1375,12 +1396,14 @@ fhandler_console::output_tcsetattr (int, struct termios const *t)
-   DWORD flags = ENABLE_PROCESSED_OUTPUT | ENABLE_WRAP_AT_EOL_OUTPUT;
- 
-   DWORD oflags;
-+  acquire_attach_mutex (INFINITE);
-   GetConsoleMode (get_output_handle (), &oflags);
-   if (wincap.has_con_24bit_colors () && !con_is_legacy
-       && (oflags & ENABLE_VIRTUAL_TERMINAL_PROCESSING))
-     flags |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
- 
-   int res = SetConsoleMode (get_output_handle (), flags) ? 0 : -1;
-+  release_attach_mutex ();
-   if (res)
-     __seterrno_from_win_error (GetLastError ());
-   release_output_mutex ();
-@@ -1398,6 +1421,7 @@ fhandler_console::input_tcsetattr (int, struct termios const *t)
- 
-   DWORD oflags;
- 
-+  acquire_attach_mutex (INFINITE);
-   if (!GetConsoleMode (get_handle (), &oflags))
-     oflags = 0;
-   DWORD flags = 0;
-@@ -1456,6 +1480,7 @@ fhandler_console::input_tcsetattr (int, struct termios const *t)
-       syscall_printf ("%d = tcsetattr(,%p) enable flags %y, c_lflag %y iflag %y",
- 		      res, t, flags, t->c_lflag, t->c_iflag);
-     }
-+  release_attach_mutex ();
- 
-   get_ttyp ()->rstcons (false);
-   release_input_mutex ();
-@@ -1481,6 +1506,7 @@ fhandler_console::tcgetattr (struct termios *t)
- 
-   DWORD flags;
- 
-+  acquire_attach_mutex (INFINITE);
-   if (!GetConsoleMode (get_handle (), &flags))
-     {
-       __seterrno ();
-@@ -1505,6 +1531,7 @@ fhandler_console::tcgetattr (struct termios *t)
-       /* All the output bits we can ignore */
-       res = 0;
-     }
-+  release_attach_mutex ();
-   syscall_printf ("%d = tcgetattr(%p) enable flags %y, t->lflag %y, t->iflag %y",
- 		 res, t, flags, t->c_lflag, t->c_iflag);
-   return res;
+Thanks for testing.
+
+On Fri, 22 Jan 2021 13:20:57 +0100
+Corinna Vinschen wrote:
+> Hi Takashi,
+> 
+> On Jan 22 05:58, Takashi Yano via Cygwin-patches wrote:
+> > The new implementation of pseudo console support by commit bb428520
+> > provides the important advantages, while there also has been several
+> > disadvantages compared to the previous implementation.
+> > 
+> > These patches overturn some of them.
+> > 
+> > The disadvantage:
+> >  1) The cygwin program which calls console API directly does not work.
+> > is supposed to be able to be overcome as well, however, I am not sure
+> > it is worth enough. This will need a lot of hooks for console APIs.
+> > 
+> > Takashi Yano (4):
+> >   Cygwin: pty: Inherit typeahead data between two input pipes.
+> >   Cygwin: pty: Keep code page between non-cygwin apps.
+> >   Cygwin: pty: Make apps using console APIs be able to debug with gdb.
+> >   Cygwin: pty: Allow multiple apps to enable pseudo console
+> >     simultaneously.
+> > 
+> >  winsup/cygwin/fhandler.h      |  15 +-
+> >  winsup/cygwin/fhandler_tty.cc | 805 ++++++++++++++++++++++++++--------
+> >  winsup/cygwin/spawn.cc        | 102 +++--
+> >  winsup/cygwin/tty.cc          |  11 +-
+> >  winsup/cygwin/tty.h           |  18 +-
+> >  5 files changed, 730 insertions(+), 221 deletions(-)
+> > 
+> > -- 
+> > 2.30.0
+> 
+> I found a problem with this patchset.
+> 
+> Try this:
+> 
+>   Start mintty
+> 
+>   $ touch foo
+>   $ attrib +r foo
+>   $ gdb /bin/rm
+>   $ start foo
+> 
+>   At this point, starting rm will take a few seconds.  While GDB is
+>   still working on this, *before* GDB returns to the prompt, type some
+>   keys on keyboard, e. g., "1234".
+> 
+> Without this patchset, you'll see the keys being echoed in mintty, and
+> as soon as GDB returns to the prompt, the keys are copied to GDBs input
+> buffer and the keys you typed show up after the prompt.  This is the
+> expected behaviour.
+> 
+>   (gdb) 1234
+> 
+> With this patchset, the keys are *not* echoed in mintty, and as soon
+> as the GDB prompt returns, the keys are still not visible.
+
+I have fixed this issue. Please try v3 patch set. In v3 patch set,
+pseudo console is not activated for GDB if the app to be debugged
+is cygwin program. Also, for non-cygwin apps, I added the code to
+transfer input when switching occurs between GDB and the debugging
+process.
+
+> Now continue the execution of rm:
+> 
+>   (gdb) c
+>   /usr/bin/rm: remove write-protected regular file 'foo'? 
+> 
+> Without this patchset, I get
+> 
+>   /usr/bin/rm: error closing file
+>   [...]
+>   [Inferior 1 (process 1224) exited with code 01]
+>   (gdb)
+
+This seems to be a bug of cygwin GDB. The cause is that the pgid
+setting for /usr/bin/rm is lost after break. The following patch
+for GDB source resolves the issue. In the following section,
+winpid is passed to getpgid() rather than cygwin pid. Also, winpid
+is passed to other POSIX system calls such as kill() elsewhere. 
+
+I hope the GDB maintainer will check it out.
+
+--- inflow.c.orig	2020-05-24 06:10:29.000000000 +0900
++++ inflow.c	2021-01-23 17:48:27.963609500 +0900
+@@ -364,11 +364,11 @@
+ #ifdef HAVE_TERMIOS_H
+ 	  /* If we can't tell the inferior's actual process group,
+ 	     then restore whatever was the foreground pgrp the last
+ 	     time the inferior was running.  See also comments
+ 	     describing terminal_state::process_group.  */
+-#ifdef HAVE_GETPGID
++#if defined (HAVE_GETPGID) && !defined (__CYGWIN__)
+ 	  result = tcsetpgrp (0, getpgid (inf->pid));
+ #else
+ 	  result = tcsetpgrp (0, tinfo->process_group);
+ #endif
+ 	  if (result == -1)
+
+
+> That's not optimal, apparently.  With this patchset:
+> 
+>   (gdb) c
+>   /usr/bin/rm: remove write-protected regular file 'foo'? 1234
+> 
+> so the keys typed while gdb was starting rm have been saved up and then
+> used as input for rm.  That's not quite right either, is it?
+
+Another undesired behavior of cygwin GDB is that the debugging program
+in pty cannot continue to execute after interrupted by Ctrl-C. If pseudo
+console is activated for the debugging program, it seems to be able to
+do this for some unknown reason.
+
 -- 
-2.30.0
-
+Takashi Yano <takashi.yano@nifty.ne.jp>
