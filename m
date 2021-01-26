@@ -1,39 +1,39 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
- by sourceware.org (Postfix) with ESMTPS id CB4103857C62
- for <cygwin-patches@cygwin.com>; Tue, 26 Jan 2021 11:45:12 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org CB4103857C62
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+ by sourceware.org (Postfix) with ESMTPS id D0AB83AAA0B0
+ for <cygwin-patches@cygwin.com>; Tue, 26 Jan 2021 11:46:21 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org D0AB83AAA0B0
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MAwPZ-1lFgWl3IKX-00BOZG for <cygwin-patches@cygwin.com>; Tue, 26 Jan 2021
- 12:45:10 +0100
+ mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1Mzhzd-1lrGIP2RlJ-00vfrP for <cygwin-patches@cygwin.com>; Tue, 26 Jan 2021
+ 12:46:20 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 57F81A80D7F; Tue, 26 Jan 2021 12:45:10 +0100 (CET)
-Date: Tue, 26 Jan 2021 12:45:10 +0100
+ id C3BA9A80D7F; Tue, 26 Jan 2021 12:46:19 +0100 (CET)
+Date: Tue, 26 Jan 2021 12:46:19 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2 6/8] syscalls.cc: Expose shallow-pathconv unlink_nt
-Message-ID: <20210126114510.GL4393@calimero.vinschen.de>
+Subject: Re: [PATCH v2 7/8] dir.cc: Try unlink_nt first
+Message-ID: <20210126114619.GM4393@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20210115134534.13290-1-ben@wijen.net>
- <20210120161056.77784-7-ben@wijen.net>
+ <20210120161056.77784-8-ben@wijen.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210120161056.77784-7-ben@wijen.net>
-X-Provags-ID: V03:K1:3YJPdULvZvZftL/Cpiy1wUAoUmeMQFJ0D8+r40Iq5y53nlZEAqO
- SWOOJIJECUb5uvV/rNF/XUHQhIlG5KvAj5Bk+kdhV9Zfk4SzNFbwH1Fz2SFyZiHpiGmqJtg
- T7/+c9NxSwqE3b80kKL2LXonqg5m7ANehjsVXs2TFX+a9AfG6mk33jiWzBe86koaQQuSQ6w
- mvL2LoYZqXeHAxjIbbhFw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:vj/xxWHlM9U=:MkvI5CBcw5nI+yFclTHi1E
- H3IiP1cLKCUiaMkCCdcHYNUBNYsh/6e0JB5x4aXusED72I9k2gcFuwqGD4JJcc2ah70ZEMSEQ
- MTrgOn1++mx+65yKaVRfwqXFe7OZ6WTgVR0uhC+OGJQsNIEW7ZYxfx7U9S9h8FEqeRwfpCxGm
- /hdzjI8208OK1zq20UzoPyy0lYT1TyAOm9xdO0LVL8myoFGjLjCTEolANqAWWROW3OqdGjzWM
- hvuqQUUBNFUhf7HbjMm4f1mdUcINTIydl6kcGsxHeCaWqToCbd2ufa9WpS/UQyv0j+lckW+yg
- P35RiN2+HrqzQC5gzDt1jQBIeEC6pND91BGbpHeXXqv87Y3DjBB7T8akc1quq0re+hE6eT3uD
- 2oqyk+JIjzdgpknK/xVStmY8VrbO2HfjS+XQzdTGlrKtRGM9h5eon6ryEKBV0Bu2b2qf7ZZBy
- Xr6JW8TDew==
+In-Reply-To: <20210120161056.77784-8-ben@wijen.net>
+X-Provags-ID: V03:K1:txoZviYnCY/Yvxs6YUlJDuAoGQzDPZ4LSx1SqToVcdG93s0BmyY
+ AtKZnDEzXJnLq/qiYIOxiBfkNhiHuklhcN6+v6/0nvcSucDmhBt0frUSE+hnLdNNpSZJz97
+ 6BZXAFxnOj/eJa3ranIVWgkDnoMDPerUk9coLmUgMk+WNvwvY8sxGoCmrRaZcbpAb4STVWx
+ hHHgIEEy4XgGUUw+m4PTg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Wh7bMNqtGZo=:pCm3dHhNlXhLrK+SL90pU2
+ lqfaSArvJBxO9tJHow7WsniAwETLsPl2xJmh2W7A1LIvMma8nMRjWWRvQEpkKCKco1ZqC9PpB
+ xFvTvvKDpbWsCbkbmQ1zN9pkWZUS7gmbJel8zdwfeqJE62v475RPZxaHQWbz5DpbnBegvF54x
+ j6P6YuPJiH4qRfnHRx4wXg4Vcp6QXTO/CLsbmHHsLFePBQvXLVa688ZP3Vim/Fx5fF8S2wVt4
+ XNBtJ4jjwAIBNKx9KlnSsnEhn5c7IPfNgt2tokq9N2JrlkgQQG5Qmm7YivGSrsGxO/n0OvSA0
+ cTLhXlnNjdnShr3fTEAo15EgNQTgpnI09jeQYgoeS4KxpIt0Wr3d/G6+1f+o0O+8JfDKKURtm
+ tQlDZEHzZy+dYl6d2cYXHFyW0mV9b4gcgkerTC+Tvj5zoej/XYSy0g+naOn5DB4vpo56nfQKB
+ L2P9M+wX7g==
 X-Spam-Status: No, score=-106.9 required=5.0 tests=BAYES_00, GIT_PATCH_0,
  GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
  RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
@@ -52,50 +52,54 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 26 Jan 2021 11:45:14 -0000
+X-List-Received-Date: Tue, 26 Jan 2021 11:46:24 -0000
 
 On Jan 20 17:10, Ben Wijen wrote:
-> Not having to query file information improves unlink speed.
+> Speedup deletion of directories.
 > ---
->  winsup/cygwin/syscalls.cc | 78 ++++++++++++++++++++++++++-------------
->  1 file changed, 52 insertions(+), 26 deletions(-)
+>  winsup/cygwin/dir.cc | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
 > 
-> diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
-> index ab0c4c2d6..b5ab6ac5e 100644
-> --- a/winsup/cygwin/syscalls.cc
-> +++ b/winsup/cygwin/syscalls.cc
-> @@ -1272,6 +1272,28 @@ _unlink_ntpc_ (path_conv& pc, bool shareable)
->    return status;
->  }
+> diff --git a/winsup/cygwin/dir.cc b/winsup/cygwin/dir.cc
+> index 7762557d6..470f83aee 100644
+> --- a/winsup/cygwin/dir.cc
+> +++ b/winsup/cygwin/dir.cc
+> @@ -22,6 +22,8 @@ details. */
+>  #include "cygtls.h"
+>  #include "tls_pbuf.h"
 >  
-> +NTSTATUS
-> +unlink_nt (const char *ourname, ULONG eflags)
-> +{
-> +  uint32_t opt = PC_SYM_NOFOLLOW | PC_SKIP_SYM_CHECK | PC_SKIP_FS_CHECK;
-> +  if (!(eflags & FILE_NON_DIRECTORY_FILE))
-> +    opt &= ~PC_SKIP_FS_CHECK;
+> +extern NTSTATUS unlink_nt (const char *ourname, ULONG eflags);
 > +
-> +  path_conv pc (ourname, opt, NULL);
-> +  if (pc.error || pc.isspecial ())
-> +    return STATUS_CANNOT_DELETE;
-> +
-> +  OBJECT_ATTRIBUTES attr;
-> +  PUNICODE_STRING ntpath = pc.get_nt_native_path ();
-> +  InitializeObjectAttributes(&attr, ntpath, 0, NULL, NULL);
-> +  NTSTATUS status = _unlink_nt (&attr, eflags);
+>  extern "C" int
+>  dirfd (DIR *dir)
+>  {
+> @@ -398,6 +400,14 @@ rmdir (const char *dir)
+>  	  if (msdos && p == dir + 1 && isdrive (dir))
+>  	    p[1] = '\\';
+>  	}
+> +      if (has_dot_last_component (dir, false)) {
+> +        set_errno (EINVAL);
+> +        __leave;
+> +      }
+> +      if (NT_SUCCESS (unlink_nt (dir, FILE_DIRECTORY_FILE))) {
+> +        res = 0;
+> +        __leave;
+> +      }
 
-Sorry again, but I don't see the advantage of not using the intelligence
-already collected in path_conv by neglecting to call the unlink
-variation not using them.  It's also unclear to me, why the new code
-doesn't try_to_bin right away, rather than stomping ahead and falling
-back to the current code for each such file.  In an rm -rf on a file
-hirarchy used by other users, you could end up with a much slower
-operation.
+So what about /dev, /proc, etc?
 
-Wouldn't it make more sense to streamline the existing _unlink_nt?  I
-don't claim it's the most streamlined way to delete files, but at least
-it has documented workarounds for problems encountered on the way,
-already.
+>        if (!(fh = build_fh_name (dir, PC_SYM_NOFOLLOW)))
+>  	__leave;   /* errno already set */;
+>  
+> @@ -408,8 +418,6 @@ rmdir (const char *dir)
+>  	}
+>        else if (!fh->exists ())
+>  	set_errno (ENOENT);
+> -      else if (has_dot_last_component (dir, false))
+> -	set_errno (EINVAL);
+>        else if (!fh->rmdir ())
+>  	res = 0;
+>        delete fh;
 
 
 Corinna
