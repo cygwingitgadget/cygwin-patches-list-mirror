@@ -1,42 +1,42 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
- by sourceware.org (Postfix) with ESMTPS id D0AB83AAA0B0
- for <cygwin-patches@cygwin.com>; Tue, 26 Jan 2021 11:46:21 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org D0AB83AAA0B0
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+ by sourceware.org (Postfix) with ESMTPS id 3D859385480E
+ for <cygwin-patches@cygwin.com>; Tue, 26 Jan 2021 12:15:19 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 3D859385480E
 Received: from calimero.vinschen.de ([24.134.7.25]) by
  mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1Mzhzd-1lrGIP2RlJ-00vfrP for <cygwin-patches@cygwin.com>; Tue, 26 Jan 2021
- 12:46:20 +0100
+ id 1N4yuK-1m5J0j11vQ-010qOD for <cygwin-patches@cygwin.com>; Tue, 26 Jan 2021
+ 13:15:17 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id C3BA9A80D7F; Tue, 26 Jan 2021 12:46:19 +0100 (CET)
-Date: Tue, 26 Jan 2021 12:46:19 +0100
+ id B4EB5A80D7F; Tue, 26 Jan 2021 13:15:16 +0100 (CET)
+Date: Tue, 26 Jan 2021 13:15:16 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2 7/8] dir.cc: Try unlink_nt first
-Message-ID: <20210126114619.GM4393@calimero.vinschen.de>
+Subject: Re: [PATCH v2 8/8] fhandler_disk_file.cc: Use path_conv's IndexNumber
+Message-ID: <20210126121516.GN4393@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
 References: <20210115134534.13290-1-ben@wijen.net>
- <20210120161056.77784-8-ben@wijen.net>
+ <20210120161056.77784-9-ben@wijen.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210120161056.77784-8-ben@wijen.net>
-X-Provags-ID: V03:K1:txoZviYnCY/Yvxs6YUlJDuAoGQzDPZ4LSx1SqToVcdG93s0BmyY
- AtKZnDEzXJnLq/qiYIOxiBfkNhiHuklhcN6+v6/0nvcSucDmhBt0frUSE+hnLdNNpSZJz97
- 6BZXAFxnOj/eJa3ranIVWgkDnoMDPerUk9coLmUgMk+WNvwvY8sxGoCmrRaZcbpAb4STVWx
- hHHgIEEy4XgGUUw+m4PTg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Wh7bMNqtGZo=:pCm3dHhNlXhLrK+SL90pU2
- lqfaSArvJBxO9tJHow7WsniAwETLsPl2xJmh2W7A1LIvMma8nMRjWWRvQEpkKCKco1ZqC9PpB
- xFvTvvKDpbWsCbkbmQ1zN9pkWZUS7gmbJel8zdwfeqJE62v475RPZxaHQWbz5DpbnBegvF54x
- j6P6YuPJiH4qRfnHRx4wXg4Vcp6QXTO/CLsbmHHsLFePBQvXLVa688ZP3Vim/Fx5fF8S2wVt4
- XNBtJ4jjwAIBNKx9KlnSsnEhn5c7IPfNgt2tokq9N2JrlkgQQG5Qmm7YivGSrsGxO/n0OvSA0
- cTLhXlnNjdnShr3fTEAo15EgNQTgpnI09jeQYgoeS4KxpIt0Wr3d/G6+1f+o0O+8JfDKKURtm
- tQlDZEHzZy+dYl6d2cYXHFyW0mV9b4gcgkerTC+Tvj5zoej/XYSy0g+naOn5DB4vpo56nfQKB
- L2P9M+wX7g==
-X-Spam-Status: No, score=-106.9 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
- RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+In-Reply-To: <20210120161056.77784-9-ben@wijen.net>
+X-Provags-ID: V03:K1:nmOx8o8WJK64VkK2N56rvACPL8ZOHGCfR53CRfB8Qj4IpNCC+v0
+ C+vswOn/mhuN5LKXfLAcrJD1K4DPDEbKi6/E54Z/bbva7B8NfweTQgYHRoGbEi0ufUTOxkn
+ 3O2pDoGgHy8GEsb0p5dF9EurRduz5lHI0kARpLBq0DkTURNUIqZCOlvyjLs48aYTTy2G/ba
+ dLMB49+ZUHaUG8oOl4haA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:c56/dszOP54=:l37a/iljoNcSHi+L/1ufxy
+ kkII8yk7LXA91Xn6MB2pbaHBsRpahMqQYU5JoC8wCQUCwduiFo0rUtSDD9zLrCGhxkhtYMuKt
+ Vx7ExyzlNWLWkIPfQm3N7JA7YQOlsodQ/Iiy16K9f8cUgKzdIryJnmwXhYNJ3fpHZ7RcvUR6q
+ vrMX4jGOr0awugKkP3vdFCYQ0APEmGdcrr52pyJyNgSCLd91OJ53yqt1ejehevIy18+a8JVZx
+ Kk59IdJpq/YD7Y+a+EVB+08gBAf95GDeoh9n8k2LfICw2Td1ZPbNnznhWWHP0SudfwoFBNV7b
+ /i+SrO580aidkS0O8pnCylyT09B8imFPyzLsTux3ZaiHVdSx+9wgbZwruukqR+fNneNjFRUek
+ /4ahxZUE6s+o1+JfWOWtbm/HCbcH59a7ldOFO1rsqFCbx0rp/GklWKns8YEYaTMUgX03QQJUH
+ i/e4vthbgA==
+X-Spam-Status: No, score=-107.2 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
+ RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -52,54 +52,50 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 26 Jan 2021 11:46:24 -0000
+X-List-Received-Date: Tue, 26 Jan 2021 12:15:20 -0000
 
 On Jan 20 17:10, Ben Wijen wrote:
-> Speedup deletion of directories.
-> ---
->  winsup/cygwin/dir.cc | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
+> path_conv already knows the IndexNumber, so just use it.
+
+Yeah, this looks like a vestige from before the time we switched to
+FILE_ALL_INFORMATION.
+
 > 
-> diff --git a/winsup/cygwin/dir.cc b/winsup/cygwin/dir.cc
-> index 7762557d6..470f83aee 100644
-> --- a/winsup/cygwin/dir.cc
-> +++ b/winsup/cygwin/dir.cc
-> @@ -22,6 +22,8 @@ details. */
->  #include "cygtls.h"
->  #include "tls_pbuf.h"
->  
-> +extern NTSTATUS unlink_nt (const char *ourname, ULONG eflags);
-> +
->  extern "C" int
->  dirfd (DIR *dir)
+> This commit also fixes the potential handle leak.
+> ---
+>  winsup/cygwin/fhandler_disk_file.cc | 24 ++++++------------------
+>  1 file changed, 6 insertions(+), 18 deletions(-)
+> 
+> diff --git a/winsup/cygwin/fhandler_disk_file.cc b/winsup/cygwin/fhandler_disk_file.cc
+> index fe04f832b..39f914a59 100644
+> --- a/winsup/cygwin/fhandler_disk_file.cc
+> +++ b/winsup/cygwin/fhandler_disk_file.cc
+> @@ -2029,9 +2029,6 @@ readdir_get_ino (const char *path, bool dot_dot)
 >  {
-> @@ -398,6 +400,14 @@ rmdir (const char *dir)
->  	  if (msdos && p == dir + 1 && isdrive (dir))
->  	    p[1] = '\\';
->  	}
-> +      if (has_dot_last_component (dir, false)) {
-> +        set_errno (EINVAL);
-> +        __leave;
-> +      }
-> +      if (NT_SUCCESS (unlink_nt (dir, FILE_DIRECTORY_FILE))) {
-> +        res = 0;
-> +        __leave;
-> +      }
-
-So what about /dev, /proc, etc?
-
->        if (!(fh = build_fh_name (dir, PC_SYM_NOFOLLOW)))
->  	__leave;   /* errno already set */;
+>    char *fname;
+>    struct stat st;
+> -  HANDLE hdl;
+> -  OBJECT_ATTRIBUTES attr;
+> -  IO_STATUS_BLOCK io;
+>    ino_t ino = 0;
 >  
-> @@ -408,8 +418,6 @@ rmdir (const char *dir)
->  	}
->        else if (!fh->exists ())
->  	set_errno (ENOENT);
-> -      else if (has_dot_last_component (dir, false))
-> -	set_errno (EINVAL);
->        else if (!fh->rmdir ())
->  	res = 0;
->        delete fh;
+>    if (dot_dot)
+> @@ -2044,26 +2041,17 @@ readdir_get_ino (const char *path, bool dot_dot)
+>        path = fname;
+>      }
+>    path_conv pc (path, PC_SYM_NOFOLLOW | PC_POSIX | PC_KEEP_HANDLE);
+
+Given that this function doesn't need a handle anymore, PC_KEEP_HANDLE
+can go away.
+
+> -  if (pc.isspecial ())
+> +  if (pc.isgood_inode (pc.fai ()->InternalInformation.IndexNumber.QuadPart))
+> +    ino = pc.fai ()->InternalInformation.IndexNumber.QuadPart;
+
+This ignores the fact that the file could be on an NFS filesystem.
+Rather than using pc.fai ()->InternalInformation.IndexNumber.QuadPart,
+this call should use pc.get_ino ().
 
 
+Thanks,
 Corinna
