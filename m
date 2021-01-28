@@ -1,42 +1,99 @@
-Return-Path: <brian.inglis@systematicsw.ab.ca>
-Received: from smtp-out-no.shaw.ca (smtp-out-no.shaw.ca [64.59.134.13])
- by sourceware.org (Postfix) with ESMTPS id D94FC3861812
- for <cygwin-patches@cygwin.com>; Thu, 28 Jan 2021 18:45:48 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org D94FC3861812
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=SystematicSw.ab.ca
-Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
-Received: from [192.168.1.104] ([24.64.172.44]) by shaw.ca with ESMTP
- id 5CIclJdyieHr95CIdlF1AM; Thu, 28 Jan 2021 11:45:48 -0700
-X-Authority-Analysis: v=2.4 cv=Yq/K+6UX c=1 sm=1 tr=0 ts=6013065c
- a=kiZT5GMN3KAWqtYcXc+/4Q==:117 a=kiZT5GMN3KAWqtYcXc+/4Q==:17
- a=IkcTkHD0fZMA:10 a=CCpqsmhAAAAA:8 a=RPk8hShqe2G5D_XDKDcA:9 a=QEXdDO2ut3YA:10
- a=ul9cdbp4aOFLsgKbc677:22
-Reply-To: cygwin-patches@cygwin.com
+Return-Path: <kbrown@cornell.edu>
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com
+ (mail-bn7nam10on2123.outbound.protection.outlook.com [40.107.92.123])
+ by sourceware.org (Postfix) with ESMTPS id 7649F385783D
+ for <cygwin-patches@cygwin.com>; Thu, 28 Jan 2021 20:33:43 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 7649F385783D
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=e8h+Vwaj39XAh9Uo2BAH6L6trMwNc9L1AVAsdSfBs/I/SozHNbnieZxL6fluWQUvUMSkYxvWx+HqIgNPORfDCa4X4NNqak3eahbAkkJDEA3nK8YDugWiEf2sJXv/WCjm2Pkj5famCASVGaeuoMizLK5S14zPj8oF3H1fwbkAfCnPjKIooIk27G7BpdmeOsk+cF0QpPZaYrdubQ3bFoxlmJ4ss2ExyUWVa9EJT4hsOi4yoIWqfYlqvYxg32dIE9uwSWu6DqaF7iOuBteRbzLbVNnYtPuFnbDNTTZMOo5gtpfkVbu08i6iJXS53R4phx5lTxPRm4Liry6Q9UEeroNfVg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XvjF/jfsak1Z32RyWfHGOqlhrXfkCzgnwrMv9lUel/c=;
+ b=T3uS/MJxOdU9dF1d5v7Q6SDggAFapoSbddr0LEd2Cjy+9BOZNNKFQT8kPsE/E/DowgmPPHkt2O3cSgm3KOz33dGFg1W8AsQYeXznbGjCp4LCJSuc669uYg4e6mCMyF3b9YuAO3DGirNR74RgrzjaiihZA7L2ZjBUmdHGgnWrFLgej8HemjOPpWpby6T81CtE2QK14S34MZMDtT0ioZXFJ5TLrHtJZAsmpETWhNuL7i0IYJZxp/7xOvKd/FbOu0PmgxzKOWH1bz4vuPzPiIK1LTTPZ55NMHULCNP4h9CUslbQTLDhY2R5zV+hzXgFsn08rfLqdNBYo8cwdxnTWHyJsQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cornell.edu; dmarc=pass action=none header.from=cornell.edu;
+ dkim=pass header.d=cornell.edu; arc=none
+Received: from BN7PR04MB4388.namprd04.prod.outlook.com (2603:10b6:406:f8::19)
+ by BN6PR04MB0435.namprd04.prod.outlook.com (2603:10b6:404:92::15)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3805.17; Thu, 28 Jan
+ 2021 20:33:42 +0000
+Received: from BN7PR04MB4388.namprd04.prod.outlook.com
+ ([fe80::f071:e174:ef12:375c]) by BN7PR04MB4388.namprd04.prod.outlook.com
+ ([fe80::f071:e174:ef12:375c%6]) with mapi id 15.20.3784.017; Thu, 28 Jan 2021
+ 20:33:41 +0000
+Subject: Re: [PATCH] Cygwin: getdtablesize: always return OPEN_MAX_MAX
 To: cygwin-patches@cygwin.com
-References: <CAGEXLhUUtV-kKxO-jQo4427R=N=Uo1aT_LrHGpc1r55umbb92w@mail.gmail.com>
- <20210128100802.GW4393@calimero.vinschen.de>
- <20210128101429.GX4393@calimero.vinschen.de>
- <6c0a481b-b6fb-0a7e-66ef-36e1941397bb@SystematicSw.ab.ca>
-From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
-Organization: Systematic Software
-Subject: Re: fhandler_serial.cc: MARK and SPACE parity for serial port
-Message-ID: <a4cffe34-479b-d787-cc28-4bc03121304e@SystematicSw.ab.ca>
-Date: Thu, 28 Jan 2021 11:45:46 -0700
+References: <20210128025150.46708-1-kbrown@cornell.edu>
+ <20210128102029.GY4393@calimero.vinschen.de>
+ <151a4199-92f2-43aa-dd91-5d86c2e1d3c6@cornell.edu>
+ <20210128160749.GB4393@calimero.vinschen.de>
+From: Ken Brown <kbrown@cornell.edu>
+Message-ID: <9b430aa5-1033-ebef-b002-b1523355271c@cornell.edu>
+Date: Thu, 28 Jan 2021 15:33:39 -0500
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
  Thunderbird/78.6.1
+In-Reply-To: <20210128160749.GB4393@calimero.vinschen.de>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [65.112.130.200]
+X-ClientProxiedBy: BN6PR11CA0056.namprd11.prod.outlook.com
+ (2603:10b6:404:f7::18) To BN7PR04MB4388.namprd04.prod.outlook.com
+ (2603:10b6:406:f8::19)
 MIME-Version: 1.0
-In-Reply-To: <6c0a481b-b6fb-0a7e-66ef-36e1941397bb@SystematicSw.ab.ca>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-CA
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfJksMkepMy/mb4uunDD2Iu/6BkWGhZhx29FZA9CNOzLKdUR/hdoNLFZ7NnVwzLcMInzk2U15g03BFPetBHQEXRGVpepZNvYsh5KG3qJvmb9XzQSvWPrn
- J+oBdaT7TS0zw5p2IXWXO4c9/KeaD3ZTijf2fK11chFWMNYdQ3y5pZoC5LrMBC6yA0gEWAYhKqqCyjE+jpcUkEBwHD4thDgKoMU=
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00, BODY_8BITS,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_DNSWL_LOW,
- RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_NONE,
- TXREP autolearn=no autolearn_force=no version=3.4.2
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [10.13.22.4] (65.112.130.200) by
+ BN6PR11CA0056.namprd11.prod.outlook.com (2603:10b6:404:f7::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.3805.17 via Frontend Transport; Thu, 28 Jan 2021 20:33:41 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ad16ac5a-1599-4d7f-10b1-08d8c3cc0010
+X-MS-TrafficTypeDiagnostic: BN6PR04MB0435:
+X-Microsoft-Antispam-PRVS: <BN6PR04MB043524492C8244F21F982503D8BA9@BN6PR04MB0435.namprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WuOgRWFIT6BJX4XNHz200Mmo26Z6PxrAaumGoddCGDiSAWhcLvf1uZswiWILjqdMSWgNkoxH87ehD7mLwekxg3lJ7JiTwsYc2wSYnPri7YQWhLDcnQD4Jtk9/OHYEmGVi7AUhDPKGXdVDiyC04EjSabaP1L95spX9NmY9PK2YKgWt1N3/vFjwk9N2ztKd1dhy/6VN1nD/MZRvuzoFYcwTHZAJBdblF+VgK3tCpKQ/zeQPwoGjfkJSN8c8AAbQo2y+9aM926IyTlrDWXgYXZ6aWvzxqF6QNQT36fpMwS4ko9SVIqBTQVq8VAYi2CIBevf5eRCEAlrndTh8m7Di2srdUESlk5ykj4W4mweI0V0Na5Jfu5aM05XIFixi0kAFSc6xGTanHcIctfaECBBIMHdcR1YeInOiclHC/JCpADgFGwvFpuE+GCyXRakIAM0jA57P3giRpo2+zofZC7TPLqLRAhm6P4i5R1Eb7ShYG1xNuZ2/2es84ra2tc9xS26qs3bdeBt23z6BB0HXUMnOje7ljtg+vvVw/Gsm9OoZdK6b6gXp6fEyCVtT/gdqw7U03nLEXyiB2TdZnd1XKYAQCbyFCXtbZA1qwFzI/5IgRASYzs=
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:BN7PR04MB4388.namprd04.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(4636009)(396003)(136003)(376002)(366004)(39860400002)(346002)(8676002)(83380400001)(31696002)(6916009)(2906002)(6486002)(8936002)(36756003)(16576012)(66946007)(26005)(86362001)(52116002)(956004)(786003)(66476007)(66556008)(2616005)(316002)(478600001)(186003)(75432002)(16526019)(5660300002)(53546011)(31686004)(43740500002)(45980500001);
+ DIR:OUT; SFP:1102; 
+X-MS-Exchange-AntiSpam-MessageData: =?Windows-1252?Q?B33JVI7ki/8cIcIbxi+Pnq3p5NQJPOn0CW81v+fPV+oqesMNXdY0Ff0/?=
+ =?Windows-1252?Q?OqddGNAF7KTS/qeERYgpUCS/P6+ejg/+79orvQVNq/DwpMYYNo/LzZVI?=
+ =?Windows-1252?Q?BI0ZCTn4sq5SO0CKKgpEpSVFZIyB0HDCQa43fG5iHAfV19Ec8dREHKZP?=
+ =?Windows-1252?Q?+0/WQeUvOFOSXtt9UqR2o8FkJtA9WDcoR3IVQJzp+9Fni7olY6v1GGiz?=
+ =?Windows-1252?Q?TIAOCnb02h8FA3kEB9pkR3gCQ3M5Lj3yl5qVDS7GPutZe6nGhPmr9ibA?=
+ =?Windows-1252?Q?kZiRfUOHU81Rki6cYCiEARI94xczORObjmmJ0RRzaqjuZG6l/EPv7VdV?=
+ =?Windows-1252?Q?wPRg2IpCBjYruGjD2zka7zA8Wd8YyqI3hltJCHgvoFrmKqnulozMH7ZE?=
+ =?Windows-1252?Q?KJQdPOzAZorq7Iy6/Lvc0zhD9+ORlATaMkldPKUPtQeY87TIzW/LpS/c?=
+ =?Windows-1252?Q?wQnLi8CzUDNwDfWqa3VBuRF1nbHNXR/nNtlmZY0DJMtyt5LvukCUVuC1?=
+ =?Windows-1252?Q?T8jlr0kJwPmauwiFHU651AogoSbVePF9rGLNRN1XROyGbV5WmUJfkZJB?=
+ =?Windows-1252?Q?ARTiyqcBplgKQW8aB1xY61KsfXUdSch/4V7hijrgSzAnovLcmLUZGbS/?=
+ =?Windows-1252?Q?1WqOhoIUNb9mBDeNBoepwk9LnC6GzEPTewJ0VtNDm5o9x1l22/U7WQnW?=
+ =?Windows-1252?Q?QQDppDci9Tcqmv9owsyQughIoiPbVgJsW7BKBnOdo4e/ld0vIVoYrHsH?=
+ =?Windows-1252?Q?/4klC5seE3ndQsxerAsAV8c/Yo0GYX/huBJ+GDERoD140wOXptEXhfW9?=
+ =?Windows-1252?Q?GYBSIDTkBUI1YjBYgdftb5cNI4NPn9sBZ+ykZ4INfYKD+AyMpFekGsZS?=
+ =?Windows-1252?Q?k/6ZfcMzO4IUqrCq8TQ78LNWXxX4whxu/b8tcTqq3g25vE7nuzKT4HDV?=
+ =?Windows-1252?Q?N/Hb2J7MM5YCs1O0fZ3/2KKqvnE86nyBNfPqsfWcj6xhw9pZYCHUkU/Y?=
+ =?Windows-1252?Q?FSXlC1i0x+e9EGKRFp6/+6ju/9uIjuu89zuEK9WJUcgw9jr/TsTdn97B?=
+ =?Windows-1252?Q?QgHi1KL1qHkCBK+h/cBXZWeOJbKyc0SHx4jYv/Z2h+OhucU1Gy5u9eJ5?=
+ =?Windows-1252?Q?6FYqHB+L/pASvUrzgL8jqK80?=
+X-OriginatorOrg: cornell.edu
+X-MS-Exchange-CrossTenant-Network-Message-Id: ad16ac5a-1599-4d7f-10b1-08d8c3cc0010
+X-MS-Exchange-CrossTenant-AuthSource: BN7PR04MB4388.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jan 2021 20:33:41.6651 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5d7e4366-1b9b-45cf-8e79-b14b27df46e1
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 8PfADPTnXxCWQuXohsD4uJImOCNTQHV6awTVE64cvu4Enr2t8p9EWe04uHExSfbaNhrE7C/r/7RKhzB8Srlbng==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR04MB0435
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, MSGID_FROM_MTA_HEADER,
+ NICE_REPLY_A, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_PASS, SPF_PASS,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -51,110 +108,62 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 28 Jan 2021 18:45:50 -0000
+X-List-Received-Date: Thu, 28 Jan 2021 20:33:45 -0000
 
-On 2021-01-28 10:17, Brian Inglis wrote:
-> On 2021-01-28 03:14, Corinna Vinschen via Cygwin-patches wrote:
->> On Jan 28 11:08, Corinna Vinschen via Cygwin-patches wrote:
->>> Hi Marek,
->>> thanks for the patch.  [...]
->>>> index 17e8d83a3..933851c21 100644
->>>> --- a/winsup/cygwin/include/sys/termios.h
->>>> +++ b/winsup/cygwin/include/sys/termios.h
->>>> @@ -185,6 +185,7 @@ POSIX commands */
->>>>   #define PARODD 0x00200
->>>>   #define HUPCL 0x00400
->>>>   #define CLOCAL 0x00800
->>>> +#define CMSPAR  0x40000000 /* Mark or space (stick) parity.  */
+On 1/28/2021 11:07 AM, Corinna Vinschen via Cygwin-patches wrote:
+> On Jan 28 08:42, Ken Brown via Cygwin-patches wrote:
+>> On 1/28/2021 5:20 AM, Corinna Vinschen via Cygwin-patches wrote:
+>>> On Jan 27 21:51, Ken Brown via Cygwin-patches wrote:
+>>>> According to the Linux man page for getdtablesize(3), the latter is
+>>>> supposed to return "the maximum number of files a process can have
+>>>> open, one more than the largest possible value for a file descriptor."
+>>>> The constant OPEN_MAX_MAX is the only limit enforced by Cygwin, so we
+>>>> now return that.
+>>>>
+>>>> Previously getdtablesize returned the current size of cygheap->fdtab,
+>>>> Cygwin's internal file descriptor table.  But this is a dynamically
+>>>> growing table, and its current size does not reflect an actual limit
+>>>> on the number of open files.
+>>>>
+>>>> With this change, gnulib now reports that getdtablesize and
+>>>> fcntl(F_DUPFD) work on Cygwin.  Packages like GNU tar that use the
+>>>> corresponding gnulib modules will no longer use gnulib replacements on
+>>>> Cygwin.
+>>>> ---
+>>>>    winsup/cygwin/syscalls.cc | 2 +-
+>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
+>>>> index 5da05b18a..1f16d54b9 100644
+>>>> --- a/winsup/cygwin/syscalls.cc
+>>>> +++ b/winsup/cygwin/syscalls.cc
+>>>> @@ -2887,7 +2887,7 @@ setdtablesize (int size)
+>>>>    extern "C" int
+>>>>    getdtablesize ()
+>>>>    {
+>>>> -  return cygheap->fdtab.size;
+>>>> +  return OPEN_MAX_MAX;
+>>>>    }
+>>>
+>>> getdtablesize is used internally, too.  After this change, the values
+>>> returned by sysconf and getrlimit should be revisited as well.
 >>
->> Why did you choose such a big value here?  Wouldn't it be nicer just to
->> follow up with
->>
->>    #define CMSPAR 0x10000
->>
->> or am I missing something here?
+>> They will now return OPEN_MAX_MAX, as I think they should.  The only
+>> question in my mind is whether to simplify the code by removing the calls to
+>> getdtablesize, something like this (untested):
 > 
-> GLIBC/Linux compatibility:
-> https://sourceware.org/git/?p=glibc.git&a=search&h=HEAD&st=grep&s=define+CMSPAR
-> 
-> sysdeps/unix/sysv/linux/alpha/bits/termios-baud.h
->    23 #ifdef __USE_MISC
->    24 # define CBAUD  0000037
->    25 # define CBAUDEX 0000000
->    26 # define CMSPAR   010000000000          /* mark or space (stick) parity */
->    27 # define CRTSCTS  020000000000          /* flow control */
->    28 #endif
-> sysdeps/unix/sysv/linux/bits/termios-baud.h
->    23 #ifdef __USE_MISC
->    24 # define CBAUD   000000010017 /* Baud speed mask (not in POSIX).  */
->    25 # define CBAUDEX 000000010000 /* Extra baud speed mask, included in CBAUD.
->    26                                  (not in POSIX).  */
->    27 # define CIBAUD  002003600000 /* Input baud rate (not used).  */
->    28 # define CMSPAR  010000000000 /* Mark or space (stick) parity.  */
->    29 # define CRTSCTS 020000000000 /* Flow control.  */
->    30 #endif
-> sysdeps/unix/sysv/linux/powerpc/bits/termios-baud.h
->    23 #ifdef __USE_MISC
->    24 # define CBAUD  0000377
->    25 # define CBAUDEX 0000020
->    26 # define CMSPAR   010000000000          /* mark or space (stick) parity */
->    27 # define CRTSCTS  020000000000          /* flow control */
->    28 #endif
-> sysdeps/unix/sysv/linux/sparc/bits/termios-baud.h
->    23 #ifdef __USE_MISC
->    24 # define CBAUD   0x0000100f
->    25 # define CBAUDEX 0x00001000
->    26 # define CIBAUD  0x100f0000     /* input baud rate (not used) */
->    27 # define CMSPAR  0x40000000     /* mark or space (stick) parity */
->    28 # define CRTSCTS 0x80000000     /* flow control */
->    29 #endif
-> 
->> Also, on second thought I think CMSPAR should follow CRTSCTS, a few
->> lines below, because of its numerical value higher than CRTSCTS.
-> 
-> GLIBC/Linux normally has it lower:
-> $ grep -C2 'define\s\+CMSPAR' /usr/include/**/*.h
-> /usr/include/asm-generic/termbits.h:
-> #define  B4000000 0010017
-> #define CIBAUD      002003600000    /* input baud rate */
-> #define CMSPAR      010000000000    /* mark or space (stick) parity */
-> #define CRTSCTS      020000000000    /* flow control */
-> 
-> -- 
-> /usr/include/i386-linux-gnu/bits/termios.h:
-> #ifdef __USE_MISC
-> # define CIBAUD      002003600000        /* input baud rate (not used) */
-> # define CMSPAR   010000000000        /* mark or space (stick) parity */
-> # define CRTSCTS  020000000000        /* flow control */
-> #endif
+> But then again, what happens with OPEN_MAX in limits.h?  Linux removed
+> it entirely.  Given we have such a limit and it's not flexible as on
+> Linux, should we go ahead, drop OPEN_MAX_MAX entirely and define
+> OPEN_MAX as 3200?
 
-Linux may have inherited this from early Unix, UART, or serial I/O mux docs as 
-they use octal, support split input/output speeds, are 16 bit aligned, and some 
-of the fields are direct from UART register docs:
+Makes sense to me.
 
-  3:0  output baud rate enum
-  6:4  output data and stop bit lengths in UART line control register low bits
-11:7  output parity and other control and/or status
-12    output baud rate high speed extension
-15:13 unused
-19:16 input baud rate enum
-22:20 input data and stop bit lengths in UART line control register low bits
-27:23 input parity and other control and/or status
-28    input baud rate high speed extension
-29    unused
-30    mark or space (stick) parity
-31    flow control
+> One problem is that there are some applications in the wild which run
+> loops up to either sysconf(_SC_OPEN_MAX) or OPEN_MAX to handle open
+> descriptors.  tcsh is one of them.  It may slow done tcsh quite a bit
+> if the loop runs to 3200 now every time.
 
-Cygwin currently supports only up to B3000000 0x100f and cannot easily support:
+I don't use tcsh.  Is it easy to test this?
 
-#define  B3500000 0010016
-#define  B4000000 0010017
-
-as bit 3 is already and differently used.
-
--- 
-Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
-
-This email may be disturbing to some readers as it contains
-too much technical detail. Reader discretion is advised.
-[Data in binary units and prefixes, physical quantities in SI.]
+Ken
