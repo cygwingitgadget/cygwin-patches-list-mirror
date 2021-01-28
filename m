@@ -1,39 +1,38 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
- by sourceware.org (Postfix) with ESMTPS id D1FDE398E430
- for <cygwin-patches@cygwin.com>; Thu, 28 Jan 2021 09:41:03 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org D1FDE398E430
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+ by sourceware.org (Postfix) with ESMTPS id A73DB385042E
+ for <cygwin-patches@cygwin.com>; Thu, 28 Jan 2021 10:08:05 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org A73DB385042E
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1MVe9i-1lWep01QKi-00RcF5 for <cygwin-patches@cygwin.com>; Thu, 28 Jan 2021
- 10:41:02 +0100
+ mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MCska-1lDtvG3K7s-008shP for <cygwin-patches@cygwin.com>; Thu, 28 Jan 2021
+ 11:08:02 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 463A8A80D85; Thu, 28 Jan 2021 10:41:01 +0100 (CET)
-Date: Thu, 28 Jan 2021 10:41:01 +0100
+ id 4E57AA80D85; Thu, 28 Jan 2021 11:08:02 +0100 (CET)
+Date: Thu, 28 Jan 2021 11:08:02 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2] Cygwin: fchmodat: add limited support for
- AT_SYMLINK_NOFOLLOW
-Message-ID: <20210128094101.GV4393@calimero.vinschen.de>
+Subject: Re: fhandler_serial.cc: MARK and SPACE parity for serial port
+Message-ID: <20210128100802.GW4393@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20210127185348.44805-1-kbrown@cornell.edu>
+References: <CAGEXLhUUtV-kKxO-jQo4427R=N=Uo1aT_LrHGpc1r55umbb92w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210127185348.44805-1-kbrown@cornell.edu>
-X-Provags-ID: V03:K1:URlDLQBX4FrjkUZHvoXiAiMYLer9FcuVS9vyuCpPKW2IoDlCzfj
- aKZlwlOFNdSN6hmPY8aQicj6tzjn/WyTbYZVFAjZjVg02eTGt1W+W7foGWm46XXNVOKn3gr
- CKmnHH54foHAnhfXmnszjPZrKiS+B6bRCpmwPwjErwS7QBsHvhrRmMkgn2jBA251zuLjoRl
- cASJ65/BmvWlWpqjWc31A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:k4s8bbsezq0=:qUGw56c4vb1f2JCTKUXjAI
- 7EOu0+l44mTMBqw9O7uKqoP5ZSJyA3JEAkAWl/ahTaWMqivkh/lvZOzj495fpLwmu/ER+Nis5
- djfwBQothPf0y8N6eNLr0qRqh2kALGyb5SWj0JW+a1rnhrLK+1khhoyrpo3gPC+Zk+Yg6PGm6
- OMrUOQUMN3haj0q/2jUeilRwS6hlsiOc0KO2FAuhSBH+wOBR3LtDoXEyKJE/AJyXlJg3fXiOZ
- xVUAyvSRy5YGth2CWVIVeLdihm2NtCszJNT/JtkXoF8TMNSk0mf1O11sk/wIhkJ/nz9CBMcS2
- vV3PR2qKiEPPbIXUutkFFFVZGOU/aGreeyc6+I4fVmW3LPQznfDOWVH3RBlFMNMzR4yPac+z1
- lkSBCWfCRpnFBcJSJgk/bDt2Z/lrCt1NIqYRqbX9VBUdPgtDFw6wIH6ygOc/qBBG3O9Q9W7XL
- UeHQfZDYpw==
+In-Reply-To: <CAGEXLhUUtV-kKxO-jQo4427R=N=Uo1aT_LrHGpc1r55umbb92w@mail.gmail.com>
+X-Provags-ID: V03:K1:TMqS38yUPDcdrAJqnwT/K0HkfCFqNHbaPFjopUkCjvMc920UnZm
+ 5PA50ZM/e8rWDiftCcxcnG6lkM1KoX1AR2Qdj3Vgm+qh8ZqmpMHYEur80bXgwN3EN1OwUta
+ Gx2UlYqAzhJ7Za8jfZ0OOyO9g8v5GSihCdhJw7rPyq2wcSog2Ni5pzInmdzPQvaoBn38Rh+
+ aD/td3CLr54fuodtGM+0Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:CeDmnHQwNTw=:5pDEzjP523SLzRklG/UDHc
+ oR3XSpLNg8VD/BqzGR4NJP7VluIPe5OgoOsH716PMxojeEWVGBbRXiKxgZVp3u9bzkLhq9/aa
+ R3s9j3kBEBZKIfdjpxQrO3vSC5tHfEVgxjDV+8EU//g/W0xZnS/g5ftqyzXnRjTAuXOE5hxZS
+ 0/SO01t8mvnLk31GpjMZg1baxEOco9niKNmyN4v1Wm3A+qf7M5TIRhsAAHerq1rAHY0lEIQzf
+ S06KV2oKQtdTyrCAYdRSCN+yl+/wBBOYGHKMp9AsPY5MOUtnubr+gZLeiKRUnf08uhXRwNlED
+ ISFmZeIVTNiv6CyU3/JgjWidN/yoSC34gw1T3BVN7CpGXeyJcDuWUo4xu9CpDVy4PIGLgmT5Y
+ TDh68Hn+M4brMDsUwzWlxB73o71gDsX/mq+44Ctjrc0Q5nZYch0mMbh6VNzv37NCJOuAnut7Q
+ 116Z+jKqug==
 X-Spam-Status: No, score=-107.0 required=5.0 tests=BAYES_00, GIT_PATCH_0,
  GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
  RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
@@ -52,68 +51,99 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 28 Jan 2021 09:41:05 -0000
+X-List-Received-Date: Thu, 28 Jan 2021 10:08:07 -0000
 
-On Jan 27 13:53, Ken Brown via Cygwin-patches wrote:
-> Allow fchmodat with the AT_SYMLINK_NOFOLLOW flag to succeed on
-> non-symlinks.  Previously it always failed, as it does on Linux.  But
-> POSIX permits it to succeed on non-symlinks even if it fails on
-> symlinks.
+Hi Marek,
+
+thanks for the patch.  This is a patch adding functionality so it's not
+trivial.  Would you mind to express your willingness to put this patch
+as well as further patches under 2-clause BSD license per the
+"Before you get started" section of https://cygwin.com/contrib.html?
+
+A few minor problems with this patch.
+
+First of all, your MUA apparently broke the inline patch.  There are
+line breaks in the patch, unexpected by git am, and the spacing in the
+termios.h hunk is all wrong, see below.
+
+If you can't change that in your MUA, please attach your patches as
+plain text attachements, that usually helps.
+
+On Jan 27 21:30, Marek Smetana via Cygwin-patches wrote:
+> Hi,
 > 
-> The reason for following POSIX rather than Linux is to make gnulib
-> report that fchmodat works on Cygwin.  This improves the efficiency of
-> packages like GNU tar that use gnulib's fchmodat module.  Previously
-> such packages would use a gnulib replacement for fchmodat on Cygwin.
+> This patch add MARK and SPACE parity support to serial port
+> 
 > ---
->  winsup/cygwin/syscalls.cc | 20 +++++++++++++++-----
->  1 file changed, 15 insertions(+), 5 deletions(-)
+>  winsup/cygwin/fhandler_serial.cc    | 9 ++++++++-
+>  winsup/cygwin/include/sys/termios.h | 1 +
+>  2 files changed, 9 insertions(+), 1 deletion(-)
 > 
-> diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
-> index 4cc8d07f5..5da05b18a 100644
-> --- a/winsup/cygwin/syscalls.cc
-> +++ b/winsup/cygwin/syscalls.cc
-> @@ -4787,17 +4787,27 @@ fchmodat (int dirfd, const char *pathname, mode_t mode, int flags)
->    tmp_pathbuf tp;
->    __try
->      {
-> -      if (flags)
-> +      if (flags & ~AT_SYMLINK_NOFOLLOW)
->  	{
-> -	  /* BSD has lchmod, but Linux does not.  POSIX says
-> -	     AT_SYMLINK_NOFOLLOW is allowed to fail on symlinks; but Linux
-> -	     blindly fails even for non-symlinks.  */
-> -	  set_errno ((flags & ~AT_SYMLINK_NOFOLLOW) ? EINVAL : EOPNOTSUPP);
-> +	  set_errno (EINVAL);
->  	  __leave;
->  	}
->        char *path = tp.c_get ();
->        if (gen_full_path_at (path, dirfd, pathname))
->  	__leave;
-> +      if (flags)
+> diff --git a/winsup/cygwin/fhandler_serial.cc
+> b/winsup/cygwin/fhandler_serial.cc
 
-For clarity, and on the off-chance that new flags are added to fchmodat,
-it might be better to check for (flags & AT_SYMLINK_NOFOLLOW) here
-explicitely.  Your choice.
+Wrong line break
 
-> +	{
-> +          /* BSD has lchmod, but Linux does not.  POSIX says
-> +	     AT_SYMLINK_NOFOLLOW is allowed to fail on symlinks.
-> +	     Linux blindly fails even for non-symlinks, but we allow
-> +	     it to succeed. */
-> +	  path_conv pc (path, PC_SYM_NOFOLLOW, stat_suffixes);
-> +	  if (pc.issymlink ())
-> +	    {
-> +	      set_errno (EOPNOTSUPP);
-> +	      __leave;
-> +	    }
-> +	}
->        return chmod (path, mode);
->      }
->    __except (EFAULT) {}
-> -- 
-> 2.30.0
+> index fd5b45899..23d69eca5 100644
+> --- a/winsup/cygwin/fhandler_serial.cc
+> +++ b/winsup/cygwin/fhandler_serial.cc
+> @@ -727,7 +727,10 @@ fhandler_serial::tcsetattr (int action, const struct
+> termios *t)
 
-Looks good.
+Wrong line break
+
+>    /* -------------- Set parity ------------------ */
+> 
+>    if (t->c_cflag & PARENB)
+> -    state.Parity = (t->c_cflag & PARODD) ? ODDPARITY : EVENPARITY;
+> +    if(t->c_cflag & CMSPAR)
+> +      state.Parity = (t->c_cflag & PARODD) ? MARKPARITY : SPACEPARITY;
+> +    else
+> +      state.Parity = (t->c_cflag & PARODD) ? ODDPARITY : EVENPARITY;
+
+Please put the nested if/else into curly braces so the potential
+for later changes breaking the if/else chain is reduced.
+
+>    else
+>      state.Parity = NOPARITY;
+> 
+> @@ -1068,6 +1071,10 @@ fhandler_serial::tcgetattr (struct termios *t)
+>      t->c_cflag |= (PARENB | PARODD);
+>    if (state.Parity == EVENPARITY)
+>      t->c_cflag |= PARENB;
+> +  if (state.Parity == MARKPARITY)
+> +    t->c_cflag |= (PARENB | PARODD | CMSPAR);
+> +  if (state.Parity == SPACEPARITY)
+> +    t->c_cflag |= (PARENB | CMSPAR);
+> 
+>    /* -------------- Parity errors ------------------ */
+> 
+> diff --git a/winsup/cygwin/include/sys/termios.h
+> b/winsup/cygwin/include/sys/termios.h
+
+Wrong line break
+
+> index 17e8d83a3..933851c21 100644
+> --- a/winsup/cygwin/include/sys/termios.h
+> +++ b/winsup/cygwin/include/sys/termios.h
+> @@ -185,6 +185,7 @@ POSIX commands */
+>  #define PARODD 0x00200
+>  #define HUPCL 0x00400
+>  #define CLOCAL 0x00800
+> +#define CMSPAR  0x40000000 /* Mark or space (stick) parity.  */
+
+Spacing here is completely off, probably due to your MUA.  Please note
+that every definition is followed by a TAB and a SPACE for historical
+reasons.  Ideally you do the same for the new CMSPAR definition.
+
+> 
+>  /* Extended baud rates above 37K. */
+>  #define CBAUDEX 0x0100f
+> 
+> ---
+
+Other than these minor formatting issues, your patch looks good,
+so I'm looking forward to the fixed version.
 
 
 Thanks,
