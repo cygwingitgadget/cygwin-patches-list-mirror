@@ -1,30 +1,25 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com
- [210.131.2.80])
- by sourceware.org (Postfix) with ESMTPS id 3440A384B060
- for <cygwin-patches@cygwin.com>; Thu, 28 Jan 2021 11:49:47 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 3440A384B060
-Received: from Express5800-S70 (x067108.dynamic.ppp.asahi-net.or.jp
+Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
+ by sourceware.org (Postfix) with ESMTPS id 195823858D33
+ for <cygwin-patches@cygwin.com>; Thu, 28 Jan 2021 12:20:43 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 195823858D33
+Received: from localhost.localdomain (x067108.dynamic.ppp.asahi-net.or.jp
  [122.249.67.108]) (authenticated)
- by conssluserg-01.nifty.com with ESMTP id 10SBnScC030384
- for <cygwin-patches@cygwin.com>; Thu, 28 Jan 2021 20:49:29 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 10SBnScC030384
+ by conuserg-11.nifty.com with ESMTP id 10SCKIxu031456;
+ Thu, 28 Jan 2021 21:20:24 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 10SCKIxu031456
 X-Nifty-SrcIP: [122.249.67.108]
-Date: Thu, 28 Jan 2021 20:49:30 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 1/2] Cygwin: console: Make read() thread-safe.
-Message-Id: <20210128204930.93d8270735cf62e7e3a10e05@nifty.ne.jp>
-In-Reply-To: <20210128111409.581-2-takashi.yano@nifty.ne.jp>
-References: <20210128111409.581-1-takashi.yano@nifty.ne.jp>
- <20210128111409.581-2-takashi.yano@nifty.ne.jp>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Subject: [PATCH v2 0/2] Make terminal read() thread-safe.
+Date: Thu, 28 Jan 2021 21:20:08 +0900
+Message-Id: <20210128122010.1424-1-takashi.yano@nifty.ne.jp>
+X-Mailer: git-send-email 2.30.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE,
+ SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -39,18 +34,19 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 28 Jan 2021 11:49:49 -0000
+X-List-Received-Date: Thu, 28 Jan 2021 12:20:47 -0000
 
-On Thu, 28 Jan 2021 20:14:08 +0900
-Takashi Yano wrote:
-> - Currently read() is somehow not thread-safe. This patch fixes the
->   issue.
-> ---
->  winsup/cygwin/fhandler_console.cc | 7 +++----
->  winsup/cygwin/select.cc           | 3 ---
->  2 files changed, 3 insertions(+), 7 deletions(-)
+Currently read() for console and pty slave are somehow
+not thread-safe. These patches fix the issue.
 
-Sorry, this does not seem to be enough. Please wait a while.
+Takashi Yano (2):
+  Cygwin: console: Make read() thread-safe.
+  Cygwin: pty: Make slave read() thread-safe.
+
+ winsup/cygwin/fhandler_console.cc | 10 +++++-----
+ winsup/cygwin/fhandler_tty.cc     |  6 ++++++
+ 2 files changed, 11 insertions(+), 5 deletions(-)
 
 -- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+2.30.0
+
