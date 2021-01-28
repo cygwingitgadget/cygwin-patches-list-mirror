@@ -1,45 +1,41 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
- by sourceware.org (Postfix) with ESMTPS id EF6DD3857C4C
- for <cygwin-patches@cygwin.com>; Thu, 28 Jan 2021 16:13:06 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org EF6DD3857C4C
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MiaLn-1lafFG0KHf-00ffmn for <cygwin-patches@cygwin.com>; Thu, 28 Jan 2021
- 17:13:05 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 23F6BA80B92; Thu, 28 Jan 2021 17:13:04 +0100 (CET)
-Date: Thu, 28 Jan 2021 17:13:04 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
-To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: getdtablesize: always return OPEN_MAX_MAX
-Message-ID: <20210128161304.GC4393@calimero.vinschen.de>
+Return-Path: <brian.inglis@systematicsw.ab.ca>
+Received: from smtp-out-no.shaw.ca (smtp-out-no.shaw.ca [64.59.134.12])
+ by sourceware.org (Postfix) with ESMTPS id 25D233850415
+ for <cygwin-patches@cygwin.com>; Thu, 28 Jan 2021 17:17:06 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 25D233850415
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=SystematicSw.ab.ca
+Authentication-Results: sourceware.org;
+ spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
+Received: from [192.168.1.104] ([24.64.172.44]) by shaw.ca with ESMTP
+ id 5AullIsRueHr95AumlEZWX; Thu, 28 Jan 2021 10:17:05 -0700
+X-Authority-Analysis: v=2.4 cv=Yq/K+6UX c=1 sm=1 tr=0 ts=6012f191
+ a=kiZT5GMN3KAWqtYcXc+/4Q==:117 a=kiZT5GMN3KAWqtYcXc+/4Q==:17
+ a=IkcTkHD0fZMA:10 a=CCpqsmhAAAAA:8 a=TImcKGuyeGIbufSLrCcA:9 a=QEXdDO2ut3YA:10
+ a=ul9cdbp4aOFLsgKbc677:22
 Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20210128025150.46708-1-kbrown@cornell.edu>
- <20210128102029.GY4393@calimero.vinschen.de>
- <151a4199-92f2-43aa-dd91-5d86c2e1d3c6@cornell.edu>
- <20210128160749.GB4393@calimero.vinschen.de>
+To: cygwin-patches@cygwin.com
+References: <CAGEXLhUUtV-kKxO-jQo4427R=N=Uo1aT_LrHGpc1r55umbb92w@mail.gmail.com>
+ <20210128100802.GW4393@calimero.vinschen.de>
+ <20210128101429.GX4393@calimero.vinschen.de>
+From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
+Organization: Systematic Software
+Subject: Re: fhandler_serial.cc: MARK and SPACE parity for serial port
+Message-ID: <6c0a481b-b6fb-0a7e-66ef-36e1941397bb@SystematicSw.ab.ca>
+Date: Thu, 28 Jan 2021 10:17:03 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210128160749.GB4393@calimero.vinschen.de>
-X-Provags-ID: V03:K1:FzGI8M4qCixpOpGhcPpIOybmIlXGG72Wq1C9yiAyaPlzkWcN+IR
- 1QRpo7Pq/ES13ZG94sF8FyWSOtwHEwpKiBp6zBGjdx5/cS2MeqCoXslI9Ko1HQD8p2mvsaN
- OHbPPyM2Pjv/3LIZlfRRhoc8QNgYc9ynCg08reiX1fqhTPttQWqnAr9c2yef/EdatmWsmtR
- lkMmdsM2W0YNCqQVTywxQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:L/W3tLB8ESk=:yxY5ihmS2NWhnUjtqvRyTY
- DLpCtX/b4fGWGgstCCWhj7ueCwD21kadutz8dCpezp3qA8TsN0x7BmgDxR99Tr7008o/PYATo
- wYXJAjAwtLEiipx5jJduA0ZOuOAy/lQND44gCGmPa6sogNfMUbMyWUfJjGZ7TZdVVsZlFa7Cq
- 9e4mFZPN+7GFBc9LvuSRkJsk5kh6oE5oGIhcFRmDqcmSMXUAp0en+sRKFGv0pC5A8MgZuCgiu
- KUhDfRbp+NU1H8cwlQxEJGtUC989JkVQItbqRPvEZ8DBE8+v+oyFzoXO4X3PigHnIasfZ/tjx
- OZcTjRCWzKW9Ato6Dp8nPsBOlG+oT2b5o/zH95jcQlPV+CltRn8++JKi6ZlGwycpsaHxzX76W
- dWEGdDFOwT/Kk1TuRDLYc4Kyvara7GHm5EpDk9z8JKPTtGodX6wemC2/bDOL/Zfbpe5wSfvj1
- 7teo7uN+fg==
-X-Spam-Status: No, score=-107.3 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+In-Reply-To: <20210128101429.GX4393@calimero.vinschen.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-CA
+Content-Transfer-Encoding: 8bit
+X-CMAE-Envelope: MS4xfE9n/I96lBLv7GyDiC1UjLrv/V5lTJB+0ZoMpIxsNvl3r5ASLLgCF/4EGZIejBDsdLMrLvPYSuDirh9OxINpRRXIqsuGNyDJ4hKAR0rb3kyCTYaOUfXS
+ 2ABR3O0T2I0H+Ho90G86s2msm2loZ1rVj20eURmD4dCrolRyd/QfgwWCTiRm9qtRAA4MprpkXiAIP2z/5NOAfA5Y0ml98T8ZTHk=
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
+ KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H3,
+ RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_NONE,
+ TXREP autolearn=no autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -54,57 +50,84 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 28 Jan 2021 16:13:08 -0000
+X-List-Received-Date: Thu, 28 Jan 2021 17:17:07 -0000
 
-On Jan 28 17:07, Corinna Vinschen via Cygwin-patches wrote:
-> On Jan 28 08:42, Ken Brown via Cygwin-patches wrote:
-> > On 1/28/2021 5:20 AM, Corinna Vinschen via Cygwin-patches wrote:
-> > > On Jan 27 21:51, Ken Brown via Cygwin-patches wrote:
-> > > > According to the Linux man page for getdtablesize(3), the latter is
-> > > > supposed to return "the maximum number of files a process can have
-> > > > open, one more than the largest possible value for a file descriptor."
-> > > > The constant OPEN_MAX_MAX is the only limit enforced by Cygwin, so we
-> > > > now return that.
-> > > > 
-> > > > Previously getdtablesize returned the current size of cygheap->fdtab,
-> > > > Cygwin's internal file descriptor table.  But this is a dynamically
-> > > > growing table, and its current size does not reflect an actual limit
-> > > > on the number of open files.
-> > > > 
-> > > > With this change, gnulib now reports that getdtablesize and
-> > > > fcntl(F_DUPFD) work on Cygwin.  Packages like GNU tar that use the
-> > > > corresponding gnulib modules will no longer use gnulib replacements on
-> > > > Cygwin.
-> > > > ---
-> > > >   winsup/cygwin/syscalls.cc | 2 +-
-> > > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
-> > > > index 5da05b18a..1f16d54b9 100644
-> > > > --- a/winsup/cygwin/syscalls.cc
-> > > > +++ b/winsup/cygwin/syscalls.cc
-> > > > @@ -2887,7 +2887,7 @@ setdtablesize (int size)
-> > > >   extern "C" int
-> > > >   getdtablesize ()
-> > > >   {
-> > > > -  return cygheap->fdtab.size;
-> > > > +  return OPEN_MAX_MAX;
-> > > >   }
-> > > 
-> > > getdtablesize is used internally, too.  After this change, the values
-> > > returned by sysconf and getrlimit should be revisited as well.
-> > 
-> > They will now return OPEN_MAX_MAX, as I think they should.  The only
-> > question in my mind is whether to simplify the code by removing the calls to
-> > getdtablesize, something like this (untested):
+On 2021-01-28 03:14, Corinna Vinschen via Cygwin-patches wrote:
+> On Jan 28 11:08, Corinna Vinschen via Cygwin-patches wrote:
+>> Hi Marek,
+>> thanks for the patch.  [...]
+>>> index 17e8d83a3..933851c21 100644
+>>> --- a/winsup/cygwin/include/sys/termios.h
+>>> +++ b/winsup/cygwin/include/sys/termios.h
+>>> @@ -185,6 +185,7 @@ POSIX commands */
+>>>   #define PARODD 0x00200
+>>>   #define HUPCL 0x00400
+>>>   #define CLOCAL 0x00800
+>>> +#define CMSPAR  0x40000000 /* Mark or space (stick) parity.  */
 > 
-> But then again, what happens with OPEN_MAX in limits.h?  Linux removed
-> it entirely.  Given we have such a limit and it's not flexible as on
-> Linux, should we go ahead, drop OPEN_MAX_MAX entirely and define
-> OPEN_MAX as 3200?
+> Why did you choose such a big value here?  Wouldn't it be nicer just to
+> follow up with
+> 
+>    #define CMSPAR 0x10000
+> 
+> or am I missing something here?
 
-...ideally by adding a file include/cygwin/limits.h included by
-include/limits.h, which defines __OPEN_MAX et al, as required.
+GLIBC/Linux compatibility:
+https://sourceware.org/git/?p=glibc.git&a=search&h=HEAD&st=grep&s=define+CMSPAR
 
+sysdeps/unix/sysv/linux/alpha/bits/termios-baud.h	
+   23 #ifdef __USE_MISC
+   24 # define CBAUD  0000037
+   25 # define CBAUDEX 0000000
+   26 # define CMSPAR   010000000000          /* mark or space (stick) parity */
+   27 # define CRTSCTS  020000000000          /* flow control */
+   28 #endif
+sysdeps/unix/sysv/linux/bits/termios-baud.h	
+   23 #ifdef __USE_MISC
+   24 # define CBAUD   000000010017 /* Baud speed mask (not in POSIX).  */
+   25 # define CBAUDEX 000000010000 /* Extra baud speed mask, included in CBAUD.
+   26                                  (not in POSIX).  */
+   27 # define CIBAUD  002003600000 /* Input baud rate (not used).  */
+   28 # define CMSPAR  010000000000 /* Mark or space (stick) parity.  */
+   29 # define CRTSCTS 020000000000 /* Flow control.  */
+   30 #endif
+sysdeps/unix/sysv/linux/powerpc/bits/termios-baud.h	
+   23 #ifdef __USE_MISC
+   24 # define CBAUD  0000377
+   25 # define CBAUDEX 0000020
+   26 # define CMSPAR   010000000000          /* mark or space (stick) parity */
+   27 # define CRTSCTS  020000000000          /* flow control */
+   28 #endif
+sysdeps/unix/sysv/linux/sparc/bits/termios-baud.h	
+   23 #ifdef __USE_MISC
+   24 # define CBAUD   0x0000100f
+   25 # define CBAUDEX 0x00001000
+   26 # define CIBAUD  0x100f0000     /* input baud rate (not used) */
+   27 # define CMSPAR  0x40000000     /* mark or space (stick) parity */
+   28 # define CRTSCTS 0x80000000     /* flow control */
+   29 #endif
 
-Corinna
+> Also, on second thought I think CMSPAR should follow CRTSCTS, a few
+> lines below, because of its numerical value higher than CRTSCTS.
+
+GLIBC/Linux normally has it lower:
+$ grep -C2 'define\s\+CMSPAR' /usr/include/**/*.h
+/usr/include/asm-generic/termbits.h:
+#define  B4000000 0010017
+#define CIBAUD	  002003600000	/* input baud rate */
+#define CMSPAR	  010000000000	/* mark or space (stick) parity */
+#define CRTSCTS	  020000000000	/* flow control */
+
+--
+/usr/include/i386-linux-gnu/bits/termios.h:
+#ifdef __USE_MISC
+# define CIBAUD	  002003600000		/* input baud rate (not used) */
+# define CMSPAR   010000000000		/* mark or space (stick) parity */
+# define CRTSCTS  020000000000		/* flow control */
+#endif
+-- 
+Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
+
+This email may be disturbing to some readers as it contains
+too much technical detail. Reader discretion is advised.
+[Data in binary units and prefixes, physical quantities in SI.]
