@@ -1,26 +1,29 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
- by sourceware.org (Postfix) with ESMTPS id 591743857C70
- for <cygwin-patches@cygwin.com>; Thu, 28 Jan 2021 11:15:41 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 591743857C70
-Received: from localhost.localdomain (x067108.dynamic.ppp.asahi-net.or.jp
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com
+ [210.131.2.80])
+ by sourceware.org (Postfix) with ESMTPS id 3440A384B060
+ for <cygwin-patches@cygwin.com>; Thu, 28 Jan 2021 11:49:47 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 3440A384B060
+Received: from Express5800-S70 (x067108.dynamic.ppp.asahi-net.or.jp
  [122.249.67.108]) (authenticated)
- by conuserg-08.nifty.com with ESMTP id 10SBERd2025778;
- Thu, 28 Jan 2021 20:15:14 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 10SBERd2025778
+ by conssluserg-01.nifty.com with ESMTP id 10SBnScC030384
+ for <cygwin-patches@cygwin.com>; Thu, 28 Jan 2021 20:49:29 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 10SBnScC030384
 X-Nifty-SrcIP: [122.249.67.108]
+Date: Thu, 28 Jan 2021 20:49:30 +0900
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH 2/2] Cygwin: pty: Make slave read() thread-safe.
-Date: Thu, 28 Jan 2021 20:14:09 +0900
-Message-Id: <20210128111409.581-3-takashi.yano@nifty.ne.jp>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20210128111409.581-1-takashi.yano@nifty.ne.jp>
+Subject: Re: [PATCH 1/2] Cygwin: console: Make read() thread-safe.
+Message-Id: <20210128204930.93d8270735cf62e7e3a10e05@nifty.ne.jp>
+In-Reply-To: <20210128111409.581-2-takashi.yano@nifty.ne.jp>
 References: <20210128111409.581-1-takashi.yano@nifty.ne.jp>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
+ <20210128111409.581-2-takashi.yano@nifty.ne.jp>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
  SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -36,38 +39,18 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 28 Jan 2021 11:15:42 -0000
+X-List-Received-Date: Thu, 28 Jan 2021 11:49:49 -0000
 
-- Currently slave read() is somehow not thread-safe. This patch
-  fixes the issue.
----
- winsup/cygwin/fhandler_tty.cc | 6 ++++++
- 1 file changed, 6 insertions(+)
+On Thu, 28 Jan 2021 20:14:08 +0900
+Takashi Yano wrote:
+> - Currently read() is somehow not thread-safe. This patch fixes the
+>   issue.
+> ---
+>  winsup/cygwin/fhandler_console.cc | 7 +++----
+>  winsup/cygwin/select.cc           | 3 ---
+>  2 files changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
-index 06fc19ac2..48b89ae77 100644
---- a/winsup/cygwin/fhandler_tty.cc
-+++ b/winsup/cygwin/fhandler_tty.cc
-@@ -1241,6 +1241,7 @@ fhandler_pty_slave::read (void *ptr, size_t& len)
- 	time_to_wait = !vtime ? INFINITE : 100 * vtime;
-     }
- 
-+wait_retry:
-   while (len)
-     {
-       switch (cygwait (input_available_event, time_to_wait))
-@@ -1319,6 +1320,11 @@ fhandler_pty_slave::read (void *ptr, size_t& len)
- 	    }
- 	  goto out;
- 	}
-+      if (!IsEventSignalled (input_available_event))
-+	{ /* Maybe another thread has processed input. */
-+	  ReleaseMutex (input_mutex);
-+	  goto wait_retry;
-+	}
- 
-       if (!bytes_available (bytes_in_pipe))
- 	{
+Sorry, this does not seem to be enough. Please wait a while.
+
 -- 
-2.30.0
-
+Takashi Yano <takashi.yano@nifty.ne.jp>
