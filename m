@@ -1,37 +1,50 @@
-Return-Path: <lavr@ncbi.nlm.nih.gov>
-Received: from nihsmtpxwayst06.hub.nih.gov (nihsmtpxwayst06.hub.nih.gov
- [165.112.13.57])
- by sourceware.org (Postfix) with ESMTPS id 3A2E63896812
- for <cygwin-patches@cygwin.com>; Fri, 29 Jan 2021 19:29:43 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 3A2E63896812
-IronPort-SDR: VxKYU8YwKG/tVt9cirTxNIeQ7QwIcoKiNeq1WEYezWgCORzfEI3djWy/Pzb9H8pQ/k4rRsbk55
- wNv/Ngagfjuc7faaeTCHtSShPI6idULwpKktpxc3J0aBmcT8W/crLVyd4L3WpP1UVvjKFJAoF1
- apz2zktW0YVJsF+wJMaDtfq12yZTQW7u1yBstuunkZx/n5yZWB2afsfoGzm3tbfXEnn9rXQfiV
- 79jyBFZlGzdDYTO3/5fkGoKjmTWb/mgb8sf3Em6swnxW9sD4tc9RMzrlK+RF0r9mbvPGduzhEP
- BHI=
-X-SBRS-Extended: Low
-X-IronPortListener: non-ces-out
-X-IronPortListener: non-ces-out
-X-IronPort-AV: E=Sophos;i="5.79,386,1602561600"; d="scan'208";a="45632784"
-Received: from msg-b12-ltm1_v9.hub.nih.gov (HELO mail2.ncbi.nlm.nih.gov)
- ([128.231.90.73])
- by nihsmtpxwayst06.hub.nih.gov with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 29 Jan 2021 14:29:39 -0500
-Received: from mail1.ncbi.nlm.nih.gov (vhod12.be-md.ncbi.nlm.nih.gov
- [130.14.26.83])
- by mail2.ncbi.nlm.nih.gov (Postfix) with ESMTP id BB7851A0009;
- Fri, 29 Jan 2021 14:29:30 -0500 (EST)
-From: Anton Lavrentiev <lavr@ncbi.nlm.nih.gov>
+Return-Path: <mara.smetana@gmail.com>
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
+ [IPv6:2a00:1450:4864:20::634])
+ by sourceware.org (Postfix) with ESMTPS id D91AC386197F
+ for <cygwin-patches@cygwin.com>; Fri, 29 Jan 2021 22:06:33 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org D91AC386197F
+Received: by mail-ej1-x634.google.com with SMTP id g3so15118484ejb.6
+ for <cygwin-patches@cygwin.com>; Fri, 29 Jan 2021 14:06:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20161025;
+ h=x-gm-message-state:subject:references:from:to:message-id:date
+ :user-agent:mime-version:in-reply-to:content-language;
+ bh=WbmkHLwMAAPRJDstWFWHMV3xqtDx4B+1x2zg8THYWxA=;
+ b=CKpl3RX4Fw8PEiG2wU6ZMSTnmsDxKBL4ZeQ1+XxB4+8Iyr2Enw1Unfwk7cRCGpHvUc
+ 2TcacLwwRB2vLx/UC7FZsFWTgU9MiFFrnfAjo5bohEBLJ+sqEhQjqqVEbHDDv8jZD4lH
+ fJ2z1jGgoM8So9LLTRosgRySlERe3IB6KKFgCtf/jHsqsVL8GYs4Utq5YhAll/KgUxwx
+ WRt9wOUtqH+LtoFCJB5YciVjn0WwJcpBGI1T8CyAmxVyTvOKHUzE09Y72KD2Cgji7RJr
+ dUQ4EQeEJAcWF/UyWP9hLERoBusAvF/Qi7TyH/+z9DGzE2ka28p56iwAiAk9Be/ukIaA
+ VvqQ==
+X-Gm-Message-State: AOAM5314I9k0fiJcA34LlGEtR75Qq4WOigQAIB/vyfgsvh6Jf+BrW9cV
+ 6BVXMOChKGcqhVZHdJA+0ezpI9WObik+Bg==
+X-Google-Smtp-Source: ABdhPJz+b2YcNb+FVVY3p/6K0TBuaYV9KjRA2jplYaMFGYexrMuTQloOgGIFlpY9G0du6sLw3VEaPA==
+X-Received: by 2002:a17:907:1050:: with SMTP id
+ oy16mr6456584ejb.424.1611957993026; 
+ Fri, 29 Jan 2021 14:06:33 -0800 (PST)
+Received: from [192.168.2.166] ([188.120.201.247])
+ by smtp.gmail.com with ESMTPSA id gj9sm4384281ejb.107.2021.01.29.14.06.31
+ for <cygwin-patches@cygwin.com>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 29 Jan 2021 14:06:32 -0800 (PST)
+Subject: fhandler_serial.cc: MARK and SPACE parity for serial port
+References: <CAGEXLhUUtV-kKxO-jQo4427R=N=Uo1aT_LrHGpc1r55umbb92w@mail.gmail.com>
+ <20210128100802.GW4393@calimero.vinschen.de>
+ <20210128101429.GX4393@calimero.vinschen.de>
+From: Marek Smetana <mara.smetana@gmail.com>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] CYGWIN:  Fix resolver debugging output
-Date: Fri, 29 Jan 2021 14:29:03 -0500
-Message-Id: <20210129192903.939-1-lavr@ncbi.nlm.nih.gov>
-X-Mailer: git-send-email 2.29.2
+Message-ID: <4d88d636-8274-5dea-67f8-f224a63b49a9@gmail.com>
+Date: Fri, 29 Jan 2021 23:06:30 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-15.4 required=5.0 tests=BAYES_00, DKIMWL_WL_HIGH,
- DKIM_SIGNED, DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, FROM_GOV_DKIM_AU,
- GIT_PATCH_0, SPF_HELO_PASS, SPF_PASS,
+In-Reply-To: <20210128101429.GX4393@calimero.vinschen.de>
+Content-Type: multipart/mixed; boundary="------------787BBEA552C764FCD6D4510A"
+Content-Language: cs
+X-Spam-Status: No, score=-13.0 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, FREEMAIL_FROM, GIT_PATCH_0,
+ RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_PASS,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -47,152 +60,78 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Fri, 29 Jan 2021 19:29:49 -0000
+X-List-Received-Date: Fri, 29 Jan 2021 22:06:35 -0000
 
-- Use %S (instead of %s) when a wide-character output is due;
-- Use native byte order for host and add port when doing I/O with DNS server;
-- Use forward way for resolv.conf's "options" processing, so listing "debug" as a
-  first option, will show all following option(s) as they are read;
-- Re-evaluate debug output flag after each "options" processing as it may chance.
----
- winsup/cygwin/libc/minires-os-if.c |  6 +++---
- winsup/cygwin/libc/minires.c       | 32 ++++++++++++++++++------------
- 2 files changed, 22 insertions(+), 16 deletions(-)
+This is a multi-part message in MIME format.
+--------------787BBEA552C764FCD6D4510A
+Content-Type: text/plain; charset=iso-8859-2; format=flowed
+Content-Transfer-Encoding: 8bit
 
-diff --git a/winsup/cygwin/libc/minires-os-if.c b/winsup/cygwin/libc/minires-os-if.c
-index 565158150..dedee3098 100644
---- a/winsup/cygwin/libc/minires-os-if.c
-+++ b/winsup/cygwin/libc/minires-os-if.c
-@@ -324,7 +324,7 @@ static void get_registry_dns_items(PUNICODE_STRING in, res_state statp,
- 	     srch++);
- 	*srch++ = 0;
- 	if (numAddresses < DIM(statp->nsaddr_list)) {
--	  DPRINTF(debug, "server \"%s\"\n", ap);
-+	  DPRINTF(debug, "registry server \"%s\"\n", ap);
- 	  statp->nsaddr_list[numAddresses].sin_addr.s_addr = cygwin_inet_addr((char *) ap);
- 	  if ( statp->nsaddr_list[numAddresses].sin_addr.s_addr != 0 )
- 	    numAddresses++;
-@@ -355,7 +355,7 @@ static void get_registry_dns(res_state statp)
-   NTSTATUS status;
-   const PCWSTR keyName = L"Tcpip\\Parameters";
- 
--  DPRINTF(statp->options & RES_DEBUG, "key %s\n", keyName);
-+  DPRINTF(statp->options & RES_DEBUG, "key %S\n", keyName);
-   status = RtlCheckRegistryKey (RTL_REGISTRY_SERVICES, keyName);
-   if (!NT_SUCCESS (status))
-     {
-@@ -460,7 +460,7 @@ void get_dns_info(res_state statp)
-        pIPAddr;
-        pIPAddr = pIPAddr->Next) {
-     if (numAddresses < DIM(statp->nsaddr_list)) {
--	DPRINTF(debug, "server \"%s\"\n", pIPAddr->IpAddress.String);
-+	DPRINTF(debug, "params server \"%s\"\n", pIPAddr->IpAddress.String);
-       statp->nsaddr_list[numAddresses].sin_addr.s_addr = cygwin_inet_addr(pIPAddr->IpAddress.String);
-       if (statp->nsaddr_list[numAddresses].sin_addr.s_addr != 0) {
- 	numAddresses++;
-diff --git a/winsup/cygwin/libc/minires.c b/winsup/cygwin/libc/minires.c
-index 0979daae3..8c7e31218 100644
---- a/winsup/cygwin/libc/minires.c
-+++ b/winsup/cygwin/libc/minires.c
-@@ -73,7 +73,7 @@ void minires_get_search(char * string, res_state statp)
-       statp->dnsrch[j] = strcpy(ptr, words[j]);
-       statp->dnsrch[j+1] = NULL;
-       ptr += sizes[j];
--      DPRINTF(debug, "search \"%s\"\n", words[j]);
-+      DPRINTF(debug, "registry search \"%s\"\n", words[j]);
-     }
-     else if (j < MAXDNSRCH + 1)
-       DPRINTF(debug, "no space for \"%s\"\n", words[j]);
-@@ -86,12 +86,12 @@ Read options
- 
- 
- ***********************************************************************/
--static void get_options(res_state statp, int i, char **words)
-+static void get_options(res_state statp, int n, char **words)
- {
-   char *ptr;
--  int value;
-+  int i, value;
- 
--  while (i-- > 0) {
-+  for (i = 0;  i < n;  ++i) {
-     if (!strcasecmp("debug", words[i])) {
-       statp->options |= RES_DEBUG;
-       DPRINTF(statp->options & RES_DEBUG, "%s: 1\n", words[i]);
-@@ -170,7 +170,7 @@ static void get_resolv(res_state statp)
-   have_address = (statp->nscount != 0);
- 
-   while ( fgets(line, sizeof(line), fd) != 0) {
--    DPRINTF(debug, "resolv.conf %s", line);
-+    DPRINTF(debug, _PATH_RESCONF " line: %s", line);
-     if ((i = scanline(line, words, sizes, DIM(words))) > 0) {
-       if (!have_address
- 	  && !strncasecmp("nameserver", words[0], sizes[0])) {
-@@ -186,7 +186,7 @@ static void get_resolv(res_state statp)
- 	  else {
- 	    statp->nsaddr_list[ns++].sin_addr.s_addr = address;
- 	    statp->nscount++;
--	    DPRINTF(debug, "server \"%s\"\n", words[j]);
-+	    DPRINTF(debug, "nameserver \"%s\"\n", words[j]);
- 	  }
- 	}
-       }
-@@ -208,8 +208,10 @@ static void get_resolv(res_state statp)
- 	}
-       }
-       /* Options line */
--      else if (!strncasecmp("options", words[0], sizes[0]))
-+      else if (!strncasecmp("options", words[0], sizes[0])) {
- 	get_options(statp, i - 1, &words[1]);
-+        debug = statp->options & RES_DEBUG;
-+      }
-     }
-   }
-   fclose(fd);
-@@ -332,7 +334,7 @@ void res_nclose(res_state statp)
-   if (statp->sockfd != -1) {
-     res = close(statp->sockfd);
-     DPRINTF(statp->options & RES_DEBUG, "close sockfd %d: %s\n",
--	    statp->sockfd, (res == 0)?"OK":strerror(errno));
-+	    statp->sockfd, res == 0 ? "OK" : strerror(errno));
-     statp->sockfd = -1;
-   }
- }
-@@ -503,8 +505,9 @@ int res_nsend( res_state statp, const unsigned char * MsgPtr,
-     rslt = cygwin_sendto(statp->sockfd, MsgPtr, MsgLength, 0,
- 			 (struct sockaddr *) &statp->nsaddr_list[wServ],
- 			 sizeof(struct sockaddr_in));
--    DPRINTF(debug, "sendto: server %08x sockfd %d %s\n",
--	    statp->nsaddr_list[wServ].sin_addr.s_addr,
-+    DPRINTF(debug, "sendto: server %08x:%hu sockfd %d %s\n",
-+	    ntohl(statp->nsaddr_list[wServ].sin_addr.s_addr),
-+	    ntohs(statp->nsaddr_list[wServ].sin_port),
- 	    statp->sockfd, (rslt == MsgLength)?"OK":strerror(errno));
-     if (rslt != MsgLength) {
-       statp->res_h_errno = NETDB_INTERNAL;
-@@ -519,8 +522,9 @@ int res_nsend( res_state statp, const unsigned char * MsgPtr,
-     timeOut.tv_usec = 0;
-     rslt = cygwin_select(statp->sockfd + 1, &fdset_read, NULL, NULL, &timeOut);
-     if ( rslt == 0 ) { /* Timeout */
--      DPRINTF(statp->options & RES_DEBUG, "timeout for server %08x\n",
--	      statp->nsaddr_list[wServ].sin_addr.s_addr);
-+      DPRINTF(statp->options & RES_DEBUG, "timeout for server %08x:%hu\n",
-+	      ntohl(statp->nsaddr_list[wServ].sin_addr.s_addr),
-+	      ntohs(statp->nsaddr_list[wServ].sin_port));
-       continue;
-     }
-     else if ((rslt != 1) || (FD_ISSET(statp->sockfd, &fdset_read) == 0)) {
-@@ -537,7 +541,9 @@ int res_nsend( res_state statp, const unsigned char * MsgPtr,
-       statp->res_h_errno = NETDB_INTERNAL;
-       return -1;
-     }
--    DPRINTF(debug, "recvfrom: %d bytes from %08x\n", rslt, dnsSockAddr.sin_addr.s_addr);
-+    DPRINTF(debug, "recvfrom: %d bytes from %08x:%hu\n", rslt, 
-+            ntohl(dnsSockAddr.sin_addr.s_addr),
-+            ntohs(dnsSockAddr.sin_port));
-     /*
-        Prepare to retry with tcp
-     */
--- 
-2.29.2
+Hi,
 
+I have modified the patch as recommended and am sending it as an attachment.
+
+The CMSPAR value is the same as in "asm / termbits.h" on Linux.
+
+Patches  sent by me are licensed under the 2-clause BSD license.
+
+Best regards
+
+Marek
+
+
+
+--------------787BBEA552C764FCD6D4510A
+Content-Type: text/plain; charset=UTF-8;
+ name="serial_parity.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="serial_parity.patch"
+
+ winsup/cygwin/fhandler_serial.cc    | 11 ++++++++++-
+ winsup/cygwin/include/sys/termios.h |  1 +
+ 2 files changed, 11 insertions(+), 1 deletion(-)
+
+diff --git c/winsup/cygwin/fhandler_serial.cc w/winsup/cygwin/fhandler_serial.cc
+index fd5b45899..e0257302c 100644
+--- c/winsup/cygwin/fhandler_serial.cc
++++ w/winsup/cygwin/fhandler_serial.cc
+@@ -727,7 +727,12 @@ fhandler_serial::tcsetattr (int action, const struct termios *t)
+   /* -------------- Set parity ------------------ */
+ 
+   if (t->c_cflag & PARENB)
+-    state.Parity = (t->c_cflag & PARODD) ? ODDPARITY : EVENPARITY;
++    {
++      if(t->c_cflag & CMSPAR)
++        state.Parity = (t->c_cflag & PARODD) ? MARKPARITY : SPACEPARITY;
++      else
++        state.Parity = (t->c_cflag & PARODD) ? ODDPARITY : EVENPARITY;
++    }
+   else
+     state.Parity = NOPARITY;
+ 
+@@ -1068,6 +1073,10 @@ fhandler_serial::tcgetattr (struct termios *t)
+     t->c_cflag |= (PARENB | PARODD);
+   if (state.Parity == EVENPARITY)
+     t->c_cflag |= PARENB;
++  if (state.Parity == MARKPARITY)
++    t->c_cflag |= (PARENB | PARODD | CMSPAR);
++  if (state.Parity == SPACEPARITY)
++    t->c_cflag |= (PARENB | CMSPAR);
+ 
+   /* -------------- Parity errors ------------------ */
+ 
+diff --git c/winsup/cygwin/include/sys/termios.h w/winsup/cygwin/include/sys/termios.h
+index 17e8d83a3..e4465fca3 100644
+--- c/winsup/cygwin/include/sys/termios.h
++++ w/winsup/cygwin/include/sys/termios.h
+@@ -206,6 +206,7 @@ POSIX commands */
+ 
+ #define CRTSXOFF 0x04000
+ #define CRTSCTS	 0x08000
++#define CMSPAR	 0x40000000 /* Mark or space (stick) parity.  */
+ 
+ /* lflag bits */
+ #define ISIG	0x0001
+
+--------------787BBEA552C764FCD6D4510A--
