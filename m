@@ -1,42 +1,39 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
- by sourceware.org (Postfix) with ESMTPS id D2D5E3860C3E
- for <cygwin-patches@cygwin.com>; Mon,  1 Feb 2021 09:50:59 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org D2D5E3860C3E
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+ by sourceware.org (Postfix) with ESMTPS id B8AD63858018
+ for <cygwin-patches@cygwin.com>; Mon,  1 Feb 2021 09:55:02 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org B8AD63858018
 Received: from calimero.vinschen.de ([24.134.7.25]) by
  mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1MALql-1lGiBg2ZB5-00BxVw for <cygwin-patches@cygwin.com>; Mon, 01 Feb 2021
- 10:50:55 +0100
+ id 1M5jA2-1l3lpQ22fq-007EX5 for <cygwin-patches@cygwin.com>; Mon, 01 Feb 2021
+ 10:54:58 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id D32D6A80CFE; Mon,  1 Feb 2021 10:50:54 +0100 (CET)
-Date: Mon, 1 Feb 2021 10:50:54 +0100
+ id 12BC5A80CFE; Mon,  1 Feb 2021 10:54:58 +0100 (CET)
+Date: Mon, 1 Feb 2021 10:54:58 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: getdtablesize: always return OPEN_MAX_MAX
-Message-ID: <20210201095054.GF375565@calimero.vinschen.de>
+Subject: Re: [PATCH 0/1] Recognizing native Windows AF_UNIX sockets
+Message-ID: <20210201095458.GG375565@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20210128025150.46708-1-kbrown@cornell.edu>
- <20210128102029.GY4393@calimero.vinschen.de>
- <151a4199-92f2-43aa-dd91-5d86c2e1d3c6@cornell.edu>
- <20210128160749.GB4393@calimero.vinschen.de>
- <9b430aa5-1033-ebef-b002-b1523355271c@cornell.edu>
+References: <20210130163436.21257-1-kbrown@cornell.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <9b430aa5-1033-ebef-b002-b1523355271c@cornell.edu>
-X-Provags-ID: V03:K1:iXmedrGsVWuLlBeARKOc4bU9uWn7GpiH/k5jT5XQCl/BhXGOfM7
- x6cURV7+V3ni/3GjQUWm/NN4COlRmYr32z8DKebWN0F6RMF0fSXgz/BbAvFct6v3AfmdCkR
- mnGVasIRpS4WH9gz/NSxl0jJJBEx8lx82LiQPPESjqTwxd5IBg0h5ufvUFP3jSGoklpVG6f
- WmE3Y2D07zNTe3867ZVbQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:7a3x2G4LNHU=:RtwxN6SHpmLN9YKBmSDaDf
- z4xOu6r7T4Nf9O5e7W5Nbrh1TE+JBLpyMmdSw0cOgqOyPD10S5qNYd7oav3weO7lJmojl/HKa
- VSXkYrwHAjeCoJTIdSI8iueBrSZPdqRQqONIhLwC1NWODpZxlqzNG/QGBFsiYJaeBR+NPE5y5
- n8PGLJkzCm8TgBAAqMiHr8SS8+HrxtMgVju5m69wOzeXZr2caiHXK+QRu8xf9Z3rorw8IPxko
- DZ0TiV5Nu+RCpK+gnrWoXtG9SHXBtXPSHVoWBOIAxPOYGySXAycTb6QRGXL6P0N2tOVT7hfgj
- IuCklI7oGy6pXJo5dqdrxiExIoPMRnscEZcuVqXF1EIpgYMTJMqKmosdK0XRANnYlNIWi9THz
- vKArw8ty2Xd4jT2+LdoaTLeWxxQIH8sjib5/CIWg+ONDpIL3vo55hWYyEehSVlwG14p0cz7rt
- ii2Q+NnmBg==
+In-Reply-To: <20210130163436.21257-1-kbrown@cornell.edu>
+X-Provags-ID: V03:K1:2qt1/Aq+Ryj/ja05+vE4CXS4TqmbzekXe5l8qf2uiwVnAaRaZit
+ M7AabP5cAnKz3XZj0xopFTDIqCCR7L+U6RbMajGktqPf0VtfwkldlYlWnAe37AnxONDvIT1
+ eVMIFqyZ+wPV1EJ0jmKw8Lpps06F0IZWj/sDCX/f4vMOvyqG0amUK8yH2hb7YNSx9NUbJza
+ 3esWBqGvYVL2yIkql7CQg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:zAJNfBltods=:RUB7+XsRCeF8NYYs5entJX
+ gtPaXF33TVxg7qPpBLT1+3kWqwEZBUD7XAfXpZr4EXO23EMF+iaog8bv/luFsgTiv9zfNBjFK
+ p04aUgzF7b0Mldi2nZAHmTQqNH9seqoYD+IwEE0WXXg6g0inclOUfGKIAGtHoOYCLKOSjgirC
+ dQbIbpJ5xVO1YwEw9xOdSwhYcl4sZByrIyKOzHza6WWFlIRRy4hkIOGXj0WYfo4IX5A06mz+T
+ lLWC84h8l4hl7eQ1bIuEUWhP8bTIF5O5TSQabUU3WpUbF0BvcECl16N1lCg2SWiba+XGl5oYj
+ tTsbsqybw6Sgbf8E5/40QaMY0gSDbG+P5ZU1COAfbyZhT8SOgO4WHJZ+mbICCqxp45NnNOldF
+ 1bqUp4soU2enLeCrWaTEYg+7FtuTI4jcG98366H5UG5/dJTtrwuedsNAJomITUp1ec6mcSjvc
+ LrRNJDLJ56QnH/Lhq8rnHMQBlsNyWmDER97QtFEbKXWwRWTOGn9MUaL3Zicq/HpZ/SnfiKoLq
+ w==
 X-Spam-Status: No, score=-101.3 required=5.0 tests=BAYES_00,
  GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
  RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
@@ -55,25 +52,24 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 01 Feb 2021 09:51:01 -0000
+X-List-Received-Date: Mon, 01 Feb 2021 09:55:04 -0000
 
-On Jan 28 15:33, Ken Brown via Cygwin-patches wrote:
-> On 1/28/2021 11:07 AM, Corinna Vinschen via Cygwin-patches wrote:
-> > One problem is that there are some applications in the wild which run
-> > loops up to either sysconf(_SC_OPEN_MAX) or OPEN_MAX to handle open
-> > descriptors.  tcsh is one of them.  It may slow done tcsh quite a bit
-> > if the loop runs to 3200 now every time.
+On Jan 30 11:34, Ken Brown via Cygwin-patches wrote:
+> This patch attempts to fix the problem reported here:
 > 
-> I don't use tcsh.  Is it easy to test this?
+>   https://cygwin.com/pipermail/cygwin/2020-September/246362.html
+> 
+> See also the followup here:
+> 
+>   https://cygwin.com/pipermail/cygwin/2021-January/247666.html
+> 
+> The problem, briefly, is that on certain recent versions of Windows
+> 10, including 2004 but not 1909, native Windows AF_UNIX sockets are
+> represented by reparse points that Cygwin doesn't recognize.  As a
+> result, tools like 'ls' and 'rm' don't work.
 
-I just checked the source.  In the olden days, before the invention of
-close-on-exec, tcsh closed all descriptors > 2 up to OPEN_MAX prior to
-starting any executable.
-
-With close-on-exec this happens only at startup and after an error
-occured.
-
-So testing should be easy: The tcsh startup may be noticably slower.
+LGTM, please push.
 
 
+Thanks,
 Corinna
