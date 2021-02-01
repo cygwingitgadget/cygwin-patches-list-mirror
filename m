@@ -1,39 +1,39 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
- by sourceware.org (Postfix) with ESMTPS id B8AD63858018
- for <cygwin-patches@cygwin.com>; Mon,  1 Feb 2021 09:55:02 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org B8AD63858018
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+ by sourceware.org (Postfix) with ESMTPS id EC378383E81D
+ for <cygwin-patches@cygwin.com>; Mon,  1 Feb 2021 10:01:48 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org EC378383E81D
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1M5jA2-1l3lpQ22fq-007EX5 for <cygwin-patches@cygwin.com>; Mon, 01 Feb 2021
- 10:54:58 +0100
+ mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MJmbB-1lPyiX2rEX-00K9wP for <cygwin-patches@cygwin.com>; Mon, 01 Feb 2021
+ 11:01:44 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 12BC5A80CFE; Mon,  1 Feb 2021 10:54:58 +0100 (CET)
-Date: Mon, 1 Feb 2021 10:54:58 +0100
+ id 15DDBA80D7F; Mon,  1 Feb 2021 11:01:44 +0100 (CET)
+Date: Mon, 1 Feb 2021 11:01:44 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 0/1] Recognizing native Windows AF_UNIX sockets
-Message-ID: <20210201095458.GG375565@calimero.vinschen.de>
+Subject: Re: [PATCH v3 0/2] Make terminal read() thread-safe.
+Message-ID: <20210201100144.GH375565@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20210130163436.21257-1-kbrown@cornell.edu>
+References: <20210128141133.734-1-takashi.yano@nifty.ne.jp>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210130163436.21257-1-kbrown@cornell.edu>
-X-Provags-ID: V03:K1:2qt1/Aq+Ryj/ja05+vE4CXS4TqmbzekXe5l8qf2uiwVnAaRaZit
- M7AabP5cAnKz3XZj0xopFTDIqCCR7L+U6RbMajGktqPf0VtfwkldlYlWnAe37AnxONDvIT1
- eVMIFqyZ+wPV1EJ0jmKw8Lpps06F0IZWj/sDCX/f4vMOvyqG0amUK8yH2hb7YNSx9NUbJza
- 3esWBqGvYVL2yIkql7CQg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:zAJNfBltods=:RUB7+XsRCeF8NYYs5entJX
- gtPaXF33TVxg7qPpBLT1+3kWqwEZBUD7XAfXpZr4EXO23EMF+iaog8bv/luFsgTiv9zfNBjFK
- p04aUgzF7b0Mldi2nZAHmTQqNH9seqoYD+IwEE0WXXg6g0inclOUfGKIAGtHoOYCLKOSjgirC
- dQbIbpJ5xVO1YwEw9xOdSwhYcl4sZByrIyKOzHza6WWFlIRRy4hkIOGXj0WYfo4IX5A06mz+T
- lLWC84h8l4hl7eQ1bIuEUWhP8bTIF5O5TSQabUU3WpUbF0BvcECl16N1lCg2SWiba+XGl5oYj
- tTsbsqybw6Sgbf8E5/40QaMY0gSDbG+P5ZU1COAfbyZhT8SOgO4WHJZ+mbICCqxp45NnNOldF
- 1bqUp4soU2enLeCrWaTEYg+7FtuTI4jcG98366H5UG5/dJTtrwuedsNAJomITUp1ec6mcSjvc
- LrRNJDLJ56QnH/Lhq8rnHMQBlsNyWmDER97QtFEbKXWwRWTOGn9MUaL3Zicq/HpZ/SnfiKoLq
- w==
+In-Reply-To: <20210128141133.734-1-takashi.yano@nifty.ne.jp>
+X-Provags-ID: V03:K1:Y5hPRk/IQSlaQGrhx2bQQCajJeRBhxALM2SKIw5qaHhquuLcKrb
+ hvjNKoYcnLfNuTDEkvJlTFblciWBId5OijUsnpGlBgt3U6/iQ605Ohqtpwux3EWV+Bcd5W/
+ wTiBlJ3PAywWGV980gP+XFh5gfQyRIr8CmtTrnZN/5QJv+4I9idpgJFLN+HYFxzyQE4F7B6
+ qKGxB+O/vdb0e3SLQvkmA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ndu5t0Zyot4=:yxSU4900TPC3q+CUoKuhX9
+ lglLAorE1OWjCwg+elwygSmVeDOgRkVaxVPx5uO60l+7mbGSrcut/ogvYwMEHK7k2dHNwiTdJ
+ SiGjcrIKuGBHLWlpdNRA6VFUlKewvHn9NTKp6dVZPhW+KnC9Cw24xFBXCYY/zoPZ3ks1uO+os
+ LYELd4eH2uT5spJNbLk2St2H3o/pXwagIHDep0tAeWsBbJv1EgFsOXblNudxAPlm5J1iUsMMV
+ xL1GZCZQLPv9L7Y+8wjmCASFYvDowxR4Mf15Sdnk6pChVG7jbqDrUCYSMedIJ5VKlCU7GgZQx
+ 2ZaNj3i9byLG2jwDeY28YoMmXiW129zbD5OaDeFoYkNjJef0cHDAEWqESCPzm1HNM/JEYEVKG
+ V3JnfHt3HmosZ0Vj0EYQyGXwVsoIE7koJfktqvK54UYKIvSRAJ8Lud0hjiaW/FqPCvaHbU8be
+ s7WTN/fSmM0fliKH7kXqGzbCdksosusC6ktQYL3wc62EPmX8fm1NNocLDQ7+maCB/0/hBoANU
+ A==
 X-Spam-Status: No, score=-101.3 required=5.0 tests=BAYES_00,
  GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
  RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
@@ -52,24 +52,26 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 01 Feb 2021 09:55:04 -0000
+X-List-Received-Date: Mon, 01 Feb 2021 10:01:50 -0000
 
-On Jan 30 11:34, Ken Brown via Cygwin-patches wrote:
-> This patch attempts to fix the problem reported here:
+On Jan 28 23:11, Takashi Yano via Cygwin-patches wrote:
+> Currently read() for console and pty slave are somehow
+> not thread-safe. These patches fix the issue.
 > 
->   https://cygwin.com/pipermail/cygwin/2020-September/246362.html
+> Takashi Yano (2):
+>   Cygwin: console: Make read() thread-safe.
+>   Cygwin: pty: Make slave read() thread-safe.
 > 
-> See also the followup here:
+>  winsup/cygwin/fhandler.h          | 10 ++++++++++
+>  winsup/cygwin/fhandler_console.cc | 11 ++++++-----
+>  winsup/cygwin/fhandler_termios.cc |  2 ++
+>  winsup/cygwin/fhandler_tty.cc     |  6 ++++++
+>  4 files changed, 24 insertions(+), 5 deletions(-)
 > 
->   https://cygwin.com/pipermail/cygwin/2021-January/247666.html
-> 
-> The problem, briefly, is that on certain recent versions of Windows
-> 10, including 2004 but not 1909, native Windows AF_UNIX sockets are
-> represented by reparse points that Cygwin doesn't recognize.  As a
-> result, tools like 'ls' and 'rm' don't work.
+> -- 
+> 2.30.0
 
-LGTM, please push.
-
+Pushed.
 
 Thanks,
 Corinna
