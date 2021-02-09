@@ -1,44 +1,27 @@
-Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
- by sourceware.org (Postfix) with ESMTPS id 64051393D027
- for <cygwin-patches@cygwin.com>; Thu,  4 Feb 2021 19:38:01 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 64051393D027
-Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1M6DSi-1l19o72S2y-006gJv for <cygwin-patches@cygwin.com>; Thu, 04 Feb 2021
- 20:37:59 +0100
-Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 0B9E2A806FB; Thu,  4 Feb 2021 20:37:59 +0100 (CET)
-Date: Thu, 4 Feb 2021 20:37:59 +0100
-From: Corinna Vinschen <corinna-cygwin@cygwin.com>
+Return-Path: <mark@maxrnd.com>
+Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
+ by sourceware.org (Postfix) with ESMTPS id 0BEF23857C48
+ for <cygwin-patches@cygwin.com>; Tue,  9 Feb 2021 10:50:23 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 0BEF23857C48
+Authentication-Results: sourceware.org;
+ dmarc=none (p=none dis=none) header.from=maxrnd.com
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=mark@maxrnd.com
+Received: (from daemon@localhost)
+ by m0.truegem.net (8.12.11/8.12.11) id 119AoNGq037376;
+ Tue, 9 Feb 2021 02:50:23 -0800 (PST) (envelope-from mark@maxrnd.com)
+Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67),
+ claiming to be "localhost.localdomain"
+ via SMTP by m0.truegem.net, id smtpdHiKysx; Tue Feb  9 02:50:16 2021
+From: Mark Geisert <mark@maxrnd.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH 09/11] mount.cc: Implement poor-man's cache
-Message-ID: <20210204193759.GL4251@calimero.vinschen.de>
-Reply-To: cygwin-patches@cygwin.com
-Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20210115134534.13290-1-ben@wijen.net>
- <20210115134534.13290-10-ben@wijen.net>
- <20210118115103.GY59030@calimero.vinschen.de>
- <36453e31-040d-7918-f19a-2f379b988194@wijen.net>
+Subject: [PATCH] Cygwin: Have tmpfile(3) use O_TMPFILE
+Date: Tue,  9 Feb 2021 02:50:00 -0800
+Message-Id: <20210209105000.26544-1-mark@maxrnd.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <36453e31-040d-7918-f19a-2f379b988194@wijen.net>
-X-Provags-ID: V03:K1:vU90SC1Q12bZ9l35QZy0NtcuUlk4BrpRMU2qu0MnIhyob+ob1dD
- kUOz8LCb76n1qevebatop8rb0byGssrv+3w1vDG01+ZrokB3KZFef4oEzsqxmdHUjNdo6uC
- KZbJgQ3pvVCuT7oPV1mlQlCkljmedWlY1x4+NQON+3Gwva7sU37HJxMJhoojI+sXKk9AP5U
- qNPzbPben2s7vTy3lMMeg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:IOl4NLEXr9o=:LdAoMOBbYbxn6xWqBYUsPg
- UiJxihQlVfIZ3Ph/XPcgUWuVGHCA4GgF9bjJKer4lyqN58XRUEzEf7YdQgQXDq2sn1egsZUid
- 0sYIGNfS55MNcEJftQytafTIGT+hocoStmcXldWYpgezpIbWGA2BfA37o4g3dvMgRAe2Q17eY
- g/RwmgRuVdWL6asqGmX1Cb9qJbXUDVNGNd5ELr8uy1BChmvQCuTkBw1BpvSW8g1IDzGKzozmm
- 0//++qnLLdoPMqlXi2JBHyoI3eH7ljzRx9UkwtNuswx/kE+/3TBvPZohBMw8N2ruXPtQ0IfXV
- KFIANdDP4mwlLwaJ4J7W4NIerdd1cNMzMscyTcfAp5WD5chVNDScq26TQW4RHaq8q0o41X5tM
- fdyYchhsnL9Z/R8HE2axRzBUfzaZwfHSn6jfmINWetzM9rh3luTIk4T4YmELrbHArlIoC4sc2
- iB3jAabxMA==
-X-Spam-Status: No, score=-101.3 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.8 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, SPF_HELO_NONE, SPF_NONE,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -54,34 +37,60 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 04 Feb 2021 19:38:02 -0000
+X-List-Received-Date: Tue, 09 Feb 2021 10:50:25 -0000
 
-On Feb  3 12:38, Ben wrote:
-> 
-> 
-> On 18-01-2021 12:51, Corinna Vinschen via Cygwin-patches wrote:
-> > Ok, so hash_prefix reduces the path to a drive letter or the UNC path
-> > prefix and hashes it.  However, what about partitions mounted to a
-> > subdir of, say, drive C?  In that case the hashing goes awry, because
-> > you're comparing with the hash of drive C while the path is actually
-> > pointing to another partition.
-> > 
-> How can I mount a partition as a subdir of drive C?
-> For some reason I can't:
-> $ mount /cygdrive/e/Temp/dummy /cygdrive/c/Temp/dummy/dummyone
-> mount: /cygdrive/c/Temp/dummy/dummyone: Invalid argument
+Per discussion on cygwin-developers, a Cygwin tmpfile(3) implementation
+has been added to syscalls.cc.  This overrides the one supplied by
+newlib.  Then the open(2) flag O_TMPFILE was added to the open call that
+tmpfile internally makes.
+---
+ winsup/cygwin/release/3.2.0 |  4 ++++
+ winsup/cygwin/syscalls.cc   | 20 ++++++++++++++++++++
+ 2 files changed, 24 insertions(+)
 
-I wasn't talking about Cygwin mount points, but rather about Windows
-mount points.  Since Windows 2000 a partition can be mounted into a
-directory of another partition.  Only drive C: (ignoring non-harddisks)
-has to be mounted with a drive letter, all others can be mounted just as
-on Unix.
+diff --git a/winsup/cygwin/release/3.2.0 b/winsup/cygwin/release/3.2.0
+index f748a9bc8..d02d16863 100644
+--- a/winsup/cygwin/release/3.2.0
++++ b/winsup/cygwin/release/3.2.0
+@@ -19,6 +19,10 @@ What changed:
+ 
+ - A few FAQ updates.
+ 
++- Have tmpfile(3) make use of Win32 FILE_ATTRIBUTE_TEMPORARY via open(2)
++  flag O_TMPFILE.
++  Addresses: https://cygwin.com/pipermail/cygwin/2021-January/247304.html
++
+ 
+ Bug Fixes
+ ---------
+diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
+index 52a020f07..b79c1c7cd 100644
+--- a/winsup/cygwin/syscalls.cc
++++ b/winsup/cygwin/syscalls.cc
+@@ -5225,3 +5225,23 @@ pipe2 (int filedes[2], int mode)
+   syscall_printf ("%R = pipe2([%d, %d], %y)", res, read, write, mode);
+   return res;
+ }
++
++extern "C" FILE *
++tmpfile (void)
++{
++  char *dir = getenv ("TMPDIR");
++  if (!dir)
++    dir = P_tmpdir;
++  int fd = open (dir, O_RDWR | O_CREAT | O_BINARY | O_TMPFILE,
++                 S_IRUSR | S_IWUSR);
++  if (fd < 0)
++    return NULL;
++  FILE *fp = fdopen (fd, "wb+");
++  int e = errno;
++  if (!fp)
++    close (fd); // ..will remove file
++  set_errno (e);
++  return fp;
++}
++
++EXPORT_ALIAS (tmpfile, tmpfile64);
+-- 
+2.30.0
 
-But, yeah, Cygwin also supports bind mounts.  Here's an example
-from my /etc/fstab.d user mount file:
-
-  //remote/cygwin-src /cygwin nfs binary 0 0
-  /cygwin/pub /home/pub nfs bind 0 0
-
-
-Corinna
