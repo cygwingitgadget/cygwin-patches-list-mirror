@@ -1,41 +1,41 @@
 Return-Path: <corinna-cygwin@cygwin.com>
 Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
- by sourceware.org (Postfix) with ESMTPS id 4433A398B841
- for <cygwin-patches@cygwin.com>; Tue,  9 Feb 2021 15:25:12 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 4433A398B841
+ by sourceware.org (Postfix) with ESMTPS id BC3C3398B833
+ for <cygwin-patches@cygwin.com>; Tue,  9 Feb 2021 15:25:50 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org BC3C3398B833
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1Mzy6q-1m5CN63Im6-00x4Jh for <cygwin-patches@cygwin.com>; Tue, 09 Feb 2021
- 16:25:10 +0100
+ mrelayeu.kundenserver.de (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis)
+ id 1N7zJl-1lvXCQ29SN-0155t3 for <cygwin-patches@cygwin.com>; Tue, 09 Feb 2021
+ 16:25:49 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 45D9CA807A5; Tue,  9 Feb 2021 16:25:10 +0100 (CET)
-Date: Tue, 9 Feb 2021 16:25:10 +0100
+ id 06204A807A5; Tue,  9 Feb 2021 16:25:49 +0100 (CET)
+Date: Tue, 9 Feb 2021 16:25:49 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: Have tmpfile(3) use O_TMPFILE
-Message-ID: <20210209152510.GV4251@calimero.vinschen.de>
+Subject: Re: [PATCH 0/1] Fix fstat on FIFOs, part 1
+Message-ID: <20210209152549.GW4251@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20210209105000.26544-1-mark@maxrnd.com>
+References: <20210209151158.57831-1-kbrown@cornell.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210209105000.26544-1-mark@maxrnd.com>
-X-Provags-ID: V03:K1:Yn0hiITrYH1+VN6ji9JQrEDgUe5ESv/MsTH7Px34J4mt88xoBuo
- d372zoZFsKlyow+mhwy8a/IHVjcS9WcrpoyJT99rhIpxfdvvOU68Id36rI1RivlbEs0Uqw9
- eYcZLTeV0mylMbWkAcbQVuk3sxOQURycA5PJAcW19bRhC/VnVAO9fzhyCmvlNy+YNe6kzS5
- dK2MqrfEg980xJThLn+vA==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:IhOmMgTt+eM=:522ULxJ4jMojP8GBWV58K3
- BEMbJY8NL0oRS9rg3dfqZfXnN5V2P2KHoFMxNLBVPzap/AHM1rdgGZs0wolbCXD5g4nzXHvfk
- DaOaYBNw1XXe2+Ou3f1vEFs2FZ1kfCGxuAuu3if53UoTkqf31Psl89ISBjg/h+WNlyqx5FUTk
- 5hs+YJKPosBdu4f5uF5VIXa1Aq2ddoz2xr5CG6YTDUl5YnOf8G4aiF2MYmVupyj6rn0NwuOcL
- xQsrgqGcqS3Zm4Xugp3vVpXwHPrtL8mCN4mhVUkbetQIUEkNDjnJj7sZaS+S+TdEw9LWW0qkd
- mMUeafW3g+D6+Vg26E+AuGpS2ep3l4iw+GkIBIjj4ZRLO0TxbuZqDGgy6mWMNSL4AdZ2+E+m8
- 9Nli61wWWRa5J3sgScnTqexTVU+9+0MPbKBhM4VlJ7goH7hc5Yrq2JiQR8AKYU7JkE1U/uggc
- 0Rb1m5WfKg==
-X-Spam-Status: No, score=-107.0 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
- KAM_SHORT, RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+In-Reply-To: <20210209151158.57831-1-kbrown@cornell.edu>
+X-Provags-ID: V03:K1:e6Sx0icZXZDxLZVLANaOo5FOXR7+IknrWtc4rcIkWuiWqtVGiCe
+ 4muCOSvBNUJjSjFDEWGKPyONtsUsOHybis+x/gg3dn/j0eEC36SRuN9NTvwFqF366XL4f+e
+ WxXRUYNT8gP/OjQIXWF0kxKPpHXc9LcYctyhuuL/WtZfM7cMeGeFYe6lT5O0BUIbwJdIrDf
+ Sh1uOt+VG05P9wxqAFZhw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:/qAHpGTdKls=:vTwahgLTn+UsqO5FUSX42S
+ zWQWyXNekZNqvP+WNf4Ah5KvngpR+eq6PLhxUYd7eEHxlyjjyYhcPiYjnpjrnT1e+famqG0YE
+ qhWayC9ZZetDt36JzhUk4zReVkejLD/inp6pD6KPSH9mP3EQAI9EJUsZ6AI5GcQYrlPxnIrMe
+ RuZTH6UXTNEgmvCJVTczhddbu+ci+OwS7uzIVZfbivUaY+UdbuEouu2EJLpA1KFEUCUuhi9Z+
+ S6Ia+k0mxf2Mq7AWpzyV0+tBYrhOQaBFbox2eyYPFx1HDkQ9LR/WJ6ntl0Dv7DEBiXEv6pQMI
+ 4pJsxkTR4vyBBccGdjqF8a2TiwgS0nvY63mK8bR9keCRaYUa+GFFGB/67TXuQBenOxtJV/zxW
+ 31q59pb2ettssDSOguKUkAS5oXL+dNWhmkn5kKZwxu6r3t9aPYVcllJizLw0dCo6bwvshMSsw
+ s0AVKsGTBA==
+X-Spam-Status: No, score=-101.0 required=5.0 tests=BAYES_00,
+ GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, KAM_NUMSUBJECT,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -51,61 +51,27 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 09 Feb 2021 15:25:14 -0000
+X-List-Received-Date: Tue, 09 Feb 2021 15:25:52 -0000
 
-Hi Mark,
-
-On Feb  9 02:50, Mark Geisert wrote:
-> Per discussion on cygwin-developers, a Cygwin tmpfile(3) implementation
-> has been added to syscalls.cc.  This overrides the one supplied by
-> newlib.  Then the open(2) flag O_TMPFILE was added to the open call that
-> tmpfile internally makes.
-> ---
->  winsup/cygwin/release/3.2.0 |  4 ++++
->  winsup/cygwin/syscalls.cc   | 20 ++++++++++++++++++++
->  2 files changed, 24 insertions(+)
+On Feb  9 10:11, Ken Brown via Cygwin-patches wrote:
+> Commit 76dca77f04 had a careless blunder, so this patch reverts it.
 > 
-> diff --git a/winsup/cygwin/release/3.2.0 b/winsup/cygwin/release/3.2.0
-> index f748a9bc8..d02d16863 100644
-> --- a/winsup/cygwin/release/3.2.0
-> +++ b/winsup/cygwin/release/3.2.0
-> @@ -19,6 +19,10 @@ What changed:
->  
->  - A few FAQ updates.
->  
-> +- Have tmpfile(3) make use of Win32 FILE_ATTRIBUTE_TEMPORARY via open(2)
-> +  flag O_TMPFILE.
-> +  Addresses: https://cygwin.com/pipermail/cygwin/2021-January/247304.html
-> +
->  
->  Bug Fixes
->  ---------
-> diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
-> index 52a020f07..b79c1c7cd 100644
-> --- a/winsup/cygwin/syscalls.cc
-> +++ b/winsup/cygwin/syscalls.cc
-> @@ -5225,3 +5225,23 @@ pipe2 (int filedes[2], int mode)
->    syscall_printf ("%R = pipe2([%d, %d], %y)", res, read, write, mode);
->    return res;
->  }
-> +
-> +extern "C" FILE *
-> +tmpfile (void)
-> +{
-> +  char *dir = getenv ("TMPDIR");
+> Nevertheless, fstat(2) can be made more efficient on FIFOs, and I'm
+> working on a separate patchset to do this right.  It's worth doing,
+> because every call to open(2) on a FIFO leads to a call chain
+> 
+>   device_access_denied --> fhaccess --> fstat,
+> 
+> and this is one of the cases where greater efficiency is possible.
+> 
+> Ken Brown (1):
+>   Revert "Cygwin: fstat_helper: always use handle in call to
+>     get_file_attribute"
+> 
+>  winsup/cygwin/fhandler_disk_file.cc | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
 
-This isn't what Linux tmpfile does.  Per the man page, it tries to
-create the file in P_tmpdir first, and if that fails, it tries
-"/tmp".
-
-> +  if (!dir)
-> +    dir = P_tmpdir;
-> +  int fd = open (dir, O_RDWR | O_CREAT | O_BINARY | O_TMPFILE,
-
-You have to specify O_EXCL here.  The idea is that this file cannot be
-made permanent, and missing the O_EXCL flag allows exactly that.  See
-https://man7.org/linux/man-pages/man2/open.2.html, the lengthy
-description in terms of O_TMPFILE.
+Sure, go ahead.
 
 
 Thanks,
