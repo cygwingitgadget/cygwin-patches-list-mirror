@@ -1,29 +1,28 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com
- [210.131.2.80])
- by sourceware.org (Postfix) with ESMTPS id 8BA74398E462
- for <cygwin-patches@cygwin.com>; Wed, 10 Feb 2021 12:30:49 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 8BA74398E462
-Received: from Express5800-S70 (v040204.dynamic.ppp.asahi-net.or.jp
- [124.155.40.204]) (authenticated)
- by conssluserg-01.nifty.com with ESMTP id 11ACULVx010873
- for <cygwin-patches@cygwin.com>; Wed, 10 Feb 2021 21:30:21 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 11ACULVx010873
-X-Nifty-SrcIP: [124.155.40.204]
-Date: Wed, 10 Feb 2021 21:30:24 +0900
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Return-Path: <mark@maxrnd.com>
+Received: from m0.truegem.net (m0.truegem.net [69.55.228.47])
+ by sourceware.org (Postfix) with ESMTPS id 5182F3850430
+ for <cygwin-patches@cygwin.com>; Thu, 11 Feb 2021 06:53:28 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 5182F3850430
+Authentication-Results: sourceware.org;
+ dmarc=none (p=none dis=none) header.from=maxrnd.com
+Authentication-Results: sourceware.org; spf=none smtp.mailfrom=mark@maxrnd.com
+Received: (from daemon@localhost)
+ by m0.truegem.net (8.12.11/8.12.11) id 11B6rQS2064361;
+ Wed, 10 Feb 2021 22:53:26 -0800 (PST) (envelope-from mark@maxrnd.com)
+Received: from 162-235-43-67.lightspeed.irvnca.sbcglobal.net(162.235.43.67),
+ claiming to be "localhost.localdomain"
+ via SMTP by m0.truegem.net, id smtpdhSflXA; Wed Feb 10 22:53:17 2021
+From: Mark Geisert <mark@maxrnd.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH] Cygwin: pty: Reduce unecessary input transfer.
-Message-Id: <20210210213024.975a7e82dd9e03d65a164da6@nifty.ne.jp>
-In-Reply-To: <20210210090259.25996-1-takashi.yano@nifty.ne.jp>
-References: <20210210090259.25996-1-takashi.yano@nifty.ne.jp>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.30; i686-pc-mingw32)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, NICE_REPLY_A, RCVD_IN_DNSWL_NONE,
- SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
+Subject: [PATCH v2] Cygwin: Have tmpfile(3) use O_TMPFILE
+Date: Wed, 10 Feb 2021 22:53:05 -0800
+Message-Id: <20210211065306.457-1-mark@maxrnd.com>
+X-Mailer: git-send-email 2.30.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, SPF_HELO_NONE, SPF_NONE,
+ TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -38,24 +37,60 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 10 Feb 2021 12:30:52 -0000
+X-List-Received-Date: Thu, 11 Feb 2021 06:53:29 -0000
 
-On Wed, 10 Feb 2021 18:02:59 +0900
-Takashi Yano wrote:
-> - Currently, input transfer is performed every time one line is read(),
->   if the non-cygwin app is running in the background. With this patch,
->   transfer is triggered by setpgid() rather than read() so that the
->   unnecessary input transfer can be reduced much in that situation.
-> ---
->  winsup/cygwin/fhandler.h      |  15 +-
->  winsup/cygwin/fhandler_tty.cc | 371 ++++++++++++++++++++--------------
->  winsup/cygwin/spawn.cc        |  76 ++++---
->  winsup/cygwin/tty.cc          |  89 ++++++++
->  winsup/cygwin/tty.h           |  16 +-
->  5 files changed, 371 insertions(+), 196 deletions(-)
+Per discussion on cygwin-developers, a Cygwin tmpfile(3) implementation
+has been added to syscalls.cc.  This overrides the one supplied by
+newlib.  Then the open(2) flag O_TMPFILE was added to the open call that
+tmpfile internally makes.
 
-Hmm. This patch seems to have some race issues.
-Please wait for v2 patch.
+This v2 patch removes O_CREAT from open() call as O_TMPFILE obviates it.
+Note that open() takes a directory's path but returns an fd to a file.
+---
+ winsup/cygwin/release/3.2.0 |  4 ++++
+ winsup/cygwin/syscalls.cc   | 17 +++++++++++++++++
+ 2 files changed, 21 insertions(+)
 
+diff --git a/winsup/cygwin/release/3.2.0 b/winsup/cygwin/release/3.2.0
+index f748a9bc8..d02d16863 100644
+--- a/winsup/cygwin/release/3.2.0
++++ b/winsup/cygwin/release/3.2.0
+@@ -19,6 +19,10 @@ What changed:
+ 
+ - A few FAQ updates.
+ 
++- Have tmpfile(3) make use of Win32 FILE_ATTRIBUTE_TEMPORARY via open(2)
++  flag O_TMPFILE.
++  Addresses: https://cygwin.com/pipermail/cygwin/2021-January/247304.html
++
+ 
+ Bug Fixes
+ ---------
+diff --git a/winsup/cygwin/syscalls.cc b/winsup/cygwin/syscalls.cc
+index 52a020f07..4cda69033 100644
+--- a/winsup/cygwin/syscalls.cc
++++ b/winsup/cygwin/syscalls.cc
+@@ -5225,3 +5225,20 @@ pipe2 (int filedes[2], int mode)
+   syscall_printf ("%R = pipe2([%d, %d], %y)", res, read, write, mode);
+   return res;
+ }
++
++extern "C" FILE *
++tmpfile (void)
++{
++  char *dir = getenv ("TMPDIR");
++  if (!dir)
++    dir = P_tmpdir;
++  int fd = open (dir, O_RDWR | O_BINARY | O_TMPFILE, S_IRUSR | S_IWUSR);
++  if (fd < 0)
++    return NULL;
++  FILE *fp = fdopen (fd, "wb+");
++  int e = errno;
++  if (!fp)
++    close (fd); // ..will remove tmp file
++  set_errno (e);
++  return fp;
++}
 -- 
-Takashi Yano <takashi.yano@nifty.ne.jp>
+2.30.0
+
