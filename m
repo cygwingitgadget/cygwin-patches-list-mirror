@@ -1,24 +1,23 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
 Received: from conuserg-09.nifty.com (conuserg-09.nifty.com [210.131.2.76])
- by sourceware.org (Postfix) with ESMTPS id 936FD3858024
- for <cygwin-patches@cygwin.com>; Sun, 14 Feb 2021 09:43:32 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 936FD3858024
+ by sourceware.org (Postfix) with ESMTPS id AD3B7385802B
+ for <cygwin-patches@cygwin.com>; Sun, 14 Feb 2021 18:48:37 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org AD3B7385802B
 Received: from localhost.localdomain (y085178.dynamic.ppp.asahi-net.or.jp
  [118.243.85.178]) (authenticated)
- by conuserg-09.nifty.com with ESMTP id 11E9gxTY026697;
- Sun, 14 Feb 2021 18:43:05 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 11E9gxTY026697
+ by conuserg-09.nifty.com with ESMTP id 11EIluTw011057;
+ Mon, 15 Feb 2021 03:48:02 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com 11EIluTw011057
 X-Nifty-SrcIP: [118.243.85.178]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v2] Cygwin: console: Abort read() on signal if SA_RESTART is
- not set.
-Date: Sun, 14 Feb 2021 18:42:50 +0900
-Message-Id: <20210214094250.1245-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: pty: Fix a bug in input transfer for GDB.
+Date: Mon, 15 Feb 2021 03:47:51 +0900
+Message-Id: <20210214184752.716-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.6 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+X-Spam-Status: No, score=-10.7 required=5.0 tests=BAYES_00, DKIM_SIGNED,
  DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
  SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
@@ -35,75 +34,37 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Sun, 14 Feb 2021 09:43:36 -0000
+X-List-Received-Date: Sun, 14 Feb 2021 18:48:41 -0000
 
-- Currently, console read() keeps reading after SIGWINCH is sent
-  even if SA_RESTART flag is not set. With this patch, read()
-  returns EINTR on SIGWINCH if SA_RESTART flag is not set.
-  The same problem for SIGQUIT and SIGTSTP has also been fixed.
+- With this patch, not only NL but also CR is treated as a line end
+  in the code checking if input transfer is necessary.
 ---
- winsup/cygwin/fhandler_console.cc | 7 +++----
- winsup/cygwin/fhandler_termios.cc | 1 +
- winsup/cygwin/tty.cc              | 1 +
- winsup/cygwin/tty.h               | 1 +
- 4 files changed, 6 insertions(+), 4 deletions(-)
+ winsup/cygwin/fhandler_tty.cc | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
-index 3c0783575..78af6cf2b 100644
---- a/winsup/cygwin/fhandler_console.cc
-+++ b/winsup/cygwin/fhandler_console.cc
-@@ -586,12 +586,11 @@ wait_retry:
- 	case input_ok: /* input ready */
- 	  break;
- 	case input_signalled: /* signalled */
--	  release_input_mutex ();
--	  /* The signal will be handled by cygwait() above. */
--	  continue;
- 	case input_winch:
- 	  release_input_mutex ();
--	  continue;
-+	  if (global_sigs[get_ttyp ()->last_sig].sa_flags & SA_RESTART)
-+	    continue;
-+	  goto sig_exit;
- 	default:
- 	  /* Should not come here */
- 	  release_input_mutex ();
-diff --git a/winsup/cygwin/fhandler_termios.cc b/winsup/cygwin/fhandler_termios.cc
-index 9fbace95c..e8daf946b 100644
---- a/winsup/cygwin/fhandler_termios.cc
-+++ b/winsup/cygwin/fhandler_termios.cc
-@@ -133,6 +133,7 @@ tty_min::kill_pgrp (int sig)
-   siginfo_t si = {0};
-   si.si_signo = sig;
-   si.si_code = SI_KERNEL;
-+  last_sig = sig;
- 
-   for (unsigned i = 0; i < pids.npids; i++)
+diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+index f6eb3ae4d..5afede859 100644
+--- a/winsup/cygwin/fhandler_tty.cc
++++ b/winsup/cygwin/fhandler_tty.cc
+@@ -1181,7 +1181,7 @@ fhandler_pty_slave::mask_switch_to_pcon_in (bool mask, bool xfer)
+   /* In GDB, transfer input based on setpgid() does not work because
+      GDB may not set terminal process group properly. Therefore,
+      transfer input here if isHybrid is set. */
+-  if (get_ttyp ()->switch_to_pcon_in && !!masked != mask && xfer && isHybrid)
++  if (isHybrid && !!masked != mask && xfer)
      {
-diff --git a/winsup/cygwin/tty.cc b/winsup/cygwin/tty.cc
-index 41f81f694..7627cd6c7 100644
---- a/winsup/cygwin/tty.cc
-+++ b/winsup/cygwin/tty.cc
-@@ -251,6 +251,7 @@ tty::init ()
-   master_is_running_as_service = false;
-   req_xfer_input = false;
-   pcon_input_state = to_cyg;
-+  last_sig = 0;
+       if (mask && get_ttyp ()->pcon_input_state_eq (tty::to_nat))
+ 	{
+@@ -1471,7 +1471,8 @@ wait_retry:
+ out:
+   termios_printf ("%d = read(%p, %lu)", totalread, ptr, len);
+   len = (size_t) totalread;
+-  mask_switch_to_pcon_in (false, totalread > 0 && ptr0[totalread - 1] == '\n');
++  bool saw_eol = totalread > 0 && strchr ("\r\n", ptr0[totalread -1]);
++  mask_switch_to_pcon_in (false, saw_eol);
  }
  
- HANDLE
-diff --git a/winsup/cygwin/tty.h b/winsup/cygwin/tty.h
-index e1de7ab46..a8ddd68d6 100644
---- a/winsup/cygwin/tty.h
-+++ b/winsup/cygwin/tty.h
-@@ -48,6 +48,7 @@ public:
-   fh_devices ntty;
-   ULONGLONG last_ctrl_c;	/* tick count of last ctrl-c */
-   bool is_console;
-+  int last_sig;
- 
-   IMPLEMENT_STATUS_FLAG (bool, initialized)
-   IMPLEMENT_STATUS_FLAG (bool, rstcons)
+ int
 -- 
 2.30.0
 
