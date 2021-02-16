@@ -1,26 +1,36 @@
-Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
- by sourceware.org (Postfix) with ESMTPS id 11F093861024
- for <cygwin-patches@cygwin.com>; Tue, 16 Feb 2021 11:37:34 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 11F093861024
-Received: from localhost.localdomain (y085178.dynamic.ppp.asahi-net.or.jp
- [118.243.85.178]) (authenticated)
- by conuserg-07.nifty.com with ESMTP id 11GBbDb1022750;
- Tue, 16 Feb 2021 20:37:21 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 11GBbDb1022750
-X-Nifty-SrcIP: [118.243.85.178]
-From: Takashi Yano <takashi.yano@nifty.ne.jp>
+Return-Path: <brian.inglis@systematicsw.ab.ca>
+Received: from smtp-out-no.shaw.ca (smtp-out-no.shaw.ca [64.59.134.12])
+ by sourceware.org (Postfix) with ESMTPS id 52E69384B80F
+ for <cygwin-patches@cygwin.com>; Tue, 16 Feb 2021 16:01:04 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 52E69384B80F
+Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
+ header.from=SystematicSW.ab.ca
+Authentication-Results: sourceware.org;
+ spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
+Received: from BWINGLISD.cg.shawcable.net. ([24.64.172.44])
+ by shaw.ca with ESMTP
+ id C2mblLRm22SWTC2mdlwzGX; Tue, 16 Feb 2021 09:01:03 -0700
+X-Authority-Analysis: v=2.4 cv=fdJod2cF c=1 sm=1 tr=0 ts=602bec3f
+ a=kiZT5GMN3KAWqtYcXc+/4Q==:117 a=kiZT5GMN3KAWqtYcXc+/4Q==:17
+ a=r77TgQKjGQsHNAKrUKIA:9 a=CK5ovNVcWVCeCUjQAzIA:9 a=QEXdDO2ut3YA:10
+ a=VSevBwtulvAOWX-5JCwA:9 a=B2y7HmGcmWMA:10
+From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH v2] Cygwin: console: Introduce new thread which handles input
- signal.
-Date: Tue, 16 Feb 2021 20:37:05 +0900
-Message-Id: <20210216113705.1358-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] cpuinfo: fix check; add AVX features;
+ move SME, SEV/_ES features
+Date: Tue, 16 Feb 2021 09:00:58 -0700
+Message-Id: <20210216160059.62164-1-Brian.Inglis@SystematicSW.ab.ca>
 X-Mailer: git-send-email 2.30.0
+Reply-To: cygwin-patches@cygwin.com
 MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="------------2.30.0"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00, DKIM_SIGNED,
- DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, KAM_SOMETLD_ARE_BAD_TLD,
- PDS_OTHER_BAD_TLD, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_PASS,
+X-CMAE-Envelope: MS4xfH8AhWZ335zLINs1GX0h2jopyt4OexcG75EyKa91x8ytT1WZqvuP5ewDU30UqXQp/ZnBukeKzVIfTrF53A4rfBuI7XDwMcPcacZp3mYlG9fT6T1WIomY
+ EdBB24D8Etu6KFmtjLjDOhZOk/r/dmOKmuVGTxaD9nkPSdrq1V1e8g79j5eJxI8G2TdPMnLPQsui9sO28YytkJw5RTerSw8x+2XAnFoyGEJshShakhMz4FT4
+ 0pALpomzKMvGOJMBz14mzA3DJlMSwxvx4OUHVq1c0CY=
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW,
+ RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPAM_BODY, SPF_HELO_NONE, SPF_NONE,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -36,297 +46,133 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 16 Feb 2021 11:37:39 -0000
+X-List-Received-Date: Tue, 16 Feb 2021 16:01:07 -0000
 
-- Currently, Ctrl-Z, Ctrl-\ and SIGWINCH does not work in console
-  if the process does not call read() or select(). This is because
-  these are processed in process_input_message() which is called
-  from read() or select(). This is a long standing issue of console.
-  Addresses:
-    https://cygwin.com/pipermail/cygwin/2020-May/244898.html
-    https://cygwin.com/pipermail/cygwin/2021-February/247779.html
+This is a multi-part message in MIME format.
+--------------2.30.0
+Content-Type: text/plain; charset=UTF-8; format=fixed
+Content-Transfer-Encoding: 8bit
 
-  With this patch, new thread which handles only input signals is
-  introduced so that Crtl-Z, etc. work without calling read() or
-  select(). Ctrl-S and Ctrl-Q are also handled in this thread.
+
+fix cpuid 0x80000007 supported check;
+Linux 5.11 💕 Valentine's Day Edition 💕 added features and changes:
+add Intel 0x00000007 EDX:23 avx512_fp16 and 0x00000007:1 EAX:4 avx_vnni;
+group scattered AMD 0x8000001f EAX Secure Mem/Encrypted Virt features at end:
+0 sme, 1 sev, 3 sev_es (more to come not yet displayed)
 ---
- winsup/cygwin/exceptions.cc       |   1 +
- winsup/cygwin/fhandler.h          |   5 +-
- winsup/cygwin/fhandler_console.cc | 177 +++++++++++++++++++++++++++++-
- 3 files changed, 181 insertions(+), 2 deletions(-)
+ winsup/cygwin/fhandler_proc.cc | 46 ++++++++++++++++++----------------
+ 1 file changed, 24 insertions(+), 22 deletions(-)
 
-diff --git a/winsup/cygwin/exceptions.cc b/winsup/cygwin/exceptions.cc
-index 3a6823325..a914110fe 100644
---- a/winsup/cygwin/exceptions.cc
-+++ b/winsup/cygwin/exceptions.cc
-@@ -1163,6 +1163,7 @@ ctrl_c_handler (DWORD type)
- 	sig = SIGQUIT;
-       t->last_ctrl_c = GetTickCount64 ();
-       t->kill_pgrp (sig);
-+      t->output_stopped = false;
-       t->last_ctrl_c = GetTickCount64 ();
-       return TRUE;
-     }
-diff --git a/winsup/cygwin/fhandler.h b/winsup/cygwin/fhandler.h
-index 166ade414..e457e2785 100644
---- a/winsup/cygwin/fhandler.h
-+++ b/winsup/cygwin/fhandler.h
-@@ -2105,6 +2105,7 @@ public:
-     HANDLE input_mutex;
-     HANDLE output_mutex;
-   };
-+  HANDLE thread_sync_event;
- private:
-   static const unsigned MAX_WRITE_CHARS;
-   static console_state *shared_console_info;
-@@ -2167,7 +2168,7 @@ private:
+
+--------------2.30.0
+Content-Type: text/x-patch; name="0001-cpuinfo-fix-check-add-AVX-features-move-SME-SEV-_ES-features.patch"
+Content-Transfer-Encoding: 8bit
+Content-Disposition: attachment; filename="0001-cpuinfo-fix-check-add-AVX-features-move-SME-SEV-_ES-features.patch"
+
+diff --git a/winsup/cygwin/fhandler_proc.cc b/winsup/cygwin/fhandler_proc.cc
+index 8e23c0609485..501c157daae5 100644
+--- a/winsup/cygwin/fhandler_proc.cc
++++ b/winsup/cygwin/fhandler_proc.cc
+@@ -1293,7 +1293,7 @@ format_proc_cpuinfo (void *, char *&destbuf)
  
-   void __reg3 read (void *ptr, size_t& len);
-   ssize_t __stdcall write (const void *ptr, size_t len);
--  void doecho (const void *str, DWORD len) { (void) write (str, len); }
-+  void doecho (const void *str, DWORD len);
-   int close ();
-   static bool exists () {return !!GetConsoleCP ();}
+ /* features scattered in various CPUID levels. */
+       /* cpuid 0x80000007 edx */
+-      if (maxf >= 0x00000007)
++      if (maxe >= 0x80000007)
+ 	{
+ 	  cpuid (&unused, &unused, &unused, &features1, 0x80000007);
  
-@@ -2247,6 +2248,8 @@ private:
-   static void request_xterm_mode_input (bool, const handle_set_t *p);
-   static void request_xterm_mode_output (bool, const handle_set_t *p);
+@@ -1330,13 +1330,6 @@ format_proc_cpuinfo (void *, char *&destbuf)
+ 	  ftcprint (features1,  7, "hw_pstate");	/* hw P state */
+ 	  ftcprint (features1, 11, "proc_feedback"); /* proc feedback interf */
+ 	}
+-      /* cpuid 0x8000001f eax */
+-      if (maxe >= 0x8000001f)
+-	{
+-	  cpuid (&features1, &unused, &unused, &unused, 0x8000001f);
+-
+-	  ftcprint (features1,  0, "sme");	/* secure memory encryption */
+-	}
  
-+  static void cons_master_thread (handle_set_t *p, tty *ttyp);
-+
-   friend tty_min * tty_list::get_cttyp ();
- };
+ /*	  ftcprint (features1, 11, "pti");*//* Page Table Isolation reqd with Meltdown */
  
-diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
-index 78af6cf2b..5053cb053 100644
---- a/winsup/cygwin/fhandler_console.cc
-+++ b/winsup/cygwin/fhandler_console.cc
-@@ -47,6 +47,8 @@ details. */
- 		  con.b.srWindow.Top + con.scroll_region.Bottom)
- #define con_is_legacy (shared_console_info && con.is_legacy)
+@@ -1370,14 +1363,6 @@ format_proc_cpuinfo (void *, char *&destbuf)
+ /*	  from above */
+ 	  ftcprint (features1,  6, "mba");	/* memory bandwidth alloc */
+ 	}
+-      /* cpuid 0x8000001f eax */
+-      if (maxe >= 0x8000001f)
+-	{
+-	  cpuid (&features2, &unused, &unused, &unused, 0x8000001f);
+-
+-	  ftcprint (features2,  1, "sev");	/* secure encrypted virt */
+-	/*ftcprint (features2,  3, "sev_es"); - print below */
+-	}
+       /* cpuid 0x80000008 ebx */
+       if (maxe >= 0x80000008)
+         {
+@@ -1401,12 +1386,6 @@ format_proc_cpuinfo (void *, char *&destbuf)
+ /*	  ftcprint (features1, 26, "ssb_no");	*//* ssb fixed in hardware */
+         }
  
-+#define CONS_THREAD_SYNC "cygcons.thread_sync"
-+
- const unsigned fhandler_console::MAX_WRITE_CHARS = 16384;
+-      /* cpuid 0x8000001f eax - set above */
+-      if (maxe >= 0x8000001f)
+-	{
+-	  ftcprint (features2,  3, "sev_es");	/* AMD SEV encrypted state */
+-	}
+-
+       /* cpuid 0x00000007 ebx */
+       if (maxf >= 0x00000007)
+ 	{
+@@ -1478,6 +1457,7 @@ format_proc_cpuinfo (void *, char *&destbuf)
+ 	{
+ 	  cpuid (&features1, &unused, &unused, &unused, 0x00000007, 1);
  
- fhandler_console::console_state NO_COPY *fhandler_console::shared_console_info;
-@@ -170,6 +172,143 @@ console_unit::console_unit (HWND me0):
-     api_fatal ("console device allocation failure - too many consoles in use, max consoles is 32");
- }
++	  ftcprint (features1,  4, "avx_vnni");	    /* vex enc NN vec */
+ 	  ftcprint (features1,  5, "avx512_bf16");  /* vec bfloat16 short */
+ 	}
  
-+static DWORD WINAPI
-+cons_master_thread (VOID *arg)
-+{
-+  fhandler_console *fh = (fhandler_console *) arg;
-+  tty *ttyp = (tty *) fh->tc ();
-+  fhandler_console::handle_set_t handle_set;
-+  fh->get_duplicated_handle_set (&handle_set);
-+  HANDLE thread_sync_event;
-+  DuplicateHandle (GetCurrentProcess (), fh->thread_sync_event,
-+		   GetCurrentProcess (), &thread_sync_event,
-+		   0, FALSE, DUPLICATE_SAME_ACCESS);
-+  SetEvent (thread_sync_event);
-+  /* Do not touch class members after here because the class instance
-+     may have been destroyed. */
-+  fhandler_console::cons_master_thread (&handle_set, ttyp);
-+  fhandler_console::close_handle_set (&handle_set);
-+  SetEvent (thread_sync_event);
-+  CloseHandle (thread_sync_event);
-+  return 0;
-+}
-+
-+/* This thread processes signals derived from input messages.
-+   Without this thread, those signals can be handled only when
-+   the process calls read() or select(). This thread reads input
-+   records, processes signals and removes corresponding record.
-+   The other input records are kept back for read() or select(). */
-+void
-+fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
-+{
-+  DWORD output_stopped_at = 0;
-+  while (con.owner == myself->pid)
-+    {
-+      DWORD total_read, n, i, j;
-+      INPUT_RECORD input_rec[INREC_SIZE];
-+
-+      WaitForSingleObject (p->input_mutex, INFINITE);
-+      total_read = 0;
-+      switch (cygwait (p->input_handle, (DWORD) 0))
+@@ -1539,6 +1519,7 @@ format_proc_cpuinfo (void *, char *&destbuf)
+ 	  ftcprint (features1, 13, "avic");             /* virt int control */
+ 	  ftcprint (features1, 15, "v_vmsave_vmload");  /* virt vmsave vmload */
+ 	  ftcprint (features1, 16, "vgif");             /* virt glb int flag */
++/*	  ftcprint (features1, 28, "svme_addr_chk");  *//* secure vmexit addr check */
+         }
+ 
+       /* Intel cpuid 0x00000007 ecx */
+@@ -1592,10 +1573,31 @@ format_proc_cpuinfo (void *, char *&destbuf)
+           ftcprint (features1, 16, "tsxldtrk");		   /* TSX Susp Ld Addr Track */
+           ftcprint (features1, 18, "pconfig");		   /* platform config */
+           ftcprint (features1, 19, "arch_lbr");		   /* last branch records */
++          ftcprint (features1, 23, "avx512_fp16");	   /* avx512 fp16 */
+           ftcprint (features1, 28, "flush_l1d");	   /* flush l1d cache */
+           ftcprint (features1, 29, "arch_capabilities");   /* arch cap MSR */
+         }
+ 
++      /* cpuid x8000001f eax */
++      if (is_amd && maxe >= 0x8000001f)
 +	{
-+	case WAIT_OBJECT_0:
-+	  ReadConsoleInputA (p->input_handle,
-+			     input_rec, INREC_SIZE, &total_read);
-+	  break;
-+	case WAIT_TIMEOUT:
-+	case WAIT_SIGNALED:
-+	case WAIT_CANCELED:
-+	  break;
-+	default: /* Error */
-+	  ReleaseMutex (p->input_mutex);
-+	  return;
++	  cpuid (&features2, &unused, &unused, &unused, 0x8000001f);
++
++	  ftcprint (features2,  0, "sme");	/* secure memory encryption */
++	  ftcprint (features2,  1, "sev");	/* AMD secure encrypted virt */
++/*	  ftcprint (features2,  2, "vm_page_flush");*/	/* VM page flush MSR */
++	  ftcprint (features2,  3, "sev_es");	/* AMD SEV encrypted state */
++/*	  ftcprint (features2,  4, "sev_snp");*//* AMD SEV secure nested paging */
++/*	  ftcprint (features2,  5, "vmpl");   *//* VM permission levels support */
++/*	  ftcprint (features2, 10, "sme_coherent");   *//* SME h/w cache coherent */
++/*	  ftcprint (features2, 11, "sev_64b");*//* SEV 64 bit host guest only */
++/*	  ftcprint (features2, 12, "sev_rest_inj");   *//* SEV restricted injection */
++/*	  ftcprint (features2, 13, "sev_alt_inj");    *//* SEV alternate injection */
++/*	  ftcprint (features2, 14, "sev_es_dbg_swap");*//* SEV-ES debug state swap */
++/*	  ftcprint (features2, 15, "no_host_ibs");    *//* host IBS unsupported */
++/*	  ftcprint (features2, 16, "vte");    *//* virtual transparent encryption */
 +	}
-+      for (i = 0; i < total_read; i++)
-+	{
-+	  const char c = input_rec[i].Event.KeyEvent.uChar.AsciiChar;
-+	  bool processed = false;
-+	  termios &ti = ttyp->ti;
-+	  switch (input_rec[i].EventType)
-+	    {
-+	    case KEY_EVENT:
-+	      if (ti.c_lflag & ISIG)
-+		{
-+		  int sig = 0;
-+		  if (CCEQ (ti.c_cc[VINTR], c))
-+		    sig = SIGINT;
-+		  else if (CCEQ (ti.c_cc[VQUIT], c))
-+		    sig = SIGQUIT;
-+		  else if (CCEQ (ti.c_cc[VSUSP], c))
-+		    sig = SIGTSTP;
-+		  if (sig && input_rec[i].Event.KeyEvent.bKeyDown)
-+		    {
-+		      ttyp->kill_pgrp (sig);
-+		      ttyp->output_stopped = false;
-+		      /* Discard type ahead input */
-+		      goto skip_writeback;
-+		    }
-+		}
-+	      if (ti.c_iflag & IXON)
-+		{
-+		  if (CCEQ (ti.c_cc[VSTOP], c))
-+		    {
-+		      if (!ttyp->output_stopped
-+			  && input_rec[i].Event.KeyEvent.bKeyDown)
-+			{
-+			  ttyp->output_stopped = true;
-+			  output_stopped_at = i;
-+			}
-+		      processed = true;
-+		    }
-+		  else if (CCEQ (ti.c_cc[VSTART], c))
-+		    {
-+		restart_output:
-+		      if (input_rec[i].Event.KeyEvent.bKeyDown)
-+			ttyp->output_stopped = false;
-+		      processed = true;
-+		    }
-+		  else if ((ti.c_iflag & IXANY) && ttyp->output_stopped
-+			   && c && i >= output_stopped_at)
-+		    goto restart_output;
-+		}
-+	      break;
-+	    case WINDOW_BUFFER_SIZE_EVENT:
-+	      SHORT y = con.dwWinSize.Y;
-+	      SHORT x = con.dwWinSize.X;
-+	      con.fillin (p->output_handle);
-+	      if (y != con.dwWinSize.Y || x != con.dwWinSize.X)
-+		{
-+		  con.scroll_region.Top = 0;
-+		  con.scroll_region.Bottom = -1;
-+		  if (wincap.has_con_24bit_colors () && !con_is_legacy)
-+		    { /* Fix tab position */
-+		      /* Re-setting ENABLE_VIRTUAL_TERMINAL_PROCESSING
-+			 fixes the tab position. */
-+		      request_xterm_mode_output (false, p);
-+		      request_xterm_mode_output (true, p);
-+		    }
-+		  ttyp->kill_pgrp (SIGWINCH);
-+		}
-+	      processed = true;
-+	      break;
-+	    }
-+	  if (processed)
-+	    { /* Remove corresponding record. */
-+	      for (j = i; j < total_read - 1; j++)
-+		input_rec[j] = input_rec[j + 1];
-+	      total_read--;
-+	      i--;
-+	    }
-+	}
-+      if (total_read)
-+	/* Write back input records other than interrupt. */
-+	WriteConsoleInput (p->input_handle, input_rec, total_read, &n);
-+skip_writeback:
-+      ReleaseMutex (p->input_mutex);
-+      cygwait (40);
-+    }
-+}
 +
- bool
- fhandler_console::set_unit ()
- {
-@@ -1194,6 +1333,15 @@ fhandler_console::open (int flags, mode_t)
-   debug_printf ("opened conin$ %p, conout$ %p", get_handle (),
- 		get_output_handle ());
+       print ("\n");
  
-+  if (myself->pid == con.owner)
-+    {
-+      char name[MAX_PATH];
-+      shared_name (name, CONS_THREAD_SYNC, get_minor ());
-+      thread_sync_event = CreateEvent(NULL, FALSE, FALSE, name);
-+      new cygthread (::cons_master_thread, this, "consm");
-+      WaitForSingleObject (thread_sync_event, INFINITE);
-+      CloseHandle (thread_sync_event);
-+    }
-   return 1;
- }
- 
-@@ -1230,6 +1378,16 @@ fhandler_console::close ()
- 
-   release_output_mutex ();
- 
-+  if (con.owner == myself->pid)
-+    {
-+      char name[MAX_PATH];
-+      shared_name (name, CONS_THREAD_SYNC, get_minor ());
-+      thread_sync_event = OpenEvent (MAXIMUM_ALLOWED, FALSE, name);
-+      con.owner = 0;
-+      WaitForSingleObject (thread_sync_event, INFINITE);
-+      CloseHandle (thread_sync_event);
-+    }
-+
-   CloseHandle (input_mutex);
-   input_mutex = NULL;
-   CloseHandle (output_mutex);
-@@ -1539,7 +1697,7 @@ fhandler_console::tcgetattr (struct termios *t)
- }
- 
- fhandler_console::fhandler_console (fh_devices unit) :
--  fhandler_termios (), input_ready (false),
-+  fhandler_termios (), input_ready (false), thread_sync_event (NULL),
-   input_mutex (NULL), output_mutex (NULL)
- {
-   if (unit > 0)
-@@ -3022,6 +3180,14 @@ fhandler_console::write (const void *vsrc, size_t len)
-   if (bg <= bg_eof)
-     return (ssize_t) bg;
- 
-+  if (get_ttyp ()->output_stopped && is_nonblocking ())
-+    {
-+      set_errno (EAGAIN);
-+      return -1;
-+    }
-+  while (get_ttyp ()->output_stopped)
-+    cygwait (10);
-+
-   acquire_attach_mutex (INFINITE);
-   push_process_state process_state (PID_TTYOU);
-   acquire_output_mutex (INFINITE);
-@@ -3352,6 +3518,15 @@ fhandler_console::write (const void *vsrc, size_t len)
-   return len;
- }
- 
-+void
-+fhandler_console::doecho (const void *str, DWORD len)
-+{
-+  bool stopped = get_ttyp ()->output_stopped;
-+  get_ttyp ()->output_stopped = false;
-+  write (str, len);
-+  get_ttyp ()->output_stopped = stopped;
-+}
-+
- static const struct {
-   int vk;
-   const char *val[4];
--- 
-2.30.0
+       bufptr += __small_sprintf (bufptr, "bogomips\t: %d.00\n",
+
+--------------2.30.0--
+
 
