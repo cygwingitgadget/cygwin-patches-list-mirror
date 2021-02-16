@@ -1,37 +1,26 @@
-Return-Path: <brian.inglis@systematicsw.ab.ca>
-Received: from smtp-out-no.shaw.ca (smtp-out-no.shaw.ca [64.59.134.9])
- by sourceware.org (Postfix) with ESMTPS id 80D493857C4E
- for <cygwin-patches@cygwin.com>; Mon, 15 Feb 2021 22:35:45 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 80D493857C4E
-Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=SystematicSW.ab.ca
-Authentication-Results: sourceware.org;
- spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
-Received: from BWINGLISD.cg.shawcable.net. ([24.64.172.44])
- by shaw.ca with ESMTP
- id BmT0lFATo2SWTBmT1lv11G; Mon, 15 Feb 2021 15:35:44 -0700
-X-Authority-Analysis: v=2.4 cv=fdJod2cF c=1 sm=1 tr=0 ts=602af740
- a=kiZT5GMN3KAWqtYcXc+/4Q==:117 a=kiZT5GMN3KAWqtYcXc+/4Q==:17
- a=r77TgQKjGQsHNAKrUKIA:9 a=GGbs7QDsRHf33fvN9iIA:9 a=QEXdDO2ut3YA:10
- a=ioQJsTg4OrVoz4WC9BQA:9 a=B2y7HmGcmWMA:10
-From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
-To: cygwin.patches@cygwin.com,
-	cygwin-patches@cygwin.com
-Subject: [PATCH v2] winsup/doc/posix.xml: add note for getrlimit, setrlimit,
- xrefs to notes
-Date: Mon, 15 Feb 2021 15:35:39 -0700
-Message-Id: <20210215223540.18256-1-Brian.Inglis@SystematicSW.ab.ca>
+Return-Path: <takashi.yano@nifty.ne.jp>
+Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
+ by sourceware.org (Postfix) with ESMTPS id 7F37C3857C50
+ for <cygwin-patches@cygwin.com>; Tue, 16 Feb 2021 10:33:29 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 7F37C3857C50
+Received: from localhost.localdomain (y085178.dynamic.ppp.asahi-net.or.jp
+ [118.243.85.178]) (authenticated)
+ by conuserg-12.nifty.com with ESMTP id 11GAX5eO003162;
+ Tue, 16 Feb 2021 19:33:10 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 11GAX5eO003162
+X-Nifty-SrcIP: [118.243.85.178]
+From: Takashi Yano <takashi.yano@nifty.ne.jp>
+To: cygwin-patches@cygwin.com
+Subject: [PATCH] Cygwin: console: Introduce new thread which handles input
+ signal.
+Date: Tue, 16 Feb 2021 19:32:56 +0900
+Message-Id: <20210216103256.666-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.30.0
-Reply-To: cygwin-patches@cygwin.com
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="------------2.30.0"
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfAYLV+QpB+oTRyyNHkXm2S7iCWyR2EkQTAF5R/Qe7QC/6sJbVolO723Epa4T13Az3zoXLT1shIUJ6X1RnTY4BzxX6bXIzTwZVXlsu2dJZD/h+d0IjdKF
- cxfcfqHzxv1SSyuqklzkMjDAbtHWsUzoPTZEeKBbVPoKxgxeh7nF8Oti6YSrsuWGHow1fTgev37w4D6S6SBHgEKQYD87iOAQV456UhXOU4liVi4KxmhT+Twe
- XHsF4rCNxABdE0OHFY+Bn2UcsuI0vcTx1ZzygibzVKzmEKAdemzoIBTSRvTYPagwHZIi1x3AHd2vKguzNnVofA==
-X-Spam-Status: No, score=-11.6 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW,
- RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_NONE,
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+ DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, KAM_SOMETLD_ARE_BAD_TLD,
+ PDS_OTHER_BAD_TLD, RCVD_IN_DNSWL_NONE, SPF_HELO_NONE, SPF_PASS,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -47,319 +36,273 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Mon, 15 Feb 2021 22:35:47 -0000
+X-List-Received-Date: Tue, 16 Feb 2021 10:33:31 -0000
 
-This is a multi-part message in MIME format.
---------------2.30.0
-Content-Type: text/plain; charset=UTF-8; format=fixed
-Content-Transfer-Encoding: 8bit
+- Currently, Ctrl-Z, Ctrl-\ and SIGWINCH does not work in console
+  if the process does not call read() or select(). This is because
+  these are processed in process_input_message() which is called
+  from read() or select(). This is a long standing issue of console.
+  Addresses:
+    https://cygwin.com/pipermail/cygwin/2020-May/244898.html
+    https://cygwin.com/pipermail/cygwin/2021-February/247779.html
 
-
-change notes to see "Implementation Notes" to xref to std-notes;
-add xref to std-notes to getrlimit, setrlimit;
-add note to document limitations of getrlimit, setrlimit resources support
+  With this patch, new thread which handles only input signals is
+  introduced so that Crtl-Z, etc. work without calling read() or
+  select(). Ctrl-S and Ctrl-Q are also handled in this thread.
 ---
- winsup/doc/posix.xml | 101 ++++++++++++++++++++++++-------------------
- 1 file changed, 57 insertions(+), 44 deletions(-)
+ winsup/cygwin/exceptions.cc       |   1 +
+ winsup/cygwin/fhandler.h          |   4 +
+ winsup/cygwin/fhandler_console.cc | 168 +++++++++++++++++++++++++++++-
+ 3 files changed, 172 insertions(+), 1 deletion(-)
 
-
---------------2.30.0
-Content-Type: text/x-patch; name="0001-winsup-doc-posix.xml-add-note-for-getrlimit-setrlimit.patch"
-Content-Transfer-Encoding: 8bit
-Content-Disposition: attachment; filename="0001-winsup-doc-posix.xml-add-note-for-getrlimit-setrlimit.patch"
-
-diff --git a/winsup/doc/posix.xml b/winsup/doc/posix.xml
-index 0669d07de890..360ee703f3dd 100644
---- a/winsup/doc/posix.xml
-+++ b/winsup/doc/posix.xml
-@@ -64,7 +64,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
-     atoi
-     atol
-     atoll
--    basename			(see chapter "Implementation Notes")
-+    basename			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-     bind
-     bsearch
-     btowc
-@@ -126,8 +126,8 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
-     clock_getcpuclockid
-     clock_getres
-     clock_gettime
--    clock_nanosleep		(see chapter "Implementation Notes")
--    clock_settime		(see chapter "Implementation Notes")
-+    clock_nanosleep		<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-+    clock_settime		<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-     clog
-     clogf
-     clogl
-@@ -242,7 +242,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
-     fchown
-     fchownat
-     fclose
--    fcntl			(see chapter "Implementation Notes")
-+    fcntl			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-     fdatasync
-     fdim
-     fdimf
-@@ -292,7 +292,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
-     fopen
-     fork
-     fpathconf
--    fpclassify			(see chapter "Implementation Notes")
-+    fpclassify			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-     fprintf
-     fputc
-     fputs
-@@ -347,7 +347,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
-     getgroups
-     gethostid
-     gethostname
--    getitimer			(see chapter "Implementation Notes")
-+    getitimer			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-     getline
-     getlogin
-     getlogin_r
-@@ -367,7 +367,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
-     getpwnam_r
-     getpwuid
-     getpwuid_r
--    getrlimit
-+    getrlimit			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-     getrusage
-     gets
-     getservbyname
-@@ -428,26 +428,26 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
-     iscntrl_l
-     isdigit
-     isdigit_l
--    isfinite			(see chapter "Implementation Notes")
-+    isfinite			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-     isgraph
-     isgraph_l
--    isgreater			(see chapter "Implementation Notes")
--    isgreaterequal		(see chapter "Implementation Notes")
--    isinf			(see chapter "Implementation Notes")
-+    isgreater			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-+    isgreaterequal		<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-+    isinf			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-     isless
--    islessequal			(see chapter "Implementation Notes")
--    islessgreater		(see chapter "Implementation Notes")
-+    islessequal			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-+    islessgreater		<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-     islower
-     islower_l
--    isnan			(see chapter "Implementation Notes")
--    isnormal			(see chapter "Implementation Notes")
-+    isnan			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-+    isnormal			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-     isprint
-     isprint_l
-     ispunct
-     ispunct_l
-     isspace
-     isspace_l
--    isunordered			(see chapter "Implementation Notes")
-+    isunordered			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-     isupper
-     isupper_l
-     iswalnum
-@@ -511,7 +511,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
-     localeconv
-     localtime
-     localtime_r
--    lockf			(see chapter "Implementation Notes")
-+    lockf			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-     log
-     log10
-     log10f
-@@ -579,10 +579,10 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
-     mq_timedsend
-     mq_unlink
-     mrand48
--    msgctl			(see chapter "Implementation Notes")
--    msgget			(see chapter "Implementation Notes")
--    msgrcv			(see chapter "Implementation Notes")
--    msgsnd			(see chapter "Implementation Notes")
-+    msgctl			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-+    msgget			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-+    msgrcv			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-+    msgsnd			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-     msync
-     munlock
-     munmap
-@@ -834,9 +834,9 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
-     sem_trywait
-     sem_unlink
-     sem_wait
--    semctl			(see chapter "Implementation Notes")
--    semget			(see chapter "Implementation Notes")
--    semop			(see chapter "Implementation Notes")
-+    semctl			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-+    semget			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-+    semop			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-     send
-     sendmsg
-     sendto
-@@ -847,7 +847,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
-     setgid
-     setgrent
-     sethostent
--    setitimer			(see chapter "Implementation Notes")
-+    setitimer			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-     setjmp
-     setkey			(available in external "crypt" library)
-     setlocale
-@@ -859,7 +859,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
-     setpwent
-     setregid
-     setreuid
--    setrlimit
-+    setrlimit			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-     setservent
-     setsid
-     setsockopt
-@@ -869,10 +869,10 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
-     setvbuf
-     shm_open
-     shm_unlink
--    shmat			(see chapter "Implementation Notes")
--    shmctl			(see chapter "Implementation Notes")
--    shmdt			(see chapter "Implementation Notes")
--    shmget			(see chapter "Implementation Notes")
-+    shmat			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-+    shmctl			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-+    shmdt			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-+    shmget			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-     shutdown
-     sigaction
-     sigaddset
-@@ -886,9 +886,9 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
-     sigismember
-     siglongjmp
-     signal
--    signbit			(see chapter "Implementation Notes")
-+    signbit			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-     signgam
--    sigpause			(see chapter "Implementation Notes")
-+    sigpause			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-     sigpending
-     sigprocmask
-     sigqueue
-@@ -937,7 +937,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
-     strdup
-     strerror
-     strerror_l
--    strerror_r			(see chapter "Implementation Notes")
-+    strerror_r			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-     strfmon
-     strfmon_l
-     strftime
-@@ -1001,7 +1001,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
-     tgammaf
-     tgammal
-     time
--    timer_create		(see chapter "Implementation Notes")
-+    timer_create		<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-     timer_delete
-     timer_getoverrun
-     timer_gettime
-@@ -1162,7 +1162,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
-     finitef
-     finitel
-     fiprintf
--    flock			(see chapter "Implementation Notes")
-+    flock			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-     fls
-     flsl
-     flsll
-@@ -1212,7 +1212,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
-     madvise
-     mkstemps
-     openpty
--    qsort_r			(see chapter "Implementation Notes")
-+    qsort_r			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-     rcmd
-     rcmd_af
-     reallocarray
-@@ -1257,7 +1257,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
-     valloc
-     verr
-     verrx
--    vhangup			(see chapter "Implementation Notes")
-+    vhangup			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-     vsyslog
-     vwarn
-     vwarnx
-@@ -1291,14 +1291,14 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
-     asnprintf
-     asprintf
-     asprintf_r
--    basename			(see chapter "Implementation Notes")
-+    basename			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-     canonicalize_file_name
-     clearenv
-     clog10
-     clog10f
-     clog10l
-     crypt_r			(available in external "crypt" library)
--    dladdr			(see chapter "Implementation Notes")
-+    dladdr			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-     dremf
-     dup3
-     envz_add
-@@ -1370,8 +1370,8 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
-     ptsname_r
-     putwc_unlocked
-     putwchar_unlocked
--    renameat2			(see chapter "Implementation Notes")
--    qsort_r			(see chapter "Implementation Notes")
-+    renameat2			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-+    qsort_r			<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-     quotactl
-     rawmemchr
-     removexattr
-@@ -1545,8 +1545,8 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
-     bcmp			(POSIX.1-2001, SUSv3)
-     bcopy			(SUSv3)
-     bzero			(SUSv3)
--    chroot			(SUSv2) (see chapter "Implementation Notes")
--    clock_setres		(QNX, VxWorks) (see chapter "Implementation Notes")
-+    chroot			(SUSv2)		<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-+    clock_setres		(QNX, VxWorks)	<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
-     cuserid			(POSIX.1-1988, SUSv2)
-     ecvt			(SUSv3)
-     endutent			(XPG2)
-@@ -1592,7 +1592,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
-     ualarm			(SUSv3)
-     usleep			(SUSv3)
-     utmpname			(XPG2)
--    vfork			(SUSv3) (see chapter "Implementation Notes")
-+    vfork			(SUSv3)		<xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
- </screen>
+diff --git a/winsup/cygwin/exceptions.cc b/winsup/cygwin/exceptions.cc
+index 3a6823325..a914110fe 100644
+--- a/winsup/cygwin/exceptions.cc
++++ b/winsup/cygwin/exceptions.cc
+@@ -1163,6 +1163,7 @@ ctrl_c_handler (DWORD type)
+ 	sig = SIGQUIT;
+       t->last_ctrl_c = GetTickCount64 ();
+       t->kill_pgrp (sig);
++      t->output_stopped = false;
+       t->last_ctrl_c = GetTickCount64 ();
+       return TRUE;
+     }
+diff --git a/winsup/cygwin/fhandler.h b/winsup/cygwin/fhandler.h
+index 166ade414..9f60672ae 100644
+--- a/winsup/cygwin/fhandler.h
++++ b/winsup/cygwin/fhandler.h
+@@ -2111,6 +2111,7 @@ private:
+   static bool invisible_console;
+   HANDLE input_mutex, output_mutex;
+   handle_set_t handle_set;
++  HANDLE thread_sync_event;
  
- </sect1>
-@@ -1727,6 +1727,19 @@ flavors, depending on whether _GNU_SOURCE is defined when compiling.</para>
- <para><function>dladdr</function> always sets the Dl_info members dli_sname and
- dli_saddr to NULL, indicating no symbol matching addr could be found.</para>
+   /* Used when we encounter a truncated multi-byte sequence.  The
+      lead bytes are stored here and revisited in the next write call. */
+@@ -2247,6 +2248,9 @@ private:
+   static void request_xterm_mode_input (bool, const handle_set_t *p);
+   static void request_xterm_mode_output (bool, const handle_set_t *p);
  
-+<para><function>getrlimit</function> resources RLIMIT_AS, RLIMIT_CPU,
-+RLIMIT_FSIZE, RLIMIT_DATA always return rlim_cur and rlim_max as RLIM_INFINITY,
-+so <function>setrlimit</function> returns -1 and sets EINVAL if they are
-+lowered, or returns 0 if unchanged.
-+<function>getrlimit</function> resource RLIMIT_NOFILE always returns rlim_cur
-+and rlim_max as OPEN_MAX; <function>setrlimit</function> returns 0 sets EINVAL
-+if rlim_cur > rlim_max, does not change the value if it is RLIM_INFINITY,
-+otherwise returns the result from <function>setdtablesize</function>.
-+<function>getrlimit</function>/<function>setrlimit</function> resources
-+RLIMIT_CORE and RLIMIT_STACK return the current values and set the requested
-+values.
-+All other resource arguments return -1 and set EINVAL.</para>
++  static DWORD WINAPI start_master_thread (void *arg);
++  static void cons_master_thread (handle_set_t *p, tty *ttyp);
 +
- </sect1>
+   friend tty_min * tty_list::get_cttyp ();
+ };
  
- </chapter>
-
---------------2.30.0--
-
+diff --git a/winsup/cygwin/fhandler_console.cc b/winsup/cygwin/fhandler_console.cc
+index 78af6cf2b..b5fcd3a0a 100644
+--- a/winsup/cygwin/fhandler_console.cc
++++ b/winsup/cygwin/fhandler_console.cc
+@@ -47,6 +47,8 @@ details. */
+ 		  con.b.srWindow.Top + con.scroll_region.Bottom)
+ #define con_is_legacy (shared_console_info && con.is_legacy)
+ 
++#define CONS_THREAD_SYNC "cygcons.thread_sync"
++
+ const unsigned fhandler_console::MAX_WRITE_CHARS = 16384;
+ 
+ fhandler_console::console_state NO_COPY *fhandler_console::shared_console_info;
+@@ -170,6 +172,143 @@ console_unit::console_unit (HWND me0):
+     api_fatal ("console device allocation failure - too many consoles in use, max consoles is 32");
+ }
+ 
++DWORD WINAPI
++fhandler_console::start_master_thread (VOID *arg)
++{
++  fhandler_console *fh = (fhandler_console *) arg;
++  tty *ttyp = (tty *) fh->tc ();
++  fhandler_console::handle_set_t handle_set;
++  fh->get_duplicated_handle_set (&handle_set);
++  HANDLE thread_sync_event;
++  DuplicateHandle (GetCurrentProcess (), fh->thread_sync_event,
++		   GetCurrentProcess (), &thread_sync_event,
++		   0, FALSE, DUPLICATE_SAME_ACCESS);
++  SetEvent (thread_sync_event);
++  /* Do not touch class members after here because the class instance
++     may have been destroyed. */
++  cons_master_thread (&handle_set, ttyp);
++  close_handle_set (&handle_set);
++  SetEvent (thread_sync_event);
++  CloseHandle (thread_sync_event);
++  return 0;
++}
++
++/* This thread processes signals derived from input messages.
++   Without this thread, those signals can be handled only when
++   the process calls read() or select(). This thread reads input
++   records, processes signals and removes corresponding record.
++   The other input records are kept back for read() or select(). */
++void
++fhandler_console::cons_master_thread (handle_set_t *p, tty *ttyp)
++{
++  DWORD output_stopped_at = 0;
++  while (con.owner == myself->pid)
++    {
++      DWORD total_read, n, i, j;
++      INPUT_RECORD input_rec[INREC_SIZE];
++
++      WaitForSingleObject (p->input_mutex, INFINITE);
++      total_read = 0;
++      switch (cygwait (p->input_handle, (DWORD) 0))
++	{
++	case WAIT_OBJECT_0:
++	  ReadConsoleInputA (p->input_handle,
++			     input_rec, INREC_SIZE, &total_read);
++	  break;
++	case WAIT_TIMEOUT:
++	case WAIT_SIGNALED:
++	case WAIT_CANCELED:
++	  break;
++	default: /* Error */
++	  ReleaseMutex (p->input_mutex);
++	  return;
++	}
++      for (i = 0; i < total_read; i++)
++	{
++	  const char c = input_rec[i].Event.KeyEvent.uChar.AsciiChar;
++	  bool processed = false;
++	  termios &ti = ttyp->ti;
++	  switch (input_rec[i].EventType)
++	    {
++	    case KEY_EVENT:
++	      if (ti.c_lflag & ISIG)
++		{
++		  int sig = 0;
++		  if (CCEQ (ti.c_cc[VINTR], c))
++		    sig = SIGINT;
++		  else if (CCEQ (ti.c_cc[VQUIT], c))
++		    sig = SIGQUIT;
++		  else if (CCEQ (ti.c_cc[VSUSP], c))
++		    sig = SIGTSTP;
++		  if (sig && input_rec[i].Event.KeyEvent.bKeyDown)
++		    {
++		      ttyp->kill_pgrp (sig);
++		      ttyp->output_stopped = false;
++		      /* Discard type ahead input */
++		      goto skip_writeback;
++		    }
++		}
++	      if (ti.c_iflag & IXON)
++		{
++		  if (CCEQ (ti.c_cc[VSTOP], c))
++		    {
++		      if (!ttyp->output_stopped
++			  && input_rec[i].Event.KeyEvent.bKeyDown)
++			{
++			  ttyp->output_stopped = true;
++			  output_stopped_at = i;
++			}
++		      processed = true;
++		    }
++		  else if (CCEQ (ti.c_cc[VSTART], c))
++		    {
++		restart_output:
++		      if (input_rec[i].Event.KeyEvent.bKeyDown)
++			ttyp->output_stopped = false;
++		      processed = true;
++		    }
++		  else if ((ti.c_iflag & IXANY) && ttyp->output_stopped
++			   && c && i >= output_stopped_at)
++		    goto restart_output;
++		}
++	      break;
++	    case WINDOW_BUFFER_SIZE_EVENT:
++	      SHORT y = con.dwWinSize.Y;
++	      SHORT x = con.dwWinSize.X;
++	      con.fillin (p->output_handle);
++	      if (y != con.dwWinSize.Y || x != con.dwWinSize.X)
++		{
++		  con.scroll_region.Top = 0;
++		  con.scroll_region.Bottom = -1;
++		  if (wincap.has_con_24bit_colors () && !con_is_legacy)
++		    { /* Fix tab position */
++		      /* Re-setting ENABLE_VIRTUAL_TERMINAL_PROCESSING
++			 fixes the tab position. */
++		      request_xterm_mode_output (false, p);
++		      request_xterm_mode_output (true, p);
++		    }
++		  ttyp->kill_pgrp (SIGWINCH);
++		}
++	      processed = true;
++	      break;
++	    }
++	  if (processed)
++	    { /* Remove corresponding record. */
++	      for (j = i; j < total_read - 1; j++)
++		input_rec[j] = input_rec[j + 1];
++	      total_read--;
++	      i--;
++	    }
++	}
++      if (total_read)
++	/* Write back input records other than interrupt. */
++	WriteConsoleInput (p->input_handle, input_rec, total_read, &n);
++skip_writeback:
++      ReleaseMutex (p->input_mutex);
++      cygwait (40);
++    }
++}
++
+ bool
+ fhandler_console::set_unit ()
+ {
+@@ -1194,6 +1333,15 @@ fhandler_console::open (int flags, mode_t)
+   debug_printf ("opened conin$ %p, conout$ %p", get_handle (),
+ 		get_output_handle ());
+ 
++  if (myself->pid == con.owner)
++    {
++      char name[MAX_PATH];
++      shared_name (name, CONS_THREAD_SYNC, get_minor ());
++      thread_sync_event = CreateEvent(NULL, FALSE, FALSE, name);
++      new cygthread (start_master_thread, this, "consm");
++      WaitForSingleObject (thread_sync_event, INFINITE);
++      CloseHandle (thread_sync_event);
++    }
+   return 1;
+ }
+ 
+@@ -1230,6 +1378,16 @@ fhandler_console::close ()
+ 
+   release_output_mutex ();
+ 
++  if (con.owner == myself->pid)
++    {
++      char name[MAX_PATH];
++      shared_name (name, CONS_THREAD_SYNC, get_minor ());
++      thread_sync_event = OpenEvent (MAXIMUM_ALLOWED, FALSE, name);
++      con.owner = 0;
++      WaitForSingleObject (thread_sync_event, INFINITE);
++      CloseHandle (thread_sync_event);
++    }
++
+   CloseHandle (input_mutex);
+   input_mutex = NULL;
+   CloseHandle (output_mutex);
+@@ -1540,7 +1698,7 @@ fhandler_console::tcgetattr (struct termios *t)
+ 
+ fhandler_console::fhandler_console (fh_devices unit) :
+   fhandler_termios (), input_ready (false),
+-  input_mutex (NULL), output_mutex (NULL)
++  input_mutex (NULL), output_mutex (NULL), thread_sync_event (NULL)
+ {
+   if (unit > 0)
+     dev ().parse (unit);
+@@ -3022,6 +3180,14 @@ fhandler_console::write (const void *vsrc, size_t len)
+   if (bg <= bg_eof)
+     return (ssize_t) bg;
+ 
++  if (get_ttyp ()->output_stopped && is_nonblocking ())
++    {
++      set_errno (EAGAIN);
++      return -1;
++    }
++  while (get_ttyp ()->output_stopped)
++    cygwait (10);
++
+   acquire_attach_mutex (INFINITE);
+   push_process_state process_state (PID_TTYOU);
+   acquire_output_mutex (INFINITE);
+-- 
+2.30.0
 
