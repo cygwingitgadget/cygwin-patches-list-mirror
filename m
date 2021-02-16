@@ -1,37 +1,40 @@
 Return-Path: <brian.inglis@systematicsw.ab.ca>
-Received: from smtp-out-no.shaw.ca (smtp-out-no.shaw.ca [64.59.134.12])
- by sourceware.org (Postfix) with ESMTPS id 52E69384B80F
- for <cygwin-patches@cygwin.com>; Tue, 16 Feb 2021 16:01:04 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 52E69384B80F
+Received: from smtp-out-so.shaw.ca (smtp-out-so.shaw.ca [64.59.136.139])
+ by sourceware.org (Postfix) with ESMTPS id 5FA40384400A
+ for <cygwin-patches@cygwin.com>; Tue, 16 Feb 2021 16:51:10 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org 5FA40384400A
 Authentication-Results: sourceware.org; dmarc=none (p=none dis=none)
- header.from=SystematicSW.ab.ca
+ header.from=SystematicSw.ab.ca
 Authentication-Results: sourceware.org;
  spf=none smtp.mailfrom=brian.inglis@systematicsw.ab.ca
-Received: from BWINGLISD.cg.shawcable.net. ([24.64.172.44])
- by shaw.ca with ESMTP
- id C2mblLRm22SWTC2mdlwzGX; Tue, 16 Feb 2021 09:01:03 -0700
-X-Authority-Analysis: v=2.4 cv=fdJod2cF c=1 sm=1 tr=0 ts=602bec3f
+Received: from [192.168.1.104] ([24.64.172.44]) by shaw.ca with ESMTP
+ id C3Z6lad1rnRGtC3Z7lwoFL; Tue, 16 Feb 2021 09:51:09 -0700
+X-Authority-Analysis: v=2.4 cv=cagXElPM c=1 sm=1 tr=0 ts=602bf7fd
  a=kiZT5GMN3KAWqtYcXc+/4Q==:117 a=kiZT5GMN3KAWqtYcXc+/4Q==:17
- a=r77TgQKjGQsHNAKrUKIA:9 a=CK5ovNVcWVCeCUjQAzIA:9 a=QEXdDO2ut3YA:10
- a=VSevBwtulvAOWX-5JCwA:9 a=B2y7HmGcmWMA:10
-From: Brian Inglis <Brian.Inglis@SystematicSW.ab.ca>
-To: cygwin-patches@cygwin.com
-Subject: [PATCH] cpuinfo: fix check; add AVX features;
- move SME, SEV/_ES features
-Date: Tue, 16 Feb 2021 09:00:58 -0700
-Message-Id: <20210216160059.62164-1-Brian.Inglis@SystematicSW.ab.ca>
-X-Mailer: git-send-email 2.30.0
+ a=IkcTkHD0fZMA:10 a=94nOnFI1EgyDtX4ev68A:9 a=QEXdDO2ut3YA:10
 Reply-To: cygwin-patches@cygwin.com
+To: cygwin-patches@cygwin.com
+References: <20210215223540.18256-1-Brian.Inglis@SystematicSW.ab.ca>
+ <YCus7LynfyqkvjWl@calimero.vinschen.de>
+From: Brian Inglis <Brian.Inglis@SystematicSw.ab.ca>
+Organization: Systematic Software
+Subject: Re: [PATCH v2] winsup/doc/posix.xml: add note for getrlimit,
+ setrlimit, xrefs to notes
+Message-ID: <39425336-2abc-793e-f2fd-ac6ade12d55c@SystematicSw.ab.ca>
+Date: Tue, 16 Feb 2021 09:51:08 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="------------2.30.0"
+In-Reply-To: <YCus7LynfyqkvjWl@calimero.vinschen.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-CA
 Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfH8AhWZ335zLINs1GX0h2jopyt4OexcG75EyKa91x8ytT1WZqvuP5ewDU30UqXQp/ZnBukeKzVIfTrF53A4rfBuI7XDwMcPcacZp3mYlG9fT6T1WIomY
- EdBB24D8Etu6KFmtjLjDOhZOk/r/dmOKmuVGTxaD9nkPSdrq1V1e8g79j5eJxI8G2TdPMnLPQsui9sO28YytkJw5RTerSw8x+2XAnFoyGEJshShakhMz4FT4
- 0pALpomzKMvGOJMBz14mzA3DJlMSwxvx4OUHVq1c0CY=
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00, GIT_PATCH_0,
- KAM_DMARC_STATUS, KAM_LAZY_DOMAIN_SECURITY, RCVD_IN_DNSWL_LOW,
- RCVD_IN_MSPIKE_H3, RCVD_IN_MSPIKE_WL, SPAM_BODY, SPF_HELO_NONE, SPF_NONE,
- TXREP autolearn=ham autolearn_force=no version=3.4.2
+X-CMAE-Envelope: MS4xfMGhVfwOYvFOgXI+oRYEWnnI9aYnFowbOnhHmrrzjtSS2I3uZTIE6es4SVc2Wmk0auMisn6eN6dSlUF8mVPhfNvcb18NF/G9o4ZlctQ32RybWX78MY6I
+ C0vwspBxs6cTwEAebJ1aC8fZiXfIDUd6oEwveQqWnGAZ6lpesdao8/UfnfVlAtzz87XvRRQBvfPPcvlmGZ+DavVx+G/0rSTST/Y=
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00, KAM_DMARC_STATUS,
+ KAM_LAZY_DOMAIN_SECURITY, NICE_REPLY_A, RCVD_IN_DNSWL_LOW, RCVD_IN_MSPIKE_H4,
+ RCVD_IN_MSPIKE_WL, SPF_HELO_NONE, SPF_NONE,
+ TXREP autolearn=no autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
 X-BeenThere: cygwin-patches@cygwin.com
@@ -46,133 +49,45 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Tue, 16 Feb 2021 16:01:07 -0000
+X-List-Received-Date: Tue, 16 Feb 2021 16:51:11 -0000
 
-This is a multi-part message in MIME format.
---------------2.30.0
-Content-Type: text/plain; charset=UTF-8; format=fixed
-Content-Transfer-Encoding: 8bit
+On 2021-02-16 04:30, Corinna Vinschen via Cygwin-patches wrote:
+> On Feb 15 15:35, Brian Inglis wrote:
+>> change notes to see "Implementation Notes" to xref to std-notes;
+>> add xref to std-notes to getrlimit, setrlimit;
+>> add note to document limitations of getrlimit, setrlimit resources support
+>> ---
+>>   winsup/doc/posix.xml | 101 ++++++++++++++++++++++++-------------------
+>>   1 file changed, 57 insertions(+), 44 deletions(-)
 
+> Pushed with a change:
+>    <xref linkend="std-notes">(see chapter "Implementation Notes")</xref>
+> -->
+>    (see <xref linkend="std-notes">chapter "Implementation Notes"</xref>)
+> The reason is how xref is handled when creating html docs.  The result
+> of an xref is always 'the section called "..."'.  With the above change,
+> the text works (albeit differently) in html and info file.
 
-fix cpuid 0x80000007 supported check;
-Linux 5.11 💕 Valentine's Day Edition 💕 added features and changes:
-add Intel 0x00000007 EDX:23 avx512_fp16 and 0x00000007:1 EAX:4 avx_vnni;
-group scattered AMD 0x8000001f EAX Secure Mem/Encrypted Virt features at end:
-0 sme, 1 sev, 3 sev_es (more to come not yet displayed)
----
- winsup/cygwin/fhandler_proc.cc | 46 ++++++++++++++++++----------------
- 1 file changed, 24 insertions(+), 22 deletions(-)
+Cheers, thanks, I'll bear that in mind in future, and read the generated output 
+more carefully.
 
+I'm not seeing .info generated with Note:... links, is that okay?
 
---------------2.30.0
-Content-Type: text/x-patch; name="0001-cpuinfo-fix-check-add-AVX-features-move-SME-SEV-_ES-features.patch"
-Content-Transfer-Encoding: 8bit
-Content-Disposition: attachment; filename="0001-cpuinfo-fix-check-add-AVX-features-move-SME-SEV-_ES-features.patch"
+Also ...api.pdf is not being regenerated, so what have I lost or am missing?
 
-diff --git a/winsup/cygwin/fhandler_proc.cc b/winsup/cygwin/fhandler_proc.cc
-index 8e23c0609485..501c157daae5 100644
---- a/winsup/cygwin/fhandler_proc.cc
-+++ b/winsup/cygwin/fhandler_proc.cc
-@@ -1293,7 +1293,7 @@ format_proc_cpuinfo (void *, char *&destbuf)
- 
- /* features scattered in various CPUID levels. */
-       /* cpuid 0x80000007 edx */
--      if (maxf >= 0x00000007)
-+      if (maxe >= 0x80000007)
- 	{
- 	  cpuid (&unused, &unused, &unused, &features1, 0x80000007);
- 
-@@ -1330,13 +1330,6 @@ format_proc_cpuinfo (void *, char *&destbuf)
- 	  ftcprint (features1,  7, "hw_pstate");	/* hw P state */
- 	  ftcprint (features1, 11, "proc_feedback"); /* proc feedback interf */
- 	}
--      /* cpuid 0x8000001f eax */
--      if (maxe >= 0x8000001f)
--	{
--	  cpuid (&features1, &unused, &unused, &unused, 0x8000001f);
--
--	  ftcprint (features1,  0, "sme");	/* secure memory encryption */
--	}
- 
- /*	  ftcprint (features1, 11, "pti");*//* Page Table Isolation reqd with Meltdown */
- 
-@@ -1370,14 +1363,6 @@ format_proc_cpuinfo (void *, char *&destbuf)
- /*	  from above */
- 	  ftcprint (features1,  6, "mba");	/* memory bandwidth alloc */
- 	}
--      /* cpuid 0x8000001f eax */
--      if (maxe >= 0x8000001f)
--	{
--	  cpuid (&features2, &unused, &unused, &unused, 0x8000001f);
--
--	  ftcprint (features2,  1, "sev");	/* secure encrypted virt */
--	/*ftcprint (features2,  3, "sev_es"); - print below */
--	}
-       /* cpuid 0x80000008 ebx */
-       if (maxe >= 0x80000008)
-         {
-@@ -1401,12 +1386,6 @@ format_proc_cpuinfo (void *, char *&destbuf)
- /*	  ftcprint (features1, 26, "ssb_no");	*//* ssb fixed in hardware */
-         }
- 
--      /* cpuid 0x8000001f eax - set above */
--      if (maxe >= 0x8000001f)
--	{
--	  ftcprint (features2,  3, "sev_es");	/* AMD SEV encrypted state */
--	}
--
-       /* cpuid 0x00000007 ebx */
-       if (maxf >= 0x00000007)
- 	{
-@@ -1478,6 +1457,7 @@ format_proc_cpuinfo (void *, char *&destbuf)
- 	{
- 	  cpuid (&features1, &unused, &unused, &unused, 0x00000007, 1);
- 
-+	  ftcprint (features1,  4, "avx_vnni");	    /* vex enc NN vec */
- 	  ftcprint (features1,  5, "avx512_bf16");  /* vec bfloat16 short */
- 	}
- 
-@@ -1539,6 +1519,7 @@ format_proc_cpuinfo (void *, char *&destbuf)
- 	  ftcprint (features1, 13, "avic");             /* virt int control */
- 	  ftcprint (features1, 15, "v_vmsave_vmload");  /* virt vmsave vmload */
- 	  ftcprint (features1, 16, "vgif");             /* virt glb int flag */
-+/*	  ftcprint (features1, 28, "svme_addr_chk");  *//* secure vmexit addr check */
-         }
- 
-       /* Intel cpuid 0x00000007 ecx */
-@@ -1592,10 +1573,31 @@ format_proc_cpuinfo (void *, char *&destbuf)
-           ftcprint (features1, 16, "tsxldtrk");		   /* TSX Susp Ld Addr Track */
-           ftcprint (features1, 18, "pconfig");		   /* platform config */
-           ftcprint (features1, 19, "arch_lbr");		   /* last branch records */
-+          ftcprint (features1, 23, "avx512_fp16");	   /* avx512 fp16 */
-           ftcprint (features1, 28, "flush_l1d");	   /* flush l1d cache */
-           ftcprint (features1, 29, "arch_capabilities");   /* arch cap MSR */
-         }
- 
-+      /* cpuid x8000001f eax */
-+      if (is_amd && maxe >= 0x8000001f)
-+	{
-+	  cpuid (&features2, &unused, &unused, &unused, 0x8000001f);
-+
-+	  ftcprint (features2,  0, "sme");	/* secure memory encryption */
-+	  ftcprint (features2,  1, "sev");	/* AMD secure encrypted virt */
-+/*	  ftcprint (features2,  2, "vm_page_flush");*/	/* VM page flush MSR */
-+	  ftcprint (features2,  3, "sev_es");	/* AMD SEV encrypted state */
-+/*	  ftcprint (features2,  4, "sev_snp");*//* AMD SEV secure nested paging */
-+/*	  ftcprint (features2,  5, "vmpl");   *//* VM permission levels support */
-+/*	  ftcprint (features2, 10, "sme_coherent");   *//* SME h/w cache coherent */
-+/*	  ftcprint (features2, 11, "sev_64b");*//* SEV 64 bit host guest only */
-+/*	  ftcprint (features2, 12, "sev_rest_inj");   *//* SEV restricted injection */
-+/*	  ftcprint (features2, 13, "sev_alt_inj");    *//* SEV alternate injection */
-+/*	  ftcprint (features2, 14, "sev_es_dbg_swap");*//* SEV-ES debug state swap */
-+/*	  ftcprint (features2, 15, "no_host_ibs");    *//* host IBS unsupported */
-+/*	  ftcprint (features2, 16, "vte");    *//* virtual transparent encryption */
-+	}
-+
-       print ("\n");
- 
-       bufptr += __small_sprintf (bufptr, "bogomips\t: %d.00\n",
+I have the following doc tools (and others):
 
---------------2.30.0--
+$ apt l asciidoc dblatex poppler\$ xmlto
+asciidoc 8.6.9-1 x86_64 [installed, manual]
+dblatex 0.3.10-1 x86_64 [installed, automatic]
+poppler 21.01.0-1 x86_64 [installed, manual]
+xmlto 0.0.28-1 x86_64 [installed, automatic]
 
+What else is needed?
 
+-- 
+Take care. Thanks, Brian Inglis, Calgary, Alberta, Canada
+
+This email may be disturbing to some readers as it contains
+too much technical detail. Reader discretion is advised.
+[Data in binary units and prefixes, physical quantities in SI.]
