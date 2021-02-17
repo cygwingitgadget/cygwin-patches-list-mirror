@@ -1,42 +1,43 @@
 Return-Path: <corinna-cygwin@cygwin.com>
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
- by sourceware.org (Postfix) with ESMTPS id ED8E43893649
- for <cygwin-patches@cygwin.com>; Wed, 17 Feb 2021 09:35:06 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org ED8E43893649
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+ by sourceware.org (Postfix) with ESMTPS id E58DD385702D
+ for <cygwin-patches@cygwin.com>; Wed, 17 Feb 2021 09:39:13 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org E58DD385702D
 Received: from calimero.vinschen.de ([24.134.7.25]) by
- mrelayeu.kundenserver.de (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis)
- id 1N79dk-1lvCEV2TZU-017XPb for <cygwin-patches@cygwin.com>; Wed, 17 Feb 2021
- 10:35:03 +0100
+ mrelayeu.kundenserver.de (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MRT6b-1lXQgE2zYr-00NQvD for <cygwin-patches@cygwin.com>; Wed, 17 Feb 2021
+ 10:39:11 +0100
 Received: by calimero.vinschen.de (Postfix, from userid 500)
- id 1D011A80BC1; Wed, 17 Feb 2021 10:35:03 +0100 (CET)
-Date: Wed, 17 Feb 2021 10:35:03 +0100
+ id 55520A8066E; Wed, 17 Feb 2021 10:39:11 +0100 (CET)
+Date: Wed, 17 Feb 2021 10:39:11 +0100
 From: Corinna Vinschen <corinna-cygwin@cygwin.com>
 To: cygwin-patches@cygwin.com
-Subject: Re: [PATCH v2] Cygwin: console: Introduce new thread which handles
- input signal.
-Message-ID: <YCzjR33VcmA+vTCc@calimero.vinschen.de>
+Subject: Re: [PATCH] cpuinfo: fix check; add AVX features; move SME, SEV/_ES
+ features
+Message-ID: <YCzkP/tySyRgeO5v@calimero.vinschen.de>
 Reply-To: cygwin-patches@cygwin.com
 Mail-Followup-To: cygwin-patches@cygwin.com
-References: <20210216113705.1358-1-takashi.yano@nifty.ne.jp>
+References: <20210216160059.62164-1-Brian.Inglis@SystematicSW.ab.ca>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210216113705.1358-1-takashi.yano@nifty.ne.jp>
-X-Provags-ID: V03:K1:xSEpFiCf+NfK5LpcU9+UasHA7KHPSESZa6ePGbnED+HYMaLR1jK
- RWuy11BMnjAhx1Iq/h6h1GmjEWx7rJZD7PuIOwdgwVCdStqhrE8reQukBeUnxtssDi47Vin
- aoJh4sYIMqcdKvSmPUoz22gj/yeqH1mQU8jSpP9ZomdljxKSNRyNejUwFbnSOP0ZDacy6mm
- Ol5SWp3xsj8s0zjuyT5tw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:yll38O8jGKw=:kSTR3MgEaiRDRouE4N6W1d
- /Lz0wL5f3HVc404gfcPoIwN5eYM+U9aWtOvirlwpOrkpkOUN+Oojg0DarCuQKmJFbgU9X7+R6
- 9+2DjtjeS8ru2XXIPjY+6ZPDPwahqu6pqzA5bH8sOBJzqcuDyKtKKC/b+sEGDWh/jeyAaM6cB
- FcRKm0T6dqPU1BBmyRagsjdVS2PCjrr8oY/F8aTuuvolUU7hNaVjPRiGL9tkXtQqiTPy8Vk4U
- 80PAcMLy0F8XCbJ9fIGQO0XJmCrUXDbYXlOW7MTh/7mO44VvAKfAOrW4bcL4OOqwhyvlJ4tUI
- RtS2rvksCKnmkYQiT5rq2SlqjsHi42PA0ub6KDH8Kh627w+gbWlonJTN9nG9IAobkSM2jpAxU
- u6SYRIHfrQ3dKVgtknjxvMSmO2vyVNfKQWOu9jKj3eKqyI83qtgoj3q2OMnP7IsOgYx6M1Aqs
- AE0n5jxqBw==
-X-Spam-Status: No, score=-101.3 required=5.0 tests=BAYES_00,
- GOOD_FROM_CORINNA_CYGWIN, KAM_DMARC_NONE, KAM_DMARC_STATUS, RCVD_IN_DNSWL_NONE,
- RCVD_IN_MSPIKE_H2, SPF_HELO_NONE, SPF_NEUTRAL,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210216160059.62164-1-Brian.Inglis@SystematicSW.ab.ca>
+X-Provags-ID: V03:K1:CC6rBKrSoxcF5EwadOvIV/6wZMfIj9Z39zy0DCQ8ywKBPmguepw
+ 7yh39CBmE70WFlgNxi41KvralfDysHrD07hauc0sQcaXuOHPyJWFqez6hbsxP1C1kApx75p
+ r6k9cFWoQrKgGnBH/LCvd5j5FN3spb8LJOBQMbRXfUgqyFqgPCcilysFqzFIQtrGbHLYEcs
+ xYL9o2D9GZC1YJYiK22RA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:qir4dTCJ1HU=:ke8EBmsxk3dE5HeUm675Eh
+ gJxQN1qVfLTKp2xGiREhOf5yAu6d2ULXMWqHOyszrPTRSu4NpznR1N+Zh4ZX1rPM6EkoC9f5Z
+ cDszt/Al63QwuH4SplLLNiDQt6cLHHH1zvsfbV64WwluHIiybyhRJtxAcVU4K0WQP6DPV8u3L
+ AmAGWBs6ico8Z/HF2yVHaj39sWO6awf5bTJ1nkVUc/UAyGD9JDHOUp15L1LmhiMrMMq+X4+bg
+ YqVctP2F69qM7z9wE3NL+HKmmjj70IEdgn9wVHrFNeW6fL1YtcCLgGAOwWnCzskgoUw85RkNc
+ G/eukCEQ2741u/f2ubchXVjTSoCypEhXp96xgLYf5FN4dCJkAOGbUFMWjLmwuziG1VKiZ5+dB
+ pyn31IyJCOPczRNdpKT5lGteWr7mlD3Qjs0CWegVbQVtK2MDQmReBSVrfzX/ICufnRhkgGH+0
+ Ad7oBRkIYg==
+X-Spam-Status: No, score=-104.1 required=5.0 tests=BAYES_00, GIT_PATCH_0,
+ GOOD_FROM_CORINNA_CYGWIN, JMQ_SPF_NEUTRAL, KAM_DMARC_NONE, KAM_DMARC_STATUS,
+ RCVD_IN_DNSWL_NONE, RCVD_IN_MSPIKE_H2, SPAM_BODY, SPF_HELO_NONE, SPF_NEUTRAL,
  TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
  server2.sourceware.org
@@ -52,27 +53,35 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Wed, 17 Feb 2021 09:35:08 -0000
+X-List-Received-Date: Wed, 17 Feb 2021 09:39:15 -0000
 
-On Feb 16 20:37, Takashi Yano via Cygwin-patches wrote:
-> - Currently, Ctrl-Z, Ctrl-\ and SIGWINCH does not work in console
->   if the process does not call read() or select(). This is because
->   these are processed in process_input_message() which is called
->   from read() or select(). This is a long standing issue of console.
->   Addresses:
->     https://cygwin.com/pipermail/cygwin/2020-May/244898.html
->     https://cygwin.com/pipermail/cygwin/2021-February/247779.html
+Hi Brian,
+
+On Feb 16 09:00, Brian Inglis wrote:
 > 
->   With this patch, new thread which handles only input signals is
->   introduced so that Crtl-Z, etc. work without calling read() or
->   select(). Ctrl-S and Ctrl-Q are also handled in this thread.
+> fix cpuid 0x80000007 supported check;
+> Linux 5.11 💕 Valentine's Day Edition 💕 added features and changes:
+> add Intel 0x00000007 EDX:23 avx512_fp16 and 0x00000007:1 EAX:4 avx_vnni;
+> group scattered AMD 0x8000001f EAX Secure Mem/Encrypted Virt features at end:
+> 0 sme, 1 sev, 3 sev_es (more to come not yet displayed)
 > ---
->  winsup/cygwin/exceptions.cc       |   1 +
->  winsup/cygwin/fhandler.h          |   5 +-
->  winsup/cygwin/fhandler_console.cc | 177 +++++++++++++++++++++++++++++-
->  3 files changed, 181 insertions(+), 2 deletions(-)
+>  winsup/cygwin/fhandler_proc.cc | 46 ++++++++++++++++++----------------
+>  1 file changed, 24 insertions(+), 22 deletions(-)
+> 
 
-Pushed.  This is great!  Can you please add an entry to the release docs?
+> diff --git a/winsup/cygwin/fhandler_proc.cc b/winsup/cygwin/fhandler_proc.cc
+> index 8e23c0609485..501c157daae5 100644
+> --- a/winsup/cygwin/fhandler_proc.cc
+> +++ b/winsup/cygwin/fhandler_proc.cc
+> @@ -1293,7 +1293,7 @@ format_proc_cpuinfo (void *, char *&destbuf)
+>  
+>  /* features scattered in various CPUID levels. */
+>        /* cpuid 0x80000007 edx */
+> -      if (maxf >= 0x00000007)
+> +      if (maxe >= 0x80000007)
+
+Maybe I'm a stickler here, but I think it would be nice to put this
+bugfix into its own patch, prior to the patch adding the 5.11 features.
 
 
 Thanks,
