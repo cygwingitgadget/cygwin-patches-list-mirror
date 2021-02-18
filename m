@@ -1,24 +1,23 @@
 Return-Path: <takashi.yano@nifty.ne.jp>
-Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
- by sourceware.org (Postfix) with ESMTPS id A976D386F83C
- for <cygwin-patches@cygwin.com>; Thu, 18 Feb 2021 09:03:16 +0000 (GMT)
-DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org A976D386F83C
+Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
+ by sourceware.org (Postfix) with ESMTPS id BC4BB386F83C
+ for <cygwin-patches@cygwin.com>; Thu, 18 Feb 2021 09:06:12 +0000 (GMT)
+DMARC-Filter: OpenDMARC Filter v1.3.2 sourceware.org BC4BB386F83C
 Received: from localhost.localdomain (y085178.dynamic.ppp.asahi-net.or.jp
  [118.243.85.178]) (authenticated)
- by conuserg-11.nifty.com with ESMTP id 11I92pB6016932;
- Thu, 18 Feb 2021 18:02:57 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 11I92pB6016932
+ by conuserg-10.nifty.com with ESMTP id 11I95mai001212;
+ Thu, 18 Feb 2021 18:05:57 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 11I95mai001212
 X-Nifty-SrcIP: [118.243.85.178]
 From: Takashi Yano <takashi.yano@nifty.ne.jp>
 To: cygwin-patches@cygwin.com
-Subject: [PATCH] Cygwin: Add console fix regarding Ctrl-Z etc. to release
- notes.
-Date: Thu, 18 Feb 2021 18:02:42 +0900
-Message-Id: <20210218090242.1507-1-takashi.yano@nifty.ne.jp>
+Subject: [PATCH] Cygwin: pty: Reflect tty settings to pseudo console mode.
+Date: Thu, 18 Feb 2021 18:05:39 +0900
+Message-Id: <20210218090539.1560-1-takashi.yano@nifty.ne.jp>
 X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.3 required=5.0 tests=BAYES_00, DKIM_SIGNED,
+X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00, DKIM_SIGNED,
  DKIM_VALID, DKIM_VALID_AU, DKIM_VALID_EF, GIT_PATCH_0, RCVD_IN_DNSWL_NONE,
  SPF_HELO_NONE, SPF_PASS, TXREP autolearn=ham autolearn_force=no version=3.4.2
 X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
@@ -35,28 +34,52 @@ List-Post: <mailto:cygwin-patches@cygwin.com>
 List-Help: <mailto:cygwin-patches-request@cygwin.com?subject=help>
 List-Subscribe: <https://cygwin.com/mailman/listinfo/cygwin-patches>,
  <mailto:cygwin-patches-request@cygwin.com?subject=subscribe>
-X-List-Received-Date: Thu, 18 Feb 2021 09:03:19 -0000
+X-List-Received-Date: Thu, 18 Feb 2021 09:06:14 -0000
 
+- With this patch, tty setting such as echo, icanon, isig and onlcr
+  are reflected to pseudo console mode.
 ---
- winsup/cygwin/release/3.2.0 | 5 +++++
- 1 file changed, 5 insertions(+)
+ winsup/cygwin/fhandler_tty.cc | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/winsup/cygwin/release/3.2.0 b/winsup/cygwin/release/3.2.0
-index d02d16863..d69ed446c 100644
---- a/winsup/cygwin/release/3.2.0
-+++ b/winsup/cygwin/release/3.2.0
-@@ -9,6 +9,11 @@ What's new:
-   thrd_detach, thrd_equal, thrd_exit, thrd_join, thrd_sleep, thrd_yield,
-   tss_create, tss_delete, tss_get, tss_set.
+diff --git a/winsup/cygwin/fhandler_tty.cc b/winsup/cygwin/fhandler_tty.cc
+index 5afede859..e4c35ea41 100644
+--- a/winsup/cygwin/fhandler_tty.cc
++++ b/winsup/cygwin/fhandler_tty.cc
+@@ -3261,6 +3261,33 @@ skip_create:
+   if (get_ttyp ()->previous_output_code_page)
+     SetConsoleOutputCP (get_ttyp ()->previous_output_code_page);
  
-+- In cygwin console, new thread which handles special keys/signals such
-+  as Ctrl-Z (VSUSP), Ctrl-\ (VQUIT), Ctrl-S (VSTOP), Ctrl-Q (VSTART) and
-+  SIGWINCH has been intrudocued. There have been a long standing issue
-+  that these keys/signals are handled only when app calls read() or
-+  select(). Now, these work even if app does not call read() or select().
++  do
++    {
++      termios &t = get_ttyp ()->ti;
++      DWORD mode;
++      /* Set input mode */
++      GetConsoleMode (hpConIn, &mode);
++      mode &= ~(ENABLE_ECHO_INPUT | ENABLE_LINE_INPUT | ENABLE_PROCESSED_INPUT);
++      if (t.c_lflag & ECHO)
++	mode |= ENABLE_ECHO_INPUT;
++      if (t.c_lflag & ICANON)
++	mode |= ENABLE_LINE_INPUT;
++      if (mode & ENABLE_ECHO_INPUT && !(mode & ENABLE_LINE_INPUT))
++	/* This is illegal, so turn off the echo here, and fake it
++	   when we read the characters */
++	mode &= ~ENABLE_ECHO_INPUT;
++      if ((t.c_lflag & ISIG) && !(t.c_iflag & IGNBRK))
++	mode |= ENABLE_PROCESSED_INPUT;
++      SetConsoleMode (hpConIn, mode);
++      /* Set output mode */
++      GetConsoleMode (hpConOut, &mode);
++      mode &= ~DISABLE_NEWLINE_AUTO_RETURN;
++      if (!(t.c_oflag & OPOST) || !(t.c_oflag & ONLCR))
++	mode |= DISABLE_NEWLINE_AUTO_RETURN;
++      SetConsoleMode (hpConOut, mode);
++    }
++  while (false);
++
+   return true;
  
- What changed:
- -------------
+ cleanup_pcon_in:
 -- 
 2.30.0
 
